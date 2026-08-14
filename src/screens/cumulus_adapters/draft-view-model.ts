@@ -20,6 +20,8 @@ import { buildTransfigurationDisplay } from "../../transfiguration/transfigurati
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { DraftData } from "../../types/draft-data";
 import { bindSourceTransport } from "../../runtime/localization/runtime";
+import type { SiteId } from "../../types/identifiers";
+import type { ExplorationActionId } from "../../types/identifiers";
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -120,7 +122,7 @@ export function buildDraftView(params: {
 /** UUID-only reconstruction payload for an Exploration-transfigured Draft offer. */
 export function buildDraftTransfiguredOfferLog(
   view: DraftView,
-  source: { readonly siteId: string; readonly actionId: string },
+  source: { readonly siteId: SiteId; readonly actionId: ExplorationActionId },
 ) {
   return {
     sourceSiteId: source.siteId,

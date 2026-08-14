@@ -21,9 +21,14 @@ import {
   logGambleSettled,
 } from "./gamble-site-logging-view-model";
 import { localizedDreamsignFixture } from "../../cumulus/test-helpers/dreamsign-fixture";
+import { asShuffleCommitment } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 const REWARD_DREAMSIGN = {
-  id: "00000000-0000-4000-8000-000000000025",
+  id: asDreamsignId("00000000-0000-4000-8000-000000000025"),
   name: "Fixture Sign",
   effectDescription: "Fixture effect.",
 };
@@ -33,14 +38,21 @@ const RUNTIME: TidemarkLadderClimbSiteRuntime = {
   kind: "gamble",
   gameId: "tidemark-ladder-climb",
   isFarpoint: false,
-  shuffleCommitments: ["attempt-1", "attempt-2", "attempt-3", "attempt-4"],
+  shuffleCommitments: [
+    asShuffleCommitment("attempt-1"),
+    asShuffleCommitment("attempt-2"),
+    asShuffleCommitment("attempt-3"),
+    asShuffleCommitment("attempt-4"),
+  ],
   committedCards: [
     { rank: "Q", suit: "clubs" },
     { rank: "10", suit: "diamonds" },
     { rank: "8", suit: "hearts" },
     { rank: "6", suit: "spades" },
   ],
-  dreamsignCandidateScores: [{ dreamsignId: REWARD_DREAMSIGN.id, score: 1 }],
+  dreamsignCandidateScores: [
+    { dreamsignId: asDreamsignId(REWARD_DREAMSIGN.id), score: 1 },
+  ],
   strongPoolSize: 1,
   strongPoolCutoffScore: 1,
   rewardDreamsign: REWARD_DREAMSIGN,
@@ -60,7 +72,7 @@ const RUNTIME: TidemarkLadderClimbSiteRuntime = {
 
 const VIEW: LadderClimbSiteView = {
   gameId: "tidemark-ladder-climb",
-  siteId: "fixture-site",
+  siteId: asSiteId("fixture-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
@@ -71,7 +83,7 @@ const VIEW: LadderClimbSiteView = {
     id: "fixture-guide",
     name: assertLocalized("Fixture Guide"),
     line: assertLocalized("Fixture line."),
-    art: artRef.dreamGuide("fixture-guide"),
+    art: artRef.dreamGuide(asGuideId("fixture-guide")),
   },
   result: null,
   replacement: null,
@@ -89,7 +101,7 @@ describe("gamble-site-logging-view-model", () => {
   });
 
   it("records the Ladder Climb Essence payout and net settlement", () => {
-    logGambleSettled("fixture-site", RUNTIME, VIEW, gambleFixture());
+    logGambleSettled(asSiteId("fixture-site"), RUNTIME, VIEW, gambleFixture());
 
     expect(getLogEntries()).toHaveLength(1);
     expect(getLogEntries()[0]).toMatchObject({
@@ -101,7 +113,7 @@ describe("gamble-site-logging-view-model", () => {
       essenceGained: 25,
       essenceChangeAtSettlement: 25,
       netEssenceChange: 25,
-      dreamsignId: REWARD_DREAMSIGN.id,
+      dreamsignId: asDreamsignId(REWARD_DREAMSIGN.id),
       dreamsignAwarded: true,
     });
   });
@@ -126,7 +138,11 @@ describe("gamble-site-logging-view-model", () => {
       gameId: "four-suit-reprise",
       isFarpoint: false,
       drawCost: 25,
-      shuffleCommitments: ["round-1", "round-2", "round-3"],
+      shuffleCommitments: [
+        asShuffleCommitment("round-1"),
+        asShuffleCommitment("round-2"),
+        asShuffleCommitment("round-3"),
+      ],
       committedCards: [
         { rank: "7", suit: "hearts" },
         { rank: "4", suit: "diamonds" },
@@ -134,13 +150,13 @@ describe("gamble-site-logging-view-model", () => {
       ],
       targets: [
         {
-          entryId: "entry-101",
+          entryId: asDeckEntryId("entry-101"),
           cardId: card.id,
           cardNumber: card.cardNumber,
           cardSnapshot: card,
           transfigurationOffers: [
             {
-              entryId: "entry-101",
+              entryId: asDeckEntryId("entry-101"),
               type: "Empowered",
               effectDescription: "Fixture form.",
               effectDetails: { fixture: true },
@@ -153,16 +169,16 @@ describe("gamble-site-logging-view-model", () => {
       rounds: [
         {
           roundNumber: 1,
-          shuffleCommitment: "round-1",
+          shuffleCommitment: asShuffleCommitment("round-1"),
           card: { rank: "7", suit: "hearts" },
-          targetEntryId: "entry-101",
+          targetEntryId: asDeckEntryId("entry-101"),
           targetCardId: card.id,
           costPaid: 25,
           outcome: "duplication",
           resultRevealed: true,
           resultSettled: true,
           essenceGained: 0,
-          duplicatedEntryId: "duplicate-101",
+          duplicatedEntryId: asDeckEntryId("duplicate-101"),
         },
       ],
       phase: "result",
@@ -172,9 +188,9 @@ describe("gamble-site-logging-view-model", () => {
       cards: [],
     } as unknown as FourSuitRepriseSiteView;
 
-    logGamblePrepared("fixture-site", runtime, view, gambleFixture());
-    logGambleResolved("fixture-site", runtime, view, gambleFixture());
-    logGambleSettled("fixture-site", runtime, view, gambleFixture());
+    logGamblePrepared(asSiteId("fixture-site"), runtime, view, gambleFixture());
+    logGambleResolved(asSiteId("fixture-site"), runtime, view, gambleFixture());
+    logGambleSettled(asSiteId("fixture-site"), runtime, view, gambleFixture());
 
     expect(getLogEntries()).toHaveLength(3);
     expect(getLogEntries()[0]).toMatchObject({
@@ -200,7 +216,7 @@ describe("gamble-site-logging-view-model", () => {
       event: "gamble_wager_settled",
       gambleFoldHash: gambleFixture().foldHash,
       finalEffect: "duplication",
-      duplicatedEntryId: "duplicate-101",
+      duplicatedEntryId: asDeckEntryId("duplicate-101"),
     });
   });
 
@@ -212,7 +228,7 @@ describe("gamble-site-logging-view-model", () => {
       wagerCost: 50,
       prizeEssence: 300,
       attemptNumber: 1,
-      shuffleCommitment: "blackjack-hand",
+      shuffleCommitment: asShuffleCommitment("blackjack-hand"),
       committedDeck: [
         { rank: "10", suit: "clubs" },
         { rank: "10", suit: "spades" },
@@ -237,9 +253,9 @@ describe("gamble-site-logging-view-model", () => {
     };
     const view = { gameId: "blackjack" } as unknown as BlackjackSiteView;
 
-    logGamblePrepared("fixture-site", runtime, view, gambleFixture());
-    logGambleResolved("fixture-site", runtime, view, gambleFixture());
-    logGambleSettled("fixture-site", runtime, view, gambleFixture());
+    logGamblePrepared(asSiteId("fixture-site"), runtime, view, gambleFixture());
+    logGambleResolved(asSiteId("fixture-site"), runtime, view, gambleFixture());
+    logGambleSettled(asSiteId("fixture-site"), runtime, view, gambleFixture());
 
     expect(getLogEntries()).toHaveLength(3);
     expect(getLogEntries()[0]).toMatchObject({

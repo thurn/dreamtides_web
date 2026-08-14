@@ -5,6 +5,7 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import { buildMobileDeckView, toDeckCardView } from "./mobile-deck-view-model";
 import { NIGHTMARE_CARD_ID, NIGHTMARE_CARD_NAME } from "../../data/nightmare";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+import { asDeckEntryId } from "../../types/identifiers";
 
 const transfigurationData = transfigurationFixture();
 
@@ -28,7 +29,7 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 
 function makeEntry(overrides: Partial<DeckEntry> = {}): DeckEntry {
   return {
-    entryId: "entry-1",
+    entryId: asDeckEntryId("entry-1"),
     cardNumber: 1,
     transfiguration: null,
     isBane: false,
@@ -43,7 +44,7 @@ function database(...cards: CardData[]): Map<number, CardData> {
 describe("toDeckCardView", () => {
   it("resolves a plain entry to its card, keyed by entryId and carrying no transfiguration", () => {
     const card = makeCard({ cardNumber: 7 });
-    const entry = makeEntry({ entryId: "e7", cardNumber: 7 });
+    const entry = makeEntry({ entryId: asDeckEntryId("e7"), cardNumber: 7 });
 
     const view = toDeckCardView(transfigurationData, entry, database(card));
 
@@ -56,7 +57,11 @@ describe("toDeckCardView", () => {
 
   it("returns null when the card number is not in the database", () => {
     expect(
-      toDeckCardView(transfigurationData, makeEntry({ cardNumber: 999 }), database()),
+      toDeckCardView(
+        transfigurationData,
+        makeEntry({ cardNumber: 999 }),
+        database(),
+      ),
     ).toBeNull();
   });
 
@@ -89,11 +94,13 @@ describe("toDeckCardView", () => {
     const view = toDeckCardView(
       transfigurationData,
       makeEntry({ cardNumber: 10002, isBane: true }),
-      database(makeCard({
-        id: NIGHTMARE_CARD_ID,
-        name: asCardName(NIGHTMARE_CARD_NAME),
-        cardNumber: 10002,
-      })),
+      database(
+        makeCard({
+          id: NIGHTMARE_CARD_ID,
+          name: asCardName(NIGHTMARE_CARD_NAME),
+          cardNumber: 10002,
+        }),
+      ),
     );
     expect(view?.isBane).toBe(true);
   });
@@ -104,8 +111,8 @@ describe("buildMobileDeckView", () => {
     const a = makeCard({ cardNumber: 1, id: asCardId("a") });
     const b = makeCard({ cardNumber: 2, id: asCardId("b") });
     const deck = [
-      makeEntry({ entryId: "e2", cardNumber: 2 }),
-      makeEntry({ entryId: "e1", cardNumber: 1 }),
+      makeEntry({ entryId: asDeckEntryId("e2"), cardNumber: 2 }),
+      makeEntry({ entryId: asDeckEntryId("e1"), cardNumber: 1 }),
     ];
 
     const view = buildMobileDeckView(transfigurationData, deck, database(a, b));
@@ -115,8 +122,8 @@ describe("buildMobileDeckView", () => {
 
   it("drops entries whose card is missing rather than throwing", () => {
     const deck = [
-      makeEntry({ entryId: "ok", cardNumber: 1 }),
-      makeEntry({ entryId: "gone", cardNumber: 42 }),
+      makeEntry({ entryId: asDeckEntryId("ok"), cardNumber: 1 }),
+      makeEntry({ entryId: asDeckEntryId("gone"), cardNumber: 42 }),
     ];
 
     const view = buildMobileDeckView(
@@ -131,8 +138,8 @@ describe("buildMobileDeckView", () => {
   it("keeps distinct entryId keys even when two entries share a card (and name)", () => {
     const card = makeCard({ cardNumber: 1 });
     const deck = [
-      makeEntry({ entryId: "copy-a", cardNumber: 1 }),
-      makeEntry({ entryId: "copy-b", cardNumber: 1 }),
+      makeEntry({ entryId: asDeckEntryId("copy-a"), cardNumber: 1 }),
+      makeEntry({ entryId: asDeckEntryId("copy-b"), cardNumber: 1 }),
     ];
 
     const view = buildMobileDeckView(transfigurationData, deck, database(card));

@@ -17,6 +17,8 @@ import type {
 } from "../../cumulus/screens/PoolViewerScreen";
 import { txa } from "@trox/runtime";
 import { localizedSourceText } from "../../runtime/localization/runtime";
+import type { DeckEntryId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 export const DEFAULT_POOL_VIEWER_FILTERS: PoolViewerFilterView = {
   query: "",
@@ -28,7 +30,7 @@ export const DEFAULT_POOL_VIEWER_FILTERS: PoolViewerFilterView = {
 };
 
 interface PoolEntry {
-  entryId: string;
+  entryId: DeckEntryId;
   card: CardData;
   copies: number | null;
 }
@@ -142,7 +144,7 @@ function entriesFor(
           : [
               {
                 ...entry("signature", card, null),
-                entryId: `signature:${String(index)}:${card.id}`,
+                entryId: asDeckEntryId(`signature:${String(index)}:${card.id}`),
               },
             ];
       },
@@ -157,7 +159,7 @@ function entry(
   card: CardData,
   copies: number | null,
 ): PoolEntry {
-  return { entryId: `${source}:${card.id}`, card, copies };
+  return { entryId: asDeckEntryId(`${source}:${card.id}`), card, copies };
 }
 
 function tideEntries(
@@ -175,7 +177,9 @@ function tideEntries(
         : [
             {
               ...entry("tides", card, copies),
-              entryId: `tides:${tide.id}:${String(index)}:${card.id}`,
+              entryId: asDeckEntryId(
+                `tides:${tide.id}:${String(index)}:${card.id}`,
+              ),
             },
           ];
     }),

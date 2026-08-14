@@ -6,6 +6,8 @@ import type { RunPoolContext } from "./journey-content";
 import { buildTutorialJourneyPackage } from "./tutorial-journey-package";
 import { validateTutorialJourneyPool } from "./tutorial-journey-pool";
 import { GLOSSARY, glossaryRulesTextForms } from "./glossary";
+import { asDreamAvatarId } from "../types/identifiers";
+import { asDreamsignId } from "../types/identifiers";
 
 const CARD_IDS = [
   "00000000-0000-4000-8000-000000000001",
@@ -53,7 +55,7 @@ function syntheticSource(): Record<string, unknown> {
 
 function dreamAvatar(id: string): DreamAvatarContent {
   return {
-    id,
+    id: asDreamAvatarId(id),
     name: "Tutorial Avatar",
     title: "Keeper of the Example",
     renderedText: "The first warrior costs less.",
@@ -151,9 +153,11 @@ describe("buildTutorialJourneyPackage", () => {
     vi.spyOn(console, "log").mockImplementation(() => {});
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
-      idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
+      idIndex: new Map(
+        CARD_IDS.map((id, index) => [asCardId(id), index + 101]),
+      ),
       starterCardNumbers: [],
-      allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
+      allDreamsignPoolIds: [asDreamsignId(OPENING_DREAMSIGN_ID)],
       poolData: {},
     } satisfies RunPoolContext;
 
@@ -199,9 +203,9 @@ describe("buildTutorialJourneyPackage", () => {
     vi.spyOn(console, "log").mockImplementation(() => {});
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
-      idIndex: new Map([[CARD_IDS[0], 101]]),
+      idIndex: new Map([[asCardId(CARD_IDS[0]), 101]]),
       starterCardNumbers: [],
-      allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
+      allDreamsignPoolIds: [asDreamsignId(OPENING_DREAMSIGN_ID)],
       poolData: {},
     } satisfies RunPoolContext;
 
@@ -218,7 +222,9 @@ describe("buildTutorialJourneyPackage", () => {
   it("rejects an opening Dreamsign outside the journey pool", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
-      idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
+      idIndex: new Map(
+        CARD_IDS.map((id, index) => [asCardId(id), index + 101]),
+      ),
       starterCardNumbers: [],
       allDreamsignPoolIds: [],
       poolData: {},
@@ -262,9 +268,11 @@ describe("buildTutorialJourneyPackage", () => {
   ])("rejects opening cards with $label", ({ overrides, message }) => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
-      idIndex: new Map(CARD_IDS.map((id, index) => [id, index + 101])),
+      idIndex: new Map(
+        CARD_IDS.map((id, index) => [asCardId(id), index + 101]),
+      ),
       starterCardNumbers: [],
-      allDreamsignPoolIds: [OPENING_DREAMSIGN_ID],
+      allDreamsignPoolIds: [asDreamsignId(OPENING_DREAMSIGN_ID)],
       poolData: {},
     } satisfies RunPoolContext;
 

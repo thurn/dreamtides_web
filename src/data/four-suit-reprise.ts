@@ -3,19 +3,21 @@ import type {
   FourSuitRepriseGame,
   FourSuitRepriseOutcome,
 } from "../types/gamble-data";
+import type { DeckEntryId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
 
 export type { FourSuitRepriseOutcome } from "../types/gamble-data";
 export type FourSuitRepriseOutcomeRule =
   FourSuitRepriseGame["rules"]["outcomes"][number];
 
 interface FourSuitRepriseTargetIdentity {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
   cardNumber: number;
 }
 
 interface FourSuitRepriseDeckEntryState {
-  entryId: string;
+  entryId: DeckEntryId;
   cardNumber: number;
   isBane: boolean;
   transfiguration: unknown;
@@ -47,7 +49,7 @@ export function eligibleFourSuitRepriseTargets<
 >(params: {
   targets: readonly Target[];
   deck: readonly FourSuitRepriseDeckEntryState[];
-  usedCardIds: readonly string[];
+  usedCardIds: readonly CardId[];
 }): Target[] {
   const usedCardIds = new Set(params.usedCardIds);
   const liveEntries = new Map(

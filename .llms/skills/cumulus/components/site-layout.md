@@ -20,7 +20,7 @@ Site content chooses its own material and floating panels should hug their conte
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `siteId` | `string` | yes | — | Stable site identity exposed for diagnostics. |
+| `siteId` | `SiteId` | yes | — | Stable site identity exposed for diagnostics. |
 | `scene` | `ArtRef \| null` | yes | — | Resolved scene art, or null for the canonical atmospheric fallback. |
 | `moteTint` | `"warm" \| "violet"` | yes | — | Named tint for the routed site's deterministic Motes layer. |
 | `guide` | `SiteLayoutGuide` | yes | — | Resolved resident-guide presentation. |

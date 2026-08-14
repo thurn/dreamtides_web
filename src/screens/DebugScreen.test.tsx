@@ -13,6 +13,9 @@ import type {
 } from "../types/content";
 import type { DraftState } from "../types/draft";
 import { DebugScreen } from "./DebugScreen";
+import { asSiteId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
+import { asDreamsignId } from "../types/identifiers";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -70,7 +73,7 @@ function makeCard(cardNumber: number, name: string): CardData {
 function makeResolvedPackage(): ResolvedDreamAvatarPackage {
   return {
     dreamAvatar: {
-      id: "caller-1",
+      id: asDreamAvatarId("caller-1"),
       name: "Caller of Lanterns",
       title: "Auditor of Debug Panels",
       renderedText: "Test rules text.",
@@ -78,7 +81,11 @@ function makeResolvedPackage(): ResolvedDreamAvatarPackage {
       startingEssence: 250,
     },
     draftPoolCopiesByCard: { "1": 2, "2": 1 },
-    dreamsignPoolIds: ["sign-1", "sign-2", "sign-3"],
+    dreamsignPoolIds: [
+      asDreamsignId("sign-1"),
+      asDreamsignId("sign-2"),
+      asDreamsignId("sign-3"),
+    ],
     mandatoryOnlyPoolSize: 120,
     draftPoolSize: 198,
     doubledCardCount: 41,
@@ -93,7 +100,7 @@ function makeDraftState(): DraftState {
     draftPoolCopiesByCard: { "1": 3, "2": 1 },
     remainingCopiesByCard: { "1": 3, "2": 1 },
     currentOffer: [1, 2],
-    activeSiteId: "site-1",
+    activeSiteId: asSiteId("site-1"),
     pickNumber: 3,
     sitePicksCompleted: 2,
   };
@@ -101,17 +108,17 @@ function makeDraftState(): DraftState {
 
 const DREAMSIGN_TEMPLATES: readonly DreamsignTemplate[] = [
   {
-    id: "sign-1",
+    id: asDreamsignId("sign-1"),
     name: "First Sign",
     effectDescription: "First.",
   },
   {
-    id: "sign-2",
+    id: asDreamsignId("sign-2"),
     name: "Second Sign",
     effectDescription: "Second.",
   },
   {
-    id: "sign-3",
+    id: asDreamsignId("sign-3"),
     name: "Third Sign",
     effectDescription: "Third.",
   },
@@ -157,7 +164,7 @@ describe("DebugScreen", () => {
           ])
         }
         resolvedPackage={makeResolvedPackage()}
-        remainingDreamsignPool={["sign-2"]}
+        remainingDreamsignPool={[asDreamsignId("sign-2")]}
         dreamsignTemplates={DREAMSIGN_TEMPLATES}
         journeyState={null}
       />,

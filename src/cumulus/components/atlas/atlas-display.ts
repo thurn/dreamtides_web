@@ -1,4 +1,6 @@
 import { assetUrl } from "../../../runtime/asset-url";
+import type { DreamscapeId } from "../../../types/identifiers";
+import type { GuideId } from "../../../types/identifiers";
 
 /**
  * Visual presentation data for the redesigned Dream Atlas screen. The Atlas
@@ -16,17 +18,17 @@ import { assetUrl } from "../../../runtime/asset-url";
  */
 
 /** Rectangular scene art for a dreamscape, shown in the hover-preview header. */
-export function dreamscapeSceneUrl(dreamscapeId: string): string {
+export function dreamscapeSceneUrl(dreamscapeId: DreamscapeId): string {
   return assetUrl(`/dreamscapes/${dreamscapeId}.png`);
 }
 
 /** Circular node icon for a dreamscape, shown inside the atlas node frame. */
-export function dreamscapeIconUrl(dreamscapeId: string): string {
+export function dreamscapeIconUrl(dreamscapeId: DreamscapeId): string {
   return assetUrl(`/dreamscape-icons/${dreamscapeId}.png`);
 }
 
 /** Character render of a Dream Guide, shown standing over the preview seam. */
-export function guidePortraitUrl(guideId: string): string {
+export function guidePortraitUrl(guideId: GuideId): string {
   return assetUrl(`/dream-guides/${guideId}.png`);
 }
 

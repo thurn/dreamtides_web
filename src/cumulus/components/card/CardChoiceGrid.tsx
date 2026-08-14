@@ -29,6 +29,7 @@ import {
   type LocalizedString,
 } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { DeckEntryId } from "../../../types/identifiers";
 
 /** A small line rendered directly below a card-choice tile. */
 export type CardChoiceGridCaption =
@@ -81,9 +82,9 @@ const OPERATION_PRESENTATION = {
 >;
 
 /** One resolved card presented by a {@link CardChoiceGrid}. */
-export interface CardChoiceGridCardView {
+export interface CardChoiceGridCardView<EntryId extends string = DeckEntryId> {
   /** Stable card or deck-entry id. */
-  entryId: string;
+  entryId: EntryId;
   /** Canonical semantic model rendered by GameCard. */
   model: GameCardModel;
   /** Optional test id on the GameCard. */
@@ -121,9 +122,11 @@ export interface CardChoiceGridCardView {
 }
 
 /** A card-sized action appended after the cards. */
-export interface CardChoiceGridActionView {
+export interface CardChoiceGridActionView<
+  EntryId extends string = DeckEntryId,
+> {
   /** Stable action id reported through the action callback. */
-  entryId: string;
+  entryId: EntryId;
   /** Large glyph that carries the action's visual identity. */
   glyph: Glyph;
   /** Accessible action label. */
@@ -160,28 +163,31 @@ export type CardChoiceGridLayout =
       rowGap: string;
     };
 
-export interface CardChoiceGridProps {
+export interface CardChoiceGridProps<EntryId extends string = DeckEntryId> {
   /** Resolved cards rendered in order. */
-  cards: readonly CardChoiceGridCardView[];
+  cards: readonly CardChoiceGridCardView<EntryId>[];
   /** Named column count. */
   columns: CardChoiceGridColumns;
   /** Site preset or gallery-computed layout. */
   layout: CardChoiceGridLayout;
   /** Optional card-sized action appended after the cards. */
-  endAction?: CardChoiceGridActionView;
+  endAction?: CardChoiceGridActionView<EntryId>;
   /** Fires when an enabled card tile is activated. */
-  onCardPress?: (entryId: string) => void;
+  onCardPress?: (entryId: EntryId) => void;
   /** Fires when an enabled draggable card begins a native drag. */
-  onCardDragStart?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
+  onCardDragStart?: (
+    entryId: EntryId,
+    event: DragEvent<HTMLDivElement>,
+  ) => void;
   /** Fires when an enabled draggable card's native drag ends. */
-  onCardDragEnd?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
+  onCardDragEnd?: (entryId: EntryId, event: DragEvent<HTMLDivElement>) => void;
   /** Fires when an enabled card requests contextual actions. */
   onCardContextMenu?: (
-    entryId: string,
+    entryId: EntryId,
     event: MouseEvent<HTMLDivElement>,
   ) => void;
   /** Fires with the trailing action's stable id. */
-  onEndActionPress?: (entryId: string) => void;
+  onEndActionPress?: (entryId: EntryId) => void;
 }
 
 const COLUMN_COUNT: Record<CardChoiceGridColumns, number> = {
@@ -247,12 +253,12 @@ function CaptionNode({
   );
 }
 
-function CardChoiceAction({
+function CardChoiceAction<EntryId extends string>({
   action,
   cardWidth,
   onActivate,
 }: {
-  readonly action: CardChoiceGridActionView;
+  readonly action: CardChoiceGridActionView<EntryId>;
   readonly cardWidth: string;
   readonly onActivate?: () => void;
 }): ReactElement {
@@ -317,31 +323,31 @@ function CardChoiceAction({
   );
 }
 
-interface CardChoiceGridItemProps {
-  readonly card: CardChoiceGridCardView;
-  readonly onCardPress?: (entryId: string) => void;
+interface CardChoiceGridItemProps<EntryId extends string> {
+  readonly card: CardChoiceGridCardView<EntryId>;
+  readonly onCardPress?: (entryId: EntryId) => void;
   readonly onCardDragStart?: (
-    entryId: string,
+    entryId: EntryId,
     event: DragEvent<HTMLDivElement>,
   ) => void;
   readonly onCardDragEnd?: (
-    entryId: string,
+    entryId: EntryId,
     event: DragEvent<HTMLDivElement>,
   ) => void;
   readonly onCardContextMenu?: (
-    entryId: string,
+    entryId: EntryId,
     event: MouseEvent<HTMLDivElement>,
   ) => void;
 }
 
 /** Private grid-item envelope around the canonical player-facing GameCard. */
-function CardChoiceGridItem({
+function CardChoiceGridItem<EntryId extends string>({
   card,
   onCardPress,
   onCardDragStart,
   onCardDragEnd,
   onCardContextMenu,
-}: CardChoiceGridItemProps): ReactElement {
+}: CardChoiceGridItemProps<EntryId>): ReactElement {
   const resolve = useLocalizer();
   const reserved = card.reserved === true;
   const disabled = card.disabled === true || reserved;
@@ -516,7 +522,7 @@ function CardChoiceQuantityBadge({
 }
 
 /** Frameless card-choice grid shared by sites and framed gallery surfaces. */
-export function CardChoiceGrid({
+export function CardChoiceGrid<EntryId extends string = DeckEntryId>({
   cards,
   columns,
   layout,
@@ -526,7 +532,7 @@ export function CardChoiceGrid({
   onCardDragEnd,
   onCardContextMenu,
   onEndActionPress,
-}: CardChoiceGridProps): ReactElement {
+}: CardChoiceGridProps<EntryId>): ReactElement {
   const columnCount = COLUMN_COUNT[columns];
   const cardWidth =
     layout.kind === "gallery"

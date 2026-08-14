@@ -27,6 +27,10 @@ import {
 } from "../../draft/draft-engine";
 import { mintEntryId } from "./deck";
 import { findSite } from "./sites";
+import type { CardId } from "../../types/card-identity";
+import { cardIdFromUnknown } from "../../types/card-identity";
+import { siteIdFromUnknown } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (PICK_DRAFT_CARD)
@@ -53,7 +57,7 @@ import { findSite } from "./sites";
  */
 export interface DraftContentProvider {
   /** Resolve a card UUID to its `cardNumber`, or `null` when unknown. */
-  resolveCardNumber(cardId: string): number | null;
+  resolveCardNumber(cardId: CardId): number | null;
   /** The card database the draft engine consults (rarity, etc.). */
   cardDatabase(): Map<number, CardData>;
   /**
@@ -91,10 +95,6 @@ export function getDraftContentProvider(): DraftContentProvider | null {
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function asString(value: unknown): string | null {
-  return typeof value === "string" ? value : null;
-}
 
 function integer(value: unknown): number | null {
   return typeof value === "number" && Number.isInteger(value) ? value : null;
@@ -154,7 +154,7 @@ export function pickDraftCard(
   ctx: EventContext,
 ): JourneyState | null {
   const packIndex = integer(payload.packIndex);
-  const cardId = asString(payload.cardId);
+  const cardId = cardIdFromUnknown(payload.cardId);
   if (packIndex === null || cardId === null) return null;
 
   const provider = contentProvider;
@@ -178,7 +178,7 @@ export function pickDraftCard(
 
   // Append the picked card before advancing the persisted draft state.
   const entry: DeckEntry = {
-    entryId: mintEntryId(journey.deck, ctx.seq, 0),
+    entryId: asDeckEntryId(mintEntryId(journey.deck, ctx.seq, 0)),
     cardNumber,
     transfiguration:
       draftState.currentOfferTransfigurations?.[String(cardNumber)] ?? null,
@@ -234,7 +234,7 @@ export function enterDraftSite(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
 
   const provider = contentProvider;
@@ -298,7 +298,7 @@ export function rerollDraftOffer(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
 
   const provider = contentProvider;
@@ -320,11 +320,7 @@ export function rerollDraftOffer(
   const config = provider.draftConfigFor(nextDraftState, site);
   if (config === undefined) return null;
   const stream = rngStream(ctx);
-  const hasOffer = engineRerollDraftOffer(
-    nextDraftState,
-    config,
-    stream,
-  );
+  const hasOffer = engineRerollDraftOffer(nextDraftState, config, stream);
   if (!hasOffer) return null;
   if (nextDraftState.transfiguredOfferSource !== undefined) {
     nextDraftState.currentOfferTransfigurations = rollOfferTransfigurations(

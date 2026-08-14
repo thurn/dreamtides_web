@@ -58,6 +58,11 @@ export function asCardId(value: string): CardId {
   return value as CardId;
 }
 
+/** Decode a JSON/network value as an internal card identity. */
+export function cardIdFromUnknown(value: unknown): CardId | null {
+  return typeof value === "string" ? asCardId(value) : null;
+}
+
 /**
  * Brands a raw string as a {@link CardId} after asserting it is UUID-shaped.
  *

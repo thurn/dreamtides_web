@@ -21,6 +21,11 @@ import {
   MINIMAL_SITES_DATA,
 } from "../../__test-helpers__/atlas-fixtures";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asJourneyId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 const screenMock = vi.hoisted(() =>
   vi.fn<(props: DreamscapeScreenProps) => void>(),
@@ -51,25 +56,25 @@ function lastScreenProps(): DreamscapeScreenProps {
 
 function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
   const node: DreamscapeNode = {
-    id: "node-1",
+    id: asAtlasNodeId("node-1"),
     layer: LayerName.One,
     indexInLayer: 0,
-    dreamscapeId: "ember_wood",
+    dreamscapeId: asDreamscapeId("ember_wood"),
     sites: [
       {
-        id: "s-essence",
+        id: asSiteId("s-essence"),
         type: "Essence",
         isEnhanced: false,
         isVisited: false,
       },
       {
-        id: "s-purge",
+        id: asSiteId("s-purge"),
         type: "Purge",
         isEnhanced: false,
         isVisited: false,
       },
       {
-        id: "s-reward",
+        id: asSiteId("s-reward"),
         type: "Reward",
         isEnhanced: false,
         isVisited: false,
@@ -97,7 +102,7 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
         reward: {
           rewardType: "dreamsign",
           dreamsign: {
-            id: "dreamsign-uuid",
+            id: asDreamsignId("dreamsign-uuid"),
             name: "Lantern in the Rain",
             effectDescription: "Your first dream each dawn costs 1 less.",
             imageName: "lantern-in-the-rain.webp",
@@ -142,7 +147,7 @@ describe("DreamscapeScreenAdapter", () => {
     setJourneyContext(
       mutations,
       makeState({
-        runId: "tutorial-run",
+        runId: asJourneyId("tutorial-run"),
         isTutorialJourney: true,
         completionLevel: 0,
         hasSeenStartingDeckPopup: true,
@@ -173,7 +178,7 @@ describe("DreamscapeScreenAdapter", () => {
       "tutorial-dreamscape-guidance:tutorial-run:node-1",
       "tutorial_dreamscape_guidance_shown",
       expect.objectContaining({
-        nodeId: "node-1",
+        nodeId: asAtlasNodeId("node-1"),
         delaySeconds: 2,
       }),
     );
@@ -191,11 +196,13 @@ describe("DreamscapeScreenAdapter", () => {
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
 
-    act(() => lastScreenProps().onSelectSite("s-essence"));
+    act(() => lastScreenProps().onSelectSite(asSiteId("s-essence")));
     expect(mutations.ensureEssenceSiteRuntime).not.toHaveBeenCalled();
     expect(mutations.enterSite).not.toHaveBeenCalled();
 
-    act(() => lastScreenProps().onInlineRewardAnimationComplete("s-essence"));
+    act(() =>
+      lastScreenProps().onInlineRewardAnimationComplete(asSiteId("s-essence")),
+    );
     expect(mutations.acceptEssenceSite).toHaveBeenCalledWith("s-essence");
     expect(logEvent).toHaveBeenCalledWith(
       "site_completed",
@@ -222,11 +229,13 @@ describe("DreamscapeScreenAdapter", () => {
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
 
-    act(() => lastScreenProps().onSelectSite("s-reward"));
+    act(() => lastScreenProps().onSelectSite(asSiteId("s-reward")));
     expect(mutations.ensureRewardSiteRuntime).not.toHaveBeenCalled();
     expect(mutations.enterSite).not.toHaveBeenCalled();
 
-    act(() => lastScreenProps().onInlineRewardAnimationComplete("s-reward"));
+    act(() =>
+      lastScreenProps().onInlineRewardAnimationComplete(asSiteId("s-reward")),
+    );
     expect(mutations.acceptRewardSite).toHaveBeenCalledWith("s-reward");
     expect(logEvent).toHaveBeenCalledWith(
       "site_completed",
@@ -234,7 +243,7 @@ describe("DreamscapeScreenAdapter", () => {
         siteType: "Reward",
         outcome: "collected",
         rewardType: "dreamsign",
-        dreamsignId: "dreamsign-uuid",
+        dreamsignId: asDreamsignId("dreamsign-uuid"),
       }),
     );
 
@@ -252,12 +261,12 @@ describe("DreamscapeScreenAdapter", () => {
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
 
-    act(() => lastScreenProps().onSelectSite("s-essence"));
+    act(() => lastScreenProps().onSelectSite(asSiteId("s-essence")));
     expect(mutations.ensureEssenceSiteRuntime).toHaveBeenCalledWith(
       "s-essence",
       false,
     );
-    act(() => lastScreenProps().onSelectSite("s-reward"));
+    act(() => lastScreenProps().onSelectSite(asSiteId("s-reward")));
     expect(mutations.ensureRewardSiteRuntime).toHaveBeenCalledWith("s-reward");
     expect(mutations.enterSite).not.toHaveBeenCalled();
 
@@ -276,12 +285,12 @@ describe("DreamscapeScreenAdapter", () => {
         maxDreamsigns: 2,
         dreamsigns: [
           {
-            id: "held-dreamsign-1",
+            id: asDreamsignId("held-dreamsign-1"),
             name: "Held One",
             effectDescription: "First held dreamsign.",
           },
           {
-            id: "held-dreamsign-2",
+            id: asDreamsignId("held-dreamsign-2"),
             name: "Held Two",
             effectDescription: "Second held dreamsign.",
           },
@@ -292,21 +301,25 @@ describe("DreamscapeScreenAdapter", () => {
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
 
-    act(() => lastScreenProps().onInlineRewardAnimationComplete("s-reward"));
+    act(() =>
+      lastScreenProps().onInlineRewardAnimationComplete(asSiteId("s-reward")),
+    );
 
     expect(mutations.enterSite).not.toHaveBeenCalled();
     expect(lastScreenProps().view.replacement).toMatchObject({
       capacity: 2,
       incoming: { id: "dreamsign-uuid" },
     });
-    act(() => lastScreenProps().onReplaceDreamsign("held-dreamsign-2"));
+    act(() =>
+      lastScreenProps().onReplaceDreamsign(asDreamsignId("held-dreamsign-2")),
+    );
     expect(mutations.acceptRewardSite).toHaveBeenCalledWith("s-reward", 1);
     expect(logEvent).toHaveBeenCalledWith(
       "site_completed",
       expect.objectContaining({
-        siteId: "s-reward",
-        dreamsignId: "dreamsign-uuid",
-        replacedDreamsignId: "held-dreamsign-2",
+        siteId: asSiteId("s-reward"),
+        dreamsignId: asDreamsignId("dreamsign-uuid"),
+        replacedDreamsignId: asDreamsignId("held-dreamsign-2"),
         outcome: "replaced_dreamsign",
       }),
     );
@@ -326,7 +339,7 @@ describe("DreamscapeScreenAdapter", () => {
         maxDreamsigns: 1,
         dreamsigns: [
           {
-            id: "held-dreamsign-1",
+            id: asDreamsignId("held-dreamsign-1"),
             name: "Held One",
             effectDescription: "First held dreamsign.",
           },
@@ -336,7 +349,9 @@ describe("DreamscapeScreenAdapter", () => {
     const container = document.createElement("div");
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
-    act(() => lastScreenProps().onInlineRewardAnimationComplete("s-reward"));
+    act(() =>
+      lastScreenProps().onInlineRewardAnimationComplete(asSiteId("s-reward")),
+    );
     act(() => lastScreenProps().onDeclineReward());
 
     expect(mutations.completeSite).toHaveBeenCalledWith(
@@ -347,8 +362,8 @@ describe("DreamscapeScreenAdapter", () => {
     expect(logEvent).toHaveBeenCalledWith(
       "reward_declined",
       expect.objectContaining({
-        siteId: "s-reward",
-        dreamsignId: "dreamsign-uuid",
+        siteId: asSiteId("s-reward"),
+        dreamsignId: asDreamsignId("dreamsign-uuid"),
         outcome: "kept_current_collection",
       }),
     );
@@ -366,7 +381,7 @@ describe("DreamscapeScreenAdapter", () => {
         maxDreamsigns: 1,
         dreamsigns: [
           {
-            id: "held-dreamsign-1",
+            id: asDreamsignId("held-dreamsign-1"),
             name: "Held One",
             effectDescription: "First held dreamsign.",
           },
@@ -376,8 +391,12 @@ describe("DreamscapeScreenAdapter", () => {
     const container = document.createElement("div");
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
-    act(() => lastScreenProps().onInlineRewardAnimationComplete("s-reward"));
-    act(() => lastScreenProps().onReplaceDreamsign("missing-dreamsign"));
+    act(() =>
+      lastScreenProps().onInlineRewardAnimationComplete(asSiteId("s-reward")),
+    );
+    act(() =>
+      lastScreenProps().onReplaceDreamsign(asDreamsignId("missing-dreamsign")),
+    );
 
     expect(mutations.acceptRewardSite).not.toHaveBeenCalled();
     expect(lastScreenProps().view.replacement).not.toBeNull();
@@ -397,7 +416,7 @@ describe("DreamscapeScreenAdapter", () => {
     const root = createRoot(container);
     act(() => root.render(<DreamscapeScreenAdapter />));
 
-    act(() => lastScreenProps().onSelectSite("s-purge"));
+    act(() => lastScreenProps().onSelectSite(asSiteId("s-purge")));
     expect(mutations.enterSite).toHaveBeenCalledWith("s-purge");
     expect(mutations.ensureEssenceSiteRuntime).not.toHaveBeenCalled();
 

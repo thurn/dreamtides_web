@@ -37,6 +37,15 @@ import {
 import { getLogEntries, resetLog } from "../logging";
 import type { MerchantArchetypeId } from "../journey_v2";
 import { auguryArchetype } from "../data/augury-data";
+import { asSiteId } from "../types/identifiers";
+import { asDreamscapeId } from "../types/identifiers";
+import { asAtlasNodeId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
+import { asBattleId } from "../types/identifiers";
+import { asShuffleCommitment } from "../types/identifiers";
+import { asDreamsignId } from "../types/identifiers";
+import { asDeckEntryId } from "../types/identifiers";
+import { asExplorationActionId } from "../types/identifiers";
 
 const motionPreference = vi.hoisted(() => ({
   reduced: false,
@@ -181,11 +190,11 @@ function merchantContent() {
     cards,
     dreamsignTemplates: [
       makeMerchantTestDreamsignTemplate({
-        id: "router-sign-a",
+        id: asDreamsignId("router-sign-a"),
         name: "Router Sign A",
       }),
       makeMerchantTestDreamsignTemplate({
-        id: "router-sign-b",
+        id: asDreamsignId("router-sign-b"),
         name: "Router Sign B",
       }),
     ],
@@ -305,7 +314,7 @@ function makeMutations(): JourneyMutations {
 
 function makeSite(type: SiteState["type"]): SiteState {
   return {
-    id: "router-site",
+    id: asSiteId("router-site"),
     type,
     isEnhanced: false,
     isVisited: false,
@@ -318,25 +327,25 @@ function makeStateFor(site: SiteState): JourneyState {
     essence: 180,
     deck: [1, 2, 3, 4, 5, 6].map((cardNumber, index) =>
       makeMerchantTestDeckEntry({
-        entryId: `router-entry-${index + 1}`,
+        entryId: asDeckEntryId(`router-entry-${index + 1}`),
         cardNumber,
       }),
     ),
   });
   return {
     ...merchantState,
-    currentDreamscape: "dreamscape-router",
+    currentDreamscape: asAtlasNodeId("dreamscape-router"),
     screen: { type: "site", siteId: site.id },
     activeSiteId: site.id,
     atlas: {
       ...createDefaultState().atlas,
-      startingNodeId: "dreamscape-router",
+      startingNodeId: asAtlasNodeId("dreamscape-router"),
       nodes: {
-        "dreamscape-router": {
-          id: "dreamscape-router",
+        [asAtlasNodeId("dreamscape-router")]: {
+          id: asAtlasNodeId("dreamscape-router"),
           layer: LayerName.One,
           indexInLayer: 0,
-          dreamscapeId: "test_dreamscape",
+          dreamscapeId: asDreamscapeId("test_dreamscape"),
           position: { x: 0, y: 0 },
           state: "available",
           enhancedSiteType: null,
@@ -529,7 +538,7 @@ describe("ScreenRouter Augury routing", () => {
     const mutations = makeMutations();
     const state = makeStateFor(site);
     state.dreamAvatar = {
-      id: "72000000-0000-4000-8000-000000000001",
+      id: asDreamAvatarId("72000000-0000-4000-8000-000000000001"),
       name: "Menu Fixture",
       title: "Keeper of Tests",
       renderedText: "",
@@ -802,7 +811,7 @@ describe("ScreenRouter terminal Cumulus routing", () => {
     state.screen = { type: "journeyFailed" };
     state.completionLevel = 2;
     state.dreamAvatar = {
-      id: "73000000-0000-4000-8000-000000000001",
+      id: asDreamAvatarId("73000000-0000-4000-8000-000000000001"),
       name: "Failure Fixture",
       title: "Keeper of the Last Test",
       renderedText: "A fixture ability.",
@@ -810,12 +819,12 @@ describe("ScreenRouter terminal Cumulus routing", () => {
       startingEssence: 180,
     };
     state.failureSummary = {
-      battleId: "router-failure-battle",
+      battleId: asBattleId("router-failure-battle"),
       result: "defeat",
       reason: "score_target_reached",
-      siteId: "router-failure-site",
+      siteId: asSiteId("router-failure-site"),
       siteLabel: "Battle",
-      dreamscapeIdOrNone: "router-failure-dreamscape",
+      dreamscapeIdOrNone: asAtlasNodeId("router-failure-dreamscape"),
       turnNumber: 6,
       playerScore: 4,
       enemyScore: 10,
@@ -842,8 +851,8 @@ describe("ScreenRouter terminal Cumulus routing", () => {
         (entry) => entry.event === "journey_failed_screen_shown",
       ),
     ).toMatchObject({
-      battleId: "router-failure-battle",
-      siteId: "router-failure-site",
+      battleId: asBattleId("router-failure-battle"),
+      siteId: asSiteId("router-failure-site"),
     });
 
     const newJourney = container.querySelector<HTMLButtonElement>(
@@ -856,7 +865,7 @@ describe("ScreenRouter terminal Cumulus routing", () => {
         (entry) => entry.event === "journey_failed_start_new_run",
       ),
     ).toMatchObject({
-      battleId: "router-failure-battle",
+      battleId: asBattleId("router-failure-battle"),
       result: "defeat",
     });
   });
@@ -866,14 +875,14 @@ describe("ScreenRouter site-dispatch completeness", () => {
   it("keeps a valid site route renderable while the active atlas node advances", () => {
     const site = makeSite("Battle");
     const state = makeStateFor(site);
-    const siteNode = state.atlas.nodes["dreamscape-router"];
+    const siteNode = state.atlas.nodes[asAtlasNodeId("dreamscape-router")];
     if (siteNode === undefined) throw new Error("expected fixture site node");
-    state.atlas.nodes["next-dreamscape"] = {
+    state.atlas.nodes[asAtlasNodeId("next-dreamscape")] = {
       ...siteNode,
-      id: "next-dreamscape",
+      id: asAtlasNodeId("next-dreamscape"),
       sites: [],
     };
-    state.currentDreamscape = "next-dreamscape";
+    state.currentDreamscape = asAtlasNodeId("next-dreamscape");
     const container = renderWithJourney({
       state,
       journeyContent: merchantContent(),
@@ -939,7 +948,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
             roundNumber: 1,
             isFarpoint: false,
             wagerCost: 50,
-            shuffleCommitment: "fixture-commitment",
+            shuffleCommitment: asShuffleCommitment("fixture-commitment"),
             committedCard: { rank: "A", suit: "spades" },
             dreamsignCandidateIds: [],
             rewardDreamsign: null,
@@ -1081,14 +1090,14 @@ describe("ScreenRouter site-dispatch completeness", () => {
           prose: "The fixture waits beyond the frame.",
           actions: [
             {
-              id: "fixture-action-a",
+              id: asExplorationActionId("fixture-action-a"),
               label: "Accept the Fixture",
               effectText: "Gain the fixture card.",
               effectKind: "gain-card",
               cardId: selectedCard.id,
             },
             {
-              id: "fixture-action-b",
+              id: asExplorationActionId("fixture-action-b"),
               label: "Echo the Fixture",
               effectText: "Gain the fixture card.",
               effectKind: "gain-card",
@@ -1104,7 +1113,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
       encounterCardId: selectedCard.id,
       actionOffers: ["fixture-action-a", "fixture-action-b"].map(
         (actionId) => ({
-          actionId,
+          actionId: asExplorationActionId(actionId),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},

@@ -49,6 +49,12 @@ import {
   materializeRandomSite,
 } from "../../random-site/random-site";
 import { SELECTION_RULES_VERSION } from "../../reward-selection";
+import type { DreamsignId, SiteId } from "../../types/identifiers";
+import { siteIdFromUnknown } from "../../types/identifiers";
+import { dreamsignIdFromUnknown } from "../../types/identifiers";
+import { deckEntryIdFromUnknown } from "../../types/identifiers";
+import { auguryArchetypeIdFromUnknown } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (OPEN_SITE generation for content-coupled site types)
@@ -62,7 +68,7 @@ import { SELECTION_RULES_VERSION } from "../../reward-selection";
  */
 export interface SiteOpenResult {
   runtime: SiteRuntimeState;
-  remainingDreamsignPool?: string[];
+  remainingDreamsignPool?: DreamsignId[];
   /** Updated shop modifier queues when this open consumed an entry. */
   shopModifiers?: ShopModifiers;
   /** Updated one-use modifier queue when this site consumed an entry. */
@@ -168,8 +174,8 @@ export interface SiteContentProvider {
  */
 export interface ShopRerollResult {
   slots: RuntimeShopSlot[];
-  remainingDreamsignPoolIds: string[];
-  remainingDreamsignPool: string[];
+  remainingDreamsignPoolIds: DreamsignId[];
+  remainingDreamsignPool: DreamsignId[];
   draftState: DraftState | null;
 }
 
@@ -223,7 +229,7 @@ function clampEssence(value: number): number {
 /** Locate a site by id anywhere in the atlas (relocated legacy `findSite`). */
 export function findSite(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ): SiteState | null {
   for (const node of Object.values(journey.atlas.nodes)) {
     const site = node.sites.find((candidate) => candidate.id === siteId);
@@ -238,7 +244,7 @@ export function findSite(
  * dreamscape, belong to it; it must be unvisited; a Battle site must be visited
  * last (every non-Battle sibling already visited).
  */
-export function canVisitSite(journey: JourneyState, siteId: string): boolean {
+export function canVisitSite(journey: JourneyState, siteId: SiteId): boolean {
   for (const node of Object.values(journey.atlas.nodes)) {
     const site = node.sites.find((candidate) => candidate.id === siteId);
     if (site === undefined) continue;
@@ -265,7 +271,7 @@ export function canVisitSite(journey: JourneyState, siteId: string): boolean {
 /** Mark `siteId` visited in `visitedSites` and the atlas (legacy `completeJourneySite`). */
 export function completeJourneySite(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ): JourneyState {
   if (!canVisitSite(journey, siteId)) return journey;
   const updatedNodes = { ...journey.atlas.nodes };
@@ -290,7 +296,7 @@ export function completeJourneySite(
 /** Complete the site and return to the dreamscape (legacy `completeSiteAndReturnToDreamscape`). */
 function completeAndReturn(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ): JourneyState {
   return {
     ...completeJourneySite(journey, siteId),
@@ -302,7 +308,7 @@ function completeAndReturn(
 /** Store `runtime` for `siteId`, replacing any existing entry for that key. */
 function withRuntime(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
   runtime: SiteRuntimeState,
 ): JourneyState {
   return {
@@ -344,7 +350,7 @@ export function openSite(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
 
   if (journey.siteRuntime[siteId] !== undefined) return null;
@@ -469,7 +475,7 @@ export function chooseRandomSite(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   const siteType = payload.siteType;
   if (siteId === null || !isRandomSiteDestinationType(siteType)) return null;
   if (journey.screen.type !== "site" || journey.screen.siteId !== siteId) {
@@ -518,7 +524,7 @@ export function resolveExplorationChoice(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const site = findSite(journey, siteId);
   if (site?.type !== "Exploration") return null;
@@ -543,7 +549,7 @@ export function acceptReward(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   if (journey.visitedSites.includes(siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
@@ -603,7 +609,7 @@ export function acceptEssence(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   if (journey.visitedSites.includes(siteId)) return null;
   const existing = journey.siteRuntime[siteId];
@@ -647,8 +653,8 @@ export function acceptDreamsignOffer(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const dreamsignId = asString(payload.dreamsignId);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const dreamsignId = dreamsignIdFromUnknown(payload.dreamsignId);
   if (siteId === null || dreamsignId === null) return null;
   if (journey.visitedSites.includes(siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
@@ -705,7 +711,7 @@ export function rejectDreamsignOffer(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   if (journey.visitedSites.includes(siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
@@ -741,8 +747,8 @@ export function acceptTransfigurationChoice(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const entryId = asString(payload.entryId);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const entryId = deckEntryIdFromUnknown(payload.entryId);
   if (siteId === null || entryId === null) return null;
   if (journey.visitedSites.includes(siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
@@ -803,8 +809,8 @@ export function acceptDuplicationChoice(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const entryId = asString(payload.entryId);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const entryId = deckEntryIdFromUnknown(payload.entryId);
   if (siteId === null || entryId === null) return null;
   if (journey.visitedSites.includes(siteId)) return null;
   const runtime = journey.siteRuntime[siteId];
@@ -821,7 +827,7 @@ export function acceptDuplicationChoice(
   if (entry === undefined) return null;
 
   const copy: DeckEntry = {
-    entryId: mintEntryId(journey.deck, ctx.seq, 0),
+    entryId: asDeckEntryId(mintEntryId(journey.deck, ctx.seq, 0)),
     cardNumber: entry.cardNumber,
     transfiguration: null,
     isBane: false,
@@ -847,7 +853,7 @@ export function completeAugury(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   if (journey.visitedSites.includes(siteId)) return null;
   const existing = journey.siteRuntime[siteId];
@@ -877,7 +883,7 @@ export function rerollAugury(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const existing = journey.siteRuntime[siteId];
   if (existing !== undefined && existing.kind !== "augury") return null;
@@ -906,11 +912,13 @@ export function forceAuguryArchetype(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
-  // `archetypeId` may be a non-empty string (force) or null (clear).
+  // `archetypeId` may be a known archetype (force) or null (clear).
   const archetypeId =
-    payload.archetypeId === null ? null : asString(payload.archetypeId);
+    payload.archetypeId === null
+      ? null
+      : auguryArchetypeIdFromUnknown(payload.archetypeId);
   if (payload.archetypeId !== null && archetypeId === null) return null;
   const existing = journey.siteRuntime[siteId];
   if (existing !== undefined && existing.kind !== "augury") return null;
@@ -939,7 +947,7 @@ export function completeSite(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (
     siteId === null ||
     journey.screen.type !== "site" ||
@@ -1020,7 +1028,7 @@ export function purgeDeckCards(
   if (removed.length !== targets.size) return null;
   const deck = journey.deck.filter((entry) => !targets.has(entry.entryId));
 
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const site = findSite(journey, siteId);
   if (

@@ -10,6 +10,7 @@ import type {
   JourneyDebugDreamsignView,
 } from "../../cumulus/screens/JourneyDebugEditorScreen";
 import { assertLocalized } from "@trox/runtime";
+import { asCardId } from "../../types/card-identity";
 
 /**
  * Builds the diagnostic editor's complete presentation model from live journey
@@ -33,11 +34,13 @@ export function buildJourneyDebugEditorView(
     essence: state.essence,
     maxDreamsigns: state.maxDreamsigns,
     completionLevel: state.completionLevel,
-    dreamsigns: state.dreamsigns.map((dreamsign, index): JourneyDebugDreamsignView => ({
-      actionId: `dreamsign:${String(index)}`,
-      templateId: dreamsign.id ?? `unnamed:${String(index)}`,
-      name: assertLocalized(dreamsign.name),
-    })),
+    dreamsigns: state.dreamsigns.map(
+      (dreamsign, index): JourneyDebugDreamsignView => ({
+        actionId: `dreamsign:${String(index)}`,
+        templateId: dreamsign.id ?? `unnamed:${String(index)}`,
+        name: assertLocalized(dreamsign.name),
+      }),
+    ),
     dreamsignOptions: dreamsignOptions.map((template) => ({
       id: template.id,
       name: assertLocalized(template.name),
@@ -55,7 +58,9 @@ export function buildJourneyDebugEditorView(
           : resolveDeckEntryCard(transfigurationData, base, entry);
       return {
         entryId: entry.entryId,
-        cardId: displaySnapshot?.id ?? `unknown:${String(entry.cardNumber)}`,
+        cardId: asCardId(
+          displaySnapshot?.id ?? `unknown:${String(entry.cardNumber)}`,
+        ),
         name: assertLocalized(
           displaySnapshot?.name ?? `Unknown ${String(entry.cardNumber)}`,
         ),
@@ -69,19 +74,22 @@ export function buildJourneyDebugEditorView(
         typeChange: entry.typeChange ?? null,
         keywordModification: entry.keywordModification ?? null,
         statOverride: entry.statOverride ?? null,
-        model: displaySnapshot === null ? null : {
-          cardId: displaySnapshot.id,
-          displaySnapshot,
-          ...(entry.transfiguration === null || base === undefined
-            ? {}
+        model:
+          displaySnapshot === null
+            ? null
             : {
-                transfiguration: buildTransfigurationDisplay(
-                  transfigurationData,
-                  base,
-                  entry.transfiguration,
-                ).display,
-              }),
-        },
+                cardId: displaySnapshot.id,
+                displaySnapshot,
+                ...(entry.transfiguration === null || base === undefined
+                  ? {}
+                  : {
+                      transfiguration: buildTransfigurationDisplay(
+                        transfigurationData,
+                        base,
+                        entry.transfiguration,
+                      ).display,
+                    }),
+              },
       };
     }),
   };

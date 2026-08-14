@@ -23,6 +23,13 @@ import type { RandomSiteDestinationType } from "../types/journey";
 import { atlasLayerData } from "../types/atlas-data";
 import type { SitesData } from "../types/sites-data";
 import type { GambleData } from "../types/gamble-data";
+import type { DreamsignId, GuideId } from "../types/identifiers";
+import type { DreamscapeId } from "../types/identifiers";
+import type { AtlasNodeId } from "../types/identifiers";
+import type { SiteId } from "../types/identifiers";
+import { asAtlasNodeId } from "../types/identifiers";
+import { asSiteId } from "../types/identifiers";
+import { asDreamsignId } from "../types/identifiers";
 
 /** Parameters for site generation that require external data. */
 export interface SiteGenerationContext {
@@ -49,7 +56,7 @@ export interface AtlasBuildContext {
   sitesData: SitesData;
   gambleData: GambleData;
   /** Dreamsign ids eligible to be granted as pre-revealed known dreamsigns. */
-  dreamsignPoolIds: readonly string[];
+  dreamsignPoolIds: readonly DreamsignId[];
   /**
    * Apollyon's incarnations; generation picks one to present the boss node. May
    * be empty in legacy or test contexts, in which case no incarnation is
@@ -88,14 +95,14 @@ let siteIdCounter = 0;
  */
 let atlasRandom: () => number = Math.random;
 
-function nextNodeId(): string {
+function nextNodeId(): AtlasNodeId {
   nodeIdCounter += 1;
-  return `dreamscape-${String(nodeIdCounter)}`;
+  return asAtlasNodeId(`dreamscape-${String(nodeIdCounter)}`);
 }
 
-function nextSiteId(): string {
+function nextSiteId(): SiteId {
   siteIdCounter += 1;
-  return `site-${String(siteIdCounter)}`;
+  return asSiteId(`site-${String(siteIdCounter)}`);
 }
 
 function numericSuffix(id: string, prefix: string): number | null {
@@ -349,7 +356,7 @@ function makeSite(
   draftPickCount: number,
 ): SiteState {
   return {
-    id: nextSiteId(),
+    id: asSiteId(nextSiteId()),
     type,
     isEnhanced,
     isVisited: false,
@@ -372,7 +379,7 @@ function makeRandomSite(
   mode: "single" | "homeChoice",
   candidates: RandomSiteDestinationType[],
   homeChoiceCount: number,
-  guideId: string | null,
+  guideId: GuideId | null,
   draftPickCount: number,
 ): SiteState {
   if (mode === "homeChoice" && candidates.length < homeChoiceCount) {
@@ -680,7 +687,7 @@ interface AtlasState {
    */
   dreamscapeWeights: Map<string, number>;
   /** Run dreamsign pool still available to grant as known dreamsigns. */
-  remainingDreamsignIds: string[];
+  remainingDreamsignIds: DreamsignId[];
   logEvents: boolean;
 }
 
@@ -840,7 +847,7 @@ function drawDreamscapeForNode(
 }
 
 /** Reduces a placed dreamscape's draw weight, keeping it strictly positive. */
-function discourageRepeat(state: AtlasState, dreamscapeId: string): void {
+function discourageRepeat(state: AtlasState, dreamscapeId: DreamscapeId): void {
   const strength = Math.max(
     1,
     state.context.atlasData.dreamscapeSelection.repeatDiscourageStrength,
@@ -857,7 +864,7 @@ function discourageRepeat(state: AtlasState, dreamscapeId: string): void {
  * special Limbo place; every interior node draws from non-starter dreamscapes.
  * Idempotent: a node that already carries a dreamscape is returned unchanged.
  */
-function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
+function revealNodeDreamscape(state: AtlasState, nodeId: AtlasNodeId): void {
   const node = state.atlas.nodes[nodeId];
   // A node carries a dreamscape once it has been revealed. Treat `undefined` as
   // "not yet revealed" alongside `null`: Realtime Database drops a stored `null`
@@ -939,7 +946,7 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
 /** Sets a node's lifecycle state, revealing its dreamscape when it becomes visible. */
 function setNodeState(
   state: AtlasState,
-  nodeId: string,
+  nodeId: AtlasNodeId,
   next: DreamscapeNode["state"],
 ): void {
   const node = state.atlas.nodes[nodeId];
@@ -1015,21 +1022,24 @@ function placeKnownDreamsigns(
       break;
     }
     const node = state.atlas.nodes[chosen];
-    state.atlas.nodes[chosen] = { ...node, knownDreamsignId: dreamsignId };
+    state.atlas.nodes[chosen] = {
+      ...node,
+      knownDreamsignId: asDreamsignId(dreamsignId),
+    };
     carriers.push(chosen);
 
     if (state.logEvents) {
       logEvent("atlas_known_dreamsign_placed", {
-        nodeId: chosen,
+        nodeId: asAtlasNodeId(chosen),
         layer: node.layer,
         indexInLayer: node.indexInLayer,
-        dreamsignId,
+        dreamsignId: asDreamsignId(dreamsignId),
         amongStartReveal: startRevealedNodeIds.has(chosen),
       });
     }
   }
 
-  state.atlas.knownDreamsignCarrierIds = carriers;
+  state.atlas.knownDreamsignCarrierIds = carriers.map(asAtlasNodeId);
 }
 
 /**
@@ -1073,7 +1083,7 @@ function generateInitialAtlasInternal(
   const logEvents = options.logEvents !== false;
 
   const widths = rollLayerWidths(build.atlasData);
-  const layers: string[][] = [];
+  const layers: AtlasNodeId[][] = [];
   const nodes: Record<string, DreamscapeNode> = {};
 
   for (let ordinal = 0; ordinal < widths.length; ordinal++) {
@@ -1084,7 +1094,7 @@ function generateInitialAtlasInternal(
           `atlas-data layer-specs must define at most ${String(LAYER_COUNT)} layers.`,
       );
     }
-    const layerIds: string[] = [];
+    const layerIds: AtlasNodeId[] = [];
     for (let indexInLayer = 0; indexInLayer < widths[ordinal]; indexInLayer++) {
       const id = nextNodeId();
       nodes[id] = {
@@ -1137,7 +1147,7 @@ function generateInitialAtlasInternal(
   }
 
   const atlas: DreamAtlas = {
-    layers,
+    layers: layers,
     nodes,
     startingNodeId,
     bossNodeId,
@@ -1188,8 +1198,8 @@ function generateInitialAtlasInternal(
     logEvent("atlas_generated", {
       layerWidths: widths,
       connectionAverage: cfg.graph.connectionAverage,
-      startingNodeId,
-      bossNodeId,
+      startingNodeId: asAtlasNodeId(startingNodeId),
+      bossNodeId: asAtlasNodeId(bossNodeId),
       // The Apollyon guise chosen for the boss node, plus the pool it was drawn
       // from, so a log read can reconstruct why this incarnation appeared.
       bossIncarnationId,
@@ -1269,16 +1279,16 @@ function generateInitialAtlasInternal(
 
   // The starter is entered directly; the boss and any bonus nodes are revealed
   // but locked.
-  setNodeState(state, startingNodeId, "available");
-  setNodeState(state, bossNodeId, "revealedLocked");
+  setNodeState(state, asAtlasNodeId(startingNodeId), "available");
+  setNodeState(state, asAtlasNodeId(bossNodeId), "revealedLocked");
   for (const nodeId of bonusReveals) {
-    setNodeState(state, nodeId, "revealedLocked");
+    setNodeState(state, asAtlasNodeId(nodeId), "revealedLocked");
   }
 
   if (logEvents) {
     logEvent("atlas_initial_reveal", {
-      startingNodeId,
-      bossNodeId,
+      startingNodeId: asAtlasNodeId(startingNodeId),
+      bossNodeId: asAtlasNodeId(bossNodeId),
       bonusRevealCount: bonusReveals.length,
       bonusRevealNodeIds: bonusReveals,
     });
@@ -1296,7 +1306,7 @@ function generateInitialAtlasInternal(
  */
 export function advanceAtlas(
   atlas: DreamAtlas,
-  completedNodeId: string,
+  completedNodeId: AtlasNodeId,
   completionLevel: number,
   context: SiteGenerationContext,
   build: AtlasBuildContext,
@@ -1320,7 +1330,7 @@ export function advanceAtlas(
 
 function advanceAtlasInternal(
   atlas: DreamAtlas,
-  completedNodeId: string,
+  completedNodeId: AtlasNodeId,
   completionLevel: number,
   context: SiteGenerationContext,
   build: AtlasBuildContext,
@@ -1370,7 +1380,7 @@ function advanceAtlasInternal(
   const nextAtlas: DreamAtlas = {
     ...atlas,
     nodes: { ...atlas.nodes },
-    currentNodeId: completedNodeId,
+    currentNodeId: asAtlasNodeId(completedNodeId),
   };
   const state: AtlasState = {
     atlas: nextAtlas,
@@ -1382,7 +1392,7 @@ function advanceAtlasInternal(
     logEvents,
   };
 
-  setNodeState(state, completedNodeId, "completed");
+  setNodeState(state, asAtlasNodeId(completedNodeId), "completed");
 
   // A persisted atlas can arrive with empty arrays stripped (RTDB drops them on
   // write), so iterate every array field defensively rather than throwing while
@@ -1457,8 +1467,8 @@ function advanceAtlasInternal(
  */
 function pickForwardFrontierNode(
   atlas: DreamAtlas,
-  completedNodeId: string,
-): string | null {
+  completedNodeId: AtlasNodeId,
+): AtlasNodeId | null {
   const node = atlas.nodes[completedNodeId];
   if (node === undefined) {
     return null;
@@ -1501,7 +1511,7 @@ function completedPathIsConnected(
   for (let i = 0; i < path.length - 1; i++) {
     const node = atlas.nodes[path[i]];
     const forwardIds = Array.isArray(node?.forwardIds) ? node.forwardIds : [];
-    if (!forwardIds.includes(path[i + 1])) {
+    if (!forwardIds.includes(asAtlasNodeId(path[i + 1]))) {
       return false;
     }
   }
@@ -1544,8 +1554,8 @@ export function regenerateAtlasForProgress(
 
   // The player always starts inside the starter dreamscape; the replay begins
   // by completing it, then follows forward edges to the next node to enter.
-  let nodeToComplete: string | null = atlas.startingNodeId;
-  const completedPath: string[] = [];
+  let nodeToComplete: AtlasNodeId | null = atlas.startingNodeId;
+  const completedPath: AtlasNodeId[] = [];
   for (let completion = 1; completion <= completedDreamscapes; completion++) {
     if (nodeToComplete === null) {
       if (logEvents) {

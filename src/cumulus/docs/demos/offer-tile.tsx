@@ -5,9 +5,10 @@ import {
 } from "../../components/controls/OfferTile";
 import type { CardData } from "../../../types/cards";
 import type { CumulusComponent } from "../registry";
+import type { CardId } from "../../../types/card-identity";
 
 function card(
-  cardId: string,
+  cardId: CardId,
   imageNumber: number,
   cardNumber: number,
 ): Readonly<CardData> {
@@ -32,10 +33,10 @@ const MODEL: OfferTileModel = {
   id: "cumulus-demo-card-draft",
   kind: "card-draft",
   cards: [
-    card("7be2e6d7-abff-4c44-a0c3-35460da1693c", 287269511, 1),
-    card("161482b6-af07-4d9e-822d-8c738672beb9", 2022594419, 2),
-    card("b56ef7e8-c634-4d40-ac08-fab591dfbc4a", 618071684, 3),
-    card("9b9c2743-75b3-499d-b5fb-c3429c92d420", 1196004046, 4),
+    card(asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), 287269511, 1),
+    card(asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), 2022594419, 2),
+    card(asCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"), 618071684, 3),
+    card(asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"), 1196004046, 4),
   ],
 };
 

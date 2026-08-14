@@ -6,6 +6,10 @@ import {
   buildShopPurchaseLogs,
   buildShopSiteEntryLog,
 } from "./shop-purchase-logging-view-model";
+import { asSiteId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 const card: CardData = {
   id: asCardId("00000000-0000-4000-8000-000000000001"),
@@ -23,8 +27,8 @@ const card: CardData = {
 };
 
 const source = {
-  sourceSiteId: "00000000-0000-4000-8000-000000000002",
-  sourceActionId: "00000000-0000-4000-8000-000000000003",
+  sourceSiteId: asSiteId("00000000-0000-4000-8000-000000000002"),
+  sourceActionId: asExplorationActionId("00000000-0000-4000-8000-000000000003"),
 } as const;
 
 const shopModifiers: ShopModifiers = {
@@ -59,12 +63,12 @@ function runtime(): ShopSiteRuntime {
     purchaseHistory: [
       {
         eventSeq: 18,
-        siteId: "shop-site",
+        siteId: asSiteId("shop-site"),
         slotIndex: 0,
         item: {
           kind: "card",
           cardNumber: card.cardNumber,
-          gainedEntryId: "deck-entry-uuid",
+          gainedEntryId: asDeckEntryId("deck-entry-uuid"),
         },
         priceBeforeFree: 70,
         pricePaid: 0,
@@ -121,13 +125,13 @@ describe("shop purchase logging view model", () => {
     ).toEqual([
       {
         eventSeq: 18,
-        siteId: "shop-site",
+        siteId: asSiteId("shop-site"),
         slotIndex: 0,
         item: {
           kind: "card",
           cardId: card.id,
           cardNumber: card.cardNumber,
-          gainedEntryId: "deck-entry-uuid",
+          gainedEntryId: asDeckEntryId("deck-entry-uuid"),
         },
         priceBeforeFree: 70,
         chargedPrice: 0,
@@ -147,12 +151,12 @@ describe("shop purchase logging view model", () => {
   it("retains Dreamsign purchase and replacement UUIDs without display names", () => {
     const receipt = {
       eventSeq: 19,
-      siteId: "bazaar-site",
+      siteId: asSiteId("bazaar-site"),
       slotIndex: 1,
       item: {
         kind: "dreamsign" as const,
-        dreamsignId: "dreamsign-gained-uuid",
-        replacedDreamsignId: "dreamsign-replaced-uuid",
+        dreamsignId: asDreamsignId("dreamsign-gained-uuid"),
+        replacedDreamsignId: asDreamsignId("dreamsign-replaced-uuid"),
       },
       priceBeforeFree: 180,
       pricePaid: 0,
@@ -169,12 +173,12 @@ describe("shop purchase logging view model", () => {
     expect(buildShopPurchaseLogs([receipt], new Map())).toEqual([
       {
         eventSeq: 19,
-        siteId: "bazaar-site",
+        siteId: asSiteId("bazaar-site"),
         slotIndex: 1,
         item: {
           kind: "dreamsign",
-          dreamsignId: "dreamsign-gained-uuid",
-          replacedDreamsignId: "dreamsign-replaced-uuid",
+          dreamsignId: asDreamsignId("dreamsign-gained-uuid"),
+          replacedDreamsignId: asDreamsignId("dreamsign-replaced-uuid"),
         },
         priceBeforeFree: 180,
         chargedPrice: 0,

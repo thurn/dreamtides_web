@@ -2,18 +2,23 @@ import { describe, expect, it } from "vitest";
 import { needsManualResolution } from "./capability-check";
 import { createDefaultBattleCardStatus } from "../state/create-initial-state";
 import type { BattleCardInstance } from "../types";
+import { asCardId } from "../../types/card-identity";
+import { asBattleCardId } from "../../types/identifiers";
 
 /**
  * Build a minimal BattleCardInstance for testing. Only `definition.cardNumber`
  * and `definition.renderedText` are examined by needsManualResolution; all
  * other fields are filled with benign defaults.
  */
-function makeInstance(renderedText: string, cardNumber: number): BattleCardInstance {
+function makeInstance(
+  renderedText: string,
+  cardNumber: number,
+): BattleCardInstance {
   return {
-    battleCardId: `test-${cardNumber}`,
+    battleCardId: asBattleCardId(`test-${cardNumber}`),
     definition: {
       sourceDeckEntryId: null,
-      cardId: "",
+      cardId: asCardId(""),
       cardNumber,
       name: `Test Card ${cardNumber}`,
       battleCardKind: "character",
@@ -55,12 +60,18 @@ describe("needsManualResolution", () => {
   describe("allowlist — modeled Starter cards always return false", () => {
     it("returns false for a modeled card even when its text contains a ▸ trigger", () => {
       // Card #1 from cards_v2-data.json: '▸Challenge: Banish an enemy until end of turn.'
-      const instance = makeInstance("▸Challenge: Banish an enemy until end of turn.", 1);
+      const instance = makeInstance(
+        "▸Challenge: Banish an enemy until end of turn.",
+        1,
+      );
       expect(needsManualResolution(instance, MODELED)).toBe(false);
     });
 
     it("returns false for a modeled card with Vengeful keyword", () => {
-      const instance = makeInstance("Vengeful\n\nWhen you play a card from your void, return this character to play.", 6);
+      const instance = makeInstance(
+        "Vengeful\n\nWhen you play a card from your void, return this character to play.",
+        6,
+      );
       expect(needsManualResolution(instance, MODELED)).toBe(false);
     });
 
@@ -74,13 +85,19 @@ describe("needsManualResolution", () => {
   describe("trigger marker ▸ (U+25B8)", () => {
     it("returns true for an unmodeled card whose text starts with ▸", () => {
       // Real text from card #1 in cards_v2-data.json
-      const instance = makeInstance("▸Challenge: Banish an enemy until end of turn.", 100);
+      const instance = makeInstance(
+        "▸Challenge: Banish an enemy until end of turn.",
+        100,
+      );
       expect(needsManualResolution(instance, MODELED)).toBe(true);
     });
 
     it("returns true when ▸ appears mid-text (second paragraph)", () => {
       // Real text from card #4 in cards_v2-data.json
-      const instance = makeInstance("▸Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦.", 200);
+      const instance = makeInstance(
+        "▸Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦.",
+        200,
+      );
       expect(needsManualResolution(instance, MODELED)).toBe(true);
     });
   });
@@ -96,7 +113,10 @@ describe("needsManualResolution", () => {
     });
 
     it("returns true for an unmodeled card with a standalone 'Reclaim –' keyword", () => {
-      const instance = makeInstance("Reclaim – 2●: Return this from void.", 301);
+      const instance = makeInstance(
+        "Reclaim – 2●: Return this from void.",
+        301,
+      );
       expect(needsManualResolution(instance, MODELED)).toBe(true);
     });
   });
@@ -116,7 +136,6 @@ describe("needsManualResolution", () => {
       expect(needsManualResolution(instance, MODELED)).toBe(false); // allowlisted
       expect(needsManualResolution(instance2, MODELED)).toBe(true);
     });
-
   });
 
   describe("static spark text +<number>✦ (U+2726)", () => {

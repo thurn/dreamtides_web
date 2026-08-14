@@ -5,6 +5,7 @@ import {
   readDreamsignPool,
   resolveDreamsignTemplates,
 } from "../dreamsign/dreamsign-pool";
+import type { DreamsignId } from "../types/identifiers";
 
 /**
  * A Dreamsign Reward Site always grants a known Dreamsign drawn from the run's
@@ -24,12 +25,12 @@ export type RewardSiteData =
 export interface RewardGenerationOptions {
   economy: EconomyData["siteRewards"]["reward"];
   dreamsignTemplates: readonly DreamsignTemplate[];
-  remainingDreamsignPoolIds: readonly string[];
+  remainingDreamsignPoolIds: readonly DreamsignId[];
   /**
    * The run's full Dreamsign pool. When the remaining pool is exhausted it is
    * recreated from this list so a Reward Site can still grant a Dreamsign.
    */
-  regenerationPoolIds?: readonly string[];
+  regenerationPoolIds?: readonly DreamsignId[];
   /**
    * Deterministic `[0, 1)` random source. Defaults to `Math.random` (the
    * legacy/UI path); the coop site provider passes a stream derived from
@@ -40,8 +41,8 @@ export interface RewardGenerationOptions {
 
 export interface RewardGenerationResult {
   reward: RewardSiteData;
-  remainingDreamsignPoolIds: string[];
-  spentDreamsignPoolIds: string[];
+  remainingDreamsignPoolIds: DreamsignId[];
+  spentDreamsignPoolIds: DreamsignId[];
 }
 
 export function generateRewardSiteData({
@@ -65,7 +66,10 @@ export function generateRewardSiteData({
     ).availableIds;
   }
 
-  const candidates = resolveDreamsignTemplates(availableIds, dreamsignTemplates);
+  const candidates = resolveDreamsignTemplates(
+    availableIds,
+    dreamsignTemplates,
+  );
   const dreamsignTemplate =
     candidates.length === 0
       ? null
@@ -93,7 +97,11 @@ export function generateRewardSiteData({
   return {
     reward: {
       rewardType: "essence",
-      essenceAmount: randomInt(rng, economy.fallbackEssence.min, economy.fallbackEssence.max),
+      essenceAmount: randomInt(
+        rng,
+        economy.fallbackEssence.min,
+        economy.fallbackEssence.max,
+      ),
     },
     remainingDreamsignPoolIds: [...availableIds],
     spentDreamsignPoolIds: [],

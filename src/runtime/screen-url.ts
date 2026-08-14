@@ -1,5 +1,6 @@
 import type { JourneyState, SiteType } from "../types/journey";
 import { layerOrdinal } from "../types/layer-name";
+import type { SiteId } from "../types/identifiers";
 
 /**
  * Maps the journey's current screen to a human-readable address-bar path, so the
@@ -67,7 +68,7 @@ function dreamscapeSlug(state: JourneyState): string | null {
 }
 
 /** Resolves the site occupied on a `site` screen, or `undefined` if missing. */
-function activeSite(state: JourneyState, siteId: string) {
+function activeSite(state: JourneyState, siteId: SiteId) {
   const nodeId = state.currentDreamscape;
   if (nodeId === null) return undefined;
   return state.atlas.nodes[nodeId]?.sites.find((site) => site.id === siteId);

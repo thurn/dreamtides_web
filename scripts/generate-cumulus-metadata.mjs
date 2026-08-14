@@ -252,8 +252,8 @@ function buildNestedResolver(filePaths) {
       const rendered = checker.typeToString(
         symbolType,
         node,
-        ts.TypeFormatFlags.NoTruncation
-          | ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+        ts.TypeFormatFlags.NoTruncation |
+          ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
       );
       fields.push({
         name: symbol.getName(),
@@ -267,17 +267,32 @@ function buildNestedResolver(filePaths) {
     return fields;
   }
 
+  function isPrimitiveBackedLeaf(type) {
+    const primitiveFlags =
+      ts.TypeFlags.StringLike |
+      ts.TypeFlags.NumberLike |
+      ts.TypeFlags.BooleanLike |
+      ts.TypeFlags.BigIntLike |
+      ts.TypeFlags.ESSymbolLike;
+    if ((type.flags & primitiveFlags) !== 0) return true;
+    return type.isIntersection() && type.types.some(isPrimitiveBackedLeaf);
+  }
+
   function resolveNested(typeName) {
     const node = declByName.get(typeName);
     if (!node) return null;
     const type = checker.getTypeAtLocation(node);
+    // Nominal scalar brands are intersections such as `string & Brand`. They
+    // remain leaf values for component consumers; expanding them would expose
+    // String.prototype and the private brand symbol as a bogus object model.
+    if (isPrimitiveBackedLeaf(type)) return null;
     if (type.isUnion()) {
       const variants = type.types.map((variant) => {
         const name = checker.typeToString(
           variant,
           node,
-          ts.TypeFormatFlags.NoTruncation
-            | ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
+          ts.TypeFormatFlags.NoTruncation |
+            ts.TypeFormatFlags.UseAliasDefinedOutsideCurrentScope,
         );
         const fields = fieldsForType(variant, node);
         return { name, fields };
@@ -286,11 +301,12 @@ function buildNestedResolver(filePaths) {
       // object/intersection branches can contain local paths and unwieldy
       // implementation shapes, so retain their concise shared-field view.
       if (
-        variants.length > 0
-        && variants.every((variant) => (
-          /^[A-Za-z_][A-Za-z0-9_]*$/.test(variant.name)
-          && variant.fields.length > 0
-        ))
+        variants.length > 0 &&
+        variants.every(
+          (variant) =>
+            /^[A-Za-z_][A-Za-z0-9_]*$/.test(variant.name) &&
+            variant.fields.length > 0,
+        )
       ) {
         return { variants };
       }
@@ -426,7 +442,9 @@ function collectComponentFiles(dir) {
  * file, so "edited a component but forgot to regenerate" fails the build.
  */
 export function computeMetadataJson() {
-  const files = COMPONENT_ROOTS.flatMap((dir) => collectComponentFiles(dir)).sort();
+  const files = COMPONENT_ROOTS.flatMap((dir) =>
+    collectComponentFiles(dir),
+  ).sort();
   const metadata = extractPropMeta(files);
 
   // Emit component names in a stable (alphabetical) order for a clean diff.

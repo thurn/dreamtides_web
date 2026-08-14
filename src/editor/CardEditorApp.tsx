@@ -23,7 +23,10 @@ import FocusedCardEditor from "./FocusedCardEditor";
 import type { FocusedSaveStatus } from "./FocusedCardEditor";
 import ManageTagsModal from "./ManageTagsModal";
 import { buildCardDuplicateUsageById } from "./card-duplicate-usage";
-import { CardView, DEFAULT_ART_CROP } from "../cumulus/components/card/CardView";
+import {
+  CardView,
+  DEFAULT_ART_CROP,
+} from "../cumulus/components/card/CardView";
 import type { ArtCrop, CardData } from "../types/cards";
 import {
   parseEditorDisplayState,
@@ -51,6 +54,7 @@ import {
   type EditorSortField,
   type EditorTag,
 } from "./types";
+import type { CardId } from "../types/card-identity";
 
 const DEFAULT_EDITOR_API_CLIENT: EditorApiClient = {
   loadEditorCards,
@@ -75,7 +79,9 @@ export interface CardEditorAppProps {
 }
 
 function errorMessageFor(error: unknown): string {
-  return error instanceof Error ? error.message : "Unable to load editor cards.";
+  return error instanceof Error
+    ? error.message
+    : "Unable to load editor cards.";
 }
 
 function isAbortError(error: unknown): boolean {
@@ -206,7 +212,10 @@ function sortValue(
   }
 }
 
-function compareSortValues(left: string | number, right: string | number): number {
+function compareSortValues(
+  left: string | number,
+  right: string | number,
+): number {
   if (typeof left === "number" && typeof right === "number") {
     return left - right;
   }
@@ -251,10 +260,7 @@ function filteredAndSortedCards(
         return false;
       }
 
-      if (
-        displayState.amplifiedOnly &&
-        card["amplified-text"].trim() === ""
-      ) {
+      if (displayState.amplifiedOnly && card["amplified-text"].trim() === "") {
         return false;
       }
 
@@ -284,10 +290,7 @@ function filteredAndSortedCards(
         return false;
       }
 
-      return (
-        subtypeFilter === "" ||
-        sourceSubtype(card) === subtypeFilter
-      );
+      return subtypeFilter === "" || sourceSubtype(card) === subtypeFilter;
     })
     .sort((left, right) => {
       const direction = displayState.dir === "asc" ? 1 : -1;
@@ -388,7 +391,9 @@ function validateFieldSave(
   }
 
   if (field === "card-type") {
-    return CARD_TYPE_OPTIONS.includes(textValue as (typeof CARD_TYPE_OPTIONS)[number])
+    return CARD_TYPE_OPTIONS.includes(
+      textValue as (typeof CARD_TYPE_OPTIONS)[number],
+    )
       ? { ok: true, value: textValue }
       : { ok: false, message: "Choose a valid card type." };
   }
@@ -503,9 +508,9 @@ export default function CardEditorApp({
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
   const [imageNumberSaveStatus, setImageNumberSaveStatus] =
     useState<FocusedSaveStatus>("idle");
-  const [imageNumberSaveError, setImageNumberSaveError] = useState<string | null>(
-    null,
-  );
+  const [imageNumberSaveError, setImageNumberSaveError] = useState<
+    string | null
+  >(null);
   // Fitted rules-text font sizes (px) keyed by card id, reported by each card as
   // it is measured. Only populated while sorting by font size, so font-size
   // measurements do not churn the sort in any other view.
@@ -545,10 +550,14 @@ export default function CardEditorApp({
   }, [apiClient, loadAttempt]);
 
   useEffect(() => {
-    const reloadConfirmedSource = () => setLoadAttempt((attempt) => attempt + 1);
+    const reloadConfirmedSource = () =>
+      setLoadAttempt((attempt) => attempt + 1);
     window.addEventListener("card-editor:stale-source", reloadConfirmedSource);
     return () => {
-      window.removeEventListener("card-editor:stale-source", reloadConfirmedSource);
+      window.removeEventListener(
+        "card-editor:stale-source",
+        reloadConfirmedSource,
+      );
     };
   }, []);
 
@@ -655,7 +664,7 @@ export default function CardEditorApp({
   );
 
   const handleRulesFontSize = useCallback(
-    (cardId: string, fontSizePx: number) => {
+    (cardId: CardId, fontSizePx: number) => {
       setFontSizes((current) =>
         current[cardId] === fontSizePx
           ? current
@@ -685,8 +694,7 @@ export default function CardEditorApp({
 
   function handleDisplayStateChange(nextState: EditorDisplayState) {
     if (
-      nextState.showGlossaryInfoOnHover !==
-      displayState.showGlossaryInfoOnHover
+      nextState.showGlossaryInfoOnHover !== displayState.showGlossaryInfoOnHover
     ) {
       logEvent("card_editor_glossary_hover_changed", {
         enabled: nextState.showGlossaryInfoOnHover,
@@ -1159,13 +1167,12 @@ export default function CardEditorApp({
         >
           Card Editor
         </h1>
-        <span
-          aria-hidden="true"
-          style={{ color: "rgba(247, 241, 223, 0.35)" }}
-        >
+        <span aria-hidden="true" style={{ color: "rgba(247, 241, 223, 0.35)" }}>
           ·
         </span>
-        <span style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}>
+        <span
+          style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}
+        >
           {loadStatus.kind === "loaded" ? activeTomlLabel : "Loading…"}
         </span>
       </header>
@@ -1241,7 +1248,9 @@ export default function CardEditorApp({
                 availableTides={tides}
                 tagSaveState={tagSaveState}
                 tideSaveState={tideSaveState}
-                onRulesFontSize={sortByFontSize ? handleRulesFontSize : undefined}
+                onRulesFontSize={
+                  sortByFontSize ? handleRulesFontSize : undefined
+                }
                 onOpenArtEditor={handleOpenArtEditor}
                 onFieldBeginEdit={handleFieldBeginEdit}
                 onFieldDraftChange={handleFieldDraftChange}
@@ -1406,7 +1415,8 @@ export default function CardEditorApp({
                     available: tides,
                     saving: tideSaveState[artEditorCard.id]?.saving ?? false,
                     error: tideSaveState[artEditorCard.id]?.error ?? null,
-                    onAdd: (name: string) => handleAddCardTide(artEditorCard, name),
+                    onAdd: (name: string) =>
+                      handleAddCardTide(artEditorCard, name),
                     onRemove: (name: string) =>
                       handleRemoveCardTide(artEditorCard, name),
                     onOpenManage: () => setManageTidesOpen(true),

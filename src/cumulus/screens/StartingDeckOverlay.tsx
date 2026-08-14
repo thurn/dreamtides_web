@@ -22,6 +22,7 @@ import type { ReactElement } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { DeckGalleryOverlay } from "./DeckGalleryOverlay";
 import { tx } from "@trox/runtime";
+import type { DeckEntryId } from "../../types/identifiers";
 
 /**
  * One starting-deck card, resolved to the card the player actually holds
@@ -31,7 +32,7 @@ import { tx } from "@trox/runtime";
  */
 export interface StartingDeckCardView {
   /** Stable deck-entry id; the grid key and the basis of `testId`. */
-  entryId: string;
+  entryId: DeckEntryId;
   /** Canonical UUID-backed card model. */
   model: GameCardModel;
   /** `data-testid` for the card's grid tile. */
@@ -78,10 +79,7 @@ export function StartingDeckOverlay({
         "No cards in starting deck.",
         "[ui] Starting deck empty state.",
       )}
-      actionLabel={tx(
-        "Begin Journey",
-        "[ui] Starting deck begin action.",
-      )}
+      actionLabel={tx("Begin Journey", "[ui] Starting deck begin action.")}
       onClose={onClose}
     />
   );

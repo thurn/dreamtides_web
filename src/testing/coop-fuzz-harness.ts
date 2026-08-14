@@ -24,9 +24,10 @@ import {
   NEXT_NODE_ID,
   NODE_ID,
 } from "../rules/replay/fixture-providers";
-import {
-  GAME_ENGINE_CONFIG,
-} from "../rules/replay/replay";
+import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
+import { asDreamscapeId } from "../types/identifiers";
+import { asSiteId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
 
 export type FuzzActor = "publisher" | "host";
 export type DeliveryShape = "object" | "array" | "firebase-omissions";
@@ -142,7 +143,7 @@ function stateAwareDraft(state: FoldState, value: number): EventDraft {
   if (state.journey.runId === null) {
     return {
       type: "START_JOURNEY",
-      payload: { dreamAvatarId: DREAM_AVATAR_ID },
+      payload: { dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID) },
       intentKey: "fuzz:start-journey",
     };
   }
@@ -161,7 +162,7 @@ function stateAwareDraft(state: FoldState, value: number): EventDraft {
   if (state.journey.screen.type === "site") {
     const siteId = state.journey.screen.siteId;
     const site = state.journey.atlas.nodes[
-      state.journey.currentDreamscape ?? ""
+      state.journey.currentDreamscape ?? asDreamscapeId("")
     ]?.sites.find((candidate) => candidate.id === siteId);
     return site?.type === "Battle"
       ? { type: "BEGIN_BATTLE", payload: { siteId } }
@@ -193,7 +194,7 @@ function stateAwareDraft(state: FoldState, value: number): EventDraft {
   if (value % 3 === 0) {
     return {
       type: "OPEN_SITE",
-      payload: { siteId: ESSENCE_SITE_ID },
+      payload: { siteId: asSiteId(ESSENCE_SITE_ID) },
       intentKey: `fuzz:open:${state.journey.runId}:${ESSENCE_SITE_ID}`,
     };
   }
@@ -254,26 +255,31 @@ export class CoopFuzzRoom {
         return Promise.resolve(this.encoded.head);
       },
     };
-    observation.client = createLogClient(GAME_ENGINE_CONFIG, io, {
-      onDisplayState: (state) => {
-        observation.displayedState = state;
+    observation.client = createLogClient(
+      GAME_ENGINE_CONFIG,
+      io,
+      {
+        onDisplayState: (state) => {
+          observation.displayedState = state;
+        },
+        onConfirmedState: (state) => {
+          observation.confirmedState = state;
+        },
+        onConfirmedHead: (head) => {
+          observation.confirmedHead = head;
+        },
+        onEventOutcome: (event, seq, outcome) => {
+          observation.outcomes.push({ actor, event, seq, outcome });
+        },
+        onDivergence: ({ seq, expected, actual }) => {
+          observation.divergences.push(`${seq}:${expected}:${actual}`);
+        },
+        onFoldError: (error) => {
+          observation.foldErrors.push(`${error.seq}:${error.message}`);
+        },
       },
-      onConfirmedState: (state) => {
-        observation.confirmedState = state;
-      },
-      onConfirmedHead: (head) => {
-        observation.confirmedHead = head;
-      },
-      onEventOutcome: (event, seq, outcome) => {
-        observation.outcomes.push({ actor, event, seq, outcome });
-      },
-      onDivergence: ({ seq, expected, actual }) => {
-        observation.divergences.push(`${seq}:${expected}:${actual}`);
-      },
-      onFoldError: (error) => {
-        observation.foldErrors.push(`${error.seq}:${error.message}`);
-      },
-    }, { clientId: CLIENT_IDS[actor] });
+      { clientId: CLIENT_IDS[actor] },
+    );
     this.observations.set(actor, observation);
   }
 
@@ -313,7 +319,7 @@ export class CoopFuzzRoom {
         ? stateAwareDraft(canonical, value)
         : {
             type: "OPEN_SITE",
-            payload: { siteId: ESSENCE_SITE_ID },
+            payload: { siteId: asSiteId(ESSENCE_SITE_ID) },
             intentKey: `fuzz:shared:${canonical.journey.runId}:${value % 3}`,
           };
     await this.observations.get(actor)!.client.submit(draft);
@@ -493,9 +499,7 @@ export async function runCoopFuzz(options: {
     for (let step = 0; step < 12; step += 1) {
       await victoryRoom.submitStateAware("publisher", 5);
       victoryRoom.deliverBoth("firebase-omissions");
-      if (
-        victoryRoom.replay().finalState.journey.completionLevel === 1
-      ) {
+      if (victoryRoom.replay().finalState.journey.completionLevel === 1) {
         break;
       }
     }
@@ -508,7 +512,7 @@ export async function runCoopFuzz(options: {
       victory.journey.atlas.nodes[NODE_ID]?.state !== "completed" ||
       victory.journey.atlas.nodes[NEXT_NODE_ID]?.state !== "available" ||
       victory.journey.atlas.nodes[NEXT_NODE_ID]?.dreamscapeId === null ||
-      !victory.journey.visitedSites.includes(BATTLE_SITE_ID)
+      !victory.journey.visitedSites.includes(asSiteId(BATTLE_SITE_ID))
     ) {
       throw new Error("deterministic battle-victory sentinel failed");
     }

@@ -5,6 +5,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AppendFn } from "./actions";
+import { asClientId, asRoomId } from "../types/identifiers";
 
 // This test exercises the REAL `createLogClient`/`LogClient.submit` — including
 // its not-initialized gate (submit REJECTS until the first log node has folded
@@ -145,8 +146,8 @@ import type { RoomReadyContext } from "./RoomGate";
 function makeContext(): RoomReadyContext {
   return {
     db: {} as RoomReadyContext["db"],
-    roomId: "room-1",
-    clientId: "client-test",
+    roomId: asRoomId("room-1"),
+    clientId: asClientId("client-test"),
     genesis: fake.genesis,
     logSink: {
       recordCoopEvent: () => false,

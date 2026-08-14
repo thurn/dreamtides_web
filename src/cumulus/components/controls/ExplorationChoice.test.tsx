@@ -11,12 +11,14 @@ import {
   type ExplorationChoiceEntity,
 } from "./ExplorationChoice";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
+import { asDeckEntryId } from "../../../types/identifiers";
+import { asExplorationActionId } from "../../../types/identifiers";
 
 const entityCard = syntheticGameCard(1);
 const entity: ExplorationChoiceEntity = {
   kind: "card",
   id: entityCard.cardId,
-  entryId: "entry",
+  entryId: asDeckEntryId("entry"),
   label: assertLocalized("Entity"),
   card: entityCard,
 };
@@ -50,7 +52,7 @@ describe("ExplorationChoice", () => {
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
-          actionId: "action",
+          actionId: asExplorationActionId("action"),
           label: assertLocalized("Choice"),
           description: [
             { kind: "text", value: assertLocalized("Before ") },
@@ -81,7 +83,7 @@ describe("ExplorationChoice", () => {
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
-          actionId: "activation",
+          actionId: asExplorationActionId("activation"),
           label: assertLocalized("Choice"),
           description: [{ kind: "text", value: assertLocalized("Plain") }],
           availability: "available",
@@ -127,7 +129,7 @@ describe("ExplorationChoice", () => {
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
-          actionId: "hold",
+          actionId: asExplorationActionId("hold"),
           label: assertLocalized("Choice"),
           description: [{ kind: "entity", entity }],
           availability: "available",
@@ -160,7 +162,7 @@ describe("ExplorationChoice", () => {
     const repeatedCard = {
       ...entity,
       id: secondCard.cardId,
-      entryId: "entry-two",
+      entryId: asDeckEntryId("entry-two"),
       card: secondCard,
     };
     const dreamsign = localizedDreamsignFixture({
@@ -176,7 +178,7 @@ describe("ExplorationChoice", () => {
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
-          actionId: "ordered",
+          actionId: asExplorationActionId("ordered"),
           label: assertLocalized(
             "A long localized choice label that must remain readable",
           ),
@@ -213,7 +215,7 @@ describe("ExplorationChoice", () => {
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
-          actionId: "blocked",
+          actionId: asExplorationActionId("blocked"),
           label: assertLocalized("Choice"),
           description: [{ kind: "entity", entity }],
           availability: "unavailable",

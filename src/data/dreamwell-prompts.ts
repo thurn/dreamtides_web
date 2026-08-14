@@ -5,13 +5,14 @@ import type {
 } from "./dreamwell-database";
 import type { LocalizedString } from "@trox/runtime";
 import { bindSourceTransport } from "../runtime/localization/runtime";
+import type { DreamwellCardId } from "../types/identifiers";
 
 export type DreamwellPromptArgumentValue = string | number;
 
 /** Semantic, JSON-safe reference persisted by a Dreamwell automation prompt. */
 export interface DreamwellPromptRef {
   readonly kind: "dreamwell-prompt";
-  readonly cardId: string;
+  readonly cardId: DreamwellCardId;
   readonly promptKey: string;
   readonly arguments: Readonly<Record<string, DreamwellPromptArgumentValue>>;
   readonly part: "title" | "subtitle" | "instructions" | "choice";
@@ -67,9 +68,7 @@ export type BuiltInBattlePromptRef =
     };
 
 export type BattlePromptText =
-  | BuiltInBattlePromptRef
-  | DreamwellPromptRef
-  | LegacyPromptText;
+  BuiltInBattlePromptRef | DreamwellPromptRef | LegacyPromptText;
 
 export function builtInBattlePromptRef(
   prompt: Exclude<BuiltInBattlePromptRef["prompt"], "switch-side">,
@@ -145,10 +144,7 @@ export function builtInBattlePromptRefFromV24Descriptor(
   }
   const descriptor = value as Record<string, unknown>;
   const withoutVariables: Readonly<
-    Record<
-      string,
-      Exclude<BuiltInBattlePromptRef["prompt"], "switch-side">
-    >
+    Record<string, Exclude<BuiltInBattlePromptRef["prompt"], "switch-side">>
   > = {
     "battle-prompt-discover-character": "discover-character",
     "battle-prompt-confirm-yes": "confirm-yes",
@@ -177,7 +173,7 @@ export function builtInBattlePromptRefFromV24Descriptor(
 }
 
 export function dreamwellPromptRef(
-  cardId: string,
+  cardId: DreamwellCardId,
   promptKey: string,
   part: DreamwellPromptRef["part"] = "title",
   arguments_: DreamwellPromptRef["arguments"] = {},

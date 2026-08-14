@@ -24,6 +24,14 @@ import { LayerName } from "./types/layer-name";
 import App, { JourneyApp } from "./App";
 import { useJourney } from "./state/journey-context";
 import { registerGameProviders } from "./coop/providers/register-game-providers";
+import { asJourneyId } from "./types/identifiers";
+import { asAtlasNodeId } from "./types/identifiers";
+import { asDreamAvatarId } from "./types/identifiers";
+import { asDreamscapeId } from "./types/identifiers";
+import { asSiteId } from "./types/identifiers";
+import { asCardId } from "./types/card-identity";
+import { asDeckEntryId } from "./types/identifiers";
+import { asRoomId } from "./types/identifiers";
 
 vi.mock("./data/journey-content", () => ({
   AFFINITY_GROWN_POOL_VARIANTS: new Set<string>(),
@@ -123,25 +131,23 @@ vi.mock("./data/tutorial-actions", () => ({
       triggers: [],
       battle: {
         tutorialCardConstants: {
-          tutorialPlayerCharacterCardId:
-            "00000000-0000-4000-8000-000000000001",
+          tutorialPlayerCharacterCardId: "00000000-0000-4000-8000-000000000001",
           tutorialOpponentCharacterCardId:
             "00000000-0000-4000-8000-000000000002",
-          loadingScreenCharacterCardId:
-            "00000000-0000-4000-8000-000000000008",
-          loadingScreenEventCardId:
-            "00000000-0000-4000-8000-000000000004",
-          handoffEnemyCharacterCardId:
-            "00000000-0000-4000-8000-000000000003",
-          tutorialDreamwellCardId:
-            "00000000-0000-4000-8000-000000000005",
+          loadingScreenCharacterCardId: "00000000-0000-4000-8000-000000000008",
+          loadingScreenEventCardId: "00000000-0000-4000-8000-000000000004",
+          handoffEnemyCharacterCardId: "00000000-0000-4000-8000-000000000003",
+          tutorialDreamwellCardId: "00000000-0000-4000-8000-000000000005",
         },
         playerDreamAvatarId: "00000000-0000-4000-8000-000000000006",
         enemyDreamAvatarId: "00000000-0000-4000-8000-000000000007",
         startingEnergy: 4,
         scoreToWin: 10,
         starterDeck: [
-          { cardId: "00000000-0000-4000-8000-000000000001", copies: 30 },
+          {
+            cardId: asCardId("00000000-0000-4000-8000-000000000001"),
+            copies: 30,
+          },
         ],
         handoff: { activeSide: "player" },
         forcedPlayerDraws: [],
@@ -368,7 +374,7 @@ function makeMutations(): JourneyMutations {
 
 function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
   return {
-    runId: "journey:test",
+    runId: asJourneyId("journey:test"),
     seed: "test-seed",
     essence: 250,
     maxDreamsigns: 12,
@@ -381,9 +387,9 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
     completionLevel: 0,
     atlas: {
       nodes: {},
-      startingNodeId: "",
-      bossNodeId: "",
-      currentNodeId: "",
+      startingNodeId: asAtlasNodeId(""),
+      bossNodeId: asAtlasNodeId(""),
+      currentNodeId: asAtlasNodeId(""),
       layers: [],
       knownDreamsignCarrierIds: [],
     },
@@ -517,7 +523,7 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          gameId: "ab12cd",
+          gameId: asRoomId("ab12cd"),
           databaseMode: "emulator",
         }}
       />,
@@ -547,7 +553,7 @@ describe("App", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          gameId: "ab12cd",
+          gameId: asRoomId("ab12cd"),
           databaseMode: "emulator",
         }}
       />,
@@ -634,13 +640,13 @@ describe("JourneyApp", () => {
   ): JourneyState =>
     makeState({
       deck: Array.from({ length: 10 }, (_, index) => ({
-        entryId: `deck-${String(index + 1)}`,
+        entryId: asDeckEntryId(`deck-${String(index + 1)}`),
         cardNumber: 711 + index,
         transfiguration: null,
         isBane: false,
       })),
       dreamAvatar: {
-        id: "caller-1",
+        id: asDreamAvatarId("caller-1"),
         name: "Starter Caller",
         title: "Of the First Hand",
         renderedText: "Pick your path.",
@@ -841,14 +847,14 @@ describe("JourneyApp", () => {
       makeState({
         atlas: {
           nodes: {
-            "dreamscape-1": {
-              id: "dreamscape-1",
+            [asAtlasNodeId("dreamscape-1")]: {
+              id: asAtlasNodeId("dreamscape-1"),
               layer: LayerName.One,
               indexInLayer: 0,
-              dreamscapeId: "test_dreamscape",
+              dreamscapeId: asDreamscapeId("test_dreamscape"),
               sites: [
                 {
-                  id: "site-1",
+                  id: asSiteId("site-1"),
                   type: "Battle",
                   isEnhanced: false,
                   isVisited: false,
@@ -862,15 +868,15 @@ describe("JourneyApp", () => {
               knownDreamsignId: null,
             },
           },
-          startingNodeId: "dreamscape-1",
-          bossNodeId: "dreamscape-1",
-          currentNodeId: "dreamscape-1",
+          startingNodeId: asAtlasNodeId("dreamscape-1"),
+          bossNodeId: asAtlasNodeId("dreamscape-1"),
+          currentNodeId: asAtlasNodeId("dreamscape-1"),
           layers: [],
           knownDreamsignCarrierIds: [],
         },
-        currentDreamscape: "dreamscape-1",
-        screen: { type: "site", siteId: "site-1" },
-        activeSiteId: "site-1",
+        currentDreamscape: asAtlasNodeId("dreamscape-1"),
+        screen: { type: "site", siteId: asSiteId("site-1") },
+        activeSiteId: asSiteId("site-1"),
       }),
     );
 
@@ -900,14 +906,14 @@ describe("JourneyApp", () => {
       makeState({
         atlas: {
           nodes: {
-            "dreamscape-1": {
-              id: "dreamscape-1",
+            [asAtlasNodeId("dreamscape-1")]: {
+              id: asAtlasNodeId("dreamscape-1"),
               layer: LayerName.One,
               indexInLayer: 0,
-              dreamscapeId: "test_dreamscape",
+              dreamscapeId: asDreamscapeId("test_dreamscape"),
               sites: [
                 {
-                  id: "site-1",
+                  id: asSiteId("site-1"),
                   type: "Draft",
                   isEnhanced: false,
                   isVisited: false,
@@ -921,15 +927,15 @@ describe("JourneyApp", () => {
               knownDreamsignId: null,
             },
           },
-          startingNodeId: "dreamscape-1",
-          bossNodeId: "dreamscape-1",
-          currentNodeId: "dreamscape-1",
+          startingNodeId: asAtlasNodeId("dreamscape-1"),
+          bossNodeId: asAtlasNodeId("dreamscape-1"),
+          currentNodeId: asAtlasNodeId("dreamscape-1"),
           layers: [],
           knownDreamsignCarrierIds: [],
         },
-        currentDreamscape: "dreamscape-1",
-        screen: { type: "site", siteId: "site-1" },
-        activeSiteId: "site-1",
+        currentDreamscape: asAtlasNodeId("dreamscape-1"),
+        screen: { type: "site", siteId: asSiteId("site-1") },
+        activeSiteId: asSiteId("site-1"),
       }),
     );
 

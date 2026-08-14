@@ -21,8 +21,10 @@ import type {
   BattleInit,
   BattleMutableState,
   BattleSide,
+  BattlefieldSlotId,
   DreamwellCardDefinition,
 } from "../../battle/types";
+import { rankSlotIds } from "../../battle/types";
 import { findSite } from "../../rules/journey/sites";
 import type { BattleFoldState } from "../../rules/fold-state";
 import { emptyDawnFired } from "../../rules/battle/fold";
@@ -39,6 +41,24 @@ import type {
 import { advanceAtlas } from "../../atlas/atlas-generator";
 import { resolveBattleAiConfiguration } from "../../types/opponents-data";
 import { tutorialCardConstantId } from "../../data/tutorial-actions";
+import { asJourneyId } from "../../types/identifiers";
+import type { AtlasNodeId } from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
+import type { BattleId } from "../../types/identifiers";
+import type {
+  BattleCardId,
+  DreamAvatarId,
+  DreamwellCardId,
+} from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import { asSiteId } from "../../types/identifiers";
+import { asBattleId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asBattleEntryKey } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asOpponentId } from "../../types/identifiers";
 
 const deferredOpponentLogs = new Map<number, () => void>();
 
@@ -47,11 +67,11 @@ const deferredOpponentLogs = new Map<number, () => void>();
  * stable identity, so the derived battle seed is identical on every client.
  */
 function battleEntryKeyFor(
-  dreamscapeId: string | null,
-  siteId: string,
+  dreamscapeId: AtlasNodeId | null,
+  siteId: SiteId,
   completionLevel: number,
 ): string {
-  return `${siteId}::${String(completionLevel)}::${dreamscapeId ?? "none"}`;
+  return `${siteId}::${String(completionLevel)}::${dreamscapeId ?? asAtlasNodeId("none")}`;
 }
 
 /**
@@ -63,7 +83,7 @@ function battleEntryKeyFor(
 export function createBattlePreview(
   content: JourneyContent,
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
   seedOverride: number | null = null,
 ): BattleInit | null {
   return buildBattleInit(content, journey, siteId, seedOverride, () => {});
@@ -72,7 +92,7 @@ export function createBattlePreview(
 function buildBattleInit(
   content: JourneyContent,
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
   seedOverride: number | null,
   deferOpponentLog: (emit: () => void) => void,
 ): BattleInit | null {
@@ -87,8 +107,10 @@ function buildBattleInit(
   return createBattleInit({
     opponentsData: content.opponentsData,
     transfigurationData: content.transfigurationData,
-    battleEntryKey,
-    battleInstanceId: `battle:${journey.runId ?? "unscoped"}:${battleEntryKey}`,
+    battleEntryKey: asBattleEntryKey(battleEntryKey),
+    battleInstanceId: asBattleId(
+      `battle:${journey.runId ?? asJourneyId("unscoped")}:${battleEntryKey}`,
+    ),
     seedOverride,
     site,
     state: journey,
@@ -214,7 +236,7 @@ export function createTutorialBattleInitProvider(
         content,
         journey,
         key,
-        battleId,
+        asBattleId(battleId),
         battleConfiguration,
       );
       const board = createInitialBattleState(init);
@@ -236,7 +258,7 @@ function createTutorialBattleInit(
   content: JourneyContent,
   journey: JourneyState,
   key: string,
-  battleId: string,
+  battleId: BattleId,
   battleConfiguration: TutorialBattleConfiguration,
 ): BattleInit {
   const makeDeck = (side: BattleSide): BattleDeckCardDefinition[] => {
@@ -246,12 +268,14 @@ function createTutorialBattleInit(
           const card = cardById(content, cardId);
           return {
             ...createBaseBattleDeckCardDefinition(card),
-            sourceDeckEntryId: `tutorial:${side}:${cardId}:${String(copy)}`,
+            sourceDeckEntryId: asDeckEntryId(
+              `tutorial:${side}:${cardId}:${String(copy)}`,
+            ),
           };
         }),
     );
     return createBattleRng(
-      deriveBattleSeed(`${key}:${side}`),
+      deriveBattleSeed(asBattleEntryKey(`${key}:${side}`)),
       "playerDeckOrder",
     ).shuffle(definitions);
   };
@@ -265,9 +289,9 @@ function createTutorialBattleInit(
   );
   return {
     battleId,
-    battleEntryKey: key,
-    seed: deriveBattleSeed(key),
-    siteId: "tutorial-handoff",
+    battleEntryKey: asBattleEntryKey(key),
+    seed: deriveBattleSeed(asBattleEntryKey(key)),
+    siteId: asSiteId("tutorial-handoff"),
     dreamscapeId: null,
     completionLevelAtStart: journey.completionLevel,
     isFinalBoss: false,
@@ -327,18 +351,20 @@ function arrangeTutorialHandoff(
       if (placement.source === "deck") {
         return {
           placement,
-          instanceId: takeCard(board, placement.side, cardId),
+          instanceId: takeCard(board, placement.side, asCardId(cardId)),
         };
       }
       const definition = createBaseBattleDeckCardDefinition(
-        cardById(content, cardId),
+        cardById(content, asCardId(cardId)),
       );
       return {
         placement,
         instanceId: allocateBattleCardInstance(board, {
           definition: {
             ...definition,
-            sourceDeckEntryId: `tutorial:${placement.side}:handoff:${String(index)}:${cardId}`,
+            sourceDeckEntryId: asDeckEntryId(
+              `tutorial:${placement.side}:handoff:${String(index)}:${cardId}`,
+            ),
           },
           owner: placement.side,
           controller: placement.side,
@@ -368,9 +394,9 @@ function arrangeTutorialHandoff(
   board.phase = battleConfiguration.handoff.phase;
   board.dreamwellDeckIndex = battleConfiguration.handoff.dreamwellDeckIndex;
   applyTutorialHandoffSide(board, "player", battleConfiguration.handoff.player);
-  board.sides.player.hand = playerHand;
+  board.sides.player.hand = playerHand.map(asBattleCardId);
   applyTutorialHandoffSide(board, "enemy", battleConfiguration.handoff.enemy);
-  board.sides.enemy.hand = enemyHand;
+  board.sides.enemy.hand = enemyHand.map(asBattleCardId);
   for (const side of ["player", "enemy"] as const) {
     board.sides[side].void = [];
     clearRank(board.sides[side].frontRank);
@@ -381,11 +407,11 @@ function arrangeTutorialHandoff(
       board.sides[placement.side].void.push(instanceId);
       continue;
     }
-    const rank =
-      placement.zone === "frontRank"
-        ? board.sides[placement.side].frontRank
-        : board.sides[placement.side].backRank;
-    (rank as Record<string, string | null>)[placement.slotId] = instanceId;
+    if (placement.zone === "frontRank") {
+      board.sides[placement.side].frontRank[placement.slotId] = instanceId;
+    } else {
+      board.sides[placement.side].backRank[placement.slotId] = instanceId;
+    }
   }
 }
 
@@ -401,14 +427,16 @@ function applyTutorialHandoffSide(
   board.sides[side].dreamwellDrawnTurn = configuration.dreamwellDrawnTurn;
 }
 
-function clearRank(rank: Record<string, string | null>): void {
-  for (const slotId of Object.keys(rank)) rank[slotId] = null;
+function clearRank<SlotId extends BattlefieldSlotId>(
+  rank: Record<SlotId, BattleCardId | null>,
+): void {
+  for (const slotId of rankSlotIds(rank)) rank[slotId] = null;
 }
 
 function deriveTutorialHandCardIds(
   actions: readonly TutorialAction[],
-): Readonly<Record<BattleSide, readonly string[]>> {
-  const hands: Record<BattleSide, string[]> = { player: [], enemy: [] };
+): Readonly<Record<BattleSide, readonly CardId[]>> {
+  const hands: Record<BattleSide, CardId[]> = { player: [], enemy: [] };
   for (const action of actions) {
     if (action.action === "draw-opponent-card") {
       hands.enemy.push(action.cardId);
@@ -435,8 +463,8 @@ function materializeAuthoredHand(
   content: JourneyContent,
   board: BattleMutableState,
   side: BattleSide,
-  cardIds: readonly string[],
-): string[] {
+  cardIds: readonly CardId[],
+): BattleCardId[] {
   return cardIds.map((cardId, index) => {
     const fromDeck = takeCardIfPresent(board, side, cardId);
     if (fromDeck !== null) return fromDeck;
@@ -446,7 +474,9 @@ function materializeAuthoredHand(
     return allocateBattleCardInstance(board, {
       definition: {
         ...definition,
-        sourceDeckEntryId: `tutorial:${side}:authored-hand:${String(index)}:${cardId}`,
+        sourceDeckEntryId: asDeckEntryId(
+          `tutorial:${side}:authored-hand:${String(index)}:${cardId}`,
+        ),
       },
       owner: side,
       controller: side,
@@ -458,8 +488,8 @@ function materializeAuthoredHand(
 function takeCard(
   board: BattleMutableState,
   side: BattleSide,
-  cardId: string,
-): string {
+  cardId: CardId,
+): BattleCardId {
   const card = takeCardIfPresent(board, side, cardId);
   if (card === null) {
     throw new Error(`Tutorial handoff card ${cardId} is absent.`);
@@ -470,8 +500,8 @@ function takeCard(
 function takeCardIfPresent(
   board: BattleMutableState,
   side: BattleSide,
-  cardId: string,
-): string | null {
+  cardId: CardId,
+): BattleCardId | null {
   const deck = board.sides[side].deck;
   const index = deck.findIndex(
     (battleCardId) =>
@@ -484,7 +514,7 @@ function takeCardIfPresent(
 function stackTutorialDeck(
   board: BattleMutableState,
   side: BattleSide,
-  cardIds: readonly string[],
+  cardIds: readonly CardId[],
 ): void {
   const orderedCards = cardIds.map((cardId) => takeCard(board, side, cardId));
   board.sides[side].deck = [...orderedCards, ...board.sides[side].deck];
@@ -492,7 +522,7 @@ function stackTutorialDeck(
 
 function stackTutorialEnemyDeck(
   board: BattleMutableState,
-  cardIds: readonly string[],
+  cardIds: readonly CardId[],
 ): void {
   const visibleDraws = cardIds.map((cardId) =>
     takeCard(board, "enemy", cardId),
@@ -511,7 +541,7 @@ function stackTutorialEnemyDeck(
 function tutorialDreamwellDeck(
   content: JourneyContent,
   key: string,
-  cardIds: readonly string[],
+  cardIds: readonly DreamwellCardId[],
 ): readonly DreamwellCardDefinition[] {
   const byId = new Map(content.dreamwellCards.map((card) => [card.id, card]));
   const fixed = cardIds.map((cardId) => {
@@ -523,12 +553,12 @@ function tutorialDreamwellDeck(
     }
     return card;
   });
-  const fixedIds = new Set<string>(cardIds);
+  const fixedIds = new Set<DreamwellCardId>(cardIds);
   const rest = [...content.dreamwellCards].filter(
     (card) => !fixedIds.has(card.id),
   );
   const shuffled = createBattleRng(
-    deriveBattleSeed(`${key}:dreamwell`),
+    deriveBattleSeed(asBattleEntryKey(`${key}:dreamwell`)),
     "dreamwellDeck",
   ).shuffle(rest);
   return [...fixed, ...shuffled].map((card) => ({
@@ -555,7 +585,7 @@ function requireTutorialBattleConfiguration(
   return content.tutorial.battle;
 }
 
-function cardById(content: JourneyContent, cardId: string) {
+function cardById(content: JourneyContent, cardId: CardId) {
   const card = [...content.cardDatabase.values()].find(
     (candidate) => candidate.id === cardId,
   );
@@ -566,7 +596,7 @@ function cardById(content: JourneyContent, cardId: string) {
   return card;
 }
 
-function dreamAvatarById(content: JourneyContent, id: string) {
+function dreamAvatarById(content: JourneyContent, id: DreamAvatarId) {
   const dreamAvatar = content.dreamAvatars.find(
     (candidate) => candidate.id === id,
   );
@@ -581,7 +611,7 @@ function tutorialEnemyDescriptor(
   threxan: JourneyContent["dreamAvatars"][number],
 ): BattleEnemyDescriptor {
   return {
-    id: threxan.id,
+    id: asOpponentId(`tutorial:${threxan.id}`),
     name: threxan.name,
     subtitle: threxan.title,
     imageNumber: threxan.imageNumber,

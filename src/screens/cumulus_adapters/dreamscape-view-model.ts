@@ -21,7 +21,10 @@ import type {
 } from "../../cumulus/components/hud/JourneyStatusBar";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
-import { bindSourceTransport, localizedSourceText } from "../../runtime/localization/runtime";
+import {
+  bindSourceTransport,
+  localizedSourceText,
+} from "../../runtime/localization/runtime";
 import { tx, type LocalizedString } from "@trox/runtime";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import type {
@@ -40,6 +43,8 @@ import type { SitesData } from "../../types/sites-data";
 import type { JourneyContent } from "../../data/journey-content";
 import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
+import type { SiteId } from "../../types/identifiers";
+import type { AtlasNodeId } from "../../types/identifiers";
 
 /** The completion level at which the guardian battle is the final boss. */
 const FINAL_BOSS_COMPLETION_LEVEL = 6;
@@ -89,7 +94,7 @@ export function buildDreamscapeOverviewLog(
 /** Resolves a site click to the live site and its reconstruction fields. */
 export function resolveDreamscapeSiteSelection(
   node: DreamscapeNode,
-  siteId: string,
+  siteId: SiteId,
   essence: number,
 ) {
   const site = node.sites.find((candidate) => candidate.id === siteId);
@@ -265,7 +270,7 @@ export function buildDreamscapeView(
   state: JourneyState,
   sitesData: SitesData,
   defaultDraftPickCount: number,
-  replacementSiteId: string | null = null,
+  replacementSiteId: SiteId | null = null,
   tutorialConfiguration?: TutorialDreamscapeConfiguration,
 ): DreamscapeView {
   const inlineRewards: Record<string, InlineRewardView> = {};
@@ -350,7 +355,7 @@ export function buildDreamscapeGuideDialogue(
 
 /** Reconstruction fields for the moment delayed dreamscape guidance appears. */
 export function buildDreamscapeGuidanceLog(
-  nodeId: string,
+  nodeId: AtlasNodeId,
   state: JourneyState,
   dialogue: DreamscapeGuideDialogueView,
 ): {
@@ -373,7 +378,7 @@ export function buildDreamscapeGuidanceLog(
 /** Build the UUID-backed replacement choice for an at-cap Reward site. */
 export function buildDreamsignReplacementView(
   state: JourneyState,
-  siteId: string | null,
+  siteId: SiteId | null,
 ): Omit<DreamsignReplacementModel, "dismissLabel" | "closeLabel"> | null {
   if (siteId === null || state.dreamsigns.length < state.maxDreamsigns) {
     return null;

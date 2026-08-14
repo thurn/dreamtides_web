@@ -10,6 +10,7 @@ import {
 import { rankSlotIds, type BattleSide } from "../types";
 import { applyDebugEdit } from "../../rules/battle/apply-debug-edit";
 import { createFillBattlefieldPreviewCommand } from "./battle-debug-preview";
+import { asBattleEntryKey } from "../../types/identifiers";
 
 const EMISSION = {
   sourceSurface: "debug-menu",
@@ -18,7 +19,7 @@ const EMISSION = {
 
 function makeBattle() {
   const init = createTestBattleInit({
-    battleEntryKey: "site-7::2::dreamscape-2",
+    battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),

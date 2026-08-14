@@ -21,13 +21,13 @@ Builders prepare the ordered text, rules, and entity parts before rendering; the
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `model` | `ExplorationChoiceModel` | yes | — | Complete prepared action presentation. |
-| `onPress` | `(actionId: string) => void` | yes | — | Reports the exact authored action UUID after activation. |
+| `onPress` | `(actionId: ExplorationActionId) => void` | yes | — | Reports the exact authored action UUID after activation. |
 
 ### `model`: the `ExplorationChoiceModel` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `actionId` | `string` | no | Stable authored action UUID emitted by activation. |
+| `actionId` | `ExplorationActionId` | no | Stable authored action UUID emitted by activation. |
 | `label` | `LocalizedString` | no | Localized primary action label. |
 | `description` | `readonly ExplorationChoicePart[]` | no | Ordered authored description parts prepared by the builder. |
 | `disclosure` | `LocalizedString` | yes | Optional complete localized disclosure appended to the description. |

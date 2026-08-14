@@ -17,12 +17,19 @@ import type {
   JourneyState,
   SiteState,
 } from "../types/journey";
+import type { CardId } from "../types/card-identity";
+import type {
+  DeckEntryId,
+  ExplorationActionId,
+  IdentityRecord,
+} from "../types/identifiers";
+import { asSelectionKey } from "../types/identifiers";
 
 export interface ExplorationStarterCardPlanInput {
   effectKind: ExplorationStarterCardEffectKind;
   predicate?: RewardCardPredicate;
-  actionId: string;
-  encounterCardId: string;
+  actionId: ExplorationActionId;
+  encounterCardId: CardId;
   journey: JourneyState;
   site: SiteState;
   content: JourneyContent;
@@ -55,7 +62,7 @@ function eligibleStarterCards(
 function selectionRequest(input: {
   journey: JourneyState;
   site: SiteState;
-  actionId: string;
+  actionId: ExplorationActionId;
   suffix: "starter-target" | "gain" | "replacements";
   mechanicId: RewardSelectionRequest["mechanicId"];
   policyId: RewardSelectionRequest["policyId"];
@@ -68,7 +75,7 @@ function selectionRequest(input: {
     scope: {
       journeySeed: input.journey.seed,
       siteUuid: input.site.id,
-      selectionKey: `${input.actionId}:${input.suffix}`,
+      selectionKey: asSelectionKey(`${input.actionId}:${input.suffix}`),
     },
     count: input.count,
     constraints: input.constraints,
@@ -141,7 +148,7 @@ export function prepareExplorationStarterCardPlan(
     }
   }
 
-  const replacementCardIdByEntryId: Record<string, string> = {};
+  const replacementCardIdByEntryId: IdentityRecord<DeckEntryId, CardId> = {};
   if (
     unavailableReason === undefined &&
     (input.effectKind === "purge-random-starter-and-gain-card" ||
@@ -199,10 +206,10 @@ export function prepareExplorationStarterCardPlan(
     eligibleStarterCards: eligible,
     purgedEntryIds: purged.map((item) => item.entryId),
     purgedCardIds: purged.map((item) => item.cardId),
-    replacementCardIdByEntryId,
+    replacementCardIdByEntryId: replacementCardIdByEntryId,
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
-    selectionKey: input.actionId,
+    selectionKey: asSelectionKey(input.actionId),
     selectorSignatures: selectors.map((selection) => selection.signature),
     selectorTraces: selectors.map((selection) => selection.trace),
     ...(unavailableReason === undefined ? {} : { unavailableReason }),

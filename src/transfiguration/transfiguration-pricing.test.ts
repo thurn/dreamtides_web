@@ -6,6 +6,7 @@ import {
   transfigurationCostBand,
   transfigurationEssenceCost,
 } from "./transfiguration-pricing";
+import { asDeckEntryId, asSiteId } from "../types/identifiers";
 
 const BASE = transfigurationFixture();
 const CONFIG = {
@@ -16,16 +17,28 @@ const CONFIG = {
   },
   forms: BASE.forms.map((form) =>
     form.id === "Inspired"
-      ? { ...form, pricing: { kind: "band" as const, base: 60, jitter: 20, floor: 40 } }
+      ? {
+          ...form,
+          pricing: { kind: "band" as const, base: 60, jitter: 20, floor: 40 },
+        }
       : form,
   ),
 };
 
 function card(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: asCardName("Synthetic"), id: asCardId("synthetic-card"), cardNumber: 71,
-    cardType: "Character", subtype: "", isStarter: false, energyCost: 4,
-    spark: 2, isFast: false, renderedText: "", imageNumber: 71, artOwned: false,
+    name: asCardName("Synthetic"),
+    id: asCardId("synthetic-card"),
+    cardNumber: 71,
+    cardType: "Character",
+    subtype: "",
+    isStarter: false,
+    energyCost: 4,
+    spark: 2,
+    isFast: false,
+    renderedText: "",
+    imageNumber: 71,
+    artOwned: false,
     ...overrides,
   };
 }
@@ -33,16 +46,28 @@ function card(overrides: Partial<CardData> = {}): CardData {
 describe("transfiguration pricing", () => {
   it("uses authored form and stat-delta bands", () => {
     expect(transfigurationCostBand(CONFIG, card(), "Inspired").base).toBe(60);
-    expect(transfigurationCostBand(CONFIG, card({ energyCost: 8 }), "Empowered").base).toBe(30);
+    expect(
+      transfigurationCostBand(CONFIG, card({ energyCost: 8 }), "Empowered")
+        .base,
+    ).toBe(30);
   });
 
   it("preserves free special cases", () => {
     expect(transfigurationCostBand(CONFIG, card(), "Hastened").base).toBe(0);
-    expect(transfigurationCostBand(CONFIG, card({ spark: 0 }), "Kindled").base).toBe(0);
+    expect(
+      transfigurationCostBand(CONFIG, card({ spark: 0 }), "Kindled").base,
+    ).toBe(0);
   });
 
   it("is deterministic and remains within authored bounds", () => {
-    const args = [CONFIG, "seed", "site", "entry", card(), "Inspired"] as const;
+    const args = [
+      CONFIG,
+      "seed",
+      asSiteId("site"),
+      asDeckEntryId("entry"),
+      card(),
+      "Inspired",
+    ] as const;
     const first = transfigurationEssenceCost(...args);
     expect(transfigurationEssenceCost(...args)).toBe(first);
     expect(first).toBeGreaterThanOrEqual(CONFIG.site.pricing.minimumCost);

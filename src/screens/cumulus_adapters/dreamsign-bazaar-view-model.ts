@@ -33,11 +33,13 @@ import {
   buildShopFreePurchaseStatus,
   hasFreePurchase,
 } from "./shop-free-purchase-view-model";
+import type { GuideId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 /** Resolve Amunet, the resident Dream Guide for Dreamsign Bazaars. */
 export function resolveDreamsignBazaarGuide(
   guides: readonly DreamGuideContent[],
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent {
   return requireGuideForSiteType(guides, "DreamsignBazaar", presentingGuideId);
 }
@@ -65,12 +67,9 @@ export function buildDreamsignBazaarOffers(
     );
     const price = effectivePrice(slot, priceModifiers);
     offers.push({
-      entryId: `shop-slot-${String(slotIndex)}-${dreamsignId}`,
+      entryId: asDeckEntryId(`shop-slot-${String(slotIndex)}-${dreamsignId}`),
       slotIndex,
-      dreamsign: localizedDreamsign(
-        slot.dreamsign,
-        "Dreamsign Bazaar offer",
-      ),
+      dreamsign: localizedDreamsign(slot.dreamsign, "Dreamsign Bazaar offer"),
       price,
       state: slot.purchased
         ? "purchased"
@@ -93,7 +92,7 @@ export function buildDreamsignBazaarRestock(
 ): DreamsignBazaarRestockView {
   const price = rerollCost(config, runtime.rerollCount, site.isEnhanced);
   return {
-    entryId: `shop-restock-${site.id}`,
+    entryId: asDeckEntryId(`shop-restock-${site.id}`),
     price,
     state:
       runtime.rerollCount >= config.maxPerVisit

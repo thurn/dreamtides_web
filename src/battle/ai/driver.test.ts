@@ -6,12 +6,13 @@ import type { PlannedAction } from "./planner";
 import type { AiCard } from "./forward-model";
 import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import type { BattleAiChoiceTrace, BattleSide } from "../types";
+import { asBattleCardId } from "../../types/identifiers";
 
 // --- Fixtures -------------------------------------------------------------
 
 function aiCard(overrides: Partial<AiCard> = {}): AiCard {
   return {
-    battleCardId: "ai-card-1",
+    battleCardId: asBattleCardId("ai-card-1"),
     cardNumber: 510,
     name: "Nocturne Strummer",
     energyCost: 2,
@@ -23,11 +24,13 @@ function aiCard(overrides: Partial<AiCard> = {}): AiCard {
   };
 }
 
-function baseTrace(overrides: Partial<BattleAiChoiceTrace> = {}): BattleAiChoiceTrace {
+function baseTrace(
+  overrides: Partial<BattleAiChoiceTrace> = {},
+): BattleAiChoiceTrace {
   return {
     stage: "character",
     choice: "PLAY_CARD",
-    battleCardId: "ai-card-1",
+    battleCardId: asBattleCardId("ai-card-1"),
     cardName: "Nocturne Strummer",
     sourceHandIndex: 0,
     sourceSlotId: null,
@@ -39,7 +42,10 @@ function baseTrace(overrides: Partial<BattleAiChoiceTrace> = {}): BattleAiChoice
 }
 
 /** Narrows a command to its DEBUG_EDIT edit, asserting the envelope shape. */
-function editOf(command: BattleCommand, actor: BattleSide = "enemy"): BattleDebugEdit {
+function editOf(
+  command: BattleCommand,
+  actor: BattleSide = "enemy",
+): BattleDebugEdit {
   expect(command.id).toBe("DEBUG_EDIT");
   expect(command.actor).toBe(actor);
   expect(command.sourceSurface).toBe("auto-system");
@@ -53,14 +59,21 @@ function editOf(command: BattleCommand, actor: BattleSide = "enemy"): BattleDebu
 
 describe("actionToCommands — character play", () => {
   it("emits a reserve placement, exhausts the body, and pays the energy cost", () => {
-    const self = aiCard({ battleCardId: "strummer-1", cardNumber: 510, energyCost: 2 });
+    const self = aiCard({
+      battleCardId: asBattleCardId("strummer-1"),
+      cardNumber: 510,
+      energyCost: 2,
+    });
     const action: PlannedAction = {
       stage: "character",
       kind: "PLAY_CARD",
       self,
       targets: null,
       toSlot: "B2",
-      trace: baseTrace({ battleCardId: "strummer-1", targetSlotId: "B2" }),
+      trace: baseTrace({
+        battleCardId: asBattleCardId("strummer-1"),
+        targetSlotId: "B2",
+      }),
     };
 
     const commands = actionToCommands(action, "enemy");
@@ -70,7 +83,11 @@ describe("actionToCommands — character play", () => {
     expect(move.kind).toBe("MOVE_CARD_TO_ZONE");
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
     expect(move.battleCardId).toBe("strummer-1");
-    expect(move.destination).toEqual({ side: "enemy", zone: "backRank", slotId: "B2" });
+    expect(move.destination).toEqual({
+      side: "enemy",
+      zone: "backRank",
+      slotId: "B2",
+    });
 
     // Rules §Exhaust and Awaken: the body enters play exhausted so it cannot be
     // repositioned into the front rank as a challenger the turn it is played.
@@ -82,7 +99,8 @@ describe("actionToCommands — character play", () => {
 
     const energy = editOf(commands[2]);
     expect(energy.kind).toBe("ADJUST_CURRENT_ENERGY");
-    if (energy.kind !== "ADJUST_CURRENT_ENERGY") throw new Error("expected energy");
+    if (energy.kind !== "ADJUST_CURRENT_ENERGY")
+      throw new Error("expected energy");
     expect(energy.side).toBe("enemy");
     expect(energy.amount).toBe(-2);
   });
@@ -92,7 +110,10 @@ describe("actionToCommands — character play", () => {
 
 describe("actionToCommands — reposition", () => {
   it("moves the card by id into the deployed toSlot", () => {
-    const self = aiCard({ battleCardId: "colossus-1", cardNumber: 515 });
+    const self = aiCard({
+      battleCardId: asBattleCardId("colossus-1"),
+      cardNumber: 515,
+    });
     const action: PlannedAction = {
       stage: "reposition",
       kind: "MOVE_CARD",
@@ -102,7 +123,7 @@ describe("actionToCommands — reposition", () => {
       trace: baseTrace({
         stage: "reposition",
         choice: "MOVE_CARD",
-        battleCardId: "colossus-1",
+        battleCardId: asBattleCardId("colossus-1"),
         sourceSlotId: "B0",
         targetSlotId: "F1",
       }),
@@ -115,7 +136,11 @@ describe("actionToCommands — reposition", () => {
     expect(move.kind).toBe("MOVE_CARD_TO_ZONE");
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
     expect(move.battleCardId).toBe("colossus-1");
-    expect(move.destination).toEqual({ side: "enemy", zone: "frontRank", slotId: "F1" });
+    expect(move.destination).toEqual({
+      side: "enemy",
+      zone: "frontRank",
+      slotId: "F1",
+    });
   });
 });
 
@@ -124,7 +149,7 @@ describe("actionToCommands — reposition", () => {
 describe("actionToCommands — Flashpoint Detonation", () => {
   it("pays energy, dissolves the enemy target to the opponent void, and voids itself", () => {
     const self = aiCard({
-      battleCardId: "flash-1",
+      battleCardId: asBattleCardId("flash-1"),
       cardNumber: 516,
       name: "Flashpoint Detonation",
       energyCost: 3,
@@ -133,11 +158,11 @@ describe("actionToCommands — Flashpoint Detonation", () => {
       stage: "nonCharacter",
       kind: "PLAY_CARD",
       self,
-      targets: { targetBattleCardId: "enemy-body-9" },
+      targets: { targetBattleCardId: asBattleCardId("enemy-body-9") },
       toSlot: undefined,
       trace: baseTrace({
         stage: "nonCharacter",
-        battleCardId: "flash-1",
+        battleCardId: asBattleCardId("flash-1"),
         cardName: "Flashpoint Detonation",
       }),
     };
@@ -155,7 +180,8 @@ describe("actionToCommands — Flashpoint Detonation", () => {
 
     // Dissolve: target moved to the OPPONENT (player) void.
     const dissolve = edits.find(
-      (e) => e.kind === "MOVE_CARD_TO_ZONE" && e.battleCardId === "enemy-body-9",
+      (e) =>
+        e.kind === "MOVE_CARD_TO_ZONE" && e.battleCardId === "enemy-body-9",
     );
     expect(dissolve).toBeDefined();
     if (dissolve?.kind === "MOVE_CARD_TO_ZONE") {
@@ -198,14 +224,21 @@ describe("actionToCommands — END_TURN", () => {
 
 describe("actionToCommands — envelope", () => {
   it("threads the aiSide through energy/void edits when the AI is the player side", () => {
-    const self = aiCard({ battleCardId: "strummer-2", cardNumber: 510, energyCost: 2 });
+    const self = aiCard({
+      battleCardId: asBattleCardId("strummer-2"),
+      cardNumber: 510,
+      energyCost: 2,
+    });
     const action: PlannedAction = {
       stage: "character",
       kind: "PLAY_CARD",
       self,
       targets: null,
       toSlot: "B0",
-      trace: baseTrace({ battleCardId: "strummer-2", targetSlotId: "B0" }),
+      trace: baseTrace({
+        battleCardId: asBattleCardId("strummer-2"),
+        targetSlotId: "B0",
+      }),
     };
 
     const side: BattleSide = "player";
@@ -219,12 +252,17 @@ describe("actionToCommands — envelope", () => {
     }
     const move = editOf(commands[0], side);
     if (move.kind !== "MOVE_CARD_TO_ZONE") throw new Error("expected move");
-    expect(move.destination).toEqual({ side: "player", zone: "backRank", slotId: "B0" });
+    expect(move.destination).toEqual({
+      side: "player",
+      zone: "backRank",
+      slotId: "B0",
+    });
     const status = editOf(commands[1], side);
     if (status.kind !== "SET_CARD_STATUS") throw new Error("expected status");
     expect(status.status).toEqual({ isExhausted: true });
     const energy = editOf(commands[2], side);
-    if (energy.kind !== "ADJUST_CURRENT_ENERGY") throw new Error("expected energy");
+    if (energy.kind !== "ADJUST_CURRENT_ENERGY")
+      throw new Error("expected energy");
     expect(energy.side).toBe("player");
   });
 });
@@ -234,7 +272,7 @@ describe("actionToCommands — envelope", () => {
 describe("buildTrace", () => {
   it("enriches the planner trace with a rationale and targetBattleCardId", () => {
     const self = aiCard({
-      battleCardId: "flash-1",
+      battleCardId: asBattleCardId("flash-1"),
       cardNumber: 516,
       name: "Flashpoint Detonation",
     });
@@ -242,10 +280,10 @@ describe("buildTrace", () => {
       stage: "nonCharacter",
       kind: "PLAY_CARD",
       self,
-      targets: { targetBattleCardId: "enemy-body-9" },
+      targets: { targetBattleCardId: asBattleCardId("enemy-body-9") },
       trace: baseTrace({
         stage: "nonCharacter",
-        battleCardId: "flash-1",
+        battleCardId: asBattleCardId("flash-1"),
         cardName: "Flashpoint Detonation",
         heuristicScoreBefore: 4,
         heuristicScoreAfter: 7,
@@ -277,10 +315,17 @@ describe("buildTrace", () => {
     const playTrace = buildTrace({
       stage: "character",
       kind: "PLAY_CARD",
-      self: aiCard({ battleCardId: "strummer-1", cardNumber: 510, name: "Nocturne Strummer" }),
+      self: aiCard({
+        battleCardId: asBattleCardId("strummer-1"),
+        cardNumber: 510,
+        name: "Nocturne Strummer",
+      }),
       targets: null,
       toSlot: "B2",
-      trace: baseTrace({ battleCardId: "strummer-1", cardName: "Nocturne Strummer" }),
+      trace: baseTrace({
+        battleCardId: asBattleCardId("strummer-1"),
+        cardName: "Nocturne Strummer",
+      }),
     });
     expect(playTrace.rationale).toContain("Nocturne Strummer");
     expect(playTrace.targetBattleCardId).toBeNull();
@@ -288,13 +333,17 @@ describe("buildTrace", () => {
     const moveTrace = buildTrace({
       stage: "reposition",
       kind: "MOVE_CARD",
-      self: aiCard({ battleCardId: "colossus-1", cardNumber: 515, name: "Wildflower Colossus" }),
+      self: aiCard({
+        battleCardId: asBattleCardId("colossus-1"),
+        cardNumber: 515,
+        name: "Wildflower Colossus",
+      }),
       targets: null,
       toSlot: "F1",
       trace: baseTrace({
         stage: "reposition",
         choice: "MOVE_CARD",
-        battleCardId: "colossus-1",
+        battleCardId: asBattleCardId("colossus-1"),
         cardName: "Wildflower Colossus",
         targetSlotId: "F1",
       }),

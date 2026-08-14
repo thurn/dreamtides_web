@@ -8,6 +8,7 @@ import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
 } from "../../battle/state/selectors";
+import type { BattleCardId } from "../../types/identifiers";
 
 function isLegalRepositionPhase(board: BattleMutableState): boolean {
   return (
@@ -22,7 +23,7 @@ function isLegalRepositionPhase(board: BattleMutableState): boolean {
  */
 export function planTutorialCharacterReposition(
   board: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   destination: BattleFieldSlotAddress,
 ): BattleDebugEdit | null {
   if (

@@ -21,6 +21,11 @@ import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { LayerName } from "../../types/layer-name";
 import { economyFixture } from "../../testing/economy-fixture";
 import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 const screenMock = vi.hoisted(() => vi.fn());
 const loggingMock = vi.hoisted(() => {
@@ -64,9 +69,9 @@ vi.mock("../../cumulus/screens/DreamsignRevelationScreen", () => ({
 }));
 
 const GUIDE: DreamGuideContent = {
-  id: "sigrun-guide",
+  id: asGuideId("sigrun-guide"),
   name: "Sigrun",
-  homeDreamscapeId: "winterwake",
+  homeDreamscapeId: asDreamscapeId("winterwake"),
   siteType: "DreamsignRevelation",
   portraitSource: "fixture-guide.png",
   dialogue: { site: ["Choose what the frost reveals."] },
@@ -86,7 +91,7 @@ const TUTORIAL_CONFIGURATION: TutorialSiteConfiguration = {
 
 function makeDreamsign(id: string): Dreamsign {
   return {
-    id,
+    id: asDreamsignId(id),
     name: `Dreamsign ${id}`,
     effectDescription: "Drawn from the test pool.",
     imageName: `${id}.png`,
@@ -96,16 +101,16 @@ function makeDreamsign(id: string): Dreamsign {
 
 function makeState(): JourneyState {
   const site = {
-    id: "site-1",
+    id: asSiteId("site-1"),
     type: "DreamsignRevelation",
     isEnhanced: false,
     isVisited: false,
   } as const;
   const node: DreamscapeNode = {
-    id: "node-1",
+    id: asAtlasNodeId("node-1"),
     layer: LayerName.One,
     indexInLayer: 0,
-    dreamscapeId: "winterwake",
+    dreamscapeId: asDreamscapeId("winterwake"),
     sites: [site],
     position: { x: 0, y: 0 },
     state: "available",
@@ -116,14 +121,14 @@ function makeState(): JourneyState {
   };
   return {
     currentDreamscape: "node-1",
-    screen: { type: "site", siteId: "site-1" },
+    screen: { type: "site", siteId: asSiteId("site-1") },
     visitedSites: [],
     atlas: {
       nodes: { "node-1": node },
       layers: [["node-1"], [], [], [], [], [], []],
-      startingNodeId: "node-1",
-      bossNodeId: "node-1",
-      currentNodeId: "node-1",
+      startingNodeId: asAtlasNodeId("node-1"),
+      bossNodeId: asAtlasNodeId("node-1"),
+      currentNodeId: asAtlasNodeId("node-1"),
       knownDreamsignCarrierIds: [],
     },
     siteRuntime: {
@@ -193,7 +198,7 @@ afterEach(() => {
 describe("DreamsignRevelationScreenAdapter", () => {
   it("logs site entry and guide presentation once across equivalent state refreshes", () => {
     const { root } = mount(
-      <DreamsignRevelationScreenAdapter siteId="site-1" />,
+      <DreamsignRevelationScreenAdapter siteId={asSiteId("site-1")} />,
     );
 
     expect(screenMock).toHaveBeenCalled();
@@ -211,7 +216,7 @@ describe("DreamsignRevelationScreenAdapter", () => {
         key: "dreamsign-revelation:site-1:guide:sigrun-guide",
         event: "dream_guide_presented",
         fields: {
-          guideId: "sigrun-guide",
+          guideId: asGuideId("sigrun-guide"),
           siteType: "DreamsignRevelation",
           isEnhanced: false,
         },
@@ -232,7 +237,7 @@ describe("DreamsignRevelationScreenAdapter", () => {
       "dreamsign-revelation:site-1:guide:sigrun-guide",
       "dream_guide_presented",
       {
-        guideId: "sigrun-guide",
+        guideId: asGuideId("sigrun-guide"),
         siteType: "DreamsignRevelation",
         isEnhanced: false,
       },
@@ -240,7 +245,9 @@ describe("DreamsignRevelationScreenAdapter", () => {
 
     setJourneyContext(makeState());
     act(() => {
-      root.render(<DreamsignRevelationScreenAdapter siteId="site-1" />);
+      root.render(
+        <DreamsignRevelationScreenAdapter siteId={asSiteId("site-1")} />,
+      );
     });
 
     expect(loggingMock.emitted).toHaveLength(2);
@@ -253,14 +260,14 @@ describe("DreamsignRevelationScreenAdapter", () => {
   it("logs the resident guide while first-visit Mira guidance is active", () => {
     setJourneyContext(makeState(), TUTORIAL_CONFIGURATION);
     const { root } = mount(
-      <DreamsignRevelationScreenAdapter siteId="site-1" />,
+      <DreamsignRevelationScreenAdapter siteId={asSiteId("site-1")} />,
     );
 
     expect(loggingMock.emitted).toContainEqual({
       key: "dreamsign-revelation:site-1:guide:sigrun-guide",
       event: "dream_guide_presented",
       fields: {
-        guideId: "sigrun-guide",
+        guideId: asGuideId("sigrun-guide"),
         siteType: "DreamsignRevelation",
         isEnhanced: false,
       },

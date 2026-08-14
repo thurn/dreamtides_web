@@ -4,10 +4,12 @@ import { ExplorationChoice } from "../../components/controls/ExplorationChoice";
 import type { CumulusComponent } from "../registry";
 import { demoCard, demoDreamsign, demoInstanceId } from "./promotion-fixtures";
 import { DemoControls, DemoLog, DemoSelect } from "./promotion-demo-controls";
+import { asDeckEntryId } from "../../../types/identifiers";
+import { asExplorationActionId } from "../../../types/identifiers";
 const cardEntity = {
   kind: "card" as const,
   id: "90000000-0000-4000-8000-000000000001",
-  entryId: demoInstanceId(1),
+  entryId: asDeckEntryId(demoInstanceId(1)),
   label: assertLocalized("Wayfinder"),
   card: demoCard(1, "Wayfinder"),
 };
@@ -46,7 +48,9 @@ function Demo() {
       </DemoControls>
       <ExplorationChoice
         model={{
-          actionId: "94000000-0000-4000-8000-000000000001",
+          actionId: asExplorationActionId(
+            "94000000-0000-4000-8000-000000000001",
+          ),
           label: assertLocalized("Follow the signal"),
           description:
             variant === "plain"
@@ -81,7 +85,7 @@ function Demo() {
                   },
                 ],
           availability: variant === "unavailable" ? "unavailable" : "available",
-          preview,
+          preview: preview,
         }}
         onPress={setLast}
       />

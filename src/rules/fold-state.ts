@@ -19,6 +19,13 @@ import type { CardTutorialGuidancePresentation } from "./card-tutorial-guidance"
 // `state.battle.pendingPrompt.promptId` (a number = the opening event's seq).
 export type { BattleFoldState, PendingPrompt } from "./battle/fold";
 import type { BattleFoldState } from "./battle/fold";
+import { asAtlasNodeId, asJourneyId } from "../types/identifiers";
+import type {
+  CardTutorialScreenKey,
+  ClientId,
+  JourneyId,
+  TutorialTriggerId,
+} from "../types/identifiers";
 
 export type FrontDoorPhase =
   "main" | "mainExiting" | "loading" | "tutorial" | "journey";
@@ -26,14 +33,14 @@ export type FrontDoorPhase =
 export interface FrontDoorState {
   readonly phase: FrontDoorPhase;
   /** Stable identity shared by the automatic transitions for one journey. */
-  readonly journeyId: string | null;
+  readonly journeyId: JourneyId | null;
   /** Shared authored snapshot and cursor for the standalone tutorial. */
   readonly tutorial: TutorialPlaybackState | null;
 }
 
 export interface PlaytestControlState {
   readonly mode: "collaborative" | "single-controller";
-  readonly controllerClientId: string | null;
+  readonly controllerClientId: ClientId | null;
 }
 
 /**
@@ -46,9 +53,9 @@ export interface FoldState {
   readonly journey: JourneyState;
   readonly battle: BattleFoldState | null;
   /** First-occurrence tutorials already presented in this shared room. */
-  readonly tutorialTriggerIdsSeen?: readonly string[];
+  readonly tutorialTriggerIdsSeen?: readonly TutorialTriggerId[];
   /** Site-surface or draft-offer identities that presented one card tutorial. */
-  readonly cardTutorialScreenKeysSeen?: readonly string[];
+  readonly cardTutorialScreenKeysSeen?: readonly CardTutorialScreenKey[];
   /** Shared card-and-speech journey currently presented over a site screen. */
   readonly cardTutorialPresentation?: CardTutorialGuidancePresentation | null;
 }
@@ -68,7 +75,8 @@ export function genesisFoldState(genesis: Genesis): FoldState {
   return {
     frontDoor: {
       phase: entry,
-      journeyId: entry === "main" ? null : `genesis:${genesis.seed}`,
+      journeyId:
+        entry === "main" ? null : asJourneyId(`genesis:${genesis.seed}`),
       tutorial: null,
     },
     playtestControl: {
@@ -104,8 +112,8 @@ function genesisJourneyState(genesis: Genesis): JourneyState {
     atlas: {
       layers: [],
       nodes: {},
-      startingNodeId: "",
-      bossNodeId: "",
+      startingNodeId: asAtlasNodeId(""),
+      bossNodeId: asAtlasNodeId(""),
       bossIncarnationId: null,
       currentNodeId: null,
       knownDreamsignCarrierIds: [],

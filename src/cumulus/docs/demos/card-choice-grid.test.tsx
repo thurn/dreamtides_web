@@ -41,12 +41,12 @@ vi.mock("../../components/card/CardChoiceGrid", () => ({
     onCardPress,
   }: {
     cards: readonly {
-      entryId: string;
+      entryId: DeckEntryId;
       selection?: string;
       operation?: string;
     }[];
     columns: string;
-    onCardPress?: (entryId: string) => void;
+    onCardPress?: (entryId: DeckEntryId) => void;
   }) => (
     <div data-card-choice-grid="" data-columns={columns}>
       {cards.map((entry) => (
@@ -70,6 +70,7 @@ vi.mock("../../components/overlay/GlassPanel", () => ({
 
 import { loadCardDatabase } from "../../../data/card-database";
 import { cardChoiceGridDemo } from "./card-choice-grid";
+import type { DeckEntryId } from "../../../types/identifiers";
 
 describe("CardChoiceGrid documentation demo", () => {
   it("shows a selectable grid in a non-collapsing contextual surface", async () => {

@@ -1,4 +1,5 @@
 import { meaning, tx } from "@trox/runtime";
+import type { ClientId } from "../../types/identifiers";
 import {
   useCallback,
   useEffect,
@@ -36,6 +37,12 @@ import {
   type BattleTutorialGuidanceView,
 } from "./BattleTutorialGuidance";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type {
+  BattleCardId,
+  DreamwellCardId,
+  PresentationId,
+} from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
 
 export type TutorialBattleOwnership =
   "driver" | "observer" | "paused-driver-absent" | "terminal";
@@ -52,14 +59,14 @@ export interface TutorialBattleView {
    */
   readonly challengeOriginBattle: MobileBattleView | null;
   readonly ownership: TutorialBattleOwnership;
-  readonly driverClientId: string | null;
+  readonly driverClientId: ClientId | null;
   readonly manualControls: boolean;
   readonly foresee: BattleForeseeEditorModel | null;
   /**
    * Event-log presentation checkpoint released by this screen. It remains
    * available when optional display data cannot be projected.
    */
-  readonly presentationId: string | null;
+  readonly presentationId: PresentationId | null;
   /**
    * A persisted, event-log-owned dwell checkpoint. The materialized source
    * stays in its battlefield or Dreamwell position while it is active.
@@ -67,34 +74,34 @@ export interface TutorialBattleView {
   readonly presentation:
     | {
         readonly kind: "opponent-play";
-        readonly presentationId: string;
+        readonly presentationId: PresentationId;
         /** UUID of the catalog card presented before automation continues. */
-        readonly cardId: string;
-        readonly battleCardId: string;
+        readonly cardId: CardId;
+        readonly battleCardId: BattleCardId;
         readonly cardKind: "character" | "event";
         readonly card: MobileBattleCardView;
       }
     | {
         readonly kind: "dreamwell-reveal";
-        readonly presentationId: string;
+        readonly presentationId: PresentationId;
         /** UUID of the Dreamwell source card shown before its effect prompt. */
-        readonly cardId: string;
+        readonly cardId: DreamwellCardId;
         readonly side: "player" | "enemy";
       }
     | {
         readonly kind: "opponent-block";
-        readonly presentationId: string;
+        readonly presentationId: PresentationId;
       }
     | {
         readonly kind: "challenge-resolved";
-        readonly presentationId: string;
+        readonly presentationId: PresentationId;
         readonly paired: boolean;
         readonly dissolved: readonly {
-          readonly battleCardId: string;
+          readonly battleCardId: BattleCardId;
           readonly side: "player" | "enemy";
         }[];
         readonly scored: {
-          readonly battleCardId: string;
+          readonly battleCardId: BattleCardId;
           readonly side: "player" | "enemy";
           readonly points: number;
         } | null;
@@ -109,15 +116,15 @@ export interface TutorialBattleScreenProps {
   readonly movementStatusMessage: TutorialBattleMovementStatus | null;
   readonly onMovementStatusDismiss: () => void;
   readonly onForeseeConfirm: (resolution: {
-    readonly viewedCardIds: readonly string[];
-    readonly orderedCardIds: readonly string[];
-    readonly voidCardIds: readonly string[];
+    readonly viewedCardIds: readonly BattleCardId[];
+    readonly orderedCardIds: readonly BattleCardId[];
+    readonly voidCardIds: readonly BattleCardId[];
   }) => void;
   readonly onNewJourney: () => void;
   readonly guidance: BattleTutorialGuidanceView | null;
   readonly onGuidanceContinue: () => void;
   readonly onGuidanceDurationComplete: () => void;
-  readonly onPresentationVisible: (presentationId: string) => void;
+  readonly onPresentationVisible: (presentationId: PresentationId) => void;
 }
 
 /** Focused live tutorial battle presentation without operator tools or rewards. */
@@ -166,7 +173,7 @@ export function TutorialBattleScreen({
   ] = useState<string | null>(null);
   const screenRef = useRef<HTMLDivElement>(null);
   const challengeOriginRectsRef = useRef<{
-    readonly presentationId: string;
+    readonly presentationId: PresentationId;
     readonly rects: ReadonlyMap<string, DOMRect>;
   } | null>(null);
   const challengeTravelStarted =
@@ -446,7 +453,7 @@ export function TutorialBattleScreen({
 
 function renderedBattleCard(
   root: HTMLElement,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   zone?: `${"player" | "enemy"}-void`,
 ): HTMLElement | null {
   return (
@@ -581,7 +588,7 @@ function TutorialOpponentPlayReveal({
     NonNullable<TutorialBattleView["presentation"]>,
     { readonly kind: "opponent-play" }
   >;
-  readonly onVisible: (presentationId: string) => void;
+  readonly onVisible: (presentationId: PresentationId) => void;
 }): ReactElement {
   const reduceMotion = useReducedMotion();
   useEffect(() => {

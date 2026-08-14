@@ -15,6 +15,7 @@ import {
   resolveDreamAvatarOffer,
 } from "./journey-start-view-model";
 import { JourneyStartScreen } from "../../cumulus/screens/JourneyStartScreen";
+import type { DreamAvatarId } from "../../types/identifiers";
 
 /**
  * Live DreamAvatar-select screen: derives the offer and preview from the room's
@@ -100,7 +101,7 @@ export function JourneyStartScreenAdapter() {
   }, [guideDialogue, journeySeed, tutorialDreamAvatarId]);
 
   const handlePick = useCallback(
-    (dreamAvatarId: string) => {
+    (dreamAvatarId: DreamAvatarId) => {
       const dreamAvatar = offered.find(
         (candidate) => candidate.id === dreamAvatarId,
       );

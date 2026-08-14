@@ -7,6 +7,7 @@ import {
   selectionMetadata,
   selectMerchantReward,
 } from "./sharedSelection";
+import { asMerchantTargetKey } from "../../types/identifiers";
 
 function dreamsignGameObject(template: DreamsignTemplate): MerchantGameObject {
   return {
@@ -28,7 +29,10 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
   eligible(context: MerchantContext): boolean {
     return context.candidateDreamsigns.length > 0;
   },
-  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+  build(
+    context: MerchantContext,
+    _rng: MerchantRng,
+  ): MerchantOfferDraft | null {
     const selection = selectMerchantReward({
       context,
       archetypeId: "dreamsign",
@@ -36,9 +40,12 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
       policyId: augurySelectionPolicy(context, "dreamsign"),
     });
     const dreamsignId = selection?.bindings.dreamsignIds[0];
-    const target = dreamsignId === undefined
-      ? undefined
-      : context.dreamsignTemplates.find((template) => template.id === dreamsignId);
+    const target =
+      dreamsignId === undefined
+        ? undefined
+        : context.dreamsignTemplates.find(
+            (template) => template.id === dreamsignId,
+          );
     if (selection === null || target === undefined) return null;
 
     return {
@@ -50,7 +57,7 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
         dreamsignId: target.id,
         dreamsignTemplate: target,
       },
-      targetKey: target.id,
+      targetKey: asMerchantTargetKey(target.id),
       ...selectionMetadata(selection),
     };
   },

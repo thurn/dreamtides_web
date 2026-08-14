@@ -41,6 +41,11 @@ import {
   isLegacyPromptText,
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
+import type { DreamAvatarId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asJourneyId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAM_AVATAR / START_JOURNEY)
@@ -71,7 +76,7 @@ export interface JourneyLifecycleContentProvider {
    * run seed. Returns `null` when the id is unknown (the case bounces).
    */
   resolveDreamAvatarPackage(
-    dreamAvatarId: string,
+    dreamAvatarId: DreamAvatarId,
     seed: string,
   ): ResolvedDreamAvatarPackage | null;
   /**
@@ -81,7 +86,7 @@ export interface JourneyLifecycleContentProvider {
    */
   startJourney(input: {
     journey: JourneyState;
-    dreamAvatarId: string;
+    dreamAvatarId: DreamAvatarId;
     seed: string;
   }): JourneyState | null;
   /** Rebuild the Atlas at the journey's authoritative progress depth. */
@@ -178,7 +183,7 @@ export function enterSite(
     typeof siteId !== "string" ||
     journey.screen.type !== "dreamscape" ||
     journey.currentDreamscape === null ||
-    !canVisitSite(journey, siteId) ||
+    !canVisitSite(journey, asSiteId(siteId)) ||
     !journey.atlas.nodes[journey.currentDreamscape]?.sites.some(
       (site) => site.id === siteId,
     )
@@ -211,14 +216,14 @@ export function enterSite(
           },
         },
       },
-      screen: { type: "site", siteId },
-      activeSiteId: siteId,
+      screen: { type: "site", siteId: asSiteId(siteId) },
+      activeSiteId: asSiteId(siteId),
     };
   }
   return {
     ...journey,
-    screen: { type: "site", siteId },
-    activeSiteId: siteId,
+    screen: { type: "site", siteId: asSiteId(siteId) },
+    activeSiteId: asSiteId(siteId),
   };
 }
 
@@ -245,7 +250,9 @@ export function travelToDreamscape(
   if (
     currentNodeId !== null &&
     currentNodeId !== nodeId &&
-    !journey.atlas.nodes[currentNodeId]?.forwardIds.includes(nodeId)
+    !journey.atlas.nodes[currentNodeId]?.forwardIds.includes(
+      asAtlasNodeId(nodeId),
+    )
   ) {
     return null;
   }
@@ -260,7 +267,7 @@ export function travelToDreamscape(
     : journey.dreamscapeModifiers;
   return {
     ...journey,
-    currentDreamscape: nodeId,
+    currentDreamscape: asAtlasNodeId(nodeId),
     visitedSites: [],
     dreamscapeModifiers,
     screen: { type: "dreamscape" },
@@ -347,7 +354,7 @@ export function selectDreamAvatar(
   const provider = contentProvider;
   if (provider === null) return null;
   const resolvedPackage = provider.resolveDreamAvatarPackage(
-    dreamAvatarId,
+    asDreamAvatarId(dreamAvatarId),
     journey.seed,
   );
   if (resolvedPackage === null) return null;
@@ -384,12 +391,12 @@ export function startJourney(
   if (provider === null) return null;
   const started = provider.startJourney({
     journey,
-    dreamAvatarId,
+    dreamAvatarId: asDreamAvatarId(dreamAvatarId),
     seed: journey.seed,
   });
   return started === null
     ? null
-    : { ...started, runId: `journey:${String(ctx.seq)}` };
+    : { ...started, runId: asJourneyId(`journey:${String(ctx.seq)}`) };
 }
 
 // ---------------------------------------------------------------------------
@@ -447,7 +454,10 @@ export function loadState(
     ? null
     : {
         ...loaded,
-        journey: { ...loaded.journey, runId: `journey:${String(ctx.seq)}` },
+        journey: {
+          ...loaded.journey,
+          runId: asJourneyId(`journey:${String(ctx.seq)}`),
+        },
         ...(state.tutorialTriggerIdsSeen === undefined
           ? {}
           : { tutorialTriggerIdsSeen: state.tutorialTriggerIdsSeen }),

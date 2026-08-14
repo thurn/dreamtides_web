@@ -21,16 +21,16 @@ describe("buildRandomSiteView", () => {
       },
     };
     const site: SiteState & { type: "RandomSite" } = {
-      id: "fixture-random-site",
+      id: asSiteId("fixture-random-site"),
       type: "RandomSite",
       isEnhanced: true,
       isVisited: false,
     };
     const node: DreamscapeNode = {
-      id: "fixture-node",
+      id: asAtlasNodeId("fixture-node"),
       layer: LayerName.Four,
       indexInLayer: 0,
-      dreamscapeId: "fixture-dreamscape",
+      dreamscapeId: asDreamscapeId("fixture-dreamscape"),
       sites: [site],
       position: { x: 0, y: 0 },
       state: "available",
@@ -51,7 +51,7 @@ describe("buildRandomSiteView", () => {
       guide: {
         id: sitesData.randomSite.guideId,
         name: "Fixture Guide",
-        homeDreamscapeId: "fixture-dreamscape",
+        homeDreamscapeId: asDreamscapeId("fixture-dreamscape"),
         siteType: "RandomSite",
         portraitSource: "fixture-guide.png",
         dialogue: { site: [] },
@@ -66,3 +66,6 @@ describe("buildRandomSiteView", () => {
   });
 });
 import { assertLocalized } from "@trox/runtime";
+import { asSiteId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";

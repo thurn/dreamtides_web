@@ -14,6 +14,7 @@
  */
 
 import type { ArtCrop } from "../../types/cards";
+import { asCardId, type CardId } from "../../types/card-identity";
 
 /**
  * A keyword a figment type carries implicitly. Each maps onto the matching
@@ -23,7 +24,7 @@ export type FigmentKeyword = "vengeful" | "awakened";
 
 export interface FigmentCatalogEntry {
   /** Stable identity for this authored figment type. */
-  id: string;
+  id: CardId;
   /** The normalized lookup key (`normalizeFigmentCatalogKey(subtype)`). */
   key: string;
   /** The figment type as printed (display form). */
@@ -67,10 +68,13 @@ export interface FigmentCatalogRecord {
 }
 
 /** Stable authored identity for the Legionnaire figment. */
-export const LEGIONNAIRE_FIGMENT_ID =
-  "e757b306-5bab-4a5a-8493-28c0f3aa6440";
+export const LEGIONNAIRE_FIGMENT_ID = asCardId(
+  "e757b306-5bab-4a5a-8493-28c0f3aa6440",
+);
 
-function normalizeHydratedKeyword(keyword: string | undefined): FigmentKeyword | undefined {
+function normalizeHydratedKeyword(
+  keyword: string | undefined,
+): FigmentKeyword | undefined {
   if (keyword === "vengeful" || keyword === "awakened") {
     return keyword;
   }
@@ -91,7 +95,7 @@ function entry(
   keyword?: FigmentKeyword,
 ): FigmentCatalogEntry {
   return {
-    id: `builtin:${normalizeFigmentCatalogKey(subtype)}`,
+    id: asCardId(`builtin:${normalizeFigmentCatalogKey(subtype)}`),
     key: normalizeFigmentCatalogKey(subtype),
     subtype,
     baseSpark,
@@ -129,7 +133,8 @@ export const FIGMENT_CATALOG: Readonly<Record<string, FigmentCatalogEntry>> =
  * takes precedence over the built-in defaults, so a figment renders with the
  * name, character type, spark, rules text, and art the figment editor saved.
  */
-let hydratedCatalog: Readonly<Record<string, FigmentCatalogEntry>> | null = null;
+let hydratedCatalog: Readonly<Record<string, FigmentCatalogEntry>> | null =
+  null;
 let hydratedEntries: readonly FigmentCatalogEntry[] | null = null;
 
 /**
@@ -138,11 +143,13 @@ let hydratedEntries: readonly FigmentCatalogEntry[] | null = null;
  * name, rules text, and image number become the entry the battle UI reads when
  * creating and rendering a figment of that type.
  */
-export function hydrateFigmentCatalog(records: readonly FigmentCatalogRecord[]): void {
+export function hydrateFigmentCatalog(
+  records: readonly FigmentCatalogRecord[],
+): void {
   const entries = records.map((record) => {
     const keyword = normalizeHydratedKeyword(record.keyword);
     return {
-      id: record.id,
+      id: asCardId(record.id),
       key: normalizeFigmentCatalogKey(record.subtype),
       subtype: record.subtype,
       baseSpark: Number.isFinite(record.spark) ? record.spark : 0,
@@ -172,7 +179,7 @@ export function figmentCatalogEntries(): readonly FigmentCatalogEntry[] {
 
 /** Looks up one exact authored figment type by its stable identity. */
 export function lookupFigmentCatalogEntryById(
-  id: string,
+  id: CardId,
 ): FigmentCatalogEntry | undefined {
   return figmentCatalogEntries().find((entry) => entry.id === id);
 }

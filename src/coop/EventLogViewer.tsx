@@ -1,12 +1,19 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import type { Database } from "firebase/database";
 import type { LogNode } from "../eventlog/types";
 import { subscribeToLog } from "../eventlog/subscribe";
 import { readRoomLogLines } from "./journey-log-sink";
+import type { RoomId } from "../types/identifiers";
 
 interface EventLogViewerProps {
   db: Database;
-  gameId: string;
+  gameId: RoomId;
 }
 
 interface EventRow {
@@ -31,7 +38,9 @@ interface EventRow {
  */
 export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
   const [node, setNode] = useState<LogNode | null>(null);
-  const [logStatus, setLogStatus] = useState<"loading" | "ready" | "corrupt">("loading");
+  const [logStatus, setLogStatus] = useState<"loading" | "ready" | "corrupt">(
+    "loading",
+  );
   const [lines, setLines] = useState<string[]>([]);
   const [linesStatus, setLinesStatus] = useState<"loading" | "ready" | "error">(
     "loading",
@@ -71,7 +80,9 @@ export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
       })
       .catch((error: unknown) => {
         if (!cancelled) {
-          setLinesError(error instanceof Error ? error.message : "Failed to read log.");
+          setLinesError(
+            error instanceof Error ? error.message : "Failed to read log.",
+          );
           setLinesStatus("error");
         }
       });
@@ -185,7 +196,10 @@ export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
       </div>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wider" style={{ color: "#94a3b8" }}>
+        <h2
+          className="text-sm font-semibold uppercase tracking-wider"
+          style={{ color: "#94a3b8" }}
+        >
           Decoded event log
         </h2>
         {logStatus === "corrupt" ? (
@@ -205,7 +219,10 @@ export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
         ) : (
           <div
             className="overflow-auto rounded-lg"
-            style={{ border: "1px solid rgba(124, 58, 237, 0.25)", maxHeight: "40vh" }}
+            style={{
+              border: "1px solid rgba(124, 58, 237, 0.25)",
+              maxHeight: "40vh",
+            }}
           >
             <table className="w-full border-collapse font-mono text-xs">
               <thead>
@@ -218,13 +235,19 @@ export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
               </thead>
               <tbody>
                 {eventRows.map((row) => (
-                  <tr key={row.seq} style={{ borderTop: "1px solid rgba(124, 58, 237, 0.15)" }}>
+                  <tr
+                    key={row.seq}
+                    style={{ borderTop: "1px solid rgba(124, 58, 237, 0.15)" }}
+                  >
                     <td className="px-2 py-1">{row.seq}</td>
                     <td className="px-2 py-1">{row.type}</td>
                     <td className="px-2 py-1">{row.actor}</td>
                     <td
                       className="px-2 py-1"
-                      style={{ color: row.outcome === "bounced" ? "#fca5a5" : "#e2e8f0" }}
+                      style={{
+                        color:
+                          row.outcome === "bounced" ? "#fca5a5" : "#e2e8f0",
+                      }}
                     >
                       {row.outcome}
                     </td>
@@ -237,13 +260,18 @@ export function EventLogViewer({ db, gameId }: EventLogViewerProps): ReactNode {
       </section>
 
       <section className="flex min-h-0 flex-1 flex-col gap-2">
-        <h2 className="text-sm font-semibold uppercase tracking-wider" style={{ color: "#94a3b8" }}>
+        <h2
+          className="text-sm font-semibold uppercase tracking-wider"
+          style={{ color: "#94a3b8" }}
+        >
           Raw JSONL sink{" "}
           <span style={{ color: "#64748b" }}>
             ({filteredLines.length}/{lines.length})
           </span>
         </h2>
-        {linesStatus === "loading" && <p style={{ color: "#94a3b8" }}>Loading sink...</p>}
+        {linesStatus === "loading" && (
+          <p style={{ color: "#94a3b8" }}>Loading sink...</p>
+        )}
         {linesStatus === "error" && (
           <div
             role="alert"

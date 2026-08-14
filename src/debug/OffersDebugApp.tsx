@@ -20,11 +20,13 @@ import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { SitesData } from "../types/sites-data";
+import type { CardId } from "../types/card-identity";
+import { asDreamscapeId } from "../types/identifiers";
 
 const AUGURY_DATA = parseAuguryData(auguryJson);
 
 const fixtureCard = (
-  cardId: string,
+  cardId: CardId,
   name: string,
   imageNumber: number,
 ): Readonly<CardData> => {
@@ -46,34 +48,46 @@ const fixtureCard = (
 };
 
 const GENERAL_DRAFT_A: OfferTileFourCards = [
-  fixtureCard("7be2e6d7-abff-4c44-a0c3-35460da1693c", "Windcutter", 287269511),
   fixtureCard(
-    "161482b6-af07-4d9e-822d-8c738672beb9",
+    asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
+    "Windcutter",
+    287269511,
+  ),
+  fixtureCard(
+    asCardId("161482b6-af07-4d9e-822d-8c738672beb9"),
     "Starlight Guide",
     2022594419,
   ),
   fixtureCard(
-    "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
+    asCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"),
     "Light of Emergence",
     618071684,
   ),
-  fixtureCard("9b9c2743-75b3-499d-b5fb-c3429c92d420", "Kindlehorn", 1196004046),
+  fixtureCard(
+    asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"),
+    "Kindlehorn",
+    1196004046,
+  ),
 ];
 
 const GENERAL_DRAFT_B: OfferTileFourCards = [
   fixtureCard(
-    "967c714f-40c5-4a77-8e22-40691a2755d4",
+    asCardId("967c714f-40c5-4a77-8e22-40691a2755d4"),
     "Passage Through Oblivion",
     2212744813,
   ),
-  fixtureCard("3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", "Graywatch", 2218612335),
   fixtureCard(
-    "25d00336-5ad7-433b-8ced-71720a9f074a",
+    asCardId("3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1"),
+    "Graywatch",
+    2218612335,
+  ),
+  fixtureCard(
+    asCardId("25d00336-5ad7-433b-8ced-71720a9f074a"),
     "Wheel of the Heavens",
     1480584617,
   ),
   fixtureCard(
-    "68978d92-aa8b-4873-bb0b-6e52f12b0849",
+    asCardId("68978d92-aa8b-4873-bb0b-6e52f12b0849"),
     "Chronicle Claimer",
     1633431265,
   ),
@@ -81,38 +95,42 @@ const GENERAL_DRAFT_B: OfferTileFourCards = [
 
 // Four actual Spirit Animal cards form a realistic subtype draft and bundle.
 const CATEGORY_DRAFT: OfferTileFourCards = [
-  fixtureCard("9b9c2743-75b3-499d-b5fb-c3429c92d420", "Kindlehorn", 1196004046),
   fixtureCard(
-    "401bb341-8385-41e9-8f6f-7b48e9ce174d",
+    asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"),
+    "Kindlehorn",
+    1196004046,
+  ),
+  fixtureCard(
+    asCardId("401bb341-8385-41e9-8f6f-7b48e9ce174d"),
     "Soulflame Predator",
     2278837667,
   ),
   fixtureCard(
-    "eae928f6-aab2-415e-b4b1-b9c3ed8e6818",
+    asCardId("eae928f6-aab2-415e-b4b1-b9c3ed8e6818"),
     "Driftcaller Sovereign",
     447372529,
   ),
   fixtureCard(
-    "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
+    asCardId("c8579b20-95ff-4b1d-b4c6-6bd049fc4760"),
     "Ghostlight Wolves",
     2127752129,
   ),
 ];
 
 const PURGE_TARGET = fixtureCard(
-  "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+  asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
   "Marked Direwolf",
   2654359867,
 );
 
 const STARTER_TARGETS = [
   fixtureCard(
-    "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+    asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
     "Nocturne Strummer",
     507269458,
   ),
   fixtureCard(
-    "647f5150-b2e0-424b-9480-27557642524e",
+    asCardId("647f5150-b2e0-424b-9480-27557642524e"),
     "Ringwatcher",
     1016596168,
   ),
@@ -363,7 +381,9 @@ export default function OffersDebugApp(): ReactElement {
       }}
     >
       <img
-        src={resolveArtRef(artRef.dreamscapeScene("wilderveil"))}
+        src={resolveArtRef(
+          artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
+        )}
         alt=""
         draggable={false}
         style={{

@@ -18,6 +18,11 @@ import {
   type AtlasNodePlacementView,
   type AtlasView,
 } from "./AtlasScreen";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asAffiliationId } from "../../types/identifiers";
 
 /**
  * Stub matchMedia (jsdom lacks it; Pressable + useIsDesktop + the InfoCard
@@ -198,8 +203,8 @@ function residentModel(): Pick<
 > {
   return {
     primary: {
-      sceneArt: artRef.dreamscapeScene("wilderveil"),
-      figureArt: artRef.dreamGuide("aldric"),
+      sceneArt: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
+      figureArt: artRef.dreamGuide(asGuideId("aldric")),
       title: assertLocalized("Aldric, the Seer"),
       body: assertLocalized("Aldric offers curated visions of the future."),
       placeName: assertLocalized("The Glass Orchard"),
@@ -207,13 +212,13 @@ function residentModel(): Pick<
     },
     dreamsign: null,
     site: {
-      id: "00000000-0000-4000-8000-000000000072",
+      id: asSiteId("00000000-0000-4000-8000-000000000072"),
       name: assertLocalized("Augury"),
       blurb: assertLocalized("Study a curated vision of what waits ahead."),
       icon: GLYPHS.water,
     },
     affiliation: {
-      id: "00000000-0000-4000-8000-000000000073",
+      id: asAffiliationId("00000000-0000-4000-8000-000000000073"),
       title: assertLocalized("Fixture affiliation"),
       body: assertLocalized("Fixture cards are more likely here."),
     },
@@ -231,7 +236,7 @@ function nodeItem(
   } = {},
 ): AtlasNodePlacementView {
   const model: AtlasNodeModel = {
-    id,
+    id: asAtlasNodeId(id),
     name: assertLocalized(id),
     state,
     role: extra.role ?? "regular",
@@ -282,7 +287,9 @@ describe("Cumulus AtlasScreen", () => {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: assertLocalized("Mira"),
           speakerName: assertLocalized("Mira"),
-          text: assertLocalized("On the [purple]Atlas[/purple] screen, choose a dream."),
+          text: assertLocalized(
+            "On the [purple]Atlas[/purple] screen, choose a dream.",
+          ),
         },
         delaySeconds: 1,
         horizontalOffset: 0,
@@ -522,8 +529,12 @@ describe("Cumulus AtlasScreen", () => {
     expect(document.body.textContent).toContain(
       resolveSource(resident.primary.guideName!),
     );
-    expect(document.body.textContent).toContain(resolveSource(resident.site!.name));
-    expect(document.body.textContent).toContain(resolveSource(resident.site!.blurb));
+    expect(document.body.textContent).toContain(
+      resolveSource(resident.site!.name),
+    );
+    expect(document.body.textContent).toContain(
+      resolveSource(resident.site!.blurb),
+    );
     expect(document.body.textContent).toContain(
       resolveSource(resident.affiliation!.title),
     );

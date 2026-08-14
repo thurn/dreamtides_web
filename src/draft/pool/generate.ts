@@ -7,15 +7,13 @@ import {
   type PoolCard,
   type PoolData,
 } from "./types.ts";
-import {
-  DEFAULT_TIDES4_TUNING,
-  generateTides4,
-} from "./variant-tides4.ts";
+import { DEFAULT_TIDES4_TUNING, generateTides4 } from "./variant-tides4.ts";
+import type { DreamAvatarId } from "../../types/identifiers";
 
 export function generatePool(
   cards: readonly PoolCard[],
   seed?: number,
-  dreamAvatarId?: string,
+  dreamAvatarId?: DreamAvatarId,
   tides4Tuning?: Tides4Tuning,
 ): GeneratedPool {
   return generatePoolFromData(
@@ -30,7 +28,7 @@ export function generatePool(
 export function generatePoolFromData(
   poolData: PoolData,
   seed?: number,
-  dreamAvatarId?: string,
+  dreamAvatarId?: DreamAvatarId,
   tides4Tuning: Tides4Tuning = DEFAULT_TIDES4_TUNING,
 ): GeneratedPool {
   const resolvedSeed =

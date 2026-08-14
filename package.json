@@ -49,6 +49,7 @@
     "cumulus-metadata": "node scripts/generate-cumulus-metadata.mjs",
     "cumulus-docs": "node scripts/generate-cumulus-docs.mjs",
     "audit:player-localization": "node scripts/audit-player-localization.mjs --check",
+    "audit:domain-strings": "node scripts/domain-string-audit.mjs",
     "audit:amplified-designs": "node scripts/audit-amplified-designs.mjs",
     "upload-assets": "node scripts/upload-assets-to-storage.mjs",
     "publish-dda-image": "node .llms/skills/dda/scripts/publish-image.mjs",

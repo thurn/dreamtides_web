@@ -33,6 +33,15 @@ import {
   offerTileDescription,
 } from "../../cumulus/components/controls/offer-tile-descriptions";
 import { auguryArchetype } from "../../data/augury-data";
+import type { ChoiceId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import { asOfferId } from "../../types/identifiers";
+import { asChoiceId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asMerchantTargetKey } from "../../types/identifiers";
+import { asMerchantCategoryId } from "../../types/identifiers";
 
 const card = makeMerchantTestCard({
   id: asCardId("81000000-0000-4000-8000-000000000012"),
@@ -40,7 +49,7 @@ const card = makeMerchantTestCard({
   name: asCardName("Fixture Gift"),
 });
 
-function candidate(choiceId: string): MerchantChoiceCandidate {
+function candidate(choiceId: ChoiceId): MerchantChoiceCandidate {
   return {
     choiceId,
     gameObjects: [
@@ -62,19 +71,19 @@ function candidate(choiceId: string): MerchantChoiceCandidate {
 
 function chooserOffer(): MerchantOffer {
   return {
-    offerId: "A",
+    offerId: asOfferId("A"),
     encounterSignature: "encounter-fixture",
     archetypeId: "fit_card_draft",
     family: "grant",
-    targetKey: "fixture-target",
+    targetKey: asMerchantTargetKey("fixture-target"),
     gameObjects: [],
     choiceRequest: {
       choiceType: "catalogCard",
       candidates: [
-        candidate("choice-1"),
-        candidate("choice-2"),
-        candidate("choice-3"),
-        candidate("choice-4"),
+        candidate(asChoiceId("choice-1")),
+        candidate(asChoiceId("choice-2")),
+        candidate(asChoiceId("choice-3")),
+        candidate(asChoiceId("choice-4")),
       ],
     },
   };
@@ -82,12 +91,12 @@ function chooserOffer(): MerchantOffer {
 
 function directOffer(): MerchantOffer {
   return {
-    offerId: "B",
+    offerId: asOfferId("B"),
     encounterSignature: "encounter-fixture",
     archetypeId: "strong_card",
     family: "grant",
-    targetKey: card.id,
-    gameObjects: [candidate("direct").gameObjects[0]],
+    targetKey: asMerchantTargetKey(card.id),
+    gameObjects: [candidate(asChoiceId("direct")).gameObjects[0]],
     applyPayload: {
       kind: "add_catalog_card",
       cardUuid: card.id,
@@ -99,7 +108,7 @@ function directOffer(): MerchantOffer {
 function encounter(): MerchantEncounter {
   return {
     encounterSignature: "encounter-fixture",
-    siteId: "site-fixture",
+    siteId: asSiteId("site-fixture"),
     offers: [chooserOffer(), directOffer()],
   };
 }
@@ -127,7 +136,10 @@ function catalogObject(
   };
 }
 
-function mappedDeckObject(index: number, entryId: string): MerchantDeckCard {
+function mappedDeckObject(
+  index: number,
+  entryId: DeckEntryId,
+): MerchantDeckCard {
   const mappedCard = mappingCards[index];
   const deckEntry = makeMerchantTestDeckEntry({
     entryId,
@@ -144,7 +156,7 @@ function mappedDeckObject(index: number, entryId: string): MerchantDeckCard {
   };
 }
 
-const deckObject = mappedDeckObject(0, "entry-fixture");
+const deckObject = mappedDeckObject(0, asDeckEntryId("entry-fixture"));
 
 const mappingContext = {
   atlasData: MINIMAL_ATLAS_DATA,
@@ -171,7 +183,7 @@ function fourCandidates(payloadCopies = 1): MerchantChoiceCandidate[] {
       cardNumber: object.cardNumber,
     };
     return {
-      choiceId: `mapping-choice-${String(index)}`,
+      choiceId: asChoiceId(`mapping-choice-${String(index)}`),
       gameObjects: [object],
       applyPayload:
         payloadCopies === 1
@@ -189,11 +201,11 @@ function mappedOffer(
   overrides: Partial<MerchantOffer>,
 ): MerchantOffer {
   return {
-    offerId: "A",
+    offerId: asOfferId("A"),
     encounterSignature: "mapping-encounter",
     archetypeId,
     family: "grant",
-    targetKey: "fixture",
+    targetKey: asMerchantTargetKey("fixture"),
     gameObjects: [],
     ...overrides,
   };
@@ -212,10 +224,10 @@ function dreamsignObject(
 ): Extract<MerchantGameObject, { objectType: "dreamsign" }> {
   return {
     objectType: "dreamsign",
-    dreamsignId: id,
+    dreamsignId: asDreamsignId(id),
     displayName: `Dreamsign ${id}`,
     dreamsignTemplate: {
-      id,
+      id: asDreamsignId(id),
       name: `Dreamsign ${id}`,
       effectDescription: "Fixture",
       imageName: `${id}.png`,
@@ -343,7 +355,7 @@ describe("augury view model", () => {
   it("builds an added site as a canonical non-interactive site-node model", () => {
     const offer = mappedOffer("add_site", {
       family: "site",
-      targetKey: "Shop",
+      targetKey: asMerchantTargetKey("Shop"),
       applyPayload: { kind: "add_site", siteType: "Shop" },
     });
     const offers = buildAuguryOfferViews(
@@ -364,11 +376,17 @@ describe("augury view model", () => {
   });
 
   it("builds the persisted accept request from stable offer and choice ids", () => {
-    expect(buildAuguryAcceptRequest(encounter(), "A", "choice-2")).toEqual({
+    expect(
+      buildAuguryAcceptRequest(
+        encounter(),
+        asOfferId("A"),
+        asChoiceId("choice-2"),
+      ),
+    ).toEqual({
       encounterSignature: "encounter-fixture",
-      offerId: "A",
+      offerId: asOfferId("A"),
       archetypeId: "fit_card_draft",
-      choice: { choiceId: "choice-2" },
+      choice: { choiceId: asChoiceId("choice-2") },
     });
   });
 
@@ -400,10 +418,12 @@ describe("augury view model", () => {
       ],
       [
         mappedOffer("category_draft_known", {
-          targetKey: `type:Character:${mappingCards
-            .slice(0, 4)
-            .map((value) => value.id)
-            .join(",")}`,
+          targetKey: asMerchantTargetKey(
+            `type:Character:${mappingCards
+              .slice(0, 4)
+              .map((value) => value.id)
+              .join(",")}`,
+          ),
           choiceRequest: choiceRequest(drafts),
         }),
         "category-draft",
@@ -467,7 +487,7 @@ describe("augury view model", () => {
       [
         mappedOffer("add_site", {
           family: "site",
-          targetKey: "Shop",
+          targetKey: asMerchantTargetKey("Shop"),
           applyPayload: { kind: "add_site", siteType: "Shop" },
         }),
         "add-site",
@@ -508,10 +528,12 @@ describe("augury view model", () => {
   it("rejects malformed fixed counts and resolves structured category and copy data", () => {
     const category = buildAuguryOfferTileModel(
       mappedOffer("category_draft_known", {
-        targetKey: `type:Character:${mappingCards
-          .slice(0, 4)
-          .map((value) => value.id)
-          .join(",")}`,
+        targetKey: asMerchantTargetKey(
+          `type:Character:${mappingCards
+            .slice(0, 4)
+            .map((value) => value.id)
+            .join(",")}`,
+        ),
         choiceRequest: choiceRequest(fourCandidates()),
       }),
       mappingContext,
@@ -558,7 +580,7 @@ describe("augury view model", () => {
     for (const [id, label, expected] of cases) {
       expect(
         projectOfferTileCategory({
-          id,
+          id: asMerchantCategoryId(id),
           label,
           memberUuids: [],
         }),

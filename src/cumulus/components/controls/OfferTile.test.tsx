@@ -4,7 +4,11 @@ import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import {
+  asCardId,
+  asCardName,
+  type CardId,
+} from "../../../types/card-identity";
 import { CumulusRoot } from "../../CumulusRoot";
 import { GLYPHS } from "../../primitives/glyph";
 import {
@@ -21,7 +25,7 @@ import type { CardData } from "../../../types/cards";
 ).IS_REACT_ACT_ENVIRONMENT = true;
 
 function fixtureCard(
-  cardId: string,
+  cardId: CardId,
   imageNumber: number,
   cardNumber: number,
   art?: { readonly x: number; readonly y: number; readonly scale: number },
@@ -45,14 +49,14 @@ function fixtureCard(
 }
 
 const CARDS = [
-  fixtureCard("7be2e6d7-abff-4c44-a0c3-35460da1693c", 287269511, 1, {
+  fixtureCard(asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), 287269511, 1, {
     x: 0.5,
     y: -0.5,
     scale: 1.7,
   }),
-  fixtureCard("161482b6-af07-4d9e-822d-8c738672beb9", 2022594419, 2),
-  fixtureCard("b56ef7e8-c634-4d40-ac08-fab591dfbc4a", 618071684, 3),
-  fixtureCard("9b9c2743-75b3-499d-b5fb-c3429c92d420", 1196004046, 4),
+  fixtureCard(asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), 2022594419, 2),
+  fixtureCard(asCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"), 618071684, 3),
+  fixtureCard(asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"), 1196004046, 4),
 ] as const satisfies OfferTileFourCards;
 
 const MODEL: OfferTileModel = {

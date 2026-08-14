@@ -14,6 +14,7 @@ import {
 } from "./tutorial-placement";
 import { tx } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { PresentationId } from "../../../types/identifiers";
 
 function measuredRect(
   element: HTMLElement,
@@ -64,7 +65,7 @@ export type TutorialDialoguePlacement =
 
 export interface ViewportTutorialDialogueProps {
   /** Stable identity for this dialogue presentation. */
-  readonly presentationId: string;
+  readonly presentationId: PresentationId;
   /** Complete visible CharacterDialogue presentation. */
   readonly dialogue: CharacterDialogueModel;
   /** Semantic host context used for presentation and diagnostics. */

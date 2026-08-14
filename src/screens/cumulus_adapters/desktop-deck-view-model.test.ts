@@ -10,6 +10,9 @@ import type { PoolData } from "../../draft/pool/types";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { buildDesktopDeckView } from "./desktop-deck-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 const transfigurationData = transfigurationFixture();
 
@@ -33,7 +36,7 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 
 function makeEntry(overrides: Partial<DeckEntry> = {}): DeckEntry {
   return {
-    entryId: "entry-1",
+    entryId: asDeckEntryId("entry-1"),
     cardNumber: 1,
     transfiguration: null,
     isBane: false,
@@ -46,7 +49,7 @@ function database(...cards: CardData[]): Map<number, CardData> {
 }
 
 const dreamAvatar: DreamAvatar = {
-  id: "dc-1",
+  id: asDreamAvatarId("dc-1"),
   name: "Sable",
   title: "The Unmaker",
   renderedText: "Banish a card.",
@@ -55,7 +58,7 @@ const dreamAvatar: DreamAvatar = {
 };
 
 const dreamsign: Dreamsign = {
-  id: "ds-1",
+  id: asDreamsignId("ds-1"),
   name: "First Sign",
   effectDescription: "Draw an extra card.",
 };
@@ -114,17 +117,29 @@ describe("buildDesktopDeckView", () => {
     const a = makeCard({ cardNumber: 1, id: asCardId("a") });
     const b = makeCard({ cardNumber: 2, id: asCardId("b") });
     const deck = [
-      makeEntry({ entryId: "e2", cardNumber: 2 }),
-      makeEntry({ entryId: "e1", cardNumber: 1 }),
+      makeEntry({ entryId: asDeckEntryId("e2"), cardNumber: 2 }),
+      makeEntry({ entryId: asDeckEntryId("e1"), cardNumber: 1 }),
     ];
 
-    const view = buildDesktopDeckView(transfigurationData, deck, database(a, b), null, []);
+    const view = buildDesktopDeckView(
+      transfigurationData,
+      deck,
+      database(a, b),
+      null,
+      [],
+    );
 
     expect(view.cards.map((c) => c.entryId)).toEqual(["e2", "e1"]);
   });
 
   it("maps the DreamAvatar to the sidebar view (portrait visual + rules text)", () => {
-    const view = buildDesktopDeckView(transfigurationData, [], database(), dreamAvatar, []);
+    const view = buildDesktopDeckView(
+      transfigurationData,
+      [],
+      database(),
+      dreamAvatar,
+      [],
+    );
 
     expect(view.dreamAvatar).toEqual({
       id: "dc-1",
@@ -136,13 +151,25 @@ describe("buildDesktopDeckView", () => {
   });
 
   it("carries a null DreamAvatar through as null", () => {
-    const view = buildDesktopDeckView(transfigurationData, [], database(), null, []);
+    const view = buildDesktopDeckView(
+      transfigurationData,
+      [],
+      database(),
+      null,
+      [],
+    );
     expect(view.dreamAvatar).toBeNull();
   });
 
   it("copies the dreamsigns into the view", () => {
     const signs = [dreamsign];
-    const view = buildDesktopDeckView(transfigurationData, [], database(), null, signs);
+    const view = buildDesktopDeckView(
+      transfigurationData,
+      [],
+      database(),
+      null,
+      signs,
+    );
 
     expect(view.dreamsigns).toMatchObject(signs);
     // A copy, not the caller's array, so the view cannot alias live state.
@@ -170,5 +197,4 @@ describe("buildDesktopDeckView", () => {
       },
     ]);
   });
-
 });

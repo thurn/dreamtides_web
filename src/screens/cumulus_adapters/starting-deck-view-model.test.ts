@@ -5,15 +5,12 @@ import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { buildStartingDeckView as buildStartingDeckViewImpl } from "./starting-deck-view-model";
+import { asDeckEntryId } from "../../types/identifiers";
 
 const buildStartingDeckView = (
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
-) =>
-  buildStartingDeckViewImpl(
-    deck,
-    cardDatabase
-  );
+) => buildStartingDeckViewImpl(deck, cardDatabase);
 
 function makeCardDatabase(): Map<number, CardData> {
   return new Map<number, CardData>([
@@ -56,8 +53,18 @@ function makeCardDatabase(): Map<number, CardData> {
 
 function makeDeck(): DeckEntry[] {
   return [
-    { entryId: "entry-1", cardNumber: 1, transfiguration: null, isBane: false },
-    { entryId: "entry-2", cardNumber: 2, transfiguration: null, isBane: false },
+    {
+      entryId: asDeckEntryId("entry-1"),
+      cardNumber: 1,
+      transfiguration: null,
+      isBane: false,
+    },
+    {
+      entryId: asDeckEntryId("entry-2"),
+      cardNumber: 2,
+      transfiguration: null,
+      isBane: false,
+    },
   ];
 }
 
@@ -84,13 +91,13 @@ describe("buildStartingDeckView", () => {
     // order the entries were acquired.
     const deck: DeckEntry[] = [
       {
-        entryId: "entry-2",
+        entryId: asDeckEntryId("entry-2"),
         cardNumber: 2,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: "entry-1",
+        entryId: asDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
@@ -105,20 +112,20 @@ describe("buildStartingDeckView", () => {
   it("drops an entry whose card is not in the database", () => {
     const deck: DeckEntry[] = [
       {
-        entryId: "entry-1",
+        entryId: asDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
       },
       // cardNumber 99 is absent from the database.
       {
-        entryId: "entry-missing",
+        entryId: asDeckEntryId("entry-missing"),
         cardNumber: 99,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: "entry-2",
+        entryId: asDeckEntryId("entry-2"),
         cardNumber: 2,
         transfiguration: null,
         isBane: false,
@@ -133,7 +140,7 @@ describe("buildStartingDeckView", () => {
   it("applies a debug stat override to the resolved card", () => {
     const deck: DeckEntry[] = [
       {
-        entryId: "entry-1",
+        entryId: asDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
@@ -149,7 +156,7 @@ describe("buildStartingDeckView", () => {
   it("applies a persistent spark bonus to the resolved card", () => {
     const deck: DeckEntry[] = [
       {
-        entryId: "entry-1",
+        entryId: asDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,

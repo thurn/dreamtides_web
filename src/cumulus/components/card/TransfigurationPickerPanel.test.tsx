@@ -6,6 +6,7 @@ import {
   syntheticGameCard,
 } from "../../test-helpers/component-test-fixtures";
 import { TransfigurationPickerPanel } from "./TransfigurationPickerPanel";
+import { asDeckEntryId } from "../../../types/identifiers";
 
 beforeEach(() => {
   window.matchMedia = vi.fn().mockReturnValue({
@@ -81,18 +82,18 @@ describe("TransfigurationPickerPanel", () => {
           presentation: "open-deck",
           cards: [
             {
-              entryId: "available",
+              entryId: asDeckEntryId("available"),
               card: syntheticGameCard(1),
               availability: "available",
             },
             {
-              entryId: "reforged",
+              entryId: asDeckEntryId("reforged"),
               card: syntheticGameCard(2),
               availability: "reforged",
               reforgedType: "Empowered",
             },
             {
-              entryId: "unavailable",
+              entryId: asDeckEntryId("unavailable"),
               card: syntheticGameCard(3),
               availability: "unavailable",
             },

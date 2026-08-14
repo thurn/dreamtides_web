@@ -10,6 +10,7 @@ import { DOUBLE_TAP_WINDOW_MS } from "../../primitives/pointer-gesture";
 import { CumulusRoot } from "../../CumulusRoot";
 import { CardBrowserPanel } from "./CardBrowserPanel";
 import { CardPickerPanel } from "./CardPickerPanel";
+import { asDeckEntryId } from "../../../types/identifiers";
 
 function createRoot(container: Element) {
   const root = createReactRoot(container);
@@ -104,7 +105,7 @@ describe("CardBrowserPanel", () => {
           subtitle={assertLocalized("Your cards")}
           cards={[
             {
-              entryId: "entry-a",
+              entryId: asDeckEntryId("entry-a"),
               model: model("Archive Sentry"),
               testId: "card-a",
             },
@@ -166,7 +167,7 @@ describe("CardBrowserPanel", () => {
           title={assertLocalized("Your Void")}
           cards={[
             {
-              entryId: "physical-card",
+              entryId: asDeckEntryId("physical-card"),
               model: model("Physical"),
               testId: "physical-card",
             },
@@ -209,7 +210,7 @@ describe("CardBrowserPanel", () => {
             title={assertLocalized("Your Deck")}
             cards={[
               {
-                entryId: "physical-card",
+                entryId: asDeckEntryId("physical-card"),
                 model: model("Physical"),
                 draggable: true,
               },
@@ -331,17 +332,17 @@ describe("CardPickerPanel", () => {
           title={assertLocalized("Shop")}
           cards={[
             {
-              entryId: "available",
+              entryId: asDeckEntryId("available"),
               model: model("Available"),
               testId: "available",
             },
             {
-              entryId: "locked",
+              entryId: asDeckEntryId("locked"),
               model: model("Locked"),
               testId: "locked",
               disabled: true,
             },
-            { entryId: "third", model: model("Third") },
+            { entryId: asDeckEntryId("third"), model: model("Third") },
           ]}
           onCardPress={activate}
         />,
@@ -386,7 +387,11 @@ describe("CardPickerPanel", () => {
         <CardPickerPanel
           title={assertLocalized("Shop")}
           cards={[
-            { entryId: "reserved", model: model("Purchased"), reserved: true },
+            {
+              entryId: asDeckEntryId("reserved"),
+              model: model("Purchased"),
+              reserved: true,
+            },
           ]}
         />,
       ),
@@ -422,7 +427,7 @@ describe("CardPickerPanel", () => {
               },
             }}
             endAction={{
-              entryId: "restock",
+              entryId: asDeckEntryId("restock"),
               glyph: GLYPHS.refresh,
               label: assertLocalized("Restock"),
               caption: { kind: "essence", amount: 50 },
@@ -503,7 +508,7 @@ describe("CardPickerPanel", () => {
           title={assertLocalized("Duplication")}
           cards={[
             {
-              entryId: "selected",
+              entryId: asDeckEntryId("selected"),
               model: model("Selected"),
               stackedCopy: { shown, direction: "left" },
             },
@@ -553,7 +558,7 @@ describe("CardPickerPanel", () => {
           presentation="overlay"
           title={assertLocalized("Choose")}
           cards={Array.from({ length: 5 }, (_, index) => ({
-            entryId: String(index),
+            entryId: asDeckEntryId(String(index)),
             model: model(String(index)),
           }))}
         />,

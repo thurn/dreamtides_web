@@ -1,6 +1,7 @@
 /** Loads the DreamAvatar identities compiled from `dream_avatars.toml`. */
 
 import type { DreamAvatarPortraitFocus } from "../types/content";
+import type { CardId } from "../types/card-identity";
 
 export interface DraftDreamAvatar {
   id: string;
@@ -12,7 +13,7 @@ export interface DraftDreamAvatar {
   startingEssence?: number;
   signatureCards?: readonly string[];
   /** Stable card UUIDs, index-aligned with `signatureCards`. */
-  signatureCardIds?: readonly string[];
+  signatureCardIds?: readonly CardId[];
 }
 
 export async function loadDreamAvatarsV2(): Promise<DraftDreamAvatar[]> {

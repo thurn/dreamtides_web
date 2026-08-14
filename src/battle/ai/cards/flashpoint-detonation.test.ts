@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import { flashpointDetonation } from "./flashpoint-detonation";
 import type { AiCard, AiOpponentBody, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
+import { asBattleCardId } from "../../../types/identifiers";
 
-function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
+function makeCard(
+  overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
+): AiCard {
   return {
     name: "card",
     energyCost: 0,
@@ -15,7 +18,9 @@ function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "ca
   };
 }
 
-function makeBody(overrides: Partial<AiOpponentBody> & Pick<AiOpponentBody, "battleCardId">): AiOpponentBody {
+function makeBody(
+  overrides: Partial<AiOpponentBody> & Pick<AiOpponentBody, "battleCardId">,
+): AiOpponentBody {
   return {
     effectiveSpark: 1,
     energyCost: 0,
@@ -46,77 +51,173 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 
 describe("Flashpoint Detonation (#516)", () => {
   it("canPlay is false with no opponent bodies", () => {
-    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
-    expect(flashpointDetonation.canPlay(makeModel({ opponentBodies: [] }), self)).toBe(false);
+    const self = makeCard({
+      battleCardId: asBattleCardId("blast"),
+      cardNumber: 516,
+      energyCost: 2,
+    });
+    expect(
+      flashpointDetonation.canPlay(makeModel({ opponentBodies: [] }), self),
+    ).toBe(false);
   });
 
   it("canPlay is false without enough energy", () => {
-    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("blast"),
+      cardNumber: 516,
+      energyCost: 2,
+    });
     const model = makeModel({
       aiEnergy: 1,
-      opponentBodies: [makeBody({ battleCardId: "x", effectiveSpark: 3 })],
+      opponentBodies: [
+        makeBody({ battleCardId: asBattleCardId("x"), effectiveSpark: 3 }),
+      ],
     });
     expect(flashpointDetonation.canPlay(model, self)).toBe(false);
   });
 
   it("chooseTargets prefers a front-rank body when one exists", () => {
-    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("blast"),
+      cardNumber: 516,
+      energyCost: 2,
+    });
     const model = makeModel({
       opponentBodies: [
-        makeBody({ battleCardId: "bigBack", rank: "back", slot: "B1", effectiveSpark: 9 }),
-        makeBody({ battleCardId: "front", rank: "front", slot: "F0", effectiveSpark: 2 }),
+        makeBody({
+          battleCardId: asBattleCardId("bigBack"),
+          rank: "back",
+          slot: "B1",
+          effectiveSpark: 9,
+        }),
+        makeBody({
+          battleCardId: asBattleCardId("front"),
+          rank: "front",
+          slot: "F0",
+          effectiveSpark: 2,
+        }),
       ],
     });
-    expect(flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId).toBe("front");
+    expect(
+      flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId,
+    ).toBe("front");
   });
 
   it("chooseTargets picks the highest-spark body when none are front rank", () => {
-    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("blast"),
+      cardNumber: 516,
+      energyCost: 2,
+    });
     const model = makeModel({
       opponentBodies: [
-        makeBody({ battleCardId: "small", rank: "back", slot: "B0", effectiveSpark: 2 }),
-        makeBody({ battleCardId: "big", rank: "back", slot: "B1", effectiveSpark: 7 }),
+        makeBody({
+          battleCardId: asBattleCardId("small"),
+          rank: "back",
+          slot: "B0",
+          effectiveSpark: 2,
+        }),
+        makeBody({
+          battleCardId: asBattleCardId("big"),
+          rank: "back",
+          slot: "B1",
+          effectiveSpark: 7,
+        }),
       ],
     });
-    expect(flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId).toBe("big");
+    expect(
+      flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId,
+    ).toBe("big");
   });
 
   it("canPlay is false when every enemy body costs more than 2", () => {
-    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("blast"),
+      cardNumber: 516,
+      energyCost: 2,
+    });
     const model = makeModel({
       opponentBodies: [
-        makeBody({ battleCardId: "colossus", rank: "front", slot: "F0", effectiveSpark: 6, energyCost: 6 }),
+        makeBody({
+          battleCardId: asBattleCardId("colossus"),
+          rank: "front",
+          slot: "F0",
+          effectiveSpark: 6,
+          energyCost: 6,
+        }),
       ],
     });
     expect(flashpointDetonation.canPlay(model, self)).toBe(false);
   });
 
   it("chooseTargets skips a body that costs more than 2", () => {
-    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("blast"),
+      cardNumber: 516,
+      energyCost: 2,
+    });
     const model = makeModel({
       opponentBodies: [
         // Biggest threat, but too expensive to dissolve — must be ignored.
-        makeBody({ battleCardId: "colossus", rank: "front", slot: "F0", effectiveSpark: 9, energyCost: 6 }),
-        makeBody({ battleCardId: "cheap", rank: "front", slot: "F1", effectiveSpark: 2, energyCost: 2 }),
+        makeBody({
+          battleCardId: asBattleCardId("colossus"),
+          rank: "front",
+          slot: "F0",
+          effectiveSpark: 9,
+          energyCost: 6,
+        }),
+        makeBody({
+          battleCardId: asBattleCardId("cheap"),
+          rank: "front",
+          slot: "F1",
+          effectiveSpark: 2,
+          energyCost: 2,
+        }),
       ],
     });
-    expect(flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId).toBe("cheap");
+    expect(
+      flashpointDetonation.chooseTargets(model, self)?.targetBattleCardId,
+    ).toBe("cheap");
   });
 
   it("chooseTargets returns null when no body is cheap enough", () => {
-    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("blast"),
+      cardNumber: 516,
+      energyCost: 2,
+    });
     const model = makeModel({
       opponentBodies: [
-        makeBody({ battleCardId: "colossus", rank: "front", slot: "F0", effectiveSpark: 6, energyCost: 6 }),
+        makeBody({
+          battleCardId: asBattleCardId("colossus"),
+          rank: "front",
+          slot: "F0",
+          effectiveSpark: 6,
+          energyCost: 6,
+        }),
       ],
     });
     expect(flashpointDetonation.chooseTargets(model, self)).toBeNull();
   });
 
   it("play removes exactly the targeted body and bumps opponentVoidCount", () => {
-    const self = makeCard({ battleCardId: "blast", cardNumber: 516, energyCost: 2 });
-    const target = makeBody({ battleCardId: "front", rank: "front", slot: "F0", effectiveSpark: 2 });
-    const other = makeBody({ battleCardId: "keep", rank: "back", slot: "B0", effectiveSpark: 5 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("blast"),
+      cardNumber: 516,
+      energyCost: 2,
+    });
+    const target = makeBody({
+      battleCardId: asBattleCardId("front"),
+      rank: "front",
+      slot: "F0",
+      effectiveSpark: 2,
+    });
+    const other = makeBody({
+      battleCardId: asBattleCardId("keep"),
+      rank: "back",
+      slot: "B0",
+      effectiveSpark: 5,
+    });
     const model = makeModel({
       aiEnergy: 5,
       aiHand: [self],
@@ -124,7 +225,9 @@ describe("Flashpoint Detonation (#516)", () => {
       opponentVoidCount: 0,
     });
 
-    flashpointDetonation.play(model, self, { targetBattleCardId: "front" });
+    flashpointDetonation.play(model, self, {
+      targetBattleCardId: asBattleCardId("front"),
+    });
 
     expect(model.aiEnergy).toBe(3);
     expect(model.opponentBodies.map((b) => b.battleCardId)).toEqual(["keep"]);

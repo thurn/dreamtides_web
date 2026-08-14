@@ -2,11 +2,14 @@ import type { EventContext } from "../eventlog/types";
 import { parseTutorialActions } from "../data/tutorial-actions";
 import { TUTORIAL_PLAYER_CARD_INSTANCE_ID } from "../data/tutorial-cards";
 import type { FrontDoorState } from "./fold-state";
+import { asJourneyId, asTutorialRunId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type { BattleSlotViewId, DreamAvatarId } from "../types/identifiers";
 
 /** Fold-safe identities loaded from the pinned tutorial scenario. */
 export interface TutorialFrontDoorContentProvider {
-  readonly playerCardId: string;
-  readonly journeyDreamAvatarId: string;
+  readonly playerCardId: CardId;
+  readonly journeyDreamAvatarId: DreamAvatarId;
 }
 
 let tutorialContentProvider: TutorialFrontDoorContentProvider | null = null;
@@ -19,7 +22,7 @@ export function registerTutorialFrontDoorContentProvider(
 }
 
 /** Resolve the configured post-victory avatar for pure battle decisions. */
-export function configuredTutorialJourneyDreamAvatarId(): string | null {
+export function configuredTutorialJourneyDreamAvatarId(): DreamAvatarId | null {
   return tutorialContentProvider?.journeyDreamAvatarId ?? null;
 }
 
@@ -34,7 +37,7 @@ const MAIN_ACTION_IDS: ReadonlySet<string> = new Set([
   "reddit",
 ]);
 
-function isTutorialPlayerBackSlotId(value: unknown): value is string {
+function isTutorialPlayerBackSlotId(value: unknown): value is BattleSlotViewId {
   return (
     typeof value === "string" &&
     (/^player-back-\d+$/.test(value) || /^B\d+$/.test(value))
@@ -105,7 +108,7 @@ export function frontDoorAction(
 
   return {
     phase: "mainExiting",
-    journeyId: `event:${String(ctx.seq)}`,
+    journeyId: asJourneyId(`event:${String(ctx.seq)}`),
     tutorial: null,
   };
 }
@@ -179,10 +182,10 @@ export function beginTutorial(
   return {
     ...state,
     tutorial: {
-      runId: `event:${String(ctx.seq)}`,
+      runId: asTutorialRunId(`event:${String(ctx.seq)}`),
       actions,
       currentActionIndex: startActionIndex,
-      playerCardPlay,
+      playerCardPlay: playerCardPlay,
     },
   };
 }

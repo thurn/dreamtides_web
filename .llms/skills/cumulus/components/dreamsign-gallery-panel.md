@@ -24,7 +24,7 @@ The panel preserves the chrome-free Dreamsign material and shared InfoCard revea
 | `size` | `"compact" \| "standard"` | no | `standard` | Compact uses the two-column phone shelf; standard uses the four-column desktop shelf. |
 | `closeLabel` | `LocalizedString` | yes | — | Accessible label for the close control. |
 | `onClose` | `() => void` | yes | — | Fires when the close disc is activated. |
-| `onEntryPress` | `(entryId: string) => void` | yes | — | Fires with the UUID-derived entry id when an available Dreamsign is activated. |
+| `onEntryPress` | `(entryId: DeckEntryId) => void` | yes | — | Fires with the UUID-derived entry id when an available Dreamsign is activated. |
 | `onEndActionPress` | `() => void` | yes | — | Fires when the appended action is activated. |
 | `testId` | `string` | no | — | Stable test id for the panel root. |
 
@@ -32,7 +32,7 @@ The panel preserves the chrome-free Dreamsign material and shared InfoCard revea
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `entryId` | `string` | no | Stable action id. |
+| `entryId` | `DeckEntryId` | no | Stable action id. |
 | `glyph` | `Glyph` | no | Glyph that identifies the action. |
 | `label` | `LocalizedString` | no | Visible and accessible action label. |
 | `glossaryId` | `string` | no | Stable Glossary UUID for the action's explanatory Info Card. |

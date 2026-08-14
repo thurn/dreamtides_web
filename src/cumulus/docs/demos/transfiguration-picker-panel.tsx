@@ -3,6 +3,7 @@ import { TransfigurationPickerPanel } from "../../components/card/Transfiguratio
 import { demoCard, demoInstanceId } from "./promotion-fixtures";
 import type { CumulusComponent } from "../registry";
 import { DemoControls, DemoLog, DemoSelect } from "./promotion-demo-controls";
+import { asDeckEntryId } from "../../../types/identifiers";
 function Demo() {
   const [preparation, setPreparation] = useState<"loading" | "ready">("ready");
   const [presentation, setPresentation] = useState<"offer" | "open-deck">(
@@ -16,7 +17,7 @@ function Demo() {
   const cards = Array.from({ length: cardCount }, (_, offset) => {
     const index = offset + 1;
     return {
-      entryId: demoInstanceId(index),
+      entryId: asDeckEntryId(demoInstanceId(index)),
       card: demoCard(index, offset === 1 ? "Wayfinder" : `Candidate ${index}`),
       availability: offset === 0 ? availability : ("available" as const),
       ...(offset === 0 && availability === "reforged"

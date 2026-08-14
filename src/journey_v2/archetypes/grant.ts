@@ -24,6 +24,10 @@ import {
   selectMerchantReward,
 } from "./sharedSelection";
 import { selectionBandSize } from "../../selection/tide-affinity";
+import { asChoiceId } from "../../types/identifiers";
+import { asMerchantTargetKey } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import { asCardId } from "../../types/card-identity";
 
 function catalogGameObject(card: MerchantCatalogCard): MerchantCatalogCard {
   return card;
@@ -31,10 +35,13 @@ function catalogGameObject(card: MerchantCatalogCard): MerchantCatalogCard {
 
 function selectedCatalogCards(
   context: MerchantContext,
-  cardUuids: readonly string[],
+  cardUuids: readonly CardId[],
 ): MerchantCatalogCard[] {
   const byUuid = new Map(
-    context.candidateGrantCards.map((candidate) => [candidate.cardUuid, candidate]),
+    context.candidateGrantCards.map((candidate) => [
+      candidate.cardUuid,
+      candidate,
+    ]),
   );
   return cardUuids.flatMap((cardUuid) => {
     const card = byUuid.get(cardUuid);
@@ -50,15 +57,23 @@ export function grantCandidatePool(
     (card) => !context.ownedCardUuids.has(card.cardUuid),
   );
   if (context.draftPoolCardUuids.size === 0) return unowned;
-  return unowned.filter((card) => context.draftPoolCardUuids.has(card.cardUuid));
+  return unowned.filter((card) =>
+    context.draftPoolCardUuids.has(card.cardUuid),
+  );
 }
 
-function bandCanFill(context: MerchantContext, poolSize: number, count: number): boolean {
+function bandCanFill(
+  context: MerchantContext,
+  poolSize: number,
+  count: number,
+): boolean {
   const { bandFraction, bandMinimum } = context.rewardSelection.tuning;
   return selectionBandSize(poolSize, bandFraction, bandMinimum) >= count;
 }
 
-function addCatalogCardPayload(card: MerchantCatalogCard): MerchantApplyPayload {
+function addCatalogCardPayload(
+  card: MerchantCatalogCard,
+): MerchantApplyPayload {
   return {
     kind: "add_catalog_card",
     cardUuid: card.cardUuid,
@@ -72,13 +87,21 @@ function repeatedPayload(
 ): MerchantApplyPayload {
   return count === 1
     ? payload
-    : { kind: "composite", children: Array.from({ length: count }, () => payload) };
+    : {
+        kind: "composite",
+        children: Array.from({ length: count }, () => payload),
+      };
 }
 
 function grantedCopies(
   context: MerchantContext,
-  archetypeId: "fit_card_grant" | "fit_card_draft" | "copies_draft" |
-    "strong_card" | "category_draft_known" | "transfigured_draft",
+  archetypeId:
+    | "fit_card_grant"
+    | "fit_card_draft"
+    | "copies_draft"
+    | "strong_card"
+    | "category_draft_known"
+    | "transfigured_draft",
 ): number {
   return auguryArchetype(
     context.rewardSelection.content.auguryData,
@@ -91,7 +114,7 @@ function catalogChoiceCandidate(
   payload: MerchantApplyPayload,
 ): MerchantChoiceCandidateDraft {
   return {
-    choiceId: card.cardUuid,
+    choiceId: asChoiceId(card.cardUuid),
     gameObjects: [catalogGameObject(card)],
     applyPayload: payload,
     cardUuid: card.cardUuid,
@@ -127,7 +150,7 @@ function directGrantBuilder(
           addCatalogCardPayload(target),
           grantedCopies(context, archetypeId),
         ),
-        targetKey: target.cardUuid,
+        targetKey: asMerchantTargetKey(target.cardUuid),
         ...selectionMetadata(selection),
       };
     },
@@ -182,7 +205,9 @@ function chooserBuilder(
         family: "grant",
         gameObjects: [],
         choiceRequest: { choiceType: "catalogCard", candidates },
-        targetKey: sampled.map((card) => card.cardUuid).join(","),
+        targetKey: asMerchantTargetKey(
+          sampled.map((card) => card.cardUuid).join(","),
+        ),
         ...selectionMetadata(selection),
       };
     },
@@ -197,16 +222,21 @@ function categoryCandidatePool(
   category: MerchantCategory,
 ): readonly MerchantCatalogCard[] {
   const memberSet = new Set(category.memberUuids);
-  return grantCandidatePool(context).filter((card) => memberSet.has(card.cardUuid));
+  return grantCandidatePool(context).filter((card) =>
+    memberSet.has(card.cardUuid),
+  );
 }
 
-function offerableCategories(context: MerchantContext): readonly MerchantCategory[] {
+function offerableCategories(
+  context: MerchantContext,
+): readonly MerchantCategory[] {
   const chooserSize = auguryArchetype(
     context.rewardSelection.content.auguryData,
     "category_draft_known",
   ).quantities.chooserSize;
   return buildCategoryUniverse(context).filter(
-    (category) => categoryCandidatePool(context, category).length >= chooserSize,
+    (category) =>
+      categoryCandidatePool(context, category).length >= chooserSize,
   );
 }
 
@@ -217,7 +247,10 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
     const categories = offerableCategories(context);
     if (categories.length === 0) return null;
-    const category = categories[Math.min(Math.floor(rng() * categories.length), categories.length - 1)];
+    const category =
+      categories[
+        Math.min(Math.floor(rng() * categories.length), categories.length - 1)
+      ];
     const archetype = auguryArchetype(
       context.rewardSelection.content.auguryData,
       "category_draft_known",
@@ -231,13 +264,17 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       request: {
         count: archetype.quantities.chooserSize,
         constraints: {
-          allowedCardUuids: pool.map((card) => card.cardUuid),
+          allowedCardUuids: pool.map((card) => card.cardUuid).map(asCardId),
           excludeOwned: true,
         },
       },
     });
-    const sampled = selectedCatalogCards(context, selection?.bindings.cardUuids ?? []);
-    if (selection === null || sampled.length < archetype.quantities.chooserSize) return null;
+    const sampled = selectedCatalogCards(
+      context,
+      selection?.bindings.cardUuids ?? [],
+    );
+    if (selection === null || sampled.length < archetype.quantities.chooserSize)
+      return null;
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
         card,
@@ -252,7 +289,9 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       family: "grant",
       gameObjects: [],
       choiceRequest: { choiceType: "catalogCard", candidates },
-      targetKey: `${category.id}:${sampled.map((card) => card.cardUuid).join(",")}`,
+      targetKey: asMerchantTargetKey(
+        `${category.id}:${sampled.map((card) => card.cardUuid).join(",")}`,
+      ),
       ...selectionMetadata(selection),
     };
   },
@@ -286,7 +325,10 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
         constraints: { excludeOwned: true },
       },
     });
-    const cards = selectedCatalogCards(context, selection?.bindings.cardUuids ?? []);
+    const cards = selectedCatalogCards(
+      context,
+      selection?.bindings.cardUuids ?? [],
+    );
     if (selection === null || cards.length === 0) return null;
     return {
       archetypeId: "card_bundle",
@@ -296,7 +338,9 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
         kind: "composite",
         children: cards.map(addCatalogCardPayload),
       },
-      targetKey: cards.map((card) => card.cardUuid).join(","),
+      targetKey: asMerchantTargetKey(
+        cards.map((card) => card.cardUuid).join(","),
+      ),
       ...selectionMetadata(selection),
     };
   },
@@ -334,52 +378,66 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     });
     if (selection === null) return null;
     const forms = new Map(
-      selection.bindings.transfigurations.map((entry) => [entry.cardUuid, entry.transfiguration]),
+      selection.bindings.transfigurations.map((entry) => [
+        entry.cardUuid,
+        entry.transfiguration,
+      ]),
     );
     const choices: TransfiguredChoice[] = selectedCatalogCards(
       context,
       selection.bindings.cardUuids,
     ).flatMap((card) => {
-      const transfiguration = forms.get(card.cardUuid);
+      const transfiguration = forms.get(asCardId(card.cardUuid));
       if (transfiguration === undefined) return [];
       const built = buildTransfigurationDisplay(
         context.rewardSelection.content.transfigurationData,
         card.card,
         transfiguration,
       );
-      return [{
-        card,
-        transfiguration,
-        preview: built.card,
-        display: built.display,
-      }];
+      return [
+        {
+          card,
+          transfiguration,
+          preview: built.card,
+          display: built.display,
+        },
+      ];
     });
     if (choices.length < count) return null;
-    const candidates: MerchantChoiceCandidateDraft[] = choices.map((choice) => ({
-      choiceId: choice.card.cardUuid,
-      gameObjects: [{
-        ...choice.card,
-        card: choice.preview,
-        badge: { label: choice.transfiguration },
-        transfiguration: choice.display,
-      }],
-      applyPayload: repeatedPayload({
-        kind: "add_catalog_card",
+    const candidates: MerchantChoiceCandidateDraft[] = choices.map(
+      (choice) => ({
+        choiceId: asChoiceId(choice.card.cardUuid),
+        gameObjects: [
+          {
+            ...choice.card,
+            card: choice.preview,
+            badge: { label: choice.transfiguration },
+            transfiguration: choice.display,
+          },
+        ],
+        applyPayload: repeatedPayload(
+          {
+            kind: "add_catalog_card",
+            cardUuid: choice.card.cardUuid,
+            cardNumber: choice.card.cardNumber,
+            transfiguration: choice.transfiguration,
+          },
+          archetype.quantities.grantedCopies,
+        ),
         cardUuid: choice.card.cardUuid,
         cardNumber: choice.card.cardNumber,
-        transfiguration: choice.transfiguration,
-      }, archetype.quantities.grantedCopies),
-      cardUuid: choice.card.cardUuid,
-      cardNumber: choice.card.cardNumber,
-    }));
+      }),
+    );
     return {
       archetypeId: "transfigured_draft",
       family: "grant",
       gameObjects: [],
       choiceRequest: { choiceType: "catalogCard", candidates },
-      targetKey: choices
-        .map((choice) => `${choice.card.cardUuid}:${choice.transfiguration}`)
-        .join(","),
+      targetKey: asMerchantTargetKey(
+        choices
+          .map((choice) => `${choice.card.cardUuid}:${choice.transfiguration}`)
+          .join(","),
+      ),
       ...selectionMetadata(selection),
     };
   },

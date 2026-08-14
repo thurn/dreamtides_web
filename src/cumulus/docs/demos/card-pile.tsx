@@ -4,6 +4,7 @@ import { CardPile } from "../../components/battle/CardPile";
 import type { GameCardModel } from "../../components/card/CardView";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
+import { asBattleCardId } from "../../../types/identifiers";
 
 const DEMO_CARD_ID = asCardId("1268a899-b209-46bb-bce4-6def1dcd0404");
 const DEMO_CARD: GameCardModel = {
@@ -37,9 +38,9 @@ function CardPileDemo() {
       <div style={{ width }}>
         <CardPile
           cards={[
-            { face: "down", id: "demo-deck-top" },
-            { face: "down", id: "demo-deck-middle" },
-            { face: "down", id: "demo-deck-bottom" },
+            { face: "down", id: asBattleCardId("demo-deck-top") },
+            { face: "down", id: asBattleCardId("demo-deck-middle") },
+            { face: "down", id: asBattleCardId("demo-deck-bottom") },
           ]}
           label={assertLocalized("Face-down deck")}
         />
@@ -47,9 +48,21 @@ function CardPileDemo() {
       <div style={{ width }}>
         <CardPile
           cards={[
-            { face: "up", id: "demo-void-top", model: DEMO_CARD },
-            { face: "up", id: "demo-void-middle", model: DEMO_CARD },
-            { face: "up", id: "demo-void-bottom", model: DEMO_CARD },
+            {
+              face: "up",
+              id: asBattleCardId("demo-void-top"),
+              model: DEMO_CARD,
+            },
+            {
+              face: "up",
+              id: asBattleCardId("demo-void-middle"),
+              model: DEMO_CARD,
+            },
+            {
+              face: "up",
+              id: asBattleCardId("demo-void-bottom"),
+              model: DEMO_CARD,
+            },
           ]}
           label={assertLocalized("Face-up void")}
           onPress={() => undefined}

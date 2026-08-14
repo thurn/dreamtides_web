@@ -11,6 +11,7 @@ import {
   PlayingCardPrize,
 } from "./PlayingCard";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
+import { asDreamsignId } from "../../../types/identifiers";
 
 beforeEach(() => {
   (
@@ -28,7 +29,7 @@ describe("PlayingCardPrize", () => {
     document.body.append(host);
     const root = createRoot(host);
     const dreamsign = localizedDreamsignFixture({
-      id: "00000000-0000-4000-8000-000000000051",
+      id: asDreamsignId("00000000-0000-4000-8000-000000000051"),
       name: "Bezoar",
       imageName: "bezoar.png",
       effectDescription: "Foresee 1.",

@@ -8,14 +8,18 @@ import {
 import { registerTutorialFrontDoorContentProvider } from "./front-door";
 import { genesisFoldState } from "./fold-state";
 import { reduceGameEvent } from "./reducer";
+import { asTutorialActionId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
 
-const TUTORIAL_OPPONENT_CARD_ID = TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId;
-const TUTORIAL_PLAYER_CARD_ID = TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId;
+const TUTORIAL_OPPONENT_CARD_ID =
+  TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId;
+const TUTORIAL_PLAYER_CARD_ID =
+  TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId;
 
 beforeEach(() => {
   registerTutorialFrontDoorContentProvider({
     playerCardId: TUTORIAL_PLAYER_CARD_ID,
-    journeyDreamAvatarId: TEST_TUTORIAL_PLAYER_AVATAR_ID,
+    journeyDreamAvatarId: asDreamAvatarId(TEST_TUTORIAL_PLAYER_AVATAR_ID),
   });
 });
 
@@ -180,7 +184,7 @@ describe("front-door reducer", () => {
       event("BEGIN_TUTORIAL", {
         actions: [
           {
-            id: "welcome",
+            id: asTutorialActionId("welcome"),
             action: "display-speech-bubble",
             speechBubble: {
               speaker: "mira",
@@ -192,13 +196,13 @@ describe("front-door reducer", () => {
             wait: 0.5,
           },
           {
-            id: "how-to-play",
+            id: asTutorialActionId("how-to-play"),
             action: "display-how-to-play",
             text: "Shared configured instructions.",
             wait: 0,
           },
           {
-            id: "end-turn",
+            id: asTutorialActionId("end-turn"),
             action: "end-turn",
             wait: 0,
           },
@@ -336,7 +340,7 @@ describe("front-door reducer", () => {
     const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
     const actions = [
       {
-        id: "welcome",
+        id: asTutorialActionId("welcome"),
         action: "display-speech-bubble",
         speechBubble: {
           speaker: "mira",
@@ -348,7 +352,7 @@ describe("front-door reducer", () => {
         wait: 1,
       },
       {
-        id: "tail-start",
+        id: asTutorialActionId("tail-start"),
         action: "display-speech-bubble",
         speechBubble: {
           speaker: "mira",
@@ -385,7 +389,7 @@ describe("front-door reducer", () => {
     const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
     const actions = [
       {
-        id: "end-turn",
+        id: asTutorialActionId("end-turn"),
         action: "end-turn",
         wait: 0,
       },
@@ -412,24 +416,24 @@ describe("front-door reducer", () => {
     const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
     const actions = [
       {
-        id: "how-to-play",
+        id: asTutorialActionId("how-to-play"),
         action: "display-how-to-play",
         text: "Play a character.",
         wait: 0,
       },
       {
-        id: "end-turn",
+        id: asTutorialActionId("end-turn"),
         action: "end-turn",
         wait: 0,
       },
       {
-        id: "opponent-character-advance",
+        id: asTutorialActionId("opponent-character-advance"),
         action: "reposition-opponent-character",
         cardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       },
       {
-        id: "challenge-positioning-how-to-play",
+        id: asTutorialActionId("challenge-positioning-how-to-play"),
         action: "display-how-to-play",
         text: "Position characters in the front rank.",
         wait: 0,

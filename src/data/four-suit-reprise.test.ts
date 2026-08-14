@@ -6,6 +6,8 @@ import {
 } from "./four-suit-reprise";
 import { gambleGameByRulesKind } from "./gamble-data";
 import { gambleFixture } from "../testing/gamble-fixture";
+import { asDeckEntryId } from "../types/identifiers";
+import { asCardId } from "../types/card-identity";
 
 describe("Four-Suit Reprise rules", () => {
   it("maps every suit to exactly one deck effect", () => {
@@ -40,36 +42,52 @@ describe("Four-Suit Reprise rules", () => {
 
   it("keeps only live, unused, untransfigured target entries", () => {
     const targets = [
-      { entryId: "entry-1", cardId: "card-1", cardNumber: 1 },
-      { entryId: "entry-2", cardId: "card-2", cardNumber: 2 },
-      { entryId: "entry-3", cardId: "card-3", cardNumber: 3 },
-      { entryId: "entry-4", cardId: "card-4", cardNumber: 4 },
+      {
+        entryId: asDeckEntryId("entry-1"),
+        cardId: asCardId("card-1"),
+        cardNumber: 1,
+      },
+      {
+        entryId: asDeckEntryId("entry-2"),
+        cardId: asCardId("card-2"),
+        cardNumber: 2,
+      },
+      {
+        entryId: asDeckEntryId("entry-3"),
+        cardId: asCardId("card-3"),
+        cardNumber: 3,
+      },
+      {
+        entryId: asDeckEntryId("entry-4"),
+        cardId: asCardId("card-4"),
+        cardNumber: 4,
+      },
     ];
     expect(
       eligibleFourSuitRepriseTargets({
         targets,
-        usedCardIds: ["card-1"],
+        usedCardIds: [asCardId("card-1")],
         deck: [
           {
-            entryId: "entry-1",
+            entryId: asDeckEntryId("entry-1"),
             cardNumber: 1,
             isBane: false,
             transfiguration: null,
           },
           {
-            entryId: "entry-2",
+            entryId: asDeckEntryId("entry-2"),
             cardNumber: 2,
             isBane: false,
             transfiguration: null,
           },
           {
-            entryId: "entry-3",
+            entryId: asDeckEntryId("entry-3"),
             cardNumber: 3,
             isBane: true,
             transfiguration: null,
           },
           {
-            entryId: "entry-4",
+            entryId: asDeckEntryId("entry-4"),
             cardNumber: 4,
             isBane: false,
             transfiguration: "Empowered",

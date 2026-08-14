@@ -7,6 +7,7 @@ import { asCardId, asCardName } from "../../../types/card-identity";
 import { CardChoiceGrid } from "./CardChoiceGrid";
 import { CARD_CORNER_RADIUS } from "./card-aspect";
 import { CumulusRoot } from "../../CumulusRoot";
+import { asDeckEntryId } from "../../../types/identifiers";
 
 vi.mock("./CardView", () => ({
   CardView: () => <div />,
@@ -72,9 +73,13 @@ describe("CardChoiceGrid", () => {
         <CumulusRoot>
           <CardChoiceGrid
             cards={[
-              { entryId: "choice-a", model: model("A"), testId: "choice-a" },
               {
-                entryId: "choice-b",
+                entryId: asDeckEntryId("choice-a"),
+                model: model("A"),
+                testId: "choice-a",
+              },
+              {
+                entryId: asDeckEntryId("choice-b"),
                 model: model("B"),
                 testId: "choice-b",
                 selection: "highlighted",
@@ -132,7 +137,7 @@ describe("CardChoiceGrid", () => {
           <CardChoiceGrid
             cards={[
               {
-                entryId: "disabled-card",
+                entryId: asDeckEntryId("disabled-card"),
                 model: model("Disabled"),
                 testId: "disabled-card",
                 disabled: true,
@@ -193,15 +198,23 @@ describe("CardChoiceGrid", () => {
         <CumulusRoot>
           <CardChoiceGrid
             cards={[
-              { entryId: "purge", model: model("Purge"), operation: "purge" },
-              { entryId: "copy", model: model("Copy"), operation: "copy" },
               {
-                entryId: "transfigure",
+                entryId: asDeckEntryId("purge"),
+                model: model("Purge"),
+                operation: "purge",
+              },
+              {
+                entryId: asDeckEntryId("copy"),
+                model: model("Copy"),
+                operation: "copy",
+              },
+              {
+                entryId: asDeckEntryId("transfigure"),
                 model: model("Transfigure"),
                 operation: "transfigure",
               },
               {
-                entryId: "change",
+                entryId: asDeckEntryId("change"),
                 model: model("Change"),
                 operation: "change",
               },

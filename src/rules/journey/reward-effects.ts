@@ -17,64 +17,70 @@ import type {
   SiteType,
   TransfigurationType,
 } from "../../types/journey";
+import type { DreamsignId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import type { AtlasNodeId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import type { SiteId } from "../../types/identifiers";
 
 /** A validated, concrete journey-state mutation produced by a site reward. */
 export type JourneyRewardEffect =
   | {
       kind: "add_catalog_card";
-      cardUuid: string;
+      cardUuid: CardId;
       cardNumber: number;
       transfiguration?: TransfigurationType;
     }
   | {
       kind: "add_dreamsign";
-      dreamsignId: string;
+      dreamsignId: DreamsignId;
       dreamsignTemplate: DreamsignTemplate;
     }
   | {
       kind: "transfigure_deck_entry";
-      entryId: string;
-      cardUuid: string;
+      entryId: DeckEntryId;
+      cardUuid: CardId;
       cardNumber: number;
       transfiguration: TransfigurationType;
     }
   | {
       kind: "duplicate_deck_entry";
-      entryId: string;
-      cardUuid: string;
+      entryId: DeckEntryId;
+      cardUuid: CardId;
       cardNumber: number;
     }
   | {
       kind: "remove_deck_entry";
-      entryId: string;
-      cardUuid: string;
+      entryId: DeckEntryId;
+      cardUuid: CardId;
       cardNumber: number;
     }
   | {
       kind: "change_deck_entry_keywords";
-      entryId: string;
-      cardUuid: string;
+      entryId: DeckEntryId;
+      cardUuid: CardId;
       cardNumber: number;
       keywords: CardKeywordModification;
     }
   | {
       kind: "change_deck_entry_type";
-      entryId: string;
-      cardUuid: string;
+      entryId: DeckEntryId;
+      cardUuid: CardId;
       cardNumber: number;
       typeChange: CardTypeChange;
     }
   | {
       kind: "add_deck_entry_spark_bonus";
-      entryId: string;
-      cardUuid: string;
+      entryId: DeckEntryId;
+      cardUuid: CardId;
       cardNumber: number;
       amount: number;
     }
   | {
       kind: "reduce_deck_entry_energy_cost";
-      entryId: string;
-      cardUuid: string;
+      entryId: DeckEntryId;
+      cardUuid: CardId;
       cardNumber: number;
       amount: number;
     }
@@ -88,9 +94,9 @@ export type JourneyRewardEffect =
     }
   | {
       kind: "insert_site";
-      targetNodeId: string;
+      targetNodeId: AtlasNodeId;
       insertionIndex: number;
-      siblingSiteIdsBefore: readonly string[];
+      siblingSiteIdsBefore: readonly SiteId[];
       site: SiteState;
     }
   | {
@@ -99,12 +105,12 @@ export type JourneyRewardEffect =
     };
 
 interface EntryIdAllocator {
-  next(): string;
+  next(): DeckEntryId;
 }
 
 function createEntryIdAllocator(
   deck: readonly DeckEntry[],
-  mintEntryId?: (deck: readonly DeckEntry[], index: number) => string,
+  mintEntryId?: (deck: readonly DeckEntry[], index: number) => DeckEntryId,
 ): EntryIdAllocator {
   if (mintEntryId !== undefined) {
     let index = 0;
@@ -120,14 +126,14 @@ function createEntryIdAllocator(
   return {
     next() {
       highWater += 1;
-      return `deck-${String(highWater)}`;
+      return asDeckEntryId(`deck-${String(highWater)}`);
     },
   };
 }
 
 function validateCatalogCard(
   journeyContent: JourneyContent,
-  cardUuid: string,
+  cardUuid: CardId,
   cardNumber: number,
 ): boolean {
   const card = journeyContent.cardDatabase.get(cardNumber);
@@ -137,7 +143,7 @@ function validateCatalogCard(
 function validateDeckTarget(
   state: JourneyState,
   journeyContent: JourneyContent,
-  effect: { entryId: string; cardUuid: string; cardNumber: number },
+  effect: { entryId: DeckEntryId; cardUuid: CardId; cardNumber: number },
 ): DeckEntry | null {
   const entry = state.deck.find(
     (candidate) => candidate.entryId === effect.entryId,
@@ -207,7 +213,10 @@ function applyEffect(
       if (target === null) return null;
       return {
         ...state,
-        deck: [...state.deck, { ...target, entryId: entryIds.next() }],
+        deck: [
+          ...state.deck,
+          { ...target, entryId: asDeckEntryId(entryIds.next()) },
+        ],
       };
     }
     case "remove_deck_entry": {
@@ -313,7 +322,7 @@ export function applyJourneyRewardEffect({
   state: JourneyState;
   journeyContent: JourneyContent;
   effect: JourneyRewardEffect;
-  mintEntryId?: (deck: readonly DeckEntry[], index: number) => string;
+  mintEntryId?: (deck: readonly DeckEntry[], index: number) => DeckEntryId;
 }): JourneyState | null {
   return applyEffect(
     state,

@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { JourneyState, SiteState } from "../types/journey";
 import { activeFirstVisitTutorialSite } from "./site-tutorial-guidance";
+import { asSiteId } from "../types/identifiers";
 
 function site(id: string, type: SiteState["type"]): SiteState {
   return {
-    id,
+    id: asSiteId(id),
     type,
     data: {},
     isVisited: false,
@@ -51,7 +52,7 @@ describe("activeFirstVisitTutorialSite", () => {
     ["DreamsignRevelation", "revelation-a"],
   ] as const)("keeps the first %s visit eligible", (type, id) => {
     expect(activeFirstVisitTutorialSite(state(site(id, type)))).toEqual({
-      siteId: id,
+      siteId: asSiteId(id),
       siteType: type,
     });
   });
@@ -85,7 +86,7 @@ describe("activeFirstVisitTutorialSite", () => {
     const later = site("draft-b", "Draft");
     expect(
       activeFirstVisitTutorialSite(state(later, ["revelation-a"])),
-    ).toEqual({ siteId: "draft-b", siteType: "Draft" });
+    ).toEqual({ siteId: asSiteId("draft-b"), siteType: "Draft" });
   });
 
   it("ignores sites without authored first-visit guidance", () => {

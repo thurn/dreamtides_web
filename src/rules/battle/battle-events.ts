@@ -61,6 +61,7 @@ import type {
   DreamAtlas,
 } from "../../types/journey";
 import type { FoldState } from "../fold-state";
+import type { ClientId } from "../../types/identifiers";
 import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import { createEmptyTransitionData } from "../../battle/engine/result";
 import {
@@ -124,6 +125,25 @@ import {
 import { configuredTutorialJourneyDreamAvatarId } from "../front-door";
 import { resetJourney } from "../journey/lifecycle";
 import { canVisitSite, completeJourneySite, findSite } from "../journey/sites";
+import type {
+  BattleCardId,
+  IntentKey,
+  NoteId,
+  SiteId,
+  TutorialAiActionOverrideId,
+  TutorialRunId,
+} from "../../types/identifiers";
+import {
+  asBattleCardId,
+  asBattleEffectScriptId,
+  asDreamAvatarId,
+  asNoteId,
+  asPresentationId,
+  asSiteId,
+  battleCardIdFromUnknown,
+  tutorialAiActionOverrideIdFromUnknown,
+} from "../../types/identifiers";
+import { asTutorialRunId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -162,7 +182,7 @@ export interface BattleInitProvider {
    */
   beginBattle(input: {
     journey: JourneyState;
-    siteId: string;
+    siteId: SiteId;
     seedOverride: number | null;
     seq: number;
     rng: (drawIndex: number) => number;
@@ -189,7 +209,7 @@ export interface TutorialBattleInitProvider {
   beginTutorialBattle(input: {
     journey: JourneyState;
     actions: readonly TutorialAction[];
-    tutorialRunId: string;
+    tutorialRunId: TutorialRunId;
     restartNumber: number;
     seq: number;
     rng: (drawIndex: number) => number;
@@ -261,8 +281,8 @@ export function beginBattle(
     state.journey.screen.type !== "site" ||
     state.journey.screen.siteId !== siteId ||
     state.journey.activeSiteId !== siteId ||
-    findSite(state.journey, siteId)?.type !== "Battle" ||
-    !canVisitSite(state.journey, siteId)
+    findSite(state.journey, asSiteId(siteId))?.type !== "Battle" ||
+    !canVisitSite(state.journey, asSiteId(siteId))
   ) {
     return null;
   }
@@ -288,7 +308,7 @@ export function beginBattle(
   }
   const battle = provider.beginBattle({
     journey: state.journey,
-    siteId,
+    siteId: asSiteId(siteId),
     seedOverride,
     seq: ctx.seq,
     rng: ctx.rng,
@@ -339,7 +359,7 @@ export function beginTutorialBattle(
   ) {
     return null;
   }
-  return buildTutorialBattle(state, tutorialRunId, 0, ctx);
+  return buildTutorialBattle(state, asTutorialRunId(tutorialRunId), 0, ctx);
 }
 
 /** Rebuild the original authored handoff with a fresh deterministic restart stream. */
@@ -402,7 +422,7 @@ export function exitTutorialBattle(
       ...reset.journey,
       screen: {
         type: "journeyStart",
-        tutorialDreamAvatarId,
+        tutorialDreamAvatarId: asDreamAvatarId(tutorialDreamAvatarId),
       },
     },
   };
@@ -410,7 +430,7 @@ export function exitTutorialBattle(
 
 function buildTutorialBattle(
   state: FoldState,
-  tutorialRunId: string,
+  tutorialRunId: TutorialRunId,
   restartNumber: number,
   ctx: EventContext,
 ): FoldState | null {
@@ -688,9 +708,11 @@ function openTutorialGuidance(
     battle: {
       ...battle,
       tutorialPresentation: {
-        id: `tutorial-guidance:${event}:${sourceIdentity}:${matches
-          .map((match) => match.id)
-          .join("+")}`,
+        id: asPresentationId(
+          `tutorial-guidance:${event}:${sourceIdentity}:${matches
+            .map((match) => match.id)
+            .join("+")}`,
+        ),
         kind: "tutorial-guidance",
         source,
         messages: matches.map((match) => ({
@@ -889,7 +911,12 @@ function applyBattleCommandStep(
     }
     const script = selectDreamwellEffectScript(card.id);
     if (script !== null && script.steps.length > 0) {
-      queue.push(newEffectRun({ table: "dreamwell", id: card.id }, side));
+      queue.push(
+        newEffectRun(
+          { table: "dreamwell", id: asBattleEffectScriptId(card.id) },
+          side,
+        ),
+      );
     }
   }
 
@@ -913,7 +940,9 @@ function applyBattleCommandStep(
           dawnFired,
           triggerDawnFired,
           tutorialPresentation: {
-            id: `dreamwell-reveal:${revealedSide}:${String(boardAfter.turnNumber)}:${card.id}`,
+            id: asPresentationId(
+              `dreamwell-reveal:${revealedSide}:${String(boardAfter.turnNumber)}:${card.id}`,
+            ),
             kind: "dreamwell-reveal",
             cardId: card.id,
             side: revealedSide,
@@ -979,7 +1008,7 @@ export function battleCommand(
 export function isPassiveHostedBattleHandoff(
   state: FoldState,
   payload: Record<string, unknown>,
-  intentKey: string | undefined,
+  intentKey: IntentKey | undefined,
 ): boolean {
   const battle = state.battle;
   if (
@@ -1262,7 +1291,7 @@ export function battleRepositionCharacter(
   if (!isBattleFieldSlotAddressValid(destination)) return null;
   const edit = planTutorialCharacterReposition(
     battle.board,
-    battleCardId,
+    asBattleCardId(battleCardId),
     destination,
   );
   if (edit === null) return null;
@@ -1314,7 +1343,7 @@ function tutorialActorIsAuthorized(
   battle: BattleFoldState,
   actor: string | undefined,
   automatic: boolean,
-  controllerClientId: string | null,
+  controllerClientId: ClientId | null,
 ): boolean {
   const mode = battleModeOf(battle);
   if (mode.kind !== "tutorial") return true;
@@ -1330,7 +1359,7 @@ function tutorialCommandIsAuthorized(
   battle: BattleFoldState,
   command: BattleCommand,
   actor: string | undefined,
-  controllerClientId: string | null,
+  controllerClientId: ClientId | null,
 ): boolean {
   const mode = battleModeOf(battle);
   if (mode.kind !== "tutorial") return true;
@@ -1389,12 +1418,12 @@ function tutorialCommandIsAuthorized(
 }
 
 interface BattlePlayCardIntent {
-  battleCardId: string;
-  targetBattleCardIds: string[];
+  battleCardId: BattleCardId;
+  targetBattleCardIds: BattleCardId[];
   aiChoices: BattleAiChoiceTrace[];
   characterDestination:
     import("../../battle/types").BattleFieldSlotAddress | null;
-  tutorialAiActionOverrideId: string | null;
+  tutorialAiActionOverrideId: TutorialAiActionOverrideId | null;
 }
 
 /** Semantic, all-or-nothing Starter-card play for tutorial and AI clients. */
@@ -1588,7 +1617,7 @@ function battlePlayCardInternal(
           effectQueue: queue,
           pendingPrompt: null,
           tutorialPresentation: {
-            id: `opponent-play:${intent.battleCardId}`,
+            id: asPresentationId(`opponent-play:${intent.battleCardId}`),
             kind: "opponent-play",
             cardId: instance.definition.cardId,
             battleCardId: intent.battleCardId,
@@ -1828,15 +1857,15 @@ function coerceBattlePlayCardIntent(
     raw.tutorialAiActionOverrideId === undefined
       ? null
       : isNonEmptyString(raw.tutorialAiActionOverrideId)
-        ? raw.tutorialAiActionOverrideId
+        ? tutorialAiActionOverrideIdFromUnknown(raw.tutorialAiActionOverrideId)
         : undefined;
   if (tutorialAiActionOverrideId === undefined) return null;
   return {
-    battleCardId: raw.battleCardId,
-    targetBattleCardIds: [...raw.targetBattleCardIds],
+    battleCardId: asBattleCardId(raw.battleCardId),
+    targetBattleCardIds: [...raw.targetBattleCardIds.map(asBattleCardId)],
     aiChoices,
     characterDestination,
-    tutorialAiActionOverrideId,
+    tutorialAiActionOverrideId: tutorialAiActionOverrideId,
   };
 }
 
@@ -1899,7 +1928,7 @@ function coerceAiChoices(raw: unknown): BattleAiChoiceTrace[] | null {
     choices.push({
       stage,
       choice,
-      battleCardId,
+      battleCardId: battleCardIdFromUnknown(battleCardId),
       cardName,
       sourceHandIndex,
       sourceSlotId: sourceSlotId as BattleAiChoiceTrace["sourceSlotId"],
@@ -1907,7 +1936,7 @@ function coerceAiChoices(raw: unknown): BattleAiChoiceTrace[] | null {
       heuristicScoreBefore,
       heuristicScoreAfter,
       rationale,
-      targetBattleCardId,
+      targetBattleCardId: battleCardIdFromUnknown(targetBattleCardId),
     });
   }
   return choices;
@@ -2146,7 +2175,9 @@ export function battleAiBlock(
       ...(pacedBlock
         ? {
             tutorialPresentation: {
-              id: `opponent-block:${battle.board.activeSide}:${String(battle.board.turnNumber)}`,
+              id: asPresentationId(
+                `opponent-block:${battle.board.activeSide}:${String(battle.board.turnNumber)}`,
+              ),
               kind: "opponent-block",
               activeSide: battle.board.activeSide,
               blockers,
@@ -2256,7 +2287,7 @@ function settleTemporaryDreamwellEffects(
     ) {
       edits.push({
         kind: "SET_CARD_STATUS",
-        battleCardId,
+        battleCardId: asBattleCardId(battleCardId),
         status: { temporaryReclaimUntilEnding: null },
       });
     }
@@ -2264,7 +2295,10 @@ function settleTemporaryDreamwellEffects(
     const banish = instance.status.temporaryBanishUntilEnding;
     if (banish?.activeSide !== activeSide || banish.turnNumber !== turnNumber)
       continue;
-    const location = selectBattleCardLocation(board, battleCardId);
+    const location = selectBattleCardLocation(
+      board,
+      asBattleCardId(battleCardId),
+    );
     if (location?.zone !== "banished") continue;
     const backRank = board.sides[banish.priorController].backRank;
     const slotId = rankSlotIds(backRank).find(
@@ -2276,12 +2310,12 @@ function settleTemporaryDreamwellEffects(
     edits.push(
       {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId,
+        battleCardId: asBattleCardId(battleCardId),
         destination: { side: banish.priorController, zone: "backRank", slotId },
       },
       {
         kind: "SET_CARD_STATUS",
-        battleCardId,
+        battleCardId: asBattleCardId(battleCardId),
         status: { temporaryBanishUntilEnding: null },
       },
     );
@@ -2500,11 +2534,11 @@ function challengeResolvedPresentation(input: {
   activeSide: BattleSide;
   turnNumber: number;
   slotId: ReturnType<typeof frontRankSlotId>;
-  challengerBattleCardId: string;
-  blockerBattleCardId: string | null;
+  challengerBattleCardId: BattleCardId;
+  blockerBattleCardId: BattleCardId | null;
   playerScoreDelta: number;
   enemyScoreDelta: number;
-  dissolved: readonly { battleCardId: string; side: BattleSide }[];
+  dissolved: readonly { battleCardId: BattleCardId; side: BattleSide }[];
 }): ChallengeResolvedPresentation | null {
   const scored: ChallengeScoredEntry | null =
     input.playerScoreDelta > 0
@@ -2528,7 +2562,9 @@ function challengeResolvedPresentation(input: {
         : null;
   if (input.blockerBattleCardId === null && scored === null) return null;
   return {
-    id: `challenge-resolved:${input.activeSide}:${String(input.turnNumber)}:${input.slotId}`,
+    id: asPresentationId(
+      `challenge-resolved:${input.activeSide}:${String(input.turnNumber)}:${input.slotId}`,
+    ),
     kind: "challenge-resolved",
     activeSide: input.activeSide,
     slotId: input.slotId,
@@ -2954,7 +2990,7 @@ function scheduleBattleTriggerEdges(
   before: BattleMutableState,
   after: BattleMutableState,
   command: BattleCommand,
-  targetBattleCardIds?: readonly string[],
+  targetBattleCardIds?: readonly BattleCardId[],
 ): void {
   if (command.id !== "DEBUG_EDIT") return;
   const edit = command.edit;
@@ -3020,9 +3056,9 @@ function isBattlefieldZone(zone: string): boolean {
 function enqueueBattleTrigger(
   queue: EffectRun[],
   board: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   trigger: import("./fold").BattleScriptTrigger,
-  targetBattleCardIds?: readonly string[],
+  targetBattleCardIds?: readonly BattleCardId[],
 ): void {
   const instance = board.cardInstances[battleCardId];
   if (instance === undefined) return;
@@ -3048,7 +3084,7 @@ function enqueueBattleTrigger(
 function forEachInPlay(
   board: BattleMutableState,
   side: BattleSide,
-  visit: (battleCardId: string) => void,
+  visit: (battleCardId: BattleCardId) => void,
 ): void {
   for (const zone of [
     board.sides[side].backRank,
@@ -3129,7 +3165,7 @@ function promptResolutionIsValid(
     if (
       !chosen.every(
         (id) =>
-          board.sides[pending.run.side].deck.includes(id) &&
+          board.sides[pending.run.side].deck.includes(asBattleCardId(id)) &&
           (isCharacterDiscover
             ? board.cardInstances[id]?.definition.battleCardKind === "character"
             : (board.cardInstances[id]?.definition.energyCost ?? Infinity) <=
@@ -3170,7 +3206,7 @@ function coercePromptResolution(raw: unknown): PromptResolution | null {
     if (ids.length !== chosenIds.length) {
       return null;
     }
-    return { kind: "pick-cards", chosenIds: ids };
+    return { kind: "pick-cards", chosenIds: ids.map(asBattleCardId) };
   }
   if (kind === "choice") {
     const optionIndex = (raw as { optionIndex?: unknown }).optionIndex;
@@ -3208,9 +3244,9 @@ function coercePromptResolution(raw: unknown): PromptResolution | null {
       kind: "foresee",
       ...(viewedCardIds === undefined
         ? {}
-        : { viewedCardIds: viewedCardIds as string[] }),
-      orderedCardIds: orderedCardIds as string[],
-      voidCardIds: voidCardIds as string[],
+        : { viewedCardIds: (viewedCardIds as string[]).map(asBattleCardId) }),
+      orderedCardIds: (orderedCardIds as string[]).map(asBattleCardId),
+      voidCardIds: (voidCardIds as string[]).map(asBattleCardId),
     };
   }
   return null;
@@ -3264,8 +3300,8 @@ export function setCardNote(
     battle.board,
     {
       kind: "ADD_CARD_NOTE",
-      battleCardId: instanceId,
-      noteId: note.noteId,
+      battleCardId: asBattleCardId(instanceId),
+      noteId: asNoteId(note.noteId),
       text: note.text,
       createdAtMs: isoTimestampToMs(ctx.timestamp) ?? 0,
       expiry: note.expiry,
@@ -3281,7 +3317,7 @@ export function setCardNote(
  */
 function coerceCardNote(
   raw: unknown,
-): { noteId: string; text: string; expiry: BattleCardNoteExpiry } | null {
+): { noteId: NoteId; text: string; expiry: BattleCardNoteExpiry } | null {
   if (typeof raw !== "object" || raw === null) {
     return null;
   }
@@ -3297,7 +3333,7 @@ function coerceCardNote(
   if (expiry === null) {
     return null;
   }
-  return { noteId, text, expiry };
+  return { noteId: asNoteId(noteId), text, expiry };
 }
 
 /** Validates a raw note expiry into a {@link BattleCardNoteExpiry}, else `null`. */

@@ -2,11 +2,12 @@ import { describe, expect, it } from "vitest";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../../test-support";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { wildflowerColossus } from "./wildflower-colossus";
+import { asBattleCardId } from "../../../types/identifiers";
 
 describe("starter character #515", () => {
   it("plays the character into the back rank without resolving its rules text", () => {
     const self: AiCard = {
-      battleCardId: "colossus",
+      battleCardId: asBattleCardId("colossus"),
       cardNumber: 515,
       name: "card",
       energyCost: 6,

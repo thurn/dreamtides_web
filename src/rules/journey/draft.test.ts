@@ -7,7 +7,11 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import { drawAndSpendUniqueCards } from "../../draft/draft-engine";
 import { makeRng } from "../../draft/pool/rng";
 import { LayerName } from "../../types/layer-name";
-import type { DreamscapeNode, JourneyState, SiteState } from "../../types/journey";
+import type {
+  DreamscapeNode,
+  JourneyState,
+  SiteState,
+} from "../../types/journey";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent, type ReduceResult } from "../reducer";
 import { currentCardTutorialScreenKey } from "../card-tutorial-guidance";
@@ -15,6 +19,14 @@ import {
   registerDraftContentProvider,
   type DraftContentProvider,
 } from "./draft";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asJourneyId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asPresentationId } from "../../types/identifiers";
+import { asTutorialTriggerId } from "../../types/identifiers";
+import { asClientId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -82,7 +94,9 @@ function makeCard(cardNumber: number): CardData {
  * spent from the multiset and recorded as shown), so a pick advances the draft
  * to a fresh offer drawn from the remaining {5,6,7,8}.
  */
-function poolDraftState(overrides: Partial<PoolDraftState> = {}): PoolDraftState {
+function poolDraftState(
+  overrides: Partial<PoolDraftState> = {},
+): PoolDraftState {
   return {
     mode: "tides4",
     draftPoolCopiesByCard: {
@@ -97,7 +111,7 @@ function poolDraftState(overrides: Partial<PoolDraftState> = {}): PoolDraftState
     },
     remainingCopiesByCard: { "5": 1, "6": 1, "7": 1, "8": 1 },
     currentOffer: [1, 2, 3, 4],
-    activeSiteId: "site-a",
+    activeSiteId: asSiteId("site-a"),
     pickNumber: 1,
     sitePicksCompleted: 0,
     siteShownCardNumbers: [1, 2, 3, 4],
@@ -113,15 +127,21 @@ function stateWithDraft(draftState: PoolDraftState): FoldState {
 const NODE_ID = "node-1";
 
 function makeSite(id: string, type: SiteState["type"]): SiteState {
-  return { id, type, isEnhanced: false, isVisited: false, data: {} };
+  return {
+    id: asSiteId(id),
+    type,
+    isEnhanced: false,
+    isVisited: false,
+    data: {},
+  };
 }
 
 function makeNode(sites: SiteState[]): DreamscapeNode {
   return {
-    id: NODE_ID,
+    id: asAtlasNodeId(NODE_ID),
     layer: LayerName.One,
     indexInLayer: 0,
-    dreamscapeId: "d1",
+    dreamscapeId: asDreamscapeId("d1"),
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -156,10 +176,10 @@ function stateWithDraftSites(
             makeSite("site-battle", "Battle"),
           ]),
         },
-        startingNodeId: NODE_ID,
-        currentNodeId: NODE_ID,
+        startingNodeId: asAtlasNodeId(NODE_ID),
+        currentNodeId: asAtlasNodeId(NODE_ID),
       },
-      currentDreamscape: NODE_ID,
+      currentDreamscape: asAtlasNodeId(NODE_ID),
       ...overrides,
     },
   };
@@ -203,7 +223,7 @@ describe("PICK_DRAFT_CARD", () => {
     const result = reduce(
       stateWithDraftSites(poolDraftState()),
       "PICK_DRAFT_CARD",
-      { packIndex: 0, cardId: "card-1" },
+      { packIndex: 0, cardId: asCardId("card-1") },
     );
 
     expect(result.outcome).toBe("applied");
@@ -222,21 +242,21 @@ describe("PICK_DRAFT_CARD", () => {
   it("retires guidance with the offer while applying the selected card", () => {
     registerDraftContentProvider(provider());
     const before = stateWithDraftSites(poolDraftState(), {
-      runId: "run-a",
+      runId: asJourneyId("run-a"),
       hasSeenStartingDeckPopup: true,
-      screen: { type: "site", siteId: "site-a" },
-      activeSiteId: "site-a",
-      visitedSites: ["site-b"],
+      screen: { type: "site", siteId: asSiteId("site-a") },
+      activeSiteId: asSiteId("site-a"),
+      visitedSites: [asSiteId("site-b")],
     });
     const screenKey = currentCardTutorialScreenKey(before);
     expect(screenKey).not.toBeNull();
     const start: FoldState = {
       ...before,
       cardTutorialPresentation: {
-        id: "card-tutorial:fixture",
+        id: asPresentationId("card-tutorial:fixture"),
         screenKey: screenKey!,
-        cardId: "card-1",
-        triggerId: "support",
+        cardId: asCardId("card-1"),
+        triggerId: asTutorialTriggerId("support"),
         speaker: "mira",
         text: "Support explained.",
         duration: 4,
@@ -248,7 +268,7 @@ describe("PICK_DRAFT_CARD", () => {
 
     const result = reduce(start, "PICK_DRAFT_CARD", {
       packIndex: 0,
-      cardId: "card-1",
+      cardId: asCardId("card-1"),
     });
 
     expect(result.outcome).toBe("applied");
@@ -262,7 +282,7 @@ describe("PICK_DRAFT_CARD", () => {
     // packIndex 0 holds card 1, not card 3 — the pack membership guard bounces.
     const result = reduce(start, "PICK_DRAFT_CARD", {
       packIndex: 0,
-      cardId: "card-3",
+      cardId: asCardId("card-3"),
     });
 
     expect(result.outcome).toBe("bounced");
@@ -274,7 +294,7 @@ describe("PICK_DRAFT_CARD", () => {
     const start = stateWithDraftSites(poolDraftState());
     const result = reduce(start, "PICK_DRAFT_CARD", {
       packIndex: 0,
-      cardId: "card-8",
+      cardId: asCardId("card-8"),
     });
 
     expect(result.outcome).toBe("bounced");
@@ -287,7 +307,7 @@ describe("PICK_DRAFT_CARD", () => {
 
     const first = reduce(start, "PICK_DRAFT_CARD", {
       packIndex: 0,
-      cardId: "card-1",
+      cardId: asCardId("card-1"),
     });
     expect(first.outcome).toBe("applied");
 
@@ -296,7 +316,7 @@ describe("PICK_DRAFT_CARD", () => {
     // instead of drafting a second card.
     const second = reduce(first.state, "PICK_DRAFT_CARD", {
       packIndex: 0,
-      cardId: "card-1",
+      cardId: asCardId("card-1"),
     });
     expect(second.outcome).toBe("bounced");
     expect(second.state).toEqual(first.state);
@@ -307,7 +327,7 @@ describe("PICK_DRAFT_CARD", () => {
     const start = genesisFoldState(GENESIS);
     const result = reduce(start, "PICK_DRAFT_CARD", {
       packIndex: 0,
-      cardId: "card-1",
+      cardId: asCardId("card-1"),
     });
     expect(result.outcome).toBe("bounced");
     expect(result.state).toEqual(start);
@@ -317,7 +337,7 @@ describe("PICK_DRAFT_CARD", () => {
     const start = stateWithDraft(poolDraftState());
     const result = reduce(start, "PICK_DRAFT_CARD", {
       packIndex: 0,
-      cardId: "card-1",
+      cardId: asCardId("card-1"),
     });
     expect(result.outcome).toBe("bounced");
     expect(result.state).toEqual(start);
@@ -328,14 +348,24 @@ describe("PICK_DRAFT_CARD", () => {
     const start = stateWithDraftSites(poolDraftState());
     const context = ctx({ seq: 9, rng: makeRng(9) });
 
-    const a = reduce(start, "PICK_DRAFT_CARD", {
-      packIndex: 0,
-      cardId: "card-1",
-    }, context);
-    const b = reduce(start, "PICK_DRAFT_CARD", {
-      packIndex: 0,
-      cardId: "card-1",
-    }, ctx({ seq: 9, rng: makeRng(9) }));
+    const a = reduce(
+      start,
+      "PICK_DRAFT_CARD",
+      {
+        packIndex: 0,
+        cardId: asCardId("card-1"),
+      },
+      context,
+    );
+    const b = reduce(
+      start,
+      "PICK_DRAFT_CARD",
+      {
+        packIndex: 0,
+        cardId: asCardId("card-1"),
+      },
+      ctx({ seq: 9, rng: makeRng(9) }),
+    );
 
     expect(a.outcome).toBe("applied");
     expect(b.outcome).toBe("applied");
@@ -352,7 +382,9 @@ describe("REROLL_DRAFT_OFFER", () => {
     registerDraftContentProvider(provider());
     const start = stateWithDraftSites(poolDraftState());
 
-    const result = reduce(start, "REROLL_DRAFT_OFFER", { siteId: "site-a" });
+    const result = reduce(start, "REROLL_DRAFT_OFFER", {
+      siteId: asSiteId("site-a"),
+    });
 
     expect(result.outcome).toBe("applied");
     const draft = result.state.journey.draftState as PoolDraftState;
@@ -367,7 +399,9 @@ describe("REROLL_DRAFT_OFFER", () => {
     registerDraftContentProvider(provider());
     const start = stateWithDraftSites(poolDraftState());
 
-    const result = reduce(start, "REROLL_DRAFT_OFFER", { siteId: "site-b" });
+    const result = reduce(start, "REROLL_DRAFT_OFFER", {
+      siteId: asSiteId("site-b"),
+    });
 
     expect(result.outcome).toBe("bounced");
     expect(result.state).toEqual(start);
@@ -383,8 +417,8 @@ describe("ENTER_DRAFT_SITE", () => {
     registerDraftContentProvider(provider());
     const source = {
       kind: "transfigure-next-draft-or-shop" as const,
-      sourceSiteId: "exploration-site",
-      sourceActionId: "exploration-action",
+      sourceSiteId: asSiteId("exploration-site"),
+      sourceActionId: asExplorationActionId("exploration-action"),
     };
     const start = stateWithDraftSites(
       poolDraftState({
@@ -398,7 +432,7 @@ describe("ENTER_DRAFT_SITE", () => {
     const entered = reduce(
       start,
       "ENTER_DRAFT_SITE",
-      { siteId: "site-a" },
+      { siteId: asSiteId("site-a") },
       ctx({ seq: 14, rng: makeRng(14) }),
     );
 
@@ -411,7 +445,10 @@ describe("ENTER_DRAFT_SITE", () => {
     });
     expect(active.currentOfferTransfigurations).toEqual(
       Object.fromEntries(
-        active.currentOffer.map((cardNumber) => [String(cardNumber), "Empowered"]),
+        active.currentOffer.map((cardNumber) => [
+          String(cardNumber),
+          "Empowered",
+        ]),
       ),
     );
 
@@ -420,7 +457,7 @@ describe("ENTER_DRAFT_SITE", () => {
     const picked = reduce(
       entered.state,
       "PICK_DRAFT_CARD",
-      { packIndex: 0, cardId: `card-${String(pickedNumber)}` },
+      { packIndex: 0, cardId: asCardId(`card-${String(pickedNumber)}`) },
       ctx({ seq: 15, rng: makeRng(15) }),
     );
     expect(picked.outcome).toBe("applied");
@@ -429,7 +466,9 @@ describe("ENTER_DRAFT_SITE", () => {
         ?.transfiguration,
     ).toBe("Empowered");
     const advanced = picked.state.journey.draftState as PoolDraftState;
-    expect(advanced.transfiguredOfferSource).toEqual(active.transfiguredOfferSource);
+    expect(advanced.transfiguredOfferSource).toEqual(
+      active.transfiguredOfferSource,
+    );
     expect(Object.values(advanced.currentOfferTransfigurations ?? {})).toEqual(
       advanced.currentOffer.map(() => "Empowered"),
     );
@@ -444,21 +483,21 @@ describe("ENTER_DRAFT_SITE", () => {
         siteShownCardNumbers: [],
       }),
       {
-        screen: { type: "site", siteId: "site-a" },
-        activeSiteId: "site-a",
+        screen: { type: "site", siteId: asSiteId("site-a") },
+        activeSiteId: asSiteId("site-a"),
       },
     );
     const hosted = {
       ...start,
       playtestControl: {
         mode: "single-controller" as const,
-        controllerClientId: "controller",
+        controllerClientId: asClientId("controller"),
       },
     };
 
     const result = reduceGameEvent(
       hosted,
-      event("ENTER_DRAFT_SITE", { siteId: "site-a" }, "observer"),
+      event("ENTER_DRAFT_SITE", { siteId: asSiteId("site-a") }, "observer"),
       ctx({ rng: makeRng(3) }),
     );
 
@@ -476,7 +515,12 @@ describe("ENTER_DRAFT_SITE", () => {
     });
     const start = stateWithDraftSites(draftState);
 
-    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-a" }, ctx({ rng: makeRng(3) }));
+    const result = reduce(
+      start,
+      "ENTER_DRAFT_SITE",
+      { siteId: asSiteId("site-a") },
+      ctx({ rng: makeRng(3) }),
+    );
 
     expect(result.outcome).toBe("applied");
     const next = result.state.journey.draftState as PoolDraftState;
@@ -489,7 +533,12 @@ describe("ENTER_DRAFT_SITE", () => {
     const start = stateWithDraftSites(poolDraftState());
     const rngSpy = vi.fn(() => 0);
 
-    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-a" }, ctx({ rng: rngSpy }));
+    const result = reduce(
+      start,
+      "ENTER_DRAFT_SITE",
+      { siteId: asSiteId("site-a") },
+      ctx({ rng: rngSpy }),
+    );
 
     expect(result.outcome).toBe("bounced");
     expect(result.state.journey).toBe(start.journey);
@@ -508,7 +557,7 @@ describe("ENTER_DRAFT_SITE", () => {
     const soloResult = reduce(
       start,
       "ENTER_DRAFT_SITE",
-      { siteId: "site-a" },
+      { siteId: asSiteId("site-a") },
       ctx({ seq: 1, rng: makeRng(1) }),
     );
     expect(soloResult.outcome).toBe("applied");
@@ -516,13 +565,13 @@ describe("ENTER_DRAFT_SITE", () => {
     const firstResult = reduce(
       start,
       "ENTER_DRAFT_SITE",
-      { siteId: "site-a" },
+      { siteId: asSiteId("site-a") },
       ctx({ seq: 1, rng: makeRng(1) }),
     );
     const secondResult = reduce(
       firstResult.state,
       "ENTER_DRAFT_SITE",
-      { siteId: "site-a" },
+      { siteId: asSiteId("site-a") },
       ctx({ seq: 2, rng: makeRng(2) }),
     );
 
@@ -534,7 +583,9 @@ describe("ENTER_DRAFT_SITE", () => {
 
   it("bounces without a provider", () => {
     const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
-    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-b" });
+    const result = reduce(start, "ENTER_DRAFT_SITE", {
+      siteId: asSiteId("site-b"),
+    });
     expect(result.outcome).toBe("bounced");
     expect(result.state).toEqual(start);
   });
@@ -542,7 +593,9 @@ describe("ENTER_DRAFT_SITE", () => {
   it("bounces with a null draftState", () => {
     registerDraftContentProvider(provider());
     const start = genesisFoldState(GENESIS);
-    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-a" });
+    const result = reduce(start, "ENTER_DRAFT_SITE", {
+      siteId: asSiteId("site-a"),
+    });
     expect(result.outcome).toBe("bounced");
     expect(result.state).toEqual(start);
   });
@@ -550,7 +603,9 @@ describe("ENTER_DRAFT_SITE", () => {
   it("bounces for a non-draft site", () => {
     registerDraftContentProvider(provider());
     const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
-    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-battle" });
+    const result = reduce(start, "ENTER_DRAFT_SITE", {
+      siteId: asSiteId("site-battle"),
+    });
     expect(result.outcome).toBe("bounced");
     expect(result.state).toEqual(start);
   });
@@ -558,7 +613,9 @@ describe("ENTER_DRAFT_SITE", () => {
   it("bounces for an unknown site id", () => {
     registerDraftContentProvider(provider());
     const start = stateWithDraftSites(poolDraftState({ activeSiteId: null }));
-    const result = reduce(start, "ENTER_DRAFT_SITE", { siteId: "site-nowhere" });
+    const result = reduce(start, "ENTER_DRAFT_SITE", {
+      siteId: asSiteId("site-nowhere"),
+    });
     expect(result.outcome).toBe("bounced");
     expect(result.state).toEqual(start);
   });
@@ -580,7 +637,7 @@ describe("SET_DRAFT_STATE", () => {
   it("replaces the draft state (debug edit)", () => {
     const start = stateWithDraft(poolDraftState());
     const replacement = poolDraftState({
-      activeSiteId: "site-z",
+      activeSiteId: asSiteId("site-z"),
       pickNumber: 5,
       currentOffer: [6, 7, 8],
     });
@@ -627,8 +684,20 @@ describe("draft-engine injected rng", () => {
   it("produces the same sample for the same rng stream", () => {
     const a = structuredClone(samplePool());
     const b = structuredClone(samplePool());
-    const drawnA = drawAndSpendUniqueCards(a, 4, undefined, undefined, makeRng(7));
-    const drawnB = drawAndSpendUniqueCards(b, 4, undefined, undefined, makeRng(7));
+    const drawnA = drawAndSpendUniqueCards(
+      a,
+      4,
+      undefined,
+      undefined,
+      makeRng(7),
+    );
+    const drawnB = drawAndSpendUniqueCards(
+      b,
+      4,
+      undefined,
+      undefined,
+      makeRng(7),
+    );
     expect(drawnA).toEqual(drawnB);
     expect(drawnA).toHaveLength(4);
   });
@@ -637,7 +706,13 @@ describe("draft-engine injected rng", () => {
     // A fixed rng of 0 makes weightedSample take the first cumulative entry each
     // iteration, so the draw is fully determined by the injected source.
     const state = structuredClone(samplePool());
-    const drawn = drawAndSpendUniqueCards(state, 4, undefined, undefined, () => 0);
+    const drawn = drawAndSpendUniqueCards(
+      state,
+      4,
+      undefined,
+      undefined,
+      () => 0,
+    );
     expect(new Set(drawn).size).toBe(4);
   });
 });

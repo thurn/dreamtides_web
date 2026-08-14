@@ -78,6 +78,12 @@ import {
   SELECTION_RULES_VERSION,
 } from "../../reward-selection";
 import { resolveDeckEntryCard } from "../../card-type-change";
+import type { DeckEntryId, DreamsignId } from "../../types/identifiers";
+import { offerIdFromUnknown } from "../../types/identifiers";
+import { asChoiceId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asShuffleCommitment } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
@@ -87,7 +93,9 @@ function asString(value: unknown): string | null {
 function coerceMerchantChoice(value: unknown): MerchantChoice | undefined {
   if (typeof value !== "object" || value === null) return undefined;
   const choiceId = (value as { choiceId?: unknown }).choiceId;
-  return typeof choiceId === "string" ? { choiceId } : undefined;
+  return typeof choiceId === "string"
+    ? { choiceId: asChoiceId(choiceId) }
+    : undefined;
 }
 
 function shopSourceDraftState(journey: JourneyState): DraftState | null {
@@ -150,7 +158,9 @@ function eligibleGambleDreamsigns(
     journey.remainingDreamsignPool,
     content.dreamsignTemplates,
   );
-  const dreamsignCandidateIds = availableIds.filter((id) => !heldIds.has(id));
+  const dreamsignCandidateIds = availableIds.filter(
+    (id) => !heldIds.has(asDreamsignId(id)),
+  );
   const templates = dreamsignCandidateIds.flatMap((id) => {
     const template = templatesById.get(id);
     return template === undefined ? [] : [template];
@@ -186,9 +196,9 @@ function buildGravokWagerRuntime(
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
     wagerCost: gravokWagerCost(game.economy, site.isEnhanced),
-    shuffleCommitment,
+    shuffleCommitment: asShuffleCommitment(shuffleCommitment),
     committedCard,
-    dreamsignCandidateIds,
+    dreamsignCandidateIds: dreamsignCandidateIds.map(asDreamsignId),
     rewardDreamsign:
       selectedTemplate === null ? null : createDreamsign(selectedTemplate),
     result: null,
@@ -205,7 +215,7 @@ function buildTidemarkLadderClimbRuntime(
   const { templates } = eligibleGambleDreamsigns(journey, content);
   if (templates.length === 0) return null;
   const commitments = Array.from({ length: 4 }, () => ({
-    shuffleCommitment: gambleShuffleCommitment(rng),
+    shuffleCommitment: asShuffleCommitment(gambleShuffleCommitment(rng)),
     card: gambleCommittedCard(rng),
   }));
   const affinity = buildRewardSelectionContext({
@@ -238,7 +248,9 @@ function buildTidemarkLadderClimbRuntime(
     kind: "gamble",
     gameId: "tidemark-ladder-climb",
     isFarpoint: site.isEnhanced,
-    shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
+    shuffleCommitments: commitments
+      .map((entry) => entry.shuffleCommitment)
+      .map(asShuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
     dreamsignCandidateScores,
     strongPoolSize: strongPool.length,
@@ -256,7 +268,7 @@ function buildStarwayStairsRuntime(
   rng: () => number,
 ): StarwayStairsSiteRuntime {
   const commitments = game.rules.tiers.map(() => ({
-    shuffleCommitment: gambleShuffleCommitment(rng),
+    shuffleCommitment: asShuffleCommitment(gambleShuffleCommitment(rng)),
     card: gambleCommittedCard(rng),
   }));
   return {
@@ -265,7 +277,9 @@ function buildStarwayStairsRuntime(
     roundNumber: 1,
     isFarpoint: site.isEnhanced,
     wagerAmount: starwayStairsWagerAmount(game.economy, site.isEnhanced),
-    shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
+    shuffleCommitments: commitments
+      .map((entry) => entry.shuffleCommitment)
+      .map(asShuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
     results: [],
     terminalReason: null,
@@ -315,7 +329,7 @@ function buildFourSuitRepriseRuntime(
   if (targets.length === 0) return null;
 
   const commitments = Array.from({ length: game.rules.maxRounds }, () => ({
-    shuffleCommitment: gambleShuffleCommitment(rng),
+    shuffleCommitment: asShuffleCommitment(gambleShuffleCommitment(rng)),
     card: gambleCommittedCard(rng),
   }));
   return {
@@ -323,7 +337,9 @@ function buildFourSuitRepriseRuntime(
     gameId: "four-suit-reprise",
     isFarpoint: site.isEnhanced,
     drawCost: fourSuitRepriseDrawCost(game.economy, site.isEnhanced),
-    shuffleCommitments: commitments.map((entry) => entry.shuffleCommitment),
+    shuffleCommitments: commitments
+      .map((entry) => entry.shuffleCommitment)
+      .map(asShuffleCommitment),
     committedCards: commitments.map((entry) => entry.card),
     targets,
     rounds: [],
@@ -344,7 +360,7 @@ function buildBlackjackRuntime(
     wagerCost: blackjackWagerCost(economy, site.isEnhanced),
     prizeEssence: economy.prizeEssence,
     attemptNumber: 1,
-    shuffleCommitment: gambleShuffleCommitment(rng),
+    shuffleCommitment: asShuffleCommitment(gambleShuffleCommitment(rng)),
     committedDeck: rngShuffle(STANDARD_PLAYING_CARD_DECK, rng),
     deckCursor: 0,
     playerCards: [],
@@ -500,7 +516,7 @@ function selectCardChoiceEntryIds(
   kind: "transfiguration" | "duplication",
   isEnhanced: boolean,
   rng: () => number,
-): string[] {
+): DeckEntryId[] {
   const ordered = isEnhanced ? [...deck] : rngShuffle(deck, rng);
   const duplicationRules = content.sitesData.siteTypes.Duplication.rules;
   if (duplicationRules?.kind !== "duplication") {
@@ -516,7 +532,7 @@ function selectCardChoiceEntryIds(
         ? duplicationLimits.enhancedLimit
         : duplicationLimits.standardLimit;
   const limit = configuredLimit ?? Number.POSITIVE_INFINITY;
-  const entryIds: string[] = [];
+  const entryIds: DeckEntryId[] = [];
   for (const entry of ordered) {
     if (entryIds.length >= limit) break;
     const card = content.cardDatabase.get(entry.cardNumber);
@@ -557,7 +573,7 @@ function buildCardChoiceRuntime(
     return {
       kind: "cardChoice",
       choiceKind: "duplication",
-      entryIds,
+      entryIds: entryIds.map(asDeckEntryId),
       acceptedEntryIds: [],
     };
   }
@@ -567,7 +583,7 @@ function buildCardChoiceRuntime(
   );
   const transfigurationOffers: CardChoiceTransfigurationOffer[] = [];
   for (const entryId of entryIds) {
-    const entry = deckByEntryId.get(entryId);
+    const entry = deckByEntryId.get(asDeckEntryId(entryId));
     if (entry === undefined) continue;
     const card = content.cardDatabase.get(entry.cardNumber);
     if (card === undefined) continue;
@@ -577,7 +593,7 @@ function buildCardChoiceRuntime(
       entry.transfiguration,
     )) {
       transfigurationOffers.push({
-        entryId,
+        entryId: asDeckEntryId(entryId),
         type: offer.type,
         change: offer.change,
         effectDetails: transfigurationEffectDetails(offer, card),
@@ -586,7 +602,7 @@ function buildCardChoiceRuntime(
           content.transfigurationData,
           journey.seed,
           site.id,
-          entryId,
+          asDeckEntryId(entryId),
           card,
           offer.type,
         ),
@@ -596,7 +612,7 @@ function buildCardChoiceRuntime(
   return {
     kind: "cardChoice",
     choiceKind: "transfiguration",
-    entryIds,
+    entryIds: entryIds.map(asDeckEntryId),
     acceptedEntryIds: [],
     transfigurationOffers,
   };
@@ -607,11 +623,11 @@ export function createSiteContentProvider(
 ): SiteContentProvider {
   const dreamsignRegenerationPoolIds = (
     journey: JourneyState,
-  ): readonly string[] => journey.resolvedPackage?.dreamsignPoolIds ?? [];
+  ): readonly DreamsignId[] => journey.resolvedPackage?.dreamsignPoolIds ?? [];
   const tutorialOpeningDreamsignIds = (
     journey: JourneyState,
     site: SiteState,
-  ): readonly string[] => {
+  ): readonly DreamsignId[] => {
     if (journey.isTutorialJourney !== true) return [];
     const openingNode = journey.atlas.nodes[journey.atlas.startingNodeId];
     const openingRevelation = openingNode?.sites.find(
@@ -674,7 +690,8 @@ export function createSiteContentProvider(
           const runtime: RewardSiteRuntime = {
             kind: "reward",
             reward: generated.reward,
-            remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+            remainingDreamsignPoolIds:
+              generated.remainingDreamsignPoolIds.map(asDreamsignId),
             accepted: false,
           };
           // Keep the run pool unchanged when the essence fallback spent nothing;
@@ -684,7 +701,8 @@ export function createSiteContentProvider(
           }
           return {
             runtime,
-            remainingDreamsignPool: generated.remainingDreamsignPoolIds,
+            remainingDreamsignPool:
+              generated.remainingDreamsignPoolIds.map(asDreamsignId),
           };
         }
         case "DreamsignRevelation": {
@@ -704,12 +722,14 @@ export function createSiteContentProvider(
           const runtime: SiteRuntimeState = {
             kind: "dreamsignOffer",
             offeredDreamsigns: draw.offeredDreamsigns,
-            remainingDreamsignPool: draw.remainingDreamsignPool,
+            remainingDreamsignPool:
+              draw.remainingDreamsignPool.map(asDreamsignId),
             accepted: false,
           };
           return {
             runtime,
-            remainingDreamsignPool: draw.remainingDreamsignPool,
+            remainingDreamsignPool:
+              draw.remainingDreamsignPool.map(asDreamsignId),
           };
         }
         case "Shop":
@@ -768,7 +788,8 @@ export function createSiteContentProvider(
                 ? baseSlots
                 : transfigureShopSlots(baseSlots, content, stream),
             rerollCount: 0,
-            remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+            remainingDreamsignPoolIds:
+              generated.remainingDreamsignPoolIds.map(asDreamsignId),
             purchaseHistory: [],
             ...(freePurchaseModifier === undefined
               ? {}
@@ -794,7 +815,8 @@ export function createSiteContentProvider(
           // shop drew is persisted below.
           return {
             runtime,
-            remainingDreamsignPool: generated.remainingDreamsignPoolIds,
+            remainingDreamsignPool:
+              generated.remainingDreamsignPoolIds.map(asDreamsignId),
             ...(modifierIndex < 0
               ? {}
               : {
@@ -886,8 +908,10 @@ export function createSiteContentProvider(
                 stream,
               )
             : shopSlotsToRuntime(generated.slots),
-        remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
-        remainingDreamsignPool: generated.remainingDreamsignPoolIds,
+        remainingDreamsignPoolIds:
+          generated.remainingDreamsignPoolIds.map(asDreamsignId),
+        remainingDreamsignPool:
+          generated.remainingDreamsignPoolIds.map(asDreamsignId),
         draftState,
       };
     },
@@ -906,7 +930,7 @@ export function createSiteContentProvider(
       seq,
     }): JourneyState | null => {
       const encounterSignature = asString(payload.encounterSignature);
-      const offerId = asString(payload.offerId);
+      const offerId = offerIdFromUnknown(payload.offerId);
       const selectionRulesVersion = asString(payload.selectionRulesVersion);
       if (encounterSignature === null || offerId === null) return null;
       const choice = coerceMerchantChoice(payload.choice);

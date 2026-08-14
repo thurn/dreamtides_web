@@ -18,12 +18,21 @@ import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { collectAutomationHashDrift } from "./battle-card-effects-table";
 import type { CardData } from "../../types/cards";
+import type { CardId } from "../../types/card-identity";
 
-const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
+const REPO_ROOT = join(
+  dirname(fileURLToPath(import.meta.url)),
+  "..",
+  "..",
+  "..",
+);
 
 /** Loads the real runtime card catalog the battle screen reads at runtime. */
-function loadCardsById(): Map<string, string> {
-  const json = readFileSync(join(REPO_ROOT, "public", "cards_v2-data.json"), "utf8");
+function loadCardsById(): Map<CardId, string> {
+  const json = readFileSync(
+    join(REPO_ROOT, "public", "cards_v2-data.json"),
+    "utf8",
+  );
   const cards = JSON.parse(json) as CardData[];
   return new Map(cards.map((card) => [card.id, card.renderedText]));
 }

@@ -4,9 +4,9 @@ import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
-import { asCardId } from "../../../types/card-identity";
 import { CumulusRoot } from "../../CumulusRoot";
 import { DreamwellCard, type DreamwellCardModel } from "./DreamwellCard";
+import { asDreamwellCardId } from "../../../types/identifiers";
 
 beforeEach(() => {
   (
@@ -17,9 +17,9 @@ beforeEach(() => {
 });
 
 const MODEL: DreamwellCardModel = {
-  cardId: asCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
+  cardId: asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
   displaySnapshot: {
-    id: asCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
+    id: asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
     name: assertLocalized("Fixture Beacon"),
     renderedText: assertLocalized(
       "Look at the top 2 cards of your deck. Put one into your hand.",

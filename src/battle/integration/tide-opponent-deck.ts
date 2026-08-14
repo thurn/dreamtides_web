@@ -21,6 +21,9 @@ import {
   sampleSelectionBand,
   selectionBandSize,
 } from "../../selection/tide-affinity";
+import type { BattleEntryKey, TideId } from "../../types/identifiers";
+import { asTideId } from "../../types/identifiers";
+import type { TideVector } from "../../selection/tide-affinity";
 
 interface RankedCard {
   card: CardData;
@@ -39,7 +42,7 @@ interface RankedDreamsign {
 export interface TideOpponentDeckBuild {
   baseCards: CardData[];
   finalCards: CardData[];
-  joinedTideIds: string[];
+  joinedTideIds: TideId[];
   dreamsign: DreamsignTemplate | null;
   modifications: {
     startersAdded: CardData[];
@@ -57,31 +60,35 @@ function codeUnits(left: string, right: string): number {
 
 function chooseDreamsign(args: {
   templates: readonly DreamsignTemplate[];
-  context: ReadonlyMap<string, number>;
+  context: TideVector;
   bandFraction: number;
   bandMinimum: number;
   rng: () => number;
 }): DreamsignTemplate | null {
   const ranked: RankedDreamsign[] = args.templates.map((dreamsign) => {
-    const vector = new Map<string, number>();
+    const vector = new Map<TideId, number>();
     addTideIds(vector, dreamsign.tideIds ?? []);
     const affinity = cosineAffinity(vector, args.context);
     const rarity = rarityStrength(dreamsign.rarity);
     return { dreamsign, affinity, rarity, rank: [affinity, rarity] };
   });
-  ranked.sort((left, right) =>
-    compareRanks(left.rank, right.rank) || codeUnits(left.dreamsign.id, right.dreamsign.id),
+  ranked.sort(
+    (left, right) =>
+      compareRanks(left.rank, right.rank) ||
+      codeUnits(left.dreamsign.id, right.dreamsign.id),
   );
-  return sampleSelectionBand(
-    ranked,
-    selectionBandSize(ranked.length, args.bandFraction, args.bandMinimum),
-    args.rng,
-  )?.dreamsign ?? null;
+  return (
+    sampleSelectionBand(
+      ranked,
+      selectionBandSize(ranked.length, args.bandFraction, args.bandMinimum),
+      args.rng,
+    )?.dreamsign ?? null
+  );
 }
 
 function iterativeDeck(args: {
   candidates: readonly CardData[];
-  context: Map<string, number>;
+  context: Map<TideId, number>;
   targetSize: number;
   bandFraction: number;
   bandMinimum: number;
@@ -96,8 +103,10 @@ function iterativeDeck(args: {
       const rarity = rarityStrength(card.rarity);
       return { card, affinity, rarity, rank: [affinity, rarity] };
     });
-    ranked.sort((left, right) =>
-      compareRanks(left.rank, right.rank) || codeUnits(left.card.id, right.card.id),
+    ranked.sort(
+      (left, right) =>
+        compareRanks(left.rank, right.rank) ||
+        codeUnits(left.card.id, right.card.id),
     );
     const picked = sampleSelectionBand(
       ranked,
@@ -119,7 +128,7 @@ export function buildTideOpponentDeck(args: {
   dreamsignTemplates: readonly DreamsignTemplate[];
   completionLevel: number;
   poolSeed: number;
-  battleEntryKey?: string;
+  battleEntryKey?: BattleEntryKey;
   opponentsContentHash: string;
   progression: OpponentsData["progression"];
   deckSize: number;
@@ -143,20 +152,21 @@ export function buildTideOpponentDeck(args: {
   );
   const joinedTideIds = generated.tides4Provenance.tides
     .filter((tide) => tide.joined)
-    .map((tide) => tide.id);
-  const context = new Map<string, number>();
+    .map((tide) => asTideId(tide.id));
+  const context = new Map<TideId, number>();
   addTideIds(context, joinedTideIds);
   addTideIds(context, args.affiliation?.tideIds ?? []);
   const rng = makeRng((args.poolSeed ^ 0x9e3779b9) >>> 0);
-  const dreamsign = args.completionLevel >= args.progression.dreamsignsFromLayer
-    ? chooseDreamsign({
-        templates: args.dreamsignTemplates,
-        context,
-        bandFraction: args.tides4Decks.selection.bandFraction,
-        bandMinimum: args.tides4Decks.selection.bandMinimum,
-        rng,
-      })
-    : null;
+  const dreamsign =
+    args.completionLevel >= args.progression.dreamsignsFromLayer
+      ? chooseDreamsign({
+          templates: args.dreamsignTemplates,
+          context,
+          bandFraction: args.tides4Decks.selection.bandFraction,
+          bandMinimum: args.tides4Decks.selection.bandMinimum,
+          rng,
+        })
+      : null;
   addTideIds(context, dreamsign?.tideIds ?? []);
 
   let legendariesSuppressed = 0;
@@ -188,14 +198,21 @@ export function buildTideOpponentDeck(args: {
   );
   const cutRanked = baseCards
     .map((card) => ({ card, affinity: cardAffinity(card.id, context, index) }))
-    .sort((left, right) => left.affinity - right.affinity || codeUnits(left.card.id, right.card.id));
+    .sort(
+      (left, right) =>
+        left.affinity - right.affinity ||
+        codeUnits(left.card.id, right.card.id),
+    );
   const cardsCut = cutRanked.slice(0, starterCount).map(({ card }) => card);
   const cutIds = new Set(cardsCut.map((card) => card.id));
   const startersAdded = [...args.cardDatabase.values()]
     .filter((card) => card.isStarter || card.rarity === "Starter")
     .sort((left, right) => codeUnits(left.id, right.id))
     .map((card) => ({ card, key: rng() }))
-    .sort((left, right) => left.key - right.key || codeUnits(left.card.id, right.card.id))
+    .sort(
+      (left, right) =>
+        left.key - right.key || codeUnits(left.card.id, right.card.id),
+    )
     .slice(0, starterCount)
     .map(({ card }) => card);
   const finalCards = [
@@ -208,7 +225,8 @@ export function buildTideOpponentDeck(args: {
     joinedTideIds,
     dreamsign,
     modifications: { startersAdded, cardsCut, legendariesSuppressed },
-    abilityActive: args.completionLevel >= args.progression.abilityActiveFromLayer,
+    abilityActive:
+      args.completionLevel >= args.progression.abilityActiveFromLayer,
   };
   const emit = (): void => {
     logEvent("tide_opponent_deck_constructed", {

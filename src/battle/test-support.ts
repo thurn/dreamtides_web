@@ -18,6 +18,13 @@ import {
   frontRankSlotIds,
 } from "./types";
 import type { BackRankSlotId, FrontRankSlotId } from "./types";
+import { asSiteId } from "../types/identifiers";
+import { asAtlasNodeId } from "../types/identifiers";
+import { asDreamscapeId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
+import type { DeckEntryId } from "../types/identifiers";
+import { asDeckEntryId } from "../types/identifiers";
+import { asDreamsignId } from "../types/identifiers";
 
 /** A generous materialized window for test ranks. The play area grows without
  *  bound at runtime; tests build an explicit window and override slots by id. */
@@ -42,7 +49,7 @@ export function emptyBackRankSlots(): Record<BackRankSlotId, null> {
 
 export function makeBattleTestSite(): SiteState {
   return {
-    id: "site-7",
+    id: asSiteId("site-7"),
     type: "Battle",
     isEnhanced: false,
     isVisited: false,
@@ -52,7 +59,7 @@ export function makeBattleTestSite(): SiteState {
 export function makeBattleTestDreamAvatars(): DreamAvatarContent[] {
   return [
     {
-      id: "dream-avatar-arc",
+      id: asDreamAvatarId("dream-avatar-arc"),
       name: "Aeris, the Prism Guide",
       title: "Storm Archivist",
       renderedText:
@@ -61,7 +68,7 @@ export function makeBattleTestDreamAvatars(): DreamAvatarContent[] {
       startingEssence: 250,
     },
     {
-      id: "dream-avatar-bloom",
+      id: asDreamAvatarId("dream-avatar-bloom"),
       name: "Talan, Keeper of Branches",
       title: "Verdant Witness",
       renderedText: "Your field grows harder to uproot with every turn passed.",
@@ -149,11 +156,11 @@ export function makeBattleTestState(): Pick<
   return {
     atlas: {
       nodes: {
-        "dreamscape-2": {
-          id: "dreamscape-2",
+        [asAtlasNodeId("dreamscape-2")]: {
+          id: asAtlasNodeId("dreamscape-2"),
           layer: LayerName.One,
           indexInLayer: 0,
-          dreamscapeId: "test_dreamscape",
+          dreamscapeId: asDreamscapeId("test_dreamscape"),
           sites: [makeBattleTestSite()],
           position: { x: 0, y: 0 },
           state: "available",
@@ -163,15 +170,15 @@ export function makeBattleTestState(): Pick<
           knownDreamsignId: null,
         },
       },
-      startingNodeId: "dreamscape-2",
-      bossNodeId: "dreamscape-2",
-      currentNodeId: "dreamscape-2",
-      layers: [["dreamscape-2"], [], [], [], [], [], []],
+      startingNodeId: asAtlasNodeId("dreamscape-2"),
+      bossNodeId: asAtlasNodeId("dreamscape-2"),
+      currentNodeId: asAtlasNodeId("dreamscape-2"),
+      layers: [[asAtlasNodeId("dreamscape-2")], [], [], [], [], [], []],
       knownDreamsignCarrierIds: [],
     },
     battleModifiers: [],
     completionLevel: 2,
-    currentDreamscape: "dreamscape-2",
+    currentDreamscape: asAtlasNodeId("dreamscape-2"),
     deck: makeBattleTestDeckEntries(),
     dreamAvatar: makeBattleTestDreamAvatar(),
     dreamsigns: makeBattleTestDreamsigns(),
@@ -182,20 +189,20 @@ export function makeBattleTestState(): Pick<
 
 function makeBattleTestDeckEntries(): DeckEntry[] {
   return [
-    makeDeckEntry("deck-1", 101),
-    makeDeckEntry("deck-2", 102),
-    makeDeckEntry("deck-3", 103),
-    makeDeckEntry("deck-4", 104),
-    makeDeckEntry("deck-5", 106),
-    makeDeckEntry("deck-6", 201),
-    makeDeckEntry("deck-7", 205),
-    makeDeckEntry("deck-8", 301),
+    makeDeckEntry(asDeckEntryId("deck-1"), 101),
+    makeDeckEntry(asDeckEntryId("deck-2"), 102),
+    makeDeckEntry(asDeckEntryId("deck-3"), 103),
+    makeDeckEntry(asDeckEntryId("deck-4"), 104),
+    makeDeckEntry(asDeckEntryId("deck-5"), 106),
+    makeDeckEntry(asDeckEntryId("deck-6"), 201),
+    makeDeckEntry(asDeckEntryId("deck-7"), 205),
+    makeDeckEntry(asDeckEntryId("deck-8"), 301),
   ];
 }
 
 function makeBattleTestDreamAvatar(): DreamAvatar {
   return {
-    id: "dream-avatar-arc",
+    id: asDreamAvatarId("dream-avatar-arc"),
     name: "Aeris",
     title: "Storm Archivist",
     renderedText: "Gain a fleeting advantage whenever your line bends first.",
@@ -226,7 +233,7 @@ function makeResolvedPackage(): ResolvedDreamAvatarPackage {
       "103": 2,
       "104": 2,
     },
-    dreamsignPoolIds: ["sign-1", "sign-2"],
+    dreamsignPoolIds: [asDreamsignId("sign-1"), asDreamsignId("sign-2")],
     mandatoryOnlyPoolSize: 120,
     draftPoolSize: 200,
     doubledCardCount: 4,
@@ -258,7 +265,7 @@ function makeCard(
   };
 }
 
-function makeDeckEntry(entryId: string, cardNumber: number): DeckEntry {
+function makeDeckEntry(entryId: DeckEntryId, cardNumber: number): DeckEntry {
   return {
     entryId,
     cardNumber,

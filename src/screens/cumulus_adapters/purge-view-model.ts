@@ -30,11 +30,12 @@ import { projectGuideView } from "./guide-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { SitesData } from "../../types/sites-data";
 import { bindSourceTransport } from "../../runtime/localization/runtime";
+import type { GuideId } from "../../types/identifiers";
 
 /** Resolve Master Takeshi, the resident guide for Purge. */
 export function resolvePurgeGuide(
   guides: readonly DreamGuideContent[],
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent {
   return requireGuideForSiteType(guides, "Purge", presentingGuideId);
 }
@@ -111,9 +112,10 @@ export function buildPurgeSiteView(params: {
 
   return {
     presentation: (() => {
-      const presentation = params.sitesData.siteTypes.Purge.presentation as Extract<
-      import("../../types/sites-data").SitePresentation,
-      { kind: "purge" }
+      const presentation = params.sitesData.siteTypes.Purge
+        .presentation as Extract<
+        import("../../types/sites-data").SitePresentation,
+        { kind: "purge" }
       >;
       return {
         kind: presentation.kind,

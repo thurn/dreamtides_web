@@ -8,6 +8,9 @@ import {
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
 import { selectBattleCardLocation } from "../state/selectors";
+import type { BattleCardId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import { asBattleCardId } from "../../types/identifiers";
 
 export function promptTextLogFields(
   prefix: string,
@@ -37,8 +40,8 @@ export function promptTextLogFields(
 
 function backingCardUuid(
   board: BattleMutableState,
-  instanceId: string,
-): string | null {
+  instanceId: BattleCardId,
+): CardId | null {
   return board.cardInstances[instanceId]?.definition.cardId ?? null;
 }
 
@@ -65,7 +68,7 @@ export function createBattlePromptOpenedLogFields(
       : promptTextLogFields("prompt", pendingPrompt.options.label)),
     candidateBattleCardInstanceIds: candidateInstanceIds,
     candidateBackingCardUuids: candidateInstanceIds.map((instanceId) =>
-      backingCardUuid(board, instanceId),
+      backingCardUuid(board, asBattleCardId(instanceId)),
     ),
   };
 }
@@ -77,8 +80,11 @@ export function createBattlePromptResolutionLogFields(
   resolution: PromptResolution,
 ): Record<string, unknown> {
   const openedFields = createBattlePromptOpenedLogFields(board, pendingPrompt);
-  const candidateInstanceIds =
-    openedFields.candidateBattleCardInstanceIds as string[];
+  const candidateInstanceIds = (
+    openedFields.candidateBattleCardInstanceIds as unknown[]
+  ).flatMap((value) =>
+    typeof value === "string" ? [asBattleCardId(value)] : [],
+  );
   const chosenInstanceIds =
     resolution.kind === "pick-cards"
       ? resolution.chosenIds
@@ -101,7 +107,7 @@ export function createBattlePromptResolutionLogFields(
     }),
     chosenBattleCardInstanceIds: chosenInstanceIds,
     chosenBackingCardUuids: chosenInstanceIds.map((instanceId) =>
-      backingCardUuid(board, instanceId),
+      backingCardUuid(board, asBattleCardId(instanceId)),
     ),
     finalResolution: resolution,
   };

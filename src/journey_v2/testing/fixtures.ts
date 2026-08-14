@@ -22,6 +22,10 @@ import type {
 } from "../../types/journey";
 import { createDefaultState } from "../../state/journey-context";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
+import { asSiteId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 export const TEST_CARD_UUIDS = {
   ordinary: "11111111-1111-4111-8111-111111111111",
@@ -58,7 +62,7 @@ export function makeMerchantTestDeckEntry(
 ): DeckEntry {
   const { entryId, cardNumber, ...rest } = overrides;
   return {
-    entryId,
+    entryId: asDeckEntryId(entryId),
     cardNumber,
     transfiguration: null,
     isBane: false,
@@ -70,7 +74,7 @@ export function makeMerchantTestSite(
   overrides: Partial<SiteState> = {},
 ): SiteState {
   return {
-    id: "site-merchant-fixture",
+    id: asSiteId("site-merchant-fixture"),
     type: "Reward",
     isEnhanced: false,
     isVisited: false,
@@ -94,7 +98,7 @@ export function makeMerchantTestDreamsign(
   overrides: Partial<Dreamsign> = {},
 ): Dreamsign {
   return {
-    id: "held-sign",
+    id: asDreamsignId("held-sign"),
     name: "Held Sign",
     effectDescription: "",
     ...overrides,
@@ -114,7 +118,7 @@ export function makeMerchantTestJourneyState(
 
 function makeMerchantTestDreamAvatarContent(): DreamAvatarContent {
   return {
-    id: "dream-avatar-fixture",
+    id: asDreamAvatarId("dream-avatar-fixture"),
     name: "Fixture DreamAvatar",
     title: "Fixture",
     renderedText: "",

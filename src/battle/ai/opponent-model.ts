@@ -7,6 +7,7 @@ import type {
   AiEvaluationWeights,
   AiOpponentModelTuning,
 } from "../../types/opponents-data";
+import type { BattleCardId } from "../../types/identifiers";
 
 /**
  * Abstract opponent-response model. Given a {@link ForwardModel} projection
@@ -72,7 +73,7 @@ function clampEval(value: number): number {
 
 interface Challenger {
   slot: FrontRankSlotId;
-  battleCardId: string;
+  battleCardId: BattleCardId;
   effectiveSpark: number;
 }
 

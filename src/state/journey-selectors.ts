@@ -4,6 +4,7 @@ import type {
   SiteState,
   SiteType,
 } from "../types/journey";
+import type { SiteId } from "../types/identifiers";
 
 /** The current dreamscape node and a site whose persisted type is verified. */
 export interface CurrentSiteSelection<Type extends SiteType> {
@@ -14,7 +15,7 @@ export interface CurrentSiteSelection<Type extends SiteType> {
 /** Select a typed site only when it belongs to the journey's current dreamscape. */
 export function selectCurrentSite<Type extends SiteType>(
   state: JourneyState,
-  siteId: string,
+  siteId: SiteId,
   expectedType: Type,
 ): CurrentSiteSelection<Type> | null {
   if (state.currentDreamscape === null) return null;

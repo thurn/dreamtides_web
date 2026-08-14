@@ -6,6 +6,7 @@ import { isBackRankSlotId, isFrontRankSlotId, rankSlotIds } from "../types";
 import type { FrontRankSlotId } from "../types";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 import { opponentsFixture } from "../../testing/opponents-fixture";
+import { asBattleCardId } from "../../types/identifiers";
 
 const AI_TUNING = opponentsFixture().ai;
 
@@ -42,7 +43,7 @@ let nextId = 0;
 function makeCard(overrides: Partial<AiCard> = {}): AiCard {
   nextId += 1;
   return {
-    battleCardId: `card-${nextId}`,
+    battleCardId: asBattleCardId(`card-${nextId}`),
     cardNumber: 999, // unmodeled vanilla body by default
     name: "Test Body",
     energyCost: 0,
@@ -57,7 +58,7 @@ function makeCard(overrides: Partial<AiCard> = {}): AiCard {
 function opponentBody(overrides: Partial<AiOpponentBody> = {}): AiOpponentBody {
   nextId += 1;
   return {
-    battleCardId: `opp-${nextId}`,
+    battleCardId: asBattleCardId(`opp-${nextId}`),
     effectiveSpark: 0,
     energyCost: 0,
     rank: "front",
@@ -67,7 +68,9 @@ function opponentBody(overrides: Partial<AiOpponentBody> = {}): AiOpponentBody {
   };
 }
 
-function defaultOptions(overrides: Partial<PlannerOptions> = {}): PlannerOptions {
+function defaultOptions(
+  overrides: Partial<PlannerOptions> = {},
+): PlannerOptions {
   return {
     deadlineMs: 1_000_000,
     beamWidth: 12,
@@ -87,17 +90,32 @@ function defaultOptions(overrides: Partial<PlannerOptions> = {}): PlannerOptions
 
 function strummer(): AiCard {
   // #510 Nocturne Strummer — 2●, 1✦, Support +2✦.
-  return makeCard({ cardNumber: 510, name: "Nocturne Strummer", energyCost: 2, basePrintedSpark: 1 });
+  return makeCard({
+    cardNumber: 510,
+    name: "Nocturne Strummer",
+    energyCost: 2,
+    basePrintedSpark: 1,
+  });
 }
 
 function colossus(): AiCard {
   // #515 Wildflower Colossus — 6●, 6✦, +2✦ per supporting ally.
-  return makeCard({ cardNumber: 515, name: "Wildflower Colossus", energyCost: 6, basePrintedSpark: 6 });
+  return makeCard({
+    cardNumber: 515,
+    name: "Wildflower Colossus",
+    energyCost: 6,
+    basePrintedSpark: 6,
+  });
 }
 
 function direwolf(): AiCard {
   // #512 Marked Direwolf — 4●, 4✦ vanilla.
-  return makeCard({ cardNumber: 512, name: "Marked Direwolf", energyCost: 4, basePrintedSpark: 4 });
+  return makeCard({
+    cardNumber: 512,
+    name: "Marked Direwolf",
+    energyCost: 4,
+    basePrintedSpark: 4,
+  });
 }
 
 // --- Tests -----------------------------------------------------------------
@@ -398,7 +416,9 @@ describe("planNextAction", () => {
       expect(action.trace.choice).toBe(action.kind);
       expect(action.trace.stage).toBe(action.stage);
       if (action.kind === "PLAY_CARD") {
-        expect(action.trace.battleCardId).toBe(action.self?.battleCardId ?? null);
+        expect(action.trace.battleCardId).toBe(
+          action.self?.battleCardId ?? null,
+        );
         expect(action.trace.cardName).toBe(action.self?.name ?? null);
         expect(typeof action.trace.heuristicScoreBefore).toBe("number");
         expect(typeof action.trace.heuristicScoreAfter).toBe("number");

@@ -15,6 +15,10 @@ import {
   prepareExplorationRandomDeckTargetPlan,
   type ExplorationRandomDeckTargetPlanInput,
 } from "./random-deck-target-plan";
+import { asSiteId } from "../types/identifiers";
+import { asDeckEntryId } from "../types/identifiers";
+import { asExplorationActionId } from "../types/identifiers";
+import { asCardTypeChangePredicateId } from "../types/identifiers";
 
 const CARD_IDS = Array.from({ length: 5 }, (_, index) =>
   asCardId(`b0000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`),
@@ -54,20 +58,32 @@ function contentFixture(reverse = false): JourneyContent {
 
 function journeyFixture(reverse = false): JourneyState {
   const deck = [
-    makeMerchantTestDeckEntry({ entryId: "entry-warrior-a", cardNumber: 1 }),
-    makeMerchantTestDeckEntry({ entryId: "entry-warrior-b", cardNumber: 1 }),
-    makeMerchantTestDeckEntry({ entryId: "entry-event", cardNumber: 2 }),
-    makeMerchantTestDeckEntry({ entryId: "entry-starter", cardNumber: 3 }),
     makeMerchantTestDeckEntry({
-      entryId: "entry-nightmare",
+      entryId: asDeckEntryId("entry-warrior-a"),
+      cardNumber: 1,
+    }),
+    makeMerchantTestDeckEntry({
+      entryId: asDeckEntryId("entry-warrior-b"),
+      cardNumber: 1,
+    }),
+    makeMerchantTestDeckEntry({
+      entryId: asDeckEntryId("entry-event"),
+      cardNumber: 2,
+    }),
+    makeMerchantTestDeckEntry({
+      entryId: asDeckEntryId("entry-starter"),
+      cardNumber: 3,
+    }),
+    makeMerchantTestDeckEntry({
+      entryId: asDeckEntryId("entry-nightmare"),
       cardNumber: 4,
       isBane: true,
     }),
     makeMerchantTestDeckEntry({
-      entryId: "entry-prior-override",
+      entryId: asDeckEntryId("entry-prior-override"),
       cardNumber: 5,
       typeChange: {
-        predicateId: "fixture:prior-character",
+        predicateId: asCardTypeChangePredicateId("fixture:prior-character"),
         cardType: "Character",
         subtype: "Warrior",
         label: "Character",
@@ -81,7 +97,7 @@ function journeyFixture(reverse = false): JourneyState {
 }
 
 const site = makeMerchantTestSite({
-  id: "random-deck-target-site",
+  id: asSiteId("random-deck-target-site"),
   type: "Exploration",
 });
 
@@ -92,8 +108,8 @@ function prepare(
     effectKind: "copy-random-cards",
     predicate: "warrior",
     count: 4,
-    actionId: "random-deck-target-action",
-    encounterCardId: ENCOUNTER_CARD_ID,
+    actionId: asExplorationActionId("random-deck-target-action"),
+    encounterCardId: asCardId(ENCOUNTER_CARD_ID),
     journey: journeyFixture(),
     site,
     content: contentFixture(),
@@ -108,8 +124,8 @@ function prepareReplacement(
     effectKind: "replace-random-with-card",
     predicate: "warrior",
     replacementCardId: CARD_IDS[4],
-    actionId: "replace-random-with-card-action",
-    encounterCardId: ENCOUNTER_CARD_ID,
+    actionId: asExplorationActionId("replace-random-with-card-action"),
+    encounterCardId: asCardId(ENCOUNTER_CARD_ID),
     journey: journeyFixture(),
     site,
     content: contentFixture(),
@@ -229,7 +245,7 @@ describe("Exploration random deck target plan", () => {
       "entry-warrior-b",
     ]);
     expect(plan.targets).toEqual([
-      { entryId: "entry-warrior-b", cardId: CARD_IDS[0] },
+      { entryId: asDeckEntryId("entry-warrior-b"), cardId: CARD_IDS[0] },
     ]);
     expect(plan.selectorTrace).toMatchObject({
       mechanicId: "replace-deck-entry",
@@ -254,8 +270,8 @@ describe("Exploration random deck target plan", () => {
     });
 
     expect(plan.eligibleCards).toEqual([
-      { entryId: "entry-event", cardId: CARD_IDS[1] },
-      { entryId: "entry-nightmare", cardId: CARD_IDS[3] },
+      { entryId: asDeckEntryId("entry-event"), cardId: CARD_IDS[1] },
+      { entryId: asDeckEntryId("entry-nightmare"), cardId: CARD_IDS[3] },
     ]);
     expect(plan.targets).toHaveLength(1);
     expect(plan.eligibleCards).toContainEqual(plan.targets[0]);
@@ -267,11 +283,11 @@ describe("Exploration random deck target plan", () => {
         seed: "random-deck-target-plan-test",
         deck: [
           makeMerchantTestDeckEntry({
-            entryId: "entry-warrior-a",
+            entryId: asDeckEntryId("entry-warrior-a"),
             cardNumber: 1,
           }),
           makeMerchantTestDeckEntry({
-            entryId: "entry-warrior-b",
+            entryId: asDeckEntryId("entry-warrior-b"),
             cardNumber: 1,
           }),
         ],
@@ -279,11 +295,11 @@ describe("Exploration random deck target plan", () => {
     });
 
     expect(plan.eligibleCards).toEqual([
-      { entryId: "entry-warrior-a", cardId: CARD_IDS[0] },
-      { entryId: "entry-warrior-b", cardId: CARD_IDS[0] },
+      { entryId: asDeckEntryId("entry-warrior-a"), cardId: CARD_IDS[0] },
+      { entryId: asDeckEntryId("entry-warrior-b"), cardId: CARD_IDS[0] },
     ]);
     expect(plan.targets).toEqual([
-      { entryId: "entry-warrior-b", cardId: CARD_IDS[0] },
+      { entryId: asDeckEntryId("entry-warrior-b"), cardId: CARD_IDS[0] },
     ]);
   });
 
@@ -345,7 +361,7 @@ describe("Exploration random deck target plan", () => {
       replacementCardId: undefined,
     });
     const unknownReplacement = prepareReplacement({
-      replacementCardId: "b0000000-0000-4000-8000-000000000098",
+      replacementCardId: asCardId("b0000000-0000-4000-8000-000000000098"),
     });
     const explicitCount = prepareReplacement({ count: 1 });
     const unrelatedField = prepareReplacement({ cardType: "Event" });
@@ -381,16 +397,18 @@ describe("Exploration random deck target plan", () => {
     });
     const differentEffect = prepare({
       count: 1,
-      actionId: "replace-random-with-card-action",
+      actionId: asExplorationActionId("replace-random-with-card-action"),
     });
     const differentPredicate = prepareReplacement({ predicate: "event" });
-    const differentAction = prepareReplacement({ actionId: "other-action" });
+    const differentAction = prepareReplacement({
+      actionId: asExplorationActionId("other-action"),
+    });
     const differentEncounter = prepareReplacement({
-      encounterCardId: "b0000000-0000-4000-8000-000000000098",
+      encounterCardId: asCardId("b0000000-0000-4000-8000-000000000098"),
     });
     const differentSite = prepareReplacement({
       site: makeMerchantTestSite({
-        id: "other-random-deck-target-site",
+        id: asSiteId("other-random-deck-target-site"),
         type: "Exploration",
       }),
     });
@@ -449,16 +467,18 @@ describe("Exploration random deck target plan", () => {
   it("binds authored identity and rejects retained-signature target mutations", () => {
     const plan = prepare();
     const differentEncounter = prepare({
-      encounterCardId: "b0000000-0000-4000-8000-000000000098",
+      encounterCardId: asCardId("b0000000-0000-4000-8000-000000000098"),
     });
-    const differentAction = prepare({ actionId: "different-action" });
+    const differentAction = prepare({
+      actionId: asExplorationActionId("different-action"),
+    });
     const firstTarget = plan.targets[0];
     if (firstTarget === undefined)
       throw new Error("Expected a prepared target");
     const tampered = {
       ...plan,
       targets: [
-        { ...firstTarget, entryId: "foreign-entry" },
+        { ...firstTarget, entryId: asDeckEntryId("foreign-entry") },
         ...plan.targets.slice(1),
       ],
     };

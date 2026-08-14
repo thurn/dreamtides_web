@@ -2,6 +2,7 @@ import { supportedDeploySlots } from "../../engine/support";
 import { rankSlotIds } from "../../types";
 import type { ForwardModel } from "../forward-model";
 import { starterCardModels } from "./index";
+import type { BattleCardId } from "../../../types/identifiers";
 
 /**
  * Computes every card-keyed +✦ bonus currently active on the AI's board.
@@ -21,13 +22,18 @@ import { starterCardModels } from "./index";
  * `supportContribution` (`engine/challenge.ts`) and by board evaluation, so
  * support math stays in one place.
  */
-export function buildSupportContribution(model: ForwardModel): Map<string, number> {
+export function buildSupportContribution(
+  model: ForwardModel,
+): Map<string, number> {
   const contribution = new Map<string, number>();
-  const add = (battleCardId: string, amount: number): void => {
+  const add = (battleCardId: BattleCardId, amount: number): void => {
     if (amount === 0) {
       return;
     }
-    contribution.set(battleCardId, (contribution.get(battleCardId) ?? 0) + amount);
+    contribution.set(
+      battleCardId,
+      (contribution.get(battleCardId) ?? 0) + amount,
+    );
   };
 
   // Support: back-rank cards buffing the front allies they cover.

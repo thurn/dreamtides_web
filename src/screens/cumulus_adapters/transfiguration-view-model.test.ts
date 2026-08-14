@@ -20,18 +20,23 @@ import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 
 const transfigurationData = transfigurationFixture();
 const buildTransfigurationCandidates = (
-  ...args: Parameters<typeof buildTransfigurationCandidatesImpl> extends readonly [unknown, ...infer Rest]
+  ...args: Parameters<
+    typeof buildTransfigurationCandidatesImpl
+  > extends readonly [unknown, ...infer Rest]
     ? Rest
     : never
 ) => buildTransfigurationCandidatesImpl(transfigurationData, ...args);
 const buildTransfigurationSiteView = (
-  params: Omit<Parameters<typeof buildTransfigurationSiteViewImpl>[0], "transfigurationData">,
+  params: Omit<
+    Parameters<typeof buildTransfigurationSiteViewImpl>[0],
+    "transfigurationData"
+  >,
 ) => buildTransfigurationSiteViewImpl({ ...params, transfigurationData });
 
 const GUIDE = {
-  id: "fixture-transfiguration-guide",
+  id: asGuideId("fixture-transfiguration-guide"),
   name: "Fixture Transfiguration Guide",
-  homeDreamscapeId: "fixture-home",
+  homeDreamscapeId: asDreamscapeId("fixture-home"),
   siteType: "Transfiguration",
   portraitSource: "fixture-guide.png",
   dialogue: { site: ["Fixture line."] },
@@ -59,14 +64,14 @@ function makeCard(cardNumber: number): CardData {
 
 function makeEntry(cardNumber: number): DeckEntry {
   return {
-    entryId: `entry-${String(cardNumber)}`,
+    entryId: asDeckEntryId(`entry-${String(cardNumber)}`),
     cardNumber,
     transfiguration: null,
     isBane: false,
   };
 }
 
-function offer(entryId: string, type: TransfigurationType, cost: number) {
+function offer(entryId: DeckEntryId, type: TransfigurationType, cost: number) {
   return {
     entryId,
     type,
@@ -81,20 +86,25 @@ function runtime(): CardChoiceSiteRuntime {
   return {
     kind: "cardChoice",
     choiceKind: "transfiguration",
-    entryIds: ["entry-1", "entry-2", "entry-3", "entry-4"],
+    entryIds: [
+      asDeckEntryId("entry-1"),
+      asDeckEntryId("entry-2"),
+      asDeckEntryId("entry-3"),
+      asDeckEntryId("entry-4"),
+    ],
     acceptedEntryIds: [],
     transfigurationOffers: [
-      offer("entry-1", "Empowered", 40),
-      offer("entry-1", "Kindled", 70),
-      offer("entry-2", "Amplified", 20),
-      offer("entry-3", "Resonant", 30),
-      offer("entry-4", "Perfected", 50),
+      offer(asDeckEntryId("entry-1"), "Empowered", 40),
+      offer(asDeckEntryId("entry-1"), "Kindled", 70),
+      offer(asDeckEntryId("entry-2"), "Amplified", 20),
+      offer(asDeckEntryId("entry-3"), "Resonant", 30),
+      offer(asDeckEntryId("entry-4"), "Perfected", 50),
     ],
   };
 }
 
 const site: SiteState = {
-  id: "transfiguration-site",
+  id: asSiteId("transfiguration-site"),
   type: "Transfiguration",
   isEnhanced: false,
   isVisited: false,
@@ -222,3 +232,8 @@ describe("buildTransfigurationSiteView", () => {
   });
 });
 import { assertLocalized } from "@trox/runtime";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";

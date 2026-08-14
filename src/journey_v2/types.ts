@@ -16,6 +16,17 @@ import type {
   RewardSelectionPolicyId,
   RewardSelectionTrace,
 } from "../reward-selection/types";
+import type { DeckEntryId } from "../types/identifiers";
+import type { DreamsignId } from "../types/identifiers";
+import type { ChoiceId } from "../types/identifiers";
+import type { OfferId } from "../types/identifiers";
+import type { SiteId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type {
+  AuguryArchetypeId,
+  MerchantTargetKey,
+  SelectionKey,
+} from "../types/identifiers";
 
 export interface MerchantGameObjectBadge {
   label: string;
@@ -23,15 +34,15 @@ export interface MerchantGameObjectBadge {
 }
 
 export interface MerchantCardIdentity {
-  cardUuid: string;
+  cardUuid: CardId;
   cardNumber: number;
-  entryId?: string;
-  dreamsignId?: string;
+  entryId?: DeckEntryId;
+  dreamsignId?: DreamsignId;
 }
 
 export interface MerchantDeckCard extends MerchantCardIdentity {
   objectType: "deckCard";
-  entryId: string;
+  entryId: DeckEntryId;
   deckEntry: DeckEntry;
   card: CardData;
   displayName: string;
@@ -60,7 +71,7 @@ export interface MerchantContext {
   journeySeed: string;
   site: SiteState;
   /** Canonical Augury slot scope injected by encounter generation. */
-  selectionKey?: string;
+  selectionKey?: SelectionKey;
   /**
    * Debug reroll counter for this site. Mixed into the encounter RNG salt so a
    * non-zero value produces a fresh encounter from the same journey parameters
@@ -75,14 +86,14 @@ export interface MerchantContext {
    * `AugurySiteRuntime`; the generator validates it against the eligible
    * builder set and ignores values that are not eligible.
    */
-  forcedArchetypeId?: string;
+  forcedArchetypeId?: AuguryArchetypeId;
   /** Retained on the context for other screens; the merchant ignores it. */
   essence: number;
   deckCards: readonly MerchantDeckCard[];
-  cardByUuid: ReadonlyMap<string, CardData>;
+  cardByUuid: ReadonlyMap<CardId, CardData>;
   cardByNumber: ReadonlyMap<number, CardData>;
-  deckEntryById: ReadonlyMap<string, MerchantDeckCard>;
-  ownedCardUuids: ReadonlySet<string>;
+  deckEntryById: ReadonlyMap<DeckEntryId, MerchantDeckCard>;
+  ownedCardUuids: ReadonlySet<CardId>;
   /**
    * UUIDs of the cards in this journey's resolved draft pool (the cards the player
    * could actually draft this game). Empty when no draft pool has been resolved.
@@ -90,8 +101,8 @@ export interface MerchantContext {
    * every grant trace marks each candidate's pool membership (`inDraftPool`) so a
    * log reader can tell pool cards from global-catalog cards.
    */
-  draftPoolCardUuids: ReadonlySet<string>;
-  heldDreamsignIds: ReadonlySet<string>;
+  draftPoolCardUuids: ReadonlySet<CardId>;
+  heldDreamsignIds: ReadonlySet<DreamsignId>;
   heldDreamsignFallbackNames: ReadonlySet<string>;
   /** Non-starter pool cards eligible as grant targets. */
   candidateGrantCards: readonly MerchantCatalogCard[];
@@ -126,24 +137,24 @@ export interface MerchantChoiceRequest {
 }
 
 export interface MerchantChoice {
-  choiceId: string;
+  choiceId: ChoiceId;
 }
 
 export interface MerchantChoiceCandidate {
-  choiceId: string;
+  choiceId: ChoiceId;
   gameObjects: readonly MerchantGameObject[];
   applyPayload: MerchantApplyPayload;
-  cardUuid?: string;
+  cardUuid?: CardId;
   cardNumber?: number;
-  dreamsignId?: string;
+  dreamsignId?: DreamsignId;
 }
 
 export interface MerchantOffer {
-  offerId: string;
+  offerId: OfferId;
   encounterSignature: string;
   archetypeId: MerchantArchetypeId;
   family: MerchantOfferFamily;
-  targetKey: string;
+  targetKey: MerchantTargetKey;
   gameObjects: readonly MerchantGameObject[];
   applyPayload?: MerchantApplyPayload;
   choiceRequest?: MerchantChoiceRequest;
@@ -151,7 +162,7 @@ export interface MerchantOffer {
   trace?: MerchantOfferTrace;
   mechanicId?: RewardMechanicId;
   policyId?: RewardSelectionPolicyId;
-  selectionKey?: string;
+  selectionKey?: SelectionKey;
   selectionRulesVersion?: string;
   selectionContentRevision?: string;
   selectionTrace?: RewardSelectionTrace;
@@ -159,7 +170,7 @@ export interface MerchantOffer {
 
 export interface MerchantEncounter {
   encounterSignature: string;
-  siteId: string;
+  siteId: SiteId;
   selectionRulesVersion?: string;
   selectionContentRevision?: string;
   offers: readonly MerchantOffer[];
@@ -167,7 +178,7 @@ export interface MerchantEncounter {
 
 export interface MerchantAcceptRequest {
   encounterSignature: string;
-  offerId: string;
+  offerId: OfferId;
   archetypeId: MerchantArchetypeId;
   selectionRulesVersion?: string;
   choice?: MerchantChoice;
@@ -184,7 +195,7 @@ export type MerchantOfferActionResult =
 
 export interface MerchantDeclineRequest {
   encounterSignature: string;
-  offerId: string;
+  offerId: OfferId;
   selectionRulesVersion?: string;
   choice?: MerchantChoice;
 }
@@ -194,7 +205,7 @@ export type MerchantGameObject =
   | MerchantDeckCard
   | {
       objectType: "dreamsign";
-      dreamsignId: string;
+      dreamsignId: DreamsignId;
       dreamsignTemplate: DreamsignTemplate;
       displayName: string;
       badge?: MerchantGameObjectBadge;

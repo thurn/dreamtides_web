@@ -11,10 +11,11 @@ import {
   startFieldSave,
   updateFieldDraft,
 } from "./save-state";
+import { asCardId } from "../types/card-identity";
 
-const firstName = { cardId: "card-1", field: "name" } as const;
-const secondName = { cardId: "card-2", field: "name" } as const;
-const firstSpark = { cardId: "card-1", field: "spark" } as const;
+const firstName = { cardId: asCardId("card-1"), field: "name" } as const;
+const secondName = { cardId: asCardId("card-2"), field: "name" } as const;
+const firstSpark = { cardId: asCardId("card-1"), field: "spark" } as const;
 
 describe("editor save state", () => {
   it("marks exactly one card UUID and field as saving", () => {
@@ -145,11 +146,7 @@ describe("editor save state", () => {
       firstName,
       "Original",
     );
-    const canceledEdit = cancelFieldEdit(
-      reenteredEdit,
-      firstName,
-      "Original",
-    );
+    const canceledEdit = cancelFieldEdit(reenteredEdit, firstName, "Original");
 
     const completed = completeFieldSave(
       canceledEdit,

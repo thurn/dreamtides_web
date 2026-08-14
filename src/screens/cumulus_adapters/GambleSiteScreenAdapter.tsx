@@ -15,11 +15,12 @@ import {
 import { useGuideDialogue } from "./guide-dialogue-view-model";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
 import { gambleSiteActions } from "./gamble-site-actions-view-model";
+import type { SiteId } from "../../types/identifiers";
 export function GambleSiteScreenAdapter({
   siteId,
   gambleGameId,
 }: {
-  siteId: string;
+  siteId: SiteId;
   gambleGameId: GambleGameId | null;
 }) {
   const { state, journeyContent, mutations } = useJourney();

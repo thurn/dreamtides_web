@@ -26,6 +26,7 @@ import {
 } from "./figments";
 import { cardIsRevealedTo } from "./card-visibility";
 import { centerPreferredEmptySlot } from "../center-preferred-slot";
+import type { BattleCardId } from "../../types/identifiers";
 
 /**
  * Summary of B-5 journey deck metadata captured at battle-init time. The
@@ -57,7 +58,7 @@ export function selectBattleJourneyDeckSummary(
 
 export function selectBattleCardInstance(
   state: BattleMutableState,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
 ): BattleCardInstance | null {
   if (battleCardId === null) {
     return null;
@@ -78,9 +79,12 @@ export function selectBattleCardInstance(
 export function selectKindleTargetBattleCardId(
   state: BattleMutableState,
   side: BattleSide,
-  preferredBattleCardId: string | null,
-): string | null {
-  const preferredLocation = selectBattlefieldCardLocation(state, preferredBattleCardId);
+  preferredBattleCardId: BattleCardId | null,
+): BattleCardId | null {
+  const preferredLocation = selectBattlefieldCardLocation(
+    state,
+    preferredBattleCardId,
+  );
 
   if (preferredLocation !== null && preferredLocation.side === side) {
     return preferredBattleCardId;
@@ -105,11 +109,15 @@ export function selectKindleTargetBattleCardId(
   return null;
 }
 
-export function selectCardHasPreventedMarker(instance: BattleCardInstance): boolean {
+export function selectCardHasPreventedMarker(
+  instance: BattleCardInstance,
+): boolean {
   return instance.markers.isPrevented;
 }
 
-export function selectCardHasCopiedMarker(instance: BattleCardInstance): boolean {
+export function selectCardHasCopiedMarker(
+  instance: BattleCardInstance,
+): boolean {
   return instance.markers.isCopied;
 }
 
@@ -131,7 +139,7 @@ export function selectCardHasNotes(instance: BattleCardInstance): boolean {
  */
 export function selectEffectiveSpark(
   state: BattleMutableState,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
 ): number | null {
   const instance = selectBattleCardInstance(state, battleCardId);
   if (instance === null) {
@@ -151,7 +159,7 @@ export function selectEffectiveSpark(
  */
 export function selectEffectiveSparkOrZero(
   state: BattleMutableState,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
 ): number {
   return selectEffectiveSpark(state, battleCardId) ?? 0;
 }
@@ -187,7 +195,7 @@ export function selectHistoryEntryTurnNumber(
 
 export function selectBattleCardLocation(
   state: BattleMutableState,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
 ): BattleCardLocation | null {
   if (battleCardId === null) {
     return null;
@@ -256,11 +264,14 @@ export function selectBattleCardLocation(
 
 export function selectBattlefieldCardLocation(
   state: BattleMutableState,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
 ): BattleFieldCardLocation | null {
   const location = selectBattleCardLocation(state, battleCardId);
 
-  if (location === null || (location.zone !== "backRank" && location.zone !== "frontRank")) {
+  if (
+    location === null ||
+    (location.zone !== "backRank" && location.zone !== "frontRank")
+  ) {
     return null;
   }
 
@@ -281,7 +292,7 @@ export function selectBattlefieldCardLocation(
  */
 export function selectIsOpponentHandCardHidden(
   state: BattleMutableState,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
 ): boolean {
   if (battleCardId === null) {
     return false;
@@ -305,7 +316,7 @@ export function selectIsOpponentHandCardHidden(
 
 export function selectIsHandCardHiddenTo(
   state: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   viewer: BattleSide,
 ): boolean {
   const location = selectBattleCardLocation(state, battleCardId);
@@ -362,41 +373,49 @@ export function selectCenterPreferredCharacterPlaySlot(
   const { backRank } = state.sides[side];
   const centerIndex = (BACK_RANK_SLOTS - 1) / 2;
   const slotId = centerPreferredEmptySlot(backRank, centerIndex);
-  return slotId === null
-    ? null
-    : { side, zone: "backRank", slotId };
+  return slotId === null ? null : { side, zone: "backRank", slotId };
 }
 
 export function selectBattlefieldSlotOccupant(
   state: BattleMutableState,
   target: BattleFieldSlotAddress,
-): string | null {
+): BattleCardId | null {
   if (!isBattleFieldSlotAddressValid(target)) {
     return null;
   }
 
   if (target.zone === "backRank") {
-    return state.sides[target.side].backRank[target.slotId as BackRankSlotId] ?? null;
+    return (
+      state.sides[target.side].backRank[target.slotId as BackRankSlotId] ?? null
+    );
   }
 
-  return state.sides[target.side].frontRank[target.slotId as FrontRankSlotId] ?? null;
+  return (
+    state.sides[target.side].frontRank[target.slotId as FrontRankSlotId] ?? null
+  );
 }
 
 export function isBattleFieldSlotAddressValid(
   target: BattleFieldSlotAddress,
 ): target is BattleFieldSlotAddress {
   if (target.zone === "backRank") {
-    return isBackRankSlotId(target.slotId) && slotIndex(target.slotId) < BACK_RANK_SLOTS;
+    return (
+      isBackRankSlotId(target.slotId) &&
+      slotIndex(target.slotId) < BACK_RANK_SLOTS
+    );
   }
 
-  return isFrontRankSlotId(target.slotId) && slotIndex(target.slotId) < FRONT_RANK_SLOTS;
+  return (
+    isFrontRankSlotId(target.slotId) &&
+    slotIndex(target.slotId) < FRONT_RANK_SLOTS
+  );
 }
 
 function selectOccupiedBattlefieldSlot(
   state: BattleMutableState,
   side: BattleSide,
   zone: BattlefieldZone,
-  battleCardId: string,
+  battleCardId: BattleCardId,
 ): BattleFieldCardLocation | null {
   if (zone === "backRank") {
     for (const slotId of rankSlotIds(state.sides[side].backRank)) {

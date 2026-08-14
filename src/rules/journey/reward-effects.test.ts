@@ -4,6 +4,10 @@ import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type { JourneyState } from "../../types/journey";
 import { applyJourneyRewardEffect } from "./reward-effects";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
 
 const CARD_A = "11111111-1111-4111-8111-111111111111";
 const CARD_B = "22222222-2222-4222-8222-222222222222";
@@ -24,13 +28,13 @@ function fixture() {
   const state = {
     deck: [
       {
-        entryId: "entry-a",
+        entryId: asDeckEntryId("entry-a"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: "entry-b",
+        entryId: asDeckEntryId("entry-b"),
         cardNumber: 2,
         transfiguration: null,
         isBane: false,
@@ -49,20 +53,20 @@ describe("applyJourneyRewardEffect", () => {
     const next = applyJourneyRewardEffect({
       state,
       journeyContent,
-      mintEntryId: (_deck, index) => `mint-${String(index)}`,
+      mintEntryId: (_deck, index) => asDeckEntryId(`mint-${String(index)}`),
       effect: {
         kind: "composite",
         children: [
           {
             kind: "remove_deck_entry",
-            entryId: "entry-a",
-            cardUuid: CARD_A,
+            entryId: asDeckEntryId("entry-a"),
+            cardUuid: asCardId(CARD_A),
             cardNumber: 1,
           },
           {
             kind: "duplicate_deck_entry",
-            entryId: "entry-b",
-            cardUuid: CARD_B,
+            entryId: asDeckEntryId("entry-b"),
+            cardUuid: asCardId(CARD_B),
             cardNumber: 2,
           },
           {
@@ -72,15 +76,15 @@ describe("applyJourneyRewardEffect", () => {
           },
           {
             kind: "add_deck_entry_spark_bonus",
-            entryId: "entry-b",
-            cardUuid: CARD_B,
+            entryId: asDeckEntryId("entry-b"),
+            cardUuid: asCardId(CARD_B),
             cardNumber: 2,
             amount: 2,
           },
           {
             kind: "reduce_deck_entry_energy_cost",
-            entryId: "entry-b",
-            cardUuid: CARD_B,
+            entryId: asDeckEntryId("entry-b"),
+            cardUuid: asCardId(CARD_B),
             cardNumber: 2,
             amount: 1,
           },
@@ -111,8 +115,8 @@ describe("applyJourneyRewardEffect", () => {
           { kind: "add_essence", amount: 5 },
           {
             kind: "remove_deck_entry",
-            entryId: "entry-a",
-            cardUuid: CARD_B,
+            entryId: asDeckEntryId("entry-a"),
+            cardUuid: asCardId(CARD_B),
             cardNumber: 1,
           },
         ],
@@ -127,13 +131,13 @@ describe("applyJourneyRewardEffect", () => {
   it("inserts one exact prepared site and rejects stale or forged preconditions", () => {
     const { journeyContent, state: partialState } = fixture();
     const sourceSite = {
-      id: "source-exploration",
+      id: asSiteId("source-exploration"),
       type: "Exploration" as const,
       isEnhanced: false,
       isVisited: false,
     };
     const battleSite = {
-      id: "battle",
+      id: asSiteId("battle"),
       type: "Battle" as const,
       isEnhanced: false,
       isVisited: false,
@@ -142,7 +146,7 @@ describe("applyJourneyRewardEffect", () => {
       ...partialState,
       currentDreamscape: "node-a",
       atlas: {
-        currentNodeId: "node-a",
+        currentNodeId: asAtlasNodeId("node-a"),
         nodes: {
           "node-a": { sites: [sourceSite, battleSite] },
         },
@@ -150,11 +154,11 @@ describe("applyJourneyRewardEffect", () => {
     } as unknown as JourneyState;
     const effect = {
       kind: "insert_site" as const,
-      targetNodeId: "node-a",
+      targetNodeId: asAtlasNodeId("node-a"),
       insertionIndex: 2,
       siblingSiteIdsBefore: [sourceSite.id, battleSite.id],
       site: {
-        id: "site-exploration-source-exploration-action-a",
+        id: asSiteId("site-exploration-source-exploration-action-a"),
         type: "Shop" as const,
         isEnhanced: false,
         isVisited: false,
@@ -166,15 +170,15 @@ describe("applyJourneyRewardEffect", () => {
       journeyContent,
       effect,
     });
-    expect(next?.atlas.nodes["node-a"]?.sites).toEqual([
+    expect(next?.atlas.nodes[asAtlasNodeId("node-a")]?.sites).toEqual([
       sourceSite,
       battleSite,
       effect.site,
     ]);
-    expect(state.atlas.nodes["node-a"]?.sites).toHaveLength(2);
+    expect(state.atlas.nodes[asAtlasNodeId("node-a")]?.sites).toHaveLength(2);
 
     const invalidEffects = [
-      { ...effect, targetNodeId: "node-b" },
+      { ...effect, targetNodeId: asAtlasNodeId("node-b") },
       { ...effect, insertionIndex: 1 },
       { ...effect, siblingSiteIdsBefore: [battleSite.id, sourceSite.id] },
       { ...effect, site: { ...effect.site, id: sourceSite.id } },
@@ -198,7 +202,7 @@ describe("applyJourneyRewardEffect", () => {
       ...partialState,
       currentDreamscape: "node-a",
       atlas: {
-        currentNodeId: "node-a",
+        currentNodeId: asAtlasNodeId("node-a"),
         nodes: { "node-a": { sites: [] } },
       },
     } as unknown as JourneyState;
@@ -209,9 +213,9 @@ describe("applyJourneyRewardEffect", () => {
       effect: { kind: "add_site", siteType: "Duplication" },
     });
 
-    expect(next?.atlas.nodes["node-a"]?.sites).toEqual([
+    expect(next?.atlas.nodes[asAtlasNodeId("node-a")]?.sites).toEqual([
       {
-        id: "site-merchant-Duplication-0",
+        id: asSiteId("site-merchant-Duplication-0"),
         type: "Duplication",
         isEnhanced: false,
         isVisited: false,

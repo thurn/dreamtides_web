@@ -9,6 +9,7 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import { StartingDeckOverlay } from "./StartingDeckOverlay";
 import type { StartingDeckView } from "./StartingDeckOverlay";
 import { CumulusRoot } from "../CumulusRoot";
+import { asDeckEntryId } from "../../types/identifiers";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -69,7 +70,7 @@ function makeView(cardCount = 2): StartingDeckView {
     cards: Array.from({ length: cardCount }, (_, index) => {
       const cardNumber = index + 1;
       return {
-        entryId: `entry-${String(cardNumber)}`,
+        entryId: asDeckEntryId(`entry-${String(cardNumber)}`),
         model: (() => {
           const displaySnapshot = makeCard(
             cardNumber,

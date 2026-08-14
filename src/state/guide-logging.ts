@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { logEventOnce } from "../logging";
+import type { GuideId } from "../types/identifiers";
 
 export function useGuidePresentedLog(input: {
   enabled: boolean;
   key: string;
-  guideId: string;
+  guideId: GuideId;
   siteType: string;
   isEnhanced: boolean;
 }): void {

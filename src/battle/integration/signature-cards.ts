@@ -1,6 +1,10 @@
 import type { CardData } from "../../types/cards";
 import type { Rarity } from "../../types/cards";
-import { tokenizeRulesText, type TextSegment } from "../../cumulus/components/card/card-text";
+import {
+  tokenizeRulesText,
+  type TextSegment,
+} from "../../cumulus/components/card/card-text";
+import type { CardId } from "../../types/card-identity";
 
 /**
  * A card chosen to represent an opponent DreamAvatar's ability before battle.
@@ -13,7 +17,7 @@ import { tokenizeRulesText, type TextSegment } from "../../cumulus/components/ca
  * — never use it as a key, card names are not unique.
  */
 export interface SignatureCardSelection {
-  cardId: string;
+  cardId: CardId;
   cardNumber: number;
   name: string;
   /**
@@ -34,7 +38,10 @@ export interface SignatureCardSelection {
  * terms the text references, which is how a card or ability is reduced to the
  * controlled mechanical vocabulary it speaks.
  */
-function collectGlossaryTerms(segments: readonly TextSegment[], into: Set<string>): void {
+function collectGlossaryTerms(
+  segments: readonly TextSegment[],
+  into: Set<string>,
+): void {
   for (const segment of segments) {
     if (segment.kind === "term") {
       into.add(segment.entry.term);
@@ -174,7 +181,8 @@ export function selectSignatureCards(args: {
 
   scored.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
-    const cardType = cardTypeRank(b.card.cardType) - cardTypeRank(a.card.cardType);
+    const cardType =
+      cardTypeRank(b.card.cardType) - cardTypeRank(a.card.cardType);
     if (cardType !== 0) return cardType;
     const rarity = rarityRank(b.card.rarity) - rarityRank(a.card.rarity);
     if (rarity !== 0) return rarity;

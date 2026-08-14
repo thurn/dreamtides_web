@@ -20,8 +20,10 @@ import type {
   BattleSide,
   FrontRankSlotId,
   BackRankSlotId,
+  BattlefieldSlotId,
 } from "../types";
 import { centerPreferredEmptySlot } from "../center-preferred-slot";
+import type { BattleCardId } from "../../types/identifiers";
 
 /**
  * Lightweight, mutable projection of a single battle card that the AI planner
@@ -29,7 +31,7 @@ import { centerPreferredEmptySlot } from "../center-preferred-slot";
  * preserved for the AI's own cards so it can act on them.
  */
 export interface AiCard {
-  battleCardId: string;
+  battleCardId: BattleCardId;
   cardNumber: number;
   name: string;
   energyCost: number;
@@ -62,7 +64,7 @@ export interface AiCard {
  */
 export interface AiOpponentBody {
   /** Opaque instance id used only to name this body as a target. */
-  battleCardId: string;
+  battleCardId: BattleCardId;
   effectiveSpark: number;
   /**
    * The body's printed energy cost. A card in play is public, so its cost is
@@ -143,7 +145,10 @@ function projectZone(
  * The number of slots to materialize for an AI model rank: enough to cover the
  * highest occupied position plus one spare empty slot, never below `min`.
  */
-function modelRankWindow(rank: Record<string, string | null>, min: number): number {
+function modelRankWindow<K extends BattlefieldSlotId, V>(
+  rank: Record<K, V | null>,
+  min: number,
+): number {
   let occupiedWidth = 0;
   for (const slotId of rankSlotIds(rank)) {
     if (rank[slotId] !== null) {
@@ -158,7 +163,7 @@ function modelRankWindow(rank: Record<string, string | null>, min: number): numb
  * a fresh slot when every materialized slot is occupied. Equidistant slots
  * prefer the lower index so placement remains deterministic.
  */
-export function centerPreferredEmptyModelSlot<K extends string>(
+export function centerPreferredEmptyModelSlot<K extends BattlefieldSlotId>(
   rank: Record<K, AiCard | null>,
   makeId: (index: number) => K,
   centerIndex: number,
@@ -173,7 +178,10 @@ export function centerPreferredEmptyModelSlot<K extends string>(
   return fresh;
 }
 
-export function forwardModelFromState(state: BattleMutableState, aiSide: BattleSide): ForwardModel {
+export function forwardModelFromState(
+  state: BattleMutableState,
+  aiSide: BattleSide,
+): ForwardModel {
   const ai = state.sides[aiSide];
   const opponentSide = opposingSide(aiSide);
   const opponent = state.sides[opponentSide];
@@ -181,22 +189,26 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   // The model mirrors each rank's occupants and carries one spare empty slot so
   // the planner always has somewhere to deploy; planner helpers grow further on
   // demand, so the AI's board is never capped.
-  const aiFrontRank: Record<FrontRankSlotId, AiCard | null> = createEmptySlotRecord(
-    frontRankSlotIds(modelRankWindow(ai.frontRank, MIN_FRONT_RANK_SLOTS)),
-  );
+  const aiFrontRank: Record<FrontRankSlotId, AiCard | null> =
+    createEmptySlotRecord(
+      frontRankSlotIds(modelRankWindow(ai.frontRank, MIN_FRONT_RANK_SLOTS)),
+    );
   for (const slotId of rankSlotIds(aiFrontRank)) {
     const id = ai.frontRank[slotId] ?? null;
     const instance = id === null ? undefined : state.cardInstances[id];
-    aiFrontRank[slotId] = instance === undefined ? null : projectAiCard(instance);
+    aiFrontRank[slotId] =
+      instance === undefined ? null : projectAiCard(instance);
   }
 
-  const aiBackRank: Record<BackRankSlotId, AiCard | null> = createEmptySlotRecord(
-    backRankSlotIds(modelRankWindow(ai.backRank, MIN_BACK_RANK_SLOTS)),
-  );
+  const aiBackRank: Record<BackRankSlotId, AiCard | null> =
+    createEmptySlotRecord(
+      backRankSlotIds(modelRankWindow(ai.backRank, MIN_BACK_RANK_SLOTS)),
+    );
   for (const slotId of rankSlotIds(aiBackRank)) {
     const id = ai.backRank[slotId] ?? null;
     const instance = id === null ? undefined : state.cardInstances[id];
-    aiBackRank[slotId] = instance === undefined ? null : projectAiCard(instance);
+    aiBackRank[slotId] =
+      instance === undefined ? null : projectAiCard(instance);
   }
 
   const opponentBodies: AiOpponentBody[] = [];
@@ -308,7 +320,7 @@ function cloneAiCardOrNull(card: AiCard | null): AiCard | null {
   return card === null ? null : cloneAiCard(card);
 }
 
-function cloneSlotRecord<K extends string>(
+function cloneSlotRecord<K extends BattlefieldSlotId>(
   source: Record<K, AiCard | null>,
 ): Record<K, AiCard | null> {
   const record = {} as Record<K, AiCard | null>;

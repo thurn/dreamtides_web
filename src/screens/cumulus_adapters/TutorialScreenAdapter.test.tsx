@@ -10,6 +10,17 @@ import { TutorialScreenAdapter } from "./TutorialScreenAdapter";
 import type { TutorialScreenProps } from "../../cumulus/screens/TutorialScreen";
 import type { DreamAvatarContent } from "../../types/content";
 import { makeTutorialConfiguration } from "../../test/tutorial-configuration-fixture";
+import type { CardId } from "../../types/card-identity";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asBattleId } from "../../types/identifiers";
+import {
+  asTutorialActionId,
+  type TutorialActionId,
+} from "../../types/identifiers";
+import { asTutorialRunId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asBattleSlotViewId } from "../../types/identifiers";
 
 const TUTORIAL_CONFIGURATION = makeTutorialConfiguration();
 
@@ -17,7 +28,7 @@ expect.addEqualityTesters([localizedStringSourceEquality]);
 
 const DREAM_AVATARS: readonly DreamAvatarContent[] = [
   {
-    id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+    id: asDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
     name: "Gunnar Deepforge",
     title: "The Hammer's Echo",
     renderedText: "Player ability.",
@@ -26,7 +37,7 @@ const DREAM_AVATARS: readonly DreamAvatarContent[] = [
     startingEssence: 0,
   },
   {
-    id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+    id: asDreamAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
     name: "Threxan",
     title: "the Resounding Wrath",
     renderedText: "Opponent ability.",
@@ -54,7 +65,7 @@ const mocks = vi.hoisted(() => ({
       playerCardPlay: null,
       actions: [
         {
-          id: "welcome",
+          id: "welcome" as TutorialActionId,
           action: "display-speech-bubble" as const,
           speechBubble: {
             speaker: "mira" as const,
@@ -66,7 +77,7 @@ const mocks = vi.hoisted(() => ({
           wait: 3,
         },
         {
-          id: "dream-avatar-arrival",
+          id: "dream-avatar-arrival" as TutorialActionId,
           action: "animate-dream-avatar-portrait" as const,
           owner: "player" as const,
           pause: 1,
@@ -74,7 +85,7 @@ const mocks = vi.hoisted(() => ({
           wait: 0,
         },
         {
-          id: "nightmare-call",
+          id: "nightmare-call" as TutorialActionId,
           action: "display-speech-bubble" as const,
           speechBubble: {
             speaker: "mira" as const,
@@ -86,25 +97,25 @@ const mocks = vi.hoisted(() => ({
           wait: 3,
         },
         {
-          id: "how-to-play",
+          id: "how-to-play" as TutorialActionId,
           action: "display-how-to-play" as const,
           text: "Configured adapter instructions.\n\nScore 10⍟ to win.",
           wait: 0,
         },
         {
-          id: "end-turn",
+          id: "end-turn" as TutorialActionId,
           action: "end-turn" as const,
           wait: 0,
         },
         {
-          id: "autumn-glade",
+          id: "autumn-glade" as TutorialActionId,
           action: "draw-dreamwell-card" as const,
           owner: "enemy" as const,
-          cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3" as CardId,
           wait: 0,
         },
         {
-          id: "dreamwell-how-to-play",
+          id: "dreamwell-how-to-play" as TutorialActionId,
           action: "display-how-to-play" as const,
           trigger: "immediate" as const,
           companion: "dreamwell-card" as const,
@@ -214,7 +225,7 @@ beforeEach(() => {
       currentActionIndex: number | null;
       playerCardPlay: {
         cardInstanceId: string;
-        cardId: string;
+        cardId: CardId;
         targetSlotId: string | null;
       } | null;
     }
@@ -318,7 +329,7 @@ describe("TutorialScreenAdapter", () => {
 
     act(() => {
       adapterMocks.props?.onDreamAvatarArrivalComplete?.(
-        "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+        asDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
         "player",
       );
     });
@@ -326,8 +337,10 @@ describe("TutorialScreenAdapter", () => {
       expect.arrayContaining([
         expect.objectContaining({
           event: "tutorial_dream_avatar_arrived",
-          battleId: "tutorial-battle",
-          dreamAvatarId: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+          battleId: asBattleId("tutorial-battle"),
+          dreamAvatarId: asDreamAvatarId(
+            "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+          ),
           owner: "player",
           actionId: "dream-avatar-arrival",
           abilityActive: false,
@@ -368,7 +381,7 @@ describe("TutorialScreenAdapter", () => {
           layoutMotion: "travel",
           showPlayableOutline: true,
           model: {
-            cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+            cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
           },
         },
       ],
@@ -384,11 +397,11 @@ describe("TutorialScreenAdapter", () => {
         expect.objectContaining({
           event: "tutorial_player_turn_presented",
           runId: "event:1",
-          battleId: "tutorial-battle",
+          battleId: asBattleId("tutorial-battle"),
           activeSide: "player",
           currentEnergy: 4,
           maxEnergy: 4,
-          cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
           cardInstanceId: "tutorial-player-deck-1",
           sourceZone: "player-deck",
           destinationZone: "player-hand",
@@ -400,34 +413,37 @@ describe("TutorialScreenAdapter", () => {
 
     act(() => {
       adapterMocks.props?.onHowToPlayPresented?.(
-        "event:1",
-        "how-to-play",
+        asTutorialRunId("event:1"),
+        asTutorialActionId("how-to-play"),
         "player-turn-announcement-complete",
       );
       adapterMocks.props?.onHowToPlayDismissed?.(
-        "event:1",
-        "how-to-play",
+        asTutorialRunId("event:1"),
+        asTutorialActionId("how-to-play"),
         "player-turn-announcement-complete",
       );
       adapterMocks.props?.onPlayerCardPlay?.(
-        "event:1",
-        "tutorial-player-deck-1",
-        "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-        "player-back-4",
+        asTutorialRunId("event:1"),
+        asBattleCardId("tutorial-player-deck-1"),
+        asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
+        asBattleSlotViewId("player-back-4"),
       );
-      adapterMocks.props?.onActionComplete?.("event:1", "how-to-play");
+      adapterMocks.props?.onActionComplete?.(
+        asTutorialRunId("event:1"),
+        asTutorialActionId("how-to-play"),
+      );
       adapterMocks.props?.onPlayerCharacterReposition?.(
-        "event:1",
-        "block-opponent",
-        "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-        "229ab3a1-3720-41a2-924c-8fe112188f8e",
-        "player-front-0",
+        asTutorialRunId("event:1"),
+        asTutorialActionId("block-opponent"),
+        asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
+        asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        asBattleSlotViewId("player-front-0"),
       );
     });
     expect(mocks.action).toHaveBeenCalledWith("tutorial", "play-card", {
       runId: "event:1",
       cardInstanceId: "tutorial-player-deck-1",
-      cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
       targetSlotId: "player-back-4",
     });
     expect(getLogEntries()).toEqual(
@@ -436,7 +452,7 @@ describe("TutorialScreenAdapter", () => {
           event: "tutorial_how_to_play_presented",
           runId: "event:1",
           actionId: "how-to-play",
-          battleId: "tutorial-battle",
+          battleId: asBattleId("tutorial-battle"),
           trigger: "player-turn-announcement-complete",
           title: "How to Play",
         }),
@@ -444,25 +460,25 @@ describe("TutorialScreenAdapter", () => {
           event: "tutorial_how_to_play_dismissed",
           runId: "event:1",
           actionId: "how-to-play",
-          battleId: "tutorial-battle",
+          battleId: asBattleId("tutorial-battle"),
           trigger: "player-turn-announcement-complete",
         }),
         expect.objectContaining({
           event: "tutorial_player_card_play_requested",
           runId: "event:1",
-          battleId: "tutorial-battle",
+          battleId: asBattleId("tutorial-battle"),
           cardInstanceId: "tutorial-player-deck-1",
-          cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
           sourceZone: "player-hand",
           destinationZone: "player-back-rank",
           targetSlotId: "player-back-4",
         }),
         expect.objectContaining({
           event: "tutorial_player_character_reposition_requested",
-          battleId: "tutorial-battle",
+          battleId: asBattleId("tutorial-battle"),
           runId: "event:1",
           actionId: "block-opponent",
-          cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
           opposingCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           targetSlotId: "player-front-0",
         }),
@@ -487,7 +503,7 @@ describe("TutorialScreenAdapter", () => {
         currentActionIndex: number | null;
         playerCardPlay: {
           cardInstanceId: string;
-          cardId: string;
+          cardId: CardId;
           targetSlotId: string | null;
         } | null;
       }
@@ -496,13 +512,13 @@ describe("TutorialScreenAdapter", () => {
       mocks.state.tutorial as unknown as {
         playerCardPlay: {
           cardInstanceId: string;
-          cardId: string;
+          cardId: CardId;
           targetSlotId: string | null;
         } | null;
       }
     ).playerCardPlay = {
       cardInstanceId: "tutorial-player-deck-1",
-      cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
       targetSlotId: "player-back-4",
     };
     const container = document.createElement("div");
@@ -520,10 +536,15 @@ describe("TutorialScreenAdapter", () => {
 
     expect(adapterMocks.props?.view.endTurn).toEqual({
       actionId: "end-turn",
-      triggerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      triggerCardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
       ready: true,
     });
-    act(() => adapterMocks.props?.onEndTurn?.("event:1", "end-turn"));
+    act(() =>
+      adapterMocks.props?.onEndTurn?.(
+        asTutorialRunId("event:1"),
+        asTutorialActionId("end-turn"),
+      ),
+    );
 
     expect(mocks.completeTutorialAction).toHaveBeenCalledWith(
       "event:1",
@@ -535,7 +556,7 @@ describe("TutorialScreenAdapter", () => {
           event: "tutorial_end_turn_requested",
           runId: "event:1",
           actionId: "end-turn",
-          battleId: "tutorial-battle",
+          battleId: asBattleId("tutorial-battle"),
           sourceSide: "player",
           destinationSide: "enemy",
           destinationPhase: "dawn",
@@ -572,7 +593,7 @@ describe("TutorialScreenAdapter", () => {
       dreamwell: {
         side: "enemy",
         model: {
-          cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          cardId: asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
           displaySnapshot: {
             name: "Autumn Glade",
             renderedText: "Gain 2⍟.",
@@ -592,7 +613,7 @@ describe("TutorialScreenAdapter", () => {
       wait: 0,
       trigger: "immediate",
       companion: {
-        cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        cardId: asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
         displaySnapshot: {
           id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
           name: "Autumn Glade",

@@ -28,6 +28,8 @@ import {
 import offerFrameUrl from "../../assets/dreamsign_card_frame_2.png";
 import offerBlackFillUrl from "../../assets/offer_tile_black_fill.png";
 import "./offer-tile.css";
+import type { OfferId } from "../../../types/identifiers";
+import { asOfferId } from "../../../types/identifiers";
 
 /** Named OfferTile edge lengths, in pixels. */
 export const OFFER_TILE_STANDARD_SIZE = 300;
@@ -160,7 +162,7 @@ export interface OfferTileProps {
   /** Archetype-authored copy for the surfaced reward. */
   presentation: AuguryArchetypeData["presentation"];
   /** Activates the offer, reporting the stable `model.id`. */
-  onPress: (offerId: string) => void;
+  onPress: (offerId: OfferId) => void;
   /** Complete tile composition size. Defaults to the 300px standard tile. */
   size?: OfferTileSize;
   /** Optional test selector; defaults to `offer-tile`. */
@@ -203,11 +205,11 @@ export function OfferTile({
     // One-off Augury exception: ordinary Cumulus InfoCards use the
     // coordinator's normal beside-source desktop placement.
     placementException: "augury-offer-above-source",
-    onActivate: () => onPress(model.id),
+    onActivate: () => onPress(asOfferId(model.id)),
   });
   const lastPointerType = useRef<string | null>(null);
   const pointerDown = binding.sourceProps.onPointerDown;
-  const motionDelay = offerTileMotionDelay(model.id);
+  const motionDelay = offerTileMotionDelay(asOfferId(model.id));
   const edge = OFFER_TILE_DIMENSIONS[size];
   const scale = edge / OFFER_TILE_STANDARD_SIZE;
 
@@ -227,7 +229,7 @@ export function OfferTile({
       }}
       onClick={(event) => {
         if (lastPointerType.current !== "touch" || event.detail === 0) {
-          onPress(model.id);
+          onPress(asOfferId(model.id));
         }
       }}
       style={{
@@ -299,7 +301,7 @@ export function OfferTile({
 }
 
 /** Stable negative phase so neighboring tiles drift independently on every render. */
-function offerTileMotionDelay(offerId: string): string {
+function offerTileMotionDelay(offerId: OfferId): string {
   let hash = 0;
   for (const character of offerId) {
     hash = (hash * 31 + character.charCodeAt(0)) % 5800;

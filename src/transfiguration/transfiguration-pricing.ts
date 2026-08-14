@@ -26,6 +26,8 @@ import type {
 import { merchantRng } from "../journey_v2/signals/rng";
 import { transfigurationForm } from "../data/transfiguration-data";
 import { transfigurationMechanic } from "./transfiguration-logic";
+import type { SiteId } from "../types/identifiers";
+import type { DeckEntryId } from "../types/identifiers";
 
 /** Lowest and highest essence a transfiguration can ever cost. */
 function clampCost(data: TransfigurationData, value: number): number {
@@ -115,8 +117,8 @@ export function rollTransfigurationCost(
 export function transfigurationEssenceCost(
   data: TransfigurationData,
   seed: string,
-  siteId: string,
-  entryId: string,
+  siteId: SiteId,
+  entryId: DeckEntryId,
   card: CardData,
   type: TransfigurationType,
 ): number {

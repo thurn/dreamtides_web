@@ -1,4 +1,5 @@
-/**
+import type { DreamsignId, MerchantTargetKey } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers"; /**
  * Pure explanation data for a single Dream Merchant offer.
  *
  * Every archetype builder is a deterministic `score → band → sample` pipeline,
@@ -73,13 +74,13 @@ export type MerchantDreamsignTier = "covered" | "generic" | "fallback";
  */
 export interface MerchantTraceCandidate {
   /** Authoritative key (its meaning is {@link MerchantOfferTrace.keyKind}). */
-  key: string;
+  key: MerchantTargetKey;
   /** Non-authoritative human label; never key logic off this. */
   displayName?: string;
-  cardUuid?: string;
+  cardUuid?: import("../../types/card-identity").CardId;
   cardNumber?: number;
-  dreamsignId?: string;
-  entryId?: string;
+  dreamsignId?: DreamsignId;
+  entryId?: DeckEntryId;
   /** Final score used for banding; higher ranks first. */
   score: number;
   /** Named score sub-components, when the score is a blend or has structure. */

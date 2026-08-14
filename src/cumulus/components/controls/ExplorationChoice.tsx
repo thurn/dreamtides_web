@@ -8,13 +8,15 @@ import { renderRulesSymbolsInline } from "../card/RulesText";
 import { Pressable } from "../../primitives/Pressable";
 import { gameCardRevealSpec, type GameCardModel } from "../card/CardView";
 import { dreamsignRevealSpec, type LocalizedDreamsign } from "../hud/Dreamsign";
+import type { DeckEntryId } from "../../../types/identifiers";
+import type { ExplorationActionId } from "../../../types/identifiers";
 
 /** Shared presentation fields for a revealable Exploration entity. */
 interface ExplorationChoiceEntityBase {
   /** Stable canonical entity UUID. */
   readonly id: string;
   /** Stable deck-entry UUID when the entity is a concrete deck object. */
-  readonly entryId?: string;
+  readonly entryId?: DeckEntryId;
   /** Number of identical UUID-resolved copies represented by the entity. */
   readonly copies?: number;
   /** Localized inline label shown in the authored description. */
@@ -60,7 +62,7 @@ export type ExplorationChoicePart =
 /** Complete prepared presentation for one Exploration action. */
 export interface ExplorationChoiceModel {
   /** Stable authored action UUID emitted by activation. */
-  readonly actionId: string;
+  readonly actionId: ExplorationActionId;
   /** Localized primary action label. */
   readonly label: LocalizedString;
   /** Ordered authored description parts prepared by the builder. */
@@ -77,7 +79,7 @@ export interface ExplorationChoiceProps {
   /** Complete prepared action presentation. */
   readonly model: ExplorationChoiceModel;
   /** Reports the exact authored action UUID after activation. */
-  readonly onPress: (actionId: string) => void;
+  readonly onPress: (actionId: ExplorationActionId) => void;
 }
 
 function choiceStyle(

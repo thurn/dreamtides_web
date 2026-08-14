@@ -66,7 +66,9 @@ describe("extractPropMeta (Cumulus docgen)", () => {
   it("captures the JSDoc description of a prop", () => {
     // Catches losing the props-table copy during normalization.
     expect(byName("size").description).toBe("The size of the fixture.");
-    expect(byName("label").description).toBe("The text label shown by the fixture.");
+    expect(byName("label").description).toBe(
+      "The text label shown by the fixture.",
+    );
   });
 
   it("reports required vs optional accurately", () => {
@@ -139,12 +141,12 @@ describe("extractPropMeta (Cumulus docgen)", () => {
       "NestedFixturePrimaryVariant",
       "NestedFixtureSecondaryVariant",
     ]);
-    expect(variant.nested.variants[0].fields.map((field) => field.name)).toEqual([
-      "kind",
-      "label",
-      "count",
-    ]);
-    const muted = variant.nested.variants[1].fields.find((field) => field.name === "muted");
+    expect(
+      variant.nested.variants[0].fields.map((field) => field.name),
+    ).toEqual(["kind", "label", "count"]);
+    const muted = variant.nested.variants[1].fields.find(
+      (field) => field.name === "muted",
+    );
     expect(muted.optional).toBe(true);
     expect(muted.tsType).toBe("boolean");
   });
@@ -155,6 +157,15 @@ describe("extractPropMeta (Cumulus docgen)", () => {
     const active = (nestedProps ?? []).find((p) => p.name === "active");
     expect(active).toBeTruthy();
     expect(active.nested).toBeUndefined();
+  });
+
+  it("leaves primitive-backed nominal types without nested field lists", () => {
+    const brandedValue = (nestedProps ?? []).find(
+      (prop) => prop.name === "brandedValue",
+    );
+    expect(brandedValue).toBeTruthy();
+    expect(brandedValue.tsType).toBe("NestedFixtureBrand");
+    expect(brandedValue.nested).toBeUndefined();
   });
 
   it("documents only the component in a file that also exports a hook and a constant", () => {

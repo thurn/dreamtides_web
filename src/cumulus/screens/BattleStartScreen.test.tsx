@@ -12,6 +12,9 @@ import { CumulusRoot } from "../CumulusRoot";
 import { MENU_EDGE_INSET_MOBILE_PX } from "../primitives/chrome-geometry";
 import { BattleStartScreen, type BattleStartView } from "./BattleStartScreen";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import { asBattleId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 class ResizeObserverStub {
   constructor(_callback: ResizeObserverCallback) {}
@@ -63,8 +66,8 @@ function makeView(): BattleStartView {
     artOwned: true,
   }));
   return {
-    battleId: "battle-test",
-    scene: artRef.dreamscapeScene("test_dreamscape"),
+    battleId: asBattleId("battle-test"),
+    scene: artRef.dreamscapeScene(asDreamscapeId("test_dreamscape")),
     dreamAvatar: {
       id: "opponent-uuid",
       name: assertLocalized("Aeris, the Prism Guide"),
@@ -75,7 +78,7 @@ function makeView(): BattleStartView {
     },
     dreamsigns: [
       localizedDreamsignFixture({
-        id: "battle-test:dreamsign:0",
+        id: asDreamsignId("battle-test:dreamsign:0"),
         name: "Sign of Quiet Thunder",
         effectDescription: "The first event each turn costs 1 less.",
         imageName: "quiet-thunder.webp",
@@ -155,9 +158,7 @@ describe("Cumulus BattleStartScreen", () => {
       "var(--space-s)",
     );
     expect(pointsValue?.children[0]?.textContent).toBe("12");
-    expect(
-      pointsValue?.children[1]?.matches("[data-inline-glyph]"),
-    ).toBe(true);
+    expect(pointsValue?.children[1]?.matches("[data-inline-glyph]")).toBe(true);
     expect(pointsValue?.children[1]?.querySelector("i")?.className).toContain(
       "bxf bx-star-circle",
     );
@@ -200,7 +201,9 @@ describe("Cumulus BattleStartScreen", () => {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: assertLocalized("Mira"),
           speakerName: assertLocalized("Mira"),
-          text: assertLocalized("Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win"),
+          text: assertLocalized(
+            "Before each dream battle, you can view cards from your opponent's deck and see the ⍟ required to win",
+          ),
         },
         delaySeconds: 1,
         horizontalOffset: 0,
@@ -280,7 +283,9 @@ describe("Cumulus BattleStartScreen", () => {
     expect(glassPanel?.style.backdropFilter).toContain("--glass-blur");
     expect(panel?.style.position).toBe("absolute");
     expect(panel?.style.top).toBe("");
-    expect(panel?.style.bottom).toBe(JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
+    expect(panel?.style.bottom).toBe(
+      JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
+    );
     expect(panel?.style.left).toBe("var(--space-s)");
     expect(panel?.style.width).toBe("calc(100vw - (var(--space-s) * 2))");
     expect(panel?.style.maxHeight).toBe(

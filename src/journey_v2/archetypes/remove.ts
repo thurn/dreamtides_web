@@ -10,6 +10,7 @@ import {
   selectionMetadata,
   selectMerchantReward,
 } from "./sharedSelection";
+import { asMerchantTargetKey } from "../../types/identifiers";
 
 function removeDeckEntryPayload(
   card: MerchantDeckCard,
@@ -27,10 +28,16 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
   archetypeId: "purge",
   family: "remove",
   eligible(context): boolean {
-    return context.deckCards.length >= context.rewardSelection.tuning.minDeckForPurge &&
-      context.deckCards.some((card) => !card.deckEntry.isBane);
+    return (
+      context.deckCards.length >=
+        context.rewardSelection.tuning.minDeckForPurge &&
+      context.deckCards.some((card) => !card.deckEntry.isBane)
+    );
   },
-  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+  build(
+    context: MerchantContext,
+    _rng: MerchantRng,
+  ): MerchantOfferDraft | null {
     const selection = selectMerchantReward({
       context,
       archetypeId: "purge",
@@ -39,14 +46,15 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
       request: { constraints: { allowStarters: true } },
     });
     const entryId = selection?.bindings.deckEntryIds[0];
-    const target = entryId === undefined ? undefined : context.deckEntryById.get(entryId);
+    const target =
+      entryId === undefined ? undefined : context.deckEntryById.get(entryId);
     if (selection === null || target === undefined) return null;
     return {
       archetypeId: "purge",
       family: "remove",
       gameObjects: [{ ...target }],
       applyPayload: removeDeckEntryPayload(target),
-      targetKey: target.entryId,
+      targetKey: asMerchantTargetKey(target.entryId),
       ...selectionMetadata(selection),
     };
   },

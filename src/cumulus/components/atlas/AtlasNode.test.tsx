@@ -16,18 +16,26 @@ import {
   atlasPrimaryInfoCard,
   type AtlasNodeModel,
 } from "./AtlasNode";
+import { asDreamscapeId } from "../../../types/identifiers";
+import { asGuideId } from "../../../types/identifiers";
+import { asAtlasNodeId } from "../../../types/identifiers";
+import { asDreamsignId } from "../../../types/identifiers";
+import { asSiteId } from "../../../types/identifiers";
+import { asAffiliationId } from "../../../types/identifiers";
 
-const NODE_ID = "00000000-0000-4000-8000-000000000051";
-const DREAMSIGN_ID = "00000000-0000-4000-8000-000000000052";
-const SITE_ID = "00000000-0000-4000-8000-000000000053";
-const AFFILIATION_ID = "00000000-0000-4000-8000-000000000054";
+const NODE_ID = asAtlasNodeId("00000000-0000-4000-8000-000000000051");
+const DREAMSIGN_ID = asDreamsignId("00000000-0000-4000-8000-000000000052");
+const SITE_ID = asSiteId("00000000-0000-4000-8000-000000000053");
+const AFFILIATION_ID = asAffiliationId(
+  "00000000-0000-4000-8000-000000000054",
+);
 
 describe("atlasPrimaryInfoCard", () => {
   it("selects the scene reveal for a known place and text for an unseen dream", () => {
     expect(
       atlasPrimaryInfoCard({
-        sceneArt: artRef.dreamscapeScene("wilderveil"),
-        figureArt: artRef.dreamGuide("aldric"),
+        sceneArt: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
+        figureArt: artRef.dreamGuide(asGuideId("aldric")),
         placeName: assertLocalized("Wilderveil"),
         guideName: assertLocalized("Aldric, the Seer"),
         title: assertLocalized("Aldric, the Seer"),
@@ -61,13 +69,13 @@ function model(
     state,
     role: "regular",
     isReachable: true,
-    iconRef: artRef.dreamscapeIcon("wilderveil"),
+    iconRef: artRef.dreamscapeIcon(asDreamscapeId("wilderveil")),
     unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
     siteBadgeGlyph: GLYPHS.water,
     knownDreamsignRef: artRef.dreamsign("known.png"),
     primary: {
-      sceneArt: artRef.dreamscapeScene("wilderveil"),
-      figureArt: artRef.dreamGuide("aldric"),
+      sceneArt: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
+      figureArt: artRef.dreamGuide(asGuideId("aldric")),
       placeName: assertLocalized("Wilderveil"),
       guideName: assertLocalized("Aldric, the Seer"),
       title: assertLocalized("Aldric, the Seer"),

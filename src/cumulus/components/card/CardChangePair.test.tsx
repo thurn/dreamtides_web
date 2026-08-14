@@ -6,6 +6,7 @@ import {
   syntheticGameCard,
 } from "../../test-helpers/component-test-fixtures";
 import { CardChangePair } from "./CardChangePair";
+import { asDeckEntryId } from "../../../types/identifiers";
 
 afterEach(() => {
   document.body.innerHTML = "";
@@ -26,11 +27,11 @@ describe("CardChangePair", () => {
             changeId: kind,
             kind,
             before: {
-              entryId: "entry-before",
+              entryId: asDeckEntryId("entry-before"),
               card: syntheticGameCard(1, "Duplicate"),
             },
             after: {
-              entryId: "entry-after",
+              entryId: asDeckEntryId("entry-after"),
               card: syntheticGameCard(2, "Duplicate"),
             },
           }}
@@ -68,8 +69,8 @@ describe("CardChangePair", () => {
         model={{
           changeId: "change",
           kind: "copy",
-          before: { entryId: "a", card: syntheticGameCard(1) },
-          after: { entryId: "b", card: syntheticGameCard(2) },
+          before: { entryId: asDeckEntryId("a"), card: syntheticGameCard(1) },
+          after: { entryId: asDeckEntryId("b"), card: syntheticGameCard(2) },
         }}
         reveal="before"
       />,
@@ -103,11 +104,11 @@ describe("CardChangePair", () => {
           changeId: "reduced",
           kind: "keyword",
           before: {
-            entryId: "entry-before",
+            entryId: asDeckEntryId("entry-before"),
             card: syntheticGameCard(1, "A very long duplicate display name"),
           },
           after: {
-            entryId: "entry-after",
+            entryId: asDeckEntryId("entry-after"),
             card: syntheticGameCard(2, "A very long duplicate display name"),
           },
         }}

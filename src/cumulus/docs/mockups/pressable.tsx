@@ -11,6 +11,7 @@ import { Pressable } from "../../primitives/Pressable";
 import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
+import { asDreamscapeId } from "../../../types/identifiers";
 
 interface TileSpec {
   icon: string;
@@ -20,7 +21,12 @@ interface TileSpec {
 }
 
 const TILES: TileSpec[] = [
-  { icon: "bxf bx-play", label: "Continue", sub: "Resume your dream", emphasis: true },
+  {
+    icon: "bxf bx-play",
+    label: "Continue",
+    sub: "Resume your dream",
+    emphasis: true,
+  },
   { icon: "bxf bx-moon", label: "New Dream", sub: "Begin a fresh run" },
   { icon: "bxf bx-grid", label: "Collection", sub: "Browse every card" },
   { icon: "bxf bx-cog", label: "Settings", sub: "Audio, controls, data" },
@@ -42,7 +48,9 @@ function Tile({ icon, label, sub, emphasis = false }: TileSpec) {
         borderRadius: token("--radius-panel"),
         border: `1px solid ${emphasis ? token("--border-accent") : token("--border-soft")}`,
         background: emphasis ? token("--accent") : token("--surface-chrome"),
-        boxShadow: emphasis ? token("--glow-accent-soft") : token("--shadow-md"),
+        boxShadow: emphasis
+          ? token("--glow-accent-soft")
+          : token("--shadow-md"),
       }}
     >
       <i
@@ -50,7 +58,9 @@ function Tile({ icon, label, sub, emphasis = false }: TileSpec) {
         aria-hidden="true"
         style={{
           fontSize: 30,
-          color: emphasis ? token("--text-on-accent") : token("--accent-bright"),
+          color: emphasis
+            ? token("--text-on-accent")
+            : token("--accent-bright"),
         }}
       />
       <span
@@ -65,9 +75,7 @@ function Tile({ icon, label, sub, emphasis = false }: TileSpec) {
         style={{
           font: token("--t-caption"),
           textAlign: "center",
-          color: emphasis
-            ? "rgba(255,255,255,0.85)"
-            : token("--text-muted"),
+          color: emphasis ? "rgba(255,255,255,0.85)" : token("--text-muted"),
         }}
       >
         {sub}
@@ -87,7 +95,7 @@ export function PressableMockup() {
     <div
       style={{
         ...sceneRoot,
-        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.45) 0%, rgba(8,5,17,0.6) 55%, rgba(8,5,17,0.92) 100%), url(${dreamscapeSceneUrl("firstlight_meadow")})`,
+        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.45) 0%, rgba(8,5,17,0.6) 55%, rgba(8,5,17,0.92) 100%), url(${dreamscapeSceneUrl(asDreamscapeId("firstlight_meadow"))})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",
@@ -133,7 +141,6 @@ export function PressableMockup() {
           <Tile key={tile.label} {...tile} />
         ))}
       </div>
-
     </div>
   );
 }

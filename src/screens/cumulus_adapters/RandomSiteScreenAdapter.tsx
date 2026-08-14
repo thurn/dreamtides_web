@@ -6,8 +6,9 @@ import { useJourney } from "../../state/journey-context";
 import type { RandomSiteDestinationType } from "../../types/journey";
 import { buildRandomSiteView } from "./random-site-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
+import type { SiteId } from "../../types/identifiers";
 
-export function RandomSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function RandomSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, journeyContent } = useJourney();
   const node =
     state.currentDreamscape === null

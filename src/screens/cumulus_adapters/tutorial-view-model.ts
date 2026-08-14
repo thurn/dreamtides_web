@@ -10,7 +10,6 @@ import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
 import type { CardData } from "../../types/cards";
 import type { DreamwellCard } from "../../data/dreamwell-database";
 import type { DreamAvatarContent } from "../../types/content";
-import { asCardId } from "../../types/card-identity";
 import type {
   TutorialAction,
   TutorialBattleConfiguration,
@@ -21,6 +20,20 @@ import type {
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import { tutorialInstructionPlainText } from "../../data/tutorial-instruction-markup";
 import { tutorialStarterDeckSize } from "../../data/tutorial-actions";
+import type { CardId } from "../../types/card-identity";
+import type {
+  BattleCardId,
+  DreamAvatarId,
+  DreamwellCardId,
+} from "../../types/identifiers";
+import type { TutorialActionId } from "../../types/identifiers";
+import {
+  asBattleCardId,
+  asBattleId,
+  asBattleSlotViewId,
+  asDreamwellCardId,
+} from "../../types/identifiers";
+import { backRankSlotId, frontRankSlotId } from "../../battle/types";
 
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
 const AUTUMN_GLADE_SCORE_GAIN = 2;
@@ -44,7 +57,7 @@ function tutorialSpeechBubbleLogDetails(speechBubble: TutorialSpeechBubble) {
 /** Reconstruction fields logged whenever an authored tutorial action appears. */
 export function tutorialActionLogDetails(
   action: TutorialAction,
-  featuredDreamwellCardId: string,
+  featuredDreamwellCardId: DreamwellCardId,
 ) {
   if (action.action === "animate-dream-avatar-portrait") {
     return {
@@ -214,7 +227,7 @@ export function tutorialActionLogDetails(
 
 function tutorialCardView(
   card: CardData,
-  instanceId: string,
+  instanceId: BattleCardId,
   layoutMotion: MobileBattleCardView["layoutMotion"],
   exhausted: boolean,
   showPlayableOutline: boolean,
@@ -232,8 +245,8 @@ function tutorialCardView(
 
 function tutorialCardById(
   cards: readonly CardData[] | null,
-  cardId: string,
-  actionId: string,
+  cardId: CardId,
+  actionId: TutorialActionId,
 ): CardData | null {
   if (cards === null) return null;
   const card = cards.find((candidate) => candidate.id === cardId);
@@ -248,15 +261,14 @@ function tutorialCardById(
 function tutorialDeckIds(
   owner: "enemy" | "player",
   deckSize: number,
-): readonly string[] {
-  return Array.from(
-    { length: deckSize },
-    (_unused, index) => `tutorial-${owner}-deck-${String(index + 1)}`,
+): readonly BattleCardId[] {
+  return Array.from({ length: deckSize }, (_unused, index) =>
+    asBattleCardId(`tutorial-${owner}-deck-${String(index + 1)}`),
   );
 }
 
 function tutorialDreamwellModel(card: DreamwellCard) {
-  const cardId = asCardId(card.id);
+  const cardId = asDreamwellCardId(card.id);
   return {
     cardId,
     displaySnapshot: {
@@ -271,12 +283,13 @@ function tutorialDreamwellModel(card: DreamwellCard) {
 }
 
 function emptySlots(
-  owner: "enemy" | "player",
   rank: "back" | "front",
   count: number,
 ): readonly MobileBattleSlotView[] {
   return Array.from({ length: count }, (_unused, index) => ({
-    id: `${owner}-${rank}-${String(index)}`,
+    id: asBattleSlotViewId(
+      rank === "back" ? backRankSlotId(index) : frontRankSlotId(index),
+    ),
     card: null,
   }));
 }
@@ -292,8 +305,8 @@ function emptySide(
     deckCardIds: tutorialDeckIds(owner, deckSize),
     banishedCardCount: 0,
     voidCards: [],
-    backRank: emptySlots(owner, "back", 3),
-    frontRank: emptySlots(owner, "front", 2),
+    backRank: emptySlots("back", 3),
+    frontRank: emptySlots("front", 2),
     status: {
       dreamAvatar: null,
       currentEnergy: 0,
@@ -328,7 +341,7 @@ function emptyInspectorSide(
 }
 
 function activeDialogue(playback: TutorialPlaybackState | null): {
-  readonly actionId: string;
+  readonly actionId: TutorialActionId;
   readonly parentAction: TutorialAction["action"];
   readonly speechBubble: TutorialSpeechBubble;
 } | null {
@@ -940,8 +953,14 @@ export function buildTutorialView(
               bubbleWidth: dialogue.speechBubble.bubbleWidth,
               model: {
                 portrait: { kind: "character-portrait", characterId: "mira" },
-                portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
-                speakerName: tx("Mira", "[tutorial] Name of the tutorial guide."),
+                portraitAlt: tx(
+                  "Mira",
+                  "[tutorial] Name of the tutorial guide.",
+                ),
+                speakerName: tx(
+                  "Mira",
+                  "[tutorial] Name of the tutorial guide.",
+                ),
                 text: localizedSourceText(dialogue.speechBubble.text),
               },
             },
@@ -1093,7 +1112,7 @@ export function buildTutorialView(
                 ? "dusk"
                 : "day";
       return {
-        battleId: TUTORIAL_BATTLE_ID,
+        battleId: asBattleId(TUTORIAL_BATTLE_ID),
         perspective: "player",
         aiApproval: null,
         cardPicker: null,
@@ -1232,7 +1251,7 @@ export function buildTutorialView(
 
 function dreamAvatarById(
   dreamAvatars: readonly DreamAvatarContent[],
-  dreamAvatarId: string,
+  dreamAvatarId: DreamAvatarId,
 ): DreamAvatarContent {
   const dreamAvatar = dreamAvatars.find(
     (candidate) => candidate.id === dreamAvatarId,

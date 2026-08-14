@@ -19,6 +19,10 @@ import type {
   FrontRankSlotId,
 } from "../types";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
+import type { BattleCardId } from "../../types/identifiers";
+import { asBattleId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asBattleCardId } from "../../types/identifiers";
 
 vi.mock("../../logging", () => ({
   logEvent: vi.fn(),
@@ -53,7 +57,7 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
 
 function makeBareState(): BattleMutableState {
   return {
-    battleId: "battle-ai-hook-test",
+    battleId: asBattleId("battle-ai-hook-test"),
     activeSide: "enemy",
     turnNumber: 2,
     phase: "day",
@@ -85,7 +89,7 @@ function journeyDeckProvenance(): BattleCardProvenance {
 function direwolfDefinition(): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
-    cardId: "",
+    cardId: asCardId(""),
     cardNumber: 512,
     name: "Marked Direwolf",
     battleCardKind: "character",
@@ -144,7 +148,7 @@ function makeEnemyTurnState(
     isRevealedToPlayer: false,
     provenance: journeyDeckProvenance(),
   });
-  mutable.sides.enemy.backRank.B0 = cardId;
+  mutable.sides.enemy.backRank.B0 = asBattleCardId(cardId);
   mutate?.(mutable);
   return createReducerState(mutable);
 }
@@ -171,7 +175,7 @@ function keywordCharacterDefinition(
 ): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
-    cardId: "",
+    cardId: asCardId(""),
     cardNumber: 0,
     name,
     battleCardKind: "character",
@@ -209,7 +213,7 @@ function placeFrontRankCharacterInSlot(
     isRevealedToPlayer: side === "enemy" ? false : true,
     provenance: journeyDeckProvenance(),
   });
-  state.sides[side].frontRank[slot] = id;
+  state.sides[side].frontRank[slot] = asBattleCardId(id);
   return id;
 }
 
@@ -244,7 +248,7 @@ function placeBackRankCharacter(
     isRevealedToPlayer: side === "enemy" ? false : true,
     provenance: journeyDeckProvenance(),
   });
-  state.sides[side].backRank[slot] = id;
+  state.sides[side].backRank[slot] = asBattleCardId(id);
   return id;
 }
 
@@ -302,8 +306,8 @@ function HookHarness({
   submit: (command: BattleCommand) => void;
   submitGesture?: (commands: readonly BattleCommand[]) => void;
   submitPlayCard?: (
-    battleCardId: string,
-    targetBattleCardIds: readonly string[],
+    battleCardId: BattleCardId,
+    targetBattleCardIds: readonly BattleCardId[],
     trace: import("../types").BattleAiChoiceTrace | null,
     characterDestination?: BattleFieldSlotAddress,
   ) => void;
@@ -422,7 +426,7 @@ describe("useBattleAi", () => {
         provenance: journeyDeckProvenance(),
       });
       mutable.cardInstances[centerOccupantId].status.isExhausted = true;
-      mutable.sides.enemy.backRank.B4 = centerOccupantId;
+      mutable.sides.enemy.backRank.B4 = asBattleCardId(centerOccupantId);
       mutable.sides.enemy.currentEnergy = 2;
       const supportId = allocateBattleCardInstance(mutable, {
         definition: strummerDefinition(),
@@ -431,7 +435,7 @@ describe("useBattleAi", () => {
         isRevealedToPlayer: false,
         provenance: journeyDeckProvenance(),
       });
-      mutable.sides.enemy.hand = [supportId];
+      mutable.sides.enemy.hand = [asBattleCardId(supportId)];
     });
     const commandDispatch = vi.fn();
     const playCardDispatch = vi.fn();
@@ -764,12 +768,12 @@ describe("useBattleAi", () => {
 
       expect(edits).toContainEqual({
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: winner,
+        battleCardId: asBattleCardId(winner),
         destination: { side: "enemy", zone: "void" },
       });
       expect(edits).toContainEqual({
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: loser,
+        battleCardId: asBattleCardId(loser),
         destination: { side: "player", zone: "void" },
       });
     });

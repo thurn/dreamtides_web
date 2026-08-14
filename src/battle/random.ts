@@ -1,4 +1,5 @@
 const HASH_OFFSET_BASIS = 2166136261;
+import type { BattleEntryKey } from "../types/identifiers";
 const HASH_PRIME = 16777619;
 
 export const BATTLE_RNG_STREAMS = [
@@ -17,11 +18,14 @@ export interface BattleRng {
   shuffle: <T>(items: readonly T[]) => T[];
 }
 
-export function deriveBattleSeed(battleEntryKey: string): number {
+export function deriveBattleSeed(battleEntryKey: BattleEntryKey): number {
   return hashStringToSeed(battleEntryKey);
 }
 
-export function createBattleRng(seed: number, streamName: BattleRngStreamName): BattleRng {
+export function createBattleRng(
+  seed: number,
+  streamName: BattleRngStreamName,
+): BattleRng {
   let state = deriveStreamSeed(seed, streamName);
 
   function nextUint32(): number {
@@ -37,7 +41,9 @@ export function createBattleRng(seed: number, streamName: BattleRngStreamName): 
 
   function nextInt(maxExclusive: number): number {
     if (!Number.isFinite(maxExclusive) || maxExclusive <= 0) {
-      throw new Error(`maxExclusive must be a positive finite number, received ${String(maxExclusive)}`);
+      throw new Error(
+        `maxExclusive must be a positive finite number, received ${String(maxExclusive)}`,
+      );
     }
     return Math.floor(nextFloat() * maxExclusive);
   }
@@ -46,7 +52,10 @@ export function createBattleRng(seed: number, streamName: BattleRngStreamName): 
     const shuffled = [...items];
     for (let index = shuffled.length - 1; index > 0; index -= 1) {
       const swapIndex = nextInt(index + 1);
-      [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+      [shuffled[index], shuffled[swapIndex]] = [
+        shuffled[swapIndex],
+        shuffled[index],
+      ];
     }
     return shuffled;
   }
@@ -66,7 +75,10 @@ export function createBattleRngStreams(
   };
 }
 
-function deriveStreamSeed(seed: number, streamName: BattleRngStreamName): number {
+function deriveStreamSeed(
+  seed: number,
+  streamName: BattleRngStreamName,
+): number {
   return hashStringToSeed(`${String(seed)}:${streamName}`);
 }
 

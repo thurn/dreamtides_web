@@ -15,6 +15,10 @@ import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { ViewportTutorialDialogue } from "../components/overlay/ViewportTutorialDialogue";
 import { useIsDesktop } from "../primitives/use-is-desktop";
+import type { SiteId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asPresentationId } from "../../types/identifiers";
 
 export type PurgeGuideView = SiteLayoutGuideView;
 
@@ -40,7 +44,7 @@ export interface PurgeSiteView {
     readonly purgeAction: (count: number) => LocalizedString;
   };
   /** Stable site id used by the shared character-gallery layout. */
-  siteId: string;
+  siteId: SiteId;
   /** Current dreamscape scene art behind the site, if resolved. */
   scene: ArtRef | null;
   /** Master Takeshi's guide art and line. */
@@ -61,7 +65,7 @@ export interface PurgeSiteScreenProps {
   /** Leave the site without purging. */
   onClose: () => void;
   /** Commit selected deck entries at the displayed total cost. */
-  onPurge: (entryIds: readonly string[], cost: number) => void;
+  onPurge: (entryIds: readonly DeckEntryId[], cost: number) => void;
   /** Reports when delayed first-visit guidance becomes visible. */
   onTutorialShown?: (tutorial: FirstVisitSiteTutorialView) => void;
 }
@@ -72,9 +76,9 @@ export function PurgeSiteScreen({
   onPurge,
   onTutorialShown,
 }: PurgeSiteScreenProps) {
-  const [selectedEntryIds, setSelectedEntryIds] = useState<readonly string[]>(
-    [],
-  );
+  const [selectedEntryIds, setSelectedEntryIds] = useState<
+    readonly DeckEntryId[]
+  >([]);
   const freeEntryIds = useMemo(
     () =>
       new Set(
@@ -85,7 +89,7 @@ export function PurgeSiteScreen({
     [view.cards],
   );
   const selectedPaidCount = selectedEntryIds.filter(
-    (entryId) => !freeEntryIds.has(entryId),
+    (entryId) => !freeEntryIds.has(asDeckEntryId(entryId)),
   ).length;
   const totalCost = view.visitCosts[selectedPaidCount] ?? 0;
   const canSelectPaid = selectedPaidCount < view.maxPaidSelections;
@@ -128,7 +132,7 @@ export function PurgeSiteScreen({
   }, [onTutorialShown, tutorialVisible, view.tutorial]);
 
   const toggleSelection = useCallback(
-    (entryId: string) => {
+    (entryId: DeckEntryId) => {
       setSelectedEntryIds((prev) => {
         const selected = prev.includes(entryId);
         if (selected) {
@@ -145,7 +149,7 @@ export function PurgeSiteScreen({
 
   const commitPurge = useCallback(() => {
     if (selectedEntryIds.length === 0) return;
-    onPurge(selectedEntryIds, totalCost);
+    onPurge(selectedEntryIds.map(asDeckEntryId), totalCost);
   }, [onPurge, selectedEntryIds, totalCost]);
 
   return (
@@ -176,7 +180,7 @@ export function PurgeSiteScreen({
       </SiteLayout>
       {tutorialVisible && view.tutorial !== undefined && (
         <ViewportTutorialDialogue
-          presentationId={view.tutorial.id}
+          presentationId={asPresentationId(view.tutorial.id)}
           dialogue={view.tutorial.model}
           context="site"
           placement={{ kind: "anchored", anchorId: "site-content" }}
@@ -203,14 +207,14 @@ function PurgeGallery({
   readonly layout: "mobile" | "desktop";
   readonly presentation: PurgeSiteView["presentation"];
   readonly cards: readonly PurgeCardView[];
-  readonly selectedEntryIds: readonly string[];
+  readonly selectedEntryIds: readonly DeckEntryId[];
   readonly selectedCount: number;
   readonly canSelectPaid: boolean;
   readonly totalCost: number;
   readonly actionWidthReservations: readonly GlassButtonWidthReservation[];
   readonly onClose: () => void;
   readonly onPurge: () => void;
-  readonly onToggle: (entryId: string) => void;
+  readonly onToggle: (entryId: DeckEntryId) => void;
 }) {
   const desktop = layout === "desktop";
   return (

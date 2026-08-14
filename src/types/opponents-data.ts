@@ -1,3 +1,6 @@
+import type { CardId } from "./card-identity";
+import type { AiDifficultyPresetId, IdentityRecord } from "./identifiers";
+
 export type OpponentMode = "expectiminimax" | "worstCase";
 
 export interface AiEvaluationWeights {
@@ -21,7 +24,7 @@ export interface AiOpponentModelTuning {
 }
 
 export interface AiDifficultyPreset {
-  id: string;
+  id: AiDifficultyPresetId;
   beamWidth: number;
   opponentMode: OpponentMode;
   sampleCount: number;
@@ -64,13 +67,13 @@ export interface OpponentsData {
     legendariesFromLayer: number;
     starterDilution: number[];
   };
-  journeyAiDeck: Array<{ cardId: string; count: number }>;
+  journeyAiDeck: Array<{ cardId: CardId; count: number }>;
   ai: {
-    journeyDefaultPreset: string;
-    tutorialDefaultPreset: string;
+    journeyDefaultPreset: AiDifficultyPresetId;
+    tutorialDefaultPreset: AiDifficultyPresetId;
     evaluation: AiEvaluationWeights;
     opponentModel: AiOpponentModelTuning;
-    presets: Record<string, AiDifficultyPreset>;
+    presets: IdentityRecord<AiDifficultyPresetId, AiDifficultyPreset>;
   };
 }
 

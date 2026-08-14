@@ -16,6 +16,10 @@ import { POINTER_MOVEMENT_SLOP_PX } from "../../primitives/pointer-gesture";
 import { token } from "../../primitives/tokens";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import {
+  battleCardIdFromUnknown,
+  type BattleCardId,
+} from "../../../types/identifiers";
 
 /** Card width and the minimum empty travel lane before the Void indicator. */
 const FORESEE_CARD_WIDTH_DESKTOP_PX = 180;
@@ -32,7 +36,7 @@ const FORESEE_SOURCE_CARD_WIDTH_MOBILE_PX = 260;
 /** One UUID-backed battle card in the inspected deck prefix. */
 export interface BattleForeseeEditorCard {
   /** Stable battle-instance id used for ordering and every callback. */
-  readonly battleCardId: string;
+  readonly battleCardId: BattleCardId;
   /** Complete card presentation resolved from the battle instance. */
   readonly card: GameCardModel;
 }
@@ -52,11 +56,11 @@ export interface BattleForeseeEditorModel {
 /** The complete staged result emitted by one confirmation. */
 export interface BattleForeseeResult {
   /** The exact original deck prefix inspected at confirmation time. */
-  viewedCardIds: readonly string[];
+  viewedCardIds: readonly BattleCardId[];
   /** Cards returned to the deck, top to bottom. */
-  orderedCardIds: readonly string[];
+  orderedCardIds: readonly BattleCardId[];
   /** Cards moved to the void, in the order chosen. */
-  voidCardIds: readonly string[];
+  voidCardIds: readonly BattleCardId[];
 }
 
 export interface BattleForeseeEditorProps {
@@ -68,7 +72,7 @@ export interface BattleForeseeEditorProps {
 
 interface ForeseePointerDrag {
   pointerId: number;
-  battleCardId: string;
+  battleCardId: BattleCardId;
   startX: number;
   startY: number;
   dragging: boolean;
@@ -128,10 +132,10 @@ export function BattleForeseeEditor({
   const minimumCount = safeAllowedCounts[0] ?? 0;
   const initialCount = model.initialCount;
   const [count, setCount] = useState(initialCount);
-  const [orderedCardIds, setOrderedCardIds] = useState<readonly string[]>(
+  const [orderedCardIds, setOrderedCardIds] = useState<readonly BattleCardId[]>(
     allCardIds.slice(0, initialCount),
   );
-  const [voidCardIds, setVoidCardIds] = useState<readonly string[]>([]);
+  const [voidCardIds, setVoidCardIds] = useState<readonly BattleCardId[]>([]);
   const pointerDragRef = useRef<ForeseePointerDrag | null>(null);
   const dragSuppressedRef = useRef(false);
   const cardById = new Map(
@@ -169,14 +173,17 @@ export function BattleForeseeEditor({
     setCount(previousCount);
   };
 
-  const moveToVoid = (battleCardId: string): void => {
+  const moveToVoid = (battleCardId: BattleCardId): void => {
     setOrderedCardIds((current) => current.filter((id) => id !== battleCardId));
     setVoidCardIds((current) =>
       current.includes(battleCardId) ? current : [...current, battleCardId],
     );
   };
 
-  const moveToDeck = (battleCardId: string, beforeCardId?: string): void => {
+  const moveToDeck = (
+    battleCardId: BattleCardId,
+    beforeCardId?: BattleCardId,
+  ): void => {
     setVoidCardIds((current) => current.filter((id) => id !== battleCardId));
     setOrderedCardIds((current) => {
       const withoutMoved = current.filter((id) => id !== battleCardId);
@@ -191,7 +198,7 @@ export function BattleForeseeEditor({
     });
   };
 
-  const moveWithinDeck = (battleCardId: string, offset: -1 | 1): void => {
+  const moveWithinDeck = (battleCardId: BattleCardId, offset: -1 | 1): void => {
     setOrderedCardIds((current) => {
       const index = current.indexOf(battleCardId);
       const target = index + offset;
@@ -203,7 +210,7 @@ export function BattleForeseeEditor({
   };
 
   const resolvePointerDrop = (
-    battleCardId: string,
+    battleCardId: BattleCardId,
     clientX: number,
     clientY: number,
     sourceElement: HTMLElement,
@@ -229,12 +236,12 @@ export function BattleForeseeEditor({
     )
       .filter((element) => element.dataset.foreseeCardId !== battleCardId)
       .map((element) => ({
-        battleCardId: element.dataset.foreseeCardId,
+        battleCardId: battleCardIdFromUnknown(element.dataset.foreseeCardId),
         bounds: element.getBoundingClientRect(),
       }))
       .filter(
         (candidate) =>
-          candidate.battleCardId !== undefined &&
+          candidate.battleCardId !== null &&
           rectContainsPoint(candidate.bounds, clientX, clientY),
       )
       .sort(
@@ -242,7 +249,7 @@ export function BattleForeseeEditor({
           distanceSquaredToRect(clientX, clientY, left.bounds) -
           distanceSquaredToRect(clientX, clientY, right.bounds),
       )[0];
-    if (targetCard?.battleCardId !== undefined) {
+    if (targetCard?.battleCardId !== null && targetCard !== undefined) {
       moveToDeck(battleCardId, targetCard.battleCardId);
       return;
     }
@@ -295,7 +302,7 @@ export function BattleForeseeEditor({
   };
 
   const renderCard = (
-    battleCardId: string,
+    battleCardId: BattleCardId,
     zone: "deck" | "void",
     stackIndex: number,
     stackSize: number,

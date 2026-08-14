@@ -2,6 +2,7 @@
 
 import type { CardId } from "../../types/card-identity.ts";
 import type { Tides4DecksJson, Tides4Role } from "./tides4-io.ts";
+import type { DreamAvatarId, TideId } from "../../types/identifiers";
 
 /** The single production draft-pool construction strategy. */
 export type PoolVariant = "tides4";
@@ -31,13 +32,10 @@ export interface PoolData {
 }
 
 export type Tides4PoolTideSelection =
-  | "starter"
-  | "facet-drawn"
-  | "facet-fill"
-  | "neutral-fill";
+  "starter" | "facet-drawn" | "facet-fill" | "neutral-fill";
 
 export interface Tides4PoolTide {
-  id: string;
+  id: TideId;
   displayName: string;
   displayDescription: string;
   role: Tides4Role;
@@ -49,12 +47,12 @@ export interface Tides4PoolTide {
 
 export interface Tides4PoolCardProvenance {
   copies: number;
-  tideIds: string[];
-  primaryTideId: string;
+  tideIds: TideId[];
+  primaryTideId: TideId;
 }
 
 export interface Tides4PoolProvenance {
-  dreamAvatarId: string;
+  dreamAvatarId: DreamAvatarId;
   signatureless: boolean;
   borrowedArchetypeName: string | null;
   dealSize: number;
@@ -72,14 +70,14 @@ export interface GeneratedPool {
   seed: number;
   size: number;
   variant: PoolVariant;
-  tideDeckIds: string[];
+  tideDeckIds: TideId[];
   tides4Provenance: Tides4PoolProvenance;
 }
 
 /** Raw output of the tide combination before run metadata is attached. */
 export interface Tides4GenerationResult {
   counts: Map<CardId, number>;
-  tideDeckIds: string[];
+  tideDeckIds: TideId[];
   /** Current algorithm label followed by joined tide ids. */
   selected: string[];
   tides4Provenance: Tides4PoolProvenance;

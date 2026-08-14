@@ -1,30 +1,23 @@
 import type { DreamwellEditorPreviewData } from "./DreamwellEditorPreview";
 import type { ArtCrop } from "../types/cards";
+import type { DreamwellCardId } from "../types/identifiers";
 
 /**
  * Dreamwell fields edited inline by double-clicking the card (the name heading,
  * the rules box, the energy orb) or the tier caption beneath it.
  */
 export type EditableDreamwellField =
-  | "name"
-  | "rendered-text"
-  | "energy-added"
-  | "order";
+  "name" | "rendered-text" | "energy-added" | "order";
 
 /**
  * All Dreamwell fields the editor can save: the inline-editable fields plus
  * `image-number` and the `art` crop, both set through the focused editor.
  */
 export type SavableDreamwellField =
-  | EditableDreamwellField
-  | "image-number"
-  | "art";
+  EditableDreamwellField | "image-number" | "art";
 
 export type DreamwellSortField =
-  | "sourceOrder"
-  | "name"
-  | "energyAdded"
-  | "order";
+  "sourceOrder" | "name" | "energyAdded" | "order";
 export type DreamwellSortDirection = "asc" | "desc";
 export type DreamwellSize = "small" | "medium" | "large";
 
@@ -41,7 +34,7 @@ export const MAX_DREAMWELL_ORDER = 4;
  * typed editor adapter maps them to canonical RON fields.
  */
 export interface EditorDreamwellRecord {
-  id: string;
+  id: DreamwellCardId;
   name: string;
   "rendered-text": string;
   "energy-added": number;
@@ -72,7 +65,7 @@ export interface LoadEditorDreamwellResponse {
 }
 
 export interface SaveEditorDreamwellFieldRequest {
-  id: string;
+  id: DreamwellCardId;
   field: SavableDreamwellField;
   value: unknown;
   clientRevision?: number;

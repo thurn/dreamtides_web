@@ -1,5 +1,10 @@
 import type { DreamsignTemplate } from "../types/content";
 import type { Dreamsign } from "../types/journey";
+import {
+  asDreamsignId,
+  asTideId,
+  type DreamsignId,
+} from "../types/identifiers";
 
 const DREAMSIGN_JSON_PATH = "/dreamsign-data.json";
 
@@ -24,21 +29,19 @@ export async function loadDreamsignTemplates(): Promise<DreamsignTemplate[]> {
   }
   const raw = (await response.json()) as RawDreamsign[];
   return raw.map((entry) => ({
-    id: entry.id,
+    id: asDreamsignId(entry.id),
     name: entry.name,
     effectDescription: entry.effectDescription,
     imageName: entry.imageName,
     imageAlt: entry.imageAlt,
     rarity: entry.rarity,
-    tideIds: entry.tideIds,
+    tideIds: entry.tideIds.map(asTideId),
     tags: entry.tags,
   }));
 }
 
 /** Instantiates a collectible Dreamsign from a template. */
-export function createDreamsign(
-  template: DreamsignTemplate,
-): Dreamsign {
+export function createDreamsign(template: DreamsignTemplate): Dreamsign {
   return {
     id: template.id,
     name: template.name,
@@ -52,7 +55,7 @@ export function createDreamsign(
 export function requireDreamsignId(
   dreamsign: Pick<Dreamsign, "id">,
   context: string,
-): string {
+): DreamsignId {
   if (dreamsign.id === undefined || dreamsign.id.length === 0) {
     throw new Error(`${context} dreamsign is missing a stable id.`);
   }

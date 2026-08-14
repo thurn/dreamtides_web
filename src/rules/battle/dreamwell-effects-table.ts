@@ -21,37 +21,57 @@ import {
 } from "./effect-step";
 import type { DreamwellEffectScript } from "../../battle/automation/dreamwell-effects";
 import { dreamwellPromptRef } from "../../data/dreamwell-prompts";
+import type { BattleCardId } from "../../types/identifiers";
+import type {
+  DreamwellCardId,
+  DreamwellChoiceKey,
+  DreamwellPromptKey,
+  IdentityRecord,
+} from "../../types/identifiers";
+import { asBattleCardId, asDreamwellCardId } from "../../types/identifiers";
+import { asDreamwellPromptKey } from "../../types/identifiers";
+import { asDreamwellChoiceKey } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Deterministic dreamwell effect table
 // ---------------------------------------------------------------------------
 
-const DISCOVER_CARD_ID = "f61431f3-33bd-42ff-a229-b4013582e86e";
-const DISCOVER_CHARACTER_ID = "8f5f2e26-44b5-447b-90d0-eaf22ab29fed";
-const ECHO_CASCADE_ID = "2ad68489-044a-40d1-9be6-e62497a4e1fd";
-const FIRMAMENT_MIRROR_ID = "14dec460-3ec6-40c1-978f-67e70cb0b227";
-const SILENT_WINTER_ID = "9954cede-8a16-4053-b6e9-da745f4540f5";
+const DISCOVER_CARD_ID = asDreamwellCardId(
+  "f61431f3-33bd-42ff-a229-b4013582e86e",
+);
+const DISCOVER_CHARACTER_ID = asDreamwellCardId(
+  "8f5f2e26-44b5-447b-90d0-eaf22ab29fed",
+);
+const ECHO_CASCADE_ID = asDreamwellCardId(
+  "2ad68489-044a-40d1-9be6-e62497a4e1fd",
+);
+const FIRMAMENT_MIRROR_ID = asDreamwellCardId(
+  "14dec460-3ec6-40c1-978f-67e70cb0b227",
+);
+const SILENT_WINTER_ID = asDreamwellCardId(
+  "9954cede-8a16-4053-b6e9-da745f4540f5",
+);
 
 function prompt(
-  cardId: string,
-  promptKey: string,
+  cardId: DreamwellCardId,
+  promptKey: DreamwellPromptKey,
   arguments_: Readonly<Record<string, string | number>> = {},
 ) {
   return dreamwellPromptRef(cardId, promptKey, "title", arguments_);
 }
 
 function promptSubtitle(
-  cardId: string,
-  promptKey: string,
+  cardId: DreamwellCardId,
+  promptKey: DreamwellPromptKey,
   arguments_: Readonly<Record<string, string | number>> = {},
 ) {
   return dreamwellPromptRef(cardId, promptKey, "subtitle", arguments_);
 }
 
 function promptChoice(
-  cardId: string,
-  promptKey: string,
-  choiceKey: string,
+  cardId: DreamwellCardId,
+  promptKey: DreamwellPromptKey,
+  choiceKey: DreamwellChoiceKey,
   arguments_: Readonly<Record<string, string | number>> = {},
 ) {
   return dreamwellPromptRef(cardId, promptKey, "choice", arguments_, choiceKey);
@@ -67,9 +87,9 @@ function seededRandom(seed: number): () => number {
 }
 
 function deterministicShuffle(
-  ids: readonly string[],
+  ids: readonly BattleCardId[],
   seedText: string,
-): string[] {
+): BattleCardId[] {
   let seed = 2166136261;
   for (const char of seedText)
     seed = Math.imul(seed ^ char.charCodeAt(0), 16777619) >>> 0;
@@ -84,8 +104,8 @@ function deterministicShuffle(
 
 function sampledDiscoverCandidates(
   ctx: import("./effect-step").StepContext,
-  matches: (battleCardId: string) => boolean,
-): string[] {
+  matches: (battleCardId: BattleCardId) => boolean,
+): BattleCardId[] {
   const matching = ctx.state.sides[ctx.side].deck.filter(
     (battleCardId) =>
       ctx.state.cardInstances[battleCardId] !== undefined &&
@@ -100,7 +120,7 @@ function sampledDiscoverCandidates(
 }
 
 function discoverResolution(
-  chosenIds: string[],
+  chosenIds: BattleCardId[],
   ctx: import("./effect-step").StepContext,
 ): BattleDebugEdit[] {
   const chosen = chosenIds[0];
@@ -112,7 +132,7 @@ function discoverResolution(
   return [
     {
       kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: chosen,
+      battleCardId: asBattleCardId(chosen),
       destination: { side: ctx.side, zone: "hand" },
     },
     {
@@ -163,25 +183,28 @@ function selectTutorialCenterBackRankSlot(
  * step in order, applying edits immediately and pausing on prompts until the
  * player resolves them.
  */
-export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
+export const DREAMWELL_EFFECTS: IdentityRecord<
+  DreamwellCardId,
+  DreamwellEffectScript
+> = {
   // Catalog entries with no effect are still registered so catalog coverage is
   // observable and status remains authoritative by UUID.
   "32d64cb6-9856-43a2-9451-fcb14007a9a6": {
-    id: "32d64cb6-9856-43a2-9451-fcb14007a9a6",
+    id: asDreamwellCardId("32d64cb6-9856-43a2-9451-fcb14007a9a6"),
     steps: [],
   },
   "5e17dc4b-b654-4962-ba5a-7b042852a980": {
-    id: "5e17dc4b-b654-4962-ba5a-7b042852a980",
+    id: asDreamwellCardId("5e17dc4b-b654-4962-ba5a-7b042852a980"),
     steps: [],
   },
   "662b7393-751c-4aa9-8150-5f20b4d176a4": {
-    id: "662b7393-751c-4aa9-8150-5f20b4d176a4",
+    id: asDreamwellCardId("662b7393-751c-4aa9-8150-5f20b4d176a4"),
     steps: [],
   },
 
   // Lily Lake — immediately draw an additional Dreamwell card.
   "558a1f1b-7dc1-4d83-9f00-c6af2187a954": {
-    id: "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+    id: asDreamwellCardId("558a1f1b-7dc1-4d83-9f00-c6af2187a954"),
     steps: [
       {
         kind: "edits",
@@ -207,7 +230,11 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: prompt(DISCOVER_CARD_ID, "discover-card", { maximum_cost: 2 }),
+          label: prompt(
+            asDreamwellCardId(DISCOVER_CARD_ID),
+            asDreamwellPromptKey("discover-card"),
+            { maximum_cost: 2 },
+          ),
           count: 1,
           optional: false,
           candidates: (ctx) =>
@@ -231,7 +258,10 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: prompt(DISCOVER_CHARACTER_ID, "discover-character"),
+          label: prompt(
+            asDreamwellCardId(DISCOVER_CHARACTER_ID),
+            asDreamwellPromptKey("discover-character"),
+          ),
           count: 1,
           optional: false,
           candidates: (ctx) =>
@@ -255,14 +285,17 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: prompt(ECHO_CASCADE_ID, "rematerialize-ally"),
+          label: prompt(
+            asDreamwellCardId(ECHO_CASCADE_ID),
+            asDreamwellPromptKey("rematerialize-ally"),
+          ),
           count: 1,
           optional: false,
           candidates: (ctx) => alliesInPlay(ctx.state, ctx.side),
           resolve: ([id]) =>
             id === undefined
               ? []
-              : [{ kind: "REMATERIALIZE", battleCardId: id }],
+              : [{ kind: "REMATERIALIZE", battleCardId: asBattleCardId(id) }],
         },
       },
     ],
@@ -277,8 +310,14 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: prompt(FIRMAMENT_MIRROR_ID, "grant-reclaim"),
-          subtitle: promptSubtitle(FIRMAMENT_MIRROR_ID, "grant-reclaim"),
+          label: prompt(
+            asDreamwellCardId(FIRMAMENT_MIRROR_ID),
+            asDreamwellPromptKey("grant-reclaim"),
+          ),
+          subtitle: promptSubtitle(
+            asDreamwellCardId(FIRMAMENT_MIRROR_ID),
+            asDreamwellPromptKey("grant-reclaim"),
+          ),
           count: 1,
           optional: false,
           candidates: (ctx) => ctx.state.sides[ctx.side].void,
@@ -288,7 +327,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
               : [
                   {
                     kind: "SET_CARD_STATUS",
-                    battleCardId: id,
+                    battleCardId: asBattleCardId(id),
                     status: {
                       temporaryReclaimUntilEnding: {
                         activeSide: ctx.state.activeSide,
@@ -305,31 +344,31 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Meteor Meadow — Draw a card.
   "5ec17498-9028-4a01-80a0-67c91b03d505": {
-    id: "5ec17498-9028-4a01-80a0-67c91b03d505",
+    id: asDreamwellCardId("5ec17498-9028-4a01-80a0-67c91b03d505"),
     steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) }],
   },
 
   // Autumn Glade — +2⍟ score (active side).
   "02e8ea92-1218-413c-9f0b-4c865a3921d3": {
-    id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+    id: asDreamwellCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
     steps: [{ kind: "edits", build: (ctx) => gainScoreEdits(ctx.side, 2) }],
   },
 
   // Twilight Radiance — +1● current energy.
   "de98477c-e216-4618-bff1-0e24bd982fdb": {
-    id: "de98477c-e216-4618-bff1-0e24bd982fdb",
+    id: asDreamwellCardId("de98477c-e216-4618-bff1-0e24bd982fdb"),
     steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
   },
 
   // Prismatic Pastures — +3● current energy.
   "d585b78a-dfe3-4e12-95ac-432c3c880540": {
-    id: "d585b78a-dfe3-4e12-95ac-432c3c880540",
+    id: asDreamwellCardId("d585b78a-dfe3-4e12-95ac-432c3c880540"),
     steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 3) }],
   },
 
   // The Voltsurge — Each side draws 2.
   "7171ff89-ebe4-42d0-8863-9b4b0531cad2": {
-    id: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+    id: asDreamwellCardId("7171ff89-ebe4-42d0-8863-9b4b0531cad2"),
     steps: [
       {
         kind: "edits",
@@ -340,7 +379,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Shadow Passage — Erode 3 (active side).
   "03e4e701-4720-4278-8198-9b7e0514d4cf": {
-    id: "03e4e701-4720-4278-8198-9b7e0514d4cf",
+    id: asDreamwellCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
     steps: [
       {
         kind: "edits",
@@ -351,7 +390,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // The Brimming Well — Opponent +1 max ● (ADJUST_MAX_ENERGY +1 on opponent).
   "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf": {
-    id: "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
+    id: asDreamwellCardId("a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf"),
     steps: [
       {
         kind: "edits",
@@ -364,7 +403,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Glimmering Horizon — If <2 in hand, draw until 2.
   "cf0f0a05-2a94-407c-8c22-e41b925f9c03": {
-    id: "cf0f0a05-2a94-407c-8c22-e41b925f9c03",
+    id: asDreamwellCardId("cf0f0a05-2a94-407c-8c22-e41b925f9c03"),
     steps: [
       { kind: "edits", build: (ctx) => drawUntilEdits(ctx.state, ctx.side, 2) },
     ],
@@ -372,7 +411,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Wellspring Commons — Each side draws until ≥3 in hand.
   "06e62e45-53f9-4264-9aa6-2575b445332a": {
-    id: "06e62e45-53f9-4264-9aa6-2575b445332a",
+    id: asDreamwellCardId("06e62e45-53f9-4264-9aa6-2575b445332a"),
     steps: [
       {
         kind: "edits",
@@ -386,7 +425,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Stillwater Mirror — Reveal enemy hand.
   "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a": {
-    id: "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
+    id: asDreamwellCardId("eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a"),
     steps: [
       {
         kind: "edits",
@@ -404,7 +443,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Foxfire Thicket — Create a 1✦ ethereal figment; skip if no open slot.
   "51caf26d-83bf-45a9-bc80-010d353277db": {
-    id: "51caf26d-83bf-45a9-bc80-010d353277db",
+    id: asDreamwellCardId("51caf26d-83bf-45a9-bc80-010d353277db"),
     steps: [
       {
         kind: "edits",
@@ -432,17 +471,20 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Eternal Horizon — Each ally +1✦ (delta-relative).
   "a57f1276-3fb6-4527-b538-953fbace35cf": {
-    id: "a57f1276-3fb6-4527-b538-953fbace35cf",
+    id: asDreamwellCardId("a57f1276-3fb6-4527-b538-953fbace35cf"),
     steps: [
       {
         kind: "edits",
         build: (ctx) => {
           return alliesInPlay(ctx.state, ctx.side).map((id) => {
-            const instance = selectBattleCardInstance(ctx.state, id);
+            const instance = selectBattleCardInstance(
+              ctx.state,
+              asBattleCardId(id),
+            );
             const existing = instance?.sparkDelta ?? 0;
             return {
               kind: "SET_CARD_SPARK_DELTA" as const,
-              battleCardId: id,
+              battleCardId: asBattleCardId(id),
               value: existing + 1,
             };
           });
@@ -454,7 +496,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
   // Twin Moons — Draw a card; if it is a character, +1●. Two steps so the
   // second sees the post-draw hand (drawn card is last hand entry).
   "120ec4c2-aa7b-48f4-be9f-f39820e565ca": {
-    id: "120ec4c2-aa7b-48f4-be9f-f39820e565ca",
+    id: asDreamwellCardId("120ec4c2-aa7b-48f4-be9f-f39820e565ca"),
     steps: [
       { kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) },
       {
@@ -475,7 +517,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
   // For each side independently: pick one random void character and move to that
   // side's default play slot; skip a side with no void character or no open slot.
   "a3033051-8eb7-4fbf-93d6-f947ed68974d": {
-    id: "a3033051-8eb7-4fbf-93d6-f947ed68974d",
+    id: asDreamwellCardId("a3033051-8eb7-4fbf-93d6-f947ed68974d"),
     steps: [
       {
         kind: "edits",
@@ -488,7 +530,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
             const pick = voidChars[Math.floor(ctx.random() * voidChars.length)];
             edits.push({
               kind: "MOVE_CARD_TO_ZONE",
-              battleCardId: pick,
+              battleCardId: asBattleCardId(pick),
               destination: slot,
             });
           }
@@ -504,7 +546,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Astral Interface — Draw, then discard 1.
   "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d": {
-    id: "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
+    id: asDreamwellCardId("ee1ef770-29ea-4a63-a1f9-7e97b5b8870d"),
     steps: [
       { kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) },
       {
@@ -512,8 +554,8 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         prompt: {
           kind: "pick-cards",
           label: prompt(
-            "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
-            "discard-drawn-card",
+            asDreamwellCardId("ee1ef770-29ea-4a63-a1f9-7e97b5b8870d"),
+            asDreamwellPromptKey("discard-drawn-card"),
           ),
           count: 1,
           optional: false,
@@ -528,7 +570,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
           },
           resolve: ([id]) =>
             id !== undefined
-              ? [{ kind: "DISCARD_CARD", battleCardId: id }]
+              ? [{ kind: "DISCARD_CARD", battleCardId: asBattleCardId(id) }]
               : [],
         },
       },
@@ -537,20 +579,23 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Emberwake Flats — +2●, then discard 1.
   "91deefd2-0400-4c78-ab9f-f6db864ff7e2": {
-    id: "91deefd2-0400-4c78-ab9f-f6db864ff7e2",
+    id: asDreamwellCardId("91deefd2-0400-4c78-ab9f-f6db864ff7e2"),
     steps: [
       { kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 2) },
       {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: prompt("91deefd2-0400-4c78-ab9f-f6db864ff7e2", "discard-card"),
+          label: prompt(
+            asDreamwellCardId("91deefd2-0400-4c78-ab9f-f6db864ff7e2"),
+            asDreamwellPromptKey("discard-card"),
+          ),
           count: 1,
           optional: false,
           candidates: (ctx) => ctx.state.sides[ctx.side].hand,
           resolve: ([id]) =>
             id !== undefined
-              ? [{ kind: "DISCARD_CARD", battleCardId: id }]
+              ? [{ kind: "DISCARD_CARD", battleCardId: asBattleCardId(id) }]
               : [],
         },
       },
@@ -559,15 +604,15 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Sunset's Last Gaze — You may discard 2, then draw 2.
   "fa8704fe-759f-408d-992d-d8f9d5ffd760": {
-    id: "fa8704fe-759f-408d-992d-d8f9d5ffd760",
+    id: asDreamwellCardId("fa8704fe-759f-408d-992d-d8f9d5ffd760"),
     steps: [
       {
         kind: "prompt",
         prompt: {
           kind: "confirm",
           label: prompt(
-            "fa8704fe-759f-408d-992d-d8f9d5ffd760",
-            "discard-and-draw",
+            asDreamwellCardId("fa8704fe-759f-408d-992d-d8f9d5ffd760"),
+            asDreamwellPromptKey("discard-and-draw"),
             { count: 2 },
           ),
           onYes: [
@@ -576,8 +621,8 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
               prompt: {
                 kind: "pick-cards",
                 label: prompt(
-                  "fa8704fe-759f-408d-992d-d8f9d5ffd760",
-                  "choose-discards",
+                  asDreamwellCardId("fa8704fe-759f-408d-992d-d8f9d5ffd760"),
+                  asDreamwellPromptKey("choose-discards"),
                   { count: 2 },
                 ),
                 count: 2,
@@ -586,7 +631,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
                 resolve: (ids) =>
                   ids.map((id) => ({
                     kind: "DISCARD_CARD" as const,
-                    battleCardId: id,
+                    battleCardId: asBattleCardId(id),
                   })),
               },
             },
@@ -599,15 +644,15 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Leaf Light Canopy — Return a card from your void to hand.
   "2b23a60c-209c-4c75-b63c-b7f73b2e1a56": {
-    id: "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+    id: asDreamwellCardId("2b23a60c-209c-4c75-b63c-b7f73b2e1a56"),
     steps: [
       {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
           label: prompt(
-            "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
-            "return-void-card",
+            asDreamwellCardId("2b23a60c-209c-4c75-b63c-b7f73b2e1a56"),
+            asDreamwellPromptKey("return-void-card"),
           ),
           count: 1,
           optional: false,
@@ -617,7 +662,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
               ? [
                   {
                     kind: "MOVE_CARD_TO_ZONE",
-                    battleCardId: id,
+                    battleCardId: asBattleCardId(id),
                     destination: { side: ctx.side, zone: "hand" },
                   },
                 ]
@@ -629,13 +674,16 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Verdant Hollow — Return an EVENT from your void to hand.
   "a0fbcbd9-96ee-4392-add7-e1d436f99553": {
-    id: "a0fbcbd9-96ee-4392-add7-e1d436f99553",
+    id: asDreamwellCardId("a0fbcbd9-96ee-4392-add7-e1d436f99553"),
     steps: [
       {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: prompt("a0fbcbd9-96ee-4392-add7-e1d436f99553", "return-event"),
+          label: prompt(
+            asDreamwellCardId("a0fbcbd9-96ee-4392-add7-e1d436f99553"),
+            asDreamwellPromptKey("return-event"),
+          ),
           count: 1,
           optional: false,
           candidates: (ctx) => eventsInVoid(ctx.state, ctx.side),
@@ -644,7 +692,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
               ? [
                   {
                     kind: "MOVE_CARD_TO_ZONE",
-                    battleCardId: id,
+                    battleCardId: asBattleCardId(id),
                     destination: { side: ctx.side, zone: "hand" },
                   },
                 ]
@@ -663,7 +711,10 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: prompt(SILENT_WINTER_ID, "banish-enemy-character"),
+          label: prompt(
+            asDreamwellCardId(SILENT_WINTER_ID),
+            asDreamwellPromptKey("banish-enemy-character"),
+          ),
           count: 1,
           optional: false,
           candidates: (ctx) => enemyCharactersInPlay(ctx.state, ctx.side),
@@ -674,7 +725,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
             return [
               {
                 kind: "SET_CARD_STATUS",
-                battleCardId: id,
+                battleCardId: asBattleCardId(id),
                 status: {
                   temporaryBanishUntilEnding: {
                     activeSide: ctx.state.activeSide,
@@ -687,7 +738,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
               },
               {
                 kind: "MOVE_CARD_TO_ZONE",
-                battleCardId: id,
+                battleCardId: asBattleCardId(id),
                 destination: { side: target.owner, zone: "banished" },
               },
             ];
@@ -699,15 +750,15 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Shining Beacon — Reveal top 2; pick 1 to hand, the other to bottom of deck.
   "3a4293da-55a1-4094-898a-df402ffa1c92": {
-    id: "3a4293da-55a1-4094-898a-df402ffa1c92",
+    id: asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
     steps: [
       {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
           label: prompt(
-            "3a4293da-55a1-4094-898a-df402ffa1c92",
-            "pick-card-for-hand",
+            asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
+            asDreamwellPromptKey("pick-card-for-hand"),
           ),
           count: 1,
           optional: false,
@@ -720,14 +771,14 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
             const edits: BattleDebugEdit[] = [
               {
                 kind: "MOVE_CARD_TO_ZONE",
-                battleCardId: chosenId,
+                battleCardId: asBattleCardId(chosenId),
                 destination: { side: ctx.side, zone: "hand" },
               },
             ];
             if (otherId !== undefined) {
               edits.push({
                 kind: "MOVE_CARD_TO_ZONE",
-                battleCardId: otherId,
+                battleCardId: asBattleCardId(otherId),
                 destination: {
                   side: ctx.side,
                   zone: "deck",
@@ -744,15 +795,15 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Luminous Enigma — You may put a card from your void on top of your deck.
   "556057bb-b134-497e-86c2-c6f30049e9e3": {
-    id: "556057bb-b134-497e-86c2-c6f30049e9e3",
+    id: asDreamwellCardId("556057bb-b134-497e-86c2-c6f30049e9e3"),
     steps: [
       {
         kind: "prompt",
         prompt: {
           kind: "confirm",
           label: prompt(
-            "556057bb-b134-497e-86c2-c6f30049e9e3",
-            "confirm-void-to-deck",
+            asDreamwellCardId("556057bb-b134-497e-86c2-c6f30049e9e3"),
+            asDreamwellPromptKey("confirm-void-to-deck"),
           ),
           onYes: [
             {
@@ -760,8 +811,8 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
               prompt: {
                 kind: "pick-cards",
                 label: prompt(
-                  "556057bb-b134-497e-86c2-c6f30049e9e3",
-                  "choose-void-for-deck",
+                  asDreamwellCardId("556057bb-b134-497e-86c2-c6f30049e9e3"),
+                  asDreamwellPromptKey("choose-void-for-deck"),
                 ),
                 count: 1,
                 optional: false,
@@ -771,7 +822,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
                     ? [
                         {
                           kind: "MOVE_CARD_TO_ZONE",
-                          battleCardId: id,
+                          battleCardId: asBattleCardId(id),
                           destination: {
                             side: ctx.side,
                             zone: "deck",
@@ -790,15 +841,15 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // The Bastion — You may abandon one of your characters, then draw 2.
   "20be0fdd-d691-40a9-b4f8-15689ea7ebaa": {
-    id: "20be0fdd-d691-40a9-b4f8-15689ea7ebaa",
+    id: asDreamwellCardId("20be0fdd-d691-40a9-b4f8-15689ea7ebaa"),
     steps: [
       {
         kind: "prompt",
         prompt: {
           kind: "confirm",
           label: prompt(
-            "20be0fdd-d691-40a9-b4f8-15689ea7ebaa",
-            "confirm-abandon-and-draw",
+            asDreamwellCardId("20be0fdd-d691-40a9-b4f8-15689ea7ebaa"),
+            asDreamwellPromptKey("confirm-abandon-and-draw"),
             { count: 2 },
           ),
           onYes: [
@@ -807,15 +858,15 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
               prompt: {
                 kind: "pick-cards",
                 label: prompt(
-                  "20be0fdd-d691-40a9-b4f8-15689ea7ebaa",
-                  "choose-character-to-abandon",
+                  asDreamwellCardId("20be0fdd-d691-40a9-b4f8-15689ea7ebaa"),
+                  asDreamwellPromptKey("choose-character-to-abandon"),
                 ),
                 count: 1,
                 optional: false,
                 candidates: (ctx) => alliesInPlay(ctx.state, ctx.side),
                 resolve: ([id]) =>
                   id !== undefined
-                    ? [{ kind: "ABANDON", battleCardId: id }]
+                    ? [{ kind: "ABANDON", battleCardId: asBattleCardId(id) }]
                     : [],
               },
             },
@@ -828,32 +879,32 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // The Crossroads — Choose: draw a card / gain 2●.
   "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c": {
-    id: "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
+    id: asDreamwellCardId("af2ef62f-d31b-4544-a2b0-f5aab03c2d7c"),
     steps: [
       {
         kind: "prompt",
         prompt: {
           kind: "choice",
           label: prompt(
-            "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
-            "choose-benefit",
+            asDreamwellCardId("af2ef62f-d31b-4544-a2b0-f5aab03c2d7c"),
+            asDreamwellPromptKey("choose-benefit"),
             { amount: 2 },
           ),
           options: [
             {
               label: promptChoice(
-                "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
-                "choose-benefit",
-                "draw-card",
+                asDreamwellCardId("af2ef62f-d31b-4544-a2b0-f5aab03c2d7c"),
+                asDreamwellPromptKey("choose-benefit"),
+                asDreamwellChoiceKey("draw-card"),
                 { amount: 2 },
               ),
               build: (ctx) => drawEdits(ctx.side, 1),
             },
             {
               label: promptChoice(
-                "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c",
-                "choose-benefit",
-                "gain-energy",
+                asDreamwellCardId("af2ef62f-d31b-4544-a2b0-f5aab03c2d7c"),
+                asDreamwellPromptKey("choose-benefit"),
+                asDreamwellChoiceKey("gain-energy"),
                 { amount: 2 },
               ),
               build: (ctx) => gainEnergyEdits(ctx.side, 2),
@@ -866,13 +917,16 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Fortune's Wheel — You may discard your hand, then draw that many.
   "446095b1-ec4d-40d7-8eed-a8221d339ea2": {
-    id: "446095b1-ec4d-40d7-8eed-a8221d339ea2",
+    id: asDreamwellCardId("446095b1-ec4d-40d7-8eed-a8221d339ea2"),
     steps: [
       {
         kind: "prompt",
         prompt: {
           kind: "confirm",
-          label: prompt("446095b1-ec4d-40d7-8eed-a8221d339ea2", "redraw-hand"),
+          label: prompt(
+            asDreamwellCardId("446095b1-ec4d-40d7-8eed-a8221d339ea2"),
+            asDreamwellPromptKey("redraw-hand"),
+          ),
           onYes: [
             {
               kind: "edits",
@@ -898,7 +952,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
 
   // Skypath — Foresee 1.
   "f9b479cf-02cb-40e1-bb64-70b29977bf15": {
-    id: "f9b479cf-02cb-40e1-bb64-70b29977bf15",
+    id: asDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
     steps: [{ kind: "prompt", prompt: { kind: "foresee", count: 1 } }],
   },
 
@@ -906,15 +960,15 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
   // No energy is charged (the Dreamwell grants the play). The played card's own
   // ability is left for the operator to resolve, consistent with planCardPlay.
   "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5": {
-    id: "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5",
+    id: asDreamwellCardId("fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5"),
     steps: [
       {
         kind: "prompt",
         prompt: {
           kind: "confirm",
           label: prompt(
-            "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5",
-            "confirm-play-void-character",
+            asDreamwellCardId("fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5"),
+            asDreamwellPromptKey("confirm-play-void-character"),
           ),
           onYes: [
             {
@@ -922,8 +976,8 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
               prompt: {
                 kind: "pick-cards",
                 label: prompt(
-                  "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5",
-                  "choose-void-character",
+                  asDreamwellCardId("fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5"),
+                  asDreamwellPromptKey("choose-void-character"),
                 ),
                 count: 1,
                 optional: false,
@@ -937,7 +991,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
                     ? [
                         {
                           kind: "MOVE_CARD_TO_ZONE",
-                          battleCardId: id,
+                          battleCardId: asBattleCardId(id),
                           destination: slot,
                         },
                       ]
@@ -960,7 +1014,7 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
  * Returns the `DreamwellEffectScript` for `cardId` if one exists, else `null`.
  */
 export function selectDreamwellEffectScript(
-  cardId: string,
+  cardId: DreamwellCardId,
 ): DreamwellEffectScript | null {
   return DREAMWELL_EFFECTS[cardId] ?? null;
 }
@@ -970,7 +1024,9 @@ export function selectDreamwellEffectScript(
  * - `"auto"` — a fully automated script exists in `DREAMWELL_EFFECTS`.
  * - `"none"` — the card id is unknown / unregistered.
  */
-export function dreamwellAutomationStatus(cardId: string): "auto" | "none" {
+export function dreamwellAutomationStatus(
+  cardId: DreamwellCardId,
+): "auto" | "none" {
   if (cardId in DREAMWELL_EFFECTS) return "auto";
   return "none";
 }

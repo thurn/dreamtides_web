@@ -5,11 +5,18 @@ import type {
   SiteState,
 } from "../../types/journey";
 import { buildInlineRewardCompletionLog } from "./inline-reward-view-model";
+import { asSiteId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 const STATE = { essence: 90 };
 
 function site(type: SiteState["type"]): SiteState {
-  return { id: "site-uuid", type, isEnhanced: false, isVisited: false };
+  return {
+    id: asSiteId("site-uuid"),
+    type,
+    isEnhanced: false,
+    isVisited: false,
+  };
 }
 
 describe("buildInlineRewardCompletionLog", () => {
@@ -38,7 +45,7 @@ describe("buildInlineRewardCompletionLog", () => {
       reward: {
         rewardType: "dreamsign",
         dreamsign: {
-          id: "dreamsign-uuid",
+          id: asDreamsignId("dreamsign-uuid"),
           name: "Display name",
           effectDescription: "A test effect.",
         },

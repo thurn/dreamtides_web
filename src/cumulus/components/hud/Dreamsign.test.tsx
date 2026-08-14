@@ -13,6 +13,7 @@ import {
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { CumulusRoot } from "../../CumulusRoot";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
+import { asDreamsignId } from "../../../types/identifiers";
 
 /**
  * The unified dreamsign entity (formerly `DreamsignArtTile` +
@@ -40,7 +41,7 @@ function makeDreamsign(
       overrides.effectDescription ?? `${overrides.name} effect.`,
     imageName: overrides.imageName,
     imageAlt: overrides.imageAlt,
-    id: overrides.id ?? "00000000-0000-4000-8000-000000000031",
+    id: asDreamsignId(overrides.id ?? "00000000-0000-4000-8000-000000000031"),
   });
 }
 

@@ -11,15 +11,13 @@ import {
   resolveAuguryGuide,
 } from "./augury-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
+import type { ChoiceId, OfferId, SiteId } from "../../types/identifiers";
 
-export function AugurySiteScreenAdapter({ siteId }: { siteId: string }) {
+export function AugurySiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, journeyContent } = useJourney();
   const current = selectCurrentSite(state, siteId, "Augury");
   const { node = null, site = null } = current ?? {};
-  const guide = resolveAuguryGuide(
-    journeyContent.guides,
-    site?.randomSite?.presentingGuideId,
-  );
+  const guide = resolveAuguryGuide(journeyContent.guides, site?.randomSite?.presentingGuideId);
   const guideLine = useGuideDialogue(guide, "site");
   const result = useMemo(
     () =>
@@ -76,7 +74,7 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: string }) {
       });
   }, [siteId]);
 
-  const handleChoose = (offerId: string, choiceId: string | null) =>
+  const handleChoose = (offerId: OfferId, choiceId: ChoiceId | null) =>
     chooseAuguryOffer(
       site,
       result,
@@ -100,7 +98,7 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: string }) {
     mutations.rerollAugury?.(site.id);
   }, [mutations, site]);
 
-  const handleInspect = (offerId: string) => {
+  const handleInspect = (offerId: OfferId) => {
     const offer = result?.encounter?.offers.find(
       (candidate) => candidate.offerId === offerId,
     );

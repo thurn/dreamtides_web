@@ -26,6 +26,17 @@ import type { ActivePrompt } from "./effect-runner-core";
 import type { EffectStep } from "./effect-step";
 import type { BattleCommand } from "../../battle/debug/commands";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
+import type { CardId } from "../../types/card-identity";
+import type {
+  BattleCardId,
+  BattleEffectScriptId,
+  DreamwellCardId,
+  PresentationId,
+  TutorialAiActionOverrideId,
+  TutorialRunId,
+  TutorialTriggerId,
+} from "../../types/identifiers";
+import { asDreamwellCardId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Cursor + run model
@@ -34,7 +45,7 @@ import type { TutorialTriggerDefinition } from "../../types/tutorial";
 /** Key into a static effect-script table. `id` is a card UUID. */
 export interface ScriptRef {
   table: "battle" | "dreamwell";
-  id: string;
+  id: BattleEffectScriptId;
 }
 
 /**
@@ -60,7 +71,7 @@ export interface EffectRun {
   cursor: number[];
   side: BattleSide;
   /** Persisted for compatibility with older queued runs. */
-  sourceInstanceId?: string;
+  sourceInstanceId?: BattleCardId;
   /** Immutable, JSON-safe facts captured at the reducer edge that created the
    * run. In particular, leave-play scripts must not rediscover their source
    * after it has changed zones. */
@@ -70,12 +81,12 @@ export interface EffectRun {
 /** Plain data carried from a trigger edge into a closure-backed registry script. */
 export interface EffectBindings {
   trigger?: BattleScriptTrigger;
-  sourceCardId?: string;
+  sourceCardId?: CardId;
   sourceController?: BattleSide;
   sourceZone?: string;
   /** Targets selected as part of the semantic play intent.  They are instance
    * ids, captured before costs and carried through queued event resolution. */
-  targetBattleCardIds?: readonly string[];
+  targetBattleCardIds?: readonly BattleCardId[];
 }
 
 /** The battle lifecycle edges that an authored card script may subscribe to. */
@@ -160,7 +171,7 @@ export interface BattleFoldState {
   /** Authored one-shot actions which may preempt tutorial heuristic planning. */
   tutorialAiActionOverrides?: readonly TutorialBattleAiActionOverride[];
   /** Override ids committed by their matching semantic battle action. */
-  consumedTutorialAiActionOverrideIds?: readonly string[];
+  consumedTutorialAiActionOverrideIds?: readonly TutorialAiActionOverrideId[];
   /**
    * Per-side once-per-turn exhaustion-clear guard. The reducer stamps the
    * outgoing side's turn number when a committed handoff clears all in-play
@@ -180,7 +191,7 @@ export type TutorialBattlePresentation =
   | TutorialGuidancePresentation;
 
 export interface TutorialGuidanceMessage {
-  readonly triggerId: string;
+  readonly triggerId: TutorialTriggerId;
   readonly speaker: TutorialTriggerDefinition["speaker"];
   readonly text: string;
   readonly delay?: number;
@@ -193,20 +204,20 @@ export interface TutorialGuidanceMessage {
 export type TutorialGuidanceSource =
   | {
       readonly kind: "card";
-      readonly cardId: string;
-      readonly battleCardId: string;
+      readonly cardId: CardId;
+      readonly battleCardId: BattleCardId;
       readonly cardKind: "character" | "event";
       readonly side: BattleSide;
     }
   | {
       readonly kind: "dreamwell";
-      readonly cardId: string;
+      readonly cardId: DreamwellCardId;
       readonly side: BattleSide;
     }
   | {
       readonly kind: "figment";
-      readonly cardId: string;
-      readonly battleCardId: string;
+      readonly cardId: CardId;
+      readonly battleCardId: BattleCardId;
       readonly side: BattleSide;
     }
   | {
@@ -238,7 +249,7 @@ export type TutorialGuidanceContinuation =
 
 /** A queued Mira explanation and the exact battle work parked behind it. */
 export interface TutorialGuidancePresentation {
-  readonly id: string;
+  readonly id: PresentationId;
   readonly kind: "tutorial-guidance";
   readonly source: TutorialGuidanceSource;
   readonly messages: readonly TutorialGuidanceMessage[];
@@ -247,21 +258,21 @@ export interface TutorialGuidancePresentation {
 }
 
 export interface OpponentPlayPresentation {
-  readonly id: string;
+  readonly id: PresentationId;
   readonly kind: "opponent-play";
   /** UUID of the catalog card shown at the presentation boundary. */
-  readonly cardId: string;
+  readonly cardId: CardId;
   /** Physical battle-card identity for the card that was played. */
-  readonly battleCardId: string;
+  readonly battleCardId: BattleCardId;
   readonly cardKind: "character" | "event";
 }
 
 /** A Dreamwell source card that must be seen before its effect can prompt. */
 export interface DreamwellRevealPresentation {
-  readonly id: string;
+  readonly id: PresentationId;
   readonly kind: "dreamwell-reveal";
   /** UUID of the revealed Dreamwell card. */
-  readonly cardId: string;
+  readonly cardId: DreamwellCardId;
   readonly side: BattleSide;
   readonly turnNumber: number;
 }
@@ -275,7 +286,7 @@ export interface DreamwellRevealPresentation {
  * the board still long enough for the shared-layout travel to play and be read.
  */
 export interface OpponentBlockPresentation {
-  readonly id: string;
+  readonly id: PresentationId;
   readonly kind: "opponent-block";
   /** The side whose challengers are being blocked. */
   readonly activeSide: BattleSide;
@@ -284,22 +295,22 @@ export interface OpponentBlockPresentation {
 }
 
 export interface OpponentBlockEntry {
-  readonly battleCardId: string;
+  readonly battleCardId: BattleCardId;
   readonly slotId: FrontRankSlotId;
   /** The challenger this blocker moved to oppose. */
-  readonly challengerBattleCardId: string;
+  readonly challengerBattleCardId: BattleCardId;
 }
 
 /** One resolved Challenge lane, held while its result animation plays. */
 export interface ChallengeResolvedPresentation {
-  readonly id: string;
+  readonly id: PresentationId;
   readonly kind: "challenge-resolved";
   readonly activeSide: BattleSide;
   readonly slotId: FrontRankSlotId;
   /** The active-side character whose Challenge produced this result. */
-  readonly challengerBattleCardId: string;
+  readonly challengerBattleCardId: BattleCardId;
   /** The opposing character in the lane, or null for an unpaired Challenge. */
-  readonly blockerBattleCardId: string | null;
+  readonly blockerBattleCardId: BattleCardId | null;
   /** Points scored by a character in this lane, or null when no character scored. */
   readonly scored: ChallengeScoredEntry | null;
   /** Every character this lane dissolved, in resolution order. */
@@ -307,13 +318,13 @@ export interface ChallengeResolvedPresentation {
 }
 
 export interface ChallengeScoredEntry {
-  readonly battleCardId: string;
+  readonly battleCardId: BattleCardId;
   readonly side: BattleSide;
   readonly points: number;
 }
 
 export interface ChallengeDissolvedEntry {
-  readonly battleCardId: string;
+  readonly battleCardId: BattleCardId;
   readonly side: BattleSide;
 }
 
@@ -348,7 +359,7 @@ export interface JourneyBattleMode {
 
 export interface TutorialBattleMode {
   kind: "tutorial";
-  tutorialRunId: string;
+  tutorialRunId: TutorialRunId;
   restartNumber: number;
   resultConfig: {
     playerOnlyVictory: true;
@@ -384,7 +395,7 @@ export function resolveScript(ref: ScriptRef): EffectStep[] {
   if (ref.table === "battle") {
     return selectBattleTriggeredEffectSteps(ref.id) ?? [];
   }
-  return selectDreamwellEffectScript(ref.id)?.steps ?? [];
+  return selectDreamwellEffectScript(asDreamwellCardId(ref.id))?.steps ?? [];
 }
 
 /**
@@ -395,7 +406,7 @@ export function resolveScript(ref: ScriptRef): EffectStep[] {
 export function newEffectRun(
   scriptRef: ScriptRef,
   side: BattleSide,
-  sourceInstanceId?: string,
+  sourceInstanceId?: BattleCardId,
   bindings?: EffectBindings,
 ): EffectRun {
   const run: EffectRun = { scriptRef, cursor: [0], side };

@@ -12,6 +12,8 @@ import type {
   MerchantEncounter,
   MerchantOffer,
 } from "../types";
+import type { OfferId } from "../../types/identifiers";
+import { asOfferId, asSelectionKey } from "../../types/identifiers";
 
 /**
  * One archetype build attempt during a slot roll. A `built: false` entry is a
@@ -106,7 +108,10 @@ function rollSlot(
   context: MerchantContext,
   saltParts: readonly string[],
 ): {
-  result: { builder: MerchantArchetypeBuilder; draft: MerchantOfferDraft } | null;
+  result: {
+    builder: MerchantArchetypeBuilder;
+    draft: MerchantOfferDraft;
+  } | null;
   attempts: MerchantRollAttempt[];
 } {
   let pool = [...eligible];
@@ -122,7 +127,10 @@ function rollSlot(
     if (builder === null) return { result: null, attempts };
     const buildRng = merchantRng(...saltParts, "target", builder.archetypeId);
     const draft = builder.build(
-      { ...context, selectionKey: saltParts.slice(2).join(":") },
+      {
+        ...context,
+        selectionKey: asSelectionKey(saltParts.slice(2).join(":")),
+      },
       buildRng,
     );
     attempts.push({ archetypeId: builder.archetypeId, built: draft !== null });
@@ -146,7 +154,10 @@ function forceSlot(
   context: MerchantContext,
   saltParts: readonly string[],
 ): {
-  result: { builder: MerchantArchetypeBuilder; draft: MerchantOfferDraft } | null;
+  result: {
+    builder: MerchantArchetypeBuilder;
+    draft: MerchantOfferDraft;
+  } | null;
   attempts: MerchantRollAttempt[];
 } {
   const attempts: MerchantRollAttempt[] = [];
@@ -158,7 +169,10 @@ function forceSlot(
       String(attempt),
     );
     const draft = builder.build(
-      { ...context, selectionKey: saltParts.slice(2).join(":") },
+      {
+        ...context,
+        selectionKey: asSelectionKey(saltParts.slice(2).join(":")),
+      },
       buildRng,
     );
     attempts.push({ archetypeId: builder.archetypeId, built: draft !== null });
@@ -210,7 +224,7 @@ function signatureFor(
 
 function draftToOffer(
   draft: MerchantOfferDraft,
-  offerId: string,
+  offerId: OfferId,
 ): Omit<MerchantOffer, "encounterSignature"> {
   return {
     offerId,
@@ -227,7 +241,9 @@ function draftToOffer(
     ...(draft.trace === undefined ? {} : { trace: draft.trace }),
     ...(draft.mechanicId === undefined ? {} : { mechanicId: draft.mechanicId }),
     ...(draft.policyId === undefined ? {} : { policyId: draft.policyId }),
-    ...(draft.selectionKey === undefined ? {} : { selectionKey: draft.selectionKey }),
+    ...(draft.selectionKey === undefined
+      ? {}
+      : { selectionKey: draft.selectionKey }),
     ...(draft.selectionRulesVersion === undefined
       ? {}
       : { selectionRulesVersion: draft.selectionRulesVersion }),
@@ -276,9 +292,10 @@ function assertValidEncounter(encounter: MerchantEncounter): void {
   }
 }
 
-export function generateMerchantEncounterWithDebug(
-  context: MerchantContext,
-): { encounter: MerchantEncounter; debug: MerchantEncounterGenerationDebug } {
+export function generateMerchantEncounterWithDebug(context: MerchantContext): {
+  encounter: MerchantEncounter;
+  debug: MerchantEncounterGenerationDebug;
+} {
   const eligible = MERCHANT_ARCHETYPE_BUILDERS.filter((builder) => {
     const config = auguryArchetype(
       context.rewardSelection.content.auguryData,
@@ -317,7 +334,10 @@ export function generateMerchantEncounterWithDebug(
   // back to a normal roll and concatenate both attempt logs so the dead forced
   // rolls remain visible alongside the eventual pick.
   const rollsA: MerchantRollAttempt[] = [];
-  let slotA: { builder: MerchantArchetypeBuilder; draft: MerchantOfferDraft } | null;
+  let slotA: {
+    builder: MerchantArchetypeBuilder;
+    draft: MerchantOfferDraft;
+  } | null;
   if (forcedBuilder === null) {
     const rolled = rollSlot(eligible, context, slotASalt);
     rollsA.push(...rolled.attempts);
@@ -337,7 +357,8 @@ export function generateMerchantEncounterWithDebug(
     throw new Error("Dream Merchant could not roll a first offer");
   }
   const honoredForcedArchetypeId =
-    forcedBuilder !== null && slotA.builder.archetypeId === forcedBuilder.archetypeId
+    forcedBuilder !== null &&
+    slotA.builder.archetypeId === forcedBuilder.archetypeId
       ? forcedBuilder.archetypeId
       : null;
 
@@ -352,8 +373,8 @@ export function generateMerchantEncounterWithDebug(
   const slotB = rolledB.result;
 
   const unsignedOffers = [
-    draftToOffer(slotA.draft, OFFER_IDS[0]),
-    draftToOffer(slotB.draft, OFFER_IDS[1]),
+    draftToOffer(slotA.draft, asOfferId(OFFER_IDS[0])),
+    draftToOffer(slotB.draft, asOfferId(OFFER_IDS[1])),
   ];
   const encounterSignature = signatureFor(context, unsignedOffers);
   const offers: MerchantOffer[] = unsignedOffers.map((offer) => ({

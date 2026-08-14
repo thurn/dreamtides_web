@@ -39,6 +39,7 @@ import { ViewportTutorialDialogue } from "../components/overlay/ViewportTutorial
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import type { LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import { asPresentationId } from "../../types/identifiers";
 
 /** Everything the draft screen renders, mapped from live journey state. */
 export interface DraftView {
@@ -215,7 +216,7 @@ export function DraftScreen({
 
       {tutorialVisible && availableTutorial !== undefined && (
         <ViewportTutorialDialogue
-          presentationId={availableTutorial.id}
+          presentationId={asPresentationId(availableTutorial.id)}
           dialogue={availableTutorial.model}
           context="site"
           placement={{ kind: "floating", avoidance: "cards-and-chrome" }}

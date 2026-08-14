@@ -9,16 +9,27 @@ import type {
 } from "../../types/tutorial";
 import { CumulusRoot } from "../CumulusRoot";
 import { TutorialEditorRail } from "./TutorialEditorRail";
+import { asCardId } from "../../types/card-identity";
+import { asTutorialActionId } from "../../types/identifiers";
+import { asDreamwellCardId } from "../../types/identifiers";
 
 const NEW_ACTION_ID = "11111111-1111-4111-8111-111111111111";
 
 const TEST_TUTORIAL_CARD_CONSTANTS = {
-  tutorialPlayerCharacterCardId: "11111111-1111-4111-8111-111111111111",
-  tutorialOpponentCharacterCardId: "22222222-2222-4222-8222-222222222222",
-  loadingScreenCharacterCardId: "66666666-6666-4666-8666-666666666666",
-  loadingScreenEventCardId: "44444444-4444-4444-8444-444444444444",
-  handoffEnemyCharacterCardId: "33333333-3333-4333-8333-333333333333",
-  tutorialDreamwellCardId: "55555555-5555-4555-8555-555555555555",
+  tutorialPlayerCharacterCardId: asCardId(
+    "11111111-1111-4111-8111-111111111111",
+  ),
+  tutorialOpponentCharacterCardId: asCardId(
+    "22222222-2222-4222-8222-222222222222",
+  ),
+  loadingScreenCharacterCardId: asCardId(
+    "66666666-6666-4666-8666-666666666666",
+  ),
+  loadingScreenEventCardId: asCardId("44444444-4444-4444-8444-444444444444"),
+  handoffEnemyCharacterCardId: asCardId("33333333-3333-4333-8333-333333333333"),
+  tutorialDreamwellCardId: asDreamwellCardId(
+    "55555555-5555-4555-8555-555555555555",
+  ),
 } as const;
 
 vi.mock("framer-motion", () => ({
@@ -47,7 +58,7 @@ const INITIAL_SPEECH_BUBBLE: TutorialSpeechBubble = {
 
 const INITIAL_ACTIONS: readonly TutorialAction[] = [
   {
-    id: "welcome",
+    id: asTutorialActionId("welcome"),
     action: "display-speech-bubble",
     speechBubble: INITIAL_SPEECH_BUBBLE,
     wait: 3,
@@ -113,7 +124,7 @@ describe("TutorialEditorRail", () => {
     const actions: readonly TutorialAction[] = [
       INITIAL_ACTIONS[0],
       {
-        id: "second",
+        id: asTutorialActionId("second"),
         action: "display-speech-bubble",
         speechBubble: {
           speaker: "mira",
@@ -126,15 +137,15 @@ describe("TutorialEditorRail", () => {
         wait: 1,
       },
       {
-        id: "third",
+        id: asTutorialActionId("third"),
         action: "draw-opponent-card",
-        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         wait: 0,
       },
       {
-        id: "fourth",
+        id: asTutorialActionId("fourth"),
         action: "reveal-and-play-opponent-card",
-        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         revealDuration: 2,
         wait: 0,
       },
@@ -215,7 +226,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "display-speech-bubble",
           speechBubble: {
             speaker: "mira",
@@ -265,7 +276,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "display-how-to-play",
           trigger: "immediate",
           cardWidth: 500,
@@ -296,7 +307,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "display-how-to-play",
           trigger: "immediate",
           companion: "dreamwell-card",
@@ -317,7 +328,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "display-how-to-play",
           trigger: "immediate",
           companion: "dreamwell-card",
@@ -372,7 +383,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "end-turn",
           speechBubble: {
             speaker: "mira",
@@ -585,15 +596,15 @@ describe("TutorialEditorRail", () => {
     const actions: readonly TutorialAction[] = [
       INITIAL_ACTIONS[0],
       {
-        id: "reveal",
+        id: asTutorialActionId("reveal"),
         action: "reveal-and-play-opponent-card",
-        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         revealDuration: 2,
         speechBubble: INITIAL_SPEECH_BUBBLE,
         wait: 0,
       },
       {
-        id: "end-turn",
+        id: asTutorialActionId("end-turn"),
         action: "end-turn",
         speechBubble: INITIAL_SPEECH_BUBBLE,
         wait: 0,
@@ -658,7 +669,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "animate-dream-avatar-portrait",
           owner: "player",
           pause: 1,
@@ -689,7 +700,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "animate-dream-avatar-portrait",
           owner: "enemy",
           pause: 1,
@@ -708,7 +719,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "animate-dream-avatar-portrait",
           owner: "enemy",
           pause: 1.5,
@@ -727,7 +738,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "animate-dream-avatar-portrait",
           owner: "enemy",
           pause: 1.5,
@@ -765,9 +776,11 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "draw-opponent-card",
-          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          cardId: asCardId(
+            TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          ),
           wait: 0,
         },
       ],
@@ -807,7 +820,7 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "end-turn",
           wait: 0,
         },
@@ -843,10 +856,12 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "draw-dreamwell-card",
           owner: "enemy",
-          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialDreamwellCardId,
+          cardId: asCardId(
+            TEST_TUTORIAL_CARD_CONSTANTS.tutorialDreamwellCardId,
+          ),
           wait: 0,
         },
       ],
@@ -889,9 +904,11 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "reposition-opponent-character",
-          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          cardId: asCardId(
+            TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          ),
           wait: 0,
         },
       ],
@@ -933,10 +950,13 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "reposition-player-character",
-          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId,
-          opposingCardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          cardId: asCardId(
+            TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId,
+          ),
+          opposingCardId:
+            TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
           wait: 0,
         },
       ],
@@ -981,9 +1001,11 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "reveal-and-play-opponent-card",
-          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          cardId: asCardId(
+            TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          ),
           revealDuration: 2,
           wait: 0,
         },
@@ -999,9 +1021,11 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "reveal-and-play-opponent-card",
-          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          cardId: asCardId(
+            TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          ),
           revealDuration: 2,
           speechBubble: {
             speaker: "mira",
@@ -1028,9 +1052,11 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "reveal-and-play-opponent-card",
-          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          cardId: asCardId(
+            TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          ),
           revealDuration: 2,
           speechBubble: {
             speaker: "mira",
@@ -1057,9 +1083,11 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "reveal-and-play-opponent-card",
-          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          cardId: asCardId(
+            TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          ),
           revealDuration: 2,
           speechBubble: {
             speaker: "mira",
@@ -1086,9 +1114,11 @@ describe("TutorialEditorRail", () => {
       [
         INITIAL_ACTIONS[0],
         {
-          id: NEW_ACTION_ID,
+          id: asTutorialActionId(NEW_ACTION_ID),
           action: "reveal-and-play-opponent-card",
-          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          cardId: asCardId(
+            TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId,
+          ),
           revealDuration: 2.5,
           speechBubble: {
             speaker: "mira",

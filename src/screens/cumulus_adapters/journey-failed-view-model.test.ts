@@ -5,6 +5,10 @@ expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { JourneyState } from "../../types/journey";
 import { buildJourneyFailedView } from "./journey-failed-view-model";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asBattleId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
 
 function state(overrides: Partial<JourneyState> = {}): JourneyState {
   const base = createDefaultState();
@@ -12,7 +16,7 @@ function state(overrides: Partial<JourneyState> = {}): JourneyState {
     ...base,
     completionLevel: 2,
     dreamAvatar: {
-      id: "dream-avatar-uuid",
+      id: asDreamAvatarId("dream-avatar-uuid"),
       name: "The Wayfinder",
       title: "Bearer of the Last Light",
       renderedText: "A fixture ability.",
@@ -20,12 +24,12 @@ function state(overrides: Partial<JourneyState> = {}): JourneyState {
       startingEssence: 200,
     },
     failureSummary: {
-      battleId: "battle-uuid",
+      battleId: asBattleId("battle-uuid"),
       result: "defeat",
       reason: "score_target_reached",
-      siteId: "site-uuid",
+      siteId: asSiteId("site-uuid"),
       siteLabel: "Battle",
-      dreamscapeIdOrNone: "dreamscape-uuid",
+      dreamscapeIdOrNone: asAtlasNodeId("dreamscape-uuid"),
       turnNumber: 6,
       playerScore: 4,
       enemyScore: 10,
@@ -60,14 +64,14 @@ describe("buildJourneyFailedView", () => {
   it.each(["turn_limit_reached", "forced_result"] as const)(
     "preserves the semantic %s reason",
     (reason) => {
-    const view = buildJourneyFailedView(
-      state({
-        failureSummary: {
-          ...state().failureSummary!,
-          reason,
-        },
-      }),
-    );
+      const view = buildJourneyFailedView(
+        state({
+          failureSummary: {
+            ...state().failureSummary!,
+            reason,
+          },
+        }),
+      );
 
       expect(view?.reason).toBe(reason);
     },

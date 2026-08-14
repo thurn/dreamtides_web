@@ -5,6 +5,9 @@ import { assertLocalized } from "@trox/runtime";
 import { artRef } from "../../primitives/art";
 import { mountCumulus } from "../../test-helpers/component-test-fixtures";
 import { SiteLayout, type SiteLayoutComposition } from "./SiteLayout";
+import { asGuideId } from "../../../types/identifiers";
+import { asSiteId } from "../../../types/identifiers";
+import { asDreamscapeId } from "../../../types/identifiers";
 
 const compositions: readonly SiteLayoutComposition[] = [
   "balanced-gallery",
@@ -48,14 +51,14 @@ describe("SiteLayout", () => {
         installMatchMedia(width);
         const { container, root } = mountCumulus(
           <SiteLayout
-            siteId={composition}
+            siteId={asSiteId(composition)}
             scene={null}
             moteTint="warm"
             guide={{
               id: "guide",
               name: assertLocalized("Guide"),
               line: assertLocalized("Line"),
-              art: artRef.dreamGuide("guide"),
+              art: artRef.dreamGuide(asGuideId("guide")),
               presence: "speaking",
             }}
             composition={composition}
@@ -98,14 +101,14 @@ describe("SiteLayout", () => {
   it("keeps portrait-only guides free of speech and resolves a scene independently", () => {
     const { container, root } = mountCumulus(
       <SiteLayout
-        siteId="fixture"
-        scene={artRef.dreamscapeScene("fixture")}
+        siteId={asSiteId("fixture")}
+        scene={artRef.dreamscapeScene(asDreamscapeId("fixture"))}
         moteTint="violet"
         guide={{
           id: "guide",
           name: assertLocalized("Guide"),
           line: assertLocalized("Line"),
-          art: artRef.dreamGuide("guide"),
+          art: artRef.dreamGuide(asGuideId("guide")),
           presence: "portrait-only",
         }}
         composition="balanced-gallery"
@@ -124,14 +127,14 @@ describe("SiteLayout", () => {
     installMatchMedia(1000);
     const { container, root } = mountCumulus(
       <SiteLayout
-        siteId="intermediate"
+        siteId={asSiteId("intermediate")}
         scene={null}
         moteTint="warm"
         guide={{
           id: "guide",
           name: assertLocalized("Guide"),
           line: assertLocalized("Line"),
-          art: artRef.dreamGuide("guide"),
+          art: artRef.dreamGuide(asGuideId("guide")),
           presence: "speaking",
         }}
         composition="content-led-gallery"

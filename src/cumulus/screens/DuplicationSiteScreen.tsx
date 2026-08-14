@@ -11,19 +11,20 @@ import {
   type SiteLayoutGuideView,
 } from "../components/layout/SiteLayout";
 import { useIsDesktop } from "../primitives/use-is-desktop";
+import type { DeckEntryId, SiteId } from "../../types/identifiers";
 
 export type DuplicationGuideView = SiteLayoutGuideView;
 
 export interface DuplicationCardView {
   /** Concrete deck-entry id; duplicate catalog cards remain independent choices. */
-  entryId: string;
+  entryId: DeckEntryId;
   /** The fully resolved card currently held in the deck. */
   model: GameCardModel;
 }
 
 export interface DuplicationSiteView {
   /** Stable site id used by the shared guide-gallery layout. */
-  siteId: string;
+  siteId: SiteId;
   /** Current dreamscape scene art behind the site, if resolved. */
   scene: ArtRef | null;
   /** Deacon Holt's guide art and one stable line for this visit. */
@@ -44,7 +45,7 @@ export interface DuplicationSiteScreenProps {
   /** Leave the site without duplicating a card. */
   onClose: () => void;
   /** Duplicate the selected concrete deck entry. */
-  onDuplicate: (entryId: string) => void;
+  onDuplicate: (entryId: DeckEntryId) => void;
 }
 
 export function DuplicationSiteScreen({
@@ -52,7 +53,7 @@ export function DuplicationSiteScreen({
   onClose,
   onDuplicate,
 }: DuplicationSiteScreenProps) {
-  const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
+  const [selectedEntryId, setSelectedEntryId] = useState<DeckEntryId | null>(null);
   const [confirming, setConfirming] = useState(false);
   const layout = useIsDesktop() ? "desktop" : "mobile";
   const desktop = layout === "desktop";
@@ -60,7 +61,7 @@ export function DuplicationSiteScreen({
   const locked = confirming || view.alreadyAccepted;
 
   const toggleSelection = useCallback(
-    (entryId: string) => {
+    (entryId: DeckEntryId) => {
       if (locked) return;
       setSelectedEntryId((current) => (current === entryId ? null : entryId));
     },

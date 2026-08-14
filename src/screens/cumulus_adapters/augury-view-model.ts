@@ -30,6 +30,10 @@ import type {
   MerchantOfferActionResult,
 } from "../../journey_v2";
 import type { MerchantDeckSnapshot } from "../../journey_v2/trace/deckSnapshot";
+import {
+  asAuguryCardViewId,
+  asOfferId,
+} from "../../types/identifiers";
 import type { CardData } from "../../types/cards";
 import type { LocalizedString } from "@trox/runtime";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
@@ -65,6 +69,11 @@ import type {
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
 import { tx } from "@trox/runtime";
+import type { GuideId } from "../../types/identifiers";
+import type { OfferId } from "../../types/identifiers";
+import type { ChoiceId } from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
 
 type CardObject = MerchantCatalogCard | MerchantDeckCard;
 
@@ -86,7 +95,7 @@ export interface AuguryLogEntry {
 
 export function resolveAuguryGuide(
   guides: readonly DreamGuideContent[],
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent {
   return requireGuideForSiteType(guides, "Augury", presentingGuideId);
 }
@@ -105,7 +114,7 @@ function toCardView(
   includeTransfiguration = true,
 ): AuguryCardView {
   return {
-    id: `${object.cardUuid}${idSuffix}`,
+    id: asAuguryCardViewId(`${object.cardUuid}${idSuffix}`),
     model: {
       cardId: card.id,
       displaySnapshot: card,
@@ -121,7 +130,7 @@ function sitePreviewModel(
   sitesData: SitesData,
 ): DreamscapeSiteModel {
   return {
-    id: `augury-preview:${siteType}`,
+    id: asSiteId(`augury-preview:${siteType}`),
     type: siteType,
     isVisited: false,
     pos: { x: 50, y: 50 },
@@ -154,13 +163,16 @@ function allCards(objects: readonly MerchantGameObject[]): CardObject[] {
 function toDreamsign(
   object: Extract<MerchantGameObject, { objectType: "dreamsign" }>,
 ): ReturnType<typeof localizedDreamsign> {
-  return localizedDreamsign({
-    id: object.dreamsignId,
-    name: object.dreamsignTemplate.name,
-    effectDescription: object.dreamsignTemplate.effectDescription,
-    imageName: object.dreamsignTemplate.imageName,
-    imageAlt: object.dreamsignTemplate.imageAlt,
-  }, "Augury offer");
+  return localizedDreamsign(
+    {
+      id: object.dreamsignId,
+      name: object.dreamsignTemplate.name,
+      effectDescription: object.dreamsignTemplate.effectDescription,
+      imageName: object.dreamsignTemplate.imageName,
+      imageAlt: object.dreamsignTemplate.imageAlt,
+    },
+    "Augury offer",
+  );
 }
 
 function unavailable(message: string): never {
@@ -561,7 +573,7 @@ export function buildAuguryOfferViews(
   return encounter.offers.map((offer) => {
     const tile = buildAuguryOfferTileModel(offer, context);
     return {
-      id: offer.offerId,
+      id: asOfferId(offer.offerId),
       requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
       tile,
       presentation: auguryArchetype(
@@ -666,8 +678,8 @@ export function buildAugurySiteModel(params: {
 
 export function buildAuguryAcceptRequest(
   encounter: MerchantEncounter,
-  offerId: string,
-  choiceId: string | null,
+  offerId: OfferId,
+  choiceId: ChoiceId | null,
 ): MerchantAcceptRequest | null {
   const offer = encounter.offers.find(
     (candidate) => candidate.offerId === offerId,
@@ -711,7 +723,7 @@ export function buildAuguryDeclineRequest(
 export function buildAuguryLogEntries(
   result: AuguryBuildResult,
   site: SiteState,
-  guideId: string | null,
+  guideId: GuideId | null,
 ): AuguryLogEntry[] {
   const entries: AuguryLogEntry[] = [
     {
@@ -817,11 +829,11 @@ export function chooseAuguryOffer(
   site: SiteState | null,
   result: AuguryBuildResult | null,
   acceptOffer: (
-    siteId: string,
+    siteId: SiteId,
     request: MerchantAcceptRequest,
   ) => MerchantOfferActionResult | void,
-  offerId: string,
-  choiceId: string | null,
+  offerId: OfferId,
+  choiceId: ChoiceId | null,
 ): { ok: true } | { ok: false; message: LocalizedString } {
   if (
     site === null ||
@@ -830,20 +842,14 @@ export function chooseAuguryOffer(
   ) {
     return {
       ok: false,
-      message: tx(
-        "The augury is clouded.",
-        "[augury] Error clouded.",
-      ),
+      message: tx("The augury is clouded.", "[augury] Error clouded."),
     };
   }
   const request = buildAuguryAcceptRequest(result.encounter, offerId, choiceId);
   if (request === null) {
     return {
       ok: false,
-      message: tx(
-        "Choose a vision first.",
-        "[augury] Error choose vision.",
-      ),
+      message: tx("Choose a vision first.", "[augury] Error choose vision."),
     };
   }
   return auguryChoiceResult(acceptOffer(site.id, request));

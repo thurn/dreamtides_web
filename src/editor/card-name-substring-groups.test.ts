@@ -5,7 +5,7 @@ import { buildCardNameSubstringGroups } from "./card-name-substring-groups";
 
 function card(id: string, name: string, cardNumber: number): EditorCardRecord {
   return {
-    id,
+    id: asCardId(id),
     cardNumber,
     cardType: "Character",
     "energy-cost": 1,
@@ -46,10 +46,12 @@ describe("buildCardNameSubstringGroups", () => {
     ]);
 
     expect(groups.map((group) => group.key)).toEqual(["dream", "light"]);
-    expect(groups.map((group) => group.cards.map((entry) => entry.id))).toEqual([
-      ["uuid-dream", "uuid-dreamlight"],
-      ["uuid-dreamlight", "uuid-light"],
-    ]);
+    expect(groups.map((group) => group.cards.map((entry) => entry.id))).toEqual(
+      [
+        ["uuid-dream", "uuid-dreamlight"],
+        ["uuid-dreamlight", "uuid-light"],
+      ],
+    );
   });
 
   it("keeps the longest substring when nested matches have identical participants", () => {
@@ -91,7 +93,10 @@ describe("buildCardNameSubstringGroups", () => {
       "uuid-alpha",
       "uuid-beta",
     ]);
-    expect(descending.map((group) => group.key)).toEqual(["starlight", "dream"]);
+    expect(descending.map((group) => group.key)).toEqual([
+      "starlight",
+      "dream",
+    ]);
     expect(descending[0]?.cards.map((entry) => entry.id)).toEqual([
       "uuid-beta",
       "uuid-alpha",

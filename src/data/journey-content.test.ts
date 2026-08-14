@@ -1,6 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { MINIMAL_ATLAS_DATA, MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
+import {
+  MINIMAL_ATLAS_DATA,
+  MINIMAL_SITES_DATA,
+} from "../__test-helpers__/atlas-fixtures";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { economyFixture } from "../testing/economy-fixture";
@@ -49,14 +52,16 @@ describe("loadJourneyContent", () => {
     const tides = {
       version: 2,
       selection: { bandFraction: 0.25, bandMinimum: 5 },
-      tides: [{
-        id: "tide-a",
-        displayName: "Tide A",
-        displayDescription: "A synthetic tide.",
-        resonance: "ember",
-        role: "neutral",
-        cards: [{ id: "card-1", copies: 1 }],
-      }],
+      tides: [
+        {
+          id: "tide-a",
+          displayName: "Tide A",
+          displayDescription: "A synthetic tide.",
+          resonance: "ember",
+          role: "neutral",
+          cards: [{ id: "card-1", copies: 1 }],
+        },
+      ],
       tidePoolByDreamAvatar: {},
     };
     const exploration = {
@@ -65,20 +70,24 @@ describe("loadJourneyContent", () => {
       foldHash: explorationJson.foldHash,
       customCards: [],
       customDreamsigns: [],
-      encounters: [{
-        cardId: "card-1",
-        prose: "A fixture encounter.",
-        action: [{
-          id: "fixture-action",
-          label: "Invite someone through",
-          effectText: "Gain a card",
-          effectKind: "gain-offered-card",
-          canonicalMechanicId: "gain-card",
-          selectionPolicyId: "card-fit-quality",
-          predicate: "cheap-character",
-          count: 1,
-        }],
-      }],
+      encounters: [
+        {
+          cardId: asCardId("card-1"),
+          prose: "A fixture encounter.",
+          action: [
+            {
+              id: "fixture-action",
+              label: "Invite someone through",
+              effectText: "Gain a card",
+              effectKind: "gain-offered-card",
+              canonicalMechanicId: "gain-card",
+              selectionPolicyId: "card-fit-quality",
+              predicate: "cheap-character",
+              count: 1,
+            },
+          ],
+        },
+      ],
     };
     const assets = new Map<string, unknown>([
       ["/cards_v2-data.json", input.cards],
@@ -90,7 +99,10 @@ describe("loadJourneyContent", () => {
       ["/tides4-data.json", tides],
       ["/dreamscapes-data.json", []],
       ["/affiliations-data.json", []],
-      ["/dream-guides-data.json", { schemaVersion: 1, contentHash: "a".repeat(64), guides: [] }],
+      [
+        "/dream-guides-data.json",
+        { schemaVersion: 1, contentHash: "a".repeat(64), guides: [] },
+      ],
       ["/atlas-data.json", MINIMAL_ATLAS_DATA],
       ["/sites-data.json", MINIMAL_SITES_DATA],
       ["/economy-data.json", input.economy ?? economyFixture()],
@@ -102,33 +114,41 @@ describe("loadJourneyContent", () => {
       ["/figments-data.json", []],
     ]);
     const failures = new Set(input.failingPaths ?? []);
-    vi.stubGlobal("fetch", vi.fn((request: string | URL | Request) => {
-      const path = typeof request === "string"
-        ? request
-        : request instanceof URL ? request.pathname : new URL(request.url).pathname;
-      const ok = !failures.has(path) && assets.has(path);
-      return Promise.resolve({
-        ok,
-        status: ok ? 200 : 503,
-        statusText: ok ? "OK" : "Test Failure",
-        json: () => Promise.resolve(assets.get(path) ?? null),
-      } as Response);
-    }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn((request: string | URL | Request) => {
+        const path =
+          typeof request === "string"
+            ? request
+            : request instanceof URL
+              ? request.pathname
+              : new URL(request.url).pathname;
+        const ok = !failures.has(path) && assets.has(path);
+        return Promise.resolve({
+          ok,
+          status: ok ? 200 : 503,
+          statusText: ok ? "OK" : "Test Failure",
+          json: () => Promise.resolve(assets.get(path) ?? null),
+        } as Response);
+      }),
+    );
   }
 
   it("loads the current catalogs and assembles selection tuning from their owners", async () => {
     stubFetch({
       cards: [makeCard(1), makeCard(2)],
-      dreamAvatars: [{
-        id: "avatar-1",
-        name: "Test Avatar",
-        title: "Speaker of Tests",
-        renderedText: "Test rules text.",
-        imageNumber: "0001",
-        startingEssence: 235,
-        signatureCards: [],
-        signatureCardIds: [],
-      }],
+      dreamAvatars: [
+        {
+          id: "avatar-1",
+          name: "Test Avatar",
+          title: "Speaker of Tests",
+          renderedText: "Test rules text.",
+          imageNumber: "0001",
+          startingEssence: 235,
+          signatureCards: [],
+          signatureCardIds: [],
+        },
+      ],
     });
     const content = await loadJourneyContent();
     expect(content.cardDatabase.size).toBe(2);
@@ -136,13 +156,20 @@ describe("loadJourneyContent", () => {
     expect(content.rewardSelectionData.tuning).toMatchObject({
       bandFraction: 0.25,
       minDeckForPurge: MINIMAL_SITES_DATA.selection.minDeckForPurge,
-      subtypeMinPoolCards: CONFIG_DATA_FIXTURE.auguryData.selection.subtypeMinPoolCards,
+      subtypeMinPoolCards:
+        CONFIG_DATA_FIXTURE.auguryData.selection.subtypeMinPoolCards,
     });
   });
 
   it("rejects when the Tides catalog is unavailable", async () => {
-    stubFetch({ cards: [makeCard(1)], dreamAvatars: [], failingPaths: ["/tides4-data.json"] });
-    await expect(loadJourneyContent()).rejects.toThrow("Missing Tides4 catalog");
+    stubFetch({
+      cards: [makeCard(1)],
+      dreamAvatars: [],
+      failingPaths: ["/tides4-data.json"],
+    });
+    await expect(loadJourneyContent()).rejects.toThrow(
+      "Missing Tides4 catalog",
+    );
   });
 
   it("uses the authored economy default when an avatar omits starting essence", async () => {
@@ -151,15 +178,17 @@ describe("loadJourneyContent", () => {
     stubFetch({
       cards: [makeCard(1)],
       economy,
-      dreamAvatars: [{
-        id: "avatar-defaulted",
-        name: "Defaulted",
-        title: "D",
-        renderedText: "",
-        imageNumber: "0001",
-        signatureCards: [],
-        signatureCardIds: [],
-      }],
+      dreamAvatars: [
+        {
+          id: "avatar-defaulted",
+          name: "Defaulted",
+          title: "D",
+          renderedText: "",
+          imageNumber: "0001",
+          signatureCards: [],
+          signatureCardIds: [],
+        },
+      ],
     });
     const content = await loadJourneyContent();
     expect(content.dreamAvatars[0].startingEssence).toBe(137);

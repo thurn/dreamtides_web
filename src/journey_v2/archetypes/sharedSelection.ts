@@ -9,10 +9,12 @@ import {
 import type { MerchantArchetypeId, MerchantOfferDraft } from "./types";
 import type { MerchantContext } from "../types";
 import { auguryArchetype } from "../../data/augury-data";
-import type {
-  MerchantOfferTrace,
-  MerchantTraceDecision,
-} from "../trace/types";
+import type { MerchantOfferTrace, MerchantTraceDecision } from "../trace/types";
+import {
+  asRewardCandidateKey,
+  asMerchantTargetKey,
+  asSelectionKey,
+} from "../../types/identifiers";
 
 function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
   const decision: MerchantTraceDecision =
@@ -28,34 +30,46 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
               selection.mechanicId === "change-entry-subtype"
             ? "entry_modification"
             : "scored_cards";
-  const keyKind = selection.trace.keyKind === "dreamAvatarId"
-    ? "entryId"
-    : selection.trace.keyKind;
-  const dreamsignTier = selection.trace.fallback.includes("dreamsign-signal-free")
-    ? "fallback" as const
-    : selection.trace.fallback.includes("dreamsign-generic")
-      ? "generic" as const
-      : "covered" as const;
+  const keyKind =
+    selection.trace.keyKind === "dreamAvatarId"
+      ? "entryId"
+      : selection.trace.keyKind;
+  const dreamsignTier = selection.trace.fallback.includes(
+    asRewardCandidateKey("dreamsign-signal-free"),
+  )
+    ? ("fallback" as const)
+    : selection.trace.fallback.includes(
+          asRewardCandidateKey("dreamsign-generic"),
+        )
+      ? ("generic" as const)
+      : ("covered" as const);
   const allCandidatesInDraftPool =
     selection.trace.band.candidates.length > 0 &&
-    selection.trace.band.candidates.every((candidate) => candidate.inDraftPool === true);
+    selection.trace.band.candidates.every(
+      (candidate) => candidate.inDraftPool === true,
+    );
   const threshold = selection.trace.band.candidates
     .map((candidate) => candidate.components.threshold)
     .find((value) => value !== undefined);
-  const notes = selection.trace.policyId === "purge-misfit"
-    ? [
-        ...selection.trace.fallback,
-        `purgeMisfitFraction=${String(selection.trace.tuning.purgeMisfitFraction ?? "unavailable")}`,
-        `looThreshold=${String(threshold ?? "unavailable")}`,
-        `starterPurgeBonus=${String(selection.trace.tuning.starterPurgeBonus ?? "unavailable")}`,
-      ]
-    : [
-        ...selection.trace.fallback,
-        ...(allCandidatesInDraftPool ? ["candidateSource=draftPool"] : []),
-      ];
-  const isScoredCardDecision = decision === "scored_cards" &&
-    selection.policyId !== "uniform" && selection.policyId !== "fixed";
-  const coldStart = selection.trace.fallback.includes("fit-unavailable");
+  const notes =
+    selection.trace.policyId === "purge-misfit"
+      ? [
+          ...selection.trace.fallback,
+          `purgeMisfitFraction=${String(selection.trace.tuning.purgeMisfitFraction ?? "unavailable")}`,
+          `looThreshold=${String(threshold ?? "unavailable")}`,
+          `starterPurgeBonus=${String(selection.trace.tuning.starterPurgeBonus ?? "unavailable")}`,
+        ]
+      : [
+          ...selection.trace.fallback,
+          ...(allCandidatesInDraftPool ? ["candidateSource=draftPool"] : []),
+        ];
+  const isScoredCardDecision =
+    decision === "scored_cards" &&
+    selection.policyId !== "uniform" &&
+    selection.policyId !== "fixed";
+  const coldStart = selection.trace.fallback.includes(
+    asRewardCandidateKey("fit-unavailable"),
+  );
   return {
     decision,
     keyKind,
@@ -68,21 +82,30 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
     },
     candidateCount: selection.trace.candidateCount,
     candidates: selection.trace.band.candidates.map((candidate) => ({
-      key: candidate.key,
+      key: asMerchantTargetKey(candidate.key),
       score: candidate.score,
       components: candidate.components,
-      ...(candidate.cardUuid === undefined ? {} : { cardUuid: candidate.cardUuid }),
-      ...(candidate.cardNumber === undefined ? {} : { cardNumber: candidate.cardNumber }),
-      ...(candidate.dreamsignId === undefined ? {} : { dreamsignId: candidate.dreamsignId }),
-      ...(candidate.entryId === undefined ? {} : { entryId: candidate.entryId }),
-      ...(candidate.inDraftPool === undefined ? {} : { inDraftPool: candidate.inDraftPool }),
+      ...(candidate.cardUuid === undefined
+        ? {}
+        : { cardUuid: candidate.cardUuid }),
+      ...(candidate.cardNumber === undefined
+        ? {}
+        : { cardNumber: candidate.cardNumber }),
+      ...(candidate.dreamsignId === undefined
+        ? {}
+        : { dreamsignId: candidate.dreamsignId }),
+      ...(candidate.entryId === undefined
+        ? {}
+        : { entryId: candidate.entryId }),
+      ...(candidate.inDraftPool === undefined
+        ? {}
+        : { inDraftPool: candidate.inDraftPool }),
       inBand: candidate.inBand,
       selected: candidate.selected,
     })),
-    truncated: selection.trace.band.candidates.length < selection.trace.candidateCount,
-    ...(isScoredCardDecision
-      ? { coldStartQualityFallback: coldStart }
-      : {}),
+    truncated:
+      selection.trace.band.candidates.length < selection.trace.candidateCount,
+    ...(isScoredCardDecision ? { coldStartQualityFallback: coldStart } : {}),
     ...(decision === "dreamsign_match" ? { dreamsignTier } : {}),
     ...(Object.keys(selection.trace.tuning).length === 0 || coldStart
       ? {}
@@ -114,7 +137,8 @@ export function selectMerchantReward(input: {
 }): RewardSelectionResult | null {
   const { context, archetypeId, mechanicId, policyId } = input;
   const rewardSelection =
-    mechanicId === "gain-dreamsign" && context.rewardSelection.remainingDreamsignIds.size === 0
+    mechanicId === "gain-dreamsign" &&
+    context.rewardSelection.remainingDreamsignIds.size === 0
       ? {
           ...context.rewardSelection,
           remainingDreamsignIds: new Set(
@@ -128,7 +152,9 @@ export function selectMerchantReward(input: {
     scope: {
       journeySeed: context.journeySeed,
       siteUuid: context.site.id,
-      selectionKey: `${context.selectionKey ?? "slot"}:${archetypeId}`,
+      selectionKey: asSelectionKey(
+        `${context.selectionKey ?? "slot"}:${archetypeId}`,
+      ),
     },
     count: 1,
     ...input.request,
@@ -173,7 +199,9 @@ export function selectMerchantCount(input: {
     scope: {
       journeySeed: input.context.journeySeed,
       siteUuid: input.context.site.id,
-      selectionKey: `${input.context.selectionKey ?? "slot"}:${input.archetypeId}`,
+      selectionKey: asSelectionKey(
+        `${input.context.selectionKey ?? "slot"}:${input.archetypeId}`,
+      ),
     },
     count: 1,
   };

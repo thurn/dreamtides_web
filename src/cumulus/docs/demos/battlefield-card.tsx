@@ -9,6 +9,9 @@ import {
   DemoSelect,
   DemoToggle,
 } from "./promotion-demo-controls";
+import type { BattleCardId } from "../../../types/identifiers";
+import { asPresentationId } from "../../../types/identifiers";
+import { asBattleCardId } from "../../../types/identifiers";
 function Demo() {
   const [last, setLast] = useState("No intent yet");
   const [interaction, setInteraction] = useState<
@@ -34,7 +37,7 @@ function Demo() {
             onPress: (id: string) => setLast(`press ${id}`),
             onDragStart: (id: string) => setLast(`drag-start ${id}`),
             onDragEnd: (id: string) => setLast(`drag-end ${id}`),
-            onDrop: (drop: { readonly battleCardId: string }) =>
+            onDrop: (drop: { readonly battleCardId: BattleCardId }) =>
               setLast(`drop ${drop.battleCardId}`),
           } as const);
   return (
@@ -70,7 +73,7 @@ function Demo() {
       <div style={{ width: 190 }}>
         <BattlefieldCard
           model={{
-            battleCardId: demoInstanceId(1),
+            battleCardId: asBattleCardId(demoInstanceId(1)),
             card: demoCard(1, "Wayfinder"),
             exhausted,
             storedMemory: 2,
@@ -88,7 +91,7 @@ function Demo() {
               ? {
                   scoreAnnouncement: {
                     points: 3,
-                    presentationId: "demo-score-3",
+                    presentationId: asPresentationId("demo-score-3"),
                   },
                 }
               : {}),

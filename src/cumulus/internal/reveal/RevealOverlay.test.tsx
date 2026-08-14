@@ -15,6 +15,7 @@ import {
 import { CumulusRoot } from "../../CumulusRoot";
 import { GLYPHS } from "../../primitives/glyph";
 import { artRef } from "../../primitives/art";
+import { asDreamscapeId } from "../../../types/identifiers";
 
 const UUID = "00000000-0000-4000-8000-000000000001";
 let root: Root;
@@ -396,7 +397,7 @@ describe("RevealOverlay", () => {
         kind: "infoCard",
         card: {
           variant: "atlasReveal",
-          image: artRef.dreamscapeScene("wilderveil"),
+          image: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
           title: assertLocalized("Wilderveil"),
         },
       },

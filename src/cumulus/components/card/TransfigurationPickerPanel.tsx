@@ -4,11 +4,12 @@ import type { TransfigurationType } from "../../../types/journey";
 import type { GameCardModel } from "./CardView";
 import { CardPickerPanel } from "./CardPickerPanel";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
+import type { DeckEntryId } from "../../../types/identifiers";
 
 /** One prepared deck entry offered by a Transfiguration picker. */
 export interface TransfigurationPickerCard {
   /** Stable deck-entry identity emitted by selection. */
-  readonly entryId: string;
+  readonly entryId: DeckEntryId;
   /** Complete resolved card presentation. */
   readonly card: GameCardModel;
   /** Prepared eligibility and prior-reforge state. */
@@ -36,7 +37,7 @@ export interface TransfigurationPickerPanelProps {
   /** Complete preparation state rendered by the picker. */
   readonly state: TransfigurationPickerState;
   /** Reports the exact selected deck-entry identity. */
-  readonly onCardPress: (entryId: string) => void;
+  readonly onCardPress: (entryId: DeckEntryId) => void;
   /** Declines or closes the picker without selecting a card. */
   readonly onDismiss: () => void;
 }

@@ -3,10 +3,14 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { makeTestPoolContext } from "../__test-helpers__/pool-context";
 import { getLogEntries, resetLog } from "../logging";
 import type { DreamAvatarContent } from "../types/content";
-import { buildDreamAvatarPackage, buildDreamAvatarTides4Provenance } from "./journey-content";
+import {
+  buildDreamAvatarPackage,
+  buildDreamAvatarTides4Provenance,
+} from "./journey-content";
+import { asDreamAvatarId } from "../types/identifiers";
 
 const DREAM_AVATAR: DreamAvatarContent = {
-  id: "test-avatar",
+  id: asDreamAvatarId("test-avatar"),
   name: "Test Avatar",
   title: "The Tester",
   renderedText: "",
@@ -21,8 +25,16 @@ describe("tides4 DreamAvatar packages", () => {
 
   it("builds a deterministic resolved pool and records its tide selection", () => {
     const context = makeTestPoolContext();
-    const first = buildDreamAvatarPackage(DREAM_AVATAR, context, "journey-seed");
-    const second = buildDreamAvatarPackage(DREAM_AVATAR, context, "journey-seed");
+    const first = buildDreamAvatarPackage(
+      DREAM_AVATAR,
+      context,
+      "journey-seed",
+    );
+    const second = buildDreamAvatarPackage(
+      DREAM_AVATAR,
+      context,
+      "journey-seed",
+    );
 
     expect(first.draftPoolCopiesByCard).toEqual(second.draftPoolCopiesByCard);
     expect(first.draftPoolSize).toBe(60);
@@ -46,6 +58,8 @@ describe("tides4 DreamAvatar packages", () => {
     expect(provenance).not.toBeNull();
     expect(provenance?.dealSize).toBe(60);
     expect(provenance?.tides.some((tide) => tide.joined)).toBe(true);
-    expect(Object.keys(provenance?.cardProvenanceByNumber ?? {})).not.toHaveLength(0);
+    expect(
+      Object.keys(provenance?.cardProvenanceByNumber ?? {}),
+    ).not.toHaveLength(0);
   });
 });

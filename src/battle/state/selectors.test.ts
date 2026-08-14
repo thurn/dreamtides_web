@@ -16,12 +16,14 @@ import {
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
+import { asBattleCardId } from "../../types/identifiers";
+import { asBattleEntryKey } from "../../types/identifiers";
 
 describe("selectEffectiveSpark", () => {
   it("clamps negative printedSpark + sparkDelta to zero per spec E-5", () => {
     const state = createInitialBattleState(
       createTestBattleInit({
-        battleEntryKey: "site-7::2::dreamscape-2",
+        battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
         cardDatabase: makeBattleTestCardDatabase(),
@@ -47,7 +49,7 @@ describe("selectEffectiveSpark", () => {
   it("returns null for missing or null battleCardId (bug-041)", () => {
     const state = createInitialBattleState(
       createTestBattleInit({
-        battleEntryKey: "site-7::2::dreamscape-2",
+        battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
         cardDatabase: makeBattleTestCardDatabase(),
@@ -55,7 +57,9 @@ describe("selectEffectiveSpark", () => {
       }),
     );
     expect(selectEffectiveSpark(state, null)).toBeNull();
-    expect(selectEffectiveSpark(state, "bc_missing")).toBeNull();
+    expect(
+      selectEffectiveSpark(state, asBattleCardId("bc_missing")),
+    ).toBeNull();
   });
 });
 
@@ -63,7 +67,7 @@ describe("selectEffectiveSparkOrZero", () => {
   it("coalesces a missing card to zero for display callers", () => {
     const state = createInitialBattleState(
       createTestBattleInit({
-        battleEntryKey: "site-7::2::dreamscape-2",
+        battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
         cardDatabase: makeBattleTestCardDatabase(),
@@ -71,10 +75,12 @@ describe("selectEffectiveSparkOrZero", () => {
       }),
     );
     expect(selectEffectiveSparkOrZero(state, null)).toBe(0);
-    expect(selectEffectiveSparkOrZero(state, "bc_missing")).toBe(0);
     expect(
-      selectEffectiveSparkOrZero(state, state.sides.player.hand[0]),
-    ).toBe(state.cardInstances[state.sides.player.hand[0]].definition.printedSpark);
+      selectEffectiveSparkOrZero(state, asBattleCardId("bc_missing")),
+    ).toBe(0);
+    expect(selectEffectiveSparkOrZero(state, state.sides.player.hand[0])).toBe(
+      state.cardInstances[state.sides.player.hand[0]].definition.printedSpark,
+    );
   });
 });
 
@@ -94,7 +100,7 @@ describe("selectPlayAreaSize", () => {
   function emptyBattleState(): BattleMutableState {
     return createInitialBattleState(
       createTestBattleInit({
-        battleEntryKey: "site-7::2::dreamscape-2",
+        battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
         cardDatabase: makeBattleTestCardDatabase(),
@@ -105,9 +111,9 @@ describe("selectPlayAreaSize", () => {
 
   it("keeps the rules-level 10/9 formation stable as battlefield occupancy changes", () => {
     const state = emptyBattleState();
-    state.sides.player.frontRank.F0 = "p0";
-    state.sides.player.frontRank.F1 = "p1";
-    state.sides.enemy.backRank.B8 = "e8";
+    state.sides.player.frontRank.F0 = asBattleCardId("p0");
+    state.sides.player.frontRank.F1 = asBattleCardId("p1");
+    state.sides.enemy.backRank.B8 = asBattleCardId("e8");
     expect(selectPlayAreaSize(state)).toEqual({ frontSize: 9, backSize: 10 });
     expect(selectSidePlayAreaSize(state, "player")).toEqual({
       frontSize: 9,
@@ -124,7 +130,7 @@ describe("selectCenterPreferredCharacterPlaySlot", () => {
   it("chooses the nearest open center slot with a deterministic lower-index tie break", () => {
     const state = createInitialBattleState(
       createTestBattleInit({
-        battleEntryKey: "site-7::2::dreamscape-2",
+        battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
         site: makeBattleTestSite(),
         state: makeBattleTestState(),
         cardDatabase: makeBattleTestCardDatabase(),
@@ -137,23 +143,22 @@ describe("selectCenterPreferredCharacterPlaySlot", () => {
       zone: "backRank",
       slotId: "B4",
     });
-    state.sides.enemy.backRank.B4 = "occupied-center-left";
+    state.sides.enemy.backRank.B4 = asBattleCardId("occupied-center-left");
     expect(selectCenterPreferredCharacterPlaySlot(state, "enemy")).toEqual({
       side: "enemy",
       zone: "backRank",
       slotId: "B5",
     });
-    state.sides.enemy.backRank.B5 = "occupied-center-right";
+    state.sides.enemy.backRank.B5 = asBattleCardId("occupied-center-right");
     expect(selectCenterPreferredCharacterPlaySlot(state, "enemy")).toEqual({
       side: "enemy",
       zone: "backRank",
       slotId: "B3",
     });
     for (const slotId of Object.keys(state.sides.enemy.backRank)) {
-      state.sides.enemy.backRank[slotId as `B${number}`] = "occupied";
+      state.sides.enemy.backRank[slotId as `B${number}`] =
+        asBattleCardId("occupied");
     }
-    expect(
-      selectCenterPreferredCharacterPlaySlot(state, "enemy"),
-    ).toBeNull();
+    expect(selectCenterPreferredCharacterPlaySlot(state, "enemy")).toBeNull();
   });
 });

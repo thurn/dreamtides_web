@@ -10,6 +10,8 @@
 
 import { assetUrl } from "../../runtime/asset-url";
 import miraHeadCircleUrl from "../assets/dream-avatars/0020-head-circle.png";
+import type { DreamscapeId } from "../../types/identifiers";
+import type { GuideId } from "../../types/identifiers";
 
 /** Character portraits authored as local Cumulus assets. */
 export type CharacterPortraitId = "mira";
@@ -50,18 +52,18 @@ export type ArtRef =
   | {
       /** A dreamscape's circular node icon, keyed by its dreamscape id. */
       readonly kind: "dreamscape-icon";
-      readonly dreamscapeId: string;
+      readonly dreamscapeId: DreamscapeId;
     }
   | {
       /** A dreamscape's rectangular scene art, keyed by its dreamscape id. */
       readonly kind: "dreamscape-scene";
-      readonly dreamscapeId: string;
+      readonly dreamscapeId: DreamscapeId;
     }
   | {
       /** A Dream Guide's transparent full-body character render, keyed by its
        * guide id. */
       readonly kind: "dream-guide";
-      readonly guideId: string;
+      readonly guideId: GuideId;
     }
   | {
       /** An Atlas-specific asset emitted under the hosted `/atlas/` prefix. */
@@ -116,15 +118,15 @@ export const artRef = {
     kind: "dream-avatar-cutout",
     imageNumber,
   }),
-  dreamscapeIcon: (dreamscapeId: string): ArtRef => ({
+  dreamscapeIcon: (dreamscapeId: DreamscapeId): ArtRef => ({
     kind: "dreamscape-icon",
     dreamscapeId,
   }),
-  dreamscapeScene: (dreamscapeId: string): ArtRef => ({
+  dreamscapeScene: (dreamscapeId: DreamscapeId): ArtRef => ({
     kind: "dreamscape-scene",
     dreamscapeId,
   }),
-  dreamGuide: (guideId: string): ArtRef => ({
+  dreamGuide: (guideId: GuideId): ArtRef => ({
     kind: "dream-guide",
     guideId,
   }),

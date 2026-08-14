@@ -19,7 +19,7 @@ The panel emits a deck-entry ID and owns responsive decline placement; it comput
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `state` | `TransfigurationPickerState` | yes | — | Complete preparation state rendered by the picker. |
-| `onCardPress` | `(entryId: string) => void` | yes | — | Reports the exact selected deck-entry identity. |
+| `onCardPress` | `(entryId: DeckEntryId) => void` | yes | — | Reports the exact selected deck-entry identity. |
 | `onDismiss` | `() => void` | yes | — | Declines or closes the picker without selecting a card. |
 
 ### `state`: the `TransfigurationPickerState` model

@@ -9,8 +9,11 @@ import {
   LEGIONNAIRE_FIGMENT_ID,
   lookupFigmentCatalogEntryById,
 } from "./figment-catalog";
+import type { BattleCardId } from "../../types/identifiers";
 
-export function isFigmentInstance(instance: BattleCardInstance | undefined | null): instance is BattleCardInstance {
+export function isFigmentInstance(
+  instance: BattleCardInstance | undefined | null,
+): instance is BattleCardInstance {
   return instance?.provenance.kind === "generated-figment";
 }
 
@@ -99,10 +102,14 @@ export function countAlliedWarriors(
 
 function warriorContribution(
   state: BattleMutableState,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
 ): number {
-  const instance = battleCardId === null ? undefined : state.cardInstances[battleCardId];
-  if (instance === undefined || instance.definition.battleCardKind !== "character") {
+  const instance =
+    battleCardId === null ? undefined : state.cardInstances[battleCardId];
+  if (
+    instance === undefined ||
+    instance.definition.battleCardKind !== "character"
+  ) {
     return 0;
   }
   if (!isWarriorSubtype(instance.definition.subtype)) {
@@ -124,7 +131,9 @@ export function selectFigmentSparkContext(
   if (!isFigmentInstance(instance)) {
     return undefined;
   }
-  return { alliedWarriorCount: countAlliedWarriors(state, instance.controller) };
+  return {
+    alliedWarriorCount: countAlliedWarriors(state, instance.controller),
+  };
 }
 
 /** The base spark of a single member figment before stack-level adjustments. */
@@ -134,7 +143,8 @@ function memberBaseSpark(
   context: FigmentSparkContext | undefined,
 ): number {
   if (isLegionInstance(instance)) {
-    const warriors = context?.alliedWarriorCount ?? selectFigmentCount(instance);
+    const warriors =
+      context?.alliedWarriorCount ?? selectFigmentCount(instance);
     return Math.max(0, warriors);
   }
   return Math.max(0, storedSpark);
@@ -166,7 +176,9 @@ export function selectEffectiveSparkForInstance(
 
   return Math.max(
     0,
-    instance.definition.printedSpark + instance.sparkDelta + instance.staticSparkBonus,
+    instance.definition.printedSpark +
+      instance.sparkDelta +
+      instance.staticSparkBonus,
   );
 }
 
@@ -213,13 +225,14 @@ export function findBattlefieldFigmentStack(
   state: BattleMutableState,
   side: BattleSide,
   subtype: string,
-  excludeBattleCardId: string | null = null,
-): { battleCardId: string; location: BattleFieldSlotAddress } | null {
+  excludeBattleCardId: BattleCardId | null = null,
+): { battleCardId: BattleCardId; location: BattleFieldSlotAddress } | null {
   const normalizedSubtype = normalizeFigmentSubtype(subtype);
 
   for (const slotId of rankSlotIds(state.sides[side].backRank)) {
     const battleCardId = state.sides[side].backRank[slotId];
-    const instance = battleCardId === null ? null : state.cardInstances[battleCardId];
+    const instance =
+      battleCardId === null ? null : state.cardInstances[battleCardId];
     if (
       battleCardId !== null &&
       battleCardId !== excludeBattleCardId &&
@@ -235,7 +248,8 @@ export function findBattlefieldFigmentStack(
 
   for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
     const battleCardId = state.sides[side].frontRank[slotId];
-    const instance = battleCardId === null ? null : state.cardInstances[battleCardId];
+    const instance =
+      battleCardId === null ? null : state.cardInstances[battleCardId];
     if (
       battleCardId !== null &&
       battleCardId !== excludeBattleCardId &&
@@ -259,7 +273,7 @@ export function findBattlefieldFigmentStack(
  */
 export function addFigmentsToStackInPlace(
   state: BattleMutableState,
-  stackBattleCardId: string,
+  stackBattleCardId: BattleCardId,
   countToAdd: number,
   baseSpark: number,
 ): void {
@@ -283,7 +297,7 @@ export function addFigmentsToStackInPlace(
  */
 export function mergeFigmentsIntoStackInPlace(
   state: BattleMutableState,
-  stackBattleCardId: string,
+  stackBattleCardId: BattleCardId,
   incoming: readonly number[],
 ): void {
   const stack = state.cardInstances[stackBattleCardId];
@@ -328,10 +342,7 @@ function figmentCatalogIdentity(instance: BattleCardInstance): string {
 
 export function isLegionnaireFigment(instance: BattleCardInstance): boolean {
   const identity = figmentCatalogIdentity(instance);
-  return (
-    identity === LEGIONNAIRE_FIGMENT_ID ||
-    identity === "builtin:legion"
-  );
+  return identity === LEGIONNAIRE_FIGMENT_ID || identity === "builtin:legion";
 }
 
 /**
@@ -340,9 +351,7 @@ export function isLegionnaireFigment(instance: BattleCardInstance): boolean {
  * anthems, and other static bonuses. Legionnaire transfers only its catalog
  * base spark because its live Warrior-count bonus is dynamic.
  */
-export function selectFigmentMergeSpark(
-  instance: BattleCardInstance,
-): number {
+export function selectFigmentMergeSpark(instance: BattleCardInstance): number {
   if (!isFigmentInstance(instance)) return 0;
   if (isLegionnaireFigment(instance)) {
     return Math.max(
@@ -351,10 +360,7 @@ export function selectFigmentMergeSpark(
         instance.definition.printedSpark,
     );
   }
-  return Math.max(
-    0,
-    instance.definition.printedSpark + instance.sparkDelta,
-  );
+  return Math.max(0, instance.definition.printedSpark + instance.sparkDelta);
 }
 
 /**
@@ -392,8 +398,8 @@ export function assessFigmentMerge(
  */
 export function mergeFigmentSparkInPlace(
   state: BattleMutableState,
-  sourceBattleCardId: string,
-  destinationBattleCardId: string,
+  sourceBattleCardId: BattleCardId,
+  destinationBattleCardId: BattleCardId,
 ): FigmentMergeAssessment | null {
   const source = state.cardInstances[sourceBattleCardId];
   const destination = state.cardInstances[destinationBattleCardId];
@@ -404,15 +410,14 @@ export function mergeFigmentSparkInPlace(
 }
 
 export interface BattlefieldFigmentMergeTarget {
-  readonly destinationBattleCardId: string;
+  readonly destinationBattleCardId: BattleCardId;
   readonly location: BattleFieldSlotAddress;
-  readonly assessment: Extract<
-    FigmentMergeAssessment,
-    { kind: "eligible" }
-  > | {
-    readonly kind: "ineligible";
-    readonly reason: "exhaustion-mismatch";
-  };
+  readonly assessment:
+    | Extract<FigmentMergeAssessment, { kind: "eligible" }>
+    | {
+        readonly kind: "ineligible";
+        readonly reason: "exhaustion-mismatch";
+      };
 }
 
 /**
@@ -423,7 +428,7 @@ export interface BattlefieldFigmentMergeTarget {
  */
 export function selectBattlefieldFigmentMergeTargets(
   state: BattleMutableState,
-  sourceBattleCardId: string,
+  sourceBattleCardId: BattleCardId,
 ): BattlefieldFigmentMergeTarget[] {
   const source = state.cardInstances[sourceBattleCardId];
   if (!isFigmentInstance(source)) return [];
@@ -478,7 +483,7 @@ export function selectBattlefieldFigmentMergeTargets(
  */
 export function dissolveFigmentsFromStackInPlace(
   state: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   countToDissolve: number,
 ): boolean {
   const instance = state.cardInstances[battleCardId];

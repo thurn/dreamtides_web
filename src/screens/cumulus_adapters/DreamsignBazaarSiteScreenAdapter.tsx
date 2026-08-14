@@ -16,11 +16,13 @@ import {
   buildShopPurchaseLogs,
   buildShopSiteEntryLog,
 } from "./shop-purchase-logging-view-model";
+import type { SiteId } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
 
 export function DreamsignBazaarSiteScreenAdapter({
   siteId,
 }: {
-  siteId: string;
+  siteId: SiteId;
 }) {
   const { state, mutations, journeyContent } = useJourney();
   const node =
@@ -145,7 +147,7 @@ export function DreamsignBazaarSiteScreenAdapter({
     ],
   );
   const handlePurge = useCallback(
-    (dreamsignId: string) => {
+    (dreamsignId: DreamsignId) => {
       if (site === null || pendingSlotIndex === null) return;
       const purgeIndex = state.dreamsigns.findIndex(
         (dreamsign) => dreamsign.id === dreamsignId,

@@ -2,7 +2,7 @@ import type { BattlefieldSlotId } from "../../types";
 import type { ForwardModel, AiCard } from "../forward-model";
 
 export interface AiTargetChoice {
-  targetBattleCardId?: string | null; // e.g. Flashpoint's enemy body
+  targetBattleCardId?: BattleCardId | null; // e.g. Flashpoint's enemy body
   targetSlotId?: BattlefieldSlotId | null;
   deckReorder?: string[] | null; // Foresee/Glimpse
 }
@@ -26,6 +26,7 @@ import { flashpointDetonation } from "./flashpoint-detonation";
 import { glimpseOfWhatWas } from "./glimpse-of-what-was";
 import { signOfArrival } from "./sign-of-arrival";
 import { worldsAwait } from "./worlds-await";
+import type { BattleCardId } from "../../../types/identifiers";
 
 const models: StarterCardModel[] = [
   nocturneStrummer,

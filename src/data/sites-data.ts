@@ -1,4 +1,5 @@
 import type { SitesData } from "../types/sites-data";
+import { asGlossaryEntryId } from "../types/identifiers";
 import {
   RANDOM_SITE_DESTINATION_TYPES,
   SITE_TYPES,
@@ -37,11 +38,13 @@ function isNonEmptyString(value: unknown): value is string {
 }
 
 function isSourceMessageRef(value: unknown): boolean {
-  return isRecord(value) &&
+  return (
+    isRecord(value) &&
     value.format === "trox-source-message-ref" &&
     typeof value.entry_id === "string" &&
     typeof value.source_signature === "string" &&
-    typeof value.contract_signature === "string";
+    typeof value.contract_signature === "string"
+  );
 }
 
 function isInteger(
@@ -104,7 +107,8 @@ function isSitePresentation(value: unknown, siteType: SiteType): boolean {
   )
     return false;
   return Object.entries(value).every(
-    ([key, field]) => key === "kind" || isNonEmptyString(field) || isSourceMessageRef(field),
+    ([key, field]) =>
+      key === "kind" || isNonEmptyString(field) || isSourceMessageRef(field),
   );
 }
 
@@ -146,7 +150,9 @@ function isSitesData(value: unknown): value is SitesData {
     !isInteger(value.selection.minDeckForPurge, { min: 1 }) ||
     !Array.isArray(value.selection.placeableTypes) ||
     value.selection.placeableTypes.length === 0 ||
-    value.selection.placeableTypes.some((entry) => !SITE_TYPES.includes(entry as SiteType)) ||
+    value.selection.placeableTypes.some(
+      (entry) => !SITE_TYPES.includes(entry as SiteType),
+    ) ||
     !isRecord(value.siteTypes) ||
     !isRecord(value.randomSite) ||
     !isRecord(value.guideAssignments)
@@ -243,21 +249,33 @@ export function parseSitesData(value: unknown): SitesData {
   }
   return {
     ...value,
-    siteTypes: Object.fromEntries(SITE_TYPES.map((siteType) => {
-      const metadata = value.siteTypes[siteType];
-      const presentation = metadata.presentation;
-      return [siteType, {
-        ...metadata,
-        presentation: presentation === null ? null : Object.fromEntries(
-          Object.entries(presentation).map(([key, field]) => [
-            key,
-            key === "kind"
-              ? field
-              : hydrateSourceTransport(field, `${siteType} presentation ${key}`),
-          ]),
-        ),
-      }];
-    })) as SitesData["siteTypes"],
+    siteTypes: Object.fromEntries(
+      SITE_TYPES.map((siteType) => {
+        const metadata = value.siteTypes[siteType];
+        const presentation = metadata.presentation;
+        return [
+          siteType,
+          {
+            ...metadata,
+            glossaryId: asGlossaryEntryId(metadata.glossaryId),
+            presentation:
+              presentation === null
+                ? null
+                : Object.fromEntries(
+                    Object.entries(presentation).map(([key, field]) => [
+                      key,
+                      key === "kind"
+                        ? field
+                        : hydrateSourceTransport(
+                            field,
+                            `${siteType} presentation ${key}`,
+                          ),
+                    ]),
+                  ),
+          },
+        ];
+      }),
+    ) as SitesData["siteTypes"],
   };
 }
 

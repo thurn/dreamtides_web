@@ -13,16 +13,26 @@ import type {
   REWARD_MECHANIC_IDS,
   REWARD_SELECTION_POLICY_IDS,
 } from "../../scripts/reward-selection-contracts.mjs";
+import type { DeckEntryId } from "../types/identifiers";
+import type { DreamsignId } from "../types/identifiers";
+import type { DreamAvatarId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type {
+  RewardCandidateKey,
+  SelectionKey,
+  SiteId,
+} from "../types/identifiers";
 
 export const SELECTION_RULES_VERSION = "2" as const;
 
 export type SelectionRulesVersion = typeof SELECTION_RULES_VERSION;
 
-export type RewardSelectionPolicyId = typeof REWARD_SELECTION_POLICY_IDS[number];
+export type RewardSelectionPolicyId =
+  (typeof REWARD_SELECTION_POLICY_IDS)[number];
 
-export type RewardMechanicId = typeof REWARD_MECHANIC_IDS[number];
+export type RewardMechanicId = (typeof REWARD_MECHANIC_IDS)[number];
 
-export type RewardCardPredicate = typeof REWARD_CARD_PREDICATES[number];
+export type RewardCardPredicate = (typeof REWARD_CARD_PREDICATES)[number];
 
 export type RewardCandidateKeyKind =
   | "cardUuid"
@@ -34,8 +44,8 @@ export type RewardCandidateKeyKind =
 
 export interface RewardSelectionScope {
   journeySeed: string;
-  siteUuid: string;
-  selectionKey: string;
+  siteUuid: SiteId;
+  selectionKey: SelectionKey;
 }
 
 export interface RewardSelectionContext {
@@ -49,11 +59,11 @@ export interface RewardSelectionContext {
     baseCard: CardData;
     effectiveCard: CardData;
   }[];
-  cardByUuid: ReadonlyMap<string, CardData>;
-  ownedCardUuids: ReadonlySet<string>;
-  draftPoolCardUuids: ReadonlySet<string>;
-  heldDreamsignIds: ReadonlySet<string>;
-  remainingDreamsignIds: ReadonlySet<string>;
+  cardByUuid: ReadonlyMap<CardId, CardData>;
+  ownedCardUuids: ReadonlySet<CardId>;
+  draftPoolCardUuids: ReadonlySet<CardId>;
+  heldDreamsignIds: ReadonlySet<DreamsignId>;
+  remainingDreamsignIds: ReadonlySet<DreamsignId>;
   affinityIndex: TideAffinityIndex;
   affinityContext: TideVector;
   selectionContentRevision: string;
@@ -63,12 +73,12 @@ export interface RewardSelectionConstraints {
   predicate?: RewardCardPredicate;
   cardScope?: "draft-pool" | "catalog";
   excludeOwned?: boolean;
-  excludedCardUuids?: readonly string[];
-  allowedCardUuids?: readonly string[];
-  excludedDeckEntryIds?: readonly string[];
-  fixedCardUuid?: string;
-  fixedDreamsignId?: string;
-  fixedDeckEntryId?: string;
+  excludedCardUuids?: readonly CardId[];
+  allowedCardUuids?: readonly CardId[];
+  excludedDeckEntryIds?: readonly DeckEntryId[];
+  fixedCardUuid?: CardId;
+  fixedDreamsignId?: DreamsignId;
+  fixedDeckEntryId?: DeckEntryId;
   fixedTransfiguration?: TransfigurationType;
   allowedTransfigurations?: readonly TransfigurationType[];
   allowPerfected?: boolean;
@@ -76,7 +86,7 @@ export interface RewardSelectionConstraints {
   starterOnly?: boolean;
   allowNightmare?: boolean;
   allowedSiteTypes?: readonly SiteType[];
-  excludedDreamAvatarIds?: readonly string[];
+  excludedDreamAvatarIds?: readonly DreamAvatarId[];
   distinctCards?: boolean;
   distinctDeckEntries?: boolean;
 }
@@ -95,14 +105,14 @@ export interface RewardSelectionRequest {
 }
 
 export interface RewardSelectionCandidateTrace {
-  key: string;
+  key: RewardCandidateKey;
   score: number;
   components: Readonly<Record<string, number>>;
-  cardUuid?: string;
+  cardUuid?: CardId;
   cardNumber?: number;
-  entryId?: string;
-  dreamsignId?: string;
-  dreamAvatarId?: string;
+  entryId?: DeckEntryId;
+  dreamsignId?: DreamsignId;
+  dreamAvatarId?: DreamAvatarId;
   siteType?: SiteType;
   transfiguration?: TransfigurationType;
   inDraftPool?: boolean;
@@ -115,7 +125,7 @@ export interface RewardSelectionTrace {
   selectionContentRevision: string;
   mechanicId: RewardMechanicId;
   policyId: RewardSelectionPolicyId;
-  selectionKey: string;
+  selectionKey: SelectionKey;
   keyKind: RewardCandidateKeyKind;
   saltParts: readonly string[];
   purpose: string;
@@ -135,12 +145,12 @@ export interface RewardSelectionTrace {
     cutoffScore: number | null;
     candidates: readonly RewardSelectionCandidateTrace[];
   };
-  selectedKeys: readonly string[];
-  fallback: readonly string[];
+  selectedKeys: readonly RewardCandidateKey[];
+  fallback: readonly RewardCandidateKey[];
   tuning: Readonly<Record<string, number>>;
   effectiveDeck: readonly {
-    entryId: string;
-    cardUuid: string;
+    entryId: DeckEntryId;
+    cardUuid: CardId;
     cardNumber: number;
     transfiguration: TransfigurationType | null;
   }[];
@@ -148,19 +158,19 @@ export interface RewardSelectionTrace {
 }
 
 export interface RewardSelectionBindings {
-  cardUuids: readonly string[];
+  cardUuids: readonly CardId[];
   cardNumbers: readonly number[];
-  deckEntryIds: readonly string[];
-  dreamsignIds: readonly string[];
-  dreamAvatarIds: readonly string[];
+  deckEntryIds: readonly DeckEntryId[];
+  dreamsignIds: readonly DreamsignId[];
+  dreamAvatarIds: readonly DreamAvatarId[];
   siteTypes: readonly SiteType[];
   transfigurations: readonly {
-    entryId?: string;
-    cardUuid: string;
+    entryId?: DeckEntryId;
+    cardUuid: CardId;
     cardNumber: number;
     transfiguration: TransfigurationType;
   }[];
-  packs: readonly (readonly string[])[];
+  packs: readonly (readonly CardId[])[];
 }
 
 export interface RewardSelectionResult {
@@ -169,7 +179,7 @@ export interface RewardSelectionResult {
   selectionContentRevision: string;
   mechanicId: RewardMechanicId;
   policyId: RewardSelectionPolicyId;
-  selectionKey: string;
+  selectionKey: SelectionKey;
   signature: string;
   bindings: RewardSelectionBindings;
   trace: RewardSelectionTrace;
@@ -180,7 +190,7 @@ export interface RewardSelectionFailure {
   selectionRulesVersion: SelectionRulesVersion;
   mechanicId: RewardMechanicId;
   policyId: RewardSelectionPolicyId;
-  selectionKey: string;
+  selectionKey: SelectionKey;
   reason:
     | "invalid_request"
     | "unsupported_mechanic_policy"
@@ -191,5 +201,4 @@ export interface RewardSelectionFailure {
 }
 
 export type RewardSelectionOutcome =
-  | RewardSelectionResult
-  | RewardSelectionFailure;
+  RewardSelectionResult | RewardSelectionFailure;

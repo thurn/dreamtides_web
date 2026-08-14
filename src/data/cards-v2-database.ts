@@ -1,4 +1,4 @@
-import type { CardId } from "../types/card-identity";
+import { asCardId, type CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { GeneratedPool, Tides4DecksJson } from "../draft/pool";
 import { validateTides4Decks } from "../draft/pool";
@@ -48,10 +48,10 @@ export async function loadTides4Decks(): Promise<Tides4DecksJson | null> {
  */
 export function buildIdIndex(
   database: Map<number, CardData>,
-): Map<string, number> {
-  const index = new Map<string, number>();
+): Map<CardId, number> {
+  const index = new Map<CardId, number>();
   for (const card of database.values()) {
-    index.set(card.id.toLowerCase(), card.cardNumber);
+    index.set(asCardId(card.id.toLowerCase()), card.cardNumber);
   }
   return index;
 }
@@ -90,7 +90,7 @@ export interface ResolvedPool {
  */
 export function resolvePool(
   pool: GeneratedPool,
-  idIndex: ReadonlyMap<string, number>,
+  idIndex: ReadonlyMap<CardId, number>,
   defaultCopyCap: number = 2,
   copyCapsByCardNumber: ReadonlyMap<number, number> = new Map<number, number>(),
 ): ResolvedPool {

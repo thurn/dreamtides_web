@@ -9,12 +9,16 @@ import type {
   TutorialHowToPlayTrigger,
   TutorialPlaybackState,
 } from "../types/tutorial";
+import type { BattleId } from "../types/identifiers";
+import type { TutorialRunId } from "../types/identifiers";
+import type { TutorialActionId } from "../types/identifiers";
+import type { DreamwellCardId } from "../types/identifiers";
 
 /** Log each shared tutorial presentation state once per playback run. */
 export function useTutorialPresentationLogging(
   playback: TutorialPlaybackState | null,
   view: TutorialView,
-  featuredDreamwellCardId: string,
+  featuredDreamwellCardId: DreamwellCardId,
   playbackSpeed = 1,
 ): void {
   const loggedActionKey = useRef<string | null>(null);
@@ -102,12 +106,12 @@ export function useTutorialPresentationLogging(
 
 /** Log the authored How to Play action's local presentation lifecycle. */
 export function useTutorialHowToPlayLogging(
-  battleId: string,
+  battleId: BattleId,
 ): Pick<TutorialScreenProps, "onHowToPlayPresented" | "onHowToPlayDismissed"> {
   const onHowToPlayPresented = useCallback(
     (
-      runId: string,
-      actionId: string,
+      runId: TutorialRunId,
+      actionId: TutorialActionId,
       trigger: TutorialHowToPlayTrigger,
     ): void => {
       logEvent("tutorial_how_to_play_presented", {
@@ -122,8 +126,8 @@ export function useTutorialHowToPlayLogging(
   );
   const onHowToPlayDismissed = useCallback(
     (
-      runId: string,
-      actionId: string,
+      runId: TutorialRunId,
+      actionId: TutorialActionId,
       trigger: TutorialHowToPlayTrigger,
     ): void => {
       logEvent("tutorial_how_to_play_dismissed", {

@@ -12,6 +12,11 @@ import type { JourneyMutations } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { JourneyState } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
+import { asJourneyId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
 
 vi.mock("../../state/journey-context", () => ({
   useJourney: vi.fn(),
@@ -55,20 +60,20 @@ function makeCardDatabase(): Map<number, CardData> {
 
 function makeState(): JourneyState {
   return {
-    runId: "journey:test",
+    runId: asJourneyId("journey:test"),
     seed: "test-seed",
     essence: 100,
     maxDreamsigns: 12,
     deck: [
       {
-        entryId: "entry-1",
+        entryId: asDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
       },
     ],
     dreamAvatar: {
-      id: "caller-1",
+      id: asDreamAvatarId("caller-1"),
       name: "Mira of Lanterns",
       title: "Keeper of Lantern Glass",
       renderedText: "DreamAvatar rules.",
@@ -80,7 +85,7 @@ function makeState(): JourneyState {
     remainingDreamsignPool: [],
     dreamsigns: [
       {
-        id: "sign-1",
+        id: asDreamsignId("sign-1"),
         name: "Night's Mark",
         effectDescription: "Draw deeper.",
       },
@@ -89,8 +94,8 @@ function makeState(): JourneyState {
     atlas: {
       layers: [],
       nodes: {},
-      startingNodeId: "",
-      bossNodeId: "",
+      startingNodeId: asAtlasNodeId(""),
+      bossNodeId: asAtlasNodeId(""),
       bossIncarnationId: null,
       currentNodeId: null,
       knownDreamsignCarrierIds: [],

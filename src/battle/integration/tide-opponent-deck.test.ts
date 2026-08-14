@@ -8,9 +8,13 @@ import type {
 } from "../../types/content";
 import type { Tides4DecksJson } from "../../draft/pool/tides4-io";
 import { buildTideOpponentDeck } from "./tide-opponent-deck";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asAffiliationId } from "../../types/identifiers";
+import { asTideId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 const AVATAR: DreamAvatarContent = {
-  id: "avatar-a",
+  id: asDreamAvatarId("avatar-a"),
   name: "Synthetic Avatar",
   title: "Fixture",
   renderedText: "A synthetic ability.",
@@ -19,10 +23,14 @@ const AVATAR: DreamAvatarContent = {
 };
 
 const AFFILIATION: AffiliationContent = {
-  id: "affiliation-a",
+  id: asAffiliationId("affiliation-a"),
   name: "Synthetic Affiliation",
   atlasCardTheme: "Fixture",
-  tideIds: ["facet-a", "signature-a", "neutral-a"],
+  tideIds: [
+    asTideId("facet-a"),
+    asTideId("signature-a"),
+    asTideId("neutral-a"),
+  ],
 };
 
 function card(index: number, rarity: CardData["rarity"] = "Common"): CardData {
@@ -47,7 +55,9 @@ function card(index: number, rarity: CardData["rarity"] = "Common"): CardData {
 const POOL_CARDS = Array.from({ length: 42 }, (_, index) =>
   card(index + 1, index === 0 ? "Legendary" : index < 8 ? "Rare" : "Common"),
 );
-const STARTERS = Array.from({ length: 10 }, (_, index) => card(index + 101, "Starter"));
+const STARTERS = Array.from({ length: 10 }, (_, index) =>
+  card(index + 101, "Starter"),
+);
 
 const TIDES: Tides4DecksJson = {
   version: 2,
@@ -59,7 +69,10 @@ const TIDES: Tides4DecksJson = {
       displayDescription: "Synthetic signature.",
       resonance: "shadow",
       role: "signature",
-      cards: POOL_CARDS.slice(0, 12).map((entry) => ({ id: entry.id, copies: 1 })),
+      cards: POOL_CARDS.slice(0, 12).map((entry) => ({
+        id: entry.id,
+        copies: 1,
+      })),
     },
     {
       id: "facet-a",
@@ -87,13 +100,16 @@ const TIDES: Tides4DecksJson = {
   },
 };
 
-const DREAMSIGNS: DreamsignTemplate[] = Array.from({ length: 12 }, (_, index) => ({
-  id: `dreamsign-${String(index)}`,
-  name: `Dreamsign ${String(index)}`,
-  effectDescription: "",
-  rarity: index < 6 ? "Rare" : "Common",
-  tideIds: [index < 6 ? "facet-a" : "other"],
-}));
+const DREAMSIGNS: DreamsignTemplate[] = Array.from(
+  { length: 12 },
+  (_, index) => ({
+    id: asDreamsignId(`dreamsign-${String(index)}`),
+    name: `Dreamsign ${String(index)}`,
+    effectDescription: "",
+    rarity: index < 6 ? "Rare" : "Common",
+    tideIds: [asTideId(index < 6 ? "facet-a" : "other")],
+  }),
+);
 
 function build(completionLevel: number, reverse = false) {
   const cards = [...POOL_CARDS, ...STARTERS];
@@ -138,8 +154,12 @@ describe("unified Tide opponent deck", () => {
     expect(result?.dreamsign).toBeNull();
     expect(result?.abilityActive).toBe(false);
     expect(result?.finalCards).toHaveLength(30);
-    expect(result?.finalCards.filter((entry) => entry.rarity === "Starter")).toHaveLength(10);
-    expect(result?.finalCards.some((entry) => entry.rarity === "Legendary")).toBe(false);
+    expect(
+      result?.finalCards.filter((entry) => entry.rarity === "Starter"),
+    ).toHaveLength(10);
+    expect(
+      result?.finalCards.some((entry) => entry.rarity === "Legendary"),
+    ).toBe(false);
     expect(result?.modifications.cardsCut).toHaveLength(10);
     expect(result?.modifications.legendariesSuppressed).toBe(1);
   });

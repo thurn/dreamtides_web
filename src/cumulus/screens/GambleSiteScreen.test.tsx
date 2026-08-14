@@ -23,9 +23,13 @@ import {
   transfigurationFormFixture,
 } from "../test-helpers/transfiguration-fixture";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import { asSiteId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 const JACKPOT_DREAMSIGN = localizedDreamsignFixture({
-  id: "00000000-0000-4000-8000-000000000041",
+  id: asDreamsignId("00000000-0000-4000-8000-000000000041"),
   name: "Fixture Jackpot",
   imageName: "fixture-jackpot.png",
   effectDescription: "Foresee 1.",
@@ -33,7 +37,7 @@ const JACKPOT_DREAMSIGN = localizedDreamsignFixture({
 
 const VIEW: GravokWagerSiteView = {
   gameId: "gravok-three-gate-wager",
-  siteId: "fixture-gamble-site",
+  siteId: asSiteId("fixture-gamble-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
@@ -77,7 +81,7 @@ const VIEW: GravokWagerSiteView = {
     id: "fixture-guide",
     name: assertLocalized("Fixture Guide"),
     line: assertLocalized("A fixture gamble."),
-    art: artRef.dreamGuide("fixture-guide"),
+    art: artRef.dreamGuide(asGuideId("fixture-guide")),
   },
   result: null,
   replacement: null,
@@ -85,7 +89,7 @@ const VIEW: GravokWagerSiteView = {
 
 const STARWAY_VIEW: StarwayStairsSiteView = {
   gameId: "starway-stairs",
-  siteId: "fixture-gamble-site",
+  siteId: asSiteId("fixture-gamble-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
@@ -122,7 +126,7 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
     line: assertLocalized(
       "Starway Stairs is the game. Keep betting to see how high you can go!",
     ),
-    art: artRef.dreamGuide("gravok"),
+    art: artRef.dreamGuide(asGuideId("gravok")),
   },
   result: null,
   cashOutReward: null,
@@ -150,7 +154,7 @@ function fourSuitCard(index: number): CardData {
 function fourSuitCardView(index: number) {
   const card = fourSuitCard(index);
   return {
-    entryId: `four-suit-entry-${String(index)}`,
+    entryId: asDeckEntryId(`four-suit-entry-${String(index)}`),
     cardId: card.id,
     model: { cardId: card.id, displaySnapshot: card },
   };
@@ -158,7 +162,7 @@ function fourSuitCardView(index: number) {
 
 const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
   gameId: "four-suit-reprise",
-  siteId: "fixture-gamble-site",
+  siteId: asSiteId("fixture-gamble-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
@@ -179,7 +183,7 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
     id: "gravok",
     name: assertLocalized("Gravok"),
     line: assertLocalized("A fixture gamble."),
-    art: artRef.dreamGuide("gravok"),
+    art: artRef.dreamGuide(asGuideId("gravok")),
   },
   result: null,
   canPlayAgain: false,
@@ -187,7 +191,7 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
 
 const BLACKJACK_VIEW: BlackjackSiteView = {
   gameId: "blackjack",
-  siteId: "fixture-gamble-site",
+  siteId: asSiteId("fixture-gamble-site"),
   handId: "fixture-blackjack-hand",
   scene: null,
   isFarpoint: false,
@@ -212,7 +216,7 @@ const BLACKJACK_VIEW: BlackjackSiteView = {
     id: "gravok",
     name: assertLocalized("Gravok"),
     line: assertLocalized("A fixture gamble."),
-    art: artRef.dreamGuide("gravok"),
+    art: artRef.dreamGuide(asGuideId("gravok")),
   },
 };
 
@@ -620,7 +624,7 @@ describe("GambleSiteScreen", () => {
         incoming: JACKPOT_DREAMSIGN,
         held: [
           localizedDreamsignFixture({
-            id: "held-sign",
+            id: asDreamsignId("held-sign"),
             name: "Held Sign",
             effectDescription: "A held effect.",
           }),
@@ -661,7 +665,7 @@ describe("GambleSiteScreen", () => {
 
 const LADDER_VIEW: LadderClimbSiteView = {
   gameId: "tidemark-ladder-climb",
-  siteId: "fixture-gamble-site",
+  siteId: asSiteId("fixture-gamble-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,

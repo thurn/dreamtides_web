@@ -9,6 +9,8 @@ import {
   sampleSelectionBand,
   selectionBandSize,
 } from "./tide-affinity";
+import { asCardId } from "../types/card-identity";
+import { asTideId } from "../types/identifiers";
 
 const tides: Tides4DecksJson = {
   version: 2,
@@ -44,27 +46,37 @@ describe("Tide affinity", () => {
   it("uses authored copy counts as the card vector weights", () => {
     const index = buildTideAffinityIndex(tides);
 
-    expect([...index.cardVectors.get("card-a") ?? []]).toEqual([["tide-a", 2]]);
-    expect([...index.cardVectors.get("card-shared") ?? []]).toEqual([
-      ["tide-a", 1],
-      ["tide-b", 1],
+    expect([...(index.cardVectors.get(asCardId("card-a")) ?? [])]).toEqual([
+      ["tide-a", 2],
     ]);
+    expect([...(index.cardVectors.get(asCardId("card-shared")) ?? [])]).toEqual(
+      [
+        ["tide-a", 1],
+        ["tide-b", 1],
+      ],
+    );
   });
 
   it("adds joined tides, distinct deck cards, and Dreamsign tides to one context", () => {
     const index = buildTideAffinityIndex(tides);
     const context = buildAffinityContext({
       index,
-      joinedTideIds: ["tide-a"],
-      deckCardUuids: ["card-shared", "card-shared", "card-b"],
-      dreamsignTideIds: ["tide-b"],
+      joinedTideIds: [asTideId("tide-a")],
+      deckCardUuids: [
+        asCardId("card-shared"),
+        asCardId("card-shared"),
+        asCardId("card-b"),
+      ],
+      dreamsignTideIds: [asTideId("tide-b")],
     });
 
     expect([...context]).toEqual([
       ["tide-a", 2],
       ["tide-b", 4],
     ]);
-    expect(cardAffinity("card-b", context, index)).toBeCloseTo(4 / Math.sqrt(20));
+    expect(cardAffinity(asCardId("card-b"), context, index)).toBeCloseTo(
+      4 / Math.sqrt(20),
+    );
     expect(cosineAffinity(new Map(), context)).toBe(0);
   });
 

@@ -27,8 +27,8 @@ Both entry IDs and card UUIDs remain semantic diagnostics, even when display nam
 | --- | --- | --- | --- |
 | `changeId` | `string` | no | Stable identity for this resolved change presentation. |
 | `kind` | `CardChangeKind` | no | Semantic visual and accessibility recipe. |
-| `before` | `{ readonly entryId: string; readonly card: GameCardModel; }` | no | Original deck entry and its complete card presentation. |
-| `after` | `{ readonly entryId: string; readonly card: GameCardModel; }` | no | Result deck entry and its complete card presentation. |
+| `before` | `{ readonly entryId: DeckEntryId; readonly card: GameCardModel; }` | no | Original deck entry and its complete card presentation. |
+| `after` | `{ readonly entryId: DeckEntryId; readonly card: GameCardModel; }` | no | Result deck entry and its complete card presentation. |
 
 ## Usage
 

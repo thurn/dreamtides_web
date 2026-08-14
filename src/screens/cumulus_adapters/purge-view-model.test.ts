@@ -17,6 +17,10 @@ import {
 } from "./purge-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
 
 const transfigurationData = transfigurationFixture();
 const buildPurgeCardViews = (
@@ -40,9 +44,9 @@ const buildPurgeSiteView = (
   });
 
 const GUIDE = {
-  id: "fixture-purge-guide",
+  id: asGuideId("fixture-purge-guide"),
   name: "Fixture Purge Guide",
-  homeDreamscapeId: "fixture-home",
+  homeDreamscapeId: asDreamscapeId("fixture-home"),
   siteType: "Purge",
   portraitSource: "fixture-guide.png",
   dialogue: { site: ["Fixture line."] },
@@ -69,7 +73,7 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 
 function makeEntry(overrides: Partial<DeckEntry> = {}): DeckEntry {
   return {
-    entryId: "entry-1",
+    entryId: asDeckEntryId("entry-1"),
     cardNumber: 1,
     transfiguration: null,
     isBane: false,
@@ -82,7 +86,7 @@ function database(...cards: CardData[]): Map<number, CardData> {
 }
 
 const site: SiteState = {
-  id: "site-purge",
+  id: asSiteId("site-purge"),
   type: "Purge",
   isEnhanced: false,
   isVisited: false,
@@ -92,8 +96,12 @@ describe("buildPurgeCardViews", () => {
   it("keeps concrete entry ids and marks Nightmare as free", () => {
     const cards = buildPurgeCardViews(
       [
-        makeEntry({ entryId: "paid", cardNumber: 1 }),
-        makeEntry({ entryId: "nightmare", cardNumber: 10002, isBane: true }),
+        makeEntry({ entryId: asDeckEntryId("paid"), cardNumber: 1 }),
+        makeEntry({
+          entryId: asDeckEntryId("nightmare"),
+          cardNumber: 10002,
+          isBane: true,
+        }),
       ],
       database(makeCard({ cardNumber: 1 }), makeCard({ cardNumber: 10002 })),
     );
@@ -109,9 +117,9 @@ describe("buildPurgeGuideView", () => {
   it("uses the resolved guide identity and supplied line", () => {
     const view = buildPurgeGuideView(
       {
-        id: "takeshi",
+        id: asGuideId("takeshi"),
         name: "Master Takeshi",
-        homeDreamscapeId: "tsukiren",
+        homeDreamscapeId: asDreamscapeId("tsukiren"),
         siteType: "Purge",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["First line."] },
@@ -124,7 +132,7 @@ describe("buildPurgeGuideView", () => {
       id: "takeshi",
       name: "Master Takeshi",
       line: "Chosen line.",
-      art: { kind: "dream-guide", guideId: "takeshi" },
+      art: { kind: "dream-guide", guideId: asGuideId("takeshi") },
     });
   });
 });
@@ -136,9 +144,13 @@ describe("buildPurgeSiteView", () => {
       ...base,
       essence: 0,
       deck: [
-        makeEntry({ entryId: "paid-a", cardNumber: 1 }),
-        makeEntry({ entryId: "paid-b", cardNumber: 2 }),
-        makeEntry({ entryId: "nightmare", cardNumber: 10002, isBane: true }),
+        makeEntry({ entryId: asDeckEntryId("paid-a"), cardNumber: 1 }),
+        makeEntry({ entryId: asDeckEntryId("paid-b"), cardNumber: 2 }),
+        makeEntry({
+          entryId: asDeckEntryId("nightmare"),
+          cardNumber: 10002,
+          isBane: true,
+        }),
       ],
     };
 

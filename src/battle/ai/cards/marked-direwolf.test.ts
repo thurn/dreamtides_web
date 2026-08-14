@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import { markedDirewolf } from "./marked-direwolf";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
+import { asBattleCardId } from "../../../types/identifiers";
 
-function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
+function makeCard(
+  overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
+): AiCard {
   return {
     name: "card",
     energyCost: 0,
@@ -39,7 +42,11 @@ describe("Marked Direwolf (#512)", () => {
   });
 
   it("play pays energy and occupies a reserve slot, exhausted", () => {
-    const self = makeCard({ battleCardId: "wolf", cardNumber: 512, energyCost: 4 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("wolf"),
+      cardNumber: 512,
+      energyCost: 4,
+    });
     const model = makeModel({ aiEnergy: 6, aiHand: [self] });
     markedDirewolf.play(model, self, null);
     expect(model.aiEnergy).toBe(2);
@@ -49,8 +56,14 @@ describe("Marked Direwolf (#512)", () => {
   });
 
   it("canPlay is false without enough energy", () => {
-    const self = makeCard({ battleCardId: "wolf", cardNumber: 512, energyCost: 4 });
-    expect(markedDirewolf.canPlay(makeModel({ aiEnergy: 3 }), self)).toBe(false);
+    const self = makeCard({
+      battleCardId: asBattleCardId("wolf"),
+      cardNumber: 512,
+      energyCost: 4,
+    });
+    expect(markedDirewolf.canPlay(makeModel({ aiEnergy: 3 }), self)).toBe(
+      false,
+    );
     expect(markedDirewolf.canPlay(makeModel({ aiEnergy: 4 }), self)).toBe(true);
   });
 });

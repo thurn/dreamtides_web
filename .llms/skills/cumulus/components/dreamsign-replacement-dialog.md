@@ -21,7 +21,7 @@ The selected value is the held Dreamsign UUID, never its position or display nam
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `model` | `DreamsignReplacementModel` | yes | — | Complete resolved replacement presentation. |
-| `onDreamsignPress` | `(dreamsignId: string) => void` | yes | — | Reports the exact held Dreamsign UUID selected for replacement. |
+| `onDreamsignPress` | `(dreamsignId: DreamsignId) => void` | yes | — | Reports the exact held Dreamsign UUID selected for replacement. |
 | `onDismiss` | `() => void` | yes | — | Dismisses the replacement workflow without selecting a held Dreamsign. |
 
 ### `model`: the `DreamsignReplacementModel` model

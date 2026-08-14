@@ -15,6 +15,7 @@ import {
   type BattleInit,
   type BattleMutableState,
   type BattleSide,
+  type BattlefieldSlotId,
 } from "../../battle/types";
 import { battleGameCardModel } from "../../battle/ui/battle-game-card-model";
 import { dreamwellCardModel } from "../../battle/ui/dreamwell-card-model";
@@ -46,6 +47,9 @@ import {
 } from "../../data/dreamwell-prompts";
 import { builtInBattlePromptMessage } from "../../runtime/localization/battle-prompt-messages";
 import { tx } from "@trox/runtime";
+import type { BattleCardId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asBattleSlotViewId } from "../../types/identifiers";
 
 const FALLBACK_PLAYER_DREAM_AVATAR = {
   imageNumber: "001",
@@ -274,16 +278,19 @@ function buildCardPickerView(
   const candidates = pendingPrompt.options.candidateIds.flatMap(
     (instanceId): MobileBattleCardPickerCandidateView[] => {
       const instance = board.cardInstances[instanceId];
-      const location = selectBattleCardLocation(board, instanceId);
+      const location = selectBattleCardLocation(
+        board,
+        asBattleCardId(instanceId),
+      );
       if (instance === undefined || location === null) return [];
       return [
         {
-          instanceId,
+          instanceId: asBattleCardId(instanceId),
           cardUuid: instance.definition.cardId,
           owner: location.side,
           zone: location.zone,
           card: buildMobileBattleCardView(instance),
-          highlighted: highlightedIds.has(instanceId),
+          highlighted: highlightedIds.has(asBattleCardId(instanceId)),
         },
       ];
     },
@@ -309,7 +316,7 @@ function buildCardPickerView(
     side: pendingPrompt.run.side,
     candidateOwner: candidates[0]?.owner ?? null,
     candidates,
-    candidateIds: [...pendingPrompt.options.candidateIds],
+    candidateIds: pendingPrompt.options.candidateIds.map(asBattleCardId),
     count: pendingPrompt.options.count,
     optional: pendingPrompt.options.optional,
     canResolve: confirmedPromptId === pendingPrompt.promptId,
@@ -520,7 +527,7 @@ function buildSideView(
 }
 
 function buildCardViews(
-  battleCardIds: readonly string[],
+  battleCardIds: readonly BattleCardId[],
   board: BattleMutableState,
   showPlayableOutline: (instance: BattleCardInstance) => boolean = () => false,
 ): MobileBattleCardView[] {
@@ -533,14 +540,14 @@ function buildCardViews(
 }
 
 function buildSlotView(
-  id: string,
-  battleCardId: string | null,
+  id: BattlefieldSlotId,
+  battleCardId: BattleCardId | null,
   board: BattleMutableState,
 ): MobileBattleSlotView {
   const instance =
     battleCardId === null ? undefined : board.cardInstances[battleCardId];
   return {
-    id,
+    id: asBattleSlotViewId(id),
     card: instance === undefined ? null : buildMobileBattleCardView(instance),
   };
 }

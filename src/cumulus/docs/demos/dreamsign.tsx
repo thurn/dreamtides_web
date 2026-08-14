@@ -8,11 +8,12 @@ import { Dreamsign } from "../../components/hud/Dreamsign";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
+import { asDreamsignId } from "../../../types/identifiers";
 
 /** Three real dreamsigns, identified by UUID. */
 const DEMO_DREAMSIGNS = [
   {
-    id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
+    id: asDreamsignId("c706d0ba-2f41-4b14-95d8-db168ac6246c"),
     name: "Amplified Acorn",
     imageName: "acorn_gold.png",
     imageAlt: "Golden fruit-like charm with a mesh-patterned orb.",
@@ -20,14 +21,14 @@ const DEMO_DREAMSIGNS = [
       "Once per turn, when you discard a card, your next card this turn costs 2● less.",
   },
   {
-    id: "278ec1ab-f532-4862-84ae-63df5e49548c",
+    id: asDreamsignId("278ec1ab-f532-4862-84ae-63df5e49548c"),
     name: "Pyramid Relic",
     imageName: "aertfact.png",
     imageAlt: "Blue-gray panel with bright red-orange branching nodes.",
     effectDescription: "The second character you play each turn costs 1● less.",
   },
   {
-    id: "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+    id: asDreamsignId("6e20e6c7-295a-48b1-b252-b8b00d6902c9"),
     name: "Amanita",
     imageName: "amanita.png",
     imageAlt: "Red spotted mushroom with white flecks.",

@@ -1,13 +1,15 @@
 import type { BattleMutableState, BattleSide } from "./types";
 import { selectBattleCardLocation } from "./state/selectors";
 import semanticPlayCardIds from "./semantic-play-card-ids.json";
+import type { CardId } from "../types/card-identity";
+import type { BattleCardId } from "../types/identifiers";
 
 const SEMANTIC_PLAY_CARD_IDS: ReadonlySet<string> = new Set(
   semanticPlayCardIds,
 );
 
 /** Whether the semantic play event has a complete, explicitly audited rule. */
-export function isBattleCardSemanticPlayAutomated(cardId: string): boolean {
+export function isBattleCardSemanticPlayAutomated(cardId: CardId): boolean {
   return SEMANTIC_PLAY_CARD_IDS.has(cardId);
 }
 
@@ -15,8 +17,8 @@ export function isBattleCardSemanticPlayAutomated(cardId: string): boolean {
 export function semanticPlayTargetsAreLegal(
   board: BattleMutableState,
   controller: BattleSide,
-  cardId: string,
-  targets: readonly string[],
+  cardId: CardId,
+  targets: readonly BattleCardId[],
 ): boolean {
   const target = targets[0];
   if (cardId === "4408b942-09a0-4f4e-a403-10c708c6e3c5") {

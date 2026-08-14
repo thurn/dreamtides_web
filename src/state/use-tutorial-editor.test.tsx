@@ -9,6 +9,8 @@ import {
   useTutorialReplay,
   type TutorialEditorState,
 } from "./use-tutorial-editor";
+import { asCardId } from "../types/card-identity";
+import { asTutorialActionId } from "../types/identifiers";
 
 const mocks = vi.hoisted(() => ({
   loadTutorialActions: vi.fn(),
@@ -39,7 +41,7 @@ describe("useTutorialEditor", () => {
   it("replays the latest authored snapshot from a selected action", async () => {
     const actions: readonly TutorialAction[] = [
       {
-        id: "welcome",
+        id: asTutorialActionId("welcome"),
         action: "display-speech-bubble",
         speechBubble: {
           speaker: "mira",
@@ -52,14 +54,18 @@ describe("useTutorialEditor", () => {
         wait: 1,
       },
       {
-        id: "tail-start",
+        id: asTutorialActionId("tail-start"),
         action: "draw-opponent-card",
-        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         wait: 0,
       },
     ];
     const beginTutorial = vi.fn(() => Promise.resolve(3));
-    let replay: ((startActionId?: string) => void) | null = null;
+    let replay:
+      | ((
+          startActionId?: import("../types/identifiers").TutorialActionId,
+        ) => void)
+      | null = null;
 
     function Probe(): null {
       replay = useTutorialReplay(actions, beginTutorial);
@@ -71,7 +77,7 @@ describe("useTutorialEditor", () => {
     const root = createRoot(container);
     act(() => root.render(<Probe />));
     await act(async () => {
-      replay?.("tail-start");
+      replay?.(asTutorialActionId("tail-start"));
       await Promise.resolve();
     });
 

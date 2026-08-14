@@ -32,6 +32,17 @@ import {
 import type { MobileBattlePromptCopy } from "../../cumulus/screens/MobileBattleScreen";
 import { assertLocalized } from "@trox/runtime";
 import { resolveChecked } from "../../runtime/localization/runtime";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asBattleId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asBattleEntryKey } from "../../types/identifiers";
+import { asDreamwellCardId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asOpponentId } from "../../types/identifiers";
+import type { BattleCardId } from "../../types/identifiers";
+import { asBattleEffectScriptId } from "../../types/identifiers";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -46,7 +57,7 @@ function resolveFixturePromptText(
 }
 
 const ENEMY_DREAM_AVATAR: BattleDreamAvatarSummary = {
-  id: "enemy-dream-avatar-uuid",
+  id: asDreamAvatarId("enemy-dream-avatar-uuid"),
   name: "Enemy Caller",
   title: "Keeper of Tests",
   renderedText: "A synthetic test ability.",
@@ -57,7 +68,9 @@ const ENEMY_DREAM_AVATAR: BattleDreamAvatarSummary = {
 function definition(index: number): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
-    cardId: `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+    cardId: asCardId(
+      `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+    ),
     cardNumber: index,
     name: `Fixture Card ${String(index)}`,
     battleCardKind: "character",
@@ -76,11 +89,11 @@ function definition(index: number): BattleDeckCardDefinition {
 
 function makeInit(): BattleInit {
   return {
-    battleId: "mobile-battle-fixture",
-    battleEntryKey: "battle-entry-fixture",
+    battleId: asBattleId("mobile-battle-fixture"),
+    battleEntryKey: asBattleEntryKey("battle-entry-fixture"),
     seed: 42,
-    siteId: "battle-site-fixture",
-    dreamscapeId: "dreamscape-fixture",
+    siteId: asSiteId("battle-site-fixture"),
+    dreamscapeId: asAtlasNodeId("dreamscape-fixture"),
     completionLevelAtStart: 2,
     isFinalBoss: false,
     essenceReward: 30,
@@ -103,7 +116,7 @@ function makeInit(): BattleInit {
     ),
     dreamwellDeck: [],
     enemyDescriptor: {
-      id: ENEMY_DREAM_AVATAR.id,
+      id: asOpponentId(ENEMY_DREAM_AVATAR.id),
       name: ENEMY_DREAM_AVATAR.name,
       subtitle: ENEMY_DREAM_AVATAR.title,
       imageNumber: ENEMY_DREAM_AVATAR.imageNumber,
@@ -116,7 +129,7 @@ function makeInit(): BattleInit {
       definition(index + 9),
     ),
     dreamAvatarSummary: {
-      id: "player-dream-avatar-uuid",
+      id: asDreamAvatarId("player-dream-avatar-uuid"),
       name: "Player Caller",
       title: "Builder of Fixtures",
       renderedText: "Another synthetic test ability.",
@@ -132,16 +145,16 @@ function makeBoard(init: BattleInit): BattleMutableState {
   const board = createInitialBattleState(init);
   const ids = Object.keys(board.cardInstances);
 
-  board.sides.player.hand = ids.slice(0, 3);
-  board.sides.player.deck = ids.slice(3, 5);
-  board.sides.player.void = ids.slice(5, 7);
-  board.sides.player.frontRank.F3 = ids[7];
+  board.sides.player.hand = ids.slice(0, 3).map(asBattleCardId);
+  board.sides.player.deck = ids.slice(3, 5).map(asBattleCardId);
+  board.sides.player.void = ids.slice(5, 7).map(asBattleCardId);
+  board.sides.player.frontRank.F3 = asBattleCardId(ids[7]);
 
-  board.sides.enemy.hand = ids.slice(8, 10);
-  board.sides.enemy.deck = ids.slice(10, 12);
-  board.sides.enemy.void = ids.slice(12, 14);
-  board.sides.enemy.frontRank.F0 = ids[14];
-  board.sides.enemy.backRank.B4 = ids[15];
+  board.sides.enemy.hand = ids.slice(8, 10).map(asBattleCardId);
+  board.sides.enemy.deck = ids.slice(10, 12).map(asBattleCardId);
+  board.sides.enemy.void = ids.slice(12, 14).map(asBattleCardId);
+  board.sides.enemy.frontRank.F0 = asBattleCardId(ids[14]);
+  board.sides.enemy.backRank.B4 = asBattleCardId(ids[15]);
 
   board.sides.player.currentEnergy = 2;
   board.sides.player.maxEnergy = 4;
@@ -219,7 +232,7 @@ describe("buildMobileBattleView", () => {
       ...makeInit(),
       dreamwellDeck: [
         {
-          id: "3a4293da-55a1-4094-898a-df402ffa1c92",
+          id: asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
           name: "Fixture Beacon",
           renderedText: "Draw a card.",
           energyAdded: 2,
@@ -242,7 +255,7 @@ describe("buildMobileBattleView", () => {
     ).toEqual({
       side: "enemy",
       model: {
-        cardId: "3a4293da-55a1-4094-898a-df402ffa1c92",
+        cardId: asCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
         displaySnapshot: {
           id: "3a4293da-55a1-4094-898a-df402ffa1c92",
           name: "Fixture Beacon",
@@ -399,7 +412,10 @@ describe("buildMobileBattleView", () => {
     const prompt = {
       promptId: 42,
       run: {
-        scriptRef: { table: "dreamwell", id: "prompt-fixture" },
+        scriptRef: {
+          table: "dreamwell",
+          id: asBattleEffectScriptId("prompt-fixture"),
+        },
         cursor: [0],
         side: "player",
       },
@@ -497,7 +513,10 @@ describe("buildMobileBattleView", () => {
     const prompt = {
       promptId: 44,
       run: {
-        scriptRef: { table: "dreamwell", id: "prompt-fixture" },
+        scriptRef: {
+          table: "dreamwell",
+          id: asBattleEffectScriptId("prompt-fixture"),
+        },
         cursor: [0],
         side: "player",
       },
@@ -576,7 +595,10 @@ describe("buildMobileBattleView", () => {
     const prompt = {
       promptId: 43,
       run: {
-        scriptRef: { table: "dreamwell", id: "prompt-fixture" },
+        scriptRef: {
+          table: "dreamwell",
+          id: asBattleEffectScriptId("prompt-fixture"),
+        },
         cursor: [0],
         side: "player",
       },
@@ -622,7 +644,10 @@ describe("buildMobileBattleView", () => {
     const prompt = {
       promptId: 45,
       run: {
-        scriptRef: { table: "dreamwell", id: "prompt-fixture" },
+        scriptRef: {
+          table: "dreamwell",
+          id: asBattleEffectScriptId("prompt-fixture"),
+        },
         cursor: [0],
         side: "player",
       },
@@ -763,11 +788,12 @@ describe("buildMobileBattleView", () => {
     const enemyInstanceIds = [
       board.sides.enemy.frontRank.F0,
       board.sides.enemy.backRank.B4,
-    ].filter((instanceId): instanceId is string => instanceId !== null);
+    ].filter((instanceId): instanceId is BattleCardId => instanceId !== null);
     board.phase = "day";
     board.activeSide = "player";
-    board.cardInstances[sourceInstanceId].definition.cardId =
-      "4408b942-09a0-4f4e-a403-10c708c6e3c5";
+    board.cardInstances[sourceInstanceId].definition.cardId = asCardId(
+      "4408b942-09a0-4f4e-a403-10c708c6e3c5",
+    );
     board.cardInstances[sourceInstanceId].definition.energyCost = 1;
     enemyInstanceIds.forEach((instanceId) => {
       board.cardInstances[instanceId].definition.energyCost = 3;
@@ -990,7 +1016,7 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
           newEffectRun(
             {
               table: "dreamwell",
-              id: dreamwellCardUuid,
+              id: asBattleEffectScriptId(dreamwellCardUuid),
             },
             "player",
           ),

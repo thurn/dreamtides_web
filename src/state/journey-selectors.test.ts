@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { JourneyState } from "../types/journey";
 import { selectCurrentSite } from "./journey-selectors";
+import { asSiteId } from "../types/identifiers";
 
 function state(currentDreamscape: string | null): JourneyState {
   return {
@@ -11,13 +12,13 @@ function state(currentDreamscape: string | null): JourneyState {
           id: "current",
           sites: [
             {
-              id: "exploration",
+              id: asSiteId("exploration"),
               type: "Exploration",
               isEnhanced: false,
               isVisited: false,
             },
             {
-              id: "augury",
+              id: asSiteId("augury"),
               type: "Augury",
               isEnhanced: true,
               isVisited: false,
@@ -33,17 +34,19 @@ describe("selectCurrentSite", () => {
   it("returns a site with its current node only when id and type match", () => {
     const selected = selectCurrentSite(
       state("current"),
-      "exploration",
+      asSiteId("exploration"),
       "Exploration",
     );
     expect(selected?.node.id).toBe("current");
     expect(selected?.site.type).toBe("Exploration");
     expect(
-      selectCurrentSite(state("current"), "exploration", "Augury"),
+      selectCurrentSite(state("current"), asSiteId("exploration"), "Augury"),
     ).toBeNull();
   });
 
   it("does not select sites outside an active dreamscape", () => {
-    expect(selectCurrentSite(state(null), "augury", "Augury")).toBeNull();
+    expect(
+      selectCurrentSite(state(null), asSiteId("augury"), "Augury"),
+    ).toBeNull();
   });
 });

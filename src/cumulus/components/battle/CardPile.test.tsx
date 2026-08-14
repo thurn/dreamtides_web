@@ -42,6 +42,7 @@ import {
   type BattlePileCard,
 } from "./CardPile";
 import { CumulusRoot } from "../../CumulusRoot";
+import { asBattleCardId } from "../../../types/identifiers";
 
 function LocalizedCardPile(props: ComponentProps<typeof CardPile>) {
   return (
@@ -71,10 +72,20 @@ const MODEL: GameCardModel = {
 };
 
 const CARDS: readonly BattlePileCard[] = [
-  { face: "up", id: "instance-top", model: MODEL, figment: true },
-  { face: "down", id: "instance-second" },
-  { face: "up", id: "instance-third", model: MODEL, figment: true },
-  { face: "down", id: "instance-hidden" },
+  {
+    face: "up",
+    id: asBattleCardId("instance-top"),
+    model: MODEL,
+    figment: true,
+  },
+  { face: "down", id: asBattleCardId("instance-second") },
+  {
+    face: "up",
+    id: asBattleCardId("instance-third"),
+    model: MODEL,
+    figment: true,
+  },
+  { face: "down", id: asBattleCardId("instance-hidden") },
 ];
 
 beforeEach(() => {
@@ -159,7 +170,7 @@ describe("CardPile", () => {
     act(() => {
       root.render(
         <LocalizedCardPile
-          cards={[{ face: "down", id: "deck-top" }]}
+          cards={[{ face: "down", id: asBattleCardId("deck-top") }]}
           label={assertLocalized("Player deck")}
         />,
       );
@@ -190,7 +201,7 @@ describe("CardPile", () => {
           cards={[
             {
               face: "up",
-              id: "resolved-card",
+              id: asBattleCardId("resolved-card"),
               model: MODEL,
               layoutMotion: "snap",
             },
@@ -219,7 +230,7 @@ describe("CardPile", () => {
     act(() => {
       root.render(
         <LocalizedCardPile
-          cards={[{ face: "up", id: "void-top", model: MODEL }]}
+          cards={[{ face: "up", id: asBattleCardId("void-top"), model: MODEL }]}
           label={assertLocalized("Player void")}
           onPress={onActivate}
         />,

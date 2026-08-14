@@ -11,6 +11,7 @@ import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { token } from "../../primitives/tokens";
 import { useTutorialAnchor } from "../overlay/tutorial-placement";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
+import type { SiteId } from "../../../types/identifiers";
 
 /**
  * Responsive recipes for the routed site family.
@@ -78,7 +79,7 @@ export interface SiteLayoutGuide extends SiteLayoutGuideView {
 
 export interface SiteLayoutProps {
   /** Stable site identity exposed for diagnostics. */
-  readonly siteId: string;
+  readonly siteId: SiteId;
   /** Resolved scene art, or null for the canonical atmospheric fallback. */
   readonly scene: ArtRef | null;
   /** Named tint for the routed site's deterministic Motes layer. */

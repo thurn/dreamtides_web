@@ -13,29 +13,34 @@ import { LayerName } from "../../types/layer-name";
 import type { MerchantContext } from "../types";
 import { asCardId } from "../../types/card-identity";
 import { addSiteBuilder, MERCHANT_PLACEABLE_SITE_TYPES } from "./site";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
 
-function makeDreamscapeState(overrides: Partial<JourneyState> = {}): JourneyState {
+function makeDreamscapeState(
+  overrides: Partial<JourneyState> = {},
+): JourneyState {
   const base = makeMerchantTestJourneyState(overrides);
   // Set up a current dreamscape with some pre-existing sites
   return {
     ...base,
-    currentDreamscape: "node-1",
+    currentDreamscape: asAtlasNodeId("node-1"),
     atlas: {
       nodes: {
-        "node-1": {
-          id: "node-1",
+        [asAtlasNodeId("node-1")]: {
+          id: asAtlasNodeId("node-1"),
           layer: LayerName.One,
           indexInLayer: 0,
-          dreamscapeId: "test_dreamscape",
+          dreamscapeId: asDreamscapeId("test_dreamscape"),
           sites: [
             {
-              id: "site-1",
+              id: asSiteId("site-1"),
               type: "Battle",
               isEnhanced: false,
               isVisited: false,
             },
             {
-              id: "site-2",
+              id: asSiteId("site-2"),
               type: "Draft",
               isEnhanced: false,
               isVisited: false,
@@ -48,14 +53,14 @@ function makeDreamscapeState(overrides: Partial<JourneyState> = {}): JourneyStat
           backwardIds: [],
           knownDreamsignId: null,
         },
-        "node-2": {
-          id: "node-2",
+        [asAtlasNodeId("node-2")]: {
+          id: asAtlasNodeId("node-2"),
           layer: LayerName.One,
           indexInLayer: 0,
-          dreamscapeId: "test_dreamscape",
+          dreamscapeId: asDreamscapeId("test_dreamscape"),
           sites: [
             {
-              id: "site-10",
+              id: asSiteId("site-10"),
               type: "Shop",
               isEnhanced: false,
               isVisited: false,
@@ -69,9 +74,9 @@ function makeDreamscapeState(overrides: Partial<JourneyState> = {}): JourneyStat
           knownDreamsignId: null,
         },
       },
-      startingNodeId: "node-1",
-      bossNodeId: "node-1",
-      currentNodeId: "node-1",
+      startingNodeId: asAtlasNodeId("node-1"),
+      bossNodeId: asAtlasNodeId("node-1"),
+      currentNodeId: asAtlasNodeId("node-1"),
       layers: [],
       knownDreamsignCarrierIds: [],
     },
@@ -80,9 +85,18 @@ function makeDreamscapeState(overrides: Partial<JourneyState> = {}): JourneyStat
 
 function makeContext(state: JourneyState): MerchantContext {
   const journeyContent = makeMerchantTestContent({
-    cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
+    cards: [
+      makeMerchantTestCard({
+        id: asCardId("11111111-1111-4111-8111-111111111111"),
+        cardNumber: 1,
+      }),
+    ],
   });
-  return buildMerchantContext({ journeyState: state, journeyContent, site: makeMerchantTestSite() });
+  return buildMerchantContext({
+    journeyState: state,
+    journeyContent,
+    site: makeMerchantTestSite(),
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -112,7 +126,12 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
     const journeyContent = makeMerchantTestContent({
-      cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
+      cards: [
+        makeMerchantTestCard({
+          id: asCardId("11111111-1111-4111-8111-111111111111"),
+          cardNumber: 1,
+        }),
+      ],
     });
 
     const rng = merchantRng("add-site-apply-test", "0");
@@ -125,13 +144,17 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     expect(offer.applyPayload.kind).toBe("add_site");
 
     const payload = offer.applyPayload;
-    const resultState = applyMerchantPayloadToState({ state, journeyContent, payload });
+    const resultState = applyMerchantPayloadToState({
+      state,
+      journeyContent,
+      payload,
+    });
     expect(resultState).not.toBeNull();
     if (resultState === null) return;
 
     // Current dreamscape (node-1) has one MORE site
-    const currentNode = resultState.atlas.nodes["node-1"];
-    const originalNode = state.atlas.nodes["node-1"];
+    const currentNode = resultState.atlas.nodes[asAtlasNodeId("node-1")];
+    const originalNode = state.atlas.nodes[asAtlasNodeId("node-1")];
     expect(currentNode).toBeDefined();
     expect(originalNode).toBeDefined();
     if (currentNode === undefined || originalNode === undefined) return;
@@ -147,7 +170,12 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
     const journeyContent = makeMerchantTestContent({
-      cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
+      cards: [
+        makeMerchantTestCard({
+          id: asCardId("11111111-1111-4111-8111-111111111111"),
+          cardNumber: 1,
+        }),
+      ],
     });
 
     const rng = merchantRng("add-site-other-dreamscape-test", "0");
@@ -165,8 +193,8 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     if (resultState === null) return;
 
     // node-2 (not current) must be unchanged
-    expect(resultState.atlas.nodes["node-2"]?.sites.length).toBe(
-      state.atlas.nodes["node-2"]?.sites.length,
+    expect(resultState.atlas.nodes[asAtlasNodeId("node-2")]?.sites.length).toBe(
+      state.atlas.nodes[asAtlasNodeId("node-2")]?.sites.length,
     );
   });
 });
@@ -180,7 +208,12 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
     const journeyContent = makeMerchantTestContent({
-      cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
+      cards: [
+        makeMerchantTestCard({
+          id: asCardId("11111111-1111-4111-8111-111111111111"),
+          cardNumber: 1,
+        }),
+      ],
     });
 
     const rng = merchantRng("add-site-distinct-ids-test", "0");
@@ -191,18 +224,26 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
     const payload = offer.applyPayload;
 
     // Apply once
-    const state1 = applyMerchantPayloadToState({ state, journeyContent, payload });
+    const state1 = applyMerchantPayloadToState({
+      state,
+      journeyContent,
+      payload,
+    });
     expect(state1).not.toBeNull();
     if (state1 === null) return;
 
     // Apply again to the already-modified state (simulate getting the same payload twice)
-    const state2 = applyMerchantPayloadToState({ state: state1, journeyContent, payload });
+    const state2 = applyMerchantPayloadToState({
+      state: state1,
+      journeyContent,
+      payload,
+    });
     expect(state2).not.toBeNull();
     if (state2 === null) return;
 
     // Both added sites must have distinct ids
-    const currentNode1 = state1.atlas.nodes["node-1"];
-    const currentNode2 = state2.atlas.nodes["node-1"];
+    const currentNode1 = state1.atlas.nodes[asAtlasNodeId("node-1")];
+    const currentNode2 = state2.atlas.nodes[asAtlasNodeId("node-1")];
     expect(currentNode1).toBeDefined();
     expect(currentNode2).toBeDefined();
     if (currentNode1 === undefined || currentNode2 === undefined) return;

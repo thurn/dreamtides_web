@@ -15,6 +15,9 @@ import {
   clearReplayFixtureProviders,
   registerReplayFixtureProviders,
 } from "../rules/replay/fixture-providers";
+import { asDreamscapeId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
+import { asSiteId } from "../types/identifiers";
 
 const GENESIS: Genesis = {
   seed: "journey-flow-reducer",
@@ -53,14 +56,18 @@ function reachBattle(): { state: FoldState; seq: number } {
   let state = genesisFoldState(GENESIS);
   let seq = 1;
   state = apply(state, seq++, "START_JOURNEY", {
-    dreamAvatarId: DREAM_AVATAR_ID,
+    dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
   });
   for (const siteId of [ESSENCE_SITE_ID, SHOP_SITE_ID, DRAFT_SITE_ID]) {
-    state = apply(state, seq++, "ENTER_SITE", { siteId });
-    state = apply(state, seq++, "COMPLETE_SITE", { siteId });
+    state = apply(state, seq++, "ENTER_SITE", { siteId: asSiteId(siteId) });
+    state = apply(state, seq++, "COMPLETE_SITE", { siteId: asSiteId(siteId) });
   }
-  state = apply(state, seq++, "ENTER_SITE", { siteId: BATTLE_SITE_ID });
-  state = apply(state, seq++, "BEGIN_BATTLE", { siteId: BATTLE_SITE_ID });
+  state = apply(state, seq++, "ENTER_SITE", {
+    siteId: asSiteId(BATTLE_SITE_ID),
+  });
+  state = apply(state, seq++, "BEGIN_BATTLE", {
+    siteId: asSiteId(BATTLE_SITE_ID),
+  });
   return { state, seq };
 }
 
@@ -88,7 +95,7 @@ describe("authoritative journey flow", () => {
     expect(state.journey.atlas.nodes[NODE_ID].state).toBe("completed");
     expect(state.journey.atlas.nodes[NEXT_NODE_ID]).toMatchObject({
       state: "available",
-      dreamscapeId: "dreamscape-next",
+      dreamscapeId: asDreamscapeId("dreamscape-next"),
     });
   });
 

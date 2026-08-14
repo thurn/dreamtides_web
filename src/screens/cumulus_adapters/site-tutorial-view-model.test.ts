@@ -5,6 +5,7 @@ expect.addEqualityTesters([localizedStringSourceEquality]);
 import type { JourneyState, SiteState } from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
+import { asSiteId } from "../../types/identifiers";
 
 const CONFIGURATION: TutorialSiteConfiguration = {
   speechBubble: {
@@ -32,7 +33,7 @@ function state(
           id: "node",
           sites: [
             {
-              id: "prior",
+              id: asSiteId("prior"),
               type: current.type,
               data: {},
               isVisited: visitedSites.includes("prior"),
@@ -47,7 +48,7 @@ function state(
 }
 
 const revelation: SiteState = {
-  id: "revelation-a",
+  id: asSiteId("revelation-a"),
   type: "DreamsignRevelation",
   data: {},
   isVisited: false,
@@ -78,7 +79,7 @@ describe("buildFirstVisitSiteTutorialView", () => {
 
   it("maps the first Purge visit to the authored site tutorial", () => {
     const purge: SiteState = {
-      id: "purge-a",
+      id: asSiteId("purge-a"),
       type: "Purge",
       data: {},
       isVisited: false,

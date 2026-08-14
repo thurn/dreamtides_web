@@ -12,10 +12,8 @@ import { makeRng } from "./rng.ts";
 import type { Tides4DecksJson } from "./tides4-io.ts";
 import { validateTides4Decks } from "./tides4-io.ts";
 import type { PoolData } from "./types.ts";
-import {
-  DEFAULT_TIDES4_TUNING,
-  generateTides4,
-} from "./variant-tides4.ts";
+import { DEFAULT_TIDES4_TUNING, generateTides4 } from "./variant-tides4.ts";
+import { asDreamAvatarId } from "../../types/identifiers";
 
 // A synthetic artifact: one starter tide, `facetCount` facet tides, and
 // `neutralCount` neutral tides, each with `cardsPerTide` disjoint cards (so
@@ -88,15 +86,19 @@ function poolSize(counts: Map<string, number>): number {
 describe("generateTides4", () => {
   it("is deterministic per seed", () => {
     const poolData = makePoolData(makeTides4(6, 30));
-    const a = generateTides4(makeRng(7), poolData, "dc-a");
-    const b = generateTides4(makeRng(7), poolData, "dc-a");
+    const a = generateTides4(makeRng(7), poolData, asDreamAvatarId("dc-a"));
+    const b = generateTides4(makeRng(7), poolData, asDreamAvatarId("dc-a"));
     expect([...a.counts.entries()]).toEqual([...b.counts.entries()]);
     expect(a.selected).toEqual(b.selected);
   });
 
   it("deals exactly the deal size with at most the copy cap per card", () => {
     const poolData = makePoolData(makeTides4(6, 30));
-    const result = generateTides4(makeRng(3), poolData, "dc-a");
+    const result = generateTides4(
+      makeRng(3),
+      poolData,
+      asDreamAvatarId("dc-a"),
+    );
     expect(poolSize(result.counts)).toBe(DEFAULT_TIDES4_TUNING.dealSize);
     for (const count of result.counts.values()) {
       expect(count).toBeGreaterThanOrEqual(1);
@@ -107,8 +109,18 @@ describe("generateTides4", () => {
   it("injects deal size, copy cap, and maximum facets deterministically", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     const tuning = { dealSize: 40, copyCap: 1, maxFacets: 1 };
-    const first = generateTides4(makeRng(19), poolData, "dc-a", tuning);
-    const second = generateTides4(makeRng(19), poolData, "dc-a", tuning);
+    const first = generateTides4(
+      makeRng(19),
+      poolData,
+      asDreamAvatarId("dc-a"),
+      tuning,
+    );
+    const second = generateTides4(
+      makeRng(19),
+      poolData,
+      asDreamAvatarId("dc-a"),
+      tuning,
+    );
 
     expect([...second.counts.entries()]).toEqual([...first.counts.entries()]);
     expect(poolSize(first.counts)).toBe(40);
@@ -125,7 +137,11 @@ describe("generateTides4", () => {
     // 1 starter + 1 facet + 1 neutral, 3 disjoint cards each x 2 copies = 18
     // dealable copies, far below the deal size.
     const poolData = makePoolData(makeTides4(1, 3, 1));
-    const result = generateTides4(makeRng(1), poolData, "dc-a");
+    const result = generateTides4(
+      makeRng(1),
+      poolData,
+      asDreamAvatarId("dc-a"),
+    );
     expect(poolSize(result.counts)).toBe(18);
   });
 
@@ -140,7 +156,11 @@ describe("generateTides4", () => {
       (_, i) => `tide-sig-1-card-${String(i)}`,
     );
     for (let seed = 0; seed < 30; seed += 1) {
-      const result = generateTides4(makeRng(seed), poolData, "dc-a");
+      const result = generateTides4(
+        makeRng(seed),
+        poolData,
+        asDreamAvatarId("dc-a"),
+      );
       expect(poolSize(result.counts)).toBe(DEFAULT_TIDES4_TUNING.dealSize);
       for (const id of signatureCardIds) {
         expect(result.counts.has(asCardId(id))).toBe(true);
@@ -151,7 +171,11 @@ describe("generateTides4", () => {
   it("always joins a signatured DreamAvatar's starter first", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     for (let seed = 0; seed < 20; seed += 1) {
-      const result = generateTides4(makeRng(seed), poolData, "dc-a");
+      const result = generateTides4(
+        makeRng(seed),
+        poolData,
+        asDreamAvatarId("dc-a"),
+      );
       expect(result.selected[0]).toBe("tides4");
       // The starter joins before any facet.
       expect(result.selected[1]).toBe("tide-sig-1");
@@ -164,7 +188,11 @@ describe("generateTides4", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     const firstFacetSeen = new Set<string>();
     for (let seed = 0; seed < 40; seed += 1) {
-      const result = generateTides4(makeRng(seed), poolData, "dc-a");
+      const result = generateTides4(
+        makeRng(seed),
+        poolData,
+        asDreamAvatarId("dc-a"),
+      );
       // selected = ["tides4", starter, facet, facet?, ...]; the first facet is the
       // lead of the random subset and must vary run to run.
       firstFacetSeen.add(result.selected[2]);
@@ -189,7 +217,9 @@ describe("generateTides4", () => {
         copies: 2,
       })),
     });
-    const facetIds = data.tides.filter((t) => t.role === "facet").map((t) => t.id);
+    const facetIds = data.tides
+      .filter((t) => t.role === "facet")
+      .map((t) => t.id);
     data.tidePoolByDreamAvatar["dc-c"] = {
       starter: "tide-sig-2",
       facets: facetIds,
@@ -199,7 +229,11 @@ describe("generateTides4", () => {
     const starterIds = new Set(["tide-sig-1", "tide-sig-2"]);
     const leadsSeen = new Set<string>();
     for (let seed = 0; seed < 40; seed += 1) {
-      const result = generateTides4(makeRng(seed), poolData, "dc-b");
+      const result = generateTides4(
+        makeRng(seed),
+        poolData,
+        asDreamAvatarId("dc-b"),
+      );
       const lead = result.selected[1];
       // The lead is a signature core (a coherent archetype), not a bare facet.
       expect(starterIds.has(lead)).toBe(true);
@@ -236,7 +270,7 @@ describe("generateTides4", () => {
     const result = generateTides4(
       () => 0,
       makePoolData(data),
-      "avatar-signatureless",
+      asDreamAvatarId("avatar-signatureless"),
       { dealSize: 4, copyCap: 2, maxFacets: 1 },
     );
 
@@ -246,7 +280,11 @@ describe("generateTides4", () => {
   it("shuffles all tides together without a dreamAvatar id or pool entry", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     const noId = generateTides4(makeRng(11), poolData, undefined);
-    const unknownId = generateTides4(makeRng(11), poolData, "dc-unknown");
+    const unknownId = generateTides4(
+      makeRng(11),
+      poolData,
+      asDreamAvatarId("dc-unknown"),
+    );
     expect(noId.selected).toEqual(unknownId.selected);
     expect(poolSize(noId.counts)).toBe(DEFAULT_TIDES4_TUNING.dealSize);
   });
@@ -260,7 +298,11 @@ describe("generateTides4", () => {
       ["tide-sig-1-card-0", "Renamed Zero"],
       ["tide-sig-1-card-1", "Renamed One"],
     ]);
-    const result = generateTides4(makeRng(2), poolData, "dc-a");
+    const result = generateTides4(
+      makeRng(2),
+      poolData,
+      asDreamAvatarId("dc-a"),
+    );
     expect([...result.counts.keys()].sort()).toEqual([
       "tide-sig-1-card-0",
       "tide-sig-1-card-1",
@@ -270,15 +312,20 @@ describe("generateTides4", () => {
   it("throws when no tide decks are bundled", () => {
     const poolData = makePoolData(makeTides4(2, 2));
     delete poolData.tides4Decks;
-    expect(() => generateTides4(makeRng(0), poolData, "dc-a")).toThrow(/tides4/);
+    expect(() =>
+      generateTides4(makeRng(0), poolData, asDreamAvatarId("dc-a")),
+    ).toThrow(/tides4/);
   });
 });
 
 describe("generateTides4 provenance", () => {
   it("records the joined tides in selection order, tagged by why", () => {
     const poolData = makePoolData(makeTides4(6, 30));
-    const provenance = generateTides4(makeRng(7), poolData, "dc-a")
-      .tides4Provenance;
+    const provenance = generateTides4(
+      makeRng(7),
+      poolData,
+      asDreamAvatarId("dc-a"),
+    ).tides4Provenance;
     expect(provenance).toBeDefined();
     if (provenance === undefined) return;
 
@@ -311,7 +358,11 @@ describe("generateTides4 provenance", () => {
 
   it("attributes every pooled card to a joined source tide", () => {
     const poolData = makePoolData(makeTides4(6, 30));
-    const result = generateTides4(makeRng(3), poolData, "dc-a");
+    const result = generateTides4(
+      makeRng(3),
+      poolData,
+      asDreamAvatarId("dc-a"),
+    );
     const provenance = result.tides4Provenance;
     expect(provenance).toBeDefined();
     if (provenance === undefined) return;
@@ -340,8 +391,11 @@ describe("generateTides4 provenance", () => {
 
   it("marks a signatureless DreamAvatar and names the borrowed archetype", () => {
     const poolData = makePoolData(makeTides4(6, 30));
-    const provenance = generateTides4(makeRng(5), poolData, "dc-b")
-      .tides4Provenance;
+    const provenance = generateTides4(
+      makeRng(5),
+      poolData,
+      asDreamAvatarId("dc-b"),
+    ).tides4Provenance;
     expect(provenance).toBeDefined();
     if (provenance === undefined) return;
 

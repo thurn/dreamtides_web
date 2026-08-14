@@ -7,10 +7,14 @@ import {
   isAutomaticOpponentPlayGuidance,
   tutorialGuidanceMessageDurationSeconds,
 } from "./tutorial-presentation-timing";
+import { asCardId } from "../types/card-identity";
+import { asBattleCardId } from "../types/identifiers";
+import { asTutorialTriggerId } from "../types/identifiers";
+import { asPresentationId } from "../types/identifiers";
 
 function message(duration: number): TutorialGuidanceMessage {
   return {
-    triggerId: `trigger-${String(duration)}`,
+    triggerId: asTutorialTriggerId(`trigger-${String(duration)}`),
     speaker: "mira",
     text: "Fixture guidance.",
     duration,
@@ -26,12 +30,12 @@ function presentation(
   automatic = true,
 ): TutorialGuidancePresentation {
   return {
-    id: "tutorial-guidance:enemy-card",
+    id: asPresentationId("tutorial-guidance:enemy-card"),
     kind: "tutorial-guidance",
     source: {
       kind: "card",
-      cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-      battleCardId: "enemy-card",
+      cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+      battleCardId: asBattleCardId("enemy-card"),
       cardKind: "character",
       side: "enemy",
     },

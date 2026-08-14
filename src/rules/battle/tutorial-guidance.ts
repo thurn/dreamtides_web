@@ -4,13 +4,18 @@ import type {
   TutorialTriggerEvent,
 } from "../../types/tutorial";
 import type { BattleCardKind } from "../../battle/types";
+import type { CardId } from "../../types/card-identity";
+import type {
+  DreamwellCardId,
+  TutorialTriggerId,
+} from "../../types/identifiers";
 
 export interface TutorialGuidanceMatchInput {
   readonly event: TutorialTriggerEvent;
-  readonly cardId?: string;
+  readonly cardId?: CardId | DreamwellCardId;
   readonly renderedText: string;
   readonly cardKind?: BattleCardKind;
-  readonly seenTriggerIds: ReadonlySet<string>;
+  readonly seenTriggerIds: ReadonlySet<TutorialTriggerId>;
 }
 
 /**

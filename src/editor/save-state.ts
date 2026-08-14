@@ -1,9 +1,27 @@
+import type { CardId } from "../types/card-identity";
+import type {
+  DreamAvatarId,
+  DreamscapeId,
+  DreamsignId,
+  DreamwellCardId,
+  EditorFieldTargetId,
+} from "../types/identifiers";
+
 export type EditableFieldValue = string | number;
 export type EditableFieldName = string;
-export type EditableFieldStatus = "idle" | "editing" | "saving" | "saved" | "error";
+export type EditableFieldStatus =
+  "idle" | "editing" | "saving" | "saved" | "error";
+
+export type EditorEntityId =
+  | CardId
+  | DreamAvatarId
+  | DreamscapeId
+  | DreamsignId
+  | DreamwellCardId
+  | EditorFieldTargetId;
 
 export interface EditableFieldSaveEntry {
-  cardId: string;
+  cardId: EditorEntityId;
   field: EditableFieldName;
   status: EditableFieldStatus;
   clientRevision: number;
@@ -18,7 +36,7 @@ export interface EditableSaveState {
 }
 
 export interface FieldTarget {
-  cardId: string;
+  cardId: EditorEntityId;
   field: EditableFieldName;
 }
 
@@ -85,7 +103,8 @@ export function beginFieldEdit(
   confirmedValue: EditableFieldValue,
 ): EditableSaveState {
   const entry = entryFor(state, target, confirmedValue);
-  const hasActiveDraft = entry.status === "editing" || entry.status === "saving";
+  const hasActiveDraft =
+    entry.status === "editing" || entry.status === "saving";
   return withEntry(state, {
     ...entry,
     status: "editing",
@@ -217,7 +236,9 @@ export function failFieldSave(
     status: shouldKeepLocalDraft ? "editing" : "error",
     draftValue: shouldKeepLocalDraft ? entry.draftValue : serverConfirmedValue,
     confirmedValue: serverConfirmedValue,
-    clientRevision: shouldKeepLocalDraft ? entry.clientRevision : clientRevision,
+    clientRevision: shouldKeepLocalDraft
+      ? entry.clientRevision
+      : clientRevision,
     message,
   });
 }

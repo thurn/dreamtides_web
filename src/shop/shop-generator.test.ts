@@ -13,6 +13,7 @@ import {
 import { rerollCost } from "./shop-pricing";
 import { asCardId, asCardName } from "../types/card-identity";
 import { economyFixture } from "../testing/economy-fixture";
+import { asDreamsignId } from "../types/identifiers";
 
 const ECONOMY = economyFixture();
 function generateShopInventory(
@@ -65,12 +66,12 @@ function makeDraftState(copies: Record<number, number>): PoolDraftState {
 
 const DREAMSIGN_TEMPLATES: DreamsignTemplate[] = [
   {
-    id: "dreamsign-1",
+    id: asDreamsignId("dreamsign-1"),
     name: "Dreamsign One",
     effectDescription: "First effect.",
   },
   {
-    id: "dreamsign-2",
+    id: asDreamsignId("dreamsign-2"),
     name: "Dreamsign Two",
     effectDescription: "Second effect.",
   },
@@ -137,7 +138,7 @@ describe("effectivePrice", () => {
         itemType: "dreamsign",
         card: null,
         dreamsign: {
-          id: "dreamsign-1",
+          id: asDreamsignId("dreamsign-1"),
           name: "Dreamsign One",
           effectDescription: "First effect.",
         },
@@ -156,7 +157,7 @@ describe("effectivePrice", () => {
         itemType: "dreamsign",
         card: null,
         dreamsign: {
-          id: "dreamsign-1",
+          id: asDreamsignId("dreamsign-1"),
           name: "Dreamsign One",
           effectDescription: "First effect.",
         },
@@ -202,7 +203,7 @@ describe("shop runtime conversion", () => {
   it("round-trips card and Dreamsign slots", () => {
     const card = makeCard({ cardNumber: 7, name: asCardName("Seven Bells") });
     const dreamsign = {
-      id: "dreamsign-1",
+      id: asDreamsignId("dreamsign-1"),
       name: "Dreamsign One",
       effectDescription: "First effect.",
     };
@@ -282,7 +283,10 @@ describe("generateShopInventory", () => {
     const result = generateShopInventory({
       cardDatabase: db,
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }),
-      remainingDreamsignPoolIds: ["dreamsign-1", "dreamsign-2"],
+      remainingDreamsignPoolIds: [
+        asDreamsignId("dreamsign-1"),
+        asDreamsignId("dreamsign-2"),
+      ],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
     });
     const cardSlots = result.slots.filter((slot) => slot.itemType === "card");
@@ -322,7 +326,10 @@ describe("generateShopInventory", () => {
     const result = generateShopInventory({
       cardDatabase: db,
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }),
-      remainingDreamsignPoolIds: ["dreamsign-1", "dreamsign-2"],
+      remainingDreamsignPoolIds: [
+        asDreamsignId("dreamsign-1"),
+        asDreamsignId("dreamsign-2"),
+      ],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
       dreamsignCount: 2,
     });
@@ -339,7 +346,10 @@ describe("generateShopInventory", () => {
     const result = generateShopInventory({
       cardDatabase: db,
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1 }),
-      remainingDreamsignPoolIds: ["dreamsign-1", "dreamsign-2"],
+      remainingDreamsignPoolIds: [
+        asDreamsignId("dreamsign-1"),
+        asDreamsignId("dreamsign-2"),
+      ],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
       dreamsignCount: 2,
     });
@@ -355,7 +365,10 @@ describe("generateShopInventory", () => {
       const result = generateShopInventory({
         cardDatabase: db,
         draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }),
-        remainingDreamsignPoolIds: ["dreamsign-1", "dreamsign-2"],
+        remainingDreamsignPoolIds: [
+          asDreamsignId("dreamsign-1"),
+          asDreamsignId("dreamsign-2"),
+        ],
         dreamsignTemplates: DREAMSIGN_TEMPLATES,
       });
       const discounted = result.slots.filter((s) => s.discountPercent > 0);
@@ -410,7 +423,7 @@ describe("generateShopInventory", () => {
     const result = generateShopInventory({
       cardDatabase: db,
       draftState: makeDraftState({ 1: 1, 3: 1, 5: 1 }),
-      remainingDreamsignPoolIds: ["dreamsign-1"],
+      remainingDreamsignPoolIds: [asDreamsignId("dreamsign-1")],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
       isSpecialty: true,
       cardCount: 2,
@@ -429,7 +442,7 @@ describe("generateShopInventory", () => {
     const result = generateShopInventory({
       cardDatabase: db,
       draftState,
-      remainingDreamsignPoolIds: ["dreamsign-1"],
+      remainingDreamsignPoolIds: [asDreamsignId("dreamsign-1")],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
       isSpecialty: true,
     });
@@ -446,7 +459,7 @@ describe("generateShopInventory", () => {
     const result = generateShopInventory({
       cardDatabase: db,
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }),
-      remainingDreamsignPoolIds: ["dreamsign-1"],
+      remainingDreamsignPoolIds: [asDreamsignId("dreamsign-1")],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
       isSpecialty: true,
     });

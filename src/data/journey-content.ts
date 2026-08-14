@@ -8,7 +8,7 @@ import {
   type Tides4ProvenanceSummary,
   type Tides4TideSummary,
 } from "../types/content";
-import type { CardId } from "../types/card-identity";
+import { asCardId, asCardName, type CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type {
   GeneratedPool,
@@ -64,6 +64,8 @@ import {
   TUTORIAL_JOURNEY_POOL,
   type TutorialJourneyPool,
 } from "./tutorial-journey-pool";
+import type { DreamsignId, TideId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
 
 export interface JourneyContent {
   cardDatabase: Map<number, CardData>;
@@ -142,12 +144,12 @@ export interface RunPoolContext {
    * Display names are read from {@link PoolData.cardNameById} only at the render
    * boundary.
    */
-  idIndex: ReadonlyMap<string, number>;
+  idIndex: ReadonlyMap<CardId, number>;
   /** Per-card rarity copy-cap overrides compiled from draft.toml. */
   poolCopyCapsByCardNumber?: ReadonlyMap<number, number>;
   /** Default pool copy cap for cards without a rarity override. */
   defaultPoolCopyCap?: number;
-  allDreamsignPoolIds: string[];
+  allDreamsignPoolIds: DreamsignId[];
   /**
    * Pool-construction algorithm for this run.
    */
@@ -328,9 +330,9 @@ export function buildDreamAvatarTides4Provenance(
   };
 
   const cardProvenanceByNumber: Record<string, Tides4CardProvenance> = {};
-  const contributionByTide = new Map<string, number>();
+  const contributionByTide = new Map<TideId, number>();
   for (const [key, entry] of Object.entries(provenance.cardProvenanceById)) {
-    const cardNumber = ctx.idIndex.get(key);
+    const cardNumber = ctx.idIndex.get(asCardId(key));
     if (cardNumber === undefined) continue;
     if (starterSet.has(cardNumber)) continue;
     cardProvenanceByNumber[String(cardNumber)] = {
@@ -338,12 +340,10 @@ export function buildDreamAvatarTides4Provenance(
       tideIds: [...entry.tideIds],
       primaryTideId: entry.primaryTideId,
     };
-    if (entry.primaryTideId !== "") {
-      contributionByTide.set(
-        entry.primaryTideId,
-        (contributionByTide.get(entry.primaryTideId) ?? 0) + 1,
-      );
-    }
+    contributionByTide.set(
+      entry.primaryTideId,
+      (contributionByTide.get(entry.primaryTideId) ?? 0) + 1,
+    );
   }
 
   const tides: Tides4TideSummary[] = provenance.tides.map((tide) => ({
@@ -439,7 +439,7 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
   }
 
   const dreamAvatars: DreamAvatarContent[] = draftDreamAvatars.map((dc) => ({
-    id: dc.id,
+    id: asDreamAvatarId(dc.id),
     name: dc.name,
     title: dc.title,
     renderedText: dc.renderedText,
@@ -447,7 +447,7 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     portraitFocus: dc.portraitFocus,
     startingEssence:
       dc.startingEssence ?? economyData.journey.defaultStartingEssence,
-    signatureCards: [...(dc.signatureCards ?? [])],
+    signatureCards: (dc.signatureCards ?? []).map(asCardName),
     signatureCardIds: [...(dc.signatureCardIds ?? [])],
   }));
 

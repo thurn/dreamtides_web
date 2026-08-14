@@ -7,6 +7,11 @@ import type {
   MerchantTraceKeyKind,
 } from "./types";
 import { MERCHANT_TUNING } from "../tuning";
+import type { DreamsignId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import type { MerchantTargetKey } from "../../types/identifiers";
+import { asMerchantTargetKey } from "../../types/identifiers";
 
 /**
  * Cap on the candidates carried per offer line. Small candidate sets (choosers
@@ -40,12 +45,12 @@ export function traceBandSize(
 
 /** A candidate before the trace assembler ranks, bands, and truncates it. */
 export interface TraceCandidateInput {
-  key: string;
+  key: MerchantTargetKey;
   displayName?: string;
-  cardUuid?: string;
+  cardUuid?: CardId;
   cardNumber?: number;
-  dreamsignId?: string;
-  entryId?: string;
+  dreamsignId?: DreamsignId;
+  entryId?: DeckEntryId;
   score: number;
   components?: Readonly<Record<string, number>>;
   inDraftPool?: boolean;
@@ -67,7 +72,7 @@ export function assembleOfferTrace(params: {
   decision: MerchantTraceDecision;
   keyKind: MerchantTraceKeyKind;
   candidates: readonly TraceCandidateInput[];
-  selectedKeys: readonly string[];
+  selectedKeys: readonly MerchantTargetKey[];
   bandFraction: number;
   bandMinimum?: number;
   selectedCount: number;
@@ -93,7 +98,9 @@ export function assembleOfferTrace(params: {
     ...(candidate.displayName === undefined
       ? {}
       : { displayName: candidate.displayName }),
-    ...(candidate.cardUuid === undefined ? {} : { cardUuid: candidate.cardUuid }),
+    ...(candidate.cardUuid === undefined
+      ? {}
+      : { cardUuid: candidate.cardUuid }),
     ...(candidate.cardNumber === undefined
       ? {}
       : { cardNumber: candidate.cardNumber }),
@@ -116,7 +123,9 @@ export function assembleOfferTrace(params: {
   const kept =
     full.length <= maxCandidates
       ? full
-      : full.filter((candidate, rank) => candidate.selected || rank < maxCandidates);
+      : full.filter(
+          (candidate, rank) => candidate.selected || rank < maxCandidates,
+        );
 
   return {
     decision: params.decision,
@@ -150,12 +159,12 @@ export function assembleOfferTrace(params: {
  */
 export function catalogTraceCandidates(
   pool: readonly MerchantCatalogCard[],
-  scoreByUuid: ReadonlyMap<string, number>,
-  componentsByUuid?: ReadonlyMap<string, Readonly<Record<string, number>>>,
-  draftPoolCardUuids?: ReadonlySet<string>,
+  scoreByUuid: ReadonlyMap<CardId, number>,
+  componentsByUuid?: ReadonlyMap<CardId, Readonly<Record<string, number>>>,
+  draftPoolCardUuids?: ReadonlySet<CardId>,
 ): TraceCandidateInput[] {
   return pool.map((card) => ({
-    key: card.cardUuid,
+    key: asMerchantTargetKey(card.cardUuid),
     displayName: card.displayName,
     cardUuid: card.cardUuid,
     cardNumber: card.cardNumber,
@@ -176,13 +185,13 @@ export function catalogTraceCandidates(
 export function deckEntryTraceCandidates(
   entries: readonly {
     deckCard: MerchantDeckCard;
-    entryId: string;
+    entryId: DeckEntryId;
     score: number;
     components?: Readonly<Record<string, number>>;
   }[],
 ): TraceCandidateInput[] {
   return entries.map((entry) => ({
-    key: entry.entryId,
+    key: asMerchantTargetKey(entry.entryId),
     displayName: entry.deckCard.displayName,
     cardUuid: entry.deckCard.cardUuid,
     cardNumber: entry.deckCard.cardNumber,

@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { createTestBattleInit } from "../../testing/create-battle-init";
-import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
+import {
+  makeBattleTestCardDatabase,
+  makeBattleTestDreamAvatars,
+  makeBattleTestSite,
+  makeBattleTestState,
+} from "../test-support";
 import type { BattleDeckCardDefinition } from "../types";
 import {
   allocateBattleCardInstance,
@@ -8,11 +13,14 @@ import {
   createDefaultBattleCardStatus,
   createInitialBattleState,
 } from "./create-initial-state";
+import { asCardId } from "../../types/card-identity";
+import { asBattleCardId } from "../../types/identifiers";
+import { asBattleEntryKey } from "../../types/identifiers";
 
 describe("createInitialBattleState", () => {
   it("draws the configured opening hand size for both sides and seeds both sides at 2/2", () => {
     const battleInit = createTestBattleInit({
-      battleEntryKey: "site-7::2::dreamscape-2",
+      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
@@ -47,16 +55,19 @@ describe("createInitialBattleState", () => {
     ]);
     expect(state.sides.player.hand[0]).toBe("bc_0001");
     expect(
-      state.cardInstances[state.sides.player.hand[0]].definition.sourceDeckEntryId,
+      state.cardInstances[state.sides.player.hand[0]].definition
+        .sourceDeckEntryId,
     ).toBe(battleInit.playerDeckOrder[0].sourceDeckEntryId);
     expect(
-      state.sides.enemy.hand.every((battleCardId) => state.cardInstances[battleCardId]?.revealedTo?.player),
+      state.sides.enemy.hand.every(
+        (battleCardId) => state.cardInstances[battleCardId]?.revealedTo?.player,
+      ),
     ).toBe(false);
   });
 
   it("seeds the raw initial state with empty board and no automatic draw or refresh", () => {
     const battleInit = createTestBattleInit({
-      battleEntryKey: "site-7::2::dreamscape-2",
+      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
@@ -80,15 +91,23 @@ describe("createInitialBattleState", () => {
     for (const side of ["player", "enemy"] as const) {
       expect(state.sides[side].void).toEqual([]);
       expect(state.sides[side].banished).toEqual([]);
-      expect(Object.values(state.sides[side].backRank).every((slot) => slot === null)).toBe(true);
-      expect(Object.values(state.sides[side].frontRank).every((slot) => slot === null)).toBe(true);
+      expect(
+        Object.values(state.sides[side].backRank).every(
+          (slot) => slot === null,
+        ),
+      ).toBe(true);
+      expect(
+        Object.values(state.sides[side].frontRank).every(
+          (slot) => slot === null,
+        ),
+      ).toBe(true);
     }
     expect(state).not.toHaveProperty("stack");
   });
 
   it("applies player-only Exploration opening-hand and starting-energy bonuses", () => {
     const baseInit = createTestBattleInit({
-      battleEntryKey: "site-7::2::dreamscape-2",
+      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
@@ -113,7 +132,7 @@ describe("createInitialBattleState", () => {
 
   it("initializes per-side visibility flags required by the spec state model", () => {
     const battleInit = createTestBattleInit({
-      battleEntryKey: "site-7::2::dreamscape-2",
+      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
@@ -129,7 +148,7 @@ describe("createInitialBattleState", () => {
 describe("cloneBattleMutableState", () => {
   function makeBattleState() {
     const battleInit = createTestBattleInit({
-      battleEntryKey: "site-7::2::dreamscape-2",
+      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
@@ -152,7 +171,9 @@ describe("cloneBattleMutableState", () => {
     expect(clone.sides.player.banished).not.toBe(state.sides.player.banished);
     expect(clone.sides.player.backRank).not.toBe(state.sides.player.backRank);
     expect(clone.sides.player.frontRank).not.toBe(state.sides.player.frontRank);
-    expect(clone.sides.player.visibility).not.toBe(state.sides.player.visibility);
+    expect(clone.sides.player.visibility).not.toBe(
+      state.sides.player.visibility,
+    );
     expect(clone.cardInstances).not.toBe(state.cardInstances);
   });
 
@@ -202,7 +223,7 @@ describe("allocateBattleCardInstance", () => {
   function makeDefinition(cardNumber: number): BattleDeckCardDefinition {
     return {
       sourceDeckEntryId: null,
-      cardId: "",
+      cardId: asCardId(""),
       cardNumber,
       name: `Phase 2 Figment ${String(cardNumber)}`,
       battleCardKind: "character",
@@ -221,7 +242,7 @@ describe("allocateBattleCardInstance", () => {
 
   it("assigns zero-padded ordinal ids that increase monotonically across calls", () => {
     const battleInit = createTestBattleInit({
-      battleEntryKey: "site-7::2::dreamscape-2",
+      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
@@ -237,7 +258,7 @@ describe("allocateBattleCardInstance", () => {
       isRevealedToPlayer: true,
       provenance: {
         kind: "generated-figment",
-        sourceBattleCardId: "bc_0001",
+        sourceBattleCardId: asBattleCardId("bc_0001"),
         chosenSpark: 3,
         chosenSubtype: "Figment",
         createdAtTurnNumber: 4,
@@ -252,7 +273,7 @@ describe("allocateBattleCardInstance", () => {
       isRevealedToPlayer: false,
       provenance: {
         kind: "generated-figment",
-        sourceBattleCardId: "bc_0002",
+        sourceBattleCardId: asBattleCardId("bc_0002"),
         chosenSpark: null,
         chosenSubtype: null,
         createdAtTurnNumber: 4,
@@ -291,7 +312,10 @@ describe("allocateBattleCardInstance", () => {
     // Each allocated instance must own a fresh status object (no shared aliasing
     // that would corrupt undo via history snapshots).
     expect(firstInstance.status).not.toBe(secondInstance.status);
-    expect(firstInstance.markers).toEqual({ isPrevented: false, isCopied: false });
+    expect(firstInstance.markers).toEqual({
+      isPrevented: false,
+      isCopied: false,
+    });
     expect(firstInstance.notes).toEqual([]);
     expect(firstInstance.provenance.kind).toBe("generated-figment");
     expect(firstInstance.provenance.sourceBattleCardId).toBe("bc_0001");
@@ -299,7 +323,7 @@ describe("allocateBattleCardInstance", () => {
 
   it("preserves caller-provided definition and provenance references instead of cloning them", () => {
     const battleInit = createTestBattleInit({
-      battleEntryKey: "site-7::2::dreamscape-2",
+      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),

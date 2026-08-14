@@ -26,6 +26,11 @@ import {
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
+import { asBattleEntryKey } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asCardTypeChangePredicateId } from "../../types/identifiers";
 
 // The padded minimum battle deck size; the enemy deck is padded up to this.
 const MIN_BATTLE_DECK_SIZE = 25;
@@ -34,7 +39,7 @@ function makeBaseInput(): CreateBattleInitInput {
   return {
     opponentsData: opponentsFixture(),
     transfigurationData: transfigurationFixture(),
-    battleEntryKey: "site-7::2::dreamscape-2",
+    battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
@@ -82,13 +87,13 @@ function makeSignatureDreamAvatars(
 ): DreamAvatarContent[] {
   return [
     {
-      id: "signature-dc",
+      id: asDreamAvatarId("signature-dc"),
       name: "Signature Sentinel",
       title: "Steering Test",
       renderedText: "",
       imageNumber: "001",
       startingEssence: 250,
-      signatureCards: [...signatureCards],
+      signatureCards: signatureCards.map(asCardName),
     },
   ];
 }
@@ -253,7 +258,7 @@ describe("createBattleInit", () => {
       const baseInput = makeBaseInput();
       const otherInput: CreateBattleInitInput = {
         ...baseInput,
-        battleEntryKey: "site-9::4::dreamscape-99",
+        battleEntryKey: asBattleEntryKey("site-9::4::dreamscape-99"),
       };
 
       const a = createBattleInit(baseInput);
@@ -311,7 +316,7 @@ describe("createBattleInit", () => {
     it("falls back to the hash-derived seed when seedOverride is null or omitted", () => {
       const baseInput = makeBaseInput();
       const expectedSeed = deriveBattleSeed(
-        `${baseInput.state.seed}:${baseInput.battleEntryKey}`,
+        asBattleEntryKey(`${baseInput.state.seed}:${baseInput.battleEntryKey}`),
       );
 
       const fromOmitted = createBattleInit(baseInput);
@@ -504,7 +509,7 @@ describe("createBattleInit", () => {
         ...new Set(
           init.playerDeckOrder
             .map((card) => card.sourceDeckEntryId)
-            .filter((id): id is string => id !== null),
+            .filter((id): id is NonNullable<typeof id> => id !== null),
         ),
       ].sort();
       const inputIds = makeBaseInput()
@@ -648,7 +653,7 @@ describe("createBattleInit", () => {
       };
       const keywordModification: CardKeywordModification = { reclaim: 2 };
       const typeChange: CardTypeChange = {
-        predicateId: "visions",
+        predicateId: asCardTypeChangePredicateId("visions"),
         cardType: "Character",
         subtype: "Seer",
         label: "Seer",
@@ -699,7 +704,7 @@ describe("createBattleInit", () => {
       const baseInput = makeBaseInput();
       const changedEntryId = "deck-5";
       const typeChange: CardTypeChange = {
-        predicateId: "spirit_animals",
+        predicateId: asCardTypeChangePredicateId("spirit_animals"),
         cardType: "Character",
         subtype: "Spirit Animal",
         label: "Spirit Animal",
@@ -856,7 +861,7 @@ describe("createBattleInit", () => {
         deck: [
           ...baseInput.state.deck,
           {
-            entryId: "deck-unknown",
+            entryId: asDeckEntryId("deck-unknown"),
             cardNumber: 9999,
             transfiguration: null,
             isBane: false,
@@ -907,14 +912,14 @@ describe("createBattleInit", () => {
       const baseState = makeBattleTestState();
       const templates = [
         {
-          id: "enemy-sign-1",
+          id: asDreamsignId("enemy-sign-1"),
           name: "Enemy Sign One",
           effectDescription: "An opposing boon.",
           imageName: "enemy-sign-one.webp",
           imageAlt: "A luminous enemy sigil",
         },
         {
-          id: "enemy-sign-2",
+          id: asDreamsignId("enemy-sign-2"),
           name: "Enemy Sign Two",
           effectDescription: "Another opposing boon.",
         },
@@ -953,7 +958,7 @@ describe("createBattleInit", () => {
         state: { ...baseState, completionLevel: 0 },
         dreamsignTemplates: [
           {
-            id: "enemy-sign-1",
+            id: asDreamsignId("enemy-sign-1"),
             name: "Enemy Sign One",
             effectDescription: "An opposing boon.",
           },

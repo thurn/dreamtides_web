@@ -17,6 +17,12 @@ import type {
   MobileBattleCardView,
   MobileBattleInteractions,
 } from "./MobileBattleScreen";
+import { asBattleId } from "../../types/identifiers";
+import { asPresentationId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asDreamwellCardId } from "../../types/identifiers";
+import { asTutorialTriggerId } from "../../types/identifiers";
+import { asClientId } from "../../types/identifiers";
 
 const reducedMotionPreference = vi.hoisted(() => ({ value: false }));
 vi.mock("framer-motion", async (importOriginal) => {
@@ -82,13 +88,13 @@ class ResizeObserverStub {
 function view(overrides: Partial<TutorialBattleView> = {}): TutorialBattleView {
   const result: TutorialBattleView = {
     battle: {
-      battleId: "tutorial-battle",
+      battleId: asBattleId("tutorial-battle"),
       inspector: { turn: "2" },
       activeSide: "player",
     } as TutorialBattleView["battle"],
     challengeOriginBattle: null,
     ownership: "driver",
-    driverClientId: "driver-client",
+    driverClientId: asClientId("driver-client"),
     manualControls: false,
     foresee: null,
     presentationId: null,
@@ -108,7 +114,7 @@ function view(overrides: Partial<TutorialBattleView> = {}): TutorialBattleView {
 function opponentPlayCard(): MobileBattleCardView {
   const cardId = asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8");
   return {
-    id: "enemy-card-1",
+    id: asBattleCardId("enemy-card-1"),
     model: {
       cardId,
       displaySnapshot: {
@@ -272,11 +278,7 @@ describe("TutorialBattleScreen", () => {
 
   it("shows a dismissible Cumulus warning when movement cannot resolve", () => {
     const dismiss = vi.fn();
-    const { container, root } = mount(
-      view(),
-      "exhausted-front-rank",
-      dismiss,
-    );
+    const { container, root } = mount(view(), "exhausted-front-rank", dismiss);
     const toast = container.querySelector<HTMLButtonElement>(
       '[data-transient-status-toast="warning"]',
     );
@@ -329,9 +331,9 @@ describe("TutorialBattleScreen", () => {
       view({
         presentation: {
           kind: "opponent-play",
-          presentationId: "opponent-play:enemy-card-1",
-          cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-          battleCardId: "enemy-card-1",
+          presentationId: asPresentationId("opponent-play:enemy-card-1"),
+          cardId: asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
+          battleCardId: asBattleCardId("enemy-card-1"),
           cardKind: "character",
           card: opponentPlayCard(),
         },
@@ -396,9 +398,9 @@ describe("TutorialBattleScreen", () => {
       view({
         presentation: {
           kind: "opponent-play",
-          presentationId: "opponent-play:enemy-card-1",
-          cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-          battleCardId: "enemy-card-1",
+          presentationId: asPresentationId("opponent-play:enemy-card-1"),
+          cardId: asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
+          battleCardId: asBattleCardId("enemy-card-1"),
           cardKind: "character",
           card: opponentPlayCard(),
         },
@@ -430,7 +432,7 @@ describe("TutorialBattleScreen", () => {
       view({
         presentation: {
           kind: "opponent-block",
-          presentationId,
+          presentationId: asPresentationId(presentationId),
         },
       }),
       null,
@@ -479,7 +481,7 @@ describe("TutorialBattleScreen", () => {
       },
     );
     const originBattle = {
-      battleId: "tutorial-battle",
+      battleId: asBattleId("tutorial-battle"),
       inspector: { turn: "2" },
       activeSide: "enemy",
       testChallengeCards: [
@@ -507,11 +509,14 @@ describe("TutorialBattleScreen", () => {
         challengeOriginBattle: originBattle,
         presentation: {
           kind: "challenge-resolved",
-          presentationId,
+          presentationId: asPresentationId(presentationId),
           paired: true,
           dissolved: [
-            { battleCardId: "player-loser-uuid", side: "player" },
-            { battleCardId: "enemy-loser-uuid", side: "enemy" },
+            {
+              battleCardId: asBattleCardId("player-loser-uuid"),
+              side: "player",
+            },
+            { battleCardId: asBattleCardId("enemy-loser-uuid"), side: "enemy" },
           ],
           scored: null,
         },
@@ -572,11 +577,11 @@ describe("TutorialBattleScreen", () => {
       view({
         presentation: {
           kind: "challenge-resolved",
-          presentationId,
+          presentationId: asPresentationId(presentationId),
           paired: false,
           dissolved: [],
           scored: {
-            battleCardId: "player-character-uuid",
+            battleCardId: asBattleCardId("player-character-uuid"),
             side: "player",
             points: 2,
           },
@@ -592,8 +597,8 @@ describe("TutorialBattleScreen", () => {
 
     expect(props.cardOverlay).toEqual({
       kind: "points-scored",
-      presentationId,
-      battleCardId: "player-character-uuid",
+      presentationId: asPresentationId(presentationId),
+      battleCardId: asBattleCardId("player-character-uuid"),
       points: 2,
     });
     expect(
@@ -608,7 +613,7 @@ describe("TutorialBattleScreen", () => {
     const onPresentationVisible = vi.fn();
     const { root } = mount(
       view({
-        presentationId: "opponent-play:missing-card",
+        presentationId: asPresentationId("opponent-play:missing-card"),
         presentation: null,
       }),
       null,
@@ -628,15 +633,16 @@ describe("TutorialBattleScreen", () => {
     const { root } = mount(
       view({
         battle: {
-          battleId: "tutorial-battle",
+          battleId: asBattleId("tutorial-battle"),
           inspector: { turn: "3" },
           activeSide: "enemy",
         } as TutorialBattleView["battle"],
         presentation: {
           kind: "dreamwell-reveal",
-          presentationId:
+          presentationId: asPresentationId(
             "dreamwell-reveal:enemy:3:5ec17498-9028-4a01-80a0-67c91b03d505",
-          cardId: "5ec17498-9028-4a01-80a0-67c91b03d505",
+          ),
+          cardId: asDreamwellCardId("5ec17498-9028-4a01-80a0-67c91b03d505"),
           side: "enemy",
         },
       }),
@@ -667,21 +673,21 @@ describe("TutorialBattleScreen", () => {
     const root = createRoot(container);
     const playerTurn = view({
       battle: {
-        battleId: "tutorial-battle",
+        battleId: asBattleId("tutorial-battle"),
         inspector: { turn: "2" },
         activeSide: "player",
       } as TutorialBattleView["battle"],
     });
     const enemyTurn = view({
       battle: {
-        battleId: "tutorial-battle",
+        battleId: asBattleId("tutorial-battle"),
         inspector: { turn: "3" },
         activeSide: "enemy",
       } as TutorialBattleView["battle"],
     });
     const guidance = {
-      presentationId: "guidance:erode",
-      triggerId: "erode",
+      presentationId: asPresentationId("guidance:erode"),
+      triggerId: asTutorialTriggerId("erode"),
       messageIndex: 0,
       messageCount: 1,
       duration: 3,
@@ -701,9 +707,9 @@ describe("TutorialBattleScreen", () => {
         kind: "dreamwell" as const,
         side: "enemy" as const,
         model: {
-          cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+          cardId: asDreamwellCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
           displaySnapshot: {
-            id: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+            id: asDreamwellCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
             name: assertLocalized("Shadow Passage"),
             renderedText: assertLocalized("Erode 3."),
             energyAdded: 1,

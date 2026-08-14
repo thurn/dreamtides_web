@@ -7,6 +7,7 @@ import type {
   EditorTideOption,
   EditorTidePool,
 } from "./dream-avatar-types";
+import { asTideId } from "../types/identifiers";
 
 export function tideDotColor(id: Resonance): string {
   return resonance(id).accentColor;
@@ -65,7 +66,9 @@ function tideChipStyle(active: boolean, color: string): CSSProperties {
     gap: "8px",
     padding: "6px 10px",
     borderRadius: "999px",
-    border: active ? `1px solid ${color}` : "1px solid rgba(247, 241, 223, 0.22)",
+    border: active
+      ? `1px solid ${color}`
+      : "1px solid rgba(247, 241, 223, 0.22)",
     background: active ? "rgba(255, 255, 255, 0.08)" : "rgba(12, 18, 20, 0.85)",
     color: "#eef4f1",
     font: "inherit",
@@ -100,9 +103,13 @@ export default function TidePoolModal({
   onSave,
   onClose,
 }: TidePoolModalProps) {
-  const [starter, setStarter] = useState<string | null>(dreamAvatar.tidePool.starter);
+  const [starter, setStarter] = useState<string | null>(
+    dreamAvatar.tidePool.starter,
+  );
   const [facets, setFacets] = useState<string[]>(dreamAvatar.tidePool.facets);
-  const [neutral, setNeutral] = useState<string[]>(dreamAvatar.tidePool.neutral);
+  const [neutral, setNeutral] = useState<string[]>(
+    dreamAvatar.tidePool.neutral,
+  );
 
   const { signatureTides, facetTides, neutralTides } = useMemo(() => {
     return {
@@ -142,8 +149,12 @@ export default function TidePoolModal({
             borderBottom: "1px solid rgba(247, 241, 223, 0.12)",
           }}
         >
-          <h2 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 850 }}>Tides</h2>
-          <span style={{ color: "#8edbd1", fontSize: "0.85rem", fontWeight: 700 }}>
+          <h2 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 850 }}>
+            Tides
+          </h2>
+          <span
+            style={{ color: "#8edbd1", fontSize: "0.85rem", fontWeight: 700 }}
+          >
             {dreamAvatar.name}
           </span>
         </header>
@@ -176,8 +187,13 @@ export default function TidePoolModal({
                   type="button"
                   aria-pressed={starter === tide.id}
                   title={`${tide.displayName} (${tide.id})`}
-                  onClick={() => setStarter(starter === tide.id ? null : tide.id)}
-                  style={tideChipStyle(starter === tide.id, tideDotColor(tide.resonance))}
+                  onClick={() =>
+                    setStarter(starter === tide.id ? null : tide.id)
+                  }
+                  style={tideChipStyle(
+                    starter === tide.id,
+                    tideDotColor(tide.resonance),
+                  )}
                 >
                   <ColorDot color={tideDotColor(tide.resonance)} />
                   <span>{tideLabel(tide)}</span>
@@ -191,7 +207,13 @@ export default function TidePoolModal({
               Facets ({facets.length}) — a random subset is drawn each run
             </h3>
             {facetsEmpty ? (
-              <p style={{ margin: "0 0 8px", color: "#f0c6bd", fontSize: "0.78rem" }}>
+              <p
+                style={{
+                  margin: "0 0 8px",
+                  color: "#f0c6bd",
+                  fontSize: "0.78rem",
+                }}
+              >
                 Select at least one facet tide.
               </p>
             ) : null}
@@ -204,7 +226,9 @@ export default function TidePoolModal({
                     type="button"
                     aria-pressed={active}
                     title={`${tide.displayName} (${tide.id})`}
-                    onClick={() => setFacets((current) => toggle(current, tide.id))}
+                    onClick={() =>
+                      setFacets((current) => toggle(current, tide.id))
+                    }
                     style={tideChipStyle(active, tideDotColor(tide.resonance))}
                   >
                     <ColorDot color={tideDotColor(tide.resonance)} />
@@ -216,7 +240,9 @@ export default function TidePoolModal({
           </section>
 
           <section>
-            <h3 style={sectionTitleStyle}>Neutral ({neutral.length}) — broad fill tides</h3>
+            <h3 style={sectionTitleStyle}>
+              Neutral ({neutral.length}) — broad fill tides
+            </h3>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
               {neutralTides.map((tide) => {
                 const active = neutral.includes(tide.id);
@@ -226,7 +252,9 @@ export default function TidePoolModal({
                     type="button"
                     aria-pressed={active}
                     title={`${tide.displayName} (${tide.id})`}
-                    onClick={() => setNeutral((current) => toggle(current, tide.id))}
+                    onClick={() =>
+                      setNeutral((current) => toggle(current, tide.id))
+                    }
                     style={tideChipStyle(active, tideDotColor(tide.resonance))}
                   >
                     <ColorDot color={tideDotColor(tide.resonance)} />
@@ -250,7 +278,13 @@ export default function TidePoolModal({
           }}
         >
           {saveError !== null ? (
-            <span style={{ marginRight: "auto", color: "#f0c6bd", fontSize: "0.8rem" }}>
+            <span
+              style={{
+                marginRight: "auto",
+                color: "#f0c6bd",
+                fontSize: "0.8rem",
+              }}
+            >
               {saveError}
             </span>
           ) : null}
@@ -273,7 +307,13 @@ export default function TidePoolModal({
           <button
             type="button"
             disabled={!canSave}
-            onClick={() => onSave({ starter, facets, neutral })}
+            onClick={() =>
+              onSave({
+                starter: starter === null ? null : asTideId(starter),
+                facets: facets.map(asTideId),
+                neutral: neutral.map(asTideId),
+              })
+            }
             style={{
               border: "1px solid rgba(142, 219, 209, 0.6)",
               background: canSave ? "#1f635d" : "#1a2a2c",

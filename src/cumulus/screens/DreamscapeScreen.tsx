@@ -30,6 +30,9 @@ import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type { SiteId } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
 
 /** A generated site reward ready to animate and grant on the dreamscape. */
 export type InlineRewardView =
@@ -54,7 +57,10 @@ export interface DreamscapeView {
   /** Generated Essence and Reward results, keyed by the site's stable id. */
   inlineRewards: Readonly<Record<string, InlineRewardView>>;
   /** Replacement choice shown after an at-cap Reward animation. */
-  replacement: Omit<DreamsignReplacementModel, "dismissLabel" | "closeLabel"> | null;
+  replacement: Omit<
+    DreamsignReplacementModel,
+    "dismissLabel" | "closeLabel"
+  > | null;
   /** Mira's delayed tutorial-only explanation of Dream Sites. */
   guideDialogue?: DreamscapeGuideDialogueView;
 }
@@ -63,11 +69,11 @@ export interface DreamscapeScreenProps {
   /** The view-model to render. */
   view: DreamscapeView;
   /** Enter a site; fired on a tap / click of an interactive node only. */
-  onSelectSite: (siteId: string) => void;
+  onSelectSite: (siteId: SiteId) => void;
   /** Report that an in-place reward collection animation has finished. */
-  onInlineRewardAnimationComplete: (siteId: string) => void;
+  onInlineRewardAnimationComplete: (siteId: SiteId) => void;
   /** Replace one held Dreamsign by UUID. */
-  onReplaceDreamsign: (dreamsignId: string) => void;
+  onReplaceDreamsign: (dreamsignId: DreamsignId) => void;
   /** Decline the pending Dreamsign Reward. */
   onDeclineReward: () => void;
   /** Report when delayed tutorial guidance becomes visible. */
@@ -120,7 +126,7 @@ export function DreamscapeScreen({
       : (view.inlineRewards[collectingSiteId] ?? null);
 
   const handleSelectSite = useCallback(
-    (siteId: string) => {
+    (siteId: SiteId) => {
       if (collectingSiteId !== null || view.replacement !== null) return;
       const model = view.sites.find(
         (candidate) => candidate.id === siteId,
@@ -142,7 +148,7 @@ export function DreamscapeScreen({
       if (completionRequestedRef.current === collectingSiteId) return;
       completionRequestedRef.current = collectingSiteId;
       setCollectingSiteId(null);
-      onInlineRewardAnimationCompleteRef.current(collectingSiteId);
+      onInlineRewardAnimationCompleteRef.current(asSiteId(collectingSiteId));
     }, INLINE_REWARD_DURATION_SECONDS * 1000);
     return () => window.clearTimeout(timer);
   }, [collectingSiteId, collectingReward]);
@@ -298,18 +304,14 @@ export function DreamscapeScreen({
                 ? txa(
                     "Found dreamsign: {dreamsign_name}",
                     {
-                      dreamsign_name: opaque(
-                        collectingReward.dreamsign.name,
-                      ),
+                      dreamsign_name: opaque(collectingReward.dreamsign.name),
                     },
                     "[accessibility] [dreamsign] [journey] Reward status when an authored Dreamsign is found and requires replacement. dreamsign_name is canonical authored content.",
                   )
                 : txa(
                     "Gained dreamsign: {dreamsign_name}",
                     {
-                      dreamsign_name: opaque(
-                        collectingReward.dreamsign.name,
-                      ),
+                      dreamsign_name: opaque(collectingReward.dreamsign.name),
                     },
                     "[accessibility] [dreamsign] [journey] Reward status when an authored Dreamsign is gained. dreamsign_name is canonical authored content.",
                   )
@@ -407,8 +409,14 @@ export function DreamscapeScreen({
               >
                 {resolve(
                   collectingReward.requiresReplacement
-                    ? tx("Dreamsign found", "[dreamsign] [journey] Visible status when a Dreamsign reward requires replacement.")
-                    : tx("Dreamsign gained", "[dreamsign] [journey] Visible status when a Dreamsign reward is collected."),
+                    ? tx(
+                        "Dreamsign found",
+                        "[dreamsign] [journey] Visible status when a Dreamsign reward requires replacement.",
+                      )
+                    : tx(
+                        "Dreamsign gained",
+                        "[dreamsign] [journey] Visible status when a Dreamsign reward is collected.",
+                      ),
                 )}
               </motion.div>
             </>
@@ -435,8 +443,14 @@ export function DreamscapeScreen({
         <DreamsignReplacementDialog
           model={{
             ...view.replacement,
-            dismissLabel: tx("Keep Current Dreamsigns", "[dreamsign] [journey] Replacement keep current action."),
-            closeLabel: tx("Decline Dreamsign reward", "[dreamsign] [journey] Replacement decline reward action."),
+            dismissLabel: tx(
+              "Keep Current Dreamsigns",
+              "[dreamsign] [journey] Replacement keep current action.",
+            ),
+            closeLabel: tx(
+              "Decline Dreamsign reward",
+              "[dreamsign] [journey] Replacement decline reward action.",
+            ),
           }}
           onDreamsignPress={onReplaceDreamsign}
           onDismiss={onDeclineReward}

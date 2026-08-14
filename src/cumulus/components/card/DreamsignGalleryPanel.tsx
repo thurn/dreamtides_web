@@ -16,11 +16,12 @@ import { Dreamsign, type LocalizedDreamsign } from "../hud/Dreamsign";
 import { EssenceValue } from "../hud/EssenceValue";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { glossaryInfoCard } from "./glossary-info-card";
+import type { DeckEntryId } from "../../../types/identifiers";
 
 /** One UUID-keyed Dreamsign offered by a gallery. */
 export interface DreamsignGalleryEntryView {
   /** Stable gallery entry id derived from the persistent slot and Dreamsign UUID. */
-  entryId: string;
+  entryId: DeckEntryId;
   /** The Dreamsign domain object rendered by the shared Dreamsign component. */
   dreamsign: LocalizedDreamsign;
   /** Essence price shown beneath the offer. */
@@ -32,7 +33,7 @@ export interface DreamsignGalleryEntryView {
 /** The bare-glyph action appended after the Dreamsign offers. */
 export interface DreamsignGalleryActionView {
   /** Stable action id. */
-  entryId: string;
+  entryId: DeckEntryId;
   /** Glyph that identifies the action. */
   glyph: Glyph;
   /** Visible and accessible action label. */
@@ -61,7 +62,7 @@ export interface DreamsignGalleryPanelProps {
   /** Fires when the close disc is activated. */
   onClose: () => void;
   /** Fires with the UUID-derived entry id when an available Dreamsign is activated. */
-  onEntryPress: (entryId: string) => void;
+  onEntryPress: (entryId: DeckEntryId) => void;
   /** Fires when the appended action is activated. */
   onEndActionPress: () => void;
   /** Stable test id for the panel root. */

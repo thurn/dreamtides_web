@@ -22,6 +22,12 @@ import {
   update,
 } from "firebase/database";
 import type { EncodedLogNode, Genesis } from "./types";
+import {
+  asClientId,
+  asRoomId,
+  type ClientId,
+  type RoomId,
+} from "../types/identifiers";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -51,17 +57,24 @@ function defaultRandomBytes(length: number): Uint8Array {
 export function generateRoomId(
   randomBytes: RandomBytes = defaultRandomBytes,
   length = DEFAULT_ROOM_ID_LENGTH,
-): string {
+): RoomId {
   if (
     !Number.isInteger(length) ||
     length < MIN_ROOM_ID_LENGTH ||
     length > MAX_ROOM_ID_LENGTH
   ) {
-    throw new Error("Room id length must be an integer between 4 and 24 characters.");
+    throw new Error(
+      "Room id length must be an integer between 4 and 24 characters.",
+    );
   }
 
   const bytes = randomBytes(length);
-  return Array.from(bytes, (byte) => ROOM_ID_ALPHABET[byte % ROOM_ID_ALPHABET.length]).join("");
+  return asRoomId(
+    Array.from(
+      bytes,
+      (byte) => ROOM_ID_ALPHABET[byte % ROOM_ID_ALPHABET.length],
+    ).join(""),
+  );
 }
 
 /** Whether `roomId` is 4-24 lowercase alphanumeric characters. */
@@ -73,13 +86,13 @@ export function isValidRoomId(roomId: string): boolean {
  * Trims and lowercases `roomId`, returning the normalized id when it is
  * valid or `null` otherwise (including when `roomId` is `null`).
  */
-export function normalizeRoomId(roomId: string | null): string | null {
+export function normalizeRoomId(roomId: string | null): RoomId | null {
   if (roomId === null) {
     return null;
   }
 
   const normalized = roomId.trim().toLowerCase();
-  return isValidRoomId(normalized) ? normalized : null;
+  return isValidRoomId(normalized) ? asRoomId(normalized) : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -91,8 +104,10 @@ export function normalizeRoomId(roomId: string | null): string | null {
  * persisted (e.g. to localStorage): the self-chain CAS exemption assumes one
  * optimistic view per actor, and two tabs sharing an id would violate it.
  */
-export function mintClientId(randomBytes: RandomBytes = defaultRandomBytes): string {
-  return generateRoomId(randomBytes, MAX_ROOM_ID_LENGTH);
+export function mintClientId(
+  randomBytes: RandomBytes = defaultRandomBytes,
+): ClientId {
+  return asClientId(generateRoomId(randomBytes, MAX_ROOM_ID_LENGTH));
 }
 
 // ---------------------------------------------------------------------------
@@ -253,9 +268,7 @@ export async function createRoomEvictingStale(
     if (hasConnectedPresence(presence)) {
       continue;
     }
-    const rawGenesis = isRecord(rawRoom.log)
-      ? rawRoom.log.genesis
-      : undefined;
+    const rawGenesis = isRecord(rawRoom.log) ? rawRoom.log.genesis : undefined;
     if (shouldEvict(rawGenesis, nowMs)) {
       updateMap[existingId] = null;
     }
@@ -301,7 +314,9 @@ export function decodePresence(
 function hasConnectedPresence(
   presence: Record<string, PresenceEntry> | null | undefined,
 ): boolean {
-  return Object.values(presence ?? {}).some((entry) => entry.connected === true);
+  return Object.values(presence ?? {}).some(
+    (entry) => entry.connected === true,
+  );
 }
 
 function presencePath(roomId: string, clientId: string): string {

@@ -26,12 +26,13 @@ import type {
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
 import { localizedTransfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
+import type { GuideId } from "../../types/identifiers";
 const STANDARD_CANDIDATE_COUNT = 3;
 
 /** Resolve Durgan, the resident guide for Transfiguration. */
 export function resolveTransfigurationGuide(
   guides: readonly DreamGuideContent[],
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent {
   return requireGuideForSiteType(guides, "Transfiguration", presentingGuideId);
 }

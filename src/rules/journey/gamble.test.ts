@@ -25,6 +25,13 @@ import { asCardId, asCardName } from "../../types/card-identity";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import { registerSiteContentProvider, type SiteContentProvider } from "./sites";
+import { asDreamsignId } from "../../types/identifiers";
+import { asShuffleCommitment } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
 
 const SITE_ID = "fixture-gamble";
 const NODE_ID = "fixture-node";
@@ -37,7 +44,7 @@ const GENESIS: Genesis = {
   },
 };
 const REWARD_DREAMSIGN: Dreamsign = {
-  id: "reward-sign",
+  id: asDreamsignId("reward-sign"),
   name: "Reward Sign",
   effectDescription: "Fixture effect.",
 };
@@ -54,9 +61,9 @@ function runtime(
     roundNumber: 1,
     isFarpoint: false,
     wagerCost: 50,
-    shuffleCommitment: "fixture-commitment",
+    shuffleCommitment: asShuffleCommitment("fixture-commitment"),
     committedCard: { rank, suit: "clubs" },
-    dreamsignCandidateIds: ["reward-sign"],
+    dreamsignCandidateIds: [asDreamsignId("reward-sign")],
     rewardDreamsign: REWARD_DREAMSIGN,
     result: null,
     ...overrides,
@@ -70,7 +77,7 @@ function stateWith(
 ): FoldState {
   const base = genesisFoldState(GENESIS);
   const site: SiteState = {
-    id: SITE_ID,
+    id: asSiteId(SITE_ID),
     type: "Gamble",
     isEnhanced: false,
     isVisited: false,
@@ -81,20 +88,23 @@ function stateWith(
       ...base.journey,
       essence: 200,
       maxDreamsigns: 12,
-      remainingDreamsignPool: ["reward-sign", "other-sign"],
-      currentDreamscape: NODE_ID,
-      activeSiteId: SITE_ID,
-      screen: { type: "site", siteId: SITE_ID },
+      remainingDreamsignPool: [
+        asDreamsignId("reward-sign"),
+        asDreamsignId("other-sign"),
+      ],
+      currentDreamscape: asAtlasNodeId(NODE_ID),
+      activeSiteId: asSiteId(SITE_ID),
+      screen: { type: "site", siteId: asSiteId(SITE_ID) },
       atlas: {
         ...base.journey.atlas,
-        startingNodeId: NODE_ID,
-        currentNodeId: NODE_ID,
+        startingNodeId: asAtlasNodeId(NODE_ID),
+        currentNodeId: asAtlasNodeId(NODE_ID),
         nodes: {
           [NODE_ID]: {
-            id: NODE_ID,
+            id: asAtlasNodeId(NODE_ID),
             layer: LayerName.Two,
             indexInLayer: 0,
-            dreamscapeId: "fixture-dreamscape",
+            dreamscapeId: asDreamscapeId("fixture-dreamscape"),
             sites: [site],
             position: { x: 0, y: 0 },
             state: "available",
@@ -168,7 +178,10 @@ beforeEach(() => {
 });
 
 function wager(state: FoldState, gateId: GravokGateId) {
-  return apply(state, "PLACE_GRAVOK_WAGER", { siteId: SITE_ID, gateId });
+  return apply(state, "PLACE_GRAVOK_WAGER", {
+    siteId: asSiteId(SITE_ID),
+    gateId,
+  });
 }
 
 function settleWager(state: FoldState) {
@@ -180,7 +193,7 @@ function settleWager(state: FoldState) {
     throw new Error("expected Gamble runtime");
   }
   return apply(state, "SETTLE_GRAVOK_WAGER", {
-    siteId: SITE_ID,
+    siteId: asSiteId(SITE_ID),
     shuffleCommitment: siteRuntime.shuffleCommitment,
   });
 }
@@ -202,7 +215,8 @@ describe("Gravok's Three-Gate Wager", () => {
       },
     });
     expect(
-      apply(wagered.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+      apply(wagered.state, "COMPLETE_SITE", { siteId: asSiteId(SITE_ID) })
+        .outcome,
     ).toBe("bounced");
 
     const settled = settleWager(wagered.state);
@@ -215,7 +229,8 @@ describe("Gravok's Three-Gate Wager", () => {
     expect(duplicate.outcome).toBe("bounced");
     expect(duplicate.state).toEqual(settled.state);
     expect(
-      apply(settled.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+      apply(settled.state, "COMPLETE_SITE", { siteId: asSiteId(SITE_ID) })
+        .outcome,
     ).toBe("applied");
   });
 
@@ -279,7 +294,7 @@ describe("Gravok's Three-Gate Wager", () => {
 
   it("holds a jackpot Dreamsign at the cap until a UUID replacement resolves", () => {
     const held: Dreamsign = {
-      id: "held-sign",
+      id: asDreamsignId("held-sign"),
       name: "Held Sign",
       effectDescription: "Held effect.",
     };
@@ -302,16 +317,16 @@ describe("Gravok's Three-Gate Wager", () => {
       won.state,
       "REPLACE_GRAVOK_WAGER_DREAMSIGN",
       {
-        siteId: SITE_ID,
-        replacedDreamsignId: "held-sign",
+        siteId: asSiteId(SITE_ID),
+        replacedDreamsignId: asDreamsignId("held-sign"),
       },
     );
     expect(unsettledReplacement.outcome).toBe("bounced");
 
     const settled = settleWager(won.state);
     const replaced = apply(settled.state, "REPLACE_GRAVOK_WAGER_DREAMSIGN", {
-      siteId: SITE_ID,
-      replacedDreamsignId: "held-sign",
+      siteId: asSiteId(SITE_ID),
+      replacedDreamsignId: asDreamsignId("held-sign"),
     });
     expect(replaced.outcome).toBe("applied");
     expect(replaced.state.journey.dreamsigns.map((sign) => sign.id)).toEqual([
@@ -320,13 +335,13 @@ describe("Gravok's Three-Gate Wager", () => {
     expect(replaced.state.journey.visitedSites).not.toContain(SITE_ID);
     expect(replaced.state.journey.screen).toEqual({
       type: "site",
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
     });
     expect(replaced.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       result: {
         dreamsignAwarded: true,
         pendingDreamsignReplacement: false,
-        replacedDreamsignId: "held-sign",
+        replacedDreamsignId: asDreamsignId("held-sign"),
       },
     });
   });
@@ -346,7 +361,7 @@ describe("Gravok's Three-Gate Wager", () => {
       gambleData: GAMBLE,
       openSite: () => ({
         runtime: runtime("K", {
-          shuffleCommitment: "next-commitment",
+          shuffleCommitment: asShuffleCommitment("next-commitment"),
           committedCard: { rank: "K", suit: "diamonds" },
         }),
       }),
@@ -356,27 +371,27 @@ describe("Gravok's Three-Gate Wager", () => {
     const wagered = wager(stateWith("6"), "six");
     const settled = settleWager(wagered.state);
     const replayed = apply(settled.state, "PLAY_AGAIN_GRAVOK_WAGER", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "fixture-commitment",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("fixture-commitment"),
     });
 
     expect(replayed.outcome).toBe("applied");
     expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       kind: "gamble",
       roundNumber: 2,
-      shuffleCommitment: "next-commitment",
+      shuffleCommitment: asShuffleCommitment("next-commitment"),
       committedCard: { rank: "K", suit: "diamonds" },
       result: null,
     });
     expect(replayed.state.journey.essence).toBe(250);
     expect(replayed.state.journey.screen).toEqual({
       type: "site",
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
     });
 
     const duplicate = apply(replayed.state, "PLAY_AGAIN_GRAVOK_WAGER", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "fixture-commitment",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("fixture-commitment"),
     });
     expect(duplicate.outcome).toBe("bounced");
     expect(wager(replayed.state, "nine").outcome).toBe("applied");
@@ -389,7 +404,7 @@ describe("Gravok's Three-Gate Wager", () => {
       gambleData: GAMBLE,
       openSite: () => ({
         runtime: runtime("K", {
-          shuffleCommitment: "final-commitment",
+          shuffleCommitment: asShuffleCommitment("final-commitment"),
           committedCard: { rank: "K", suit: "diamonds" },
         }),
       }),
@@ -400,19 +415,19 @@ describe("Gravok's Three-Gate Wager", () => {
       wager(stateWith("6", {}, { roundNumber: 2 }), "six").state,
     );
     const secondRetry = apply(secondRound.state, "PLAY_AGAIN_GRAVOK_WAGER", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "fixture-commitment",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("fixture-commitment"),
     });
     expect(secondRetry.outcome).toBe("applied");
     expect(secondRetry.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       roundNumber: 3,
-      shuffleCommitment: "final-commitment",
+      shuffleCommitment: asShuffleCommitment("final-commitment"),
     });
 
     const thirdRound = settleWager(wager(secondRetry.state, "six").state);
     const thirdRetry = apply(thirdRound.state, "PLAY_AGAIN_GRAVOK_WAGER", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "final-commitment",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("final-commitment"),
     });
     expect(thirdRetry.outcome).toBe("bounced");
     expect(thirdRetry.state).toEqual(thirdRound.state);
@@ -427,9 +442,16 @@ function ladderRuntime(
     kind: "gamble",
     gameId: "tidemark-ladder-climb",
     isFarpoint: false,
-    shuffleCommitments: ["attempt-1", "attempt-2", "attempt-3", "attempt-4"],
+    shuffleCommitments: [
+      asShuffleCommitment("attempt-1"),
+      asShuffleCommitment("attempt-2"),
+      asShuffleCommitment("attempt-3"),
+      asShuffleCommitment("attempt-4"),
+    ],
     committedCards: [...cards],
-    dreamsignCandidateScores: [{ dreamsignId: "reward-sign", score: 1 }],
+    dreamsignCandidateScores: [
+      { dreamsignId: asDreamsignId("reward-sign"), score: 1 },
+    ],
     strongPoolSize: 1,
     strongPoolCutoffScore: 1,
     rewardDreamsign: REWARD_DREAMSIGN,
@@ -458,7 +480,9 @@ function ladderStateWith(
 }
 
 function drawLadder(state: FoldState) {
-  return apply(state, "DRAW_TIDEMARK_LADDER_CLIMB", { siteId: SITE_ID });
+  return apply(state, "DRAW_TIDEMARK_LADDER_CLIMB", {
+    siteId: asSiteId(SITE_ID),
+  });
 }
 
 function settleLadder(state: FoldState) {
@@ -471,7 +495,7 @@ function settleLadder(state: FoldState) {
     throw new Error("expected Ladder Climb result");
   }
   return apply(state, "SETTLE_TIDEMARK_LADDER_CLIMB", {
-    siteId: SITE_ID,
+    siteId: asSiteId(SITE_ID),
     shuffleCommitment:
       siteRuntime.shuffleCommitments[siteRuntime.result.attemptNumber - 1],
   });
@@ -504,7 +528,8 @@ describe("Tidemark Ladder Climb", () => {
       },
     });
     expect(
-      apply(drawn.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+      apply(drawn.state, "COMPLETE_SITE", { siteId: asSiteId(SITE_ID) })
+        .outcome,
     ).toBe("bounced");
 
     const settled = settleLadder(drawn.state);
@@ -525,7 +550,8 @@ describe("Tidemark Ladder Climb", () => {
     });
     expect(drawLadder(settled.state).outcome).toBe("bounced");
     expect(
-      apply(settled.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+      apply(settled.state, "COMPLETE_SITE", { siteId: asSiteId(SITE_ID) })
+        .outcome,
     ).toBe("applied");
   });
 
@@ -587,7 +613,7 @@ describe("Tidemark Ladder Climb", () => {
 
   it("holds a win at the cap until UUID replacement settles", () => {
     const held: Dreamsign = {
-      id: "held-sign",
+      id: asDreamsignId("held-sign"),
       name: "Held Sign",
       effectDescription: "Held effect.",
     };
@@ -607,13 +633,17 @@ describe("Tidemark Ladder Climb", () => {
       },
     });
     expect(
-      apply(settled.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+      apply(settled.state, "COMPLETE_SITE", { siteId: asSiteId(SITE_ID) })
+        .outcome,
     ).toBe("bounced");
 
     const replaced = apply(
       settled.state,
       "REPLACE_TIDEMARK_LADDER_CLIMB_DREAMSIGN",
-      { siteId: SITE_ID, replacedDreamsignId: "held-sign" },
+      {
+        siteId: asSiteId(SITE_ID),
+        replacedDreamsignId: asDreamsignId("held-sign"),
+      },
     );
     expect(replaced.outcome).toBe("applied");
     expect(replaced.state.journey.essence).toBe(225);
@@ -624,7 +654,7 @@ describe("Tidemark Ladder Climb", () => {
       result: {
         dreamsignAwarded: true,
         pendingDreamsignReplacement: false,
-        replacedDreamsignId: "held-sign",
+        replacedDreamsignId: asDreamsignId("held-sign"),
       },
     });
   });
@@ -640,7 +670,11 @@ function starwayRuntime(
     roundNumber: 1,
     isFarpoint: false,
     wagerAmount: 30,
-    shuffleCommitments: ["tier-1", "tier-2", "tier-3"],
+    shuffleCommitments: [
+      asShuffleCommitment("tier-1"),
+      asShuffleCommitment("tier-2"),
+      asShuffleCommitment("tier-3"),
+    ],
     committedCards: [...cards],
     results: [],
     terminalReason: null,
@@ -667,7 +701,7 @@ function starwayStateWith(
 }
 
 function drawStarway(state: FoldState) {
-  return apply(state, "DRAW_STARWAY_STAIRS", { siteId: SITE_ID });
+  return apply(state, "DRAW_STARWAY_STAIRS", { siteId: asSiteId(SITE_ID) });
 }
 
 function settleStarway(state: FoldState) {
@@ -681,7 +715,7 @@ function settleStarway(state: FoldState) {
   const result = siteRuntime.results[siteRuntime.results.length - 1];
   if (result === undefined) throw new Error("expected Starway Stairs result");
   return apply(state, "SETTLE_STARWAY_STAIRS", {
-    siteId: SITE_ID,
+    siteId: asSiteId(SITE_ID),
     shuffleCommitment: siteRuntime.shuffleCommitments[result.tierNumber - 1],
   });
 }
@@ -707,8 +741,8 @@ describe("Starway Stairs", () => {
     });
 
     const cashedOut = apply(firstSettled.state, "CASH_OUT_STARWAY_STAIRS", {
-      siteId: SITE_ID,
-      shuffleCommitment: "tier-1",
+      siteId: asSiteId(SITE_ID),
+      shuffleCommitment: asShuffleCommitment("tier-1"),
     });
     expect(cashedOut.outcome).toBe("applied");
     expect(cashedOut.state.journey.essence).toBe(230);
@@ -771,7 +805,9 @@ describe("Starway Stairs", () => {
     const settled = settleStarway(
       drawStarway(starwayStateWith(safeCards)).state,
     );
-    const leave = apply(settled.state, "COMPLETE_SITE", { siteId: SITE_ID });
+    const leave = apply(settled.state, "COMPLETE_SITE", {
+      siteId: asSiteId(SITE_ID),
+    });
     expect(leave.outcome).toBe("bounced");
   });
 
@@ -792,8 +828,8 @@ describe("Starway Stairs", () => {
     state = settleStarway(drawStarway(state).state).state;
 
     const staleCashOut = apply(state, "CASH_OUT_STARWAY_STAIRS", {
-      siteId: SITE_ID,
-      shuffleCommitment: "tier-1",
+      siteId: asSiteId(SITE_ID),
+      shuffleCommitment: asShuffleCommitment("tier-1"),
     });
     expect(staleCashOut.outcome).toBe("bounced");
     expect(staleCashOut.state.journey.essence).toBe(140);
@@ -810,7 +846,11 @@ describe("Starway Stairs", () => {
       gambleData: GAMBLE,
       openSite: () => ({
         runtime: starwayRuntime(safeCards, {
-          shuffleCommitments: ["next-1", "next-2", "next-3"],
+          shuffleCommitments: [
+            asShuffleCommitment("next-1"),
+            asShuffleCommitment("next-2"),
+            asShuffleCommitment("next-3"),
+          ],
         }),
       }),
     });
@@ -825,8 +865,8 @@ describe("Starway Stairs", () => {
     );
 
     const replayed = apply(busted.state, "PLAY_AGAIN_STARWAY_STAIRS", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "tier-1",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("tier-1"),
     });
     expect(replayed.outcome).toBe("applied");
     expect(replayed.state.journey.essence).toBe(170);
@@ -842,8 +882,8 @@ describe("Starway Stairs", () => {
     expect(nextBet.state.journey.essence).toBe(140);
 
     const staleReplay = apply(replayed.state, "PLAY_AGAIN_STARWAY_STAIRS", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "tier-1",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("tier-1"),
     });
     expect(staleReplay.outcome).toBe("bounced");
   });
@@ -856,7 +896,13 @@ describe("Starway Stairs", () => {
       openSite: () => ({
         runtime: starwayRuntime(
           [{ rank: "2", suit: "diamonds" }, safeCards[1], safeCards[2]],
-          { shuffleCommitments: ["final-1", "final-2", "final-3"] },
+          {
+            shuffleCommitments: [
+              asShuffleCommitment("final-1"),
+              asShuffleCommitment("final-2"),
+              asShuffleCommitment("final-3"),
+            ],
+          },
         ),
       }),
     });
@@ -870,8 +916,8 @@ describe("Starway Stairs", () => {
       ).state,
     );
     const secondRetry = apply(secondRound.state, "PLAY_AGAIN_STARWAY_STAIRS", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "tier-1",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("tier-1"),
     });
     expect(secondRetry.outcome).toBe("applied");
     expect(secondRetry.state.journey.siteRuntime[SITE_ID]).toMatchObject({
@@ -881,8 +927,8 @@ describe("Starway Stairs", () => {
 
     const thirdRound = settleStarway(drawStarway(secondRetry.state).state);
     const thirdRetry = apply(thirdRound.state, "PLAY_AGAIN_STARWAY_STAIRS", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "final-1",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("final-1"),
     });
     expect(thirdRetry.outcome).toBe("bounced");
     expect(thirdRetry.state).toEqual(thirdRound.state);
@@ -912,13 +958,13 @@ function fourSuitTarget(
 ): FourSuitRepriseTarget {
   const card = fourSuitCard(index);
   return {
-    entryId,
+    entryId: asDeckEntryId(entryId),
     cardId: card.id,
     cardNumber: card.cardNumber,
     cardSnapshot: card,
     transfigurationOffers: [
       {
-        entryId,
+        entryId: asDeckEntryId(entryId),
         type: "Empowered",
         effectDescription: "Fixture form.",
         effectDetails: {},
@@ -938,7 +984,11 @@ function fourSuitRuntime(
     gameId: "four-suit-reprise",
     isFarpoint: false,
     drawCost: 25,
-    shuffleCommitments: ["round-1", "round-2", "round-3"],
+    shuffleCommitments: [
+      asShuffleCommitment("round-1"),
+      asShuffleCommitment("round-2"),
+      asShuffleCommitment("round-3"),
+    ],
     committedCards: [...cards],
     targets: [fourSuitTarget(1), fourSuitTarget(2), fourSuitTarget(3)],
     rounds: [],
@@ -975,8 +1025,11 @@ function fourSuitStateWith(
   };
 }
 
-function drawFourSuit(state: FoldState, entryId: string) {
-  return apply(state, "DRAW_FOUR_SUIT_REPRISE", { siteId: SITE_ID, entryId });
+function drawFourSuit(state: FoldState, entryId: DeckEntryId) {
+  return apply(state, "DRAW_FOUR_SUIT_REPRISE", {
+    siteId: asSiteId(SITE_ID),
+    entryId,
+  });
 }
 
 function settleFourSuit(state: FoldState) {
@@ -990,7 +1043,7 @@ function settleFourSuit(state: FoldState) {
   const round = siteRuntime.rounds[siteRuntime.rounds.length - 1];
   if (round === undefined) throw new Error("expected Four-Suit Reprise round");
   return apply(state, "SETTLE_FOUR_SUIT_REPRISE", {
-    siteId: SITE_ID,
+    siteId: asSiteId(SITE_ID),
     shuffleCommitment: round.shuffleCommitment,
   });
 }
@@ -1003,12 +1056,16 @@ describe("Four-Suit Reprise", () => {
   ];
 
   it("charges one draw and grants Diamonds while leaving the target unchanged", () => {
-    const drawn = drawFourSuit(fourSuitStateWith(followupCards), "deck-1");
+    const drawn = drawFourSuit(
+      fourSuitStateWith(followupCards),
+      asDeckEntryId("deck-1"),
+    );
     expect(drawn.outcome).toBe("applied");
     expect(drawn.state.journey.essence).toBe(175);
     expect(drawn.state.journey.deck).toHaveLength(3);
     expect(
-      apply(drawn.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+      apply(drawn.state, "COMPLETE_SITE", { siteId: asSiteId(SITE_ID) })
+        .outcome,
     ).toBe("bounced");
 
     const settled = settleFourSuit(drawn.state);
@@ -1019,8 +1076,8 @@ describe("Four-Suit Reprise", () => {
       phase: "result",
       rounds: [
         {
-          targetEntryId: "deck-1",
-          targetCardId: "fixture-card-1",
+          targetEntryId: asDeckEntryId("deck-1"),
+          targetCardId: asCardId("fixture-card-1"),
           outcome: "essence",
           resultRevealed: true,
           resultSettled: true,
@@ -1037,7 +1094,7 @@ describe("Four-Suit Reprise", () => {
       followupCards[2],
     ]);
     const duplicated = settleFourSuit(
-      drawFourSuit(heartsState, "deck-1").state,
+      drawFourSuit(heartsState, asDeckEntryId("deck-1")).state,
     );
     expect(duplicated.state.journey.deck).toHaveLength(4);
     expect(duplicated.state.journey.deck[3]).toMatchObject({
@@ -1054,7 +1111,9 @@ describe("Four-Suit Reprise", () => {
       followupCards[1],
       followupCards[2],
     ]);
-    const purged = settleFourSuit(drawFourSuit(clubsState, "deck-1").state);
+    const purged = settleFourSuit(
+      drawFourSuit(clubsState, asDeckEntryId("deck-1")).state,
+    );
     expect(purged.state.journey.deck.map((entry) => entry.entryId)).toEqual([
       "deck-2",
       "deck-3",
@@ -1071,7 +1130,7 @@ describe("Four-Suit Reprise", () => {
         followupCards[1],
         followupCards[2],
       ]),
-      "deck-1",
+      asDeckEntryId("deck-1"),
     );
     const revealed = settleFourSuit(drawn.state);
     expect(revealed.outcome).toBe("applied");
@@ -1085,15 +1144,16 @@ describe("Four-Suit Reprise", () => {
       ],
     });
     expect(
-      apply(revealed.state, "COMPLETE_SITE", { siteId: SITE_ID }).outcome,
+      apply(revealed.state, "COMPLETE_SITE", { siteId: asSiteId(SITE_ID) })
+        .outcome,
     ).toBe("bounced");
 
     const chosen = apply(
       revealed.state,
       "CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION",
       {
-        siteId: SITE_ID,
-        shuffleCommitment: "round-1",
+        siteId: asSiteId(SITE_ID),
+        shuffleCommitment: asShuffleCommitment("round-1"),
         type: "Empowered",
       },
     );
@@ -1120,27 +1180,35 @@ describe("Four-Suit Reprise", () => {
       fourSuitTarget(4),
     ];
     let state = settleFourSuit(
-      drawFourSuit(fourSuitStateWith(followupCards, { targets }), "deck-1")
-        .state,
+      drawFourSuit(
+        fourSuitStateWith(followupCards, { targets }),
+        asDeckEntryId("deck-1"),
+      ).state,
     ).state;
     let replay = apply(state, "PLAY_AGAIN_FOUR_SUIT_REPRISE", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "round-1",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("round-1"),
     });
     expect(replay.outcome).toBe("applied");
-    expect(drawFourSuit(replay.state, "deck-1-copy").outcome).toBe("bounced");
+    expect(
+      drawFourSuit(replay.state, asDeckEntryId("deck-1-copy")).outcome,
+    ).toBe("bounced");
 
-    state = settleFourSuit(drawFourSuit(replay.state, "deck-2").state).state;
+    state = settleFourSuit(
+      drawFourSuit(replay.state, asDeckEntryId("deck-2")).state,
+    ).state;
     replay = apply(state, "PLAY_AGAIN_FOUR_SUIT_REPRISE", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "round-2",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("round-2"),
     });
     expect(replay.outcome).toBe("applied");
-    state = settleFourSuit(drawFourSuit(replay.state, "deck-3").state).state;
+    state = settleFourSuit(
+      drawFourSuit(replay.state, asDeckEntryId("deck-3")).state,
+    ).state;
 
     const fourthRound = apply(state, "PLAY_AGAIN_FOUR_SUIT_REPRISE", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "round-3",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("round-3"),
     });
     expect(fourthRound.outcome).toBe("bounced");
     expect(state.journey.essence).toBe(225);
@@ -1152,7 +1220,7 @@ describe("Four-Suit Reprise", () => {
   it("uses the Farpoint draw cost", () => {
     const drawn = drawFourSuit(
       fourSuitStateWith(followupCards, { isFarpoint: true, drawCost: 15 }),
-      "deck-1",
+      asDeckEntryId("deck-1"),
     );
     expect(drawn.outcome).toBe("applied");
     expect(drawn.state.journey.essence).toBe(185);
@@ -1170,7 +1238,7 @@ function blackjackRuntime(
     wagerCost: 50,
     prizeEssence: 300,
     attemptNumber: 1,
-    shuffleCommitment: "blackjack-hand",
+    shuffleCommitment: asShuffleCommitment("blackjack-hand"),
     committedDeck: [...cards],
     deckCursor: 0,
     playerCards: [],
@@ -1208,7 +1276,7 @@ function settleBlackjack(state: FoldState) {
     throw new Error("expected Blackjack runtime");
   }
   return apply(state, "SETTLE_BLACKJACK", {
-    siteId: SITE_ID,
+    siteId: asSiteId(SITE_ID),
     shuffleCommitment: siteRuntime.shuffleCommitment,
   });
 }
@@ -1223,7 +1291,7 @@ describe("Blackjack", () => {
         { rank: "9", suit: "diamonds" },
       ]),
       "DEAL_BLACKJACK",
-      { siteId: SITE_ID },
+      { siteId: asSiteId(SITE_ID) },
     );
     expect(dealt.outcome).toBe("applied");
     expect(dealt.state.journey.essence).toBe(150);
@@ -1257,9 +1325,11 @@ describe("Blackjack", () => {
         { rank: "K", suit: "diamonds" },
       ]),
       "DEAL_BLACKJACK",
-      { siteId: SITE_ID },
+      { siteId: asSiteId(SITE_ID) },
     );
-    const hit = apply(dealt.state, "HIT_BLACKJACK", { siteId: SITE_ID });
+    const hit = apply(dealt.state, "HIT_BLACKJACK", {
+      siteId: asSiteId(SITE_ID),
+    });
     expect(hit.outcome).toBe("applied");
     expect(hit.state.journey.essence).toBe(150);
     expect(hit.state.journey.siteRuntime[SITE_ID]).toMatchObject({
@@ -1268,7 +1338,9 @@ describe("Blackjack", () => {
       dealerRevealed: false,
       outcome: null,
     });
-    const stood = apply(hit.state, "STAND_BLACKJACK", { siteId: SITE_ID });
+    const stood = apply(hit.state, "STAND_BLACKJACK", {
+      siteId: asSiteId(SITE_ID),
+    });
     expect(stood.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       deckCursor: 6,
       dealerCards: [{ rank: "10" }, { rank: "6" }, { rank: "K" }],
@@ -1293,9 +1365,11 @@ describe("Blackjack", () => {
         { rank: "5", suit: "diamonds" },
       ]),
       "DEAL_BLACKJACK",
-      { siteId: SITE_ID },
+      { siteId: asSiteId(SITE_ID) },
     );
-    const hit = apply(dealt.state, "HIT_BLACKJACK", { siteId: SITE_ID });
+    const hit = apply(dealt.state, "HIT_BLACKJACK", {
+      siteId: asSiteId(SITE_ID),
+    });
     expect(hit.state.journey.essence).toBe(150);
     expect(hit.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       deckCursor: 5,
@@ -1321,18 +1395,18 @@ describe("Blackjack", () => {
             { rank: "5", suit: "spades" },
             { rank: "7", suit: "diamonds" },
           ],
-          { shuffleCommitment: "bust-retry-hand" },
+          { shuffleCommitment: asShuffleCommitment("bust-retry-hand") },
         ),
       }),
     });
     const replayed = apply(settled.state, "PLAY_AGAIN_BLACKJACK", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "blackjack-hand",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("blackjack-hand"),
     });
     expect(replayed.outcome).toBe("applied");
     expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       attemptNumber: 2,
-      shuffleCommitment: "bust-retry-hand",
+      shuffleCommitment: asShuffleCommitment("bust-retry-hand"),
       wagerPaid: true,
     });
   });
@@ -1346,7 +1420,7 @@ describe("Blackjack", () => {
         { rank: "K", suit: "diamonds" },
       ]),
       "DEAL_BLACKJACK",
-      { siteId: SITE_ID },
+      { siteId: asSiteId(SITE_ID) },
     );
     expect(dealt.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       dealerRevealed: true,
@@ -1365,18 +1439,18 @@ describe("Blackjack", () => {
             { rank: "5", suit: "spades" },
             { rank: "7", suit: "diamonds" },
           ],
-          { shuffleCommitment: "dealer-blackjack-retry" },
+          { shuffleCommitment: asShuffleCommitment("dealer-blackjack-retry") },
         ),
       }),
     });
     const replayed = apply(settled.state, "PLAY_AGAIN_BLACKJACK", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "blackjack-hand",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("blackjack-hand"),
     });
     expect(replayed.outcome).toBe("applied");
     expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       attemptNumber: 2,
-      shuffleCommitment: "dealer-blackjack-retry",
+      shuffleCommitment: asShuffleCommitment("dealer-blackjack-retry"),
       wagerPaid: true,
     });
   });
@@ -1387,7 +1461,7 @@ describe("Blackjack", () => {
       {},
       {
         attemptNumber: 3,
-        shuffleCommitment: "third-attempt",
+        shuffleCommitment: asShuffleCommitment("third-attempt"),
         playerCards: [
           { rank: "K", suit: "clubs" },
           { rank: "9", suit: "hearts" },
@@ -1404,8 +1478,8 @@ describe("Blackjack", () => {
       },
     );
     const replayed = apply(state, "PLAY_AGAIN_BLACKJACK", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "third-attempt",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("third-attempt"),
     });
     expect(replayed.outcome).toBe("bounced");
   });
@@ -1421,9 +1495,11 @@ describe("Blackjack", () => {
         { rank: "K", suit: "hearts" },
       ]),
       "DEAL_BLACKJACK",
-      { siteId: SITE_ID },
+      { siteId: asSiteId(SITE_ID) },
     );
-    const hit = apply(dealt.state, "HIT_BLACKJACK", { siteId: SITE_ID });
+    const hit = apply(dealt.state, "HIT_BLACKJACK", {
+      siteId: asSiteId(SITE_ID),
+    });
     expect(hit.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       deckCursor: 6,
       playerCards: [{ rank: "10" }, { rank: "5" }, { rank: "6" }],
@@ -1447,10 +1523,12 @@ describe("Blackjack", () => {
         { isFarpoint: true, wagerCost: 40 },
       ),
       "DEAL_BLACKJACK",
-      { siteId: SITE_ID },
+      { siteId: asSiteId(SITE_ID) },
     );
     expect(dealt.state.journey.essence).toBe(160);
-    const stood = apply(dealt.state, "STAND_BLACKJACK", { siteId: SITE_ID });
+    const stood = apply(dealt.state, "STAND_BLACKJACK", {
+      siteId: asSiteId(SITE_ID),
+    });
     expect(stood.state.journey.siteRuntime[SITE_ID]).toMatchObject({
       outcome: "push",
     });
@@ -1475,19 +1553,19 @@ describe("Blackjack", () => {
           {
             isFarpoint: true,
             wagerCost: 40,
-            shuffleCommitment: "next-blackjack-hand",
+            shuffleCommitment: asShuffleCommitment("next-blackjack-hand"),
           },
         ),
       }),
     });
     const replayed = apply(settled.state, "PLAY_AGAIN_BLACKJACK", {
-      siteId: SITE_ID,
-      previousShuffleCommitment: "blackjack-hand",
+      siteId: asSiteId(SITE_ID),
+      previousShuffleCommitment: asShuffleCommitment("blackjack-hand"),
     });
     expect(replayed.outcome).toBe("applied");
     expect(replayed.state.journey.essence).toBe(160);
     expect(replayed.state.journey.siteRuntime[SITE_ID]).toMatchObject({
-      shuffleCommitment: "next-blackjack-hand",
+      shuffleCommitment: asShuffleCommitment("next-blackjack-hand"),
       wagerPaid: true,
       deckCursor: 4,
       playerCards: [{ rank: "10" }, { rank: "5" }],

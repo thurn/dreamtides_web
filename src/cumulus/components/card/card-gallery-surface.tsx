@@ -45,15 +45,18 @@ import {
   type CardChoiceGridCardView,
   type CardChoiceGridColumns,
 } from "./CardChoiceGrid";
+import type { DeckEntryId } from "../../../types/identifiers";
 
 /** One resolved card in a {@link CardBrowserPanel} or {@link CardPickerPanel}. */
-export type CardGalleryCardView = CardChoiceGridCardView;
+export type CardGalleryCardView<EntryId extends string = DeckEntryId> =
+  CardChoiceGridCardView<EntryId>;
 
 /** The small white line shown beneath a gallery item. */
 export type CardGalleryCaption = CardChoiceGridCaption;
 
 /** A card-sized action appended to the gallery grid. */
-export type CardGalleryActionView = CardChoiceGridActionView;
+export type CardGalleryActionView<EntryId extends string = DeckEntryId> =
+  CardChoiceGridActionView<EntryId>;
 
 /** The trailing header action rendered by either card-panel role. */
 export type CardPanelAccessory =
@@ -126,7 +129,7 @@ export type CardBrowserPresentation = "embedded" | "overlay" | "fullScreen";
 /** How a transactional card picker integrates with its host surface. */
 export type CardPickerPresentation = "embedded" | "overlay";
 
-interface CardPanelBaseProps {
+interface CardPanelBaseProps<EntryId extends string> {
   /** Header title, rendered as an `<h2>`. */
   title: LocalizedString;
   /** Optional intro line under the title. */
@@ -134,37 +137,44 @@ interface CardPanelBaseProps {
   /** Optional trailing header action. */
   rightAccessory?: CardPanelAccessory;
   /** Resolved cards rendered in order. */
-  cards: readonly CardGalleryCardView[];
+  cards: readonly CardGalleryCardView<EntryId>[];
   /** Empty-state copy shown when `cards` is empty. */
   emptyLabel?: LocalizedString;
   /** Test id for the panel root. */
   testId?: string;
 }
 
-export interface CardBrowserPanelProps extends CardPanelBaseProps {
+export interface CardBrowserPanelProps<
+  EntryId extends string = DeckEntryId,
+> extends CardPanelBaseProps<EntryId> {
   /** Optional structured search, sort, and filter toolbar above the card grid. */
   toolbar?: CardBrowserToolbar;
   /** Host integration. `overlay` is floating on desktop and full-bleed on mobile. */
   presentation?: CardBrowserPresentation;
   /** Fires when an enabled card tile is activated. */
-  onCardPress?: (entryId: string) => void;
+  onCardPress?: (entryId: EntryId) => void;
   /** Fires when a draggable card entry begins a native drag. */
-  onCardDragStart?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
+  onCardDragStart?: (
+    entryId: EntryId,
+    event: DragEvent<HTMLDivElement>,
+  ) => void;
   /** Fires when a draggable card entry's native drag ends. */
-  onCardDragEnd?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
+  onCardDragEnd?: (entryId: EntryId, event: DragEvent<HTMLDivElement>) => void;
   /** Fires when a card entry requests its contextual actions. */
   onCardContextMenu?: (
-    entryId: string,
+    entryId: EntryId,
     event: MouseEvent<HTMLDivElement>,
   ) => void;
   /**
    * Fires when a card receives two quick activations. While present, a primary
    * card press waits briefly so a second tap can take precedence.
    */
-  onCardDoubleTap?: (entryId: string) => void;
+  onCardDoubleTap?: (entryId: EntryId) => void;
 }
 
-export interface CardPickerPanelProps extends CardPanelBaseProps {
+export interface CardPickerPanelProps<
+  EntryId extends string = DeckEntryId,
+> extends CardPanelBaseProps<EntryId> {
   /** Host integration. `overlay` is floating on desktop and full-bleed on mobile. */
   presentation?: CardPickerPresentation;
   /** Optional one-or-two-action GlassButton footer below the card grid. */
@@ -172,11 +182,11 @@ export interface CardPickerPanelProps extends CardPanelBaseProps {
     | readonly [CardPickerFooterAction]
     | readonly [CardPickerFooterAction, CardPickerFooterAction];
   /** Fires when an enabled card tile is activated. */
-  onCardPress?: (entryId: string) => void;
+  onCardPress?: (entryId: EntryId) => void;
   /** Optional card-sized action appended after the cards. */
-  endAction?: CardGalleryActionView;
+  endAction?: CardGalleryActionView<EntryId>;
   /** Fires with the appended action's stable id when it is activated. */
-  onEndActionPress?: (entryId: string) => void;
+  onEndActionPress?: (entryId: EntryId) => void;
 }
 
 type GalleryColumns = "two" | "three" | "four" | "five";
@@ -185,7 +195,9 @@ type GalleryFrame = "floating" | "fullBleed";
 type GallerySpacing = "regular" | "compact";
 type GalleryHeightMode = "content" | "fill";
 
-interface CardGallerySurfaceProps extends CardPanelBaseProps {
+interface CardGallerySurfaceProps<
+  EntryId extends string,
+> extends CardPanelBaseProps<EntryId> {
   toolbar?: CardBrowserToolbar;
   footerActions?:
     | readonly [CardPickerFooterAction]
@@ -196,16 +208,19 @@ interface CardGallerySurfaceProps extends CardPanelBaseProps {
   spacing: GallerySpacing;
   heightMode: GalleryHeightMode;
   role: "browser" | "picker";
-  onCardPress?: (entryId: string) => void;
-  onCardDragStart?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
-  onCardDragEnd?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
+  onCardPress?: (entryId: EntryId) => void;
+  onCardDragStart?: (
+    entryId: EntryId,
+    event: DragEvent<HTMLDivElement>,
+  ) => void;
+  onCardDragEnd?: (entryId: EntryId, event: DragEvent<HTMLDivElement>) => void;
   onCardContextMenu?: (
-    entryId: string,
+    entryId: EntryId,
     event: MouseEvent<HTMLDivElement>,
   ) => void;
-  onCardDoubleTap?: (entryId: string) => void;
-  endAction?: CardGalleryActionView;
-  onEndActionPress?: (entryId: string) => void;
+  onCardDoubleTap?: (entryId: EntryId) => void;
+  endAction?: CardGalleryActionView<EntryId>;
+  onEndActionPress?: (entryId: EntryId) => void;
 }
 
 const STANDARD_CARD_MIN_WIDTH_PX = 96;
@@ -499,7 +514,7 @@ function cardPickerFooterButton(
 }
 
 /** Private fitted card-gallery surface shared by the two public product roles. */
-function CardGallerySurface({
+function CardGallerySurface<EntryId extends string>({
   title,
   subtitle,
   rightAccessory,
@@ -521,16 +536,16 @@ function CardGallerySurface({
   onCardDoubleTap,
   endAction,
   onEndActionPress,
-}: CardGallerySurfaceProps): ReactElement {
+}: CardGallerySurfaceProps<EntryId>): ReactElement {
   const resolve = useLocalizer();
-  const pendingCardTapsRef = useRef(new Map<string, number>());
-  const cancelPendingCardTap = (entryId: string): void => {
+  const pendingCardTapsRef = useRef(new Map<EntryId, number>());
+  const cancelPendingCardTap = (entryId: EntryId): void => {
     const timer = pendingCardTapsRef.current.get(entryId);
     if (timer === undefined) return;
     window.clearTimeout(timer);
     pendingCardTapsRef.current.delete(entryId);
   };
-  const handleCardActivate = (entryId: string): void => {
+  const handleCardActivate = (entryId: EntryId): void => {
     if (onCardDoubleTap === undefined) {
       onCardPress?.(entryId);
       return;
@@ -788,7 +803,7 @@ function CardGallerySurface({
               </p>
             </div>
           ) : (
-            <CardChoiceGrid
+            <CardChoiceGrid<EntryId>
               cards={cards}
               columns={choiceGridColumns(columns)}
               layout={{

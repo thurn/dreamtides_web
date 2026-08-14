@@ -40,19 +40,21 @@ import {
   type FieldTarget,
 } from "./save-state";
 import "./exploration-editor.css";
+import { asDreamsignId, asEditorFieldTargetId } from "../types/identifiers";
+import { asCardId, type CardId } from "../types/card-identity";
 
 type LoadState = "loading" | "ready" | "error";
 type ActionSaveStatus = "idle" | "saving" | "saved" | "error";
 
 interface ReferenceCatalog {
   cards: CardData[];
-  cardsById: ReadonlyMap<string, CardData>;
+  cardsById: ReadonlyMap<CardId, CardData>;
   dreamsigns: Dreamsign[];
   dreamsignsById: ReadonlyMap<string, Dreamsign>;
 }
 
 interface CardPickerTarget {
-  cardId: string;
+  cardId: CardId;
   slot: number;
 }
 
@@ -83,7 +85,9 @@ function renderedEffect(
       );
     }
     if (part.kind === "card") {
-      const card = references.cardsById.get(part.cardId.toLowerCase());
+      const card = references.cardsById.get(
+        asCardId(part.cardId.toLowerCase()),
+      );
       return (
         <span
           data-runtime-card-id={part.cardId}
@@ -130,7 +134,7 @@ function serverData(
 
 function replaceAction(
   data: ExplorationEditorServerData,
-  cardId: string,
+  cardId: CardId,
   slot: number,
   action: ExplorationEditorAction,
 ): ExplorationEditorServerData {
@@ -151,7 +155,7 @@ function replaceAction(
 
 function replaceProse(
   data: ExplorationEditorServerData,
-  cardId: string,
+  cardId: CardId,
   prose: string,
 ): ExplorationEditorServerData {
   return {
@@ -162,7 +166,7 @@ function replaceProse(
   };
 }
 
-function actionTarget(cardId: string, slot: number): string {
+function actionTarget(cardId: CardId, slot: number): string {
   return `${cardId}:${String(slot)}`;
 }
 
@@ -235,7 +239,7 @@ function ExplorationCardPicker({
   selectedCardId: string | undefined;
   onQueryChange: (query: string) => void;
   onClose: () => void;
-  onSelect: (cardId: string) => void;
+  onSelect: (cardId: CardId) => void;
 }) {
   const normalizedQuery = query.trim().toLocaleLowerCase();
   const visible = cards
@@ -774,7 +778,7 @@ function ExplorationEditorRow({
     if (field.control === "card") {
       const card =
         typeof action.cardId === "string"
-          ? catalog.cardsById.get(action.cardId.toLowerCase())
+          ? catalog.cardsById.get(asCardId(action.cardId.toLowerCase()))
           : undefined;
       return (
         <div className="exploration-editor-reference-field" key={key}>
@@ -804,11 +808,11 @@ function ExplorationEditorRow({
       .sort(
         (left, right) =>
           left.name.localeCompare(right.name) ||
-          (left.id ?? "").localeCompare(right.id ?? ""),
+          (left.id ?? asDreamsignId("")).localeCompare(right.id ?? ""),
       )
       .map((entry) => ({
-        value: entry.id ?? "",
-        label: `${entry.name} · ${(entry.id ?? "").slice(0, 8)}`,
+        value: entry.id ?? asDreamsignId(""),
+        label: `${entry.name} · ${(entry.id ?? asDreamsignId("")).slice(0, 8)}`,
         triggerLabel: entry.name,
       }));
     return (
@@ -839,7 +843,12 @@ function ExplorationEditorRow({
     return (
       <section className="exploration-editor-action" key={action.id}>
         {editable(
-          { cardId: `${encounter.cardId}:${String(slot)}`, field: "label" },
+          {
+            cardId: asEditorFieldTargetId(
+              `${encounter.cardId}:${String(slot)}`,
+            ),
+            field: "label",
+          },
           action.label,
           <h3>{action.label}</h3>,
           (value, revision) => saveActionText(slot, "label", value, revision),
@@ -847,7 +856,9 @@ function ExplorationEditorRow({
         )}
         {editable(
           {
-            cardId: `${encounter.cardId}:${String(slot)}`,
+            cardId: asEditorFieldTargetId(
+              `${encounter.cardId}:${String(slot)}`,
+            ),
             field: "effectText",
           },
           action.effectText,
@@ -970,7 +981,9 @@ function ExplorationEditorRow({
           >
             {editable(
               {
-                cardId: `${encounter.cardId}:${String(slot)}`,
+                cardId: asEditorFieldTargetId(
+                  `${encounter.cardId}:${String(slot)}`,
+                ),
                 field: "followupTitle",
               },
               action.followupTitle ?? action.label,
@@ -981,7 +994,9 @@ function ExplorationEditorRow({
             )}
             {editable(
               {
-                cardId: `${encounter.cardId}:${String(slot)}`,
+                cardId: asEditorFieldTargetId(
+                  `${encounter.cardId}:${String(slot)}`,
+                ),
                 field: "followupSubtitle",
               },
               action.followupSubtitle ?? action.effectText,
@@ -1132,7 +1147,7 @@ export default function ExplorationEditorApp({
         setCatalog({
           cards: loaded.cards,
           cardsById: new Map(
-            loaded.cards.map((card) => [card.id.toLowerCase(), card]),
+            loaded.cards.map((card) => [asCardId(card.id.toLowerCase()), card]),
           ),
           dreamsigns: loaded.dreamsigns,
           dreamsignsById: new Map(
@@ -1199,7 +1214,7 @@ export default function ExplorationEditorApp({
       ?.scrollIntoView({ block: "start" });
   }, [loadState]);
 
-  async function chooseCard(cardId: string) {
+  async function chooseCard(cardId: CardId) {
     if (cardPickerTarget === null || dataRef.current === null) return;
     const encounter = dataRef.current.encounters.find(
       (entry) => entry.cardId === cardPickerTarget.cardId,

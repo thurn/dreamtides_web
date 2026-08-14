@@ -16,6 +16,12 @@ import type { InfoCardProps } from "../overlay/InfoCard";
 import "./atlas.css";
 import { tx, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type {
+  AffiliationId,
+  AtlasNodeId,
+  DreamsignId,
+  SiteId,
+} from "../../../types/identifiers";
 
 const VISUALLY_HIDDEN_STYLE: CSSProperties = {
   position: "absolute",
@@ -61,7 +67,7 @@ export function atlasPrimaryInfoCard(content: AtlasNodePrimary): InfoCardProps {
 
 /** A UUID-backed known Dreamsign related to an Atlas node. */
 export interface AtlasNodeDreamsign {
-  id: string;
+  id: DreamsignId;
   name: LocalizedString;
   art: ArtRef | null;
   rulesText: LocalizedString;
@@ -69,7 +75,7 @@ export interface AtlasNodeDreamsign {
 
 /** A UUID-backed signature site related to an Atlas node. */
 export interface AtlasNodeSite {
-  id: string;
+  id: SiteId;
   name: LocalizedString;
   blurb: LocalizedString;
   icon: Glyph;
@@ -77,7 +83,7 @@ export interface AtlasNodeSite {
 
 /** A UUID-backed affiliation related to an Atlas node. */
 export interface AtlasNodeAffiliation {
-  id: string;
+  id: AffiliationId;
   title: LocalizedString;
   body: LocalizedString;
 }
@@ -91,7 +97,7 @@ export type AtlasNodeRole = "regular" | "starter" | "boss";
 
 export interface AtlasNodeModel {
   /** Stable Atlas node identity. */
-  id: string;
+  id: AtlasNodeId;
   /** Localized accessible name for the assigned or unrevealed dreamscape. */
   name: LocalizedString;
   /** Journey presentation state that selects the node treatment. */
@@ -157,7 +163,7 @@ export interface AtlasNodeProps {
   /** UUID-backed semantic Atlas face and reveal data. */
   model: AtlasNodeModel;
   /** Enter the node's dreamscape. Available nodes invoke this with their UUID. */
-  onPress: (nodeId: string) => void;
+  onPress: (nodeId: AtlasNodeId) => void;
 }
 
 /** One self-revealing, focusable Dream Atlas node. */

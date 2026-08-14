@@ -5,8 +5,16 @@ import {
   type BattleFigmentZone,
 } from "../../cumulus/screens/battle-overlays/BattleFigmentCreatorOverlay";
 import { assertLocalized } from "@trox/runtime";
-import type { BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
-import type { BattleMutableState, BattleSide, FrontRankSlotId, BackRankSlotId } from "../types";
+import type {
+  BattleDebugEdit,
+  BattleDebugZoneDestination,
+} from "../debug/commands";
+import type {
+  BattleMutableState,
+  BattleSide,
+  FrontRankSlotId,
+  BackRankSlotId,
+} from "../types";
 import {
   backRankSlotIds,
   frontRankSlotIds,
@@ -23,6 +31,7 @@ import {
   type FigmentCatalogEntry,
   type FigmentKeyword,
 } from "../state/figment-catalog";
+import { asCardId, type CardId } from "../../types/card-identity";
 
 type FigmentBattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
 const DEFAULT_FIGMENT_SUBTYPE = "Shadow";
@@ -58,19 +67,20 @@ export function BattleFigmentCreator({
   state,
 }: {
   initialSide: BattleSide;
-  initialTypeId?: string;
+  initialTypeId?: CardId;
   onClose: () => void;
   onSubmit: (edit: BattleDebugEdit) => void;
-  onTypeChange?: (figmentTypeId: string) => void;
+  onTypeChange?: (figmentTypeId: CardId) => void;
   state: BattleMutableState;
 }) {
   const defaultEntry =
-    lookupFigmentCatalogEntry(DEFAULT_FIGMENT_SUBTYPE) ?? FIGMENT_CATALOG_ENTRIES[0];
+    lookupFigmentCatalogEntry(DEFAULT_FIGMENT_SUBTYPE) ??
+    FIGMENT_CATALOG_ENTRIES[0];
   const initialEntry =
     (initialTypeId === undefined
       ? undefined
       : lookupFigmentCatalogEntryById(initialTypeId)) ?? defaultEntry;
-  const [figmentTypeId, setFigmentTypeId] = useState<string>(initialEntry.id);
+  const [figmentTypeId, setFigmentTypeId] = useState<CardId>(initialEntry.id);
   const [name, setName] = useState(defaultFigmentName(initialEntry));
   const [sparkText, setSparkText] = useState(String(initialEntry.baseSpark));
   const [count, setCount] = useState(1);
@@ -91,7 +101,8 @@ export function BattleFigmentCreator({
     }
   }, [side, state, zone]);
 
-  const selectedEntry = lookupFigmentCatalogEntryById(figmentTypeId) ?? defaultEntry;
+  const selectedEntry =
+    lookupFigmentCatalogEntryById(figmentTypeId) ?? defaultEntry;
   const subtype = selectedEntry.subtype;
   const selectedKeyword = selectedEntry?.keyword;
 
@@ -100,10 +111,11 @@ export function BattleFigmentCreator({
     // default name from the type. The spark stays editable for off-base
     // figments (rules §Figments). The name follows the type only while it still
     // matches the auto-derived pattern, so a hand-edited name is preserved.
-    const entry = lookupFigmentCatalogEntryById(nextFigmentTypeId);
+    const cardId = asCardId(nextFigmentTypeId);
+    const entry = lookupFigmentCatalogEntryById(cardId);
     if (entry === undefined) return;
-    setFigmentTypeId(nextFigmentTypeId);
-    onTypeChange?.(nextFigmentTypeId);
+    setFigmentTypeId(cardId);
+    onTypeChange?.(cardId);
     setSparkText(String(entry.baseSpark));
     setName((current) =>
       current.trim() === "" || isAutoDerivedFigmentName(current)
@@ -116,9 +128,10 @@ export function BattleFigmentCreator({
   const sparkIsValid = !Number.isNaN(spark) && spark >= 0;
   const subtypeIsValid = subtype.trim().length > 0;
   const nameIsValid = name.trim().length > 0;
-  const slotOptions = zone === "backRank"
-    ? backRankSlotIds(selectPlayAreaSize(state).backSize)
-    : frontRankSlotIds(selectPlayAreaSize(state).frontSize);
+  const slotOptions =
+    zone === "backRank"
+      ? backRankSlotIds(selectPlayAreaSize(state).backSize)
+      : frontRankSlotIds(selectPlayAreaSize(state).frontSize);
   // bug-114: pre-validate that the chosen battlefield slot is empty so Create
   // Figment does not silently close when the apply-debug-edit reducer would
   // refuse the mint. Non-battlefield zones (hand/void/deck/banished) have no
@@ -128,12 +141,7 @@ export function BattleFigmentCreator({
     zone === "backRank" || zone === "frontRank"
       ? slotOptions.filter(
           (candidateSlot) =>
-            !isBattlefieldSlotOccupied(
-              state,
-              side,
-              zone,
-              candidateSlot,
-            ),
+            !isBattlefieldSlotOccupied(state, side, zone, candidateSlot),
         ).length
       : MAX_FIGMENT_CREATION_COUNT;
   const maxCount = Math.max(
@@ -144,14 +152,16 @@ export function BattleFigmentCreator({
     setCount((current) => Math.min(current, maxCount));
   }, [maxCount]);
   const slotIsValid = !slotIsOccupied && count <= availableDestinationCount;
-  const canSubmit = nameIsValid && subtypeIsValid && sparkIsValid && slotIsValid;
-  const disabledReason = !nameIsValid || !subtypeIsValid || !sparkIsValid
-    ? "Name, subtype, and non-negative spark are required."
-    : !slotIsValid
-      ? availableDestinationCount === 0
-        ? "This rank has no open slots."
-        : `${slot} is occupied — pick another slot or change zone.`
-      : null;
+  const canSubmit =
+    nameIsValid && subtypeIsValid && sparkIsValid && slotIsValid;
+  const disabledReason =
+    !nameIsValid || !subtypeIsValid || !sparkIsValid
+      ? "Name, subtype, and non-negative spark are required."
+      : !slotIsValid
+        ? availableDestinationCount === 0
+          ? "This rank has no open slots."
+          : `${slot} is occupied — pick another slot or change zone.`
+        : null;
 
   function handleSubmit(): void {
     if (!canSubmit) {
@@ -188,15 +198,19 @@ export function BattleFigmentCreator({
         value: entry.id,
         label: assertLocalized(formatCatalogOptionLabel(entry)),
       }))}
-      keywordText={assertLocalized(selectedKeyword === undefined
-        ? "No keyword."
-        : `Keyword: ${FIGMENT_KEYWORD_LABELS[selectedKeyword]}.`)}
+      keywordText={assertLocalized(
+        selectedKeyword === undefined
+          ? "No keyword."
+          : `Keyword: ${FIGMENT_KEYWORD_LABELS[selectedKeyword]}.`,
+      )}
       count={count}
       maxCount={maxCount}
       sparkText={sparkText}
-      sparkError={sparkIsValid
-        ? undefined
-        : assertLocalized("Spark must be a non-negative whole number.")}
+      sparkError={
+        sparkIsValid
+          ? undefined
+          : assertLocalized("Spark must be a non-negative whole number.")
+      }
       baseSpark={selectedEntry.baseSpark}
       side={side}
       zone={zone}
@@ -204,7 +218,9 @@ export function BattleFigmentCreator({
       slot={slot}
       slotOptions={slotOptions}
       canSubmit={canSubmit}
-      disabledReason={disabledReason === null ? null : assertLocalized(disabledReason)}
+      disabledReason={
+        disabledReason === null ? null : assertLocalized(disabledReason)
+      }
       onNameChange={setName}
       onCountChange={setCount}
       onTypeChange={handleSelectType}
@@ -279,11 +295,15 @@ function isAutoDerivedFigmentName(name: string): boolean {
   );
 }
 
-function isReserveSlot(value: FigmentBattlefieldSlotId): value is BackRankSlotId {
+function isReserveSlot(
+  value: FigmentBattlefieldSlotId,
+): value is BackRankSlotId {
   return isBackRankSlotId(value);
 }
 
-function isDeploySlot(value: FigmentBattlefieldSlotId): value is FrontRankSlotId {
+function isDeploySlot(
+  value: FigmentBattlefieldSlotId,
+): value is FrontRankSlotId {
   return isFrontRankSlotId(value);
 }
 
@@ -311,7 +331,9 @@ function findFirstOpenReserveSlot(
   side: BattleSide,
 ): BackRankSlotId | null {
   const backRank = state.sides[side].backRank;
-  const open = rankSlotIds(backRank).find((slotId) => backRank[slotId] === null);
+  const open = rankSlotIds(backRank).find(
+    (slotId) => backRank[slotId] === null,
+  );
   return open ?? null;
 }
 
@@ -320,6 +342,8 @@ function findFirstOpenDeploySlot(
   side: BattleSide,
 ): FrontRankSlotId | null {
   const frontRank = state.sides[side].frontRank;
-  const open = rankSlotIds(frontRank).find((slotId) => frontRank[slotId] === null);
+  const open = rankSlotIds(frontRank).find(
+    (slotId) => frontRank[slotId] === null,
+  );
   return open ?? null;
 }

@@ -12,6 +12,9 @@ import {
   resolveDreamAvatarOffer,
   toDreamAvatarOfferView,
 } from "./journey-start-view-model";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asCardId, asCardName } from "../../types/card-identity";
+import { asTideId } from "../../types/identifiers";
 
 function tide(id: string, cardCount: number): Tides4DeckJson {
   return {
@@ -31,7 +34,7 @@ function dreamAvatar(
   overrides: Partial<DreamAvatarContent> = {},
 ): DreamAvatarContent {
   return {
-    id: "dc-1",
+    id: asDreamAvatarId("dc-1"),
     name: "The Cartographer",
     title: "Mapper of Sleep",
     renderedText: "Whenever you map a dream, draw a card.",
@@ -78,17 +81,17 @@ describe("largestTides", () => {
 describe("resolveDreamAvatarOffer", () => {
   it("returns only the UUID-pinned tutorial DreamAvatar", () => {
     const dreamAvatars = [
-      dreamAvatar({ id: "avatar-a" }),
-      dreamAvatar({ id: "avatar-b" }),
-      dreamAvatar({ id: "avatar-c" }),
-      dreamAvatar({ id: "avatar-d" }),
+      dreamAvatar({ id: asDreamAvatarId("avatar-a") }),
+      dreamAvatar({ id: asDreamAvatarId("avatar-b") }),
+      dreamAvatar({ id: asDreamAvatarId("avatar-c") }),
+      dreamAvatar({ id: asDreamAvatarId("avatar-d") }),
     ];
 
     const offer = resolveDreamAvatarOffer(
       dreamAvatars,
       "room-seed",
       12,
-      "avatar-c",
+      asDreamAvatarId("avatar-c"),
     );
 
     expect(offer.map((candidate) => candidate.id)).toEqual(["avatar-c"]);
@@ -96,10 +99,10 @@ describe("resolveDreamAvatarOffer", () => {
 
   it("returns an empty tutorial offer when the persisted UUID is unavailable", () => {
     const offer = resolveDreamAvatarOffer(
-      [dreamAvatar({ id: "avatar-a" })],
+      [dreamAvatar({ id: asDreamAvatarId("avatar-a") })],
       "room-seed",
       0,
-      "missing-avatar",
+      asDreamAvatarId("missing-avatar"),
     );
 
     expect(offer).toEqual([]);
@@ -107,7 +110,7 @@ describe("resolveDreamAvatarOffer", () => {
 
   it("derives the normal three-avatar offer when no tutorial UUID is set", () => {
     const dreamAvatars = ["a", "b", "c", "d"].map((id) =>
-      dreamAvatar({ id }),
+      dreamAvatar({ id: asDreamAvatarId(id) }),
     );
 
     const offer = resolveDreamAvatarOffer(dreamAvatars, "room-seed", 0);
@@ -120,7 +123,7 @@ describe("resolveDreamAvatarOffer", () => {
 describe("buildJourneyStartGuideDialogue", () => {
   it("maps authored Mira guidance for a UUID-pinned offer", () => {
     expect(
-      buildJourneyStartGuideDialogue("tutorial-avatar-uuid", {
+      buildJourneyStartGuideDialogue(asDreamAvatarId("tutorial-avatar-uuid"), {
         speaker: "mira",
         delay: 1,
         horizontalOffset: 40,
@@ -153,7 +156,7 @@ describe("buildJourneyStartGuideDialogue", () => {
     };
     expect(buildJourneyStartGuideDialogue(undefined, authored)).toBeUndefined();
     expect(
-      buildJourneyStartGuideDialogue("tutorial-avatar-uuid"),
+      buildJourneyStartGuideDialogue(asDreamAvatarId("tutorial-avatar-uuid")),
     ).toBeUndefined();
   });
 });
@@ -162,8 +165,8 @@ describe("toDreamAvatarOfferView", () => {
   it("suppresses signature cards whenever tides exist (tides4 runs show tides instead)", () => {
     const view = toDreamAvatarOfferView(
       dreamAvatar({
-        signatureCards: ["Alpha", "Beta"],
-        signatureCardIds: ["uuid-a", "uuid-b"],
+        signatureCards: [asCardName("Alpha"), asCardName("Beta")],
+        signatureCardIds: [asCardId("uuid-a"), asCardId("uuid-b")],
       }),
       [tide("t1", 3)],
     );
@@ -174,8 +177,8 @@ describe("toDreamAvatarOfferView", () => {
   it("shows signature cards keyed by their stable UUIDs when there are no tides", () => {
     const view = toDreamAvatarOfferView(
       dreamAvatar({
-        signatureCards: ["Alpha", "Alpha"],
-        signatureCardIds: ["uuid-a1", "uuid-a2"],
+        signatureCards: [asCardName("Alpha"), asCardName("Alpha")],
+        signatureCardIds: [asCardId("uuid-a1"), asCardId("uuid-a2")],
       }),
       [],
     );
@@ -189,7 +192,10 @@ describe("toDreamAvatarOfferView", () => {
 
   it("falls back to a name+index key only when a UUID is missing", () => {
     const view = toDreamAvatarOfferView(
-      dreamAvatar({ signatureCards: ["Alpha"], signatureCardIds: [] }),
+      dreamAvatar({
+        signatureCards: [asCardName("Alpha")],
+        signatureCardIds: [],
+      }),
       [],
     );
     expect(view.signatureCards).toEqual([{ id: "Alpha-0", name: "Alpha" }]);
@@ -212,18 +218,18 @@ describe("toDreamAvatarOfferView", () => {
 describe("buildDreamAvatarOfferViews", () => {
   it("shows the authored valor tides for the UUID-pinned tutorial offer", () => {
     const pool: TutorialJourneyPool = {
-      dreamAvatarId: "dc-1",
+      dreamAvatarId: asDreamAvatarId("dc-1"),
       poolSize: 6,
       openingOffers: [],
       openingDreamsignIds: [],
       tides: ["Bannerwake", "Sunwall", "Unfallen"].map((name, index) => ({
-        id: `tide-${String(index)}`,
+        id: asTideId(`tide-${String(index)}`),
         name,
         description: `${name} description`,
         type: "valor" as const,
         cards: [
           {
-            id: `00000000-0000-4000-8000-00000000000${String(index)}`,
+            id: asCardId(`00000000-0000-4000-8000-00000000000${String(index)}`),
             copies: 2,
           },
         ],
@@ -233,14 +239,14 @@ describe("buildDreamAvatarOfferViews", () => {
     const [view] = buildDreamAvatarOfferViews(
       [
         dreamAvatar({
-          signatureCards: ["Hidden signature"],
-          signatureCardIds: ["signature-id"],
+          signatureCards: [asCardName("Hidden signature")],
+          signatureCardIds: [asCardId("signature-id")],
         }),
       ],
       undefined,
       "room-seed",
       pool,
-      "dc-1",
+      asDreamAvatarId("dc-1"),
     );
 
     expect(view.signatureCards).toEqual([]);

@@ -22,6 +22,14 @@ import type {
   JourneyState,
   TransfigurationType,
 } from "../../types/journey";
+import type { CardId } from "../../types/card-identity";
+import type { DreamsignId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import { cardIdFromUnknown } from "../../types/card-identity";
+import { deckEntryIdFromUnknown } from "../../types/identifiers";
+import { dreamsignIdFromUnknown } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asCardTypeChangePredicateId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (ADD_CARD / ADD_DREAMSIGN)
@@ -46,9 +54,9 @@ import type {
  */
 export interface DeckContentProvider {
   /** Resolve a card UUID to its `cardNumber`, or `null` when unknown. */
-  resolveCardNumber(cardId: string): number | null;
+  resolveCardNumber(cardId: CardId): number | null;
   /** Resolve a dreamsign UUID to its full record, or `null` when unknown. */
-  resolveDreamsign(dreamsignId: string): Dreamsign | null;
+  resolveDreamsign(dreamsignId: DreamsignId): Dreamsign | null;
 }
 
 let contentProvider: DeckContentProvider | null = null;
@@ -85,10 +93,6 @@ const TRANSFIGURATION_TYPES: ReadonlySet<TransfigurationType> =
     "Perfected",
   ]);
 
-function asString(value: unknown): string | null {
-  return typeof value === "string" ? value : null;
-}
-
 function finiteNumber(value: unknown): number | null {
   return typeof value === "number" && Number.isFinite(value) ? value : null;
 }
@@ -102,7 +106,7 @@ function asTransfiguration(value: unknown): TransfigurationType | null {
 
 function findEntry(
   journey: JourneyState,
-  entryId: string,
+  entryId: DeckEntryId,
 ): DeckEntry | undefined {
   return journey.deck.find((entry) => entry.entryId === entryId);
 }
@@ -128,15 +132,15 @@ export function mintEntryId(
   deck: readonly DeckEntry[],
   seq: number,
   index: number,
-): string {
+): DeckEntryId {
   const existing = new Set(deck.map((entry) => entry.entryId));
   let suffix = index;
   let candidate = `deck-${String(seq)}-${String(suffix)}`;
-  while (existing.has(candidate)) {
+  while (existing.has(asDeckEntryId(candidate))) {
     suffix += 1;
     candidate = `deck-${String(seq)}-${String(suffix)}`;
   }
-  return candidate;
+  return asDeckEntryId(candidate);
 }
 
 // ---------------------------------------------------------------------------
@@ -159,7 +163,7 @@ export function addCard(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const cardId = asString(payload.cardId);
+  const cardId = cardIdFromUnknown(payload.cardId);
   if (cardId === null) return null;
   if (
     payload.isBane !== undefined &&
@@ -176,13 +180,16 @@ export function addCard(
 
   // `transfiguration` is optional; present-but-invalid is a malformed payload.
   let transfiguration: TransfigurationType | null = null;
-  if (payload.transfiguration !== undefined && payload.transfiguration !== null) {
+  if (
+    payload.transfiguration !== undefined &&
+    payload.transfiguration !== null
+  ) {
     transfiguration = asTransfiguration(payload.transfiguration);
     if (transfiguration === null) return null;
   }
 
   const entry: DeckEntry = {
-    entryId: mintEntryId(journey.deck, ctx.seq, 0),
+    entryId: asDeckEntryId(mintEntryId(journey.deck, ctx.seq, 0)),
     cardNumber,
     transfiguration,
     isBane: isNightmareCardId(resolvedCardId),
@@ -195,7 +202,7 @@ export function removeDeckEntry(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const entryId = asString(payload.entryId);
+  const entryId = deckEntryIdFromUnknown(payload.entryId);
   if (entryId === null) return null;
   if (findEntry(journey, entryId) === undefined) return null;
   return {
@@ -216,12 +223,12 @@ export function duplicateDeckEntry(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const entryId = asString(payload.entryId);
+  const entryId = deckEntryIdFromUnknown(payload.entryId);
   if (entryId === null) return null;
   const entry = findEntry(journey, entryId);
   if (entry === undefined) return null;
   const copy: DeckEntry = {
-    entryId: mintEntryId(journey.deck, ctx.seq, 0),
+    entryId: asDeckEntryId(mintEntryId(journey.deck, ctx.seq, 0)),
     cardNumber: entry.cardNumber,
     transfiguration: entry.transfiguration,
     ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
@@ -241,7 +248,7 @@ export function duplicateDeckEntry(
 /** Replace one deck entry (matched by id) with `next`, keeping order. */
 function replaceEntry(
   journey: JourneyState,
-  entryId: string,
+  entryId: DeckEntryId,
   next: (entry: DeckEntry) => DeckEntry,
 ): JourneyState {
   return {
@@ -315,7 +322,7 @@ function parseTypeChange(
   return {
     drop: false,
     value: {
-      predicateId: value.predicateId,
+      predicateId: asCardTypeChangePredicateId(value.predicateId),
       cardType: value.cardType as CardType,
       subtype: value.subtype,
       label: value.label,
@@ -324,7 +331,8 @@ function parseTypeChange(
 }
 
 function isPlainRecord(value: unknown): value is Record<string, unknown> {
-  if (typeof value !== "object" || value === null || Array.isArray(value)) return false;
+  if (typeof value !== "object" || value === null || Array.isArray(value))
+    return false;
   const prototype: unknown = Object.getPrototypeOf(value);
   return prototype === Object.prototype || prototype === null;
 }
@@ -338,8 +346,9 @@ export function setDeckEntryStatOverride(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const entryId = asString(payload.entryId);
-  if (entryId === null || findEntry(journey, entryId) === undefined) return null;
+  const entryId = deckEntryIdFromUnknown(payload.entryId);
+  if (entryId === null || findEntry(journey, entryId) === undefined)
+    return null;
   const parsed = parseStatOverride(payload.override);
   if (parsed === null) return null;
   return replaceEntry(journey, entryId, (entry) => {
@@ -360,8 +369,9 @@ export function setDeckEntryKeywords(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const entryId = asString(payload.entryId);
-  if (entryId === null || findEntry(journey, entryId) === undefined) return null;
+  const entryId = deckEntryIdFromUnknown(payload.entryId);
+  if (entryId === null || findEntry(journey, entryId) === undefined)
+    return null;
   const parsed = parseKeywordModification(payload.keywords);
   if (parsed === null) return null;
   return replaceEntry(journey, entryId, (entry) => {
@@ -382,8 +392,9 @@ export function setDeckEntryType(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const entryId = asString(payload.entryId);
-  if (entryId === null || findEntry(journey, entryId) === undefined) return null;
+  const entryId = deckEntryIdFromUnknown(payload.entryId);
+  if (entryId === null || findEntry(journey, entryId) === undefined)
+    return null;
   const parsed = parseTypeChange(payload.typeChange);
   if (parsed === null) return null;
   return replaceEntry(journey, entryId, (entry) => {
@@ -405,10 +416,14 @@ export function transfigureCard(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const entryId = asString(payload.entryId);
-  if (entryId === null || findEntry(journey, entryId) === undefined) return null;
+  const entryId = deckEntryIdFromUnknown(payload.entryId);
+  if (entryId === null || findEntry(journey, entryId) === undefined)
+    return null;
   let transfiguration: TransfigurationType | null = null;
-  if (payload.transfiguration !== null && payload.transfiguration !== undefined) {
+  if (
+    payload.transfiguration !== null &&
+    payload.transfiguration !== undefined
+  ) {
     transfiguration = asTransfiguration(payload.transfiguration);
     if (transfiguration === null) return null;
   }
@@ -423,7 +438,9 @@ export function transfigureCard(
 // ---------------------------------------------------------------------------
 
 /** `PURGE_ALL_NIGHTMARE_CARDS { }` removes every Nightmare. */
-export function purgeAllNightmareCards(journey: JourneyState): JourneyState | null {
+export function purgeAllNightmareCards(
+  journey: JourneyState,
+): JourneyState | null {
   if (!journey.deck.some((entry) => entry.isBane)) return null;
   return { ...journey, deck: journey.deck.filter((entry) => !entry.isBane) };
 }
@@ -485,7 +502,7 @@ export function addDreamsign(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const dreamsignId = asString(payload.dreamsignId);
+  const dreamsignId = dreamsignIdFromUnknown(payload.dreamsignId);
   if (dreamsignId === null) return null;
   const provider = contentProvider;
   if (provider === null) return null;
@@ -517,7 +534,7 @@ export function removeDreamsign(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const dreamsignId = asString(payload.dreamsignId);
+  const dreamsignId = dreamsignIdFromUnknown(payload.dreamsignId);
   if (dreamsignId === null) return null;
   const index = journey.dreamsigns.findIndex((d) => d.id === dreamsignId);
   if (index === -1) return null;
@@ -536,5 +553,10 @@ export function setDreamsignPool(
   if (!Array.isArray(raw) || !raw.every((id) => typeof id === "string")) {
     return null;
   }
-  return { ...journey, remainingDreamsignPool: [...raw] };
+  return {
+    ...journey,
+    remainingDreamsignPool: raw
+      .map((id) => dreamsignIdFromUnknown(id))
+      .filter((id): id is NonNullable<typeof id> => id !== null),
+  };
 }

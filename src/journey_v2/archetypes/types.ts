@@ -11,29 +11,14 @@ import type {
   RewardSelectionPolicyId,
   RewardSelectionTrace,
 } from "../../reward-selection/types";
+import type { MerchantTargetKey, SelectionKey } from "../../types/identifiers";
+import type { AuguryArchetypeId } from "../../types/identifiers";
 
 /** The 13 offer archetypes across the 6 families. */
-export type MerchantArchetypeId =
-  | "fit_card_grant"
-  | "fit_card_draft"
-  | "copies_draft"
-  | "strong_card"
-  | "category_draft_known"
-  | "card_bundle"
-  | "transfigured_draft"
-  | "transfigure"
-  | "starter_transfigure"
-  | "purge"
-  | "duplicate"
-  | "dreamsign"
-  | "add_site";
+export type MerchantArchetypeId = AuguryArchetypeId;
 
 const TRANSFIGURATION_MERCHANT_ARCHETYPE_IDS: ReadonlySet<MerchantArchetypeId> =
-  new Set([
-    "transfigured_draft",
-    "transfigure",
-    "starter_transfigure",
-  ]);
+  new Set(["transfigured_draft", "transfigure", "starter_transfigure"]);
 
 export function isTransfigurationMerchantArchetype(
   archetypeId: MerchantArchetypeId,
@@ -43,12 +28,7 @@ export function isTransfigurationMerchantArchetype(
 
 /** The 6 offer families. Slot B must come from a different family than slot A. */
 export type MerchantOfferFamily =
-  | "grant"
-  | "improve"
-  | "remove"
-  | "duplicate"
-  | "dreamsign"
-  | "site";
+  "grant" | "improve" | "remove" | "duplicate" | "dreamsign" | "site";
 
 /**
  * The canonical family of every archetype. The registry invariant cross-checks
@@ -92,7 +72,7 @@ export interface MerchantOfferDraft {
     candidates: readonly MerchantChoiceCandidateDraft[];
   };
   /** Stable identity of the offer's target, used by metrics and repetition checks. */
-  targetKey: string;
+  targetKey: MerchantTargetKey;
   /**
    * Pure explanation of how the target(s) were chosen — the candidate set,
    * scores, band, and branch taken. Populated by the builder from the score maps
@@ -102,7 +82,7 @@ export interface MerchantOfferDraft {
   trace?: MerchantOfferTrace;
   mechanicId?: RewardMechanicId;
   policyId?: RewardSelectionPolicyId;
-  selectionKey?: string;
+  selectionKey?: SelectionKey;
   selectionRulesVersion?: string;
   selectionContentRevision?: string;
   selectionTrace?: RewardSelectionTrace;

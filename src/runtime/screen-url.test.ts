@@ -9,9 +9,12 @@ import type {
 } from "../types/journey";
 import { screenToJourneyPath, siteTypeSlug, slugify } from "./screen-url";
 import { LayerName, layerAtOrdinal } from "../types/layer-name";
+import { asDreamscapeId } from "../types/identifiers";
+import { asSiteId } from "../types/identifiers";
+import { asAtlasNodeId } from "../types/identifiers";
 
 function makeSite(id: string, type: SiteType): SiteState {
-  return { id, type, isEnhanced: false, isVisited: false };
+  return { id: asSiteId(id), type, isEnhanced: false, isVisited: false };
 }
 
 function makeNode(
@@ -21,10 +24,11 @@ function makeNode(
   layerOrdinal = 2,
 ): DreamscapeNode {
   return {
-    id,
+    id: asAtlasNodeId(id),
     layer: layerAtOrdinal(layerOrdinal) ?? LayerName.One,
     indexInLayer: 0,
-    dreamscapeId,
+    dreamscapeId:
+      dreamscapeId === null ? null : asDreamscapeId(dreamscapeId),
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -46,13 +50,13 @@ function stateInDreamscape(
   const base = createDefaultState();
   return {
     ...base,
-    currentDreamscape: nodeId,
+    currentDreamscape: asAtlasNodeId(nodeId),
     atlas: {
       ...base.atlas,
-      layers: [[nodeId]],
+      layers: [[asAtlasNodeId(nodeId)]],
       nodes: { [nodeId]: node },
-      startingNodeId: nodeId,
-      currentNodeId: nodeId,
+      startingNodeId: asAtlasNodeId(nodeId),
+      currentNodeId: asAtlasNodeId(nodeId),
     },
   };
 }
@@ -60,18 +64,18 @@ function stateInDreamscape(
 describe("screenToJourneyPath", () => {
   it("maps the top-level screens", () => {
     const base = createDefaultState();
-    expect(screenToJourneyPath({ ...base, screen: { type: "journeyStart" } })).toBe(
-      "/",
-    );
+    expect(
+      screenToJourneyPath({ ...base, screen: { type: "journeyStart" } }),
+    ).toBe("/");
     expect(screenToJourneyPath({ ...base, screen: { type: "atlas" } })).toBe(
       "/atlas",
     );
     expect(
       screenToJourneyPath({ ...base, screen: { type: "journeyComplete" } }),
     ).toBe("/complete");
-    expect(screenToJourneyPath({ ...base, screen: { type: "journeyFailed" } })).toBe(
-      "/failed",
-    );
+    expect(
+      screenToJourneyPath({ ...base, screen: { type: "journeyFailed" } }),
+    ).toBe("/failed");
   });
 
   it("keys the dreamscape screen by the layer and dreamscape id", () => {
@@ -95,17 +99,22 @@ describe("screenToJourneyPath", () => {
   it("appends the site-type slug for a site screen", () => {
     const purge = makeSite("site-7", "Purge");
     const augury = makeSite("site-8", "Augury");
-    const state = stateInDreamscape("Ember Wood", [purge, augury], "dreamscape-3", 2);
+    const state = stateInDreamscape(
+      "Ember Wood",
+      [purge, augury],
+      "dreamscape-3",
+      2,
+    );
     expect(
       screenToJourneyPath({
         ...state,
-        screen: { type: "site", siteId: "site-7" },
+        screen: { type: "site", siteId: asSiteId("site-7") },
       }),
     ).toBe("/dreamscape/2-ember-wood/purge");
     expect(
       screenToJourneyPath({
         ...state,
-        screen: { type: "site", siteId: "site-8" },
+        screen: { type: "site", siteId: asSiteId("site-8") },
       }),
     ).toBe("/dreamscape/2-ember-wood/augury");
   });
@@ -131,7 +140,7 @@ describe("screenToJourneyPath", () => {
     expect(
       screenToJourneyPath({
         ...state,
-        screen: { type: "site", siteId: "does-not-exist" },
+        screen: { type: "site", siteId: asSiteId("does-not-exist") },
       }),
     ).toBe("/dreamscape/2-ember-wood");
   });

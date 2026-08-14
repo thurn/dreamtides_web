@@ -1,4 +1,5 @@
-import {useCallback,
+import {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -50,6 +51,7 @@ import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { VersionGateScreen } from "./VersionGateScreen";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
 import { meaning, tx, txa, type LocalizedString } from "@trox/runtime";
+import { asClientId, type ClientId, type RoomId } from "../types/identifiers";
 
 // How long to wait for the first log snapshot before treating the room as
 // unreachable/missing. Firebase emits its initial value within a couple of
@@ -64,16 +66,16 @@ interface SessionStorageLike {
 
 /** Return the stable tab identity for a room, minting it once per session. */
 export function roomScopedClientId(
-  roomId: string | null,
+  roomId: RoomId | null,
   storage: SessionStorageLike | null = typeof window === "undefined"
     ? null
     : window.sessionStorage,
-): string {
+): ClientId {
   if (roomId === null || storage === null) return mintClientId();
   const key = `${CLIENT_ID_STORAGE_PREFIX}${roomId}`;
   try {
     const existing = storage.getItem(key);
-    if (existing !== null && existing.length > 0) return existing;
+    if (existing !== null && existing.length > 0) return asClientId(existing);
     const minted = mintClientId();
     storage.setItem(key, minted);
     return minted;
@@ -93,8 +95,8 @@ export function roomScopedClientId(
  */
 export interface RoomReadyContext {
   db: Database;
-  roomId: string;
-  clientId: string;
+  roomId: RoomId;
+  clientId: ClientId;
   genesis: PinnedGenesis;
   logSink: JourneyLogSinkHandle;
 }
@@ -102,7 +104,7 @@ export interface RoomReadyContext {
 interface RoomGateProps {
   db: Database;
   /** The `?game=` room id, or `null` to auto-create a fresh room. */
-  gameId: string | null;
+  gameId: RoomId | null;
   /** This client's presentation and room-navigation runtime config. */
   runtimeConfig: RuntimeConfig;
   /** Hash of Atlas sections which influence deterministic folding. */
@@ -127,12 +129,12 @@ interface RoomGateProps {
 
 type GateState =
   | { status: "creating" }
-  | { status: "loading"; roomId: string }
-  | { status: "unreachable"; roomId: string }
-  | { status: "ready"; roomId: string; genesis: PinnedGenesis }
-  | { status: "versionGate"; roomId: string; genesis: Genesis }
-  | { status: "configGate"; roomId: string; genesis: Genesis }
-  | { status: "unreadable"; roomId: string }
+  | { status: "loading"; roomId: RoomId }
+  | { status: "unreachable"; roomId: RoomId }
+  | { status: "ready"; roomId: RoomId; genesis: PinnedGenesis }
+  | { status: "versionGate"; roomId: RoomId; genesis: Genesis }
+  | { status: "configGate"; roomId: RoomId; genesis: Genesis }
+  | { status: "unreadable"; roomId: RoomId }
   | {
       status: "error";
       technicalDetail?: string;
@@ -190,7 +192,7 @@ export async function createAndNavigateToRoom(
   db: Database,
   contentConfig: PinnedContentConfig,
   frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">,
-): Promise<string> {
+): Promise<RoomId> {
   for (let attempt = 0; attempt < CREATE_ROOM_MAX_ATTEMPTS; attempt++) {
     const roomId = generateRoomId();
     try {
@@ -256,7 +258,7 @@ function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenesis {
   );
 }
 
-function navigateToRoom(roomId: string): void {
+function navigateToRoom(roomId: RoomId): void {
   const nextUrl = new URL(window.location.href);
   nextUrl.searchParams.set("game", roomId);
   window.history.pushState(
@@ -322,7 +324,7 @@ export function RoomGate({
     ],
   );
   const autoCreateFiredRef = useRef(false);
-  const [activeRoomId, setActiveRoomId] = useState<string | null>(gameId);
+  const [activeRoomId, setActiveRoomId] = useState<RoomId | null>(gameId);
   const [gateState, setGateState] = useState<GateState>(
     gameId === null
       ? { status: "creating" }

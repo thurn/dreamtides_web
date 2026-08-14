@@ -13,11 +13,16 @@ import {
 } from "../test-support";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
+import { asBattleEntryKey } from "../../types/identifiers";
 
 function LocalizedBattleDeckOrderPicker(
   props: ComponentProps<typeof BattleDeckOrderPicker>,
 ) {
-  return <CumulusRoot><BattleDeckOrderPicker {...props} /></CumulusRoot>;
+  return (
+    <CumulusRoot>
+      <BattleDeckOrderPicker {...props} />
+    </CumulusRoot>
+  );
 }
 
 beforeEach(() => {
@@ -71,7 +76,9 @@ describe("BattleDeckOrderPicker", () => {
     );
     expect(rootNode).not.toBeNull();
     expect(rootNode?.getAttribute("data-battle-deck-order-scope")).toBe("full");
-    expect(rootNode?.getAttribute("data-battle-deck-order-side")).toBe("player");
+    expect(rootNode?.getAttribute("data-battle-deck-order-side")).toBe(
+      "player",
+    );
 
     // Move the first row down through two neighbours so it becomes last.
     pressReorderKey(0, "ArrowDown");
@@ -81,7 +88,11 @@ describe("BattleDeckOrderPicker", () => {
       ...document.querySelectorAll<HTMLElement>("[data-card-order-id]"),
     ].map((element) => element.getAttribute("data-card-order-id"));
 
-    expect(slotOrder).toEqual([initialOrder[1], initialOrder[2], initialOrder[0]]);
+    expect(slotOrder).toEqual([
+      initialOrder[1],
+      initialOrder[2],
+      initialOrder[0],
+    ]);
 
     const confirm = document.querySelector<HTMLButtonElement>(
       '[data-testid="battle-deck-order-confirm"]',
@@ -149,11 +160,10 @@ describe("BattleDeckOrderPicker", () => {
   });
 });
 
-function pressReorderKey(
-  slot: number,
-  key: "ArrowUp" | "ArrowDown",
-): void {
-  const row = document.querySelectorAll<HTMLElement>("[data-card-order-id]")[slot];
+function pressReorderKey(slot: number, key: "ArrowUp" | "ArrowDown"): void {
+  const row = document.querySelectorAll<HTMLElement>("[data-card-order-id]")[
+    slot
+  ];
   const handle = row?.querySelector<HTMLButtonElement>(
     "[data-card-order-drag-handle]",
   );
@@ -167,7 +177,7 @@ function pressReorderKey(
 
 function createTestBattle() {
   const battleInit = createTestBattleInit({
-    battleEntryKey: "site-7::2::dreamscape-2",
+    battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),

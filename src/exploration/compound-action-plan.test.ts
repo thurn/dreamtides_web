@@ -23,8 +23,15 @@ import {
   type ExplorationCompoundActionPlanInput,
   type ExplorationCompoundActionPreparation,
 } from "./compound-action-plan";
+import { asSiteId } from "../types/identifiers";
+import type { DeckEntryId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import { asDeckEntryId } from "../types/identifiers";
+import type { ExplorationActionId } from "../types/identifiers";
+import { asExplorationActionId } from "../types/identifiers";
+import { asCardTypeChangePredicateId } from "../types/identifiers";
 
-const ENCOUNTER_ID = "c0000000-0000-4000-8000-000000000001";
+const ENCOUNTER_ID = asCardId("c0000000-0000-4000-8000-000000000001");
 
 function card(input: {
   index: number;
@@ -92,7 +99,7 @@ function contentFixture(cards = cardsFixture()): JourneyContent {
 }
 
 function entry(
-  entryId: string,
+  entryId: DeckEntryId,
   cardNumber: number,
   options: {
     transfiguration?: TransfigurationType | null;
@@ -117,7 +124,7 @@ function journey(deck: readonly DeckEntry[], seed = "compound-plan-seed") {
 }
 
 const site: SiteState = {
-  id: "compound-plan-site",
+  id: asSiteId("compound-plan-site"),
   type: "Exploration",
   isEnhanced: false,
   isVisited: false,
@@ -138,14 +145,14 @@ function prepare(
     deck?: readonly DeckEntry[];
     seed?: string;
     siteOverride?: SiteState;
-    actionId?: string;
-    encounterCardId?: string;
+    actionId?: ExplorationActionId;
+    encounterCardId?: CardId;
     content?: JourneyContent;
   } = {},
 ): ExplorationCompoundActionPreparation {
   return prepareExplorationCompoundActionPlan({
     ...specific,
-    actionId: options.actionId ?? "compound-action",
+    actionId: options.actionId ?? asExplorationActionId("compound-action"),
     encounterCardId: options.encounterCardId ?? ENCOUNTER_ID,
     journey: journey(options.deck ?? [], options.seed),
     site: options.siteOverride ?? site,
@@ -159,9 +166,9 @@ describe("Exploration compound action plan", () => {
       { kind: "all-card-transfiguration" },
       {
         deck: [
-          entry("duplicate-z", 1),
-          entry("event", 4),
-          entry("duplicate-a", 1),
+          entry(asDeckEntryId("duplicate-z"), 1),
+          entry(asDeckEntryId("event"), 4),
+          entry(asDeckEntryId("duplicate-a"), 1),
         ],
       },
     );
@@ -185,7 +192,11 @@ describe("Exploration compound action plan", () => {
   });
 
   it("is stable under deck reordering while seed and site scope remain signed", () => {
-    const deck = [entry("z", 1), entry("a", 2), entry("m", 4)];
+    const deck = [
+      entry(asDeckEntryId("z"), 1),
+      entry(asDeckEntryId("a"), 2),
+      entry(asDeckEntryId("m"), 4),
+    ];
     const first = prepare({ kind: "all-card-transfiguration" }, { deck });
     const reordered = prepare(
       { kind: "all-card-transfiguration" },
@@ -197,7 +208,7 @@ describe("Exploration compound action plan", () => {
     );
     const moved = prepare(
       { kind: "all-card-transfiguration" },
-      { deck, siteOverride: { ...site, id: "different-site" } },
+      { deck, siteOverride: { ...site, id: asSiteId("different-site") } },
     );
 
     expect(reordered).toEqual(first);
@@ -211,8 +222,10 @@ describe("Exploration compound action plan", () => {
       { kind: "all-card-transfiguration" },
       {
         deck: [
-          entry("eligible", 1),
-          entry("already-transfigured", 4, { transfiguration: "Amplified" }),
+          entry(asDeckEntryId("eligible"), 1),
+          entry(asDeckEntryId("already-transfigured"), 4, {
+            transfiguration: "Amplified",
+          }),
         ],
       },
     );
@@ -227,21 +240,23 @@ describe("Exploration compound action plan", () => {
 
   it("discloses a purge-misfit target by effective type and signs every fixed-form companion", () => {
     const deck = [
-      entry("starter-event-now-character", 10, {
+      entry(asDeckEntryId("starter-event-now-character"), 10, {
         typeChange: {
-          predicateId: "wave8-effective-type-fixture",
+          predicateId: asCardTypeChangePredicateId(
+            "wave8-effective-type-fixture",
+          ),
           cardType: "Character",
           subtype: "Warrior",
           label: "Character",
         },
       }),
-      entry("character-a", 1),
-      entry("character-b", 2),
-      entry("event-a", 4),
-      entry("event-b", 6),
-      entry("event-c", 7),
-      entry("event-d", 8),
-      entry("event-e", 9),
+      entry(asDeckEntryId("character-a"), 1),
+      entry(asDeckEntryId("character-b"), 2),
+      entry(asDeckEntryId("event-a"), 4),
+      entry(asDeckEntryId("event-b"), 6),
+      entry(asDeckEntryId("event-c"), 7),
+      entry(asDeckEntryId("event-d"), 8),
+      entry(asDeckEntryId("event-e"), 9),
     ];
     const plan = prepare(
       {
@@ -276,7 +291,12 @@ describe("Exploration compound action plan", () => {
         kind: "purge-disclosed-transfigure-same-type",
         transfiguration: "Kindled",
       },
-      { deck: [entry("only-character", 1), entry("event", 4)] },
+      {
+        deck: [
+          entry(asDeckEntryId("only-character"), 1),
+          entry(asDeckEntryId("event"), 4),
+        ],
+      },
     );
 
     expect(plan.unavailableReason).toBe("no-same-type-companion");
@@ -293,7 +313,13 @@ describe("Exploration compound action plan", () => {
         predicate: "event",
         nightmareCount: 2,
       },
-      { deck: [entry("z-slow", 4), entry("a-fast", 5), entry("character", 1)] },
+      {
+        deck: [
+          entry(asDeckEntryId("z-slow"), 4),
+          entry(asDeckEntryId("a-fast"), 5),
+          entry(asDeckEntryId("character"), 1),
+        ],
+      },
     );
 
     expect(plan).toMatchObject({
@@ -345,11 +371,11 @@ describe("Exploration compound action plan", () => {
       },
       {
         deck: [
-          entry("copy-1", 1),
-          entry("copy-2", 1),
-          entry("character-3", 2),
-          entry("character-4", 3),
-          entry("character-5", 2),
+          entry(asDeckEntryId("copy-1"), 1),
+          entry(asDeckEntryId("copy-2"), 1),
+          entry(asDeckEntryId("character-3"), 2),
+          entry(asDeckEntryId("character-4"), 3),
+          entry(asDeckEntryId("character-5"), 2),
         ],
       },
     );
@@ -371,7 +397,7 @@ describe("Exploration compound action plan", () => {
         predicate: "event",
         nightmareCount: 1,
       },
-      { deck: [entry("character", 1)] },
+      { deck: [entry(asDeckEntryId("character"), 1)] },
     );
     const catalog = contentFixture([
       card({ index: 1, cardType: "Event" }),
@@ -394,7 +420,13 @@ describe("Exploration compound action plan", () => {
         offerCount: 4,
         transfiguration: "Kindled",
       },
-      { deck: [entry("one", 1), entry("two", 2), entry("three", 3)] },
+      {
+        deck: [
+          entry(asDeckEntryId("one"), 1),
+          entry(asDeckEntryId("two"), 2),
+          entry(asDeckEntryId("three"), 3),
+        ],
+      },
     );
 
     expect(noMatches.unavailableReason).toBe("no-predicate-matches");
@@ -420,15 +452,15 @@ describe("Exploration compound action plan", () => {
         predicate: "character",
         nightmareCount: 2,
       },
-      { deck: [entry("character", 1)] },
+      { deck: [entry(asDeckEntryId("character"), 1)] },
     );
     if (plan.kind !== "predicate-fast-nightmares") return;
     const tampered: ExplorationCompoundActionPreparation = {
       ...plan,
       targets: [
         {
-          entryId: "forged-entry",
-          cardId: plan.targets[0]?.cardId ?? "missing-card",
+          entryId: asDeckEntryId("forged-entry"),
+          cardId: plan.targets[0]?.cardId ?? asCardId("missing-card"),
         },
       ],
     };
@@ -443,7 +475,12 @@ describe("Exploration compound action plan", () => {
   });
 
   it("binds action, encounter, authored fields, content revision, and selector traces", () => {
-    const deck = [entry("a", 1), entry("b", 2), entry("c", 3), entry("d", 2)];
+    const deck = [
+      entry(asDeckEntryId("a"), 1),
+      entry(asDeckEntryId("b"), 2),
+      entry(asDeckEntryId("c"), 3),
+      entry(asDeckEntryId("d"), 2),
+    ];
     const base = prepare(
       {
         kind: "purge-transfigure-copy",
@@ -458,7 +495,7 @@ describe("Exploration compound action plan", () => {
         offerCount: 4,
         transfiguration: "Kindled",
       },
-      { deck, actionId: "different-action" },
+      { deck, actionId: asExplorationActionId("different-action") },
     );
     const changedEncounter = prepare(
       {
@@ -466,7 +503,7 @@ describe("Exploration compound action plan", () => {
         offerCount: 4,
         transfiguration: "Kindled",
       },
-      { deck, encounterCardId: "different-encounter" },
+      { deck, encounterCardId: asCardId("different-encounter") },
     );
     const changedForm = prepare(
       {

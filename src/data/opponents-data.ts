@@ -1,4 +1,6 @@
 import type { OpponentsData } from "../types/opponents-data";
+import { asCardId } from "../types/card-identity";
+import { asAiDifficultyPresetId } from "../types/identifiers";
 
 export type { OpponentsData } from "../types/opponents-data";
 
@@ -33,5 +35,27 @@ export async function loadOpponentsData(): Promise<OpponentsData> {
       "Failed to load opponent data: malformed opponents-data.json",
     );
   }
-  return value as OpponentsData;
+  const decoded = value as OpponentsData;
+  return {
+    ...decoded,
+    journeyAiDeck: decoded.journeyAiDeck.map((entry) => ({
+      ...entry,
+      cardId: asCardId(entry.cardId),
+    })),
+    ai: {
+      ...decoded.ai,
+      journeyDefaultPreset: asAiDifficultyPresetId(
+        decoded.ai.journeyDefaultPreset,
+      ),
+      tutorialDefaultPreset: asAiDifficultyPresetId(
+        decoded.ai.tutorialDefaultPreset,
+      ),
+      presets: Object.fromEntries(
+        Object.entries(decoded.ai.presets).map(([key, preset]) => [
+          key,
+          { ...preset, id: asAiDifficultyPresetId(preset.id) },
+        ]),
+      ),
+    },
+  };
 }

@@ -63,6 +63,11 @@ import {
 import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { CURRENT_REDUCER_VERSION } from "./reducer-version";
 import type { LocalizedString } from "@trox/runtime";
+import {
+  asClientId,
+  asDreamscapeId,
+  type ClientId,
+} from "../types/identifiers";
 
 /** A confirmed event's outcome, delivered to `useEventOutcomes` subscribers. */
 export type OutcomeListener = (
@@ -73,7 +78,7 @@ export type OutcomeListener = (
 
 interface CoopContextValue {
   /** This client's id, as minted by `RoomGate` (`mintClientId`). */
-  clientId: string;
+  clientId: ClientId;
   /** The displayed fold (confirmed + optimistic); seeded from genesis pre-fold. */
   gameState: FoldState;
   /** The room fold containing committed events only; safe for autonomous work. */
@@ -85,7 +90,7 @@ interface CoopContextValue {
   /** Connected clients, from the room's presence node. */
   connectedCount: number | null;
   /** Connected presence client ids, or null until presence has loaded. */
-  connectedClientIds: readonly string[] | null;
+  connectedClientIds: readonly ClientId[] | null;
   /** Contiguous confirmed log head; null until the first node is folded. */
   confirmedHead: number | null;
   /**
@@ -134,7 +139,7 @@ export function CoopProvider({
   );
   const [connectedCount, setConnectedCount] = useState<number | null>(null);
   const [connectedClientIds, setConnectedClientIds] = useState<
-    readonly string[] | null
+    readonly ClientId[] | null
   >(null);
   const [confirmedHead, setConfirmedHead] = useState<number | null>(null);
   const [corruptLog, setCorruptLog] = useState(false);
@@ -246,7 +251,9 @@ export function CoopProvider({
               const after = detail.stateAfter;
               const init = before.battle!.init;
               const completedNode =
-                before.journey.atlas.nodes[init.dreamscapeId ?? ""];
+                before.journey.atlas.nodes[
+                  init.dreamscapeId ?? asDreamscapeId("")
+                ];
               const availableForwardIds = (
                 completedNode?.forwardIds ?? []
               ).filter(
@@ -264,8 +271,9 @@ export function CoopProvider({
                 completionLevelBefore: before.journey.completionLevel,
                 completionLevelAfter: after.journey.completionLevel,
                 completedNodeState:
-                  after.journey.atlas.nodes[init.dreamscapeId ?? ""]?.state ??
-                  null,
+                  after.journey.atlas.nodes[
+                    init.dreamscapeId ?? asDreamscapeId("")
+                  ]?.state ?? null,
                 availableForwardIds,
                 availableForwardDreamscapeIds: availableForwardIds.map(
                   (nodeId) =>
@@ -365,6 +373,7 @@ export function CoopProvider({
       setConnectedClientIds(
         Object.keys(presence ?? {})
           .filter((clientId) => presence?.[clientId]?.connected === true)
+          .map(asClientId)
           .sort(),
       );
     });
@@ -494,7 +503,7 @@ export function useConfirmedHead(): number | null {
 /** This client's id, as minted by `RoomGate` (`mintClientId`). Stable for the
  *  lifetime of the room mount; used to stamp AI-originated events
  *  (`actor: "ai:<clientId>"`). */
-export function useClientId(): string {
+export function useClientId(): ClientId {
   return useCoop().clientId;
 }
 
@@ -518,7 +527,7 @@ export function useConnectedCount(): number | null {
 }
 
 /** Connected presence client ids, or null while the presence snapshot is unknown. */
-export function useConnectedClientIds(): readonly string[] | null {
+export function useConnectedClientIds(): readonly ClientId[] | null {
   return useCoop().connectedClientIds;
 }
 

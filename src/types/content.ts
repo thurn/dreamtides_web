@@ -5,6 +5,16 @@
  */
 import type { SiteType } from "./journey.ts";
 import type { Rarity } from "./cards.ts";
+import type { CardId, CardName } from "./card-identity";
+import type { GuideId } from "./identifiers";
+import type { DreamAvatarId } from "./identifiers";
+import type { DreamscapeId } from "./identifiers";
+import type {
+  AffiliationId,
+  ApollyonIncarnationId,
+  DreamsignId,
+  TideId,
+} from "./identifiers";
 
 /** Normalized point locating a DreamAvatar's head in its portrait artwork. */
 export interface DreamAvatarPortraitFocus {
@@ -15,7 +25,7 @@ export interface DreamAvatarPortraitFocus {
 }
 
 export interface DreamAvatarContent {
-  id: string;
+  id: DreamAvatarId;
   name: string;
   title: string;
   renderedText: string;
@@ -31,16 +41,16 @@ export interface DreamAvatarContent {
   /**
    * Display names corresponding to the avatar's authored signature card UUIDs.
    */
-  signatureCards?: string[];
+  signatureCards?: CardName[];
   /**
    * Stable cards_v2 UUIDs for {@link signatureCards}, index-aligned. Lets a
    * consumer distinguish two cards that share a display name.
    */
-  signatureCardIds?: string[];
+  signatureCardIds?: CardId[];
 }
 
 export interface DreamsignTemplate {
-  id: string;
+  id: DreamsignId;
   name: string;
   effectDescription: string;
   imageName?: string;
@@ -48,7 +58,7 @@ export interface DreamsignTemplate {
   /** Canonical catalog entries always provide strength rarity. */
   rarity?: Extract<Rarity, "Common" | "Uncommon" | "Rare" | "Legendary">;
   /** Canonical catalog entries provide one to three tide UUIDs. */
-  tideIds?: readonly string[];
+  tideIds?: readonly TideId[];
   tags?: readonly string[];
 }
 
@@ -64,14 +74,14 @@ export interface DreamsignTemplate {
  * dreamscape, an invariant the asset build enforces.
  */
 export interface DreamscapeContent {
-  id: string;
+  id: DreamscapeId;
   name: string;
-  guideId: string | null;
+  guideId: GuideId | null;
   signatureSite: SiteType;
-  affiliationId: string | null;
+  affiliationId: AffiliationId | null;
   isStarter: boolean;
   fixedSites?: SiteType[];
-  dreamAvatarIds: string[];
+  dreamAvatarIds: DreamAvatarId[];
 }
 
 /**
@@ -80,12 +90,17 @@ export interface DreamscapeContent {
  * dreamscape's signature site); `homeSpecialty` describes that enhancement.
  */
 export interface DreamGuideContent {
-  id: string;
+  id: GuideId;
   name: string;
-  homeDreamscapeId: string;
+  homeDreamscapeId: DreamscapeId;
   siteType: SiteType;
   portraitSource: string;
-  dialogue: Readonly<Record<string, readonly import("../runtime/localization/runtime").SourceTransport[]>>;
+  dialogue: Readonly<
+    Record<
+      string,
+      readonly import("../runtime/localization/runtime").SourceTransport[]
+    >
+  >;
   homeSpecialty: string;
 }
 
@@ -104,7 +119,7 @@ export interface DreamGuidesData {
  * the UI. `deckType` is design-reference metadata and is never displayed.
  */
 export interface ApollyonIncarnationContent {
-  id: string;
+  id: ApollyonIncarnationId;
   title: string;
   description: string;
   deckType: string;
@@ -115,10 +130,10 @@ export interface ApollyonIncarnationContent {
  * `tideIds` are the three authored tides that define the affiliation's theme.
  */
 export interface AffiliationContent {
-  id: string;
+  id: AffiliationId;
   name: string;
   atlasCardTheme: string;
-  tideIds: string[];
+  tideIds: TideId[];
 }
 
 /** The role a tide plays in `tides4` pool construction. */
@@ -135,7 +150,7 @@ export type Tides4TideSelection =
  */
 export interface Tides4TideSummary {
   /** Stable tide UUIDv4. */
-  id: string;
+  id: TideId;
   /** Narrative, thematic name shown on player-facing screens. */
   displayName: string;
   /** Player-facing description of what makes the tide distinctive. */
@@ -164,9 +179,9 @@ export interface Tides4CardProvenance {
   /** Copies of this card in the pool (1 or 2). */
   copies: number;
   /** Joined tide ids that contain this card, in join order. */
-  tideIds: string[];
+  tideIds: TideId[];
   /** The earliest joined tide (in join order) that contains this card — its home tide. */
-  primaryTideId: string;
+  primaryTideId: TideId;
 }
 
 /**
@@ -180,7 +195,7 @@ export interface Tides4CardProvenance {
  */
 export interface Tides4ProvenanceSummary {
   /** The DreamAvatar this pool was built for. */
-  dreamAvatarId: string;
+  dreamAvatarId: DreamAvatarId;
   /**
    * Whether the DreamAvatar has no signature. A signatureless DreamAvatar borrows
    * a random signatured DreamAvatar's whole pool, leaning a coherent archetype.
@@ -213,7 +228,7 @@ export interface Tides4ProvenanceSummary {
 export interface ResolvedDreamAvatarPackage {
   dreamAvatar: DreamAvatarContent;
   /** Joined tide UUIDs for this run, persisted for reconstructable affinity selection. */
-  joinedTideIds?: string[];
+  joinedTideIds?: TideId[];
   draftPoolCopiesByCard: Record<string, number>;
   /**
    * Exact early offers keyed by their 1-indexed journey pick. Authored flows
@@ -225,8 +240,8 @@ export interface ResolvedDreamAvatarPackage {
    * Authored tutorial flows use this to establish the run's theme while the
    * remaining offer slots continue to draw from the shared pool.
    */
-  openingDreamsignOfferIds?: string[];
-  dreamsignPoolIds: string[];
+  openingDreamsignOfferIds?: DreamsignId[];
+  dreamsignPoolIds: DreamsignId[];
   mandatoryOnlyPoolSize: number;
   draftPoolSize: number;
   doubledCardCount: number;

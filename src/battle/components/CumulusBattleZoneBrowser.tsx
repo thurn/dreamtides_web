@@ -1,7 +1,4 @@
-import type {
-  MouseEvent as ReactMouseEvent,
-  ReactElement,
-} from "react";
+import type { MouseEvent as ReactMouseEvent, ReactElement } from "react";
 import { CardZoneBrowserOverlay } from "../../cumulus/screens/CardZoneBrowserOverlay";
 import type {
   BattleCommandSourceSurface,
@@ -9,6 +6,7 @@ import type {
   BattleSide,
 } from "../types";
 import { battleGameCardModel } from "../ui/battle-game-card-model";
+import type { BattleCardId } from "../../types/identifiers";
 
 export type CumulusBrowseableZone = "deck" | "void" | "banished";
 
@@ -22,17 +20,17 @@ export interface CumulusBattleZoneBrowserProps {
   readonly onClose: () => void;
   readonly onSideChange: (side: BattleSide) => void;
   readonly onCardContextMenu?: (
-    battleCardId: string,
+    battleCardId: BattleCardId,
     event: ReactMouseEvent<HTMLDivElement>,
     sourceSurface: BattleCommandSourceSurface,
   ) => void;
   readonly onCardDoubleTap?: (
-    battleCardId: string,
+    battleCardId: BattleCardId,
     sourceSurface: BattleCommandSourceSurface,
   ) => void;
   readonly onCardDragEnd?: () => void;
   readonly onCardDragStart?: (
-    battleCardId: string,
+    battleCardId: BattleCardId,
     sourceSurface: BattleCommandSourceSurface,
   ) => void;
   readonly onCardDropToBrowser?: (
@@ -69,11 +67,13 @@ export function CumulusBattleZoneBrowser({
     const instance = state.cardInstances[battleCardId];
     return instance === undefined
       ? []
-      : [{
-          entryId: battleCardId,
-          model: battleGameCardModel(instance),
-          draggable: true,
-        }];
+      : [
+          {
+            entryId: battleCardId,
+            model: battleGameCardModel(instance),
+            draggable: true,
+          },
+        ];
   });
   const isDropTarget =
     pendingDragSourceSurface !== null && onCardDropToBrowser !== undefined;
@@ -96,15 +96,14 @@ export function CumulusBattleZoneBrowser({
         onCardDropToBrowser(pendingDragSourceSurface);
       }}
     >
-      <CardZoneBrowserOverlay
+      <CardZoneBrowserOverlay<BattleCardId>
         owner={browser.side === perspectiveSide ? "viewer" : "opponent"}
         zone={browser.zone}
         cards={cards}
         ownerSwitch={
           browser.zone === "banished"
             ? {
-                value:
-                  browser.side === perspectiveSide ? "viewer" : "opponent",
+                value: browser.side === perspectiveSide ? "viewer" : "opponent",
                 viewerCount: state.sides[perspectiveSide].banished.length,
                 opponentCount: state.sides[opponentSide].banished.length,
                 onChange: (owner) =>

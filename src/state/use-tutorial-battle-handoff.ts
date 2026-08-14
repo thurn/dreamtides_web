@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import { logEvent } from "../logging";
 import type { TutorialPlaybackState } from "../types/tutorial";
+import type { TutorialRunId } from "../types/identifiers";
 
 /** Appends the durable tutorial-battle handoff after the shared cursor settles. */
 export function useTutorialBattleHandoff(
   tutorial: TutorialPlaybackState | null,
-  beginTutorialBattle: ((tutorialRunId: string) => Promise<number>) | undefined,
+  beginTutorialBattle:
+    ((tutorialRunId: TutorialRunId) => Promise<number>) | undefined,
 ): void {
   const requestedKey = useRef<string | null>(null);
   useEffect(() => {
@@ -13,7 +15,8 @@ export function useTutorialBattleHandoff(
       tutorial === null ||
       tutorial.currentActionIndex !== null ||
       beginTutorialBattle === undefined
-    ) return;
+    )
+      return;
     const intentKey = `tutorial-battle:${tutorial.runId}:begin`;
     if (requestedKey.current === intentKey) return;
     requestedKey.current = intentKey;

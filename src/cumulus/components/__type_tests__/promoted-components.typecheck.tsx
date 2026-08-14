@@ -4,13 +4,14 @@ import type { BattleForeseeResult } from "../battle/BattleForeseeEditor";
 import type { BattlefieldCardInteraction } from "../battle/BattlefieldCard";
 import type { TransfigurationPickerState } from "../card/TransfigurationPickerPanel";
 import type { ArtRef } from "../../primitives/art";
+import { asSiteId } from "../../../types/identifiers";
 
 declare const art: ArtRef;
 declare const guide: SiteLayoutGuide;
 
 const invalidLayout: ReactElement = (
   <SiteLayout
-    siteId="fixture"
+    siteId={asSiteId("fixture")}
     scene={art}
     moteTint="warm"
     guide={guide}

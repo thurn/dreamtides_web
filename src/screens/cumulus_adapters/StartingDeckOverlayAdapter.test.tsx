@@ -13,6 +13,7 @@ import type { CardData } from "../../types/cards";
 import type { JourneyState } from "../../types/journey";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { StartingDeckView } from "../../cumulus/screens/StartingDeckOverlay";
+import { asDeckEntryId } from "../../types/identifiers";
 
 vi.mock("../../state/journey-context", () => ({
   useJourney: vi.fn(),
@@ -71,7 +72,7 @@ function makeState(): JourneyState {
   return {
     deck: [
       {
-        entryId: "entry-1",
+        entryId: asDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,

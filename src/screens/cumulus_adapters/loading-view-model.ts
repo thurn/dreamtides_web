@@ -5,7 +5,7 @@ import type { TutorialCardConstants } from "../../types/tutorial";
 
 function resolveCardById(
   cardDatabase: ReadonlyMap<number, CardData>,
-  cardId: CardId | string,
+  cardId: CardId,
 ): CardData {
   const card = [...cardDatabase.values()].find(
     (candidate) => candidate.id === cardId,

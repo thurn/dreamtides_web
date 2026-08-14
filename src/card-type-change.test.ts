@@ -10,6 +10,8 @@ import {
   resolveDeckEntryCard,
 } from "./card-type-change";
 import { transfigurationFixture } from "./testing/transfiguration-fixture";
+import { asDeckEntryId } from "./types/identifiers";
+import { asCardTypeChangePredicateId } from "./types/identifiers";
 
 const transfigurationData = transfigurationFixture();
 
@@ -43,10 +45,12 @@ describe("applyCardKeywordModification", () => {
   it("treats zero-cost Reclaim as an explicit playable keyword", () => {
     const card = makeCard();
 
-    expect(applyCardKeywordModification(card, { setReclaim: 0 })).toMatchObject({
-      reclaimCost: 0,
-      renderedText: "Draw a card.\n\nReclaim 0●",
-    });
+    expect(applyCardKeywordModification(card, { setReclaim: 0 })).toMatchObject(
+      {
+        reclaimCost: 0,
+        renderedText: "Draw a card.\n\nReclaim 0●",
+      },
+    );
   });
 
   it("keeps Reclaim text stable when applying the same modifier repeatedly", () => {
@@ -72,7 +76,7 @@ describe("applyCardKeywordModification", () => {
 
 function makeDeckEntry(overrides: Partial<DeckEntry> = {}): DeckEntry {
   return {
-    entryId: "entry-1",
+    entryId: asDeckEntryId("entry-1"),
     cardNumber: 1,
     transfiguration: null,
     isBane: false,
@@ -143,7 +147,7 @@ describe("resolveDeckEntryCard", () => {
     const entry = makeDeckEntry({
       transfiguration: "Empowered",
       typeChange: {
-        predicateId: "predicate-1",
+        predicateId: asCardTypeChangePredicateId("predicate-1"),
         cardType: "Character",
         subtype: "Spirit",
         label: "Becomes a Spirit",
@@ -175,6 +179,8 @@ describe("resolveDeckEntryCard", () => {
       sparkBonus: 1,
     });
 
-    expect(resolveDeckEntryCard(transfigurationData, card, entry).spark).toBe(5);
+    expect(resolveDeckEntryCard(transfigurationData, card, entry).spark).toBe(
+      5,
+    );
   });
 });

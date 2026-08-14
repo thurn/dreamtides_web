@@ -4,6 +4,9 @@ import type { SiteType } from "../types/site-type";
 import type { SitesData } from "../types/sites-data";
 import { loadDreamGuides } from "./dreamscapes";
 import { loadSitesData, siteTypeIcon } from "./sites-data";
+import { asDreamscapeId } from "../types/identifiers";
+import { asGuideId } from "../types/identifiers";
+import { asGlossaryEntryId } from "../types/identifiers";
 
 function response(value: unknown): Response {
   return {
@@ -22,7 +25,7 @@ const GUIDE_CATALOG = {
       id: "fixture-guide",
       name: "Fixture Guide",
       portraitSource: "fixture-guide.png",
-      homeDreamscapeId: "fixture-home",
+      homeDreamscapeId: asDreamscapeId("fixture-home"),
       siteType: "Shop",
       homeSpecialty: "Fixture specialty.",
       dialogue: { site: ["Fixture line."] },
@@ -88,7 +91,9 @@ describe("compiled guide and site artifact loaders", () => {
         sites.randomSite.homeChoiceCount = 4;
       },
       (sites) => {
-        sites.siteTypes.Shop.glossaryId = "missing-fixture-glossary";
+        sites.siteTypes.Shop.glossaryId = asGlossaryEntryId(
+          "missing-fixture-glossary",
+        );
       },
       (sites) => {
         const rules = sites.siteTypes.Duplication.rules;
@@ -98,14 +103,16 @@ describe("compiled guide and site artifact loaders", () => {
       },
       (sites) => {
         sites.guideAssignments.RandomSite = {
-          guideId: "wrong-guide",
-          homeDreamscapeId: "fixture-home",
+          guideId: asGuideId("wrong-guide"),
+          homeDreamscapeId: asDreamscapeId("fixture-home"),
         };
       },
     ];
 
     for (const mutate of mutations) {
-      const sites = structuredClone(MINIMAL_SITES_DATA) as MutableSitesData;
+      const sites = structuredClone(
+        MINIMAL_SITES_DATA,
+      ) as unknown as MutableSitesData;
       mutate(sites);
       vi.stubGlobal(
         "fetch",

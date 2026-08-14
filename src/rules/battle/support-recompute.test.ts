@@ -6,9 +6,17 @@ import type {
   BattleSide,
   FrontRankSlotId,
 } from "../../battle/types";
-import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "../../battle/types";
+import {
+  backRankSlotIds,
+  createEmptySlotRecord,
+  frontRankSlotIds,
+} from "../../battle/types";
 import { planSupportRecompute } from "./battle-card-effects-table";
 import { supportedDeploySlots } from "../../battle/engine/support";
+import type { BattleCardId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import { asBattleCardId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
 
 // ---------------------------------------------------------------------------
 // Registered support UUIDs (from BATTLE_CARD_EFFECTS).
@@ -31,8 +39,8 @@ const UNREGISTERED = "00000000-0000-0000-0000-000000000000";
 // ---------------------------------------------------------------------------
 
 interface InstanceSpec {
-  battleCardId: string;
-  cardId: string;
+  battleCardId: BattleCardId;
+  cardId: CardId;
   subtype?: string;
   figmentCount?: number;
   staticSparkBonus?: number;
@@ -55,23 +63,32 @@ function makeInstance(spec: InstanceSpec): BattleCardInstance {
       ? {}
       : { figments: Array.from({ length: spec.figmentCount }, () => 1) }),
     provenance: {
-      kind: spec.figmentCount === undefined ? "journey-deck" : "generated-figment",
+      kind:
+        spec.figmentCount === undefined ? "journey-deck" : "generated-figment",
     },
     staticSparkBonus: spec.staticSparkBonus ?? 0,
   } as unknown as BattleCardInstance;
 }
 
-function emptyBackRank(): Record<BackRankSlotId, string | null> {
+function emptyBackRank(): Record<BackRankSlotId, BattleCardId | null> {
   return createEmptySlotRecord(backRankSlotIds(13));
 }
 
-function emptyFrontRank(): Record<FrontRankSlotId, string | null> {
+function emptyFrontRank(): Record<FrontRankSlotId, BattleCardId | null> {
   return createEmptySlotRecord(frontRankSlotIds(12));
 }
 
-function makeState(sides: Partial<Record<BattleSide, SideSpec>>): BattleMutableState {
+function makeState(
+  sides: Partial<Record<BattleSide, SideSpec>>,
+): BattleMutableState {
   const cardInstances: Record<string, BattleCardInstance> = {};
-  const sideStates: Record<BattleSide, { backRank: Record<BackRankSlotId, string | null>; frontRank: Record<FrontRankSlotId, string | null> }> = {
+  const sideStates: Record<
+    BattleSide,
+    {
+      backRank: Record<BackRankSlotId, BattleCardId | null>;
+      frontRank: Record<FrontRankSlotId, BattleCardId | null>;
+    }
+  > = {
     player: { backRank: emptyBackRank(), frontRank: emptyFrontRank() },
     enemy: { backRank: emptyBackRank(), frontRank: emptyFrontRank() },
   };
@@ -117,12 +134,29 @@ describe("planSupportRecompute — geometry", () => {
   it("a B1 Woodland Apparition grants +2 to F0 and F1 only", () => {
     const state = makeState({
       player: {
-        back: { B1: { battleCardId: "supporter", cardId: WOODLAND_APPARITION } },
+        back: {
+          B1: {
+            battleCardId: asBattleCardId("supporter"),
+            cardId: asCardId(WOODLAND_APPARITION),
+          },
+        },
         front: {
-          F0: { battleCardId: "f0", cardId: UNREGISTERED },
-          F1: { battleCardId: "f1", cardId: UNREGISTERED },
-          F2: { battleCardId: "f2", cardId: UNREGISTERED },
-          F3: { battleCardId: "f3", cardId: UNREGISTERED },
+          F0: {
+            battleCardId: asBattleCardId("f0"),
+            cardId: asCardId(UNREGISTERED),
+          },
+          F1: {
+            battleCardId: asBattleCardId("f1"),
+            cardId: asCardId(UNREGISTERED),
+          },
+          F2: {
+            battleCardId: asBattleCardId("f2"),
+            cardId: asCardId(UNREGISTERED),
+          },
+          F3: {
+            battleCardId: asBattleCardId("f3"),
+            cardId: asCardId(UNREGISTERED),
+          },
         },
       },
     });
@@ -131,27 +165,39 @@ describe("planSupportRecompute — geometry", () => {
 
     expect(edits).toContainEqual({
       kind: "SET_CARD_STATIC_SPARK_BONUS",
-      battleCardId: "f0",
+      battleCardId: asBattleCardId("f0"),
       value: 2,
     });
     expect(edits).toContainEqual({
       kind: "SET_CARD_STATIC_SPARK_BONUS",
-      battleCardId: "f1",
+      battleCardId: asBattleCardId("f1"),
       value: 2,
     });
     // F2 and F3 are outside B1's reach: never granted (current 0, no edit).
-    expect(edits.some((e) => "battleCardId" in e && e.battleCardId === "f2")).toBe(false);
-    expect(edits.some((e) => "battleCardId" in e && e.battleCardId === "f3")).toBe(false);
+    expect(
+      edits.some((e) => "battleCardId" in e && e.battleCardId === "f2"),
+    ).toBe(false);
+    expect(
+      edits.some((e) => "battleCardId" in e && e.battleCardId === "f3"),
+    ).toBe(false);
     // The supporter itself sits in the back rank and gains nothing.
-    expect(edits.some((e) => "battleCardId" in e && e.battleCardId === "supporter")).toBe(false);
+    expect(
+      edits.some((e) => "battleCardId" in e && e.battleCardId === "supporter"),
+    ).toBe(false);
   });
 
   it("a Supporter in the FRONT rank grants nothing", () => {
     const state = makeState({
       player: {
         front: {
-          F0: { battleCardId: "front-supporter", cardId: WOODLAND_APPARITION },
-          F1: { battleCardId: "ally", cardId: UNREGISTERED },
+          F0: {
+            battleCardId: asBattleCardId("front-supporter"),
+            cardId: asCardId(WOODLAND_APPARITION),
+          },
+          F1: {
+            battleCardId: asBattleCardId("ally"),
+            cardId: asCardId(UNREGISTERED),
+          },
         },
       },
     });
@@ -168,10 +214,23 @@ describe("planSupportRecompute — predicate filter", () => {
   it("Eternal Stag grants +1 to spirit animals but not other allies", () => {
     const state = makeState({
       player: {
-        back: { B1: { battleCardId: "stag", cardId: ETERNAL_STAG } },
+        back: {
+          B1: {
+            battleCardId: asBattleCardId("stag"),
+            cardId: asCardId(ETERNAL_STAG),
+          },
+        },
         front: {
-          F0: { battleCardId: "animal", cardId: UNREGISTERED, subtype: "Spirit Animal" },
-          F1: { battleCardId: "other", cardId: UNREGISTERED, subtype: "Warrior" },
+          F0: {
+            battleCardId: asBattleCardId("animal"),
+            cardId: asCardId(UNREGISTERED),
+            subtype: "Spirit Animal",
+          },
+          F1: {
+            battleCardId: asBattleCardId("other"),
+            cardId: asCardId(UNREGISTERED),
+            subtype: "Warrior",
+          },
         },
       },
     });
@@ -179,10 +238,16 @@ describe("planSupportRecompute — predicate filter", () => {
     const edits = planSupportRecompute(state, true, () => 0, 0);
 
     expect(edits).toEqual([
-      { kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId: "animal", value: 1 },
+      {
+        kind: "SET_CARD_STATIC_SPARK_BONUS",
+        battleCardId: asBattleCardId("animal"),
+        value: 1,
+      },
     ]);
     // The non-spirit-animal ally has target 0; already 0 ⇒ no edit emitted.
-    expect(edits.some((e) => "battleCardId" in e && e.battleCardId === "other")).toBe(false);
+    expect(
+      edits.some((e) => "battleCardId" in e && e.battleCardId === "other"),
+    ).toBe(false);
   });
 });
 
@@ -191,27 +256,47 @@ describe("planSupportRecompute — dynamic warrior count", () => {
     const state = makeState({
       player: {
         back: {
-          B0: { battleCardId: "warrior-0", cardId: UNREGISTERED, subtype: "Warrior" },
-          B1: { battleCardId: "commander", cardId: SKYFLAME_COMMANDER, subtype: "Warrior" },
-          B2: { battleCardId: "warrior-2", cardId: UNREGISTERED, subtype: "Warrior" },
-          B3: { battleCardId: "non-warrior", cardId: UNREGISTERED, subtype: "Mage" },
+          B0: {
+            battleCardId: asBattleCardId("warrior-0"),
+            cardId: asCardId(UNREGISTERED),
+            subtype: "Warrior",
+          },
+          B1: {
+            battleCardId: asBattleCardId("commander"),
+            cardId: asCardId(SKYFLAME_COMMANDER),
+            subtype: "Warrior",
+          },
+          B2: {
+            battleCardId: asBattleCardId("warrior-2"),
+            cardId: asCardId(UNREGISTERED),
+            subtype: "Warrior",
+          },
+          B3: {
+            battleCardId: asBattleCardId("non-warrior"),
+            cardId: asCardId(UNREGISTERED),
+            subtype: "Mage",
+          },
         },
         front: {
-          F0: { battleCardId: "supported-warrior", cardId: UNREGISTERED, subtype: "Warrior" },
+          F0: {
+            battleCardId: asBattleCardId("supported-warrior"),
+            cardId: asCardId(UNREGISTERED),
+            subtype: "Warrior",
+          },
         },
       },
     });
 
     expect(planSupportRecompute(state, true, () => 0, 0)).toContainEqual({
       kind: "SET_CARD_STATIC_SPARK_BONUS",
-      battleCardId: "supported-warrior",
+      battleCardId: asBattleCardId("supported-warrior"),
       value: 4,
     });
 
     state.sides.player.backRank.B0 = null;
     expect(planSupportRecompute(state, true, () => 0, 0)).toContainEqual({
       kind: "SET_CARD_STATIC_SPARK_BONUS",
-      battleCardId: "supported-warrior",
+      battleCardId: asBattleCardId("supported-warrior"),
       value: 3,
     });
   });
@@ -227,11 +312,20 @@ describe("planSupportRecompute — stacking", () => {
     const state = makeState({
       player: {
         back: {
-          B1: { battleCardId: "s1", cardId: WOODLAND_APPARITION },
-          B2: { battleCardId: "s2", cardId: WOODLAND_APPARITION },
+          B1: {
+            battleCardId: asBattleCardId("s1"),
+            cardId: asCardId(WOODLAND_APPARITION),
+          },
+          B2: {
+            battleCardId: asBattleCardId("s2"),
+            cardId: asCardId(WOODLAND_APPARITION),
+          },
         },
         front: {
-          F1: { battleCardId: "shared", cardId: UNREGISTERED },
+          F1: {
+            battleCardId: asBattleCardId("shared"),
+            cardId: asCardId(UNREGISTERED),
+          },
         },
       },
     });
@@ -239,7 +333,11 @@ describe("planSupportRecompute — stacking", () => {
     const edits = planSupportRecompute(state, true, () => 0, 0);
 
     expect(edits).toEqual([
-      { kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId: "shared", value: 4 },
+      {
+        kind: "SET_CARD_STATIC_SPARK_BONUS",
+        battleCardId: asBattleCardId("shared"),
+        value: 4,
+      },
     ]);
   });
 
@@ -247,12 +345,15 @@ describe("planSupportRecompute — stacking", () => {
     const state = makeState({
       player: {
         back: {
-          B0: { battleCardId: "supporter", cardId: WOODLAND_APPARITION },
+          B0: {
+            battleCardId: asBattleCardId("supporter"),
+            cardId: asCardId(WOODLAND_APPARITION),
+          },
         },
         front: {
           F0: {
-            battleCardId: "figments",
-            cardId: UNREGISTERED,
+            battleCardId: asBattleCardId("figments"),
+            cardId: asCardId(UNREGISTERED),
             figmentCount: 3,
           },
         },
@@ -262,7 +363,7 @@ describe("planSupportRecompute — stacking", () => {
     expect(planSupportRecompute(state, true, () => 0, 0)).toEqual([
       {
         kind: "SET_CARD_STATIC_SPARK_BONUS",
-        battleCardId: "figments",
+        battleCardId: asBattleCardId("figments"),
         value: 2,
       },
     ]);
@@ -278,12 +379,22 @@ describe("planSupportRecompute — clearing stale bonuses", () => {
     // No supporter present; the ally currently carries a stale +2.
     const state = makeState({
       player: {
-        front: { F0: { battleCardId: "stale", cardId: UNREGISTERED, staticSparkBonus: 2 } },
+        front: {
+          F0: {
+            battleCardId: asBattleCardId("stale"),
+            cardId: asCardId(UNREGISTERED),
+            staticSparkBonus: 2,
+          },
+        },
       },
     });
 
     expect(planSupportRecompute(state, true, () => 0, 0)).toEqual([
-      { kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId: "stale", value: 0 },
+      {
+        kind: "SET_CARD_STATIC_SPARK_BONUS",
+        battleCardId: asBattleCardId("stale"),
+        value: 0,
+      },
     ]);
   });
 });
@@ -296,10 +407,23 @@ describe("planSupportRecompute — idempotence", () => {
   it("emits no edits when every staticSparkBonus already matches its target", () => {
     const state = makeState({
       player: {
-        back: { B1: { battleCardId: "supporter", cardId: WOODLAND_APPARITION } },
+        back: {
+          B1: {
+            battleCardId: asBattleCardId("supporter"),
+            cardId: asCardId(WOODLAND_APPARITION),
+          },
+        },
         front: {
-          F0: { battleCardId: "f0", cardId: UNREGISTERED, staticSparkBonus: 2 },
-          F1: { battleCardId: "f1", cardId: UNREGISTERED, staticSparkBonus: 2 },
+          F0: {
+            battleCardId: asBattleCardId("f0"),
+            cardId: asCardId(UNREGISTERED),
+            staticSparkBonus: 2,
+          },
+          F1: {
+            battleCardId: asBattleCardId("f1"),
+            cardId: asCardId(UNREGISTERED),
+            staticSparkBonus: 2,
+          },
         },
       },
     });
@@ -316,10 +440,23 @@ describe("planSupportRecompute — disabled", () => {
   it("clears every in-play instance to 0 when disabled", () => {
     const state = makeState({
       player: {
-        back: { B1: { battleCardId: "supporter", cardId: WOODLAND_APPARITION } },
+        back: {
+          B1: {
+            battleCardId: asBattleCardId("supporter"),
+            cardId: asCardId(WOODLAND_APPARITION),
+          },
+        },
         front: {
-          F0: { battleCardId: "f0", cardId: UNREGISTERED, staticSparkBonus: 2 },
-          F1: { battleCardId: "f1", cardId: UNREGISTERED, staticSparkBonus: 2 },
+          F0: {
+            battleCardId: asBattleCardId("f0"),
+            cardId: asCardId(UNREGISTERED),
+            staticSparkBonus: 2,
+          },
+          F1: {
+            battleCardId: asBattleCardId("f1"),
+            cardId: asCardId(UNREGISTERED),
+            staticSparkBonus: 2,
+          },
         },
       },
     });
@@ -328,23 +465,35 @@ describe("planSupportRecompute — disabled", () => {
 
     expect(edits).toContainEqual({
       kind: "SET_CARD_STATIC_SPARK_BONUS",
-      battleCardId: "f0",
+      battleCardId: asBattleCardId("f0"),
       value: 0,
     });
     expect(edits).toContainEqual({
       kind: "SET_CARD_STATIC_SPARK_BONUS",
-      battleCardId: "f1",
+      battleCardId: asBattleCardId("f1"),
       value: 0,
     });
     // The supporter already has bonus 0, so it needs no edit.
-    expect(edits.some((e) => "battleCardId" in e && e.battleCardId === "supporter")).toBe(false);
+    expect(
+      edits.some((e) => "battleCardId" in e && e.battleCardId === "supporter"),
+    ).toBe(false);
   });
 
   it("emits no edits when disabled and everything is already 0", () => {
     const state = makeState({
       player: {
-        back: { B1: { battleCardId: "supporter", cardId: WOODLAND_APPARITION } },
-        front: { F0: { battleCardId: "f0", cardId: UNREGISTERED } },
+        back: {
+          B1: {
+            battleCardId: asBattleCardId("supporter"),
+            cardId: asCardId(WOODLAND_APPARITION),
+          },
+        },
+        front: {
+          F0: {
+            battleCardId: asBattleCardId("f0"),
+            cardId: asCardId(UNREGISTERED),
+          },
+        },
       },
     });
 

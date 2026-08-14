@@ -22,6 +22,8 @@ import {
   selectMerchantCount,
   selectMerchantReward,
 } from "./sharedSelection";
+import type { DeckEntryId } from "../../types/identifiers";
+import { asMerchantTargetKey } from "../../types/identifiers";
 
 /** Clamp a value to [0, 1]. */
 function clamp01(v: number): number {
@@ -96,7 +98,7 @@ export function rewardTransfigurations(
 export interface TransfigureCandidatePair {
   transfigurationData: TransfigurationData;
   deckCard: MerchantDeckCard;
-  entryId: string;
+  entryId: DeckEntryId;
   transfiguration: TransfigurationType;
   benefit: number;
   preview: CardData;
@@ -137,7 +139,8 @@ export function transfigureCandidatePairs(
       );
       if (benefit <= 0) continue;
       all.push({
-        transfigurationData: context.rewardSelection.content.transfigurationData,
+        transfigurationData:
+          context.rewardSelection.content.transfigurationData,
         deckCard,
         entryId: deckCard.entryId,
         transfiguration,
@@ -206,7 +209,10 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
   eligible(context: MerchantContext): boolean {
     return transfigureCandidatePairs(context).length > 0;
   },
-  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+  build(
+    context: MerchantContext,
+    _rng: MerchantRng,
+  ): MerchantOfferDraft | null {
     const pairs = transfigureCandidatePairs(context);
     if (pairs.length === 0) return null;
     const selection = selectMerchantReward({
@@ -216,12 +222,14 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
       policyId: augurySelectionPolicy(context, "transfigure"),
     });
     const binding = selection?.bindings.transfigurations[0];
-    const target = binding === undefined
-      ? undefined
-      : pairs.find((pair) =>
-          pair.entryId === binding.entryId &&
-          pair.transfiguration === binding.transfiguration,
-        );
+    const target =
+      binding === undefined
+        ? undefined
+        : pairs.find(
+            (pair) =>
+              pair.entryId === binding.entryId &&
+              pair.transfiguration === binding.transfiguration,
+          );
     if (selection === null || target === undefined) return null;
 
     return {
@@ -229,7 +237,9 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
       family: "improve",
       gameObjects: [transfigurePreviewObject(target)],
       applyPayload: transfigurePayload(target),
-      targetKey: `${target.entryId}:${target.transfiguration}`,
+      targetKey: asMerchantTargetKey(
+        `${target.entryId}:${target.transfiguration}`,
+      ),
       ...selectionMetadata(selection),
     };
   },
@@ -265,12 +275,14 @@ function positiveBenefitTransfigurations(
       card,
       transfiguration,
     );
-    return transfigurationBenefit(
-      context.rewardSelection.content.transfigurationData,
-      card,
-      transfiguration,
-      preview,
-    ) > 0;
+    return (
+      transfigurationBenefit(
+        context.rewardSelection.content.transfigurationData,
+        card,
+        transfiguration,
+        preview,
+      ) > 0
+    );
   });
 }
 
@@ -289,7 +301,10 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
   eligible(context: MerchantContext): boolean {
     return transfigurableStarters(context).length > 0;
   },
-  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+  build(
+    context: MerchantContext,
+    _rng: MerchantRng,
+  ): MerchantOfferDraft | null {
     const starters = transfigurableStarters(context);
     if (starters.length === 0) return null;
     const maximumTargets = auguryArchetype(
@@ -321,9 +336,10 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
     const children: MerchantApplyPayload[] = [];
     const gameObjects: MerchantGameObject[] = [];
     for (const binding of selection.bindings.transfigurations) {
-      const deckCard = binding.entryId === undefined
-        ? undefined
-        : context.deckEntryById.get(binding.entryId);
+      const deckCard =
+        binding.entryId === undefined
+          ? undefined
+          : context.deckEntryById.get(binding.entryId);
       const chosen = binding.transfiguration;
       if (deckCard === undefined) continue;
       const preview = applyTransfigurationToCard(
@@ -332,7 +348,8 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
         chosen,
       );
       const pair: TransfigureCandidatePair = {
-        transfigurationData: context.rewardSelection.content.transfigurationData,
+        transfigurationData:
+          context.rewardSelection.content.transfigurationData,
         deckCard,
         entryId: deckCard.entryId,
         transfiguration: chosen,
@@ -356,13 +373,15 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
       family: "improve",
       gameObjects,
       applyPayload: payload,
-      targetKey: gameObjects
-        .map((obj) =>
-          obj.objectType === "deckCard"
-            ? `${obj.entryId}:${obj.badge?.label ?? ""}`
-            : "",
-        )
-        .join(","),
+      targetKey: asMerchantTargetKey(
+        gameObjects
+          .map((obj) =>
+            obj.objectType === "deckCard"
+              ? `${obj.entryId}:${obj.badge?.label ?? ""}`
+              : "",
+          )
+          .join(","),
+      ),
       ...selectionMetadata(selection),
     };
   },

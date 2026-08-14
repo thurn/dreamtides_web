@@ -17,11 +17,13 @@ import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { GLYPHS, glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
+import { asSiteId } from "../../../types/identifiers";
+import { asDreamscapeId } from "../../../types/identifiers";
 
 /** Representative placed-site models, scattered across the scene (pos in %). */
 const SITE_MODELS: DreamscapeSiteModel[] = [
   {
-    id: "s-shop",
+    id: asSiteId("s-shop"),
     type: "Shop",
     isVisited: false,
     pos: { x: 22, y: 34 },
@@ -34,7 +36,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-store-alt-2"),
   },
   {
-    id: "s-reward",
+    id: asSiteId("s-reward"),
     type: "Reward",
     isVisited: false,
     pos: { x: 40, y: 22 },
@@ -47,7 +49,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-treasure-chest"),
   },
   {
-    id: "s-rest",
+    id: asSiteId("s-rest"),
     type: "Reward",
     isVisited: false,
     pos: { x: 78, y: 52 },
@@ -62,7 +64,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     icon: GLYPHS.exhaust,
   },
   {
-    id: "s-battle",
+    id: asSiteId("s-battle"),
     type: "Battle",
     isVisited: false,
     pos: { x: 34, y: 66 },
@@ -75,7 +77,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-sword-alt"),
   },
   {
-    id: "s-boss",
+    id: asSiteId("s-boss"),
     type: "Battle",
     isVisited: false,
     pos: { x: 58, y: 74 },
@@ -96,7 +98,7 @@ export function SiteNodeMockup() {
       ref={stageRef}
       style={{
         ...sceneRoot,
-        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.35) 0%, rgba(8,5,17,0.55) 60%, rgba(8,5,17,0.9) 100%), url(${dreamscapeSceneUrl("wilderveil")})`,
+        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.35) 0%, rgba(8,5,17,0.55) 60%, rgba(8,5,17,0.9) 100%), url(${dreamscapeSceneUrl(asDreamscapeId("wilderveil"))})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         touchAction: "none",

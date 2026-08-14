@@ -93,6 +93,13 @@ import {
   type MobileBattleResultView,
 } from "./BattleResultSurface";
 import battleBackgroundUrl from "../assets/battle-background.png";
+import type { BattleId } from "../../types/identifiers";
+import type { PresentationId } from "../../types/identifiers";
+import type { BattleCardId } from "../../types/identifiers";
+import type { BattleSlotViewId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import { asBattleCardId } from "../../types/identifiers";
+import { asBattleSlotViewId } from "../../types/identifiers";
 
 export { BATTLEFIELD_CARD_EXHAUSTED_FILTER } from "../components/battle/BattlefieldCard";
 const CARD_PICKER_HIGHLIGHT_SELECTION: GameCardSelection = "highlighted";
@@ -100,7 +107,7 @@ const CARD_PICKER_SELECTION: GameCardSelection = "selected";
 
 /** One physical face-up card instance rendered by the battle board. */
 export interface MobileBattleCardView {
-  readonly id: string;
+  readonly id: BattleCardId;
   readonly model: GameCardModel;
   readonly exhausted: boolean;
   readonly figment: boolean;
@@ -114,7 +121,7 @@ export interface MobileBattleCardView {
 
 /** A stable battlefield position which may currently be empty. */
 export interface MobileBattleSlotView {
-  readonly id: string;
+  readonly id: BattleSlotViewId;
   readonly card: MobileBattleCardView | null;
 }
 
@@ -132,7 +139,7 @@ export interface MobileBattleStatusView {
 export interface MobileBattleSideView {
   readonly owner: MobileBattleOwner;
   readonly position: BattleBoardPosition;
-  readonly deckCardIds: readonly string[];
+  readonly deckCardIds: readonly BattleCardId[];
   readonly banishedCardCount: number;
   readonly voidCards: readonly MobileBattleCardView[];
   readonly backRank: readonly MobileBattleSlotView[];
@@ -146,7 +153,7 @@ export type BattleBoardPosition = "near" | "far";
 export interface MobileBattleHandView {
   readonly owner: MobileBattleOwner;
   readonly position: BattleBoardPosition;
-  readonly cardIds: readonly string[];
+  readonly cardIds: readonly BattleCardId[];
   /** Face-up models available to the current local viewer. */
   readonly cards: readonly MobileBattleCardView[];
 }
@@ -171,7 +178,7 @@ export interface MobileBattleDreamwellView {
 }
 
 export interface MobileBattleView {
-  readonly battleId: string;
+  readonly battleId: BattleId;
   readonly perspective: BattlePerspectiveSide;
   readonly near: MobileBattleSideView;
   readonly far: MobileBattleSideView;
@@ -185,7 +192,7 @@ export interface MobileBattleView {
   readonly activeSide: MobileBattleOwner;
   readonly isOpeningTurn: boolean;
   readonly phase: MobileBattlePhase;
-  readonly enemyHandCardIds: readonly string[];
+  readonly enemyHandCardIds: readonly BattleCardId[];
   readonly enemyHand: readonly MobileBattleCardView[];
   readonly enemy: MobileBattleSideView;
   readonly player: MobileBattleSideView;
@@ -206,7 +213,7 @@ export interface MobileBattleCardPickerView {
   readonly side: MobileBattleOwner;
   readonly candidateOwner?: MobileBattleOwner | null;
   readonly candidates: readonly MobileBattleCardPickerCandidateView[];
-  readonly candidateIds: readonly string[];
+  readonly candidateIds: readonly BattleCardId[];
   readonly count: number;
   readonly optional: boolean;
   readonly canResolve: boolean;
@@ -215,8 +222,8 @@ export interface MobileBattleCardPickerView {
 
 /** One UUID-backed physical candidate in an authoritative card prompt. */
 export interface MobileBattleCardPickerCandidateView {
-  readonly instanceId: string;
-  readonly cardUuid: string;
+  readonly instanceId: BattleCardId;
+  readonly cardUuid: CardId;
   readonly owner: MobileBattleOwner;
   readonly zone:
     "hand" | "deck" | "void" | "banished" | "backRank" | "frontRank";
@@ -248,7 +255,7 @@ export interface MobileBattleScreenProps {
   readonly guidedSlotHighlight?: {
     readonly owner: MobileBattleOwner;
     readonly rank: MobileBattleRank;
-    readonly slotId: string;
+    readonly slotId: BattleSlotViewId;
     readonly label: LocalizedString;
   };
   /** Keep dotted slot shells beneath occupied cards during an occupant transition. */
@@ -276,8 +283,8 @@ export interface MobileBattleScreenProps {
 /** A presentation that must remain spatially attached to one battlefield card. */
 export interface MobileBattleCardOverlayView {
   readonly kind: "points-scored";
-  readonly presentationId: string;
-  readonly battleCardId: string;
+  readonly presentationId: PresentationId;
+  readonly battleCardId: BattleCardId;
   readonly points: number;
 }
 
@@ -293,7 +300,7 @@ function BattleCardLayoutGroup({
   ownership,
   children,
 }: {
-  readonly battleId: string;
+  readonly battleId: BattleId;
   readonly ownership: "owned" | "inherited";
   readonly children: ReactNode;
 }) {
@@ -411,13 +418,13 @@ export type MobileBattleDebugInvocation =
 export interface MobileBattleSlotTarget {
   readonly owner: MobileBattleOwner;
   readonly rank: MobileBattleRank;
-  readonly slotId: string;
+  readonly slotId: BattleSlotViewId;
 }
 
 /** One occupied slot whose relationship to the dragged figment is rules-owned. */
 export interface MobileBattleFigmentMergeTarget {
-  readonly sourceBattleCardId: string;
-  readonly destinationBattleCardId: string;
+  readonly sourceBattleCardId: BattleCardId;
+  readonly destinationBattleCardId: BattleCardId;
   readonly target: MobileBattleSlotTarget;
   readonly figmentLabel: LocalizedString;
   readonly status: "eligible" | "blocked-exhaustion";
@@ -474,6 +481,9 @@ export interface MobileBattleZoneTarget {
   readonly zone: MobileBattleDropZone;
 }
 
+/** Named non-instance sentinel used while dragging a catalog card from the pool viewer. */
+export type MobileBattlePendingCardId = BattleCardId | "pool-viewer-card";
+
 export interface MobileBattleBrowseZoneTarget {
   readonly owner: MobileBattleOwner;
   readonly zone: MobileBattleBrowseZone;
@@ -483,7 +493,7 @@ export interface MobileBattleBrowseZoneTarget {
 export interface MobileBattleInteractions {
   readonly canInteract: boolean;
   readonly nearSide?: MobileBattleOwner;
-  readonly pendingCardId: string | null;
+  readonly pendingCardId: MobileBattlePendingCardId | null;
   readonly pendingCardSource?: MobileBattleCardSource | null;
   readonly pendingCardOwner?: MobileBattleOwner | null;
   /** Battlefield ranks the current gesture may use; every rendered cell in an allowed rank participates. */
@@ -497,31 +507,31 @@ export interface MobileBattleInteractions {
   /** Occupied cells that merge with the pending figment instead of swapping. */
   readonly figmentMergeTargets?: readonly MobileBattleFigmentMergeTarget[];
   /** A tutorial play awaiting a legal battlefield target. */
-  readonly targetSelectionCardId?: string | null;
+  readonly targetSelectionCardId?: BattleCardId | null;
   readonly targetSelectionPrompt?: "legal-target" | null;
-  readonly targetableCardIds?: readonly string[];
-  readonly onHandCardActivate: (battleCardId: string) => void;
-  readonly onBattlefieldCardActivate?: (battleCardId: string) => void;
+  readonly targetableCardIds?: readonly BattleCardId[];
+  readonly onHandCardActivate: (battleCardId: BattleCardId) => void;
+  readonly onBattlefieldCardActivate?: (battleCardId: BattleCardId) => void;
   readonly onTargetSelectionCancel?: () => void;
   readonly onHandCardDrop?: (target?: MobileBattleSlotTarget) => void;
   readonly onCardDebugActivate?: (
-    battleCardId: string,
+    battleCardId: BattleCardId,
     source: MobileBattleCardSource,
     invocation: MobileBattleDebugInvocation,
   ) => void;
   readonly onRevealedHandCardDebugActivate?: (
-    battleCardId: string,
+    battleCardId: BattleCardId,
     invocation: MobileBattleDebugInvocation,
   ) => void;
   readonly onCardDragStart: (
-    battleCardId: string,
+    battleCardId: BattleCardId,
     source: MobileBattleCardSource,
   ) => void;
   readonly onCardDragEnd: () => void;
   readonly onSlotDrop: (target: MobileBattleSlotTarget) => void;
   /** Commits a confirmed figment merge by stable battle-instance identity. */
   readonly onFigmentMerge?: (
-    sourceBattleCardId: string,
+    sourceBattleCardId: BattleCardId,
     target: MobileBattleSlotTarget,
   ) => void;
   readonly onBattlefieldDropRejected?: (
@@ -536,8 +546,10 @@ export interface MobileBattleInteractions {
   readonly onNextPhase: () => void;
   readonly onApproveAiProposal?: () => void;
   readonly onRejectAiProposal?: () => void;
-  readonly onCardPickerSelectionChange?: (chosenIds: readonly string[]) => void;
-  readonly onCardPickerSubmit?: (chosenIds: readonly string[]) => void;
+  readonly onCardPickerSelectionChange?: (
+    chosenIds: readonly BattleCardId[],
+  ) => void;
+  readonly onCardPickerSubmit?: (chosenIds: readonly BattleCardId[]) => void;
   readonly onCardPickerSkip?: () => void;
   readonly onChoicePromptChoose?: (optionIndex: number) => void;
   readonly onPerspectiveToggle?: () => void;
@@ -548,10 +560,10 @@ export interface MobileBattleInteractions {
 }
 
 function toggleCardPickerSelection(
-  selectedIds: readonly string[],
-  cardId: string,
+  selectedIds: readonly BattleCardId[],
+  cardId: BattleCardId,
   count: number,
-): string[] {
+): BattleCardId[] {
   if (selectedIds.includes(cardId)) {
     return selectedIds.filter((selectedId) => selectedId !== cardId);
   }
@@ -563,7 +575,7 @@ function toggleCardPickerSelection(
 
 function pickerCandidate(
   cardPicker: MobileBattleCardPickerView | null,
-  instanceId: string,
+  instanceId: BattleCardId,
 ): MobileBattleCardPickerCandidateView | null {
   return (
     cardPicker?.candidates.find(
@@ -926,13 +938,13 @@ function FarHand({
   onPickerCardToggle,
 }: {
   readonly owner: MobileBattleOwner;
-  readonly cardIds: readonly string[];
+  readonly cardIds: readonly BattleCardId[];
   readonly cards: readonly MobileBattleCardView[];
   readonly revealed: boolean;
   readonly isDesktop: boolean;
   readonly cardPicker: MobileBattleCardPickerView | null;
-  readonly selectedPickerCardIds: readonly string[];
-  readonly onPickerCardToggle: (cardId: string) => void;
+  readonly selectedPickerCardIds: readonly BattleCardId[];
+  readonly onPickerCardToggle: (cardId: BattleCardId) => void;
 }) {
   const farHandCandidates =
     cardPicker?.candidates.filter(
@@ -966,7 +978,7 @@ function FarHand({
       }}
     >
       {visibleCardIds.map((cardId, index) => {
-        const candidate = pickerCandidate(cardPicker, cardId);
+        const candidate = pickerCandidate(cardPicker, asBattleCardId(cardId));
         const card =
           cards.find((visibleCard) => visibleCard.id === cardId) ??
           candidate?.card;
@@ -987,7 +999,9 @@ function FarHand({
             data-battle-card-zone="far-hand"
             data-battle-card-face={showFaceUp ? "up" : "down"}
             data-battle-card-picker-candidate={
-              pickerCandidateIds.has(cardId) ? "true" : undefined
+              pickerCandidateIds.has(asBattleCardId(cardId))
+                ? "true"
+                : undefined
             }
             data-battle-card-picker-selected={
               selectedPickerCardIds.includes(cardId) ? "true" : undefined
@@ -1026,7 +1040,7 @@ function FarHand({
                       }
                 }
                 interaction={
-                  pickerCandidateIds.has(cardId)
+                  pickerCandidateIds.has(asBattleCardId(cardId))
                     ? {
                         draggable: false,
                         debugGesture: isDesktop ? "context-menu" : "double-tap",
@@ -1057,7 +1071,9 @@ function FarHand({
   );
 }
 
-function toDeckPile(cardIds: readonly string[]): readonly BattlePileCard[] {
+function toDeckPile(
+  cardIds: readonly BattleCardId[],
+): readonly BattlePileCard[] {
   return cardIds.map((id) => ({ face: "down", id }));
 }
 
@@ -1451,7 +1467,7 @@ function BattleCardSurface({
     >
       <BattlefieldCard
         model={{
-          battleCardId: card.id,
+          battleCardId: asBattleCardId(card.id),
           card: card.model,
           exhausted: card.exhausted,
           storedMemory: card.storedTime,
@@ -1667,7 +1683,7 @@ function visibleRankSlots(
   return [
     ...slots,
     ...Array.from({ length: slotCount - slots.length }, (_unused, offset) => ({
-      id: `${prefix}${String(slots.length + offset)}`,
+      id: asBattleSlotViewId(`${prefix}${String(slots.length + offset)}`),
       card: null,
     })),
   ];
@@ -1720,7 +1736,7 @@ function visibleMobileRankSlots(
     { length: maximumSlotCount },
     (_unused, index) =>
       slotsByIndex.get(index) ?? {
-        id: `${prefix}${String(index)}`,
+        id: asBattleSlotViewId(`${prefix}${String(index)}`),
         card: null,
       },
   );
@@ -1757,12 +1773,12 @@ function slotTargetFromElement(
   ) {
     return null;
   }
-  return { owner, rank, slotId };
+  return { owner, rank, slotId: asBattleSlotViewId(slotId) };
 }
 
 function findBattleCardView(
   view: MobileBattleView,
-  battleCardId: string,
+  battleCardId: BattleCardId,
 ): MobileBattleCardView | null {
   const cards = [
     ...view.player.backRank.flatMap((slot) =>
@@ -1862,14 +1878,14 @@ function Rank({
   readonly cardSize: string;
   readonly centerOffset: string;
   readonly order: number;
-  readonly draggingCardId: string | null;
-  readonly snapLayoutCardId: string | null;
+  readonly draggingCardId: BattleCardId | null;
+  readonly snapLayoutCardId: BattleCardId | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
-  readonly selectedPickerCardIds: readonly string[];
-  readonly onPickerCardToggle: (cardId: string) => void;
+  readonly selectedPickerCardIds: readonly BattleCardId[];
+  readonly onPickerCardToggle: (cardId: BattleCardId) => void;
   readonly onBattlefieldDragChange: (
     dragging: boolean,
-    cardId?: string,
+    cardId?: BattleCardId,
   ) => void;
   readonly hoveredMergeTarget: MobileBattleFigmentMergeTarget | null;
   readonly onMergeTargetHover: (
@@ -1971,7 +1987,7 @@ function Rank({
           const candidate =
             slot.card === null
               ? null
-              : pickerCandidate(cardPicker, slot.card.id);
+              : pickerCandidate(cardPicker, asBattleCardId(slot.card.id));
           const isPickerSelected =
             slot.card !== null && selectedPickerCardIds.includes(slot.card.id);
           const isPickerHighlighted = candidate?.highlighted === true;
@@ -2120,7 +2136,9 @@ function Rank({
                             onDragStart: () => {
                               onBattlefieldDragChange(true, slot.card?.id);
                               interactions.onCardDragStart(
-                                slot.card?.id ?? "",
+                                asBattleCardId(
+                                  slot.card?.id ?? asBattleCardId(""),
+                                ),
                                 "battlefield",
                               );
                             },
@@ -2130,14 +2148,18 @@ function Rank({
                                 ? undefined
                                 : () =>
                                     interactions.onBattlefieldCardActivate?.(
-                                      slot.card?.id ?? "",
+                                      asBattleCardId(
+                                        slot.card?.id ?? asBattleCardId(""),
+                                      ),
                                     ),
                             ...(interactions.onCardDebugActivate === undefined
                               ? {}
                               : {
                                   onDebugActivate: (invocation) =>
                                     interactions.onCardDebugActivate?.(
-                                      slot.card?.id ?? "",
+                                      asBattleCardId(
+                                        slot.card?.id ?? asBattleCardId(""),
+                                      ),
                                       "battlefield",
                                       invocation,
                                     ),
@@ -2210,14 +2232,14 @@ function PlayArea({
   readonly centerAsymmetricDesktopRanks: boolean;
   readonly cardSize: string;
   readonly centerOffset: string;
-  readonly draggingCardId: string | null;
-  readonly snapLayoutCardId: string | null;
+  readonly draggingCardId: BattleCardId | null;
+  readonly snapLayoutCardId: BattleCardId | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
-  readonly selectedPickerCardIds: readonly string[];
-  readonly onPickerCardToggle: (cardId: string) => void;
+  readonly selectedPickerCardIds: readonly BattleCardId[];
+  readonly onPickerCardToggle: (cardId: BattleCardId) => void;
   readonly onBattlefieldDragChange: (
     dragging: boolean,
-    cardId?: string,
+    cardId?: BattleCardId,
   ) => void;
   readonly hoveredMergeTarget: MobileBattleFigmentMergeTarget | null;
   readonly onMergeTargetHover: (
@@ -2313,11 +2335,11 @@ function NearHand({
   readonly cards: readonly MobileBattleCardView[];
   readonly totalCount: number;
   readonly isDesktop: boolean;
-  readonly snapLayoutCardId: string | null;
+  readonly snapLayoutCardId: BattleCardId | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
-  readonly selectedPickerCardIds: readonly string[];
-  readonly onPickerCardToggle: (cardId: string) => void;
-  readonly onCardDragChange: (dragging: boolean, cardId?: string) => void;
+  readonly selectedPickerCardIds: readonly BattleCardId[];
+  readonly onPickerCardToggle: (cardId: BattleCardId) => void;
+  readonly onCardDragChange: (dragging: boolean, cardId?: BattleCardId) => void;
   readonly interactions?: MobileBattleInteractions;
 }) {
   const pickerCandidateIds = new Set(cardPicker?.candidateIds ?? []);
@@ -2374,7 +2396,7 @@ function NearHand({
       }}
     >
       {cards.map((card, index) => {
-        const candidate = pickerCandidate(cardPicker, card.id);
+        const candidate = pickerCandidate(cardPicker, asBattleCardId(card.id));
         const isPickerCandidate = pickerCandidateIds.has(card.id);
         const isPickerSelected = selectedPickerCardIds.includes(card.id);
         const isPickerHighlighted = candidate?.highlighted === true;
@@ -2417,20 +2439,25 @@ function NearHand({
                       draggable: interactions.canInteract,
                       debugGesture: isDesktop ? "context-menu" : "double-tap",
                       onActivate: () =>
-                        interactions.onHandCardActivate(card.id),
+                        interactions.onHandCardActivate(
+                          asBattleCardId(card.id),
+                        ),
                       ...(interactions.onCardDebugActivate === undefined
                         ? {}
                         : {
                             onDebugActivate: (invocation) =>
                               interactions.onCardDebugActivate?.(
-                                card.id,
+                                asBattleCardId(card.id),
                                 "near-hand",
                                 invocation,
                               ),
                           }),
                       onDragStart: () => {
                         onCardDragChange(true, card.id);
-                        interactions.onCardDragStart(card.id, "near-hand");
+                        interactions.onCardDragStart(
+                          asBattleCardId(card.id),
+                          "near-hand",
+                        );
                       },
                       onDragEnd: () => {
                         onCardDragChange(false);
@@ -2630,7 +2657,7 @@ function SharedHandCardReveal({
                 debugGesture: isDesktop ? "context-menu" : "double-tap",
                 onDebugActivate: (invocation) =>
                   interactions.onRevealedHandCardDebugActivate?.(
-                    card.id,
+                    asBattleCardId(card.id),
                     invocation,
                   ),
               }
@@ -2756,7 +2783,11 @@ function dropMobileCardAtPoint(
     const rank = target.dataset.battleMobileDropRank;
     const slotId = target.dataset.battleMobileDropSlotId;
     if ((rank !== "back" && rank !== "front") || slotId === undefined) return;
-    interactions.onSlotDrop({ owner, rank, slotId });
+    interactions.onSlotDrop({
+      owner,
+      rank,
+      slotId: asBattleSlotViewId(slotId),
+    });
     return;
   }
   const zone = target.dataset.battleMobileDropZone;
@@ -2784,7 +2815,11 @@ function resolveBattlefieldSlot(
     if ((rank !== "back" && rank !== "front") || slotId === undefined) {
       return;
     }
-    const target = { owner, rank, slotId } as const;
+    const target = {
+      owner,
+      rank,
+      slotId: asBattleSlotViewId(slotId),
+    } as const;
     const bounds = slot.getBoundingClientRect();
     const centerX = bounds.left + bounds.width / 2;
     const centerY = bounds.top + bounds.height / 2;
@@ -2898,7 +2933,7 @@ function closestOpenBackRankSlot(
 
   return closest === undefined
     ? undefined
-    : { owner, rank: "back", slotId: closest.slotId };
+    : { owner, rank: "back", slotId: asBattleSlotViewId(closest.slotId) };
 }
 
 function pickerZoneCaption(
@@ -2987,9 +3022,9 @@ function CardPickerGallery({
   perspective,
 }: {
   readonly cardPicker: MobileBattleCardPickerView;
-  readonly selectedPickerCardIds: readonly string[];
+  readonly selectedPickerCardIds: readonly BattleCardId[];
   readonly isDesktop: boolean;
-  readonly onPickerCardToggle: (cardId: string) => void;
+  readonly onPickerCardToggle: (cardId: BattleCardId) => void;
   readonly interactions?: MobileBattleInteractions;
   readonly perspective: BattlePerspectiveSide;
 }) {
@@ -3068,7 +3103,7 @@ function CardPickerGallery({
           minHeight: 0,
         }}
       >
-        <CardPickerPanel
+        <CardPickerPanel<BattleCardId>
           title={cardPicker.label}
           subtitle={promptSubtitle}
           cards={cardPicker.candidates.map((candidate) => {
@@ -3124,7 +3159,7 @@ function ControlRow({
   readonly aiApproval: MobileBattleAiApprovalView | null;
   readonly cardPicker: MobileBattleCardPickerView | null;
   readonly choicePrompt: MobileBattleChoicePromptView | null;
-  readonly selectedPickerCardIds: readonly string[];
+  readonly selectedPickerCardIds: readonly BattleCardId[];
   readonly isDesktop: boolean;
   readonly interactions?: MobileBattleInteractions;
   readonly layoutBackSlotCount: number;
@@ -4269,7 +4304,9 @@ export function MobileBattleScreen({
     [onInspectorOpenChange],
   );
   const [isCardDragActive, setIsCardDragActive] = useState(false);
-  const [snapLayoutCardId, setSnapLayoutCardId] = useState<string | null>(null);
+  const [snapLayoutCardId, setSnapLayoutCardId] = useState<BattleCardId | null>(
+    null,
+  );
   const [hoveredMergeTarget, setHoveredMergeTarget] =
     useState<MobileBattleFigmentMergeTarget | null>(null);
   const [mergeConfirmation, setMergeConfirmation] =
@@ -4280,11 +4317,11 @@ export function MobileBattleScreen({
   const mergeAnimationSequence = useRef(1);
   const [cardPickerSelection, setCardPickerSelection] = useState<{
     readonly pickerKey: string | null;
-    readonly ids: readonly string[];
+    readonly ids: readonly BattleCardId[];
   }>({ pickerKey: null, ids: [] });
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");
   const [completedTurnAnnouncement, setCompletedTurnAnnouncement] = useState<{
-    readonly battleId: string;
+    readonly battleId: BattleId;
     readonly turn: string;
     readonly side: MobileBattleOwner;
   }>(() => ({
@@ -4530,7 +4567,7 @@ export function MobileBattleScreen({
   }, [setInspectorOpen, view.perspective]);
 
   const handlePickerCardToggle = useCallback(
-    (cardId: string): void => {
+    (cardId: BattleCardId): void => {
       if (view.cardPicker === null) return;
       const nextIds = toggleCardPickerSelection(
         selectedPickerCardIds,
@@ -4562,7 +4599,7 @@ export function MobileBattleScreen({
   }, [isCardDragActive, playbackSpeed, snapLayoutCardId, view]);
 
   const handleCardDragChange = useCallback(
-    (dragging: boolean, cardId?: string): void => {
+    (dragging: boolean, cardId?: BattleCardId): void => {
       setIsCardDragActive(dragging);
       if (dragging && cardId !== undefined) {
         snapLayoutOriginView.current = view;

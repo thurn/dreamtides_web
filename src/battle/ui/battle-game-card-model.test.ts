@@ -6,13 +6,15 @@ import {
 import { createDefaultBattleCardStatus } from "../state/create-initial-state";
 import type { BattleCardInstance } from "../types";
 import { battleGameCardModel } from "./battle-game-card-model";
+import { asBattleCardId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
 
 function shadowFigment(): BattleCardInstance {
   return {
-    battleCardId: "figment-instance-1",
+    battleCardId: asBattleCardId("figment-instance-1"),
     definition: {
       sourceDeckEntryId: null,
-      cardId: "",
+      cardId: asCardId(""),
       cardNumber: 0,
       name: "Shadow",
       battleCardKind: "character",

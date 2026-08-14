@@ -8,6 +8,9 @@ import type {
   BattleSide,
 } from "./battle/types";
 import { BATTLE_MARKER_SET_EVENT } from "./battle/state/markers-utils";
+import type { BattleId } from "./types/identifiers";
+import type { CardId } from "./types/card-identity";
+import type { BattleCardId, NoteId } from "./types/identifiers";
 
 /** Base structure for all log events. */
 export interface LogEntry {
@@ -178,18 +181,21 @@ export function logEventOnce(
  * `null` when the action is not card-scoped (e.g. end-turn, force-result).
  */
 export function createBattleLogBaseFields(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
+  state: Pick<
+    BattleMutableState,
+    "battleId" | "turnNumber" | "phase" | "activeSide"
+  >,
   context: {
     sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
+    selectedCardId: BattleCardId | null;
   },
 ): {
-  battleId: string;
+  battleId: BattleId;
   turnNumber: number;
   phase: BattleMutableState["phase"];
   activeSide: BattleMutableState["activeSide"];
   sourceSurface: BattleCommandSourceSurface;
-  selectedCardId: string | null;
+  selectedCardId: BattleCardId | null;
 } {
   return {
     battleId: state.battleId,
@@ -202,10 +208,13 @@ export function createBattleLogBaseFields(
 }
 
 export function createBattleProtoNoteAddedLogEvent(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
+  state: Pick<
+    BattleMutableState,
+    "battleId" | "turnNumber" | "phase" | "activeSide"
+  >,
   payload: {
-    battleCardId: string;
-    noteId: string;
+    battleCardId: BattleCardId;
+    noteId: NoteId;
     text: string;
     expiry: BattleCardNoteExpiry;
     createdAtTurnNumber: number;
@@ -213,7 +222,7 @@ export function createBattleProtoNoteAddedLogEvent(
   },
   context: {
     sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
+    selectedCardId: BattleCardId | null;
   },
 ): BattleDeferredLogEvent {
   return {
@@ -224,9 +233,12 @@ export function createBattleProtoNoteAddedLogEvent(
       createdAtSide: payload.createdAtSide,
       createdAtTurnNumber: payload.createdAtTurnNumber,
       expiryKind: payload.expiry.kind,
-      expirySide: payload.expiry.kind === "atStartOfTurn" ? payload.expiry.side : null,
+      expirySide:
+        payload.expiry.kind === "atStartOfTurn" ? payload.expiry.side : null,
       expiryTurnNumber:
-        payload.expiry.kind === "atStartOfTurn" ? payload.expiry.turnNumber : null,
+        payload.expiry.kind === "atStartOfTurn"
+          ? payload.expiry.turnNumber
+          : null,
       noteId: payload.noteId,
       text: payload.text,
     },
@@ -234,14 +246,17 @@ export function createBattleProtoNoteAddedLogEvent(
 }
 
 export function createBattleProtoNoteDismissedLogEvent(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
+  state: Pick<
+    BattleMutableState,
+    "battleId" | "turnNumber" | "phase" | "activeSide"
+  >,
   payload: {
-    battleCardId: string;
-    noteId: string;
+    battleCardId: BattleCardId;
+    noteId: NoteId;
   },
   context: {
     sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
+    selectedCardId: BattleCardId | null;
   },
 ): BattleDeferredLogEvent {
   return {
@@ -255,14 +270,17 @@ export function createBattleProtoNoteDismissedLogEvent(
 }
 
 export function createBattleProtoNoteClearedLogEvent(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
+  state: Pick<
+    BattleMutableState,
+    "battleId" | "turnNumber" | "phase" | "activeSide"
+  >,
   payload: {
-    battleCardId: string;
+    battleCardId: BattleCardId;
     noteCount: number;
   },
   context: {
     sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
+    selectedCardId: BattleCardId | null;
   },
 ): BattleDeferredLogEvent {
   return {
@@ -276,11 +294,14 @@ export function createBattleProtoNoteClearedLogEvent(
 }
 
 export function createBattleProtoCardCreatedLogEvent(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
+  state: Pick<
+    BattleMutableState,
+    "battleId" | "turnNumber" | "phase" | "activeSide"
+  >,
   payload: {
-    battleCardId: string;
+    battleCardId: BattleCardId;
     provenanceKind: "generated-copy" | "generated-figment" | "generated-pool";
-    sourceBattleCardId: string | null;
+    sourceBattleCardId: BattleCardId | null;
     name: string;
     subtype: string;
     printedSpark: number;
@@ -290,7 +311,7 @@ export function createBattleProtoCardCreatedLogEvent(
   },
   context: {
     sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
+    selectedCardId: BattleCardId | null;
   },
 ): BattleDeferredLogEvent {
   return {
@@ -299,7 +320,9 @@ export function createBattleProtoCardCreatedLogEvent(
       ...createBattleLogBaseFields(state, context),
       battleCardId: payload.battleCardId,
       destinationZone: payload.destinationZone,
-      ...(payload.figmentCount === undefined ? {} : { figmentCount: payload.figmentCount }),
+      ...(payload.figmentCount === undefined
+        ? {}
+        : { figmentCount: payload.figmentCount }),
       name: payload.name,
       ownerSide: payload.ownerSide,
       printedSpark: payload.printedSpark,
@@ -316,16 +339,16 @@ export function createBattleProtoFigmentsMergedLogEvent(
     "battleId" | "turnNumber" | "phase" | "activeSide"
   >,
   payload: {
-    sourceBattleCardId: string;
-    destinationBattleCardId: string;
-    figmentId: string;
+    sourceBattleCardId: BattleCardId;
+    destinationBattleCardId: BattleCardId;
+    figmentId: CardId;
     addedSpark: number;
     destinationSparkBefore: number;
     destinationSparkAfter: number;
   },
   context: {
     sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
+    selectedCardId: BattleCardId | null;
   },
 ): BattleDeferredLogEvent {
   return {
@@ -343,15 +366,18 @@ export function createBattleProtoFigmentsMergedLogEvent(
 }
 
 export function createBattleProtoDeckReorderedLogEvent(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
+  state: Pick<
+    BattleMutableState,
+    "battleId" | "turnNumber" | "phase" | "activeSide"
+  >,
   payload: {
     side: BattleSide;
-    orderBefore: readonly string[];
-    orderAfter: readonly string[];
+    orderBefore: readonly BattleCardId[];
+    orderAfter: readonly BattleCardId[];
   },
   context: {
     sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
+    selectedCardId: BattleCardId | null;
   },
 ): BattleDeferredLogEvent {
   return {
@@ -366,9 +392,12 @@ export function createBattleProtoDeckReorderedLogEvent(
 }
 
 export function createBattleProtoMarkerSetLogEvent(
-  state: Pick<BattleMutableState, "battleId" | "turnNumber" | "phase" | "activeSide">,
+  state: Pick<
+    BattleMutableState,
+    "battleId" | "turnNumber" | "phase" | "activeSide"
+  >,
   payload: {
-    battleCardId: string;
+    battleCardId: BattleCardId;
     markers: BattleCardMarkers;
     diff: {
       prevented: "set" | "cleared" | "unchanged";
@@ -377,7 +406,7 @@ export function createBattleProtoMarkerSetLogEvent(
   },
   context: {
     sourceSurface: BattleCommandSourceSurface;
-    selectedCardId: string | null;
+    selectedCardId: BattleCardId | null;
   },
 ): BattleDeferredLogEvent {
   return {
@@ -411,9 +440,9 @@ export function logBattleCommandApplied(
 
 function selectSelectedCardIdFromMetadata(
   metadata: BattleHistoryEntryMetadata,
-): string | null {
+): BattleCardId | null {
   const cardTarget = metadata.targets.find((target) => target.kind === "card");
-  return cardTarget === undefined ? null : cardTarget.ref;
+  return cardTarget === undefined ? null : (cardTarget.ref as BattleCardId);
 }
 
 export function logBattleHistoryEvent(

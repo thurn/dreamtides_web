@@ -20,32 +20,21 @@ Choose a named site fit and column count; use Card Gallery Panel when the collec
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `cards` | `readonly CardChoiceGridCardView[]` | yes | — | Resolved cards rendered in order. |
+| `cards` | `readonly CardChoiceGridCardView<EntryId>[]` | yes | — | Resolved cards rendered in order. |
 | `columns` | `CardChoiceGridColumns` = `"one" \| "two" \| "three" \| "four" \| "five"` | yes | — | Named column count. |
 | `layout` | `CardChoiceGridLayout` | yes | — | Site preset or gallery-computed layout. |
-| `endAction` | `CardChoiceGridActionView` | no | — | Optional card-sized action appended after the cards. |
-| `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
-| `onCardDragStart` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when an enabled draggable card begins a native drag. |
-| `onCardDragEnd` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when an enabled draggable card's native drag ends. |
-| `onCardContextMenu` | `((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when an enabled card requests contextual actions. |
-| `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the trailing action's stable id. |
+| `endAction` | `CardChoiceGridActionView<EntryId>` | no | — | Optional card-sized action appended after the cards. |
+| `onCardPress` | `((entryId: EntryId) => void)` | no | — | Fires when an enabled card tile is activated. |
+| `onCardDragStart` | `((entryId: EntryId, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when an enabled draggable card begins a native drag. |
+| `onCardDragEnd` | `((entryId: EntryId, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when an enabled draggable card's native drag ends. |
+| `onCardContextMenu` | `((entryId: EntryId, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when an enabled card requests contextual actions. |
+| `onEndActionPress` | `((entryId: EntryId) => void)` | no | — | Fires with the trailing action's stable id. |
 
 ### `layout`: the `CardChoiceGridLayout` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `kind` | `"site" \| "gallery"` | no |  |
-
-### `endAction`: the `CardChoiceGridActionView` model
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `entryId` | `string` | no | Stable action id reported through the action callback. |
-| `glyph` | `Glyph` | no | Large glyph that carries the action's visual identity. |
-| `label` | `LocalizedString` | no | Accessible action label. |
-| `caption` | `CardChoiceGridCaption` | no | Small uncontained line rendered below the glyph. |
-| `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
-| `testId` | `string` | yes | Optional stable test id on the action button. |
 
 ## Usage
 

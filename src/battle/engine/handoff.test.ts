@@ -2,6 +2,9 @@ import { describe, expect, it } from "vitest";
 import { planHandoff } from "./handoff";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
 import type { BattleMutableState } from "../types";
+import type { BattleCardId } from "../../types/identifiers";
+import { asBattleId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
 
 function makeEmptySide(): BattleMutableState["sides"]["player"] {
   return {
@@ -28,13 +31,15 @@ interface MakeHandoffStateOptions {
   enemyScore?: number;
 }
 
-function makeHandoffState(opts: MakeHandoffStateOptions = {}): BattleMutableState {
+function makeHandoffState(
+  opts: MakeHandoffStateOptions = {},
+): BattleMutableState {
   const playerSide = makeEmptySide();
   const enemySide = makeEmptySide();
   playerSide.score = opts.playerScore ?? 0;
   enemySide.score = opts.enemyScore ?? 0;
   return {
-    battleId: "battle-handoff-test",
+    battleId: asBattleId("battle-handoff-test"),
     activeSide: opts.activeSide ?? "player",
     turnNumber: opts.turnNumber ?? 1,
     phase: "day",
@@ -136,7 +141,10 @@ describe("planHandoff", () => {
     it("flowEdit phase is always 'dreamwell'", () => {
       const state = makeHandoffState({ activeSide: "player", turnNumber: 2 });
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
-      expect(plan.flowEdit).toMatchObject({ kind: "SET_BATTLE_FLOW", phase: "dreamwell" });
+      expect(plan.flowEdit).toMatchObject({
+        kind: "SET_BATTLE_FLOW",
+        phase: "dreamwell",
+      });
     });
   });
 
@@ -183,7 +191,7 @@ describe("planHandoff", () => {
 
     it("leaves the incoming deck untouched for the post-Dreamwell draw", () => {
       const state = makeHandoffState({ activeSide: "player", turnNumber: 2 });
-      state.sides.enemy.deck = ["enemy-top"];
+      state.sides.enemy.deck = [asBattleCardId("enemy-top")];
 
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
       const edits = [
@@ -199,8 +207,12 @@ describe("planHandoff", () => {
 
   describe("bookend edits", () => {
     function instanceWithStatus(
-      battleCardId: string,
-      status: { isExhausted?: boolean; ephemeral?: boolean; offering?: boolean },
+      battleCardId: BattleCardId,
+      status: {
+        isExhausted?: boolean;
+        ephemeral?: boolean;
+        offering?: boolean;
+      },
     ): BattleMutableState["cardInstances"][string] {
       return {
         battleCardId,
@@ -216,21 +228,38 @@ describe("planHandoff", () => {
 
     it("clears exhaustion from both sides' in-play characters", () => {
       const state = makeHandoffState({ activeSide: "enemy", turnNumber: 2 });
-      state.sides.enemy.frontRank.F0 = "e-front";
-      state.sides.enemy.backRank.B0 = "e-back";
-      state.sides.player.frontRank.F0 = "p-front";
+      state.sides.enemy.frontRank.F0 = asBattleCardId("e-front");
+      state.sides.enemy.backRank.B0 = asBattleCardId("e-back");
+      state.sides.player.frontRank.F0 = asBattleCardId("p-front");
       state.cardInstances = {
-        "e-front": instanceWithStatus("e-front", { isExhausted: true }),
-        "e-back": instanceWithStatus("e-back", { isExhausted: false }),
-        "p-front": instanceWithStatus("p-front", { isExhausted: true }),
+        [asBattleCardId("e-front")]: instanceWithStatus(
+          asBattleCardId("e-front"),
+          { isExhausted: true },
+        ),
+        [asBattleCardId("e-back")]: instanceWithStatus(
+          asBattleCardId("e-back"),
+          { isExhausted: false },
+        ),
+        [asBattleCardId("p-front")]: instanceWithStatus(
+          asBattleCardId("p-front"),
+          { isExhausted: true },
+        ),
       };
 
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
 
       // Only the exhausted character is cleared.
       expect(plan.exhaustionClearEdits).toEqual([
-        { kind: "SET_CARD_STATUS", battleCardId: "p-front", status: { isExhausted: false } },
-        { kind: "SET_CARD_STATUS", battleCardId: "e-front", status: { isExhausted: false } },
+        {
+          kind: "SET_CARD_STATUS",
+          battleCardId: asBattleCardId("p-front"),
+          status: { isExhausted: false },
+        },
+        {
+          kind: "SET_CARD_STATUS",
+          battleCardId: asBattleCardId("e-front"),
+          status: { isExhausted: false },
+        },
       ]);
       expect(plan.endingBanishEdits).toEqual([]);
     });
@@ -238,12 +267,22 @@ describe("planHandoff", () => {
     it("banishes the OUTGOING side's ephemeral hand and offering in-play cards", () => {
       // player ends turn → player is the outgoing side whose Ending banishes.
       const state = makeHandoffState({ activeSide: "player", turnNumber: 3 });
-      state.sides.player.hand = ["p-eph", "p-keep"];
-      state.sides.player.frontRank.F0 = "p-off";
+      state.sides.player.hand = [
+        asBattleCardId("p-eph"),
+        asBattleCardId("p-keep"),
+      ];
+      state.sides.player.frontRank.F0 = asBattleCardId("p-off");
       state.cardInstances = {
-        "p-eph": instanceWithStatus("p-eph", { ephemeral: true }),
-        "p-keep": instanceWithStatus("p-keep", {}),
-        "p-off": instanceWithStatus("p-off", { offering: true }),
+        [asBattleCardId("p-eph")]: instanceWithStatus(asBattleCardId("p-eph"), {
+          ephemeral: true,
+        }),
+        [asBattleCardId("p-keep")]: instanceWithStatus(
+          asBattleCardId("p-keep"),
+          {},
+        ),
+        [asBattleCardId("p-off")]: instanceWithStatus(asBattleCardId("p-off"), {
+          offering: true,
+        }),
       };
 
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });

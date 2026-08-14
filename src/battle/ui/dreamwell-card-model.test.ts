@@ -4,9 +4,10 @@ import { localizedStringSourceEquality } from "../../runtime/localization/testin
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import type { DreamwellCardDefinition } from "../types";
 import { dreamwellCardModel } from "./dreamwell-card-model";
+import { asDreamwellCardId } from "../../types/identifiers";
 
 const DEFINITION: DreamwellCardDefinition = {
-  id: "4a824c9d-8f3c-43db-b865-dc8a6b36b4a2",
+  id: asDreamwellCardId("4a824c9d-8f3c-43db-b865-dc8a6b36b4a2"),
   name: "Fixture Beacon",
   renderedText: "Draw a card.",
   energyAdded: 2,

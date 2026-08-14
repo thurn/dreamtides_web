@@ -3,6 +3,7 @@ import { buildPoolData } from "../draft/pool/pool-data";
 import { buildIdIndex } from "../data/cards-v2-database";
 import type { CardData } from "../types/cards";
 import type { RunPoolContext } from "../data/journey-content";
+import { asDreamsignId } from "../types/identifiers";
 
 /**
  * A small hand-authored corpus for tests that drive the journey-start build path
@@ -119,7 +120,7 @@ export function makeTestPoolContext(
     poolData,
     idIndex: buildIdIndex(cardDatabase),
     starterCardNumbers: TEST_STARTER_CARD_NUMBERS,
-    allDreamsignPoolIds,
+    allDreamsignPoolIds: allDreamsignPoolIds.map(asDreamsignId),
     poolVariant: "tides4",
     tides4Tuning: { dealSize: 60, copyCap: 2, maxFacets: 3 },
   };

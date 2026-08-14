@@ -24,6 +24,7 @@ import {
   createMoveCardToZoneCommand,
 } from "./battle-ui-commands";
 import { formatSideLabel, formatZoneLabel } from "../ui/format";
+import type { BattleCardId } from "../../types/identifiers";
 
 export function BattleContextMenu({
   battleCardId,
@@ -36,8 +37,8 @@ export function BattleContextMenu({
   onClose,
   onCommand,
 }: {
-  battleCardId: string;
-  onOpenNoteEditor: (battleCardId: string) => void;
+  battleCardId: BattleCardId;
+  onOpenNoteEditor: (battleCardId: BattleCardId) => void;
   presentation?: "context-menu" | "sheet";
   sourceSurface: BattleCommandSourceSurface;
   state: BattleMutableState;
@@ -607,7 +608,7 @@ type ContextMenuItem =
 
 function toCommandMenuItems(
   items: readonly ContextMenuItem[],
-  battleCardId: string,
+  battleCardId: BattleCardId,
   path = "root",
 ): readonly CommandMenuItem[] {
   return items.map((item, index) => {

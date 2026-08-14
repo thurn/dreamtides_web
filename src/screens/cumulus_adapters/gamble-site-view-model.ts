@@ -64,6 +64,8 @@ import type { GravokGateId } from "../../types/gamble";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import { asShuffleCommitment } from "../../types/identifiers";
+import type { GuideId } from "../../types/identifiers";
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(
@@ -79,7 +81,7 @@ export function gravokRevealGateId(
 /** Resolve the resident Dream Guide for Gamble. */
 export function resolveGambleGuide(
   guides: readonly DreamGuideContent[],
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent {
   return requireGuideForSiteType(guides, "Gamble", presentingGuideId);
 }
@@ -263,7 +265,7 @@ function buildLadderClimbSiteView(params: {
       result === null
         ? null
         : {
-            id: `${params.site.id}:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unprepared"}:${String(result.attemptNumber)}`,
+            id: `${params.site.id}:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? asShuffleCommitment("unprepared")}:${String(result.attemptNumber)}`,
             attemptNumber: result.attemptNumber,
             targetRank: tidemarkLadderClimbAttemptRule(
               params.game.rules,
@@ -359,7 +361,7 @@ function buildStarwayStairsSiteView(params: {
       latestResult === null
         ? null
         : {
-            id: `${params.site.id}:${runtime.shuffleCommitments[latestResult.tierNumber - 1] ?? "unprepared"}:${String(latestResult.tierNumber)}`,
+            id: `${params.site.id}:${runtime.shuffleCommitments[latestResult.tierNumber - 1] ?? asShuffleCommitment("unprepared")}:${String(latestResult.tierNumber)}`,
             tierNumber: latestResult.tierNumber,
             busted: latestResult.busted,
             resultSettled: latestResult.resultSettled,

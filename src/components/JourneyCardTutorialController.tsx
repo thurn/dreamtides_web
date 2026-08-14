@@ -6,11 +6,7 @@ import {
   useState,
   type RefObject,
 } from "react";
-import {
-  useActions,
-  useConfirmedGameState,
-  useGameState,
-} from "../coop/hooks";
+import { useActions, useConfirmedGameState, useGameState } from "../coop/hooks";
 import { logEvent } from "../logging";
 import {
   cardIdsMatchCurrentDraftOffer,
@@ -22,20 +18,25 @@ import { BattleTutorialGuidance } from "../cumulus/screens/BattleTutorialGuidanc
 import { buildCardTutorialGuidanceView } from "../screens/cumulus_adapters/card-tutorial-guidance-view-model";
 import { createCardTutorialGuidanceContentProvider } from "../coop/providers/card-tutorial-guidance-provider";
 import { activeFirstVisitTutorialSite } from "../data/site-tutorial-guidance";
+import { asPresentationId } from "../types/identifiers";
+import { asCardId } from "../types/card-identity";
+import type { CardId } from "../types/card-identity";
 
-function visibleCardIds(stage: HTMLElement): readonly string[] {
-  const ids: string[] = [];
-  const seen = new Set<string>();
+function visibleCardIds(stage: HTMLElement): readonly CardId[] {
+  const ids: CardId[] = [];
+  const seen = new Set<CardId>();
   for (const card of stage.querySelectorAll<HTMLElement>(
-    '[data-game-card-source][data-card-id]',
+    "[data-game-card-source][data-card-id]",
   )) {
     if (card.closest("[data-card-tutorial-guidance]") !== null) continue;
     const rect = card.getBoundingClientRect();
     if (rect.width <= 0 || rect.height <= 0) continue;
     const cardId = card.dataset.cardId;
-    if (cardId === undefined || seen.has(cardId)) continue;
-    seen.add(cardId);
-    ids.push(cardId);
+    if (cardId === undefined) continue;
+    const identity = asCardId(cardId);
+    if (seen.has(identity)) continue;
+    seen.add(identity);
+    ids.push(identity);
   }
   return ids;
 }
@@ -85,9 +86,7 @@ export function JourneyCardTutorialController({
   const view = useMemo(
     () =>
       buildCardTutorialGuidanceView(
-        siteTutorialActive || !presentationLocallyVisible
-          ? null
-          : presentation,
+        siteTutorialActive || !presentationLocallyVisible ? null : presentation,
         cardDatabase,
       ),
     [
@@ -186,14 +185,17 @@ export function JourneyCardTutorialController({
       const confirmed = confirmedState.cardTutorialPresentation ?? null;
       if (confirmed === null) return;
       logEvent("card_tutorial_guidance_advance_requested", {
-        presentationId: confirmed.id,
+        presentationId: asPresentationId(confirmed.id),
         screenKey: confirmed.screenKey,
         cardId: confirmed.cardId,
         triggerId: confirmed.triggerId,
         reason,
       });
       void actions
-        .completeCardTutorialGuidance(confirmed.id, confirmed.screenKey)
+        .completeCardTutorialGuidance(
+          asPresentationId(confirmed.id),
+          confirmed.screenKey,
+        )
         .catch(() => undefined);
     },
     [actions, confirmedState.cardTutorialPresentation],
@@ -203,7 +205,7 @@ export function JourneyCardTutorialController({
     const confirmed = confirmedState.cardTutorialPresentation ?? null;
     if (confirmed === null) return;
     logEvent("card_tutorial_guidance_presented", {
-      presentationId: confirmed.id,
+      presentationId: asPresentationId(confirmed.id),
       screenKey: confirmed.screenKey,
       cardId: confirmed.cardId,
       triggerId: confirmed.triggerId,

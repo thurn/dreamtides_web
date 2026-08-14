@@ -11,9 +11,10 @@ import {
   TransfigurationDetailPanel,
   type TransfigurationDetailCandidate,
 } from "./TransfigurationDetailPanel";
+import { asDeckEntryId } from "../../../types/identifiers";
 
 const candidate: TransfigurationDetailCandidate = {
-  entryId: "entry",
+  entryId: asDeckEntryId("entry"),
   card: syntheticGameCard(1),
   forms: [
     {

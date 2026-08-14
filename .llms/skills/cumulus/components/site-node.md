@@ -17,13 +17,13 @@ The dreamscape site disc: a floating circular node carrying a glyph and accent r
 | `model` | `DreamscapeSiteModel` | yes | — | The placed-site model — position, label, glyph, and state. |
 | `motion` | `boolean` | yes | — | Enable the calm floaty drift (disabled under reduced-motion via CSS). |
 | `presentation` | `"choice" \| "reward" \| "scene"` | no | `scene` | Scene placement or a large reward preview. Defaults to `scene`. |
-| `onSelect` | `(siteId: string) => void` | yes | — | Enter the site; fired on a tap / click of an interactive node only. |
+| `onSelect` | `(siteId: SiteId) => void` | yes | — | Enter the site; fired on a tap / click of an interactive node only. |
 
 ### `model`: the `DreamscapeSiteModel` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `string` | no | Stable site identity. |
+| `id` | `SiteId` | no | Stable site identity. |
 | `type` | `"Battle" \| "Draft" \| "Shop" \| "Purge" \| "Essence" \| "Transfiguration" \| "Duplication" \| "Reward" \| "Augury" \| "DreamsignBazaar" \| "DreamsignRevelation" \| "RandomSite" \| "Gamble" \| "Exploration"` | no | Site category exposed for diagnostics. |
 | `isVisited` | `boolean` | no | Whether this site has already been completed. |
 | `pos` | `ScatterPoint` | no |  |

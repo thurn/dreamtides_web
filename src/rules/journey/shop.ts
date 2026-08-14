@@ -40,6 +40,16 @@ import type {
 import { mintEntryId } from "./deck";
 import { findSite, getSiteContentProvider } from "./sites";
 import { SITE_TYPES as SITE_TYPE_VALUES } from "../../types/site-type";
+import type { SiteId } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import { siteIdFromUnknown } from "../../types/identifiers";
+import { explorationActionIdFromUnknown } from "../../types/identifiers";
+import { cardIdFromUnknown } from "../../types/card-identity";
+import { atlasNodeIdFromUnknown } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Shared helpers
@@ -72,7 +82,7 @@ function clampEssence(value: number): number {
 /** Store `runtime` for `siteId`, replacing any existing entry for that key. */
 function withShopRuntime(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
   runtime: ShopSiteRuntime,
 ): JourneyState {
   return {
@@ -82,7 +92,7 @@ function withShopRuntime(
 }
 
 /** The lowest unused `site-N` id anywhere in the atlas (legacy `nextSiteIdFromAtlas`). */
-function nextSiteId(atlas: DreamAtlas): string {
+function nextSiteId(atlas: DreamAtlas): SiteId {
   let max = 0;
   for (const node of Object.values(atlas.nodes)) {
     for (const site of node.sites) {
@@ -92,11 +102,11 @@ function nextSiteId(atlas: DreamAtlas): string {
       if (Number.isFinite(num) && num > max) max = num;
     }
   }
-  return `site-${String(max + 1)}`;
+  return asSiteId(`site-${String(max + 1)}`);
 }
 
 function debugSite(
-  id: string,
+  id: SiteId,
   type: SiteType,
   siblingSites: readonly SiteState[],
 ): SiteState {
@@ -116,7 +126,7 @@ function debugSite(
     throw new Error("Random Site has no configured destinations.");
   }
   return {
-    id,
+    id: asSiteId(id),
     type,
     isEnhanced: true,
     isVisited: false,
@@ -153,7 +163,7 @@ export function buyShopSlot(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   const slotIndex = integer(payload.slotIndex);
   if (siteId === null || slotIndex === null) return null;
   if (journey.visitedSites.includes(siteId)) return null;
@@ -175,8 +185,10 @@ export function buyShopSlot(
   }
   if (
     runtime.freePurchaseSource !== undefined &&
-    (asString(runtime.freePurchaseSource.sourceSiteId) === null ||
-      asString(runtime.freePurchaseSource.sourceActionId) === null)
+    (siteIdFromUnknown(runtime.freePurchaseSource.sourceSiteId) === null ||
+      explorationActionIdFromUnknown(
+        runtime.freePurchaseSource.sourceActionId,
+      ) === null)
   ) {
     return null;
   }
@@ -197,8 +209,9 @@ export function buyShopSlot(
       freePurchaseModifier.initialCount <= 0 ||
       freePurchaseModifier.remainingCount <= 0 ||
       freePurchaseModifier.remainingCount > freePurchaseModifier.initialCount ||
-      asString(freePurchaseModifier.sourceSiteId) === null ||
-      asString(freePurchaseModifier.sourceActionId) === null)
+      siteIdFromUnknown(freePurchaseModifier.sourceSiteId) === null ||
+      explorationActionIdFromUnknown(freePurchaseModifier.sourceActionId) ===
+        null)
   ) {
     return null;
   }
@@ -218,7 +231,7 @@ export function buyShopSlot(
 
   if (slot.itemType === "card") {
     const entry: DeckEntry = {
-      entryId: mintEntryId(journey.deck, ctx.seq, 0),
+      entryId: asDeckEntryId(mintEntryId(journey.deck, ctx.seq, 0)),
       cardNumber: slot.cardNumber,
       transfiguration: slot.transfiguration ?? null,
       isBane: false,
@@ -249,15 +262,15 @@ export function buyShopSlot(
     ) {
       return null;
     }
-    let replacedDreamsignId: string | undefined;
+    let replacedDreamsignId: DreamsignId | undefined;
     if (purgedDreamsign !== null) {
       const resolvedReplacedDreamsignId = asString(purgedDreamsign.id);
       if (resolvedReplacedDreamsignId === null) return null;
-      replacedDreamsignId = resolvedReplacedDreamsignId;
+      replacedDreamsignId = asDreamsignId(resolvedReplacedDreamsignId);
     }
     item = {
       kind: "dreamsign",
-      dreamsignId: purchasedDreamsignId,
+      dreamsignId: asDreamsignId(purchasedDreamsignId),
       ...(replacedDreamsignId === undefined ? {} : { replacedDreamsignId }),
     };
     next = {
@@ -350,7 +363,7 @@ export function rerollShop(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   if (journey.visitedSites.includes(siteId)) return null;
 
@@ -387,13 +400,14 @@ export function rerollShop(
     ...runtime,
     slots: generated.slots,
     rerollCount: runtime.rerollCount + 1,
-    remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
+    remainingDreamsignPoolIds:
+      generated.remainingDreamsignPoolIds.map(asDreamsignId),
   };
   return {
     ...journey,
     essence,
     shopModifiers,
-    remainingDreamsignPool: generated.remainingDreamsignPool,
+    remainingDreamsignPool: generated.remainingDreamsignPool.map(asDreamsignId),
     draftState: generated.draftState,
     siteRuntime: { ...journey.siteRuntime, [siteId]: nextRuntime },
   };
@@ -485,7 +499,7 @@ function resolveMerchant(
   ctx: EventContext,
   action: "accept" | "decline",
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const site = findSite(journey, siteId);
   if (site === null) return null;
@@ -557,7 +571,7 @@ export function pushTemporaryNightmareGrant(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const cardId = asString(payload.cardId);
+  const cardId = cardIdFromUnknown(payload.cardId);
   const count = integer(payload.count);
   const battlesRemaining = integer(payload.battlesRemaining);
   const source = asString(payload.source);
@@ -576,10 +590,10 @@ export function pushTemporaryNightmareGrant(
   if (cardNumber === null) return null;
 
   let deck = journey.deck;
-  const addedEntryIds: string[] = [];
+  const addedEntryIds: DeckEntryId[] = [];
   for (let i = 0; i < count; i += 1) {
     const entry: DeckEntry = {
-      entryId: mintEntryId(deck, ctx.seq, i),
+      entryId: asDeckEntryId(mintEntryId(deck, ctx.seq, i)),
       cardNumber,
       transfiguration: null,
       isBane: true,
@@ -686,7 +700,7 @@ export function replaceSiteType(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const nodeId = asString(payload.nodeId);
+  const nodeId = atlasNodeIdFromUnknown(payload.nodeId);
   const fromSiteType = asSiteType(payload.fromSiteType);
   const toSiteType = asSiteType(payload.toSiteType);
   if (nodeId === null || fromSiteType === null || toSiteType === null) {
@@ -726,7 +740,7 @@ export function addSiteToDreamscape(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const nodeId = asString(payload.nodeId);
+  const nodeId = atlasNodeIdFromUnknown(payload.nodeId);
   const siteType = asSiteType(payload.siteType);
   if (nodeId === null || siteType === null) return null;
   const node = journey.atlas.nodes[nodeId];

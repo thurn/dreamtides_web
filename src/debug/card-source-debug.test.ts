@@ -3,6 +3,8 @@ import { buildCardSourceDebugState } from "./card-source-debug";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { ResolvedDreamAvatarPackage } from "../types/content";
+import { asDreamAvatarId } from "../types/identifiers";
+import { asDreamsignId } from "../types/identifiers";
 
 function makeCard(cardNumber: number, name: string): CardData {
   return {
@@ -24,16 +26,16 @@ function makeCard(cardNumber: number, name: string): CardData {
 function makeResolvedPackage(): ResolvedDreamAvatarPackage {
   return {
     dreamAvatar: {
-      id: "caller-1",
+      id: asDreamAvatarId("caller-1"),
       name: "Caller",
       title: "Debug Witness",
       renderedText: "Test rules text.",
       imageNumber: "0009",
       startingEssence: 250,
-      signatureCards: ["Lantern Witness"],
+      signatureCards: [asCardName("Lantern Witness")],
     },
     draftPoolCopiesByCard: { "2": 2, "7": 1 },
-    dreamsignPoolIds: ["sign-1"],
+    dreamsignPoolIds: [asDreamsignId("sign-1")],
     mandatoryOnlyPoolSize: 200,
     draftPoolSize: 200,
     doubledCardCount: 10,

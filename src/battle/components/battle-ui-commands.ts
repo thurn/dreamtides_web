@@ -15,12 +15,13 @@ import type {
   BattlefieldZone,
 } from "../types";
 import type { BattleDeckCardDefinition } from "../types";
+import type { BattleCardId } from "../../types/identifiers";
 
 type MoveZoneDebugCommand = {
   id: "DEBUG_EDIT";
   edit: {
     kind: "MOVE_CARD_TO_ZONE";
-    battleCardId: string;
+    battleCardId: BattleCardId;
     destination: BattleDebugZoneDestination;
   };
   sourceSurface: BattleCommandSourceSurface;
@@ -28,7 +29,7 @@ type MoveZoneDebugCommand = {
 
 export function createMoveCardToBattlefieldCommand(
   state: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   side: BattleSide,
   sourceSurface: BattleCommandSourceSurface,
 ): MoveZoneDebugCommand | null {
@@ -56,7 +57,7 @@ export function createMoveCardToBattlefieldCommand(
  * to the void. */
 export function createPlayCardFromHandCommand(
   state: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   sourceSurface: BattleCommandSourceSurface,
   basicAutomationEnabled: boolean,
   preferredTarget?: BattleFieldSlotAddress,
@@ -66,8 +67,8 @@ export function createPlayCardFromHandCommand(
   if (location?.zone !== "hand" || instance === undefined) return null;
 
   if (
-    instance.definition.battleCardKind === "event"
-    && !basicAutomationEnabled
+    instance.definition.battleCardKind === "event" &&
+    !basicAutomationEnabled
   ) {
     return createMoveCardToZoneCommand(
       battleCardId,
@@ -78,10 +79,10 @@ export function createPlayCardFromHandCommand(
   }
 
   const target =
-    preferredTarget?.side === location.side
-    && preferredTarget.zone === "backRank"
-    && isBattleFieldSlotAddressValid(preferredTarget)
-    && selectBattlefieldSlotOccupant(state, preferredTarget) === null
+    preferredTarget?.side === location.side &&
+    preferredTarget.zone === "backRank" &&
+    isBattleFieldSlotAddressValid(preferredTarget) &&
+    selectBattlefieldSlotOccupant(state, preferredTarget) === null
       ? preferredTarget
       : selectDefaultCharacterPlaySlot(state, location.side);
   if (target === null) return null;
@@ -99,7 +100,7 @@ export function createPlayCardFromHandCommand(
 
 export function createMoveCardToRowCommand(
   state: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   side: BattleSide,
   zone: BattlefieldZone,
   sourceSurface: BattleCommandSourceSurface,
@@ -118,7 +119,7 @@ export function createMoveCardToRowCommand(
 }
 
 export function createMoveCardToZoneCommand(
-  battleCardId: string,
+  battleCardId: BattleCardId,
   side: BattleSide,
   zone: "hand" | "void" | "banished",
   sourceSurface: BattleCommandSourceSurface,
@@ -135,7 +136,7 @@ export function createMoveCardToZoneCommand(
 }
 
 export function createMoveCardToDeckCommand(
-  battleCardId: string,
+  battleCardId: BattleCardId,
   side: BattleSide,
   position: "top" | "bottom",
   sourceSurface: BattleCommandSourceSurface,
@@ -174,7 +175,8 @@ export function createDiscardMostRecentHandCardCommand(
   side: BattleSide,
   sourceSurface: BattleCommandSourceSurface,
 ): BattleCommand | null {
-  const battleCardId = state.sides[side].hand[state.sides[side].hand.length - 1];
+  const battleCardId =
+    state.sides[side].hand[state.sides[side].hand.length - 1];
   if (battleCardId === undefined) {
     return null;
   }

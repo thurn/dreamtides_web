@@ -17,6 +17,9 @@ import type {
 } from "../../types/journey";
 import { token } from "../primitives/tokens";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type { CardId } from "../../types/card-identity";
+import type { DeckEntryId } from "../../types/identifiers";
+import { asCardTypeChangePredicateId } from "../../types/identifiers";
 
 export type JourneyDebugResourceId =
   "essence" | "maxDreamsigns" | "completionLevel";
@@ -26,13 +29,13 @@ export interface JourneyDebugDreamsignView {
   name: LocalizedString;
 }
 export interface JourneyDebugCardSearchView {
-  cardId: string;
+  cardId: CardId;
   title: LocalizedString;
   model: GameCardModel;
 }
 export interface JourneyDebugDeckEntryView {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
   name: LocalizedString;
   detail: LocalizedString;
   isBane: boolean;
@@ -60,18 +63,21 @@ export interface JourneyDebugEditorScreenProps {
   onAddDreamsign: (id: string) => void;
   onRemoveDreamsign: (actionId: string) => void;
   onAddCard: (id: string) => void;
-  onRemoveCard: (entryId: string) => void;
+  onRemoveCard: (entryId: DeckEntryId) => void;
   onSetStatOverride: (
-    entryId: string,
+    entryId: DeckEntryId,
     statOverride: { energyCost?: number; spark?: number } | null,
   ) => void;
   onSetTransfiguration: (
-    entryId: string,
+    entryId: DeckEntryId,
     type: TransfigurationType | null,
   ) => void;
-  onSetTypeChange: (entryId: string, typeChange: CardTypeChange | null) => void;
+  onSetTypeChange: (
+    entryId: DeckEntryId,
+    typeChange: CardTypeChange | null,
+  ) => void;
   onSetKeywords: (
-    entryId: string,
+    entryId: DeckEntryId,
     keywords: CardKeywordModification | null,
   ) => void;
 }
@@ -369,7 +375,7 @@ function DeckEntryEditor({
 }: {
   entry: JourneyDebugDeckEntryView;
   transfigurationOptions: JourneyDebugEditorView["transfigurationOptions"];
-  onRemove: (entryId: string) => void;
+  onRemove: (entryId: DeckEntryId) => void;
   onSetStatOverride: JourneyDebugEditorScreenProps["onSetStatOverride"];
   onSetTransfiguration: JourneyDebugEditorScreenProps["onSetTransfiguration"];
   onSetTypeChange: JourneyDebugEditorScreenProps["onSetTypeChange"];
@@ -579,7 +585,7 @@ function DeckEditControls({
         label={assertLocalized("Commit type")}
         onPress={() =>
           onSetTypeChange(entry.entryId, {
-            predicateId: "debug",
+            predicateId: asCardTypeChangePredicateId("debug"),
             cardType: cardType as CardTypeChange["cardType"],
             subtype,
             label: "Debug edit",

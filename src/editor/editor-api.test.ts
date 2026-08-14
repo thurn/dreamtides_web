@@ -6,6 +6,7 @@ import {
   loadEditorCards,
   saveEditorCardField,
 } from "./editor-api";
+import { asCardId } from "../types/card-identity";
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -16,7 +17,9 @@ describe("editor-api", () => {
   it("falls back to the HTTP status for non-JSON error responses", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(() => Promise.resolve(new Response("Bad gateway", { status: 502 }))),
+      vi.fn(() =>
+        Promise.resolve(new Response("Bad gateway", { status: 502 })),
+      ),
     );
 
     await expect(loadEditorCards()).rejects.toThrow(
@@ -38,16 +41,15 @@ describe("editor-api", () => {
   it("preserves JSON error messages from the API", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(
-        () =>
-          Promise.resolve(
-            new Response(
-              JSON.stringify({
-                error: { message: "Card source unavailable" },
-              }),
-              { status: 500 },
-            ),
+      vi.fn(() =>
+        Promise.resolve(
+          new Response(
+            JSON.stringify({
+              error: { message: "Card source unavailable" },
+            }),
+            { status: 500 },
           ),
+        ),
       ),
     );
 
@@ -57,27 +59,26 @@ describe("editor-api", () => {
   it("preserves structured validation errors from save responses", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(
-        () =>
-          Promise.resolve(
-            new Response(
-              JSON.stringify({
-                error: {
-                  code: "INVALID_EDIT",
-                  details: { field: "name" },
-                  message: "Name cannot be blank.",
-                },
-              }),
-              { status: 400 },
-            ),
+      vi.fn(() =>
+        Promise.resolve(
+          new Response(
+            JSON.stringify({
+              error: {
+                code: "INVALID_EDIT",
+                details: { field: "name" },
+                message: "Name cannot be blank.",
+              },
+            }),
+            { status: 400 },
           ),
+        ),
       ),
     );
 
     await expect(
       saveEditorCardField({
         field: "name",
-        id: "card-id",
+        id: asCardId("card-id"),
         value: "",
       }),
     ).rejects.toMatchObject({
@@ -90,11 +91,10 @@ describe("editor-api", () => {
 
   it("passes an abort signal to the card load request", async () => {
     const controller = new AbortController();
-    const fetchMock = vi.fn(
-      () =>
-        Promise.resolve(
-          new Response(JSON.stringify({ cards: [] }), { status: 200 }),
-        ),
+    const fetchMock = vi.fn(() =>
+      Promise.resolve(
+        new Response(JSON.stringify({ cards: [] }), { status: 200 }),
+      ),
     );
     vi.stubGlobal("fetch", fetchMock);
 
@@ -118,11 +118,10 @@ describe("editor-api", () => {
 
   it("forwards the canonical source selection on the card load request", async () => {
     window.history.replaceState({}, "", "/editor?toml=data/cards.toml");
-    const fetchMock = vi.fn(
-      () =>
-        Promise.resolve(
-          new Response(JSON.stringify({ cards: [] }), { status: 200 }),
-        ),
+    const fetchMock = vi.fn(() =>
+      Promise.resolve(
+        new Response(JSON.stringify({ cards: [] }), { status: 200 }),
+      ),
     );
     vi.stubGlobal("fetch", fetchMock);
 
@@ -136,15 +135,18 @@ describe("editor-api", () => {
 
   it("forwards the canonical source selection on the field save request", async () => {
     window.history.replaceState({}, "", "/editor?toml=cards.toml");
-    const fetchMock = vi.fn(
-      () =>
-        Promise.resolve(
-          new Response(JSON.stringify({ card: {} }), { status: 200 }),
-        ),
+    const fetchMock = vi.fn(() =>
+      Promise.resolve(
+        new Response(JSON.stringify({ card: {} }), { status: 200 }),
+      ),
     );
     vi.stubGlobal("fetch", fetchMock);
 
-    await saveEditorCardField({ field: "name", id: "card-id", value: "Renamed" });
+    await saveEditorCardField({
+      field: "name",
+      id: asCardId("card-id"),
+      value: "Renamed",
+    });
 
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/editor/cards/card-id?source=cards.toml",

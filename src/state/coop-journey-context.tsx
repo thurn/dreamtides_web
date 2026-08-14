@@ -41,6 +41,9 @@ import {
   updateCardSourcePublication,
   type CardSourcePublication,
 } from "./card-source-publication";
+import { asCardId } from "../types/card-identity";
+import { asAtlasNodeId } from "../types/identifiers";
+import type { AtlasNodeId } from "../types/identifiers";
 
 export interface CoopJourneyProviderProps {
   children: ReactNode;
@@ -54,8 +57,8 @@ export interface CoopJourneyProviderProps {
  */
 function findNextDreamscapeId(
   atlas: DreamAtlas,
-  currentId: string | null,
-): string | null {
+  currentId: AtlasNodeId | null,
+): AtlasNodeId | null {
   if (currentId === null) return null;
   const currentNode = atlas.nodes[currentId];
   if (currentNode === undefined) return null;
@@ -75,14 +78,13 @@ export function CoopJourneyProvider({
   const fold = useGameState();
   const [cardSourcePublication, setCardSourcePublication] =
     useState<CardSourcePublication | null>(null);
-  const publishCardSourceDebug = useCallback<JourneyMutations["setCardSourceDebug"]>(
-    (cardSourceDebug, _source, publicationId) => {
-      setCardSourcePublication((current) =>
-        updateCardSourcePublication(current, cardSourceDebug, publicationId),
-      );
-    },
-    [],
-  );
+  const publishCardSourceDebug = useCallback<
+    JourneyMutations["setCardSourceDebug"]
+  >((cardSourceDebug, _source, publicationId) => {
+    setCardSourcePublication((current) =>
+      updateCardSourcePublication(current, cardSourceDebug, publicationId),
+    );
+  }, []);
   const state = useMemo<JourneyState>(
     () => ({
       ...fold.journey,
@@ -123,8 +125,7 @@ export function CoopJourneyProvider({
       // ---- lifecycle ----
       startJourney: (dreamAvatar) =>
         dispatch(actions.startJourney({ dreamAvatarId: dreamAvatar.id })),
-      rerollDreamAvatarOffer: () =>
-        dispatch(actions.rerollDreamAvatarOffer()),
+      rerollDreamAvatarOffer: () => dispatch(actions.rerollDreamAvatarOffer()),
       setDreamAvatarSelection: (resolvedPackage) =>
         dispatch(actions.selectDreamAvatar(resolvedPackage.dreamAvatar.id)),
       resetJourney: () => dispatch(actions.resetJourney()),
@@ -133,7 +134,9 @@ export function CoopJourneyProvider({
       // QA snapshots do not depend on their minted seed matching, so stamping the
       // live room seed keeps every derived generator convergent for both clients.
       loadJourneyState: (snapshot) =>
-        dispatch(actions.loadState({ ...snapshot, seed: stateRef.current.seed })),
+        dispatch(
+          actions.loadState({ ...snapshot, seed: stateRef.current.seed }),
+        ),
       bootstrapQaScene: (
         sceneId,
         explorationCardId,
@@ -199,7 +202,7 @@ export function CoopJourneyProvider({
       addCard: (cardNumber, source) => {
         const cardId = cardIdFor(cardNumber);
         if (cardId === null) return;
-        dispatch(actions.addCard({ cardId, source }));
+        dispatch(actions.addCard({ cardId: asCardId(cardId), source }));
       },
       addCardById: (cardId, source) => {
         dispatch(actions.addCard({ cardId, source }));
@@ -267,27 +270,55 @@ export function CoopJourneyProvider({
         if (packIndex < 0) return;
         const cardId = cardIdFor(cardNumber);
         if (cardId === null) return;
-        dispatch(actions.pickDraftCard(packIndex, cardId));
+        dispatch(actions.pickDraftCard(packIndex, asCardId(cardId)));
       },
       rerollDraftOffer: (siteId) => dispatch(actions.rerollDraftOffer(siteId)),
       enterDraftSite: (siteId) =>
-        dispatch(actions.enterDraftSite(siteId, stateRef.current.runId ?? undefined)),
+        dispatch(
+          actions.enterDraftSite(siteId, stateRef.current.runId ?? undefined),
+        ),
 
       // ---- sites: runtime reveal collapses to OPEN_SITE ----
       ensureRewardSiteRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined, "Reward")),
+        dispatch(
+          actions.openSite(
+            siteId,
+            stateRef.current.runId ?? undefined,
+            "Reward",
+          ),
+        ),
       ensureDreamsignOfferRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined, "DreamsignRevelation")),
+        dispatch(
+          actions.openSite(
+            siteId,
+            stateRef.current.runId ?? undefined,
+            "DreamsignRevelation",
+          ),
+        ),
       ensureEssenceSiteRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined, "Essence")),
+        dispatch(
+          actions.openSite(
+            siteId,
+            stateRef.current.runId ?? undefined,
+            "Essence",
+          ),
+        ),
       ensureShopRuntime: (site) =>
-        dispatch(actions.openSite(site.id, stateRef.current.runId ?? undefined, site.type)),
+        dispatch(
+          actions.openSite(
+            site.id,
+            stateRef.current.runId ?? undefined,
+            site.type,
+          ),
+        ),
       ensureCardChoiceRuntime: (siteId, kind) =>
-        dispatch(actions.openSite(
-          siteId,
-          stateRef.current.runId ?? undefined,
-          kind === "transfiguration" ? "Transfiguration" : "Duplication",
-        )),
+        dispatch(
+          actions.openSite(
+            siteId,
+            stateRef.current.runId ?? undefined,
+            kind === "transfiguration" ? "Transfiguration" : "Duplication",
+          ),
+        ),
       ensureGambleSiteRuntime: (siteId, gambleGameId) =>
         dispatch(
           actions.openSite(
@@ -298,13 +329,27 @@ export function CoopJourneyProvider({
           ),
         ),
       ensureExplorationSiteRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined, "Exploration")),
+        dispatch(
+          actions.openSite(
+            siteId,
+            stateRef.current.runId ?? undefined,
+            "Exploration",
+          ),
+        ),
       ensureRandomSiteRuntime: (siteId) =>
-        dispatch(actions.openSite(siteId, stateRef.current.runId ?? undefined, "RandomSite")),
+        dispatch(
+          actions.openSite(
+            siteId,
+            stateRef.current.runId ?? undefined,
+            "RandomSite",
+          ),
+        ),
 
       // ---- sites: player actions ----
       completeSite: (siteId) =>
-        dispatch(actions.completeSite(siteId, stateRef.current.runId ?? undefined)),
+        dispatch(
+          actions.completeSite(siteId, stateRef.current.runId ?? undefined),
+        ),
       chooseRandomSite: (siteId, siteType) =>
         dispatch(actions.chooseRandomSite(siteId, siteType)),
       resolveExplorationChoice: (siteId, actionId, selection) =>
@@ -378,11 +423,7 @@ export function CoopJourneyProvider({
             stateRef.current.runId ?? undefined,
           ),
         ),
-      chooseFourSuitRepriseTransfiguration: (
-        siteId,
-        shuffleCommitment,
-        type,
-      ) =>
+      chooseFourSuitRepriseTransfiguration: (siteId, shuffleCommitment, type) =>
         dispatch(
           actions.chooseFourSuitRepriseTransfiguration(
             siteId,
@@ -436,15 +477,15 @@ export function CoopJourneyProvider({
       rejectDreamsignOffer: (siteId) =>
         dispatch(actions.rejectDreamsignOffer(siteId)),
       acceptEssenceSite: (siteId) =>
-        dispatch(actions.acceptEssence(siteId, stateRef.current.runId ?? undefined)),
+        dispatch(
+          actions.acceptEssence(siteId, stateRef.current.runId ?? undefined),
+        ),
       acceptTransfigurationChoice: (siteId, entryId, type) =>
         emit("ACCEPT_TRANSFIGURATION_CHOICE", { siteId, entryId, type }),
       acceptDuplicationChoice: (siteId, entryId) =>
         dispatch(actions.acceptDuplicationChoice(siteId, entryId)),
-      completeAugurySite: (siteId) =>
-        dispatch(actions.completeAugury(siteId)),
-      rerollAugury: (siteId) =>
-        dispatch(actions.rerollAugury(siteId)),
+      completeAugurySite: (siteId) => dispatch(actions.completeAugury(siteId)),
+      rerollAugury: (siteId) => dispatch(actions.rerollAugury(siteId)),
       forceAuguryArchetype: (siteId, archetypeId) =>
         // archetypeId may be null (clear the force); the reducer accepts it.
         emit("FORCE_AUGURY_ARCHETYPE", { siteId, archetypeId }),
@@ -503,7 +544,7 @@ export function CoopJourneyProvider({
             ? current.currentDreamscape
             : findNextDreamscapeId(current.atlas, current.currentDreamscape);
         if (nodeId === null) return;
-        dispatch(actions.addSiteToDreamscape(nodeId, siteType));
+        dispatch(actions.addSiteToDreamscape(asAtlasNodeId(nodeId), siteType));
       },
       replaceSiteType: (from, to) => {
         const nodeId = stateRef.current.currentDreamscape;
@@ -515,7 +556,6 @@ export function CoopJourneyProvider({
       boostSiteAppearance: (siteType, percent, dreamscapes) =>
         dispatch(actions.boostSiteAppearance(siteType, percent, dreamscapes)),
       setCardSourceDebug: publishCardSourceDebug,
-
     };
   }, [actions, append, journeyContent, cardDatabase, publishCardSourceDebug]);
 
@@ -524,5 +564,7 @@ export function CoopJourneyProvider({
     [state, mutations, cardDatabase, journeyContent],
   );
 
-  return <JourneyContextProvider value={value}>{children}</JourneyContextProvider>;
+  return (
+    <JourneyContextProvider value={value}>{children}</JourneyContextProvider>
+  );
 }

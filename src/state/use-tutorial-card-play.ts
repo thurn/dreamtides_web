@@ -1,18 +1,26 @@
 import { useCallback } from "react";
 import { logEvent } from "../logging";
 import type { FrontDoorMutations } from "./front-door-context";
+import type {
+  BattleCardId,
+  BattleId,
+  BattleSlotViewId,
+} from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type { TutorialRunId } from "../types/identifiers";
+import { asFrontDoorActionId } from "../types/identifiers";
 
 /** Submit and log the tutorial player's authoritative first card play. */
 export function useTutorialCardPlay(
   action: FrontDoorMutations["action"],
-  battleId: string,
+  battleId: BattleId,
 ) {
   return useCallback(
     (
-      runId: string,
-      cardInstanceId: string,
-      cardId: string,
-      targetSlotId: string | null,
+      runId: TutorialRunId,
+      cardInstanceId: BattleCardId,
+      cardId: CardId,
+      targetSlotId: BattleSlotViewId | null,
     ): void => {
       logEvent("tutorial_player_card_play_requested", {
         runId,
@@ -23,7 +31,7 @@ export function useTutorialCardPlay(
         destinationZone: "player-back-rank",
         targetSlotId,
       });
-      void action("tutorial", "play-card", {
+      void action("tutorial", asFrontDoorActionId("play-card"), {
         runId,
         cardInstanceId,
         cardId,

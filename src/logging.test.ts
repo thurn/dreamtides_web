@@ -17,6 +17,9 @@ import {
 } from "./logging";
 import type { LogEntry } from "./logging";
 import type { BattleMutableState } from "./battle/types";
+import { asBattleCardId, type BattleCardId } from "./types/identifiers";
+import { asBattleId } from "./types/identifiers";
+import { asNoteId } from "./types/identifiers";
 
 beforeEach(() => {
   resetLog();
@@ -219,7 +222,7 @@ describe("createBattleLogBaseFields", () => {
   it("includes every L-3 common field", () => {
     const fields = createBattleLogBaseFields(makeBattleStateFixture(), {
       sourceSurface: "action-bar",
-      selectedCardId: "card-42",
+      selectedCardId: asBattleCardId("card-42"),
     });
 
     expect(fields.battleId).toBe("battle-fixture");
@@ -235,7 +238,7 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
   const state = makeBattleStateFixture();
   const context = {
     sourceSurface: "inspector" as const,
-    selectedCardId: null as string | null,
+    selectedCardId: null as BattleCardId | null,
   };
 
   const helpers: Array<{
@@ -246,62 +249,92 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
     {
       name: "createBattleProtoNoteAddedLogEvent",
       event: "battle_proto_note_added",
-      build: () => createBattleProtoNoteAddedLogEvent(state, {
-        battleCardId: "card-1",
-        noteId: "note-1",
-        text: "note",
-        expiry: { kind: "manual" },
-        createdAtTurnNumber: 1,
-        createdAtSide: "player",
-      }, context),
+      build: () =>
+        createBattleProtoNoteAddedLogEvent(
+          state,
+          {
+            battleCardId: asBattleCardId("card-1"),
+            noteId: asNoteId("note-1"),
+            text: "note",
+            expiry: { kind: "manual" },
+            createdAtTurnNumber: 1,
+            createdAtSide: "player",
+          },
+          context,
+        ),
     },
     {
       name: "createBattleProtoNoteDismissedLogEvent",
       event: "battle_proto_note_dismissed",
-      build: () => createBattleProtoNoteDismissedLogEvent(state, {
-        battleCardId: "card-1",
-        noteId: "note-1",
-      }, context),
+      build: () =>
+        createBattleProtoNoteDismissedLogEvent(
+          state,
+          {
+            battleCardId: asBattleCardId("card-1"),
+            noteId: asNoteId("note-1"),
+          },
+          context,
+        ),
     },
     {
       name: "createBattleProtoNoteClearedLogEvent",
       event: "battle_proto_note_cleared",
-      build: () => createBattleProtoNoteClearedLogEvent(state, {
-        battleCardId: "card-1",
-        noteCount: 2,
-      }, context),
+      build: () =>
+        createBattleProtoNoteClearedLogEvent(
+          state,
+          {
+            battleCardId: asBattleCardId("card-1"),
+            noteCount: 2,
+          },
+          context,
+        ),
     },
     {
       name: "createBattleProtoCardCreatedLogEvent",
       event: "battle_proto_card_created",
-      build: () => createBattleProtoCardCreatedLogEvent(state, {
-        battleCardId: "card-1",
-        provenanceKind: "generated-copy",
-        sourceBattleCardId: "card-0",
-        name: "Copy",
-        subtype: "x",
-        printedSpark: 1,
-        ownerSide: "player",
-        destinationZone: "hand",
-      }, context),
+      build: () =>
+        createBattleProtoCardCreatedLogEvent(
+          state,
+          {
+            battleCardId: asBattleCardId("card-1"),
+            provenanceKind: "generated-copy",
+            sourceBattleCardId: asBattleCardId("card-0"),
+            name: "Copy",
+            subtype: "x",
+            printedSpark: 1,
+            ownerSide: "player",
+            destinationZone: "hand",
+          },
+          context,
+        ),
     },
     {
       name: "createBattleProtoDeckReorderedLogEvent",
       event: "battle_proto_deck_reordered",
-      build: () => createBattleProtoDeckReorderedLogEvent(state, {
-        side: "player",
-        orderBefore: ["a", "b"],
-        orderAfter: ["b", "a"],
-      }, context),
+      build: () =>
+        createBattleProtoDeckReorderedLogEvent(
+          state,
+          {
+            side: "player",
+            orderBefore: [asBattleCardId("a"), asBattleCardId("b")],
+            orderAfter: [asBattleCardId("b"), asBattleCardId("a")],
+          },
+          context,
+        ),
     },
     {
       name: "createBattleProtoMarkerSetLogEvent",
       event: "battle_proto_marker_set",
-      build: () => createBattleProtoMarkerSetLogEvent(state, {
-        battleCardId: "card-1",
-        markers: { isPrevented: true, isCopied: false },
-        diff: { prevented: "set", copied: "unchanged" },
-      }, context),
+      build: () =>
+        createBattleProtoMarkerSetLogEvent(
+          state,
+          {
+            battleCardId: asBattleCardId("card-1"),
+            markers: { isPrevented: true, isCopied: false },
+            diff: { prevented: "set", copied: "unchanged" },
+          },
+          context,
+        ),
     },
   ];
 
@@ -324,7 +357,7 @@ function makeBattleStateFixture(): Pick<
   "battleId" | "turnNumber" | "phase" | "activeSide"
 > {
   return {
-    battleId: "battle-fixture",
+    battleId: asBattleId("battle-fixture"),
     turnNumber: 3,
     phase: "day",
     activeSide: "enemy",

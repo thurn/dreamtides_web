@@ -54,11 +54,12 @@ import {
   filterAndSortDeckCards,
 } from "./mobile-deck-filter";
 import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
+import type { DeckEntryId } from "../../types/identifiers";
 
 /** One deck card, resolved for display (transfiguration/type/stat applied). */
 export interface DeckCardView {
   /** Stable key for the deck entry — unique even across duplicate names. */
-  entryId: string;
+  entryId: DeckEntryId;
   /** Canonical UUID-backed semantic model rendered by GameCard. */
   model: GameCardModel;
   /** True when the entry is Nightmare, the sole Bane, marked with a danger ring. */
@@ -346,10 +347,7 @@ function DeckControls({
           "[card-browser] Sort-field option for canonical authored card names.",
         );
       case "drafted":
-        return tx(
-          "Acquired",
-          "[card-browser] Deck sort acquired.",
-        );
+        return tx("Acquired", "[card-browser] Deck sort acquired.");
       case "cost":
         return tx(
           "Cost",

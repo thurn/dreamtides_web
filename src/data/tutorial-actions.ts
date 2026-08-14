@@ -28,6 +28,16 @@ import {
   isTutorialHandoffSlotLegal,
   tutorialCardConstantId as resolveTutorialCardConstantId,
 } from "../../scripts/tutorial-battle-contracts.mjs";
+import {
+  asDreamAvatarId,
+  asTutorialActionId,
+  asTutorialTriggerId,
+} from "../types/identifiers";
+import { asCardId, type CardId } from "../types/card-identity";
+import { asDreamwellCardId } from "../types/identifiers";
+import { asGlossaryEntryId } from "../types/identifiers";
+import type { TutorialActionId } from "../types/identifiers";
+import { isBackRankSlotId, isFrontRankSlotId } from "../battle/types";
 
 const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
@@ -61,33 +71,47 @@ function parseSide(value: unknown, field: string): "player" | "enemy" {
 
 function parseTutorialCardConstants(value: unknown): TutorialCardConstants {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
-    throw new Error("Tutorial battle must contain a tutorialCardConstants table.");
+    throw new Error(
+      "Tutorial battle must contain a tutorialCardConstants table.",
+    );
   }
   const record = value as Record<string, unknown>;
   return {
-    tutorialPlayerCharacterCardId: parseUuid(
-      record.tutorialPlayerCharacterCardId,
-      "tutorialCardConstants.tutorialPlayerCharacterCardId",
+    tutorialPlayerCharacterCardId: asCardId(
+      parseUuid(
+        record.tutorialPlayerCharacterCardId,
+        "tutorialCardConstants.tutorialPlayerCharacterCardId",
+      ),
     ),
-    tutorialOpponentCharacterCardId: parseUuid(
-      record.tutorialOpponentCharacterCardId,
-      "tutorialCardConstants.tutorialOpponentCharacterCardId",
+    tutorialOpponentCharacterCardId: asCardId(
+      parseUuid(
+        record.tutorialOpponentCharacterCardId,
+        "tutorialCardConstants.tutorialOpponentCharacterCardId",
+      ),
     ),
-    loadingScreenCharacterCardId: parseUuid(
-      record.loadingScreenCharacterCardId,
-      "tutorialCardConstants.loadingScreenCharacterCardId",
+    loadingScreenCharacterCardId: asCardId(
+      parseUuid(
+        record.loadingScreenCharacterCardId,
+        "tutorialCardConstants.loadingScreenCharacterCardId",
+      ),
     ),
-    loadingScreenEventCardId: parseUuid(
-      record.loadingScreenEventCardId,
-      "tutorialCardConstants.loadingScreenEventCardId",
+    loadingScreenEventCardId: asCardId(
+      parseUuid(
+        record.loadingScreenEventCardId,
+        "tutorialCardConstants.loadingScreenEventCardId",
+      ),
     ),
-    handoffEnemyCharacterCardId: parseUuid(
-      record.handoffEnemyCharacterCardId,
-      "tutorialCardConstants.handoffEnemyCharacterCardId",
+    handoffEnemyCharacterCardId: asCardId(
+      parseUuid(
+        record.handoffEnemyCharacterCardId,
+        "tutorialCardConstants.handoffEnemyCharacterCardId",
+      ),
     ),
-    tutorialDreamwellCardId: parseUuid(
-      record.tutorialDreamwellCardId,
-      "tutorialCardConstants.tutorialDreamwellCardId",
+    tutorialDreamwellCardId: asDreamwellCardId(
+      parseUuid(
+        record.tutorialDreamwellCardId,
+        "tutorialCardConstants.tutorialDreamwellCardId",
+      ),
     ),
   };
 }
@@ -119,7 +143,7 @@ function parseStarterDeck(value: unknown) {
     }
     seen.add(cardId);
     return {
-      cardId,
+      cardId: asCardId(cardId),
       copies: parseInteger(
         record.copies,
         `starterDeck[${String(index)}].copies`,
@@ -212,12 +236,15 @@ function parseHandoffPlacements(value: unknown) {
       throw new Error(`Tutorial battle handoff placement repeats ${address}.`);
     }
     occupied.add(address);
-    const zone: "frontRank" | "backRank" = record.zone;
-    return {
-      ...shared,
-      zone,
-      slotId: record.slotId,
-    };
+    if (record.zone === "frontRank" && isFrontRankSlotId(record.slotId)) {
+      return { ...shared, zone: "frontRank" as const, slotId: record.slotId };
+    }
+    if (record.zone === "backRank" && isBackRankSlotId(record.slotId)) {
+      return { ...shared, zone: "backRank" as const, slotId: record.slotId };
+    }
+    throw new Error(
+      `Tutorial battle handoff placement ${String(index + 1)} has a mismatched rank slot.`,
+    );
   });
 }
 
@@ -247,18 +274,18 @@ function parseHandoff(value: unknown) {
 function parseCardDrawList(
   value: unknown,
   field: "forcedPlayerDraws" | "forcedEnemyDraws" | "dreamwellDraws",
-): readonly string[] {
+): readonly CardId[] {
   if (!Array.isArray(value)) {
     throw new Error(`Tutorial battle ${field} must be an array of card UUIDs.`);
   }
-  const cardIds: string[] = [];
+  const cardIds: CardId[] = [];
   for (const cardId of value as unknown[]) {
     if (typeof cardId !== "string" || !isCardId(cardId)) {
       throw new Error(
         `Tutorial battle ${field} must be an array of card UUIDs.`,
       );
     }
-    cardIds.push(cardId);
+    cardIds.push(asCardId(cardId));
   }
   return cardIds;
 }
@@ -272,22 +299,31 @@ export function parseTutorialBattleConfiguration(
   }
   const record = value as Record<string, unknown>;
   const battle = {
-    tutorialCardConstants: parseTutorialCardConstants(record.tutorialCardConstants),
-    playerDreamAvatarId: parseUuid(
-      record.playerDreamAvatarId,
-      "playerDreamAvatarId",
+    tutorialCardConstants: parseTutorialCardConstants(
+      record.tutorialCardConstants,
     ),
-    enemyDreamAvatarId: parseUuid(
-      record.enemyDreamAvatarId,
-      "enemyDreamAvatarId",
+    playerDreamAvatarId: asDreamAvatarId(
+      parseUuid(record.playerDreamAvatarId, "playerDreamAvatarId"),
+    ),
+    enemyDreamAvatarId: asDreamAvatarId(
+      parseUuid(record.enemyDreamAvatarId, "enemyDreamAvatarId"),
     ),
     startingEnergy: parseInteger(record.startingEnergy, "startingEnergy"),
     scoreToWin: parseInteger(record.scoreToWin, "scoreToWin", 1),
     starterDeck: parseStarterDeck(record.starterDeck),
     handoff: parseHandoff(record.handoff),
-    forcedPlayerDraws: parseCardDrawList(record.forcedPlayerDraws, "forcedPlayerDraws"),
-    forcedEnemyDraws: parseCardDrawList(record.forcedEnemyDraws, "forcedEnemyDraws"),
-    dreamwellDraws: parseCardDrawList(record.dreamwellDraws, "dreamwellDraws"),
+    forcedPlayerDraws: parseCardDrawList(
+      record.forcedPlayerDraws,
+      "forcedPlayerDraws",
+    ).map(asCardId),
+    forcedEnemyDraws: parseCardDrawList(
+      record.forcedEnemyDraws,
+      "forcedEnemyDraws",
+    ).map(asCardId),
+    dreamwellDraws: parseCardDrawList(
+      record.dreamwellDraws,
+      "dreamwellDraws",
+    ).map(asDreamwellCardId),
     aiActionOverrides: parseTutorialBattleAiActionOverrides(
       record.aiActionOverrides ?? [],
     ),
@@ -317,8 +353,8 @@ export function parseTutorialBattleConfiguration(
 export function tutorialCardConstantId(
   tutorialCardConstants: TutorialCardConstants,
   role: TutorialCardConstantRole,
-): string {
-  return resolveTutorialCardConstantId(tutorialCardConstants, role);
+): import("../types/card-identity").CardId {
+  return asCardId(resolveTutorialCardConstantId(tutorialCardConstants, role));
 }
 
 /** The deck-size value displayed and initialized from the starter-deck recipe. */
@@ -330,7 +366,7 @@ export function tutorialStarterDeckSize(
 
 function parseTutorialSpeechBubble(
   value: unknown,
-  actionId: string,
+  actionId: TutorialActionId,
   required: boolean,
 ): TutorialSpeechBubble | undefined {
   if (value === undefined && !required) return undefined;
@@ -462,7 +498,7 @@ function parsePersistentTutorialConfiguration(
   const record = value as Record<string, unknown>;
   const parsed = parseTutorialSpeechBubble(
     record.speechBubble,
-    configurationId,
+    asTutorialActionId(configurationId),
     true,
   );
   if (parsed === undefined || parsed.speaker !== "mira") {
@@ -572,7 +608,7 @@ export function parseTutorialActions(
     if (record.action === "display-speech-bubble") {
       const speechBubble = parseTutorialSpeechBubble(
         record.speechBubble,
-        id,
+        asTutorialActionId(id),
         true,
       );
       if (speechBubble === undefined) {
@@ -581,7 +617,7 @@ export function parseTutorialActions(
         );
       }
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "display-speech-bubble",
         speechBubble,
         wait,
@@ -622,7 +658,7 @@ export function parseTutorialActions(
         );
       }
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "display-how-to-play",
         trigger,
         ...(companion === undefined ? {} : { companion }),
@@ -655,7 +691,7 @@ export function parseTutorialActions(
         );
       }
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "animate-dream-avatar-portrait",
         owner,
         pause,
@@ -670,9 +706,9 @@ export function parseTutorialActions(
         );
       }
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "draw-opponent-card",
-        cardId: record.cardId,
+        cardId: asCardId(record.cardId),
         wait,
       } satisfies TutorialAction;
     }
@@ -695,10 +731,10 @@ export function parseTutorialActions(
         );
       }
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "draw-card",
         owner,
-        cardId: record.cardId,
+        cardId: asCardId(record.cardId),
         reason,
         wait,
       } satisfies TutorialAction;
@@ -710,9 +746,9 @@ export function parseTutorialActions(
         );
       }
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "reposition-opponent-character",
-        cardId: record.cardId,
+        cardId: asCardId(record.cardId),
         wait,
       } satisfies TutorialAction;
     }
@@ -731,10 +767,10 @@ export function parseTutorialActions(
         );
       }
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "reposition-player-character",
-        cardId: record.cardId,
-        opposingCardId: record.opposingCardId,
+        cardId: asCardId(record.cardId),
+        opposingCardId: asCardId(record.opposingCardId),
         wait,
       } satisfies TutorialAction;
     }
@@ -761,10 +797,10 @@ export function parseTutorialActions(
         );
       }
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "resolve-challenge",
-        challengerCardId: record.challengerCardId,
-        blockerCardId: record.blockerCardId,
+        challengerCardId: asCardId(record.challengerCardId),
+        blockerCardId: asCardId(record.blockerCardId),
         wait,
       } satisfies TutorialAction;
     }
@@ -792,10 +828,10 @@ export function parseTutorialActions(
         );
       }
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "draw-dreamwell-card",
         owner,
-        cardId: record.cardId,
+        cardId: asDreamwellCardId(record.cardId),
         ...(revealDuration === undefined ? {} : { revealDuration }),
         wait,
       } satisfies TutorialAction;
@@ -803,11 +839,11 @@ export function parseTutorialActions(
     if (record.action === "end-turn") {
       const speechBubble = parseTutorialSpeechBubble(
         record.speechBubble,
-        id,
+        asTutorialActionId(id),
         false,
       );
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "end-turn",
         ...(speechBubble === undefined ? {} : { speechBubble }),
         wait,
@@ -831,13 +867,13 @@ export function parseTutorialActions(
       }
       const speechBubble = parseTutorialSpeechBubble(
         record.speechBubble,
-        id,
+        asTutorialActionId(id),
         false,
       );
       return {
-        id,
+        id: asTutorialActionId(id),
         action: "reveal-and-play-opponent-card",
-        cardId: record.cardId,
+        cardId: asCardId(record.cardId),
         revealDuration,
         ...(speechBubble === undefined ? {} : { speechBubble }),
         wait,
@@ -917,7 +953,7 @@ export function parseTutorialTriggers(
     );
     const speechBubble = parseTutorialSpeechBubble(
       { ...record, delay: 0 },
-      record.id,
+      asTutorialActionId(record.id),
       true,
     );
     if (speechBubble === undefined) {
@@ -953,7 +989,7 @@ export function parseTutorialTriggers(
           `Tutorial trigger ${JSON.stringify(record.id)} must reference an existing glossary id.`,
         );
       }
-      parsedMatch = { kind: "glossary", id: match.id };
+      parsedMatch = { kind: "glossary", id: asGlossaryEntryId(match.id) };
     } else if (match.kind === "card-type") {
       if (match.cardType !== "event") {
         throw new Error(
@@ -967,7 +1003,12 @@ export function parseTutorialTriggers(
           `Tutorial trigger ${JSON.stringify(record.id)} must use a card UUID.`,
         );
       }
-      parsedMatch = { kind: "card-id", cardId: match.cardId };
+      parsedMatch = {
+        kind: "card-id",
+        cardId: record.on.includes("dreamwell-resolve")
+          ? asDreamwellCardId(match.cardId)
+          : asCardId(match.cardId),
+      };
     } else if (match.kind === "any") {
       parsedMatch = { kind: "any" };
     } else {
@@ -989,7 +1030,7 @@ export function parseTutorialTriggers(
       );
     }
     return {
-      id: record.id,
+      id: asTutorialTriggerId(record.id),
       on: [...record.on],
       priority,
       match: parsedMatch,

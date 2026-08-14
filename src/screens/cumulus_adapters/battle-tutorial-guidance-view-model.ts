@@ -6,6 +6,7 @@ import type { TutorialGuidanceMessage } from "../../rules/battle/fold";
 import { tutorialGuidanceMessageDurationSeconds } from "../../battle/tutorial-presentation-timing";
 import { tx } from "@trox/runtime";
 import { localizedSourceText } from "../../runtime/localization/runtime";
+import { asPresentationId } from "../../types/identifiers";
 
 function guidanceDialogue(
   battle: BattleFoldState,
@@ -20,11 +21,17 @@ function guidanceDialogue(
       },
       portraitAlt:
         dreamAvatar === null || dreamAvatar === undefined
-          ? tx("Player Avatar", "[battle] [tutorial] [dream-avatar] Fallback name for the player's Dream Avatar.")
+          ? tx(
+              "Player Avatar",
+              "[battle] [tutorial] [dream-avatar] Fallback name for the player's Dream Avatar.",
+            )
           : localizedSourceText(dreamAvatar.name),
       speakerName:
         dreamAvatar === null || dreamAvatar === undefined
-          ? tx("Dreamer", "[battle] [tutorial] Fallback speaker name for the player.")
+          ? tx(
+              "Dreamer",
+              "[battle] [tutorial] Fallback speaker name for the player.",
+            )
           : localizedSourceText(dreamAvatar.name),
       text: localizedSourceText(message.text),
     };
@@ -62,7 +69,7 @@ export function buildBattleTutorialGuidanceView(
     presentation.source.kind === "battle"
   ) {
     return {
-      presentationId: presentation.id,
+      presentationId: asPresentationId(presentation.id),
       triggerId: message.triggerId,
       messageIndex: presentation.messageIndex,
       messageCount: presentation.messages.length,
@@ -82,7 +89,7 @@ export function buildBattleTutorialGuidanceView(
     );
     if (definition === undefined) return null;
     return {
-      presentationId: presentation.id,
+      presentationId: asPresentationId(presentation.id),
       triggerId: message.triggerId,
       messageIndex: presentation.messageIndex,
       messageCount: presentation.messages.length,
@@ -99,11 +106,10 @@ export function buildBattleTutorialGuidanceView(
       },
     };
   }
-  const instance =
-    battle.board.cardInstances[presentation.source.battleCardId];
+  const instance = battle.board.cardInstances[presentation.source.battleCardId];
   if (instance === undefined) return null;
   return {
-    presentationId: presentation.id,
+    presentationId: asPresentationId(presentation.id),
     triggerId: message.triggerId,
     messageIndex: presentation.messageIndex,
     messageCount: presentation.messages.length,

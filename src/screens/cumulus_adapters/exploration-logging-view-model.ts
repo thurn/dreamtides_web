@@ -1,5 +1,6 @@
 import type { ExplorationSiteView } from "../../cumulus/screens/ExplorationSiteScreen";
 import type { ExplorationSiteRuntime } from "../../types/journey";
+import type { ExplorationActionId } from "../../types/identifiers";
 
 function compoundAuthoredFields(
   action: ExplorationSiteView["actions"][number] | undefined,
@@ -231,7 +232,7 @@ export function buildExplorationEntryLog(
 export function buildExplorationActionLog(
   view: ExplorationSiteView,
   runtime: ExplorationSiteRuntime,
-  actionId: string,
+  actionId: ExplorationActionId,
   selection: unknown,
 ) {
   const action = view.actions.find((candidate) => candidate.id === actionId);

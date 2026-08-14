@@ -83,6 +83,13 @@ import {
 import { registerSiteContentProvider, type SiteContentProvider } from "./sites";
 import { registerBattleInitProvider } from "../battle/battle-events";
 import { fixtureBattleInitProvider } from "../replay/fixture-providers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import type { DreamAvatarId } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asDeckEntryId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Fixtures & engine config
@@ -146,7 +153,7 @@ function hashNumber(text: string): number {
  */
 function lifecycleProvider(): JourneyLifecycleContentProvider {
   function packageFor(
-    dreamAvatarId: string,
+    dreamAvatarId: DreamAvatarId,
     seed: string,
   ): ResolvedDreamAvatarPackage {
     const dreamAvatar: DreamAvatarContent = {
@@ -165,7 +172,7 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
     return {
       dreamAvatar,
       draftPoolCopiesByCard: { "100": 4, "101": 4, "102": 4 },
-      dreamsignPoolIds,
+      dreamsignPoolIds: dreamsignPoolIds.map(asDreamsignId),
       mandatoryOnlyPoolSize: 3,
       draftPoolSize: 3,
       doubledCardCount: 1,
@@ -194,8 +201,11 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
         resolvedPackage: pkg,
         remainingDreamsignPool: [...pkg.dreamsignPoolIds],
         draftState: populatedDraftState(),
-        currentDreamscape: "node-start",
-        atlas: { ...journey.atlas, nodes: { "node-start": shopNode() } },
+        currentDreamscape: asAtlasNodeId("node-start"),
+        atlas: {
+          ...journey.atlas,
+          nodes: { [asAtlasNodeId("node-start")]: shopNode() },
+        },
         siteRuntime: {
           [SHOP_SITE_ID]: {
             kind: "shop",
@@ -225,7 +235,7 @@ function populatedDraftState(): PoolDraftState {
   return {
     mode: "tides4",
     currentOffer: [100, 101, 102],
-    activeSiteId: DRAFT_SITE_ID,
+    activeSiteId: asSiteId(DRAFT_SITE_ID),
     pickNumber: 1,
     sitePicksCompleted: Math.max(0, SITE_PICKS - 1),
     draftPoolCopiesByCard: { "100": 4, "101": 4, "102": 4 },
@@ -236,12 +246,17 @@ function populatedDraftState(): PoolDraftState {
 /** An atlas node carrying the Shop site `REROLL_SHOP` restocks. */
 function shopNode(): DreamscapeNode {
   return {
-    id: "node-start",
+    id: asAtlasNodeId("node-start"),
     layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: null,
     sites: [
-      { id: SHOP_SITE_ID, type: "Shop", isEnhanced: false, isVisited: false },
+      {
+        id: asSiteId(SHOP_SITE_ID),
+        type: "Shop",
+        isEnhanced: false,
+        isVisited: false,
+      },
     ],
     position: { x: 0, y: 0 },
     state: "available",
@@ -257,7 +272,7 @@ function rerolledDraftState(): DraftState {
   return {
     mode: "tides4",
     currentOffer: [],
-    activeSiteId: DRAFT_SITE_ID,
+    activeSiteId: asSiteId(DRAFT_SITE_ID),
     pickNumber: 2,
     sitePicksCompleted: Math.max(0, SITE_PICKS - 1),
     draftPoolCopiesByCard: { "100": 4 },
@@ -450,56 +465,59 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
   }),
 
   // navigation
-  (rng) => ({ type: "ENTER_SITE", payload: { siteId: pick(rng, SITE_IDS) } }),
+  (rng) => ({
+    type: "ENTER_SITE",
+    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+  }),
   (rng) => ({
     type: "TRAVEL_TO_DREAMSCAPE",
-    payload: { nodeId: pick(rng, NODE_IDS) },
+    payload: { nodeId: asAtlasNodeId(pick(rng, NODE_IDS)) },
   }),
   () => ({ type: "DISMISS_STARTING_DECK_POPUP", payload: {} }),
 
   // deck & transfiguration
   (rng) => ({
     type: "ADD_CARD",
-    payload: { cardId: `card-${100 + Math.floor(rng() * 20)}` },
+    payload: { cardId: asCardId(`card-${100 + Math.floor(rng() * 20)}`) },
   }),
   (rng) => ({
     type: "REMOVE_DECK_ENTRY",
-    payload: { entryId: `entry-${Math.floor(rng() * 20)}` },
+    payload: { entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`) },
   }),
   (rng) => ({
     type: "PURGE_DECK_CARDS",
-    payload: { entryIds: [`entry-${Math.floor(rng() * 20)}`] },
+    payload: { entryIds: [asDeckEntryId(`entry-${Math.floor(rng() * 20)}`)] },
   }),
   (rng) => ({
     type: "DUPLICATE_DECK_ENTRY",
-    payload: { entryId: `entry-${Math.floor(rng() * 20)}` },
+    payload: { entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`) },
   }),
   (rng) => ({
     type: "SET_DECK_ENTRY_TYPE",
     payload: {
-      entryId: `entry-${Math.floor(rng() * 20)}`,
+      entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
       typeChange: { to: "Event" },
     },
   }),
   (rng) => ({
     type: "TRANSFIGURE_CARD",
     payload: {
-      entryId: `entry-${Math.floor(rng() * 20)}`,
+      entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
       transfiguration: { kind: "x" },
     },
   }),
   (rng) => ({
     type: "ACCEPT_TRANSFIGURATION_CHOICE",
     payload: {
-      siteId: pick(rng, SITE_IDS),
-      entryId: `entry-${Math.floor(rng() * 20)}`,
+      siteId: asSiteId(pick(rng, SITE_IDS)),
+      entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
     },
   }),
   (rng) => ({
     type: "ACCEPT_DUPLICATION_CHOICE",
     payload: {
-      siteId: pick(rng, SITE_IDS),
-      entryId: `entry-${Math.floor(rng() * 20)}`,
+      siteId: asSiteId(pick(rng, SITE_IDS)),
+      entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
     },
   }),
   () => ({ type: "PURGE_ALL_NIGHTMARE_CARDS", payload: {} }),
@@ -511,11 +529,15 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
   // dreamsigns
   (rng) => ({
     type: "ADD_DREAMSIGN",
-    payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}` },
+    payload: {
+      dreamsignId: asDreamsignId(`ds-${Math.floor(rng() * 1_000_000)}`),
+    },
   }),
   (rng) => ({
     type: "REMOVE_DREAMSIGN",
-    payload: { dreamsignId: `ds-${Math.floor(rng() * 1_000_000)}` },
+    payload: {
+      dreamsignId: asDreamsignId(`ds-${Math.floor(rng() * 1_000_000)}`),
+    },
   }),
   // draft — a pick aligned with the start draft's offer ([100,101,102]) so it
   // APPLIES on the first pick (writing draftState); later picks bounce once the
@@ -524,7 +546,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
     const idx = Math.floor(rng() * 3);
     return {
       type: "PICK_DRAFT_CARD",
-      payload: { packIndex: idx, cardId: `card-${100 + idx}` },
+      payload: { packIndex: idx, cardId: asCardId(`card-${100 + idx}`) },
     };
   },
   // draft — a deliberately mismatched pick (exercises the pack-membership bounce)
@@ -532,61 +554,70 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
     type: "PICK_DRAFT_CARD",
     payload: {
       packIndex: Math.floor(rng() * 5),
-      cardId: `card-${200 + Math.floor(rng() * 5)}`,
+      cardId: asCardId(`card-${200 + Math.floor(rng() * 5)}`),
     },
   }),
 
   // sites (bounce without a SiteContentProvider / matching runtime)
-  (rng) => ({ type: "OPEN_SITE", payload: { siteId: pick(rng, SITE_IDS) } }),
+  (rng) => ({
+    type: "OPEN_SITE",
+    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+  }),
   (rng) => ({
     type: "COMPLETE_AUGURY",
-    payload: { siteId: pick(rng, SITE_IDS) },
+    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "ACCEPT_REWARD",
     payload: {
-      siteId: pick(rng, SITE_IDS),
+      siteId: asSiteId(pick(rng, SITE_IDS)),
       choiceIndex: Math.floor(rng() * 3),
     },
   }),
   (rng) => ({
     type: "ACCEPT_DREAMSIGN_OFFER",
     payload: {
-      siteId: pick(rng, SITE_IDS),
-      dreamsignId: `ds-${Math.floor(rng() * 1000)}`,
+      siteId: asSiteId(pick(rng, SITE_IDS)),
+      dreamsignId: asDreamsignId(`ds-${Math.floor(rng() * 1000)}`),
     },
   }),
   (rng) => ({
     type: "REJECT_DREAMSIGN_OFFER",
-    payload: { siteId: pick(rng, SITE_IDS) },
+    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "ACCEPT_ESSENCE",
-    payload: { siteId: pick(rng, SITE_IDS) },
+    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "COMPLETE_SITE",
-    payload: { siteId: pick(rng, SITE_IDS) },
+    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
   }),
 
   // shop & merchant
   (rng) => ({
     type: "ACCEPT_MERCHANT_OFFER",
-    payload: { siteId: pick(rng, SITE_IDS) },
+    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "DECLINE_MERCHANT",
-    payload: { siteId: pick(rng, SITE_IDS) },
+    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "BUY_SHOP_SLOT",
-    payload: { siteId: pick(rng, SITE_IDS), slotIndex: Math.floor(rng() * 4) },
+    payload: {
+      siteId: asSiteId(pick(rng, SITE_IDS)),
+      slotIndex: Math.floor(rng() * 4),
+    },
   }),
-  (rng) => ({ type: "REROLL_SHOP", payload: { siteId: pick(rng, SITE_IDS) } }),
+  (rng) => ({
+    type: "REROLL_SHOP",
+    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+  }),
   // REROLL_SHOP aimed at the seeded Shop site so it APPLIES (rewriting
   // draftState from the Site fake's non-null restock) at least once per run,
   // before another action can close it.
-  () => ({ type: "REROLL_SHOP", payload: { siteId: SHOP_SITE_ID } }),
+  () => ({ type: "REROLL_SHOP", payload: { siteId: asSiteId(SHOP_SITE_ID) } }),
   (rng) => ({
     type: "GRANT_FREE_REROLLS",
     payload: { count: Math.floor(rng() * 3) },
@@ -620,20 +651,26 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
   (rng) => ({
     type: "REPLACE_SITE_TYPE",
     payload: {
-      nodeId: pick(rng, NODE_IDS),
+      nodeId: asAtlasNodeId(pick(rng, NODE_IDS)),
       fromSiteType: pick(rng, SITE_TYPES),
       toSiteType: pick(rng, SITE_TYPES),
     },
   }),
   (rng) => ({
     type: "ADD_SITE_TO_DREAMSCAPE",
-    payload: { nodeId: pick(rng, NODE_IDS), siteType: pick(rng, SITE_TYPES) },
+    payload: {
+      nodeId: asAtlasNodeId(pick(rng, NODE_IDS)),
+      siteType: pick(rng, SITE_TYPES),
+    },
   }),
 
   // battle bridges & CAS-exempt (no journey case → routed to a bounce; here to
   // stress total-fold safety with types outside the journey domain switch)
   () => ({ type: "END_BATTLE", payload: {} }),
-  (rng) => ({ type: "BEGIN_BATTLE", payload: { siteId: pick(rng, SITE_IDS) } }),
+  (rng) => ({
+    type: "BEGIN_BATTLE",
+    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+  }),
   // Battle-slice mutation (applies once a BEGIN_BATTLE has created the slice), so
   // the determinism / JSON-purity / hash properties exercise a live battle fold.
   (rng) => ({
@@ -739,7 +776,7 @@ const START_JOURNEY_ENTRY: { seq: number; event: GameEvent } = {
   seq: 1,
   event: {
     type: "START_JOURNEY",
-    payload: { dreamAvatarId: "dc-1" },
+    payload: { dreamAvatarId: asDreamAvatarId("dc-1") },
     actor: ACTOR,
     clientTimestamp: TIMESTAMP,
     basedOnSeq: 0,

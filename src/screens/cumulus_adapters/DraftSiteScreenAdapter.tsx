@@ -18,10 +18,11 @@ import {
 } from "./draft-view-model";
 import { DraftScreen } from "../../cumulus/screens/DraftScreen";
 import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
+import type { SiteId } from "../../types/identifiers";
 
 /** Live draft site screen: enters the site, builds the view-model, picks a
  * card, and completes back to the dreamscape once the pack runs out. */
-export function DraftSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function DraftSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, cardDatabase, journeyContent } = useJourney();
 
   // Enter this site whenever the displayed draft state has not advanced to

@@ -2,6 +2,7 @@ import { isFrontRankSlotId, rankSlotIds } from "../types";
 import type { FrontRankSlotId, BackRankSlotId } from "../types";
 import type { AiCard, ForwardModel } from "./forward-model";
 import type { PlannedAction } from "./planner";
+import type { BattleCardId } from "../../types/identifiers";
 
 /**
  * Blocking repositioning for the AI on the OPPONENT's turn.
@@ -24,23 +25,18 @@ export interface BlockingOptions {
 }
 
 export type BlockMoveReason =
-  | "favorable"
-  | "even-trade"
-  | "score-deficit"
-  | "prevent-lethal";
+  "favorable" | "even-trade" | "score-deficit" | "prevent-lethal";
 
 export type BlockDeclineReason =
-  | "already-blocked"
-  | "no-available-blocker"
-  | "preserve-body-while-ahead";
+  "already-blocked" | "no-available-blocker" | "preserve-body-while-ahead";
 
 export interface BlockingLaneDecision {
-  challengerBattleCardId: string;
+  challengerBattleCardId: BattleCardId;
   lane: FrontRankSlotId;
   challengerSpark: number;
   outcome: "blocked" | "declined" | "already-blocked";
   reason: BlockMoveReason | BlockDeclineReason;
-  blockerBattleCardId: string | null;
+  blockerBattleCardId: BattleCardId | null;
   blockerSpark: number | null;
 }
 
@@ -57,7 +53,7 @@ export interface BlockingDecision {
   incomingScoreAfterBlocks: number;
   lethalBeforeBlocks: boolean;
   lethalPreventable: boolean;
-  availableBlockerBattleCardIds: string[];
+  availableBlockerBattleCardIds: BattleCardId[];
   lanes: BlockingLaneDecision[];
 }
 
@@ -74,7 +70,7 @@ interface BackRankBody {
 }
 
 interface Challenger {
-  battleCardId: string;
+  battleCardId: BattleCardId;
   slot: FrontRankSlotId;
   spark: number;
 }
@@ -93,7 +89,10 @@ interface BlockerChoice {
  * the challengers that would score the most. A lane already holding an AI body
  * is left alone — that body already blocks it.
  */
-export function planBlocking(model: ForwardModel, opts: BlockingOptions): PlannedAction[] {
+export function planBlocking(
+  model: ForwardModel,
+  opts: BlockingOptions,
+): PlannedAction[] {
   return planBlockingWithDecision(model, opts).actions;
 }
 
@@ -122,23 +121,22 @@ export function planBlockingWithDecision(
     }
   }
 
-  const scoreAgainstBlocker = (challengerSpark: number, blockerSpark: number): number =>
-    Math.max(0, challengerSpark - blockerSpark);
+  const scoreAgainstBlocker = (
+    challengerSpark: number,
+    blockerSpark: number,
+  ): number => Math.max(0, challengerSpark - blockerSpark);
   const unblockedChallengers = challengers.filter(
     (challenger) => model.aiFrontRank[challenger.slot] === null,
   );
-  const incomingScoreBeforeBlocks = challengers.reduce(
-    (total, challenger) => {
-      const blocker = model.aiFrontRank[challenger.slot];
-      return (
-        total +
-        (blocker === null
-          ? challenger.spark
-          : scoreAgainstBlocker(challenger.spark, bodySpark(blocker)))
-      );
-    },
-    0,
-  );
+  const incomingScoreBeforeBlocks = challengers.reduce((total, challenger) => {
+    const blocker = model.aiFrontRank[challenger.slot];
+    return (
+      total +
+      (blocker === null
+        ? challenger.spark
+        : scoreAgainstBlocker(challenger.spark, bodySpark(blocker)))
+    );
+  }, 0);
   const lethalBeforeBlocks =
     model.playerScore + incomingScoreBeforeBlocks >= opts.scoreToWin;
   const blockerSparksDescending = available

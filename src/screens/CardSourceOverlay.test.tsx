@@ -4,6 +4,8 @@ import { resolveSource } from "../runtime/localization/runtime";
 import type { Tides4ProvenanceSummary } from "../types/content";
 import type { CardSourceDebugState } from "../types/journey";
 import { buildCardSourceView } from "./cumulus_adapters/card-source-view-model";
+import { asDreamAvatarId } from "../types/identifiers";
+import { asTideId } from "../types/identifiers";
 
 const DEBUG: CardSourceDebugState = {
   screenLabel: "Draft",
@@ -12,7 +14,7 @@ const DEBUG: CardSourceDebugState = {
 };
 
 const PROVENANCE: Tides4ProvenanceSummary = {
-  dreamAvatarId: "avatar-a",
+  dreamAvatarId: asDreamAvatarId("avatar-a"),
   signatureless: false,
   borrowedArchetypeName: null,
   dealSize: 150,
@@ -20,18 +22,24 @@ const PROVENANCE: Tides4ProvenanceSummary = {
   maxFacets: 3,
   facetDrawnCount: 1,
   facetAvailableCount: 2,
-  tides: [{
-    id: "tide-a",
-    displayName: "Signature A",
-    displayDescription: "Signature description",
-    role: "signature",
-    selection: "starter",
-    joined: true,
-    cardNumbers: [1],
-    contributedCardCount: 1,
-  }],
+  tides: [
+    {
+      id: asTideId("tide-a"),
+      displayName: "Signature A",
+      displayDescription: "Signature description",
+      role: "signature",
+      selection: "starter",
+      joined: true,
+      cardNumbers: [1],
+      contributedCardCount: 1,
+    },
+  ],
   cardProvenanceByNumber: {
-    "1": { copies: 2, tideIds: ["tide-a"], primaryTideId: "tide-a" },
+    "1": {
+      copies: 2,
+      tideIds: [asTideId("tide-a")],
+      primaryTideId: asTideId("tide-a"),
+    },
   },
 };
 
@@ -39,13 +47,19 @@ describe("card source view", () => {
   it("explains cards using tides4 provenance", () => {
     const view = buildCardSourceView(DEBUG, PROVENANCE, new Map());
     if (view === null) throw new Error("Expected card source view.");
-    expect(view?.construction?.lines.map((line) => resolveSource(line.text))).toContain("Signature A");
-    expect(resolveSource(view.cards.lines[0].text)).toContain("signature tide Signature A");
+    expect(
+      view?.construction?.lines.map((line) => resolveSource(line.text)),
+    ).toContain("Signature A");
+    expect(resolveSource(view.cards.lines[0].text)).toContain(
+      "signature tide Signature A",
+    );
   });
 
   it("falls back to pool-copy provenance while tides are loading", () => {
     const view = buildCardSourceView(DEBUG, null, new Map());
     if (view === null) throw new Error("Expected card source view.");
-    expect(resolveSource(view.cards.lines[0].text)).toContain("2 copies in the pool");
+    expect(resolveSource(view.cards.lines[0].text)).toContain(
+      "2 copies in the pool",
+    );
   });
 });

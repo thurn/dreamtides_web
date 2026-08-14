@@ -8,6 +8,7 @@ import {
   generateMerchantEncounter,
   isTransfigurationMerchantArchetype,
 } from "../../journey_v2";
+import { asExplorationActionId } from "../../types/identifiers";
 
 function explorationOffersTransfiguration(
   content: JourneyContent,
@@ -27,7 +28,7 @@ function explorationOffersTransfiguration(
   );
   return encounter.actions.some(
     (action) =>
-      visibleActionIds.has(action.id) &&
+      visibleActionIds.has(asExplorationActionId(action.id)) &&
       isTransfigurationExplorationEffect(action.effectKind),
   );
 }

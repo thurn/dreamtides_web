@@ -16,8 +16,9 @@ import {
   buildShopPurchaseLogs,
   buildShopSiteEntryLog,
 } from "./shop-purchase-logging-view-model";
+import type { SiteId } from "../../types/identifiers";
 
-export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function CardShopSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, journeyContent } = useJourney();
   const node =
     state.currentDreamscape !== null

@@ -30,6 +30,10 @@ import type {
 } from "../../types/tutorial";
 import { isCardId } from "../../types/card-identity";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import { asTutorialActionId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import type { TutorialActionId } from "../../types/identifiers";
+import { asDreamwellCardId } from "../../types/identifiers";
 
 export interface TutorialEditorRailProps {
   readonly actions: readonly TutorialAction[];
@@ -41,7 +45,7 @@ export interface TutorialEditorRailProps {
     persist: boolean,
   ) => void;
   readonly onReplay: () => void;
-  readonly onPlayFromAction: (actionId: string) => void;
+  readonly onPlayFromAction: (actionId: TutorialActionId) => void;
   readonly onClose: () => void;
 }
 
@@ -136,7 +140,7 @@ function defaultAction(
   const id = nextActionId(actionName, actions);
   if (actionName === "display-speech-bubble") {
     return {
-      id,
+      id: asTutorialActionId(id),
       action: "display-speech-bubble",
       speechBubble: DEFAULT_SPEECH_BUBBLE,
       wait: 0,
@@ -144,7 +148,7 @@ function defaultAction(
   }
   if (actionName === "display-how-to-play") {
     return {
-      id,
+      id: asTutorialActionId(id),
       action: "display-how-to-play",
       trigger: "immediate",
       cardWidth: DEFAULT_HOW_TO_PLAY_CARD_WIDTH,
@@ -154,7 +158,7 @@ function defaultAction(
   }
   if (actionName === "animate-dream-avatar-portrait") {
     return {
-      id,
+      id: asTutorialActionId(id),
       action: "animate-dream-avatar-portrait",
       owner: "player",
       pause: 1,
@@ -164,7 +168,7 @@ function defaultAction(
   }
   if (actionName === "reveal-and-play-opponent-card") {
     return {
-      id,
+      id: asTutorialActionId(id),
       action: "reveal-and-play-opponent-card",
       cardId: tutorialCardConstants.tutorialOpponentCharacterCardId,
       revealDuration: 2,
@@ -173,7 +177,7 @@ function defaultAction(
   }
   if (actionName === "draw-card") {
     return {
-      id,
+      id: asTutorialActionId(id),
       action: "draw-card",
       owner: "player",
       cardId: tutorialCardConstants.tutorialPlayerCharacterCardId,
@@ -183,7 +187,7 @@ function defaultAction(
   }
   if (actionName === "draw-dreamwell-card") {
     return {
-      id,
+      id: asTutorialActionId(id),
       action: "draw-dreamwell-card",
       owner: "enemy",
       cardId: tutorialCardConstants.tutorialDreamwellCardId,
@@ -192,7 +196,7 @@ function defaultAction(
   }
   if (actionName === "reposition-opponent-character") {
     return {
-      id,
+      id: asTutorialActionId(id),
       action: "reposition-opponent-character",
       cardId: tutorialCardConstants.tutorialOpponentCharacterCardId,
       wait: 0,
@@ -200,7 +204,7 @@ function defaultAction(
   }
   if (actionName === "reposition-player-character") {
     return {
-      id,
+      id: asTutorialActionId(id),
       action: "reposition-player-character",
       cardId: tutorialCardConstants.tutorialPlayerCharacterCardId,
       opposingCardId: tutorialCardConstants.tutorialOpponentCharacterCardId,
@@ -209,7 +213,7 @@ function defaultAction(
   }
   if (actionName === "resolve-challenge") {
     return {
-      id,
+      id: asTutorialActionId(id),
       action: "resolve-challenge",
       challengerCardId: tutorialCardConstants.tutorialOpponentCharacterCardId,
       blockerCardId: tutorialCardConstants.tutorialPlayerCharacterCardId,
@@ -217,10 +221,10 @@ function defaultAction(
     };
   }
   if (actionName === "end-turn") {
-    return { id, action: "end-turn", wait: 0 };
+    return { id: asTutorialActionId(id), action: "end-turn", wait: 0 };
   }
   return {
-    id,
+    id: asTutorialActionId(id),
     action: "draw-opponent-card",
     cardId: tutorialCardConstants.tutorialOpponentCharacterCardId,
     wait: 0,
@@ -375,10 +379,11 @@ function changedActionType(
       id: action.id,
       action: actionName,
       owner: action.action === "draw-dreamwell-card" ? action.owner : "enemy",
-      cardId:
+      cardId: asDreamwellCardId(
         action.action === "draw-dreamwell-card"
           ? action.cardId
           : tutorialCardConstants.tutorialDreamwellCardId,
+      ),
       ...(action.action === "draw-dreamwell-card" &&
       action.revealDuration !== undefined
         ? { revealDuration: action.revealDuration }
@@ -406,7 +411,7 @@ function reorderedActions(
 ): readonly TutorialAction[] {
   const byId = new Map(actions.map((action) => [action.id, action]));
   return orderedIds.flatMap((id) => {
-    const action = byId.get(id);
+    const action = byId.get(asTutorialActionId(id));
     return action === undefined ? [] : [action];
   });
 }
@@ -466,7 +471,7 @@ function SpeechBubbleEditor({
   onChange,
 }: {
   readonly speechBubble: TutorialSpeechBubble | undefined;
-  readonly actionId: string;
+  readonly actionId: TutorialActionId;
   readonly actionNumber: number;
   readonly optional: boolean;
   readonly onChange: (
@@ -1105,7 +1110,7 @@ function TutorialActionRow({
             }
             testId={`tutorial-action-card-id-${action.id}`}
             onChange={(cardId) =>
-              update({ ...action, cardId }, isCardId(cardId))
+              update({ ...action, cardId: asCardId(cardId) }, isCardId(cardId))
             }
           />
         ) : null}
@@ -1163,7 +1168,10 @@ function TutorialActionRow({
               }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
-                update({ ...action, cardId }, isCardId(cardId))
+                update(
+                  { ...action, cardId: asCardId(cardId) },
+                  isCardId(cardId),
+                )
               }
             />
           </>
@@ -1181,7 +1189,10 @@ function TutorialActionRow({
               }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
-                update({ ...action, cardId }, isCardId(cardId))
+                update(
+                  { ...action, cardId: asCardId(cardId) },
+                  isCardId(cardId),
+                )
               }
             />
             <SpeechBubbleEditor
@@ -1265,7 +1276,10 @@ function TutorialActionRow({
               }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
-                update({ ...action, cardId }, isCardId(cardId))
+                update(
+                  { ...action, cardId: asDreamwellCardId(cardId) },
+                  isCardId(cardId),
+                )
               }
             />
             <NumberStepper
@@ -1309,7 +1323,7 @@ function TutorialActionRow({
             }
             testId={`tutorial-action-card-id-${action.id}`}
             onChange={(cardId) =>
-              update({ ...action, cardId }, isCardId(cardId))
+              update({ ...action, cardId: asCardId(cardId) }, isCardId(cardId))
             }
           />
         ) : null}
@@ -1326,7 +1340,10 @@ function TutorialActionRow({
               }
               testId={`tutorial-action-card-id-${action.id}`}
               onChange={(cardId) =>
-                update({ ...action, cardId }, isCardId(cardId))
+                update(
+                  { ...action, cardId: asCardId(cardId) },
+                  isCardId(cardId),
+                )
               }
             />
             <TextField
@@ -1339,7 +1356,10 @@ function TutorialActionRow({
               }
               testId={`tutorial-action-opposing-card-id-${action.id}`}
               onChange={(opposingCardId) =>
-                update({ ...action, opposingCardId }, isCardId(opposingCardId))
+                update(
+                  { ...action, opposingCardId: asCardId(opposingCardId) },
+                  isCardId(opposingCardId),
+                )
               }
             />
           </>
@@ -1358,7 +1378,7 @@ function TutorialActionRow({
               testId={`tutorial-action-challenger-card-id-${action.id}`}
               onChange={(challengerCardId) =>
                 update(
-                  { ...action, challengerCardId },
+                  { ...action, challengerCardId: asCardId(challengerCardId) },
                   isCardId(challengerCardId) &&
                     challengerCardId !== action.blockerCardId,
                 )
@@ -1375,7 +1395,7 @@ function TutorialActionRow({
               testId={`tutorial-action-blocker-card-id-${action.id}`}
               onChange={(blockerCardId) =>
                 update(
-                  { ...action, blockerCardId },
+                  { ...action, blockerCardId: asCardId(blockerCardId) },
                   isCardId(blockerCardId) &&
                     blockerCardId !== action.challengerCardId,
                 )

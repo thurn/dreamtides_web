@@ -22,8 +22,14 @@ import {
   prepareExplorationMultiCardTransfigurationPlan,
   type ExplorationMultiCardTransfigurationPlanInput,
 } from "./multi-card-transfiguration-plan";
+import { asSiteId } from "../types/identifiers";
+import type { DeckEntryId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import { asDeckEntryId } from "../types/identifiers";
+import type { ExplorationActionId } from "../types/identifiers";
+import { asExplorationActionId } from "../types/identifiers";
 
-const ENCOUNTER_CARD_ID = "b0000000-0000-4000-8000-000000000001";
+const ENCOUNTER_CARD_ID = asCardId("b0000000-0000-4000-8000-000000000001");
 const CHARACTER_CARD_ID = "b0000000-0000-4000-8000-000000000002";
 const EVENT_CARD_ID = "b0000000-0000-4000-8000-000000000003";
 const FAST_EVENT_CARD_ID = "b0000000-0000-4000-8000-000000000004";
@@ -106,14 +112,14 @@ function contentFixture(): JourneyContent {
 }
 
 const site: SiteState = {
-  id: "multi-transfiguration-site",
+  id: asSiteId("multi-transfiguration-site"),
   type: "Exploration",
   isEnhanced: false,
   isVisited: false,
 };
 
 function entry(
-  entryId: string,
+  entryId: DeckEntryId,
   cardNumber: number,
   input: {
     transfiguration?: TransfigurationType | null;
@@ -142,8 +148,8 @@ function prepare(
     "effectKind" | "predicate" | "count" | "transfiguration"
   > & {
     deck: readonly DeckEntry[];
-    actionId?: string;
-    encounterCardId?: string;
+    actionId?: ExplorationActionId;
+    encounterCardId?: CardId;
     siteOverride?: SiteState;
   },
 ) {
@@ -152,7 +158,8 @@ function prepare(
     predicate: input.predicate,
     count: input.count,
     transfiguration: input.transfiguration,
-    actionId: input.actionId ?? "multi-transfiguration-action",
+    actionId:
+      input.actionId ?? asExplorationActionId("multi-transfiguration-action"),
     encounterCardId: input.encounterCardId ?? ENCOUNTER_CARD_ID,
     journey: journey(input.deck),
     site: input.siteOverride ?? site,
@@ -167,10 +174,12 @@ describe("Exploration multi-card transfiguration plan", () => {
       predicate: "character",
       count: 2,
       deck: [
-        entry("z-copy", 2),
-        entry("event", 3),
-        entry("a-copy", 2),
-        entry("already-changed", 2, { transfiguration: "Empowered" }),
+        entry(asDeckEntryId("z-copy"), 2),
+        entry(asDeckEntryId("event"), 3),
+        entry(asDeckEntryId("a-copy"), 2),
+        entry(asDeckEntryId("already-changed"), 2, {
+          transfiguration: "Empowered",
+        }),
       ],
     });
 
@@ -202,10 +211,12 @@ describe("Exploration multi-card transfiguration plan", () => {
       count: 2,
       transfiguration: "Hastened",
       deck: [
-        entry("z-event", 3),
-        entry("already-fast", 4),
-        entry("a-event", 3),
-        entry("already-transfigured", 3, { transfiguration: "Amplified" }),
+        entry(asDeckEntryId("z-event"), 3),
+        entry(asDeckEntryId("already-fast"), 4),
+        entry(asDeckEntryId("a-event"), 3),
+        entry(asDeckEntryId("already-transfigured"), 3, {
+          transfiguration: "Amplified",
+        }),
       ],
     });
 
@@ -217,13 +228,13 @@ describe("Exploration multi-card transfiguration plan", () => {
     });
     expect(plan.eligibleCards).toEqual([
       {
-        entryId: "a-event",
-        cardId: EVENT_CARD_ID,
+        entryId: asDeckEntryId("a-event"),
+        cardId: asCardId(EVENT_CARD_ID),
         transfigurations: ["Hastened"],
       },
       {
-        entryId: "z-event",
-        cardId: EVENT_CARD_ID,
+        entryId: asDeckEntryId("z-event"),
+        cardId: asCardId(EVENT_CARD_ID),
         transfigurations: ["Hastened"],
       },
     ]);
@@ -234,13 +245,16 @@ describe("Exploration multi-card transfiguration plan", () => {
     const plan = prepare({
       effectKind: "transfigure-selected",
       predicate: "legendary",
-      deck: [entry("legendary", 2), entry("ordinary-event", 3)],
+      deck: [
+        entry(asDeckEntryId("legendary"), 2),
+        entry(asDeckEntryId("ordinary-event"), 3),
+      ],
     });
 
     expect(plan.eligibleCards).toEqual([
       expect.objectContaining({
-        entryId: "legendary",
-        cardId: CHARACTER_CARD_ID,
+        entryId: asDeckEntryId("legendary"),
+        cardId: asCardId(CHARACTER_CARD_ID),
       }),
     ]);
   });
@@ -248,12 +262,12 @@ describe("Exploration multi-card transfiguration plan", () => {
   it("keeps count-one chosen planning compatible without requiring a predicate", () => {
     const flexible = prepare({
       effectKind: "transfigure-selected",
-      deck: [entry("entry", 2)],
+      deck: [entry(asDeckEntryId("entry"), 2)],
     });
     const fixed = prepare({
       effectKind: "transfigure-fixed-selected",
       transfiguration: "Kindled",
-      deck: [entry("entry", 2)],
+      deck: [entry(asDeckEntryId("entry"), 2)],
     });
 
     expect(flexible).toMatchObject({
@@ -270,11 +284,11 @@ describe("Exploration multi-card transfiguration plan", () => {
 
   it("selects entries uniformly before using independent uniform form streams", () => {
     const deck = [
-      entry("entry-1", 2),
-      entry("entry-2", 2, { isBane: true }),
-      entry("entry-3", 2),
-      entry("entry-4", 2),
-      entry("starter-entry", 5),
+      entry(asDeckEntryId("entry-1"), 2),
+      entry(asDeckEntryId("entry-2"), 2, { isBane: true }),
+      entry(asDeckEntryId("entry-3"), 2),
+      entry(asDeckEntryId("entry-4"), 2),
+      entry(asDeckEntryId("starter-entry"), 5),
     ];
     const first = prepare({
       effectKind: "transfigure-random-cards",
@@ -309,10 +323,10 @@ describe("Exploration multi-card transfiguration plan", () => {
     });
     expect(first.eligibleCards).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ entryId: "entry-2" }),
+        expect.objectContaining({ entryId: asDeckEntryId("entry-2") }),
         expect.objectContaining({
-          entryId: "starter-entry",
-          cardId: STARTER_CARD_ID,
+          entryId: asDeckEntryId("starter-entry"),
+          cardId: asCardId(STARTER_CARD_ID),
         }),
       ]),
     );
@@ -339,21 +353,24 @@ describe("Exploration multi-card transfiguration plan", () => {
       predicate: "event",
       count: 1,
       transfiguration: "Hastened",
-      deck: [entry("ordinary-event", 3), entry("already-fast", 4)],
+      deck: [
+        entry(asDeckEntryId("ordinary-event"), 3),
+        entry(asDeckEntryId("already-fast"), 4),
+      ],
     });
 
     expect(plan.mode).toBe("random-fixed");
     expect(plan.eligibleCards).toEqual([
       {
-        entryId: "ordinary-event",
-        cardId: EVENT_CARD_ID,
+        entryId: asDeckEntryId("ordinary-event"),
+        cardId: asCardId(EVENT_CARD_ID),
         transfigurations: ["Hastened"],
       },
     ]);
     expect(plan.targets).toEqual([
       {
-        entryId: "ordinary-event",
-        cardId: EVENT_CARD_ID,
+        entryId: asDeckEntryId("ordinary-event"),
+        cardId: asCardId(EVENT_CARD_ID),
         transfiguration: "Hastened",
       },
     ]);
@@ -368,21 +385,27 @@ describe("Exploration multi-card transfiguration plan", () => {
       effectKind: "transfigure-random-cards",
       predicate: "character",
       count: 2,
-      deck: [entry("only-one", 2), entry("event", 3)],
+      deck: [
+        entry(asDeckEntryId("only-one"), 2),
+        entry(asDeckEntryId("event"), 3),
+      ],
     });
     const fixedUnavailable = prepare({
       effectKind: "transfigure-fixed-random-cards",
       predicate: "event",
       count: 1,
       transfiguration: "Kindled",
-      deck: [entry("event", 3)],
+      deck: [entry(asDeckEntryId("event"), 3)],
     });
     const chosenFixedInsufficient = prepare({
       effectKind: "transfigure-fixed-selected",
       predicate: "event",
       count: 2,
       transfiguration: "Hastened",
-      deck: [entry("only-one", 3), entry("already-fast", 4)],
+      deck: [
+        entry(asDeckEntryId("only-one"), 3),
+        entry(asDeckEntryId("already-fast"), 4),
+      ],
     });
 
     for (const plan of [
@@ -406,42 +429,51 @@ describe("Exploration multi-card transfiguration plan", () => {
         effectKind: "transfigure-random-cards",
         predicate: "character",
         count: 0,
-        deck: [entry("entry", 2)],
+        deck: [entry(asDeckEntryId("entry"), 2)],
       }),
       prepare({
         effectKind: "transfigure-random-cards",
         count: 1,
-        deck: [entry("entry", 2)],
+        deck: [entry(asDeckEntryId("entry"), 2)],
       }),
       prepare({
         effectKind: "transfigure-selected",
         count: 2,
-        deck: [entry("entry-1", 2), entry("entry-2", 2)],
+        deck: [
+          entry(asDeckEntryId("entry-1"), 2),
+          entry(asDeckEntryId("entry-2"), 2),
+        ],
       }),
       prepare({
         effectKind: "transfigure-fixed-random-cards",
         predicate: "character",
         count: 1,
-        deck: [entry("entry", 2)],
+        deck: [entry(asDeckEntryId("entry"), 2)],
       }),
       prepare({
         effectKind: "transfigure-random-cards",
         predicate: "character",
         count: 1,
         transfiguration: "Kindled",
-        deck: [entry("entry", 2)],
+        deck: [entry(asDeckEntryId("entry"), 2)],
       }),
       prepare({
         effectKind: "transfigure-fixed-selected",
         count: 2,
         transfiguration: "Kindled",
-        deck: [entry("entry-1", 2), entry("entry-2", 2)],
+        deck: [
+          entry(asDeckEntryId("entry-1"), 2),
+          entry(asDeckEntryId("entry-2"), 2),
+        ],
       }),
       prepare({
         effectKind: "transfigure-fixed-selected",
         predicate: "character",
         count: 2,
-        deck: [entry("entry-1", 2), entry("entry-2", 2)],
+        deck: [
+          entry(asDeckEntryId("entry-1"), 2),
+          entry(asDeckEntryId("entry-2"), 2),
+        ],
       }),
     ];
 
@@ -461,7 +493,10 @@ describe("Exploration multi-card transfiguration plan", () => {
       effectKind: "transfigure-random-cards",
       predicate: "character",
       count: 2,
-      deck: [entry("entry-1", 2), entry("entry-2", 2)],
+      deck: [
+        entry(asDeckEntryId("entry-1"), 2),
+        entry(asDeckEntryId("entry-2"), 2),
+      ],
     });
     const firstTarget = plan.targets[0];
     if (firstTarget === undefined) throw new Error("Expected prepared target");
@@ -484,7 +519,10 @@ describe("Exploration multi-card transfiguration plan", () => {
       predicate: "character",
       count: 2,
       transfiguration: "Kindled",
-      deck: [entry("entry-1", 2), entry("entry-2", 2)],
+      deck: [
+        entry(asDeckEntryId("entry-1"), 2),
+        entry(asDeckEntryId("entry-2"), 2),
+      ],
     });
     const firstBinding = plan.eligibleCards[0];
     if (firstBinding === undefined)
@@ -503,7 +541,10 @@ describe("Exploration multi-card transfiguration plan", () => {
   });
 
   it("binds the complete fixed chosen authored and encounter contract", () => {
-    const deck = [entry("entry-1", 2), entry("entry-2", 2)];
+    const deck = [
+      entry(asDeckEntryId("entry-1"), 2),
+      entry(asDeckEntryId("entry-2"), 2),
+    ];
     const authored = {
       effectKind: "transfigure-fixed-selected" as const,
       predicate: "character" as const,
@@ -517,14 +558,17 @@ describe("Exploration multi-card transfiguration plan", () => {
       prepare({ ...authored, predicate: "warrior" }),
       prepare({ ...authored, count: 1 }),
       prepare({ ...authored, transfiguration: "Empowered" }),
-      prepare({ ...authored, actionId: "different-action" }),
       prepare({
         ...authored,
-        encounterCardId: "b0000000-0000-4000-8000-000000000099",
+        actionId: asExplorationActionId("different-action"),
       }),
       prepare({
         ...authored,
-        siteOverride: { ...site, id: "different-site" },
+        encounterCardId: asCardId("b0000000-0000-4000-8000-000000000099"),
+      }),
+      prepare({
+        ...authored,
+        siteOverride: { ...site, id: asSiteId("different-site") },
       }),
     ];
 
@@ -540,7 +584,10 @@ describe("Exploration multi-card transfiguration plan", () => {
   });
 
   it("binds every authored field and encounter identity into the plan signature", () => {
-    const deck = [entry("entry-1", 2), entry("entry-2", 2)];
+    const deck = [
+      entry(asDeckEntryId("entry-1"), 2),
+      entry(asDeckEntryId("entry-2"), 2),
+    ];
     const base = prepare({
       effectKind: "transfigure-fixed-random-cards",
       predicate: "character",
@@ -583,7 +630,7 @@ describe("Exploration multi-card transfiguration plan", () => {
         count: 1,
         transfiguration: "Kindled",
         deck,
-        actionId: "different-action",
+        actionId: asExplorationActionId("different-action"),
       }),
       prepare({
         effectKind: "transfigure-fixed-random-cards",
@@ -591,7 +638,7 @@ describe("Exploration multi-card transfiguration plan", () => {
         count: 1,
         transfiguration: "Kindled",
         deck,
-        encounterCardId: "b0000000-0000-4000-8000-000000000099",
+        encounterCardId: asCardId("b0000000-0000-4000-8000-000000000099"),
       }),
       prepare({
         effectKind: "transfigure-fixed-random-cards",
@@ -599,7 +646,7 @@ describe("Exploration multi-card transfiguration plan", () => {
         count: 1,
         transfiguration: "Kindled",
         deck,
-        siteOverride: { ...site, id: "different-site" },
+        siteOverride: { ...site, id: asSiteId("different-site") },
       }),
     ];
 

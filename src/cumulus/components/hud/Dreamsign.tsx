@@ -20,6 +20,7 @@ import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import { token } from "../../primitives/tokens";
 import { opaque, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { DreamsignId } from "../../../types/identifiers";
 
 /** The dreamsign object's own drop-shadow + violet glow (its material, not a
  * legibility overlay) — a faithfully-copied literal with no token equivalent.
@@ -70,7 +71,7 @@ export function dreamsignRevealSpec(
 /** UUID-backed Dreamsign presentation data resolved before it reaches Cumulus. */
 export interface LocalizedDreamsign {
   /** Stable Dreamsign UUID. */
-  readonly id: string;
+  readonly id: DreamsignId;
   /** Canonical localized display name. */
   readonly name: LocalizedString;
   /** Canonical localized effect copy, or null when the object has no rules. */

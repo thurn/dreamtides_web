@@ -26,6 +26,25 @@ import { NIGHTMARE_CARD_ID } from "../data/nightmare";
 import { KNOWN_EVENT_TYPES } from "../rules/events";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import { makeActions } from "./actions";
+import { asBattleId } from "../types/identifiers";
+import { asPresentationId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
+import { asSiteId } from "../types/identifiers";
+import { asAtlasNodeId } from "../types/identifiers";
+import { asCardId } from "../types/card-identity";
+import { asDeckEntryId } from "../types/identifiers";
+import { asDreamsignId } from "../types/identifiers";
+import { asShuffleCommitment } from "../types/identifiers";
+import { asBattleCardId } from "../types/identifiers";
+import { asNoteId } from "../types/identifiers";
+import { asTutorialActionId } from "../types/identifiers";
+import { asJourneyId } from "../types/identifiers";
+import { asTutorialRunId } from "../types/identifiers";
+import { asCardTutorialScreenKey } from "../types/identifiers";
+import { asExplorationActionId } from "../types/identifiers";
+import { asAuguryArchetypeId } from "../types/identifiers";
+import { asIntentKey } from "../types/identifiers";
+import { asFrontDoorActionId } from "../types/identifiers";
 
 const GENESIS: Genesis = {
   seed: "actions-test-seed",
@@ -66,18 +85,28 @@ function captureAllDrafts(): EventDraft[] {
 
   // One call per creator. Minimal args; values are placeholders — the contract
   // is about the event type + routing, not the payload's game meaning.
-  void actions.frontDoorAction("main", "new-journey");
-  void actions.advanceFrontDoor("loading", "journey-1");
-  void actions.beginTutorial([], { intentKey: "tutorial:journey-1:begin" });
-  void actions.completeTutorialAction("event:1", "welcome");
+  void actions.frontDoorAction("main", asFrontDoorActionId("new-journey"));
+  void actions.advanceFrontDoor("loading", asJourneyId("journey-1"));
+  void actions.beginTutorial([], {
+    intentKey: asIntentKey("tutorial:journey-1:begin"),
+  });
+  void actions.completeTutorialAction(
+    asTutorialRunId("event:1"),
+    asTutorialActionId("welcome"),
+  );
   void actions.takePlaytestControl(null);
-  void actions.beginTutorialBattle("event:1");
-  void actions.restartTutorialBattle("tutorial-battle:event:1:0");
-  void actions.exitTutorialBattle("tutorial-battle:event:1:1:client-b");
-  void actions.openCardTutorialGuidance("journey:1:site:site-1", ["card-1"]);
+  void actions.beginTutorialBattle(asTutorialRunId("event:1"));
+  void actions.restartTutorialBattle(asBattleId("tutorial-battle:event:1:0"));
+  void actions.exitTutorialBattle(
+    asBattleId("tutorial-battle:event:1:1:client-b"),
+  );
+  void actions.openCardTutorialGuidance(
+    asCardTutorialScreenKey("journey:1:site:site-1"),
+    [asCardId("card-1")],
+  );
   void actions.completeCardTutorialGuidance(
-    "card-tutorial:journey:1:site:site-1:card-1:support",
-    "journey:1:site:site-1",
+    asPresentationId("card-tutorial:journey:1:site:site-1:card-1:support"),
+    asCardTutorialScreenKey("journey:1:site:site-1"),
   );
   void actions.changeEssence(1);
   void actions.setEssence(1);
@@ -85,72 +114,124 @@ function captureAllDrafts(): EventDraft[] {
   void actions.startJourney({});
   void actions.resetJourney();
   void actions.loadState({});
-  void actions.selectDreamAvatar("dc-1");
+  void actions.selectDreamAvatar(asDreamAvatarId("dc-1"));
   void actions.rerollDreamAvatarOffer();
-  void actions.enterSite("site-1");
-  void actions.travelToDreamscape("node-1");
+  void actions.enterSite(asSiteId("site-1"));
+  void actions.travelToDreamscape(asAtlasNodeId("node-1"));
   void actions.regenerateAtlas();
   void actions.dismissStartingDeckPopup();
-  void actions.addCard({ cardId: "card-1" });
-  void actions.removeDeckEntry("entry-1");
-  void actions.purgeDeckCards("site-1", ["entry-1"]);
-  void actions.duplicateDeckEntry("entry-1");
-  void actions.setDeckEntryStatOverride("entry-1", null);
-  void actions.setDeckEntryKeywords("entry-1", null);
-  void actions.setDeckEntryType("entry-1", null);
-  void actions.transfigureCard("entry-1", null);
-  void actions.acceptTransfigurationChoice("site-1", "entry-1");
-  void actions.acceptDuplicationChoice("site-1", "entry-1");
+  void actions.addCard({ cardId: asCardId("card-1") });
+  void actions.removeDeckEntry(asDeckEntryId("entry-1"));
+  void actions.purgeDeckCards(asSiteId("site-1"), [asDeckEntryId("entry-1")]);
+  void actions.duplicateDeckEntry(asDeckEntryId("entry-1"));
+  void actions.setDeckEntryStatOverride(asDeckEntryId("entry-1"), null);
+  void actions.setDeckEntryKeywords(asDeckEntryId("entry-1"), null);
+  void actions.setDeckEntryType(asDeckEntryId("entry-1"), null);
+  void actions.transfigureCard(asDeckEntryId("entry-1"), null);
+  void actions.acceptTransfigurationChoice(
+    asSiteId("site-1"),
+    asDeckEntryId("entry-1"),
+  );
+  void actions.acceptDuplicationChoice(
+    asSiteId("site-1"),
+    asDeckEntryId("entry-1"),
+  );
   void actions.purgeAllNightmareCards();
   void actions.purgeRandomNightmareCards(1);
-  void actions.addDreamsign("ds-1");
-  void actions.removeDreamsign("ds-1");
-  void actions.setDreamsignPool(["ds-1"]);
+  void actions.addDreamsign(asDreamsignId("ds-1"));
+  void actions.removeDreamsign(asDreamsignId("ds-1"));
+  void actions.setDreamsignPool([asDreamsignId("ds-1")]);
   void actions.setDraftState({});
-  void actions.pickDraftCard(0, "card-1");
-  void actions.rerollDraftOffer("site-1");
-  void actions.enterDraftSite("site-1");
-  void actions.openSite("site-1");
-  void actions.chooseRandomSite("site-1", "Shop");
-  void actions.resolveExplorationChoice("site-1", "action-1", {
-    entryIds: ["entry-1"],
-  });
-  void actions.completeAugury("site-1");
-  void actions.acceptReward("site-1");
-  void actions.acceptDreamsignOffer("site-1", "ds-1");
-  void actions.rejectDreamsignOffer("site-1");
-  void actions.acceptEssence("site-1");
-  void actions.rerollAugury("site-1");
-  void actions.forceAuguryArchetype("site-1", "arch-1");
-  void actions.completeSite("site-1");
-  void actions.placeGravokWager("site-1", "six");
-  void actions.settleGravokWager("site-1", "commitment-1");
-  void actions.playAgainGravokWager("site-1", "commitment-1");
-  void actions.replaceGravokWagerDreamsign("site-1", "ds-1");
-  void actions.drawTidemarkLadderClimb("site-1");
-  void actions.settleTidemarkLadderClimb("site-1", "commitment-1");
-  void actions.replaceTidemarkLadderClimbDreamsign("site-1", "ds-1");
-  void actions.drawStarwayStairs("site-1");
-  void actions.settleStarwayStairs("site-1", "commitment-1");
-  void actions.cashOutStarwayStairs("site-1", "commitment-1");
-  void actions.playAgainStarwayStairs("site-1", "commitment-1");
-  void actions.drawFourSuitReprise("site-1", "entry-1");
-  void actions.settleFourSuitReprise("site-1", "commitment-1");
+  void actions.pickDraftCard(0, asCardId("card-1"));
+  void actions.rerollDraftOffer(asSiteId("site-1"));
+  void actions.enterDraftSite(asSiteId("site-1"));
+  void actions.openSite(asSiteId("site-1"));
+  void actions.chooseRandomSite(asSiteId("site-1"), "Shop");
+  void actions.resolveExplorationChoice(
+    asSiteId("site-1"),
+    asExplorationActionId("action-1"),
+    {
+      entryIds: [asDeckEntryId("entry-1")],
+    },
+  );
+  void actions.completeAugury(asSiteId("site-1"));
+  void actions.acceptReward(asSiteId("site-1"));
+  void actions.acceptDreamsignOffer(asSiteId("site-1"), asDreamsignId("ds-1"));
+  void actions.rejectDreamsignOffer(asSiteId("site-1"));
+  void actions.acceptEssence(asSiteId("site-1"));
+  void actions.rerollAugury(asSiteId("site-1"));
+  void actions.forceAuguryArchetype(
+    asSiteId("site-1"),
+    asAuguryArchetypeId("fit_card_grant"),
+  );
+  void actions.completeSite(asSiteId("site-1"));
+  void actions.placeGravokWager(asSiteId("site-1"), "six");
+  void actions.settleGravokWager(
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
+  );
+  void actions.playAgainGravokWager(
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
+  );
+  void actions.replaceGravokWagerDreamsign(
+    asSiteId("site-1"),
+    asDreamsignId("ds-1"),
+  );
+  void actions.drawTidemarkLadderClimb(asSiteId("site-1"));
+  void actions.settleTidemarkLadderClimb(
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
+  );
+  void actions.replaceTidemarkLadderClimbDreamsign(
+    asSiteId("site-1"),
+    asDreamsignId("ds-1"),
+  );
+  void actions.drawStarwayStairs(asSiteId("site-1"));
+  void actions.settleStarwayStairs(
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
+  );
+  void actions.cashOutStarwayStairs(
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
+  );
+  void actions.playAgainStarwayStairs(
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
+  );
+  void actions.drawFourSuitReprise(
+    asSiteId("site-1"),
+    asDeckEntryId("entry-1"),
+  );
+  void actions.settleFourSuitReprise(
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
+  );
   void actions.chooseFourSuitRepriseTransfiguration(
-    "site-1",
-    "commitment-1",
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
     "Empowered",
   );
-  void actions.playAgainFourSuitReprise("site-1", "commitment-1");
-  void actions.dealBlackjack("site-1");
-  void actions.hitBlackjack("site-1");
-  void actions.standBlackjack("site-1");
-  void actions.settleBlackjack("site-1", "commitment-1");
-  void actions.playAgainBlackjack("site-1", "commitment-1");
-  void actions.acceptMerchantOffer("site-1");
-  void actions.declineMerchant("site-1");
-  void actions.buyShopSlot("site-1", 0);
-  void actions.rerollShop("site-1");
+  void actions.playAgainFourSuitReprise(
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
+  );
+  void actions.dealBlackjack(asSiteId("site-1"));
+  void actions.hitBlackjack(asSiteId("site-1"));
+  void actions.standBlackjack(asSiteId("site-1"));
+  void actions.settleBlackjack(
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
+  );
+  void actions.playAgainBlackjack(
+    asSiteId("site-1"),
+    asShuffleCommitment("commitment-1"),
+  );
+  void actions.acceptMerchantOffer(asSiteId("site-1"));
+  void actions.declineMerchant(asSiteId("site-1"));
+  void actions.buyShopSlot(asSiteId("site-1"), 0);
+  void actions.rerollShop(asSiteId("site-1"));
   void actions.grantFreeRerolls(1);
   void actions.applyShopDiscount(10);
   void actions.pushBattleModifier({});
@@ -162,25 +243,29 @@ function captureAllDrafts(): EventDraft[] {
   });
   void actions.banSiteType("Shop", 1);
   void actions.boostSiteAppearance("Shop", 10, 1);
-  void actions.replaceSiteType("node-1", "Shop", "Battle");
-  void actions.addSiteToDreamscape("node-1", "Shop");
+  void actions.replaceSiteType(asAtlasNodeId("node-1"), "Shop", "Battle");
+  void actions.addSiteToDreamscape(asAtlasNodeId("node-1"), "Shop");
   void actions.setCardSourceDebug(null);
   void actions.endBattle();
-  void actions.beginBattle("site-1");
+  void actions.beginBattle(asSiteId("site-1"));
   void actions.setBattleAutomation(true);
   void actions.battleCommand({});
-  void actions.battleRepositionCharacter("battle-card-1", {
+  void actions.battleRepositionCharacter(asBattleCardId("battle-card-1"), {
     side: "player",
     zone: "backRank",
     slotId: "B0",
   });
-  void actions.battlePlayCard("battle-card-1", []);
+  void actions.battlePlayCard(asBattleCardId("battle-card-1"), []);
   void actions.battleGesture([{}, {}]);
   void actions.battleAiBlock("enemy", "ai:test");
-  void actions.completeTutorialBattlePresentation("opponent-play:card-1", "battle:presentation:opponent-play:card-1", "tutorial-ai:client-a");
+  void actions.completeTutorialBattlePresentation(
+    asPresentationId("opponent-play:card-1"),
+    asIntentKey("battle:presentation:opponent-play:card-1"),
+    "tutorial-ai:client-a",
+  );
   void actions.resolvePrompt(1, {});
-  void actions.setCardNote("instance-1", {
-    noteId: "n1",
+  void actions.setCardNote(asBattleCardId("instance-1"), {
+    noteId: asNoteId("n1"),
     text: "t",
     expiry: null,
   });
@@ -241,48 +326,54 @@ describe("coop actions facade", () => {
       return Promise.resolve(captured.length);
     });
 
-    void actions.advanceFrontDoor("loading", "event:9");
-    void actions.openSite("site-7", "journey:12", "RandomSite");
-    void actions.enterDraftSite("site-7", "journey:12");
-    void actions.acceptEssence("site-7", "journey:12");
-    void actions.completeSite("site-7", "journey:12");
+    void actions.advanceFrontDoor("loading", asJourneyId("event:9"));
+    void actions.openSite(
+      asSiteId("site-7"),
+      asJourneyId("journey:12"),
+      "RandomSite",
+    );
+    void actions.enterDraftSite(asSiteId("site-7"), asJourneyId("journey:12"));
+    void actions.acceptEssence(asSiteId("site-7"), asJourneyId("journey:12"));
+    void actions.completeSite(asSiteId("site-7"), asJourneyId("journey:12"));
     void actions.settleGravokWager(
-      "site-7",
-      "commitment-1",
-      "journey:12",
+      asSiteId("site-7"),
+      asShuffleCommitment("commitment-1"),
+      asJourneyId("journey:12"),
     );
     void actions.playAgainGravokWager(
-      "site-7",
-      "commitment-1",
-      "journey:12",
+      asSiteId("site-7"),
+      asShuffleCommitment("commitment-1"),
+      asJourneyId("journey:12"),
     );
     void actions.settleStarwayStairs(
-      "site-7",
-      "commitment-2",
-      "journey:12",
+      asSiteId("site-7"),
+      asShuffleCommitment("commitment-2"),
+      asJourneyId("journey:12"),
     );
     void actions.playAgainStarwayStairs(
-      "site-7",
-      "commitment-2",
-      "journey:12",
+      asSiteId("site-7"),
+      asShuffleCommitment("commitment-2"),
+      asJourneyId("journey:12"),
     );
     void actions.settleBlackjack(
-      "site-7",
-      "commitment-3",
-      "journey:12",
+      asSiteId("site-7"),
+      asShuffleCommitment("commitment-3"),
+      asJourneyId("journey:12"),
     );
     void actions.playAgainBlackjack(
-      "site-7",
-      "commitment-3",
-      "journey:12",
+      asSiteId("site-7"),
+      asShuffleCommitment("commitment-3"),
+      asJourneyId("journey:12"),
     );
     void actions.battleCommand(
       { id: "DEBUG_EDIT" },
-      "battle:b-1:dreamwell:player:2",
+      asIntentKey("battle:b-1:dreamwell:player:2"),
     );
-    void actions.beginTutorialBattle("event:9");
-    void actions.restartTutorialBattle("tutorial-battle:event:9:0");
-    void actions.exitTutorialBattle("tutorial-battle:event:9:1:client-b");
+    void actions.beginTutorialBattle(asTutorialRunId("event:9"));
+    void actions.restartTutorialBattle(asBattleId("tutorial-battle:event:9:0"));
+    void actions.exitTutorialBattle(
+      asBattleId("tutorial-battle:event:9:1:client-b"),
+    );
 
     expect(captured.map((draft) => draft.intentKey)).toEqual([
       "front-door:event:9:loading",
@@ -305,22 +396,33 @@ describe("coop actions facade", () => {
 
   it("omits the selection protocol from intents written to legacy rooms", () => {
     const captured: EventDraft[] = [];
-    const actions = makeActions((draft) => {
-      captured.push(draft);
-      return Promise.resolve(captured.length);
-    }, { selectionRulesVersion: null });
+    const actions = makeActions(
+      (draft) => {
+        captured.push(draft);
+        return Promise.resolve(captured.length);
+      },
+      { selectionRulesVersion: null },
+    );
 
-    void actions.openSite("site-7", "journey:12", "Exploration");
-    void actions.resolveExplorationChoice("site-7", "action-1", {
-      entryIds: ["entry-1"],
-    });
+    void actions.openSite(
+      asSiteId("site-7"),
+      asJourneyId("journey:12"),
+      "Exploration",
+    );
+    void actions.resolveExplorationChoice(
+      asSiteId("site-7"),
+      asExplorationActionId("action-1"),
+      {
+        entryIds: [asDeckEntryId("entry-1")],
+      },
+    );
 
     expect(captured.map((draft) => draft.payload)).toEqual([
-      { siteId: "site-7" },
+      { siteId: asSiteId("site-7") },
       {
-        siteId: "site-7",
+        siteId: asSiteId("site-7"),
         actionId: "action-1",
-        selection: { entryIds: ["entry-1"] },
+        selection: { entryIds: [asDeckEntryId("entry-1")] },
       },
     ]);
   });
@@ -333,8 +435,8 @@ describe("coop actions facade", () => {
     });
 
     void actions.openCardTutorialGuidance(
-      "journey:12:site:site-7",
-      ["card-a"],
+      asCardTutorialScreenKey("journey:12:site:site-7"),
+      [asCardId("card-a")],
     );
 
     expect(captured).toEqual([
@@ -357,7 +459,7 @@ describe("coop actions facade", () => {
     });
     const tutorialActions = [
       {
-        id: "tail-start",
+        id: asTutorialActionId("tail-start"),
         action: "display-speech-bubble" as const,
         speechBubble: {
           speaker: "mira" as const,
@@ -372,8 +474,8 @@ describe("coop actions facade", () => {
     ];
 
     void actions.beginTutorial(tutorialActions, {
-      startActionId: "tail-start",
-      intentKey: "tutorial:test:tail-start",
+      startActionId: asTutorialActionId("tail-start"),
+      intentKey: asIntentKey("tutorial:test:tail-start"),
     });
 
     expect(captured).toEqual([
@@ -393,10 +495,10 @@ describe("coop actions facade", () => {
     });
     const tutorialActions = [
       {
-        id: "draw",
+        id: asTutorialActionId("draw"),
         action: "draw-card" as const,
         owner: "player" as const,
-        cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+        cardId: asCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
         reason: "dreamwell-effect" as const,
         wait: 0,
       },
@@ -404,7 +506,7 @@ describe("coop actions facade", () => {
 
     void actions.beginTutorial(tutorialActions, {
       startAtEnd: true,
-      intentKey: "tutorial:test:terminal",
+      intentKey: asIntentKey("tutorial:test:terminal"),
     });
 
     expect(captured).toEqual([
@@ -423,15 +525,15 @@ describe("coop actions facade", () => {
       return Promise.resolve(captured.length);
     });
 
-    void actions.beginBattle("site-7", 4242);
-    void actions.beginBattle("site-8", null);
+    void actions.beginBattle(asSiteId("site-7"), 4242);
+    void actions.beginBattle(asSiteId("site-8"), null);
 
     expect(captured).toEqual([
       {
         type: "BEGIN_BATTLE",
-        payload: { siteId: "site-7", seedOverride: 4242 },
+        payload: { siteId: asSiteId("site-7"), seedOverride: 4242 },
       },
-      { type: "BEGIN_BATTLE", payload: { siteId: "site-8" } },
+      { type: "BEGIN_BATTLE", payload: { siteId: asSiteId("site-8") } },
     ]);
   });
 });

@@ -9,6 +9,7 @@ import type {
 import { logEvent } from "../logging";
 import { logAffiliationDraw } from "../affiliations/affiliation-weights";
 import { DEFAULT_DRAFT_DATA } from "../data/draft-data";
+import type { SiteId } from "../types/identifiers";
 
 /** Default shared draft configuration. */
 export const DEFAULT_DRAFT_CONFIG: Readonly<DraftConfig> = {
@@ -275,7 +276,10 @@ function revealOffer(
   }
 
   spendShownOffer(state.remainingCopiesByCard, offer);
-  state.siteShownCardNumbers = [...(state.siteShownCardNumbers ?? []), ...offer];
+  state.siteShownCardNumbers = [
+    ...(state.siteShownCardNumbers ?? []),
+    ...offer,
+  ];
   if (options.logEvents) {
     if (config.affiliationWeights !== undefined) {
       logAffiliationDraw({
@@ -291,7 +295,9 @@ function revealOffer(
       source:
         authoredOpeningOffer === null ? "weighted_pool" : "authored_opening",
       poolRemaining: countRemainingCards(state.remainingCopiesByCard),
-      uniqueCardsRemaining: countRemainingUniqueCards(state.remainingCopiesByCard),
+      uniqueCardsRemaining: countRemainingUniqueCards(
+        state.remainingCopiesByCard,
+      ),
     });
   }
   return true;
@@ -303,7 +309,9 @@ function sanitizeDraftPoolCopies(
 ): Record<string, number> {
   const remainingCopiesByCard: Record<string, number> = {};
 
-  for (const [cardNumberText, copies] of Object.entries(draftPoolCopiesByCard)) {
+  for (const [cardNumberText, copies] of Object.entries(
+    draftPoolCopiesByCard,
+  )) {
     const cardNumber = Number(cardNumberText);
     if (
       !Number.isInteger(cardNumber) ||
@@ -371,7 +379,9 @@ export function initializeDraftState(
 
   logEvent("draft_pool_initialized", {
     poolSize: countRemainingCards(draftState.remainingCopiesByCard),
-    uniqueCardCount: countRemainingUniqueCards(draftState.remainingCopiesByCard),
+    uniqueCardCount: countRemainingUniqueCards(
+      draftState.remainingCopiesByCard,
+    ),
     dreamAvatarId: resolvedPackage.dreamAvatar.id,
   });
 
@@ -381,7 +391,7 @@ export function initializeDraftState(
 /** Prepare the state for a draft site visit. Draws the first pack. */
 export function enterDraftSite(
   state: DraftState,
-  siteId: string,
+  siteId: SiteId,
   _cardDatabase: Map<number, CardData>,
   config: DraftConfig = DEFAULT_DRAFT_CONFIG,
   rng: () => number = Math.random,
@@ -430,12 +440,7 @@ export function rerollDraftOffer(
   rng: () => number = Math.random,
 ): boolean {
   const previousOffer = [...state.currentOffer];
-  const hasOffer = revealOffer(
-    state,
-    config,
-    { logEvents: true },
-    rng,
-  );
+  const hasOffer = revealOffer(state, config, { logEvents: true }, rng);
 
   logEvent("draft_offer_rerolled", {
     siteId: state.activeSiteId,
@@ -471,9 +476,7 @@ function processPlayerPickInternal(
 ): boolean {
   const currentOffer = [...state.currentOffer];
   if (!currentOffer.includes(cardNumber)) {
-    throw new Error(
-      `Card ${String(cardNumber)} is not in the current offer`,
-    );
+    throw new Error(`Card ${String(cardNumber)} is not in the current offer`);
   }
 
   const card = cardDatabase.get(cardNumber);

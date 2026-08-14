@@ -15,6 +15,8 @@ import {
 } from "../../components/dreamscape/SiteNode";
 import { glyph } from "../../primitives/glyph";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
+import { asSiteId } from "../../../types/identifiers";
+import { asDreamsignId } from "../../../types/identifiers";
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 const CARD: CardData = {
@@ -33,12 +35,12 @@ const CARD: CardData = {
   artOwned: false,
 };
 const SIGN = localizedDreamsignFixture({
-  id: "22222222-2222-4222-8222-222222222222",
+  id: asDreamsignId("22222222-2222-4222-8222-222222222222"),
   name: "Fixture Sign",
   effectDescription: "Fixed effect.",
 });
 const SITE: DreamscapeSiteModel = {
-  id: "33333333-3333-4333-8333-333333333333",
+  id: asSiteId("33333333-3333-4333-8333-333333333333"),
   type: "Battle",
   isVisited: false,
   pos: { x: 50, y: 50 },

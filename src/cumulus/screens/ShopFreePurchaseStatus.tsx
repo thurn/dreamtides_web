@@ -1,13 +1,15 @@
 import { token } from "../primitives/tokens";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import { tx, plural, one, other, txa } from "@trox/runtime";
+import type { SiteId } from "../../types/identifiers";
+import type { ExplorationActionId } from "../../types/identifiers";
 
 /** Provenance and remaining capacity for Exploration-granted free purchases. */
 export interface ShopFreePurchaseStatusView {
   /** T56 source bound to this exact Card Shop visit, when present. */
   readonly freeNextShopSource: {
-    readonly sourceSiteId: string;
-    readonly sourceActionId: string;
+    readonly sourceSiteId: SiteId;
+    readonly sourceActionId: ExplorationActionId;
   } | null;
   /** Total successful Shop or Bazaar purchases remaining across FIFO buckets. */
   readonly freePurchasesRemaining: number;

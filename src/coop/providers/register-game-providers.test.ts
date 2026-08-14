@@ -75,6 +75,14 @@ import {
   registerGameProviders,
 } from "./register-game-providers";
 import { createSiteContentProvider } from "./site-provider";
+import { asSiteId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asAuguryArchetypeId } from "../../types/identifiers";
 
 const DREAM_AVATAR_ID = "dream-avatar-real-provider";
 const TIMESTAMP = "1970-01-01T00:00:00.000Z";
@@ -90,7 +98,7 @@ const GENESIS: Genesis = {
 /** Eight dreamsign templates so the reward, revelation, and bazaar generators have a live pool. */
 function makeDreamsignTemplates(): DreamsignTemplate[] {
   return Array.from({ length: 8 }, (_value, index) => ({
-    id: `dreamsign-${String(index)}`,
+    id: asDreamsignId(`dreamsign-${String(index)}`),
     name: `Dreamsign ${String(index)}`,
     effectDescription: "A test dreamsign.",
     imageName: "sign",
@@ -117,7 +125,7 @@ function makeCard(cardNumber: number, isStarter: boolean): CardData {
 
 function makeDreamAvatar(id: string): DreamAvatarContent {
   return {
-    id,
+    id: asDreamAvatarId(id),
     name: `DreamAvatar ${id}`,
     title: "Provider Witness",
     renderedText: "Test ability.",
@@ -210,8 +218,12 @@ describe("registerGameProviders (real content providers)", () => {
     // (plus a Battle site) to the starting node, so OPEN_SITE / BEGIN_BATTLE
     // have live targets regardless of what the atlas generator rolled.
     const prefix: SeqEvent[] = [
-      ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
-      ev(2, "SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }),
+      ev(1, "START_JOURNEY", {
+        dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+      }),
+      ev(2, "SELECT_DREAM_AVATAR", {
+        dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+      }),
     ];
     const started = replayLog({ genesis: GENESIS, events: prefix });
     expect(started.outcomes.find((o) => o.seq === 1)?.outcome).toBe("applied");
@@ -223,7 +235,10 @@ describe("registerGameProviders (real content providers)", () => {
     for (const siteType of [...CONTENT_SITE_TYPES, "Battle" as SiteType]) {
       seq += 1;
       addSiteEvents.push(
-        ev(seq, "ADD_SITE_TO_DREAMSCAPE", { nodeId, siteType }),
+        ev(seq, "ADD_SITE_TO_DREAMSCAPE", {
+          nodeId: asAtlasNodeId(nodeId),
+          siteType,
+        }),
       );
     }
 
@@ -368,8 +383,12 @@ describe("registerGameProviders (real content providers)", () => {
     const started = replayLog({
       genesis: GENESIS,
       events: [
-        ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
-        ev(2, "SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }),
+        ev(1, "START_JOURNEY", {
+          dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+        }),
+        ev(2, "SELECT_DREAM_AVATAR", {
+          dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+        }),
       ],
     }).finalState.journey;
     const openingNode = started.atlas.nodes[started.atlas.startingNodeId];
@@ -416,12 +435,16 @@ describe("registerGameProviders (real content providers)", () => {
     const journey = replayLog({
       genesis: GENESIS,
       events: [
-        ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
-        ev(2, "SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }),
+        ev(1, "START_JOURNEY", {
+          dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+        }),
+        ev(2, "SELECT_DREAM_AVATAR", {
+          dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+        }),
       ],
     }).finalState.journey;
     const shop: SiteState = {
-      id: "enhanced-shop",
+      id: asSiteId("enhanced-shop"),
       type: "Shop",
       isEnhanced: true,
       isVisited: false,
@@ -478,12 +501,16 @@ describe("registerGameProviders (real content providers)", () => {
     const started = replayLog({
       genesis: GENESIS,
       events: [
-        ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
-        ev(2, "SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }),
+        ev(1, "START_JOURNEY", {
+          dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+        }),
+        ev(2, "SELECT_DREAM_AVATAR", {
+          dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+        }),
       ],
     }).finalState.journey;
     const shop: SiteState = {
-      id: "transfigured-shop",
+      id: asSiteId("transfigured-shop"),
       type: "Shop",
       isEnhanced: false,
       isVisited: false,
@@ -491,8 +518,8 @@ describe("registerGameProviders (real content providers)", () => {
     };
     const modifier = {
       kind: "transfigure-next-draft-or-shop" as const,
-      sourceSiteId: "exploration-site",
-      sourceActionId: "exploration-action",
+      sourceSiteId: asSiteId("exploration-site"),
+      sourceActionId: asExplorationActionId("exploration-action"),
     };
 
     const result = createSiteContentProvider(content).openSite({
@@ -524,19 +551,23 @@ describe("registerGameProviders (real content providers)", () => {
     const started = replayLog({
       genesis: GENESIS,
       events: [
-        ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
-        ev(2, "SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }),
+        ev(1, "START_JOURNEY", {
+          dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+        }),
+        ev(2, "SELECT_DREAM_AVATAR", {
+          dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+        }),
       ],
     }).finalState.journey;
     const firstModifier = {
       kind: "free-next-shop" as const,
-      sourceSiteId: "exploration-one",
-      sourceActionId: "action-one",
+      sourceSiteId: asSiteId("exploration-one"),
+      sourceActionId: asExplorationActionId("action-one"),
     };
     const secondModifier = {
       kind: "free-next-shop" as const,
-      sourceSiteId: "exploration-two",
-      sourceActionId: "action-two",
+      sourceSiteId: asSiteId("exploration-two"),
+      sourceActionId: asExplorationActionId("action-two"),
     };
     const journey: JourneyState = {
       ...started,
@@ -549,7 +580,7 @@ describe("registerGameProviders (real content providers)", () => {
     const bazaar = provider.openSite({
       journey,
       site: {
-        id: "bazaar",
+        id: asSiteId("bazaar"),
         type: "DreamsignBazaar",
         isEnhanced: false,
         isVisited: false,
@@ -566,7 +597,7 @@ describe("registerGameProviders (real content providers)", () => {
     const shopResult = provider.openSite({
       journey,
       site: {
-        id: "shop",
+        id: asSiteId("shop"),
         type: "Shop",
         isEnhanced: false,
         isVisited: false,
@@ -591,7 +622,9 @@ describe("registerGameProviders (real content providers)", () => {
 
   it("rebuilds debug progress as one consistent Atlas transition", () => {
     const events = [
-      ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }),
+      ev(1, "START_JOURNEY", {
+        dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+      }),
       ev(2, "REGENERATE_ATLAS", { completionLevel: 3 }),
     ];
     const result = replayLog({ genesis: GENESIS, events });
@@ -641,7 +674,7 @@ describe("registerGameProviders (real content providers)", () => {
       seq += 1;
     };
 
-    apply("START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID });
+    apply("START_JOURNEY", { dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID) });
     const layerCount = state.journey.atlas.layers.length;
     for (let layer = 0; layer < layerCount; layer += 1) {
       const nodeId = state.journey.currentDreamscape;
@@ -709,7 +742,10 @@ function makeMerchantFixture(): {
   content: JourneyContent;
   site: SiteState;
 } {
-  const site = makeMerchantTestSite({ id: MERCHANT_SITE_ID, type: "Augury" });
+  const site = makeMerchantTestSite({
+    id: asSiteId(MERCHANT_SITE_ID),
+    type: "Augury",
+  });
 
   const cards: CardData[] = [];
   for (let i = 0; i < 30; i += 1) {
@@ -728,7 +764,10 @@ function makeMerchantFixture(): {
   for (let i = 0; i < 10; i += 1) {
     const id = `dsign-${String(i)}`;
     templates.push(
-      makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(i)}` }),
+      makeMerchantTestDreamsignTemplate({
+        id: asDreamsignId(id),
+        name: `Sign ${String(i)}`,
+      }),
     );
   }
 
@@ -739,22 +778,22 @@ function makeMerchantFixture(): {
 
   const journey = makeMerchantTestJourneyState({
     seed: MERCHANT_SEED,
-    currentDreamscape: MERCHANT_NODE_ID,
+    currentDreamscape: asAtlasNodeId(MERCHANT_NODE_ID),
     screen: { type: "site", siteId: site.id },
     activeSiteId: site.id,
     deck: [1000, 1001, 1002, 1003, 1004, 1005].map((cardNumber, index) =>
       makeMerchantTestDeckEntry({
-        entryId: `deck-${String(index + 1)}`,
+        entryId: asDeckEntryId(`deck-${String(index + 1)}`),
         cardNumber,
       }),
     ),
     atlas: {
       nodes: {
         [MERCHANT_NODE_ID]: {
-          id: MERCHANT_NODE_ID,
+          id: asAtlasNodeId(MERCHANT_NODE_ID),
           layer: LayerName.One,
           indexInLayer: 0,
-          dreamscapeId: "test_dreamscape",
+          dreamscapeId: asDreamscapeId("test_dreamscape"),
           sites: [site],
           position: { x: 0, y: 0 },
           state: "available",
@@ -764,9 +803,9 @@ function makeMerchantFixture(): {
           knownDreamsignId: null,
         },
       },
-      startingNodeId: MERCHANT_NODE_ID,
-      bossNodeId: MERCHANT_NODE_ID,
-      currentNodeId: MERCHANT_NODE_ID,
+      startingNodeId: asAtlasNodeId(MERCHANT_NODE_ID),
+      bossNodeId: asAtlasNodeId(MERCHANT_NODE_ID),
+      currentNodeId: asAtlasNodeId(MERCHANT_NODE_ID),
       layers: [],
       knownDreamsignCarrierIds: [],
     },
@@ -778,9 +817,12 @@ describe("createSiteContentProvider — Gamble", () => {
   it("chooses among every configured game unless one is forced", () => {
     resetLog();
     const fixture = makeMerchantFixture();
-    const site = makeMerchantTestSite({ id: "gamble-site", type: "Gamble" });
+    const site = makeMerchantTestSite({
+      id: asSiteId("gamble-site"),
+      type: "Gamble",
+    });
     const farpointSite = makeMerchantTestSite({
-      id: "farpoint-gamble-site",
+      id: asSiteId("farpoint-gamble-site"),
       type: "Gamble",
       isEnhanced: true,
     });
@@ -999,7 +1041,7 @@ describe("createSiteContentProvider — Gamble", () => {
     const templates = Array.from({ length: 55 }, (_value, index) => {
       const id = `dsign-${String(index).padStart(3, "0")}`;
       return makeMerchantTestDreamsignTemplate({
-        id,
+        id: asDreamsignId(id),
         name: `Sign ${String(index)}`,
       });
     });
@@ -1014,7 +1056,10 @@ describe("createSiteContentProvider — Gamble", () => {
 
     const result = createSiteContentProvider(content).openSite({
       journey,
-      site: makeMerchantTestSite({ id: "gamble-site", type: "Gamble" }),
+      site: makeMerchantTestSite({
+        id: asSiteId("gamble-site"),
+        type: "Gamble",
+      }),
       rng: () => 0.999,
       gambleGameId: "tidemark-ladder-climb",
     });
@@ -1038,7 +1083,10 @@ describe("createSiteContentProvider — Gamble", () => {
         ...fixture.journey,
         remainingDreamsignPool: [],
       },
-      site: makeMerchantTestSite({ id: "gamble-site", type: "Gamble" }),
+      site: makeMerchantTestSite({
+        id: asSiteId("gamble-site"),
+        type: "Gamble",
+      }),
       rng: () => 0,
       gambleGameId: "tidemark-ladder-climb",
     });
@@ -1084,7 +1132,7 @@ describe("registerGameProviders — merchant resolution", () => {
     const events: SeqEvent[] = [
       loadState(),
       ev(2, "ACCEPT_MERCHANT_OFFER", {
-        siteId: MERCHANT_SITE_ID,
+        siteId: asSiteId(MERCHANT_SITE_ID),
         encounterSignature: offer.encounterSignature,
         offerId: offer.offerId,
         archetypeId: offer.archetypeId,
@@ -1113,7 +1161,7 @@ describe("registerGameProviders — merchant resolution", () => {
         [MERCHANT_SITE_ID]: {
           kind: "augury",
           completed: false,
-          forcedArchetypeId: "fit_card_draft",
+          forcedArchetypeId: asAuguryArchetypeId("fit_card_draft"),
         },
       },
     };
@@ -1140,7 +1188,7 @@ describe("registerGameProviders — merchant resolution", () => {
     const events: SeqEvent[] = [
       ev(1, "LOAD_STATE", { snapshot: mintJourney }),
       ev(2, "ACCEPT_MERCHANT_OFFER", {
-        siteId: MERCHANT_SITE_ID,
+        siteId: asSiteId(MERCHANT_SITE_ID),
         encounterSignature: offer.encounterSignature,
         offerId: offer.offerId,
         archetypeId: offer.archetypeId,
@@ -1170,7 +1218,7 @@ describe("registerGameProviders — merchant resolution", () => {
     const events: SeqEvent[] = [
       loadState(),
       ev(2, "DECLINE_MERCHANT", {
-        siteId: MERCHANT_SITE_ID,
+        siteId: asSiteId(MERCHANT_SITE_ID),
         encounterSignature: encounter.encounterSignature,
         offerId: offer.offerId,
       }),

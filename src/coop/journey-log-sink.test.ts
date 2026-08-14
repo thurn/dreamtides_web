@@ -15,6 +15,7 @@ import {
   pruneLogEntries,
   type SinkRecord,
 } from "./journey-log-sink";
+import { asClientId } from "../types/identifiers";
 
 /**
  * A push-key stand-in that sorts chronologically the way Firebase push ids do:
@@ -79,10 +80,10 @@ describe("decodeRoomLogEntries", () => {
   it("keeps only serialized log lines from a native RTDB map", () => {
     expect(
       decodeRoomLogEntries({
-        "-a": "{\"event\":\"ok\"}",
+        "-a": '{"event":"ok"}',
         "-b": { event: "malformed" },
       }),
-    ).toEqual({ "-a": "{\"event\":\"ok\"}" });
+    ).toEqual({ "-a": '{"event":"ok"}' });
   });
 
   it("rejects non-map containers", () => {
@@ -157,7 +158,11 @@ describe("createCoopLogRecorder single-writer rule", () => {
 
   it("mirrors an owned event as the coop_event shape", () => {
     const { emitted, recorder } = setup();
-    const recorded = recorder.recordCoopEvent(makeEvent({ actor: "client-a" }), 5, "applied");
+    const recorded = recorder.recordCoopEvent(
+      makeEvent({ actor: "client-a" }),
+      5,
+      "applied",
+    );
 
     expect(recorded).toBe(true);
     expect(emitted).toEqual([
@@ -217,7 +222,11 @@ describe("createCoopLogRecorder single-writer rule", () => {
 
   it("does not mirror events appended by another actor", () => {
     const { emitted, recorder } = setup();
-    const recorded = recorder.recordCoopEvent(makeEvent({ actor: "client-b" }), 7, "applied");
+    const recorded = recorder.recordCoopEvent(
+      makeEvent({ actor: "client-b" }),
+      7,
+      "applied",
+    );
     expect(recorded).toBe(false);
     expect(emitted).toHaveLength(0);
   });
@@ -233,7 +242,11 @@ describe("createCoopLogRecorder single-writer rule", () => {
 
   it("includes stateHashAfter only when the event carries it", () => {
     const { emitted, recorder } = setup();
-    recorder.recordCoopEvent(makeEvent({ stateHashAfter: "abc123" }), 8, "applied");
+    recorder.recordCoopEvent(
+      makeEvent({ stateHashAfter: "abc123" }),
+      8,
+      "applied",
+    );
     expect(emitted[0]).toMatchObject({ stateHashAfter: "abc123" });
   });
 
@@ -245,11 +258,11 @@ describe("createCoopLogRecorder single-writer rule", () => {
     });
     const controlledByA = stateWithControl({
       mode: "single-controller",
-      controllerClientId: "client-a",
+      controllerClientId: asClientId("client-a"),
     });
     const controlledByB = stateWithControl({
       mode: "single-controller",
-      controllerClientId: "client-b",
+      controllerClientId: asClientId("client-b"),
     });
     const collaborative = stateWithControl({
       mode: "collaborative",
@@ -371,10 +384,7 @@ describe("createCoopLogRecorder single-writer rule", () => {
     expect(emitted[0]).toMatchObject({
       event: "fold_error",
       seq: 10,
-      invariantCodes: [
-        "atlas_frontier_missing",
-        "atlas_frontier_unseen",
-      ],
+      invariantCodes: ["atlas_frontier_missing", "atlas_frontier_unseen"],
     });
   });
 
@@ -444,7 +454,12 @@ describe("createCoopLogRecorder single-writer rule", () => {
       makeEvent({ type: "REMOVE_DECK_ENTRY", nonce: "client-a:2" }),
     ]);
     expect(emitted).toEqual([
-      { event: "pending_dropped", type: "ADD_CARD", nonce: "client-a:1", gameId: "room-1" },
+      {
+        event: "pending_dropped",
+        type: "ADD_CARD",
+        nonce: "client-a:1",
+        gameId: "room-1",
+      },
       {
         event: "pending_dropped",
         type: "REMOVE_DECK_ENTRY",
@@ -488,23 +503,36 @@ describe("createCoopEmit two-destination delivery (spec §Logging)", () => {
   it("delivers each owning-client record to BOTH rooms/logs and journey-log.jsonl, once, obeying the high-water", () => {
     const roomLogs: SinkRecord[] = [];
     const journeyLog: SinkRecord[] = [];
-    const emit = createCoopEmit(
-      { record: (r) => roomLogs.push(r) },
-      (r) => journeyLog.push(r),
+    const emit = createCoopEmit({ record: (r) => roomLogs.push(r) }, (r) =>
+      journeyLog.push(r),
     );
-    const recorder = createCoopLogRecorder({ gameId: "room-1", clientId: "client-a", emit });
+    const recorder = createCoopLogRecorder({
+      gameId: "room-1",
+      clientId: "client-a",
+      emit,
+    });
 
     // Owned event -> both destinations.
-    expect(recorder.recordCoopEvent(makeEvent({ actor: "client-a" }), 5, "applied")).toBe(true);
+    expect(
+      recorder.recordCoopEvent(makeEvent({ actor: "client-a" }), 5, "applied"),
+    ).toBe(true);
     // Peer event -> neither destination (single-writer gate upstream of emit).
-    expect(recorder.recordCoopEvent(makeEvent({ actor: "client-b" }), 6, "applied")).toBe(false);
+    expect(
+      recorder.recordCoopEvent(makeEvent({ actor: "client-b" }), 6, "applied"),
+    ).toBe(false);
     // Refold re-reports seq 5 -> no duplicate in either destination.
-    expect(recorder.recordCoopEvent(makeEvent({ actor: "client-a" }), 5, "applied")).toBe(false);
+    expect(
+      recorder.recordCoopEvent(makeEvent({ actor: "client-a" }), 5, "applied"),
+    ).toBe(false);
 
     // Both destinations received exactly the one owned coop_event, seq intact.
     expect(roomLogs).toHaveLength(1);
     expect(journeyLog).toHaveLength(1);
     expect(roomLogs[0]).toEqual(journeyLog[0]);
-    expect(roomLogs[0]).toMatchObject({ event: "coop_event", seq: 5, actor: "client-a" });
+    expect(roomLogs[0]).toMatchObject({
+      event: "coop_event",
+      seq: 5,
+      actor: "client-a",
+    });
   });
 });

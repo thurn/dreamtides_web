@@ -7,7 +7,11 @@ import type {
 } from "../types/content";
 import type { SiteState, SiteType } from "../types/journey";
 import { SITE_TYPES } from "../types/site-type";
-import { bindSourceTransport, hydrateSourceTransport, localizedSourceText } from "../runtime/localization/runtime";
+import {
+  bindSourceTransport,
+  hydrateSourceTransport,
+  localizedSourceText,
+} from "../runtime/localization/runtime";
 import { localizedGuideDialogue } from "../runtime/localization/runtime-templates.generated";
 
 // Re-export the content types so callers can import dreamscape/guide/affiliation
@@ -89,15 +93,17 @@ export async function loadDreamGuides(): Promise<DreamGuideContent[]> {
   }
   return catalog.guides.map((guide) => ({
     ...guide,
-    dialogue: Object.fromEntries(Object.entries(guide.dialogue).map(
-      ([context, lines]) => [
+    dialogue: Object.fromEntries(
+      Object.entries(guide.dialogue).map(([context, lines]) => [
         context,
-        lines.map((line, index) => hydrateSourceTransport(
-          line,
-          `Dream Guide ${guide.id} ${context}[${String(index)}]`,
-        )),
-      ],
-    )),
+        lines.map((line, index) =>
+          hydrateSourceTransport(
+            line,
+            `Dream Guide ${guide.id} ${context}[${String(index)}]`,
+          ),
+        ),
+      ]),
+    ),
   }));
 }
 
@@ -150,10 +156,16 @@ function isDreamGuideContent(value: unknown): value is DreamGuideContent {
     if (
       !Array.isArray(lines) ||
       lines.length === 0 ||
-      lines.some((line: unknown) =>
-        (typeof line !== "string" || line.trim() === "") &&
-        !(typeof line === "object" && line !== null &&
-          "format" in line && line.format === "trox-source-message-ref"))
+      lines.some(
+        (line: unknown) =>
+          (typeof line !== "string" || line.trim() === "") &&
+          !(
+            typeof line === "object" &&
+            line !== null &&
+            "format" in line &&
+            line.format === "trox-source-message-ref"
+          ),
+      )
     ) {
       return false;
     }

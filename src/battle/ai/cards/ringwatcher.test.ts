@@ -2,10 +2,11 @@ import { describe, expect, it } from "vitest";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../../test-support";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { ringwatcher } from "./ringwatcher";
+import { asBattleCardId } from "../../../types/identifiers";
 
 function makeCard(): AiCard {
   return {
-    battleCardId: "seer",
+    battleCardId: asBattleCardId("seer"),
     cardNumber: 511,
     name: "card",
     energyCost: 3,

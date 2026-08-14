@@ -21,6 +21,7 @@ import { DEBUG_REROLL_TOP } from "../primitives/chrome-geometry";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type { DreamAvatarId } from "../../types/identifiers";
 
 /** Canonical rules copy in the Journey Start console's inherited type voice. */
 export function JourneyStartAbilityCopy({
@@ -191,7 +192,7 @@ export interface JourneyStartScreenProps {
   /** Mira's introduction to the fixed tutorial DreamAvatar choice. */
   guideDialogue?: JourneyStartGuideDialogueView;
   /** Called with a DreamAvatar's id when the player commits to it. */
-  onPick: (dreamAvatarId: string) => void;
+  onPick: (dreamAvatarId: DreamAvatarId) => void;
   /** Reports when the authored journey-start speech bubble becomes visible. */
   onGuideDialogueShown?: () => void;
   /** Requests a shared debug reroll. Omitted for a fixed tutorial offer. */

@@ -5,6 +5,7 @@ import {
   resolveStarterCardNumbers,
 } from "./card-roles";
 import type { CardData } from "../types/cards";
+import { asCardId } from "../types/card-identity";
 
 const STARTER_ID = "00000000-0000-4000-8000-000000000001";
 const NIGHTMARE_ID = "00000000-0000-4000-8000-000000000002";
@@ -16,7 +17,7 @@ function fixture(): unknown {
     foldHash: "a".repeat(64),
     starterDeckCardIds: [STARTER_ID],
     nightmare: {
-      cardId: NIGHTMARE_ID,
+      cardId: asCardId(NIGHTMARE_ID),
       historicalCardNumber: 42,
       displayName: "Fixture Bane",
     },

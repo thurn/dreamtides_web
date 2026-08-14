@@ -59,7 +59,7 @@
         "fields": [
           {
             "name": "id",
-            "tsType": "string",
+            "tsType": "AtlasNodeId",
             "optional": false,
             "description": "Stable Atlas node identity."
           },
@@ -140,7 +140,7 @@
     },
     {
       "name": "onPress",
-      "tsType": "(nodeId: string) => void",
+      "tsType": "(nodeId: AtlasNodeId) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -337,7 +337,7 @@
         "fields": [
           {
             "name": "battleCardId",
-            "tsType": "string",
+            "tsType": "BattleCardId",
             "optional": false,
             "description": "Stable battle-instance identity used by every interaction callback."
           },
@@ -379,7 +379,7 @@
           },
           {
             "name": "scoreAnnouncement",
-            "tsType": "{ readonly points: number; readonly presentationId: string; }",
+            "tsType": "{ readonly points: number; readonly presentationId: PresentationId; }",
             "optional": true,
             "description": "Optional score announcement attached to this battle instance."
           },
@@ -488,7 +488,7 @@
     },
     {
       "name": "onCardPress",
-      "tsType": "((entryId: string) => void)",
+      "tsType": "((entryId: EntryId) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -496,7 +496,7 @@
     },
     {
       "name": "onCardDragStart",
-      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
+      "tsType": "((entryId: EntryId, event: DragEvent<HTMLDivElement>) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -504,7 +504,7 @@
     },
     {
       "name": "onCardDragEnd",
-      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
+      "tsType": "((entryId: EntryId, event: DragEvent<HTMLDivElement>) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -512,7 +512,7 @@
     },
     {
       "name": "onCardContextMenu",
-      "tsType": "((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)",
+      "tsType": "((entryId: EntryId, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -520,7 +520,7 @@
     },
     {
       "name": "onCardDoubleTap",
-      "tsType": "((entryId: string) => void)",
+      "tsType": "((entryId: EntryId) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -591,7 +591,7 @@
     },
     {
       "name": "cards",
-      "tsType": "readonly CardChoiceGridCardView[]",
+      "tsType": "readonly CardGalleryCardView<EntryId>[]",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -639,13 +639,13 @@
           },
           {
             "name": "before",
-            "tsType": "{ readonly entryId: string; readonly card: GameCardModel; }",
+            "tsType": "{ readonly entryId: DeckEntryId; readonly card: GameCardModel; }",
             "optional": false,
             "description": "Original deck entry and its complete card presentation."
           },
           {
             "name": "after",
-            "tsType": "{ readonly entryId: string; readonly card: GameCardModel; }",
+            "tsType": "{ readonly entryId: DeckEntryId; readonly card: GameCardModel; }",
             "optional": false,
             "description": "Result deck entry and its complete card presentation."
           }
@@ -667,7 +667,7 @@
   "CardChoiceGrid": [
     {
       "name": "cards",
-      "tsType": "readonly CardChoiceGridCardView[]",
+      "tsType": "readonly CardChoiceGridCardView<EntryId>[]",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -708,56 +708,15 @@
     },
     {
       "name": "endAction",
-      "tsType": "CardChoiceGridActionView",
+      "tsType": "CardChoiceGridActionView<EntryId>",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional card-sized action appended after the cards.",
-      "nested": {
-        "name": "CardChoiceGridActionView",
-        "fields": [
-          {
-            "name": "entryId",
-            "tsType": "string",
-            "optional": false,
-            "description": "Stable action id reported through the action callback."
-          },
-          {
-            "name": "glyph",
-            "tsType": "Glyph",
-            "optional": false,
-            "description": "Large glyph that carries the action's visual identity."
-          },
-          {
-            "name": "label",
-            "tsType": "LocalizedString",
-            "optional": false,
-            "description": "Accessible action label."
-          },
-          {
-            "name": "caption",
-            "tsType": "CardChoiceGridCaption",
-            "optional": false,
-            "description": "Small uncontained line rendered below the glyph."
-          },
-          {
-            "name": "disabled",
-            "tsType": "boolean",
-            "optional": true,
-            "description": "Detach interaction and visually recede the action."
-          },
-          {
-            "name": "testId",
-            "tsType": "string",
-            "optional": true,
-            "description": "Optional stable test id on the action button."
-          }
-        ]
-      }
+      "description": "Optional card-sized action appended after the cards."
     },
     {
       "name": "onCardPress",
-      "tsType": "((entryId: string) => void)",
+      "tsType": "((entryId: EntryId) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -765,7 +724,7 @@
     },
     {
       "name": "onCardDragStart",
-      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
+      "tsType": "((entryId: EntryId, event: DragEvent<HTMLDivElement>) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -773,7 +732,7 @@
     },
     {
       "name": "onCardDragEnd",
-      "tsType": "((entryId: string, event: DragEvent<HTMLDivElement>) => void)",
+      "tsType": "((entryId: EntryId, event: DragEvent<HTMLDivElement>) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -781,7 +740,7 @@
     },
     {
       "name": "onCardContextMenu",
-      "tsType": "((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)",
+      "tsType": "((entryId: EntryId, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -789,7 +748,7 @@
     },
     {
       "name": "onEndActionPress",
-      "tsType": "((entryId: string) => void)",
+      "tsType": "((entryId: EntryId) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -855,7 +814,7 @@
     },
     {
       "name": "onCardPress",
-      "tsType": "((entryId: string) => void)",
+      "tsType": "((entryId: EntryId) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -863,56 +822,15 @@
     },
     {
       "name": "endAction",
-      "tsType": "CardChoiceGridActionView",
+      "tsType": "CardGalleryActionView<EntryId>",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional card-sized action appended after the cards.",
-      "nested": {
-        "name": "CardChoiceGridActionView",
-        "fields": [
-          {
-            "name": "entryId",
-            "tsType": "string",
-            "optional": false,
-            "description": "Stable action id reported through the action callback."
-          },
-          {
-            "name": "glyph",
-            "tsType": "Glyph",
-            "optional": false,
-            "description": "Large glyph that carries the action's visual identity."
-          },
-          {
-            "name": "label",
-            "tsType": "LocalizedString",
-            "optional": false,
-            "description": "Accessible action label."
-          },
-          {
-            "name": "caption",
-            "tsType": "CardChoiceGridCaption",
-            "optional": false,
-            "description": "Small uncontained line rendered below the glyph."
-          },
-          {
-            "name": "disabled",
-            "tsType": "boolean",
-            "optional": true,
-            "description": "Detach interaction and visually recede the action."
-          },
-          {
-            "name": "testId",
-            "tsType": "string",
-            "optional": true,
-            "description": "Optional stable test id on the action button."
-          }
-        ]
-      }
+      "description": "Optional card-sized action appended after the cards."
     },
     {
       "name": "onEndActionPress",
-      "tsType": "((entryId: string) => void)",
+      "tsType": "((entryId: EntryId) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -983,7 +901,7 @@
     },
     {
       "name": "cards",
-      "tsType": "readonly CardChoiceGridCardView[]",
+      "tsType": "readonly CardGalleryCardView<EntryId>[]",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -1832,7 +1750,7 @@
         "fields": [
           {
             "name": "id",
-            "tsType": "string",
+            "tsType": "DreamsignId",
             "optional": false,
             "description": "Stable Dreamsign UUID."
           },
@@ -1929,7 +1847,7 @@
         "fields": [
           {
             "name": "entryId",
-            "tsType": "string",
+            "tsType": "DeckEntryId",
             "optional": false,
             "description": "Stable action id."
           },
@@ -2001,7 +1919,7 @@
     },
     {
       "name": "onEntryPress",
-      "tsType": "(entryId: string) => void",
+      "tsType": "(entryId: DeckEntryId) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -2070,7 +1988,7 @@
     },
     {
       "name": "onDreamsignPress",
-      "tsType": "(dreamsignId: string) => void",
+      "tsType": "(dreamsignId: DreamsignId) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -2098,7 +2016,7 @@
         "fields": [
           {
             "name": "cardId",
-            "tsType": "CardId",
+            "tsType": "DreamwellCardId",
             "optional": false,
             "description": "Canonical Dreamwell card UUID."
           },
@@ -2338,7 +2256,7 @@
         "fields": [
           {
             "name": "actionId",
-            "tsType": "string",
+            "tsType": "ExplorationActionId",
             "optional": false,
             "description": "Stable authored action UUID emitted by activation."
           },
@@ -2377,7 +2295,7 @@
     },
     {
       "name": "onPress",
-      "tsType": "(actionId: string) => void",
+      "tsType": "(actionId: ExplorationActionId) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -3270,7 +3188,7 @@
         "fields": [
           {
             "name": "id",
-            "tsType": "string",
+            "tsType": "DreamsignId",
             "optional": false,
             "description": "Stable Dreamsign UUID."
           },
@@ -3602,7 +3520,7 @@
     },
     {
       "name": "onPress",
-      "tsType": "(offerId: string) => void",
+      "tsType": "(offerId: OfferId) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -4439,7 +4357,7 @@
   "SiteLayout": [
     {
       "name": "siteId",
-      "tsType": "string",
+      "tsType": "SiteId",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -4544,7 +4462,7 @@
         "fields": [
           {
             "name": "id",
-            "tsType": "string",
+            "tsType": "SiteId",
             "optional": false,
             "description": "Stable site identity."
           },
@@ -4639,7 +4557,7 @@
     },
     {
       "name": "onSelect",
-      "tsType": "(siteId: string) => void",
+      "tsType": "(siteId: SiteId) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -5055,7 +4973,7 @@
         "fields": [
           {
             "name": "entryId",
-            "tsType": "string",
+            "tsType": "DeckEntryId",
             "optional": false,
             "description": "Stable deck-entry identity retained by the hosting workflow."
           },
@@ -5173,7 +5091,7 @@
     },
     {
       "name": "onCardPress",
-      "tsType": "(entryId: string) => void",
+      "tsType": "(entryId: DeckEntryId) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -5250,7 +5168,7 @@
   "ViewportTutorialDialogue": [
     {
       "name": "presentationId",
-      "tsType": "string",
+      "tsType": "PresentationId",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,

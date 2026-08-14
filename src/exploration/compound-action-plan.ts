@@ -25,6 +25,11 @@ import type {
   SiteState,
   TransfigurationType,
 } from "../types/journey";
+import type { DeckEntryId, SelectionKey } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type { ExplorationActionId } from "../types/identifiers";
+import { asCardId } from "../types/card-identity";
+import { asSelectionKey } from "../types/identifiers";
 
 export type ExplorationCompoundActionKind =
   | "all-card-transfiguration"
@@ -34,8 +39,8 @@ export type ExplorationCompoundActionKind =
   | "purge-transfigure-copy";
 
 export interface ExplorationCompoundActionBinding {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
 }
 
 export interface ExplorationCompoundActionTransfigurationTarget extends ExplorationCompoundActionBinding {
@@ -55,7 +60,7 @@ export type ExplorationCompoundActionUnavailableReason =
 interface ExplorationCompoundActionPreparationCommon {
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision: string;
-  selectionKey: string;
+  selectionKey: SelectionKey;
   selectorSignatures: readonly string[];
   selectorTraces: readonly RewardSelectionTrace[];
   unavailableReason?: ExplorationCompoundActionUnavailableReason;
@@ -96,7 +101,7 @@ export type ExplorationCompoundActionPreparation =
       transfiguration: TransfigurationType;
       nightmareCount: number;
       offeredCards: readonly {
-        cardId: string;
+        cardId: CardId;
         transfiguration: TransfigurationType;
       }[];
     })
@@ -116,8 +121,8 @@ type ExplorationUnsignedCompoundActionPreparation =
     : never;
 
 interface ExplorationCompoundActionPlanInputCommon {
-  actionId: string;
-  encounterCardId: string;
+  actionId: ExplorationActionId;
+  encounterCardId: CardId;
   journey: JourneyState;
   site: SiteState;
   content: JourneyContent;
@@ -282,7 +287,7 @@ function request(
     scope: {
       journeySeed: input.journey.seed,
       siteUuid: input.site.id,
-      selectionKey: `${input.actionId}:${suffix}`,
+      selectionKey: asSelectionKey(`${input.actionId}:${suffix}`),
     },
   };
 }
@@ -296,7 +301,7 @@ function common(
   return {
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
-    selectionKey: input.actionId,
+    selectionKey: asSelectionKey(input.actionId),
     selectorSignatures: selectors.map(({ signature }) => signature),
     selectorTraces: selectors.map(({ trace }) => trace),
     ...(unavailableReason === undefined ? {} : { unavailableReason }),
@@ -685,7 +690,7 @@ function prepareTakeTransfiguredNightmares(
   const offeredCards = selection.ok
     ? selection.bindings.transfigurations.map(
         ({ cardUuid, transfiguration }) => ({
-          cardId: cardUuid,
+          cardId: asCardId(cardUuid),
           transfiguration,
         }),
       )

@@ -4,6 +4,7 @@ import {
   isTransfigurationExplorationEffect,
   loadExplorationContent,
 } from "./exploration";
+import { asCardId } from "../types/card-identity";
 
 const HASH = "0".repeat(64);
 
@@ -16,7 +17,7 @@ function fixture(action: Record<string, unknown>) {
     customDreamsigns: [],
     encounters: [
       {
-        cardId: "00000000-0000-4000-8000-000000000001",
+        cardId: asCardId("00000000-0000-4000-8000-000000000001"),
         prose: "Synthetic prose",
         action: [
           {
@@ -45,36 +46,64 @@ afterEach(() => vi.unstubAllGlobals());
 
 describe("Exploration Wave 8 compound content", () => {
   const actions: Record<string, unknown>[] = [
-    { effectKind: "transfigure-all-cards", canonicalMechanicId: "transfigure-deck-entry",
-      selectionPolicyId: "uniform" },
-    { effectKind: "purge-disclosed-and-transfigure-same-type",
-      canonicalMechanicId: "purge-deck-entry", selectionPolicyId: "purge-misfit",
+    {
+      effectKind: "transfigure-all-cards",
+      canonicalMechanicId: "transfigure-deck-entry",
+      selectionPolicyId: "uniform",
+    },
+    {
+      effectKind: "purge-disclosed-and-transfigure-same-type",
+      canonicalMechanicId: "purge-deck-entry",
+      selectionPolicyId: "purge-misfit",
       effectText: "Purge {deck_card} and transfigure matching cards",
-      transfiguration: "Inspired" },
-    { effectKind: "make-predicate-fast-and-gain-nightmares",
-      canonicalMechanicId: "make-deck-fast", predicate: "event", nightmareCount: 2 },
-    { effectKind: "take-transfigured-cards-and-gain-nightmares",
-      canonicalMechanicId: "transfigured-card-chooser", selectionPolicyId: "card-fit",
-      predicate: "character", offerCount: 4, transfiguration: "Empowered",
-      nightmareCount: 1, followupTitle: "Choose rewards",
-      followupSubtitle: "Take any number of cards" },
-    { effectKind: "purge-one-transfigure-and-copy-others",
-      canonicalMechanicId: "transfigure-deck-entry", selectionPolicyId: "uniform",
-      offerCount: 4, transfiguration: "Kindled", followupTitle: "Choose one card",
-      followupSubtitle: "Purge one of the four cards" },
+      transfiguration: "Inspired",
+    },
+    {
+      effectKind: "make-predicate-fast-and-gain-nightmares",
+      canonicalMechanicId: "make-deck-fast",
+      predicate: "event",
+      nightmareCount: 2,
+    },
+    {
+      effectKind: "take-transfigured-cards-and-gain-nightmares",
+      canonicalMechanicId: "transfigured-card-chooser",
+      selectionPolicyId: "card-fit",
+      predicate: "character",
+      offerCount: 4,
+      transfiguration: "Empowered",
+      nightmareCount: 1,
+      followupTitle: "Choose rewards",
+      followupSubtitle: "Take any number of cards",
+    },
+    {
+      effectKind: "purge-one-transfigure-and-copy-others",
+      canonicalMechanicId: "transfigure-deck-entry",
+      selectionPolicyId: "uniform",
+      offerCount: 4,
+      transfiguration: "Kindled",
+      followupTitle: "Choose one card",
+      followupSubtitle: "Purge one of the four cards",
+    },
   ];
 
   it("loads all five contracts and classifies their transfigurations", async () => {
     for (const action of actions) {
       mockContent(fixture(action));
-      expect((await loadExplorationContent()).encounters[0].actions[0]).toMatchObject(action);
+      expect(
+        (await loadExplorationContent()).encounters[0].actions[0],
+      ).toMatchObject(action);
     }
-    expect(actions.map(({ effectKind }) =>
-      isTransfigurationExplorationEffect(effectKind as never))).toEqual([
-      true, true, false, true, true,
-    ]);
-    expect(explorationActionUsesOfferedDeckTarget(actions[1] as never)).toBe(true);
-    expect(explorationActionUsesOfferedDeckTarget(actions[0] as never)).toBe(false);
+    expect(
+      actions.map(({ effectKind }) =>
+        isTransfigurationExplorationEffect(effectKind as never),
+      ),
+    ).toEqual([true, true, false, true, true]);
+    expect(explorationActionUsesOfferedDeckTarget(actions[1] as never)).toBe(
+      true,
+    );
+    expect(explorationActionUsesOfferedDeckTarget(actions[0] as never)).toBe(
+      false,
+    );
   });
 
   it.each([
@@ -356,7 +385,7 @@ describe("Exploration Wave 7 deck-mutation content", () => {
       canonicalMechanicId: "replace-deck-entry",
       selectionPolicyId: "uniform",
       predicate: "event",
-      cardId: "00000000-0000-4000-8000-000000000048",
+      cardId: asCardId("00000000-0000-4000-8000-000000000048"),
       effectText: "Replace a random Event with {fixed_card}",
     });
     (content.encounters[0].action as Array<Record<string, unknown>>).push(
@@ -389,7 +418,7 @@ describe("Exploration Wave 7 deck-mutation content", () => {
       {
         effectKind: "replace-random-with-card",
         predicate: "event",
-        cardId: "00000000-0000-4000-8000-000000000048",
+        cardId: asCardId("00000000-0000-4000-8000-000000000048"),
       },
       {
         effectKind: "change-card-type-selected",
@@ -410,7 +439,7 @@ describe("Exploration Wave 7 deck-mutation content", () => {
       canonicalMechanicId: "replace-deck-entry",
       selectionPolicyId: "uniform",
       predicate: "event",
-      cardId: "00000000-0000-4000-8000-000000000048",
+      cardId: asCardId("00000000-0000-4000-8000-000000000048"),
       effectText: "Replace a random Event",
     },
     {
@@ -418,7 +447,7 @@ describe("Exploration Wave 7 deck-mutation content", () => {
       canonicalMechanicId: "replace-deck-entry",
       selectionPolicyId: "uniform",
       predicate: "event",
-      cardId: "00000000-0000-4000-8000-000000000048",
+      cardId: asCardId("00000000-0000-4000-8000-000000000048"),
       effectText: "Replace a random Event with {fixed_card}",
       count: 1,
     },

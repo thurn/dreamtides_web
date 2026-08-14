@@ -17,6 +17,9 @@ import {
   localizedTransfigurationFormFixture,
   transfigurationFormFixture,
 } from "../test-helpers/transfiguration-fixture";
+import { asSiteId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 function makeCard(index: number): CardData {
   return {
@@ -38,7 +41,7 @@ function makeCard(index: number): CardData {
 function candidate(index: number): TransfigurationCandidateView {
   const card = makeCard(index);
   return {
-    entryId: `entry-${String(index)}`,
+    entryId: asDeckEntryId(`entry-${String(index)}`),
     model: { cardId: card.id, displaySnapshot: card },
     availability: "available",
     reforgedType: null,
@@ -93,13 +96,13 @@ function candidate(index: number): TransfigurationCandidateView {
 
 function view(): TransfigurationSiteView {
   return {
-    siteId: "transfiguration-site",
+    siteId: asSiteId("transfiguration-site"),
     scene: null,
     guide: {
       id: "durgan_forgehammer",
       name: assertLocalized("Durgan Forgehammer"),
       line: assertLocalized("Any card, any temper you like."),
-      art: artRef.dreamGuide("durgan_forgehammer"),
+      art: artRef.dreamGuide(asGuideId("durgan_forgehammer")),
     },
     ready: true,
     isEnhanced: false,
@@ -119,7 +122,7 @@ function enhancedView(): TransfigurationSiteView {
       candidate(3),
       candidate(4),
       {
-        entryId: "entry-5",
+        entryId: asDeckEntryId("entry-5"),
         model: {
           cardId: reforgedCard.id,
           displaySnapshot: reforgedCard,
@@ -542,14 +545,11 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector('[data-site-layout-viewport="desktop"]'),
     ).toBeNull();
     expect(
-      container.querySelector(
-        '[data-site-layout-viewport="narrow"]',
-      ),
+      container.querySelector('[data-site-layout-viewport="narrow"]'),
     ).not.toBeNull();
     expect(
-      container.querySelector<HTMLImageElement>(
-        "[data-site-layout-guide]",
-      )?.style.width,
+      container.querySelector<HTMLImageElement>("[data-site-layout-guide]")
+        ?.style.width,
     ).toBe("62vw");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-workspace]")

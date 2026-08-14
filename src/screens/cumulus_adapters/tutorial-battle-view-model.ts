@@ -12,6 +12,8 @@ import {
 } from "./mobile-battle-view-model";
 import { rankSlotIds } from "../../battle/types";
 import { tx } from "@trox/runtime";
+import { asPresentationId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
 
 const INACTIVE_TUTORIAL_AVATAR_ABILITY = tx(
   "Avatar ability is not active",
@@ -58,7 +60,7 @@ function tutorialPresentationView(
         ? null
         : {
             kind: presentation.kind,
-            presentationId: presentation.id,
+            presentationId: asPresentationId(presentation.id),
             cardId: presentation.cardId,
             battleCardId: presentation.battleCardId,
             cardKind: presentation.cardKind,
@@ -73,7 +75,7 @@ function tutorialPresentationView(
         ? null
         : {
             kind: presentation.kind,
-            presentationId: presentation.id,
+            presentationId: asPresentationId(presentation.id),
             cardId: presentation.cardId,
             side: presentation.side,
           };
@@ -81,12 +83,12 @@ function tutorialPresentationView(
     case "opponent-block":
       return {
         kind: presentation.kind,
-        presentationId: presentation.id,
+        presentationId: asPresentationId(presentation.id),
       };
     case "challenge-resolved":
       return {
         kind: presentation.kind,
-        presentationId: presentation.id,
+        presentationId: asPresentationId(presentation.id),
         paired: presentation.blockerBattleCardId !== null,
         dissolved: presentation.dissolved.map((entry) => ({ ...entry })),
         scored: presentation.scored,
@@ -184,14 +186,19 @@ export function buildTutorialBattleView(
               const card = battle.board.cardInstances[battleCardId];
               return card === undefined
                 ? []
-                : [{ battleCardId, card: battleGameCardModel(card) }];
+                : [
+                    {
+                      battleCardId: asBattleCardId(battleCardId),
+                      card: battleGameCardModel(card),
+                    },
+                  ];
             }),
           }
         : null,
     presentationId:
       presentation === null || presentation.kind === "tutorial-guidance"
         ? null
-        : presentation.id,
+        : asPresentationId(presentation.id),
     presentation: tutorialPresentationView(presentation, battle),
     victoryVisible: previewVictory || battle.board.result === "victory",
   };

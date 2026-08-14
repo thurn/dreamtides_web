@@ -2,6 +2,7 @@ import type { ArtCrop } from "../types/cards";
 import type { SourceTransport } from "../runtime/localization/runtime";
 import { hydrateSourceTransport } from "../runtime/localization/runtime";
 import { SourceMessage } from "@trox/runtime";
+import { asDreamwellCardId, type DreamwellCardId } from "../types/identifiers";
 
 /**
  * The shared Dreamwell cards drawn one per turn during the Dreamwell phase
@@ -11,7 +12,7 @@ import { SourceMessage } from "@trox/runtime";
  */
 export interface DreamwellCard {
   /** Stable UUID identity. Cards are referenced by id, never by name. */
-  id: string;
+  id: DreamwellCardId;
   name: string;
   /** Rules text with the same symbol/glossary markup as regular cards. */
   renderedText: string;
@@ -92,8 +93,10 @@ function record(value: unknown): value is Record<string, unknown> {
 }
 
 function localizedTransport(value: unknown): boolean {
-  return (typeof value === "string" && value.trim() !== "") ||
-    (record(value) && value.format === "trox-source-message-ref");
+  return (
+    (typeof value === "string" && value.trim() !== "") ||
+    (record(value) && value.format === "trox-source-message-ref")
+  );
 }
 
 /** Validate the generated Dreamwell payload before it enters journey content. */
@@ -111,7 +114,7 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
     ) {
       throw new Error(`Dreamwell card ${String(cardIndex + 1)} is malformed`);
     }
-    const cardId = candidate.id;
+    const cardId = asDreamwellCardId(candidate.id);
     const automation = candidate.automation ?? [];
     if (!Array.isArray(automation))
       throw new Error(`Dreamwell card ${cardId} automation must be an array`);
@@ -185,18 +188,30 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
           };
         });
         const hydratedTexts = [
-          hydrateSourceTransport(prompt.title, `Dreamwell ${cardId} ${promptKey} title`),
-          hydrateSourceTransport(prompt.subtitle, `Dreamwell ${cardId} ${promptKey} subtitle`),
-          hydrateSourceTransport(prompt.instructions, `Dreamwell ${cardId} ${promptKey} instructions`),
+          hydrateSourceTransport(
+            prompt.title,
+            `Dreamwell ${cardId} ${promptKey} title`,
+          ),
+          hydrateSourceTransport(
+            prompt.subtitle,
+            `Dreamwell ${cardId} ${promptKey} subtitle`,
+          ),
+          hydrateSourceTransport(
+            prompt.instructions,
+            `Dreamwell ${cardId} ${promptKey} instructions`,
+          ),
           ...normalizedChoices.map((choice) => choice.label),
         ];
         const placeholders = new Set(
-          hydratedTexts.flatMap((text) => text instanceof SourceMessage
-            ? Object.keys(text.argumentSchemas)
-            : typeof text === "string"
-              ? [...text.matchAll(/\{([a-z][a-z0-9]*(?:_[a-z0-9]+)*)\}/gu)]
-                  .map((match) => match[1] ?? "")
-              : []),
+          hydratedTexts.flatMap((text) =>
+            text instanceof SourceMessage
+              ? Object.keys(text.argumentSchemas)
+              : typeof text === "string"
+                ? [
+                    ...text.matchAll(/\{([a-z][a-z0-9]*(?:_[a-z0-9]+)*)\}/gu),
+                  ].map((match) => match[1] ?? "")
+                : [],
+          ),
         );
         if (
           [...placeholders].some((name) => !argumentNames.has(name)) ||
@@ -218,6 +233,7 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
     );
     return {
       ...(candidate as unknown as DreamwellCard),
+      id: cardId,
       automation: normalizedAutomation,
     };
   });

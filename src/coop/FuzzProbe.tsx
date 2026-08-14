@@ -7,17 +7,18 @@ import {
   useConfirmedHead,
   useGameState,
 } from "./hooks";
+import type { BattleId, ClientId } from "../types/identifiers";
 
 export interface FuzzProbeSnapshot {
-  clientId: string;
+  clientId: ClientId;
   confirmedHead: number | null;
   displayedHash: string;
   confirmedHash: string;
   href: string;
   frontDoorPhase: FoldState["frontDoor"]["phase"];
   screenType: string;
-  controllerClientId: string | null;
-  battleId: string | null;
+  controllerClientId: ClientId | null;
+  battleId: BattleId | null;
   displayedState: FoldState;
   confirmedState: FoldState;
 }

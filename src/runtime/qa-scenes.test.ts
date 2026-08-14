@@ -10,6 +10,7 @@ import {
 } from "../__test-helpers__/atlas-fixtures";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
+import { asQaSceneId } from "../types/identifiers";
 import { layerOrdinal } from "../types/layer-name";
 import type { JourneyContent } from "../data/journey-content";
 import type {
@@ -50,31 +51,41 @@ import {
   makeTutorialConfiguration,
   TEST_TUTORIAL_PLAYER_AVATAR_ID,
 } from "../test/tutorial-configuration-fixture";
+import { asSiteId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type { SiteId } from "../types/identifiers";
+import { asGuideId } from "../types/identifiers";
+import { asDreamscapeId } from "../types/identifiers";
+import { asApollyonIncarnationId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
+import { asDreamsignId } from "../types/identifiers";
+import { asExplorationActionId } from "../types/identifiers";
+import { asDeckEntryId } from "../types/identifiers";
 
 const TUTORIAL_DREAM_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
 function makeDreamAvatar(id = "dream-avatar-1"): DreamAvatarContent {
   return {
-    id,
+    id: asDreamAvatarId(id),
     name: "Test DreamAvatar",
     title: "Caller of Tests",
     renderedText: "Test ability.",
     imageNumber: "0001",
     startingEssence: 250,
-    signatureCards: ["Alpha Card 1"],
+    signatureCards: [asCardName("Alpha Card 1")],
   };
 }
 
 function makeIncarnations(): ApollyonIncarnationContent[] {
   return [
     {
-      id: "incarnation-1",
+      id: asApollyonIncarnationId("incarnation-1"),
       title: "First Incarnation",
       description: "A test incarnation.",
       deckType: "test-deck",
     },
     {
-      id: "incarnation-2",
+      id: asApollyonIncarnationId("incarnation-2"),
       title: "Second Incarnation",
       description: "Another test incarnation.",
       deckType: "test-deck",
@@ -121,23 +132,32 @@ describe("QA scenes", () => {
   it("resolves a scene id case-insensitively and ignores surrounding space", () => {
     const scene = QA_SCENES[0];
     expect(findQaScene(scene.id)).toBe(scene);
-    expect(findQaScene(`  ${scene.id.toUpperCase()}  `)).toBe(scene);
+    expect(findQaScene(asQaSceneId(`  ${scene.id.toUpperCase()}  `))).toBe(
+      scene,
+    );
   });
 
   it("returns null for an unknown scene id", () => {
-    expect(findQaScene("not-a-real-scene")).toBeNull();
-    expect(buildQaScene("not-a-real-scene", makeJourneyContent())).toBeNull();
+    expect(findQaScene(asQaSceneId("not-a-real-scene"))).toBeNull();
+    expect(
+      buildQaScene(asQaSceneId("not-a-real-scene"), makeJourneyContent()),
+    ).toBeNull();
   });
 
   it("registers the Augury site under its canonical QA ids", () => {
-    expect(findQaScene("augury")?.label).toBe("Augury");
-    expect(findQaScene("augury-enhanced")?.label).toBe("Augury (Enhanced)");
+    expect(findQaScene(asQaSceneId("augury"))?.label).toBe("Augury");
+    expect(findQaScene(asQaSceneId("augury-enhanced"))?.label).toBe(
+      "Augury (Enhanced)",
+    );
   });
 });
 
 describe('the "dream-avatar-select" QA scene', () => {
   it("parks the run on the journeyStart DreamAvatar selection screen", () => {
-    const state = buildQaScene("dream-avatar-select", makeJourneyContent());
+    const state = buildQaScene(
+      asQaSceneId("dream-avatar-select"),
+      makeJourneyContent(),
+    );
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("journeyStart");
@@ -154,12 +174,15 @@ describe('the "tutorial-dream-avatar-select" QA scene', () => {
     const content = makeJourneyContent();
     content.dreamAvatars = [makeDreamAvatar(TUTORIAL_DREAM_AVATAR_ID)];
 
-    const state = buildQaScene("tutorial-dream-avatar-select", content);
+    const state = buildQaScene(
+      asQaSceneId("tutorial-dream-avatar-select"),
+      content,
+    );
 
     expect(state).not.toBeNull();
     expect(state?.screen).toEqual({
       type: "journeyStart",
-      tutorialDreamAvatarId: TUTORIAL_DREAM_AVATAR_ID,
+      tutorialDreamAvatarId: asDreamAvatarId(TUTORIAL_DREAM_AVATAR_ID),
     });
     expect(state?.dreamAvatar).toBeNull();
     expect(state?.resolvedPackage).toBeNull();
@@ -168,14 +191,17 @@ describe('the "tutorial-dream-avatar-select" QA scene', () => {
 
   it("fails to build when the required tutorial DreamAvatar is unavailable", () => {
     expect(
-      buildQaScene("tutorial-dream-avatar-select", makeJourneyContent()),
+      buildQaScene(
+        asQaSceneId("tutorial-dream-avatar-select"),
+        makeJourneyContent(),
+      ),
     ).toBeNull();
   });
 });
 
 describe('the "atlas" QA scene', () => {
   it("parks the run on the atlas screen with a generated boss node", () => {
-    const state = buildQaScene("atlas", makeJourneyContent());
+    const state = buildQaScene(asQaSceneId("atlas"), makeJourneyContent());
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("atlas");
@@ -193,7 +219,10 @@ describe('the "atlas" QA scene', () => {
 
   it("assigns a boss incarnation drawn from the supplied incarnations", () => {
     const incarnations = makeIncarnations();
-    const state = buildQaScene("atlas", makeJourneyContent(incarnations));
+    const state = buildQaScene(
+      asQaSceneId("atlas"),
+      makeJourneyContent(incarnations),
+    );
 
     const incarnationId = state?.atlas.bossIncarnationId;
     expect(incarnationId).toBeTruthy();
@@ -201,7 +230,7 @@ describe('the "atlas" QA scene', () => {
   });
 
   it("parks on the layer-1 frontier, a genuinely reachable resting state", () => {
-    const state = buildQaScene("atlas", makeJourneyContent());
+    const state = buildQaScene(asQaSceneId("atlas"), makeJourneyContent());
     // "atlas" is the first real resting screen (one dreamscape completed), so
     // the completion level and frontier depth are both 1.
     expect(state?.completionLevel).toBe(1);
@@ -221,9 +250,9 @@ describe('the "random-site-atlas" QA scene', () => {
     content.dreamscapes = [
       ...content.dreamscapes,
       {
-        id: "rust-expanse-test",
+        id: asDreamscapeId("rust-expanse-test"),
         name: "The Rust Expanse",
-        guideId: "maddox",
+        guideId: asGuideId("maddox"),
         signatureSite: "RandomSite",
         affiliationId: null,
         isStarter: false,
@@ -232,9 +261,9 @@ describe('the "random-site-atlas" QA scene', () => {
     ];
     content.guides = [
       {
-        id: "maddox",
+        id: asGuideId("maddox"),
         name: "Maddox",
-        homeDreamscapeId: "rust-expanse-test",
+        homeDreamscapeId: asDreamscapeId("rust-expanse-test"),
         siteType: "RandomSite",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["Pick a road."] },
@@ -242,7 +271,7 @@ describe('the "random-site-atlas" QA scene', () => {
       },
     ];
 
-    const state = buildQaScene("random-site-atlas", content);
+    const state = buildQaScene(asQaSceneId("random-site-atlas"), content);
 
     expect(state?.screen.type).toBe("atlas");
     const maddoxNode = Object.values(state?.atlas.nodes ?? {}).find(
@@ -261,7 +290,10 @@ describe('the "random-site-atlas" QA scene', () => {
 
 describe('the "tutorial-atlas" QA scene', () => {
   it("parks the tutorial journey at its first Atlas frontier", () => {
-    const state = buildQaScene("tutorial-atlas", makeJourneyContent());
+    const state = buildQaScene(
+      asQaSceneId("tutorial-atlas"),
+      makeJourneyContent(),
+    );
 
     expect(state?.screen.type).toBe("atlas");
     expect(state?.completionLevel).toBe(1);
@@ -279,7 +311,7 @@ describe("the atlas layer QA scenes", () => {
     const frontierLayer = displayLayer - 1;
     it(`atlas${String(displayLayer)} parks on the atlas with the frontier on the "Layer ${String(displayLayer)}" column`, () => {
       const state = buildQaScene(
-        `atlas${String(displayLayer)}`,
+        asQaSceneId(`atlas${String(displayLayer)}`),
         makeJourneyContent(),
       );
 
@@ -310,7 +342,7 @@ describe("the atlas layer QA scenes", () => {
     // make already shows one layer ahead.
     for (const displayLayer of displayLayers) {
       const state = buildQaScene(
-        `atlas${String(displayLayer)}`,
+        asQaSceneId(`atlas${String(displayLayer)}`),
         makeJourneyContent(),
       );
       const nodes = state?.atlas.nodes ?? {};
@@ -327,10 +359,12 @@ describe("the atlas layer QA scenes", () => {
 
   it("registers an atlasN scene for every reachable frontier column", () => {
     for (const displayLayer of displayLayers) {
-      expect(findQaScene(`atlas${String(displayLayer)}`)).not.toBeNull();
+      expect(
+        findQaScene(asQaSceneId(`atlas${String(displayLayer)}`)),
+      ).not.toBeNull();
     }
     // Layer I (the starter) is never a resting frontier.
-    expect(findQaScene("atlas1")).toBeNull();
+    expect(findQaScene(asQaSceneId("atlas1"))).toBeNull();
   });
 });
 
@@ -338,15 +372,15 @@ describe("the battle layer QA scenes", () => {
   const displayLayers = [1, 2, 3, 4, 5, 6, 7];
 
   it("loads an active battle only for the dedicated playable scene", () => {
-    expect(qaSceneLoadsBattle("battle")).toBe(false);
-    expect(qaSceneLoadsBattle("battle3")).toBe(false);
-    expect(qaSceneLoadsBattle("battle-playable")).toBe(true);
+    expect(qaSceneLoadsBattle(asQaSceneId("battle"))).toBe(false);
+    expect(qaSceneLoadsBattle(asQaSceneId("battle3"))).toBe(false);
+    expect(qaSceneLoadsBattle(asQaSceneId("battle-playable"))).toBe(true);
   });
 
   for (const displayLayer of [1, 2]) {
     it(`parks the tutorial journey on its Layer ${String(displayLayer)} Battle start screen`, () => {
       const state = buildQaScene(
-        `tutorial-battle${String(displayLayer)}`,
+        asQaSceneId(`tutorial-battle${String(displayLayer)}`),
         makeJourneyContent(),
       );
 
@@ -359,7 +393,7 @@ describe("the battle layer QA scenes", () => {
   for (const displayLayer of displayLayers) {
     it(`battle${String(displayLayer)} parks on the Layer ${String(displayLayer)} Battle start screen`, () => {
       const state = buildQaScene(
-        `battle${String(displayLayer)}`,
+        asQaSceneId(`battle${String(displayLayer)}`),
         makeJourneyContent(),
       );
 
@@ -392,7 +426,7 @@ describe("the battle layer QA scenes", () => {
   }
 
   it('aliases plain "battle" to the Layer 1 battle scene', () => {
-    const state = buildQaScene("battle", makeJourneyContent());
+    const state = buildQaScene(asQaSceneId("battle"), makeJourneyContent());
 
     expect(state).not.toBeNull();
     expect(state?.completionLevel).toBe(0);
@@ -410,7 +444,7 @@ describe("the battle layer QA scenes", () => {
 
 describe("site QA scenes", () => {
   it("registers direct QA jumps for gameplay site screens", () => {
-    const expectedSites = [["draft", "Draft"]] as const;
+    const expectedSites = [[asQaSceneId("draft"), "Draft"]] as const;
 
     for (const [sceneId, siteType] of expectedSites) {
       const state = buildQaScene(sceneId, makeJourneyContent());
@@ -443,7 +477,7 @@ describe('the "exploration" QA scene', () => {
     { length: 8 },
     (_, index) =>
       `a0000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
-  );
+  ).map(asDreamsignId);
 
   function addDreamsignCatalog(content: JourneyContent): void {
     content.dreamsignTemplates = DREAMSIGN_IDS.map((id, index) => ({
@@ -483,7 +517,7 @@ describe('the "exploration" QA scene', () => {
     effectKind: ExplorationEffectKind,
   ): ExplorationActionContent {
     return {
-      id: "c0000000-0000-4000-8000-000000000001",
+      id: asExplorationActionId("c0000000-0000-4000-8000-000000000001"),
       label: "Exercise Dreamsign plan",
       effectText: "Prepare a deterministic Dreamsign mutation.",
       effectKind,
@@ -505,7 +539,7 @@ describe('the "exploration" QA scene', () => {
       | "replace-all-starter-cards",
   ): ExplorationActionContent {
     return {
-      id: "d0000000-0000-4000-8000-000000000001",
+      id: asExplorationActionId("d0000000-0000-4000-8000-000000000001"),
       label: "Exercise starter plan",
       effectText: "Prepare a deterministic starter-card mutation.",
       effectKind,
@@ -567,13 +601,13 @@ describe('the "exploration" QA scene', () => {
           prose: "A precise encounter.",
           actions: [
             {
-              id: "precise-choice-a",
+              id: asExplorationActionId("precise-choice-a"),
               label: "Choose A",
               effectText: "Gain Essence.",
               effectKind: "gain-essence-per-card",
             },
             {
-              id: "precise-choice-b",
+              id: asExplorationActionId("precise-choice-b"),
               label: "Choose B",
               effectText: "Gain Essence.",
               effectKind: "gain-essence-per-card",
@@ -605,8 +639,7 @@ describe('the "exploration" QA scene', () => {
     if (sourceCard === undefined) {
       throw new Error("Exploration QA fixture requires a source card.");
     }
-    const encounterCardNumber =
-      Math.max(...content.cardDatabase.keys()) + 1;
+    const encounterCardNumber = Math.max(...content.cardDatabase.keys()) + 1;
     content.cardDatabase.set(encounterCardNumber, {
       ...sourceCard,
       id: input.encounterCardId,
@@ -624,7 +657,7 @@ describe('the "exploration" QA scene', () => {
         },
       ],
     };
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: input.encounterCardId,
       journeySeed: input.seed,
     });
@@ -646,7 +679,7 @@ describe('the "exploration" QA scene', () => {
   }
 
   function wave5SiteInsertionOffer(input: {
-    readonly encounterCardId: string;
+    readonly encounterCardId: CardId;
     readonly actionId: string;
     readonly siteType: ExplorationFixedSiteType;
     readonly seed: string;
@@ -678,7 +711,7 @@ describe('the "exploration" QA scene', () => {
           prose: "A deterministic Wave 5 encounter.",
           actions: [
             {
-              id: input.actionId,
+              id: asExplorationActionId(input.actionId),
               label: "Open a fixed site",
               effectText: "Add a fixed site to this Dreamscape.",
               effectKind: "add-fixed-site",
@@ -691,7 +724,7 @@ describe('the "exploration" QA scene', () => {
       ],
     };
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: input.encounterCardId,
       journeySeed: input.seed,
     });
@@ -700,7 +733,11 @@ describe('the "exploration" QA scene', () => {
     );
     const offer =
       runtime?.kind === "exploration" ? runtime.actionOffers[0] : undefined;
-    if (state === null || runtime?.kind !== "exploration" || offer === undefined) {
+    if (
+      state === null ||
+      runtime?.kind !== "exploration" ||
+      offer === undefined
+    ) {
       throw new Error("Wave 5 QA encounter must prepare its selected action.");
     }
     expect(runtime.encounterCardId).toBe(input.encounterCardId);
@@ -709,7 +746,7 @@ describe('the "exploration" QA scene', () => {
   }
 
   function wave5bSiteTypeChoiceOffer(input: {
-    readonly encounterCardId: string;
+    readonly encounterCardId: CardId;
     readonly actionId: string;
     readonly seed: string;
   }): {
@@ -740,7 +777,7 @@ describe('the "exploration" QA scene', () => {
           prose: "A deterministic Wave 5b encounter.",
           actions: [
             {
-              id: input.actionId,
+              id: asExplorationActionId(input.actionId),
               label: "Choose a site",
               effectText: "Choose one of three sites to add.",
               followupTitle: "Choose a site",
@@ -755,7 +792,7 @@ describe('the "exploration" QA scene', () => {
       ],
     };
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: input.encounterCardId,
       journeySeed: input.seed,
     });
@@ -777,7 +814,7 @@ describe('the "exploration" QA scene', () => {
   }
 
   function wave6ShopModifierOffer(input: {
-    readonly encounterCardId: string;
+    readonly encounterCardId: CardId;
     readonly action: ExplorationActionContent;
     readonly seed: string;
   }): {
@@ -816,7 +853,7 @@ describe('the "exploration" QA scene', () => {
       ],
     };
 
-    const state = buildQaScene("exploration-purchases", content, {
+    const state = buildQaScene(asQaSceneId("exploration-purchases"), content, {
       explorationCardId: encounterCardId,
       journeySeed: input.seed,
     });
@@ -871,7 +908,7 @@ describe('the "exploration" QA scene', () => {
     template: keyof typeof WAVE8_ACTION_IDS,
   ): ExplorationActionContent {
     const common = {
-      id: WAVE8_ACTION_IDS[template],
+      id: asExplorationActionId(WAVE8_ACTION_IDS[template]),
       label: `T${String(template)} fixture`,
       effectText: `T${String(template)} fixture effect.`,
     };
@@ -928,7 +965,7 @@ describe('the "exploration" QA scene', () => {
   }
 
   function wave8Offer(input: {
-    readonly encounterCardId: string;
+    readonly encounterCardId: CardId;
     readonly action: ExplorationActionContent;
     readonly seed: string;
     readonly duplicateDeck?: boolean;
@@ -995,7 +1032,9 @@ describe('the "exploration" QA scene', () => {
     };
 
     const baseState = buildQaScene(
-      input.duplicateDeck ? "exploration-duplicates" : "exploration",
+      asQaSceneId(
+        input.duplicateDeck ? "exploration-duplicates" : "exploration",
+      ),
       content,
       { journeySeed: input.seed },
     );
@@ -1072,7 +1111,7 @@ describe('the "exploration" QA scene', () => {
 
   it("provides the mixed, untransfigured deck and full draft package required by Wave 8", () => {
     const { content, state } = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000840",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000840"),
       seed: "4001",
       action: wave8Action(40),
     });
@@ -1131,7 +1170,7 @@ describe('the "exploration" QA scene', () => {
 
   it("prepares and resolves T40 from one exact signed all-card plan", () => {
     const { content, state, sourceSite, runtime, offer } = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000840",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000840"),
       seed: "4001",
       action: wave8Action(40),
     });
@@ -1216,7 +1255,7 @@ describe('the "exploration" QA scene', () => {
 
   it("keeps T40 signed but unavailable when the QA deck is empty", () => {
     const { offer } = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000840",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000840"),
       seed: "4000",
       action: wave8Action(40),
       deckTransform: () => [],
@@ -1235,7 +1274,7 @@ describe('the "exploration" QA scene', () => {
 
   it("prepares T75 with one disclosed purge entry and exact same-type companions", () => {
     const { content, state, sourceSite, runtime, offer } = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000875",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000875"),
       seed: "7501",
       action: wave8Action(75),
     });
@@ -1327,7 +1366,7 @@ describe('the "exploration" QA scene', () => {
 
   it("records T75's no-companion edge without disclosing a stale target", () => {
     const { offer } = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000875",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000875"),
       seed: "7500",
       action: wave8Action(75),
       deckTransform: (deck) => deck.slice(0, 1),
@@ -1346,7 +1385,7 @@ describe('the "exploration" QA scene', () => {
 
   it("prepares and resolves T77 with exact keyword and Nightmare mappings", () => {
     const { content, state, sourceSite, runtime, offer } = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000877",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000877"),
       seed: "7701",
       action: wave8Action(77),
       deckTransform: (deck, content) => {
@@ -1460,7 +1499,7 @@ describe('the "exploration" QA scene', () => {
 
   it("keeps T77 signed but unavailable when no deck entry matches its predicate", () => {
     const { offer } = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000877",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000877"),
       seed: "7700",
       action: wave8Action(77),
       deckTransform: (deck, content) =>
@@ -1481,7 +1520,7 @@ describe('the "exploration" QA scene', () => {
 
   it("resolves T78's zero-card branch with only its exact Nightmare gains", () => {
     const { content, state, sourceSite, runtime, offer } = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000878",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000878"),
       seed: "7801",
       action: wave8Action(78),
     });
@@ -1558,7 +1597,7 @@ describe('the "exploration" QA scene', () => {
 
   it("resolves T78's multi-card branch and rejects duplicate or unknown UUID intent", () => {
     const fixture = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000878",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000878"),
       seed: "7802",
       action: wave8Action(78),
     });
@@ -1642,7 +1681,7 @@ describe('the "exploration" QA scene', () => {
 
   it("prepares T80 by concrete entry UUID and persists its purge, forms, and copies", () => {
     const { content, state, sourceSite, runtime, offer } = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000880",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000880"),
       seed: "8001",
       action: wave8Action(80),
       duplicateDeck: true,
@@ -1779,7 +1818,7 @@ describe('the "exploration" QA scene', () => {
 
   it("keeps T80 signed and unavailable with fewer than four eligible entries", () => {
     const { offer } = wave8Offer({
-      encounterCardId: "e0000000-0000-4000-8000-000000000880",
+      encounterCardId: asCardId("e0000000-0000-4000-8000-000000000880"),
       seed: "8000",
       action: wave8Action(80),
       deckTransform: (deck) => deck.slice(0, 3),
@@ -1795,7 +1834,7 @@ describe('the "exploration" QA scene', () => {
   });
 
   function wave7Offer(input: {
-    readonly encounterCardId: string;
+    readonly encounterCardId: CardId;
     readonly action: ExplorationActionContent;
     readonly seed: string;
   }): {
@@ -1872,7 +1911,7 @@ describe('the "exploration" QA scene', () => {
       ],
     };
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: encounterCardId,
       journeySeed: input.seed,
     });
@@ -1930,7 +1969,7 @@ describe('the "exploration" QA scene', () => {
 
   function explorationResolution(
     state: JourneyState,
-    siteId: string,
+    siteId: SiteId,
   ): ExplorationSiteRuntime["resolution"] {
     const runtime = state.siteRuntime[siteId];
     return runtime?.kind === "exploration" ? runtime.resolution : null;
@@ -1976,7 +2015,7 @@ describe('the "exploration" QA scene', () => {
   it("prebuilds the encounter for the requested source-card UUID", () => {
     const { content, encounterCardId } = explorationContent();
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: encounterCardId,
     });
 
@@ -1992,7 +2031,7 @@ describe('the "exploration" QA scene', () => {
   it("parks the purchase-path scene before Exploration with Shop and Bazaar siblings", () => {
     const { content, encounterCardId } = explorationContent();
 
-    const state = buildQaScene("exploration-purchases", content, {
+    const state = buildQaScene(asQaSceneId("exploration-purchases"), content, {
       explorationCardId: encounterCardId,
       journeySeed: "qa-purchase-path",
     });
@@ -2029,7 +2068,9 @@ describe('the "exploration" QA scene', () => {
       isVisited: false,
     });
     expect(bazaar).toMatchObject({
-      id: `${state?.activeSiteId ?? ""}-qa-dreamsign-bazaar`,
+      id: asSiteId(
+        `${state?.activeSiteId ?? asSiteId("")}-qa-dreamsign-bazaar`,
+      ),
       type: "DreamsignBazaar",
       isEnhanced: false,
       isVisited: false,
@@ -2042,10 +2083,10 @@ describe('the "exploration" QA scene', () => {
     const actionId = "0e0d5d1d-5c79-4352-b03a-2abe039680e5";
     const { content, state, sourceSite, shopSite, bazaarSite, offer } =
       wave6ShopModifierOffer({
-        encounterCardId,
+        encounterCardId: asCardId(encounterCardId),
         seed: "5601",
         action: {
-          id: actionId,
+          id: asExplorationActionId(actionId),
           label: "T56 fixture",
           effectText: "T56 fixture effect.",
           effectKind: "free-next-shop",
@@ -2081,7 +2122,7 @@ describe('the "exploration" QA scene', () => {
       {
         kind: "free-next-shop",
         sourceSiteId: sourceSite.id,
-        sourceActionId: actionId,
+        sourceActionId: asExplorationActionId(actionId),
       },
     ]);
     expect(
@@ -2094,7 +2135,7 @@ describe('the "exploration" QA scene', () => {
       shopModifier: {
         kind: "free-next-shop",
         sourceSiteId: sourceSite.id,
-        sourceActionId: actionId,
+        sourceActionId: asExplorationActionId(actionId),
       },
     });
 
@@ -2110,7 +2151,7 @@ describe('the "exploration" QA scene', () => {
         {
           kind: "free-next-shop",
           sourceSiteId: sourceSite.id,
-          sourceActionId: actionId,
+          sourceActionId: asExplorationActionId(actionId),
         },
       ]);
       expect(
@@ -2132,7 +2173,7 @@ describe('the "exploration" QA scene', () => {
           : undefined,
       ).toEqual({
         sourceSiteId: sourceSite.id,
-        sourceActionId: actionId,
+        sourceActionId: asExplorationActionId(actionId),
       });
 
       const rerolled =
@@ -2147,7 +2188,7 @@ describe('the "exploration" QA scene', () => {
           : undefined,
       ).toEqual({
         sourceSiteId: sourceSite.id,
-        sourceActionId: actionId,
+        sourceActionId: asExplorationActionId(actionId),
       });
       expect(
         rerolledRuntime?.kind === "shop" ? rerolledRuntime.rerollCount : -1,
@@ -2176,7 +2217,7 @@ describe('the "exploration" QA scene', () => {
         essenceAfter: 51,
         freeNextShopSource: {
           sourceSiteId: sourceSite.id,
-          sourceActionId: actionId,
+          sourceActionId: asExplorationActionId(actionId),
         },
       });
       expect(receipt?.priceBeforeFree).toBeGreaterThan(0);
@@ -2190,10 +2231,10 @@ describe('the "exploration" QA scene', () => {
     const actionId = "c884d8d4-2f30-4dff-a59a-1823791c2189";
     const { content, state, sourceSite, shopSite, bazaarSite, offer } =
       wave6ShopModifierOffer({
-        encounterCardId,
+        encounterCardId: asCardId(encounterCardId),
         seed: "8201",
         action: {
-          id: actionId,
+          id: asExplorationActionId(actionId),
           label: "T82 fixture",
           effectText: "T82 fixture effect.",
           effectKind: "lose-half-essence-and-free-purchases",
@@ -2228,7 +2269,7 @@ describe('the "exploration" QA scene', () => {
     const modifier = {
       kind: "free-purchases" as const,
       sourceSiteId: sourceSite.id,
-      sourceActionId: actionId,
+      sourceActionId: asExplorationActionId(actionId),
       initialCount: 3,
       remainingCount: 3,
     };
@@ -2276,7 +2317,7 @@ describe('the "exploration" QA scene', () => {
         essenceAfter: 51,
         freePurchaseModifier: {
           sourceSiteId: sourceSite.id,
-          sourceActionId: actionId,
+          sourceActionId: asExplorationActionId(actionId),
           initialCount: 3,
           remainingBefore: 3,
           remainingAfter: 2,
@@ -2322,7 +2363,7 @@ describe('the "exploration" QA scene', () => {
         essenceAfter: 51,
         freePurchaseModifier: {
           sourceSiteId: sourceSite.id,
-          sourceActionId: actionId,
+          sourceActionId: asExplorationActionId(actionId),
           initialCount: 3,
           remainingBefore: 2,
           remainingAfter: 1,
@@ -2341,35 +2382,35 @@ describe('the "exploration" QA scene', () => {
   it.each([
     {
       template: 41,
-      encounterCardId: "1658d9a0-c3b0-4eb7-babc-4933acf362c4",
+      encounterCardId: asCardId("1658d9a0-c3b0-4eb7-babc-4933acf362c4"),
       actionId: "6937ba6d-2d29-45ee-ac65-65bd91162341",
       siteType: "Duplication",
       seed: "4101",
     },
     {
       template: 42,
-      encounterCardId: "1b4d2adc-64ab-4020-bae6-b35321898bf0",
+      encounterCardId: asCardId("1b4d2adc-64ab-4020-bae6-b35321898bf0"),
       actionId: "424f9916-1ab1-4b7c-9798-1c2aa4bdf192",
       siteType: "Shop",
       seed: "4201",
     },
     {
       template: 43,
-      encounterCardId: "4cec92f2-9bac-4949-a602-cd0a44618aaf",
+      encounterCardId: asCardId("4cec92f2-9bac-4949-a602-cd0a44618aaf"),
       actionId: "a9335699-7a01-4626-ba0d-84541218845d",
       siteType: "DreamsignBazaar",
       seed: "4301",
     },
     {
       template: 44,
-      encounterCardId: "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7",
+      encounterCardId: asCardId("2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7"),
       actionId: "644222aa-e1ce-44a7-8f54-e3acc604399f",
       siteType: "Transfiguration",
       seed: "4401",
     },
     {
       template: 45,
-      encounterCardId: "ccbefadc-aab8-4f8c-a705-07bd70c91731",
+      encounterCardId: asCardId("ccbefadc-aab8-4f8c-a705-07bd70c91731"),
       actionId: "4d5f2648-caf2-43ee-a07a-178cf3a77bfd",
       siteType: "Purge",
       seed: "4501",
@@ -2398,9 +2439,9 @@ describe('the "exploration" QA scene', () => {
       });
       expect(state.currentDreamscape).toBe(currentNodeId);
       expect(owners.map((node) => node.id)).toEqual([currentNodeId]);
-      expect(currentNode?.sites.some((site) => site.id === state.activeSiteId)).toBe(
-        true,
-      );
+      expect(
+        currentNode?.sites.some((site) => site.id === state.activeSiteId),
+      ).toBe(true);
       expect(offer).toMatchObject({
         canonicalMechanicId: "add-site",
         selectionPolicyId: "fixed",
@@ -2408,12 +2449,14 @@ describe('the "exploration" QA scene', () => {
       });
       expect(preparation).toMatchObject({
         sourceSiteId: state.activeSiteId,
-        sourceActionId: actionId,
+        sourceActionId: asExplorationActionId(actionId),
         targetNodeId: currentNodeId,
         insertionIndex: currentNode?.sites.length,
         siblingSiteIdsBefore: currentNode?.sites.map((site) => site.id),
         insertedSite: {
-          id: `site-exploration-${state.activeSiteId ?? ""}-${actionId}`,
+          id: asSiteId(
+            `site-exploration-${state.activeSiteId ?? asSiteId("")}-${actionId}`,
+          ),
           type: siteType,
           isEnhanced: false,
           isVisited: false,
@@ -2427,7 +2470,7 @@ describe('the "exploration" QA scene', () => {
   it("prepares three distinct routable alternatives for the T46 site chooser", () => {
     const actionId = "46c79bb8-2001-415e-82ae-98864e2c1e51";
     const { state, offer } = wave5bSiteTypeChoiceOffer({
-      encounterCardId: "09332e5b-3b4e-458f-9df0-3fc0419f65c3",
+      encounterCardId: asCardId("09332e5b-3b4e-458f-9df0-3fc0419f65c3"),
       actionId,
       seed: "4601",
     });
@@ -2470,7 +2513,7 @@ describe('the "exploration" QA scene', () => {
     expect(offer.siteInsertionPreparation).toBeUndefined();
     expect(preparation).toMatchObject({
       sourceSiteId: state.activeSiteId,
-      sourceActionId: actionId,
+      sourceActionId: asExplorationActionId(actionId),
       targetNodeId: currentNodeId,
       insertionIndex: currentNode?.sites.length,
       siblingSiteIdsBefore: currentNode?.sites.map((site) => site.id),
@@ -2484,7 +2527,9 @@ describe('the "exploration" QA scene', () => {
       choiceTypes.map((siteType) => ({
         siteType,
         insertedSite: {
-          id: `site-exploration-${state.activeSiteId ?? ""}-${actionId}`,
+          id: asSiteId(
+            `site-exploration-${state.activeSiteId ?? asSiteId("")}-${actionId}`,
+          ),
           type: siteType,
           isEnhanced: false,
           isVisited: false,
@@ -2500,13 +2545,13 @@ describe('the "exploration" QA scene', () => {
     const { content, encounterCardId } = explorationContent();
     const starterCardNumbers = content.poolContext?.starterCardNumbers ?? [];
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: encounterCardId,
     });
 
     expect(state?.deck.slice(0, starterCardNumbers.length)).toEqual(
       starterCardNumbers.map((cardNumber, index) => ({
-        entryId: `deck-${String(index + 1)}`,
+        entryId: asDeckEntryId(`deck-${String(index + 1)}`),
         cardNumber,
         transfiguration: null,
         isBane: false,
@@ -2530,7 +2575,7 @@ describe('the "exploration" QA scene', () => {
       content.poolContext?.starterCardNumbers ?? [],
     );
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: encounterCardId,
     });
     const appendedCards = (state?.deck ?? []).flatMap((entry) => {
@@ -2561,7 +2606,7 @@ describe('the "exploration" QA scene', () => {
       encounterCardId: asCardId("3725379c-676d-4efd-81ee-7e45d80db6d0"),
       seed: "qa-wave4b-t8",
       action: {
-        id: actionId,
+        id: asExplorationActionId(actionId),
         label: "T8 fixture",
         effectText: "T8 fixture effect.",
         followupTitle: "T8 fixture",
@@ -2617,7 +2662,7 @@ describe('the "exploration" QA scene', () => {
       encounterCardId: asCardId("78673e2b-a6d1-43de-8850-3d3327de5cc6"),
       seed: "qa-wave4b-t21",
       action: {
-        id: actionId,
+        id: asExplorationActionId(actionId),
         label: "T21 fixture",
         effectText: "T21 fixture effect.",
         followupTitle: "T21 fixture",
@@ -2649,16 +2694,18 @@ describe('the "exploration" QA scene', () => {
       selectorTraces: [],
     });
     expect(preparation?.eligibleCards).toHaveLength(2);
-    expect(preparation?.eligibleCards.every((binding) => {
-      const entry = entryById.get(binding.entryId);
-      return (
-        entry !== undefined &&
-        content.cardDatabase.get(entry.cardNumber)?.id === binding.cardId &&
-        content.cardDatabase.get(entry.cardNumber)?.subtype === "Warrior" &&
-        binding.transfigurations.length === 1 &&
-        binding.transfigurations[0] === "Kindled"
-      );
-    })).toBe(true);
+    expect(
+      preparation?.eligibleCards.every((binding) => {
+        const entry = entryById.get(binding.entryId);
+        return (
+          entry !== undefined &&
+          content.cardDatabase.get(entry.cardNumber)?.id === binding.cardId &&
+          content.cardDatabase.get(entry.cardNumber)?.subtype === "Warrior" &&
+          binding.transfigurations.length === 1 &&
+          binding.transfigurations[0] === "Kindled"
+        );
+      }),
+    ).toBe(true);
     expect(preparation?.unavailableReason).toBeUndefined();
     expect(preparation?.planSignature).toMatch(/^[0-9a-f]+$/u);
   });
@@ -2668,7 +2715,7 @@ describe('the "exploration" QA scene', () => {
       template: 52,
       encounterCardId: asCardId("0a19c54c-7a2e-4614-99c9-2c9142729ebb"),
       action: {
-        id: "979618b2-de06-40fa-9910-488dee6b3c24",
+        id: asExplorationActionId("979618b2-de06-40fa-9910-488dee6b3c24"),
         label: "T52 fixture",
         effectText: "T52 fixture effect.",
         effectKind: "copy-random-cards",
@@ -2685,7 +2732,7 @@ describe('the "exploration" QA scene', () => {
       template: 54,
       encounterCardId: asCardId("12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4"),
       action: {
-        id: "f2a61678-17b0-4d50-b75c-f1de61fa0d5c",
+        id: asExplorationActionId("f2a61678-17b0-4d50-b75c-f1de61fa0d5c"),
         label: "T54 fixture",
         effectText: "T54 fixture effect.",
         effectKind: "change-random-card-type",
@@ -2734,19 +2781,21 @@ describe('the "exploration" QA scene', () => {
       expect(
         new Set(preparation?.targets.map((binding) => binding.entryId)).size,
       ).toBe(2);
-      expect(preparation?.targets.every((binding) => {
-        const entry = entryById.get(binding.entryId);
-        const card =
-          entry === undefined
-            ? undefined
-            : content.cardDatabase.get(entry.cardNumber);
-        return (
-          card?.id === binding.cardId &&
-          (template === 52
-            ? card.cardType === "Character"
-            : card.cardType !== "Event")
-        );
-      })).toBe(true);
+      expect(
+        preparation?.targets.every((binding) => {
+          const entry = entryById.get(binding.entryId);
+          const card =
+            entry === undefined
+              ? undefined
+              : content.cardDatabase.get(entry.cardNumber);
+          return (
+            card?.id === binding.cardId &&
+            (template === 52
+              ? card.cardType === "Character"
+              : card.cardType !== "Event")
+          );
+        }),
+      ).toBe(true);
       expect(preparation?.unavailableReason).toBeUndefined();
       expect(preparation?.selectorSignature).toMatch(/^[0-9a-f]+$/u);
       expect(preparation?.planSignature).toMatch(/^[0-9a-f]+$/u);
@@ -2756,10 +2805,10 @@ describe('the "exploration" QA scene', () => {
   it("prepares and resolves T48 as one concealed signed target with one fixed replacement", () => {
     const actionId = "574dc85e-37a9-4888-80a2-afec6ee24209";
     const { content, state, sourceSite, runtime, offer } = wave7Offer({
-      encounterCardId: "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034",
+      encounterCardId: asCardId("bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034"),
       seed: "4801",
       action: {
-        id: actionId,
+        id: asExplorationActionId(actionId),
         label: "T48 fixture",
         effectText: "T48 fixture effect with {fixed_card}.",
         effectKind: "replace-random-with-card",
@@ -2852,10 +2901,10 @@ describe('the "exploration" QA scene', () => {
   it("prepares T53 with one disclosed concrete target and persists its exact automatic type change", () => {
     const actionId = "b59b7e6a-aa32-428a-9397-06766ebe9b7d";
     const { content, state, sourceSite, runtime, offer } = wave7Offer({
-      encounterCardId: "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
+      encounterCardId: asCardId("4e3c04a9-1cdd-468a-b42a-40157ed9c9d6"),
       seed: "5301",
       action: {
-        id: actionId,
+        id: asExplorationActionId(actionId),
         label: "T53 fixture",
         effectText: "Change {deck_card} to become a {card_type}.",
         effectKind: "change-card-type-selected",
@@ -2935,10 +2984,10 @@ describe('the "exploration" QA scene', () => {
   it("prepares and resolves T72 as one exact UUID-backed Legendary gain", () => {
     const actionId = "fbd70c5d-9c4a-4af7-9ace-41f52ab00976";
     const { content, state, sourceSite, runtime, offer } = wave7Offer({
-      encounterCardId: "455ef341-8a26-44e1-b287-19e53bdc6158",
+      encounterCardId: asCardId("455ef341-8a26-44e1-b287-19e53bdc6158"),
       seed: "7201",
       action: {
-        id: actionId,
+        id: asExplorationActionId(actionId),
         label: "T72 fixture",
         effectText: "Gain a random Legendary card.",
         effectKind: "gain-random-cards",
@@ -2997,7 +3046,7 @@ describe('the "exploration" QA scene', () => {
       const { content, encounterCardId } = explorationContent();
       const starterCardNumbers = content.poolContext?.starterCardNumbers ?? [];
 
-      const state = buildQaScene("exploration", content, {
+      const state = buildQaScene(asQaSceneId("exploration"), content, {
         explorationCardId: encounterCardId,
         explorationStarterCount: starterCount,
       });
@@ -3018,7 +3067,7 @@ describe('the "exploration" QA scene', () => {
     (starterCount) => {
       const { content, encounterCardId } = explorationContent();
       expect(
-        buildQaScene("exploration", content, {
+        buildQaScene(asQaSceneId("exploration"), content, {
           explorationCardId: encounterCardId,
           explorationStarterCount: starterCount,
         }),
@@ -3051,7 +3100,7 @@ describe('the "exploration" QA scene', () => {
         encounters: [{ ...encounter, actions: [starterAction(effectKind)] }],
       };
 
-      const state = buildQaScene("exploration", content, {
+      const state = buildQaScene(asQaSceneId("exploration"), content, {
         explorationCardId: encounterCardId,
         explorationStarterCount: starterCount,
         journeySeed: `qa-${effectKind}`,
@@ -3067,8 +3116,8 @@ describe('the "exploration" QA scene', () => {
         kind: effectKind,
         eligibleStarterCards: STARTER_CARD_IDS.slice(0, starterCount).map(
           (cardId, index) => ({
-            entryId: `deck-${String(index + 1)}`,
-            cardId,
+            entryId: asDeckEntryId(`deck-${String(index + 1)}`),
+            cardId: asCardId(cardId),
           }),
         ),
       });
@@ -3102,7 +3151,7 @@ describe('the "exploration" QA scene', () => {
       ],
     };
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: encounterCardId,
       explorationStarterCount: 0,
       journeySeed: "qa-no-starters",
@@ -3134,7 +3183,7 @@ describe('the "exploration" QA scene', () => {
       throw new Error("Exploration QA fixture requires an encounter.");
     }
     const randomEssenceAction = {
-      id: "random-essence-choice",
+      id: asExplorationActionId("random-essence-choice"),
       label: "Gather sparks",
       effectText: "Gain random Essence.",
       effectKind: "gain-random-essence" as const,
@@ -3143,22 +3192,23 @@ describe('the "exploration" QA scene', () => {
     };
     content.exploration = {
       ...exploration,
-      encounters: [{
-        ...encounter,
-        actions: [randomEssenceAction, ...encounter.actions.slice(1)],
-      }],
+      encounters: [
+        {
+          ...encounter,
+          actions: [randomEssenceAction, ...encounter.actions.slice(1)],
+        },
+      ],
     };
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: encounterCardId,
       journeySeed: "live-room-seed",
     });
     const runtime = Object.values(state?.siteRuntime ?? {}).find(
       (candidate) => candidate.kind === "exploration",
     );
-    const offer = runtime?.kind === "exploration"
-      ? runtime.actionOffers[0]
-      : undefined;
+    const offer =
+      runtime?.kind === "exploration" ? runtime.actionOffers[0] : undefined;
 
     expect(state?.seed).toBe("live-room-seed");
     expect(offer?.essencePreparation?.saltParts[1]).toBe("live-room-seed");
@@ -3170,7 +3220,7 @@ describe('the "exploration" QA scene', () => {
       content.poolContext?.starterCardNumbers ?? [],
     );
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: encounterCardId,
     });
 
@@ -3196,7 +3246,7 @@ describe('the "exploration" QA scene', () => {
       });
     }
 
-    const state = buildQaScene("exploration-duplicates", content, {
+    const state = buildQaScene(asQaSceneId("exploration-duplicates"), content, {
       explorationCardId: encounterCardId,
     });
 
@@ -3215,7 +3265,9 @@ describe('the "exploration" QA scene', () => {
       if (count <= 1) continue;
       const card = content.cardDatabase.get(cardNumber);
       if (card === undefined) {
-        throw new Error("Duplicated QA deck cards must resolve in the catalog.");
+        throw new Error(
+          "Duplicated QA deck cards must resolve in the catalog.",
+        );
       }
       expect(
         eligibleTransfigurations(content.transfigurationData, card),
@@ -3231,14 +3283,14 @@ describe('the "exploration" QA scene', () => {
     const heldDreamsignId = "e0000000-0000-4000-8000-000000000001";
     content.dreamsignTemplates = [
       {
-        id: heldDreamsignId,
+        id: asDreamsignId(heldDreamsignId),
         name: "Exploration QA Dreamsign",
         effectDescription: "A QA effect.",
       },
     ];
     content.poolContext = makeTestPoolContext([heldDreamsignId]);
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: encounterCardId,
     });
 
@@ -3251,7 +3303,7 @@ describe('the "exploration" QA scene', () => {
     const { content, encounterCardId } = explorationContent();
     addDreamsignCatalog(content);
 
-    const state = buildQaScene("exploration", content, {
+    const state = buildQaScene(asQaSceneId("exploration"), content, {
       explorationCardId: encounterCardId,
       explorationHeldDreamsignCount: 3,
       explorationMaxDreamsigns: 4,
@@ -3271,7 +3323,7 @@ describe('the "exploration" QA scene', () => {
     addDreamsignCatalog(content);
 
     expect(
-      buildQaScene("exploration", content, {
+      buildQaScene(asQaSceneId("exploration"), content, {
         explorationCardId: encounterCardId,
         explorationHeldDreamsignCount: 5,
         explorationMaxDreamsigns: 4,
@@ -3281,13 +3333,7 @@ describe('the "exploration" QA scene', () => {
 
   it.each([
     ["gain-offered-dreamsign", "offered-gain", 1, 4, 0],
-    [
-      "replace-selected-dreamsign-with-offered",
-      "offered-replacement",
-      3,
-      3,
-      0,
-    ],
+    ["replace-selected-dreamsign-with-offered", "offered-replacement", 3, 3, 0],
     ["replace-all-dreamsigns-random", "replace-all-random", 3, 3, 0],
     [
       "purge-selected-dreamsign-and-gain-random",
@@ -3316,7 +3362,7 @@ describe('the "exploration" QA scene', () => {
         ],
       };
 
-      const state = buildQaScene("exploration", content, {
+      const state = buildQaScene(asQaSceneId("exploration"), content, {
         explorationCardId: encounterCardId,
         explorationHeldDreamsignCount: heldCount,
         explorationMaxDreamsigns: maxDreamsigns,
@@ -3344,7 +3390,9 @@ describe('the "exploration" QA scene', () => {
         requiredOverflowReplacementCount: overflowCount,
       });
       expect(preparation?.preparedDreamsignIds).toHaveLength(3);
-      expect(preparation?.poolBeforeIds).toEqual(DREAMSIGN_IDS.slice(heldCount));
+      expect(preparation?.poolBeforeIds).toEqual(
+        DREAMSIGN_IDS.slice(heldCount),
+      );
       expect(preparation?.planSignature).toMatch(/^[0-9a-f]+$/u);
       expect(selectionTrace?.saltParts).toContain("live-room-seed");
     },
@@ -3354,8 +3402,8 @@ describe('the "exploration" QA scene', () => {
     const { content } = explorationContent();
 
     expect(
-      buildQaScene("exploration", content, {
-        explorationCardId: "missing-exploration-card",
+      buildQaScene(asQaSceneId("exploration"), content, {
+        explorationCardId: asCardId("missing-exploration-card"),
       }),
     ).toBeNull();
   });
@@ -3363,7 +3411,10 @@ describe('the "exploration" QA scene', () => {
 
 describe('the "dreamscape-with-essence" QA scene', () => {
   it("parks on the dreamscape overview with an unvisited Essence site", () => {
-    const state = buildQaScene("dreamscape-with-essence", makeJourneyContent());
+    const state = buildQaScene(
+      asQaSceneId("dreamscape-with-essence"),
+      makeJourneyContent(),
+    );
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("dreamscape");
@@ -3382,7 +3433,7 @@ describe('the "dreamscape-with-essence" QA scene', () => {
 
 describe('the "reward" QA scene', () => {
   it("parks on the dreamscape overview with an unvisited Reward site", () => {
-    const state = buildQaScene("reward", makeJourneyContent());
+    const state = buildQaScene(asQaSceneId("reward"), makeJourneyContent());
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("dreamscape");
@@ -3400,11 +3451,11 @@ describe('the "reward" QA scene', () => {
   it("builds the at-cap replacement state with UUID-backed Dreamsigns", () => {
     const content = makeJourneyContent();
     content.dreamsignTemplates = Array.from({ length: 13 }, (_, index) => ({
-      id: `dreamsign-${String(index + 1)}`,
+      id: asDreamsignId(`dreamsign-${String(index + 1)}`),
       name: `Dreamsign ${String(index + 1)}`,
       effectDescription: "A QA effect.",
     }));
-    const state = buildQaScene("reward-at-cap", content);
+    const state = buildQaScene(asQaSceneId("reward-at-cap"), content);
 
     expect(state).not.toBeNull();
     expect(state?.dreamsigns).toHaveLength(state?.maxDreamsigns ?? 0);

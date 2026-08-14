@@ -1,14 +1,17 @@
 import { useCallback } from "react";
 import { logEvent } from "../logging";
 import type { FrontDoorMutations } from "./front-door-context";
+import type { BattleId } from "../types/identifiers";
+import type { TutorialRunId } from "../types/identifiers";
+import type { TutorialActionId } from "../types/identifiers";
 
 /** Submit the authored tutorial handoff from the player to the opponent. */
 export function useTutorialEndTurn(
   completeTutorialAction: FrontDoorMutations["completeTutorialAction"],
-  battleId: string,
+  battleId: BattleId,
 ) {
   return useCallback(
-    (runId: string, actionId: string): void => {
+    (runId: TutorialRunId, actionId: TutorialActionId): void => {
       logEvent("tutorial_end_turn_requested", {
         runId,
         actionId,

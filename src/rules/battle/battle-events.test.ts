@@ -8,7 +8,9 @@ import type {
   BattleMutableState,
   BattlePhase,
   BattleSide,
+  BackRankSlotId,
   DreamwellCardDefinition,
+  FrontRankSlotId,
 } from "../../battle/types";
 import {
   backRankSlotId,
@@ -49,6 +51,23 @@ import {
   type BattleCompletionProvider,
   type BattleInitProvider,
 } from "./battle-events";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import type { BattleCardId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import { asBattleId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asDreamwellCardId } from "../../types/identifiers";
+import { asNoteId } from "../../types/identifiers";
+import { asTutorialTriggerId } from "../../types/identifiers";
+import { asGlossaryEntryId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asClientId } from "../../types/identifiers";
+import { asTutorialRunId } from "../../types/identifiers";
+import { asBattleEffectScriptId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -147,7 +166,7 @@ function makeBoard(
   > & { playerScore?: number; enemyScore?: number } = {},
 ): BattleMutableState {
   return {
-    battleId: overrides.battleId ?? "battle-xyz",
+    battleId: overrides.battleId ?? asBattleId("battle-xyz"),
     activeSide: "player",
     turnNumber: overrides.turnNumber ?? 3,
     phase: "day",
@@ -168,9 +187,9 @@ function makeBoard(
 // is irrelevant to these cases (real construction is the Task 26 provider).
 function makeInit(overrides: Partial<BattleInit> = {}): BattleInit {
   return {
-    battleId: "battle-xyz",
-    siteId: SITE_ID,
-    dreamscapeId: NODE_ID,
+    battleId: asBattleId("battle-xyz"),
+    siteId: asSiteId(SITE_ID),
+    dreamscapeId: asDreamscapeId(NODE_ID),
     completionLevelAtStart: 0,
     essenceReward: 100,
     scoreToWin: 30,
@@ -180,11 +199,14 @@ function makeInit(overrides: Partial<BattleInit> = {}): BattleInit {
   } as unknown as BattleInit;
 }
 
-function makeBattle(
-  board = makeBoard(),
-  init = makeInit(),
-): BattleFoldState {
-  return { init, board, effectQueue: [], pendingPrompt: null, dawnFired: emptyDawnFired() };
+function makeBattle(board = makeBoard(), init = makeInit()): BattleFoldState {
+  return {
+    init,
+    board,
+    effectQueue: [],
+    pendingPrompt: null,
+    dawnFired: emptyDawnFired(),
+  };
 }
 
 /**
@@ -196,7 +218,7 @@ const fakeProvider: BattleInitProvider = {
   beginBattle({ siteId, rng, timestamp }) {
     const roll = rng(0);
     const board = makeBoard({
-      battleId: `battle-${siteId}`,
+      battleId: asBattleId(`battle-${siteId}`),
       turnNumber: 1,
       playerScore: Math.floor(roll * 1000),
       enemyScore: 0,
@@ -204,11 +226,17 @@ const fakeProvider: BattleInitProvider = {
     // The forwarded timestamp threads through so the reducer's ctx.timestamp is
     // honored rather than a live clock.
     const init = makeInit({
-      battleId: `battle-${siteId}`,
+      battleId: asBattleId(`battle-${siteId}`),
       siteId,
     });
     void timestamp;
-    return { init, board, effectQueue: [], pendingPrompt: null, dawnFired: emptyDawnFired() };
+    return {
+      init,
+      board,
+      effectQueue: [],
+      pendingPrompt: null,
+      dawnFired: emptyDawnFired(),
+    };
   },
 };
 
@@ -216,8 +244,13 @@ const fakeProvider: BattleInitProvider = {
 // Journey-state fixtures
 // ---------------------------------------------------------------------------
 
-function makeEntry(entryId: string, isBane = false): DeckEntry {
-  return { entryId, cardNumber: isBane ? 10002 : 1, transfiguration: null, isBane };
+function makeEntry(entryId: DeckEntryId, isBane = false): DeckEntry {
+  return {
+    entryId,
+    cardNumber: isBane ? 10002 : 1,
+    transfiguration: null,
+    isBane,
+  };
 }
 
 const SITE_ID = "site-42";
@@ -226,16 +259,16 @@ const NEXT_NODE_ID = "node-2";
 
 function journeyAtlas(): DreamAtlas {
   return {
-    layers: [[NODE_ID], [NEXT_NODE_ID]],
+    layers: [[asAtlasNodeId(NODE_ID)], [asAtlasNodeId(NEXT_NODE_ID)]],
     nodes: {
       [NODE_ID]: {
-        id: NODE_ID,
+        id: asAtlasNodeId(NODE_ID),
         layer: LayerName.One,
         indexInLayer: 0,
-        dreamscapeId: "dreamscape-one",
+        dreamscapeId: asDreamscapeId("dreamscape-one"),
         sites: [
           {
-            id: SITE_ID,
+            id: asSiteId(SITE_ID),
             type: "Battle",
             isEnhanced: false,
             isVisited: false,
@@ -244,12 +277,12 @@ function journeyAtlas(): DreamAtlas {
         position: { x: 0, y: 0 },
         state: "available",
         enhancedSiteType: null,
-        forwardIds: [NEXT_NODE_ID],
+        forwardIds: [asAtlasNodeId(NEXT_NODE_ID)],
         backwardIds: [],
         knownDreamsignId: null,
       },
       [NEXT_NODE_ID]: {
-        id: NEXT_NODE_ID,
+        id: asAtlasNodeId(NEXT_NODE_ID),
         layer: LayerName.Two,
         indexInLayer: 0,
         dreamscapeId: null,
@@ -258,13 +291,13 @@ function journeyAtlas(): DreamAtlas {
         state: "unrevealed",
         enhancedSiteType: null,
         forwardIds: [],
-        backwardIds: [NODE_ID],
+        backwardIds: [asAtlasNodeId(NODE_ID)],
         knownDreamsignId: null,
       },
     },
-    startingNodeId: NODE_ID,
-    bossNodeId: NEXT_NODE_ID,
-    currentNodeId: NODE_ID,
+    startingNodeId: asAtlasNodeId(NODE_ID),
+    bossNodeId: asAtlasNodeId(NEXT_NODE_ID),
+    currentNodeId: asAtlasNodeId(NODE_ID),
     knownDreamsignCarrierIds: [],
   };
 }
@@ -275,10 +308,10 @@ function baseState(overrides: Partial<JourneyState> = {}): FoldState {
     ...base,
     journey: {
       ...base.journey,
-      activeSiteId: SITE_ID,
+      activeSiteId: asSiteId(SITE_ID),
       atlas: journeyAtlas(),
-      currentDreamscape: NODE_ID,
-      screen: { type: "site", siteId: SITE_ID },
+      currentDreamscape: asAtlasNodeId(NODE_ID),
+      screen: { type: "site", siteId: asSiteId(SITE_ID) },
       ...overrides,
     },
   };
@@ -319,7 +352,7 @@ const fakeCompletionProvider: BattleCompletionProvider = {
       if (forward !== undefined) {
         nodes[forwardId] = {
           ...forward,
-          dreamscapeId: "dreamscape-two",
+          dreamscapeId: asDreamscapeId("dreamscape-two"),
           state: "available",
         };
       }
@@ -334,7 +367,9 @@ const fakeCompletionProvider: BattleCompletionProvider = {
 
 describe("BEGIN_BATTLE", () => {
   it("bounces (a recorded no-op) until a battle-init provider is registered", () => {
-    const result = reduce(baseState(), "BEGIN_BATTLE", { siteId: SITE_ID });
+    const result = reduce(baseState(), "BEGIN_BATTLE", {
+      siteId: asSiteId(SITE_ID),
+    });
     expect(result.outcome).toBe("bounced");
     expect(result.state.battle).toBeNull();
   });
@@ -342,14 +377,16 @@ describe("BEGIN_BATTLE", () => {
   it("constructs a battle fold state deterministically from the same event", () => {
     registerBattleInitProvider(fakeProvider);
     const state = baseState();
-    const first = reduce(state, "BEGIN_BATTLE", { siteId: SITE_ID });
-    const second = reduce(state, "BEGIN_BATTLE", { siteId: SITE_ID });
+    const first = reduce(state, "BEGIN_BATTLE", { siteId: asSiteId(SITE_ID) });
+    const second = reduce(state, "BEGIN_BATTLE", { siteId: asSiteId(SITE_ID) });
 
     expect(first.outcome).toBe("applied");
     expect(second.outcome).toBe("applied");
     expect(first.state.battle).not.toBeNull();
     // Same journey state + same seq → hash-identical battle both times.
-    expect(hashBattle(first.state.battle)).toBe(hashBattle(second.state.battle));
+    expect(hashBattle(first.state.battle)).toBe(
+      hashBattle(second.state.battle),
+    );
     // A fresh battle carries the immutable init and starts with an empty effect
     // queue and no open prompt.
     expect(first.state.battle?.effectQueue).toEqual([]);
@@ -361,7 +398,9 @@ describe("BEGIN_BATTLE", () => {
 
   it("starts every battle with automation enabled", () => {
     registerBattleInitProvider(fakeProvider);
-    const result = reduce(baseState(), "BEGIN_BATTLE", { siteId: SITE_ID });
+    const result = reduce(baseState(), "BEGIN_BATTLE", {
+      siteId: asSiteId(SITE_ID),
+    });
 
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.basicAutomationEnabled).toBe(true);
@@ -370,7 +409,9 @@ describe("BEGIN_BATTLE", () => {
   it("bounces a second BEGIN_BATTLE when a battle is already in progress", () => {
     registerBattleInitProvider(fakeProvider);
     const existing = inBattleState();
-    const result = reduce(existing, "BEGIN_BATTLE", { siteId: SITE_ID });
+    const result = reduce(existing, "BEGIN_BATTLE", {
+      siteId: asSiteId(SITE_ID),
+    });
     expect(result.outcome).toBe("bounced");
     // Battle slice is untouched by the bounced double-begin.
     expect(hashBattle(result.state.battle)).toBe(hashBattle(existing.battle));
@@ -384,7 +425,8 @@ describe("BEGIN_BATTLE", () => {
   });
 
   it("forwards a validated seed override and event sequence to the provider", () => {
-    let captured: Parameters<BattleInitProvider["beginBattle"]>[0] | null = null;
+    let captured: Parameters<BattleInitProvider["beginBattle"]>[0] | null =
+      null;
     registerBattleInitProvider({
       beginBattle(input) {
         captured = input;
@@ -395,13 +437,13 @@ describe("BEGIN_BATTLE", () => {
     const result = reduce(
       baseState(),
       "BEGIN_BATTLE",
-      { siteId: SITE_ID, seedOverride: 4242 },
+      { siteId: asSiteId(SITE_ID), seedOverride: 4242 },
       ctx({ seq: 77 }),
     );
 
     expect(result.outcome).toBe("applied");
     expect(captured).toMatchObject({
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       seedOverride: 4242,
       seq: 77,
     });
@@ -412,7 +454,7 @@ describe("BEGIN_BATTLE", () => {
     (seedOverride) => {
       registerBattleInitProvider(fakeProvider);
       const result = reduce(baseState(), "BEGIN_BATTLE", {
-        siteId: SITE_ID,
+        siteId: asSiteId(SITE_ID),
         seedOverride,
       });
       expect(result.outcome).toBe("bounced");
@@ -438,14 +480,17 @@ describe("END_BATTLE victory", () => {
       kind: "temporary_nightmare_grant",
       count: 1,
       battlesRemaining: 1,
-      addedEntryIds: ["nightmare-entry"],
+      addedEntryIds: [asDeckEntryId("nightmare-entry")],
       source: "test",
     };
     const state = inBattleState(
       {
         essence: 450,
         battleModifiers: [survivingMod, expiringNightmareMod],
-        deck: [makeEntry("keep-entry"), makeEntry("nightmare-entry", true)],
+        deck: [
+          makeEntry(asDeckEntryId("keep-entry")),
+          makeEntry(asDeckEntryId("nightmare-entry"), true),
+        ],
       },
       makeBattle(makeBoard({ result: "victory" }), makeInit()),
     );
@@ -464,7 +509,7 @@ describe("END_BATTLE victory", () => {
     expect(journey.atlas.nodes[NODE_ID].state).toBe("completed");
     expect(journey.atlas.nodes[NEXT_NODE_ID]).toMatchObject({
       state: "available",
-      dreamscapeId: "dreamscape-two",
+      dreamscapeId: asDreamscapeId("dreamscape-two"),
     });
     // Surviving modifier decremented by one; expired one dropped.
     expect(journey.battleModifiers).toEqual([
@@ -501,7 +546,7 @@ describe("END_BATTLE victory", () => {
 describe("END_BATTLE defeat", () => {
   it("freezes a failure summary from the battle fold state and ends the battle", () => {
     const board = makeBoard({
-      battleId: "defeat-battle",
+      battleId: asBattleId("defeat-battle"),
       turnNumber: 5,
       result: "defeat",
       playerScore: 7,
@@ -545,7 +590,9 @@ describe("END_BATTLE defeat", () => {
     });
     const state = inBattleState({}, makeBattle(board, init));
     const result = reduce(state, "END_BATTLE", {});
-    expect(result.state.journey.failureSummary?.reason).toBe("turn_limit_reached");
+    expect(result.state.journey.failureSummary?.reason).toBe(
+      "turn_limit_reached",
+    );
   });
 
   it("records a score-target reason when the score target was reached before the turn limit", () => {
@@ -559,7 +606,9 @@ describe("END_BATTLE defeat", () => {
     });
     const state = inBattleState({}, makeBattle(board, init));
     const result = reduce(state, "END_BATTLE", {});
-    expect(result.state.journey.failureSummary?.reason).toBe("score_target_reached");
+    expect(result.state.journey.failureSummary?.reason).toBe(
+      "score_target_reached",
+    );
   });
 });
 
@@ -585,7 +634,10 @@ describe("END_BATTLE bounces", () => {
 // BATTLE_COMMAND — fold-time triggers (Task 20)
 // ---------------------------------------------------------------------------
 
-const EMISSION = { sourceSurface: "auto-system", selectedCardId: null } as const;
+const EMISSION = {
+  sourceSurface: "auto-system",
+  selectedCardId: null,
+} as const;
 
 /** A default (all-falsy) card status. */
 function defaultStatus(): BattleCardStatus {
@@ -604,8 +656,8 @@ function defaultStatus(): BattleCardStatus {
 /** A minimal in-play/hand card instance whose `definition.cardId` keys the
  *  automation registry (so a materialized/dawn script can resolve). */
 function makeInstance(
-  battleCardId: string,
-  cardId: string,
+  battleCardId: BattleCardId,
+  cardId: CardId,
   controller: BattleSide = "player",
 ): BattleCardInstance {
   return {
@@ -648,19 +700,21 @@ function makeInstance(
 }
 
 /** A configurable board with a per-card instance registry. */
-function makeRichBoard(over: {
-  phase?: BattlePhase;
-  turnNumber?: number;
-  dreamwellDeckIndex?: number;
-  instances?: BattleCardInstance[];
-  playerDeck?: string[];
-  playerHand?: string[];
-  playerVoid?: string[];
-  playerFront?: Record<string, string | null>;
-  playerBack?: Record<string, string | null>;
-  playerDreamwellCardIndex?: number | null;
-  playerDreamwellDrawnTurn?: number | null;
-} = {}): BattleMutableState {
+function makeRichBoard(
+  over: {
+    phase?: BattlePhase;
+    turnNumber?: number;
+    dreamwellDeckIndex?: number;
+    instances?: BattleCardInstance[];
+    playerDeck?: BattleCardId[];
+    playerHand?: BattleCardId[];
+    playerVoid?: BattleCardId[];
+    playerFront?: Record<FrontRankSlotId, BattleCardId | null>;
+    playerBack?: Record<BackRankSlotId, BattleCardId | null>;
+    playerDreamwellCardIndex?: number | null;
+    playerDreamwellDrawnTurn?: number | null;
+  } = {},
+): BattleMutableState {
   const player = makeSide();
   player.deck = over.playerDeck ?? [];
   player.hand = over.playerHand ?? [];
@@ -674,7 +728,7 @@ function makeRichBoard(over: {
     cardInstances[instance.battleCardId] = instance;
   }
   return {
-    battleId: "battle-cmd",
+    battleId: asBattleId("battle-cmd"),
     activeSide: "player",
     turnNumber: over.turnNumber ?? 3,
     phase: over.phase ?? "day",
@@ -710,20 +764,45 @@ function hashBoard(board: BattleMutableState): string {
 
 describe("BATTLE_PLAY_CARD", () => {
   it("commits a legal targeted event atomically and bounces stale targets without a cost", () => {
-    const flashpoint = makeInstance("flashpoint", "4408b942-09a0-4f4e-a403-10c708c6e3c5");
-    flashpoint.definition = { ...flashpoint.definition, battleCardKind: "event", energyCost: 3, printedEnergyCost: 3 };
-    const target = makeInstance("target", "fixture-target", "enemy");
-    target.definition = { ...target.definition, energyCost: 2, printedEnergyCost: 2 };
-    const board = makeRichBoard({ instances: [flashpoint, target], playerHand: ["flashpoint"] });
+    const flashpoint = makeInstance(
+      asBattleCardId("flashpoint"),
+      asCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
+    );
+    flashpoint.definition = {
+      ...flashpoint.definition,
+      battleCardKind: "event",
+      energyCost: 3,
+      printedEnergyCost: 3,
+    };
+    const target = makeInstance(
+      asBattleCardId("target"),
+      asCardId("fixture-target"),
+      "enemy",
+    );
+    target.definition = {
+      ...target.definition,
+      energyCost: 2,
+      printedEnergyCost: 2,
+    };
+    const board = makeRichBoard({
+      instances: [flashpoint, target],
+      playerHand: [asBattleCardId("flashpoint")],
+    });
     board.sides.player.currentEnergy = 3;
-    board.sides.enemy.frontRank.F0 = "target";
+    board.sides.enemy.frontRank.F0 = asBattleCardId("target");
     const state = inBattleState({}, battleFrom(board));
 
-    const bad = reduce(state, "BATTLE_PLAY_CARD", { battleCardId: "flashpoint", targetBattleCardIds: ["missing"] });
+    const bad = reduce(state, "BATTLE_PLAY_CARD", {
+      battleCardId: asBattleCardId("flashpoint"),
+      targetBattleCardIds: [asBattleCardId("missing")],
+    });
     expect(bad.outcome).toBe("bounced");
     expect(hashBoard(bad.state.battle?.board ?? board)).toBe(hashBoard(board));
 
-    const legal = reduce(state, "BATTLE_PLAY_CARD", { battleCardId: "flashpoint", targetBattleCardIds: ["target"] });
+    const legal = reduce(state, "BATTLE_PLAY_CARD", {
+      battleCardId: asBattleCardId("flashpoint"),
+      targetBattleCardIds: [asBattleCardId("target")],
+    });
     expect(legal.outcome).toBe("applied");
     expect(legal.state.battle?.board.sides.player.currentEnergy).toBe(0);
     expect(legal.state.battle?.board.sides.player.void).toContain("flashpoint");
@@ -732,7 +811,10 @@ describe("BATTLE_PLAY_CARD", () => {
 
   it("opens UUID-authored guidance when a targeted card is attempted without any legal targets", () => {
     const cardUuid = "4408b942-09a0-4f4e-a403-10c708c6e3c5";
-    const flashpoint = makeInstance("flashpoint", cardUuid);
+    const flashpoint = makeInstance(
+      asBattleCardId("flashpoint"),
+      asCardId(cardUuid),
+    );
     flashpoint.definition = {
       ...flashpoint.definition,
       battleCardKind: "event",
@@ -741,31 +823,33 @@ describe("BATTLE_PLAY_CARD", () => {
     };
     const board = makeRichBoard({
       instances: [flashpoint],
-      playerHand: ["flashpoint"],
+      playerHand: [asBattleCardId("flashpoint")],
     });
     board.sides.player.currentEnergy = 3;
     const state = inBattleState(
       {},
       battleFrom(board, {
         init: makeInit({
-          tutorialTriggers: [{
-            id: "flashpoint-no-valid-targets",
-            on: ["card-no-valid-targets"],
-            priority: 10,
-            speaker: "mira",
-            duration: 4,
-            horizontalOffset: 0,
-            verticalOffset: 0,
-            bubbleWidth: 500,
-            match: { kind: "card-id", cardId: cardUuid },
-            text: "There are no valid targets for this card",
-          }],
+          tutorialTriggers: [
+            {
+              id: asTutorialTriggerId("flashpoint-no-valid-targets"),
+              on: ["card-no-valid-targets"],
+              priority: 10,
+              speaker: "mira",
+              duration: 4,
+              horizontalOffset: 0,
+              verticalOffset: 0,
+              bubbleWidth: 500,
+              match: { kind: "card-id", cardId: asCardId(cardUuid) },
+              text: "There are no valid targets for this card",
+            },
+          ],
         }),
       }),
     );
 
     const opened = reduce(state, "BATTLE_PLAY_CARD", {
-      battleCardId: "flashpoint",
+      battleCardId: asBattleCardId("flashpoint"),
       targetBattleCardIds: [],
     });
 
@@ -774,20 +858,24 @@ describe("BATTLE_PLAY_CARD", () => {
       kind: "tutorial-guidance",
       source: {
         kind: "card",
-        cardId: cardUuid,
-        battleCardId: "flashpoint",
+        cardId: asCardId(cardUuid),
+        battleCardId: asBattleCardId("flashpoint"),
         side: "player",
       },
-      messages: [{
-        triggerId: "flashpoint-no-valid-targets",
-        text: "There are no valid targets for this card",
-      }],
+      messages: [
+        {
+          triggerId: "flashpoint-no-valid-targets",
+          text: "There are no valid targets for this card",
+        },
+      ],
       continuation: { kind: "commands", commands: [] },
     });
     expect(opened.state.tutorialTriggerIdsSeen).toEqual([
       "flashpoint-no-valid-targets",
     ]);
-    expect(hashBoard(opened.state.battle?.board ?? board)).toBe(hashBoard(board));
+    expect(hashBoard(opened.state.battle?.board ?? board)).toBe(
+      hashBoard(board),
+    );
 
     const completed = reduce(
       opened.state,
@@ -799,151 +887,342 @@ describe("BATTLE_PLAY_CARD", () => {
     );
     expect(completed.outcome).toBe("applied");
     expect(completed.state.battle?.tutorialPresentation).toBeNull();
-    expect(hashBoard(completed.state.battle?.board ?? board)).toBe(hashBoard(board));
+    expect(hashBoard(completed.state.battle?.board ?? board)).toBe(
+      hashBoard(board),
+    );
 
     const repeated = reduce(completed.state, "BATTLE_PLAY_CARD", {
-      battleCardId: "flashpoint",
+      battleCardId: asBattleCardId("flashpoint"),
       targetBattleCardIds: [],
     });
     expect(repeated.outcome).toBe("bounced");
   });
 
   it("enforces the exact battlefield targets for both target-requiring Starter UUIDs", () => {
-    const flashpoint = makeInstance("flashpoint", "4408b942-09a0-4f4e-a403-10c708c6e3c5");
-    flashpoint.definition = { ...flashpoint.definition, battleCardKind: "event", energyCost: 3, printedEnergyCost: 3 };
-    const blessing = makeInstance("blessing", "944e15d2-d680-4ebe-8d18-36826f4b1535");
-    blessing.definition = { ...blessing.definition, battleCardKind: "event", energyCost: 1, printedEnergyCost: 1 };
-    const enemyLowCost = makeInstance("enemy-low", "enemy-low", "enemy");
-    enemyLowCost.definition = { ...enemyLowCost.definition, energyCost: 2, printedEnergyCost: 2 };
-    const enemyHighCost = makeInstance("enemy-high", "enemy-high", "enemy");
-    enemyHighCost.definition = { ...enemyHighCost.definition, energyCost: 3, printedEnergyCost: 3 };
-    const ally = makeInstance("ally", "ally", "player");
-    const enemyEvent = makeInstance("enemy-event", "enemy-event", "enemy");
-    enemyEvent.definition = { ...enemyEvent.definition, battleCardKind: "event" };
+    const flashpoint = makeInstance(
+      asBattleCardId("flashpoint"),
+      asCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
+    );
+    flashpoint.definition = {
+      ...flashpoint.definition,
+      battleCardKind: "event",
+      energyCost: 3,
+      printedEnergyCost: 3,
+    };
+    const blessing = makeInstance(
+      asBattleCardId("blessing"),
+      asCardId("944e15d2-d680-4ebe-8d18-36826f4b1535"),
+    );
+    blessing.definition = {
+      ...blessing.definition,
+      battleCardKind: "event",
+      energyCost: 1,
+      printedEnergyCost: 1,
+    };
+    const enemyLowCost = makeInstance(
+      asBattleCardId("enemy-low"),
+      asCardId("enemy-low"),
+      "enemy",
+    );
+    enemyLowCost.definition = {
+      ...enemyLowCost.definition,
+      energyCost: 2,
+      printedEnergyCost: 2,
+    };
+    const enemyHighCost = makeInstance(
+      asBattleCardId("enemy-high"),
+      asCardId("enemy-high"),
+      "enemy",
+    );
+    enemyHighCost.definition = {
+      ...enemyHighCost.definition,
+      energyCost: 3,
+      printedEnergyCost: 3,
+    };
+    const ally = makeInstance(
+      asBattleCardId("ally"),
+      asCardId("ally"),
+      "player",
+    );
+    const enemyEvent = makeInstance(
+      asBattleCardId("enemy-event"),
+      asCardId("enemy-event"),
+      "enemy",
+    );
+    enemyEvent.definition = {
+      ...enemyEvent.definition,
+      battleCardKind: "event",
+    };
     const board = makeRichBoard({
-      instances: [flashpoint, blessing, enemyLowCost, enemyHighCost, ally, enemyEvent],
-      playerHand: ["flashpoint", "blessing"],
-      playerFront: { F0: "ally" },
+      instances: [
+        flashpoint,
+        blessing,
+        enemyLowCost,
+        enemyHighCost,
+        ally,
+        enemyEvent,
+      ],
+      playerHand: [asBattleCardId("flashpoint"), asBattleCardId("blessing")],
+      playerFront: { F0: asBattleCardId("ally") },
     });
     board.sides.player.currentEnergy = 4;
-    board.sides.enemy.frontRank.F0 = "enemy-low";
-    board.sides.enemy.frontRank.F1 = "enemy-high";
-    board.sides.enemy.backRank.B0 = "enemy-event";
+    board.sides.enemy.frontRank.F0 = asBattleCardId("enemy-low");
+    board.sides.enemy.frontRank.F1 = asBattleCardId("enemy-high");
+    board.sides.enemy.backRank.B0 = asBattleCardId("enemy-event");
     const state = inBattleState({}, battleFrom(board));
-    const play = (battleCardId: string, targetBattleCardIds: string[]) => reduce(
-      state,
-      "BATTLE_PLAY_CARD",
-      { battleCardId, targetBattleCardIds },
-    );
+    const play = (
+      battleCardId: BattleCardId,
+      targetBattleCardIds: BattleCardId[],
+    ) =>
+      reduce(state, "BATTLE_PLAY_CARD", { battleCardId, targetBattleCardIds });
 
-    expect(play("flashpoint", ["enemy-low"]).outcome).toBe("applied");
-    expect(play("flashpoint", []).outcome).toBe("bounced");
-    expect(play("flashpoint", ["ally"]).outcome).toBe("bounced");
-    expect(play("flashpoint", ["enemy-high"]).outcome).toBe("bounced");
-    expect(play("flashpoint", ["enemy-event"]).outcome).toBe("bounced");
-    expect(play("flashpoint", ["enemy-low", "enemy-high"]).outcome).toBe("bounced");
+    expect(
+      play(asBattleCardId("flashpoint"), [asBattleCardId("enemy-low")]).outcome,
+    ).toBe("applied");
+    expect(play(asBattleCardId("flashpoint"), []).outcome).toBe("bounced");
+    expect(
+      play(asBattleCardId("flashpoint"), [asBattleCardId("ally")]).outcome,
+    ).toBe("bounced");
+    expect(
+      play(asBattleCardId("flashpoint"), [asBattleCardId("enemy-high")])
+        .outcome,
+    ).toBe("bounced");
+    expect(
+      play(asBattleCardId("flashpoint"), [asBattleCardId("enemy-event")])
+        .outcome,
+    ).toBe("bounced");
+    expect(
+      play(asBattleCardId("flashpoint"), [
+        asBattleCardId("enemy-low"),
+        asBattleCardId("enemy-high"),
+      ]).outcome,
+    ).toBe("bounced");
 
-    expect(play("blessing", ["ally"]).outcome).toBe("applied");
-    expect(play("blessing", []).outcome).toBe("bounced");
-    expect(play("blessing", ["enemy-low"]).outcome).toBe("bounced");
-    expect(play("blessing", ["enemy-event"]).outcome).toBe("bounced");
-    expect(play("blessing", ["ally", "enemy-low"]).outcome).toBe("bounced");
+    expect(
+      play(asBattleCardId("blessing"), [asBattleCardId("ally")]).outcome,
+    ).toBe("applied");
+    expect(play(asBattleCardId("blessing"), []).outcome).toBe("bounced");
+    expect(
+      play(asBattleCardId("blessing"), [asBattleCardId("enemy-low")]).outcome,
+    ).toBe("bounced");
+    expect(
+      play(asBattleCardId("blessing"), [asBattleCardId("enemy-event")]).outcome,
+    ).toBe("bounced");
+    expect(
+      play(asBattleCardId("blessing"), [
+        asBattleCardId("ally"),
+        asBattleCardId("enemy-low"),
+      ]).outcome,
+    ).toBe("bounced");
   });
 
   it("parks Ringwatcher's persisted Foresee prompt after payment and materialization", () => {
-    const ringwatcher = makeInstance("ringwatcher", "647f5150-b2e0-424b-9480-27557642524e");
-    ringwatcher.definition = { ...ringwatcher.definition, energyCost: 3, printedEnergyCost: 3 };
-    const deckCard = makeInstance("deck-card", "fixture-deck-card");
-    const board = makeRichBoard({ instances: [ringwatcher, deckCard], playerHand: ["ringwatcher"], playerDeck: ["deck-card"] });
+    const ringwatcher = makeInstance(
+      asBattleCardId("ringwatcher"),
+      asCardId("647f5150-b2e0-424b-9480-27557642524e"),
+    );
+    ringwatcher.definition = {
+      ...ringwatcher.definition,
+      energyCost: 3,
+      printedEnergyCost: 3,
+    };
+    const deckCard = makeInstance(
+      asBattleCardId("deck-card"),
+      asCardId("fixture-deck-card"),
+    );
+    const board = makeRichBoard({
+      instances: [ringwatcher, deckCard],
+      playerHand: [asBattleCardId("ringwatcher")],
+      playerDeck: [asBattleCardId("deck-card")],
+    });
     board.sides.player.currentEnergy = 3;
-    const result = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", { battleCardId: "ringwatcher", targetBattleCardIds: [] });
+    const result = reduce(
+      inBattleState({}, battleFrom(board)),
+      "BATTLE_PLAY_CARD",
+      { battleCardId: asBattleCardId("ringwatcher"), targetBattleCardIds: [] },
+    );
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.board.sides.player.currentEnergy).toBe(0);
-    expect(result.state.battle?.board.sides.player.backRank.B0).toBe("ringwatcher");
-    expect(result.state.battle?.board.cardInstances.ringwatcher.status.isExhausted).toBe(true);
-    expect(result.state.battle?.pendingPrompt?.options).toMatchObject({ kind: "foresee", cardIds: ["deck-card"] });
+    expect(result.state.battle?.board.sides.player.backRank.B0).toBe(
+      "ringwatcher",
+    );
+    expect(
+      result.state.battle?.board.cardInstances.ringwatcher.status.isExhausted,
+    ).toBe(true);
+    expect(result.state.battle?.pendingPrompt?.options).toMatchObject({
+      kind: "foresee",
+      cardIds: ["deck-card"],
+    });
   });
 
   it("materializes a character at the requested legal back-rank slot", () => {
-    const ringwatcher = makeInstance("ringwatcher", "647f5150-b2e0-424b-9480-27557642524e");
-    ringwatcher.definition = { ...ringwatcher.definition, energyCost: 3, printedEnergyCost: 3 };
-    const deckCard = makeInstance("deck-card", "fixture-deck-card");
+    const ringwatcher = makeInstance(
+      asBattleCardId("ringwatcher"),
+      asCardId("647f5150-b2e0-424b-9480-27557642524e"),
+    );
+    ringwatcher.definition = {
+      ...ringwatcher.definition,
+      energyCost: 3,
+      printedEnergyCost: 3,
+    };
+    const deckCard = makeInstance(
+      asBattleCardId("deck-card"),
+      asCardId("fixture-deck-card"),
+    );
     const board = makeRichBoard({
       instances: [ringwatcher, deckCard],
-      playerHand: ["ringwatcher"],
-      playerDeck: ["deck-card"],
+      playerHand: [asBattleCardId("ringwatcher")],
+      playerDeck: [asBattleCardId("deck-card")],
     });
     board.sides.player.currentEnergy = 3;
     delete board.sides.player.backRank.B7;
 
-    const result = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", {
-      battleCardId: "ringwatcher",
-      targetBattleCardIds: [],
-      characterDestination: { side: "player", zone: "backRank", slotId: "B7" },
-    });
+    const result = reduce(
+      inBattleState({}, battleFrom(board)),
+      "BATTLE_PLAY_CARD",
+      {
+        battleCardId: asBattleCardId("ringwatcher"),
+        targetBattleCardIds: [],
+        characterDestination: {
+          side: "player",
+          zone: "backRank",
+          slotId: "B7",
+        },
+      },
+    );
 
     expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.board.sides.player.backRank.B7).toBe("ringwatcher");
+    expect(result.state.battle?.board.sides.player.backRank.B7).toBe(
+      "ringwatcher",
+    );
     expect(result.state.battle?.board.sides.player.backRank.B0).toBeNull();
   });
 
   it("rejects a requested character destination that is occupied or outside the fixed board", () => {
-    const ringwatcher = makeInstance("ringwatcher", "647f5150-b2e0-424b-9480-27557642524e");
-    ringwatcher.definition = { ...ringwatcher.definition, energyCost: 3, printedEnergyCost: 3 };
-    const occupant = makeInstance("occupant", "fixture-occupant");
+    const ringwatcher = makeInstance(
+      asBattleCardId("ringwatcher"),
+      asCardId("647f5150-b2e0-424b-9480-27557642524e"),
+    );
+    ringwatcher.definition = {
+      ...ringwatcher.definition,
+      energyCost: 3,
+      printedEnergyCost: 3,
+    };
+    const occupant = makeInstance(
+      asBattleCardId("occupant"),
+      asCardId("fixture-occupant"),
+    );
     const board = makeRichBoard({
       instances: [ringwatcher, occupant],
-      playerHand: ["ringwatcher"],
-      playerBack: { B7: "occupant" },
+      playerHand: [asBattleCardId("ringwatcher")],
+      playerBack: { B7: asBattleCardId("occupant") },
     });
     board.sides.player.currentEnergy = 3;
     const state = inBattleState({}, battleFrom(board));
 
     for (const slotId of ["B7", "B10"]) {
       const result = reduce(state, "BATTLE_PLAY_CARD", {
-        battleCardId: "ringwatcher",
+        battleCardId: asBattleCardId("ringwatcher"),
         targetBattleCardIds: [],
         characterDestination: { side: "player", zone: "backRank", slotId },
       });
       expect(result.outcome).toBe("bounced");
       expect(result.state.battle?.board.sides.player.currentEnergy).toBe(3);
-      expect(result.state.battle?.board.sides.player.hand).toContain("ringwatcher");
+      expect(result.state.battle?.board.sides.player.hand).toContain(
+        "ringwatcher",
+      );
     }
   });
 
   it("retains an AI semantic-play trace in the folded transition through JSON replay", () => {
-    const eventCard = makeInstance("glimpse", "2162742c-09d0-4e62-ae49-0f8f79b45adc");
-    eventCard.definition = { ...eventCard.definition, battleCardKind: "event", energyCost: 1, printedEnergyCost: 1 };
-    const deckCard = makeInstance("deck-card", "fixture-character");
-    const board = makeRichBoard({ instances: [eventCard, deckCard], playerHand: ["glimpse"], playerDeck: ["deck-card"] });
+    const eventCard = makeInstance(
+      asBattleCardId("glimpse"),
+      asCardId("2162742c-09d0-4e62-ae49-0f8f79b45adc"),
+    );
+    eventCard.definition = {
+      ...eventCard.definition,
+      battleCardKind: "event",
+      energyCost: 1,
+      printedEnergyCost: 1,
+    };
+    const deckCard = makeInstance(
+      asBattleCardId("deck-card"),
+      asCardId("fixture-character"),
+    );
+    const board = makeRichBoard({
+      instances: [eventCard, deckCard],
+      playerHand: [asBattleCardId("glimpse")],
+      playerDeck: [asBattleCardId("deck-card")],
+    });
     board.sides.player.currentEnergy = 1;
     const trace = {
-      stage: "nonCharacter" as const, choice: "PLAY_CARD" as const,
-      battleCardId: "glimpse", cardName: null, sourceHandIndex: 0,
-      sourceSlotId: null, targetSlotId: null, heuristicScoreBefore: 1,
-      heuristicScoreAfter: 2, rationale: "fixture rationale", targetBattleCardId: null,
+      stage: "nonCharacter" as const,
+      choice: "PLAY_CARD" as const,
+      battleCardId: asBattleCardId("glimpse"),
+      cardName: null,
+      sourceHandIndex: 0,
+      sourceSlotId: null,
+      targetSlotId: null,
+      heuristicScoreBefore: 1,
+      heuristicScoreAfter: 2,
+      rationale: "fixture rationale",
+      targetBattleCardId: null,
     };
-    const result = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", {
-      battleCardId: "glimpse", targetBattleCardIds: [], aiChoices: [trace],
-    });
+    const result = reduce(
+      inBattleState({}, battleFrom(board)),
+      "BATTLE_PLAY_CARD",
+      {
+        battleCardId: asBattleCardId("glimpse"),
+        targetBattleCardIds: [],
+        aiChoices: [trace],
+      },
+    );
     expect(result.outcome).toBe("applied");
     const restored = JSON.parse(JSON.stringify(result.state)) as FoldState;
     expect(restored.battle?.lastTransition?.aiChoices).toEqual([trace]);
   });
 
   it("runs a Final Witness dissolution exactly once when Flashpoint's effect moves it", () => {
-    const flashpoint = makeInstance("flashpoint", "4408b942-09a0-4f4e-a403-10c708c6e3c5");
-    flashpoint.definition = { ...flashpoint.definition, battleCardKind: "event", energyCost: 3, printedEnergyCost: 3 };
-    const witness = makeInstance("witness", "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", "enemy");
-    witness.definition = { ...witness.definition, energyCost: 2, printedEnergyCost: 2 };
-    const drawn = makeInstance("drawn", "fixture-character", "enemy");
-    const board = makeRichBoard({ instances: [flashpoint, witness, drawn], playerHand: ["flashpoint"] });
-    board.sides.player.currentEnergy = 3;
-    board.sides.enemy.deck = ["drawn"];
-    board.sides.enemy.frontRank.F0 = "witness";
-    const result = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", {
-      battleCardId: "flashpoint", targetBattleCardIds: ["witness"],
+    const flashpoint = makeInstance(
+      asBattleCardId("flashpoint"),
+      asCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
+    );
+    flashpoint.definition = {
+      ...flashpoint.definition,
+      battleCardKind: "event",
+      energyCost: 3,
+      printedEnergyCost: 3,
+    };
+    const witness = makeInstance(
+      asBattleCardId("witness"),
+      asCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
+      "enemy",
+    );
+    witness.definition = {
+      ...witness.definition,
+      energyCost: 2,
+      printedEnergyCost: 2,
+    };
+    const drawn = makeInstance(
+      asBattleCardId("drawn"),
+      asCardId("fixture-character"),
+      "enemy",
+    );
+    const board = makeRichBoard({
+      instances: [flashpoint, witness, drawn],
+      playerHand: [asBattleCardId("flashpoint")],
     });
+    board.sides.player.currentEnergy = 3;
+    board.sides.enemy.deck = [asBattleCardId("drawn")];
+    board.sides.enemy.frontRank.F0 = asBattleCardId("witness");
+    const result = reduce(
+      inBattleState({}, battleFrom(board)),
+      "BATTLE_PLAY_CARD",
+      {
+        battleCardId: asBattleCardId("flashpoint"),
+        targetBattleCardIds: [asBattleCardId("witness")],
+      },
+    );
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.board.sides.enemy.void).toContain("witness");
     expect(result.state.battle?.board.sides.enemy.hand).toEqual(["drawn"]);
@@ -951,27 +1230,65 @@ describe("BATTLE_PLAY_CARD", () => {
   });
 
   it("samples Discover once, persists candidates, and reshuffles the complete remaining deck on choice", () => {
-    const sign = makeInstance("sign", "910b4cf9-dec7-4e03-af4f-7d5ae342eeba");
-    sign.definition = { ...sign.definition, battleCardKind: "event", energyCost: 2, printedEnergyCost: 2 };
-    const characters = ["c1", "c2", "c3", "c4"].map((id) => makeInstance(id, `fixture-${id}`));
-    const board = makeRichBoard({ instances: [sign, ...characters], playerHand: ["sign"], playerDeck: characters.map((card) => card.battleCardId) });
+    const sign = makeInstance(
+      asBattleCardId("sign"),
+      asCardId("910b4cf9-dec7-4e03-af4f-7d5ae342eeba"),
+    );
+    sign.definition = {
+      ...sign.definition,
+      battleCardKind: "event",
+      energyCost: 2,
+      printedEnergyCost: 2,
+    };
+    const characters = ["c1", "c2", "c3", "c4"].map((id) =>
+      makeInstance(asBattleCardId(id), asCardId(`fixture-${id}`)),
+    );
+    const board = makeRichBoard({
+      instances: [sign, ...characters],
+      playerHand: [asBattleCardId("sign")],
+      playerDeck: characters.map((card) => card.battleCardId),
+    });
     board.sides.player.currentEnergy = 2;
     let openingRngCalls = 0;
-    const opened = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", {
-      battleCardId: "sign", targetBattleCardIds: [],
-    }, ctx({ rng: () => { openingRngCalls += 1; return 0.25; } }));
+    const opened = reduce(
+      inBattleState({}, battleFrom(board)),
+      "BATTLE_PLAY_CARD",
+      {
+        battleCardId: asBattleCardId("sign"),
+        targetBattleCardIds: [],
+      },
+      ctx({
+        rng: () => {
+          openingRngCalls += 1;
+          return 0.25;
+        },
+      }),
+    );
     expect(opened.outcome).toBe("applied");
     expect(openingRngCalls).toBe(1);
     const restored = JSON.parse(JSON.stringify(opened.state)) as FoldState;
     const prompt = restored.battle?.pendingPrompt;
     expect(prompt?.options.kind).toBe("pick-cards");
-    if (prompt?.options.kind !== "pick-cards") throw new Error("expected Discover prompt");
+    if (prompt?.options.kind !== "pick-cards")
+      throw new Error("expected Discover prompt");
     expect(prompt.options.candidateIds).toHaveLength(3);
     const chosen = prompt.options.candidateIds[0];
     let resolutionRngCalls = 0;
-    const resolved = reduce(restored, "RESOLVE_PROMPT", {
-      promptId: prompt.promptId, resolution: { kind: "pick-cards", chosenIds: [chosen] },
-    }, ctx({ seq: prompt.promptId + 1, rng: () => { resolutionRngCalls += 1; return 0.5; } }));
+    const resolved = reduce(
+      restored,
+      "RESOLVE_PROMPT",
+      {
+        promptId: prompt.promptId,
+        resolution: { kind: "pick-cards", chosenIds: [chosen] },
+      },
+      ctx({
+        seq: prompt.promptId + 1,
+        rng: () => {
+          resolutionRngCalls += 1;
+          return 0.5;
+        },
+      }),
+    );
     expect(resolved.outcome).toBe("applied");
     expect(resolved.state.battle?.board.sides.player.hand).toContain(chosen);
     expect(resolved.state.battle?.board.sides.player.deck).toHaveLength(3);
@@ -979,16 +1296,45 @@ describe("BATTLE_PLAY_CARD", () => {
   });
 
   it("auto-resolves Discover with zero legal deck characters without drawing RNG", () => {
-    const sign = makeInstance("sign", "910b4cf9-dec7-4e03-af4f-7d5ae342eeba");
-    sign.definition = { ...sign.definition, battleCardKind: "event", energyCost: 2, printedEnergyCost: 2 };
-    const nonCharacter = makeInstance("event-deck", "fixture-event");
-    nonCharacter.definition = { ...nonCharacter.definition, battleCardKind: "event" };
-    const board = makeRichBoard({ instances: [sign, nonCharacter], playerHand: ["sign"], playerDeck: ["event-deck"] });
+    const sign = makeInstance(
+      asBattleCardId("sign"),
+      asCardId("910b4cf9-dec7-4e03-af4f-7d5ae342eeba"),
+    );
+    sign.definition = {
+      ...sign.definition,
+      battleCardKind: "event",
+      energyCost: 2,
+      printedEnergyCost: 2,
+    };
+    const nonCharacter = makeInstance(
+      asBattleCardId("event-deck"),
+      asCardId("fixture-event"),
+    );
+    nonCharacter.definition = {
+      ...nonCharacter.definition,
+      battleCardKind: "event",
+    };
+    const board = makeRichBoard({
+      instances: [sign, nonCharacter],
+      playerHand: [asBattleCardId("sign")],
+      playerDeck: [asBattleCardId("event-deck")],
+    });
     board.sides.player.currentEnergy = 2;
     let rngCalls = 0;
-    const result = reduce(inBattleState({}, battleFrom(board)), "BATTLE_PLAY_CARD", {
-      battleCardId: "sign", targetBattleCardIds: [],
-    }, ctx({ rng: () => { rngCalls += 1; return 0.5; } }));
+    const result = reduce(
+      inBattleState({}, battleFrom(board)),
+      "BATTLE_PLAY_CARD",
+      {
+        battleCardId: asBattleCardId("sign"),
+        targetBattleCardIds: [],
+      },
+      ctx({
+        rng: () => {
+          rngCalls += 1;
+          return 0.5;
+        },
+      }),
+    );
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.pendingPrompt).toBeNull();
     expect(rngCalls).toBe(0);
@@ -999,7 +1345,8 @@ describe("BATTLE_PLAY_CARD", () => {
 function staticSupportFixtureScript(): { id: string } {
   const id = "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f";
   const script = BATTLE_CARD_EFFECTS[id];
-  if (script === undefined) throw new Error(`missing Support fixture script: ${id}`);
+  if (script === undefined)
+    throw new Error(`missing Support fixture script: ${id}`);
   return script;
 }
 
@@ -1007,13 +1354,23 @@ function staticSupportFixtureScript(): { id: string } {
  *  play (battlefield) slot — the Celestial-Gateway shape. Requires a probe board
  *  with a player void character and an open play slot. */
 function firstVoidToPlayDreamwell(probe: BattleMutableState): { id: string } {
-  const ctx: StepContext = { side: "player", state: probe, random: () => 0, nowMs: 0 };
+  const ctx: StepContext = {
+    side: "player",
+    state: probe,
+    random: () => 0,
+    nowMs: 0,
+  };
   const script = Object.values(DREAMWELL_EFFECTS).find((s) => {
     if (s.steps.some((step) => step.kind === "prompt")) return false;
-    const edits = s.steps.flatMap((step) => (step.kind === "edits" ? step.build(ctx) : []));
-    return edits.some((e) => e.kind === "MOVE_CARD_TO_ZONE" && "slotId" in e.destination);
+    const edits = s.steps.flatMap((step) =>
+      step.kind === "edits" ? step.build(ctx) : [],
+    );
+    return edits.some(
+      (e) => e.kind === "MOVE_CARD_TO_ZONE" && "slotId" in e.destination,
+    );
   });
-  if (script === undefined) throw new Error("no void-to-play dreamwell script registered");
+  if (script === undefined)
+    throw new Error("no void-to-play dreamwell script registered");
   return script;
 }
 
@@ -1027,16 +1384,26 @@ const SAFE_DREAMWELL_KINDS = new Set<string>([
 
 /** A deterministic dreamwell script whose edits touch no deck/instance state,
  *  so the fixture board needs no card instances to observe its effect. */
-function firstSafeDeterministicDreamwell(probe: BattleMutableState): { id: string } {
-  const ctx: StepContext = { side: "player", state: probe, random: () => 0, nowMs: 0 };
+function firstSafeDeterministicDreamwell(probe: BattleMutableState): {
+  id: string;
+} {
+  const ctx: StepContext = {
+    side: "player",
+    state: probe,
+    random: () => 0,
+    nowMs: 0,
+  };
   const script = Object.values(DREAMWELL_EFFECTS).find((s) => {
     if (s.steps.some((step) => step.kind === "prompt")) return false;
     const edits = s.steps.flatMap((step) =>
       step.kind === "edits" ? step.build(ctx) : [],
     );
-    return edits.length > 0 && edits.every((e) => SAFE_DREAMWELL_KINDS.has(e.kind));
+    return (
+      edits.length > 0 && edits.every((e) => SAFE_DREAMWELL_KINDS.has(e.kind))
+    );
   });
-  if (script === undefined) throw new Error("no safe deterministic dreamwell script registered");
+  if (script === undefined)
+    throw new Error("no safe deterministic dreamwell script registered");
   return script;
 }
 
@@ -1049,7 +1416,7 @@ function hostedJourneyBattleState(board: BattleMutableState): FoldState {
     ...baseState(),
     playtestControl: {
       mode: "single-controller",
-      controllerClientId: "controller",
+      controllerClientId: asClientId("controller"),
     },
     battle: battleFrom(board),
   };
@@ -1208,7 +1575,11 @@ describe("hosted journey battle automatic handoffs", () => {
 
 describe("BATTLE_COMMAND fold-time triggers", () => {
   it("bounces when no battle is in progress", () => {
-    const result = reduce(baseState(), "BATTLE_COMMAND", debugEdit({ kind: "SET_SCORE", side: "player", value: 5 }));
+    const result = reduce(
+      baseState(),
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_SCORE", side: "player", value: 5 }),
+    );
     expect(result.outcome).toBe("bounced");
     expect(result.state.battle).toBeNull();
   });
@@ -1218,40 +1589,62 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const battle = battleFrom(board, {
       pendingPrompt: {
         promptId: 7,
-        run: { scriptRef: { table: "battle", id: "x" }, cursor: [0], side: "player" },
+        run: {
+          scriptRef: { table: "battle", id: asBattleEffectScriptId("x") },
+          cursor: [0],
+          side: "player",
+        },
         kind: "foresee",
-        options: { kind: "foresee", count: 1, cardIds: [board.sides.player.deck[0]] },
+        options: {
+          kind: "foresee",
+          count: 1,
+          cardIds: [board.sides.player.deck[0]],
+        },
       },
     });
     const state = { ...baseState(), battle };
-    const result = reduce(state, "BATTLE_COMMAND", debugEdit({ kind: "SET_SCORE", side: "player", value: 5 }));
+    const result = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_SCORE", side: "player", value: 5 }),
+    );
     expect(result.outcome).toBe("bounced");
   });
 
   it("bounces a malformed command payload", () => {
     const state = { ...baseState(), battle: battleFrom(makeRichBoard()) };
-    expect(reduce(state, "BATTLE_COMMAND", { command: { id: "NONSENSE" } }).outcome).toBe("bounced");
+    expect(
+      reduce(state, "BATTLE_COMMAND", { command: { id: "NONSENSE" } }).outcome,
+    ).toBe("bounced");
     expect(reduce(state, "BATTLE_COMMAND", {}).outcome).toBe("bounced");
   });
 
   it("accepts and applies one atomic Foresee command", () => {
-    const deckInstances = [1, 2, 3].map((index) => makeInstance(
-      `foresee-command-${String(index)}`,
-      `10000000-0000-0000-0000-00000000000${String(index)}`,
-    ));
-    const viewedCardIds = deckInstances.map((instance) => instance.battleCardId);
+    const deckInstances = [1, 2, 3].map((index) =>
+      makeInstance(
+        asBattleCardId(`foresee-command-${String(index)}`),
+        asCardId(`10000000-0000-0000-0000-00000000000${String(index)}`),
+      ),
+    );
+    const viewedCardIds = deckInstances.map(
+      (instance) => instance.battleCardId,
+    );
     const board = makeRichBoard({
       instances: deckInstances,
       playerDeck: viewedCardIds,
     });
     const state = { ...baseState(), battle: battleFrom(board) };
-    const result = reduce(state, "BATTLE_COMMAND", debugEdit({
-      kind: "FORESEE",
-      side: "player",
-      viewedCardIds,
-      orderedCardIds: [viewedCardIds[2], viewedCardIds[0]],
-      voidCardIds: [viewedCardIds[1]],
-    }));
+    const result = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "FORESEE",
+        side: "player",
+        viewedCardIds,
+        orderedCardIds: [viewedCardIds[2], viewedCardIds[0]],
+        voidCardIds: [viewedCardIds[1]],
+      }),
+    );
 
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.board.sides.player.deck).toEqual([
@@ -1266,24 +1659,30 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
   it("accepts the nineteen-character battlefield preview payload", () => {
     const state = { ...baseState(), battle: battleFrom(makeRichBoard()) };
     const definition = makeInstance(
-      "preview-source",
-      "10000000-0000-0000-0000-000000000099",
+      asBattleCardId("preview-source"),
+      asCardId("10000000-0000-0000-0000-000000000099"),
     ).definition;
     const definitions = Array.from({ length: 24 }, () => definition);
-    const result = reduce(state, "BATTLE_COMMAND", debugEdit({
-      kind: "FILL_BATTLEFIELD_PREVIEW",
-      definitions: { player: definitions, enemy: definitions },
-      createdAtMs: 10_000,
-    }));
+    const result = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "FILL_BATTLEFIELD_PREVIEW",
+        definitions: { player: definitions, enemy: definitions },
+        createdAtMs: 10_000,
+      }),
+    );
 
     expect(result.outcome).toBe("applied");
     expect(
-      Object.values(result.state.battle?.board.sides.player.backRank ?? {})
-        .filter((battleCardId) => battleCardId !== null),
+      Object.values(
+        result.state.battle?.board.sides.player.backRank ?? {},
+      ).filter((battleCardId) => battleCardId !== null),
     ).toHaveLength(10);
     expect(
-      Object.values(result.state.battle?.board.sides.player.frontRank ?? {})
-        .filter((battleCardId) => battleCardId !== null),
+      Object.values(
+        result.state.battle?.board.sides.player.frontRank ?? {},
+      ).filter((battleCardId) => battleCardId !== null),
     ).toHaveLength(9);
   });
 
@@ -1314,7 +1713,11 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
 
   it("applies a plain command edit with no triggers and drains to an empty queue", () => {
     const state = { ...baseState(), battle: battleFrom(makeRichBoard()) };
-    const result = reduce(state, "BATTLE_COMMAND", debugEdit({ kind: "SET_SCORE", side: "player", value: 9 }));
+    const result = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_SCORE", side: "player", value: 9 }),
+    );
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.board.sides.player.score).toBe(9);
     expect(result.state.battle?.effectQueue).toEqual([]);
@@ -1323,8 +1726,8 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
 
   it("folds a public hand-card reveal into the shared battle snapshot", () => {
     const instance = makeInstance(
-      "bc-shared-reveal",
-      "a5f4564c-3f13-4d5e-9073-2d1ef5472291",
+      asBattleCardId("bc-shared-reveal"),
+      asCardId("a5f4564c-3f13-4d5e-9073-2d1ef5472291"),
       "player",
     );
     const board = makeRichBoard({
@@ -1346,44 +1749,70 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
       instance.battleCardId,
     );
     expect(
-      result.state.battle?.board.cardInstances[instance.battleCardId]?.revealedTo,
+      result.state.battle?.board.cardInstances[instance.battleCardId]
+        ?.revealedTo,
     ).toEqual({ player: true, enemy: true });
   });
 
   it("moves a character into play without resolving its rules text", () => {
     const instance = makeInstance(
-      "bc-mat",
-      "647f5150-b2e0-424b-9480-27557642524e",
+      asBattleCardId("bc-mat"),
+      asCardId("647f5150-b2e0-424b-9480-27557642524e"),
       "player",
     );
-    const board = makeRichBoard({ turnNumber: 3, phase: "day", playerHand: ["bc-mat"], instances: [instance] });
+    const board = makeRichBoard({
+      turnNumber: 3,
+      phase: "day",
+      playerHand: [asBattleCardId("bc-mat")],
+      instances: [instance],
+    });
     const state = { ...baseState(), battle: battleFrom(board) };
 
     const moveEdit = {
       kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "bc-mat",
-      destination: { side: "player", zone: "frontRank", slotId: frontRankSlotId(0) },
+      battleCardId: asBattleCardId("bc-mat"),
+      destination: {
+        side: "player",
+        zone: "frontRank",
+        slotId: frontRankSlotId(0),
+      },
     };
     const result = reduce(state, "BATTLE_COMMAND", debugEdit(moveEdit));
     expect(result.outcome).toBe("applied");
 
-    const exhausted = applyDebugEdit(board, {
-      kind: "SET_CARD_STATUS",
-      battleCardId: "bc-mat",
-      status: { isExhausted: true },
-    }, EMISSION).state;
-    const expected = applyDebugEdit(exhausted, moveEdit as never, EMISSION).state;
+    const exhausted = applyDebugEdit(
+      board,
+      {
+        kind: "SET_CARD_STATUS",
+        battleCardId: asBattleCardId("bc-mat"),
+        status: { isExhausted: true },
+      },
+      EMISSION,
+    ).state;
+    const expected = applyDebugEdit(
+      exhausted,
+      moveEdit as never,
+      EMISSION,
+    ).state;
     expect(hashBoard(result.state.battle!.board)).toBe(hashBoard(expected));
     expect(
-      result.state.battle?.board.cardInstances["bc-mat"]?.status.isExhausted,
+      result.state.battle?.board.cardInstances[asBattleCardId("bc-mat")]?.status
+        .isExhausted,
     ).toBe(true);
     expect(result.state.battle?.effectQueue).toEqual([]);
     expect(result.state.battle?.pendingPrompt).toBeNull();
   });
 
   it("resolves UUID-keyed materialized scripts through the persisted queue", () => {
-    const instance = makeInstance("bc-trigger", BATTLE_EFFECT_FIXTURE_CARD_ID, "player");
-    const board = makeRichBoard({ playerHand: [instance.battleCardId], instances: [instance] });
+    const instance = makeInstance(
+      asBattleCardId("bc-trigger"),
+      asCardId(BATTLE_EFFECT_FIXTURE_CARD_ID),
+      "player",
+    );
+    const board = makeRichBoard({
+      playerHand: [instance.battleCardId],
+      instances: [instance],
+    });
     const result = reduce(
       { ...baseState(), battle: battleFrom(board) },
       "BATTLE_COMMAND",
@@ -1393,13 +1822,22 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
         destination: { side: "player", zone: "backRank", slotId: "B0" },
       }),
     );
-    expect(result.state.battle?.board.sides.player.score).toBe(board.sides.player.score + 1);
+    expect(result.state.battle?.board.sides.player.score).toBe(
+      board.sides.player.score + 1,
+    );
     expect(result.state.battle?.effectQueue).toEqual([]);
   });
 
   it("parks and resumes a battle-script prompt after JSON persistence", () => {
-    const instance = makeInstance("bc-prompt", BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID, "player");
-    const board = makeRichBoard({ playerHand: [instance.battleCardId], instances: [instance] });
+    const instance = makeInstance(
+      asBattleCardId("bc-prompt"),
+      asCardId(BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID),
+      "player",
+    );
+    const board = makeRichBoard({
+      playerHand: [instance.battleCardId],
+      instances: [instance],
+    });
     const opened = reduce(
       { ...baseState(), battle: battleFrom(board) },
       "BATTLE_COMMAND",
@@ -1416,21 +1854,23 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
       promptId,
       resolution: { kind: "choice", optionIndex: 0 },
     });
-    expect(resolved.state.battle?.board.sides.player.score).toBe(board.sides.player.score + 1);
+    expect(resolved.state.battle?.board.sides.player.score).toBe(
+      board.sides.player.score + 1,
+    );
     expect(resolved.state.battle?.pendingPrompt).toBeNull();
   });
 
   it("does not clear exhaustion when the active side crosses Dawn", () => {
     const instance = makeInstance(
-      "bc-dawn",
-      "0458658d-7e02-4286-9249-93674d16620b",
+      asBattleCardId("bc-dawn"),
+      asCardId("0458658d-7e02-4286-9249-93674d16620b"),
       "player",
     );
     instance.status.isExhausted = true;
     const board = makeRichBoard({
       turnNumber: 4,
       phase: "day",
-      playerFront: { [frontRankSlotId(0)]: "bc-dawn" },
+      playerFront: { [frontRankSlotId(0)]: asBattleCardId("bc-dawn") },
       instances: [instance],
     });
     const state = { ...baseState(), battle: battleFrom(board) };
@@ -1440,7 +1880,8 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(first.outcome).toBe("applied");
     expect(first.state.battle?.board.phase).toBe("day");
     expect(
-      first.state.battle?.board.cardInstances["bc-dawn"]?.status.isExhausted,
+      first.state.battle?.board.cardInstances[asBattleCardId("bc-dawn")]?.status
+        .isExhausted,
     ).toBe(true);
     expect(first.state.battle?.dawnFired.player).toBeNull();
     expect(first.state.battle?.effectQueue).toEqual([]);
@@ -1448,8 +1889,16 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
   });
 
   it("clears exhaustion from both sides when the turn ends", () => {
-    const outgoing = makeInstance("bc-outgoing", "outgoing-card", "player");
-    const incoming = makeInstance("bc-incoming", "incoming-card", "enemy");
+    const outgoing = makeInstance(
+      asBattleCardId("bc-outgoing"),
+      asCardId("outgoing-card"),
+      "player",
+    );
+    const incoming = makeInstance(
+      asBattleCardId("bc-incoming"),
+      asCardId("incoming-card"),
+      "enemy",
+    );
     outgoing.status.isExhausted = true;
     incoming.status.isExhausted = true;
     const board = makeRichBoard({
@@ -1496,7 +1945,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const probe = makeRichBoard();
     const dw = firstSafeDeterministicDreamwell(probe);
     const dreamwellCard: DreamwellCardDefinition = {
-      id: dw.id,
+      id: asDreamwellCardId(dw.id),
       name: "Fixture Dreamwell",
       renderedText: "",
       energyAdded: 0,
@@ -1513,12 +1962,22 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     });
     const state = { ...baseState(), battle: battleFrom(board, { init }) };
 
-    const revealEdit = { kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 2 };
+    const revealEdit = {
+      kind: "DRAW_DREAMWELL_CARD",
+      side: "player",
+      turnNumber: 2,
+    };
     const result = reduce(state, "BATTLE_COMMAND", debugEdit(revealEdit));
     expect(result.outcome).toBe("applied");
     // The reveal alone advances the index; the script's edits change more.
-    const revealOnly = applyDebugEdit(board, revealEdit as never, EMISSION).state;
-    expect(hashBoard(result.state.battle!.board)).not.toBe(hashBoard(revealOnly));
+    const revealOnly = applyDebugEdit(
+      board,
+      revealEdit as never,
+      EMISSION,
+    ).state;
+    expect(hashBoard(result.state.battle!.board)).not.toBe(
+      hashBoard(revealOnly),
+    );
     // Deterministic dreamwell script drains fully.
     expect(result.state.battle?.effectQueue).toEqual([]);
     expect(result.state.battle?.pendingPrompt).toBeNull();
@@ -1526,15 +1985,15 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
 
   it("draws the card Foresee leaves on top only after the Dreamwell prompt resolves", () => {
     const foreseenTop = makeInstance(
-      "bc-foreseen-top",
-      "00000000-0000-0000-0000-000000000001",
+      asBattleCardId("bc-foreseen-top"),
+      asCardId("00000000-0000-0000-0000-000000000001"),
     );
     const nextCard = makeInstance(
-      "bc-next",
-      "00000000-0000-0000-0000-000000000002",
+      asBattleCardId("bc-next"),
+      asCardId("00000000-0000-0000-0000-000000000002"),
     );
     const skypath: DreamwellCardDefinition = {
-      id: "f9b479cf-02cb-40e1-bb64-70b29977bf15",
+      id: asDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
       name: "Fixture Dreamwell",
       renderedText: "Foresee 1.",
       energyAdded: 1,
@@ -1633,7 +2092,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
 
   it("parks a matching Dreamwell card before reveal and resumes its effect after Mira advances", () => {
     const dreamwellCard: DreamwellCardDefinition = {
-      id: "03e4e701-4720-4278-8198-9b7e0514d4cf",
+      id: asDreamwellCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
       name: "Fixture Shadow Passage",
       renderedText: "Erode 3.",
       energyAdded: 1,
@@ -1643,18 +2102,23 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     };
     const init = makeInit({
       dreamwellDeck: [dreamwellCard],
-      tutorialTriggers: [{
-        id: "erode",
-        on: ["dreamwell-resolve"],
-        priority: 100,
-        speaker: "mira",
-        duration: 3,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 700,
-        match: { kind: "glossary", id: "23526f6e-f17e-4496-bf96-1875858d023d" },
-        text: "[yellow]Erode[/yellow] sends cards from a deck to the void.",
-      }],
+      tutorialTriggers: [
+        {
+          id: asTutorialTriggerId("erode"),
+          on: ["dreamwell-resolve"],
+          priority: 100,
+          speaker: "mira",
+          duration: 3,
+          horizontalOffset: 0,
+          verticalOffset: 0,
+          bubbleWidth: 700,
+          match: {
+            kind: "glossary",
+            id: asGlossaryEntryId("23526f6e-f17e-4496-bf96-1875858d023d"),
+          },
+          text: "[yellow]Erode[/yellow] sends cards from a deck to the void.",
+        },
+      ],
     });
     const board = makeRichBoard({
       turnNumber: 2,
@@ -1678,7 +2142,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
       kind: "tutorial-guidance",
       source: {
         kind: "dreamwell",
-        cardId: "03e4e701-4720-4278-8198-9b7e0514d4cf",
+        cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
         side: "player",
       },
       messages: [{ triggerId: "erode", duration: 3 }],
@@ -1704,23 +2168,37 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
   // --- support convergence: recompute at the fold boundary is idempotent ---
   it("recomputes Support so an immediate re-recompute yields zero edits", () => {
     const support = staticSupportFixtureScript();
-    const supporter = makeInstance("bc-support", support.id, "player");
-    const ally = makeInstance("bc-ally", "ally-card", "player");
+    const supporter = makeInstance(
+      asBattleCardId("bc-support"),
+      asCardId(support.id),
+      "player",
+    );
+    const ally = makeInstance(
+      asBattleCardId("bc-ally"),
+      asCardId("ally-card"),
+      "player",
+    );
     // Supporter at B0 supports the front ally at F0 (supportedDeploySlots(B0) = [F0]).
     const board = makeRichBoard({
       turnNumber: 3,
       phase: "day",
-      playerBack: { [backRankSlotId(0)]: "bc-support" },
-      playerFront: { [frontRankSlotId(0)]: "bc-ally" },
+      playerBack: { [backRankSlotId(0)]: asBattleCardId("bc-support") },
+      playerFront: { [frontRankSlotId(0)]: asBattleCardId("bc-ally") },
       instances: [supporter, ally],
     });
     const state = { ...baseState(), battle: battleFrom(board) };
 
-    const result = reduce(state, "BATTLE_COMMAND", debugEdit({ kind: "SET_SCORE", side: "player", value: 3 }));
+    const result = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({ kind: "SET_SCORE", side: "player", value: 3 }),
+    );
     expect(result.outcome).toBe("applied");
     const nextBoard = result.state.battle!.board;
     // The ally picked up the supporter's spark bonus during the fold's recompute.
-    expect(nextBoard.cardInstances["bc-ally"].staticSparkBonus).toBeGreaterThan(0);
+    expect(
+      nextBoard.cardInstances[asBattleCardId("bc-ally")].staticSparkBonus,
+    ).toBeGreaterThan(0);
     // Recomputing again immediately produces no further edits (idempotent).
     const again = planSupportRecompute(nextBoard, true, () => 0, 0);
     expect(again).toEqual([]);
@@ -1728,8 +2206,16 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
 
   it("settles Support onto every member of a figment stack at the fold boundary", () => {
     const support = staticSupportFixtureScript();
-    const supporter = makeInstance("figment-support", support.id, "player");
-    const figments = makeInstance("supported-figments", "figment-card", "player");
+    const supporter = makeInstance(
+      asBattleCardId("figment-support"),
+      asCardId(support.id),
+      "player",
+    );
+    const figments = makeInstance(
+      asBattleCardId("supported-figments"),
+      asCardId("figment-card"),
+      "player",
+    );
     figments.provenance.kind = "generated-figment";
     figments.figments = [1, 1, 1];
     const board = makeRichBoard({
@@ -1754,7 +2240,11 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
   });
 
   it("resolves the final front-rank lane during Challenge", () => {
-    const challenger = makeInstance("challenge-final-lane", "final-lane-card", "player");
+    const challenger = makeInstance(
+      asBattleCardId("challenge-final-lane"),
+      asCardId("final-lane-card"),
+      "player",
+    );
     challenger.definition.printedSpark = 2;
     const finalSlot = frontRankSlotId(FRONT_RANK_SLOTS - 1);
     const board = makeRichBoard({
@@ -1776,9 +2266,17 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
   });
 
   it("scores a winning blocked challenger by the spark difference", () => {
-    const challenger = makeInstance("difference-challenger", "challenger-card", "player");
+    const challenger = makeInstance(
+      asBattleCardId("difference-challenger"),
+      asCardId("challenger-card"),
+      "player",
+    );
     challenger.definition.printedSpark = 8;
-    const blocker = makeInstance("difference-blocker", "blocker-card", "enemy");
+    const blocker = makeInstance(
+      asBattleCardId("difference-blocker"),
+      asCardId("blocker-card"),
+      "enemy",
+    );
     blocker.definition.printedSpark = 2;
     const board = makeRichBoard({
       instances: [challenger, blocker],
@@ -1803,15 +2301,35 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
 
   it("resolves Challenge lanes from the settled board after an F0 dissolved trigger", () => {
     const support = staticSupportFixtureScript();
-    const f0 = makeInstance("challenge-f0", BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID, "player");
+    const f0 = makeInstance(
+      asBattleCardId("challenge-f0"),
+      asCardId(BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID),
+      "player",
+    );
     f0.definition.printedSpark = 1;
-    const f0Enemy = makeInstance("challenge-f0-enemy", "enemy-f0", "enemy");
+    const f0Enemy = makeInstance(
+      asBattleCardId("challenge-f0-enemy"),
+      asCardId("enemy-f0"),
+      "enemy",
+    );
     f0Enemy.definition.printedSpark = 4;
-    const f1 = makeInstance("challenge-f1", "player-f1", "player");
+    const f1 = makeInstance(
+      asBattleCardId("challenge-f1"),
+      asCardId("player-f1"),
+      "player",
+    );
     f1.definition.printedSpark = 2;
-    const f1Enemy = makeInstance("challenge-f1-enemy", "enemy-f1", "enemy");
+    const f1Enemy = makeInstance(
+      asBattleCardId("challenge-f1-enemy"),
+      asCardId("enemy-f1"),
+      "enemy",
+    );
     f1Enemy.definition.printedSpark = 3;
-    const supporter = makeInstance("challenge-support", support.id, "player");
+    const supporter = makeInstance(
+      asBattleCardId("challenge-support"),
+      asCardId(support.id),
+      "player",
+    );
     const board = makeRichBoard({
       instances: [f0, f0Enemy, f1, f1Enemy, supporter],
       playerFront: { F0: f0.battleCardId, F1: f1.battleCardId },
@@ -1830,18 +2348,34 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
 
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.board.sides.player.void).toEqual(
-      expect.arrayContaining([f0.battleCardId, supporter.battleCardId, f1.battleCardId]),
+      expect.arrayContaining([
+        f0.battleCardId,
+        supporter.battleCardId,
+        f1.battleCardId,
+      ]),
     );
     expect(result.state.battle?.board.sides.player.score).toBe(0);
     expect(result.state.battle?.challengeCursor).toBeNull();
   });
 
   it("parks a dissolved-trigger prompt and resumes its next Challenge lane once after JSON replay", () => {
-    const f0 = makeInstance("prompt-f0", BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID, "player");
+    const f0 = makeInstance(
+      asBattleCardId("prompt-f0"),
+      asCardId(BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID),
+      "player",
+    );
     f0.definition.printedSpark = 1;
-    const f0Enemy = makeInstance("prompt-f0-enemy", "enemy-f0", "enemy");
+    const f0Enemy = makeInstance(
+      asBattleCardId("prompt-f0-enemy"),
+      asCardId("enemy-f0"),
+      "enemy",
+    );
     f0Enemy.definition.printedSpark = 2;
-    const f1 = makeInstance("prompt-f1", "player-f1", "player");
+    const f1 = makeInstance(
+      asBattleCardId("prompt-f1"),
+      asCardId("player-f1"),
+      "player",
+    );
     f1.definition.printedSpark = 3;
     const board = makeRichBoard({
       instances: [f0, f0Enemy, f1],
@@ -1858,10 +2392,15 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     expect(opened.state.battle?.challengeCursor).toMatchObject({ nextLane: 1 });
 
     const restored = JSON.parse(JSON.stringify(opened.state)) as FoldState;
-    const resolved = reduce(restored, "RESOLVE_PROMPT", {
-      promptId: restored.battle?.pendingPrompt?.promptId,
-      resolution: { kind: "choice", optionIndex: 0 },
-    }, ctx({ seq: 91 }));
+    const resolved = reduce(
+      restored,
+      "RESOLVE_PROMPT",
+      {
+        promptId: restored.battle?.pendingPrompt?.promptId,
+        resolution: { kind: "choice", optionIndex: 0 },
+      },
+      ctx({ seq: 91 }),
+    );
     expect(resolved.state.battle?.board.sides.player.score).toBe(4);
     expect(resolved.state.battle?.challengeCursor).toBeNull();
 
@@ -1875,9 +2414,17 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
   });
 
   it("stops Challenge after an F0 victory and gives a winning blocker no score", () => {
-    const f0 = makeInstance("victory-f0", "victory-player", "player");
+    const f0 = makeInstance(
+      asBattleCardId("victory-f0"),
+      asCardId("victory-player"),
+      "player",
+    );
     f0.definition.printedSpark = 5;
-    const f1 = makeInstance("victory-f1", "victory-player-1", "player");
+    const f1 = makeInstance(
+      asBattleCardId("victory-f1"),
+      asCardId("victory-player-1"),
+      "player",
+    );
     f1.definition.printedSpark = 5;
     const victoryBoard = makeRichBoard({
       instances: [f0, f1],
@@ -1885,17 +2432,30 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     });
     victoryBoard.sides.player.score = 0;
     const victory = reduce(
-      { ...baseState(), battle: battleFrom(victoryBoard, { init: makeInit({ scoreToWin: 5 }) }) },
+      {
+        ...baseState(),
+        battle: battleFrom(victoryBoard, { init: makeInit({ scoreToWin: 5 }) }),
+      },
       "BATTLE_COMMAND",
       debugEdit({ kind: "SET_PHASE", phase: "challenge" }),
     );
     expect(victory.state.battle?.board.result).toBe("victory");
     expect(victory.state.battle?.board.sides.player.score).toBe(5);
-    expect(victory.state.battle?.board.sides.player.frontRank.F1).toBe(f1.battleCardId);
+    expect(victory.state.battle?.board.sides.player.frontRank.F1).toBe(
+      f1.battleCardId,
+    );
 
-    const player = makeInstance("tutorial-player", "tutorial-player-card", "player");
+    const player = makeInstance(
+      asBattleCardId("tutorial-player"),
+      asCardId("tutorial-player-card"),
+      "player",
+    );
     player.definition.printedSpark = 1;
-    const enemy = makeInstance("tutorial-enemy", "tutorial-enemy-card", "enemy");
+    const enemy = makeInstance(
+      asBattleCardId("tutorial-enemy"),
+      asCardId("tutorial-enemy-card"),
+      "enemy",
+    );
     enemy.definition.printedSpark = 5;
     const tutorialBoard = makeRichBoard({
       instances: [player, enemy],
@@ -1907,13 +2467,13 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
         ...baseState(),
         playtestControl: {
           mode: "single-controller",
-          controllerClientId: "player",
+          controllerClientId: asClientId("player"),
         },
         battle: battleFrom(tutorialBoard, {
           init: makeInit({ scoreToWin: 5 }),
           mode: {
             kind: "tutorial",
-            tutorialRunId: "tutorial-run",
+            tutorialRunId: asTutorialRunId("tutorial-run"),
             restartNumber: 0,
             resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
           },
@@ -1933,19 +2493,31 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
     const board = makeRichBoard({
       turnNumber: 3,
       phase: "day",
-      playerHand: ["bc-det"],
-      instances: [makeInstance("bc-det", "647f5150-b2e0-424b-9480-27557642524e", "player")],
+      playerHand: [asBattleCardId("bc-det")],
+      instances: [
+        makeInstance(
+          asBattleCardId("bc-det"),
+          asCardId("647f5150-b2e0-424b-9480-27557642524e"),
+          "player",
+        ),
+      ],
     });
     const state = { ...baseState(), battle: battleFrom(board) };
     const payload = debugEdit({
       kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "bc-det",
-      destination: { side: "player", zone: "frontRank", slotId: frontRankSlotId(0) },
+      battleCardId: asBattleCardId("bc-det"),
+      destination: {
+        side: "player",
+        zone: "frontRank",
+        slotId: frontRankSlotId(0),
+      },
     });
     const first = reduce(state, "BATTLE_COMMAND", payload);
     const second = reduce(state, "BATTLE_COMMAND", payload);
     expect(first.outcome).toBe("applied");
-    expect(hashBattle(first.state.battle)).toBe(hashBattle(second.state.battle));
+    expect(hashBattle(first.state.battle)).toBe(
+      hashBattle(second.state.battle),
+    );
   });
 });
 
@@ -1984,10 +2556,12 @@ function parkForeseePrompt(extraQueue: EffectRun[] = []): {
   cardIds: string[];
 } {
   const foresee = firstForeseePromptDreamwellScript();
-  const deckInstances = [1, 2, 3].map((index) => makeInstance(
-    `foresee-${String(index)}`,
-    `00000000-0000-0000-0000-00000000000${String(index)}`,
-  ));
+  const deckInstances = [1, 2, 3].map((index) =>
+    makeInstance(
+      asBattleCardId(`foresee-${String(index)}`),
+      asCardId(`00000000-0000-0000-0000-00000000000${String(index)}`),
+    ),
+  );
   const board = makeRichBoard({
     turnNumber: 3,
     phase: "day",
@@ -1996,7 +2570,14 @@ function parkForeseePrompt(extraQueue: EffectRun[] = []): {
   });
   const battle = battleFrom(board, {
     effectQueue: [
-      { scriptRef: { table: "dreamwell", id: foresee.id }, cursor: [0], side: "player" },
+      {
+        scriptRef: {
+          table: "dreamwell",
+          id: asBattleEffectScriptId(foresee.id),
+        },
+        cursor: [0],
+        side: "player",
+      },
       ...extraQueue,
     ],
   });
@@ -2050,7 +2631,9 @@ describe("RESOLVE_PROMPT", () => {
     const { state, promptId, cardIds } = parkForeseePrompt();
     const [voidedCardId, ...orderedCardIds] = cardIds;
     if (voidedCardId === undefined) throw new Error("expected a foreseen card");
-    const deckTail = state.battle!.board.sides.player.deck.slice(cardIds.length);
+    const deckTail = state.battle!.board.sides.player.deck.slice(
+      cardIds.length,
+    );
     const voidBefore = state.battle!.board.sides.player.void;
     const result = reduce(
       state,
@@ -2060,7 +2643,7 @@ describe("RESOLVE_PROMPT", () => {
         resolution: {
           kind: "foresee",
           orderedCardIds,
-          voidCardIds: [voidedCardId],
+          voidCardIds: [asBattleCardId(voidedCardId)],
         },
       },
       ctx({ seq: PARK_SEQ + 1 }),
@@ -2108,7 +2691,9 @@ describe("RESOLVE_PROMPT", () => {
       thirdCardId,
       firstCardId,
     ]);
-    expect(result.state.battle!.board.sides.player.void).toContain(secondCardId);
+    expect(result.state.battle!.board.sides.player.void).toContain(
+      secondCardId,
+    );
   });
 
   it("bounces a Foresee resolution that does not partition the recorded prefix", () => {
@@ -2120,7 +2705,10 @@ describe("RESOLVE_PROMPT", () => {
         promptId,
         resolution: {
           kind: "foresee",
-          orderedCardIds: [...cardIds, ...cardIds],
+          orderedCardIds: [
+            ...cardIds.map(asBattleCardId),
+            ...cardIds.map(asBattleCardId),
+          ],
           voidCardIds: [],
         },
       },
@@ -2135,7 +2723,8 @@ describe("RESOLVE_PROMPT", () => {
     const { state, promptId } = parkForeseePrompt();
     const deck = state.battle!.board.sides.player.deck;
     const nonTopCardId = deck[1];
-    if (nonTopCardId === undefined) throw new Error("expected a second deck card");
+    if (nonTopCardId === undefined)
+      throw new Error("expected a second deck card");
 
     const result = reduce(
       state,
@@ -2160,7 +2749,7 @@ describe("RESOLVE_PROMPT", () => {
     const probe = makeRichBoard();
     const safe = firstSafeDeterministicDreamwell(probe);
     const safeRun: EffectRun = {
-      scriptRef: { table: "dreamwell", id: safe.id },
+      scriptRef: { table: "dreamwell", id: asBattleEffectScriptId(safe.id) },
       cursor: [0],
       side: "player",
     };
@@ -2250,7 +2839,7 @@ describe("RESOLVE_PROMPT", () => {
 // ---------------------------------------------------------------------------
 
 const MANUAL_NOTE = {
-  noteId: "note-1",
+  noteId: asNoteId("note-1"),
   text: "watch this card",
   expiry: { kind: "manual" },
 };
@@ -2259,7 +2848,9 @@ function noteState(): FoldState {
   const board = makeRichBoard({
     turnNumber: 3,
     phase: "day",
-    instances: [makeInstance("bc-note", "note-card", "player")],
+    instances: [
+      makeInstance(asBattleCardId("bc-note"), asCardId("note-card"), "player"),
+    ],
   });
   return { ...baseState(), battle: battleFrom(board) };
 }
@@ -2274,14 +2865,18 @@ describe("SET_CARD_NOTE", () => {
       ctx({ seq: 5, timestamp: "1970-01-01T00:00:02.000Z" }),
     );
     expect(result.outcome).toBe("applied");
-    const notes = result.state.battle?.board.cardInstances["bc-note"].notes ?? [];
+    const notes =
+      result.state.battle?.board.cardInstances[asBattleCardId("bc-note")]
+        .notes ?? [];
     expect(notes).toHaveLength(1);
     expect(notes[0].noteId).toBe("note-1");
     expect(notes[0].text).toBe("watch this card");
     expect(notes[0].expiry).toEqual({ kind: "manual" });
     // createdAtMs comes from ctx.timestamp (= event.clientTimestamp), never a
     // live clock — two clients folding the same event stamp the same value.
-    expect(notes[0].createdAtMs).toBe(isoTimestampToMs("1970-01-01T00:00:02.000Z"));
+    expect(notes[0].createdAtMs).toBe(
+      isoTimestampToMs("1970-01-01T00:00:02.000Z"),
+    );
   });
 
   it("accepts an atStartOfTurn expiry", () => {
@@ -2289,13 +2884,15 @@ describe("SET_CARD_NOTE", () => {
     const result = reduce(state, "SET_CARD_NOTE", {
       instanceId: "bc-note",
       note: {
-        noteId: "note-2",
+        noteId: asNoteId("note-2"),
         text: "temporary",
         expiry: { kind: "atStartOfTurn", side: "enemy", turnNumber: 4 },
       },
     });
     expect(result.outcome).toBe("applied");
-    const notes = result.state.battle?.board.cardInstances["bc-note"].notes ?? [];
+    const notes =
+      result.state.battle?.board.cardInstances[asBattleCardId("bc-note")]
+        .notes ?? [];
     expect(notes[0].expiry).toEqual({
       kind: "atStartOfTurn",
       side: "enemy",
@@ -2323,7 +2920,8 @@ describe("SET_CARD_NOTE", () => {
   it("bounces a malformed note payload", () => {
     const state = noteState();
     expect(
-      reduce(state, "SET_CARD_NOTE", { instanceId: "bc-note", note: "hi" }).outcome,
+      reduce(state, "SET_CARD_NOTE", { instanceId: "bc-note", note: "hi" })
+        .outcome,
     ).toBe("bounced");
     expect(
       reduce(state, "SET_CARD_NOTE", {
@@ -2334,7 +2932,11 @@ describe("SET_CARD_NOTE", () => {
     expect(
       reduce(state, "SET_CARD_NOTE", {
         instanceId: "bc-note",
-        note: { noteId: "n", text: "bad expiry", expiry: { kind: "whenever" } },
+        note: {
+          noteId: asNoteId("n"),
+          text: "bad expiry",
+          expiry: { kind: "whenever" },
+        },
       }).outcome,
     ).toBe("bounced");
   });
@@ -2344,11 +2946,24 @@ describe("SET_CARD_NOTE", () => {
     const board = makeRichBoard({
       turnNumber: 3,
       phase: "day",
-      instances: [makeInstance("bc-note", "note-card", "player")],
+      instances: [
+        makeInstance(
+          asBattleCardId("bc-note"),
+          asCardId("note-card"),
+          "player",
+        ),
+      ],
     });
     const battle = battleFrom(board, {
       effectQueue: [
-        { scriptRef: { table: "dreamwell", id: foresee.id }, cursor: [0], side: "player" },
+        {
+          scriptRef: {
+            table: "dreamwell",
+            id: asBattleEffectScriptId(foresee.id),
+          },
+          cursor: [0],
+          side: "player",
+        },
       ],
     });
     const parked = reduce(
@@ -2366,7 +2981,9 @@ describe("SET_CARD_NOTE", () => {
       ctx({ seq: 61 }),
     );
     expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.board.cardInstances["bc-note"].notes).toHaveLength(1);
+    expect(
+      result.state.battle?.board.cardInstances[asBattleCardId("bc-note")].notes,
+    ).toHaveLength(1);
     // The note left the open prompt intact.
     expect(result.state.battle?.pendingPrompt).not.toBeNull();
   });
@@ -2379,7 +2996,9 @@ describe("SET_CARD_NOTE", () => {
       ctx({ intervening: [{ seq: 5, actor: "bob", type: "ADJUST_ESSENCE" }] }),
     );
     expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.board.cardInstances["bc-note"].notes).toHaveLength(1);
+    expect(
+      result.state.battle?.board.cardInstances[asBattleCardId("bc-note")].notes,
+    ).toHaveLength(1);
   });
 });
 
@@ -2389,7 +3008,11 @@ describe("SET_CARD_NOTE", () => {
 
 describe("battle automation", () => {
   function cardPlayState(enabled: boolean): FoldState {
-    const instance = makeInstance("bc-play", "card-play", "player");
+    const instance = makeInstance(
+      asBattleCardId("bc-play"),
+      asCardId("card-play"),
+      "player",
+    );
     instance.definition.energyCost = 2;
     instance.definition.printedEnergyCost = 2;
     const board = makeRichBoard({
@@ -2406,25 +3029,48 @@ describe("battle automation", () => {
 
   const playCommand = debugEdit({
     kind: "MOVE_CARD_TO_ZONE",
-    battleCardId: "bc-play",
-    destination: { side: "player", zone: "backRank", slotId: backRankSlotId(0) },
+    battleCardId: asBattleCardId("bc-play"),
+    destination: {
+      side: "player",
+      zone: "backRank",
+      slotId: backRankSlotId(0),
+    },
   });
 
   it("expands raw commands even when persisted state carries a false marker", () => {
-    const automated = reduce(cardPlayState(true), "BATTLE_COMMAND", playCommand);
-    const persistedFalse = reduce(cardPlayState(false), "BATTLE_COMMAND", playCommand);
+    const automated = reduce(
+      cardPlayState(true),
+      "BATTLE_COMMAND",
+      playCommand,
+    );
+    const persistedFalse = reduce(
+      cardPlayState(false),
+      "BATTLE_COMMAND",
+      playCommand,
+    );
 
     expect(automated.state.battle?.board.sides.player.currentEnergy).toBe(3);
-    expect(persistedFalse.state.battle?.board.sides.player.currentEnergy).toBe(3);
+    expect(persistedFalse.state.battle?.board.sides.player.currentEnergy).toBe(
+      3,
+    );
     expect(automated.state.battle?.basicAutomationEnabled).toBe(true);
     expect(persistedFalse.state.battle?.basicAutomationEnabled).toBe(false);
-    expect(automated.state.battle?.board.sides.player.backRank[backRankSlotId(0)]).toBe("bc-play");
-    expect(persistedFalse.state.battle?.board.sides.player.backRank[backRankSlotId(0)]).toBe("bc-play");
     expect(
-      automated.state.battle?.board.cardInstances["bc-play"]?.status.isExhausted,
+      automated.state.battle?.board.sides.player.backRank[backRankSlotId(0)],
+    ).toBe("bc-play");
+    expect(
+      persistedFalse.state.battle?.board.sides.player.backRank[
+        backRankSlotId(0)
+      ],
+    ).toBe("bc-play");
+    expect(
+      automated.state.battle?.board.cardInstances[asBattleCardId("bc-play")]
+        ?.status.isExhausted,
     ).toBe(true);
     expect(
-      persistedFalse.state.battle?.board.cardInstances["bc-play"]?.status.isExhausted,
+      persistedFalse.state.battle?.board.cardInstances[
+        asBattleCardId("bc-play")
+      ]?.status.isExhausted,
     ).toBe(true);
   });
 
@@ -2439,9 +3085,17 @@ describe("battle automation", () => {
 
 describe("BATTLE_AI_BLOCK", () => {
   it("applies deterministic blocking once and records the processed turn", () => {
-    const challenger = makeInstance("challenger", "challenger-card", "player");
+    const challenger = makeInstance(
+      asBattleCardId("challenger"),
+      asCardId("challenger-card"),
+      "player",
+    );
     challenger.definition.printedSpark = 2;
-    const blocker = makeInstance("blocker", "blocker-card", "enemy");
+    const blocker = makeInstance(
+      asBattleCardId("blocker"),
+      asCardId("blocker-card"),
+      "enemy",
+    );
     blocker.definition.printedSpark = 4;
     const board = makeRichBoard({
       phase: "dusk",
@@ -2454,9 +3108,9 @@ describe("BATTLE_AI_BLOCK", () => {
 
     const first = reduce(state, "BATTLE_AI_BLOCK", { aiSide: "enemy" });
     expect(first.outcome).toBe("applied");
-    expect(first.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)]).toBe(
-      blocker.battleCardId,
-    );
+    expect(
+      first.state.battle?.board.sides.enemy.frontRank[frontRankSlotId(0)],
+    ).toBe(blocker.battleCardId);
     expect(first.state.battle?.aiBlockingTurn).toEqual({
       activeSide: "player",
       turnNumber: 3,
@@ -2471,20 +3125,20 @@ describe("BATTLE_AI_BLOCK", () => {
     const smallerChallengerId = "55f731c8-95f9-4505-868d-f93aeed9a3cf";
     const blockerId = "5cfe3a4a-05d8-4be9-9ab3-0ad31e6dc24b";
     const largerChallenger = makeInstance(
-      largerChallengerId,
-      "16d0a384-31d4-4ed2-a2d5-e27b43fd9bf4",
+      asBattleCardId(largerChallengerId),
+      asCardId("16d0a384-31d4-4ed2-a2d5-e27b43fd9bf4"),
       "player",
     );
     largerChallenger.definition.printedSpark = 3;
     const smallerChallenger = makeInstance(
-      smallerChallengerId,
-      "d865c4bf-a792-4af7-89cb-611670cf6620",
+      asBattleCardId(smallerChallengerId),
+      asCardId("d865c4bf-a792-4af7-89cb-611670cf6620"),
       "player",
     );
     smallerChallenger.definition.printedSpark = 2;
     const blocker = makeInstance(
-      blockerId,
-      "a7f597d4-2d9e-4777-aa02-72c895cb98fd",
+      asBattleCardId(blockerId),
+      asCardId("a7f597d4-2d9e-4777-aa02-72c895cb98fd"),
       "enemy",
     );
     blocker.definition.printedSpark = 1;
@@ -2493,13 +3147,13 @@ describe("BATTLE_AI_BLOCK", () => {
       turnNumber: 5,
       instances: [largerChallenger, smallerChallenger, blocker],
       playerFront: {
-        [frontRankSlotId(0)]: largerChallengerId,
-        [frontRankSlotId(1)]: smallerChallengerId,
+        [frontRankSlotId(0)]: asBattleCardId(largerChallengerId),
+        [frontRankSlotId(1)]: asBattleCardId(smallerChallengerId),
       },
     });
     board.sides.player.score = 5;
     board.sides.enemy.score = 9;
-    board.sides.enemy.backRank[backRankSlotId(0)] = blockerId;
+    board.sides.enemy.backRank[backRankSlotId(0)] = asBattleCardId(blockerId);
     const state = {
       ...baseState(),
       battle: battleFrom(board, {
@@ -2525,14 +3179,14 @@ describe("BATTLE_AI_BLOCK", () => {
       lethalPreventable: true,
       lanes: [
         {
-          challengerBattleCardId: largerChallengerId,
+          challengerBattleCardId: asBattleCardId(largerChallengerId),
           lane: "F0",
           outcome: "blocked",
           reason: "prevent-lethal",
-          blockerBattleCardId: blockerId,
+          blockerBattleCardId: asBattleCardId(blockerId),
         },
         {
-          challengerBattleCardId: smallerChallengerId,
+          challengerBattleCardId: asBattleCardId(smallerChallengerId),
           lane: "F1",
           outcome: "declined",
           reason: "no-available-blocker",
@@ -2591,9 +3245,9 @@ describe("BATTLE_AI_BLOCK", () => {
       activeSide: "player",
       blockers: [
         {
-          battleCardId: "blocker",
+          battleCardId: asBattleCardId("blocker"),
           slotId: frontRankSlotId(0),
-          challengerBattleCardId: "challenger",
+          challengerBattleCardId: asBattleCardId("challenger"),
         },
       ],
     });
@@ -2607,21 +3261,25 @@ describe("BATTLE_AI_BLOCK", () => {
   it("does not pace a tutorial blocker that enters an uncontested lane", () => {
     // No challenger anywhere, so the deterministic blocking has nothing to block:
     // any repositioning it performs is not a block and gets no beat.
-    const blocker = makeInstance("blocker", "blocker-card", "enemy");
+    const blocker = makeInstance(
+      asBattleCardId("blocker"),
+      asCardId("blocker-card"),
+      "enemy",
+    );
     blocker.definition.printedSpark = 4;
     const board = makeRichBoard({
       phase: "dusk",
       turnNumber: 3,
       instances: [blocker],
     });
-    board.sides.enemy.backRank[backRankSlotId(0)] = "blocker";
+    board.sides.enemy.backRank[backRankSlotId(0)] = asBattleCardId("blocker");
 
     const blocked = reduce(
       {
         ...baseState(),
         playtestControl: {
           mode: "single-controller",
-          controllerClientId: "player",
+          controllerClientId: asClientId("player"),
         },
         battle: battleFrom(board, { mode: TUTORIAL_MODE }),
       },
@@ -2644,31 +3302,46 @@ describe("BATTLE_AI_BLOCK", () => {
 const TUTORIAL_ACTOR = "tutorial-ai:player";
 const TUTORIAL_MODE = {
   kind: "tutorial" as const,
-  tutorialRunId: "tutorial-run",
+  tutorialRunId: asTutorialRunId("tutorial-run"),
   restartNumber: 0,
-  resultConfig: { playerOnlyVictory: true as const, turnLimitDisabled: true as const },
+  resultConfig: {
+    playerOnlyVictory: true as const,
+    turnLimitDisabled: true as const,
+  },
 };
 
 /** Dusk with one player challenger in `F0` and one enemy blocker in reserve. */
-function contestedBlockingState({ tutorial }: { tutorial: boolean }): FoldState {
-  const challenger = makeInstance("challenger", "challenger-card", "player");
+function contestedBlockingState({
+  tutorial,
+}: {
+  tutorial: boolean;
+}): FoldState {
+  const challenger = makeInstance(
+    asBattleCardId("challenger"),
+    asCardId("challenger-card"),
+    "player",
+  );
   challenger.definition.printedSpark = 2;
-  const blocker = makeInstance("blocker", "blocker-card", "enemy");
+  const blocker = makeInstance(
+    asBattleCardId("blocker"),
+    asCardId("blocker-card"),
+    "enemy",
+  );
   blocker.definition.printedSpark = 4;
   const board = makeRichBoard({
     phase: "dusk",
     turnNumber: 3,
     instances: [challenger, blocker],
-    playerFront: { [frontRankSlotId(0)]: "challenger" },
+    playerFront: { [frontRankSlotId(0)]: asBattleCardId("challenger") },
   });
-  board.sides.enemy.backRank[backRankSlotId(0)] = "blocker";
+  board.sides.enemy.backRank[backRankSlotId(0)] = asBattleCardId("blocker");
   return {
     ...baseState(),
     ...(tutorial
       ? {
           playtestControl: {
             mode: "single-controller" as const,
-            controllerClientId: "player",
+            controllerClientId: asClientId("player"),
           },
         }
       : {}),
@@ -2677,25 +3350,37 @@ function contestedBlockingState({ tutorial }: { tutorial: boolean }): FoldState 
 }
 
 /** A lane whose challenger loses outright, so exactly one character dissolves. */
-function resolvedChallengeState({ tutorial }: { tutorial: boolean }): FoldState {
-  const challenger = makeInstance("challenger", "challenger-card", "player");
+function resolvedChallengeState({
+  tutorial,
+}: {
+  tutorial: boolean;
+}): FoldState {
+  const challenger = makeInstance(
+    asBattleCardId("challenger"),
+    asCardId("challenger-card"),
+    "player",
+  );
   challenger.definition.printedSpark = 2;
-  const blocker = makeInstance("blocker", "blocker-card", "enemy");
+  const blocker = makeInstance(
+    asBattleCardId("blocker"),
+    asCardId("blocker-card"),
+    "enemy",
+  );
   blocker.definition.printedSpark = 4;
   const board = makeRichBoard({
     phase: "dusk",
     turnNumber: 3,
     instances: [challenger, blocker],
-    playerFront: { [frontRankSlotId(0)]: "challenger" },
+    playerFront: { [frontRankSlotId(0)]: asBattleCardId("challenger") },
   });
-  board.sides.enemy.frontRank[frontRankSlotId(0)] = "blocker";
+  board.sides.enemy.frontRank[frontRankSlotId(0)] = asBattleCardId("blocker");
   return {
     ...baseState(),
     ...(tutorial
       ? {
           playtestControl: {
             mode: "single-controller" as const,
-            controllerClientId: "player",
+            controllerClientId: asClientId("player"),
           },
         }
       : {}),
@@ -2733,10 +3418,12 @@ describe("paced Challenge beats", () => {
       kind: "challenge-resolved",
       activeSide: "player",
       slotId: "F0",
-      challengerBattleCardId: "challenger",
-      blockerBattleCardId: "blocker",
+      challengerBattleCardId: asBattleCardId("challenger"),
+      blockerBattleCardId: asBattleCardId("blocker"),
       scored: null,
-      dissolved: [{ battleCardId: "challenger", side: "player" }],
+      dissolved: [
+        { battleCardId: asBattleCardId("challenger"), side: "player" },
+      ],
     });
   });
 
@@ -2772,18 +3459,20 @@ describe("paced Challenge beats", () => {
       battle: {
         ...base.battle!,
         init: makeInit({
-          tutorialTriggers: [{
-            id: "spark-tie",
-            on: ["challenge-resolved"],
-            priority: 10,
-            speaker: "mira",
-            duration: 5,
-            horizontalOffset: 0,
-            verticalOffset: 0,
-            bubbleWidth: 500,
-            match: { kind: "any" },
-            text: "If spark values tie, both characters are dissolved.",
-          }],
+          tutorialTriggers: [
+            {
+              id: asTutorialTriggerId("spark-tie"),
+              on: ["challenge-resolved"],
+              priority: 10,
+              speaker: "mira",
+              duration: 5,
+              horizontalOffset: 0,
+              verticalOffset: 0,
+              bubbleWidth: 500,
+              match: { kind: "any" },
+              text: "If spark values tie, both characters are dissolved.",
+            },
+          ],
         }),
       },
     };
@@ -2818,10 +3507,12 @@ describe("paced Challenge beats", () => {
         turnNumber: 3,
         slotId: "F0",
       },
-      messages: [{
-        triggerId: "spark-tie",
-        text: "If spark values tie, both characters are dissolved.",
-      }],
+      messages: [
+        {
+          triggerId: "spark-tie",
+          text: "If spark values tie, both characters are dissolved.",
+        },
+      ],
     });
     expect(guided.state.battle?.board.activeSide).toBe("player");
 
@@ -2897,29 +3588,41 @@ describe("paced Challenge beats", () => {
   });
 
   it("waits for each Challenge lane animation before resolving the next lane", () => {
-    const scorer = makeInstance("scorer", "scorer-card", "player");
+    const scorer = makeInstance(
+      asBattleCardId("scorer"),
+      asCardId("scorer-card"),
+      "player",
+    );
     scorer.definition.printedSpark = 2;
-    const loser = makeInstance("loser", "loser-card", "player");
+    const loser = makeInstance(
+      asBattleCardId("loser"),
+      asCardId("loser-card"),
+      "player",
+    );
     loser.definition.printedSpark = 1;
-    const blocker = makeInstance("blocker", "blocker-card", "enemy");
+    const blocker = makeInstance(
+      asBattleCardId("blocker"),
+      asCardId("blocker-card"),
+      "enemy",
+    );
     blocker.definition.printedSpark = 3;
     const board = makeRichBoard({
       phase: "dusk",
       turnNumber: 3,
       instances: [scorer, loser, blocker],
       playerFront: {
-        [frontRankSlotId(0)]: "scorer",
-        [frontRankSlotId(1)]: "loser",
+        [frontRankSlotId(0)]: asBattleCardId("scorer"),
+        [frontRankSlotId(1)]: asBattleCardId("loser"),
       },
     });
-    board.sides.enemy.frontRank[frontRankSlotId(1)] = "blocker";
+    board.sides.enemy.frontRank[frontRankSlotId(1)] = asBattleCardId("blocker");
 
     const first = reduce(
       {
         ...baseState(),
         playtestControl: {
           mode: "single-controller",
-          controllerClientId: "player",
+          controllerClientId: asClientId("player"),
         },
         battle: battleFrom(board, { mode: TUTORIAL_MODE }),
       },
@@ -2932,9 +3635,13 @@ describe("paced Challenge beats", () => {
     expect(first.state.battle?.tutorialPresentation).toMatchObject({
       kind: "challenge-resolved",
       slotId: "F0",
-      challengerBattleCardId: "scorer",
+      challengerBattleCardId: asBattleCardId("scorer"),
       blockerBattleCardId: null,
-      scored: { battleCardId: "scorer", side: "player", points: 2 },
+      scored: {
+        battleCardId: asBattleCardId("scorer"),
+        side: "player",
+        points: 2,
+      },
       dissolved: [],
     });
     expect(
@@ -2952,10 +3659,10 @@ describe("paced Challenge beats", () => {
     expect(second.state.battle?.tutorialPresentation).toMatchObject({
       kind: "challenge-resolved",
       slotId: "F1",
-      challengerBattleCardId: "loser",
-      blockerBattleCardId: "blocker",
+      challengerBattleCardId: asBattleCardId("loser"),
+      blockerBattleCardId: asBattleCardId("blocker"),
       scored: null,
-      dissolved: [{ battleCardId: "loser", side: "player" }],
+      dissolved: [{ battleCardId: asBattleCardId("loser"), side: "player" }],
     });
     expect(second.state.battle?.board.sides.player.void).toContain("loser");
     expect(second.state.battle?.board.activeSide).toBe("player");
@@ -2983,18 +3690,24 @@ describe("paced Challenge beats", () => {
     expect(resolved.outcome).toBe("applied");
     expect(resolved.state.battle?.tutorialPresentation ?? null).toBeNull();
     expect(resolved.state.battle?.challengeCursor ?? null).toBeNull();
-    expect(resolved.state.battle?.board.sides.player.void).toContain("challenger");
+    expect(resolved.state.battle?.board.sides.player.void).toContain(
+      "challenger",
+    );
     expect(resolved.state.battle?.board.activeSide).toBe("enemy");
   });
 
   it("holds an unopposed scorer for its points animation before handoff", () => {
-    const challenger = makeInstance("challenger", "challenger-card", "player");
+    const challenger = makeInstance(
+      asBattleCardId("challenger"),
+      asCardId("challenger-card"),
+      "player",
+    );
     challenger.definition.printedSpark = 2;
     const board = makeRichBoard({
       phase: "dusk",
       turnNumber: 3,
       instances: [challenger],
-      playerFront: { [frontRankSlotId(0)]: "challenger" },
+      playerFront: { [frontRankSlotId(0)]: asBattleCardId("challenger") },
     });
 
     const resolved = reduce(
@@ -3002,7 +3715,7 @@ describe("paced Challenge beats", () => {
         ...baseState(),
         playtestControl: {
           mode: "single-controller",
-          controllerClientId: "player",
+          controllerClientId: asClientId("player"),
         },
         battle: battleFrom(board, { mode: TUTORIAL_MODE }),
       },
@@ -3016,10 +3729,10 @@ describe("paced Challenge beats", () => {
     expect(resolved.state.battle?.tutorialPresentation).toMatchObject({
       kind: "challenge-resolved",
       slotId: "F0",
-      challengerBattleCardId: "challenger",
+      challengerBattleCardId: asBattleCardId("challenger"),
       blockerBattleCardId: null,
       scored: {
-        battleCardId: "challenger",
+        battleCardId: asBattleCardId("challenger"),
         side: "player",
         points: 2,
       },
@@ -3046,19 +3759,30 @@ describe("paced Challenge beats", () => {
 // ---------------------------------------------------------------------------
 
 describe("BATTLE_GESTURE", () => {
-  const gainFive = { id: "DEBUG_EDIT", edit: { kind: "ADJUST_SCORE", side: "player", amount: 5 } };
-  const gainThree = { id: "DEBUG_EDIT", edit: { kind: "ADJUST_SCORE", side: "player", amount: 3 } };
+  const gainFive = {
+    id: "DEBUG_EDIT",
+    edit: { kind: "ADJUST_SCORE", side: "player", amount: 5 },
+  };
+  const gainThree = {
+    id: "DEBUG_EDIT",
+    edit: { kind: "ADJUST_SCORE", side: "player", amount: 3 },
+  };
   // Missing `edit.kind` → coerceBattleCommand returns null (invalid command).
   const invalid = { id: "DEBUG_EDIT", edit: {} };
 
   function gestureState(): FoldState {
-    return { ...baseState(), battle: battleFrom(makeRichBoard({ turnNumber: 3, phase: "day" })) };
+    return {
+      ...baseState(),
+      battle: battleFrom(makeRichBoard({ turnNumber: 3, phase: "day" })),
+    };
   }
 
   it("applies every command when all are valid (both effects present)", () => {
     const state = gestureState();
     const base = state.battle!.board.sides.player.score;
-    const result = reduce(state, "BATTLE_GESTURE", { commands: [gainFive, gainThree] });
+    const result = reduce(state, "BATTLE_GESTURE", {
+      commands: [gainFive, gainThree],
+    });
     expect(result.outcome).toBe("applied");
     expect(result.state.battle?.board.sides.player.score).toBe(base + 5 + 3);
   });
@@ -3066,7 +3790,9 @@ describe("BATTLE_GESTURE", () => {
   it("bounces the WHOLE gesture when any command is invalid — no partial application", () => {
     const state = gestureState();
     const before = hashBattle(state.battle);
-    const result = reduce(state, "BATTLE_GESTURE", { commands: [gainFive, invalid] });
+    const result = reduce(state, "BATTLE_GESTURE", {
+      commands: [gainFive, invalid],
+    });
     expect(result.outcome).toBe("bounced");
     // The valid leading command left no trace: the battle is byte-identical.
     expect(hashBattle(result.state.battle)).toBe(before);
@@ -3074,22 +3800,31 @@ describe("BATTLE_GESTURE", () => {
 
   it("bounces an empty or non-array commands payload", () => {
     const state = gestureState();
-    expect(reduce(state, "BATTLE_GESTURE", { commands: [] }).outcome).toBe("bounced");
-    expect(reduce(state, "BATTLE_GESTURE", { commands: "nope" }).outcome).toBe("bounced");
+    expect(reduce(state, "BATTLE_GESTURE", { commands: [] }).outcome).toBe(
+      "bounced",
+    );
+    expect(reduce(state, "BATTLE_GESTURE", { commands: "nope" }).outcome).toBe(
+      "bounced",
+    );
     expect(reduce(state, "BATTLE_GESTURE", {}).outcome).toBe("bounced");
   });
 
   it("bounces with no battle in progress", () => {
-    expect(reduce(baseState(), "BATTLE_GESTURE", { commands: [gainFive] }).outcome).toBe("bounced");
+    expect(
+      reduce(baseState(), "BATTLE_GESTURE", { commands: [gainFive] }).outcome,
+    ).toBe("bounced");
   });
 
   it("folds a valid gesture deterministically (two folds are byte-identical)", () => {
     const state = gestureState();
-    const a = reduce(state, "BATTLE_GESTURE", { commands: [gainFive, gainThree] });
-    const b = reduce(state, "BATTLE_GESTURE", { commands: [gainFive, gainThree] });
+    const a = reduce(state, "BATTLE_GESTURE", {
+      commands: [gainFive, gainThree],
+    });
+    const b = reduce(state, "BATTLE_GESTURE", {
+      commands: [gainFive, gainThree],
+    });
     expect(hashBattle(a.state.battle)).toBe(hashBattle(b.state.battle));
   });
-
 });
 
 // ---------------------------------------------------------------------------
@@ -3101,7 +3836,7 @@ describe("dreamwell reveal side", () => {
     const probe = makeRichBoard();
     const dw = firstSafeDeterministicDreamwell(probe);
     const dreamwellCard: DreamwellCardDefinition = {
-      id: dw.id,
+      id: asDreamwellCardId(dw.id),
       name: "Fixture Dreamwell",
       renderedText: "",
       energyAdded: 0,
@@ -3111,21 +3846,35 @@ describe("dreamwell reveal side", () => {
     };
     const init = makeInit({ dreamwellDeck: [dreamwellCard] });
     // Active side is `player`; the enemy takes a manual extra dreamwell draw.
-    const board = makeRichBoard({ turnNumber: 2, phase: "dreamwell", dreamwellDeckIndex: 0 });
+    const board = makeRichBoard({
+      turnNumber: 2,
+      phase: "dreamwell",
+      dreamwellDeckIndex: 0,
+    });
     const state = { ...baseState(), battle: battleFrom(board, { init }) };
 
-    const revealEdit = { kind: "DRAW_DREAMWELL_CARD", side: "enemy", turnNumber: 2 };
+    const revealEdit = {
+      kind: "DRAW_DREAMWELL_CARD",
+      side: "enemy",
+      turnNumber: 2,
+    };
     const result = reduce(state, "BATTLE_COMMAND", debugEdit(revealEdit));
     expect(result.outcome).toBe("applied");
     // The enemy's revealed script ran: the board changed beyond the bare reveal.
-    const revealOnly = applyDebugEdit(board, revealEdit as never, EMISSION).state;
-    expect(hashBoard(result.state.battle!.board)).not.toBe(hashBoard(revealOnly));
+    const revealOnly = applyDebugEdit(
+      board,
+      revealEdit as never,
+      EMISSION,
+    ).state;
+    expect(hashBoard(result.state.battle!.board)).not.toBe(
+      hashBoard(revealOnly),
+    );
     expect(result.state.battle?.board.sides.enemy.dreamwellDrawnTurn).toBe(2);
   });
 
   it("chains Lily Lake into the next known Dreamwell card exactly once with its refill and effect", () => {
     const lilyLake: DreamwellCardDefinition = {
-      id: "558a1f1b-7dc1-4d83-9f00-c6af2187a954",
+      id: asDreamwellCardId("558a1f1b-7dc1-4d83-9f00-c6af2187a954"),
       name: "Fixture Lily Lake",
       renderedText: "",
       energyAdded: 2,
@@ -3134,7 +3883,7 @@ describe("dreamwell reveal side", () => {
       imageNumber: 0,
     };
     const autumnGlade: DreamwellCardDefinition = {
-      id: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+      id: asDreamwellCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
       name: "Fixture Autumn Glade",
       renderedText: "",
       energyAdded: 3,
@@ -3152,16 +3901,27 @@ describe("dreamwell reveal side", () => {
     board.sides.player.currentEnergy = 1;
     const state = {
       ...baseState(),
-      battle: battleFrom(board, { init: makeInit({ dreamwellDeck: [lilyLake, autumnGlade] }) }),
+      battle: battleFrom(board, {
+        init: makeInit({ dreamwellDeck: [lilyLake, autumnGlade] }),
+      }),
     };
-    const payload = debugEdit({ kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 4 });
+    const payload = debugEdit({
+      kind: "DRAW_DREAMWELL_CARD",
+      side: "player",
+      turnNumber: 4,
+    });
 
     const first = reduce(state, "BATTLE_COMMAND", payload);
     const replay = reduce(state, "BATTLE_COMMAND", payload);
 
     expect(first.outcome).toBe("applied");
-    expect(hashBattle(first.state.battle)).toBe(hashBattle(replay.state.battle));
-    expect(first.state.battle).toMatchObject({ effectQueue: [], pendingPrompt: null });
+    expect(hashBattle(first.state.battle)).toBe(
+      hashBattle(replay.state.battle),
+    );
+    expect(first.state.battle).toMatchObject({
+      effectQueue: [],
+      pendingPrompt: null,
+    });
     expect(first.state.battle?.board).toMatchObject({ dreamwellDeckIndex: 2 });
     expect(first.state.battle?.board.sides.player).toMatchObject({
       dreamwellCardIndex: 1,
@@ -3184,13 +3944,24 @@ describe("support recompute ordering", () => {
     // must be recomputed AFTER the drain, so the final board is self-consistent.
     const support = staticSupportFixtureScript();
     const probe = makeRichBoard({
-      playerVoid: ["bc-support"],
-      playerFront: { [frontRankSlotId(0)]: "bc-ally" },
-      instances: [makeInstance("bc-support", support.id, "player"), makeInstance("bc-ally", "ally-card", "player")],
+      playerVoid: [asBattleCardId("bc-support")],
+      playerFront: { [frontRankSlotId(0)]: asBattleCardId("bc-ally") },
+      instances: [
+        makeInstance(
+          asBattleCardId("bc-support"),
+          asCardId(support.id),
+          "player",
+        ),
+        makeInstance(
+          asBattleCardId("bc-ally"),
+          asCardId("ally-card"),
+          "player",
+        ),
+      ],
     });
     const voidToPlay = firstVoidToPlayDreamwell(probe);
     const dreamwellCard: DreamwellCardDefinition = {
-      id: voidToPlay.id,
+      id: asDreamwellCardId(voidToPlay.id),
       name: "Fixture Gateway",
       renderedText: "",
       energyAdded: 0,
@@ -3203,9 +3974,20 @@ describe("support recompute ordering", () => {
       turnNumber: 2,
       phase: "dreamwell",
       dreamwellDeckIndex: 0,
-      playerVoid: ["bc-support"],
-      playerFront: { [frontRankSlotId(0)]: "bc-ally" },
-      instances: [makeInstance("bc-support", support.id, "player"), makeInstance("bc-ally", "ally-card", "player")],
+      playerVoid: [asBattleCardId("bc-support")],
+      playerFront: { [frontRankSlotId(0)]: asBattleCardId("bc-ally") },
+      instances: [
+        makeInstance(
+          asBattleCardId("bc-support"),
+          asCardId(support.id),
+          "player",
+        ),
+        makeInstance(
+          asBattleCardId("bc-ally"),
+          asCardId("ally-card"),
+          "player",
+        ),
+      ],
     });
     const state = { ...baseState(), battle: battleFrom(board, { init }) };
 
@@ -3238,12 +4020,19 @@ describe("RESOLVE_PROMPT pick-cards candidate validation", () => {
         promptId: PROMPT_SEQ,
         // The run's script is irrelevant to the candidate check, which reads the
         // recorded `options`; a bounce never reaches the driver.
-        run: { scriptRef: { table: "battle", id: "unresolved" }, cursor: [0], side: "player" },
+        run: {
+          scriptRef: {
+            table: "battle",
+            id: asBattleEffectScriptId("unresolved"),
+          },
+          cursor: [0],
+          side: "player",
+        },
         kind: "pick-cards",
         options: {
           kind: "pick-cards",
           label: builtInBattlePromptRef("generic"),
-          candidateIds: ["card-a", "card-b"],
+          candidateIds: [asBattleCardId("card-a"), asBattleCardId("card-b")],
           count: 1,
           optional: false,
           highlightCardIds: [],
@@ -3259,7 +4048,10 @@ describe("RESOLVE_PROMPT pick-cards candidate validation", () => {
     const result = reduce(
       state,
       "RESOLVE_PROMPT",
-      { promptId: PROMPT_SEQ, resolution: { kind: "pick-cards", chosenIds: ["card-z"] } },
+      {
+        promptId: PROMPT_SEQ,
+        resolution: { kind: "pick-cards", chosenIds: ["card-z"] },
+      },
       ctx({ seq: PROMPT_SEQ + 1 }),
     );
     expect(result.outcome).toBe("bounced");
@@ -3273,7 +4065,10 @@ describe("RESOLVE_PROMPT pick-cards candidate validation", () => {
     const result = reduce(
       state,
       "RESOLVE_PROMPT",
-      { promptId: PROMPT_SEQ, resolution: { kind: "pick-cards", chosenIds: ["card-a", "card-b"] } },
+      {
+        promptId: PROMPT_SEQ,
+        resolution: { kind: "pick-cards", chosenIds: ["card-a", "card-b"] },
+      },
       ctx({ seq: PROMPT_SEQ + 1 }),
     );
     expect(result.outcome).toBe("bounced");
@@ -3285,7 +4080,10 @@ describe("RESOLVE_PROMPT pick-cards candidate validation", () => {
     const result = reduce(
       state,
       "RESOLVE_PROMPT",
-      { promptId: PROMPT_SEQ, resolution: { kind: "pick-cards", chosenIds: ["card-a"] } },
+      {
+        promptId: PROMPT_SEQ,
+        resolution: { kind: "pick-cards", chosenIds: ["card-a"] },
+      },
       ctx({ seq: PROMPT_SEQ + 1 }),
     );
     // In-candidate + in-count → passes validation (the driver then resolves it).
@@ -3303,7 +4101,14 @@ describe("RESOLVE_PROMPT choice validation", () => {
       battle: battleFrom(board, {
         pendingPrompt: {
           promptId: PROMPT_SEQ,
-          run: { scriptRef: { table: "battle", id: "unresolved" }, cursor: [0], side: "player" },
+          run: {
+            scriptRef: {
+              table: "battle",
+              id: asBattleEffectScriptId("unresolved"),
+            },
+            cursor: [0],
+            side: "player",
+          },
           kind: "choice",
           options: {
             kind: "choice",
@@ -3343,7 +4148,14 @@ describe("RESOLVE_PROMPT confirm validation", () => {
       battle: battleFrom(board, {
         pendingPrompt: {
           promptId: PROMPT_SEQ,
-          run: { scriptRef: { table: "battle", id: "unresolved" }, cursor: [0], side: "player" },
+          run: {
+            scriptRef: {
+              table: "battle",
+              id: asBattleEffectScriptId("unresolved"),
+            },
+            cursor: [0],
+            side: "player",
+          },
           kind: "confirm",
           options: {
             kind: "choice",

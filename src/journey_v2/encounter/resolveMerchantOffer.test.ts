@@ -20,6 +20,11 @@ import {
   resolveMerchantDecline,
   resolveMerchantOffer,
 } from "./resolveMerchantOffer";
+import { asSiteId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 function poolCards(count: number): CardData[] {
   const cards: CardData[] = [];
@@ -41,7 +46,12 @@ function dreamsignFixture(count: number) {
   const templates = [];
   for (let i = 0; i < count; i += 1) {
     const id = `dsign-${String(i)}`;
-    templates.push(makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(i)}` }));
+    templates.push(
+      makeMerchantTestDreamsignTemplate({
+        id: asDreamsignId(id),
+        name: `Sign ${String(i)}`,
+      }),
+    );
   }
   return templates;
 }
@@ -52,7 +62,7 @@ function makeFixture(overrides: { seed?: string } = {}): {
   site: SiteState;
 } {
   const site = makeMerchantTestSite({
-    id: "site-merchant-resolve",
+    id: asSiteId("site-merchant-resolve"),
     type: "Augury",
   });
   const cards = poolCards(30);
@@ -63,22 +73,22 @@ function makeFixture(overrides: { seed?: string } = {}): {
   });
   const state = makeMerchantTestJourneyState({
     seed: overrides.seed ?? "merchant-resolve-seed",
-    currentDreamscape: "dreamscape-a",
+    currentDreamscape: asAtlasNodeId("dreamscape-a"),
     screen: { type: "site", siteId: site.id },
     activeSiteId: site.id,
     deck: [1000, 1001, 1002, 1003, 1004, 1005].map((cardNumber, index) =>
       makeMerchantTestDeckEntry({
-        entryId: `deck-${String(index + 1)}`,
+        entryId: asDeckEntryId(`deck-${String(index + 1)}`),
         cardNumber,
       }),
     ),
     atlas: {
       nodes: {
-        "dreamscape-a": {
-          id: "dreamscape-a",
+        [asAtlasNodeId("dreamscape-a")]: {
+          id: asAtlasNodeId("dreamscape-a"),
           layer: LayerName.One,
           indexInLayer: 0,
-          dreamscapeId: "test_dreamscape",
+          dreamscapeId: asDreamscapeId("test_dreamscape"),
           sites: [site],
           position: { x: 0, y: 0 },
           state: "available",
@@ -88,9 +98,9 @@ function makeFixture(overrides: { seed?: string } = {}): {
           knownDreamsignId: null,
         },
       },
-      startingNodeId: "dreamscape-a",
-      bossNodeId: "dreamscape-a",
-      currentNodeId: "dreamscape-a",
+      startingNodeId: asAtlasNodeId("dreamscape-a"),
+      bossNodeId: asAtlasNodeId("dreamscape-a"),
+      currentNodeId: asAtlasNodeId("dreamscape-a"),
       layers: [],
       knownDreamsignCarrierIds: [],
     },
@@ -187,18 +197,25 @@ describe("resolveMerchantOffer", () => {
     expect(result.ok).toBe(true);
     if (!result.ok) return;
     expect(result.state.screen).toEqual({ type: "dreamscape" });
-    expect(result.state.atlas.nodes["dreamscape-a"]?.sites[0]?.isVisited).toBe(true);
+    expect(
+      result.state.atlas.nodes[asAtlasNodeId("dreamscape-a")]?.sites[0]
+        ?.isVisited,
+    ).toBe(true);
     expect(result.appliedPayload).toEqual(directPayload);
     expect(result.state.deck).toEqual(expectedRewardState.deck);
     expect(result.state.dreamsigns).toEqual(expectedRewardState.dreamsigns);
     expect(result.state.essence).toBe(expectedRewardState.essence);
     expect(
       Object.values(result.state.atlas.nodes).map((node) =>
-        node.sites.map(({ isVisited: _isVisited, ...candidateSite }) => candidateSite),
+        node.sites.map(
+          ({ isVisited: _isVisited, ...candidateSite }) => candidateSite,
+        ),
       ),
     ).toEqual(
       Object.values(expectedRewardState.atlas.nodes).map((node) =>
-        node.sites.map(({ isVisited: _isVisited, ...candidateSite }) => candidateSite),
+        node.sites.map(
+          ({ isVisited: _isVisited, ...candidateSite }) => candidateSite,
+        ),
       ),
     );
   });
@@ -220,7 +237,10 @@ describe("resolveMerchantOffer", () => {
     expect(result.state.deck).toEqual(fixture.state.deck);
     expect(result.state.dreamsigns).toEqual(fixture.state.dreamsigns);
     expect(result.state.screen).toEqual({ type: "dreamscape" });
-    expect(result.state.atlas.nodes["dreamscape-a"]?.sites[0]?.isVisited).toBe(true);
+    expect(
+      result.state.atlas.nodes[asAtlasNodeId("dreamscape-a")]?.sites[0]
+        ?.isVisited,
+    ).toBe(true);
   });
 });
 
@@ -253,10 +273,12 @@ describe("applyMerchantPayloadToState", () => {
     expect(next).not.toBeNull();
     // The current dreamscape gains one new Site of the requested type.
     const beforeCount =
-      fixture.state.atlas.nodes["dreamscape-a"]?.sites.length ?? 0;
-    const afterCount = next?.atlas.nodes["dreamscape-a"]?.sites.length ?? 0;
+      fixture.state.atlas.nodes[asAtlasNodeId("dreamscape-a")]?.sites.length ??
+      0;
+    const afterCount =
+      next?.atlas.nodes[asAtlasNodeId("dreamscape-a")]?.sites.length ?? 0;
     expect(afterCount).toBe(beforeCount + 1);
-    const sites = next?.atlas.nodes["dreamscape-a"]?.sites ?? [];
+    const sites = next?.atlas.nodes[asAtlasNodeId("dreamscape-a")]?.sites ?? [];
     const addedSite = sites[sites.length - 1];
     expect(addedSite?.type).toBe("Shop");
     expect(addedSite?.isVisited).toBe(false);

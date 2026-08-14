@@ -6,10 +6,11 @@ import {
   toJourneyDreamAvatar,
 } from "./dream-avatar-selection";
 import type { DreamAvatarContent } from "../types/content";
+import { asDreamAvatarId } from "../types/identifiers";
 
 function makeDreamAvatar(id: string): DreamAvatarContent {
   return {
-    id,
+    id: asDreamAvatarId(id),
     name: `DreamAvatar ${id}`,
     title: `Title ${id}`,
     renderedText: `Rules text for ${id}.`,
@@ -45,10 +46,7 @@ describe("selectDreamAvatarOffer", () => {
 
   it("fails loudly when the validated DreamAvatar list is too small", () => {
     expect(() =>
-      selectDreamAvatarOffer([
-        makeDreamAvatar("a"),
-        makeDreamAvatar("b"),
-      ]),
+      selectDreamAvatarOffer([makeDreamAvatar("a"), makeDreamAvatar("b")]),
     ).toThrow("Expected at least 3 DreamAvatars");
   });
 
@@ -84,9 +82,11 @@ describe("selectDreamAvatarOffer", () => {
     expect(rerolled.map((dreamAvatar) => dreamAvatar.id)).toEqual(
       repeated.map((dreamAvatar) => dreamAvatar.id),
     );
-    expect(rerolled.some(
-      (dreamAvatar) => !initial.some((shown) => shown.id === dreamAvatar.id),
-    )).toBe(true);
+    expect(
+      rerolled.some(
+        (dreamAvatar) => !initial.some((shown) => shown.id === dreamAvatar.id),
+      ),
+    ).toBe(true);
   });
 });
 

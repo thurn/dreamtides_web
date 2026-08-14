@@ -31,6 +31,31 @@ import type {
   TransfigurationType,
 } from "../types/journey";
 import { SELECTION_RULES_VERSION } from "../reward-selection";
+import type { BattleId } from "../types/identifiers";
+import type { PresentationId } from "../types/identifiers";
+import type { DreamAvatarId } from "../types/identifiers";
+import type { SiteId } from "../types/identifiers";
+import type { AtlasNodeId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type { DeckEntryId } from "../types/identifiers";
+import type { DreamsignId } from "../types/identifiers";
+import type { ShuffleCommitment } from "../types/identifiers";
+import type { BattleCardId } from "../types/identifiers";
+import type { TutorialAiActionOverrideId } from "../types/identifiers";
+import type {
+  AuguryArchetypeId,
+  CardTutorialScreenKey,
+  ClientId,
+  ExplorationActionId,
+  FrontDoorActionId,
+  IntentKey,
+  JourneyId,
+  NoteId,
+  TutorialActionId,
+  TutorialRunId,
+} from "../types/identifiers";
+import type { BattleSide, BattlefieldSlotId } from "../battle/types";
+import { asIntentKey } from "../types/identifiers";
 
 /**
  * Appends a stamped event, resolving to its committed seq. In production this
@@ -45,31 +70,34 @@ export interface CoopActions {
   // --- standalone front door ---
   frontDoorAction: (
     surface: "main" | "tutorial",
-    actionId: string,
+    actionId: FrontDoorActionId,
     detail?: unknown,
   ) => Promise<number>;
   advanceFrontDoor: (
     from: "mainExiting" | "loading",
-    journeyId: string,
+    journeyId: JourneyId,
   ) => Promise<number>;
   beginTutorial: (
     actions: readonly TutorialAction[],
     options?: BeginTutorialOptions,
   ) => Promise<number>;
-  completeTutorialAction: (runId: string, actionId: string) => Promise<number>;
-  takePlaytestControl: (
-    previousControllerClientId: string | null,
+  completeTutorialAction: (
+    runId: TutorialRunId,
+    actionId: TutorialActionId,
   ) => Promise<number>;
-  beginTutorialBattle: (tutorialRunId: string) => Promise<number>;
-  restartTutorialBattle: (battleId: string) => Promise<number>;
-  exitTutorialBattle: (battleId: string) => Promise<number>;
+  takePlaytestControl: (
+    previousControllerClientId: ClientId | null,
+  ) => Promise<number>;
+  beginTutorialBattle: (tutorialRunId: TutorialRunId) => Promise<number>;
+  restartTutorialBattle: (battleId: BattleId) => Promise<number>;
+  exitTutorialBattle: (battleId: BattleId) => Promise<number>;
   openCardTutorialGuidance: (
-    screenKey: string,
-    cardIds: readonly string[],
+    screenKey: CardTutorialScreenKey,
+    cardIds: readonly CardId[],
   ) => Promise<number>;
   completeCardTutorialGuidance: (
-    presentationId: string,
-    screenKey: string,
+    presentationId: PresentationId,
+    screenKey: CardTutorialScreenKey,
   ) => Promise<number>;
 
   // --- essence & limits ---
@@ -83,190 +111,202 @@ export interface CoopActions {
   loadState: (snapshot: unknown, battle?: unknown) => Promise<number>;
 
   // --- dreamAvatar ---
-  selectDreamAvatar: (dreamAvatarId: string) => Promise<number>;
+  selectDreamAvatar: (dreamAvatarId: DreamAvatarId) => Promise<number>;
   rerollDreamAvatarOffer: () => Promise<number>;
 
   // --- navigation ---
-  enterSite: (siteId: string) => Promise<number>;
-  travelToDreamscape: (nodeId: string) => Promise<number>;
+  enterSite: (siteId: SiteId) => Promise<number>;
+  travelToDreamscape: (nodeId: AtlasNodeId) => Promise<number>;
   regenerateAtlas: (completionLevel?: number) => Promise<number>;
   dismissStartingDeckPopup: () => Promise<number>;
 
   // --- deck & transfiguration ---
   addCard: (options: {
-    cardId: string;
+    cardId: CardId;
     transfiguration?: unknown;
     source?: unknown;
   }) => Promise<number>;
-  removeDeckEntry: (entryId: string) => Promise<number>;
+  removeDeckEntry: (entryId: DeckEntryId) => Promise<number>;
   purgeDeckCards: (
-    siteId: string,
-    entryIds: readonly string[],
+    siteId: SiteId,
+    entryIds: readonly DeckEntryId[],
   ) => Promise<number>;
-  duplicateDeckEntry: (entryId: string) => Promise<number>;
+  duplicateDeckEntry: (entryId: DeckEntryId) => Promise<number>;
   setDeckEntryStatOverride: (
-    entryId: string,
+    entryId: DeckEntryId,
     override: unknown,
   ) => Promise<number>;
-  setDeckEntryKeywords: (entryId: string, keywords: unknown) => Promise<number>;
-  setDeckEntryType: (entryId: string, typeChange: unknown) => Promise<number>;
+  setDeckEntryKeywords: (
+    entryId: DeckEntryId,
+    keywords: unknown,
+  ) => Promise<number>;
+  setDeckEntryType: (
+    entryId: DeckEntryId,
+    typeChange: unknown,
+  ) => Promise<number>;
   transfigureCard: (
-    entryId: string,
+    entryId: DeckEntryId,
     transfiguration: unknown,
   ) => Promise<number>;
   acceptTransfigurationChoice: (
-    siteId: string,
-    entryId: string,
+    siteId: SiteId,
+    entryId: DeckEntryId,
   ) => Promise<number>;
-  acceptDuplicationChoice: (siteId: string, entryId: string) => Promise<number>;
+  acceptDuplicationChoice: (
+    siteId: SiteId,
+    entryId: DeckEntryId,
+  ) => Promise<number>;
   purgeAllNightmareCards: () => Promise<number>;
   purgeRandomNightmareCards: (count: number) => Promise<number>;
 
   // --- dreamsigns ---
-  addDreamsign: (dreamsignId: string) => Promise<number>;
-  removeDreamsign: (dreamsignId: string) => Promise<number>;
-  setDreamsignPool: (ids: readonly string[]) => Promise<number>;
+  addDreamsign: (dreamsignId: DreamsignId) => Promise<number>;
+  removeDreamsign: (dreamsignId: DreamsignId) => Promise<number>;
+  setDreamsignPool: (ids: readonly DreamsignId[]) => Promise<number>;
 
   // --- draft ---
   setDraftState: (draftState: unknown) => Promise<number>;
-  pickDraftCard: (packIndex: number, cardId: string) => Promise<number>;
-  rerollDraftOffer: (siteId: string) => Promise<number>;
-  enterDraftSite: (siteId: string, runId?: string) => Promise<number>;
+  pickDraftCard: (packIndex: number, cardId: CardId) => Promise<number>;
+  rerollDraftOffer: (siteId: SiteId) => Promise<number>;
+  enterDraftSite: (siteId: SiteId, runId?: JourneyId) => Promise<number>;
 
   // --- sites ---
   openSite: (
-    siteId: string,
-    runId?: string,
+    siteId: SiteId,
+    runId?: JourneyId,
     siteType?: SiteType,
     gambleGameId?: GambleGameId,
   ) => Promise<number>;
   chooseRandomSite: (
-    siteId: string,
+    siteId: SiteId,
     siteType: RandomSiteDestinationType,
   ) => Promise<number>;
   resolveExplorationChoice: (
-    siteId: string,
-    actionId: string,
+    siteId: SiteId,
+    actionId: ExplorationActionId,
     selection?: unknown,
   ) => Promise<number>;
-  completeAugury: (siteId: string) => Promise<number>;
-  acceptReward: (siteId: string, choiceIndex?: number) => Promise<number>;
+  completeAugury: (siteId: SiteId) => Promise<number>;
+  acceptReward: (siteId: SiteId, choiceIndex?: number) => Promise<number>;
   acceptDreamsignOffer: (
-    siteId: string,
-    dreamsignId: string,
+    siteId: SiteId,
+    dreamsignId: DreamsignId,
   ) => Promise<number>;
-  rejectDreamsignOffer: (siteId: string) => Promise<number>;
-  acceptEssence: (siteId: string, runId?: string) => Promise<number>;
-  rerollAugury: (siteId: string) => Promise<number>;
+  rejectDreamsignOffer: (siteId: SiteId) => Promise<number>;
+  acceptEssence: (siteId: SiteId, runId?: JourneyId) => Promise<number>;
+  rerollAugury: (siteId: SiteId) => Promise<number>;
   forceAuguryArchetype: (
-    siteId: string,
-    archetypeId: string,
+    siteId: SiteId,
+    archetypeId: AuguryArchetypeId,
   ) => Promise<number>;
-  completeSite: (siteId: string, runId?: string) => Promise<number>;
-  placeGravokWager: (
-    siteId: string,
-    gateId: GravokGateId,
-  ) => Promise<number>;
+  completeSite: (siteId: SiteId, runId?: JourneyId) => Promise<number>;
+  placeGravokWager: (siteId: SiteId, gateId: GravokGateId) => Promise<number>;
   settleGravokWager: (
-    siteId: string,
-    shuffleCommitment: string,
-    runId?: string,
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
+    runId?: JourneyId,
   ) => Promise<number>;
   playAgainGravokWager: (
-    siteId: string,
-    previousShuffleCommitment: string,
-    runId?: string,
+    siteId: SiteId,
+    previousShuffleCommitment: ShuffleCommitment,
+    runId?: JourneyId,
   ) => Promise<number>;
   replaceGravokWagerDreamsign: (
-    siteId: string,
-    replacedDreamsignId: string,
+    siteId: SiteId,
+    replacedDreamsignId: DreamsignId,
   ) => Promise<number>;
-  drawTidemarkLadderClimb: (siteId: string) => Promise<number>;
+  drawTidemarkLadderClimb: (siteId: SiteId) => Promise<number>;
   settleTidemarkLadderClimb: (
-    siteId: string,
-    shuffleCommitment: string,
-    runId?: string,
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
+    runId?: JourneyId,
   ) => Promise<number>;
   replaceTidemarkLadderClimbDreamsign: (
-    siteId: string,
-    replacedDreamsignId: string,
+    siteId: SiteId,
+    replacedDreamsignId: DreamsignId,
   ) => Promise<number>;
-  drawStarwayStairs: (siteId: string) => Promise<number>;
+  drawStarwayStairs: (siteId: SiteId) => Promise<number>;
   settleStarwayStairs: (
-    siteId: string,
-    shuffleCommitment: string,
-    runId?: string,
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
+    runId?: JourneyId,
   ) => Promise<number>;
   cashOutStarwayStairs: (
-    siteId: string,
-    shuffleCommitment: string,
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
   ) => Promise<number>;
   playAgainStarwayStairs: (
-    siteId: string,
-    previousShuffleCommitment: string,
-    runId?: string,
+    siteId: SiteId,
+    previousShuffleCommitment: ShuffleCommitment,
+    runId?: JourneyId,
   ) => Promise<number>;
-  drawFourSuitReprise: (siteId: string, entryId: string) => Promise<number>;
+  drawFourSuitReprise: (
+    siteId: SiteId,
+    entryId: DeckEntryId,
+  ) => Promise<number>;
   settleFourSuitReprise: (
-    siteId: string,
-    shuffleCommitment: string,
-    runId?: string,
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
+    runId?: JourneyId,
   ) => Promise<number>;
   chooseFourSuitRepriseTransfiguration: (
-    siteId: string,
-    shuffleCommitment: string,
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
     type: TransfigurationType,
   ) => Promise<number>;
   playAgainFourSuitReprise: (
-    siteId: string,
-    previousShuffleCommitment: string,
-    runId?: string,
+    siteId: SiteId,
+    previousShuffleCommitment: ShuffleCommitment,
+    runId?: JourneyId,
   ) => Promise<number>;
-  dealBlackjack: (siteId: string) => Promise<number>;
-  hitBlackjack: (siteId: string) => Promise<number>;
-  standBlackjack: (siteId: string) => Promise<number>;
+  dealBlackjack: (siteId: SiteId) => Promise<number>;
+  hitBlackjack: (siteId: SiteId) => Promise<number>;
+  standBlackjack: (siteId: SiteId) => Promise<number>;
   settleBlackjack: (
-    siteId: string,
-    shuffleCommitment: string,
-    runId?: string,
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
+    runId?: JourneyId,
   ) => Promise<number>;
   playAgainBlackjack: (
-    siteId: string,
-    previousShuffleCommitment: string,
-    runId?: string,
+    siteId: SiteId,
+    previousShuffleCommitment: ShuffleCommitment,
+    runId?: JourneyId,
   ) => Promise<number>;
 
   // --- merchant & shop ---
-  acceptMerchantOffer: (siteId: string, offer?: unknown) => Promise<number>;
-  declineMerchant: (siteId: string) => Promise<number>;
-  buyShopSlot: (siteId: string, slotIndex: number) => Promise<number>;
-  rerollShop: (siteId: string) => Promise<number>;
+  acceptMerchantOffer: (siteId: SiteId, offer?: unknown) => Promise<number>;
+  declineMerchant: (siteId: SiteId) => Promise<number>;
+  buyShopSlot: (siteId: SiteId, slotIndex: number) => Promise<number>;
+  rerollShop: (siteId: SiteId) => Promise<number>;
   grantFreeRerolls: (count: number) => Promise<number>;
   applyShopDiscount: (percent: number) => Promise<number>;
 
   // --- modifiers & atlas ---
   pushBattleModifier: (modifier: unknown) => Promise<number>;
   pushTemporaryNightmareGrant: (payload: {
-    cardId: string;
+    cardId: CardId;
     count: number;
     battlesRemaining: number;
     source: string;
   }) => Promise<number>;
   banSiteType: (
-    siteType: string,
+    siteType: SiteType,
     dreamscapesRemaining: number,
   ) => Promise<number>;
   boostSiteAppearance: (
-    siteType: string,
+    siteType: SiteType,
     percent: number,
     dreamscapesRemaining: number,
   ) => Promise<number>;
   replaceSiteType: (
-    nodeId: string,
-    fromSiteType: string,
-    toSiteType: string,
+    nodeId: AtlasNodeId,
+    fromSiteType: SiteType,
+    toSiteType: SiteType,
   ) => Promise<number>;
-  addSiteToDreamscape: (nodeId: string, siteType: string) => Promise<number>;
+  addSiteToDreamscape: (
+    nodeId: AtlasNodeId,
+    siteType: SiteType,
+  ) => Promise<number>;
   setCardSourceDebug: (state: unknown) => Promise<number>;
 
   // --- battle lifecycle bridges ---
@@ -274,53 +314,62 @@ export interface CoopActions {
 
   // --- battle events ---
   beginBattle: (
-    siteId: string,
+    siteId: SiteId,
     seedOverride?: number | null,
   ) => Promise<number>;
   setBattleAutomation: (enabled: boolean) => Promise<number>;
   battleCommand: (
     command: unknown,
-    intentKey?: string,
+    intentKey?: IntentKey,
     actor?: string,
   ) => Promise<number>;
   battleRepositionCharacter: (
-    battleCardId: string,
+    battleCardId: BattleCardId,
     destination: {
       readonly side: "player";
       readonly zone: "backRank" | "frontRank";
-      readonly slotId: string;
+      readonly slotId: BattlefieldSlotId;
     },
   ) => Promise<number>;
   battlePlayCard: (
-    battleCardId: string,
-    targetBattleCardIds: readonly string[],
-    intentKey?: string,
+    battleCardId: BattleCardId,
+    targetBattleCardIds: readonly BattleCardId[],
+    intentKey?: IntentKey,
     actor?: string,
     aiChoices?: unknown,
     characterDestination?: {
       readonly side: "player" | "enemy";
       readonly zone: "backRank";
-      readonly slotId: string;
+      readonly slotId: BattlefieldSlotId;
     },
-    tutorialAiActionOverrideId?: string,
+    tutorialAiActionOverrideId?: TutorialAiActionOverrideId,
   ) => Promise<number>;
   /** Submit an ordered list of battle commands as one all-or-nothing event. */
   battleGesture: (
     commands: readonly unknown[],
-    intentKey?: string,
+    intentKey?: IntentKey,
     actor?: string,
   ) => Promise<number>;
-  battleAiBlock: (aiSide: string, actor: string, intentKey?: string) => Promise<number>;
+  battleAiBlock: (
+    aiSide: BattleSide,
+    actor: string,
+    intentKey?: IntentKey,
+  ) => Promise<number>;
   completeTutorialBattlePresentation: (
-    presentationId: string,
-    intentKey: string,
+    presentationId: PresentationId,
+    intentKey: IntentKey,
     actor: string,
     messageIndex?: number,
   ) => Promise<number>;
-  resolvePrompt: (promptId: number, resolution: unknown, intentKey?: string, actor?: string) => Promise<number>;
+  resolvePrompt: (
+    promptId: number,
+    resolution: unknown,
+    intentKey?: IntentKey,
+    actor?: string,
+  ) => Promise<number>;
   setCardNote: (
-    instanceId: string,
-    note: { noteId: string; text: string; expiry: unknown },
+    instanceId: BattleCardId,
+    note: { noteId: NoteId; text: string; expiry: unknown },
   ) => Promise<number>;
 }
 
@@ -334,13 +383,14 @@ export function makeActions(
   append: AppendFn,
   options: { selectionRulesVersion?: string | null } = {},
 ): CoopActions {
-  const selectionRulesVersion = options.selectionRulesVersion === undefined
-    ? SELECTION_RULES_VERSION
-    : options.selectionRulesVersion;
+  const selectionRulesVersion =
+    options.selectionRulesVersion === undefined
+      ? SELECTION_RULES_VERSION
+      : options.selectionRulesVersion;
   const emit = (
     type: string,
     payload: Record<string, unknown>,
-    intentKey?: string,
+    intentKey?: IntentKey,
   ): Promise<number> =>
     append({
       type,
@@ -349,9 +399,9 @@ export function makeActions(
     });
   const siteIntentKey = (
     kind: string,
-    siteId: string,
-    runId?: string,
-  ): string => `${kind}:${runId ?? "unscoped"}:${siteId}`;
+    siteId: SiteId,
+    runId?: JourneyId,
+  ): IntentKey => asIntentKey(`${kind}:${runId ?? "unscoped"}:${siteId}`);
 
   return {
     // --- standalone front door ---
@@ -384,7 +434,7 @@ export function makeActions(
       emit(
         "COMPLETE_TUTORIAL_ACTION",
         { runId, actionId },
-        `tutorial:${runId}:complete:${actionId}`,
+        asIntentKey(`tutorial:${runId}:complete:${actionId}`),
       ),
     takePlaytestControl: (previousControllerClientId) =>
       emit("TAKE_PLAYTEST_CONTROL", { previousControllerClientId }),
@@ -392,19 +442,19 @@ export function makeActions(
       emit(
         "BEGIN_TUTORIAL_BATTLE",
         { tutorialRunId },
-        `tutorial-battle:${tutorialRunId}:begin`,
+        asIntentKey(`tutorial-battle:${tutorialRunId}:begin`),
       ),
     restartTutorialBattle: (battleId) =>
       emit(
         "RESTART_TUTORIAL_BATTLE",
         { battleId },
-        `tutorial-battle:${battleId}:restart`,
+        asIntentKey(`tutorial-battle:${battleId}:restart`),
       ),
     exitTutorialBattle: (battleId) =>
       emit(
         "EXIT_TUTORIAL_BATTLE",
         { battleId },
-        `tutorial-battle:${battleId}:exit`,
+        asIntentKey(`tutorial-battle:${battleId}:exit`),
       ),
     openCardTutorialGuidance: (screenKey, cardIds) =>
       emit(
@@ -413,13 +463,13 @@ export function makeActions(
           screenKey,
           cardIds: [...cardIds],
         },
-        `card-tutorial:${screenKey}:open`,
+        asIntentKey(`card-tutorial:${screenKey}:open`),
       ),
     completeCardTutorialGuidance: (presentationId, screenKey) =>
       emit(
         "COMPLETE_CARD_TUTORIAL_GUIDANCE",
         { presentationId },
-        `card-tutorial:${screenKey}:complete`,
+        asIntentKey(`card-tutorial:${screenKey}:complete`),
       ),
 
     // --- essence & limits ---
@@ -502,9 +552,11 @@ export function makeActions(
           ...(gambleGameId === undefined ? {} : { gambleGameId }),
           ...(selectionRulesVersion === null ? {} : { selectionRulesVersion }),
         },
-        gambleGameId === undefined
-          ? siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)
-          : `${siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)}:${gambleGameId}`,
+        asIntentKey(
+          gambleGameId === undefined
+            ? siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)
+            : `${siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)}:${gambleGameId}`,
+        ),
       ),
     chooseRandomSite: (siteId, siteType) =>
       emit("CHOOSE_RANDOM_SITE", { siteId, siteType }),
@@ -546,13 +598,17 @@ export function makeActions(
       emit(
         "SETTLE_GRAVOK_WAGER",
         { siteId, shuffleCommitment },
-        `${siteIntentKey("settle-gravok-wager", siteId, runId)}:${shuffleCommitment}`,
+        asIntentKey(
+          `${siteIntentKey("settle-gravok-wager", siteId, runId)}:${shuffleCommitment}`,
+        ),
       ),
     playAgainGravokWager: (siteId, previousShuffleCommitment, runId) =>
       emit(
         "PLAY_AGAIN_GRAVOK_WAGER",
         { siteId, previousShuffleCommitment },
-        `${siteIntentKey("play-again-gravok-wager", siteId, runId)}:${previousShuffleCommitment}`,
+        asIntentKey(
+          `${siteIntentKey("play-again-gravok-wager", siteId, runId)}:${previousShuffleCommitment}`,
+        ),
       ),
     replaceGravokWagerDreamsign: (siteId, replacedDreamsignId) =>
       emit("REPLACE_GRAVOK_WAGER_DREAMSIGN", {
@@ -565,23 +621,23 @@ export function makeActions(
       emit(
         "SETTLE_TIDEMARK_LADDER_CLIMB",
         { siteId, shuffleCommitment },
-        `${siteIntentKey("settle-tidemark-ladder-climb", siteId, runId)}:${shuffleCommitment}`,
+        asIntentKey(
+          `${siteIntentKey("settle-tidemark-ladder-climb", siteId, runId)}:${shuffleCommitment}`,
+        ),
       ),
-    replaceTidemarkLadderClimbDreamsign: (
-      siteId,
-      replacedDreamsignId,
-    ) =>
+    replaceTidemarkLadderClimbDreamsign: (siteId, replacedDreamsignId) =>
       emit("REPLACE_TIDEMARK_LADDER_CLIMB_DREAMSIGN", {
         siteId,
         replacedDreamsignId,
       }),
-    drawStarwayStairs: (siteId) =>
-      emit("DRAW_STARWAY_STAIRS", { siteId }),
+    drawStarwayStairs: (siteId) => emit("DRAW_STARWAY_STAIRS", { siteId }),
     settleStarwayStairs: (siteId, shuffleCommitment, runId) =>
       emit(
         "SETTLE_STARWAY_STAIRS",
         { siteId, shuffleCommitment },
-        `${siteIntentKey("settle-starway-stairs", siteId, runId)}:${shuffleCommitment}`,
+        asIntentKey(
+          `${siteIntentKey("settle-starway-stairs", siteId, runId)}:${shuffleCommitment}`,
+        ),
       ),
     cashOutStarwayStairs: (siteId, shuffleCommitment) =>
       emit("CASH_OUT_STARWAY_STAIRS", { siteId, shuffleCommitment }),
@@ -589,7 +645,9 @@ export function makeActions(
       emit(
         "PLAY_AGAIN_STARWAY_STAIRS",
         { siteId, previousShuffleCommitment },
-        `${siteIntentKey("play-again-starway-stairs", siteId, runId)}:${previousShuffleCommitment}`,
+        asIntentKey(
+          `${siteIntentKey("play-again-starway-stairs", siteId, runId)}:${previousShuffleCommitment}`,
+        ),
       ),
     drawFourSuitReprise: (siteId, entryId) =>
       emit("DRAW_FOUR_SUIT_REPRISE", { siteId, entryId }),
@@ -597,27 +655,23 @@ export function makeActions(
       emit(
         "SETTLE_FOUR_SUIT_REPRISE",
         { siteId, shuffleCommitment },
-        `${siteIntentKey("settle-four-suit-reprise", siteId, runId)}:${shuffleCommitment}`,
+        asIntentKey(
+          `${siteIntentKey("settle-four-suit-reprise", siteId, runId)}:${shuffleCommitment}`,
+        ),
       ),
-    chooseFourSuitRepriseTransfiguration: (
-      siteId,
-      shuffleCommitment,
-      type,
-    ) =>
+    chooseFourSuitRepriseTransfiguration: (siteId, shuffleCommitment, type) =>
       emit("CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION", {
         siteId,
         shuffleCommitment,
         type,
       }),
-    playAgainFourSuitReprise: (
-      siteId,
-      previousShuffleCommitment,
-      runId,
-    ) =>
+    playAgainFourSuitReprise: (siteId, previousShuffleCommitment, runId) =>
       emit(
         "PLAY_AGAIN_FOUR_SUIT_REPRISE",
         { siteId, previousShuffleCommitment },
-        `${siteIntentKey("play-again-four-suit-reprise", siteId, runId)}:${previousShuffleCommitment}`,
+        asIntentKey(
+          `${siteIntentKey("play-again-four-suit-reprise", siteId, runId)}:${previousShuffleCommitment}`,
+        ),
       ),
     dealBlackjack: (siteId) => emit("DEAL_BLACKJACK", { siteId }),
     hitBlackjack: (siteId) => emit("HIT_BLACKJACK", { siteId }),
@@ -626,13 +680,17 @@ export function makeActions(
       emit(
         "SETTLE_BLACKJACK",
         { siteId, shuffleCommitment },
-        `${siteIntentKey("settle-blackjack", siteId, runId)}:${shuffleCommitment}`,
+        asIntentKey(
+          `${siteIntentKey("settle-blackjack", siteId, runId)}:${shuffleCommitment}`,
+        ),
       ),
     playAgainBlackjack: (siteId, previousShuffleCommitment, runId) =>
       emit(
         "PLAY_AGAIN_BLACKJACK",
         { siteId, previousShuffleCommitment },
-        `${siteIntentKey("play-again-blackjack", siteId, runId)}:${previousShuffleCommitment}`,
+        asIntentKey(
+          `${siteIntentKey("play-again-blackjack", siteId, runId)}:${previousShuffleCommitment}`,
+        ),
       ),
 
     // --- merchant & shop ---
@@ -692,14 +750,24 @@ export function makeActions(
         battleCardId,
         destination,
       }),
-    battlePlayCard: (battleCardId, targetBattleCardIds, intentKey, actor, aiChoices, characterDestination, tutorialAiActionOverrideId) =>
+    battlePlayCard: (
+      battleCardId,
+      targetBattleCardIds,
+      intentKey,
+      actor,
+      aiChoices,
+      characterDestination,
+      tutorialAiActionOverrideId,
+    ) =>
       append({
         type: "BATTLE_PLAY_CARD",
         payload: {
           battleCardId,
           targetBattleCardIds: [...targetBattleCardIds],
           ...(aiChoices === undefined ? {} : { aiChoices }),
-          ...(characterDestination === undefined ? {} : { characterDestination }),
+          ...(characterDestination === undefined
+            ? {}
+            : { characterDestination }),
           ...(tutorialAiActionOverrideId === undefined
             ? {}
             : { tutorialAiActionOverrideId }),

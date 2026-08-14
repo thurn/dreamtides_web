@@ -2,11 +2,12 @@ import { describe, expect, it } from "vitest";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../../test-support";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { finalWitness } from "./final-witness";
+import { asBattleCardId } from "../../../types/identifiers";
 
 describe("starter character #514", () => {
   it("plays the character into the back rank without resolving its rules text", () => {
     const self: AiCard = {
-      battleCardId: "witness",
+      battleCardId: asBattleCardId("witness"),
       cardNumber: 514,
       name: "card",
       energyCost: 3,
@@ -15,7 +16,7 @@ describe("starter character #514", () => {
       figmentCount: 1,
       canChallengeThisTurn: true,
     };
-    const deckCard = { ...self, battleCardId: "deck-card" };
+    const deckCard = { ...self, battleCardId: asBattleCardId("deck-card") };
     const model: ForwardModel = {
       aiEnergy: 5,
       aiMaxEnergy: 5,

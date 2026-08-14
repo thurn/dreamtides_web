@@ -3,6 +3,7 @@ import type { CardData } from "../types/cards";
 import type { GeneratedPool } from "../draft/pool";
 import { buildIdIndex, resolvePool } from "./cards-v2-database";
 import { asCardId, asCardName } from "../types/card-identity";
+import { asDreamAvatarId } from "../types/identifiers";
 
 /** The synthetic card id a `makeCard` record carries for a given card number. */
 function idFor(cardNumber: number): string {
@@ -13,10 +14,12 @@ function idFor(cardNumber: number): string {
  * Minimal card record factory. Only the fields used by the UUID index and cap
  * fixtures matter here; the rest are stable placeholders.
  */
-function makeCard(overrides: Partial<CardData> & {
-  name: string;
-  cardNumber: number;
-}): CardData {
+function makeCard(
+  overrides: Partial<CardData> & {
+    name: string;
+    cardNumber: number;
+  },
+): CardData {
   return {
     id: asCardId(idFor(overrides.cardNumber)),
     cardType: "Character",
@@ -53,7 +56,7 @@ function makePool(copiesByCardNumber: Record<number, number>): GeneratedPool {
     variant: "tides4",
     tideDeckIds: [],
     tides4Provenance: {
-      dreamAvatarId: "test-avatar",
+      dreamAvatarId: asDreamAvatarId("test-avatar"),
       signatureless: false,
       borrowedArchetypeName: null,
       dealSize: size,
@@ -70,7 +73,14 @@ function makePool(copiesByCardNumber: Record<number, number>): GeneratedPool {
 describe("resolvePool copy caps", () => {
   const db = new Map<number, CardData>([
     [10, makeCard({ name: asCardName("Common"), cardNumber: 10 })],
-    [11, makeCard({ name: asCardName("Special"), cardNumber: 11, rarity: "Special" })],
+    [
+      11,
+      makeCard({
+        name: asCardName("Special"),
+        cardNumber: 11,
+        rarity: "Special",
+      }),
+    ],
   ]);
   const idIndex = buildIdIndex(db);
   const rarityCopyCaps = new Map([[11, 1]]);

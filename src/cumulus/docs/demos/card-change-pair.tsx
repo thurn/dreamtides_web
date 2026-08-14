@@ -6,6 +6,7 @@ import {
 import { demoCard, demoInstanceId } from "./promotion-fixtures";
 import type { CumulusComponent } from "../registry";
 import { DemoControls, DemoSelect } from "./promotion-demo-controls";
+import { asDeckEntryId } from "../../../types/identifiers";
 function Demo() {
   const [kind, setKind] = useState<CardChangeKind>("transfiguration");
   const [reveal, setReveal] = useState<"before" | "complete">("complete");
@@ -36,11 +37,11 @@ function Demo() {
           changeId: "93000000-0000-4000-8000-000000000001",
           kind,
           before: {
-            entryId: demoInstanceId(1),
+            entryId: asDeckEntryId(demoInstanceId(1)),
             card: demoCard(1, "Wayfinder"),
           },
           after: {
-            entryId: demoInstanceId(2),
+            entryId: asDeckEntryId(demoInstanceId(2)),
             card: demoCard(2, "Wayfinder"),
           },
         }}

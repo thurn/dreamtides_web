@@ -10,6 +10,8 @@ import type {
   DreamsignTemplate,
   ResolvedDreamAvatarPackage,
 } from "../types/content";
+import { asDreamAvatarId } from "../types/identifiers";
+import { asDreamsignId } from "../types/identifiers";
 
 function makeCard(num: number, name: string): CardData {
   return {
@@ -46,7 +48,7 @@ function makeDraftState(
 function makeResolvedPackage(): ResolvedDreamAvatarPackage {
   return {
     dreamAvatar: {
-      id: "dream-avatar-1",
+      id: asDreamAvatarId("dream-avatar-1"),
       name: "Caller of Depths",
       title: "Witness of Logs",
       renderedText: "Test",
@@ -54,7 +56,11 @@ function makeResolvedPackage(): ResolvedDreamAvatarPackage {
       startingEssence: 245,
     },
     draftPoolCopiesByCard: { "1": 2, "2": 1 },
-    dreamsignPoolIds: ["sign-1", "sign-2", "sign-3"],
+    dreamsignPoolIds: [
+      asDreamsignId("sign-1"),
+      asDreamsignId("sign-2"),
+      asDreamsignId("sign-3"),
+    ],
     mandatoryOnlyPoolSize: 120,
     draftPoolSize: 198,
     doubledCardCount: 41,
@@ -65,17 +71,17 @@ function makeResolvedPackage(): ResolvedDreamAvatarPackage {
 
 const DREAMSIGN_TEMPLATES: readonly DreamsignTemplate[] = [
   {
-    id: "sign-1",
+    id: asDreamsignId("sign-1"),
     name: "First Sign",
     effectDescription: "Test",
   },
   {
-    id: "sign-2",
+    id: asDreamsignId("sign-2"),
     name: "Second Sign",
     effectDescription: "Test",
   },
   {
-    id: "sign-3",
+    id: asDreamsignId("sign-3"),
     name: "Third Sign",
     effectDescription: "Test",
   },
@@ -142,7 +148,7 @@ describe("extractPackageDebugInfo", () => {
   it("summarizes remaining and spent Dreamsign pool entries", () => {
     const result = extractPackageDebugInfo(
       makeResolvedPackage(),
-      ["sign-2"],
+      [asDreamsignId("sign-2")],
       DREAMSIGN_TEMPLATES,
     );
 

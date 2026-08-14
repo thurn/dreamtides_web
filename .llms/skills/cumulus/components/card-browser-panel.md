@@ -22,15 +22,15 @@ Toolbar controls and drag, context-menu, and mobile double-tap gestures belong t
 | --- | --- | --- | --- | --- |
 | `toolbar` | `CardBrowserToolbar` | no | — | Optional structured search, sort, and filter toolbar above the card grid. |
 | `presentation` | `CardBrowserPresentation` = `"embedded" \| "overlay" \| "fullScreen"` | no | `embedded` | Host integration. `overlay` is floating on desktop and full-bleed on mobile. |
-| `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
-| `onCardDragStart` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry begins a native drag. |
-| `onCardDragEnd` | `((entryId: string, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry's native drag ends. |
-| `onCardContextMenu` | `((entryId: string, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when a card entry requests its contextual actions. |
-| `onCardDoubleTap` | `((entryId: string) => void)` | no | — | Fires when a card receives two quick activations. While present, a primary card press waits briefly so a second tap can take precedence. |
+| `onCardPress` | `((entryId: EntryId) => void)` | no | — | Fires when an enabled card tile is activated. |
+| `onCardDragStart` | `((entryId: EntryId, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry begins a native drag. |
+| `onCardDragEnd` | `((entryId: EntryId, event: DragEvent<HTMLDivElement>) => void)` | no | — | Fires when a draggable card entry's native drag ends. |
+| `onCardContextMenu` | `((entryId: EntryId, event: MouseEvent<HTMLDivElement, MouseEvent>) => void)` | no | — | Fires when a card entry requests its contextual actions. |
+| `onCardDoubleTap` | `((entryId: EntryId) => void)` | no | — | Fires when a card receives two quick activations. While present, a primary card press waits briefly so a second tap can take precedence. |
 | `title` | `LocalizedString` | yes | — | Header title, rendered as an `<h2>`. |
 | `subtitle` | `LocalizedString` | no | — | Optional intro line under the title. |
 | `rightAccessory` | `CardPanelAccessory` | no | — | Optional trailing header action. |
-| `cards` | `readonly CardChoiceGridCardView[]` | yes | — | Resolved cards rendered in order. |
+| `cards` | `readonly CardGalleryCardView<EntryId>[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `LocalizedString` | no | — | Empty-state copy shown when `cards` is empty. |
 | `testId` | `string` | no | — | Test id for the panel root. |
 

@@ -16,6 +16,8 @@ import {
   generateMerchantEncounter,
   generateMerchantEncounterWithDebug,
 } from "./generateMerchantEncounter";
+import { asSiteId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 function poolCards(count: number): CardData[] {
   const cards: CardData[] = [];
@@ -37,7 +39,12 @@ function dreamsignTemplates(count: number) {
   const templates = [];
   for (let i = 0; i < count; i += 1) {
     const id = `dsign-${String(i)}`;
-    templates.push(makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(i)}` }));
+    templates.push(
+      makeMerchantTestDreamsignTemplate({
+        id: asDreamsignId(id),
+        name: `Sign ${String(i)}`,
+      }),
+    );
   }
   return templates;
 }
@@ -58,7 +65,7 @@ function contextFor(content: JourneyContent, state: JourneyState) {
   return buildMerchantContext({
     journeyState: state,
     journeyContent: content,
-    site: makeMerchantTestSite({ id: "site-gen-fixture" }),
+    site: makeMerchantTestSite({ id: asSiteId("site-gen-fixture") }),
   });
 }
 
@@ -109,7 +116,9 @@ describe("generateMerchantEncounter", () => {
   it("records roll attempts and attaches a trace to each offer", () => {
     const content = fixtureContent({});
     for (let s = 0; s < 10; s += 1) {
-      const state = makeMerchantTestJourneyState({ seed: `rolls-${String(s)}` });
+      const state = makeMerchantTestJourneyState({
+        seed: `rolls-${String(s)}`,
+      });
       const { encounter, debug } = generateMerchantEncounterWithDebug(
         contextFor(content, state),
       );
@@ -160,7 +169,10 @@ describe("generateMerchantEncounter", () => {
 
   it("still yields a valid encounter for an empty deck", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestJourneyState({ seed: "empty-deck", deck: [] });
+    const state = makeMerchantTestJourneyState({
+      seed: "empty-deck",
+      deck: [],
+    });
     const encounter = generateMerchantEncounter(contextFor(content, state));
     expect(encounter.offers).toHaveLength(2);
     expect(encounter.offers[0].family).not.toBe(encounter.offers[1].family);

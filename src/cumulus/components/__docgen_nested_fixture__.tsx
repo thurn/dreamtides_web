@@ -9,6 +9,11 @@
 
 import type { DocgenFixtureProps } from "./__docgen_fixture__";
 
+declare const fixtureBrand: unique symbol;
+type NestedFixtureBrand = string & {
+  readonly [fixtureBrand]: "NestedFixtureBrand";
+};
+
 /** A nested model the fixture prop points at. */
 export interface NestedFixtureModel {
   /** How the widget is labelled. */
@@ -40,6 +45,8 @@ interface NestedFixtureProps {
   models: NestedFixtureModel[];
   /** A plain flag with no nested shape. */
   active: boolean;
+  /** A primitive-backed nominal value. */
+  brandedValue: NestedFixtureBrand;
   /** A discriminated model union. */
   variant: NestedFixtureVariant;
 }
@@ -51,11 +58,13 @@ export function NestedFixture({
   model,
   models,
   active,
+  brandedValue,
   variant,
 }: NestedFixtureProps) {
   return (
     <div
       data-active={active}
+      data-branded-value={brandedValue}
       data-label={model.label}
       data-variant={variant.kind}
     >

@@ -11,8 +11,9 @@ import {
   buildExplorationResolutionLog,
 } from "./exploration-logging-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
+import type { ExplorationActionId, SiteId } from "../../types/identifiers";
 
-export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function ExplorationSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, journeyContent, mutations } = useJourney();
   const current = selectCurrentSite(state, siteId, "Exploration");
   const node = current?.node ?? null;
@@ -56,9 +57,9 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
       ...buildExplorationEntryLog(view, explorationRuntime),
     });
     logEventOnce(`exploration:${site.id}:guide:${guide.id}`, "dream_guide_presented", {
-      guideId: guide.id,
-      siteType: site.type,
-      isEnhanced: site.isEnhanced,
+        guideId: guide.id,
+        siteType: site.type,
+        isEnhanced: site.isEnhanced,
     });
   }, [explorationRuntime, guide, site, view]);
 
@@ -68,8 +69,8 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
     const log = buildExplorationResolutionLog(view, explorationRuntime);
     if (log === null) return;
     logEventOnce(`exploration:${site.id}:resolved:${resolution.actionId}`, "exploration_choice_resolved", {
-      siteId: site.id,
-      ...log,
+        siteId: site.id,
+        ...log,
     });
   }, [explorationRuntime, site, view]);
 
@@ -84,7 +85,7 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
   }, [explorationRuntime, site, view]);
 
   const handleResolve = useCallback(
-    (actionId: string, selection?: unknown) => {
+    (actionId: ExplorationActionId, selection?: unknown) => {
       if (site === null || explorationRuntime === null || view === null) return;
       logEvent("exploration_choice_requested", {
         siteId: site.id,

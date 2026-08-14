@@ -3,6 +3,7 @@ import { buildDreamwellDeck as buildConfiguredDreamwellDeck } from "./create-bat
 import { createBattleRng } from "../random";
 import type { DreamwellCard } from "../../data/dreamwell-database";
 import { opponentsFixture } from "../../testing/opponents-fixture";
+import { asDreamwellCardId } from "../../types/identifiers";
 
 const DREAMWELL_CONFIG = opponentsFixture().dreamwell;
 
@@ -21,7 +22,7 @@ function buildTestDreamwellDeck(
  */
 function makeCard(order: number, n: number): DreamwellCard {
   return {
-    id: `dw-${String(order)}-${String(n)}`,
+    id: asDreamwellCardId(`dw-${String(order)}-${String(n)}`),
     name: `Order ${String(order)} #${String(n)}`,
     renderedText: "",
     order,
@@ -132,8 +133,8 @@ describe("buildDreamwellDeck", () => {
   });
 
   it("returns an empty deck for an empty catalog without looping forever", () => {
-    expect(buildTestDreamwellDeck([], createBattleRng(1, "dreamwellDeck"))).toEqual(
-      [],
-    );
+    expect(
+      buildTestDreamwellDeck([], createBattleRng(1, "dreamwellDeck")),
+    ).toEqual([]);
   });
 });

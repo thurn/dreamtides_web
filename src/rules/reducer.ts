@@ -17,6 +17,7 @@
 // functions; `routeDomain` wraps their result over the fold state.
 
 import type { BounceReason, EventContext, GameEvent } from "../eventlog/types";
+import { intentKeyFromUnknown } from "../types/identifiers";
 import {
   CAS_EXEMPT_EVENT_TYPES,
   DECISION_NEUTRAL_EVENT_TYPES,
@@ -37,6 +38,8 @@ import * as sites from "./journey/sites";
 import * as cardTutorial from "./card-tutorial-guidance";
 import { assertFoldInvariants } from "./invariants";
 import { NIGHTMARE_CARD_ID } from "../data/nightmare";
+import { asSiteId } from "../types/identifiers";
+import { asClientId } from "../types/identifiers";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export type ReduceResult =
@@ -80,7 +83,7 @@ export function reduceGameEvent(
           ...state,
           playtestControl: {
             mode: "single-controller",
-            controllerClientId: event.actor,
+            controllerClientId: asClientId(event.actor),
           },
         }
       : state;
@@ -118,7 +121,11 @@ export function reduceGameEvent(
       result = {
         state: {
           ...routedState,
-          battle: { ...routedState.battle!, pendingPrompt: null, effectQueue: [] },
+          battle: {
+            ...routedState.battle!,
+            pendingPrompt: null,
+            effectQueue: [],
+          },
         },
         outcome: "applied",
       };
@@ -132,9 +139,10 @@ export function reduceGameEvent(
     return enforceInvariants(event, controlled);
   }
   const result = routeDomain(routedState, event, ctx);
-  const controlled = result.outcome === "bounced" && controlDecision === "claim"
-    ? { ...result, state }
-    : result;
+  const controlled =
+    result.outcome === "bounced" && controlDecision === "claim"
+      ? { ...result, state }
+      : result;
   return enforceInvariants(event, controlled);
 }
 
@@ -190,10 +198,8 @@ function authorizePlaytestIntent(
   if (event.type === "COMPLETE_TUTORIAL_BATTLE_PRESENTATION") {
     const controllerClientId = control.controllerClientId;
     return controllerClientId !== null &&
-      (
-        event.actor === controllerClientId ||
-        event.actor === `tutorial-ai:${controllerClientId}`
-      )
+      (event.actor === controllerClientId ||
+        event.actor === `tutorial-ai:${controllerClientId}`)
       ? "allow"
       : "reject";
   }
@@ -210,16 +216,13 @@ function authorizePlaytestIntent(
   return event.actor === control.controllerClientId ? "allow" : "reject";
 }
 
-function isPassiveHostedHandoff(
-  state: FoldState,
-  event: GameEvent,
-): boolean {
+function isPassiveHostedHandoff(state: FoldState, event: GameEvent): boolean {
   if (
     event.type === "BATTLE_COMMAND" &&
     battleEvents.isPassiveHostedBattleHandoff(
       state,
       event.payload,
-      event.intentKey,
+      intentKeyFromUnknown(event.intentKey) ?? undefined,
     )
   ) {
     return true;
@@ -236,7 +239,8 @@ function isPassiveHostedHandoff(
   if (event.type !== "COMPLETE_SITE") return false;
   const siteId = event.payload.siteId;
   if (typeof siteId !== "string") return false;
-  return readDraftSiteProgress(state.journey.draftState, siteId).isComplete;
+  return readDraftSiteProgress(state.journey.draftState, asSiteId(siteId))
+    .isComplete;
 }
 
 const TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES: ReadonlySet<string> = new Set([
@@ -258,8 +262,10 @@ function isFirstTutorialGameplayIntent(
   ) {
     return true;
   }
-  return state.battle?.mode?.kind === "tutorial" &&
-    TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES.has(event.type);
+  return (
+    state.battle?.mode?.kind === "tutorial" &&
+    TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES.has(event.type)
+  );
 }
 
 const PASSIVE_HOSTED_EVENT_TYPES: ReadonlySet<string> = new Set([
@@ -275,10 +281,7 @@ const PASSIVE_HOSTED_EVENT_TYPES: ReadonlySet<string> = new Set([
 
 function isPlayerControlledIntent(event: GameEvent): boolean {
   if (PASSIVE_HOSTED_EVENT_TYPES.has(event.type)) return false;
-  if (
-    event.actor.startsWith("tutorial-ai:") ||
-    event.actor.startsWith("ai:")
-  ) {
+  if (event.actor.startsWith("tutorial-ai:") || event.actor.startsWith("ai:")) {
     return false;
   }
   return true;
@@ -375,16 +378,14 @@ export function routeDomain(
   if (
     state.battle?.tutorialPresentation != null &&
     type !== "COMPLETE_TUTORIAL_BATTLE_PRESENTATION" &&
-    (
-      type === "END_BATTLE" ||
+    (type === "END_BATTLE" ||
       type === "BATTLE_COMMAND" ||
       type === "BATTLE_REPOSITION_CHARACTER" ||
       type === "BATTLE_PLAY_CARD" ||
       type === "BATTLE_GESTURE" ||
       type === "BATTLE_AI_BLOCK" ||
       type === "RESOLVE_PROMPT" ||
-      type === "SET_CARD_NOTE"
-    )
+      type === "SET_CARD_NOTE")
   ) {
     return bounce(state);
   }
@@ -423,7 +424,10 @@ export function routeDomain(
         battleEvents.restartTutorialBattle(state, payload, ctx, event.actor),
       );
     case "EXIT_TUTORIAL_BATTLE":
-      return foldCase(state, battleEvents.exitTutorialBattle(state, payload, ctx, event.actor));
+      return foldCase(
+        state,
+        battleEvents.exitTutorialBattle(state, payload, ctx, event.actor),
+      );
     case "OPEN_CARD_TUTORIAL_GUIDANCE":
       return foldCase(
         state,
@@ -448,7 +452,10 @@ export function routeDomain(
     case "TRAVEL_TO_DREAMSCAPE":
       return journeyCase(state, lifecycle.travelToDreamscape(journey, payload));
     case "REGENERATE_ATLAS":
-      return journeyCase(state, lifecycle.regenerateAtlas(journey, payload, ctx));
+      return journeyCase(
+        state,
+        lifecycle.regenerateAtlas(journey, payload, ctx),
+      );
     case "DISMISS_STARTING_DECK_POPUP":
       return journeyCase(state, lifecycle.dismissStartingDeckPopup(journey));
 
@@ -473,7 +480,10 @@ export function routeDomain(
     case "DUPLICATE_DECK_ENTRY":
       return journeyCase(state, deck.duplicateDeckEntry(journey, payload, ctx));
     case "SET_DECK_ENTRY_STAT_OVERRIDE":
-      return journeyCase(state, deck.setDeckEntryStatOverride(journey, payload));
+      return journeyCase(
+        state,
+        deck.setDeckEntryStatOverride(journey, payload),
+      );
     case "SET_DECK_ENTRY_KEYWORDS":
       return journeyCase(state, deck.setDeckEntryKeywords(journey, payload));
     case "SET_DECK_ENTRY_TYPE":
@@ -483,7 +493,10 @@ export function routeDomain(
     case "PURGE_ALL_NIGHTMARE_CARDS":
       return journeyCase(state, deck.purgeAllNightmareCards(journey));
     case "PURGE_RANDOM_NIGHTMARE_CARDS":
-      return journeyCase(state, deck.purgeRandomNightmareCards(journey, payload, ctx));
+      return journeyCase(
+        state,
+        deck.purgeRandomNightmareCards(journey, payload, ctx),
+      );
 
     case "ACCEPT_TRANSFIGURATION_CHOICE":
       return journeyCase(
@@ -603,13 +616,19 @@ export function routeDomain(
     case "APPLY_SHOP_DISCOUNT":
       return journeyCase(state, shop.applyShopDiscount(journey, payload));
     case "ACCEPT_MERCHANT_OFFER":
-      return journeyCase(state, shop.acceptMerchantOffer(journey, payload, ctx));
+      return journeyCase(
+        state,
+        shop.acceptMerchantOffer(journey, payload, ctx),
+      );
     case "DECLINE_MERCHANT":
       return journeyCase(state, shop.declineMerchant(journey, payload, ctx));
     case "PUSH_BATTLE_MODIFIER":
       return journeyCase(state, shop.pushBattleModifier(journey, payload));
     case "PUSH_TEMPORARY_NIGHTMARE_GRANT":
-      return journeyCase(state, shop.pushTemporaryNightmareGrant(journey, payload, ctx));
+      return journeyCase(
+        state,
+        shop.pushTemporaryNightmareGrant(journey, payload, ctx),
+      );
     case "BAN_SITE_TYPE":
       return journeyCase(state, shop.banSiteType(journey, payload));
     case "BOOST_SITE_APPEARANCE":
@@ -646,27 +665,52 @@ export function routeDomain(
     case "END_BATTLE":
       return foldCase(state, battleEvents.endBattle(state, payload, ctx));
     case "BATTLE_COMMAND":
-      return foldCase(state, battleEvents.battleCommand(state, payload, ctx, event.actor));
+      return foldCase(
+        state,
+        battleEvents.battleCommand(state, payload, ctx, event.actor),
+      );
     case "BATTLE_REPOSITION_CHARACTER":
       return foldCase(
         state,
-        battleEvents.battleRepositionCharacter(state, payload, ctx, event.actor),
+        battleEvents.battleRepositionCharacter(
+          state,
+          payload,
+          ctx,
+          event.actor,
+        ),
       );
     case "BATTLE_PLAY_CARD":
-      return foldCase(state, battleEvents.battlePlayCard(state, payload, ctx, event.actor));
+      return foldCase(
+        state,
+        battleEvents.battlePlayCard(state, payload, ctx, event.actor),
+      );
     case "BATTLE_GESTURE":
-      return foldCase(state, battleEvents.battleGesture(state, payload, ctx, event.actor));
+      return foldCase(
+        state,
+        battleEvents.battleGesture(state, payload, ctx, event.actor),
+      );
     case "BATTLE_AI_BLOCK":
-      return foldCase(state, battleEvents.battleAiBlock(state, payload, ctx, event.actor));
+      return foldCase(
+        state,
+        battleEvents.battleAiBlock(state, payload, ctx, event.actor),
+      );
     case "COMPLETE_TUTORIAL_BATTLE_PRESENTATION":
       return foldCase(
         state,
-        battleEvents.completeTutorialBattlePresentation(state, payload, ctx, event.actor),
+        battleEvents.completeTutorialBattlePresentation(
+          state,
+          payload,
+          ctx,
+          event.actor,
+        ),
       );
 
     // --- in-battle prompt resolution & card notes (touch the battle slice) ---
     case "RESOLVE_PROMPT":
-      return foldCase(state, battleEvents.resolvePrompt(state, payload, ctx, event.actor));
+      return foldCase(
+        state,
+        battleEvents.resolvePrompt(state, payload, ctx, event.actor),
+      );
     case "SET_CARD_NOTE":
       return foldCase(state, battleEvents.setCardNote(state, payload, ctx));
 
@@ -707,7 +751,7 @@ function takePlaytestControl(
       ...state,
       playtestControl: {
         ...state.playtestControl,
-        controllerClientId: actor,
+        controllerClientId: asClientId(actor),
       },
     },
   };

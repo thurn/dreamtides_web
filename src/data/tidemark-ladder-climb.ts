@@ -82,7 +82,7 @@ export function scoreTidemarkLadderClimbDreamsignCandidates(params: {
 }): TidemarkLadderClimbDreamsignCandidateScore[] {
   return params.templates
     .map((template) => {
-      const vector = new Map<string, number>();
+      const vector = new Map<import("../types/identifiers").TideId, number>();
       addTideIds(vector, template.tideIds ?? []);
       return {
         dreamsignId: template.id,

@@ -22,26 +22,15 @@ The optional stacked-copy card model reserves its complete fanned footprint befo
 | --- | --- | --- | --- | --- |
 | `presentation` | `CardPickerPresentation` = `"embedded" \| "overlay"` | no | `embedded` | Host integration. `overlay` is floating on desktop and full-bleed on mobile. |
 | `footerActions` | `readonly [CardPickerFooterAction] \| readonly [CardPickerFooterAction, CardPickerFooterAction]` | no | — | Optional one-or-two-action GlassButton footer below the card grid. |
-| `onCardPress` | `((entryId: string) => void)` | no | — | Fires when an enabled card tile is activated. |
-| `endAction` | `CardChoiceGridActionView` | no | — | Optional card-sized action appended after the cards. |
-| `onEndActionPress` | `((entryId: string) => void)` | no | — | Fires with the appended action's stable id when it is activated. |
+| `onCardPress` | `((entryId: EntryId) => void)` | no | — | Fires when an enabled card tile is activated. |
+| `endAction` | `CardGalleryActionView<EntryId>` | no | — | Optional card-sized action appended after the cards. |
+| `onEndActionPress` | `((entryId: EntryId) => void)` | no | — | Fires with the appended action's stable id when it is activated. |
 | `title` | `LocalizedString` | yes | — | Header title, rendered as an `<h2>`. |
 | `subtitle` | `LocalizedString` | no | — | Optional intro line under the title. |
 | `rightAccessory` | `CardPanelAccessory` | no | — | Optional trailing header action. |
-| `cards` | `readonly CardChoiceGridCardView[]` | yes | — | Resolved cards rendered in order. |
+| `cards` | `readonly CardGalleryCardView<EntryId>[]` | yes | — | Resolved cards rendered in order. |
 | `emptyLabel` | `LocalizedString` | no | — | Empty-state copy shown when `cards` is empty. |
 | `testId` | `string` | no | — | Test id for the panel root. |
-
-### `endAction`: the `CardChoiceGridActionView` model
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `entryId` | `string` | no | Stable action id reported through the action callback. |
-| `glyph` | `Glyph` | no | Large glyph that carries the action's visual identity. |
-| `label` | `LocalizedString` | no | Accessible action label. |
-| `caption` | `CardChoiceGridCaption` | no | Small uncontained line rendered below the glyph. |
-| `disabled` | `boolean` | yes | Detach interaction and visually recede the action. |
-| `testId` | `string` | yes | Optional stable test id on the action button. |
 
 ### `rightAccessory`: the `CardPanelAccessory` model
 

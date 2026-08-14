@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import { signOfArrival } from "./sign-of-arrival";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
+import { asBattleCardId } from "../../../types/identifiers";
 
-function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
+function makeCard(
+  overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
+): AiCard {
   return {
     name: "card",
     energyCost: 0,
@@ -35,13 +38,21 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 
 describe("Sign of Arrival (#518)", () => {
   it("canPlay requires 2 energy", () => {
-    const self = makeCard({ battleCardId: "herald", cardNumber: 518, energyCost: 2 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("herald"),
+      cardNumber: 518,
+      energyCost: 2,
+    });
     expect(signOfArrival.canPlay(makeModel({ aiEnergy: 1 }), self)).toBe(false);
     expect(signOfArrival.canPlay(makeModel({ aiEnergy: 2 }), self)).toBe(true);
   });
 
   it("play adds one character AiCard to hand and voids the event", () => {
-    const self = makeCard({ battleCardId: "herald", cardNumber: 518, energyCost: 2 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("herald"),
+      cardNumber: 518,
+      energyCost: 2,
+    });
     const model = makeModel({ aiEnergy: 3, aiHand: [self] });
 
     signOfArrival.play(model, self, null);
@@ -57,7 +68,10 @@ describe("Sign of Arrival (#518)", () => {
   });
 
   it("valueHint is a small positive card-advantage bonus", () => {
-    const self = makeCard({ battleCardId: "herald", cardNumber: 518 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("herald"),
+      cardNumber: 518,
+    });
     const hint = signOfArrival.valueHint?.(makeModel(), self) ?? 0;
     expect(hint).toBeGreaterThan(0);
   });

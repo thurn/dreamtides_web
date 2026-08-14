@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FoldState } from "../rules/fold-state";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { useLocalizer } from "../runtime/localization/use-localizer";
+import { asClientId } from "../types/identifiers";
 
 const mocks = vi.hoisted(() => ({
   clientId: "viewer",
@@ -78,7 +79,8 @@ function state(controllerClientId: string | null): FoldState {
     },
     playtestControl: {
       mode: "single-controller",
-      controllerClientId,
+      controllerClientId:
+        controllerClientId === null ? null : asClientId(controllerClientId),
     },
     journey: {} as FoldState["journey"],
     battle: null,

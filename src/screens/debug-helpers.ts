@@ -8,6 +8,7 @@ import {
   countRemainingCards,
   countRemainingUniqueCards,
 } from "../draft/draft-engine";
+import type { DreamsignId } from "../types/identifiers";
 
 /** Debug info for the player's fixed draft pool state. */
 export interface DraftDebugInfo {
@@ -25,7 +26,7 @@ export interface DraftDebugInfo {
 }
 
 export interface DreamsignPoolDebugEntry {
-  id: string;
+  id: DreamsignId;
   name: string;
 }
 
@@ -63,7 +64,9 @@ export function extractDraftDebugInfo(
   return {
     ...common,
     remainingCards: countRemainingCards(draftState.remainingCopiesByCard),
-    remainingUniqueCards: countRemainingUniqueCards(draftState.remainingCopiesByCard),
+    remainingUniqueCards: countRemainingUniqueCards(
+      draftState.remainingCopiesByCard,
+    ),
     topRemainingCards: Object.entries(draftState.remainingCopiesByCard)
       .filter(([, copiesRemaining]) => copiesRemaining > 0)
       .map(([cardNumber, copiesRemaining]) => ({
@@ -84,8 +87,8 @@ export function extractDraftDebugInfo(
       .map(({ cardNumber, copiesRemaining }) => ({
         cardNumber,
         name:
-          cardDatabase.get(cardNumber)?.name
-          ?? `Unknown Card #${String(cardNumber)}`,
+          cardDatabase.get(cardNumber)?.name ??
+          `Unknown Card #${String(cardNumber)}`,
         copiesRemaining,
       })),
   };
@@ -94,7 +97,7 @@ export function extractDraftDebugInfo(
 /** Extracts a debug summary of the resolved run package and Dreamsign pool. */
 export function extractPackageDebugInfo(
   resolvedPackage: ResolvedDreamAvatarPackage | null,
-  remainingDreamsignPool: readonly string[],
+  remainingDreamsignPool: readonly DreamsignId[],
   dreamsignTemplates: readonly DreamsignTemplate[],
 ): PackageDebugInfo | null {
   if (resolvedPackage === null) {
@@ -106,7 +109,7 @@ export function extractPackageDebugInfo(
   );
   const remainingIds = new Set(remainingDreamsignPool);
 
-  const toDreamsignEntry = (id: string): DreamsignPoolDebugEntry => ({
+  const toDreamsignEntry = (id: DreamsignId): DreamsignPoolDebugEntry => ({
     id,
     name: templatesById.get(id)?.name ?? id,
   });

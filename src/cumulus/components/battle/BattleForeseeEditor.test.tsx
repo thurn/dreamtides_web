@@ -11,6 +11,8 @@ import {
 } from "./BattleForeseeEditor";
 import { CumulusRoot } from "../../CumulusRoot";
 import { assertLocalized } from "@trox/runtime";
+import { asBattleCardId } from "../../../types/identifiers";
+import { asDreamwellCardId } from "../../../types/identifiers";
 
 vi.mock("../card/CardView", () => ({
   GameCard: ({ model }: { model: { displaySnapshot: CardData } }) => (
@@ -46,7 +48,7 @@ function makeView(initialCount = 1): BattleForeseeEditorModel {
     cards: [1, 2, 3].map((index) => {
       const displaySnapshot = makeCard(index);
       return {
-        battleCardId: `battle-card-${String(index)}`,
+        battleCardId: asBattleCardId(`battle-card-${String(index)}`),
         card: { cardId: displaySnapshot.id, displaySnapshot },
       };
     }),
@@ -54,9 +56,9 @@ function makeView(initialCount = 1): BattleForeseeEditorModel {
 }
 
 const SOURCE_DREAMWELL_CARD = {
-  cardId: asCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
+  cardId: asDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
   displaySnapshot: {
-    id: asCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
+    id: asDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
     name: assertLocalized("Skypath"),
     renderedText: assertLocalized("Foresee 1."),
     energyAdded: 1,
@@ -397,9 +399,16 @@ describe("BattleForeseeEditor", () => {
         ?.click();
     });
     expect(onConfirm).toHaveBeenCalledWith({
-      viewedCardIds: ["battle-card-1", "battle-card-2", "battle-card-3"],
-      orderedCardIds: ["battle-card-1", "battle-card-3"],
-      voidCardIds: ["battle-card-2"],
+      viewedCardIds: [
+        asBattleCardId("battle-card-1"),
+        asBattleCardId("battle-card-2"),
+        asBattleCardId("battle-card-3"),
+      ],
+      orderedCardIds: [
+        asBattleCardId("battle-card-1"),
+        asBattleCardId("battle-card-3"),
+      ],
+      voidCardIds: [asBattleCardId("battle-card-2")],
     });
 
     act(() => root.unmount());
@@ -417,7 +426,7 @@ describe("BattleForeseeEditor", () => {
         .cards.slice(0, 2)
         .map((card, index) => ({
           ...card,
-          battleCardId: cardInstanceIds[index],
+          battleCardId: asBattleCardId(cardInstanceIds[index]),
         })),
     };
     const { container, root } = mount(
@@ -608,9 +617,16 @@ describe("BattleForeseeEditor", () => {
         ?.click();
     });
     expect(onConfirm).toHaveBeenCalledWith({
-      viewedCardIds: ["battle-card-1", "battle-card-2", "battle-card-3"],
-      orderedCardIds: ["battle-card-2", "battle-card-1"],
-      voidCardIds: ["battle-card-3"],
+      viewedCardIds: [
+        asBattleCardId("battle-card-1"),
+        asBattleCardId("battle-card-2"),
+        asBattleCardId("battle-card-3"),
+      ],
+      orderedCardIds: [
+        asBattleCardId("battle-card-2"),
+        asBattleCardId("battle-card-1"),
+      ],
+      voidCardIds: [asBattleCardId("battle-card-3")],
     });
     expect(JSON.stringify(model)).toBe(before);
     act(() => root.unmount());

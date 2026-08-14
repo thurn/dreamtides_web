@@ -15,6 +15,10 @@ import {
   prepareExplorationDisclosedDeckTargetPlan,
   type ExplorationDisclosedDeckTargetPlanInput,
 } from "./disclosed-deck-target-plan";
+import { asSiteId } from "../types/identifiers";
+import { asDeckEntryId } from "../types/identifiers";
+import { asExplorationActionId } from "../types/identifiers";
+import { asCardTypeChangePredicateId } from "../types/identifiers";
 
 const CARD_IDS = Array.from({ length: 7 }, (_, index) =>
   asCardId(`c0000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`),
@@ -57,31 +61,46 @@ function contentFixture(reverse = false): JourneyContent {
 
 function journeyFixture(reverse = false): JourneyState {
   const deck = [
-    makeMerchantTestDeckEntry({ entryId: "entry-copy-a", cardNumber: 1 }),
-    makeMerchantTestDeckEntry({ entryId: "entry-copy-b", cardNumber: 1 }),
-    makeMerchantTestDeckEntry({ entryId: "entry-encounter", cardNumber: 2 }),
-    makeMerchantTestDeckEntry({ entryId: "entry-event", cardNumber: 3 }),
-    makeMerchantTestDeckEntry({ entryId: "entry-starter", cardNumber: 4 }),
     makeMerchantTestDeckEntry({
-      entryId: "entry-nightmare",
+      entryId: asDeckEntryId("entry-copy-a"),
+      cardNumber: 1,
+    }),
+    makeMerchantTestDeckEntry({
+      entryId: asDeckEntryId("entry-copy-b"),
+      cardNumber: 1,
+    }),
+    makeMerchantTestDeckEntry({
+      entryId: asDeckEntryId("entry-encounter"),
+      cardNumber: 2,
+    }),
+    makeMerchantTestDeckEntry({
+      entryId: asDeckEntryId("entry-event"),
+      cardNumber: 3,
+    }),
+    makeMerchantTestDeckEntry({
+      entryId: asDeckEntryId("entry-starter"),
+      cardNumber: 4,
+    }),
+    makeMerchantTestDeckEntry({
+      entryId: asDeckEntryId("entry-nightmare"),
       cardNumber: 5,
       isBane: true,
     }),
     makeMerchantTestDeckEntry({
-      entryId: "entry-effective-character",
+      entryId: asDeckEntryId("entry-effective-character"),
       cardNumber: 6,
       typeChange: {
-        predicateId: "fixture:effective-character",
+        predicateId: asCardTypeChangePredicateId("fixture:effective-character"),
         cardType: "Character",
         subtype: "Warrior",
         label: "Character",
       },
     }),
     makeMerchantTestDeckEntry({
-      entryId: "entry-effective-event",
+      entryId: asDeckEntryId("entry-effective-event"),
       cardNumber: 7,
       typeChange: {
-        predicateId: "fixture:effective-event",
+        predicateId: asCardTypeChangePredicateId("fixture:effective-event"),
         cardType: "Event",
         subtype: "",
         label: "Event",
@@ -95,7 +114,7 @@ function journeyFixture(reverse = false): JourneyState {
 }
 
 const site = makeMerchantTestSite({
-  id: "disclosed-deck-target-site",
+  id: asSiteId("disclosed-deck-target-site"),
   type: "Exploration",
 });
 
@@ -105,7 +124,7 @@ function prepare(
   return prepareExplorationDisclosedDeckTargetPlan({
     effectKind: "change-card-type-selected",
     cardType: "Event",
-    actionId: ACTION_ID,
+    actionId: asExplorationActionId(ACTION_ID),
     encounterCardId: ENCOUNTER_CARD_ID,
     journey: journeyFixture(),
     site,
@@ -125,14 +144,17 @@ describe("Exploration disclosed deck target plan", () => {
     });
     expect(plan.unavailableReason).toBeUndefined();
     expect(plan.eligibleCards).toEqual([
-      { entryId: "entry-copy-a", cardId: CARD_IDS[0] },
-      { entryId: "entry-copy-b", cardId: CARD_IDS[0] },
-      { entryId: "entry-effective-character", cardId: CARD_IDS[5] },
-      { entryId: "entry-nightmare", cardId: CARD_IDS[4] },
-      { entryId: "entry-starter", cardId: CARD_IDS[3] },
+      { entryId: asDeckEntryId("entry-copy-a"), cardId: CARD_IDS[0] },
+      { entryId: asDeckEntryId("entry-copy-b"), cardId: CARD_IDS[0] },
+      {
+        entryId: asDeckEntryId("entry-effective-character"),
+        cardId: CARD_IDS[5],
+      },
+      { entryId: asDeckEntryId("entry-nightmare"), cardId: CARD_IDS[4] },
+      { entryId: asDeckEntryId("entry-starter"), cardId: CARD_IDS[3] },
     ]);
     expect(plan.eligibleCards).not.toContainEqual({
-      entryId: "entry-encounter",
+      entryId: asDeckEntryId("entry-encounter"),
       cardId: ENCOUNTER_CARD_ID,
     });
     expect(plan.target).not.toBeNull();
@@ -194,13 +216,13 @@ describe("Exploration disclosed deck target plan", () => {
   it("binds action, encounter, site, and authored type into the plan signature", () => {
     const original = prepare();
     const differentAction = prepare({
-      actionId: "c0000000-0000-4000-8000-000000000091",
+      actionId: asExplorationActionId("c0000000-0000-4000-8000-000000000091"),
     });
     const differentEncounter = prepare({
       encounterCardId: CARD_IDS[2],
     });
     const differentSite = prepare({
-      site: { ...site, id: "different-exploration-site" },
+      site: { ...site, id: asSiteId("different-exploration-site") },
     });
     const differentType = prepare({ cardType: "Character" });
 
@@ -215,7 +237,7 @@ describe("Exploration disclosed deck target plan", () => {
     if (plan.target === null) throw new Error("Expected disclosed target");
     const tamperedTarget = {
       ...plan,
-      target: { ...plan.target, entryId: "foreign-entry" },
+      target: { ...plan.target, entryId: asDeckEntryId("foreign-entry") },
     };
     const tamperedSelector = {
       ...plan,
@@ -256,7 +278,7 @@ describe("Exploration disclosed deck target plan", () => {
         seed: "disclosed-deck-target-plan-test",
         deck: [
           makeMerchantTestDeckEntry({
-            entryId: "only-event",
+            entryId: asDeckEntryId("only-event"),
             cardNumber: 3,
           }),
         ],

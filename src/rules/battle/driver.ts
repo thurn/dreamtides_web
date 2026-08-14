@@ -27,12 +27,17 @@ import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import { battleTriggerScriptId } from "./battle-card-effects-table";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import { dreamwellEnergyEdits } from "../../battle/engine/energy";
-import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core";
+import {
+  applyPromptResolution,
+  planNextEffectStep,
+} from "./effect-runner-core";
 import type { PromptResolution } from "./effect-runner-core";
 import type { EffectStep, StepContext } from "./effect-step";
 import type { BattleFoldState, EffectRun } from "./fold";
 import { battleModeOf, newEffectRun, resolveScript } from "./fold";
 import { selectBattleCardLocation } from "../../battle/state/selectors";
+import type { BattleCardId } from "../../types/identifiers";
+import { asBattleEffectScriptId } from "../../types/identifiers";
 
 const EMISSION: BattleEngineEmissionContext = {
   sourceSurface: "auto-system",
@@ -56,7 +61,11 @@ function listAtPath(steps: EffectStep[], path: number[]): EffectStep[] {
   let list = steps;
   for (const index of path) {
     const step = list[index];
-    if (step === undefined || step.kind !== "prompt" || step.prompt.kind !== "confirm") {
+    if (
+      step === undefined ||
+      step.kind !== "prompt" ||
+      step.prompt.kind !== "confirm"
+    ) {
       throw new Error(
         `driver: cursor path ${JSON.stringify(path)} descends through a non-confirm step`,
       );
@@ -73,19 +82,29 @@ function listAtPath(steps: EffectStep[], path: number[]): EffectStep[] {
  * siblings-after within the current branch, then siblings-after in each
  * ancestor branch. Mirrors how `applyPromptResolution` prepends `onYes`.
  */
-function remainingFromCursor(steps: EffectStep[], cursor: number[]): EffectStep[] {
+function remainingFromCursor(
+  steps: EffectStep[],
+  cursor: number[],
+): EffectStep[] {
   if (cursor.length === 0) return steps;
   const [head, ...restPath] = cursor;
   if (restPath.length === 0) {
     return steps.slice(head);
   }
   const child = steps[head];
-  if (child === undefined || child.kind !== "prompt" || child.prompt.kind !== "confirm") {
+  if (
+    child === undefined ||
+    child.kind !== "prompt" ||
+    child.prompt.kind !== "confirm"
+  ) {
     throw new Error(
       `driver: cursor ${JSON.stringify(cursor)} descends through a non-confirm step`,
     );
   }
-  return [...remainingFromCursor(child.prompt.onYes, restPath), ...steps.slice(head + 1)];
+  return [
+    ...remainingFromCursor(child.prompt.onYes, restPath),
+    ...steps.slice(head + 1),
+  ];
 }
 
 /**
@@ -142,9 +161,11 @@ function assertCursorMatchesRest(
   nextCursor: number[] | null,
   expectedRest: EffectStep[],
 ): void {
-  const actual = nextCursor === null ? [] : remainingFromCursor(steps, nextCursor);
+  const actual =
+    nextCursor === null ? [] : remainingFromCursor(steps, nextCursor);
   const same =
-    actual.length === expectedRest.length && actual.every((s, i) => s === expectedRest[i]);
+    actual.length === expectedRest.length &&
+    actual.every((s, i) => s === expectedRest[i]);
   if (!same) {
     throw new Error(
       "driver: cursor navigation diverged from applyPromptResolution rest — unsupported nested script shape",
@@ -173,7 +194,11 @@ function applyEdits(
   for (const edit of edits) {
     if (edit.kind === "DRAW_DREAMWELL_CARD" && battle !== undefined) {
       const dreamwell = battle.init.dreamwellDeck[next.dreamwellDeckIndex];
-      for (const energyEdit of dreamwellEnergyEdits(edit.side, next.sides[edit.side].maxEnergy, dreamwell?.energyAdded ?? 0)) {
+      for (const energyEdit of dreamwellEnergyEdits(
+        edit.side,
+        next.sides[edit.side].maxEnergy,
+        dreamwell?.energyAdded ?? 0,
+      )) {
         next = applyDebugEdit(next, energyEdit, EMISSION).state;
       }
     }
@@ -183,10 +208,23 @@ function applyEdits(
       scheduleEffectLifecycleEdge(queue, before, next, edit);
       if (edit.kind === "DRAW_DREAMWELL_CARD") {
         const index = next.sides[edit.side].dreamwellCardIndex;
-        const dreamwell = index === null ? undefined : battle?.init.dreamwellDeck[index];
-        const script = dreamwell === undefined ? null : selectDreamwellEffectScript(dreamwell.id);
-        if (dreamwell !== undefined && script !== null && script.steps.length > 0) {
-          queue.push(newEffectRun({ table: "dreamwell", id: dreamwell.id }, edit.side));
+        const dreamwell =
+          index === null ? undefined : battle?.init.dreamwellDeck[index];
+        const script =
+          dreamwell === undefined
+            ? null
+            : selectDreamwellEffectScript(dreamwell.id);
+        if (
+          dreamwell !== undefined &&
+          script !== null &&
+          script.steps.length > 0
+        ) {
+          queue.push(
+            newEffectRun(
+              { table: "dreamwell", id: asBattleEffectScriptId(dreamwell.id) },
+              edit.side,
+            ),
+          );
         }
       }
     }
@@ -207,9 +245,12 @@ function scheduleEffectLifecycleEdge(
     }
     return;
   }
-  const battleCardId = edit.kind === "MOVE_CARD_TO_ZONE" ? edit.battleCardId
-    : edit.kind === "ABANDON" ? edit.battleCardId
-      : null;
+  const battleCardId =
+    edit.kind === "MOVE_CARD_TO_ZONE"
+      ? edit.battleCardId
+      : edit.kind === "ABANDON"
+        ? edit.battleCardId
+        : null;
   if (battleCardId === null) return;
 
   const source = selectBattleCardLocation(before, battleCardId);
@@ -219,7 +260,10 @@ function scheduleEffectLifecycleEdge(
 
   const sourceInPlay = isBattlefieldZone(source.zone);
   const destinationInPlay = isBattlefieldZone(destination.zone);
-  if (source.zone === "hand" && instance.definition.battleCardKind === "event") {
+  if (
+    source.zone === "hand" &&
+    instance.definition.battleCardKind === "event"
+  ) {
     enqueueLifecycleRun(queue, before, battleCardId, "played");
   }
   if (!sourceInPlay && destinationInPlay) {
@@ -229,29 +273,40 @@ function scheduleEffectLifecycleEdge(
   // void edge is dissolution/abandonment, so a replacement never draws or
   // triggers any generic leave-play automation.
   if (sourceInPlay && destination.zone === "void") {
-    enqueueLifecycleRun(queue, before, battleCardId, edit.kind === "ABANDON" ? "abandoned" : "dissolved");
+    enqueueLifecycleRun(
+      queue,
+      before,
+      battleCardId,
+      edit.kind === "ABANDON" ? "abandoned" : "dissolved",
+    );
   }
 }
 
 function enqueueLifecycleRun(
   queue: EffectRun[],
   board: BattleMutableState,
-  battleCardId: string,
-  trigger: "played" | "materialized" | "rematerialized" | "dissolved" | "abandoned",
+  battleCardId: BattleCardId,
+  trigger:
+    "played" | "materialized" | "rematerialized" | "dissolved" | "abandoned",
 ): void {
   const instance = board.cardInstances[battleCardId];
   if (instance === undefined) return;
-  queue.push(newEffectRun(
-    { table: "battle", id: battleTriggerScriptId(instance.definition.cardId, trigger) },
-    instance.controller,
-    battleCardId,
-    {
-      trigger,
-      sourceCardId: instance.definition.cardId,
-      sourceController: instance.controller,
-      sourceZone: selectBattleCardLocation(board, battleCardId)?.zone,
-    },
-  ));
+  queue.push(
+    newEffectRun(
+      {
+        table: "battle",
+        id: battleTriggerScriptId(instance.definition.cardId, trigger),
+      },
+      instance.controller,
+      battleCardId,
+      {
+        trigger,
+        sourceCardId: instance.definition.cardId,
+        sourceController: instance.controller,
+        sourceZone: selectBattleCardLocation(board, battleCardId)?.zone,
+      },
+    ),
+  );
 }
 
 function isBattlefieldZone(zone: string): boolean {
@@ -292,8 +347,23 @@ function runQueue(
     const isTutorial = battleModeOf(battle).kind === "tutorial";
     const stepCtx: StepContext =
       run.sourceInstanceId === undefined
-        ? { side: run.side, state: currentBoard, random, nowMs, bindings: run.bindings, isTutorial }
-        : { side: run.side, state: currentBoard, random, nowMs, sourceId: run.sourceInstanceId, bindings: run.bindings, isTutorial };
+        ? {
+            side: run.side,
+            state: currentBoard,
+            random,
+            nowMs,
+            bindings: run.bindings,
+            isTutorial,
+          }
+        : {
+            side: run.side,
+            state: currentBoard,
+            random,
+            nowMs,
+            sourceId: run.sourceInstanceId,
+            bindings: run.bindings,
+            isTutorial,
+          };
     const plan = planNextEffectStep(remaining, stepCtx);
 
     if (plan.type === "done") {
@@ -305,8 +375,18 @@ function runQueue(
       currentBoard = applyEdits(currentBoard, plan.edits, currentQueue, battle);
       const terminal = scoreTerminalResult(battle, currentBoard);
       if (terminal !== null) {
-        currentBoard = forceBattleResult(currentBoard, terminal, EMISSION).state;
-        return { ...battle, board: currentBoard, effectQueue: [], pendingPrompt: null, dawnFired };
+        currentBoard = forceBattleResult(
+          currentBoard,
+          terminal,
+          EMISSION,
+        ).state;
+        return {
+          ...battle,
+          board: currentBoard,
+          effectQueue: [],
+          pendingPrompt: null,
+          dawnFired,
+        };
       }
       const nextCursor = advanceCursor(steps, run.cursor);
       currentQueue =
@@ -326,7 +406,9 @@ function runQueue(
     ) {
       const promptStep = remaining[0];
       if (promptStep === undefined || promptStep.kind !== "prompt") {
-        throw new Error("driver: pick-cards plan does not point at a prompt step");
+        throw new Error(
+          "driver: pick-cards plan does not point at a prompt step",
+        );
       }
       const resolution: PromptResolution = {
         kind: "pick-cards",
@@ -341,8 +423,18 @@ function runQueue(
       currentBoard = applyEdits(currentBoard, edits, currentQueue, battle);
       const terminal = scoreTerminalResult(battle, currentBoard);
       if (terminal !== null) {
-        currentBoard = forceBattleResult(currentBoard, terminal, EMISSION).state;
-        return { ...battle, board: currentBoard, effectQueue: [], pendingPrompt: null, dawnFired };
+        currentBoard = forceBattleResult(
+          currentBoard,
+          terminal,
+          EMISSION,
+        ).state;
+        return {
+          ...battle,
+          board: currentBoard,
+          effectQueue: [],
+          pendingPrompt: null,
+          dawnFired,
+        };
       }
       const nextCursor = nextCursorAfterPrompt(
         steps,
@@ -351,9 +443,10 @@ function runQueue(
         resolution,
       );
       assertCursorMatchesRest(steps, nextCursor, expectedRest);
-      currentQueue = nextCursor === null
-        ? currentQueue.slice(1)
-        : [{ ...run, cursor: nextCursor }, ...currentQueue.slice(1)];
+      currentQueue =
+        nextCursor === null
+          ? currentQueue.slice(1)
+          : [{ ...run, cursor: nextCursor }, ...currentQueue.slice(1)];
       continue;
     }
 
@@ -505,8 +598,31 @@ export function resolvePendingPromptWithStream(
   const isTutorial = battleModeOf(battle).kind === "tutorial";
   const stepCtx: StepContext =
     run.sourceInstanceId === undefined
-      ? { side: run.side, state: battle.board, random, nowMs, bindings: run.bindings, promptCandidateIds: pending.options.kind === "pick-cards" ? pending.options.candidateIds : undefined, isTutorial }
-      : { side: run.side, state: battle.board, random, nowMs, sourceId: run.sourceInstanceId, bindings: run.bindings, promptCandidateIds: pending.options.kind === "pick-cards" ? pending.options.candidateIds : undefined, isTutorial };
+      ? {
+          side: run.side,
+          state: battle.board,
+          random,
+          nowMs,
+          bindings: run.bindings,
+          promptCandidateIds:
+            pending.options.kind === "pick-cards"
+              ? pending.options.candidateIds
+              : undefined,
+          isTutorial,
+        }
+      : {
+          side: run.side,
+          state: battle.board,
+          random,
+          nowMs,
+          sourceId: run.sourceInstanceId,
+          bindings: run.bindings,
+          promptCandidateIds:
+            pending.options.kind === "pick-cards"
+              ? pending.options.candidateIds
+              : undefined,
+          isTutorial,
+        };
 
   const { edits, rest: expectedRest } = applyPromptResolution(
     promptStep.prompt,
@@ -514,7 +630,12 @@ export function resolvePendingPromptWithStream(
     rest,
     stepCtx,
   );
-  const nextCursor = nextCursorAfterPrompt(steps, run.cursor, promptStep, resolution);
+  const nextCursor = nextCursorAfterPrompt(
+    steps,
+    run.cursor,
+    promptStep,
+    resolution,
+  );
   assertCursorMatchesRest(steps, nextCursor, expectedRest);
   const advancedQueue =
     nextCursor === null
@@ -549,7 +670,10 @@ function scoreTerminalResult(
 ): "victory" | "defeat" | null {
   if (board.result !== null) return null;
   if (board.sides.player.score >= battle.init.scoreToWin) return "victory";
-  if (battleModeOf(battle).kind === "journey" && board.sides.enemy.score >= battle.init.scoreToWin) {
+  if (
+    battleModeOf(battle).kind === "journey" &&
+    board.sides.enemy.score >= battle.init.scoreToWin
+  ) {
     return "defeat";
   }
   return null;

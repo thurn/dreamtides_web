@@ -9,6 +9,8 @@ import {
 } from "./draft-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
+import { asSiteId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
 
 const buildDraftView = (
   params: Omit<
@@ -168,16 +170,16 @@ describe("buildDraftView", () => {
     ]);
     expect(
       buildDraftTransfiguredOfferLog(view, {
-        siteId: "exploration-site",
-        actionId: "exploration-action",
+        siteId: asSiteId("exploration-site"),
+        actionId: asExplorationActionId("exploration-action"),
       }),
     ).toEqual({
-      sourceSiteId: "exploration-site",
-      sourceActionId: "exploration-action",
+      sourceSiteId: asSiteId("exploration-site"),
+      sourceActionId: asExplorationActionId("exploration-action"),
       pickNumber: 1,
       cards: [
-        { cardId: "card-6", transfiguration: "Kindled" },
-        { cardId: "card-5", transfiguration: "Empowered" },
+        { cardId: asCardId("card-6"), transfiguration: "Kindled" },
+        { cardId: asCardId("card-5"), transfiguration: "Empowered" },
       ],
     });
   });

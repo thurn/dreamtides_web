@@ -16,6 +16,9 @@ import {
 } from "./PurgeSiteScreen";
 import { CumulusRoot } from "../CumulusRoot";
 import { PURGE_PRESENTATION } from "../test-helpers/presentation-fixtures";
+import { asSiteId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -38,20 +41,20 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 function view(cardCount = 2): PurgeSiteView {
   return {
     presentation: PURGE_PRESENTATION,
-    siteId: "purge-site",
+    siteId: asSiteId("purge-site"),
     scene: null,
     guide: {
       id: "takeshi",
       name: assertLocalized("Master Takeshi"),
       line: assertLocalized("Cut only what the dream can spare."),
-      art: artRef.dreamGuide("takeshi"),
+      art: artRef.dreamGuide(asGuideId("takeshi")),
     },
     cards: Array.from({ length: cardCount }, (_, index) => {
       const cardNumber = index + 1;
       const suffix =
         cardNumber === 1 ? "a" : cardNumber === 2 ? "b" : String(cardNumber);
       return {
-        entryId: `entry-${suffix}`,
+        entryId: asDeckEntryId(`entry-${suffix}`),
         model: (() => {
           const displaySnapshot = makeCard({
             name: asCardName(`Test Card ${String(cardNumber)}`),

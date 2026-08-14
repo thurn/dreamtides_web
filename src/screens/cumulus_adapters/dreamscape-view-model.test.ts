@@ -26,6 +26,14 @@ import {
   toQsbDreamAvatar,
   toQsbDreamsigns,
 } from "./dreamscape-view-model";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import type { SiteId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
 
 const buildSiteModels = (
   dreamscapeNode: DreamscapeNode,
@@ -37,7 +45,7 @@ const buildDreamscapeView = (
   dreamscapeNode: DreamscapeNode,
   state: JourneyState,
   sitesData = MINIMAL_SITES_DATA,
-  replacementSiteId: string | null = null,
+  replacementSiteId: SiteId | null = null,
 ) =>
   buildDreamscapeViewImpl(
     dreamscapeNode,
@@ -57,14 +65,14 @@ function site(
 
 function node(overrides: Partial<DreamscapeNode> = {}): DreamscapeNode {
   return {
-    id: "node-1",
+    id: asAtlasNodeId("node-1"),
     layer: 0,
     indexInLayer: 0,
     dreamscapeId: "ember_wood",
     sites: [
-      site({ id: "s-purge", type: "Purge" }),
-      site({ id: "s-draft", type: "Draft" }),
-      site({ id: "s-battle", type: "Battle" }),
+      site({ id: asSiteId("s-purge"), type: "Purge" }),
+      site({ id: asSiteId("s-draft"), type: "Draft" }),
+      site({ id: asSiteId("s-battle"), type: "Battle" }),
     ],
     position: { x: 0, y: 0 },
     state: "revealed",
@@ -78,7 +86,9 @@ function node(overrides: Partial<DreamscapeNode> = {}): DreamscapeNode {
 
 describe("battleLabel", () => {
   it("identifies the final boss at the last completion level", () => {
-    expect(resolveSource(battleLabel(6, MINIMAL_SITES_DATA))).toBe("Final Boss");
+    expect(resolveSource(battleLabel(6, MINIMAL_SITES_DATA))).toBe(
+      "Final Boss",
+    );
     expect(resolveSource(battleLabel(0, MINIMAL_SITES_DATA))).toBe("Battle");
     expect(resolveSource(battleLabel(3, MINIMAL_SITES_DATA))).toBe("Battle");
   });
@@ -103,9 +113,9 @@ describe("buildSiteModels", () => {
 
     const visitedNonBattle = node({
       sites: [
-        site({ id: "s-purge", type: "Purge", isVisited: true }),
-        site({ id: "s-draft", type: "Draft", isVisited: true }),
-        site({ id: "s-battle", type: "Battle" }),
+        site({ id: asSiteId("s-purge"), type: "Purge", isVisited: true }),
+        site({ id: asSiteId("s-draft"), type: "Draft", isVisited: true }),
+        site({ id: asSiteId("s-battle"), type: "Battle" }),
       ],
     });
     const unlocked = buildSiteModels(visitedNonBattle, 0).find(
@@ -131,7 +141,7 @@ describe("toQsbDreamAvatar", () => {
 
   it("maps the DreamAvatar's title to the epithet and its imageNumber to a portrait ref", () => {
     const dreamAvatar: DreamAvatar = {
-      id: "dc-1",
+      id: asDreamAvatarId("dc-1"),
       name: "Drusus Calvus",
       title: "Triumphator",
       renderedText: "Gain 1 essence.",
@@ -152,7 +162,7 @@ describe("toQsbDreamsigns", () => {
   it("maps owned dreamsigns by imageName and drops those without art", () => {
     const signs: Dreamsign[] = [
       {
-        id: "orb",
+        id: asDreamsignId("orb"),
         name: "Dreaming Orb",
         effectDescription: "At Dawn, foresee 1.",
         imageName: "magic-ball.png",
@@ -163,7 +173,9 @@ describe("toQsbDreamsigns", () => {
     expect(docked).toHaveLength(1);
     expect(docked[0]?.id).toBe("orb");
     expect(resolveSource(docked[0].name)).toBe("Dreaming Orb");
-    expect(resolveSource(docked[0].effectDescription!)).toBe("At Dawn, foresee 1.");
+    expect(resolveSource(docked[0].effectDescription!)).toBe(
+      "At Dawn, foresee 1.",
+    );
     expect(docked[0]?.imageName).toBe("magic-ball.png");
   });
 });
@@ -253,9 +265,9 @@ describe("buildDreamscapeView", () => {
     } as JourneyState;
     const returnedNode = node({
       sites: [
-        site({ id: "s-purge", type: "Purge" }),
-        site({ id: "s-draft", type: "Draft", isVisited: true }),
-        site({ id: "s-battle", type: "Battle" }),
+        site({ id: asSiteId("s-purge"), type: "Purge" }),
+        site({ id: asSiteId("s-draft"), type: "Draft", isVisited: true }),
+        site({ id: asSiteId("s-battle"), type: "Battle" }),
       ],
     });
 
@@ -280,7 +292,7 @@ describe("buildDreamscapeView", () => {
 
   it("maps generated Essence rewards by site id for the in-place animation", () => {
     const essenceNode = node({
-      sites: [site({ id: "s-essence", type: "Essence" })],
+      sites: [site({ id: asSiteId("s-essence"), type: "Essence" })],
     });
     const state = {
       essence: 240,
@@ -302,10 +314,10 @@ describe("buildDreamscapeView", () => {
 
   it("maps generated Reward site results by site id for in-place collection", () => {
     const rewardNode = node({
-      sites: [site({ id: "s-reward", type: "Reward" })],
+      sites: [site({ id: asSiteId("s-reward"), type: "Reward" })],
     });
     const dreamsign = {
-      id: "dreamsign-uuid",
+      id: asDreamsignId("dreamsign-uuid"),
       name: "Lantern in the Rain",
       effectDescription: "Your first dream each dawn costs 1 less.",
       imageName: "lantern-in-the-rain.webp",
@@ -339,15 +351,15 @@ describe("buildDreamscapeView", () => {
 
   it("builds an at-cap Dreamsign replacement view from a Reward runtime", () => {
     const rewardNode = node({
-      sites: [site({ id: "s-reward", type: "Reward" })],
+      sites: [site({ id: asSiteId("s-reward"), type: "Reward" })],
     });
     const pendingDreamsign = {
-      id: "pending-dreamsign",
+      id: asDreamsignId("pending-dreamsign"),
       name: "Pending",
       effectDescription: "Pending effect.",
     };
     const heldDreamsign = {
-      id: "held-dreamsign",
+      id: asDreamsignId("held-dreamsign"),
       name: "Held",
       effectDescription: "Held effect.",
     };
@@ -368,7 +380,7 @@ describe("buildDreamscapeView", () => {
       rewardNode,
       state,
       MINIMAL_SITES_DATA,
-      "s-reward",
+      asSiteId("s-reward"),
     );
     expect(view.inlineRewards["s-reward"]).toMatchObject({
       kind: "dreamsign",
@@ -389,13 +401,13 @@ describe("buildDreamscapeHudView", () => {
       essence: 10,
       deck: [
         {
-          entryId: "entry-a",
+          entryId: asDeckEntryId("entry-a"),
           cardNumber: 1,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: "entry-b",
+          entryId: asDeckEntryId("entry-b"),
           cardNumber: 2,
           transfiguration: null,
           isBane: false,
@@ -414,18 +426,18 @@ describe("buildDreamscapeHudView", () => {
     const state = {
       ...createDefaultState(),
       essence: 290,
-      screen: { type: "site" as const, siteId: "exploration-site" },
+      screen: { type: "site" as const, siteId: asSiteId("exploration-site") },
       siteRuntime: {
         "exploration-site": {
           kind: "exploration" as const,
-          encounterCardId: "encounter-card-id",
+          encounterCardId: asCardId("encounter-card-id"),
           actionOffers: [],
           resolution: {
-            actionId: "gain-essence",
+            actionId: asExplorationActionId("gain-essence"),
             gainedCardIds: [],
             gainedDreamsignIds: [],
             purgedCardIds: [],
-            affectedEntryIds: ["spirit-animal-entry"],
+            affectedEntryIds: [asDeckEntryId("spirit-animal-entry")],
             essenceGained: 90,
           },
         },

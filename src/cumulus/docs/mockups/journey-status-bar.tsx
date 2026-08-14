@@ -14,6 +14,8 @@ import { artRef } from "../../primitives/art";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
+import { asDreamscapeId } from "../../../types/identifiers";
+import { asDreamsignId } from "../../../types/identifiers";
 
 export function JourneyStatusBarMockup() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -22,7 +24,7 @@ export function JourneyStatusBarMockup() {
       ref={stageRef}
       style={{
         ...sceneRoot,
-        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.25) 0%, rgba(8,5,17,0.35) 55%, rgba(8,5,17,0.85) 100%), url(${dreamscapeSceneUrl("frostforge")})`,
+        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.25) 0%, rgba(8,5,17,0.35) 55%, rgba(8,5,17,0.85) 100%), url(${dreamscapeSceneUrl(asDreamscapeId("frostforge"))})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         touchAction: "none",
@@ -38,10 +40,18 @@ export function JourneyStatusBarMockup() {
           pointerEvents: "none",
         }}
       >
-        <div style={{ font: token("--t-title"), color: token("--text-primary") }}>
+        <div
+          style={{ font: token("--t-title"), color: token("--text-primary") }}
+        >
           Frostforge
         </div>
-        <div style={{ font: token("--t-caption"), color: token("--text-secondary"), marginTop: token("--space-xs") }}>
+        <div
+          style={{
+            font: token("--t-caption"),
+            color: token("--text-secondary"),
+            marginTop: token("--space-xs"),
+          }}
+        >
           Press essence, the DreamAvatar, or a dreamsign to read it.
         </div>
       </div>
@@ -56,25 +66,27 @@ export function JourneyStatusBarMockup() {
           name: assertLocalized("Threxan"),
           epithet: assertLocalized("the Resounding Wrath"),
           portrait: artRef.dreamAvatar("0025"),
-          ability: assertLocalized("At the start of your first turn, draw a card."),
+          ability: assertLocalized(
+            "At the start of your first turn, draw a card.",
+          ),
         }}
         dreamsigns={[
           {
-            id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
+            id: asDreamsignId("c706d0ba-2f41-4b14-95d8-db168ac6246c"),
             name: "Amplified Acorn",
             imageName: "acorn_gold.png",
             effectDescription:
               "Once per turn, when you discard a card, your next card this turn costs 2● less.",
           },
           {
-            id: "278ec1ab-f532-4862-84ae-63df5e49548c",
+            id: asDreamsignId("278ec1ab-f532-4862-84ae-63df5e49548c"),
             name: "Pyramid Relic",
             imageName: "aertfact.png",
             effectDescription:
               "The second character you play each turn costs 1● less.",
           },
           {
-            id: "d1fdbe21-56f6-43c0-aaac-1e4683964da5",
+            id: asDreamsignId("d1fdbe21-56f6-43c0-aaac-1e4683964da5"),
             name: "Bell",
             imageName: "bell.png",
             effectDescription:
@@ -82,7 +94,6 @@ export function JourneyStatusBarMockup() {
           },
         ].map(localizedDreamsignFixture)}
       />
-
     </div>
   );
 }

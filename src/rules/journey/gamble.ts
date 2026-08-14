@@ -43,6 +43,12 @@ import type {
 import type { EventContext } from "../../eventlog/types";
 import { mintEntryId } from "./deck";
 import { findSite, getSiteContentProvider } from "./sites";
+import type { SiteId } from "../../types/identifiers";
+import { siteIdFromUnknown } from "../../types/identifiers";
+import { shuffleCommitmentFromUnknown } from "../../types/identifiers";
+import { dreamsignIdFromUnknown } from "../../types/identifiers";
+import { deckEntryIdFromUnknown } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 const GATE_IDS: ReadonlySet<string> = new Set(["six", "nine", "jack"]);
 
@@ -57,7 +63,7 @@ function asString(value: unknown): string | null {
 
 function runtimeFor(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ): GambleSiteRuntime | null {
   const site = findSite(journey, siteId);
   const runtime = journey.siteRuntime[siteId];
@@ -77,7 +83,7 @@ function runtimeFor(
 
 function withRuntime(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
   runtime: GambleSiteRuntime,
 ): JourneyState {
   return {
@@ -88,7 +94,7 @@ function withRuntime(
 
 function gravokRuntimeFor(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ): GravokWagerSiteRuntime | null {
   const runtime = runtimeFor(journey, siteId);
   return runtime?.gameId === "gravok-three-gate-wager" ? runtime : null;
@@ -96,7 +102,7 @@ function gravokRuntimeFor(
 
 function tidemarkRuntimeFor(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ): TidemarkLadderClimbSiteRuntime | null {
   const runtime = runtimeFor(journey, siteId);
   return runtime?.gameId === "tidemark-ladder-climb" ? runtime : null;
@@ -104,7 +110,7 @@ function tidemarkRuntimeFor(
 
 function starwayRuntimeFor(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ): StarwayStairsSiteRuntime | null {
   const runtime = runtimeFor(journey, siteId);
   return runtime?.gameId === "starway-stairs" ? runtime : null;
@@ -112,7 +118,7 @@ function starwayRuntimeFor(
 
 function fourSuitRuntimeFor(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ): FourSuitRepriseSiteRuntime | null {
   const runtime = runtimeFor(journey, siteId);
   return runtime?.gameId === "four-suit-reprise" ? runtime : null;
@@ -120,7 +126,7 @@ function fourSuitRuntimeFor(
 
 function blackjackRuntimeFor(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ): BlackjackSiteRuntime | null {
   const runtime = runtimeFor(journey, siteId);
   return runtime?.gameId === "blackjack" ? runtime : null;
@@ -146,7 +152,7 @@ export function dealBlackjack(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const runtime = blackjackRuntimeFor(journey, siteId);
   if (
@@ -196,7 +202,7 @@ export function hitBlackjack(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const runtime = blackjackRuntimeFor(journey, siteId);
   if (runtime === null || !runtime.wagerPaid || runtime.outcome !== null) {
@@ -241,7 +247,7 @@ export function standBlackjack(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const runtime = blackjackRuntimeFor(journey, siteId);
   const game = configuredGame("blackjack");
@@ -276,8 +282,10 @@ export function settleBlackjack(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const shuffleCommitment = asString(payload.shuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const shuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.shuffleCommitment,
+  );
   if (siteId === null || shuffleCommitment === null) return null;
   const runtime = blackjackRuntimeFor(journey, siteId);
   if (
@@ -314,8 +322,10 @@ export function playAgainBlackjack(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const previousShuffleCommitment = asString(payload.previousShuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const previousShuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.previousShuffleCommitment,
+  );
   if (siteId === null || previousShuffleCommitment === null) return null;
 
   const runtime = blackjackRuntimeFor(journey, siteId);
@@ -370,7 +380,7 @@ export function placeGravokWager(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   const rawGateId = asString(payload.gateId);
   if (siteId === null || rawGateId === null || !GATE_IDS.has(rawGateId)) {
     return null;
@@ -447,8 +457,10 @@ export function settleGravokWager(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const shuffleCommitment = asString(payload.shuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const shuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.shuffleCommitment,
+  );
   if (siteId === null || shuffleCommitment === null) return null;
 
   const runtime = gravokRuntimeFor(journey, siteId);
@@ -480,8 +492,10 @@ export function playAgainGravokWager(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const previousShuffleCommitment = asString(payload.previousShuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const previousShuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.previousShuffleCommitment,
+  );
   if (siteId === null || previousShuffleCommitment === null) return null;
 
   const runtime = gravokRuntimeFor(journey, siteId);
@@ -527,8 +541,10 @@ export function replaceGravokWagerDreamsign(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const replacedDreamsignId = asString(payload.replacedDreamsignId);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const replacedDreamsignId = dreamsignIdFromUnknown(
+    payload.replacedDreamsignId,
+  );
   if (siteId === null || replacedDreamsignId === null) return null;
 
   const runtime = gravokRuntimeFor(journey, siteId);
@@ -569,7 +585,7 @@ export function drawTidemarkLadderClimb(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
 
   const runtime = tidemarkRuntimeFor(journey, siteId);
@@ -629,8 +645,10 @@ export function settleTidemarkLadderClimb(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const shuffleCommitment = asString(payload.shuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const shuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.shuffleCommitment,
+  );
   if (siteId === null || shuffleCommitment === null) return null;
 
   const runtime = tidemarkRuntimeFor(journey, siteId);
@@ -688,8 +706,10 @@ export function replaceTidemarkLadderClimbDreamsign(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const replacedDreamsignId = asString(payload.replacedDreamsignId);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const replacedDreamsignId = dreamsignIdFromUnknown(
+    payload.replacedDreamsignId,
+  );
   if (siteId === null || replacedDreamsignId === null) return null;
 
   const runtime = tidemarkRuntimeFor(journey, siteId);
@@ -727,7 +747,7 @@ export function drawStarwayStairs(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
+  const siteId = siteIdFromUnknown(payload.siteId);
   if (siteId === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
   const game = configuredGame("starwayStairs");
@@ -759,8 +779,10 @@ export function settleStarwayStairs(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const shuffleCommitment = asString(payload.shuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const shuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.shuffleCommitment,
+  );
   if (siteId === null || shuffleCommitment === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
   const result = runtime?.results[runtime.results.length - 1];
@@ -802,8 +824,10 @@ export function cashOutStarwayStairs(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const shuffleCommitment = asString(payload.shuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const shuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.shuffleCommitment,
+  );
   if (siteId === null || shuffleCommitment === null) return null;
   const runtime = starwayRuntimeFor(journey, siteId);
   const result = runtime?.results[runtime.results.length - 1];
@@ -837,8 +861,10 @@ export function playAgainStarwayStairs(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const previousShuffleCommitment = asString(payload.previousShuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const previousShuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.previousShuffleCommitment,
+  );
   if (siteId === null || previousShuffleCommitment === null) return null;
 
   const runtime = starwayRuntimeFor(journey, siteId);
@@ -884,8 +910,8 @@ export function drawFourSuitReprise(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const entryId = asString(payload.entryId);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const entryId = deckEntryIdFromUnknown(payload.entryId);
   if (siteId === null || entryId === null) return null;
 
   const runtime = fourSuitRuntimeFor(journey, siteId);
@@ -951,8 +977,10 @@ export function settleFourSuitReprise(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const shuffleCommitment = asString(payload.shuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const shuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.shuffleCommitment,
+  );
   if (siteId === null || shuffleCommitment === null) return null;
 
   const runtime = fourSuitRuntimeFor(journey, siteId);
@@ -998,13 +1026,17 @@ export function settleFourSuitReprise(
   } else if (round.outcome === "duplication") {
     const duplicatedEntryId = mintEntryId(journey.deck, ctx.seq, 0);
     const copy: DeckEntry = {
-      entryId: duplicatedEntryId,
+      entryId: asDeckEntryId(duplicatedEntryId),
       cardNumber: target.cardNumber,
       transfiguration: null,
       isBane: false,
     };
     nextJourney = { ...journey, deck: [...journey.deck, copy] };
-    nextRound = { ...nextRound, resultSettled: true, duplicatedEntryId };
+    nextRound = {
+      ...nextRound,
+      resultSettled: true,
+      duplicatedEntryId: asDeckEntryId(duplicatedEntryId),
+    };
   } else if (round.outcome === "purge") {
     nextJourney = {
       ...journey,
@@ -1028,8 +1060,10 @@ export function chooseFourSuitRepriseTransfiguration(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const shuffleCommitment = asString(payload.shuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const shuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.shuffleCommitment,
+  );
   const type = asString(payload.type) as TransfigurationType | null;
   if (siteId === null || shuffleCommitment === null || type === null) {
     return null;
@@ -1101,8 +1135,10 @@ export function playAgainFourSuitReprise(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const siteId = asString(payload.siteId);
-  const previousShuffleCommitment = asString(payload.previousShuffleCommitment);
+  const siteId = siteIdFromUnknown(payload.siteId);
+  const previousShuffleCommitment = shuffleCommitmentFromUnknown(
+    payload.previousShuffleCommitment,
+  );
   if (siteId === null || previousShuffleCommitment === null) return null;
 
   const runtime = fourSuitRuntimeFor(journey, siteId);

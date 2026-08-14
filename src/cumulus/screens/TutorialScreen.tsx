@@ -1,9 +1,4 @@
-import {
-  assertLocalized,
-  tx,
-  txa,
-  type LocalizedString,
-} from "@trox/runtime";
+import { assertLocalized, tx, txa, type LocalizedString } from "@trox/runtime";
 import { MotionConfig, motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
@@ -75,6 +70,16 @@ import type {
 import { renderTutorialInstructionParagraph } from "../internal/tutorial-instruction-text";
 import { parseTutorialInstructionMarkup } from "../../data/tutorial-instruction-markup";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
+import type { CardId } from "../../types/card-identity";
+import type {
+  BattleCardId,
+  BattleSlotViewId,
+  DreamAvatarId,
+} from "../../types/identifiers";
+import { asBattleSlotViewId, asDreamAvatarId } from "../../types/identifiers";
+import type { TutorialActionId } from "../../types/identifiers";
+import type { TutorialRunId } from "../../types/identifiers";
+import { asTutorialRunId } from "../../types/identifiers";
 
 export interface TutorialDreamAvatarView {
   readonly visual: DreamAvatarVisual;
@@ -84,7 +89,7 @@ export interface TutorialDreamAvatarView {
 
 export type TutorialDialogueView =
   | {
-      readonly actionId?: string;
+      readonly actionId?: TutorialActionId;
       readonly parentAction?: TutorialAction["action"];
       readonly kind: "guide";
       readonly delay?: number;
@@ -95,7 +100,7 @@ export type TutorialDialogueView =
       readonly model: CharacterDialogueModel;
     }
   | {
-      readonly actionId?: string;
+      readonly actionId?: TutorialActionId;
       readonly parentAction?: TutorialAction["action"];
       readonly kind: "dreamAvatar";
       readonly owner: TutorialDreamAvatarOwner;
@@ -115,7 +120,7 @@ export interface TutorialChallengeParticipantView {
 }
 
 export interface TutorialChallengeView {
-  readonly actionId: string;
+  readonly actionId: TutorialActionId;
   readonly challenger: TutorialChallengeParticipantView;
   readonly blocker: TutorialChallengeParticipantView;
   readonly winnerOwner: TutorialDreamAvatarOwner;
@@ -125,7 +130,7 @@ export interface TutorialChallengeView {
 export interface TutorialView {
   readonly battle: MobileBattleView;
   readonly cardDraw?: {
-    readonly actionId: string;
+    readonly actionId: TutorialActionId;
     readonly owner: TutorialDreamAvatarOwner;
     readonly card: MobileBattleCardView;
   } | null;
@@ -135,10 +140,10 @@ export interface TutorialView {
     TutorialDreamAvatarOwner,
     TutorialDreamAvatarView
   >;
-  readonly playbackRunId: string | null;
+  readonly playbackRunId: TutorialRunId | null;
   readonly currentAction: TutorialAction | null;
   readonly howToPlay: {
-    readonly actionId: string;
+    readonly actionId: TutorialActionId;
     readonly text: LocalizedString;
     readonly wait: number;
     readonly trigger: TutorialHowToPlayTrigger;
@@ -146,15 +151,15 @@ export interface TutorialView {
     readonly cardWidth?: number;
   } | null;
   readonly endTurn: {
-    readonly actionId: string;
-    readonly triggerCardId: string;
+    readonly actionId: TutorialActionId;
+    readonly triggerCardId: CardId;
     readonly ready: boolean;
   } | null;
   readonly playerReposition?: {
-    readonly actionId: string;
-    readonly cardInstanceId: string;
-    readonly cardId: string;
-    readonly opposingCardId: string;
+    readonly actionId: TutorialActionId;
+    readonly cardInstanceId: BattleCardId;
+    readonly cardId: CardId;
+    readonly opposingCardId: CardId;
   } | null;
   readonly challenge?: TutorialChallengeView | null;
 }
@@ -171,41 +176,47 @@ export interface TutorialScreenProps {
   readonly editor?: TutorialEditorView;
   /** Multiplier applied to every timed part of the tutorial sequence. */
   readonly playbackSpeed?: number;
-  readonly onActionComplete?: (runId: string, actionId: string) => void;
+  readonly onActionComplete?: (
+    runId: TutorialRunId,
+    actionId: TutorialActionId,
+  ) => void;
   readonly onDreamAvatarArrivalComplete?: (
-    dreamAvatarId: string,
+    dreamAvatarId: DreamAvatarId,
     owner: TutorialDreamAvatarOwner,
   ) => void;
   readonly onHowToPlayPresented?: (
-    runId: string,
-    actionId: string,
+    runId: TutorialRunId,
+    actionId: TutorialActionId,
     trigger: TutorialHowToPlayTrigger,
   ) => void;
   readonly onHowToPlayDismissed?: (
-    runId: string,
-    actionId: string,
+    runId: TutorialRunId,
+    actionId: TutorialActionId,
     trigger: TutorialHowToPlayTrigger,
   ) => void;
   readonly onPlayerCardPlay?: (
-    runId: string,
-    cardInstanceId: string,
-    cardId: string,
-    targetSlotId: string | null,
+    runId: TutorialRunId,
+    cardInstanceId: BattleCardId,
+    cardId: CardId,
+    targetSlotId: BattleSlotViewId | null,
   ) => void;
-  readonly onEndTurn?: (runId: string, actionId: string) => void;
+  readonly onEndTurn?: (
+    runId: TutorialRunId,
+    actionId: TutorialActionId,
+  ) => void;
   readonly onPlayerCharacterReposition?: (
-    runId: string,
-    actionId: string,
-    cardId: string,
-    opposingCardId: string,
-    targetSlotId: string,
+    runId: TutorialRunId,
+    actionId: TutorialActionId,
+    cardId: CardId,
+    opposingCardId: CardId,
+    targetSlotId: BattleSlotViewId,
   ) => void;
   readonly onEditorActionsChange?: (
     actions: readonly TutorialAction[],
     persist: boolean,
   ) => void;
   readonly onReplay?: () => void;
-  readonly onPlayFromAction?: (actionId: string) => void;
+  readonly onPlayFromAction?: (actionId: TutorialActionId) => void;
 }
 
 interface TutorialDialogueAnchor {
@@ -298,9 +309,9 @@ function TutorialRepositionTargetResolver({
   onTargetSlotChange,
 }: {
   readonly screen: HTMLElement;
-  readonly cardId: string;
-  readonly opposingCardId: string;
-  readonly onTargetSlotChange: (slotId: string | null) => void;
+  readonly cardId: CardId;
+  readonly opposingCardId: CardId;
+  readonly onTargetSlotChange: (slotId: BattleSlotViewId | null) => void;
 }): null {
   useLayoutEffect(() => {
     const sourceCard = screen.querySelector<HTMLElement>(
@@ -350,7 +361,7 @@ function TutorialRepositionTargetResolver({
         onTargetSlotChange(null);
         return;
       }
-      onTargetSlotChange(targetSlotId);
+      onTargetSlotChange(asBattleSlotViewId(targetSlotId));
     };
 
     updateGeometry();
@@ -399,14 +410,8 @@ function TutorialHowToPlayDialog({
       style={{ visibility: staged ? "hidden" : "visible" }}
     >
       <GlassDialog
-        title={tx(
-          "How to Play",
-          "[tutorial] How to play title.",
-        )}
-        closeLabel={tx(
-          "Close how to play",
-          "[tutorial] How to play close.",
-        )}
+        title={tx("How to Play", "[tutorial] How to play title.")}
+        closeLabel={tx("Close how to play", "[tutorial] How to play close.")}
         presentation="popup"
         chrome="flowing-close"
         companion={
@@ -581,7 +586,9 @@ function expandedTutorialSide(
     ...Array.from(
       { length: Math.max(0, count - slots.length) },
       (_, offset) => ({
-        id: `${owner}-${rank}-${String(slots.length + offset)}`,
+        id: asBattleSlotViewId(
+          `${owner}-${rank}-${String(slots.length + offset)}`,
+        ),
         card: null,
       }),
     ),
@@ -1722,15 +1729,13 @@ export function TutorialScreen({
   >(null);
   const [completedTurnAnnouncementSide, setCompletedTurnAnnouncementSide] =
     useState<"enemy" | "player" | null>(null);
-  const [pendingTutorialCardId, setPendingTutorialCardId] = useState<
-    string | null
-  >(null);
-  const [repositionTargetSlotId, setRepositionTargetSlotId] = useState<
-    string | null
-  >(null);
+  const [pendingTutorialCardId, setPendingTutorialCardId] =
+    useState<BattleCardId | null>(null);
+  const [repositionTargetSlotId, setRepositionTargetSlotId] =
+    useState<BattleSlotViewId | null>(null);
   const [repositionRequestedActionKey, setRepositionRequestedActionKey] =
     useState<string | null>(null);
-  const pendingTutorialCardIdRef = useRef<string | null>(null);
+  const pendingTutorialCardIdRef = useRef<BattleCardId | null>(null);
   const tutorialCardDropHandledRef = useRef(false);
   const reportedDrawKeys = useRef<Set<string>>(new Set());
   const reportedArrivalKeys = useRef<Set<string>>(new Set());
@@ -2118,7 +2123,7 @@ export function TutorialScreen({
     reportedArrivalKeys.current.add(dreamAvatarArrival.key);
     setArrivedActionKey(dreamAvatarArrival.key);
     onDreamAvatarArrivalComplete?.(
-      dreamAvatarArrival.dreamAvatar.profile.id,
+      asDreamAvatarId(dreamAvatarArrival.dreamAvatar.profile.id),
       dreamAvatarArrival.owner,
     );
   }, [dreamAvatarArrival, onDreamAvatarArrivalComplete]);
@@ -2159,7 +2164,7 @@ export function TutorialScreen({
       }
       setHowToPlayPresentedActionKey(actionKey);
       onHowToPlayPresented?.(
-        runId,
+        asTutorialRunId(runId),
         view.howToPlay.actionId,
         view.howToPlay.trigger,
       );
@@ -2206,7 +2211,11 @@ export function TutorialScreen({
       return;
     }
     setHowToPlayPresentedActionKey(actionKey);
-    onHowToPlayPresented?.(runId, howToPlay.actionId, howToPlay.trigger);
+    onHowToPlayPresented?.(
+      asTutorialRunId(runId),
+      howToPlay.actionId,
+      howToPlay.trigger,
+    );
   }, [
     completedTurnAnnouncementSide,
     dreamwellEmergedActionKey,
@@ -2231,11 +2240,11 @@ export function TutorialScreen({
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     if (wait === 0) {
-      onActionComplete?.(runId, id);
+      onActionComplete?.(asTutorialRunId(runId), id);
       return undefined;
     }
     const timeout = window.setTimeout(
-      () => onActionComplete?.(runId, id),
+      () => onActionComplete?.(asTutorialRunId(runId), id),
       millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
@@ -2274,7 +2283,7 @@ export function TutorialScreen({
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
-      () => onActionComplete?.(runId, id),
+      () => onActionComplete?.(asTutorialRunId(runId), id),
       millisecondsAtPlaybackSpeed(
         TUTORIAL_CARD_TRAVEL_SECONDS + wait,
         playbackSpeed,
@@ -2302,7 +2311,7 @@ export function TutorialScreen({
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
-      () => onActionComplete?.(runId, id),
+      () => onActionComplete?.(asTutorialRunId(runId), id),
       millisecondsAtPlaybackSpeed(
         TUTORIAL_CARD_TRAVEL_SECONDS + wait,
         playbackSpeed,
@@ -2334,11 +2343,11 @@ export function TutorialScreen({
     const { id, revealDuration = 0, wait } = view.currentAction;
     const runId = view.playbackRunId;
     if (revealDuration + wait === 0) {
-      onActionComplete?.(runId, id);
+      onActionComplete?.(asTutorialRunId(runId), id);
       return undefined;
     }
     const timeout = window.setTimeout(
-      () => onActionComplete?.(runId, id),
+      () => onActionComplete?.(asTutorialRunId(runId), id),
       millisecondsAtPlaybackSpeed(revealDuration + wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
@@ -2368,11 +2377,11 @@ export function TutorialScreen({
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     if (wait === 0) {
-      onActionComplete?.(runId, id);
+      onActionComplete?.(asTutorialRunId(runId), id);
       return undefined;
     }
     const timeout = window.setTimeout(
-      () => onActionComplete?.(runId, id),
+      () => onActionComplete?.(asTutorialRunId(runId), id),
       millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
@@ -2397,7 +2406,7 @@ export function TutorialScreen({
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
-      () => onActionComplete?.(runId, id),
+      () => onActionComplete?.(asTutorialRunId(runId), id),
       millisecondsAtPlaybackSpeed(
         TUTORIAL_OPPONENT_REPOSITION_SECONDS + wait,
         playbackSpeed,
@@ -2417,7 +2426,11 @@ export function TutorialScreen({
     const howToPlay = view.howToPlay;
     if (runId === null || howToPlay === null) return;
     setHowToPlayDismissedActionKey(`${runId}:${howToPlay.actionId}`);
-    onHowToPlayDismissed?.(runId, howToPlay.actionId, howToPlay.trigger);
+    onHowToPlayDismissed?.(
+      asTutorialRunId(runId),
+      howToPlay.actionId,
+      howToPlay.trigger,
+    );
   }, [onHowToPlayDismissed, view.howToPlay, view.playbackRunId]);
 
   // The instructional action has completed by the time the player receives
@@ -2466,7 +2479,7 @@ export function TutorialScreen({
   }, [playerRepositionActionKey]);
 
   const playTutorialCard = useCallback(
-    (targetSlotId: string | null): void => {
+    (targetSlotId: BattleSlotViewId | null): void => {
       const runId = view.playbackRunId;
       const card = tutorialPlayableCard;
       if (
@@ -2480,7 +2493,12 @@ export function TutorialScreen({
       tutorialCardDropHandledRef.current = true;
       pendingTutorialCardIdRef.current = null;
       setPendingTutorialCardId(null);
-      onPlayerCardPlay(runId, card.id, card.model.cardId, targetSlotId);
+      onPlayerCardPlay(
+        asTutorialRunId(runId),
+        card.id,
+        card.model.cardId,
+        targetSlotId,
+      );
     },
     [onPlayerCardPlay, tutorialPlayableCard, view.playbackRunId],
   );
@@ -2578,7 +2596,7 @@ export function TutorialScreen({
                   `${view.playbackRunId}:${playerReposition.actionId}`,
                 );
                 onPlayerCharacterReposition(
-                  view.playbackRunId,
+                  asTutorialRunId(view.playbackRunId),
                   playerReposition.actionId,
                   playerReposition.cardId,
                   playerReposition.opposingCardId,
@@ -2603,7 +2621,10 @@ export function TutorialScreen({
               ) {
                 return;
               }
-              onEndTurn?.(view.playbackRunId, view.endTurn.actionId);
+              onEndTurn?.(
+                asTutorialRunId(view.playbackRunId),
+                view.endTurn.actionId,
+              );
             },
           },
     [
@@ -2633,7 +2654,7 @@ export function TutorialScreen({
       return undefined;
     }
     const timeout = window.setTimeout(
-      () => onActionComplete?.(runId, howToPlay.actionId),
+      () => onActionComplete?.(asTutorialRunId(runId), howToPlay.actionId),
       millisecondsAtPlaybackSpeed(howToPlay.wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
@@ -2675,7 +2696,7 @@ export function TutorialScreen({
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
-      () => onActionComplete?.(runId, id),
+      () => onActionComplete?.(asTutorialRunId(runId), id),
       millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
@@ -3083,7 +3104,7 @@ export function TutorialScreen({
             playbackSpeed={playbackSpeed}
             onComplete={() =>
               onActionComplete?.(
-                challengeAnimation.runId,
+                asTutorialRunId(challengeAnimation.runId),
                 challengeAnimation.actionId,
               )
             }

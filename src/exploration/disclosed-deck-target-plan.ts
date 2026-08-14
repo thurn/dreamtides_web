@@ -11,13 +11,17 @@ import {
 } from "../reward-selection/types";
 import type { CardType } from "../types/cards";
 import type { JourneyState, SiteState } from "../types/journey";
+import type { DeckEntryId, SelectionKey } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type { ExplorationActionId } from "../types/identifiers";
+import { asSelectionKey } from "../types/identifiers";
 
 export type ExplorationDisclosedDeckTargetEffectKind =
   "change-card-type-selected";
 
 export interface ExplorationDisclosedDeckTargetBinding {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
 }
 
 export type ExplorationDisclosedDeckTargetUnavailableReason =
@@ -31,7 +35,7 @@ export interface ExplorationDisclosedDeckTargetPreparation {
   target: ExplorationDisclosedDeckTargetBinding | null;
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision: string;
-  selectionKey: string;
+  selectionKey: SelectionKey;
   selectorSignature?: string;
   selectorTrace?: RewardSelectionTrace;
   unavailableReason?: ExplorationDisclosedDeckTargetUnavailableReason;
@@ -41,8 +45,8 @@ export interface ExplorationDisclosedDeckTargetPreparation {
 export interface ExplorationDisclosedDeckTargetPlanInput {
   effectKind: ExplorationDisclosedDeckTargetEffectKind;
   cardType: CardType;
-  actionId: string;
-  encounterCardId: string;
+  actionId: ExplorationActionId;
+  encounterCardId: CardId;
   journey: JourneyState;
   site: SiteState;
   content: JourneyContent;
@@ -57,8 +61,10 @@ function isValidAuthoredInput(
   );
 }
 
-function selectionKey(input: ExplorationDisclosedDeckTargetPlanInput): string {
-  return `${input.actionId}:disclosed-deck-target`;
+function selectionKey(
+  input: ExplorationDisclosedDeckTargetPlanInput,
+): SelectionKey {
+  return asSelectionKey(`${input.actionId}:disclosed-deck-target`);
 }
 
 function eligibleBindings(

@@ -2,25 +2,35 @@ import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { useActions, useClientId, useGameState } from "../coop/hooks";
 import type { BattleFoldState, FrontDoorState } from "../rules/fold-state";
 import type { BeginTutorialOptions, TutorialAction } from "../types/tutorial";
+import type {
+  BattleId,
+  FrontDoorActionId,
+  JourneyId,
+  TutorialActionId,
+  TutorialRunId,
+} from "../types/identifiers";
 
 export interface FrontDoorMutations {
   action: (
     surface: "main" | "tutorial",
-    actionId: string,
+    actionId: FrontDoorActionId,
     detail?: unknown,
   ) => Promise<number>;
   advance: (
     from: "mainExiting" | "loading",
-    journeyId: string,
+    journeyId: JourneyId,
   ) => Promise<number>;
   beginTutorial: (
     actions: readonly TutorialAction[],
     options?: BeginTutorialOptions,
   ) => Promise<number>;
-  completeTutorialAction: (runId: string, actionId: string) => Promise<number>;
-  beginTutorialBattle?: (tutorialRunId: string) => Promise<number>;
-  restartTutorialBattle?: (battleId: string) => Promise<number>;
-  exitTutorialBattle?: (battleId: string) => Promise<number>;
+  completeTutorialAction: (
+    runId: TutorialRunId,
+    actionId: TutorialActionId,
+  ) => Promise<number>;
+  beginTutorialBattle?: (tutorialRunId: TutorialRunId) => Promise<number>;
+  restartTutorialBattle?: (battleId: BattleId) => Promise<number>;
+  exitTutorialBattle?: (battleId: BattleId) => Promise<number>;
 }
 
 export interface FrontDoorContextValue {

@@ -20,10 +20,13 @@ import {
   ShopFreePurchaseStatus,
   type ShopFreePurchaseStatusView,
 } from "./ShopFreePurchaseStatus";
+import type { DeckEntryId } from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 export interface CardShopOfferView {
   /** Stable UUID-derived tile id. */
-  entryId: string;
+  entryId: DeckEntryId;
   /** Persistent runtime slot index used to purchase the ware. */
   slotIndex: number;
   /** Fully resolved card rendered by GameCard. */
@@ -36,7 +39,7 @@ export interface CardShopOfferView {
 
 export interface CardShopRestockView {
   /** Stable action id. */
-  entryId: string;
+  entryId: DeckEntryId;
   /** Effective essence price for this visit. */
   price: number;
   /** Whether the one-use refresh can currently be triggered. */
@@ -48,7 +51,7 @@ export interface CardShopSiteView {
     Extract<import("../../types/sites-data").SitePresentation, { kind: "shop" }>
   >;
   /** Stable site id used by the shared character-gallery layout. */
-  siteId: string;
+  siteId: SiteId;
   /** Current dreamscape scene art behind the site, if resolved. */
   scene: ArtRef | null;
   /** Tobias's art and dialog line. */
@@ -136,7 +139,7 @@ function CardShopGallery({
           .map((offer) => offer.entryId),
       );
       return current.size === persisted.size &&
-        [...current].every((entryId) => persisted.has(entryId))
+        [...current].every((entryId) => persisted.has(asDeckEntryId(entryId)))
         ? current
         : persisted;
     });
@@ -224,10 +227,7 @@ function CardShopGallery({
           kind: "iconButton",
           button: {
             glyph: GLYPHS.close,
-            label: tx(
-              "Leave card shop",
-              "[ui] Card shop leave action.",
-            ),
+            label: tx("Leave card shop", "[ui] Card shop leave action."),
             onPress: onClose,
             testId: "cumulus-card-shop-leave",
           },

@@ -10,6 +10,7 @@ import type {
   EditorDisplayState,
   EditorTag,
 } from "./types";
+import type { CardId } from "../types/card-identity";
 
 export interface CardTagSaveState {
   saving: boolean;
@@ -35,7 +36,7 @@ export interface CardEditorGridProps {
   availableTides: EditorTag[];
   tagSaveState: Record<string, CardTagSaveState>;
   tideSaveState: Record<string, CardTagSaveState>;
-  onRulesFontSize?: (cardId: string, fontSizePx: number) => void;
+  onRulesFontSize?: (cardId: CardId, fontSizePx: number) => void;
   onOpenArtEditor: (card: EditorCardRecord) => void;
   onFieldBeginEdit: (
     card: EditorCardRecord,

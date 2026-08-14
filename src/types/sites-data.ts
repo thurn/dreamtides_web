@@ -1,5 +1,6 @@
 import type { RandomSiteDestinationType, SiteType } from "./site-type";
 import type { SourceTransport } from "../runtime/localization/runtime";
+import type { DreamscapeId, GlossaryEntryId, GuideId } from "./identifiers";
 
 export type SitePresentation =
   | {
@@ -17,7 +18,12 @@ export type SitePresentation =
       restockAction: SourceTransport;
       freePrice: SourceTransport;
     }
-  | { kind: "purge"; title: SourceTransport; instruction: SourceTransport; purgeAction: SourceTransport }
+  | {
+      kind: "purge";
+      title: SourceTransport;
+      instruction: SourceTransport;
+      purgeAction: SourceTransport;
+    }
   | {
       kind: "dreamsign-bazaar";
       title: SourceTransport;
@@ -27,7 +33,11 @@ export type SitePresentation =
       freePrice: SourceTransport;
       replacementTitle: SourceTransport;
     }
-  | { kind: "dreamsign-revelation"; loading: SourceTransport; exhausted: SourceTransport }
+  | {
+      kind: "dreamsign-revelation";
+      loading: SourceTransport;
+      exhausted: SourceTransport;
+    }
   | { kind: "random-site"; title: SourceTransport };
 
 export interface DuplicationSiteRules {
@@ -43,7 +53,7 @@ export type SiteRules = DuplicationSiteRules;
 
 export interface SiteTypeData {
   icon: string;
-  glossaryId: string;
+  glossaryId: GlossaryEntryId;
   presentation: SitePresentation | null;
   rules: SiteRules | null;
 }
@@ -62,15 +72,15 @@ export interface SitesData {
     destinations: readonly RandomSiteDestinationType[];
     homeChoiceCount: number;
     insufficientDestinations: "fail";
-    guideId: string;
+    guideId: GuideId;
   };
   guideAssignments: Readonly<
     Partial<
       Record<
         SiteType,
         {
-          guideId: string;
-          homeDreamscapeId: string;
+          guideId: GuideId;
+          homeDreamscapeId: DreamscapeId;
         }
       >
     >

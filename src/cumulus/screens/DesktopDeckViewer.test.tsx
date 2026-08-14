@@ -10,6 +10,7 @@ import { CumulusRoot } from "../CumulusRoot";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { DesktopDeckViewer } from "./DesktopDeckViewer";
 import { assertLocalized } from "@trox/runtime";
+import { asDeckEntryId } from "../../types/identifiers";
 
 function deckCard(index: number): DeckCardView {
   const card: CardData = {
@@ -27,7 +28,7 @@ function deckCard(index: number): DeckCardView {
     artOwned: false,
   };
   return {
-    entryId: `entry-${String(index)}`,
+    entryId: asDeckEntryId(`entry-${String(index)}`),
     model: { cardId: card.id, displaySnapshot: card },
     isBane: false,
   };

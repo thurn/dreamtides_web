@@ -14,6 +14,10 @@ import { asCardId } from "../../types/card-identity";
 import type { JourneyState, SiteState } from "../../types/journey";
 import { buildExplorationRuntime } from "./exploration-provider";
 import { createCardTutorialGuidanceContentProvider } from "./card-tutorial-guidance-provider";
+import { asSiteId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
+import { asAuguryArchetypeId } from "../../types/identifiers";
 
 function uuid(index: number) {
   return asCardId(
@@ -34,18 +38,21 @@ describe("card tutorial guidance content provider", () => {
     );
     const content = makeMerchantTestContent({ cards });
     const site = makeMerchantTestSite({
-      id: "augury-with-transfiguration",
+      id: asSiteId("augury-with-transfiguration"),
       type: "Augury",
     });
     const journey = makeMerchantTestJourneyState({
       deck: [
-        makeMerchantTestDeckEntry({ entryId: "deck-1", cardNumber: 1 }),
+        makeMerchantTestDeckEntry({
+          entryId: asDeckEntryId("deck-1"),
+          cardNumber: 1,
+        }),
       ],
       siteRuntime: {
         [site.id]: {
           kind: "augury",
           completed: false,
-          forcedArchetypeId: "transfigured_draft",
+          forcedArchetypeId: asAuguryArchetypeId("transfigured_draft"),
         },
       },
     });
@@ -70,13 +77,13 @@ describe("card tutorial guidance content provider", () => {
       spark: 2,
     });
     const transfigureAction: ExplorationActionContent = {
-      id: "transfigure-card",
+      id: asExplorationActionId("transfigure-card"),
       label: "Change a card",
       effectText: "Transfigure a chosen card.",
       effectKind: "transfigure-selected",
     };
     const ordinaryAction: ExplorationActionContent = {
-      id: "gain-essence",
+      id: asExplorationActionId("gain-essence"),
       label: "Gather essence",
       effectText: "Gain essence.",
       effectKind: "gain-essence-per-card",
@@ -98,14 +105,17 @@ describe("card tutorial guidance content provider", () => {
       exploration,
     };
     const site: SiteState = {
-      id: "exploration-with-transfiguration",
+      id: asSiteId("exploration-with-transfiguration"),
       type: "Exploration",
       isEnhanced: false,
       isVisited: false,
     };
     const baseJourney = makeMerchantTestJourneyState({
       deck: [
-        makeMerchantTestDeckEntry({ entryId: "deck-1", cardNumber: 102 }),
+        makeMerchantTestDeckEntry({
+          entryId: asDeckEntryId("deck-1"),
+          cardNumber: 102,
+        }),
       ],
     });
     const runtime = buildExplorationRuntime(
@@ -158,6 +168,8 @@ describe("card tutorial guidance content provider", () => {
         },
       },
     };
-    expect(provider.hasVisibleTransfigurationReward(resolved, site)).toBe(false);
+    expect(provider.hasVisibleTransfigurationReward(resolved, site)).toBe(
+      false,
+    );
   });
 });

@@ -15,13 +15,19 @@ import {
   selectionMetadata,
   selectMerchantReward,
 } from "./sharedSelection";
+import { asChoiceId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asMerchantTargetKey } from "../../types/identifiers";
 
 /** Duplicates strong entries, using rarity first and leave-one-out affinity second. */
 export const duplicateBuilder: MerchantArchetypeBuilder = {
   archetypeId: "duplicate",
   family: "duplicate",
   eligible: (context) => context.deckCards.some((card) => !card.card.isStarter),
-  build(context: MerchantContext, _rng: MerchantRng): MerchantOfferDraft | null {
+  build(
+    context: MerchantContext,
+    _rng: MerchantRng,
+  ): MerchantOfferDraft | null {
     const archetype = auguryArchetype(
       context.rewardSelection.content.auguryData,
       "duplicate",
@@ -36,7 +42,9 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
     if (selection === null) return null;
     const sampled = selection.bindings.deckEntryIds.flatMap((entryId) => {
       const deckCard = context.deckEntryById.get(entryId);
-      return deckCard === undefined ? [] : [{ entryId, deckCard }];
+      return deckCard === undefined
+        ? []
+        : [{ entryId: asDeckEntryId(entryId), deckCard }];
     });
     if (sampled.length === 0) return null;
 
@@ -65,21 +73,25 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
         family: "duplicate",
         gameObjects: [object(target.deckCard)],
         applyPayload: payload(target.deckCard),
-        targetKey: target.entryId,
+        targetKey: asMerchantTargetKey(target.entryId),
         ...selectionMetadata(selection),
       };
     }
-    const candidates: MerchantChoiceCandidateDraft[] = sampled.map((target) => ({
-      choiceId: target.entryId,
-      gameObjects: [object(target.deckCard)],
-      applyPayload: payload(target.deckCard),
-    }));
+    const candidates: MerchantChoiceCandidateDraft[] = sampled.map(
+      (target) => ({
+        choiceId: asChoiceId(target.entryId),
+        gameObjects: [object(target.deckCard)],
+        applyPayload: payload(target.deckCard),
+      }),
+    );
     return {
       archetypeId: "duplicate",
       family: "duplicate",
       gameObjects: [],
       choiceRequest: { choiceType: "catalogCard", candidates },
-      targetKey: sampled.map((entry) => entry.entryId).join(","),
+      targetKey: asMerchantTargetKey(
+        sampled.map((entry) => entry.entryId).join(","),
+      ),
       ...selectionMetadata(selection),
     };
   },

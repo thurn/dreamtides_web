@@ -27,14 +27,14 @@ The caller owns board geometry and battle legality; quick press and deliberate d
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `battleCardId` | `string` | no | Stable battle-instance identity used by every interaction callback. |
+| `battleCardId` | `BattleCardId` | no | Stable battle-instance identity used by every interaction callback. |
 | `card` | `GameCardModel` | no | Complete resolved game-card presentation. |
 | `exhausted` | `boolean` | no | Whether the battle instance is exhausted. |
 | `storedMemory` | `number` | no | Prepared stored-memory count shown on the card. |
 | `figment` | `boolean` | no | Whether to use the canonical Figment treatment. |
 | `selection` | `GameCardSelection` | yes | Optional semantic selection treatment prepared by the board. |
 | `challengeMarker` | `{ readonly owner: "player" \| "enemy"; readonly side: "near" \| "far"; }` | yes | Optional challenge ownership and viewer-relative orientation. |
-| `scoreAnnouncement` | `{ readonly points: number; readonly presentationId: string; }` | yes | Optional score announcement attached to this battle instance. |
+| `scoreAnnouncement` | `{ readonly points: number; readonly presentationId: PresentationId; }` | yes | Optional score announcement attached to this battle instance. |
 | `motion` | `"snap" \| "travel"` | no | Named layout-motion behavior for board travel. |
 | `presentation` | `"battlefield" \| "full"` | no | Canonical compact battlefield or complete-card presentation. |
 

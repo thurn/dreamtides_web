@@ -3,6 +3,7 @@ import type { BattleMutableState, BattleSide } from "../../battle/types";
 import { rankSlotIds } from "../../battle/types";
 import type { EffectBindings } from "./fold";
 import type { BattlePromptText } from "../../data/dreamwell-prompts";
+import type { BattleCardId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Core types
@@ -20,11 +21,11 @@ export interface StepContext {
   /** The triggering card's `battleCardId`, when the effect resolves from a
    *  specific in-play character (Dawn/Materialized self-effects). Absent for
    *  side-scoped effects. */
-  sourceId?: string;
+  sourceId?: BattleCardId;
   /** Plain trigger-edge facts captured before a source changed zones. */
   bindings?: EffectBindings;
   /** Candidate ids materialized when this prompt opened. */
-  promptCandidateIds?: readonly string[];
+  promptCandidateIds?: readonly BattleCardId[];
   /** True while this step runs inside the scripted tutorial battle. Use only
    *  for a board-position preference in a specific guided teaching moment
    *  (e.g. centering a demonstrated figment instead of the documented
@@ -42,15 +43,18 @@ export type EffectPrompt =
       subtitle?: BattlePromptText;
       count: number;
       optional: boolean;
-      candidates: (ctx: StepContext) => string[];
-      resolve: (chosenIds: string[], ctx: StepContext) => BattleDebugEdit[];
+      candidates: (ctx: StepContext) => BattleCardId[];
+      resolve: (
+        chosenIds: BattleCardId[],
+        ctx: StepContext,
+      ) => BattleDebugEdit[];
       /**
        * Optional callout: ids among the candidates worth flagging in the picker,
        * e.g. the card just drawn by a preceding draw step so a "draw then
        * discard" effect makes it obvious which card is new. The picker badges
        * these; resolution is unaffected.
        */
-      highlight?: (ctx: StepContext) => string[];
+      highlight?: (ctx: StepContext) => BattleCardId[];
     }
   | {
       kind: "choice";
@@ -85,7 +89,7 @@ export function charactersInVoid(
   state: BattleMutableState,
   side: BattleSide,
   maxCost?: number,
-): string[] {
+): BattleCardId[] {
   return state.sides[side].void.filter((id) => {
     const instance = state.cardInstances[id];
     if (instance === undefined) return false;
@@ -103,7 +107,7 @@ export function charactersInVoid(
 export function eventsInVoid(
   state: BattleMutableState,
   side: BattleSide,
-): string[] {
+): BattleCardId[] {
   return state.sides[side].void.filter((id) => {
     const instance = state.cardInstances[id];
     if (instance === undefined) return false;
@@ -118,7 +122,7 @@ export function eventsInVoid(
 export function enemyCharactersInPlay(
   state: BattleMutableState,
   side: BattleSide,
-): string[] {
+): BattleCardId[] {
   return ranksOccupants(state, opponentOf(side));
 }
 
@@ -129,7 +133,7 @@ export function enemyCharactersInPlay(
 export function alliesInPlay(
   state: BattleMutableState,
   side: BattleSide,
-): string[] {
+): BattleCardId[] {
   return ranksOccupants(state, side);
 }
 
@@ -185,7 +189,7 @@ export function erodeEdits(side: BattleSide, count: number): BattleDebugEdit[] {
  * instance is absent, returns `[]`.
  */
 export function addGainedSparkEdits(
-  battleCardId: string,
+  battleCardId: BattleCardId,
   amount: number,
   state: BattleMutableState,
 ): BattleDebugEdit[] {
@@ -223,7 +227,7 @@ export function topOfDeck(
   state: BattleMutableState,
   side: BattleSide,
   n: number,
-): string[] {
+): BattleCardId[] {
   return state.sides[side].deck.slice(0, n);
 }
 
@@ -232,8 +236,11 @@ export function topOfDeck(
 // ---------------------------------------------------------------------------
 
 /** Collects all non-null occupants from both rank zones for `side`. */
-function ranksOccupants(state: BattleMutableState, side: BattleSide): string[] {
-  const result: string[] = [];
+function ranksOccupants(
+  state: BattleMutableState,
+  side: BattleSide,
+): BattleCardId[] {
+  const result: BattleCardId[] = [];
   for (const slotId of rankSlotIds(state.sides[side].backRank)) {
     const id = state.sides[side].backRank[slotId];
     if (id !== null) result.push(id);

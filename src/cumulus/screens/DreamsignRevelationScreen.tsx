@@ -22,6 +22,8 @@ import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type { DreamsignId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
@@ -64,7 +66,7 @@ export interface DreamsignRevelationScreenProps {
   /** Skip the offer and return to the dreamscape. */
   onSkip: () => void;
   /** Replace an owned dreamsign while accepting the pending one. */
-  onPurge: (dreamsignId: string) => void;
+  onPurge: (dreamsignId: DreamsignId) => void;
   /** Cancel cap handling and return to the offer. */
   onCancelPurge: () => void;
   /** Index currently animating toward the JourneyStatusBar. */
@@ -116,7 +118,7 @@ export function DreamsignRevelationScreen({
       }}
     >
       <SiteLayout
-        siteId="dreamsign-revelation"
+        siteId={asSiteId("dreamsign-revelation")}
         scene={view.scene}
         moteTint="violet"
         guide={{ ...view.guide, presence: "speaking" }}

@@ -9,35 +9,42 @@ import type {
   RewardMechanicId,
   RewardSelectionPolicyId,
 } from "../reward-selection";
+import type { CardId } from "../types/card-identity";
+import type { DreamsignId, ExplorationActionId } from "../types/identifiers";
 
 export type EncounterRenderedTemplatePart =
   | { kind: "text"; text: string }
   | {
-    kind: "variable";
-    placeholder: string;
-    variableName: string;
-    value: unknown;
-    text: string;
-  }
+      kind: "variable";
+      placeholder: string;
+      variableName: string;
+      value: unknown;
+      text: string;
+    }
   | {
-    kind: "card";
-    placeholder: string;
-    cardId: string;
-    cardName: string;
-  }
+      kind: "card";
+      placeholder: string;
+      cardId: CardId;
+      cardName: string;
+    }
   | {
-    kind: "dreamsign";
-    placeholder: string;
-    dreamsignId: string;
-    dreamsignName: string;
-  };
+      kind: "dreamsign";
+      placeholder: string;
+      dreamsignId: DreamsignId;
+      dreamsignName: string;
+    };
 
 export interface EncounterRuntimeCardSelection {
   placeholder: string;
   predicate: string | null;
-  cardId: string;
+  cardId: CardId;
   cardName: string;
-  source: "player_deck" | "catalog_fallback" | "offer_pool" | "starter_deck" | "fixed_reference";
+  source:
+    | "player_deck"
+    | "catalog_fallback"
+    | "offer_pool"
+    | "starter_deck"
+    | "fixed_reference";
 }
 
 export type ExplorationEditorControl =
@@ -81,7 +88,7 @@ export interface ExplorationEditorEffectSchema {
 }
 
 export interface ExplorationEditorAction {
-  id: string;
+  id: ExplorationActionId;
   label: string;
   effectText: string;
   renderedEffectText: string;
@@ -95,8 +102,8 @@ export interface ExplorationEditorAction {
   predicate?: ExplorationPredicate;
   count?: number;
   cardType?: CardType;
-  cardId?: string;
-  dreamsignId?: string;
+  cardId?: CardId;
+  dreamsignId?: DreamsignId;
   packCount?: number;
   packSize?: number;
   offerCount?: number;
@@ -115,7 +122,7 @@ export interface ExplorationEditorAction {
 }
 
 export interface ExplorationEditorEncounter {
-  cardId: string;
+  cardId: CardId;
   cardName: string;
   cardAbilityText: string;
   imageNumber: number;
@@ -140,12 +147,12 @@ export interface ExplorationEditorLoadResult extends ExplorationEditorServerData
 export interface ExplorationEditorClient {
   load(signal?: AbortSignal): Promise<ExplorationEditorLoadResult>;
   saveProse(request: {
-    cardId: string;
+    cardId: CardId;
     value: string;
     clientRevision: number;
   }): Promise<{ data: ExplorationEditorServerData; clientRevision: number }>;
   saveAction(request: {
-    cardId: string;
+    cardId: CardId;
     slot: number;
     action: ExplorationEditorAction;
     clientRevision: number;

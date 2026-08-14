@@ -8,6 +8,10 @@ import type {
 } from "../../rules/battle/fold";
 import type { BattleCardInstance } from "../../battle/types";
 import { buildBattleTutorialGuidanceView } from "./battle-tutorial-guidance-view-model";
+import { asCardId } from "../../types/card-identity";
+import { asBattleCardId } from "../../types/identifiers";
+import { asTutorialTriggerId } from "../../types/identifiers";
+import { asPresentationId } from "../../types/identifiers";
 
 function battleWithMessage(message: TutorialGuidanceMessage): BattleFoldState {
   return {
@@ -16,7 +20,7 @@ function battleWithMessage(message: TutorialGuidanceMessage): BattleFoldState {
       kind: "tutorial-guidance",
       source: {
         kind: "dreamwell",
-        cardId: "03e4e701-4720-4278-8198-9b7e0514d4cf",
+        cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
         side: "player",
       },
       messages: [message],
@@ -24,15 +28,17 @@ function battleWithMessage(message: TutorialGuidanceMessage): BattleFoldState {
       continuation: { kind: "commands", commands: [] },
     },
     init: {
-      dreamwellDeck: [{
-        id: "03e4e701-4720-4278-8198-9b7e0514d4cf",
-        name: "Fixture Dreamwell",
-        renderedText: "Support.",
-        energyAdded: 1,
-        order: 1,
-        cardNumber: 1,
-        imageNumber: 1,
-      }],
+      dreamwellDeck: [
+        {
+          id: "03e4e701-4720-4278-8198-9b7e0514d4cf",
+          name: "Fixture Dreamwell",
+          renderedText: "Support.",
+          energyAdded: 1,
+          order: 1,
+          cardNumber: 1,
+          imageNumber: 1,
+        },
+      ],
       dreamAvatarSummary: {
         id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
         name: "Tensho",
@@ -71,41 +77,40 @@ describe("buildBattleTutorialGuidanceView", () => {
       speakerName: "Threxan",
       portrait: { kind: "dreamAvatar", imageNumber: "0025" },
     },
-  ])("maps $speaker trigger speech to its authored speaker", ({
-    speaker,
-    speakerName,
-    portrait,
-  }) => {
-    const view = buildBattleTutorialGuidanceView(
-      battleWithMessage({
-        triggerId: "support",
-        speaker,
-        duration: 5,
+  ])(
+    "maps $speaker trigger speech to its authored speaker",
+    ({ speaker, speakerName, portrait }) => {
+      const view = buildBattleTutorialGuidanceView(
+        battleWithMessage({
+          triggerId: asTutorialTriggerId("support"),
+          speaker,
+          duration: 5,
+          horizontalOffset: 24,
+          verticalOffset: -20,
+          bubbleWidth: 300,
+          text: "Support helps the characters in front of it.",
+        }),
+      );
+
+      expect(view).toMatchObject({
+        dialogue: {
+          portrait,
+          portraitAlt: speakerName,
+          speakerName,
+          text: "Support helps the characters in front of it.",
+        },
         horizontalOffset: 24,
         verticalOffset: -20,
         bubbleWidth: 300,
-        text: "Support helps the characters in front of it.",
-      }),
-    );
-
-    expect(view).toMatchObject({
-      dialogue: {
-        portrait,
-        portraitAlt: speakerName,
-        speakerName,
-        text: "Support helps the characters in front of it.",
-      },
-      horizontalOffset: 24,
-      verticalOffset: -20,
-      bubbleWidth: 300,
-    });
-  });
+      });
+    },
+  );
 
   it("uses automatic opponent guidance as the card's reveal window", () => {
     const battleCardId = "enemy-card";
     const cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e";
     const instance = {
-      battleCardId,
+      battleCardId: asBattleCardId(battleCardId),
       owner: "enemy",
       controller: "enemy",
       sparkDelta: 0,
@@ -133,7 +138,7 @@ describe("buildBattleTutorialGuidanceView", () => {
       },
       definition: {
         sourceDeckEntryId: null,
-        cardId,
+        cardId: asCardId(cardId),
         cardNumber: 520,
         name: "Synthetic opponent card",
         battleCardKind: "character",
@@ -150,7 +155,7 @@ describe("buildBattleTutorialGuidanceView", () => {
       },
     } as BattleCardInstance;
     const battle = battleWithMessage({
-      triggerId: "support",
+      triggerId: asTutorialTriggerId("support"),
       speaker: "mira",
       duration: 1,
       horizontalOffset: 0,
@@ -159,22 +164,23 @@ describe("buildBattleTutorialGuidanceView", () => {
       text: "Support helps the characters in front of it.",
     });
     battle.tutorialPresentation = {
-      id: "tutorial-guidance:support",
+      id: asPresentationId("tutorial-guidance:support"),
       kind: "tutorial-guidance",
       source: {
         kind: "card",
-        cardId,
-        battleCardId,
+        cardId: asCardId(cardId),
+        battleCardId: asBattleCardId(battleCardId),
         cardKind: "character",
         side: "enemy",
       },
-      messages: battle.tutorialPresentation?.kind === "tutorial-guidance"
-        ? battle.tutorialPresentation.messages
-        : [],
+      messages:
+        battle.tutorialPresentation?.kind === "tutorial-guidance"
+          ? battle.tutorialPresentation.messages
+          : [],
       messageIndex: 0,
       continuation: {
         kind: "play-card",
-        payload: { battleCardId },
+        payload: { battleCardId: asBattleCardId(battleCardId) },
         automatic: true,
       },
     };
@@ -186,15 +192,15 @@ describe("buildBattleTutorialGuidanceView", () => {
       duration: 2,
       source: {
         kind: "card",
-        battleCardId,
-        model: { cardId },
+        battleCardId: asBattleCardId(battleCardId),
+        model: { cardId: asCardId(cardId) },
       },
     });
   });
 
   it("maps Challenge guidance to a bubble without a companion card", () => {
     const battle = battleWithMessage({
-      triggerId: "spark-tie",
+      triggerId: asTutorialTriggerId("spark-tie"),
       speaker: "mira",
       duration: 5,
       horizontalOffset: 0,
@@ -203,7 +209,9 @@ describe("buildBattleTutorialGuidanceView", () => {
       text: "If spark values tie, both characters are dissolved.",
     });
     battle.tutorialPresentation = {
-      id: "tutorial-guidance:challenge-resolved:player:3:F0:spark-tie",
+      id: asPresentationId(
+        "tutorial-guidance:challenge-resolved:player:3:F0:spark-tie",
+      ),
       kind: "tutorial-guidance",
       source: {
         kind: "challenge",
@@ -211,9 +219,10 @@ describe("buildBattleTutorialGuidanceView", () => {
         turnNumber: 3,
         slotId: "F0",
       },
-      messages: battle.tutorialPresentation?.kind === "tutorial-guidance"
-        ? battle.tutorialPresentation.messages
-        : [],
+      messages:
+        battle.tutorialPresentation?.kind === "tutorial-guidance"
+          ? battle.tutorialPresentation.messages
+          : [],
       messageIndex: 0,
       continuation: { kind: "commands", commands: [] },
     };
@@ -227,7 +236,7 @@ describe("buildBattleTutorialGuidanceView", () => {
 
   it("maps a phase-level trigger to a bubble without a companion card", () => {
     const battle = battleWithMessage({
-      triggerId: "opponent-reposition-opportunity",
+      triggerId: asTutorialTriggerId("opponent-reposition-opportunity"),
       speaker: "mira",
       duration: 5,
       horizontalOffset: 0,
@@ -236,16 +245,19 @@ describe("buildBattleTutorialGuidanceView", () => {
       text: "Repositioning explanation.",
     });
     battle.tutorialPresentation = {
-      id: "tutorial-guidance:opponent-reposition-opportunity:player:3",
+      id: asPresentationId(
+        "tutorial-guidance:opponent-reposition-opportunity:player:3",
+      ),
       kind: "tutorial-guidance",
       source: {
         kind: "battle",
         activeSide: "player",
         turnNumber: 3,
       },
-      messages: battle.tutorialPresentation?.kind === "tutorial-guidance"
-        ? battle.tutorialPresentation.messages
-        : [],
+      messages:
+        battle.tutorialPresentation?.kind === "tutorial-guidance"
+          ? battle.tutorialPresentation.messages
+          : [],
       messageIndex: 0,
       continuation: { kind: "commands", commands: [] },
     };

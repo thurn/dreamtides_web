@@ -21,6 +21,7 @@ import type {
   FrontRankSlotId,
   BackRankSlotId,
 } from "../types";
+import { asBattleCardId, type BattleCardId } from "../../types/identifiers";
 
 /**
  * Default per-card status: every flag false and every numeric counter zero. A
@@ -42,7 +43,9 @@ export function createDefaultBattleCardStatus(): BattleCardStatus {
   };
 }
 
-export function createInitialBattleState(battleInit: BattleInit): BattleMutableState {
+export function createInitialBattleState(
+  battleInit: BattleInit,
+): BattleMutableState {
   const state: BattleMutableState = {
     battleId: battleInit.battleId,
     activeSide: "player",
@@ -84,14 +87,20 @@ export function createInitialBattleState(battleInit: BattleInit): BattleMutableS
   );
   const playerOpeningHand = playerDeckCardIds.slice(0, openingHandSize);
   const enemyOpeningHand = enemyDeckCardIds.slice(0, enemyOpeningHandSize);
-  state.sides.player.hand = playerOpeningHand;
-  state.sides.player.deck = playerDeckCardIds.slice(playerOpeningHand.length);
-  state.sides.enemy.hand = enemyOpeningHand;
-  state.sides.enemy.deck = enemyDeckCardIds.slice(enemyOpeningHand.length);
+  state.sides.player.hand = playerOpeningHand.map(asBattleCardId);
+  state.sides.player.deck = playerDeckCardIds
+    .slice(playerOpeningHand.length)
+    .map(asBattleCardId);
+  state.sides.enemy.hand = enemyOpeningHand.map(asBattleCardId);
+  state.sides.enemy.deck = enemyDeckCardIds
+    .slice(enemyOpeningHand.length)
+    .map(asBattleCardId);
   return state;
 }
 
-export function cloneBattleMutableState(state: BattleMutableState): BattleMutableState {
+export function cloneBattleMutableState(
+  state: BattleMutableState,
+): BattleMutableState {
   return {
     battleId: state.battleId,
     activeSide: state.activeSide,
@@ -117,7 +126,9 @@ export function cloneBattleMutableState(state: BattleMutableState): BattleMutabl
           const cloned: BattleCardInstance = {
             ...instance,
             definition: cloneBattleDeckCardDefinition(instance.definition),
-            ...(instance.figments === undefined ? {} : { figments: [...instance.figments] }),
+            ...(instance.figments === undefined
+              ? {}
+              : { figments: [...instance.figments] }),
             // Persisted pre-automation battles omit the temporary-effect
             // fields. Normalize them while cloning the replay/load boundary.
             status: { ...createDefaultBattleCardStatus(), ...instance.status },
@@ -135,8 +146,10 @@ export function cloneBattleMutableState(state: BattleMutableState): BattleMutabl
   };
 }
 
-export function allocateBattleCardId(state: BattleMutableState): string {
-  const battleCardId = formatBattleCardId(state.nextBattleCardOrdinal);
+export function allocateBattleCardId(state: BattleMutableState): BattleCardId {
+  const battleCardId = asBattleCardId(
+    formatBattleCardId(state.nextBattleCardOrdinal),
+  );
   state.nextBattleCardOrdinal += 1;
   return battleCardId;
 }
@@ -150,10 +163,10 @@ export function allocateBattleCardInstance(
     isRevealedToPlayer?: boolean;
     provenance: BattleCardProvenance;
   },
-): string {
+): BattleCardId {
   const battleCardId = allocateBattleCardId(state);
   state.cardInstances[battleCardId] = {
-    battleCardId,
+    battleCardId: asBattleCardId(battleCardId),
     definition: params.definition,
     owner: params.owner,
     controller: params.controller,
@@ -181,7 +194,7 @@ function createBattleCardInstance(
   state: BattleMutableState,
   definition: BattleDeckCardDefinition,
   owner: BattleSide,
-): string {
+): BattleCardId {
   return allocateBattleCardInstance(state, {
     definition,
     owner,
@@ -206,7 +219,9 @@ export function cloneBattleDeckCardDefinition(
   };
 }
 
-function cloneBattleSideMutableState(side: BattleSideMutableState): BattleSideMutableState {
+function cloneBattleSideMutableState(
+  side: BattleSideMutableState,
+): BattleSideMutableState {
   return {
     ...side,
     visibility: { ...side.visibility },
@@ -230,8 +245,8 @@ function createInitialSideState(
     maxEnergy,
     score: 0,
     visibility: {},
-    deck,
-    hand,
+    deck: deck.map(asBattleCardId),
+    hand: hand.map(asBattleCardId),
     void: [],
     banished: [],
     backRank: createEmptyBackRank(),
@@ -242,14 +257,14 @@ function createInitialSideState(
   };
 }
 
-function createEmptyBackRank(): Record<BackRankSlotId, string | null> {
+function createEmptyBackRank(): Record<BackRankSlotId, BattleCardId | null> {
   return createEmptySlotRecord(backRankSlotIds(MIN_BACK_RANK_SLOTS));
 }
 
-function createEmptyFrontRank(): Record<FrontRankSlotId, string | null> {
+function createEmptyFrontRank(): Record<FrontRankSlotId, BattleCardId | null> {
   return createEmptySlotRecord(frontRankSlotIds(MIN_FRONT_RANK_SLOTS));
 }
 
-export function formatBattleCardId(ordinal: number): string {
-  return `bc_${String(ordinal).padStart(4, "0")}`;
+export function formatBattleCardId(ordinal: number): BattleCardId {
+  return asBattleCardId(`bc_${String(ordinal).padStart(4, "0")}`);
 }

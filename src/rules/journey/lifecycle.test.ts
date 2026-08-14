@@ -16,6 +16,20 @@ import {
   normalizeLegacyPendingPrompt,
   type JourneyLifecycleContentProvider,
 } from "./lifecycle";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import type { DreamAvatarId } from "../../types/identifiers";
+import type { AtlasNodeId } from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asDreamsignId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asTutorialActionId } from "../../types/identifiers";
+import { asClientId } from "../../types/identifiers";
+import { asTutorialTriggerId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -81,14 +95,14 @@ function hostedJourneyStart(controllerClientId = "alice"): FoldState {
     },
     playtestControl: {
       mode: "single-controller",
-      controllerClientId,
+      controllerClientId: asClientId(controllerClientId),
     },
-    tutorialTriggerIdsSeen: ["support"],
+    tutorialTriggerIdsSeen: [asTutorialTriggerId("support")],
     journey: {
       ...state.journey,
       screen: {
         type: "journeyStart",
-        tutorialDreamAvatarId: "dc-tutorial",
+        tutorialDreamAvatarId: asDreamAvatarId("dc-tutorial"),
       },
     },
   };
@@ -118,7 +132,7 @@ function deterministicProvider(
   isTutorialJourney = false,
 ): JourneyLifecycleContentProvider {
   function packageFor(
-    dreamAvatarId: string,
+    dreamAvatarId: DreamAvatarId,
     seed: string,
   ): ResolvedDreamAvatarPackage {
     const dreamAvatar: DreamAvatarContent = {
@@ -139,7 +153,7 @@ function deterministicProvider(
     return {
       dreamAvatar,
       draftPoolCopiesByCard: { "1": 2, "2": 1 },
-      dreamsignPoolIds,
+      dreamsignPoolIds: dreamsignPoolIds.map(asDreamsignId),
       mandatoryOnlyPoolSize: 3,
       draftPoolSize: 3,
       doubledCardCount: 1,
@@ -168,13 +182,13 @@ function deterministicProvider(
         resolvedPackage: pkg,
         remainingDreamsignPool: [...pkg.dreamsignPoolIds],
         atlas: {
-          layers: [["node-start"]],
+          layers: [[asAtlasNodeId("node-start")]],
           nodes: {
-            "node-start": {
-              id: "node-start",
+            [asAtlasNodeId("node-start")]: {
+              id: asAtlasNodeId("node-start"),
               layer: LayerName.One,
               indexInLayer: 0,
-              dreamscapeId: "dreamscape-start",
+              dreamscapeId: asDreamscapeId("dreamscape-start"),
               sites: [],
               position: { x: 0, y: 0 },
               state: "available",
@@ -184,13 +198,13 @@ function deterministicProvider(
               knownDreamsignId: null,
             },
           },
-          startingNodeId: "node-start",
-          bossNodeId: "node-start",
+          startingNodeId: asAtlasNodeId("node-start"),
+          bossNodeId: asAtlasNodeId("node-start"),
           bossIncarnationId: null,
-          currentNodeId: "node-start",
+          currentNodeId: asAtlasNodeId("node-start"),
           knownDreamsignCarrierIds: [],
         },
-        currentDreamscape: "node-start",
+        currentDreamscape: asAtlasNodeId("node-start"),
         screen: { type: "dreamscape" },
       };
     },
@@ -313,21 +327,30 @@ describe("navigation", () => {
     const state = {
       ...base,
       journey: {
-        ...withAtlasSite(base.journey, "node-1", "site-1"),
-        currentDreamscape: "node-1",
+        ...withAtlasSite(
+          base.journey,
+          asAtlasNodeId("node-1"),
+          asSiteId("site-1"),
+        ),
+        currentDreamscape: asAtlasNodeId("node-1"),
         screen: { type: "dreamscape" as const },
       },
     };
-    const siteScreen = apply(state, "ENTER_SITE", { siteId: "site-1" });
+    const siteScreen = apply(state, "ENTER_SITE", {
+      siteId: asSiteId("site-1"),
+    });
     expect(siteScreen.journey.screen).toEqual({
       type: "site",
-      siteId: "site-1",
+      siteId: asSiteId("site-1"),
     });
     expect(siteScreen.journey.activeSiteId).toBe("site-1");
 
     expect(
-      reduceGameEvent(state, event("ENTER_SITE", { siteId: "unknown" }), ctx())
-        .outcome,
+      reduceGameEvent(
+        state,
+        event("ENTER_SITE", { siteId: asSiteId("unknown") }),
+        ctx(),
+      ).outcome,
     ).toBe("bounced");
   });
 
@@ -358,30 +381,36 @@ describe("TRAVEL_TO_DREAMSCAPE", () => {
         ...base.journey,
         atlas: {
           ...base.journey.atlas,
-          currentNodeId: "node-a",
+          currentNodeId: asAtlasNodeId("node-a"),
           nodes: {
-            "node-a": {
-              ...withAtlasSite(base.journey, "node-a", "site-a").atlas.nodes[
-                "node-a"
-              ],
-              forwardIds: ["node-b"],
+            [asAtlasNodeId("node-a")]: {
+              ...withAtlasSite(
+                base.journey,
+                asAtlasNodeId("node-a"),
+                asSiteId("site-a"),
+              ).atlas.nodes[asAtlasNodeId("node-a")],
+              forwardIds: [asAtlasNodeId("node-b")],
             },
-            "node-b": {
-              ...withAtlasSite(base.journey, "node-b", "site-b").atlas.nodes[
-                "node-b"
-              ],
+            [asAtlasNodeId("node-b")]: {
+              ...withAtlasSite(
+                base.journey,
+                asAtlasNodeId("node-b"),
+                asSiteId("site-b"),
+              ).atlas.nodes[asAtlasNodeId("node-b")],
               layer: LayerName.Two,
-              backwardIds: ["node-a"],
+              backwardIds: [asAtlasNodeId("node-a")],
             },
           },
         },
-        currentDreamscape: "node-a",
+        currentDreamscape: asAtlasNodeId("node-a"),
         screen: { type: "atlas" },
-        visitedSites: ["stale-site"],
+        visitedSites: [asSiteId("stale-site")],
         dreamscapeModifiers: [modifier(1, "one"), modifier(2, "two")],
       },
     };
-    const next = apply(state, "TRAVEL_TO_DREAMSCAPE", { nodeId: "node-b" });
+    const next = apply(state, "TRAVEL_TO_DREAMSCAPE", {
+      nodeId: asAtlasNodeId("node-b"),
+    });
     expect(next.journey.currentDreamscape).toBe("node-b");
     expect(next.journey.visitedSites).toEqual([]);
     expect(next.journey.dreamscapeModifiers).toEqual([modifier(1, "two")]);
@@ -396,15 +425,21 @@ describe("TRAVEL_TO_DREAMSCAPE", () => {
       journey: {
         ...base.journey,
         atlas: {
-          ...withAtlasSite(base.journey, "node-a", "site-a").atlas,
-          currentNodeId: "node-a",
+          ...withAtlasSite(
+            base.journey,
+            asAtlasNodeId("node-a"),
+            asSiteId("site-a"),
+          ).atlas,
+          currentNodeId: asAtlasNodeId("node-a"),
         },
-        currentDreamscape: "node-a",
+        currentDreamscape: asAtlasNodeId("node-a"),
         screen: { type: "atlas" },
         dreamscapeModifiers: [modifier(2, "two")],
       },
     };
-    const next = apply(state, "TRAVEL_TO_DREAMSCAPE", { nodeId: "node-a" });
+    const next = apply(state, "TRAVEL_TO_DREAMSCAPE", {
+      nodeId: asAtlasNodeId("node-a"),
+    });
     expect(next.journey.dreamscapeModifiers).toEqual([modifier(2, "two")]);
   });
 });
@@ -432,7 +467,7 @@ describe("REROLL_DREAM_AVATAR_OFFER", () => {
   it("bounces after the journey has started", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
     const started = apply(genesis(), "START_JOURNEY", {
-      dreamAvatarId: "dc-1",
+      dreamAvatarId: asDreamAvatarId("dc-1"),
     });
     const out = reduceGameEvent(
       started,
@@ -452,7 +487,7 @@ describe("REROLL_DREAM_AVATAR_OFFER", () => {
         ...start.journey,
         screen: {
           type: "journeyStart" as const,
-          tutorialDreamAvatarId: "tutorial-avatar-id",
+          tutorialDreamAvatarId: asDreamAvatarId("tutorial-avatar-id"),
         },
       },
     };
@@ -477,7 +512,7 @@ describe("SELECT_DREAM_AVATAR", () => {
     const start = genesis();
     const out = reduceGameEvent(
       start,
-      event("SELECT_DREAM_AVATAR", { dreamAvatarId: "dc-1" }),
+      event("SELECT_DREAM_AVATAR", { dreamAvatarId: asDreamAvatarId("dc-1") }),
       ctx(),
     );
     expect(out.outcome).toBe("bounced");
@@ -490,7 +525,7 @@ describe("SELECT_DREAM_AVATAR", () => {
     const a = apply(
       start,
       "SELECT_DREAM_AVATAR",
-      { dreamAvatarId: "dc-42" },
+      { dreamAvatarId: asDreamAvatarId("dc-42") },
       ctx({
         seq: 3,
         timestamp: "2020-01-01T00:00:00.000Z",
@@ -500,7 +535,7 @@ describe("SELECT_DREAM_AVATAR", () => {
     const b = apply(
       start,
       "SELECT_DREAM_AVATAR",
-      { dreamAvatarId: "dc-42" },
+      { dreamAvatarId: asDreamAvatarId("dc-42") },
       ctx({
         seq: 3,
         timestamp: "2099-12-31T23:59:59.000Z",
@@ -519,8 +554,12 @@ describe("SELECT_DREAM_AVATAR", () => {
   it("produces a different package for a different dreamAvatar", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
     const start = genesis();
-    const a = apply(start, "SELECT_DREAM_AVATAR", { dreamAvatarId: "dc-1" });
-    const b = apply(start, "SELECT_DREAM_AVATAR", { dreamAvatarId: "dc-2" });
+    const a = apply(start, "SELECT_DREAM_AVATAR", {
+      dreamAvatarId: asDreamAvatarId("dc-1"),
+    });
+    const b = apply(start, "SELECT_DREAM_AVATAR", {
+      dreamAvatarId: asDreamAvatarId("dc-2"),
+    });
     expect(hashState(a.journey.resolvedPackage)).not.toBe(
       hashState(b.journey.resolvedPackage),
     );
@@ -536,7 +575,7 @@ describe("START_JOURNEY", () => {
     const start = hostedJourneyStart();
     const out = reduceGameEvent(
       start,
-      event("START_JOURNEY", { dreamAvatarId: "dc-tutorial" }),
+      event("START_JOURNEY", { dreamAvatarId: asDreamAvatarId("dc-tutorial") }),
       ctx(),
     );
     expect(out.outcome).toBe("bounced");
@@ -553,7 +592,7 @@ describe("START_JOURNEY", () => {
     const started = apply(
       start,
       "START_JOURNEY",
-      { dreamAvatarId: "dc-7" },
+      { dreamAvatarId: asDreamAvatarId("dc-7") },
       ctx({ seq: 17 }),
     );
     expect(started.journey.seed).toBe(GENESIS.seed);
@@ -566,7 +605,7 @@ describe("START_JOURNEY", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider(true));
     const started = reduceGameEvent(
       hostedJourneyStart(),
-      event("START_JOURNEY", { dreamAvatarId: "dc-tutorial" }),
+      event("START_JOURNEY", { dreamAvatarId: asDreamAvatarId("dc-tutorial") }),
       ctx({ seq: 17 }),
     );
 
@@ -595,7 +634,7 @@ describe("START_JOURNEY", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
     const started = reduceGameEvent(
       hostedJourneyStart(),
-      event("START_JOURNEY", { dreamAvatarId: "dc-tutorial" }),
+      event("START_JOURNEY", { dreamAvatarId: asDreamAvatarId("dc-tutorial") }),
       ctx({ seq: 17 }),
     );
 
@@ -610,11 +649,11 @@ describe("START_JOURNEY", () => {
   it("bounces START_JOURNEY once a dreamAvatar is already selected", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
     const started = apply(genesis(), "START_JOURNEY", {
-      dreamAvatarId: "dc-7",
+      dreamAvatarId: asDreamAvatarId("dc-7"),
     });
     const out = reduceGameEvent(
       started,
-      event("START_JOURNEY", { dreamAvatarId: "dc-9" }),
+      event("START_JOURNEY", { dreamAvatarId: asDreamAvatarId("dc-9") }),
       ctx(),
     );
     expect(out.outcome).toBe("bounced");
@@ -624,7 +663,9 @@ describe("START_JOURNEY", () => {
 describe("RESET_JOURNEY", () => {
   it("resets journey state to the genesis fold and clears battle", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
-    let state = apply(genesis(), "START_JOURNEY", { dreamAvatarId: "dc-7" });
+    let state = apply(genesis(), "START_JOURNEY", {
+      dreamAvatarId: asDreamAvatarId("dc-7"),
+    });
     state = {
       ...state,
       journey: {
@@ -762,7 +803,7 @@ describe("LOAD_STATE", () => {
           candidateIds: ["void-card-a", "void-card-b"],
           count: 1,
           optional: false,
-          highlightCardIds: ["void-card-b"],
+          highlightCardIds: [asBattleCardId("void-card-b")],
         },
       },
     };
@@ -785,7 +826,7 @@ describe("LOAD_STATE", () => {
         candidateIds: ["void-card-a", "void-card-b"],
         count: 1,
         optional: false,
-        highlightCardIds: ["void-card-b"],
+        highlightCardIds: [asBattleCardId("void-card-b")],
       },
     });
   });
@@ -850,7 +891,7 @@ describe("LOAD_STATE", () => {
       freeNextShopModifiers: [],
       freePurchaseModifiers: [],
     });
-    expect(loaded.journey.siteRuntime["legacy-shop"]).toMatchObject({
+    expect(loaded.journey.siteRuntime[asSiteId("legacy-shop")]).toMatchObject({
       kind: "shop",
       purchaseHistory: [],
     });
@@ -861,20 +902,32 @@ describe("LOAD_STATE", () => {
     const snapshot = {
       ...start.journey,
       deck: [
-        { entryId: "nightmare", cardNumber: 10002, isBane: false },
-        { entryId: "retired", cardNumber: 44, isBane: true },
+        {
+          entryId: asDeckEntryId("nightmare"),
+          cardNumber: 10002,
+          isBane: false,
+        },
+        { entryId: asDeckEntryId("retired"), cardNumber: 44, isBane: true },
       ],
       dreamsigns: [
-        { id: "negative", name: "Sign", effectDescription: "", isBane: true },
+        {
+          id: asDreamsignId("negative"),
+          name: "Sign",
+          effectDescription: "",
+          isBane: true,
+        },
       ],
     };
 
     const loaded = apply(start, "LOAD_STATE", { snapshot });
 
     expect(loaded.journey.deck).toEqual([
-      expect.objectContaining({ entryId: "nightmare", isBane: true }),
       expect.objectContaining({
-        entryId: "retired",
+        entryId: asDeckEntryId("nightmare"),
+        isBane: true,
+      }),
+      expect.objectContaining({
+        entryId: asDeckEntryId("retired"),
         cardNumber: 10002,
         isBane: true,
       }),
@@ -923,7 +976,7 @@ describe("LOAD_STATE", () => {
   it("bounces a snapshot that nulls a currently non-null run field", () => {
     registerJourneyLifecycleContentProvider(deterministicProvider());
     const started = apply(genesis(), "START_JOURNEY", {
-      dreamAvatarId: "dc-7",
+      dreamAvatarId: asDreamAvatarId("dc-7"),
     });
     expect(started.journey.dreamAvatar).not.toBeNull();
     const snapshot: JourneyState = { ...started.journey, dreamAvatar: null };
@@ -981,15 +1034,15 @@ describe("LOAD_STATE", () => {
       aiBlockingTurn: { activeSide: "player", turnNumber: 3 },
       tutorialAiActionOverrides: [
         {
-          id: "scripted-play",
+          id: asTutorialActionId("scripted-play"),
           trigger: {
             kind: "after-dreamwell",
             side: "enemy",
-            cardId: "51caf26d-83bf-45a9-bc80-010d353277db",
+            cardId: asCardId("51caf26d-83bf-45a9-bc80-010d353277db"),
           },
           action: {
             kind: "play-card",
-            cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+            cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
           },
         },
       ],
@@ -1110,8 +1163,8 @@ describe("LOAD_STATE", () => {
 
 function withAtlasSite(
   journey: JourneyState,
-  nodeId: string,
-  siteId: string,
+  nodeId: AtlasNodeId,
+  siteId: SiteId,
 ): JourneyState {
   return {
     ...journey,

@@ -13,6 +13,7 @@ import type {
 import type { DreamscapeNode } from "../../types/journey";
 import { resolveNodeAffiliation } from "../../affiliations/affiliation-weights";
 import type { BattleRng } from "../random";
+import type { DreamAvatarId } from "../../types/identifiers";
 
 /**
  * Whether the opposing DreamAvatar's ability is active at this run layer.
@@ -62,9 +63,9 @@ export function opponentCarriesDreamsign(
  */
 export function selectOpponentDreamAvatar(
   dreamAvatars: readonly DreamAvatarContent[],
-  playerDreamAvatarId: string | null,
+  playerDreamAvatarId: DreamAvatarId | null,
   rng: BattleRng,
-  eligibleDreamAvatarIds?: readonly string[] | null,
+  eligibleDreamAvatarIds?: readonly DreamAvatarId[] | null,
 ): DreamAvatarContent | null {
   if (dreamAvatars.length === 0) {
     return null;

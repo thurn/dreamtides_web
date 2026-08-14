@@ -10,6 +10,21 @@ import type { ArtCrop } from "../types/cards";
 import type { CardTransfigurationDisplay } from "../runtime/transfiguration-display";
 import type { BattleDebugEdit } from "./debug/commands";
 import type { TutorialTriggerDefinition } from "../types/tutorial";
+import type { DeckEntryId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type { BattleId } from "../types/identifiers";
+import type { SiteId } from "../types/identifiers";
+import type { AtlasNodeId } from "../types/identifiers";
+import type { BattleCardId } from "../types/identifiers";
+import type {
+  BattleEntryKey,
+  BattleHistoryCommandId,
+  AiDifficultyPresetId,
+  DreamwellCardId,
+  NoteId,
+  OpponentId,
+  IdentityRecord,
+} from "../types/identifiers";
 
 export type BattleSide = "player" | "enemy";
 
@@ -53,7 +68,7 @@ export function frontRankSlotIds(count: number): FrontRankSlotId[] {
 }
 
 /** Parses the 0-based positional index out of a slot id (`"B3" → 3`). */
-export function slotIndex(slotId: string): number {
+export function slotIndex(slotId: BattlefieldSlotId): number {
   return Number.parseInt(slotId.slice(1), 10);
 }
 
@@ -70,7 +85,9 @@ export function isFrontRankSlotId(value: string): value is FrontRankSlotId {
  * positional order. Iterating this (rather than a fixed universe) is how every
  * scan of a rank's occupants stays correct as the rank grows without bound.
  */
-export function rankSlotIds<K extends string, V>(rank: Record<K, V>): K[] {
+export function rankSlotIds<K extends BattlefieldSlotId, V>(
+  rank: Record<K, V>,
+): K[] {
   return (Object.keys(rank) as K[]).sort(
     (left, right) => slotIndex(left) - slotIndex(right),
   );
@@ -82,8 +99,8 @@ export function rankSlotIds<K extends string, V>(rank: Record<K, V>): K[] {
  * empty interior positions present so their lane identity (and the staggered
  * support geometry) survives a character leaving the middle of a rank.
  */
-export function ensureContiguousRankSlots<K extends string>(
-  rank: Record<K, string | null>,
+export function ensureContiguousRankSlots<K extends BattlefieldSlotId>(
+  rank: Record<K, BattleCardId | null>,
   slotId: K,
 ): void {
   const prefix = slotId.slice(0, 1);
@@ -101,12 +118,12 @@ export function ensureContiguousRankSlots<K extends string>(
  * `null`, returning the same record. Restores the contiguous lane positions
  * after a transport (e.g. RTDB) drops `null`-valued interior slots.
  */
-export function densifyRank<K extends string>(
-  rank: Record<K, string | null>,
+export function densifyRank<K extends BattlefieldSlotId>(
+  rank: Record<K, BattleCardId | null>,
   prefix: "B" | "F",
-): Record<K, string | null> {
+): Record<K, BattleCardId | null> {
   let maxIndex = -1;
-  for (const slotId of Object.keys(rank)) {
+  for (const slotId of Object.keys(rank) as K[]) {
     maxIndex = Math.max(maxIndex, slotIndex(slotId));
   }
   for (let i = 0; i <= maxIndex; i += 1) {
@@ -124,7 +141,7 @@ export function densifyRank<K extends string>(
  * `Record<K, null>` is assignable to the wider `Record<K, string | null>` /
  * `Record<K, AiCard | null>` shapes callers declare.
  */
-export function createEmptySlotRecord<K extends string>(
+export function createEmptySlotRecord<K extends BattlefieldSlotId>(
   slotIds: readonly K[],
 ): Record<K, null> {
   const record = {} as Record<K, null>;
@@ -220,7 +237,7 @@ export interface BattleCommandTarget {
  */
 export interface BattleEngineEmissionContext {
   sourceSurface: BattleCommandSourceSurface;
-  selectedCardId: string | null;
+  selectedCardId: BattleCardId | null;
 }
 
 /**
@@ -241,7 +258,7 @@ export interface BattleSideVisibilityFlags {
  * battle state back out to the journey deck.
  */
 export interface BattleJourneyDeckEntry {
-  entryId: string;
+  entryId: DeckEntryId;
   cardNumber: number;
   transfiguration: TransfigurationType | null;
   typeChange?: CardTypeChange | null;
@@ -250,10 +267,10 @@ export interface BattleJourneyDeckEntry {
 }
 
 export interface BattleDeckCardDefinition {
-  sourceDeckEntryId: string | null;
+  sourceDeckEntryId: DeckEntryId | null;
   /** Stable cards_v2 UUID of the source card. "" for synthetic definitions
    *  (figments, generated copies) that have no catalog card. */
-  cardId: string;
+  cardId: CardId;
   cardNumber: number;
   name: string;
   battleCardKind: BattleCardKind;
@@ -294,7 +311,7 @@ export interface BattleDeckCardDefinition {
  * regular cards.
  */
 export interface DreamwellCardDefinition {
-  id: string;
+  id: DreamwellCardId;
   name: string;
   renderedText: string;
   energyAdded: number;
@@ -315,13 +332,13 @@ export interface DreamwellCardDefinition {
  * (`src/battle/integration/signature-cards.ts`).
  */
 export interface BattleSignatureCard {
-  cardId: string;
+  cardId: CardId;
   cardNumber: number;
   name: string;
 }
 
 export interface BattleEnemyDescriptor {
-  id: string;
+  id: OpponentId;
   name: string;
   subtitle: string;
   imageNumber?: DreamAvatar["imageNumber"];
@@ -342,7 +359,7 @@ export interface BattleEnemyDescriptor {
 }
 
 export interface BattleDreamAvatarSummary {
-  id: DreamAvatar["id"];
+  id: DreamAvatar["id"] | OpponentId;
   name: DreamAvatar["name"];
   title: DreamAvatar["title"];
   renderedText: DreamAvatar["renderedText"];
@@ -359,11 +376,11 @@ export interface BattleDreamsignSummary {
 }
 
 export interface BattleInit {
-  battleId: string;
-  battleEntryKey: string;
+  battleId: BattleId;
+  battleEntryKey: BattleEntryKey;
   seed: number;
-  siteId: string;
-  dreamscapeId: string | null;
+  siteId: SiteId;
+  dreamscapeId: AtlasNodeId | null;
   completionLevelAtStart: number;
   isFinalBoss: boolean;
   essenceReward: number;
@@ -440,7 +457,7 @@ export interface BattleCardStatus {
   temporaryReclaimUntilEnding?: {
     activeSide: BattleSide;
     turnNumber: number;
-    sourceId: string;
+    sourceId: DreamwellCardId;
   } | null;
   /** Durable return data for a card banished by a temporary Dreamwell effect. */
   temporaryBanishUntilEnding?: {
@@ -448,7 +465,7 @@ export interface BattleCardStatus {
     turnNumber: number;
     priorOwner: BattleSide;
     priorController: BattleSide;
-    sourceId: string;
+    sourceId: DreamwellCardId;
   } | null;
 }
 
@@ -457,7 +474,7 @@ export type BattleCardNoteExpiry =
   | { kind: "atStartOfTurn"; side: BattleSide; turnNumber: number };
 
 export interface BattleCardNote {
-  noteId: string;
+  noteId: NoteId;
   text: string;
   createdAtTurnNumber: number;
   createdAtSide: BattleSide;
@@ -470,7 +487,7 @@ export type BattleCardProvenanceKind =
 
 export interface BattleCardProvenance {
   kind: BattleCardProvenanceKind;
-  sourceBattleCardId: string | null;
+  sourceBattleCardId: BattleCardId | null;
   chosenSpark: number | null;
   chosenSubtype: string | null;
   createdAtTurnNumber: number | null;
@@ -479,7 +496,7 @@ export interface BattleCardProvenance {
 }
 
 export interface BattleCardInstance {
-  battleCardId: string;
+  battleCardId: BattleCardId;
   definition: BattleDeckCardDefinition;
   owner: BattleSide;
   controller: BattleSide;
@@ -522,12 +539,12 @@ export interface BattleSideMutableState {
   maxEnergy: number;
   score: number;
   visibility: BattleSideVisibilityFlags;
-  deck: string[];
-  hand: string[];
-  void: string[];
-  banished: string[];
-  backRank: Record<BackRankSlotId, string | null>;
-  frontRank: Record<FrontRankSlotId, string | null>;
+  deck: BattleCardId[];
+  hand: BattleCardId[];
+  void: BattleCardId[];
+  banished: BattleCardId[];
+  backRank: Record<BackRankSlotId, BattleCardId | null>;
+  frontRank: Record<FrontRankSlotId, BattleCardId | null>;
   /**
    * Number of Fatigue events this side has suffered this battle (rules
    * §Fatigue). Drawing or eroding from an empty deck awards the opponent
@@ -564,7 +581,7 @@ export interface BattleSideMutableState {
  * no dreamAvatar or dreamsigns, so the `player` prefix is implicit (bug-034).
  */
 export interface BattleMutableState {
-  battleId: string;
+  battleId: BattleId;
   activeSide: BattleSide;
   turnNumber: number;
   phase: BattlePhase;
@@ -575,16 +592,16 @@ export interface BattleMutableState {
    * The reveal is shared through the room fold and clears when the instance
    * leaves a hand.
    */
-  revealedHandCardId?: string | null;
+  revealedHandCardId?: BattleCardId | null;
   /** Next index to draw from the shared `BattleInit.dreamwellDeck`. */
   dreamwellDeckIndex: number;
   nextBattleCardOrdinal: number;
   sides: Record<BattleSide, BattleSideMutableState>;
-  cardInstances: Record<string, BattleCardInstance>;
+  cardInstances: IdentityRecord<BattleCardId, BattleCardInstance>;
 }
 
 export interface BattleUiState {
-  selectedCardId: string | null;
+  selectedCardId: BattleCardId | null;
   selectedSide: BattleSide | null;
   openZone: { side: BattleSide; zone: BattleZoneId } | null;
   inspectorTab: "card" | "player" | "enemy" | "log";
@@ -666,10 +683,10 @@ export interface BattleResultChange {
 }
 
 export interface BattleAiChoiceTrace {
-  aiPresetId?: string;
+  aiPresetId?: AiDifficultyPresetId;
   stage: BattleAiDecisionStage;
   choice: "PLAY_CARD" | "MOVE_CARD" | "END_TURN";
-  battleCardId: string | null;
+  battleCardId: BattleCardId | null;
   cardName: string | null;
   sourceHandIndex: number | null;
   sourceSlotId: BattlefieldSlotId | null;
@@ -677,7 +694,7 @@ export interface BattleAiChoiceTrace {
   heuristicScoreBefore: number | null;
   heuristicScoreAfter: number | null;
   rationale?: string | null;
-  targetBattleCardId?: string | null;
+  targetBattleCardId?: BattleCardId | null;
 }
 
 export interface BattleDeferredLogEvent {
@@ -696,7 +713,7 @@ export interface BattleTransitionData {
 }
 
 export interface BattleHistoryEntryMetadata {
-  commandId: string;
+  commandId: BattleHistoryCommandId;
   label: string;
   kind: BattleHistoryEntryKind;
   isComposite: boolean;

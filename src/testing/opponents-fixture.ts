@@ -1,4 +1,6 @@
 import type { OpponentsData } from "../types/opponents-data";
+import { asCardId } from "../types/card-identity";
+import { asAiDifficultyPresetId } from "../types/identifiers";
 
 const STARTER_IDS = [
   "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
@@ -16,7 +18,7 @@ const STARTER_IDS = [
 /** Stable synthetic opponent input for tests which are not testing compilation. */
 export function opponentsFixture(): OpponentsData {
   const standard = {
-    id: "standard",
+    id: asAiDifficultyPresetId("standard"),
     beamWidth: 12,
     opponentMode: "expectiminimax" as const,
     sampleCount: 8,
@@ -53,10 +55,13 @@ export function opponentsFixture(): OpponentsData {
       legendariesFromLayer: 5,
       starterDilution: [10, 5],
     },
-    journeyAiDeck: STARTER_IDS.map((cardId) => ({ cardId, count: 3 })),
+    journeyAiDeck: STARTER_IDS.map((cardId) => ({
+      cardId: asCardId(cardId),
+      count: 3,
+    })),
     ai: {
-      journeyDefaultPreset: "standard",
-      tutorialDefaultPreset: "standard",
+      journeyDefaultPreset: asAiDifficultyPresetId("standard"),
+      tutorialDefaultPreset: asAiDifficultyPresetId("standard"),
       evaluation: {
         scoreDifference: 10,
         frontRankSpark: 1,

@@ -16,6 +16,8 @@ import {
   buildAffinityContext,
   buildTideAffinityIndex,
 } from "../selection/tide-affinity";
+import { asDreamsignId } from "../types/identifiers";
+import { asTideId } from "../types/identifiers";
 
 describe("Tidemark Ladder Climb rules", () => {
   const economy = {
@@ -124,24 +126,24 @@ describe("Tidemark Ladder Climb rules", () => {
     ];
     const templates = [
       makeMerchantTestDreamsignTemplate({
-        id: "sign-z-matched",
+        id: asDreamsignId("sign-z-matched"),
         rarity: "Common",
-        tideIds: ["wolf-tide"],
+        tideIds: [asTideId("wolf-tide")],
       }),
       makeMerchantTestDreamsignTemplate({
-        id: "sign-b-generic",
+        id: asDreamsignId("sign-b-generic"),
         rarity: "Uncommon",
         tideIds: [],
       }),
       makeMerchantTestDreamsignTemplate({
-        id: "sign-a-generic",
+        id: asDreamsignId("sign-a-generic"),
         rarity: "Uncommon",
         tideIds: [],
       }),
       makeMerchantTestDreamsignTemplate({
-        id: "sign-off-deck",
+        id: asDreamsignId("sign-off-deck"),
         rarity: "Common",
-        tideIds: ["dragon-tide"],
+        tideIds: [asTideId("dragon-tide")],
       }),
     ];
     const affinityIndex = buildTideAffinityIndex({
@@ -179,10 +181,10 @@ describe("Tidemark Ladder Climb rules", () => {
         affinityContext,
       }),
     ).toEqual([
-      { dreamsignId: "sign-z-matched", score: 1 },
-      { dreamsignId: "sign-a-generic", score: 0 },
-      { dreamsignId: "sign-b-generic", score: 0 },
-      { dreamsignId: "sign-off-deck", score: 0 },
+      { dreamsignId: asDreamsignId("sign-z-matched"), score: 1 },
+      { dreamsignId: asDreamsignId("sign-a-generic"), score: 0 },
+      { dreamsignId: asDreamsignId("sign-b-generic"), score: 0 },
+      { dreamsignId: asDreamsignId("sign-off-deck"), score: 0 },
     ]);
   });
 });

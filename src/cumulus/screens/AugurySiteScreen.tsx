@@ -1,10 +1,6 @@
 import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import { motion, useReducedMotion } from "framer-motion";
-import {
-  useCallback,
-  useState,
-  type ReactNode,
-} from "react";
+import { useCallback, useState, type ReactNode } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
 import { CardChangePair } from "../components/card/CardChangePair";
@@ -42,16 +38,22 @@ import {
 } from "../components/layout/SiteLayout";
 import { debugRerollCornerStyle } from "../primitives/chrome-geometry";
 import { useIsDesktop } from "../primitives/use-is-desktop";
+import type { SiteId } from "../../types/identifiers";
+import type { OfferId } from "../../types/identifiers";
+import type { ChoiceId } from "../../types/identifiers";
+import type { AuguryCardViewId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
 
 export type AuguryGuideView = SiteLayoutGuideView;
 
 export interface AuguryCardView {
-  id: string;
+  id: AuguryCardViewId;
   model: GameCardModel;
 }
 
 export interface AuguryCardChoiceView {
-  id: string;
+  id: ChoiceId;
   card: AuguryCardView;
 }
 
@@ -65,7 +67,7 @@ export type AuguryOfferVisualView =
   | {
       kind: "beforeAfter";
       pairs: readonly {
-        id: string;
+        id: DeckEntryId;
         before: AuguryCardView;
         after: AuguryCardView;
       }[];
@@ -82,7 +84,7 @@ export type AuguryOfferVisualView =
     };
 
 export interface AuguryOfferView {
-  id: string;
+  id: OfferId;
   requiresSelection: boolean;
   tile: OfferTileModel;
   presentation: AuguryArchetypeData["presentation"];
@@ -90,7 +92,7 @@ export interface AuguryOfferView {
 }
 
 export interface AugurySiteView {
-  siteId: string;
+  siteId: SiteId;
   scene: ArtRef | null;
   encounterSignature: string | null;
   guide: AuguryGuideView;
@@ -107,8 +109,8 @@ export interface AugurySiteScreenProps {
   view: AugurySiteView;
   /** Requests a shared debug reroll of both Augury offers. */
   onReroll?: () => void;
-  onInspectOffer?: (offerId: string) => void;
-  onChoose: (offerId: string, choiceId: string | null) => AuguryChoiceResult;
+  onInspectOffer?: (offerId: OfferId) => void;
+  onChoose: (offerId: OfferId, choiceId: ChoiceId | null) => AuguryChoiceResult;
   onClose: () => void;
 }
 
@@ -143,10 +145,12 @@ export function AugurySiteScreen({
   const isDesktop = useIsDesktop();
   const layout = isDesktop ? "desktop" : "mobile";
   const [selectedChoices, setSelectedChoices] = useState<
-    ReadonlyMap<string, string>
+    ReadonlyMap<OfferId, ChoiceId>
   >(new Map());
-  const [inspectedOfferId, setInspectedOfferId] = useState<string | null>(null);
-  const [committingOfferId, setCommittingOfferId] = useState<string | null>(
+  const [inspectedOfferId, setInspectedOfferId] = useState<OfferId | null>(
+    null,
+  );
+  const [committingOfferId, setCommittingOfferId] = useState<OfferId | null>(
     null,
   );
   const [errorMessage, setErrorMessage] = useState<LocalizedString | null>(
@@ -169,7 +173,7 @@ export function AugurySiteScreen({
           ),
       };
 
-  const selectChoice = useCallback((offerId: string, choiceId: string) => {
+  const selectChoice = useCallback((offerId: OfferId, choiceId: ChoiceId) => {
     setErrorMessage(null);
     setSelectedChoices((current) => new Map(current).set(offerId, choiceId));
   }, []);
@@ -403,10 +407,10 @@ function OfferDetailPanel({
 }: {
   offer: AuguryOfferView;
   layout: "mobile" | "desktop";
-  selectedChoiceId?: string;
+  selectedChoiceId?: ChoiceId;
   disabled: boolean;
   errorMessage: LocalizedString | null;
-  onSelect: (offerId: string, choiceId: string) => void;
+  onSelect: (offerId: OfferId, choiceId: ChoiceId) => void;
   onChooseAgain: () => void;
   onConfirm: (offer: AuguryOfferView) => void;
 }) {
@@ -520,11 +524,11 @@ function OfferDetailVisual({
   selectedChoiceId,
   onSelect,
 }: {
-  offerId: string;
+  offerId: OfferId;
   visual: AuguryOfferVisualView;
   layout: "mobile" | "desktop";
-  selectedChoiceId?: string;
-  onSelect: (offerId: string, choiceId: string) => void;
+  selectedChoiceId?: ChoiceId;
+  onSelect: (offerId: OfferId, choiceId: ChoiceId) => void;
 }) {
   const choices = (
     items: readonly AuguryCardChoiceView[],
@@ -553,8 +557,14 @@ function OfferDetailVisual({
               model={{
                 changeId: pair.id,
                 kind: "replacement",
-                before: { entryId: pair.before.id, card: pair.before.model },
-                after: { entryId: pair.after.id, card: pair.after.model },
+                before: {
+                  entryId: asDeckEntryId(pair.before.id),
+                  card: pair.before.model,
+                },
+                after: {
+                  entryId: asDeckEntryId(pair.after.id),
+                  card: pair.after.model,
+                },
               }}
               reveal="complete"
             />
@@ -610,17 +620,17 @@ function CardChoices({
   selectedCopyCount,
   onSelect,
 }: {
-  offerId: string;
+  offerId: OfferId;
   choices: readonly AuguryCardChoiceView[];
   layout: "mobile" | "desktop";
   fit?: CardChoiceGridSiteFit;
   columns?: CardChoiceGridColumns;
-  selectedChoiceId?: string;
+  selectedChoiceId?: ChoiceId;
   selectedCopyCount?: number;
-  onSelect: (offerId: string, choiceId: string) => void;
+  onSelect: (offerId: OfferId, choiceId: ChoiceId) => void;
 }) {
   return (
-    <CardChoiceGrid
+    <CardChoiceGrid<ChoiceId>
       cards={choices.map((choice) => ({
         entryId: choice.id,
         model: choice.card.model,
@@ -652,7 +662,7 @@ function CardRow({
   return (
     <CardChoiceGrid
       cards={cards.map((card) => ({
-        entryId: card.id,
+        entryId: asDeckEntryId(card.id),
         model: card.model,
         selection: tone === "danger" ? "danger" : undefined,
       }))}

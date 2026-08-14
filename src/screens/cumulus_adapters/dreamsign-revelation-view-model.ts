@@ -20,11 +20,12 @@ import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
 import { localizedSitePresentation } from "../../cumulus/screens/localized-site-presentation";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import type { GuideId } from "../../types/identifiers";
 
 /** Resolve Sigrun, the resident guide for Dreamsign Revelation. */
 export function resolveDreamsignRevelationGuide(
   guides: readonly DreamGuideContent[],
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent {
   return requireGuideForSiteType(
     guides,

@@ -26,6 +26,15 @@ import type {
   MerchantDeclineRequest,
   MerchantOfferActionResult,
 } from "../journey_v2";
+import { asAtlasNodeId } from "../types/identifiers";
+import type { SiteId } from "../types/identifiers";
+import type { ShuffleCommitment } from "../types/identifiers";
+import type { DreamsignId, ExplorationActionId } from "../types/identifiers";
+import type { DeckEntryId } from "../types/identifiers";
+import type { PublicationId } from "../types/identifiers";
+import type { AtlasNodeId } from "../types/identifiers";
+import type { QaSceneId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
 
 export { deriveEntryIdCounter };
 
@@ -38,102 +47,117 @@ export interface JourneyMutations {
   ) => void;
   /** Request a shared debug reroll of the journey-start DreamAvatar offer. */
   rerollDreamAvatarOffer: () => void;
-  completeSite: (siteId: string, source: string) => void;
+  completeSite: (siteId: SiteId, source: string) => void;
   /** Materialize the shared Three-Gate Wager deck commitment and Dreamsign. */
   ensureGambleSiteRuntime: (
-    siteId: string,
+    siteId: SiteId,
     gambleGameId?: GambleGameId,
   ) => void;
   /** Materialize the shared encounter and every randomized follow-up offer. */
-  ensureExplorationSiteRuntime: (siteId: string) => void;
+  ensureExplorationSiteRuntime: (siteId: SiteId) => void;
   /** Materialize Random Site's configured persisted home choices. */
-  ensureRandomSiteRuntime: (siteId: string) => void;
+  ensureRandomSiteRuntime: (siteId: SiteId) => void;
   /** Choose one offered destination; the event log makes first valid choice win. */
   chooseRandomSite: (
-    siteId: string,
+    siteId: SiteId,
     siteType: RandomSiteDestinationType,
   ) => void;
   /** Resolve one authored choice and its optional card-selection payload. */
   resolveExplorationChoice: (
-    siteId: string,
-    actionId: string,
+    siteId: SiteId,
+    actionId: ExplorationActionId,
     selection?: unknown,
   ) => void;
   /** Commit one gate choice; the reducer derives the draw, cost, and payout. */
-  placeGravokWager: (siteId: string, gateId: GravokGateId) => void;
+  placeGravokWager: (siteId: SiteId, gateId: GravokGateId) => void;
   /** Apply the wager's payout when the result announcement appears. */
-  settleGravokWager: (siteId: string, shuffleCommitment: string) => void;
+  settleGravokWager: (
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
+  ) => void;
   /** Reassemble the deck and lock a fresh draw for another wager. */
   playAgainGravokWager: (
-    siteId: string,
-    previousShuffleCommitment: string,
+    siteId: SiteId,
+    previousShuffleCommitment: ShuffleCommitment,
   ) => void;
   /** Replace a held Dreamsign after a jackpot win at the collection cap. */
   replaceGravokWagerDreamsign: (
-    siteId: string,
-    replacedDreamsignId: string,
+    siteId: SiteId,
+    replacedDreamsignId: DreamsignId,
   ) => void;
   /** Buy and reveal the next Ladder Climb attempt. */
-  drawTidemarkLadderClimb: (siteId: string) => void;
+  drawTidemarkLadderClimb: (siteId: SiteId) => void;
   /** Settle the current Ladder Climb outcome after its card reveal. */
   settleTidemarkLadderClimb: (
-    siteId: string,
-    shuffleCommitment: string,
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
   ) => void;
   /** Replace a held Dreamsign after a Ladder Climb win at the cap. */
   replaceTidemarkLadderClimbDreamsign: (
-    siteId: string,
-    replacedDreamsignId: string,
+    siteId: SiteId,
+    replacedDreamsignId: DreamsignId,
   ) => void;
   /** Reveal the current Starway Stairs tier. */
-  drawStarwayStairs: (siteId: string) => void;
+  drawStarwayStairs: (siteId: SiteId) => void;
   /** Settle the current Starway Stairs result after its card reveal. */
-  settleStarwayStairs: (siteId: string, shuffleCommitment: string) => void;
+  settleStarwayStairs: (
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
+  ) => void;
   /** Bank the latest safe Starway Stairs prize. */
-  cashOutStarwayStairs: (siteId: string, shuffleCommitment: string) => void;
+  cashOutStarwayStairs: (
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
+  ) => void;
   /** Reassemble the deck and prepare another Starway Stairs game. */
   playAgainStarwayStairs: (
-    siteId: string,
-    previousShuffleCommitment: string,
+    siteId: SiteId,
+    previousShuffleCommitment: ShuffleCommitment,
   ) => void;
   /** Pay for one Four-Suit Reprise draw against the selected deck entry. */
-  drawFourSuitReprise: (siteId: string, entryId: string) => void;
+  drawFourSuitReprise: (siteId: SiteId, entryId: DeckEntryId) => void;
   /** Reveal and apply the current Four-Suit Reprise outcome. */
-  settleFourSuitReprise: (siteId: string, shuffleCommitment: string) => void;
+  settleFourSuitReprise: (
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
+  ) => void;
   /** Apply the player's free chosen form after a Spades result. */
   chooseFourSuitRepriseTransfiguration: (
-    siteId: string,
-    shuffleCommitment: string,
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
     type: TransfigurationType,
   ) => void;
   /** Move the shared visit into its next distinct-card choice. */
   playAgainFourSuitReprise: (
-    siteId: string,
-    previousShuffleCommitment: string,
+    siteId: SiteId,
+    previousShuffleCommitment: ShuffleCommitment,
   ) => void;
   /** Pay for a round and reveal its opening hand. */
-  dealBlackjack: (siteId: string) => void;
+  dealBlackjack: (siteId: SiteId) => void;
   /** Pay for and reveal the next committed card. */
-  hitBlackjack: (siteId: string) => void;
+  hitBlackjack: (siteId: SiteId) => void;
   /** Finish the round on its current total. */
-  standBlackjack: (siteId: string) => void;
+  standBlackjack: (siteId: SiteId) => void;
   /** Apply the visible hand outcome. */
-  settleBlackjack: (siteId: string, shuffleCommitment: string) => void;
+  settleBlackjack: (
+    siteId: SiteId,
+    shuffleCommitment: ShuffleCommitment,
+  ) => void;
   /** Start and pay for a fresh hand after a settled push. */
   playAgainBlackjack: (
-    siteId: string,
-    previousShuffleCommitment: string,
+    siteId: SiteId,
+    previousShuffleCommitment: ShuffleCommitment,
   ) => void;
-  ensureRewardSiteRuntime: (siteId: string) => void;
+  ensureRewardSiteRuntime: (siteId: SiteId) => void;
   /**
    * Accepts the Dreamsign Reward at the given site. When the player is at the
    * 12-Dreamsign cap, `purgeIndex` selects an existing Dreamsign to replace;
    * without it the mutation no-ops at the cap so the UI can prompt a purge.
    */
-  acceptRewardSite: (siteId: string, purgeIndex?: number) => void;
-  ensureDreamsignOfferRuntime: (siteId: string, optionCount: number) => void;
+  acceptRewardSite: (siteId: SiteId, purgeIndex?: number) => void;
+  ensureDreamsignOfferRuntime: (siteId: SiteId, optionCount: number) => void;
   acceptDreamsignOffer: (
-    siteId: string,
+    siteId: SiteId,
     dreamsign: Dreamsign,
     purgeIndex?: number,
   ) => void;
@@ -141,9 +165,9 @@ export interface JourneyMutations {
    * Rejects the Dreamsign Offering at the given site. Rejecting carries no
    * reward; it simply marks the runtime as resolved and completes the site.
    */
-  rejectDreamsignOffer: (siteId: string) => void;
-  ensureEssenceSiteRuntime: (siteId: string, isEnhanced: boolean) => void;
-  acceptEssenceSite: (siteId: string) => void;
+  rejectDreamsignOffer: (siteId: SiteId) => void;
+  ensureEssenceSiteRuntime: (siteId: SiteId, isEnhanced: boolean) => void;
+  acceptEssenceSite: (siteId: SiteId) => void;
   ensureShopRuntime: (site: SiteState) => void;
   /**
    * Buys the shop slot at `slotIndex`. For a Dreamsign slot when the player
@@ -151,20 +175,20 @@ export interface JourneyMutations {
    * replace; without it the mutation no-ops at the cap so the UI can prompt a
    * purge.
    */
-  buyShopSlot: (siteId: string, slotIndex: number, purgeIndex?: number) => void;
+  buyShopSlot: (siteId: SiteId, slotIndex: number, purgeIndex?: number) => void;
   rerollShop: (site: SiteState) => void;
   ensureCardChoiceRuntime: (
-    siteId: string,
+    siteId: SiteId,
     kind: "transfiguration" | "duplication",
   ) => void;
   acceptTransfigurationChoice: (
-    siteId: string,
-    entryId: string,
+    siteId: SiteId,
+    entryId: DeckEntryId,
     type: TransfigurationType,
     effectDescription: string,
     effectDetails: Record<string, unknown>,
   ) => void;
-  acceptDuplicationChoice: (siteId: string, entryId: string) => void;
+  acceptDuplicationChoice: (siteId: SiteId, entryId: DeckEntryId) => void;
   /**
    * Marks an Augury site as completed and returns to the dreamscape.
    * The augury screen is responsible for any narrative interaction; the
@@ -172,13 +196,13 @@ export interface JourneyMutations {
    * a runtime slot exists, flips the `completed` flag, and walks the
    * visit-tracking bookkeeping.
    */
-  completeAugurySite: (siteId: string) => void;
+  completeAugurySite: (siteId: SiteId) => void;
   acceptDreamMerchantOffer: (
-    siteId: string,
+    siteId: SiteId,
     request: MerchantAcceptRequest,
   ) => MerchantOfferActionResult | void;
   declineDreamMerchant: (
-    siteId: string,
+    siteId: SiteId,
     request: MerchantDeclineRequest,
   ) => void;
   /**
@@ -188,7 +212,7 @@ export interface JourneyMutations {
    * Optional because it is exposed only by the live journey providers, not by
    * lightweight test/demo mutation stubs.
    */
-  rerollAugury?: (siteId: string) => void;
+  rerollAugury?: (siteId: SiteId) => void;
   /**
    * Debug-only: forces the next generated Augury encounter to include an
    * offer of the given archetype (in slot A), or clears the force when passed
@@ -199,20 +223,20 @@ export interface JourneyMutations {
    * because it is exposed only by the live journey providers.
    */
   forceAuguryArchetype?: (
-    siteId: string,
+    siteId: SiteId,
     archetypeId: MerchantArchetypeId | null,
   ) => void;
-  pickDraftCard: (siteId: string, cardNumber: number) => void;
+  pickDraftCard: (siteId: SiteId, cardNumber: number) => void;
   /** Requests a shared debug reroll of the displayed offer at an active draft site. */
-  rerollDraftOffer?: (siteId: string) => void;
+  rerollDraftOffer?: (siteId: SiteId) => void;
   /**
    * Enters a draft site, revealing its first offer. The coop event log scopes
    * this intent to the current run and site, so every observing client may
    * request it while the displayed fold catches up.
    */
-  enterDraftSite: (siteId: string) => void;
+  enterDraftSite: (siteId: SiteId) => void;
   addCard: (cardNumber: number, source: string) => void;
-  removeCard: (entryId: string, source: string) => void;
+  removeCard: (entryId: DeckEntryId, source: string) => void;
   /**
    * Apply a transfiguration to a deck entry, or clear it when `type` is
    * `null`. The null variant supports Augury reward templates that
@@ -221,7 +245,7 @@ export interface JourneyMutations {
    * log payload.
    */
   transfigureCard: (
-    entryId: string,
+    entryId: DeckEntryId,
     type: TransfigurationType | null,
     effectDescription: string,
     effectDetails: Record<string, unknown>,
@@ -232,7 +256,7 @@ export interface JourneyMutations {
   setCardSourceDebug: (
     cardSourceDebug: CardSourceDebugState | null,
     source: string,
-    publicationId?: string,
+    publicationId?: PublicationId,
   ) => void;
   /**
    * Adds a Dreamsign. When the player is at the 12-Dreamsign cap, `purgeIndex`
@@ -246,11 +270,11 @@ export interface JourneyMutations {
   ) => void;
   removeDreamsign: (index: number, reason: string) => void;
   setRemainingDreamsignPool: (
-    remainingDreamsignPool: string[],
+    remainingDreamsignPool: DreamsignId[],
     source: string,
   ) => void;
-  enterSite: (siteId: string) => void;
-  travelToDreamscape: (nodeId: string) => void;
+  enterSite: (siteId: SiteId) => void;
+  travelToDreamscape: (nodeId: AtlasNodeId) => void;
   regenerateAtlas?: (completionLevel?: number) => void;
   setDraftState: (draftState: DraftState, source: string) => void;
   /**
@@ -269,8 +293,8 @@ export interface JourneyMutations {
    * it; lightweight test/demo mutation stubs omit it.
    */
   bootstrapQaScene?: (
-    sceneId: string,
-    explorationCardId?: string | null,
+    sceneId: QaSceneId,
+    explorationCardId?: CardId | null,
     explorationDreamsignCount?: number | null,
     explorationDreamsignCap?: number | null,
     explorationStarterCount?: number | null,
@@ -288,20 +312,20 @@ export interface JourneyMutations {
   /** Debug-only: set `completionLevel` to `value`. */
   /** Debug-only: set or clear absolute stat overrides on a deck entry. */
   setDeckEntryStatOverride?: (
-    entryId: string,
+    entryId: DeckEntryId,
     statOverride: { energyCost?: number; spark?: number } | null,
     source: string,
   ) => void;
   /** Debug-only: replace (not merge) a deck entry's keyword modification, or
    *  clear it with `null`. */
   setDeckEntryKeywords?: (
-    entryId: string,
+    entryId: DeckEntryId,
     keywordModification: CardKeywordModification | null,
     source: string,
   ) => void;
   /** Debug-only: replace or clear a deck entry's type/subtype override. */
   setDeckEntryTypeChange?: (
-    entryId: string,
+    entryId: DeckEntryId,
     typeChange: CardTypeChange | null,
     source: string,
   ) => void;
@@ -317,32 +341,32 @@ export interface JourneyMutations {
    * card database (the same pattern `pushTemporaryNightmareGrant` uses). On a
    * miss this no-ops and logs a console warning.
    */
-  addCardById: (cardId: string, source: string) => string | null;
+  addCardById: (cardId: CardId, source: string) => string | null;
   addCardByIdWithTransfiguration: (
-    cardId: string,
+    cardId: CardId,
     type: TransfigurationType,
     source: string,
   ) => string | null;
   /** Remove the deck entry with the given entryId. Mirrors `removeCard`. */
-  removeDeckEntry: (entryId: string, source: string) => void;
+  removeDeckEntry: (entryId: DeckEntryId, source: string) => void;
   /**
    * Purge the given deck entries at a Purge site. The reducer derives the
    * authoritative price from the selected entries, site, and folded modifiers.
    */
   purgeDeckCards: (
-    siteId: string,
-    entryIds: readonly string[],
+    siteId: SiteId,
+    entryIds: readonly DeckEntryId[],
     source: string,
   ) => void;
   /** Add a duplicate of the deck entry with the given entryId. */
-  duplicateDeckEntry: (entryId: string, source: string) => void;
+  duplicateDeckEntry: (entryId: DeckEntryId, source: string) => void;
   changeDeckEntryType: (
-    entryId: string,
+    entryId: DeckEntryId,
     typeChange: CardTypeChange,
     source: string,
   ) => void;
   changeDeckEntryKeywords: (
-    entryId: string,
+    entryId: DeckEntryId,
     keywordModification: CardKeywordModification,
     source: string,
   ) => void;
@@ -461,8 +485,8 @@ export function createDefaultState(
     atlas: {
       layers: [],
       nodes: {},
-      startingNodeId: "",
-      bossNodeId: "",
+      startingNodeId: asAtlasNodeId(""),
+      bossNodeId: asAtlasNodeId(""),
       bossIncarnationId: null,
       currentNodeId: null,
       knownDreamsignCarrierIds: [],
@@ -501,7 +525,7 @@ export function applyDreamAvatarSelection(
 
 export function applyRemainingDreamsignPool(
   prev: JourneyState,
-  remainingDreamsignPool: string[],
+  remainingDreamsignPool: DreamsignId[],
 ): JourneyState {
   return {
     ...prev,

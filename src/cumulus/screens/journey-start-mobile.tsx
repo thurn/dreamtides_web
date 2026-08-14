@@ -26,6 +26,7 @@ import {
   type DreamAvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
+import { asDreamAvatarId } from "../../types/identifiers";
 
 /** Invisible touch slop padded around each mobile tide disc so it is easier to
  * press; the disc row reabsorbs it with negative margins so the visual layout
@@ -176,8 +177,14 @@ function EdgeChevron({
         glyph={dir === "left" ? GLYPHS.chevronLeft : GLYPHS.chevronRight}
         label={
           dir === "left"
-            ? tx("Previous", "[dream-avatar] [journey] Command that moves to the previous Dream Avatar offer.")
-            : tx("Next", "[dream-avatar] [journey] Command that moves to the next Dream Avatar offer.")
+            ? tx(
+                "Previous",
+                "[dream-avatar] [journey] Command that moves to the previous Dream Avatar offer.",
+              )
+            : tx(
+                "Next",
+                "[dream-avatar] [journey] Command that moves to the next Dream Avatar offer.",
+              )
         }
         onPress={onClick}
       />
@@ -286,10 +293,7 @@ export function CarouselSelect({
       {onReroll !== undefined && (
         <JourneyStartRerollControl
           onReroll={onReroll}
-          label={tx(
-            "Reroll Avatars",
-            "[journey] Start reroll action.",
-          )}
+          label={tx("Reroll Avatars", "[journey] Start reroll action.")}
         />
       )}
 
@@ -338,7 +342,7 @@ export function CarouselSelect({
               "[dream-avatar] [journey] Command that chooses the currently selected Dream Avatar or starting-deck option.",
             )}
             onChoose={() => {
-              onPick(activeDreamAvatar.id);
+              onPick(asDreamAvatarId(activeDreamAvatar.id));
             }}
           />
         </div>

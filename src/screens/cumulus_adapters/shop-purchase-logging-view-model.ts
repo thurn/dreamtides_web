@@ -7,6 +7,7 @@ import type {
   ShopSiteRuntime,
 } from "../../types/journey";
 import { hasFreePurchase } from "./shop-free-purchase-view-model";
+import { asDreamsignId } from "../../types/identifiers";
 
 /** Reconstructable inventory and modifier state recorded when a merchant opens. */
 export function buildShopSiteEntryLog(
@@ -37,9 +38,11 @@ export function buildShopSiteEntryLog(
             }
           : {
               kind: "dreamsign" as const,
-              dreamsignId: requireDreamsignId(
-                slot.dreamsign,
-                "Dreamsign Bazaar entry log",
+              dreamsignId: asDreamsignId(
+                requireDreamsignId(
+                  slot.dreamsign,
+                  "Dreamsign Bazaar entry log",
+                ),
               ),
             },
       purchased: slot.purchased,

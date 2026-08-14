@@ -25,7 +25,7 @@ DreamwellCard performs no entrance, exit, or idle animation.
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `cardId` | `CardId` | no | Canonical Dreamwell card UUID. |
+| `cardId` | `DreamwellCardId` | no | Canonical Dreamwell card UUID. |
 | `displaySnapshot` | `DreamwellCardDisplaySnapshot` | no | Complete presentation data whose `id` matches `cardId`. |
 
 ## Usage

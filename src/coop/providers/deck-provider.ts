@@ -11,6 +11,7 @@ import { buildIdIndex } from "../../data/cards-v2-database";
 import { createDreamsign } from "../../data/dreamsigns";
 import type { Dreamsign } from "../../types/journey";
 import type { DeckContentProvider } from "../../rules/journey/deck";
+import { asCardId } from "../../types/card-identity";
 
 export function createDeckContentProvider(
   content: JourneyContent,
@@ -23,7 +24,8 @@ export function createDeckContentProvider(
   );
 
   return {
-    resolveCardNumber: (cardId) => idIndex.get(cardId.toLowerCase()) ?? null,
+    resolveCardNumber: (cardId) =>
+      idIndex.get(asCardId(cardId.toLowerCase())) ?? null,
     resolveDreamsign: (dreamsignId): Dreamsign | null => {
       const template = templateById.get(dreamsignId);
       return template === undefined ? null : createDreamsign(template);

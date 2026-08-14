@@ -4,6 +4,7 @@ import type { SiteState } from "../../types/journey";
 import { tx } from "@trox/runtime";
 import { localizedSourceText } from "../../runtime/localization/runtime";
 import type { CardData } from "../../types/cards";
+import type { CardId } from "../../types/card-identity";
 import {
   createBattleLogBaseFields,
   logEvent,
@@ -77,6 +78,13 @@ import { BattleTutorialGuidance } from "../../cumulus/screens/BattleTutorialGuid
 import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
 import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
 import { selectBattlefieldFigmentMergeTargets } from "../state/figments";
+import type { BattleCardId, DreamAvatarId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asBattleSlotViewId } from "../../types/identifiers";
+import { asBattleHistoryCommandId } from "../../types/identifiers";
+import { asBattleEffectScriptId } from "../../types/identifiers";
+import { asIntentKey } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
 
 // `BattleLogDrawer` renders from the append-only coop fold, so its
 // `history` prop is supplied an empty undo/redo envelope.
@@ -92,7 +100,7 @@ const PHASE_CONTROL_SEQUENCE = [
 ] as const satisfies readonly BattlePhase[];
 type ZoneBrowserState = { side: BattleSide; zone: BrowseableZone } | null;
 type ContextMenuState = {
-  battleCardId: string;
+  battleCardId: BattleCardId;
   presentation: "context-menu" | "sheet";
   sourceSurface: BattleCommandSourceSurface;
   x: number;
@@ -105,7 +113,7 @@ type ForeseeOverlayState = {
 type PendingDragState =
   | {
       kind: "battle-card";
-      battleCardId: string;
+      battleCardId: BattleCardId;
       sourceSurface: BattleCommandSourceSurface;
     }
   | {
@@ -128,10 +136,12 @@ function isDeveloperBattleSurface(source: BattleCommandSourceSurface): boolean {
   );
 }
 
-function affectedBattleCardIds(command: BattleCommand): readonly string[] {
+function affectedBattleCardIds(
+  command: BattleCommand,
+): readonly BattleCardId[] {
   if (command.id !== "DEBUG_EDIT") return [];
   const edit = command.edit;
-  const ids = new Set<string>();
+  const ids = new Set<BattleCardId>();
   if ("battleCardId" in edit) ids.add(edit.battleCardId);
   if ("sourceBattleCardId" in edit) ids.add(edit.sourceBattleCardId);
   if (edit.kind === "FORESEE") {
@@ -143,12 +153,12 @@ function affectedBattleCardIds(command: BattleCommand): readonly string[] {
       ids.add(id);
     }
   } else if (edit.kind === "REORDER_DECK") {
-    for (const id of edit.order) ids.add(id);
+    for (const id of edit.order) ids.add(asBattleCardId(id));
   }
   return [...ids];
 }
 
-function selectedBattleCardId(command: BattleCommand): string | null {
+function selectedBattleCardId(command: BattleCommand): BattleCardId | null {
   return affectedBattleCardIds(command)[0] ?? null;
 }
 
@@ -216,7 +226,9 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     () =>
       pendingPrompt?.run.scriptRef.table === "dreamwell"
         ? battleInit.dreamwellDeck.find(
-            (card) => card.id === pendingPrompt.run.scriptRef.id,
+            (card) =>
+              asBattleEffectScriptId(card.id) ===
+              pendingPrompt.run.scriptRef.id,
           )
         : undefined,
     [battleInit.dreamwellDeck, pendingPrompt],
@@ -244,7 +256,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   const [openFigmentCreator, setOpenFigmentCreator] =
     useState<BattleSide | null>(null);
   const [lastFigmentTypeId, setLastFigmentTypeId] = useState<
-    string | undefined
+    CardId | undefined
   >(undefined);
   const [isPoolViewerOpen, setIsPoolViewerOpen] = useState(false);
   const [openNoteEditor, setOpenNoteEditor] = useState<string | null>(null);
@@ -355,15 +367,17 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   );
   const submitAiPlayCard = useCallback(
     (
-      battleCardId: string,
-      targetBattleCardIds: readonly string[],
+      battleCardId: BattleCardId,
+      targetBattleCardIds: readonly BattleCardId[],
       trace: import("../types").BattleAiChoiceTrace | null,
       characterDestination?: import("../types").BattleFieldSlotAddress,
     ): void => {
       void actions.battlePlayCard(
         battleCardId,
         targetBattleCardIds,
-        `battle-play:${board.battleId}:${String(board.turnNumber)}:${battleCardId}`,
+        asIntentKey(
+          `battle-play:${board.battleId}:${String(board.turnNumber)}:${battleCardId}`,
+        ),
         `ai:${clientId}`,
         trace === null ? undefined : [trace],
         characterDestination === undefined
@@ -438,7 +452,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       ? null
       : pendingDrag.kind === "battle-card"
         ? pendingDrag.battleCardId
-        : "__pool_viewer_card__";
+        : "pool-viewer-card";
   const pendingDragLocation =
     pendingDrag?.kind === "battle-card"
       ? selectBattleCardLocation(board, pendingDrag.battleCardId)
@@ -462,7 +476,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           target: {
             owner: candidate.location.side,
             rank: candidate.location.zone === "backRank" ? "back" : "front",
-            slotId: candidate.location.slotId,
+            slotId: asBattleSlotViewId(candidate.location.slotId),
           },
           figmentLabel:
             board.cardInstances[pendingDrag.battleCardId]?.definition.name ===
@@ -507,7 +521,9 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           sourceSurface: "battlefield",
           selectedCardId:
             resolution.kind === "pick-cards"
-              ? (resolution.chosenIds[0] ?? null)
+              ? resolution.chosenIds[0] === undefined
+                ? null
+                : asBattleCardId(resolution.chosenIds[0])
               : null,
         }),
         ...createBattlePromptResolutionLogFields(
@@ -526,13 +542,14 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   const logCumulusCardPickerInteraction = useCallback(
     (
       action: "selection-changed" | "submit" | "skip",
-      chosenIds: readonly string[],
+      chosenIds: readonly BattleCardId[],
     ): void => {
       if (pendingPrompt?.options.kind !== "pick-cards") return;
       logEvent("battle_cumulus_card_picker_interaction", {
         ...createBattleLogBaseFields(board, {
           sourceSurface: "hand-tray",
-          selectedCardId: chosenIds[0] ?? null,
+          selectedCardId:
+            chosenIds[0] === undefined ? null : asBattleCardId(chosenIds[0]),
         }),
         action,
         dreamwellCardUuid:
@@ -608,7 +625,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           }),
           perspectiveSide,
           semanticActingSide: actor,
-          commandId: attributedCommand.id,
+          commandId: asBattleHistoryCommandId(attributedCommand.id),
           editKind:
             attributedCommand.id === "DEBUG_EDIT"
               ? attributedCommand.edit.kind
@@ -862,8 +879,8 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       return;
     }
     try {
-      const cardsById = new Map<string, string>();
-      const namesById = new Map<string, string>();
+      const cardsById = new Map<CardId, string>();
+      const namesById = new Map<CardId, string>();
       for (const card of cardDatabase.values()) {
         cardsById.set(card.id, card.renderedText);
         namesById.set(card.id, card.name);
@@ -903,7 +920,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     }
   }, [cardDatabase]);
 
-  function handleHandCardDoubleClick(battleCardId: string): void {
+  function handleHandCardDoubleClick(battleCardId: BattleCardId): void {
     if (!canPlayerAct) {
       return;
     }
@@ -1015,7 +1032,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   }
 
   function handleCardContextMenu(
-    battleCardId: string,
+    battleCardId: BattleCardId,
     event: ReactMouseEvent<HTMLElement>,
     sourceSurface: BattleCommandSourceSurface,
   ): void {
@@ -1030,7 +1047,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   }
 
   function handleCumulusCardDebugActivate(
-    battleCardId: string,
+    battleCardId: BattleCardId,
     sourceSurface: BattleCommandSourceSurface,
     invocation:
       | { readonly presentation: "sheet" }
@@ -1069,7 +1086,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   }
 
   function handleCardDragStart(
-    battleCardId: string,
+    battleCardId: BattleCardId,
     sourceSurface?: BattleCommandSourceSurface,
   ): void {
     if (!canPlayerAct) {
@@ -1227,7 +1244,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   }
 
   function handleFigmentMerge(
-    sourceBattleCardId: string,
+    sourceBattleCardId: BattleCardId,
     target: MobileBattleSlotTarget,
   ): void {
     if (!canPlayerAct) return;
@@ -1714,7 +1731,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       ) : null}
       {openNoteEditor !== null ? (
         <BattleCardNoteEditor
-          battleCardId={openNoteEditor}
+          battleCardId={asBattleCardId(openNoteEditor)}
           state={board}
           onClose={() => setOpenNoteEditor(null)}
           onSubmit={(edit) =>
@@ -1883,7 +1900,7 @@ function findEnemySourceDreamAvatar(
   });
 }
 
-function parseEnemySourceDreamAvatarId(enemyId: string): string | null {
+function parseEnemySourceDreamAvatarId(enemyId: string): DreamAvatarId | null {
   const prefix = "enemy:";
   if (!enemyId.startsWith(prefix)) {
     return null;
@@ -1893,7 +1910,7 @@ function parseEnemySourceDreamAvatarId(enemyId: string): string | null {
   if (seedSeparator <= 0) {
     return null;
   }
-  return sourceAndSeed.slice(0, seedSeparator);
+  return asDreamAvatarId(sourceAndSeed.slice(0, seedSeparator));
 }
 
 function resolveDragSourceSurface(

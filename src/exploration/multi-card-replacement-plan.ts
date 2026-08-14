@@ -11,11 +11,16 @@ import {
 } from "../reward-selection/types";
 import type { CardData } from "../types/cards";
 import type { JourneyState, SiteState } from "../types/journey";
+import type { DeckEntryId, SelectionKey } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import { asCardId } from "../types/card-identity";
+import type { ExplorationActionId } from "../types/identifiers";
+import { asSelectionKey } from "../types/identifiers";
 
 export interface MultiCardReplacementBinding {
-  sourceEntryId: string;
-  sourceCardId: string;
-  replacementCardId: string;
+  sourceEntryId: DeckEntryId;
+  sourceCardId: CardId;
+  replacementCardId: CardId;
 }
 
 export interface MultiCardReplacementPreparation {
@@ -25,7 +30,7 @@ export interface MultiCardReplacementPreparation {
   bindings: readonly MultiCardReplacementBinding[];
   selectionRulesVersion: string;
   selectionContentRevision: string;
-  selectionKey: string;
+  selectionKey: SelectionKey;
   selectorSignatures: readonly string[];
   selectorTraces: readonly RewardSelectionTrace[];
   unavailableReason?: "requires-eligible-card";
@@ -33,8 +38,8 @@ export interface MultiCardReplacementPreparation {
 }
 
 export interface MultiCardReplacementPlanInput {
-  actionId: string;
-  encounterCardId: string;
+  actionId: ExplorationActionId;
+  encounterCardId: CardId;
   predicate: ExplorationPredicate;
   count: number;
   journey: JourneyState;
@@ -72,8 +77,8 @@ function matchesPredicate(
 
 function replacementRequest(input: {
   plan: MultiCardReplacementPlanInput;
-  sourceEntryId: string;
-  sourceCardId: string;
+  sourceEntryId: DeckEntryId;
+  sourceCardId: CardId;
 }): RewardSelectionRequest {
   return {
     mechanicId: "gain-card",
@@ -81,7 +86,9 @@ function replacementRequest(input: {
     scope: {
       journeySeed: input.plan.journey.seed,
       siteUuid: input.plan.site.id,
-      selectionKey: `${input.plan.actionId}:replacement:${input.sourceEntryId}`,
+      selectionKey: asSelectionKey(
+        `${input.plan.actionId}:replacement:${input.sourceEntryId}`,
+      ),
     },
     count: 1,
     constraints: {
@@ -175,7 +182,7 @@ export function prepareMultiCardReplacementPlan(
     bindings.push({
       sourceEntryId: entry.entryId,
       sourceCardId: baseCard.id,
-      replacementCardId,
+      replacementCardId: asCardId(replacementCardId),
     });
     selectorSignatures.push(selected.signature);
     selectorTraces.push(selected.trace);
@@ -188,7 +195,7 @@ export function prepareMultiCardReplacementPlan(
     bindings,
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
-    selectionKey: input.actionId,
+    selectionKey: asSelectionKey(input.actionId),
     selectorSignatures,
     selectorTraces,
     ...(bindings.length === 0

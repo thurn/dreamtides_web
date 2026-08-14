@@ -1,13 +1,10 @@
-import { asCardId } from "../types/card-identity";
+import { asCardId, type CardId } from "../types/card-identity";
 import type { ArtCrop, CardData } from "../types/cards";
 import { figmentCardDisplayName } from "../data/figment-card-display";
 
 /** Figment fields edited inline through the card frame. */
 export type EditableFigmentField =
-  | "name"
-  | "subtype"
-  | "spark"
-  | "rendered-text";
+  "name" | "subtype" | "spark" | "rendered-text";
 
 /**
  * All figment fields the editor can save. Extends the inline-editable fields
@@ -21,7 +18,7 @@ export type FigmentSortDirection = "asc" | "desc";
 export type FigmentSize = "small" | "medium" | "large";
 
 export interface EditorFigmentRecord {
-  id: string;
+  id: CardId;
   name: string;
   subtype: string;
   spark: number;
@@ -48,7 +45,7 @@ export interface LoadEditorFigmentsResponse {
 }
 
 export interface SaveEditorFigmentFieldRequest {
-  id: string;
+  id: CardId;
   field: SavableFigmentField;
   value: unknown;
   clientRevision?: number;
@@ -56,13 +53,13 @@ export interface SaveEditorFigmentFieldRequest {
 
 /** Request to save a figment's art crop through the focused editor. */
 export interface SaveEditorFigmentArtRequest {
-  id: string;
+  id: CardId;
   art: ArtCrop;
 }
 
 /** Request to point a figment at a different art image. */
 export interface SaveEditorFigmentImageNumberRequest {
-  id: string;
+  id: CardId;
   imageNumber: number;
 }
 

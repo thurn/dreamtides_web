@@ -30,6 +30,8 @@ import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { meaning, opaque, txa, tx, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type { CardId } from "../../types/card-identity";
+import type { BattleId } from "../../types/identifiers";
 
 export interface BattleStartDreamAvatarView {
   id: string;
@@ -41,12 +43,12 @@ export interface BattleStartDreamAvatarView {
 }
 
 export interface BattleStartSignatureCardView {
-  cardId: string;
+  cardId: CardId;
   model: GameCardModel;
 }
 
 export interface BattleStartView {
-  battleId: string;
+  battleId: BattleId;
   scene: ArtRef | null;
   dreamAvatar: BattleStartDreamAvatarView;
   dreamsigns: readonly LocalizedDreamsign[];
@@ -459,10 +461,7 @@ function BattleStartPanel({
             >
               <Stake
                 stake="points"
-                label={tx(
-                  "To Win",
-                  "[battle] Start to win label.",
-                )}
+                label={tx("To Win", "[battle] Start to win label.")}
                 density={density}
               >
                 <span>{view.pointsToWin}</span>
@@ -470,20 +469,14 @@ function BattleStartPanel({
               </Stake>
               <Stake
                 stake="reward"
-                label={tx(
-                  "Reward",
-                  "[battle] Start reward label.",
-                )}
+                label={tx("Reward", "[battle] Start reward label.")}
                 density={density}
               >
                 <EssenceValue amount={view.essenceReward} tone="inherit" />
               </Stake>
             </div>
             <GlassButton
-              label={tx(
-                "Begin Battle",
-                "[battle] Start action.",
-              )}
+              label={tx("Begin Battle", "[battle] Start action.")}
               variant="accent"
               placement="onGlass"
               onPress={onBegin}

@@ -13,6 +13,9 @@ import { loadSitesData } from "./sites-data";
 import { generateSiteComposition } from "../atlas/atlas-generator";
 import { LayerName } from "../types/layer-name";
 import type { DreamscapeContent } from "../types/content";
+import type { DreamscapeId } from "../types/identifiers";
+import { asGuideId } from "../types/identifiers";
+import { asAffiliationId } from "../types/identifiers";
 
 // Referential-integrity test for the dreamscape / guide / affiliation / atlas
 // content bundles. It runs against the *compiled* JSON the asset pipeline emits
@@ -104,9 +107,11 @@ describe("dreamscape content referential integrity", () => {
     for (const d of dreamscapes) {
       if (d.isStarter) continue;
       expect(d.guideId).not.toBeNull();
-      expect(guideIds.has(d.guideId as string)).toBe(true);
+      expect(guideIds.has(asGuideId(d.guideId as string))).toBe(true);
       expect(d.affiliationId).not.toBeNull();
-      expect(affiliationIds.has(d.affiliationId as string)).toBe(true);
+      expect(
+        affiliationIds.has(asAffiliationId(d.affiliationId as string)),
+      ).toBe(true);
     }
   });
 
@@ -124,7 +129,9 @@ describe("dreamscape content referential integrity", () => {
 
   it("every affiliation defines exactly three known tides", async () => {
     const affiliations = await loadAffiliations();
-    const artifact = readPublicJson("tides4-data.json") as { tides: { id: string }[] };
+    const artifact = readPublicJson("tides4-data.json") as {
+      tides: { id: string }[];
+    };
     const tideIds = new Set(artifact.tides.map((tide) => tide.id));
     expect(affiliations.length).toBeGreaterThan(0);
     for (const a of affiliations) {
@@ -147,9 +154,9 @@ describe("dreamscape content referential integrity", () => {
       // ...must be the guide whose home dreamscape this is. This is the
       // dreamscape <-> guide <-> signature-site contract the frame and the
       // home-enhancement trigger both rely on.
-      expect((guide as { homeDreamscapeId: string }).homeDreamscapeId).toBe(
-        d.id,
-      );
+      expect(
+        (guide as { homeDreamscapeId: DreamscapeId }).homeDreamscapeId,
+      ).toBe(d.id);
       // And that guide must be the one the dreamscape names as its resident.
       expect((guide as { id: string }).id).toBe(d.guideId);
     }

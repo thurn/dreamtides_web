@@ -6,19 +6,31 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "./test-support";
 import type { TutorialBattleControllerPlan } from "./tutorial-battle-controller";
 import { useTutorialBattleInteractions } from "./use-tutorial-battle-interactions";
-import type { BattleCardInstance, BattleInit, BattleMutableState } from "./types";
+import type {
+  BattleCardInstance,
+  BattleInit,
+  BattleMutableState,
+} from "./types";
 import { getLogEntries, resetLog } from "../logging";
 import type { FoldState } from "../rules/fold-state";
 import type { EventOutcome, GameEvent } from "../eventlog/types";
+import type { BattleCardId } from "../types/identifiers";
+import { asBattleId } from "../types/identifiers";
+import { asCardId } from "../types/card-identity";
+import { asBattleCardId } from "../types/identifiers";
+import { asBattleSlotViewId } from "../types/identifiers";
+import { asJourneyId } from "../types/identifiers";
+import { asClientId } from "../types/identifiers";
+import { asTutorialRunId } from "../types/identifiers";
 
 const mocks = vi.hoisted(() => ({
   battlePlayCard: vi.fn(() => Promise.resolve(1)),
-  battleCommand: vi.fn(
-    (_command: unknown, _intentKey?: string) => Promise.resolve(1),
+  battleCommand: vi.fn((_command: unknown, _intentKey?: string) =>
+    Promise.resolve(1),
   ),
   battleRepositionCharacter: vi.fn(
     (
-      _battleCardId: string,
+      _battleCardId: BattleCardId,
       _destination: {
         readonly side: "player";
         readonly zone: "backRank" | "frontRank";
@@ -31,8 +43,7 @@ const mocks = vi.hoisted(() => ({
   confirmedState: null as FoldState | null,
   confirmedHead: null as number | null,
   outcomeListener: null as
-    | ((event: GameEvent, seq: number, outcome: EventOutcome) => void)
-    | null,
+    ((event: GameEvent, seq: number, outcome: EventOutcome) => void) | null,
 }));
 
 vi.mock("../coop/hooks", () => ({
@@ -55,8 +66,7 @@ vi.mock("../coop/hooks", () => ({
 }));
 
 const PLAYER_CARD_UUID = "e83014d3-9d35-4e80-a1b3-9b25360ad2af";
-const REQUIRED_ENEMY_TARGET_EVENT_UUID =
-  "4408b942-09a0-4f4e-a403-10c708c6e3c5";
+const REQUIRED_ENEMY_TARGET_EVENT_UUID = "4408b942-09a0-4f4e-a403-10c708c6e3c5";
 const PLAYER_INSTANCE_ID = "player-hand-instance-uuid";
 const REVISIT_CHARACTER_UUID = "5a980eff-6ec7-44d8-9977-b98e66bbc2c8";
 const REVISIT_INSTANCE_ID = "bc_0018";
@@ -81,7 +91,7 @@ function side(): BattleMutableState["sides"]["player"] {
 
 function instance(): BattleCardInstance {
   return {
-    battleCardId: PLAYER_INSTANCE_ID,
+    battleCardId: asBattleCardId(PLAYER_INSTANCE_ID),
     owner: "player",
     controller: "player",
     sparkDelta: 0,
@@ -110,7 +120,7 @@ function instance(): BattleCardInstance {
     },
     definition: {
       sourceDeckEntryId: null,
-      cardId: PLAYER_CARD_UUID,
+      cardId: asCardId(PLAYER_CARD_UUID),
       cardNumber: 512,
       name: "display-only",
       battleCardKind: "character",
@@ -130,9 +140,9 @@ function instance(): BattleCardInstance {
 
 function state(): FoldState {
   const player = side();
-  player.hand = [PLAYER_INSTANCE_ID];
+  player.hand = [asBattleCardId(PLAYER_INSTANCE_ID)];
   const board: BattleMutableState = {
-    battleId: "tutorial-battle-uuid",
+    battleId: asBattleId("tutorial-battle-uuid"),
     activeSide: "player",
     turnNumber: 3,
     phase: "day",
@@ -144,16 +154,20 @@ function state(): FoldState {
     cardInstances: { [PLAYER_INSTANCE_ID]: instance() },
   };
   return {
-    frontDoor: { phase: "tutorial", journeyId: "journey-uuid", tutorial: null },
+    frontDoor: {
+      phase: "tutorial",
+      journeyId: asJourneyId("journey-uuid"),
+      tutorial: null,
+    },
     playtestControl: {
       mode: "single-controller",
-      controllerClientId: "driver-client",
+      controllerClientId: asClientId("driver-client"),
     },
     journey: {} as FoldState["journey"],
     battle: {
       mode: {
         kind: "tutorial",
-        tutorialRunId: "tutorial-run-uuid",
+        tutorialRunId: asTutorialRunId("tutorial-run-uuid"),
         restartNumber: 0,
         resultConfig: {
           playerOnlyVictory: true,
@@ -186,7 +200,7 @@ function stateWithoutLegalEventTarget(): FoldState {
             ...source,
             definition: {
               ...source.definition,
-              cardId: REQUIRED_ENEMY_TARGET_EVENT_UUID,
+              cardId: asCardId(REQUIRED_ENEMY_TARGET_EVENT_UUID),
               battleCardKind: "event",
             },
           },
@@ -215,14 +229,14 @@ function sameTurnRevisitState(
   next.battle.board.cardInstances = {
     [REVISIT_INSTANCE_ID]: {
       ...fixture,
-      battleCardId: REVISIT_INSTANCE_ID,
+      battleCardId: asBattleCardId(REVISIT_INSTANCE_ID),
       status: {
         ...fixture.status,
         isExhausted: exhausted,
       },
       definition: {
         ...fixture.definition,
-        cardId: REVISIT_CHARACTER_UUID,
+        cardId: asCardId(REVISIT_CHARACTER_UUID),
       },
     },
   };
@@ -230,7 +244,7 @@ function sameTurnRevisitState(
 }
 const controller: TutorialBattleControllerPlan = {
   status: "driver",
-  driverClientId: "driver-client",
+  driverClientId: asClientId("driver-client"),
   isCurrentClientDriver: true,
   isDriverPresent: true,
   requiresHumanDecision: true,
@@ -273,7 +287,8 @@ afterEach(() => {
 describe("useTutorialBattleInteractions", () => {
   it("starts Challenge when the player finishes Night", () => {
     mocks.state = state();
-    if (mocks.state.battle === null) throw new Error("fixture requires a battle");
+    if (mocks.state.battle === null)
+      throw new Error("fixture requires a battle");
     mocks.state.battle.board.phase = "night";
     const root = mount();
 
@@ -297,7 +312,7 @@ describe("useTutorialBattleInteractions", () => {
 
     act(() => {
       latest?.interactions.onCardDragStart(
-        PLAYER_INSTANCE_ID,
+        asBattleCardId(PLAYER_INSTANCE_ID),
         "near-hand",
       );
     });
@@ -308,7 +323,7 @@ describe("useTutorialBattleInteractions", () => {
       latest?.interactions.onHandCardDrop?.({
         owner: "player",
         rank: "back",
-        slotId: "B2",
+        slotId: asBattleSlotViewId("B2"),
       });
     });
 
@@ -330,7 +345,9 @@ describe("useTutorialBattleInteractions", () => {
     const root = mount();
 
     act(() => {
-      latest?.interactions.onHandCardActivate(PLAYER_INSTANCE_ID);
+      latest?.interactions.onHandCardActivate(
+        asBattleCardId(PLAYER_INSTANCE_ID),
+      );
     });
 
     expect(latest?.interactions.targetSelectionCardId).toBeNull();
@@ -344,7 +361,7 @@ describe("useTutorialBattleInteractions", () => {
       expect.objectContaining({
         event: "tutorial_battle_human_intent_requested",
         kind: "target-selection-unavailable",
-        battleCardId: PLAYER_INSTANCE_ID,
+        battleCardId: asBattleCardId(PLAYER_INSTANCE_ID),
         definitionId: REQUIRED_ENEMY_TARGET_EVENT_UUID,
         input: "click",
         legalTargetCount: 0,
@@ -360,7 +377,7 @@ describe("useTutorialBattleInteractions", () => {
 
     act(() => {
       latest?.interactions.onCardDragStart(
-        PLAYER_INSTANCE_ID,
+        asBattleCardId(PLAYER_INSTANCE_ID),
         "near-hand",
       );
     });
@@ -370,7 +387,7 @@ describe("useTutorialBattleInteractions", () => {
       latest?.interactions.onHandCardDrop?.({
         owner: "player",
         rank: "back",
-        slotId: "B2",
+        slotId: asBattleSlotViewId("B2"),
       });
     });
 
@@ -384,7 +401,7 @@ describe("useTutorialBattleInteractions", () => {
       expect.objectContaining({
         event: "tutorial_battle_human_intent_requested",
         kind: "target-selection-unavailable",
-        battleCardId: PLAYER_INSTANCE_ID,
+        battleCardId: asBattleCardId(PLAYER_INSTANCE_ID),
         definitionId: REQUIRED_ENEMY_TARGET_EVENT_UUID,
         input: "drag",
         legalTargetCount: 0,
@@ -403,20 +420,24 @@ describe("useTutorialBattleInteractions", () => {
 
     act(() => {
       latest?.interactions.onCardDragStart(
-        REVISIT_INSTANCE_ID,
+        asBattleCardId(REVISIT_INSTANCE_ID),
         "battlefield",
       );
     });
-    expect(latest?.interactions.isSlotDropEligible?.({
-      owner: "player",
-      rank: "back",
-      slotId: "B1",
-    })).toBe(true);
-    expect(latest?.interactions.isSlotDropEligible?.({
-      owner: "player",
-      rank: "front",
-      slotId: "F3",
-    })).toBe(false);
+    expect(
+      latest?.interactions.isSlotDropEligible?.({
+        owner: "player",
+        rank: "back",
+        slotId: asBattleSlotViewId("B1"),
+      }),
+    ).toBe(true);
+    expect(
+      latest?.interactions.isSlotDropEligible?.({
+        owner: "player",
+        rank: "front",
+        slotId: asBattleSlotViewId("F3"),
+      }),
+    ).toBe(false);
     expect(latest?.interactions.sourceSlotTarget).toEqual({
       owner: "player",
       rank: "front",
@@ -426,7 +447,7 @@ describe("useTutorialBattleInteractions", () => {
       latest?.interactions.onSlotDrop({
         owner: "player",
         rank: "front",
-        slotId: "F1",
+        slotId: asBattleSlotViewId("F1"),
       });
       await Promise.resolve();
     });
@@ -435,7 +456,7 @@ describe("useTutorialBattleInteractions", () => {
     act(() => root.render(<Harness />));
     act(() => {
       latest?.interactions.onCardDragStart(
-        REVISIT_INSTANCE_ID,
+        asBattleCardId(REVISIT_INSTANCE_ID),
         "battlefield",
       );
     });
@@ -445,7 +466,11 @@ describe("useTutorialBattleInteractions", () => {
         placementPoint: { clientX: 1077.375, clientY: 439.3125 },
         candidates: [
           {
-            target: { owner: "player", rank: "front", slotId: "F3" },
+            target: {
+              owner: "player",
+              rank: "front",
+              slotId: asBattleSlotViewId("F3"),
+            },
             eligible: true,
             rect: {
               left: 1026.03125,
@@ -463,7 +488,11 @@ describe("useTutorialBattleInteractions", () => {
             edgeDistanceSquared: 0,
           },
         ],
-        chosenTarget: { owner: "player", rank: "front", slotId: "F3" },
+        chosenTarget: {
+          owner: "player",
+          rank: "front",
+          slotId: asBattleSlotViewId("F3"),
+        },
         strategy: "direct-hit",
       });
     });
@@ -471,7 +500,7 @@ describe("useTutorialBattleInteractions", () => {
       latest?.interactions.onSlotDrop({
         owner: "player",
         rank: "front",
-        slotId: "F3",
+        slotId: asBattleSlotViewId("F3"),
       });
       await Promise.resolve();
     });
@@ -490,7 +519,7 @@ describe("useTutorialBattleInteractions", () => {
       expect.objectContaining({
         event: "tutorial_battle_human_drop_resolved",
         attemptId: "driver-client:tutorial-battle-uuid:movement:2",
-        battleCardId: REVISIT_INSTANCE_ID,
+        battleCardId: asBattleCardId(REVISIT_INSTANCE_ID),
         definitionId: REVISIT_CHARACTER_UUID,
         source: {
           owner: "player",
@@ -510,7 +539,7 @@ describe("useTutorialBattleInteractions", () => {
     expect(getLogEntries()).toContainEqual(
       expect.objectContaining({
         event: "tutorial_battle_human_move_submitted",
-        battleCardId: REVISIT_INSTANCE_ID,
+        battleCardId: asBattleCardId(REVISIT_INSTANCE_ID),
         definitionId: REVISIT_CHARACTER_UUID,
         source: {
           side: "player",
@@ -534,7 +563,7 @@ describe("useTutorialBattleInteractions", () => {
         {
           type: "BATTLE_REPOSITION_CHARACTER",
           payload: {
-            battleCardId: REVISIT_INSTANCE_ID,
+            battleCardId: asBattleCardId(REVISIT_INSTANCE_ID),
             destination: secondDestination,
           },
           actor: "driver-client",
@@ -551,7 +580,7 @@ describe("useTutorialBattleInteractions", () => {
       expect.objectContaining({
         event: "tutorial_battle_human_move_event_outcome",
         attemptId: "driver-client:tutorial-battle-uuid:movement:2",
-        battleCardId: REVISIT_INSTANCE_ID,
+        battleCardId: asBattleCardId(REVISIT_INSTANCE_ID),
         definitionId: REVISIT_CHARACTER_UUID,
         committedSeq: 59,
         outcome: "applied",
@@ -561,7 +590,7 @@ describe("useTutorialBattleInteractions", () => {
       expect.objectContaining({
         event: "tutorial_battle_human_move_folded",
         attemptId: "driver-client:tutorial-battle-uuid:movement:2",
-        battleCardId: REVISIT_INSTANCE_ID,
+        battleCardId: asBattleCardId(REVISIT_INSTANCE_ID),
         definitionId: REVISIT_CHARACTER_UUID,
         committedSeq: 59,
         outcome: "applied",
@@ -585,20 +614,24 @@ describe("useTutorialBattleInteractions", () => {
 
     act(() => {
       latest?.interactions.onCardDragStart(
-        REVISIT_INSTANCE_ID,
+        asBattleCardId(REVISIT_INSTANCE_ID),
         "battlefield",
       );
     });
-    expect(latest?.interactions.isSlotDropEligible?.({
-      owner: "player",
-      rank: "back",
-      slotId: "B1",
-    })).toBe(true);
-    expect(latest?.interactions.isSlotDropEligible?.({
-      owner: "player",
-      rank: "front",
-      slotId: "F2",
-    })).toBe(false);
+    expect(
+      latest?.interactions.isSlotDropEligible?.({
+        owner: "player",
+        rank: "back",
+        slotId: asBattleSlotViewId("B1"),
+      }),
+    ).toBe(true);
+    expect(
+      latest?.interactions.isSlotDropEligible?.({
+        owner: "player",
+        rank: "front",
+        slotId: asBattleSlotViewId("F2"),
+      }),
+    ).toBe(false);
 
     act(() => {
       latest?.interactions.onBattlefieldDropRejected?.({
@@ -613,7 +646,7 @@ describe("useTutorialBattleInteractions", () => {
     expect(getLogEntries()).toContainEqual(
       expect.objectContaining({
         event: "tutorial_battle_human_move_rejected",
-        battleCardId: REVISIT_INSTANCE_ID,
+        battleCardId: asBattleCardId(REVISIT_INSTANCE_ID),
         definitionId: REVISIT_CHARACTER_UUID,
         reason: "ineligible-slot",
         releasePoint: { clientX: 720, clientY: 410 },

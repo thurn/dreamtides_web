@@ -1,7 +1,8 @@
 import type { CardSourceDebugState } from "../types/journey";
+import type { PublicationId } from "../types/identifiers";
 
 export interface CardSourcePublication {
-  ownerId: string | null;
+  ownerId: PublicationId | null;
   state: CardSourceDebugState;
 }
 
@@ -9,7 +10,7 @@ export interface CardSourcePublication {
 export function updateCardSourcePublication(
   current: CardSourcePublication | null,
   state: CardSourceDebugState | null,
-  ownerId?: string,
+  ownerId?: PublicationId,
 ): CardSourcePublication | null {
   if (state !== null) {
     return { ownerId: ownerId ?? null, state };

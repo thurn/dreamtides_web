@@ -5,6 +5,7 @@ import {
   type CardBrowserPresentation,
 } from "./card-gallery-surface";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
+import type { DeckEntryId } from "../../../types/identifiers";
 
 const GallerySurface = cardGallerySurface;
 
@@ -21,10 +22,10 @@ function frameForPresentation(
  * The collection-browsing card surface. It owns the canonical responsive grid,
  * optional browser toolbar, scrolling, and physical-card gestures.
  */
-export function CardBrowserPanel({
+export function CardBrowserPanel<EntryId extends string = DeckEntryId>({
   presentation = "embedded",
   ...props
-}: CardBrowserPanelProps): ReactElement {
+}: CardBrowserPanelProps<EntryId>): ReactElement {
   const isDesktop = useIsDesktop();
   return (
     <GallerySurface

@@ -18,7 +18,7 @@ Floating and anchored preferences consume only the Tutorial Dialogue Placement c
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `presentationId` | `string` | yes | — | Stable identity for this dialogue presentation. |
+| `presentationId` | `PresentationId` | yes | — | Stable identity for this dialogue presentation. |
 | `dialogue` | `CharacterDialogueModel` | yes | — | Complete visible CharacterDialogue presentation. |
 | `context` | `"site" \| "card" \| "battle"` | yes | — | Semantic host context used for presentation and diagnostics. |
 | `placement` | `TutorialDialoguePlacement` | yes | — | Named placement preference resolved through registered geometry. |

@@ -15,6 +15,15 @@ import type { TutorialBattleAiActionOverride } from "../types/tutorial";
 import type { PromptResolution } from "../rules/battle/effect-runner-core";
 import { battleModeOf, type PendingPrompt } from "../rules/battle/fold";
 import type { FoldState } from "../rules/fold-state";
+import type { CardId } from "../types/card-identity";
+import type { BattleCardId, ClientId, IntentKey } from "../types/identifiers";
+import type { TutorialAiActionOverrideId } from "../types/identifiers";
+import type { PresentationId } from "../types/identifiers";
+import type { BattleId } from "../types/identifiers";
+import type { DreamwellCardId } from "../types/identifiers";
+import { asBattleCardId } from "../types/identifiers";
+import { asPresentationId } from "../types/identifiers";
+import { asIntentKey } from "../types/identifiers";
 
 export type TutorialDriverStatus =
   "not-tutorial" | "driver" | "observer" | "paused-driver-absent" | "terminal";
@@ -22,17 +31,17 @@ export type TutorialDriverStatus =
 export interface TutorialBattleControllerInput {
   /** The confirmed room fold only; optimistic state must never drive automation. */
   state: FoldState;
-  clientId: string;
+  clientId: ClientId;
   /** `null` means presence has not loaded and automation must pause safely. */
-  connectedClientIds: readonly string[] | null;
+  connectedClientIds: readonly ClientId[] | null;
 }
 
 export interface TutorialAiActionOverrideMiss {
-  overrideId: string;
+  overrideId: TutorialAiActionOverrideId;
   triggerKind: TutorialBattleAiActionOverride["trigger"]["kind"];
-  triggerCardId: string;
+  triggerCardId: DreamwellCardId;
   actionKind: TutorialBattleAiActionOverride["action"]["kind"];
-  actionCardId: string;
+  actionCardId: CardId;
   reason: TutorialAiActionOverrideBlockReason;
 }
 
@@ -40,53 +49,53 @@ export type TutorialAutomaticIntent = (
   | {
       kind: "battle-command";
       command: BattleCommand;
-      intentKey: string;
+      intentKey: IntentKey;
       reason: string;
     }
   | {
       kind: "battle-play-card";
-      battleCardId: string;
-      targetBattleCardIds: readonly string[];
+      battleCardId: BattleCardId;
+      targetBattleCardIds: readonly BattleCardId[];
       aiChoices: readonly ReturnType<typeof buildTrace>[];
       characterDestination?: {
         side: "enemy";
         zone: "backRank";
         slotId: `B${number}`;
       };
-      tutorialAiActionOverrideId?: string;
-      intentKey: string;
+      tutorialAiActionOverrideId?: TutorialAiActionOverrideId;
+      intentKey: IntentKey;
       reason: string;
     }
   | {
       kind: "battle-gesture";
       commands: readonly BattleCommand[];
-      intentKey: string;
+      intentKey: IntentKey;
       reason: string;
     }
   | {
       kind: "battle-ai-block";
       decision: BlockingDecision;
-      intentKey: string;
+      intentKey: IntentKey;
       reason: string;
     }
   | {
       kind: "complete-presentation";
-      presentationId: string;
-      intentKey: string;
+      presentationId: PresentationId;
+      intentKey: IntentKey;
       reason: string;
     }
   | {
       kind: "resolve-prompt";
       promptId: number;
       resolution: PromptResolution;
-      intentKey: string;
+      intentKey: IntentKey;
       reason: string;
     }
 ) & { aiActionOverrideMiss?: TutorialAiActionOverrideMiss };
 
 export interface TutorialBattleControllerPlan {
   status: TutorialDriverStatus;
-  driverClientId: string | null;
+  driverClientId: ClientId | null;
   /** True only for the persisted driver on this client, including at terminal. */
   isCurrentClientDriver: boolean;
   /** Presence is deliberately explicit: a terminal result may outlive its driver. */
@@ -161,8 +170,10 @@ export function planTutorialBattleController(
       requiresHumanDecision: false,
       intent: {
         kind: "complete-presentation",
-        presentationId: presentation.id,
-        intentKey: `tutorial-battle:${battle.board.battleId}:presentation:${presentation.id}`,
+        presentationId: asPresentationId(presentation.id),
+        intentKey: asIntentKey(
+          `tutorial-battle:${battle.board.battleId}:presentation:${presentation.id}`,
+        ),
         reason: presentation.kind,
       },
     };
@@ -210,7 +221,7 @@ export function planTutorialBattleController(
           edit: { kind: "SET_PHASE", phase: "dawn" },
           sourceSurface: "auto-system",
         },
-        `${key}:dawn:triggers`,
+        asIntentKey(`${key}:dawn:triggers`),
         "resolve-dawn-triggers",
         controllerClientId,
       );
@@ -221,7 +232,7 @@ export function planTutorialBattleController(
         edit: { kind: "SET_PHASE", phase: "day" },
         sourceSurface: "auto-system",
       },
-      `${key}:dawn:day`,
+      asIntentKey(`${key}:dawn:day`),
       "advance-dawn",
       controllerClientId,
     );
@@ -238,7 +249,7 @@ export function planTutorialBattleController(
           },
           sourceSurface: "auto-system",
         },
-        `${key}:dreamwell:reveal`,
+        asIntentKey(`${key}:dreamwell:reveal`),
         "reveal-dreamwell",
         controllerClientId,
       );
@@ -249,7 +260,7 @@ export function planTutorialBattleController(
         edit: { kind: "SET_PHASE", phase: "dawn" },
         sourceSurface: "auto-system",
       },
-      `${key}:dreamwell:dawn`,
+      asIntentKey(`${key}:dreamwell:dawn`),
       "advance-dreamwell",
       controllerClientId,
     );
@@ -283,7 +294,7 @@ export function planTutorialBattleController(
         intent: {
           kind: "battle-ai-block",
           decision: blocking.decision,
-          intentKey: `${key}:block`,
+          intentKey: asIntentKey(`${key}:block`),
           reason: "enemy-block-player-challenge",
         },
       };
@@ -295,7 +306,7 @@ export function planTutorialBattleController(
           edit: { kind: "SET_PHASE", phase: "night" },
           sourceSurface: "auto-system",
         },
-        `${key}:night`,
+        asIntentKey(`${key}:night`),
         "advance-player-dusk",
         controllerClientId,
       );
@@ -363,7 +374,9 @@ export function planTutorialBattleController(
                 },
               }),
           tutorialAiActionOverrideId: scripted.override.id,
-          intentKey: `${key}:enemy-scripted-play:${scripted.override.id}`,
+          intentKey: asIntentKey(
+            `${key}:enemy-scripted-play:${scripted.override.id}`,
+          ),
           reason: "enemy-scripted-day-play",
         },
       };
@@ -427,7 +440,9 @@ export function planTutorialBattleController(
           ...(aiActionOverrideMiss === undefined
             ? {}
             : { aiActionOverrideMiss }),
-          intentKey: `${key}:enemy-play:${action.self.battleCardId}`,
+          intentKey: asIntentKey(
+            `${key}:enemy-play:${action.self.battleCardId}`,
+          ),
           reason: "enemy-day-play",
         },
       };
@@ -448,7 +463,9 @@ export function planTutorialBattleController(
           ...(aiActionOverrideMiss === undefined
             ? {}
             : { aiActionOverrideMiss }),
-          intentKey: `${key}:enemy-move:${action.self?.battleCardId ?? "none"}:${action.toSlot ?? "none"}`,
+          intentKey: asIntentKey(
+            `${key}:enemy-move:${action.self?.battleCardId ?? asBattleCardId("none")}:${action.toSlot ?? "none"}`,
+          ),
           reason: "enemy-day-reposition",
         },
       };
@@ -460,7 +477,7 @@ export function planTutorialBattleController(
         sourceSurface: "auto-system",
         aiChoices: [trace],
       },
-      `${key}:enemy-day-complete`,
+      asIntentKey(`${key}:enemy-day-complete`),
       "enemy-day-complete",
       controllerClientId,
       aiActionOverrideMiss,
@@ -493,9 +510,9 @@ function idlePlan(status: "not-tutorial"): TutorialBattleControllerPlan {
 
 function commandPlan(
   command: BattleCommand,
-  intentKey: string,
+  intentKey: IntentKey,
   reason: string,
-  driverClientId: string | null,
+  driverClientId: ClientId | null,
   aiActionOverrideMiss?: TutorialAiActionOverrideMiss,
 ): TutorialBattleControllerPlan {
   return {
@@ -528,21 +545,23 @@ function handoffPlan(
   }).flowEdit;
   return commandPlan(
     { id: "DEBUG_EDIT", edit: flowEdit, sourceSurface: "auto-system" },
-    `${intentKeyPrefix(battle.board)}:handoff`,
+    asIntentKey(`${intentKeyPrefix(battle.board)}:handoff`),
     reason,
     state.playtestControl?.controllerClientId ?? null,
   );
 }
 
 function promptIntent(
-  battleId: string,
+  battleId: BattleId,
   prompt: PendingPrompt,
 ): TutorialAutomaticIntent {
   return {
     kind: "resolve-prompt",
     promptId: prompt.promptId,
     resolution: deterministicPromptResolution(prompt),
-    intentKey: `tutorial-battle:${battleId}:prompt:${String(prompt.promptId)}`,
+    intentKey: asIntentKey(
+      `tutorial-battle:${battleId}:prompt:${String(prompt.promptId)}`,
+    ),
     reason: `enemy-${prompt.options.kind}-prompt`,
   };
 }
@@ -563,8 +582,8 @@ function deterministicPromptResolution(
     case "foresee":
       return {
         kind: "foresee",
-        viewedCardIds: [...prompt.options.cardIds],
-        orderedCardIds: [...prompt.options.cardIds],
+        viewedCardIds: [...prompt.options.cardIds.map(asBattleCardId)],
+        orderedCardIds: [...prompt.options.cardIds.map(asBattleCardId)],
         voidCardIds: [],
       };
   }
@@ -579,7 +598,7 @@ function enemyHasChallenger(state: FoldState): boolean {
 }
 
 function intentKeyPrefix(board: {
-  battleId: string;
+  battleId: BattleId;
   activeSide: string;
   turnNumber: number;
   phase: string;
@@ -587,7 +606,7 @@ function intentKeyPrefix(board: {
   return `tutorial-battle:${board.battleId}:${board.activeSide}:${String(board.turnNumber)}:${board.phase}`;
 }
 
-function tutorialPlannerSeed(battleId: string, turnNumber: number): number {
+function tutorialPlannerSeed(battleId: BattleId, turnNumber: number): number {
   let hash = 2166136261 >>> 0;
   for (let index = 0; index < battleId.length; index += 1) {
     hash ^= battleId.charCodeAt(index);

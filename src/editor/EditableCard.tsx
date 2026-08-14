@@ -16,6 +16,7 @@ import type {
   EditorDisplayState,
   EditorTag,
 } from "./types";
+import type { CardId } from "../types/card-identity";
 
 export interface EditableCardProps {
   card: EditorCardRecord;
@@ -61,7 +62,7 @@ export interface EditableCardProps {
    * Supplied only when the grid needs it (font-size sort); omitting it skips the
    * report while the local overlay still works.
    */
-  onRulesFontSize?: (cardId: string, fontSizePx: number) => void;
+  onRulesFontSize?: (cardId: CardId, fontSizePx: number) => void;
   onOpenArtEditor: (card: EditorCardRecord) => void;
   onFieldBeginEdit: (
     card: EditorCardRecord,
@@ -102,7 +103,11 @@ function numericPreviewValue(
 ): number | null {
   const textValue = String(value).trim();
 
-  if ((allowBlank && textValue === "") || textValue === "*" || textValue === "X") {
+  if (
+    (allowBlank && textValue === "") ||
+    textValue === "*" ||
+    textValue === "X"
+  ) {
     return null;
   }
 
@@ -548,7 +553,11 @@ export default function EditableCard({
       // EditableField in both display and edit states (no remount on edit).
       return (
         <EditableField
-          {...fieldProps("spark", displayEditorValue(card.spark), sparkSaveEntry)}
+          {...fieldProps(
+            "spark",
+            displayEditorValue(card.spark),
+            sparkSaveEntry,
+          )}
           layout="pip"
         >
           {defaultNode}

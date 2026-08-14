@@ -12,13 +12,14 @@ import { Motes } from "../../components/hud/Motes";
 import { GlassPanel } from "../../components/overlay/GlassPanel";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
+import { asDreamscapeId } from "../../../types/identifiers";
 
 export function MotesMockup() {
   return (
     <div
       style={{
         ...sceneRoot,
-        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.25) 0%, rgba(8,5,17,0.35) 55%, rgba(8,5,17,0.85) 100%), url(${dreamscapeSceneUrl("winterwake_fjords")})`,
+        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.25) 0%, rgba(8,5,17,0.35) 55%, rgba(8,5,17,0.85) 100%), url(${dreamscapeSceneUrl(asDreamscapeId("winterwake_fjords"))})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}

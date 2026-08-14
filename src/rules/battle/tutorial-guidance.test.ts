@@ -10,13 +10,17 @@ import { GLOSSARY_IDS, lookupGlossaryTerm } from "../../data/glossary";
 import { parseTutorialTriggers } from "../../data/tutorial-actions";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
 import { matchTutorialGuidance } from "./tutorial-guidance";
+import { asTutorialTriggerId } from "../../types/identifiers";
+import type { TutorialTriggerId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asGlossaryEntryId } from "../../types/identifiers";
 
 function glossaryTrigger(
   id: string,
   priority: number,
 ): TutorialTriggerDefinition {
   return {
-    id,
+    id: asTutorialTriggerId(id),
     on: ["card-play", "dreamwell-resolve"],
     priority,
     speaker: "mira",
@@ -26,12 +30,13 @@ function glossaryTrigger(
     bubbleWidth: 700,
     match: {
       kind: "glossary",
-      id:
+      id: asGlossaryEntryId(
         {
           support: GLOSSARY_IDS.support,
           foresee: GLOSSARY_IDS.foresee,
           erode: GLOSSARY_IDS.erode,
         }[id] ?? id,
+      ),
     },
     text: id,
   };
@@ -47,7 +52,7 @@ describe("matchTutorialGuidance", () => {
       event: "card-play" as const,
       renderedText: "Foresee 1. Supports adjacent characters.",
       cardKind: "character" as const,
-      seenTriggerIds: new Set<string>(),
+      seenTriggerIds: new Set<TutorialTriggerId>(),
     };
 
     const firstMatches = matchTutorialGuidance(triggers, input);
@@ -67,7 +72,7 @@ describe("matchTutorialGuidance", () => {
         event: "card-play",
         renderedText: "Support. Foresee 1.",
         cardKind: "character",
-        seenTriggerIds: new Set(["support"]),
+        seenTriggerIds: new Set([asTutorialTriggerId("support")]),
       },
     );
     expect(matches.map((match) => match.id)).toEqual(["foresee"]);
@@ -76,7 +81,7 @@ describe("matchTutorialGuidance", () => {
   it("defers a matching keyword until after the general Event explanation", () => {
     const triggers: readonly TutorialTriggerDefinition[] = [
       {
-        id: "event-card",
+        id: asTutorialTriggerId("event-card"),
         on: ["card-play"],
         priority: 10,
         speaker: "mira",
@@ -93,7 +98,7 @@ describe("matchTutorialGuidance", () => {
       event: "card-play",
       renderedText: "Erode 3.",
       cardKind: "event",
-      seenTriggerIds: new Set<string>(),
+      seenTriggerIds: new Set<TutorialTriggerId>(),
     } as const;
 
     const firstMatches = matchTutorialGuidance(triggers, input);
@@ -101,7 +106,7 @@ describe("matchTutorialGuidance", () => {
 
     const secondMatches = matchTutorialGuidance(triggers, {
       ...input,
-      seenTriggerIds: new Set(["event-card"]),
+      seenTriggerIds: new Set([asTutorialTriggerId("event-card")]),
     });
     expect(secondMatches.map((match) => match.id)).toEqual(["erode"]);
   });
@@ -111,7 +116,7 @@ describe("matchTutorialGuidance", () => {
     const matches = matchTutorialGuidance(
       [
         {
-          id: "flashpoint-no-valid-targets",
+          id: asTutorialTriggerId("flashpoint-no-valid-targets"),
           on: ["card-no-valid-targets"],
           priority: 10,
           speaker: "mira",
@@ -119,13 +124,13 @@ describe("matchTutorialGuidance", () => {
           horizontalOffset: 0,
           verticalOffset: 0,
           bubbleWidth: 500,
-          match: { kind: "card-id", cardId },
+          match: { kind: "card-id", cardId: asCardId(cardId) },
           text: "There are no valid targets for this card",
         },
       ],
       {
         event: "card-no-valid-targets",
-        cardId,
+        cardId: asCardId(cardId),
         renderedText: "Dissolve a low-cost enemy.",
         cardKind: "event",
         seenTriggerIds: new Set(),

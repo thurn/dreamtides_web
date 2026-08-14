@@ -72,6 +72,10 @@ import {
   revealCardPublicly,
   setCardRevealedTo,
 } from "../../battle/state/card-visibility";
+import type { BattleCardId, NoteId } from "../../types/identifiers";
+import { asCardId, type CardId } from "../../types/card-identity";
+import { asNoteId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
 
 export function applyDebugEdit(
   state: BattleMutableState,
@@ -206,26 +210,33 @@ export function applyDebugEdit(
         ),
       };
     case "SET_CARD_SPARK":
-      if (nextState.cardInstances[edit.battleCardId]?.sparkDelta === undefined) {
+      if (
+        nextState.cardInstances[edit.battleCardId]?.sparkDelta === undefined
+      ) {
         return {
           state,
           transition: createEmptyTransitionData(),
         };
       }
       nextState.cardInstances[edit.battleCardId].sparkDelta =
-        edit.value - nextState.cardInstances[edit.battleCardId].definition.printedSpark;
+        edit.value -
+        nextState.cardInstances[edit.battleCardId].definition.printedSpark;
       return {
         state: nextState,
         transition: createEmptyTransitionData(),
       };
     case "SET_CARD_SPARK_DELTA":
-      if (nextState.cardInstances[edit.battleCardId]?.sparkDelta === undefined) {
+      if (
+        nextState.cardInstances[edit.battleCardId]?.sparkDelta === undefined
+      ) {
         return {
           state,
           transition: createEmptyTransitionData(),
         };
       }
-      if (nextState.cardInstances[edit.battleCardId].sparkDelta === edit.value) {
+      if (
+        nextState.cardInstances[edit.battleCardId].sparkDelta === edit.value
+      ) {
         return {
           state,
           transition: createEmptyTransitionData(),
@@ -237,13 +248,19 @@ export function applyDebugEdit(
         transition: createEmptyTransitionData(),
       };
     case "SET_CARD_STATIC_SPARK_BONUS":
-      if (nextState.cardInstances[edit.battleCardId]?.staticSparkBonus === undefined) {
+      if (
+        nextState.cardInstances[edit.battleCardId]?.staticSparkBonus ===
+        undefined
+      ) {
         return {
           state,
           transition: createEmptyTransitionData(),
         };
       }
-      if (nextState.cardInstances[edit.battleCardId].staticSparkBonus === edit.value) {
+      if (
+        nextState.cardInstances[edit.battleCardId].staticSparkBonus ===
+        edit.value
+      ) {
         return {
           state,
           transition: createEmptyTransitionData(),
@@ -266,7 +283,12 @@ export function applyDebugEdit(
     case "DRAW_CARD":
       return drawCardToHand(state, edit.side);
     case "DRAW_DREAMWELL_CARD":
-      return drawDreamwellCard(state, edit.side, edit.turnNumber, edit.additional ?? false);
+      return drawDreamwellCard(
+        state,
+        edit.side,
+        edit.turnNumber,
+        edit.additional ?? false,
+      );
     case "ERODE":
       return erodeDeck(state, edit.side, edit.count);
     case "DISCARD_CARD":
@@ -276,7 +298,12 @@ export function applyDebugEdit(
     case "REMATERIALIZE":
       return rematerializeCard(state, edit.battleCardId);
     case "KINDLE":
-      return kindleCard(state, edit.side, edit.amount, edit.preferredBattleCardId ?? null);
+      return kindleCard(
+        state,
+        edit.side,
+        edit.amount,
+        edit.preferredBattleCardId ?? null,
+      );
     case "SET_CARD_VISIBILITY":
       if (nextState.cardInstances[edit.battleCardId] === undefined) {
         return {
@@ -284,11 +311,13 @@ export function applyDebugEdit(
           transition: createEmptyTransitionData(),
         };
       }
-      if (!setCardRevealedTo(
-        nextState.cardInstances[edit.battleCardId],
-        visibilityEditViewer(edit),
-        visibilityEditValue(edit),
-      )) {
+      if (
+        !setCardRevealedTo(
+          nextState.cardInstances[edit.battleCardId],
+          visibilityEditViewer(edit),
+          visibilityEditValue(edit),
+        )
+      ) {
         return {
           state,
           transition: createEmptyTransitionData(),
@@ -429,9 +458,21 @@ export function applyDebugEdit(
         context,
       );
     case "REVEAL_DECK_TOP":
-      return revealDeckTop(state, nextState, edit.side, edit.count, edit.viewer ?? "player");
+      return revealDeckTop(
+        state,
+        nextState,
+        edit.side,
+        edit.count,
+        edit.viewer ?? "player",
+      );
     case "HIDE_DECK_TOP":
-      return hideDeckTop(state, nextState, edit.side, edit.count, edit.viewer ?? "player");
+      return hideDeckTop(
+        state,
+        nextState,
+        edit.side,
+        edit.count,
+        edit.viewer ?? "player",
+      );
     case "PLAY_FROM_DECK_TOP":
       return playFromDeckTop(state, edit.side, edit.target);
     case "SET_PHASE":
@@ -494,7 +535,7 @@ function reorderDeck(
     };
   }
 
-  nextState.sides[side].deck = orderAfter;
+  nextState.sides[side].deck = orderAfter.map(asBattleCardId);
 
   return {
     state: nextState,
@@ -503,7 +544,11 @@ function reorderDeck(
       logEvents: [
         createBattleProtoDeckReorderedLogEvent(
           nextState,
-          { side, orderBefore, orderAfter },
+          {
+            side,
+            orderBefore: orderBefore.map(asBattleCardId),
+            orderAfter: orderAfter.map(asBattleCardId),
+          },
           context,
         ),
       ],
@@ -515,9 +560,9 @@ function resolveForesee(
   state: BattleMutableState,
   nextState: BattleMutableState,
   side: BattleSide,
-  viewedCardIds: readonly string[],
-  orderedCardIds: readonly string[],
-  voidCardIds: readonly string[],
+  viewedCardIds: readonly BattleCardId[],
+  orderedCardIds: readonly BattleCardId[],
+  voidCardIds: readonly BattleCardId[],
   viewer: BattleSide,
   context: BattleEngineEmissionContext,
 ): {
@@ -542,10 +587,7 @@ function resolveForesee(
 
   const deckAfter = [...orderedCardIds, ...deckBefore.slice(viewedCount)];
   nextState.sides[side].deck = deckAfter;
-  nextState.sides[side].void = [
-    ...nextState.sides[side].void,
-    ...voidCardIds,
-  ];
+  nextState.sides[side].void = [...nextState.sides[side].void, ...voidCardIds];
 
   for (const battleCardId of viewedCardIds) {
     const instance = nextState.cardInstances[battleCardId];
@@ -554,9 +596,11 @@ function resolveForesee(
     }
   }
 
-  const cardUuids = (battleCardIds: readonly string[]): string[] =>
+  const cardUuids = (battleCardIds: readonly BattleCardId[]): string[] =>
     battleCardIds.map(
-      (battleCardId) => nextState.cardInstances[battleCardId]?.definition.cardId ?? "",
+      (battleCardId) =>
+        nextState.cardInstances[battleCardId]?.definition.cardId ??
+        asCardId(""),
     );
 
   return {
@@ -702,7 +746,10 @@ function playFromDeckTop(
   transition: BattleTransitionData;
 } {
   const topBattleCardId = state.sides[side].deck[0];
-  if (topBattleCardId === undefined || state.cardInstances[topBattleCardId] === undefined) {
+  if (
+    topBattleCardId === undefined ||
+    state.cardInstances[topBattleCardId] === undefined
+  ) {
     return {
       state,
       transition: createEmptyTransitionData(),
@@ -714,7 +761,8 @@ function playFromDeckTop(
   // given, otherwise the first open reserve slot, then the first open deployed
   // slot (selectDefaultCharacterPlaySlot). No-op when nothing is open or the
   // explicit target is occupied/invalid.
-  const resolvedTarget = target ?? selectDefaultCharacterPlaySlot(state, side) ?? undefined;
+  const resolvedTarget =
+    target ?? selectDefaultCharacterPlaySlot(state, side) ?? undefined;
   if (resolvedTarget === undefined) {
     return {
       state,
@@ -731,7 +779,11 @@ function playFromDeckTop(
 
   const nextState = cloneBattleMutableState(state);
   nextState.sides[side].deck = nextState.sides[side].deck.slice(1);
-  insertBattleCardAtDebugDestination(nextState, topBattleCardId, resolvedTarget);
+  insertBattleCardAtDebugDestination(
+    nextState,
+    topBattleCardId,
+    resolvedTarget,
+  );
   nextState.cardInstances[topBattleCardId].controller = resolvedTarget.side;
   revealCardPublicly(nextState.cardInstances[topBattleCardId]);
 
@@ -791,8 +843,8 @@ function setSideHandVisibility(
 function addCardNote(
   state: BattleMutableState,
   nextState: BattleMutableState,
-  battleCardId: string,
-  noteId: string,
+  battleCardId: BattleCardId,
+  noteId: NoteId,
   text: string,
   createdAtMs: number,
   expiry: BattleCardNote["expiry"],
@@ -848,8 +900,8 @@ function addCardNote(
 function dismissCardNote(
   state: BattleMutableState,
   nextState: BattleMutableState,
-  battleCardId: string,
-  noteId: string,
+  battleCardId: BattleCardId,
+  noteId: NoteId,
   context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
@@ -880,7 +932,7 @@ function dismissCardNote(
       logEvents: [
         createBattleProtoNoteDismissedLogEvent(
           nextState,
-          { battleCardId, noteId },
+          { battleCardId, noteId: asNoteId(noteId) },
           context,
         ),
       ],
@@ -891,7 +943,7 @@ function dismissCardNote(
 function clearCardNotes(
   state: BattleMutableState,
   nextState: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
@@ -933,7 +985,7 @@ function clearCardNotes(
 function setCardMarkers(
   state: BattleMutableState,
   nextState: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   markers: BattleCardMarkers,
   context: BattleEngineEmissionContext,
 ): {
@@ -978,7 +1030,10 @@ function setCardMarkers(
               isCopied: markers.isCopied,
             },
             diff: {
-              prevented: diffMarkerValue(previous.isPrevented, markers.isPrevented),
+              prevented: diffMarkerValue(
+                previous.isPrevented,
+                markers.isPrevented,
+              ),
               copied: diffMarkerValue(previous.isCopied, markers.isCopied),
             },
           },
@@ -1005,7 +1060,7 @@ function setCardMarkers(
 function setCardStatus(
   state: BattleMutableState,
   nextState: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   status: Partial<BattleCardStatus>,
 ): {
   state: BattleMutableState;
@@ -1063,7 +1118,7 @@ function setCardStatus(
 function setCounters(
   state: BattleMutableState,
   nextState: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   value: number,
 ): {
   state: BattleMutableState;
@@ -1112,13 +1167,17 @@ function selectFirstOpenBackRankSlot(
       return { side, zone: "backRank", slotId };
     }
   }
-  return { side, zone: "backRank", slotId: backRankSlotId(rankSlotIds(backRank).length) };
+  return {
+    side,
+    zone: "backRank",
+    slotId: backRankSlotId(rankSlotIds(backRank).length),
+  };
 }
 
 function createCardCopy(
   state: BattleMutableState,
   nextState: BattleMutableState,
-  sourceBattleCardId: string,
+  sourceBattleCardId: BattleCardId,
   destination: BattleDebugZoneDestination,
   createdAtMs: number,
   context: BattleEngineEmissionContext,
@@ -1169,7 +1228,7 @@ function createCardCopy(
         createBattleProtoCardCreatedLogEvent(
           nextState,
           {
-            battleCardId,
+            battleCardId: asBattleCardId(battleCardId),
             destinationZone: formatDestinationZoneLabel(destination),
             name: definition.name,
             ownerSide: destination.side,
@@ -1189,7 +1248,7 @@ function createFigment(
   state: BattleMutableState,
   nextState: BattleMutableState,
   side: BattleSide,
-  chosenFigmentId: string | undefined,
+  chosenFigmentId: CardId | undefined,
   count: number,
   chosenSubtype: string,
   chosenSpark: number,
@@ -1209,9 +1268,8 @@ function createFigment(
       ? undefined
       : lookupFigmentCatalogEntryById(chosenFigmentId)) ??
     lookupFigmentCatalogEntry(chosenSubtype);
-  const resolvedSpark = chosenSpark < 0
-    ? catalogEntry?.baseSpark ?? 0
-    : chosenSpark;
+  const resolvedSpark =
+    chosenSpark < 0 ? (catalogEntry?.baseSpark ?? 0) : chosenSpark;
 
   const destinations = figmentDestinations(nextState, destination, count);
   if (destinations === null) {
@@ -1225,7 +1283,7 @@ function createFigment(
     sourceDeckEntryId: null,
     // Figments use their authored UUID as their catalog identity. Legacy or
     // isolated callers without a hydrated catalog retain the empty fallback.
-    cardId: catalogEntry?.id ?? chosenFigmentId ?? "",
+    cardId: asCardId(catalogEntry?.id ?? chosenFigmentId ?? asCardId("")),
     cardNumber: 0,
     name,
     battleCardKind: "character",
@@ -1289,7 +1347,7 @@ function createFigment(
     return createBattleProtoCardCreatedLogEvent(
       nextState,
       {
-        battleCardId,
+        battleCardId: asBattleCardId(battleCardId),
         destinationZone: formatDestinationZoneLabel(resolvedDestination),
         figmentCount: selectFigmentCount(nextState.cardInstances[battleCardId]),
         name,
@@ -1327,12 +1385,10 @@ function figmentDestinations(
   const openSlotIds: readonly BattlefieldSlotId[] =
     destination.zone === "backRank"
       ? rankSlotIds(state.sides[destination.side].backRank).filter(
-          (slotId) =>
-            state.sides[destination.side].backRank[slotId] === null,
+          (slotId) => state.sides[destination.side].backRank[slotId] === null,
         )
       : rankSlotIds(state.sides[destination.side].frontRank).filter(
-          (slotId) =>
-            state.sides[destination.side].frontRank[slotId] === null,
+          (slotId) => state.sides[destination.side].frontRank[slotId] === null,
         );
   if (!openSlotIds.includes(destination.slotId) || openSlotIds.length < count) {
     return null;
@@ -1351,7 +1407,7 @@ function figmentDestinations(
  */
 function applyFigmentKeywordToStatus(
   state: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   keyword: FigmentKeyword | undefined,
 ): void {
   const instance = state.cardInstances[battleCardId];
@@ -1415,7 +1471,7 @@ function createCardFromDefinition(
         createBattleProtoCardCreatedLogEvent(
           nextState,
           {
-            battleCardId,
+            battleCardId: asBattleCardId(battleCardId),
             destinationZone: formatDestinationZoneLabel(destination),
             name: clonedDefinition.name,
             ownerSide: destination.side,
@@ -1459,10 +1515,15 @@ function fillBattlefieldPreview(
     for (const zone of ["frontRank", "backRank"] as const) {
       for (const battleCardId of Object.values(current.sides[side][zone])) {
         if (battleCardId === null) continue;
-        current = moveCardToDebugZone(current, battleCardId, {
-          side,
-          zone: "void",
-        }, context).state;
+        current = moveCardToDebugZone(
+          current,
+          battleCardId,
+          {
+            side,
+            zone: "void",
+          },
+          context,
+        ).state;
       }
     }
   }
@@ -1615,8 +1676,11 @@ export function forceBattleResult(
 
 function moveCardToDebugZone(
   state: BattleMutableState,
-  battleCardId: string,
-  destination: Extract<BattleDebugEdit, { kind: "MOVE_CARD_TO_ZONE" }>["destination"],
+  battleCardId: BattleCardId,
+  destination: Extract<
+    BattleDebugEdit,
+    { kind: "MOVE_CARD_TO_ZONE" }
+  >["destination"],
   context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
@@ -1679,7 +1743,7 @@ function moveCardToDebugZone(
     const nextState = cloneBattleMutableState(state);
     const stackEmptied = dissolveFigmentsFromStackInPlace(
       nextState,
-      battleCardId,
+      asBattleCardId(battleCardId),
       1,
     );
     if (stackEmptied) {
@@ -1692,9 +1756,10 @@ function moveCardToDebugZone(
     };
   }
 
-  const destinationOccupant = "slotId" in destination
-    ? selectBattlefieldSlotOccupant(state, destination)
-    : null;
+  const destinationOccupant =
+    "slotId" in destination
+      ? selectBattlefieldSlotOccupant(state, destination)
+      : null;
   const mergeAssessment =
     destinationOccupant === null
       ? null
@@ -1753,8 +1818,7 @@ function moveCardToDebugZone(
               figmentId: sourceInstance.definition.cardId,
               addedSpark: merged.addedSpark,
               destinationSparkBefore,
-              destinationSparkAfter:
-                destinationSparkBefore + merged.addedSpark,
+              destinationSparkAfter: destinationSparkBefore + merged.addedSpark,
             },
             {
               sourceSurface: context.sourceSurface,
@@ -1768,7 +1832,12 @@ function moveCardToDebugZone(
     insertBattleCardAtDebugDestination(nextState, battleCardId, destination);
     const moved = nextState.cardInstances[battleCardId];
     moved.controller = destination.side;
-    if (destination.zone === "backRank" || destination.zone === "frontRank" || destination.zone === "void" || destination.zone === "banished") {
+    if (
+      destination.zone === "backRank" ||
+      destination.zone === "frontRank" ||
+      destination.zone === "void" ||
+      destination.zone === "banished"
+    ) {
       revealCardPublicly(moved);
     } else {
       setCardRevealedTo(moved, destination.side, true);
@@ -1796,7 +1865,8 @@ function clearCountersOnLeavingPlay(
   destinationZone: string,
 ): void {
   const leavingPlay =
-    !BATTLEFIELD_ZONE_NAMES.has(destinationZone) && BATTLEFIELD_ZONE_NAMES.has(sourceZone);
+    !BATTLEFIELD_ZONE_NAMES.has(destinationZone) &&
+    BATTLEFIELD_ZONE_NAMES.has(sourceZone);
   if (leavingPlay) {
     instance.status = {
       ...instance.status,
@@ -1807,8 +1877,14 @@ function clearCountersOnLeavingPlay(
 
 function swapBattlefieldSlots(
   state: BattleMutableState,
-  source: Extract<BattleDebugEdit, { kind: "SWAP_BATTLEFIELD_SLOTS" }>["source"],
-  target: Extract<BattleDebugEdit, { kind: "SWAP_BATTLEFIELD_SLOTS" }>["target"],
+  source: Extract<
+    BattleDebugEdit,
+    { kind: "SWAP_BATTLEFIELD_SLOTS" }
+  >["source"],
+  target: Extract<
+    BattleDebugEdit,
+    { kind: "SWAP_BATTLEFIELD_SLOTS" }
+  >["target"],
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
@@ -1816,11 +1892,9 @@ function swapBattlefieldSlots(
   if (
     !isBattleFieldSlotAddressValid(source) ||
     !isBattleFieldSlotAddressValid(target) ||
-    (
-      source.side === target.side &&
+    (source.side === target.side &&
       source.zone === target.zone &&
-      source.slotId === target.slotId
-    )
+      source.slotId === target.slotId)
   ) {
     return {
       state,
@@ -1844,11 +1918,15 @@ function swapBattlefieldSlots(
   // occupant lands on `target`; the target occupant lands on `source`. A
   // front-to-front swap repositions a body already in the front rank and does
   // not advance it, so it stays legal.
-  const sourceAdvancesToFront = target.zone === "frontRank" && source.zone !== "frontRank";
-  const targetAdvancesToFront = source.zone === "frontRank" && target.zone !== "frontRank";
+  const sourceAdvancesToFront =
+    target.zone === "frontRank" && source.zone !== "frontRank";
+  const targetAdvancesToFront =
+    source.zone === "frontRank" && target.zone !== "frontRank";
   if (
-    (sourceAdvancesToFront && state.cardInstances[sourceOccupant].status.isExhausted) ||
-    (targetAdvancesToFront && state.cardInstances[targetOccupant].status.isExhausted)
+    (sourceAdvancesToFront &&
+      state.cardInstances[sourceOccupant].status.isExhausted) ||
+    (targetAdvancesToFront &&
+      state.cardInstances[targetOccupant].status.isExhausted)
   ) {
     return {
       state,
@@ -2007,7 +2085,7 @@ function applyFatigueInPlace(
 
 function discardHandCard(
   state: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
@@ -2044,7 +2122,7 @@ function discardHandCard(
  */
 function abandonCard(
   state: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
@@ -2063,10 +2141,15 @@ function abandonCard(
     };
   }
 
-  return moveCardToDebugZone(state, battleCardId, {
-    side: location.side,
-    zone: "void",
-  }, context);
+  return moveCardToDebugZone(
+    state,
+    battleCardId,
+    {
+      side: location.side,
+      zone: "void",
+    },
+    context,
+  );
 }
 
 /**
@@ -2078,7 +2161,7 @@ function abandonCard(
  */
 function rematerializeCard(
   state: BattleMutableState,
-  _battleCardId: string,
+  _battleCardId: BattleCardId,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
@@ -2098,7 +2181,7 @@ function rematerializeCard(
 function addFigmentsToCard(
   state: BattleMutableState,
   nextState: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   count: number,
 ): {
   state: BattleMutableState;
@@ -2113,9 +2196,10 @@ function addFigmentsToCard(
   }
 
   const catalogEntry = lookupFigmentCatalogEntry(stack.definition.subtype);
-  const baseSpark = catalogEntry?.baseSpark
-    ?? selectFigmentSparks(stack)[0]
-    ?? stack.definition.printedSpark;
+  const baseSpark =
+    catalogEntry?.baseSpark ??
+    selectFigmentSparks(stack)[0] ??
+    stack.definition.printedSpark;
   addFigmentsToStackInPlace(nextState, battleCardId, count, baseSpark);
 
   return {
@@ -2128,7 +2212,7 @@ function kindleCard(
   state: BattleMutableState,
   side: BattleSide,
   amount: number,
-  preferredBattleCardId: string | null,
+  preferredBattleCardId: BattleCardId | null,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
@@ -2140,7 +2224,11 @@ function kindleCard(
     };
   }
 
-  const battleCardId = selectKindleTargetBattleCardId(state, side, preferredBattleCardId);
+  const battleCardId = selectKindleTargetBattleCardId(
+    state,
+    side,
+    preferredBattleCardId,
+  );
 
   if (battleCardId === null) {
     return {
@@ -2246,7 +2334,10 @@ function createEnergyChangeTransition(
 
 function isSameLocation(
   source: NonNullable<ReturnType<typeof selectBattleCardLocation>>,
-  destination: Extract<BattleDebugEdit, { kind: "MOVE_CARD_TO_ZONE" }>["destination"],
+  destination: Extract<
+    BattleDebugEdit,
+    { kind: "MOVE_CARD_TO_ZONE" }
+  >["destination"],
   state: BattleMutableState,
 ): boolean {
   if ("slotId" in destination) {
@@ -2301,7 +2392,7 @@ function removeBattleCardFromLocation(
 
 function insertBattleCardAtDebugDestination(
   state: BattleMutableState,
-  battleCardId: string,
+  battleCardId: BattleCardId,
   destination: BattleDebugZoneDestination,
 ): void {
   if ("slotId" in destination) {
@@ -2339,7 +2430,7 @@ function revealPublicDestination(
 function setBattlefieldSlotOccupant(
   state: BattleMutableState,
   target: BattleFieldSlotAddress,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
 ): void {
   if (target.zone === "backRank") {
     const backRank = state.sides[target.side].backRank;

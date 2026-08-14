@@ -11,8 +11,10 @@ import {
 } from "./duplication-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
 import { useGuidePresentedLog } from "../../state/guide-logging";
+import type { SiteId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
 
-export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function DuplicationSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, journeyContent } = useJourney();
   const node =
     state.currentDreamscape === null
@@ -87,7 +89,7 @@ export function DuplicationSiteScreenAdapter({ siteId }: { siteId: string }) {
   };
 
   const handleDuplicate = useCallback(
-    (entryId: string) => {
+    (entryId: DeckEntryId) => {
       if (
         site === null ||
         runtime === null ||

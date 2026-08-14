@@ -4,7 +4,7 @@ import {
   cardImageUrl,
   hasAssignedImage,
 } from "../../../data/card-database";
-import type { CardId } from "../../../types/card-identity";
+import type { DreamwellCardId } from "../../../types/identifiers";
 import type { ArtCrop } from "../../../types/cards";
 import { token } from "../../primitives/tokens";
 import { CardStatOrb } from "../card/CardStatOrb";
@@ -19,7 +19,7 @@ import { useLocalizer } from "../../../runtime/localization/use-localizer";
 /** The complete resolved display data for one Dreamwell card. */
 export interface DreamwellCardDisplaySnapshot {
   /** Stable Dreamwell card UUID. */
-  readonly id: CardId;
+  readonly id: DreamwellCardId;
   /** Display name resolved at the final render boundary. */
   readonly name: LocalizedString;
   /** Rules copy with the shared Dreamtides symbol markup. */
@@ -35,7 +35,7 @@ export interface DreamwellCardDisplaySnapshot {
 /** UUID identity and complete resolved snapshot for a Dreamwell card. */
 export interface DreamwellCardModel {
   /** Canonical Dreamwell card UUID. */
-  readonly cardId: CardId;
+  readonly cardId: DreamwellCardId;
   /** Complete presentation data whose `id` matches `cardId`. */
   readonly displaySnapshot: DreamwellCardDisplaySnapshot;
 }

@@ -1,14 +1,17 @@
 import { parse } from "smol-toml";
 import tutorialJourneyPoolSource from "../../data/tutorial_journey_pool.toml?raw";
 import { DEFAULT_TIDES4_TUNING } from "../draft/pool/variant-tides4";
+import type { DreamAvatarId, DreamsignId, TideId } from "../types/identifiers";
+import { asDreamAvatarId, asDreamsignId, asTideId } from "../types/identifiers";
+import { asCardId, type CardId } from "../types/card-identity";
 
 export interface TutorialJourneyPoolCard {
-  readonly id: string;
+  readonly id: CardId;
   readonly copies: number;
 }
 
 export interface TutorialJourneyTide {
-  readonly id: string;
+  readonly id: TideId;
   readonly name: string;
   readonly description: string;
   readonly type: "valor";
@@ -16,10 +19,10 @@ export interface TutorialJourneyTide {
 }
 
 export interface TutorialJourneyPool {
-  readonly dreamAvatarId: string;
+  readonly dreamAvatarId: DreamAvatarId;
   readonly poolSize: number;
-  readonly openingOffers: readonly (readonly string[])[];
-  readonly openingDreamsignIds: readonly string[];
+  readonly openingOffers: readonly (readonly CardId[])[];
+  readonly openingDreamsignIds: readonly DreamsignId[];
   readonly tides: readonly TutorialJourneyTide[];
 }
 
@@ -46,11 +49,7 @@ function nonBlankString(value: unknown, label: string): string {
 }
 
 function positiveInteger(value: unknown, label: string): number {
-  if (
-    typeof value !== "number" ||
-    !Number.isSafeInteger(value) ||
-    value <= 0
-  ) {
+  if (typeof value !== "number" || !Number.isSafeInteger(value) || value <= 0) {
     return invalid(`${label} must be a positive integer`);
   }
   return value;
@@ -90,14 +89,11 @@ export function validateTutorialJourneyPool(
     invalid("opening-dreamsigns must contain between one and three UUIDs");
   }
   const openingDreamsignIds = rawOpeningDreamsignIds.map((value, index) => {
-    const id = nonBlankString(
-      value,
-      `opening-dreamsigns[${String(index)}]`,
-    );
+    const id = nonBlankString(value, `opening-dreamsigns[${String(index)}]`);
     if (!UUID_RE.test(id)) {
       invalid(`opening-dreamsigns[${String(index)}] must be a UUID`);
     }
-    return id;
+    return asDreamsignId(id);
   });
   if (
     new Set(openingDreamsignIds.map((id) => id.toLocaleLowerCase())).size !==
@@ -133,7 +129,7 @@ export function validateTutorialJourneyPool(
         invalid(`${label} duplicates opening card ${JSON.stringify(cardId)}`);
       }
       openingCardIds.add(normalizedCardId);
-      return cardId;
+      return asCardId(cardId);
     });
   });
 
@@ -143,14 +139,15 @@ export function validateTutorialJourneyPool(
   const tides = source.tides.map((value, tideIndex): TutorialJourneyTide => {
     const label = `tides[${String(tideIndex)}]`;
     const tide = record(value, label);
-    const id = nonBlankString(tide.id, `${label}.id`);
-    if (!TIDE_ID_RE.test(id)) {
+    const rawId = nonBlankString(tide.id, `${label}.id`);
+    if (!TIDE_ID_RE.test(rawId)) {
       invalid(`${label}.id must use lowercase kebab-case`);
     }
-    if (seenTideIds.has(id)) {
-      invalid(`${label}.id duplicates ${JSON.stringify(id)}`);
+    if (seenTideIds.has(rawId)) {
+      invalid(`${label}.id duplicates ${JSON.stringify(rawId)}`);
     }
-    seenTideIds.add(id);
+    seenTideIds.add(rawId);
+    const id = asTideId(rawId);
 
     const name = nonBlankString(tide.name, `${label}.name`);
     const normalizedName = name.toLocaleLowerCase();
@@ -188,7 +185,7 @@ export function validateTutorialJourneyPool(
         if (copies > 2) {
           invalid(`${cardLabel}.copies exceeds the normal two-copy limit`);
         }
-        return { id: cardId, copies };
+        return { id: asCardId(cardId), copies };
       },
     );
     return { id, name, description, type: "valor", cards };
@@ -215,7 +212,7 @@ export function validateTutorialJourneyPool(
   }
 
   return {
-    dreamAvatarId,
+    dreamAvatarId: asDreamAvatarId(dreamAvatarId),
     poolSize,
     openingOffers,
     openingDreamsignIds,

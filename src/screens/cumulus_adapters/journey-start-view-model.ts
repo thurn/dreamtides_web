@@ -22,6 +22,7 @@ import type {
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import { localizedSourceText } from "../../runtime/localization/runtime";
 import { tx } from "@trox/runtime";
+import type { DreamAvatarId } from "../../types/identifiers";
 
 /** The select screen shows at most this many tides per DreamAvatar. */
 const MAX_TIDES_SHOWN = 4;
@@ -35,7 +36,7 @@ export function resolveDreamAvatarOffer(
   dreamAvatars: readonly DreamAvatarContent[],
   journeySeed: string,
   rerollCount: number,
-  tutorialDreamAvatarId?: string,
+  tutorialDreamAvatarId?: DreamAvatarId,
 ): DreamAvatarContent[] {
   if (tutorialDreamAvatarId !== undefined) {
     const tutorialDreamAvatar = dreamAvatars.find(
@@ -52,7 +53,7 @@ export function resolveDreamAvatarOffer(
 
 /** Build Mira's fixed guidance for the tutorial-only DreamAvatar offer. */
 export function buildJourneyStartGuideDialogue(
-  tutorialDreamAvatarId?: string,
+  tutorialDreamAvatarId?: DreamAvatarId,
   speechBubble?: TutorialJourneyStartConfiguration["speechBubble"],
 ): JourneyStartGuideDialogueView | undefined {
   if (tutorialDreamAvatarId === undefined || speechBubble === undefined) {
@@ -173,7 +174,7 @@ export function buildDreamAvatarOfferViews(
   poolContext: RunPoolContext | undefined,
   journeySeed: string,
   tutorialJourneyPool?: TutorialJourneyPool,
-  tutorialDreamAvatarId?: string,
+  tutorialDreamAvatarId?: DreamAvatarId,
 ): DreamAvatarOfferView[] {
   return offered.map((dreamAvatar) => {
     const tutorialTides =

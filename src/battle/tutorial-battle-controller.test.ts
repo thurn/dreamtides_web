@@ -9,9 +9,17 @@ import type {
 } from "./types";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { resolveBattleAiConfiguration } from "../types/opponents-data";
+import type { BattleCardId, ClientId } from "../types/identifiers";
+import { asBattleId } from "../types/identifiers";
+import { asCardId } from "../types/card-identity";
+import { asBattleCardId } from "../types/identifiers";
+import { asPresentationId } from "../types/identifiers";
+import { asJourneyId } from "../types/identifiers";
+import { asClientId } from "../types/identifiers";
+import { asTutorialRunId } from "../types/identifiers";
 
-const DRIVER = "client-driver";
-const OBSERVER = "client-observer";
+const DRIVER = asClientId("client-driver");
+const OBSERVER = asClientId("client-observer");
 const TUTORIAL_AI_CONFIGURATION = resolveBattleAiConfiguration(
   opponentsFixture(),
   "tutorial",
@@ -27,16 +35,20 @@ function stateFor(
 ): FoldState {
   const board = boardFor(boardOverrides);
   return {
-    frontDoor: { phase: "tutorial", journeyId: "journey-uuid", tutorial: null },
+    frontDoor: {
+      phase: "tutorial",
+      journeyId: asJourneyId("journey-uuid"),
+      tutorial: null,
+    },
     playtestControl: {
       mode: "single-controller",
-      controllerClientId: extras.driverClientId ?? DRIVER,
+      controllerClientId: asClientId(extras.driverClientId ?? DRIVER),
     },
     journey: {} as FoldState["journey"],
     battle: {
       mode: {
         kind: "tutorial",
-        tutorialRunId: "tutorial-run-uuid",
+        tutorialRunId: asTutorialRunId("tutorial-run-uuid"),
         restartNumber: 0,
         resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
       },
@@ -61,7 +73,7 @@ function stateFor(
 function boardFor(overrides: Partial<BattleMutableState>): BattleMutableState {
   const enemyCardId = "enemy-card-uuid";
   return {
-    battleId: "tutorial-battle-run-uuid",
+    battleId: asBattleId("tutorial-battle-run-uuid"),
     activeSide: "player",
     turnNumber: 4,
     phase: "day",
@@ -74,7 +86,7 @@ function boardFor(overrides: Partial<BattleMutableState>): BattleMutableState {
       enemy: side(),
     },
     cardInstances: {
-      [enemyCardId]: card(enemyCardId, "enemy"),
+      [enemyCardId]: card(asBattleCardId(enemyCardId), "enemy"),
     },
     ...overrides,
   };
@@ -99,7 +111,7 @@ function side(): BattleMutableState["sides"]["player"] {
 }
 
 function card(
-  battleCardId: string,
+  battleCardId: BattleCardId,
   controller: "player" | "enemy",
 ): BattleCardInstance {
   return {
@@ -132,7 +144,7 @@ function card(
     },
     definition: {
       sourceDeckEntryId: null,
-      cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+      cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
       cardNumber: 512,
       name: "display-only",
       battleCardKind: "character" as const,
@@ -153,7 +165,7 @@ function card(
 function plan(
   state: FoldState,
   clientId = DRIVER,
-  connectedClientIds: readonly string[] | null = [DRIVER, OBSERVER],
+  connectedClientIds: readonly ClientId[] | null = [DRIVER, OBSERVER],
 ) {
   return planTutorialBattleController({ state, clientId, connectedClientIds });
 }
@@ -181,7 +193,7 @@ describe("tutorial battle controller", () => {
 
   it("leaves takeover explicit when several viewers remain", () => {
     const state = stateFor({ phase: "dawn" });
-    const otherViewer = "client-z-viewer";
+    const otherViewer = asClientId("client-z-viewer");
     expect(plan(state, OBSERVER, [otherViewer, OBSERVER]).intent).toBeNull();
     expect(plan(state, otherViewer, [otherViewer, OBSERVER]).intent).toBeNull();
     expect(plan(state, OBSERVER, null).intent).toBeNull();
@@ -236,15 +248,23 @@ describe("tutorial battle controller", () => {
       "a28ad36d-fa74-4190-a463-7efd3a6233d0";
     const player = side();
     player.score = 7;
-    player.frontRank.F0 = markedDirewolfBattleCardId;
+    player.frontRank.F0 = asBattleCardId(markedDirewolfBattleCardId);
     const enemy = side();
     enemy.score = 9;
-    enemy.backRank.B0 = runeboundChampionBattleCardId;
-    const markedDirewolf = card(markedDirewolfBattleCardId, "player");
-    markedDirewolf.definition.cardId = markedDirewolfBattleCardId;
+    enemy.backRank.B0 = asBattleCardId(runeboundChampionBattleCardId);
+    const markedDirewolf = card(
+      asBattleCardId(markedDirewolfBattleCardId),
+      "player",
+    );
+    markedDirewolf.definition.cardId = asCardId(markedDirewolfBattleCardId);
     markedDirewolf.definition.printedSpark = 4;
-    const runeboundChampion = card(runeboundChampionBattleCardId, "enemy");
-    runeboundChampion.definition.cardId = runeboundChampionBattleCardId;
+    const runeboundChampion = card(
+      asBattleCardId(runeboundChampionBattleCardId),
+      "enemy",
+    );
+    runeboundChampion.definition.cardId = asCardId(
+      runeboundChampionBattleCardId,
+    );
     runeboundChampion.definition.printedSpark = 3;
 
     const result = plan(
@@ -273,8 +293,8 @@ describe("tutorial battle controller", () => {
         lethalPreventable: true,
         lanes: [
           {
-            challengerBattleCardId: markedDirewolfBattleCardId,
-            blockerBattleCardId: runeboundChampionBattleCardId,
+            challengerBattleCardId: asBattleCardId(markedDirewolfBattleCardId),
+            blockerBattleCardId: asBattleCardId(runeboundChampionBattleCardId),
             lane: "F0",
             outcome: "blocked",
             reason: "prevent-lethal",
@@ -288,15 +308,15 @@ describe("tutorial battle controller", () => {
     const challengerBattleCardId = "229ab3a1-3720-41a2-924c-8fe112188f8e";
     const blockerBattleCardId = "a28ad36d-fa74-4190-a463-7efd3a6233d0";
     const player = side();
-    player.frontRank.F0 = challengerBattleCardId;
+    player.frontRank.F0 = asBattleCardId(challengerBattleCardId);
     const enemy = side();
     enemy.score = 9;
-    enemy.backRank.B0 = blockerBattleCardId;
-    const challenger = card(challengerBattleCardId, "player");
-    challenger.definition.cardId = challengerBattleCardId;
+    enemy.backRank.B0 = asBattleCardId(blockerBattleCardId);
+    const challenger = card(asBattleCardId(challengerBattleCardId), "player");
+    challenger.definition.cardId = asCardId(challengerBattleCardId);
     challenger.definition.printedSpark = 2;
-    const blocker = card(blockerBattleCardId, "enemy");
-    blocker.definition.cardId = blockerBattleCardId;
+    const blocker = card(asBattleCardId(blockerBattleCardId), "enemy");
+    blocker.definition.cardId = asCardId(blockerBattleCardId);
     blocker.definition.printedSpark = 3;
 
     const result = plan(
@@ -320,8 +340,8 @@ describe("tutorial battle controller", () => {
         lethalBeforeBlocks: false,
         lanes: [
           {
-            challengerBattleCardId,
-            blockerBattleCardId,
+            challengerBattleCardId: asBattleCardId(challengerBattleCardId),
+            blockerBattleCardId: asBattleCardId(blockerBattleCardId),
             lane: "F0",
             outcome: "blocked",
             reason: "favorable",
@@ -333,7 +353,7 @@ describe("tutorial battle controller", () => {
 
   it("pauses for player blocking on an enemy challenge and advances empty enemy Dusk", () => {
     const challengingEnemy = side();
-    challengingEnemy.frontRank.F0 = "enemy-card-uuid";
+    challengingEnemy.frontRank.F0 = asBattleCardId("enemy-card-uuid");
     expect(
       plan(
         stateFor({
@@ -364,7 +384,7 @@ describe("tutorial battle controller", () => {
   it("uses semantic BATTLE_PLAY_CARD planning for an enemy Day", () => {
     const enemyCardId = "enemy-card-uuid";
     const enemy = side();
-    enemy.hand = [enemyCardId];
+    enemy.hand = [asBattleCardId(enemyCardId)];
     const state = stateFor({
       activeSide: "enemy",
       phase: "day",
@@ -373,7 +393,7 @@ describe("tutorial battle controller", () => {
     const result = plan(state);
     expect(result.intent).toMatchObject({
       kind: "battle-play-card",
-      battleCardId: enemyCardId,
+      battleCardId: asBattleCardId(enemyCardId),
       aiChoices: [{ aiPresetId: "standard" }],
       characterDestination: {
         side: "enemy",
@@ -388,23 +408,23 @@ describe("tutorial battle controller", () => {
     const enemyCardId = "enemy-card-uuid";
     const centerOccupantId = "center-occupant-uuid";
     const enemy = side();
-    enemy.hand = [enemyCardId];
-    enemy.backRank.B4 = centerOccupantId;
+    enemy.hand = [asBattleCardId(enemyCardId)];
+    enemy.backRank.B4 = asBattleCardId(centerOccupantId);
     const result = plan(
       stateFor({
         activeSide: "enemy",
         phase: "day",
         sides: { player: side(), enemy },
         cardInstances: {
-          [enemyCardId]: card(enemyCardId, "enemy"),
-          [centerOccupantId]: card(centerOccupantId, "enemy"),
+          [enemyCardId]: card(asBattleCardId(enemyCardId), "enemy"),
+          [centerOccupantId]: card(asBattleCardId(centerOccupantId), "enemy"),
         },
       }),
     );
 
     expect(result.intent).toMatchObject({
       kind: "battle-play-card",
-      battleCardId: enemyCardId,
+      battleCardId: asBattleCardId(enemyCardId),
       characterDestination: {
         side: "enemy",
         zone: "backRank",
@@ -503,7 +523,10 @@ describe("tutorial battle controller", () => {
     expect(foreseePlan.intent).toMatchObject({
       resolution: {
         kind: "foresee",
-        orderedCardIds: ["deck-b-uuid", "deck-a-uuid"],
+        orderedCardIds: [
+          asBattleCardId("deck-b-uuid"),
+          asBattleCardId("deck-a-uuid"),
+        ],
         voidCardIds: [],
       },
     });
@@ -519,14 +542,14 @@ describe("tutorial battle controller", () => {
   it("finishes a winning Challenge presentation before exposing terminal state", () => {
     const terminal = stateFor({ result: "victory" });
     terminal.battle!.tutorialPresentation = {
-      id: "challenge-resolved:player:4:F0",
+      id: asPresentationId("challenge-resolved:player:4:F0"),
       kind: "challenge-resolved",
       activeSide: "player",
       slotId: "F0",
-      challengerBattleCardId: "player-character-uuid",
+      challengerBattleCardId: asBattleCardId("player-character-uuid"),
       blockerBattleCardId: null,
       scored: {
-        battleCardId: "player-character-uuid",
+        battleCardId: asBattleCardId("player-character-uuid"),
         side: "player",
         points: 2,
       },
@@ -537,7 +560,7 @@ describe("tutorial battle controller", () => {
       status: "driver",
       intent: {
         kind: "complete-presentation",
-        presentationId: "challenge-resolved:player:4:F0",
+        presentationId: asPresentationId("challenge-resolved:player:4:F0"),
       },
     });
     expect(plan(terminal, OBSERVER, [DRIVER, OBSERVER])).toMatchObject({

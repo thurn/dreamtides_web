@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import { worldsAwait } from "./worlds-await";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
+import { asBattleCardId } from "../../../types/identifiers";
 
-function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
+function makeCard(
+  overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
+): AiCard {
   return {
     name: "card",
     energyCost: 0,
@@ -35,13 +38,25 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 
 describe("Worlds Await (#519)", () => {
   it("canPlay is false with no allies on the board", () => {
-    const self = makeCard({ battleCardId: "dw", cardNumber: 519, energyCost: 1 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("dw"),
+      cardNumber: 519,
+      energyCost: 1,
+    });
     expect(worldsAwait.canPlay(makeModel({ aiEnergy: 3 }), self)).toBe(false);
   });
 
   it("canPlay is false without enough energy even with an ally", () => {
-    const self = makeCard({ battleCardId: "dw", cardNumber: 519, energyCost: 1 });
-    const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("dw"),
+      cardNumber: 519,
+      energyCost: 1,
+    });
+    const ally = makeCard({
+      battleCardId: asBattleCardId("ally"),
+      cardNumber: 512,
+      basePrintedSpark: 4,
+    });
     const model = makeModel({
       aiEnergy: 0,
       aiFrontRank: { ...emptyFrontRankSlots(), F0: ally },
@@ -50,8 +65,16 @@ describe("Worlds Await (#519)", () => {
   });
 
   it("canPlay is true with a reserve ally and energy", () => {
-    const self = makeCard({ battleCardId: "dw", cardNumber: 519, energyCost: 1 });
-    const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("dw"),
+      cardNumber: 519,
+      energyCost: 1,
+    });
+    const ally = makeCard({
+      battleCardId: asBattleCardId("ally"),
+      cardNumber: 512,
+      basePrintedSpark: 4,
+    });
     const model = makeModel({
       aiEnergy: 1,
       aiBackRank: { ...emptyBackRankSlots(), B0: ally },
@@ -60,9 +83,21 @@ describe("Worlds Await (#519)", () => {
   });
 
   it("play adds +3 to the chosen ally's sparkDelta and voids the event", () => {
-    const self = makeCard({ battleCardId: "dw", cardNumber: 519, energyCost: 1 });
-    const small = makeCard({ battleCardId: "small", cardNumber: 514, basePrintedSpark: 2 });
-    const big = makeCard({ battleCardId: "big", cardNumber: 512, basePrintedSpark: 4 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("dw"),
+      cardNumber: 519,
+      energyCost: 1,
+    });
+    const small = makeCard({
+      battleCardId: asBattleCardId("small"),
+      cardNumber: 514,
+      basePrintedSpark: 2,
+    });
+    const big = makeCard({
+      battleCardId: asBattleCardId("big"),
+      cardNumber: 512,
+      basePrintedSpark: 4,
+    });
     const model = makeModel({
       aiEnergy: 2,
       aiHand: [self],
@@ -80,8 +115,16 @@ describe("Worlds Await (#519)", () => {
   });
 
   it("pumps a reserve ally when no deployed ally exists", () => {
-    const self = makeCard({ battleCardId: "dw", cardNumber: 519, energyCost: 1 });
-    const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("dw"),
+      cardNumber: 519,
+      energyCost: 1,
+    });
+    const ally = makeCard({
+      battleCardId: asBattleCardId("ally"),
+      cardNumber: 512,
+      basePrintedSpark: 4,
+    });
     const model = makeModel({
       aiEnergy: 2,
       aiHand: [self],

@@ -15,6 +15,10 @@ import type {
   JourneyState,
   SiteState,
 } from "../types/journey";
+import type { DreamsignId } from "../types/identifiers";
+import { dreamsignIdFromUnknown } from "../types/identifiers";
+import type { ExplorationActionId } from "../types/identifiers";
+import { asSelectionKey } from "../types/identifiers";
 
 export type ExplorationDreamsignEffectKind =
   | "gain-nightmare-and-dreamsign"
@@ -42,7 +46,7 @@ interface PlanContract {
   requestedCount: number;
   nightmareCount: number;
   requiresNightmares: boolean;
-  fixedDreamsignId?: string;
+  fixedDreamsignId?: DreamsignId;
 }
 
 interface SelectorProof {
@@ -55,7 +59,7 @@ function contractFor(
   authoredCount: number | undefined,
   heldCount: number,
   authoredNightmareCount: number | undefined,
-  fixedDreamsignId: string | undefined,
+  fixedDreamsignId: DreamsignId | undefined,
 ): PlanContract {
   switch (effectKind) {
     case "gain-nightmare-and-dreamsign":
@@ -112,8 +116,8 @@ function contractFor(
 
 function dreamsignIdIndex(
   content: JourneyContent,
-): ReadonlyMap<string, string> {
-  const index = new Map<string, string>();
+): ReadonlyMap<string, DreamsignId> {
+  const index = new Map<string, DreamsignId>();
   for (const template of content.dreamsignTemplates) {
     index.set(template.id.toLowerCase(), template.id);
   }
@@ -127,7 +131,7 @@ function dreamsignIdIndex(
 
 function randomPoolIdIndex(
   content: JourneyContent,
-): ReadonlyMap<string, string> {
+): ReadonlyMap<string, DreamsignId> {
   return new Map(
     content.dreamsignTemplates.map((template) => [
       template.id.toLowerCase(),
@@ -137,11 +141,11 @@ function randomPoolIdIndex(
 }
 
 function canonicalIds(
-  ids: readonly string[],
-  index: ReadonlyMap<string, string>,
+  ids: readonly DreamsignId[],
+  index: ReadonlyMap<string, DreamsignId>,
   excluded: ReadonlySet<string> = new Set(),
-): string[] {
-  const result = new Set<string>();
+): DreamsignId[] {
+  const result = new Set<DreamsignId>();
   for (const id of ids) {
     const canonical = index.get(id.toLowerCase());
     if (canonical !== undefined && !excluded.has(canonical.toLowerCase())) {
@@ -153,9 +157,9 @@ function canonicalIds(
 
 function heldIds(
   journey: JourneyState,
-  index: ReadonlyMap<string, string>,
-): string[] | null {
-  const result: string[] = [];
+  index: ReadonlyMap<string, DreamsignId>,
+): DreamsignId[] | null {
+  const result: DreamsignId[] = [];
   const seen = new Set<string>();
   for (const dreamsign of journey.dreamsigns) {
     const canonical =
@@ -170,7 +174,10 @@ function heldIds(
   return result;
 }
 
-function equalIds(left: readonly string[], right: readonly string[]): boolean {
+function equalIds(
+  left: readonly DreamsignId[],
+  right: readonly DreamsignId[],
+): boolean {
   return (
     left.length === right.length &&
     left.every((value, index) => value === right[index])
@@ -179,7 +186,7 @@ function equalIds(left: readonly string[], right: readonly string[]): boolean {
 
 function unavailableReason(input: {
   contract: PlanContract;
-  heldIds: readonly string[] | null;
+  heldIds: readonly DreamsignId[] | null;
   maxDreamsigns: number;
 }): DreamsignActionUnavailableReason | null {
   const { contract, heldIds: held, maxDreamsigns } = input;
@@ -220,7 +227,7 @@ function unavailableReason(input: {
 
 function signaturePayload(input: {
   effectKind: ExplorationDreamsignEffectKind;
-  actionId: string;
+  actionId: ExplorationActionId;
   preparation: Omit<ExplorationDreamsignPreparation, "planSignature">;
   selector: SelectorProof | null;
 }): unknown {
@@ -236,7 +243,7 @@ function signaturePayload(input: {
 
 function signedPreparation(input: {
   effectKind: ExplorationDreamsignEffectKind;
-  actionId: string;
+  actionId: ExplorationActionId;
   preparation: Omit<ExplorationDreamsignPreparation, "planSignature">;
   selector: SelectorProof | null;
 }): ExplorationDreamsignPreparation {
@@ -251,8 +258,8 @@ export function prepareExplorationDreamsignPlan(input: {
   effectKind: ExplorationDreamsignEffectKind;
   authoredCount?: number;
   authoredNightmareCount?: number;
-  fixedDreamsignId?: string;
-  actionId: string;
+  fixedDreamsignId?: DreamsignId;
+  actionId: ExplorationActionId;
   journey: JourneyState;
   site: SiteState;
   content: JourneyContent;
@@ -331,7 +338,7 @@ export function prepareExplorationDreamsignPlan(input: {
         scope: {
           journeySeed: input.journey.seed,
           siteUuid: input.site.id,
-          selectionKey: input.actionId,
+          selectionKey: asSelectionKey(input.actionId),
         },
         count: contract.requestedCount,
         ...(contract.fixedDreamsignId === undefined
@@ -375,44 +382,47 @@ export function prepareExplorationDreamsignPlan(input: {
   };
 }
 
-function stringValue(value: unknown): string | null {
-  return typeof value === "string" && value.length > 0 ? value : null;
+function dreamsignIdValue(value: unknown): DreamsignId | null {
+  const id = dreamsignIdFromUnknown(value);
+  return id !== null && id.length > 0 ? id : null;
 }
 
-function stringArray(value: unknown): string[] | null {
-  if (
-    !Array.isArray(value) ||
-    value.some((entry) => typeof entry !== "string")
-  ) {
-    return null;
+function dreamsignIdArray(value: unknown): DreamsignId[] | null {
+  if (!Array.isArray(value)) return null;
+  const result: DreamsignId[] = [];
+  for (const entry of value) {
+    const id = dreamsignIdValue(entry);
+    if (id === null) return null;
+    result.push(id);
   }
-  const result = value as string[];
   return new Set(result).size === result.length ? result : null;
 }
 
 function selectionHasOnly(
   selection: ExplorationDreamsignSelection,
-  keys: readonly string[],
+  keys: readonly (keyof ExplorationDreamsignSelection)[],
 ): boolean {
-  return Object.keys(selection).every((key) => keys.includes(key));
+  return Object.keys(selection).every((key) =>
+    keys.includes(key as keyof ExplorationDreamsignSelection),
+  );
 }
 
 function poolAfter(
   preparation: ExplorationDreamsignPreparation,
-  gainedIds: readonly string[],
-): string[] {
+  gainedIds: readonly DreamsignId[],
+): DreamsignId[] {
   const gained = new Set(gainedIds.map((id) => id.toLowerCase()));
   return preparation.poolBasisIds.filter((id) => !gained.has(id.toLowerCase()));
 }
 
 function mutation(input: {
   preparation: ExplorationDreamsignPreparation;
-  afterIds: string[];
-  gainedIds: string[];
-  purgedIds?: string[];
+  afterIds: DreamsignId[];
+  gainedIds: DreamsignId[];
+  purgedIds?: DreamsignId[];
   replacements?: Array<{
-    removedDreamsignId: string;
-    gainedDreamsignId: string;
+    removedDreamsignId: DreamsignId;
+    gainedDreamsignId: DreamsignId;
   }>;
 }): ExplorationDreamsignMutationResolution {
   return {
@@ -436,8 +446,8 @@ export function resolveExplorationDreamsignPlan(input: {
   effectKind: ExplorationDreamsignEffectKind;
   authoredCount?: number;
   authoredNightmareCount?: number;
-  fixedDreamsignId?: string;
-  actionId: string;
+  fixedDreamsignId?: DreamsignId;
+  actionId: ExplorationActionId;
   preparation: ExplorationDreamsignPreparation;
   selectorSignature?: string;
   selectorTrace?: RewardSelectionResult["trace"];
@@ -501,6 +511,10 @@ export function resolveExplorationDreamsignPlan(input: {
               input.journey.maxDreamsigns,
           )
         : 0;
+  const selectedDreamsignIds =
+    input.selectorTrace === undefined
+      ? null
+      : dreamsignIdArray(input.selectorTrace.selectedKeys);
   if (
     input.preparation.planSignature !== expectedSignature ||
     input.preparation.unavailableReason !== undefined ||
@@ -525,11 +539,8 @@ export function resolveExplorationDreamsignPlan(input: {
           !input.preparation.poolBasisIds.includes(id)) ||
         (contract.kind === "fixed-gain" && id !== contract.fixedDreamsignId),
     ) ||
-    input.selectorTrace === undefined ||
-    !equalIds(
-      input.selectorTrace.selectedKeys,
-      input.preparation.preparedDreamsignIds,
-    )
+    selectedDreamsignIds === null ||
+    !equalIds(selectedDreamsignIds, input.preparation.preparedDreamsignIds)
   ) {
     return null;
   }
@@ -540,7 +551,7 @@ export function resolveExplorationDreamsignPlan(input: {
       return null;
     }
     const gained = prepared[0];
-    const replaced = stringValue(input.selection.replacedDreamsignId);
+    const replaced = dreamsignIdValue(input.selection.replacedDreamsignId);
     if (gained === undefined) return null;
     if (held.length < input.journey.maxDreamsigns) {
       if (replaced !== null) return null;
@@ -550,7 +561,8 @@ export function resolveExplorationDreamsignPlan(input: {
         gainedIds: [gained],
       });
     }
-    const slot = replaced === null ? -1 : held.indexOf(replaced);
+    if (replaced === null) return null;
+    const slot = held.indexOf(replaced);
     if (slot < 0) return null;
     const afterIds = [...held];
     afterIds[slot] = gained;
@@ -560,7 +572,7 @@ export function resolveExplorationDreamsignPlan(input: {
       gainedIds: [gained],
       replacements: [
         {
-          removedDreamsignId: replaced as string,
+          removedDreamsignId: replaced,
           gainedDreamsignId: gained,
         },
       ],
@@ -575,8 +587,8 @@ export function resolveExplorationDreamsignPlan(input: {
     ) {
       return null;
     }
-    const offered = stringValue(input.selection.offeredDreamsignId);
-    const replaced = stringValue(input.selection.replacedDreamsignId);
+    const offered = dreamsignIdValue(input.selection.offeredDreamsignId);
+    const replaced = dreamsignIdValue(input.selection.replacedDreamsignId);
     if (offered === null || !prepared.includes(offered)) return null;
     if (held.length < input.journey.maxDreamsigns) {
       if (replaced !== null) return null;
@@ -586,7 +598,8 @@ export function resolveExplorationDreamsignPlan(input: {
         gainedIds: [offered],
       });
     }
-    const slot = replaced === null ? -1 : held.indexOf(replaced);
+    if (replaced === null) return null;
+    const slot = held.indexOf(replaced);
     if (slot < 0) return null;
     const afterIds = [...held];
     afterIds[slot] = offered;
@@ -596,7 +609,7 @@ export function resolveExplorationDreamsignPlan(input: {
       gainedIds: [offered],
       replacements: [
         {
-          removedDreamsignId: replaced as string,
+          removedDreamsignId: replaced,
           gainedDreamsignId: offered,
         },
       ],
@@ -612,9 +625,10 @@ export function resolveExplorationDreamsignPlan(input: {
     ) {
       return null;
     }
-    const offered = stringValue(input.selection.offeredDreamsignId);
-    const replaced = stringValue(input.selection.replacedDreamsignId);
-    const slot = replaced === null ? -1 : held.indexOf(replaced);
+    const offered = dreamsignIdValue(input.selection.offeredDreamsignId);
+    const replaced = dreamsignIdValue(input.selection.replacedDreamsignId);
+    if (replaced === null) return null;
+    const slot = held.indexOf(replaced);
     if (offered === null || !prepared.includes(offered) || slot < 0)
       return null;
     const afterIds = [...held];
@@ -625,7 +639,7 @@ export function resolveExplorationDreamsignPlan(input: {
       gainedIds: [offered],
       replacements: [
         {
-          removedDreamsignId: replaced as string,
+          removedDreamsignId: replaced,
           gainedDreamsignId: offered,
         },
       ],
@@ -658,8 +672,10 @@ export function resolveExplorationDreamsignPlan(input: {
   ) {
     return null;
   }
-  const purged = stringValue(input.selection.purgedDreamsignId);
-  const overflow = stringArray(input.selection.overflowReplacementDreamsignIds);
+  const purged = dreamsignIdValue(input.selection.purgedDreamsignId);
+  const overflow = dreamsignIdArray(
+    input.selection.overflowReplacementDreamsignIds,
+  );
   if (
     purged === null ||
     !held.includes(purged) ||
@@ -675,7 +691,7 @@ export function resolveExplorationDreamsignPlan(input: {
   let preparedIndex = 0;
   const replacements: ExplorationDreamsignMutationResolution["replacements"] =
     [];
-  const afterIds: string[] = [];
+  const afterIds: DreamsignId[] = [];
   for (const heldId of held) {
     if (heldId === purged) continue;
     if (overflowSet.has(heldId)) {

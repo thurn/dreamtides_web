@@ -12,13 +12,18 @@ import {
 } from "../reward-selection/types";
 import type { CardData, CardType } from "../types/cards";
 import type { JourneyState, SiteState } from "../types/journey";
+import type { DeckEntryId, SelectionKey } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import { asDeckEntryId } from "../types/identifiers";
+import type { ExplorationActionId } from "../types/identifiers";
+import { asSelectionKey } from "../types/identifiers";
 
 export type ExplorationRandomDeckTargetEffectKind =
   "copy-random-cards" | "change-random-card-type" | "replace-random-with-card";
 
 export interface ExplorationRandomDeckTargetBinding {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
 }
 
 export type ExplorationRandomDeckTargetUnavailableReason =
@@ -29,12 +34,12 @@ export interface ExplorationRandomDeckTargetPreparation {
   count: number;
   predicate?: ExplorationPredicate;
   cardType?: CardType;
-  replacementCardId?: string;
+  replacementCardId?: CardId;
   eligibleCards: readonly ExplorationRandomDeckTargetBinding[];
   targets: readonly ExplorationRandomDeckTargetBinding[];
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision: string;
-  selectionKey: string;
+  selectionKey: SelectionKey;
   selectorSignature?: string;
   selectorTrace?: RewardSelectionTrace;
   unavailableReason?: ExplorationRandomDeckTargetUnavailableReason;
@@ -46,9 +51,9 @@ export interface ExplorationRandomDeckTargetPlanInput {
   predicate?: ExplorationPredicate;
   count?: number;
   cardType?: CardType;
-  replacementCardId?: string;
-  actionId: string;
-  encounterCardId: string;
+  replacementCardId?: CardId;
+  actionId: ExplorationActionId;
+  encounterCardId: CardId;
   journey: JourneyState;
   site: SiteState;
   content: JourneyContent;
@@ -153,8 +158,10 @@ function eligibleBindings(
     );
 }
 
-function selectionKey(input: ExplorationRandomDeckTargetPlanInput): string {
-  return `${input.actionId}:random-deck-targets`;
+function selectionKey(
+  input: ExplorationRandomDeckTargetPlanInput,
+): SelectionKey {
+  return asSelectionKey(`${input.actionId}:random-deck-targets`);
 }
 
 function signedPreparation(
@@ -270,7 +277,7 @@ export function prepareExplorationRandomDeckTargetPlan(
     eligibleCards.map((binding) => [binding.entryId, binding]),
   );
   const targets = selection.bindings.deckEntryIds.flatMap((entryId) => {
-    const binding = eligibleByEntry.get(entryId);
+    const binding = eligibleByEntry.get(asDeckEntryId(entryId));
     return binding === undefined ? [] : [binding];
   });
   if (

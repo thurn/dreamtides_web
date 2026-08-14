@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import { glimpseOfWhatWas } from "./glimpse-of-what-was";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
+import { asBattleCardId } from "../../../types/identifiers";
 
-function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
+function makeCard(
+  overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
+): AiCard {
   return {
     name: "card",
     energyCost: 0,
@@ -35,16 +38,40 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 
 describe("Glimpse of What Was (#517)", () => {
   it("canPlay requires 1 energy", () => {
-    const self = makeCard({ battleCardId: "glimpse", cardNumber: 517, energyCost: 1 });
-    expect(glimpseOfWhatWas.canPlay(makeModel({ aiEnergy: 0 }), self)).toBe(false);
-    expect(glimpseOfWhatWas.canPlay(makeModel({ aiEnergy: 1 }), self)).toBe(true);
+    const self = makeCard({
+      battleCardId: asBattleCardId("glimpse"),
+      cardNumber: 517,
+      energyCost: 1,
+    });
+    expect(glimpseOfWhatWas.canPlay(makeModel({ aiEnergy: 0 }), self)).toBe(
+      false,
+    );
+    expect(glimpseOfWhatWas.canPlay(makeModel({ aiEnergy: 1 }), self)).toBe(
+      true,
+    );
   });
 
   it("play draws one card and leaves the deck a permutation of the rest", () => {
-    const self = makeCard({ battleCardId: "glimpse", cardNumber: 517, energyCost: 1 });
-    const a = makeCard({ battleCardId: "a", cardNumber: 512, energyCost: 4 });
-    const b = makeCard({ battleCardId: "b", cardNumber: 513, energyCost: 5 });
-    const c = makeCard({ battleCardId: "c", cardNumber: 514, energyCost: 3 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("glimpse"),
+      cardNumber: 517,
+      energyCost: 1,
+    });
+    const a = makeCard({
+      battleCardId: asBattleCardId("a"),
+      cardNumber: 512,
+      energyCost: 4,
+    });
+    const b = makeCard({
+      battleCardId: asBattleCardId("b"),
+      cardNumber: 513,
+      energyCost: 5,
+    });
+    const c = makeCard({
+      battleCardId: asBattleCardId("c"),
+      cardNumber: 514,
+      energyCost: 3,
+    });
     const model = makeModel({ aiEnergy: 2, aiHand: [self], aiDeck: [a, b, c] });
 
     glimpseOfWhatWas.play(model, self, null);

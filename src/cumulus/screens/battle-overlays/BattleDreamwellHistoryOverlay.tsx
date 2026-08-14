@@ -7,10 +7,11 @@ import {
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { token } from "../../primitives/tokens";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { DeckEntryId, DreamwellCardId } from "../../../types/identifiers";
 
 export interface BattleDreamwellHistoryEntryView {
-  readonly entryId: string;
-  readonly cardId: string;
+  readonly entryId: DeckEntryId;
+  readonly cardId: DreamwellCardId;
   readonly model: DreamwellCardModel;
 }
 
@@ -27,18 +28,15 @@ export function BattleDreamwellHistoryOverlay({
   const resolve = useLocalizer();
   return (
     <GlassDialog
-      title={tx(
-          "Dreamwell History",
-          "[battle] Dreamwell history title.",
-        )}
+      title={tx("Dreamwell History", "[battle] Dreamwell history title.")}
       subtitle={tx(
-          "Shared draws, most recent first.",
-          "[battle] Dreamwell history subtitle.",
-        )}
+        "Shared draws, most recent first.",
+        "[battle] Dreamwell history subtitle.",
+      )}
       closeLabel={tx(
-          "Close Dreamwell history",
-          "[battle] Dreamwell history close action.",
-        )}
+        "Close Dreamwell history",
+        "[battle] Dreamwell history close action.",
+      )}
       onClose={onClose}
       desktopCenterTarget="battlefield"
     >
@@ -60,10 +58,12 @@ export function BattleDreamwellHistoryOverlay({
               font: token("--t-body"),
             }}
           >
-            {resolve(tx(
-              "No Dreamwell cards drawn yet.",
-              "[battle] Dreamwell history empty.",
-            ))}
+            {resolve(
+              tx(
+                "No Dreamwell cards drawn yet.",
+                "[battle] Dreamwell history empty.",
+              ),
+            )}
           </p>
         ) : (
           entries.map((entry) => (

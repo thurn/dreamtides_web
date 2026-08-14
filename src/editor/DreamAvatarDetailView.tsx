@@ -17,6 +17,7 @@ import type {
   EditorDreamAvatarRecord,
   EditorTideOption,
 } from "./dream-avatar-types";
+import { asTideId } from "../types/identifiers";
 
 export interface DreamAvatarDetailViewProps {
   dreamAvatar: EditorDreamAvatarRecord;
@@ -484,7 +485,9 @@ export default function DreamAvatarDetailView({
   );
 
   const selectedTideMeta =
-    selectedTideId === null ? null : (tideById.get(selectedTideId) ?? null);
+    selectedTideId === null
+      ? null
+      : (tideById.get(asTideId(selectedTideId)) ?? null);
   const selectedTideLabel =
     selectedTideMeta !== null
       ? tideOptionLabel(selectedTideMeta)

@@ -16,10 +16,14 @@ import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import { DreamsignGalleryPanel } from "../components/card/DreamsignGalleryPanel";
 import { GLYPHS } from "../primitives/glyph";
 import { GLOSSARY_IDS } from "../../data/glossary";
+import { asSiteId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 function sign(index: number): LocalizedDreamsign {
   return localizedDreamsignFixture({
-    id: `dreamsign-uuid-${String(index)}`,
+    id: asDreamsignId(`dreamsign-uuid-${String(index)}`),
     name: `Dreamsign Fixture ${String(index)}`,
     imageName: `fixture-${String(index)}.png`,
     imageAlt: `Dreamsign fixture ${String(index)}`,
@@ -30,16 +34,16 @@ function sign(index: number): LocalizedDreamsign {
 function view(): DreamsignBazaarSiteView {
   return {
     presentation: DREAMSIGN_MARKET_PRESENTATION,
-    siteId: "dreamsign-bazaar-site",
+    siteId: asSiteId("dreamsign-bazaar-site"),
     scene: null,
     guide: {
       id: "amunet_the_tomb_keeper",
       name: assertLocalized("Amunet, the Tomb-Keeper"),
       line: assertLocalized("The sands remember all dreams."),
-      art: artRef.dreamGuide("amunet_the_tomb_keeper"),
+      art: artRef.dreamGuide(asGuideId("amunet_the_tomb_keeper")),
     },
     offers: Array.from({ length: 3 }, (_, index) => ({
-      entryId: `dreamsign-offer-${String(index)}`,
+      entryId: asDeckEntryId(`dreamsign-offer-${String(index)}`),
       slotIndex: index,
       dreamsign: sign(index + 1),
       price: 100 + index * 25,
@@ -47,7 +51,7 @@ function view(): DreamsignBazaarSiteView {
       requiresReplacement: false,
     })),
     restock: {
-      entryId: "restock-dreamsign-bazaar-site",
+      entryId: asDeckEntryId("restock-dreamsign-bazaar-site"),
       price: 50,
       state: "available",
     },
@@ -115,9 +119,7 @@ describe("DreamsignBazaarSiteScreen", () => {
     );
 
     expect(
-      container.querySelector(
-        "[data-site-layout-speech-anchor]",
-      )?.textContent,
+      container.querySelector("[data-site-layout-speech-anchor]")?.textContent,
     ).toContain("Amunet, the Tomb-Keeper");
     const gallery = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-dreamsign-bazaar-gallery"]',
@@ -165,7 +167,7 @@ describe("DreamsignBazaarSiteScreen", () => {
         title={assertLocalized("Fixture gallery")}
         entries={[]}
         endAction={{
-          entryId: "fixture-action",
+          entryId: asDeckEntryId("fixture-action"),
           glyph: GLYPHS.refresh,
           label: assertLocalized("Fixture action"),
           glossaryId: GLOSSARY_IDS.dreamsignRestock,

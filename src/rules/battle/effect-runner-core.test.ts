@@ -6,13 +6,18 @@ import {
   planNextEffectStep,
 } from "./effect-runner-core";
 import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
+import { asBattleCardId, type BattleCardId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Minimal fixture helpers
 // ---------------------------------------------------------------------------
 
 const SENTINEL_EDIT = { kind: "DRAW_CARD" as const, side: "player" as const };
-const SENTINEL_EDIT_2 = { kind: "ADJUST_SCORE" as const, side: "player" as const, amount: 1 };
+const SENTINEL_EDIT_2 = {
+  kind: "ADJUST_SCORE" as const,
+  side: "player" as const,
+  amount: 1,
+};
 const FIXTURE_PROMPT = builtInBattlePromptRef("generic");
 
 function makeCtx(): StepContext {
@@ -89,7 +94,10 @@ describe("planNextEffectStep — edits head", () => {
 
 describe("planNextEffectStep — pick-cards prompt head", () => {
   it("resolves candidateIds eagerly from ctx, not just stores the builder", () => {
-    const expectedCandidates = ["card-a", "card-b"];
+    const expectedCandidates = [
+      asBattleCardId("card-a"),
+      asBattleCardId("card-b"),
+    ];
     let candidatesFnCalled = false;
 
     const pickPrompt: EffectPrompt = {
@@ -143,7 +151,7 @@ describe("planNextEffectStep — pick-cards prompt head", () => {
       label: FIXTURE_PROMPT,
       count: 2,
       optional: true,
-      candidates: () => ["x", "y"],
+      candidates: () => [asBattleCardId("x"), asBattleCardId("y")],
       resolve: () => [],
     };
     const result = planNextEffectStep([{ kind: "prompt", prompt }], makeCtx());
@@ -177,7 +185,10 @@ describe("planNextEffectStep — choice prompt head", () => {
     expect(result.active.kind).toBe("choice");
     if (result.active.kind !== "choice") throw new Error();
     expect(result.active.label).toEqual(FIXTURE_PROMPT);
-    expect(result.active.options).toEqual([{ label: FIXTURE_PROMPT }, { label: FIXTURE_PROMPT }]);
+    expect(result.active.options).toEqual([
+      { label: FIXTURE_PROMPT },
+      { label: FIXTURE_PROMPT },
+    ]);
     expect(result.prompt).toBe(choicePrompt);
     expect(result.rest).toHaveLength(0);
   });
@@ -248,10 +259,10 @@ describe("planNextEffectStep — foresee prompt head", () => {
 
 describe("applyPromptResolution — pick-cards", () => {
   it("edits === prompt.resolve(chosenIds, ctx) and rest is unchanged", () => {
-    const chosenIds = ["card-x", "card-y"];
+    const chosenIds = [asBattleCardId("card-x"), asBattleCardId("card-y")];
     const resolvedEdits = [SENTINEL_EDIT, SENTINEL_EDIT_2];
     let resolveCalled = false;
-    let capturedIds: string[] | null = null;
+    let capturedIds: BattleCardId[] | null = null;
 
     const prompt: EffectPrompt = {
       kind: "pick-cards",
@@ -340,7 +351,10 @@ describe("applyPromptResolution — choice", () => {
 
 describe("applyPromptResolution — confirm (CRITICAL)", () => {
   const onYesStep: EffectStep = { kind: "edits", build: () => [SENTINEL_EDIT] };
-  const tailStep: EffectStep = { kind: "edits", build: () => [SENTINEL_EDIT_2] };
+  const tailStep: EffectStep = {
+    kind: "edits",
+    build: () => [SENTINEL_EDIT_2],
+  };
 
   const confirmPrompt: EffectPrompt = {
     kind: "confirm",
@@ -348,7 +362,7 @@ describe("applyPromptResolution — confirm (CRITICAL)", () => {
     onYes: [onYesStep],
   };
 
-  it('optionIndex=0 (Yes): rest === [...onYes, ...originalRest] in that order, edits === []', () => {
+  it("optionIndex=0 (Yes): rest === [...onYes, ...originalRest] in that order, edits === []", () => {
     const originalRest = [tailStep];
     const { edits, rest } = applyPromptResolution(
       confirmPrompt,
@@ -372,7 +386,7 @@ describe("applyPromptResolution — confirm (CRITICAL)", () => {
     expect(rest[1]).toBe(tailStep);
   });
 
-  it('optionIndex=1 (Skip): rest === originalRest unchanged, edits === []', () => {
+  it("optionIndex=1 (Skip): rest === originalRest unchanged, edits === []", () => {
     const originalRest = [tailStep];
     const { edits, rest } = applyPromptResolution(
       confirmPrompt,
@@ -420,7 +434,10 @@ describe("applyPromptResolution — confirm (CRITICAL)", () => {
 describe("applyPromptResolution — foresee", () => {
   it("returns one atomic FORESEE edit and leaves the queued rest unchanged", () => {
     const foreseePrompt: EffectPrompt = { kind: "foresee", count: 2 };
-    const tailStep: EffectStep = { kind: "edits", build: () => [SENTINEL_EDIT] };
+    const tailStep: EffectStep = {
+      kind: "edits",
+      build: () => [SENTINEL_EDIT],
+    };
     const ctx = makeCtx();
     ctx.state = {
       sides: { player: { deck: ["card-a", "card-b", "card-c"] } },
@@ -430,21 +447,23 @@ describe("applyPromptResolution — foresee", () => {
       foreseePrompt,
       {
         kind: "foresee",
-        orderedCardIds: ["card-b"],
-        voidCardIds: ["card-a"],
+        orderedCardIds: [asBattleCardId("card-b")],
+        voidCardIds: [asBattleCardId("card-a")],
       },
       [tailStep],
       ctx,
     );
 
-    expect(edits).toEqual([{
-      kind: "FORESEE",
-      side: "player",
-      viewer: "player",
-      viewedCardIds: ["card-a", "card-b"],
-      orderedCardIds: ["card-b"],
-      voidCardIds: ["card-a"],
-    }]);
+    expect(edits).toEqual([
+      {
+        kind: "FORESEE",
+        side: "player",
+        viewer: "player",
+        viewedCardIds: [asBattleCardId("card-a"), asBattleCardId("card-b")],
+        orderedCardIds: [asBattleCardId("card-b")],
+        voidCardIds: [asBattleCardId("card-a")],
+      },
+    ]);
 
     // Bug class: rest dropped
     expect(rest).toHaveLength(1);
@@ -461,26 +480,39 @@ describe("applyPromptResolution — foresee", () => {
       { kind: "foresee", count: 1 },
       {
         kind: "foresee",
-        viewedCardIds: ["card-a", "card-b", "card-c"],
-        orderedCardIds: ["card-c", "card-a"],
-        voidCardIds: ["card-b"],
+        viewedCardIds: [
+          asBattleCardId("card-a"),
+          asBattleCardId("card-b"),
+          asBattleCardId("card-c"),
+        ],
+        orderedCardIds: [asBattleCardId("card-c"), asBattleCardId("card-a")],
+        voidCardIds: [asBattleCardId("card-b")],
       },
       [],
       ctx,
     );
 
-    expect(edits).toEqual([{
-      kind: "FORESEE",
-      side: "player",
-      viewer: "player",
-      viewedCardIds: ["card-a", "card-b", "card-c"],
-      orderedCardIds: ["card-c", "card-a"],
-      voidCardIds: ["card-b"],
-    }]);
+    expect(edits).toEqual([
+      {
+        kind: "FORESEE",
+        side: "player",
+        viewer: "player",
+        viewedCardIds: [
+          asBattleCardId("card-a"),
+          asBattleCardId("card-b"),
+          asBattleCardId("card-c"),
+        ],
+        orderedCardIds: [asBattleCardId("card-c"), asBattleCardId("card-a")],
+        voidCardIds: [asBattleCardId("card-b")],
+      },
+    ]);
   });
 
   it("keeps kind-only legacy resolutions as a no-op", () => {
-    const tailStep: EffectStep = { kind: "edits", build: () => [SENTINEL_EDIT] };
+    const tailStep: EffectStep = {
+      kind: "edits",
+      build: () => [SENTINEL_EDIT],
+    };
     const result = applyPromptResolution(
       { kind: "foresee", count: 2 },
       { kind: "foresee" },

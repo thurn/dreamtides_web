@@ -4,22 +4,25 @@ import {
   generateRewardSiteData as generateRewardSiteDataRaw,
   type RewardGenerationOptions,
 } from "./reward-generator";
+import { asDreamsignId } from "../types/identifiers";
 
 const ECONOMY = { fallbackEssence: { min: 17, max: 29 } };
-function generateRewardSiteData(options: Omit<RewardGenerationOptions, "economy">) {
+function generateRewardSiteData(
+  options: Omit<RewardGenerationOptions, "economy">,
+) {
   return generateRewardSiteDataRaw({ ...options, economy: ECONOMY });
 }
 
 const DREAMSIGN_TEMPLATES: DreamsignTemplate[] = [
   {
-    id: "dreamsign-1",
+    id: asDreamsignId("dreamsign-1"),
     name: "Dreamsign One",
     effectDescription: "First effect.",
     imageName: "dreamsign_one.png",
     imageAlt: "Dreamsign One art",
   },
   {
-    id: "dreamsign-2",
+    id: asDreamsignId("dreamsign-2"),
     name: "Dreamsign Two",
     effectDescription: "Second effect.",
   },

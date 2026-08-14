@@ -1,4 +1,5 @@
 import type { DraftRarityCap } from "./draft-data";
+import type { AffiliationId, ExplorationActionId, SiteId } from "./identifiers";
 
 /** Configuration for the tides4 draft offer engine. */
 export interface DraftConfig {
@@ -21,7 +22,7 @@ export interface DraftConfig {
    * reconstruction log so a draw can be traced back to its dreamscape's faction.
    * Absent in a neutral dreamscape.
    */
-  affiliationId?: string;
+  affiliationId?: AffiliationId;
 }
 
 /** Context provided to a pack generation strategy. */
@@ -47,7 +48,7 @@ export interface DraftState {
   /** Current offer presented to the player. */
   currentOffer: number[];
   /** Site currently owning the in-progress or completed visit state. */
-  activeSiteId: string | null;
+  activeSiteId: SiteId | null;
   /** 1-indexed pick counter across the entire journey (1..30). */
   pickNumber: number;
   /** Number of player picks completed in the current draft site visit. */
@@ -61,11 +62,14 @@ export interface DraftState {
    */
   siteShownCardNumbers?: number[];
   /** Exact transfiguration rolled for each card in the currently visible offer. */
-  currentOfferTransfigurations?: Record<string, import("./journey").TransfigurationType>;
+  currentOfferTransfigurations?: Record<
+    string,
+    import("./journey").TransfigurationType
+  >;
   /** Exploration action whose one-use modifier transfigures this Draft visit. */
   transfiguredOfferSource?: {
-    siteId: string;
-    actionId: string;
+    siteId: SiteId;
+    actionId: ExplorationActionId;
   };
   /**
    * The full fixed run multiset, keyed by card number. Immutable for the run:

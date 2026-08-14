@@ -2,6 +2,8 @@ import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 import type { BattlePromptText } from "../../data/dreamwell-prompts";
 import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
+import type { BattleCardId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -14,27 +16,27 @@ export type ActivePrompt =
       kind: "pick-cards";
       label: BattlePromptText;
       subtitle?: BattlePromptText;
-      candidateIds: string[];
+      candidateIds: BattleCardId[];
       count: number;
       optional: boolean;
       /** Candidate ids to flag in the picker (e.g. a just-drawn card). */
-      highlightCardIds: string[];
+      highlightCardIds: BattleCardId[];
     }
   | {
       kind: "choice";
       label: BattlePromptText;
       options: { label: BattlePromptText }[];
     }
-  | { kind: "foresee"; count: number; cardIds: string[] };
+  | { kind: "foresee"; count: number; cardIds: BattleCardId[] };
 
 export type PromptResolution =
-  | { kind: "pick-cards"; chosenIds: string[] }
+  | { kind: "pick-cards"; chosenIds: BattleCardId[] }
   | { kind: "choice"; optionIndex: number }
   | {
       kind: "foresee";
-      viewedCardIds?: string[];
-      orderedCardIds?: string[];
-      voidCardIds?: string[];
+      viewedCardIds?: BattleCardId[];
+      orderedCardIds?: BattleCardId[];
+      voidCardIds?: BattleCardId[];
     };
 
 /** Result of inspecting the head of the step queue. */
@@ -97,7 +99,7 @@ function buildActivePrompt(
         candidateIds,
         count: prompt.count,
         optional: prompt.optional,
-        highlightCardIds,
+        highlightCardIds: highlightCardIds.map(asBattleCardId),
       };
     }
     case "choice":

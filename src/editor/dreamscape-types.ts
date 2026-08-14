@@ -1,4 +1,10 @@
 import type { SiteType } from "../types/journey";
+import type {
+  AffiliationId,
+  DreamAvatarId,
+  DreamscapeId,
+  GuideId,
+} from "../types/identifiers";
 
 /**
  * One dreamscape as the editor sees it. The kebab-case keys mirror the
@@ -8,35 +14,35 @@ import type { SiteType } from "../types/journey";
  * `affiliation-id` are `null` there.
  */
 export interface EditorDreamscapeRecord {
-  id: string;
+  id: DreamscapeId;
   name: string;
   "signature-site": string;
-  "guide-id": string | null;
-  "affiliation-id": string | null;
+  "guide-id": GuideId | null;
+  "affiliation-id": AffiliationId | null;
   isStarter: boolean;
   fixedSites: string[];
   /** UUIDs of the DreamAvatars resident in this region (3-4 for non-starters). */
-  dreamAvatarIds: string[];
+  dreamAvatarIds: DreamAvatarId[];
   sourceIndex: number;
 }
 
 /** A Dream Guide pickable as a dreamscape's resident guide. */
 export interface GuideOption {
-  id: string;
+  id: GuideId;
   name: string;
-  homeDreamscapeId: string | null;
+  homeDreamscapeId: DreamscapeId | null;
   siteType: string | null;
 }
 
 /** An affiliation pickable as a dreamscape's thematic faction. */
 export interface AffiliationOption {
-  id: string;
+  id: AffiliationId;
   name: string;
 }
 
 /** A DreamAvatar assignable as a resident of a dreamscape. */
 export interface DreamAvatarOption {
-  id: string;
+  id: DreamAvatarId;
   name: string;
   title: string;
   imageNumber: string;
@@ -64,7 +70,7 @@ export interface DreamscapeCatalog {
 export type DreamAvatarAssignmentAction = "replace" | "add" | "remove";
 
 export interface DreamAvatarAssignmentRequest {
-  dreamscapeId: string;
+  dreamscapeId: DreamscapeId;
   action: DreamAvatarAssignmentAction;
   /** The incoming DreamAvatar (for "replace" / "add"). */
   inId?: string;
@@ -81,7 +87,7 @@ export type EditableDreamscapeField =
   "name" | "signature-site" | "guide-id" | "affiliation-id";
 
 export interface SaveEditorDreamscapeFieldRequest {
-  id: string;
+  id: DreamscapeId;
   field: EditableDreamscapeField;
   value: string;
   clientRevision?: number;

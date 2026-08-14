@@ -14,6 +14,10 @@ import {
   makeTutorialBattleConfiguration,
   TEST_TUTORIAL_CARD_CONSTANTS,
 } from "../test/tutorial-configuration-fixture";
+import { asCardId } from "../types/card-identity";
+import { asDreamwellCardId } from "../types/identifiers";
+import { asTutorialAiActionOverrideId } from "../types/identifiers";
+import { asTutorialActionId } from "../types/identifiers";
 
 const ACTIONS_RESPONSE = {
   contentHash: "0".repeat(64),
@@ -98,7 +102,7 @@ const ACTIONS_RESPONSE = {
   },
   actions: [
     {
-      id: "welcome",
+      id: asTutorialActionId("welcome"),
       action: "display-speech-bubble",
       speechBubble: {
         speaker: "mira",
@@ -150,7 +154,7 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "enemy-taunt",
+          id: asTutorialActionId("enemy-taunt"),
           action: "display-speech-bubble",
           speechBubble: {
             speaker: "enemy",
@@ -166,7 +170,7 @@ describe("parseTutorialActions", () => {
       ]),
     ).toEqual([
       {
-        id: "enemy-taunt",
+        id: asTutorialActionId("enemy-taunt"),
         action: "display-speech-bubble",
         speechBubble: {
           speaker: "enemy",
@@ -183,7 +187,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-speaker",
+          id: asTutorialActionId("bad-speaker"),
           action: "display-speech-bubble",
           speechBubble: { speaker: "spectator", text: "No." },
           wait: 1,
@@ -193,7 +197,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-bubble-width",
+          id: asTutorialActionId("bad-bubble-width"),
           action: "display-speech-bubble",
           speechBubble: { bubbleWidth: 750, text: "Too wide." },
           wait: 1,
@@ -203,7 +207,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-duration",
+          id: asTutorialActionId("bad-duration"),
           action: "display-speech-bubble",
           speechBubble: { duration: -1, text: "Too brief." },
           wait: 1,
@@ -213,7 +217,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-speech-markup",
+          id: asTutorialActionId("bad-speech-markup"),
           action: "display-speech-bubble",
           speechBubble: { text: "A [yellow]blocked character." },
           wait: 1,
@@ -226,7 +230,7 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "lower-line",
+          id: asTutorialActionId("lower-line"),
           action: "display-speech-bubble",
           speechBubble: {
             horizontalOffset: 30,
@@ -238,7 +242,7 @@ describe("parseTutorialActions", () => {
       ]),
     ).toEqual([
       {
-        id: "lower-line",
+        id: asTutorialActionId("lower-line"),
         action: "display-speech-bubble",
         speechBubble: {
           speaker: "mira",
@@ -254,7 +258,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-offset",
+          id: asTutorialActionId("bad-offset"),
           action: "display-speech-bubble",
           speechBubble: { verticalOffset: "lower", text: "No." },
           wait: 1,
@@ -264,7 +268,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-horizontal-offset",
+          id: asTutorialActionId("bad-horizontal-offset"),
           action: "display-speech-bubble",
           speechBubble: { horizontalOffset: "right", text: "No." },
           wait: 1,
@@ -319,7 +323,7 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "how-to-play",
+          id: asTutorialActionId("how-to-play"),
           action: "display-how-to-play",
           text,
           wait: 0,
@@ -327,7 +331,7 @@ describe("parseTutorialActions", () => {
       ]),
     ).toEqual([
       {
-        id: "how-to-play",
+        id: asTutorialActionId("how-to-play"),
         action: "display-how-to-play",
         trigger: "player-turn-announcement-complete",
         text,
@@ -337,7 +341,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "blank-how-to-play",
+          id: asTutorialActionId("blank-how-to-play"),
           action: "display-how-to-play",
           text: "  ",
           wait: 0,
@@ -347,7 +351,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-how-to-play-trigger",
+          id: asTutorialActionId("bad-how-to-play-trigger"),
           action: "display-how-to-play",
           trigger: "after-a-card-name",
           text,
@@ -358,7 +362,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-how-to-play-companion",
+          id: asTutorialActionId("bad-how-to-play-companion"),
           action: "display-how-to-play",
           companion: "named-card",
           text,
@@ -369,7 +373,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-how-to-play-markup",
+          id: asTutorialActionId("bad-how-to-play-markup"),
           action: "display-how-to-play",
           text: "Position a character to [yellow]challenge.",
           wait: 0,
@@ -379,7 +383,7 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "dreamwell-how-to-play",
+          id: asTutorialActionId("dreamwell-how-to-play"),
           action: "display-how-to-play",
           trigger: "immediate",
           companion: "dreamwell-card",
@@ -390,7 +394,7 @@ describe("parseTutorialActions", () => {
       ]),
     ).toEqual([
       {
-        id: "dreamwell-how-to-play",
+        id: asTutorialActionId("dreamwell-how-to-play"),
         action: "display-how-to-play",
         trigger: "immediate",
         companion: "dreamwell-card",
@@ -402,7 +406,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-how-to-play-width",
+          id: asTutorialActionId("bad-how-to-play-width"),
           action: "display-how-to-play",
           cardWidth: 0,
           text,
@@ -416,12 +420,12 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "legacy-arrival",
+          id: asTutorialActionId("legacy-arrival"),
           action: "animate-dream-avatar-portrait",
           wait: 0,
         },
         {
-          id: "opponent-arrival",
+          id: asTutorialActionId("opponent-arrival"),
           action: "animate-dream-avatar-portrait",
           owner: "enemy",
           pause: 2.5,
@@ -431,7 +435,7 @@ describe("parseTutorialActions", () => {
       ]),
     ).toEqual([
       {
-        id: "legacy-arrival",
+        id: asTutorialActionId("legacy-arrival"),
         action: "animate-dream-avatar-portrait",
         owner: "player",
         pause: 0,
@@ -439,7 +443,7 @@ describe("parseTutorialActions", () => {
         wait: 0,
       },
       {
-        id: "opponent-arrival",
+        id: asTutorialActionId("opponent-arrival"),
         action: "animate-dream-avatar-portrait",
         owner: "enemy",
         pause: 2.5,
@@ -453,17 +457,17 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "vrakmoth-draw",
+          id: asTutorialActionId("vrakmoth-draw"),
           action: "draw-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
           wait: 0.5,
         },
       ]),
     ).toEqual([
       {
-        id: "vrakmoth-draw",
+        id: asTutorialActionId("vrakmoth-draw"),
         action: "draw-opponent-card",
-        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         wait: 0.5,
       },
     ]);
@@ -473,7 +477,7 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "end-turn",
+          id: asTutorialActionId("end-turn"),
           action: "end-turn",
           speechBubble: {
             text: "Good, you have now [yellow]materialized[/yellow] this character.",
@@ -483,7 +487,7 @@ describe("parseTutorialActions", () => {
       ]),
     ).toEqual([
       {
-        id: "end-turn",
+        id: asTutorialActionId("end-turn"),
         action: "end-turn",
         speechBubble: {
           speaker: "mira",
@@ -499,7 +503,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "blank-end-turn-speech",
+          id: asTutorialActionId("blank-end-turn-speech"),
           action: "end-turn",
           speechBubble: { text: " " },
           wait: 0,
@@ -512,26 +516,26 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "opponent-character-advance",
+          id: asTutorialActionId("opponent-character-advance"),
           action: "reposition-opponent-character",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
           wait: 0,
         },
       ]),
     ).toEqual([
       {
-        id: "opponent-character-advance",
+        id: asTutorialActionId("opponent-character-advance"),
         action: "reposition-opponent-character",
-        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         wait: 0,
       },
     ]);
     expect(() =>
       parseTutorialActions([
         {
-          id: "named-opponent",
+          id: asTutorialActionId("named-opponent"),
           action: "reposition-opponent-character",
-          cardId: "Twilight Troubadour",
+          cardId: asCardId("Twilight Troubadour"),
           wait: 0,
         },
       ]),
@@ -542,18 +546,18 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "block-opponent",
+          id: asTutorialActionId("block-opponent"),
           action: "reposition-player-character",
-          cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+          cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
           opposingCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           wait: 0,
         },
       ]),
     ).toEqual([
       {
-        id: "block-opponent",
+        id: asTutorialActionId("block-opponent"),
         action: "reposition-player-character",
-        cardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
+        cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
         opposingCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         wait: 0,
       },
@@ -561,9 +565,9 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "named-player",
+          id: asTutorialActionId("named-player"),
           action: "reposition-player-character",
-          cardId: "Marked Direwolf",
+          cardId: asCardId("Marked Direwolf"),
           opposingCardId: "Twilight Troubadour",
           wait: 0,
         },
@@ -575,7 +579,7 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "resolve-challenge",
+          id: asTutorialActionId("resolve-challenge"),
           action: "resolve-challenge",
           challengerCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           blockerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
@@ -584,7 +588,7 @@ describe("parseTutorialActions", () => {
       ]),
     ).toEqual([
       {
-        id: "resolve-challenge",
+        id: asTutorialActionId("resolve-challenge"),
         action: "resolve-challenge",
         challengerCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
         blockerCardId: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
@@ -594,7 +598,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "named-challenge",
+          id: asTutorialActionId("named-challenge"),
           action: "resolve-challenge",
           challengerCardId: "Twilight Troubadour",
           blockerCardId: "Marked Direwolf",
@@ -605,7 +609,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "self-challenge",
+          id: asTutorialActionId("self-challenge"),
           action: "resolve-challenge",
           challengerCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
           blockerCardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
@@ -619,29 +623,29 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "autumn-glade",
+          id: asTutorialActionId("autumn-glade"),
           action: "draw-dreamwell-card",
           owner: "enemy",
-          cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+          cardId: asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
           wait: 0,
         },
       ]),
     ).toEqual([
       {
-        id: "autumn-glade",
+        id: asTutorialActionId("autumn-glade"),
         action: "draw-dreamwell-card",
         owner: "enemy",
-        cardId: "02e8ea92-1218-413c-9f0b-4c865a3921d3",
+        cardId: asCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
         wait: 0,
       },
     ]);
     expect(() =>
       parseTutorialActions([
         {
-          id: "named-card",
+          id: asTutorialActionId("named-card"),
           action: "draw-dreamwell-card",
           owner: "enemy",
-          cardId: "Autumn Glade",
+          cardId: asCardId("Autumn Glade"),
           wait: 0,
         },
       ]),
@@ -652,26 +656,26 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "player-effect-draw",
+          id: asTutorialActionId("player-effect-draw"),
           action: "draw-card",
           owner: "player",
-          cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+          cardId: asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
           reason: "dreamwell-effect",
           wait: 0,
         },
         {
-          id: "opponent-effect-draw",
+          id: asTutorialActionId("opponent-effect-draw"),
           action: "draw-card",
           owner: "enemy",
-          cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+          cardId: asCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
           reason: "dreamwell-effect",
           wait: 0,
         },
         {
-          id: "player-turn-draw",
+          id: asTutorialActionId("player-turn-draw"),
           action: "draw-card",
           owner: "player",
-          cardId: "2162742c-09d0-4e62-ae49-0f8f79b45adc",
+          cardId: asCardId("2162742c-09d0-4e62-ae49-0f8f79b45adc"),
           reason: "turn-draw",
           wait: 0,
         },
@@ -687,20 +691,20 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "player-voltsurge",
+          id: asTutorialActionId("player-voltsurge"),
           action: "draw-dreamwell-card",
           owner: "player",
-          cardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+          cardId: asCardId("7171ff89-ebe4-42d0-8863-9b4b0531cad2"),
           revealDuration: 5,
           wait: 0,
         },
       ]),
     ).toEqual([
       {
-        id: "player-voltsurge",
+        id: asTutorialActionId("player-voltsurge"),
         action: "draw-dreamwell-card",
         owner: "player",
-        cardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+        cardId: asCardId("7171ff89-ebe4-42d0-8863-9b4b0531cad2"),
         revealDuration: 5,
         wait: 0,
       },
@@ -711,9 +715,9 @@ describe("parseTutorialActions", () => {
     expect(
       parseTutorialActions([
         {
-          id: "vrakmoth-reveal-and-play",
+          id: asTutorialActionId("vrakmoth-reveal-and-play"),
           action: "reveal-and-play-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
           speechBubble: {
             duration: 4,
             horizontalOffset: 30,
@@ -726,9 +730,9 @@ describe("parseTutorialActions", () => {
       ]),
     ).toEqual([
       {
-        id: "vrakmoth-reveal-and-play",
+        id: asTutorialActionId("vrakmoth-reveal-and-play"),
         action: "reveal-and-play-opponent-card",
-        cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         revealDuration: 2,
         speechBubble: {
           speaker: "mira",
@@ -744,9 +748,9 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-card-reveal",
+          id: asTutorialActionId("bad-card-reveal"),
           action: "reveal-and-play-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
           revealDuration: -0.5,
           wait: 0,
         },
@@ -755,9 +759,9 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-reveal-offset",
+          id: asTutorialActionId("bad-reveal-offset"),
           action: "reveal-and-play-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
           speechBubble: { verticalOffset: "lower", text: "No." },
           wait: 0,
         },
@@ -766,9 +770,9 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-reveal-width",
+          id: asTutorialActionId("bad-reveal-width"),
           action: "reveal-and-play-opponent-card",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
+          cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
           speechBubble: { bubbleWidth: 750, text: "No." },
           wait: 0,
         },
@@ -780,7 +784,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-owner",
+          id: asTutorialActionId("bad-owner"),
           action: "animate-dream-avatar-portrait",
           owner: "spectator",
           pause: 1,
@@ -792,7 +796,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-pause",
+          id: asTutorialActionId("bad-pause"),
           action: "animate-dream-avatar-portrait",
           owner: "player",
           pause: -1,
@@ -804,7 +808,7 @@ describe("parseTutorialActions", () => {
     expect(() =>
       parseTutorialActions([
         {
-          id: "bad-duration",
+          id: asTutorialActionId("bad-duration"),
           action: "animate-dream-avatar-portrait",
           owner: "player",
           pause: 1,
@@ -828,7 +832,10 @@ describe("parseTutorialActions", () => {
           horizontalOffset: 40,
           verticalOffset: -20,
           bubbleWidth: 300,
-          match: { kind: "glossary", id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4" },
+          match: {
+            kind: "glossary",
+            id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4",
+          },
           text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
         },
       ]),
@@ -854,7 +861,10 @@ describe("parseTutorialActions", () => {
           on: ["card-play"],
           delay: { "card-seen": 1 },
           duration: 3,
-          match: { kind: "glossary", id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4" },
+          match: {
+            kind: "glossary",
+            id: "59f426ac-b9cb-47af-a00a-8cbab941c6c4",
+          },
           text: "No.",
         },
       ]),
@@ -871,7 +881,7 @@ describe("parseTutorialActions", () => {
           priority: 10,
           duration: 4,
           bubbleWidth: 500,
-          match: { kind: "card-id", cardId },
+          match: { kind: "card-id", cardId: asCardId(cardId) },
           text: "There are no valid targets for this card",
         },
       ]),
@@ -885,7 +895,7 @@ describe("parseTutorialActions", () => {
         horizontalOffset: 0,
         verticalOffset: 0,
         bubbleWidth: 500,
-        match: { kind: "card-id", cardId },
+        match: { kind: "card-id", cardId: asCardId(cardId) },
         text: "There are no valid targets for this card",
       },
     ]);
@@ -1020,31 +1030,39 @@ describe("parseTutorialBattleConfiguration", () => {
     const battle = makeTutorialBattleConfiguration({
       tutorialCardConstants: {
         ...TEST_TUTORIAL_CARD_CONSTANTS,
-        tutorialDreamwellCardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+        tutorialDreamwellCardId: asDreamwellCardId(
+          "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+        ),
       },
       starterDeck: [
-        { cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId, copies: 3 },
-        { cardId: TEST_TUTORIAL_CARD_CONSTANTS.handoffEnemyCharacterCardId, copies: 3 },
-        { cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8", copies: 3 },
-        { cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481", copies: 3 },
+        {
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.tutorialPlayerCharacterCardId,
+          copies: 3,
+        },
+        {
+          cardId: TEST_TUTORIAL_CARD_CONSTANTS.handoffEnemyCharacterCardId,
+          copies: 3,
+        },
+        { cardId: asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"), copies: 3 },
+        { cardId: asCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"), copies: 3 },
       ],
-      forcedPlayerDraws: ["5a980eff-6ec7-44d8-9977-b98e66bbc2c8"],
-      forcedEnemyDraws: ["a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"],
+      forcedPlayerDraws: [asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8")],
+      forcedEnemyDraws: [asCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481")],
       dreamwellDraws: [
-        "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+        asDreamwellCardId("7171ff89-ebe4-42d0-8863-9b4b0531cad2"),
         TEST_TUTORIAL_CARD_CONSTANTS.tutorialDreamwellCardId,
       ],
       aiActionOverrides: [
         {
-          id: "play-card-after-dreamwell",
+          id: asTutorialAiActionOverrideId("play-card-after-dreamwell"),
           trigger: {
             kind: "after-dreamwell",
             side: "enemy",
-            cardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
+            cardId: asDreamwellCardId("7171ff89-ebe4-42d0-8863-9b4b0531cad2"),
           },
           action: {
             kind: "play-card",
-            cardId: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
+            cardId: asCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
           },
         },
       ],
@@ -1094,7 +1112,7 @@ describe("parseTutorialBattleConfiguration", () => {
             ...battle.aiActionOverrides[0],
             trigger: {
               ...battle.aiActionOverrides[0].trigger,
-              cardId: "03e4e701-4720-4278-8198-9b7e0514d4cf",
+              cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
             },
           },
         ],
@@ -1108,7 +1126,7 @@ describe("parseTutorialBattleConfiguration", () => {
             ...battle.aiActionOverrides[0],
             action: {
               kind: "play-card",
-              cardId: "00000000-0000-4000-8000-000000000101",
+              cardId: asCardId("00000000-0000-4000-8000-000000000101"),
             },
           },
         ],

@@ -15,13 +15,13 @@ One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engin
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `model` | `AtlasNodeModel` | yes | — | UUID-backed semantic Atlas face and reveal data. |
-| `onPress` | `(nodeId: string) => void` | yes | — | Enter the node's dreamscape. Available nodes invoke this with their UUID. |
+| `onPress` | `(nodeId: AtlasNodeId) => void` | yes | — | Enter the node's dreamscape. Available nodes invoke this with their UUID. |
 
 ### `model`: the `AtlasNodeModel` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `string` | no | Stable Atlas node identity. |
+| `id` | `AtlasNodeId` | no | Stable Atlas node identity. |
 | `name` | `LocalizedString` | no | Localized accessible name for the assigned or unrevealed dreamscape. |
 | `state` | `AtlasNodeState` | no | Journey presentation state that selects the node treatment. |
 | `role` | `AtlasNodeRole` | no |  |

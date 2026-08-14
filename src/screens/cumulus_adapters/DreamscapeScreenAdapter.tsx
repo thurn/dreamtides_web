@@ -15,6 +15,8 @@ import {
   resolveRewardDecline,
   resolveRewardReplacement,
 } from "./inline-reward-view-model";
+import type { SiteId } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
 
 /** Wires the live journey fold to the pure Cumulus Dreamscape screen. */
 export function DreamscapeScreenAdapter() {
@@ -23,7 +25,7 @@ export function DreamscapeScreenAdapter() {
     state.currentDreamscape === null
       ? undefined
       : state.atlas.nodes[state.currentDreamscape];
-  const [replacementSiteId, setReplacementSiteId] = useState<string | null>(
+  const [replacementSiteId, setReplacementSiteId] = useState<SiteId | null>(
     null,
   );
   const view = useMemo(
@@ -66,7 +68,7 @@ export function DreamscapeScreenAdapter() {
   }, [node, state.completionLevel, view]);
 
   const handleSelectSite = useCallback(
-    (siteId: string) => {
+    (siteId: SiteId) => {
       if (node === undefined) return;
       const selection = resolveDreamscapeSiteSelection(
         node,
@@ -91,7 +93,7 @@ export function DreamscapeScreenAdapter() {
   );
 
   const handleInlineRewardAnimationComplete = useCallback(
-    (siteId: string) => {
+    (siteId: SiteId) => {
       if (node === undefined) return;
       const site = node.sites.find((candidate) => candidate.id === siteId);
       const resolution = resolveInlineReward(
@@ -112,7 +114,7 @@ export function DreamscapeScreenAdapter() {
   );
 
   const handleReplaceDreamsign = useCallback(
-    (dreamsignId: string) => {
+    (dreamsignId: DreamsignId) => {
       if (replacementSiteId === null || node === undefined) return;
       const resolution = resolveRewardReplacement(
         node,

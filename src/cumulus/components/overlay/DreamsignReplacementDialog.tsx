@@ -12,6 +12,8 @@ import { GlassButton } from "../controls/GlassButton";
 import { Dreamsign, type LocalizedDreamsign } from "../hud/Dreamsign";
 import { token } from "../../primitives/tokens";
 import { GlassDialog } from "./GlassDialog";
+import type { DreamsignId } from "../../../types/identifiers";
+import { asDreamsignId } from "../../../types/identifiers";
 
 /** Prepared display data for choosing which held Dreamsign to replace. */
 export interface DreamsignReplacementModel {
@@ -31,7 +33,7 @@ export interface DreamsignReplacementDialogProps {
   /** Complete resolved replacement presentation. */
   readonly model: DreamsignReplacementModel;
   /** Reports the exact held Dreamsign UUID selected for replacement. */
-  readonly onDreamsignPress: (dreamsignId: string) => void;
+  readonly onDreamsignPress: (dreamsignId: DreamsignId) => void;
   /** Dismisses the replacement workflow without selecting a held Dreamsign. */
   readonly onDismiss: () => void;
 }
@@ -132,7 +134,7 @@ export function DreamsignReplacementDialog({
                   )}
                   variant="accent"
                   placement="onGlass"
-                  onPress={() => onDreamsignPress(dreamsignId)}
+                  onPress={() => onDreamsignPress(asDreamsignId(dreamsignId))}
                 />
               </div>
             );

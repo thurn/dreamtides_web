@@ -96,6 +96,19 @@ import {
   type RewardSelectionResult,
 } from "../../reward-selection/types";
 import { stableDigest } from "../../reward-selection/stable";
+import type { CardId } from "../../types/card-identity";
+import type { DeckEntryId, SelectionKey } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { dreamsignIdFromUnknown } from "../../types/identifiers";
+import type { ExplorationActionId } from "../../types/identifiers";
+import { asCardTypeChangePredicateId } from "../../types/identifiers";
+import { asSelectionKey } from "../../types/identifiers";
 
 interface ExplorationSelection {
   entryIds?: unknown;
@@ -166,9 +179,11 @@ function authoredNightmareCount(
 
 function fixedDreamsignId(
   action: ExplorationActionContent,
-): string | undefined {
+): DreamsignId | undefined {
   return action.effectKind === "gain-nightmare-and-dreamsign"
-    ? action.dreamsignId
+    ? action.dreamsignId === undefined
+      ? undefined
+      : asDreamsignId(action.dreamsignId)
     : undefined;
 }
 
@@ -267,7 +282,7 @@ function prepareCompoundAction(input: {
   action: ExplorationActionContent;
   journey: JourneyState;
   site: SiteState;
-  encounterCardId: string;
+  encounterCardId: CardId;
   content: JourneyContent;
 }): ExplorationCompoundActionPreparation | null {
   const { action, journey, site, encounterCardId, content } = input;
@@ -414,7 +429,7 @@ function transfigureAllEligibleEntryIds(
   action: ExplorationActionContent,
   journey: JourneyState,
   content: JourneyContent,
-): string[] {
+): DeckEntryId[] {
   const predicate = action.predicate;
   const transfiguration = action.transfiguration;
   if (predicate === undefined || transfiguration === undefined) return [];
@@ -438,12 +453,12 @@ function usesOfferedDeckTarget(action: ExplorationActionContent): boolean {
 }
 
 function emptyOffer(
-  actionId: string,
+  actionId: ExplorationActionId,
   mechanicId?: RewardMechanicId,
   policyId?: RewardSelectionPolicyId,
 ): ExplorationActionOfferRuntime {
   return {
-    actionId,
+    actionId: asExplorationActionId(actionId),
     ...(mechanicId === undefined ? {} : { canonicalMechanicId: mechanicId }),
     ...(policyId === undefined ? {} : { selectionPolicyId: policyId }),
     offeredCardIds: [],
@@ -461,7 +476,7 @@ function buildCompoundActionOffer(input: {
   journey: JourneyState;
   content: JourneyContent;
   site: SiteState;
-  encounterCardId: string;
+  encounterCardId: CardId;
 }): ExplorationActionOfferRuntime | null {
   const preparation = prepareCompoundAction(input);
   if (preparation === null) return null;
@@ -494,7 +509,7 @@ function buildCompoundActionOffer(input: {
   );
   offer.selectionRulesVersion = preparation.selectionRulesVersion;
   offer.selectionContentRevision = preparation.selectionContentRevision;
-  offer.selectionKey = preparation.selectionKey;
+  offer.selectionKey = asSelectionKey(preparation.selectionKey);
   offer.selectionSignature = preparation.planSignature;
   offer.selectionTraces = [...preparation.selectorTraces];
   offer.compoundActionPreparation = preparation;
@@ -551,7 +566,7 @@ function buildDisclosedDeckTargetOffer(input: {
   journey: JourneyState;
   content: JourneyContent;
   site: SiteState;
-  encounterCardId: string;
+  encounterCardId: CardId;
 }): ExplorationActionOfferRuntime {
   const preparation = prepareExplorationDisclosedDeckTargetPlan({
     effectKind: "change-card-type-selected",
@@ -570,7 +585,7 @@ function buildDisclosedDeckTargetOffer(input: {
     ),
     selectionRulesVersion: preparation.selectionRulesVersion,
     selectionContentRevision: preparation.selectionContentRevision,
-    selectionKey: preparation.selectionKey,
+    selectionKey: asSelectionKey(preparation.selectionKey),
     selectionSignature: preparation.planSignature,
     ...(preparation.selectorTrace === undefined
       ? {}
@@ -593,7 +608,7 @@ function legacyShuffled<T>(items: readonly T[], rng: () => number): T[] {
 function legacyCatalogCandidates(
   content: JourneyContent,
   predicate: ExplorationPredicate,
-  excludedCardId: string,
+  excludedCardId: CardId,
 ): CardData[] {
   const customCardIds = new Set(
     (content.exploration?.customCards ?? []).map((card) =>
@@ -655,7 +670,7 @@ function buildLegacyActionOffer(
   journey: JourneyState,
   content: JourneyContent,
   rng: () => number,
-  encounterCardId: string,
+  encounterCardId: CardId,
   site: SiteState,
 ): ExplorationActionOfferRuntime | null {
   const offer = emptyOffer(action.id);
@@ -684,7 +699,7 @@ function buildLegacyActionOffer(
     const preparation = prepareExplorationSiteInsertion({
       journey,
       sourceSite: site,
-      sourceActionId: action.id,
+      sourceActionId: asExplorationActionId(action.id),
       encounterCardId,
       siteType: action.siteType,
       selectionRulesVersion: SELECTION_RULES_VERSION,
@@ -698,7 +713,7 @@ function buildLegacyActionOffer(
           selectionPolicyId: "fixed",
           selectionRulesVersion: SELECTION_RULES_VERSION,
           selectionContentRevision,
-          selectionKey: action.id,
+          selectionKey: asSelectionKey(action.id),
           selectionSignature: preparation.planSignature,
           siteInsertionPreparation: preparation,
         };
@@ -716,7 +731,7 @@ function buildLegacyActionOffer(
       scope: {
         journeySeed: journey.seed,
         siteUuid: site.id,
-        selectionKey: action.id,
+        selectionKey: asSelectionKey(action.id),
       },
       count: action.offerCount,
       constraints: {
@@ -735,7 +750,7 @@ function buildLegacyActionOffer(
     const preparation = prepareExplorationSiteTypeChoice({
       journey,
       sourceSite: site,
-      sourceActionId: action.id,
+      sourceActionId: asExplorationActionId(action.id),
       encounterCardId,
       siteTypes,
       selectorSignature: selected.signature,
@@ -789,7 +804,7 @@ function buildLegacyActionOffer(
       selectionPolicyId: "uniform",
       selectionRulesVersion: preparation.selectionRulesVersion,
       selectionContentRevision: preparation.selectionContentRevision,
-      selectionKey: preparation.selectionKey,
+      selectionKey: asSelectionKey(preparation.selectionKey),
       selectionSignature: preparation.planSignature,
       ...(preparation.selectorTrace === undefined
         ? {}
@@ -1057,17 +1072,17 @@ function withSelection(
 }
 
 function essenceSelectionKey(
-  encounterCardId: string,
-  actionId: string,
-): string {
-  return `${encounterCardId}:${actionId}`;
+  encounterCardId: CardId,
+  actionId: ExplorationActionId,
+): SelectionKey {
+  return asSelectionKey(`${encounterCardId}:${actionId}`);
 }
 
 function essenceSelectionRequest(input: {
   journey: JourneyState;
   site: SiteState;
-  encounterCardId: string;
-  actionId: string;
+  encounterCardId: CardId;
+  actionId: ExplorationActionId;
 }): RewardSelectionRequest {
   return {
     mechanicId: "essence-mutation",
@@ -1075,7 +1090,9 @@ function essenceSelectionRequest(input: {
     scope: {
       journeySeed: input.journey.seed,
       siteUuid: input.site.id,
-      selectionKey: essenceSelectionKey(input.encounterCardId, input.actionId),
+      selectionKey: asSelectionKey(
+        essenceSelectionKey(input.encounterCardId, input.actionId),
+      ),
     },
     count: 1,
   };
@@ -1083,7 +1100,7 @@ function essenceSelectionRequest(input: {
 
 function essenceSelectionSignature(
   action: ExplorationActionContent,
-  encounterCardId: string,
+  encounterCardId: CardId,
   offer: ExplorationActionOfferRuntime,
 ): string {
   return stableDigest({
@@ -1105,7 +1122,7 @@ function buildEssenceMutationOffer(input: {
   action: ExplorationActionContent;
   journey: JourneyState;
   site: SiteState;
-  encounterCardId: string;
+  encounterCardId: CardId;
   selectionContentRevision: string;
   offer: ExplorationActionOfferRuntime;
 }): ExplorationActionOfferRuntime | null {
@@ -1115,7 +1132,9 @@ function buildEssenceMutationOffer(input: {
     ...input.offer,
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision,
-    selectionKey: essenceSelectionKey(encounterCardId, action.id),
+    selectionKey: asSelectionKey(
+      essenceSelectionKey(encounterCardId, action.id),
+    ),
   };
   if (
     action.effectKind === "gain-essence" &&
@@ -1167,7 +1186,7 @@ function buildActionOffer(
   journey: JourneyState,
   content: JourneyContent,
   site: SiteState,
-  encounterCardId: string,
+  encounterCardId: CardId,
 ): ExplorationActionOfferRuntime | null {
   const canonical = canonicalSelectionForAction(action);
   const offer = emptyOffer(action.id, canonical.mechanicId, canonical.policyId);
@@ -1186,7 +1205,7 @@ function buildActionOffer(
       scope: {
         journeySeed: journey.seed,
         siteUuid: site.id,
-        selectionKey: action.id,
+        selectionKey: asSelectionKey(action.id),
       },
       count: 1,
       ...overrides,
@@ -1210,7 +1229,7 @@ function buildActionOffer(
     const preparation = prepareExplorationSiteInsertion({
       journey,
       sourceSite: site,
-      sourceActionId: action.id,
+      sourceActionId: asExplorationActionId(action.id),
       encounterCardId,
       siteType: action.siteType,
       selectionRulesVersion: SELECTION_RULES_VERSION,
@@ -1223,7 +1242,7 @@ function buildActionOffer(
       selectionPolicyId: "fixed",
       selectionRulesVersion: SELECTION_RULES_VERSION,
       selectionContentRevision: context.selectionContentRevision,
-      selectionKey: action.id,
+      selectionKey: asSelectionKey(action.id),
       selectionSignature: preparation.planSignature,
       siteInsertionPreparation: preparation,
     };
@@ -1246,7 +1265,7 @@ function buildActionOffer(
     const preparation = prepareExplorationSiteTypeChoice({
       journey,
       sourceSite: site,
-      sourceActionId: action.id,
+      sourceActionId: asExplorationActionId(action.id),
       encounterCardId,
       siteTypes,
       selectorSignature: selected.signature,
@@ -1284,7 +1303,7 @@ function buildActionOffer(
             : ("uniform" as const),
       selectionRulesVersion: SELECTION_RULES_VERSION,
       selectionContentRevision: context.selectionContentRevision,
-      selectionKey: action.id,
+      selectionKey: asSelectionKey(action.id),
       dreamsignPreparation: planned.preparation,
       offeredDreamsignIds:
         planned.preparation.kind === "offered-gain" ||
@@ -1319,7 +1338,7 @@ function buildActionOffer(
           : "uniform",
       selectionRulesVersion: preparation.selectionRulesVersion,
       selectionContentRevision: preparation.selectionContentRevision,
-      selectionKey: preparation.selectionKey,
+      selectionKey: asSelectionKey(preparation.selectionKey),
       selectionSignature: preparation.planSignature,
       selectionTraces: [...preparation.selectorTraces],
       multiCardTransfigurationPreparation: preparation,
@@ -1349,7 +1368,7 @@ function buildActionOffer(
       selectionPolicyId: "card-fit-quality",
       selectionRulesVersion: preparation.selectionRulesVersion,
       selectionContentRevision: preparation.selectionContentRevision,
-      selectionKey: preparation.selectionKey,
+      selectionKey: asSelectionKey(preparation.selectionKey),
       selectionSignature: preparation.planSignature,
       selectionTraces: [...preparation.selectorTraces],
       multiCardReplacementPreparation: preparation,
@@ -1398,7 +1417,7 @@ function buildActionOffer(
       selectionPolicyId: "uniform",
       selectionRulesVersion: preparation.selectionRulesVersion,
       selectionContentRevision: preparation.selectionContentRevision,
-      selectionKey: preparation.selectionKey,
+      selectionKey: asSelectionKey(preparation.selectionKey),
       selectionSignature: preparation.planSignature,
       ...(preparation.selectorTrace === undefined
         ? {}
@@ -1487,8 +1506,8 @@ function buildActionOffer(
       action,
       journey,
       content,
-    );
-    offer.selectionKey = action.id;
+    ).map(asDeckEntryId);
+    offer.selectionKey = asSelectionKey(action.id);
     offer.selectionRulesVersion = SELECTION_RULES_VERSION;
     offer.selectionContentRevision = context.selectionContentRevision;
     offer.selectionSignature = stableDigest({
@@ -1652,8 +1671,7 @@ function buildActionOffer(
         excludedCardUuids: [encounterCardId],
       },
       ...(action.effectKind === "gain-offered-card" && (action.count ?? 1) > 1
-        ? {
-          }
+        ? {}
         : {}),
     });
     if (selected === null) return null;
@@ -1688,7 +1706,9 @@ function buildActionOffer(
         scope: {
           journeySeed: journey.seed,
           siteUuid: site.id,
-          selectionKey: `${action.id}:replacement:${entry.entryId}`,
+          selectionKey: asSelectionKey(
+            `${action.id}:replacement:${entry.entryId}`,
+          ),
         },
         constraints: {
           predicate: action.predicate ?? "character",
@@ -1700,7 +1720,7 @@ function buildActionOffer(
       if (selected === null) continue;
       const replacement = selected.bindings.cardUuids[0];
       if (replacement !== undefined) {
-        offer.replacementCardIdByEntryId[entry.entryId] = replacement;
+        offer.replacementCardIdByEntryId[entry.entryId] = asCardId(replacement);
         selections.push(selected);
       }
     }
@@ -1718,7 +1738,7 @@ function buildActionOffer(
 }
 
 function explorationEncounterSignature(
-  cardId: string,
+  cardId: CardId,
   actionOffers: readonly ExplorationActionOfferRuntime[],
 ): string {
   return stableDigest({
@@ -1748,7 +1768,7 @@ export function buildLegacyExplorationRuntime(
   site: SiteState,
   content: JourneyContent,
   rng: () => number,
-  encounterCardId?: string | null,
+  encounterCardId?: CardId | null,
 ): ExplorationSiteRuntime | null {
   if (content.exploration === undefined) return null;
   const availableEncounters = content.exploration.encounters.filter(
@@ -1791,7 +1811,7 @@ export function buildExplorationRuntime(
   site: SiteState,
   content: JourneyContent,
   _rng: () => number,
-  encounterCardId?: string | null,
+  encounterCardId?: CardId | null,
 ): ExplorationSiteRuntime | null {
   if (content.exploration === undefined) return null;
   const availableEncounters = content.exploration.encounters.filter(
@@ -1821,7 +1841,7 @@ export function buildExplorationRuntime(
     scope: {
       journeySeed: journey.seed,
       siteUuid: site.id,
-      selectionKey: "exploration-encounter",
+      selectionKey: asSelectionKey("exploration-encounter"),
     },
     count: 1,
   };
@@ -1898,7 +1918,7 @@ function hasExactSelectionKeys(
 function cardForEntry(
   journey: JourneyState,
   content: JourneyContent,
-  entryId: string,
+  entryId: DeckEntryId,
 ): { entry: DeckEntry; card: CardData } | null {
   const entry = journey.deck.find((candidate) => candidate.entryId === entryId);
   if (entry === undefined) return null;
@@ -1914,14 +1934,14 @@ function cardForEntry(
 function cardIdForEntry(
   journey: JourneyState,
   content: JourneyContent,
-  entryId: string,
+  entryId: DeckEntryId,
 ): string | null {
   return cardForEntry(journey, content, entryId)?.card.id ?? null;
 }
 
 function addCardEffect(
   content: JourneyContent,
-  cardId: string,
+  cardId: CardId,
 ): JourneyRewardEffect | null {
   const card = idIndex(content).get(cardId.toLowerCase());
   if (card === undefined) return null;
@@ -1935,8 +1955,8 @@ function addCardEffect(
 function deckTarget(
   journey: JourneyState,
   content: JourneyContent,
-  entryId: string,
-): { entryId: string; cardUuid: string; cardNumber: number } | null {
+  entryId: DeckEntryId,
+): { entryId: DeckEntryId; cardUuid: CardId; cardNumber: number } | null {
   const entry = journey.deck.find((candidate) => candidate.entryId === entryId);
   if (entry === undefined) return null;
   const card = content.cardDatabase.get(entry.cardNumber);
@@ -1947,7 +1967,7 @@ function deckTarget(
 
 function dreamsignForId(
   content: JourneyContent,
-  dreamsignId: string,
+  dreamsignId: DreamsignId,
 ): Dreamsign | null {
   const custom = content.exploration?.customDreamsigns.find(
     (dreamsign) => dreamsign.id?.toLowerCase() === dreamsignId.toLowerCase(),
@@ -1961,8 +1981,8 @@ function dreamsignForId(
 function addDreamsign(
   journey: JourneyState,
   content: JourneyContent,
-  dreamsignId: string,
-  replacedDreamsignId: string | null,
+  dreamsignId: DreamsignId,
+  replacedDreamsignId: DreamsignId | null,
 ): JourneyState | null {
   const reward = dreamsignForId(content, dreamsignId);
   if (reward === null) return null;
@@ -1989,9 +2009,11 @@ function addDreamsign(
   };
 }
 
-function typeChange(subtype: string) {
+function typeChange(subtype: string): CardTypeChange {
   return {
-    predicateId: `exploration:subtype:${subtype.toLowerCase().split(" ").join("-")}`,
+    predicateId: asCardTypeChangePredicateId(
+      `exploration:subtype:${subtype.toLowerCase().split(" ").join("-")}`,
+    ),
     cardType: "Character" as const,
     subtype,
     label: subtype,
@@ -2000,16 +2022,18 @@ function typeChange(subtype: string) {
 
 function cardTypeChange(cardType: CardType): CardTypeChange {
   return {
-    predicateId: `exploration:card-type:${cardType.toLowerCase()}`,
+    predicateId: asCardTypeChangePredicateId(
+      `exploration:card-type:${cardType.toLowerCase()}`,
+    ),
     cardType,
     subtype: "",
     label: cardType,
   };
 }
 
-function baseResolution(actionId: string): ExplorationResolution {
+function baseResolution(actionId: ExplorationActionId): ExplorationResolution {
   return {
-    actionId,
+    actionId: asExplorationActionId(actionId),
     selection: {},
     gainedCardIds: [],
     gainedEntryIds: [],
@@ -2056,7 +2080,7 @@ function validEssenceMutationOffer(input: {
   offer: ExplorationActionOfferRuntime;
   journey: JourneyState;
   site: SiteState;
-  encounterCardId: string;
+  encounterCardId: CardId;
   content: JourneyContent;
 }): boolean {
   const { action, offer, journey, site, encounterCardId, content } = input;
@@ -2139,7 +2163,7 @@ function validShopPurchaseModifierOffer(
 
 function withResolution(
   journey: JourneyState,
-  siteId: string,
+  siteId: SiteId,
   runtime: ExplorationSiteRuntime,
   resolution: ExplorationResolution,
 ): JourneyState {
@@ -2210,7 +2234,7 @@ export function resolveExplorationChoice(input: {
       return null;
     }
   }
-  const result = baseResolution(actionId);
+  const result = baseResolution(asExplorationActionId(actionId));
   if (runtime.selectionRulesVersion !== undefined) {
     result.selectionRulesVersion = runtime.selectionRulesVersion;
     result.selectionContentRevision =
@@ -2235,7 +2259,7 @@ export function resolveExplorationChoice(input: {
     return true;
   };
 
-  const addCardIds = (cardIds: readonly string[]): boolean => {
+  const addCardIds = (cardIds: readonly CardId[]): boolean => {
     const beforeEntryIds = new Set(next.deck.map((entry) => entry.entryId));
     const children = cardIds.map((cardId) => addCardEffect(content, cardId));
     if (children.some((child) => child === null)) return false;
@@ -2255,7 +2279,7 @@ export function resolveExplorationChoice(input: {
     return true;
   };
 
-  const duplicateEntry = (entryId: string, count: number): boolean => {
+  const duplicateEntry = (entryId: DeckEntryId, count: number): boolean => {
     if (!Number.isInteger(count) || count <= 0) return false;
     const target = deckTarget(next, content, entryId);
     const cardId = cardIdForEntry(next, content, entryId);
@@ -2272,7 +2296,9 @@ export function resolveExplorationChoice(input: {
     ) {
       return false;
     }
-    result.gainedCardIds.push(...Array.from({ length: count }, () => cardId));
+    result.gainedCardIds.push(
+      ...Array.from({ length: count }, () => cardId).map(asCardId),
+    );
     result.gainedEntryIds?.push(
       ...next.deck
         .filter((entry) => !beforeEntryIds.has(entry.entryId))
@@ -2311,8 +2337,8 @@ export function resolveExplorationChoice(input: {
 
     const validateTransfigurationTarget = (
       target: {
-        entryId: string;
-        cardId: string;
+        entryId: DeckEntryId;
+        cardId: CardId;
         transfiguration: TransfigurationType;
       },
       allowPerfected: boolean,
@@ -2759,7 +2785,7 @@ export function resolveExplorationChoice(input: {
       offer.selectionRulesVersion !== SELECTION_RULES_VERSION ||
       offer.selectionContentRevision !==
         expectedPreparation.selectionContentRevision ||
-      offer.selectionKey !== action.id ||
+      offer.selectionKey !== asSelectionKey(action.id) ||
       offer.selectionSignature !== preparation.planSignature ||
       !equalStrings(offer.offeredDeckEntryIds ?? [], []) ||
       stableDigest(offer.replacementCardIdByEntryId) !== stableDigest({}) ||
@@ -2791,7 +2817,7 @@ export function resolveExplorationChoice(input: {
         entry === undefined
           ? undefined
           : content.cardDatabase.get(entry.cardNumber);
-      const sourceTarget = deckTarget(journey, content, entryId);
+      const sourceTarget = deckTarget(journey, content, asDeckEntryId(entryId));
       const replacement =
         binding === undefined
           ? null
@@ -2826,8 +2852,8 @@ export function resolveExplorationChoice(input: {
 
     result.selection = { entryIds };
     result.resolvedPredicate = action.predicate;
-    result.affectedEntryIds.push(...entryIds);
-    result.purgedEntryIds?.push(...entryIds);
+    result.affectedEntryIds.push(...entryIds.map(asDeckEntryId));
+    result.purgedEntryIds?.push(...entryIds.map(asDeckEntryId));
     result.purgedEntrySnapshots?.push(...valid.map(({ entry }) => entry));
     result.purgedCardIds.push(
       ...valid.map(({ binding }) => binding.sourceCardId),
@@ -3195,7 +3221,7 @@ export function resolveExplorationChoice(input: {
       offer.selectionRulesVersion !== SELECTION_RULES_VERSION ||
       offer.selectionContentRevision !==
         expectedPreparation.selectionContentRevision ||
-      offer.selectionKey !== action.id ||
+      offer.selectionKey !== asSelectionKey(action.id) ||
       offer.selectionSignature !== preparation.planSignature ||
       !equalStrings(offer.offeredDeckEntryIds ?? [], []) ||
       stableDigest(offer.transfigurationByEntryId) !==
@@ -3216,8 +3242,8 @@ export function resolveExplorationChoice(input: {
     }
 
     let requestedTargets: Array<{
-      entryId: string;
-      cardId: string;
+      entryId: DeckEntryId;
+      cardId: CardId;
       transfiguration: (typeof preparation.targets)[number]["transfiguration"];
     }>;
     if (action.effectKind === "transfigure-selected") {
@@ -3242,7 +3268,11 @@ export function resolveExplorationChoice(input: {
         );
         return binding === undefined || transfiguration === undefined
           ? null
-          : { entryId, cardId: binding.cardId, transfiguration };
+          : {
+              entryId: asDeckEntryId(entryId),
+              cardId: binding.cardId,
+              transfiguration,
+            };
       });
       if (selected.some((target) => target === null)) return null;
       requestedTargets = selected as typeof requestedTargets;
@@ -3267,7 +3297,7 @@ export function resolveExplorationChoice(input: {
           !binding.transfigurations.includes(fixedTransfiguration)
           ? null
           : {
-              entryId,
+              entryId: asDeckEntryId(entryId),
               cardId: binding.cardId,
               transfiguration: fixedTransfiguration,
             };
@@ -3370,7 +3400,7 @@ export function resolveExplorationChoice(input: {
       offer.selectionRulesVersion !== SELECTION_RULES_VERSION ||
       offer.selectionContentRevision !==
         expectedPreparation.selectionContentRevision ||
-      offer.selectionKey !== action.id ||
+      offer.selectionKey !== asSelectionKey(action.id) ||
       offer.selectionSignature !== preparation.planSignature ||
       !equalStrings(offer.offeredDeckEntryIds ?? [], []) ||
       stableDigest(offer.transfigurationByEntryId) !==
@@ -3474,7 +3504,7 @@ export function resolveExplorationChoice(input: {
       offer.selectionRulesVersion !== SELECTION_RULES_VERSION ||
       offer.selectionContentRevision !==
         expectedPreparation.selectionContentRevision ||
-      offer.selectionKey !== action.id ||
+      offer.selectionKey !== asSelectionKey(action.id) ||
       offer.selectionSignature !== preparation.planSignature ||
       !equalStrings(
         offer.offeredDeckEntryIds ?? [],
@@ -3528,7 +3558,7 @@ export function resolveExplorationChoice(input: {
         target !== null,
     );
     const validReplacementCardIds = replacementCardIds.filter(
-      (cardId): cardId is string => cardId !== undefined,
+      (cardId): cardId is CardId => cardId !== undefined,
     );
     const validReplacementEffects = replacementEffects.filter(
       (effect): effect is JourneyRewardEffect => effect !== null,
@@ -3615,12 +3645,12 @@ export function resolveExplorationChoice(input: {
       offer.selectionPolicyId !== expectedPolicy ||
       offer.selectionRulesVersion !== SELECTION_RULES_VERSION ||
       offer.selectionContentRevision !== expectedRevision ||
-      offer.selectionKey !== action.id ||
+      offer.selectionKey !== asSelectionKey(action.id) ||
       offer.selectionSignature === undefined ||
       offer.selectionTrace === undefined ||
       offer.selectionTrace.mechanicId !== "gain-dreamsign" ||
       offer.selectionTrace.policyId !== expectedPolicy ||
-      offer.selectionTrace.selectionKey !== action.id ||
+      offer.selectionTrace.selectionKey !== asSelectionKey(action.id) ||
       offer.selectionTrace.selectionContentRevision !== expectedRevision ||
       !equalStrings(offer.offeredDreamsignIds ?? [], expectedVisibleOffers)
     ) {
@@ -3685,13 +3715,17 @@ export function resolveExplorationChoice(input: {
       const replacedDreamsignId = stringValue(selection.replacedDreamsignId);
       if (offeredDreamsignId === null) return null;
       result.selection = {
-        offeredDreamsignId,
-        ...(replacedDreamsignId === null ? {} : { replacedDreamsignId }),
+        offeredDreamsignId: asDreamsignId(offeredDreamsignId),
+        ...(replacedDreamsignId === null
+          ? {}
+          : { replacedDreamsignId: asDreamsignId(replacedDreamsignId) }),
       };
     } else if (action.effectKind === "gain-nightmare-and-dreamsign") {
       const replacedDreamsignId = stringValue(selection.replacedDreamsignId);
       result.selection =
-        replacedDreamsignId === null ? {} : { replacedDreamsignId };
+        replacedDreamsignId === null
+          ? {}
+          : { replacedDreamsignId: asDreamsignId(replacedDreamsignId) };
     } else if (
       action.effectKind === "purge-selected-dreamsign-and-gain-random"
     ) {
@@ -3856,12 +3890,12 @@ export function resolveExplorationChoice(input: {
     case "copy-selected-card": {
       const entryIds = stringArray(selection.entryIds);
       if (entryIds === null || entryIds.length !== 1) return null;
-      const selected = cardForEntry(next, content, entryIds[0]);
+      const selected = cardForEntry(next, content, asDeckEntryId(entryIds[0]));
       if (
         selected === null ||
         (action.predicate !== undefined &&
           !matchesPredicate(selected.card, action.predicate, content)) ||
-        !duplicateEntry(entryIds[0], action.count ?? 1)
+        !duplicateEntry(asDeckEntryId(entryIds[0]), action.count ?? 1)
       ) {
         return null;
       }
@@ -3880,7 +3914,7 @@ export function resolveExplorationChoice(input: {
         return null;
       }
       for (const entryId of entryIds) {
-        if (!duplicateEntry(entryId, 1)) return null;
+        if (!duplicateEntry(asDeckEntryId(entryId), 1)) return null;
       }
       result.selection = { entryIds };
       break;
@@ -3890,8 +3924,10 @@ export function resolveExplorationChoice(input: {
       if (
         entryIds === null ||
         entryIds.length !== 1 ||
-        !(offer.offeredDeckEntryIds ?? []).includes(entryIds[0]) ||
-        !duplicateEntry(entryIds[0], 1)
+        !(offer.offeredDeckEntryIds ?? []).includes(
+          asDeckEntryId(entryIds[0]),
+        ) ||
+        !duplicateEntry(asDeckEntryId(entryIds[0]), 1)
       ) {
         return null;
       }
@@ -3968,7 +4004,9 @@ export function resolveExplorationChoice(input: {
       const dreamAvatarId = stringValue(selection.dreamAvatarId);
       if (
         dreamAvatarId === null ||
-        !(offer.offeredDreamAvatarIds ?? []).includes(dreamAvatarId)
+        !(offer.offeredDreamAvatarIds ?? []).includes(
+          asDreamAvatarId(dreamAvatarId),
+        )
       ) {
         return null;
       }
@@ -4064,11 +4102,23 @@ export function resolveExplorationChoice(input: {
         return null;
       const beforeEntryIds = new Set(next.deck.map((entry) => entry.entryId));
       const purged = next.deck.find((entry) => entry.entryId === purgeEntryId);
-      const purgeCardId = cardIdForEntry(next, content, purgeEntryId);
+      const purgeCardId = cardIdForEntry(
+        next,
+        content,
+        asDeckEntryId(purgeEntryId),
+      );
       const copied = next.deck.find((entry) => entry.entryId === copyEntryId);
-      const copiedCardId = cardIdForEntry(next, content, copyEntryId);
-      const purgeTarget = deckTarget(next, content, purgeEntryId);
-      const copyTarget = deckTarget(next, content, copyEntryId);
+      const copiedCardId = cardIdForEntry(
+        next,
+        content,
+        asDeckEntryId(copyEntryId),
+      );
+      const purgeTarget = deckTarget(
+        next,
+        content,
+        asDeckEntryId(purgeEntryId),
+      );
+      const copyTarget = deckTarget(next, content, asDeckEntryId(copyEntryId));
       if (
         purged === undefined ||
         purgeCardId === null ||
@@ -4085,16 +4135,16 @@ export function resolveExplorationChoice(input: {
         })
       )
         return null;
-      result.purgedCardIds.push(purgeCardId);
-      result.purgedEntryIds?.push(purgeEntryId);
+      result.purgedCardIds.push(asCardId(purgeCardId));
+      result.purgedEntryIds?.push(asDeckEntryId(purgeEntryId));
       result.purgedEntrySnapshots?.push(purged);
-      result.gainedCardIds.push(copiedCardId);
+      result.gainedCardIds.push(asCardId(copiedCardId));
       result.gainedEntryIds?.push(
         ...next.deck
           .filter((entry) => !beforeEntryIds.has(entry.entryId))
           .map((entry) => entry.entryId),
       );
-      result.affectedEntryIds.push(copyEntryId);
+      result.affectedEntryIds.push(asDeckEntryId(copyEntryId));
       result.selection = { purgeEntryId, copyEntryId };
       break;
     }
@@ -4104,14 +4154,18 @@ export function resolveExplorationChoice(input: {
         next,
         content,
         action.dreamsignId,
-        stringValue(selection.replacedDreamsignId),
+        dreamsignIdFromUnknown(selection.replacedDreamsignId),
       );
       if (added === null) return null;
       next = added;
       result.gainedDreamsignIds.push(action.dreamsignId);
-      const replacedDreamsignId = stringValue(selection.replacedDreamsignId);
+      const replacedDreamsignId = dreamsignIdFromUnknown(
+        selection.replacedDreamsignId,
+      );
       result.selection =
-        replacedDreamsignId === null ? {} : { replacedDreamsignId };
+        replacedDreamsignId === null
+          ? {}
+          : { replacedDreamsignId: asDreamsignId(replacedDreamsignId) };
       break;
     }
     case "gain-random-dreamsign": {
@@ -4121,14 +4175,18 @@ export function resolveExplorationChoice(input: {
         next,
         content,
         dreamsignId,
-        stringValue(selection.replacedDreamsignId),
+        dreamsignIdFromUnknown(selection.replacedDreamsignId),
       );
       if (added === null) return null;
       next = added;
       result.gainedDreamsignIds.push(dreamsignId);
-      const replacedDreamsignId = stringValue(selection.replacedDreamsignId);
+      const replacedDreamsignId = dreamsignIdFromUnknown(
+        selection.replacedDreamsignId,
+      );
       result.selection =
-        replacedDreamsignId === null ? {} : { replacedDreamsignId };
+        replacedDreamsignId === null
+          ? {}
+          : { replacedDreamsignId: asDreamsignId(replacedDreamsignId) };
       break;
     }
     case "gain-card": {
@@ -4142,10 +4200,10 @@ export function resolveExplorationChoice(input: {
       if (
         cardIds === null ||
         cardIds.length !== 1 ||
-        !offer.offeredCardIds.includes(cardIds[0]) ||
+        !offer.offeredCardIds.includes(asCardId(cardIds[0])) ||
         !Number.isInteger(copies) ||
         copies <= 0 ||
-        !addCardIds(Array.from({ length: copies }, () => cardIds[0]))
+        !addCardIds(Array.from({ length: copies }, () => asCardId(cardIds[0])))
       ) {
         return null;
       }
@@ -4157,7 +4215,7 @@ export function resolveExplorationChoice(input: {
       const required = action.count ?? 1;
       if (required !== 1 || entryIds === null || entryIds.length !== 1)
         return null;
-      const selected = cardForEntry(next, content, entryIds[0]);
+      const selected = cardForEntry(next, content, asDeckEntryId(entryIds[0]));
       if (selected === null) return null;
       if (
         action.predicate !== undefined &&
@@ -4169,7 +4227,7 @@ export function resolveExplorationChoice(input: {
         selected.card,
         selected.entry.transfiguration,
       ).find((form) => form.type === selection.transfiguration)?.type;
-      const target = deckTarget(next, content, entryIds[0]);
+      const target = deckTarget(next, content, asDeckEntryId(entryIds[0]));
       if (
         transfiguration === undefined ||
         target === null ||
@@ -4180,7 +4238,7 @@ export function resolveExplorationChoice(input: {
         })
       )
         return null;
-      result.affectedEntryIds.push(entryIds[0]);
+      result.affectedEntryIds.push(asDeckEntryId(entryIds[0]));
       result.chosenTransfiguration = transfiguration;
       break;
     }
@@ -4197,7 +4255,7 @@ export function resolveExplorationChoice(input: {
         return null;
       const predicate = action.predicate;
       const selected = entryIds.map((entryId) =>
-        cardForEntry(next, content, entryId),
+        cardForEntry(next, content, asDeckEntryId(entryId)),
       );
       if (
         selected.some(
@@ -4209,7 +4267,7 @@ export function resolveExplorationChoice(input: {
       )
         return null;
       const targets = entryIds.map((entryId) =>
-        deckTarget(next, content, entryId),
+        deckTarget(next, content, asDeckEntryId(entryId)),
       );
       if (
         targets.some((target) => target === null) ||
@@ -4224,7 +4282,7 @@ export function resolveExplorationChoice(input: {
       result.purgedCardIds.push(
         ...selected.map((entry) => (entry as { card: CardData }).card.id),
       );
-      result.purgedEntryIds?.push(...entryIds);
+      result.purgedEntryIds?.push(...entryIds.map(asDeckEntryId));
       result.purgedEntrySnapshots?.push(
         ...selected.map((entry) => (entry as { entry: DeckEntry }).entry),
       );
@@ -4244,12 +4302,14 @@ export function resolveExplorationChoice(input: {
       if (
         cardIds === null ||
         cardIds.length !== 1 ||
-        !offer.offeredCardIds.includes(cardIds[0])
+        !offer.offeredCardIds.includes(asCardId(cardIds[0]))
       )
         return null;
       const copies = action.count ?? 1;
       if (!Number.isInteger(copies) || copies <= 0) return null;
-      if (!addCardIds(Array.from({ length: copies }, () => cardIds[0])))
+      if (
+        !addCardIds(Array.from({ length: copies }, () => asCardId(cardIds[0])))
+      )
         return null;
       result.selection = { cardIds };
       break;
@@ -4259,7 +4319,7 @@ export function resolveExplorationChoice(input: {
       if (
         cardIds === null ||
         cardIds.length !== 1 ||
-        !offer.offeredCardIds.includes(cardIds[0])
+        !offer.offeredCardIds.includes(asCardId(cardIds[0]))
       ) {
         return null;
       }
@@ -4304,7 +4364,7 @@ export function resolveExplorationChoice(input: {
         offer.canonicalMechanicId !== "add-site" ||
         offer.selectionPolicyId !== "fixed" ||
         offer.selectionRulesVersion !== SELECTION_RULES_VERSION ||
-        offer.selectionKey !== action.id ||
+        offer.selectionKey !== asSelectionKey(action.id) ||
         offer.selectionTrace !== undefined ||
         offer.selectionTraces !== undefined ||
         offer.offeredSiteType !== undefined
@@ -4319,7 +4379,7 @@ export function resolveExplorationChoice(input: {
       const expectedPreparation = prepareExplorationSiteInsertion({
         journey,
         sourceSite: site,
-        sourceActionId: action.id,
+        sourceActionId: asExplorationActionId(action.id),
         encounterCardId: runtime.encounterCardId,
         siteType: action.siteType,
         selectionRulesVersion: SELECTION_RULES_VERSION,
@@ -4371,7 +4431,7 @@ export function resolveExplorationChoice(input: {
         offer.canonicalMechanicId !== "add-site" ||
         offer.selectionPolicyId !== "site-uniform" ||
         offer.selectionRulesVersion !== SELECTION_RULES_VERSION ||
-        offer.selectionKey !== action.id ||
+        offer.selectionKey !== asSelectionKey(action.id) ||
         offer.selectionTrace === undefined ||
         offer.selectionTraces !== undefined ||
         offer.offeredSiteType !== undefined ||
@@ -4390,7 +4450,7 @@ export function resolveExplorationChoice(input: {
         scope: {
           journeySeed: journey.seed,
           siteUuid: site.id,
-          selectionKey: action.id,
+          selectionKey: asSelectionKey(action.id),
         },
         count: action.offerCount,
         constraints: {
@@ -4405,7 +4465,7 @@ export function resolveExplorationChoice(input: {
       const expectedPreparation = prepareExplorationSiteTypeChoice({
         journey,
         sourceSite: site,
-        sourceActionId: action.id,
+        sourceActionId: asExplorationActionId(action.id),
         encounterCardId: runtime.encounterCardId,
         siteTypes: selectedTypes,
         selectorSignature: selected.signature,
@@ -4477,22 +4537,22 @@ export function resolveExplorationChoice(input: {
         return null;
       result.purgedDreamsignIds = [
         ...(result.purgedDreamsignIds ?? []),
-        dreamsignId,
+        asDreamsignId(dreamsignId),
       ];
       result.essenceGained = action.essence;
-      result.selection = { dreamsignId };
+      result.selection = { dreamsignId: asDreamsignId(dreamsignId) };
       break;
     }
     case "purge-for-essence": {
       const entryIds = stringArray(selection.entryIds);
       if (entryIds === null || entryIds.length !== 1) return null;
-      const selected = cardForEntry(next, content, entryIds[0]);
+      const selected = cardForEntry(next, content, asDeckEntryId(entryIds[0]));
       if (selected === null) return null;
       const essenceGained =
         Math.max(0, selected.card.spark ?? 0) *
         (action.essencePerSpark ??
           input.content.economyData.exploration.defaultEssencePerSpark);
-      const target = deckTarget(next, content, entryIds[0]);
+      const target = deckTarget(next, content, asDeckEntryId(entryIds[0]));
       if (
         target === null ||
         !applyReward({
@@ -4505,7 +4565,7 @@ export function resolveExplorationChoice(input: {
       )
         return null;
       result.purgedCardIds.push(selected.card.id);
-      result.purgedEntryIds?.push(entryIds[0]);
+      result.purgedEntryIds?.push(asDeckEntryId(entryIds[0]));
       result.purgedEntrySnapshots?.push(selected.entry);
       result.essenceGained = essenceGained;
       result.selection = { entryIds };
@@ -4519,7 +4579,7 @@ export function resolveExplorationChoice(input: {
         action.subtype === undefined
       )
         return null;
-      const selected = cardForEntry(next, content, entryIds[0]);
+      const selected = cardForEntry(next, content, asDeckEntryId(entryIds[0]));
       if (
         selected === null ||
         selected.card.cardType !== "Character" ||
@@ -4528,7 +4588,7 @@ export function resolveExplorationChoice(input: {
           !matchesPredicate(selected.card, action.predicate, content))
       )
         return null;
-      const target = deckTarget(next, content, entryIds[0]);
+      const target = deckTarget(next, content, asDeckEntryId(entryIds[0]));
       if (
         target === null ||
         !applyReward({
@@ -4538,7 +4598,7 @@ export function resolveExplorationChoice(input: {
         })
       )
         return null;
-      result.affectedEntryIds.push(entryIds[0]);
+      result.affectedEntryIds.push(asDeckEntryId(entryIds[0]));
       result.chosenSubtype = action.subtype;
       result.selection = { entryIds };
       break;
@@ -4556,8 +4616,8 @@ export function resolveExplorationChoice(input: {
       ) {
         return null;
       }
-      const selected = cardForEntry(next, content, entryIds[0]);
-      const target = deckTarget(next, content, entryIds[0]);
+      const selected = cardForEntry(next, content, asDeckEntryId(entryIds[0]));
+      const target = deckTarget(next, content, asDeckEntryId(entryIds[0]));
       if (
         selected === null ||
         target === null ||
@@ -4575,11 +4635,11 @@ export function resolveExplorationChoice(input: {
       ) {
         return null;
       }
-      result.affectedEntryIds.push(entryIds[0]);
+      result.affectedEntryIds.push(asDeckEntryId(entryIds[0]));
       result.resolvedCardType = cardType;
       result.cardTypeChanges = [
         {
-          entryId: entryIds[0],
+          entryId: asDeckEntryId(entryIds[0]),
           cardId: selected.card.id,
           beforeCardType: selected.card.cardType,
           afterCardType: cardType,
@@ -4622,10 +4682,12 @@ export function resolveExplorationChoice(input: {
       const cardIds = stringArray(selection.cardIds);
       if (
         cardIds === null ||
-        cardIds.some((cardId) => !offer.offeredCardIds.includes(cardId))
+        cardIds.some(
+          (cardId) => !offer.offeredCardIds.includes(asCardId(cardId)),
+        )
       )
         return null;
-      if (!addCardIds(cardIds)) return null;
+      if (!addCardIds(cardIds.map(asCardId))) return null;
       result.selection = { cardIds };
       break;
     }
@@ -4638,8 +4700,8 @@ export function resolveExplorationChoice(input: {
       ) {
         return null;
       }
-      const selected = cardForEntry(next, content, entryIds[0]);
-      const target = deckTarget(next, content, entryIds[0]);
+      const selected = cardForEntry(next, content, asDeckEntryId(entryIds[0]));
+      const target = deckTarget(next, content, asDeckEntryId(entryIds[0]));
       const replacement = addCardEffect(content, action.cardId);
       if (
         selected === null ||
@@ -4660,7 +4722,7 @@ export function resolveExplorationChoice(input: {
         return null;
       }
       result.purgedCardIds.push(selected.card.id);
-      result.purgedEntryIds?.push(entryIds[0]);
+      result.purgedEntryIds?.push(asDeckEntryId(entryIds[0]));
       result.gainedCardIds.push(action.cardId);
       result.gainedEntryIds?.push(
         ...next.deck
@@ -4674,8 +4736,12 @@ export function resolveExplorationChoice(input: {
       const entryIds = stringArray(selection.entryIds);
       if (entryIds === null || entryIds.length !== 1) return null;
       const replacementId = offer.replacementCardIdByEntryId[entryIds[0]];
-      const purgedCardId = cardIdForEntry(next, content, entryIds[0]);
-      const target = deckTarget(next, content, entryIds[0]);
+      const purgedCardId = cardIdForEntry(
+        next,
+        content,
+        asDeckEntryId(entryIds[0]),
+      );
+      const target = deckTarget(next, content, asDeckEntryId(entryIds[0]));
       const replacement =
         replacementId === undefined
           ? null
@@ -4691,7 +4757,7 @@ export function resolveExplorationChoice(input: {
         })
       )
         return null;
-      result.purgedCardIds.push(purgedCardId);
+      result.purgedCardIds.push(asCardId(purgedCardId));
       result.gainedCardIds.push(replacementId);
       break;
     }
@@ -4731,7 +4797,7 @@ export function resolveExplorationChoice(input: {
         action.transfiguration === undefined
       )
         return null;
-      const selected = cardForEntry(next, content, entryIds[0]);
+      const selected = cardForEntry(next, content, asDeckEntryId(entryIds[0]));
       if (
         selected === null ||
         selected.entry.transfiguration !== null ||
@@ -4744,7 +4810,7 @@ export function resolveExplorationChoice(input: {
         ).some((form) => form.type === action.transfiguration)
       )
         return null;
-      const target = deckTarget(next, content, entryIds[0]);
+      const target = deckTarget(next, content, asDeckEntryId(entryIds[0]));
       if (
         target === null ||
         !applyReward({
@@ -4754,7 +4820,7 @@ export function resolveExplorationChoice(input: {
         })
       )
         return null;
-      result.affectedEntryIds.push(entryIds[0]);
+      result.affectedEntryIds.push(asDeckEntryId(entryIds[0]));
       result.chosenTransfiguration = action.transfiguration;
       result.selection = { entryIds };
       break;

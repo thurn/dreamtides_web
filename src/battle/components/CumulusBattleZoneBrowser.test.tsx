@@ -14,15 +14,19 @@ import {
   makeBattleTestState,
 } from "../test-support";
 import { CumulusBattleZoneBrowser } from "./CumulusBattleZoneBrowser";
+import { asBattleCardId } from "../../types/identifiers";
+import { asBattleEntryKey } from "../../types/identifiers";
 
 function createState() {
-  return createInitialBattleState(createTestBattleInit({
-    battleEntryKey: "site-7::2::dreamscape-2",
-    site: makeBattleTestSite(),
-    state: makeBattleTestState(),
-    cardDatabase: makeBattleTestCardDatabase(),
-    dreamAvatars: makeBattleTestDreamAvatars(),
-  }));
+  return createInitialBattleState(
+    createTestBattleInit({
+      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
+      site: makeBattleTestSite(),
+      state: makeBattleTestState(),
+      cardDatabase: makeBattleTestCardDatabase(),
+      dreamAvatars: makeBattleTestDreamAvatars(),
+    }),
+  );
 }
 
 function mount(
@@ -108,7 +112,9 @@ describe("CumulusBattleZoneBrowser", () => {
         '[data-testid="card-zone-browser-search"]',
       )?.placeholder,
     ).toBe("Search by name…");
-    expect(container.querySelector('button[aria-label="Sort zone cards"]')).not.toBeNull();
+    expect(
+      container.querySelector('button[aria-label="Sort zone cards"]'),
+    ).not.toBeNull();
     expect(
       container.querySelector('button[aria-label="Filter zone cards by type"]'),
     ).not.toBeNull();
@@ -138,7 +144,9 @@ describe("CumulusBattleZoneBrowser", () => {
     });
 
     expect(
-      mounted.container.querySelector('[data-card-zone-browser-owner="opponent"]'),
+      mounted.container.querySelector(
+        '[data-card-zone-browser-owner="opponent"]',
+      ),
     ).not.toBeNull();
     const [viewerTab, opponentTab] = Array.from(
       mounted.container.querySelectorAll<HTMLButtonElement>('[role="tab"]'),
@@ -169,7 +177,8 @@ describe("CumulusBattleZoneBrowser", () => {
   it("searches the current zone by card name", () => {
     const mounted = mount("deck");
     const firstCardId = mounted.state.sides.player.deck[0];
-    const firstName = mounted.state.cardInstances[firstCardId]?.definition.name ?? "";
+    const firstName =
+      mounted.state.cardInstances[firstCardId]?.definition.name ?? "";
     const input = mounted.container.querySelector<HTMLInputElement>(
       '[data-testid="card-zone-browser-search"]',
     );
@@ -200,7 +209,7 @@ describe("CumulusBattleZoneBrowser", () => {
         state.sides.player.hand = state.sides.player.hand.filter(
           (cardId) => cardId !== zoneCardId,
         );
-        state.sides.player[zone] = [zoneCardId];
+        state.sides.player[zone] = [asBattleCardId(zoneCardId)];
       });
       const entry = mounted.container.querySelector<HTMLElement>(
         `[data-gallery-entry-id="${zoneCardId}"]`,
@@ -208,14 +217,18 @@ describe("CumulusBattleZoneBrowser", () => {
 
       expect(mounted.container.textContent).not.toContain("Reveal Top");
       if (zone === "void") {
-        expect(mounted.container.querySelector("input[type=search]")).toBeNull();
+        expect(
+          mounted.container.querySelector("input[type=search]"),
+        ).toBeNull();
         expect(
           mounted.container.querySelector(
             'button[aria-label="Filter zone cards by type"]',
           ),
         ).toBeNull();
       } else {
-        expect(mounted.container.querySelector("input[type=search]")).not.toBeNull();
+        expect(
+          mounted.container.querySelector("input[type=search]"),
+        ).not.toBeNull();
       }
       expect(
         mounted.container.querySelector('button[aria-label="Sort zone cards"]'),
@@ -223,14 +236,18 @@ describe("CumulusBattleZoneBrowser", () => {
       expect(entry?.draggable).toBe(true);
 
       act(() => {
-        entry?.dispatchEvent(new Event("dragstart", {
-          bubbles: true,
-          cancelable: true,
-        }));
-        entry?.dispatchEvent(new MouseEvent("contextmenu", {
-          bubbles: true,
-          cancelable: true,
-        }));
+        entry?.dispatchEvent(
+          new Event("dragstart", {
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
+        entry?.dispatchEvent(
+          new MouseEvent("contextmenu", {
+            bubbles: true,
+            cancelable: true,
+          }),
+        );
       });
 
       expect(mounted.onCardDragStart).toHaveBeenCalledWith(
@@ -265,7 +282,7 @@ describe("CumulusBattleZoneBrowser", () => {
         state.sides.player.hand = state.sides.player.hand.filter(
           (cardId) => cardId !== zoneCardId,
         );
-        state.sides.player[zone] = [zoneCardId];
+        state.sides.player[zone] = [asBattleCardId(zoneCardId)];
       });
       const card = mounted.container.querySelector<HTMLElement>(
         `[data-gallery-entry-id="${zoneCardId}"] [data-game-card-source]`,
@@ -297,7 +314,7 @@ describe("CumulusBattleZoneBrowser", () => {
       removeEventListener: vi.fn(),
     });
     const mounted = mount("void", (state) => {
-      const voidCardId = state.sides.player.hand[0] ?? "";
+      const voidCardId = state.sides.player.hand[0] ?? asBattleCardId("");
       state.sides.player.hand = state.sides.player.hand.filter(
         (cardId) => cardId !== voidCardId,
       );
@@ -310,25 +327,31 @@ describe("CumulusBattleZoneBrowser", () => {
 
     expect(entry?.draggable).toBe(false);
     act(() => {
-      source?.dispatchEvent(new PointerEvent("pointerdown", {
-        bubbles: true,
-        pointerType: "touch",
-        pointerId: 7,
-        clientX: 100,
-        clientY: 200,
-      }));
+      source?.dispatchEvent(
+        new PointerEvent("pointerdown", {
+          bubbles: true,
+          pointerType: "touch",
+          pointerId: 7,
+          clientX: 100,
+          clientY: 200,
+        }),
+      );
       vi.advanceTimersByTime(1_000);
     });
 
     expect(source?.dataset.revealActive).toBe("true");
-    expect(document.querySelector("[data-cumulus-reveal-portal]")).not.toBeNull();
+    expect(
+      document.querySelector("[data-cumulus-reveal-portal]"),
+    ).not.toBeNull();
 
     act(() => {
-      source?.dispatchEvent(new PointerEvent("pointerup", {
-        bubbles: true,
-        pointerType: "touch",
-        pointerId: 7,
-      }));
+      source?.dispatchEvent(
+        new PointerEvent("pointerup", {
+          bubbles: true,
+          pointerType: "touch",
+          pointerId: 7,
+        }),
+      );
       mounted.root.unmount();
     });
     vi.useRealTimers();

@@ -13,6 +13,9 @@ import {
   DuplicationSiteScreen,
   type DuplicationSiteView,
 } from "./DuplicationSiteScreen";
+import { asSiteId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 function makeCard(index: number): CardData {
   return {
@@ -33,13 +36,13 @@ function makeCard(index: number): CardData {
 
 function view(cardCount = 3, isEnhanced = false): DuplicationSiteView {
   return {
-    siteId: "duplication-site",
+    siteId: asSiteId("duplication-site"),
     scene: null,
     guide: {
       id: "deacon_holt",
       name: assertLocalized("Deacon Holt"),
       line: assertLocalized("Pick one, and I'll make another."),
-      art: artRef.dreamGuide("deacon_holt"),
+      art: artRef.dreamGuide(asGuideId("deacon_holt")),
     },
     ready: true,
     alreadyAccepted: false,
@@ -48,17 +51,14 @@ function view(cardCount = 3, isEnhanced = false): DuplicationSiteView {
       const index = offset + 1;
       const card = makeCard(index);
       return {
-        entryId: `entry-${String(index)}`,
+        entryId: asDeckEntryId(`entry-${String(index)}`),
         model: { cardId: card.id, displaySnapshot: card },
       };
     }),
   };
 }
 
-function stubMatchMedia(
-  desktop = true,
-  compactShowcase = false,
-): void {
+function stubMatchMedia(desktop = true, compactShowcase = false): void {
   window.matchMedia = (query: string) => ({
     matches: query.includes("prefers-reduced-motion")
       ? false
@@ -118,7 +118,9 @@ describe("DuplicationSiteScreen", () => {
 
     expect(container.querySelector("h2")?.textContent).toBe("Duplication");
     expect(
-      container.querySelectorAll('[data-testid^="cumulus-duplication-card-entry-"]'),
+      container.querySelectorAll(
+        '[data-testid^="cumulus-duplication-card-entry-"]',
+      ),
     ).toHaveLength(3);
     const gallery = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-duplication-card-gallery"]',
@@ -132,9 +134,7 @@ describe("DuplicationSiteScreen", () => {
         .siteLayoutComposition,
     ).toBe("content-led-gallery");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-site-layout-speech-anchor]",
-      ),
+      container.querySelector<HTMLElement>("[data-site-layout-speech-anchor]"),
     ).not.toBeNull();
     const initialPanelWidth = gallery?.style.width;
 
@@ -154,7 +154,9 @@ describe("DuplicationSiteScreen", () => {
     act(() => first?.click());
     expect(gallery?.style.width).toBe(initialPanelWidth);
     expect(confirm?.getAttribute("aria-disabled")).toBeNull();
-    expect(container.querySelector("[data-gallery-stacked-copy]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-gallery-stacked-copy]"),
+    ).not.toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-duplication-detail"]'),
     ).toBeNull();
@@ -191,8 +193,8 @@ describe("DuplicationSiteScreen", () => {
     );
     act(() => rightmost?.click());
     expect(
-      container.querySelector<HTMLElement>("[data-gallery-stacked-copy]")
-        ?.style.transform,
+      container.querySelector<HTMLElement>("[data-gallery-stacked-copy]")?.style
+        .transform,
     ).toContain("rotate(-3deg)");
     act(() => rightmost?.click());
     expect(confirm?.getAttribute("aria-disabled")).toBe("true");

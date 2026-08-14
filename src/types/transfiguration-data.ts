@@ -1,4 +1,5 @@
 import type { TransfigurationType } from "./journey";
+import type { GlossaryEntryId } from "./identifiers";
 
 export interface TransfigurationCostBand {
   readonly base: number;
@@ -23,7 +24,7 @@ export type TransfigurationRewardScore =
 
 export interface TransfigurationFormDefinition {
   readonly id: TransfigurationType;
-  readonly glossaryUuid: string;
+  readonly glossaryUuid: GlossaryEntryId;
   readonly name: string;
   readonly description: string;
   readonly glyph:

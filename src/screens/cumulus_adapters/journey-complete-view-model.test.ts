@@ -11,6 +11,10 @@ import {
   buildJourneyCompleteCardIds,
   buildJourneyCompleteView,
 } from "./journey-complete-view-model";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
 
 function card(cardNumber: number, id: string): CardData {
   return {
@@ -31,7 +35,7 @@ function card(cardNumber: number, id: string): CardData {
 
 function node(id: string, state: DreamscapeNode["state"]): DreamscapeNode {
   return {
-    id,
+    id: asAtlasNodeId(id),
     layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: null,
@@ -52,7 +56,7 @@ function state(): JourneyState {
     essence: 140,
     completionLevel: 7,
     dreamAvatar: {
-      id: "dream-avatar-uuid",
+      id: asDreamAvatarId("dream-avatar-uuid"),
       name: "The Wayfinder",
       title: "Bearer of the Last Light",
       renderedText: "A fixture ability.",
@@ -61,13 +65,13 @@ function state(): JourneyState {
     },
     deck: [
       {
-        entryId: "entry-a",
+        entryId: asDeckEntryId("entry-a"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: "entry-b",
+        entryId: asDeckEntryId("entry-b"),
         cardNumber: 2,
         transfiguration: null,
         isBane: false,
@@ -75,7 +79,7 @@ function state(): JourneyState {
     ],
     dreamsigns: [
       {
-        id: "dreamsign-uuid",
+        id: asDreamsignId("dreamsign-uuid"),
         name: "Fixture Sign",
         effectDescription: "A fixture effect.",
       },
@@ -83,9 +87,9 @@ function state(): JourneyState {
     atlas: {
       ...base.atlas,
       nodes: {
-        completedA: node("completed-a", "completed"),
-        completedB: node("completed-b", "completed"),
-        available: node("available", "available"),
+        [asAtlasNodeId("completedA")]: node("completed-a", "completed"),
+        [asAtlasNodeId("completedB")]: node("completed-b", "completed"),
+        [asAtlasNodeId("available")]: node("available", "available"),
       },
     },
   };

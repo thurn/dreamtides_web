@@ -8,6 +8,10 @@ import {
   assertFoldInvariants,
   foldInvariantViolations,
 } from "./invariants";
+import type { DreamscapeId } from "../types/identifiers";
+import { asDreamscapeId } from "../types/identifiers";
+import { asAtlasNodeId } from "../types/identifiers";
+import { asJourneyId } from "../types/identifiers";
 
 const GENESIS = {
   seed: "invariant-test",
@@ -22,11 +26,11 @@ function node(
   id: string,
   layer: LayerName,
   state: DreamscapeNode["state"],
-  dreamscapeId: string | null,
+  dreamscapeId: DreamscapeId | null,
   forwardIds: string[] = [],
 ): DreamscapeNode {
   return {
-    id,
+    id: asAtlasNodeId(id),
     layer,
     indexInLayer: 0,
     dreamscapeId,
@@ -34,7 +38,7 @@ function node(
     position: { x: 0, y: 0 },
     state,
     enhancedSiteType: null,
-    forwardIds,
+    forwardIds: forwardIds.map(asAtlasNodeId),
     backwardIds: [],
     knownDreamsignId: null,
   };
@@ -46,36 +50,39 @@ function postVictoryState() {
     ...base,
     journey: {
       ...base.journey,
-      runId: "journey:1",
+      runId: asJourneyId("journey:1"),
       completionLevel: 1,
       screen: { type: "atlas" as const },
       atlas: {
         ...base.journey.atlas,
-        layers: [["node-one"], ["node-two-a", "node-two-b"]],
+        layers: [
+          [asAtlasNodeId("node-one")],
+          [asAtlasNodeId("node-two-a"), asAtlasNodeId("node-two-b")],
+        ],
         nodes: {
           "node-one": node(
             "node-one",
             LayerName.One,
             "completed",
-            "dreamscape-one",
+            asDreamscapeId("dreamscape-one"),
             ["node-two-a", "node-two-b"],
           ),
           "node-two-a": node(
             "node-two-a",
             LayerName.Two,
             "available",
-            "dreamscape-two-a",
+            asDreamscapeId("dreamscape-two-a"),
           ),
           "node-two-b": node(
             "node-two-b",
             LayerName.Two,
             "available",
-            "dreamscape-two-b",
+            asDreamscapeId("dreamscape-two-b"),
           ),
         },
-        startingNodeId: "node-one",
-        bossNodeId: "node-two-a",
-        currentNodeId: "node-one",
+        startingNodeId: asAtlasNodeId("node-one"),
+        bossNodeId: asAtlasNodeId("node-two-a"),
+        currentNodeId: asAtlasNodeId("node-one"),
       },
     },
   };

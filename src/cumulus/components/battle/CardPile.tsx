@@ -12,19 +12,20 @@ import { battleCardLayoutId } from "./battle-card-layout";
 import { Pressable } from "../../primitives/Pressable";
 import { txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { BattleCardId } from "../../../types/identifiers";
 
 /** A face-down physical card instance. */
 export interface FaceDownPileCard {
   readonly face: "down";
   /** Stable battle-card instance id used for continuity across zones. */
-  readonly id: string;
+  readonly id: BattleCardId;
 }
 
 /** A face-up physical card instance and its canonical display snapshot. */
 export interface FaceUpPileCard {
   readonly face: "up";
   /** Stable battle-card instance id used for continuity across zones. */
-  readonly id: string;
+  readonly id: BattleCardId;
   /** Canonical UUID-backed card model rendered by GameCard. */
   readonly model: GameCardModel;
   /** Whether this rendered location should participate in shared-layout travel. */

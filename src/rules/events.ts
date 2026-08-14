@@ -1,3 +1,32 @@
+import type {
+  AtlasNodeId,
+  AuguryArchetypeId,
+  BattleCardId,
+  BattleId,
+  CardTutorialScreenKey,
+  ClientId,
+  DeckEntryId,
+  DreamAvatarId,
+  DreamsignId,
+  ExplorationActionId,
+  FrontDoorActionId,
+  JourneyId,
+  NoteId,
+  PresentationId,
+  ShuffleCommitment,
+  SiteId,
+  TutorialActionId,
+  TutorialAiActionOverrideId,
+  TutorialRunId,
+} from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type {
+  RandomSiteDestinationType,
+  SiteType,
+  TransfigurationType,
+} from "../types/journey";
+import type { BattleSide } from "../battle/types";
+
 // The reducer-internal typed view of every event that folds over `FoldState`.
 //
 // At the engine boundary a `GameEvent.payload` is `Record<string, unknown>`
@@ -23,23 +52,29 @@ export interface EventPayloads {
   // --- standalone front door ---
   FRONT_DOOR_ACTION: {
     surface: "main" | "tutorial";
-    actionId: string;
+    actionId: FrontDoorActionId;
     detail?: unknown;
   };
   ADVANCE_FRONT_DOOR: {
     from: "mainExiting" | "loading";
-    journeyId: string;
+    journeyId: JourneyId;
   };
   BEGIN_TUTORIAL: { actions: unknown };
-  COMPLETE_TUTORIAL_ACTION: { runId: string; actionId: string };
-  TAKE_PLAYTEST_CONTROL: { previousControllerClientId: string | null };
-  BEGIN_TUTORIAL_BATTLE: { tutorialRunId: string };
-  RESTART_TUTORIAL_BATTLE: {
-    battleId: string;
+  COMPLETE_TUTORIAL_ACTION: {
+    runId: TutorialRunId;
+    actionId: TutorialActionId;
   };
-  EXIT_TUTORIAL_BATTLE: { battleId: string };
-  OPEN_CARD_TUTORIAL_GUIDANCE: { screenKey: string; cardIds: string[] };
-  COMPLETE_CARD_TUTORIAL_GUIDANCE: { presentationId: string };
+  TAKE_PLAYTEST_CONTROL: { previousControllerClientId: ClientId | null };
+  BEGIN_TUTORIAL_BATTLE: { tutorialRunId: TutorialRunId };
+  RESTART_TUTORIAL_BATTLE: {
+    battleId: BattleId;
+  };
+  EXIT_TUTORIAL_BATTLE: { battleId: BattleId };
+  OPEN_CARD_TUTORIAL_GUIDANCE: {
+    screenKey: CardTutorialScreenKey;
+    cardIds: CardId[];
+  };
+  COMPLETE_CARD_TUTORIAL_GUIDANCE: { presentationId: PresentationId };
 
   // --- essence & limits ---
   ADJUST_ESSENCE: { delta: number };
@@ -52,47 +87,47 @@ export interface EventPayloads {
   LOAD_STATE: { snapshot: unknown; battle?: unknown };
 
   // --- dreamAvatar ---
-  SELECT_DREAM_AVATAR: { dreamAvatarId: string };
+  SELECT_DREAM_AVATAR: { dreamAvatarId: DreamAvatarId };
   REROLL_DREAM_AVATAR_OFFER: Record<string, never>;
 
   // --- navigation ---
-  ENTER_SITE: { siteId: string };
-  TRAVEL_TO_DREAMSCAPE: { nodeId: string };
+  ENTER_SITE: { siteId: SiteId };
+  TRAVEL_TO_DREAMSCAPE: { nodeId: AtlasNodeId };
   REGENERATE_ATLAS: { completionLevel?: number };
   DISMISS_STARTING_DECK_POPUP: Record<string, never>;
 
   // --- deck & transfiguration ---
   ADD_CARD: {
-    cardId: string;
+    cardId: CardId;
     transfiguration?: unknown;
     source?: unknown;
   };
-  REMOVE_DECK_ENTRY: { entryId: string };
-  PURGE_DECK_CARDS: { siteId: string; entryIds: string[] };
-  DUPLICATE_DECK_ENTRY: { entryId: string };
-  SET_DECK_ENTRY_STAT_OVERRIDE: { entryId: string; override: unknown };
-  SET_DECK_ENTRY_KEYWORDS: { entryId: string; keywords: unknown };
-  SET_DECK_ENTRY_TYPE: { entryId: string; typeChange: unknown };
-  TRANSFIGURE_CARD: { entryId: string; transfiguration: unknown };
-  ACCEPT_TRANSFIGURATION_CHOICE: { siteId: string; entryId: string };
-  ACCEPT_DUPLICATION_CHOICE: { siteId: string; entryId: string };
+  REMOVE_DECK_ENTRY: { entryId: DeckEntryId };
+  PURGE_DECK_CARDS: { siteId: SiteId; entryIds: DeckEntryId[] };
+  DUPLICATE_DECK_ENTRY: { entryId: DeckEntryId };
+  SET_DECK_ENTRY_STAT_OVERRIDE: { entryId: DeckEntryId; override: unknown };
+  SET_DECK_ENTRY_KEYWORDS: { entryId: DeckEntryId; keywords: unknown };
+  SET_DECK_ENTRY_TYPE: { entryId: DeckEntryId; typeChange: unknown };
+  TRANSFIGURE_CARD: { entryId: DeckEntryId; transfiguration: unknown };
+  ACCEPT_TRANSFIGURATION_CHOICE: { siteId: SiteId; entryId: DeckEntryId };
+  ACCEPT_DUPLICATION_CHOICE: { siteId: SiteId; entryId: DeckEntryId };
   PURGE_ALL_NIGHTMARE_CARDS: Record<string, never>;
   PURGE_RANDOM_NIGHTMARE_CARDS: { count: number };
 
   // --- dreamsigns ---
-  ADD_DREAMSIGN: { dreamsignId: string };
-  REMOVE_DREAMSIGN: { dreamsignId: string };
-  SET_DREAMSIGN_POOL: { ids: string[] };
+  ADD_DREAMSIGN: { dreamsignId: DreamsignId };
+  REMOVE_DREAMSIGN: { dreamsignId: DreamsignId };
+  SET_DREAMSIGN_POOL: { ids: DreamsignId[] };
 
   // --- draft ---
   SET_DRAFT_STATE: { draftState: unknown };
-  PICK_DRAFT_CARD: { packIndex: number; cardId: string };
-  REROLL_DRAFT_OFFER: { siteId: string };
-  ENTER_DRAFT_SITE: { siteId: string };
+  PICK_DRAFT_CARD: { packIndex: number; cardId: CardId };
+  REROLL_DRAFT_OFFER: { siteId: SiteId };
+  ENTER_DRAFT_SITE: { siteId: SiteId };
 
   // --- sites ---
   OPEN_SITE: {
-    siteId: string;
+    siteId: SiteId;
     selectionRulesVersion?: string;
     gambleGameId?:
       | "gravok-three-gate-wager"
@@ -101,123 +136,126 @@ export interface EventPayloads {
       | "four-suit-reprise"
       | "blackjack";
   };
-  CHOOSE_RANDOM_SITE: { siteId: string; siteType: string };
+  CHOOSE_RANDOM_SITE: { siteId: SiteId; siteType: RandomSiteDestinationType };
   RESOLVE_EXPLORATION_CHOICE: {
-    siteId: string;
-    actionId: string;
+    siteId: SiteId;
+    actionId: ExplorationActionId;
     selectionRulesVersion?: string;
     selection?: unknown;
   };
-  COMPLETE_AUGURY: { siteId: string };
-  ACCEPT_REWARD: { siteId: string; choiceIndex?: number };
-  ACCEPT_DREAMSIGN_OFFER: { siteId: string; dreamsignId: string };
-  REJECT_DREAMSIGN_OFFER: { siteId: string };
-  ACCEPT_ESSENCE: { siteId: string };
-  REROLL_AUGURY: { siteId: string };
-  FORCE_AUGURY_ARCHETYPE: { siteId: string; archetypeId: string };
-  COMPLETE_SITE: { siteId: string };
+  COMPLETE_AUGURY: { siteId: SiteId };
+  ACCEPT_REWARD: { siteId: SiteId; choiceIndex?: number };
+  ACCEPT_DREAMSIGN_OFFER: { siteId: SiteId; dreamsignId: DreamsignId };
+  REJECT_DREAMSIGN_OFFER: { siteId: SiteId };
+  ACCEPT_ESSENCE: { siteId: SiteId };
+  REROLL_AUGURY: { siteId: SiteId };
+  FORCE_AUGURY_ARCHETYPE: { siteId: SiteId; archetypeId: AuguryArchetypeId };
+  COMPLETE_SITE: { siteId: SiteId };
   PLACE_GRAVOK_WAGER: {
-    siteId: string;
+    siteId: SiteId;
     gateId: "six" | "nine" | "jack";
   };
-  SETTLE_GRAVOK_WAGER: { siteId: string; shuffleCommitment: string };
+  SETTLE_GRAVOK_WAGER: { siteId: SiteId; shuffleCommitment: ShuffleCommitment };
   PLAY_AGAIN_GRAVOK_WAGER: {
-    siteId: string;
-    previousShuffleCommitment: string;
+    siteId: SiteId;
+    previousShuffleCommitment: ShuffleCommitment;
   };
   REPLACE_GRAVOK_WAGER_DREAMSIGN: {
-    siteId: string;
-    replacedDreamsignId: string;
+    siteId: SiteId;
+    replacedDreamsignId: DreamsignId;
   };
-  DRAW_TIDEMARK_LADDER_CLIMB: { siteId: string };
+  DRAW_TIDEMARK_LADDER_CLIMB: { siteId: SiteId };
   SETTLE_TIDEMARK_LADDER_CLIMB: {
-    siteId: string;
-    shuffleCommitment: string;
+    siteId: SiteId;
+    shuffleCommitment: ShuffleCommitment;
   };
   REPLACE_TIDEMARK_LADDER_CLIMB_DREAMSIGN: {
-    siteId: string;
-    replacedDreamsignId: string;
+    siteId: SiteId;
+    replacedDreamsignId: DreamsignId;
   };
-  DRAW_STARWAY_STAIRS: { siteId: string };
+  DRAW_STARWAY_STAIRS: { siteId: SiteId };
   SETTLE_STARWAY_STAIRS: {
-    siteId: string;
-    shuffleCommitment: string;
+    siteId: SiteId;
+    shuffleCommitment: ShuffleCommitment;
   };
-  CASH_OUT_STARWAY_STAIRS: { siteId: string; shuffleCommitment: string };
+  CASH_OUT_STARWAY_STAIRS: {
+    siteId: SiteId;
+    shuffleCommitment: ShuffleCommitment;
+  };
   PLAY_AGAIN_STARWAY_STAIRS: {
-    siteId: string;
-    previousShuffleCommitment: string;
+    siteId: SiteId;
+    previousShuffleCommitment: ShuffleCommitment;
   };
-  DRAW_FOUR_SUIT_REPRISE: { siteId: string; entryId: string };
+  DRAW_FOUR_SUIT_REPRISE: { siteId: SiteId; entryId: DeckEntryId };
   SETTLE_FOUR_SUIT_REPRISE: {
-    siteId: string;
-    shuffleCommitment: string;
+    siteId: SiteId;
+    shuffleCommitment: ShuffleCommitment;
   };
   CHOOSE_FOUR_SUIT_REPRISE_TRANSFIGURATION: {
-    siteId: string;
-    shuffleCommitment: string;
-    type: string;
+    siteId: SiteId;
+    shuffleCommitment: ShuffleCommitment;
+    type: TransfigurationType;
   };
   PLAY_AGAIN_FOUR_SUIT_REPRISE: {
-    siteId: string;
-    previousShuffleCommitment: string;
+    siteId: SiteId;
+    previousShuffleCommitment: ShuffleCommitment;
   };
-  DEAL_BLACKJACK: { siteId: string };
-  HIT_BLACKJACK: { siteId: string };
-  STAND_BLACKJACK: { siteId: string };
-  SETTLE_BLACKJACK: { siteId: string; shuffleCommitment: string };
+  DEAL_BLACKJACK: { siteId: SiteId };
+  HIT_BLACKJACK: { siteId: SiteId };
+  STAND_BLACKJACK: { siteId: SiteId };
+  SETTLE_BLACKJACK: { siteId: SiteId; shuffleCommitment: ShuffleCommitment };
   PLAY_AGAIN_BLACKJACK: {
-    siteId: string;
-    previousShuffleCommitment: string;
+    siteId: SiteId;
+    previousShuffleCommitment: ShuffleCommitment;
   };
 
   // --- merchant & shop ---
-  ACCEPT_MERCHANT_OFFER: { siteId: string; offer?: unknown };
-  DECLINE_MERCHANT: { siteId: string };
-  BUY_SHOP_SLOT: { siteId: string; slotIndex: number };
-  REROLL_SHOP: { siteId: string };
+  ACCEPT_MERCHANT_OFFER: { siteId: SiteId; offer?: unknown };
+  DECLINE_MERCHANT: { siteId: SiteId };
+  BUY_SHOP_SLOT: { siteId: SiteId; slotIndex: number };
+  REROLL_SHOP: { siteId: SiteId };
   GRANT_FREE_REROLLS: { count: number };
   APPLY_SHOP_DISCOUNT: { percent: number };
 
   // --- modifiers & atlas ---
   PUSH_BATTLE_MODIFIER: { modifier: unknown };
   PUSH_TEMPORARY_NIGHTMARE_GRANT: {
-    cardId: string;
+    cardId: CardId;
     count: number;
     battlesRemaining: number;
     source: string;
   };
-  BAN_SITE_TYPE: { siteType: string; dreamscapesRemaining: number };
+  BAN_SITE_TYPE: { siteType: SiteType; dreamscapesRemaining: number };
   BOOST_SITE_APPEARANCE: {
-    siteType: string;
+    siteType: SiteType;
     percent: number;
     dreamscapesRemaining: number;
   };
   REPLACE_SITE_TYPE: {
-    nodeId: string;
-    fromSiteType: string;
-    toSiteType: string;
+    nodeId: AtlasNodeId;
+    fromSiteType: SiteType;
+    toSiteType: SiteType;
   };
-  ADD_SITE_TO_DREAMSCAPE: { nodeId: string; siteType: string };
+  ADD_SITE_TO_DREAMSCAPE: { nodeId: AtlasNodeId; siteType: SiteType };
   SET_CARD_SOURCE_DEBUG: { state: unknown };
 
   // --- battle lifecycle bridges ---
   END_BATTLE: Record<string, never>;
 
   // --- battle events (no legacy 1:1) ---
-  BEGIN_BATTLE: { siteId: string; seedOverride?: number };
+  BEGIN_BATTLE: { siteId: SiteId; seedOverride?: number };
   SET_BATTLE_AUTOMATION: { enabled: boolean };
   BATTLE_COMMAND: { command: unknown };
   BATTLE_REPOSITION_CHARACTER: {
-    battleCardId: string;
+    battleCardId: BattleCardId;
     destination: unknown;
   };
   BATTLE_PLAY_CARD: {
-    battleCardId: string;
-    targetBattleCardIds: string[];
+    battleCardId: BattleCardId;
+    targetBattleCardIds: BattleCardId[];
     aiChoices?: unknown;
     characterDestination?: unknown;
-    tutorialAiActionOverrideId?: string;
+    tutorialAiActionOverrideId?: TutorialAiActionOverrideId;
   };
   // A single player gesture that the automation planner expanded into an ordered
   // list of battle commands (e.g. a play that also spends energy, or a turn
@@ -225,9 +263,9 @@ export interface EventPayloads {
   // is a `BattleCommand`, validated in the domain case; the whole list applies
   // all-or-nothing so no half-applied gesture can exist in the log.
   BATTLE_GESTURE: { commands: unknown[] };
-  BATTLE_AI_BLOCK: { aiSide: string };
+  BATTLE_AI_BLOCK: { aiSide: BattleSide };
   COMPLETE_TUTORIAL_BATTLE_PRESENTATION: {
-    presentationId: string;
+    presentationId: PresentationId;
     messageIndex?: number;
   };
   RESOLVE_PROMPT: { promptId: number; resolution: unknown };
@@ -235,8 +273,8 @@ export interface EventPayloads {
   // writes; `expiry` is a `BattleCardNoteExpiry`, kept as `unknown` here so this
   // file stays import-light (the domain case narrows it).
   SET_CARD_NOTE: {
-    instanceId: string;
-    note: { noteId: string; text: string; expiry: unknown };
+    instanceId: BattleCardId;
+    note: { noteId: NoteId; text: string; expiry: unknown };
   };
 }
 
@@ -285,8 +323,8 @@ export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> =
     "FRONT_DOOR_ACTION",
     "ADVANCE_FRONT_DOOR",
     "BEGIN_TUTORIAL",
-  "COMPLETE_TUTORIAL_ACTION",
-  "TAKE_PLAYTEST_CONTROL",
+    "COMPLETE_TUTORIAL_ACTION",
+    "TAKE_PLAYTEST_CONTROL",
     "OPEN_CARD_TUTORIAL_GUIDANCE",
     "COMPLETE_CARD_TUTORIAL_GUIDANCE",
     "SET_CARD_NOTE",

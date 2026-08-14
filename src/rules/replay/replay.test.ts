@@ -29,6 +29,10 @@ import {
 import adversarial from "./fixtures/adversarial.json";
 import battle from "./fixtures/battle.json";
 import journeyOnly from "./fixtures/journey-only.json";
+import { asSiteId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 interface ReplayFixture {
   providerSet: string;
@@ -70,7 +74,7 @@ describe("replay fixtures", () => {
           candidateIds: ["card-a", "card-b", "card-c"],
           count: 2,
           optional: true,
-          highlightCardIds: ["card-c"],
+          highlightCardIds: [asBattleCardId("card-c")],
         },
       },
     },
@@ -165,15 +169,15 @@ describe("replay fixtures", () => {
           ...state.journey,
           deck: [
             {
-              entryId: "nightmare",
+              entryId: asDeckEntryId("nightmare"),
               cardNumber: NIGHTMARE_CARD_NUMBER,
               isBane: false,
             },
-            { entryId: "retired", cardNumber: 44, isBane: true },
+            { entryId: asDeckEntryId("retired"), cardNumber: 44, isBane: true },
           ],
           dreamsigns: [
             {
-              id: "negative",
+              id: asDreamsignId("negative"),
               name: "Sign",
               effectDescription: "",
               isBane: true,
@@ -184,14 +188,14 @@ describe("replay fixtures", () => {
               kind: "temporary_bane_grant",
               count: 1,
               battlesRemaining: 1,
-              addedEntryIds: ["nightmare"],
+              addedEntryIds: [asDeckEntryId("nightmare")],
               source: "historical-log",
             },
             {
               kind: "temporary_bane_grant",
               count: 1,
               battlesRemaining: 1,
-              addedEntryIds: ["retired"],
+              addedEntryIds: [asDeckEntryId("retired")],
               source: "historical-log",
             },
           ],
@@ -200,9 +204,12 @@ describe("replay fixtures", () => {
     );
 
     expect(decoded.journey.deck).toEqual([
-      expect.objectContaining({ entryId: "nightmare", isBane: true }),
       expect.objectContaining({
-        entryId: "retired",
+        entryId: asDeckEntryId("nightmare"),
+        isBane: true,
+      }),
+      expect.objectContaining({
+        entryId: asDeckEntryId("retired"),
         cardNumber: NIGHTMARE_CARD_NUMBER,
         isBane: true,
       }),
@@ -248,7 +255,7 @@ describe("replay fixtures", () => {
       freeNextShopModifiers: [],
       freePurchaseModifiers: [],
     });
-    expect(decoded.journey.siteRuntime["legacy-shop"]).toMatchObject({
+    expect(decoded.journey.siteRuntime[asSiteId("legacy-shop")]).toMatchObject({
       kind: "shop",
       purchaseHistory: [],
     });

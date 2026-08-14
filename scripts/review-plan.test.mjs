@@ -40,6 +40,7 @@ describe("fast review plan", () => {
       testInputs: [
         "scripts/cumulus-generated-docs-drift.test.mjs",
         "scripts/cumulus-ui-boundary.test.mjs",
+        "scripts/domain-string-audit.test.mjs",
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
       ],
@@ -140,6 +141,7 @@ describe("fast review plan", () => {
       testInputs: [
         "scripts/cumulus-generated-docs-drift.test.mjs",
         "scripts/cumulus-ui-boundary.test.mjs",
+        "scripts/domain-string-audit.test.mjs",
         "src/live.ts",
       ],
     });
@@ -154,6 +156,7 @@ describe("fast review plan", () => {
       testInputs: [
         "scripts/cumulus-generated-docs-drift.test.mjs",
         "scripts/cumulus-ui-boundary.test.mjs",
+        "scripts/domain-string-audit.test.mjs",
       ],
     });
   });

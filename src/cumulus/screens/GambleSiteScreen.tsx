@@ -53,6 +53,11 @@ import {
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import type { TransfigurationCandidateView } from "./TransfigurationSiteScreen";
 import { TransfigurationDetailPanel } from "../components/card/TransfigurationDetailPanel";
+import type { SiteId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import type { DreamsignId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 export interface GambleGateView {
   /** Stable gate id used by the wager intent. */
@@ -95,7 +100,7 @@ export interface GambleResultView {
 export interface GravokWagerSiteView {
   gameId: "gravok-three-gate-wager";
   /** Stable journey site id. */
-  siteId: string;
+  siteId: SiteId;
   /** Current dreamscape scene art behind the site, if resolved. */
   scene: ArtRef | null;
   /** Whether Farpoint Station's free-wager rule applies. */
@@ -145,7 +150,7 @@ export interface LadderClimbResultView {
 
 export interface LadderClimbSiteView {
   gameId: "tidemark-ladder-climb";
-  siteId: string;
+  siteId: SiteId;
   scene: ArtRef | null;
   isFarpoint: boolean;
   runtimeReady: boolean;
@@ -187,7 +192,7 @@ export interface StarwayStairsResultView {
 
 export interface StarwayStairsSiteView {
   gameId: "starway-stairs";
-  siteId: string;
+  siteId: SiteId;
   scene: ArtRef | null;
   isFarpoint: boolean;
   runtimeReady: boolean;
@@ -205,8 +210,8 @@ export interface StarwayStairsSiteView {
 }
 
 export interface FourSuitRepriseCardView {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
   model: GameCardModel;
 }
 
@@ -225,7 +230,7 @@ export interface FourSuitRepriseResultView {
 
 export interface FourSuitRepriseSiteView {
   gameId: "four-suit-reprise";
-  siteId: string;
+  siteId: SiteId;
   scene: ArtRef | null;
   isFarpoint: boolean;
   runtimeReady: boolean;
@@ -244,7 +249,7 @@ export interface FourSuitRepriseSiteView {
 
 export interface BlackjackSiteView {
   gameId: "blackjack";
-  siteId: string;
+  siteId: SiteId;
   /** Stable committed-shoe identity for one animated hand. */
   handId: string;
   scene: ArtRef | null;
@@ -301,7 +306,7 @@ export interface GambleSiteScreenProps {
   /** Prepare another Starway Stairs round after a terminal result. */
   onPlayAgainStarway?: () => void;
   /** Draw one suit against the selected Four-Suit Reprise target. */
-  onDrawFourSuit?: (entryId: string) => void;
+  onDrawFourSuit?: (entryId: DeckEntryId) => void;
   /** Settle the visible Four-Suit Reprise result. */
   onFourSuitOutcomeShown?: () => void;
   /** Apply the free chosen form after a Spades result. */
@@ -319,7 +324,7 @@ export interface GambleSiteScreenProps {
   /** Start a fresh Blackjack hand after a settled push or eligible loss. */
   onPlayAgainBlackjack?: () => void;
   /** Replace one UUID-identified held Dreamsign after a jackpot win. */
-  onReplaceDreamsign: (dreamsignId: string) => void;
+  onReplaceDreamsign: (dreamsignId: DreamsignId) => void;
 }
 
 function gambleActionLabel(
@@ -813,7 +818,9 @@ interface LadderDreamsignTrajectory {
   readonly target: DOMRect;
 }
 
-function ladderHudDreamsignTarget(dreamsignId: string): HTMLElement | null {
+function ladderHudDreamsignTarget(
+  dreamsignId: DreamsignId,
+): HTMLElement | null {
   const candidates = document.querySelectorAll<HTMLElement>(
     "[data-dreamsign-id]",
   );
@@ -873,7 +880,7 @@ function LadderDreamsignReward({
     }
     let animationFrame = 0;
     const hideHudTarget = (): void => {
-      const target = ladderHudDreamsignTarget(dreamsignId);
+      const target = ladderHudDreamsignTarget(asDreamsignId(dreamsignId));
       if (target === null) {
         animationFrame = window.requestAnimationFrame(hideHudTarget);
         return;
@@ -904,7 +911,7 @@ function LadderDreamsignReward({
     const readingTimer = window.setTimeout(() => {
       const measureTrajectory = (): void => {
         const source = sourceRef.current?.getBoundingClientRect();
-        const target = ladderHudDreamsignTarget(dreamsignId);
+        const target = ladderHudDreamsignTarget(asDreamsignId(dreamsignId));
         const targetRect = target?.getBoundingClientRect();
         if (
           source === undefined ||
@@ -1374,7 +1381,7 @@ function GravokWagerScreen({
   onLeave: () => void;
   onOutcomeShown: () => void;
   onPlayAgain: () => void;
-  onReplaceDreamsign: (dreamsignId: string) => void;
+  onReplaceDreamsign: (dreamsignId: DreamsignId) => void;
 }) {
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
@@ -1722,7 +1729,7 @@ function LadderClimbScreen({
   onDraw: () => void;
   onLeave: () => void;
   onOutcomeShown: () => void;
-  onReplaceDreamsign: (dreamsignId: string) => void;
+  onReplaceDreamsign: (dreamsignId: DreamsignId) => void;
 }) {
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
@@ -3159,7 +3166,7 @@ function FourSuitRepriseScreen({
   onPlayAgain,
 }: {
   view: FourSuitRepriseSiteView;
-  onDraw: (entryId: string) => void;
+  onDraw: (entryId: DeckEntryId) => void;
   onLeave: () => void;
   onOutcomeShown: () => void;
   onChooseTransfiguration: (type: TransfigurationType) => void;

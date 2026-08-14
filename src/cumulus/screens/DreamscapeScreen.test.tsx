@@ -12,6 +12,9 @@ import { artRef } from "../primitives/art";
 import type { SiteState } from "../../types/journey";
 import { CumulusRoot } from "../CumulusRoot";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -73,7 +76,7 @@ function siteModel(
 
 function siteState(id: string, overrides: Partial<SiteState> = {}): SiteState {
   return {
-    id,
+    id: asSiteId(id),
     type: "Purge",
     isEnhanced: false,
     isVisited: false,
@@ -82,7 +85,7 @@ function siteState(id: string, overrides: Partial<SiteState> = {}): SiteState {
 }
 
 const VIEW: DreamscapeView = {
-  scene: artRef.dreamscapeScene("ember_wood"),
+  scene: artRef.dreamscapeScene(asDreamscapeId("ember_wood")),
   title: assertLocalized("Ember Wood"),
   inlineRewards: {},
   replacement: null,
@@ -329,7 +332,7 @@ describe("DreamscapeScreen", () => {
           kind: "dreamsign",
           requiresReplacement: false,
           dreamsign: localizedDreamsignFixture({
-            id: "dreamsign-uuid",
+            id: asDreamsignId("dreamsign-uuid"),
             name: "Lantern in the Rain",
             effectDescription: "Your first dream each dawn costs 1 less.",
             imageName: "lantern-in-the-rain.webp",
@@ -407,13 +410,13 @@ describe("DreamscapeScreen", () => {
     const onReplaceDreamsign = vi.fn();
     const onDeclineReward = vi.fn();
     const pendingDreamsign = localizedDreamsignFixture({
-      id: "pending-dreamsign",
+      id: asDreamsignId("pending-dreamsign"),
       name: "Lantern in the Rain",
       effectDescription: "Your first dream each dawn costs 1 less.",
       imageName: "lantern-in-the-rain.webp",
     });
     const heldDreamsign = localizedDreamsignFixture({
-      id: "held-dreamsign",
+      id: asDreamsignId("held-dreamsign"),
       name: "Held Sign",
       effectDescription: "A held effect.",
       imageName: "held.webp",

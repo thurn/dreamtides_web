@@ -1,5 +1,6 @@
 import type { Tides4Role } from "../draft/pool/tides4-io";
 import type { Resonance } from "../types/resonance-data";
+import type { DreamAvatarId, TideId } from "../types/identifiers";
 
 /** The inline-editable text fields on a DreamAvatar record. */
 export type EditableDreamAvatarField =
@@ -13,7 +14,7 @@ export type DreamAvatarSearchScope = "name" | "all";
 
 /** A tide identity (without its decklist) the editor's tide picker renders. */
 export interface EditorTideOption {
-  id: string;
+  id: TideId;
   displayName: string;
   resonance: Resonance;
   role: Tides4Role;
@@ -21,13 +22,13 @@ export interface EditorTideOption {
 
 /** The set of tides a DreamAvatar's draft pool is built from. */
 export interface EditorTidePool {
-  starter: string | null;
-  facets: string[];
-  neutral: string[];
+  starter: TideId | null;
+  facets: TideId[];
+  neutral: TideId[];
 }
 
 export interface EditorDreamAvatarRecord {
-  id: string;
+  id: DreamAvatarId;
   name: string;
   title: string;
   imageNumber: string;
@@ -56,14 +57,14 @@ export interface LoadEditorDreamAvatarsResponse {
 }
 
 export interface SaveEditorDreamAvatarFieldRequest {
-  id: string;
+  id: DreamAvatarId;
   field: EditableDreamAvatarField;
   value: unknown;
   clientRevision?: number;
 }
 
 export interface SaveEditorDreamAvatarTidePoolRequest {
-  id: string;
+  id: DreamAvatarId;
   pool: EditorTidePool;
 }
 

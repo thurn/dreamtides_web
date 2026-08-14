@@ -1,4 +1,5 @@
 import type { CardData } from "../../types/cards";
+import type { CardId } from "../../types/card-identity";
 import type { JourneyState } from "../../types/journey";
 import type { JourneyCompleteView } from "../../cumulus/screens/JourneyCompleteScreen";
 import { buildStartingDeckCards } from "./starting-deck-view-model";
@@ -59,7 +60,7 @@ export function buildJourneyCompleteView(
 export function buildJourneyCompleteCardIds(
   deck: JourneyState["deck"],
   cardDatabase: Map<number, CardData>,
-): readonly string[] {
+): readonly CardId[] {
   return buildStartingDeckCards(deck, cardDatabase).map(
     (entry) => entry.model.cardId,
   );

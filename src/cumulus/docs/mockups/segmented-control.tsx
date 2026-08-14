@@ -18,6 +18,7 @@ import {
 } from "../../components/controls/SegmentedControl";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
+import { asDreamscapeId } from "../../../types/identifiers";
 
 // Curated real card UUIDs from data/cards.toml (a mix of Character
 // and Event so the filter has something to actually filter). Resolved and
@@ -36,7 +37,10 @@ const OPTIONS: SegmentedOption[] = [
   { value: "Events", label: assertLocalized("Events") },
 ];
 
-function resolveCards(database: Map<number, CardData>, ids: readonly string[]): CardData[] {
+function resolveCards(
+  database: Map<number, CardData>,
+  ids: readonly string[],
+): CardData[] {
   const byId = new Map<string, CardData>();
   for (const card of database.values()) {
     byId.set(card.id, card);
@@ -68,13 +72,15 @@ export function SegmentedControlMockup() {
     };
   }, []);
 
-  const cards = database ? resolveCards(database, CARD_IDS).filter((c) => matchesFilter(c, filter)) : [];
+  const cards = database
+    ? resolveCards(database, CARD_IDS).filter((c) => matchesFilter(c, filter))
+    : [];
 
   return (
     <div
       style={{
         ...sceneRoot,
-        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.55) 0%, rgba(8,5,17,0.7) 50%, rgba(8,5,17,0.94) 100%), url(${dreamscapeSceneUrl("grid_city")})`,
+        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.55) 0%, rgba(8,5,17,0.7) 50%, rgba(8,5,17,0.94) 100%), url(${dreamscapeSceneUrl(asDreamscapeId("grid_city"))})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",
@@ -96,13 +102,23 @@ export function SegmentedControlMockup() {
         >
           Collection
         </p>
-        <h1 style={{ font: token("--t-display"), margin: `${token("--space-xs")} 0 0`, color: token("--text-primary") }}>
+        <h1
+          style={{
+            font: token("--t-display"),
+            margin: `${token("--space-xs")} 0 0`,
+            color: token("--text-primary"),
+          }}
+        >
           Your Cards
         </h1>
       </div>
 
       <div style={{ margin: `${token("--space-2xl")} 0` }}>
-        <SegmentedControl options={OPTIONS} value={filter} onChange={setFilter} />
+        <SegmentedControl
+          options={OPTIONS}
+          value={filter}
+          onChange={setFilter}
+        />
       </div>
 
       <div
@@ -116,18 +132,24 @@ export function SegmentedControlMockup() {
         }}
       >
         {database === null ? (
-          <p style={{ color: token("--text-muted"), font: token("--t-lead") }}>Loading cards…</p>
+          <p style={{ color: token("--text-muted"), font: token("--t-lead") }}>
+            Loading cards…
+          </p>
         ) : cards.length === 0 ? (
-          <p style={{ color: token("--text-muted"), font: token("--t-lead") }}>No cards match this filter.</p>
+          <p style={{ color: token("--text-muted"), font: token("--t-lead") }}>
+            No cards match this filter.
+          </p>
         ) : (
           cards.map((card, index) => (
-            <div key={`${card.id}-${String(index)}`} style={{ width: "clamp(120px, 16vw, 168px)" }}>
+            <div
+              key={`${card.id}-${String(index)}`}
+              style={{ width: "clamp(120px, 16vw, 168px)" }}
+            >
               <GameCard model={{ cardId: card.id, displaySnapshot: card }} />
             </div>
           ))
         )}
       </div>
-
     </div>
   );
 }

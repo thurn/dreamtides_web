@@ -5,7 +5,10 @@ import type {
   BattleMutableState,
   BattleSide,
 } from "../../battle/types";
-import { emptyBackRankSlots, emptyFrontRankSlots } from "../../battle/test-support";
+import {
+  emptyBackRankSlots,
+  emptyFrontRankSlots,
+} from "../../battle/test-support";
 import { applyDebugEdit } from "./apply-debug-edit";
 import type { ActivePrompt, PromptResolution } from "./effect-runner-core";
 import { isoTimestampToMs } from "./timestamp";
@@ -14,6 +17,13 @@ import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
 import type { BattleFoldState, EffectRun, ScriptRef } from "./fold";
 import { emptyDawnFired, newEffectRun, resolveScript } from "./fold";
 import { advanceEffectQueue, resolvePendingPrompt } from "./driver";
+import type { BattleCardId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asBattleId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asTutorialRunId } from "../../types/identifiers";
+import { asBattleEffectScriptId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Deterministic context + hashing
@@ -73,7 +83,8 @@ function applyEditsOracle(
   const nowMs = isoTimestampToMs(context.timestamp) ?? 0;
   for (const steps of runs) {
     for (const step of steps) {
-      if (step.kind !== "edits") throw new Error("oracle: only edit-only scripts");
+      if (step.kind !== "edits")
+        throw new Error("oracle: only edit-only scripts");
       for (const edit of step.build({ side, state: b, random, nowMs })) {
         b = applyDebugEdit(b, edit, EMISSION).state;
       }
@@ -89,8 +100,11 @@ function applyEditsOracle(
 
 function editOnlyDreamwellRef(): ScriptRef {
   for (const [id, script] of Object.entries(DREAMWELL_EFFECTS)) {
-    if (script.steps.length > 0 && script.steps.every((s) => s.kind === "edits")) {
-      return { table: "dreamwell", id };
+    if (
+      script.steps.length > 0 &&
+      script.steps.every((s) => s.kind === "edits")
+    ) {
+      return { table: "dreamwell", id: asBattleEffectScriptId(id) };
     }
   }
   throw new Error("no edit-only dreamwell script registered");
@@ -99,8 +113,11 @@ function editOnlyDreamwellRef(): ScriptRef {
 function twoEditOnlyDreamwellRefs(): [ScriptRef, ScriptRef] {
   const refs: ScriptRef[] = [];
   for (const [id, script] of Object.entries(DREAMWELL_EFFECTS)) {
-    if (script.steps.length > 0 && script.steps.every((s) => s.kind === "edits")) {
-      refs.push({ table: "dreamwell", id });
+    if (
+      script.steps.length > 0 &&
+      script.steps.every((s) => s.kind === "edits")
+    ) {
+      refs.push({ table: "dreamwell", id: asBattleEffectScriptId(id) });
     }
     if (refs.length === 2) return [refs[0], refs[1]];
   }
@@ -113,7 +130,7 @@ function topLevelPickCardsDreamwellRef(): ScriptRef {
   for (const [id, script] of Object.entries(DREAMWELL_EFFECTS)) {
     const first = script.steps[0];
     if (first?.kind === "prompt" && first.prompt.kind === "pick-cards") {
-      return { table: "dreamwell", id };
+      return { table: "dreamwell", id: asBattleEffectScriptId(id) };
     }
   }
   throw new Error("no top-level pick-cards dreamwell script registered");
@@ -125,7 +142,7 @@ function leadingEditThenPromptDreamwellRef(): ScriptRef {
   for (const [id, script] of Object.entries(DREAMWELL_EFFECTS)) {
     const [first, second] = script.steps;
     if (first?.kind === "edits" && second?.kind === "prompt") {
-      return { table: "dreamwell", id };
+      return { table: "dreamwell", id: asBattleEffectScriptId(id) };
     }
   }
   throw new Error("no leading-edit-then-prompt dreamwell script registered");
@@ -141,7 +158,7 @@ function nestedPromptDreamwellRef(): ScriptRef {
       first.prompt.kind === "confirm" &&
       first.prompt.onYes.some((s) => s.kind === "prompt")
     ) {
-      return { table: "dreamwell", id };
+      return { table: "dreamwell", id: asBattleEffectScriptId(id) };
     }
   }
   throw new Error("no nested-prompt dreamwell script registered");
@@ -152,7 +169,11 @@ function nestedPromptDreamwellRef(): ScriptRef {
 // ---------------------------------------------------------------------------
 
 function makeSide(
-  overrides: Partial<{ hand: string[]; void: string[]; deck: string[] }> = {},
+  overrides: Partial<{
+    hand: BattleCardId[];
+    void: BattleCardId[];
+    deck: BattleCardId[];
+  }> = {},
 ): BattleMutableState["sides"][BattleSide] {
   return {
     currentEnergy: 0,
@@ -172,10 +193,10 @@ function makeSide(
 }
 
 function makeInstance(
-  battleCardId: string,
+  battleCardId: BattleCardId,
   side: BattleSide,
   kind: "character" | "event",
-): BattleMutableState["cardInstances"][string] {
+): BattleMutableState["cardInstances"][BattleCardId] {
   return {
     battleCardId,
     owner: side,
@@ -206,7 +227,7 @@ function makeInstance(
     },
     definition: {
       sourceDeckEntryId: null,
-      cardId: "",
+      cardId: asCardId(""),
       cardNumber: 1,
       name: `${kind}-${battleCardId}`,
       battleCardKind: kind,
@@ -228,22 +249,34 @@ function makeInstance(
 // hand / void / deck regardless of which script structure discovery selects.
 function makeBoard(): BattleMutableState {
   const cardInstances: BattleMutableState["cardInstances"] = {};
-  const handIds: string[] = [];
-  const voidIds: string[] = [];
-  const deckIds: string[] = [];
+  const handIds: BattleCardId[] = [];
+  const voidIds: BattleCardId[] = [];
+  const deckIds: BattleCardId[] = [];
   for (let i = 0; i < 4; i += 1) {
-    const h = `h${i}`;
-    const v = `v${i}`;
-    const d = `d${i}`;
+    const h = asBattleCardId(`h${i}`);
+    const v = asBattleCardId(`v${i}`);
+    const d = asBattleCardId(`d${i}`);
     handIds.push(h);
     voidIds.push(v);
     deckIds.push(d);
-    cardInstances[h] = makeInstance(h, "player", i % 2 === 0 ? "character" : "event");
-    cardInstances[v] = makeInstance(v, "player", i % 2 === 0 ? "character" : "event");
-    cardInstances[d] = makeInstance(d, "player", i % 2 === 0 ? "character" : "event");
+    cardInstances[h] = makeInstance(
+      h,
+      "player",
+      i % 2 === 0 ? "character" : "event",
+    );
+    cardInstances[v] = makeInstance(
+      v,
+      "player",
+      i % 2 === 0 ? "character" : "event",
+    );
+    cardInstances[d] = makeInstance(
+      d,
+      "player",
+      i % 2 === 0 ? "character" : "event",
+    );
   }
   return {
-    battleId: "test-battle",
+    battleId: asBattleId("test-battle"),
     activeSide: "player",
     turnNumber: 1,
     phase: "day",
@@ -264,8 +297,8 @@ function makeBoard(): BattleMutableState {
 // enough to prove preservation; it is cast because the full shape is irrelevant
 // here (init construction is BEGIN_BATTLE's concern, tested in battle-events).
 const TEST_INIT = {
-  battleId: "test-battle",
-  siteId: "site-1",
+  battleId: asBattleId("test-battle"),
+  siteId: asSiteId("site-1"),
   dreamscapeId: null,
   scoreToWin: 30,
   turnLimit: 12,
@@ -287,7 +320,10 @@ function foldState(runs: EffectRun[], board = makeBoard()): BattleFoldState {
 function autoResolve(options: ActivePrompt): PromptResolution {
   switch (options.kind) {
     case "pick-cards":
-      return { kind: "pick-cards", chosenIds: options.candidateIds.slice(0, options.count) };
+      return {
+        kind: "pick-cards",
+        chosenIds: options.candidateIds.slice(0, options.count),
+      };
     case "choice":
       return { kind: "choice", optionIndex: 0 };
     case "foresee":
@@ -295,12 +331,16 @@ function autoResolve(options: ActivePrompt): PromptResolution {
   }
 }
 
-function driveToCompletion(state: BattleFoldState, seqStart: number): BattleFoldState {
+function driveToCompletion(
+  state: BattleFoldState,
+  seqStart: number,
+): BattleFoldState {
   let current = state;
   let seq = seqStart;
   let guard = 0;
   while (current.pendingPrompt !== null) {
-    if (guard++ > 20) throw new Error("driveToCompletion: prompt loop did not terminate");
+    if (guard++ > 20)
+      throw new Error("driveToCompletion: prompt loop did not terminate");
     const resolution = autoResolve(current.pendingPrompt.options);
     current = resolvePendingPrompt(current, resolution, ctx({ seq }));
     seq += 1;
@@ -323,7 +363,12 @@ describe("advanceEffectQueue — edit-only run", () => {
     expect(result.pendingPrompt).toBeNull();
     expect(result.effectQueue).toEqual([]);
 
-    const expectedBoard = applyEditsOracle(makeBoard(), [resolveScript(ref)], "player", context);
+    const expectedBoard = applyEditsOracle(
+      makeBoard(),
+      [resolveScript(ref)],
+      "player",
+      context,
+    );
     expect(hashBoard(result.board)).toBe(hashBoard(expectedBoard));
   });
 
@@ -344,7 +389,7 @@ describe("advanceEffectQueue — edit-only run", () => {
 describe("advanceEffectQueue — Nomad's Verge dreamwell placement", () => {
   const NOMADS_VERGE_REF: ScriptRef = {
     table: "dreamwell",
-    id: "51caf26d-83bf-45a9-bc80-010d353277db",
+    id: asBattleEffectScriptId("51caf26d-83bf-45a9-bc80-010d353277db"),
   };
 
   it("places the figment at the leftmost open back-rank slot in a journey battle", () => {
@@ -361,7 +406,7 @@ describe("advanceEffectQueue — Nomad's Verge dreamwell placement", () => {
       ...foldState([newEffectRun(NOMADS_VERGE_REF, "enemy")]),
       mode: {
         kind: "tutorial",
-        tutorialRunId: "test-run",
+        tutorialRunId: asTutorialRunId("test-run"),
         restartNumber: 0,
         resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
       },
@@ -380,7 +425,7 @@ describe("advanceEffectQueue — prompt parking", () => {
   it("drains 9954cede-8a16-4053-b6e9-da745f4540f5 when no enemy is in play", () => {
     const ref: ScriptRef = {
       table: "dreamwell",
-      id: "9954cede-8a16-4053-b6e9-da745f4540f5",
+      id: asBattleEffectScriptId("9954cede-8a16-4053-b6e9-da745f4540f5"),
     };
     const result = advanceEffectQueue(
       foldState([newEffectRun(ref, "player")]),
@@ -395,7 +440,10 @@ describe("advanceEffectQueue — prompt parking", () => {
     const ref = topLevelPickCardsDreamwellRef();
     const context = ctx({ seq: 9 });
 
-    const result = advanceEffectQueue(foldState([newEffectRun(ref, "player")]), context);
+    const result = advanceEffectQueue(
+      foldState([newEffectRun(ref, "player")]),
+      context,
+    );
 
     expect(result.pendingPrompt).not.toBeNull();
     const pending = result.pendingPrompt!;
@@ -416,11 +464,19 @@ describe("advanceEffectQueue — prompt parking", () => {
     const steps = resolveScript(ref);
     const context = ctx({ seq: 5 });
 
-    const result = advanceEffectQueue(foldState([newEffectRun(ref, "player")]), context);
+    const result = advanceEffectQueue(
+      foldState([newEffectRun(ref, "player")]),
+      context,
+    );
 
     expect(result.pendingPrompt).not.toBeNull();
     // Board reflects the leading edit step only (not the prompt's resolution).
-    const leadingOnly = applyEditsOracle(makeBoard(), [[steps[0]]], "player", context);
+    const leadingOnly = applyEditsOracle(
+      makeBoard(),
+      [[steps[0]]],
+      "player",
+      context,
+    );
     expect(hashBoard(result.board)).toBe(hashBoard(leadingOnly));
   });
 });
@@ -432,7 +488,10 @@ describe("advanceEffectQueue — prompt parking", () => {
 describe("resolvePendingPrompt — resume", () => {
   it("applies the resolution edits and drains the queue", () => {
     const ref = topLevelPickCardsDreamwellRef();
-    const parked = advanceEffectQueue(foldState([newEffectRun(ref, "player")]), ctx({ seq: 9 }));
+    const parked = advanceEffectQueue(
+      foldState([newEffectRun(ref, "player")]),
+      ctx({ seq: 9 }),
+    );
     expect(parked.pendingPrompt).not.toBeNull();
     const parkedHash = hashBoard(parked.board);
 
@@ -448,22 +507,36 @@ describe("resolvePendingPrompt — resume", () => {
   it("returns the input unchanged when no prompt is pending (defensive)", () => {
     const state = foldState([]);
     const before = hashState(state);
-    const result = resolvePendingPrompt(state, { kind: "foresee" }, ctx({ seq: 2 }));
+    const result = resolvePendingPrompt(
+      state,
+      { kind: "foresee" },
+      ctx({ seq: 2 }),
+    );
     expect(hashState(result)).toBe(before);
   });
 
   it("preserves the immutable init across advance and resolve", () => {
     const ref = topLevelPickCardsDreamwellRef();
-    const parked = advanceEffectQueue(foldState([newEffectRun(ref, "player")]), ctx({ seq: 9 }));
+    const parked = advanceEffectQueue(
+      foldState([newEffectRun(ref, "player")]),
+      ctx({ seq: 9 }),
+    );
     // advanceEffectQueue carries init through unchanged.
     expect(parked.init).toBe(TEST_INIT);
 
-    const resumed = resolvePendingPrompt(parked, autoResolve(parked.pendingPrompt!.options), ctx({ seq: 10 }));
+    const resumed = resolvePendingPrompt(
+      parked,
+      autoResolve(parked.pendingPrompt!.options),
+      ctx({ seq: 10 }),
+    );
     // resolvePendingPrompt (which threads through runQueue) preserves it too.
     expect(resumed.init).toBe(TEST_INIT);
 
     // An edit-only advance that drains without parking also preserves it.
-    const drained = advanceEffectQueue(foldState([newEffectRun(editOnlyDreamwellRef(), "player")]), ctx({ seq: 3 }));
+    const drained = advanceEffectQueue(
+      foldState([newEffectRun(editOnlyDreamwellRef(), "player")]),
+      ctx({ seq: 3 }),
+    );
     expect(drained.init).toBe(TEST_INIT);
   });
 });
@@ -475,14 +548,19 @@ describe("resolvePendingPrompt — resume", () => {
 describe("cursor serialization (closure-smuggling guard)", () => {
   it("a nested-prompt run parked mid-flight resumes identically after encode/decode", () => {
     const ref = nestedPromptDreamwellRef();
-    const parked = advanceEffectQueue(foldState([newEffectRun(ref, "player")]), ctx({ seq: 1 }));
+    const parked = advanceEffectQueue(
+      foldState([newEffectRun(ref, "player")]),
+      ctx({ seq: 1 }),
+    );
     expect(parked.pendingPrompt).not.toBeNull();
     // Parked on the top-level confirm.
     expect(parked.pendingPrompt!.kind).toBe("confirm");
 
     const roundTripped = JSON.parse(JSON.stringify(parked)) as BattleFoldState;
     // Round-trip preserves the cursor bytes exactly.
-    expect(roundTripped.pendingPrompt!.run.cursor).toEqual(parked.pendingPrompt!.run.cursor);
+    expect(roundTripped.pendingPrompt!.run.cursor).toEqual(
+      parked.pendingPrompt!.run.cursor,
+    );
 
     const finalDirect = driveToCompletion(parked, 100);
     const finalRoundTripped = driveToCompletion(roundTripped, 100);
@@ -494,11 +572,18 @@ describe("cursor serialization (closure-smuggling guard)", () => {
 
   it("descends into a confirm.onYes branch — cursor grows a level", () => {
     const ref = nestedPromptDreamwellRef();
-    const parked = advanceEffectQueue(foldState([newEffectRun(ref, "player")]), ctx({ seq: 1 }));
+    const parked = advanceEffectQueue(
+      foldState([newEffectRun(ref, "player")]),
+      ctx({ seq: 1 }),
+    );
     expect(parked.pendingPrompt!.run.cursor).toEqual([0]);
 
     // Confirm "Yes" (option 0) should descend into onYes, exposing the inner prompt.
-    const afterYes = resolvePendingPrompt(parked, { kind: "choice", optionIndex: 0 }, ctx({ seq: 2 }));
+    const afterYes = resolvePendingPrompt(
+      parked,
+      { kind: "choice", optionIndex: 0 },
+      ctx({ seq: 2 }),
+    );
     expect(afterYes.pendingPrompt).not.toBeNull();
     // Inner prompt cursor addresses a step inside the branch (depth 2).
     expect(afterYes.pendingPrompt!.run.cursor.length).toBe(2);

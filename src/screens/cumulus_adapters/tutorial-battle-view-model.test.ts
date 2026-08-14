@@ -7,6 +7,11 @@ import { buildMobileBattleView } from "./mobile-battle-view-model";
 import { buildTutorialBattleView } from "./tutorial-battle-view-model";
 import { assertLocalized } from "@trox/runtime";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { asBattleId } from "../../types/identifiers";
+import { asOpponentId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asBattleCardId } from "../../types/identifiers";
+import { asPresentationId } from "../../types/identifiers";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -78,7 +83,11 @@ describe("buildTutorialBattleView", () => {
         tutorialPresentation: {
           id: "tutorial-guidance:1",
           kind: "tutorial-guidance",
-          source: { kind: "dreamwell", cardId: "card-uuid", side: "player" },
+          source: {
+            kind: "dreamwell",
+            cardId: asCardId("card-uuid"),
+            side: "player",
+          },
           messages: [],
           messageIndex: 0,
           continuation: { kind: "commands", commands: [] },
@@ -108,7 +117,7 @@ describe("buildTutorialBattleView", () => {
     const battleCardId = "enemy-card-instance";
     const cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e";
     const instance = {
-      battleCardId,
+      battleCardId: asBattleCardId(battleCardId),
       owner: "enemy",
       controller: "enemy",
       sparkDelta: 0,
@@ -138,7 +147,7 @@ describe("buildTutorialBattleView", () => {
       },
       definition: {
         sourceDeckEntryId: null,
-        cardId,
+        cardId: asCardId(cardId),
         cardNumber: 520,
         name: "Synthetic opponent card",
         battleCardKind: "character",
@@ -183,8 +192,8 @@ describe("buildTutorialBattleView", () => {
       tutorialPresentation: {
         id: `opponent-play:${battleCardId}`,
         kind: "opponent-play",
-        cardId,
-        battleCardId,
+        cardId: asCardId(cardId),
+        battleCardId: asBattleCardId(battleCardId),
         cardKind: "character",
       },
     } as unknown as BattleFoldState;
@@ -200,12 +209,11 @@ describe("buildTutorialBattleView", () => {
       null,
     );
 
-    const projectedBoard =
-      vi.mocked(buildMobileBattleView).mock.lastCall?.[1];
+    const projectedBoard = vi.mocked(buildMobileBattleView).mock.lastCall?.[1];
     expect(projectedBoard?.sides.enemy.backRank.B4).toBeNull();
     expect(view.presentation).toMatchObject({
       kind: "opponent-play",
-      battleCardId,
+      battleCardId: asBattleCardId(battleCardId),
       card: { id: battleCardId },
     });
 
@@ -248,8 +256,8 @@ describe("buildTutorialBattleView", () => {
       } as TutorialBattleControllerPlan,
       null,
     );
-    const projectedEventBoard =
-      vi.mocked(buildMobileBattleView).mock.lastCall?.[1];
+    const projectedEventBoard = vi.mocked(buildMobileBattleView).mock
+      .lastCall?.[1];
     expect(projectedEventBoard?.sides.enemy.void).toEqual([]);
     expect(eventView.presentation).toMatchObject({
       kind: "opponent-play",
@@ -294,8 +302,8 @@ describe("buildTutorialBattleView", () => {
         tutorialPresentation: {
           id: presentationId,
           kind: "opponent-play",
-          cardId: "229ab3a1-3720-41a2-924c-8fe112188f8e",
-          battleCardId: "missing-instance",
+          cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+          battleCardId: asBattleCardId("missing-instance"),
           cardKind: "character",
         },
       } as unknown as BattleFoldState,
@@ -348,8 +356,10 @@ describe("buildTutorialBattleView", () => {
               ? { blockers: [] }
               : {
                   slotId: "F0",
-                  challengerBattleCardId: "enemy-challenger-uuid",
-                  blockerBattleCardId: "player-blocker-uuid",
+                  challengerBattleCardId: asBattleCardId(
+                    "enemy-challenger-uuid",
+                  ),
+                  blockerBattleCardId: asBattleCardId("player-blocker-uuid"),
                   scored: null,
                   dissolved: [],
                 }),
@@ -366,7 +376,7 @@ describe("buildTutorialBattleView", () => {
 
       expect(view.presentation).toEqual({
         kind,
-        presentationId,
+        presentationId: asPresentationId(presentationId),
         ...(kind === "challenge-resolved"
           ? { paired: true, dissolved: [], scored: null }
           : {}),
@@ -381,11 +391,11 @@ describe("buildTutorialBattleView", () => {
       enemy,
       near: player,
       far: enemy,
-      battleId: "settled",
+      battleId: asBattleId("settled"),
     } as MobileBattleView;
     const originView = {
       ...settledView,
-      battleId: "origin",
+      battleId: asBattleId("origin"),
     } as MobileBattleView;
     vi.mocked(buildMobileBattleView)
       .mockReturnValueOnce(settledView)
@@ -433,12 +443,12 @@ describe("buildTutorialBattleView", () => {
         kind: "challenge-resolved",
         activeSide: "player",
         slotId: "F4",
-        challengerBattleCardId: playerLoser,
-        blockerBattleCardId: enemyLoser,
+        challengerBattleCardId: asBattleCardId(playerLoser),
+        blockerBattleCardId: asBattleCardId(enemyLoser),
         scored: null,
         dissolved: [
-          { battleCardId: playerLoser, side: "player" },
-          { battleCardId: enemyLoser, side: "enemy" },
+          { battleCardId: asBattleCardId(playerLoser), side: "player" },
+          { battleCardId: asBattleCardId(enemyLoser), side: "enemy" },
         ],
       },
     } as unknown as BattleFoldState;
@@ -471,8 +481,8 @@ describe("buildTutorialBattleView", () => {
     expect(view.presentation).toMatchObject({
       kind: "challenge-resolved",
       dissolved: [
-        { battleCardId: playerLoser, side: "player" },
-        { battleCardId: enemyLoser, side: "enemy" },
+        { battleCardId: asBattleCardId(playerLoser), side: "player" },
+        { battleCardId: asBattleCardId(enemyLoser), side: "enemy" },
       ],
     });
   });
@@ -490,7 +500,7 @@ describe("buildTutorialBattleView", () => {
       {
         init: {
           enemyDescriptor: {
-            id: "enemy-avatar-uuid",
+            id: asOpponentId("enemy-avatar-uuid"),
             imageNumber: "0025",
             name: "Enemy",
             subtitle: "Opponent",

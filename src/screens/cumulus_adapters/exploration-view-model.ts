@@ -60,11 +60,21 @@ import { projectGuideView } from "./guide-view-model";
 import { transfigurationForm } from "../../data/transfiguration-data";
 import { tx, txa } from "@trox/runtime";
 import { localizedTransfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
+import type { GuideId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import type { DreamsignId } from "../../types/identifiers";
+import type { DreamAvatarId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asSelectionKey } from "../../types/identifiers";
+import { asRewardCandidateKey } from "../../types/identifiers";
 
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
   guides: readonly DreamGuideContent[],
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent {
   return requireGuideForSiteType(guides, "Exploration", presentingGuideId);
 }
@@ -99,7 +109,7 @@ function matchesPredicate(
   }
 }
 
-function cardById(content: JourneyContent, cardId: string): CardData | null {
+function cardById(content: JourneyContent, cardId: CardId): CardData | null {
   const normalized = cardId.toLowerCase();
   return (
     [...content.cardDatabase.values()].find(
@@ -116,7 +126,7 @@ function hasStarterCardRole(card: CardData): boolean {
 
 function dreamsignById(
   content: JourneyContent,
-  dreamsignId: string,
+  dreamsignId: DreamsignId,
 ): ReturnType<typeof createDreamsign> | null {
   const normalized = dreamsignId.toLowerCase();
   const customDreamsign = content.exploration?.customDreamsigns.find(
@@ -129,7 +139,10 @@ function dreamsignById(
   return template === undefined ? null : createDreamsign(template);
 }
 
-function dreamAvatarById(content: JourneyContent, dreamAvatarId: string) {
+function dreamAvatarById(
+  content: JourneyContent,
+  dreamAvatarId: DreamAvatarId,
+) {
   const normalized = dreamAvatarId.toLowerCase();
   const dreamAvatar = content.dreamAvatars.find(
     (candidate) => candidate.id.toLowerCase() === normalized,
@@ -144,7 +157,7 @@ function modelForCard(card: CardData): GameCardModel {
 function deckCardChoice(
   entry: DeckEntry,
   content: JourneyContent,
-): ExplorationCardChoiceView | null {
+): ExplorationCardChoiceView<DeckEntryId> | null {
   const base = content.cardDatabase.get(entry.cardNumber);
   if (base === undefined) return null;
   const resolved = resolveDeckEntryCard(
@@ -174,7 +187,7 @@ function eligibleDeckCards(
   state: JourneyState,
   content: JourneyContent,
   predicate?: ExplorationPredicate,
-): readonly ExplorationCardChoiceView[] {
+): readonly ExplorationCardChoiceView<DeckEntryId>[] {
   return state.deck.flatMap((entry) => {
     const card = deckCardChoice(entry, content);
     if (card === null) return [];
@@ -192,7 +205,7 @@ function freeTransfigurationCandidates(
   state: JourneyState,
   content: JourneyContent,
   predicate?: ExplorationPredicate,
-  offeredEntryIds?: readonly string[],
+  offeredEntryIds?: readonly DeckEntryId[],
 ): readonly TransfigurationCandidateView[] {
   const offered =
     offeredEntryIds === undefined ? null : new Set(offeredEntryIds);
@@ -278,7 +291,7 @@ function preparedMultiCardTransfigurationCards(
   offer: ExplorationActionOfferRuntime,
   state: JourneyState,
   content: JourneyContent,
-): readonly ExplorationCardChoiceView[] {
+): readonly ExplorationCardChoiceView<DeckEntryId>[] {
   return preparedMultiCardTransfigurationCandidates(offer, state, content).map(
     (candidate) => ({
       entryId: candidate.entryId,
@@ -294,7 +307,7 @@ function preparedMultiCardReplacementCards(
   offer: ExplorationActionOfferRuntime,
   state: JourneyState,
   content: JourneyContent,
-): readonly ExplorationCardChoiceView[] {
+): readonly ExplorationCardChoiceView<DeckEntryId>[] {
   const preparation = offer.multiCardReplacementPreparation;
   if (preparation === undefined) return [];
   return preparation.bindings.flatMap((binding) => {
@@ -314,9 +327,9 @@ function offeredCards(
   ids: readonly string[],
   content: JourneyContent,
   transfigurationByCardId?: Readonly<Record<string, TransfigurationType>>,
-): readonly ExplorationCardChoiceView[] {
+): readonly ExplorationCardChoiceView<CardId>[] {
   return ids.flatMap((id) => {
-    const card = cardById(content, id);
+    const card = cardById(content, asCardId(id));
     if (card === null) return [];
     const transfiguration = transfigurationByCardId?.[card.id];
     if (transfiguration === undefined) {
@@ -345,7 +358,7 @@ function offeredDeckCards(
   ids: readonly string[],
   state: JourneyState,
   content: JourneyContent,
-): readonly ExplorationCardChoiceView[] {
+): readonly ExplorationCardChoiceView<DeckEntryId>[] {
   return ids.flatMap((entryId) => {
     const entry = state.deck.find((candidate) => candidate.entryId === entryId);
     if (entry === undefined) return [];
@@ -367,7 +380,7 @@ function dreamsignChoices(
   content: JourneyContent,
 ): readonly ReturnType<typeof localizedDreamsign>[] {
   return ids.flatMap((id) => {
-    const dreamsign = dreamsignById(content, id);
+    const dreamsign = dreamsignById(content, asDreamsignId(id));
     if (dreamsign?.id === undefined) return [];
     return [localizedDreamsign(dreamsign, "Exploration Dreamsign choice")];
   });
@@ -427,19 +440,50 @@ function dreamsignFlowFollowup(
 function deckFollowup(
   title: LocalizedString,
   subtitle: LocalizedString,
+  cards: readonly ExplorationCardChoiceView<DeckEntryId>[],
+  mode: "single" | "exact" | "purge-and-copy",
+  selectionOperation: ExplorationCardSelectionOperation | undefined,
+  count?: number,
+  selectionKey?: "entryIds",
+): ExplorationFollowupView;
+function deckFollowup(
+  title: LocalizedString,
+  subtitle: LocalizedString,
+  cards: readonly ExplorationCardChoiceView<CardId>[],
+  mode: "single" | "exact",
+  selectionOperation: ExplorationCardSelectionOperation | undefined,
+  count: number,
+  selectionKey: "cardIds",
+): ExplorationFollowupView;
+function deckFollowup(
+  title: LocalizedString,
+  subtitle: LocalizedString,
   cards: readonly ExplorationCardChoiceView[],
   mode: "single" | "exact" | "purge-and-copy",
   selectionOperation: ExplorationCardSelectionOperation | undefined,
   count = 1,
   selectionKey: "entryIds" | "cardIds" = "entryIds",
 ): ExplorationFollowupView {
+  if (selectionKey === "cardIds") {
+    return {
+      kind: "cards",
+      title,
+      subtitle,
+      cards: cards as readonly ExplorationCardChoiceView<CardId>[],
+      mode: mode === "purge-and-copy" ? "exact" : mode,
+      selectionKey,
+      ...(selectionOperation === undefined ? {} : { selectionOperation }),
+      min: count,
+      max: count,
+    };
+  }
   return {
     kind: "cards",
     title,
     subtitle,
-    cards,
+    cards: cards as readonly ExplorationCardChoiceView<DeckEntryId>[],
     mode,
-    selectionKey,
+    selectionKey: "entryIds",
     ...(selectionOperation === undefined ? {} : { selectionOperation }),
     min: count,
     max: count,
@@ -453,7 +497,8 @@ function configuredFollowupCopy(
   fallback: string | LocalizedString | SourceMessage,
 ): LocalizedString {
   const template = action[key];
-  const selected = template === undefined || template === "" ? fallback : template;
+  const selected =
+    template === undefined || template === "" ? fallback : template;
   const valueFor = (name: string): number | LocalizedString => {
     switch (name) {
       case "action_label":
@@ -467,27 +512,39 @@ function configuredFollowupCopy(
       case "essence_per_spark":
         if (action.essencePerSpark !== undefined) return action.essencePerSpark;
         if (content.economyData === undefined) {
-          throw new Error("Missing Exploration economy data for {essence_per_spark}.");
+          throw new Error(
+            "Missing Exploration economy data for {essence_per_spark}.",
+          );
         }
         return content.economyData.exploration.defaultEssencePerSpark;
       default:
-        throw new Error(`Missing configured Exploration followup argument {${name}}.`);
+        throw new Error(
+          `Missing configured Exploration followup argument {${name}}.`,
+        );
     }
   };
   if (selected instanceof LocalizedString) return selected;
-  const names = selected instanceof SourceMessage
-    ? Object.keys(selected.argumentSchemas)
-    : [...selected.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map(
-        (match) => match[1] ?? "",
-      );
-  const values = Object.fromEntries(names.map((name) => [name, valueFor(name)]));
+  const names =
+    selected instanceof SourceMessage
+      ? Object.keys(selected.argumentSchemas)
+      : [...selected.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map(
+          (match) => match[1] ?? "",
+        );
+  const values = Object.fromEntries(
+    names.map((name) => [name, valueFor(name)]),
+  );
   if (selected instanceof SourceMessage) {
-    return selected.bind(Object.fromEntries(
-      names.map((name) => {
-        const value = values[name];
-        return [name, value instanceof LocalizedString ? opaque(value) : value];
-      }),
-    ));
+    return selected.bind(
+      Object.fromEntries(
+        names.map((name) => {
+          const value = values[name];
+          return [
+            name,
+            value instanceof LocalizedString ? opaque(value) : value,
+          ];
+        }),
+      ),
+    );
   }
   return localizedSourceText(selected, values);
 }
@@ -1142,7 +1199,7 @@ interface ExplorationEffectReference {
 }
 
 interface DeckCardVariableTarget {
-  readonly entryId: string;
+  readonly entryId: DeckEntryId;
   readonly entity: Extract<ExplorationEntityView, { readonly kind: "card" }>;
 }
 
@@ -1273,10 +1330,7 @@ function effectReferencesForAction(
       });
     }
   }
-  if (
-    argumentNames.includes("deck_card") &&
-    deckCardEntity !== undefined
-  ) {
+  if (argumentNames.includes("deck_card") && deckCardEntity !== undefined) {
     references.push({
       needle: "{deck_card}",
       part: { kind: "entity", entity: deckCardEntity },
@@ -1291,10 +1345,7 @@ function effectReferencesForAction(
       part: { kind: "entity", entity: starterCardEntity },
     });
   }
-  if (
-    argumentNames.includes("fixed_card") &&
-    action.cardId !== undefined
-  ) {
+  if (argumentNames.includes("fixed_card") && action.cardId !== undefined) {
     const card = cardById(content, action.cardId);
     if (card !== null) {
       references.push({
@@ -1325,10 +1376,7 @@ function effectReferencesForAction(
       });
     }
   }
-  if (
-    argumentNames.includes("card_type") &&
-    action.cardType !== undefined
-  ) {
+  if (argumentNames.includes("card_type") && action.cardType !== undefined) {
     references.push({
       needle: "{card_type}",
       part: { kind: "card-type", cardType: action.cardType },
@@ -1358,9 +1406,12 @@ function effectReferencesForAction(
 function explorationEffectArgumentNames(
   message: ExplorationActionContent["effectText"],
 ): readonly string[] {
-  if (message instanceof SourceMessage) return Object.keys(message.argumentSchemas);
+  if (message instanceof SourceMessage)
+    return Object.keys(message.argumentSchemas);
   if (typeof message === "string") {
-    return [...message.matchAll(/\{([a-z_]+)\}/g)].map((match) => match[1] ?? "");
+    return [...message.matchAll(/\{([a-z_]+)\}/g)].map(
+      (match) => match[1] ?? "",
+    );
   }
   return [];
 }
@@ -1378,7 +1429,8 @@ function localizedUnpreparedEffect(
 ): LocalizedString {
   if (message instanceof LocalizedString) return message;
   if (message instanceof SourceMessage) {
-    if (Object.keys(message.argumentSchemas).length === 0) return message.bind({});
+    if (Object.keys(message.argumentSchemas).length === 0)
+      return message.bind({});
     return tx(
       "Exploration effect resolved",
       "[exploration] Generic player-safe Exploration outcome used when a resolved typed effect requires presentation arguments that are unavailable.",
@@ -1410,40 +1462,40 @@ export function buildExplorationActionEffect(
   ): LocalizedString => {
     const argumentNames = explorationEffectArgumentNames(action.effectText);
     const localizedValues: Record<string, LocalizedString> = Object.fromEntries(
-      argumentNames.map(
-        (argumentName) => {
-          const concealedTarget = concealedTargets[argumentName];
-          if (concealedTarget !== undefined) {
-            return [argumentName, concealedTarget];
-          }
-          const reference = references.find(
-            (candidate) => candidate.needle === `{${argumentName}}`,
+      argumentNames.map((argumentName) => {
+        const concealedTarget = concealedTargets[argumentName];
+        if (concealedTarget !== undefined) {
+          return [argumentName, concealedTarget];
+        }
+        const reference = references.find(
+          (candidate) => candidate.needle === `{${argumentName}}`,
+        );
+        if (reference === undefined) {
+          throw new Error(
+            `Missing localized Exploration effect argument {${argumentName}}.`,
           );
-          if (reference === undefined) {
-            throw new Error(
-              `Missing localized Exploration effect argument {${argumentName}}.`,
-            );
-          }
-          if (reference.part.kind === "card-type") {
-            return [
-              argumentName,
-              localizedSourceText(reference.part.cardType),
-            ];
-          }
-          const entity = reference.part.entity;
-          return [
-            argumentName,
-            entity.kind === "card"
-              ? localizedSourceText(entity.card.name)
-              : entity.dreamsign.name,
-          ];
-        },
-      ),
+        }
+        if (reference.part.kind === "card-type") {
+          return [argumentName, localizedSourceText(reference.part.cardType)];
+        }
+        const entity = reference.part.entity;
+        return [
+          argumentName,
+          entity.kind === "card"
+            ? localizedSourceText(entity.card.name)
+            : entity.dreamsign.name,
+        ];
+      }),
     );
     if (action.effectText instanceof SourceMessage) {
-      return action.effectText.bind(Object.fromEntries(
-        Object.entries(localizedValues).map(([name, value]) => [name, opaque(value)]),
-      ));
+      return action.effectText.bind(
+        Object.fromEntries(
+          Object.entries(localizedValues).map(([name, value]) => [
+            name,
+            opaque(value),
+          ]),
+        ),
+      );
     }
     if (action.effectText instanceof LocalizedString) return action.effectText;
     return localizedSourceText(action.effectText, localizedValues);
@@ -1666,7 +1718,10 @@ function hasUsableStarterCardTransfigurationPreparation(
     return false;
   }
   const validBindings = (
-    bindings: readonly { readonly entryId: string; readonly cardId: string }[],
+    bindings: readonly {
+      readonly entryId: DeckEntryId;
+      readonly cardId: CardId;
+    }[],
   ): boolean =>
     new Set(bindings.map((binding) => binding.entryId)).size ===
       bindings.length &&
@@ -2129,7 +2184,7 @@ function hasUsableCompoundActionPreparation(
     return false;
   }
 
-  const currentCard = (entryId: string, cardId: string) => {
+  const currentCard = (entryId: DeckEntryId, cardId: CardId) => {
     const entry = state.deck.find((candidate) => candidate.entryId === entryId);
     const card = entry === undefined ? null : deckCardChoice(entry, content);
     return card !== null &&
@@ -2138,7 +2193,7 @@ function hasUsableCompoundActionPreparation(
       : null;
   };
   const hasDistinctEntries = (
-    bindings: readonly { readonly entryId: string }[],
+    bindings: readonly { readonly entryId: DeckEntryId }[],
   ) =>
     new Set(bindings.map((binding) => binding.entryId)).size ===
     bindings.length;
@@ -2345,7 +2400,7 @@ function actionView(
       siteInsertionPreparation !== undefined &&
       offer.canonicalMechanicId === "add-site" &&
       offer.selectionPolicyId === "fixed" &&
-      offer.selectionKey === action.id &&
+      offer.selectionKey === asSelectionKey(action.id) &&
       offer.selectionSignature === siteInsertionPreparation.planSignature &&
       offer.selectionTrace === undefined &&
       offer.selectionTraces === undefined &&
@@ -2378,14 +2433,17 @@ function actionView(
       followup.kind === "site-types" &&
       offer.canonicalMechanicId === "add-site" &&
       offer.selectionPolicyId === "site-uniform" &&
-      offer.selectionKey === action.id &&
+      offer.selectionKey === asSelectionKey(action.id) &&
       offer.selectionSignature === siteTypeChoicePreparation.planSignature &&
       offer.selectionTrace !== undefined &&
       siteTypeChoicePreparation.selectorSignature.length > 0 &&
       offer.selectionTrace.mechanicId === "add-site" &&
       offer.selectionTrace.policyId === "site-uniform" &&
-      offer.selectionTrace.selectionKey === action.id &&
-      sameOrderedIds(offer.selectionTrace.selectedKeys, preparedSiteTypes) &&
+      offer.selectionTrace.selectionKey === asSelectionKey(action.id) &&
+      sameOrderedIds(
+        offer.selectionTrace.selectedKeys,
+        preparedSiteTypes.map(asRewardCandidateKey),
+      ) &&
       offer.selectionTraces === undefined &&
       offer.offeredSiteType === undefined &&
       siteTypeChoicePreparation.sourceSiteId === state.activeSiteId &&
@@ -2600,9 +2658,9 @@ function actionView(
   };
 }
 
-function sameOrderedIds(
-  actual: readonly string[],
-  expected: readonly string[],
+function sameOrderedIds<Value>(
+  actual: readonly Value[],
+  expected: readonly Value[],
 ): boolean {
   return (
     actual.length === expected.length &&
@@ -2612,22 +2670,22 @@ function sameOrderedIds(
 
 function persistedSelectionIds(
   resolution: NonNullable<ExplorationSiteRuntime["resolution"]>,
-): readonly string[] | null {
+): readonly DeckEntryId[] | null {
   const entryIds = resolution.selection?.entryIds;
   return Array.isArray(entryIds) &&
     entryIds.every((entryId): entryId is string => typeof entryId === "string")
-    ? entryIds
+    ? entryIds.map(asDeckEntryId)
     : null;
 }
 
 function persistedSelectionCardIds(
   resolution: NonNullable<ExplorationSiteRuntime["resolution"]>,
-): readonly string[] | null {
+): readonly CardId[] | null {
   const cardIds = resolution.selection?.cardIds;
   return Array.isArray(cardIds) &&
     cardIds.every((cardId): cardId is string => typeof cardId === "string") &&
     new Set(cardIds).size === cardIds.length
-    ? cardIds
+    ? cardIds.map(asCardId)
     : null;
 }
 
@@ -2848,8 +2906,8 @@ function compoundActionRewardForResolution(
   };
   const matchesPreparedTransfigurations = (
     targets: readonly {
-      readonly entryId: string;
-      readonly cardId: string;
+      readonly entryId: DeckEntryId;
+      readonly cardId: CardId;
       readonly transfiguration: TransfigurationType;
     }[],
   ) =>
@@ -3385,7 +3443,7 @@ function cardTypeChangesRewardForResolution(
     return null;
   }
   const mappings = resolution.cardTypeChanges ?? [];
-  let preparedTargets: Array<{ entryId: string; cardId: string }>;
+  let preparedTargets: Array<{ entryId: DeckEntryId; cardId: CardId }>;
   if (isRandom) {
     preparedTargets = [...(offer.randomDeckTargetPreparation?.targets ?? [])];
   } else if (isDisclosed) {
@@ -3798,7 +3856,7 @@ function starterCardRewardForResolution(
 
 function rewardForResolution(
   runtime: ExplorationSiteRuntime,
-  siteId: string,
+  siteId: SiteId,
   state: JourneyState,
   content: JourneyContent,
   sceneNode: DreamscapeNode | null,
@@ -4015,14 +4073,8 @@ function rewardForResolution(
       }
       return [
         {
-          removed: localizedDreamsign(
-            removed,
-            "Exploration removed Dreamsign",
-          ),
-          gained: localizedDreamsign(
-            gained,
-            "Exploration gained Dreamsign",
-          ),
+          removed: localizedDreamsign(removed, "Exploration removed Dreamsign"),
+          gained: localizedDreamsign(gained, "Exploration gained Dreamsign"),
         },
       ];
     });
@@ -4458,9 +4510,10 @@ function rewardForResolution(
             if (card === null) return [];
             return [
               {
-                entryId:
+                entryId: asDeckEntryId(
                   resolution.purgedEntryIds?.[index] ??
-                  `purged:${String(index)}:${card.id}`,
+                    `purged:${String(index)}:${card.id}`,
+                ),
                 model: modelForCard(card),
                 isBane: false,
               },
@@ -4496,7 +4549,7 @@ function rewardForResolution(
     ? null
     : {
         semanticKind,
-        objects: { cards, purgedCards, dreamsigns },
+        objects: { cards, purgedCards: purgedCards, dreamsigns },
         deckModification,
       };
 }

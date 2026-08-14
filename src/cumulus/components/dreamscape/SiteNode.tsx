@@ -30,6 +30,7 @@ import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import "./site-node.css";
 import type { LocalizedString } from "@trox/runtime";
+import type { SiteId } from "../../../types/identifiers";
 
 /** Compact diameter for site nodes placed over a dreamscape scene. */
 const SCENE_NODE_SIZE = 60;
@@ -48,7 +49,7 @@ const NODE_ACCENT: CumulusColor = "accent";
  */
 export interface DreamscapeSiteModel {
   /** Stable site identity. */
-  id: string;
+  id: SiteId;
   /** Site category exposed for diagnostics. */
   type: SiteType;
   /** Whether this site has already been completed. */
@@ -100,7 +101,7 @@ export interface SiteNodeProps {
   /** Scene placement or a large reward preview. Defaults to `scene`. */
   presentation?: "scene" | "reward" | "choice";
   /** Enter the site; fired on a tap / click of an interactive node only. */
-  onSelect: (siteId: string) => void;
+  onSelect: (siteId: SiteId) => void;
 }
 
 /**

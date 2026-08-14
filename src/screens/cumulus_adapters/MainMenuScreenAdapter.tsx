@@ -7,6 +7,7 @@ import {
 import { logEvent } from "../../logging";
 import { useFrontDoor } from "../../state/front-door-context";
 import { buildMainMenuView } from "./main-menu-view-model";
+import { asFrontDoorActionId } from "../../types/identifiers";
 
 /** Coop-backed `/main` wiring, including its cinematic New Journey transition. */
 export function MainMenuScreenAdapter({
@@ -31,9 +32,11 @@ export function MainMenuScreenAdapter({
   const handleAction = useCallback(
     (actionId: MainMenuActionId) => {
       logEvent("main_menu_action_pressed", { actionId });
-      void mutations.action("main", actionId).catch((error: unknown) => {
-        console.error("Coop main-menu action failed", error);
-      });
+      void mutations
+        .action("main", asFrontDoorActionId(actionId))
+        .catch((error: unknown) => {
+          console.error("Coop main-menu action failed", error);
+        });
     },
     [mutations],
   );
@@ -41,9 +44,11 @@ export function MainMenuScreenAdapter({
   const handleSocial = useCallback(
     (socialId: MainMenuSocialId) => {
       logEvent("main_menu_social_pressed", { socialId });
-      void mutations.action("main", socialId).catch((error: unknown) => {
-        console.error("Coop main-menu social action failed", error);
-      });
+      void mutations
+        .action("main", asFrontDoorActionId(socialId))
+        .catch((error: unknown) => {
+          console.error("Coop main-menu social action failed", error);
+        });
     },
     [mutations],
   );

@@ -11,6 +11,7 @@ import {
   resolveRunLayerCount,
   selectOpponentDreamAvatar,
 } from "./opponent-deck";
+import { asDreamAvatarId, asDreamsignId } from "../../types/identifiers";
 
 function dreamAvatar(id: string): DreamAvatarContent {
   return { id } as DreamAvatarContent;
@@ -42,7 +43,7 @@ describe("opponent descriptor helpers", () => {
     const second = dreamAvatar("00000000-0000-4000-8000-000000000002");
     expect(
       selectOpponentDreamAvatar([first, second], null, fixedRng(0), [
-        second.id.toUpperCase(),
+        asDreamAvatarId(second.id.toUpperCase()),
       ]),
     ).toBe(second);
   });
@@ -57,8 +58,8 @@ describe("opponent descriptor helpers", () => {
 
   it("selects one Dreamsign at the authored unlock layer", () => {
     const signs = [
-      { id: "00000000-0000-4000-8000-000000000003" },
-      { id: "00000000-0000-4000-8000-000000000004" },
+      { id: asDreamsignId("00000000-0000-4000-8000-000000000003") },
+      { id: asDreamsignId("00000000-0000-4000-8000-000000000004") },
     ] as DreamsignTemplate[];
     expect(buildOpponentDreamsigns(2, 3, signs, fixedRng(1))).toEqual([]);
     expect(buildOpponentDreamsigns(3, 3, signs, fixedRng(1))).toEqual([

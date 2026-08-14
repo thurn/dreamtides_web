@@ -1,10 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { reachableAtlasNodeIds } from "./atlas-generator";
-import {
-  makeTestAtlasNode,
-} from "../__test-helpers__/atlas-fixtures";
+import { makeTestAtlasNode } from "../__test-helpers__/atlas-fixtures";
 import type { DreamAtlas, DreamscapeNode } from "../types/journey";
 import { LayerName } from "../types/layer-name";
+import { asAtlasNodeId } from "../types/identifiers";
 
 /**
  * Builds a small three-choice atlas:
@@ -25,7 +24,11 @@ function makeBranchingAtlas(
     forwardIds: string[],
     state: DreamscapeNode["state"],
   ): DreamscapeNode =>
-    makeTestAtlasNode(id, [], { layer, forwardIds, state });
+    makeTestAtlasNode(id, [], {
+      layer,
+      forwardIds: forwardIds.map(asAtlasNodeId),
+      state,
+    });
 
   const nodes: DreamscapeNode[] = [
     node("start", LayerName.One, ["a", "b"], states.start ?? "completed"),
@@ -38,11 +41,16 @@ function makeBranchingAtlas(
   ];
 
   return {
-    layers: [["start"], ["a", "b"], ["c", "d", "e"], ["boss"]],
+    layers: [
+      [asAtlasNodeId("start")],
+      [asAtlasNodeId("a"), asAtlasNodeId("b")],
+      [asAtlasNodeId("c"), asAtlasNodeId("d"), asAtlasNodeId("e")],
+      [asAtlasNodeId("boss")],
+    ],
     nodes: Object.fromEntries(nodes.map((n) => [n.id, n])),
-    startingNodeId: "start",
-    bossNodeId: "boss",
-    currentNodeId: "a",
+    startingNodeId: asAtlasNodeId("start"),
+    bossNodeId: asAtlasNodeId("boss"),
+    currentNodeId: asAtlasNodeId("a"),
     knownDreamsignCarrierIds: [],
   };
 }

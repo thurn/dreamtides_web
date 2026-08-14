@@ -19,6 +19,8 @@ import {
   isBackRankSlotId,
 } from "../types";
 import type { ResolvedBattleAiConfiguration } from "../../types/opponents-data";
+import type { AiActionKey, BattleCardId } from "../../types/identifiers";
+import { asAiActionKey, asBattleCardId } from "../../types/identifiers";
 
 /**
  * A held AI proposal: the plain-language description, the enriched trace, and
@@ -41,8 +43,8 @@ export interface AiProposal {
   commands: BattleCommand[];
   /** Authoritative play payload for Starter-card proposals. */
   playCard?: {
-    battleCardId: string;
-    targetBattleCardIds: string[];
+    battleCardId: BattleCardId;
+    targetBattleCardIds: BattleCardId[];
     characterDestination?: BattleFieldSlotAddress;
   };
 }
@@ -62,8 +64,8 @@ export interface UseBattleAiArgs {
   submitCommand: (command: BattleCommand) => void;
   submitGesture: (commands: readonly BattleCommand[]) => void;
   submitPlayCard?: (
-    battleCardId: string,
-    targetBattleCardIds: readonly string[],
+    battleCardId: BattleCardId,
+    targetBattleCardIds: readonly BattleCardId[],
     trace: BattleAiChoiceTrace | null,
     characterDestination?: BattleFieldSlotAddress,
   ) => void;
@@ -159,7 +161,7 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
 
   // Actions the human rejected this turn, by stable key. Cleared when the turn
   // actually passes (a new transition with a different turn/active-side).
-  const [excludedKeys, setExcludedKeys] = useState<ReadonlySet<string>>(
+  const [excludedKeys, setExcludedKeys] = useState<ReadonlySet<AiActionKey>>(
     () => new Set(),
   );
 
@@ -319,7 +321,7 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
 async function computeProposalAsync(
   mutable: BattleMutableState,
   aiSide: BattleSide,
-  excludedKeys: ReadonlySet<string>,
+  excludedKeys: ReadonlySet<AiActionKey>,
   caps: BattleCapsInput,
   basicAutomation: boolean,
   aiConfiguration: ResolvedBattleAiConfiguration,
@@ -382,7 +384,7 @@ function buildEndPhaseProposal(
 async function planNonExcludedActionAsync(
   model: ForwardModel,
   mutable: BattleMutableState,
-  excludedKeys: ReadonlySet<string>,
+  excludedKeys: ReadonlySet<AiActionKey>,
   aiConfiguration: ResolvedBattleAiConfiguration,
   scoreToWin: number,
   yieldFn: () => Promise<void>,
@@ -430,7 +432,7 @@ async function planNonExcludedActionAsync(
  */
 function removeCardFromModel(
   model: ForwardModel,
-  battleCardId: string | undefined,
+  battleCardId: BattleCardId | undefined,
 ): ForwardModel | null {
   if (battleCardId === undefined) {
     return null;
@@ -662,27 +664,31 @@ function makeAiCommand(
 }
 
 /** Stable exclusion key for a planned action: card id + kind + destination. */
-function plannedActionExclusionKey(action: PlannedAction): string {
-  return [
-    action.kind,
-    action.self?.battleCardId ?? "",
-    action.toSlot ?? "",
-    action.targets?.targetBattleCardId ?? "",
-  ].join("|");
+function plannedActionExclusionKey(action: PlannedAction): AiActionKey {
+  return asAiActionKey(
+    [
+      action.kind,
+      action.self?.battleCardId ?? asBattleCardId(""),
+      action.toSlot ?? "",
+      action.targets?.targetBattleCardId ?? asBattleCardId(""),
+    ].join("|"),
+  );
 }
 
 /** Exclusion key for a held action proposal, derived from its trace. */
-function proposalExclusionKey(proposal: AiProposal): string | null {
+function proposalExclusionKey(proposal: AiProposal): AiActionKey | null {
   const trace = proposal.trace;
   if (trace === null) {
     return null;
   }
-  return [
-    trace.choice,
-    trace.battleCardId ?? "",
-    trace.targetSlotId ?? "",
-    trace.targetBattleCardId ?? "",
-  ].join("|");
+  return asAiActionKey(
+    [
+      trace.choice,
+      trace.battleCardId ?? asBattleCardId(""),
+      trace.targetSlotId ?? "",
+      trace.targetBattleCardId ?? asBattleCardId(""),
+    ].join("|"),
+  );
 }
 
 function describeFallback(action: PlannedAction): string {

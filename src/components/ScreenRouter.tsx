@@ -15,11 +15,19 @@ import {
 } from "./CumulusJourneyChrome";
 import { useAuguryJourneyMenuActions } from "./AuguryJourneyMenu";
 import { ErrorBoundary } from "./ErrorBoundary";
+import { asSiteId } from "../types/identifiers";
+import type { SiteId } from "../types/identifiers";
+import {
+  asScreenTransitionKey,
+  type ScreenTransitionKey,
+} from "../types/identifiers";
 
-function screenKey(screen: Screen): string {
-  return screen.type === "site"
-    ? `screen-site-${screen.siteId}`
-    : `screen-${screen.type}`;
+function screenKey(screen: Screen): ScreenTransitionKey {
+  return asScreenTransitionKey(
+    screen.type === "site"
+      ? `screen-site-${screen.siteId}`
+      : `screen-${screen.type}`,
+  );
 }
 
 /** Renders every gameplay route through its exhaustive Cumulus disposition. */
@@ -36,7 +44,7 @@ export function ScreenRouter({
   const lastLoggedNavigationRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const signature = `${screen.type}|${siteId ?? ""}`;
+    const signature = `${screen.type}|${siteId ?? asSiteId("")}`;
     if (lastLoggedNavigationRef.current === signature) return;
     lastLoggedNavigationRef.current = signature;
     logEvent("screen_rendered", { screenType: screen.type, siteId });
@@ -114,7 +122,7 @@ function SiteRoute({
   runtimeConfig,
   cumulusChromeHandlers,
 }: {
-  siteId: string;
+  siteId: SiteId;
   runtimeConfig: RuntimeConfig;
   cumulusChromeHandlers?: CumulusJourneyChromeHandlers;
 }) {

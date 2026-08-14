@@ -18,6 +18,7 @@ import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { CARD_ROLE_DATA } from "../data/card-roles";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
+import { asRoomId } from "../types/identifiers";
 
 const REDUCER_VERSION = "dreamtides-coop-v25";
 const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
@@ -93,7 +94,7 @@ function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
   return {
     seedOverride: null,
     aiMode: true,
-    gameId: "abc123",
+    gameId: asRoomId("abc123"),
     databaseMode: "emulator",
     ...overrides,
   };
@@ -128,24 +129,26 @@ function mount(config: RuntimeConfig): void {
   root = createRoot(container);
   act(() => {
     root?.render(
-      <CumulusRoot><RoomGate
-        db={{} as never}
-        gameId={config.gameId}
-        runtimeConfig={config}
-        atlasFoldHash={ATLAS_FOLD_HASH}
-        sitesFoldHash={SITES_FOLD_HASH}
-        draftData={DRAFT_DATA}
-        economyData={ECONOMY}
-        gambleData={CONFIG_DATA_FIXTURE.gambleData}
-        transfigurationData={CONFIG_DATA_FIXTURE.transfigurationData}
-        opponentsData={opponentsFixture()}
-        rewardSelectionData={CONFIG_DATA_FIXTURE.rewardSelectionData}
-        auguryData={CONFIG_DATA_FIXTURE.auguryData}
-        explorationFoldHash="fixture-exploration-fold-hash"
-        tutorialFoldHash="fixture-tutorial-fold-hash"
-      >
-        {() => <div data-room-children="true">room children</div>}
-      </RoomGate></CumulusRoot>,
+      <CumulusRoot>
+        <RoomGate
+          db={{} as never}
+          gameId={config.gameId}
+          runtimeConfig={config}
+          atlasFoldHash={ATLAS_FOLD_HASH}
+          sitesFoldHash={SITES_FOLD_HASH}
+          draftData={DRAFT_DATA}
+          economyData={ECONOMY}
+          gambleData={CONFIG_DATA_FIXTURE.gambleData}
+          transfigurationData={CONFIG_DATA_FIXTURE.transfigurationData}
+          opponentsData={opponentsFixture()}
+          rewardSelectionData={CONFIG_DATA_FIXTURE.rewardSelectionData}
+          auguryData={CONFIG_DATA_FIXTURE.auguryData}
+          explorationFoldHash="fixture-exploration-fold-hash"
+          tutorialFoldHash="fixture-tutorial-fold-hash"
+        >
+          {() => <div data-room-children="true">room children</div>}
+        </RoomGate>
+      </CumulusRoot>,
     );
   });
 }
@@ -309,7 +312,9 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
-    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-testid=application-state-action-primary]"),
+    ).not.toBeNull();
   });
 
   it("treats a genesis with no contentConfig as a mismatch (config gate)", async () => {
@@ -328,7 +333,9 @@ describe("RoomGate content-config gate", () => {
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
     expect(container.querySelector("[data-room-children]")).toBeNull();
-    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-testid=application-state-action-primary]"),
+    ).not.toBeNull();
   });
 
   it("does not adopt a room whose Atlas fold hash differs", async () => {
@@ -350,7 +357,9 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
-    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-testid=application-state-action-primary]"),
+    ).not.toBeNull();
   });
 
   it("opens the content gate when the Sites fold hash differs", async () => {
@@ -372,7 +381,9 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
-    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-testid=application-state-action-primary]"),
+    ).not.toBeNull();
   });
 
   it("does not adopt a room whose economy fold hash differs", async () => {
@@ -395,7 +406,9 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
-    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-testid=application-state-action-primary]"),
+    ).not.toBeNull();
   });
 
   it("gates a current-version genesis whose content config predates Atlas hashes", async () => {
@@ -414,7 +427,9 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     expect(container.querySelector("[data-config-gate]")).not.toBeNull();
-    expect(container.querySelector("[data-testid=application-state-action-primary]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-testid=application-state-action-primary]"),
+    ).not.toBeNull();
   });
 
   it("renders the version gate for a prior reducer build", async () => {
@@ -474,8 +489,8 @@ describe("room-scoped client identity", () => {
       },
     };
 
-    const first = roomScopedClientId("room42", storage);
-    const reloaded = roomScopedClientId("room42", storage);
+    const first = roomScopedClientId(asRoomId("room42"), storage);
+    const reloaded = roomScopedClientId(asRoomId("room42"), storage);
 
     expect(reloaded).toBe(first);
   });

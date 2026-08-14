@@ -11,13 +11,14 @@ import {
 import type { CardData } from "../../types/cards";
 import type { MerchantContext } from "../types";
 import { buildMerchantDeckSnapshot, deckFeatureTallies } from "./deckSnapshot";
+import { asDeckEntryId } from "../../types/identifiers";
 
 function contextWithDeck(cards: readonly CardData[]): MerchantContext {
   const journeyContent = makeMerchantTestContent({ cards });
   const journeyState = makeMerchantTestJourneyState({
     deck: cards.map((card, i) =>
       makeMerchantTestDeckEntry({
-        entryId: `entry-${String(i)}`,
+        entryId: asDeckEntryId(`entry-${String(i)}`),
         cardNumber: card.cardNumber,
       }),
     ),
@@ -65,7 +66,11 @@ describe("deckFeatureTallies", () => {
 
   it("buckets a variable (null) cost into its own band", () => {
     const tallies = deckFeatureTallies([
-      makeMerchantTestCard({ id: asCardId("x"), cardNumber: 9, energyCost: null }),
+      makeMerchantTestCard({
+        id: asCardId("x"),
+        cardNumber: 9,
+        energyCost: null,
+      }),
     ]);
     expect(tallies.costBand).toEqual({ variable: 1 });
   });
@@ -74,8 +79,16 @@ describe("deckFeatureTallies", () => {
 describe("buildMerchantDeckSnapshot", () => {
   it("reports size, sorted card numbers, and feature tallies", () => {
     const cards = [
-      makeMerchantTestCard({ id: asCardId("a"), cardNumber: 30, subtype: "Warrior" }),
-      makeMerchantTestCard({ id: asCardId("b"), cardNumber: 10, subtype: "Warrior" }),
+      makeMerchantTestCard({
+        id: asCardId("a"),
+        cardNumber: 30,
+        subtype: "Warrior",
+      }),
+      makeMerchantTestCard({
+        id: asCardId("b"),
+        cardNumber: 10,
+        subtype: "Warrior",
+      }),
     ];
     const snapshot = buildMerchantDeckSnapshot(contextWithDeck(cards));
     expect(snapshot.size).toBe(2);

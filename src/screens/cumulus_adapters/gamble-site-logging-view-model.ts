@@ -10,6 +10,9 @@ import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 import type { GambleData } from "../../types/gamble-data";
 import { resolveSource } from "../../runtime/localization/runtime";
+import { asShuffleCommitment } from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
 
 function gambleCatalogLogFields(
   runtime: GambleSiteRuntime,
@@ -34,7 +37,7 @@ export function logGambleSiteEntered(
 
 /** Record the complete deterministic game preparation for replay diagnosis. */
 export function logGamblePrepared(
-  siteId: string,
+  siteId: SiteId,
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
   gambleData: GambleData,
@@ -101,7 +104,7 @@ export function logGamblePrepared(
     if (runtime.phase === "choose" && runtime.rounds.length > 0) {
       const previous = runtime.rounds[runtime.rounds.length - 1];
       logEventOnce(
-        `Gamble:${siteId}:four-suit-play-again:${previous?.shuffleCommitment ?? "unknown"}`,
+        `Gamble:${siteId}:four-suit-play-again:${previous?.shuffleCommitment ?? asShuffleCommitment("unknown")}`,
         "gamble_game_prepared",
         {
           siteId,
@@ -219,7 +222,7 @@ export function logGamblePrepared(
 
 /** Record each payment, revealed card, and resolved outcome. */
 export function logGambleResolved(
-  siteId: string,
+  siteId: SiteId,
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
   gambleData: GambleData,
@@ -296,8 +299,7 @@ export function logGambleResolved(
         siteId,
         ...gambleCatalogLogFields(runtime, gambleData),
         gateId: runtime.result.gateId,
-        odds:
-          gate === undefined ? null : resolveSource(gate.chanceLabel),
+        odds: gate === undefined ? null : resolveSource(gate.chanceLabel),
         oddsNumerator: gate?.oddsNumerator ?? null,
         oddsDenominator: gate?.oddsDenominator ?? null,
         payment: runtime.wagerCost,
@@ -320,7 +322,7 @@ export function logGambleResolved(
       result.tierNumber,
     );
     logEventOnce(
-      `Gamble:${siteId}:starway-result:${runtime.shuffleCommitments[result.tierNumber - 1] ?? "unknown"}`,
+      `Gamble:${siteId}:starway-result:${runtime.shuffleCommitments[result.tierNumber - 1] ?? asShuffleCommitment("unknown")}`,
       "gamble_wager_resolved",
       {
         siteId,
@@ -348,7 +350,7 @@ export function logGambleResolved(
   const ladderGame = gambleGameByRulesKind(gambleData, "ladderClimb");
   const attempt = ladderGame.rules.attempts[result.attemptNumber - 1];
   logEventOnce(
-    `Gamble:${siteId}:ladder-result:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? "unknown"}`,
+    `Gamble:${siteId}:ladder-result:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? asShuffleCommitment("unknown")}`,
     "gamble_wager_resolved",
     {
       siteId,
@@ -376,7 +378,7 @@ export function logGambleResolved(
 
 /** Record when the result presentation applies its authoritative settlement. */
 export function logGambleSettled(
-  siteId: string,
+  siteId: SiteId,
   runtime: GambleSiteRuntime,
   view: GambleSiteView,
   gambleData: GambleData,
@@ -459,7 +461,7 @@ export function logGambleSettled(
     const result = runtime.results[runtime.results.length - 1];
     if (result === undefined || !result.resultSettled) return;
     logEventOnce(
-      `Gamble:${siteId}:starway-settled:${runtime.shuffleCommitments[result.tierNumber - 1] ?? "unknown"}:${runtime.terminalReason ?? "continue"}`,
+      `Gamble:${siteId}:starway-settled:${runtime.shuffleCommitments[result.tierNumber - 1] ?? asShuffleCommitment("unknown")}:${runtime.terminalReason ?? "continue"}`,
       "gamble_wager_settled",
       {
         siteId,
@@ -485,7 +487,7 @@ export function logGambleSettled(
   )
     return;
   logEventOnce(
-    `Gamble:${siteId}:ladder-settled:${runtime.shuffleCommitments[runtime.result.attemptNumber - 1] ?? "unknown"}`,
+    `Gamble:${siteId}:ladder-settled:${runtime.shuffleCommitments[runtime.result.attemptNumber - 1] ?? asShuffleCommitment("unknown")}`,
     "gamble_wager_settled",
     {
       siteId,
@@ -515,10 +517,10 @@ export function logGambleSettled(
 
 /** Record the UUID replacement that completed an at-cap Dreamsign win. */
 export function logGambleReplacement(
-  siteId: string,
+  siteId: SiteId,
   gameId: GambleSiteRuntime["gameId"],
-  replacedDreamsignId: string,
-  awardedDreamsignId: string | undefined,
+  replacedDreamsignId: DreamsignId,
+  awardedDreamsignId: DreamsignId | undefined,
 ): void {
   logEventOnce(
     `Gamble:${siteId}:replacement:${replacedDreamsignId}`,

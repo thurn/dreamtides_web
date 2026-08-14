@@ -3,13 +3,43 @@ import type { MobileBattleInspectorAction } from "../../cumulus/screens/MobileBa
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
 import type { BattleMutableState, BattleSideMutableState } from "../types";
 import { resolveBattleInspectorIntent } from "./battle-inspector-intents";
+import { asBattleId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
 
 function side(deck: string[], hand: string[]): BattleSideMutableState {
-  return { currentEnergy: 2, maxEnergy: 4, score: 3, visibility: {}, deck, hand, void: [], banished: [], backRank: emptyBackRankSlots(), frontRank: emptyFrontRankSlots(), fatigueCount: 0, dreamwellCardIndex: null, dreamwellDrawnTurn: null };
+  return {
+    currentEnergy: 2,
+    maxEnergy: 4,
+    score: 3,
+    visibility: {},
+    deck: deck.map(asBattleCardId),
+    hand: hand.map(asBattleCardId),
+    void: [],
+    banished: [],
+    backRank: emptyBackRankSlots(),
+    frontRank: emptyFrontRankSlots(),
+    fatigueCount: 0,
+    dreamwellCardIndex: null,
+    dreamwellDrawnTurn: null,
+  };
 }
 
 function state(): BattleMutableState {
-  return { battleId: "battle-inspector-fixture", activeSide: "player", turnNumber: 2, phase: "day", result: null, forcedResult: null, dreamwellDeckIndex: 0, nextBattleCardOrdinal: 4, cardInstances: {}, sides: { player: side(["p-deck-a", "p-deck-b"], ["p-hand"]), enemy: side(["e-deck-a", "e-deck-b"], ["e-hand"]) } };
+  return {
+    battleId: asBattleId("battle-inspector-fixture"),
+    activeSide: "player",
+    turnNumber: 2,
+    phase: "day",
+    result: null,
+    forcedResult: null,
+    dreamwellDeckIndex: 0,
+    nextBattleCardOrdinal: 4,
+    cardInstances: {},
+    sides: {
+      player: side(["p-deck-a", "p-deck-b"], ["p-hand"]),
+      enemy: side(["e-deck-a", "e-deck-b"], ["e-hand"]),
+    },
+  };
 }
 
 describe("resolveBattleInspectorIntent", () => {
@@ -17,7 +47,10 @@ describe("resolveBattleInspectorIntent", () => {
     [{ kind: "draw", side: "enemy" }, "DRAW_CARD"],
     [{ kind: "discard", side: "enemy" }, "DISCARD_CARD"],
     [{ kind: "erode", side: "enemy", count: 3 }, "ERODE"],
-    [{ kind: "adjust-stat", side: "enemy", stat: "points", amount: 1 }, "ADJUST_SCORE"],
+    [
+      { kind: "adjust-stat", side: "enemy", stat: "points", amount: 1 },
+      "ADJUST_SCORE",
+    ],
     [{ kind: "skip-to-rewards" }, "SKIP_TO_REWARDS"],
     [{ kind: "force-result", result: "defeat" }, "FORCE_RESULT"],
   ] as const)("maps %o to an inspector-sourced command", (action, expected) => {
@@ -25,14 +58,37 @@ describe("resolveBattleInspectorIntent", () => {
     expect(resolution.kind).toBe("command");
     if (resolution.kind !== "command") return;
     expect(resolution.command.sourceSurface).toBe("inspector");
-    expect(resolution.command.id === "DEBUG_EDIT" ? resolution.command.edit.kind : resolution.command.id).toBe(expected);
+    expect(
+      resolution.command.id === "DEBUG_EDIT"
+        ? resolution.command.edit.kind
+        : resolution.command.id,
+    ).toBe(expected);
   });
 
   it("orders the combined energy gesture safely and shuffles instance ids", () => {
-    const increase = resolveBattleInspectorIntent({ kind: "adjust-energy-pair", side: "player", amount: 1 }, state());
-    expect(increase).toMatchObject({ kind: "gesture", commands: [{ edit: { kind: "SET_MAX_ENERGY" } }, { edit: { kind: "SET_CURRENT_ENERGY" } }] });
-    const shuffle = resolveBattleInspectorIntent({ kind: "shuffle", side: "player" }, state(), () => 0);
-    expect(shuffle).toMatchObject({ kind: "command", command: { sourceSurface: "inspector", edit: { kind: "REORDER_DECK", order: ["p-deck-b", "p-deck-a"] } } });
+    const increase = resolveBattleInspectorIntent(
+      { kind: "adjust-energy-pair", side: "player", amount: 1 },
+      state(),
+    );
+    expect(increase).toMatchObject({
+      kind: "gesture",
+      commands: [
+        { edit: { kind: "SET_MAX_ENERGY" } },
+        { edit: { kind: "SET_CURRENT_ENERGY" } },
+      ],
+    });
+    const shuffle = resolveBattleInspectorIntent(
+      { kind: "shuffle", side: "player" },
+      state(),
+      () => 0,
+    );
+    expect(shuffle).toMatchObject({
+      kind: "command",
+      command: {
+        sourceSurface: "inspector",
+        edit: { kind: "REORDER_DECK", order: ["p-deck-b", "p-deck-a"] },
+      },
+    });
   });
 
   it.each([
@@ -47,15 +103,25 @@ describe("resolveBattleInspectorIntent", () => {
     [{ kind: "open-battle-log" }, "battle-log"],
     [{ kind: "open-dreamwell-history" }, "dreamwell-history"],
   ] as const)("maps %o to the expected accessory", (action, accessory) => {
-    expect(resolveBattleInspectorIntent(action as MobileBattleInspectorAction, state())).toMatchObject({ kind: "accessory", accessory });
+    expect(
+      resolveBattleInspectorIntent(
+        action as MobileBattleInspectorAction,
+        state(),
+      ),
+    ).toMatchObject({ kind: "accessory", accessory });
   });
 
   it("preserves the selected zone on open-zone accessories", () => {
-    expect(resolveBattleInspectorIntent({
-      kind: "open-zone",
-      side: "enemy",
-      zone: "banished",
-    }, state())).toMatchObject({
+    expect(
+      resolveBattleInspectorIntent(
+        {
+          kind: "open-zone",
+          side: "enemy",
+          zone: "banished",
+        },
+        state(),
+      ),
+    ).toMatchObject({
       kind: "accessory",
       accessory: "open-zone",
       side: "enemy",

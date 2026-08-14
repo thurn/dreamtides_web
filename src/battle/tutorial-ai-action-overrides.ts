@@ -7,10 +7,14 @@ import {
 } from "./semantic-play";
 import { selectCenterPreferredCharacterPlaySlot } from "./state/selectors";
 import type { BattleFieldSlotAddress } from "./types";
+import type {
+  BattleCardId,
+  TutorialAiActionOverrideId,
+} from "../types/identifiers";
 
 export interface TutorialAiPlayCardOverrideSelection {
   readonly override: TutorialBattleAiActionOverride;
-  readonly battleCardId: string;
+  readonly battleCardId: BattleCardId;
   readonly sourceHandIndex: number;
   readonly characterDestination: BattleFieldSlotAddress | null;
 }
@@ -54,8 +58,8 @@ export function planTutorialAiActionOverride(
 /** Resolve and authenticate one override id against the pre-action fold. */
 export function resolveTutorialAiPlayCardOverride(
   battle: BattleFoldState,
-  overrideId: string,
-  battleCardId: string,
+  overrideId: TutorialAiActionOverrideId,
+  battleCardId: BattleCardId,
 ): TutorialBattleAiActionOverride | null {
   const override = (battle.tutorialAiActionOverrides ?? []).find(
     (candidate) => candidate.id === overrideId,
@@ -74,7 +78,7 @@ export function resolveTutorialAiPlayCardOverride(
 /** Persist exact-once consumption in the same fold step as the action. */
 export function consumeTutorialAiActionOverride(
   battle: BattleFoldState,
-  overrideId: string | null,
+  overrideId: TutorialAiActionOverrideId | null,
 ): BattleFoldState {
   if (overrideId === null) return battle;
   return {
@@ -153,12 +157,7 @@ function selectPlayCard(
     return { kind: "blocked", override, reason: "insufficient-energy" };
   }
   if (
-    !semanticPlayTargetsAreLegal(
-      board,
-      side,
-      instance.definition.cardId,
-      [],
-    )
+    !semanticPlayTargetsAreLegal(board, side, instance.definition.cardId, [])
   ) {
     return { kind: "blocked", override, reason: "targets-required" };
   }

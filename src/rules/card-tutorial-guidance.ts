@@ -5,12 +5,23 @@ import { activeFirstVisitTutorialSite } from "../data/site-tutorial-guidance";
 import type { FoldState } from "./fold-state";
 import { matchTutorialGuidance } from "./battle/tutorial-guidance";
 import { tutorialSpeechBubbleDelaySeconds } from "../data/tutorial-speech-bubble";
+import { asCardId } from "../types/card-identity";
+import type { CardId } from "../types/card-identity";
+import {
+  asCardTutorialScreenKey,
+  asPresentationId,
+} from "../types/identifiers";
+import type {
+  CardTutorialScreenKey,
+  PresentationId,
+  TutorialTriggerId,
+} from "../types/identifiers";
 
 export interface CardTutorialGuidancePresentation {
-  readonly id: string;
-  readonly screenKey: string;
-  readonly cardId: string | null;
-  readonly triggerId: string;
+  readonly id: PresentationId;
+  readonly screenKey: CardTutorialScreenKey;
+  readonly cardId: CardId | null;
+  readonly triggerId: TutorialTriggerId;
   readonly speaker: TutorialTriggerDefinition["speaker"];
   readonly text: string;
   readonly delay?: number;
@@ -26,7 +37,7 @@ export interface CardTutorialGuidanceMatch {
 }
 
 export interface CardTutorialGuidanceContext {
-  readonly screenKey: string;
+  readonly screenKey: CardTutorialScreenKey;
   readonly event: "card-seen" | "transfiguration-seen";
   /** Local presentation milestone that must be visible before requesting guidance. */
   readonly visibilityGate?: "exploration-actions";
@@ -34,7 +45,7 @@ export interface CardTutorialGuidanceContext {
 
 export interface CardTutorialGuidanceContentProvider {
   readonly triggers: readonly TutorialTriggerDefinition[];
-  cardById(cardId: string): CardData | undefined;
+  cardById(cardId: CardId): CardData | undefined;
   hasVisibleTransfigurationReward(
     journey: JourneyState,
     site: SiteState,
@@ -82,7 +93,9 @@ export function currentCardTutorialContext(
       runtime.choiceKind === "transfiguration" &&
       runtime.transfigurationOffers.length > 0
       ? {
-          screenKey: `${siteScreenKey}:concept:transfiguration`,
+          screenKey: asCardTutorialScreenKey(
+            `${siteScreenKey}:concept:transfiguration`,
+          ),
           event: "transfiguration-seen",
         }
       : null;
@@ -92,7 +105,9 @@ export function currentCardTutorialContext(
     provider?.hasVisibleTransfigurationReward(state.journey, site) === true
   ) {
     return {
-      screenKey: `${siteScreenKey}:concept:transfiguration`,
+      screenKey: asCardTutorialScreenKey(
+        `${siteScreenKey}:concept:transfiguration`,
+      ),
       event: "transfiguration-seen",
       visibilityGate: "exploration-actions",
     };
@@ -102,7 +117,9 @@ export function currentCardTutorialContext(
     provider?.hasVisibleTransfigurationReward(state.journey, site) === true
   ) {
     return {
-      screenKey: `${siteScreenKey}:concept:transfiguration`,
+      screenKey: asCardTutorialScreenKey(
+        `${siteScreenKey}:concept:transfiguration`,
+      ),
       event: "transfiguration-seen",
     };
   }
@@ -117,9 +134,10 @@ export function currentCardTutorialContext(
     return null;
   }
   return {
-    screenKey:
+    screenKey: asCardTutorialScreenKey(
       `${siteScreenKey}:draft-offer:${String(draft.pickNumber)}:` +
-      draft.currentOffer.join(","),
+        draft.currentOffer.join(","),
+    ),
     event: "card-seen",
   };
 }
@@ -128,14 +146,14 @@ export function currentCardTutorialContext(
 export function currentCardTutorialScreenKey(
   state: FoldState,
   provider?: CardTutorialGuidanceContentProvider | null,
-): string | null {
+): CardTutorialScreenKey | null {
   return currentCardTutorialContext(state, provider)?.screenKey ?? null;
 }
 
 /** Whether visible UUIDs resolve to the authoritative persisted Draft offer. */
 export function cardIdsMatchCurrentDraftOffer(
   state: FoldState,
-  cardIds: readonly string[],
+  cardIds: readonly CardId[],
   provider: CardTutorialGuidanceContentProvider,
 ): boolean {
   const site = currentTutorialSite(state);
@@ -156,8 +174,7 @@ export function cardIdsMatchCurrentDraftOffer(
     visibleNumbers.every(
       (cardNumber): cardNumber is number =>
         cardNumber !== undefined && offeredNumbers.has(cardNumber),
-    ) &&
-    new Set(visibleNumbers).size === cardIds.length
+    ) && new Set(visibleNumbers).size === cardIds.length
   );
 }
 
@@ -168,8 +185,8 @@ export function cardIdsMatchCurrentDraftOffer(
  */
 export function selectCardTutorialGuidance(
   provider: CardTutorialGuidanceContentProvider,
-  cardIds: readonly string[],
-  seenTriggerIds: ReadonlySet<string>,
+  cardIds: readonly CardId[],
+  seenTriggerIds: ReadonlySet<TutorialTriggerId>,
   event: "card-seen" | "transfiguration-seen" = "card-seen",
 ): CardTutorialGuidanceMatch | null {
   if (event === "transfiguration-seen") {
@@ -180,7 +197,7 @@ export function selectCardTutorialGuidance(
     })[0];
     return trigger === undefined ? null : { card: null, trigger };
   }
-  const visitedCardIds = new Set<string>();
+  const visitedCardIds = new Set<CardId>();
   for (const cardId of cardIds) {
     if (visitedCardIds.has(cardId)) continue;
     visitedCardIds.add(cardId);
@@ -218,14 +235,19 @@ export function openCardTutorialGuidance(
     (state.cardTutorialPresentation ?? null) !== null ||
     (state.cardTutorialScreenKeysSeen ?? []).includes(screenKey) ||
     contentProvider === null ||
-    !cardIdsMatchCurrentDraftOffer(state, payload.cardIds, contentProvider)
+    !cardIdsMatchCurrentDraftOffer(
+      state,
+      payload.cardIds.map(asCardId),
+      contentProvider,
+    )
   ) {
     return null;
   }
 
+  const cardIds = payload.cardIds.map(asCardId);
   const match = selectCardTutorialGuidance(
     contentProvider,
-    payload.cardIds,
+    cardIds,
     new Set(state.tutorialTriggerIdsSeen ?? []),
     context.event,
   );
@@ -241,7 +263,9 @@ export function openCardTutorialGuidance(
       screenKey,
     ],
     cardTutorialPresentation: {
-      id: `card-tutorial:${screenKey}:${match.card?.id ?? "site"}:${match.trigger.id}`,
+      id: asPresentationId(
+        `card-tutorial:${screenKey}:${match.card?.id ?? asCardId("site")}:${match.trigger.id}`,
+      ),
       screenKey,
       cardId: match.card?.id ?? null,
       triggerId: match.trigger.id,
@@ -262,10 +286,7 @@ export function completeCardTutorialGuidance(
   payload: Record<string, unknown>,
 ): FoldState | null {
   const presentation = state.cardTutorialPresentation ?? null;
-  if (
-    presentation === null ||
-    payload.presentationId !== presentation.id
-  ) {
+  if (presentation === null || payload.presentationId !== presentation.id) {
     return null;
   }
   return { ...state, cardTutorialPresentation: null };
@@ -276,9 +297,7 @@ export function completeCardTutorialGuidance(
  * opened it. Normal site actions remain available; the first action that moves
  * to another surface retires the guidance with that same folded transition.
  */
-export function reconcileCardTutorialGuidance(
-  state: FoldState,
-): FoldState {
+export function reconcileCardTutorialGuidance(state: FoldState): FoldState {
   const presentation = state.cardTutorialPresentation ?? null;
   if (
     presentation === null ||

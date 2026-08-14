@@ -12,6 +12,9 @@ import {
   DemoSelect,
   DemoToggle,
 } from "./promotion-demo-controls";
+import { asSiteId } from "../../../types/identifiers";
+import { asDreamscapeId } from "../../../types/identifiers";
+import { asGuideId } from "../../../types/identifiers";
 
 const compositions: readonly SiteLayoutComposition[] = [
   "balanced-gallery",
@@ -95,8 +98,12 @@ function Demo() {
           }}
         >
           <SiteLayout
-            siteId="catalog-site"
-            scene={sceneVisible ? artRef.dreamscapeScene("wilderveil") : null}
+            siteId={asSiteId("catalog-site")}
+            scene={
+              sceneVisible
+                ? artRef.dreamscapeScene(asDreamscapeId("wilderveil"))
+                : null
+            }
             moteTint={moteTint}
             guide={{
               id: "catalog-guide",
@@ -104,7 +111,7 @@ function Demo() {
               line: assertLocalized(
                 "A complete site stage owns this composition.",
               ),
-              art: artRef.dreamGuide("aldric"),
+              art: artRef.dreamGuide(asGuideId("aldric")),
               presence,
             }}
             composition={composition}

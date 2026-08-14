@@ -5,6 +5,9 @@ expect.addEqualityTesters([localizedStringSourceEquality]);
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { buildCardTutorialGuidanceView } from "./card-tutorial-guidance-view-model";
+import { asPresentationId } from "../../types/identifiers";
+import { asCardTutorialScreenKey } from "../../types/identifiers";
+import { asTutorialTriggerId } from "../../types/identifiers";
 
 const CARD: CardData = {
   id: asCardId("card-a"),
@@ -25,10 +28,10 @@ describe("buildCardTutorialGuidanceView", () => {
   it("maps the shared presentation to Mira, the canonical card, and bubble settings", () => {
     const view = buildCardTutorialGuidanceView(
       {
-        id: "card-tutorial:fixture",
-        screenKey: "journey:1:site:site-a",
+        id: asPresentationId("card-tutorial:fixture"),
+        screenKey: asCardTutorialScreenKey("journey:1:site:site-a"),
         cardId: CARD.id,
-        triggerId: "support",
+        triggerId: asTutorialTriggerId("support"),
         speaker: "mira",
         text: "Support helps the character in front.",
         duration: 5,
@@ -40,7 +43,7 @@ describe("buildCardTutorialGuidanceView", () => {
     );
 
     expect(view).toMatchObject({
-      presentationId: "card-tutorial:fixture",
+      presentationId: asPresentationId("card-tutorial:fixture"),
       triggerId: "support",
       duration: 5,
       horizontalOffset: 24,
@@ -61,10 +64,12 @@ describe("buildCardTutorialGuidanceView", () => {
   it("maps a site concept to viewport dialogue without a card source", () => {
     const view = buildCardTutorialGuidanceView(
       {
-        id: "card-tutorial:transfiguration",
-        screenKey: "journey:1:site:site-a:concept:transfiguration",
+        id: asPresentationId("card-tutorial:transfiguration"),
+        screenKey: asCardTutorialScreenKey(
+          "journey:1:site:site-a:concept:transfiguration",
+        ),
         cardId: null,
-        triggerId: "transfiguration",
+        triggerId: asTutorialTriggerId("transfiguration"),
         speaker: "mira",
         text: "Cards can be [yellow]transfigured[/yellow] to change their cost, spark, or abilities",
         duration: 5,
@@ -76,7 +81,7 @@ describe("buildCardTutorialGuidanceView", () => {
     );
 
     expect(view).toMatchObject({
-      presentationId: "card-tutorial:transfiguration",
+      presentationId: asPresentationId("card-tutorial:transfiguration"),
       triggerId: "transfiguration",
       source: { kind: "journey-site" },
     });

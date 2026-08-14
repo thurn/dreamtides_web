@@ -43,7 +43,10 @@ import {
 } from "./types.ts";
 import type { Tides4DecksJson } from "./tides4-io.ts";
 import type { Tides4Tuning } from "../../types/draft-data";
+import { asTideId, type TideId } from "../../types/identifiers";
 import { DEFAULT_DRAFT_DATA } from "../../data/draft-data";
+import type { DreamAvatarId } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
 
 /** Developer/test fallback; production injects the compiled draft.toml values. */
 export const DEFAULT_TIDES4_TUNING: Tides4Tuning =
@@ -70,7 +73,7 @@ export const DEFAULT_TIDES4_TUNING: Tides4Tuning =
 export function generateTides4(
   rng: () => number,
   poolData: PoolData,
-  dreamAvatarId?: string,
+  dreamAvatarId?: DreamAvatarId,
   tuning: Tides4Tuning = DEFAULT_TIDES4_TUNING,
 ): Tides4GenerationResult {
   const data: Tides4DecksJson | undefined = poolData.tides4Decks;
@@ -89,7 +92,7 @@ export function combineTidesPool(
   rng: () => number,
   poolData: PoolData,
   data: Tides4DecksJson,
-  dreamAvatarId: string | undefined,
+  dreamAvatarId: DreamAvatarId | undefined,
   tuning: Tides4Tuning = DEFAULT_TIDES4_TUNING,
 ): Tides4GenerationResult {
   const dealSize = tuning.dealSize;
@@ -196,11 +199,11 @@ export function combineTidesPool(
   const bag: CardId[] = [];
   const bagCounts = new Map<CardId, number>();
   let dealable = 0;
-  const deckIds: string[] = [];
+  const deckIds: TideId[] = [];
   const tides: Tides4PoolTide[] = [];
   // CardId -> joined tide ids that contain it, in join order. The first id is the
   // card's "home" (primary) tide.
-  const containingTides = new Map<CardId, string[]>();
+  const containingTides = new Map<CardId, TideId[]>();
   // The card UUIDs of the always-joined signature tide(s) (selection `"starter"`).
   // These are guaranteed a slot in the dealt pool: the deal below seeds them
   // before filling the remainder, so the signature tide is never cut by the bag
@@ -213,6 +216,7 @@ export function combineTidesPool(
   ): void => {
     const tide = tideById.get(id);
     if (!tide) return;
+    const tideId = asTideId(id);
     const cardIds: CardId[] = [];
     const seenInTide = new Set<CardId>();
     for (const card of tide.cards) {
@@ -231,7 +235,7 @@ export function combineTidesPool(
         homes = [];
         containingTides.set(cardId, homes);
       }
-      if (!homes.includes(id)) homes.push(id);
+      if (!homes.includes(tideId)) homes.push(tideId);
       if (selection === "starter") signatureCardIds.add(cardId);
       for (let i = 0; i < card.copies; i += 1) {
         const have = bagCounts.get(cardId) ?? 0;
@@ -240,9 +244,9 @@ export function combineTidesPool(
         if (have < tuning.copyCap) dealable += 1;
       }
     }
-    if (fold) deckIds.push(id);
+    if (fold) deckIds.push(tideId);
     tides.push({
-      id,
+      id: tideId,
       displayName: tide.displayName,
       displayDescription: tide.displayDescription,
       role: tide.role,
@@ -299,28 +303,29 @@ export function combineTidesPool(
   // Per-card provenance over the dealt pool, plus each tide's contribution (the
   // pooled cards whose home tide is that one).
   const cardProvenanceById: Record<CardId, Tides4PoolCardProvenance> = {};
-  const contributionByTide = new Map<string, number>();
+  const contributionByTide = new Map<TideId, number>();
   for (const [cardId, copies] of counts) {
     const homes = containingTides.get(cardId) ?? [];
-    const primaryTideId = homes[0] ?? "";
+    const primaryTideId = homes[0];
+    if (primaryTideId === undefined) {
+      throw new Error(`Dealt card ${cardId} has no joined source tide.`);
+    }
     cardProvenanceById[cardId] = {
       copies,
       tideIds: [...homes],
       primaryTideId,
     };
-    if (primaryTideId !== "") {
-      contributionByTide.set(
-        primaryTideId,
-        (contributionByTide.get(primaryTideId) ?? 0) + 1,
-      );
-    }
+    contributionByTide.set(
+      primaryTideId,
+      (contributionByTide.get(primaryTideId) ?? 0) + 1,
+    );
   }
   for (const tide of tides) {
     tide.contributedCardCount = contributionByTide.get(tide.id) ?? 0;
   }
 
   const tides4Provenance: Tides4PoolProvenance = {
-    dreamAvatarId: dreamAvatarId ?? "",
+    dreamAvatarId: dreamAvatarId ?? asDreamAvatarId(""),
     signatureless,
     borrowedArchetypeName,
     dealSize,

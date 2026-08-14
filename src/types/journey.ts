@@ -30,6 +30,25 @@ import type {
   ExplorationChoosableSiteType,
   ExplorationFixedSiteType,
 } from "../data/exploration";
+import type { CardId } from "./card-identity";
+import type {
+  AtlasNodeId,
+  ApollyonIncarnationId,
+  BattleId,
+  CardTypeChangePredicateId,
+  DeckEntryId,
+  DreamAvatarId,
+  DreamscapeId,
+  DreamsignId,
+  ExplorationActionId,
+  GuideId,
+  IdentityRecord,
+  JourneyId,
+  ShuffleCommitment,
+  SelectionKey,
+  SiteId,
+  AuguryArchetypeId,
+} from "./identifiers";
 export type { SiteType } from "./site-type";
 export type { RandomSiteDestinationType } from "./site-type";
 export type { AtlasData } from "./atlas-data";
@@ -60,7 +79,7 @@ export type TransfigurationChange =
 
 /** Persistent card type/subtype override applied to one concrete deck entry. */
 export interface CardTypeChange {
-  predicateId: string;
+  predicateId: CardTypeChangePredicateId;
   cardType: CardType;
   subtype: string;
   label: string;
@@ -98,7 +117,7 @@ export type AtlasNodeState =
 
 /** An entry in the player's deck. Duplicates are possible. */
 export interface DeckEntry {
-  entryId: string;
+  entryId: DeckEntryId;
   cardNumber: number;
   transfiguration: TransfigurationType | null;
   typeChange?: CardTypeChange | null;
@@ -115,7 +134,7 @@ export interface DeckEntry {
 
 /** The selected DreamAvatar package shown in player-facing UI. */
 export interface DreamAvatar {
-  id: string;
+  id: DreamAvatarId;
   name: string;
   title: string;
   renderedText: string;
@@ -132,7 +151,7 @@ export interface DreamAvatar {
 
 /** A passive effect collected during the journey. */
 export interface Dreamsign {
-  id?: string;
+  id?: DreamsignId;
   name: string;
   effectDescription: string;
   imageName?: string;
@@ -161,7 +180,7 @@ export interface CardSourceDebugState {
 
 /** A site within a dreamscape. */
 export interface SiteState {
-  id: string;
+  id: SiteId;
   type: SiteType;
   isEnhanced: boolean;
   isVisited: boolean;
@@ -176,7 +195,7 @@ export interface RandomSiteMetadata {
   candidateSiteTypes: RandomSiteDestinationType[];
   destinationSiteType?: RandomSiteDestinationType;
   /** Random Site guide that continues presenting the materialized destination. */
-  presentingGuideId?: string;
+  presentingGuideId?: GuideId;
   /** Set once the wrapper becomes the selected concrete destination. */
   materialized?: boolean;
 }
@@ -192,28 +211,28 @@ export interface RandomSiteMetadata {
  * one of its sites.
  */
 export interface DreamscapeNode {
-  id: string;
+  id: AtlasNodeId;
   /** The layer this node sits on, from `LayerName.One` (starter) to `Seven` (boss). */
   layer: LayerName;
   /** Column index of this node within its layer. */
   indexInLayer: number;
   /** The dreamscape assigned to this node, or `null` while unrevealed. */
-  dreamscapeId: string | null;
+  dreamscapeId: DreamscapeId | null;
   sites: SiteState[];
   position: { x: number; y: number };
   state: AtlasNodeState;
   /** The site type this dreamscape enhances, or `null` when none. */
   enhancedSiteType: SiteType | null;
   /** Node ids in the next layer this node connects forward to. */
-  forwardIds: string[];
+  forwardIds: AtlasNodeId[];
   /** Node ids in the previous layer this node connects backward to. */
-  backwardIds: string[];
+  backwardIds: AtlasNodeId[];
   /**
    * The id of a pre-revealed "known" dreamsign carried by this node, or `null`
    * when the node carries none. The dreamsign is shown to the player before
    * they reach the node so they can plan a route toward it.
    */
-  knownDreamsignId: string | null;
+  knownDreamsignId: DreamsignId | null;
 }
 
 /**
@@ -227,16 +246,16 @@ export interface DreamAtlas {
    * Node ids per layer, ordered like {@link LAYER_ORDER}: index 0 holds the
    * {@link LayerName.One} nodes, index 6 the {@link LayerName.Seven} boss.
    */
-  layers: string[][];
-  nodes: Record<string, DreamscapeNode>;
+  layers: AtlasNodeId[][];
+  nodes: IdentityRecord<AtlasNodeId, DreamscapeNode>;
   /**
    * The {@link LayerName.One} starter dreamscape the player begins the run in.
    * Anchors the left edge of the Atlas and is the player's "you started here"
    * marker.
    */
-  startingNodeId: string;
+  startingNodeId: AtlasNodeId;
   /** The {@link LayerName.Seven} boss node, always revealed from the start of the run. */
-  bossNodeId: string;
+  bossNodeId: AtlasNodeId;
   /**
    * The Apollyon incarnation chosen for this run, identifying which guise the
    * boss node presents (title + short deck description). Resolves against
@@ -244,11 +263,11 @@ export interface DreamAtlas {
    * before an incarnation was assigned, in which case the UI falls back to the
    * default boss presentation.
    */
-  bossIncarnationId?: string | null;
+  bossIncarnationId?: ApollyonIncarnationId | null;
   /** The node the player currently occupies, or `null` between dreamscapes. */
-  currentNodeId: string | null;
+  currentNodeId: AtlasNodeId | null;
   /** Node ids that carry a pre-revealed known dreamsign. */
-  knownDreamsignCarrierIds: string[];
+  knownDreamsignCarrierIds: AtlasNodeId[];
 }
 
 /** Terminal battle result stored on a frozen failure summary. */
@@ -270,12 +289,12 @@ export type JourneyFailureReason =
  * discarded by `resetJourney()`.
  */
 export interface JourneyFailureSummary {
-  battleId: string;
+  battleId: BattleId;
   result: JourneyFailureBattleResult;
   reason: JourneyFailureReason;
-  siteId: string;
+  siteId: SiteId;
   siteLabel: string;
-  dreamscapeIdOrNone: string | null;
+  dreamscapeIdOrNone: AtlasNodeId | null;
   turnNumber: number;
   playerScore: number;
   enemyScore: number;
@@ -283,8 +302,8 @@ export interface JourneyFailureSummary {
 
 /** Canonical provenance for a queued Exploration shop modifier. */
 export interface ExplorationModifierSource {
-  readonly sourceSiteId: string;
-  readonly sourceActionId: string;
+  readonly sourceSiteId: SiteId;
+  readonly sourceActionId: ExplorationActionId;
 }
 
 /** One queued modifier that makes every item in the next Card Shop free. */
@@ -302,18 +321,18 @@ export interface FreePurchaseModifier extends ExplorationModifierSource {
 /** Exact persisted result of one successful Shop or Dreamsign Bazaar buy. */
 export interface ShopPurchaseResult {
   readonly eventSeq: number;
-  readonly siteId: string;
+  readonly siteId: SiteId;
   readonly slotIndex: number;
   readonly item:
     | {
         readonly kind: "card";
         readonly cardNumber: number;
-        readonly gainedEntryId: string;
+        readonly gainedEntryId: DeckEntryId;
       }
     | {
         readonly kind: "dreamsign";
-        readonly dreamsignId: string;
-        readonly replacedDreamsignId?: string;
+        readonly dreamsignId: DreamsignId;
+        readonly replacedDreamsignId?: DreamsignId;
       };
   /** Effective price after ordinary discounts but before a free modifier. */
   readonly priceBeforeFree: number;
@@ -355,15 +374,15 @@ export interface ShopSiteRuntime {
   kind: "shop";
   slots: RuntimeShopSlot[];
   rerollCount: number;
-  remainingDreamsignPoolIds: string[];
+  remainingDreamsignPoolIds: DreamsignId[];
   /** Exact successful purchase history, retained when rerolls replace slots. */
   purchaseHistory: readonly ShopPurchaseResult[];
   /** T56 source bound when this exact Card Shop visit opened. */
   freePurchaseSource?: ExplorationModifierSource;
   /** Exploration action whose one-use modifier transfigures this Shop visit. */
   transfiguredOfferSource?: {
-    siteId: string;
-    actionId: string;
+    siteId: SiteId;
+    actionId: ExplorationActionId;
   };
 }
 
@@ -380,7 +399,7 @@ export interface RewardSiteRuntime {
         dreamsign: Dreamsign;
       }
     | { rewardType: "essence"; essenceAmount: number };
-  remainingDreamsignPoolIds: string[];
+  remainingDreamsignPoolIds: DreamsignId[];
   accepted: boolean;
 }
 
@@ -388,7 +407,7 @@ export interface RewardSiteRuntime {
 export interface DreamsignOfferSiteRuntime {
   kind: "dreamsignOffer";
   offeredDreamsigns: Dreamsign[];
-  remainingDreamsignPool: string[];
+  remainingDreamsignPool: DreamsignId[];
   accepted: boolean;
 }
 
@@ -401,7 +420,7 @@ export interface EssenceSiteRuntime {
 
 /** Runtime state for a card choice site. */
 export interface CardChoiceTransfigurationOffer {
-  entryId: string;
+  entryId: DeckEntryId;
   type: TransfigurationType;
   /** Structured change used by player presentation. */
   change?: TransfigurationChange;
@@ -420,8 +439,8 @@ export interface CardChoiceTransfigurationOffer {
 
 export type CardChoiceSiteRuntime = {
   kind: "cardChoice";
-  entryIds: string[];
-  acceptedEntryIds: string[];
+  entryIds: DeckEntryId[];
+  acceptedEntryIds: DeckEntryId[];
 } & (
   | {
       choiceKind: "transfiguration";
@@ -457,7 +476,7 @@ export interface AugurySiteRuntime {
    * category is forced; the value is ignored if it is not eligible for the
    * current journey state.
    */
-  forcedArchetypeId?: string;
+  forcedArchetypeId?: AuguryArchetypeId;
 }
 
 /** Resolved one-card outcome for Gravok's Three-Gate Wager. */
@@ -470,7 +489,7 @@ export interface GravokWagerResult {
   essenceSettled?: boolean;
   dreamsignAwarded: boolean;
   pendingDreamsignReplacement: boolean;
-  replacedDreamsignId?: string;
+  replacedDreamsignId?: DreamsignId;
 }
 
 /** Catalog selection inputs persisted so a Gamble choice can be reconstructed. */
@@ -497,9 +516,9 @@ export interface GravokWagerSiteRuntime {
   roundNumber?: number;
   isFarpoint: boolean;
   wagerCost: number;
-  shuffleCommitment: string;
+  shuffleCommitment: ShuffleCommitment;
   committedCard: StandardPlayingCard;
-  dreamsignCandidateIds: string[];
+  dreamsignCandidateIds: DreamsignId[];
   rewardDreamsign: Dreamsign | null;
   result: GravokWagerResult | null;
 }
@@ -534,32 +553,32 @@ export interface ExplorationDreamsignPreparation {
   requestedCount: number;
   /** Authored Nightmare bundle size signed with compound Dreamsign plans. */
   nightmareCount?: number;
-  heldIdsAtPreparation: string[];
+  heldIdsAtPreparation: DreamsignId[];
   maxDreamsignsAtPreparation: number;
-  poolBeforeIds: string[];
-  poolBasisIds: string[];
+  poolBeforeIds: DreamsignId[];
+  poolBasisIds: DreamsignId[];
   poolRegenerated: boolean;
-  preparedDreamsignIds: string[];
+  preparedDreamsignIds: DreamsignId[];
   requiredOverflowReplacementCount: number;
   unavailableReason?: DreamsignActionUnavailableReason;
   planSignature: string;
 }
 
 export interface ExplorationDreamsignReplacement {
-  removedDreamsignId: string;
-  gainedDreamsignId: string;
+  removedDreamsignId: DreamsignId;
+  gainedDreamsignId: DreamsignId;
 }
 
 /** Complete Dreamsign state and pool transition persisted by a resolution. */
 export interface ExplorationDreamsignMutationResolution {
-  beforeIds: string[];
-  afterIds: string[];
-  offeredIds: string[];
-  gainedIds: string[];
-  purgedIds: string[];
+  beforeIds: DreamsignId[];
+  afterIds: DreamsignId[];
+  offeredIds: DreamsignId[];
+  gainedIds: DreamsignId[];
+  purgedIds: DreamsignId[];
   replacements: ExplorationDreamsignReplacement[];
-  poolBeforeIds: string[];
-  poolAfterIds: string[];
+  poolBeforeIds: DreamsignId[];
+  poolAfterIds: DreamsignId[];
   poolRegenerated: boolean;
 }
 
@@ -574,20 +593,20 @@ export type ExplorationStarterCardUnavailableReason =
 
 /** Canonical base-card identity paired with one concrete starter deck entry. */
 export interface ExplorationStarterCardBinding {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
 }
 
 /** Signed, replayable starter-card plan prepared when an Exploration site opens. */
 export interface ExplorationStarterCardPreparation {
   kind: ExplorationStarterCardEffectKind;
   eligibleStarterCards: ExplorationStarterCardBinding[];
-  purgedEntryIds: string[];
-  purgedCardIds: string[];
-  replacementCardIdByEntryId: Record<string, string>;
+  purgedEntryIds: DeckEntryId[];
+  purgedCardIds: CardId[];
+  replacementCardIdByEntryId: IdentityRecord<DeckEntryId, CardId>;
   selectionRulesVersion: string;
   selectionContentRevision: string;
-  selectionKey: string;
+  selectionKey: SelectionKey;
   selectorSignatures: string[];
   selectorTraces: RewardSelectionTrace[];
   unavailableReason?: ExplorationStarterCardUnavailableReason;
@@ -596,10 +615,10 @@ export interface ExplorationStarterCardPreparation {
 
 /** Exact persisted identity mapping for one atomic starter-card replacement. */
 export interface ExplorationStarterCardReplacement {
-  purgedEntryId: string;
-  purgedCardId: string;
-  gainedEntryId: string;
-  gainedCardId: string;
+  purgedEntryId: DeckEntryId;
+  purgedCardId: CardId;
+  gainedEntryId: DeckEntryId;
+  gainedCardId: CardId;
 }
 
 export type ExplorationStarterCardTransfigurationEffectKind =
@@ -612,8 +631,8 @@ export type ExplorationStarterCardTransfigurationUnavailableReason =
 
 /** Canonical base-card identity paired with one concrete starter deck entry. */
 export interface ExplorationStarterCardTransfigurationBinding {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
 }
 
 /** One prepared starter entry and its independently selected positive form. */
@@ -629,7 +648,7 @@ export interface ExplorationStarterCardTransfigurationPreparation {
   targets: readonly ExplorationStarterCardTransfigurationTarget[];
   selectionRulesVersion: string;
   selectionContentRevision: string;
-  selectionKey: string;
+  selectionKey: SelectionKey;
   selectorSignatures: readonly string[];
   selectorTraces: readonly RewardSelectionTrace[];
   unavailableReason?: ExplorationStarterCardTransfigurationUnavailableReason;
@@ -638,40 +657,40 @@ export interface ExplorationStarterCardTransfigurationPreparation {
 
 /** Exact persisted before/after mapping for one starter-card transfiguration. */
 export interface ExplorationStarterCardTransfiguration {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
   beforeTransfiguration: null;
   afterTransfiguration: TransfigurationType;
 }
 
 /** Exact persisted before/after mapping for one general deck transfiguration. */
 export interface ExplorationCardTransfiguration {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
   beforeTransfiguration: null;
   afterTransfiguration: TransfigurationType;
 }
 
 /** Exact source-to-minted mapping for one chosen card replacement. */
 export interface ExplorationCardReplacement {
-  sourceEntryId: string;
-  sourceCardId: string;
-  replacementEntryId: string;
-  replacementCardId: string;
+  sourceEntryId: DeckEntryId;
+  sourceCardId: CardId;
+  replacementEntryId: DeckEntryId;
+  replacementCardId: CardId;
 }
 
 /** Exact source-to-minted mapping for one copied concrete deck entry. */
 export interface ExplorationCardCopy {
-  sourceEntryId: string;
-  sourceCardId: string;
-  mintedEntryId: string;
-  mintedCardId: string;
+  sourceEntryId: DeckEntryId;
+  sourceCardId: CardId;
+  mintedEntryId: DeckEntryId;
+  mintedCardId: CardId;
 }
 
 /** Exact persisted type override applied to one concrete deck entry. */
 export interface ExplorationCardTypeChange {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
   beforeCardType: CardType;
   afterCardType: CardType;
   beforeTypeChange: CardTypeChange | null;
@@ -680,26 +699,26 @@ export interface ExplorationCardTypeChange {
 
 /** Exact persisted keyword mutation applied to one concrete deck entry. */
 export interface ExplorationCardKeywordChange {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
   before: CardKeywordModification | null;
   after: CardKeywordModification;
 }
 
 /** Exact Nightmare card minted by one compound Exploration action. */
 export interface ExplorationNightmareGain {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
 }
 
 export interface ExplorationActionOfferRuntime {
-  actionId: string;
+  actionId: ExplorationActionId;
   /** Canonical internal mechanic and policy; omitted on legacy runtimes. */
   canonicalMechanicId?: RewardMechanicId;
   selectionPolicyId?: RewardSelectionPolicyId;
   selectionRulesVersion?: string;
   selectionContentRevision?: string;
-  selectionKey?: string;
+  selectionKey?: SelectionKey;
   selectionSignature?: string;
   selectionTrace?: RewardSelectionTrace;
   /** Every trace when one action prepares independent targets per deck entry. */
@@ -728,28 +747,28 @@ export interface ExplorationActionOfferRuntime {
   siteInsertionPreparation?: ExplorationSiteInsertionPreparation;
   /** Exact signed player-facing site-type offer and append plan. */
   siteTypeChoicePreparation?: ExplorationSiteTypeChoicePreparation;
-  offeredCardIds: string[];
-  offeredDreamsignIds?: string[];
+  offeredCardIds: CardId[];
+  offeredDreamsignIds?: DreamsignId[];
   /** Randomly minted concrete deck-entry UUIDs for deck-card effects. */
-  offeredDeckEntryIds?: string[];
+  offeredDeckEntryIds?: DeckEntryId[];
   /** Deterministic eligible deck-entry UUIDs captured when a bulk effect is prepared. */
-  eligibleDeckEntryIds?: string[];
+  eligibleDeckEntryIds?: DeckEntryId[];
   /** Randomly offered DreamAvatar UUIDs for identity replacement effects. */
-  offeredDreamAvatarIds?: string[];
-  packCardIds: string[][];
-  replacementCardIdByEntryId: Record<string, string>;
-  transfigurationByEntryId: Record<string, TransfigurationType>;
-  transfigurationByCardId?: Record<string, TransfigurationType>;
+  offeredDreamAvatarIds?: DreamAvatarId[];
+  packCardIds: CardId[][];
+  replacementCardIdByEntryId: IdentityRecord<DeckEntryId, CardId>;
+  transfigurationByEntryId: IdentityRecord<DeckEntryId, TransfigurationType>;
+  transfigurationByCardId?: IdentityRecord<CardId, TransfigurationType>;
   offeredSiteType?: SiteType;
 }
 
 /** Signed append-only fixed-site plan prepared when an Exploration site opens. */
 export interface ExplorationSiteInsertionPreparation {
-  sourceSiteId: string;
-  sourceActionId: string;
-  targetNodeId: string;
+  sourceSiteId: SiteId;
+  sourceActionId: ExplorationActionId;
+  targetNodeId: AtlasNodeId;
   insertionIndex: number;
-  siblingSiteIdsBefore: readonly string[];
+  siblingSiteIdsBefore: readonly SiteId[];
   insertedSite: SiteState & { type: ExplorationFixedSiteType };
   planSignature: string;
 }
@@ -762,11 +781,11 @@ export interface ExplorationPreparedSiteChoice {
 
 /** Signed site-type chooser prepared when an Exploration site opens. */
 export interface ExplorationSiteTypeChoicePreparation {
-  sourceSiteId: string;
-  sourceActionId: string;
-  targetNodeId: string;
+  sourceSiteId: SiteId;
+  sourceActionId: ExplorationActionId;
+  targetNodeId: AtlasNodeId;
   insertionIndex: number;
-  siblingSiteIdsBefore: readonly string[];
+  siblingSiteIdsBefore: readonly SiteId[];
   choices: readonly ExplorationPreparedSiteChoice[];
   selectorSignature: string;
   planSignature: string;
@@ -774,31 +793,31 @@ export interface ExplorationSiteTypeChoicePreparation {
 
 /** Exact site insertion persisted by a resolved Exploration action. */
 export interface ExplorationSiteInsertionResolution {
-  targetNodeId: string;
+  targetNodeId: AtlasNodeId;
   insertionIndex: number;
-  siblingSiteIdsBefore: readonly string[];
+  siblingSiteIdsBefore: readonly SiteId[];
   insertedSite: SiteState & { type: ExplorationFixedSiteType };
 }
 
 /** Persisted result shown with the authored response before leaving the site. */
 export interface ExplorationResolution {
-  actionId: string;
+  actionId: ExplorationActionId;
   selectionRulesVersion?: string;
   selectionContentRevision?: string;
   encounterSignature?: string;
   selectionSignature?: string;
   /** Validated UUID-only player intent persisted for replay and diagnostics. */
   selection?: Record<string, string | string[] | number>;
-  gainedCardIds: string[];
+  gainedCardIds: CardId[];
   /** Concrete deck-entry UUIDs minted by this resolution. */
-  gainedEntryIds?: string[];
-  gainedDreamsignIds: string[];
-  purgedCardIds: string[];
+  gainedEntryIds?: DeckEntryId[];
+  gainedDreamsignIds: DreamsignId[];
+  purgedCardIds: CardId[];
   /** Concrete deck-entry UUIDs removed by this resolution. */
-  purgedEntryIds?: string[];
+  purgedEntryIds?: DeckEntryId[];
   /** Exact pre-resolution deck entries needed to replay and present purges. */
   purgedEntrySnapshots?: DeckEntry[];
-  purgedDreamsignIds?: string[];
+  purgedDreamsignIds?: DreamsignId[];
   /** Authoritative structured Dreamsign transition for compound effects. */
   dreamsignMutation?: ExplorationDreamsignMutationResolution;
   /** Exact removed-to-minted mappings for starter-card replacement effects. */
@@ -817,10 +836,10 @@ export interface ExplorationResolution {
   cardKeywordChanges?: readonly ExplorationCardKeywordChange[];
   /** Exact ordered Nightmare entries minted by a compound action. */
   nightmareGains?: readonly ExplorationNightmareGain[];
-  affectedEntryIds: string[];
+  affectedEntryIds: DeckEntryId[];
   /** Exact resolved spark values before and after a persisted deck mutation. */
-  sparkBeforeByEntryId?: Record<string, number>;
-  sparkAfterByEntryId?: Record<string, number>;
+  sparkBeforeByEntryId?: IdentityRecord<DeckEntryId, number>;
+  sparkAfterByEntryId?: IdentityRecord<DeckEntryId, number>;
   essenceGained: number;
   /** Exact shared Essence balance immediately before and after the mutation. */
   essenceBefore?: number;
@@ -836,7 +855,7 @@ export interface ExplorationResolution {
   /** Exact authored card type applied by a random type-change action. */
   resolvedCardType?: CardType;
   /** Exact Reclaim cost applied to each surviving concrete deck entry. */
-  reclaimCostByEntryId?: Record<string, number>;
+  reclaimCostByEntryId?: IdentityRecord<DeckEntryId, number>;
   /** Exact one-battle modifier created by the resolution. */
   battleModifier?:
     | {
@@ -850,8 +869,8 @@ export interface ExplorationResolution {
         energyCostReduction: 1;
         battlesRemaining: number;
       };
-  previousDreamAvatarId?: string;
-  chosenDreamAvatarId?: string;
+  previousDreamAvatarId?: DreamAvatarId;
+  chosenDreamAvatarId?: DreamAvatarId;
   /** Exact one-use future-site modifier created by the resolution. */
   siteOfferModifier?: TransfiguredSiteOfferModifier;
   /** Exact FIFO shop modifier appended by this resolution. */
@@ -866,14 +885,14 @@ export interface ExplorationSiteRuntime {
   selectionRulesVersion?: string;
   selectionContentRevision?: string;
   encounterSignature?: string;
-  encounterCardId: string;
+  encounterCardId: CardId;
   actionOffers: ExplorationActionOfferRuntime[];
   resolution: ExplorationResolution | null;
 }
 
 /** One scored candidate considered for a strong-pool Dreamsign reward. */
 export interface TidemarkLadderClimbDreamsignCandidateScore {
-  dreamsignId: string;
+  dreamsignId: DreamsignId;
   score: number;
 }
 
@@ -888,7 +907,7 @@ export interface TidemarkLadderClimbResult {
   resultSettled: boolean;
   dreamsignAwarded: boolean;
   pendingDreamsignReplacement: boolean;
-  replacedDreamsignId?: string;
+  replacedDreamsignId?: DreamsignId;
 }
 
 /** Shared, replayable runtime for one Tidemark Ladder Climb encounter. */
@@ -899,7 +918,7 @@ export interface TidemarkLadderClimbSiteRuntime {
   selectionTrace?: GambleSelectionTrace;
   isFarpoint: boolean;
   /** One independent full-deck commitment for each possible attempt. */
-  shuffleCommitments: string[];
+  shuffleCommitments: ShuffleCommitment[];
   committedCards: StandardPlayingCard[];
   /** All eligible candidates, sorted by descending match score then UUID. */
   dreamsignCandidateScores: TidemarkLadderClimbDreamsignCandidateScore[];
@@ -937,7 +956,7 @@ export interface StarwayStairsSiteRuntime {
   /** Essence paid for each tier draw in this round. */
   wagerAmount: number;
   /** One independent full-deck commitment for each tier. */
-  shuffleCommitments: string[];
+  shuffleCommitments: ShuffleCommitment[];
   committedCards: StandardPlayingCard[];
   results: StarwayStairsResult[];
   terminalReason: StarwayStairsTerminalReason | null;
@@ -946,8 +965,8 @@ export interface StarwayStairsSiteRuntime {
 
 /** One deck card prepared as a legal Four-Suit Reprise target. */
 export interface FourSuitRepriseTarget {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
   cardNumber: number;
   /** Exact card face locked when the site opens, retained after a purge. */
   cardSnapshot: CardData;
@@ -958,16 +977,16 @@ export interface FourSuitRepriseTarget {
 /** One paid, one-shot suit result in Four-Suit Reprise. */
 export interface FourSuitRepriseRound {
   roundNumber: 1 | 2 | 3;
-  shuffleCommitment: string;
+  shuffleCommitment: ShuffleCommitment;
   card: StandardPlayingCard;
-  targetEntryId: string;
-  targetCardId: string;
+  targetEntryId: DeckEntryId;
+  targetCardId: CardId;
   costPaid: number;
   outcome: FourSuitRepriseOutcome;
   resultRevealed: boolean;
   resultSettled: boolean;
   essenceGained: number;
-  duplicatedEntryId?: string;
+  duplicatedEntryId?: DeckEntryId;
   chosenTransfiguration?: TransfigurationType;
 }
 
@@ -980,7 +999,7 @@ export interface FourSuitRepriseSiteRuntime {
   isFarpoint: boolean;
   drawCost: number;
   /** One independent full-deck commitment for each possible round. */
-  shuffleCommitments: string[];
+  shuffleCommitments: ShuffleCommitment[];
   committedCards: StandardPlayingCard[];
   targets: FourSuitRepriseTarget[];
   rounds: FourSuitRepriseRound[];
@@ -998,7 +1017,7 @@ export interface BlackjackSiteRuntime {
   prizeEssence: number;
   /** Paid-hand number; every dealer win advances this counter. */
   attemptNumber: number;
-  shuffleCommitment: string;
+  shuffleCommitment: ShuffleCommitment;
   /** Complete deterministic shoe; cards past deckCursor have not been drawn. */
   committedDeck: StandardPlayingCard[];
   deckCursor: number;
@@ -1052,11 +1071,11 @@ export type Screen =
        * Shared tutorial override that presents exactly this DreamAvatar UUID.
        * Absent for the normal seeded three-avatar offer.
        */
-      tutorialDreamAvatarId?: string;
+      tutorialDreamAvatarId?: DreamAvatarId;
     }
   | { type: "atlas" }
   | { type: "dreamscape" }
-  | { type: "site"; siteId: string }
+  | { type: "site"; siteId: SiteId }
   | { type: "journeyComplete" }
   | { type: "journeyFailed" };
 
@@ -1088,7 +1107,7 @@ export type BattleModifier =
        * The deck `entryId`s added when this modifier was pushed; removed when
        * `battlesRemaining` hits 0 so the temporary Nightmares leave the deck.
        */
-      addedEntryIds: readonly string[];
+      addedEntryIds: readonly DeckEntryId[];
       source: string;
     }
   | {
@@ -1150,14 +1169,14 @@ export interface ShopModifiers {
 /** A one-use Exploration modifier consumed by the next eligible Draft or Shop. */
 export interface TransfiguredSiteOfferModifier {
   readonly kind: "transfigure-next-draft-or-shop";
-  readonly sourceSiteId: string;
-  readonly sourceActionId: string;
+  readonly sourceSiteId: SiteId;
+  readonly sourceActionId: ExplorationActionId;
 }
 
 /** The top-level journey state object. */
 export interface JourneyState {
   /** Event-log identity of the current assembled or loaded run. */
-  readonly runId: string | null;
+  readonly runId: JourneyId | null;
   /** Whether this run was assembled from the authored tutorial journey handoff. */
   readonly isTutorialJourney?: boolean;
   /**
@@ -1179,16 +1198,16 @@ export interface JourneyState {
   dreamAvatar: DreamAvatar | null;
   resolvedPackage: ResolvedDreamAvatarPackage | null;
   cardSourceDebug: CardSourceDebugState | null;
-  remainingDreamsignPool: string[];
+  remainingDreamsignPool: DreamsignId[];
   dreamsigns: Dreamsign[];
   completionLevel: number;
   atlas: DreamAtlas;
-  currentDreamscape: string | null;
-  visitedSites: string[];
-  siteRuntime: Record<string, SiteRuntimeState>;
+  currentDreamscape: AtlasNodeId | null;
+  visitedSites: SiteId[];
+  siteRuntime: IdentityRecord<SiteId, SiteRuntimeState>;
   draftState: DraftState | null;
   screen: Screen;
-  activeSiteId: string | null;
+  activeSiteId: SiteId | null;
   failureSummary: JourneyFailureSummary | null;
   /**
    * Whether the player has dismissed the one-time starter-deck reveal popup

@@ -1,6 +1,13 @@
 import type { LayerName } from "./layer-name";
 import type { SiteType } from "./site-type";
 import type { SourceTransport } from "../runtime/localization/runtime";
+import type {
+  ArtAssetKey,
+  AtlasFillProfileId,
+  DreamscapeId,
+  GuideId,
+  IdentityRecord,
+} from "./identifiers";
 
 export interface AtlasIntegerRange {
   min: number;
@@ -15,13 +22,13 @@ export interface AtlasLayerData {
   role: AtlasLayerRole;
   nodeCount: AtlasIntegerRange;
   siteCount: AtlasIntegerRange | null;
-  fillProfile: string | null;
+  fillProfile: AtlasFillProfileId | null;
   mandatorySites: Partial<Record<SiteType, number>>;
 }
 
 /** Base site weights resolved before run modifiers are applied. */
 export interface AtlasFillProfile {
-  id: string;
+  id: AtlasFillProfileId;
   signatureSiteWeight: number;
   siteWeights: Partial<Record<SiteType, number>>;
 }
@@ -52,7 +59,7 @@ export interface AtlasData {
     knownDreamsignSite: SiteType;
     mandatoryCapacityBehavior: "omit-fill";
   };
-  fillProfiles: Readonly<Record<string, AtlasFillProfile>>;
+  fillProfiles: Readonly<IdentityRecord<AtlasFillProfileId, AtlasFillProfile>>;
   knownDreamsign: {
     maxPerAtlas: number;
     eligibleLayers: readonly LayerName[];
@@ -60,14 +67,14 @@ export interface AtlasData {
     earlyRevealBias: number;
   };
   boss: {
-    dreamscapeId: string;
+    dreamscapeId: DreamscapeId;
     place: string;
     name: string;
     fallbackTitle: string;
     fallbackIntroduction: string;
-    sceneArtId: string;
-    iconArtId: string;
-    figureArtId: string;
+    sceneArtId: DreamscapeId;
+    iconArtId: DreamscapeId;
+    figureArtId: GuideId;
   };
   presentation: {
     unseenTitle: SourceTransport;
@@ -78,7 +85,7 @@ export interface AtlasData {
   };
   assets: {
     unrevealedFrameSource: string;
-    unrevealedFrameKey: string;
+    unrevealedFrameKey: ArtAssetKey;
     bossSceneSource: string;
     bossIconSource: string;
     bossFigureSource: string;

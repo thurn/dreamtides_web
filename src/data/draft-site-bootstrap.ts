@@ -7,6 +7,7 @@
 
 import { countRemainingCards } from "../draft/draft-engine";
 import type { DraftState } from "../types/draft";
+import type { SiteId } from "../types/identifiers";
 
 /** The derived draft progress for a site, read from the effective draft state. */
 export interface DraftSiteProgress {
@@ -30,10 +31,12 @@ export interface DraftSiteProgress {
  */
 export function readDraftSiteProgress(
   effective: DraftState | null,
-  siteId: string,
+  siteId: SiteId,
 ): DraftSiteProgress {
   const isActive = effective?.activeSiteId === siteId;
-  const sitePicksCompleted = isActive ? effective?.sitePicksCompleted ?? 0 : 0;
+  const sitePicksCompleted = isActive
+    ? (effective?.sitePicksCompleted ?? 0)
+    : 0;
   const offerCardNumbers = isActive ? [...(effective?.currentOffer ?? [])] : [];
   const offerKey = offerCardNumbers.join(",");
   const remainingTotal =
@@ -41,8 +44,14 @@ export function readDraftSiteProgress(
       ? countRemainingCards(effective.remainingCopiesByCard)
       : 0;
   const isComplete =
-    isActive
-    && offerKey === ""
-    && (sitePicksCompleted > 0 || remainingTotal < 4);
-  return { isActive, offerCardNumbers, offerKey, sitePicksCompleted, isComplete };
+    isActive &&
+    offerKey === "" &&
+    (sitePicksCompleted > 0 || remainingTotal < 4);
+  return {
+    isActive,
+    offerCardNumbers,
+    offerKey,
+    sitePicksCompleted,
+    isComplete,
+  };
 }

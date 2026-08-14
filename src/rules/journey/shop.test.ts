@@ -23,6 +23,12 @@ import {
   type SiteContentProvider,
 } from "./sites";
 import { registerDeckContentProvider } from "./deck";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -89,7 +95,7 @@ function makeSite(
   overrides: Partial<SiteState> = {},
 ): SiteState {
   return {
-    id: SITE_ID,
+    id: asSiteId(SITE_ID),
     type,
     isEnhanced: false,
     isVisited: false,
@@ -100,10 +106,10 @@ function makeSite(
 
 function makeNode(sites: SiteState[]): DreamscapeNode {
   return {
-    id: NODE_ID,
+    id: asAtlasNodeId(NODE_ID),
     layer: LayerName.Two,
     indexInLayer: 0,
-    dreamscapeId: "d1",
+    dreamscapeId: asDreamscapeId("d1"),
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -134,7 +140,7 @@ function dreamsignSlot(
   return {
     itemType: "dreamsign",
     dreamsign: {
-      id,
+      id: asDreamsignId(id),
       name: `Dreamsign ${id}`,
       effectDescription: `Effect ${id}`,
     },
@@ -175,15 +181,15 @@ function stateWith(
     ...base,
     journey: {
       ...base.journey,
-      currentDreamscape: NODE_ID,
+      currentDreamscape: asAtlasNodeId(NODE_ID),
       atlas: {
         ...base.journey.atlas,
         nodes: { [NODE_ID]: makeNode(sites) },
-        startingNodeId: NODE_ID,
-        currentNodeId: NODE_ID,
+        startingNodeId: asAtlasNodeId(NODE_ID),
+        currentNodeId: asAtlasNodeId(NODE_ID),
       },
-      screen: { type: "site", siteId: SITE_ID },
-      activeSiteId: SITE_ID,
+      screen: { type: "site", siteId: asSiteId(SITE_ID) },
+      activeSiteId: asSiteId(SITE_ID),
       ...overrides,
     },
   };
@@ -212,8 +218,8 @@ const rerollProvider: SiteContentProvider = {
     const draw = Math.floor(rng(0) * 1_000_000);
     return {
       slots: [cardSlot({ cardNumber: draw })],
-      remainingDreamsignPoolIds: [`pool-${String(draw)}`],
-      remainingDreamsignPool: [`pool-${String(draw)}`],
+      remainingDreamsignPoolIds: [asDreamsignId(`pool-${String(draw)}`)],
+      remainingDreamsignPool: [asDreamsignId(`pool-${String(draw)}`)],
       draftState: null,
     };
   },
@@ -232,7 +238,7 @@ describe("BUY_SHOP_SLOT", () => {
   it("bounces when the price exceeds current essence, leaving essence unchanged", () => {
     const state = shopState([cardSlot({ basePrice: 100 })], { essence: 50 });
     const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 0,
     });
     expect(result.outcome).toBe("bounced");
@@ -245,7 +251,7 @@ describe("BUY_SHOP_SLOT", () => {
       essence: 300,
     });
     const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 0,
     });
     expect(result.outcome).toBe("applied");
@@ -264,7 +270,7 @@ describe("BUY_SHOP_SLOT", () => {
       { essence: 300 },
     );
     const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 0,
     });
     expect(result.outcome).toBe("applied");
@@ -276,13 +282,13 @@ describe("BUY_SHOP_SLOT", () => {
   it("bounces a second buy on the same slot (the coop double-buy race)", () => {
     const state = shopState([cardSlot({ basePrice: 100 })], { essence: 300 });
     const first = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 0,
     });
     expect(first.outcome).toBe("applied");
     expect(first.state.journey.essence).toBe(200);
     const second = reduce(first.state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 0,
     });
     expect(second.outcome).toBe("bounced");
@@ -310,7 +316,7 @@ describe("BUY_SHOP_SLOT", () => {
       },
     );
     const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 0,
     });
     expect(result.outcome).toBe("applied");
@@ -320,7 +326,7 @@ describe("BUY_SHOP_SLOT", () => {
   it("bounces on an out-of-range slot index", () => {
     const state = shopState([cardSlot()], { essence: 300 });
     const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 5,
     });
     expect(result.outcome).toBe("bounced");
@@ -329,8 +335,8 @@ describe("BUY_SHOP_SLOT", () => {
   it("keeps a bound Card Shop free across paid rerolls and persists every receipt", () => {
     registerSiteContentProvider(rerollProvider);
     const freePurchaseSource = {
-      sourceSiteId: "exploration-free-shop",
-      sourceActionId: "action-free-shop",
+      sourceSiteId: asSiteId("exploration-free-shop"),
+      sourceActionId: asExplorationActionId("action-free-shop"),
     };
     const state = shopState([cardSlot({ cardNumber: 9 })], {
       essence: 300,
@@ -343,20 +349,20 @@ describe("BUY_SHOP_SLOT", () => {
     });
 
     const first = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 0,
     });
     const rerolled = reduce(
       first.state,
       "REROLL_SHOP",
-      { siteId: SITE_ID },
+      { siteId: asSiteId(SITE_ID) },
       ctx({ seq: 43 }),
     );
     const second = reduce(
       rerolled.state,
       "BUY_SHOP_SLOT",
       {
-        siteId: SITE_ID,
+        siteId: asSiteId(SITE_ID),
         slotIndex: 0,
       },
       ctx({ seq: 44 }),
@@ -375,7 +381,7 @@ describe("BUY_SHOP_SLOT", () => {
       purchaseHistory: [
         {
           eventSeq: 42,
-          siteId: SITE_ID,
+          siteId: asSiteId(SITE_ID),
           slotIndex: 0,
           item: { kind: "card", cardNumber: 9 },
           priceBeforeFree: 100,
@@ -386,7 +392,7 @@ describe("BUY_SHOP_SLOT", () => {
         },
         {
           eventSeq: 44,
-          siteId: SITE_ID,
+          siteId: asSiteId(SITE_ID),
           slotIndex: 0,
           pricePaid: 0,
           essenceBefore: 250,
@@ -400,21 +406,21 @@ describe("BUY_SHOP_SLOT", () => {
   it("consumes stacked free-purchase modifiers FIFO even when the visit is already free", () => {
     const firstModifier = {
       kind: "free-purchases" as const,
-      sourceSiteId: "exploration-one",
-      sourceActionId: "action-one",
+      sourceSiteId: asSiteId("exploration-one"),
+      sourceActionId: asExplorationActionId("action-one"),
       initialCount: 1,
       remainingCount: 1,
     };
     const secondModifier = {
       kind: "free-purchases" as const,
-      sourceSiteId: "exploration-two",
-      sourceActionId: "action-two",
+      sourceSiteId: asSiteId("exploration-two"),
+      sourceActionId: asExplorationActionId("action-two"),
       initialCount: 2,
       remainingCount: 2,
     };
     const freePurchaseSource = {
-      sourceSiteId: "exploration-free-shop",
-      sourceActionId: "action-free-shop",
+      sourceSiteId: asSiteId("exploration-free-shop"),
+      sourceActionId: asExplorationActionId("action-free-shop"),
     };
     const slots = [cardSlot(), cardSlot(), cardSlot()];
     let current = shopState(slots, {
@@ -432,7 +438,7 @@ describe("BUY_SHOP_SLOT", () => {
 
     for (let slotIndex = 0; slotIndex < slots.length; slotIndex += 1) {
       const result = reduce(current, "BUY_SHOP_SLOT", {
-        siteId: SITE_ID,
+        siteId: asSiteId(SITE_ID),
         slotIndex,
       });
       expect(result.outcome).toBe("applied");
@@ -454,17 +460,29 @@ describe("BUY_SHOP_SLOT", () => {
             },
       ),
     ).toEqual([
-      { sourceActionId: "action-one", before: 1, after: 0 },
-      { sourceActionId: "action-two", before: 2, after: 1 },
-      { sourceActionId: "action-two", before: 1, after: 0 },
+      {
+        sourceActionId: asExplorationActionId("action-one"),
+        before: 1,
+        after: 0,
+      },
+      {
+        sourceActionId: asExplorationActionId("action-two"),
+        before: 2,
+        after: 1,
+      },
+      {
+        sourceActionId: asExplorationActionId("action-two"),
+        before: 1,
+        after: 0,
+      },
     ]);
   });
 
   it("consumes a T82 counter when ordinary discounts already make the item free", () => {
     const modifier = {
       kind: "free-purchases" as const,
-      sourceSiteId: "exploration-site",
-      sourceActionId: "discount-overlap-action",
+      sourceSiteId: asSiteId("exploration-site"),
+      sourceActionId: asExplorationActionId("discount-overlap-action"),
       initialCount: 1,
       remainingCount: 1,
     };
@@ -477,7 +495,7 @@ describe("BUY_SHOP_SLOT", () => {
     );
 
     const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 0,
     });
 
@@ -492,7 +510,7 @@ describe("BUY_SHOP_SLOT", () => {
           priceBeforeFree: 0,
           pricePaid: 0,
           freePurchaseModifier: {
-            sourceActionId: "discount-overlap-action",
+            sourceActionId: asExplorationActionId("discount-overlap-action"),
             remainingBefore: 1,
             remainingAfter: 0,
           },
@@ -504,8 +522,8 @@ describe("BUY_SHOP_SLOT", () => {
   it("consumes a T82 purchase at a Dreamsign Bazaar and records replacement identity", () => {
     const modifier = {
       kind: "free-purchases" as const,
-      sourceSiteId: "exploration-site",
-      sourceActionId: "free-bazaar-action",
+      sourceSiteId: asSiteId("exploration-site"),
+      sourceActionId: asExplorationActionId("free-bazaar-action"),
       initialCount: 1,
       remainingCount: 1,
     };
@@ -516,7 +534,7 @@ describe("BUY_SHOP_SLOT", () => {
         maxDreamsigns: 1,
         dreamsigns: [
           {
-            id: "replaced-dreamsign",
+            id: asDreamsignId("replaced-dreamsign"),
             name: "Replaced",
             effectDescription: "Replaced effect",
           },
@@ -527,7 +545,7 @@ describe("BUY_SHOP_SLOT", () => {
     );
 
     const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 0,
       purgeIndex: 0,
     });
@@ -542,15 +560,15 @@ describe("BUY_SHOP_SLOT", () => {
         {
           item: {
             kind: "dreamsign",
-            dreamsignId: "offered-dreamsign",
-            replacedDreamsignId: "replaced-dreamsign",
+            dreamsignId: asDreamsignId("offered-dreamsign"),
+            replacedDreamsignId: asDreamsignId("replaced-dreamsign"),
           },
           priceBeforeFree: 100,
           pricePaid: 0,
           essenceBefore: 0,
           essenceAfter: 0,
           freePurchaseModifier: {
-            sourceActionId: "free-bazaar-action",
+            sourceActionId: asExplorationActionId("free-bazaar-action"),
             remainingBefore: 1,
             remainingAfter: 0,
           },
@@ -562,8 +580,8 @@ describe("BUY_SHOP_SLOT", () => {
   it("keeps the T82 counter and receipt history unchanged when a capped Bazaar buy bounces", () => {
     const modifier = {
       kind: "free-purchases" as const,
-      sourceSiteId: "exploration-site",
-      sourceActionId: "free-bazaar-action",
+      sourceSiteId: asSiteId("exploration-site"),
+      sourceActionId: asExplorationActionId("free-bazaar-action"),
       initialCount: 1,
       remainingCount: 1,
     };
@@ -573,7 +591,7 @@ describe("BUY_SHOP_SLOT", () => {
         maxDreamsigns: 1,
         dreamsigns: [
           {
-            id: "held-dreamsign",
+            id: asDreamsignId("held-dreamsign"),
             name: "Held",
             effectDescription: "Held effect",
           },
@@ -584,7 +602,7 @@ describe("BUY_SHOP_SLOT", () => {
     );
 
     const result = reduce(state, "BUY_SHOP_SLOT", {
-      siteId: SITE_ID,
+      siteId: asSiteId(SITE_ID),
       slotIndex: 0,
     });
 
@@ -602,8 +620,8 @@ describe("BUY_SHOP_SLOT", () => {
     const runtime = {
       ...shopRuntime([dreamsignSlot("offered-dreamsign")]),
       freePurchaseSource: {
-        sourceSiteId: "exploration-site",
-        sourceActionId: "free-shop-action",
+        sourceSiteId: asSiteId("exploration-site"),
+        sourceActionId: asExplorationActionId("free-shop-action"),
       },
     };
     const state = shopState(
@@ -613,7 +631,7 @@ describe("BUY_SHOP_SLOT", () => {
     );
     expect(
       reduce(state, "BUY_SHOP_SLOT", {
-        siteId: SITE_ID,
+        siteId: asSiteId(SITE_ID),
         slotIndex: 0,
       }).outcome,
     ).toBe("bounced");
@@ -627,7 +645,7 @@ describe("BUY_SHOP_SLOT", () => {
 describe("REROLL_SHOP", () => {
   it("bounces when no content provider is registered", () => {
     const state = shopState([cardSlot()], { essence: 300 });
-    const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
+    const result = reduce(state, "REROLL_SHOP", { siteId: asSiteId(SITE_ID) });
     expect(result.outcome).toBe("bounced");
   });
 
@@ -637,7 +655,7 @@ describe("REROLL_SHOP", () => {
       essence: 300,
       shopModifiers: shopModifiers({ freeRerolls: 1 }),
     });
-    const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
+    const result = reduce(state, "REROLL_SHOP", { siteId: asSiteId(SITE_ID) });
     expect(result.outcome).toBe("applied");
     // Free reroll consumed first; essence untouched.
     expect(result.state.journey.shopModifiers.freeRerolls).toBe(0);
@@ -655,7 +673,7 @@ describe("REROLL_SHOP", () => {
       essence: 300,
       shopModifiers: shopModifiers(),
     });
-    const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
+    const result = reduce(state, "REROLL_SHOP", { siteId: asSiteId(SITE_ID) });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.shopModifiers.freeRerolls).toBe(0);
     expect(result.state.journey.essence).toBe(300 - cost);
@@ -667,7 +685,7 @@ describe("REROLL_SHOP", () => {
       essence: 20,
       shopModifiers: shopModifiers(),
     });
-    const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
+    const result = reduce(state, "REROLL_SHOP", { siteId: asSiteId(SITE_ID) });
     expect(result.outcome).toBe("bounced");
     expect(result.state.journey.essence).toBe(20);
   });
@@ -680,7 +698,7 @@ describe("REROLL_SHOP", () => {
       shopModifiers: shopModifiers({ freeRerolls: 1 }),
       siteRuntime: { [SITE_ID]: runtime },
     });
-    const result = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
+    const result = reduce(state, "REROLL_SHOP", { siteId: asSiteId(SITE_ID) });
     expect(result.outcome).toBe("bounced");
   });
 
@@ -693,9 +711,13 @@ describe("REROLL_SHOP", () => {
       shopModifiers: shopModifiers(),
     });
 
-    const first = reduce(state, "REROLL_SHOP", { siteId: SITE_ID });
-    const second = reduce(first.state, "REROLL_SHOP", { siteId: SITE_ID });
-    const third = reduce(second.state, "REROLL_SHOP", { siteId: SITE_ID });
+    const first = reduce(state, "REROLL_SHOP", { siteId: asSiteId(SITE_ID) });
+    const second = reduce(first.state, "REROLL_SHOP", {
+      siteId: asSiteId(SITE_ID),
+    });
+    const third = reduce(second.state, "REROLL_SHOP", {
+      siteId: asSiteId(SITE_ID),
+    });
 
     expect(first.outcome).toBe("applied");
     expect(second.outcome).toBe("applied");
@@ -923,7 +945,7 @@ describe("atlas edits", () => {
       activeSiteId: null,
     }); // node has one Shop site
     const result = reduce(state, "REPLACE_SITE_TYPE", {
-      nodeId: NODE_ID,
+      nodeId: asAtlasNodeId(NODE_ID),
       fromSiteType: "Shop",
       toSiteType: "Essence",
     });
@@ -938,7 +960,7 @@ describe("atlas edits", () => {
     const state = shopState([cardSlot()]);
     expect(
       reduce(state, "REPLACE_SITE_TYPE", {
-        nodeId: NODE_ID,
+        nodeId: asAtlasNodeId(NODE_ID),
         fromSiteType: "Essence",
         toSiteType: "Shop",
       }).outcome,
@@ -948,7 +970,7 @@ describe("atlas edits", () => {
   it("ADD_SITE_TO_DREAMSCAPE appends a new site to the node", () => {
     const state = shopState([cardSlot()]);
     const result = reduce(state, "ADD_SITE_TO_DREAMSCAPE", {
-      nodeId: NODE_ID,
+      nodeId: asAtlasNodeId(NODE_ID),
       siteType: "Essence",
     });
     expect(result.outcome).toBe("applied");
@@ -965,14 +987,14 @@ describe("atlas edits", () => {
         randomSite: {
           ...MINIMAL_SITES_DATA.randomSite,
           destinations: ["Exploration"],
-          guideId: "fixture-random-guide",
+          guideId: asGuideId("fixture-random-guide"),
         },
       },
       openSite: () => null,
     });
     const state = shopState([cardSlot()]);
     const result = reduce(state, "ADD_SITE_TO_DREAMSCAPE", {
-      nodeId: NODE_ID,
+      nodeId: asAtlasNodeId(NODE_ID),
       siteType: "RandomSite",
     });
     expect(result.outcome).toBe("applied");
@@ -980,7 +1002,7 @@ describe("atlas edits", () => {
       type: "RandomSite",
       randomSite: {
         mode: "single",
-        presentingGuideId: "fixture-random-guide",
+        presentingGuideId: asGuideId("fixture-random-guide"),
         candidateSiteTypes: ["Exploration"],
         destinationSiteType: "Exploration",
       },
@@ -991,7 +1013,7 @@ describe("atlas edits", () => {
     const state = shopState([cardSlot()]);
     expect(
       reduce(state, "ADD_SITE_TO_DREAMSCAPE", {
-        nodeId: "nope",
+        nodeId: asAtlasNodeId("nope"),
         siteType: "Essence",
       }).outcome,
     ).toBe("bounced");
@@ -1036,7 +1058,9 @@ describe("merchant offers", () => {
     };
     registerSiteContentProvider(provider);
     const state = stateWith([makeSite("Augury")]);
-    const result = reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: SITE_ID });
+    const result = reduce(state, "ACCEPT_MERCHANT_OFFER", {
+      siteId: asSiteId(SITE_ID),
+    });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.essence).toBe(499);
   });
@@ -1054,14 +1078,16 @@ describe("merchant offers", () => {
     registerSiteContentProvider(provider);
     const state = stateWith([makeSite("Augury")]);
     expect(
-      reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: SITE_ID }).outcome,
+      reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: asSiteId(SITE_ID) })
+        .outcome,
     ).toBe("bounced");
   });
 
   it("ACCEPT_MERCHANT_OFFER bounces with no provider or unknown site", () => {
     const state = stateWith([makeSite("Augury")]);
     expect(
-      reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: SITE_ID }).outcome,
+      reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: asSiteId(SITE_ID) })
+        .outcome,
     ).toBe("bounced");
     const provider: SiteContentProvider = {
       sitesData: MINIMAL_SITES_DATA,
@@ -1074,7 +1100,8 @@ describe("merchant offers", () => {
     };
     registerSiteContentProvider(provider);
     expect(
-      reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: "missing" }).outcome,
+      reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: asSiteId("missing") })
+        .outcome,
     ).toBe("bounced");
   });
 
@@ -1086,13 +1113,18 @@ describe("merchant offers", () => {
       },
       resolveMerchant({ journey, action }) {
         return action === "decline"
-          ? { ...journey, visitedSites: [...journey.visitedSites, SITE_ID] }
+          ? {
+              ...journey,
+              visitedSites: [...journey.visitedSites, asSiteId(SITE_ID)],
+            }
           : null;
       },
     };
     registerSiteContentProvider(provider);
     const state = stateWith([makeSite("Augury")]);
-    const result = reduce(state, "DECLINE_MERCHANT", { siteId: SITE_ID });
+    const result = reduce(state, "DECLINE_MERCHANT", {
+      siteId: asSiteId(SITE_ID),
+    });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.visitedSites).toContain(SITE_ID);
   });

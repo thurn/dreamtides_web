@@ -1,4 +1,5 @@
 import type { ArtCrop, CardData, CardType, Rarity } from "../types/cards";
+import type { CardId } from "../types/card-identity";
 
 export type EditableCardField =
   | "energy-cost"
@@ -19,16 +20,12 @@ export const CARD_TYPE_OPTIONS: readonly CardType[] = ["Character", "Event"];
  * `tides`, saved through their respective chip controls.
  */
 export type SavableCardField =
-  | EditableCardField
-  | "art"
-  | "image-number"
-  | "tags"
-  | "tides";
+  EditableCardField | "art" | "image-number" | "tags" | "tides";
 
 export type EditorFieldValue = string | number;
 
 export interface EditorCardRecord {
-  id: string;
+  id: CardId;
   cardNumber: number;
   cardType: CardType;
   rarity?: Rarity;
@@ -59,14 +56,7 @@ export interface EditorTag {
 
 export type EditorTypeFilter = "all" | "character" | "event";
 export type EditorCostFilter =
-  | "all"
-  | "0"
-  | "1"
-  | "2"
-  | "3"
-  | "4"
-  | "5plus"
-  | "x";
+  "all" | "0" | "1" | "2" | "3" | "4" | "5plus" | "x";
 export type EditorSortField =
   | "cardNumber"
   | "name"
@@ -170,7 +160,7 @@ export interface LoadEditorCardsResponse {
 }
 
 export interface SaveEditorCardFieldRequest {
-  id: string;
+  id: CardId;
   field: SavableCardField;
   value: unknown;
   clientRevision?: number;
@@ -178,7 +168,7 @@ export interface SaveEditorCardFieldRequest {
 
 /** Request to save a card's art crop through the focused editor. */
 export interface SaveEditorCardArtRequest {
-  id: string;
+  id: CardId;
   art: ArtCrop;
 }
 
@@ -187,7 +177,7 @@ export interface SaveEditorCardArtRequest {
  * The number is resolved to `/cards/<imageNumber>.webp` at render time.
  */
 export interface SaveEditorCardImageNumberRequest {
-  id: string;
+  id: CardId;
   imageNumber: number;
 }
 
@@ -220,7 +210,7 @@ export interface LoadEditorTagsResponse {
 }
 
 export interface SaveEditorCardTagsRequest {
-  id: string;
+  id: CardId;
   tags: string[];
 }
 
@@ -236,7 +226,7 @@ export interface SaveEditorTagRegistryResponse {
 }
 
 export interface SaveEditorCardTidesRequest {
-  id: string;
+  id: CardId;
   tides: string[];
 }
 

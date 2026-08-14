@@ -26,6 +26,7 @@ import { useScaleToFit } from "../primitives/use-scale-to-fit";
 import { atlasPreflightImageUrls } from "./atlas-preflight";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
+import type { AtlasNodeId } from "../../types/identifiers";
 
 /** One connector between two nodes, in stage coordinates. */
 export interface AtlasEdgeView {
@@ -65,7 +66,7 @@ export interface AtlasScreenProps {
   /** The view-model to render. */
   view: AtlasView;
   /** Enter a node's dreamscape; fired on a tap / click of an available node. */
-  onEnterNode: (nodeId: string) => void;
+  onEnterNode: (nodeId: AtlasNodeId) => void;
   /** Report when delayed tutorial guidance becomes visible. */
   onGuideDialogueShown?: () => void;
 }

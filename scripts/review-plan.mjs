@@ -21,6 +21,7 @@ const TEST_INPUT_EXTENSIONS = new Set([
 const SOURCE_TREE_CONTRACT_TESTS = [
   "scripts/cumulus-generated-docs-drift.test.mjs",
   "scripts/cumulus-ui-boundary.test.mjs",
+  "scripts/domain-string-audit.test.mjs",
 ];
 
 const LOCALIZATION_CONTRACT_INPUTS = new Set([

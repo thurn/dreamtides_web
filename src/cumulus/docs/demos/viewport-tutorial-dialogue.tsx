@@ -13,6 +13,7 @@ import {
   DemoSelect,
   DemoToggle,
 } from "./promotion-demo-controls";
+import { asPresentationId } from "../../../types/identifiers";
 function Demo() {
   const [placement, setPlacement] = useState<"floating" | "anchored">(
     "floating",
@@ -108,7 +109,7 @@ function Demo() {
         )}
       </div>
       <ViewportTutorialDialogue
-        presentationId="demo-tutorial"
+        presentationId={asPresentationId("demo-tutorial")}
         dialogue={demoDialogue}
         context={context}
         placement={

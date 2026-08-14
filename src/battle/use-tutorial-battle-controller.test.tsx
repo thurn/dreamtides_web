@@ -6,6 +6,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useTutorialBattleController } from "./use-tutorial-battle-controller";
 import type { FoldState } from "../rules/fold-state";
 import { TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS } from "./tutorial-presentation-timing";
+import { asCardId } from "../types/card-identity";
+import { asBattleCardId } from "../types/identifiers";
+import { asBattleId } from "../types/identifiers";
+import { asPresentationId } from "../types/identifiers";
+import { asJourneyId } from "../types/identifiers";
+import { asClientId } from "../types/identifiers";
+import { asTutorialRunId } from "../types/identifiers";
 
 const mocks = vi.hoisted(() => ({
   completePresentation: vi.fn(() => Promise.resolve(1)),
@@ -25,28 +32,32 @@ vi.mock("../coop/hooks", () => ({
 
 function presentationState(): FoldState {
   return {
-    frontDoor: { phase: "tutorial", journeyId: "journey", tutorial: null },
+    frontDoor: {
+      phase: "tutorial",
+      journeyId: asJourneyId("journey"),
+      tutorial: null,
+    },
     playtestControl: {
       mode: "single-controller",
-      controllerClientId: "tutorial-driver",
+      controllerClientId: asClientId("tutorial-driver"),
     },
     journey: {} as FoldState["journey"],
     battle: {
       mode: {
         kind: "tutorial",
-        tutorialRunId: "tutorial-run",
+        tutorialRunId: asTutorialRunId("tutorial-run"),
         restartNumber: 0,
         resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
       },
       init: {} as never,
-      board: { battleId: "tutorial-battle", result: null } as never,
+      board: { battleId: asBattleId("tutorial-battle"), result: null } as never,
       effectQueue: [],
       pendingPrompt: null,
       tutorialPresentation: {
-        id: "opponent-play:bc_0042",
+        id: asPresentationId("opponent-play:bc_0042"),
         kind: "opponent-play",
-        cardId: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
-        battleCardId: "bc_0042",
+        cardId: asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
+        battleCardId: asBattleCardId("bc_0042"),
         cardKind: "character",
       },
       dawnFired: { player: null, enemy: null },
@@ -54,19 +65,19 @@ function presentationState(): FoldState {
   };
 }
 
-function Harness({ visiblePresentationId, paused = false }: {
+function Harness({
+  visiblePresentationId,
+  paused = false,
+}: {
   readonly visiblePresentationId: string | null;
   readonly paused?: boolean;
 }) {
   const controller = useTutorialBattleController({ paused });
   useEffect(() => {
     if (visiblePresentationId !== null) {
-      controller.onPresentationVisible(visiblePresentationId);
+      controller.onPresentationVisible(asPresentationId(visiblePresentationId));
     }
-  }, [
-    controller.onPresentationVisible,
-    visiblePresentationId,
-  ]);
+  }, [controller.onPresentationVisible, visiblePresentationId]);
   return null;
 }
 
@@ -103,9 +114,7 @@ describe("useTutorialBattleController", () => {
     expect(mocks.completePresentation).not.toHaveBeenCalled();
 
     act(() => {
-      root.render(
-        <Harness visiblePresentationId="opponent-play:bc_0042" />,
-      );
+      root.render(<Harness visiblePresentationId="opponent-play:bc_0042" />);
     });
     act(() => {
       vi.advanceTimersByTime(1_999);
@@ -133,14 +142,14 @@ describe("useTutorialBattleController", () => {
       battle: {
         ...presentationState().battle!,
         tutorialPresentation: {
-          id: "challenge-resolved:player:4:F0",
+          id: asPresentationId("challenge-resolved:player:4:F0"),
           kind: "challenge-resolved",
           activeSide: "player",
           slotId: "F0",
-          challengerBattleCardId: "player-character-uuid",
+          challengerBattleCardId: asBattleCardId("player-character-uuid"),
           blockerBattleCardId: null,
           scored: {
-            battleCardId: "player-character-uuid",
+            battleCardId: asBattleCardId("player-character-uuid"),
             side: "player",
             points: 2,
           },
@@ -155,9 +164,7 @@ describe("useTutorialBattleController", () => {
       );
     });
     act(() => {
-      vi.advanceTimersByTime(
-        TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS - 1,
-      );
+      vi.advanceTimersByTime(TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS - 1);
     });
     expect(mocks.completePresentation).not.toHaveBeenCalled();
 
@@ -176,10 +183,7 @@ describe("useTutorialBattleController", () => {
 
     act(() => {
       root.render(
-        <Harness
-          visiblePresentationId="opponent-play:bc_0042"
-          paused
-        />,
+        <Harness visiblePresentationId="opponent-play:bc_0042" paused />,
       );
     });
     act(() => {

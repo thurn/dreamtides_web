@@ -16,6 +16,8 @@ import {
 } from "../components/layout/SiteLayout";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type { DeckEntryId } from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
 
 export type TransfigurationGuideView = SiteLayoutGuideView;
 
@@ -28,7 +30,7 @@ export interface TransfigurationFormView extends TransfigurationButtonModel {
 
 export interface TransfigurationCandidateView {
   /** Concrete deck-entry id; duplicate cards remain independent choices. */
-  entryId: string;
+  entryId: DeckEntryId;
   /** Card shown in the picker; reforged context cards include their form. */
   model: GameCardModel;
   /** Whether the card can enter the forge or is completed deck context. */
@@ -40,7 +42,7 @@ export interface TransfigurationCandidateView {
 }
 
 export interface TransfigurationSiteView {
-  siteId: string;
+  siteId: SiteId;
   scene: ArtRef | null;
   guide: TransfigurationGuideView;
   ready: boolean;
@@ -53,7 +55,7 @@ export interface TransfigurationSiteScreenProps {
   view: TransfigurationSiteView;
   onClose: () => void;
   onTransfigure: (
-    entryId: string,
+    entryId: DeckEntryId,
     type: TransfigurationType,
     effectDescription: string,
     effectDetails: Record<string, unknown>,
@@ -105,7 +107,7 @@ export function TransfigurationSiteScreen({
     null;
 
   const beginPick = useCallback(
-    (entryId: string, layout: "mobile" | "desktop") => {
+    (entryId: DeckEntryId, layout: "mobile" | "desktop") => {
       if (travel !== null) return;
       const candidate = view.candidates.find(
         (choice) => choice.entryId === entryId,

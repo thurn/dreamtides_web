@@ -1,34 +1,42 @@
 import type { Tides4DecksJson } from "../draft/pool/tides4-io";
 import type { Rarity } from "../types/cards";
+import type { CardId } from "../types/card-identity";
+import { asCardId } from "../types/card-identity";
+import type { TideId } from "../types/identifiers";
+import { asTideId } from "../types/identifiers";
 
-export type TideVector = ReadonlyMap<string, number>;
+export type TideVector = ReadonlyMap<TideId, number>;
 
 export interface TideAffinityIndex {
-  readonly cardVectors: ReadonlyMap<string, TideVector>;
-  readonly knownTideIds: ReadonlySet<string>;
+  readonly cardVectors: ReadonlyMap<CardId, TideVector>;
+  readonly knownTideIds: ReadonlySet<TideId>;
 }
 
-export function buildTideAffinityIndex(data: Tides4DecksJson): TideAffinityIndex {
-  const cardVectors = new Map<string, Map<string, number>>();
-  const knownTideIds = new Set<string>();
+export function buildTideAffinityIndex(
+  data: Tides4DecksJson,
+): TideAffinityIndex {
+  const cardVectors = new Map<CardId, Map<TideId, number>>();
+  const knownTideIds = new Set<TideId>();
   for (const tide of data.tides) {
-    knownTideIds.add(tide.id);
+    const tideId = asTideId(tide.id);
+    knownTideIds.add(tideId);
     for (const card of tide.cards) {
-      const vector = cardVectors.get(card.id) ?? new Map<string, number>();
-      vector.set(tide.id, card.copies);
-      cardVectors.set(card.id, vector);
+      const cardId = asCardId(card.id);
+      const vector = cardVectors.get(cardId) ?? new Map<TideId, number>();
+      vector.set(tideId, card.copies);
+      cardVectors.set(cardId, vector);
     }
   }
   return { cardVectors, knownTideIds };
 }
 
-export function mutableVector(source?: TideVector): Map<string, number> {
+export function mutableVector(source?: TideVector): Map<TideId, number> {
   return new Map(source ?? []);
 }
 
 export function addTideIds(
-  target: Map<string, number>,
-  tideIds: Iterable<string>,
+  target: Map<TideId, number>,
+  tideIds: Iterable<TideId>,
 ): void {
   for (const tideId of tideIds) {
     target.set(tideId, (target.get(tideId) ?? 0) + 1);
@@ -36,8 +44,8 @@ export function addTideIds(
 }
 
 export function addCardVector(
-  target: Map<string, number>,
-  cardUuid: string,
+  target: Map<TideId, number>,
+  cardUuid: CardId,
   index: TideAffinityIndex,
 ): void {
   for (const [tideId, weight] of index.cardVectors.get(cardUuid) ?? []) {
@@ -47,11 +55,11 @@ export function addCardVector(
 
 export function buildAffinityContext(args: {
   index: TideAffinityIndex;
-  joinedTideIds?: Iterable<string>;
-  deckCardUuids?: Iterable<string>;
-  dreamsignTideIds?: Iterable<string>;
-}): Map<string, number> {
-  const result = new Map<string, number>();
+  joinedTideIds?: Iterable<TideId>;
+  deckCardUuids?: Iterable<CardId>;
+  dreamsignTideIds?: Iterable<TideId>;
+}): Map<TideId, number> {
+  const result = new Map<TideId, number>();
   addTideIds(result, args.joinedTideIds ?? []);
   for (const cardUuid of new Set(args.deckCardUuids ?? [])) {
     addCardVector(result, cardUuid, args.index);
@@ -67,13 +75,14 @@ export function cosineAffinity(left: TideVector, right: TideVector): number {
   for (const value of left.values()) leftSquared += value * value;
   for (const value of right.values()) rightSquared += value * value;
   if (leftSquared === 0 || rightSquared === 0) return 0;
-  const [small, large] = left.size <= right.size ? [left, right] : [right, left];
+  const [small, large] =
+    left.size <= right.size ? [left, right] : [right, left];
   for (const [key, value] of small) dot += value * (large.get(key) ?? 0);
   return dot / Math.sqrt(leftSquared * rightSquared);
 }
 
 export function cardAffinity(
-  cardUuid: string,
+  cardUuid: CardId,
   context: TideVector,
   index: TideAffinityIndex,
 ): number {
@@ -82,10 +91,14 @@ export function cardAffinity(
 
 export function rarityStrength(rarity: Rarity | undefined): number {
   switch (rarity) {
-    case "Common": return 0;
-    case "Uncommon": return 1;
-    case "Rare": return 2;
-    case "Legendary": return 3;
+    case "Common":
+      return 0;
+    case "Uncommon":
+      return 1;
+    case "Rare":
+      return 2;
+    case "Legendary":
+      return 3;
     case "Starter":
     case "Tutorial":
     case "Special":

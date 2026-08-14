@@ -21,6 +21,7 @@ import {
 import { eligibleTransfigurations } from "../../transfiguration/transfiguration-logic";
 import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardId } from "../../types/card-identity";
+import { asDeckEntryId } from "../../types/identifiers";
 
 function uuid(n: number): CardId {
   const hex = n.toString(16).padStart(12, "0");
@@ -39,7 +40,9 @@ function makeContext(input: {
   const journeyContent = makeMerchantTestContent({
     cards: input.cards,
   });
-  const journeyState = makeMerchantTestJourneyState({ deck: [...input.deckEntries] });
+  const journeyState = makeMerchantTestJourneyState({
+    deck: [...input.deckEntries],
+  });
   return buildMerchantContext({
     journeyState,
     journeyContent,
@@ -98,7 +101,12 @@ describe("improve family — transfigure pair enumeration", () => {
     });
     const context = makeContext({
       cards: [card],
-      deckEntries: [makeMerchantTestDeckEntry({ entryId: "e1", cardNumber: 100 })],
+      deckEntries: [
+        makeMerchantTestDeckEntry({
+          entryId: asDeckEntryId("e1"),
+          cardNumber: 100,
+        }),
+      ],
     });
     const pairs = transfigureCandidatePairs(context);
     expect(pairs).toHaveLength(2);
@@ -120,7 +128,7 @@ describe("improve family — transfigure pair enumeration", () => {
       cards: [card],
       deckEntries: [
         makeMerchantTestDeckEntry({
-          entryId: "e1",
+          entryId: asDeckEntryId("e1"),
           cardNumber: 101,
           transfiguration: "Kindled",
         }),
@@ -151,8 +159,14 @@ describe("improve family — transfigure pair enumeration", () => {
     const withBoth = makeContext({
       cards: [starter, nonStarter],
       deckEntries: [
-        makeMerchantTestDeckEntry({ entryId: "starter-e", cardNumber: 200 }),
-        makeMerchantTestDeckEntry({ entryId: "ns-e", cardNumber: 201 }),
+        makeMerchantTestDeckEntry({
+          entryId: asDeckEntryId("starter-e"),
+          cardNumber: 200,
+        }),
+        makeMerchantTestDeckEntry({
+          entryId: asDeckEntryId("ns-e"),
+          cardNumber: 201,
+        }),
       ],
     });
     const pairsBoth = transfigureCandidatePairs(withBoth);
@@ -163,7 +177,10 @@ describe("improve family — transfigure pair enumeration", () => {
     const starterOnly = makeContext({
       cards: [starter],
       deckEntries: [
-        makeMerchantTestDeckEntry({ entryId: "starter-e", cardNumber: 200 }),
+        makeMerchantTestDeckEntry({
+          entryId: asDeckEntryId("starter-e"),
+          cardNumber: 200,
+        }),
       ],
     });
     const pairsStarter = transfigureCandidatePairs(starterOnly);
@@ -185,7 +202,12 @@ describe("improve family — transfigure pair enumeration", () => {
     });
     const context = makeContext({
       cards: [card],
-      deckEntries: [makeMerchantTestDeckEntry({ entryId: "e1", cardNumber: 300 })],
+      deckEntries: [
+        makeMerchantTestDeckEntry({
+          entryId: asDeckEntryId("e1"),
+          cardNumber: 300,
+        }),
+      ],
     });
     const pairs = transfigureCandidatePairs(context);
     expect(pairs.length).toBeGreaterThan(0);
@@ -212,7 +234,10 @@ describe("improve family — transfigure pair enumeration", () => {
     });
     cards.push(direwolf);
     deckEntries.push(
-      makeMerchantTestDeckEntry({ entryId: "direwolf", cardNumber: 900 }),
+      makeMerchantTestDeckEntry({
+        entryId: asDeckEntryId("direwolf"),
+        cardNumber: 900,
+      }),
     );
     // The Kindled pair on the direwolf: benefit clamp01((8-4)/4)=1.0.
 
@@ -233,7 +258,10 @@ describe("improve family — transfigure pair enumeration", () => {
         }),
       );
       deckEntries.push(
-        makeMerchantTestDeckEntry({ entryId: `evt-${String(i)}`, cardNumber: n }),
+        makeMerchantTestDeckEntry({
+          entryId: asDeckEntryId(`evt-${String(i)}`),
+          cardNumber: n,
+        }),
       );
     }
 
@@ -244,8 +272,11 @@ describe("improve family — transfigure pair enumeration", () => {
     expect(first).not.toBeNull();
     expect(replay?.targetKey).toBe(first?.targetKey);
     expect(first?.selectionTrace?.candidateCount).toBeGreaterThanOrEqual(3);
-    expect(first?.selectionTrace?.band.candidates.some((candidate) =>
-      candidate.key === "direwolf:Kindled")).toBe(true);
+    expect(
+      first?.selectionTrace?.band.candidates.some(
+        (candidate) => candidate.key === "direwolf:Kindled",
+      ),
+    ).toBe(true);
   });
 
   it("targetKey is entryId:transfiguration and payload applies", () => {
@@ -257,7 +288,10 @@ describe("improve family — transfigure pair enumeration", () => {
       spark: 2,
     });
     const deckEntries = [
-      makeMerchantTestDeckEntry({ entryId: "e1", cardNumber: 400 }),
+      makeMerchantTestDeckEntry({
+        entryId: asDeckEntryId("e1"),
+        cardNumber: 400,
+      }),
     ];
     const context = makeContext({ cards: [card], deckEntries });
     const draft = transfigureBuilder.build(context, merchantRng("s"));
@@ -292,7 +326,10 @@ describe("improve family — starter_transfigure", () => {
     const eligibleCtx = makeContext({
       cards: [starter],
       deckEntries: [
-        makeMerchantTestDeckEntry({ entryId: "s1", cardNumber: 500 }),
+        makeMerchantTestDeckEntry({
+          entryId: asDeckEntryId("s1"),
+          cardNumber: 500,
+        }),
       ],
     });
     expect(starterTransfigureBuilder.eligible(eligibleCtx)).toBe(true);
@@ -301,7 +338,7 @@ describe("improve family — starter_transfigure", () => {
       cards: [starter],
       deckEntries: [
         makeMerchantTestDeckEntry({
-          entryId: "s1",
+          entryId: asDeckEntryId("s1"),
           cardNumber: 500,
           transfiguration: "Kindled",
         }),
@@ -330,9 +367,18 @@ describe("improve family — starter_transfigure", () => {
       spark: 2,
     });
     const deckEntries = [
-      makeMerchantTestDeckEntry({ entryId: "s0", cardNumber: 600 }),
-      makeMerchantTestDeckEntry({ entryId: "s1", cardNumber: 601 }),
-      makeMerchantTestDeckEntry({ entryId: "ns", cardNumber: 610 }),
+      makeMerchantTestDeckEntry({
+        entryId: asDeckEntryId("s0"),
+        cardNumber: 600,
+      }),
+      makeMerchantTestDeckEntry({
+        entryId: asDeckEntryId("s1"),
+        cardNumber: 601,
+      }),
+      makeMerchantTestDeckEntry({
+        entryId: asDeckEntryId("ns"),
+        cardNumber: 610,
+      }),
     ];
     const context = makeContext({
       cards: [...starters, nonStarter],

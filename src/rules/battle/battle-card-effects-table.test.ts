@@ -9,6 +9,8 @@ import {
 } from "./battle-card-effects-table";
 import { newEffectRun, resolveScript, type EffectRun } from "./fold";
 import { STARTER_CARD_IDS } from "../../data/card-roles";
+import { asCardId } from "../../types/card-identity";
+import { asBattleCardId } from "../../types/identifiers";
 
 const UNREGISTERED_ID = "00000000-0000-0000-0000-000000000000";
 
@@ -66,16 +68,20 @@ describe("BATTLE_CARD_EFFECTS structural invariants", () => {
 describe("battleCardAutomationStatus", () => {
   it('returns "auto" for a registered id', () => {
     for (const registeredId of Object.keys(BATTLE_CARD_EFFECTS)) {
-      expect(battleCardAutomationStatus(registeredId)).toBe("auto");
+      expect(battleCardAutomationStatus(asCardId(registeredId))).toBe("auto");
     }
   });
 
   it('returns "none" for an unregistered id', () => {
-    expect(battleCardAutomationStatus(UNREGISTERED_ID)).toBe("none");
+    expect(battleCardAutomationStatus(asCardId(UNREGISTERED_ID))).toBe("none");
   });
 
   it('returns "none" for a character with a manual triggered effect', () => {
-    expect(battleCardAutomationStatus("647f5150-b2e0-424b-9480-27557642524e")).toBe("none");
+    expect(
+      battleCardAutomationStatus(
+        asCardId("647f5150-b2e0-424b-9480-27557642524e"),
+      ),
+    ).toBe("none");
   });
 });
 
@@ -86,14 +92,14 @@ describe("battleCardAutomationStatus", () => {
 describe("selectBattleCardEffectScript", () => {
   it("returns the entry for a registered id", () => {
     for (const registeredId of Object.keys(BATTLE_CARD_EFFECTS)) {
-      const script = selectBattleCardEffectScript(registeredId);
+      const script = selectBattleCardEffectScript(asCardId(registeredId));
       expect(script).not.toBeNull();
       expect(script?.id).toBe(registeredId);
     }
   });
 
   it("returns null for an unregistered id", () => {
-    expect(selectBattleCardEffectScript(UNREGISTERED_ID)).toBeNull();
+    expect(selectBattleCardEffectScript(asCardId(UNREGISTERED_ID))).toBeNull();
   });
 });
 
@@ -101,16 +107,24 @@ describe("battle trigger script registry", () => {
   it("resolves UUID#trigger ids without placing closures in persisted runs", () => {
     const scriptRef = {
       table: "battle" as const,
-      id: battleTriggerScriptId(BATTLE_EFFECT_FIXTURE_CARD_ID, "dissolved"),
+      id: battleTriggerScriptId(
+        asCardId(BATTLE_EFFECT_FIXTURE_CARD_ID),
+        "dissolved",
+      ),
     };
     expect(resolveScript(scriptRef)).toHaveLength(1);
 
-    const run = newEffectRun(scriptRef, "player", "instance-1", {
-      trigger: "dissolved",
-      sourceCardId: BATTLE_EFFECT_FIXTURE_CARD_ID,
-      sourceController: "player",
-      sourceZone: "frontRank",
-    });
+    const run = newEffectRun(
+      scriptRef,
+      "player",
+      asBattleCardId("instance-1"),
+      {
+        trigger: "dissolved",
+        sourceCardId: asCardId(BATTLE_EFFECT_FIXTURE_CARD_ID),
+        sourceController: "player",
+        sourceZone: "frontRank",
+      },
+    );
     const restored = JSON.parse(JSON.stringify(run)) as EffectRun;
     expect(restored).toEqual(run);
     expect(resolveScript(restored.scriptRef)).toHaveLength(1);

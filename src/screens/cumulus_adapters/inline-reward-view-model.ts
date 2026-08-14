@@ -5,6 +5,8 @@ import type {
   SiteState,
 } from "../../types/journey";
 import { requireDreamsignId } from "../../data/dreamsigns";
+import type { SiteId } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
 
 export type InlineRewardCompletionKind = "essence" | "reward";
 
@@ -38,8 +40,8 @@ export function resolveInlineReward(
 export function resolveRewardReplacement(
   node: DreamscapeNode,
   state: JourneyState,
-  siteId: string,
-  dreamsignId: string,
+  siteId: SiteId,
+  dreamsignId: DreamsignId,
 ) {
   const site = node.sites.find((candidate) => candidate.id === siteId);
   const runtime = state.siteRuntime[siteId];
@@ -72,7 +74,7 @@ export function resolveRewardReplacement(
 export function resolveRewardDecline(
   node: DreamscapeNode,
   state: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ) {
   const site = node.sites.find((candidate) => candidate.id === siteId);
   const runtime = state.siteRuntime[siteId];

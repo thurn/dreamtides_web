@@ -1,19 +1,16 @@
 import type { EditorTag } from "./types";
+import type { DreamsignId } from "../types/identifiers";
 
 export type EditableDreamsignField = "name" | "rendered-text";
 export type SavableDreamsignField = EditableDreamsignField | "tags";
 export type DreamsignSortField =
-  | "sourceOrder"
-  | "name"
-  | "rulesTextLength"
-  | "nameLength"
-  | "tagCount";
+  "sourceOrder" | "name" | "rulesTextLength" | "nameLength" | "tagCount";
 export type DreamsignSortDirection = "asc" | "desc";
 export type DreamsignSize = "small" | "medium" | "large";
 export type DreamsignSearchScope = "name" | "all";
 
 export interface EditorDreamsignRecord {
-  id: string;
+  id: DreamsignId;
   name: string;
   imageName: string;
   imageAlt: string;
@@ -44,7 +41,7 @@ export interface LoadEditorDreamsignsResponse {
 }
 
 export interface SaveEditorDreamsignFieldRequest {
-  id: string;
+  id: DreamsignId;
   field: SavableDreamsignField;
   value: unknown;
   clientRevision?: number;
@@ -71,7 +68,7 @@ export interface LoadEditorDreamsignTagsResponse {
 }
 
 export interface SaveEditorDreamsignTagsRequest {
-  id: string;
+  id: DreamsignId;
   tags: string[];
 }
 

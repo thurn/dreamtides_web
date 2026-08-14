@@ -8,6 +8,7 @@ import {
 } from "../../test-helpers/component-test-fixtures";
 import { useTutorialAnchor, useTutorialObstacle } from "./tutorial-placement";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
+import { asPresentationId } from "../../../types/identifiers";
 
 const resizeCallbacks: ResizeObserverCallback[] = [];
 const animationFrames: FrameRequestCallback[] = [];
@@ -28,7 +29,7 @@ function PlacementHost() {
       <div ref={anchorRef} data-fixture-anchor="" />
       <div ref={obstacleRef} data-fixture-obstacle="" />
       <ViewportTutorialDialogue
-        presentationId="tutorial"
+        presentationId={asPresentationId("tutorial")}
         dialogue={fixtureDialogue}
         context="site"
         placement={{ kind: "anchored", anchorId: "anchor" }}
@@ -51,7 +52,7 @@ function DuplicateAnchorHost() {
         Remove first
       </button>
       <ViewportTutorialDialogue
-        presentationId="duplicate-tutorial"
+        presentationId={asPresentationId("duplicate-tutorial")}
         dialogue={fixtureDialogue}
         context="site"
         placement={{ kind: "anchored", anchorId: "duplicate" }}
@@ -75,7 +76,7 @@ function ReplacementAnchorHost() {
         Replace route
       </button>
       <ViewportTutorialDialogue
-        presentationId="route-tutorial"
+        presentationId={asPresentationId("route-tutorial")}
         dialogue={fixtureDialogue}
         context="site"
         placement={{ kind: "anchored", anchorId: "route-anchor" }}
@@ -99,7 +100,7 @@ function MovingObstacleHost() {
         Move obstacle
       </button>
       <ViewportTutorialDialogue
-        presentationId="moving-tutorial"
+        presentationId={asPresentationId("moving-tutorial")}
         dialogue={{
           ...fixtureDialogue,
           text: assertLocalized(
@@ -259,7 +260,7 @@ describe("ViewportTutorialDialogue", () => {
   it("keeps hidden dialogue out of the accessibility announcement channel", () => {
     const { container, root } = mountCumulus(
       <ViewportTutorialDialogue
-        presentationId="hidden"
+        presentationId={asPresentationId("hidden")}
         dialogue={fixtureDialogue}
         context="card"
         placement={{ kind: "floating", avoidance: "cards-and-chrome" }}

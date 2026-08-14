@@ -12,6 +12,7 @@ import type { RevealSpec } from "./model";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
 import { asCardId, asCardName } from "../../../types/card-identity";
+import { asDreamscapeId } from "../../../types/identifiers";
 
 const UUID_A = "00000000-0000-4000-8000-000000000001";
 const UUID_B = "00000000-0000-4000-8000-000000000002";
@@ -513,14 +514,14 @@ describe("Cumulus reveal coordinator root", () => {
       },
       {
         variant: "fullBleed",
-        image: artRef.dreamscapeScene("scene"),
+        image: artRef.dreamscapeScene(asDreamscapeId("scene")),
         title: assertLocalized("Full Title"),
         subtitle: assertLocalized("Full Subtitle"),
         body: { kind: "plain", text: assertLocalized("Full Body") },
       },
       {
         variant: "atlasReveal",
-        image: artRef.dreamscapeScene("atlas"),
+        image: artRef.dreamscapeScene(asDreamscapeId("atlas")),
         title: assertLocalized("Atlas Title"),
         subtitle: assertLocalized("Atlas Guide"),
         body: { kind: "plain", text: assertLocalized("Atlas Body") },

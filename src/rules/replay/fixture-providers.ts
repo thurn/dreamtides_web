@@ -70,6 +70,18 @@ import {
   registerSiteContentProvider,
   type SiteContentProvider,
 } from "../journey/sites";
+import { asDreamscapeId } from "../../types/identifiers";
+import type { DreamAvatarId } from "../../types/identifiers";
+import type { BattleCardId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import type { SiteId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asDreamsignId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
+import { asBattleId } from "../../types/identifiers";
+import { asBattleEntryKey } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Stable ids the fixture event logs reference
@@ -79,8 +91,8 @@ import {
 export const FIXTURE_PROVIDER_SET = "synthetic-deterministic-v1";
 
 export const DREAM_AVATAR_ID = "dc-fixture";
-export const NODE_ID = "node-start";
-export const NEXT_NODE_ID = "node-next";
+export const NODE_ID = asAtlasNodeId("node-start");
+export const NEXT_NODE_ID = asAtlasNodeId("node-next");
 export const ESSENCE_SITE_ID = "site-essence";
 export const SHOP_SITE_ID = "site-shop";
 export const BATTLE_SITE_ID = "site-battle";
@@ -95,8 +107,8 @@ const DRAFT_POOL_COPIES_BY_CARD: Record<string, number> = {
 };
 
 /** Battle-card instance ids the battle-fixture BATTLE_COMMANDs move. */
-export const BATTLE_CARD_DETERMINISTIC = "bc-det";
-export const BATTLE_CARD_FORESEE = "bc-foresee";
+export const BATTLE_CARD_DETERMINISTIC = asBattleCardId("bc-det");
+export const BATTLE_CARD_FORESEE = asBattleCardId("bc-foresee");
 
 /** The front-rank slots the two battle cards deploy into. */
 export const DETERMINISTIC_SLOT = frontRankSlotId(0);
@@ -133,7 +145,7 @@ function makePrng(seed: number): () => number {
 // ---------------------------------------------------------------------------
 
 function fixturePackage(
-  dreamAvatarId: string,
+  dreamAvatarId: DreamAvatarId,
   seed: string,
 ): ResolvedDreamAvatarPackage {
   const rng = makePrng(hashNumber(`${dreamAvatarId}:${seed}`));
@@ -151,7 +163,7 @@ function fixturePackage(
       startingEssence: 300,
     },
     draftPoolCopiesByCard: DRAFT_POOL_COPIES_BY_CARD,
-    dreamsignPoolIds,
+    dreamsignPoolIds: dreamsignPoolIds.map(asDreamsignId),
     mandatoryOnlyPoolSize: 3,
     draftPoolSize: 3,
     doubledCardCount: 1,
@@ -168,29 +180,44 @@ function fixtureNode(
 ): DreamscapeNode {
   const allSites: SiteState[] = [
     {
-      id: ESSENCE_SITE_ID,
+      id: asSiteId(ESSENCE_SITE_ID),
       type: "Essence",
       isEnhanced: false,
       isVisited: false,
     },
-    { id: SHOP_SITE_ID, type: "Shop", isEnhanced: false, isVisited: false },
-    { id: DRAFT_SITE_ID, type: "Draft", isEnhanced: false, isVisited: false },
-    { id: BATTLE_SITE_ID, type: "Battle", isEnhanced: false, isVisited: false },
+    {
+      id: asSiteId(SHOP_SITE_ID),
+      type: "Shop",
+      isEnhanced: false,
+      isVisited: false,
+    },
+    {
+      id: asSiteId(DRAFT_SITE_ID),
+      type: "Draft",
+      isEnhanced: false,
+      isVisited: false,
+    },
+    {
+      id: asSiteId(BATTLE_SITE_ID),
+      type: "Battle",
+      isEnhanced: false,
+      isVisited: false,
+    },
   ];
   const sites =
     includedSiteTypes === null
       ? allSites
       : allSites.filter((site) => includedSiteTypes.has(site.type));
   return {
-    id: NODE_ID,
+    id: asAtlasNodeId(NODE_ID),
     layer: LayerName.One,
     indexInLayer: 0,
-    dreamscapeId: "dreamscape-start",
+    dreamscapeId: asDreamscapeId("dreamscape-start"),
     sites,
     position: { x: 0, y: 0 },
     state: "available",
     enhancedSiteType: null,
-    forwardIds: [NEXT_NODE_ID],
+    forwardIds: [asAtlasNodeId(NEXT_NODE_ID)],
     backwardIds: [],
     knownDreamsignId: null,
   };
@@ -198,7 +225,7 @@ function fixtureNode(
 
 function fixtureNextNode(): DreamscapeNode {
   return {
-    id: NEXT_NODE_ID,
+    id: asAtlasNodeId(NEXT_NODE_ID),
     layer: LayerName.Two,
     indexInLayer: 0,
     dreamscapeId: null,
@@ -207,7 +234,7 @@ function fixtureNextNode(): DreamscapeNode {
     state: "unrevealed",
     enhancedSiteType: null,
     forwardIds: [],
-    backwardIds: [NODE_ID],
+    backwardIds: [asAtlasNodeId(NODE_ID)],
     knownDreamsignId: null,
   };
 }
@@ -266,9 +293,9 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
             [NODE_ID]: fixtureNode(includedSiteTypes),
             [NEXT_NODE_ID]: fixtureNextNode(),
           },
-          startingNodeId: NODE_ID,
-          bossNodeId: NEXT_NODE_ID,
-          currentNodeId: NODE_ID,
+          startingNodeId: asAtlasNodeId(NODE_ID),
+          bossNodeId: asAtlasNodeId(NEXT_NODE_ID),
+          currentNodeId: asAtlasNodeId(NODE_ID),
         },
         siteRuntime: {},
         screen: { type: "dreamscape" },
@@ -358,8 +385,8 @@ function defaultStatus(): BattleCardStatus {
 }
 
 function makeInstance(
-  battleCardId: string,
-  cardId: string,
+  battleCardId: BattleCardId,
+  cardId: CardId,
   controller: BattleSide = "player",
 ): BattleCardInstance {
   return {
@@ -419,7 +446,7 @@ function makeSide(): BattleMutableState["sides"][BattleSide] {
   };
 }
 
-function makeInit(siteId: string): BattleInit {
+function makeInit(siteId: SiteId): BattleInit {
   const foresee = Object.values(DREAMWELL_EFFECTS).find((script) => {
     const first = script.steps[0];
     return first?.kind === "prompt" && first.prompt.kind === "foresee";
@@ -428,11 +455,11 @@ function makeInit(siteId: string): BattleInit {
     throw new Error("replay fixture requires a Foresee Dreamwell script");
   }
   return {
-    battleId: `battle-${siteId}`,
-    battleEntryKey: `fixture:${siteId}`,
+    battleId: asBattleId(`battle-${siteId}`),
+    battleEntryKey: asBattleEntryKey(`fixture:${siteId}`),
     seed: 1,
     siteId,
-    dreamscapeId: NODE_ID,
+    dreamscapeId: asDreamscapeId(NODE_ID),
     completionLevelAtStart: 0,
     isFinalBoss: false,
     essenceReward: 75,
@@ -470,10 +497,10 @@ function makeInit(siteId: string): BattleInit {
         [NODE_ID]: fixtureNode(),
         [NEXT_NODE_ID]: fixtureNextNode(),
       },
-      startingNodeId: NODE_ID,
-      bossNodeId: NEXT_NODE_ID,
+      startingNodeId: asAtlasNodeId(NODE_ID),
+      bossNodeId: asAtlasNodeId(NEXT_NODE_ID),
       bossIncarnationId: null,
-      currentNodeId: NODE_ID,
+      currentNodeId: asAtlasNodeId(NODE_ID),
       knownDreamsignCarrierIds: [],
     },
   } as unknown as BattleInit;
@@ -497,7 +524,7 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
       player.hand = [BATTLE_CARD_DETERMINISTIC, BATTLE_CARD_FORESEE];
       const enemy = makeSide();
       const board: BattleMutableState = {
-        battleId: `battle-${siteId}`,
+        battleId: asBattleId(`battle-${siteId}`),
         activeSide: "player",
         turnNumber: 2,
         phase: "dreamwell",
@@ -509,12 +536,12 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
         cardInstances: {
           [BATTLE_CARD_DETERMINISTIC]: makeInstance(
             BATTLE_CARD_DETERMINISTIC,
-            "00000000-0000-0000-0000-000000000001",
+            asCardId("00000000-0000-0000-0000-000000000001"),
             "player",
           ),
           [BATTLE_CARD_FORESEE]: makeInstance(
             BATTLE_CARD_FORESEE,
-            "00000000-0000-0000-0000-000000000002",
+            asCardId("00000000-0000-0000-0000-000000000002"),
             "player",
           ),
         },
@@ -544,7 +571,7 @@ function fixtureBattleCompletionProvider(): BattleCompletionProvider {
       }
       return {
         ...journey.atlas,
-        currentNodeId: NODE_ID,
+        currentNodeId: asAtlasNodeId(NODE_ID),
         nodes: {
           ...journey.atlas.nodes,
           [NODE_ID]: {
@@ -553,7 +580,7 @@ function fixtureBattleCompletionProvider(): BattleCompletionProvider {
           },
           [NEXT_NODE_ID]: {
             ...journey.atlas.nodes[NEXT_NODE_ID],
-            dreamscapeId: "dreamscape-next",
+            dreamscapeId: asDreamscapeId("dreamscape-next"),
             state: "available",
           },
         },

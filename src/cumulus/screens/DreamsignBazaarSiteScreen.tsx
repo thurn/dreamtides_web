@@ -1,7 +1,7 @@
 // DreamsignBazaarSiteScreen — Amunet's Cumulus Dreamsign bazaar. It uses the
 // Dream Market's guide/gallery stage with Dreamsign entities in the glass shelf.
 
-import {motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import { DreamsignGalleryPanel } from "../components/card/DreamsignGalleryPanel";
@@ -21,6 +21,9 @@ import {
   type ShopFreePurchaseStatusView,
 } from "./ShopFreePurchaseStatus";
 import { meaning, tx } from "@trox/runtime";
+import type { DeckEntryId } from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
 
 // Four 126px items, three 16px gaps, and the panel's 64px horizontal padding
 // occupy 616px; this cap keeps a deliberate 32px breathing edge per side.
@@ -28,7 +31,7 @@ const DESKTOP_GALLERY_MAX_WIDTH = 680;
 
 export interface DreamsignBazaarOfferView {
   /** Stable UUID-derived gallery entry id. */
-  entryId: string;
+  entryId: DeckEntryId;
   /** Persistent runtime slot index used to purchase the ware. */
   slotIndex: number;
   /** Dreamsign rendered by the shared semantic entity component. */
@@ -43,7 +46,7 @@ export interface DreamsignBazaarOfferView {
 
 export interface DreamsignBazaarRestockView {
   /** Stable action id. */
-  entryId: string;
+  entryId: DeckEntryId;
   /** Effective essence price for this visit. */
   price: number;
   /** Whether the one-use refresh can currently be triggered. */
@@ -67,7 +70,7 @@ export interface DreamsignBazaarSiteView {
     >
   >;
   /** Stable site id. */
-  siteId: string;
+  siteId: SiteId;
   /** Current dreamscape scene art behind the site, if resolved. */
   scene: ArtRef | null;
   /** Amunet's art and dialog line. */
@@ -92,7 +95,7 @@ export interface DreamsignBazaarSiteScreenProps {
   /** Leave the bazaar. */
   onClose: () => void;
   /** Replace an owned Dreamsign while completing the pending purchase. */
-  onPurge: (dreamsignId: string) => void;
+  onPurge: (dreamsignId: DreamsignId) => void;
   /** Cancel cap handling and return to the shelf. */
   onCancelPurge: () => void;
 }
@@ -107,7 +110,10 @@ export function DreamsignBazaarSiteScreen({
 }: DreamsignBazaarSiteScreenProps) {
   const layout = useIsDesktop() ? "desktop" : "mobile";
   return (
-    <div data-testid="cumulus-dreamsign-bazaar-site-screen" style={{ position: "fixed", inset: 0 }}>
+    <div
+      data-testid="cumulus-dreamsign-bazaar-site-screen"
+      style={{ position: "fixed", inset: 0 }}
+    >
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
@@ -132,7 +138,10 @@ export function DreamsignBazaarSiteScreen({
             incoming: view.purge.pendingDreamsign,
             held: view.purge.currentDreamsigns,
             capacity: view.purge.maxDreamsigns,
-            dismissLabel: tx(meaning("dreamsign-replacement-cancel", "Cancel"), "[dreamsign] Bazaar replacement cancel."),
+            dismissLabel: tx(
+              meaning("dreamsign-replacement-cancel", "Cancel"),
+              "[dreamsign] Bazaar replacement cancel.",
+            ),
             closeLabel: tx(
               "Cancel replacement",
               "[dreamsign] Accessible label for closing a Dreamsign replacement dialog.",
@@ -181,7 +190,7 @@ function DreamsignBazaarGallery({
     );
   }, [offers]);
 
-  const buyOffer = (entryId: string): void => {
+  const buyOffer = (entryId: DeckEntryId): void => {
     const offer = offers.find((candidate) => candidate.entryId === entryId);
     if (
       offer === undefined ||

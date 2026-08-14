@@ -26,6 +26,14 @@ import type {
   SiteType,
 } from "../types/journey";
 import { LayerName, layerAtOrdinal, layerOrdinal } from "../types/layer-name";
+import { asDreamscapeId } from "../types/identifiers";
+import type { DreamscapeId } from "../types/identifiers";
+import { asDreamsignId, asSiteId } from "../types/identifiers";
+import { asAtlasNodeId } from "../types/identifiers";
+import {
+  asAtlasFillProfileId,
+  type AtlasFillProfileId,
+} from "../types/identifiers";
 
 function defaultContext(
   overrides?: Partial<SiteGenerationContext>,
@@ -40,9 +48,8 @@ const TEST_DREAMSCAPES = SYNTHETIC_ATLAS_DREAMSCAPES;
 const TEST_ATLAS_DATA = makeSyntheticAtlasData();
 // Dreamsign ids the known-dreamsign placement can draw from; arbitrary unique
 // strings so the tests do not depend on any real dreamsign data.
-const TEST_DREAMSIGN_POOL = Array.from(
-  { length: 8 },
-  (_, i) => `test-dreamsign-${String(i)}`,
+const TEST_DREAMSIGN_POOL = Array.from({ length: 8 }, (_, i) =>
+  asDreamsignId(`test-dreamsign-${String(i)}`),
 );
 
 let fixtureRandomState = 1;
@@ -357,18 +364,18 @@ describe("generateSiteComposition", () => {
   it("uses the selected fill profile's exact weights", () => {
     const weightedProfiles = {
       early: {
-        id: "early",
+        id: asAtlasFillProfileId("early"),
         signatureSiteWeight: 0,
         siteWeights: { Transfiguration: 1, Duplication: 10 },
       },
       late: {
-        id: "late",
+        id: asAtlasFillProfileId("late"),
         signatureSiteWeight: 0,
         siteWeights: { Transfiguration: 10, Duplication: 1 },
       },
     };
 
-    function bossFill(fillProfile: "early" | "late"): SiteType {
+    function bossFill(fillProfile: AtlasFillProfileId): SiteType {
       const atlasData = makeSyntheticAtlasData();
       atlasData.fillProfiles = weightedProfiles;
       atlasData.layers = atlasData.layers.map((layer) =>
@@ -390,8 +397,8 @@ describe("generateSiteComposition", () => {
       return atlas.nodes[atlas.bossNodeId].sites[0].type;
     }
 
-    expect(bossFill("early")).toBe("Duplication");
-    expect(bossFill("late")).toBe("Transfiguration");
+    expect(bossFill(asAtlasFillProfileId("early"))).toBe("Duplication");
+    expect(bossFill(asAtlasFillProfileId("late"))).toBe("Transfiguration");
   });
 
   it("leaves Draft site data attached and other sites unresolved", () => {
@@ -679,8 +686,12 @@ describe("generateInitialAtlas structural invariants", () => {
       expect(a.dreamscapeId).not.toBe(b.dreamscapeId);
       // ...and therefore different signature site icons, since each dreamscape
       // has a unique signature site.
-      const siteA = dreamscapesById.get(a.dreamscapeId ?? "")?.signatureSite;
-      const siteB = dreamscapesById.get(b.dreamscapeId ?? "")?.signatureSite;
+      const siteA = dreamscapesById.get(
+        a.dreamscapeId ?? asDreamscapeId(""),
+      )?.signatureSite;
+      const siteB = dreamscapesById.get(
+        b.dreamscapeId ?? asDreamscapeId(""),
+      )?.signatureSite;
       expect(siteA).toBeDefined();
       expect(siteB).toBeDefined();
       expect(siteA).not.toBe(siteB);
@@ -718,7 +729,7 @@ describe("generateInitialAtlas structural invariants", () => {
       for (const layerIds of afterLayer1.layers) {
         const revealedDreamscapeIds = layerIds
           .map((id) => afterLayer1.nodes[id].dreamscapeId)
-          .filter((id): id is string => id !== null && id !== undefined);
+          .filter((id): id is DreamscapeId => id !== null && id !== undefined);
         expect(new Set(revealedDreamscapeIds).size).toBe(
           revealedDreamscapeIds.length,
         );
@@ -819,7 +830,7 @@ describe("advanceAtlas", () => {
     const atlas = freshAtlas();
     const result = advanceAtlas(
       atlas,
-      "nonexistent",
+      asAtlasNodeId("nonexistent"),
       1,
       defaultContext(),
       buildContext(),
@@ -931,7 +942,7 @@ describe("advanceAtlas", () => {
       for (const nodeId of path) {
         atlas = advanceAtlas(
           atlas,
-          nodeId,
+          asAtlasNodeId(nodeId),
           completionLevel,
           defaultContext(),
           buildContext(),
@@ -972,7 +983,7 @@ describe("advanceAtlas", () => {
     for (let step = 0; step < atlas.layers.length + 2; step++) {
       atlas = advanceAtlas(
         atlas,
-        currentId,
+        asAtlasNodeId(currentId),
         completionLevel,
         defaultContext(),
         buildContext(),
@@ -1228,7 +1239,7 @@ describe("edgesCross", () => {
 
 describe("revealedAtlasSite", () => {
   function makeSite(id: string, type: SiteType, isEnhanced = false): SiteState {
-    return { id, type, isEnhanced, isVisited: false };
+    return { id: asSiteId(id), type, isEnhanced, isVisited: false };
   }
 
   function makeNode(

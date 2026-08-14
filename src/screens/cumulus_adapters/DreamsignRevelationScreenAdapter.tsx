@@ -11,13 +11,15 @@ import {
 } from "./dreamsign-revelation-view-model";
 import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
+import type { SiteId } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
 
 const FLY_TO_HUD_MS = 900;
 
 export function DreamsignRevelationScreenAdapter({
   siteId,
 }: {
-  siteId: string;
+  siteId: SiteId;
 }) {
   const { state, mutations, journeyContent } = useJourney();
   const node =
@@ -143,7 +145,7 @@ export function DreamsignRevelationScreenAdapter({
   }, [claimedIndex, mutations, pendingPurgeDreamsign, siteId]);
 
   const handlePurge = useCallback(
-    (dreamsignId: string) => {
+    (dreamsignId: DreamsignId) => {
       if (pendingPurgeDreamsign === null) return;
       const index = state.dreamsigns.findIndex(
         (dreamsign) =>

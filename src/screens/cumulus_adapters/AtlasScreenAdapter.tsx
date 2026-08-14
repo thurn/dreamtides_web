@@ -17,6 +17,7 @@ import {
   buildAtlasView,
   atlasChoiceLayer,
 } from "./atlas-view-model";
+import type { AtlasNodeId } from "../../types/identifiers";
 
 /**
  * Live atlas screen: builds the vertical run-graph view-model from the current
@@ -61,7 +62,7 @@ export function AtlasScreenAdapter() {
   }, [atlas, view.nodes.length, state.completionLevel]);
 
   const handleEnterNode = useCallback(
-    (nodeId: string) => {
+    (nodeId: AtlasNodeId) => {
       const node = atlas.nodes[nodeId];
       if (node === undefined || node.state !== "available") {
         return;

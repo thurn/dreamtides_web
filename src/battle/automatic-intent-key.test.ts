@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { BattleCommand } from "./debug/commands";
 import { automaticBattleIntentKey } from "./automatic-intent-key";
+import { asBattleId } from "../types/identifiers";
 
 const state = { activeSide: "player" as const, turnNumber: 2 };
 
@@ -12,9 +13,9 @@ describe("automaticBattleIntentKey", () => {
       sourceSurface: "auto-system",
     };
 
-    expect(automaticBattleIntentKey("battle-7", state, command)).toBe(
-      "battle:battle-7:dreamwell:player:2",
-    );
+    expect(
+      automaticBattleIntentKey(asBattleId("battle-7"), state, command),
+    ).toBe("battle:battle-7:dreamwell:player:2");
   });
 
   it("leaves deliberate additional Dreamwell draws as separate player intents", () => {
@@ -29,7 +30,9 @@ describe("automaticBattleIntentKey", () => {
       sourceSurface: "status-strip",
     };
 
-    expect(automaticBattleIntentKey("battle-7", state, command)).toBeUndefined();
+    expect(
+      automaticBattleIntentKey(asBattleId("battle-7"), state, command),
+    ).toBeUndefined();
   });
 
   it("identifies automatic phase advancement without coalescing phase controls", () => {
@@ -43,9 +46,11 @@ describe("automaticBattleIntentKey", () => {
       sourceSurface: "phase-controls",
     };
 
-    expect(automaticBattleIntentKey("battle-7", state, automatic)).toBe(
-      "battle:battle-7:auto-phase:player:2:day",
-    );
-    expect(automaticBattleIntentKey("battle-7", state, manual)).toBeUndefined();
+    expect(
+      automaticBattleIntentKey(asBattleId("battle-7"), state, automatic),
+    ).toBe("battle:battle-7:auto-phase:player:2:day");
+    expect(
+      automaticBattleIntentKey(asBattleId("battle-7"), state, manual),
+    ).toBeUndefined();
   });
 });

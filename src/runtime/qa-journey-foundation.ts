@@ -9,6 +9,7 @@ import type {
   JourneyState,
 } from "../types/journey";
 import { generateJourneySeed } from "../state/journey-state-actions";
+import { asDeckEntryId } from "../types/identifiers";
 
 /**
  * A fully valid journey state parked on the Dream Atlas, plus the generated atlas
@@ -76,7 +77,7 @@ export function createQaJourneyFoundation(
     essence: dreamAvatar.startingEssence,
     maxDreamsigns: journeyContent.economyData.journey.dreamsignCap,
     deck: poolContext.starterCardNumbers.map((cardNumber, index) => ({
-      entryId: `deck-${String(index + 1)}`,
+      entryId: asDeckEntryId(`deck-${String(index + 1)}`),
       cardNumber,
       transfiguration: null,
       isBane: false,

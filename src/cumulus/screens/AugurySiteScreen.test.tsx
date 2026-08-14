@@ -11,6 +11,12 @@ import { resolveColor } from "../primitives/color";
 import { GLYPHS } from "../primitives/glyph";
 import { CumulusRoot } from "../CumulusRoot";
 import { AugurySiteScreen, type AugurySiteView } from "./AugurySiteScreen";
+import { asSiteId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import { asGuideId } from "../../types/identifiers";
+import { asOfferId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asAuguryCardViewId, asChoiceId } from "../../types/identifiers";
 
 vi.mock("../components/card/CardView", async () => {
   const { Pressable } = await import("../primitives/Pressable");
@@ -24,7 +30,7 @@ vi.mock("../components/card/CardView", async () => {
       selection,
       testId,
     }: {
-      model: { cardId: string };
+      model: { cardId: CardId };
       onPress?: () => void;
       selection?: string;
       testId?: string;
@@ -81,18 +87,18 @@ function view(): AugurySiteView {
   const choices = [card(1), card(2), card(3), card(4)];
   const direct = card(5);
   return {
-    siteId: "augury-site",
+    siteId: asSiteId("augury-site"),
     scene: null,
     encounterSignature: "encounter-fixture",
     guide: {
       id: "aldric_the_seer",
       name: assertLocalized("Aldric, the Seer"),
       line: assertLocalized("Choose one path for your dream."),
-      art: artRef.dreamGuide("aldric_the_seer"),
+      art: artRef.dreamGuide(asGuideId("aldric_the_seer")),
     },
     offers: [
       {
-        id: "A",
+        id: asOfferId("A"),
         requiresSelection: true,
         presentation: PRESENTATION,
         tile: {
@@ -107,16 +113,16 @@ function view(): AugurySiteView {
           kind: "cardChoices",
           doubled: false,
           choices: choices.map((choice, index) => ({
-            id: `choice-${String(index + 1)}`,
+            id: asChoiceId(`choice-${String(index + 1)}`),
             card: {
-              id: choice.id,
+              id: asAuguryCardViewId(choice.id),
               model: { cardId: choice.id, displaySnapshot: choice },
             },
           })),
         },
       },
       {
-        id: "B",
+        id: asOfferId("B"),
         requiresSelection: false,
         presentation: PRESENTATION,
         tile: {
@@ -128,7 +134,7 @@ function view(): AugurySiteView {
           kind: "cards",
           cards: [
             {
-              id: direct.id,
+              id: asAuguryCardViewId(direct.id),
               model: { cardId: direct.id, displaySnapshot: direct },
             },
           ],
@@ -287,9 +293,9 @@ describe("AugurySiteScreen", () => {
       container.querySelectorAll('[data-testid^="cumulus-augury-choice-"]'),
     ).toHaveLength(4);
     expect(
-      container.querySelector("[data-site-layout]")?.getAttribute(
-        "data-site-layout-composition",
-      ),
+      container
+        .querySelector("[data-site-layout]")
+        ?.getAttribute("data-site-layout-composition"),
     ).toBe("content-led-expanded-revelation");
     const detailStage = container.querySelector<HTMLElement>(
       '[data-augury-desktop-placement="center"]',
@@ -404,9 +410,9 @@ describe("AugurySiteScreen", () => {
     click(container.querySelector('[data-testid="cumulus-augury-offer-B"]'));
     expect(onChoose).not.toHaveBeenCalled();
     expect(
-      container.querySelector("[data-site-layout]")?.getAttribute(
-        "data-site-layout-composition",
-      ),
+      container
+        .querySelector("[data-site-layout]")
+        ?.getAttribute("data-site-layout-composition"),
     ).toBe("content-led-expanded-revelation");
     expect(
       container
@@ -438,7 +444,7 @@ describe("AugurySiteScreen", () => {
           visual: {
             kind: "site",
             model: {
-              id: "augury-preview:Shop",
+              id: asSiteId("augury-preview:Shop"),
               type: "Shop",
               isVisited: false,
               pos: { x: 50, y: 50 },
@@ -504,7 +510,7 @@ describe("AugurySiteScreen", () => {
           presentation: PRESENTATION,
           visual: {
             kind: "beforeAfter",
-            pairs: [{ id: "entry-1", before, after }],
+            pairs: [{ id: asDeckEntryId("entry-1"), before, after }],
           },
         },
         base.offers[1],

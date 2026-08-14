@@ -6,10 +6,16 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BattleCommand } from "../debug/commands";
 import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
-import { makeBattleTestCardDatabase, makeBattleTestDreamAvatars, makeBattleTestSite, makeBattleTestState } from "../test-support";
+import {
+  makeBattleTestCardDatabase,
+  makeBattleTestDreamAvatars,
+  makeBattleTestSite,
+  makeBattleTestState,
+} from "../test-support";
 import type { BattleMutableState } from "../types";
 import { BattleContextMenu as RealBattleContextMenu } from "./BattleContextMenu";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
+import { asBattleEntryKey } from "../../types/identifiers";
 
 function BattleContextMenu(
   props: ComponentProps<typeof RealBattleContextMenu>,
@@ -22,14 +28,35 @@ function BattleContextMenu(
 }
 
 function state(): BattleMutableState {
-  return createInitialBattleState(createTestBattleInit({ battleEntryKey: "test", site: makeBattleTestSite(), state: makeBattleTestState(), cardDatabase: makeBattleTestCardDatabase(), dreamAvatars: makeBattleTestDreamAvatars() }));
+  return createInitialBattleState(
+    createTestBattleInit({
+      battleEntryKey: asBattleEntryKey("test"),
+      site: makeBattleTestSite(),
+      state: makeBattleTestState(),
+      cardDatabase: makeBattleTestCardDatabase(),
+      dreamAvatars: makeBattleTestDreamAvatars(),
+    }),
+  );
 }
 
 beforeEach(() => {
-  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
-  window.matchMedia = (media: string) => ({ matches: media.includes("min-width"), media, onchange: null, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {}, dispatchEvent: () => false });
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
+  window.matchMedia = (media: string) => ({
+    matches: media.includes("min-width"),
+    media,
+    onchange: null,
+    addEventListener() {},
+    removeEventListener() {},
+    addListener() {},
+    removeListener() {},
+    dispatchEvent: () => false,
+  });
 });
-afterEach(() => { document.body.innerHTML = ""; });
+afterEach(() => {
+  document.body.innerHTML = "";
+});
 
 describe("BattleContextMenu", () => {
   it("offers a shared reveal action for cards in hand", () => {
@@ -40,21 +67,24 @@ describe("BattleContextMenu", () => {
     document.body.append(host);
     const root = createRoot(host);
 
-    act(() => root.render(
-      <BattleContextMenu
-        battleCardId={battleCardId}
-        sourceSurface="hand-tray"
-        state={board}
-        x={200}
-        y={300}
-        onClose={() => undefined}
-        onCommand={onCommand}
-        onOpenNoteEditor={() => undefined}
-      />,
-    ));
+    act(() =>
+      root.render(
+        <BattleContextMenu
+          battleCardId={battleCardId}
+          sourceSurface="hand-tray"
+          state={board}
+          x={200}
+          y={300}
+          onClose={() => undefined}
+          onCommand={onCommand}
+          onOpenNoteEditor={() => undefined}
+        />,
+      ),
+    );
 
-    const reveal = [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
-      .find((element) => element.textContent?.trim() === "Reveal");
+    const reveal = [
+      ...document.querySelectorAll<HTMLElement>('[role="menuitem"]'),
+    ].find((element) => element.textContent?.trim() === "Reveal");
     expect(reveal).not.toBeUndefined();
     act(() => reveal?.click());
     expect(onCommand).toHaveBeenCalledWith({
@@ -67,30 +97,55 @@ describe("BattleContextMenu", () => {
 
   it("delegates clamped card actions and nested commands to CommandMenu", () => {
     const board = state();
-    const battleCardId = board.sides.player.hand.find((id) => board.cardInstances[id]?.definition.battleCardKind === "character");
+    const battleCardId = board.sides.player.hand.find(
+      (id) =>
+        board.cardInstances[id]?.definition.battleCardKind === "character",
+    );
     if (battleCardId === undefined) throw new Error("expected character");
     const onCommand = vi.fn<(command: BattleCommand) => void>();
-    const host = document.createElement("div"); document.body.append(host);
+    const host = document.createElement("div");
+    document.body.append(host);
     const root = createRoot(host);
-    act(() => root.render(<BattleContextMenu battleCardId={battleCardId} sourceSurface="inspector" state={board} x={9999} y={9999} onClose={() => undefined} onCommand={onCommand} onOpenNoteEditor={() => undefined} />));
-    const menu = document.querySelector('[data-command-menu-context]');
+    act(() =>
+      root.render(
+        <BattleContextMenu
+          battleCardId={battleCardId}
+          sourceSurface="inspector"
+          state={board}
+          x={9999}
+          y={9999}
+          onClose={() => undefined}
+          onCommand={onCommand}
+          onOpenNoteEditor={() => undefined}
+        />,
+      ),
+    );
+    const menu = document.querySelector("[data-command-menu-context]");
     expect(menu).not.toBeNull();
     expect(menu?.textContent).toContain("Player · Hand");
-    const status = [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')].find((element) => element.textContent?.includes("Status"));
+    const status = [
+      ...document.querySelectorAll<HTMLElement>('[role="menuitem"]'),
+    ].find((element) => element.textContent?.includes("Status"));
     expect(status).not.toBeUndefined();
     act(() => status?.click());
-    const exhaust = [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')].find((element) => element.textContent?.includes("Exhaust"));
+    const exhaust = [
+      ...document.querySelectorAll<HTMLElement>('[role="menuitem"]'),
+    ].find((element) => element.textContent?.includes("Exhaust"));
     expect(exhaust).not.toBeUndefined();
     act(() => exhaust?.click());
     const command = onCommand.mock.calls[0]?.[0];
-    expect(command).toMatchObject({ id: "DEBUG_EDIT", edit: { kind: "SET_CARD_STATUS", battleCardId } });
+    expect(command).toMatchObject({
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_CARD_STATUS", battleCardId },
+    });
     act(() => root.unmount());
   });
 
   it("renders memory counter commands with the filled brain instead of the source character", () => {
     const board = state();
     const battleCardId = board.sides.player.hand.find(
-      (id) => board.cardInstances[id]?.definition.battleCardKind === "character",
+      (id) =>
+        board.cardInstances[id]?.definition.battleCardKind === "character",
     );
     if (battleCardId === undefined) throw new Error("expected character");
     board.cardInstances[battleCardId].status.counters = 2;
@@ -98,27 +153,31 @@ describe("BattleContextMenu", () => {
     document.body.append(host);
     const root = createRoot(host);
 
-    act(() => root.render(
-      <BattleContextMenu
-        battleCardId={battleCardId}
-        sourceSurface="inspector"
-        state={board}
-        x={200}
-        y={300}
-        onClose={() => undefined}
-        onCommand={() => undefined}
-        onOpenNoteEditor={() => undefined}
-      />,
-    ));
+    act(() =>
+      root.render(
+        <BattleContextMenu
+          battleCardId={battleCardId}
+          sourceSurface="inspector"
+          state={board}
+          x={200}
+          y={300}
+          onClose={() => undefined}
+          onCommand={() => undefined}
+          onOpenNoteEditor={() => undefined}
+        />,
+      ),
+    );
 
-    const memory = [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
-      .find((element) => element.textContent?.trim() === "Memory (2)");
+    const memory = [
+      ...document.querySelectorAll<HTMLElement>('[role="menuitem"]'),
+    ].find((element) => element.textContent?.trim() === "Memory (2)");
     expect(memory?.querySelector("i.bxf.bx-brain")).not.toBeNull();
     expect(document.body.textContent).not.toContain("⧗");
 
     act(() => memory?.click());
-    const increment = [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
-      .find((element) => element.textContent?.trim() === "+1");
+    const increment = [
+      ...document.querySelectorAll<HTMLElement>('[role="menuitem"]'),
+    ].find((element) => element.textContent?.trim() === "+1");
     expect(increment?.querySelector("i.bxf.bx-brain")).not.toBeNull();
     expect(document.body.querySelector("i.bxf.bx-hourglass")).toBeNull();
 
@@ -128,7 +187,8 @@ describe("BattleContextMenu", () => {
   it("accepts a typed signed spark adjustment instead of preset amounts", () => {
     const board = state();
     const battleCardId = board.sides.player.hand.find(
-      (id) => board.cardInstances[id]?.definition.battleCardKind === "character",
+      (id) =>
+        board.cardInstances[id]?.definition.battleCardKind === "character",
     );
     if (battleCardId === undefined) throw new Error("expected character");
     const card = board.cardInstances[battleCardId];
@@ -136,29 +196,40 @@ describe("BattleContextMenu", () => {
     const host = document.createElement("div");
     document.body.append(host);
     const root = createRoot(host);
-    act(() => root.render(
-      <BattleContextMenu
-        battleCardId={battleCardId}
-        sourceSurface="hand-tray"
-        state={board}
-        x={200}
-        y={300}
-        onClose={() => undefined}
-        onCommand={onCommand}
-        onOpenNoteEditor={() => undefined}
-      />,
-    ));
+    act(() =>
+      root.render(
+        <BattleContextMenu
+          battleCardId={battleCardId}
+          sourceSurface="hand-tray"
+          state={board}
+          x={200}
+          y={300}
+          onClose={() => undefined}
+          onCommand={onCommand}
+          onOpenNoteEditor={() => undefined}
+        />,
+      ),
+    );
 
-    act(() => [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
-      .find((element) => element.textContent?.trim() === "Add Spark")?.click());
+    act(() =>
+      [...document.querySelectorAll<HTMLElement>('[role="menuitem"]')]
+        .find((element) => element.textContent?.trim() === "Add Spark")
+        ?.click(),
+    );
     expect(document.body.textContent).not.toContain("Reset to 0");
     expect(document.body.textContent).not.toContain("+1");
-    const input = document.querySelector<HTMLInputElement>('[data-testid="command-menu-signed-integer-input"]');
+    const input = document.querySelector<HTMLInputElement>(
+      '[data-testid="command-menu-signed-integer-input"]',
+    );
     act(() => {
-      Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set?.call(input, "-4");
+      Object.getOwnPropertyDescriptor(
+        HTMLInputElement.prototype,
+        "value",
+      )?.set?.call(input, "-4");
       input?.dispatchEvent(new Event("input", { bubbles: true }));
       [...document.querySelectorAll<HTMLButtonElement>("button")]
-        .find((button) => button.textContent?.trim() === "Apply")?.click();
+        .find((button) => button.textContent?.trim() === "Apply")
+        ?.click();
     });
     expect(onCommand).toHaveBeenCalledWith({
       id: "DEBUG_EDIT",
@@ -176,7 +247,8 @@ describe("BattleContextMenu", () => {
   it("does not offer stack-growth actions for figments", () => {
     const board = state();
     const battleCardId = board.sides.player.hand.find(
-      (id) => board.cardInstances[id]?.definition.battleCardKind === "character",
+      (id) =>
+        board.cardInstances[id]?.definition.battleCardKind === "character",
     );
     if (battleCardId === undefined) throw new Error("expected character");
     board.cardInstances[battleCardId].provenance = {
@@ -193,21 +265,24 @@ describe("BattleContextMenu", () => {
     const host = document.createElement("div");
     document.body.append(host);
     const root = createRoot(host);
-    act(() => root.render(
-      <BattleContextMenu
-        battleCardId={battleCardId}
-        sourceSurface="inspector"
-        state={board}
-        x={100}
-        y={100}
-        onClose={() => undefined}
-        onCommand={() => undefined}
-        onOpenNoteEditor={() => undefined}
-      />,
-    ));
+    act(() =>
+      root.render(
+        <BattleContextMenu
+          battleCardId={battleCardId}
+          sourceSurface="inspector"
+          state={board}
+          x={100}
+          y={100}
+          onClose={() => undefined}
+          onCommand={() => undefined}
+          onOpenNoteEditor={() => undefined}
+        />,
+      ),
+    );
 
-    expect(document.querySelector("[data-command-menu-context]")?.textContent)
-      .not.toContain("Add Figments");
+    expect(
+      document.querySelector("[data-command-menu-context]")?.textContent,
+    ).not.toContain("Add Figments");
     act(() => root.unmount());
   });
 });

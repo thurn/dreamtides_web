@@ -1,19 +1,18 @@
 import { describe, expect, it } from "vitest";
 import type { BattleCardInstance } from "../types";
-import {
-  cardIsRevealedTo,
-  normalizeCardVisibility,
-} from "./card-visibility";
+import { cardIsRevealedTo, normalizeCardVisibility } from "./card-visibility";
+import { asBattleCardId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
 
 function legacyInstance(
   controller: "player" | "enemy",
   isRevealedToPlayer: boolean,
 ): BattleCardInstance {
   return {
-    battleCardId: "bc_legacy_visibility",
+    battleCardId: asBattleCardId("bc_legacy_visibility"),
     definition: {
       sourceDeckEntryId: null,
-      cardId: "00000000-0000-4000-8000-000000000101",
+      cardId: asCardId("00000000-0000-4000-8000-000000000101"),
       cardNumber: 101,
       name: "Fixture",
       battleCardKind: "character",

@@ -10,6 +10,8 @@ import {
   deckSortLabel,
   filterAndSortDeckCards,
 } from "./mobile-deck-filter";
+import type { DeckEntryId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -30,7 +32,7 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 }
 
 /** A minimal deck-card view around a card, keyed by its entryId. */
-function view(entryId: string, card: Partial<CardData>): DeckCardView {
+function view(entryId: DeckEntryId, card: Partial<CardData>): DeckCardView {
   const displaySnapshot = makeCard(card);
   return {
     entryId,
@@ -42,7 +44,7 @@ function view(entryId: string, card: Partial<CardData>): DeckCardView {
 /** N Character views of one subtype, keyed `<subtype>-0`, `<subtype>-1`, … */
 function subtypeViews(subtype: string, count: number): DeckCardView[] {
   return Array.from({ length: count }, (_, i) =>
-    view(`${subtype.toLowerCase() || "none"}-${String(i)}`, {
+    view(asDeckEntryId(`${subtype.toLowerCase() || "none"}-${String(i)}`), {
       cardType: "Character",
       subtype,
     }),
@@ -57,9 +59,9 @@ const values = <T extends string>(options: readonly { value: T }[]): T[] =>
 
 describe("filterAndSortDeckCards — filtering", () => {
   const deck: DeckCardView[] = [
-    view("char-a", { cardType: "Character" }),
-    view("event-a", { cardType: "Event" }),
-    view("char-b", { cardType: "Character" }),
+    view(asDeckEntryId("char-a"), { cardType: "Character" }),
+    view(asDeckEntryId("event-a"), { cardType: "Event" }),
+    view(asDeckEntryId("char-b"), { cardType: "Character" }),
   ];
 
   it("returns every card for the 'all' filter", () => {
@@ -88,9 +90,18 @@ describe("filterAndSortDeckCards — filtering", () => {
 
   it("keeps only the chosen subtype when filtered to a subtype", () => {
     const mixed = [
-      view("warrior-1", { cardType: "Character", subtype: "Warrior" }),
-      view("beast-1", { cardType: "Character", subtype: "Beast" }),
-      view("warrior-2", { cardType: "Character", subtype: "Warrior" }),
+      view(asDeckEntryId("warrior-1"), {
+        cardType: "Character",
+        subtype: "Warrior",
+      }),
+      view(asDeckEntryId("beast-1"), {
+        cardType: "Character",
+        subtype: "Beast",
+      }),
+      view(asDeckEntryId("warrior-2"), {
+        cardType: "Character",
+        subtype: "Warrior",
+      }),
     ];
     const result = filterAndSortDeckCards(mixed, {
       typeFilter: "subtype:Warrior",
@@ -104,7 +115,7 @@ describe("buildDeckTypeFilterOptions — smart subtype options", () => {
   it("offers only the base options when no subtype is well-represented", () => {
     const deck = [
       ...subtypeViews("Warrior", SUBTYPE_FILTER_MIN_COUNT - 1),
-      view("event", { cardType: "Event" }),
+      view(asDeckEntryId("event"), { cardType: "Event" }),
     ];
     expect(values(buildDeckTypeFilterOptions(deck))).toEqual(
       values(BASE_DECK_TYPE_FILTER_OPTIONS),
@@ -144,9 +155,9 @@ describe("buildDeckTypeFilterOptions — smart subtype options", () => {
 describe("filterAndSortDeckCards — sorting", () => {
   it("preserves acquisition order for the 'drafted' sort", () => {
     const deck = [
-      view("c", { energyCost: 3 }),
-      view("a", { energyCost: 1 }),
-      view("b", { energyCost: 2 }),
+      view(asDeckEntryId("c"), { energyCost: 3 }),
+      view(asDeckEntryId("a"), { energyCost: 1 }),
+      view(asDeckEntryId("b"), { energyCost: 2 }),
     ];
     const result = filterAndSortDeckCards(deck, {
       typeFilter: "all",
@@ -157,9 +168,9 @@ describe("filterAndSortDeckCards — sorting", () => {
 
   it("sorts by cost low-to-high, placing variable (null) cost at the expensive end", () => {
     const deck = [
-      view("x", { energyCost: null }),
-      view("three", { energyCost: 3 }),
-      view("one", { energyCost: 1 }),
+      view(asDeckEntryId("x"), { energyCost: null }),
+      view(asDeckEntryId("three"), { energyCost: 3 }),
+      view(asDeckEntryId("one"), { energyCost: 1 }),
     ];
     const result = filterAndSortDeckCards(deck, {
       typeFilter: "all",
@@ -170,9 +181,9 @@ describe("filterAndSortDeckCards — sorting", () => {
 
   it("sorts by spark low-to-high, placing no-spark cards first", () => {
     const deck = [
-      view("five", { spark: 5 }),
-      view("none", { spark: null }),
-      view("two", { spark: 2 }),
+      view(asDeckEntryId("five"), { spark: 5 }),
+      view(asDeckEntryId("none"), { spark: null }),
+      view(asDeckEntryId("two"), { spark: 2 }),
     ];
     const result = filterAndSortDeckCards(deck, {
       typeFilter: "all",
@@ -183,9 +194,9 @@ describe("filterAndSortDeckCards — sorting", () => {
 
   it("sorts by name A-to-Z", () => {
     const deck = [
-      view("gamma", { name: asCardName("Gamma") }),
-      view("alpha", { name: asCardName("Alpha") }),
-      view("beta", { name: asCardName("Beta") }),
+      view(asDeckEntryId("gamma"), { name: asCardName("Gamma") }),
+      view(asDeckEntryId("alpha"), { name: asCardName("Alpha") }),
+      view(asDeckEntryId("beta"), { name: asCardName("Beta") }),
     ];
     const result = filterAndSortDeckCards(deck, {
       typeFilter: "all",
@@ -196,9 +207,9 @@ describe("filterAndSortDeckCards — sorting", () => {
 
   it("sorts by subtype A-to-Z", () => {
     const deck = [
-      view("wizard", { subtype: "Wizard" }),
-      view("beast", { subtype: "Beast" }),
-      view("mage", { subtype: "Mage" }),
+      view(asDeckEntryId("wizard"), { subtype: "Wizard" }),
+      view(asDeckEntryId("beast"), { subtype: "Beast" }),
+      view(asDeckEntryId("mage"), { subtype: "Mage" }),
     ];
     const result = filterAndSortDeckCards(deck, {
       typeFilter: "all",
@@ -209,9 +220,9 @@ describe("filterAndSortDeckCards — sorting", () => {
 
   it("keeps acquisition order for cards that tie on the sort key (stable)", () => {
     const deck = [
-      view("first-two", { energyCost: 2 }),
-      view("second-two", { energyCost: 2 }),
-      view("third-two", { energyCost: 2 }),
+      view(asDeckEntryId("first-two"), { energyCost: 2 }),
+      view(asDeckEntryId("second-two"), { energyCost: 2 }),
+      view(asDeckEntryId("third-two"), { energyCost: 2 }),
     ];
     const result = filterAndSortDeckCards(deck, {
       typeFilter: "all",
@@ -221,7 +232,10 @@ describe("filterAndSortDeckCards — sorting", () => {
   });
 
   it("does not mutate the input array", () => {
-    const deck = [view("c", { energyCost: 3 }), view("a", { energyCost: 1 })];
+    const deck = [
+      view(asDeckEntryId("c"), { energyCost: 3 }),
+      view(asDeckEntryId("a"), { energyCost: 1 }),
+    ];
     const before = ids(deck);
     filterAndSortDeckCards(deck, { typeFilter: "all", sort: "cost" });
     expect(ids(deck)).toEqual(before);
@@ -229,9 +243,9 @@ describe("filterAndSortDeckCards — sorting", () => {
 
   it("filters and sorts together", () => {
     const deck = [
-      view("char-3", { cardType: "Character", energyCost: 3 }),
-      view("event-1", { cardType: "Event", energyCost: 1 }),
-      view("char-1", { cardType: "Character", energyCost: 1 }),
+      view(asDeckEntryId("char-3"), { cardType: "Character", energyCost: 3 }),
+      view(asDeckEntryId("event-1"), { cardType: "Event", energyCost: 1 }),
+      view(asDeckEntryId("char-1"), { cardType: "Character", energyCost: 1 }),
     ];
     const result = filterAndSortDeckCards(deck, {
       typeFilter: "type:Character",

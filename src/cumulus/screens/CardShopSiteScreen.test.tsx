@@ -13,6 +13,10 @@ import {
 } from "./CardShopSiteScreen";
 import { CumulusRoot } from "../CumulusRoot";
 import { SHOP_PRESENTATION } from "../test-helpers/presentation-fixtures";
+import { asSiteId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
 
 function makeCard(index: number): CardData {
   return {
@@ -34,16 +38,16 @@ function makeCard(index: number): CardData {
 function view(): CardShopSiteView {
   return {
     presentation: SHOP_PRESENTATION,
-    siteId: "shop-site",
+    siteId: asSiteId("shop-site"),
     scene: null,
     guide: {
       id: "tobias_tanglefur",
       name: assertLocalized("Tobias Tanglefur"),
       line: assertLocalized("I've set aside something just for you."),
-      art: artRef.dreamGuide("tobias_tanglefur"),
+      art: artRef.dreamGuide(asGuideId("tobias_tanglefur")),
     },
     offers: Array.from({ length: 5 }, (_, index) => ({
-      entryId: `shop-offer-${String(index)}`,
+      entryId: asDeckEntryId(`shop-offer-${String(index)}`),
       slotIndex: index,
       model: (() => {
         const displaySnapshot = makeCard(index + 1);
@@ -53,7 +57,7 @@ function view(): CardShopSiteView {
       state: index === 4 ? ("unaffordable" as const) : ("available" as const),
     })),
     restock: {
-      entryId: "shop-restock-shop-site",
+      entryId: asDeckEntryId("shop-restock-shop-site"),
       price: 50,
       state: "available",
     },
@@ -119,8 +123,7 @@ describe("CardShopSiteScreen", () => {
     );
 
     expect(
-      container.querySelector("[data-site-layout-speech-anchor]")
-        ?.textContent,
+      container.querySelector("[data-site-layout-speech-anchor]")?.textContent,
     ).toContain("Tobias Tanglefur");
     const gallery = container.querySelector<HTMLElement>(
       '[data-testid="cumulus-card-shop-gallery"]',
@@ -181,8 +184,7 @@ describe("CardShopSiteScreen", () => {
       container.querySelector("[data-site-layout-guide] img"),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-site-layout-speech-anchor]")
-        ?.textContent,
+      container.querySelector("[data-site-layout-speech-anchor]")?.textContent,
     ).toContain("Tobias Tanglefur");
 
     const region = container.querySelector<HTMLElement>(
@@ -265,8 +267,8 @@ describe("CardShopSiteScreen", () => {
     const benefitView = view();
     benefitView.freePurchaseStatus = {
       freeNextShopSource: {
-        sourceSiteId: "exploration-site",
-        sourceActionId: "exploration-action",
+        sourceSiteId: asSiteId("exploration-site"),
+        sourceActionId: asExplorationActionId("exploration-action"),
       },
       freePurchasesRemaining: 2,
     };

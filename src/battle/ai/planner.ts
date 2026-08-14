@@ -25,6 +25,8 @@ import {
   type FrontRankSlotId,
   type BackRankSlotId,
 } from "../types";
+import type { AiDifficultyPresetId } from "../../types/identifiers";
+import { asAiActionKey, type AiActionKey } from "../../types/identifiers";
 
 /**
  * Staged beam-search planner with a deadline guard (`battle_ai.md`
@@ -72,7 +74,7 @@ export interface PlannerOptions {
   maxSearchDepth?: number;
   evaluation: AiEvaluationWeights;
   opponentModel: AiOpponentModelTuning;
-  aiPresetId?: string;
+  aiPresetId?: AiDifficultyPresetId;
 }
 
 // --- Card classification --------------------------------------------------
@@ -312,15 +314,17 @@ const STAGE_ORDER: Record<BattleAiDecisionStage, number> = {
   endTurn: 3,
 };
 
-function actionSortKey(action: PlanAction): string {
-  return [
-    STAGE_ORDER[action.stage],
-    action.kind,
-    action.card.cardNumber,
-    action.card.battleCardId,
-    action.sourceSlotId ?? "",
-    action.toSlot ?? "",
-  ].join("|");
+function actionSortKey(action: PlanAction): AiActionKey {
+  return asAiActionKey(
+    [
+      STAGE_ORDER[action.stage],
+      action.kind,
+      action.card.cardNumber,
+      action.card.battleCardId,
+      action.sourceSlotId ?? "",
+      action.toSlot ?? "",
+    ].join("|"),
+  );
 }
 
 /**
@@ -521,8 +525,8 @@ async function searchBestPlanAsync(
   return best.actions;
 }
 
-function planSortKey(entry: BeamEntry): string {
-  return entry.actions.map(actionSortKey).join(">");
+function planSortKey(entry: BeamEntry): AiActionKey {
+  return asAiActionKey(entry.actions.map(actionSortKey).join(">"));
 }
 
 // --- Deadline guard -------------------------------------------------------
@@ -538,7 +542,7 @@ function deadlineApproached(opts: PlannerOptions): boolean {
 
 // --- Trace + result assembly ----------------------------------------------
 
-function endTurnAction(aiPresetId?: string): PlannedAction {
+function endTurnAction(aiPresetId?: AiDifficultyPresetId): PlannedAction {
   return {
     stage: "endTurn",
     kind: "END_TURN",

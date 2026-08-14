@@ -23,12 +23,15 @@ import type {
   SiteState,
   TransfigurationType,
 } from "../types/journey";
+import type { CardId } from "../types/card-identity";
+import type { ExplorationActionId } from "../types/identifiers";
+import { asSelectionKey } from "../types/identifiers";
 
 export interface ExplorationStarterCardTransfigurationPlanInput {
   effectKind: ExplorationStarterCardTransfigurationEffectKind;
   count?: number;
-  actionId: string;
-  encounterCardId: string;
+  actionId: ExplorationActionId;
+  encounterCardId: CardId;
   journey: JourneyState;
   site: SiteState;
   content: JourneyContent;
@@ -98,7 +101,7 @@ function starterCandidates(
 function selectionRequest(input: {
   journey: JourneyState;
   site: SiteState;
-  actionId: string;
+  actionId: ExplorationActionId;
   suffix: string;
   mechanicId: RewardSelectionRequest["mechanicId"];
   count: number;
@@ -110,7 +113,7 @@ function selectionRequest(input: {
     scope: {
       journeySeed: input.journey.seed,
       siteUuid: input.site.id,
-      selectionKey: `${input.actionId}:${input.suffix}`,
+      selectionKey: asSelectionKey(`${input.actionId}:${input.suffix}`),
     },
     count: input.count,
     constraints: input.constraints,
@@ -159,7 +162,7 @@ function unavailablePreparation(input: {
     targets: [],
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: input.selectionContentRevision,
-    selectionKey: input.plan.actionId,
+    selectionKey: asSelectionKey(input.plan.actionId),
     selectorSignatures: [],
     selectorTraces: [],
     unavailableReason: input.reason,
@@ -305,7 +308,7 @@ export function prepareExplorationStarterCardTransfigurationPlan(
     targets,
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
-    selectionKey: input.actionId,
+    selectionKey: asSelectionKey(input.actionId),
     selectorSignatures: selectors.map((selection) => selection.signature),
     selectorTraces: selectors.map((selection) => selection.trace),
   });

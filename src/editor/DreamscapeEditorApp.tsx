@@ -31,6 +31,8 @@ import type {
   EditorDreamscapeRecord,
 } from "./dreamscape-types";
 import type { DreamscapeEditorApiClient } from "./dreamscape-types";
+import { asGuideId } from "../types/identifiers";
+import { asAffiliationId } from "../types/identifiers";
 
 const DEFAULT_DREAMSCAPE_API_CLIENT: DreamscapeEditorApiClient = {
   loadEditorDreamscapes,
@@ -110,7 +112,7 @@ function filteredDreamscapes(
   return dreamscapes.filter((record) => {
     const haystack =
       `${record.name} ${record.id} ${record["signature-site"]} ` +
-      `${record["guide-id"] ?? ""} ${record["affiliation-id"] ?? ""}`.toLowerCase();
+      `${record["guide-id"] ?? asGuideId("")} ${record["affiliation-id"] ?? asAffiliationId("")}`.toLowerCase();
     return haystack.includes(searchText);
   });
 }

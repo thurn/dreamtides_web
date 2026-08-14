@@ -24,6 +24,7 @@ import { Select } from "../components/controls/Select";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type { DeckEntryId } from "../../types/identifiers";
 
 export type PoolViewerSourceId = "run" | "tides" | "catalog" | "signature";
 export type PoolViewerTitleKind = "pool" | "battle";
@@ -74,9 +75,15 @@ export interface PoolViewerScreenProps {
   onClose: () => void;
   onSourceChange: (source: PoolViewerSourceId) => void;
   onFiltersChange: (patch: Partial<PoolViewerFilterView>) => void;
-  onCardPress: (entryId: string) => void;
-  onCardDragStart?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
-  onCardDragEnd?: (entryId: string, event: DragEvent<HTMLDivElement>) => void;
+  onCardPress: (entryId: DeckEntryId) => void;
+  onCardDragStart?: (
+    entryId: DeckEntryId,
+    event: DragEvent<HTMLDivElement>,
+  ) => void;
+  onCardDragEnd?: (
+    entryId: DeckEntryId,
+    event: DragEvent<HTMLDivElement>,
+  ) => void;
 }
 
 const rootStyle: CSSProperties = {
@@ -512,9 +519,6 @@ function sortFieldLabel(sort: PoolViewerSortId): LocalizedString {
         "[card-browser] Sort-field option for canonical authored subtypes.",
       );
     case "spark":
-      return tx(
-        "Spark",
-        "[card-browser] Sort-field option for printed Spark.",
-      );
+      return tx("Spark", "[card-browser] Sort-field option for printed Spark.");
   }
 }

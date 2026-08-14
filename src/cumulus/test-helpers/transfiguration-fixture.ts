@@ -2,13 +2,14 @@ import { assertLocalized } from "@trox/runtime";
 import type { TransfigurationType } from "../../types/journey";
 import type { TransfigurationFormDefinition } from "../../types/transfiguration-data";
 import type { LocalizedTransfigurationPresentation } from "../components/controls/transfiguration-presentation";
+import { asGlossaryEntryId } from "../../types/identifiers";
 
 export function transfigurationFormFixture(
   id: TransfigurationType,
 ): TransfigurationFormDefinition {
   return {
     id,
-    glossaryUuid: "00000000-0000-4000-8000-000000000001",
+    glossaryUuid: asGlossaryEntryId("00000000-0000-4000-8000-000000000001"),
     name: `Fixture ${id}`,
     // localization-ignore: test-only fixture mirrors authored RON presentation copy.
     description: `Fixture ${id} effect`,

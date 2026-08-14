@@ -10,6 +10,7 @@ import type {
   TutorialAction,
   TutorialEditorSaveStatus,
 } from "../types/tutorial";
+import type { TutorialActionId } from "../types/identifiers";
 
 export interface TutorialEditorState {
   readonly actions: readonly TutorialAction[];
@@ -29,11 +30,11 @@ export function useTutorialReplay(
     actions: readonly TutorialAction[],
     options?: BeginTutorialOptions,
   ) => Promise<number>,
-): (startActionId?: string) => void {
+): (startActionId?: TutorialActionId) => void {
   const actionsRef = useRef(actions);
   actionsRef.current = actions;
   return useCallback(
-    (startActionId?: string): void => {
+    (startActionId?: TutorialActionId): void => {
       let normalized: readonly TutorialAction[];
       try {
         normalized = parseTutorialActions(actionsRef.current);

@@ -7,6 +7,11 @@ import {
   createBattlePromptResolutionLogFields,
 } from "./battle-prompt-logging";
 import { dreamwellPromptRef } from "../../data/dreamwell-prompts";
+import { asBattleCardId } from "../../types/identifiers";
+import { asBattleId } from "../../types/identifiers";
+import { asDreamwellCardId } from "../../types/identifiers";
+import { asCardId } from "../../types/card-identity";
+import { asBattleEffectScriptId } from "../../types/identifiers";
 
 function side(): BattleMutableState["sides"][BattleSide] {
   return {
@@ -29,10 +34,10 @@ function side(): BattleMutableState["sides"][BattleSide] {
 function board(): BattleMutableState {
   const player = side();
   const enemy = side();
-  player.void = ["void-instance"];
-  enemy.frontRank.F0 = "battlefield-instance";
+  player.void = [asBattleCardId("void-instance")];
+  enemy.frontRank.F0 = asBattleCardId("battlefield-instance");
   return {
-    battleId: "battle-log-fixture",
+    battleId: asBattleId("battle-log-fixture"),
     activeSide: "player",
     turnNumber: 2,
     phase: "dreamwell",
@@ -43,10 +48,14 @@ function board(): BattleMutableState {
     sides: { player, enemy },
     cardInstances: {
       "void-instance": {
-        definition: { cardId: "11111111-1111-4111-8111-111111111111" },
+        definition: {
+          cardId: asCardId("11111111-1111-4111-8111-111111111111"),
+        },
       },
       "battlefield-instance": {
-        definition: { cardId: "22222222-2222-4222-8222-222222222222" },
+        definition: {
+          cardId: asCardId("22222222-2222-4222-8222-222222222222"),
+        },
       },
     },
   } as unknown as BattleMutableState;
@@ -59,7 +68,7 @@ describe("createBattlePromptResolutionLogFields", () => {
       run: {
         scriptRef: {
           table: "dreamwell",
-          id: "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+          id: asBattleEffectScriptId("2b23a60c-209c-4c75-b63c-b7f73b2e1a56"),
         },
         cursor: [0],
         side: "player",
@@ -68,10 +77,13 @@ describe("createBattlePromptResolutionLogFields", () => {
       options: {
         kind: "pick-cards",
         label: dreamwellPromptRef(
-          "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",
+          asDreamwellCardId("2b23a60c-209c-4c75-b63c-b7f73b2e1a56"),
           "return-void-card",
         ),
-        candidateIds: ["void-instance", "battlefield-instance"],
+        candidateIds: [
+          asBattleCardId("void-instance"),
+          asBattleCardId("battlefield-instance"),
+        ],
         count: 1,
         optional: false,
         highlightCardIds: [],
@@ -88,7 +100,7 @@ describe("createBattlePromptResolutionLogFields", () => {
     expect(
       createBattlePromptResolutionLogFields(board(), prompt, {
         kind: "pick-cards",
-        chosenIds: ["battlefield-instance"],
+        chosenIds: [asBattleCardId("battlefield-instance")],
       }),
     ).toEqual({
       dreamwellCardUuid: "2b23a60c-209c-4c75-b63c-b7f73b2e1a56",

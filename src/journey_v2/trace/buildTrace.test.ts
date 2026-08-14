@@ -4,11 +4,12 @@ import {
   traceBandSize,
   type TraceCandidateInput,
 } from "./buildTrace";
+import { asMerchantTargetKey } from "../../types/identifiers";
 
 /** Builds `n` candidates whose key/score is its index (higher index = higher). */
 function rankedCandidates(n: number): TraceCandidateInput[] {
   return Array.from({ length: n }, (_, i) => ({
-    key: `k${String(i)}`,
+    key: asMerchantTargetKey(`k${String(i)}`),
     score: i,
   }));
 }
@@ -39,7 +40,7 @@ describe("assembleOfferTrace", () => {
       decision: "scored_cards",
       keyKind: "cardUuid",
       candidates: rankedCandidates(5),
-      selectedKeys: ["k4"],
+      selectedKeys: [asMerchantTargetKey("k4")],
       selectedCount: 1,
       bandFraction: 0.25,
       bandMinimum: 5,
@@ -60,7 +61,7 @@ describe("assembleOfferTrace", () => {
       decision: "scored_cards",
       keyKind: "cardUuid",
       candidates: rankedCandidates(40),
-      selectedKeys: ["k39"],
+      selectedKeys: [asMerchantTargetKey("k39")],
       selectedCount: 1,
       bandFraction: 0.25,
       bandMinimum: 5,
@@ -80,12 +81,14 @@ describe("assembleOfferTrace", () => {
       decision: "scored_cards",
       keyKind: "cardUuid",
       candidates: rankedCandidates(5),
-      selectedKeys: ["k4", "k2"],
+      selectedKeys: [asMerchantTargetKey("k4"), asMerchantTargetKey("k2")],
       selectedCount: 2,
       bandFraction: 1,
       bandMinimum: 5,
     });
-    const selected = trace.candidates.filter((c) => c.selected).map((c) => c.key);
+    const selected = trace.candidates
+      .filter((c) => c.selected)
+      .map((c) => c.key);
     expect(new Set(selected)).toEqual(new Set(["k4", "k2"]));
   });
 
@@ -96,7 +99,7 @@ describe("assembleOfferTrace", () => {
       decision: "scored_cards",
       keyKind: "cardUuid",
       candidates: rankedCandidates(100),
-      selectedKeys: ["k0"],
+      selectedKeys: [asMerchantTargetKey("k0")],
       selectedCount: 1,
       bandFraction: 0.25,
       bandMinimum: 5,
@@ -104,7 +107,9 @@ describe("assembleOfferTrace", () => {
     });
     expect(trace.truncated).toBe(true);
     expect(trace.candidateCount).toBe(100);
-    expect(trace.candidates.some((c) => c.key === "k0" && c.selected)).toBe(true);
+    expect(trace.candidates.some((c) => c.key === "k0" && c.selected)).toBe(
+      true,
+    );
   });
 
   it("carries optional branch fields only when provided", () => {
@@ -112,7 +117,7 @@ describe("assembleOfferTrace", () => {
       decision: "dreamsign_match",
       keyKind: "dreamsignId",
       candidates: rankedCandidates(3),
-      selectedKeys: ["k2"],
+      selectedKeys: [asMerchantTargetKey("k2")],
       selectedCount: 1,
       bandFraction: 0.4,
       bandMinimum: 2,
@@ -130,7 +135,7 @@ describe("assembleOfferTrace", () => {
       decision: "uniform",
       keyKind: "siteType",
       candidates: rankedCandidates(3),
-      selectedKeys: ["k2"],
+      selectedKeys: [asMerchantTargetKey("k2")],
       selectedCount: 1,
       bandFraction: 1,
     });

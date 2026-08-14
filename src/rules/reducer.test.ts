@@ -8,7 +8,10 @@ import type {
   BattleMutableState,
   BattleSide,
 } from "../battle/types";
-import { emptyBackRankSlots, emptyFrontRankSlots } from "../battle/test-support";
+import {
+  emptyBackRankSlots,
+  emptyFrontRankSlots,
+} from "../battle/test-support";
 import { genesisFoldState, type FoldState } from "./fold-state";
 import { GAME_ENGINE_CONFIG } from "./replay/replay";
 import { registerJourneyLifecycleContentProvider } from "./journey/lifecycle";
@@ -18,6 +21,12 @@ import {
   isMatchingResolve,
   reduceGameEvent,
 } from "./reducer";
+import type { BattleCardId } from "../types/identifiers";
+import { asCardId } from "../types/card-identity";
+import { asBattleId } from "../types/identifiers";
+import { asBattleCardId } from "../types/identifiers";
+import { asNoteId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -42,9 +51,7 @@ function foldStateWithEssence(essence: number): FoldState {
   };
 }
 
-function ctx(
-  overrides: Partial<EventContext> = {},
-): EventContext {
+function ctx(overrides: Partial<EventContext> = {}): EventContext {
   return {
     seq: 10,
     rng: () => 0,
@@ -162,7 +169,11 @@ function stateWithPendingPrompt(promptId: number): FoldState {
     effectQueue: [],
     pendingPrompt: {
       promptId,
-      run: { scriptRef: { table: "dreamwell", id: "" }, cursor: [0], side: "player" },
+      run: {
+        scriptRef: { table: "dreamwell", id: "" },
+        cursor: [0],
+        side: "player",
+      },
       kind: "foresee",
       options: { kind: "foresee", count: 0, cardIds: [] },
     },
@@ -173,7 +184,7 @@ function stateWithPendingPrompt(promptId: number): FoldState {
 // A note payload matching the `{ noteId, text, expiry }` shape SET_CARD_NOTE
 // stores (the shape the battle note editor writes).
 const NOTE_PAYLOAD = {
-  noteId: "n1",
+  noteId: asNoteId("n1"),
   text: "hi",
   expiry: { kind: "manual" },
 };
@@ -196,12 +207,12 @@ function makeBattleSide(): BattleMutableState["sides"][BattleSide] {
   };
 }
 
-function makeCardInstance(battleCardId: string): BattleCardInstance {
+function makeCardInstance(battleCardId: BattleCardId): BattleCardInstance {
   return {
     battleCardId,
     definition: {
       sourceDeckEntryId: null,
-      cardId: "card-uuid",
+      cardId: asCardId("card-uuid"),
       cardNumber: 0,
       name: "Fixture Card",
       battleCardKind: "character",
@@ -250,10 +261,13 @@ function makeCardInstance(battleCardId: string): BattleCardInstance {
  * optionally an open prompt. SET_CARD_NOTE needs a live card to annotate, so
  * the CAS-exempt seam tests use this rather than the board-less fixtures above.
  */
-function stateWithBattleCard(cardId: string, promptId?: number): FoldState {
+function stateWithBattleCard(
+  cardId: BattleCardId,
+  promptId?: number,
+): FoldState {
   const base = foldStateWithEssence(100);
   const board: BattleMutableState = {
-    battleId: "b",
+    battleId: asBattleId("b"),
     activeSide: "player",
     turnNumber: 3,
     phase: "day",
@@ -273,7 +287,11 @@ function stateWithBattleCard(cardId: string, promptId?: number): FoldState {
         ? null
         : {
             promptId,
-            run: { scriptRef: { table: "dreamwell", id: "" }, cursor: [0], side: "player" },
+            run: {
+              scriptRef: { table: "dreamwell", id: "" },
+              cursor: [0],
+              side: "player",
+            },
             kind: "foresee",
             options: { kind: "foresee", count: 0, cardIds: [] },
           },
@@ -310,7 +328,10 @@ describe("rule 4 — prompt gate", () => {
     const state = stateWithPendingPrompt(1);
     const result = reduceGameEvent(
       state,
-      event("RESOLVE_PROMPT", { promptId: 999, resolution: { kind: "foresee" } }),
+      event("RESOLVE_PROMPT", {
+        promptId: 999,
+        resolution: { kind: "foresee" },
+      }),
       ctx(),
     );
     // A stale/mismatched promptId is gated by rule 4 (a pending prompt bounces
@@ -326,7 +347,7 @@ describe("rule 4 — prompt gate", () => {
 
 describe("rule 1 — CAS-exempt types", () => {
   it("applies SET_CARD_NOTE through a hostile partner window", () => {
-    const state = stateWithBattleCard("i1");
+    const state = stateWithBattleCard(asBattleCardId("i1"));
     const result = reduceGameEvent(
       state,
       event("SET_CARD_NOTE", { instanceId: "i1", note: NOTE_PAYLOAD }),
@@ -337,11 +358,13 @@ describe("rule 1 — CAS-exempt types", () => {
     // CAS-exempt (rule 1): skips rules 2–4, so the hostile partner window never
     // gates it. The domain case stores the note on the card.
     expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.board.cardInstances["i1"].notes).toHaveLength(1);
+    expect(
+      result.state.battle?.board.cardInstances[asBattleCardId("i1")].notes,
+    ).toHaveLength(1);
   });
 
   it("applies SET_CARD_NOTE through an open prompt (rule 4 skipped)", () => {
-    const state = stateWithBattleCard("i1", 1);
+    const state = stateWithBattleCard(asBattleCardId("i1"), 1);
     const result = reduceGameEvent(
       state,
       event("SET_CARD_NOTE", { instanceId: "i1", note: NOTE_PAYLOAD }),
@@ -349,7 +372,9 @@ describe("rule 1 — CAS-exempt types", () => {
     );
     // CAS-exempt: applies even while a prompt is open, and leaves it intact.
     expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.board.cardInstances["i1"].notes).toHaveLength(1);
+    expect(
+      result.state.battle?.board.cardInstances[asBattleCardId("i1")].notes,
+    ).toHaveLength(1);
     expect(result.state.battle?.pendingPrompt?.promptId).toBe(1);
   });
 });
@@ -481,13 +506,7 @@ describe("isMatchingResolve (rule 2)", () => {
 
   it("does not match (and does not throw) on a missing or non-number promptId", () => {
     const state = stateWithPendingPrompt(7);
-    for (const bad of [
-      undefined,
-      null,
-      "7",
-      NaN,
-      {},
-    ] as unknown[]) {
+    for (const bad of [undefined, null, "7", NaN, {}] as unknown[]) {
       const ev = event("RESOLVE_PROMPT", {
         promptId: bad,
         resolution: {},
@@ -611,8 +630,12 @@ describe("genesisFoldState", () => {
     const base = { seq: 0, state: genesisFoldState(genesis) };
     const events = [{ seq: 1, event: adjustEssence(7) }];
 
-    const first = foldEvents(GAME_ENGINE_CONFIG, genesis, base, events, { devMode: true });
-    const second = foldEvents(GAME_ENGINE_CONFIG, genesis, base, events, { devMode: true });
+    const first = foldEvents(GAME_ENGINE_CONFIG, genesis, base, events, {
+      devMode: true,
+    });
+    const second = foldEvents(GAME_ENGINE_CONFIG, genesis, base, events, {
+      devMode: true,
+    });
 
     expect(hashState(first.state)).toBe(hashState(second.state));
   });
@@ -638,7 +661,12 @@ describe("reducer containment at the foldEvents layer", () => {
     try {
       const state = genesisFoldState(GENESIS);
       const batch = [
-        { seq: 1, event: event("START_JOURNEY", { dreamAvatarId: "dc-x" }) },
+        {
+          seq: 1,
+          event: event("START_JOURNEY", {
+            dreamAvatarId: asDreamAvatarId("dc-x"),
+          }),
+        },
       ];
       const base = { seq: 0, state };
 
@@ -674,7 +702,7 @@ describe("reducer containment at the foldEvents layer", () => {
 function stateWithPoisonedPrompt(promptId: number): FoldState {
   const base = foldStateWithEssence(100);
   const board: BattleMutableState = {
-    battleId: "b",
+    battleId: asBattleId("b"),
     activeSide: "player",
     turnNumber: 3,
     phase: "day",
@@ -685,7 +713,11 @@ function stateWithPoisonedPrompt(promptId: number): FoldState {
     sides: { player: makeBattleSide(), enemy: makeBattleSide() },
     cardInstances: {},
   };
-  const run = { scriptRef: { table: "dreamwell", id: "" }, cursor: [0, 0], side: "player" };
+  const run = {
+    scriptRef: { table: "dreamwell", id: "" },
+    cursor: [0, 0],
+    side: "player",
+  };
   const battle = {
     init: {} as never,
     board,

@@ -1,3 +1,14 @@
+import type { CardId } from "./card-identity";
+import type {
+  DreamAvatarId,
+  DreamwellCardId,
+  GlossaryEntryId,
+  TutorialActionId,
+  TutorialAiActionOverrideId,
+  TutorialTriggerId,
+} from "./identifiers";
+import type { TutorialRunId } from "./identifiers";
+import type { BackRankSlotId, FrontRankSlotId } from "../battle/types";
 /** Stable action names authored by the Tutorial Editor. */
 export type TutorialActionName =
   | "display-speech-bubble"
@@ -88,7 +99,7 @@ export type TutorialTriggerEvent =
 export type TutorialTriggerMatcher =
   | {
       readonly kind: "glossary";
-      readonly id: string;
+      readonly id: GlossaryEntryId;
     }
   | {
       readonly kind: "card-type";
@@ -96,7 +107,7 @@ export type TutorialTriggerMatcher =
     }
   | {
       readonly kind: "card-id";
-      readonly cardId: string;
+      readonly cardId: CardId | DreamwellCardId;
     }
   | {
       readonly kind: "any";
@@ -107,7 +118,7 @@ export interface TutorialTriggerDefinition extends Omit<
   TutorialSpeechBubble,
   "delay" | "duration"
 > {
-  readonly id: string;
+  readonly id: TutorialTriggerId;
   readonly on: readonly TutorialTriggerEvent[];
   readonly priority: number;
   readonly delay?: TutorialTriggerDelay;
@@ -142,17 +153,17 @@ export type TutorialCardConstantRole =
 
 /** UUID constants used by tutorial presentation, scripted actions, and handoff. */
 export interface TutorialCardConstants {
-  readonly tutorialPlayerCharacterCardId: string;
-  readonly tutorialOpponentCharacterCardId: string;
-  readonly loadingScreenCharacterCardId: string;
-  readonly loadingScreenEventCardId: string;
-  readonly handoffEnemyCharacterCardId: string;
-  readonly tutorialDreamwellCardId: string;
+  readonly tutorialPlayerCharacterCardId: CardId;
+  readonly tutorialOpponentCharacterCardId: CardId;
+  readonly loadingScreenCharacterCardId: CardId;
+  readonly loadingScreenEventCardId: CardId;
+  readonly handoffEnemyCharacterCardId: CardId;
+  readonly tutorialDreamwellCardId: DreamwellCardId;
 }
 
 /** One card and copy count in the shared tutorial starter-deck recipe. */
 export interface TutorialStarterDeckEntry {
-  readonly cardId: string;
+  readonly cardId: CardId;
   readonly copies: number;
 }
 
@@ -171,7 +182,11 @@ export type TutorialBattleHandoffPlacement = Readonly<
     cardRole: TutorialCardConstantRole;
     side: "player" | "enemy";
     source: "deck" | "created";
-  } & ({ zone: "frontRank" | "backRank"; slotId: string } | { zone: "void" })
+  } & (
+    | { zone: "frontRank"; slotId: FrontRankSlotId }
+    | { zone: "backRank"; slotId: BackRankSlotId }
+    | { zone: "void" }
+  )
 >;
 
 /** Complete authored board state at the playable tutorial-battle handoff. */
@@ -196,16 +211,16 @@ export interface TutorialBattleHandoffConfiguration {
 /** UUID-authored scenario used before and after the playable battle handoff. */
 export interface TutorialBattleConfiguration {
   readonly tutorialCardConstants: TutorialCardConstants;
-  readonly playerDreamAvatarId: string;
-  readonly enemyDreamAvatarId: string;
+  readonly playerDreamAvatarId: DreamAvatarId;
+  readonly enemyDreamAvatarId: DreamAvatarId;
   readonly startingEnergy: number;
   readonly scoreToWin: number;
   readonly starterDeck: readonly TutorialStarterDeckEntry[];
   readonly handoff: TutorialBattleHandoffConfiguration;
-  readonly forcedPlayerDraws: readonly string[];
-  readonly forcedEnemyDraws: readonly string[];
+  readonly forcedPlayerDraws: readonly CardId[];
+  readonly forcedEnemyDraws: readonly CardId[];
   /** Complete shared deck prefix, including authored pre-handoff draws. */
-  readonly dreamwellDraws: readonly string[];
+  readonly dreamwellDraws: readonly DreamwellCardId[];
   /** One-shot, state-matched actions which take priority over heuristic AI. */
   readonly aiActionOverrides: readonly TutorialBattleAiActionOverride[];
 }
@@ -215,14 +230,14 @@ export interface TutorialBattleAfterDreamwellTrigger {
   readonly kind: "after-dreamwell";
   readonly side: "enemy";
   /** UUID of the Dreamwell card resolved on the current turn. */
-  readonly cardId: string;
+  readonly cardId: DreamwellCardId;
 }
 
 /** A semantic play submitted through the ordinary battle play-card event. */
 export interface TutorialBattlePlayCardOverrideAction {
   readonly kind: "play-card";
   /** UUID of the card the AI should play from its hand. */
-  readonly cardId: string;
+  readonly cardId: CardId;
 }
 
 /**
@@ -230,7 +245,7 @@ export interface TutorialBattlePlayCardOverrideAction {
  * source order is planned before the heuristic AI.
  */
 export interface TutorialBattleAiActionOverride {
-  readonly id: string;
+  readonly id: TutorialAiActionOverrideId;
   readonly trigger: TutorialBattleAfterDreamwellTrigger;
   readonly action: TutorialBattlePlayCardOverrideAction;
 }
@@ -246,7 +261,7 @@ export type TutorialHowToPlayCompanion = "dreamwell-card";
 
 /** Fields shared by every authored tutorial action. */
 export interface TutorialActionBase {
-  readonly id: string;
+  readonly id: TutorialActionId;
   readonly action: TutorialActionName;
   /** Seconds to wait before the sequence advances from this action. */
   readonly wait: number;
@@ -290,7 +305,7 @@ export interface AnimateDreamAvatarPortraitTutorialAction extends TutorialAction
 export interface DrawOpponentCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-opponent-card";
   /** UUID of the card represented by the face-down draw. */
-  readonly cardId: string;
+  readonly cardId: CardId;
 }
 
 /** Draw purpose used to reconstruct scripted Dreamwell and turn draws. */
@@ -300,7 +315,7 @@ export type TutorialCardDrawReason = "dreamwell-effect" | "turn-draw";
 export interface DrawCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-card";
   readonly owner: TutorialDreamAvatarOwner;
-  readonly cardId: string;
+  readonly cardId: CardId;
   readonly reason: TutorialCardDrawReason;
 }
 
@@ -308,7 +323,7 @@ export interface DrawCardTutorialAction extends TutorialActionBase {
 export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionBase {
   readonly action: "reveal-and-play-opponent-card";
   /** UUID of the opponent hand card to reveal and play. */
-  readonly cardId: string;
+  readonly cardId: CardId;
   /** Seconds the face-up card remains at reading scale before it travels. */
   readonly revealDuration: number;
   /** Optional dialogue shown only while the card remains face up. */
@@ -318,28 +333,28 @@ export interface RevealAndPlayOpponentCardTutorialAction extends TutorialActionB
 /** Moves one UUID-authored opponent character to its closest front-rank cell. */
 export interface RepositionOpponentCharacterTutorialAction extends TutorialActionBase {
   readonly action: "reposition-opponent-character";
-  readonly cardId: string;
+  readonly cardId: CardId;
 }
 
 /** Waits for the player to move one UUID-authored character across from an opponent. */
 export interface RepositionPlayerCharacterTutorialAction extends TutorialActionBase {
   readonly action: "reposition-player-character";
-  readonly cardId: string;
-  readonly opposingCardId: string;
+  readonly cardId: CardId;
+  readonly opposingCardId: CardId;
 }
 
 /** Resolves one UUID-authored challenger/blocker pairing with unequal spark. */
 export interface ResolveChallengeTutorialAction extends TutorialActionBase {
   readonly action: "resolve-challenge";
-  readonly challengerCardId: string;
-  readonly blockerCardId: string;
+  readonly challengerCardId: CardId;
+  readonly blockerCardId: CardId;
 }
 
 /** Draws and reveals one UUID-authored Dreamwell card for the selected side. */
 export interface DrawDreamwellCardTutorialAction extends TutorialActionBase {
   readonly action: "draw-dreamwell-card";
   readonly owner: TutorialDreamAvatarOwner;
-  readonly cardId: string;
+  readonly cardId: DreamwellCardId;
   /** Seconds the emerged card remains readable before its effect applies. */
   readonly revealDuration?: number;
 }
@@ -371,23 +386,23 @@ export type TutorialEditorSaveStatus = "idle" | "saving" | "saved" | "error";
 /** Optional cursor and transport metadata for a shared tutorial playback. */
 export interface BeginTutorialOptions {
   /** Stable authored action id that should animate first. */
-  readonly startActionId?: string;
+  readonly startActionId?: TutorialActionId;
   /** Preserve the authored snapshot while placing its shared cursor at the end. */
   readonly startAtEnd?: boolean;
   /** Durable deduplication key for automatic tutorial starts. */
-  readonly intentKey?: string;
+  readonly intentKey?: import("./identifiers").IntentKey;
 }
 
 /** Shared result of the tutorial player's first card-play gesture. */
 export interface TutorialPlayerCardPlay {
-  readonly cardInstanceId: string;
-  readonly cardId: string;
-  readonly targetSlotId: string | null;
+  readonly cardInstanceId: import("./identifiers").BattleCardId;
+  readonly cardId: CardId;
+  readonly targetSlotId: import("./identifiers").BattleSlotViewId | null;
 }
 
 /** Event-log-owned progress for one shared tutorial playback. */
 export interface TutorialPlaybackState {
-  readonly runId: string;
+  readonly runId: TutorialRunId;
   readonly actions: readonly TutorialAction[];
   /** Null after the last action completes. */
   readonly currentActionIndex: number | null;

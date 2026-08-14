@@ -11,6 +11,9 @@ import {
   BattleTutorialGuidance,
   type BattleTutorialGuidanceView,
 } from "./BattleTutorialGuidance";
+import { asPresentationId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asDreamwellCardId } from "../../types/identifiers";
 
 class ResizeObserverStub {
   observe(_target: Element) {}
@@ -78,7 +81,7 @@ describe("BattleTutorialGuidance", () => {
         <CumulusRoot>
           <BattleTutorialGuidance
             view={{
-              presentationId: "guidance:erode",
+              presentationId: asPresentationId("guidance:erode"),
               triggerId: "erode",
               messageIndex: 0,
               messageCount: 1,
@@ -94,9 +97,13 @@ describe("BattleTutorialGuidance", () => {
                 kind: "dreamwell",
                 side: "player",
                 model: {
-                  cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+                  cardId: asDreamwellCardId(
+                    "03e4e701-4720-4278-8198-9b7e0514d4cf",
+                  ),
                   displaySnapshot: {
-                    id: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+                    id: asDreamwellCardId(
+                      "03e4e701-4720-4278-8198-9b7e0514d4cf",
+                    ),
                     name: assertLocalized("Shadow Passage"),
                     renderedText: assertLocalized("Erode 3."),
                     energyAdded: 1,
@@ -117,9 +124,7 @@ describe("BattleTutorialGuidance", () => {
     ).not.toBeNull();
     expect(container.textContent).toContain("Mira");
     expect(container.textContent).toContain("Erode");
-    expect(
-      container.querySelector('[aria-label="points"]'),
-    ).not.toBeNull();
+    expect(container.querySelector('[aria-label="points"]')).not.toBeNull();
     const guidance = container.querySelector<HTMLElement>(
       "[data-battle-tutorial-guidance]",
     );
@@ -158,7 +163,7 @@ describe("BattleTutorialGuidance", () => {
         <CumulusRoot>
           <BattleTutorialGuidance
             view={{
-              presentationId: "guidance:erode",
+              presentationId: asPresentationId("guidance:erode"),
               triggerId: "erode",
               messageIndex: 0,
               messageCount: 1,
@@ -168,9 +173,13 @@ describe("BattleTutorialGuidance", () => {
                 kind: "dreamwell",
                 side: "player",
                 model: {
-                  cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+                  cardId: asDreamwellCardId(
+                    "03e4e701-4720-4278-8198-9b7e0514d4cf",
+                  ),
                   displaySnapshot: {
-                    id: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+                    id: asDreamwellCardId(
+                      "03e4e701-4720-4278-8198-9b7e0514d4cf",
+                    ),
                     name: assertLocalized("Shadow Passage"),
                     renderedText: assertLocalized("Erode 3."),
                     energyAdded: 1,
@@ -226,7 +235,7 @@ describe("BattleTutorialGuidance", () => {
         <CumulusRoot>
           <BattleTutorialGuidance
             view={{
-              presentationId: "guidance:spark-tie",
+              presentationId: asPresentationId("guidance:spark-tie"),
               triggerId: "spark-tie",
               messageIndex: 0,
               messageCount: 1,
@@ -274,14 +283,14 @@ describe("BattleTutorialGuidance", () => {
       artOwned: true,
     };
     const view: BattleTutorialGuidanceView = {
-      presentationId: "guidance:support",
+      presentationId: asPresentationId("guidance:support"),
       triggerId: "support",
       messageIndex: 0,
       messageCount: 1,
       ...guidanceFields("Support helps the character in front."),
       source: {
         kind: "card",
-        battleCardId,
+        battleCardId: asBattleCardId(battleCardId),
         model: { cardId, displaySnapshot },
         figment: false,
       },
@@ -373,7 +382,9 @@ describe("BattleTutorialGuidance", () => {
               messageCount: 2,
               dialogue: {
                 ...view.dialogue,
-                text: assertLocalized("The same card stays here for the next explanation."),
+                text: assertLocalized(
+                  "The same card stays here for the next explanation.",
+                ),
               },
             }}
             onDismiss={() => undefined}
@@ -408,9 +419,8 @@ describe("BattleTutorialGuidance", () => {
     expect(source.dataset.tutorialGuidanceJourneyHidden).toBe("destination");
     expect(source.style.opacity).toBe("0");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-battle-tutorial-guidance]",
-      )?.dataset.tutorialGuidanceJourney,
+      container.querySelector<HTMLElement>("[data-battle-tutorial-guidance]")
+        ?.dataset.tutorialGuidanceJourney,
     ).toBe("settling");
     expect(animations[1]?.[1]?.transform).toContain("scale(0.375)");
     expect(animations[1]?.[1]?.opacity).toBe(0);
@@ -499,7 +509,7 @@ describe("BattleTutorialGuidance", () => {
       },
     );
     const view: BattleTutorialGuidanceView = {
-      presentationId: "card-tutorial:fixture",
+      presentationId: asPresentationId("card-tutorial:fixture"),
       triggerId: "support",
       messageIndex: 0,
       messageCount: 1,
@@ -527,8 +537,12 @@ describe("BattleTutorialGuidance", () => {
     expect(source.style.visibility).toBe("");
     expect(source.style.opacity).toBe("");
     expect(source.dataset.tutorialGuidanceJourneyHidden).toBeUndefined();
-    expect(container.querySelector("[data-card-tutorial-guidance]")).not.toBeNull();
-    expect(container.querySelector("[data-battle-tutorial-guidance]")).toBeNull();
+    expect(
+      container.querySelector("[data-card-tutorial-guidance]"),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-battle-tutorial-guidance]"),
+    ).toBeNull();
     expect(
       container.querySelector('[data-testid="card-tutorial-card"]'),
     ).toBeNull();
@@ -576,9 +590,7 @@ describe("BattleTutorialGuidance", () => {
     });
     expect(source.style.visibility).toBe("");
     expect(source.style.opacity).toBe("");
-    expect(
-      container.querySelector("[data-card-tutorial-guidance]"),
-    ).toBeNull();
+    expect(container.querySelector("[data-card-tutorial-guidance]")).toBeNull();
 
     act(() => root.unmount());
     if (animateDescriptor === undefined) {
@@ -606,7 +618,7 @@ describe("BattleTutorialGuidance", () => {
         <CumulusRoot>
           <BattleTutorialGuidance
             view={{
-              presentationId: "site-tutorial:transfiguration",
+              presentationId: asPresentationId("site-tutorial:transfiguration"),
               triggerId: "transfiguration",
               messageIndex: 0,
               messageCount: 1,

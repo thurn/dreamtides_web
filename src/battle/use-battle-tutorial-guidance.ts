@@ -5,6 +5,8 @@ import {
   isAutomaticOpponentPlayGuidance,
   tutorialGuidanceMessageDurationSeconds,
 } from "./tutorial-presentation-timing";
+import { asPresentationId } from "../types/identifiers";
+import { asIntentKey } from "../types/identifiers";
 
 export interface BattleTutorialGuidanceController {
   readonly advance: () => void;
@@ -29,7 +31,7 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
       if (message === undefined) return;
       logEvent("battle_tutorial_guidance_advance_requested", {
         battleId: state.battle.board.battleId,
-        presentationId: guidance.id,
+        presentationId: asPresentationId(guidance.id),
         triggerId: message.triggerId,
         messageIndex: guidance.messageIndex,
         reason,
@@ -37,8 +39,10 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
       });
       void actions
         .completeTutorialBattlePresentation(
-          guidance.id,
-          `battle-tutorial:${guidance.id}:${String(guidance.messageIndex)}`,
+          asPresentationId(guidance.id),
+          asIntentKey(
+            `battle-tutorial:${guidance.id}:${String(guidance.messageIndex)}`,
+          ),
           clientId,
           guidance.messageIndex,
         )
@@ -51,7 +55,7 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
     if (guidance === null || state.battle === null) return;
     logEvent("battle_tutorial_guidance_presented", {
       battleId: state.battle.board.battleId,
-      presentationId: guidance.id,
+      presentationId: asPresentationId(guidance.id),
       source: guidance.source,
       triggerIds: guidance.messages.map((message) => message.triggerId),
       speakers: guidance.messages.map((message) => message.speaker),
@@ -63,8 +67,7 @@ export function useBattleTutorialGuidance(): BattleTutorialGuidanceController {
           messageIndex,
         }),
       ),
-      satisfiesOpponentPlayReveal:
-        isAutomaticOpponentPlayGuidance(guidance),
+      satisfiesOpponentPlayReveal: isAutomaticOpponentPlayGuidance(guidance),
       verticalOffsets: guidance.messages.map(
         (message) => message.verticalOffset,
       ),

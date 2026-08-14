@@ -29,6 +29,8 @@ import { motionTimeSeconds } from "../../primitives/motion-time";
 import { token } from "../../primitives/tokens";
 import { battleCardLayoutId } from "./battle-card-layout";
 import { useTutorialObstacle } from "../overlay/tutorial-placement";
+import type { BattleCardId } from "../../../types/identifiers";
+import type { PresentationId } from "../../../types/identifiers";
 
 export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
   "grayscale(0.5) brightness(0.62)";
@@ -36,7 +38,7 @@ export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
 /** Semantic viewport-space result from one completed battlefield drag. */
 export interface BattlefieldCardDrop {
   /** Stable battle-instance identity of the dragged card. */
-  readonly battleCardId: string;
+  readonly battleCardId: BattleCardId;
   /** Pointer release x-coordinate in viewport space. */
   readonly clientX: number;
   /** Pointer release y-coordinate in viewport space. */
@@ -50,7 +52,7 @@ export interface BattlefieldCardDrop {
 /** Complete prepared presentation for one face-up battle instance. */
 export interface BattlefieldCardModel {
   /** Stable battle-instance identity used by every interaction callback. */
-  readonly battleCardId: string;
+  readonly battleCardId: BattleCardId;
   /** Complete resolved game-card presentation. */
   readonly card: GameCardModel;
   /** Whether the battle instance is exhausted. */
@@ -73,7 +75,7 @@ export interface BattlefieldCardModel {
     /** Signed score delta announced by the card. */
     readonly points: number;
     /** Stable presentation identity used to restart announcement motion. */
-    readonly presentationId: string;
+    readonly presentationId: PresentationId;
   };
   /** Named layout-motion behavior for board travel. */
   readonly motion: "snap" | "travel";
@@ -91,17 +93,17 @@ export type BattlefieldCardInteraction =
       /** Keyboard- and pointer-pressable card. */
       readonly kind: "pressable";
       /** Reports the pressed battle-instance identity. */
-      readonly onPress: (battleCardId: string) => void;
+      readonly onPress: (battleCardId: BattleCardId) => void;
     }
   | {
       /** Pointer-draggable card with optional quick-press behavior. */
       readonly kind: "draggable";
       /** Optional quick-press intent for the battle instance. */
-      readonly onPress?: (battleCardId: string) => void;
+      readonly onPress?: (battleCardId: BattleCardId) => void;
       /** Reports the battle instance when deliberate dragging begins. */
-      readonly onDragStart: (battleCardId: string) => void;
+      readonly onDragStart: (battleCardId: BattleCardId) => void;
       /** Reports the battle instance when dragging ends or is cancelled. */
-      readonly onDragEnd: (battleCardId: string) => void;
+      readonly onDragEnd: (battleCardId: BattleCardId) => void;
       /** Reports the complete semantic viewport drop result. */
       readonly onDrop: (drop: BattlefieldCardDrop) => void;
     };

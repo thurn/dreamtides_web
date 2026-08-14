@@ -20,18 +20,21 @@ import { useIsDesktop } from "../primitives/use-is-desktop";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import { opaque, tx, txa } from "@trox/runtime";
+import type { BattleCardId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import type { PresentationId } from "../../types/identifiers";
 
 export type BattleTutorialGuidanceSourceView =
   | {
       readonly kind: "card";
       readonly model: GameCardModel;
       readonly figment: boolean;
-      readonly battleCardId: string;
+      readonly battleCardId: BattleCardId;
     }
   | {
       readonly kind: "journey-card";
       readonly model: GameCardModel;
-      readonly cardId: string;
+      readonly cardId: CardId;
     }
   | {
       readonly kind: "journey-site";
@@ -46,7 +49,7 @@ export type BattleTutorialGuidanceSourceView =
     };
 
 export interface BattleTutorialGuidanceView {
-  readonly presentationId: string;
+  readonly presentationId: PresentationId;
   readonly triggerId: string;
   readonly messageIndex: number;
   readonly messageCount: number;
@@ -67,7 +70,7 @@ export interface BattleTutorialGuidanceProps {
 
 const GUIDANCE_OBJECT_TRAVEL_MS = motionTimeSeconds("--dur-slow") * 1_000;
 function battleCardSurface(
-  battleCardId: string,
+  battleCardId: BattleCardId,
   journey: HTMLElement,
 ): HTMLElement | null {
   return (
@@ -80,7 +83,7 @@ function battleCardSurface(
 }
 
 function journeyCardSurface(
-  cardId: string,
+  cardId: CardId,
   journey: HTMLElement,
 ): HTMLElement | null {
   const candidates = [

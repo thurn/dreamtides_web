@@ -16,13 +16,15 @@ import {
   TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS,
   TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS,
 } from "./tutorial-presentation-timing";
+import type { PresentationId } from "../types/identifiers";
+import type { BattleId } from "../types/identifiers";
+import type { ClientId } from "../types/identifiers";
 
 /** Fixed readable dwell for each persisted tutorial reveal. */
 export const TUTORIAL_BATTLE_PRESENTATION_DWELL_MS = 3_000;
 
-export interface TutorialBattleControllerRuntime
-  extends TutorialBattleControllerPlan {
-  readonly onPresentationVisible: (presentationId: string) => void;
+export interface TutorialBattleControllerRuntime extends TutorialBattleControllerPlan {
+  readonly onPresentationVisible: (presentationId: PresentationId) => void;
 }
 
 /**
@@ -32,7 +34,9 @@ export interface TutorialBattleControllerRuntime
  * finish and register, short enough not to stall the turn.
  */
 const PRESENTATION_DWELL_MS: Readonly<
-  Partial<Record<NonNullable<BattleFoldState["tutorialPresentation"]>["kind"], number>>
+  Partial<
+    Record<NonNullable<BattleFoldState["tutorialPresentation"]>["kind"], number>
+  >
 > = {
   "opponent-play": TUTORIAL_OPPONENT_PLAY_REVEAL_DWELL_MS,
   "opponent-block": 2_000,
@@ -48,7 +52,7 @@ export function tutorialBattlePresentationDwellMs(
   }
   return (
     PRESENTATION_DWELL_MS[presentation.kind] ??
-      TUTORIAL_BATTLE_PRESENTATION_DWELL_MS
+    TUTORIAL_BATTLE_PRESENTATION_DWELL_MS
   );
 }
 
@@ -66,11 +70,15 @@ export function useTutorialBattleController({
   const clientId = useClientId();
   const connectedClientIds = useConnectedClientIds();
   const actions = useActions();
-  const [visiblePresentationId, setVisiblePresentationId] =
-    useState<string | null>(null);
-  const onPresentationVisible = useCallback((presentationId: string) => {
-    setVisiblePresentationId(presentationId);
-  }, []);
+  const [visiblePresentationId, setVisiblePresentationId] = useState<
+    string | null
+  >(null);
+  const onPresentationVisible = useCallback(
+    (presentationId: PresentationId) => {
+      setVisiblePresentationId(presentationId);
+    },
+    [],
+  );
   const plan = useMemo(
     () => planTutorialBattleController({ state, clientId, connectedClientIds }),
     [state, clientId, connectedClientIds],
@@ -106,41 +114,53 @@ export function useTutorialBattleController({
             dwellMs,
             reason: intent.reason,
           });
-          void actions.completeTutorialBattlePresentation(
-            intent.presentationId,
-            intent.intentKey,
-            actor,
-          ).catch(() => undefined);
+          void actions
+            .completeTutorialBattlePresentation(
+              intent.presentationId,
+              intent.intentKey,
+              actor,
+            )
+            .catch(() => undefined);
         }, dwellMs);
         return () => window.clearTimeout(timeout);
       }
       case "battle-command":
-        void actions.battleCommand(intent.command, intent.intentKey, actor).catch(() => undefined);
+        void actions
+          .battleCommand(intent.command, intent.intentKey, actor)
+          .catch(() => undefined);
         return;
       case "battle-play-card":
-        void actions.battlePlayCard(
-          intent.battleCardId,
-          intent.targetBattleCardIds,
-          intent.intentKey,
-          actor,
-          intent.aiChoices,
-          intent.characterDestination,
-          intent.tutorialAiActionOverrideId,
-        ).catch(() => undefined);
+        void actions
+          .battlePlayCard(
+            intent.battleCardId,
+            intent.targetBattleCardIds,
+            intent.intentKey,
+            actor,
+            intent.aiChoices,
+            intent.characterDestination,
+            intent.tutorialAiActionOverrideId,
+          )
+          .catch(() => undefined);
         return;
       case "battle-gesture":
-        void actions.battleGesture(intent.commands, intent.intentKey, actor).catch(() => undefined);
+        void actions
+          .battleGesture(intent.commands, intent.intentKey, actor)
+          .catch(() => undefined);
         return;
       case "battle-ai-block":
-        void actions.battleAiBlock("enemy", actor, intent.intentKey).catch(() => undefined);
+        void actions
+          .battleAiBlock("enemy", actor, intent.intentKey)
+          .catch(() => undefined);
         return;
       case "resolve-prompt":
-        void actions.resolvePrompt(
-          intent.promptId,
-          intent.resolution,
-          intent.intentKey,
-          actor,
-        ).catch(() => undefined);
+        void actions
+          .resolvePrompt(
+            intent.promptId,
+            intent.resolution,
+            intent.intentKey,
+            actor,
+          )
+          .catch(() => undefined);
         return;
     }
   }, [actions, clientId, paused, plan, state.battle, visiblePresentationId]);
@@ -152,8 +172,8 @@ export function useTutorialBattleController({
 }
 
 function logTutorialIntent(
-  battleId: string,
-  driverClientId: string,
+  battleId: BattleId,
+  driverClientId: ClientId,
   intent: TutorialAutomaticIntent,
 ): void {
   logEvent("tutorial_battle_automatic_intent_planned", {
@@ -165,13 +185,12 @@ function logTutorialIntent(
     aiActionOverrideMiss: intent.aiActionOverrideMiss ?? null,
     ...(intent.kind === "battle-play-card"
       ? {
-        battleCardId: intent.battleCardId,
-        targetBattleCardIds: intent.targetBattleCardIds,
-        aiChoices: intent.aiChoices,
-        characterDestination: intent.characterDestination ?? null,
-        tutorialAiActionOverrideId:
-          intent.tutorialAiActionOverrideId ?? null,
-      }
+          battleCardId: intent.battleCardId,
+          targetBattleCardIds: intent.targetBattleCardIds,
+          aiChoices: intent.aiChoices,
+          characterDestination: intent.characterDestination ?? null,
+          tutorialAiActionOverrideId: intent.tutorialAiActionOverrideId ?? null,
+        }
       : {}),
     ...(intent.kind === "resolve-prompt"
       ? { promptId: intent.promptId, resolution: intent.resolution }

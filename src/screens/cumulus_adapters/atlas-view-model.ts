@@ -44,7 +44,10 @@ import type {
   AtlasView,
 } from "../../cumulus/screens/AtlasScreen";
 import type { JourneyContent } from "../../data/journey-content";
-import { bindSourceTransport, localizedSourceText } from "../../runtime/localization/runtime";
+import {
+  bindSourceTransport,
+  localizedSourceText,
+} from "../../runtime/localization/runtime";
 import { tx } from "@trox/runtime";
 import {
   siteTypeDescription,
@@ -59,6 +62,9 @@ import type {
 } from "../../types/journey";
 import type { TutorialAtlasConfiguration } from "../../types/tutorial";
 import { type LayerName, layerOrdinal } from "../../types/layer-name";
+import type { SiteId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
 
 /**
  * The portrait design canvas the mobile atlas stage scales to fit (letterboxed).
@@ -357,7 +363,7 @@ function buildDreamsignCard(
 /** Resolves the signature site's standard InfoCard payload. */
 function buildSignatureSiteCard(
   dreamscape: NonNullable<JourneyContent["dreamscapes"][number]>,
-  siteId: string,
+  siteId: SiteId,
   journeyContent: JourneyContent,
 ): AtlasNodeSite {
   return {
@@ -437,9 +443,9 @@ function buildNodeCard(
         : null;
     return {
       primary: {
-        sceneArt: artRef.dreamscapeScene(boss.sceneArtId),
+        sceneArt: artRef.dreamscapeScene(asDreamscapeId(boss.sceneArtId)),
         // The boss stands over the Limbo scene as its prominent figure.
-        figureArt: artRef.dreamGuide(boss.figureArtId),
+        figureArt: artRef.dreamGuide(asGuideId(boss.figureArtId)),
         // Title with the run's chosen Apollyon incarnation (its full name, e.g.
         // "Apollyon, the World's End"), falling back to the default epithet when
         // no incarnation was assigned.
@@ -571,7 +577,9 @@ export function buildAtlasMapNodes(
     // its circular icon; an unrevealed node shows the empty round frame.
     const iconRef =
       geo.role === "boss"
-        ? artRef.dreamscapeIcon(journeyContent.atlasData.boss.iconArtId)
+        ? artRef.dreamscapeIcon(
+            asDreamscapeId(journeyContent.atlasData.boss.iconArtId),
+          )
         : dreamscape === null
           ? null
           : artRef.dreamscapeIcon(dreamscape.id);

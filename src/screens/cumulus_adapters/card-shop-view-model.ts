@@ -37,11 +37,15 @@ import {
   buildShopFreePurchaseStatus,
   hasFreePurchase,
 } from "./shop-free-purchase-view-model";
+import type { GuideId } from "../../types/identifiers";
+import type { SiteId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import type { ExplorationActionId } from "../../types/identifiers";
 
 /** Resolve Tobias, the resident Dream Guide for Card Shops. */
 export function resolveCardShopGuide(
   guides: readonly DreamGuideContent[],
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent {
   return requireGuideForSiteType(guides, "Shop", presentingGuideId);
 }
@@ -77,7 +81,7 @@ export function buildCardShopOffers(
           );
     const price = effectivePrice(slot, priceModifiers);
     offers.push({
-      entryId: `shop-slot-${String(slotIndex)}-${card.id}`,
+      entryId: asDeckEntryId(`shop-slot-${String(slotIndex)}-${card.id}`),
       slotIndex,
       model:
         transfigured === null
@@ -107,7 +111,7 @@ export function buildCardShopRestock(
 ): CardShopRestockView {
   const price = rerollCost(config, runtime.rerollCount, site.isEnhanced);
   return {
-    entryId: `shop-restock-${site.id}`,
+    entryId: asDeckEntryId(`shop-restock-${site.id}`),
     price,
     state:
       runtime.rerollCount >= config.maxPerVisit
@@ -136,7 +140,7 @@ export function buildCardShopDebugState(
 /** UUID-only reconstruction payload for an Exploration-transfigured Shop. */
 export function buildCardShopTransfiguredOfferLog(
   view: CardShopSiteView,
-  source: { readonly siteId: string; readonly actionId: string },
+  source: { readonly siteId: SiteId; readonly actionId: ExplorationActionId },
 ) {
   return {
     sourceSiteId: source.siteId,

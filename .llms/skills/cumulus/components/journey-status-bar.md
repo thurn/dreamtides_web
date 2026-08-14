@@ -27,7 +27,7 @@ The persistent, transparent bottom HUD for journey screens. Its journey variant 
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `string` | no | Stable Dreamsign UUID. |
+| `id` | `DreamsignId` | no | Stable Dreamsign UUID. |
 | `name` | `LocalizedString` | no | Canonical localized display name. |
 | `effectDescription` | `LocalizedString \| null` | no | Canonical localized effect copy, or null when the object has no rules. |
 | `imageName` | `string` | yes | Hosted art key. |

@@ -13,11 +13,18 @@ import { DreamAvatarPortrait } from "../../components/hud/DreamAvatarPortrait";
 import { InfoCard } from "../../components/overlay/InfoCard";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
+import { asDreamscapeId } from "../../../types/identifiers";
+import { asDreamsignId } from "../../../types/identifiers";
+import { asAtlasNodeId } from "../../../types/identifiers";
+import { asSiteId } from "../../../types/identifiers";
+import { asAffiliationId } from "../../../types/identifiers";
 
 const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
 const BATTLE_CARD_ID = asCardId("22222222-2222-4222-8222-222222222222");
 const CONFORMANCE_CARD_IMAGE = 485518048;
-const ATLAS_NODE_ID = "33333333-3333-4333-8333-333333333333";
+const ATLAS_NODE_ID = asAtlasNodeId(
+  "33333333-3333-4333-8333-333333333333",
+);
 
 const CARD: CardData = {
   id: CARD_ID,
@@ -41,12 +48,12 @@ const ATLAS_MODEL: AtlasNodeModel = {
   state: "available",
   role: "regular",
   isReachable: true,
-  iconRef: artRef.dreamscapeIcon("wilderveil"),
+  iconRef: artRef.dreamscapeIcon(asDreamscapeId("wilderveil")),
   siteBadgeGlyph: GLYPHS.water,
   unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
   knownDreamsignRef: artRef.dreamsign("runes.png"),
   primary: {
-    sceneArt: artRef.dreamscapeScene("wilderveil"),
+    sceneArt: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
     figureArt: null,
     placeName: assertLocalized("Conformance Veil"),
     guideName: null,
@@ -54,19 +61,19 @@ const ATLAS_MODEL: AtlasNodeModel = {
     body: assertLocalized("A fixed Atlas fixture."),
   },
   dreamsign: {
-    id: "44444444-4444-4444-8444-444444444444",
+    id: asDreamsignId("44444444-4444-4444-8444-444444444444"),
     name: assertLocalized("Measured Sign"),
     art: null,
     rulesText: assertLocalized("The first vision is fixed."),
   },
   site: {
-    id: "55555555-5555-4555-8555-555555555555",
+    id: asSiteId("55555555-5555-4555-8555-555555555555"),
     name: assertLocalized("Measured Site"),
     blurb: assertLocalized("A fixed semantic site."),
     icon: GLYPHS.water,
   },
   affiliation: {
-    id: "66666666-6666-4666-8666-666666666666",
+    id: asAffiliationId("66666666-6666-4666-8666-666666666666"),
     title: assertLocalized("Fixture affiliation"),
     body: assertLocalized("Fixture cards are more likely here."),
   },

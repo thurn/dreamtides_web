@@ -15,6 +15,8 @@ import {
   localizedSourceMessage,
   sourceMessage,
 } from "../runtime/localization/runtime";
+import type { DreamsignId, ExplorationActionId } from "../types/identifiers";
+import { asExplorationActionId } from "../types/identifiers";
 
 const EXPLORATION_DATA_PATH = "/exploration-data.json";
 
@@ -74,7 +76,7 @@ export function isTransfigurationExplorationEffect(
 }
 
 export interface ExplorationActionContent {
-  id: string;
+  id: ExplorationActionId;
   /** Strings are accepted only by synthetic fixtures; loaded content is typed. */
   label: string | LocalizedString;
   effectText: string | LocalizedString | SourceMessage;
@@ -88,7 +90,7 @@ export interface ExplorationActionContent {
   count?: number;
   cardType?: CardType;
   cardId?: CardId;
-  dreamsignId?: string;
+  dreamsignId?: DreamsignId;
   packCount?: number;
   packSize?: number;
   offerCount?: number;
@@ -140,7 +142,7 @@ interface RawExplorationData {
   customCards?: CardData[];
   customDreamsigns?: Dreamsign[];
   encounters?: Array<{
-    cardId?: string;
+    cardId?: CardId;
     prose?: string;
     action?: ExplorationActionContent[];
   }>;
@@ -155,7 +157,10 @@ function requiredString(value: unknown, label: string): string {
   return value;
 }
 
-function hydrateStaticMessage(value: unknown, label: string): string | LocalizedString {
+function hydrateStaticMessage(
+  value: unknown,
+  label: string,
+): string | LocalizedString {
   if (typeof value === "string") return requiredString(value, label);
   const message = sourceMessage(value as SourceMessageRef);
   if (Object.keys(message.argumentSchemas).length !== 0) {
@@ -164,18 +169,25 @@ function hydrateStaticMessage(value: unknown, label: string): string | Localized
   return message.bind({});
 }
 
-function hydrateEffectMessage(value: unknown): string | LocalizedString | SourceMessage {
-  if (typeof value === "string") return requiredString(value, "action effect text");
+function hydrateEffectMessage(
+  value: unknown,
+): string | LocalizedString | SourceMessage {
+  if (typeof value === "string")
+    return requiredString(value, "action effect text");
   const message = sourceMessage(value as SourceMessageRef);
   return Object.keys(message.argumentSchemas).length === 0
     ? localizedSourceMessage(value as SourceMessageRef)
     : message;
 }
 
-function messageArgumentNames(value: ExplorationActionContent["effectText"]): readonly string[] {
+function messageArgumentNames(
+  value: ExplorationActionContent["effectText"],
+): readonly string[] {
   if (value instanceof SourceMessage) return Object.keys(value.argumentSchemas);
   if (typeof value === "string") {
-    return [...value.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map((match) => match[1] ?? "");
+    return [...value.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map(
+      (match) => match[1] ?? "",
+    );
   }
   return [];
 }
@@ -255,13 +267,15 @@ const EXPLORATION_FIXED_SITE_TYPE_SET: ReadonlySet<string> = new Set(
 );
 const SHOP_PURCHASE_MODIFIER_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> =
   new Set(["free-next-shop", "lose-half-essence-and-free-purchases"]);
-const WAVE8_COMPOUND_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> = new Set([
-  "transfigure-all-cards",
-  "purge-disclosed-and-transfigure-same-type",
-  "make-predicate-fast-and-gain-nightmares",
-  "take-transfigured-cards-and-gain-nightmares",
-  "purge-one-transfigure-and-copy-others",
-]);
+const WAVE8_COMPOUND_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> = new Set(
+  [
+    "transfigure-all-cards",
+    "purge-disclosed-and-transfigure-same-type",
+    "make-predicate-fast-and-gain-nightmares",
+    "take-transfigured-cards-and-gain-nightmares",
+    "purge-one-transfigure-and-copy-others",
+  ],
+);
 const EXPLORATION_EFFECT_FIELDS: ReadonlyArray<keyof ExplorationActionContent> =
   [
     "predicate",
@@ -289,32 +303,44 @@ const EXPLORATION_EFFECT_FIELDS: ReadonlyArray<keyof ExplorationActionContent> =
 
 function validateWave8CompoundFields(raw: ExplorationActionContent): void {
   if (!WAVE8_COMPOUND_EFFECT_KINDS.has(raw.effectKind)) return;
-  const contracts: Record<string, {
-    mechanic: RewardMechanicId;
-    policy?: RewardSelectionPolicyId;
-    fields: ReadonlyArray<keyof ExplorationActionContent>;
-  }> = {
+  const contracts: Record<
+    string,
+    {
+      mechanic: RewardMechanicId;
+      policy?: RewardSelectionPolicyId;
+      fields: ReadonlyArray<keyof ExplorationActionContent>;
+    }
+  > = {
     "transfigure-all-cards": {
-      mechanic: "transfigure-deck-entry", policy: "uniform", fields: [],
+      mechanic: "transfigure-deck-entry",
+      policy: "uniform",
+      fields: [],
     },
     "purge-disclosed-and-transfigure-same-type": {
-      mechanic: "purge-deck-entry", policy: "purge-misfit", fields: ["transfiguration"],
+      mechanic: "purge-deck-entry",
+      policy: "purge-misfit",
+      fields: ["transfiguration"],
     },
     "make-predicate-fast-and-gain-nightmares": {
-      mechanic: "make-deck-fast", fields: ["predicate", "nightmareCount"],
+      mechanic: "make-deck-fast",
+      fields: ["predicate", "nightmareCount"],
     },
     "take-transfigured-cards-and-gain-nightmares": {
-      mechanic: "transfigured-card-chooser", policy: "card-fit",
+      mechanic: "transfigured-card-chooser",
+      policy: "card-fit",
       fields: ["predicate", "offerCount", "transfiguration", "nightmareCount"],
     },
     "purge-one-transfigure-and-copy-others": {
-      mechanic: "transfigure-deck-entry", policy: "uniform",
+      mechanic: "transfigure-deck-entry",
+      policy: "uniform",
       fields: ["offerCount", "transfiguration"],
     },
   };
   const contract = contracts[raw.effectKind];
-  if (raw.canonicalMechanicId !== contract.mechanic ||
-      raw.selectionPolicyId !== contract.policy) {
+  if (
+    raw.canonicalMechanicId !== contract.mechanic ||
+    raw.selectionPolicyId !== contract.policy
+  ) {
     throw new Error(
       `Invalid Exploration data: ${raw.effectKind} requires ${contract.mechanic} with ${contract.policy ?? "no selection policy"}`,
     );
@@ -328,26 +354,35 @@ function validateWave8CompoundFields(raw: ExplorationActionContent): void {
       `Invalid Exploration data: ${String(unsupportedField)} does not apply to ${raw.effectKind}`,
     );
   }
-  if (allowedFields.has("predicate") &&
-      (raw.predicate === undefined || !EXPLORATION_PREDICATE_SET.has(raw.predicate))) {
+  if (
+    allowedFields.has("predicate") &&
+    (raw.predicate === undefined ||
+      !EXPLORATION_PREDICATE_SET.has(raw.predicate))
+  ) {
     throw new Error(
       `Invalid Exploration data: ${raw.effectKind} requires a supported non-Any predicate`,
     );
   }
-  if (allowedFields.has("transfiguration") &&
-      !TRANSFIGURATION_SET.has(raw.transfiguration ?? "")) {
+  if (
+    allowedFields.has("transfiguration") &&
+    !TRANSFIGURATION_SET.has(raw.transfiguration ?? "")
+  ) {
     throw new Error(
       `Invalid Exploration data: ${raw.effectKind} requires a supported transfiguration`,
     );
   }
-  if (allowedFields.has("nightmareCount") &&
-      (!Number.isInteger(raw.nightmareCount) || (raw.nightmareCount ?? 0) <= 0)) {
+  if (
+    allowedFields.has("nightmareCount") &&
+    (!Number.isInteger(raw.nightmareCount) || (raw.nightmareCount ?? 0) <= 0)
+  ) {
     throw new Error(
       `Invalid Exploration data: ${raw.effectKind} requires a positive integer nightmareCount`,
     );
   }
   if (allowedFields.has("offerCount") && raw.offerCount !== 4) {
-    throw new Error(`Invalid Exploration data: ${raw.effectKind} requires offerCount 4`);
+    throw new Error(
+      `Invalid Exploration data: ${raw.effectKind} requires offerCount 4`,
+    );
   }
   const requiresFollowup =
     raw.effectKind === "take-transfigured-cards-and-gain-nightmares" ||
@@ -358,8 +393,13 @@ function validateWave8CompoundFields(raw: ExplorationActionContent): void {
         `Invalid Exploration data: ${raw.effectKind} requires a paired nonblank followup`,
       );
     }
-  } else if (raw.followupTitle !== undefined || raw.followupSubtitle !== undefined) {
-    throw new Error(`Invalid Exploration data: ${raw.effectKind} does not support a followup`);
+  } else if (
+    raw.followupTitle !== undefined ||
+    raw.followupSubtitle !== undefined
+  ) {
+    throw new Error(
+      `Invalid Exploration data: ${raw.effectKind} does not support a followup`,
+    );
   }
   const tokens = messageArgumentNames(raw.effectText);
   if (raw.effectKind === "purge-disclosed-and-transfigure-same-type") {
@@ -372,7 +412,8 @@ function validateWave8CompoundFields(raw: ExplorationActionContent): void {
     const allowedTokens = new Set<string>(
       raw.effectKind === "make-predicate-fast-and-gain-nightmares" ||
         raw.effectKind === "take-transfigured-cards-and-gain-nightmares"
-        ? ["nightmare_card"] : [],
+        ? ["nightmare_card"]
+        : [],
     );
     if (tokens.some((token) => !allowedTokens.has(token))) {
       throw new Error(
@@ -500,10 +541,7 @@ function validateSiteTypeChoiceFields(raw: ExplorationActionContent): void {
       "Invalid Exploration data: choose-site-type requires offerCount 3",
     );
   }
-  if (
-    raw.followupTitle === undefined ||
-    raw.followupSubtitle === undefined
-  ) {
+  if (raw.followupTitle === undefined || raw.followupSubtitle === undefined) {
     throw new Error(
       "Invalid Exploration data: choose-site-type requires a paired followup",
     );
@@ -1177,7 +1215,7 @@ function validateAction(
   }
   return {
     ...raw,
-    id: requiredString(raw.id, "action id"),
+    id: asExplorationActionId(requiredString(raw.id, "action id")),
     ...(raw.cardId === undefined ? {} : { cardId: asCardId(raw.cardId) }),
   };
 }
@@ -1263,7 +1301,7 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
 /** Resolve an encounter by its source-card UUID. */
 export function explorationEncounterForCard(
   content: ExplorationContent,
-  cardId: string,
+  cardId: CardId,
 ): ExplorationEncounterContent | null {
   const normalized = cardId.toLowerCase();
   return (

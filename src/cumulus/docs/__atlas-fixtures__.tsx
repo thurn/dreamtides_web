@@ -11,6 +11,10 @@ import {
 } from "../components/atlas/atlas-display";
 import { artRef } from "../primitives/art";
 import { glyph } from "../primitives/glyph";
+import { asDreamsignId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
 
 export interface NodeSizing {
   nodeSize: number;
@@ -66,8 +70,8 @@ function primary(role: AtlasFixtureRole): AtlasNodePrimary {
   }
   if (role === "boss") {
     return {
-      sceneArt: artRef.dreamscapeScene("limbo"),
-      figureArt: artRef.dreamGuide("apollyon"),
+      sceneArt: artRef.dreamscapeScene(asDreamscapeId("limbo")),
+      figureArt: artRef.dreamGuide(asGuideId("apollyon")),
       placeName: assertLocalized("Fixture Boss Realm"),
       guideName: assertLocalized("Fixture Boss"),
       title: assertLocalized("Fixture Boss"),
@@ -83,7 +87,7 @@ function primary(role: AtlasFixtureRole): AtlasNodePrimary {
           ? "frostforge"
           : "hopes_end";
   return {
-    sceneArt: artRef.dreamscapeScene(id),
+    sceneArt: artRef.dreamscapeScene(asDreamscapeId(id)),
     figureArt: null,
     placeName: assertLocalized("A Revealed Dream"),
     guideName: null,
@@ -110,7 +114,7 @@ export function atlasFixtureNodes(sizing: NodeSizing): AtlasFixtureNode[] {
     const dreamsign =
       role === "available"
         ? {
-            id: "00000000-0000-4000-8000-000000000088",
+            id: asDreamsignId("00000000-0000-4000-8000-000000000088"),
             name: assertLocalized("Golden Acorn"),
             art: artRef.dreamsign("acorn_gold.png"),
             rulesText: assertLocalized(
@@ -122,7 +126,7 @@ export function atlasFixtureNodes(sizing: NodeSizing): AtlasFixtureNode[] {
       role,
       boxSize: isStarter || isBoss ? sizing.anchorNodeSize : sizing.nodeSize,
       item: {
-        id: UUIDS[role],
+        id: asAtlasNodeId(UUIDS[role]),
         name: primary(role).placeName ?? primary(role).title,
         state,
         role: isStarter ? "starter" : isBoss ? "boss" : "regular",
@@ -131,14 +135,14 @@ export function atlasFixtureNodes(sizing: NodeSizing): AtlasFixtureNode[] {
           ? null
           : artRef.dreamscapeIcon(
               isBoss
-                ? "limbo"
+                ? asDreamscapeId("limbo")
                 : role === "starter"
-                  ? "firstlight_meadow"
+                  ? asDreamscapeId("firstlight_meadow")
                   : role === "completed"
-                    ? "tumbleleaf_village"
+                    ? asDreamscapeId("tumbleleaf_village")
                     : role === "available"
-                      ? "frostforge"
-                      : "hopes_end",
+                      ? asDreamscapeId("frostforge")
+                      : asDreamscapeId("hopes_end"),
             ),
         unrevealedFrameRef: artRef.atlasAsset("Round_frame_main.png"),
         siteBadgeGlyph: isHidden || isStarter || isBoss ? null : badge,

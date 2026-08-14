@@ -19,6 +19,12 @@ import {
 } from "../../battle/test-support";
 import { planBasicAutomationCommands } from "./basic-automation";
 import { DREAMWELL_EFFECTS } from "./dreamwell-effects-table";
+import type { BattleCardId, DreamwellCardId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
+import { asCardId } from "../../types/card-identity";
+import { asBattleId } from "../../types/identifiers";
+import { asBattleCardId } from "../../types/identifiers";
+import { asDreamwellCardId } from "../../types/identifiers";
 
 const CAPS = {
   maxEnergyCap: 10,
@@ -28,11 +34,11 @@ const CAPS = {
 };
 
 function makeInstance(
-  battleCardId: string,
+  battleCardId: BattleCardId,
   options: {
     owner: BattleSide;
     kind?: BattleCardKind;
-    cardId?: string;
+    cardId?: CardId;
     energyCost?: number;
     printedSpark?: number;
     sparkDelta?: number;
@@ -46,7 +52,7 @@ function makeInstance(
     battleCardId,
     definition: {
       sourceDeckEntryId: null,
-      cardId: options.cardId ?? "",
+      cardId: options.cardId ?? asCardId(""),
       cardNumber: 1,
       name: battleCardId,
       battleCardKind: options.kind ?? "character",
@@ -117,7 +123,7 @@ function makeState(options: {
   instances?: BattleCardInstance[];
 }): BattleMutableState {
   return {
-    battleId: "battle-test",
+    battleId: asBattleId("battle-test"),
     activeSide: options.activeSide ?? "player",
     turnNumber: options.turnNumber ?? 1,
     phase: options.phase ?? "day",
@@ -146,22 +152,22 @@ function edits(commands: BattleCommand[]): BattleDebugEdit[] {
 
 function frontRankSlots(
   slot: FrontRankSlotId,
-  battleCardId: string | null,
-): Record<FrontRankSlotId, string | null> {
+  battleCardId: BattleCardId | null,
+): Record<FrontRankSlotId, BattleCardId | null> {
   return {
     ...emptyFrontRankSlots(),
     [slot]: battleCardId,
   };
 }
 
-function firstPromptDreamwellEffectId(): string {
+function firstPromptDreamwellEffectId(): DreamwellCardId {
   const id = Object.values(DREAMWELL_EFFECTS).find((script) =>
     script.steps.some((step) => step.kind === "prompt"),
   )?.id;
   if (id === undefined) {
     throw new Error("no prompt-bearing Dreamwell effect registered");
   }
-  return id;
+  return asDreamwellCardId(id);
 }
 
 describe("planBasicAutomationCommands — playing cards", () => {
@@ -169,10 +175,10 @@ describe("planBasicAutomationCommands — playing cards", () => {
     const state = makeState({
       player: {
         currentEnergy: 5,
-        hand: ["c1"],
+        hand: [asBattleCardId("c1")],
       },
       instances: [
-        makeInstance("c1", {
+        makeInstance(asBattleCardId("c1"), {
           owner: "player",
           kind: "character",
           energyCost: 3,
@@ -183,7 +189,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       id: "DEBUG_EDIT",
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: "c1",
+        battleCardId: asBattleCardId("c1"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
       },
       sourceSurface: "hand-tray",
@@ -195,12 +201,12 @@ describe("planBasicAutomationCommands — playing cards", () => {
       { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -3 },
       {
         kind: "SET_CARD_STATUS",
-        battleCardId: "c1",
+        battleCardId: asBattleCardId("c1"),
         status: { isExhausted: true },
       },
       {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: "c1",
+        battleCardId: asBattleCardId("c1"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
       },
     ]);
@@ -210,13 +216,13 @@ describe("planBasicAutomationCommands — playing cards", () => {
     const state = makeState({
       player: {
         currentEnergy: 5,
-        hand: ["interactive-c1"],
+        hand: [asBattleCardId("interactive-c1")],
       },
       instances: [
-        makeInstance("interactive-c1", {
+        makeInstance(asBattleCardId("interactive-c1"), {
           owner: "player",
           kind: "character",
-          cardId: "interactive-fixture",
+          cardId: asCardId("interactive-fixture"),
           energyCost: 3,
           renderedText: "Materialized: choose one.",
         }),
@@ -226,7 +232,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       id: "DEBUG_EDIT",
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: "interactive-c1",
+        battleCardId: asBattleCardId("interactive-c1"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
       },
       sourceSurface: "hand-tray",
@@ -236,12 +242,12 @@ describe("planBasicAutomationCommands — playing cards", () => {
       { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -3 },
       {
         kind: "SET_CARD_STATUS",
-        battleCardId: "interactive-c1",
+        battleCardId: asBattleCardId("interactive-c1"),
         status: { isExhausted: true },
       },
       {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: "interactive-c1",
+        battleCardId: asBattleCardId("interactive-c1"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
       },
     ]);
@@ -249,16 +255,20 @@ describe("planBasicAutomationCommands — playing cards", () => {
 
   it("routes a played event to the void and still spends its energy", () => {
     const state = makeState({
-      player: { currentEnergy: 5, hand: ["e1"] },
+      player: { currentEnergy: 5, hand: [asBattleCardId("e1")] },
       instances: [
-        makeInstance("e1", { owner: "player", kind: "event", energyCost: 2 }),
+        makeInstance(asBattleCardId("e1"), {
+          owner: "player",
+          kind: "event",
+          energyCost: 2,
+        }),
       ],
     });
     const play: BattleCommand = {
       id: "DEBUG_EDIT",
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: "e1",
+        battleCardId: asBattleCardId("e1"),
         destination: { side: "player", zone: "frontRank", slotId: "F0" },
       },
       sourceSurface: "hand-tray",
@@ -268,7 +278,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
       { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: -2 },
       {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: "e1",
+        battleCardId: asBattleCardId("e1"),
         destination: { side: "player", zone: "void" },
       },
     ]);
@@ -276,14 +286,16 @@ describe("planBasicAutomationCommands — playing cards", () => {
 
   it("clamps energy spend so current energy never goes negative", () => {
     const state = makeState({
-      player: { currentEnergy: 1, hand: ["c1"] },
-      instances: [makeInstance("c1", { owner: "player", energyCost: 4 })],
+      player: { currentEnergy: 1, hand: [asBattleCardId("c1")] },
+      instances: [
+        makeInstance(asBattleCardId("c1"), { owner: "player", energyCost: 4 }),
+      ],
     });
     const play: BattleCommand = {
       id: "DEBUG_EDIT",
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: "c1",
+        battleCardId: asBattleCardId("c1"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
       },
       sourceSurface: "hand-tray",
@@ -301,14 +313,16 @@ describe("planBasicAutomationCommands — playing cards", () => {
 
   it("does not treat hand→void/deck moves as a play", () => {
     const state = makeState({
-      player: { currentEnergy: 5, hand: ["c1"] },
-      instances: [makeInstance("c1", { owner: "player", energyCost: 3 })],
+      player: { currentEnergy: 5, hand: [asBattleCardId("c1")] },
+      instances: [
+        makeInstance(asBattleCardId("c1"), { owner: "player", energyCost: 3 }),
+      ],
     });
     const discardToVoid: BattleCommand = {
       id: "DEBUG_EDIT",
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: "c1",
+        battleCardId: asBattleCardId("c1"),
         destination: { side: "player", zone: "void" },
       },
       sourceSurface: "hand-tray",
@@ -323,15 +337,17 @@ describe("planBasicAutomationCommands — playing cards", () => {
     const state = makeState({
       player: {
         currentEnergy: 5,
-        backRank: { ...emptyBackRankSlots(), B0: "c1" },
+        backRank: { ...emptyBackRankSlots(), B0: asBattleCardId("c1") },
       },
-      instances: [makeInstance("c1", { owner: "player", energyCost: 3 })],
+      instances: [
+        makeInstance(asBattleCardId("c1"), { owner: "player", energyCost: 3 }),
+      ],
     });
     const reposition: BattleCommand = {
       id: "DEBUG_EDIT",
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: "c1",
+        battleCardId: asBattleCardId("c1"),
         destination: { side: "player", zone: "frontRank", slotId: "F0" },
       },
       sourceSurface: "battlefield",
@@ -354,9 +370,14 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 3,
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      enemy: { deck: ["d-enemy"] },
-      instances: [makeInstance("p0", { owner: "player", printedSpark: 4 })],
+      player: { frontRank: frontRankSlots("F0", asBattleCardId("p0")) },
+      enemy: { deck: [asBattleCardId("d-enemy")] },
+      instances: [
+        makeInstance(asBattleCardId("p0"), {
+          owner: "player",
+          printedSpark: 4,
+        }),
+      ],
     });
     const handoff: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -396,9 +417,14 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       activeSide: "player",
       turnNumber: 3,
       phase: "challenge",
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      enemy: { deck: ["d-enemy"] },
-      instances: [makeInstance("p0", { owner: "player", printedSpark: 4 })],
+      player: { frontRank: frontRankSlots("F0", asBattleCardId("p0")) },
+      enemy: { deck: [asBattleCardId("d-enemy")] },
+      instances: [
+        makeInstance(asBattleCardId("p0"), {
+          owner: "player",
+          printedSpark: 4,
+        }),
+      ],
     });
     const handoff: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -429,7 +455,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 1,
-      enemy: { deck: ["d-enemy"] },
+      enemy: { deck: [asBattleCardId("d-enemy")] },
     });
     const handoff: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -454,8 +480,8 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 2,
-      player: { hand: overfullHand },
-      enemy: { deck: ["d-enemy"] },
+      player: { hand: overfullHand.map(asBattleCardId) },
+      enemy: { deck: [asBattleCardId("d-enemy")] },
     });
     const handoff: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -472,11 +498,11 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       planBasicAutomationCommands(state, handoff, { ...CAPS, handLimit: 7 }),
     ).filter((edit) => edit.kind === "DISCARD_CARD");
     expect(discards).toEqual([
-      { kind: "DISCARD_CARD", battleCardId: "h11" },
-      { kind: "DISCARD_CARD", battleCardId: "h10" },
-      { kind: "DISCARD_CARD", battleCardId: "h9" },
-      { kind: "DISCARD_CARD", battleCardId: "h8" },
-      { kind: "DISCARD_CARD", battleCardId: "h7" },
+      { kind: "DISCARD_CARD", battleCardId: asBattleCardId("h11") },
+      { kind: "DISCARD_CARD", battleCardId: asBattleCardId("h10") },
+      { kind: "DISCARD_CARD", battleCardId: asBattleCardId("h9") },
+      { kind: "DISCARD_CARD", battleCardId: asBattleCardId("h8") },
+      { kind: "DISCARD_CARD", battleCardId: asBattleCardId("h7") },
     ]);
   });
 
@@ -484,9 +510,17 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 4,
-      player: { score: 22, frontRank: frontRankSlots("F0", "p0") },
-      enemy: { deck: ["d-enemy"] },
-      instances: [makeInstance("p0", { owner: "player", printedSpark: 5 })],
+      player: {
+        score: 22,
+        frontRank: frontRankSlots("F0", asBattleCardId("p0")),
+      },
+      enemy: { deck: [asBattleCardId("d-enemy")] },
+      instances: [
+        makeInstance(asBattleCardId("p0"), {
+          owner: "player",
+          printedSpark: 5,
+        }),
+      ],
     });
     const handoff: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -511,15 +545,15 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     // The reducer's `BATTLE_COMMAND` owns the all-card exhaustion clear when it
     // folds the handoff flip edit. The client expansion emits no
     // duplicate status-clear edits.
-    const incomingFront = makeInstance("e-front", {
+    const incomingFront = makeInstance(asBattleCardId("e-front"), {
       owner: "enemy",
       printedSpark: 2,
     });
-    const incomingBack = makeInstance("e-back", {
+    const incomingBack = makeInstance(asBattleCardId("e-back"), {
       owner: "enemy",
       printedSpark: 1,
     });
-    const outgoingFront = makeInstance("p-front", {
+    const outgoingFront = makeInstance(asBattleCardId("p-front"), {
       owner: "player",
       printedSpark: 3,
     });
@@ -530,11 +564,11 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 5,
-      player: { frontRank: frontRankSlots("F1", "p-front") },
+      player: { frontRank: frontRankSlots("F1", asBattleCardId("p-front")) },
       enemy: {
-        deck: ["d-enemy"],
-        frontRank: frontRankSlots("F0", "e-front"),
-        backRank: { ...emptyBackRankSlots(), B0: "e-back" },
+        deck: [asBattleCardId("d-enemy")],
+        frontRank: frontRankSlots("F0", asBattleCardId("e-front")),
+        backRank: { ...emptyBackRankSlots(), B0: asBattleCardId("e-back") },
       },
       instances: [incomingFront, incomingBack, outgoingFront],
     });
@@ -567,7 +601,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 3,
-      enemy: { deck: ["d-enemy"] },
+      enemy: { deck: [asBattleCardId("d-enemy")] },
     });
     const handoff: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -585,15 +619,19 @@ describe("planBasicAutomationCommands — turn handoff", () => {
   });
 
   it("banishes the outgoing side's ephemeral hand and offering in-play cards", () => {
-    const ephemeral = makeInstance("p-eph", { owner: "player" });
+    const ephemeral = makeInstance(asBattleCardId("p-eph"), {
+      owner: "player",
+    });
     ephemeral.status.ephemeral = true;
-    const offering = makeInstance("p-off", {
+    const offering = makeInstance(asBattleCardId("p-off"), {
       owner: "player",
       printedSpark: 3,
     });
     offering.status.offering = true;
-    const normalHand = makeInstance("p-keep", { owner: "player" });
-    const normalPlay = makeInstance("p-stay", {
+    const normalHand = makeInstance(asBattleCardId("p-keep"), {
+      owner: "player",
+    });
+    const normalPlay = makeInstance(asBattleCardId("p-stay"), {
       owner: "player",
       printedSpark: 2,
     });
@@ -602,11 +640,11 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       activeSide: "player",
       turnNumber: 4,
       player: {
-        hand: ["p-eph", "p-keep"],
-        frontRank: frontRankSlots("F0", "p-off"),
-        backRank: { ...emptyBackRankSlots(), B0: "p-stay" },
+        hand: [asBattleCardId("p-eph"), asBattleCardId("p-keep")],
+        frontRank: frontRankSlots("F0", asBattleCardId("p-off")),
+        backRank: { ...emptyBackRankSlots(), B0: asBattleCardId("p-stay") },
       },
-      enemy: { deck: ["d-enemy"] },
+      enemy: { deck: [asBattleCardId("d-enemy")] },
       instances: [ephemeral, offering, normalHand, normalPlay],
     });
     const handoff: BattleCommand = {
@@ -625,12 +663,12 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     // The ephemeral hand card and the offering in-play card are banished.
     expect(result).toContainEqual({
       kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "p-eph",
+      battleCardId: asBattleCardId("p-eph"),
       destination: { side: "player", zone: "banished" },
     });
     expect(result).toContainEqual({
       kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "p-off",
+      battleCardId: asBattleCardId("p-off"),
       destination: { side: "player", zone: "banished" },
     });
     // Normal cards (hand and in-play) are left alone.
@@ -641,20 +679,24 @@ describe("planBasicAutomationCommands — turn handoff", () => {
           edit.destination.zone === "banished",
       )
       .map((edit) =>
-        edit.kind === "MOVE_CARD_TO_ZONE" ? edit.battleCardId : "",
+        edit.kind === "MOVE_CARD_TO_ZONE"
+          ? edit.battleCardId
+          : asBattleCardId(""),
       );
     expect(banishedIds).not.toContain("p-keep");
     expect(banishedIds).not.toContain("p-stay");
   });
 
   it("banishes the outgoing side after the hand-limit discard and before the side flip", () => {
-    const ephemeral = makeInstance("p-eph", { owner: "player" });
+    const ephemeral = makeInstance(asBattleCardId("p-eph"), {
+      owner: "player",
+    });
     ephemeral.status.ephemeral = true;
     const state = makeState({
       activeSide: "player",
       turnNumber: 4,
-      player: { hand: ["p-eph"] },
-      enemy: { deck: ["d-enemy"] },
+      player: { hand: [asBattleCardId("p-eph")] },
+      enemy: { deck: [asBattleCardId("d-enemy")] },
       instances: [ephemeral],
     });
     const handoff: BattleCommand = {
@@ -683,9 +725,11 @@ describe("planBasicAutomationCommands — turn handoff", () => {
   });
 
   it("does not banish the incoming side's ephemeral or offering cards", () => {
-    const incomingEphemeral = makeInstance("e-eph", { owner: "enemy" });
+    const incomingEphemeral = makeInstance(asBattleCardId("e-eph"), {
+      owner: "enemy",
+    });
     incomingEphemeral.status.ephemeral = true;
-    const incomingOffering = makeInstance("e-off", {
+    const incomingOffering = makeInstance(asBattleCardId("e-off"), {
       owner: "enemy",
       printedSpark: 2,
     });
@@ -694,9 +738,9 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       activeSide: "player",
       turnNumber: 4,
       enemy: {
-        deck: ["d-enemy"],
-        hand: ["e-eph"],
-        frontRank: frontRankSlots("F0", "e-off"),
+        deck: [asBattleCardId("d-enemy")],
+        hand: [asBattleCardId("e-eph")],
+        frontRank: frontRankSlots("F0", asBattleCardId("e-off")),
       },
       instances: [incomingEphemeral, incomingOffering],
     });
@@ -756,7 +800,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       imageNumber: 0,
     },
     {
-      id: "dw-1",
+      id: asDreamwellCardId("dw-1"),
       name: "Bonus",
       renderedText: "",
       energyAdded: 1,
@@ -771,7 +815,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       activeSide: "player",
       turnNumber: 2,
       phase: "dreamwell",
-      player: { deck: ["foreseen-top"] },
+      player: { deck: [asBattleCardId("foreseen-top")] },
     });
     const advance: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -800,7 +844,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       activeSide: "enemy",
       turnNumber: 1,
       phase: "dreamwell",
-      enemy: { deck: ["foreseen-top"] },
+      enemy: { deck: [asBattleCardId("foreseen-top")] },
     });
     const advance: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -820,7 +864,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       activeSide: "player",
       turnNumber: 1,
       phase: "dreamwell",
-      player: { deck: ["opening-top"] },
+      player: { deck: [asBattleCardId("opening-top")] },
     });
     const advance: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -888,7 +932,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
     const state = makeState({
       activeSide: "enemy",
       turnNumber: 2,
-      enemy: { deck: ["d0"] },
+      enemy: { deck: [asBattleCardId("d0")] },
     });
     const gesture: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -911,7 +955,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 1,
-      player: { deck: ["d0"] },
+      player: { deck: [asBattleCardId("d0")] },
     });
     const gesture: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -926,12 +970,15 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
 
   it("expands a Dawn gesture into a bare crossing into Day", () => {
     // A `SET_PHASE dawn` navigation steps dawn → day without an exhaustion edit.
-    const exhausted = makeInstance("p0", { owner: "player", printedSpark: 2 });
+    const exhausted = makeInstance(asBattleCardId("p0"), {
+      owner: "player",
+      printedSpark: 2,
+    });
     exhausted.status.isExhausted = true;
     const state = makeState({
       activeSide: "player",
       turnNumber: 4,
-      player: { frontRank: frontRankSlots("F0", "p0") },
+      player: { frontRank: frontRankSlots("F0", asBattleCardId("p0")) },
       instances: [exhausted],
     });
     const gesture: BattleCommand = {
@@ -953,16 +1000,16 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
     // applies this on the committed dawn edge; the client expansion emits neither
     // the exhaustion clear nor the energy gain, so the non-idempotent trigger
     // fires exactly once.
-    const driftcaller = makeInstance("p0", {
+    const driftcaller = makeInstance(asBattleCardId("p0"), {
       owner: "player",
-      cardId: "9b9c2743-75b3-499d-b5fb-c3429c92d420",
+      cardId: asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"),
       printedSpark: 2,
     });
     driftcaller.status.isExhausted = true;
     const state = makeState({
       activeSide: "player",
       turnNumber: 4,
-      player: { frontRank: frontRankSlots("F0", "p0") },
+      player: { frontRank: frontRankSlots("F0", asBattleCardId("p0")) },
       instances: [driftcaller],
     });
     const gesture: BattleCommand = {
@@ -983,9 +1030,9 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       { length: 12 },
       (_, index) => `h${String(index)}`,
     );
-    const ephemeral = makeInstance("h11", { owner: "player" });
+    const ephemeral = makeInstance(asBattleCardId("h11"), { owner: "player" });
     ephemeral.status.ephemeral = true;
-    const offering = makeInstance("p-off", {
+    const offering = makeInstance(asBattleCardId("p-off"), {
       owner: "player",
       printedSpark: 3,
     });
@@ -994,8 +1041,8 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       activeSide: "player",
       turnNumber: 4,
       player: {
-        hand: overfullHand,
-        frontRank: frontRankSlots("F0", "p-off"),
+        hand: overfullHand.map(asBattleCardId),
+        frontRank: frontRankSlots("F0", asBattleCardId("p-off")),
       },
       instances: [ephemeral, offering],
     });
@@ -1010,16 +1057,16 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
     // Hand-limit discard for the active side.
     expect(result).toContainEqual({
       kind: "DISCARD_CARD",
-      battleCardId: "h11",
+      battleCardId: asBattleCardId("h11"),
     });
     expect(result).toContainEqual({
       kind: "DISCARD_CARD",
-      battleCardId: "h10",
+      battleCardId: asBattleCardId("h10"),
     });
     // Offering in-play card is banished.
     expect(result).toContainEqual({
       kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: "p-off",
+      battleCardId: asBattleCardId("p-off"),
       destination: { side: "player", zone: "banished" },
     });
     // An ending gesture does not flip the side (that is the handoff's job).
@@ -1030,7 +1077,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 2,
-      player: { deck: ["d0"] },
+      player: { deck: [asBattleCardId("d0")] },
     });
     for (const phase of ["day", "dusk", "night"] as const) {
       const gesture: BattleCommand = {
@@ -1049,8 +1096,13 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 3,
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      instances: [makeInstance("p0", { owner: "player", printedSpark: 4 })],
+      player: { frontRank: frontRankSlots("F0", asBattleCardId("p0")) },
+      instances: [
+        makeInstance(asBattleCardId("p0"), {
+          owner: "player",
+          printedSpark: 4,
+        }),
+      ],
     });
     const gesture: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -1078,8 +1130,13 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       activeSide: "player",
       turnNumber: 3,
       phase: "night",
-      player: { frontRank: frontRankSlots("F0", "p0") },
-      instances: [makeInstance("p0", { owner: "player", printedSpark: 4 })],
+      player: { frontRank: frontRankSlots("F0", asBattleCardId("p0")) },
+      instances: [
+        makeInstance(asBattleCardId("p0"), {
+          owner: "player",
+          printedSpark: 4,
+        }),
+      ],
     });
     const gesture: BattleCommand = {
       id: "DEBUG_EDIT",

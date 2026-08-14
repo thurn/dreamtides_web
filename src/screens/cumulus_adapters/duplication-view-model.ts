@@ -20,11 +20,14 @@ import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { toDeckCardView } from "./mobile-deck-view-model";
 import { projectGuideView } from "./guide-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
+import type { GuideId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
+import type { CardId } from "../../types/card-identity";
 
 /** Resolve Deacon Holt, the resident guide for Duplication. */
 export function resolveDuplicationGuide(
   guides: readonly DreamGuideContent[],
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent {
   return requireGuideForSiteType(guides, "Duplication", presentingGuideId);
 }
@@ -65,7 +68,7 @@ export function buildDuplicationOfferLog(
   state: JourneyState,
   runtime: CardChoiceSiteRuntime,
   cardDatabase: Map<number, CardData>,
-): Array<{ entryId: string; cardId: string }> {
+): Array<{ entryId: DeckEntryId; cardId: CardId }> {
   const deckByEntryId = new Map(
     state.deck.map((entry) => [entry.entryId, entry]),
   );

@@ -2,6 +2,8 @@ import { assertLocalized } from "@trox/runtime";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { GameCardModel } from "../../components/card/CardView";
 import { localizedTransfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
+import { asDreamsignId } from "../../../types/identifiers";
+import { asDeckEntryId } from "../../../types/identifiers";
 
 export function demoCard(index: number, _name: string): GameCardModel {
   const id = asCardId(
@@ -31,7 +33,9 @@ export function demoInstanceId(index: number): string {
 }
 
 export const demoDreamsign = (index: number) => ({
-  id: `91000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+  id: asDreamsignId(
+    `91000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+  ),
   name: assertLocalized(`Dreamsign ${String(index)}`),
   effectDescription: assertLocalized("Once per turn, gain 1 Essence."),
   imageAlt: assertLocalized(`Dreamsign ${String(index)}`),
@@ -45,7 +49,7 @@ export const demoDialogue = {
 };
 
 export const demoTransfigurationCandidate = {
-  entryId: demoInstanceId(1),
+  entryId: asDeckEntryId(demoInstanceId(1)),
   card: demoCard(1, "Wayfinder"),
   forms: [
     {

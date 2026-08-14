@@ -7,6 +7,7 @@ import { GlassPanel } from "../overlay/GlassPanel";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { CardBack } from "../battle/CardBack";
 import { GameCard, type GameCardModel } from "./CardView";
+import type { DeckEntryId } from "../../../types/identifiers";
 
 /** Semantic recipe for one resolved card change. */
 export type CardChangeKind =
@@ -21,14 +22,14 @@ export interface CardChangePairModel {
   /** Original deck entry and its complete card presentation. */
   readonly before: {
     /** Stable original deck-entry identity. */
-    readonly entryId: string;
+    readonly entryId: DeckEntryId;
     /** Complete original card presentation. */
     readonly card: GameCardModel;
   };
   /** Result deck entry and its complete card presentation. */
   readonly after: {
     /** Stable result deck-entry identity. */
-    readonly entryId: string;
+    readonly entryId: DeckEntryId;
     /** Complete result card presentation. */
     readonly card: GameCardModel;
   };

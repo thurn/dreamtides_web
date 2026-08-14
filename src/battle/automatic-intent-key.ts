@@ -1,15 +1,17 @@
 import type { BattleCommand } from "./debug/commands";
 import type { BattleMutableState } from "./types";
+import type { BattleId, IntentKey } from "../types/identifiers";
+import { asIntentKey } from "../types/identifiers";
 
 /**
  * Returns the event-log identity for automatic battle flow that every client
  * may observe. User gestures return undefined and remain independent intents.
  */
 export function automaticBattleIntentKey(
-  battleId: string,
+  battleId: BattleId,
   state: Pick<BattleMutableState, "activeSide" | "turnNumber">,
   command: BattleCommand,
-): string | undefined {
+): IntentKey | undefined {
   if (command.id !== "DEBUG_EDIT") {
     return undefined;
   }
@@ -17,26 +19,30 @@ export function automaticBattleIntentKey(
     command.edit.kind === "DRAW_DREAMWELL_CARD" &&
     command.edit.additional !== true
   ) {
-    return [
-      "battle",
-      battleId,
-      "dreamwell",
-      command.edit.side,
-      String(command.edit.turnNumber),
-    ].join(":");
+    return asIntentKey(
+      [
+        "battle",
+        battleId,
+        "dreamwell",
+        command.edit.side,
+        String(command.edit.turnNumber),
+      ].join(":"),
+    );
   }
   if (
     command.edit.kind === "SET_PHASE" &&
     command.sourceSurface === "auto-system"
   ) {
-    return [
-      "battle",
-      battleId,
-      "auto-phase",
-      state.activeSide,
-      String(state.turnNumber),
-      command.edit.phase,
-    ].join(":");
+    return asIntentKey(
+      [
+        "battle",
+        battleId,
+        "auto-phase",
+        state.activeSide,
+        String(state.turnNumber),
+        command.edit.phase,
+      ].join(":"),
+    );
   }
   return undefined;
 }

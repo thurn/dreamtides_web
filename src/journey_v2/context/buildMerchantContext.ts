@@ -13,6 +13,8 @@ import type {
   MerchantDeckCard,
 } from "../types";
 import { buildRewardSelectionContext } from "../../reward-selection";
+import type { CardId } from "../../types/card-identity";
+import type { DeckEntryId, DreamsignId } from "../../types/identifiers";
 
 interface BuildMerchantContextInput {
   journeyState: JourneyState;
@@ -22,8 +24,8 @@ interface BuildMerchantContextInput {
 
 function buildCardByUuid(
   cardDatabase: ReadonlyMap<number, CardData>,
-): ReadonlyMap<string, CardData> {
-  const cardByUuid = new Map<string, CardData>();
+): ReadonlyMap<CardId, CardData> {
+  const cardByUuid = new Map<CardId, CardData>();
   for (const card of cardDatabase.values()) {
     if (card.id.length > 0) {
       cardByUuid.set(card.id, card);
@@ -74,8 +76,8 @@ function projectCatalogCard(card: CardData): MerchantCatalogCard {
 function buildDraftPoolCardUuids(
   journeyState: JourneyState,
   cardByNumber: ReadonlyMap<number, CardData>,
-): ReadonlySet<string> {
-  const draftPoolCardUuids = new Set<string>();
+): ReadonlySet<CardId> {
+  const draftPoolCardUuids = new Set<CardId>();
   const copiesByCard = journeyState.resolvedPackage?.draftPoolCopiesByCard;
   if (copiesByCard === undefined) return draftPoolCardUuids;
   for (const cardNumberKey of Object.keys(copiesByCard)) {
@@ -91,8 +93,8 @@ function buildDraftPoolCardUuids(
 
 function buildHeldDreamsignIds(
   dreamsigns: readonly Dreamsign[],
-): ReadonlySet<string> {
-  const heldDreamsignIds = new Set<string>();
+): ReadonlySet<DreamsignId> {
+  const heldDreamsignIds = new Set<DreamsignId>();
   for (const dreamsign of dreamsigns) {
     if (dreamsign.id !== undefined) {
       heldDreamsignIds.add(dreamsign.id);
@@ -115,7 +117,7 @@ function buildHeldDreamsignFallbackNames(
 
 function isAvailableDreamsignTemplate(
   template: DreamsignTemplate,
-  heldDreamsignIds: ReadonlySet<string>,
+  heldDreamsignIds: ReadonlySet<DreamsignId>,
   heldDreamsignFallbackNames: ReadonlySet<string>,
 ): boolean {
   return (
@@ -138,8 +140,8 @@ export function buildMerchantContext({
       .filter((deckCard): deckCard is MerchantDeckCard => deckCard !== null),
   );
 
-  const deckEntryById = new Map<string, MerchantDeckCard>();
-  const ownedCardUuids = new Set<string>();
+  const deckEntryById = new Map<DeckEntryId, MerchantDeckCard>();
+  const ownedCardUuids = new Set<CardId>();
   for (const deckCard of deckCards) {
     deckEntryById.set(deckCard.entryId, deckCard);
     ownedCardUuids.add(deckCard.cardUuid);

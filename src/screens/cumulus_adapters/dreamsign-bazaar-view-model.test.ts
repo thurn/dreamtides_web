@@ -18,7 +18,7 @@ import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 
 function sign(id: string, name: string): Dreamsign {
   return {
-    id,
+    id: asDreamsignId(id),
     name,
     imageName: `${id}.png`,
     imageAlt: `${name} fixture art`,
@@ -59,7 +59,7 @@ function runtime(): ShopSiteRuntime {
 }
 
 const site: SiteState = {
-  id: "dreamsign-bazaar-site",
+  id: asSiteId("dreamsign-bazaar-site"),
   type: "DreamsignBazaar",
   isEnhanced: false,
   isVisited: false,
@@ -87,21 +87,21 @@ describe("buildDreamsignBazaarOffers", () => {
       })),
     ).toEqual([
       {
-        entryId: "shop-slot-0-dreamsign-uuid-a",
+        entryId: asDeckEntryId("shop-slot-0-dreamsign-uuid-a"),
         slotIndex: 0,
         price: 70,
         state: "available",
         requiresReplacement: true,
       },
       {
-        entryId: "shop-slot-1-dreamsign-uuid-b",
+        entryId: asDeckEntryId("shop-slot-1-dreamsign-uuid-b"),
         slotIndex: 1,
         price: 180,
         state: "unaffordable",
         requiresReplacement: true,
       },
       {
-        entryId: "shop-slot-2-dreamsign-uuid-c",
+        entryId: asDeckEntryId("shop-slot-2-dreamsign-uuid-c"),
         slotIndex: 2,
         price: 45,
         state: "purchased",
@@ -178,9 +178,9 @@ describe("buildDreamsignBazaarSiteView", () => {
       site,
       runtime: runtime(),
       guide: {
-        id: "fixture-amunet",
+        id: asGuideId("fixture-amunet"),
         name: "Amunet Fixture",
-        homeDreamscapeId: "fixture-dream",
+        homeDreamscapeId: asDreamscapeId("fixture-dream"),
         siteType: "DreamsignBazaar",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["Choose carefully."] },
@@ -211,8 +211,8 @@ describe("buildDreamsignBazaarSiteView", () => {
         freePurchaseModifiers: [
           {
             kind: "free-purchases" as const,
-            sourceSiteId: "exploration-site",
-            sourceActionId: "exploration-action",
+            sourceSiteId: asSiteId("exploration-site"),
+            sourceActionId: asExplorationActionId("exploration-action"),
             initialCount: 4,
             remainingCount: 3,
           },
@@ -225,9 +225,9 @@ describe("buildDreamsignBazaarSiteView", () => {
       site,
       runtime: runtime(),
       guide: {
-        id: "fixture-amunet",
+        id: asGuideId("fixture-amunet"),
         name: "Amunet Fixture",
-        homeDreamscapeId: "fixture-dream",
+        homeDreamscapeId: asDreamscapeId("fixture-dream"),
         siteType: "DreamsignBazaar",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["Choose carefully."] },
@@ -248,3 +248,9 @@ describe("buildDreamsignBazaarSiteView", () => {
   });
 });
 import { assertLocalized } from "@trox/runtime";
+import { asSiteId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";

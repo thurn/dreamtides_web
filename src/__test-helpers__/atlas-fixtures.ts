@@ -15,6 +15,12 @@ import { LayerName } from "../types/layer-name";
 import { SITE_TYPES } from "../types/site-type";
 import type { SitesData } from "../types/sites-data";
 import { GLOSSARY_IDS } from "../data/glossary";
+import { asDreamscapeId } from "../types/identifiers";
+import { asGuideId } from "../types/identifiers";
+import { asAtlasNodeId } from "../types/identifiers";
+import { asAffiliationId } from "../types/identifiers";
+import { asAtlasFillProfileId } from "../types/identifiers";
+import { asArtAssetKey } from "../types/identifiers";
 
 /**
  * Shared synthetic Atlas fixtures plus explicit production-bundle loaders for
@@ -24,7 +30,7 @@ import { GLOSSARY_IDS } from "../data/glossary";
 /** Synthetic starter catalog for tests that need a structurally valid Atlas. */
 export const MINIMAL_DREAMSCAPES: DreamscapeContent[] = [
   {
-    id: "fixture-starter-dreamscape",
+    id: asDreamscapeId("fixture-starter-dreamscape"),
     name: "Fixture Starter Dreamscape",
     guideId: null,
     signatureSite: "Draft",
@@ -52,14 +58,15 @@ export const SYNTHETIC_ATLAS_DREAMSCAPES: DreamscapeContent[] = [
       "Exploration",
     ] as const
   ).map((signatureSite, index) => ({
-    id: `fixture-dreamscape-${String(index)}`,
+    id: asDreamscapeId(`fixture-dreamscape-${String(index)}`),
     name: `Fixture Dreamscape ${String(index)}`,
-    guideId:
+    guideId: asGuideId(
       signatureSite === "RandomSite"
         ? "fixture-random-guide"
         : `fixture-guide-${String(index)}`,
+    ),
     signatureSite,
-    affiliationId: `fixture-affiliation-${String(index)}`,
+    affiliationId: asAffiliationId(`fixture-affiliation-${String(index)}`),
     isStarter: false,
     dreamAvatarIds: [],
   })),
@@ -152,7 +159,7 @@ export const MINIMAL_SITES_DATA: SitesData = {
     ],
     homeChoiceCount: 3,
     insufficientDestinations: "fail",
-    guideId: "fixture-random-guide",
+    guideId: asGuideId("fixture-random-guide"),
   },
   guideAssignments: Object.fromEntries(
     SYNTHETIC_ATLAS_DREAMSCAPES.flatMap((dreamscape) =>
@@ -191,7 +198,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "standard",
         nodeCount: { min: 2, max: 2 },
         siteCount: { min: 6, max: 6 },
-        fillProfile: "early",
+        fillProfile: asAtlasFillProfileId("early"),
         mandatorySites: { Draft: 2, Purge: 1, Augury: 1 },
       },
       {
@@ -199,7 +206,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "standard",
         nodeCount: { min: 3, max: 3 },
         siteCount: { min: 4, max: 4 },
-        fillProfile: "early",
+        fillProfile: asAtlasFillProfileId("early"),
         mandatorySites: { Draft: 1, Purge: 1 },
       },
       {
@@ -207,7 +214,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "standard",
         nodeCount: { min: 3, max: 4 },
         siteCount: { min: 3, max: 6 },
-        fillProfile: "early",
+        fillProfile: asAtlasFillProfileId("early"),
         mandatorySites: { Draft: 1 },
       },
       {
@@ -215,7 +222,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "standard",
         nodeCount: { min: 3, max: 5 },
         siteCount: { min: 3, max: 6 },
-        fillProfile: "late",
+        fillProfile: asAtlasFillProfileId("late"),
         mandatorySites: {},
       },
       {
@@ -223,7 +230,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "standard",
         nodeCount: { min: 3, max: 5 },
         siteCount: { min: 3, max: 6 },
-        fillProfile: "late",
+        fillProfile: asAtlasFillProfileId("late"),
         mandatorySites: {},
       },
       {
@@ -231,7 +238,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "boss",
         nodeCount: { min: 1, max: 1 },
         siteCount: { min: 3, max: 6 },
-        fillProfile: "late",
+        fillProfile: asAtlasFillProfileId("late"),
         mandatorySites: {},
       },
     ],
@@ -259,12 +266,12 @@ export function makeSyntheticAtlasData(): AtlasData {
     },
     fillProfiles: {
       early: {
-        id: "early",
+        id: asAtlasFillProfileId("early"),
         signatureSiteWeight: 3,
         siteWeights: { Essence: 3, Transfiguration: 1, Duplication: 1 },
       },
       late: {
-        id: "late",
+        id: asAtlasFillProfileId("late"),
         signatureSiteWeight: 3,
         siteWeights: { Essence: 3, Transfiguration: 5, Duplication: 5 },
       },
@@ -281,14 +288,14 @@ export function makeSyntheticAtlasData(): AtlasData {
       earlyRevealBias: 1,
     },
     boss: {
-      dreamscapeId: "fixture-boss-dreamscape",
+      dreamscapeId: asDreamscapeId("fixture-boss-dreamscape"),
       place: "Fixture Boss Place",
       name: "Fixture Boss",
       fallbackTitle: "Fixture Boss Title",
       fallbackIntroduction: "A synthetic boss introduction.",
-      sceneArtId: "fixture-boss-scene",
-      iconArtId: "fixture-boss-icon",
-      figureArtId: "fixture-boss-figure",
+      sceneArtId: asDreamscapeId("fixture-boss-scene"),
+      iconArtId: asDreamscapeId("fixture-boss-icon"),
+      figureArtId: asGuideId("fixture-boss-figure"),
     },
     presentation: {
       unseenTitle: "Fixture unseen title",
@@ -299,7 +306,7 @@ export function makeSyntheticAtlasData(): AtlasData {
     },
     assets: {
       unrevealedFrameSource: "fixture-frame.png",
-      unrevealedFrameKey: "fixture-frame.png",
+      unrevealedFrameKey: asArtAssetKey("fixture-frame.png"),
       bossSceneSource: "fixture-boss-scene.png",
       bossIconSource: "fixture-boss-icon.png",
       bossFigureSource: "fixture-boss-figure.png",
@@ -353,10 +360,10 @@ export function makeTestAtlasNode(
   overrides: Partial<DreamscapeNode> = {},
 ): DreamscapeNode {
   return {
-    id,
+    id: asAtlasNodeId(id),
     layer: LayerName.One,
     indexInLayer: 0,
-    dreamscapeId: "test_dreamscape",
+    dreamscapeId: asDreamscapeId("test_dreamscape"),
     sites,
     position: { x: 0, y: 0 },
     state: "available",

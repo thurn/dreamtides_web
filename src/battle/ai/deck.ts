@@ -1,6 +1,7 @@
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 import type { BattleDeckCardDefinition } from "../types";
 import type { CardData } from "../../types/cards";
+import type { CardId } from "../../types/card-identity";
 
 /**
  * Builds the journey AI deck from UUID-keyed configured entries, preserving
@@ -8,7 +9,7 @@ import type { CardData } from "../../types/cards";
  */
 export function buildAiConfiguredDeck(
   cardDatabase: ReadonlyMap<number, CardData>,
-  entries: readonly { cardId: string; count: number }[],
+  entries: readonly { cardId: CardId; count: number }[],
 ): BattleDeckCardDefinition[] {
   const byId = new Map(
     [...cardDatabase.values()].map((card) => [card.id.toLowerCase(), card]),

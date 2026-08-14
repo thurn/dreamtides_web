@@ -1,6 +1,7 @@
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { StarterCardModel } from "./index";
 import { playEvent } from "./helpers";
+import { asBattleCardId } from "../../../types/identifiers";
 
 /**
  * Monotonic counter making each approximated discovery's synthetic
@@ -32,7 +33,7 @@ export const signOfArrival: StarterCardModel = {
     playEvent(model, self, () => {
       discoverCounter += 1;
       const discovered: AiCard = {
-        battleCardId: `discovered:${discoverCounter}`,
+        battleCardId: asBattleCardId(`discovered:${discoverCounter}`),
         cardNumber: 512,
         name: "Marked Direwolf",
         energyCost: 4,

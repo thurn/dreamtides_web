@@ -15,6 +15,7 @@ import type {
   FrontRankSlotId,
 } from "../types";
 import { frontRankSlotIds, rankSlotIds, slotIndex } from "../types";
+import type { BattleCardId } from "../../types/identifiers";
 
 /**
  * The unified, keyword-aware Challenge resolver (rules §Challengers, Blockers,
@@ -60,7 +61,7 @@ export interface ChallengeResolution {
   /** ADJUST_SCORE + MOVE_CARD_TO_ZONE(void) edits that commit the outcome. */
   edits: BattleDebugEdit[];
   /** Every character that dissolves to the void, with its side. */
-  dissolved: readonly { battleCardId: string; side: BattleSide }[];
+  dissolved: readonly { battleCardId: BattleCardId; side: BattleSide }[];
   playerScoreDelta: number;
   enemyScoreDelta: number;
 }
@@ -71,7 +72,7 @@ export function resolveChallengeLane(
 ): ChallengeResolution {
   const { state, activeSide, slotId, supportContribution } = input;
   const opposingSide: BattleSide = activeSide === "player" ? "enemy" : "player";
-  const dissolved: { battleCardId: string; side: BattleSide }[] = [];
+  const dissolved: { battleCardId: BattleCardId; side: BattleSide }[] = [];
   const lane = resolveLane({
     state,
     slotId,
@@ -150,7 +151,9 @@ export function hasCombatKeyword(
  * `state`.
  */
 /** One past the highest occupied front-rank index, or 0 when the rank is empty. */
-function occupiedFrontRankWidth(frontRank: Record<FrontRankSlotId, string | null>): number {
+function occupiedFrontRankWidth(
+  frontRank: Record<FrontRankSlotId, BattleCardId | null>,
+): number {
   let width = 0;
   for (const slotId of rankSlotIds(frontRank)) {
     if (frontRank[slotId] !== null) {
@@ -166,7 +169,7 @@ export function resolveChallenge(input: ChallengeInput): ChallengeResolution {
   const opposingSide: BattleSide = activeSide === "player" ? "enemy" : "player";
 
   const laneResults: LaneResolution[] = [];
-  const dissolved: { battleCardId: string; side: BattleSide }[] = [];
+  const dissolved: { battleCardId: BattleCardId; side: BattleSide }[] = [];
 
   // Lanes pair the same front-rank index across both sides and span every
   // occupied lane (the front rank grows without bound). Empty-vs-empty lanes
@@ -187,23 +190,26 @@ export function resolveChallenge(input: ChallengeInput): ChallengeResolution {
     laneResults.push(lane);
   }
 
-  return resolutionFromLanes(
-    activeSide,
-    laneResults,
-    dissolved,
-  );
+  return resolutionFromLanes(activeSide, laneResults, dissolved);
 }
 
 /** Builds the public resolution shape while retaining score edits before moves. */
 function resolutionFromLanes(
   activeSide: BattleSide,
   lanes: readonly LaneResolution[],
-  dissolved: readonly { battleCardId: string; side: BattleSide }[],
+  dissolved: readonly { battleCardId: BattleCardId; side: BattleSide }[],
 ): ChallengeResolution {
-  const activeScored = lanes.reduce((total, lane) => total + lane.activeScored, 0);
+  const activeScored = lanes.reduce(
+    (total, lane) => total + lane.activeScored,
+    0,
+  );
   const edits: BattleDebugEdit[] = [];
   if (activeScored > 0) {
-    edits.push({ kind: "ADJUST_SCORE", side: activeSide, amount: activeScored });
+    edits.push({
+      kind: "ADJUST_SCORE",
+      side: activeSide,
+      amount: activeScored,
+    });
   }
   for (const entry of dissolved) {
     edits.push({
@@ -232,7 +238,7 @@ function resolveLane(params: {
   activeSide: BattleSide;
   opposingSide: BattleSide;
   supportContribution: ReadonlyMap<string, number> | undefined;
-  dissolved: { battleCardId: string; side: BattleSide }[];
+  dissolved: { battleCardId: BattleCardId; side: BattleSide }[];
 }): LaneResolution {
   const {
     state,
@@ -246,19 +252,34 @@ function resolveLane(params: {
   const challengerId = state.sides[activeSide].frontRank[slotId] ?? null;
   const blockerId = state.sides[opposingSide].frontRank[slotId] ?? null;
   const challenger =
-    challengerId === null ? null : state.cardInstances[challengerId] ?? null;
+    challengerId === null ? null : (state.cardInstances[challengerId] ?? null);
   const blocker =
-    blockerId === null ? null : state.cardInstances[blockerId] ?? null;
+    blockerId === null ? null : (state.cardInstances[blockerId] ?? null);
 
-  const challengerSpark = laneSpark(state, challenger, challengerId, supportContribution);
-  const blockerSpark = laneSpark(state, blocker, blockerId, supportContribution);
+  const challengerSpark = laneSpark(
+    state,
+    challenger,
+    challengerId,
+    supportContribution,
+  );
+  const blockerSpark = laneSpark(
+    state,
+    blocker,
+    blockerId,
+    supportContribution,
+  );
 
   // `playerSpark`/`enemySpark` describe the spark that actually fights in that
   // lane — for a figment stack, the topmost figment alone (rules §Figments).
-  const playerSpark = activeSide === "player" ? challengerSpark.compare : blockerSpark.compare;
-  const enemySpark = activeSide === "player" ? blockerSpark.compare : challengerSpark.compare;
+  const playerSpark =
+    activeSide === "player" ? challengerSpark.compare : blockerSpark.compare;
+  const enemySpark =
+    activeSide === "player" ? blockerSpark.compare : challengerSpark.compare;
 
-  const lane = (winner: BattleSide | null, scoreDelta: number): BattleLaneJudgment => ({
+  const lane = (
+    winner: BattleSide | null,
+    scoreDelta: number,
+  ): BattleLaneJudgment => ({
     slotId,
     playerSpark,
     enemySpark,
@@ -358,7 +379,7 @@ interface LaneSpark {
 function laneSpark(
   state: BattleMutableState,
   instance: BattleCardInstance | null,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
   supportContribution: ReadonlyMap<string, number> | undefined,
 ): LaneSpark {
   if (instance === null) {
@@ -367,7 +388,7 @@ function laneSpark(
   if (isFigmentInstance(instance)) {
     const context = selectFigmentSparkContext(state, instance);
     const support =
-      battleCardId === null ? 0 : supportContribution?.get(battleCardId) ?? 0;
+      battleCardId === null ? 0 : (supportContribution?.get(battleCardId) ?? 0);
     const count = Math.max(1, selectFigmentCount(instance));
     const topmostSupport = support / count;
     return {
@@ -378,7 +399,7 @@ function laneSpark(
     };
   }
   const bonus =
-    battleCardId === null ? 0 : supportContribution?.get(battleCardId) ?? 0;
+    battleCardId === null ? 0 : (supportContribution?.get(battleCardId) ?? 0);
   const spark = selectEffectiveSparkForInstance(instance) + bonus;
   return { compare: spark, total: spark, reserve: 0 };
 }
@@ -389,9 +410,6 @@ function laneSpark(
  * topmost figments' sparks, so a losing stack loses only its topmost Figment
  * through the leave-play replacement.
  */
-function dissolvesAgainst(
-  selfSpark: number,
-  opposingSpark: number,
-): boolean {
+function dissolvesAgainst(selfSpark: number, opposingSpark: number): boolean {
   return selfSpark <= opposingSpark;
 }

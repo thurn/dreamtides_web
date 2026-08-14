@@ -2,11 +2,12 @@ import { describe, expect, it } from "vitest";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../../test-support";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { runeboundChampion } from "./runebound-champion";
+import { asBattleCardId } from "../../../types/identifiers";
 
 describe("starter character #513", () => {
   it("plays the character into the back rank without resolving its rules text", () => {
     const self: AiCard = {
-      battleCardId: "champ",
+      battleCardId: asBattleCardId("champ"),
       cardNumber: 513,
       name: "card",
       energyCost: 5,

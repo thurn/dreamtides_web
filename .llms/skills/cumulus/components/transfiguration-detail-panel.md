@@ -32,7 +32,7 @@ Builders prepare each form's quote and affordability; status and controlled sele
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `entryId` | `string` | no | Stable deck-entry identity retained by the hosting workflow. |
+| `entryId` | `DeckEntryId` | no | Stable deck-entry identity retained by the hosting workflow. |
 | `card` | `GameCardModel` | no | Complete current card presentation. |
 | `forms` | `readonly TransfigurationDetailForm[]` | no | Prepared form quotes in display order. |
 

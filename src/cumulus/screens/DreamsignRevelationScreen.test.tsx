@@ -12,11 +12,10 @@ import {
 } from "./DreamsignRevelationScreen";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
 import { CumulusRoot } from "../CumulusRoot";
-import {
-  DREAMSIGN_REVELATION_PRESENTATION,
-} from "../test-helpers/presentation-fixtures";
+import { DREAMSIGN_REVELATION_PRESENTATION } from "../test-helpers/presentation-fixtures";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
 import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import { asGuideId } from "../../types/identifiers";
 
 function dreamsign(id: string, imageName: string): LocalizedDreamsign {
   return localizedDreamsignFixture({
@@ -36,7 +35,7 @@ function view(): DreamsignRevelationView {
       id: "sigrun",
       name: assertLocalized("Sigrun"),
       line: assertLocalized("Choose one sign."),
-      art: artRef.dreamGuide("sigrun"),
+      art: artRef.dreamGuide(asGuideId("sigrun")),
     },
     offer: [
       dreamsign("left", "eye_3.png"),
@@ -106,7 +105,9 @@ describe("DreamsignRevelationScreen", () => {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: assertLocalized("Mira"),
           speakerName: assertLocalized("Mira"),
-          text: assertLocalized("A [purple]Dreamsign[/purple] gives ongoing benefits."),
+          text: assertLocalized(
+            "A [purple]Dreamsign[/purple] gives ongoing benefits.",
+          ),
         },
         delaySeconds: 1,
         horizontalOffset: 0,
@@ -135,8 +136,7 @@ describe("DreamsignRevelationScreen", () => {
       container.querySelector("[data-site-layout-guide] img"),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-site-layout-speech-anchor]")
-        ?.textContent,
+      container.querySelector("[data-site-layout-speech-anchor]")?.textContent,
     ).toContain("Choose one sign.");
     act(() => {
       vi.advanceTimersByTime(999);
@@ -163,8 +163,7 @@ describe("DreamsignRevelationScreen", () => {
       container.querySelector("[data-site-layout-guide] img"),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-site-layout-speech-anchor]")
-        ?.textContent,
+      container.querySelector("[data-site-layout-speech-anchor]")?.textContent,
     ).toContain("Choose one sign.");
     expect(container.querySelectorAll("[data-revelation-option]")).toHaveLength(
       3,

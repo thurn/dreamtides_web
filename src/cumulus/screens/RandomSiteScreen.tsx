@@ -16,6 +16,8 @@ import {
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import type { LocalizedString } from "@trox/runtime";
+import type { SiteId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
 
 export interface RandomSiteChoiceView {
   siteType: RandomSiteDestinationType;
@@ -26,7 +28,7 @@ export interface RandomSiteChoiceView {
 
 export interface RandomSiteView {
   title: LocalizedString;
-  siteId: string;
+  siteId: SiteId;
   scene: ArtRef | null;
   guide: SiteLayoutGuideView;
   choices: readonly RandomSiteChoiceView[];
@@ -108,7 +110,7 @@ export function RandomSiteScreen({
             >
               {view.choices.map((choice, index) => {
                 const model: DreamscapeSiteModel = {
-                  id: `${view.siteId}:random:${choice.siteType}`,
+                  id: asSiteId(`${view.siteId}:random:${choice.siteType}`),
                   type: choice.siteType,
                   isVisited: false,
                   pos: { x: 50, y: 50 },
@@ -153,7 +155,7 @@ export function RandomSiteScreen({
             </div>
           </GlassPanel>
         </motion.section>
-    </SiteLayout>
+      </SiteLayout>
     </div>
   );
 }

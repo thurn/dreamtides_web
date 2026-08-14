@@ -9,8 +9,10 @@ import { PurgeSiteScreen } from "../../cumulus/screens/PurgeSiteScreen";
 import { buildPurgeSiteView, resolvePurgeGuide } from "./purge-view-model";
 import type { FirstVisitSiteTutorialView } from "../../cumulus/screens/site-tutorial-view";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
+import type { SiteId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
 
-export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
+export function PurgeSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
   const { state, mutations, journeyContent } = useJourney();
   const { cardDatabase, guides } = journeyContent;
   const tutorialPurge = journeyContent.tutorial?.purge;
@@ -107,7 +109,7 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
   }, [mutations, site]);
 
   const handlePurge = useCallback(
-    (entryIds: readonly string[], cost: number) => {
+    (entryIds: readonly DeckEntryId[], cost: number) => {
       if (site === null || entryIds.length === 0) return;
       const entryIdSet = new Set(entryIds);
       const purgedEntries = state.deck.filter((entry) =>

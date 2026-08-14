@@ -24,6 +24,10 @@ import type {
   SiteState,
   TransfigurationType,
 } from "../types/journey";
+import type { DeckEntryId, SelectionKey } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
+import type { ExplorationActionId } from "../types/identifiers";
+import { asSelectionKey } from "../types/identifiers";
 
 export type ExplorationMultiCardTransfigurationEffectKind =
   | "transfigure-selected"
@@ -35,14 +39,14 @@ export type ExplorationMultiCardTransfigurationMode =
   "chosen-flexible" | "chosen-fixed" | "random-flexible" | "random-fixed";
 
 export interface ExplorationMultiCardTransfigurationEligibleBinding {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
   transfigurations: readonly TransfigurationType[];
 }
 
 export interface ExplorationMultiCardTransfigurationTarget {
-  entryId: string;
-  cardId: string;
+  entryId: DeckEntryId;
+  cardId: CardId;
   transfiguration: TransfigurationType;
 }
 
@@ -55,7 +59,7 @@ export interface ExplorationMultiCardTransfigurationPreparation {
   targets: readonly ExplorationMultiCardTransfigurationTarget[];
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision: string;
-  selectionKey: string;
+  selectionKey: SelectionKey;
   selectorSignatures: readonly string[];
   selectorTraces: readonly RewardSelectionTrace[];
   unavailableReason?: ExplorationMultiCardTransfigurationUnavailableReason;
@@ -67,8 +71,8 @@ export interface ExplorationMultiCardTransfigurationPlanInput {
   predicate?: ExplorationPredicate;
   count?: number;
   transfiguration?: TransfigurationType;
-  actionId: string;
-  encounterCardId: string;
+  actionId: ExplorationActionId;
+  encounterCardId: CardId;
   journey: JourneyState;
   site: SiteState;
   content: JourneyContent;
@@ -204,7 +208,7 @@ function selectionRequest(input: {
     scope: {
       journeySeed: input.plan.journey.seed,
       siteUuid: input.plan.site.id,
-      selectionKey: `${input.plan.actionId}:${input.suffix}`,
+      selectionKey: asSelectionKey(`${input.plan.actionId}:${input.suffix}`),
     },
     count: input.count,
     constraints: input.constraints,
@@ -282,7 +286,7 @@ export function prepareExplorationMultiCardTransfigurationPlan(
     eligibleCards,
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
-    selectionKey: input.actionId,
+    selectionKey: asSelectionKey(input.actionId),
   } as const;
   const unavailable = (
     unavailableReason: ExplorationMultiCardTransfigurationUnavailableReason,

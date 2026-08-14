@@ -9,26 +9,30 @@ import {
   buildTideAffinityIndex,
 } from "../selection/tide-affinity";
 import type { Tides4DecksJson } from "../draft/pool/tides4-io";
+import { asDreamsignId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
 
 const EMPTY_TIDES: Tides4DecksJson = {
   version: 2,
   selection: { bandFraction: 0.25, bandMinimum: 5 },
-  tides: [{
-    id: "unavailable",
-    displayName: "Unavailable",
-    displayDescription: "Unavailable",
-    resonance: "ember",
-    role: "neutral",
-    cards: [],
-  }],
+  tides: [
+    {
+      id: "unavailable",
+      displayName: "Unavailable",
+      displayDescription: "Unavailable",
+      resonance: "ember",
+      role: "neutral",
+      cards: [],
+    },
+  ],
   tidePoolByDreamAvatar: {},
 };
 
 function draftPoolUuids(
   state: JourneyState,
   cardDatabase: ReadonlyMap<number, CardData>,
-): ReadonlySet<string> {
-  const result = new Set<string>();
+): ReadonlySet<CardId> {
+  const result = new Set<CardId>();
   for (const rawNumber of Object.keys(
     state.resolvedPackage?.draftPoolCopiesByCard ?? {},
   )) {
@@ -43,14 +47,19 @@ function selectionContentRevision(content: JourneyContent): string {
     cards: [...content.cardDatabase.values()]
       .sort((left, right) => left.id.localeCompare(right.id))
       .map((card) => ({ ...card })),
-    dreamsigns: [...content.dreamsignTemplates]
-      .sort((left, right) => left.id.localeCompare(right.id)),
-    customCards: [...(content.exploration?.customCards ?? [])]
-      .sort((left, right) => left.id.localeCompare(right.id)),
-    customDreamsigns: [...(content.exploration?.customDreamsigns ?? [])]
-      .sort((left, right) => (left.id ?? "").localeCompare(right.id ?? "")),
-    dreamAvatars: [...content.dreamAvatars]
-      .sort((left, right) => left.id.localeCompare(right.id)),
+    dreamsigns: [...content.dreamsignTemplates].sort((left, right) =>
+      left.id.localeCompare(right.id),
+    ),
+    customCards: [...(content.exploration?.customCards ?? [])].sort(
+      (left, right) => left.id.localeCompare(right.id),
+    ),
+    customDreamsigns: [...(content.exploration?.customDreamsigns ?? [])].sort(
+      (left, right) =>
+        (left.id ?? asDreamsignId("")).localeCompare(right.id ?? ""),
+    ),
+    dreamAvatars: [...content.dreamAvatars].sort((left, right) =>
+      left.id.localeCompare(right.id),
+    ),
     tides: content.poolContext?.poolData.tides4Decks,
     auguryFoldHash: content.auguryData.foldHash,
     sitesFoldHash: content.sitesData.foldHash,
@@ -64,7 +73,7 @@ export function buildRewardSelectionContext(input: {
   site: SiteState;
 }): RewardSelectionContext {
   const { journeyState, journeyContent, site } = input;
-  const cardByUuid = new Map<string, CardData>();
+  const cardByUuid = new Map<CardId, CardData>();
   for (const card of journeyContent.cardDatabase.values()) {
     cardByUuid.set(card.id, card);
   }
@@ -72,20 +81,26 @@ export function buildRewardSelectionContext(input: {
     const baseCard = journeyContent.cardDatabase.get(entry.cardNumber);
     return baseCard === undefined
       ? []
-      : [{
-          entry,
-          baseCard,
-          effectiveCard: resolveDeckEntryCard(
-            journeyContent.transfigurationData,
-            baseCard,
+      : [
+          {
             entry,
-          ),
-        }];
+            baseCard,
+            effectiveCard: resolveDeckEntryCard(
+              journeyContent.transfigurationData,
+              baseCard,
+              entry,
+            ),
+          },
+        ];
   });
-  const tideData = journeyContent.poolContext?.poolData.tides4Decks ?? EMPTY_TIDES;
+  const tideData =
+    journeyContent.poolContext?.poolData.tides4Decks ?? EMPTY_TIDES;
   const affinityIndex = buildTideAffinityIndex(tideData);
   const dreamsignById = new Map(
-    journeyContent.dreamsignTemplates.map((dreamsign) => [dreamsign.id, dreamsign]),
+    journeyContent.dreamsignTemplates.map((dreamsign) => [
+      dreamsign.id,
+      dreamsign,
+    ]),
   );
   const heldDreamsignIds = new Set(
     journeyState.dreamsigns.flatMap((dreamsign) =>
@@ -96,7 +111,9 @@ export function buildRewardSelectionContext(input: {
   const affinityContext = buildAffinityContext({
     index: affinityIndex,
     joinedTideIds,
-    deckCardUuids: effectiveDeckCards.map(({ effectiveCard }) => effectiveCard.id),
+    deckCardUuids: effectiveDeckCards.map(
+      ({ effectiveCard }) => effectiveCard.id,
+    ),
     dreamsignTideIds: [...heldDreamsignIds].flatMap(
       (id) => dreamsignById.get(id)?.tideIds ?? [],
     ),
@@ -109,8 +126,13 @@ export function buildRewardSelectionContext(input: {
     deckEntries: journeyState.deck,
     effectiveDeckCards,
     cardByUuid,
-    ownedCardUuids: new Set(effectiveDeckCards.map(({ baseCard }) => baseCard.id)),
-    draftPoolCardUuids: draftPoolUuids(journeyState, journeyContent.cardDatabase),
+    ownedCardUuids: new Set<CardId>(
+      effectiveDeckCards.map(({ baseCard }) => baseCard.id),
+    ),
+    draftPoolCardUuids: draftPoolUuids(
+      journeyState,
+      journeyContent.cardDatabase,
+    ),
     heldDreamsignIds,
     remainingDreamsignIds: new Set(journeyState.remainingDreamsignPool),
     affinityIndex,

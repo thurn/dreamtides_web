@@ -19,6 +19,8 @@ import type { DreamAvatarContent } from "../../types/content";
 import type { TutorialDreamAvatarOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
 import { useJourney } from "../../state/journey-context";
+import type { DreamAvatarId, IntentKey } from "../../types/identifiers";
+import { asIntentKey } from "../../types/identifiers";
 export function TutorialScreenAdapter({
   dreamAvatars,
   playbackSpeed = 1,
@@ -41,7 +43,7 @@ export function TutorialScreenAdapter({
     saveError,
     onActionsChange: handleEditorActionsChange,
   } = tutorialEditor.useTutorialEditor();
-  const beginRequestedKey = useRef<string | null>(null);
+  const beginRequestedKey = useRef<IntentKey | null>(null);
   const tutorialCards = useTutorialCards();
   const handleReplay = tutorialEditor.useTutorialReplay(
     authoredActions,
@@ -55,7 +57,7 @@ export function TutorialScreenAdapter({
       state.journeyId === null
     )
       return;
-    const intentKey = `tutorial:${state.journeyId}:begin`;
+    const intentKey = asIntentKey(`tutorial:${state.journeyId}:begin`);
     if (beginRequestedKey.current === intentKey) return;
     beginRequestedKey.current = intentKey;
     void mutations
@@ -101,7 +103,7 @@ export function TutorialScreenAdapter({
   const completeAction = mutations.completeTutorialAction;
   const handleActionComplete = useTutorialActionComplete(completeAction);
   const handleDreamAvatarArrivalComplete = useCallback(
-    (dreamAvatarId: string, owner: TutorialDreamAvatarOwner): void => {
+    (dreamAvatarId: DreamAvatarId, owner: TutorialDreamAvatarOwner): void => {
       logEvent("tutorial_dream_avatar_arrived", {
         battleId: view.battle.battleId,
         dreamAvatarId,
@@ -134,8 +136,7 @@ export function TutorialScreenAdapter({
               actions: authoredActions,
               tutorialCardConstants: battleConfiguration.tutorialCardConstants,
               saveStatus,
-              saveError:
-                saveError === null ? null : assertLocalized(saveError),
+              saveError: saveError === null ? null : assertLocalized(saveError),
             }
           : undefined
       }

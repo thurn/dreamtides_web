@@ -5,6 +5,7 @@ import type {
   TransfigurationRewardScore,
 } from "../types/transfiguration-data";
 import type { TransfigurationType } from "../types/journey";
+import { asGlossaryEntryId } from "../types/identifiers";
 
 const FORM_IDS: readonly TransfigurationType[] = [
   "Empowered",
@@ -26,7 +27,9 @@ function fixtureForm(
 ): TransfigurationFormDefinition {
   return {
     id,
-    glossaryUuid: `00000000-0000-4000-8000-00000000000${String(index + 1)}`,
+    glossaryUuid: asGlossaryEntryId(
+      `00000000-0000-4000-8000-00000000000${String(index + 1)}`,
+    ),
     name: `Fixture ${id}`,
     description: `Fixture ${id} effect`,
     glyph: `transfiguration${id}`,

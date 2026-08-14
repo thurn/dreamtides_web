@@ -1,10 +1,11 @@
 import type { JourneyState, SiteState, SiteType } from "../types/journey";
+import type { SiteId } from "../types/identifiers";
 
 export type FirstVisitTutorialSiteType =
   "Draft" | "Purge" | "DreamsignRevelation";
 
 export interface FirstVisitTutorialSite {
-  readonly siteId: string;
+  readonly siteId: SiteId;
   readonly siteType: FirstVisitTutorialSiteType;
 }
 
@@ -38,10 +39,7 @@ export function activeFirstVisitTutorialSite(
   const currentSiteId = state.screen.siteId;
   const sites = allSites(state);
   const current = sites.find((site) => site.id === currentSiteId);
-  if (
-    current === undefined ||
-    !isFirstVisitTutorialSiteType(current.type)
-  ) {
+  if (current === undefined || !isFirstVisitTutorialSiteType(current.type)) {
     return null;
   }
   if (

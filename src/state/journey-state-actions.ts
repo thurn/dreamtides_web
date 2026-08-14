@@ -21,10 +21,14 @@ import type {
   SiteType,
 } from "../types/journey";
 import { deriveEntryIdCounter } from "./deck-entry-ids";
+import type { DeckEntryId, DreamsignId, SiteId } from "../types/identifiers";
+import type { AtlasNodeId } from "../types/identifiers";
+import { asDeckEntryId } from "../types/identifiers";
+import { asSiteId } from "../types/identifiers";
 
 export interface PreparedDraftPick {
   expected: {
-    siteId: string;
+    siteId: SiteId;
     cardNumber: number;
     pickNumber: number;
     currentOffer: number[];
@@ -36,8 +40,8 @@ export interface PreparedDraftPick {
   };
 }
 
-export function nextDeckEntryId(deck: readonly DeckEntry[]): string {
-  return `deck-${String(deriveEntryIdCounter(deck) + 1)}`;
+export function nextDeckEntryId(deck: readonly DeckEntry[]): DeckEntryId {
+  return asDeckEntryId(`deck-${String(deriveEntryIdCounter(deck) + 1)}`);
 }
 
 /** Clamp an essence amount to zero or greater. */
@@ -64,7 +68,7 @@ export function addCardToJourneyState(
     deck: [
       ...prev.deck,
       {
-        entryId: nextDeckEntryId(prev.deck),
+        entryId: asDeckEntryId(nextDeckEntryId(prev.deck)),
         cardNumber,
         transfiguration: null,
         isBane: false,
@@ -81,7 +85,7 @@ export function pickDraftCardInJourneyState({
   affiliationWeights,
 }: {
   prev: JourneyState;
-  siteId: string;
+  siteId: SiteId;
   cardNumber: number;
   cardDatabase: Map<number, CardData>;
   /**
@@ -129,7 +133,7 @@ export function prepareDraftCardPickInJourneyState({
   affiliationWeights,
 }: {
   prev: JourneyState;
-  siteId: string;
+  siteId: SiteId;
   cardNumber: number;
   cardDatabase: Map<number, CardData>;
   /**
@@ -252,7 +256,7 @@ export function updateJourneyAtlas(
  * - The Battle site must be visited last: every non-Battle site in the same
  *   dreamscape must already be visited.
  */
-export function canVisitSite(prev: JourneyState, siteId: string): boolean {
+export function canVisitSite(prev: JourneyState, siteId: SiteId): boolean {
   for (const node of Object.values(prev.atlas.nodes)) {
     const site = node.sites.find((candidate) => candidate.id === siteId);
     if (site === undefined) {
@@ -279,7 +283,7 @@ export function canVisitSite(prev: JourneyState, siteId: string): boolean {
 
 export function completeJourneySite(
   prev: JourneyState,
-  siteId: string,
+  siteId: SiteId,
 ): JourneyState {
   if (!canVisitSite(prev, siteId)) {
     return prev;
@@ -340,7 +344,7 @@ function totalSiteCount(atlas: DreamAtlas): number {
 export function addSiteToCurrentDreamscape(
   prev: JourneyState,
   siteType: SiteType,
-  sourceId: string,
+  sourceId: SiteType,
 ): JourneyState {
   const targetId = prev.currentDreamscape;
   if (targetId === null || prev.atlas.nodes[targetId] === undefined) {
@@ -348,7 +352,7 @@ export function addSiteToCurrentDreamscape(
   }
   const count = totalSiteCount(prev.atlas);
   const newSite: SiteState = {
-    id: `site-merchant-${sourceId}-${String(count)}`,
+    id: asSiteId(`site-merchant-${sourceId}-${String(count)}`),
     type: siteType,
     isEnhanced: false,
     isVisited: false,
@@ -389,7 +393,7 @@ function siteRecordsEqual(left: SiteState, right: SiteState): boolean {
 export function insertPreparedSiteInJourneyState(
   prev: JourneyState,
   input: {
-    targetNodeId: string;
+    targetNodeId: AtlasNodeId;
     insertionIndex: number;
     siblingSiteIdsBefore: readonly string[];
     site: SiteState;
@@ -521,7 +525,7 @@ export function startJourneyFromDreamAvatar({
     }
 
     deck.push({
-      entryId: nextDeckEntryId(deck),
+      entryId: asDeckEntryId(nextDeckEntryId(deck)),
       cardNumber,
       transfiguration: null,
       isBane: false,
@@ -556,7 +560,7 @@ export function startJourneyFromDreamAvatar({
   const knownDreamsignIds = new Set(
     atlas.knownDreamsignCarrierIds
       .map((id) => atlas.nodes[id]?.knownDreamsignId)
-      .filter((id): id is string => id !== null && id !== undefined),
+      .filter((id): id is DreamsignId => id !== null && id !== undefined),
   );
   const remainingDreamsignPool = resolvedPackage.dreamsignPoolIds.filter(
     (id) => !knownDreamsignIds.has(id),

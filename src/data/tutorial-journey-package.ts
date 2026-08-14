@@ -7,6 +7,7 @@ import type { CardData } from "../types/cards";
 import type { RunPoolContext } from "./journey-content";
 import type { TutorialJourneyPool } from "./tutorial-journey-pool";
 import { extractGlossaryTerms } from "./glossary-terms";
+import { asCardId, type CardId } from "../types/card-identity";
 
 const RULES_TEXT_SYMBOL_RE = /[●⍏✦▸⍟☾⧗❖]/u;
 
@@ -28,12 +29,14 @@ export function buildTutorialJourneyPackage(
 
   const starterCardNumbers = new Set(context.starterCardNumbers);
   const draftPoolCopiesByCard: Record<string, number> = {};
-  const unresolvedCardIds: string[] = [];
+  const unresolvedCardIds: CardId[] = [];
   for (const tide of tutorialPool.tides) {
     for (const card of tide.cards) {
-      const cardNumber = context.idIndex.get(card.id.toLocaleLowerCase());
+      const cardNumber = context.idIndex.get(
+        asCardId(card.id.toLocaleLowerCase()),
+      );
       if (cardNumber === undefined) {
-        unresolvedCardIds.push(card.id);
+        unresolvedCardIds.push(asCardId(card.id));
         continue;
       }
       if (starterCardNumbers.has(cardNumber)) {
@@ -82,7 +85,9 @@ export function buildTutorialJourneyPackage(
   for (const [offerIndex, cardIds] of tutorialPool.openingOffers.entries()) {
     const cardNumbers: number[] = [];
     for (const cardId of cardIds) {
-      const cardNumber = context.idIndex.get(cardId.toLocaleLowerCase());
+      const cardNumber = context.idIndex.get(
+        asCardId(cardId.toLocaleLowerCase()),
+      );
       if (cardNumber === undefined) {
         throw new Error(
           `Tutorial opening offer references unknown card ${cardId}.`,

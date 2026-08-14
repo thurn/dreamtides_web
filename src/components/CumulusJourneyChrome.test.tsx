@@ -6,9 +6,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDefaultState, useJourney } from "../state/journey-context";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { CumulusJourneyChrome } from "./CumulusJourneyChrome";
+import { asDreamAvatarId } from "../types/identifiers";
+import { asDeckEntryId } from "../types/identifiers";
+import { asDreamsignId } from "../types/identifiers";
 
 vi.mock("../state/journey-context", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("../state/journey-context")>();
+  const actual =
+    await importOriginal<typeof import("../state/journey-context")>();
   return { ...actual, useJourney: vi.fn() };
 });
 
@@ -46,13 +50,13 @@ beforeEach(() => {
   const state = createDefaultState();
   state.essence = 275;
   state.deck = Array.from({ length: 17 }, (_, index) => ({
-    entryId: `entry-${String(index)}`,
+    entryId: asDeckEntryId(`entry-${String(index)}`),
     cardNumber: index + 1,
     transfiguration: null,
     isBane: false,
   }));
   state.dreamAvatar = {
-    id: "00000000-0000-4000-8000-000000000001",
+    id: asDreamAvatarId("00000000-0000-4000-8000-000000000001"),
     name: "Test DreamAvatar",
     title: "Keeper of Chrome",
     renderedText: "Draw a card.",
@@ -60,7 +64,9 @@ beforeEach(() => {
     startingEssence: 200,
   };
   state.dreamsigns = Array.from({ length: 5 }, (_, index) => ({
-    id: `00000000-0000-4000-8000-${String(index + 2).padStart(12, "0")}`,
+    id: asDreamsignId(
+      `00000000-0000-4000-8000-${String(index + 2).padStart(12, "0")}`,
+    ),
     name: `Test Dreamsign ${String(index + 1)}`,
     effectDescription: "Keep watch over the lower corner.",
     imageName: "bell.png",
@@ -96,7 +102,9 @@ describe("CumulusJourneyChrome", () => {
         </CumulusRoot>,
       );
     });
-    expect(container.querySelector("[data-connected-count]")?.textContent).not.toBe("");
+    expect(
+      container.querySelector("[data-connected-count]")?.textContent,
+    ).not.toBe("");
 
     act(() => {
       root.render(
@@ -124,8 +132,12 @@ describe("CumulusJourneyChrome", () => {
       );
     });
 
-    expect(container.querySelector('[data-testid="screen-content"]')).not.toBeNull();
-    expect(container.querySelector("[data-journey-status-bar-anchor]")).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="screen-content"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-journey-status-bar-anchor]"),
+    ).not.toBeNull();
     expect(container.textContent).toContain("275");
     expect(
       container.querySelector('[data-testid="dreamscape-menu-button"] i')
@@ -151,7 +163,9 @@ describe("CumulusJourneyChrome", () => {
       );
     });
 
-    expect(container.querySelector("[data-journey-status-bar-anchor]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-journey-status-bar-anchor]"),
+    ).not.toBeNull();
     expect(
       container.querySelector('[data-testid="dreamscape-menu-button"] i')
         ?.className,
@@ -173,10 +187,10 @@ describe("CumulusJourneyChrome", () => {
       container.querySelector('[data-journey-status-bar-variant="battle"]'),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-journey-status-essence]')?.textContent,
+      container.querySelector("[data-journey-status-essence]")?.textContent,
     ).toContain("275");
     expect(
-      container.querySelector('[data-journey-status-dreamsigns] img'),
+      container.querySelector("[data-journey-status-dreamsigns] img"),
     ).not.toBeNull();
     const dreamsignColumns = container.querySelector<HTMLElement>(
       '[data-journey-status-dreamsign-columns="two-high"]',
@@ -228,7 +242,9 @@ describe("CumulusJourneyChrome", () => {
     expect(
       container.querySelector('[data-testid="mobile-battle-content"]'),
     ).not.toBeNull();
-    expect(container.querySelector("[data-journey-status-bar-anchor]")).toBeNull();
+    expect(
+      container.querySelector("[data-journey-status-bar-anchor]"),
+    ).toBeNull();
     expect(
       container.querySelector('[data-testid="dreamscape-menu-button"]'),
     ).toBeNull();
@@ -246,8 +262,14 @@ describe("CumulusJourneyChrome", () => {
       );
     });
 
-    expect(container.querySelector('[data-testid="end-screen-content"]')).not.toBeNull();
-    expect(container.querySelector("[data-journey-status-bar-anchor]")).toBeNull();
-    expect(container.querySelector('[data-testid="dreamscape-menu-button"]')).not.toBeNull();
+    expect(
+      container.querySelector('[data-testid="end-screen-content"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector("[data-journey-status-bar-anchor]"),
+    ).toBeNull();
+    expect(
+      container.querySelector('[data-testid="dreamscape-menu-button"]'),
+    ).not.toBeNull();
   });
 });

@@ -3,8 +3,11 @@ import { nocturneStrummer } from "./nocturne-strummer";
 import { buildSupportContribution } from "./support-contribution";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
+import { asBattleCardId } from "../../../types/identifiers";
 
-function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
+function makeCard(
+  overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
+): AiCard {
   return {
     name: "card",
     energyCost: 0,
@@ -36,14 +39,24 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 
 describe("Nocturne Strummer (#510)", () => {
   it("supportSpark returns 2", () => {
-    const self = makeCard({ battleCardId: "strummer", cardNumber: 510 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("strummer"),
+      cardNumber: 510,
+    });
     expect(nocturneStrummer.supportSpark?.(makeModel(), self)).toBe(2);
   });
 
   it("via buildSupportContribution, a deployed ally in a supported slot gets +2", () => {
-    const strummer = makeCard({ battleCardId: "strummer", cardNumber: 510 });
+    const strummer = makeCard({
+      battleCardId: asBattleCardId("strummer"),
+      cardNumber: 510,
+    });
     // The receiving ally needs no model of its own; it only collects the bonus.
-    const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
+    const ally = makeCard({
+      battleCardId: asBattleCardId("ally"),
+      cardNumber: 512,
+      basePrintedSpark: 4,
+    });
     // B1 supports F0 and F1.
     const model = makeModel({
       aiFrontRank: { ...emptyFrontRankSlots(), F0: ally },
@@ -54,9 +67,12 @@ describe("Nocturne Strummer (#510)", () => {
   });
 
   it("grants +2 to every figment in a supported stack", () => {
-    const strummer = makeCard({ battleCardId: "strummer", cardNumber: 510 });
+    const strummer = makeCard({
+      battleCardId: asBattleCardId("strummer"),
+      cardNumber: 510,
+    });
     const figments = makeCard({
-      battleCardId: "figments",
+      battleCardId: asBattleCardId("figments"),
       cardNumber: 0,
       basePrintedSpark: 1,
       figmentCount: 3,
@@ -70,8 +86,15 @@ describe("Nocturne Strummer (#510)", () => {
   });
 
   it("does not buff a deployed ally outside the supported slots", () => {
-    const strummer = makeCard({ battleCardId: "strummer", cardNumber: 510 });
-    const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
+    const strummer = makeCard({
+      battleCardId: asBattleCardId("strummer"),
+      cardNumber: 510,
+    });
+    const ally = makeCard({
+      battleCardId: asBattleCardId("ally"),
+      cardNumber: 512,
+      basePrintedSpark: 4,
+    });
     // B0 supports only F0; an ally in F3 is not covered.
     const model = makeModel({
       aiFrontRank: { ...emptyFrontRankSlots(), F3: ally },
@@ -81,7 +104,11 @@ describe("Nocturne Strummer (#510)", () => {
   });
 
   it("play pays energy and occupies a reserve slot, exhausted", () => {
-    const self = makeCard({ battleCardId: "strummer", cardNumber: 510, energyCost: 2 });
+    const self = makeCard({
+      battleCardId: asBattleCardId("strummer"),
+      cardNumber: 510,
+      energyCost: 2,
+    });
     const model = makeModel({ aiEnergy: 5, aiHand: [self] });
     nocturneStrummer.play(model, self, null);
     expect(model.aiEnergy).toBe(3);

@@ -1,5 +1,4 @@
 import type { DreamwellCardModel } from "../../cumulus/components/battle/DreamwellCard";
-import { asCardId } from "../../types/card-identity";
 import type { DreamwellCardDefinition } from "../types";
 import { localizedSourceText } from "../../runtime/localization/runtime";
 
@@ -11,7 +10,7 @@ import { localizedSourceText } from "../../runtime/localization/runtime";
 export function dreamwellCardModel(
   definition: DreamwellCardDefinition,
 ): DreamwellCardModel {
-  const cardId = asCardId(definition.id);
+  const cardId = definition.id;
   return {
     cardId,
     displaySnapshot: {

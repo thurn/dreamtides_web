@@ -8,11 +8,12 @@ import {
 } from "./transfiguration-view-model";
 import { useGuideDialogue } from "./guide-dialogue-view-model";
 import { useTransfigurationSiteActions } from "../../state/transfiguration-site-actions";
+import type { SiteId } from "../../types/identifiers";
 
 export function TransfigurationSiteScreenAdapter({
   siteId,
 }: {
-  siteId: string;
+  siteId: SiteId;
 }) {
   const { state, journeyContent } = useJourney();
   const node =

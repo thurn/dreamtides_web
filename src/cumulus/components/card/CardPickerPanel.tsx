@@ -5,6 +5,7 @@ import {
   type CardPickerPresentation,
 } from "./card-gallery-surface";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
+import type { DeckEntryId } from "../../../types/identifiers";
 
 const GallerySurface = cardGallerySurface;
 
@@ -25,10 +26,10 @@ function pickerColumnsFor(
  * The transactional card-choice surface. It owns count-aware columns,
  * confirmation actions, and the compact mobile overlay recipe.
  */
-export function CardPickerPanel({
+export function CardPickerPanel<EntryId extends string = DeckEntryId>({
   presentation = "embedded",
   ...props
-}: CardPickerPanelProps): ReactElement {
+}: CardPickerPanelProps<EntryId>): ReactElement {
   const isDesktop = useIsDesktop();
   return (
     <GallerySurface

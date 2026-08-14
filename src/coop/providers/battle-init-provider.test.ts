@@ -22,6 +22,8 @@ import {
   createBattlePreview,
   settleDeferredOpponentLog,
 } from "./battle-init-provider";
+import { asJourneyId } from "../../types/identifiers";
+import { asSiteId } from "../../types/identifiers";
 
 function makeContent(): JourneyContent {
   return {
@@ -45,7 +47,7 @@ function makeJourney(): JourneyState {
   return {
     ...createDefaultState(),
     ...makeBattleTestState(),
-    runId: "journey:test",
+    runId: asJourneyId("journey:test"),
   };
 }
 
@@ -56,10 +58,15 @@ describe("battle init provider", () => {
     const content = makeContent();
     const journey = makeJourney();
 
-    const preview = createBattlePreview(content, journey, "site-7", 4242);
+    const preview = createBattlePreview(
+      content,
+      journey,
+      asSiteId("site-7"),
+      4242,
+    );
     const battle = createBattleInitProvider(content).beginBattle({
       journey,
-      siteId: "site-7",
+      siteId: asSiteId("site-7"),
       seedOverride: 4242,
       seq: 17,
       rng: () => 0,

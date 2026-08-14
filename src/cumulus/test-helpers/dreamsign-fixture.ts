@@ -1,5 +1,6 @@
 import { assertLocalized } from "@trox/runtime";
 import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import { asDreamsignId } from "../../types/identifiers";
 
 interface DreamsignFixtureInput {
   readonly id: string;
@@ -14,7 +15,7 @@ export function localizedDreamsignFixture(
   input: DreamsignFixtureInput,
 ): LocalizedDreamsign {
   return {
-    id: input.id,
+    id: asDreamsignId(input.id),
     name: assertLocalized(input.name),
     effectDescription:
       input.effectDescription === null

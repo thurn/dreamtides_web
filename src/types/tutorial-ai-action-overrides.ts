@@ -1,5 +1,8 @@
 import { isCardId } from "./card-identity";
 import type { TutorialBattleAiActionOverride } from "./tutorial";
+import { asTutorialAiActionOverrideId } from "./identifiers";
+import { asCardId } from "./card-identity";
+import { asDreamwellCardId } from "./identifiers";
 
 const OVERRIDE_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 
@@ -8,9 +11,7 @@ export function parseTutorialBattleAiActionOverrides(
   value: unknown,
 ): readonly TutorialBattleAiActionOverride[] {
   if (!Array.isArray(value)) {
-    throw new Error(
-      "Tutorial battle aiActionOverrides must be an array.",
-    );
+    throw new Error("Tutorial battle aiActionOverrides must be an array.");
   }
   const overrides: TutorialBattleAiActionOverride[] = [];
   const ids = new Set<string>();
@@ -25,10 +26,7 @@ export function parseTutorialBattleAiActionOverrides(
       );
     }
     const record = candidate as Record<string, unknown>;
-    if (
-      typeof record.id !== "string" ||
-      !OVERRIDE_ID_PATTERN.test(record.id)
-    ) {
+    if (typeof record.id !== "string" || !OVERRIDE_ID_PATTERN.test(record.id)) {
       throw new Error(
         "Tutorial battle AI action override ids must use lowercase kebab-case.",
       );
@@ -67,15 +65,17 @@ export function parseTutorialBattleAiActionOverrides(
     }
     ids.add(record.id);
     overrides.push({
-      id: record.id,
+      id: asTutorialAiActionOverrideId(record.id),
       trigger: {
         kind: "after-dreamwell",
         side: "enemy",
-        cardId: (trigger as Record<string, unknown>).cardId as string,
+        cardId: asDreamwellCardId(
+          (trigger as Record<string, unknown>).cardId as string,
+        ),
       },
       action: {
         kind: "play-card",
-        cardId: (action as Record<string, unknown>).cardId as string,
+        cardId: asCardId((action as Record<string, unknown>).cardId as string),
       },
     });
   }
@@ -83,9 +83,7 @@ export function parseTutorialBattleAiActionOverrides(
 }
 
 /** Validate persisted fold data with the same parser used by runtime content. */
-export function isTutorialBattleAiActionOverrides(
-  value: unknown,
-): boolean {
+export function isTutorialBattleAiActionOverrides(value: unknown): boolean {
   try {
     parseTutorialBattleAiActionOverrides(value);
     return true;

@@ -3,6 +3,7 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { asRoomId } from "../types/identifiers";
 
 const fake = vi.hoisted(() => ({
   onCorrupt: null as (() => void) | null,
@@ -46,7 +47,9 @@ describe("EventLogViewer", () => {
 
   it("surfaces a corrupt decoded event log instead of waiting forever", async () => {
     await act(async () => {
-      root.render(<EventLogViewer db={{} as never} gameId="room1" />);
+      root.render(
+        <EventLogViewer db={{} as never} gameId={asRoomId("room1")} />,
+      );
       await Promise.resolve();
     });
 

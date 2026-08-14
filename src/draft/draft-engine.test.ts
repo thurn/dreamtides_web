@@ -11,6 +11,8 @@ import {
   processPlayerPick,
   SITE_PICKS,
 } from "./draft-engine";
+import { asSiteId } from "../types/identifiers";
+import { asDreamAvatarId } from "../types/identifiers";
 
 function makeCard(
   cardNumber: number,
@@ -42,7 +44,7 @@ function buildResolvedPackage(
 ): ResolvedDreamAvatarPackage {
   return {
     dreamAvatar: {
-      id: "test-dream-avatar",
+      id: asDreamAvatarId("test-dream-avatar"),
       name: "Test DreamAvatar",
       title: "Draft Architect",
       renderedText: "Test rules text.",
@@ -61,8 +63,9 @@ function buildResolvedPackage(
       (total, copies) => total + copies,
       0,
     ),
-    doubledCardCount: Object.values(copiesByCard).filter((copies) => copies === 2)
-      .length,
+    doubledCardCount: Object.values(copiesByCard).filter(
+      (copies) => copies === 2,
+    ).length,
     legalSubsetCount: 1,
     preferredSubsetCount: 1,
   };
@@ -97,11 +100,7 @@ beforeEach(() => {
 
 describe("initializeDraftState", () => {
   it("creates state from the resolved package pool", () => {
-    const cardDatabase = buildDB([
-      makeCard(1),
-      makeCard(2),
-      makeCard(3),
-    ]);
+    const cardDatabase = buildDB([makeCard(1), makeCard(2), makeCard(3)]);
 
     const state = initializeDraftState(
       cardDatabase,
@@ -152,7 +151,7 @@ describe("fixed multiset offer generation", () => {
 
     vi.spyOn(Math, "random").mockReturnValue(0);
 
-    enterDraftSite(state, "site-a", cardDatabase);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase);
 
     expect(getCurrentOffer(state)).toHaveLength(4);
     expect(new Set(getCurrentOffer(state)).size).toBe(4);
@@ -181,7 +180,7 @@ describe("fixed multiset offer generation", () => {
     };
     const state = initializeDraftState(cardDatabase, resolvedPackage);
 
-    enterDraftSite(state, "site-a", cardDatabase, undefined, () => 0);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase, undefined, () => 0);
     expect(state.currentOffer).toEqual([8, 6, 4, 2]);
 
     processPlayerPick(8, state, cardDatabase, undefined, () => 0);
@@ -222,7 +221,7 @@ describe("fixed multiset offer generation", () => {
       .mockReturnValueOnce(0)
       .mockReturnValueOnce(0);
 
-    enterDraftSite(state, "site-a", cardDatabase);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase);
 
     expect(state.currentOffer[0]).toBe(1);
   });
@@ -239,7 +238,7 @@ describe("fixed multiset offer generation", () => {
       ),
     });
 
-    enterDraftSite(state, "site-a", cardDatabase);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase);
     const firstOffer = [...state.currentOffer];
     expect(firstOffer.length).toBe(4);
     expect(new Set(firstOffer).size).toBe(4);
@@ -270,7 +269,7 @@ describe("fixed multiset offer generation", () => {
       remainingCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 1 },
     });
 
-    enterDraftSite(state, "site-a", cardDatabase);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase);
     expect(new Set(state.currentOffer)).toEqual(new Set([1, 2, 3, 4]));
 
     // Every card has now been shown this visit, so the visit ends after the pick
@@ -283,7 +282,7 @@ describe("fixed multiset offer generation", () => {
     expect(isComplete).toBe(true);
 
     // A brand-new site resets the shown set, so the same cards are offerable.
-    enterDraftSite(state, "site-b", cardDatabase);
+    enterDraftSite(state, asSiteId("site-b"), cardDatabase);
     expect(new Set(state.currentOffer)).toEqual(new Set([1, 2, 3, 4]));
     expect(new Set(state.siteShownCardNumbers)).toEqual(new Set([1, 2, 3, 4]));
   });
@@ -307,7 +306,7 @@ describe("fixed multiset offer generation", () => {
 
     vi.spyOn(Math, "random").mockReturnValue(0);
 
-    enterDraftSite(state, "site-a", cardDatabase);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase);
     expect(state.remainingCopiesByCard).toEqual({
       "1": 1,
       "5": 1,
@@ -350,7 +349,7 @@ describe("fixed multiset offer generation", () => {
       },
     });
 
-    enterDraftSite(state, "site-a", cardDatabase);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase);
 
     // The remaining copies held only 2 unique cards, so the multiset is
     // recreated from the run's fixed pool and a fresh offer is revealed.
@@ -375,7 +374,7 @@ describe("fixed multiset offer generation", () => {
 
     vi.spyOn(Math, "random").mockReturnValue(0);
 
-    enterDraftSite(state, "site-a", cardDatabase);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase);
     for (let pickIndex = 0; pickIndex < SITE_PICKS; pickIndex += 1) {
       const currentOffer = getCurrentOffer(state);
       const isComplete = processPlayerPick(
@@ -406,11 +405,11 @@ describe("fixed multiset offer generation", () => {
 
     vi.spyOn(Math, "random").mockReturnValue(0);
 
-    enterDraftSite(state, "site-a", cardDatabase);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase);
     const firstOffer = [...state.currentOffer];
     const firstRemainingPool = { ...state.remainingCopiesByCard };
 
-    enterDraftSite(state, "site-a", cardDatabase);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase);
 
     expect(state.currentOffer).toEqual(firstOffer);
     expect(state.remainingCopiesByCard).toEqual(firstRemainingPool);
@@ -434,14 +433,14 @@ describe("fixed multiset offer generation", () => {
         "7": 1,
         "8": 1,
       },
-      activeSiteId: "site-a",
+      activeSiteId: asSiteId("site-a"),
       currentOffer: [],
       sitePicksCompleted: 3,
     });
 
     vi.spyOn(Math, "random").mockReturnValue(0);
 
-    enterDraftSite(state, "site-b", cardDatabase);
+    enterDraftSite(state, asSiteId("site-b"), cardDatabase);
 
     expect(state.activeSiteId).toBe("site-b");
     expect(state.sitePicksCompleted).toBe(0);
@@ -467,7 +466,7 @@ describe("legendary exclusion", () => {
     const state = makeDraftState({
       draftPoolCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 2, "5": 2 },
       remainingCopiesByCard: { "2": 1, "3": 1, "4": 1, "5": 1 },
-      activeSiteId: "site-a",
+      activeSiteId: asSiteId("site-a"),
       currentOffer: [1, 4, 5, 2],
       siteShownCardNumbers: [1, 4, 5, 2],
       // Final pick of the visit, so no follow-up offer is revealed and the
@@ -495,7 +494,7 @@ describe("legendary exclusion", () => {
     const state = makeDraftState({
       draftPoolCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 1, "5": 1 },
       remainingCopiesByCard: { "1": 1, "3": 1, "4": 1, "5": 1 },
-      activeSiteId: "site-a",
+      activeSiteId: asSiteId("site-a"),
       currentOffer: [2, 3, 4, 5],
       siteShownCardNumbers: [2, 3, 4, 5],
       sitePicksCompleted: SITE_PICKS - 1,
@@ -524,7 +523,7 @@ describe("legendary exclusion", () => {
     // offer leads with the Legendaries (cards 1 and 2).
     vi.spyOn(Math, "random").mockReturnValue(0);
 
-    enterDraftSite(state, "site-a", cardDatabase);
+    enterDraftSite(state, asSiteId("site-a"), cardDatabase);
     const offer = [...state.currentOffer];
     const legendaryInOffer =
       offer.find((n) => cardDatabase.get(n)?.rarity === "Legendary") ?? 0;
@@ -538,7 +537,7 @@ describe("legendary exclusion", () => {
     }
     // ...so a brand-new visit (which resets the shown set and may recreate the
     // multiset) can never surface a second Legendary.
-    enterDraftSite(state, "site-b", cardDatabase);
+    enterDraftSite(state, asSiteId("site-b"), cardDatabase);
     for (const cardNumber of state.currentOffer) {
       expect(cardDatabase.get(cardNumber)?.rarity).not.toBe("Legendary");
     }
@@ -549,9 +548,7 @@ describe("configured draft rules", () => {
   const config: DraftConfig = {
     packSize: 3,
     sitePickCount: 2,
-    rarityCaps: [
-      { rarity: "Special", poolCopyCap: 1, maxPicksPerRun: 2 },
-    ],
+    rarityCaps: [{ rarity: "Special", poolCopyCap: 1, maxPicksPerRun: 2 }],
   };
 
   it("uses the configured offer size and completes at the configured site target", () => {
@@ -563,7 +560,13 @@ describe("configured draft rules", () => {
       ),
     });
 
-    enterDraftSite(state, "site-configured", cardDatabase, config, () => 0);
+    enterDraftSite(
+      state,
+      asSiteId("site-configured"),
+      cardDatabase,
+      config,
+      () => 0,
+    );
     expect(state.currentOffer).toHaveLength(3);
     expect(
       processPlayerPick(
@@ -598,20 +601,13 @@ describe("configured draft rules", () => {
     const state = makeDraftState({
       draftPoolCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 1 },
       remainingCopiesByCard: { "2": 1, "3": 1, "4": 1 },
-      activeSiteId: "site-a",
+      activeSiteId: asSiteId("site-a"),
       currentOffer: [1, 2, 3],
       siteShownCardNumbers: [1, 2, 3],
       sitePicksCompleted: 1,
     });
 
-    processPlayerPick(
-      1,
-      state,
-      cardDatabase,
-      config,
-      () => 0,
-      [2, 1],
-    );
+    processPlayerPick(1, state, cardDatabase, config, () => 0, [2, 1]);
 
     expect(state.draftPoolCopiesByCard).toEqual({ "4": 1 });
     expect(state.remainingCopiesByCard).toEqual({ "4": 1 });

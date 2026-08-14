@@ -15,6 +15,7 @@ import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BounceReason } from "../eventlog/types";
 import type { AppendFn } from "./actions";
+import { asClientId, asRoomId } from "../types/identifiers";
 
 interface FakeEvent {
   type: string;
@@ -147,8 +148,8 @@ const bounceCalls: Array<
 function makeContext(): RoomReadyContext {
   return {
     db: {} as RoomReadyContext["db"],
-    roomId: "room-1",
-    clientId: "client-test",
+    roomId: asRoomId("room-1"),
+    clientId: asClientId("client-test"),
     genesis: fake.genesis,
     logSink: {
       recordCoopEvent: (event: FakeEvent) => event.actor === "client-test",

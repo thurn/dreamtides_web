@@ -1,6 +1,7 @@
 import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleMutableState, BattleResult, BattleSide } from "../types";
 import { rankSlotIds } from "../types";
+import type { BattleCardId } from "../../types/identifiers";
 
 export interface HandoffInput {
   state: BattleMutableState;
@@ -71,7 +72,7 @@ export function endingBanishEdits(
 function appendBanishEdit(
   state: BattleMutableState,
   side: BattleSide,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
   statusKey: "ephemeral" | "offering",
   edits: BattleDebugEdit[],
 ): void {
@@ -114,7 +115,7 @@ export function endOfTurnExhaustionClearEdits(
 
 function appendExhaustClearEdit(
   state: BattleMutableState,
-  battleCardId: string | null,
+  battleCardId: BattleCardId | null,
   edits: BattleDebugEdit[],
 ): void {
   if (battleCardId === null) {

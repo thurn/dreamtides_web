@@ -14,6 +14,8 @@ import type {
   MerchantOffer,
 } from "../types";
 import { generateMerchantEncounter } from "./generateMerchantEncounter";
+import type { SiteId } from "../../types/identifiers";
+import type { DeckEntryId } from "../../types/identifiers";
 
 export type MerchantResolveFailureReason =
   | "encounter_unavailable"
@@ -74,7 +76,10 @@ function fail(
   return { ok: false, reason, state };
 }
 
-function markSiteComplete(state: JourneyState, siteId: string): JourneyState | null {
+function markSiteComplete(
+  state: JourneyState,
+  siteId: SiteId,
+): JourneyState | null {
   const completed = completeJourneySite(state, siteId);
   if (completed === state) return null;
   return setJourneyScreen(
@@ -98,9 +103,14 @@ export function applyMerchantPayloadToState({
   state: JourneyState;
   journeyContent: JourneyContent;
   payload: MerchantApplyPayload;
-  mintEntryId?: (deck: readonly DeckEntry[], index: number) => string;
+  mintEntryId?: (deck: readonly DeckEntry[], index: number) => DeckEntryId;
 }): JourneyState | null {
-  return applyJourneyRewardEffect({ state, journeyContent, effect: payload, mintEntryId });
+  return applyJourneyRewardEffect({
+    state,
+    journeyContent,
+    effect: payload,
+    mintEntryId,
+  });
 }
 
 function findCurrentOffer(input: {
@@ -112,7 +122,10 @@ function findCurrentOffer(input: {
   const { state, journeyContent, site, request } = input;
   const runtime = state.siteRuntime[site.id];
   let encounter = runtime?.kind === "augury" ? runtime.encounter : undefined;
-  if (runtime?.kind === "augury" && runtime.selectionRulesVersion !== undefined) {
+  if (
+    runtime?.kind === "augury" &&
+    runtime.selectionRulesVersion !== undefined
+  ) {
     if (request.selectionRulesVersion !== runtime.selectionRulesVersion) {
       return "stale_encounter";
     }
@@ -165,7 +178,7 @@ export function resolveMerchantOffer({
   request,
   mintEntryId,
 }: ResolveMerchantOfferInput & {
-  mintEntryId?: (deck: readonly DeckEntry[], index: number) => string;
+  mintEntryId?: (deck: readonly DeckEntry[], index: number) => DeckEntryId;
 }): ResolveMerchantOfferResult {
   const offer = findCurrentOffer({ state, journeyContent, site, request });
   if (typeof offer === "string") return fail(state, offer);
@@ -207,17 +220,19 @@ export function resolveMerchantDecline({
     ) {
       return { ok: false, reason: "stale_encounter", state };
     }
-    const encounter = runtime?.kind === "augury" && runtime.encounter !== undefined
-      ? runtime.encounter
-      : generateMerchantEncounter(
-          buildMerchantContext({ journeyState: state, journeyContent, site }),
-        );
+    const encounter =
+      runtime?.kind === "augury" && runtime.encounter !== undefined
+        ? runtime.encounter
+        : generateMerchantEncounter(
+            buildMerchantContext({ journeyState: state, journeyContent, site }),
+          );
     if (encounter.encounterSignature !== request.encounterSignature) {
       return { ok: false, reason: "stale_encounter", state };
     }
     if (
-      encounter.offers.find((candidate) => candidate.offerId === request.offerId) ===
-      undefined
+      encounter.offers.find(
+        (candidate) => candidate.offerId === request.offerId,
+      ) === undefined
     ) {
       return { ok: false, reason: "offer_not_found", state };
     }

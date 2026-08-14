@@ -1,10 +1,11 @@
 import type { EffectStep } from "../../rules/battle/effect-step";
+import type { DreamwellCardId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Dreamwell effect script
 // ---------------------------------------------------------------------------
 
 export interface DreamwellEffectScript {
-  id: string; // Dreamwell card UUID
+  id: DreamwellCardId;
   steps: EffectStep[];
 }

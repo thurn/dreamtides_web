@@ -11,11 +11,12 @@ import { Dreamsign } from "../../components/hud/Dreamsign";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
+import { asDreamsignId } from "../../../types/identifiers";
 
 /** A gallery of real dreamsign art assets (by id), with authored-style effects. */
 const GALLERY = [
   {
-    id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
+    id: asDreamsignId("c706d0ba-2f41-4b14-95d8-db168ac6246c"),
     name: "Amplified Acorn",
     imageName: "acorn_gold.png",
     imageAlt: "Golden fruit-like charm with a mesh-patterned orb.",
@@ -23,14 +24,14 @@ const GALLERY = [
       "Once per turn, when you discard a card, your next card this turn costs 2● less.",
   },
   {
-    id: "278ec1ab-f532-4862-84ae-63df5e49548c",
+    id: asDreamsignId("278ec1ab-f532-4862-84ae-63df5e49548c"),
     name: "Pyramid Relic",
     imageName: "aertfact.png",
     imageAlt: "Blue-gray panel with bright red-orange branching nodes.",
     effectDescription: "The second character you play each turn costs 1● less.",
   },
   {
-    id: "d1fdbe21-56f6-43c0-aaac-1e4683964da5",
+    id: asDreamsignId("d1fdbe21-56f6-43c0-aaac-1e4683964da5"),
     name: "Bell",
     imageName: "bell.png",
     imageAlt: "A brass bell.",
@@ -38,7 +39,7 @@ const GALLERY = [
       "When you play a character from your void, rematerialize it.",
   },
   {
-    id: "49990864-1db0-4c08-91ae-40a1f04223e4",
+    id: asDreamsignId("49990864-1db0-4c08-91ae-40a1f04223e4"),
     name: "Algae",
     imageName: "algae.png",
     imageAlt: "Green tangled algae fronds.",
@@ -46,14 +47,14 @@ const GALLERY = [
       "Once per turn, when you draw a character, reduce its cost by 1● until end of turn.",
   },
   {
-    id: "d2a916c1-321a-4ae3-9a50-0b7f13c5eff6",
+    id: asDreamsignId("d2a916c1-321a-4ae3-9a50-0b7f13c5eff6"),
     name: "Worm Apple",
     imageName: "apple.png",
     imageAlt: "A polished red apple.",
     effectDescription: "You may play ❖ and ❖❖ events for 1●.",
   },
   {
-    id: "6e20e6c7-295a-48b1-b252-b8b00d6902c9",
+    id: asDreamsignId("6e20e6c7-295a-48b1-b252-b8b00d6902c9"),
     name: "Amanita",
     imageName: "amanita.png",
     imageAlt: "Red spotted mushroom with white flecks.",

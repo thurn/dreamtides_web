@@ -8,6 +8,7 @@ import type {
   SiteState,
   TransfigurationType,
 } from "../types/journey";
+import type { DeckEntryId } from "../types/identifiers";
 
 type Runtime = Extract<
   CardChoiceSiteRuntime,
@@ -21,7 +22,7 @@ export function useTransfigurationSiteActions(input: {
 }): {
   close: () => void;
   transfigure: (
-    entryId: string,
+    entryId: DeckEntryId,
     type: TransfigurationType,
     effectDescription: string,
     effectDetails: Record<string, unknown>,
@@ -86,7 +87,7 @@ export function useTransfigurationSiteActions(input: {
 
   const transfigure = useCallback(
     (
-      entryId: string,
+      entryId: DeckEntryId,
       type: TransfigurationType,
       effectDescription: string,
       effectDetails: Record<string, unknown>,

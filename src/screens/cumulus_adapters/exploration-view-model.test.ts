@@ -6,6 +6,7 @@ import type { JourneyContent } from "../../data/journey-content";
 import type { ExplorationActionContent } from "../../data/exploration";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { asCardId, asCardName } from "../../types/card-identity";
+import { asCardTypeChangePredicateId } from "../../types/identifiers";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -35,6 +36,18 @@ import type { MultiCardReplacementPreparation } from "../../exploration/multi-ca
 import type { ExplorationRandomDeckTargetPreparation } from "../../exploration/random-deck-target-plan";
 import type { ExplorationDisclosedDeckTargetPreparation } from "../../exploration/disclosed-deck-target-plan";
 import type { ExplorationCompoundActionPreparation } from "../../exploration/compound-action-plan";
+import { asSiteId } from "../../types/identifiers";
+import { asExplorationActionId } from "../../types/identifiers";
+import { asDeckEntryId } from "../../types/identifiers";
+import { asDreamsignId } from "../../types/identifiers";
+import { asDreamAvatarId } from "../../types/identifiers";
+import { asDreamscapeId } from "../../types/identifiers";
+import type { DreamsignId } from "../../types/identifiers";
+import { asGuideId } from "../../types/identifiers";
+import { asAtlasNodeId } from "../../types/identifiers";
+import type { ExplorationActionId } from "../../types/identifiers";
+import { asSelectionKey } from "../../types/identifiers";
+import { asRewardCandidateKey } from "../../types/identifiers";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -81,16 +94,16 @@ function card(id: CardData["id"], cardNumber: number): CardData {
 }
 
 const explorationSite: SiteState & { type: "Exploration" } = {
-  id: "site-exploration-fixture",
+  id: asSiteId("site-exploration-fixture"),
   type: "Exploration",
   isEnhanced: true,
   isVisited: false,
 };
 
 const guide: DreamGuideContent = {
-  id: "fixture-layaway",
+  id: asGuideId("fixture-layaway"),
   name: "Fixture Guide",
-  homeDreamscapeId: "fixture-dreamscape",
+  homeDreamscapeId: asDreamscapeId("fixture-dreamscape"),
   siteType: "Exploration",
   portraitSource: "fixture-guide.png",
   dialogue: { site: ["Every card dreams. Draw one, and we'll step inside."] },
@@ -101,7 +114,7 @@ describe("exploration-view-model", () => {
   it("builds authored narrative, two actions, and persisted reward state", () => {
     const source = card(sourceId, 17);
     const gainedDreamsign = {
-      id: "gained-dreamsign-id",
+      id: asDreamsignId("gained-dreamsign-id"),
       name: "Gained Dreamsign",
       effectDescription: "A synthetic reward sign.",
     };
@@ -109,7 +122,7 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: "entry-a",
+          entryId: asDeckEntryId("entry-a"),
           cardNumber: source.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -122,14 +135,14 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: "action-a",
+          actionId: asExplorationActionId("action-a"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
         },
         {
-          actionId: "action-b",
+          actionId: asExplorationActionId("action-b"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -137,11 +150,11 @@ describe("exploration-view-model", () => {
         },
       ],
       resolution: {
-        actionId: "action-a",
+        actionId: asExplorationActionId("action-a"),
         gainedCardIds: [source.id],
-        gainedDreamsignIds: [gainedDreamsign.id],
+        gainedDreamsignIds: [asDreamsignId(gainedDreamsign.id)],
         purgedCardIds: [source.id],
-        purgedEntryIds: ["entry-purged"],
+        purgedEntryIds: [asDeckEntryId("entry-purged")],
         affectedEntryIds: [],
         essenceGained: 0,
       },
@@ -206,7 +219,10 @@ describe("exploration-view-model", () => {
         objects: {
           cards: [{ cardId: source.id }],
           purgedCards: [
-            { entryId: "entry-purged", model: { cardId: source.id } },
+            {
+              entryId: asDeckEntryId("entry-purged"),
+              model: { cardId: source.id },
+            },
           ],
           dreamsigns: [{ id: gainedDreamsign.id }],
         },
@@ -231,14 +247,14 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: "entry-character",
+          entryId: asDeckEntryId("entry-character"),
           cardNumber: source.cardNumber,
           transfiguration: null,
           isBane: false,
           sparkBonus: 1,
         },
         {
-          entryId: "entry-event",
+          entryId: asDeckEntryId("entry-event"),
           cardNumber: event.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -250,15 +266,15 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: "blood-oath",
+          actionId: asExplorationActionId("blood-oath"),
           offeredCardIds: [],
-          offeredDeckEntryIds: ["entry-purged"],
+          offeredDeckEntryIds: [asDeckEntryId("entry-purged")],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
         },
         {
-          actionId: "gain-source",
+          actionId: asExplorationActionId("gain-source"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -266,22 +282,22 @@ describe("exploration-view-model", () => {
         },
       ],
       resolution: {
-        actionId: "blood-oath",
+        actionId: asExplorationActionId("blood-oath"),
         gainedCardIds: [],
         gainedDreamsignIds: [],
         purgedCardIds: [purged.id],
-        purgedEntryIds: ["entry-purged"],
+        purgedEntryIds: [asDeckEntryId("entry-purged")],
         purgedEntrySnapshots: [
           {
-            entryId: "entry-purged",
+            entryId: asDeckEntryId("entry-purged"),
             cardNumber: purged.cardNumber,
             transfiguration: null,
             isBane: false,
           },
         ],
-        affectedEntryIds: ["entry-character"],
-        sparkBeforeByEntryId: { "entry-character": 2 },
-        sparkAfterByEntryId: { "entry-character": 3 },
+        affectedEntryIds: [asDeckEntryId("entry-character")],
+        sparkBeforeByEntryId: { [asDeckEntryId("entry-character")]: 2 },
+        sparkAfterByEntryId: { [asDeckEntryId("entry-character")]: 3 },
         essenceGained: 0,
       },
     };
@@ -344,7 +360,7 @@ describe("exploration-view-model", () => {
         cards: [],
         purgedCards: [
           {
-            entryId: "entry-purged",
+            entryId: asDeckEntryId("entry-purged"),
             model: { cardId: purged.id },
           },
         ],
@@ -357,7 +373,7 @@ describe("exploration-view-model", () => {
           "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
         cards: [
           {
-            entryId: "entry-character",
+            entryId: asDeckEntryId("entry-character"),
             model: {
               cardId: source.id,
               displaySnapshot: { spark: 3 },
@@ -376,7 +392,7 @@ describe("exploration-view-model", () => {
       rarity: "Special" as const,
     };
     const actionOffers = ["make-fast", "reduce-cost"].map((actionId) => ({
-      actionId,
+      actionId: asExplorationActionId(actionId),
       offeredCardIds: [],
       packCardIds: [],
       replacementCardIdByEntryId: {},
@@ -426,7 +442,7 @@ describe("exploration-view-model", () => {
     const baseResolution = {
       gainedDreamsignIds: [],
       purgedCardIds: [],
-      affectedEntryIds: ["entry-character"],
+      affectedEntryIds: [asDeckEntryId("entry-character")],
       essenceGained: 0,
     };
 
@@ -441,7 +457,7 @@ describe("exploration-view-model", () => {
         actionOffers,
         resolution: {
           ...baseResolution,
-          actionId: "make-fast",
+          actionId: asExplorationActionId("make-fast"),
           gainedCardIds: [],
         },
       },
@@ -449,7 +465,7 @@ describe("exploration-view-model", () => {
         ...createDefaultState(),
         deck: [
           {
-            entryId: "entry-character",
+            entryId: asDeckEntryId("entry-character"),
             cardNumber: source.cardNumber,
             transfiguration: null,
             keywordModification: { fast: true },
@@ -466,7 +482,7 @@ describe("exploration-view-model", () => {
         kind: "fast",
         cards: [
           {
-            entryId: "entry-character",
+            entryId: asDeckEntryId("entry-character"),
             model: { displaySnapshot: { isFast: true } },
           },
         ],
@@ -484,7 +500,7 @@ describe("exploration-view-model", () => {
         actionOffers,
         resolution: {
           ...baseResolution,
-          actionId: "reduce-cost",
+          actionId: asExplorationActionId("reduce-cost"),
           gainedCardIds: [
             NIGHTMARE_CARD_ID,
             NIGHTMARE_CARD_ID,
@@ -496,7 +512,7 @@ describe("exploration-view-model", () => {
         ...createDefaultState(),
         deck: [
           {
-            entryId: "entry-character",
+            entryId: asDeckEntryId("entry-character"),
             cardNumber: source.cardNumber,
             transfiguration: null,
             keywordModification: { energyCostReduction: 1 },
@@ -521,7 +537,7 @@ describe("exploration-view-model", () => {
         amount: 1,
         cards: [
           {
-            entryId: "entry-character",
+            entryId: asDeckEntryId("entry-character"),
             model: { displaySnapshot: { energyCost: 1 } },
           },
         ],
@@ -539,19 +555,19 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: "entry-eligible",
+          entryId: asDeckEntryId("entry-eligible"),
           cardNumber: source.cardNumber,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: "entry-transfigured",
+          entryId: asDeckEntryId("entry-transfigured"),
           cardNumber: source.cardNumber,
           transfiguration: "Inspired" as const,
           isBane: false,
         },
         {
-          entryId: "entry-zero-cost",
+          entryId: asDeckEntryId("entry-zero-cost"),
           cardNumber: zeroCost.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -563,14 +579,14 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: "gather-light",
+          actionId: asExplorationActionId("gather-light"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
         },
         {
-          actionId: "gain-card",
+          actionId: asExplorationActionId("gain-card"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -634,7 +650,7 @@ describe("exploration-view-model", () => {
     expect(view.actions[0].followup).toMatchObject({
       kind: "cards",
       selectionOperation: "transfigure",
-      cards: [{ entryId: "entry-eligible" }],
+      cards: [{ entryId: asDeckEntryId("entry-eligible") }],
     });
     expect(resolveSource(view.actions[0].effectText)).toBe(
       "Apply Empowered to a chosen card.",
@@ -656,13 +672,13 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: "entry-already-transfigured",
+          entryId: asDeckEntryId("entry-already-transfigured"),
           cardNumber: target.cardNumber,
           transfiguration: "Kindled" as const,
           isBane: false,
         },
         {
-          entryId: "entry-target",
+          entryId: asDeckEntryId("entry-target"),
           cardNumber: target.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -674,15 +690,15 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: "inspire-event",
+          actionId: asExplorationActionId("inspire-event"),
           offeredCardIds: [],
-          offeredDeckEntryIds: ["entry-target"],
+          offeredDeckEntryIds: [asDeckEntryId("entry-target")],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
         },
         {
-          actionId: "gain-card",
+          actionId: asExplorationActionId("gain-card"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -762,7 +778,7 @@ describe("exploration-view-model", () => {
       ],
       effectDisclosure: "(Fixture Inspired effect)",
       followup: { kind: "none" },
-      automaticSelection: { entryIds: ["entry-target"] },
+      automaticSelection: { entryIds: [asDeckEntryId("entry-target")] },
       available: true,
     });
   });
@@ -777,7 +793,7 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: "entry-target",
+          entryId: asDeckEntryId("entry-target"),
           cardNumber: target.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -789,15 +805,15 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: "become-survivor",
+          actionId: asExplorationActionId("become-survivor"),
           offeredCardIds: [],
-          offeredDeckEntryIds: ["entry-target"],
+          offeredDeckEntryIds: [asDeckEntryId("entry-target")],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
         },
         {
-          actionId: "gain-card",
+          actionId: asExplorationActionId("gain-card"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -869,7 +885,7 @@ describe("exploration-view-model", () => {
         },
       ],
       followup: { kind: "none" },
-      automaticSelection: { entryIds: ["entry-target"] },
+      automaticSelection: { entryIds: [asDeckEntryId("entry-target")] },
       available: true,
     });
     expect(view.actions[0].effectText).not.toContain("{deck_card}");
@@ -882,12 +898,12 @@ describe("exploration-view-model", () => {
       runtime: {
         ...runtime,
         resolution: {
-          actionId: "become-survivor",
-          selection: { entryIds: ["entry-target"] },
+          actionId: asExplorationActionId("become-survivor"),
+          selection: { entryIds: [asDeckEntryId("entry-target")] },
           gainedCardIds: [],
           gainedDreamsignIds: [],
           purgedCardIds: [],
-          affectedEntryIds: ["entry-target"],
+          affectedEntryIds: [asDeckEntryId("entry-target")],
           essenceGained: 0,
           chosenSubtype: "Survivor",
         },
@@ -909,7 +925,7 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: "entry-target",
+          entryId: asDeckEntryId("entry-target"),
           cardNumber: target.cardNumber,
           transfiguration: "Kindled" as const,
           isBane: false,
@@ -922,14 +938,14 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId,
+          actionId: asExplorationActionId(actionId),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
         },
         {
-          actionId: "gain-card",
+          actionId: asExplorationActionId("gain-card"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -937,11 +953,11 @@ describe("exploration-view-model", () => {
         },
       ],
       resolution: {
-        actionId,
+        actionId: asExplorationActionId(actionId),
         gainedCardIds: [],
         gainedDreamsignIds: [],
         purgedCardIds: [],
-        affectedEntryIds: ["entry-target"],
+        affectedEntryIds: [asDeckEntryId("entry-target")],
         essenceGained: 0,
       },
     };
@@ -999,7 +1015,7 @@ describe("exploration-view-model", () => {
 
     expect(view?.reward).toMatchObject({
       kind: "transfiguration",
-      entryId: "entry-target",
+      entryId: asDeckEntryId("entry-target"),
       before: {
         cardId: target.id,
         displaySnapshot: { spark: 2 },
@@ -1026,19 +1042,22 @@ describe("exploration-view-model", () => {
       subtype: "",
       spark: null,
     };
-    const actionId = "transfigure-all-events";
+    const actionId = asExplorationActionId("transfigure-all-events");
     const actionOffers = [
       {
         actionId,
         canonicalMechanicId: "transfigure-deck-for-essence" as const,
-        eligibleDeckEntryIds: ["entry-event-a", "entry-event-b"],
+        eligibleDeckEntryIds: [
+          asDeckEntryId("entry-event-a"),
+          asDeckEntryId("entry-event-b"),
+        ],
         offeredCardIds: [],
         packCardIds: [],
         replacementCardIdByEntryId: {},
         transfigurationByEntryId: {},
       },
       {
-        actionId: "gain-card",
+        actionId: asExplorationActionId("gain-card"),
         offeredCardIds: [],
         packCardIds: [],
         replacementCardIdByEntryId: {},
@@ -1090,7 +1109,7 @@ describe("exploration-view-model", () => {
       },
     } as unknown as JourneyContent;
     const startingDeck = [firstEvent, secondEvent].map((event, index) => ({
-      entryId: index === 0 ? "entry-event-a" : "entry-event-b",
+      entryId: asDeckEntryId(index === 0 ? "entry-event-a" : "entry-event-b"),
       cardNumber: event.cardNumber,
       transfiguration: null,
       isBane: false,
@@ -1135,11 +1154,14 @@ describe("exploration-view-model", () => {
       runtime: {
         ...unresolvedRuntime,
         resolution: {
-          actionId,
+          actionId: asExplorationActionId(actionId),
           gainedCardIds: [],
           gainedDreamsignIds: [],
           purgedCardIds: [],
-          affectedEntryIds: ["entry-event-a", "entry-event-b"],
+          affectedEntryIds: [
+            asDeckEntryId("entry-event-a"),
+            asDeckEntryId("entry-event-b"),
+          ],
           essenceGained: 0,
           essenceSpent: 100,
           chosenTransfiguration: "Inspired",
@@ -1166,11 +1188,11 @@ describe("exploration-view-model", () => {
           essenceSpent: 100,
           cards: [
             {
-              entryId: "entry-event-a",
+              entryId: asDeckEntryId("entry-event-a"),
               model: { transfiguration: { type: "Inspired" } },
             },
             {
-              entryId: "entry-event-b",
+              entryId: asDeckEntryId("entry-event-b"),
               model: { transfiguration: { type: "Inspired" } },
             },
           ],
@@ -1185,13 +1207,13 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: "entry-eligible",
+          entryId: asDeckEntryId("entry-eligible"),
           cardNumber: source.cardNumber,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: "entry-transfigured",
+          entryId: asDeckEntryId("entry-transfigured"),
           cardNumber: source.cardNumber,
           transfiguration: "Inspired" as const,
           isBane: false,
@@ -1203,14 +1225,14 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: "transfigure",
+          actionId: asExplorationActionId("transfigure"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
         },
         {
-          actionId: "gain-card",
+          actionId: asExplorationActionId("gain-card"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -1272,7 +1294,7 @@ describe("exploration-view-model", () => {
       kind: "transfiguration",
       candidates: [
         {
-          entryId: "entry-eligible",
+          entryId: asDeckEntryId("entry-eligible"),
           forms: [
             { type: "Empowered", essenceCost: 0, affordable: true },
             { type: "Kindled", essenceCost: 0, affordable: true },
@@ -1296,13 +1318,13 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: "spirit-entry-a",
+          entryId: asDeckEntryId("spirit-entry-a"),
           cardNumber: firstSpiritAnimal.cardNumber,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: "spirit-entry-b",
+          entryId: asDeckEntryId("spirit-entry-b"),
           cardNumber: secondSpiritAnimal.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -1314,14 +1336,14 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: "gain-essence",
+          actionId: asExplorationActionId("gain-essence"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
         },
         {
-          actionId: "gain-card",
+          actionId: asExplorationActionId("gain-card"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -1329,11 +1351,14 @@ describe("exploration-view-model", () => {
         },
       ],
       resolution: {
-        actionId: "gain-essence",
+        actionId: asExplorationActionId("gain-essence"),
         gainedCardIds: [],
         gainedDreamsignIds: [],
         purgedCardIds: [],
-        affectedEntryIds: ["spirit-entry-a", "spirit-entry-b"],
+        affectedEntryIds: [
+          asDeckEntryId("spirit-entry-a"),
+          asDeckEntryId("spirit-entry-b"),
+        ],
         essenceGained: 30,
       },
     };
@@ -1394,8 +1419,14 @@ describe("exploration-view-model", () => {
     expect(view?.reward).toMatchObject({
       kind: "essence",
       cards: [
-        { entryId: "spirit-entry-a", model: { cardId: firstSpiritAnimal.id } },
-        { entryId: "spirit-entry-b", model: { cardId: secondSpiritAnimal.id } },
+        {
+          entryId: asDeckEntryId("spirit-entry-a"),
+          model: { cardId: firstSpiritAnimal.id },
+        },
+        {
+          entryId: asDeckEntryId("spirit-entry-b"),
+          model: { cardId: secondSpiritAnimal.id },
+        },
       ],
       essencePerCard: 15,
       totalEssence: 30,
@@ -1409,7 +1440,7 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: "entry-a",
+          entryId: asDeckEntryId("entry-a"),
           cardNumber: source.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -1421,14 +1452,14 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: "gain-offered",
+          actionId: asExplorationActionId("gain-offered"),
           offeredCardIds: [offered.id],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
         },
         {
-          actionId: "increase-spark",
+          actionId: asExplorationActionId("increase-spark"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -1527,7 +1558,7 @@ describe("exploration-view-model", () => {
       dreamwellCards: [],
       dreamsignTemplates: [
         {
-          id: dreamsignId,
+          id: asDreamsignId(dreamsignId),
           name: "Fixture Sign",
           effectDescription: "Draw a card, then discard a card.",
           imageName: "fixture.png",
@@ -1546,7 +1577,7 @@ describe("exploration-view-model", () => {
       },
     } as unknown as JourneyContent;
     const offer = {
-      actionId: "fixture-action",
+      actionId: asExplorationActionId("fixture-action"),
       offeredCardIds: [],
       packCardIds: [],
       replacementCardIdByEntryId: {},
@@ -1555,7 +1586,7 @@ describe("exploration-view-model", () => {
 
     const fixed = buildExplorationActionEffect(
       {
-        id: "fixed-card",
+        id: asExplorationActionId("fixed-card"),
         label: "Gain a card",
         effectText: "Gain {fixed_card}",
         effectKind: "gain-card",
@@ -1566,7 +1597,7 @@ describe("exploration-view-model", () => {
     );
     const nightmare = buildExplorationActionEffect(
       {
-        id: "nightmare-card",
+        id: asExplorationActionId("nightmare-card"),
         label: "Accept the cost",
         effectText: "Gain 3 {nightmare_card} cards.",
         effectKind: "reduce-cost-all-and-gain-nightmares",
@@ -1577,11 +1608,11 @@ describe("exploration-view-model", () => {
     );
     const dreamsign = buildExplorationActionEffect(
       {
-        id: "fixed-dreamsign",
+        id: asExplorationActionId("fixed-dreamsign"),
         label: "Take the sign",
         effectText: "Gain Fixture Sign",
         effectKind: "gain-dreamsign",
-        dreamsignId,
+        dreamsignId: asDreamsignId(dreamsignId),
       },
       offer,
       content,
@@ -1619,7 +1650,7 @@ describe("exploration-view-model", () => {
       ...card(asCardId("f0000000-0000-4000-8000-000000000032"), 32),
       isStarter: true,
     };
-    const starterEntryId = "starter-entry-32";
+    const starterEntryId = asDeckEntryId("starter-entry-32");
     const state: JourneyState = {
       ...createDefaultState(),
       deck: [
@@ -1646,7 +1677,7 @@ describe("exploration-view-model", () => {
           : {},
       selectionRulesVersion: "starter-rules-v1",
       selectionContentRevision: "starter-content-v1",
-      selectionKey: "fixture-starter-selection",
+      selectionKey: asSelectionKey("fixture-starter-selection"),
       selectorSignatures: ["starter-selector-signature"],
       selectorTraces: [],
       ...(unavailableReason === undefined ? {} : { unavailableReason }),
@@ -1702,7 +1733,7 @@ describe("exploration-view-model", () => {
           encounterCardId: source.id,
           actionOffers: [
             {
-              actionId: action.id,
+              actionId: asExplorationActionId(action.id),
               starterCardPreparation,
               offeredCardIds: [],
               offeredDeckEntryIds:
@@ -1714,7 +1745,7 @@ describe("exploration-view-model", () => {
               transfigurationByEntryId: {},
             },
             {
-              actionId: "starter-fallback",
+              actionId: asExplorationActionId("starter-fallback"),
               offeredCardIds: [],
               packCardIds: [],
               replacementCardIdByEntryId: {},
@@ -1728,7 +1759,7 @@ describe("exploration-view-model", () => {
 
     const disclosed = build(
       {
-        id: "starter-disclosed",
+        id: asExplorationActionId("starter-disclosed"),
         label: "Release",
         effectText: "Purge {starter_card}.",
         effectKind: "purge-starter-card",
@@ -1759,7 +1790,7 @@ describe("exploration-view-model", () => {
     ] as const) {
       const concealed = build(
         {
-          id: `concealed-${kind}`,
+          id: asExplorationActionId(`concealed-${kind}`),
           label: "Accept",
           effectText: "Change the Starter cards.",
           effectKind: kind,
@@ -1790,7 +1821,7 @@ describe("exploration-view-model", () => {
     };
     const unavailable = build(
       {
-        id: "starter-unavailable",
+        id: asExplorationActionId("starter-unavailable"),
         label: "Release",
         effectText: "Purge {starter_card}.",
         effectKind: "purge-starter-card",
@@ -1807,7 +1838,7 @@ describe("exploration-view-model", () => {
     const source = card(sourceId, 17);
     const heldDreamsignId = "held-dreamsign-id";
     const heldDreamsign = {
-      id: heldDreamsignId,
+      id: asDreamsignId(heldDreamsignId),
       name: "Held Dreamsign",
       effectDescription: "A synthetic sign effect.",
       imageName: "held-dreamsign.webp",
@@ -1823,15 +1854,15 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: "random-dreamsign",
+          actionId: asExplorationActionId("random-dreamsign"),
           offeredCardIds: [],
-          offeredDreamsignIds: ["offered-dreamsign-id"],
+          offeredDreamsignIds: [asDreamsignId("offered-dreamsign-id")],
           packCardIds: [],
           replacementCardIdByEntryId: {},
           transfigurationByEntryId: {},
         },
         {
-          actionId: "purge-dreamsign",
+          actionId: asExplorationActionId("purge-dreamsign"),
           offeredCardIds: [],
           packCardIds: [],
           replacementCardIdByEntryId: {},
@@ -1919,11 +1950,11 @@ describe("exploration-view-model", () => {
       runtime: {
         ...runtime,
         resolution: {
-          actionId: "purge-dreamsign",
+          actionId: asExplorationActionId("purge-dreamsign"),
           gainedCardIds: [],
           gainedDreamsignIds: [],
           purgedCardIds: [],
-          purgedDreamsignIds: [heldDreamsignId],
+          purgedDreamsignIds: [asDreamsignId(heldDreamsignId)],
           affectedEntryIds: [],
           essenceGained: 50,
         },
@@ -1946,14 +1977,14 @@ describe("exploration-view-model", () => {
       name: asCardName("Synthetic Nightmare"),
     };
     const fixedDreamsign = {
-      id: "40000000-0000-4000-8000-000000000001",
+      id: asDreamsignId("40000000-0000-4000-8000-000000000001"),
       name: "Fixed Dreamsign",
       effectDescription: "A fixed synthetic effect.",
       imageName: "fixed.webp",
       imageAlt: "Fixed Dreamsign art",
     };
     const heldDreamsign = {
-      id: "40000000-0000-4000-8000-000000000002",
+      id: asDreamsignId("40000000-0000-4000-8000-000000000002"),
       name: "Held Dreamsign",
       effectDescription: "A held synthetic effect.",
       imageName: "held.webp",
@@ -1961,14 +1992,14 @@ describe("exploration-view-model", () => {
     };
     const offeredDreamsigns = [
       {
-        id: "40000000-0000-4000-8000-000000000003",
+        id: asDreamsignId("40000000-0000-4000-8000-000000000003"),
         name: "Offered Dreamsign A",
         effectDescription: "An offered synthetic effect.",
         imageName: "offered-a.webp",
         imageAlt: "Offered Dreamsign A art",
       },
       {
-        id: "40000000-0000-4000-8000-000000000004",
+        id: asDreamsignId("40000000-0000-4000-8000-000000000004"),
         name: "Offered Dreamsign B",
         effectDescription: "Another offered synthetic effect.",
         imageName: "offered-b.webp",
@@ -1977,7 +2008,7 @@ describe("exploration-view-model", () => {
     ];
     const preparation = (
       kind: "fixed-gain" | "offered-gain",
-      preparedDreamsignIds: string[],
+      preparedDreamsignIds: DreamsignId[],
       requiredOverflowReplacementCount: number,
     ) => ({
       kind,
@@ -1998,7 +2029,7 @@ describe("exploration-view-model", () => {
         label: "Accept the fixed bundle",
         effectText: "Gain 2 {nightmare_card} cards and gain Fixed Dreamsign.",
         effectKind: "gain-nightmare-and-dreamsign" as const,
-        dreamsignId: fixedDreamsign.id,
+        dreamsignId: asDreamsignId(fixedDreamsign.id),
         nightmareCount: 2,
       },
       {
@@ -2036,9 +2067,9 @@ describe("exploration-view-model", () => {
       },
     } as unknown as JourneyContent;
     const offer = (
-      actionId: string,
+      actionId: ExplorationActionId,
       dreamsignPreparation: ReturnType<typeof preparation>,
-      offeredDreamsignIds: string[],
+      offeredDreamsignIds: DreamsignId[],
     ) => ({
       actionId,
       offeredCardIds: [],
@@ -2064,12 +2095,12 @@ describe("exploration-view-model", () => {
           encounterCardId: source.id,
           actionOffers: [
             offer(
-              actions[0].id,
+              asExplorationActionId(actions[0].id),
               preparation("fixed-gain", [fixedDreamsign.id], fixedOverflow),
               [],
             ),
             offer(
-              actions[1].id,
+              asExplorationActionId(actions[1].id),
               preparation(
                 "offered-gain",
                 offeredDreamsigns.map((dreamsign) => dreamsign.id),
@@ -2132,7 +2163,7 @@ describe("exploration-view-model", () => {
         maxDreamsigns: 1,
         dreamsigns: [fixedDreamsign],
         deck: nightmareEntries.map((entryId) => ({
-          entryId,
+          entryId: asDeckEntryId(entryId),
           cardNumber: nightmare.cardNumber,
           transfiguration: null,
           isBane: true,
@@ -2141,11 +2172,11 @@ describe("exploration-view-model", () => {
       1,
       1,
       {
-        actionId: actions[0].id,
-        selection: { replacedDreamsignId: heldDreamsign.id },
+        actionId: asExplorationActionId(actions[0].id),
+        selection: { replacedDreamsignId: asDreamsignId(heldDreamsign.id) },
         gainedCardIds: [NIGHTMARE_CARD_ID, NIGHTMARE_CARD_ID],
-        gainedEntryIds: nightmareEntries,
-        gainedDreamsignIds: [fixedDreamsign.id],
+        gainedEntryIds: nightmareEntries.map(asDeckEntryId),
+        gainedDreamsignIds: [asDreamsignId(fixedDreamsign.id)],
         purgedCardIds: [],
         purgedDreamsignIds: [heldDreamsign.id],
         affectedEntryIds: [],
@@ -2158,8 +2189,8 @@ describe("exploration-view-model", () => {
           purgedIds: [heldDreamsign.id],
           replacements: [
             {
-              removedDreamsignId: heldDreamsign.id,
-              gainedDreamsignId: fixedDreamsign.id,
+              removedDreamsignId: asDreamsignId(heldDreamsign.id),
+              gainedDreamsignId: asDreamsignId(fixedDreamsign.id),
             },
           ],
           poolBeforeIds: offeredDreamsigns.map((dreamsign) => dreamsign.id),
@@ -2175,11 +2206,11 @@ describe("exploration-view-model", () => {
         sourceKind: "gain-nightmare-and-dreamsign",
         nightmares: [
           {
-            entryId: nightmareEntries[0],
+            entryId: asDeckEntryId(nightmareEntries[0]),
             model: { cardId: NIGHTMARE_CARD_ID },
           },
           {
-            entryId: nightmareEntries[1],
+            entryId: asDeckEntryId(nightmareEntries[1]),
             model: { cardId: NIGHTMARE_CARD_ID },
           },
         ],
@@ -2197,7 +2228,7 @@ describe("exploration-view-model", () => {
   it("builds signed compound Dreamsign choices without revealing random results", () => {
     const source = card(sourceId, 17);
     const dreamsign = (id: string, label: string) => ({
-      id,
+      id: asDreamsignId(id),
       name: label,
       effectDescription: `Synthetic effect for ${label}.`,
       imageName: `${label.toLowerCase().replace(/ /gu, "-")}.webp`,
@@ -2228,7 +2259,7 @@ describe("exploration-view-model", () => {
         | "offered-replacement"
         | "replace-all-random"
         | "purge-and-gain-random",
-      preparedDreamsignIds: string[],
+      preparedDreamsignIds: DreamsignId[],
       requiredOverflowReplacementCount: number,
     ) => ({
       kind,
@@ -2253,9 +2284,11 @@ describe("exploration-view-model", () => {
       encounterCardId: source.id,
       actionOffers: [
         {
-          actionId: actionIds.gain,
+          actionId: asExplorationActionId(actionIds.gain),
           offeredCardIds: [],
-          offeredDreamsignIds: offered.map((item) => item.id),
+          offeredDreamsignIds: offered
+            .map((item) => item.id)
+            .map(asDreamsignId),
           dreamsignPreparation: preparation(
             "offered-gain",
             offered.map((item) => item.id),
@@ -2266,9 +2299,11 @@ describe("exploration-view-model", () => {
           transfigurationByEntryId: {},
         },
         {
-          actionId: actionIds.replace,
+          actionId: asExplorationActionId(actionIds.replace),
           offeredCardIds: [],
-          offeredDreamsignIds: offered.map((item) => item.id),
+          offeredDreamsignIds: offered
+            .map((item) => item.id)
+            .map(asDreamsignId),
           dreamsignPreparation: preparation(
             "offered-replacement",
             offered.map((item) => item.id),
@@ -2279,7 +2314,7 @@ describe("exploration-view-model", () => {
           transfigurationByEntryId: {},
         },
         {
-          actionId: actionIds.replaceAll,
+          actionId: asExplorationActionId(actionIds.replaceAll),
           offeredCardIds: [],
           offeredDreamsignIds: [],
           dreamsignPreparation: preparation(
@@ -2292,7 +2327,7 @@ describe("exploration-view-model", () => {
           transfigurationByEntryId: {},
         },
         {
-          actionId: actionIds.purgeGain,
+          actionId: asExplorationActionId(actionIds.purgeGain),
           offeredCardIds: [],
           offeredDreamsignIds: [],
           dreamsignPreparation: preparation(
@@ -2437,28 +2472,31 @@ describe("exploration-view-model", () => {
     });
 
     const resolution: ExplorationResolution = {
-      actionId: actionIds.purgeGain,
+      actionId: asExplorationActionId(actionIds.purgeGain),
       selection: {
         purgedDreamsignId: held[0].id,
         overflowReplacementDreamsignIds: [held[1].id],
       },
       gainedCardIds: [],
-      gainedDreamsignIds: random.slice(0, 2).map((item) => item.id),
+      gainedDreamsignIds: random
+        .slice(0, 2)
+        .map((item) => item.id)
+        .map(asDreamsignId),
       purgedCardIds: [],
       purgedDreamsignIds: [held[0].id, held[1].id],
       dreamsignMutation: {
-        beforeIds: held.map((item) => item.id),
+        beforeIds: held.map((item) => item.id).map(asDreamsignId),
         afterIds: [held[2].id, random[0].id, random[1].id],
         offeredIds: [],
         gainedIds: [random[0].id, random[1].id],
         purgedIds: [held[0].id, held[1].id],
         replacements: [
           {
-            removedDreamsignId: held[1].id,
-            gainedDreamsignId: random[1].id,
+            removedDreamsignId: asDreamsignId(held[1].id),
+            gainedDreamsignId: asDreamsignId(random[1].id),
           },
         ],
-        poolBeforeIds: random.map((item) => item.id),
+        poolBeforeIds: random.map((item) => item.id).map(asDreamsignId),
         poolAfterIds: [random[2].id],
         poolRegenerated: false,
       },
@@ -2535,25 +2573,25 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: "source-entry",
+          entryId: asDeckEntryId("source-entry"),
           cardNumber: source.cardNumber,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: "copy-a",
+          entryId: asDeckEntryId("copy-a"),
           cardNumber: source.cardNumber,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: "copy-b",
+          entryId: asDeckEntryId("copy-b"),
           cardNumber: source.cardNumber,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: "survivor-entry",
+          entryId: asDeckEntryId("survivor-entry"),
           cardNumber: survivor.cardNumber,
           transfiguration: null,
           keywordModification: { setReclaim: 2 },
@@ -2561,7 +2599,7 @@ describe("exploration-view-model", () => {
         },
       ],
       dreamAvatar: {
-        id: "avatar-2",
+        id: asDreamAvatarId("avatar-2"),
         name: "Avatar 2",
         title: "Synthetic",
         renderedText: "A synthetic ability.",
@@ -2578,7 +2616,7 @@ describe("exploration-view-model", () => {
       > = {},
     ) => {
       const fallback: ExplorationActionContent = {
-        id: "fallback",
+        id: asExplorationActionId("fallback"),
         label: "Fallback",
         effectText: "Gain a card",
         effectKind: "gain-card",
@@ -2622,16 +2660,20 @@ describe("exploration-view-model", () => {
           encounterCardId: source.id,
           actionOffers: [
             {
-              actionId: action.id,
+              actionId: asExplorationActionId(action.id),
               offeredCardIds: [],
-              offeredDreamAvatarIds: ["avatar-1", "avatar-2", "avatar-3"],
+              offeredDreamAvatarIds: [
+                asDreamAvatarId("avatar-1"),
+                asDreamAvatarId("avatar-2"),
+                asDreamAvatarId("avatar-3"),
+              ],
               packCardIds: [],
               replacementCardIdByEntryId: {},
               transfigurationByEntryId: {},
               ...offerOverrides,
             },
             {
-              actionId: fallback.id,
+              actionId: asExplorationActionId(fallback.id),
               offeredCardIds: [],
               packCardIds: [],
               replacementCardIdByEntryId: {},
@@ -2643,8 +2685,10 @@ describe("exploration-view-model", () => {
       });
     };
 
-    const emptyResolution = (actionId: string): ExplorationResolution => ({
-      actionId,
+    const emptyResolution = (
+      actionId: ExplorationActionId,
+    ): ExplorationResolution => ({
+      actionId: asExplorationActionId(actionId),
       gainedCardIds: [],
       gainedDreamsignIds: [],
       purgedCardIds: [],
@@ -2654,26 +2698,29 @@ describe("exploration-view-model", () => {
 
     const copied = build(
       {
-        id: "copy",
+        id: asExplorationActionId("copy"),
         label: "Copy",
         effectText: "Gain 2 copies of $DECK_CARD",
         effectKind: "copy-selected-card",
         count: 2,
       },
       {
-        ...emptyResolution("copy"),
+        ...emptyResolution(asExplorationActionId("copy")),
         gainedCardIds: [source.id, source.id],
-        gainedEntryIds: ["copy-a", "copy-b"],
-        affectedEntryIds: ["source-entry"],
+        gainedEntryIds: [asDeckEntryId("copy-a"), asDeckEntryId("copy-b")],
+        affectedEntryIds: [asDeckEntryId("source-entry")],
       },
     );
     expect(copied).toMatchObject({
       outcomeKind: "card-copies",
       reward: {
         kind: "card-copies",
-        sourceEntryId: "source-entry",
-        source: { entryId: "source-entry" },
-        cards: [{ entryId: "copy-a" }, { entryId: "copy-b" }],
+        sourceEntryId: asDeckEntryId("source-entry"),
+        source: { entryId: asDeckEntryId("source-entry") },
+        cards: [
+          { entryId: asDeckEntryId("copy-a") },
+          { entryId: asDeckEntryId("copy-b") },
+        ],
       },
     });
 
@@ -2691,24 +2738,24 @@ describe("exploration-view-model", () => {
     };
     const purgedAndCopied = build(
       {
-        id: "purge-copy",
+        id: asExplorationActionId("purge-copy"),
         label: "Purge and copy",
         effectText:
           "Purge a chosen card and gain a copy of another chosen card",
         effectKind: "purge-and-copy",
       },
       {
-        ...emptyResolution("purge-copy"),
+        ...emptyResolution(asExplorationActionId("purge-copy")),
         selection: {
           purgeEntryId: "source-entry",
           copyEntryId: "survivor-entry",
         },
         purgedCardIds: [source.id],
-        purgedEntryIds: ["source-entry"],
+        purgedEntryIds: [asDeckEntryId("source-entry")],
         purgedEntrySnapshots: [purgedSnapshot],
         gainedCardIds: [survivor.id],
-        gainedEntryIds: ["copy-b"],
-        affectedEntryIds: ["survivor-entry"],
+        gainedEntryIds: [asDeckEntryId("copy-b")],
+        affectedEntryIds: [asDeckEntryId("survivor-entry")],
       },
       purgeAndCopyState,
     );
@@ -2717,33 +2764,43 @@ describe("exploration-view-model", () => {
       reward: {
         kind: "purge-and-copy",
         purgedCard: {
-          entryId: "source-entry",
+          entryId: asDeckEntryId("source-entry"),
           model: { cardId: source.id },
         },
-        sourceEntryId: "survivor-entry",
+        sourceEntryId: asDeckEntryId("survivor-entry"),
         source: {
-          entryId: "survivor-entry",
+          entryId: asDeckEntryId("survivor-entry"),
           model: { cardId: survivor.id },
         },
-        cards: [{ entryId: "copy-b", model: { cardId: survivor.id } }],
+        cards: [
+          { entryId: asDeckEntryId("copy-b"), model: { cardId: survivor.id } },
+        ],
         count: 1,
       },
     });
 
     const copiedMultiple = build(
       {
-        id: "copy-multiple",
+        id: asExplorationActionId("copy-multiple"),
         label: "Copy two",
         effectText: "Gain one copy of each of 2 chosen cards",
         effectKind: "copy-selected-cards",
         count: 2,
       },
       {
-        ...emptyResolution("copy-multiple"),
-        selection: { entryIds: ["source-entry", "survivor-entry"] },
+        ...emptyResolution(asExplorationActionId("copy-multiple")),
+        selection: {
+          entryIds: [
+            asDeckEntryId("source-entry"),
+            asDeckEntryId("survivor-entry"),
+          ],
+        },
         gainedCardIds: [source.id, survivor.id],
-        gainedEntryIds: ["copy-a", "copy-b"],
-        affectedEntryIds: ["source-entry", "survivor-entry"],
+        gainedEntryIds: [asDeckEntryId("copy-a"), asDeckEntryId("copy-b")],
+        affectedEntryIds: [
+          asDeckEntryId("source-entry"),
+          asDeckEntryId("survivor-entry"),
+        ],
       },
     );
     expect(copiedMultiple).toMatchObject({
@@ -2752,10 +2809,13 @@ describe("exploration-view-model", () => {
         kind: "card-copies-multiple",
         count: 2,
         pairs: [
-          { source: { entryId: "source-entry" }, copy: { entryId: "copy-a" } },
           {
-            source: { entryId: "survivor-entry" },
-            copy: { entryId: "copy-b" },
+            source: { entryId: asDeckEntryId("source-entry") },
+            copy: { entryId: asDeckEntryId("copy-a") },
+          },
+          {
+            source: { entryId: asDeckEntryId("survivor-entry") },
+            copy: { entryId: asDeckEntryId("copy-b") },
           },
         ],
       },
@@ -2773,20 +2833,20 @@ describe("exploration-view-model", () => {
 
     const purgedForEssence = build(
       {
-        id: "purge-for-essence",
+        id: asExplorationActionId("purge-for-essence"),
         label: "Yield",
         effectText: "Purge a chosen card and gain 20 essence for each ✦ it had",
         effectKind: "purge-for-essence",
         essencePerSpark: 20,
       },
       {
-        ...emptyResolution("purge-for-essence"),
-        selection: { entryIds: ["source-entry"] },
+        ...emptyResolution(asExplorationActionId("purge-for-essence")),
+        selection: { entryIds: [asDeckEntryId("source-entry")] },
         purgedCardIds: [source.id],
-        purgedEntryIds: ["source-entry"],
+        purgedEntryIds: [asDeckEntryId("source-entry")],
         purgedEntrySnapshots: [
           {
-            entryId: "source-entry",
+            entryId: asDeckEntryId("source-entry"),
             cardNumber: source.cardNumber,
             transfiguration: null,
             sparkBonus: 3,
@@ -2800,7 +2860,10 @@ describe("exploration-view-model", () => {
       outcomeKind: "purged-card-essence",
       reward: {
         kind: "purged-card-essence",
-        card: { entryId: "source-entry", model: { cardId: source.id } },
+        card: {
+          entryId: asDeckEntryId("source-entry"),
+          model: { cardId: source.id },
+        },
         spark: 5,
         essencePerSpark: 20,
         totalEssence: 100,
@@ -2809,14 +2872,14 @@ describe("exploration-view-model", () => {
 
     const modifier = build(
       {
-        id: "energy",
+        id: asExplorationActionId("energy"),
         label: "Energy",
         effectText: "Gain 2 additional energy at the start of your next battle",
         effectKind: "next-battle-starting-energy",
         count: 2,
       },
       {
-        ...emptyResolution("energy"),
+        ...emptyResolution(asExplorationActionId("energy")),
         battleModifier: {
           kind: "starting-energy",
           amount: 2,
@@ -2835,14 +2898,14 @@ describe("exploration-view-model", () => {
 
     const compoundModifier = build(
       {
-        id: "compound-modifier",
+        id: asExplorationActionId("compound-modifier"),
         label: "Enter the radiance",
         effectText:
           "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
         effectKind: "next-battle-smaller-hand-and-cost-discount",
       },
       {
-        ...emptyResolution("compound-modifier"),
+        ...emptyResolution(asExplorationActionId("compound-modifier")),
         battleModifier: {
           kind: "smaller-hand-and-cost-discount",
           openingHandDelta: -1,
@@ -2863,17 +2926,21 @@ describe("exploration-view-model", () => {
 
     const reclaim = build(
       {
-        id: "reclaim",
+        id: asExplorationActionId("reclaim"),
         label: "Enter alone",
         effectText: "Purge duplicates and grant reclaim",
         effectKind: "purge-duplicates-and-grant-reclaim",
       },
       {
-        ...emptyResolution("reclaim"),
+        ...emptyResolution(asExplorationActionId("reclaim")),
         purgedCardIds: [source.id, source.id, source.id],
-        purgedEntryIds: ["source-entry", "copy-a", "copy-b"],
-        affectedEntryIds: ["survivor-entry"],
-        reclaimCostByEntryId: { "survivor-entry": 2 },
+        purgedEntryIds: [
+          asDeckEntryId("source-entry"),
+          asDeckEntryId("copy-a"),
+          asDeckEntryId("copy-b"),
+        ],
+        affectedEntryIds: [asDeckEntryId("survivor-entry")],
+        reclaimCostByEntryId: { [asDeckEntryId("survivor-entry")]: 2 },
       },
       { ...baseState, deck: [baseState.deck[3]] },
     );
@@ -2882,14 +2949,17 @@ describe("exploration-view-model", () => {
       reward: {
         objects: {
           purgedCards: [
-            { entryId: "source-entry", model: { cardId: source.id } },
-            { entryId: "copy-a", model: { cardId: source.id } },
-            { entryId: "copy-b", model: { cardId: source.id } },
+            {
+              entryId: asDeckEntryId("source-entry"),
+              model: { cardId: source.id },
+            },
+            { entryId: asDeckEntryId("copy-a"), model: { cardId: source.id } },
+            { entryId: asDeckEntryId("copy-b"), model: { cardId: source.id } },
           ],
         },
         deckModification: {
           kind: "reclaim",
-          cards: [{ entryId: "survivor-entry" }],
+          cards: [{ entryId: asDeckEntryId("survivor-entry") }],
           reclaimCostByEntryId: { "survivor-entry": 2 },
         },
       },
@@ -2897,16 +2967,16 @@ describe("exploration-view-model", () => {
 
     const avatar = build(
       {
-        id: "avatar",
+        id: asExplorationActionId("avatar"),
         label: "Follow",
         effectText: "Pick a new Dream Avatar from 3 choices",
         effectKind: "choose-dream-avatar",
         offerCount: 3,
       },
       {
-        ...emptyResolution("avatar"),
-        previousDreamAvatarId: "avatar-0",
-        chosenDreamAvatarId: "avatar-2",
+        ...emptyResolution(asExplorationActionId("avatar")),
+        previousDreamAvatarId: asDreamAvatarId("avatar-0"),
+        chosenDreamAvatarId: asDreamAvatarId("avatar-2"),
       },
     );
     expect(avatar).toMatchObject({
@@ -2930,14 +3000,14 @@ describe("exploration-view-model", () => {
 
     const fixedEssence = build(
       {
-        id: "fixed-essence",
+        id: asExplorationActionId("fixed-essence"),
         label: "Gather",
         effectText: "Gain 100 essence",
         effectKind: "gain-essence",
         essence: 100,
       },
       {
-        ...emptyResolution("fixed-essence"),
+        ...emptyResolution(asExplorationActionId("fixed-essence")),
         essenceBefore: 250,
         essenceGained: 100,
         essenceAfter: 350,
@@ -2968,7 +3038,7 @@ describe("exploration-view-model", () => {
     };
     const randomEssence = build(
       {
-        id: "random-essence",
+        id: asExplorationActionId("random-essence"),
         label: "Harvest",
         effectText: "Gain a random amount of essence between 50 and 150",
         effectKind: "gain-random-essence",
@@ -2976,7 +3046,7 @@ describe("exploration-view-model", () => {
         maximumEssence: 150,
       },
       {
-        ...emptyResolution("random-essence"),
+        ...emptyResolution(asExplorationActionId("random-essence")),
         essenceBefore: 250,
         essenceGained: 87,
         essenceAfter: 337,
@@ -3008,7 +3078,7 @@ describe("exploration-view-model", () => {
 
     const unavailableRandomEssence = build(
       {
-        id: "random-unavailable",
+        id: asExplorationActionId("random-unavailable"),
         label: "Harvest",
         effectText: "Gain a random amount of essence between 50 and 150",
         effectKind: "gain-random-essence",
@@ -3016,7 +3086,7 @@ describe("exploration-view-model", () => {
         maximumEssence: 150,
       },
       {
-        ...emptyResolution("random-unavailable"),
+        ...emptyResolution(asExplorationActionId("random-unavailable")),
         essenceBefore: 250,
         essenceAfter: 250,
       },
@@ -3032,13 +3102,13 @@ describe("exploration-view-model", () => {
 
     const doubledZeroEssence = build(
       {
-        id: "double-essence",
+        id: asExplorationActionId("double-essence"),
         label: "Balance",
         effectText: "Double your current essence",
         effectKind: "double-essence",
       },
       {
-        ...emptyResolution("double-essence"),
+        ...emptyResolution(asExplorationActionId("double-essence")),
         essenceBefore: 0,
         essenceGained: 0,
         essenceAfter: 0,
@@ -3058,14 +3128,17 @@ describe("exploration-view-model", () => {
 
     const tookNone = build(
       {
-        id: "take-none",
+        id: asExplorationActionId("take-none"),
         label: "Take any",
         effectText: "Take any number of Character cards from 4 choices",
         effectKind: "take-cards",
         predicate: "character",
         offerCount: 4,
       },
-      { ...emptyResolution("take-none"), selection: { cardIds: [] } },
+      {
+        ...emptyResolution(asExplorationActionId("take-none")),
+        selection: { cardIds: [] },
+      },
     );
     expect(tookNone).toMatchObject({
       outcomeKind: "card-acquisition",
@@ -3076,7 +3149,7 @@ describe("exploration-view-model", () => {
     });
 
     const purgeUpToTwo: ExplorationActionContent = {
-      id: "purge-up-to-two",
+      id: asExplorationActionId("purge-up-to-two"),
       label: "Stand Down the Escort",
       effectText: "Purge up to 2 chosen Character cards",
       effectKind: "purge-selected",
@@ -3087,9 +3160,17 @@ describe("exploration-view-model", () => {
     };
     const purgedTwo = build(purgeUpToTwo, {
       ...emptyResolution(purgeUpToTwo.id),
-      selection: { entryIds: ["source-entry", "survivor-entry"] },
+      selection: {
+        entryIds: [
+          asDeckEntryId("source-entry"),
+          asDeckEntryId("survivor-entry"),
+        ],
+      },
       purgedCardIds: [source.id, survivor.id],
-      purgedEntryIds: ["source-entry", "survivor-entry"],
+      purgedEntryIds: [
+        asDeckEntryId("source-entry"),
+        asDeckEntryId("survivor-entry"),
+      ],
       purgedEntrySnapshots: [baseState.deck[0], baseState.deck[3]],
     });
     expect(purgedTwo).toMatchObject({
@@ -3098,8 +3179,14 @@ describe("exploration-view-model", () => {
         semanticKind: "card-purge",
         objects: {
           purgedCards: [
-            { entryId: "source-entry", model: { cardId: source.id } },
-            { entryId: "survivor-entry", model: { cardId: survivor.id } },
+            {
+              entryId: asDeckEntryId("source-entry"),
+              model: { cardId: source.id },
+            },
+            {
+              entryId: asDeckEntryId("survivor-entry"),
+              model: { cardId: survivor.id },
+            },
           ],
         },
       },
@@ -3135,19 +3222,19 @@ describe("exploration-view-model", () => {
 
     const replacement = build(
       {
-        id: "replace-fixed",
+        id: asExplorationActionId("replace-fixed"),
         label: "Replace",
         effectText: `Choose a card to purge and replace it with ${survivor.name}`,
         effectKind: "replace-selected-with-card",
         cardId: survivor.id,
       },
       {
-        ...emptyResolution("replace-fixed"),
-        selection: { entryIds: ["source-entry"] },
+        ...emptyResolution(asExplorationActionId("replace-fixed")),
+        selection: { entryIds: [asDeckEntryId("source-entry")] },
         purgedCardIds: [source.id],
-        purgedEntryIds: ["source-entry"],
+        purgedEntryIds: [asDeckEntryId("source-entry")],
         gainedCardIds: [survivor.id],
-        gainedEntryIds: ["replacement-entry"],
+        gainedEntryIds: [asDeckEntryId("replacement-entry")],
       },
     );
     expect(replacement).toMatchObject({
@@ -3157,7 +3244,10 @@ describe("exploration-view-model", () => {
         objects: {
           cards: [{ cardId: survivor.id }],
           purgedCards: [
-            { entryId: "source-entry", model: { cardId: source.id } },
+            {
+              entryId: asDeckEntryId("source-entry"),
+              model: { cardId: source.id },
+            },
           ],
         },
       },
@@ -3176,15 +3266,15 @@ describe("exploration-view-model", () => {
 
     const starterPurge = build(
       {
-        id: "purge-random-starter",
+        id: asExplorationActionId("purge-random-starter"),
         label: "Release",
         effectText: "Purge a random Starter card",
         effectKind: "purge-random-starter-card",
       },
       {
-        ...emptyResolution("purge-random-starter"),
+        ...emptyResolution(asExplorationActionId("purge-random-starter")),
         purgedCardIds: [source.id],
-        purgedEntryIds: ["source-entry"],
+        purgedEntryIds: [asDeckEntryId("source-entry")],
         purgedEntrySnapshots: [baseState.deck[0]],
         starterCardReplacements: [],
       },
@@ -3195,7 +3285,12 @@ describe("exploration-view-model", () => {
         kind: "starter-card-mutation",
         sourceKind: "purge-random-starter-card",
         mode: "purge",
-        purged: [{ entryId: "source-entry", model: { cardId: source.id } }],
+        purged: [
+          {
+            entryId: asDeckEntryId("source-entry"),
+            model: { cardId: source.id },
+          },
+        ],
         replacements: [],
       },
     });
@@ -3212,25 +3307,25 @@ describe("exploration-view-model", () => {
     };
     const starterReplacement = build(
       {
-        id: "replace-random-starter",
+        id: asExplorationActionId("replace-random-starter"),
         label: "Exchange",
         effectText: "Purge a random Starter card and gain a Character card",
         effectKind: "purge-random-starter-and-gain-card",
         predicate: "character",
       },
       {
-        ...emptyResolution("replace-random-starter"),
+        ...emptyResolution(asExplorationActionId("replace-random-starter")),
         purgedCardIds: [source.id],
-        purgedEntryIds: ["source-entry"],
+        purgedEntryIds: [asDeckEntryId("source-entry")],
         purgedEntrySnapshots: [baseState.deck[0]],
         gainedCardIds: [survivor.id],
-        gainedEntryIds: ["copy-a"],
+        gainedEntryIds: [asDeckEntryId("copy-a")],
         resolvedPredicate: "character",
         starterCardReplacements: [
           {
-            purgedEntryId: "source-entry",
+            purgedEntryId: asDeckEntryId("source-entry"),
             purgedCardId: source.id,
-            gainedEntryId: "copy-a",
+            gainedEntryId: asDeckEntryId("copy-a"),
             gainedCardId: survivor.id,
           },
         ],
@@ -3243,12 +3338,17 @@ describe("exploration-view-model", () => {
         kind: "starter-card-mutation",
         sourceKind: "purge-random-starter-and-gain-card",
         mode: "replace",
-        purged: [{ entryId: "source-entry", model: { cardId: source.id } }],
+        purged: [
+          {
+            entryId: asDeckEntryId("source-entry"),
+            model: { cardId: source.id },
+          },
+        ],
         replacements: [
           {
-            purged: { entryId: "source-entry" },
+            purged: { entryId: asDeckEntryId("source-entry") },
             gained: {
-              entryId: "copy-a",
+              entryId: asDeckEntryId("copy-a"),
               model: { cardId: survivor.id },
             },
           },
@@ -3272,31 +3372,34 @@ describe("exploration-view-model", () => {
     };
     const allStarterReplacements = build(
       {
-        id: "replace-all-starters",
+        id: asExplorationActionId("replace-all-starters"),
         label: "Rewrite",
         effectText: "Replace all Starter cards with Character cards",
         effectKind: "replace-all-starter-cards",
         predicate: "character",
       },
       {
-        ...emptyResolution("replace-all-starters"),
+        ...emptyResolution(asExplorationActionId("replace-all-starters")),
         purgedCardIds: [source.id, survivor.id],
-        purgedEntryIds: ["source-entry", "survivor-entry"],
+        purgedEntryIds: [
+          asDeckEntryId("source-entry"),
+          asDeckEntryId("survivor-entry"),
+        ],
         purgedEntrySnapshots: [baseState.deck[0], baseState.deck[3]],
         gainedCardIds: [survivor.id, source.id],
-        gainedEntryIds: ["copy-a", "copy-b"],
+        gainedEntryIds: [asDeckEntryId("copy-a"), asDeckEntryId("copy-b")],
         resolvedPredicate: "character",
         starterCardReplacements: [
           {
-            purgedEntryId: "source-entry",
+            purgedEntryId: asDeckEntryId("source-entry"),
             purgedCardId: source.id,
-            gainedEntryId: "copy-a",
+            gainedEntryId: asDeckEntryId("copy-a"),
             gainedCardId: survivor.id,
           },
           {
-            purgedEntryId: "survivor-entry",
+            purgedEntryId: asDeckEntryId("survivor-entry"),
             purgedCardId: survivor.id,
-            gainedEntryId: "copy-b",
+            gainedEntryId: asDeckEntryId("copy-b"),
             gainedCardId: source.id,
           },
         ],
@@ -3309,31 +3412,31 @@ describe("exploration-view-model", () => {
       mode: "replace",
       replacements: [
         {
-          purged: { entryId: "source-entry" },
-          gained: { entryId: "copy-a" },
+          purged: { entryId: asDeckEntryId("source-entry") },
+          gained: { entryId: asDeckEntryId("copy-a") },
         },
         {
-          purged: { entryId: "survivor-entry" },
-          gained: { entryId: "copy-b" },
+          purged: { entryId: asDeckEntryId("survivor-entry") },
+          gained: { entryId: asDeckEntryId("copy-b") },
         },
       ],
     });
 
     const inconsistentStarterReplacement = build(
       {
-        id: "inconsistent-starter",
+        id: asExplorationActionId("inconsistent-starter"),
         label: "Exchange",
         effectText: "Purge a random Starter card and gain a Character card",
         effectKind: "purge-random-starter-and-gain-card",
         predicate: "character",
       },
       {
-        ...emptyResolution("inconsistent-starter"),
+        ...emptyResolution(asExplorationActionId("inconsistent-starter")),
         purgedCardIds: [source.id],
-        purgedEntryIds: ["source-entry"],
+        purgedEntryIds: [asDeckEntryId("source-entry")],
         purgedEntrySnapshots: [baseState.deck[0]],
         gainedCardIds: [survivor.id],
-        gainedEntryIds: ["copy-a"],
+        gainedEntryIds: [asDeckEntryId("copy-a")],
         starterCardReplacements: [],
       },
       starterReplacementState,
@@ -3342,18 +3445,18 @@ describe("exploration-view-model", () => {
 
     const future = build(
       {
-        id: "future-transfigured-site",
+        id: asExplorationActionId("future-transfigured-site"),
         label: "Follow",
         effectText:
           "The next draft or shop site will contain transfigured cards",
         effectKind: "transfigure-next-draft-or-shop",
       },
       {
-        ...emptyResolution("future-transfigured-site"),
+        ...emptyResolution(asExplorationActionId("future-transfigured-site")),
         siteOfferModifier: {
           kind: "transfigure-next-draft-or-shop",
           sourceSiteId: explorationSite.id,
-          sourceActionId: "future-transfigured-site",
+          sourceActionId: asExplorationActionId("future-transfigured-site"),
         },
       },
     );
@@ -3363,7 +3466,7 @@ describe("exploration-view-model", () => {
         kind: "site-offer-modifier",
         modifier: "transfigure-next-draft-or-shop",
         sourceSiteId: explorationSite.id,
-        sourceActionId: "future-transfigured-site",
+        sourceActionId: asExplorationActionId("future-transfigured-site"),
       },
     });
   });
@@ -3380,7 +3483,7 @@ describe("exploration-view-model", () => {
       ...createDefaultState(),
       activeSiteId: explorationSite.id,
       deck: deckCards.map((deckCard, index) => ({
-        entryId: `compound-entry-${String(index)}`,
+        entryId: asDeckEntryId(`compound-entry-${String(index)}`),
         cardNumber: deckCard.cardNumber,
         transfiguration: null,
         isBane: false,
@@ -3444,7 +3547,7 @@ describe("exploration-view-model", () => {
           encounterCardId: source.id,
           actionOffers: [
             {
-              actionId: action.id,
+              actionId: asExplorationActionId(action.id),
               canonicalMechanicId:
                 preparation.kind === "take-transfigured-nightmares"
                   ? "transfigured-card-chooser"
@@ -3465,7 +3568,7 @@ describe("exploration-view-model", () => {
                       : "uniform",
               selectionRulesVersion: preparation.selectionRulesVersion,
               selectionContentRevision: preparation.selectionContentRevision,
-              selectionKey: preparation.selectionKey,
+              selectionKey: asSelectionKey(preparation.selectionKey),
               selectionSignature: preparation.planSignature,
               selectionTraces: [...preparation.selectorTraces],
               compoundActionPreparation: preparation,
@@ -3502,7 +3605,7 @@ describe("exploration-view-model", () => {
     };
 
     const allAction: ExplorationActionContent = {
-      id: "compound-all",
+      id: asExplorationActionId("compound-all"),
       label: "Recast everything",
       effectText: "Transfigure every card.",
       effectKind: "transfigure-all-cards",
@@ -3510,7 +3613,7 @@ describe("exploration-view-model", () => {
     const all = build(allAction, {
       ...commonPreparation,
       kind: "all-card-transfiguration",
-      selectionKey: allAction.id,
+      selectionKey: asSelectionKey(allAction.id),
       allCards: bindings.map((binding) => ({
         ...binding,
         positiveForms: ["Kindled"],
@@ -3527,7 +3630,7 @@ describe("exploration-view-model", () => {
     });
 
     const disclosedAction: ExplorationActionContent = {
-      id: "compound-disclosed",
+      id: asExplorationActionId("compound-disclosed"),
       label: "Purge the disclosed card",
       effectText: "Purge {deck_card} and transfigure its companions.",
       effectKind: "purge-disclosed-and-transfigure-same-type",
@@ -3536,7 +3639,7 @@ describe("exploration-view-model", () => {
     const disclosed = build(disclosedAction, {
       ...commonPreparation,
       kind: "purge-disclosed-transfigure-same-type",
-      selectionKey: disclosedAction.id,
+      selectionKey: asSelectionKey(disclosedAction.id),
       transfiguration: "Kindled",
       eligiblePurgeTargets: bindings.map((binding) => ({
         ...binding,
@@ -3566,7 +3669,7 @@ describe("exploration-view-model", () => {
     expect(disclosedEntityPart.entity.entryId).toBe(bindings[0].entryId);
 
     const fastAction: ExplorationActionContent = {
-      id: "compound-fast",
+      id: asExplorationActionId("compound-fast"),
       label: "Make the deck fast",
       effectText: "Make every Character Fast and gain Nightmares.",
       effectKind: "make-predicate-fast-and-gain-nightmares",
@@ -3577,7 +3680,7 @@ describe("exploration-view-model", () => {
       build(fastAction, {
         ...commonPreparation,
         kind: "predicate-fast-nightmares",
-        selectionKey: fastAction.id,
+        selectionKey: asSelectionKey(fastAction.id),
         predicate: "character",
         nightmareCount: 2,
         targets: bindings,
@@ -3589,7 +3692,7 @@ describe("exploration-view-model", () => {
     });
 
     const takeAction: ExplorationActionContent = {
-      id: "compound-take",
+      id: asExplorationActionId("compound-take"),
       label: "Take transformed cards",
       effectText: "Take any offered cards and gain Nightmares.",
       effectKind: "take-transfigured-cards-and-gain-nightmares",
@@ -3603,7 +3706,7 @@ describe("exploration-view-model", () => {
     const take = build(takeAction, {
       ...commonPreparation,
       kind: "take-transfigured-nightmares",
-      selectionKey: takeAction.id,
+      selectionKey: asSelectionKey(takeAction.id),
       predicate: "character",
       offerCount: 4,
       transfiguration: "Kindled",
@@ -3631,7 +3734,7 @@ describe("exploration-view-model", () => {
     ).toBe(true);
 
     const purgeCopyAction: ExplorationActionContent = {
-      id: "compound-purge-copy",
+      id: asExplorationActionId("compound-purge-copy"),
       label: "Choose one to purge",
       effectText: "Purge one prepared card and copy the rest.",
       effectKind: "purge-one-transfigure-and-copy-others",
@@ -3641,7 +3744,7 @@ describe("exploration-view-model", () => {
     const purgeCopy = build(purgeCopyAction, {
       ...commonPreparation,
       kind: "purge-transfigure-copy",
-      selectionKey: purgeCopyAction.id,
+      selectionKey: asSelectionKey(purgeCopyAction.id),
       offerCount: 4,
       transfiguration: "Kindled",
       eligibleCards: bindings,
@@ -3673,7 +3776,7 @@ describe("exploration-view-model", () => {
     ];
     const nightmare = card(asCardId(NIGHTMARE_CARD_ID), 35);
     const action: ExplorationActionContent = {
-      id: "compound-selected-gain",
+      id: asExplorationActionId("compound-selected-gain"),
       label: "Take transformed cards",
       effectText: "Take any offered cards and gain Nightmares.",
       effectKind: "take-transfigured-cards-and-gain-nightmares",
@@ -3694,20 +3797,20 @@ describe("exploration-view-model", () => {
       })),
       selectionRulesVersion: "2",
       selectionContentRevision: "compound-resolution-revision",
-      selectionKey: action.id,
+      selectionKey: asSelectionKey(action.id),
       selectorSignatures: [],
       selectorTraces: [],
       planSignature: "compound-resolution-plan",
     };
     const gainedEntries = [
       {
-        entryId: "gained-transfigured-a",
+        entryId: asDeckEntryId("gained-transfigured-a"),
         cardNumber: offered[0].cardNumber,
         transfiguration: "Kindled" as const,
         isBane: false,
       },
       {
-        entryId: "gained-transfigured-b",
+        entryId: asDeckEntryId("gained-transfigured-b"),
         cardNumber: offered[1].cardNumber,
         transfiguration: "Kindled" as const,
         isBane: false,
@@ -3715,13 +3818,13 @@ describe("exploration-view-model", () => {
     ];
     const nightmareEntries = [
       {
-        entryId: "gained-nightmare-a",
+        entryId: asDeckEntryId("gained-nightmare-a"),
         cardNumber: nightmare.cardNumber,
         transfiguration: null,
         isBane: true,
       },
       {
-        entryId: "gained-nightmare-b",
+        entryId: asDeckEntryId("gained-nightmare-b"),
         cardNumber: nightmare.cardNumber,
         transfiguration: null,
         isBane: true,
@@ -3761,7 +3864,7 @@ describe("exploration-view-model", () => {
       selectionPolicyId: "card-fit" as const,
       selectionRulesVersion: preparation.selectionRulesVersion,
       selectionContentRevision: preparation.selectionContentRevision,
-      selectionKey: preparation.selectionKey,
+      selectionKey: asSelectionKey(preparation.selectionKey),
       selectionSignature: preparation.planSignature,
       selectionTraces: [],
       compoundActionPreparation: preparation,
@@ -3777,7 +3880,7 @@ describe("exploration-view-model", () => {
       ),
     };
     const resolution: ExplorationResolution = {
-      actionId: action.id,
+      actionId: asExplorationActionId(action.id),
       selectionRulesVersion: preparation.selectionRulesVersion,
       selectionContentRevision: preparation.selectionContentRevision,
       selectionSignature: preparation.planSignature,
@@ -3934,7 +4037,9 @@ describe("exploration-view-model", () => {
               : "Survivor",
       };
       const eligibleCards = [first, second].map((candidate, index) => ({
-        entryId: `multi-transfiguration-entry-${String(index + 1)}`,
+        entryId: asDeckEntryId(
+          `multi-transfiguration-entry-${String(index + 1)}`,
+        ),
         cardId: candidate.id,
         transfigurations:
           fixedForm === undefined
@@ -3947,7 +4052,7 @@ describe("exploration-view-model", () => {
         mode === "chosen-flexible" || mode === "chosen-fixed"
           ? []
           : eligibleCards.map((binding, index) => ({
-              entryId: binding.entryId,
+              entryId: asDeckEntryId(binding.entryId),
               cardId: binding.cardId,
               transfiguration: fixedForm ?? binding.transfigurations[index % 2],
             }));
@@ -3957,7 +4062,7 @@ describe("exploration-view-model", () => {
         targets,
         selectionRulesVersion: "2",
         selectionContentRevision: "multi-transfiguration-content-v1",
-        selectionKey: "multi-transfiguration-key",
+        selectionKey: asSelectionKey("multi-transfiguration-key"),
         selectorSignatures:
           mode === "chosen-flexible" || mode === "chosen-fixed"
             ? []
@@ -3966,7 +4071,7 @@ describe("exploration-view-model", () => {
         planSignature: "multi-transfiguration-plan",
       };
       const action: ExplorationActionContent = {
-        id: `multi-${effectKind}`,
+        id: asExplorationActionId(`multi-${effectKind}`),
         label: "Rewrite two forms",
         effectText: "Transfigure two cards",
         followupTitle: "Rewrite two forms",
@@ -3979,7 +4084,7 @@ describe("exploration-view-model", () => {
         ...(fixedForm === undefined ? {} : { transfiguration: fixedForm }),
       };
       const fallback: ExplorationActionContent = {
-        id: "multi-transfiguration-fallback",
+        id: asExplorationActionId("multi-transfiguration-fallback"),
         label: "Fallback",
         effectText: "Gain a card",
         effectKind: "gain-card",
@@ -4015,7 +4120,7 @@ describe("exploration-view-model", () => {
       const baseState: JourneyState = {
         ...createDefaultState(),
         deck: [first, second].map((candidate, index) => ({
-          entryId: eligibleCards[index].entryId,
+          entryId: asDeckEntryId(eligibleCards[index].entryId),
           cardNumber: candidate.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -4040,12 +4145,12 @@ describe("exploration-view-model", () => {
             encounterCardId: source.id,
             actionOffers: [
               {
-                actionId: action.id,
+                actionId: asExplorationActionId(action.id),
                 canonicalMechanicId: "transfigure-deck-entry",
                 selectionPolicyId: policy,
                 selectionRulesVersion: preparation.selectionRulesVersion,
                 selectionContentRevision: preparation.selectionContentRevision,
-                selectionKey: preparation.selectionKey,
+                selectionKey: asSelectionKey(preparation.selectionKey),
                 selectionSignature: preparation.planSignature,
                 selectionTraces: [...preparation.selectorTraces],
                 multiCardTransfigurationPreparation: preparation,
@@ -4062,7 +4167,7 @@ describe("exploration-view-model", () => {
                 ...offerOverrides,
               },
               {
-                actionId: fallback.id,
+                actionId: asExplorationActionId(fallback.id),
                 offeredCardIds: [],
                 packCardIds: [],
                 replacementCardIdByEntryId: {},
@@ -4081,8 +4186,8 @@ describe("exploration-view-model", () => {
             kind: "multi-card-transfiguration",
             count: 2,
             candidates: [
-              { entryId: eligibleCards[0].entryId },
-              { entryId: eligibleCards[1].entryId },
+              { entryId: asDeckEntryId(eligibleCards[0].entryId) },
+              { entryId: asDeckEntryId(eligibleCards[1].entryId) },
             ],
           },
         });
@@ -4098,8 +4203,8 @@ describe("exploration-view-model", () => {
             min: 2,
             max: 2,
             cards: [
-              { entryId: eligibleCards[0].entryId },
-              { entryId: eligibleCards[1].entryId },
+              { entryId: asDeckEntryId(eligibleCards[0].entryId) },
+              { entryId: asDeckEntryId(eligibleCards[1].entryId) },
             ],
           },
         });
@@ -4121,7 +4226,7 @@ describe("exploration-view-model", () => {
       const committedTargets =
         mode === "chosen-flexible" || mode === "chosen-fixed"
           ? eligibleCards.map((binding, index) => ({
-              entryId: binding.entryId,
+              entryId: asDeckEntryId(binding.entryId),
               cardId: binding.cardId,
               transfiguration: fixedForm ?? binding.transfigurations[index % 2],
             }))
@@ -4134,30 +4239,36 @@ describe("exploration-view-model", () => {
         })),
       };
       const cardTransfigurations = committedTargets.map((target) => ({
-        entryId: target.entryId,
+        entryId: asDeckEntryId(target.entryId),
         cardId: target.cardId,
         beforeTransfiguration: null,
         afterTransfiguration: target.transfiguration,
       }));
       const resolution: ExplorationResolution = {
-        actionId: action.id,
+        actionId: asExplorationActionId(action.id),
         selection:
           mode === "chosen-flexible"
             ? {
-                entryIds: committedTargets.map((target) => target.entryId),
+                entryIds: committedTargets
+                  .map((target) => target.entryId)
+                  .map(asDeckEntryId),
                 transfigurations: committedTargets.map(
                   (target) => target.transfiguration,
                 ),
               }
             : mode === "chosen-fixed"
               ? {
-                  entryIds: committedTargets.map((target) => target.entryId),
+                  entryIds: committedTargets
+                    .map((target) => target.entryId)
+                    .map(asDeckEntryId),
                 }
               : {},
         gainedCardIds: [],
         gainedDreamsignIds: [],
         purgedCardIds: [],
-        affectedEntryIds: committedTargets.map((target) => target.entryId),
+        affectedEntryIds: committedTargets
+          .map((target) => target.entryId)
+          .map(asDeckEntryId),
         cardTransfigurations,
         essenceGained: 0,
       };
@@ -4169,16 +4280,16 @@ describe("exploration-view-model", () => {
           sourceKind: effectKind,
           transfigurations: [
             {
-              entryId: committedTargets[0].entryId,
+              entryId: asDeckEntryId(committedTargets[0].entryId),
               cardId: committedTargets[0].cardId,
               beforeTransfiguration: null,
               afterTransfiguration: committedTargets[0].transfiguration,
               before: {
-                entryId: committedTargets[0].entryId,
+                entryId: asDeckEntryId(committedTargets[0].entryId),
                 model: { cardId: committedTargets[0].cardId },
               },
               after: {
-                entryId: committedTargets[0].entryId,
+                entryId: asDeckEntryId(committedTargets[0].entryId),
                 model: {
                   cardId: committedTargets[0].cardId,
                   transfiguration: {
@@ -4187,7 +4298,7 @@ describe("exploration-view-model", () => {
                 },
               },
             },
-            { entryId: committedTargets[1].entryId },
+            { entryId: asDeckEntryId(committedTargets[1].entryId) },
           ],
         },
       });
@@ -4207,7 +4318,8 @@ describe("exploration-view-model", () => {
             selection: {
               entryIds: [...committedTargets]
                 .reverse()
-                .map((target) => target.entryId),
+                .map((target) => target.entryId)
+                .map(asDeckEntryId),
               ...(mode === "chosen-flexible"
                 ? {
                     transfigurations: committedTargets.map(
@@ -4223,8 +4335,8 @@ describe("exploration-view-model", () => {
             ...resolution,
             selection: {
               entryIds: [
-                committedTargets[0].entryId,
-                committedTargets[0].entryId,
+                asDeckEntryId(committedTargets[0].entryId),
+                asDeckEntryId(committedTargets[0].entryId),
               ],
               ...(mode === "chosen-flexible"
                 ? {
@@ -4236,8 +4348,8 @@ describe("exploration-view-model", () => {
                 : {}),
             },
             affectedEntryIds: [
-              committedTargets[0].entryId,
-              committedTargets[0].entryId,
+              asDeckEntryId(committedTargets[0].entryId),
+              asDeckEntryId(committedTargets[0].entryId),
             ],
             cardTransfigurations: [
               cardTransfigurations[0],
@@ -4273,8 +4385,14 @@ describe("exploration-view-model", () => {
         isStarter: true,
       };
       const starterCards = [
-        { entryId: "starter-transfigure-a", cardId: firstStarter.id },
-        { entryId: "starter-transfigure-b", cardId: secondStarter.id },
+        {
+          entryId: asDeckEntryId("starter-transfigure-a"),
+          cardId: firstStarter.id,
+        },
+        {
+          entryId: asDeckEntryId("starter-transfigure-b"),
+          cardId: secondStarter.id,
+        },
       ];
       const targets = [
         { ...starterCards[0], transfiguration: "Empowered" as const },
@@ -4287,13 +4405,13 @@ describe("exploration-view-model", () => {
         targets,
         selectionRulesVersion: "starter-transfiguration-rules-v1",
         selectionContentRevision: "starter-transfiguration-content-v1",
-        selectionKey: "starter-transfiguration-key",
+        selectionKey: asSelectionKey("starter-transfiguration-key"),
         selectorSignatures: ["starter-targets", "starter-forms"],
         selectorTraces: [],
         planSignature: "starter-transfiguration-plan",
       };
       const action: ExplorationActionContent = {
-        id: `starter-transfiguration-${effectKind}`,
+        id: asExplorationActionId(`starter-transfiguration-${effectKind}`),
         label: "Rewrite the origins",
         effectText: "Transfigure the starter cards",
         effectKind,
@@ -4302,7 +4420,7 @@ describe("exploration-view-model", () => {
         ...(count === undefined ? {} : { count }),
       };
       const fallback: ExplorationActionContent = {
-        id: "starter-transfiguration-fallback",
+        id: asExplorationActionId("starter-transfiguration-fallback"),
         label: "Fallback",
         effectText: "Gain a card",
         effectKind: "gain-card",
@@ -4371,12 +4489,12 @@ describe("exploration-view-model", () => {
             encounterCardId: source.id,
             actionOffers: [
               {
-                actionId: action.id,
+                actionId: asExplorationActionId(action.id),
                 canonicalMechanicId: "transfigure-deck-entry",
                 selectionPolicyId: "uniform",
                 selectionRulesVersion: preparation.selectionRulesVersion,
                 selectionContentRevision: preparation.selectionContentRevision,
-                selectionKey: preparation.selectionKey,
+                selectionKey: asSelectionKey(preparation.selectionKey),
                 selectionSignature: preparation.planSignature,
                 selectionTraces: [...preparation.selectorTraces],
                 starterCardTransfigurationPreparation: preparation,
@@ -4393,7 +4511,7 @@ describe("exploration-view-model", () => {
                 ...offerOverrides,
               },
               {
-                actionId: fallback.id,
+                actionId: asExplorationActionId(fallback.id),
                 offeredCardIds: [],
                 packCardIds: [],
                 replacementCardIdByEntryId: {},
@@ -4433,7 +4551,7 @@ describe("exploration-view-model", () => {
         afterTransfiguration: target.transfiguration,
       }));
       const resolution: ExplorationResolution = {
-        actionId: action.id,
+        actionId: asExplorationActionId(action.id),
         selection: {},
         gainedCardIds: [],
         gainedEntryIds: [],
@@ -4515,12 +4633,12 @@ describe("exploration-view-model", () => {
     };
     const bindings = [
       {
-        sourceEntryId: "replace-source-a",
+        sourceEntryId: asDeckEntryId("replace-source-a"),
         sourceCardId: firstSource.id,
         replacementCardId: firstReplacement.id,
       },
       {
-        sourceEntryId: "replace-source-b",
+        sourceEntryId: asDeckEntryId("replace-source-b"),
         sourceCardId: secondSource.id,
         replacementCardId: secondReplacement.id,
       },
@@ -4533,13 +4651,13 @@ describe("exploration-view-model", () => {
       bindings,
       selectionRulesVersion: "2",
       selectionContentRevision: "replacement-content-v1",
-      selectionKey: "replacement-action",
+      selectionKey: asSelectionKey("replacement-action"),
       selectorSignatures: ["replacement-a", "replacement-b"],
       selectorTraces,
       planSignature: "replacement-plan",
     };
     const action: ExplorationActionContent = {
-      id: "replacement-action",
+      id: asExplorationActionId("replacement-action"),
       label: "Exchange two echoes",
       effectText: "Replace up to two Events",
       followupTitle: "Choose echoes",
@@ -4595,7 +4713,7 @@ describe("exploration-view-model", () => {
       selectionPolicyId: "card-fit-quality" as const,
       selectionRulesVersion: preparation.selectionRulesVersion,
       selectionContentRevision: preparation.selectionContentRevision,
-      selectionKey: preparation.selectionKey,
+      selectionKey: asSelectionKey(preparation.selectionKey),
       selectionSignature: preparation.planSignature,
       selectionTraces: [...preparation.selectorTraces],
       multiCardReplacementPreparation: preparation,
@@ -4651,13 +4769,13 @@ describe("exploration-view-model", () => {
 
     const gainedEntries = [
       {
-        entryId: "replace-gained-a",
+        entryId: asDeckEntryId("replace-gained-a"),
         cardNumber: firstReplacement.cardNumber,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: "replace-gained-b",
+        entryId: asDeckEntryId("replace-gained-b"),
         cardNumber: secondReplacement.cardNumber,
         transfiguration: null,
         isBane: false,
@@ -4670,7 +4788,7 @@ describe("exploration-view-model", () => {
       replacementCardId: binding.replacementCardId,
     }));
     const resolution: ExplorationResolution = {
-      actionId: action.id,
+      actionId: asExplorationActionId(action.id),
       selection: { entryIds: bindings.map((binding) => binding.sourceEntryId) },
       gainedCardIds: mappings.map((mapping) => mapping.replacementCardId),
       gainedEntryIds: mappings.map((mapping) => mapping.replacementEntryId),
@@ -4775,7 +4893,7 @@ describe("exploration-view-model", () => {
           ? first
           : card(asCardId("f4000000-0000-4000-8000-000000000042"), 42);
       const bindings = [first, second].map((candidate, index) => ({
-        entryId: `random-target-${String(index + 1)}`,
+        entryId: asDeckEntryId(`random-target-${String(index + 1)}`),
         cardId: candidate.id,
       }));
       const selectorTrace = { fixture: effectKind } as never;
@@ -4788,13 +4906,15 @@ describe("exploration-view-model", () => {
         targets: bindings,
         selectionRulesVersion: "2",
         selectionContentRevision: "random-target-content-v1",
-        selectionKey: "random-target-action:random-deck-targets",
+        selectionKey: asSelectionKey(
+          "random-target-action:random-deck-targets",
+        ),
         selectorSignature: "random-target-selector",
         selectorTrace,
         planSignature: "random-target-plan",
       };
       const action: ExplorationActionContent = {
-        id: "random-target-action",
+        id: asExplorationActionId("random-target-action"),
         label: "Resolve random cards",
         effectText: "Resolve two random cards",
         effectKind,
@@ -4833,7 +4953,7 @@ describe("exploration-view-model", () => {
         },
       } as unknown as JourneyContent;
       const beforeEntries = [first, second].map((candidate, index) => ({
-        entryId: bindings[index].entryId,
+        entryId: asDeckEntryId(bindings[index].entryId),
         cardNumber: candidate.cardNumber,
         transfiguration: null,
         isBane: false,
@@ -4844,7 +4964,7 @@ describe("exploration-view-model", () => {
         selectionPolicyId: "uniform" as const,
         selectionRulesVersion: preparation.selectionRulesVersion,
         selectionContentRevision: preparation.selectionContentRevision,
-        selectionKey: preparation.selectionKey,
+        selectionKey: asSelectionKey(preparation.selectionKey),
         selectionSignature: preparation.planSignature,
         selectionTrace: preparation.selectorTrace,
         randomDeckTargetPreparation: preparation,
@@ -4891,22 +5011,26 @@ describe("exploration-view-model", () => {
       if (effectKind === "copy-random-cards") {
         const copies = beforeEntries.map((entry, index) => ({
           ...entry,
-          entryId: `random-copy-${String(index + 1)}`,
+          entryId: asDeckEntryId(`random-copy-${String(index + 1)}`),
         }));
         const mappings = bindings.map((binding, index) => ({
-          sourceEntryId: binding.entryId,
+          sourceEntryId: asDeckEntryId(binding.entryId),
           sourceCardId: binding.cardId,
-          mintedEntryId: copies[index].entryId,
+          mintedEntryId: asDeckEntryId(copies[index].entryId),
           mintedCardId: binding.cardId,
         }));
         const resolution: ExplorationResolution = {
-          actionId: action.id,
+          actionId: asExplorationActionId(action.id),
           selection: {},
           gainedCardIds: mappings.map((mapping) => mapping.mintedCardId),
-          gainedEntryIds: mappings.map((mapping) => mapping.mintedEntryId),
+          gainedEntryIds: mappings
+            .map((mapping) => mapping.mintedEntryId)
+            .map(asDeckEntryId),
           gainedDreamsignIds: [],
           purgedCardIds: [],
-          affectedEntryIds: mappings.map((mapping) => mapping.sourceEntryId),
+          affectedEntryIds: mappings
+            .map((mapping) => mapping.sourceEntryId)
+            .map(asDeckEntryId),
           cardCopies: mappings,
           essenceGained: 0,
         };
@@ -4921,12 +5045,12 @@ describe("exploration-view-model", () => {
             kind: "card-copies-multiple",
             pairs: [
               {
-                source: { entryId: bindings[0].entryId },
-                copy: { entryId: copies[0].entryId },
+                source: { entryId: asDeckEntryId(bindings[0].entryId) },
+                copy: { entryId: asDeckEntryId(copies[0].entryId) },
               },
               {
-                source: { entryId: bindings[1].entryId },
-                copy: { entryId: copies[1].entryId },
+                source: { entryId: asDeckEntryId(bindings[1].entryId) },
+                copy: { entryId: asDeckEntryId(copies[1].entryId) },
               },
             ],
           },
@@ -4937,7 +5061,10 @@ describe("exploration-view-model", () => {
             {
               ...resolution,
               cardCopies: [
-                { ...mappings[0], sourceEntryId: bindings[1].entryId },
+                {
+                  ...mappings[0],
+                  sourceEntryId: asDeckEntryId(bindings[1].entryId),
+                },
                 mappings[1],
               ],
             },
@@ -4948,10 +5075,16 @@ describe("exploration-view-model", () => {
             { ...beforeState, deck: [...beforeEntries, ...copies] },
             {
               ...resolution,
-              gainedEntryIds: [copies[0].entryId, copies[0].entryId],
+              gainedEntryIds: [
+                asDeckEntryId(copies[0].entryId),
+                asDeckEntryId(copies[0].entryId),
+              ],
               cardCopies: [
                 mappings[0],
-                { ...mappings[1], mintedEntryId: copies[0].entryId },
+                {
+                  ...mappings[1],
+                  mintedEntryId: asDeckEntryId(copies[0].entryId),
+                },
               ],
             },
           )?.reward,
@@ -4960,7 +5093,7 @@ describe("exploration-view-model", () => {
       }
 
       const afterTypeChange = {
-        predicateId: "exploration:card-type:Event",
+        predicateId: asCardTypeChangePredicateId("exploration:card-type:Event"),
         cardType: "Event" as const,
         subtype: "",
         label: "Event",
@@ -4970,7 +5103,7 @@ describe("exploration-view-model", () => {
         typeChange: afterTypeChange,
       }));
       const mappings = bindings.map((binding) => ({
-        entryId: binding.entryId,
+        entryId: asDeckEntryId(binding.entryId),
         cardId: binding.cardId,
         beforeCardType: "Character" as const,
         afterCardType: "Event" as const,
@@ -4978,13 +5111,15 @@ describe("exploration-view-model", () => {
         afterTypeChange,
       }));
       const resolution: ExplorationResolution = {
-        actionId: action.id,
+        actionId: asExplorationActionId(action.id),
         selection: {},
         gainedCardIds: [],
         gainedEntryIds: [],
         gainedDreamsignIds: [],
         purgedCardIds: [],
-        affectedEntryIds: mappings.map((mapping) => mapping.entryId),
+        affectedEntryIds: mappings
+          .map((mapping) => mapping.entryId)
+          .map(asDeckEntryId),
         resolvedCardType: "Event",
         cardTypeChanges: mappings,
         essenceGained: 0,
@@ -4998,7 +5133,7 @@ describe("exploration-view-model", () => {
           sourceKind: "change-random-card-type",
           changes: [
             {
-              entryId: bindings[0].entryId,
+              entryId: asDeckEntryId(bindings[0].entryId),
               cardId: bindings[0].cardId,
               beforeCardType: "Character",
               afterCardType: "Event",
@@ -5007,7 +5142,7 @@ describe("exploration-view-model", () => {
               },
               after: { model: { displaySnapshot: { cardType: "Event" } } },
             },
-            { entryId: bindings[1].entryId },
+            { entryId: asDeckEntryId(bindings[1].entryId) },
           ],
         },
       });
@@ -5034,19 +5169,19 @@ describe("exploration-view-model", () => {
       49,
     );
     const sourceEntry = {
-      entryId: "random-replacement-source",
+      entryId: asDeckEntryId("random-replacement-source"),
       cardNumber: source.cardNumber,
       transfiguration: null,
       isBane: false,
     };
     const gainedEntry = {
-      entryId: "random-replacement-gained",
+      entryId: asDeckEntryId("random-replacement-gained"),
       cardNumber: replacement.cardNumber,
       transfiguration: null,
       isBane: false,
     };
     const action: ExplorationActionContent = {
-      id: "random-fixed-replacement-action",
+      id: asExplorationActionId("random-fixed-replacement-action"),
       label: "Replace one card",
       effectText: "Replace a random Character with {fixed_card}",
       effectKind: "replace-random-with-card",
@@ -5064,7 +5199,7 @@ describe("exploration-view-model", () => {
       targets: [{ entryId: sourceEntry.entryId, cardId: source.id }],
       selectionRulesVersion: "2",
       selectionContentRevision: "replacement-content-v1",
-      selectionKey: `${action.id}:random-deck-targets`,
+      selectionKey: asSelectionKey(`${action.id}:random-deck-targets`),
       selectorSignature: "replacement-selector",
       selectorTrace: { fixture: "replacement" } as never,
       planSignature: "replacement-plan",
@@ -5098,7 +5233,7 @@ describe("exploration-view-model", () => {
       selectionPolicyId: "uniform" as const,
       selectionRulesVersion: preparation.selectionRulesVersion,
       selectionContentRevision: preparation.selectionContentRevision,
-      selectionKey: preparation.selectionKey,
+      selectionKey: asSelectionKey(preparation.selectionKey),
       selectionSignature: preparation.planSignature,
       selectionTrace: preparation.selectorTrace,
       randomDeckTargetPreparation: preparation,
@@ -5149,7 +5284,7 @@ describe("exploration-view-model", () => {
       replacementCardId: replacement.id,
     };
     const resolution: ExplorationResolution = {
-      actionId: action.id,
+      actionId: asExplorationActionId(action.id),
       selection: {},
       gainedCardIds: [replacement.id],
       gainedEntryIds: [gainedEntry.entryId],
@@ -5188,13 +5323,13 @@ describe("exploration-view-model", () => {
       spark: null,
     };
     const entry = {
-      entryId: "disclosed-type-target",
+      entryId: asDeckEntryId("disclosed-type-target"),
       cardNumber: event.cardNumber,
       transfiguration: null,
       isBane: false,
     };
     const action: ExplorationActionContent = {
-      id: "disclosed-type-action",
+      id: asExplorationActionId("disclosed-type-action"),
       label: "Change the revealed card",
       effectText: "Change {deck_card} to become a {card_type}",
       effectKind: "change-card-type-selected",
@@ -5210,7 +5345,7 @@ describe("exploration-view-model", () => {
       target: { entryId: entry.entryId, cardId: event.id },
       selectionRulesVersion: "2",
       selectionContentRevision: "disclosed-content-v1",
-      selectionKey: `${action.id}:disclosed-deck-target`,
+      selectionKey: asSelectionKey(`${action.id}:disclosed-deck-target`),
       selectorSignature: "disclosed-selector",
       selectorTrace: { fixture: "disclosed" } as never,
       planSignature: "disclosed-plan",
@@ -5244,7 +5379,7 @@ describe("exploration-view-model", () => {
       selectionPolicyId: "deck-entry-centrality" as const,
       selectionRulesVersion: preparation.selectionRulesVersion,
       selectionContentRevision: preparation.selectionContentRevision,
-      selectionKey: preparation.selectionKey,
+      selectionKey: asSelectionKey(preparation.selectionKey),
       selectionSignature: preparation.planSignature,
       selectionTrace: preparation.selectorTrace,
       disclosedDeckTargetPreparation: preparation,
@@ -5293,14 +5428,16 @@ describe("exploration-view-model", () => {
     expect(preparedAction?.effectText).not.toContain("{card_type}");
     expect(preparedAction?.effectParts).toHaveLength(2);
     const afterTypeChange = {
-      predicateId: "exploration:card-type:character",
+      predicateId: asCardTypeChangePredicateId(
+        "exploration:card-type:character",
+      ),
       cardType: "Character" as const,
       subtype: "",
       label: "Character",
     };
     const finalEntry = { ...entry, typeChange: afterTypeChange };
     const resolution: ExplorationResolution = {
-      actionId: action.id,
+      actionId: asExplorationActionId(action.id),
       selection: { entryIds: [entry.entryId] },
       gainedCardIds: [],
       gainedEntryIds: [],
@@ -5341,7 +5478,7 @@ describe("exploration-view-model", () => {
   it("builds fixed-site actions automatically and reveals only the atlas-confirmed insertion", () => {
     const source = card(sourceId, 17);
     const action: ExplorationActionContent = {
-      id: "41000000-0000-4000-8000-000000000041",
+      id: asExplorationActionId("41000000-0000-4000-8000-000000000041"),
       label: "Open the passage",
       effectText: "Add a duplication site to this dreamscape.",
       effectKind: "add-fixed-site",
@@ -5350,23 +5487,23 @@ describe("exploration-view-model", () => {
       siteType: "Duplication",
     };
     const siblingSite: SiteState = {
-      id: "site-draft-fixture",
+      id: asSiteId("site-draft-fixture"),
       type: "Draft",
       isEnhanced: false,
       isVisited: false,
     };
     const insertedSite = {
-      id: `site-exploration-${explorationSite.id}-${action.id}`,
+      id: asSiteId(`site-exploration-${explorationSite.id}-${action.id}`),
       type: "Duplication" as const,
       isEnhanced: false,
       isVisited: false,
     };
-    const nodeId = "fixture-node";
+    const nodeId = asAtlasNodeId("fixture-node");
     const node = {
-      id: nodeId,
+      id: asAtlasNodeId(nodeId),
       layer: LayerName.One,
       indexInLayer: 0,
-      dreamscapeId: "fixture-dreamscape",
+      dreamscapeId: asDreamscapeId("fixture-dreamscape"),
       sites: [explorationSite, siblingSite],
       position: { x: 0, y: 0 },
       state: "available",
@@ -5378,7 +5515,7 @@ describe("exploration-view-model", () => {
     const preparation = {
       sourceSiteId: explorationSite.id,
       sourceActionId: action.id,
-      targetNodeId: nodeId,
+      targetNodeId: asAtlasNodeId(nodeId),
       insertionIndex: node.sites.length,
       siblingSiteIdsBefore: node.sites.map((site) => site.id),
       insertedSite,
@@ -5390,7 +5527,7 @@ describe("exploration-view-model", () => {
       selectionPolicyId: "fixed" as const,
       selectionRulesVersion: "selection-rules-v1",
       selectionContentRevision: "selection-content-v1",
-      selectionKey: action.id,
+      selectionKey: asSelectionKey(action.id),
       selectionSignature: preparation.planSignature,
       siteInsertionPreparation: preparation,
       offeredCardIds: [],
@@ -5460,7 +5597,7 @@ describe("exploration-view-model", () => {
       sites: [...node.sites, insertedSite],
     };
     const resolution: ExplorationResolution = {
-      actionId: action.id,
+      actionId: asExplorationActionId(action.id),
       selection: {},
       selectionSignature: preparation.planSignature,
       gainedCardIds: [],
@@ -5469,10 +5606,10 @@ describe("exploration-view-model", () => {
       affectedEntryIds: [],
       essenceGained: 0,
       siteInsertion: {
-        targetNodeId: nodeId,
+        targetNodeId: asAtlasNodeId(nodeId),
         insertionIndex: preparation.insertionIndex,
         siblingSiteIdsBefore: preparation.siblingSiteIdsBefore,
-        insertedSite,
+        insertedSite: insertedSite,
       },
     };
     const resolvedState = {
@@ -5501,7 +5638,7 @@ describe("exploration-view-model", () => {
       outcomeKind: "site-insertion",
       reward: {
         kind: "site-insertion",
-        targetNodeId: nodeId,
+        targetNodeId: asAtlasNodeId(nodeId),
         insertionIndex: 2,
         siblingSiteIdsBefore: [explorationSite.id, siblingSite.id],
         model: {
@@ -5541,7 +5678,7 @@ describe("exploration-view-model", () => {
   it("builds a signed site-type chooser and reconstructs the selected insertion", () => {
     const source = card(sourceId, 18);
     const action: ExplorationActionContent = {
-      id: "46000000-0000-4000-8000-000000000046",
+      id: asExplorationActionId("46000000-0000-4000-8000-000000000046"),
       label: "Shape three futures",
       effectText: "Choose a site to add to this dreamscape.",
       effectKind: "choose-site-type",
@@ -5552,17 +5689,17 @@ describe("exploration-view-model", () => {
       followupSubtitle: "Choose one prepared site.",
     };
     const siblingSite: SiteState = {
-      id: "site-draft-choice-fixture",
+      id: asSiteId("site-draft-choice-fixture"),
       type: "Draft",
       isEnhanced: false,
       isVisited: false,
     };
-    const nodeId = "fixture-choice-node";
+    const nodeId = asAtlasNodeId("fixture-choice-node");
     const node = {
-      id: nodeId,
+      id: asAtlasNodeId(nodeId),
       layer: LayerName.One,
       indexInLayer: 0,
-      dreamscapeId: "fixture-choice-dreamscape",
+      dreamscapeId: asDreamscapeId("fixture-choice-dreamscape"),
       sites: [explorationSite, siblingSite],
       position: { x: 0, y: 0 },
       state: "available",
@@ -5576,7 +5713,7 @@ describe("exploration-view-model", () => {
     const choices = siteTypes.map((siteType) => ({
       siteType,
       insertedSite: {
-        id: preparedSiteId,
+        id: asSiteId(preparedSiteId),
         type: siteType,
         isEnhanced: false,
         isVisited: false,
@@ -5585,7 +5722,7 @@ describe("exploration-view-model", () => {
     const preparation = {
       sourceSiteId: explorationSite.id,
       sourceActionId: action.id,
-      targetNodeId: nodeId,
+      targetNodeId: asAtlasNodeId(nodeId),
       insertionIndex: node.sites.length,
       siblingSiteIdsBefore: node.sites.map((site) => site.id),
       choices,
@@ -5597,7 +5734,7 @@ describe("exploration-view-model", () => {
       selectionContentRevision: "selection-content-v1",
       mechanicId: "add-site" as const,
       policyId: "site-uniform" as const,
-      selectionKey: action.id,
+      selectionKey: asSelectionKey(action.id),
       keyKind: "siteType" as const,
       saltParts: ["exploration", explorationSite.id, action.id],
       purpose: "site-type-choice",
@@ -5613,7 +5750,7 @@ describe("exploration-view-model", () => {
         cutoffScore: null,
         candidates: [],
       },
-      selectedKeys: [...siteTypes],
+      selectedKeys: siteTypes.map(asRewardCandidateKey),
       fallback: [],
       tuning: {},
       effectiveDeck: [],
@@ -5625,7 +5762,7 @@ describe("exploration-view-model", () => {
       selectionPolicyId: "site-uniform" as const,
       selectionRulesVersion: "selection-rules-v1",
       selectionContentRevision: "selection-content-v1",
-      selectionKey: action.id,
+      selectionKey: asSelectionKey(action.id),
       selectionSignature: preparation.planSignature,
       selectionTrace,
       siteTypeChoicePreparation: preparation,
@@ -5746,7 +5883,7 @@ describe("exploration-view-model", () => {
       },
     };
     const resolution: ExplorationResolution = {
-      actionId: action.id,
+      actionId: asExplorationActionId(action.id),
       selection: { siteType: chosen.siteType },
       selectionSignature: preparation.planSignature,
       gainedCardIds: [],
@@ -5755,7 +5892,7 @@ describe("exploration-view-model", () => {
       affectedEntryIds: [],
       essenceGained: 0,
       siteInsertion: {
-        targetNodeId: nodeId,
+        targetNodeId: asAtlasNodeId(nodeId),
         insertionIndex: preparation.insertionIndex,
         siblingSiteIdsBefore: preparation.siblingSiteIdsBefore,
         insertedSite: chosen.insertedSite,
@@ -5766,7 +5903,7 @@ describe("exploration-view-model", () => {
       reward: {
         kind: "site-insertion",
         sourceKind: "choose-site-type",
-        targetNodeId: nodeId,
+        targetNodeId: asAtlasNodeId(nodeId),
         insertionIndex: 2,
         model: {
           id: chosen.insertedSite.id,
@@ -5792,7 +5929,7 @@ describe("exploration-view-model", () => {
       shopModifier: {
         kind: "free-next-shop" as const,
         sourceSiteId: explorationSite.id,
-        sourceActionId: "shop-modifier-action",
+        sourceActionId: asExplorationActionId("shop-modifier-action"),
       },
       essenceBefore: undefined,
       essenceSpent: undefined,
@@ -5800,7 +5937,7 @@ describe("exploration-view-model", () => {
       expected: {
         modifier: "free-next-shop",
         sourceSiteId: explorationSite.id,
-        sourceActionId: "shop-modifier-action",
+        sourceActionId: asExplorationActionId("shop-modifier-action"),
       },
     },
     {
@@ -5809,7 +5946,7 @@ describe("exploration-view-model", () => {
       shopModifier: {
         kind: "free-purchases" as const,
         sourceSiteId: explorationSite.id,
-        sourceActionId: "shop-modifier-action",
+        sourceActionId: asExplorationActionId("shop-modifier-action"),
         initialCount: 3,
         remainingCount: 3,
       },
@@ -5819,7 +5956,7 @@ describe("exploration-view-model", () => {
       expected: {
         modifier: "free-purchases",
         sourceSiteId: explorationSite.id,
-        sourceActionId: "shop-modifier-action",
+        sourceActionId: asExplorationActionId("shop-modifier-action"),
         freePurchaseCount: 3,
         essenceBefore: 255,
         essenceSpent: 127,
@@ -5839,7 +5976,7 @@ describe("exploration-view-model", () => {
     }) => {
       const source = card(sourceId, 18);
       const action: ExplorationActionContent = {
-        id: "shop-modifier-action",
+        id: asExplorationActionId("shop-modifier-action"),
         label: "Fixture choice",
         effectText: "Fixture effect.",
         effectKind,
@@ -5873,7 +6010,7 @@ describe("exploration-view-model", () => {
         encounterCardId: source.id,
         actionOffers: [
           {
-            actionId: action.id,
+            actionId: asExplorationActionId(action.id),
             canonicalMechanicId: "shop-purchase-modifier",
             offeredCardIds: [],
             packCardIds: [],
@@ -5882,7 +6019,7 @@ describe("exploration-view-model", () => {
           },
         ],
         resolution: {
-          actionId: action.id,
+          actionId: asExplorationActionId(action.id),
           gainedCardIds: [],
           gainedDreamsignIds: [],
           purgedCardIds: [],

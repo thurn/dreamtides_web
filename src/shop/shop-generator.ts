@@ -7,6 +7,7 @@ import type { EconomyData, EconomyWeightedValue } from "../types/economy-data";
 import { drawAndSpendUniqueCards } from "../draft/draft-engine";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import { logAffiliationDraw } from "../affiliations/affiliation-weights";
+import type { AffiliationId, DreamsignId } from "../types/identifiers";
 
 /** The types of items that can appear in a shop slot. */
 export type ShopItemType = "card" | "dreamsign";
@@ -42,10 +43,10 @@ export interface ShopGenerationOptions {
    * on the result.
    */
   draftState: DraftState | null;
-  remainingDreamsignPoolIds?: readonly string[];
+  remainingDreamsignPoolIds?: readonly DreamsignId[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
   /** The run's full Dreamsign pool, used to regenerate an exhausted pool. */
-  dreamsignRegenerationPoolIds?: readonly string[];
+  dreamsignRegenerationPoolIds?: readonly DreamsignId[];
   /** Specialty Shops use their authored stock count and card price. */
   isSpecialty?: boolean;
   cardCount?: number;
@@ -61,7 +62,7 @@ export interface ShopGenerationOptions {
    * The id of the affiliation `affiliationNumberWeights` came from, recorded in
    * the reconstruction log. Absent in a neutral dreamscape.
    */
-  affiliationId?: string;
+  affiliationId?: AffiliationId;
   /**
    * Deterministic `[0, 1)` random source for the stock draw, discounts, and the
    * Dreamsign pull. Defaults to `Math.random` (the legacy/UI path); the coop
@@ -87,8 +88,8 @@ function weightedValue(
 
 export interface ShopInventoryResult {
   slots: ShopSlot[];
-  remainingDreamsignPoolIds: string[];
-  spentDreamsignPoolIds: string[];
+  remainingDreamsignPoolIds: DreamsignId[];
+  spentDreamsignPoolIds: DreamsignId[];
   reconstructionLog: ShopInventoryReconstructionLog;
   /**
    * The draft multiset after this shop drew its card slots from — and spent —
@@ -110,7 +111,7 @@ export interface ShopInventoryResult {
 export interface ShopInventoryReconstructionLog {
   event: "shop_inventory_generated";
   shopType: "specialty" | "regular";
-  affiliationId: string | null;
+  affiliationId: AffiliationId | null;
   requestedCardCount: number;
   requestedDreamsignCount: number;
   cardSource: "draft_multiset" | "none";
@@ -340,7 +341,7 @@ export function generateShopInventory(
 
   // --- Dreamsign slots: drawn from the shared Dreamsign pool and spent. ---
   let remainingPool = [...remainingDreamsignPoolIds];
-  const spentDreamsignPoolIds: string[] = [];
+  const spentDreamsignPoolIds: DreamsignId[] = [];
   if (dreamsignTemplates.length > 0 && dreamsignCount > 0) {
     const draw = drawDreamsignOptions(
       remainingPool,

@@ -10,6 +10,7 @@ import type { GambleData } from "../types/gamble-data";
 import type { TransfigurationData } from "../types/transfiguration-data";
 import { asCardId, isCardId, type CardId } from "../types/card-identity";
 import type { GambleGameId } from "../types/gamble";
+import { asQaSceneId, type QaSceneId, type RoomId } from "../types/identifiers";
 
 export interface RuntimeConfig {
   seedOverride: number | null;
@@ -21,7 +22,7 @@ export interface RuntimeConfig {
    * genesis.
    */
   tutorialPlaybackSpeed?: number;
-  gameId: string | null;
+  gameId: RoomId | null;
   databaseMode: DatabaseMode;
   /**
    * Name of a saved journey to load on boot, from `?loadJourney=`. When set, the
@@ -42,7 +43,7 @@ export interface RuntimeConfig {
    * directly for browser QA. Null when absent. `parseRuntimeConfig` always sets
    * it; it is optional only so test config literals can omit it.
    */
-  gotoScene?: string | null;
+  gotoScene?: QaSceneId | null;
   /**
    * Exploration encounter source-card UUID from `?card=`. This is consumed by
    * the `exploration`, `exploration-enhanced`, and `exploration-duplicates` QA
@@ -65,7 +66,7 @@ export interface RuntimeConfig {
    * `parseRuntimeConfig` always sets it; it is optional only so test config
    * literals can omit it.
    */
-  viewLogs?: string | null;
+  viewLogs?: RoomId | null;
   /**
    * Optional Gamble game forced by `?gambleGame=`. Null lets OPEN_SITE choose
    * randomly; the resolved game is persisted in the room event log.
@@ -211,12 +212,12 @@ function parseTutorialPlaybackSpeed(rawSpeed: string | null): number {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
 }
 
-function parseGotoScene(rawScene: string | null): string | null {
+function parseGotoScene(rawScene: string | null): QaSceneId | null {
   if (rawScene === null) {
     return null;
   }
   const trimmed = rawScene.trim();
-  return trimmed === "" ? null : trimmed;
+  return trimmed === "" ? null : asQaSceneId(trimmed);
 }
 
 function parseDatabaseMode(rawRealtime: string | null): DatabaseMode {

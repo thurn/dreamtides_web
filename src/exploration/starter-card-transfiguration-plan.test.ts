@@ -16,6 +16,9 @@ import {
   explorationStarterCardTransfigurationPreparationsEqual,
   prepareExplorationStarterCardTransfigurationPlan,
 } from "./starter-card-transfiguration-plan";
+import { asSiteId } from "../types/identifiers";
+import { asDeckEntryId } from "../types/identifiers";
+import { asExplorationActionId } from "../types/identifiers";
 
 const ENCOUNTER_CARD_ID = "a0000000-0000-4000-8000-000000000001";
 
@@ -74,7 +77,7 @@ function contentFixture(): JourneyContent {
 }
 
 const site: SiteState = {
-  id: "starter-transfiguration-site",
+  id: asSiteId("starter-transfiguration-site"),
   type: "Exploration",
   isEnhanced: false,
   isVisited: false,
@@ -90,7 +93,7 @@ function journeyFixture(
     deck: Array.from({ length: starterCount }, (_, index) => {
       const entryId = `starter-${String(index + 1)}`;
       return {
-        entryId,
+        entryId: asDeckEntryId(entryId),
         cardNumber: index % 2 === 0 ? 2 : 3,
         transfiguration:
           entryId === transfiguredEntryId ? ("Empowered" as const) : null,
@@ -109,8 +112,8 @@ function prepare(
   return prepareExplorationStarterCardTransfigurationPlan({
     effectKind,
     count,
-    actionId: "starter-transfiguration-action",
-    encounterCardId: ENCOUNTER_CARD_ID,
+    actionId: asExplorationActionId("starter-transfiguration-action"),
+    encounterCardId: asCardId(ENCOUNTER_CARD_ID),
     journey,
     site,
     content: contentFixture(),
@@ -247,8 +250,8 @@ describe("Exploration starter-card transfiguration plan", () => {
     const plan = prepareExplorationStarterCardTransfigurationPlan({
       effectKind: "transfigure-random-starter-cards",
       count: 1,
-      actionId: "role-only-starter-action",
-      encounterCardId: ENCOUNTER_CARD_ID,
+      actionId: asExplorationActionId("role-only-starter-action"),
+      encounterCardId: asCardId(ENCOUNTER_CARD_ID),
       journey: journeyFixture(1),
       site,
       content,
@@ -264,8 +267,8 @@ describe("Exploration starter-card transfiguration plan", () => {
     const journey = journeyFixture(2);
     const baseInput = {
       effectKind: "transfigure-all-starter-cards" as const,
-      actionId: "bound-starter-action",
-      encounterCardId: ENCOUNTER_CARD_ID,
+      actionId: asExplorationActionId("bound-starter-action"),
+      encounterCardId: asCardId(ENCOUNTER_CARD_ID),
       journey,
       site,
       content,
@@ -279,7 +282,7 @@ describe("Exploration starter-card transfiguration plan", () => {
       });
     const encounterChanged = prepareExplorationStarterCardTransfigurationPlan({
       ...baseInput,
-      encounterCardId: "a0000000-0000-4000-8000-000000000099",
+      encounterCardId: asCardId("a0000000-0000-4000-8000-000000000099"),
     });
 
     expect(authoredCountChanged.targets).toEqual(original.targets);
