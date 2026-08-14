@@ -4,7 +4,7 @@
 
 # Wager Prize Card
 
-Components · Live demo & interactive props: `/cumulus#/wager-prize-card`
+Atlas & Sites · Live demo & interactive props: `/cumulus#/wager-prize-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

@@ -11,7 +11,12 @@ import "../assets/phosphor.css";
 import type { CSSProperties } from "react";
 import { useCumulusRoute } from "./route";
 import { useOverviewScrollRestoration } from "./use-overview-scroll-restoration";
-import { CUMULUS_COMPONENTS, type CumulusComponent } from "./registry";
+import {
+  CUMULUS_COMPONENT_GROUPS,
+  CUMULUS_COMPONENTS,
+  type CumulusComponent,
+  type CumulusComponentGroup,
+} from "./registry";
 import { getComponent } from "./registry";
 import { getMockup } from "./mockups/registry";
 import { ComponentPage } from "./ComponentPage";
@@ -41,25 +46,30 @@ const contentStyle: CSSProperties = {
   margin: "0 auto",
 };
 
-/** Group registry entries by their `group`, preserving first-seen order. */
+interface ComponentGroup {
+  group: CumulusComponentGroup;
+  entries: CumulusComponent[];
+}
+
+/** Group registry entries in the catalog's stable reader-facing order. */
 function groupComponents(
   components: CumulusComponent[],
-): { group: string; entries: CumulusComponent[] }[] {
-  const groups: { group: string; entries: CumulusComponent[] }[] = [];
+): ComponentGroup[] {
+  const groups = new Map<CumulusComponentGroup, CumulusComponent[]>();
   for (const component of components) {
-    let bucket = groups.find((candidate) => candidate.group === component.group);
-    if (!bucket) {
-      bucket = { group: component.group, entries: [] };
-      groups.push(bucket);
-    }
-    bucket.entries.push(component);
+    const bucket = groups.get(component.group) ?? [];
+    bucket.push(component);
+    groups.set(component.group, bucket);
   }
-  return groups;
+  return CUMULUS_COMPONENT_GROUPS.flatMap((group) => {
+    const entries = groups.get(group);
+    return entries === undefined ? [] : [{ group, entries }];
+  });
 }
 
 /** Stable DOM-id slug for a component group's overview section, e.g.
  * "Components" -> "cumulus-toc-group-components". */
-function groupAnchorId(group: string): string {
+function groupAnchorId(group: CumulusComponentGroup): string {
   const slug = group.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   return `cumulus-toc-group-${slug}`;
 }
@@ -70,16 +80,16 @@ function componentAnchorId(id: string): string {
 }
 
 const UI_SYSTEMS_ANCHOR_ID = "cumulus-toc-ui-systems";
+const COMPONENTS_ANCHOR_ID = "cumulus-toc-components";
 
 function systemAnchorId(id: string): string {
   return `cumulus-toc-system-${id}`;
 }
 
 /** Builds the table-of-contents entries in the exact top-to-bottom order the
- * overview renders its sections: prose, UI systems, then each component group
- * with its components nested one rung in. */
+ * overview renders its sections: prose, component groups, then UI systems. */
 function buildTocEntries(
-  groups: { group: string; entries: CumulusComponent[] }[],
+  groups: ComponentGroup[],
   systems: readonly CumulusUISystem[],
 ): TocEntry[] {
   const entries: TocEntry[] = [
@@ -88,23 +98,26 @@ function buildTocEntries(
     // The token section's categories (Color, Typography, ...) nest one rung in,
     // derived from the section itself so they can't drift from its headings.
     ...TOKEN_TOC_ENTRIES.map((entry) => ({ ...entry, depth: 1 as const })),
+    { id: COMPONENTS_ANCHOR_ID, label: "Components", depth: 0 },
+  ];
+  for (const { group, entries: components } of groups) {
+    entries.push({ id: groupAnchorId(group), label: group, depth: 1 });
+    for (const component of components) {
+      entries.push({
+        id: componentAnchorId(component.id),
+        label: component.title,
+        depth: 2,
+      });
+    }
+  }
+  entries.push(
     { id: UI_SYSTEMS_ANCHOR_ID, label: "UI Systems", depth: 0 },
     ...systems.map((system) => ({
       id: systemAnchorId(system.id),
       label: system.title,
       depth: 1 as const,
     })),
-  ];
-  for (const { group, entries: components } of groups) {
-    entries.push({ id: groupAnchorId(group), label: group, depth: 0 });
-    for (const component of components) {
-      entries.push({
-        id: componentAnchorId(component.id),
-        label: component.title,
-        depth: 1,
-      });
-    }
-  }
+  );
   return entries;
 }
 
@@ -134,6 +147,56 @@ function Overview() {
       <IntroSection />
 
       <DesignTokensSection />
+
+      <section
+        id={COMPONENTS_ANCHOR_ID}
+        data-cumulus-components=""
+        style={{ marginBottom: token("--space-4xl") }}
+      >
+        <h2
+          style={{
+            margin: `0 0 ${token("--space-2xl")}`,
+            color: token("--text-muted"),
+            font: token("--t-eyebrow"),
+            letterSpacing: token("--tracking-eyebrow"),
+            textTransform: "uppercase",
+          }}
+        >
+          Components
+        </h2>
+        {groups.length === 0 ? (
+          <p style={{ color: token("--text-muted"), font: token("--t-body") }}>
+            Components coming soon.
+          </p>
+        ) : (
+          <div style={{ display: "flex", flexDirection: "column", gap: token("--space-4xl") }}>
+            {groups.map(({ group, entries }) => (
+              <section key={group} id={groupAnchorId(group)}>
+                <h3
+                  style={{
+                    font: token("--t-eyebrow"),
+                    letterSpacing: token("--tracking-eyebrow"),
+                    textTransform: "uppercase",
+                    color: token("--text-muted"),
+                    margin: `0 0 ${token("--space-l")}`,
+                  }}
+                >
+                  {group}
+                </h3>
+                <div style={{ display: "flex", flexDirection: "column", gap: token("--space-3xl") }}>
+                  {entries.map((entry) => (
+                    <ComponentShowcase
+                      key={entry.id}
+                      entry={entry}
+                      anchorId={componentAnchorId(entry.id)}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        )}
+      </section>
 
       <section
         id={UI_SYSTEMS_ANCHOR_ID}
@@ -174,39 +237,6 @@ function Overview() {
           ))}
         </div>
       </section>
-
-      {groups.length === 0 ? (
-        <p style={{ color: token("--text-muted"), font: token("--t-body") }}>
-          Components coming soon.
-        </p>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: token("--space-4xl") }}>
-          {groups.map(({ group, entries }) => (
-            <section key={group} id={groupAnchorId(group)}>
-              <h2
-                style={{
-                  font: token("--t-eyebrow"),
-                  letterSpacing: token("--tracking-eyebrow"),
-                  textTransform: "uppercase",
-                  color: token("--text-muted"),
-                  margin: `0 0 ${token("--space-l")}`,
-                }}
-              >
-                {group}
-              </h2>
-              <div style={{ display: "flex", flexDirection: "column", gap: token("--space-3xl") }}>
-                {entries.map((entry) => (
-                  <ComponentShowcase
-                    key={entry.id}
-                    entry={entry}
-                    anchorId={componentAnchorId(entry.id)}
-                  />
-                ))}
-              </div>
-            </section>
-          ))}
-        </div>
-      )}
     </div>
   );
 }

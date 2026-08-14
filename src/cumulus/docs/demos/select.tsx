@@ -74,7 +74,7 @@ export const selectDemo: CumulusComponent = {
     "It reserves the width of its widest option's label, so the button holds one size and never jitters as the selection changes. Give a menu entry a compact `triggerLabel` to show a shorter form on the collapsed button while the menu shows the full phrase.",
     "The menu opens above or below according to the available viewport space and scrolls when neither side can fit every option. Trigger and menu wear the same liquid glass, so the open control reads as one continuous surface.",
   ],
-  group: "Components",
+  group: "Actions & Inputs",
   docName: "Select",
   Component: SelectDemo,
   usage: [

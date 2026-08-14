@@ -92,6 +92,22 @@ export interface CumulusUsageExample {
   code: string;
 }
 
+/** The stable, reader-facing order of logical groups in the component catalog. */
+export const CUMULUS_COMPONENT_GROUPS = [
+  "Primitives",
+  "Actions & Inputs",
+  "Surfaces & Overlays",
+  "Text & Guidance",
+  "Status, Feedback & Effects",
+  "Battle",
+  "Cards",
+  "Card Workflows",
+  "Characters & Collectibles",
+  "Atlas & Sites",
+] as const;
+
+export type CumulusComponentGroup = (typeof CUMULUS_COMPONENT_GROUPS)[number];
+
 /**
  * A single documented entry in the Cumulus catalog.
  */
@@ -137,8 +153,8 @@ export interface CumulusComponent {
    * sweep is adopted or deleted. Omit for shipped components.
    */
   status?: "incubating";
-  /** Table-of-contents grouping, e.g. "Primitives" | "Components". */
-  group: string;
+  /** Logical subheading beneath Components in the overview and table of contents. */
+  group: CumulusComponentGroup;
   /**
    * Key into cumulus-metadata.json — the component's react-docgen displayName.
    * PropsTable/ControlPanel look up the generated PropMeta[] under this key.
@@ -173,72 +189,81 @@ export interface CumulusComponent {
 }
 
 /**
- * The Cumulus component catalog. Append one object literal per component. Order
- * within a group is preserved; CumulusApp groups entries by `group` for the TOC.
+ * The Cumulus component catalog. Entries are ordered by their reader-facing
+ * group and then in the order they should appear within that group.
  */
 export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   pressableDemo,
+  inlineGlyphDemo,
+  standaloneGlyphDemo,
+
   explorationChoiceDemo,
-  essenceValueDemo,
   iconButtonDemo,
   mainMenuButtonDemo,
   glassButtonDemo,
-  offerTileDemo,
-  glassPanelDemo,
-  glassDialogDemo,
-  dreamsignReplacementDialogDemo,
-  viewportTutorialDialogueDemo,
-  developerRailDemo,
-  commandMenuDemo,
-  tutorialFeatureCalloutDemo,
-  speechBubbleDemo,
-  characterDialogueDemo,
   segmentedControlDemo,
   selectDemo,
   textFieldDemo,
   textAreaDemo,
   numberStepperDemo,
   disclosureSectionDemo,
-  cardOrderEditorDemo,
+  transfigurationButtonDemo,
+
+  glassPanelDemo,
+  glassDialogDemo,
+  dreamsignReplacementDialogDemo,
+  developerRailDemo,
+  commandMenuDemo,
+  infoCardDemo,
+  editableInfoCardDemo,
+
+  richTextDemo,
+  rulesTextDemo,
+  tutorialFeatureCalloutDemo,
+  speechBubbleDemo,
+  characterDialogueDemo,
+  viewportTutorialDialogueDemo,
+
+  essenceValueDemo,
   tideDiscDemo,
   tidesInfoLabelDemo,
-  transfigurationButtonDemo,
   transientStatusToastDemo,
   radialAnnouncementDemo,
   motesDemo,
-  infoCardDemo,
-  editableInfoCardDemo,
-  inlineGlyphDemo,
-  standaloneGlyphDemo,
   journeyStatusBarDemo,
   coopPresenceStatusDemo,
+
   battleStatusDisplayDemo,
   battlePhaseIndicatorDemo,
   battlefieldCardDemo,
   battleForeseeEditorDemo,
-  dreamwellCardDemo,
-  dreamAvatarPortraitDemo,
-  dreamAvatarStageDemo,
-  richTextDemo,
-  rulesTextDemo,
+  cardOrderEditorDemo,
+
   gameCardDemo,
   playingCardDemo,
   cardBackDemo,
   cardPileDemo,
+  dreamwellCardDemo,
+  cardStatOrbDemo,
+
   cardChoiceGridDemo,
   cardBrowserPanelDemo,
   cardPickerPanelDemo,
   transfigurationPickerPanelDemo,
   transfigurationDetailPanelDemo,
   cardChangePairDemo,
-  cardStatOrbDemo,
-  atlasNodeDemo,
-  atlasEdgeDemo,
+
+  dreamAvatarPortraitDemo,
+  dreamAvatarStageDemo,
   dreamsignDemo,
   dreamsignGalleryPanelDemo,
+
+  atlasNodeDemo,
+  atlasEdgeDemo,
   siteNodeDemo,
-  wagerPrizeCardDemo,
   siteLayoutDemo,
+  offerTileDemo,
+  wagerPrizeCardDemo,
 ];
 
 /** Look up a registry entry by its route id. */

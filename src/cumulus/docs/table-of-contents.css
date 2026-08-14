@@ -82,6 +82,11 @@
   font: var(--t-caption);
 }
 
+.cumulus-toc__item--grandchild {
+  padding-left: var(--space-3xl);
+  font: var(--t-caption);
+}
+
 /* Trail: an ancestor of the active entry — dimmed accent so the reader can see
    which group they are inside without it competing with the active row. */
 .cumulus-toc__item--trail {

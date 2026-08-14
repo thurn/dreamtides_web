@@ -36,7 +36,7 @@ export const speechBubbleDemo: CumulusComponent = {
   details: [
     "The component owns its glass material, path-following glass rim, white on-glass name treatment, quote voice, named display scales, pointer geometry, yellow highlights, bold high-contrast purple highlights, and canonical inline rules glyphs. Top-left and bottom-left pointer bases stay clear of the rounded corners.",
   ],
-  group: "Components",
+  group: "Text & Guidance",
   docName: "SpeechBubble",
   Component: SpeechBubbleDemo,
   usage: [

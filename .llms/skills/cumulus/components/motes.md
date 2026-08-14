@@ -4,7 +4,7 @@
 
 # Motes
 
-Components · Live demo & interactive props: `/cumulus#/motes`
+Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/motes`
 
 Real consumers: **10** (imports outside `src/cumulus/docs/` and tests).
 

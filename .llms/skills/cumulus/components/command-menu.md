@@ -4,7 +4,7 @@
 
 # Command Menu
 
-Components · Live demo & interactive props: `/cumulus#/command-menu`
+Surfaces & Overlays · Live demo & interactive props: `/cumulus#/command-menu`
 
 Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 

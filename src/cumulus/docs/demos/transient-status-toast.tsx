@@ -21,7 +21,7 @@ export const transientStatusToastDemo: CumulusComponent = {
     "The fixed, safe-area-aware short-lived warning surface for structured player-facing status copy.",
   callout:
     "Keep lifecycle and auto-dismiss timing in the controller; this component owns only transient presentation and optional tap dismissal.",
-  group: "Components",
+  group: "Status, Feedback & Effects",
   docName: "TransientStatusToast",
   Component: TransientStatusToastDemo,
   usage: [

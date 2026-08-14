@@ -1,7 +1,7 @@
 // TableOfContents — the floating left-hand rail on the /cumulus overview. Lists
-// the overview's top-level sections (Design Philosophy, Design Tokens, UI
-// Systems, component groups) and, one rung in, each system or component, and
-// keeps the entry the reader is
+// the overview's top-level sections (Design Philosophy, Design Tokens,
+// Components, UI Systems), the component groups nested beneath Components, and
+// each system or component nested beneath its owner. It keeps the entry the reader is
 // currently scrolled to highlighted. The rail only appears when the viewport is
 // wide enough for it to float in the gutter beside the centered content column
 // without overlapping it — the width breakpoint lives in table-of-contents.css.
@@ -12,13 +12,13 @@
 import { useEffect, useState, type ReactElement } from "react";
 import "./table-of-contents.css";
 
-/** One row in the table of contents. `depth` 0 is a top-level section; depth 1
- * is a child (a component nested under its group). `id` is the DOM `id` of the
- * anchor element the row scrolls to and observes. */
+/** One row in the table of contents. `depth` 0 is a top-level section, depth 1
+ * is a section child, and depth 2 is a component nested under its group. `id`
+ * is the DOM `id` of the anchor element the row scrolls to and observes. */
 export interface TocEntry {
   id: string;
   label: string;
-  depth: 0 | 1;
+  depth: 0 | 1 | 2;
 }
 
 // How far below the viewport top a section's start must cross before it counts
@@ -77,21 +77,26 @@ function useActiveEntryId(entries: TocEntry[]): string | null {
   return activeId;
 }
 
-/** The id of the depth-0 entry that owns the active entry: the nearest
- * preceding top-level section when the active entry is a child, so the rail can
- * mark the group the reader is inside. `null` when the active entry is itself
- * top-level (or there is no active entry). */
-function parentIdOf(entries: TocEntry[], activeId: string | null): string | null {
+/** The ids of the entries that own the active entry, from its nearest parent
+ * through its top-level section. These provide a trail for both levels of the
+ * Components hierarchy. */
+function ancestorIdsOf(entries: TocEntry[], activeId: string | null): Set<string> {
   const activeIndex = entries.findIndex((entry) => entry.id === activeId);
   if (activeIndex === -1 || entries[activeIndex].depth === 0) {
-    return null;
+    return new Set();
   }
+  const ancestors = new Set<string>();
+  let nextDepth = entries[activeIndex].depth - 1;
   for (let index = activeIndex - 1; index >= 0; index -= 1) {
-    if (entries[index].depth === 0) {
-      return entries[index].id;
+    if (entries[index].depth === nextDepth) {
+      ancestors.add(entries[index].id);
+      nextDepth -= 1;
+      if (nextDepth < 0) {
+        break;
+      }
     }
   }
-  return null;
+  return ancestors;
 }
 
 /** Smooth-scrolls to an anchor, landing it just below the viewport top rather
@@ -115,7 +120,7 @@ function scrollToAnchor(id: string): void {
  */
 export function TableOfContents({ entries }: { entries: TocEntry[] }): ReactElement | null {
   const activeId = useActiveEntryId(entries);
-  const parentId = parentIdOf(entries, activeId);
+  const ancestorIds = ancestorIdsOf(entries, activeId);
 
   if (entries.length === 0) {
     return null;
@@ -129,10 +134,12 @@ export function TableOfContents({ entries }: { entries: TocEntry[] }): ReactElem
           const classes = ["cumulus-toc__item"];
           if (entry.depth === 1) {
             classes.push("cumulus-toc__item--child");
+          } else if (entry.depth === 2) {
+            classes.push("cumulus-toc__item--grandchild");
           }
           if (entry.id === activeId) {
             classes.push("cumulus-toc__item--active");
-          } else if (entry.id === parentId) {
+          } else if (ancestorIds.has(entry.id)) {
             classes.push("cumulus-toc__item--trail");
           }
           return (

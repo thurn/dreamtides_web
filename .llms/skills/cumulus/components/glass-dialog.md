@@ -4,7 +4,7 @@
 
 # Glass Dialog
 
-Components · Live demo & interactive props: `/cumulus#/glass-dialog`
+Surfaces & Overlays · Live demo & interactive props: `/cumulus#/glass-dialog`
 
 Real consumers: **14** (imports outside `src/cumulus/docs/` and tests).
 

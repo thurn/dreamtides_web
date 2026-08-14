@@ -4,7 +4,7 @@
 
 # Game Card
 
-Components · Live demo & interactive props: `/cumulus#/game-card`
+Cards · Live demo & interactive props: `/cumulus#/game-card`
 
 Real consumers: **32** (imports outside `src/cumulus/docs/` and tests).
 

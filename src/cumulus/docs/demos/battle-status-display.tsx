@@ -41,7 +41,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
     "The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current and target points at right.",
   callout:
     "Pass the canonical owner and its near/far relationship separately so accessibility copy follows the current perspective.",
-  group: "Components",
+  group: "Battle",
   docName: "BattleStatusDisplay",
   Component: BattleStatusDisplayDemo,
   usage: [

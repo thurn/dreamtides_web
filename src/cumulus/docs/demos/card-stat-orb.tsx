@@ -46,7 +46,7 @@ export const cardStatOrbDemo: CumulusComponent = {
   details: [
     "The hammer matches the Transfiguration site's atlas icon; the 30px design-size badge intersects the mark's lower-right edge and scales with it.",
   ],
-  group: "Components",
+  group: "Cards",
   docName: "CardStatOrb",
   Component: CardStatOrbDemo,
   usage: [

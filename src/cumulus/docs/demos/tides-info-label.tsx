@@ -14,7 +14,7 @@ export const tidesInfoLabelDemo: CumulusComponent = {
   details: [
     "Hover, keyboard focus, and touch-hold reveal the canonical Tides InfoCard; InlineGlyph keeps the information mark centered on the surrounding capital height.",
   ],
-  group: "Components",
+  group: "Status, Feedback & Effects",
   docName: "TidesInfoLabel",
   Component: TidesInfoLabelDemo,
   usage: [

@@ -4,7 +4,7 @@
 
 # DreamAvatar Stage
 
-Components · Live demo & interactive props: `/cumulus#/dream-avatar-stage`
+Characters & Collectibles · Live demo & interactive props: `/cumulus#/dream-avatar-stage`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 

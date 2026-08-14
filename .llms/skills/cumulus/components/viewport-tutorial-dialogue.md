@@ -4,7 +4,7 @@
 
 # Viewport Tutorial Dialogue
 
-Overlays · Live demo & interactive props: `/cumulus#/viewport-tutorial-dialogue`
+Text & Guidance · Live demo & interactive props: `/cumulus#/viewport-tutorial-dialogue`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 

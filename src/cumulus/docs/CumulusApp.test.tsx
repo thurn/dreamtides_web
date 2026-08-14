@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
 import CumulusApp from "./CumulusApp";
+import { CUMULUS_COMPONENT_GROUPS } from "./registry";
 
 (
   globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
@@ -55,6 +56,66 @@ describe("Cumulus documentation route", () => {
     expect(uncaughtErrors).toEqual([]);
     expect(container.childElementCount).toBeGreaterThan(0);
     expect(container.querySelectorAll("[data-card-pile]")).toHaveLength(3);
+
+    const components = container.querySelector<HTMLElement>(
+      "[data-cumulus-components]",
+    );
+    const systems = container.querySelector<HTMLElement>(
+      "[data-cumulus-ui-systems]",
+    );
+    expect(components?.querySelector(":scope > h2")?.textContent).toBe(
+      "Components",
+    );
+    expect(
+      Array.from(components?.querySelectorAll(":scope h3") ?? []).map(
+        (heading) => heading.textContent,
+      ),
+    ).toEqual([...CUMULUS_COMPONENT_GROUPS]);
+    expect(
+      components?.compareDocumentPosition(systems as Node) ?? 0,
+    ).toBe(Node.DOCUMENT_POSITION_FOLLOWING);
+
+    const tocButtons = Array.from(
+      container.querySelectorAll<HTMLButtonElement>(
+        '[aria-label="Table of contents"] button',
+      ),
+    );
+    const tocLabels = tocButtons.map((button) => button.textContent);
+    const componentsButton = tocButtons.find(
+      (button) => button.textContent === "Components",
+    );
+    const primitivesButton = tocButtons.find(
+      (button) => button.textContent === "Primitives",
+    );
+    const pressableButton = tocButtons.find(
+      (button) => button.textContent === "Pressable",
+    );
+    expect(componentsButton?.classList).not.toContain(
+      "cumulus-toc__item--child",
+    );
+    expect(primitivesButton?.classList).toContain(
+      "cumulus-toc__item--child",
+    );
+    expect(pressableButton?.classList).toContain(
+      "cumulus-toc__item--grandchild",
+    );
+    expect(tocLabels.indexOf("Components")).toBeLessThan(
+      tocLabels.indexOf("Primitives"),
+    );
+    expect(tocLabels.indexOf("Primitives")).toBeLessThan(
+      tocLabels.indexOf("Pressable"),
+    );
+    expect(tocLabels.indexOf("Wager Prize Card")).toBeLessThan(
+      tocLabels.indexOf("UI Systems"),
+    );
+    const topLevelButtons = tocButtons.filter(
+      (button) =>
+        !button.classList.contains("cumulus-toc__item--child") &&
+        !button.classList.contains("cumulus-toc__item--grandchild"),
+    );
+    expect(topLevelButtons[topLevelButtons.length - 1]?.textContent).toBe(
+      "UI Systems",
+    );
 
     act(() => root.unmount());
   });

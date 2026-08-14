@@ -37,7 +37,7 @@ export const disclosureSectionDemo: CumulusComponent = {
   details: [
     "Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the section uses its lighter nested-glass treatment.",
   ],
-  group: "Components",
+  group: "Actions & Inputs",
   docName: "DisclosureSection",
   Component: Demo,
   usage: [

@@ -79,7 +79,7 @@ export const atlasNodeDemo: CumulusComponent = {
   title: "Atlas Node",
   blurb:
     "One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — including a frame-shaped violet outline that visibly widens and contracts around the next selectable dreamscape — and which reveals its scene / detail card on hover or press.",
-  group: "Components",
+  group: "Atlas & Sites",
   docName: "AtlasNode",
   Component: AtlasNodeDemo,
   usage: [

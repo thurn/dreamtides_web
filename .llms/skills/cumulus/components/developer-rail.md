@@ -4,7 +4,7 @@
 
 # Developer Rail
 
-Components · Live demo & interactive props: `/cumulus#/developer-rail`
+Surfaces & Overlays · Live demo & interactive props: `/cumulus#/developer-rail`
 
 Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 

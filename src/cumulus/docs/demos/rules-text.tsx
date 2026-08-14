@@ -47,7 +47,7 @@ export const rulesTextDemo: CumulusComponent = {
   title: "Rules Text",
   blurb:
     "The canonical Dreamtides rules-copy source: resource symbols and keywords render in place, while hovering, focusing, or touch-holding anywhere in the complete block reveals one contextual glossary card.",
-  group: "Components",
+  group: "Text & Guidance",
   docName: "RulesText",
   Component: RulesTextDemo,
   usage: [

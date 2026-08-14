@@ -68,7 +68,7 @@ export const offerTileDemo: CumulusComponent = {
     "The circular symbolic Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame.",
   callout:
     "Use the named offer kind that matches the category and pass every object surfaced by the generated offer.",
-  group: "Components",
+  group: "Atlas & Sites",
   docName: "OfferTile",
   Component: OfferTileDemo,
   usage: [

@@ -54,7 +54,7 @@ export const dreamsignReplacementDialogDemo: CumulusComponent = {
     "The selected value is the held Dreamsign UUID, never its position or display name.",
   ],
   relatedSystems: ["entity-reveals"],
-  group: "Overlays",
+  group: "Surfaces & Overlays",
   docName: "DreamsignReplacementDialog",
   Component: Demo,
   usage: [

@@ -27,7 +27,7 @@ export const textFieldDemo: CumulusComponent = {
   title: "TextField",
   blurb:
     "The reusable labeled text and search input on Cumulus control chrome, with supporting and validation messaging.",
-  group: "Components",
+  group: "Actions & Inputs",
   docName: "TextField",
   Component: Demo,
   usage: [

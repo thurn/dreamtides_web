@@ -4,7 +4,7 @@
 
 # Text Area
 
-Components · Live demo & interactive props: `/cumulus#/text-area`
+Actions & Inputs · Live demo & interactive props: `/cumulus#/text-area`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

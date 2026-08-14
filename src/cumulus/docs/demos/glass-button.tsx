@@ -65,7 +65,7 @@ export const glassButtonDemo: CumulusComponent = {
     "The labeled glass action — a bold text label with optional Essence cost or non-cost value on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.",
   callout:
     "Use purple accent glass for primary and commit actions, neutral glass for secondary actions, and danger glass for destructive actions.",
-  group: "Components",
+  group: "Actions & Inputs",
   docName: "GlassButton",
   Component: GlassButtonDemo,
   usage: [

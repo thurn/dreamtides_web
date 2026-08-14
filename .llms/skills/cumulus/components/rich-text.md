@@ -4,7 +4,7 @@
 
 # Rich Text
 
-Components · Live demo & interactive props: `/cumulus#/rich-text`
+Text & Guidance · Live demo & interactive props: `/cumulus#/rich-text`
 
 Real consumers: **10** (imports outside `src/cumulus/docs/` and tests).
 

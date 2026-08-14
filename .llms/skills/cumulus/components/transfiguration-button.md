@@ -4,7 +4,7 @@
 
 # Transfiguration Button
 
-Components · Live demo & interactive props: `/cumulus#/transfiguration-button`
+Actions & Inputs · Live demo & interactive props: `/cumulus#/transfiguration-button`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

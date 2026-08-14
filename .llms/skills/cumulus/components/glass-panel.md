@@ -4,7 +4,7 @@
 
 # Glass Panel
 
-Components · Live demo & interactive props: `/cumulus#/glass-panel`
+Surfaces & Overlays · Live demo & interactive props: `/cumulus#/glass-panel`
 
 Real consumers: **20** (imports outside `src/cumulus/docs/` and tests).
 

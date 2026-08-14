@@ -4,7 +4,7 @@
 
 # Info Card
 
-Components · Live demo & interactive props: `/cumulus#/info-card`
+Surfaces & Overlays · Live demo & interactive props: `/cumulus#/info-card`
 
 Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 

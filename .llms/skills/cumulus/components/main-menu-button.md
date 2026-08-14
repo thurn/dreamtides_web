@@ -4,7 +4,7 @@
 
 # Main Menu Button
 
-Components · Live demo & interactive props: `/cumulus#/main-menu-button`
+Actions & Inputs · Live demo & interactive props: `/cumulus#/main-menu-button`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

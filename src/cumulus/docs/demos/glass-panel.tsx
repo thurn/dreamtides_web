@@ -48,7 +48,7 @@ export const glassPanelDemo: CumulusComponent = {
     "Floating panels always hug their header, body, and footer; unassigned interior whitespace is not allowed. Do not give the panel or its slots a decorative height, flex growth, or spacer that separates content. Cap an overflowing body with max-height and scrolling instead.",
     "Width and placement belong to the caller's wrapper. Edge-rail and full-bleed frames own their bounded height through those named frame contracts.",
   ],
-  group: "Components",
+  group: "Surfaces & Overlays",
   docName: "GlassPanel",
   Component: GlassPanelDemo,
   usage: [

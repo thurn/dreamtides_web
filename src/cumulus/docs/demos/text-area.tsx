@@ -26,7 +26,7 @@ export const textAreaDemo: CumulusComponent = {
   title: "Text Area",
   blurb:
     "The reusable multiline authoring field on Cumulus control chrome, with explicit draft and commit callbacks.",
-  group: "Components",
+  group: "Actions & Inputs",
   docName: "TextArea",
   Component: Demo,
   usage: [

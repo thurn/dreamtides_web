@@ -4,7 +4,7 @@
 
 # Speech Bubble
 
-Components · Live demo & interactive props: `/cumulus#/speech-bubble`
+Text & Guidance · Live demo & interactive props: `/cumulus#/speech-bubble`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 

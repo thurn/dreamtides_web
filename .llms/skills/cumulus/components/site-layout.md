@@ -4,7 +4,7 @@
 
 # Site Layout
 
-Layouts · Live demo & interactive props: `/cumulus#/site-layout`
+Atlas & Sites · Live demo & interactive props: `/cumulus#/site-layout`
 
 Real consumers: **11** (imports outside `src/cumulus/docs/` and tests).
 

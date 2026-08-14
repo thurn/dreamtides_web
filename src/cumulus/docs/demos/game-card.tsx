@@ -203,7 +203,7 @@ export const gameCardDemo: CumulusComponent = {
     "The card-aspect.ts contract is the source for full-card, battlefield, art-region, corner-radius, and draft-offer geometry across renderers. Compact cards read at 240px on desktop and 45vw on mobile; glossary definitions, exhausted status, focus, press, and drag dismissal are automatic.",
     "On desktop, rules that explicitly materialize an authored figment add a small UUID-backed card with a violet glowing border beyond the definition stack; that adjacent figment keeps its card size and enlarges only its rules text by 50 percent. A figment's own reading copy stays unoutlined. Touch layouts keep the compact reading pair.",
   ],
-  group: "Components",
+  group: "Cards",
   docName: "GameCard",
   Component: GameCardDemo,
   usage: [

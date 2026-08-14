@@ -30,7 +30,7 @@ export const essenceValueDemo: CumulusComponent = {
   details: [
     "The reward badge is reserved for an Essence gain attached directly to reward art.",
   ],
-  group: "Components",
+  group: "Status, Feedback & Effects",
   docName: "EssenceValue",
   Component: EssenceValueDemo,
   usage: [

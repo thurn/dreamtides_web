@@ -68,7 +68,7 @@ export const atlasEdgeDemo: CumulusComponent = {
   title: "Atlas Edge",
   blurb:
     "The connector between two Atlas nodes, drawn inside the map's SVG. Its treatment reflects the endpoints' lifecycle relative to the layer the player is choosing into.",
-  group: "Components",
+  group: "Atlas & Sites",
   docName: "AtlasEdge",
   usage: [
     {

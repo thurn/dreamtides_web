@@ -153,7 +153,7 @@ export const siteLayoutDemo: CumulusComponent = {
     "Site content chooses its own material and floating panels should hug their content rather than fill the allocated region.",
   ],
   relatedSystems: ["journey-screen-host-chrome"],
-  group: "Layouts",
+  group: "Atlas & Sites",
   docName: "SiteLayout",
   Component: Demo,
   usage: [

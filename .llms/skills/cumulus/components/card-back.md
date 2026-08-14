@@ -4,7 +4,7 @@
 
 # Card Back
 
-Components · Live demo & interactive props: `/cumulus#/card-back`
+Cards · Live demo & interactive props: `/cumulus#/card-back`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 

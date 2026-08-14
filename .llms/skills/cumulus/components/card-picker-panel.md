@@ -4,7 +4,7 @@
 
 # Card Picker Panel
 
-Components · Live demo & interactive props: `/cumulus#/card-picker-panel`
+Card Workflows · Live demo & interactive props: `/cumulus#/card-picker-panel`
 
 Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
 

@@ -4,7 +4,7 @@
 
 # Card Stat Orb
 
-Components · Live demo & interactive props: `/cumulus#/card-stat-orb`
+Cards · Live demo & interactive props: `/cumulus#/card-stat-orb`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 

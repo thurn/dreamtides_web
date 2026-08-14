@@ -38,7 +38,7 @@ export const characterDialogueDemo: CumulusComponent = {
   details: [
     "The component owns its named portrait and bubble scales, centered pointer with clear portrait-frame separation, crop, frame, pairing layout, and fade transition; callers provide typed art, accessible portrait copy, the speaker name, the spoken line, and visibility.",
   ],
-  group: "Components",
+  group: "Text & Guidance",
   docName: "CharacterDialogue",
   Component: CharacterDialogueDemo,
   usage: [

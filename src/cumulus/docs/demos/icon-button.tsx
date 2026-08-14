@@ -51,7 +51,7 @@ export const iconButtonDemo: CumulusComponent = {
     "The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.",
   callout:
     "Use GlassButton for labeled actions, IconButton for compact corner actions, and a bare Pressable glyph for the lightest inline affordance.",
-  group: "Components",
+  group: "Actions & Inputs",
   docName: "IconButton",
   Component: IconButtonDemo,
   usage: [

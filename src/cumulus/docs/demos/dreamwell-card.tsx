@@ -36,7 +36,7 @@ export const dreamwellCardDemo: CumulusComponent = {
     "The static landscape card drawn from the Dreamwell: UUID-keyed art, energy grant, name, and complete rules text in one readable object.",
   callout: "Size and place the card through a wrapper.",
   details: ["DreamwellCard performs no entrance, exit, or idle animation."],
-  group: "Components",
+  group: "Cards",
   docName: "DreamwellCard",
   Component: DreamwellCardDemo,
   usage: [

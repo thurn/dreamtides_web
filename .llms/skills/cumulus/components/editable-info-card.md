@@ -4,7 +4,7 @@
 
 # Editable Info Card
 
-Components · Live demo & interactive props: `/cumulus#/editable-info-card`
+Surfaces & Overlays · Live demo & interactive props: `/cumulus#/editable-info-card`
 
 Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 

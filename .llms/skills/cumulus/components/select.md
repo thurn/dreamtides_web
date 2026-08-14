@@ -4,7 +4,7 @@
 
 # Select
 
-Components · Live demo & interactive props: `/cumulus#/select`
+Actions & Inputs · Live demo & interactive props: `/cumulus#/select`
 
 Real consumers: **10** (imports outside `src/cumulus/docs/` and tests).
 

@@ -102,7 +102,7 @@ export const transfigurationButtonDemo: CumulusComponent = {
     "The canonical forge-form choice: compact and optionally priced controls with shared glyph, color, state, and accessibility behavior.",
   callout:
     "Use the compact variant for space-constrained lists and the priced variant when choices may carry an essence quote; zero-cost choices omit the price.",
-  group: "Components",
+  group: "Actions & Inputs",
   docName: "TransfigurationButton",
   Component: TransfigurationButtonDemo,
   usage: [

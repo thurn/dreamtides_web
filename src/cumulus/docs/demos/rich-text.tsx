@@ -47,7 +47,7 @@ export const richTextDemo: CumulusComponent = {
   details: [
     'Definition rows use their term and colon by default; set `termPresentation: "definitionOnly"` when the authored sentence carries its own symbol and context. Use underline only for a semantically named subject, not general emphasis.',
   ],
-  group: "Components",
+  group: "Text & Guidance",
   docName: "RichTextView",
   Component: RichTextViewDemo,
   usage: [

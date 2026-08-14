@@ -74,7 +74,7 @@ export const dreamsignDemo: CumulusComponent = {
   title: "Dreamsign",
   blurb:
     "A dreamsign — a minor passive collectible — shown as its art floating on the scene. Hovering or pressing it reveals the full name and effect through the shared InfoCard, including the unified mobile width and typography treatment.",
-  group: "Components",
+  group: "Characters & Collectibles",
   docName: "Dreamsign",
   Component: DreamsignDemo,
   usage: [

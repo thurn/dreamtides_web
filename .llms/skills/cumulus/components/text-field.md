@@ -4,7 +4,7 @@
 
 # TextField
 
-Components · Live demo & interactive props: `/cumulus#/text-field`
+Actions & Inputs · Live demo & interactive props: `/cumulus#/text-field`
 
 Real consumers: **8** (imports outside `src/cumulus/docs/` and tests).
 

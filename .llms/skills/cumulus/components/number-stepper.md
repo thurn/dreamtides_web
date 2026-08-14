@@ -4,7 +4,7 @@
 
 # NumberStepper
 
-Components · Live demo & interactive props: `/cumulus#/number-stepper`
+Actions & Inputs · Live demo & interactive props: `/cumulus#/number-stepper`
 
 Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
 

@@ -4,7 +4,7 @@
 
 # Dreamsign Gallery Panel
 
-Components · Live demo & interactive props: `/cumulus#/dreamsign-gallery-panel`
+Characters & Collectibles · Live demo & interactive props: `/cumulus#/dreamsign-gallery-panel`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

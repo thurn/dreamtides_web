@@ -4,7 +4,7 @@
 
 # Journey Status Bar
 
-Components · Live demo & interactive props: `/cumulus#/journey-status-bar`
+Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/journey-status-bar`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 

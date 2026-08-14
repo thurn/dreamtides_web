@@ -80,7 +80,7 @@ export const dreamAvatarPortraitDemo: CumulusComponent = {
   details: [
     "Put width, flex behavior, and placement on that wrapper; the component owns only its frame chrome and crop. Use DreamAvatar Stage for full-body scene art.",
   ],
-  group: "Components",
+  group: "Characters & Collectibles",
   docName: "DreamAvatarPortrait",
   Component: DreamAvatarPortraitDemo,
   usage: [

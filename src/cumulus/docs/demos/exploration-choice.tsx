@@ -105,7 +105,7 @@ export const explorationChoiceDemo: CumulusComponent = {
     "Builders prepare the ordered text, rules, and entity parts before rendering; the component performs no placeholder search.",
   ],
   relatedSystems: ["entity-reveals"],
-  group: "Controls",
+  group: "Actions & Inputs",
   docName: "ExplorationChoice",
   Component: Demo,
   usage: [

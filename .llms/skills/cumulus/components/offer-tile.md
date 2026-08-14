@@ -4,7 +4,7 @@
 
 # Offer Tile
 
-Components · Live demo & interactive props: `/cumulus#/offer-tile`
+Atlas & Sites · Live demo & interactive props: `/cumulus#/offer-tile`
 
 Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
 

@@ -34,7 +34,7 @@ export const wagerPrizeCardDemo: CumulusComponent = {
   details: [
     "When a Dreamsign is present, the entire prize face is its hover and press reveal source.",
   ],
-  group: "Components",
+  group: "Atlas & Sites",
   docName: "WagerPrizeCard",
   Component: WagerPrizeCardDemo,
   usage: [

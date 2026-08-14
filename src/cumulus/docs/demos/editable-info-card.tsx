@@ -67,7 +67,7 @@ export const editableInfoCardDemo: CumulusComponent = {
     "The constrained authoring form of InfoCard. It owns its text inputs, editing states, typography, and shell; callers provide controlled strings and lifecycle callbacks.",
   callout:
     "Use only on authoring surfaces because player-facing reveals use InfoCard, and EditableInfoCard accepts no children, render callbacks, className, or style props.",
-  group: "Components",
+  group: "Surfaces & Overlays",
   docName: "EditableInfoCard",
   Component: Demo,
   usage: [

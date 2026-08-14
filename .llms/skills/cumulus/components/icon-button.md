@@ -4,7 +4,7 @@
 
 # Icon Button
 
-Components · Live demo & interactive props: `/cumulus#/icon-button`
+Actions & Inputs · Live demo & interactive props: `/cumulus#/icon-button`
 
 Real consumers: **19** (imports outside `src/cumulus/docs/` and tests).
 

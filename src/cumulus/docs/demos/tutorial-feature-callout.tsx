@@ -24,7 +24,7 @@ export const tutorialFeatureCalloutDemo: CumulusComponent = {
   details: [
     "CardFeatureCallout provides the card-language labels, resource colors, and popover material; place the callout and leader line in the surrounding layout.",
   ],
-  group: "Components",
+  group: "Text & Guidance",
   docName: "TutorialFeatureCallout",
   Component: TutorialFeatureCalloutDemo,
   usage: [

@@ -4,7 +4,7 @@
 
 # Playing Card
 
-Components · Live demo & interactive props: `/cumulus#/playing-card`
+Cards · Live demo & interactive props: `/cumulus#/playing-card`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

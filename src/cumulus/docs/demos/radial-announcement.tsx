@@ -88,7 +88,7 @@ export const radialAnnouncementDemo: CumulusComponent = {
   details: [
     "Each enum branch owns its established production choreography—including card-attached scoring travel and persistent hand-total orbits—while callers only place it in the relevant scene or card context.",
   ],
-  group: "Components",
+  group: "Status, Feedback & Effects",
   docName: "RadialAnnouncement",
   Component: RadialAnnouncementDemo,
   usage: [

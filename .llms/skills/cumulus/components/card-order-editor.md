@@ -4,7 +4,7 @@
 
 # CardOrderEditor
 
-Components · Live demo & interactive props: `/cumulus#/card-order-editor`
+Battle · Live demo & interactive props: `/cumulus#/card-order-editor`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

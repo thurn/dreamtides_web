@@ -55,7 +55,7 @@ export const journeyStatusBarDemo: CumulusComponent = {
   blurb:
     "The persistent, transparent bottom HUD for journey screens. Its journey variant shows the complete run inventory; its desktop-only battle variant keeps essence and bottom-up, right-to-left Dreamsign columns at the playable board's lower corners. It docks at `compact` on mobile and `grand` on desktop; choosing the battle demo enforces the production `grand` size.",
   relatedSystems: ["journey-screen-host-chrome"],
-  group: "Components",
+  group: "Status, Feedback & Effects",
   docName: "JourneyStatusBar",
   Component: JourneyStatusBarDemo,
   usage: [

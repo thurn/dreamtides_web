@@ -98,7 +98,7 @@ export const dreamAvatarStageDemo: CumulusComponent = {
   details: [
     "Use DreamAvatar Portrait for framed profile crops and semantic profile reveals.",
   ],
-  group: "Components",
+  group: "Characters & Collectibles",
   docName: "DreamAvatarStage",
   Component: DreamAvatarStageDemo,
   usage: [

@@ -78,7 +78,7 @@ export const cardPileDemo: CumulusComponent = {
   details: [
     "Face-up entries can reveal their card or remain inactive beneath one pile-level activation; face-down entries resolve through CardBack.",
   ],
-  group: "Components",
+  group: "Cards",
   docName: "CardPile",
   Component: CardPileDemo,
   usage: [

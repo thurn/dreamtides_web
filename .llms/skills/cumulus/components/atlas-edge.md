@@ -4,7 +4,7 @@
 
 # Atlas Edge
 
-Components · Live demo & interactive props: `/cumulus#/atlas-edge`
+Atlas & Sites · Live demo & interactive props: `/cumulus#/atlas-edge`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

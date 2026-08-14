@@ -133,7 +133,7 @@ export const viewportTutorialDialogueDemo: CumulusComponent = {
     "Floating and anchored preferences consume only the Tutorial Dialogue Placement coordinator snapshot.",
   ],
   relatedSystems: ["tutorial-dialogue-placement"],
-  group: "Overlays",
+  group: "Text & Guidance",
   docName: "ViewportTutorialDialogue",
   Component: Demo,
   usage: [

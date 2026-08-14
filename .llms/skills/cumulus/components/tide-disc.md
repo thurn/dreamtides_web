@@ -4,7 +4,7 @@
 
 # Tide Disc
 
-Components · Live demo & interactive props: `/cumulus#/tide-disc`
+Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/tide-disc`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

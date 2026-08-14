@@ -93,7 +93,7 @@ export const cardPickerPanelDemo: CumulusComponent = {
     "The picker derives two through five columns from its card count and viewport. Desktop sets of up to three cards expand to the 240px reading width when space permits, larger desktop sets use the standard fit, mobile cards use the compact fit, and mobile overlay pickers use two columns for touch clearance.",
     "The optional stacked-copy card model reserves its complete fanned footprint before the copy appears, preventing confirmation-state layout shifts without a panel-level spacing switch.",
   ],
-  group: "Components",
+  group: "Card Workflows",
   docName: "CardPickerPanel",
   Component: CardPickerPanelDemo,
   usage: [

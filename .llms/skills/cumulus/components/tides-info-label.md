@@ -4,7 +4,7 @@
 
 # Tides Info Label
 
-Components · Live demo & interactive props: `/cumulus#/tides-info-label`
+Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/tides-info-label`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

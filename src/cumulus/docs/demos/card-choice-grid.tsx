@@ -93,7 +93,7 @@ export const cardChoiceGridDemo: CumulusComponent = {
     "The grid owns card sizing, selection and disabled states, optional operation badges and captions, and stable-id callbacks.",
     "Choose a named site fit and column count; use Card Gallery Panel when the collection needs its own title, controls, scrolling, or glass frame.",
   ],
-  group: "Components",
+  group: "Card Workflows",
   docName: "CardChoiceGrid",
   Component: CardChoiceGridDemo,
   usage: [

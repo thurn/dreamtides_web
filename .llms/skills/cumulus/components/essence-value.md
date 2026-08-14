@@ -4,7 +4,7 @@
 
 # Essence Value
 
-Components · Live demo & interactive props: `/cumulus#/essence-value`
+Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/essence-value`
 
 Real consumers: **12** (imports outside `src/cumulus/docs/` and tests).
 

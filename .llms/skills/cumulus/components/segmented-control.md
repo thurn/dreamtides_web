@@ -4,7 +4,7 @@
 
 # Segmented Control
 
-Components · Live demo & interactive props: `/cumulus#/segmented-control`
+Actions & Inputs · Live demo & interactive props: `/cumulus#/segmented-control`
 
 Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
 

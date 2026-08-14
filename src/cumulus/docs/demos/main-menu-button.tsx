@@ -20,7 +20,7 @@ export const mainMenuButtonDemo: CumulusComponent = {
     "The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus.",
   callout:
     "Use only on the full-bleed main-menu scene; labeled actions elsewhere use GlassButton.",
-  group: "Components",
+  group: "Actions & Inputs",
   docName: "MainMenuButton",
   Component: MainMenuButtonDemo,
   usage: [

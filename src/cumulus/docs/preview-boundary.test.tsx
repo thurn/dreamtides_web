@@ -20,7 +20,7 @@ const entry: CumulusComponent = {
   id: "fixed-preview",
   title: "Fixed Preview",
   blurb: "A fixed-position preview fixture.",
-  group: "Components",
+  group: "Primitives",
   docName: "FixedPreview",
   Component: () => <div style={{ position: "fixed" }} />,
   usage: [],

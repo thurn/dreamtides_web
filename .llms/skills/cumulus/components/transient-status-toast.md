@@ -4,7 +4,7 @@
 
 # Transient Status Toast
 
-Components · Live demo & interactive props: `/cumulus#/transient-status-toast`
+Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/transient-status-toast`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 

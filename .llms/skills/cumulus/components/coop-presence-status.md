@@ -4,7 +4,7 @@
 
 # Coop Presence Status
 
-Components · Live demo & interactive props: `/cumulus#/coop-presence-status`
+Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/coop-presence-status`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

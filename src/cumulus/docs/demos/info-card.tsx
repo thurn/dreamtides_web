@@ -40,7 +40,7 @@ export const infoCardDemo: CumulusComponent = {
   propsNote:
     "InfoCardProps is a discriminated union. The flattened table combines every variant: image is required only for object, fullBleed, and atlasReveal; glyph only for icon; and tide only for tide. Omit variant, or pass text, for the text member.",
   relatedSystems: ["entity-reveals"],
-  group: "Components",
+  group: "Surfaces & Overlays",
   docName: "InfoCard",
   Component: InfoCard,
   usage: [

@@ -41,7 +41,7 @@ export const cardOrderEditorDemo: CumulusComponent = {
   details: [
     "Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the editor uses its lighter nested-glass treatment.",
   ],
-  group: "Components",
+  group: "Battle",
   docName: "CardOrderEditor",
   Component: Demo,
   usage: [

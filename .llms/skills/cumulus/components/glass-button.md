@@ -4,7 +4,7 @@
 
 # Glass Button
 
-Components · Live demo & interactive props: `/cumulus#/glass-button`
+Actions & Inputs · Live demo & interactive props: `/cumulus#/glass-button`
 
 Real consumers: **30** (imports outside `src/cumulus/docs/` and tests).
 

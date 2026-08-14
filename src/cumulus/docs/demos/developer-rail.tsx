@@ -43,7 +43,7 @@ export const developerRailDemo: CumulusComponent = {
   details: [
     "Place it in a rail track that defines its position and responsive takeover behavior.",
   ],
-  group: "Components",
+  group: "Surfaces & Overlays",
   docName: "DeveloperRail",
   Component: Demo,
   usage: [

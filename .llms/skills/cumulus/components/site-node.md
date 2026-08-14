@@ -4,7 +4,7 @@
 
 # Site Node
 
-Components · Live demo & interactive props: `/cumulus#/site-node`
+Atlas & Sites · Live demo & interactive props: `/cumulus#/site-node`
 
 Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 

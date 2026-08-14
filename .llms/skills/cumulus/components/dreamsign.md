@@ -4,7 +4,7 @@
 
 # Dreamsign
 
-Components · Live demo & interactive props: `/cumulus#/dreamsign`
+Characters & Collectibles · Live demo & interactive props: `/cumulus#/dreamsign`
 
 Real consumers: **13** (imports outside `src/cumulus/docs/` and tests).
 

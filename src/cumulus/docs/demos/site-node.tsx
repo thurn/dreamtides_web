@@ -122,7 +122,7 @@ export const siteNodeDemo: CumulusComponent = {
   title: "Site Node",
   blurb:
     "The dreamscape site disc: a floating circular node carrying a glyph and accent ring. Scene placement uses the compact presentation over art; reward surfaces use the larger reward presentation. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard.",
-  group: "Components",
+  group: "Atlas & Sites",
   docName: "SiteNode",
   Component: SiteNodeDemo,
   usage: [

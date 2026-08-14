@@ -19,7 +19,7 @@ export const coopPresenceStatusDemo: CumulusComponent = {
   callout:
     "Supply visibility from app chrome state rather than hiding the status with injected presentation rules.",
   relatedSystems: ["journey-screen-host-chrome"],
-  group: "Components",
+  group: "Status, Feedback & Effects",
   docName: "CoopPresenceStatus",
   Component: CoopPresenceStatusDemo,
   usage: [

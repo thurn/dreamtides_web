@@ -19,7 +19,7 @@ export const cardBackDemo: CumulusComponent = {
   callout:
     "CardBack owns its appearance and takes only an accessible label plus an optional test id.",
   details: ["Size and place it through a wrapper."],
-  group: "Components",
+  group: "Cards",
   docName: "CardBack",
   Component: CardBackDemo,
   usage: [

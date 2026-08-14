@@ -4,7 +4,7 @@
 
 # Tutorial Feature Callout
 
-Components · Live demo & interactive props: `/cumulus#/tutorial-feature-callout`
+Text & Guidance · Live demo & interactive props: `/cumulus#/tutorial-feature-callout`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

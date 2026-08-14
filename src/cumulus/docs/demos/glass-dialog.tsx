@@ -62,7 +62,7 @@ export const glassDialogDemo: CumulusComponent = {
     'Add `companion` when one tangible object should lead a popup pair: the object sits left of a wider prose panel on desktop and centered above it on mobile. `chrome="flowing-close"` places the close disc in body flow so ordinary prose wraps around it.',
     'Close placement is internal: it sits on the header row by default, and `cutoutAwareClose` floats it beside a device island on a full-bleed mobile mock-up. Battle overlays use `desktopCenterTarget="battlefield"` so a docked inspector rail stays outside the panel\'s centering region.',
   ],
-  group: "Components",
+  group: "Surfaces & Overlays",
   docName: "GlassDialog",
   Component: GlassDialogDemo,
   usage: [

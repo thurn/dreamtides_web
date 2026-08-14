@@ -76,7 +76,7 @@ export const segmentedControlDemo: CumulusComponent = {
   details: [
     "The shared liquid-glass track and neutral frosted selection pair cleanly with adjacent Select controls.",
   ],
-  group: "Components",
+  group: "Actions & Inputs",
   docName: "SegmentedControl",
   Component: SegmentedControlDemo,
   usage: [

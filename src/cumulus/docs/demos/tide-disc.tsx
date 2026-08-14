@@ -57,7 +57,7 @@ export const tideDiscDemo: CumulusComponent = {
     "The canonical resonance catalog supplies each fixed accent, glyph, display name, and accessibility name to TideDisc and InfoCard.",
     "Selection-provenance controls use role colors instead. tide-spec has no renderable component of its own, so it is documented here on its canonical renderer.",
   ],
-  group: "Components",
+  group: "Status, Feedback & Effects",
   docName: "TideDisc",
   Component: TideDiscDemo,
   usage: [

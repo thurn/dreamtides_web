@@ -74,7 +74,7 @@ export const dreamsignGalleryPanelDemo: CumulusComponent = {
   details: [
     "The panel preserves the chrome-free Dreamsign material and shared InfoCard reveal while matching the Dream Market's gallery frame and direct-buy interaction.",
   ],
-  group: "Components",
+  group: "Characters & Collectibles",
   docName: "DreamsignGalleryPanel",
   Component: DreamsignGalleryPanelDemo,
   usage: [

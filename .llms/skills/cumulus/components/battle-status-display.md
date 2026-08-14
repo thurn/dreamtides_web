@@ -4,7 +4,7 @@
 
 # Battle Status Display
 
-Components · Live demo & interactive props: `/cumulus#/battle-status-display`
+Battle · Live demo & interactive props: `/cumulus#/battle-status-display`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

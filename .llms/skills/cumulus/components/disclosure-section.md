@@ -4,7 +4,7 @@
 
 # DisclosureSection
 
-Components · Live demo & interactive props: `/cumulus#/disclosure-section`
+Actions & Inputs · Live demo & interactive props: `/cumulus#/disclosure-section`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 

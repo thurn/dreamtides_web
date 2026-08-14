@@ -35,7 +35,7 @@ export const playingCardDemo: CumulusComponent = {
     "Use the face-down variant for a hidden committed card and the four-suit variant for Four-Suit Reprise's draw object.",
   propsNote:
     "The rankSuit variant requires rank and suit. The faceDown and fourSuit variants require drawnCard and accept revealDrawnCard.",
-  group: "Components",
+  group: "Cards",
   docName: "PlayingCard",
   Component: PlayingCardDemo,
   usage: [

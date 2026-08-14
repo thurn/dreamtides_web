@@ -4,7 +4,7 @@
 
 # Character Dialogue
 
-Components · Live demo & interactive props: `/cumulus#/character-dialogue`
+Text & Guidance · Live demo & interactive props: `/cumulus#/character-dialogue`
 
 Real consumers: **8** (imports outside `src/cumulus/docs/` and tests).
 

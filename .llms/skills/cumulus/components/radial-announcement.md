@@ -4,7 +4,7 @@
 
 # Radial Announcement
 
-Components · Live demo & interactive props: `/cumulus#/radial-announcement`
+Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/radial-announcement`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 

@@ -4,7 +4,7 @@
 
 # Rules Text
 
-Components · Live demo & interactive props: `/cumulus#/rules-text`
+Text & Guidance · Live demo & interactive props: `/cumulus#/rules-text`
 
 Real consumers: **15** (imports outside `src/cumulus/docs/` and tests).
 

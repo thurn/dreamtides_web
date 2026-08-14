@@ -94,7 +94,7 @@ export const cardBrowserPanelDemo: CumulusComponent = {
     "The browser renders five columns on desktop and four on mobile, using the standard desktop card fit and compact mobile fit. Embedded browsers use floating glass, overlays become full-bleed on mobile, and full-screen hosts use the gallery scrim at every viewport.",
     "Toolbar controls and drag, context-menu, and mobile double-tap gestures belong to this role. Transaction confirmation actions belong to Card Picker Panel.",
   ],
-  group: "Components",
+  group: "Card Workflows",
   docName: "CardBrowserPanel",
   Component: CardBrowserPanelDemo,
   usage: [

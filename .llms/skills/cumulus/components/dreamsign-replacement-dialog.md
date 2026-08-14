@@ -4,7 +4,7 @@
 
 # Dreamsign Replacement Dialog
 
-Overlays · Live demo & interactive props: `/cumulus#/dreamsign-replacement-dialog`
+Surfaces & Overlays · Live demo & interactive props: `/cumulus#/dreamsign-replacement-dialog`
 
 Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
 

@@ -4,7 +4,7 @@
 
 # DreamAvatar Portrait
 
-Components · Live demo & interactive props: `/cumulus#/dream-avatar-portrait`
+Characters & Collectibles · Live demo & interactive props: `/cumulus#/dream-avatar-portrait`
 
 Real consumers: **12** (imports outside `src/cumulus/docs/` and tests).
 

@@ -4,7 +4,7 @@
 
 # Card Choice Grid
 
-Components · Live demo & interactive props: `/cumulus#/card-choice-grid`
+Card Workflows · Live demo & interactive props: `/cumulus#/card-choice-grid`
 
 Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
 

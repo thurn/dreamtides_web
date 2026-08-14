@@ -4,7 +4,7 @@
 
 # Dreamwell Card
 
-Components · Live demo & interactive props: `/cumulus#/dreamwell-card`
+Cards · Live demo & interactive props: `/cumulus#/dreamwell-card`
 
 Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
 

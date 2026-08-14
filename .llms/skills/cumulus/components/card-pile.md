@@ -4,7 +4,7 @@
 
 # Card Pile
 
-Components · Live demo & interactive props: `/cumulus#/card-pile`
+Cards · Live demo & interactive props: `/cumulus#/card-pile`
 
 Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
 

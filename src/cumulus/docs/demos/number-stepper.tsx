@@ -30,7 +30,7 @@ export const numberStepperDemo: CumulusComponent = {
   title: "NumberStepper",
   blurb:
     "A labeled, accessible decrement/value/increment row with optional canonical resource notation.",
-  group: "Components",
+  group: "Actions & Inputs",
   docName: "NumberStepper",
   Component: Demo,
   usage: [
