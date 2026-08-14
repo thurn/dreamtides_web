@@ -10,7 +10,10 @@ import {
 } from "../../../data/card-database";
 import { GLOSSARY_IDS } from "../../../data/glossary";
 import { extractMaterializedFigmentPreviews } from "../../../data/materialized-figments";
-import { figmentCardDisplayName } from "../../../data/figment-card-display";
+import {
+  figmentCardDisplayName,
+  figmentCardIdentityName,
+} from "../../../data/figment-card-display";
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import { localizedSourceText } from "../../../runtime/localization/runtime";
 import {
@@ -41,6 +44,24 @@ import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { glossaryInfoCard } from "./glossary-info-card";
 import { meaning, opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+
+function localizedCardDisplayName(
+  card: Pick<CardData, "name" | "subtype">,
+  figment: boolean,
+): LocalizedString {
+  if (!figment) return localizedSourceText(card.name);
+  const identity = figmentCardIdentityName(card.name, card.subtype);
+  if (identity === "") return localizedSourceText("Figment");
+  return txa(
+    "{figment_identity} Figment",
+    {
+      figment_identity: opaque(
+        localizedSourceText(identity),
+      ),
+    },
+    "[battle] Canonical card title for a generated Figment. figment_identity is the independently localized authored Figment identity and has no grammatical metadata.",
+  );
+}
 
 export {
   DEFAULT_ART_CROP,
@@ -808,6 +829,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
         name: figmentCardDisplayName(sourceCard.name, sourceCard.subtype),
       }
     : sourceCard;
+  const localizedCardName = localizedCardDisplayName(card, figment);
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
   // Top of the rules text box as a fraction of card height, measured live so the
@@ -1076,7 +1098,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           textOverflow: "ellipsis",
         }}
       >
-        {card.name}
+        {resolve(localizedCardName)}
       </span>
       {transfiguration !== undefined ? (
         <i
@@ -1374,7 +1396,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           alt={resolve(
             txa(
               "{card_name} identicon",
-              { card_name: opaque(localizedSourceText(card.name)) },
+              { card_name: opaque(localizedCardName) },
               "[accessibility] Alternative text for a generated card identicon. card_name is the card's canonical authored name.",
             ),
           )}
@@ -1385,7 +1407,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       ) : !imageError ? (
         <ArtLayers
           imageUrl={cardImageUrl(card.imageNumber)}
-          alt={localizedSourceText(card.name)}
+          alt={localizedCardName}
           artCrop={renderedArtCrop}
           imageAspect={imageAspect}
           safeAreaTarget={safeAreaTarget}
@@ -1423,7 +1445,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
               lineHeight: 1.15,
             }}
           >
-            {card.name}
+            {resolve(localizedCardName)}
           </span>
         </div>
       )}
@@ -1834,7 +1856,7 @@ export function GameCard({
       role={interactive ? "button" : undefined}
       tabIndex={0}
       aria-disabled={unavailable || undefined}
-      aria-label={resolve(localizedSourceText(displaySnapshot.name))}
+      aria-label={resolve(localizedCardDisplayName(displaySnapshot, figment))}
       data-testid={testId}
       data-game-card-source=""
       data-game-card-presentation={presentation}

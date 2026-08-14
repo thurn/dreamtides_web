@@ -10,7 +10,7 @@ const DEMO_CARD: GameCardModel = {
   cardId: DEMO_CARD_ID,
   displaySnapshot: {
     id: DEMO_CARD_ID,
-    name: asCardName("Physical Card"),
+    name: asCardName("Woodland Apparition"),
     cardNumber: 1,
     cardType: "Character",
     subtype: "Dreamborn",

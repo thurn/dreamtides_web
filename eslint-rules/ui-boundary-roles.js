@@ -21,6 +21,7 @@ export const OUTER_UI_ROLES = Object.freeze({
 const fileRoles = {
   "src/App.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/main.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/root-router.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/runtime/localization/context.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
   // The entry sheet owns only the app-wide reset, cursor affordance, and
   // globally inherited legacy color bridge; product presentation belongs to
@@ -38,20 +39,28 @@ const fileRoles = {
   "src/components/CumulusJourneyChrome.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/DreamscapeJourneyMenu.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/ErrorBoundary.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
-  "src/components/LocalizedErrorBoundaryFallback.tsx": OUTER_UI_ROLES.EMERGENCY_FALLBACK,
+  "src/components/LocalizedErrorBoundaryFallback.tsx":
+    OUTER_UI_ROLES.EMERGENCY_FALLBACK,
   "src/components/FrontDoorRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/JourneyCardTutorialController.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/components/ScreenRouter.tsx": OUTER_UI_ROLES.APP_SHELL,
-  "src/battle/components/BattleCardNoteEditor.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/BattleCardNoteEditor.tsx":
+    OUTER_UI_ROLES.STATE_ADAPTER,
   "src/battle/components/BattleContextMenu.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
-  "src/battle/components/BattleDeckOrderPicker.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
-  "src/battle/components/BattleDreamwellHistoryDrawer.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
-  "src/battle/components/BattleFigmentCreator.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/BattleDeckOrderPicker.tsx":
+    OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/BattleDreamwellHistoryDrawer.tsx":
+    OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/BattleFigmentCreator.tsx":
+    OUTER_UI_ROLES.STATE_ADAPTER,
   "src/battle/components/BattleLogDrawer.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
-  "src/battle/components/CumulusBattleForeseeOverlay.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
-  "src/battle/components/CumulusBattleZoneBrowser.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/CumulusBattleForeseeOverlay.tsx":
+    OUTER_UI_ROLES.STATE_ADAPTER,
+  "src/battle/components/CumulusBattleZoneBrowser.tsx":
+    OUTER_UI_ROLES.STATE_ADAPTER,
   "src/battle/components/PlayableBattleScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
-  "src/battle/components/PoolViewerFloatingController.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/battle/components/PoolViewerFloatingController.tsx":
+    OUTER_UI_ROLES.APP_SHELL,
 
   "src/coop/BounceToast.tsx": OUTER_UI_ROLES.STATE_ADAPTER,
   "src/coop/ConfigGateScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
@@ -79,53 +88,99 @@ const fileRoles = {
 };
 
 for (const name of [
-  "AtlasScreenAdapter", "BattleStartScreenAdapter", "CardShopSiteScreenAdapter",
-  "DesktopDeckViewerAdapter", "DraftSiteScreenAdapter", "AugurySiteScreenAdapter", "PoolViewerAdapter",
-  "DreamscapeScreenAdapter", "DreamsignBazaarSiteScreenAdapter",
-  "DreamsignRevelationScreenAdapter", "DuplicationSiteScreenAdapter",
+  "AtlasScreenAdapter",
+  "BattleStartScreenAdapter",
+  "CardShopSiteScreenAdapter",
+  "DesktopDeckViewerAdapter",
+  "DraftSiteScreenAdapter",
+  "AugurySiteScreenAdapter",
+  "PoolViewerAdapter",
+  "DreamscapeScreenAdapter",
+  "DreamsignBazaarSiteScreenAdapter",
+  "DreamsignRevelationScreenAdapter",
+  "DuplicationSiteScreenAdapter",
   "GambleSiteScreenAdapter",
   "LoadingScreenAdapter",
-  "MobileBattleScreenAdapter", "MobileDeckViewerAdapter", "PurgeSiteScreenAdapter",
+  "MobileBattleScreenAdapter",
+  "MobileDeckViewerAdapter",
+  "PurgeSiteScreenAdapter",
   "MainMenuScreenAdapter",
-  "JourneyCompleteScreenAdapter", "JourneyFailedScreenAdapter", "JourneyStartScreenAdapter",
-  "StartingDeckOverlayAdapter", "TransfigurationSiteScreenAdapter",
+  "JourneyCompleteScreenAdapter",
+  "JourneyFailedScreenAdapter",
+  "JourneyStartScreenAdapter",
+  "StartingDeckOverlayAdapter",
+  "TransfigurationSiteScreenAdapter",
   "ExplorationSiteScreenAdapter",
-  "TutorialBattleScreenAdapter", "TutorialScreenAdapter",
-  "RandomSiteScreenAdapter", "registry",
+  "TutorialBattleScreenAdapter",
+  "TutorialScreenAdapter",
+  "RandomSiteScreenAdapter",
+  "registry",
 ]) {
   // The registry is the production resolver; the rest are state/effect wiring.
-  fileRoles[`src/screens/cumulus_adapters/${name}.tsx`] = OUTER_UI_ROLES.STATE_ADAPTER;
+  fileRoles[`src/screens/cumulus_adapters/${name}.tsx`] =
+    OUTER_UI_ROLES.STATE_ADAPTER;
 }
 
 for (const name of [
-  "CardEditorApp", "CardEditorGrid", "CardEditorToolbar", "CardTagEditor",
-  "DreamAvatarDetailView", "DreamAvatarEditorApp", "DreamAvatarEditorGrid",
-  "DreamAvatarEditorToolbar", "DreamscapeEditorApp", "DreamscapeEditorToolbar",
-  "DreamscapeResidents", "DreamsignEditorApp", "DreamsignEditorGrid",
-  "DreamsignEditorToolbar", "DreamwellEditorApp", "DreamwellEditorPreview", "DreamwellEditorToolbar",
-  "EditableCard", "EditableDreamAvatar", "EditableDreamscape", "EditableDreamsign",
-  "EditableDreamwell", "EditableField", "EditableFigment", "FigmentEditorApp",
-  "FocusedCardEditor", "ManageTagsModal", "TagChip", "TagFilterControl",
-  "ExplorationEditorApp", "GlossaryEditorApp",
-  "TidePoolModal", "TideSourcePreview", "TidesDetailView", "TidesEditorApp",
+  "CardEditorApp",
+  "CardEditorGrid",
+  "CardEditorToolbar",
+  "CardTagEditor",
+  "DreamAvatarDetailView",
+  "DreamAvatarEditorApp",
+  "DreamAvatarEditorGrid",
+  "DreamAvatarEditorToolbar",
+  "DreamscapeEditorApp",
+  "DreamscapeEditorToolbar",
+  "DreamscapeResidents",
+  "DreamsignEditorApp",
+  "DreamsignEditorGrid",
+  "DreamsignEditorToolbar",
+  "DreamwellEditorApp",
+  "DreamwellEditorPreview",
+  "DreamwellEditorToolbar",
+  "EditableCard",
+  "EditableDreamAvatar",
+  "EditableDreamscape",
+  "EditableDreamsign",
+  "EditableDreamwell",
+  "EditableField",
+  "EditableFigment",
+  "FigmentEditorApp",
+  "FocusedCardEditor",
+  "ManageTagsModal",
+  "TagChip",
+  "TagFilterControl",
+  "ExplorationEditorApp",
+  "GlossaryEditorApp",
+  "TidePoolModal",
+  "TideSourcePreview",
+  "TidesDetailView",
+  "TidesEditorApp",
   "TidesListView",
 ]) {
   fileRoles[`src/editor/${name}.tsx`] = OUTER_UI_ROLES.OPERATOR_TOOL;
 }
 
 for (const name of [
-  "CardBrowserGrid", "CardBrowserToolbar", "MtgNameTooltip",
+  "CardBrowserGrid",
+  "CardBrowserToolbar",
+  "MtgNameTooltip",
 ]) {
-  fileRoles[`src/editor/card-browser/${name}.tsx`] = OUTER_UI_ROLES.OPERATOR_TOOL;
+  fileRoles[`src/editor/card-browser/${name}.tsx`] =
+    OUTER_UI_ROLES.OPERATOR_TOOL;
 }
 
 export const OUTER_UI_FILE_ROLES = Object.freeze(fileRoles);
 
-export const OUTER_UI_ROLE_VALUES = Object.freeze(Object.values(OUTER_UI_ROLES));
+export const OUTER_UI_ROLE_VALUES = Object.freeze(
+  Object.values(OUTER_UI_ROLES),
+);
 
 /** Convert an ESLint filename to a repository-relative POSIX path. */
 export function toRepoRelativePosix(absolutePath, cwd) {
-  if (!path.isAbsolute(absolutePath)) return absolutePath.split(path.sep).join("/");
+  if (!path.isAbsolute(absolutePath))
+    return absolutePath.split(path.sep).join("/");
   return path.relative(cwd, absolutePath).split(path.sep).join("/");
 }
 
@@ -174,13 +229,19 @@ export function outerUiRole(fileRelative) {
 /** True when player-facing static-copy lint owns this repository path. */
 export function isPlayerLocalizationFile(fileRelative) {
   if (
-    /(?:^|\/)(?:__tests__|__test-helpers__|testing|fixtures)(?:\/|$)/u.test(fileRelative) ||
+    /(?:^|\/)(?:__tests__|__test-helpers__|testing|fixtures)(?:\/|$)/u.test(
+      fileRelative,
+    ) ||
     /\.(?:test|spec)\.tsx?$/u.test(fileRelative)
   ) {
     return false;
   }
   if (LOCALIZATION_EXCLUDED_FILES.has(fileRelative)) return false;
-  if (LOCALIZATION_EXCLUDED_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))) {
+  if (
+    LOCALIZATION_EXCLUDED_PREFIXES.some((prefix) =>
+      fileRelative.startsWith(prefix),
+    )
+  ) {
     return false;
   }
   if (LOCALIZATION_NON_REACT_PRODUCER_FILES.includes(fileRelative)) return true;

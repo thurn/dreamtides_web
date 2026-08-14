@@ -48,7 +48,6 @@ vi.mock("./GlossaryEditorApp", () => ({
   },
 }));
 
-
 vi.mock("./ExplorationEditorApp", () => ({
   default: function MockExplorationEditorApp() {
     return null;
@@ -119,11 +118,7 @@ describe("main editor route", () => {
       directTutorialBattle?: boolean;
       runtimeConfig?: { aiMode: boolean };
     };
-    const route = renderedRouteComponent() as ReactElement<{
-      children: ReactElement<AppProps>;
-    }>;
-    const app = route.props.children;
-    return app.props;
+    return renderedRouteComponent().props as AppProps;
   }
 
   it("mounts the isolated editor for the Vite-served /editor/ path", async () => {

@@ -45,6 +45,7 @@ const SITE_TYPES = [
 
 const ROUTER_FILES = [
   "src/App.tsx",
+  "src/root-router.tsx",
   "src/components/ScreenRouter.tsx",
   "src/components/BattleSiteRoute.tsx",
   "src/battle/components/PlayableBattleScreen.tsx",
@@ -63,7 +64,8 @@ const GENERIC_COMPONENT_SOURCES = [
   "src/components/ScreenRouter.tsx",
 ];
 
-const DELETED_PLAYER_UI = /\/(?:AtlasScreen|JourneyStartScreen|JourneyCompleteScreen|JourneyFailedScreen|DreamscapeScreen|DraftSiteScreen|ShopScreen|EssenceSiteScreen|DreamsignRevelationScreen|PurgeSiteScreen|TransfigurationSiteScreen|DuplicationSiteScreen|RewardSiteScreen|StubSiteScreen|HUD|BattleStartScreen)$/;
+const DELETED_PLAYER_UI =
+  /\/(?:AtlasScreen|JourneyStartScreen|JourneyCompleteScreen|JourneyFailedScreen|DreamscapeScreen|DraftSiteScreen|ShopScreen|EssenceSiteScreen|DreamsignRevelationScreen|PurgeSiteScreen|TransfigurationSiteScreen|DuplicationSiteScreen|RewardSiteScreen|StubSiteScreen|HUD|BattleStartScreen)$/;
 
 function collectFiles(dir) {
   const files = [];
@@ -81,7 +83,10 @@ function collectFiles(dir) {
 /** Production TSX and CSS outside the Cumulus ownership boundary. */
 export function collectOuterUiFiles(srcRoot = SRC_ROOT) {
   return collectFiles(srcRoot)
-    .filter((file) => !relative(ROOT, file).split(sep).join("/").startsWith(CUMULUS_PREFIX))
+    .filter(
+      (file) =>
+        !relative(ROOT, file).split(sep).join("/").startsWith(CUMULUS_PREFIX),
+    )
     .filter((file) => /\.(tsx|css)$/.test(file))
     .filter((file) => !/\.(test|spec)\.(tsx|css)$/.test(file))
     .map((file) => relative(ROOT, file).split(sep).join("/"))
@@ -135,7 +140,9 @@ function casesForFunction(source, name) {
 
 describe("Cumulus UI boundary", () => {
   it("classifies every outer production UI file recursively", () => {
-    expect(Object.keys(OUTER_UI_FILE_ROLES).sort()).toEqual(collectOuterUiFiles());
+    expect(Object.keys(OUTER_UI_FILE_ROLES).sort()).toEqual(
+      collectOuterUiFiles(),
+    );
     for (const [file, role] of Object.entries(OUTER_UI_FILE_ROLES)) {
       expect(OUTER_UI_ROLE_VALUES).toContain(role);
       expect(file).toMatch(/^src\//);
@@ -151,7 +158,9 @@ describe("Cumulus UI boundary", () => {
 
   it("keeps bootstrap and coop controllers outside strict presentation scope", () => {
     expect(isStrictCompositionFile("src/coop/BounceToast.tsx", [])).toBe(false);
-    expect(isStrictCompositionFile("src/editor/CardEditorApp.tsx", [])).toBe(false);
+    expect(isStrictCompositionFile("src/editor/CardEditorApp.tsx", [])).toBe(
+      false,
+    );
     expect(isUniversalUiFile("src/editor/CardEditorApp.tsx")).toBe(true);
     expect(isUniversalUiFile("src/vendor/boxicons/boxicons.css")).toBe(false);
   });
@@ -160,8 +169,14 @@ describe("Cumulus UI boundary", () => {
     expect(LOCALIZATION_NON_REACT_PRODUCER_FILES).toContain(
       "src/components/JourneyUtilityMenuController.ts",
     );
-    expect(isPlayerLocalizationFile("src/components/DreamscapeJourneyMenu.tsx")).toBe(true);
-    expect(isPlayerLocalizationFile("src/components/JourneyUtilityMenuController.ts")).toBe(true);
+    expect(
+      isPlayerLocalizationFile("src/components/DreamscapeJourneyMenu.tsx"),
+    ).toBe(true);
+    expect(
+      isPlayerLocalizationFile(
+        "src/components/JourneyUtilityMenuController.ts",
+      ),
+    ).toBe(true);
   });
 
   it("keeps deleted player UI out of gameplay routing", () => {
@@ -169,7 +184,9 @@ describe("Cumulus UI boundary", () => {
       const fullPath = resolve(ROOT, relativePath);
       const source = readFileSync(fullPath, "utf8");
       const imports = extractImportSpecifiers(source, fullPath);
-      expect(imports.filter((specifier) => DELETED_PLAYER_UI.test(specifier))).toEqual([]);
+      expect(
+        imports.filter((specifier) => DELETED_PLAYER_UI.test(specifier)),
+      ).toEqual([]);
       expect(source).not.toMatch(/\b(?:UiVariant|uiVariant|servedByCumulus)\b/);
     }
   });

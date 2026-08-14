@@ -2,7 +2,7 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
 import { MINIMAL_SITES_DATA } from "../__test-helpers__/atlas-fixtures";
@@ -30,8 +30,13 @@ vi.mock("../data/sites-data", async (importOriginal) => {
   };
 });
 
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+
 describe("OffersDebugApp", () => {
   it("shows one OfferTile for every distinct Augury UI presentation", async () => {
+    vi.stubEnv("MODE", "production");
     (
       globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
     ).IS_REACT_ACT_ENVIRONMENT = true;
@@ -91,10 +96,14 @@ describe("OffersDebugApp", () => {
     expect(strongCardGift.kind).toBe("card-gift");
     expect(strongCardGift.kind).toBe("card-gift");
     expect(copiesDraft.kind).toBe("copies-draft");
-    expect(copiesDraft.kind === "copies-draft" && copiesDraft.copyCount).toBe(2);
+    expect(copiesDraft.kind === "copies-draft" && copiesDraft.copyCount).toBe(
+      2,
+    );
     expect(categoryDraft.kind).toBe("category-draft");
     expect(cardBundle.kind).toBe("card-bundle");
-    expect(cardBundle.kind === "card-bundle" ? cardBundle.cards : []).toHaveLength(3);
+    expect(
+      cardBundle.kind === "card-bundle" ? cardBundle.cards : [],
+    ).toHaveLength(3);
     expect(transfigure.kind).toBe("transfigure-card");
     expect(duplicate.kind).toBe("duplicate-card");
     expect(
