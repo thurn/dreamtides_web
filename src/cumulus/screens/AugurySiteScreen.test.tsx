@@ -211,7 +211,7 @@ describe("AugurySiteScreen", () => {
     expect(container.querySelectorAll("[data-offer-tile]")).toHaveLength(2);
     expect(
       container
-        .querySelector("[data-guide-gallery-guide]")
+        .querySelector("[data-site-layout-guide]")
         ?.getAttribute("data-guide-id"),
     ).toBe("aldric_the_seer");
     expect(container.textContent).toContain("Choose one path for your dream.");
@@ -275,10 +275,10 @@ describe("AugurySiteScreen", () => {
     ).toBe("A");
     expect(container.querySelectorAll("[data-offer-tile]")).toHaveLength(0);
     expect(
-      container.querySelector('[data-testid="cumulus-augury-speech"]'),
+      container.querySelector("[data-site-layout-speech-anchor]"),
     ).toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-augury-guide-art"]'),
+      container.querySelector("[data-site-layout-guide] img"),
     ).not.toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-augury-offer-B"]'),
@@ -287,10 +287,10 @@ describe("AugurySiteScreen", () => {
       container.querySelectorAll('[data-testid^="cumulus-augury-choice-"]'),
     ).toHaveLength(4);
     expect(
-      container
-        .querySelector("[data-guide-gallery-desktop-layout]")
-        ?.getAttribute("data-guide-gallery-desktop-layout-mode"),
-    ).toBe("showcase");
+      container.querySelector("[data-site-layout]")?.getAttribute(
+        "data-site-layout-composition",
+      ),
+    ).toBe("content-led-expanded-revelation");
     const detailStage = container.querySelector<HTMLElement>(
       '[data-augury-desktop-placement="center"]',
     );
@@ -404,10 +404,10 @@ describe("AugurySiteScreen", () => {
     click(container.querySelector('[data-testid="cumulus-augury-offer-B"]'));
     expect(onChoose).not.toHaveBeenCalled();
     expect(
-      container
-        .querySelector("[data-guide-gallery-desktop-layout]")
-        ?.getAttribute("data-guide-gallery-desktop-layout-mode"),
-    ).toBe("showcase");
+      container.querySelector("[data-site-layout]")?.getAttribute(
+        "data-site-layout-composition",
+      ),
+    ).toBe("content-led-expanded-revelation");
     expect(
       container
         .querySelector("[data-augury-layout]")
@@ -418,7 +418,7 @@ describe("AugurySiteScreen", () => {
         .justifySelf,
     ).toBe("center");
     expect(
-      container.querySelector('[data-testid="cumulus-augury-guide-art"]'),
+      container.querySelector("[data-site-layout-guide] img"),
     ).not.toBeNull();
     click(container.querySelector('[data-testid="cumulus-augury-confirm-B"]'));
     expect(onChoose).toHaveBeenCalledWith("B", null);
@@ -527,7 +527,7 @@ describe("AugurySiteScreen", () => {
       container.querySelector("[data-glass-panel-header] h2")?.textContent,
     ).not.toBe("");
     const arrow = container.querySelector<HTMLElement>(
-      "[data-augury-transition-arrow] i",
+      '[data-card-change-kind="replacement"] i',
     );
     expect(arrow?.className).toContain("bxf bx-arrow-right");
     const normalizedWhite = document.createElement("span");

@@ -1,23 +1,21 @@
 import { meaning, txa, tx } from "@trox/runtime";
 import {
+  useEffect,
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
   type ReactElement,
 } from "react";
-import { GameCard, type GameCardModel } from "../components/card/CardView";
-import { GlassButton } from "../components/controls/GlassButton";
-import { IconButton } from "../components/controls/IconButton";
-import {
-  DreamwellCard,
-  type DreamwellCardModel,
-} from "../components/battle/DreamwellCard";
-import { GlassDialog } from "../components/overlay/GlassDialog";
-import { GLYPHS } from "../primitives/glyph";
-import { POINTER_MOVEMENT_SLOP_PX } from "../primitives/pointer-gesture";
-import { token } from "../primitives/tokens";
-import { useIsDesktop } from "./use-is-desktop";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
+import { GameCard, type GameCardModel } from "../card/CardView";
+import { GlassButton } from "../controls/GlassButton";
+import { IconButton } from "../controls/IconButton";
+import { DreamwellCard, type DreamwellCardModel } from "./DreamwellCard";
+import { GlassDialog } from "../overlay/GlassDialog";
+import { GLYPHS } from "../../primitives/glyph";
+import { POINTER_MOVEMENT_SLOP_PX } from "../../primitives/pointer-gesture";
+import { token } from "../../primitives/tokens";
+import { useIsDesktop } from "../../primitives/use-is-desktop";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** Card width and the minimum empty travel lane before the Void indicator. */
 const FORESEE_CARD_WIDTH_DESKTOP_PX = 180;
@@ -32,25 +30,27 @@ const FORESEE_SOURCE_CARD_WIDTH_DESKTOP_PX = 360;
 const FORESEE_SOURCE_CARD_WIDTH_MOBILE_PX = 260;
 
 /** One UUID-backed battle card in the inspected deck prefix. */
-export interface BattleForeseeCardView {
+export interface BattleForeseeEditorCard {
   /** Stable battle-instance id used for ordering and every callback. */
-  battleCardId: string;
+  readonly battleCardId: string;
   /** Complete card presentation resolved from the battle instance. */
-  model: GameCardModel;
+  readonly card: GameCardModel;
 }
 
 /** The ordered deck cards available to this adjustable Foresee resolution. */
-export interface BattleForeseeView {
+export interface BattleForeseeEditorModel {
   /** Number of cards shown when the modal opens. */
-  initialCount: number;
+  readonly initialCount: number;
   /** Available cards in their original top-to-bottom deck order. */
-  cards: readonly BattleForeseeCardView[];
+  readonly cards: readonly BattleForeseeEditorCard[];
+  /** Closed ordered set of card counts the player may stage. */
+  readonly allowedCounts: readonly number[];
   /** Dreamwell card whose effect opened this authoritative prompt. */
-  sourceDreamwellCard?: DreamwellCardModel;
+  readonly source?: DreamwellCardModel;
 }
 
 /** The complete staged result emitted by one confirmation. */
-export interface BattleForeseeResolution {
+export interface BattleForeseeResult {
   /** The exact original deck prefix inspected at confirmation time. */
   viewedCardIds: readonly string[];
   /** Cards returned to the deck, top to bottom. */
@@ -59,11 +59,11 @@ export interface BattleForeseeResolution {
   voidCardIds: readonly string[];
 }
 
-export interface BattleForeseeOverlayProps {
+export interface BattleForeseeEditorProps {
   /** The exact cards inspected by the effect. */
-  view: BattleForeseeView;
+  model: BattleForeseeEditorModel;
   /** Commits one complete order/void resolution. */
-  onConfirm: (resolution: BattleForeseeResolution) => void;
+  onConfirm: (resolution: BattleForeseeResult) => void;
 }
 
 interface ForeseePointerDrag {
@@ -82,10 +82,10 @@ interface ForeseePointerDrag {
  * Avoiding native HTML drag keeps Firefox from rasterizing the complete card
  * and glass compositor subtree into an engine-owned drag image.
  */
-export function BattleForeseeOverlay({
-  view,
+export function BattleForeseeEditor({
+  model,
   onConfirm,
-}: BattleForeseeOverlayProps): ReactElement {
+}: BattleForeseeEditorProps): ReactElement {
   const resolve = useLocalizer();
   const isDesktop = useIsDesktop();
   const cardWidthPx = isDesktop
@@ -100,12 +100,33 @@ export function BattleForeseeOverlay({
   const sourceCardWidthPx = isDesktop
     ? FORESEE_SOURCE_CARD_WIDTH_DESKTOP_PX
     : FORESEE_SOURCE_CARD_WIDTH_MOBILE_PX;
-  const allCardIds = view.cards.map((card) => card.battleCardId);
-  const minimumCount = allCardIds.length === 0 ? 0 : 1;
-  const initialCount = Math.min(
-    allCardIds.length,
-    Math.max(minimumCount, Math.floor(view.initialCount)),
+  const allCardIds = model.cards.map((card) => card.battleCardId);
+  if (new Set(allCardIds).size !== allCardIds.length) {
+    throw new Error("BattleForeseeEditor requires unique battleCardId values.");
+  }
+  const allowedCountsAreValid = model.allowedCounts.every(
+    (count, index, counts) =>
+      Number.isInteger(count) &&
+      count >= 0 &&
+      count <= allCardIds.length &&
+      (index === 0 || counts[index - 1] < count),
   );
+  if (!allowedCountsAreValid || model.allowedCounts.length === 0) {
+    throw new Error(
+      "BattleForeseeEditor requires a nonempty, strictly increasing set of valid allowedCounts.",
+    );
+  }
+  if (
+    !Number.isInteger(model.initialCount) ||
+    !model.allowedCounts.includes(model.initialCount)
+  ) {
+    throw new Error(
+      "BattleForeseeEditor initialCount must be one of allowedCounts.",
+    );
+  }
+  const safeAllowedCounts = model.allowedCounts;
+  const minimumCount = safeAllowedCounts[0] ?? 0;
+  const initialCount = model.initialCount;
   const [count, setCount] = useState(initialCount);
   const [orderedCardIds, setOrderedCardIds] = useState<readonly string[]>(
     allCardIds.slice(0, initialCount),
@@ -113,24 +134,39 @@ export function BattleForeseeOverlay({
   const [voidCardIds, setVoidCardIds] = useState<readonly string[]>([]);
   const pointerDragRef = useRef<ForeseePointerDrag | null>(null);
   const dragSuppressedRef = useRef(false);
-  const cardById = new Map(view.cards.map((card) => [card.battleCardId, card]));
+  const cardById = new Map(
+    model.cards.map((card) => [card.battleCardId, card]),
+  );
+  const modelIdentity = `${allCardIds.join("|")}::${safeAllowedCounts.join("|")}::${String(initialCount)}`;
+
+  useEffect(() => {
+    setCount(initialCount);
+    setOrderedCardIds(allCardIds.slice(0, initialCount));
+    setVoidCardIds([]);
+    pointerDragRef.current = null;
+  }, [modelIdentity]);
 
   const incrementCount = (): void => {
-    const addedCardId = allCardIds[count];
-    if (addedCardId === undefined) return;
-    setOrderedCardIds((current) => [...current, addedCardId]);
-    setCount((current) => current + 1);
+    const nextCount = safeAllowedCounts.find((candidate) => candidate > count);
+    if (nextCount === undefined) return;
+    const addedCardIds = allCardIds.slice(count, nextCount);
+    setOrderedCardIds((current) => [...current, ...addedCardIds]);
+    setCount(nextCount);
   };
 
   const decrementCount = (): void => {
-    if (count <= minimumCount) return;
-    const removedCardId = allCardIds[count - 1];
-    if (removedCardId === undefined) return;
+    const previousCount = [...safeAllowedCounts]
+      .reverse()
+      .find((candidate) => candidate < count);
+    if (previousCount === undefined) return;
+    const removedCardIds = new Set(allCardIds.slice(previousCount, count));
     setOrderedCardIds((current) =>
-      current.filter((id) => id !== removedCardId),
+      current.filter((id) => !removedCardIds.has(id)),
     );
-    setVoidCardIds((current) => current.filter((id) => id !== removedCardId));
-    setCount((current) => current - 1);
+    setVoidCardIds((current) =>
+      current.filter((id) => !removedCardIds.has(id)),
+    );
+    setCount(previousCount);
   };
 
   const moveToVoid = (battleCardId: string): void => {
@@ -152,6 +188,17 @@ export function BattleForeseeOverlay({
         battleCardId,
         ...withoutMoved.slice(targetIndex),
       ];
+    });
+  };
+
+  const moveWithinDeck = (battleCardId: string, offset: -1 | 1): void => {
+    setOrderedCardIds((current) => {
+      const index = current.indexOf(battleCardId);
+      const target = index + offset;
+      if (index < 0 || target < 0 || target >= current.length) return current;
+      const next = [...current];
+      [next[index], next[target]] = [next[target], next[index]];
+      return next;
     });
   };
 
@@ -262,6 +309,36 @@ export function BattleForeseeOverlay({
         data-foresee-card-id={battleCardId}
         data-foresee-card-zone={zone}
         data-foresee-pointer-dragging="false"
+        role="button"
+        tabIndex={0}
+        aria-label={resolve(
+          txa(
+            "Foresee card {card_name}, in {zone}",
+            { card_name: card.card.displaySnapshot.name, zone },
+            "[accessibility] A staged Foresee card and its current destination.",
+          ),
+        )}
+        onKeyDown={(event) => {
+          if (event.key === "ArrowLeft" && zone === "deck") {
+            event.preventDefault();
+            moveWithinDeck(battleCardId, -1);
+          } else if (event.key === "ArrowRight" && zone === "deck") {
+            event.preventDefault();
+            moveWithinDeck(battleCardId, 1);
+          } else if (
+            event.key === "Delete" ||
+            event.key.toLowerCase() === "v"
+          ) {
+            event.preventDefault();
+            moveToVoid(battleCardId);
+          } else if (event.key === "Home" || event.key.toLowerCase() === "d") {
+            event.preventDefault();
+            moveToDeck(
+              battleCardId,
+              event.key === "Home" ? orderedCardIds[0] : undefined,
+            );
+          }
+        }}
         onDragStart={(event) => {
           event.preventDefault();
         }}
@@ -327,7 +404,7 @@ export function BattleForeseeOverlay({
           touchAction: "none",
         }}
       >
-        <GameCard model={card.model} presentation="full" />
+        <GameCard model={card.card} presentation="full" />
       </article>
     );
   };
@@ -347,17 +424,17 @@ export function BattleForeseeOverlay({
   return (
     <GlassDialog
       title={txa(
-          "Foresee {count}",
-          { count },
-          "[battle] Title of the Foresee overlay. count is the positive number of cards the player may inspect and reorder.",
-        )}
+        "Foresee {count}",
+        { count },
+        "[battle] Title of the Foresee overlay. count is the positive number of cards the player may inspect and reorder.",
+      )}
       desktopCenterTarget="battlefield"
     >
       <div
         data-battle-cumulus-foresee=""
         style={{ display: "grid", gap: token("--space-m") }}
       >
-        {view.sourceDreamwellCard === undefined ? null : (
+        {model.source === undefined ? null : (
           <section
             data-battle-prompt-source="dreamwell"
             style={{
@@ -374,13 +451,10 @@ export function BattleForeseeOverlay({
                 textTransform: "uppercase",
               }}
             >
-              {resolve(tx(
-                "Triggered By",
-                "[battle] Foresee triggered by.",
-              ))}
+              {resolve(tx("Triggered By", "[battle] Foresee triggered by."))}
             </span>
             <div style={{ width: sourceCardWidthPx, maxWidth: "100%" }}>
-              <DreamwellCard model={view.sourceDreamwellCard} />
+              <DreamwellCard model={model.source} />
             </div>
           </section>
         )}
@@ -396,10 +470,7 @@ export function BattleForeseeOverlay({
           <IconButton
             glyph={GLYPHS.minus}
             size="sm"
-            label={tx(
-                "Foresee 1 fewer",
-                "[battle] Foresee less action.",
-              )}
+            label={tx("Foresee 1 fewer", "[battle] Foresee less action.")}
             placement="onGlass"
             disabled={count <= minimumCount}
             onPress={decrementCount}
@@ -407,12 +478,9 @@ export function BattleForeseeOverlay({
           <IconButton
             glyph={GLYPHS.plus}
             size="sm"
-            label={tx(
-                "Foresee 1 more",
-                "[battle] Foresee more action.",
-              )}
+            label={tx("Foresee 1 more", "[battle] Foresee more action.")}
             placement="onGlass"
-            disabled={count >= allCardIds.length}
+            disabled={!safeAllowedCounts.some((candidate) => candidate > count)}
             onPress={incrementCount}
           />
         </div>
@@ -430,10 +498,7 @@ export function BattleForeseeOverlay({
             }}
           >
             <div data-foresee-indicator="deck" style={indicatorStyle}>
-              {resolve(tx(
-                "Deck",
-                "[battle] Foresee deck destination.",
-              ))}
+              {resolve(tx("Deck", "[battle] Foresee deck destination."))}
             </div>
 
             <div
@@ -477,10 +542,12 @@ export function BattleForeseeOverlay({
               data-foresee-zone="void"
               style={indicatorStyle}
             >
-              {resolve(tx(
-                meaning("foresee-void-destination", "Void"),
-                "[battle] Foresee void destination.",
-              ))}
+              {resolve(
+                tx(
+                  meaning("foresee-void-destination", "Void"),
+                  "[battle] Foresee void destination.",
+                ),
+              )}
             </div>
           </div>
         </div>
@@ -494,13 +561,25 @@ export function BattleForeseeOverlay({
             placement="onGlass"
             variant="accent"
             testId="battle-foresee-confirm"
-            onPress={() =>
-              onConfirm({
+            onPress={() => {
+              const result = {
                 viewedCardIds: allCardIds.slice(0, count),
                 orderedCardIds,
                 voidCardIds,
-              })
-            }
+              };
+              const viewed = new Set(result.viewedCardIds);
+              const emitted = [...result.orderedCardIds, ...result.voidCardIds];
+              if (
+                emitted.some((id) => !viewed.has(id)) ||
+                new Set(emitted).size !== emitted.length ||
+                emitted.length !== viewed.size
+              ) {
+                throw new Error(
+                  "BattleForeseeEditor produced an invalid result partition.",
+                );
+              }
+              onConfirm(result);
+            }}
           />
         </div>
       </div>

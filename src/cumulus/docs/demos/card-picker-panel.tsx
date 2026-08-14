@@ -45,7 +45,8 @@ function CardPickerPanelDemo() {
     };
   }, [selected]);
 
-  if (cards === null) return <div style={{ opacity: 0.7 }}>Loading cards...</div>;
+  if (cards === null)
+    return <div style={{ opacity: 0.7 }}>Loading cards...</div>;
 
   return (
     <div style={{ width: "min(940px, 100%)", maxHeight: 700 }}>

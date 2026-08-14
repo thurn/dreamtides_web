@@ -545,7 +545,7 @@ describe("BattleTutorialGuidance", () => {
       "[data-card-tutorial-dialogue-layout]",
     );
     expect(dialogueLayout?.style.visibility).toBe("visible");
-    expect(dialogueLayout?.style.maxWidth).toBe("700px");
+    expect(dialogueLayout?.style.width).toContain("560px");
     expect(
       Number.parseFloat(dialogueLayout?.style.top ?? "") + 100,
     ).toBeLessThanOrEqual(500);

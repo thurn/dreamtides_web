@@ -8,10 +8,7 @@
 // dreamscape ids through `artRef`; the forgone node carries the forced-blank
 // unreachable shape the view-model produces (a dimmed, badge-free empty frame).
 
-import {
-  atlasFixtureNodes,
-  nodeSizing,
-} from "../__atlas-fixtures__";
+import { atlasFixtureNodes, nodeSizing } from "../__atlas-fixtures__";
 import { AtlasNode } from "../../components/atlas/AtlasNode";
 import type { CumulusComponent } from "../registry";
 

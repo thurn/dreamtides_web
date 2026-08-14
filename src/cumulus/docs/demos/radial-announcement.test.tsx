@@ -26,7 +26,9 @@ describe("RadialAnnouncement documentation demo", () => {
     );
     const freezeStyles = frozenDemo?.querySelector("style")?.textContent;
 
-    expect(frozenDemo?.querySelector("[data-radial-announcement]")).not.toBeNull();
+    expect(
+      frozenDemo?.querySelector("[data-radial-announcement]"),
+    ).not.toBeNull();
     expect(freezeStyles).toContain("[data-radial-announcement-disc]");
     expect(freezeStyles).toContain("[data-radial-announcement-copy]");
     expect(freezeStyles).toContain("animation: none !important");

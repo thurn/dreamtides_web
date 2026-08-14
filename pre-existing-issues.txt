@@ -1,7 +1,5 @@
-`scripts/regenerate-assets.sh` fails in its Trox extraction step with
-`trox.literal-required` errors across canonical RON catalogs. The current Trox
-extractor accepts the single-literal `Tx("...")` form but rejects structured
-`Tx(text: "...", placeholders: {...})` values, including entries in
-`data/atlas.ron`, `data/augury.ron`, `data/draft.ron`, `data/exploration.ron`,
-`data/glossary.ron`, and `data/sites.ron`. Asset setup and the other generation
-steps complete before extraction aborts.
+`?goto=battle-playable` remains on the "Opening QA Scene" gate after the room
+and journey foundation are created. The journey log stops after
+`draft_pool_initialized` without writing `debug_qa_scene_loaded`. This reproduces
+on both the existing localhost:5173 build and the isolated worktree server, so
+the playable-battle browser workflow cannot currently reach its battle surface.

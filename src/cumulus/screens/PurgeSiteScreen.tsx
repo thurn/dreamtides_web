@@ -7,15 +7,16 @@ import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import type { GlassButtonWidthReservation } from "../components/controls/GlassButton";
 import type { ArtRef } from "../primitives/art";
 import {
-  GuideGallerySiteLayout,
-  type GuideGalleryGuideView,
-} from "./GuideGallerySiteLayout";
+  SiteLayout,
+  type SiteLayoutGuide,
+} from "../components/layout/SiteLayout";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
-import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
+import { ViewportTutorialDialogue } from "../components/overlay/ViewportTutorialDialogue";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 
-export type PurgeGuideView = GuideGalleryGuideView;
+export type PurgeGuideView = Omit<SiteLayoutGuide, "presence">;
 
 export type PurgeActionWidthLabel =
   | { readonly kind: "decline" }
@@ -89,6 +90,7 @@ export function PurgeSiteScreen({
   const totalCost = view.visitCosts[selectedPaidCount] ?? 0;
   const canSelectPaid = selectedPaidCount < view.maxPaidSelections;
   const selectedCount = selectedEntryIds.length;
+  const layout = useIsDesktop() ? "desktop" : "mobile";
   const actionWidthReservations = useMemo(
     () =>
       purgeActionWidthReservations(
@@ -147,15 +149,17 @@ export function PurgeSiteScreen({
   }, [onPurge, selectedEntryIds, totalCost]);
 
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      screenTestId="cumulus-purge-site-screen"
-      guideArtTestId="cumulus-purge-guide-art"
-      speechAnchorTestId="cumulus-purge-speech-anchor"
-      speechBubbleTestId="cumulus-purge-speech-bubble"
-      renderGallery={(layout) => (
+    <div
+      data-testid="cumulus-purge-site-screen"
+      style={{ position: "fixed", inset: 0 }}
+    >
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{ ...view.guide, presence: "speaking" }}
+        composition="balanced-gallery"
+      >
         <PurgeGallery
           layout={layout}
           presentation={view.presentation}
@@ -169,22 +173,17 @@ export function PurgeSiteScreen({
           onPurge={commitPurge}
           onToggle={toggleSelection}
         />
-      )}
-    >
+      </SiteLayout>
       {tutorialVisible && view.tutorial !== undefined && (
         <ViewportTutorialDialogue
-          view={{
-            id: view.tutorial.id,
-            dialogue: view.tutorial.model,
-            horizontalOffset: view.tutorial.horizontalOffset,
-            verticalOffset: view.tutorial.verticalOffset,
-            bubbleWidth: view.tutorial.bubbleWidth,
-          }}
+          presentationId={view.tutorial.id}
+          dialogue={view.tutorial.model}
+          context="site"
+          placement={{ kind: "anchored", anchorId: "site-content" }}
           visible
-          kind="site"
         />
       )}
-    </GuideGallerySiteLayout>
+    </div>
   );
 }
 

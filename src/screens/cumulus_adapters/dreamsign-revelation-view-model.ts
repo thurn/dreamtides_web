@@ -76,17 +76,17 @@ export function buildDreamsignRevelationView(params: {
       params.pendingPurgeDreamsign === null
         ? null
         : {
-            pendingDreamsign: localizedDreamsign(
+            incoming: localizedDreamsign(
               params.pendingPurgeDreamsign,
               "Dreamsign Revelation pending reward",
             ),
-            currentDreamsigns: params.state.dreamsigns.map((dreamsign) =>
+            held: params.state.dreamsigns.map((dreamsign) =>
               localizedDreamsign(
                 dreamsign,
                 "Dreamsign Revelation held collection",
               ),
             ),
-            maxDreamsigns: params.state.maxDreamsigns,
+            capacity: params.state.maxDreamsigns,
           },
   };
 }

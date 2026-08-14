@@ -18,7 +18,10 @@ import {
  * without competing with the source card's semantic rules-text colors.
  */
 export function glossaryDefinitionsCardModel(
-  entries: readonly (ProjectedGlossaryCatalogEntry | import("../../../data/glossary").GlossaryCatalogEntry)[],
+  entries: readonly (
+    | ProjectedGlossaryCatalogEntry
+    | import("../../../data/glossary").GlossaryCatalogEntry
+  )[],
   excludedIds: readonly string[] = [],
 ): InfoCardTextProps | null {
   const excluded = new Set(excludedIds);
@@ -31,12 +34,14 @@ export function glossaryDefinitionsCardModel(
     body: {
       kind: "definitions",
       entries: visibleEntries.map((entry) => ({
-        term: "localizedTerm" in entry
-          ? entry.localizedTerm
-          : localizedSourceText(entry.term),
-        definition: "localizedDefinition" in entry
-          ? entry.localizedDefinition
-          : localizedSourceText(entry.definition),
+        term:
+          "localizedTerm" in entry
+            ? entry.localizedTerm
+            : localizedSourceText(entry.term),
+        definition:
+          "localizedDefinition" in entry
+            ? entry.localizedDefinition
+            : localizedSourceText(entry.definition),
         symbol: entry.definitionSymbol,
         termPresentation: entry.termPresentation,
       })),

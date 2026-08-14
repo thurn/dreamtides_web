@@ -382,7 +382,9 @@ function OfferFullArtBackground({
   backgroundArt,
 }: {
   readonly kind: "dreamsign-gift" | "add-site";
-  readonly backgroundArt: NonNullable<AuguryArchetypeData["presentation"]["backgroundArt"]>;
+  readonly backgroundArt: NonNullable<
+    AuguryArchetypeData["presentation"]["backgroundArt"]
+  >;
 }): ReactElement {
   const imageNumber = backgroundArt.imageNumber;
   return (
@@ -424,7 +426,9 @@ function DreamsignGiftComposition({
   backgroundArt,
 }: {
   readonly dreamsign: OfferTileDreamsign;
-  readonly backgroundArt: NonNullable<AuguryArchetypeData["presentation"]["backgroundArt"]>;
+  readonly backgroundArt: NonNullable<
+    AuguryArchetypeData["presentation"]["backgroundArt"]
+  >;
 }): ReactElement {
   return (
     <span
@@ -438,7 +442,10 @@ function DreamsignGiftComposition({
         pointerEvents: "none",
       }}
     >
-      <OfferFullArtBackground kind="dreamsign-gift" backgroundArt={backgroundArt} />
+      <OfferFullArtBackground
+        kind="dreamsign-gift"
+        backgroundArt={backgroundArt}
+      />
       <DreamsignArtPiece
         dreamsign={dreamsign}
         edge={offerStagePercentage(54)}
@@ -452,7 +459,9 @@ function AddSiteComposition({
   backgroundArt,
 }: {
   readonly site: OfferTileSite;
-  readonly backgroundArt: NonNullable<AuguryArchetypeData["presentation"]["backgroundArt"]>;
+  readonly backgroundArt: NonNullable<
+    AuguryArchetypeData["presentation"]["backgroundArt"]
+  >;
 }): ReactElement {
   return (
     <span
@@ -712,9 +721,13 @@ function OfferVisual({
   readonly model: OfferTileModel;
   readonly presentation: AuguryArchetypeData["presentation"];
 }): ReactElement {
-  const requireBackgroundArt = (): NonNullable<AuguryArchetypeData["presentation"]["backgroundArt"]> => {
+  const requireBackgroundArt = (): NonNullable<
+    AuguryArchetypeData["presentation"]["backgroundArt"]
+  > => {
     if (presentation.backgroundArt === undefined) {
-      throw new Error(`Augury ${model.kind} presentation is missing background art`);
+      throw new Error(
+        `Augury ${model.kind} presentation is missing background art`,
+      );
     }
     return presentation.backgroundArt;
   };
@@ -776,8 +789,18 @@ function OfferVisual({
         />
       );
     case "dreamsign-gift":
-      return <DreamsignGiftComposition dreamsign={model.dreamsign} backgroundArt={requireBackgroundArt()} />;
+      return (
+        <DreamsignGiftComposition
+          dreamsign={model.dreamsign}
+          backgroundArt={requireBackgroundArt()}
+        />
+      );
     case "add-site":
-      return <AddSiteComposition site={model.site} backgroundArt={requireBackgroundArt()} />;
+      return (
+        <AddSiteComposition
+          site={model.site}
+          backgroundArt={requireBackgroundArt()}
+        />
+      );
   }
 }

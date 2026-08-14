@@ -613,6 +613,44 @@ describe("Cumulus reveal coordinator root", () => {
     expect(text).not.toContain("reveal-");
   });
 
+  it("treats the catalog wildcard subtype as absent reveal copy", () => {
+    const cardId = asCardId(UUID_A);
+    const { container } = mount(
+      <CumulusRoot>
+        <Source
+          id={UUID_A}
+          spec={{
+            primary: {
+              kind: "gameCard",
+              cardId,
+              displaySnapshot: {
+                id: cardId,
+                name: asCardName("Moon Twin"),
+                cardNumber: 42,
+                cardType: "Character",
+                subtype: "*",
+                isStarter: false,
+                energyCost: 2,
+                spark: 3,
+                isFast: false,
+                renderedText: "Challenge: Awaken.",
+                imageNumber: 42,
+                artOwned: true,
+              },
+            },
+            secondaries: [],
+          }}
+        />
+      </CumulusRoot>,
+    );
+    const button = container.querySelector("button")!;
+    const text =
+      document.getElementById(button.getAttribute("aria-describedby")!)
+        ?.textContent ?? "";
+    expect(text.trim()).not.toBe("");
+    expect(text).not.toContain("*");
+  });
+
   it("rejects an incomplete GameCard registration instead of describing only its UUID", () => {
     const incomplete = {
       primary: { kind: "gameCard", cardId: asCardId(UUID_A) },

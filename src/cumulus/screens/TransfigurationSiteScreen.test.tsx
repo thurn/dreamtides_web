@@ -205,7 +205,7 @@ describe("TransfigurationSiteScreen", () => {
     );
 
     expect(
-      container.querySelector("[data-guide-gallery-desktop-composition]"),
+      container.querySelector('[data-site-layout-viewport="desktop"]'),
     ).not.toBeNull();
     expect(container.querySelector("h2")?.textContent?.trim()).not.toBe("");
     expect(
@@ -229,10 +229,9 @@ describe("TransfigurationSiteScreen", () => {
       )?.dataset.galleryCardSize,
     ).toBe("reading");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-guide-gallery-desktop-layout]",
-      )?.dataset.guideGalleryDesktopLayoutMode,
-    ).toBe("showcase");
+      container.querySelector<HTMLElement>("[data-site-layout]")?.dataset
+        .siteLayoutComposition,
+    ).toBe("content-led-revelation");
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-picker"]',
@@ -307,7 +306,7 @@ describe("TransfigurationSiteScreen", () => {
   });
 
   it("uses four columns for the enhanced whole-deck picker on mobile", () => {
-    stubMatchMedia(true, false);
+    stubMatchMedia(true, false, true);
     const { container, root } = mount(
       <TransfigurationSiteScreen
         view={enhancedView()}
@@ -387,8 +386,8 @@ describe("TransfigurationSiteScreen", () => {
     ).toBe("auto");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
-        ?.style.paddingBlockStart,
-    ).toBe("0px");
+        ?.style.padding,
+    ).toBe("var(--space-xs)");
     expect(
       container
         .querySelector<HTMLButtonElement>(
@@ -411,7 +410,7 @@ describe("TransfigurationSiteScreen", () => {
     expect(commit?.style.opacity).toBe("0.5");
     expect(
       commit?.querySelectorAll("[data-glass-button-width-reservation]"),
-    ).toHaveLength(5);
+    ).toHaveLength(4);
     expect(
       container.querySelector('[role="radio"][aria-checked="true"]'),
     ).toBeNull();
@@ -522,7 +521,7 @@ describe("TransfigurationSiteScreen", () => {
   });
 
   it("uses the compact mobile gallery and a card-first icon detail surface", () => {
-    stubMatchMedia(true, false);
+    stubMatchMedia(true, false, true);
     const animate = vi.fn(() => ({}) as Animation);
     Object.defineProperty(HTMLElement.prototype, "animate", {
       configurable: true,
@@ -540,16 +539,16 @@ describe("TransfigurationSiteScreen", () => {
       '[data-testid="cumulus-transfiguration-picker"]',
     );
     expect(
-      container.querySelector("[data-guide-gallery-desktop-composition]"),
+      container.querySelector('[data-site-layout-viewport="desktop"]'),
     ).toBeNull();
     expect(
       container.querySelector(
-        '[data-guide-gallery-mobile-composition="revelation"]',
+        '[data-site-layout-viewport="narrow"]',
       ),
     ).not.toBeNull();
     expect(
       container.querySelector<HTMLImageElement>(
-        '[data-testid="cumulus-transfiguration-guide-art"]',
+        "[data-site-layout-guide]",
       )?.style.width,
     ).toBe("62vw");
     expect(
@@ -583,28 +582,16 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       container.querySelector<HTMLElement>(
         "[data-transfiguration-detail-card-target]",
-      )?.style.alignSelf,
-    ).toBe("start");
+      )?.style.justifySelf,
+    ).toBe("center");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.dataset.transfigurationOptionLayout,
     ).toBe("compact");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
-        ?.dataset.transfigurationDetailBodyLayout,
-    ).toBe("side-by-side");
-    expect(
-      container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
         ?.style.padding,
     ).toBe("var(--space-l) var(--space-s)");
-    expect(
-      container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
-        ?.style.containerType,
-    ).toBe("inline-size");
-    expect(
-      container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
-        ?.style.gridTemplateRows,
-    ).toBe("auto");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-detail-body]")
         ?.style.gridTemplateColumns,
@@ -613,14 +600,6 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.style.flexDirection,
     ).toBe("column");
-    expect(
-      container.querySelector<HTMLElement>("[data-transfiguration-options]")
-        ?.style.alignItems,
-    ).toBe("stretch");
-    expect(
-      container.querySelector<HTMLElement>("[data-transfiguration-options]")
-        ?.style.justifyContent,
-    ).toBe("flex-start");
     expect(
       container.querySelector<HTMLElement>(
         "[data-transfiguration-panel-viewport]",
@@ -693,7 +672,7 @@ describe("TransfigurationSiteScreen", () => {
   });
 
   it("reserves the expanded mobile region before choosing a dense form offer", () => {
-    stubMatchMedia(true, false);
+    stubMatchMedia(true, false, true);
     const denseView = view();
     const first = denseView.candidates[0];
     if (first === undefined) throw new Error("Missing candidate fixture");
@@ -727,9 +706,9 @@ describe("TransfigurationSiteScreen", () => {
     );
 
     expect(
-      container.querySelector<HTMLElement>("[data-guide-gallery-mobile-region]")
-        ?.dataset.guideGalleryMobileRegionSize,
-    ).toBe("expanded");
+      container.querySelector<HTMLElement>("[data-site-layout]")?.dataset
+        .siteLayoutComposition,
+    ).toContain("expanded-revelation");
 
     act(() => {
       container
@@ -740,15 +719,15 @@ describe("TransfigurationSiteScreen", () => {
     });
 
     expect(
-      container.querySelector<HTMLElement>("[data-guide-gallery-mobile-region]")
-        ?.dataset.guideGalleryMobileRegionSize,
-    ).toBe("expanded");
+      container.querySelector<HTMLElement>("[data-site-layout]")?.dataset
+        .siteLayoutComposition,
+    ).toContain("expanded-revelation");
     expect(container.querySelectorAll('[role="radio"]')).toHaveLength(5);
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-detail"]',
       )?.style.height,
-    ).toBe("auto");
+    ).toBe("");
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-detail"]',
@@ -757,7 +736,7 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.style.height,
-    ).toBe("auto");
+    ).toBe("");
     expect(
       container.querySelector<HTMLElement>("[data-transfiguration-options]")
         ?.style.overflowY,

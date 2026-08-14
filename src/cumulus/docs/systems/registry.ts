@@ -7,6 +7,10 @@ import {
   JourneyScreenHostChromeDocs,
   JourneyScreenHostChromePreview,
 } from "./journey-screen-host-chrome";
+import {
+  TutorialDialoguePlacementDocs,
+  TutorialDialoguePlacementPreview,
+} from "./tutorial-dialogue-placement";
 
 /**
  * A cross-component behavioral contract documented by Cumulus. UI systems own
@@ -27,6 +31,14 @@ export interface CumulusUISystem {
 }
 
 export const CUMULUS_UI_SYSTEMS = [
+  {
+    id: "tutorial-dialogue-placement",
+    title: "Tutorial Dialogue Placement",
+    blurb:
+      "Coordinate route-local tutorial anchors and obstacles so CharacterDialogue can occupy measured safe viewport space without product selector discovery.",
+    Preview: TutorialDialoguePlacementPreview,
+    Docs: TutorialDialoguePlacementDocs,
+  },
   {
     id: "entity-reveals",
     title: "Entity Reveals",

@@ -436,10 +436,7 @@ function QsbDreamAvatarBust({
                   "[journey] Shared journey-status labels and controls.",
                 ),
                 body: richText.plain(
-                  tx(
-                    "No avatar is active.",
-                    "[journey] Status no avatar.",
-                  ),
+                  tx("No avatar is active.", "[journey] Status no avatar."),
                 ),
               },
             },

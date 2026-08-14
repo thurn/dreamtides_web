@@ -13,8 +13,9 @@ const MODEL: DreamwellCardModel = {
   displaySnapshot: {
     id: CARD_ID,
     name: assertLocalized("Shining Beacon"),
-    renderedText:
-      assertLocalized("Look at the top 2 cards of your deck. Put one into your hand and the other on the bottom of your deck."),
+    renderedText: assertLocalized(
+      "Look at the top 2 cards of your deck. Put one into your hand and the other on the bottom of your deck.",
+    ),
     energyAdded: 2,
     imageNumber: 1252796548,
   },

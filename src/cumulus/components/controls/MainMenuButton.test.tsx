@@ -7,7 +7,10 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MainMenuButton } from "./MainMenuButton";
 import { CumulusRoot } from "../../CumulusRoot";
 
-function mount(element: ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -38,7 +41,10 @@ afterEach(() => {
 describe("MainMenuButton", () => {
   it("renders the shared neutral glass treatment on the press surface", () => {
     const { container, root } = mount(
-      <MainMenuButton label={assertLocalized("New Journey")} onPress={() => {}} />,
+      <MainMenuButton
+        label={assertLocalized("New Journey")}
+        onPress={() => {}}
+      />,
     );
 
     const glassSurface = container.querySelector<HTMLElement>(
@@ -56,7 +62,10 @@ describe("MainMenuButton", () => {
   it("reports activation with its player-facing label intact", () => {
     const onPress = vi.fn();
     const { container, root } = mount(
-      <MainMenuButton label={assertLocalized("New Journey")} onPress={onPress} />,
+      <MainMenuButton
+        label={assertLocalized("New Journey")}
+        onPress={onPress}
+      />,
     );
     const button = container.querySelector("button");
 
@@ -66,5 +75,4 @@ describe("MainMenuButton", () => {
 
     act(() => root.unmount());
   });
-
 });

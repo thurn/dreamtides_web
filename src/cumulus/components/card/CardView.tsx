@@ -36,7 +36,7 @@ import type { CardTransfigurationDisplay } from "../../../runtime/transfiguratio
 import { TRANSFIGURE_MARK_START } from "../../../runtime/transfigure-markers";
 import { renderRulesText } from "./RulesText";
 import { useFitText } from "../controls/useFitText";
-import { DESKTOP_MIN_WIDTH } from "../../screens/use-is-desktop";
+import { DESKTOP_MIN_WIDTH } from "../../primitives/use-is-desktop";
 import { Pressable } from "../../primitives/Pressable";
 import { useRevealSource } from "../../internal/reveal/context";
 import { DEFAULT_ART_CROP, resolveCardArtImageStyle } from "./card-art-crop";
@@ -55,9 +55,7 @@ function localizedCardDisplayName(
   return txa(
     "{figment_identity} Figment",
     {
-      figment_identity: opaque(
-        localizedSourceText(identity),
-      ),
+      figment_identity: opaque(localizedSourceText(identity)),
     },
     "[battle] Canonical card title for a generated Figment. figment_identity is the independently localized authored Figment identity and has no grammatical metadata.",
   );
@@ -139,6 +137,7 @@ function cardRulesTextDefinitionCards(
   card: Pick<CardData, "isFast" | "isInterrupt" | "renderedText">,
   extraExcludedIds: readonly string[] = [],
 ) {
+  if (card.renderedText.trim() === "") return [];
   return rulesTextDefinitionCards(
     localizedSourceText(card.renderedText),
     "card",

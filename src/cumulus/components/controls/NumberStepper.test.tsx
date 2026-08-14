@@ -43,9 +43,9 @@ describe("NumberStepper", () => {
       );
     });
 
-    expect(host.querySelector<HTMLElement>('[data-testid="stepper"]')?.style.gap).toBe(
-      gap,
-    );
+    expect(
+      host.querySelector<HTMLElement>('[data-testid="stepper"]')?.style.gap,
+    ).toBe(gap);
 
     act(() => root.unmount());
   });

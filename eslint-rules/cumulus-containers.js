@@ -28,7 +28,7 @@ export const CONTAINER_COMPONENTS = [
   "DeveloperRail", // edge-attached developer-tool shell with scrolling body/footer slots
   "GlassBackdrop", // the frosted layer — hosts optional lifted-above-the-frost content
   "DisclosureSection", // progressive-disclosure wrapper for structured secondary content
-  "GuideGallerySiteLayout", // responsive site stage — hosts each site's typed gallery
+  "SiteLayout", // responsive routed-site stage — hosts one typed site body
 ];
 
 /**

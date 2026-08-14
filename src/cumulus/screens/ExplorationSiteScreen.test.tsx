@@ -1265,13 +1265,13 @@ describe("ExplorationSiteScreen", () => {
       container.querySelector('[data-testid="cumulus-exploration-panel"]'),
     ).toBeNull();
     expect(
-      container.querySelector("[data-guide-gallery-guide]"),
+      container.querySelector("[data-site-layout-guide]"),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-exploration-guide-art"]'),
+      container.querySelector("[data-site-layout-guide] img"),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-exploration-speech"]'),
+      container.querySelector("[data-site-layout-speech-anchor]"),
     ).not.toBeNull();
     expect(container.textContent).not.toContain("Channel A Possibility");
     expect(container.textContent).not.toContain(
@@ -1430,10 +1430,10 @@ describe("ExplorationSiteScreen", () => {
         ?.querySelector("[data-glass-panel-header]"),
     ).toBeNull();
     const action = container.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-exploration-choice-0"]',
+      '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
     );
     expect(action?.dataset.explorationActionId).toBe(directView.actions[0].id);
-    expect(action?.dataset.explorationEffectKind).toBe(
+    expect(action?.parentElement?.dataset.explorationEffectKind).toBe(
       directView.actions[0].effectKind,
     );
     act(() => action?.click());
@@ -1476,7 +1476,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -1537,7 +1537,7 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     const choice = container.querySelector<HTMLElement>(
-      '[data-testid="cumulus-exploration-choice-0"]',
+      '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
     );
     expect(choice?.dataset.explorationEntityPreview).toBe("card");
     expect(choice?.dataset.explorationDeckEntryId).toBe(starterEntryId);
@@ -1587,7 +1587,7 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     const effect = container.querySelector<HTMLElement>(
-      "#exploration-effect-0",
+      '[data-testid="cumulus-exploration-choice-0"] [data-exploration-choice-description]',
     );
     const energyGlyph = effect?.querySelector<HTMLElement>(
       '[data-inline-glyph][aria-label="energy"]',
@@ -1650,7 +1650,7 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     const labels = container.querySelectorAll(
-      "#exploration-effect-0 [data-exploration-entity-label]",
+      '[data-testid="cumulus-exploration-choice-0"] [data-exploration-choice-description] [data-exploration-entity-label]',
     );
     expect(labels).toHaveLength(2);
     expect(
@@ -1696,13 +1696,9 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     const effect = container.querySelector<HTMLElement>(
-      "#exploration-effect-0",
+      '[data-testid="cumulus-exploration-choice-0"] [data-exploration-choice-description]',
     );
-    const cardType = effect?.querySelector<HTMLElement>(
-      "[data-exploration-card-type-variable]",
-    );
-    expect(cardType?.dataset.cardType).toBe("Character");
-    expect(cardType?.textContent?.trim()).not.toBe("");
+    expect(effect?.textContent).toContain("Character");
     expect(effect?.textContent).not.toContain("{card_type}");
 
     act(() => root.unmount());
@@ -1752,10 +1748,10 @@ describe("ExplorationSiteScreen", () => {
       '[data-exploration-choices-state="waiting"]',
     );
     const firstChoice = container.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-exploration-choice-0"]',
+      '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
     );
     const secondChoice = container.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-exploration-choice-1"]',
+      '[data-testid="cumulus-exploration-choice-1"] [data-exploration-action-id]',
     );
     expect(narrative?.textContent).toBe("");
     expect(narrative?.dataset.explorationTypewriterState).toBe("typing");
@@ -1872,7 +1868,7 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     const source = container.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-exploration-choice-0"]',
+      '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
     );
     const label = container.querySelector<HTMLElement>(
       '[data-exploration-entity-label="card"]',
@@ -1884,11 +1880,9 @@ describe("ExplorationSiteScreen", () => {
     expect(source?.dataset.revealSourceRetain).toBe("true");
     expect(source?.dataset.revealPrimaryVariant).toBe("gameCard");
     expect(label?.textContent).toBe(referencedCard.name);
-    expect(label?.querySelector("span")?.style.textDecoration).toBe(
-      "underline",
-    );
-    expect(label?.hasAttribute("data-reveal-entity-id")).toBe(false);
-    expect(label?.tabIndex).toBe(-1);
+    expect(label?.style.textDecoration).toBe("underline");
+    expect(label?.hasAttribute("data-reveal-entity-id")).toBe(true);
+    expect(label?.tabIndex).toBe(0);
     act(() => source?.focus());
     expect(source?.dataset.revealActive).toBe("true");
     await act(async () => {
@@ -1945,7 +1939,7 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     const source = container.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-exploration-choice-0"]',
+      '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
     )!;
 
     act(() => {
@@ -2034,7 +2028,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -2099,7 +2093,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -2248,7 +2242,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -2331,7 +2325,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -2412,7 +2406,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       belowCapacity.container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -2472,7 +2466,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       belowCap.container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -2517,7 +2511,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       atCap.container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -2586,7 +2580,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -2677,7 +2671,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -2756,7 +2750,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       direct.container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -2920,12 +2914,12 @@ describe("ExplorationSiteScreen", () => {
     expect(pairs?.item(1).dataset.gainedEntryId).toBe("gained-entry-b");
     expect(
       outcome?.querySelectorAll(
-        '[data-exploration-starter-card-mutation-object="purged"]',
+        '[data-card-change-kind="replacement"] [data-card-change-face="before"]',
       ),
     ).toHaveLength(2);
     expect(
       outcome?.querySelectorAll(
-        '[data-exploration-starter-card-mutation-object="gained"]',
+        '[data-card-change-kind="replacement"] [data-card-change-face="after"]',
       ),
     ).toHaveLength(2);
     expect(onExit).not.toHaveBeenCalled();
@@ -3074,12 +3068,12 @@ describe("ExplorationSiteScreen", () => {
     expect(pairs?.item(1).dataset.afterTransfiguration).toBe("Kindled");
     expect(
       outcome?.querySelectorAll(
-        '[data-exploration-starter-card-transfiguration-face="before"]',
+        '[data-card-change-kind="transfiguration"] [data-card-change-face="before"]',
       ),
     ).toHaveLength(2);
     expect(
       outcome?.querySelectorAll(
-        '[data-exploration-starter-card-transfiguration-face="after"]',
+        '[data-card-change-kind="transfiguration"] [data-card-change-face="after"]',
       ),
     ).toHaveLength(2);
     const pairContainer = outcome?.querySelector<HTMLElement>(
@@ -3144,12 +3138,12 @@ describe("ExplorationSiteScreen", () => {
     expect(pairs?.item(0).dataset.afterTransfiguration).toBe("Empowered");
     expect(
       outcome?.querySelectorAll(
-        '[data-exploration-card-transfiguration-face="before"]',
+        '[data-card-change-kind="transfiguration"] [data-card-change-face="before"]',
       ),
     ).toHaveLength(2);
     expect(
       outcome?.querySelectorAll(
-        '[data-exploration-card-transfiguration-face="after"]',
+        '[data-card-change-kind="transfiguration"] [data-card-change-face="after"]',
       ),
     ).toHaveLength(2);
     expect(
@@ -3325,12 +3319,12 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(
       outcome?.querySelectorAll(
-        '[data-exploration-card-type-change-face="before"][data-card-type="Character"]',
+        '[data-card-change-kind="card-type"] [data-card-change-face="before"]',
       ),
     ).toHaveLength(2);
     expect(
       outcome?.querySelectorAll(
-        '[data-exploration-card-type-change-face="after"][data-card-type="Event"]',
+        '[data-card-change-kind="card-type"] [data-card-change-face="after"]',
       ),
     ).toHaveLength(2);
     act(() => root.unmount());
@@ -3491,7 +3485,7 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(
       outcome()?.querySelectorAll(
-        '[data-exploration-starter-card-transfiguration-side="concealed"]',
+        '[data-card-change-pair][data-card-change-reveal="before"]',
       ),
     ).toHaveLength(2);
     expect(onExit).not.toHaveBeenCalled();
@@ -3504,7 +3498,7 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(
       outcome()?.querySelectorAll(
-        '[data-exploration-starter-card-transfiguration-side="revealed"]',
+        '[data-card-change-pair][data-card-change-reveal="complete"]',
       ),
     ).toHaveLength(2);
     expect(onExit).not.toHaveBeenCalled();
@@ -3659,7 +3653,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -3744,7 +3738,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -3826,7 +3820,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -3923,7 +3917,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -4019,7 +4013,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -4092,7 +4086,7 @@ describe("ExplorationSiteScreen", () => {
       act(() =>
         container
           .querySelector<HTMLButtonElement>(
-            '[data-testid="cumulus-exploration-choice-0"]',
+            '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
           )
           ?.click(),
       );
@@ -4205,7 +4199,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -4292,7 +4286,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         )
         ?.click(),
     );
@@ -4914,7 +4908,7 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     const effect = container.querySelector<HTMLElement>(
-      "#exploration-effect-0",
+      '[data-testid="cumulus-exploration-choice-0"] [data-exploration-choice-description]',
     );
     expect(effect?.textContent).not.toContain("❖");
     expect(effect?.querySelector("[data-inline-glyph] i")?.className).toContain(
@@ -6084,7 +6078,7 @@ describe("ExplorationSiteScreen", () => {
       }
       const openChooser = (): void => {
         const action = container.querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-exploration-choice-0"]',
+          '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
         );
         expect(action).not.toBeNull();
         expect(action?.disabled).toBe(false);

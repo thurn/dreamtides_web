@@ -13,7 +13,7 @@ import { offerTileDescription } from "../cumulus/components/controls/offer-tile-
 import { artRef, resolveArtRef } from "../cumulus/primitives/art";
 import { glyph } from "../cumulus/primitives/glyph";
 import { token } from "../cumulus/primitives/tokens";
-import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
+import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
 import auguryJson from "../generated/config/augury-data.json";
 import { auguryArchetype, parseAuguryData } from "../data/augury-data";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";

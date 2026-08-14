@@ -8,11 +8,14 @@ import { TextField } from "./TextField";
 import { CumulusRoot } from "../../CumulusRoot";
 
 beforeEach(() => {
-  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
-    .IS_REACT_ACT_ENVIRONMENT = true;
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
 });
 
-afterEach(() => { document.body.innerHTML = ""; });
+afterEach(() => {
+  document.body.innerHTML = "";
+});
 
 describe("TextField commit behavior", () => {
   it("commits once when Enter blurs the field", () => {
@@ -20,11 +23,24 @@ describe("TextField commit behavior", () => {
     document.body.append(host);
     const root = createRoot(host);
     const onCommit = vi.fn();
-    act(() => root.render(<CumulusRoot><TextField label={assertLocalized("Field")} value="draft" onChange={vi.fn()} onCommit={onCommit} /></CumulusRoot>));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <TextField
+            label={assertLocalized("Field")}
+            value="draft"
+            onChange={vi.fn()}
+            onCommit={onCommit}
+          />
+        </CumulusRoot>,
+      ),
+    );
     const input = host.querySelector("input")!;
     input.focus();
     act(() => {
-      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter", bubbles: true }));
+      input.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+      );
     });
     expect(onCommit).toHaveBeenCalledOnce();
     expect(onCommit).toHaveBeenCalledWith("draft");
@@ -36,7 +52,18 @@ describe("TextField commit behavior", () => {
     document.body.append(host);
     const root = createRoot(host);
     const onCommit = vi.fn();
-    act(() => root.render(<CumulusRoot><TextField label={assertLocalized("Field")} value="draft" onChange={vi.fn()} onCommit={onCommit} /></CumulusRoot>));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <TextField
+            label={assertLocalized("Field")}
+            value="draft"
+            onChange={vi.fn()}
+            onCommit={onCommit}
+          />
+        </CumulusRoot>,
+      ),
+    );
     const input = host.querySelector("input")!;
     input.focus();
     act(() => input.blur());

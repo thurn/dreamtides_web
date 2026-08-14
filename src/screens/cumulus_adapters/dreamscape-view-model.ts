@@ -29,7 +29,7 @@ import type {
   DreamscapeView,
   InlineRewardView,
 } from "../../cumulus/screens/DreamscapeScreen";
-import type { DreamsignReplacementView } from "../../cumulus/screens/DreamsignReplacementDialog";
+import type { DreamsignReplacementModel } from "../../cumulus/components/overlay/DreamsignReplacementDialog";
 import type {
   DreamAvatar,
   Dreamsign,
@@ -354,7 +354,7 @@ export function buildDreamscapeGuidanceLog(
 export function buildDreamsignReplacementView(
   state: JourneyState,
   siteId: string | null,
-): DreamsignReplacementView | null {
+): Omit<DreamsignReplacementModel, "dismissLabel" | "closeLabel"> | null {
   if (siteId === null || state.dreamsigns.length < state.maxDreamsigns) {
     return null;
   }
@@ -367,13 +367,13 @@ export function buildDreamsignReplacementView(
     return null;
   }
   return {
-    pendingDreamsign: localizedDreamsign(
+    incoming: localizedDreamsign(
       runtime.reward.dreamsign,
       "Dreamscape pending reward",
     ),
-    currentDreamsigns: state.dreamsigns.map((dreamsign) =>
+    held: state.dreamsigns.map((dreamsign) =>
       localizedDreamsign(dreamsign, "Dreamscape held reward"),
     ),
-    maxDreamsigns: state.maxDreamsigns,
+    capacity: state.maxDreamsigns,
   };
 }

@@ -458,9 +458,9 @@ describe("DreamscapeScreen", () => {
             view={{
               ...rewardView,
               replacement: {
-                pendingDreamsign,
-                currentDreamsigns: [heldDreamsign],
-                maxDreamsigns: 1,
+                incoming: pendingDreamsign,
+                held: [heldDreamsign],
+                capacity: 1,
               },
             }}
             onSelectSite={() => undefined}
@@ -474,7 +474,7 @@ describe("DreamscapeScreen", () => {
     act(() =>
       document
         .querySelector<HTMLButtonElement>(
-          '[data-testid="replace-dreamsign-held-dreamsign"]',
+          '[data-replace-dreamsign-id="held-dreamsign"] button',
         )
         ?.click(),
     );
@@ -482,7 +482,7 @@ describe("DreamscapeScreen", () => {
     act(() =>
       document
         .querySelector<HTMLButtonElement>(
-          '[data-testid="dreamsign-replacement-cancel"]',
+          "[data-dreamsign-replacement-dialog] > div:last-child button",
         )
         ?.click(),
     );

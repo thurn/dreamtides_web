@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import {glassSurfaceStyle } from "../../internal/glass-surface";
+import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import type { CumulusColor } from "../../primitives/color";
 import { token } from "../../primitives/tokens";
@@ -22,10 +22,16 @@ const CARD_FEATURES: Readonly<
   Record<TutorialFeatureCalloutKind, CardFeatureSpec>
 > = {
   cost: {
-    label: tx(meaning("tutorial-cost-feature-label", "Cost"), "[loading] Loading-screen card feature labels."),
+    label: tx(
+      meaning("tutorial-cost-feature-label", "Cost"),
+      "[loading] Loading-screen card feature labels.",
+    ),
     glyph: GLYPHS.energy,
     color: "energy",
-    glyphLabel: tx("energy", "[accessibility] [loading] Loading-screen resource glyph names."),
+    glyphLabel: tx(
+      "energy",
+      "[accessibility] [loading] Loading-screen resource glyph names.",
+    ),
   },
   spark: {
     label: tx(
@@ -34,10 +40,7 @@ const CARD_FEATURES: Readonly<
     ),
     glyph: GLYPHS.sparkInline,
     color: "spark",
-    glyphLabel: tx(
-      "spark",
-      "[tutorial] Feature spark glyph.",
-    ),
+    glyphLabel: tx("spark", "[tutorial] Feature spark glyph."),
   },
   ability: {
     label: tx(
@@ -46,10 +49,7 @@ const CARD_FEATURES: Readonly<
     ),
   },
   cardType: {
-    label: tx(
-      "Card Type",
-      "[tutorial] Feature card type.",
-    ),
+    label: tx("Card Type", "[tutorial] Feature card type."),
   },
 };
 

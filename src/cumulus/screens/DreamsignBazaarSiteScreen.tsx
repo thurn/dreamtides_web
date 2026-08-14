@@ -9,18 +9,15 @@ import { Dreamsign } from "../components/hud/Dreamsign";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { GLOSSARY_IDS } from "../../data/glossary";
-import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
-import {
-  GuideGallerySiteLayout,
-  type GuideGalleryGuideView,
-} from "./GuideGallerySiteLayout";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
+import { SiteLayout, type SiteLayoutGuide } from "../components/layout/SiteLayout";
+import { DreamsignReplacementDialog } from "../components/overlay/DreamsignReplacementDialog";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import {
   ShopFreePurchaseStatus,
   type ShopFreePurchaseStatusView,
 } from "./ShopFreePurchaseStatus";
-import { meaning, tx, txa, type LocalizedString } from "@trox/runtime";
+import { meaning, tx } from "@trox/runtime";
 
 // Four 126px items, three 16px gaps, and the panel's 64px horizontal padding
 // occupy 616px; this cap keeps a deliberate 32px breathing edge per side.
@@ -71,7 +68,7 @@ export interface DreamsignBazaarSiteView {
   /** Current dreamscape scene art behind the site, if resolved. */
   scene: ArtRef | null;
   /** Amunet's art and dialog line. */
-  guide: GuideGalleryGuideView;
+  guide: Omit<SiteLayoutGuide, "presence">;
   /** Three Dreamsign wares in persistent slot order. */
   offers: readonly DreamsignBazaarOfferView[];
   /** The one-use restock action. */
@@ -92,7 +89,7 @@ export interface DreamsignBazaarSiteScreenProps {
   /** Leave the bazaar. */
   onClose: () => void;
   /** Replace an owned Dreamsign while completing the pending purchase. */
-  onPurge: (index: number) => void;
+  onPurge: (dreamsignId: string) => void;
   /** Cancel cap handling and return to the shelf. */
   onCancelPurge: () => void;
 }
@@ -105,16 +102,16 @@ export function DreamsignBazaarSiteScreen({
   onPurge,
   onCancelPurge,
 }: DreamsignBazaarSiteScreenProps) {
+  const layout = useIsDesktop() ? "desktop" : "mobile";
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      screenTestId="cumulus-dreamsign-bazaar-site-screen"
-      guideArtTestId="cumulus-dreamsign-bazaar-guide-art"
-      speechAnchorTestId="cumulus-dreamsign-bazaar-speech-anchor"
-      speechBubbleTestId="cumulus-dreamsign-bazaar-speech-bubble"
-      renderGallery={(layout) => (
+    <div data-testid="cumulus-dreamsign-bazaar-site-screen" style={{ position: "fixed", inset: 0 }}>
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{ ...view.guide, presence: "speaking" }}
+        composition="balanced-gallery"
+      >
         <DreamsignBazaarGallery
           layout={layout}
           presentation={view.presentation}
@@ -125,17 +122,24 @@ export function DreamsignBazaarSiteScreen({
           onRestock={onRestock}
           onClose={onClose}
         />
-      )}
-    >
+      </SiteLayout>
       {view.purge !== null ? (
         <DreamsignReplacementDialog
-          purge={view.purge}
-          title={view.presentation.replacementTitle}
-          onPurge={onPurge}
-          onCancel={onCancelPurge}
+          model={{
+            incoming: view.purge.pendingDreamsign,
+            held: view.purge.currentDreamsigns,
+            capacity: view.purge.maxDreamsigns,
+            dismissLabel: tx(meaning("dreamsign-replacement-cancel", "Cancel"), "[dreamsign] Bazaar replacement cancel."),
+            closeLabel: tx(
+              "Cancel replacement",
+              "[dreamsign] Accessible label for closing a Dreamsign replacement dialog.",
+            ),
+          }}
+          onDreamsignPress={onPurge}
+          onDismiss={onCancelPurge}
         />
       ) : null}
-    </GuideGallerySiteLayout>
+    </div>
   );
 }
 
@@ -352,104 +356,4 @@ function snapshotRect(rect: DOMRect): RectSnapshot {
     width: rect.width,
     height: rect.height,
   };
-}
-
-function DreamsignReplacementDialog({
-  purge,
-  title,
-  onPurge,
-  onCancel,
-}: {
-  readonly purge: DreamsignBazaarPurgeView;
-  readonly title: LocalizedString;
-  readonly onPurge: (index: number) => void;
-  readonly onCancel: () => void;
-}) {
-  const resolve = useLocalizer();
-  return (
-    <div
-      role="dialog"
-      aria-modal="true"
-      aria-labelledby="dreamsign-bazaar-purge-title"
-      style={{
-        position: "absolute",
-        inset: 0,
-        zIndex: 80,
-        display: "grid",
-        placeItems: "center",
-        padding: token("--space-l"),
-        background: token("--scrim"),
-        pointerEvents: "auto",
-      }}
-    >
-      <div
-        style={{
-          width: "min(100%, 440px)",
-          maxHeight: `calc(100dvh - ${token("--space-6xl")})`,
-          overflow: "auto",
-          boxSizing: "border-box",
-          padding: token("--space-l"),
-          background: token("--surface-chrome-strong"),
-          border: `1px solid ${token("--border-soft")}`,
-          borderRadius: token("--radius-panel"),
-          boxShadow: token("--shadow-lg"),
-        }}
-      >
-        <h2
-          id="dreamsign-bazaar-purge-title"
-          style={{
-            margin: 0,
-            font: token("--t-title-sm"),
-            color: token("--text-primary"),
-          }}
-        >
-          {resolve(title)}
-        </h2>
-        <p
-          style={{ font: token("--t-body"), color: token("--text-secondary") }}
-        >
-          {resolve(txa(
-            "Your collection is full at {count} Dreamsigns.",
-            { count: purge.maxDreamsigns },
-            "[dreamsign] Bazaar replacement full.",
-          ))}
-        </p>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
-            gap: token("--space-s"),
-          }}
-        >
-          {purge.currentDreamsigns.map((dreamsign, index) => (
-            <div key={dreamsign.id} style={{ width: 72, height: 72 }}>
-              <Dreamsign
-                dreamsign={dreamsign}
-                onPress={() => onPurge(index)}
-                testid={`cumulus-dreamsign-bazaar-purge-${String(index)}`}
-              />
-            </div>
-          ))}
-        </div>
-        <div style={{ marginTop: token("--space-l"), textAlign: "center" }}>
-          <Pressable
-            as="button"
-            onClick={onCancel}
-            style={{
-              border: 0,
-              background: "transparent",
-              padding: token("--space-xs"),
-              font: token("--t-button-sm"),
-              color: token("--text-secondary"),
-            }}
-          >
-            {resolve(tx(
-              meaning("dreamsign-replacement-cancel", "Cancel"),
-              "[dreamsign] Bazaar replacement cancel.",
-            ))}
-          </Pressable>
-        </div>
-      </div>
-    </div>
-  );
 }

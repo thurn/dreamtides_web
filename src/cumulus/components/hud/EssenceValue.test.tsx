@@ -34,9 +34,9 @@ describe("EssenceValue", () => {
     expect(value?.style.background).toBe("var(--surface-chrome)");
     expect(value?.style.borderRadius).toBe("var(--radius-pill)");
     expect(value?.style.color).toBe("var(--text-primary)");
-    expect(
-      (value?.lastElementChild as HTMLElement | null)?.style.color,
-    ).toBe("var(--essence)");
+    expect((value?.lastElementChild as HTMLElement | null)?.style.color).toBe(
+      "var(--essence)",
+    );
     expect(value?.querySelector("i.bxf.bx-crypto")).not.toBeNull();
 
     act(() => root.unmount());
@@ -60,7 +60,9 @@ describe("EssenceValue", () => {
       );
     });
 
-    const source = container.querySelector<HTMLElement>("[data-essence-source]");
+    const source = container.querySelector<HTMLElement>(
+      "[data-essence-source]",
+    );
     expect(source?.dataset.revealFeedback).toBe("measured");
     expect(source?.dataset.revealEntityType).toBe("resource-essence");
     expect(source?.dataset.revealEntityId).toMatch(/^[0-9a-f-]{36}$/);

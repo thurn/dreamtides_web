@@ -295,8 +295,8 @@ describe("DreamscapeScreenAdapter", () => {
 
     expect(mutations.enterSite).not.toHaveBeenCalled();
     expect(lastScreenProps().view.replacement).toMatchObject({
-      maxDreamsigns: 2,
-      pendingDreamsign: { id: "dreamsign-uuid" },
+      capacity: 2,
+      incoming: { id: "dreamsign-uuid" },
     });
     act(() => lastScreenProps().onReplaceDreamsign("held-dreamsign-2"));
     expect(mutations.acceptRewardSite).toHaveBeenCalledWith("s-reward", 1);

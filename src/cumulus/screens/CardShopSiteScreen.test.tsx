@@ -119,7 +119,7 @@ describe("CardShopSiteScreen", () => {
     );
 
     expect(
-      container.querySelector('[data-testid="cumulus-card-shop-speech-bubble"]')
+      container.querySelector("[data-site-layout-speech-anchor]")
         ?.textContent,
     ).toContain("Tobias Tanglefur");
     const gallery = container.querySelector<HTMLElement>(
@@ -175,13 +175,13 @@ describe("CardShopSiteScreen", () => {
     );
 
     expect(
-      container.querySelector("[data-guide-gallery-desktop-composition]"),
+      container.querySelector('[data-site-layout-viewport="desktop"]'),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-card-shop-guide-art"]'),
+      container.querySelector("[data-site-layout-guide] img"),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-card-shop-speech-bubble"]')
+      container.querySelector("[data-site-layout-speech-anchor]")
         ?.textContent,
     ).toContain("Tobias Tanglefur");
 
@@ -200,7 +200,7 @@ describe("CardShopSiteScreen", () => {
     expect(gallery?.dataset.galleryCardSize).toBe("standard");
     expect(gallery?.dataset.gallerySpacing).toBe("regular");
     expect(gallery?.style.width).not.toBe("100%");
-    expect(gallery?.style.width).toMatch(/^calc\(/);
+    expect(gallery?.style.width).toMatch(/^min\(calc\(/);
     expect(
       container.querySelector("[data-gallery-action-label]")?.textContent,
     ).toBe("Restock Offers");

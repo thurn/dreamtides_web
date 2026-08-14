@@ -11,7 +11,9 @@ let container: HTMLDivElement;
 let root: Root;
 
 beforeEach(() => {
-  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
   window.matchMedia = vi.fn().mockImplementation(() => ({
     matches: false,
     addEventListener: vi.fn(),
@@ -43,8 +45,15 @@ describe("TransientStatusToast", () => {
         </CumulusRoot>,
       );
     });
-    expect(container.querySelector("[data-transient-status-toast=warning]")?.textContent).toContain("Action Not Applied");
-    act(() => container.querySelector<HTMLButtonElement>("[data-transient-status-toast]")!.click());
+    expect(
+      container.querySelector("[data-transient-status-toast=warning]")
+        ?.textContent,
+    ).toContain("Action Not Applied");
+    act(() =>
+      container
+        .querySelector<HTMLButtonElement>("[data-transient-status-toast]")!
+        .click(),
+    );
     expect(onDismiss).toHaveBeenCalledOnce();
   });
 });

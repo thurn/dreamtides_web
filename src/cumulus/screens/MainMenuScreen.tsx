@@ -8,7 +8,7 @@ import type { Glyph } from "../primitives/glyph";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
-import { useIsDesktop } from "./use-is-desktop";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import "../primitives/cumulus-base.css";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 

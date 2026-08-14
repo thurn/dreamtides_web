@@ -10,7 +10,7 @@ import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { useIsDesktop } from "../../screens/use-is-desktop";
+import { useIsDesktop } from "../../primitives/use-is-desktop";
 import { sceneRoot } from "./scene";
 
 interface MediaSample {

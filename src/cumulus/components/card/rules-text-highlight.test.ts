@@ -9,7 +9,9 @@ import { tokenizeRulesText, type TextSegment } from "./card-text";
  * groups so trigger keywords (which live inside a nobreak with their arrow) are
  * included.
  */
-function termHighlights(text: string): { word: string; highlighted: boolean }[] {
+function termHighlights(
+  text: string,
+): { word: string; highlighted: boolean }[] {
   const out: { word: string; highlighted: boolean }[] = [];
   const walk = (segments: TextSegment[]): void => {
     for (const segment of segments) {

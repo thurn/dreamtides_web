@@ -42,10 +42,17 @@ const textPresentation = (
 describe("offer tile descriptions", () => {
   it("interpolates semantic values into authored text", () => {
     const model: OfferTileModel = { id: "gift", kind: "card-gift", card: CARD };
-    const presentation = textPresentation("Fixture headline", "Target {cardName}");
+    const presentation = textPresentation(
+      "Fixture headline",
+      "Target {cardName}",
+    );
 
-    expect(resolveSource(auguryOfferHeadline(model, presentation))).toBe("Fixture headline");
-    expect(resolveSource(offerTileDescription(model, presentation))).toBe("Target Fixture Card");
+    expect(resolveSource(auguryOfferHeadline(model, presentation))).toBe(
+      "Fixture headline",
+    );
+    expect(resolveSource(offerTileDescription(model, presentation))).toBe(
+      "Target Fixture Card",
+    );
   });
 
   it("selects authored count branches from the surfaced offer", () => {
@@ -68,8 +75,12 @@ describe("offer tile descriptions", () => {
       cards: [CARD, CARD],
     };
 
-    expect(resolveSource(offerTileDescription(one, presentation))).toBe("Fixture singular 1");
-    expect(resolveSource(offerTileDescription(two, presentation))).toBe("Fixture plural 2");
+    expect(resolveSource(offerTileDescription(one, presentation))).toBe(
+      "Fixture singular 1",
+    );
+    expect(resolveSource(offerTileDescription(two, presentation))).toBe(
+      "Fixture plural 2",
+    );
   });
 
   it("selects authored category branches and interpolates named categories", () => {
@@ -100,12 +111,19 @@ describe("offer tile descriptions", () => {
   });
 
   it("rejects copy whose placeholders do not match the offer model", () => {
-    const model: OfferTileModel = { id: "draft", kind: "card-draft", cards: [CARD, CARD] };
-    const presentation = textPresentation("Fixture headline", "Missing {cardName}");
-
-    expect(() => resolveSource(offerTileDescription(model, presentation))).toThrow(
-      /missing value for \{cardName\}/u,
+    const model: OfferTileModel = {
+      id: "draft",
+      kind: "card-draft",
+      cards: [CARD, CARD],
+    };
+    const presentation = textPresentation(
+      "Fixture headline",
+      "Missing {cardName}",
     );
+
+    expect(() =>
+      resolveSource(offerTileDescription(model, presentation)),
+    ).toThrow(/missing value for \{cardName\}/u);
   });
 
   it("returns authored descriptions as plain rich text", () => {

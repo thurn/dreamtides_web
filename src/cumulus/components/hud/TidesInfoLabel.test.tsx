@@ -21,9 +21,17 @@ describe("TidesInfoLabel", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><TidesInfoLabel /></CumulusRoot>));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <TidesInfoLabel />
+        </CumulusRoot>,
+      ),
+    );
 
-    const source = container.querySelector<HTMLElement>("[data-tides-info-label]");
+    const source = container.querySelector<HTMLElement>(
+      "[data-tides-info-label]",
+    );
     expect(source?.textContent?.trim()).toBe("Tides:");
     expect(source?.getAttribute("aria-label")).toBe("Tides information");
     expect(source?.tabIndex).toBe(0);
@@ -31,9 +39,13 @@ describe("TidesInfoLabel", () => {
     expect(source?.dataset.revealPrimaryVariant).toBe("text");
     expect(source?.dataset.revealSecondaryTitles).toBe("");
 
-    const glyphGroup = source?.querySelector<HTMLElement>("[data-tides-info-glyph]");
+    const glyphGroup = source?.querySelector<HTMLElement>(
+      "[data-tides-info-glyph]",
+    );
     const glyph = source?.querySelector<HTMLElement>("[data-inline-glyph]");
-    const metric = glyph?.querySelector<HTMLElement>("[data-inline-glyph-metric]");
+    const metric = glyph?.querySelector<HTMLElement>(
+      "[data-inline-glyph-metric]",
+    );
     expect(source?.firstElementChild).toBe(glyphGroup);
     expect(glyphGroup?.firstElementChild).toBe(glyph);
     expect(glyphGroup?.style.marginRight).toBe("var(--space-xs)");

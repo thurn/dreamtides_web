@@ -24,6 +24,7 @@ const CONTEXT_COMPONENTS = [
   "src/cumulus/components/battle/DreamwellCard.tsx",
   "src/cumulus/components/controls/OfferTile.tsx",
   "src/cumulus/components/controls/TransfigurationButton.tsx",
+  "src/cumulus/components/controls/ExplorationChoice.tsx",
   "src/cumulus/components/dreamscape/SiteNode.tsx",
   "src/cumulus/components/hud/DreamAvatarPortrait.tsx",
   "src/cumulus/components/hud/Dreamsign.tsx",

@@ -43,7 +43,8 @@ function CardBrowserPanelDemo() {
     };
   }, []);
 
-  if (cards === null) return <div style={{ opacity: 0.7 }}>Loading cards...</div>;
+  if (cards === null)
+    return <div style={{ opacity: 0.7 }}>Loading cards...</div>;
 
   return (
     <div style={{ width: "min(1040px, 100%)", height: 700 }}>
@@ -52,7 +53,11 @@ function CardBrowserPanelDemo() {
         subtitle={assertLocalized("Four cards")}
         cards={cards}
         toolbar={{
-          search: { label: assertLocalized("Search Cards"), value: query, onChange: setQuery },
+          search: {
+            label: assertLocalized("Search Cards"),
+            value: query,
+            onChange: setQuery,
+          },
           sort: {
             ariaLabel: assertLocalized("Sort cards"),
             value: sort,

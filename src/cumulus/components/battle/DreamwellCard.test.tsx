@@ -21,8 +21,9 @@ const MODEL: DreamwellCardModel = {
   displaySnapshot: {
     id: asCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
     name: assertLocalized("Fixture Beacon"),
-    renderedText:
-      assertLocalized("Look at the top 2 cards of your deck. Put one into your hand."),
+    renderedText: assertLocalized(
+      "Look at the top 2 cards of your deck. Put one into your hand.",
+    ),
     energyAdded: 2,
     imageNumber: 42,
     art: { x: 0.25, y: -0.5, scale: 1.4 },
@@ -57,7 +58,8 @@ describe("DreamwellCard", () => {
       card?.querySelector("[data-dreamwell-card-rules]")?.textContent,
     ).toContain("Look at the top 2 cards");
     expect(
-      card?.querySelector<HTMLElement>('[data-card-stat="dreamwellEnergy"]')
+      card
+        ?.querySelector<HTMLElement>('[data-card-stat="dreamwellEnergy"]')
         ?.querySelector("[data-card-stat-value]")?.textContent,
     ).toBe("2");
     expect(card?.querySelector("img")?.getAttribute("src")).toContain(

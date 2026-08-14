@@ -4,8 +4,8 @@
 
 import type { JourneyState } from "../types/journey";
 import {GLYPHS } from "../cumulus/primitives/glyph";
-import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
-import { MENU_BUTTON_PX } from "../cumulus/screens/chrome-geometry";
+import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
+import { MENU_BUTTON_PX } from "../cumulus/primitives/chrome-geometry";
 import { CommandMenu } from "../cumulus/components/overlay/CommandMenu";
 import {
   useJourneyUtilityMenuController,

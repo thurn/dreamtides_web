@@ -72,7 +72,10 @@ describe("artSafeAreaTarget", () => {
   });
 
   it("targets just under the box's first text line when measured", () => {
-    expect(artSafeAreaTarget(0.62)).toBeCloseTo(0.62 + ART_SAFE_AREA_OVERLAP, 6);
+    expect(artSafeAreaTarget(0.62)).toBeCloseTo(
+      0.62 + ART_SAFE_AREA_OVERLAP,
+      6,
+    );
   });
 
   it("caps the target just shy of the card bottom", () => {
@@ -85,7 +88,10 @@ describe("minArtScale", () => {
     // At the floor, the down-most-pan bottom sits exactly on the target.
     const target = artSafeAreaTarget(0.9); // a short, low box
     const floor = minArtScale(WIDE_ASPECT, target);
-    expect(visibleBottomAtMaxDownPan(WIDE_ASPECT, floor)).toBeCloseTo(target, 4);
+    expect(visibleBottomAtMaxDownPan(WIDE_ASPECT, floor)).toBeCloseTo(
+      target,
+      4,
+    );
   });
 
   it("lets a taller box (higher top) zoom out further than a short one", () => {
@@ -138,7 +144,11 @@ describe("artPanStep", () => {
 
   it("holds the target move steady across zoom levels", () => {
     for (const scale of [1.2, 2, 4]) {
-      const move = visualMove(artPanStep(WIDE_ASPECT, scale, 0.03), WIDE_ASPECT, scale);
+      const move = visualMove(
+        artPanStep(WIDE_ASPECT, scale, 0.03),
+        WIDE_ASPECT,
+        scale,
+      );
       expect(move.x).toBeCloseTo(0.03, 4);
       expect(move.y).toBeCloseTo(0.03, 4);
     }

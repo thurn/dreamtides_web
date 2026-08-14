@@ -40,16 +40,17 @@ import { GLYPHS } from "../primitives/glyph";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import { DreamsignReplacementDialog } from "./DreamsignReplacementDialog";
-import type { DreamsignReplacementView } from "./DreamsignReplacementDialog";
 import {
-  GuideGallerySiteLayout,
-  type GuideGalleryGuideView,
-} from "./GuideGallerySiteLayout";
+  DreamsignReplacementDialog,
+  type DreamsignReplacementModel,
+} from "../components/overlay/DreamsignReplacementDialog";
 import {
-  TransfigurationDetailPanel,
-  type TransfigurationCandidateView,
-} from "./TransfigurationSiteScreen";
+  SiteLayout,
+  type SiteLayoutGuide,
+} from "../components/layout/SiteLayout";
+import { useIsDesktop } from "../primitives/use-is-desktop";
+import type { TransfigurationCandidateView } from "./TransfigurationSiteScreen";
+import { TransfigurationDetailPanel } from "../components/card/TransfigurationDetailPanel";
 
 export interface GambleGateView {
   /** Stable gate id used by the wager intent. */
@@ -113,11 +114,14 @@ export interface GravokWagerSiteView {
   /** Three gate choices in ascending risk order. */
   gates: readonly GambleGateView[];
   /** Resident Dream Guide art and greeting. */
-  guide: GuideGalleryGuideView;
+  guide: Omit<SiteLayoutGuide, "presence">;
   /** Resolved wager, or null before commitment. */
   result: GambleResultView | null;
   /** At-cap replacement content after a jackpot win. */
-  replacement: DreamsignReplacementView | null;
+  replacement: Omit<
+    DreamsignReplacementModel,
+    "dismissLabel" | "closeLabel"
+  > | null;
 }
 
 export interface LadderClimbResultView {
@@ -155,9 +159,12 @@ export interface LadderClimbSiteView {
     canAfford: boolean;
     available: boolean;
   } | null;
-  guide: GuideGalleryGuideView;
+  guide: Omit<SiteLayoutGuide, "presence">;
   result: LadderClimbResultView | null;
-  replacement: DreamsignReplacementView | null;
+  replacement: Omit<
+    DreamsignReplacementModel,
+    "dismissLabel" | "closeLabel"
+  > | null;
 }
 
 export interface StarwayStairsTierView {
@@ -188,7 +195,7 @@ export interface StarwayStairsSiteView {
   canPlayAgain: boolean;
   tiers: readonly StarwayStairsTierView[];
   currentTierNumber: StarwayStairsTierNumber | null;
-  guide: GuideGalleryGuideView;
+  guide: Omit<SiteLayoutGuide, "presence">;
   result: StarwayStairsResultView | null;
   cashOutReward: number | null;
   terminalReason: "bust" | "cashed-out" | "top" | null;
@@ -228,7 +235,7 @@ export interface FourSuitRepriseSiteView {
   outcomes: FourSuitRepriseGame["rules"]["outcomes"];
   phase: "choose" | "result";
   cards: readonly FourSuitRepriseCardView[];
-  guide: GuideGalleryGuideView;
+  guide: Omit<SiteLayoutGuide, "presence">;
   result: FourSuitRepriseResultView | null;
   canPlayAgain: boolean;
 }
@@ -258,7 +265,7 @@ export interface BlackjackSiteView {
   resultId: string | null;
   /** Whether a settled push or eligible loss may start another paid hand. */
   canPlayAgain: boolean;
-  guide: GuideGalleryGuideView;
+  guide: Omit<SiteLayoutGuide, "presence">;
 }
 
 export type GambleSiteView =
@@ -326,45 +333,21 @@ function gambleActionLabel(
 ): LocalizedString {
   switch (key) {
     case "bet":
-      return tx(
-        "Bet",
-        "[gamble] Bet action.",
-      );
+      return tx("Bet", "[gamble] Bet action.");
     case "draw":
-      return tx(
-        "Draw",
-        "[gamble] Draw action.",
-      );
+      return tx("Draw", "[gamble] Draw action.");
     case "climb":
-      return tx(
-        "Climb",
-        "[gamble] Climb action.",
-      );
+      return tx("Climb", "[gamble] Climb action.");
     case "take":
-      return tx(
-        "Take",
-        "[gamble] Take action.",
-      );
+      return tx("Take", "[gamble] Take action.");
     case "choose-another":
-      return tx(
-        "Choose Another Card",
-        "[gamble] Choose another card action.",
-      );
+      return tx("Choose Another Card", "[gamble] Choose another card action.");
     case "deal":
-      return tx(
-        "Deal",
-        "[gamble] Deal action.",
-      );
+      return tx("Deal", "[gamble] Deal action.");
     case "hit":
-      return tx(
-        "Hit",
-        "[gamble] Hit action.",
-      );
+      return tx("Hit", "[gamble] Hit action.");
     case "stand":
-      return tx(
-        "Stand",
-        "[gamble] Stand action.",
-      );
+      return tx("Stand", "[gamble] Stand action.");
   }
 }
 
@@ -389,79 +372,40 @@ function gambleOutcomeLabel(
   switch (key) {
     case "won":
       return view.gameId === "gravok-three-gate-wager"
-        ? tx(
-            "Won!",
-            "[gamble] Gravok won outcome.",
-          )
-        : tx(
-            "Won",
-            "[gamble] Ladder won outcome.",
-          );
+        ? tx("Won!", "[gamble] Gravok won outcome.")
+        : tx("Won", "[gamble] Ladder won outcome.");
     case "miss":
-      return tx(
-        "Miss",
-        "[gamble] Miss outcome.",
-      );
+      return tx("Miss", "[gamble] Miss outcome.");
     case "safe":
-      return tx(
-        "Safe!",
-        "[gamble] Safe outcome.",
-      );
+      return tx("Safe!", "[gamble] Safe outcome.");
     case "bust":
-      return tx(
-        "Bust!",
-        "[gamble] Bust outcome.",
-      );
+      return tx("Bust!", "[gamble] Bust outcome.");
     case "prize-at-stake":
-      return tx(
-        "Prize at stake",
-        "[gamble] Prize at stake outcome.",
-      );
+      return tx("Prize at stake", "[gamble] Prize at stake outcome.");
     case "transfiguration":
       return tx(
         meaning("gamble-transfigure-result", "Transfigure"),
         "[gamble] [transfiguration] Transfigure outcome.",
       );
     case "essence":
-      return tx(
-        "Gained",
-        "[gamble] Gained outcome.",
-      );
+      return tx("Gained", "[gamble] Gained outcome.");
     case "duplication":
-      return tx(
-        "Duplicated",
-        "[gamble] Duplicated outcome.",
-      );
+      return tx("Duplicated", "[gamble] Duplicated outcome.");
     case "purge":
       return tx(
         "Purged",
         "[card] Past-tense result heading for cards removed from the player's deck.",
       );
     case "player-win":
-      return tx(
-        "You Win!",
-        "[gamble] Player win outcome.",
-      );
+      return tx("You Win!", "[gamble] Player win outcome.");
     case "dealer-win":
-      return tx(
-        "Dealer Wins",
-        "[gamble] Dealer win outcome.",
-      );
+      return tx("Dealer Wins", "[gamble] Dealer win outcome.");
     case "push":
-      return tx(
-        "Push",
-        "[gamble] Push outcome.",
-      );
+      return tx("Push", "[gamble] Push outcome.");
     case "wager-returned":
-      return tx(
-        "Wager Returned",
-        "[gamble] Wager returned outcome.",
-      );
+      return tx("Wager Returned", "[gamble] Wager returned outcome.");
     case "wins":
-      return tx(
-        "Wins",
-        "[gamble] Wins outcome.",
-      );
+      return tx("Wins", "[gamble] Wins outcome.");
   }
 }
 
@@ -485,10 +429,7 @@ function gambleRulesDisclosure(
         "[gamble] Starway rules.",
       );
     case "four-suit-reprise":
-      return tx(
-        "Choose a card to wager",
-        "[gamble] Four suit rules.",
-      );
+      return tx("Choose a card to wager", "[gamble] Four suit rules.");
     case "blackjack":
       return tx(
         "Closest to 21 Without Going Over",
@@ -500,30 +441,15 @@ function gambleRulesDisclosure(
 function gambleTitle(gameId: GambleSiteView["gameId"]): LocalizedString {
   switch (gameId) {
     case "gravok-three-gate-wager":
-      return tx(
-        "Gravok's Three-Gate Wager",
-        "[gamble] Gravok title.",
-      );
+      return tx("Gravok's Three-Gate Wager", "[gamble] Gravok title.");
     case "tidemark-ladder-climb":
-      return tx(
-        "Tidemark Ladder Climb",
-        "[gamble] Ladder title.",
-      );
+      return tx("Tidemark Ladder Climb", "[gamble] Ladder title.");
     case "starway-stairs":
-      return tx(
-        "Starway Stairs",
-        "[gamble] Starway title.",
-      );
+      return tx("Starway Stairs", "[gamble] Starway title.");
     case "four-suit-reprise":
-      return tx(
-        "Four-Suit Reprise",
-        "[gamble] Four suit title.",
-      );
+      return tx("Four-Suit Reprise", "[gamble] Four suit title.");
     case "blackjack":
-      return tx(
-        "Blackjack",
-        "[gamble] Blackjack title.",
-      );
+      return tx("Blackjack", "[gamble] Blackjack title.");
   }
 }
 
@@ -1357,6 +1283,7 @@ function GravokWagerScreen({
 }) {
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
+  const layout = useIsDesktop() ? "desktop" : "mobile";
   const [revealStarted, setRevealStarted] = useState(false);
   const [outcomeVisible, setOutcomeVisible] = useState(false);
   const [replacementVisible, setReplacementVisible] = useState(false);
@@ -1429,252 +1356,263 @@ function GravokWagerScreen({
   }, [replacementVisible, view.replacement, view.result]);
 
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      screenTestId="cumulus-gamble-site-screen"
-      guideArtTestId="cumulus-gamble-guide-art"
-      speechAnchorTestId="cumulus-gamble-speech-anchor"
-      speechBubbleTestId="cumulus-gamble-speech-bubble"
-      renderGallery={(layout) => {
-        const wagerLocked = view.result !== null;
-        const outcomeGateIndex =
-          view.result === null
-            ? -1
-            : view.gates.findIndex(
-                (gate) =>
-                  gate.id !== view.result?.gateId &&
-                  gate.id !== view.result?.revealGateId,
-              );
-        const outcomeGate = view.gates[outcomeGateIndex];
-        const selectedGateIndex =
-          view.result === null
-            ? -1
-            : view.gates.findIndex((gate) => gate.id === view.result?.gateId);
-        const revealGateIndex =
-          view.result === null
-            ? -1
-            : view.gates.findIndex(
-                (gate) => gate.id === view.result?.revealGateId,
-              );
-        const roundActionGridColumn =
-          Math.abs(selectedGateIndex - revealGateIndex) === 2
-            ? "1 / span 3"
-            : `${Math.min(selectedGateIndex, revealGateIndex) + 1} / span 2`;
-        return (
-          <main
-            data-gamble-wager-region=""
-            data-gamble-layout={layout}
-            data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
-            style={{
-              position: "relative",
-              zIndex: 10,
-              width: "100%",
-              maxWidth:
-                layout === "desktop"
-                  ? DESKTOP_GAMBLE_REGION_MAX_WIDTH
-                  : undefined,
-              height: "100%",
-              minHeight: 0,
-              justifySelf: "center",
-              alignSelf: "center",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap:
-                layout === "desktop" ? token("--space-s") : token("--space-xs"),
-              boxSizing: "border-box",
-              padding:
-                layout === "desktop" ? token("--space-l") : token("--space-xs"),
-              pointerEvents: "auto",
-            }}
-          >
-            <section
-              aria-label={resolve(gambleAccessibilityDescription(view.gameId))}
-              data-gamble-gates=""
+    <div
+      data-testid="cumulus-gamble-site-screen"
+      style={{ position: "fixed", inset: 0 }}
+    >
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{ ...view.guide, presence: "speaking" }}
+        composition="balanced-gallery"
+      >
+        {(() => {
+          const wagerLocked = view.result !== null;
+          const outcomeGateIndex =
+            view.result === null
+              ? -1
+              : view.gates.findIndex(
+                  (gate) =>
+                    gate.id !== view.result?.gateId &&
+                    gate.id !== view.result?.revealGateId,
+                );
+          const outcomeGate = view.gates[outcomeGateIndex];
+          const selectedGateIndex =
+            view.result === null
+              ? -1
+              : view.gates.findIndex((gate) => gate.id === view.result?.gateId);
+          const revealGateIndex =
+            view.result === null
+              ? -1
+              : view.gates.findIndex(
+                  (gate) => gate.id === view.result?.revealGateId,
+                );
+          const roundActionGridColumn =
+            Math.abs(selectedGateIndex - revealGateIndex) === 2
+              ? "1 / span 3"
+              : `${Math.min(selectedGateIndex, revealGateIndex) + 1} / span 2`;
+          return (
+            <main
+              data-gamble-wager-region=""
+              data-gamble-layout={layout}
+              data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
               style={{
                 position: "relative",
+                zIndex: 10,
                 width: "100%",
-                display: "grid",
-                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                maxWidth:
+                  layout === "desktop"
+                    ? DESKTOP_GAMBLE_REGION_MAX_WIDTH
+                    : undefined,
+                height: "100%",
+                minHeight: 0,
+                justifySelf: "center",
+                alignSelf: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
                 gap:
                   layout === "desktop"
                     ? token("--space-s")
                     : token("--space-xs"),
-                alignItems: "center",
-                justifyItems: "center",
+                boxSizing: "border-box",
+                padding:
+                  layout === "desktop"
+                    ? token("--space-l")
+                    : token("--space-xs"),
+                pointerEvents: "auto",
               }}
             >
-              {view.gates.map((gate, gateIndex) => {
-                const presentation: GambleGatePresentation =
-                  view.result === null
-                    ? "available"
-                    : gate.id === view.result.gateId
-                      ? "selected"
-                      : gate.id === view.result.revealGateId
-                        ? "revealed"
-                        : "faded";
-                return (
-                  <GambleGateCard
-                    key={gate.id}
-                    gate={gate}
-                    layout={layout}
-                    presentation={presentation}
-                    revealStarted={revealStarted}
-                    drawnCard={view.card}
-                    gridColumn={gateIndex + 1}
-                  />
-                );
-              })}
-              {outcomeVisible &&
-                view.result !== null &&
-                outcomeGate !== undefined && (
+              <section
+                aria-label={resolve(
+                  gambleAccessibilityDescription(view.gameId),
+                )}
+                data-gamble-gates=""
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                  gap:
+                    layout === "desktop"
+                      ? token("--space-s")
+                      : token("--space-xs"),
+                  alignItems: "center",
+                  justifyItems: "center",
+                }}
+              >
+                {view.gates.map((gate, gateIndex) => {
+                  const presentation: GambleGatePresentation =
+                    view.result === null
+                      ? "available"
+                      : gate.id === view.result.gateId
+                        ? "selected"
+                        : gate.id === view.result.revealGateId
+                          ? "revealed"
+                          : "faded";
+                  return (
+                    <GambleGateCard
+                      key={gate.id}
+                      gate={gate}
+                      layout={layout}
+                      presentation={presentation}
+                      revealStarted={revealStarted}
+                      drawnCard={view.card}
+                      gridColumn={gateIndex + 1}
+                    />
+                  );
+                })}
+                {outcomeVisible &&
+                  view.result !== null &&
+                  outcomeGate !== undefined && (
+                    <div
+                      data-gamble-outcome-slot={outcomeGate.id}
+                      style={{
+                        position: "relative",
+                        gridColumn: outcomeGateIndex + 1,
+                        gridRow: 1,
+                        width: "100%",
+                        height: "100%",
+                        alignSelf: "stretch",
+                        justifySelf: "stretch",
+                        pointerEvents: "none",
+                      }}
+                    >
+                      <GambleOutcome
+                        key={view.result.id}
+                        view={view}
+                        result={view.result}
+                        layout={layout}
+                      />
+                    </div>
+                  )}
+              </section>
+
+              <div
+                data-gamble-choice-buttons=""
+                data-gamble-round-actions={
+                  roundActionsVisible ? "visible" : "hidden"
+                }
+                style={{
+                  width: "100%",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                  gap:
+                    layout === "desktop"
+                      ? token("--space-s")
+                      : token("--space-xs"),
+                  justifyItems: "center",
+                }}
+              >
+                {roundActionsVisible ? (
                   <div
-                    data-gamble-outcome-slot={outcomeGate.id}
+                    data-gamble-round-action-group=""
                     style={{
-                      position: "relative",
-                      gridColumn: outcomeGateIndex + 1,
-                      gridRow: 1,
+                      gridColumn: roundActionGridColumn,
                       width: "100%",
-                      height: "100%",
-                      alignSelf: "stretch",
-                      justifySelf: "stretch",
-                      pointerEvents: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap:
+                        layout === "desktop"
+                          ? token("--space-s")
+                          : token("--space-xs"),
                     }}
                   >
-                    <GambleOutcome
-                      key={view.result.id}
-                      view={view}
-                      result={view.result}
-                      layout={layout}
-                    />
-                  </div>
-                )}
-            </section>
-
-            <div
-              data-gamble-choice-buttons=""
-              data-gamble-round-actions={
-                roundActionsVisible ? "visible" : "hidden"
-              }
-              style={{
-                width: "100%",
-                display: "grid",
-                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-                gap:
-                  layout === "desktop"
-                    ? token("--space-s")
-                    : token("--space-xs"),
-                justifyItems: "center",
-              }}
-            >
-              {roundActionsVisible ? (
-                <div
-                  data-gamble-round-action-group=""
-                  style={{
-                    gridColumn: roundActionGridColumn,
-                    width: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap:
-                      layout === "desktop"
-                        ? token("--space-s")
-                        : token("--space-xs"),
-                  }}
-                >
-                  {view.canPlayAgain && (
+                    {view.canPlayAgain && (
+                      <GlassButton
+                        label={tx(
+                          "Play Again",
+                          "[gamble] Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
+                        )}
+                        variant="accent"
+                        testId="gamble-play-again"
+                        onPress={onPlayAgain}
+                      />
+                    )}
                     <GlassButton
                       label={tx(
-                        "Play Again",
-                        "[gamble] Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
+                        "Leave",
+                        "[gamble] Visible command that exits the current Gamble site.",
                       )}
-                      variant="accent"
-                      testId="gamble-play-again"
-                      onPress={onPlayAgain}
+                      testId="gamble-leave-after-round"
+                      onPress={onLeave}
                     />
-                  )}
+                  </div>
+                ) : (
+                  view.gates.map((gate) => (
+                    <GambleBetButton
+                      key={gate.id}
+                      gate={gate}
+                      view={view}
+                      layout={layout}
+                      wagerLocked={wagerLocked}
+                      selected={view.result?.gateId === gate.id}
+                      onChooseGate={onChooseGate}
+                    />
+                  ))
+                )}
+              </div>
+
+              {!wagerLocked && (
+                <div
+                  data-gamble-leave-slot=""
+                  style={{
+                    position: "absolute",
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
                   <GlassButton
                     label={tx(
                       "Leave",
                       "[gamble] Visible command that exits the current Gamble site.",
                     )}
-                    testId="gamble-leave-after-round"
+                    testId="gamble-leave"
                     onPress={onLeave}
                   />
                 </div>
-              ) : (
-                view.gates.map((gate) => (
-                  <GambleBetButton
-                    key={gate.id}
-                    gate={gate}
-                    view={view}
-                    layout={layout}
-                    wagerLocked={wagerLocked}
-                    selected={view.result?.gateId === gate.id}
-                    onChooseGate={onChooseGate}
+              )}
+              {view.result?.pendingDreamsignReplacement === true &&
+                !replacementVisible &&
+                !outcomeVisible && (
+                  <GlassButton
+                    label={tx(
+                      "Choose Replacement",
+                      "[gamble] [dreamsign] Visible command that opens the required Dreamsign replacement picker after a Gamble reward would exceed the current player's capacity.",
+                    )}
+                    variant="accent"
+                    testId="gamble-open-replacement"
+                    onPress={() => setReplacementVisible(true)}
                   />
-                ))
-              )}
-            </div>
-
-            {!wagerLocked && (
-              <div
-                data-gamble-leave-slot=""
-                style={{
-                  position: "absolute",
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <GlassButton
-                  label={tx(
-                    "Leave",
-                    "[gamble] Visible command that exits the current Gamble site.",
-                  )}
-                  testId="gamble-leave"
-                  onPress={onLeave}
-                />
-              </div>
-            )}
-            {view.result?.pendingDreamsignReplacement === true &&
-              !replacementVisible &&
-              !outcomeVisible && (
-                <GlassButton
-                  label={tx(
-                    "Choose Replacement",
-                    "[gamble] [dreamsign] Visible command that opens the required Dreamsign replacement picker after a Gamble reward would exceed the current player's capacity.",
-                  )}
-                  variant="accent"
-                  testId="gamble-open-replacement"
-                  onPress={() => setReplacementVisible(true)}
-                />
-              )}
-          </main>
-        );
-      }}
-    >
+                )}
+            </main>
+          );
+        })()}
+      </SiteLayout>
       {replacementVisible && view.replacement !== null && (
         <DreamsignReplacementDialog
-          view={view.replacement}
-          cancelLabel={tx(
-            "Not Yet",
-            "[gamble] [dreamsign] Visible command that postpones choosing a Dreamsign replacement.",
-          )}
-          closeLabel={tx(
-            "Close replacement choice",
-            "[accessibility] [gamble] [dreamsign] Command that closes the Gamble Dreamsign replacement picker.",
-          )}
-          onCancel={() => setReplacementVisible(false)}
-          onReplace={onReplaceDreamsign}
+          model={{
+            ...view.replacement,
+            dismissLabel: tx(
+              "Not Yet",
+              "[gamble] [dreamsign] Visible command that postpones choosing a Dreamsign replacement.",
+            ),
+            closeLabel: tx(
+              "Close replacement choice",
+              "[accessibility] [gamble] [dreamsign] Command that closes the Gamble Dreamsign replacement picker.",
+            ),
+          }}
+          onDismiss={() => setReplacementVisible(false)}
+          onDreamsignPress={onReplaceDreamsign}
         />
       )}
-    </GuideGallerySiteLayout>
+    </div>
   );
 }
 
@@ -1693,6 +1631,7 @@ function LadderClimbScreen({
 }) {
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
+  const layout = useIsDesktop() ? "desktop" : "mobile";
   const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
   const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
   const [rewardResultId, setRewardResultId] = useState<string | null>(null);
@@ -1785,233 +1724,244 @@ function LadderClimbScreen({
   }, [replacementVisible, view.replacement, view.result]);
 
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      mobileComposition="dialog"
-      screenTestId="cumulus-gamble-site-screen"
-      guideArtTestId="cumulus-gamble-guide-art"
-      speechAnchorTestId="cumulus-gamble-speech-anchor"
-      speechBubbleTestId="cumulus-gamble-speech-bubble"
-      renderGallery={(layout) => {
-        const result = view.result;
-        const resultRevealed =
-          result !== null && revealedResultId === result.id;
-        const outcomeVisible = result !== null && outcomeResultId === result.id;
-        const cardSize = layout === "desktop" ? "wager" : "wagerCompact";
-        const showNextTarget = roundActionsVisible && view.nextDraw !== null;
-        const targetRank =
-          showNextTarget && view.nextDraw !== null
-            ? view.nextDraw.targetRank
-            : (result?.targetRank ?? view.nextDraw?.targetRank ?? "Q");
-        const actionsVisible = result === null || roundActionsVisible;
-        return (
-          <main
-            data-gamble-wager-region=""
-            data-gamble-game={view.gameId}
-            data-gamble-layout={layout}
-            data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
-            style={{
-              position: "relative",
-              zIndex: 10,
-              width: "100%",
-              maxWidth:
-                layout === "desktop"
-                  ? DESKTOP_GAMBLE_REGION_MAX_WIDTH
-                  : undefined,
-              height: "100%",
-              minHeight: 0,
-              justifySelf: "center",
-              alignSelf: "center",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap:
-                layout === "desktop" ? token("--space-s") : token("--space-xs"),
-              boxSizing: "border-box",
-              padding:
-                layout === "desktop" ? token("--space-l") : token("--space-xs"),
-              pointerEvents: "auto",
-            }}
-          >
-            <section
-              aria-label={resolve(gambleAccessibilityDescription(view.gameId))}
-              data-ladder-climb-stage=""
+    <div
+      data-testid="cumulus-gamble-site-screen"
+      style={{ position: "fixed", inset: 0 }}
+    >
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{ ...view.guide, presence: "speaking" }}
+        composition="balanced-dialogue"
+      >
+        {(() => {
+          const result = view.result;
+          const resultRevealed =
+            result !== null && revealedResultId === result.id;
+          const outcomeVisible =
+            result !== null && outcomeResultId === result.id;
+          const cardSize = layout === "desktop" ? "wager" : "wagerCompact";
+          const showNextTarget = roundActionsVisible && view.nextDraw !== null;
+          const targetRank =
+            showNextTarget && view.nextDraw !== null
+              ? view.nextDraw.targetRank
+              : (result?.targetRank ?? view.nextDraw?.targetRank ?? "Q");
+          const actionsVisible = result === null || roundActionsVisible;
+          return (
+            <main
+              data-gamble-wager-region=""
+              data-gamble-game={view.gameId}
+              data-gamble-layout={layout}
+              data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
               style={{
                 position: "relative",
+                zIndex: 10,
                 width: "100%",
-                display: "grid",
-                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-                gap:
+                maxWidth:
                   layout === "desktop"
-                    ? token("--space-s")
-                    : token("--space-xs"),
+                    ? DESKTOP_GAMBLE_REGION_MAX_WIDTH
+                    : undefined,
+                height: "100%",
+                minHeight: 0,
+                justifySelf: "center",
+                alignSelf: "center",
+                display: "flex",
+                flexDirection: "column",
                 alignItems: "center",
-                justifyItems: "center",
-              }}
-            >
-              {outcomeVisible && result !== null && (
-                <div
-                  data-ladder-outcome=""
-                  style={{
-                    position: "relative",
-                    gridColumn: 1,
-                    gridRow: 1,
-                    width: "100%",
-                    height: "100%",
-                    pointerEvents: "none",
-                  }}
-                >
-                  <RadialAnnouncement
-                    announcementId={result.id}
-                    headline={gambleOutcomeLabel(
-                      view,
-                      result.won ? "won" : "miss",
-                    )}
-                    tone={result.won ? "reward" : "danger"}
-                    size={layout === "mobile" ? "mini" : "wager"}
-                    duration="extended"
-                  />
-                </div>
-              )}
-              <div
-                data-ladder-climb-card=""
-                style={{ gridColumn: 2, gridRow: 1 }}
-              >
-                <WagerPrizeCard
-                  prizeId="ladder-climb"
-                  minimumWinningRank={targetRank}
-                  essenceReward={view.essenceReward}
-                  rewardDreamsign={view.rewardDreamsign}
-                  drawnCard={result?.card ?? null}
-                  size={cardSize}
-                  revealDrawnCard={resultRevealed && !showNextTarget}
-                  dreamsignTestId="gamble-ladder-dreamsign-name"
-                />
-              </div>
-              <LadderDreamsignReward
-                active={
-                  result?.won === true &&
-                  result.resultSettled &&
-                  rewardResultId === result.id
-                }
-                dreamsign={view.rewardDreamsign}
-                layout={layout}
-                reduceMotion={reduceMotion}
-              />
-            </section>
-
-            <div
-              data-ladder-actions={actionsVisible ? "visible" : "hidden"}
-              style={{
-                width: "100%",
-                display: "grid",
-                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                justifyContent: "center",
                 gap:
                   layout === "desktop"
                     ? token("--space-s")
                     : token("--space-xs"),
-                justifyItems: "center",
+                boxSizing: "border-box",
+                padding:
+                  layout === "desktop"
+                    ? token("--space-l")
+                    : token("--space-xs"),
+                pointerEvents: "auto",
               }}
             >
-              <motion.div
-                data-ladder-round-action-group=""
-                aria-hidden={!actionsVisible || undefined}
-                inert={actionsVisible ? undefined : true}
-                initial={false}
-                animate={{ opacity: actionsVisible ? 1 : 0 }}
-                transition={{
-                  duration: FADE_DURATION_SECONDS,
-                  ease: "easeOut",
-                }}
+              <section
+                aria-label={resolve(
+                  gambleAccessibilityDescription(view.gameId),
+                )}
+                data-ladder-climb-stage=""
                 style={{
-                  gridColumn: "1 / span 3",
+                  position: "relative",
                   width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
                   gap:
                     layout === "desktop"
                       ? token("--space-s")
                       : token("--space-xs"),
-                  pointerEvents: actionsVisible ? "auto" : "none",
+                  alignItems: "center",
+                  justifyItems: "center",
                 }}
               >
-                {view.nextDraw !== null && (
+                {outcomeVisible && result !== null && (
+                  <div
+                    data-ladder-outcome=""
+                    style={{
+                      position: "relative",
+                      gridColumn: 1,
+                      gridRow: 1,
+                      width: "100%",
+                      height: "100%",
+                      pointerEvents: "none",
+                    }}
+                  >
+                    <RadialAnnouncement
+                      announcementId={result.id}
+                      headline={gambleOutcomeLabel(
+                        view,
+                        result.won ? "won" : "miss",
+                      )}
+                      tone={result.won ? "reward" : "danger"}
+                      size={layout === "mobile" ? "mini" : "wager"}
+                      duration="extended"
+                    />
+                  </div>
+                )}
+                <div
+                  data-ladder-climb-card=""
+                  style={{ gridColumn: 2, gridRow: 1 }}
+                >
+                  <WagerPrizeCard
+                    prizeId="ladder-climb"
+                    minimumWinningRank={targetRank}
+                    essenceReward={view.essenceReward}
+                    rewardDreamsign={view.rewardDreamsign}
+                    drawnCard={result?.card ?? null}
+                    size={cardSize}
+                    revealDrawnCard={resultRevealed && !showNextTarget}
+                    dreamsignTestId="gamble-ladder-dreamsign-name"
+                  />
+                </div>
+                <LadderDreamsignReward
+                  active={
+                    result?.won === true &&
+                    result.resultSettled &&
+                    rewardResultId === result.id
+                  }
+                  dreamsign={view.rewardDreamsign}
+                  layout={layout}
+                  reduceMotion={reduceMotion}
+                />
+              </section>
+
+              <div
+                data-ladder-actions={actionsVisible ? "visible" : "hidden"}
+                style={{
+                  width: "100%",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                  gap:
+                    layout === "desktop"
+                      ? token("--space-s")
+                      : token("--space-xs"),
+                  justifyItems: "center",
+                }}
+              >
+                <motion.div
+                  data-ladder-round-action-group=""
+                  aria-hidden={!actionsVisible || undefined}
+                  inert={actionsVisible ? undefined : true}
+                  initial={false}
+                  animate={{ opacity: actionsVisible ? 1 : 0 }}
+                  transition={{
+                    duration: FADE_DURATION_SECONDS,
+                    ease: "easeOut",
+                  }}
+                  style={{
+                    gridColumn: "1 / span 3",
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap:
+                      layout === "desktop"
+                        ? token("--space-s")
+                        : token("--space-xs"),
+                    pointerEvents: actionsVisible ? "auto" : "none",
+                  }}
+                >
+                  {view.nextDraw !== null && (
+                    <GlassButton
+                      label={gambleActionLabel("draw")}
+                      accessibilityLabel={txa(
+                        "Draw attempt {attempt_number} for {essence_cost} Essence",
+                        {
+                          attempt_number: view.nextDraw.attemptNumber,
+                          essence_cost: view.nextDraw.cost,
+                        },
+                        "[accessibility] [gamble] Command for purchasing the next Tidemark Ladder draw. attempt_number is the one-based attempt number from 1 through 4 and essence_cost is the non-negative Essence price paid by the current player.",
+                      )}
+                      essenceCost={view.nextDraw.cost}
+                      variant="accent"
+                      disabled={
+                        !view.runtimeReady ||
+                        !view.nextDraw.available ||
+                        !view.nextDraw.canAfford
+                      }
+                      testId={
+                        result === null
+                          ? "gamble-ladder-climb"
+                          : "gamble-ladder-climb-again"
+                      }
+                      onPress={onDraw}
+                    />
+                  )}
                   <GlassButton
-                    label={gambleActionLabel("draw")}
-                    accessibilityLabel={txa(
-                      "Draw attempt {attempt_number} for {essence_cost} Essence",
-                      {
-                        attempt_number: view.nextDraw.attemptNumber,
-                        essence_cost: view.nextDraw.cost,
-                      },
-                      "[accessibility] [gamble] Command for purchasing the next Tidemark Ladder draw. attempt_number is the one-based attempt number from 1 through 4 and essence_cost is the non-negative Essence price paid by the current player.",
+                    label={tx(
+                      "Leave",
+                      "[gamble] Visible command that exits the current Gamble site.",
                     )}
-                    essenceCost={view.nextDraw.cost}
-                    variant="accent"
-                    disabled={
-                      !view.runtimeReady ||
-                      !view.nextDraw.available ||
-                      !view.nextDraw.canAfford
-                    }
                     testId={
                       result === null
-                        ? "gamble-ladder-climb"
-                        : "gamble-ladder-climb-again"
+                        ? "gamble-ladder-leave"
+                        : "gamble-ladder-leave-after-draw"
                     }
-                    onPress={onDraw}
+                    onPress={onLeave}
+                  />
+                </motion.div>
+              </div>
+              {result?.pendingDreamsignReplacement === true &&
+                !replacementVisible &&
+                !outcomeVisible && (
+                  <GlassButton
+                    label={tx(
+                      "Choose Replacement",
+                      "[gamble] [dreamsign] Visible command that opens the required Dreamsign replacement picker after a Gamble reward would exceed the current player's capacity.",
+                    )}
+                    variant="accent"
+                    testId="gamble-ladder-open-replacement"
+                    onPress={() => setReplacementVisible(true)}
                   />
                 )}
-                <GlassButton
-                  label={tx(
-                    "Leave",
-                    "[gamble] Visible command that exits the current Gamble site.",
-                  )}
-                  testId={
-                    result === null
-                      ? "gamble-ladder-leave"
-                      : "gamble-ladder-leave-after-draw"
-                  }
-                  onPress={onLeave}
-                />
-              </motion.div>
-            </div>
-            {result?.pendingDreamsignReplacement === true &&
-              !replacementVisible &&
-              !outcomeVisible && (
-                <GlassButton
-                  label={tx(
-                    "Choose Replacement",
-                    "[gamble] [dreamsign] Visible command that opens the required Dreamsign replacement picker after a Gamble reward would exceed the current player's capacity.",
-                  )}
-                  variant="accent"
-                  testId="gamble-ladder-open-replacement"
-                  onPress={() => setReplacementVisible(true)}
-                />
-              )}
-          </main>
-        );
-      }}
-    >
+            </main>
+          );
+        })()}
+      </SiteLayout>
       {replacementVisible && view.replacement !== null && (
         <DreamsignReplacementDialog
-          view={view.replacement}
-          cancelLabel={tx(
-            "Not Yet",
-            "[gamble] [dreamsign] Visible command that postpones choosing a Dreamsign replacement.",
-          )}
-          closeLabel={tx(
-            "Close replacement choice",
-            "[accessibility] [gamble] [dreamsign] Command that closes the Gamble Dreamsign replacement picker.",
-          )}
-          onCancel={() => setReplacementVisible(false)}
-          onReplace={onReplaceDreamsign}
+          model={{
+            ...view.replacement,
+            dismissLabel: tx(
+              "Not Yet",
+              "[gamble] [dreamsign] Visible command that postpones choosing a Dreamsign replacement.",
+            ),
+            closeLabel: tx(
+              "Close replacement choice",
+              "[accessibility] [gamble] [dreamsign] Command that closes the Gamble Dreamsign replacement picker.",
+            ),
+          }}
+          onDismiss={() => setReplacementVisible(false)}
+          onDreamsignPress={onReplaceDreamsign}
         />
       )}
-    </GuideGallerySiteLayout>
+    </div>
   );
 }
 
@@ -2032,6 +1982,7 @@ function StarwayStairsScreen({
 }) {
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
+  const layout = useIsDesktop() ? "desktop" : "mobile";
   const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
   const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
   const [actionsVisible, setActionsVisible] = useState(view.result === null);
@@ -2107,264 +2058,270 @@ function StarwayStairsScreen({
   }, [outcomeResultId, view.currentTierNumber, view.result]);
 
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      mobileComposition="dialog"
-      screenTestId="cumulus-gamble-site-screen"
-      guideArtTestId="cumulus-gamble-guide-art"
-      speechAnchorTestId="cumulus-gamble-speech-anchor"
-      speechBubbleTestId="cumulus-gamble-speech-bubble"
-      renderGallery={(layout) => {
-        const outcomeVisible =
-          view.result !== null && outcomeResultId === view.result.id;
-        return (
-          <main
-            data-gamble-wager-region=""
-            data-gamble-game={view.gameId}
-            data-gamble-layout={layout}
-            data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
-            style={{
-              position: "relative",
-              zIndex: 10,
-              width: "100%",
-              maxWidth:
-                layout === "desktop"
-                  ? DESKTOP_GAMBLE_REGION_MAX_WIDTH
-                  : undefined,
-              height: "100%",
-              minHeight: 0,
-              justifySelf: "center",
-              alignSelf: "center",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap:
-                layout === "desktop" ? token("--space-s") : token("--space-xs"),
-              boxSizing: "border-box",
-              padding:
-                layout === "desktop" ? token("--space-l") : token("--space-xs"),
-              pointerEvents: "auto",
-            }}
-          >
-            <section
-              aria-label={resolve(gambleAccessibilityDescription(view.gameId))}
-              data-starway-stairs-tiers=""
+    <div data-testid="cumulus-gamble-site-screen">
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{ ...view.guide, presence: "speaking" }}
+        composition="balanced-dialogue"
+      >
+        {(() => {
+          const outcomeVisible =
+            view.result !== null && outcomeResultId === view.result.id;
+          return (
+            <main
+              data-gamble-wager-region=""
+              data-gamble-game={view.gameId}
+              data-gamble-layout={layout}
+              data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
               style={{
                 position: "relative",
+                zIndex: 10,
                 width: "100%",
-                display: "grid",
-                gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                maxWidth:
+                  layout === "desktop"
+                    ? DESKTOP_GAMBLE_REGION_MAX_WIDTH
+                    : undefined,
+                height: "100%",
+                minHeight: 0,
+                justifySelf: "center",
+                alignSelf: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
                 gap:
                   layout === "desktop"
                     ? token("--space-s")
                     : token("--space-xs"),
-                alignItems: "start",
-                justifyItems: "center",
+                boxSizing: "border-box",
+                padding:
+                  layout === "desktop"
+                    ? token("--space-l")
+                    : token("--space-xs"),
+                pointerEvents: "auto",
               }}
             >
-              {/* Gamble tiles reserve immutable grid slots: result overlays are
+              <section
+                aria-label={resolve(
+                  gambleAccessibilityDescription(view.gameId),
+                )}
+                data-starway-stairs-tiers=""
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+                  gap:
+                    layout === "desktop"
+                      ? token("--space-s")
+                      : token("--space-xs"),
+                  alignItems: "start",
+                  justifyItems: "center",
+                }}
+              >
+                {/* Gamble tiles reserve immutable grid slots: result overlays are
                   absolute so drawing and announcements never move the wager objects. */}
-              {view.tiers.map((tier) => {
-                const isLatestResult =
-                  view.result?.tierNumber === tier.tierNumber;
-                const revealDrawnCard =
-                  tier.card !== null &&
-                  (!isLatestResult || revealedResultId === view.result?.id);
-                return (
-                  <div
-                    key={tier.tierNumber}
-                    data-starway-tier={tier.tierNumber}
-                    data-starway-tier-state={tier.state}
-                    style={{
-                      position: "relative",
-                      width: "100%",
-                      minWidth: 0,
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      gap:
-                        layout === "desktop"
-                          ? token("--space-s")
-                          : token("--space-xs"),
-                    }}
-                  >
-                    <WagerPrizeCard
-                      prizeId={
-                        `starway-${String(tier.tierNumber)}` as
-                          "starway-1" | "starway-2" | "starway-3"
-                      }
-                      minimumWinningRank={tier.minimumWinningRank}
-                      essenceReward={tier.essenceReward}
-                      rewardDreamsign={null}
-                      size={layout === "desktop" ? "wager" : "wagerCompact"}
-                      drawnCard={tier.card}
-                      revealDrawnCard={revealDrawnCard}
-                      emphasis={
-                        tier.tierNumber === emphasisTierNumber
-                          ? "current"
-                          : "muted"
-                      }
-                    />
-                    {outcomeVisible &&
-                      isLatestResult &&
-                      view.result !== null && (
-                        <div
-                          data-starway-outcome=""
-                          style={{
-                            position: "absolute",
-                            inset: 0,
-                            display: "grid",
-                            placeItems: "center",
-                            pointerEvents: "none",
-                            zIndex: 2,
-                          }}
-                        >
-                          <RadialAnnouncement
-                            announcementId={view.result.id}
-                            headline={gambleOutcomeLabel(
-                              view,
-                              view.result.busted ? "bust" : "safe",
-                            )}
-                            detail={
-                              view.result.busted
-                                ? undefined
-                                : gambleOutcomeLabel(view, "prize-at-stake")
-                            }
-                            essenceGained={
-                              !view.result.busted &&
-                              view.result.tierNumber === view.tiers.length
-                                ? view.result.prizeAtRisk
-                                : undefined
-                            }
-                            tone={view.result.busted ? "danger" : "reward"}
-                            size={layout === "mobile" ? "mini" : "wager"}
-                            duration="extended"
-                          />
-                        </div>
-                      )}
-                  </div>
-                );
-              })}
-            </section>
+                {view.tiers.map((tier) => {
+                  const isLatestResult =
+                    view.result?.tierNumber === tier.tierNumber;
+                  const revealDrawnCard =
+                    tier.card !== null &&
+                    (!isLatestResult || revealedResultId === view.result?.id);
+                  return (
+                    <div
+                      key={tier.tierNumber}
+                      data-starway-tier={tier.tierNumber}
+                      data-starway-tier-state={tier.state}
+                      style={{
+                        position: "relative",
+                        width: "100%",
+                        minWidth: 0,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap:
+                          layout === "desktop"
+                            ? token("--space-s")
+                            : token("--space-xs"),
+                      }}
+                    >
+                      <WagerPrizeCard
+                        prizeId={
+                          `starway-${String(tier.tierNumber)}` as
+                            "starway-1" | "starway-2" | "starway-3"
+                        }
+                        minimumWinningRank={tier.minimumWinningRank}
+                        essenceReward={tier.essenceReward}
+                        rewardDreamsign={null}
+                        size={layout === "desktop" ? "wager" : "wagerCompact"}
+                        drawnCard={tier.card}
+                        revealDrawnCard={revealDrawnCard}
+                        emphasis={
+                          tier.tierNumber === emphasisTierNumber
+                            ? "current"
+                            : "muted"
+                        }
+                      />
+                      {outcomeVisible &&
+                        isLatestResult &&
+                        view.result !== null && (
+                          <div
+                            data-starway-outcome=""
+                            style={{
+                              position: "absolute",
+                              inset: 0,
+                              display: "grid",
+                              placeItems: "center",
+                              pointerEvents: "none",
+                              zIndex: 2,
+                            }}
+                          >
+                            <RadialAnnouncement
+                              announcementId={view.result.id}
+                              headline={gambleOutcomeLabel(
+                                view,
+                                view.result.busted ? "bust" : "safe",
+                              )}
+                              detail={
+                                view.result.busted
+                                  ? undefined
+                                  : gambleOutcomeLabel(view, "prize-at-stake")
+                              }
+                              essenceGained={
+                                !view.result.busted &&
+                                view.result.tierNumber === view.tiers.length
+                                  ? view.result.prizeAtRisk
+                                  : undefined
+                              }
+                              tone={view.result.busted ? "danger" : "reward"}
+                              size={layout === "mobile" ? "mini" : "wager"}
+                              duration="extended"
+                            />
+                          </div>
+                        )}
+                    </div>
+                  );
+                })}
+              </section>
 
-            <div
-              data-starway-actions=""
-              aria-hidden={!actionsVisible || undefined}
-              style={{
-                minHeight: token("--touch-min"),
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: token("--space-xs"),
-                flexWrap: "nowrap",
-                visibility: actionsVisible ? "visible" : "hidden",
-                pointerEvents: actionsVisible ? "auto" : "none",
-              }}
-            >
-              {currentTier !== null && (
-                <div data-starway-tier-button={currentTier.tierNumber}>
-                  <GlassButton
-                    label={gambleActionLabel(
-                      currentTier.tierNumber === 1 ? "bet" : "climb",
-                    )}
-                    accessibilityLabel={
-                      currentTier.tierNumber === 1
-                        ? txa(
-                            "Bet {essence_cost} Essence on Starway Stairs",
-                            { essence_cost: view.wagerAmount },
-                            "[accessibility] [gamble] Command for the initial Starway Stairs wager. essence_cost is the non-negative Essence price.",
-                          )
-                        : txa(
-                            "Climb to tier {tier_number} for {essence_cost} Essence",
-                            {
-                              tier_number: currentTier.tierNumber,
-                              essence_cost: view.wagerAmount,
-                            },
-                            "[accessibility] [gamble] Command for climbing Starway Stairs. tier_number is the one-based destination tier and essence_cost is the non-negative Essence price.",
-                          )
-                    }
-                    essenceValue={view.wagerAmount}
-                    size={layout === "mobile" ? "compact" : "standard"}
-                    variant="accent"
-                    disabled={
-                      decisionPending ||
-                      !view.runtimeReady ||
-                      !view.canAffordWager
-                    }
-                    testId={`gamble-starway-tier-${String(currentTier.tierNumber)}`}
-                    onPress={() => {
-                      setDecisionPending(true);
-                      onDraw();
-                    }}
-                  />
-                </div>
-              )}
-              {view.cashOutReward !== null && (
-                <GlassButton
-                  label={gambleActionLabel("take")}
-                  accessibilityLabel={txa(
-                    "Take {essence_amount} Essence",
-                    { essence_amount: view.cashOutReward },
-                    "[accessibility] [gamble] Command for ending a Starway Stairs run and taking the accumulated payout. essence_amount is the positive integer Essence granted to the current player; the same amount is also visible beside the button label.",
-                  )}
-                  essenceValue={view.cashOutReward}
-                  size={layout === "mobile" ? "compact" : "standard"}
-                  disabled={decisionPending}
-                  testId="gamble-starway-cash-out"
-                  onPress={() => {
-                    setDecisionPending(true);
-                    setEmphasisTierNumber(null);
-                    onCashOut();
-                  }}
-                />
-              )}
-              {view.terminalReason !== null ? (
-                <>
-                  {view.canPlayAgain && (
+              <div
+                data-starway-actions=""
+                aria-hidden={!actionsVisible || undefined}
+                style={{
+                  minHeight: token("--touch-min"),
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: token("--space-xs"),
+                  flexWrap: "nowrap",
+                  visibility: actionsVisible ? "visible" : "hidden",
+                  pointerEvents: actionsVisible ? "auto" : "none",
+                }}
+              >
+                {currentTier !== null && (
+                  <div data-starway-tier-button={currentTier.tierNumber}>
                     <GlassButton
-                      label={tx(
-                        "Play Again",
-                        "[gamble] Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
+                      label={gambleActionLabel(
+                        currentTier.tierNumber === 1 ? "bet" : "climb",
                       )}
+                      accessibilityLabel={
+                        currentTier.tierNumber === 1
+                          ? txa(
+                              "Bet {essence_cost} Essence on Starway Stairs",
+                              { essence_cost: view.wagerAmount },
+                              "[accessibility] [gamble] Command for the initial Starway Stairs wager. essence_cost is the non-negative Essence price.",
+                            )
+                          : txa(
+                              "Climb to tier {tier_number} for {essence_cost} Essence",
+                              {
+                                tier_number: currentTier.tierNumber,
+                                essence_cost: view.wagerAmount,
+                              },
+                              "[accessibility] [gamble] Command for climbing Starway Stairs. tier_number is the one-based destination tier and essence_cost is the non-negative Essence price.",
+                            )
+                      }
+                      essenceValue={view.wagerAmount}
                       size={layout === "mobile" ? "compact" : "standard"}
                       variant="accent"
-                      disabled={decisionPending}
-                      testId="gamble-starway-play-again"
+                      disabled={
+                        decisionPending ||
+                        !view.runtimeReady ||
+                        !view.canAffordWager
+                      }
+                      testId={`gamble-starway-tier-${String(currentTier.tierNumber)}`}
                       onPress={() => {
                         setDecisionPending(true);
-                        onPlayAgain();
+                        onDraw();
                       }}
                     />
-                  )}
+                  </div>
+                )}
+                {view.cashOutReward !== null && (
+                  <GlassButton
+                    label={gambleActionLabel("take")}
+                    accessibilityLabel={txa(
+                      "Take {essence_amount} Essence",
+                      { essence_amount: view.cashOutReward },
+                      "[accessibility] [gamble] Command for ending a Starway Stairs run and taking the accumulated payout. essence_amount is the positive integer Essence granted to the current player; the same amount is also visible beside the button label.",
+                    )}
+                    essenceValue={view.cashOutReward}
+                    size={layout === "mobile" ? "compact" : "standard"}
+                    disabled={decisionPending}
+                    testId="gamble-starway-cash-out"
+                    onPress={() => {
+                      setDecisionPending(true);
+                      setEmphasisTierNumber(null);
+                      onCashOut();
+                    }}
+                  />
+                )}
+                {view.terminalReason !== null ? (
+                  <>
+                    {view.canPlayAgain && (
+                      <GlassButton
+                        label={tx(
+                          "Play Again",
+                          "[gamble] Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
+                        )}
+                        size={layout === "mobile" ? "compact" : "standard"}
+                        variant="accent"
+                        disabled={decisionPending}
+                        testId="gamble-starway-play-again"
+                        onPress={() => {
+                          setDecisionPending(true);
+                          onPlayAgain();
+                        }}
+                      />
+                    )}
+                    <GlassButton
+                      label={tx(
+                        "Leave",
+                        "[gamble] Visible command that exits the current Gamble site.",
+                      )}
+                      size={layout === "mobile" ? "compact" : "standard"}
+                      testId="gamble-starway-leave-after-result"
+                      onPress={onLeave}
+                    />
+                  </>
+                ) : view.result === null && currentTier?.tierNumber === 1 ? (
                   <GlassButton
                     label={tx(
                       "Leave",
                       "[gamble] Visible command that exits the current Gamble site.",
                     )}
                     size={layout === "mobile" ? "compact" : "standard"}
-                    testId="gamble-starway-leave-after-result"
+                    testId="gamble-starway-leave"
                     onPress={onLeave}
                   />
-                </>
-              ) : view.result === null && currentTier?.tierNumber === 1 ? (
-                <GlassButton
-                  label={tx(
-                    "Leave",
-                    "[gamble] Visible command that exits the current Gamble site.",
-                  )}
-                  size={layout === "mobile" ? "compact" : "standard"}
-                  testId="gamble-starway-leave"
-                  onPress={onLeave}
-                />
-              ) : null}
-            </div>
-          </main>
-        );
-      }}
-    />
+                ) : null}
+              </div>
+            </main>
+          );
+        })()}
+      </SiteLayout>
+    </div>
   );
 }
 
@@ -2425,6 +2382,7 @@ function BlackjackScreen({
   onPlayAgain: () => void;
 }) {
   const reduceMotion = useReducedMotion() === true;
+  const layout = useIsDesktop() ? "desktop" : "mobile";
   const resolve = useLocalizer();
   const [presentation, setPresentation] = useState<BlackjackPresentationState>({
     playerCardCount: 0,
@@ -2864,16 +2822,14 @@ function BlackjackScreen({
   };
 
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      mobileComposition="dialog"
-      screenTestId="cumulus-gamble-site-screen"
-      guideArtTestId="cumulus-gamble-guide-art"
-      speechAnchorTestId="cumulus-gamble-speech-anchor"
-      speechBubbleTestId="cumulus-gamble-speech-bubble"
-      renderGallery={(layout) => (
+    <div data-testid="cumulus-gamble-site-screen">
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{ ...view.guide, presence: "speaking" }}
+        composition="balanced-dialogue"
+      >
         <main
           data-gamble-wager-region=""
           data-gamble-game={view.gameId}
@@ -3094,8 +3050,8 @@ function BlackjackScreen({
             )}
           </motion.div>
         </main>
-      )}
-    />
+      </SiteLayout>
+    </div>
   );
 }
 
@@ -3116,6 +3072,7 @@ function FourSuitRepriseScreen({
 }) {
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
+  const layout = useIsDesktop() ? "desktop" : "mobile";
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
   const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
@@ -3237,433 +3194,441 @@ function FourSuitRepriseScreen({
   }, [transfigurationVisible, view.result]);
 
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      mobileComposition="dialog"
-      screenTestId="cumulus-gamble-site-screen"
-      guideArtTestId="cumulus-gamble-guide-art"
-      speechAnchorTestId="cumulus-gamble-speech-anchor"
-      speechBubbleTestId="cumulus-gamble-speech-bubble"
-      renderGallery={(layout) => {
-        const selectedCard =
-          view.cards.find((card) => card.entryId === selectedEntryId) ?? null;
-        if (view.phase === "choose" && selectedCard === null) {
-          return (
-            <section
-              data-four-suit-picker=""
-              data-four-suit-layout={layout}
-              style={{
-                position: "relative",
-                zIndex: 10,
-                minHeight: 0,
-                height: "100%",
-                maxHeight: "100%",
-                width:
-                  layout === "desktop"
-                    ? "100%"
-                    : `calc(100vw - (${token("--space-s")} * 2))`,
-                boxSizing: "border-box",
-                pointerEvents: "auto",
-                display: "grid",
-                alignItems: "center",
-              }}
-            >
-              <CardPickerPanel
-                title={gambleTitle(view.gameId)}
-                subtitle={gambleRulesDisclosure(view.gameId)}
-                footerActions={[
-                  {
-                    label: tx(
-                      "Leave",
-                      "[gamble] Visible command that exits the current Gamble site.",
-                    ),
-                    onPress: onLeave,
-                    testId: "gamble-four-suit-leave",
-                  },
-                ]}
-                cards={view.cards.map((card) => ({
-                  entryId: card.entryId,
-                  model: card.model,
-                  testId: `gamble-four-suit-card-${card.entryId}`,
-                }))}
-                emptyLabel={tx(
-                  "No eligible cards remain.",
-                  "[gamble] Empty state in that picker when the current player owns no cards eligible for the wager.",
-                )}
-                testId="gamble-four-suit-card-gallery"
-                onCardPress={setSelectedEntryId}
-              />
-            </section>
-          );
-        }
+    <div data-testid="cumulus-gamble-site-screen">
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{ ...view.guide, presence: "speaking" }}
+        composition="balanced-dialogue"
+      >
+        {(() => {
+          const selectedCard =
+            view.cards.find((card) => card.entryId === selectedEntryId) ?? null;
+          if (view.phase === "choose" && selectedCard === null) {
+            return (
+              <section
+                data-four-suit-picker=""
+                data-four-suit-layout={layout}
+                style={{
+                  position: "relative",
+                  zIndex: 10,
+                  minHeight: 0,
+                  height: "100%",
+                  maxHeight: "100%",
+                  width:
+                    layout === "desktop"
+                      ? "100%"
+                      : `calc(100vw - (${token("--space-s")} * 2))`,
+                  boxSizing: "border-box",
+                  pointerEvents: "auto",
+                  display: "grid",
+                  alignItems: "center",
+                }}
+              >
+                <CardPickerPanel
+                  title={gambleTitle(view.gameId)}
+                  subtitle={gambleRulesDisclosure(view.gameId)}
+                  footerActions={[
+                    {
+                      label: tx(
+                        "Leave",
+                        "[gamble] Visible command that exits the current Gamble site.",
+                      ),
+                      onPress: onLeave,
+                      testId: "gamble-four-suit-leave",
+                    },
+                  ]}
+                  cards={view.cards.map((card) => ({
+                    entryId: card.entryId,
+                    model: card.model,
+                    testId: `gamble-four-suit-card-${card.entryId}`,
+                  }))}
+                  emptyLabel={tx(
+                    "No eligible cards remain.",
+                    "[gamble] Empty state in that picker when the current player owns no cards eligible for the wager.",
+                  )}
+                  testId="gamble-four-suit-card-gallery"
+                  onCardPress={setSelectedEntryId}
+                />
+              </section>
+            );
+          }
 
-        if (transfigurationVisible && view.result !== null) {
+          if (transfigurationVisible && view.result !== null) {
+            return (
+              <div
+                data-four-suit-transfiguration=""
+                style={{
+                  position: "relative",
+                  zIndex: 10,
+                  width: "100%",
+                  maxWidth: DESKTOP_GAMBLE_REGION_MAX_WIDTH,
+                  minHeight: 0,
+                  pointerEvents: "auto",
+                }}
+              >
+                <TransfigurationDetailPanel
+                  candidate={{
+                    entryId: view.result.transfigurationCandidate.entryId,
+                    card: view.result.transfigurationCandidate.model,
+                    forms: view.result.transfigurationCandidate.forms,
+                  }}
+                  value={selectedFormType}
+                  status={decisionPending ? "submitting" : "idle"}
+                  quote="included"
+                  navigation={{ kind: "fixed" }}
+                  onChange={(type) =>
+                    setSelectedFormType((current) =>
+                      current === type ? null : type,
+                    )
+                  }
+                  onConfirm={(type) => {
+                    setDecisionPending(true);
+                    onChooseTransfiguration(type);
+                  }}
+                />
+              </div>
+            );
+          }
+
+          const activeResult = view.phase === "result" ? view.result : null;
+          const target =
+            view.phase === "choose"
+              ? selectedCard
+              : (activeResult?.target ?? null);
+          const drawnCard = activeResult?.card ?? null;
+          const drawnCardVisible =
+            activeResult !== null && revealedResultId === activeResult.id;
+          const outcomeVisible =
+            activeResult !== null && outcomeResultId === activeResult.id;
+          const showReselect = view.phase === "choose" && selectedCard !== null;
+          const drawCardWidth =
+            PLAYING_CARD_DESIGN.sizes[
+              layout === "desktop" ? "wager" : "wagerCompact"
+            ].square;
+          const stageGridTemplateColumns =
+            layout === "desktop"
+              ? `${String(FOUR_SUIT_TARGET_WIDTH.desktop)}px ${String(drawCardWidth)}px ${String(FOUR_SUIT_REWARD_PANEL_WIDTH.desktop)}px`
+              : `${String(FOUR_SUIT_TARGET_WIDTH.mobile)}px ${String(drawCardWidth)}px`;
+          const stageColumnGap =
+            layout === "desktop" ? token("--space-4xl") : token("--space-2xl");
           return (
-            <div
-              data-four-suit-transfiguration=""
+            <main
+              data-gamble-wager-region=""
+              data-gamble-game={view.gameId}
+              data-gamble-layout={layout}
+              data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
               style={{
                 position: "relative",
                 zIndex: 10,
                 width: "100%",
-                maxWidth: DESKTOP_GAMBLE_REGION_MAX_WIDTH,
+                maxWidth:
+                  layout === "desktop" ? FOUR_SUIT_STAGE_MAX_WIDTH : undefined,
+                height: "100%",
                 minHeight: 0,
+                justifySelf: "center",
+                alignSelf: "center",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: token("--space-3xl"),
+                boxSizing: "border-box",
+                padding:
+                  layout === "desktop"
+                    ? token("--space-l")
+                    : token("--space-xs"),
                 pointerEvents: "auto",
               }}
             >
-              <TransfigurationDetailPanel
-                layout={layout}
-                candidate={view.result.transfigurationCandidate}
-                selectedFormType={selectedFormType}
-                confirming={decisionPending}
-                alreadyAccepted={false}
-                showConfirmEssenceCost={false}
-                onSelectForm={(type) =>
-                  setSelectedFormType((current) =>
-                    current === type ? null : type,
-                  )
-                }
-                onConfirm={(form) => {
-                  setDecisionPending(true);
-                  onChooseTransfiguration(form.type);
+              <section
+                aria-label={resolve(
+                  gambleAccessibilityDescription(view.gameId),
+                )}
+                data-four-suit-stage=""
+                style={{
+                  position: "relative",
+                  width: "max-content",
+                  display: "grid",
+                  gridTemplateColumns: stageGridTemplateColumns,
+                  gridTemplateAreas:
+                    layout === "desktop"
+                      ? '"target draw rewards"'
+                      : '"target draw" "rewards rewards"',
+                  columnGap: stageColumnGap,
+                  rowGap: layout === "desktop" ? undefined : stageColumnGap,
+                  alignItems: "center",
+                  justifyItems: "center",
+                  justifyContent: "center",
                 }}
-              />
-            </div>
-          );
-        }
-
-        const activeResult = view.phase === "result" ? view.result : null;
-        const target =
-          view.phase === "choose"
-            ? selectedCard
-            : (activeResult?.target ?? null);
-        const drawnCard = activeResult?.card ?? null;
-        const drawnCardVisible =
-          activeResult !== null && revealedResultId === activeResult.id;
-        const outcomeVisible =
-          activeResult !== null && outcomeResultId === activeResult.id;
-        const showReselect = view.phase === "choose" && selectedCard !== null;
-        const drawCardWidth =
-          PLAYING_CARD_DESIGN.sizes[
-            layout === "desktop" ? "wager" : "wagerCompact"
-          ].square;
-        const stageGridTemplateColumns =
-          layout === "desktop"
-            ? `${String(FOUR_SUIT_TARGET_WIDTH.desktop)}px ${String(drawCardWidth)}px ${String(FOUR_SUIT_REWARD_PANEL_WIDTH.desktop)}px`
-            : `${String(FOUR_SUIT_TARGET_WIDTH.mobile)}px ${String(drawCardWidth)}px`;
-        const stageColumnGap =
-          layout === "desktop" ? token("--space-4xl") : token("--space-2xl");
-        return (
-          <main
-            data-gamble-wager-region=""
-            data-gamble-game={view.gameId}
-            data-gamble-layout={layout}
-            data-gamble-farpoint={view.isFarpoint ? "true" : "false"}
-            style={{
-              position: "relative",
-              zIndex: 10,
-              width: "100%",
-              maxWidth:
-                layout === "desktop" ? FOUR_SUIT_STAGE_MAX_WIDTH : undefined,
-              height: "100%",
-              minHeight: 0,
-              justifySelf: "center",
-              alignSelf: "center",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: token("--space-3xl"),
-              boxSizing: "border-box",
-              padding:
-                layout === "desktop" ? token("--space-l") : token("--space-xs"),
-              pointerEvents: "auto",
-            }}
-          >
-            <section
-              aria-label={resolve(gambleAccessibilityDescription(view.gameId))}
-              data-four-suit-stage=""
-              style={{
-                position: "relative",
-                width: "max-content",
-                display: "grid",
-                gridTemplateColumns: stageGridTemplateColumns,
-                gridTemplateAreas:
-                  layout === "desktop"
-                    ? '"target draw rewards"'
-                    : '"target draw" "rewards rewards"',
-                columnGap: stageColumnGap,
-                rowGap: layout === "desktop" ? undefined : stageColumnGap,
-                alignItems: "center",
-                justifyItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              {target !== null && (
+              >
+                {target !== null && (
+                  <div
+                    data-four-suit-target-slot=""
+                    style={{
+                      position: "relative",
+                      gridArea: "target",
+                      width: FOUR_SUIT_TARGET_WIDTH[layout],
+                      height:
+                        FOUR_SUIT_TARGET_WIDTH[layout] /
+                        CARD_ASPECT_RATIO_VALUE,
+                      minWidth: 0,
+                    }}
+                  >
+                    {cardOutcomePhase !== "complete" && (
+                      <div
+                        data-four-suit-target={target.entryId}
+                        data-four-suit-target-presentation={cardOutcomePhase}
+                        style={{ position: "absolute", inset: 0 }}
+                      >
+                        {activeResult !== null &&
+                        cardOutcomePhase === "animating" ? (
+                          <FourSuitOutcomeCard
+                            result={activeResult}
+                            layout={layout}
+                            reduceMotion={reduceMotion}
+                            essenceReward={view.essenceReward}
+                          />
+                        ) : (
+                          <GameCard
+                            model={
+                              activeResult?.outcome === "transfiguration"
+                                ? activeResult.transfigurationCandidate.model
+                                : target.model
+                            }
+                          />
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+                <div data-four-suit-draw-card="" style={{ gridArea: "draw" }}>
+                  <PlayingCard
+                    variant="fourSuit"
+                    size={layout === "desktop" ? "wager" : "wagerCompact"}
+                    drawnCard={drawnCard}
+                    revealDrawnCard={drawnCardVisible}
+                  />
+                </div>
                 <div
-                  data-four-suit-target-slot=""
+                  data-four-suit-prize=""
                   style={{
-                    position: "relative",
-                    gridArea: "target",
-                    width: FOUR_SUIT_TARGET_WIDTH[layout],
-                    height:
-                      FOUR_SUIT_TARGET_WIDTH[layout] / CARD_ASPECT_RATIO_VALUE,
+                    gridArea: "rewards",
+                    width: FOUR_SUIT_REWARD_PANEL_WIDTH[layout],
                     minWidth: 0,
                   }}
                 >
-                  {cardOutcomePhase !== "complete" && (
+                  <GlassPanel testId="gamble-four-suit-outcome-panel">
                     <div
-                      data-four-suit-target={target.entryId}
-                      data-four-suit-target-presentation={cardOutcomePhase}
-                      style={{ position: "absolute", inset: 0 }}
+                      data-four-suit-outcomes=""
+                      style={{
+                        height: fourSuitRewardPanelBodyHeight(layout),
+                        boxSizing: "border-box",
+                        display: "grid",
+                        gridTemplateRows: "repeat(4, minmax(0, 1fr))",
+                        padding:
+                          layout === "desktop"
+                            ? token("--space-s")
+                            : token("--space-xs"),
+                      }}
                     >
-                      {activeResult !== null &&
-                      cardOutcomePhase === "animating" ? (
-                        <FourSuitOutcomeCard
-                          result={activeResult}
-                          layout={layout}
-                          reduceMotion={reduceMotion}
-                          essenceReward={view.essenceReward}
-                        />
-                      ) : (
-                        <GameCard
-                          model={
-                            activeResult?.outcome === "transfiguration"
-                              ? activeResult.transfigurationCandidate.model
-                              : target.model
-                          }
-                        />
-                      )}
+                      {view.outcomes.map((outcome) => (
+                        <div
+                          key={outcome.suit}
+                          data-four-suit-outcome={outcome.suit}
+                          aria-label={resolve(
+                            fourSuitOutcomeAccessibilityLabel(
+                              outcome.suit,
+                              outcome.outcome,
+                            ),
+                          )}
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns:
+                              layout === "desktop"
+                                ? "44px minmax(0, 1fr)"
+                                : "40px minmax(0, 1fr)",
+                            alignItems: "center",
+                            gap:
+                              layout === "desktop"
+                                ? token("--space-s")
+                                : token("--space-xs"),
+                            font:
+                              layout === "desktop"
+                                ? token("--t-button-lg")
+                                : token("--t-button"),
+                          }}
+                        >
+                          <PlayingCardSuitMark
+                            suit={outcome.suit}
+                            size={
+                              layout === "desktop" ? "reward" : "rewardCompact"
+                            }
+                          />
+                          <span>
+                            {outcome.outcome === "transfiguration"
+                              ? resolve(
+                                  gambleOutcomeLabel(view, "transfiguration"),
+                                )
+                              : outcome.outcome === "essence"
+                                ? resolve(
+                                    txa(
+                                      "Gain {essence_amount} Essence",
+                                      { essence_amount: view.essenceReward },
+                                      "[gamble] Complete visible Four-Suit Reprise reward row when the selected suit grants Essence. essence_amount is the positive integer Essence gained by the current player.",
+                                    ),
+                                  )
+                                : resolve(
+                                    gambleOutcomeLabel(view, outcome.outcome),
+                                  )}
+                          </span>
+                        </div>
+                      ))}
                     </div>
-                  )}
+                  </GlassPanel>
                 </div>
-              )}
-              <div data-four-suit-draw-card="" style={{ gridArea: "draw" }}>
-                <PlayingCard
-                  variant="fourSuit"
-                  size={layout === "desktop" ? "wager" : "wagerCompact"}
-                  drawnCard={drawnCard}
-                  revealDrawnCard={drawnCardVisible}
-                />
-              </div>
-              <div
-                data-four-suit-prize=""
-                style={{
-                  gridArea: "rewards",
-                  width: FOUR_SUIT_REWARD_PANEL_WIDTH[layout],
-                  minWidth: 0,
-                }}
-              >
-                <GlassPanel testId="gamble-four-suit-outcome-panel">
+                {outcomeVisible && activeResult !== null && (
                   <div
-                    data-four-suit-outcomes=""
+                    data-four-suit-announcement=""
                     style={{
-                      height: fourSuitRewardPanelBodyHeight(layout),
-                      boxSizing: "border-box",
+                      position: "absolute",
+                      inset: 0,
                       display: "grid",
-                      gridTemplateRows: "repeat(4, minmax(0, 1fr))",
-                      padding:
-                        layout === "desktop"
-                          ? token("--space-s")
-                          : token("--space-xs"),
+                      placeItems: "center",
+                      pointerEvents: "none",
+                      zIndex: 2,
                     }}
                   >
-                    {view.outcomes.map((outcome) => (
-                      <div
-                        key={outcome.suit}
-                        data-four-suit-outcome={outcome.suit}
-                        aria-label={resolve(
-                          fourSuitOutcomeAccessibilityLabel(
-                            outcome.suit,
-                            outcome.outcome,
-                          ),
-                        )}
-                        style={{
-                          display: "grid",
-                          gridTemplateColumns:
-                            layout === "desktop"
-                              ? "44px minmax(0, 1fr)"
-                              : "40px minmax(0, 1fr)",
-                          alignItems: "center",
-                          gap:
-                            layout === "desktop"
-                              ? token("--space-s")
-                              : token("--space-xs"),
-                          font:
-                            layout === "desktop"
-                              ? token("--t-button-lg")
-                              : token("--t-button"),
-                        }}
-                      >
-                        <PlayingCardSuitMark
-                          suit={outcome.suit}
-                          size={
-                            layout === "desktop" ? "reward" : "rewardCompact"
-                          }
-                        />
-                        <span>
-                          {outcome.outcome === "transfiguration"
-                            ? resolve(
-                                gambleOutcomeLabel(view, "transfiguration"),
-                              )
-                            : outcome.outcome === "essence"
-                              ? resolve(
-                                  txa(
-                                    "Gain {essence_amount} Essence",
-                                    { essence_amount: view.essenceReward },
-                                    "[gamble] Complete visible Four-Suit Reprise reward row when the selected suit grants Essence. essence_amount is the positive integer Essence gained by the current player.",
-                                  ),
-                                )
-                              : resolve(
-                                  gambleOutcomeLabel(view, outcome.outcome),
-                                )}
-                        </span>
-                      </div>
-                    ))}
+                    <RadialAnnouncement
+                      announcementId={activeResult.id}
+                      headline={gambleOutcomeLabel(view, activeResult.outcome)}
+                      essenceGained={
+                        activeResult.essenceGained > 0
+                          ? activeResult.essenceGained
+                          : undefined
+                      }
+                      tone={
+                        activeResult.outcome === "purge" ? "danger" : "reward"
+                      }
+                      size={layout === "mobile" ? "mini" : "wager"}
+                      duration="extended"
+                    />
                   </div>
-                </GlassPanel>
-              </div>
-              {outcomeVisible && activeResult !== null && (
-                <div
-                  data-four-suit-announcement=""
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    display: "grid",
-                    placeItems: "center",
-                    pointerEvents: "none",
-                    zIndex: 2,
-                  }}
-                >
-                  <RadialAnnouncement
-                    announcementId={activeResult.id}
-                    headline={gambleOutcomeLabel(view, activeResult.outcome)}
-                    essenceGained={
-                      activeResult.essenceGained > 0
-                        ? activeResult.essenceGained
-                        : undefined
-                    }
-                    tone={
-                      activeResult.outcome === "purge" ? "danger" : "reward"
-                    }
-                    size={layout === "mobile" ? "mini" : "wager"}
-                    duration="extended"
-                  />
-                </div>
-              )}
-            </section>
+                )}
+              </section>
 
-            <div
-              data-four-suit-actions=""
-              style={{
-                minHeight: token("--touch-min"),
-                width: "max-content",
-                display: "grid",
-                gridTemplateColumns: stageGridTemplateColumns,
-                columnGap: stageColumnGap,
-                alignItems: "center",
-                visibility:
-                  view.phase === "choose" || actionsVisible
-                    ? "visible"
-                    : "hidden",
-                pointerEvents:
-                  view.phase === "choose" || actionsVisible ? "auto" : "none",
-              }}
-            >
-              {showReselect && (
-                <div
-                  data-four-suit-reselect=""
-                  style={{ gridColumn: "1", justifySelf: "start" }}
-                >
-                  <IconButton
-                    glyph={GLYPHS.refreshCcw}
-                    label={gambleActionLabel("choose-another")}
-                    size="sm"
-                    disabled={decisionPending}
-                    testId="gamble-four-suit-choose-again"
-                    onPress={() => setSelectedEntryId(null)}
-                  />
-                </div>
-              )}
               <div
-                data-four-suit-primary-actions=""
+                data-four-suit-actions=""
                 style={{
-                  gridColumn: layout === "desktop" ? "2 / 4" : "2",
-                  justifySelf: layout === "desktop" ? "center" : "start",
-                  display: "flex",
+                  minHeight: token("--touch-min"),
+                  width: "max-content",
+                  display: "grid",
+                  gridTemplateColumns: stageGridTemplateColumns,
+                  columnGap: stageColumnGap,
                   alignItems: "center",
-                  gap: token("--space-s"),
+                  visibility:
+                    view.phase === "choose" || actionsVisible
+                      ? "visible"
+                      : "hidden",
+                  pointerEvents:
+                    view.phase === "choose" || actionsVisible ? "auto" : "none",
                 }}
               >
-                {view.phase === "choose" && selectedCard !== null ? (
-                  <>
-                    <GlassButton
-                      label={gambleActionLabel("draw")}
-                      accessibilityLabel={txa(
-                        "Draw for {essence_cost} Essence",
-                        { essence_cost: view.drawCost },
-                        "[accessibility] [gamble] Command for paying to draw in Four-Suit Reprise. essence_cost is the non-negative Essence price paid by the current player and is also rendered separately on the button.",
-                      )}
-                      essenceCost={view.drawCost}
-                      size={layout === "mobile" ? "compact" : "standard"}
-                      variant="accent"
-                      disabled={
-                        decisionPending ||
-                        !view.runtimeReady ||
-                        !view.canAffordDraw
-                      }
-                      testId="gamble-four-suit-draw"
-                      onPress={() => {
-                        setDecisionPending(true);
-                        onDraw(selectedCard.entryId);
-                      }}
-                    />
-                    <GlassButton
-                      label={tx(
-                        "Leave",
-                        "[gamble] Visible command that exits the current Gamble site.",
-                      )}
-                      size={layout === "mobile" ? "compact" : "standard"}
+                {showReselect && (
+                  <div
+                    data-four-suit-reselect=""
+                    style={{ gridColumn: "1", justifySelf: "start" }}
+                  >
+                    <IconButton
+                      glyph={GLYPHS.refreshCcw}
+                      label={gambleActionLabel("choose-another")}
+                      size="sm"
                       disabled={decisionPending}
-                      testId="gamble-four-suit-leave-selected"
-                      onPress={onLeave}
+                      testId="gamble-four-suit-choose-again"
+                      onPress={() => setSelectedEntryId(null)}
                     />
-                  </>
-                ) : actionsVisible ? (
-                  <>
-                    {view.canPlayAgain && !decisionPending && (
+                  </div>
+                )}
+                <div
+                  data-four-suit-primary-actions=""
+                  style={{
+                    gridColumn: layout === "desktop" ? "2 / 4" : "2",
+                    justifySelf: layout === "desktop" ? "center" : "start",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: token("--space-s"),
+                  }}
+                >
+                  {view.phase === "choose" && selectedCard !== null ? (
+                    <>
                       <GlassButton
-                        label={tx(
-                          "Play Again",
-                          "[gamble] Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
+                        label={gambleActionLabel("draw")}
+                        accessibilityLabel={txa(
+                          "Draw for {essence_cost} Essence",
+                          { essence_cost: view.drawCost },
+                          "[accessibility] [gamble] Command for paying to draw in Four-Suit Reprise. essence_cost is the non-negative Essence price paid by the current player and is also rendered separately on the button.",
                         )}
+                        essenceCost={view.drawCost}
                         size={layout === "mobile" ? "compact" : "standard"}
                         variant="accent"
-                        disabled={decisionPending}
-                        testId="gamble-four-suit-play-again"
+                        disabled={
+                          decisionPending ||
+                          !view.runtimeReady ||
+                          !view.canAffordDraw
+                        }
+                        testId="gamble-four-suit-draw"
                         onPress={() => {
                           setDecisionPending(true);
-                          onPlayAgain();
+                          onDraw(selectedCard.entryId);
                         }}
                       />
-                    )}
-                    <GlassButton
-                      label={tx(
-                        "Leave",
-                        "[gamble] Visible command that exits the current Gamble site.",
+                      <GlassButton
+                        label={tx(
+                          "Leave",
+                          "[gamble] Visible command that exits the current Gamble site.",
+                        )}
+                        size={layout === "mobile" ? "compact" : "standard"}
+                        disabled={decisionPending}
+                        testId="gamble-four-suit-leave-selected"
+                        onPress={onLeave}
+                      />
+                    </>
+                  ) : actionsVisible ? (
+                    <>
+                      {view.canPlayAgain && !decisionPending && (
+                        <GlassButton
+                          label={tx(
+                            "Play Again",
+                            "[gamble] Visible command that immediately starts another round of the current Gamble game after the previous outcome settles.",
+                          )}
+                          size={layout === "mobile" ? "compact" : "standard"}
+                          variant="accent"
+                          disabled={decisionPending}
+                          testId="gamble-four-suit-play-again"
+                          onPress={() => {
+                            setDecisionPending(true);
+                            onPlayAgain();
+                          }}
+                        />
                       )}
-                      size={layout === "mobile" ? "compact" : "standard"}
-                      testId="gamble-four-suit-leave-after-result"
-                      onPress={onLeave}
-                    />
-                  </>
-                ) : null}
+                      <GlassButton
+                        label={tx(
+                          "Leave",
+                          "[gamble] Visible command that exits the current Gamble site.",
+                        )}
+                        size={layout === "mobile" ? "compact" : "standard"}
+                        testId="gamble-four-suit-leave-after-result"
+                        onPress={onLeave}
+                      />
+                    </>
+                  ) : null}
+                </div>
               </div>
-            </div>
-          </main>
-        );
-      }}
-    />
+            </main>
+          );
+        })()}
+      </SiteLayout>
+    </div>
   );
 }

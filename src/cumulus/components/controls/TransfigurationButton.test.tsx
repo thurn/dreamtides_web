@@ -31,7 +31,7 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
-  window.matchMedia = ((query: string) => ({
+  window.matchMedia = (query: string) => ({
     matches: false,
     media: query,
     onchange: null,
@@ -40,7 +40,7 @@ beforeEach(() => {
     addListener: () => {},
     removeListener: () => {},
     dispatchEvent: () => false,
-  }));
+  });
 });
 
 afterEach(() => {
@@ -98,9 +98,7 @@ describe("TransfigurationButton", () => {
 
     const button = container.querySelector<HTMLButtonElement>("button");
     expect(button?.dataset.transfigurationButtonVariant).toBe("priced");
-    expect(button?.style.gridTemplateColumns).toBe(
-      "auto minmax(0, 1fr)",
-    );
+    expect(button?.style.gridTemplateColumns).toBe("auto minmax(0, 1fr)");
     expect(button?.style.padding).toBe("var(--space-xs)");
     expect(
       button?.querySelector("[data-transfiguration-button-price]"),

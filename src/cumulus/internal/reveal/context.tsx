@@ -162,14 +162,20 @@ function gameCardDescriptionUnits(
         "[accessibility] Complete card-type sentence for a revealed game card. card_type is the authored Character or Event display label.",
       ),
     },
-    ...canonicalDescription(card.subtype).map((): RevealDescriptionUnit => ({
-      kind: "message",
-      message: txa(
-        "Subtype: {card_subtype}.",
-        { card_subtype: card.subtype },
-        "[accessibility] Complete subtype sentence for a revealed game card. card_subtype is the authored catalog subtype and remains grammatically opaque.",
-      ),
-    })),
+    ...(card.subtype === undefined ||
+    card.subtype.trim() === "" ||
+    card.subtype === "*"
+      ? []
+      : [
+          {
+            kind: "message" as const,
+            message: txa(
+              "Subtype: {card_subtype}.",
+              { card_subtype: card.subtype },
+              "[accessibility] Complete subtype sentence for a revealed game card. card_subtype is the authored catalog subtype and remains grammatically opaque.",
+            ),
+          },
+        ]),
     ...energyUnits,
     ...(card.sparkVariable === true
       ? [
@@ -859,7 +865,7 @@ export function useRevealSource(
               : (spec.primary.card.variant ?? "text"),
       "data-reveal-placement-exception": placementException,
       "data-reveal-secondary-titles": spec.secondaries
-        .map((card) => card.title === undefined ? "" : resolve(card.title))
+        .map((card) => (card.title === undefined ? "" : resolve(card.title)))
         .join("\u001f"),
       style: {
         "--reveal-press-scale": String(feedback.pressScale),

@@ -67,7 +67,7 @@ import type {
   MobileBattleSlotTarget,
 } from "../../cumulus/screens/MobileBattleScreen";
 import type { MobileBattleResultAction } from "../../cumulus/screens/BattleResultSurface";
-import { useIsDesktop } from "../../cumulus/screens/use-is-desktop";
+import { useIsDesktop } from "../../cumulus/primitives/use-is-desktop";
 import {
   createBattlePromptOpenedLogFields,
   createBattlePromptResolutionLogFields,

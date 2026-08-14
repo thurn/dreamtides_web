@@ -43,7 +43,11 @@ describe("StandaloneGlyph", () => {
 
   it("uses an explicit label or hides a decorative mark", () => {
     const labeled = renderLocalizedToStaticMarkup(
-      <StandaloneGlyph glyph={GLYPHS.bolt} color="text-primary" label={assertLocalized("Fast")} />,
+      <StandaloneGlyph
+        glyph={GLYPHS.bolt}
+        color="text-primary"
+        label={assertLocalized("Fast")}
+      />,
     );
     const decorative = renderLocalizedToStaticMarkup(
       <StandaloneGlyph glyph={GLYPHS.bolt} color="text-primary" />,

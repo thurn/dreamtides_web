@@ -15,8 +15,8 @@ import type { CharacterDialogueModel } from "../components/overlay/CharacterDial
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { Pressable } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
-import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
-import { useIsDesktop } from "./use-is-desktop";
+import { ViewportTutorialDialogue } from "../components/overlay/ViewportTutorialDialogue";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import { opaque, tx, txa } from "@trox/runtime";
@@ -401,30 +401,33 @@ export function BattleTutorialGuidance({
   ) {
     return (
       <ViewportTutorialDialogue
-        view={{
-          id: renderedView.presentationId,
-          dialogue: renderedView.dialogue,
-          horizontalOffset: renderedView.horizontalOffset,
-          verticalOffset: renderedView.verticalOffset,
-          bubbleWidth: renderedView.bubbleWidth,
-        }}
-        visible={active && dialogueVisible}
-        kind={
+        presentationId={renderedView.presentationId}
+        dialogue={renderedView.dialogue}
+        context={
           renderedView.source.kind === "journey-card"
             ? "card"
             : renderedView.source.kind === "battle"
               ? "battle"
               : "site"
         }
-        triggerId={renderedView.triggerId}
-        messageIndex={renderedView.messageIndex}
+        placement={{ kind: "floating", avoidance: "cards-and-chrome" }}
+        visible={active && dialogueVisible}
+        diagnostics={{
+          triggerId: renderedView.triggerId,
+          messageIndex: renderedView.messageIndex,
+        }}
       />
     );
   }
   return (
     <section
       ref={journeyRef}
-      aria-label={resolve(tx("Battle tutorial", "[accessibility] [tutorial] Tutorial region names."))}
+      aria-label={resolve(
+        tx(
+          "Battle tutorial",
+          "[accessibility] [tutorial] Tutorial region names.",
+        ),
+      )}
       aria-live={active ? "polite" : "off"}
       aria-hidden={active ? undefined : "true"}
       data-battle-tutorial-guidance=""

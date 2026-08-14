@@ -1,5 +1,5 @@
 import { token } from "../primitives/tokens";
-import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
+import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "../primitives/chrome-geometry";
 
 /** Shared narrow-stage measure for terminal journey result screens. */
 export const JOURNEY_RESULT_CONTENT_MAX_WIDTH_PX = 440;

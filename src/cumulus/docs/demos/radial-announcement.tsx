@@ -47,11 +47,7 @@ function RadialAnnouncementDemo(args: Record<string, unknown>) {
       <style>{FROZEN_ANNOUNCEMENT_CSS}</style>
       {variant === "hand-total" ? (
         <div style={{ display: "grid", height: "100%", placeItems: "center" }}>
-          <RadialAnnouncement
-            variant="hand-total"
-            owner="player"
-            total={17}
-          />
+          <RadialAnnouncement variant="hand-total" owner="player" total={17} />
         </div>
       ) : variant === "card-score" ? (
         <RadialAnnouncement variant="card-score" points={points} />
@@ -66,7 +62,10 @@ function RadialAnnouncementDemo(args: Record<string, unknown>) {
           />
         )
       ) : variant === "victory" ? (
-        <RadialAnnouncement variant="victory" headline={assertLocalized("Victory")} />
+        <RadialAnnouncement
+          variant="victory"
+          headline={assertLocalized("Victory")}
+        />
       ) : (
         <RadialAnnouncement
           headline={assertLocalized("Fast")}

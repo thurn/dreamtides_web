@@ -66,6 +66,41 @@ const strictComponentSurface = extractPropMeta(
   STRICT_COMPONENT_ROOTS.flatMap((dir) => collectComponentFiles(dir)).sort(),
 );
 
+const PROMOTED_COMPONENT_PROP_MANIFEST = {
+  SiteLayout: [
+    "atmosphere",
+    "children",
+    "composition",
+    "guide",
+    "scene",
+    "siteId",
+  ],
+  DreamsignReplacementDialog: ["model", "onDismiss", "onDreamsignPress"],
+  TransfigurationPickerPanel: ["onCardPress", "onDismiss", "state"],
+  TransfigurationDetailPanel: [
+    "candidate",
+    "navigation",
+    "onChange",
+    "onConfirm",
+    "quote",
+    "status",
+    "value",
+  ],
+  BattleForeseeEditor: ["model", "onConfirm"],
+  ExplorationChoice: ["model", "onPress"],
+  CardChangePair: ["model", "reveal"],
+  BattlefieldCard: ["interaction", "model"],
+  BattlePhaseIndicator: ["phase", "side"],
+  ViewportTutorialDialogue: [
+    "context",
+    "diagnostics",
+    "dialogue",
+    "placement",
+    "presentationId",
+    "visible",
+  ],
+};
+
 /** Props whose very presence re-opens an arbitrary-customization escape hatch. */
 const BANNED_PROP_NAMES = new Set(["style", "className"]);
 
@@ -87,6 +122,16 @@ const REACT_NODE_TYPE =
   /\b(ReactNode|ReactElement|ReactChild|ReactPortal)\b|JSX\.Element/;
 
 describe("Cumulus strict-API contract (resolved surface)", () => {
+  it("locks every promoted component to its exact semantic prop manifest", () => {
+    for (const [component, expected] of Object.entries(
+      PROMOTED_COMPONENT_PROP_MANIFEST,
+    )) {
+      expect(
+        (surface[component] ?? []).map((prop) => prop.name).sort(),
+        component,
+      ).toEqual([...expected].sort());
+    }
+  });
   it("finds a non-trivial component surface to check", () => {
     // Guard against extractPropMeta silently returning nothing (which would make
     // every assertion below vacuously pass).

@@ -77,8 +77,14 @@ describe("OfferTile", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <OfferTile presentation={PRESENTATION} model={MODEL} onPress={() => {}} testId="standard" />
-          <OfferTile presentation={PRESENTATION}
+          <OfferTile
+            presentation={PRESENTATION}
+            model={MODEL}
+            onPress={() => {}}
+            testId="standard"
+          />
+          <OfferTile
+            presentation={PRESENTATION}
             model={{ ...MODEL, id: "compact" }}
             size="compact"
             onPress={() => {}}
@@ -136,7 +142,8 @@ describe("OfferTile", () => {
       root.render(
         <CumulusRoot>
           {models.map(([testId, model]) => (
-            <OfferTile presentation={PRESENTATION}
+            <OfferTile
+              presentation={PRESENTATION}
               key={testId}
               model={model}
               onPress={() => {}}
@@ -196,8 +203,14 @@ describe("OfferTile", () => {
     expect(focusedSingleImage.style.objectPosition).toBe("");
     expect(focusedSingleImage.style.left).toBe("50%");
     expect(focusedSingleImage.style.top).toBe("50%");
-    expect(Number.parseFloat(focusedSingleImage.style.width)).toBeCloseTo(280.5, 5);
-    expect(Number.parseFloat(focusedSingleImage.style.height)).toBeCloseTo(170, 5);
+    expect(Number.parseFloat(focusedSingleImage.style.width)).toBeCloseTo(
+      280.5,
+      5,
+    );
+    expect(Number.parseFloat(focusedSingleImage.style.height)).toBeCloseTo(
+      170,
+      5,
+    );
     const authoredTranslation = /translate\(([-\d.]+)%, ([-\d.]+)%\)$/.exec(
       focusedSingleImage.style.transform,
     );
@@ -294,7 +307,8 @@ describe("OfferTile", () => {
       root.render(
         <CumulusRoot>
           {models.map(([testId, model]) => (
-            <OfferTile presentation={PRESENTATION}
+            <OfferTile
+              presentation={PRESENTATION}
               key={testId}
               model={model}
               onPress={() => {}}
@@ -331,7 +345,11 @@ describe("OfferTile", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <OfferTile presentation={PRESENTATION} model={MODEL} onPress={activate} />
+          <OfferTile
+            presentation={PRESENTATION}
+            model={MODEL}
+            onPress={activate}
+          />
         </CumulusRoot>,
       );
     });
@@ -383,7 +401,11 @@ describe("OfferTile", () => {
     const addSite: OfferTileModel = {
       id: "add-site",
       kind: "add-site",
-      site: { id: "Duplication", name: assertLocalized("Duplication"), glyph: GLYPHS.copy },
+      site: {
+        id: "Duplication",
+        name: assertLocalized("Duplication"),
+        glyph: GLYPHS.copy,
+      },
     };
     const container = document.createElement("div");
     document.body.append(container);
@@ -391,8 +413,18 @@ describe("OfferTile", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <OfferTile presentation={dreamsignPresentation} model={gift} onPress={() => {}} testId="gift" />
-          <OfferTile presentation={sitePresentation} model={addSite} onPress={() => {}} testId="site" />
+          <OfferTile
+            presentation={dreamsignPresentation}
+            model={gift}
+            onPress={() => {}}
+            testId="gift"
+          />
+          <OfferTile
+            presentation={sitePresentation}
+            model={addSite}
+            onPress={() => {}}
+            testId="site"
+          />
         </CumulusRoot>,
       );
     });
@@ -448,5 +480,4 @@ describe("OfferTile", () => {
     act(() => root.unmount());
     container.remove();
   });
-
 });

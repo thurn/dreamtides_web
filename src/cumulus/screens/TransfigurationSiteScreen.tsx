@@ -1,31 +1,23 @@
 // TransfigurationSiteScreen — Durgan Forgehammer's standard desktop forge.
 
-import { meaning,
-  tx,
-  txa,
-} from "@trox/runtime";
 import { motion } from "framer-motion";
 import { useCallback, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
-import { CardPickerPanel } from "../components/card/CardPickerPanel";
-import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
-import { GlassButton } from "../components/controls/GlassButton";
-import {
-  TransfigurationButton,
-  type TransfigurationButtonModel,
-} from "../components/controls/TransfigurationButton";
-import { GlassPanel } from "../components/overlay/GlassPanel";
+import type { TransfigurationButtonModel } from "../components/controls/TransfigurationButton";
+import { TransfigurationPickerPanel } from "../components/card/TransfigurationPickerPanel";
+import { TransfigurationDetailPanel } from "../components/card/TransfigurationDetailPanel";
 import type { ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import type { TransfigurationType } from "../../types/journey";
 import {
-  GuideGallerySiteLayout,
-  type GuideGalleryGuideView,
-} from "./GuideGallerySiteLayout";
+  SiteLayout,
+  type SiteLayoutGuide,
+} from "../components/layout/SiteLayout";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 
-export type TransfigurationGuideView = GuideGalleryGuideView;
+export type TransfigurationGuideView = Omit<SiteLayoutGuide, "presence">;
 
 export interface TransfigurationFormView extends TransfigurationButtonModel {
   /** Persisted reconstruction payload passed back to the mutation. */
@@ -83,9 +75,6 @@ interface CardTravel {
 }
 
 const CARD_DISMISS_SCALE = 0;
-// The authored mobile card ceiling expressed as width so the card can fit both
-// its equal visual column and the live detail-row height without distortion.
-const MOBILE_DETAIL_CARD_MAX_WIDTH = 227;
 // Keeps the desktop detail compact once forge-form descriptions are carried
 // accessibly instead of occupying a second visible line in every option.
 const DESKTOP_DETAIL_PANEL_MAX_WIDTH_PX = 640;
@@ -104,6 +93,7 @@ export function TransfigurationSiteScreen({
     useState<TransfigurationType | null>(null);
   const [travel, setTravel] = useState<CardTravel | null>(null);
   const [confirming, setConfirming] = useState(false);
+  const layout = useIsDesktop() ? "desktop" : "mobile";
   const picked =
     view.candidates.find((candidate) => candidate.entryId === pickedEntryId) ??
     null;
@@ -184,22 +174,22 @@ export function TransfigurationSiteScreen({
   }, [confirming]);
 
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      desktopComposition={view.isEnhanced ? "split" : "showcase"}
-      mobileComposition="revelation"
-      mobileRegionSize={
-        view.candidates.some((candidate) => candidate.forms.length > 3)
-          ? "expanded"
-          : "standard"
-      }
-      screenTestId="cumulus-transfiguration-site-screen"
-      guideArtTestId="cumulus-transfiguration-guide-art"
-      speechAnchorTestId="cumulus-transfiguration-speech-anchor"
-      speechBubbleTestId="cumulus-transfiguration-speech-bubble"
-      renderGallery={(layout) => (
+    <div data-testid="cumulus-transfiguration-site-screen">
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{ ...view.guide, presence: "speaking" }}
+        composition={
+          view.candidates.some((candidate) => candidate.forms.length > 3)
+            ? view.isEnhanced
+              ? "balanced-expanded-revelation"
+              : "content-led-expanded-revelation"
+            : view.isEnhanced
+              ? "balanced-revelation"
+              : "content-led-revelation"
+        }
+      >
         <section
           data-transfiguration-workspace=""
           data-transfiguration-layout={layout}
@@ -255,31 +245,54 @@ export function TransfigurationSiteScreen({
           >
             {picked === null ? (
               <TransfigurationPickerPanel
-                layout={layout}
-                ready={view.ready}
-                isEnhanced={view.isEnhanced}
-                candidates={view.candidates}
-                onClose={onClose}
-                onPick={(entryId) => beginPick(entryId, layout)}
+                state={
+                  view.ready
+                    ? {
+                        kind: "ready",
+                        presentation: view.isEnhanced ? "open-deck" : "offer",
+                        cards: view.candidates.map((candidate) => ({
+                          entryId: candidate.entryId,
+                          card: candidate.model,
+                          availability: candidate.availability,
+                          reforgedType: candidate.reforgedType,
+                        })),
+                      }
+                    : { kind: "loading" }
+                }
+                onDismiss={onClose}
+                onCardPress={(entryId) => beginPick(entryId, layout)}
               />
             ) : (
               <TransfigurationDetailPanel
-                layout={layout}
-                candidate={picked}
-                selectedFormType={selectedFormType}
-                confirming={confirming}
-                alreadyAccepted={view.alreadyAccepted}
-                onBack={goBack}
-                onSelectForm={(type) =>
+                candidate={{
+                  entryId: picked.entryId,
+                  card: picked.model,
+                  forms: picked.forms,
+                }}
+                value={selectedFormType}
+                status={
+                  confirming
+                    ? "submitting"
+                    : view.alreadyAccepted
+                      ? "accepted"
+                      : "idle"
+                }
+                quote="show-cost"
+                navigation={{ kind: "reselectable", onBack: goBack }}
+                onChange={(type) =>
                   setSelectedFormType((current) =>
                     current === type ? null : type,
                   )
                 }
-                onConfirm={(form) => {
+                onConfirm={(type) => {
+                  const form = picked.forms.find(
+                    (candidateForm) => candidateForm.type === type,
+                  );
+                  if (form === undefined) return;
                   setConfirming(true);
                   onTransfigure(
                     picked.entryId,
-                    form.type,
+                    type,
                     resolve(form.presentation.description),
                     form.effectDetails,
                     form.essenceCost,
@@ -307,13 +320,16 @@ export function TransfigurationSiteScreen({
                 }}
               >
                 <TransfigurationDetailPanel
-                  layout={layout}
-                  candidate={fallbackCandidate}
-                  selectedFormType={null}
-                  confirming={false}
-                  alreadyAccepted={false}
-                  onBack={() => undefined}
-                  onSelectForm={() => undefined}
+                  candidate={{
+                    entryId: fallbackCandidate.entryId,
+                    card: fallbackCandidate.model,
+                    forms: fallbackCandidate.forms,
+                  }}
+                  value={null}
+                  status="idle"
+                  quote="show-cost"
+                  navigation={{ kind: "reselectable", onBack: () => undefined }}
+                  onChange={() => undefined}
                   onConfirm={() => undefined}
                 />
               </div>
@@ -348,314 +364,8 @@ export function TransfigurationSiteScreen({
             </motion.div>
           )}
         </section>
-      )}
-    />
-  );
-}
-
-export function TransfigurationPickerPanel({
-  layout,
-  ready,
-  isEnhanced,
-  candidates,
-  onClose,
-  onPick,
-}: {
-  readonly layout: "mobile" | "desktop";
-  readonly ready: boolean;
-  readonly isEnhanced: boolean;
-  readonly candidates: readonly TransfigurationCandidateView[];
-  readonly onClose: () => void;
-  readonly onPick: (entryId: string) => void;
-}) {
-  const enhanced = isEnhanced;
-  const subtitle = !ready
-    ? tx("Heating the forge…", "[transfiguration] [loading] Loading status while Transfiguration choices are prepared.")
-    : enhanced
-      ? tx("Pick any card to reforge", "[transfiguration] Instruction when any eligible card may be reforged.")
-      : tx("Choose a card to reforge", "[transfiguration] Instruction for choosing the offered card to reforge.");
-  const desktop = layout === "desktop";
-  return (
-    <CardPickerPanel
-      title={tx(
-          "Transfiguration",
-          "[transfiguration] Title of the card picker at a Transfiguration site.",
-        )}
-      subtitle={subtitle}
-      rightAccessory={
-        enhanced || !desktop
-          ? {
-              kind: "glassButton",
-              button: {
-                label: tx("Decline", "[ui] Compact action declining the current interaction without applying it."),
-                onPress: onClose,
-                testId: "cumulus-transfiguration-decline",
-              },
-            }
-          : undefined
-      }
-      footerActions={
-        desktop && !enhanced
-          ? [
-              {
-                label: tx("Decline Offer", "[ui] Action declining the current site offer and leaving without its reward."),
-                onPress: onClose,
-                testId: "cumulus-transfiguration-decline",
-              },
-            ]
-          : undefined
-      }
-      cards={candidates.map((candidate) => ({
-        entryId: candidate.entryId,
-        model: candidate.model,
-        testId: `cumulus-transfiguration-card-${candidate.entryId}`,
-        disabled: candidate.availability !== "available",
-        caption:
-          candidate.reforgedType === null
-            ? undefined
-            : {
-                kind: "text" as const,
-                message: txa(
-                  "{form} · Reforged",
-                  { form: candidate.reforgedType },
-                  "[transfiguration] Caption beneath a card that has already been reforged. form is its canonical Transfiguration form name and is one of the forms defined by game data.",
-                ),
-              },
-      }))}
-      emptyLabel={
-        ready
-          ? tx("No eligible cards to reforge.", "[transfiguration] Empty state when no card can be reforged.")
-          : tx("Heating the forge…", "[transfiguration] [loading] Loading status while Transfiguration choices are prepared.")
-      }
-      testId="cumulus-transfiguration-picker"
-      onCardPress={onPick}
-    />
-  );
-}
-
-export function TransfigurationDetailPanel({
-  layout,
-  candidate,
-  selectedFormType,
-  confirming,
-  alreadyAccepted,
-  showConfirmEssenceCost = true,
-  onBack,
-  onSelectForm,
-  onConfirm,
-}: {
-  readonly layout: "mobile" | "desktop";
-  readonly candidate: TransfigurationCandidateView;
-  readonly selectedFormType: TransfigurationType | null;
-  readonly confirming: boolean;
-  readonly alreadyAccepted: boolean;
-  /** Whether the confirmation action shows the selected form's quoted cost. */
-  readonly showConfirmEssenceCost?: boolean;
-  readonly onBack?: () => void;
-  readonly onSelectForm: (type: TransfigurationType) => void;
-  readonly onConfirm: (form: TransfigurationFormView) => void;
-}) {
-  const resolve = useLocalizer();
-  const mobile = layout === "mobile";
-  const activeForm =
-    candidate.forms.find((form) => form.type === selectedFormType) ?? null;
-  const disabled =
-    activeForm === null ||
-    !activeForm.affordable ||
-    confirming ||
-    alreadyAccepted;
-
-  return (
-    <section
-      data-testid="cumulus-transfiguration-detail"
-      data-transfiguration-detail-layout={layout}
-      style={{
-        width: mobile ? `calc(100vw - (${token("--space-s")} * 2))` : "100%",
-        height: mobile ? "auto" : undefined,
-        minHeight: mobile ? "100%" : undefined,
-        maxHeight: mobile ? undefined : "100%",
-        boxSizing: "border-box",
-        overflow: "hidden",
-        display: mobile ? "flex" : undefined,
-        flexDirection: mobile ? "column" : undefined,
-        justifySelf: mobile ? "center" : undefined,
-      }}
-    >
-      <GlassPanel
-        title={tx(
-            "Choose Its New Form",
-            "[transfiguration] Title above the form choices for the currently selected card. \"Its\" refers to that card and avoids assuming grammatical gender for its display name.",
-          )}
-        headerSpacing={mobile ? "compact" : "medium"}
-        footer={
-          <div
-            data-transfiguration-actions=""
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: mobile ? "center" : "flex-end",
-              gap: token("--space-s"),
-              paddingRight: mobile ? token("--space-s") : token("--space-2xl"),
-              paddingBottom: mobile ? token("--space-s") : token("--space-l"),
-              paddingLeft: mobile ? token("--space-s") : token("--space-2xl"),
-            }}
-          >
-            {onBack !== undefined && (
-              <GlassButton
-                placement="onGlass"
-                label={tx(
-                  meaning("transfiguration-reselect-action", "Choose Again"),
-                  "[transfiguration] Visible command that returns to the Transfiguration card picker.",
-                )}
-                disabled={confirming}
-                onPress={onBack}
-                testId="cumulus-transfiguration-choose-again"
-              />
-            )}
-            <GlassButton
-              placement="onGlass"
-              variant="accent"
-              label={
-                confirming
-                  ? tx("Reforging…", "[transfiguration] Pending status while a Transfiguration is being saved.")
-                  : tx(meaning("transfiguration-commit-action", "Transfigure"), "[transfiguration] Command that commits the selected Transfiguration form.")
-              }
-              essenceCost={
-                showConfirmEssenceCost
-                  ? (activeForm?.essenceCost ?? null)
-                  : null
-              }
-              widthReservations={
-                showConfirmEssenceCost
-                  ? [
-                      {
-                        label: tx(meaning("transfiguration-commit-action", "Transfigure"), "[transfiguration] Command that commits the selected Transfiguration form."),
-                        essenceCost: null,
-                      },
-                      ...candidate.forms.flatMap((form) => [
-                        {
-                          label: tx(meaning("transfiguration-commit-action", "Transfigure"), "[transfiguration] Command that commits the selected Transfiguration form."),
-                          essenceCost: form.essenceCost,
-                        },
-                        {
-                          label: tx("Reforging…", "[transfiguration] Pending status while a Transfiguration is being saved."),
-                          essenceCost: form.essenceCost,
-                        },
-                      ]),
-                    ]
-                  : [
-                      {
-                        label: tx(meaning("transfiguration-commit-action", "Transfigure"), "[transfiguration] Command that commits the selected Transfiguration form."),
-                        essenceCost: null,
-                      },
-                      {
-                        label: tx("Reforging…", "[transfiguration] Pending status while a Transfiguration is being saved."),
-                        essenceCost: null,
-                      },
-                    ]
-              }
-              disabled={disabled}
-              onPress={() => {
-                if (activeForm !== null) onConfirm(activeForm);
-              }}
-              testId="cumulus-transfiguration-confirm"
-            />
-          </div>
-        }
-      >
-        <div
-          data-transfiguration-detail-body=""
-          data-transfiguration-detail-body-layout={
-            mobile ? "side-by-side" : "desktop-columns"
-          }
-          style={{
-            display: "grid",
-            containerType: mobile ? "inline-size" : undefined,
-            flex: mobile ? "1 0 auto" : undefined,
-            minHeight: mobile ? "auto" : undefined,
-            gridTemplateColumns: mobile
-              ? "minmax(0, 1fr) minmax(0, 1fr)"
-              : "minmax(220px, 278px) minmax(240px, 288px)",
-            gridTemplateRows: mobile ? "auto" : undefined,
-            gap: mobile ? token("--space-s") : token("--space-2xl"),
-            alignItems: mobile ? "stretch" : "start",
-            padding: mobile
-              ? `${token("--space-l")} ${token("--space-s")}`
-              : token("--space-2xl"),
-          }}
-        >
-          <div
-            style={{
-              width: mobile
-                ? `min(100%, ${String(MOBILE_DETAIL_CARD_MAX_WIDTH)}px)`
-                : "min(100%, 278px)",
-              height: mobile ? "auto" : undefined,
-              aspectRatio: mobile ? String(CARD_ASPECT_RATIO_VALUE) : undefined,
-              justifySelf: "center",
-              alignSelf: mobile ? "start" : undefined,
-              minHeight: 0,
-            }}
-            data-transfiguration-detail-card-target=""
-          >
-            <GameCard
-              model={activeForm?.previewModel ?? candidate.model}
-              selection={activeForm === null ? undefined : "transfigured"}
-            />
-          </div>
-
-          <div
-            style={{
-              minWidth: 0,
-              minHeight: mobile ? 0 : undefined,
-              width: mobile ? "100%" : undefined,
-              flex: mobile ? "0 0 auto" : undefined,
-              display: "flex",
-              flexDirection: "column",
-              gap: mobile ? token("--space-xs") : token("--space-s"),
-            }}
-          >
-            <div
-              role="radiogroup"
-              aria-label={resolve(tx(
-                "Transfiguration options",
-                "[accessibility] [transfiguration] Options name.",
-              ))}
-              data-transfiguration-options=""
-              data-transfiguration-option-layout={mobile ? "compact" : "priced"}
-              style={{
-                display: "flex",
-                minHeight: mobile ? 0 : undefined,
-                height: mobile ? "auto" : undefined,
-                boxSizing: "border-box",
-                flexDirection: "column",
-                alignItems: mobile ? "stretch" : undefined,
-                justifyContent: mobile ? "flex-start" : undefined,
-                gap: token("--space-xs"),
-                maxHeight: mobile ? undefined : "min(52vh, 520px)",
-                overflowY: mobile ? "visible" : "auto",
-                padding: token("--space-xs"),
-                paddingBlockStart: mobile ? token("--space-xs") : 0,
-              }}
-            >
-              {candidate.forms.map((form) => {
-                const selected = form.type === activeForm?.type;
-                return (
-                  <TransfigurationButton
-                    key={form.type}
-                    form={form}
-                    variant={mobile ? "compact" : "priced"}
-                    selected={selected}
-                    disabled={confirming}
-                    onPress={onSelectForm}
-                    testId={`cumulus-transfiguration-form-${form.type}`}
-                  />
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </GlassPanel>
-    </section>
+      </SiteLayout>
+    </div>
   );
 }
 

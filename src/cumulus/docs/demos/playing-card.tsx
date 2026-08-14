@@ -2,11 +2,7 @@ import { PlayingCard } from "../../components/card/PlayingCard";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
 
-function PlayingCardDemo({
-  revealed = false,
-}: {
-  revealed?: boolean;
-}) {
+function PlayingCardDemo({ revealed = false }: { revealed?: boolean }) {
   return (
     <div
       style={{

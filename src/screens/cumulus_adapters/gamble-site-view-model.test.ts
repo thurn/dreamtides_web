@@ -262,9 +262,9 @@ describe("gamble-site-view-model", () => {
       pendingDreamsignReplacement: true,
     });
     expect(view.replacement).toMatchObject({
-      pendingDreamsign: { id: "fixture-sign" },
-      currentDreamsigns: [{ id: "held-sign" }],
-      maxDreamsigns: 1,
+      incoming: { id: "fixture-sign" },
+      held: [{ id: "held-sign" }],
+      capacity: 1,
     });
     expect(view.canPlayAgain).toBe(false);
   });

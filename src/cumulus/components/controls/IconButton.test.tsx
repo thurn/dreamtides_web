@@ -30,7 +30,7 @@ beforeEach(() => {
   ).IS_REACT_ACT_ENVIRONMENT = true;
   // Pressable's usePrefersReducedMotion reads window.matchMedia; jsdom lacks it.
   if (typeof window.matchMedia !== "function") {
-    window.matchMedia = ((query: string) => ({
+    window.matchMedia = (query: string) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -39,7 +39,7 @@ beforeEach(() => {
       addListener: () => {},
       removeListener: () => {},
       dispatchEvent: () => false,
-    }));
+    });
   }
 });
 
@@ -50,7 +50,11 @@ afterEach(() => {
 describe("IconButton", () => {
   it("renders an accessible button labelled by `label`, carrying the glyph class", () => {
     const { container, root } = mount(
-      <IconButton glyph={GLYPHS.close} label={assertLocalized("Close deck")} onPress={() => {}} />,
+      <IconButton
+        glyph={GLYPHS.close}
+        label={assertLocalized("Close deck")}
+        onPress={() => {}}
+      />,
     );
 
     const button = container.querySelector("button");
@@ -129,7 +133,11 @@ describe("IconButton", () => {
 
   it("defaults to the `md` size", () => {
     const { container, root } = mount(
-      <IconButton glyph={GLYPHS.close} label={assertLocalized("Close")} onPress={() => {}} />,
+      <IconButton
+        glyph={GLYPHS.close}
+        label={assertLocalized("Close")}
+        onPress={() => {}}
+      />,
     );
 
     const style =
@@ -165,7 +173,11 @@ describe("IconButton", () => {
   it("fires `onPress` on click", () => {
     const onPress = vi.fn();
     const { container, root } = mount(
-      <IconButton glyph={GLYPHS.close} label={assertLocalized("Close")} onPress={onPress} />,
+      <IconButton
+        glyph={GLYPHS.close}
+        label={assertLocalized("Close")}
+        onPress={onPress}
+      />,
     );
 
     act(() => {

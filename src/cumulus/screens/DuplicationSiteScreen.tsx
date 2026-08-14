@@ -6,12 +6,10 @@ import type { GameCardModel } from "../components/card/CardView";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import type { ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
-import {
-  GuideGallerySiteLayout,
-  type GuideGalleryGuideView,
-} from "./GuideGallerySiteLayout";
+import { SiteLayout, type SiteLayoutGuide } from "../components/layout/SiteLayout";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 
-export type DuplicationGuideView = GuideGalleryGuideView;
+export type DuplicationGuideView = Omit<SiteLayoutGuide, "presence">;
 
 export interface DuplicationCardView {
   /** Concrete deck-entry id; duplicate catalog cards remain independent choices. */
@@ -53,6 +51,9 @@ export function DuplicationSiteScreen({
 }: DuplicationSiteScreenProps) {
   const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
   const [confirming, setConfirming] = useState(false);
+  const layout = useIsDesktop() ? "desktop" : "mobile";
+  const desktop = layout === "desktop";
+  const columnCount = view.isEnhanced ? (desktop ? 5 : 4) : 3;
   const locked = confirming || view.alreadyAccepted;
 
   const toggleSelection = useCallback(
@@ -70,19 +71,14 @@ export function DuplicationSiteScreen({
   }, [locked, onDuplicate, selectedEntryId]);
 
   return (
-    <GuideGallerySiteLayout
+    <div data-testid="cumulus-duplication-site-screen">
+    <SiteLayout
       siteId={view.siteId}
       scene={view.scene}
-      guide={view.guide}
-      desktopComposition={view.isEnhanced ? "split" : "showcase"}
-      screenTestId="cumulus-duplication-site-screen"
-      guideArtTestId="cumulus-duplication-guide-art"
-      speechAnchorTestId="cumulus-duplication-speech-anchor"
-      speechBubbleTestId="cumulus-duplication-speech-bubble"
-      renderGallery={(layout) => {
-        const desktop = layout === "desktop";
-        const columnCount = view.isEnhanced ? (desktop ? 5 : 4) : 3;
-        return (
+      atmosphere="warm"
+      guide={{ ...view.guide, presence: "speaking" }}
+      composition={view.isEnhanced ? "balanced-gallery" : "content-led-gallery"}
+    >
           <section
             data-duplication-card-grid=""
             data-duplication-layout={layout}
@@ -156,8 +152,7 @@ export function DuplicationSiteScreen({
               onCardPress={toggleSelection}
             />
           </section>
-        );
-      }}
-    />
+    </SiteLayout>
+    </div>
   );
 }

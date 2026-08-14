@@ -54,7 +54,11 @@ function Section({
   return (
     <section
       id={id}
-      style={{ display: "flex", flexDirection: "column", gap: token("--space-l") }}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-l"),
+      }}
     >
       <h2 style={sectionHeadingStyle}>{title}</h2>
       {children}
@@ -295,7 +299,9 @@ function RoutePolicyTable() {
         borderRadius: token("--radius-control"),
       }}
     >
-      <table style={{ width: "100%", minWidth: 760, borderCollapse: "collapse" }}>
+      <table
+        style={{ width: "100%", minWidth: 760, borderCollapse: "collapse" }}
+      >
         <thead>
           <tr>
             <th style={headerStyle}>Route</th>
@@ -345,7 +351,10 @@ export function JourneyScreenHostChromeDocs() {
         <Flow />
       </Section>
 
-      <Section id="journey-screen-host-responsibility" title="Responsibility Boundary">
+      <Section
+        id="journey-screen-host-responsibility"
+        title="Responsibility Boundary"
+      >
         <Responsibilities />
       </Section>
 
@@ -379,15 +388,15 @@ export function JourneyScreenHostChromeDocs() {
             state takes precedence while it is active.
           </li>
           <li>
-            CoopPresenceStatus receives the presence-derived client count and
-            an explicit visibility decision. A null count reports connection in
+            CoopPresenceStatus receives the presence-derived client count and an
+            explicit visibility decision. A null count reports connection in
             progress. Presence is informational, pointer-transparent chrome.
           </li>
           <li>
             JourneyStatusBar is built from the current journey state. Journey
-            routes use the complete inventory in grand desktop or compact
-            mobile form. Playable battle exposes only the desktop partial HUD
-            defined by the battle variant.
+            routes use the complete inventory in grand desktop or compact mobile
+            form. Playable battle exposes only the desktop partial HUD defined
+            by the battle variant.
           </li>
           <li>
             The utility CommandMenu appears for journey chrome once a
@@ -398,7 +407,10 @@ export function JourneyScreenHostChromeDocs() {
         </ContractList>
       </Section>
 
-      <Section id="journey-screen-host-presence" title="Route Presence And Input">
+      <Section
+        id="journey-screen-host-presence"
+        title="Route Presence And Input"
+      >
         <div style={surfaceStyle}>
           <p style={{ ...bodyStyle, maxWidth: undefined }}>
             AnimatePresence retains an outgoing route long enough to fade it,
@@ -414,8 +426,8 @@ export function JourneyScreenHostChromeDocs() {
       <Section id="journey-screen-host-errors" title="Error Containment">
         <ContractList>
           <li>
-            The app-shell boundary contains failures across ScreenRouter and
-            the retained app overlays, preserving a visible emergency fallback.
+            The app-shell boundary contains failures across ScreenRouter and the
+            retained app overlays, preserving a visible emergency fallback.
           </li>
           <li>
             Each route composition receives a
@@ -458,8 +470,9 @@ export function JourneyScreenHostChromeDocs() {
               models and screen render trees.
             </li>
             <li>
-              Register a non-site adapter in <span style={codeStyle}>screenFor</span>,
-              or give every new SiteType an explicit
+              Register a non-site adapter in{" "}
+              <span style={codeStyle}>screenFor</span>, or give every new
+              SiteType an explicit
               <span style={codeStyle}> siteDispositionFor</span> branch.
             </li>
             <li>
@@ -477,23 +490,34 @@ export function JourneyScreenHostChromeDocs() {
       </Section>
 
       <Section id="journey-screen-host-related" title="Related References">
-        <div style={{ display: "flex", gap: token("--space-s"), flexWrap: "wrap" }}>
+        <div
+          style={{ display: "flex", gap: token("--space-s"), flexWrap: "wrap" }}
+        >
           <a
             data-system-related-component="journey-status-bar"
             href="#/journey-status-bar"
-            style={{ color: token("--accent-bright"), font: token("--t-body-sm") }}
+            style={{
+              color: token("--accent-bright"),
+              font: token("--t-body-sm"),
+            }}
           >
             Journey Status Bar →
           </a>
           <a
             href="#/command-menu"
-            style={{ color: token("--accent-bright"), font: token("--t-body-sm") }}
+            style={{
+              color: token("--accent-bright"),
+              font: token("--t-body-sm"),
+            }}
           >
             Command Menu →
           </a>
           <a
             href="#/coop-presence-status"
-            style={{ color: token("--accent-bright"), font: token("--t-body-sm") }}
+            style={{
+              color: token("--accent-bright"),
+              font: token("--t-body-sm"),
+            }}
           >
             Coop Presence Status →
           </a>

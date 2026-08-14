@@ -21,7 +21,7 @@ import {
   buildLoadingCalloutLeaderLine,
   type LoadingCalloutLeaderLine,
 } from "./loading-callout-geometry";
-import { useIsDesktop } from "./use-is-desktop";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import { tx } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 

@@ -1165,7 +1165,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     });
 
     const choiceButton = container.querySelector(
-      '[data-testid="cumulus-exploration-choice-0"]',
+      '[data-testid="cumulus-exploration-choice-0"] [data-exploration-action-id]',
     );
     if (!(choiceButton instanceof HTMLButtonElement)) {
       throw new Error("expected an Exploration choice button");

@@ -9,7 +9,7 @@ import type { CardData } from "../../types/cards";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
 import { artRef } from "../primitives/art";
 import { CumulusRoot } from "../CumulusRoot";
-import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
+import { MENU_EDGE_INSET_MOBILE_PX } from "../primitives/chrome-geometry";
 import { BattleStartScreen, type BattleStartView } from "./BattleStartScreen";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
 

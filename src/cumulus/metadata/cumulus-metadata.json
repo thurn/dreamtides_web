@@ -135,6 +135,80 @@
       "description": "Enter the node's dreamscape. Available nodes invoke this with their UUID."
     }
   ],
+  "BattleForeseeEditor": [
+    {
+      "name": "model",
+      "tsType": "BattleForeseeEditorModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The exact cards inspected by the effect.",
+      "nested": {
+        "name": "BattleForeseeEditorModel",
+        "fields": [
+          {
+            "name": "initialCount",
+            "tsType": "number",
+            "optional": false,
+            "description": "Number of cards shown when the modal opens."
+          },
+          {
+            "name": "cards",
+            "tsType": "readonly BattleForeseeEditorCard[]",
+            "optional": false,
+            "description": "Available cards in their original top-to-bottom deck order."
+          },
+          {
+            "name": "allowedCounts",
+            "tsType": "readonly number[]",
+            "optional": false,
+            "description": "Closed ordered set of card counts the player may stage."
+          },
+          {
+            "name": "source",
+            "tsType": "DreamwellCardModel",
+            "optional": true,
+            "description": "Dreamwell card whose effect opened this authoritative prompt."
+          }
+        ]
+      }
+    },
+    {
+      "name": "onConfirm",
+      "tsType": "(resolution: BattleForeseeResult) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Commits one complete order/void resolution."
+    }
+  ],
+  "BattlePhaseIndicator": [
+    {
+      "name": "phase",
+      "tsType": "\"dawn\" | \"day\" | \"dusk\" | \"night\" | \"challenge\"",
+      "unionMembers": [
+        "dawn",
+        "day",
+        "dusk",
+        "night",
+        "challenge"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Controlled visible phase."
+    },
+    {
+      "name": "side",
+      "tsType": "\"near\" | \"far\"",
+      "unionMembers": [
+        "near",
+        "far"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Status-edge orientation from the viewer's perspective."
+    }
+  ],
   "BattleStatusDisplay": [
     {
       "name": "owner",
@@ -236,6 +310,100 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional stable test id for the complete status card."
+    }
+  ],
+  "BattlefieldCard": [
+    {
+      "name": "model",
+      "tsType": "BattlefieldCardModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Complete prepared battle-instance presentation.",
+      "nested": {
+        "name": "BattlefieldCardModel",
+        "fields": [
+          {
+            "name": "battleCardId",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable battle-instance identity used by every interaction callback."
+          },
+          {
+            "name": "card",
+            "tsType": "GameCardModel",
+            "optional": false,
+            "description": "Complete resolved game-card presentation."
+          },
+          {
+            "name": "exhausted",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Whether the battle instance is exhausted."
+          },
+          {
+            "name": "storedMemory",
+            "tsType": "number",
+            "optional": false,
+            "description": "Prepared stored-memory count shown on the card."
+          },
+          {
+            "name": "figment",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Whether to use the canonical Figment treatment."
+          },
+          {
+            "name": "selection",
+            "tsType": "GameCardSelection",
+            "optional": true,
+            "description": "Optional semantic selection treatment prepared by the board."
+          },
+          {
+            "name": "challengeMarker",
+            "tsType": "{ readonly owner: \"player\" | \"enemy\"; readonly side: \"near\" | \"far\"; }",
+            "optional": true,
+            "description": "Optional challenge ownership and viewer-relative orientation."
+          },
+          {
+            "name": "scoreAnnouncement",
+            "tsType": "{ readonly points: number; readonly presentationId: string; }",
+            "optional": true,
+            "description": "Optional score announcement attached to this battle instance."
+          },
+          {
+            "name": "motion",
+            "tsType": "\"snap\" | \"travel\"",
+            "optional": false,
+            "description": "Named layout-motion behavior for board travel."
+          },
+          {
+            "name": "presentation",
+            "tsType": "\"battlefield\" | \"full\"",
+            "optional": false,
+            "description": "Canonical compact battlefield or complete-card presentation."
+          }
+        ]
+      }
+    },
+    {
+      "name": "interaction",
+      "tsType": "BattlefieldCardInteraction",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Closed interaction behavior prepared by the board.",
+      "nested": {
+        "name": "BattlefieldCardInteraction",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"passive\" | \"pressable\" | \"draggable\"",
+            "optional": false,
+            "description": "Readable card with no board action.\nKeyboard- and pointer-pressable card.\nPointer-draggable card with optional quick-press behavior."
+          }
+        ]
+      }
     }
   ],
   "CardBack": [
@@ -432,6 +600,56 @@
       "required": false,
       "defaultValue": null,
       "description": "Test id for the panel root."
+    }
+  ],
+  "CardChangePair": [
+    {
+      "name": "model",
+      "tsType": "CardChangePairModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Complete resolved change to display.",
+      "nested": {
+        "name": "CardChangePairModel",
+        "fields": [
+          {
+            "name": "changeId",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable identity for this resolved change presentation."
+          },
+          {
+            "name": "kind",
+            "tsType": "CardChangeKind",
+            "optional": false,
+            "description": "Semantic visual and accessibility recipe."
+          },
+          {
+            "name": "before",
+            "tsType": "{ readonly entryId: string; readonly card: GameCardModel; }",
+            "optional": false,
+            "description": "Original deck entry and its complete card presentation."
+          },
+          {
+            "name": "after",
+            "tsType": "{ readonly entryId: string; readonly card: GameCardModel; }",
+            "optional": false,
+            "description": "Result deck entry and its complete card presentation."
+          }
+        ]
+      }
+    },
+    {
+      "name": "reveal",
+      "tsType": "\"before\" | \"complete\"",
+      "unionMembers": [
+        "before",
+        "complete"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Controlled choreography phase for concealing or revealing the result."
     }
   ],
   "CardChoiceGrid": [
@@ -1794,6 +2012,67 @@
       "description": "Stable test id for the panel root."
     }
   ],
+  "DreamsignReplacementDialog": [
+    {
+      "name": "model",
+      "tsType": "DreamsignReplacementModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Complete resolved replacement presentation.",
+      "nested": {
+        "name": "DreamsignReplacementModel",
+        "fields": [
+          {
+            "name": "incoming",
+            "tsType": "LocalizedDreamsign",
+            "optional": false,
+            "description": "The newly acquired Dreamsign awaiting capacity resolution."
+          },
+          {
+            "name": "held",
+            "tsType": "readonly LocalizedDreamsign[]",
+            "optional": false,
+            "description": "Held Dreamsigns, each resolved by UUID."
+          },
+          {
+            "name": "capacity",
+            "tsType": "number",
+            "optional": false,
+            "description": "Prepared maximum held-Dreamsign count."
+          },
+          {
+            "name": "dismissLabel",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Label for the non-destructive dismissal action."
+          },
+          {
+            "name": "closeLabel",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Accessible label for the dialog close control."
+          }
+        ]
+      }
+    },
+    {
+      "name": "onDreamsignPress",
+      "tsType": "(dreamsignId: string) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Reports the exact held Dreamsign UUID selected for replacement."
+    },
+    {
+      "name": "onDismiss",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Dismisses the replacement workflow without selecting a held Dreamsign."
+    }
+  ],
   "DreamwellCard": [
     {
       "name": "model",
@@ -2032,6 +2311,65 @@
           }
         ]
       }
+    }
+  ],
+  "ExplorationChoice": [
+    {
+      "name": "model",
+      "tsType": "ExplorationChoiceModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Complete prepared action presentation.",
+      "nested": {
+        "name": "ExplorationChoiceModel",
+        "fields": [
+          {
+            "name": "actionId",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable authored action UUID emitted by activation."
+          },
+          {
+            "name": "label",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Localized primary action label."
+          },
+          {
+            "name": "description",
+            "tsType": "readonly ExplorationChoicePart[]",
+            "optional": false,
+            "description": "Ordered authored description parts prepared by the builder."
+          },
+          {
+            "name": "disclosure",
+            "tsType": "LocalizedString",
+            "optional": true,
+            "description": "Optional complete localized disclosure appended to the description."
+          },
+          {
+            "name": "availability",
+            "tsType": "\"available\" | \"unavailable\"",
+            "optional": false,
+            "description": "Prepared activation availability; unavailable choices remain readable."
+          },
+          {
+            "name": "preview",
+            "tsType": "ExplorationChoiceEntity",
+            "optional": true,
+            "description": "Optional entity revealed by holding or focusing the complete choice."
+          }
+        ]
+      }
+    },
+    {
+      "name": "onPress",
+      "tsType": "(actionId: string) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Reports the exact authored action UUID after activation."
     }
   ],
   "GalleryActionCard": [
@@ -3997,6 +4335,102 @@
       "description": "Text shown when `value` does not match an option, for action-picker controls."
     }
   ],
+  "SiteLayout": [
+    {
+      "name": "siteId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Stable site identity exposed for diagnostics."
+    },
+    {
+      "name": "scene",
+      "tsType": "ArtRef | null",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Resolved scene art, or null for the canonical atmospheric fallback."
+    },
+    {
+      "name": "atmosphere",
+      "tsType": "\"warm\" | \"violet\"",
+      "unionMembers": [
+        "warm",
+        "violet"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Named atmospheric treatment for the routed site stage."
+    },
+    {
+      "name": "guide",
+      "tsType": "SiteLayoutGuide",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Resolved resident-guide presentation.",
+      "nested": {
+        "name": "SiteLayoutGuide",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable Dream Guide identity."
+          },
+          {
+            "name": "name",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Localized guide name used by visible and accessible presentation."
+          },
+          {
+            "name": "line",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Localized line spoken by the guide when present."
+          },
+          {
+            "name": "art",
+            "tsType": "ArtRef",
+            "optional": false,
+            "description": "Transparent resident-guide artwork."
+          },
+          {
+            "name": "presence",
+            "tsType": "\"speaking\" | \"portrait-only\"",
+            "optional": false,
+            "description": "Whether the guide speaks or appears as a portrait without dialogue."
+          }
+        ]
+      }
+    },
+    {
+      "name": "composition",
+      "tsType": "SiteLayoutComposition",
+      "unionMembers": [
+        "balanced-gallery",
+        "content-led-gallery",
+        "balanced-dialogue",
+        "balanced-revelation",
+        "content-led-revelation",
+        "balanced-expanded-revelation",
+        "content-led-expanded-revelation"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Named recipe that owns desktop, intermediate, and narrow composition."
+    },
+    {
+      "name": "children",
+      "tsType": "ReactElement<unknown, string | JSXElementConstructor<any>>",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The one screen-specific site body mounted in the layout's content region."
+    }
+  ],
   "SiteNode": [
     {
       "name": "model",
@@ -4496,6 +4930,152 @@
       "description": "Optional stable test id for the semantic source."
     }
   ],
+  "TransfigurationDetailPanel": [
+    {
+      "name": "candidate",
+      "tsType": "TransfigurationDetailCandidate",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Complete selected-card presentation with prepared form quotes.",
+      "nested": {
+        "name": "TransfigurationDetailCandidate",
+        "fields": [
+          {
+            "name": "entryId",
+            "tsType": "string",
+            "optional": false,
+            "description": "Stable deck-entry identity retained by the hosting workflow."
+          },
+          {
+            "name": "card",
+            "tsType": "GameCardModel",
+            "optional": false,
+            "description": "Complete current card presentation."
+          },
+          {
+            "name": "forms",
+            "tsType": "readonly TransfigurationDetailForm[]",
+            "optional": false,
+            "description": "Prepared form quotes in display order."
+          }
+        ]
+      }
+    },
+    {
+      "name": "value",
+      "tsType": "TransfigurationType | null",
+      "unionMembers": [
+        "Empowered",
+        "Amplified",
+        "Kindled",
+        "Inspired",
+        "Enduring",
+        "Hastened",
+        "Resonant",
+        "Attuned",
+        "Perfected"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Controlled selected form, or null before selection."
+    },
+    {
+      "name": "status",
+      "tsType": "\"idle\" | \"submitting\" | \"accepted\"",
+      "unionMembers": [
+        "idle",
+        "submitting",
+        "accepted"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Authoritative commit presentation state."
+    },
+    {
+      "name": "quote",
+      "tsType": "\"show-cost\" | \"included\"",
+      "unionMembers": [
+        "show-cost",
+        "included"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Whether the commit action shows a quoted Essence cost."
+    },
+    {
+      "name": "navigation",
+      "tsType": "TransfigurationDetailNavigation",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Closed navigation behavior for the hosting workflow.",
+      "nested": {
+        "name": "TransfigurationDetailNavigation",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"fixed\" | \"reselectable\"",
+            "optional": false,
+            "description": "The hosting workflow fixes the selected card.\nThe hosting workflow allows returning to card selection."
+          }
+        ]
+      }
+    },
+    {
+      "name": "onChange",
+      "tsType": "(type: TransfigurationType) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Reports a controlled form selection by canonical form type."
+    },
+    {
+      "name": "onConfirm",
+      "tsType": "(type: TransfigurationType) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Commits the selected canonical form type."
+    }
+  ],
+  "TransfigurationPickerPanel": [
+    {
+      "name": "state",
+      "tsType": "TransfigurationPickerState",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Complete preparation state rendered by the picker.",
+      "nested": {
+        "name": "TransfigurationPickerState",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"loading\" | \"ready\"",
+            "optional": false,
+            "description": "Choices are still being prepared.\nPrepared choices are ready to display."
+          }
+        ]
+      }
+    },
+    {
+      "name": "onCardPress",
+      "tsType": "(entryId: string) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Reports the exact selected deck-entry identity."
+    },
+    {
+      "name": "onDismiss",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Declines or closes the picker without selecting a card."
+    }
+  ],
   "TransientStatusToast": [
     {
       "name": "copy",
@@ -4552,6 +5132,101 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional stable test id for product-screen QA."
+    }
+  ],
+  "TutorialPlacementProvider": [],
+  "ViewportTutorialDialogue": [
+    {
+      "name": "presentationId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Stable identity for this dialogue presentation."
+    },
+    {
+      "name": "dialogue",
+      "tsType": "CharacterDialogueModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Complete visible CharacterDialogue presentation.",
+      "nested": {
+        "name": "CharacterDialogueModel",
+        "fields": [
+          {
+            "name": "portrait",
+            "tsType": "CharacterDialoguePortraitArt",
+            "optional": false,
+            "description": "Typed portrait art shown inside the circular frame."
+          },
+          {
+            "name": "portraitAlt",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Accessible description of the portrait art."
+          },
+          {
+            "name": "speakerName",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Character name shown by the speech bubble."
+          },
+          {
+            "name": "text",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Spoken line shown with tutorial highlights and canonical inline rules glyphs."
+          }
+        ]
+      }
+    },
+    {
+      "name": "context",
+      "tsType": "\"site\" | \"card\" | \"battle\"",
+      "unionMembers": [
+        "site",
+        "card",
+        "battle"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Semantic host context used for presentation and diagnostics."
+    },
+    {
+      "name": "placement",
+      "tsType": "TutorialDialoguePlacement",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Named placement preference resolved through registered geometry.",
+      "nested": {
+        "name": "TutorialDialoguePlacement",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"floating\" | \"anchored\"",
+            "optional": false,
+            "description": "Places dialogue in measured free viewport space.\nPrefers placement above one registered semantic anchor."
+          }
+        ]
+      }
+    },
+    {
+      "name": "visible",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Whether dialogue is visible and announced through aria-live."
+    },
+    {
+      "name": "diagnostics",
+      "tsType": "{ readonly triggerId?: string | undefined; readonly messageIndex?: number | undefined; }",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional tutorial-state diagnostics retained on semantic attributes."
     }
   ],
   "WagerPrizeCard": [

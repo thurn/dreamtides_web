@@ -5,7 +5,10 @@
 // `.dream-atlas` svg. `docName` points at AtlasEdge so the props table reports
 // its real API.
 
-import { AtlasEdge, type AtlasEdgeKind } from "../../components/atlas/AtlasEdge";
+import {
+  AtlasEdge,
+  type AtlasEdgeKind,
+} from "../../components/atlas/AtlasEdge";
 import type { CumulusComponent } from "../registry";
 
 const KINDS: Array<{ kind: AtlasEdgeKind; label: string }> = [
@@ -46,7 +49,13 @@ function AtlasEdgeDemo() {
                 userSpaceOnUse gradient paints the sweep at any orientation, so a
                 same-row route no longer vanishes the way a shared
                 objectBoundingBox gradient would. */}
-            <AtlasEdge kind={kind} x1={140} y1={rowY(i)} x2={452} y2={rowY(i)} />
+            <AtlasEdge
+              kind={kind}
+              x1={140}
+              y1={rowY(i)}
+              x2={452}
+              y2={rowY(i)}
+            />
           </g>
         ))}
       </svg>

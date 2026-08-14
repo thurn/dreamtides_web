@@ -15,8 +15,7 @@ import type { HTMLAttributes, ReactNode } from "react";
  * Props for the docgen fixture. Extends a node_modules DOM type so the test can
  * confirm the generator's propFilter excludes inherited DOM props.
  */
-export interface DocgenFixtureProps
-  extends HTMLAttributes<HTMLDivElement> {
+export interface DocgenFixtureProps extends HTMLAttributes<HTMLDivElement> {
   /** Whether the fixture renders in its active state. */
   active: boolean;
   /** The size of the fixture. */

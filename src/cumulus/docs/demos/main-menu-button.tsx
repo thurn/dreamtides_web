@@ -5,7 +5,10 @@ import type { CumulusComponent } from "../registry";
 function MainMenuButtonDemo() {
   return (
     <div style={{ width: 280 }}>
-      <MainMenuButton label={assertLocalized("New Journey")} onPress={() => {}} />
+      <MainMenuButton
+        label={assertLocalized("New Journey")}
+        onPress={() => {}}
+      />
     </div>
   );
 }

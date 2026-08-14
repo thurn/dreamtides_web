@@ -66,8 +66,7 @@ function CardChoiceGridDemo({
             cards={cards.map((card, index) => ({
               entryId: card.id,
               model: { cardId: card.id, displaySnapshot: card },
-              selection:
-                selected === card.id ? "highlighted" : undefined,
+              selection: selected === card.id ? "highlighted" : undefined,
               operation:
                 selected === card.id ? DEMO_OPERATIONS[index] : undefined,
             }))}

@@ -3,18 +3,17 @@ import { motion, useReducedMotion } from "framer-motion";
 import {
   useCallback,
   useState,
-  type CSSProperties,
   type ReactNode,
 } from "react";
 import type { GameCardModel } from "../components/card/CardView";
 import { GameCard } from "../components/card/CardView";
+import { CardChangePair } from "../components/card/CardChangePair";
 import {
   CardChoiceGrid,
   type CardChoiceGridColumns,
   type CardChoiceGridSiteFit,
 } from "../components/card/CardChoiceGrid";
 import { GlassButton } from "../components/controls/GlassButton";
-import { StandaloneGlyph } from "../components/controls/StandaloneGlyph";
 import { IconButton } from "../components/controls/IconButton";
 import type { OfferTileModel } from "../components/controls/OfferTile";
 import {
@@ -38,13 +37,13 @@ import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import type { AuguryArchetypeData } from "../../types/augury-data";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
-  GuideGallerySiteLayout,
-  type GuideGalleryGuideView,
-} from "./GuideGallerySiteLayout";
-import { debugRerollCornerStyle } from "./chrome-geometry";
-import { useIsDesktop } from "./use-is-desktop";
+  SiteLayout,
+  type SiteLayoutGuide,
+} from "../components/layout/SiteLayout";
+import { debugRerollCornerStyle } from "../primitives/chrome-geometry";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 
-export type AuguryGuideView = GuideGalleryGuideView;
+export type AuguryGuideView = Omit<SiteLayoutGuide, "presence">;
 
 export interface AuguryCardView {
   id: string;
@@ -142,6 +141,7 @@ export function AugurySiteScreen({
 }: AugurySiteScreenProps) {
   const reduceMotion = useReducedMotion();
   const isDesktop = useIsDesktop();
+  const layout = isDesktop ? "desktop" : "mobile";
   const [selectedChoices, setSelectedChoices] = useState<
     ReadonlyMap<string, string>
   >(new Map());
@@ -212,19 +212,24 @@ export function AugurySiteScreen({
   };
 
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={guide}
-      desktopComposition={inspectedOffer === null ? "split" : "showcase"}
-      mobileComposition="revelation"
-      mobileRegionSize={inspectedOffer === null ? "standard" : "expanded"}
-      speechBubbleVisible={inspectedOffer === null}
-      screenTestId="cumulus-augury-site-screen"
-      guideArtTestId="cumulus-augury-guide-art"
-      speechAnchorTestId="cumulus-augury-speech-anchor"
-      speechBubbleTestId="cumulus-augury-speech"
-      renderGallery={(layout) => (
+    <div
+      data-testid="cumulus-augury-site-screen"
+      style={{ position: "fixed", inset: 0 }}
+    >
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{
+          ...guide,
+          presence: inspectedOffer === null ? "speaking" : "portrait-only",
+        }}
+        composition={
+          inspectedOffer === null
+            ? "balanced-revelation"
+            : "content-led-expanded-revelation"
+        }
+      >
         <section
           data-augury-layout={layout}
           data-augury-phase={inspectedOffer === null ? "comparison" : "detail"}
@@ -353,18 +358,14 @@ export function AugurySiteScreen({
               style={{ pointerEvents: "auto" }}
             >
               <GlassButton
-                label={tx(
-                  "Walk On",
-                  "[augury] Site walk on.",
-                )}
+                label={tx("Walk On", "[augury] Site walk on.")}
                 onPress={onClose}
                 testId="cumulus-augury-unavailable-exit"
               />
             </motion.div>
           )}
         </section>
-      )}
-    >
+      </SiteLayout>
       {onReroll !== undefined && (
         <div
           data-augury-reroll-control=""
@@ -380,16 +381,13 @@ export function AugurySiteScreen({
           <IconButton
             glyph={GLYPHS.refresh}
             overlayGlyph={GLYPHS.bug}
-            label={tx(
-              "Reroll Augury offers",
-              "[augury] Reroll offers.",
-            )}
+            label={tx("Reroll Augury offers", "[augury] Reroll offers.")}
             onPress={onReroll}
             testId="reroll-augury-offers"
           />
         </div>
       )}
-    </GuideGallerySiteLayout>
+    </div>
   );
 }
 
@@ -550,11 +548,15 @@ function OfferDetailVisual({
       return (
         <div style={{ display: "grid", gap: token("--space-s") }}>
           {visual.pairs.map((pair) => (
-            <Transition
+            <CardChangePair
               key={pair.id}
-              before={pair.before}
-              after={pair.after}
-              layout={layout}
+              model={{
+                changeId: pair.id,
+                kind: "replacement",
+                before: { entryId: pair.before.id, card: pair.before.model },
+                after: { entryId: pair.after.id, card: pair.after.model },
+              }}
+              reveal="complete"
             />
           ))}
         </div>
@@ -584,8 +586,6 @@ function OfferDetailVisual({
       );
   }
 }
-
-type CardTileWidth = CSSProperties["width"];
 
 function cardGridColumns(
   count: number,
@@ -659,81 +659,6 @@ function CardRow({
       columns={cardGridColumns(cards.length, layout)}
       layout={{ kind: "site", viewport: layout, fit }}
     />
-  );
-}
-
-function CardTile({
-  card,
-  width,
-  selected = false,
-  muted = false,
-  danger = false,
-  onPress,
-  testId,
-}: {
-  card: AuguryCardView;
-  width: CardTileWidth;
-  selected?: boolean;
-  muted?: boolean;
-  danger?: boolean;
-  onPress?: () => void;
-  testId?: string;
-}) {
-  return (
-    <div style={{ position: "relative", width }}>
-      <GameCard
-        model={card.model}
-        onPress={onPress}
-        unavailable={muted}
-        selection={danger ? "danger" : selected ? "highlighted" : undefined}
-        testId={testId}
-      />
-    </div>
-  );
-}
-
-function TransitionArrow({ layout }: { layout: "mobile" | "desktop" }) {
-  return (
-    <span
-      data-augury-transition-arrow=""
-      style={{
-        display: "grid",
-        placeItems: "center",
-        flexShrink: 0,
-        fontSize: layout === "desktop" ? 32 : 24,
-      }}
-    >
-      <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
-    </span>
-  );
-}
-
-function Transition({
-  before,
-  after,
-  layout,
-}: {
-  before: AuguryCardView;
-  after: AuguryCardView;
-  layout: "mobile" | "desktop";
-}) {
-  const width =
-    layout === "desktop"
-      ? "min(240px, 40cqw, 64cqh)"
-      : "min(124px, 38cqw, 58cqh)";
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: token("--space-s"),
-      }}
-    >
-      <CardTile card={before} width={width} muted />
-      <TransitionArrow layout={layout} />
-      <CardTile card={after} width={width} selected />
-    </div>
   );
 }
 

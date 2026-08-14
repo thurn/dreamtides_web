@@ -194,14 +194,14 @@ function buildGravokWagerSiteView(params: {
       result?.pendingDreamsignReplacement === true &&
       runtime.rewardDreamsign !== null
         ? {
-            pendingDreamsign: localizedDreamsign(
+            incoming: localizedDreamsign(
               runtime.rewardDreamsign,
               "Gamble pending reward",
             ),
-            currentDreamsigns: params.state.dreamsigns.map((dreamsign) =>
+            held: params.state.dreamsigns.map((dreamsign) =>
               localizedDreamsign(dreamsign, "Gamble held collection"),
             ),
-            maxDreamsigns: params.state.maxDreamsigns,
+            capacity: params.state.maxDreamsigns,
           }
         : null,
   };
@@ -280,14 +280,14 @@ function buildLadderClimbSiteView(params: {
     replacement:
       result?.pendingDreamsignReplacement === true
         ? {
-            pendingDreamsign: localizedDreamsign(
+            incoming: localizedDreamsign(
               runtime.rewardDreamsign,
               "Ladder Climb pending reward",
             ),
-            currentDreamsigns: params.state.dreamsigns.map((dreamsign) =>
+            held: params.state.dreamsigns.map((dreamsign) =>
               localizedDreamsign(dreamsign, "Gamble held collection"),
             ),
-            maxDreamsigns: params.state.maxDreamsigns,
+            capacity: params.state.maxDreamsigns,
           }
         : null,
   };

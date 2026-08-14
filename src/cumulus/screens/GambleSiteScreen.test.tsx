@@ -617,15 +617,15 @@ describe("GambleSiteScreen", () => {
         pendingDreamsignReplacement: true,
       },
       replacement: {
-        pendingDreamsign: JACKPOT_DREAMSIGN,
-        currentDreamsigns: [
+        incoming: JACKPOT_DREAMSIGN,
+        held: [
           localizedDreamsignFixture({
             id: "held-sign",
             name: "Held Sign",
             effectDescription: "A held effect.",
           }),
         ],
-        maxDreamsigns: 1,
+        capacity: 1,
       },
     };
     const { container, root } = mount(
@@ -649,7 +649,7 @@ describe("GambleSiteScreen", () => {
     act(() => {
       container
         .querySelector<HTMLButtonElement>(
-          '[data-testid="replace-dreamsign-held-sign"]',
+          '[data-replace-dreamsign-id="held-sign"] button',
         )
         ?.click();
     });
@@ -696,10 +696,9 @@ describe("GambleSiteScreen — Ladder Climb", () => {
     );
 
     expect(
-      container
-        .querySelector("[data-guide-gallery-mobile-guide]")
-        ?.getAttribute("data-guide-gallery-mobile-guide"),
-    ).toBe("dialog");
+      container.querySelector<HTMLElement>("[data-site-layout]")?.dataset
+        .siteLayoutComposition,
+    ).toBe("balanced-dialogue");
 
     act(() => root.unmount());
   });

@@ -116,7 +116,7 @@ describe("DreamsignBazaarSiteScreen", () => {
 
     expect(
       container.querySelector(
-        '[data-testid="cumulus-dreamsign-bazaar-speech-bubble"]',
+        "[data-site-layout-speech-anchor]",
       )?.textContent,
     ).toContain("Amunet, the Tomb-Keeper");
     const gallery = container.querySelector<HTMLElement>(
@@ -209,7 +209,7 @@ describe("DreamsignBazaarSiteScreen", () => {
     );
 
     expect(
-      container.querySelector("[data-guide-gallery-desktop-composition]"),
+      container.querySelector('[data-site-layout-viewport="desktop"]'),
     ).not.toBeNull();
     expect(
       container.querySelector<HTMLElement>(
@@ -263,6 +263,7 @@ describe("DreamsignBazaarSiteScreen", () => {
       currentDreamsigns: [sign(10), sign(11)],
       maxDreamsigns: 2,
     };
+    const replacementId = cappedView.purge.currentDreamsigns[1]?.id;
     const onPurge = vi.fn();
     const { container, root } = mount(
       <DreamsignBazaarSiteScreen
@@ -280,11 +281,11 @@ describe("DreamsignBazaarSiteScreen", () => {
     act(() => {
       container
         .querySelector<HTMLElement>(
-          '[data-testid="cumulus-dreamsign-bazaar-purge-1"]',
+          `[data-replace-dreamsign-id="${replacementId}"] button`,
         )
         ?.click();
     });
-    expect(onPurge).toHaveBeenCalledWith(1);
+    expect(onPurge).toHaveBeenCalledWith(replacementId);
 
     act(() => root.unmount());
   });

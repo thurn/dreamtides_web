@@ -17,7 +17,7 @@ import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
 import type { DreamAvatarPortraitFocus } from "../../types/content";
 import { GLOSSARY_IDS } from "../../data/glossary";
-import { DEBUG_REROLL_TOP } from "./chrome-geometry";
+import { DEBUG_REROLL_TOP } from "../primitives/chrome-geometry";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
@@ -305,7 +305,7 @@ export function OnMediaEyebrow({ label }: { readonly label: LocalizedString }) {
 /** The side-by-side DreamAvatar triptych is this screen's desktop idiom, so it
  * flips to the desktop layout at the shared {@link useIsDesktop} breakpoint:
  * below it a one-per-page swipe carousel, at or above it a desktop triptych. */
-export { useIsDesktop } from "./use-is-desktop";
+export { useIsDesktop } from "../primitives/use-is-desktop";
 
 /** The brand-tinted hairline between ability text and the tides row. `flush`
  * drops the built-in top margin for callers (the desktop card) that own their

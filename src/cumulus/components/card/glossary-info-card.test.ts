@@ -26,7 +26,9 @@ describe("glossaryInfoCard", () => {
     glossaryInfoCard("missing-glossary-entry");
 
     expect(
-      getLogEntries().filter((entry) => entry.event === "glossary_entry_missing"),
+      getLogEntries().filter(
+        (entry) => entry.event === "glossary_entry_missing",
+      ),
     ).toHaveLength(1);
   });
 });

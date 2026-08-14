@@ -128,17 +128,14 @@ describe("DuplicationSiteScreen", () => {
     expect(gallery?.dataset.galleryCardSize).toBe("reading");
     expect(gallery?.dataset.galleryReservesStackedCopy).toBe("true");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-guide-gallery-desktop-layout]",
-      )?.dataset.guideGalleryDesktopLayoutMode,
-    ).toBe("showcase");
+      container.querySelector<HTMLElement>("[data-site-layout]")?.dataset
+        .siteLayoutComposition,
+    ).toBe("content-led-gallery");
     expect(
       container.querySelector<HTMLElement>(
-        '[data-testid="cumulus-duplication-speech-anchor"]',
-      )?.style.left,
-    ).toBe(
-      "clamp(calc(var(--space-6xl) + var(--space-6xl) + var(--space-5xl) + var(--space-xl)), 18vw, calc(var(--space-6xl) + var(--space-6xl) + var(--space-6xl) + var(--space-5xl) + var(--space-xl)))",
-    );
+        "[data-site-layout-speech-anchor]",
+      ),
+    ).not.toBeNull();
     const initialPanelWidth = gallery?.style.width;
 
     const confirm = container.querySelector<HTMLButtonElement>(

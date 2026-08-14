@@ -69,10 +69,12 @@ export function TidesInfoLabel() {
       >
         <InlineGlyph glyph={GLYPHS.infoFilled} />
       </span>
-      {resolve(tx(
-        "Tides:",
-        "[dream-avatar] Visible eyebrow labeling the list of a Dream Avatar's Tides.",
-      ))}
+      {resolve(
+        tx(
+          "Tides:",
+          "[dream-avatar] Visible eyebrow labeling the list of a Dream Avatar's Tides.",
+        ),
+      )}
     </Pressable>
   );
 }

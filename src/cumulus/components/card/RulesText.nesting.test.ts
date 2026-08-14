@@ -26,14 +26,17 @@ function displayPathFor(path: string) {
   return `src/${relative(SRC_ROOT, path).split("\\").join("/")}`;
 }
 
-function getJsxTagName(node: ts.JsxOpeningLikeElement, sourceFile: ts.SourceFile) {
+function getJsxTagName(
+  node: ts.JsxOpeningLikeElement,
+  sourceFile: ts.SourceFile,
+) {
   return node.tagName.getText(sourceFile);
 }
 
 function containsRulesText(node: ts.Node, sourceFile: ts.SourceFile): boolean {
   if (
-    (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node))
-    && getJsxTagName(
+    (ts.isJsxElement(node) || ts.isJsxSelfClosingElement(node)) &&
+    getJsxTagName(
       ts.isJsxElement(node) ? node.openingElement : node,
       sourceFile,
     ) === "RulesText"
@@ -41,9 +44,9 @@ function containsRulesText(node: ts.Node, sourceFile: ts.SourceFile): boolean {
     return true;
   }
 
-  return node.getChildren(sourceFile).some((child) =>
-    containsRulesText(child, sourceFile),
-  );
+  return node
+    .getChildren(sourceFile)
+    .some((child) => containsRulesText(child, sourceFile));
 }
 
 function findParagraphWrappedRulesText(
@@ -53,9 +56,9 @@ function findParagraphWrappedRulesText(
 
   function visit(node: ts.Node) {
     if (
-      ts.isJsxElement(node)
-      && getJsxTagName(node.openingElement, sourceFile) === "p"
-      && containsRulesText(node, sourceFile)
+      ts.isJsxElement(node) &&
+      getJsxTagName(node.openingElement, sourceFile) === "p" &&
+      containsRulesText(node, sourceFile)
     ) {
       const position = sourceFile.getLineAndCharacterOfPosition(
         node.openingElement.getStart(sourceFile),

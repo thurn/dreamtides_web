@@ -54,7 +54,7 @@ import {
   type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
-import { useIsDesktop } from "./use-is-desktop";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import {
   TutorialEditorRail,
   TutorialEditorTakeover,

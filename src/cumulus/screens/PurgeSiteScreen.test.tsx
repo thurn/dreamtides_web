@@ -9,7 +9,6 @@ import type { CardData } from "../../types/cards";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
-import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
 import {
   PurgeSiteScreen,
   purgeActionWidthReservations,
@@ -286,8 +285,8 @@ describe("PurgeSiteScreen", () => {
     );
     expect(cardRegion?.dataset.purgeLayout).toBe("mobile");
     expect(
-      container.querySelector<HTMLElement>("[data-guide-gallery-site]")?.style
-        .paddingBottom,
+      container.querySelector<HTMLElement>("[data-site-layout-stage]")?.style
+        .bottom,
     ).toBe(JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE);
     expect(cardRegion?.style.height).toBe("100%");
     expect(cardRegion?.style.width).toBe("calc(100vw - (var(--space-s) * 2))");
@@ -334,12 +333,10 @@ describe("PurgeSiteScreen", () => {
     );
 
     const guideArt = container.querySelector<HTMLElement>(
-      '[data-testid="cumulus-purge-guide-art"]',
+      "[data-site-layout-guide]",
     );
-    expect(guideArt?.style.left).toBe(
-      `max(var(--safe-area-inset-left), ${String(MENU_EDGE_INSET_MOBILE_PX)}px)`,
-    );
-    expect(guideArt?.style.width).toBe("58vw");
+    expect(guideArt?.style.left).toBe("0px");
+    expect(guideArt?.style.width).toBe("46vw");
 
     act(() => {
       root.unmount();
@@ -352,10 +349,10 @@ describe("PurgeSiteScreen", () => {
     );
 
     const speechAnchor = container.querySelector<HTMLElement>(
-      '[data-testid="cumulus-purge-speech-anchor"]',
+      "[data-site-layout-speech-anchor]",
     );
-    expect(speechAnchor?.style.left).toBe("40vw");
-    expect(speechAnchor?.style.top).toBe("var(--space-xs)");
+    expect(speechAnchor?.style.left).toBe("86%");
+    expect(speechAnchor?.style.top).toBe("var(--space-m)");
     expect(speechAnchor?.style.bottom).toBe("");
 
     act(() => {
@@ -370,20 +367,23 @@ describe("PurgeSiteScreen", () => {
     );
 
     const desktopComposition = container.querySelector<HTMLElement>(
-      "[data-guide-gallery-desktop-composition]",
+      '[data-site-layout-viewport="desktop"]',
     );
     expect(desktopComposition).not.toBeNull();
-    expect(desktopComposition?.style.bottom).toContain("var(--space-3xl)");
+    expect(
+      container.querySelector<HTMLElement>("[data-site-layout-stage]")?.style
+        .bottom,
+    ).toContain("var(--space-3xl)");
     const desktopLayout = container.querySelector<HTMLElement>(
-      "[data-guide-gallery-desktop-layout]",
+      "[data-site-layout-content-region]",
     );
     expect(desktopLayout?.style.minHeight).toBe("0px");
-    expect(desktopLayout?.style.gridTemplateRows).toBe("minmax(0, 1fr)");
+    expect(desktopLayout?.style.display).toBe("grid");
     expect(
-      container.querySelector('[data-testid="cumulus-purge-guide-art"]'),
+      container.querySelector("[data-site-layout-guide] img"),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="cumulus-purge-speech-bubble"]'),
+      container.querySelector("[data-site-layout-speech-anchor]"),
     ).not.toBeNull();
 
     const cardRegion = container.querySelector<HTMLElement>(

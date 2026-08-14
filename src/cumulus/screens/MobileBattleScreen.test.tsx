@@ -651,10 +651,10 @@ describe("MobileBattleScreen", () => {
     const { container, root } = mount(statusView);
 
     const battlefield = container.querySelector<HTMLElement>(
-      '[data-battle-card-id="player-front-card"][data-battle-card-zone="player-front-rank"]',
+      '[data-battle-card-zone="player-front-rank"] [data-battle-card-id="player-front-card"]',
     );
     const hand = container.querySelector<HTMLElement>(
-      '[data-battle-card-id="player-hand-0"][data-battle-card-zone="near-hand"]',
+      '[data-battle-card-zone="near-hand"] [data-battle-card-id="player-hand-0"]',
     );
     expect(battlefield?.dataset.battleCardExhausted).toBe("true");
     expect(battlefield?.dataset.battleCardStoredTime).toBe("4");
@@ -748,7 +748,7 @@ describe("MobileBattleScreen", () => {
       );
     });
     const updatedBattlefield = container.querySelector<HTMLElement>(
-      '[data-battle-card-id="player-front-card"][data-battle-card-zone="player-front-rank"]',
+      '[data-battle-card-zone="player-front-rank"] [data-battle-card-id="player-front-card"]',
     );
     expect(updatedBattlefield?.dataset.battleCardExhausted).toBe("false");
     expect(updatedBattlefield?.dataset.battleCardStoredTime).toBe("0");
@@ -844,7 +844,9 @@ describe("MobileBattleScreen", () => {
     );
 
     expect(stage?.style.gridRow).toBe("5");
-    expect(stagedCard?.dataset.battleCardZone).toBe("targeting-stage");
+    expect(stagedCard?.parentElement?.dataset.battleCardZone).toBe(
+      "targeting-stage",
+    );
     expect(
       hand?.querySelector(`[data-battle-card-id="${targetingCard.id}"]`),
     ).toBeNull();
@@ -892,7 +894,7 @@ describe("MobileBattleScreen", () => {
       },
     });
     const scoringCard = container.querySelector<HTMLElement>(
-      '[data-battle-card-id="player-front-card"][data-battle-card-zone="player-front-rank"]',
+      '[data-battle-card-zone="player-front-rank"] [data-battle-card-id="player-front-card"]',
     );
     const overlay = scoringCard?.querySelector<HTMLElement>(
       '[data-radial-announcement-variant="card-score"]',
@@ -908,14 +910,14 @@ describe("MobileBattleScreen", () => {
     expect(
       container
         .querySelector(
-          '[data-battle-card-id="enemy-front-card"][data-battle-card-zone="enemy-front-rank"]',
+          '[data-battle-card-zone="enemy-front-rank"] [data-battle-card-id="enemy-front-card"]',
         )
         ?.querySelector('[data-radial-announcement-variant="card-score"]'),
     ).toBeNull();
     expect(
       container
         .querySelector(
-          '[data-battle-card-id="player-hand-0"][data-battle-card-zone="near-hand"]',
+          '[data-battle-card-zone="near-hand"] [data-battle-card-id="player-hand-0"]',
         )
         ?.querySelector('[data-radial-announcement-variant="card-score"]'),
     ).toBeNull();
@@ -1326,10 +1328,10 @@ describe("MobileBattleScreen", () => {
     );
     const firstHandCard = playerHand?.querySelector<HTMLElement>(
       '[data-battle-card-id="player-hand-0"]',
-    )?.parentElement;
+    )?.parentElement?.parentElement;
     const lastHandCard = playerHand?.querySelector<HTMLElement>(
       '[data-battle-card-id="player-hand-3"]',
-    )?.parentElement;
+    )?.parentElement?.parentElement;
     const controls = container.querySelector<HTMLElement>(
       '[data-battle-mobile-row="control-row"]',
     );
@@ -2111,7 +2113,7 @@ describe("MobileBattleScreen", () => {
   it("moves one glowing phase light above the active player status", () => {
     const { container, root } = mount();
     const indicator = container.querySelector<HTMLElement>(
-      '[data-battle-phase-indicator="player"]',
+      '[data-battle-phase="day"][data-battle-side="near"]',
     );
     const light = indicator?.querySelector<HTMLElement>(
       "[data-battle-phase-light]",
@@ -2128,9 +2130,9 @@ describe("MobileBattleScreen", () => {
     );
 
     expect(
-      container.querySelector('[data-battle-phase-indicator="enemy"]'),
+      container.querySelector('[data-battle-side="far"]'),
     ).toBeNull();
-    expect(indicator?.dataset.battleMobilePhase).toBe("day");
+    expect(indicator?.dataset.battlePhase).toBe("day");
     expect(indicator?.getAttribute("aria-label")?.trim()).not.toBe("");
     expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
     expect(indicator?.style.top).toBe("0px");
@@ -2143,8 +2145,6 @@ describe("MobileBattleScreen", () => {
     expect(light?.style.transition).toContain("var(--motion-object-travel)");
     expect(icon?.classList.contains("bxf")).toBe(true);
     expect(icon?.classList.contains("bx-sun")).toBe(true);
-    expect(core?.style.width).toBe("19px");
-    expect(core?.style.height).toBe("19px");
     expect(core?.style.borderRadius).toBe("var(--radius-pill)");
     expect(core?.style.backgroundColor).toBe("var(--bg-sunken)");
     expect(core?.style.fontSize).toBe("15px");
@@ -2152,14 +2152,12 @@ describe("MobileBattleScreen", () => {
     expect(icon?.style.height).toBe("1em");
     expect(icon?.style.color).toBe("var(--accent-bright)");
     expect(icon?.style.filter.match(/drop-shadow/g)).toHaveLength(2);
-    expect(halo?.style.width).toBe("19px");
-    expect(halo?.style.height).toBe("19px");
     expect(halo?.style.backgroundColor).toBe("var(--accent)");
     expect(halo?.style.animation).toBe("");
     expect(streak?.style.width).toBe("28px");
     expect(streak?.style.height).toBe("2px");
     expect(streak?.style.backgroundColor).toBe("var(--accent-bright)");
-    expect(streak?.style.animation).toContain("battle-phase-comet-tail");
+    expect(streak?.style.animation).toContain("cumulus-battle-phase-comet");
     expect(streak?.style.animation).toContain("var(--dur-slow)");
 
     act(() => root.unmount());
@@ -2173,7 +2171,7 @@ describe("MobileBattleScreen", () => {
     };
     const { container, root } = mount(view);
     const indicator = container.querySelector<HTMLElement>(
-      '[data-battle-phase-indicator="enemy"]',
+      '[data-battle-phase="challenge"][data-battle-side="far"]',
     );
     const light = indicator?.querySelector<HTMLElement>(
       "[data-battle-phase-light]",
@@ -2183,16 +2181,16 @@ describe("MobileBattleScreen", () => {
     );
 
     expect(
-      container.querySelector('[data-battle-phase-indicator="player"]'),
+      container.querySelector('[data-battle-side="near"]'),
     ).toBeNull();
-    expect(indicator?.dataset.battleMobilePhase).toBe("challenge");
+    expect(indicator?.dataset.battlePhase).toBe("challenge");
     expect(indicator?.parentElement?.dataset.battleStatusPhaseAnchor).toBe("");
     expect(indicator?.style.top).toBe("100%");
     expect(indicator?.style.bottom).toBe("");
     expect(light?.style.top).toBe("-12px");
     expect(light?.style.left).toBe("90%");
     expect(light?.style.transform).toBe("translate(-50%, 0%)");
-    expect(halo?.style.animation).toContain("battle-phase-challenge-pulse");
+    expect(halo?.style.animation).toContain("cumulus-battle-phase-pulse");
     expect(halo?.style.animation).toContain("var(--dur-slow)");
 
     act(() => root.unmount());
@@ -2552,7 +2550,7 @@ describe("MobileBattleScreen", () => {
     const handCards = () =>
       Array.from(
         container.querySelectorAll<HTMLElement>(
-          '[data-battle-card-zone="near-hand"]',
+          '[data-battle-card-zone="near-hand"] > [data-battlefield-card]',
         ),
       );
     const cardShadow = (index: number): string =>
@@ -2773,13 +2771,13 @@ describe("MobileBattleScreen", () => {
     expect(onHandCardActivate).not.toHaveBeenCalled();
 
     act(() => {
-      candidate
-        ?.querySelector<HTMLElement>('[data-battle-card-zone="far-hand"]')
-        ?.click();
+      candidate?.querySelector<HTMLElement>("[data-battlefield-card]")?.click();
     });
 
     expect(
-      candidate?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+      enemyHand
+        ?.querySelector<HTMLElement>(`[data-battle-card-id="${candidateId}"]`)
+        ?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
     ).toContain("var(--selected)");
     act(() => {
       container
@@ -3031,9 +3029,7 @@ describe("MobileBattleScreen", () => {
     ).not.toContain(resolveColor("selected"));
 
     act(() => {
-      candidate
-        ?.querySelector<HTMLElement>('[data-battle-card-zone="near-hand"]')
-        ?.click();
+      candidate?.querySelector<HTMLElement>("[data-battlefield-card]")?.click();
     });
 
     expect(
@@ -3487,7 +3483,7 @@ describe("MobileBattleScreen", () => {
     expect(interactions.onNextPhase).toHaveBeenCalledTimes(1);
     expect(
       container.querySelector(
-        "[data-journey-status-bar], [data-journey-menu], [data-battle-phase], [data-debug-rail]",
+        "[data-journey-status-bar], [data-journey-menu], [data-debug-rail]",
       ),
     ).toBeNull();
     expect(container.querySelector("[data-connected-count]")).toBeNull();

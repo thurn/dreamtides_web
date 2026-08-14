@@ -9,10 +9,8 @@ import {
   SiteNode,
   type DreamscapeSiteModel,
 } from "../components/dreamscape/SiteNode";
-import {
-  GuideGallerySiteLayout,
-  type GuideGalleryGuideView,
-} from "./GuideGallerySiteLayout";
+import { SiteLayout, type SiteLayoutGuide } from "../components/layout/SiteLayout";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import type { LocalizedString } from "@trox/runtime";
 
@@ -27,7 +25,7 @@ export interface RandomSiteView {
   title: LocalizedString;
   siteId: string;
   scene: ArtRef | null;
-  guide: GuideGalleryGuideView;
+  guide: Omit<SiteLayoutGuide, "presence">;
   choices: readonly RandomSiteChoiceView[];
 }
 
@@ -39,6 +37,7 @@ export function RandomSiteScreen({
   onChoose: (siteType: RandomSiteDestinationType) => void;
 }) {
   const reduceMotion = useReducedMotion();
+  const layout = useIsDesktop() ? "desktop" : "mobile";
   const [selected, setSelected] = useState<RandomSiteDestinationType | null>(
     null,
   );
@@ -58,15 +57,14 @@ export function RandomSiteScreen({
   );
 
   return (
-    <GuideGallerySiteLayout
+    <div data-testid="cumulus-random-site-screen">
+    <SiteLayout
       siteId={view.siteId}
       scene={view.scene}
-      guide={view.guide}
-      desktopComposition="showcase"
-      mobileComposition="revelation"
-      screenTestId="cumulus-random-site-screen"
-      guideArtTestId="cumulus-random-site-guide-art"
-      renderGallery={(layout) => (
+      atmosphere="warm"
+      guide={{ ...view.guide, presence: "speaking" }}
+      composition="content-led-revelation"
+    >
         <motion.section
           data-random-site-choice-panel=""
           initial={{ opacity: 0, y: 24 }}
@@ -157,7 +155,7 @@ export function RandomSiteScreen({
             </div>
           </GlassPanel>
         </motion.section>
-      )}
-    />
+    </SiteLayout>
+    </div>
   );
 }

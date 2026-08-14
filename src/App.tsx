@@ -33,7 +33,7 @@ import { FuzzProbe } from "./coop/FuzzProbe";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { DesktopDeckViewerAdapter } from "./screens/cumulus_adapters/DesktopDeckViewerAdapter";
 import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckViewerAdapter";
-import { useIsDesktop } from "./cumulus/screens/use-is-desktop";
+import { useIsDesktop } from "./cumulus/primitives/use-is-desktop";
 import { ApplicationStateScreen } from "./cumulus/screens/ApplicationStateScreen";
 import { PoolViewerAdapter } from "./screens/cumulus_adapters/PoolViewerAdapter";
 import { StartingDeckOverlayAdapter } from "./screens/cumulus_adapters/StartingDeckOverlayAdapter";

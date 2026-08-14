@@ -125,9 +125,7 @@ describe("CardPile", () => {
       "battle-card:instance-second",
       "battle-card:instance-third",
     ]);
-    expect(
-      layers.map((layer) => layer.dataset.battleCardLayoutId),
-    ).toEqual([
+    expect(layers.map((layer) => layer.dataset.battleCardLayoutId)).toEqual([
       "battle-card:instance-top",
       "battle-card:instance-second",
       "battle-card:instance-third",
@@ -142,7 +140,9 @@ describe("CardPile", () => {
       "translate(var(--space-xxs), calc(-1 * var(--space-xxs)))",
       "translate(0, 0)",
     ]);
-    expect(container.querySelector('[data-battle-card-id="instance-hidden"]')).toBeNull();
+    expect(
+      container.querySelector('[data-battle-card-id="instance-hidden"]'),
+    ).toBeNull();
     expect(container.querySelectorAll("[data-card-back]")).toHaveLength(1);
     expect(container.querySelectorAll("[data-mock-card-view]")).toHaveLength(2);
     expect(container.querySelector("button")).toBeNull();
@@ -253,7 +253,9 @@ describe("CardPile", () => {
     });
 
     const pile = container.querySelector<HTMLElement>("[data-card-pile]");
-    const outline = container.querySelector<HTMLElement>("[data-card-pile-empty]");
+    const outline = container.querySelector<HTMLElement>(
+      "[data-card-pile-empty]",
+    );
     expect(pile?.dataset.pileCount).toBe("0");
     expect(pile?.dataset.pileEmptyState).toBe("outlined");
     expect(pile?.style.aspectRatio).toBe(

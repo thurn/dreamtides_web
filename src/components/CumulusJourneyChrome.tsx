@@ -9,7 +9,7 @@ import { ErrorBoundary } from "./ErrorBoundary";
 import { useJourney } from "../state/journey-context";
 import { JourneyStatusBar } from "../cumulus/components/hud/JourneyStatusBar";
 import { CoopPresenceStatus } from "../cumulus/components/hud/CoopPresenceStatus";
-import { useIsDesktop } from "../cumulus/screens/use-is-desktop";
+import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
 import type { JourneyState } from "../types/journey";
 import { buildDreamscapeHudView } from "../screens/cumulus_adapters/dreamscape-view-model";
 import { JourneyCardTutorialController } from "./JourneyCardTutorialController";

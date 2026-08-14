@@ -728,8 +728,9 @@ function CardGallerySurface({
           frame === "floating" && heightMode === "fill" ? "grid" : undefined,
         alignItems:
           frame === "floating" && heightMode === "fill" ? "center" : undefined,
-        width: frame === "fullBleed" ? "100%" : panelWidth,
+        width: frame === "fullBleed" ? "100%" : `min(${panelWidth}, 100%)`,
         maxWidth: "100%",
+        minWidth: 0,
         height:
           frame === "fullBleed" || heightMode === "fill" ? "100%" : undefined,
         maxHeight: "100%",

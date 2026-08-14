@@ -15,13 +15,29 @@ describe("CardView visual editor surface", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><CardView card={{
-      id: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
-      name: asCardName("Twilight Troubadour"), cardNumber: 520, cardType: "Character",
-      subtype: "Musician", isStarter: false, energyCost: 2, spark: 2, isFast: false,
-      renderedText: "", imageNumber: 1792373848, artOwned: false,
-      art: { x: 0.4, y: -0.3, scale: 2.17 },
-    }} /></CumulusRoot>));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <CardView
+            card={{
+              id: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+              name: asCardName("Twilight Troubadour"),
+              cardNumber: 520,
+              cardType: "Character",
+              subtype: "Musician",
+              isStarter: false,
+              energyCost: 2,
+              spark: 2,
+              isFast: false,
+              renderedText: "",
+              imageNumber: 1792373848,
+              artOwned: false,
+              art: { x: 0.4, y: -0.3, scale: 2.17 },
+            }}
+          />
+        </CumulusRoot>,
+      ),
+    );
 
     const feather = container.querySelector<HTMLElement>(
       "[data-card-art-blur-feather]",
@@ -32,9 +48,7 @@ describe("CardView visual editor surface", () => {
 
     expect(parseFloat(feather?.style.top ?? "0")).toBeGreaterThan(0);
     expect(feather?.style.bottom).toBe("0px");
-    expect(feather?.style.maskImage).toContain(
-      "rgba(0, 0, 0, 0) 0%",
-    );
+    expect(feather?.style.maskImage).toContain("rgba(0, 0, 0, 0) 0%");
     expect(parseFloat(canvas?.style.top ?? "0")).toBeLessThan(0);
     expect(parseFloat(canvas?.style.height ?? "0")).toBeGreaterThan(100);
 
@@ -46,13 +60,31 @@ describe("CardView visual editor surface", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><CardView card={{
-      id: asCardId("11111111-1111-4111-8111-111111111111"),
-      name: asCardName("Archive Sentry"), cardNumber: 1, cardType: "Character",
-      subtype: "Synth", isStarter: false, energyCost: 1, spark: 1, isFast: false,
-      renderedText: RULES_TEXT, imageNumber: 1, artOwned: true,
-    }} /></CumulusRoot>));
-    expect(container.querySelector(".card-view")?.textContent).toContain("Archive Sentry");
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <CardView
+            card={{
+              id: asCardId("11111111-1111-4111-8111-111111111111"),
+              name: asCardName("Archive Sentry"),
+              cardNumber: 1,
+              cardType: "Character",
+              subtype: "Synth",
+              isStarter: false,
+              energyCost: 1,
+              spark: 1,
+              isFast: false,
+              renderedText: RULES_TEXT,
+              imageNumber: 1,
+              artOwned: true,
+            }}
+          />
+        </CumulusRoot>,
+      ),
+    );
+    expect(container.querySelector(".card-view")?.textContent).toContain(
+      "Archive Sentry",
+    );
     expect(document.querySelector("[data-hover-zoom-overlay]")).toBeNull();
     expect(document.querySelector("[role='tooltip']")).toBeNull();
     act(() => root.unmount());
@@ -63,17 +95,36 @@ describe("CardView visual editor surface", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
-    act(() => root.render(<CumulusRoot><CardView glossaryInfoOnHover card={{
-      id: asCardId("11111111-1111-4111-8111-111111111111"),
-      name: asCardName("Archive Sentry"), cardNumber: 1, cardType: "Character",
-      subtype: "Synth", isStarter: false, energyCost: 1, spark: 1, isFast: false,
-      renderedText: RULES_TEXT, imageNumber: 1, artOwned: true,
-    }} /></CumulusRoot>));
+    act(() =>
+      root.render(
+        <CumulusRoot>
+          <CardView
+            glossaryInfoOnHover
+            card={{
+              id: asCardId("11111111-1111-4111-8111-111111111111"),
+              name: asCardName("Archive Sentry"),
+              cardNumber: 1,
+              cardType: "Character",
+              subtype: "Synth",
+              isStarter: false,
+              energyCost: 1,
+              spark: 1,
+              isFast: false,
+              renderedText: RULES_TEXT,
+              imageNumber: 1,
+              artOwned: true,
+            }}
+          />
+        </CumulusRoot>,
+      ),
+    );
 
     const source = container.querySelector<HTMLElement>(
       "[data-card-view-glossary-hover-source]",
     );
-    expect(source?.getAttribute("data-reveal-primary-variant")).toBe("gameCard");
+    expect(source?.getAttribute("data-reveal-primary-variant")).toBe(
+      "gameCard",
+    );
     expect(source?.getAttribute("data-reveal-complete-game-card")).toBe("true");
     expect(source?.getAttribute("data-reveal-secondary-titles")).toBe("");
     const description = document.getElementById(

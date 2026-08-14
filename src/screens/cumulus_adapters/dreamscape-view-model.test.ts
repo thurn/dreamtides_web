@@ -365,9 +365,9 @@ describe("buildDreamscapeView", () => {
       requiresReplacement: true,
     });
     expect(view.replacement).toMatchObject({
-      pendingDreamsign,
-      currentDreamsigns: [heldDreamsign],
-      maxDreamsigns: 1,
+      incoming: { id: pendingDreamsign.id },
+      held: [{ id: heldDreamsign.id }],
+      capacity: 1,
     });
   });
 });

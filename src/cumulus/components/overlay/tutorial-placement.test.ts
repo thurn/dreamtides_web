@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   placeCardTutorialDialogue,
   placeTutorialDialogueAboveAnchor,
-} from "./card-tutorial-dialogue-placement";
+} from "./tutorial-placement";
 
 function rect(left: number, top: number, width: number, height: number) {
   return {
@@ -46,10 +46,7 @@ describe("placeCardTutorialDialogue", () => {
         rect(8, 335, 185, 259),
         rect(197, 335, 185, 259),
       ],
-      obstacleRects: [
-        rect(159, 602, 72, 22),
-        rect(0, 774, 390, 70),
-      ],
+      obstacleRects: [rect(159, 602, 72, 22), rect(0, 774, 390, 70)],
       gap: 8,
     });
 
@@ -105,5 +102,21 @@ describe("placeCardTutorialDialogue", () => {
     expect(position).toEqual({ left: 12, bottom: 288 });
     if (position === null) throw new Error("Expected anchored placement.");
     expect(900 - position.bottom - 100).toBe(512);
+  });
+
+  it("keeps floating dialogue inside every physical safe-area edge", () => {
+    const point = placeCardTutorialDialogue({
+      viewportWidth: 390,
+      viewportHeight: 844,
+      dialogueWidth: 300,
+      dialogueHeight: 160,
+      cardRects: [],
+      gap: 8,
+      safeAreaInsets: { top: 47, right: 12, bottom: 34, left: 10 },
+    });
+    expect(point.left).toBeGreaterThanOrEqual(18);
+    expect(point.left + 300).toBeLessThanOrEqual(370);
+    expect(point.top).toBeGreaterThanOrEqual(55);
+    expect(point.top + 160).toBeLessThanOrEqual(802);
   });
 });

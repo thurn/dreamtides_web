@@ -22,9 +22,9 @@ import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import {
-  BattleForeseeOverlay,
-  type BattleForeseeView,
-} from "./BattleForeseeOverlay";
+  BattleForeseeEditor,
+  type BattleForeseeEditorModel,
+} from "../components/battle/BattleForeseeEditor";
 import {
   MobileBattleScreen,
   type MobileBattleCardView,
@@ -54,7 +54,7 @@ export interface TutorialBattleView {
   readonly ownership: TutorialBattleOwnership;
   readonly driverClientId: string | null;
   readonly manualControls: boolean;
-  readonly foresee: BattleForeseeView | null;
+  readonly foresee: BattleForeseeEditorModel | null;
   /**
    * Event-log presentation checkpoint released by this screen. It remains
    * available when optional display data cannot be projected.
@@ -378,13 +378,13 @@ export function TutorialBattleScreen({
         >
           <GlassPanel
             title={tx(
-                "Choose a Target",
-                "[battle] [tutorial] Title above the tutorial battle prompt shown after the current player plays a card that requires a battlefield target.",
-              )}
+              "Choose a Target",
+              "[battle] [tutorial] Title above the tutorial battle prompt shown after the current player plays a card that requires a battlefield target.",
+            )}
             subtitle={tx(
-                "Select a highlighted legal target.",
-                "[ui] Instruction beneath that title; the current player must activate one of the visually highlighted legal targets.",
-              )}
+              "Select a highlighted legal target.",
+              "[ui] Instruction beneath that title; the current player must activate one of the visually highlighted legal targets.",
+            )}
             headerSpacing="compact"
             headerDivider={false}
             radius="control"
@@ -409,17 +409,26 @@ export function TutorialBattleScreen({
           copy={{
             message:
               movementStatusMessage === "send-failed"
-                ? tx("Movement failed to send. Try again.", "[tutorial] Error when a tutorial movement intent could not be submitted.")
+                ? tx(
+                    "Movement failed to send. Try again.",
+                    "[tutorial] Error when a tutorial movement intent could not be submitted.",
+                  )
                 : movementStatusMessage === "exhausted-front-rank"
-                  ? tx("This character is exhausted and cannot move to the front rank.", "[ui] Error when an exhausted Character cannot enter the front rank during the opponent's Dusk.")
-                  : tx("No legal battlefield cell is available for this movement.", "[tutorial] Error when a tutorial movement has no legal destination."),
+                  ? tx(
+                      "This character is exhausted and cannot move to the front rank.",
+                      "[ui] Error when an exhausted Character cannot enter the front rank during the opponent's Dusk.",
+                    )
+                  : tx(
+                      "No legal battlefield cell is available for this movement.",
+                      "[tutorial] Error when a tutorial movement has no legal destination.",
+                    ),
           }}
           onDismiss={onMovementStatusDismiss}
         />
       ) : null}
       {view.manualControls && view.foresee !== null ? (
-        <BattleForeseeOverlay
-          view={view.foresee}
+        <BattleForeseeEditor
+          model={view.foresee}
           onConfirm={onForeseeConfirm}
         />
       ) : null}
@@ -490,10 +499,9 @@ function TutorialVictorySurface({
     <section
       role="dialog"
       aria-modal="true"
-      aria-label={resolve(tx(
-        "Tutorial complete",
-        "[battle] [tutorial] Battle complete.",
-      ))}
+      aria-label={resolve(
+        tx("Tutorial complete", "[battle] [tutorial] Battle complete."),
+      )}
       data-tutorial-victory-screen=""
       style={{
         position: "fixed",
@@ -521,10 +529,7 @@ function TutorialVictorySurface({
       <Motes on tint="warm" count={12} seed={243} zIndex={1} />
       <RadialAnnouncement
         variant="victory"
-        headline={tx(
-          "Victory",
-          "[battle] Victory headline.",
-        )}
+        headline={tx("Victory", "[battle] Victory headline.")}
         announcementId="tutorial-victory"
       />
       <div

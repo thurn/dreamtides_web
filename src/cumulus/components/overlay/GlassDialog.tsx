@@ -35,7 +35,7 @@ import type { LocalizedString } from "@trox/runtime";
 import { useEffect, useLayoutEffect, useState } from "react";
 import type { CSSProperties, ReactElement, ReactNode } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
-import { useIsDesktop } from "../../screens/use-is-desktop";
+import { useIsDesktop } from "../../primitives/use-is-desktop";
 import { IconButton } from "../controls/IconButton";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";

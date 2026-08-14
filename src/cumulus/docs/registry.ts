@@ -62,6 +62,16 @@ import { textAreaDemo } from "./demos/text-area";
 import { transfigurationButtonDemo } from "./demos/transfiguration-button";
 import { transientStatusToastDemo } from "./demos/transient-status-toast";
 import { wagerPrizeCardDemo } from "./demos/wager-prize-card";
+import { siteLayoutDemo } from "./demos/site-layout";
+import { dreamsignReplacementDialogDemo } from "./demos/dreamsign-replacement-dialog";
+import { transfigurationPickerPanelDemo } from "./demos/transfiguration-picker-panel";
+import { transfigurationDetailPanelDemo } from "./demos/transfiguration-detail-panel";
+import { cardChangePairDemo } from "./demos/card-change-pair";
+import { explorationChoiceDemo } from "./demos/exploration-choice";
+import { battleForeseeEditorDemo } from "./demos/battle-foresee-editor";
+import { battlefieldCardDemo } from "./demos/battlefield-card";
+import { battlePhaseIndicatorDemo } from "./demos/battle-phase-indicator";
+import { viewportTutorialDialogueDemo } from "./demos/viewport-tutorial-dialogue";
 
 /**
  * A single authored usage snippet shown on a component's doc page. The source
@@ -168,6 +178,7 @@ export interface CumulusComponent {
  */
 export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   pressableDemo,
+  explorationChoiceDemo,
   essenceValueDemo,
   iconButtonDemo,
   mainMenuButtonDemo,
@@ -175,6 +186,8 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   offerTileDemo,
   glassPanelDemo,
   glassDialogDemo,
+  dreamsignReplacementDialogDemo,
+  viewportTutorialDialogueDemo,
   developerRailDemo,
   commandMenuDemo,
   tutorialFeatureCalloutDemo,
@@ -200,6 +213,9 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   journeyStatusBarDemo,
   coopPresenceStatusDemo,
   battleStatusDisplayDemo,
+  battlePhaseIndicatorDemo,
+  battlefieldCardDemo,
+  battleForeseeEditorDemo,
   dreamwellCardDemo,
   dreamAvatarPortraitDemo,
   dreamAvatarStageDemo,
@@ -212,6 +228,9 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   cardChoiceGridDemo,
   cardBrowserPanelDemo,
   cardPickerPanelDemo,
+  transfigurationPickerPanelDemo,
+  transfigurationDetailPanelDemo,
+  cardChangePairDemo,
   cardStatOrbDemo,
   atlasNodeDemo,
   atlasEdgeDemo,
@@ -219,6 +238,7 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   dreamsignGalleryPanelDemo,
   siteNodeDemo,
   wagerPrizeCardDemo,
+  siteLayoutDemo,
 ];
 
 /** Look up a registry entry by its route id. */

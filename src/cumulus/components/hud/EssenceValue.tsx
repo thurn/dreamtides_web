@@ -92,8 +92,7 @@ function EssenceValueVisual({
       : tone === "mark"
         ? token("--text-primary")
         : token("--essence");
-  const glyphColor =
-    tone === "inherit" ? "inherit" : token("--essence");
+  const glyphColor = tone === "inherit" ? "inherit" : token("--essence");
   return (
     // `cumulus` carries the design-token scope so `--essence` resolves when the
     // value is mounted outside a `.cumulus` subtree (e.g. a journey screen).

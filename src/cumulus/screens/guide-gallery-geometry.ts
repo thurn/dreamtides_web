@@ -1,7 +1,7 @@
 // Shared mobile geometry for a character band above a floating gallery panel.
 
 import { token } from "../primitives/tokens";
-import { MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
+import { MENU_EDGE_INSET_MOBILE_PX } from "../primitives/chrome-geometry";
 
 export const GUIDE_GALLERY_MOBILE_GUIDE_HEIGHT =
   "clamp(170px, 28dvh, 240px)";

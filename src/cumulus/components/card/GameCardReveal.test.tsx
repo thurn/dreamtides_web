@@ -41,7 +41,10 @@ function model(displaySnapshot = card()): GameCardModel {
   return { cardId: CARD_ID, displaySnapshot };
 }
 
-function mount(element: React.ReactElement): { container: HTMLDivElement; root: Root } {
+function mount(element: React.ReactElement): {
+  container: HTMLDivElement;
+  root: Root;
+} {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
@@ -51,7 +54,17 @@ function mount(element: React.ReactElement): { container: HTMLDivElement; root: 
 
 function rect(width: number, left = 80, top = 120): DOMRect {
   const height = width * 1.5;
-  return { x: left, y: top, left, top, width, height, right: left + width, bottom: top + height, toJSON: () => ({}) };
+  return {
+    x: left,
+    y: top,
+    left,
+    top,
+    width,
+    height,
+    right: left + width,
+    bottom: top + height,
+    toJSON: () => ({}),
+  };
 }
 
 function pointer(type: string, init: PointerEventInit): Event {
@@ -60,52 +73,94 @@ function pointer(type: string, init: PointerEventInit): Event {
 
 beforeEach(() => {
   vi.mocked(extractMaterializedFigmentPreviews).mockReset().mockReturnValue([]);
-  (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }).IS_REACT_ACT_ENVIRONMENT = true;
+  (
+    globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+  ).IS_REACT_ACT_ENVIRONMENT = true;
   window.matchMedia = (query: string) => ({
-    matches: query.includes("pointer: fine"), media: query, onchange: null,
-    addEventListener: () => undefined, removeEventListener: () => undefined,
-    addListener: () => undefined, removeListener: () => undefined, dispatchEvent: () => false,
+    matches: query.includes("pointer: fine"),
+    media: query,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => false,
   });
-  Object.defineProperty(window, "innerWidth", { configurable: true, value: 1200 });
-  Object.defineProperty(window, "innerHeight", { configurable: true, value: 900 });
+  Object.defineProperty(window, "innerWidth", {
+    configurable: true,
+    value: 1200,
+  });
+  Object.defineProperty(window, "innerHeight", {
+    configurable: true,
+    value: 900,
+  });
   resizeCallbacks = [];
   globalThis.ResizeObserver = class {
-    constructor(callback: ResizeObserverCallback) { resizeCallbacks.push(callback); }
+    constructor(callback: ResizeObserverCallback) {
+      resizeCallbacks.push(callback);
+    }
     observe() {}
     unobserve() {}
     disconnect() {}
   };
-  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(function getRect(this: HTMLElement) {
-    if (this.hasAttribute("data-game-card-source")) return rect(Number(this.parentElement?.dataset.testWidth ?? 160));
-    if (this.getAttribute("data-reveal-measure") === "primary") return rect(240, 0, 0);
-    if (this.getAttribute("data-reveal-measure") === "secondary") return rect(248, 0, 0);
-    if (this.getAttribute("data-reveal-measure") === "adjacent") return rect(150, 0, 0);
-    if (this.classList.contains("card-view")) return rect(160);
-    return rect(100);
-  });
+  vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+    function getRect(this: HTMLElement) {
+      if (this.hasAttribute("data-game-card-source"))
+        return rect(Number(this.parentElement?.dataset.testWidth ?? 160));
+      if (this.getAttribute("data-reveal-measure") === "primary")
+        return rect(240, 0, 0);
+      if (this.getAttribute("data-reveal-measure") === "secondary")
+        return rect(248, 0, 0);
+      if (this.getAttribute("data-reveal-measure") === "adjacent")
+        return rect(150, 0, 0);
+      if (this.classList.contains("card-view")) return rect(160);
+      return rect(100);
+    },
+  );
 });
 
 afterEach(() => {
   vi.useRealTimers();
   vi.restoreAllMocks();
   document.body.innerHTML = "";
-  delete (globalThis as { ResizeObserver?: typeof ResizeObserver }).ResizeObserver;
+  delete (globalThis as { ResizeObserver?: typeof ResizeObserver })
+    .ResizeObserver;
 });
 
 function remeasure(): void {
-  act(() => resizeCallbacks.forEach((callback) => callback([], {} as ResizeObserver)));
+  act(() =>
+    resizeCallbacks.forEach((callback) => callback([], {} as ResizeObserver)),
+  );
 }
 
 describe("GameCard reveal contract", () => {
   it("registers canonical UUID semantics and derives de-duplicated glossary secondaries", () => {
-    const { container, root } = mount(<GameCard model={model(card({ renderedText: "Nightmare is a Bane. The Bane keyword identifies Nightmare." }))} />);
-    const source = container.querySelector<HTMLElement>("[data-game-card-source]");
-    expect(source?.getAttribute("aria-describedby")).toMatch(/^cumulus-reveal-description-/);
-    const description = document.querySelector("[data-cumulus-reveal-descriptions]")?.textContent ?? "";
+    const { container, root } = mount(
+      <GameCard
+        model={model(
+          card({
+            renderedText:
+              "Nightmare is a Bane. The Bane keyword identifies Nightmare.",
+          }),
+        )}
+      />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    expect(source?.getAttribute("aria-describedby")).toMatch(
+      /^cumulus-reveal-description-/,
+    );
+    const description =
+      document.querySelector("[data-cumulus-reveal-descriptions]")
+        ?.textContent ?? "";
     expect(description).toContain("Archive Sentry");
-    expect(description).toContain("Nightmare is a Bane. The Bane keyword identifies Nightmare");
+    expect(description).toContain(
+      "Nightmare is a Bane. The Bane keyword identifies Nightmare",
+    );
     const baneEntry = glossary.lookupGlossaryTerm("bane");
-    if (baneEntry === undefined) throw new Error("Bane glossary fixture missing");
+    if (baneEntry === undefined)
+      throw new Error("Bane glossary fixture missing");
     expect(description.split(baneEntry.definition).length - 1).toBe(1);
     act(() => root.unmount());
   });
@@ -124,9 +179,9 @@ describe("GameCard reveal contract", () => {
     const source = container.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
-    const description = document.getElementById(
-      source?.getAttribute("aria-describedby") ?? "",
-    )?.textContent ?? "";
+    const description =
+      document.getElementById(source?.getAttribute("aria-describedby") ?? "")
+        ?.textContent ?? "";
 
     expect(description).not.toContain("Put a character into play");
     expect(description).not.toContain("Your discard pile");
@@ -152,9 +207,9 @@ describe("GameCard reveal contract", () => {
     const source = container.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
-    const description = document.getElementById(
-      source?.getAttribute("aria-describedby") ?? "",
-    )?.textContent ?? "";
+    const description =
+      document.getElementById(source?.getAttribute("aria-describedby") ?? "")
+        ?.textContent ?? "";
     const numericGlossaryIds: readonly string[] = [
       glossary.GLOSSARY_IDS.erode,
       glossary.GLOSSARY_IDS.foresee,
@@ -164,9 +219,7 @@ describe("GameCard reveal contract", () => {
       (entry) => numericGlossaryIds.includes(entry.id),
     );
 
-    expect(numericEntries.map((entry) => entry.id)).toEqual(
-      numericGlossaryIds,
-    );
+    expect(numericEntries.map((entry) => entry.id)).toEqual(numericGlossaryIds);
     for (const entry of numericEntries) {
       expect(description).toContain(entry.term);
       expect(description).toContain(entry.definition);
@@ -185,9 +238,9 @@ describe("GameCard reveal contract", () => {
     const source = container.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
-    const description = document.getElementById(
-      source?.getAttribute("aria-describedby") ?? "",
-    )?.textContent ?? "";
+    const description =
+      document.getElementById(source?.getAttribute("aria-describedby") ?? "")
+        ?.textContent ?? "";
     expect(description).toContain("Exhausted");
     expect(description).toContain(
       glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.exhausted).definition,
@@ -235,9 +288,9 @@ describe("GameCard reveal contract", () => {
     const source = container.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
-    const description = document.getElementById(
-      source?.getAttribute("aria-describedby") ?? "",
-    )?.textContent ?? "";
+    const description =
+      document.getElementById(source?.getAttribute("aria-describedby") ?? "")
+        ?.textContent ?? "";
     expect(description).toContain("Figment");
     expect(description).toContain(
       glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.figment).definition,
@@ -277,18 +330,16 @@ describe("GameCard reveal contract", () => {
   it("shows the Figment definition once when a figment's own rules text mentions figments", () => {
     const { container, root } = mount(
       <GameCard
-        model={model(
-          card({ renderedText: "Merge with another figment." }),
-        )}
+        model={model(card({ renderedText: "Merge with another figment." }))}
         figment
       />,
     );
     const source = container.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
-    const description = document.getElementById(
-      source?.getAttribute("aria-describedby") ?? "",
-    )?.textContent ?? "";
+    const description =
+      document.getElementById(source?.getAttribute("aria-describedby") ?? "")
+        ?.textContent ?? "";
     const figmentDefinition = glossary.requireGlossaryEntry(
       glossary.GLOSSARY_IDS.figment,
     ).definition;
@@ -303,14 +354,16 @@ describe("GameCard reveal contract", () => {
       label: "fast",
       cardData: { isFast: true, isInterrupt: false },
       glossaryId: glossary.GLOSSARY_IDS.fast,
-      definition: "A fast (❖) card may be played at the end of either player's turn.",
+      definition:
+        "A fast (❖) card may be played at the end of either player's turn.",
       iconCount: 1,
     },
     {
       label: "interrupt",
       cardData: { isFast: true, isInterrupt: true },
       glossaryId: glossary.GLOSSARY_IDS.interrupt,
-      definition: "An interrupt (❖❖) card may be played in response to an opponent action, or at the end of either player's turn.",
+      definition:
+        "An interrupt (❖❖) card may be played in response to an opponent action, or at the end of either player's turn.",
       iconCount: 2,
     },
   ])(
@@ -331,9 +384,7 @@ describe("GameCard reveal contract", () => {
           : undefined,
       );
       const { container, root } = mount(
-        <GameCard
-          model={model(card({ ...cardData, renderedText: "" }))}
-        />,
+        <GameCard model={model(card({ ...cardData, renderedText: "" }))} />,
       );
       const source = container.querySelector<HTMLElement>(
         "[data-game-card-source]",
@@ -411,9 +462,7 @@ describe("GameCard reveal contract", () => {
       const timingCard = document.querySelector<HTMLElement>(
         '[data-cumulus-reveal-card="secondary"]',
       );
-      expect(timingCard?.textContent).toContain(
-        definition.replace(/❖/gu, ""),
-      );
+      expect(timingCard?.textContent).toContain(definition.replace(/❖/gu, ""));
       expect(timingCard?.textContent).not.toContain("card may be played");
       expect(timingCard?.querySelectorAll("i.bxf.bx-bolt")).toHaveLength(
         iconCount,
@@ -435,9 +484,9 @@ describe("GameCard reveal contract", () => {
     const source = container.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
-    const description = document.getElementById(
-      source?.getAttribute("aria-describedby") ?? "",
-    )?.textContent ?? "";
+    const description =
+      document.getElementById(source?.getAttribute("aria-describedby") ?? "")
+        ?.textContent ?? "";
     expect(source).not.toBeNull();
     expect(description).toContain("Rule definition unavailable");
     expect(description).toContain(
@@ -448,42 +497,54 @@ describe("GameCard reveal contract", () => {
   });
 
   it("shows an authored figment card beyond glossary definitions on desktop", async () => {
-    vi.mocked(extractMaterializedFigmentPreviews).mockReturnValue([{
-      card: Object.freeze({
-        id: asCardId("bb1a5acd-1a03-4aa3-826d-f0a301843845"),
-        name: asCardName("Legionnaire"),
-        cardNumber: 1,
-        cardType: "Character",
-        subtype: "Warrior",
-        isStarter: false,
-        energyCost: 0,
-        spark: 1,
-        isFast: false,
-        renderedText: "This character has +1✦ for each other warrior you control.",
-        imageNumber: 436090582,
-        artOwned: false,
-        art: { x: 0, y: 0.123, scale: 1.2 },
-      }),
-    }]);
+    vi.mocked(extractMaterializedFigmentPreviews).mockReturnValue([
+      {
+        card: Object.freeze({
+          id: asCardId("bb1a5acd-1a03-4aa3-826d-f0a301843845"),
+          name: asCardName("Legionnaire"),
+          cardNumber: 1,
+          cardType: "Character",
+          subtype: "Warrior",
+          isStarter: false,
+          energyCost: 0,
+          spark: 1,
+          isFast: false,
+          renderedText:
+            "This character has +1✦ for each other warrior you control.",
+          imageNumber: 436090582,
+          artOwned: false,
+          art: { x: 0, y: 0.123, scale: 1.2 },
+        }),
+      },
+    ]);
     const { container, root } = mount(
       <div data-test-width="240">
         <GameCard
-          model={model(card({
-            renderedText: "Nightmare is a Bane. Materialize a 1✦ warrior figment.",
-          }))}
+          model={model(
+            card({
+              renderedText:
+                "Nightmare is a Bane. Materialize a 1✦ warrior figment.",
+            }),
+          )}
         />
       </div>,
     );
-    const source = container.querySelector<HTMLElement>("[data-game-card-source]");
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
     act(() => {
       source?.dispatchEvent(
         pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
       );
     });
-    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
     remeasure();
     await vi.waitFor(() =>
-      expect(document.querySelector('[data-cumulus-reveal-card="adjacent"]')).not.toBeNull(),
+      expect(
+        document.querySelector('[data-cumulus-reveal-card="adjacent"]'),
+      ).not.toBeNull(),
     );
     const definition = document.querySelector<HTMLElement>(
       '[data-cumulus-reveal-card="secondary"]',
@@ -492,14 +553,16 @@ describe("GameCard reveal contract", () => {
       '[data-cumulus-reveal-card="adjacent"]',
     );
     expect(figment?.style.width).toBe("150px");
-    expect(figment?.querySelector("[data-cumulus-reveal-adjacent-label]")).toBeNull();
+    expect(
+      figment?.querySelector("[data-cumulus-reveal-adjacent-label]"),
+    ).toBeNull();
     const figmentCard = figment?.querySelector<HTMLElement>(
       '[data-card-id="bb1a5acd-1a03-4aa3-826d-f0a301843845"]',
     );
     expect(figmentCard?.getAttribute("data-figment")).toBe("true");
-    expect(
-      figmentCard?.getAttribute("data-card-rules-text-presentation"),
-    ).toBe("adjacent-figment");
+    expect(figmentCard?.getAttribute("data-card-rules-text-presentation")).toBe(
+      "adjacent-figment",
+    );
     expect(figmentCard?.style.boxShadow).toContain(
       "0 0 0 3px var(--accent-bright)",
     );
@@ -517,34 +580,74 @@ describe("GameCard reveal contract", () => {
       ?.style.fontSize.match(/([0-9.]+)px/u)?.[1];
     expect(Number(figmentRulesFont)).toBeCloseTo(Number(sourceRulesFont) * 1.5);
     expect(Number.parseFloat(figment!.style.left)).toBe(
-      Number.parseFloat(definition!.style.left)
-        + Number.parseFloat(definition!.style.width)
-        + 10,
+      Number.parseFloat(definition!.style.left) +
+        Number.parseFloat(definition!.style.width) +
+        10,
     );
     act(() => root.unmount());
   });
 
   it("uses a reading copy below 240px and leaves a complete 240px source in place", async () => {
-    const small = mount(<div data-test-width="239"><GameCard model={model()} /></div>);
-    const smallSource = small.container.querySelector<HTMLElement>("[data-game-card-source]");
-    act(() => { smallSource?.dispatchEvent(pointer("pointerover", { pointerType: "mouse", pointerId: 1 })); });
+    const small = mount(
+      <div data-test-width="239">
+        <GameCard model={model()} />
+      </div>,
+    );
+    const smallSource = small.container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    act(() => {
+      smallSource?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+      );
+    });
     expect(smallSource?.dataset.revealActive).toBe("true");
-    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
     remeasure();
-    await vi.waitFor(() => expect(document.querySelector('[data-cumulus-reveal-card="primary"]')).not.toBeNull());
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector('[data-cumulus-reveal-card="primary"]'),
+      ).not.toBeNull(),
+    );
     expect(smallSource?.style.opacity).toBe("0");
-    expect(document.querySelector<HTMLElement>('[data-cumulus-reveal-card="primary"]')?.style.width).toBe("240px");
+    expect(
+      document.querySelector<HTMLElement>(
+        '[data-cumulus-reveal-card="primary"]',
+      )?.style.width,
+    ).toBe("240px");
     act(() => small.root.unmount());
 
-    const wide = mount(<div data-test-width="240"><GameCard model={model()} /></div>);
-    const wideSource = wide.container.querySelector<HTMLElement>("[data-game-card-source]");
-    act(() => { wideSource?.dispatchEvent(pointer("pointerover", { pointerType: "mouse", pointerId: 2 })); });
-    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
+    const wide = mount(
+      <div data-test-width="240">
+        <GameCard model={model()} />
+      </div>,
+    );
+    const wideSource = wide.container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    act(() => {
+      wideSource?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 2 }),
+      );
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
     remeasure();
-    await vi.waitFor(() => expect(document.querySelectorAll('[data-cumulus-reveal-card="secondary"]')).toHaveLength(1));
+    await vi.waitFor(() =>
+      expect(
+        document.querySelectorAll('[data-cumulus-reveal-card="secondary"]'),
+      ).toHaveLength(1),
+    );
     expect(wideSource?.style.opacity).not.toBe("0");
-    expect(document.querySelector('[data-cumulus-reveal-card="primary"]')).toBeNull();
-    expect(document.querySelectorAll('[data-cumulus-reveal-card="secondary"]')).toHaveLength(1);
+    expect(
+      document.querySelector('[data-cumulus-reveal-card="primary"]'),
+    ).toBeNull();
+    expect(
+      document.querySelectorAll('[data-cumulus-reveal-card="secondary"]'),
+    ).toHaveLength(1);
     act(() => wide.root.unmount());
   });
 
@@ -554,24 +657,57 @@ describe("GameCard reveal contract", () => {
         <GameCard model={model()} />
       </div>,
     );
-    const source = container.querySelector<HTMLElement>("[data-game-card-source]");
-    act(() => { source?.dispatchEvent(pointer("pointerover", { pointerType: "mouse", pointerId: 1 })); });
-    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
+    act(() => {
+      source?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+      );
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
     remeasure();
-    await vi.waitFor(() => expect(document.querySelector('[data-cumulus-reveal-card="primary"]')).not.toBeNull());
-    expect(document.querySelector<HTMLElement>('[data-cumulus-reveal-card="primary"]')?.style.width).toBe("300px");
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector('[data-cumulus-reveal-card="primary"]'),
+      ).not.toBeNull(),
+    );
+    expect(
+      document.querySelector<HTMLElement>(
+        '[data-cumulus-reveal-card="primary"]',
+      )?.style.width,
+    ).toBe("300px");
     act(() => root.unmount());
   });
 
   it("keeps hidden-rules cards eligible for a complete popup", async () => {
-    const { container, root } = mount(<GameCard model={model()} hideRulesText />);
-    const source = container.querySelector<HTMLElement>("[data-game-card-source]");
+    const { container, root } = mount(
+      <GameCard model={model()} hideRulesText />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
     expect(source?.dataset.revealCompleteGameCard).toBe("false");
-    act(() => { source?.dispatchEvent(pointer("pointerover", { pointerType: "mouse", pointerId: 1 })); });
-    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
+    act(() => {
+      source?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
+      );
+    });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
     remeasure();
-    await vi.waitFor(() => expect(document.querySelector('[data-cumulus-reveal-card="primary"]')).not.toBeNull());
-    expect(document.querySelector('[data-cumulus-reveal-card="primary"]')?.textContent).toContain("Nightmare is a Bane");
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector('[data-cumulus-reveal-card="primary"]'),
+      ).not.toBeNull(),
+    );
+    expect(
+      document.querySelector('[data-cumulus-reveal-card="primary"]')
+        ?.textContent,
+    ).toContain("Nightmare is a Bane");
     act(() => root.unmount());
   });
 
@@ -593,17 +729,13 @@ describe("GameCard reveal contract", () => {
     expect(surface?.style.aspectRatio).toBe("1 / 1");
     expect(surface?.style.borderRadius).toBe("var(--cv-radius)");
     expect(surface?.style.getPropertyValue("--cv-radius")).toBe("3.6%");
-    expect(
-      surface?.querySelector("[data-card-stat-value]")?.textContent,
-    ).toBe("3");
-    expect(surface?.querySelector('[data-card-energy-anchor]')).toBeNull();
+    expect(surface?.querySelector("[data-card-stat-value]")?.textContent).toBe(
+      "3",
+    );
+    expect(surface?.querySelector("[data-card-energy-anchor]")).toBeNull();
     expect(surface?.querySelector('[data-testid="card-type-line"]')).toBeNull();
-    expect(spark?.style.width).toBe(
-      "calc(var(--cv-spark-orb-size) * 2.5)",
-    );
-    expect(spark?.style.height).toBe(
-      "calc(var(--cv-spark-orb-size) * 2.5)",
-    );
+    expect(spark?.style.width).toBe("calc(var(--cv-spark-orb-size) * 2.5)");
+    expect(spark?.style.height).toBe("calc(var(--cv-spark-orb-size) * 2.5)");
 
     act(() => {
       source?.dispatchEvent(
@@ -629,7 +761,7 @@ describe("GameCard reveal contract", () => {
     expect(reveal?.textContent).toContain("Archive Sentry");
     expect(reveal?.textContent).toContain("Synth");
     expect(reveal?.textContent).toContain("Nightmare is a Bane");
-    expect(reveal?.querySelector('[data-card-energy-anchor]')).not.toBeNull();
+    expect(reveal?.querySelector("[data-card-energy-anchor]")).not.toBeNull();
 
     act(() => root.unmount());
   });
@@ -661,7 +793,8 @@ describe("GameCard reveal contract", () => {
       ).not.toBeNull(),
     );
     expect(
-      document.querySelector('[data-cumulus-reveal-card="primary"]')?.textContent,
+      document.querySelector('[data-cumulus-reveal-card="primary"]')
+        ?.textContent,
     ).toContain("Archive Sentry");
 
     act(() => root.unmount());
@@ -735,9 +868,9 @@ describe("GameCard reveal contract", () => {
     }
 
     expect(battlefieldImage?.style.height).toBe(fullImage?.style.height);
-    expect(Number.parseFloat(battlefieldImage?.style.width ?? "Infinity")).toBeLessThan(
-      Number.parseFloat(fullImage?.style.width ?? "0"),
-    );
+    expect(
+      Number.parseFloat(battlefieldImage?.style.width ?? "Infinity"),
+    ).toBeLessThan(Number.parseFloat(fullImage?.style.width ?? "0"));
 
     act(() => {
       full.root.unmount();
@@ -794,7 +927,9 @@ describe("GameCard reveal contract", () => {
     const { container, root } = mount(
       <GameCard model={model()} selection="copied" />,
     );
-    const source = container.querySelector<HTMLElement>("[data-game-card-source]");
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
     act(() => {
       source?.dispatchEvent(
         pointer("pointerover", { pointerType: "mouse", pointerId: 1 }),
@@ -818,9 +953,7 @@ describe("GameCard reveal contract", () => {
   });
 
   it("carries the figment frame and title bar onto the reading copy", async () => {
-    const { container, root } = mount(
-      <GameCard model={model()} figment />,
-    );
+    const { container, root } = mount(<GameCard model={model()} figment />);
     const source = container.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
@@ -863,14 +996,24 @@ describe("GameCard reveal contract", () => {
 
   it("keeps informative unavailable cards focusable while suppressing activation", async () => {
     const activate = vi.fn();
-    const { container, root } = mount(<GameCard model={model()} unavailable onPress={activate} />);
-    const source = container.querySelector<HTMLElement>("[data-game-card-source]");
+    const { container, root } = mount(
+      <GameCard model={model()} unavailable onPress={activate} />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
     expect(source?.tabIndex).toBe(0);
     act(() => source?.focus());
     expect(source?.dataset.revealActive).toBe("true");
-    await act(async () => { await new Promise((resolve) => setTimeout(resolve, 0)); });
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
     remeasure();
-    await vi.waitFor(() => expect(document.querySelector('[data-cumulus-reveal-card="primary"]')).not.toBeNull());
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector('[data-cumulus-reveal-card="primary"]'),
+      ).not.toBeNull(),
+    );
     act(() => source?.click());
     expect(activate).not.toHaveBeenCalled();
     act(() => root.unmount());
@@ -879,24 +1022,62 @@ describe("GameCard reveal contract", () => {
   it("fires quick activation, suppresses a hold, and dismisses on drag recognition", () => {
     vi.useFakeTimers();
     const activate = vi.fn();
-    const { container, root } = mount(<GameCard model={model()} onPress={activate} />);
-    const source = container.querySelector<HTMLElement>("[data-game-card-source]");
-    act(() => { source?.dispatchEvent(pointer("pointerdown", { pointerType: "touch", pointerId: 4, clientX: 100, clientY: 200 })); });
-    act(() => { source?.dispatchEvent(pointer("pointerup", { pointerType: "touch", pointerId: 4, clientX: 100, clientY: 200 })); });
-    expect(activate).toHaveBeenCalledTimes(1);
-
+    const { container, root } = mount(
+      <GameCard model={model()} onPress={activate} />,
+    );
+    const source = container.querySelector<HTMLElement>(
+      "[data-game-card-source]",
+    );
     act(() => {
-      source?.dispatchEvent(pointer("pointerdown", { pointerType: "touch", pointerId: 5, clientX: 100, clientY: 200 }));
-      vi.advanceTimersByTime(300);
-      source?.dispatchEvent(pointer("pointerup", { pointerType: "touch", pointerId: 5, clientX: 100, clientY: 200 }));
+      source?.dispatchEvent(
+        pointer("pointerdown", {
+          pointerType: "touch",
+          pointerId: 4,
+          clientX: 100,
+          clientY: 200,
+        }),
+      );
+    });
+    act(() => {
+      source?.dispatchEvent(
+        pointer("pointerup", {
+          pointerType: "touch",
+          pointerId: 4,
+          clientX: 100,
+          clientY: 200,
+        }),
+      );
     });
     expect(activate).toHaveBeenCalledTimes(1);
 
     act(() => {
-      source?.dispatchEvent(pointer("pointerover", { pointerType: "mouse", pointerId: 6 }));
+      source?.dispatchEvent(
+        pointer("pointerdown", {
+          pointerType: "touch",
+          pointerId: 5,
+          clientX: 100,
+          clientY: 200,
+        }),
+      );
+      vi.advanceTimersByTime(300);
+      source?.dispatchEvent(
+        pointer("pointerup", {
+          pointerType: "touch",
+          pointerId: 5,
+          clientX: 100,
+          clientY: 200,
+        }),
+      );
+    });
+    expect(activate).toHaveBeenCalledTimes(1);
+
+    act(() => {
+      source?.dispatchEvent(
+        pointer("pointerover", { pointerType: "mouse", pointerId: 6 }),
+      );
       source?.dispatchEvent(new Event("dragstart", { bubbles: true }));
     });
-    expect(document.querySelector('[data-cumulus-reveal-group]')).toBeNull();
+    expect(document.querySelector("[data-cumulus-reveal-group]")).toBeNull();
     act(() => root.unmount());
   });
 });

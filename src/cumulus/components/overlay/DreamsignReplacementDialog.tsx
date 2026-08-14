@@ -1,43 +1,52 @@
 import {
-  tx,
-  plural,
   one,
   other,
+  plural,
+  tx,
   txa,
   type LocalizedString,
 } from "@trox/runtime";
-import { requireDreamsignId } from "../../data/dreamsigns";
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
-import { GlassButton } from "../components/controls/GlassButton";
-import { Dreamsign } from "../components/hud/Dreamsign";
-import { GlassDialog } from "../components/overlay/GlassDialog";
-import { token } from "../primitives/tokens";
-import { useLocalizer } from "../../runtime/localization/use-localizer";
+import { requireDreamsignId } from "../../../data/dreamsigns";
+import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import { GlassButton } from "../controls/GlassButton";
+import { Dreamsign, type LocalizedDreamsign } from "../hud/Dreamsign";
+import { token } from "../../primitives/tokens";
+import { GlassDialog } from "./GlassDialog";
 
-/** The pending and currently held Dreamsigns shown by a replacement choice. */
-export interface DreamsignReplacementView {
-  pendingDreamsign: LocalizedDreamsign;
-  currentDreamsigns: readonly LocalizedDreamsign[];
-  maxDreamsigns: number;
+/** Prepared display data for choosing which held Dreamsign to replace. */
+export interface DreamsignReplacementModel {
+  /** The newly acquired Dreamsign awaiting capacity resolution. */
+  readonly incoming: LocalizedDreamsign;
+  /** Held Dreamsigns, each resolved by UUID. */
+  readonly held: readonly LocalizedDreamsign[];
+  /** Prepared maximum held-Dreamsign count. */
+  readonly capacity: number;
+  /** Label for the non-destructive dismissal action. */
+  readonly dismissLabel: LocalizedString;
+  /** Accessible label for the dialog close control. */
+  readonly closeLabel: LocalizedString;
 }
 
 export interface DreamsignReplacementDialogProps {
-  view: DreamsignReplacementView;
-  onReplace: (dreamsignId: string) => void;
-  onCancel: () => void;
-  cancelLabel: LocalizedString;
-  closeLabel: LocalizedString;
+  /** Complete resolved replacement presentation. */
+  readonly model: DreamsignReplacementModel;
+  /** Reports the exact held Dreamsign UUID selected for replacement. */
+  readonly onDreamsignPress: (dreamsignId: string) => void;
+  /** Dismisses the replacement workflow without selecting a held Dreamsign. */
+  readonly onDismiss: () => void;
 }
 
-/** Shared UUID-backed replacement choice for every Dreamsign acquisition flow. */
+/** The canonical UUID-backed Dreamsign capacity-resolution dialog. */
 export function DreamsignReplacementDialog({
-  view,
-  onReplace,
-  onCancel,
-  cancelLabel,
-  closeLabel,
+  model,
+  onDreamsignPress,
+  onDismiss,
 }: DreamsignReplacementDialogProps) {
   const resolve = useLocalizer();
+  const incomingId = requireDreamsignId(
+    model.incoming,
+    "Cumulus Dreamsign replacement incoming reward",
+  );
   return (
     <GlassDialog
       title={tx(
@@ -45,26 +54,21 @@ export function DreamsignReplacementDialog({
         "[dreamsign] Heading for choosing which held Dreamsign to replace after gaining one while at capacity.",
       )}
       subtitle={txa(
-        plural(view.maxDreamsigns, [
+        plural(model.capacity, [
           one("You can hold {count} Dreamsign."),
           other("You can hold {count} Dreamsigns."),
         ]),
-        { count: view.maxDreamsigns },
+        { count: model.capacity },
         "[dreamsign] Subtitle in the Dreamsign replacement dialog. count is the positive maximum number of Dreamsigns the current player may hold at once.",
       )}
-      onClose={onCancel}
-      closeLabel={closeLabel}
+      onClose={onDismiss}
+      closeLabel={model.closeLabel}
     >
       <div
         data-dreamsign-replacement-dialog=""
-        data-pending-dreamsign-id={requireDreamsignId(
-          view.pendingDreamsign,
-          "Cumulus Dreamsign replacement pending reward",
-        )}
-        style={{
-          width: "min(100%, 420px)",
-          margin: "0 auto",
-        }}
+        data-incoming-dreamsign-id={incomingId}
+        data-dreamsign-replacement-capacity={model.capacity}
+        style={{ width: "min(100%, 420px)", margin: "0 auto" }}
       >
         <div
           style={{
@@ -90,14 +94,11 @@ export function DreamsignReplacementDialog({
             )}
           </p>
           <div style={{ width: 88, height: 88 }}>
-            <Dreamsign
-              dreamsign={view.pendingDreamsign}
-              testid="dreamsign-replacement-pending"
-              variant="hud"
-            />
+            <Dreamsign dreamsign={model.incoming} variant="hud" />
           </div>
         </div>
         <div
+          data-dreamsign-replacement-held-count={model.held.length}
           style={{
             display: "grid",
             gridTemplateColumns: `repeat(auto-fit, minmax(calc(2 * ${token("--touch-min")} + ${token("--space-xxs")}), 1fr))`,
@@ -105,7 +106,7 @@ export function DreamsignReplacementDialog({
             justifyItems: "center",
           }}
         >
-          {view.currentDreamsigns.map((dreamsign) => {
+          {model.held.map((dreamsign) => {
             const dreamsignId = requireDreamsignId(
               dreamsign,
               "Cumulus Dreamsign replacement collection",
@@ -122,11 +123,7 @@ export function DreamsignReplacementDialog({
                 }}
               >
                 <div style={{ width: 72, height: 72 }}>
-                  <Dreamsign
-                    dreamsign={dreamsign}
-                    testid={`dreamsign-replacement-held-${dreamsignId}`}
-                    variant="hud"
-                  />
+                  <Dreamsign dreamsign={dreamsign} variant="hud" />
                 </div>
                 <GlassButton
                   label={tx(
@@ -135,8 +132,7 @@ export function DreamsignReplacementDialog({
                   )}
                   variant="accent"
                   placement="onGlass"
-                  testId={`replace-dreamsign-${dreamsignId}`}
-                  onPress={() => onReplace(dreamsignId)}
+                  onPress={() => onDreamsignPress(dreamsignId)}
                 />
               </div>
             );
@@ -150,10 +146,9 @@ export function DreamsignReplacementDialog({
           }}
         >
           <GlassButton
-            label={cancelLabel}
+            label={model.dismissLabel}
             placement="onGlass"
-            testId="dreamsign-replacement-cancel"
-            onPress={onCancel}
+            onPress={onDismiss}
           />
         </div>
       </div>

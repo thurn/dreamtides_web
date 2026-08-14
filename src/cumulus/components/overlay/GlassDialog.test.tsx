@@ -137,7 +137,11 @@ describe("GlassDialog", () => {
 
   it("uses a custom closeLabel as the close control's aria-label", () => {
     const { container, root } = mount(
-      <GlassDialog title={assertLocalized("Title")} onClose={() => {}} closeLabel={assertLocalized("Dismiss deck")}>
+      <GlassDialog
+        title={assertLocalized("Title")}
+        onClose={() => {}}
+        closeLabel={assertLocalized("Dismiss deck")}
+      >
         <div>content</div>
       </GlassDialog>,
     );
@@ -190,7 +194,11 @@ describe("GlassDialog", () => {
 
   it("keeps the popup presentation bounded and content-sized on mobile", () => {
     const { container, root } = mount(
-      <GlassDialog title={assertLocalized("How to Play")} presentation="popup" onClose={() => {}}>
+      <GlassDialog
+        title={assertLocalized("How to Play")}
+        presentation="popup"
+        onClose={() => {}}
+      >
         <div data-testid="popup-content">content</div>
       </GlassDialog>,
     );
@@ -235,9 +243,7 @@ describe("GlassDialog", () => {
       "[data-glass-dialog-panel]",
     );
     expect(layout?.dataset.glassDialogCompanionLayout).toBe("horizontal");
-    expect(layout?.style.gridTemplateColumns).toBe(
-      "360px minmax(0, 460px)",
-    );
+    expect(layout?.style.gridTemplateColumns).toBe("360px minmax(0, 460px)");
     expect(layout?.style.width).toBe("calc(820px + var(--space-xl))");
     expect(panel?.style.width).toBe("100%");
     expect(panel?.style.boxSizing).toBe("border-box");
@@ -338,7 +344,10 @@ describe("GlassDialog", () => {
     document.body.append(battlefield);
 
     const { container, root } = mount(
-      <GlassDialog title={assertLocalized("Foresee 2")} desktopCenterTarget="battlefield">
+      <GlassDialog
+        title={assertLocalized("Foresee 2")}
+        desktopCenterTarget="battlefield"
+      >
         <div>content</div>
       </GlassDialog>,
     );
@@ -361,7 +370,11 @@ describe("GlassDialog", () => {
     // Default: hasInjectedDisplayCutout() is false, so even on mobile the disc
     // stays on the header's trailing edge.
     const { container, root } = mount(
-      <GlassDialog title={assertLocalized("Title")} onClose={() => {}} cutoutAwareClose>
+      <GlassDialog
+        title={assertLocalized("Title")}
+        onClose={() => {}}
+        cutoutAwareClose
+      >
         <div>content</div>
       </GlassDialog>,
     );
@@ -380,7 +393,11 @@ describe("GlassDialog", () => {
     vi.mocked(hasInjectedDisplayCutout).mockReturnValue(true);
     const onClose = vi.fn();
     const { container, root } = mount(
-      <GlassDialog title={assertLocalized("Title")} onClose={onClose} cutoutAwareClose>
+      <GlassDialog
+        title={assertLocalized("Title")}
+        onClose={onClose}
+        cutoutAwareClose
+      >
         <div>content</div>
       </GlassDialog>,
     );

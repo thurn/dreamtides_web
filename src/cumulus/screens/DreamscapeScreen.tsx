@@ -24,8 +24,8 @@ import { token } from "../primitives/tokens";
 import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import {
   DreamsignReplacementDialog,
-  type DreamsignReplacementView,
-} from "./DreamsignReplacementDialog";
+  type DreamsignReplacementModel,
+} from "../components/overlay/DreamsignReplacementDialog";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { opaque, tx, txa, type LocalizedString } from "@trox/runtime";
@@ -54,7 +54,7 @@ export interface DreamscapeView {
   /** Generated Essence and Reward results, keyed by the site's stable id. */
   inlineRewards: Readonly<Record<string, InlineRewardView>>;
   /** Replacement choice shown after an at-cap Reward animation. */
-  replacement: DreamsignReplacementView | null;
+  replacement: Omit<DreamsignReplacementModel, "dismissLabel" | "closeLabel"> | null;
   /** Mira's delayed tutorial-only explanation of Dream Sites. */
   guideDialogue?: DreamscapeGuideDialogueView;
 }
@@ -433,17 +433,13 @@ export function DreamscapeScreen({
       )}
       {view.replacement !== null && (
         <DreamsignReplacementDialog
-          view={view.replacement}
-          onReplace={onReplaceDreamsign}
-          onCancel={onDeclineReward}
-          cancelLabel={tx(
-            "Keep Current Dreamsigns",
-            "[dreamsign] [journey] Replacement keep current action.",
-          )}
-          closeLabel={tx(
-            "Decline Dreamsign reward",
-            "[dreamsign] [journey] Replacement decline reward action.",
-          )}
+          model={{
+            ...view.replacement,
+            dismissLabel: tx("Keep Current Dreamsigns", "[dreamsign] [journey] Replacement keep current action."),
+            closeLabel: tx("Decline Dreamsign reward", "[dreamsign] [journey] Replacement decline reward action."),
+          }}
+          onDreamsignPress={onReplaceDreamsign}
+          onDismiss={onDeclineReward}
         />
       )}
     </div>

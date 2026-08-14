@@ -31,8 +31,7 @@ interface NestedFixtureSecondaryVariant {
 }
 
 type NestedFixtureVariant =
-  | NestedFixturePrimaryVariant
-  | NestedFixtureSecondaryVariant;
+  NestedFixturePrimaryVariant | NestedFixtureSecondaryVariant;
 
 interface NestedFixtureProps {
   /** The single model object. */
@@ -48,9 +47,18 @@ interface NestedFixtureProps {
 /**
  * A throwaway component used purely to validate nested-model extraction.
  */
-export function NestedFixture({ model, models, active, variant }: NestedFixtureProps) {
+export function NestedFixture({
+  model,
+  models,
+  active,
+  variant,
+}: NestedFixtureProps) {
   return (
-    <div data-active={active} data-label={model.label} data-variant={variant.kind}>
+    <div
+      data-active={active}
+      data-label={model.label}
+      data-variant={variant.kind}
+    >
       {models.length}
     </div>
   );

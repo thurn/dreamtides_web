@@ -32,10 +32,10 @@ import {
   MENU_BUTTON_PX,
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
-} from "./chrome-geometry";
-import { useIsDesktop } from "./use-is-desktop";
+} from "../primitives/chrome-geometry";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
-import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
+import { ViewportTutorialDialogue } from "../components/overlay/ViewportTutorialDialogue";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import type { LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
@@ -215,15 +215,11 @@ export function DraftScreen({
 
       {tutorialVisible && availableTutorial !== undefined && (
         <ViewportTutorialDialogue
-          view={{
-            id: availableTutorial.id,
-            dialogue: availableTutorial.model,
-            horizontalOffset: availableTutorial.horizontalOffset,
-            verticalOffset: availableTutorial.verticalOffset,
-            bubbleWidth: availableTutorial.bubbleWidth,
-          }}
+          presentationId={availableTutorial.id}
+          dialogue={availableTutorial.model}
+          context="site"
+          placement={{ kind: "floating", avoidance: "cards-and-chrome" }}
           visible
-          kind="site"
         />
       )}
 
@@ -241,10 +237,7 @@ export function DraftScreen({
       >
         <IconButton
           glyph={GLYPHS.refresh}
-          label={tx(
-              "Reroll draft offer",
-              "[ui] Draft reroll offer.",
-            )}
+          label={tx("Reroll draft offer", "[ui] Draft reroll offer.")}
           onPress={onReroll}
           testId="reroll-draft-offer"
         />

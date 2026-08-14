@@ -11,10 +11,8 @@ import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
-import {
-  GuideGallerySiteLayout,
-  type GuideGalleryGuideView,
-} from "./GuideGallerySiteLayout";
+import { SiteLayout, type SiteLayoutGuide } from "../components/layout/SiteLayout";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import {
   ShopFreePurchaseStatus,
   type ShopFreePurchaseStatusView,
@@ -51,7 +49,7 @@ export interface CardShopSiteView {
   /** Current dreamscape scene art behind the site, if resolved. */
   scene: ArtRef | null;
   /** Tobias's art and dialog line. */
-  guide: GuideGalleryGuideView;
+  guide: Omit<SiteLayoutGuide, "presence">;
   /** Five card wares in persistent slot order. */
   offers: readonly CardShopOfferView[];
   /** The one-use restock action. */
@@ -77,16 +75,16 @@ export function CardShopSiteScreen({
   onRestock,
   onClose,
 }: CardShopSiteScreenProps) {
+  const layout = useIsDesktop() ? "desktop" : "mobile";
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      screenTestId="cumulus-card-shop-site-screen"
-      guideArtTestId="cumulus-card-shop-guide-art"
-      speechAnchorTestId="cumulus-card-shop-speech-anchor"
-      speechBubbleTestId="cumulus-card-shop-speech-bubble"
-      renderGallery={(layout) => (
+    <div data-testid="cumulus-card-shop-site-screen">
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{ ...view.guide, presence: "speaking" }}
+        composition="balanced-gallery"
+      >
         <CardShopGallery
           layout={layout}
           presentation={view.presentation}
@@ -97,8 +95,8 @@ export function CardShopSiteScreen({
           onRestock={onRestock}
           onClose={onClose}
         />
-      )}
-    />
+      </SiteLayout>
+    </div>
   );
 }
 

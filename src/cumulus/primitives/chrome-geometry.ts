@@ -4,7 +4,7 @@
 // import it without reaching into src/components (no-external-ui-imports); the
 // menu, which may import from src/cumulus, is the other consumer.
 
-import { token } from "../primitives/tokens";
+import { token } from "./tokens";
 
 /**
  * The menu trigger disc's diameter. Both platforms wear the same compact

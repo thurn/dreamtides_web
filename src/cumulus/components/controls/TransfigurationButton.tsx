@@ -9,14 +9,7 @@ import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { EssenceValue } from "../hud/EssenceValue";
 import { StandaloneGlyph } from "./StandaloneGlyph";
-import {
-  exact,
-  one,
-  other,
-  opaque,
-  plural,
-  txa,
-} from "@trox/runtime";
+import { exact, one, other, opaque, plural, txa } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { LocalizedTransfigurationPresentation } from "./transfiguration-presentation";
 
@@ -77,11 +70,13 @@ export function TransfigurationButton({
       data-transfiguration-button-variant={variant}
       role="radio"
       aria-checked={selected}
-      aria-description={resolve(txa(
-        "{description}",
-        { description: opaque(form.presentation.description) },
-        "[transfiguration] Description of a Transfiguration form sourced from the authored catalog.",
-      ))}
+      aria-description={resolve(
+        txa(
+          "{description}",
+          { description: opaque(form.presentation.description) },
+          "[transfiguration] Description of a Transfiguration form sourced from the authored catalog.",
+        ),
+      )}
       ariaLabelMessage={txa(
         plural(form.essenceCost, [
           exact(0, "{form_name}, free"),

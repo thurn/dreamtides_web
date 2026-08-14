@@ -12,8 +12,9 @@ import { GLYPHS } from "../../primitives/glyph";
 import { CumulusRoot } from "../../CumulusRoot";
 import { RadialAnnouncement } from "./RadialAnnouncement";
 
-(globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
-  .IS_REACT_ACT_ENVIRONMENT = true;
+(
+  globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
+).IS_REACT_ACT_ENVIRONMENT = true;
 
 describe("RadialAnnouncement", () => {
   it("renders a semantic reward with canonical Essence notation", () => {
@@ -64,23 +65,18 @@ describe("RadialAnnouncement", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <RadialAnnouncement
-            headline={assertLocalized("Bust!")}
-            size="mini"
-          />
+          <RadialAnnouncement headline={assertLocalized("Bust!")} size="mini" />
         </CumulusRoot>,
       );
     });
 
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-radial-announcement-disc]",
-      )?.style.width,
+      container.querySelector<HTMLElement>("[data-radial-announcement-disc]")
+        ?.style.width,
     ).toBe("108px");
     expect(
-      container.querySelector<HTMLElement>(
-        "[data-radial-announcement-ripple]",
-      )?.style.inset,
+      container.querySelector<HTMLElement>("[data-radial-announcement-ripple]")
+        ?.style.inset,
     ).toBe("calc(-1 * var(--space-xxs))");
 
     act(() => root.unmount());
@@ -161,9 +157,8 @@ describe("RadialAnnouncement", () => {
     expect(available?.textContent).toContain("2");
     expect(available?.querySelector("i.bx-sparkle")).not.toBeNull();
     expect(
-      available?.querySelector<HTMLElement>(
-        "[data-radial-announcement-disc]",
-      )?.style.animation,
+      available?.querySelector<HTMLElement>("[data-radial-announcement-disc]")
+        ?.style.animation,
     ).toContain("radial-announcement-target-disc");
     const availableOrbit = available?.querySelector<HTMLElement>(
       "[data-radial-announcement-orbit]",
@@ -228,7 +223,7 @@ describe("RadialAnnouncement", () => {
       victory?.querySelectorAll("[data-radial-announcement-ripple]"),
     ).toHaveLength(2);
     expect(
-      victory?.querySelector("[data-radial-announcement-symbol=\"victory\"]"),
+      victory?.querySelector('[data-radial-announcement-symbol="victory"]'),
     ).not.toBeNull();
     expect(victory?.querySelector("style")?.textContent).toContain(
       '[data-radial-announcement-variant="victory"]',
@@ -261,9 +256,11 @@ describe("RadialAnnouncement", () => {
     expect(total?.dataset.radialAnnouncementOwner).toBe("dealer");
     expect(total?.dataset.radialAnnouncementTotal).toBe("17");
     expect(total?.getAttribute("aria-label")).toContain("17");
-    expect(total?.querySelector<HTMLElement>(
-      "[data-radial-announcement-hand-total-orbit]",
-    )?.style.animation).toContain("infinite");
+    expect(
+      total?.querySelector<HTMLElement>(
+        "[data-radial-announcement-hand-total-orbit]",
+      )?.style.animation,
+    ).toContain("infinite");
 
     act(() => root.unmount());
     container.remove();

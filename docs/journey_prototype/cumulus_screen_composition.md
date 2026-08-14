@@ -48,6 +48,29 @@ Use one atmospheric layer per screen. A nested feature that needs particles
 should route through the screen's existing `Motes` policy or become a documented
 component variant.
 
+## Routed Site Family
+
+Character-led routed sites compose through `SiteLayout`. The layout owns the
+full-viewport scene, one Motes atmosphere, safe-area and HUD clearance, guide
+portrait, optional speech, and one content region. A site selects one named
+composition recipe; the recipe defines desktop, intermediate, and narrow
+behavior together. The content region chooses its own material, and floating
+glass panels remain content-sized.
+
+The routed family includes Augury, Card Shop, Dreamsign Bazaar, Dreamsign
+Revelation, Duplication, Exploration, Gamble, Purge, Random Site, and
+Transfiguration. Dreamsign Revelation uses the same stage with glass-free offer
+content.
+
+Four compositions have dedicated ownership:
+
+- Draft uses its card-drafting stage.
+- Battle uses the battle board and battle-status stages.
+- Essence outcomes remain inline within their owning screen.
+- Reward outcomes remain inline within their owning screen.
+
+Router-owned `CumulusJourneyChrome` remains a sibling of the site layout.
+
 ## Persistent Journey Chrome
 
 `CumulusJourneyChrome` is the app-owned wrapper around Cumulus product

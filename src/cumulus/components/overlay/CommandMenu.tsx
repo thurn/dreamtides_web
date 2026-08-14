@@ -24,11 +24,11 @@ import type { Glyph } from "../../primitives/glyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
-import { useIsDesktop } from "../../screens/use-is-desktop";
+import { useIsDesktop } from "../../primitives/use-is-desktop";
 import {
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
-} from "../../screens/chrome-geometry";
+} from "../../primitives/chrome-geometry";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export type CommandMenuCopy = LocalizedString;

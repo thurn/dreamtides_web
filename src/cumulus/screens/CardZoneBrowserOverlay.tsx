@@ -22,7 +22,7 @@ import type { CardChoiceGridCardView as CardGalleryCardView } from "../component
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import { useIsDesktop } from "./use-is-desktop";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 
 export type CardZoneBrowserZone = "deck" | "void" | "banished";
 export type CardZoneBrowserSort = "current" | "cost" | "spark" | "name";

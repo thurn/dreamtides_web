@@ -122,13 +122,17 @@ function localizedPresentationText(
   if (typeof selected !== "string") {
     return bindSourceTransport(selected, variables);
   }
-  const names = [...selected.matchAll(/\{([a-z][a-zA-Z0-9_]*)\}/gu)]
-    .map((match) => match[1] ?? "");
-  const compatibleVariables = Object.fromEntries(names.map((name) => {
-    const value = variables[name] ?? variables[canonicalPlaceholderName(name)];
-    if (value === undefined) throw new Error(`missing value for {${name}}`);
-    return [name, value];
-  }));
+  const names = [...selected.matchAll(/\{([a-z][a-zA-Z0-9_]*)\}/gu)].map(
+    (match) => match[1] ?? "",
+  );
+  const compatibleVariables = Object.fromEntries(
+    names.map((name) => {
+      const value =
+        variables[name] ?? variables[canonicalPlaceholderName(name)];
+      if (value === undefined) throw new Error(`missing value for {${name}}`);
+      return [name, value];
+    }),
+  );
   return bindSourceTransport(selected, compatibleVariables);
 }
 

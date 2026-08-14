@@ -176,11 +176,15 @@ export function buildTutorialBattleView(
       confirmedHumanPrompt && prompt.options.kind === "foresee"
         ? {
             initialCount: prompt.options.count,
+            allowedCounts: Array.from(
+              { length: prompt.options.cardIds.length },
+              (_, index) => index + 1,
+            ),
             cards: prompt.options.cardIds.flatMap((battleCardId) => {
               const card = battle.board.cardInstances[battleCardId];
               return card === undefined
                 ? []
-                : [{ battleCardId, model: battleGameCardModel(card) }];
+                : [{ battleCardId, card: battleGameCardModel(card) }];
             }),
           }
         : null,

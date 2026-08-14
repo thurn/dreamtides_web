@@ -13,11 +13,7 @@ import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import { useRevealSource } from "../../internal/reveal/context";
 import { Pressable } from "../../primitives/Pressable";
 import "./dreamwell-card.css";
-import {
-  txa,
-  opaque,
-  type LocalizedString,
-} from "@trox/runtime";
+import { txa, opaque, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 /** The complete resolved display data for one Dreamwell card. */

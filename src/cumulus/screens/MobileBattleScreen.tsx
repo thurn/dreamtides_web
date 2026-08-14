@@ -23,7 +23,6 @@ import {
 import { LayoutGroup, motion, useReducedMotion } from "framer-motion";
 import {
   GameCard,
-  cardSelectionShadowLayers,
   type GameCardModel,
   type GameCardSelection,
 } from "../components/card/CardView";
@@ -34,9 +33,13 @@ import {
   BATTLEFIELD_CARD_CORNER_RADIUS,
   CARD_ASPECT_RATIO,
   CARD_ASPECT_RATIO_VALUE,
-  CARD_CORNER_RADIUS,
 } from "../components/card/card-aspect";
 import { BattleStatusDisplay } from "../components/battle/BattleStatusDisplay";
+import { BattlePhaseIndicator } from "../components/battle/BattlePhaseIndicator";
+import {
+  BattlefieldCard,
+  type BattlefieldCardInteraction,
+} from "../components/battle/BattlefieldCard";
 import type { BattleStatusDreamAvatarProfile } from "../components/battle/BattleStatusDisplay";
 import {
   DreamwellCard,
@@ -50,7 +53,6 @@ import {
 } from "../components/battle/battle-card-layout";
 import { GlassButton } from "../components/controls/GlassButton";
 import { DisclosureSection } from "../components/controls/DisclosureSection";
-import { StandaloneGlyph } from "../components/controls/StandaloneGlyph";
 import { IconButton } from "../components/controls/IconButton";
 import { NumberStepper } from "../components/controls/NumberStepper";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
@@ -65,13 +67,8 @@ import {
   RadialAnnouncement,
 } from "../components/status/RadialAnnouncement";
 import type { DreamAvatarVisual } from "../components/hud/DreamAvatarPortrait";
-import { InlineGlyph } from "../components/typography/InlineGlyph";
 import { GLYPHS } from "../primitives/glyph";
-import {
-  DOUBLE_TAP_WINDOW_MS,
-  LONG_PRESS_THRESHOLD_MS,
-  POINTER_MOVEMENT_SLOP_PX,
-} from "../primitives/pointer-gesture";
+import { DOUBLE_TAP_WINDOW_MS } from "../primitives/pointer-gesture";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
 import { motionTimeSeconds } from "../primitives/motion-time";
 import { token } from "../primitives/tokens";
@@ -88,7 +85,7 @@ import {
   MOBILE_BATTLE_MIN_BACK_RANK_SLOTS,
   MOBILE_BATTLE_MIN_FRONT_RANK_SLOTS,
 } from "./mobile-battle-layout";
-import { useIsDesktop } from "./use-is-desktop";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
   BattleResultSurface,
@@ -97,10 +94,7 @@ import {
 } from "./BattleResultSurface";
 import battleBackgroundUrl from "../assets/battle-background.png";
 
-/** Canonical visual treatment for an exhausted battlefield card body. */
-export const BATTLEFIELD_CARD_EXHAUSTED_FILTER =
-  "grayscale(0.5) brightness(0.62)";
-const POINTER_DROP_COMMIT_HOLD_MS = motionTimeSeconds("--dur-slow") * 1_000;
+export { BATTLEFIELD_CARD_EXHAUSTED_FILTER } from "../components/battle/BattlefieldCard";
 const CARD_PICKER_HIGHLIGHT_SELECTION: GameCardSelection = "highlighted";
 const CARD_PICKER_SELECTION: GameCardSelection = "selected";
 
@@ -586,35 +580,9 @@ const DESKTOP_BATTLEFIELD_SIDE_INSET_PERCENT = 14;
 const BATTLEFIELD_WIDTH_PERCENT = 100 - BATTLEFIELD_SIDE_INSET_PERCENT * 2;
 const BATTLEFIELD_FULL_WIDTH_PERCENT =
   100 - BATTLEFIELD_FULL_SIDE_INSET_PERCENT * 2;
-// Human-tuned box measures: a compact glyph in a padded dark disc, tucked
-// into the status edge far enough to read as attached to the status display.
-const PHASE_LIGHT_ICON_SIZE = 15;
-const PHASE_LIGHT_DISC_PADDING = 2;
-const PHASE_LIGHT_SIZE = PHASE_LIGHT_ICON_SIZE + PHASE_LIGHT_DISC_PADDING * 2;
-const PHASE_LIGHT_VERTICAL_OFFSET = -12;
-const PHASE_LIGHT_STREAK_WIDTH = 28;
-const PHASE_LIGHT_STREAK_HEIGHT = 2;
-const PHASE_COMET_TAIL_START_SCALE = 0.35;
-const PHASE_COMET_TAIL_PEAK_SCALE = 1.55;
-const PHASE_CHALLENGE_PULSE_PEAK_SCALE = 1.65;
 const FIGMENT_MERGE_ANIMATION_SECONDS = motionTimeSeconds("--dur-slow") * 2;
 const FIGMENT_MERGE_NOTICE_MS = motionTimeSeconds("--dur-slow") * 4 * 1_000;
-const PHASE_LIGHT_LEFT = {
-  dawn: "10%",
-  day: "30%",
-  dusk: "50%",
-  night: "70%",
-  challenge: "90%",
-} satisfies Record<MobileBattlePhase, string>;
-const PHASE_GLYPH = {
-  dawn: GLYPHS.phaseDawn,
-  day: GLYPHS.phaseDay,
-  dusk: GLYPHS.phaseDusk,
-  night: GLYPHS.phaseNight,
-  challenge: GLYPHS.phaseChallenge,
-} satisfies Record<MobileBattlePhase, (typeof GLYPHS)[keyof typeof GLYPHS]>;
-
-const BATTLE_PHASE_LIGHT_CSS = `
+const BATTLE_OVERLAY_CSS = `
   body:has([data-radial-announcement]) [data-cumulus-reveal-portal] {
     visibility: hidden;
   }
@@ -623,25 +591,6 @@ const BATTLE_PHASE_LIGHT_CSS = `
     display: none;
   }
 
-  @keyframes battle-phase-comet-tail {
-    0% { transform: translateY(-50%) scaleX(${String(PHASE_COMET_TAIL_START_SCALE)}); opacity: 0.12; }
-    45% { transform: translateY(-50%) scaleX(${String(PHASE_COMET_TAIL_PEAK_SCALE)}); opacity: 0.52; }
-    100% { transform: translateY(-50%) scaleX(1); opacity: 0.28; }
-  }
-
-  @keyframes battle-phase-challenge-pulse {
-    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.22; }
-    45% { transform: translate(-50%, -50%) scale(${String(PHASE_CHALLENGE_PULSE_PEAK_SCALE)}); opacity: 0.48; }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    [data-battle-phase-light],
-    [data-battle-phase-light-halo],
-    [data-battle-phase-light-streak] {
-      animation: none !important;
-      transition: none !important;
-    }
-  }
 `;
 // The status keeps its content-driven width while the two physical piles share
 // the remaining room. This leaves a stable gap between all three objects and
@@ -1061,7 +1010,7 @@ function FarHand({
             }}
           >
             {showFaceUp && card !== undefined ? (
-              <FaceUpCard
+              <BattleCardSurface
                 card={card}
                 zone="far-hand"
                 showRulesText
@@ -1250,7 +1199,7 @@ function SideZones({
                 ),
               ]),
               {},
-              "[accessibility] [battle] Label for a battle card pile. owner is \"viewer\" for the near, local-perspective side or \"opponent\" for the far side; zone is \"deck\" or \"void\" and identifies the inspected pile.",
+              '[accessibility] [battle] Label for a battle card pile. owner is "viewer" for the near, local-perspective side or "opponent" for the far side; zone is "deck" or "void" and identifies the inspected pile.',
             )}
             onPress={
               interactions?.onZoneOpen === undefined
@@ -1321,7 +1270,7 @@ function SideZones({
             </div>
           ) : null}
           {activeSide === owner ? (
-            <PhaseIndicator owner={owner} position={position} phase={phase} />
+            <BattlePhaseIndicator side={position} phase={phase} />
           ) : null}
         </div>
       </div>
@@ -1367,7 +1316,7 @@ function SideZones({
                 ),
               ]),
               {},
-              "[accessibility] [battle] Label for a battle card pile. owner is \"viewer\" for the near, local-perspective side or \"opponent\" for the far side; zone is \"deck\" or \"void\" and identifies the inspected pile.",
+              '[accessibility] [battle] Label for a battle card pile. owner is "viewer" for the near, local-perspective side or "opponent" for the far side; zone is "deck" or "void" and identifies the inspected pile.',
             )}
             emptyState="outlined"
             emptyLabel={
@@ -1391,293 +1340,22 @@ function SideZones({
   );
 }
 
-function PhaseIndicator({
-  owner,
-  position,
-  phase,
-}: {
-  readonly owner: MobileBattleOwner;
-  readonly position: BattleBoardPosition;
-  readonly phase: MobileBattlePhase;
-}) {
-  const resolve = useLocalizer();
-  const phaseLabel =
-    position === "near"
-      ? phase === "dawn"
-        ? tx(
-            "Your turn, Dawn phase",
-            "[accessibility] [battle] Battle phase for the local side during Dawn.",
-          )
-        : phase === "day"
-          ? tx(
-              "Your turn, Day phase",
-              "[accessibility] [battle] Battle phase for the local side during Day.",
-            )
-          : phase === "dusk"
-            ? tx(
-                "Your turn, Dusk phase",
-                "[accessibility] [battle] Battle phase for the local side during Dusk.",
-              )
-            : phase === "night"
-              ? tx(
-                  "Your turn, Night phase",
-                  "[accessibility] [battle] Battle phase for the local side during Night.",
-                )
-              : tx(
-                  "Your turn, Challenge phase",
-                  "[accessibility] [battle] Battle phase for the local side during the Challenge.",
-                )
-      : phase === "dawn"
-        ? tx(
-            "Opponent’s turn, Dawn phase",
-            "[accessibility] [battle] Battle phase for the opposing side during Dawn.",
-          )
-        : phase === "day"
-          ? tx(
-              "Opponent’s turn, Day phase",
-              "[accessibility] [battle] Battle phase for the opposing side during Day.",
-            )
-          : phase === "dusk"
-            ? tx(
-                "Opponent’s turn, Dusk phase",
-                "[accessibility] [battle] Battle phase for the opposing side during Dusk.",
-              )
-            : phase === "night"
-              ? tx(
-                  "Opponent’s turn, Night phase",
-                  "[accessibility] [battle] Battle phase for the opposing side during Night.",
-                )
-              : tx(
-                  "Opponent’s turn, Challenge phase",
-                  "[accessibility] [battle] Battle phase for the opposing side during the Challenge.",
-                );
-  return (
-    <div
-      role="img"
-      aria-label={resolve(phaseLabel)}
-      data-battle-phase-indicator={owner}
-      data-battle-mobile-phase={phase}
-      style={{
-        position: "absolute",
-        left: 0,
-        right: 0,
-        top: position === "near" ? 0 : "100%",
-        height: 0,
-        pointerEvents: "none",
-      }}
-    >
-      <span
-        aria-hidden="true"
-        data-battle-phase-light=""
-        style={{
-          position: "absolute",
-          top:
-            position === "near"
-              ? -PHASE_LIGHT_VERTICAL_OFFSET
-              : PHASE_LIGHT_VERTICAL_OFFSET,
-          left: PHASE_LIGHT_LEFT[phase],
-          width: PHASE_LIGHT_SIZE,
-          height: PHASE_LIGHT_SIZE,
-          // Follow the phase track along the status edge; the tuned signed
-          // offset determines how much of the disc seats into the bar.
-          transform:
-            position === "near"
-              ? "translate(-50%, -100%)"
-              : "translate(-50%, 0%)",
-          transition: `left ${token("--motion-object-travel")}`,
-        }}
-      >
-        <span
-          key={`${phase}-streak`}
-          data-battle-phase-light-streak=""
-          style={{
-            position: "absolute",
-            top: "50%",
-            right: "50%",
-            width: PHASE_LIGHT_STREAK_WIDTH,
-            height: PHASE_LIGHT_STREAK_HEIGHT,
-            transform: "translateY(-50%)",
-            transformOrigin: "right center",
-            borderRadius: token("--radius-pill"),
-            backgroundColor: token("--accent-bright"),
-            boxShadow: token("--glow-accent-soft"),
-            opacity: 0.28,
-            animation: `battle-phase-comet-tail ${token("--dur-slow")} ${token("--ease-out")}`,
-          }}
-        />
-        <span
-          key={`${phase}-halo`}
-          data-battle-phase-light-halo=""
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: PHASE_LIGHT_SIZE,
-            height: PHASE_LIGHT_SIZE,
-            transform: "translate(-50%, -50%)",
-            borderRadius: token("--radius-pill"),
-            backgroundColor: token("--accent"),
-            boxShadow: token("--glow-accent-soft"),
-            opacity: 0.22,
-            animation:
-              phase === "challenge"
-                ? `battle-phase-challenge-pulse ${token("--dur-slow")} ${token("--ease-out")}`
-                : undefined,
-          }}
-        />
-        <span
-          data-battle-phase-light-core=""
-          style={{
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            width: PHASE_LIGHT_SIZE,
-            height: PHASE_LIGHT_SIZE,
-            borderRadius: token("--radius-pill"),
-            backgroundColor: token("--bg-sunken"),
-            fontSize: PHASE_LIGHT_ICON_SIZE,
-          }}
-        >
-          <StandaloneGlyph
-            glyph={PHASE_GLYPH[phase]}
-            color="accent-bright"
-            depth="content-protection"
-          />
-        </span>
-      </span>
-    </div>
-  );
+interface BattleCardSurfaceInteraction {
+  readonly draggable: boolean;
+  readonly debugGesture: "context-menu" | "double-tap";
+  readonly onActivate?: () => void;
+  readonly onDebugActivate?: (invocation: MobileBattleDebugInvocation) => void;
+  readonly onDragStart?: () => void;
+  readonly onDragEnd?: () => void;
+  readonly onPointerDrop?: (
+    clientX: number,
+    clientY: number,
+    placementClientX: number,
+    placementClientY: number,
+  ) => void;
 }
 
-interface LinearTransform {
-  readonly a: number;
-  readonly b: number;
-  readonly c: number;
-  readonly d: number;
-}
-
-const IDENTITY_LINEAR_TRANSFORM: LinearTransform = { a: 1, b: 0, c: 0, d: 1 };
-
-function clamp(value: number, minimum: number, maximum: number): number {
-  return Math.min(Math.max(value, minimum), maximum);
-}
-
-function inverseLinearTransform(element: HTMLElement | null): LinearTransform {
-  if (element === null) return IDENTITY_LINEAR_TRANSFORM;
-  const transform = getComputedStyle(element).transform;
-  const matrix = /^matrix\(([^)]+)\)$/.exec(transform);
-  const matrix3d = /^matrix3d\(([^)]+)\)$/.exec(transform);
-  const values = (matrix?.[1] ?? matrix3d?.[1])
-    ?.split(",")
-    .map((value) => Number(value.trim()));
-  if (values === undefined) return IDENTITY_LINEAR_TRANSFORM;
-  const [a, b, c, d] =
-    matrix !== null
-      ? [values[0], values[1], values[2], values[3]]
-      : [values[0], values[1], values[4], values[5]];
-  if (
-    a === undefined ||
-    b === undefined ||
-    c === undefined ||
-    d === undefined
-  ) {
-    return IDENTITY_LINEAR_TRANSFORM;
-  }
-  const determinant = a * d - b * c;
-  if (!Number.isFinite(determinant) || Math.abs(determinant) < Number.EPSILON) {
-    return IDENTITY_LINEAR_TRANSFORM;
-  }
-  return {
-    a: d / determinant,
-    b: -b / determinant,
-    c: -c / determinant,
-    d: a / determinant,
-  };
-}
-
-function ChallengerChevron({
-  owner,
-  position,
-}: {
-  readonly owner: MobileBattleOwner;
-  readonly position: BattleBoardPosition;
-}) {
-  const resolve = useLocalizer();
-  const direction = position === "far" ? "down" : "up";
-  return (
-    <div
-      role="img"
-      aria-label={resolve(
-        owner === "enemy"
-          ? tx(
-              "Opponent challenger",
-              "[accessibility] [battle] Name for the opposing challenger card in a battle challenge.",
-            )
-          : tx(
-              "Player challenger",
-              "[accessibility] [battle] Name for the local player's challenger card in a battle challenge.",
-            ),
-      )}
-      data-battle-challenger-chevron={owner}
-      data-battle-challenger-chevron-direction={direction}
-      data-battle-challenger-chevron-style="circle-badge"
-      style={{
-        position: "absolute",
-        zIndex: 7,
-        top: position === "near" ? "-4%" : undefined,
-        bottom: position === "far" ? "-4%" : undefined,
-        left: "50%",
-        width: "22%",
-        height: "16%",
-        pointerEvents: "none",
-        transform: "translateX(-50%)",
-      }}
-    >
-      <svg
-        viewBox="0 0 50 50"
-        preserveAspectRatio="xMidYMid meet"
-        aria-hidden="true"
-        style={{
-          display: "block",
-          width: "100%",
-          height: "100%",
-          overflow: "visible",
-          transform: position === "far" ? "rotate(180deg)" : undefined,
-          transformOrigin: "50% 50%",
-        }}
-      >
-        <g data-battle-challenger-marker-circle="">
-          <circle
-            cx="25"
-            cy="25"
-            r="23"
-            fill={token("--surface-status-badge")}
-          />
-          <polyline
-            points="13,32 25,19 37,32"
-            fill="none"
-            stroke={token("--surface-status-badge")}
-            strokeWidth={7}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <polyline
-            points="13,32 25,19 37,32"
-            fill="none"
-            stroke={token("--battle-challenger-chevron")}
-            strokeWidth={5}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </g>
-      </svg>
-    </div>
-  );
-}
-
-function FaceUpCard({
+function BattleCardSurface({
   card,
   zone,
   showRulesText = false,
@@ -1699,456 +1377,110 @@ function FaceUpCard({
     readonly selected: boolean;
     readonly kind: GameCardSelection;
   };
-  readonly interaction?: {
-    readonly draggable: boolean;
-    readonly debugGesture: "context-menu" | "double-tap";
-    readonly onActivate?: () => void;
-    readonly onDebugActivate?: (
-      invocation: MobileBattleDebugInvocation,
-    ) => void;
-    readonly onDragStart?: () => void;
-    readonly onDragEnd?: () => void;
-    readonly onPointerDrop?: (
-      clientX: number,
-      clientY: number,
-      placementClientX: number,
-      placementClientY: number,
-    ) => void;
-  };
+  readonly interaction?: BattleCardSurfaceInteraction;
 }) {
-  const dragSuppressedRef = useRef(false);
-  const longPressSuppressedRef = useRef(false);
-  const touchPressStartedAtRef = useRef<number | null>(null);
   const pendingTapRef = useRef<number | null>(null);
-  const pointerDropHoldRef = useRef<number | null>(null);
-  const pointerDragRef = useRef<{
-    pointerId: number;
-    startX: number;
-    startY: number;
-    dragging: boolean;
-    inverseParentTransform: LinearTransform;
-    originBounds: DOMRect;
-    constraintBounds: DOMRect | null;
-    viewportX: number;
-    viewportY: number;
-  } | null>(null);
-  const draggable = interaction?.draggable === true;
-  const activatable = interaction?.onActivate !== undefined;
-  const snapLayoutMotion = snapLayout || card.layoutMotion === "snap";
-  const selectionAboveExhaustion =
-    card.exhausted && selection?.selected === true ? selection : null;
-  const restingTransform = "";
-  const cancelPendingTap = (): void => {
-    if (pendingTapRef.current === null) return;
-    window.clearTimeout(pendingTapRef.current);
-    pendingTapRef.current = null;
-  };
-  const cancelPointerDropHold = (): void => {
-    if (pointerDropHoldRef.current === null) return;
-    window.clearTimeout(pointerDropHoldRef.current);
-    pointerDropHoldRef.current = null;
+  const activate = (): void => {
+    if (
+      interaction?.onDebugActivate === undefined ||
+      interaction.debugGesture === "context-menu"
+    ) {
+      interaction?.onActivate?.();
+      return;
+    }
+    if (pendingTapRef.current !== null) {
+      window.clearTimeout(pendingTapRef.current);
+      pendingTapRef.current = null;
+      interaction.onDebugActivate({ presentation: "sheet" });
+      return;
+    }
+    pendingTapRef.current = window.setTimeout(() => {
+      pendingTapRef.current = null;
+      interaction.onActivate?.();
+    }, DOUBLE_TAP_WINDOW_MS);
   };
   useEffect(
     () => () => {
-      cancelPendingTap();
-      cancelPointerDropHold();
+      if (pendingTapRef.current !== null)
+        window.clearTimeout(pendingTapRef.current);
     },
     [],
   );
-  const finishPointerDrag = (
-    event: React.PointerEvent<HTMLDivElement>,
-    drop: boolean,
-  ): void => {
-    const pointerDrag = pointerDragRef.current;
-    if (pointerDrag?.pointerId !== event.pointerId) {
-      return;
-    }
-    if (pointerDrag.dragging) {
-      event.preventDefault();
-      if (drop) {
-        const pointerEvents = event.currentTarget.style.pointerEvents;
-        event.currentTarget.style.pointerEvents = "none";
-        try {
-          interaction?.onPointerDrop?.(
-            event.clientX,
-            event.clientY,
-            pointerDrag.originBounds.left +
-              pointerDrag.originBounds.width / 2 +
-              pointerDrag.viewportX,
-            pointerDrag.originBounds.top +
-              pointerDrag.originBounds.height / 2 +
-              pointerDrag.viewportY,
-          );
-        } finally {
-          event.currentTarget.style.pointerEvents = pointerEvents;
+
+  const semanticInteraction: BattlefieldCardInteraction =
+    interaction?.draggable === true
+      ? {
+          kind: "draggable",
+          ...(interaction.onActivate === undefined &&
+          interaction.onDebugActivate === undefined
+            ? {}
+            : { onPress: activate }),
+          onDragStart: () => interaction.onDragStart?.(),
+          onDragEnd: () => interaction.onDragEnd?.(),
+          onDrop: (drop) =>
+            interaction.onPointerDrop?.(
+              drop.clientX,
+              drop.clientY,
+              drop.placementClientX,
+              drop.placementClientY,
+            ),
         }
-      }
-      interaction?.onDragEnd?.();
-    }
-    try {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    } catch {
-      // Pointer capture is best-effort in browsers that have already released it.
-    }
-    pointerDragRef.current = null;
-    event.currentTarget.dataset.battlePointerDragging = "false";
-    cancelPointerDropHold();
-    if (
-      drop &&
-      pointerDrag.dragging &&
-      interaction?.onPointerDrop !== undefined
-    ) {
-      const releasedCard = event.currentTarget;
-      const releasedTransform = releasedCard.style.transform;
-      releasedCard.dataset.battlePointerDrop = "committing";
-      pointerDropHoldRef.current = window.setTimeout(() => {
-        pointerDropHoldRef.current = null;
-        if (releasedCard.style.transform === releasedTransform) {
-          releasedCard.style.zIndex = "";
-          releasedCard.style.transform = restingTransform;
-        }
-        delete releasedCard.dataset.battlePointerDrop;
-      }, POINTER_DROP_COMMIT_HOLD_MS);
-      return;
-    }
-    event.currentTarget.style.zIndex = "";
-    event.currentTarget.style.transform = restingTransform;
-  };
+      : interaction?.onActivate !== undefined ||
+          interaction?.onDebugActivate !== undefined
+        ? { kind: "pressable", onPress: activate }
+        : { kind: "passive" };
+
   return (
-    <motion.div
-      data-battle-card-id={card.id}
+    <div
       data-battle-card-zone={zone}
-      data-battle-card-face="up"
-      data-battle-card-exhausted={card.exhausted ? "true" : "false"}
-      data-battle-card-stored-time={String(card.storedTime)}
-      data-battle-pointer-dragging="false"
-      draggable={false}
-      onPointerDownCapture={(event) => {
-        dragSuppressedRef.current = false;
-        longPressSuppressedRef.current = false;
-        touchPressStartedAtRef.current =
-          event.pointerType === "touch" ? event.timeStamp : null;
-        if (!draggable || event.button !== 0) return;
-        pointerDragRef.current = {
-          pointerId: event.pointerId,
-          startX: event.clientX,
-          startY: event.clientY,
-          dragging: false,
-          inverseParentTransform: inverseLinearTransform(
-            event.currentTarget.parentElement,
-          ),
-          originBounds: event.currentTarget.getBoundingClientRect(),
-          constraintBounds:
-            event.currentTarget
-              .closest<HTMLElement>("[data-battle-play-area]")
-              ?.getBoundingClientRect() ?? null,
-          viewportX: 0,
-          viewportY: 0,
-        };
-        try {
-          event.currentTarget.setPointerCapture(event.pointerId);
-        } catch {
-          // Pointer capture is best-effort on older Mobile Safari versions.
-        }
-      }}
-      onPointerMove={(event) => {
-        const pointerDrag = pointerDragRef.current;
-        if (pointerDrag?.pointerId !== event.pointerId) {
-          return;
-        }
-        const requestedViewportX = event.clientX - pointerDrag.startX;
-        const requestedViewportY = event.clientY - pointerDrag.startY;
-        if (
-          !pointerDrag.dragging &&
-          Math.hypot(requestedViewportX, requestedViewportY) <=
-            POINTER_MOVEMENT_SLOP_PX
-        ) {
-          return;
-        }
-        event.preventDefault();
-        const dragStarted = !pointerDrag.dragging;
-        if (dragStarted) {
-          touchPressStartedAtRef.current = null;
-          pointerDrag.dragging = true;
-          dragSuppressedRef.current = true;
-          event.currentTarget.dataset.battlePointerDragging = "true";
-          event.currentTarget.style.zIndex = "100";
-        }
-        const viewportX =
-          pointerDrag.constraintBounds === null
-            ? requestedViewportX
-            : clamp(
-                requestedViewportX,
-                pointerDrag.constraintBounds.left -
-                  pointerDrag.originBounds.left,
-                pointerDrag.constraintBounds.right -
-                  pointerDrag.originBounds.right,
-              );
-        const viewportY =
-          pointerDrag.constraintBounds === null
-            ? requestedViewportY
-            : clamp(
-                requestedViewportY,
-                pointerDrag.constraintBounds.top - pointerDrag.originBounds.top,
-                pointerDrag.constraintBounds.bottom -
-                  pointerDrag.originBounds.bottom,
-              );
-        const inverse = pointerDrag.inverseParentTransform;
-        pointerDrag.viewportX = viewportX;
-        pointerDrag.viewportY = viewportY;
-        const x = inverse.a * viewportX + inverse.c * viewportY;
-        const y = inverse.b * viewportX + inverse.d * viewportY;
-        // Pointer movement must reach the compositor before React rerenders the
-        // full card/reveal subtree; otherwise the card trails the finger.
-        event.currentTarget.style.transform = [
-          restingTransform,
-          `translate3d(${String(x)}px, ${String(y)}px, 0)`,
-        ]
-          .filter(Boolean)
-          .join(" ");
-        if (dragStarted) {
-          window.dispatchEvent(new Event("dragstart"));
-          interaction?.onDragStart?.();
-        }
-      }}
-      onPointerUpCapture={(event) => {
-        if (
-          event.pointerType === "touch" &&
-          touchPressStartedAtRef.current !== null &&
-          event.timeStamp - touchPressStartedAtRef.current >=
-            LONG_PRESS_THRESHOLD_MS
-        ) {
-          longPressSuppressedRef.current = true;
-        }
-        touchPressStartedAtRef.current = null;
-        finishPointerDrag(event, true);
-      }}
-      onPointerCancelCapture={(event) => {
-        touchPressStartedAtRef.current = null;
-        finishPointerDrag(event, false);
-      }}
-      onClick={(event) => {
-        if (!activatable && interaction?.onDebugActivate === undefined) return;
-        event.stopPropagation();
-        if (longPressSuppressedRef.current) {
-          longPressSuppressedRef.current = false;
-          dragSuppressedRef.current = false;
-          cancelPendingTap();
-          return;
-        }
-        if (dragSuppressedRef.current) {
-          dragSuppressedRef.current = false;
-          return;
-        }
-        if (interaction?.onDebugActivate === undefined) {
-          interaction?.onActivate?.();
-          return;
-        }
-        if (interaction.debugGesture === "context-menu") {
-          interaction.onActivate?.();
-          return;
-        }
-        if (pendingTapRef.current !== null) {
-          cancelPendingTap();
-          interaction.onDebugActivate({ presentation: "sheet" });
-          return;
-        }
-        pendingTapRef.current = window.setTimeout(() => {
-          pendingTapRef.current = null;
-          interaction?.onActivate?.();
-        }, DOUBLE_TAP_WINDOW_MS);
-      }}
+      style={{ width: "100%", position: "relative" }}
       onContextMenu={(event) => {
         if (
           interaction?.debugGesture !== "context-menu" ||
           interaction.onDebugActivate === undefined
-        ) {
+        )
           return;
-        }
         event.preventDefault();
         event.stopPropagation();
-        cancelPendingTap();
         interaction.onDebugActivate({
           presentation: "context-menu",
           x: event.clientX,
           y: event.clientY,
         });
       }}
-      style={{
-        width: "100%",
-        cursor: draggable ? "grab" : activatable ? "pointer" : undefined,
-        position: "relative",
-        containerType: "inline-size",
-        touchAction: draggable ? "none" : undefined,
-        transform: restingTransform || undefined,
-        transformOrigin: "50% 50%",
-      }}
     >
-      <motion.div
-        layoutId={snapLayoutMotion ? undefined : battleCardLayoutId(card.id)}
-        data-battle-card-motion=""
-        data-battle-card-layout-id={
-          snapLayoutMotion ? undefined : battleCardLayoutId(card.id)
-        }
-        data-battle-card-layout-motion={snapLayoutMotion ? "snap" : "travel"}
-        style={{
-          width: "100%",
-          height: "100%",
-          filter: card.exhausted
-            ? BATTLEFIELD_CARD_EXHAUSTED_FILTER
-            : undefined,
+      <BattlefieldCard
+        model={{
+          battleCardId: card.id,
+          card: card.model,
+          exhausted: card.exhausted,
+          storedMemory: card.storedTime,
+          figment: card.figment,
+          selection:
+            selection === undefined
+              ? card.showPlayableOutline
+                ? "playable"
+                : undefined
+              : selection.selected
+                ? selection.kind
+                : undefined,
+          challengeMarker:
+            challengerChevron === undefined || challengerPosition === undefined
+              ? undefined
+              : { owner: challengerChevron, side: challengerPosition },
+          scoreAnnouncement:
+            cardOverlay?.battleCardId === card.id
+              ? {
+                  points: cardOverlay.points,
+                  presentationId: cardOverlay.presentationId,
+                }
+              : undefined,
+          motion:
+            snapLayout || card.layoutMotion === "snap" ? "snap" : "travel",
+          presentation: showRulesText ? "full" : "battlefield",
         }}
-      >
-        <GameCard
-          model={card.model}
-          selection={
-            selectionAboveExhaustion === null &&
-            (selection?.selected ?? card.showPlayableOutline)
-              ? (selection?.kind ?? "playable")
-              : undefined
-          }
-          hideRulesText={!showRulesText}
-          exhausted={card.exhausted}
-          presentation={showRulesText ? "full" : "battlefield"}
-          figment={card.figment}
-          testId={`battle-card-face:${card.id}`}
-        />
-        {challengerChevron !== undefined && challengerPosition !== undefined ? (
-          <ChallengerChevron
-            owner={challengerChevron}
-            position={challengerPosition}
-          />
-        ) : null}
-      </motion.div>
-      {selectionAboveExhaustion !== null ? (
-        <div
-          aria-hidden="true"
-          data-battle-card-selection-ring="unfiltered"
-          style={{
-            position: "absolute",
-            inset: 0,
-            zIndex: 5,
-            borderRadius: showRulesText
-              ? CARD_CORNER_RADIUS
-              : BATTLEFIELD_CARD_CORNER_RADIUS,
-            boxShadow: cardSelectionShadowLayers(
-              selectionAboveExhaustion.kind,
-            ).join(", "),
-            pointerEvents: "none",
-          }}
-        />
-      ) : null}
-      {cardOverlay?.battleCardId === card.id ? (
-        <RadialAnnouncement
-          variant="card-score"
-          points={cardOverlay.points}
-          announcementId={cardOverlay.presentationId}
-        />
-      ) : null}
-      <BattleCardStatusIndicators card={card} />
-    </motion.div>
-  );
-}
-
-// The badge follows the card width at battlefield scale and caps at the legacy
-// hand-card badge measure so the indicators retain one visual weight.
-const BATTLE_CARD_STATUS_BADGE_SIZE = "min(26cqw, 28px)";
-const BATTLE_CARD_EXHAUST_ICON_SIZE = "min(19cqw, 20px)";
-
-const BATTLE_CARD_STATUS_BADGE_STYLE: CSSProperties = {
-  position: "absolute",
-  display: "inline-flex",
-  alignItems: "center",
-  justifyContent: "center",
-  minWidth: BATTLE_CARD_STATUS_BADGE_SIZE,
-  height: BATTLE_CARD_STATUS_BADGE_SIZE,
-  paddingInline: token("--space-xxs"),
-  border: `1px solid ${token("--text-on-accent")}`,
-  borderRadius: token("--radius-pill"),
-  background: token("--surface-card"),
-  color: token("--text-primary"),
-  font: token("--t-popover-meta"),
-  boxShadow: token("--shadow-sm"),
-  boxSizing: "border-box",
-  pointerEvents: "none",
-  zIndex: 4,
-};
-
-function BattleCardStatusIndicators({
-  card,
-}: {
-  readonly card: MobileBattleCardView;
-}) {
-  const resolve = useLocalizer();
-  return (
-    <div
-      data-battle-card-status-indicators=""
-      style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
-    >
-      {card.exhausted ? (
-        <div
-          aria-label={resolve(
-            tx(
-              "Exhausted",
-              "[accessibility] [battle] Status on a battle card whose actions are unavailable until it is readied by the game rules.",
-            ),
-          )}
-          data-battle-card-status="exhausted"
-          style={{
-            ...BATTLE_CARD_STATUS_BADGE_STYLE,
-            top: "50%",
-            left: "50%",
-            width: BATTLE_CARD_STATUS_BADGE_SIZE,
-            paddingInline: 0,
-            transform: "translate(-50%, -50%)",
-            fontSize: BATTLE_CARD_EXHAUST_ICON_SIZE,
-          }}
-        >
-          <StandaloneGlyph
-            glyph={GLYPHS.exhaust}
-            color="white"
-            depth="content-protection"
-          />
-        </div>
-      ) : null}
-      {card.storedTime > 0 ? (
-        <div
-          aria-label={resolve(
-            txa(
-              plural(card.storedTime, [
-                one("{count} memory counter"),
-                other("{count} memory counters"),
-              ]),
-              { count: card.storedTime },
-              "[accessibility] [battle] Name for the Memory status badge on a battle card. count is the positive integer number of Memory counters currently stored on that card.",
-            ),
-          )}
-          data-battle-card-status="stored-time"
-          style={{
-            ...BATTLE_CARD_STATUS_BADGE_STYLE,
-            right: "4%",
-            bottom: "4%",
-            width: BATTLE_CARD_STATUS_BADGE_SIZE,
-            paddingInline: 0,
-            borderRadius: token("--radius-compact"),
-            background: token("--surface-status-badge"),
-            color: token("--text-on-accent"),
-          }}
-        >
-          <span
-            data-battle-memory-counter=""
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              font: token("--t-numeral-sm"),
-              fontVariantNumeric: "tabular-nums",
-            }}
-          >
-            <span>{card.storedTime}</span>
-            <InlineGlyph glyph={GLYPHS.memory} />
-          </span>
-        </div>
-      ) : null}
+        interaction={semanticInteraction}
+      />
     </div>
   );
 }
@@ -2742,7 +2074,7 @@ function Rank({
                 />
               ) : null}
               {slot.card !== null ? (
-                <FaceUpCard
+                <BattleCardSurface
                   card={slot.card}
                   zone={`${owner}-${rank}-rank`}
                   snapLayout={snapLayoutCardId === slot.card.id}
@@ -3055,7 +2387,7 @@ function NearHand({
         const rotation = normalized * (isDesktop ? 8 : 18);
         const drop = normalized * normalized * (isDesktop ? 8 : 18);
         const cardContent = (
-          <FaceUpCard
+          <BattleCardSurface
             card={card}
             zone="near-hand"
             showRulesText
@@ -3239,7 +2571,7 @@ function TargetingCardStage({
         pointerEvents: "auto",
       }}
     >
-      <FaceUpCard
+      <BattleCardSurface
         card={card}
         zone="targeting-stage"
         showRulesText
@@ -3287,7 +2619,7 @@ function SharedHandCardReveal({
         pointerEvents: "auto",
       }}
     >
-      <FaceUpCard
+      <BattleCardSurface
         card={card}
         zone="shared-reveal"
         showRulesText
@@ -3582,7 +2914,10 @@ function pickerZoneCaption(
   const viewerOwned = candidate.owner === perspective;
   if (candidate.zone === "hand") {
     return viewerOwned
-      ? tx("Your Hand", "[battle] Caption for a card candidate in the viewer's hand.")
+      ? tx(
+          "Your Hand",
+          "[battle] Caption for a card candidate in the viewer's hand.",
+        )
       : tx(
           "Opponent Hand",
           "[battle] Caption for a card candidate in the opponent's hand.",
@@ -4351,10 +3686,22 @@ function BattleInspectorContent({
               gap: token("--space-s"),
             }}
           >
-            <InspectorValue label={assertLocalized("Turn")} value={inspector.turn} />
-            <InspectorValue label={assertLocalized("Phase")} value={inspector.phase} />
-            <InspectorValue label={assertLocalized("Active side")} value={inspector.activeSide} />
-            <InspectorValue label={assertLocalized("Result")} value={inspector.result} />
+            <InspectorValue
+              label={assertLocalized("Turn")}
+              value={inspector.turn}
+            />
+            <InspectorValue
+              label={assertLocalized("Phase")}
+              value={inspector.phase}
+            />
+            <InspectorValue
+              label={assertLocalized("Active side")}
+              value={inspector.activeSide}
+            />
+            <InspectorValue
+              label={assertLocalized("Result")}
+              value={inspector.result}
+            />
             <InspectorValue
               label={assertLocalized("Next Dreamwell order")}
               value={inspector.nextDreamwellOrder}
@@ -4567,9 +3914,18 @@ function BattleInspectorContent({
               gap: token("--space-s"),
             }}
           >
-            <InspectorValue label={assertLocalized("Hand")} value={String(side.zones.hand)} />
-            <InspectorValue label={assertLocalized("Deck")} value={String(side.zones.deck)} />
-            <InspectorValue label={assertLocalized("Void")} value={String(side.zones.void)} />
+            <InspectorValue
+              label={assertLocalized("Hand")}
+              value={String(side.zones.hand)}
+            />
+            <InspectorValue
+              label={assertLocalized("Deck")}
+              value={String(side.zones.deck)}
+            />
+            <InspectorValue
+              label={assertLocalized("Void")}
+              value={String(side.zones.void)}
+            />
             <InspectorValue
               label={assertLocalized("Banished")}
               value={String(side.zones.banished)}
@@ -4739,9 +4095,7 @@ function BattleInspectorContent({
           />
           <InspectorButton
             label={assertLocalized(
-              inspector.isFarHandRevealed
-                ? "Hide Far Hand"
-                : "Reveal Far Hand",
+              inspector.isFarHandRevealed ? "Hide Far Hand" : "Reveal Far Hand",
             )}
             onPress={() => onAction?.({ kind: "toggle-opponent-hand" })}
             disabled={onAction === undefined}
@@ -4771,10 +4125,22 @@ function BattleInspectorContent({
               marginTop: token("--space-s"),
             }}
           >
-            <InspectorValue label={assertLocalized("Proposal")} value={inspector.ai.proposal} />
-            <InspectorValue label={assertLocalized("Kind")} value={inspector.ai.kind} />
-            <InspectorValue label={assertLocalized("Card")} value={inspector.ai.card} />
-            <InspectorValue label={assertLocalized("Target")} value={inspector.ai.target} />
+            <InspectorValue
+              label={assertLocalized("Proposal")}
+              value={inspector.ai.proposal}
+            />
+            <InspectorValue
+              label={assertLocalized("Kind")}
+              value={inspector.ai.kind}
+            />
+            <InspectorValue
+              label={assertLocalized("Card")}
+              value={inspector.ai.card}
+            />
+            <InspectorValue
+              label={assertLocalized("Target")}
+              value={inspector.ai.target}
+            />
             <InspectorValue
               label={assertLocalized("Heuristic change")}
               value={inspector.ai.heuristicChange}
@@ -5591,7 +4957,7 @@ export function MobileBattleScreen({
 
   return (
     <>
-      <style>{BATTLE_PHASE_LIGHT_CSS}</style>
+      <style>{BATTLE_OVERLAY_CSS}</style>
       <div
         className="cumulus"
         data-battle-inspector-open={isInspectorOpen ? "true" : "false"}

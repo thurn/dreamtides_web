@@ -4,8 +4,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { CardBrowserPanel } from "../components/card/CardBrowserPanel";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../components/card/CardChoiceGrid";
 import { token } from "../primitives/tokens";
-import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "./chrome-geometry";
-import { useIsDesktop } from "./use-is-desktop";
+import { MENU_BUTTON_PX, MENU_EDGE_INSET_MOBILE_PX } from "../primitives/chrome-geometry";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 
 export interface DeckGalleryOverlayProps {

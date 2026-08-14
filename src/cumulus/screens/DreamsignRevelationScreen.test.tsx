@@ -10,7 +10,7 @@ import {
   DreamsignRevelationScreen,
   type DreamsignRevelationView,
 } from "./DreamsignRevelationScreen";
-import { JOURNEY_STATUS_BAR_CLEARANCE_OP } from "../components/hud/JourneyStatusBar";
+import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
 import { CumulusRoot } from "../CumulusRoot";
 import {
   DREAMSIGN_REVELATION_PRESENTATION,
@@ -132,10 +132,10 @@ describe("DreamsignRevelationScreen", () => {
       ),
     ).toBeNull();
     expect(
-      container.querySelector('[data-testid="revelation-guide-art"]'),
+      container.querySelector("[data-site-layout-guide] img"),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="revelation-speech-bubble"]')
+      container.querySelector("[data-site-layout-speech-anchor]")
         ?.textContent,
     ).toContain("Choose one sign.");
     act(() => {
@@ -157,13 +157,13 @@ describe("DreamsignRevelationScreen", () => {
     expect(
       container.querySelector<HTMLElement>("[data-revelation-site-tutorial]")
         ?.style.top,
-    ).toBe("var(--space-s)");
+    ).toBe("20dvh");
     expect(onTutorialShown).toHaveBeenCalledOnce();
     expect(
-      container.querySelector('[data-testid="revelation-guide-art"]'),
+      container.querySelector("[data-site-layout-guide] img"),
     ).not.toBeNull();
     expect(
-      container.querySelector('[data-testid="revelation-speech-bubble"]')
+      container.querySelector("[data-site-layout-speech-anchor]")
         ?.textContent,
     ).toContain("Choose one sign.");
     expect(container.querySelectorAll("[data-revelation-option]")).toHaveLength(
@@ -214,7 +214,7 @@ describe("DreamsignRevelationScreen", () => {
     );
 
     const region = container.querySelector<HTMLElement>(
-      "[data-revelation-mobile-offer-region]",
+      "[data-site-layout-stage]",
     );
     const offer = container.querySelector<HTMLElement>(
       "[data-revelation-offer]",
@@ -224,7 +224,7 @@ describe("DreamsignRevelationScreen", () => {
     );
 
     expect(region?.style.bottom).toBe(
-      `calc(${JOURNEY_STATUS_BAR_CLEARANCE_OP})`,
+      JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
     );
     expect(offer?.style.gridTemplateRows).toBe("auto minmax(0, 1fr)");
     expect(offer?.style.height).toBe("100%");
@@ -266,9 +266,9 @@ describe("DreamsignRevelationScreen", () => {
     const replacementView: DreamsignRevelationView = {
       ...view(),
       purge: {
-        pendingDreamsign: dreamsign("pending", "aurora.png"),
-        currentDreamsigns: [dreamsign("owned", "eye_3.png")],
-        maxDreamsigns: 1,
+        incoming: dreamsign("pending", "aurora.png"),
+        held: [dreamsign("owned", "eye_3.png")],
+        capacity: 1,
       },
     };
     const { container, root } = mount(

@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import {
-  BattleForeseeOverlay,
-  type BattleForeseeResolution,
-  type BattleForeseeView,
-} from "../../cumulus/screens/BattleForeseeOverlay";
+  BattleForeseeEditor,
+  type BattleForeseeResult,
+  type BattleForeseeEditorModel,
+} from "../../cumulus/components/battle/BattleForeseeEditor";
 import type {
   BattleMutableState,
   BattleSide,
@@ -17,7 +17,7 @@ export interface CumulusBattleForeseeOverlayProps {
   side: BattleSide;
   state: BattleMutableState;
   sourceDreamwellCard?: DreamwellCardDefinition;
-  onConfirm: (resolution: BattleForeseeResolution) => void;
+  onConfirm: (resolution: BattleForeseeResult) => void;
 }
 
 /** Maps live battle state into the pure Cumulus Foresee modal. */
@@ -28,33 +28,30 @@ export function CumulusBattleForeseeOverlay({
   sourceDreamwellCard,
   onConfirm,
 }: CumulusBattleForeseeOverlayProps) {
-  const view = useMemo<BattleForeseeView>(() => ({
-    initialCount,
-    cards: state.sides[side].deck
-      .flatMap((battleCardId) => {
+  const model = useMemo<BattleForeseeEditorModel>(
+    () => ({
+      initialCount,
+      allowedCounts: Array.from(
+        { length: state.sides[side].deck.length },
+        (_, index) => index + 1,
+      ),
+      cards: state.sides[side].deck.flatMap((battleCardId) => {
         const instance = state.cardInstances[battleCardId];
         return instance === undefined
           ? []
-          : [{
-              battleCardId,
-              model: battleGameCardModel(instance),
-            }];
+          : [
+              {
+                battleCardId,
+                card: battleGameCardModel(instance),
+              },
+            ];
       }),
-    ...(sourceDreamwellCard === undefined
-      ? {}
-      : { sourceDreamwellCard: dreamwellCardModel(sourceDreamwellCard) }),
-  }), [
-    initialCount,
-    side,
-    sourceDreamwellCard,
-    state.cardInstances,
-    state.sides,
-  ]);
-
-  return (
-    <BattleForeseeOverlay
-      view={view}
-      onConfirm={onConfirm}
-    />
+      ...(sourceDreamwellCard === undefined
+        ? {}
+        : { source: dreamwellCardModel(sourceDreamwellCard) }),
+    }),
+    [initialCount, side, sourceDreamwellCard, state.cardInstances, state.sides],
   );
+
+  return <BattleForeseeEditor model={model} onConfirm={onConfirm} />;
 }

@@ -3,6 +3,7 @@ import { localizedSourceText } from "../../runtime/localization/runtime";
 // deck anchor, flips it face up, and holds it in the encounter panel.
 
 import {
+  assertLocalized,
   meaning,
   opaque,
   txa,
@@ -20,22 +21,19 @@ import {
   useMemo,
   useRef,
   useState,
-  type CSSProperties,
-  type ReactNode,
   type RefObject,
 } from "react";
 import {
   GameCard,
-  gameCardRevealSpec,
   type GameCardModel,
 } from "../components/card/CardView";
+import { CardChangePair } from "../components/card/CardChangePair";
 import {
   CardChoiceGrid,
   type CardChoiceOperation,
   type CardChoiceGridColumns,
 } from "../components/card/CardChoiceGrid";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
-import { renderRulesSymbolsInline } from "../components/card/RulesText";
 import {
   CARD_ASPECT_RATIO,
   CARD_ASPECT_RATIO_VALUE,
@@ -55,7 +53,6 @@ import {
 } from "../components/hud/JourneyStatusBar";
 import {
   Dreamsign,
-  dreamsignRevealSpec,
   type LocalizedDreamsign,
 } from "../components/hud/Dreamsign";
 import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
@@ -76,18 +73,21 @@ import {
   MENU_BUTTON_PX,
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
-} from "./chrome-geometry";
+} from "../primitives/chrome-geometry";
 import {
-  GuideGallerySiteLayout,
-  type GuideGalleryGuideView,
-} from "./GuideGallerySiteLayout";
+  SiteLayout,
+  type SiteLayoutGuide,
+} from "../components/layout/SiteLayout";
+import type { TransfigurationCandidateView } from "./TransfigurationSiteScreen";
+import { TransfigurationDetailPanel } from "../components/card/TransfigurationDetailPanel";
+import { TransfigurationPickerPanel } from "../components/card/TransfigurationPickerPanel";
 import {
-  TransfigurationDetailPanel,
-  TransfigurationPickerPanel,
-  type TransfigurationCandidateView,
-} from "./TransfigurationSiteScreen";
+  ExplorationChoice as ExplorationChoiceControl,
+  type ExplorationChoiceEntity,
+  type ExplorationChoicePart,
+} from "../components/controls/ExplorationChoice";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
-import { useIsDesktop } from "./use-is-desktop";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
 import type { CardType, FrozenCardData } from "../../types/cards";
@@ -98,8 +98,6 @@ import type {
   TransfigurationType,
 } from "../../types/journey";
 import type { ExplorationChoosableSiteType } from "../../data/exploration";
-import { useRevealSource } from "../internal/reveal/context";
-import { revealEntityId } from "../internal/reveal/identity";
 
 export interface ExplorationSiteView {
   /** Stable site id exposed to QA and logging. */
@@ -107,7 +105,7 @@ export interface ExplorationSiteView {
   /** Current dreamscape scene art behind the encounter, when resolved. */
   scene: ArtRef | null;
   /** Resident Dream Guide art and greeting. */
-  guide: GuideGalleryGuideView;
+  guide: Omit<SiteLayoutGuide, "presence">;
   /** UUID-backed card selected from the Exploration prototype pool. */
   card: GameCardModel;
   /** Licensed full-resolution source for the selected card's frame break. */
@@ -671,79 +669,6 @@ function explorationEntityDetails(
       };
 }
 
-function explorationEntityRevealRegistration(entity: ExplorationEntityView) {
-  const details = explorationEntityDetails(entity);
-  if (entity.kind === "card") {
-    const spec = gameCardRevealSpec({
-      cardId: entity.card.id,
-      displaySnapshot: entity.card,
-      ...(entity.transfiguration === undefined
-        ? {}
-        : { transfiguration: entity.transfiguration }),
-    });
-    return {
-      details,
-      identity: {
-        entityType:
-          details.copies === 1
-            ? ("game-card" as const)
-            : ("game-card-copies" as const),
-        entityId: entity.card.id,
-      },
-      spec:
-        details.copies === 1
-          ? spec
-          : { ...spec, primary: { ...spec.primary, copies: details.copies } },
-    };
-  }
-  return {
-    details,
-    identity: {
-      entityType: "dreamsign" as const,
-      entityId: revealEntityId("dreamsign", details.id),
-    },
-    spec: dreamsignRevealSpec(
-      entity.dreamsign,
-      Boolean(entity.dreamsign.imageName),
-    ),
-  };
-}
-
-function useExplorationEntityReveal(
-  entity: ExplorationEntityView,
-  onActivate: (() => void) | undefined,
-) {
-  const registration = explorationEntityRevealRegistration(entity);
-  const binding = useRevealSource({
-    identity: registration.identity,
-    spec: registration.spec,
-    onActivate,
-  });
-  return { details: registration.details, binding };
-}
-
-function explorationChoiceStyle(
-  available: boolean,
-  revealStyle?: CSSProperties,
-): CSSProperties {
-  return {
-    ...revealStyle,
-    width: "100%",
-    minHeight: token("--touch-min"),
-    display: "grid",
-    gridTemplateColumns: "minmax(0, 1fr) auto",
-    alignItems: "center",
-    gap: token("--space-s"),
-    padding: token("--space-s"),
-    border: `1px solid ${token("--border-soft")}`,
-    borderRadius: token("--radius-control"),
-    background: token("--glass-on-glass-fill"),
-    color: token("--text-on-glass"),
-    textAlign: "left",
-    opacity: available ? 1 : 0.46,
-  };
-}
-
 function explorationDeckModificationHeadline(
   modification: ExplorationDeckModificationView,
 ): LocalizedString {
@@ -793,74 +718,55 @@ function explorationDeckModificationHeadline(
   }
 }
 
-function ExplorationChoiceContents({
-  action,
-  index,
-}: {
-  readonly action: ExplorationActionView;
-  readonly index: number;
-}) {
-  const resolve = useLocalizer();
-  const effectDescription =
-    action.effectFallback === undefined && action.effectParts !== undefined
-      ? renderExplorationEffectDescription(
-          action.effectText,
-          action.effectParts,
-          index,
-          resolve,
-        )
-      : renderRulesSymbolsInline(
-          resolve(action.effectFallback?.message ?? action.effectText),
-        );
-  return (
-    <>
-      <span style={{ minWidth: 0, display: "grid", gap: token("--space-xxs") }}>
-        <strong style={{ font: token("--t-button") }}>
-          {renderRulesSymbolsInline(resolve(action.label))}
-        </strong>
-        <span
-          id={`exploration-effect-${String(index)}`}
-          style={{ font: token("--t-caption"), color: token("--text-muted") }}
-        >
-          {effectDescription}
-          {action.effectDisclosure === undefined ? null : (
-            <span> {resolve(action.effectDisclosure)}</span>
-          )}
-        </span>
-      </span>
-      <span aria-hidden="true" style={{ font: token("--t-title") }}>
-        ›
-      </span>
-    </>
-  );
+function preparedExplorationChoiceEntity(
+  entity: ExplorationEntityView,
+): ExplorationChoiceEntity {
+  const details = explorationEntityDetails(entity);
+  const base = {
+    id: details.id,
+    ...(details.entryId === undefined
+      ? {}
+      : { entryId: details.entryId }),
+    copies: details.copies,
+    label: details.name,
+  };
+  return entity.kind === "card"
+    ? {
+        ...base,
+        kind: "card",
+        card: {
+          cardId: entity.card.id,
+          displaySnapshot: entity.card,
+          ...(entity.transfiguration === undefined
+            ? {}
+            : { transfiguration: entity.transfiguration }),
+        },
+      }
+    : { ...base, kind: "dreamsign", dreamsign: entity.dreamsign };
 }
 
 interface ExplorationEffectToken {
   readonly start: number;
   readonly end: number;
   readonly part: ExplorationActionEffectPart;
-  readonly partIndex: number;
 }
 
-function renderExplorationEffectDescription(
+function prepareExplorationChoiceDescription(
   message: LocalizedString,
   parts: readonly ExplorationActionEffectPart[],
-  choiceIndex: number,
   resolve: (message: LocalizedString) => string,
-): readonly ReactNode[] {
+): readonly ExplorationChoicePart[] {
   const text = resolve(message);
   const nextStartByLabel = new Map<string, number>();
   const candidates = parts
-    .flatMap((part, partIndex): ExplorationEffectToken[] => {
+    .flatMap((part): ExplorationEffectToken[] => {
       const label =
         part.kind === "card-type"
           ? part.cardType
           : resolve(explorationEntityDetails(part.entity).name);
       const start = text.indexOf(label, nextStartByLabel.get(label) ?? 0);
       if (start >= 0) nextStartByLabel.set(label, start + label.length);
-      return start < 0
-        ? []
-        : [{ start, end: start + label.length, part, partIndex }];
+      return start < 0 ? [] : [{ start, end: start + label.length, part }];
     })
     .sort((left, right) => left.start - right.start || left.end - right.end);
   const tokens: ExplorationEffectToken[] = [];
@@ -871,163 +777,39 @@ function renderExplorationEffectDescription(
     }
   }
 
-  if (tokens.length === 0) return [renderRulesSymbolsInline(text)];
+  if (tokens.length === 0) {
+    return [{ kind: "rules", value: message }];
+  }
 
-  const rendered: ReactNode[] = [];
+  const rendered: ExplorationChoicePart[] = [];
   let cursor = 0;
   for (const token of tokens) {
     if (token.start > cursor) {
-      rendered.push(
-        <span key={`text-${String(cursor)}`}>
-          {renderRulesSymbolsInline(text.slice(cursor, token.start))}
-        </span>,
-      );
+      rendered.push({
+        kind: "rules",
+        value: assertLocalized(text.slice(cursor, token.start)),
+      });
     }
     if (token.part.kind === "card-type") {
-      rendered.push(
-        <span
-          key={`card-type-${String(token.partIndex)}`}
-          data-exploration-card-type-variable=""
-          data-card-type={token.part.cardType}
-        >
-          {renderRulesSymbolsInline(text.slice(token.start, token.end))}
-        </span>,
-      );
+      rendered.push({
+        kind: "rules",
+        value: assertLocalized(text.slice(token.start, token.end)),
+      });
     } else {
-      rendered.push(
-        <ExplorationEntityLabel
-          key={`entity-${String(token.partIndex)}`}
-          entity={token.part.entity}
-          data-testid={`cumulus-exploration-choice-${String(choiceIndex)}-entity-${String(token.partIndex)}`}
-        />,
-      );
+      rendered.push({
+        kind: "entity",
+        entity: preparedExplorationChoiceEntity(token.part.entity),
+      });
     }
     cursor = token.end;
   }
   if (cursor < text.length) {
-    rendered.push(
-      <span key={`text-${String(cursor)}`}>
-        {renderRulesSymbolsInline(text.slice(cursor))}
-      </span>,
-    );
+    rendered.push({
+      kind: "rules",
+      value: assertLocalized(text.slice(cursor)),
+    });
   }
   return rendered;
-}
-
-function ExplorationEntityLabel({
-  entity,
-  "data-testid": testId,
-}: {
-  readonly entity: ExplorationEntityView;
-  readonly "data-testid": string;
-}) {
-  const resolve = useLocalizer();
-  const details = explorationEntityDetails(entity);
-  return (
-    <span
-      data-exploration-entity-label={entity.kind}
-      data-entity-id={details.id}
-      data-exploration-deck-entry-id={details.entryId}
-      data-entity-copies={details.copies}
-      data-testid={testId}
-    >
-      <span style={{ textDecoration: "underline" }}>
-        {resolve(details.name)}
-      </span>
-    </span>
-  );
-}
-
-interface ExplorationChoiceProps {
-  readonly action: ExplorationActionView;
-  readonly index: number;
-  readonly onActivate: () => void;
-}
-
-function PlainExplorationChoice({
-  action,
-  index,
-  onActivate,
-}: ExplorationChoiceProps) {
-  return (
-    <Pressable
-      as="button"
-      disabled={!action.available}
-      aria-describedby={`exploration-effect-${String(index)}`}
-      data-exploration-action-id={action.id}
-      data-exploration-effect-kind={action.effectKind}
-      data-testid={`cumulus-exploration-choice-${String(index)}`}
-      onClick={onActivate}
-      style={explorationChoiceStyle(action.available)}
-    >
-      <ExplorationChoiceContents action={action} index={index} />
-    </Pressable>
-  );
-}
-
-function EntityExplorationChoice({
-  action,
-  index,
-  onActivate,
-  entity,
-}: ExplorationChoiceProps & { readonly entity: ExplorationEntityView }) {
-  const { details, binding } = useExplorationEntityReveal(
-    entity,
-    action.available ? onActivate : undefined,
-  );
-  const suppressCompatibilityClick = useRef(false);
-  const pointerDown = binding.sourceProps.onPointerDown;
-  const revealDescriptionId = binding.sourceProps["aria-describedby"];
-
-  return (
-    <Pressable
-      as="button"
-      ref={binding.ref}
-      {...binding.sourceProps}
-      disabled={!action.available}
-      aria-describedby={`${revealDescriptionId ?? ""} exploration-effect-${String(index)}`.trim()}
-      data-exploration-action-id={action.id}
-      data-exploration-effect-kind={action.effectKind}
-      data-exploration-entity-preview={entity.kind}
-      data-entity-id={details.id}
-      data-exploration-deck-entry-id={details.entryId}
-      data-entity-copies={details.copies}
-      data-reveal-source-retain="true"
-      data-testid={`cumulus-exploration-choice-${String(index)}`}
-      onPointerDown={(event) => {
-        suppressCompatibilityClick.current = event.pointerType === "touch";
-        pointerDown?.(event);
-      }}
-      onClick={(event) => {
-        if (!action.available) return;
-        if (event.detail === 0) {
-          suppressCompatibilityClick.current = false;
-          onActivate();
-          return;
-        }
-        if (suppressCompatibilityClick.current) {
-          suppressCompatibilityClick.current = false;
-          return;
-        }
-        onActivate();
-      }}
-      style={explorationChoiceStyle(
-        action.available,
-        binding.sourceProps.style,
-      )}
-    >
-      <ExplorationChoiceContents action={action} index={index} />
-    </Pressable>
-  );
-}
-
-function ExplorationChoice(props: ExplorationChoiceProps) {
-  const entity = previewEntityForAction(props.action);
-  return entity === null ? (
-    <PlainExplorationChoice {...props} />
-  ) : (
-    <EntityExplorationChoice {...props} entity={entity} />
-  );
 }
 
 type ExplorationRewardItem =
@@ -1256,6 +1038,8 @@ function ExplorationNarrativeChoices({
           return (
             <motion.div
               key={action.id}
+              data-exploration-effect-kind={action.effectKind}
+              data-testid={`cumulus-exploration-choice-${String(index)}`}
               aria-hidden={!visible}
               data-exploration-choice-reveal-state={
                 visible ? "revealed" : "waiting"
@@ -1274,13 +1058,36 @@ function ExplorationNarrativeChoices({
                 pointerEvents: visible ? "auto" : "none",
               }}
             >
-              <ExplorationChoice
-                action={{
-                  ...action,
-                  available: visible && action.available,
+              <ExplorationChoiceControl
+                model={{
+                  actionId: action.id,
+                  label: action.label,
+                  description:
+                    action.effectFallback !== undefined
+                      ? [
+                          {
+                            kind: "rules",
+                            value: action.effectFallback.message,
+                          },
+                        ]
+                      : action.effectParts === undefined
+                        ? [{ kind: "rules", value: action.effectText }]
+                        : prepareExplorationChoiceDescription(
+                            action.effectText,
+                            action.effectParts,
+                            resolve,
+                          ),
+                  disclosure: action.effectDisclosure,
+                  availability:
+                    visible && action.available ? "available" : "unavailable",
+                  preview: (() => {
+                    const entity = previewEntityForAction(action);
+                    return entity === null
+                      ? undefined
+                      : preparedExplorationChoiceEntity(entity);
+                  })(),
                 }}
-                index={index}
-                onActivate={() => onActivate(action)}
+                onPress={() => onActivate(action)}
               />
             </motion.div>
           );
@@ -1862,7 +1669,6 @@ function PurgedCardPresentation({
 function CardReplacementPresentation({
   pair,
   index,
-  isDesktop,
   reduceMotion,
   scope,
 }: {
@@ -1876,9 +1682,6 @@ function CardReplacementPresentation({
   readonly scope: "starter" | "multi";
 }) {
   const resolve = useLocalizer();
-  const cardWidth = isDesktop
-    ? DESKTOP_ESSENCE_CARD_WIDTH
-    : MOBILE_ESSENCE_CARD_WIDTH;
   return (
     <motion.div
       data-exploration-card-replacement=""
@@ -1925,66 +1728,15 @@ function CardReplacementPresentation({
       }}
       style={{ width: "fit-content", maxWidth: "100%" }}
     >
-      <GlassPanel
-        radius="popover"
-        testId={`cumulus-exploration-${scope}-card-replacement-${String(index)}`}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: isDesktop ? token("--space-m") : token("--space-xs"),
-            padding: isDesktop ? token("--space-m") : token("--space-s"),
-          }}
-        >
-          <div
-            data-exploration-card-replacement-object="purged"
-            data-exploration-starter-card-mutation-object={
-              scope === "starter" ? "purged" : undefined
-            }
-            data-exploration-deck-entry-id={pair.purged.entryId}
-            data-card-id={pair.purged.model.cardId}
-            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
-          >
-            <GameCard
-              model={pair.purged.model}
-              selection="danger"
-              testId={`cumulus-exploration-${scope}-card-purged-${pair.purged.entryId}`}
-            />
-          </div>
-          <span
-            data-exploration-card-replacement-arrow=""
-            data-exploration-starter-card-replacement-arrow={
-              scope === "starter" ? "" : undefined
-            }
-            aria-hidden="true"
-            style={{
-              display: "grid",
-              placeItems: "center",
-              flexShrink: 0,
-              fontSize: isDesktop ? 30 : 24,
-            }}
-          >
-            <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
-          </span>
-          <div
-            data-exploration-card-replacement-object="gained"
-            data-exploration-starter-card-mutation-object={
-              scope === "starter" ? "gained" : undefined
-            }
-            data-exploration-deck-entry-id={pair.gained.entryId}
-            data-card-id={pair.gained.model.cardId}
-            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
-          >
-            <GameCard
-              model={pair.gained.model}
-              selection="changed"
-              testId={`cumulus-exploration-${scope}-card-gained-${pair.gained.entryId}`}
-            />
-          </div>
-        </div>
-      </GlassPanel>
+      <CardChangePair
+        model={{
+          changeId: `${scope}-${pair.purged.entryId}-${pair.gained.entryId}`,
+          kind: "replacement",
+          before: { entryId: pair.purged.entryId, card: pair.purged.model },
+          after: { entryId: pair.gained.entryId, card: pair.gained.model },
+        }}
+        reveal="complete"
+      />
     </motion.div>
   );
 }
@@ -1993,7 +1745,6 @@ function CardTransfigurationPairPresentation({
   mapping,
   index,
   phase,
-  isDesktop,
   reduceMotion,
   scope,
 }: {
@@ -2013,9 +1764,6 @@ function CardTransfigurationPairPresentation({
   readonly scope: "starter" | "multi" | "compound";
 }) {
   const resolve = useLocalizer();
-  const cardWidth = isDesktop
-    ? DESKTOP_ESSENCE_CARD_WIDTH
-    : MOBILE_ESSENCE_CARD_WIDTH;
   const revealAfter = phase !== "original";
   return (
     <motion.div
@@ -2066,113 +1814,15 @@ function CardTransfigurationPairPresentation({
       }}
       style={{ width: "fit-content", maxWidth: "100%" }}
     >
-      <GlassPanel
-        radius="popover"
-        testId={`cumulus-exploration-${scope}-card-transfiguration-${String(index)}`}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: isDesktop ? token("--space-m") : token("--space-xs"),
-            padding: isDesktop ? token("--space-m") : token("--space-s"),
-          }}
-        >
-          <div
-            data-exploration-card-transfiguration-face="before"
-            data-exploration-starter-card-transfiguration-face={
-              scope === "starter" ? "before" : undefined
-            }
-            data-exploration-deck-entry-id={mapping.entryId}
-            data-card-id={mapping.cardId}
-            data-transfiguration="none"
-            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
-          >
-            <GameCard
-              model={mapping.before.model}
-              testId={`cumulus-exploration-${scope}-card-before-${mapping.entryId}`}
-            />
-          </div>
-          <span
-            data-exploration-card-transfiguration-arrow=""
-            data-exploration-starter-card-transfiguration-arrow={
-              scope === "starter" ? "" : undefined
-            }
-            aria-hidden="true"
-            style={{
-              display: "grid",
-              placeItems: "center",
-              flexShrink: 0,
-              fontSize: isDesktop ? 30 : 24,
-            }}
-          >
-            <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
-          </span>
-          <motion.div
-            data-exploration-card-transfiguration-face="after"
-            data-exploration-starter-card-transfiguration-face={
-              scope === "starter" ? "after" : undefined
-            }
-            data-exploration-deck-entry-id={mapping.entryId}
-            data-card-id={mapping.cardId}
-            data-transfiguration={mapping.afterTransfiguration}
-            initial={false}
-            animate={{ rotateY: revealAfter ? 180 : 0 }}
-            transition={{
-              delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
-              duration: reduceMotion ? 0 : FLIP_SECONDS,
-              ease: DREAM_EASE,
-            }}
-            style={{
-              position: "relative",
-              width: cardWidth,
-              aspectRatio: CARD_ASPECT_RATIO,
-              transformStyle: "preserve-3d",
-              perspective: 1200,
-            }}
-          >
-            <div
-              data-exploration-card-transfiguration-side="concealed"
-              data-exploration-starter-card-transfiguration-side={
-                scope === "starter" ? "concealed" : undefined
-              }
-              aria-hidden={revealAfter}
-              style={{
-                position: "absolute",
-                inset: 0,
-                backfaceVisibility: "hidden",
-              }}
-            >
-              <CardBack
-                label={tx(
-                  "Exploration card, face down",
-                  "[exploration] Card face down.",
-                )}
-                testId={`cumulus-exploration-${scope}-card-concealed-${mapping.entryId}`}
-              />
-            </div>
-            <div
-              data-exploration-card-transfiguration-side="revealed"
-              data-exploration-starter-card-transfiguration-side={
-                scope === "starter" ? "revealed" : undefined
-              }
-              style={{
-                position: "absolute",
-                inset: 0,
-                transform: "rotateY(180deg)",
-                backfaceVisibility: "hidden",
-              }}
-            >
-              <GameCard
-                model={mapping.after.model}
-                selection="transfigured"
-                testId={`cumulus-exploration-${scope}-card-after-${mapping.entryId}`}
-              />
-            </div>
-          </motion.div>
-        </div>
-      </GlassPanel>
+      <CardChangePair
+        model={{
+          changeId: `${scope}-${mapping.entryId}-${mapping.afterTransfiguration}`,
+          kind: "transfiguration",
+          before: { entryId: mapping.entryId, card: mapping.before.model },
+          after: { entryId: mapping.entryId, card: mapping.after.model },
+        }}
+        reveal={revealAfter ? "complete" : "before"}
+      />
     </motion.div>
   );
 }
@@ -2182,7 +1832,6 @@ function CompoundCardPairPresentation({
   after,
   index,
   kind,
-  isDesktop,
   reduceMotion,
 }: {
   readonly before: ExplorationCardChoiceView;
@@ -2193,9 +1842,6 @@ function CompoundCardPairPresentation({
   readonly reduceMotion: boolean;
 }) {
   const resolve = useLocalizer();
-  const cardWidth = isDesktop
-    ? DESKTOP_ESSENCE_CARD_WIDTH
-    : MOBILE_ESSENCE_CARD_WIDTH;
   return (
     <motion.div
       data-exploration-compound-card-pair={kind}
@@ -2235,51 +1881,15 @@ function CompoundCardPairPresentation({
       }}
       style={{ width: "fit-content", maxWidth: "100%" }}
     >
-      <GlassPanel
-        radius="popover"
-        testId={`cumulus-exploration-compound-${kind}-pair-${String(index)}`}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: isDesktop ? token("--space-m") : token("--space-xs"),
-            padding: isDesktop ? token("--space-m") : token("--space-s"),
-          }}
-        >
-          <div
-            data-exploration-compound-card-face="before"
-            data-exploration-deck-entry-id={before.entryId}
-            data-card-id={before.model.cardId}
-            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
-          >
-            <GameCard model={before.model} />
-          </div>
-          <span
-            aria-hidden="true"
-            style={{
-              display: "grid",
-              placeItems: "center",
-              flexShrink: 0,
-              fontSize: isDesktop ? 30 : 24,
-            }}
-          >
-            <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
-          </span>
-          <div
-            data-exploration-compound-card-face="after"
-            data-exploration-deck-entry-id={after.entryId}
-            data-card-id={after.model.cardId}
-            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
-          >
-            <GameCard
-              model={after.model}
-              selection={kind === "keyword" ? "changed" : "copied"}
-            />
-          </div>
-        </div>
-      </GlassPanel>
+      <CardChangePair
+        model={{
+          changeId: `${kind}-${before.entryId}-${after.entryId}`,
+          kind,
+          before: { entryId: before.entryId, card: before.model },
+          after: { entryId: after.entryId, card: after.model },
+        }}
+        reveal="complete"
+      />
     </motion.div>
   );
 }
@@ -2288,7 +1898,6 @@ function CardTypeChangePairPresentation({
   change,
   index,
   phase,
-  isDesktop,
   reduceMotion,
 }: {
   readonly change: Extract<
@@ -2301,9 +1910,6 @@ function CardTypeChangePairPresentation({
   readonly reduceMotion: boolean;
 }) {
   const resolve = useLocalizer();
-  const cardWidth = isDesktop
-    ? DESKTOP_ESSENCE_CARD_WIDTH
-    : MOBILE_ESSENCE_CARD_WIDTH;
   const revealAfter = phase !== "original";
   return (
     <motion.div
@@ -2340,98 +1946,15 @@ function CardTypeChangePairPresentation({
       }}
       style={{ width: "fit-content", maxWidth: "100%" }}
     >
-      <GlassPanel
-        radius="popover"
-        testId={`cumulus-exploration-card-type-change-${String(index)}`}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: isDesktop ? token("--space-m") : token("--space-xs"),
-            padding: isDesktop ? token("--space-m") : token("--space-s"),
-          }}
-        >
-          <div
-            data-exploration-card-type-change-face="before"
-            data-exploration-deck-entry-id={change.entryId}
-            data-card-id={change.cardId}
-            data-card-type={change.beforeCardType}
-            style={{ width: cardWidth, aspectRatio: CARD_ASPECT_RATIO }}
-          >
-            <GameCard
-              model={change.before.model}
-              testId={`cumulus-exploration-card-type-before-${change.entryId}`}
-            />
-          </div>
-          <span
-            data-exploration-card-type-change-arrow=""
-            aria-hidden="true"
-            style={{
-              display: "grid",
-              placeItems: "center",
-              flexShrink: 0,
-              fontSize: isDesktop ? 30 : 24,
-            }}
-          >
-            <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
-          </span>
-          <motion.div
-            data-exploration-card-type-change-face="after"
-            data-exploration-deck-entry-id={change.entryId}
-            data-card-id={change.cardId}
-            data-card-type={change.afterCardType}
-            initial={false}
-            animate={{ rotateY: revealAfter ? 180 : 0 }}
-            transition={{
-              delay: reduceMotion ? 0 : index * REWARD_STAGGER_SECONDS,
-              duration: reduceMotion ? 0 : FLIP_SECONDS,
-              ease: DREAM_EASE,
-            }}
-            style={{
-              position: "relative",
-              width: cardWidth,
-              aspectRatio: CARD_ASPECT_RATIO,
-              transformStyle: "preserve-3d",
-              perspective: 1200,
-            }}
-          >
-            <div
-              data-exploration-card-type-change-side="concealed"
-              aria-hidden={revealAfter}
-              style={{
-                position: "absolute",
-                inset: 0,
-                backfaceVisibility: "hidden",
-              }}
-            >
-              <CardBack
-                label={tx(
-                  "Exploration card, face down",
-                  "[exploration] Card face down.",
-                )}
-                testId={`cumulus-exploration-card-type-concealed-${change.entryId}`}
-              />
-            </div>
-            <div
-              data-exploration-card-type-change-side="revealed"
-              style={{
-                position: "absolute",
-                inset: 0,
-                transform: "rotateY(180deg)",
-                backfaceVisibility: "hidden",
-              }}
-            >
-              <GameCard
-                model={change.after.model}
-                selection="changed"
-                testId={`cumulus-exploration-card-type-after-${change.entryId}`}
-              />
-            </div>
-          </motion.div>
-        </div>
-      </GlassPanel>
+      <CardChangePair
+        model={{
+          changeId: `card-type-${change.entryId}-${change.afterCardType}`,
+          kind: "card-type",
+          before: { entryId: change.entryId, card: change.before.model },
+          after: { entryId: change.entryId, card: change.after.model },
+        }}
+        reveal={revealAfter ? "complete" : "before"}
+      />
     </motion.div>
   );
 }
@@ -2712,6 +2235,7 @@ export function ExplorationSiteScreen({
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const isDesktop = useIsDesktop();
+  const layout = isDesktop ? "desktop" : "mobile";
   const cardTargetRef = useRef<HTMLDivElement>(null);
   const exitCompletedRef = useRef(false);
   const resumedResolutionRef = useRef<string | null>(null);
@@ -4146,15 +3670,17 @@ export function ExplorationSiteScreen({
                 : null;
 
   return (
-    <GuideGallerySiteLayout
-      siteId={view.siteId}
-      scene={view.scene}
-      guide={view.guide}
-      screenTestId="cumulus-exploration-site-screen"
-      guideArtTestId="cumulus-exploration-guide-art"
-      speechAnchorTestId="cumulus-exploration-speech-anchor"
-      speechBubbleTestId="cumulus-exploration-speech"
-      renderGallery={(layout) => (
+    <div
+      data-testid="cumulus-exploration-site-screen"
+      style={{ position: "fixed", inset: 0 }}
+    >
+      <SiteLayout
+        siteId={view.siteId}
+        scene={view.scene}
+        atmosphere="warm"
+        guide={{ ...view.guide, presence: "speaking" }}
+        composition="balanced-gallery"
+      >
         <section
           data-exploration-gallery=""
           data-exploration-layout={layout}
@@ -4244,10 +3770,7 @@ export function ExplorationSiteScreen({
                   }}
                 >
                   <GlassButton
-                    label={tx(
-                      "Delve",
-                      "[exploration] Delve action.",
-                    )}
+                    label={tx("Delve", "[exploration] Delve action.")}
                     variant="accent"
                     placement="onMedia"
                     onPress={startFrameBreak}
@@ -4258,8 +3781,7 @@ export function ExplorationSiteScreen({
             </div>
           </div>
         </section>
-      )}
-    >
+      </SiteLayout>
       {!reduceMotion &&
         !revealed &&
         returnTrajectory === null &&
@@ -7655,37 +7177,49 @@ export function ExplorationSiteScreen({
                   ) ?? null;
                 return candidate === null ? (
                   <TransfigurationPickerPanel
-                    layout={isDesktop ? "desktop" : "mobile"}
-                    ready
-                    isEnhanced
-                    candidates={activeAction.followup.candidates}
-                    onClose={() => setActiveActionId(null)}
-                    onPick={(entryId) => {
+                    state={{
+                      kind: "ready",
+                      presentation: "open-deck",
+                      cards: activeAction.followup.candidates.map((choice) => ({
+                        entryId: choice.entryId,
+                        card: choice.model,
+                        availability: choice.availability,
+                        reforgedType: choice.reforgedType,
+                      })),
+                    }}
+                    onDismiss={() => setActiveActionId(null)}
+                    onCardPress={(entryId) => {
                       setSelectedTransfigurationEntryId(entryId);
                       setSelectedTransfigurationFormType(null);
                     }}
                   />
                 ) : (
                   <TransfigurationDetailPanel
-                    layout={isDesktop ? "desktop" : "mobile"}
-                    candidate={candidate}
-                    selectedFormType={selectedTransfigurationFormType}
-                    confirming={transfigurationConfirming}
-                    alreadyAccepted={false}
-                    onBack={() => {
-                      setSelectedTransfigurationEntryId(null);
-                      setSelectedTransfigurationFormType(null);
+                    candidate={{
+                      entryId: candidate.entryId,
+                      card: candidate.model,
+                      forms: candidate.forms,
                     }}
-                    onSelectForm={(type) =>
+                    value={selectedTransfigurationFormType}
+                    status={transfigurationConfirming ? "submitting" : "idle"}
+                    quote="show-cost"
+                    navigation={{
+                      kind: "reselectable",
+                      onBack: () => {
+                        setSelectedTransfigurationEntryId(null);
+                        setSelectedTransfigurationFormType(null);
+                      },
+                    }}
+                    onChange={(type) =>
                       setSelectedTransfigurationFormType((current) =>
                         current === type ? null : type,
                       )
                     }
-                    onConfirm={(form) => {
+                    onConfirm={(type) => {
                       setTransfigurationConfirming(true);
                       onResolve(activeAction.id, {
                         entryIds: [candidate.entryId],
-                        transfiguration: form.type,
+                        transfiguration: type,
                       });
                     }}
                   />
@@ -7789,30 +7323,35 @@ export function ExplorationSiteScreen({
                     style={{ width: "100%", minHeight: 0 }}
                   >
                     <TransfigurationDetailPanel
-                      layout={isDesktop ? "desktop" : "mobile"}
-                      candidate={candidate}
-                      selectedFormType={selectedForm}
-                      confirming={transfigurationConfirming}
-                      alreadyAccepted={false}
-                      showConfirmEssenceCost={false}
-                      onBack={() => {
-                        setTransfigurationConfirming(false);
-                        setMultiTransfigurationStep((current) =>
-                          current === null || current === 0
-                            ? null
-                            : current - 1,
-                        );
+                      candidate={{
+                        entryId: candidate.entryId,
+                        card: candidate.model,
+                        forms: candidate.forms,
                       }}
-                      onSelectForm={(type) =>
+                      value={selectedForm}
+                      status={transfigurationConfirming ? "submitting" : "idle"}
+                      quote="included"
+                      navigation={{
+                        kind: "reselectable",
+                        onBack: () => {
+                          setTransfigurationConfirming(false);
+                          setMultiTransfigurationStep((current) =>
+                            current === null || current === 0
+                              ? null
+                              : current - 1,
+                          );
+                        },
+                      }}
+                      onChange={(type) =>
                         setMultiTransfigurationForms((current) => ({
                           ...current,
                           [entryId]: type,
                         }))
                       }
-                      onConfirm={(form) => {
+                      onConfirm={(type) => {
                         const nextForms = {
                           ...multiTransfigurationForms,
-                          [entryId]: form.type,
+                          [entryId]: type,
                         };
                         setMultiTransfigurationForms(nextForms);
                         if (multiTransfigurationStep + 1 < followup.count) {
@@ -8547,6 +8086,6 @@ export function ExplorationSiteScreen({
             />
           </motion.div>
         )}
-    </GuideGallerySiteLayout>
+    </div>
   );
 }

@@ -25,7 +25,7 @@ import {
   GUIDE_GALLERY_MOBILE_GUIDE_WIDTH,
   GUIDE_GALLERY_MOBILE_PANEL_WIDTH,
 } from "./guide-gallery-geometry";
-import { useIsDesktop } from "./use-is-desktop";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { meaning, opaque, txa, tx, type LocalizedString } from "@trox/runtime";

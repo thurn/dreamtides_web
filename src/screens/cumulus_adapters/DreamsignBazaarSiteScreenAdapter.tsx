@@ -145,12 +145,16 @@ export function DreamsignBazaarSiteScreenAdapter({
     ],
   );
   const handlePurge = useCallback(
-    (purgeIndex: number) => {
+    (dreamsignId: string) => {
       if (site === null || pendingSlotIndex === null) return;
+      const purgeIndex = state.dreamsigns.findIndex(
+        (dreamsign) => dreamsign.id === dreamsignId,
+      );
+      if (purgeIndex < 0) return;
       mutations.buyShopSlot(site.id, pendingSlotIndex, purgeIndex);
       setPendingSlotIndex(null);
     },
-    [mutations, pendingSlotIndex, site],
+    [mutations, pendingSlotIndex, site, state.dreamsigns],
   );
   const handleRestock = useCallback(() => {
     if (site !== null) mutations.rerollShop(site);

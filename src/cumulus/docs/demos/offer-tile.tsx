@@ -6,7 +6,11 @@ import {
 } from "../../components/controls/OfferTile";
 import type { CumulusComponent } from "../registry";
 
-function card(cardId: string, imageNumber: number, cardNumber: number): OfferTileCard {
+function card(
+  cardId: string,
+  imageNumber: number,
+  cardNumber: number,
+): OfferTileCard {
   const id = asCardId(cardId);
   return {
     cardId: id,
@@ -47,7 +51,12 @@ function OfferTileDemo() {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
       <OfferTile model={MODEL} presentation={PRESENTATION} onPress={() => {}} />
-      <OfferTile model={{ ...MODEL, id: `${MODEL.id}:compact` }} presentation={PRESENTATION} size="compact" onPress={() => {}} />
+      <OfferTile
+        model={{ ...MODEL, id: `${MODEL.id}:compact` }}
+        presentation={PRESENTATION}
+        size="compact"
+        onPress={() => {}}
+      />
     </div>
   );
 }

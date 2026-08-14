@@ -110,8 +110,9 @@ describe("CharacterDialogue", () => {
               portrait: artRef.characterPortrait("mira"),
               portraitAlt: assertLocalized("Mira"),
               speakerName: assertLocalized("Mira"),
-              text:
-                assertLocalized("Welcome, [yellow]Dreamer[/yellow]. An [purple]event[purple] resolves once. Score ⍟ equal to your spark ✦."),
+              text: assertLocalized(
+                "Welcome, [yellow]Dreamer[/yellow]. An [purple]event[purple] resolves once. Score ⍟ equal to your spark ✦.",
+              ),
             }}
             size="prominent"
             visible
@@ -143,9 +144,7 @@ describe("CharacterDialogue", () => {
     expect(glassBody?.style.background).toBe("var(--glass-sheen)");
     expect(glassBody?.style.backdropFilter).toContain("var(--glass-blur)");
     expect(bubbleRim?.getAttribute("d")).toContain("L 0 31");
-    expect(bubbleRim?.getAttribute("fill")).toBe(
-      "var(--glass-fill-popover)",
-    );
+    expect(bubbleRim?.getAttribute("fill")).toBe("var(--glass-fill-popover)");
     expect(bubbleRim?.getAttribute("stroke")).toBe("var(--glass-rim)");
     expect(bubbleRim?.getAttribute("stroke-width")).toBe("2");
     const highlight = bubble?.querySelector<HTMLElement>(
@@ -157,9 +156,7 @@ describe("CharacterDialogue", () => {
       '[data-tutorial-instruction-highlight="purple"]',
     );
     expect(purpleHighlight?.textContent).toBe("event");
-    expect(purpleHighlight?.style.color).toBe(
-      "var(--text-tutorial-highlight)",
-    );
+    expect(purpleHighlight?.style.color).toBe("var(--text-tutorial-highlight)");
     expect(purpleHighlight?.style.fontWeight).toBe("700");
     expect(highlight?.style.fontWeight).toBe("");
     expect(bubble?.textContent).toContain(
@@ -176,7 +173,9 @@ describe("CharacterDialogue", () => {
     expect(pointsIcon?.querySelector("i")?.className).toContain(
       "bxf bx-star-circle",
     );
-    expect(sparkIcon?.querySelector("i")?.className).toContain("bxf bx-sparkle");
+    expect(sparkIcon?.querySelector("i")?.className).toContain(
+      "bxf bx-sparkle",
+    );
     expect(sparkIcon?.parentElement?.style.color).toContain(
       "var(--cv-rules-spark-color",
     );
@@ -235,8 +234,9 @@ describe("CharacterDialogue", () => {
               portrait: artRef.characterPortrait("mira"),
               portraitAlt: assertLocalized("Mira"),
               speakerName: assertLocalized("Mira"),
-              text:
-                assertLocalized("A ▸Dissolved ability may cost 1● and ☾, store 1⧗, gain 2⍟ and 1✦, spend ◆ essence, or use ❖."),
+              text: assertLocalized(
+                "A ▸Dissolved ability may cost 1● and ☾, store 1⧗, gain 2⍟ and 1✦, spend ◆ essence, or use ❖.",
+              ),
             }}
             visible
           />

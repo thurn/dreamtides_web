@@ -14,14 +14,20 @@ function CoopPresenceStatusDemo({
 export const coopPresenceStatusDemo: CumulusComponent = {
   id: "coop-presence-status",
   title: "Coop Presence Status",
-  blurb: "The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count.",
-  callout: "Supply visibility from app chrome state rather than hiding the status with injected presentation rules.",
+  blurb:
+    "The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count.",
+  callout:
+    "Supply visibility from app chrome state rather than hiding the status with injected presentation rules.",
   relatedSystems: ["journey-screen-host-chrome"],
   group: "Components",
   docName: "CoopPresenceStatus",
   Component: CoopPresenceStatusDemo,
-  usage: [{ code: `import { CoopPresenceStatus } from "src/cumulus/components/hud/CoopPresenceStatus";
+  usage: [
+    {
+      code: `import { CoopPresenceStatus } from "src/cumulus/components/hud/CoopPresenceStatus";
 
-<CoopPresenceStatus count={connectedCount} visible={showConnectedCount} />` }],
+<CoopPresenceStatus count={connectedCount} visible={showConnectedCount} />`,
+    },
+  ],
   demo: { defaultArgs: { count: 2, visible: true } },
 };
