@@ -39,8 +39,6 @@ export const BOLT_ICON_CLASS: Glyph = GLYPHS.bolt;
  * cleanly than the busier multi-star "sparkles" at the small inline size,
  * while the corner spark stat keeps `SPARK_ICON_CLASS` at its larger size.
  */
-export const SPARK_INLINE_ICON_CLASS: Glyph = GLYPHS.sparkInline;
-
 /**
  * Soft content-protection shadow that grounds the glyph against the art behind
  * it: a short downward dark blur plus a tight dark halo. This reads as depth

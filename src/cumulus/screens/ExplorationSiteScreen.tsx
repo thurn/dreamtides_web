@@ -106,9 +106,7 @@ import type { ExplorationActionId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
 import type { IdentityRecord } from "../../types/identifiers";
-import {
-  parseDeckEntryId,
-} from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
 
 export interface ExplorationSiteView {
   /** Stable site id exposed to QA and logging. */
@@ -468,9 +466,7 @@ interface ExplorationDeckModificationViewBase {
   /** Exact post-resolution snapshots of the affected deck entries. */
   readonly cards: readonly ExplorationCardChoiceView[];
   /** Exact Reclaim cost by deck-entry UUID for the Reclaim outcome. */
-  readonly reclaimCostByEntryId?: Readonly<
-    IdentityRecord<DeckEntryId, number>
-  >;
+  readonly reclaimCostByEntryId?: Readonly<IdentityRecord<DeckEntryId, number>>;
 }
 
 export type ExplorationDeckModificationView =
@@ -1957,7 +1953,10 @@ function CompoundCardPairPresentation({
             entryId: parseDeckEntryId(before.entryId),
             card: before.model,
           },
-          after: { entryId: parseDeckEntryId(after.entryId), card: after.model },
+          after: {
+            entryId: parseDeckEntryId(after.entryId),
+            card: after.model,
+          },
         }}
         reveal="complete"
       />
@@ -2878,7 +2877,10 @@ export function ExplorationSiteScreen({
         completeExit();
         return;
       }
-      const trajectories = new Map<ExplorationRewardItemKey, RewardTrajectory>();
+      const trajectories = new Map<
+        ExplorationRewardItemKey,
+        RewardTrajectory
+      >();
       for (const item of rewardItems) {
         const sourceRect = rewardItemRefs.current
           .get(item.key)
@@ -7315,7 +7317,6 @@ export function ExplorationSiteScreen({
                 ) : (
                   <TransfigurationDetailPanel
                     candidate={{
-                      entryId: candidate.entryId,
                       card: candidate.model,
                       forms: candidate.forms,
                     }}
@@ -7378,10 +7379,14 @@ export function ExplorationSiteScreen({
                         cards={followup.candidates.map((candidate) => ({
                           entryId: candidate.entryId,
                           model: candidate.model,
-                          selection: selectedEntryIds.includes(candidate.entryId)
+                          selection: selectedEntryIds.includes(
+                            candidate.entryId,
+                          )
                             ? "selected"
                             : undefined,
-                          operation: selectedEntryIds.includes(candidate.entryId)
+                          operation: selectedEntryIds.includes(
+                            candidate.entryId,
+                          )
                             ? "transfigure"
                             : undefined,
                           testId: `cumulus-exploration-multi-transfiguration-card-${candidate.entryId}`,
@@ -7443,7 +7448,6 @@ export function ExplorationSiteScreen({
                   >
                     <TransfigurationDetailPanel
                       candidate={{
-                        entryId: candidate.entryId,
                         card: candidate.model,
                         forms: candidate.forms,
                       }}
@@ -7730,12 +7734,9 @@ export function ExplorationSiteScreen({
                             variant="accent"
                             placement="onGlass"
                             onPress={() =>
-                              onResolve(
-                                activeAction.id,
-                                {
-                                  packIndex: pack.index,
-                                },
-                              )
+                              onResolve(activeAction.id, {
+                                packIndex: pack.index,
+                              })
                             }
                             testId={`cumulus-exploration-pack-${String(pack.index)}-choose`}
                           />
@@ -8088,9 +8089,7 @@ export function ExplorationSiteScreen({
                       <Dreamsign
                         dreamsign={dreamsign}
                         testid={`cumulus-exploration-dreamsign-${dreamsign.id}`}
-                        onPress={() =>
-                          chooseDreamsign(dreamsign.id)
-                        }
+                        onPress={() => chooseDreamsign(dreamsign.id)}
                       />
                     </div>
                   ))}

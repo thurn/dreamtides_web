@@ -6,7 +6,7 @@
 
 Characters & Collectibles · Live demo & interactive props: `/cumulus#/dream-avatar-stage`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **3** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The full-body DreamAvatar art layer for a caller-owned stage: `standing` adds a low ambient glow, `cutout` preserves the underlying scene, and `fullBleed` supplies a cinematic backdrop and head-focused composition.
 

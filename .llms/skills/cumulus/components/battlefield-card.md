@@ -6,7 +6,7 @@
 
 Battle · Live demo & interactive props: `/cumulus#/battlefield-card`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The complete face-up battle-instance presentation for exhaustion, memory, figments, selection, challenge markers, score announcements, press, and pointer drag.
 

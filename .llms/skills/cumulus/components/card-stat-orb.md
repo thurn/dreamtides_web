@@ -6,7 +6,7 @@
 
 Cards · Live demo & interactive props: `/cumulus#/card-stat-orb`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **3** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The card-corner resource stat: a fitted white numeral over the energy, spark, or Dreamwell-energy glyph, with an optional monochrome transfiguration badge.
 

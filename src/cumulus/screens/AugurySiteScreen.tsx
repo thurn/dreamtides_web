@@ -333,7 +333,17 @@ export function AugurySiteScreen({
                   >
                     <OfferTile
                       model={offer.tile}
-                      presentation={offer.presentation}
+                      presentation={{
+                        subtitle: offer.presentation.subtitle,
+                        ...(offer.presentation.backgroundArt === undefined
+                          ? {}
+                          : {
+                              backgroundArt: {
+                                imageNumber:
+                                  offer.presentation.backgroundArt.imageNumber,
+                              },
+                            }),
+                      }}
                       size={layout === "desktop" ? "standard" : "compact"}
                       onPress={() => inspectOffer(offer)}
                       testId={`cumulus-augury-offer-${offer.id}`}

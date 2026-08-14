@@ -73,7 +73,7 @@ describe("TransfigurationPickerPanel", () => {
     },
   );
 
-  it("emits only the exact available entry ID while keeping unavailable and reforged cards readable", () => {
+  it("emits only the exact available entry ID while keeping reforged cards readable", () => {
     const onCardPress = vi.fn();
     const { container, root } = mountCumulus(
       <TransfigurationPickerPanel
@@ -92,11 +92,6 @@ describe("TransfigurationPickerPanel", () => {
               availability: "reforged",
               reforgedType: "Empowered",
             },
-            {
-              entryId: parseDeckEntryId("unavailable"),
-              card: syntheticGameCard(3),
-              availability: "unavailable",
-            },
           ],
         }}
         onCardPress={onCardPress}
@@ -113,13 +108,6 @@ describe("TransfigurationPickerPanel", () => {
     act(() =>
       container
         .querySelector<HTMLElement>(
-          '[data-gallery-entry-id="unavailable"] [data-game-card-source]',
-        )
-        ?.click(),
-    );
-    act(() =>
-      container
-        .querySelector<HTMLElement>(
           '[data-gallery-entry-id="reforged"] [data-game-card-source]',
         )
         ?.click(),
@@ -128,9 +116,6 @@ describe("TransfigurationPickerPanel", () => {
     expect(onCardPress).toHaveBeenCalledWith("available");
     expect(
       container.querySelector('[data-gallery-entry-id="reforged"]'),
-    ).not.toBeNull();
-    expect(
-      container.querySelector('[data-gallery-entry-id="unavailable"]'),
     ).not.toBeNull();
     act(() => root.unmount());
   });

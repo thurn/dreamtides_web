@@ -6,7 +6,7 @@
 
 Actions & Inputs · Live demo & interactive props: `/cumulus#/exploration-choice`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A reveal-aware semantic action whose ordered description can mix localized text, rules, and UUID-backed entities.
 

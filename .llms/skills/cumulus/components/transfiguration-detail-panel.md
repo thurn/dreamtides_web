@@ -6,7 +6,7 @@
 
 Card Workflows · Live demo & interactive props: `/cumulus#/transfiguration-detail-panel`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **3** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A controlled form chooser for one prepared candidate, including previews, affordability, quoted costs, navigation, and commit state.
 
@@ -22,7 +22,7 @@ Builders prepare each form's quote and affordability; status and controlled sele
 | --- | --- | --- | --- | --- |
 | `candidate` | `TransfigurationDetailCandidate` | yes | — | Complete selected-card presentation with prepared form quotes. |
 | `value` | `TransfigurationType \| null` = `"Empowered" \| "Amplified" \| "Kindled" \| "Inspired" \| "Enduring" \| "Hastened" \| "Resonant" \| "Attuned" \| "Perfected"` | yes | — | Controlled selected form, or null before selection. |
-| `status` | `"idle" \| "submitting" \| "accepted"` | yes | — | Authoritative commit presentation state. |
+| `status` | `"idle" \| "submitting"` | yes | — | Authoritative commit presentation state. |
 | `quote` | `"show-cost" \| "included"` | yes | — | Whether the commit action shows a quoted Essence cost. |
 | `navigation` | `TransfigurationDetailNavigation` | yes | — | Closed navigation behavior for the hosting workflow. |
 | `onChange` | `(type: TransfigurationType) => void` | yes | — | Reports a controlled form selection by canonical form type. |
@@ -32,7 +32,6 @@ Builders prepare each form's quote and affordability; status and controlled sele
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `entryId` | `DeckEntryId` | no | Stable deck-entry identity retained by the hosting workflow. |
 | `card` | `GameCardModel` | no | Complete current card presentation. |
 | `forms` | `readonly TransfigurationDetailForm[]` | no | Prepared form quotes in display order. |
 

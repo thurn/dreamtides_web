@@ -69,7 +69,6 @@ afterEach(() => {
 describe("CommandMenu app-chrome model", () => {
   it("opens root actions, drills into a submenu, and invokes a leaf", () => {
     const command = vi.fn();
-    const opened = vi.fn();
     const { root } = mount(
       <CommandMenu
         model={{
@@ -86,7 +85,6 @@ describe("CommandMenu app-chrome model", () => {
               id: "more",
               label: assertLocalized("More"),
               glyph: GLYPHS.chevronRight,
-              onOpen: opened,
               actions: [
                 {
                   kind: "action",
@@ -112,7 +110,6 @@ describe("CommandMenu app-chrome model", () => {
         .find((button) => button.textContent?.includes("More"))
         ?.click(),
     );
-    expect(opened).toHaveBeenCalledTimes(1);
     expect(document.body.textContent).toContain("Load");
     act(() =>
       [...document.querySelectorAll<HTMLButtonElement>("button")]

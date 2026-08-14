@@ -6,7 +6,7 @@
 
 Battle · Live demo & interactive props: `/cumulus#/battle-phase-indicator`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A controlled, oriented comet marker for the five presentation-level battle phases.
 

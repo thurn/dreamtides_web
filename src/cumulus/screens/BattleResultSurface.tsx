@@ -3,6 +3,7 @@ import { GlassButton } from "../components/controls/GlassButton";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { Motes } from "../components/hud/Motes";
 import { GlassPanel } from "../components/overlay/GlassPanel";
+import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import { MOBILE_BATTLE_INSPECTOR_RAIL_TRACK } from "./mobile-battle-layout";
@@ -160,9 +161,9 @@ function VictoryReward({
           : "minmax(0, 1fr)",
         placeItems: "center",
         paddingTop: `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-4xl")})`,
-        paddingRight: `max(var(--safe-area-inset-right), ${token("--space-l")})`,
+        paddingRight: safeAreaInsetAtLeast("right", "--space-l"),
         paddingBottom: `calc(max(var(--safe-area-inset-bottom), ${token("--safe-bottom")}) + ${token("--space-2xl")})`,
-        paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-l")})`,
+        paddingLeft: safeAreaInsetAtLeast("left", "--space-l"),
       }}
     >
       <Motes on tint="warm" count={18} seed={44} zIndex={1} />
@@ -332,9 +333,9 @@ function DefeatOrDrawResult({
           : "minmax(0, 1fr)",
         placeItems: "center",
         paddingTop: `max(var(--safe-area-inset-top), ${token("--space-l")})`,
-        paddingRight: `max(var(--safe-area-inset-right), ${token("--space-l")})`,
+        paddingRight: safeAreaInsetAtLeast("right", "--space-l"),
         paddingBottom: `max(var(--safe-area-inset-bottom), ${token("--space-l")})`,
-        paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-l")})`,
+        paddingLeft: safeAreaInsetAtLeast("left", "--space-l"),
       }}
     >
       <div

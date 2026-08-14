@@ -20,7 +20,6 @@ function LocalizedTransfigurationButton(
 const empowered = {
   type: "Empowered" as const,
   presentation: localizedTransfigurationFormFixture("Empowered"),
-  change: { kind: "energy-delta" as const, from: 2, to: 1 },
   essenceCost: 40,
   affordable: true,
 };

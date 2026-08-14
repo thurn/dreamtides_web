@@ -11,16 +11,13 @@ import {
   TransfigurationDetailPanel,
   type TransfigurationDetailCandidate,
 } from "./TransfigurationDetailPanel";
-import { parseDeckEntryId } from "../../../types/identifiers";
 
 const candidate: TransfigurationDetailCandidate = {
-  entryId: parseDeckEntryId("entry"),
   card: syntheticGameCard(1),
   forms: [
     {
       type: "Empowered",
       presentation: localizedTransfigurationFormFixture("Empowered"),
-      change: { kind: "energy-delta", from: 2, to: 1 },
       essenceCost: 20,
       affordable: true,
       previewModel: syntheticGameCard(2),
@@ -28,7 +25,6 @@ const candidate: TransfigurationDetailCandidate = {
     {
       type: "Kindled",
       presentation: localizedTransfigurationFormFixture("Kindled"),
-      change: { kind: "spark-delta", from: 1, to: 2 },
       essenceCost: 40,
       affordable: false,
       previewModel: syntheticGameCard(3),
@@ -39,7 +35,6 @@ const candidate: TransfigurationDetailCandidate = {
         ...localizedTransfigurationFormFixture("Resonant"),
         name: assertLocalized("Resonant Across the Unending Luminous Horizon"),
       },
-      change: { kind: "spark-delta", from: 1, to: 3 },
       essenceCost: 30,
       affordable: true,
       previewModel: syntheticGameCard(4),
@@ -92,7 +87,7 @@ describe("TransfigurationDetailPanel", () => {
     act(() => root.unmount());
   });
 
-  it.each(["idle", "submitting", "accepted"] as const)(
+  it.each(["idle", "submitting"] as const)(
     "exposes controlled %s status with fixed navigation",
     (status) => {
       const { container, root } = mountCumulus(
@@ -185,14 +180,14 @@ describe("TransfigurationDetailPanel", () => {
     },
   );
 
-  it("exposes accepted status and reselectable navigation without confirming", () => {
+  it("supports reselectable navigation without a selected form", () => {
     const onBack = vi.fn();
     const onConfirm = vi.fn();
     const { container, root } = mountCumulus(
       <TransfigurationDetailPanel
         candidate={candidate}
-        value="Empowered"
-        status="accepted"
+        value={null}
+        status="idle"
         quote="show-cost"
         navigation={{ kind: "reselectable", onBack }}
         onChange={() => undefined}

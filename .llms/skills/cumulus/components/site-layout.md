@@ -6,7 +6,7 @@
 
 Atlas & Sites · Live demo & interactive props: `/cumulus#/site-layout`
 
-Real consumers: **11** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **10** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The responsive full-stage composition for routed character-led sites, with scene, mote tint, guide, speech, safe areas, and one site-body region.
 

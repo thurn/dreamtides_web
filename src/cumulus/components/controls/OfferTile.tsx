@@ -8,8 +8,7 @@ import {
 import { identiconsForced } from "../../../runtime/identicon-mode";
 import type { DomTestId } from "../../types/dom";
 import type { CardData } from "../../../types/cards";
-import type { TransfigurationType } from "../../../types/journey";
-import type { AuguryArchetypeData } from "../../../types/augury-data";
+import type { AuguryPresentationText } from "../../../types/augury-data";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
@@ -29,10 +28,7 @@ import {
 import offerFrameUrl from "../../assets/dreamsign_card_frame_2.png";
 import offerBlackFillUrl from "../../assets/offer_tile_black_fill.png";
 import "./offer-tile.css";
-import type {
-  DreamsignId,
-  OfferTileId,
-} from "../../../types/identifiers";
+import type { DreamsignId, OfferTileId } from "../../../types/identifiers";
 import type { SiteType } from "../../../types/journey";
 
 /** Named OfferTile edge lengths, in pixels. */
@@ -142,8 +138,6 @@ export type OfferTileModel =
   | (OfferTileBase & {
       kind: "transfigure-card";
       card: Readonly<CardData>;
-      /** Exact transfiguration applied to the preselected card. */
-      transfiguration: TransfigurationType;
     })
   | (OfferTileBase & {
       kind: "transfigure-starters";
@@ -164,13 +158,19 @@ export interface OfferTileProps {
   /** The offer's strict symbolic view model. */
   model: OfferTileModel;
   /** Archetype-authored copy for the surfaced reward. */
-  presentation: AuguryArchetypeData["presentation"];
+  presentation: OfferTilePresentation;
   /** Activates the offer, reporting the stable `model.id`. */
   onPress: (offerId: OfferTileId) => void;
   /** Complete tile composition size. Defaults to the 300px standard tile. */
   size?: OfferTileSize;
   /** Optional test selector; defaults to `offer-tile`. */
   testId?: DomTestId;
+}
+
+/** Authored Augury copy and optional art consumed by the tile itself. */
+export interface OfferTilePresentation {
+  readonly subtitle: AuguryPresentationText;
+  readonly backgroundArt?: Readonly<{ imageNumber: number }>;
 }
 
 /**
@@ -380,9 +380,7 @@ function OfferFullArtBackground({
   backgroundArt,
 }: {
   readonly kind: "dreamsign-gift" | "add-site";
-  readonly backgroundArt: NonNullable<
-    AuguryArchetypeData["presentation"]["backgroundArt"]
-  >;
+  readonly backgroundArt: NonNullable<OfferTilePresentation["backgroundArt"]>;
 }): ReactElement {
   const imageNumber = backgroundArt.imageNumber;
   return (
@@ -424,9 +422,7 @@ function DreamsignGiftComposition({
   backgroundArt,
 }: {
   readonly dreamsign: OfferTileDreamsign;
-  readonly backgroundArt: NonNullable<
-    AuguryArchetypeData["presentation"]["backgroundArt"]
-  >;
+  readonly backgroundArt: NonNullable<OfferTilePresentation["backgroundArt"]>;
 }): ReactElement {
   return (
     <span
@@ -457,9 +453,7 @@ function AddSiteComposition({
   backgroundArt,
 }: {
   readonly site: OfferTileSite;
-  readonly backgroundArt: NonNullable<
-    AuguryArchetypeData["presentation"]["backgroundArt"]
-  >;
+  readonly backgroundArt: NonNullable<OfferTilePresentation["backgroundArt"]>;
 }): ReactElement {
   return (
     <span
@@ -515,9 +509,7 @@ function CardArtPiece({
   const [imageBroken, setImageBroken] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
   const useCardImage =
-    !identiconsForced() &&
-    hasAssignedImage(card.imageNumber) &&
-    !imageBroken;
+    !identiconsForced() && hasAssignedImage(card.imageNumber) && !imageBroken;
   const imageSource = useCardImage
     ? cardImageUrl(card.imageNumber)
     : cardIdenticonUri(card.id);
@@ -716,10 +708,10 @@ function OfferVisual({
   presentation,
 }: {
   readonly model: OfferTileModel;
-  readonly presentation: AuguryArchetypeData["presentation"];
+  readonly presentation: OfferTilePresentation;
 }): ReactElement {
   const requireBackgroundArt = (): NonNullable<
-    AuguryArchetypeData["presentation"]["backgroundArt"]
+    OfferTilePresentation["backgroundArt"]
   > => {
     if (presentation.backgroundArt === undefined) {
       throw new Error(

@@ -6,7 +6,7 @@
 
 Actions & Inputs · Live demo & interactive props: `/cumulus#/text-field`
 
-Real consumers: **8** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **8** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The reusable labeled text and search input on Cumulus control chrome, with supporting and validation messaging.
 

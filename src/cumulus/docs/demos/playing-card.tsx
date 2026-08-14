@@ -11,7 +11,6 @@ function PlayingCardDemo({ revealed = false }: { revealed?: boolean }) {
         gap: token("--space-xl"),
       }}
     >
-      <PlayingCard variant="rankSuit" rank="Q" suit="hearts" />
       <PlayingCard
         variant="faceDown"
         drawnCard={{ rank: "A", suit: "spades" }}
@@ -30,19 +29,15 @@ export const playingCardDemo: CumulusComponent = {
   id: "playing-card",
   title: "Playing Card",
   blurb:
-    "The shared outlined playing-card face, with visible rank-and-suit, conventional face-down, and Four-Suit Reprise variants.",
+    "The shared outlined playing-card face, with conventional face-down and Four-Suit Reprise variants.",
   callout:
     "Use the face-down variant for a hidden committed card and the four-suit variant for Four-Suit Reprise's draw object.",
   propsNote:
-    "The rankSuit variant requires rank and suit. The faceDown and fourSuit variants require drawnCard and accept revealDrawnCard.",
+    "The faceDown and fourSuit variants require drawnCard and accept revealDrawnCard.",
   group: "Cards",
   docName: "PlayingCard",
   Component: PlayingCardDemo,
   usage: [
-    {
-      label: "Visible card",
-      code: `<PlayingCard variant="rankSuit" rank="Q" suit="hearts" />`,
-    },
     {
       label: "Face-down card",
       code: `<PlayingCard

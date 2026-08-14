@@ -115,8 +115,7 @@ const PLAYING_CARD_SUIT_MARK_SPECS: Readonly<
 > = {
   indexCompact: {
     fontSize: PLAYING_CARD_DESIGN.sizes.compact.fontSize,
-    outlineWidth:
-      PLAYING_CARD_DESIGN.sizes.compact.blackCharacterOutlineWidth,
+    outlineWidth: PLAYING_CARD_DESIGN.sizes.compact.blackCharacterOutlineWidth,
   },
   index: {
     fontSize: PLAYING_CARD_DESIGN.sizes.standard.fontSize,
@@ -341,28 +340,15 @@ function PlayingCardIndex({
 }
 
 interface PlayingCardBaseProps {
-  /** Named Gamble playing-card size. Defaults to `wager`. */
+  /** Named Gamble playing-card size. Defaults to `standard`. */
   size?: PlayingCardSize;
   /** Accent the card rim when it is the current choice. */
   emphasis?: "standard" | "current";
 }
 
-type RankSuitPlayingCardProps = PlayingCardBaseProps & {
-  /** Render a visible rank-and-suit card face. */
-  variant: "rankSuit";
-  /** Rank shown on the visible card face. */
-  rank: PlayingCardRank;
-  /** Suit shown on the visible card face. */
-  suit: PlayingCardSuit;
-  drawnCard?: never;
-  revealDrawnCard?: never;
-};
-
 type FourSuitPlayingCardProps = PlayingCardBaseProps & {
   /** Render the concealed four-suit face, optionally flipping to a committed draw. */
   variant: "fourSuit";
-  rank?: never;
-  suit?: never;
   /** Committed result available on the reverse face. */
   drawnCard: {
     rank: PlayingCardRank;
@@ -375,8 +361,6 @@ type FourSuitPlayingCardProps = PlayingCardBaseProps & {
 type FaceDownPlayingCardProps = PlayingCardBaseProps & {
   /** Render a conventional face-down card, optionally flipping to its committed face. */
   variant: "faceDown";
-  rank?: never;
-  suit?: never;
   /** Committed face available when the dealer reveals this card. */
   drawnCard: {
     rank: PlayingCardRank;
@@ -388,9 +372,7 @@ type FaceDownPlayingCardProps = PlayingCardBaseProps & {
 
 /** Official visible, face-down, and concealed-four-suit playing-card variants. */
 export type PlayingCardProps =
-  | RankSuitPlayingCardProps
-  | FourSuitPlayingCardProps
-  | FaceDownPlayingCardProps;
+  FourSuitPlayingCardProps | FaceDownPlayingCardProps;
 
 /**
  * A standalone playing card on the shared glass superellipse. Four-Suit
@@ -403,15 +385,8 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
   const emphasis = props.emphasis ?? "standard";
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard =
-    props.variant !== "rankSuit" &&
-    props.revealDrawnCard === true &&
-    props.drawnCard !== null;
-  const visibleCard =
-    props.variant === "rankSuit"
-      ? { rank: props.rank, suit: props.suit }
-      : showingDrawnCard
-        ? props.drawnCard
-        : null;
+    props.revealDrawnCard === true && props.drawnCard !== null;
+  const visibleCard = showingDrawnCard ? props.drawnCard : null;
   const label =
     visibleCard === null
       ? tx(
@@ -419,12 +394,7 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
           "[accessibility] [gamble] Name for a concealed Four-Suit Reprise playing card.",
         )
       : frontAriaLabel(visibleCard.rank, visibleCard.suit);
-  const state =
-    props.variant === "rankSuit"
-      ? "visible"
-      : showingDrawnCard
-        ? "drawn"
-        : "concealed";
+  const state = showingDrawnCard ? "drawn" : "concealed";
   const surfaceStyle: CSSProperties = {
     ...CARD_FACE_STYLE,
     ...(emphasis === "current"
@@ -465,77 +435,70 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
         perspective: PLAYING_CARD_DESIGN.flip.perspective,
       }}
     >
-      {props.variant === "rankSuit" ? (
-        <div data-playing-card-surface="" style={surfaceStyle}>
+      <motion.div
+        data-playing-card-flip=""
+        initial={false}
+        animate={{ rotateY: showingDrawnCard ? 180 : 0 }}
+        transition={
+          reduceMotion
+            ? { duration: 0 }
+            : {
+                duration: PLAYING_CARD_DESIGN.flip.durationSeconds,
+                ease: PLAYING_CARD_DESIGN.flip.ease,
+              }
+        }
+        style={{
+          position: "relative",
+          width: "100%",
+          height: "100%",
+          transformStyle: "preserve-3d",
+        }}
+      >
+        <div
+          aria-hidden={showingDrawnCard || undefined}
+          data-playing-card-concealed-face={props.variant}
+          data-playing-card-four-suit-face={
+            props.variant === "fourSuit" ? "" : undefined
+          }
+          data-playing-card-face-down={
+            props.variant === "faceDown" ? "" : undefined
+          }
+          style={surfaceStyle}
+        >
+          <div
+            data-four-suit-playing-card-face=""
+            style={{
+              position: "relative",
+              zIndex: 1,
+              display: "grid",
+              gridTemplateColumns: "repeat(2, max-content)",
+              gridTemplateRows: "repeat(2, max-content)",
+              placeItems: "center",
+              gap: token("--space-xxs"),
+            }}
+          >
+            {FOUR_SUIT_FACE_ORDER.map((suit) => (
+              <PlayingCardSuitMark
+                key={suit}
+                suit={suit}
+                size={size === "standard" ? "fourSuit" : "fourSuitCompact"}
+              />
+            ))}
+          </div>
+          <PlayingCardRim emphasis={emphasis} />
+        </div>
+        <div
+          aria-hidden={!showingDrawnCard || undefined}
+          data-playing-card-drawn-face=""
+          style={{
+            ...surfaceStyle,
+            transform: "rotateY(180deg)",
+          }}
+        >
           {rankSuitContent}
           <PlayingCardRim emphasis={emphasis} />
         </div>
-      ) : (
-        <motion.div
-          data-playing-card-flip=""
-          initial={false}
-          animate={{ rotateY: showingDrawnCard ? 180 : 0 }}
-          transition={
-            reduceMotion
-              ? { duration: 0 }
-              : {
-                  duration: PLAYING_CARD_DESIGN.flip.durationSeconds,
-                  ease: PLAYING_CARD_DESIGN.flip.ease,
-                }
-          }
-          style={{
-            position: "relative",
-            width: "100%",
-            height: "100%",
-            transformStyle: "preserve-3d",
-          }}
-        >
-          <div
-            aria-hidden={showingDrawnCard || undefined}
-            data-playing-card-concealed-face={props.variant}
-            data-playing-card-four-suit-face={
-              props.variant === "fourSuit" ? "" : undefined
-            }
-            data-playing-card-face-down={
-              props.variant === "faceDown" ? "" : undefined
-            }
-            style={surfaceStyle}
-          >
-            <div
-              data-four-suit-playing-card-face=""
-              style={{
-                position: "relative",
-                zIndex: 1,
-                display: "grid",
-                gridTemplateColumns: "repeat(2, max-content)",
-                gridTemplateRows: "repeat(2, max-content)",
-                placeItems: "center",
-                gap: token("--space-xxs"),
-              }}
-            >
-              {FOUR_SUIT_FACE_ORDER.map((suit) => (
-                <PlayingCardSuitMark
-                  key={suit}
-                  suit={suit}
-                  size={size === "standard" ? "fourSuit" : "fourSuitCompact"}
-                />
-              ))}
-            </div>
-            <PlayingCardRim emphasis={emphasis} />
-          </div>
-          <div
-            aria-hidden={!showingDrawnCard || undefined}
-            data-playing-card-drawn-face=""
-            style={{
-              ...surfaceStyle,
-              transform: "rotateY(180deg)",
-            }}
-          >
-            {rankSuitContent}
-            <PlayingCardRim emphasis={emphasis} />
-          </div>
-        </motion.div>
-      )}
+      </motion.div>
     </div>
   );
 }
@@ -662,9 +625,7 @@ function PlayingCardPrizeObject<ObjectId extends string>({
           style={{
             margin: 0,
             font:
-              size === "standard"
-                ? token("--t-title")
-                : token("--t-title-sm"),
+              size === "standard" ? token("--t-title") : token("--t-title-sm"),
           }}
         >
           {resolve(title)}
@@ -708,7 +669,9 @@ function PlayingCardPrizeObject<ObjectId extends string>({
   return (
     <div
       role={showingDrawnCard ? "img" : "group"}
-      aria-label={resolve(showingDrawnCard ? drawnCardLabel : accessibilityLabel)}
+      aria-label={resolve(
+        showingDrawnCard ? drawnCardLabel : accessibilityLabel,
+      )}
       data-playing-card-prize={objectId}
       data-playing-card-prize-state={showingDrawnCard ? "drawn" : "prize"}
       data-playing-card-prize-size={size}

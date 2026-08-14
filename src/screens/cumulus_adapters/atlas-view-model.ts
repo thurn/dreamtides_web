@@ -62,7 +62,7 @@ import type {
 } from "../../types/journey";
 import type { TutorialAtlasConfiguration } from "../../types/tutorial";
 import { type LayerName, layerOrdinal } from "../../types/layer-name";
-import type { AtlasNodeId, SiteId } from "../../types/identifiers";
+import type { AtlasNodeId } from "../../types/identifiers";
 import { parsePresentationId } from "../../types/identifiers";
 
 /**
@@ -349,7 +349,6 @@ function buildDreamsignCard(
     return null;
   }
   return {
-    id: dreamsign.id,
     name: localizedSourceText(dreamsign.name),
     art:
       dreamsign.imageName != null
@@ -362,11 +361,9 @@ function buildDreamsignCard(
 /** Resolves the signature site's standard InfoCard payload. */
 function buildSignatureSiteCard(
   dreamscape: NonNullable<JourneyContent["dreamscapes"][number]>,
-  siteId: SiteId,
   journeyContent: JourneyContent,
 ): AtlasNodeSite {
   return {
-    id: siteId,
     name: localizedSourceText(
       siteTypeName(journeyContent.sitesData, dreamscape.signatureSite),
     ),
@@ -386,7 +383,6 @@ function buildAffiliationCard(
 ): AtlasNodeAffiliation | null {
   return affiliation !== null
     ? {
-        id: affiliation.id,
         title: bindSourceTransport(
           journeyContent.atlasData.presentation.affiliationTitleTemplate,
           {
@@ -445,12 +441,12 @@ function buildNodeCard(
         sceneArt: artRef.dreamscapeScene(boss.sceneArtId),
         // The boss stands over the Limbo scene as its prominent figure.
         figureArt: artRef.dreamGuide(boss.figureArtId),
-        // Title with the run's chosen Apollyon incarnation (its full name, e.g.
-        // "Apollyon, the World's End"), falling back to the default epithet when
-        // no incarnation was assigned.
         title: bindSourceTransport(
           bossIncarnation?.title ?? boss.fallbackTitle,
         ),
+        // Title with the run's chosen Apollyon incarnation (its full name, e.g.
+        // "Apollyon, the World's End"), falling back to the default epithet when
+        // no incarnation was assigned.
         body: bindSourceTransport(
           bossIncarnation?.description ?? boss.fallbackIntroduction,
         ),
@@ -514,7 +510,7 @@ function buildNodeCard(
   const revealedSite = revealedAtlasSite(node);
   const site =
     guide != null && revealedSite !== null
-      ? buildSignatureSiteCard(dreamscape, revealedSite.id, journeyContent)
+      ? buildSignatureSiteCard(dreamscape, journeyContent)
       : null;
 
   // Show the dreamscape scene as the full-bleed hero, with the resident guide's
@@ -576,9 +572,7 @@ export function buildAtlasMapNodes(
     // its circular icon; an unrevealed node shows the empty round frame.
     const iconRef =
       geo.role === "boss"
-        ? artRef.dreamscapeIcon(
-            journeyContent.atlasData.boss.iconArtId,
-          )
+        ? artRef.dreamscapeIcon(journeyContent.atlasData.boss.iconArtId)
         : dreamscape === null
           ? null
           : artRef.dreamscapeIcon(dreamscape.id);
@@ -607,13 +601,7 @@ export function buildAtlasMapNodes(
         ? artRef.dreamsign(dreamsignTemplate.imageName)
         : null;
 
-    const reveal = buildNodeCard(
-      node,
-      geo,
-      journeyContent,
-      atlas,
-      isReachable,
-    );
+    const reveal = buildNodeCard(node, geo, journeyContent, atlas, isReachable);
     const model: AtlasNodeModel = {
       id: node.id,
       name: reveal.primary.placeName ?? reveal.primary.title,

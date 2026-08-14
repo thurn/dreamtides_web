@@ -6,7 +6,7 @@
 
 Cards · Live demo & interactive props: `/cumulus#/game-card`
 
-Real consumers: **32** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **32** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.
 

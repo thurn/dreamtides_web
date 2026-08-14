@@ -37,7 +37,7 @@ describe("the Cumulus catalog has no unreviewed ghost components", () => {
     const message = ghosts
       .map(
         (c) =>
-          `GHOST COMPONENT ${c.docName} (${c.module}) has no real consumer under src/ — ` +
+          `GHOST COMPONENT ${c.docName} (${c.module}) has no source-module importer under src/ — ` +
           `wire it up, mark it status: "incubating" in its demo, or add its docName to ` +
           `BASELINE in scripts/cumulus-ghost-components.test.mjs`,
       )

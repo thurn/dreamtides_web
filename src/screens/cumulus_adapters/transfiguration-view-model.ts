@@ -3,10 +3,7 @@
 
 import type { LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
-import {
-  buildTransfigurationDisplay,
-  describeTransfiguration,
-} from "../../transfiguration/transfiguration-logic";
+import { buildTransfigurationDisplay } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -90,9 +87,6 @@ export function buildTransfigurationCandidates(
       presentation: localizedTransfigurationPresentation(
         transfigurationForm(transfigurationData, offer.type),
       ),
-      change:
-        offer.change ??
-        describeTransfiguration(transfigurationData, card, offer.type),
       effectDetails: offer.effectDetails,
       essenceCost: offer.essenceCost,
       affordable: offer.essenceCost <= state.essence,
@@ -161,7 +155,6 @@ export function buildTransfigurationSiteView(params: {
     guide: buildTransfigurationGuideView(params.guide, params.guideLine),
     ready: params.runtime !== null,
     isEnhanced: params.site.isEnhanced,
-    alreadyAccepted: (params.runtime?.acceptedEntryIds.length ?? 0) > 0,
     candidates: buildTransfigurationCandidates(
       params.transfigurationData,
       params.state,

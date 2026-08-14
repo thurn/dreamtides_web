@@ -6,7 +6,7 @@
 
 Card Workflows · Live demo & interactive props: `/cumulus#/card-browser-panel`
 
-Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **4** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The collection-browsing card surface: canonical responsive grid, optional search and sorting controls, and physical-card gestures in one scrolling panel.
 

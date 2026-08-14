@@ -6,7 +6,7 @@
 
 Atlas & Sites · Live demo & interactive props: `/cumulus#/atlas-edge`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The connector between two Atlas nodes, drawn inside the map's SVG. Its treatment reflects the endpoints' lifecycle relative to the layer the player is choosing into.
 

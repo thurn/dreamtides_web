@@ -47,12 +47,6 @@ export type ExplorationChoiceEntity =
 /** One authored unit in an ordered Exploration action description. */
 export type ExplorationChoicePart =
   | {
-      /** Plain localized prose. */
-      readonly kind: "text";
-      /** Complete localized prose fragment. */
-      readonly value: LocalizedString;
-    }
-  | {
       /** Localized rules text whose semantic glyphs should render inline. */
       readonly kind: "rules";
       /** Complete localized rules fragment. */
@@ -196,9 +190,7 @@ function ChoiceContents({
                 key={`${part.kind}-${String(index)}`}
                 data-exploration-choice-part={part.kind}
               >
-                {part.kind === "rules"
-                  ? renderRulesSymbolsInline(resolve(part.value))
-                  : resolve(part.value)}
+                {renderRulesSymbolsInline(resolve(part.value))}
               </span>
             ),
           )}

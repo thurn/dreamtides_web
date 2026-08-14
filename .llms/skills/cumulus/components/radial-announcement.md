@@ -6,7 +6,7 @@
 
 Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/radial-announcement`
 
-Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **5** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The single orbiting circular status system for scene announcements, card scoring, merge targets, playing-hand totals, and terminal victory.
 

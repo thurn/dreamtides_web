@@ -12,7 +12,7 @@ import {
 import { artRef } from "../primitives/art";
 import { glyph } from "../primitives/glyph";
 import { parseArtAssetKey, parseAtlasNodeId } from "../../types/identifiers";
-import { testDreamscapeId, testGuideId, testDreamsignId } from "../../types/test-identities";
+import { testDreamscapeId, testGuideId } from "../../types/test-identities";
 
 export interface NodeSizing {
   nodeSize: number;
@@ -112,7 +112,6 @@ export function atlasFixtureNodes(sizing: NodeSizing): AtlasFixtureNode[] {
     const dreamsign =
       role === "available"
         ? {
-            id: testDreamsignId("00000000-0000-4000-8000-000000000088"),
             name: assertLocalized("Golden Acorn"),
             art: artRef.dreamsign("acorn_gold.png"),
             rulesText: assertLocalized(
@@ -142,7 +141,9 @@ export function atlasFixtureNodes(sizing: NodeSizing): AtlasFixtureNode[] {
                       ? testDreamscapeId("frostforge")
                       : testDreamscapeId("hopes_end"),
             ),
-        unrevealedFrameRef: artRef.atlasAsset(parseArtAssetKey("Round_frame_main.png")),
+        unrevealedFrameRef: artRef.atlasAsset(
+          parseArtAssetKey("Round_frame_main.png"),
+        ),
         siteBadgeGlyph: isHidden || isStarter || isBoss ? null : badge,
         knownDreamsignRef: dreamsign?.art ?? null,
         primary: primary(role),

@@ -6,7 +6,7 @@
 
 Battle · Live demo & interactive props: `/cumulus#/card-order-editor`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A surface-aware, identity-safe drag-to-reorder control for the battle deck-order workflow, with arrow-key reordering on each drag handle.
 

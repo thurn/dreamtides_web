@@ -419,7 +419,7 @@ export function BattleTutorialGuidance({
               ? "battle"
               : "site"
         }
-        placement={{ kind: "floating", avoidance: "cards-and-chrome" }}
+        placement={{ kind: "floating" }}
         visible={active && dialogueVisible}
         diagnostics={{
           triggerId: renderedView.triggerId,

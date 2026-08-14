@@ -56,8 +56,6 @@ export type TutorialDialoguePlacement =
   | {
       /** Places dialogue in measured free viewport space. */
       readonly kind: "floating";
-      /** Avoids registered card and chrome obstacles. */
-      readonly avoidance: "cards-and-chrome";
     }
   | {
       /** Prefers placement above one registered semantic anchor. */

@@ -6,7 +6,7 @@
 
 Text & Guidance · Live demo & interactive props: `/cumulus#/speech-bubble`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **3** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A guide-dialog bubble for character-led screens: the same frosted information material as an InfoCard, with a strict left, top-left, or bottom-left pointer toward the speaker and shared tutorial instruction formatting backed by the canonical inline rules-glyph renderer.
 

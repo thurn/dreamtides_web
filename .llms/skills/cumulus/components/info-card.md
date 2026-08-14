@@ -6,7 +6,7 @@
 
 Surfaces & Overlays · Live demo & interactive props: `/cumulus#/info-card`
 
-Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **4** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The strict information-card presentation. Its media treatment varies by content — object, full-bleed, atlas reveal, icon, tide, or text — over a single fixed liquid-glass shell. Standard variants have a native width of 248px and begin geometry scaling below ~551px; atlasReveal has a native width of 360px and begins geometry scaling below 800px. Both cutoffs are distinct from the Entity Reveal Coordinator's 900px input-layout breakpoint.
 
@@ -34,7 +34,7 @@ InfoCardProps is a discriminated union. The flattened table combines every varia
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"plain" \| "rules" \| "underline" \| "note" \| "stack" \| "definitions"` | no |  |
+| `kind` | `"plain" \| "rules" \| "note" \| "stack" \| "definitions"` | no |  |
 
 ## Usage
 

@@ -2,7 +2,11 @@ import { useState } from "react";
 import { assertLocalized } from "@trox/runtime";
 import { ExplorationChoice } from "../../components/controls/ExplorationChoice";
 import type { CumulusComponent } from "../registry";
-import { demoCard, demoDreamsign, demoIdentitySeed } from "./promotion-fixtures";
+import {
+  demoCard,
+  demoDreamsign,
+  demoIdentitySeed,
+} from "./promotion-fixtures";
 import { DemoControls, DemoLog, DemoSelect } from "./promotion-demo-controls";
 import { parseDeckEntryId } from "../../../types/identifiers";
 import { parseExplorationActionId } from "../../../types/identifiers";
@@ -57,14 +61,14 @@ function Demo() {
             variant === "plain"
               ? [
                   {
-                    kind: "text",
+                    kind: "rules",
                     value: assertLocalized(
                       "Continue carefully through the long luminous passage.",
                     ),
                   },
                 ]
               : [
-                  { kind: "text", value: assertLocalized("Study ") },
+                  { kind: "rules", value: assertLocalized("Study ") },
                   {
                     kind: "entity",
                     entity:
@@ -76,7 +80,7 @@ function Demo() {
                     kind: "rules",
                     value: assertLocalized(" and draw 1 card."),
                   },
-                  { kind: "text", value: assertLocalized(" Then remember ") },
+                  { kind: "rules", value: assertLocalized(" Then remember ") },
                   {
                     kind: "entity",
                     entity:

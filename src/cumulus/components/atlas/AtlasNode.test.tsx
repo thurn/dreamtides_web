@@ -17,15 +17,13 @@ import {
   type AtlasNodeModel,
 } from "./AtlasNode";
 import { parseAtlasNodeId } from "../../../types/identifiers";
-import { parseSiteId } from "../../../types/identifiers";
-import { testDreamscapeId, testGuideId, testDreamsignId, testAffiliationId, testArtAssetKey } from "../../../types/test-identities";
+import {
+  testDreamscapeId,
+  testGuideId,
+  testArtAssetKey,
+} from "../../../types/test-identities";
 
 const NODE_ID = parseAtlasNodeId("00000000-0000-4000-8000-000000000051");
-const DREAMSIGN_ID = testDreamsignId("00000000-0000-4000-8000-000000000052");
-const SITE_ID = parseSiteId("00000000-0000-4000-8000-000000000053");
-const AFFILIATION_ID = testAffiliationId(
-  "00000000-0000-4000-8000-000000000054",
-);
 
 describe("atlasPrimaryInfoCard", () => {
   it("selects the scene reveal for a known place and text for an unseen dream", () => {
@@ -79,19 +77,16 @@ function model(
       body: assertLocalized("Aldric offers curated visions of the future."),
     },
     dreamsign: {
-      id: DREAMSIGN_ID,
       name: assertLocalized("Known Sign"),
       art: artRef.dreamsign("known.png"),
       rulesText: assertLocalized("Your first vision costs less."),
     },
     site: {
-      id: SITE_ID,
       name: assertLocalized("Augury"),
       blurb: assertLocalized("Study a curated vision of what waits ahead."),
       icon: GLYPHS.water,
     },
     affiliation: {
-      id: AFFILIATION_ID,
       title: assertLocalized("Fixture affiliation"),
       body: assertLocalized("Fixture cards are more likely here."),
     },

@@ -406,7 +406,7 @@ export function renderComponentMarkdown(doc, props, consumerCount) {
   if (typeof consumerCount === "number") {
     lines.push("");
     lines.push(
-      `Real consumers: **${consumerCount}** (imports outside \`src/cumulus/docs/\` and tests).`,
+      `Source-module importers: **${consumerCount}** (value imports outside docs and test/type fixtures; not a production-liveness measure).`,
     );
   }
   lines.push("");

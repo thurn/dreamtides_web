@@ -6,7 +6,7 @@
 
 Actions & Inputs · Live demo & interactive props: `/cumulus#/transfiguration-button`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The canonical forge-form choice: compact and optionally priced controls with shared glyph, color, state, and accessibility behavior.
 
@@ -29,7 +29,6 @@ The canonical forge-form choice: compact and optionally priced controls with sha
 | --- | --- | --- | --- |
 | `type` | `TransfigurationType` | no | Named transfiguration form, which determines the canonical glyph. |
 | `presentation` | `LocalizedTransfigurationPresentation` | no | Authored presentation resolved from the injected catalog. |
-| `change` | `TransfigurationChange` | no | Locale-neutral rules change announced as the option's accessible description. |
 | `essenceCost` | `number` | no | Quoted essence cost announced in the accessible label. |
 | `affordable` | `boolean` | no | Whether the player can currently pay the quoted cost. |
 

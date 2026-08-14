@@ -5,10 +5,7 @@ import { resolveChecked } from "../../runtime/localization/runtime";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import {
-  parseCardName,
-  parseCardSubtype,
-} from "../../types/card-identity";
+import { parseCardName, parseCardSubtype } from "../../types/card-identity";
 import { parseCardTypeChangePredicateId } from "../../types/identifiers";
 import type { CardData } from "../../types/cards";
 import type { CardTypeChange } from "../../types/journey";
@@ -38,7 +35,13 @@ import { parseSiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testDreamAvatarId, testDreamsignId, testExplorationActionId, testGuideId, testCardId } from "../../types/test-identities";
+import {
+  testDreamAvatarId,
+  testDreamsignId,
+  testExplorationActionId,
+  testGuideId,
+  testCardId,
+} from "../../types/test-identities";
 
 const reducedMotionPreference = vi.hoisted(() => ({ value: true }));
 const CHOICE_A_ID = testExplorationActionId("choice-a");
@@ -702,10 +705,6 @@ function multiTransfigurationFollowupView(): ExplorationSiteView {
     forms: types.map((type) => ({
       type,
       presentation: localizedTransfigurationFormFixture(type),
-      change:
-        type === "Empowered"
-          ? ({ kind: "energy-delta", from: 2, to: 1 } as const)
-          : ({ kind: "spark-delta", from: 2, to: 4 } as const),
       effectDetails: { entryId, type },
       essenceCost: 0,
       affordable: true,
@@ -896,8 +895,16 @@ function deckModificationRewardView(
         : "All cards in your deck become ❖ (fast)",
     ),
     cards: [
-      { entryId: parseDeckEntryId("deck-entry-a"), model: first, isBane: false },
-      { entryId: parseDeckEntryId("deck-entry-b"), model: second, isBane: false },
+      {
+        entryId: parseDeckEntryId("deck-entry-a"),
+        model: first,
+        isBane: false,
+      },
+      {
+        entryId: parseDeckEntryId("deck-entry-b"),
+        model: second,
+        isBane: false,
+      },
     ],
   };
   const deckModification: ExplorationDeckModificationView =
@@ -3674,7 +3681,6 @@ describe("ExplorationSiteScreen", () => {
                     type: "Empowered",
                     presentation:
                       localizedTransfigurationFormFixture("Empowered"),
-                    change: { kind: "energy-delta", from: 2, to: 1 },
                     effectDetails: { energyCost: { before: 2, after: 1 } },
                     essenceCost: 0,
                     affordable: true,
@@ -5735,9 +5741,18 @@ describe("ExplorationSiteScreen", () => {
         destination: flight.getAttribute("data-exploration-destination"),
       })),
     ).toEqual([
-      { entryId: parseDeckEntryId("source-entry"), destination: "journey-deck" },
-      { entryId: parseDeckEntryId("copy-entry-a"), destination: "journey-deck" },
-      { entryId: parseDeckEntryId("copy-entry-b"), destination: "journey-deck" },
+      {
+        entryId: parseDeckEntryId("source-entry"),
+        destination: "journey-deck",
+      },
+      {
+        entryId: parseDeckEntryId("copy-entry-a"),
+        destination: "journey-deck",
+      },
+      {
+        entryId: parseDeckEntryId("copy-entry-b"),
+        destination: "journey-deck",
+      },
     ]);
     expect(onExit).not.toHaveBeenCalled();
     act(() => {

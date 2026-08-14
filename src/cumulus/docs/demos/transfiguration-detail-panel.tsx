@@ -6,9 +6,7 @@ import type { CumulusComponent } from "../registry";
 import { DemoControls, DemoLog, DemoSelect } from "./promotion-demo-controls";
 function Demo() {
   const [value, setValue] = useState<TransfigurationType | null>("Empowered");
-  const [status, setStatus] = useState<"idle" | "submitting" | "accepted">(
-    "idle",
-  );
+  const [status, setStatus] = useState<"idle" | "submitting">("idle");
   const [quote, setQuote] = useState<"show-cost" | "included">("show-cost");
   const [navigation, setNavigation] = useState<"fixed" | "reselectable">(
     "reselectable",
@@ -31,10 +29,8 @@ function Demo() {
         <DemoSelect
           label="Status"
           value={status}
-          values={["idle", "submitting", "accepted"]}
-          onChange={(next) =>
-            setStatus(next as "idle" | "submitting" | "accepted")
-          }
+          values={["idle", "submitting"]}
+          onChange={(next) => setStatus(next as "idle" | "submitting")}
         />
         <DemoSelect
           label="Quote"

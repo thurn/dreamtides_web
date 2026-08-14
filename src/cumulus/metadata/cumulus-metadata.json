@@ -1397,14 +1397,6 @@
       "description": "Accessible name for the close action."
     },
     {
-      "name": "headerAction",
-      "tsType": "{ readonly glyph: Glyph; readonly label: LocalizedString; readonly onPress: () => void; readonly disabled?: boolean | undefined; readonly testId?: string | undefined; }",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional tool action placed before the close disc."
-    },
-    {
       "name": "children",
       "tsType": "ReactNode",
       "unionMembers": [],
@@ -2553,14 +2545,6 @@
       "description": "Optional supporting line rendered beneath the title."
     },
     {
-      "name": "structuredSubtitle",
-      "tsType": "readonly GlassPanelTextSegment[]",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional structured subtitle whose entity runs receive the canonical underline."
-    },
-    {
       "name": "headingLevel",
       "tsType": "\"h1\" | \"h2\"",
       "unionMembers": [
@@ -2644,23 +2628,6 @@
                 "tsType": "GlassPanelIconButtonProps",
                 "optional": false,
                 "description": "Props forwarded to the icon control; placement is panel-owned."
-              }
-            ]
-          },
-          {
-            "name": "GlassPanelIconButtonGroupAccessory",
-            "fields": [
-              {
-                "name": "kind",
-                "tsType": "\"iconButtonGroup\"",
-                "optional": false,
-                "description": ""
-              },
-              {
-                "name": "buttons",
-                "tsType": "readonly GlassPanelIconButtonProps[]",
-                "optional": false,
-                "description": "Props forwarded to each icon control; placement is panel-owned."
               }
             ]
           }
@@ -2941,7 +2908,7 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"note\" | \"stack\" | \"definitions\"",
+            "tsType": "\"plain\" | \"rules\" | \"note\" | \"stack\" | \"definitions\"",
             "optional": false,
             "description": ""
           }
@@ -3390,11 +3357,28 @@
     },
     {
       "name": "presentation",
-      "tsType": "Readonly<{ headline: AuguryPresentationText; subtitle: AuguryPresentationText; backgroundArt?: Readonly<{ source: \"card\"; imageNumber: number; }> | undefined; }>",
+      "tsType": "OfferTilePresentation",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Archetype-authored copy for the surfaced reward."
+      "description": "Archetype-authored copy for the surfaced reward.",
+      "nested": {
+        "name": "OfferTilePresentation",
+        "fields": [
+          {
+            "name": "subtitle",
+            "tsType": "AuguryPresentationText",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "backgroundArt",
+            "tsType": "Readonly<{ imageNumber: number; }>",
+            "optional": true,
+            "description": ""
+          }
+        ]
+      }
     },
     {
       "name": "onPress",
@@ -3434,7 +3418,7 @@
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Named Gamble playing-card size. Defaults to `wager`."
+      "description": "Named Gamble playing-card size. Defaults to `standard`."
     },
     {
       "name": "emphasis",
@@ -3449,56 +3433,20 @@
     },
     {
       "name": "variant",
-      "tsType": "\"fourSuit\" | \"rankSuit\" | \"faceDown\"",
+      "tsType": "\"fourSuit\" | \"faceDown\"",
       "unionMembers": [
         "fourSuit",
-        "rankSuit",
         "faceDown"
       ],
       "required": true,
       "defaultValue": null,
-      "description": "Render a visible rank-and-suit card face.\nRender the concealed four-suit face, optionally flipping to a committed draw.\nRender a conventional face-down card, optionally flipping to its committed face."
-    },
-    {
-      "name": "rank",
-      "tsType": "StandardPlayingCardRank",
-      "unionMembers": [
-        "A",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "J",
-        "Q",
-        "K"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Rank shown on the visible card face."
-    },
-    {
-      "name": "suit",
-      "tsType": "StandardPlayingCardSuit",
-      "unionMembers": [
-        "clubs",
-        "diamonds",
-        "hearts",
-        "spades"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Suit shown on the visible card face."
+      "description": "Render the concealed four-suit face, optionally flipping to a committed draw.\nRender a conventional face-down card, optionally flipping to its committed face."
     },
     {
       "name": "drawnCard",
       "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | { rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
       "description": "Committed result available on the reverse face.\nCommitted face available when the dealer reveals this card."
     },
@@ -4009,27 +3957,6 @@
       "required": true,
       "defaultValue": null,
       "description": "Owner included in the accessible total announcement."
-    }
-  ],
-  "RichTextView": [
-    {
-      "name": "value",
-      "tsType": "RichText",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "",
-      "nested": {
-        "name": "RichText",
-        "fields": [
-          {
-            "name": "kind",
-            "tsType": "\"plain\" | \"rules\" | \"underline\" | \"note\" | \"stack\" | \"definitions\"",
-            "optional": false,
-            "description": ""
-          }
-        ]
-      }
     }
   ],
   "RulesText": [
@@ -4745,12 +4672,6 @@
             "description": "Authored presentation resolved from the injected catalog."
           },
           {
-            "name": "change",
-            "tsType": "TransfigurationChange",
-            "optional": false,
-            "description": "Locale-neutral rules change announced as the option's accessible description."
-          },
-          {
             "name": "essenceCost",
             "tsType": "number",
             "optional": false,
@@ -4821,12 +4742,6 @@
         "name": "TransfigurationDetailCandidate",
         "fields": [
           {
-            "name": "entryId",
-            "tsType": "DeckEntryId",
-            "optional": false,
-            "description": "Stable deck-entry identity retained by the hosting workflow."
-          },
-          {
             "name": "card",
             "tsType": "GameCardModel",
             "optional": false,
@@ -4861,11 +4776,10 @@
     },
     {
       "name": "status",
-      "tsType": "\"idle\" | \"submitting\" | \"accepted\"",
+      "tsType": "\"idle\" | \"submitting\"",
       "unionMembers": [
         "idle",
-        "submitting",
-        "accepted"
+        "submitting"
       ],
       "required": true,
       "defaultValue": null,

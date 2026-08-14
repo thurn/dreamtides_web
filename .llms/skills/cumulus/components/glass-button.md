@@ -6,7 +6,7 @@
 
 Actions & Inputs · Live demo & interactive props: `/cumulus#/glass-button`
 
-Real consumers: **30** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **30** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The labeled glass action — a bold text label with optional Essence cost or non-cost value on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface.
 

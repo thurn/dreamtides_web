@@ -24,7 +24,9 @@ import { testGuideId, testCardId } from "../../types/test-identities";
 function makeCard(index: number): CardData {
   return {
     name: parseCardName(`Forge Fixture ${String(index)}`),
-    id: testCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    id: testCardId(
+      `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+    ),
     cardNumber: index,
     cardType: "Character",
     subtype: "",
@@ -49,7 +51,6 @@ function candidate(index: number): TransfigurationCandidateView {
       {
         type: "Empowered",
         presentation: localizedTransfigurationFormFixture("Empowered"),
-        change: { kind: "energy-delta", from: 2, to: 1 },
         effectDetails: { fixture: true },
         essenceCost: 40,
         affordable: true,
@@ -71,7 +72,6 @@ function candidate(index: number): TransfigurationCandidateView {
       {
         type: "Kindled",
         presentation: localizedTransfigurationFormFixture("Kindled"),
-        change: { kind: "spark-delta", from: 2, to: 4 },
         effectDetails: { fixture: true },
         essenceCost: 80,
         affordable: false,
@@ -106,7 +106,6 @@ function view(): TransfigurationSiteView {
     },
     ready: true,
     isEnhanced: false,
-    alreadyAccepted: false,
     candidates: [candidate(1), candidate(2), candidate(3)],
   };
 }

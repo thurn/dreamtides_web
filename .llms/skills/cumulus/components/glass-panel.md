@@ -6,7 +6,7 @@
 
 Surfaces & Overlays · Live demo & interactive props: `/cumulus#/glass-panel`
 
-Real consumers: **20** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **20** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The persistent, non-modal, content-hugging liquid-glass container: an optional structured header, a composed body, and an optional footer on the canonical floating material.
 
@@ -25,7 +25,6 @@ Width and placement belong to the caller's wrapper. Edge-rail and full-bleed fra
 | `eyebrow` | `LocalizedString` | no | — | Optional uppercase context line rendered above the title. |
 | `title` | `LocalizedString` | no | — | Optional plain panel title. |
 | `subtitle` | `LocalizedString` | no | — | Optional supporting line rendered beneath the title. |
-| `structuredSubtitle` | `readonly GlassPanelTextSegment[]` | no | — | Optional structured subtitle whose entity runs receive the canonical underline. |
 | `headingLevel` | `"h1" \| "h2"` | no | `h2` | Semantic heading element for the title. Defaults to `h2`. |
 | `titleVoice` | `GlassPanelTitleVoice` = `"standard" \| "hero"` | no | `standard` | Title and subtitle typography. Defaults to `standard`. |
 | `headerSpacing` | `GlassPanelHeaderSpacing` = `"compact" \| "regular" \| "medium" \| "spacious"` | no | `regular` | Header padding preset. Defaults to `regular`. |
@@ -55,13 +54,6 @@ Width and placement belong to the caller's wrapper. Edge-rail and full-bleed fra
 | --- | --- | --- | --- |
 | `kind` | `"iconButton"` | no |  |
 | `button` | `GlassPanelIconButtonProps` | no | Props forwarded to the icon control; placement is panel-owned. |
-
-#### `GlassPanelIconButtonGroupAccessory`
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `kind` | `"iconButtonGroup"` | no |  |
-| `buttons` | `readonly GlassPanelIconButtonProps[]` | no | Props forwarded to each icon control; placement is panel-owned. |
 
 ## Usage
 

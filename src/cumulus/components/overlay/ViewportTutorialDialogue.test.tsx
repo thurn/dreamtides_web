@@ -24,7 +24,10 @@ class ResizeObserverStub {
 
 function PlacementHost() {
   const anchorRef = useTutorialAnchor("tutorial-anchor:anchor");
-  const obstacleRef = useTutorialObstacle("tutorial-obstacle:obstacle", "chrome");
+  const obstacleRef = useTutorialObstacle(
+    "tutorial-obstacle:obstacle",
+    "chrome",
+  );
   return (
     <>
       <div ref={anchorRef} data-fixture-anchor="" />
@@ -83,7 +86,10 @@ function ReplacementAnchorHost() {
         presentationId={parsePresentationId("route-tutorial")}
         dialogue={fixtureDialogue}
         context="site"
-        placement={{ kind: "anchored", anchorId: "tutorial-anchor:route-anchor" }}
+        placement={{
+          kind: "anchored",
+          anchorId: "tutorial-anchor:route-anchor",
+        }}
         visible
       />
     </>
@@ -115,7 +121,7 @@ function MovingObstacleHost() {
           ),
         }}
         context="card"
-        placement={{ kind: "floating", avoidance: "cards-and-chrome" }}
+        placement={{ kind: "floating" }}
         visible
       />
     </>
@@ -270,7 +276,7 @@ describe("ViewportTutorialDialogue", () => {
         presentationId={parsePresentationId("hidden")}
         dialogue={fixtureDialogue}
         context="card"
-        placement={{ kind: "floating", avoidance: "cards-and-chrome" }}
+        placement={{ kind: "floating" }}
         visible={false}
       />,
     );

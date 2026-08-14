@@ -21,8 +21,7 @@ import {
 import { testArtAssetKey } from "../../types/test-identities";
 import { testPresentationId } from "../../types/test-identities";
 import { parseAtlasNodeId } from "../../types/identifiers";
-import { parseSiteId } from "../../types/identifiers";
-import { testDreamscapeId, testGuideId, testAffiliationId } from "../../types/test-identities";
+import { testDreamscapeId, testGuideId } from "../../types/test-identities";
 
 /**
  * Stub matchMedia (jsdom lacks it; Pressable + useIsDesktop + the InfoCard
@@ -212,13 +211,11 @@ function residentModel(): Pick<
     },
     dreamsign: null,
     site: {
-      id: parseSiteId("00000000-0000-4000-8000-000000000072"),
       name: assertLocalized("Augury"),
       blurb: assertLocalized("Study a curated vision of what waits ahead."),
       icon: GLYPHS.water,
     },
     affiliation: {
-      id: testAffiliationId("00000000-0000-4000-8000-000000000073"),
       title: assertLocalized("Fixture affiliation"),
       body: assertLocalized("Fixture cards are more likely here."),
     },

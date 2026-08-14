@@ -6,7 +6,7 @@
 
 Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/motes`
 
-Real consumers: **10** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **10** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The atmospheric particle layer — drifting dust that gives a surface its living shimmer. Its tint adapts to whether it sits over scene art or over chrome.
 

@@ -1738,9 +1738,14 @@ function LadderClimbScreen({
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const layout = useIsDesktop() ? "desktop" : "mobile";
-  const [revealedResultId, setRevealedResultId] = useState<GambleResultId | null>(null);
-  const [outcomeResultId, setOutcomeResultId] = useState<GambleResultId | null>(null);
-  const [rewardResultId, setRewardResultId] = useState<GambleResultId | null>(null);
+  const [revealedResultId, setRevealedResultId] =
+    useState<GambleResultId | null>(null);
+  const [outcomeResultId, setOutcomeResultId] = useState<GambleResultId | null>(
+    null,
+  );
+  const [rewardResultId, setRewardResultId] = useState<GambleResultId | null>(
+    null,
+  );
   const [roundActionsVisible, setRoundActionsVisible] = useState(false);
   const [replacementVisible, setReplacementVisible] = useState(false);
   const settledResultIdRef = useRef<GambleResultId | undefined>(undefined);
@@ -2089,8 +2094,11 @@ function StarwayStairsScreen({
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const layout = useIsDesktop() ? "desktop" : "mobile";
-  const [revealedResultId, setRevealedResultId] = useState<GambleResultId | null>(null);
-  const [outcomeResultId, setOutcomeResultId] = useState<GambleResultId | null>(null);
+  const [revealedResultId, setRevealedResultId] =
+    useState<GambleResultId | null>(null);
+  const [outcomeResultId, setOutcomeResultId] = useState<GambleResultId | null>(
+    null,
+  );
   const [actionsVisible, setActionsVisible] = useState(view.result === null);
   const [decisionPending, setDecisionPending] = useState(false);
   const [emphasisTierNumber, setEmphasisTierNumber] =
@@ -3182,9 +3190,14 @@ function FourSuitRepriseScreen({
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const layout = useIsDesktop() ? "desktop" : "mobile";
-  const [selectedEntryId, setSelectedEntryId] = useState<DeckEntryId | null>(null);
-  const [revealedResultId, setRevealedResultId] = useState<GambleResultId | null>(null);
-  const [outcomeResultId, setOutcomeResultId] = useState<GambleResultId | null>(null);
+  const [selectedEntryId, setSelectedEntryId] = useState<DeckEntryId | null>(
+    null,
+  );
+  const [revealedResultId, setRevealedResultId] =
+    useState<GambleResultId | null>(null);
+  const [outcomeResultId, setOutcomeResultId] = useState<GambleResultId | null>(
+    null,
+  );
   const [actionsVisible, setActionsVisible] = useState(false);
   const [transfigurationVisible, setTransfigurationVisible] = useState(false);
   const [selectedFormType, setSelectedFormType] =
@@ -3379,7 +3392,6 @@ function FourSuitRepriseScreen({
               >
                 <TransfigurationDetailPanel
                   candidate={{
-                    entryId: view.result.transfigurationCandidate.entryId,
                     card: view.result.transfigurationCandidate.model,
                     forms: view.result.transfigurationCandidate.forms,
                   }}

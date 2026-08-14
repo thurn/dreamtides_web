@@ -16,12 +16,7 @@ import type { InfoCardProps } from "../overlay/InfoCard";
 import "./atlas.css";
 import { tx, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
-import type {
-  AffiliationId,
-  AtlasNodeId,
-  DreamsignId,
-  SiteId,
-} from "../../../types/identifiers";
+import type { AtlasNodeId } from "../../../types/identifiers";
 
 const VISUALLY_HIDDEN_STYLE: CSSProperties = {
   position: "absolute",
@@ -67,7 +62,6 @@ export function atlasPrimaryInfoCard(content: AtlasNodePrimary): InfoCardProps {
 
 /** A UUID-backed known Dreamsign related to an Atlas node. */
 export interface AtlasNodeDreamsign {
-  id: DreamsignId;
   name: LocalizedString;
   art: ArtRef | null;
   rulesText: LocalizedString;
@@ -75,7 +69,6 @@ export interface AtlasNodeDreamsign {
 
 /** A UUID-backed signature site related to an Atlas node. */
 export interface AtlasNodeSite {
-  id: SiteId;
   name: LocalizedString;
   blurb: LocalizedString;
   icon: Glyph;
@@ -83,7 +76,6 @@ export interface AtlasNodeSite {
 
 /** A UUID-backed affiliation related to an Atlas node. */
 export interface AtlasNodeAffiliation {
-  id: AffiliationId;
   title: LocalizedString;
   body: LocalizedString;
 }

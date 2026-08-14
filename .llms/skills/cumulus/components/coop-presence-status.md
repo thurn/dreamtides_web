@@ -6,7 +6,7 @@
 
 Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/coop-presence-status`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count.
 

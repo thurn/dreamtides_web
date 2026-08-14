@@ -6,7 +6,7 @@
 
 Primitives · Live demo & interactive props: `/cumulus#/inline-glyph`
 
-Real consumers: **12** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **12** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size.
 

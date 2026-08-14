@@ -52,8 +52,6 @@ export interface CommandMenuGroup<Id extends string = string> {
   glyph: Glyph;
   label: CommandMenuCopy;
   active?: boolean;
-  /** Runs when Cumulus opens this group, before its nested commands are shown. */
-  onOpen?: () => void;
   actions: readonly CommandMenuItem<Id>[];
 }
 
@@ -86,8 +84,7 @@ export type CommandMenuItem<Id extends string = string> =
   | CommandMenuDivider<Id>;
 
 type CommandMenuInteractiveItem<Id extends string> =
-  | CommandMenuAction<Id>
-  | CommandMenuGroup<Id>;
+  CommandMenuAction<Id> | CommandMenuGroup<Id>;
 
 /** The fixed trigger rendered by an app-chrome command menu. */
 export interface CommandMenuTriggerModel {
@@ -393,7 +390,6 @@ function HierarchicalMenu<Id extends string>({
 
   function choose(item: CommandMenuInteractiveItem<Id>): void {
     if (item.kind === "group") {
-      item.onOpen?.();
       setPath((previous) => [...previous, item.id]);
       return;
     }

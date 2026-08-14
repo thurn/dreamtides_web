@@ -144,8 +144,7 @@ export interface CardChoiceGridActionView<
 export type CardChoiceGridColumns = "one" | "two" | "three" | "four" | "five";
 
 /** Named fit preset for a site card-choice grid. */
-export type CardChoiceGridSiteFit =
-  "choice" | "compact-choice" | "mixed-reward";
+export type CardChoiceGridSiteFit = "choice" | "mixed-reward";
 
 /** Layout contract for a {@link CardChoiceGrid}. */
 export type CardChoiceGridLayout =
@@ -204,11 +203,6 @@ function siteCardWidth(
   viewport: "mobile" | "desktop",
   fit: CardChoiceGridSiteFit,
 ): string {
-  if (fit === "compact-choice") {
-    return viewport === "desktop"
-      ? "min(178px, 15.5cqw, 52cqh)"
-      : "min(74px, 18cqw, 27cqh)";
-  }
   if (fit === "mixed-reward") {
     return viewport === "desktop"
       ? "min(160px, 24cqw, 34cqh)"

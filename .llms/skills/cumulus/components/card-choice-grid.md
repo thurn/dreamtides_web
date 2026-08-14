@@ -6,7 +6,7 @@
 
 Card Workflows · Live demo & interactive props: `/cumulus#/card-choice-grid`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **3** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A frameless, responsive grid that turns a small set of resolved GameCards into selectable choices inside an existing site or panel.
 

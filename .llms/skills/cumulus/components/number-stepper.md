@@ -6,7 +6,7 @@
 
 Actions & Inputs · Live demo & interactive props: `/cumulus#/number-stepper`
 
-Real consumers: **6** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **6** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A labeled, accessible decrement/value/increment row with optional canonical resource notation.
 

@@ -50,14 +50,27 @@ function fixtureCard(
 }
 
 const CARDS = [
-  fixtureCard(testCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), 287269511, 1, {
-    x: 0.5,
-    y: -0.5,
-    scale: 1.7,
-  }),
-  fixtureCard(testCardId("161482b6-af07-4d9e-822d-8c738672beb9"), 2022594419, 2),
+  fixtureCard(
+    testCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
+    287269511,
+    1,
+    {
+      x: 0.5,
+      y: -0.5,
+      scale: 1.7,
+    },
+  ),
+  fixtureCard(
+    testCardId("161482b6-af07-4d9e-822d-8c738672beb9"),
+    2022594419,
+    2,
+  ),
   fixtureCard(testCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"), 618071684, 3),
-  fixtureCard(testCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"), 1196004046, 4),
+  fixtureCard(
+    testCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"),
+    1196004046,
+    4,
+  ),
 ] as const satisfies OfferTileFourCards;
 
 const MODEL: OfferTileModel = {
@@ -120,10 +133,18 @@ describe("OfferTile", () => {
 
   it("fills the circle with one, two, three, and four original-art panels", () => {
     const models: readonly [string, OfferTileModel, string][] = [
-      ["one", { id: testOfferTileId("one"), kind: "card-gift", card: CARDS[0] }, "single"],
+      [
+        "one",
+        { id: testOfferTileId("one"), kind: "card-gift", card: CARDS[0] },
+        "single",
+      ],
       [
         "two",
-        { id: testOfferTileId("two"), kind: "card-bundle", cards: [CARDS[0], CARDS[1]] },
+        {
+          id: testOfferTileId("two"),
+          kind: "card-bundle",
+          cards: [CARDS[0], CARDS[1]],
+        },
         "split-2",
       ],
       [
@@ -273,7 +294,6 @@ describe("OfferTile", () => {
           id: testOfferTileId("transfigure"),
           kind: "transfigure-card",
           card: CARDS[0],
-          transfiguration: "Empowered",
         },
       ],
       [

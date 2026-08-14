@@ -6,7 +6,7 @@
 
 Text & Guidance · Live demo & interactive props: `/cumulus#/tutorial-feature-callout`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A compact speech-inspired glass label for teaching one semantic region of a full GameCard, with canonical energy and spark glyph treatments.
 

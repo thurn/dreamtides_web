@@ -6,7 +6,7 @@
 
 Surfaces & Overlays · Live demo & interactive props: `/cumulus#/glass-dialog`
 
-Real consumers: **14** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **14** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. Standard chrome places the title, optional subtitle, and close disc in a hairline-closed header; flowing chrome floats the close disc in prose flow. Its companion GlassBackdrop is the frosted layer alone, for a screen that wants the frost without the dialog chrome.
 

@@ -49,7 +49,6 @@ import { playingCardDemo } from "./demos/playing-card";
 import { pressableDemo } from "./demos/pressable";
 import { radialAnnouncementDemo } from "./demos/radial-announcement";
 import { journeyStatusBarDemo } from "./demos/journey-status-bar";
-import { richTextDemo } from "./demos/rich-text";
 import { rulesTextDemo } from "./demos/rules-text";
 import { segmentedControlDemo } from "./demos/segmented-control";
 import { selectDemo } from "./demos/select";
@@ -152,7 +151,6 @@ export type CumulusComponentId =
   | "playing-card"
   | "pressable"
   | "radial-announcement"
-  | "rich-text"
   | "rules-text"
   | "segmented-control"
   | "select"
@@ -280,7 +278,6 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   infoCardDemo,
   editableInfoCardDemo,
 
-  richTextDemo,
   rulesTextDemo,
   tutorialFeatureCalloutDemo,
   speechBubbleDemo,

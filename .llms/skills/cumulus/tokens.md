@@ -104,13 +104,7 @@ Each --t-* bundles face + weight + size/line-height: apply a voice with one toke
 | `--font-ui` | `'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` | body, chrome, buttons, HUD |
 | `--font-title` | `'EB Garamond', Georgia, 'Times New Roman', serif` | titles, names, display |
 | `--font-rules-text` | `'Fira Sans Condensed', 'Inter', system-ui, sans-serif` | card / ability rules text |
-| `--font-numeral` | `'Anton', Impact, sans-serif` | stat-orb numerals (Anton) |
 | `--font-meta` | `'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace` | eyebrows, counters, meta |
-| `--font-logo` | `'EB Garamond', Georgia, 'Times New Roman', serif` | wordmark = serif + violet title gradient |
-| `--font-serif-canon` | `'EB Garamond', Georgia, 'Times New Roman', serif` | EB Garamond — titles, names |
-| `--font-sans-canon` | `'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` | Inter — body, HUD, buttons |
-| `--font-mono-canon` | `'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace` | JetBrains Mono — eyebrows |
-| `--font-rules-canon` | `'Fira Sans Condensed', 'Inter', system-ui, sans-serif` | Fira Sans Condensed — rules text |
 | `--t-wordmark` | `600 clamp(72px, 10vw, 150px)/0.9 'EB Garamond', Georgia, 'Times New Roman', serif` | Dreamtides main-menu wordmark |
 | `--t-display` | `600 40px/1.04 'EB Garamond', Georgia, 'Times New Roman', serif` | screen hero title |
 | `--t-hero` | `600 46px/1.05 'EB Garamond', Georgia, 'Times New Roman', serif` | dream-avatar-select hero name |
@@ -128,8 +122,6 @@ Each --t-* bundles face + weight + size/line-height: apply a voice with one toke
 | `--t-button-sm` | `700 14px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` |  |
 | `--t-caption` | `600 12px/1.35 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` | metadata |
 | `--t-popover-headline` | `600 19px/1.18 'EB Garamond', Georgia, 'Times New Roman', serif` | letter-spacing: -0.01em |
-| `--t-popover-epithet` | `500 14px/1.25 'EB Garamond', Georgia, 'Times New Roman', serif` | a name's epithet under a popover headline |
-| `--t-popover-body` | `500 14px/1.45 'Fira Sans Condensed', 'Inter', system-ui, sans-serif` |  |
 | `--t-popover-meta` | `700 10.5px/1 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace` | .12em uppercase |
 | `--t-eyebrow` | `700 11px/1.2 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace` |  |
 | `--t-numeral-sm` | `800 13px/1 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif` |  |
@@ -154,10 +146,8 @@ The named --space-* scale places content rhythm on a 4px grid. Use --space-xxs o
 | `--space-5xl` | `48px` |  |
 | `--space-6xl` | `64px` |  |
 | `--gutter` | `var(--space-xl)` | default horizontal page padding |
-| `--gutter-tight` | `var(--space-m)` | dense grids |
 | `--touch-min` | `44px` | never smaller — Apple HIG floor |
 | `--hud-h` | `64px` | persistent bottom resource bar |
-| `--sheet-grab` | `36px` | drag handle width on bottom sheets |
 | `--press-scale` | `0.9` |  |
 
 ## Shadows & glows
@@ -170,10 +160,8 @@ Elevation and glow treatments — always these, never an ad-hoc box-shadow.
 | `--shadow-md` | `0 6px 18px rgba(4, 2, 10, 0.55)` |  |
 | `--shadow-lg` | `0 16px 40px rgba(3, 1, 8, 0.62)` |  |
 | `--shadow-card` | `0 10px 26px rgba(3, 1, 8, 0.55), 0 2px 6px rgba(3, 1, 8, 0.4)` |  |
-| `--shadow-sheet` | `0 -12px 40px rgba(3, 1, 8, 0.6)` |  |
 | `--glow-accent-soft` | `0 0 24px rgba(147, 51, 234, 0.35)` |  |
 | `--inset-top` | `inset 0 1px 0 rgba(255, 255, 255, 0.08)` |  |
-| `--inset-press` | `inset 0 2px 8px rgba(3, 1, 8, 0.5)` |  |
 
 ## Motion
 
@@ -192,7 +180,6 @@ Durations, easings, and the two material-continuity transitions (object-travel, 
 | `--dur-tutorial-dreamwell-emerge` | `1000ms` |  |
 | `--dur-tutorial-character-reposition` | `1000ms` |  |
 | `--motion-object-travel` | `420ms var(--ease-out)` |  |
-| `--stagger-travel` | `55ms` |  |
 
 ## Safe area & device frame
 
@@ -208,8 +195,6 @@ The hardware-inset channel plus the static design floors that reserve chrome. Ap
 | `--display-cutout-left` | `0px` |  |
 | `--display-cutout-width` | `0px` |  |
 | `--display-cutout-height` | `0px` |  |
-| `--device-w` | `390px` | iPhone logical width |
-| `--device-h` | `844px` | iPhone logical height |
 | `--safe-top` | `59px` | design floor: minimum chrome reservation for the status bar + Dynamic Island region. Equals the derived iPhone-16 top inset (11+37+11 in scripts/screenshot-devices.mjs) but is independent of it — this is a static reservation, not the hardware-inset channel (--safe-area-inset-top). |
 | `--safe-bottom` | `34px` | home indicator inset |
 

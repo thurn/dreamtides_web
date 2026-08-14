@@ -6,7 +6,7 @@
 
 Battle · Live demo & interactive props: `/cumulus#/battle-status-display`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current and target points at right.
 

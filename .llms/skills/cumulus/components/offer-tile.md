@@ -6,7 +6,7 @@
 
 Atlas & Sites · Live demo & interactive props: `/cumulus#/offer-tile`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **2** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The circular symbolic Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame.
 
@@ -17,7 +17,7 @@ The circular symbolic Augury offer button in named 300×300 desktop and 240×240
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `model` | `OfferTileModel` | yes | — | The offer's strict symbolic view model. |
-| `presentation` | `Readonly<{ headline: AuguryPresentationText; subtitle: AuguryPresentationText; backgroundArt?: Readonly<{ source: "card"; imageNumber: number; }> \| undefined; }>` | yes | — | Archetype-authored copy for the surfaced reward. |
+| `presentation` | `OfferTilePresentation` | yes | — | Archetype-authored copy for the surfaced reward. |
 | `onPress` | `(offerId: OfferTileId) => void` | yes | — | Activates the offer, reporting the stable `model.id`. |
 | `size` | `OfferTileSize` = `"compact" \| "standard"` | no | `standard` | Complete tile composition size. Defaults to the 300px standard tile. |
 | `testId` | `string` | no | `offer-tile` | Optional test selector; defaults to `offer-tile`. |
@@ -28,6 +28,13 @@ The circular symbolic Augury offer button in named 300×300 desktop and 240×240
 | --- | --- | --- | --- |
 | `id` | `OfferTileId` | no | Stable identity for this visible offer. Production callers should combine the encounter signature and offer id so simultaneous offers never collide. |
 | `kind` | `"card-gift" \| "card-draft" \| "transfigured-draft" \| "category-draft" \| "copies-draft" \| "card-bundle" \| "transfigure-card" \| "transfigure-starters" \| "purge-card" \| "duplicate-card" \| "dreamsign-gift" \| "add-site"` | no |  |
+
+### `presentation`: the `OfferTilePresentation` model
+
+| Field | Type | Optional | Description |
+| --- | --- | --- | --- |
+| `subtitle` | `AuguryPresentationText` | no |  |
+| `backgroundArt` | `Readonly<{ imageNumber: number; }>` | yes |  |
 
 ## Usage
 

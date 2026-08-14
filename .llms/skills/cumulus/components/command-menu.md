@@ -6,7 +6,7 @@
 
 Surfaces & Overlays · Live demo & interactive props: `/cumulus#/command-menu`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **2** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The single command offering: one strict model renders fixed app-chrome commands or card and pointer actions through the same typed hierarchy.
 

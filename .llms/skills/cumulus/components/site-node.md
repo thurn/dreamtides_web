@@ -6,7 +6,7 @@
 
 Atlas & Sites · Live demo & interactive props: `/cumulus#/site-node`
 
-Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **4** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The dreamscape site disc: a floating circular node carrying a glyph and accent ring. Scene placement uses the compact presentation over art; reward surfaces use the larger reward presentation. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard.
 

@@ -120,7 +120,7 @@ function Demo() {
         context={context}
         placement={
           placement === "floating"
-            ? { kind: "floating", avoidance: "cards-and-chrome" }
+            ? { kind: "floating" }
             : {
                 kind: "anchored",
                 anchorId: "tutorial-anchor:demo-site-anchor",
@@ -153,7 +153,7 @@ export const viewportTutorialDialogueDemo: CumulusComponent = {
   Component: Demo,
   usage: [
     {
-      code: `<ViewportTutorialDialogue presentationId={id} dialogue={dialogue} context="card" placement={{ kind: "floating", avoidance: "cards-and-chrome" }} visible />`,
+      code: `<ViewportTutorialDialogue presentationId={id} dialogue={dialogue} context="card" placement={{ kind: "floating" }} visible />`,
     },
   ],
   demo: { defaultArgs: {} },

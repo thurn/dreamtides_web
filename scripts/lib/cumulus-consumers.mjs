@@ -1,10 +1,11 @@
 // Consumer-count helper for the Cumulus component catalog.
 //
 // For every entry registered in src/cumulus/docs/registry.ts, this computes how
-// many real code sites actually consume that component's SOURCE module — where
-// "real" means a value (non-`import type`) import from a file under src/ that is
-// NOT part of the doc site (src/cumulus/docs/) and NOT a test/spec. A component
-// with zero such consumers is a "ghost": documented but unadopted (or dead).
+// many code sites import that component's SOURCE module by value. The metric is
+// module-level: sibling exports share the same count, and the count does not
+// prove that a component symbol renders in a production-reachable state.
+// Candidates are files under src/ that are outside the doc site and test/type
+// fixture directories.
 //
 // Two callers share this single source of truth so their adoption numbers can
 // never disagree:
@@ -204,13 +205,14 @@ function collectTsFiles(dir) {
 
 /**
  * Whether `fullPath` may count as a consumer: a TS/TSX file under src/ that is
- * not part of the doc site and not a test/spec.
+ * not part of the doc site and not a test/type fixture.
  */
 function isConsumerCandidate(fullPath) {
   const base = fullPath.slice(fullPath.lastIndexOf(sep) + 1);
   if (/\.(test|spec)\./.test(base)) return false;
   const relPath = relative(ROOT, fullPath).split(sep).join("/");
   if (relPath.startsWith(DOCS_PREFIX)) return false;
+  if (relPath.split("/").includes("__type_tests__")) return false;
   return true;
 }
 
@@ -244,8 +246,8 @@ function buildValueImportIndex() {
 }
 
 /**
- * Compute, per registered component (in registry order), the number of real
- * (value, non-doc, non-test) consumers of its source module.
+ * Compute, per registered component (in registry order), the number of value
+ * importers of its source module outside docs and test/type fixtures.
  *
  * @returns {{ id: import("../../src/cumulus/docs/registry").CumulusComponentId, title: string, docName: string, status: string | undefined, module: string, count: number }[]}
  */

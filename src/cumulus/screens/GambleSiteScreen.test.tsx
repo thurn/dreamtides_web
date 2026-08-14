@@ -142,7 +142,9 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
 function fourSuitCard(index: number): CardData {
   return {
     name: parseCardName(`Four Suit Fixture ${String(index)}`),
-    id: testCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    id: testCardId(
+      `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+    ),
     cardNumber: index,
     cardType: "Character",
     subtype: "",
@@ -252,7 +254,6 @@ function fourSuitResultView(
           {
             type: "Empowered",
             presentation: localizedTransfigurationFormFixture("Empowered"),
-            change: { kind: "energy-delta", from: 2, to: 1 },
             effectDetails: { fixture: true },
             essenceCost: 0,
             affordable: true,
@@ -732,7 +733,9 @@ describe("GambleSiteScreen — Ladder Climb", () => {
         ?.getAttribute("data-wager-prize-card-state"),
     ).toBe("prize");
     expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(0);
-    expect(container.querySelector("[data-playing-card-prize-title]")).not.toBeNull();
+    expect(
+      container.querySelector("[data-playing-card-prize-title]"),
+    ).not.toBeNull();
     expect(
       container.querySelector('[data-testid="gamble-ladder-dreamsign-name"]'),
     ).not.toBeNull();
@@ -1060,9 +1063,9 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     expect(
       container.querySelectorAll("[data-starway-tier-button]"),
     ).toHaveLength(1);
-    expect(container.querySelectorAll("[data-playing-card-prize-title]")).toHaveLength(
-      3,
-    );
+    expect(
+      container.querySelectorAll("[data-playing-card-prize-title]"),
+    ).toHaveLength(3);
     expect(
       Array.from(
         container.querySelectorAll<HTMLElement>("[data-wager-prize-card]"),

@@ -6,7 +6,7 @@
 
 Cards · Live demo & interactive props: `/cumulus#/card-pile`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A physical deck or void stack built from structured, topmost-first card instances. It shows at most three slightly offset layers and rests sideways as one fixed object.
 

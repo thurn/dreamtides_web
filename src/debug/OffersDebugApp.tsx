@@ -200,7 +200,6 @@ export function buildOfferTileDebugModels(
       id: parseOfferTileId("debug:transfigure"),
       kind: "transfigure-card",
       card: GENERAL_DRAFT_B[1],
-      transfiguration: "Empowered",
     },
     starter_transfigure: {
       id: parseOfferTileId("debug:starter_transfigure"),

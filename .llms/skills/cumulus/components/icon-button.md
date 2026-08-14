@@ -6,7 +6,7 @@
 
 Actions & Inputs · Live demo & interactive props: `/cumulus#/icon-button`
 
-Real consumers: **20** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **20** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls.
 

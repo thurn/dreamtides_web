@@ -48,29 +48,7 @@ const DOCS_PREFIX = "src/cumulus/docs/";
 // inline: it is a member of a sanctioned, deliberately-complete design scale
 // (spacing / type / radius / elevation / motion / device-frame), reserved so
 // UI code can pick a step by role.
-export const BASELINE = [
-  // Device-frame layout constants (the iPhone canvas the kit designs against).
-  "--device-h",
-  "--device-w",
-  "--sheet-grab", // reserved layout constant: bottom-sheet drag-handle width
-  "--gutter-tight", // reserved screen gutter for dense grids
-  // Motion scale members.
-  "--stagger-travel",
-  // Font roles / canonical face layer (the sanctioned type-face vocabulary).
-  "--font-logo",
-  "--font-numeral",
-  "--font-mono-canon",
-  "--font-rules-canon",
-  "--font-sans-canon",
-  "--font-serif-canon",
-  // Elevation / inset shadow scale members.
-  "--inset-press",
-  "--shadow-sheet",
-  // Type scale (--t-*) members — sanctioned complete scale; each bundles
-  // weight + size + face for a voice UI code applies by role.
-  "--t-popover-body",
-  "--t-popover-epithet",
-];
+export const BASELINE = [];
 
 /** Whether `fullPath` is walked at all: TS/TSX/CSS source under src/. */
 function isCandidateFile(name) {

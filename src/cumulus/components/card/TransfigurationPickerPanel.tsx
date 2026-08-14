@@ -13,7 +13,7 @@ export interface TransfigurationPickerCard {
   /** Complete resolved card presentation. */
   readonly card: GameCardModel;
   /** Prepared eligibility and prior-reforge state. */
-  readonly availability: "available" | "unavailable" | "reforged";
+  readonly availability: "available" | "reforged";
   /** Existing form shown when availability is `reforged`. */
   readonly reforgedType?: TransfigurationType | null;
 }

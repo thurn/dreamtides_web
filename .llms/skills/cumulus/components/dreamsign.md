@@ -6,7 +6,7 @@
 
 Characters & Collectibles · Live demo & interactive props: `/cumulus#/dreamsign`
 
-Real consumers: **13** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **13** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A dreamsign — a minor passive collectible — shown as its art floating on the scene. Hovering or pressing it reveals the full name and effect through the shared InfoCard, including the unified mobile width and typography treatment.
 

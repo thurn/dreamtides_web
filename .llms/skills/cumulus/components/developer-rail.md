@@ -6,7 +6,7 @@
 
 Surfaces & Overlays · Live demo & interactive props: `/cumulus#/developer-rail`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **2** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The shared edge-attached shell for persistent developer tools, with canonical glass, header hierarchy, close action, scrolling body, and optional footer.
 
@@ -24,7 +24,6 @@ Place it in a rail track that defines its position and responsive takeover behav
 | `side` | `"left" \| "right"` | yes | — | Physical screen edge occupied by the docked rail. |
 | `onClose` | `() => void` | yes | — | Accessible close action. |
 | `closeLabel` | `LocalizedString` | yes | — | Accessible name for the close action. |
-| `headerAction` | `{ readonly glyph: Glyph; readonly label: LocalizedString; readonly onPress: () => void; readonly disabled?: boolean \| undefined; readonly testId?: string \| undefined; }` | no | — | Optional tool action placed before the close disc. |
 | `children` | `ReactNode` | yes | — | Scrollable tool content. |
 | `footer` | `ReactNode` | no | — | Optional fixed rail footer. |
 | `testId` | `string` | no | — | Stable test id for product QA. |

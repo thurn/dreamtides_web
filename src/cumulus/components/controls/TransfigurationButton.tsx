@@ -1,9 +1,6 @@
 // TransfigurationButton — the canonical forge-form choice.
 
-import type {
-  TransfigurationChange,
-  TransfigurationType,
-} from "../../../types/journey";
+import type { TransfigurationType } from "../../../types/journey";
 import { GLYPHS } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import type { DomTestId } from "../../types/dom";
@@ -20,8 +17,6 @@ export interface TransfigurationButtonModel {
   type: TransfigurationType;
   /** Authored presentation resolved from the injected catalog. */
   presentation: LocalizedTransfigurationPresentation;
-  /** Locale-neutral rules change announced as the option's accessible description. */
-  change: TransfigurationChange;
   /** Quoted essence cost announced in the accessible label. */
   essenceCost: number;
   /** Whether the player can currently pay the quoted cost. */

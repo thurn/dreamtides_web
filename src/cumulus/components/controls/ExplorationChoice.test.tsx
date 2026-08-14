@@ -56,7 +56,7 @@ describe("ExplorationChoice", () => {
           actionId,
           label: assertLocalized("Choice"),
           description: [
-            { kind: "text", value: assertLocalized("Before ") },
+            { kind: "rules", value: assertLocalized("Before ") },
             { kind: "entity", entity },
             { kind: "rules", value: assertLocalized(" after") },
           ],
@@ -87,7 +87,7 @@ describe("ExplorationChoice", () => {
         model={{
           actionId,
           label: assertLocalized("Choice"),
-          description: [{ kind: "text", value: assertLocalized("Plain") }],
+          description: [{ kind: "rules", value: assertLocalized("Plain") }],
           availability: "available",
         }}
         onPress={onPress}
@@ -187,7 +187,7 @@ describe("ExplorationChoice", () => {
           ),
           description: [
             { kind: "entity", entity },
-            { kind: "text", value: assertLocalized(" then ") },
+            { kind: "rules", value: assertLocalized(" then ") },
             { kind: "entity", entity: repeatedCard },
             { kind: "rules", value: assertLocalized(" then reveal ") },
             { kind: "entity", entity: dreamsignEntity },

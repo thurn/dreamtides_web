@@ -6,7 +6,7 @@
 
 Card Workflows · Live demo & interactive props: `/cumulus#/card-picker-panel`
 
-Real consumers: **7** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **7** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The transactional card-choice surface: count-aware responsive cards with header, footer, and trailing choice actions.
 

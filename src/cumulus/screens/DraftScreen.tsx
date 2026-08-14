@@ -220,7 +220,7 @@ export function DraftScreen({
           presentationId={parsePresentationId(availableTutorial.id)}
           dialogue={availableTutorial.model}
           context="site"
-          placement={{ kind: "floating", avoidance: "cards-and-chrome" }}
+          placement={{ kind: "floating" }}
           visible
         />
       )}

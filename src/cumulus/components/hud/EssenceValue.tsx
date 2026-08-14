@@ -1,7 +1,5 @@
-// EssenceValue — the ONE way to show a player-facing essence amount outside
-// flowing rules text: the number glued directly to the filled crypto glyph with
-// no gap (`120◆`), kept on a single line. The amount carries no trailing
-// "essence" word because the glyph names the currency.
+// EssenceValue — the compact number-and-glyph presentation for essence amounts.
+// The pair stays on one line with no gap (`120◆`).
 //
 // EssenceValue inherits its type from the surrounding context — it sets the
 // color (via `tone`) and the tight number+glyph pairing, nothing else. Size and

@@ -306,7 +306,6 @@ function tutorialTimingVariables(playbackSpeed: number): CSSProperties {
     "--dur-tutorial-character-reposition": seconds(
       "--dur-tutorial-character-reposition",
     ),
-    "--stagger-travel": seconds("--stagger-travel"),
     "--motion-object-travel": `${seconds("--dur-slow")} var(--ease-out)`,
   } as CSSProperties;
 }

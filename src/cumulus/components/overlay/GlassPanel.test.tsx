@@ -55,10 +55,7 @@ describe("GlassPanel", () => {
           <GlassPanel
             eyebrow={assertLocalized("Vision I")}
             title={assertLocalized("Transfigure Your Starters")}
-            structuredSubtitle={[
-              { kind: "text", text: assertLocalized("Transfigure ") },
-              { kind: "entity", text: assertLocalized("A Thread Rewoven") },
-            ]}
+            subtitle={assertLocalized("Transfigure A Thread Rewoven")}
             rightAccessory={{
               kind: "iconButton",
               button: {
@@ -91,9 +88,7 @@ describe("GlassPanel", () => {
     expect(panel?.querySelector("h2")?.textContent).toBe(
       "Transfigure Your Starters",
     );
-    expect(
-      panel?.querySelector("[data-glass-panel-subtitle-entity]")?.textContent,
-    ).toBe("A Thread Rewoven");
+    expect(panel?.textContent).toContain("Transfigure A Thread Rewoven");
     expect(
       panel?.querySelector<HTMLElement>("[data-glass-panel-header]")?.style
         .textAlign,

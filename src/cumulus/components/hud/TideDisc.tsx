@@ -2,8 +2,8 @@
 // This is the Tide family's atom: both the desktop and the mobile DreamAvatar
 // select render their reveal-trigger tide rows from it, so the disc's tint,
 // ring, and glyph treatment read identically on every surface and cannot drift
-// apart. Colors and glyphs come from `tideVisual` (tide-spec) — the same table
-// the pills and the shared InfoCard's tide variant read.
+// apart. Colors and glyphs come from `tideVisual` (tide-spec), also used by the
+// shared InfoCard tide variant.
 //
 // The disc uses the larger touch-friendly size everywhere it appears.
 //

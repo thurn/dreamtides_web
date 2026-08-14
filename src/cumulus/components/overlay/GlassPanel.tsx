@@ -31,21 +31,12 @@ export interface GlassPanelIconButtonAccessory {
   button: GlassPanelIconButtonProps;
 }
 
-/** Compact icon controls rendered together at the trailing edge. */
-export interface GlassPanelIconButtonGroupAccessory {
-  kind: "iconButtonGroup";
-  /** Props forwarded to each icon control; placement is panel-owned. */
-  buttons: readonly GlassPanelIconButtonProps[];
-}
-
 /**
  * A structured control rendered at the trailing edge of a GlassPanel header.
  * Each branch carries the control's public props while the panel owns placement.
  */
 export type GlassPanelAccessory =
-  | GlassPanelGlassButtonAccessory
-  | GlassPanelIconButtonAccessory
-  | GlassPanelIconButtonGroupAccessory;
+  GlassPanelGlassButtonAccessory | GlassPanelIconButtonAccessory;
 
 /** The panel frame geometry and material. */
 export type GlassPanelFrame = "floating" | "fullBleed" | "edgeRail";
@@ -63,11 +54,6 @@ export type GlassPanelHeaderSpacing =
 /** Title voice for a standard panel heading or a large character dossier. */
 export type GlassPanelTitleVoice = "standard" | "hero";
 
-/** One text run in structured panel copy. */
-export type GlassPanelTextSegment =
-  | { kind: "text"; text: LocalizedString }
-  | { kind: "entity"; text: LocalizedString };
-
 export interface GlassPanelProps {
   /** Optional uppercase context line rendered above the title. */
   eyebrow?: LocalizedString;
@@ -75,8 +61,6 @@ export interface GlassPanelProps {
   title?: LocalizedString;
   /** Optional supporting line rendered beneath the title. */
   subtitle?: LocalizedString;
-  /** Optional structured subtitle whose entity runs receive the canonical underline. */
-  structuredSubtitle?: readonly GlassPanelTextSegment[];
   /** Semantic heading element for the title. Defaults to `h2`. */
   headingLevel?: "h1" | "h2";
   /** Title and subtitle typography. Defaults to `standard`. */
@@ -131,46 +115,7 @@ function accessoryNode(
   if (accessory.kind === "glassButton") {
     return <GlassButton {...accessory.button} placement={placement} />;
   }
-  if (accessory.kind === "iconButtonGroup") {
-    return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: token("--space-xs"),
-        }}
-      >
-        {accessory.buttons.map((button, index) => (
-          <IconButton
-            {...button}
-            key={button.testId ?? String(index)}
-            placement={placement}
-          />
-        ))}
-      </div>
-    );
-  }
   return <IconButton {...accessory.button} placement={placement} />;
-}
-
-function structuredTextNode(
-  text: readonly GlassPanelTextSegment[],
-  resolve: (message: LocalizedString) => string,
-): ReactNode {
-  return text.map((segment, index) =>
-    segment.kind === "entity" ? (
-      <u
-        key={`${String(index)}:${segment.kind}`}
-        data-glass-panel-subtitle-entity=""
-      >
-        {resolve(segment.text)}
-      </u>
-    ) : (
-      <span key={`${String(index)}:${segment.kind}`}>
-        {resolve(segment.text)}
-      </span>
-    ),
-  );
 }
 
 /**
@@ -183,7 +128,6 @@ export function GlassPanel({
   eyebrow,
   title,
   subtitle,
-  structuredSubtitle,
   headingLevel = "h2",
   titleVoice = "standard",
   headerSpacing = "regular",
@@ -209,7 +153,6 @@ export function GlassPanel({
     eyebrow !== undefined ||
     title !== undefined ||
     subtitle !== undefined ||
-    structuredSubtitle !== undefined ||
     rightAccessory !== undefined;
   const accessory =
     rightAccessory === undefined
@@ -330,7 +273,7 @@ export function GlassPanel({
                 {resolve(title)}
               </Heading>
             ) : null}
-            {(subtitle !== undefined || structuredSubtitle !== undefined) && (
+            {subtitle !== undefined && (
               <p
                 style={{
                   margin: 0,
@@ -342,11 +285,7 @@ export function GlassPanel({
                   color: token("--text-on-glass-muted"),
                 }}
               >
-                {structuredSubtitle === undefined
-                  ? subtitle === undefined
-                    ? null
-                    : resolve(subtitle)
-                  : structuredTextNode(structuredSubtitle, resolve)}
+                {resolve(subtitle)}
               </p>
             )}
           </div>

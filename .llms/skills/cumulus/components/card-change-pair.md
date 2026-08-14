@@ -6,7 +6,7 @@
 
 Card Workflows · Live demo & interactive props: `/cumulus#/card-change-pair`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **2** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A resolved before-and-after card presentation for replacements, copies, Transfigurations, keyword changes, and card-type changes.
 

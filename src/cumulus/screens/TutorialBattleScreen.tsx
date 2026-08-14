@@ -526,9 +526,9 @@ function TutorialVictorySurface({
         justifyContent: "center",
         gap: token("--space-2xl"),
         paddingTop: safeAreaInsetAtLeast("top", "--space-2xl"),
-        paddingRight: `max(var(--safe-area-inset-right), ${token("--space-l")})`,
+        paddingRight: safeAreaInsetAtLeast("right", "--space-l"),
         paddingBottom: safeAreaInsetAtLeast("bottom", "--space-2xl"),
-        paddingLeft: `max(var(--safe-area-inset-left), ${token("--space-l")})`,
+        paddingLeft: safeAreaInsetAtLeast("left", "--space-l"),
       }}
     >
       <style>{TUTORIAL_VICTORY_CSS}</style>

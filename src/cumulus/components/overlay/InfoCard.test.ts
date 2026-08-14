@@ -172,7 +172,7 @@ describe("InfoCard shell treatment", () => {
         subtitle: assertLocalized("Gain ⍏3, 4⍟, pay ☾, and store 1⧗"),
         body: richText.stack(
           richText.plain(assertLocalized("▸Dawn")),
-          richText.underline(assertLocalized("❖ Fast")),
+          richText.plain(assertLocalized("❖ Fast")),
           richText.note(assertLocalized("❖❖ Interrupt")),
           richText.definitions([
             {

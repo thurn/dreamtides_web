@@ -85,7 +85,7 @@ export interface DreamAvatarPortraitProps {
   unavailable?: boolean;
 }
 
-/** One reveal contract shared by every DreamAvatar surface. */
+/** Reveal contract for semantic DreamAvatar portrait surfaces. */
 export function dreamAvatarRevealSpec(
   dreamAvatar: DreamAvatarVisual,
   ability: LocalizedString | undefined,

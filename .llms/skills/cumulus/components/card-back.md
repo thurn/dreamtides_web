@@ -6,7 +6,7 @@
 
 Cards · Live demo & interactive props: `/cumulus#/card-back`
 
-Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **5** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation.
 

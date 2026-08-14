@@ -52,7 +52,7 @@ const preStyle: CSSProperties = {
 };
 
 const codeStyle: CSSProperties = {
-  fontFamily: token("--font-mono-canon"),
+  fontFamily: token("--font-meta"),
   fontSize: "12.5px",
   lineHeight: 1.65,
   color: token("--text-secondary"),

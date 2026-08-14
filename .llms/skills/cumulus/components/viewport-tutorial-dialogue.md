@@ -6,7 +6,7 @@
 
 Text & Guidance · Live demo & interactive props: `/cumulus#/viewport-tutorial-dialogue`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **3** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A measured CharacterDialogue surface placed from registered semantic anchors and obstacles within viewport safe space.
 
@@ -43,5 +43,5 @@ Floating and anchored preferences consume only the Tutorial Dialogue Placement c
 ## Usage
 
 ```tsx
-<ViewportTutorialDialogue presentationId={id} dialogue={dialogue} context="card" placement={{ kind: "floating", avoidance: "cards-and-chrome" }} visible />
+<ViewportTutorialDialogue presentationId={id} dialogue={dialogue} context="card" placement={{ kind: "floating" }} visible />
 ```

@@ -8,9 +8,8 @@
 // subtree and passing it in as an arbitrary node. Slots that render copy (e.g.
 // `InfoCard.body`) take a `RichText`, never a `ReactNode`.
 
-import { Fragment, type ReactElement, type ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import type { LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { token } from "../../primitives/tokens";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
@@ -57,7 +56,6 @@ export interface RichTextDefinition {
  *  - `rules` — Dreamtides rules text (see `RulesText`): glossary keywords gain
  *    the spark-amber emphasis and resource symbols (`◆`, `●`, `⍏N`) render as
  *    their inline glyphs. Use for card / dreamAvatar / dreamsign ability text.
- *  - `underline` — a semantically underlined run inside inline prose.
  *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a
  *    "Locked" / "Visited" status shown under a site blurb.
  *  - `stack` — several parts laid out vertically as separate lines.
@@ -68,7 +66,6 @@ export interface RichTextDefinition {
 export type RichText =
   | { readonly kind: "plain"; readonly text: LocalizedString }
   | { readonly kind: "rules"; readonly text: LocalizedString }
-  | { readonly kind: "underline"; readonly text: LocalizedString }
   | { readonly kind: "note"; readonly text: LocalizedString }
   | { readonly kind: "stack"; readonly parts: readonly RichText[] }
   | {
@@ -80,7 +77,6 @@ export type RichText =
 export const richText = {
   plain: (text: LocalizedString): RichText => ({ kind: "plain", text }),
   rules: (text: LocalizedString): RichText => ({ kind: "rules", text }),
-  underline: (text: LocalizedString): RichText => ({ kind: "underline", text }),
   note: (text: LocalizedString): RichText => ({ kind: "note", text }),
   stack: (...parts: RichText[]): RichText => ({ kind: "stack", parts }),
   definitions: (entries: readonly RichTextDefinition[]): RichText => ({
@@ -98,7 +94,7 @@ interface RichTextRenderOptions {
    * Route every textual RichText field through the canonical inline rules-text
    * tokenizer. InfoCard enables this at its shared rendering boundary so icon
    * substitutions and compact Unicode trigger formatting stay consistent in
-   * plain, note, underline, and definition-label copy.
+   * plain, note, and definition-label copy.
    */
   readonly substituteRulesSymbols?: boolean;
 }
@@ -211,12 +207,6 @@ export function renderRichText(
       return (
         <Fragment key={key}>{renderRulesText(resolve(value.text))}</Fragment>
       );
-    case "underline":
-      return (
-        <span key={key} style={{ textDecoration: "underline" }}>
-          {renderInlineText(value.text, resolve, options)}
-        </span>
-      );
     case "note":
       return (
         <div
@@ -296,10 +286,4 @@ export function renderRichText(
         </dl>
       );
   }
-}
-
-/** Renders a {@link RichText} value inline. */
-export function RichTextView({ value }: { value: RichText }): ReactElement {
-  const resolve = useLocalizer();
-  return <>{renderRichText(value, resolve)}</>;
 }

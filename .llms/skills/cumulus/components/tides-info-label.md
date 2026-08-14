@@ -6,7 +6,7 @@
 
 Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/tides-info-label`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The typographic Tides eyebrow: a filled one-em information glyph followed by uppercase copy, with one shared definition reveal across the complete label.
 

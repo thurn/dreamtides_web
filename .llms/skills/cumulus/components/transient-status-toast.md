@@ -6,7 +6,7 @@
 
 Status, Feedback & Effects · Live demo & interactive props: `/cumulus#/transient-status-toast`
 
-Real consumers: **3** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **3** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The fixed, safe-area-aware short-lived warning surface for structured player-facing status copy.
 

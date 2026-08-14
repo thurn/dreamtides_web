@@ -1,15 +1,10 @@
-// control-treatment — the resting surface material for Cumulus's interactive
-// filter/sort controls (SegmentedControl, Select) and the matching glass icon
-// button.
-//
-// A "control" here is a resting piece of chrome the player taps to filter or
-// sort a collection — the type filter over a deck, the sort dropdown beside it.
+// control-treatment — the resting surface material shared by Cumulus controls,
+// including SegmentedControl, Select, GlassButton, and glass icon buttons.
 // These controls sit over painterly scene art, so their surface material is a
 // deliberate, single design choice: liquid glass. `controlChrome()` is the one
 // source of truth for what a control looks like — the track/trigger surface,
 // the segment radius, and the resting / selected segment styles — so
-// SegmentedControl and Select render from the SAME material and it can never
-// drift between the two. `glassIconButtonChrome()` gives the corner icon
+// controls render from the same material. `glassIconButtonChrome()` gives the corner icon
 // buttons (a deck viewer's close control, the dreamscape menu) that same glass
 // surface as a fully-round disc, so a control cluster and its corner buttons
 // read as one family.

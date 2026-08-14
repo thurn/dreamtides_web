@@ -6,7 +6,7 @@
 
 Surfaces & Overlays · Live demo & interactive props: `/cumulus#/dreamsign-replacement-dialog`
 
-Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **4** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A UUID-routed capacity-resolution dialog that keeps the incoming and held Dreamsigns fully readable.
 

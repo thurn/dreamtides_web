@@ -1936,7 +1936,7 @@ function GlossaryInfoCardView(props: CardViewProps) {
   );
 }
 
-/** Visual editor surface; player UI uses {@link GameCard}. */
+/** Lower-level card surface for compositions that own interaction externally. */
 export function CardView(props: CardViewProps) {
   return props.glossaryInfoOnHover ? (
     <GlossaryInfoCardView {...props} />

@@ -7,7 +7,6 @@ import {
 import type { GameCardModel } from "../../components/card/CardView";
 import { localizedTransfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
 import { parseDreamsignId } from "../../../types/identifiers";
-import { parseDeckEntryId } from "../../../types/identifiers";
 
 export function demoCard(index: number, _name: string): GameCardModel {
   const id = parseCardId(
@@ -53,13 +52,11 @@ export const demoDialogue = {
 };
 
 export const demoTransfigurationCandidate = {
-  entryId: parseDeckEntryId(demoIdentitySeed(1)),
   card: demoCard(1, "Wayfinder"),
   forms: [
     {
       type: "Empowered" as const,
       presentation: localizedTransfigurationFormFixture("Empowered"),
-      change: { kind: "energy-delta" as const, from: 2, to: 1 },
       essenceCost: 20,
       affordable: true,
       previewModel: demoCard(2, "Wayfinder"),
@@ -67,7 +64,6 @@ export const demoTransfigurationCandidate = {
     {
       type: "Kindled" as const,
       presentation: localizedTransfigurationFormFixture("Kindled"),
-      change: { kind: "spark-delta" as const, from: 3, to: 5 },
       essenceCost: 40,
       affordable: false,
       previewModel: demoCard(3, "Wayfinder"),
@@ -75,7 +71,6 @@ export const demoTransfigurationCandidate = {
     {
       type: "Resonant" as const,
       presentation: localizedTransfigurationFormFixture("Resonant"),
-      change: { kind: "spark-delta" as const, from: 3, to: 4 },
       essenceCost: 30,
       affordable: true,
       previewModel: demoCard(4, "Wayfinder, Keeper of the Far Resonance"),

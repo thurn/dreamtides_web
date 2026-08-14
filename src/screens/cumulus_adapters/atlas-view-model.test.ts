@@ -508,7 +508,6 @@ describe("buildAtlasMapNodes", () => {
     expect(resolveSource(middle!.model.site!.name)).toBe("Augury");
     expect(resolveSource(middle!.model.site!.blurb).length).toBeGreaterThan(0);
     expect(middle?.model.site?.icon).toBe("fixture-atlas-icon");
-    expect(middle?.model.affiliation?.id).toBe(content.affiliations[0]?.id);
     expect(resolveSource(middle!.model.affiliation!.title)).toBe(
       "Fixture title Figments",
     );

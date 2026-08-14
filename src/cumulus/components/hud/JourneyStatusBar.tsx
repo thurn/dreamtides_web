@@ -810,9 +810,9 @@ function QsbBattleHudBar({
 
 /**
  * JourneyStatusBar — the persistent, TRANSPARENT bottom HUD for journey screens.
- * Essence total, deck sprite, DreamAvatar bust, and a
- * docked dreamsign strip sit directly on scene art (legible via `.hud-outline`),
- * all revealing through the shared coordinator. No menu-dots button.
+ * Essence total, deck action, DreamAvatar bust, and a docked dreamsign strip
+ * sit directly on scene art (legible via `.hud-outline`). Semantic entities
+ * reveal through the shared coordinator; the deck action opens the deck view.
  */
 export function JourneyStatusBar({
   stageRef,

@@ -6,7 +6,7 @@
 
 Card Workflows · Live demo & interactive props: `/cumulus#/transfiguration-picker-panel`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **2** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A Transfiguration-specific card picker with closed loading, offer, open-deck, availability, and reforged display states.
 

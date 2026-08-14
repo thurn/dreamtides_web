@@ -10,9 +10,9 @@ function Demo() {
     "open-deck",
   );
   const [cardCount, setCardCount] = useState(3);
-  const [availability, setAvailability] = useState<
-    "available" | "unavailable" | "reforged"
-  >("available");
+  const [availability, setAvailability] = useState<"available" | "reforged">(
+    "available",
+  );
   const [last, setLast] = useState("No selection yet");
   const cards = Array.from({ length: cardCount }, (_, offset) => {
     const index = offset + 1;
@@ -49,9 +49,9 @@ function Demo() {
         <DemoSelect
           label="First candidate"
           value={availability}
-          values={["available", "unavailable", "reforged"]}
+          values={["available", "reforged"]}
           onChange={(value) =>
-            setAvailability(value as "available" | "unavailable" | "reforged")
+            setAvailability(value as "available" | "reforged")
           }
         />
       </DemoControls>

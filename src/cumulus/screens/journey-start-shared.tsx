@@ -309,9 +309,7 @@ export function OnMediaEyebrow({ label }: { readonly label: LocalizedString }) {
   );
 }
 
-/** The side-by-side DreamAvatar triptych is this screen's desktop idiom, so it
- * flips to the desktop layout at the shared {@link useIsDesktop} breakpoint:
- * below it a one-per-page swipe carousel, at or above it a desktop triptych. */
+/** Reactive viewport helper used with Journey Start's layout-specific threshold. */
 export { useIsDesktop } from "../primitives/use-is-desktop";
 
 /** The brand-tinted hairline between ability text and the tides row. `flush`

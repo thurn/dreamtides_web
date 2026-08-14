@@ -634,38 +634,6 @@ function MotionSpecimen(name: string, entry: TokenEntry): ReactElement {
   );
 }
 
-const STAGGER_DEMO_COUNT = 4;
-
-/** A row of dots sharing one reference duration/easing, each delayed by an
- * increasing multiple of `--stagger-travel` — the shape the token is
- * actually used in (several like objects entering in a cascade). */
-function StaggerSpecimen(name: string): ReactElement {
-  return (
-    <div style={specimenTileStyle}>
-      <div style={{ ...motionTrackStyle, display: "flex", alignItems: "center" }}>
-        {Array.from({ length: STAGGER_DEMO_COUNT }, (_, index) => (
-          <div
-            key={index}
-            className="cumulus-primitives-dot"
-            style={{
-              ...motionDotStyle,
-              position: "relative",
-              top: 0,
-              left: 0,
-              marginLeft: index === 0 ? token("--space-xs") : token("--space-s"),
-              animationDuration: token("--dur-base"),
-              animationTimingFunction: token("--ease-out"),
-              animationDelay: `calc(var(${name}) * ${String(index)})`,
-            }}
-          />
-        ))}
-      </div>
-      <p style={specimenNameStyle}>{name}</p>
-      <p style={specimenValueStyle}>staggered by index × the token</p>
-    </div>
-  );
-}
-
 function renderMotionEntries(entries: [string, TokenEntry][]): ReactElement {
   const families = groupByFamily(entries);
   return (
@@ -674,9 +642,9 @@ function renderMotionEntries(entries: [string, TokenEntry][]): ReactElement {
         <div key={family} style={familyBlockStyle}>
           <p style={familyTitleStyle}>{familyLabel(family)}</p>
           <div style={gridStyle}>
-            {family === "stagger"
-              ? familyEntries.map(([name]) => <div key={name}>{StaggerSpecimen(name)}</div>)
-              : familyEntries.map(([name, entry]) => <div key={name}>{MotionSpecimen(name, entry)}</div>)}
+            {familyEntries.map(([name, entry]) => (
+              <div key={name}>{MotionSpecimen(name, entry)}</div>
+            ))}
           </div>
         </div>
       ))}

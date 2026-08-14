@@ -6,7 +6,7 @@
 
 Actions & Inputs · Live demo & interactive props: `/cumulus#/select`
 
-Real consumers: **10** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **10** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. Two of them share a single line where a segmented control would not fit.
 

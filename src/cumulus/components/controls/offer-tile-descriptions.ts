@@ -13,9 +13,8 @@ import { richText, type RichText } from "../card/rich-text";
 import type { OfferTileModel } from "./OfferTile";
 
 type Presentation = AuguryArchetypeData["presentation"];
-function cardName(model: {
-  readonly name: string;
-}): LocalizedString {
+type SubtitlePresentation = Pick<Presentation, "subtitle">;
+function cardName(model: { readonly name: string }): LocalizedString {
   return localizedSourceText(model.name);
 }
 
@@ -147,7 +146,7 @@ export function auguryOfferHeadline(
 /** Complete authored description for an Augury offer's semantic model. */
 export function offerTileDescription(
   model: OfferTileModel,
-  presentation: Presentation,
+  presentation: SubtitlePresentation,
 ): LocalizedString {
   return localizedPresentationText(presentation.subtitle, model);
 }
@@ -155,7 +154,7 @@ export function offerTileDescription(
 /** InfoCard copy derived from the authored Augury presentation. */
 export function offerTileRichDescription(
   model: OfferTileModel,
-  presentation: Presentation,
+  presentation: SubtitlePresentation,
 ): RichText {
   return richText.plain(offerTileDescription(model, presentation));
 }

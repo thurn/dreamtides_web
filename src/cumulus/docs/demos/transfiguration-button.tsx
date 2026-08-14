@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { assertLocalized } from "@trox/runtime";
-import type {
-  TransfigurationChange,
-  TransfigurationType,
-} from "../../../types/journey";
+import type { TransfigurationType } from "../../../types/journey";
 import {
   TransfigurationButton,
   type TransfigurationButtonVariant,
@@ -26,27 +23,16 @@ function demoPresentation(
 const DEMO_FORMS = [
   {
     type: "Inspired" as const,
-    change: { kind: "added-fast" } satisfies TransfigurationChange,
     essenceCost: 0,
     affordable: true,
   },
   {
     type: "Empowered" as const,
-    change: {
-      kind: "energy-delta",
-      from: 2,
-      to: 1,
-    } satisfies TransfigurationChange,
     essenceCost: 40,
     affordable: true,
   },
   {
     type: "Kindled" as const,
-    change: {
-      kind: "spark-delta",
-      from: 2,
-      to: 4,
-    } satisfies TransfigurationChange,
     essenceCost: 80,
     affordable: false,
   },

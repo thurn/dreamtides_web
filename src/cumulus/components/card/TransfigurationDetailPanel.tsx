@@ -12,7 +12,6 @@ import { GlassPanel } from "../overlay/GlassPanel";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { GameCard, type GameCardModel } from "./CardView";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
-import type { DeckEntryId } from "../../../types/identifiers";
 
 /** One prepared Transfiguration form and its resolved preview card. */
 export interface TransfigurationDetailForm extends TransfigurationButtonModel {
@@ -22,8 +21,6 @@ export interface TransfigurationDetailForm extends TransfigurationButtonModel {
 
 /** One selected deck entry and every prepared form it may take. */
 export interface TransfigurationDetailCandidate {
-  /** Stable deck-entry identity retained by the hosting workflow. */
-  readonly entryId: DeckEntryId;
   /** Complete current card presentation. */
   readonly card: GameCardModel;
   /** Prepared form quotes in display order. */
@@ -49,7 +46,7 @@ export interface TransfigurationDetailPanelProps {
   /** Controlled selected form, or null before selection. */
   readonly value: TransfigurationType | null;
   /** Authoritative commit presentation state. */
-  readonly status: "idle" | "submitting" | "accepted";
+  readonly status: "idle" | "submitting";
   /** Whether the commit action shows a quoted Essence cost. */
   readonly quote: "show-cost" | "included";
   /** Closed navigation behavior for the hosting workflow. */

@@ -47,7 +47,6 @@ export interface TransfigurationSiteView {
   guide: TransfigurationGuideView;
   ready: boolean;
   isEnhanced: boolean;
-  alreadyAccepted: boolean;
   candidates: readonly TransfigurationCandidateView[];
 }
 
@@ -267,18 +266,11 @@ export function TransfigurationSiteScreen({
             ) : (
               <TransfigurationDetailPanel
                 candidate={{
-                  entryId: picked.entryId,
                   card: picked.model,
                   forms: picked.forms,
                 }}
                 value={selectedFormType}
-                status={
-                  confirming
-                    ? "submitting"
-                    : view.alreadyAccepted
-                      ? "accepted"
-                      : "idle"
-                }
+                status={confirming ? "submitting" : "idle"}
                 quote="show-cost"
                 navigation={{ kind: "reselectable", onBack: goBack }}
                 onChange={(type) =>
@@ -323,7 +315,6 @@ export function TransfigurationSiteScreen({
               >
                 <TransfigurationDetailPanel
                   candidate={{
-                    entryId: fallbackCandidate.entryId,
                     card: fallbackCandidate.model,
                     forms: fallbackCandidate.forms,
                   }}

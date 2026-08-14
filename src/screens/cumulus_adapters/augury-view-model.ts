@@ -223,9 +223,7 @@ function candidateCards(
   );
 }
 
-function fourCards(
-  cards: readonly Readonly<CardData>[],
-): OfferTileCardChoices {
+function fourCards(cards: readonly Readonly<CardData>[]): OfferTileCardChoices {
   if (cards.length === 2) return [cards[0], cards[1]];
   if (cards.length === 3) return [cards[0], cards[1], cards[2]];
   if (cards.length === 4) return [cards[0], cards[1], cards[2], cards[3]];
@@ -352,9 +350,7 @@ export function buildAuguryOfferTileModel(
   offer: MerchantOffer,
   context: MerchantContext,
 ): OfferTileModel {
-  const id = parseOfferTileId(
-    `${offer.encounterSignature}:${offer.offerId}`,
-  );
+  const id = parseOfferTileId(`${offer.encounterSignature}:${offer.offerId}`);
   switch (offer.archetypeId) {
     case "fit_card_grant":
     case "strong_card":
@@ -401,7 +397,6 @@ export function buildAuguryOfferTileModel(
         id,
         kind: "transfigure-card",
         card: requiredCard(offer.gameObjects, "transfigure", true),
-        transfiguration: payload.transfiguration,
       };
     }
     case "starter_transfigure": {

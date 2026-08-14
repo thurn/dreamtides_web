@@ -214,7 +214,8 @@ describe("renderComponentMarkdown", () => {
     );
     expect(markdown).toContain("# Widget");
     expect(markdown).toContain("A fixture widget.");
-    expect(markdown).toContain("Real consumers: **3**");
+    expect(markdown).toContain("Source-module importers: **3**");
+    expect(markdown).toContain("not a production-liveness measure");
     expect(markdown).toContain("> **Guidance:** Prefer a real component.");
     expect(markdown).toContain(
       "The fixture keeps its supporting explanation in ordinary prose.\n\nEach item becomes a separate paragraph.",

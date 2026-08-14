@@ -6,7 +6,7 @@
 
 Surfaces & Overlays · Live demo & interactive props: `/cumulus#/editable-info-card`
 
-Real consumers: **4** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **4** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The constrained authoring form of InfoCard. It owns its text inputs, editing states, typography, and shell; callers provide controlled strings and lifecycle callbacks.
 

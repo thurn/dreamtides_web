@@ -6,7 +6,7 @@
 
 Actions & Inputs · Live demo & interactive props: `/cumulus#/disclosure-section`
 
-Real consumers: **5** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **5** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A controlled, surface-aware Cumulus section for progressively revealing dense secondary information.
 

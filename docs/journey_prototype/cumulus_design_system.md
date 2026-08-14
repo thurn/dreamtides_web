@@ -151,10 +151,7 @@ gain evidence that its abstraction is useful or be folded into its owner.
 Zero-consumer components are permitted only with the visible `incubating`
 catalog status and a named adoption role. Incubation lasts through one
 subsequent health sweep: a component that still has no production consumer at
-the following sweep is adopted or deleted. `CardTermDefinitions` is currently
-the incubating normal-flow consolidated glossary card intended for definitions placed
-beside or beneath rules text; entity-reveal glossary cards are a separate
-coordinator-owned surface and do not count as its adoption.
+the following sweep is adopted or deleted.
 
 ### Product screens
 
@@ -322,7 +319,7 @@ and name-prefix family.
   frame geometry and material as one local rendering contract.
 - **Typography** — the type scale (`--t-*`) and font roles (`--font-ui` = Inter,
   `--font-title` = EB Garamond, `--font-rules-text` = Fira Sans Condensed,
-  `--font-numeral` = Anton, `--font-meta` = JetBrains Mono).
+  `--font-meta` = JetBrains Mono).
 - **Corner radius** — five canonical roles: `--radius-compact` (8px),
   `--radius-control` (14px), `--radius-panel` (18px), `--radius-large` (24px),
   and `--radius-pill` (fully round).

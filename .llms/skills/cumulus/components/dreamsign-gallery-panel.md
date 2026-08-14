@@ -6,7 +6,7 @@
 
 Characters & Collectibles · Live demo & interactive props: `/cumulus#/dreamsign-gallery-panel`
 
-Real consumers: **1** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action.
 

@@ -6,7 +6,7 @@
 
 Battle · Live demo & interactive props: `/cumulus#/battle-foresee-editor`
 
-Real consumers: **2** (imports outside `src/cumulus/docs/` and tests).
+Source-module importers: **2** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
 A commit-gated local editor for a prepared deck prefix, count choices, deck order, and Void partition.
 

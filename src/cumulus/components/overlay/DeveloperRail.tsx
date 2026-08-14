@@ -1,7 +1,6 @@
 import { assertLocalized, type LocalizedString } from "@trox/runtime";
 import type { ReactElement, ReactNode } from "react";
 import { GLYPHS } from "../../primitives/glyph";
-import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { GlassPanel } from "./GlassPanel";
 import type { DomElementId, DomTestId } from "../../types/dom";
@@ -19,14 +18,6 @@ export interface DeveloperRailProps {
   readonly onClose: () => void;
   /** Accessible name for the close action. */
   readonly closeLabel: LocalizedString;
-  /** Optional tool action placed before the close disc. */
-  readonly headerAction?: {
-    readonly glyph: Glyph;
-    readonly label: LocalizedString;
-    readonly onPress: () => void;
-    readonly disabled?: boolean;
-    readonly testId?: DomTestId;
-  };
   /** Scrollable tool content. */
   readonly children: ReactNode;
   /** Optional fixed rail footer. */
@@ -43,7 +34,6 @@ export function DeveloperRail({
   side,
   onClose,
   closeLabel,
-  headerAction,
   children,
   footer,
   testId,
@@ -66,30 +56,15 @@ export function DeveloperRail({
         title={title}
         subtitle={subtitle}
         headerSpacing="compact"
-        rightAccessory={
-          headerAction === undefined
-            ? {
-                kind: "iconButton",
-                button: {
-                  glyph: GLYPHS.close,
-                  label: closeLabel,
-                  onPress: onClose,
-                  size: "sm",
-                },
-              }
-            : {
-                kind: "iconButtonGroup",
-                buttons: [
-                  { ...headerAction, size: "sm" },
-                  {
-                    glyph: GLYPHS.close,
-                    label: closeLabel,
-                    onPress: onClose,
-                    size: "sm",
-                  },
-                ],
-              }
-        }
+        rightAccessory={{
+          kind: "iconButton",
+          button: {
+            glyph: GLYPHS.close,
+            label: closeLabel,
+            onPress: onClose,
+            size: "sm",
+          },
+        }}
         footer={footer}
       >
         <div
