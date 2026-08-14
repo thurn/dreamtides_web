@@ -49,7 +49,18 @@ export const generatedCardDataWatchPaths = [
   path.join(__dirname, "data", "cards.toml"),
   path.join(__dirname, "public", "card-data.json"),
   path.join(__dirname, "public", "cards_v2-data.json"),
+  path.join(__dirname, "src", "generated", "config", "card-role-data.json"),
 ].map((filePath) => path.resolve(filePath));
+export const cardEditorSourceWatchPaths = [
+  path.join(__dirname, "data", "cards.ron"),
+  path.join(__dirname, "data", "internal", "internal_card_metadata.ron"),
+].map((filePath) => path.resolve(filePath));
+export const gameDataPipelineWatchPatterns = [
+  path.resolve(path.join(__dirname, ".game-data-stage-*")) + "/**",
+  path.resolve(path.join(__dirname, ".game-data-transactions")) + "/**",
+  path.resolve(path.join(__dirname, ".game-data-transaction.json")),
+  path.resolve(path.join(__dirname, ".game-data.lock")),
+];
 
 function resolveBuildGitSha(): string {
   try {
@@ -844,6 +855,10 @@ export function cardDataHotReloadPlugin(): Plugin {
 /** Vite plugin that detects stale generated card data during development. */
 export function generatedCardDataDriftPlugin(): Plugin {
   const watchedPaths = new Set(generatedCardDataWatchPaths);
+  const suppressedHotUpdatePaths = new Set([
+    ...cardEditorSourceWatchPaths,
+    ...generatedCardDataWatchPaths,
+  ]);
 
   const runCheck = (): ReturnType<typeof checkGeneratedCardData> =>
     checkGeneratedCardData({ rootDir: __dirname });
@@ -938,11 +953,14 @@ export function generatedCardDataDriftPlugin(): Plugin {
       server.watcher.once("close", closeWatchers);
     },
     hotUpdate(context) {
-      if (!isWatchedCardDataPath(context.file)) {
+      const filePath = path.resolve(context.file);
+      if (!suppressedHotUpdatePaths.has(filePath)) {
         return undefined;
       }
 
-      reportCheckResult(runCheck(), context.server);
+      if (isWatchedCardDataPath(filePath)) {
+        reportCheckResult(runCheck(), context.server);
+      }
       return [];
     },
   };
@@ -1028,15 +1046,12 @@ export default defineConfig({
   ],
   server: {
     watch: {
-      // The card editor APIs write card and tag TOML files under data
-      // (via temp-file swaps) and regenerate the generated card data on every
-      // save. regenerateCardData() writes the two public card JSON catalogs
-      // (public/card-data.json and public/cards_v2-data.json). Files in public/
-      // are not part of the module graph, but Vite still forces a full page
-      // reload whenever any public/ file changes. The two catalogs are listed in
-      // generatedCardDataWatchPaths below; ignoring them keeps
-      // an editor save from reloading the page, closing the art editor mid-edit,
-      // and discarding inline edits.
+      // Card editor transactions validate edits in temporary game-data trees,
+      // publish the canonical Cards RON sources, and regenerate compatibility
+      // TOML plus the public card JSON catalogs. The dedicated RON/card-data
+      // watchers validate those writes and emit targeted custom events. Keeping
+      // the transaction workspace and outputs out of Vite's generic watcher
+      // preserves the open editor and any in-progress local state.
       //
       // Git worktrees live under .worktrees and .claude/worktrees inside the
       // project root, so they fall within the watched tree. Each checkout
@@ -1055,6 +1070,7 @@ export default defineConfig({
         path.resolve(path.join(__dirname, "saved-journeys")) + "/**",
         path.resolve(path.join(__dirname, ".worktrees")) + "/**",
         path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
+        ...gameDataPipelineWatchPatterns,
         // The DreamAvatar and tides editors write the canonical tide catalogs and
         // regenerate the public DreamAvatar/tides JSON catalogs on every save.
         // These files are otherwise watched; ignoring them keeps a
@@ -1069,6 +1085,7 @@ export default defineConfig({
         // save; ignore it so an editor save does not trigger a full page reload
         // that closes the open card editor mid-edit.
         path.resolve(path.join(__dirname, "public", "dreamwell-data.json")),
+        ...cardEditorSourceWatchPaths,
         ...generatedCardDataWatchPaths,
         // The Dream Atlas content catalogs (atlas, dreamscapes,
         // dream_guides, affiliations, and apollyon_incarnations)

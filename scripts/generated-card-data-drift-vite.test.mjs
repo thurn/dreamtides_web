@@ -4,6 +4,8 @@ import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
 import viteConfig, {
+  cardEditorSourceWatchPaths,
+  gameDataPipelineWatchPatterns,
   generatedDataTomlWatchPattern,
   generatedCardDataDriftPlugin,
   generatedCardDataWatchPaths,
@@ -61,11 +63,13 @@ describe("generated card data drift Vite integration", () => {
       resolve(join(rootDir, "saved-journeys")) + "/**",
       resolve(join(rootDir, ".worktrees")) + "/**",
       resolve(join(rootDir, ".claude", "worktrees")) + "/**",
+      ...gameDataPipelineWatchPatterns,
       resolve(join(rootDir, "data", "tides.ron")),
       resolve(join(rootDir, "data", "dream_avatars.ron")),
       resolve(join(rootDir, "public", "dream-avatars-v2-data.json")),
       resolve(join(rootDir, "public", "tides4-data.json")),
       resolve(join(rootDir, "public", "dreamwell-data.json")),
+      ...cardEditorSourceWatchPaths,
       ...generatedCardDataWatchPaths,
       ...generatedConfigDataWatchPaths({ rootDir }).map((p) => resolve(p)),
     ]);
@@ -77,6 +81,20 @@ describe("generated card data drift Vite integration", () => {
     expect(
       callHotUpdate(
         plugin,
+        makeHotUpdateContext(join(rootDir, "data", "cards.ron")),
+      ),
+    ).toEqual([]);
+    expect(
+      callHotUpdate(
+        plugin,
+        makeHotUpdateContext(
+          join(rootDir, "data", "internal", "internal_card_metadata.ron"),
+        ),
+      ),
+    ).toEqual([]);
+    expect(
+      callHotUpdate(
+        plugin,
         makeHotUpdateContext(join(rootDir, "data", "cards.toml")),
       ),
     ).toEqual([]);
@@ -84,6 +102,14 @@ describe("generated card data drift Vite integration", () => {
       callHotUpdate(
         plugin,
         makeHotUpdateContext(join(rootDir, "public", "card-data.json")),
+      ),
+    ).toEqual([]);
+    expect(
+      callHotUpdate(
+        plugin,
+        makeHotUpdateContext(
+          join(rootDir, "src", "generated", "config", "card-role-data.json"),
+        ),
       ),
     ).toEqual([]);
   });
