@@ -249,6 +249,17 @@ operations to the embedded `tide_pool` field in `data/dream_avatars.ron` in the
 same revision-checked transaction. Successful saves validate and regenerate the
 compatibility and runtime artifacts.
 
+## Exploration Editor
+
+The standalone `/exploration` route accepts `cards=<comma-separated UUIDs>` to
+show only encounters whose source-card UUID is in the list. UUID matching is
+case-insensitive, whitespace is ignored, and duplicate values are collapsed.
+Omitting `cards` shows the complete encounter catalog.
+
+```
+http://localhost:5173/exploration?cards=161482b6-af07-4d9e-822d-8c738672beb9,738a5af0-f848-4d48-bceb-9a43c9b11066
+```
+
 ## Image Viewer
 
 The standalone `/images` route browses candidate card art. Favorite and manual

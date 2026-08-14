@@ -14,6 +14,7 @@ import type { Dreamsign } from "../types/journey";
 import EditableField from "./EditableField";
 import { EditorApiRequestError } from "./editor-api";
 import { explorationEditorClient } from "./exploration-editor-api";
+import { parseExplorationCardFilter } from "./exploration-editor-url-state";
 import type {
   EncounterRenderedTemplatePart,
   ExplorationEditorAction,
@@ -1086,6 +1087,10 @@ export default function ExplorationEditorApp({
   const [cardPickerTarget, setCardPickerTarget] =
     useState<CardPickerTarget | null>(null);
   const [cardPickerQuery, setCardPickerQuery] = useState("");
+  const cardFilter = useMemo(
+    () => parseExplorationCardFilter(window.location.search),
+    [],
+  );
 
   const setData = useCallback((next: ExplorationEditorServerData) => {
     dataRef.current = next;
@@ -1117,6 +1122,12 @@ export default function ExplorationEditorApp({
     client
       .load(controller.signal)
       .then((loaded) => {
+        const visibleEncounterCount =
+          cardFilter === null
+            ? loaded.encounters.length
+            : loaded.encounters.filter((encounter) =>
+                cardFilter.has(encounter.cardId.toLowerCase()),
+              ).length;
         setData(serverData(loaded));
         setCatalog({
           cards: loaded.cards,
@@ -1135,6 +1146,9 @@ export default function ExplorationEditorApp({
         setLoadState("ready");
         logEvent("exploration_editor_loaded", {
           encounterCount: loaded.encounters.length,
+          cardFilterActive: cardFilter !== null,
+          requestedCardCount: cardFilter?.size ?? 0,
+          visibleEncounterCount,
           effectKindCount: loaded.effectSchemas.length,
           runtimeCardSelections: loaded.encounters.flatMap((encounter) =>
             encounter.actions.flatMap((action, slot) =>
@@ -1158,7 +1172,7 @@ export default function ExplorationEditorApp({
         });
       });
     return () => controller.abort();
-  }, [client, loadRevision, setData]);
+  }, [cardFilter, client, loadRevision, setData]);
 
   useEffect(() => {
     const reloadConfirmedData = () =>
@@ -1226,6 +1240,15 @@ export default function ExplorationEditorApp({
       : data.encounters.find(
           (entry) => entry.cardId === cardPickerTarget.cardId,
         )?.actions[cardPickerTarget.slot];
+  const visibleEncounters = useMemo(
+    () =>
+      data === null || cardFilter === null
+        ? (data?.encounters ?? [])
+        : data.encounters.filter((encounter) =>
+            cardFilter.has(encounter.cardId.toLowerCase()),
+          ),
+    [cardFilter, data],
+  );
 
   return (
     <div className="cumulus exploration-editor-layout">
@@ -1237,7 +1260,7 @@ export default function ExplorationEditorApp({
           </div>
           {loadState === "ready" && data !== null && (
             <span>
-              {data.encounters.length} encounters · edits write directly to
+              {visibleEncounters.length} encounters · edits write directly to
               exploration.ron
             </span>
           )}
@@ -1268,7 +1291,7 @@ export default function ExplorationEditorApp({
         )}
         {loadState === "ready" && data !== null && (
           <div className="exploration-editor-list">
-            {[...data.encounters].reverse().map((encounter, index) => (
+            {[...visibleEncounters].reverse().map((encounter, index) => (
               <ExplorationEditorRow
                 key={encounter.cardId}
                 client={client}

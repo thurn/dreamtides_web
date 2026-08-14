@@ -91,312 +91,312 @@ export function localizedGuideDialogue(sourceText: string): LocalizedString | nu
 // JSON, so enumerate the finite vocabulary as statically extractable messages.
 export function localizedDreamsignImageAlt(sourceText: string): LocalizedString | null {
   switch (sourceText) {
-    case "Algae Dreamsign artwork":
-      return tx("Algae Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Amanita Dreamsign artwork":
-      return tx("Amanita Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Amber Eye Dreamsign artwork":
-      return tx("Amber Eye Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Amplified Acorn Dreamsign artwork":
-      return tx("Amplified Acorn Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Antler Dreamsign artwork":
-      return tx("Antler Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Attuned Petals Dreamsign artwork":
-      return tx("Attuned Petals Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Banded Worm Dreamsign artwork":
-      return tx("Banded Worm Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Bat Wing Dreamsign artwork":
-      return tx("Bat Wing Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Bead Charm Dreamsign artwork":
-      return tx("Bead Charm Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Bell Dreamsign artwork":
-      return tx("Bell Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Belladonna Dreamsign artwork":
-      return tx("Belladonna Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Berries Dreamsign artwork":
-      return tx("Berries Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Bestiary Dreamsign artwork":
-      return tx("Bestiary Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Bezoar Dreamsign artwork":
-      return tx("Bezoar Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Black Attuned Dreamsign artwork":
-      return tx("Black Attuned Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Black Cat Dreamsign artwork":
-      return tx("Black Cat Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Black Feather Dreamsign artwork":
-      return tx("Black Feather Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Black Horn Dreamsign artwork":
-      return tx("Black Horn Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Blazing Orb Dreamsign artwork":
-      return tx("Blazing Orb Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Blue Crystal Dreamsign artwork":
-      return tx("Blue Crystal Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Blue Feather Dreamsign artwork":
-      return tx("Blue Feather Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Broomstick Dreamsign artwork":
-      return tx("Broomstick Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Brown Acorn Dreamsign artwork":
-      return tx("Brown Acorn Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Butterfly Wings Dreamsign artwork":
-      return tx("Butterfly Wings Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Cactus Dreamsign artwork":
-      return tx("Cactus Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Candle Dreamsign artwork":
-      return tx("Candle Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Carved Bone Dreamsign artwork":
-      return tx("Carved Bone Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Carved Relic Dreamsign artwork":
-      return tx("Carved Relic Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Cauldron Dreamsign artwork":
-      return tx("Cauldron Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Charm Bracelet Dreamsign artwork":
-      return tx("Charm Bracelet Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Charm Pouch Dreamsign artwork":
-      return tx("Charm Pouch Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Charm Staff Dreamsign artwork":
-      return tx("Charm Staff Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Clam Shell Dreamsign artwork":
-      return tx("Clam Shell Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Cloud Lens Dreamsign artwork":
-      return tx("Cloud Lens Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Clover Dreamsign artwork":
-      return tx("Clover Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Cracked Mirror Dreamsign artwork":
-      return tx("Cracked Mirror Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Cracked Orb Dreamsign artwork":
-      return tx("Cracked Orb Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Crow Dreamsign artwork":
-      return tx("Crow Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Crystal Orb Dreamsign artwork":
-      return tx("Crystal Orb Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Crystal Wand Dreamsign artwork":
-      return tx("Crystal Wand Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Curled Tail Dreamsign artwork":
-      return tx("Curled Tail Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Curved Blade Dreamsign artwork":
-      return tx("Curved Blade Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Dead Rat Dreamsign artwork":
-      return tx("Dead Rat Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Dragon Egg Dreamsign artwork":
-      return tx("Dragon Egg Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Dreamcatcher Dreamsign artwork":
-      return tx("Dreamcatcher Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Egg Nest Dreamsign artwork":
-      return tx("Egg Nest Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Essence Vial Dreamsign artwork":
-      return tx("Essence Vial Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Eye Amulet Dreamsign artwork":
-      return tx("Eye Amulet Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Eye Grimoire Dreamsign artwork":
-      return tx("Eye Grimoire Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Eyeball Plant Dreamsign artwork":
-      return tx("Eyeball Plant Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Eyeball Slime Dreamsign artwork":
-      return tx("Eyeball Slime Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Flaming Button Dreamsign artwork":
-      return tx("Flaming Button Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Flash Powder Dreamsign artwork":
-      return tx("Flash Powder Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Flower Petals Dreamsign artwork":
-      return tx("Flower Petals Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Garlic Bulb Dreamsign artwork":
-      return tx("Garlic Bulb Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Gem Codex Dreamsign artwork":
-      return tx("Gem Codex Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Ginger Root Dreamsign artwork":
-      return tx("Ginger Root Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Glow Pouch Dreamsign artwork":
-      return tx("Glow Pouch Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Glowing Crystal Dreamsign artwork":
-      return tx("Glowing Crystal Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Gold Feather Dreamsign artwork":
-      return tx("Gold Feather Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Gold Key Dreamsign artwork":
-      return tx("Gold Key Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Gray Feather Dreamsign artwork":
-      return tx("Gray Feather Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Green Amulet Dreamsign artwork":
-      return tx("Green Amulet Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Green Beetle Dreamsign artwork":
-      return tx("Green Beetle Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Green Cauldron Dreamsign artwork":
-      return tx("Green Cauldron Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Green Fly Dreamsign artwork":
-      return tx("Green Fly Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Green Slime Dreamsign artwork":
-      return tx("Green Slime Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "amber acorn with tan cap and warm glowing highlights":
+      return tx("amber acorn with tan cap and warm glowing highlights", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Antler-like bone branch in beige and brown, branching into smooth curves.":
+      return tx("Antler-like bone branch in beige and brown, branching into smooth curves.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Beaded gold necklace with hanging claws, tusks, and colored charms.":
+      return tx("Beaded gold necklace with hanging claws, tusks, and colored charms.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Beige rope doll with flowing strands, tied in loose knots, on orange-brown background.":
+      return tx("Beige rope doll with flowing strands, tied in loose knots, on orange-brown background.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Beige scroll sealed with red ribbon and gold wax medal.":
+      return tx("Beige scroll sealed with red ribbon and gold wax medal.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "black and gray book with skull emblem and bone corner guards":
+      return tx("black and gray book with skull emblem and bone corner guards", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Black and orange spider with blurred legs and open fangs.":
+      return tx("Black and orange spider with blurred legs and open fangs.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "black cat figurine with glowing amber eyes and curled tail":
+      return tx("black cat figurine with glowing amber eyes and curled tail", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "black cauldron filled with bubbling neon green liquid":
+      return tx("black cauldron filled with bubbling neon green liquid", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Black cauldron filled with bubbling neon green liquid.":
+      return tx("Black cauldron filled with bubbling neon green liquid.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "black raven with glossy feathers and a pale blue eye":
+      return tx("black raven with glossy feathers and a pale blue eye", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Black-and-white swirling feather or seed form against blue background.":
+      return tx("Black-and-white swirling feather or seed form against blue background.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Blue faceted crystal shard with glowing pale center.":
+      return tx("Blue faceted crystal shard with glowing pale center.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Blue glass vial containing black smoky liquid, capped with a brown stopper.":
+      return tx("Blue glass vial containing black smoky liquid, capped with a brown stopper.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Blue metal medallion with purple gem and small orb-like charm.":
+      return tx("Blue metal medallion with purple gem and small orb-like charm.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Blue steel wand or dagger with brown wooden handle and glowing tip.":
+      return tx("Blue steel wand or dagger with brown wooden handle and glowing tip.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "blue-gray book featuring a mint-green jellyfish over ocean waves":
+      return tx("blue-gray book featuring a mint-green jellyfish over ocean waves", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "blue-gray rat with red eyes on a brown branch":
+      return tx("blue-gray rat with red eyes on a brown branch", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Blue-gray square panel with bright red-orange branching nodes and lines.":
+      return tx("Blue-gray square panel with bright red-orange branching nodes and lines.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Blue-green fish with orange belly, sharp teeth, and speckled scales.":
+      return tx("Blue-green fish with orange belly, sharp teeth, and speckled scales.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "bluish-gray bat wing with dark shadows and a sleek curved membrane":
+      return tx("bluish-gray bat wing with dark shadows and a sleek curved membrane", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Bound bundle of pale green herbs with purple and yellow flowers":
+      return tx("Bound bundle of pale green herbs with purple and yellow flowers", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Bright blue feather fan with green leaves at the base":
+      return tx("Bright blue feather fan with green leaves at the base", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Bright golden eye with black slit pupil and glowing amber iris.":
+      return tx("Bright golden eye with black slit pupil and glowing amber iris.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "bright green beetle with yellow highlights and glossy segmented shell":
+      return tx("bright green beetle with yellow highlights and glossy segmented shell", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Bright green faceted gemstone pendant in a gold setting.":
+      return tx("Bright green faceted gemstone pendant in a gold setting.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "bright green slime blob covered in multiple blinking eyeballs":
+      return tx("bright green slime blob covered in multiple blinking eyeballs", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Bright red faceted crystal gem with sharp reflective planes.":
+      return tx("Bright red faceted crystal gem with sharp reflective planes.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "brown and orange pile of rounded wooden nuts or seeds":
+      return tx("brown and orange pile of rounded wooden nuts or seeds", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Brown banded worm curled in an S shape with glossy segmented rings":
+      return tx("Brown banded worm curled in an S shape with glossy segmented rings", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "brown book embossed with a paw print medallion on the cover":
+      return tx("brown book embossed with a paw print medallion on the cover", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "brown broom with red band and glowing yellow-green bristles":
+      return tx("brown broom with red band and glowing yellow-green bristles", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "brown hooded stone or shell with swirling cream streaks and a circular dark opening":
+      return tx("brown hooded stone or shell with swirling cream streaks and a circular dark opening", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Brown human skull with hollow eye sockets and teeth.":
+      return tx("Brown human skull with hollow eye sockets and teeth.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Brown leather satchel with gold buckle, stitching, and flap closure.":
+      return tx("Brown leather satchel with gold buckle, stitching, and flap closure.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Brown ringed bracelet with black beads and tan claw-like hanging charms.":
+      return tx("Brown ringed bracelet with black beads and tan claw-like hanging charms.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "brown strapped book with leaf corners and parchment peeking out":
+      return tx("brown strapped book with leaf corners and parchment peeking out", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "clear blue jar holding a black spider with red markings":
+      return tx("clear blue jar holding a black spider with red markings", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Copper-brown scorpion with segmented tail and raised claws.":
+      return tx("Copper-brown scorpion with segmented tail and raised claws.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Cream and orange spotted spiral shell with rounded bands.":
+      return tx("Cream and orange spotted spiral shell with rounded bands.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "cream candle with golden flame and melted wax drips":
+      return tx("cream candle with golden flame and melted wax drips", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "cream theatrical mask with black eye makeup and dark hair backing":
+      return tx("cream theatrical mask with black eye makeup and dark hair backing", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Cream-colored paired teeth with smooth ivory shading and dark root gaps":
+      return tx("Cream-colored paired teeth with smooth ivory shading and dark root gaps", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Cream-colored rolled parchment scroll with softly shaded edges.":
+      return tx("Cream-colored rolled parchment scroll with softly shaded edges.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "cream-white segmented grub with red head, orange legs, and black mandibles":
+      return tx("cream-white segmented grub with red head, orange legs, and black mandibles", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "curved black horn or claw with cream spots and bright green interior":
+      return tx("curved black horn or claw with cream spots and bright green interior", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "curved black staff with copper wrappings, feathers, and dark hanging charms":
+      return tx("curved black staff with copper wrappings, feathers, and dark hanging charms", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "curved silver blade with black grip, tan guard, and cyan glowing background":
+      return tx("curved silver blade with black grip, tan guard, and cyan glowing background", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Dark brown witch hat with a black band and silver buckle.":
+      return tx("Dark brown witch hat with a black band and silver buckle.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "dark gray mortar holding bright yellow-green potion with a gold pestle":
+      return tx("dark gray mortar holding bright yellow-green potion with a gold pestle", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Dark gray stone with bright cyan rune-like symbol inset.":
+      return tx("Dark gray stone with bright cyan rune-like symbol inset.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Dark magenta flower petals layered into a velvety blossom.":
+      return tx("Dark magenta flower petals layered into a velvety blossom.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "dark red sealed envelope tied with ribbon and gold wax seal":
+      return tx("dark red sealed envelope tied with ribbon and gold wax seal", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Dark red woven orb with olive beads, wrapped in brown cords and gray tassels.":
+      return tx("Dark red woven orb with olive beads, wrapped in brown cords and gray tassels.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "deep red leather pouch with gold cord, blue beads, and stitched flap":
+      return tx("deep red leather pouch with gold cord, blue beads, and stitched flap", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Faceted red-orange crystal with bright translucent highlights.":
+      return tx("Faceted red-orange crystal with bright translucent highlights.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Glass vial of bright purple powder with cork stopper.":
+      return tx("Glass vial of bright purple powder with cork stopper.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "glossy pink and purple crystal sphere on a brown pedestal":
+      return tx("glossy pink and purple crystal sphere on a brown pedestal", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Glossy red lollipop or wand with a tapered silver stick.":
+      return tx("Glossy red lollipop or wand with a tapered silver stick.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Glossy red tongue-like organ with raised bumps and wet highlights":
+      return tx("Glossy red tongue-like organ with raised bumps and wet highlights", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Glowing blue crystal facets with white highlights and soft purple shadows":
+      return tx("Glowing blue crystal facets with white highlights and soft purple shadows", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Glowing red amber egg with fiery yellow core and dark crack lines.":
+      return tx("Glowing red amber egg with fiery yellow core and dark crack lines.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Glowing red wedge-shaped gem or cheese-like shard with oval cutouts.":
+      return tx("Glowing red wedge-shaped gem or cheese-like shard with oval cutouts.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Gold triangular eye amulet with horns and carved sunburst details.":
+      return tx("Gold triangular eye amulet with horns and carved sunburst details.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Gold-rimmed circular lens filled with purple and magenta clouds.":
+      return tx("Gold-rimmed circular lens filled with purple and magenta clouds.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Golden autumn leaf with brown veins and glowing amber edges.":
+      return tx("Golden autumn leaf with brown veins and glowing amber edges.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "golden clam shell with a pale pearl-like interior and striped lid":
+      return tx("golden clam shell with a pale pearl-like interior and striped lid", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Golden feather with brown shaft and warm orange glow.":
+      return tx("Golden feather with brown shaft and warm orange glow.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Golden fruit-like charm with a mesh-patterned orb and smooth teardrop front.":
+      return tx("Golden fruit-like charm with a mesh-patterned orb and smooth teardrop front.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Golden ginger root with sliced yellow pieces and warm brown shadows.":
+      return tx("Golden ginger root with sliced yellow pieces and warm brown shadows.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "golden ornate key with curled filigree bow and bright polished shaft":
+      return tx("golden ornate key with curled filigree bow and bright polished shaft", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "golden root vegetable with green leaves and twisted trailing tendrils":
+      return tx("golden root vegetable with green leaves and twisted trailing tendrils", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Gray cloth pouch tied at the neck, glowing with cyan light.":
+      return tx("Gray cloth pouch tied at the neck, glowing with cyan light.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Gray stone bowl with green leaves and pale golden pestle or stem.":
+      return tx("Gray stone bowl with green leaves and pale golden pestle or stem.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Gray wolf mask medallion with orange gem and dark beads.":
+      return tx("Gray wolf mask medallion with orange gem and dark beads.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "gray wooden book with a bright orange lightning bolt across the cover":
+      return tx("gray wooden book with a bright orange lightning bolt across the cover", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "gray-blue rose blossom with pale green stem and leaves":
+      return tx("gray-blue rose blossom with pale green stem and leaves", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "green book with a coiled serpent embossed on the cover":
+      return tx("green book with a coiled serpent embossed on the cover", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "green book with a turquoise swirling gem set in the cover":
+      return tx("green book with a turquoise swirling gem set in the cover", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Green fly with translucent wings, brown legs, and copper eyes.":
+      return tx("Green fly with translucent wings, brown legs, and copper eyes.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Green leafy sprig with pale veins and soft brown stem.":
+      return tx("Green leafy sprig with pale veins and soft brown stem.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Green potion bottle with black skull emblem and toxic glow.":
+      return tx("Green potion bottle with black skull emblem and toxic glow.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "green spiky cactus with small offshoots and pale thorns":
+      return tx("green spiky cactus with small offshoots and pale thorns", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "green-and-black berry-like orb surrounded by yellow spotted petals":
+      return tx("green-and-black berry-like orb surrounded by yellow spotted petals", "[accessibility] [dreamsign] Dreamsign image description.");
     case "Hair Lock Dreamsign artwork":
       return tx("Hair Lock Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Herb Mortar Dreamsign artwork":
-      return tx("Herb Mortar Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Honeycombs Dreamsign artwork":
-      return tx("Honeycombs Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Hourglass Dreamsign artwork":
-      return tx("Hourglass Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Ice Crystals Dreamsign artwork":
-      return tx("Ice Crystals Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Ivory Claw Dreamsign artwork":
-      return tx("Ivory Claw Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Larva Dreamsign artwork":
-      return tx("Larva Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Leaf Bundle Dreamsign artwork":
-      return tx("Leaf Bundle Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Leaf Ledger Dreamsign artwork":
-      return tx("Leaf Ledger Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Leather Satchel Dreamsign artwork":
-      return tx("Leather Satchel Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Magic Fish Dreamsign artwork":
-      return tx("Magic Fish Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Mandrake Root Dreamsign artwork":
-      return tx("Mandrake Root Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Mortal Skull Dreamsign artwork":
-      return tx("Mortal Skull Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Mushroom Caps Dreamsign artwork":
-      return tx("Mushroom Caps Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Notes Dreamsign artwork":
-      return tx("Notes Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Oak Leaf Dreamsign artwork":
-      return tx("Oak Leaf Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Opal Dreamsign artwork":
-      return tx("Opal Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Paired Teeth Dreamsign artwork":
-      return tx("Paired Teeth Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Parchment Dreamsign artwork":
-      return tx("Parchment Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Pearl Shell Dreamsign artwork":
-      return tx("Pearl Shell Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Philosopher's Stone Dreamsign artwork":
-      return tx("Philosopher's Stone Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Phoenix Feather Dreamsign artwork":
-      return tx("Phoenix Feather Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Pig Nose Dreamsign artwork":
-      return tx("Pig Nose Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Piranha Dreamsign artwork":
-      return tx("Piranha Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Poison Bottle Dreamsign artwork":
-      return tx("Poison Bottle Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Poppy Flower Dreamsign artwork":
-      return tx("Poppy Flower Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Potion Mortar Dreamsign artwork":
-      return tx("Potion Mortar Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Powder Bowl Dreamsign artwork":
-      return tx("Powder Bowl Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Purple Crystal Dreamsign artwork":
-      return tx("Purple Crystal Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Purple Potion Dreamsign artwork":
-      return tx("Purple Potion Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Pyramid Relic Dreamsign artwork":
-      return tx("Pyramid Relic Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Rabbit Tail Dreamsign artwork":
-      return tx("Rabbit Tail Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Rainbow Horn Dreamsign artwork":
-      return tx("Rainbow Horn Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Rainbow Jellyfish Dreamsign artwork":
-      return tx("Rainbow Jellyfish Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Rainbow Mushroom Dreamsign artwork":
-      return tx("Rainbow Mushroom Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Raven Skull Dreamsign artwork":
-      return tx("Raven Skull Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Red Cheese Dreamsign artwork":
-      return tx("Red Cheese Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Red Heart Dreamsign artwork":
-      return tx("Red Heart Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Red Pin Dreamsign artwork":
-      return tx("Red Pin Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Red Shard Dreamsign artwork":
-      return tx("Red Shard Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Root Staff Dreamsign artwork":
-      return tx("Root Staff Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Rope Doll Dreamsign artwork":
-      return tx("Rope Doll Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Rosemary Dreamsign artwork":
-      return tx("Rosemary Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Rune Sack Dreamsign artwork":
-      return tx("Rune Sack Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Rune Stone Dreamsign artwork":
-      return tx("Rune Stone Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Scorpion Dreamsign artwork":
-      return tx("Scorpion Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Sea Tome Dreamsign artwork":
-      return tx("Sea Tome Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Sea Urchin Dreamsign artwork":
-      return tx("Sea Urchin Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Sealed Letter Dreamsign artwork":
-      return tx("Sealed Letter Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Sealed Scroll Dreamsign artwork":
-      return tx("Sealed Scroll Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Serpent Tome Dreamsign artwork":
-      return tx("Serpent Tome Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Shadow Droplet Dreamsign artwork":
-      return tx("Shadow Droplet Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Sickle Dreamsign artwork":
-      return tx("Sickle Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Silver Key Dreamsign artwork":
-      return tx("Silver Key Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Skull Codex Dreamsign artwork":
-      return tx("Skull Codex Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Skull Dagger Dreamsign artwork":
-      return tx("Skull Dagger Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Skull Drum Dreamsign artwork":
-      return tx("Skull Drum Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Skull Pendant Dreamsign artwork":
-      return tx("Skull Pendant Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Slug Dreamsign artwork":
-      return tx("Slug Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Spell Tome Dreamsign artwork":
-      return tx("Spell Tome Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Spice Blossoms Dreamsign artwork":
-      return tx("Spice Blossoms Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Spider Dreamsign artwork":
-      return tx("Spider Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Spider Jar Dreamsign artwork":
-      return tx("Spider Jar Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Spider Medallion Dreamsign artwork":
-      return tx("Spider Medallion Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Spiral Shell Dreamsign artwork":
-      return tx("Spiral Shell Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Spotted Egg Dreamsign artwork":
-      return tx("Spotted Egg Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Spotted Mug Dreamsign artwork":
-      return tx("Spotted Mug Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Star Anise Dreamsign artwork":
-      return tx("Star Anise Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Star Badge Dreamsign artwork":
-      return tx("Star Badge Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Steel Wand Dreamsign artwork":
-      return tx("Steel Wand Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Storm Tome Dreamsign artwork":
-      return tx("Storm Tome Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Strange Fruit Dreamsign artwork":
-      return tx("Strange Fruit Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Tarot Card Dreamsign artwork":
-      return tx("Tarot Card Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Theater Mask Dreamsign artwork":
-      return tx("Theater Mask Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Toad Dreamsign artwork":
-      return tx("Toad Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Tongue Dreamsign artwork":
-      return tx("Tongue Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Tortoise Shell Dreamsign artwork":
-      return tx("Tortoise Shell Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Trinket Necklace Dreamsign artwork":
-      return tx("Trinket Necklace Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Twisted Herbs Dreamsign artwork":
-      return tx("Twisted Herbs Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Voodoo Doll Dreamsign artwork":
-      return tx("Voodoo Doll Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "White Rat Dreamsign artwork":
-      return tx("White Rat Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Wing Dreamsign artwork":
-      return tx("Wing Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Witch Coin Dreamsign artwork":
-      return tx("Witch Coin Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Witch Hat Dreamsign artwork":
-      return tx("Witch Hat Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Wolf Sigil Dreamsign artwork":
-      return tx("Wolf Sigil Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
-    case "Worm Apple Dreamsign artwork":
-      return tx("Worm Apple Dreamsign artwork", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Iridescent oval gem shimmering orange, yellow, green, and blue.":
+      return tx("Iridescent oval gem shimmering orange, yellow, green, and blue.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "ivory and pink bell with red ribbon tied around the top":
+      return tx("ivory and pink bell with red ribbon tied around the top", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "ivory curved claw or tusk with brown spots":
+      return tx("ivory curved claw or tusk with brown spots", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "large faceted purple crystal on a brown pedestal":
+      return tx("large faceted purple crystal on a brown pedestal", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "light green plant sprouting many eye-like nodules from a cracked pot":
+      return tx("light green plant sprouting many eye-like nodules from a cracked pot", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "multiple fantasy item icons on dark background, dominated by varied reds, golds, blues, and greens":
+      return tx("multiple fantasy item icons on dark background, dominated by varied reds, golds, blues, and greens", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Off-white skull with dark eye sockets and long beak-like nasal opening.":
+      return tx("Off-white skull with dark eye sockets and long beak-like nasal opening.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "olive green leafy branch bound with yellow twine":
+      return tx("olive green leafy branch bound with yellow twine", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Olive green spotted toad with dark limbs and splayed webbed feet":
+      return tx("Olive green spotted toad with dark limbs and splayed webbed feet", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Olive-green spiny shell or seed pod dotted with bumps.":
+      return tx("Olive-green spiny shell or seed pod dotted with bumps.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Open blue-gray clam shell holding a glowing pearl.":
+      return tx("Open blue-gray clam shell holding a glowing pearl.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "orange glowing ember-like disc surrounded by soft pink aura":
+      return tx("orange glowing ember-like disc surrounded by soft pink aura", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "orange poppy-like flower with dark purple center and soft glowing petals":
+      return tx("orange poppy-like flower with dark purple center and soft glowing petals", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Orange spiked egg with yellow spots and ember-like glowing highlights":
+      return tx("Orange spiked egg with yellow spots and ember-like glowing highlights", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Orange-brown star anise pod with eight pointed segments.":
+      return tx("Orange-brown star anise pod with eight pointed segments.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Orange-yellow eggs nestled in a woven brown nest.":
+      return tx("Orange-yellow eggs nestled in a woven brown nest.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Pale beige conch shell with scattered brown speckles.":
+      return tx("Pale beige conch shell with scattered brown speckles.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "pale cyan feather with soft translucent barbs on a white background":
+      return tx("pale cyan feather with soft translucent barbs on a white background", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Pale gray feather with curved quill and soft layered barbs.":
+      return tx("Pale gray feather with curved quill and soft layered barbs.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "pale green clover leaf with white ringed center pattern":
+      return tx("pale green clover leaf with white ringed center pattern", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Pale ivory circular shells or coins, layered and glossy, on warm tan background.":
+      return tx("Pale ivory circular shells or coins, layered and glossy, on warm tan background.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Pale pink segmented worm curled into a hook shape with soft beige shading":
+      return tx("Pale pink segmented worm curled into a hook shape with soft beige shading", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Pale white mouse with red eyes and pink tail, curled in profile":
+      return tx("Pale white mouse with red eyes and pink tail, curled in profile", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Pale yellow parchment pages with dark handwritten notes and tiny diagram.":
+      return tx("Pale yellow parchment pages with dark handwritten notes and tiny diagram.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Pink speckled mushroom cap with two hollow dark openings.":
+      return tx("Pink speckled mushroom cap with two hollow dark openings.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "purple-black orb with branching cracks and a bright white glowing center":
+      return tx("purple-black orb with branching cracks and a bright white glowing center", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Rainbow twisted horn or horn-shaped spiral, fading from green to orange.":
+      return tx("Rainbow twisted horn or horn-shaped spiral, fading from green to orange.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Rainbow-capped mushroom with tan speckled stem and golden underside.":
+      return tx("Rainbow-capped mushroom with tan speckled stem and golden underside.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Red anatomical heart with glossy veins and rounded chambers.":
+      return tx("Red anatomical heart with glossy veins and rounded chambers.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "red and black butterfly with white-spotted wing edges":
+      return tx("red and black butterfly with white-spotted wing edges", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "red fiery eye orb with vertical slit pupil on a brown base":
+      return tx("red fiery eye orb with vertical slit pupil on a brown base", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "red spellbook with turquoise gem, gold corners, and green ribbon":
+      return tx("red spellbook with turquoise gem, gold corners, and green ribbon", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Red spotted goblet filled with yellow liquid and a curled handle":
+      return tx("Red spotted goblet filled with yellow liquid and a curled handle", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Red spotted mushroom with white flecks and pale stem.":
+      return tx("Red spotted mushroom with white flecks and pale stem.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Red star emblem over a white and gray circular badge.":
+      return tx("Red star emblem over a white and gray circular badge.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Red-orange faceted gem or crystal with rough, glowing, rounded shape.":
+      return tx("Red-orange faceted gem or crystal with rough, glowing, rounded shape.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "red-wrapped wand with blue-purple crystal tip and hanging green leaves":
+      return tx("red-wrapped wand with blue-purple crystal tip and hanging green leaves", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Reddish-orange sack spilling pale rune-marked stones or shells.":
+      return tx("Reddish-orange sack spilling pale rune-marked stones or shells.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Shallow golden bowl holding sparkling violet powder or liquid.":
+      return tx("Shallow golden bowl holding sparkling violet powder or liquid.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Shimmering lime-green ribbon or liquid fabric twisting in soft waves.":
+      return tx("Shimmering lime-green ribbon or liquid fabric twisting in soft waves.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Shiny red apple with green segmented stem and curled leaf.":
+      return tx("Shiny red apple with green segmented stem and curled leaf.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Silver circular emblem with a white shard symbol on lavender and magenta background":
+      return tx("Silver circular emblem with a white shard symbol on lavender and magenta background", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Silver crescent sickle with teal glow and wooden handle.":
+      return tx("Silver crescent sickle with teal glow and wooden handle.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "silver dagger with a skull hilt and dark handle":
+      return tx("silver dagger with a skull hilt and dark handle", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "silver metal key with round ornate bow and long cylindrical shaft":
+      return tx("silver metal key with round ornate bow and long cylindrical shaft", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Silver segmented shell or armored dome, shaded white and gray.":
+      return tx("Silver segmented shell or armored dome, shaded white and gray.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "silver-framed mirror with cracked glass, purple jewel, and curled ornamentation":
+      return tx("silver-framed mirror with cracked glass, purple jewel, and curled ornamentation", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Single black feather with layered barbs and a thin dark shaft.":
+      return tx("Single black feather with layered barbs and a thin dark shaft.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Skull pendant with dangling chains, beige bone and dark eye sockets.":
+      return tx("Skull pendant with dangling chains, beige bone and dark eye sockets.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "sleek black-and-silver droplet of liquid or polished metal":
+      return tx("sleek black-and-silver droplet of liquid or polished metal", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Small hanging talisman with beige face, orange beads, and metal tools.":
+      return tx("Small hanging talisman with beige face, orange beads, and metal tools.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Stitched tan voodoo doll with pins, red button eye, and rough fabric":
+      return tx("Stitched tan voodoo doll with pins, red button eye, and rough fabric", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Swirling crimson and pink feather or flower petal form.":
+      return tx("Swirling crimson and pink feather or flower petal form.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "tan bone pipe or whistle with rounded joints and hollow end":
+      return tx("tan bone pipe or whistle with rounded joints and hollow end", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "tan book with a glowing red eye and cracked mystical cover":
+      return tx("tan book with a glowing red eye and cracked mystical cover", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Tan drum with carved skull lid, brown body, and gold tension cords.":
+      return tx("Tan drum with carved skull lid, brown body, and gold tension cords.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "teal tarot card with gold crescent moon and star symbols":
+      return tx("teal tarot card with gold crescent moon and star symbols", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Three amber gem shards set in pale cream honeycomb frames.":
+      return tx("Three amber gem shards set in pale cream honeycomb frames.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Translucent aqua shell with rainbow-dotted cap and flowing ruffled skirt.":
+      return tx("Translucent aqua shell with rainbow-dotted cap and flowing ruffled skirt.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Translucent green slime mound with rounded gelatinous bulges.":
+      return tx("Translucent green slime mound with rounded gelatinous bulges.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "two brown star anise blossoms on warm amber background":
+      return tx("two brown star anise blossoms on warm amber background", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Two turquoise ice crystals with white veins and glossy rounded facets.":
+      return tx("Two turquoise ice crystals with white veins and glossy rounded facets.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "White garlic bulb with creamy cloves and faint beige shading.":
+      return tx("White garlic bulb with creamy cloves and faint beige shading.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "White-gold feather glowing softly against a vivid yellow background.":
+      return tx("White-gold feather glowing softly against a vivid yellow background.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Wooden hourglass with pale sand, tilted in a warm brown frame.":
+      return tx("Wooden hourglass with pale sand, tilted in a warm brown frame.", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "wooden staff topped with glowing green gem and wrapped root-like branches":
+      return tx("wooden staff topped with glowing green gem and wrapped root-like branches", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "yellow-gold fish with orange scales and bright fins":
+      return tx("yellow-gold fish with orange scales and bright fins", "[accessibility] [dreamsign] Dreamsign image description.");
+    case "Yellow-green spotted egg with large dark blotches and smooth rounded surface.":
+      return tx("Yellow-green spotted egg with large dark blotches and smooth rounded surface.", "[accessibility] [dreamsign] Dreamsign image description.");
     default:
       return null;
   }

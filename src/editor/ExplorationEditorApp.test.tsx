@@ -247,6 +247,7 @@ beforeEach(() => {
   (globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean })
     .IS_REACT_ACT_ENVIRONMENT = true;
   vi.spyOn(console, "log").mockImplementation(() => undefined);
+  window.history.replaceState(null, "", "/exploration");
 });
 
 afterEach(() => {
@@ -269,6 +270,29 @@ describe("ExplorationEditorApp", () => {
     expect([...container.querySelectorAll<HTMLElement>("[data-exploration-card-id]")]
       .map((row) => row.dataset.explorationCardId))
       .toEqual([LAST_CARD_ID, CARD_ID]);
+    act(() => root.unmount());
+  });
+
+  it("renders only encounters selected by the cards URL parameter", async () => {
+    const loaded = loadResult();
+    loaded.encounters.push({
+      ...structuredClone(loaded.encounters[0]),
+      cardId: LAST_CARD_ID,
+      cardName: "Last Authored Encounter",
+    });
+    window.history.replaceState(
+      null,
+      "",
+      `/exploration?cards=${LAST_CARD_ID.toUpperCase()},missing-card`,
+    );
+
+    const { container, root } = await renderLoaded(client({
+      load: vi.fn().mockResolvedValue(loaded),
+    }));
+
+    expect([
+      ...container.querySelectorAll<HTMLElement>("[data-exploration-card-id]"),
+    ].map((row) => row.dataset.explorationCardId)).toEqual([LAST_CARD_ID]);
     act(() => root.unmount());
   });
 
