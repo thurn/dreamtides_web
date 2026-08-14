@@ -140,7 +140,8 @@ function SiteRoute({
         siteId: site.id,
         siteType: site.type,
         guideId:
-          site.guideIdOverride ?? journeyContent.sitesData.randomSite.guideId,
+          site.randomSite?.presentingGuideId ??
+            journeyContent.sitesData.randomSite.guideId,
         isEnhanced: site.isEnhanced,
         sourceMode: site.randomSite.mode,
       },

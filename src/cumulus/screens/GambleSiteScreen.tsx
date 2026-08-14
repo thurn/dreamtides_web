@@ -1,4 +1,4 @@
-import { meaning, tx, txa, type LocalizedString } from "@trox/runtime";
+import { meaning, opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import {
   useCallback,
   useEffect,
@@ -18,11 +18,13 @@ import { blackjackHandTotal } from "../../data/blackjack";
 import type { FourSuitRepriseGame } from "../../types/gamble-data";
 import {
   PlayingCard,
+  PlayingCardPrize,
   PLAYING_CARD_DESIGN,
   PlayingCardSuitMark,
   PLAYING_CARD_FLIP_DURATION_MS,
-  WagerPrizeCard,
   type PlayingCardRank,
+  type PlayingCardPrizeEmphasis,
+  type PlayingCardSize,
   type PlayingCardSuit,
 } from "../components/card/PlayingCard";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
@@ -46,7 +48,7 @@ import {
 } from "../components/overlay/DreamsignReplacementDialog";
 import {
   SiteLayout,
-  type SiteLayoutGuide,
+  type SiteLayoutGuideView,
 } from "../components/layout/SiteLayout";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import type { TransfigurationCandidateView } from "./TransfigurationSiteScreen";
@@ -114,7 +116,7 @@ export interface GravokWagerSiteView {
   /** Three gate choices in ascending risk order. */
   gates: readonly GambleGateView[];
   /** Resident Dream Guide art and greeting. */
-  guide: Omit<SiteLayoutGuide, "presence">;
+  guide: SiteLayoutGuideView;
   /** Resolved wager, or null before commitment. */
   result: GambleResultView | null;
   /** At-cap replacement content after a jackpot win. */
@@ -159,7 +161,7 @@ export interface LadderClimbSiteView {
     canAfford: boolean;
     available: boolean;
   } | null;
-  guide: Omit<SiteLayoutGuide, "presence">;
+  guide: SiteLayoutGuideView;
   result: LadderClimbResultView | null;
   replacement: Omit<
     DreamsignReplacementModel,
@@ -195,7 +197,7 @@ export interface StarwayStairsSiteView {
   canPlayAgain: boolean;
   tiers: readonly StarwayStairsTierView[];
   currentTierNumber: StarwayStairsTierNumber | null;
-  guide: Omit<SiteLayoutGuide, "presence">;
+  guide: SiteLayoutGuideView;
   result: StarwayStairsResultView | null;
   cashOutReward: number | null;
   terminalReason: "bust" | "cashed-out" | "top" | null;
@@ -235,7 +237,7 @@ export interface FourSuitRepriseSiteView {
   outcomes: FourSuitRepriseGame["rules"]["outcomes"];
   phase: "choose" | "result";
   cards: readonly FourSuitRepriseCardView[];
-  guide: Omit<SiteLayoutGuide, "presence">;
+  guide: SiteLayoutGuideView;
   result: FourSuitRepriseResultView | null;
   canPlayAgain: boolean;
 }
@@ -265,7 +267,7 @@ export interface BlackjackSiteView {
   resultId: string | null;
   /** Whether a settled push or eligible loss may start another paid hand. */
   canPlayAgain: boolean;
-  guide: Omit<SiteLayoutGuide, "presence">;
+  guide: SiteLayoutGuideView;
 }
 
 export type GambleSiteView =
@@ -1032,6 +1034,99 @@ function LadderDreamsignReward({
   );
 }
 
+type WagerPrizeCardId =
+  | GravokGateId
+  | "ladder-climb"
+  | "starway-1"
+  | "starway-2"
+  | "starway-3"
+  | "blackjack";
+
+interface WagerPrizeCardProps {
+  prizeId: WagerPrizeCardId;
+  minimumWinningRank: PlayingCardRank;
+  size?: PlayingCardSize;
+  drawnCard: { rank: PlayingCardRank; suit: PlayingCardSuit } | null;
+  revealDrawnCard?: boolean;
+  dreamsignTestId?: string;
+  emphasis?: PlayingCardPrizeEmphasis;
+  essenceReward: number;
+  rewardDreamsign: LocalizedDreamsign | null;
+}
+
+/** Gamble-owned rules copy composed onto the generic playing-card prize face. */
+function WagerPrizeCard({
+  prizeId,
+  minimumWinningRank,
+  essenceReward,
+  rewardDreamsign,
+  drawnCard,
+  revealDrawnCard,
+  dreamsignTestId,
+  emphasis,
+  size,
+}: WagerPrizeCardProps) {
+  const title = txa(
+    "Draw {minimum_rank}-A",
+    { minimum_rank: minimumWinningRank },
+    "[ui] Title printed on a Gamble prize card before its concealed playing card is revealed. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace.",
+  );
+  const description =
+    rewardDreamsign === null
+      ? txa(
+          "Win {essence_amount} Essence.",
+          { essence_amount: essenceReward },
+          "[dreamsign] Reward sentence on a Gamble prize without a Dreamsign. essence_amount is the positive Essence payout.",
+        )
+      : txa(
+          "Win {essence_amount} Essence and {dreamsign_name}.",
+          {
+            essence_amount: essenceReward,
+            dreamsign_name: opaque(rewardDreamsign.name),
+          },
+          "[dreamsign] Reward sentence on a Gamble prize with a Dreamsign. essence_amount is the positive Essence payout and dreamsign_name is the canonical authored Dreamsign name.",
+        );
+  const accessibilityLabel =
+    rewardDreamsign === null
+      ? txa(
+          "Draw {minimum_rank}-A. Win {essence_amount} Essence.",
+          { minimum_rank: minimumWinningRank, essence_amount: essenceReward },
+          "[accessibility] [dreamsign] Complete name for a Gamble prize without a Dreamsign. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace, and essence_amount is the positive Essence payout.",
+        )
+      : txa(
+          "Draw {minimum_rank}-A. Win {essence_amount} Essence and {dreamsign_name}.",
+          {
+            minimum_rank: minimumWinningRank,
+            essence_amount: essenceReward,
+            dreamsign_name: opaque(rewardDreamsign.name),
+          },
+          "[accessibility] [dreamsign] Complete name for a Gamble prize with a Dreamsign. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace, essence_amount is the positive Essence payout, and dreamsign_name is the canonical authored Dreamsign name.",
+        );
+  const showingDrawnCard = revealDrawnCard === true && drawnCard !== null;
+  return (
+    <div
+      data-wager-prize-card={prizeId}
+      data-wager-prize-card-state={showingDrawnCard ? "drawn" : "prize"}
+      data-wager-prize-target={`${minimumWinningRank}-A`}
+      data-wager-prize-essence-reward={essenceReward}
+      style={{ display: "contents" }}
+    >
+      <PlayingCardPrize
+        objectId={prizeId}
+        title={title}
+        description={description}
+        accessibilityLabel={accessibilityLabel}
+        size={size}
+        drawnCard={drawnCard}
+        revealDrawnCard={revealDrawnCard}
+        relatedDreamsignTestId={dreamsignTestId}
+        emphasis={emphasis}
+        relatedDreamsign={rewardDreamsign}
+      />
+    </div>
+  );
+}
+
 type GambleGatePresentation = "available" | "selected" | "revealed" | "faded";
 
 function GambleGateCard({
@@ -1055,7 +1150,7 @@ function GambleGateCard({
       minimumWinningRank={gate.minimumWinningRank}
       essenceReward={gate.essenceReward}
       rewardDreamsign={gate.rewardDreamsign}
-      size={layout === "desktop" ? "wager" : "wagerCompact"}
+      size={layout === "desktop" ? "standard" : "compact"}
       drawnCard={presentation === "revealed" ? drawnCard : null}
       revealDrawnCard={presentation === "revealed" && revealStarted}
       dreamsignTestId={
@@ -1363,7 +1458,7 @@ function GravokWagerScreen({
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{ ...view.guide, presence: "speaking" }}
         composition="balanced-gallery"
       >
@@ -1731,9 +1826,9 @@ function LadderClimbScreen({
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{ ...view.guide, presence: "speaking" }}
-        composition="balanced-dialogue"
+        composition="balanced-gallery"
       >
         {(() => {
           const result = view.result;
@@ -1741,7 +1836,7 @@ function LadderClimbScreen({
             result !== null && revealedResultId === result.id;
           const outcomeVisible =
             result !== null && outcomeResultId === result.id;
-          const cardSize = layout === "desktop" ? "wager" : "wagerCompact";
+          const cardSize = layout === "desktop" ? "standard" : "compact";
           const showNextTarget = roundActionsVisible && view.nextDraw !== null;
           const targetRank =
             showNextTarget && view.nextDraw !== null
@@ -2062,9 +2157,9 @@ function StarwayStairsScreen({
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{ ...view.guide, presence: "speaking" }}
-        composition="balanced-dialogue"
+        composition="balanced-gallery"
       >
         {(() => {
           const outcomeVisible =
@@ -2155,7 +2250,7 @@ function StarwayStairsScreen({
                         minimumWinningRank={tier.minimumWinningRank}
                         essenceReward={tier.essenceReward}
                         rewardDreamsign={null}
-                        size={layout === "desktop" ? "wager" : "wagerCompact"}
+                        size={layout === "desktop" ? "standard" : "compact"}
                         drawnCard={tier.card}
                         revealDrawnCard={revealDrawnCard}
                         emphasis={
@@ -2349,7 +2444,7 @@ function blackjackCardDisplaySize(
   cardCount: number,
   layout: "desktop" | "mobile",
 ): number {
-  if (cardCount === 0) return PLAYING_CARD_DESIGN.sizes.wagerCompact.square;
+  if (cardCount === 0) return PLAYING_CARD_DESIGN.sizes.compact.square;
   const totalGapCount = cardCount;
   const roomForCards =
     BLACKJACK_HAND_MAX_WIDTH[layout] -
@@ -2358,7 +2453,7 @@ function blackjackCardDisplaySize(
   return Math.max(
     48,
     Math.min(
-      PLAYING_CARD_DESIGN.sizes.wagerCompact.square,
+      PLAYING_CARD_DESIGN.sizes.compact.square,
       Math.floor(roomForCards / cardCount),
     ),
   );
@@ -2670,7 +2765,7 @@ function BlackjackScreen({
       layout,
     );
     const cardScale =
-      cardDisplaySize / PLAYING_CARD_DESIGN.sizes.wagerCompact.square;
+      cardDisplaySize / PLAYING_CARD_DESIGN.sizes.compact.square;
     return (
       <section
         aria-label={resolve(
@@ -2689,7 +2784,7 @@ function BlackjackScreen({
           position: "absolute",
           top: owner === "dealer" ? 0 : undefined,
           bottom: owner === "player" ? 0 : undefined,
-          height: PLAYING_CARD_DESIGN.sizes.wagerCompact.square,
+          height: PLAYING_CARD_DESIGN.sizes.compact.square,
           width: "100%",
           display: "flex",
           justifyContent: "center",
@@ -2714,7 +2809,7 @@ function BlackjackScreen({
           style={{
             width: "100%",
             maxWidth: BLACKJACK_HAND_MAX_WIDTH[layout],
-            height: PLAYING_CARD_DESIGN.sizes.wagerCompact.square,
+            height: PLAYING_CARD_DESIGN.sizes.compact.square,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -2770,8 +2865,8 @@ function BlackjackScreen({
                     position: "absolute",
                     top: "50%",
                     left: "50%",
-                    width: PLAYING_CARD_DESIGN.sizes.wagerCompact.square,
-                    height: PLAYING_CARD_DESIGN.sizes.wagerCompact.square,
+                    width: PLAYING_CARD_DESIGN.sizes.compact.square,
+                    height: PLAYING_CARD_DESIGN.sizes.compact.square,
                     translate: "-50% -50%",
                   }}
                 >
@@ -2779,7 +2874,7 @@ function BlackjackScreen({
                     variant="faceDown"
                     drawnCard={card}
                     revealDrawnCard={revealed}
-                    size="wagerCompact"
+                    size="compact"
                   />
                 </motion.div>
               </motion.div>
@@ -2826,9 +2921,9 @@ function BlackjackScreen({
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{ ...view.guide, presence: "speaking" }}
-        composition="balanced-dialogue"
+        composition="balanced-gallery"
       >
         <main
           data-gamble-wager-region=""
@@ -3198,9 +3293,9 @@ function FourSuitRepriseScreen({
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{ ...view.guide, presence: "speaking" }}
-        composition="balanced-dialogue"
+        composition="balanced-gallery"
       >
         {(() => {
           const selectedCard =
@@ -3305,7 +3400,7 @@ function FourSuitRepriseScreen({
           const showReselect = view.phase === "choose" && selectedCard !== null;
           const drawCardWidth =
             PLAYING_CARD_DESIGN.sizes[
-              layout === "desktop" ? "wager" : "wagerCompact"
+              layout === "desktop" ? "standard" : "compact"
             ].square;
           const stageGridTemplateColumns =
             layout === "desktop"
@@ -3406,7 +3501,7 @@ function FourSuitRepriseScreen({
                 <div data-four-suit-draw-card="" style={{ gridArea: "draw" }}>
                   <PlayingCard
                     variant="fourSuit"
-                    size={layout === "desktop" ? "wager" : "wagerCompact"}
+                    size={layout === "desktop" ? "standard" : "compact"}
                     drawnCard={drawnCard}
                     revealDrawnCard={drawnCardVisible}
                   />

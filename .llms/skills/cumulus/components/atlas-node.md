@@ -21,7 +21,9 @@ One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engin
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `node` | `DreamscapeNode` | no |  |
+| `id` | `string` | no | Stable Atlas node identity. |
+| `name` | `LocalizedString` | no | Localized accessible name for the assigned or unrevealed dreamscape. |
+| `state` | `AtlasNodeState` | no | Journey presentation state that selects the node treatment. |
 | `role` | `AtlasNodeRole` | no |  |
 | `isReachable` | `boolean` | no |  |
 | `iconRef` | `ArtRef \| null` | no |  |
@@ -44,7 +46,7 @@ import { AtlasNode } from "src/cumulus/components/atlas/AtlasNode";
   <div className="nodes">
     {nodes.map(({ model, left, top, boxSize }) => (
       <div
-        key={model.node.id}
+        key={model.id}
         style={{ position: "absolute", left, top, width: boxSize, height: boxSize, transform: "translate(-50%, -50%)" }}
       >
         <AtlasNode model={model} onPress={(id) => enterDreamscape(id)} />

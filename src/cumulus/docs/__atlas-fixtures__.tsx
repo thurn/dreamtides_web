@@ -1,6 +1,4 @@
 import { assertLocalized } from "@trox/runtime";
-import { LayerName } from "../../types/layer-name";
-import type { DreamscapeNode } from "../../types/journey";
 import type {
   AtlasNodeModel,
   AtlasNodePrimary,
@@ -55,32 +53,6 @@ const UUIDS: Record<AtlasFixtureRole, string> = {
   boss: "00000000-0000-4000-8000-000000000087",
 };
 
-function node(
-  role: AtlasFixtureRole,
-  state: DreamscapeNode["state"],
-): DreamscapeNode {
-  return {
-    id: UUIDS[role],
-    layer: LayerName.One,
-    indexInLayer: 0,
-    dreamscapeId: role === "unrevealed" ? null : role,
-    biomeName:
-      role === "unrevealed"
-        ? ""
-        : role === "boss"
-          ? "Limbo"
-          : "Demo Dreamscape",
-    sites: [],
-    position: { x: 0, y: 0 },
-    state,
-    enhancedSiteType: null,
-    forwardIds: [],
-    backwardIds: [],
-    knownDreamsignId:
-      role === "available" ? "00000000-0000-4000-8000-000000000088" : null,
-  };
-}
-
 function primary(role: AtlasFixtureRole): AtlasNodePrimary {
   if (role === "unrevealed" || role === "forgone") {
     return {
@@ -121,7 +93,7 @@ function primary(role: AtlasFixtureRole): AtlasNodePrimary {
 }
 
 export function atlasFixtureNodes(sizing: NodeSizing): AtlasFixtureNode[] {
-  const states: Array<[AtlasFixtureRole, DreamscapeNode["state"]]> = [
+  const states: Array<[AtlasFixtureRole, AtlasNodeModel["state"]]> = [
     ["unrevealed", "unrevealed"],
     ["revealedLocked", "revealedLocked"],
     ["available", "available"],
@@ -150,7 +122,9 @@ export function atlasFixtureNodes(sizing: NodeSizing): AtlasFixtureNode[] {
       role,
       boxSize: isStarter || isBoss ? sizing.anchorNodeSize : sizing.nodeSize,
       item: {
-        node: node(role, state),
+        id: UUIDS[role],
+        name: primary(role).placeName ?? primary(role).title,
+        state,
         role: isStarter ? "starter" : isBoss ? "boss" : "regular",
         isReachable: role !== "forgone",
         iconRef: isHidden

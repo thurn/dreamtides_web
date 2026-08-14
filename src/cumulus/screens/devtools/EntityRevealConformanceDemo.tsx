@@ -2,7 +2,6 @@ import { assertLocalized } from "@trox/runtime";
 import { useEffect, useState } from "react";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
-import { LayerName } from "../../../types/layer-name";
 import {
   AtlasNode,
   type AtlasNodeModel,
@@ -37,20 +36,9 @@ const CARD: CardData = {
 };
 
 const ATLAS_MODEL: AtlasNodeModel = {
-  node: {
-    id: ATLAS_NODE_ID,
-    layer: LayerName.Two,
-    indexInLayer: 0,
-    dreamscapeId: "conformance-veil",
-    biomeName: "Conformance Veil",
-    sites: [],
-    position: { x: 0, y: 0 },
-    state: "available",
-    enhancedSiteType: null,
-    forwardIds: [],
-    backwardIds: [],
-    knownDreamsignId: "44444444-4444-4444-8444-444444444444",
-  },
+  id: ATLAS_NODE_ID,
+  name: assertLocalized("Conformance Veil"),
+  state: "available",
   role: "regular",
   isReachable: true,
   iconRef: artRef.dreamscapeIcon("wilderveil"),

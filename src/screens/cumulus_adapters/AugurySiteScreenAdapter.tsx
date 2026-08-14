@@ -18,7 +18,7 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: string }) {
   const { node = null, site = null } = current ?? {};
   const guide = resolveAuguryGuide(
     journeyContent.guides,
-    site?.guideIdOverride,
+    site?.randomSite?.presentingGuideId,
   );
   const guideLine = useGuideDialogue(guide, "site");
   const result = useMemo(

@@ -9,12 +9,9 @@ import { glyph } from "../../primitives/glyph";
 import { SiteNode, type DreamscapeSiteModel } from "./SiteNode";
 
 const MODEL: DreamscapeSiteModel = {
-  site: {
-    id: "00000000-0000-4000-8000-000000000041",
-    type: "Battle",
-    isEnhanced: false,
-    isVisited: false,
-  },
+  id: "00000000-0000-4000-8000-000000000041",
+  type: "Battle",
+  isVisited: false,
   pos: { x: 50, y: 50 },
   index: 0,
   isBattle: true,
@@ -48,7 +45,7 @@ describe("SiteNode", () => {
     expect(source.style.touchAction).toBe("pan-x pan-y");
     expect(source.dataset.revealFeedback).toBe("measured");
     expect(source.dataset.revealEntityType).toBe("site");
-    expect(source.dataset.revealEntityId).toBe(MODEL.site.id);
+    expect(source.dataset.revealEntityId).toBe(MODEL.id);
     expect(source.dataset.revealPrimaryVariant).toBe("icon");
     expect(source.dataset.revealSecondaryTitles).toBe("");
     expect(source.getAttribute("aria-disabled")).toBe("true");

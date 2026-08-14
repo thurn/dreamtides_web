@@ -41,9 +41,9 @@ import {
 /** Resolve Tobias, the resident Dream Guide for Card Shops. */
 export function resolveCardShopGuide(
   guides: readonly DreamGuideContent[],
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent {
-  return requireGuideForSiteType(guides, "Shop", guideIdOverride);
+  return requireGuideForSiteType(guides, "Shop", presentingGuideId);
 }
 
 /** Build Tobias's guide slice for the shared character-gallery layout. */

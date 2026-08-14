@@ -3,7 +3,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import type { CSSProperties, ReactElement } from "react";
 import type {
-  GravokGateId,
   StandardPlayingCardRank,
   StandardPlayingCardSuit,
 } from "../../../types/gamble";
@@ -18,7 +17,7 @@ import { dreamsignRevealSpec, type LocalizedDreamsign } from "../hud/Dreamsign";
 import { opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
-type WagerRevealSourceBinding = ReturnType<typeof useRevealSource>;
+type PrizeRevealSourceBinding = ReturnType<typeof useRevealSource>;
 
 /**
  * The deliberately centralized playing-card art direction. Change these
@@ -26,14 +25,14 @@ type WagerRevealSourceBinding = ReturnType<typeof useRevealSource>;
  */
 export const PLAYING_CARD_DESIGN = {
   sizes: {
-    wagerCompact: {
+    compact: {
       square: 116,
       fontSize: 46,
       rankSuitGap: token("--space-xxs"),
       redCharacterOutlineWidth: 5,
       blackCharacterOutlineWidth: 5,
     },
-    wager: {
+    standard: {
       square: 188,
       fontSize: 76,
       rankSuitGap: token("--space-xxs"),
@@ -86,20 +85,11 @@ export type PlayingCardSuitMarkSize =
   | "rewardCompact"
   | "reward";
 
-/** Stable Gamble prize identities rendered by the shared wager object. */
-export type WagerPrizeCardId =
-  | GravokGateId
-  | "ladder-climb"
-  | "starway-1"
-  | "starway-2"
-  | "starway-3"
-  | "blackjack";
+/** Named square sizes for the shared playing-card object. */
+export type PlayingCardSize = "compact" | "standard";
 
-/** Named square sizes reserved for Gamble prize cards. */
-export type WagerPrizeCardSize = "wagerCompact" | "wager";
-
-/** Semantic visual priority for a wager prize within a multi-tier choice. */
-export type WagerPrizeCardEmphasis = "standard" | "current" | "muted";
+/** Semantic visual priority for a prize within a multi-tier choice. */
+export type PlayingCardPrizeEmphasis = "standard" | "current" | "muted";
 
 const SUIT_SYMBOLS: Record<PlayingCardSuit, string> = {
   clubs: "♣",
@@ -123,13 +113,13 @@ const PLAYING_CARD_SUIT_MARK_SPECS: Readonly<
   >
 > = {
   indexCompact: {
-    fontSize: PLAYING_CARD_DESIGN.sizes.wagerCompact.fontSize,
+    fontSize: PLAYING_CARD_DESIGN.sizes.compact.fontSize,
     outlineWidth:
-      PLAYING_CARD_DESIGN.sizes.wagerCompact.blackCharacterOutlineWidth,
+      PLAYING_CARD_DESIGN.sizes.compact.blackCharacterOutlineWidth,
   },
   index: {
-    fontSize: PLAYING_CARD_DESIGN.sizes.wager.fontSize,
-    outlineWidth: PLAYING_CARD_DESIGN.sizes.wager.blackCharacterOutlineWidth,
+    fontSize: PLAYING_CARD_DESIGN.sizes.standard.fontSize,
+    outlineWidth: PLAYING_CARD_DESIGN.sizes.standard.blackCharacterOutlineWidth,
   },
   fourSuitCompact: { fontSize: 46, outlineWidth: 4 },
   fourSuit: { fontSize: 68, outlineWidth: 5 },
@@ -300,7 +290,7 @@ function PlayingCardIndex({
 }: {
   rank: PlayingCardRank;
   suit: PlayingCardSuit;
-  size: WagerPrizeCardSize;
+  size: PlayingCardSize;
 }): ReactElement {
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const isRedSuit = RED_SUITS.has(suit);
@@ -343,7 +333,7 @@ function PlayingCardIndex({
       </span>
       <PlayingCardSuitMark
         suit={suit}
-        size={size === "wager" ? "index" : "indexCompact"}
+        size={size === "standard" ? "index" : "indexCompact"}
       />
     </span>
   );
@@ -351,7 +341,7 @@ function PlayingCardIndex({
 
 interface PlayingCardBaseProps {
   /** Named Gamble playing-card size. Defaults to `wager`. */
-  size?: WagerPrizeCardSize;
+  size?: PlayingCardSize;
   /** Accent the card rim when it is the current choice. */
   emphasis?: "standard" | "current";
 }
@@ -408,7 +398,7 @@ export type PlayingCardProps =
 export function PlayingCard(props: PlayingCardProps): ReactElement {
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
-  const size = props.size ?? "wager";
+  const size = props.size ?? "standard";
   const emphasis = props.emphasis ?? "standard";
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard =
@@ -526,7 +516,7 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
                 <PlayingCardSuitMark
                   key={suit}
                   suit={suit}
-                  size={size === "wager" ? "fourSuit" : "fourSuitCompact"}
+                  size={size === "standard" ? "fourSuit" : "fourSuitCompact"}
                 />
               ))}
             </div>
@@ -549,13 +539,17 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
   );
 }
 
-export interface WagerPrizeCardProps {
-  /** Stable Gamble choice represented by this prize object. */
-  prizeId: WagerPrizeCardId;
-  /** Lowest rank in the inclusive winning range through Ace. */
-  minimumWinningRank: PlayingCardRank;
-  /** Named desktop or mobile square size. Defaults to `wager`. */
-  size?: WagerPrizeCardSize;
+export interface PlayingCardPrizeProps {
+  /** Stable identity for this prize object. */
+  objectId: string;
+  /** Localized heading printed on the prize face. */
+  title: LocalizedString;
+  /** Localized supporting copy printed beneath the heading. */
+  description: LocalizedString;
+  /** Complete localized accessible name for the concealed prize face. */
+  accessibilityLabel: LocalizedString;
+  /** Named compact or standard square size. Defaults to `standard`. */
+  size?: PlayingCardSize;
   /** Committed card shown on the reverse face after a bet. */
   drawnCard: {
     rank: PlayingCardRank;
@@ -563,39 +557,36 @@ export interface WagerPrizeCardProps {
   } | null;
   /** Turn the prize face over to its committed card. */
   revealDrawnCard?: boolean;
-  /** Optional stable selector for the prize Dreamsign name. */
-  dreamsignTestId?: string;
+  /** Optional stable selector for the related Dreamsign name. */
+  relatedDreamsignTestId?: string;
   /** Accent current tier, foreground-muted alternative, or standard priority. */
-  emphasis?: WagerPrizeCardEmphasis;
-  /** Essence awarded on a win. */
-  essenceReward: number;
-  /** Dreamsign appended to the Essence reward, when present. */
-  rewardDreamsign: LocalizedDreamsign | null;
+  emphasis?: PlayingCardPrizeEmphasis;
+  /** Dreamsign related to the prize copy, when present. */
+  relatedDreamsign: LocalizedDreamsign | null;
 }
 
 /**
- * A Gamble prize on the PlayingCard superellipse. Its reward copy stays one
- * sentence, and an assigned result flips into the standard rank-and-suit face
- * without changing the object's footprint.
+ * Localized prize copy on the PlayingCard superellipse. An assigned result
+ * flips into the standard rank-and-suit face without changing the footprint.
  */
-export function WagerPrizeCard(props: WagerPrizeCardProps): ReactElement {
-  if (props.rewardDreamsign !== null) {
+export function PlayingCardPrize(props: PlayingCardPrizeProps): ReactElement {
+  if (props.relatedDreamsign !== null) {
     return (
-      <DreamsignWagerPrizeCard
+      <DreamsignPlayingCardPrize
         {...props}
-        rewardDreamsign={props.rewardDreamsign}
+        relatedDreamsign={props.relatedDreamsign}
       />
     );
   }
-  return <WagerPrizeCardObject {...props} />;
+  return <PlayingCardPrizeObject {...props} />;
 }
 
-function DreamsignWagerPrizeCard(
-  props: WagerPrizeCardProps & { rewardDreamsign: LocalizedDreamsign },
+function DreamsignPlayingCardPrize(
+  props: PlayingCardPrizeProps & { relatedDreamsign: LocalizedDreamsign },
 ): ReactElement {
   const dreamsignId = requireDreamsignId(
-    props.rewardDreamsign,
-    "Wager prize card",
+    props.relatedDreamsign,
+    "Playing card prize",
   );
   const revealBinding = useRevealSource({
     identity: {
@@ -603,83 +594,54 @@ function DreamsignWagerPrizeCard(
       entityId: revealEntityId("dreamsign", dreamsignId),
     },
     spec: dreamsignRevealSpec(
-      props.rewardDreamsign,
-      Boolean(props.rewardDreamsign.imageName),
+      props.relatedDreamsign,
+      Boolean(props.relatedDreamsign.imageName),
     ),
     feedback: "stationary",
   });
 
-  return <WagerPrizeCardObject {...props} revealBinding={revealBinding} />;
+  return <PlayingCardPrizeObject {...props} revealBinding={revealBinding} />;
 }
 
-function WagerPrizeCardObject({
-  prizeId,
-  minimumWinningRank,
-  size = "wager",
+function PlayingCardPrizeObject({
+  objectId,
+  title,
+  description,
+  accessibilityLabel,
+  size = "standard",
   drawnCard,
   revealDrawnCard = false,
-  dreamsignTestId,
+  relatedDreamsignTestId,
   emphasis = "standard",
-  essenceReward,
-  rewardDreamsign,
+  relatedDreamsign,
   revealBinding,
-}: WagerPrizeCardProps & {
-  revealBinding?: WagerRevealSourceBinding;
+}: PlayingCardPrizeProps & {
+  revealBinding?: PrizeRevealSourceBinding;
 }): ReactElement {
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const sizeSpec = PLAYING_CARD_DESIGN.sizes[size];
   const showingDrawnCard = revealDrawnCard && drawnCard !== null;
-  const prizeLabel =
-    rewardDreamsign === null
-      ? txa(
-          "Draw {minimum_rank}-A. Win {essence_amount} Essence.",
-          { minimum_rank: minimumWinningRank, essence_amount: essenceReward },
-          "[accessibility] [dreamsign] Complete name for a wager prize without a Dreamsign. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace, and essence_amount is the positive Essence payout.",
-        )
-      : txa(
-          "Draw {minimum_rank}-A. Win {essence_amount} Essence and {dreamsign_name}.",
-          {
-            minimum_rank: minimumWinningRank,
-            essence_amount: essenceReward,
-            dreamsign_name: opaque(rewardDreamsign.name),
-          },
-          "[accessibility] [dreamsign] Complete name for a wager prize that includes a Dreamsign. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace, essence_amount is the positive Essence payout, and dreamsign_name is the canonical authored Dreamsign name.",
-        );
   const drawnCardLabel =
     drawnCard === null
-      ? prizeLabel
+      ? accessibilityLabel
       : frontAriaLabel(drawnCard.rank, drawnCard.suit);
-  const prizeDescription =
-    rewardDreamsign === null
-      ? txa(
-          "Win {essence_amount} Essence.",
-          { essence_amount: essenceReward },
-          "[dreamsign] Reward sentence on a wager prize without a Dreamsign. essence_amount is the positive Essence payout.",
-        )
-      : txa(
-          "Win {essence_amount} Essence and {dreamsign_name}.",
-          {
-            essence_amount: essenceReward,
-            dreamsign_name: opaque(rewardDreamsign.name),
-          },
-          "[dreamsign] Reward sentence on a wager prize that includes a Dreamsign. essence_amount is the positive Essence payout and dreamsign_name is the canonical authored Dreamsign name.",
-        );
   const prizeFaceContent = (
     <>
       <div
-        data-wager-prize-copy=""
+        data-playing-card-prize-copy=""
         style={{
           position: "relative",
           zIndex: 1,
           width: "100%",
-          padding: size === "wager" ? token("--space-s") : token("--space-xs"),
+          padding:
+            size === "standard" ? token("--space-s") : token("--space-xs"),
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          gap: size === "wager" ? token("--space-s") : token("--space-xs"),
+          gap: size === "standard" ? token("--space-s") : token("--space-xs"),
           textAlign: "center",
           color:
             emphasis === "muted"
@@ -691,34 +653,34 @@ function WagerPrizeCardObject({
         }}
       >
         <h2
-          data-wager-prize-title=""
+          data-playing-card-prize-title=""
           style={{
             margin: 0,
-            font: size === "wager" ? token("--t-title") : token("--t-title-sm"),
+            font:
+              size === "standard"
+                ? token("--t-title")
+                : token("--t-title-sm"),
           }}
         >
-          {resolve(
-            txa(
-              "Draw {minimum_rank}-A",
-              { minimum_rank: minimumWinningRank },
-              "[ui] Title printed on a wager prize card before its concealed playing card is revealed. minimum_rank is the lowest standard playing-card rank in the inclusive winning range through Ace.",
-            ),
-          )}
+          {resolve(title)}
         </h2>
         <p
-          data-wager-prize-description=""
+          data-playing-card-prize-description=""
           style={{
             margin: 0,
-            font: size === "wager" ? token("--t-body") : token("--t-body-sm"),
+            font:
+              size === "standard" ? token("--t-body") : token("--t-body-sm"),
           }}
         >
           <span
-            data-testid={rewardDreamsign === null ? undefined : dreamsignTestId}
-            data-wager-prize-dreamsign-name={
-              rewardDreamsign === null ? undefined : ""
+            data-testid={
+              relatedDreamsign === null ? undefined : relatedDreamsignTestId
+            }
+            data-playing-card-prize-dreamsign-name={
+              relatedDreamsign === null ? undefined : ""
             }
           >
-            {resolve(prizeDescription)}
+            {resolve(description)}
           </span>
         </p>
       </div>
@@ -741,14 +703,12 @@ function WagerPrizeCardObject({
   return (
     <div
       role={showingDrawnCard ? "img" : "group"}
-      aria-label={resolve(showingDrawnCard ? drawnCardLabel : prizeLabel)}
-      data-wager-prize-card={prizeId}
-      data-wager-prize-card-state={showingDrawnCard ? "drawn" : "prize"}
-      data-wager-prize-card-size={size}
-      data-wager-prize-card-emphasis={emphasis}
-      data-wager-prize-target={`${minimumWinningRank}-A`}
-      data-wager-prize-essence-reward={essenceReward}
-      data-wager-prize-drawn-card={
+      aria-label={resolve(showingDrawnCard ? drawnCardLabel : accessibilityLabel)}
+      data-playing-card-prize={objectId}
+      data-playing-card-prize-state={showingDrawnCard ? "drawn" : "prize"}
+      data-playing-card-prize-size={size}
+      data-playing-card-prize-emphasis={emphasis}
+      data-playing-card-prize-drawn-card={
         drawnCard === null ? undefined : `${drawnCard.rank}-${drawnCard.suit}`
       }
       data-playing-card={
@@ -766,7 +726,7 @@ function WagerPrizeCardObject({
       }}
     >
       <motion.div
-        data-wager-prize-card-flip=""
+        data-playing-card-prize-flip=""
         initial={false}
         animate={{ rotateY: showingDrawnCard ? 180 : 0 }}
         transition={
@@ -784,10 +744,10 @@ function WagerPrizeCardObject({
           transformStyle: "preserve-3d",
         }}
       >
-        {revealBinding === undefined || rewardDreamsign === null ? (
+        {revealBinding === undefined || relatedDreamsign === null ? (
           <div
             aria-hidden={showingDrawnCard || undefined}
-            data-wager-prize-face=""
+            data-playing-card-prize-face=""
             style={prizeFaceStyle}
           >
             {prizeFaceContent}
@@ -801,14 +761,14 @@ function WagerPrizeCardObject({
             tabIndex={showingDrawnCard ? -1 : 0}
             ariaLabelMessage={txa(
               "Dreamsign: {dreamsign_name}",
-              { dreamsign_name: opaque(rewardDreamsign.name) },
+              { dreamsign_name: opaque(relatedDreamsign.name) },
               "[accessibility] [dreamsign] Name for an interactive Dreamsign object. dreamsign_name is its canonical authored display name and has unknown grammatical gender.",
             )}
             aria-hidden={showingDrawnCard || undefined}
             pressFeedback="stationary"
             hoverFeedback="stationary"
-            data-wager-prize-face=""
-            data-wager-prize-dreamsign-source=""
+            data-playing-card-prize-face=""
+            data-playing-card-prize-dreamsign-source=""
             style={prizeFaceStyle}
           >
             {prizeFaceContent}

@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 import { resolveSource } from "../../runtime/localization/runtime";
+import { assertLocalized } from "@trox/runtime";
+import type { JourneyContent } from "../../data/journey-content";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import type {
@@ -39,6 +41,7 @@ const buildDreamscapeView = (
 ) =>
   buildDreamscapeViewImpl(
     dreamscapeNode,
+    assertLocalized("Fixture Dreamscape"),
     state,
     sitesData,
     5,
@@ -58,7 +61,6 @@ function node(overrides: Partial<DreamscapeNode> = {}): DreamscapeNode {
     layer: 0,
     indexInLayer: 0,
     dreamscapeId: "ember_wood",
-    biomeName: "Ember Wood",
     sites: [
       site({ id: "s-purge", type: "Purge" }),
       site({ id: "s-draft", type: "Draft" }),
@@ -116,7 +118,7 @@ describe("buildSiteModels", () => {
   it("carries guardian tier and draft pick count as semantic values", () => {
     const models = buildSiteModels(node(), 6);
     const battle = models.find((m) => m.isBattle);
-    const draft = models.find((m) => m.site.type === "Draft");
+    const draft = models.find((m) => m.type === "Draft");
     expect(resolveSource(battle!.label)).toBe("Final Boss");
     expect(resolveSource(draft!.label)).toBe("Draft 5x");
   });
@@ -172,9 +174,17 @@ describe("dreamscapeSceneRef / dreamscapeTitle", () => {
     expect(dreamscapeSceneRef(node({ dreamscapeId: null }))).toBeNull();
   });
 
-  it("uses the biome name, or a fallback title when the dream is unrevealed", () => {
-    expect(dreamscapeTitle(node())).toBe("Ember Wood");
-    expect(dreamscapeTitle(node({ biomeName: "" }))).toBe("An Unknown Dream");
+  it("resolves canonical dreamscape names and an unrevealed fallback", () => {
+    const content = {
+      dreamscapes: [{ id: "ember_wood", name: "Fixture Dreamscape" }],
+      atlasData: { boss: { dreamscapeId: "fixture-boss", place: "Limbo" } },
+    } as unknown as JourneyContent;
+    expect(resolveSource(dreamscapeTitle(node(), content))).toBe(
+      "Fixture Dreamscape",
+    );
+    expect(resolveSource(dreamscapeTitle(node({ dreamscapeId: null }), content))).toBe(
+      "An Unknown Dream",
+    );
   });
 });
 
@@ -263,7 +273,7 @@ describe("buildDreamscapeView", () => {
       completionLevel: 2,
     } as unknown as JourneyState;
     const view = buildDreamscapeView(node(), state, MINIMAL_SITES_DATA);
-    expect(resolveSource(view.title)).toBe("Ember Wood");
+    expect(resolveSource(view.title)).toBe("Fixture Dreamscape");
     expect(view.sites).toHaveLength(3);
     expect(view.inlineRewards).toEqual({});
   });

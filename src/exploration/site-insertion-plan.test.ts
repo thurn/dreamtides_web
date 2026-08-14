@@ -37,7 +37,6 @@ function journey(): JourneyState {
           layer: LayerName.Two,
           indexInLayer: 0,
           dreamscapeId: "fixture-dreamscape",
-          biomeName: "Fixture biome",
           sites: [sourceSite, battleSite],
           position: { x: 0, y: 0 },
           state: "available",
@@ -123,6 +122,17 @@ describe("Exploration fixed-site insertion planning", () => {
       {
         ...plan,
         insertedSite: { ...plan.insertedSite, type: "Shop" as const },
+      },
+      {
+        ...plan,
+        insertedSite: {
+          ...plan.insertedSite,
+          randomSite: {
+            mode: "single" as const,
+            candidateSiteTypes: ["Shop" as const],
+            presentingGuideId: "forged-guide",
+          },
+        },
       },
       { ...plan, planSignature: "forged" },
     ];

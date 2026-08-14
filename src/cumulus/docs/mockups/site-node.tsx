@@ -21,7 +21,9 @@ import { sceneRoot } from "./scene";
 /** Representative placed-site models, scattered across the scene (pos in %). */
 const SITE_MODELS: DreamscapeSiteModel[] = [
   {
-    site: { id: "s-shop", type: "Shop", isEnhanced: false, isVisited: false },
+    id: "s-shop",
+    type: "Shop",
+    isVisited: false,
     pos: { x: 22, y: 34 },
     index: 0,
     isBattle: false,
@@ -32,12 +34,9 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-store-alt-2"),
   },
   {
-    site: {
-      id: "s-reward",
-      type: "Reward",
-      isEnhanced: false,
-      isVisited: false,
-    },
+    id: "s-reward",
+    type: "Reward",
+    isVisited: false,
     pos: { x: 40, y: 22 },
     index: 1,
     isBattle: false,
@@ -48,7 +47,9 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-treasure-chest"),
   },
   {
-    site: { id: "s-rest", type: "Reward", isEnhanced: true, isVisited: false },
+    id: "s-rest",
+    type: "Reward",
+    isVisited: false,
     pos: { x: 78, y: 52 },
     index: 3,
     isBattle: false,
@@ -61,12 +62,9 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     icon: GLYPHS.exhaust,
   },
   {
-    site: {
-      id: "s-battle",
-      type: "Battle",
-      isEnhanced: false,
-      isVisited: false,
-    },
+    id: "s-battle",
+    type: "Battle",
+    isVisited: false,
     pos: { x: 34, y: 66 },
     index: 4,
     isBattle: true,
@@ -77,7 +75,9 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-sword-alt"),
   },
   {
-    site: { id: "s-boss", type: "Battle", isEnhanced: false, isVisited: false },
+    id: "s-boss",
+    type: "Battle",
+    isVisited: false,
     pos: { x: 58, y: 74 },
     index: 5,
     isBattle: true,
@@ -104,7 +104,7 @@ export function SiteNodeMockup() {
     >
       {SITE_MODELS.map((model) => (
         <SiteNode
-          key={model.site.id}
+          key={model.id}
           model={model}
           motion
           onSelect={() => undefined}

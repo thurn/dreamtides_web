@@ -10,7 +10,10 @@ import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { GLOSSARY_IDS } from "../../data/glossary";
 import { token } from "../primitives/tokens";
-import { SiteLayout, type SiteLayoutGuide } from "../components/layout/SiteLayout";
+import {
+  SiteLayout,
+  type SiteLayoutGuideView,
+} from "../components/layout/SiteLayout";
 import { DreamsignReplacementDialog } from "../components/overlay/DreamsignReplacementDialog";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import {
@@ -68,7 +71,7 @@ export interface DreamsignBazaarSiteView {
   /** Current dreamscape scene art behind the site, if resolved. */
   scene: ArtRef | null;
   /** Amunet's art and dialog line. */
-  guide: Omit<SiteLayoutGuide, "presence">;
+  guide: SiteLayoutGuideView;
   /** Three Dreamsign wares in persistent slot order. */
   offers: readonly DreamsignBazaarOfferView[];
   /** The one-use restock action. */
@@ -108,7 +111,7 @@ export function DreamsignBazaarSiteScreen({
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{ ...view.guide, presence: "speaking" }}
         composition="balanced-gallery"
       >

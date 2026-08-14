@@ -110,13 +110,7 @@ function sameSite(left: SiteState, right: SiteState): boolean {
     left.id === right.id &&
     left.type === right.type &&
     left.isEnhanced === right.isEnhanced &&
-    left.isVisited === right.isVisited &&
-    left.randomSite === undefined &&
-    right.randomSite === undefined &&
-    left.guideIdOverride === undefined &&
-    right.guideIdOverride === undefined &&
-    left.data === undefined &&
-    right.data === undefined
+    left.isVisited === right.isVisited
   );
 }
 

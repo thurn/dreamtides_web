@@ -175,7 +175,6 @@ function deterministicProvider(
               layer: LayerName.One,
               indexInLayer: 0,
               dreamscapeId: "dreamscape-start",
-              biomeName: "Starting Dreamscape",
               sites: [],
               position: { x: 0, y: 0 },
               state: "available",
@@ -1125,7 +1124,6 @@ function withAtlasSite(
           layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: null,
-          biomeName: "",
           sites: [
             {
               id: siteId,

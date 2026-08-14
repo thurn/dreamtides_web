@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { CSSProperties } from "react";
-import type { DreamscapeNode } from "../../../types/journey";
+import type { AtlasNodeState } from "../../../types/journey";
 import { richText } from "../card/rich-text";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import type {
@@ -90,7 +90,12 @@ export interface AtlasNodeAffiliation {
 export type AtlasNodeRole = "regular" | "starter" | "boss";
 
 export interface AtlasNodeModel {
-  node: DreamscapeNode;
+  /** Stable Atlas node identity. */
+  id: string;
+  /** Localized accessible name for the assigned or unrevealed dreamscape. */
+  name: LocalizedString;
+  /** Journey presentation state that selects the node treatment. */
+  state: AtlasNodeState;
   role: AtlasNodeRole;
   isReachable: boolean;
   iconRef: ArtRef | null;
@@ -161,22 +166,22 @@ export function AtlasNode({
   onPress,
 }: AtlasNodeProps): React.ReactElement {
   const resolve = useLocalizer();
-  const { node, role } = model;
+  const { id, role, state } = model;
   const isStarter = role === "starter";
   const isBoss = role === "boss";
-  const isAvailable = node.state === "available";
+  const isAvailable = state === "available";
   const binding = useRevealSource({
     identity: {
       entityType: "atlas-node",
-      entityId: revealEntityId("atlas-node", node.id),
+      entityId: revealEntityId("atlas-node", id),
     },
     spec: atlasNodeRevealSpec(model),
-    onActivate: isAvailable ? () => onPress(node.id) : undefined,
+    onActivate: isAvailable ? () => onPress(id) : undefined,
   });
   const suppressCompatibilityClick = React.useRef(false);
   const pointerDown = binding.sourceProps.onPointerDown;
   const active = binding.sourceProps["data-reveal-active"] === "true";
-  const isCompleted = node.state === "completed";
+  const isCompleted = state === "completed";
 
   const frameUrl = resolveArtRef(model.unrevealedFrameRef);
   const face =
@@ -199,12 +204,12 @@ export function AtlasNode({
     );
 
   const className =
-    `cumulus-atlas-node cumulus-atlas-node-${node.state}` +
+    `cumulus-atlas-node cumulus-atlas-node-${state}` +
     (model.isReachable === false ? " cumulus-atlas-node-unreachable" : "") +
     (isBoss ? " cumulus-atlas-node-boss" : "") +
     (isStarter ? " cumulus-atlas-node-start" : "");
   const accessibleStateMessage = (() => {
-    switch (node.state) {
+    switch (state) {
       case "unrevealed":
         return tx(
           "This dreamscape is unrevealed.",
@@ -275,8 +280,8 @@ export function AtlasNode({
       style={nodeStyle}
       aria-labelledby={`${accessibleNameId}-name ${accessibleNameId}-state${accessibleRoleMessage === null ? "" : ` ${accessibleNameId}-role`}${accessibleDreamsignMessage === null ? "" : ` ${accessibleNameId}-dreamsign`}`}
       aria-disabled={!isAvailable}
-      data-atlas-node-id={node.id}
-      data-node-state={node.state}
+      data-atlas-node-id={id}
+      data-node-state={state}
       data-node-boss={isBoss ? "true" : undefined}
       data-node-starting={isStarter ? "true" : undefined}
       data-node-known-dreamsign={
@@ -290,25 +295,18 @@ export function AtlasNode({
         if (!isAvailable) return;
         if (event.detail === 0) {
           suppressCompatibilityClick.current = false;
-          onPress(node.id);
+          onPress(id);
           return;
         }
         if (suppressCompatibilityClick.current) {
           suppressCompatibilityClick.current = false;
           return;
         }
-        onPress(node.id);
+        onPress(id);
       }}
     >
       <span id={`${accessibleNameId}-name`} style={VISUALLY_HIDDEN_STYLE}>
-        {node.biomeName === ""
-          ? resolve(
-              tx(
-                "Unrevealed dreamscape",
-                "[accessibility] Name used for a Dream Atlas node before its authored dreamscape name is known.",
-              ),
-            )
-          : node.biomeName}
+        {resolve(model.name)}
       </span>
       <span id={`${accessibleNameId}-state`} style={VISUALLY_HIDDEN_STYLE}>
         {resolve(accessibleStateMessage)}

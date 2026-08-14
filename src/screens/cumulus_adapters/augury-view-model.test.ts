@@ -356,10 +356,11 @@ describe("augury view model", () => {
     }
 
     expect(visual.model).toMatchObject({
-      site: { type: "Shop", isVisited: false },
+      type: "Shop",
+      isVisited: false,
       isInteractive: false,
-      label: "Card Shop",
     });
+    expect(resolveSource(visual.model.label)).toBe("Card Shop");
   });
 
   it("builds the persisted accept request from stable offer and choice ids", () => {

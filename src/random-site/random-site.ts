@@ -41,19 +41,19 @@ export function materializeRandomSite(
   destinationSiteType: RandomSiteDestinationType,
   presentingGuideId?: string,
 ): SiteState {
+  const randomSite = site.randomSite ?? {
+    mode: "single" as const,
+    candidateSiteTypes: [destinationSiteType],
+  };
   return {
     ...site,
     type: destinationSiteType,
     isEnhanced: true,
-    ...(site.guideIdOverride === undefined && presentingGuideId !== undefined
-      ? { guideIdOverride: presentingGuideId }
-      : {}),
     randomSite: {
-      ...(site.randomSite ?? {
-        mode: "single",
-        candidateSiteTypes: [destinationSiteType],
-      }),
+      ...randomSite,
       destinationSiteType,
+      presentingGuideId:
+        randomSite.presentingGuideId ?? presentingGuideId,
       materialized: true,
     },
   };

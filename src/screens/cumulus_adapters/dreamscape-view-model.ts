@@ -37,6 +37,7 @@ import type {
   JourneyState,
 } from "../../types/journey";
 import type { SitesData } from "../../types/sites-data";
+import type { JourneyContent } from "../../data/journey-content";
 import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 
@@ -69,17 +70,19 @@ export function buildDreamscapeOverviewLog(
   return {
     nodeId: node.id,
     dreamscapeId: node.dreamscapeId,
-    biomeName: node.biomeName,
     completionLevel,
     layoutSeed: dreamscapeLayoutSeed(node),
-    sites: view.sites.map((model) => ({
-      siteId: model.site.id,
-      type: model.site.type,
-      isEnhanced: model.site.isEnhanced,
-      isVisited: model.site.isVisited,
-      isLocked: model.isLocked,
-      pos: model.pos,
-    })),
+    sites: view.sites.map((model) => {
+      const site = node.sites.find((candidate) => candidate.id === model.id);
+      return {
+        siteId: model.id,
+        type: model.type,
+        isEnhanced: site?.isEnhanced ?? false,
+        isVisited: model.isVisited,
+        isLocked: model.isLocked,
+        pos: model.pos,
+      };
+    }),
   };
 }
 
@@ -155,7 +158,9 @@ export function buildSiteModels(
           })
         : localizedSourceText(siteTypeName(sitesData, site.type));
     return {
-      site,
+      id: site.id,
+      type: site.type,
+      isVisited: site.isVisited,
       pos: positions[index] ?? FALLBACK_POS,
       index,
       isBattle,
@@ -231,9 +236,23 @@ export function dreamscapeSceneRef(node: DreamscapeNode): ArtRef | null {
     : null;
 }
 
-/** The dreamscape's display title, with a fallback for an unrevealed dream. */
-export function dreamscapeTitle(node: DreamscapeNode): string {
-  return node.biomeName.length > 0 ? node.biomeName : "An Unknown Dream";
+/** Resolve the dreamscape's localized display title from canonical content. */
+export function dreamscapeTitle(
+  node: DreamscapeNode,
+  journeyContent: JourneyContent,
+): LocalizedString {
+  if (node.dreamscapeId === journeyContent.atlasData.boss.dreamscapeId) {
+    return localizedSourceText(journeyContent.atlasData.boss.place);
+  }
+  const dreamscape = journeyContent.dreamscapes.find(
+    (candidate) => candidate.id === node.dreamscapeId,
+  );
+  return dreamscape === undefined
+    ? tx(
+        "An Unknown Dream",
+        "[ui] Dreamscape title shown while its canonical identity is unavailable.",
+      )
+    : localizedSourceText(dreamscape.name);
 }
 
 /**
@@ -242,6 +261,7 @@ export function dreamscapeTitle(node: DreamscapeNode): string {
  */
 export function buildDreamscapeView(
   node: DreamscapeNode,
+  title: LocalizedString,
   state: JourneyState,
   sitesData: SitesData,
   defaultDraftPickCount: number,
@@ -276,7 +296,7 @@ export function buildDreamscapeView(
   });
   return {
     scene: dreamscapeSceneRef(node),
-    title: localizedSourceText(dreamscapeTitle(node)),
+    title,
     sites: buildSiteModels(
       node,
       state.completionLevel,

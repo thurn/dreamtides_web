@@ -600,8 +600,17 @@ export function buildAtlasMapNodes(
         ? artRef.dreamsign(dreamsignTemplate.imageName)
         : null;
 
-    const model: AtlasNodeModel = {
+    const reveal = buildNodeCard(
       node,
+      geo,
+      journeyContent,
+      atlas,
+      isReachable,
+    );
+    const model: AtlasNodeModel = {
+      id: node.id,
+      name: reveal.primary.placeName ?? reveal.primary.title,
+      state: node.state,
       role: geo.role,
       isReachable,
       iconRef,
@@ -610,7 +619,7 @@ export function buildAtlasMapNodes(
       ),
       siteBadgeGlyph,
       knownDreamsignRef,
-      ...buildNodeCard(node, geo, journeyContent, atlas, isReachable),
+      ...reveal,
     };
     items.push({
       model,

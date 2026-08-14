@@ -8,7 +8,6 @@ import { localizedStringSourceEquality } from "../../../runtime/localization/tes
 import { resolveSource } from "../../../runtime/localization/runtime";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
-import { LayerName } from "../../../types/layer-name";
 import { CumulusRoot } from "../../CumulusRoot";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
@@ -53,24 +52,13 @@ describe("atlasPrimaryInfoCard", () => {
 });
 
 function model(
-  state: AtlasNodeModel["node"]["state"],
+  state: AtlasNodeModel["state"],
   overrides: Partial<AtlasNodeModel> = {},
 ): AtlasNodeModel {
   return {
-    node: {
-      id: NODE_ID,
-      layer: LayerName.Two,
-      indexInLayer: 0,
-      dreamscapeId: "wilderveil",
-      biomeName: "Wilderveil",
-      sites: [],
-      position: { x: 1, y: 0 },
-      state,
-      enhancedSiteType: null,
-      forwardIds: [],
-      backwardIds: [],
-      knownDreamsignId: DREAMSIGN_ID,
-    },
+    id: NODE_ID,
+    name: assertLocalized("Wilderveil"),
+    state,
     role: "regular",
     isReachable: true,
     iconRef: artRef.dreamscapeIcon("wilderveil"),

@@ -31,7 +31,6 @@ describe("buildRandomSiteView", () => {
       layer: LayerName.Four,
       indexInLayer: 0,
       dreamscapeId: "fixture-dreamscape",
-      biomeName: "Fixture Dreamscape",
       sites: [site],
       position: { x: 0, y: 0 },
       state: "available",

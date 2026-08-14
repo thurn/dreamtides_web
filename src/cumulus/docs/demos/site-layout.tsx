@@ -16,7 +16,6 @@ import {
 const compositions: readonly SiteLayoutComposition[] = [
   "balanced-gallery",
   "content-led-gallery",
-  "balanced-dialogue",
   "balanced-revelation",
   "content-led-revelation",
   "balanced-expanded-revelation",
@@ -31,7 +30,7 @@ function Demo() {
     "speaking",
   );
   const [sceneVisible, setSceneVisible] = useState(false);
-  const [atmosphere, setAtmosphere] = useState<"warm" | "violet">("violet");
+  const [moteTint, setMoteTint] = useState<"warm" | "violet">("violet");
   const [content, setContent] = useState<"gallery" | "dialogue" | "revelation">(
     "gallery",
   );
@@ -65,10 +64,10 @@ function Demo() {
           }
         />
         <DemoSelect
-          label="Atmosphere"
-          value={atmosphere}
+          label="Mote tint"
+          value={moteTint}
           values={["warm", "violet"]}
-          onChange={(value) => setAtmosphere(value as "warm" | "violet")}
+          onChange={(value) => setMoteTint(value as "warm" | "violet")}
         />
         <DemoToggle
           label="Scene art"
@@ -98,7 +97,7 @@ function Demo() {
           <SiteLayout
             siteId="catalog-site"
             scene={sceneVisible ? artRef.dreamscapeScene("wilderveil") : null}
-            atmosphere={atmosphere}
+            moteTint={moteTint}
             guide={{
               id: "catalog-guide",
               name: assertLocalized("Dream Guide"),
@@ -145,7 +144,7 @@ export const siteLayoutDemo: CumulusComponent = {
   id: "site-layout",
   title: "Site Layout",
   blurb:
-    "The responsive full-stage composition for routed character-led sites, with scene, atmosphere, guide, speech, safe areas, and one site-body region.",
+    "The responsive full-stage composition for routed character-led sites, with scene, mote tint, guide, speech, safe areas, and one site-body region.",
   callout:
     "Choose one named composition and let the site body choose its own material.",
   details: [
@@ -158,7 +157,7 @@ export const siteLayoutDemo: CumulusComponent = {
   Component: Demo,
   usage: [
     {
-      code: `<SiteLayout siteId="shop" scene={scene} atmosphere="warm" guide={guide} composition="balanced-gallery"><ShopGallery /></SiteLayout>`,
+      code: `<SiteLayout siteId="shop" scene={scene} moteTint="warm" guide={guide} composition="balanced-gallery"><ShopGallery /></SiteLayout>`,
     },
   ],
   demo: { defaultArgs: {} },

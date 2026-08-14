@@ -19,7 +19,10 @@ export function PurgeSiteScreenAdapter({ siteId }: { siteId: string }) {
       ? (state.atlas.nodes[state.currentDreamscape] ?? null)
       : null;
   const site = node?.sites.find((candidate) => candidate.id === siteId) ?? null;
-  const guide = resolvePurgeGuide(guides, site?.guideIdOverride);
+  const guide = resolvePurgeGuide(
+    guides,
+    site?.randomSite?.presentingGuideId,
+  );
   const guideLine = useGuideDialogue(guide, "site");
 
   const view = useMemo(

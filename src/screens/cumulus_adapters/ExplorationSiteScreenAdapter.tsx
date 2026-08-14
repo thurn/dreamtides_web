@@ -17,7 +17,10 @@ export function ExplorationSiteScreenAdapter({ siteId }: { siteId: string }) {
   const current = selectCurrentSite(state, siteId, "Exploration");
   const node = current?.node ?? null;
   const site = current?.site ?? null;
-  const guide = resolveExplorationGuide(journeyContent.guides, site?.guideIdOverride);
+  const guide = resolveExplorationGuide(
+    journeyContent.guides,
+    site?.randomSite?.presentingGuideId,
+  );
   const guideLine = useGuideDialogue(guide, "site");
   const runtime = state.siteRuntime[siteId];
   const explorationRuntime = runtime?.kind === "exploration" ? runtime : null;

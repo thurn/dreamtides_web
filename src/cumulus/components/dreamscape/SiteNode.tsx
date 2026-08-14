@@ -22,7 +22,7 @@ import * as React from "react";
 import type { CSSProperties } from "react";
 import { richText, type RichText } from "../card/rich-text";
 import { type ScatterPoint } from "./dreamscape-scatter";
-import type { SiteState } from "../../../types/journey";
+import type { SiteType } from "../../../types/site-type";
 import { type Glyph, GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, withAlpha } from "../../primitives/color";
 import { useRevealSource } from "../../internal/reveal/context";
@@ -47,7 +47,12 @@ const NODE_ACCENT: CumulusColor = "accent";
  * single source of truth for position, label, and interaction state.
  */
 export interface DreamscapeSiteModel {
-  site: SiteState;
+  /** Stable site identity. */
+  id: string;
+  /** Site category exposed for diagnostics. */
+  type: SiteType;
+  /** Whether this site has already been completed. */
+  isVisited: boolean;
   pos: ScatterPoint;
   index: number;
   /** This site is the dreamscape's guardian battle. */
@@ -108,10 +113,10 @@ export function SiteNode({
   presentation = "scene",
   onSelect,
 }: SiteNodeProps): React.ReactElement {
-  const { site, pos, index, isBattle, isLocked, isInteractive } = model;
+  const { id, type, pos, index, isBattle, isLocked, isInteractive } = model;
 
   const binding = useRevealSource({
-    identity: { entityType: "site", entityId: revealEntityId("site", site.id) },
+    identity: { entityType: "site", entityId: revealEntityId("site", id) },
     spec: {
       primary: {
         kind: "infoCard",
@@ -124,7 +129,7 @@ export function SiteNode({
       },
       secondaries: [],
     },
-    onActivate: isInteractive ? () => onSelect(site.id) : undefined,
+    onActivate: isInteractive ? () => onSelect(id) : undefined,
   });
   const lastPointerType = React.useRef<string | null>(null);
   const pointerDown = binding.sourceProps.onPointerDown;
@@ -177,18 +182,18 @@ export function SiteNode({
       }}
       onClick={() => {
         if (isInteractive && lastPointerType.current !== "touch")
-          onSelect(site.id);
+          onSelect(id);
       }}
       onKeyDown={(event) => {
         if (isInteractive && (event.key === "Enter" || event.key === " ")) {
           event.preventDefault();
-          onSelect(site.id);
+          onSelect(id);
         }
       }}
       ariaLabelMessage={model.label}
       aria-disabled={!isInteractive}
-      data-site-id={site.id}
-      data-site-type={site.type}
+      data-site-id={id}
+      data-site-type={type}
       data-site-node-presentation={presentation}
       data-site-locked={isLocked ? "true" : "false"}
       data-interactive={isInteractive ? "true" : "false"}

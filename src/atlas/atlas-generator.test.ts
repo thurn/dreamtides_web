@@ -636,7 +636,6 @@ describe("generateInitialAtlas structural invariants", () => {
       expect(atlas.nodes[atlas.startingNodeId].dreamscapeId).toBe(starter?.id);
       const boss = atlas.nodes[atlas.bossNodeId];
       expect(boss.dreamscapeId).toBe(TEST_ATLAS_DATA.boss.dreamscapeId);
-      expect(boss.biomeName).toBe(TEST_ATLAS_DATA.boss.place);
       expect(boss.enhancedSiteType).toBeNull();
       expect(boss.sites[boss.sites.length - 1]?.type).toBe("Battle");
     }
@@ -1032,7 +1031,6 @@ describe("advanceAtlas", () => {
         // since the literal deliberately omits a required field.
         snapshotNodes[id] = {
           ...rest,
-          biomeName: "",
           sites: [],
         } as unknown as DreamscapeNode;
       } else {
@@ -1060,14 +1058,13 @@ describe("advanceAtlas", () => {
     );
 
     // Every newly-available forward node is fully revealed: it carries a real
-    // dreamscape, a name, and a non-empty site list ending in a Battle so the
+    // dreamscape and a non-empty site list ending in a Battle so the
     // player can actually clear it and progress.
     for (const id of forwardTargets) {
       const node = advanced.nodes[id];
       expect(node.state).toBe("available");
       expect(node.dreamscapeId).not.toBeNull();
       expect(node.dreamscapeId).not.toBeUndefined();
-      expect(node.biomeName).not.toBe("");
       expect(node.sites.length).toBeGreaterThan(0);
       expect(node.sites.some((s) => s.type === "Battle")).toBe(true);
     }

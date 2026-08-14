@@ -24,7 +24,7 @@ export function RandomSiteScreenAdapter({ siteId }: { siteId: string }) {
   const guide = requireGuideForSiteType(
     journeyContent.guides,
     "RandomSite",
-    site?.guideIdOverride,
+    site?.randomSite?.presentingGuideId,
   );
   const guideLine = useGuideDialogue(guide, "random-site");
   const view = useMemo(

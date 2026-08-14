@@ -5,7 +5,6 @@ import { loadCardDatabase } from "../data/card-database";
 import { loadSitesData, siteTypeIcon } from "../data/sites-data";
 import {
   OfferTile,
-  type OfferTileCard,
   type OfferTileFourCards,
   type OfferTileModel,
 } from "../cumulus/components/controls/OfferTile";
@@ -28,24 +27,21 @@ const fixtureCard = (
   cardId: string,
   name: string,
   imageNumber: number,
-): OfferTileCard => {
+): Readonly<CardData> => {
   const id = asCardId(cardId);
   return {
-    cardId: id,
-    displaySnapshot: {
-      id,
-      name: asCardName(name),
-      cardNumber: imageNumber,
-      cardType: "Character",
-      subtype: "",
-      isStarter: false,
-      energyCost: null,
-      spark: null,
-      isFast: false,
-      renderedText: "",
-      imageNumber,
-      artOwned: true,
-    },
+    id,
+    name: asCardName(name),
+    cardNumber: imageNumber,
+    cardType: "Character",
+    subtype: "",
+    isStarter: false,
+    energyCost: null,
+    spark: null,
+    isFast: false,
+    renderedText: "",
+    imageNumber,
+    artOwned: true,
   };
 };
 
@@ -233,14 +229,13 @@ export const OFFER_TILE_DEBUG_ARCHETYPE_IDS = MERCHANT_ARCHETYPE_BUILDERS.map(
 ).filter((archetypeId) => archetypeId !== "strong_card");
 
 function hydrateCard(
-  card: OfferTileCard,
+  card: Readonly<CardData>,
   cardsById: ReadonlyMap<string, CardData>,
-): OfferTileCard {
-  const displaySnapshot = cardsById.get(card.cardId);
-  return displaySnapshot === undefined ? card : { ...card, displaySnapshot };
+): Readonly<CardData> {
+  return cardsById.get(card.id) ?? card;
 }
 
-function hydrateCards<T extends readonly OfferTileCard[]>(
+function hydrateCards<T extends readonly Readonly<CardData>[]>(
   cards: T,
   cardsById: ReadonlyMap<string, CardData>,
 ): T {

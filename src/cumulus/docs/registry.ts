@@ -61,7 +61,6 @@ import { textFieldDemo } from "./demos/text-field";
 import { textAreaDemo } from "./demos/text-area";
 import { transfigurationButtonDemo } from "./demos/transfiguration-button";
 import { transientStatusToastDemo } from "./demos/transient-status-toast";
-import { wagerPrizeCardDemo } from "./demos/wager-prize-card";
 import { siteLayoutDemo } from "./demos/site-layout";
 import { dreamsignReplacementDialogDemo } from "./demos/dreamsign-replacement-dialog";
 import { transfigurationPickerPanelDemo } from "./demos/transfiguration-picker-panel";
@@ -263,7 +262,6 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   siteNodeDemo,
   siteLayoutDemo,
   offerTileDemo,
-  wagerPrizeCardDemo,
 ];
 
 /** Look up a registry entry by its route id. */

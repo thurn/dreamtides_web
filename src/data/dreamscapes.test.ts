@@ -227,7 +227,11 @@ describe("dreamscape content referential integrity", () => {
       expect(
         guideForSite(guides, {
           type,
-          guideIdOverride: owner?.guideId ?? undefined,
+          randomSite: {
+            mode: "single",
+            candidateSiteTypes: [type],
+            presentingGuideId: owner?.guideId ?? undefined,
+          },
         })?.id,
       ).toBe(owner?.guideId);
     }

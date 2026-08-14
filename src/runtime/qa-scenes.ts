@@ -223,7 +223,6 @@ const RANDOM_SITE_ATLAS_SCENE: QaScene = {
     const node = {
       ...target,
       dreamscapeId: dreamscape.id,
-      biomeName: dreamscape.name,
       sites,
       enhancedSiteType: "RandomSite" as const,
       knownDreamsignId: null,
@@ -1108,9 +1107,9 @@ function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
             ? {
                 ...site,
                 type: destination,
-                guideIdOverride: guideId,
                 randomSite: {
                   mode: "single" as const,
+                  presentingGuideId: guideId,
                   candidateSiteTypes: [destination],
                   destinationSiteType: destination,
                   materialized: true,

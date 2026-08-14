@@ -111,7 +111,6 @@ function makeNode(sites: SiteState[]): DreamscapeNode {
     layer: LayerName.Two,
     indexInLayer: 0,
     dreamscapeId: "d1",
-    biomeName: "Biome",
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -270,9 +269,9 @@ describe("Random Site", () => {
   function homeRandomSite(): SiteState {
     return {
       ...makeSite("RandomSite", true),
-      guideIdOverride: "fixture-random-guide",
       randomSite: {
         mode: "homeChoice",
+        presentingGuideId: "fixture-random-guide",
         candidateSiteTypes: [
           "Shop",
           "Purge",
@@ -319,9 +318,9 @@ describe("Random Site", () => {
       id: SITE_ID,
       type: selected,
       isEnhanced: true,
-      guideIdOverride: "fixture-random-guide",
       randomSite: {
         mode: "homeChoice",
+        presentingGuideId: "fixture-random-guide",
         destinationSiteType: selected,
         materialized: true,
       },
@@ -338,9 +337,9 @@ describe("Random Site", () => {
   it("materializes a persisted single destination when entered", () => {
     const wrapper: SiteState = {
       ...makeSite("RandomSite", true),
-      guideIdOverride: "fixture-random-guide",
       randomSite: {
         mode: "single",
+        presentingGuideId: "fixture-random-guide",
         candidateSiteTypes: ["Exploration"],
         destinationSiteType: "Exploration",
       },
@@ -355,7 +354,9 @@ describe("Random Site", () => {
       id: SITE_ID,
       type: "Exploration",
       isEnhanced: true,
-      guideIdOverride: "fixture-random-guide",
+      randomSite: {
+        presentingGuideId: "fixture-random-guide",
+      },
     });
   });
 

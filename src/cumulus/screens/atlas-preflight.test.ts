@@ -12,7 +12,6 @@ function node(id: string): DreamscapeNode {
     layer: LayerName.Two,
     indexInLayer: 0,
     dreamscapeId: null,
-    biomeName: "",
     sites: [],
     position: { x: 0, y: 0 },
     state: "available",
@@ -25,7 +24,9 @@ function node(id: string): DreamscapeNode {
 
 function item(id: string, overrides: Partial<AtlasNodeModel>): AtlasNodeModel {
   return {
-    node: node(id),
+    id,
+    name: assertLocalized(id),
+    state: node(id).state,
     role: "regular",
     isReachable: true,
     iconRef: null,

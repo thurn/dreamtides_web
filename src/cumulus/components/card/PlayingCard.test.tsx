@@ -3,11 +3,12 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { tx } from "@trox/runtime";
 import { CumulusRoot } from "../../CumulusRoot";
 import {
   PLAYING_CARD_DESIGN,
   PlayingCard,
-  WagerPrizeCard,
+  PlayingCardPrize,
 } from "./PlayingCard";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 
@@ -21,8 +22,8 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-describe("WagerPrizeCard", () => {
-  it("keeps the jackpot reward in one sentence and flips into the drawn card", () => {
+describe("PlayingCardPrize", () => {
+  it("keeps related Dreamsign reveal semantics and flips into the drawn card", () => {
     const host = document.createElement("div");
     document.body.append(host);
     const root = createRoot(host);
@@ -36,32 +37,37 @@ describe("WagerPrizeCard", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <WagerPrizeCard
-            prizeId="jack"
-            minimumWinningRank="J"
-            essenceReward={200}
-            rewardDreamsign={dreamsign}
-            size="wagerCompact"
+          <PlayingCardPrize
+            objectId="fixture-prize"
+            title={tx("Fixture prize", "[test] Fixture prize title.")}
+            description={tx(
+              "Fixture reward",
+              "[test] Fixture prize description.",
+            )}
+            accessibilityLabel={tx(
+              "Fixture prize and reward",
+              "[test] Fixture accessible prize name.",
+            )}
+            relatedDreamsign={dreamsign}
+            size="compact"
             drawnCard={{ rank: "Q", suit: "hearts" }}
           />
         </CumulusRoot>,
       );
     });
 
-    const prize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
+    const prize = host.querySelector<HTMLElement>("[data-playing-card-prize]");
     const description = prize?.querySelector<HTMLElement>(
-      "[data-wager-prize-description]",
+      "[data-playing-card-prize-description]",
     );
     expect(
-      prize?.querySelector<HTMLElement>("[data-wager-prize-copy]")?.style.gap,
+      prize?.querySelector<HTMLElement>("[data-playing-card-prize-copy]")?.style.gap,
     ).toBe("var(--space-xs)");
-    expect(description?.textContent).toContain("200");
-    expect(description?.textContent).toContain("Bezoar");
     expect(
-      description?.querySelector("[data-wager-prize-dreamsign-name]"),
+      description?.querySelector("[data-playing-card-prize-dreamsign-name]"),
     ).not.toBeNull();
     const dreamsignSource = prize?.querySelector<HTMLElement>(
-      "[data-wager-prize-dreamsign-source]",
+      "[data-playing-card-prize-dreamsign-source]",
     );
     expect(dreamsignSource?.dataset.revealEntityType).toBe("dreamsign");
     expect(dreamsignSource?.dataset.revealPrimaryVariant).toBe("object");
@@ -71,23 +77,30 @@ describe("WagerPrizeCard", () => {
       "Look at the top card of your deck",
     );
     expect(
-      dreamsignSource?.querySelector("[data-wager-prize-title]"),
+      dreamsignSource?.querySelector("[data-playing-card-prize-title]"),
     ).not.toBeNull();
     expect(
-      dreamsignSource?.querySelector("[data-wager-prize-description]"),
+      dreamsignSource?.querySelector("[data-playing-card-prize-description]"),
     ).not.toBeNull();
-    expect(prize?.dataset.wagerPrizeCardState).toBe("prize");
+    expect(prize?.dataset.playingCardPrizeState).toBe("prize");
     expect(prize?.dataset.playingCard).toBeUndefined();
 
     act(() => {
       root.render(
         <CumulusRoot>
-          <WagerPrizeCard
-            prizeId="jack"
-            minimumWinningRank="J"
-            essenceReward={200}
-            rewardDreamsign={dreamsign}
-            size="wagerCompact"
+          <PlayingCardPrize
+            objectId="fixture-prize"
+            title={tx("Fixture prize", "[test] Fixture prize title.")}
+            description={tx(
+              "Fixture reward",
+              "[test] Fixture prize description.",
+            )}
+            accessibilityLabel={tx(
+              "Fixture prize and reward",
+              "[test] Fixture accessible prize name.",
+            )}
+            relatedDreamsign={dreamsign}
+            size="compact"
             drawnCard={{ rank: "Q", suit: "hearts" }}
             revealDrawnCard
           />
@@ -95,8 +108,8 @@ describe("WagerPrizeCard", () => {
       );
     });
 
-    const revealed = host.querySelector<HTMLElement>("[data-wager-prize-card]");
-    expect(revealed?.dataset.wagerPrizeCardState).toBe("drawn");
+    const revealed = host.querySelector<HTMLElement>("[data-playing-card-prize]");
+    expect(revealed?.dataset.playingCardPrizeState).toBe("drawn");
     expect(revealed?.dataset.playingCard).toBe("Q-hearts");
     expect(revealed?.getAttribute("aria-label")).toContain("Q");
     expect(revealed?.getAttribute("aria-label")).toContain("hearts");
@@ -114,7 +127,7 @@ describe("WagerPrizeCard", () => {
         <CumulusRoot>
           <PlayingCard
             variant="fourSuit"
-            size="wagerCompact"
+            size="compact"
             drawnCard={{ rank: "7", suit: "clubs" }}
           />
         </CumulusRoot>,
@@ -149,7 +162,7 @@ describe("WagerPrizeCard", () => {
         <CumulusRoot>
           <PlayingCard
             variant="fourSuit"
-            size="wagerCompact"
+            size="compact"
             drawnCard={{ rank: "7", suit: "clubs" }}
             revealDrawnCard
           />
@@ -173,7 +186,7 @@ describe("WagerPrizeCard", () => {
         <CumulusRoot>
           <PlayingCard
             variant="faceDown"
-            size="wagerCompact"
+            size="compact"
             drawnCard={{ rank: "A", suit: "spades" }}
           />
         </CumulusRoot>,
@@ -189,7 +202,7 @@ describe("WagerPrizeCard", () => {
         <CumulusRoot>
           <PlayingCard
             variant="faceDown"
-            size="wagerCompact"
+            size="compact"
             drawnCard={{ rank: "A", suit: "spades" }}
             revealDrawnCard
           />
@@ -201,7 +214,7 @@ describe("WagerPrizeCard", () => {
     act(() => root.unmount());
   });
 
-  it("renders and emphasizes a Starway Stairs prize", () => {
+  it("renders current and muted prize emphasis", () => {
     const host = document.createElement("div");
     document.body.append(host);
     const root = createRoot(host);
@@ -209,11 +222,18 @@ describe("WagerPrizeCard", () => {
     act(() => {
       root.render(
         <CumulusRoot>
-          <WagerPrizeCard
-            prizeId="starway-1"
-            minimumWinningRank="3"
-            essenceReward={60}
-            rewardDreamsign={null}
+          <PlayingCardPrize
+            objectId="fixture-prize"
+            title={tx("Fixture prize", "[test] Fixture prize title.")}
+            description={tx(
+              "Fixture reward",
+              "[test] Fixture prize description.",
+            )}
+            accessibilityLabel={tx(
+              "Fixture prize and reward",
+              "[test] Fixture accessible prize name.",
+            )}
+            relatedDreamsign={null}
             drawnCard={null}
             emphasis="current"
           />
@@ -221,9 +241,8 @@ describe("WagerPrizeCard", () => {
       );
     });
 
-    const prize = host.querySelector<HTMLElement>("[data-wager-prize-card]");
-    expect(prize?.dataset.wagerPrizeTarget).toBe("3-A");
-    expect(prize?.dataset.wagerPrizeCardEmphasis).toBe("current");
+    const prize = host.querySelector<HTMLElement>("[data-playing-card-prize]");
+    expect(prize?.dataset.playingCardPrizeEmphasis).toBe("current");
     expect(prize?.querySelector("path")?.getAttribute("stroke")).toBe(
       "var(--border-accent-glass)",
     );
@@ -231,18 +250,25 @@ describe("WagerPrizeCard", () => {
       "5",
     );
     expect(
-      prize?.querySelector<HTMLElement>("[data-wager-prize-face]")?.style
+      prize?.querySelector<HTMLElement>("[data-playing-card-prize-face]")?.style
         .background,
     ).toContain("var(--accent-bright)");
 
     act(() => {
       root.render(
         <CumulusRoot>
-          <WagerPrizeCard
-            prizeId="starway-1"
-            minimumWinningRank="3"
-            essenceReward={60}
-            rewardDreamsign={null}
+          <PlayingCardPrize
+            objectId="fixture-prize"
+            title={tx("Fixture prize", "[test] Fixture prize title.")}
+            description={tx(
+              "Fixture reward",
+              "[test] Fixture prize description.",
+            )}
+            accessibilityLabel={tx(
+              "Fixture prize and reward",
+              "[test] Fixture accessible prize name.",
+            )}
+            relatedDreamsign={null}
             drawnCard={{ rank: "3", suit: "clubs" }}
             revealDrawnCard
             emphasis="muted"
@@ -252,12 +278,12 @@ describe("WagerPrizeCard", () => {
     });
 
     const mutedPrize = host.querySelector<HTMLElement>(
-      "[data-wager-prize-card]",
+      "[data-playing-card-prize]",
     );
     expect(mutedPrize?.style.opacity).toBe("");
     expect(mutedPrize?.style.filter).toBe("");
     expect(
-      mutedPrize?.querySelector<HTMLElement>("[data-wager-prize-copy]")?.style
+      mutedPrize?.querySelector<HTMLElement>("[data-playing-card-prize-copy]")?.style
         .color,
     ).toBe("var(--text-on-glass-muted)");
     expect(

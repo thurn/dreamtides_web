@@ -23,7 +23,9 @@ The dreamscape site disc: a floating circular node carrying a glyph and accent r
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `site` | `SiteState` | no |  |
+| `id` | `string` | no | Stable site identity. |
+| `type` | `"Battle" \| "Draft" \| "Shop" \| "Purge" \| "Essence" \| "Transfiguration" \| "Duplication" \| "Reward" \| "Augury" \| "DreamsignBazaar" \| "DreamsignRevelation" \| "RandomSite" \| "Gamble" \| "Exploration"` | no | Site category exposed for diagnostics. |
+| `isVisited` | `boolean` | no | Whether this site has already been completed. |
 | `pos` | `ScatterPoint` | no |  |
 | `index` | `number` | no |  |
 | `isBattle` | `boolean` | no | This site is the dreamscape's guardian battle. |
@@ -44,11 +46,11 @@ import { SiteNode } from "src/cumulus/components/dreamscape/SiteNode";
 <div ref={stageRef} style={{ position: "relative" }}>
   {models.map((model) => (
     <SiteNode
-      key={model.site.id}
+      key={model.id}
       model={model}
       motion
       stageRef={stageRef}
-      onSelect={() => visitSite(model.site)}
+      onSelect={() => visitSite(model.id)}
     />
   ))}
 </div>

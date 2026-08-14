@@ -40,7 +40,7 @@ export function GambleSiteScreenAdapter({
   const runtime = runtimeCandidate?.kind === "gamble" ? runtimeCandidate : null;
   const guide = resolveGambleGuide(
     journeyContent.guides,
-    site?.guideIdOverride,
+    site?.randomSite?.presentingGuideId,
   );
   const dialogueContext =
     site?.randomSite?.materialized === true

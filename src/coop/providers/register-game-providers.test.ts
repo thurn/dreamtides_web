@@ -755,7 +755,6 @@ function makeMerchantFixture(): {
           layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
-          biomeName: "Fixture",
           sites: [site],
           position: { x: 0, y: 0 },
           state: "available",

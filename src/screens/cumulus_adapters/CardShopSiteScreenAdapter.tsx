@@ -28,7 +28,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: string }) {
   const shopRuntime = runtime?.kind === "shop" ? runtime : null;
   const guide = resolveCardShopGuide(
     journeyContent.guides,
-    site?.guideIdOverride,
+    site?.randomSite?.presentingGuideId,
   );
   const guideLine = useGuideDialogue(guide, "site");
 

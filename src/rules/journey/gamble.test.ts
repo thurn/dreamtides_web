@@ -95,7 +95,6 @@ function stateWith(
             layer: LayerName.Two,
             indexInLayer: 0,
             dreamscapeId: "fixture-dreamscape",
-            biomeName: "Fixture",
             sites: [site],
             position: { x: 0, y: 0 },
             state: "available",

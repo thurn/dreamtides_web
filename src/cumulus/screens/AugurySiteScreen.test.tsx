@@ -122,7 +122,7 @@ function view(): AugurySiteView {
         tile: {
           id: "encounter-fixture:B",
           kind: "card-gift",
-          card: { cardId: direct.id, displaySnapshot: direct },
+          card: direct,
         },
         visual: {
           kind: "cards",
@@ -438,12 +438,9 @@ describe("AugurySiteScreen", () => {
           visual: {
             kind: "site",
             model: {
-              site: {
-                id: "augury-preview:Shop",
-                type: "Shop",
-                isEnhanced: false,
-                isVisited: false,
-              },
+              id: "augury-preview:Shop",
+              type: "Shop",
+              isVisited: false,
               pos: { x: 50, y: 50 },
               index: 0,
               isBattle: false,

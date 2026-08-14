@@ -106,7 +106,6 @@ function makeState(): JourneyState {
     layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: "winterwake",
-    biomeName: "Winterwake",
     sites: [site],
     position: { x: 0, y: 0 },
     state: "available",

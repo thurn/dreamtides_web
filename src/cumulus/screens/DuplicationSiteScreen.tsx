@@ -6,10 +6,13 @@ import type { GameCardModel } from "../components/card/CardView";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import type { ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
-import { SiteLayout, type SiteLayoutGuide } from "../components/layout/SiteLayout";
+import {
+  SiteLayout,
+  type SiteLayoutGuideView,
+} from "../components/layout/SiteLayout";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 
-export type DuplicationGuideView = Omit<SiteLayoutGuide, "presence">;
+export type DuplicationGuideView = SiteLayoutGuideView;
 
 export interface DuplicationCardView {
   /** Concrete deck-entry id; duplicate catalog cards remain independent choices. */
@@ -75,7 +78,7 @@ export function DuplicationSiteScreen({
     <SiteLayout
       siteId={view.siteId}
       scene={view.scene}
-      atmosphere="warm"
+      moteTint="warm"
       guide={{ ...view.guide, presence: "speaking" }}
       composition={view.isEnhanced ? "balanced-gallery" : "content-led-gallery"}
     >

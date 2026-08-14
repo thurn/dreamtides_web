@@ -233,7 +233,6 @@ function journeyAtlas(): DreamAtlas {
         layer: LayerName.One,
         indexInLayer: 0,
         dreamscapeId: "dreamscape-one",
-        biomeName: "One",
         sites: [
           {
             id: SITE_ID,
@@ -254,7 +253,6 @@ function journeyAtlas(): DreamAtlas {
         layer: LayerName.Two,
         indexInLayer: 0,
         dreamscapeId: null,
-        biomeName: "",
         sites: [],
         position: { x: 1, y: 0 },
         state: "unrevealed",
@@ -322,7 +320,6 @@ const fakeCompletionProvider: BattleCompletionProvider = {
         nodes[forwardId] = {
           ...forward,
           dreamscapeId: "dreamscape-two",
-          biomeName: "Two",
           state: "available",
         };
       }

@@ -30,7 +30,6 @@ function node(
     layer,
     indexInLayer: 0,
     dreamscapeId,
-    biomeName: dreamscapeId === null ? "" : id,
     sites: [],
     position: { x: 0, y: 0 },
     state,

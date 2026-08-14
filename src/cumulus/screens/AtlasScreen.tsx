@@ -137,8 +137,8 @@ export function AtlasScreen({
           <div data-atlas-node-layer="" style={nodeLayerStyle}>
             {view.nodes.map(({ model, left, top, boxSize }) => (
               <div
-                key={model.node.id}
-                data-atlas-node-placement={model.node.id}
+                key={model.id}
+                data-atlas-node-placement={model.id}
                 style={{
                   position: "absolute",
                   left,

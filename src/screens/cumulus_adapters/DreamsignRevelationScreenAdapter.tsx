@@ -37,7 +37,7 @@ export function DreamsignRevelationScreenAdapter({
   const remainingDreamsignPoolKey = state.remainingDreamsignPool.join("\u0000");
   const guide = resolveDreamsignRevelationGuide(
     journeyContent.guides,
-    site?.guideIdOverride,
+    site?.randomSite?.presentingGuideId,
   );
   const guideLine = useGuideDialogue(guide, "site");
   const [claimedIndex, setClaimedIndex] = useState<number | null>(null);

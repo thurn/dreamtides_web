@@ -846,7 +846,6 @@ describe("JourneyApp", () => {
               layer: LayerName.One,
               indexInLayer: 0,
               dreamscapeId: "test_dreamscape",
-              biomeName: "Test Dreamscape",
               sites: [
                 {
                   id: "site-1",
@@ -906,7 +905,6 @@ describe("JourneyApp", () => {
               layer: LayerName.One,
               indexInLayer: 0,
               dreamscapeId: "test_dreamscape",
-              biomeName: "Test Dreamscape",
               sites: [
                 {
                   id: "site-1",

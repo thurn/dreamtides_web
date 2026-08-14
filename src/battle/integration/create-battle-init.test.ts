@@ -1099,9 +1099,9 @@ describe("createBattleInit", () => {
       // snapshot's contents.
       const sourceAtlas = baseInput.state.atlas;
       const firstNodeId = Object.keys(sourceAtlas.nodes)[0];
-      const originalBiomeName = snapshot.nodes[firstNodeId].biomeName;
-      sourceAtlas.nodes[firstNodeId].biomeName = "Mutated After Snapshot";
-      expect(snapshot.nodes[firstNodeId].biomeName).toBe(originalBiomeName);
+      const originalX = snapshot.nodes[firstNodeId].position.x;
+      sourceAtlas.nodes[firstNodeId].position.x = originalX + 100;
+      expect(snapshot.nodes[firstNodeId].position.x).toBe(originalX);
     });
   });
 });

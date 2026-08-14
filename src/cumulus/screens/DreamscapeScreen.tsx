@@ -112,7 +112,7 @@ export function DreamscapeScreen({
   const collectingModel =
     collectingSiteId === null
       ? null
-      : (view.sites.find((model) => model.site.id === collectingSiteId) ??
+      : (view.sites.find((model) => model.id === collectingSiteId) ??
         null);
   const collectingReward =
     collectingSiteId === null
@@ -123,9 +123,9 @@ export function DreamscapeScreen({
     (siteId: string) => {
       if (collectingSiteId !== null || view.replacement !== null) return;
       const model = view.sites.find(
-        (candidate) => candidate.site.id === siteId,
+        (candidate) => candidate.id === siteId,
       );
-      if (model?.site.type === "Essence" || model?.site.type === "Reward") {
+      if (model?.type === "Essence" || model?.type === "Reward") {
         completionRequestedRef.current = null;
         setCollectingSiteId(siteId);
       }
@@ -210,21 +210,21 @@ export function DreamscapeScreen({
       {view.sites
         .filter(
           (model) =>
-            !model.site.isVisited || model.site.id === collectingSiteId,
+            !model.isVisited || model.id === collectingSiteId,
         )
         .map((model) => {
-          const isCollecting = model.site.id === collectingSiteId;
+          const isCollecting = model.id === collectingSiteId;
           const renderedModel =
             collectingSiteId === null
               ? model
               : { ...model, isInteractive: false };
           const isInlineRewardSite =
-            model.site.type === "Essence" || model.site.type === "Reward";
+            model.type === "Essence" || model.type === "Reward";
 
           if (!isInlineRewardSite) {
             return (
               <SiteNode
-                key={model.site.id}
+                key={model.id}
                 model={renderedModel}
                 motion
                 onSelect={handleSelectSite}
@@ -234,28 +234,28 @@ export function DreamscapeScreen({
 
           return (
             <motion.div
-              key={model.site.id}
+              key={model.id}
               data-essence-site-departure={
-                isCollecting && model.site.type === "Essence"
-                  ? model.site.id
+                isCollecting && model.type === "Essence"
+                  ? model.id
                   : undefined
               }
               data-reward-site-departure={
-                isCollecting && model.site.type === "Reward"
-                  ? model.site.id
+                isCollecting && model.type === "Reward"
+                  ? model.id
                   : undefined
               }
               initial={false}
               animate={{
                 opacity:
-                  isCollecting && model.site.type === "Reward"
+                  isCollecting && model.type === "Reward"
                     ? 0
                     : isCollecting
                       ? [1, 0.55, 0, 0]
                       : 1,
               }}
               transition={
-                isCollecting && model.site.type === "Essence"
+                isCollecting && model.type === "Essence"
                   ? {
                       duration: INLINE_REWARD_DURATION_SECONDS,
                       // Clear the site early while the gained value continues
@@ -273,7 +273,7 @@ export function DreamscapeScreen({
                 height: 0,
                 zIndex: 10,
                 willChange:
-                  isCollecting && model.site.type === "Essence"
+                  isCollecting && model.type === "Essence"
                     ? "opacity"
                     : undefined,
               }}
@@ -289,7 +289,7 @@ export function DreamscapeScreen({
 
       {collectingModel !== null && collectingReward !== null && (
         <div
-          key={collectingModel.site.id}
+          key={collectingModel.id}
           role="status"
           aria-live="polite"
           aria-label={resolve(
@@ -320,13 +320,13 @@ export function DreamscapeScreen({
                 ),
           )}
           data-essence-collection={
-            collectingModel.site.type === "Essence"
-              ? collectingModel.site.id
+            collectingModel.type === "Essence"
+              ? collectingModel.id
               : undefined
           }
           data-reward-collection={
-            collectingModel.site.type === "Reward"
-              ? collectingModel.site.id
+            collectingModel.type === "Reward"
+              ? collectingModel.id
               : undefined
           }
           data-inline-reward-kind={collectingReward.kind}

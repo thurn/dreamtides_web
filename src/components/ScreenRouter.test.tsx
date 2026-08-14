@@ -337,7 +337,6 @@ function makeStateFor(site: SiteState): JourneyState {
           layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
-          biomeName: "Router Dreamscape",
           position: { x: 0, y: 0 },
           state: "available",
           enhancedSiteType: null,

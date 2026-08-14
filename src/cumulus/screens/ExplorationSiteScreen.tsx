@@ -76,7 +76,7 @@ import {
 } from "../primitives/chrome-geometry";
 import {
   SiteLayout,
-  type SiteLayoutGuide,
+  type SiteLayoutGuideView,
 } from "../components/layout/SiteLayout";
 import type { TransfigurationCandidateView } from "./TransfigurationSiteScreen";
 import { TransfigurationDetailPanel } from "../components/card/TransfigurationDetailPanel";
@@ -90,7 +90,7 @@ import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import { requireDreamsignId } from "../../data/dreamsigns";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
-import type { CardType, FrozenCardData } from "../../types/cards";
+import type { CardData, CardType } from "../../types/cards";
 import type {
   CardKeywordModification,
   CardTypeChange,
@@ -105,7 +105,7 @@ export interface ExplorationSiteView {
   /** Current dreamscape scene art behind the encounter, when resolved. */
   scene: ArtRef | null;
   /** Resident Dream Guide art and greeting. */
-  guide: Omit<SiteLayoutGuide, "presence">;
+  guide: SiteLayoutGuideView;
   /** UUID-backed card selected from the Exploration prototype pool. */
   card: GameCardModel;
   /** Licensed full-resolution source for the selected card's frame break. */
@@ -580,7 +580,7 @@ export interface ExplorationActionView {
 export type ExplorationEntityView =
   | {
       readonly kind: "card";
-      readonly card: FrozenCardData;
+      readonly card: Readonly<CardData>;
       /** Prepared deck-entry UUID when this entity discloses a concrete deck object. */
       readonly entryId?: string;
       readonly copies?: number;
@@ -1387,8 +1387,8 @@ function explorationRewardIdentity(
         reward.targetNodeId,
         reward.insertionIndex,
         ...reward.siblingSiteIdsBefore,
-        reward.model.site.id,
-        reward.model.site.type,
+        reward.model.id,
+        reward.model.type,
       ].join("|");
     case "dreamsign-mutation":
       return [
@@ -3677,7 +3677,7 @@ export function ExplorationSiteScreen({
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{ ...view.guide, presence: "speaking" }}
         composition="balanced-gallery"
       >
@@ -4907,8 +4907,8 @@ export function ExplorationSiteScreen({
             data-exploration-site-insertion-source={
               siteInsertionReward.sourceKind
             }
-            data-exploration-site-id={siteInsertionReward.model.site.id}
-            data-exploration-site-type={siteInsertionReward.model.site.type}
+            data-exploration-site-id={siteInsertionReward.model.id}
+            data-exploration-site-type={siteInsertionReward.model.type}
             data-exploration-target-node-id={siteInsertionReward.targetNodeId}
             data-exploration-insertion-index={
               siteInsertionReward.insertionIndex
@@ -4952,7 +4952,7 @@ export function ExplorationSiteScreen({
               tone="reward"
               size={isDesktop ? "compact" : "mini"}
               duration="extended"
-              announcementId={`exploration-site-insertion:${siteInsertionReward.model.site.id}`}
+              announcementId={`exploration-site-insertion:${siteInsertionReward.model.id}`}
             />
             <div
               data-exploration-site-insertion-node=""

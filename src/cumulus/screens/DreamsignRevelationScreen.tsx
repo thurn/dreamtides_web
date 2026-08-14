@@ -118,7 +118,7 @@ export function DreamsignRevelationScreen({
       <SiteLayout
         siteId="dreamsign-revelation"
         scene={view.scene}
-        atmosphere="violet"
+        moteTint="violet"
         guide={{ ...view.guide, presence: "speaking" }}
         composition={
           view.tutorial === undefined

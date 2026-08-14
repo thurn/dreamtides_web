@@ -32,7 +32,7 @@ export function DreamsignBazaarSiteScreenAdapter({
   const shopRuntime = runtime?.kind === "shop" ? runtime : null;
   const guide = resolveDreamsignBazaarGuide(
     journeyContent.guides,
-    site?.guideIdOverride,
+    site?.randomSite?.presentingGuideId,
   );
   const guideLine = useGuideDialogue(guide, "site");
   const [pendingSlotIndex, setPendingSlotIndex] = useState<number | null>(null);

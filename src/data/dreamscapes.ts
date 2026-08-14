@@ -251,10 +251,10 @@ export function otherGuideSignatureSites(
 export function guideForSiteType(
   guides: readonly DreamGuideContent[],
   siteType: SiteType,
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent | null {
-  if (guideIdOverride !== undefined) {
-    return guides.find((guide) => guide.id === guideIdOverride) ?? null;
+  if (presentingGuideId !== undefined) {
+    return guides.find((guide) => guide.id === presentingGuideId) ?? null;
   }
   return guides.find((guide) => guide.siteType === siteType) ?? null;
 }
@@ -263,15 +263,15 @@ export function guideForSiteType(
 export function requireGuideForSiteType(
   guides: readonly DreamGuideContent[],
   siteType: SiteType,
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent {
   const matches =
-    guideIdOverride === undefined
+    presentingGuideId === undefined
       ? guides.filter((guide) => guide.siteType === siteType)
-      : guides.filter((guide) => guide.id === guideIdOverride);
+      : guides.filter((guide) => guide.id === presentingGuideId);
   if (matches.length !== 1) {
     throw new Error(
-      `Expected exactly one Dream Guide for ${guideIdOverride ?? siteType}; found ${String(matches.length)}.`,
+      `Expected exactly one Dream Guide for ${presentingGuideId ?? siteType}; found ${String(matches.length)}.`,
     );
   }
   return matches[0];
@@ -297,10 +297,11 @@ export function guideDialogueLines(
 /** Resolve the guide for a concrete site, honoring Random Site hosting. */
 export function guideForSite(
   guides: readonly DreamGuideContent[],
-  site: Pick<SiteState, "type" | "guideIdOverride">,
+  site: Pick<SiteState, "type" | "randomSite">,
 ): DreamGuideContent | null {
-  if (site.guideIdOverride !== undefined) {
-    return guides.find((guide) => guide.id === site.guideIdOverride) ?? null;
+  const presentingGuideId = site.randomSite?.presentingGuideId;
+  if (presentingGuideId !== undefined) {
+    return guides.find((guide) => guide.id === presentingGuideId) ?? null;
   }
   return guideForSiteType(guides, site.type);
 }

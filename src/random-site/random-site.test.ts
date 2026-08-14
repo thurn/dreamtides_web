@@ -23,7 +23,7 @@ describe("Random Site metadata", () => {
     })).toBe(false);
   });
 
-  it("applies the configured presenting guide when legacy metadata omits one", () => {
+  it("persists the configured presenting guide in Random Site metadata", () => {
     const site: SiteState = {
       id: "fixture-random-site",
       type: "RandomSite",
@@ -39,7 +39,7 @@ describe("Random Site metadata", () => {
       materializeRandomSite(site, "Exploration", "fixture-random-guide"),
     ).toMatchObject({
       type: "Exploration",
-      guideIdOverride: "fixture-random-guide",
+      randomSite: { presentingGuideId: "fixture-random-guide" },
     });
   });
 });

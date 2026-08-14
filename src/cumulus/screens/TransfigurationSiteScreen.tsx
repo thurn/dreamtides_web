@@ -12,12 +12,12 @@ import { token } from "../primitives/tokens";
 import type { TransfigurationType } from "../../types/journey";
 import {
   SiteLayout,
-  type SiteLayoutGuide,
+  type SiteLayoutGuideView,
 } from "../components/layout/SiteLayout";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 
-export type TransfigurationGuideView = Omit<SiteLayoutGuide, "presence">;
+export type TransfigurationGuideView = SiteLayoutGuideView;
 
 export interface TransfigurationFormView extends TransfigurationButtonModel {
   /** Persisted reconstruction payload passed back to the mutation. */
@@ -178,7 +178,7 @@ export function TransfigurationSiteScreen({
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{ ...view.guide, presence: "speaking" }}
         composition={
           view.candidates.some((candidate) => candidate.forms.length > 3)

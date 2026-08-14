@@ -146,12 +146,9 @@ function siteInsertionRewardView(): ExplorationSiteView {
       insertionIndex: 3,
       siblingSiteIdsBefore: ["site-a", "site-b", "exploration-site"],
       model: {
-        site: {
-          id: "site-exploration-source-action",
-          type: "Duplication",
-          isEnhanced: false,
-          isVisited: false,
-        },
+        id: "site-exploration-source-action",
+        type: "Duplication",
+        isVisited: false,
         pos: { x: 50, y: 50 },
         index: 3,
         isBattle: false,
@@ -6012,12 +6009,9 @@ describe("ExplorationSiteScreen", () => {
               choices: siteTypes.map((siteType, index) => ({
                 siteType,
                 model: {
-                  site: {
-                    id: `prepared-site-${String(index)}`,
-                    type: siteType,
-                    isEnhanced: false,
-                    isVisited: false,
-                  },
+                  id: `prepared-site-${String(index)}`,
+                  type: siteType,
+                  isVisited: false,
                   pos: { x: 50, y: 50 },
                   index,
                   isBattle: false,

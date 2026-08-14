@@ -37,9 +37,9 @@ import {
 /** Resolve Amunet, the resident Dream Guide for Dreamsign Bazaars. */
 export function resolveDreamsignBazaarGuide(
   guides: readonly DreamGuideContent[],
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent {
-  return requireGuideForSiteType(guides, "DreamsignBazaar", guideIdOverride);
+  return requireGuideForSiteType(guides, "DreamsignBazaar", presentingGuideId);
 }
 
 /** Build Amunet's guide slice for the shared character-gallery layout. */

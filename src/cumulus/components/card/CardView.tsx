@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
 import "./CardView.css";
-import type { CardData, FrozenCardData, Rarity } from "../../../types/cards";
+import type { CardData, Rarity } from "../../../types/cards";
 import type { CardId } from "../../../types/card-identity";
 import {
   cardIdenticonUri,
@@ -692,7 +692,7 @@ function useCardMetrics(large: boolean): {
 }
 
 export interface CardViewSlotContext {
-  card: CardData | FrozenCardData;
+  card: Readonly<CardData>;
   large: boolean;
   textScale: number;
   typeLine: LocalizedString | null;
@@ -721,7 +721,7 @@ export type GameCardPresentation = "full" | "battlefield";
 
 /** Props for the shared CardView component. */
 export interface CardViewProps {
-  card: CardData | FrozenCardData;
+  card: Readonly<CardData>;
   /** Primary press action for editor and inspector card surfaces. */
   onPress?: () => void;
   /** Semantic reason this card carries the canonical selection ring. */
@@ -1701,11 +1701,10 @@ export interface GameCardModel {
    * same value for its reading reveal, so the compact source and full reveal
    * cannot disagree. Its `id` must equal `cardId`.
    *
-   * `FrozenCardData` provides shallow compile-time readonly fields. It does not
-   * freeze the object at runtime; callers should replace the snapshot whenever
-   * effective display state changes rather than mutating it in place.
+   * The snapshot is shallow-readonly at compile time. Callers should replace it
+   * whenever effective display state changes rather than mutating it in place.
    */
-  readonly displaySnapshot: FrozenCardData;
+  readonly displaySnapshot: Readonly<CardData>;
   /**
    * Semantic description of an applied transfiguration. The renderer derives
    * its canonical glyphs and colors from the descriptor's strict `type`.

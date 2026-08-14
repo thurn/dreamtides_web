@@ -6,8 +6,7 @@ import {
   hasAssignedImage,
 } from "../../../data/card-database";
 import { identiconsForced } from "../../../runtime/identicon-mode";
-import type { CardId } from "../../../types/card-identity";
-import type { FrozenCardData } from "../../../types/cards";
+import type { CardData } from "../../../types/cards";
 import type { TransfigurationType } from "../../../types/journey";
 import type { AuguryArchetypeData } from "../../../types/augury-data";
 import { useRevealSource } from "../../internal/reveal/context";
@@ -41,14 +40,6 @@ export const OFFER_TILE_DIMENSIONS: Readonly<Record<OfferTileSize, number>> = {
   compact: OFFER_TILE_COMPACT_SIZE,
 };
 
-/** UUID-backed card whose original art is shown inside an offer. */
-export interface OfferTileCard {
-  /** Canonical card UUID. Names are display-only and never enter the tile model. */
-  cardId: CardId;
-  /** UUID-matched display data carrying the art asset and authored focal crop. */
-  displaySnapshot: FrozenCardData;
-}
-
 /** UUID-backed dreamsign art shown symbolically inside an offer. */
 export interface OfferTileDreamsign {
   /** Canonical dreamsign UUID. */
@@ -71,32 +62,33 @@ export interface OfferTileSite {
 
 /** A fixed four-card fixture, retained for debug compositions. */
 export type OfferTileFourCards = readonly [
-  OfferTileCard,
-  OfferTileCard,
-  OfferTileCard,
-  OfferTileCard,
+  Readonly<CardData>,
+  Readonly<CardData>,
+  Readonly<CardData>,
+  Readonly<CardData>,
 ];
 
 /** The two to four surfaced card choices carried by a card-draft offer. */
 export type OfferTileCardChoices =
-  | readonly [OfferTileCard, OfferTileCard]
-  | readonly [OfferTileCard, OfferTileCard, OfferTileCard]
+  | readonly [Readonly<CardData>, Readonly<CardData>]
+  | readonly [Readonly<CardData>, Readonly<CardData>, Readonly<CardData>]
   | OfferTileFourCards;
 
 /** The fixed cards granted together by a bundle offer. */
 export type OfferTileBundleCards =
-  | readonly [OfferTileCard, OfferTileCard]
-  | readonly [OfferTileCard, OfferTileCard, OfferTileCard];
+  | readonly [Readonly<CardData>, Readonly<CardData>]
+  | readonly [Readonly<CardData>, Readonly<CardData>, Readonly<CardData>];
 
 /** The one or two starter cards preselected for transfiguration. */
 export type OfferTileStarterCards =
-  readonly [OfferTileCard] | readonly [OfferTileCard, OfferTileCard];
+  | readonly [Readonly<CardData>]
+  | readonly [Readonly<CardData>, Readonly<CardData>];
 
 /** The one to three surfaced deck-card choices in a duplicate offer. */
 export type OfferTileDuplicateCards =
-  | readonly [OfferTileCard]
-  | readonly [OfferTileCard, OfferTileCard]
-  | readonly [OfferTileCard, OfferTileCard, OfferTileCard];
+  | readonly [Readonly<CardData>]
+  | readonly [Readonly<CardData>, Readonly<CardData>]
+  | readonly [Readonly<CardData>, Readonly<CardData>, Readonly<CardData>];
 
 interface OfferTileBase {
   /**
@@ -123,7 +115,7 @@ export type OfferTileCategory =
  * component owns the composition; callers provide only UUID-backed subjects.
  */
 export type OfferTileModel =
-  | (OfferTileBase & { kind: "card-gift"; card: OfferTileCard })
+  | (OfferTileBase & { kind: "card-gift"; card: Readonly<CardData> })
   | (OfferTileBase & {
       kind: "card-draft" | "transfigured-draft";
       cards: OfferTileCardChoices;
@@ -143,7 +135,7 @@ export type OfferTileModel =
   | (OfferTileBase & { kind: "card-bundle"; cards: OfferTileBundleCards })
   | (OfferTileBase & {
       kind: "transfigure-card";
-      card: OfferTileCard;
+      card: Readonly<CardData>;
       /** Exact transfiguration applied to the preselected card. */
       transfiguration: TransfigurationType;
     })
@@ -151,7 +143,7 @@ export type OfferTileModel =
       kind: "transfigure-starters";
       cards: OfferTileStarterCards;
     })
-  | (OfferTileBase & { kind: "purge-card"; card: OfferTileCard })
+  | (OfferTileBase & { kind: "purge-card"; card: Readonly<CardData> })
   | (OfferTileBase & {
       kind: "duplicate-card";
       cards: OfferTileDuplicateCards;
@@ -509,31 +501,30 @@ function CardArtPiece({
   overlay = false,
   frameAspect = 1,
 }: {
-  readonly card: OfferTileCard;
+  readonly card: Readonly<CardData>;
   readonly treatment?: "plain" | "purged";
   readonly overlay?: boolean;
   readonly frameAspect?: number;
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
-  const cardData = card.displaySnapshot;
   const useCardImage =
     !identiconsForced() &&
-    hasAssignedImage(cardData.imageNumber) &&
+    hasAssignedImage(card.imageNumber) &&
     !imageBroken;
   const imageSource = useCardImage
-    ? cardImageUrl(cardData.imageNumber)
-    : cardIdenticonUri(card.cardId);
-  const artCrop = cardData.art ?? DEFAULT_ART_CROP;
+    ? cardImageUrl(card.imageNumber)
+    : cardIdenticonUri(card.id);
+  const artCrop = card.art ?? DEFAULT_ART_CROP;
 
   useEffect(() => {
     setImageBroken(false);
     setImageAspect(null);
-  }, [card.cardId, cardData.imageNumber]);
+  }, [card.id, card.imageNumber]);
 
   return (
     <span
-      data-offer-tile-card-art={card.cardId}
+      data-offer-tile-card-art={card.id}
       data-offer-tile-card-art-treatment={treatment}
       style={{
         position: "relative",
@@ -591,7 +582,7 @@ function CardArtPiece({
 function CardArtMosaic({
   cards,
 }: {
-  readonly cards: readonly OfferTileCard[];
+  readonly cards: readonly Readonly<CardData>[];
 }): ReactElement {
   const layout =
     cards.length === 1
@@ -619,7 +610,7 @@ function CardArtMosaic({
     >
       {cards.map((card) => (
         <span
-          key={card.cardId}
+          key={card.id}
           data-offer-tile-card-art-panel=""
           style={{
             minWidth: 0,
@@ -692,7 +683,7 @@ function CardArtOperation({
   glyph,
   tone,
 }: {
-  readonly cards: readonly OfferTileCard[];
+  readonly cards: readonly Readonly<CardData>[];
   readonly glyph: Glyph;
   readonly tone?: "neutral" | "accent" | "danger" | "spark" | "duplicate";
 }): ReactElement {

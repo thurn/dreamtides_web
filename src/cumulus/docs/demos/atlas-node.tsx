@@ -56,7 +56,7 @@ function AtlasNodeDemo({ mobileSizing = false }: AtlasNodeDemoArgs) {
       <div className="nodes">
         {placed.map(({ item, boxSize, left, top }) => (
           <div
-            key={item.node.id}
+            key={item.id}
             style={{
               position: "absolute",
               left,
@@ -91,7 +91,7 @@ export const atlasNodeDemo: CumulusComponent = {
   <div className="nodes">
     {nodes.map(({ model, left, top, boxSize }) => (
       <div
-        key={model.node.id}
+        key={model.id}
         style={{ position: "absolute", left, top, width: boxSize, height: boxSize, transform: "translate(-50%, -50%)" }}
       >
         <AtlasNode model={model} onPress={(id) => enterDreamscape(id)} />

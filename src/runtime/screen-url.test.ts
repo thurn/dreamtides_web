@@ -16,7 +16,7 @@ function makeSite(id: string, type: SiteType): SiteState {
 
 function makeNode(
   id: string,
-  biomeName: string,
+  dreamscapeId: string | null,
   sites: SiteState[],
   layerOrdinal = 2,
 ): DreamscapeNode {
@@ -24,8 +24,7 @@ function makeNode(
     id,
     layer: layerAtOrdinal(layerOrdinal) ?? LayerName.One,
     indexInLayer: 0,
-    dreamscapeId: "biome-1",
-    biomeName,
+    dreamscapeId,
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -38,12 +37,12 @@ function makeNode(
 
 /** A default state parked in a single-node dreamscape with the given sites. */
 function stateInDreamscape(
-  biomeName: string,
+  dreamscapeId: string | null,
   sites: SiteState[],
   nodeId = "dreamscape-3",
   layer = 2,
 ): JourneyState {
-  const node = makeNode(nodeId, biomeName, sites, layer);
+  const node = makeNode(nodeId, dreamscapeId, sites, layer);
   const base = createDefaultState();
   return {
     ...base,
@@ -75,16 +74,16 @@ describe("screenToJourneyPath", () => {
     );
   });
 
-  it("keys the dreamscape screen by the layer + biome slug", () => {
-    const state = stateInDreamscape("Ember Wood", [], "dreamscape-3", 2);
+  it("keys the dreamscape screen by the layer and dreamscape id", () => {
+    const state = stateInDreamscape("ember-wood", [], "dreamscape-3", 2);
     expect(screenToJourneyPath({ ...state, screen: { type: "dreamscape" } })).toBe(
       "/dreamscape/2-ember-wood",
     );
   });
 
-  it("disambiguates same-named biomes by layer", () => {
-    const layer1 = stateInDreamscape("Ember Wood", [], "dreamscape-3", 1);
-    const layer4 = stateInDreamscape("Ember Wood", [], "dreamscape-9", 4);
+  it("disambiguates the same dreamscape id by layer", () => {
+    const layer1 = stateInDreamscape("ember-wood", [], "dreamscape-3", 1);
+    const layer4 = stateInDreamscape("ember-wood", [], "dreamscape-9", 4);
     expect(
       screenToJourneyPath({ ...layer1, screen: { type: "dreamscape" } }),
     ).toBe("/dreamscape/1-ember-wood");
@@ -111,8 +110,8 @@ describe("screenToJourneyPath", () => {
     ).toBe("/dreamscape/2-ember-wood/augury");
   });
 
-  it("falls back to the node id slug when the biome is unnamed", () => {
-    const state = stateInDreamscape("", [], "dreamscape-4", 3);
+  it("falls back to the node id slug while identity is concealed", () => {
+    const state = stateInDreamscape(null, [], "dreamscape-4", 3);
     expect(screenToJourneyPath({ ...state, screen: { type: "dreamscape" } })).toBe(
       "/dreamscape/3-dreamscape-4",
     );

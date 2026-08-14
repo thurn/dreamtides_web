@@ -21,7 +21,9 @@ import type { CumulusComponent } from "../registry";
 /** Representative placed-site models, one per node state. */
 const DEMO_MODELS: DreamscapeSiteModel[] = [
   {
-    site: { id: "s-shop", type: "Shop", isEnhanced: false, isVisited: false },
+    id: "s-shop",
+    type: "Shop",
+    isVisited: false,
     pos: { x: 24, y: 40 },
     index: 0,
     isBattle: false,
@@ -32,12 +34,9 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-store-alt-2"),
   },
   {
-    site: {
-      id: "s-reward",
-      type: "Reward",
-      isEnhanced: false,
-      isVisited: false,
-    },
+    id: "s-reward",
+    type: "Reward",
+    isVisited: false,
     pos: { x: 50, y: 26 },
     index: 1,
     isBattle: false,
@@ -48,12 +47,9 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-treasure-chest"),
   },
   {
-    site: {
-      id: "s-battle",
-      type: "Battle",
-      isEnhanced: false,
-      isVisited: false,
-    },
+    id: "s-battle",
+    type: "Battle",
+    isVisited: false,
     pos: { x: 38, y: 74 },
     index: 3,
     isBattle: true,
@@ -64,12 +60,9 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-sword-alt"),
   },
   {
-    site: {
-      id: "s-locked",
-      type: "Battle",
-      isEnhanced: false,
-      isVisited: false,
-    },
+    id: "s-locked",
+    type: "Battle",
+    isVisited: false,
     pos: { x: 66, y: 74 },
     index: 4,
     isBattle: true,
@@ -107,7 +100,7 @@ function SiteNodeDemo({ motion = true }: SiteNodeDemoArgs) {
     >
       {DEMO_MODELS.map((model) => (
         <SiteNode
-          key={model.site.id}
+          key={model.id}
           model={model}
           motion={motion}
           onSelect={() => undefined}
@@ -133,11 +126,11 @@ export const siteNodeDemo: CumulusComponent = {
 <div ref={stageRef} style={{ position: "relative" }}>
   {models.map((model) => (
     <SiteNode
-      key={model.site.id}
+      key={model.id}
       model={model}
       motion
       stageRef={stageRef}
-      onSelect={() => visitSite(model.site)}
+      onSelect={() => visitSite(model.id)}
     />
   ))}
 </div>`,

@@ -371,7 +371,7 @@ describe("GambleSiteScreen", () => {
     ).toBe("150");
     expect(
       container.querySelector(
-        '[data-gamble-gate="jack"] [data-wager-prize-dreamsign-name]',
+        '[data-gamble-gate="jack"] [data-playing-card-prize-dreamsign-name]',
       ),
     ).not.toBeNull();
     expect(container.textContent).not.toContain("chance");
@@ -383,18 +383,18 @@ describe("GambleSiteScreen", () => {
     expect(dreamsignName).not.toBeNull();
     expect(
       dreamsignName?.parentElement?.hasAttribute(
-        "data-wager-prize-description",
+        "data-playing-card-prize-description",
       ),
     ).toBe(true);
     const dreamsignSource = container.querySelector<HTMLElement>(
-      '[data-gamble-gate="jack"] [data-wager-prize-dreamsign-source]',
+      '[data-gamble-gate="jack"] [data-playing-card-prize-dreamsign-source]',
     );
     expect(dreamsignSource?.dataset.revealPrimaryVariant).toBe("object");
     expect(
-      dreamsignSource?.querySelector("[data-wager-prize-title]"),
+      dreamsignSource?.querySelector("[data-playing-card-prize-title]"),
     ).not.toBeNull();
     expect(
-      dreamsignSource?.querySelector("[data-wager-prize-description]"),
+      dreamsignSource?.querySelector("[data-playing-card-prize-description]"),
     ).not.toBeNull();
     const leaveSlot = container.querySelector<HTMLElement>(
       "[data-gamble-leave-slot]",
@@ -698,7 +698,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
     expect(
       container.querySelector<HTMLElement>("[data-site-layout]")?.dataset
         .siteLayoutComposition,
-    ).toBe("balanced-dialogue");
+    ).toBe("balanced-gallery");
 
     act(() => root.unmount());
   });
@@ -724,12 +724,12 @@ describe("GambleSiteScreen — Ladder Climb", () => {
         ?.getAttribute("data-wager-prize-card-state"),
     ).toBe("prize");
     expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(0);
-    expect(container.querySelector("[data-wager-prize-title]")).not.toBeNull();
+    expect(container.querySelector("[data-playing-card-prize-title]")).not.toBeNull();
     expect(
       container.querySelector('[data-testid="gamble-ladder-dreamsign-name"]'),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-wager-prize-dreamsign-source]"),
+      container.querySelector("[data-playing-card-prize-dreamsign-source]"),
     ).not.toBeNull();
     expect(
       container
@@ -1052,7 +1052,7 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     expect(
       container.querySelectorAll("[data-starway-tier-button]"),
     ).toHaveLength(1);
-    expect(container.querySelectorAll("[data-wager-prize-title]")).toHaveLength(
+    expect(container.querySelectorAll("[data-playing-card-prize-title]")).toHaveLength(
       3,
     );
     expect(
@@ -1088,11 +1088,11 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     expect(actions?.textContent).not.toContain("Essence");
     expect(
       container.querySelector(
-        '[data-starway-tier="1"] [data-wager-prize-card-emphasis="current"]',
+        '[data-starway-tier="1"] [data-playing-card-prize-emphasis="current"]',
       ),
     ).not.toBeNull();
     expect(
-      container.querySelectorAll('[data-wager-prize-card-emphasis="muted"]'),
+      container.querySelectorAll('[data-playing-card-prize-emphasis="muted"]'),
     ).toHaveLength(2);
     act(() => bet?.click());
     expect(onDrawStarway).toHaveBeenCalledOnce();
@@ -1161,12 +1161,12 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     ).not.toBeNull();
     expect(
       container.querySelector(
-        '[data-starway-tier="1"] [data-wager-prize-card-emphasis="current"]',
+        '[data-starway-tier="1"] [data-playing-card-prize-emphasis="current"]',
       ),
     ).not.toBeNull();
     expect(
       container.querySelector(
-        '[data-starway-tier="2"] [data-wager-prize-card-emphasis="muted"]',
+        '[data-starway-tier="2"] [data-playing-card-prize-emphasis="muted"]',
       ),
     ).not.toBeNull();
     void act(() => vi.advanceTimersByTime(4_000));
@@ -1193,12 +1193,12 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     ).not.toBeNull();
     expect(
       container.querySelector(
-        '[data-starway-tier="1"] [data-wager-prize-card-emphasis="muted"]',
+        '[data-starway-tier="1"] [data-playing-card-prize-emphasis="muted"]',
       ),
     ).not.toBeNull();
     expect(
       container.querySelector(
-        '[data-starway-tier="2"] [data-wager-prize-card-emphasis="current"]',
+        '[data-starway-tier="2"] [data-playing-card-prize-emphasis="current"]',
       ),
     ).not.toBeNull();
     act(() => cashOut?.click());

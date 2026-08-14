@@ -11,10 +11,10 @@ import {
   OfferTile,
   OFFER_TILE_COMPACT_SIZE,
   OFFER_TILE_STANDARD_SIZE,
-  type OfferTileCard,
   type OfferTileFourCards,
   type OfferTileModel,
 } from "./OfferTile";
+import type { CardData } from "../../../types/cards";
 
 (
   globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
@@ -25,25 +25,22 @@ function fixtureCard(
   imageNumber: number,
   cardNumber: number,
   art?: { readonly x: number; readonly y: number; readonly scale: number },
-): OfferTileCard {
+): Readonly<CardData> {
   const id = asCardId(cardId);
   return {
-    cardId: id,
-    displaySnapshot: {
-      id,
-      name: asCardName(`Test Card ${String(cardNumber)}`),
-      cardNumber,
-      cardType: "Character",
-      subtype: "Spirit Animal",
-      isStarter: false,
-      energyCost: 2,
-      spark: 3,
-      isFast: false,
-      renderedText: "▸ Dawn: Draw a card.",
-      imageNumber,
-      artOwned: true,
-      ...(art === undefined ? {} : { art }),
-    },
+    id,
+    name: asCardName(`Test Card ${String(cardNumber)}`),
+    cardNumber,
+    cardType: "Character",
+    subtype: "Spirit Animal",
+    isStarter: false,
+    energyCost: 2,
+    spark: 3,
+    isFast: false,
+    renderedText: "▸ Dawn: Draw a card.",
+    imageNumber,
+    artOwned: true,
+    ...(art === undefined ? {} : { art }),
   };
 }
 
@@ -189,7 +186,7 @@ describe("OfferTile", () => {
     expect(four.style.gap).toBe("var(--space-xxs)");
 
     const focusedSingleImage = container.querySelector<HTMLImageElement>(
-      `[data-testid="one"] [data-offer-tile-card-art="${CARDS[0].cardId}"] img`,
+      `[data-testid="one"] [data-offer-tile-card-art="${CARDS[0].id}"] img`,
     )!;
     Object.defineProperties(focusedSingleImage, {
       naturalWidth: { configurable: true, value: 462 },
@@ -244,7 +241,7 @@ describe("OfferTile", () => {
         expect(Number.parseFloat(image.style.width)).toBeGreaterThan(100);
       }
       const authoredPanelImage = container.querySelector<HTMLImageElement>(
-        `[data-testid="${testId}"] [data-offer-tile-card-art="${CARDS[0].cardId}"] img`,
+        `[data-testid="${testId}"] [data-offer-tile-card-art="${CARDS[0].id}"] img`,
       )!;
       const panelTranslation = /translate\(([-\d.]+)%, ([-\d.]+)%\)$/.exec(
         authoredPanelImage.style.transform,

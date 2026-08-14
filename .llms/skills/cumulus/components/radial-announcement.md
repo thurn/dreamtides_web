@@ -24,7 +24,7 @@ Each enum branch owns its established production choreography—including card-a
 | `detail` | `LocalizedString` | no | — | Optional supporting copy beneath the headline. |
 | `essenceGained` | `number` | no | — | Optional gained Essence amount, rendered with the canonical currency glyph. |
 | `tone` | `RadialAnnouncementTone` = `"accent" \| "danger" \| "reward"` | no | `accent` | Semantic orbit and ripple color. Defaults to accent. |
-| `size` | `"compact" \| "standard" \| "wager" \| "mini"` | no | `standard` | Named disc diameter. Defaults to standard. Named compact disc diameter. Defaults to compact. |
+| `size` | `"compact" \| "standard" \| "mini" \| "wager"` | no | `standard` | Named disc diameter. Defaults to standard. Named compact disc diameter. Defaults to compact. |
 | `duration` | `RadialAnnouncementDuration` = `"standard" \| "extended"` | no | `standard` | Named animation and reading dwell. Defaults to standard. |
 | `announcementId` | `string` | no | — | Stable identifier exposed on the announcement root. |
 | `points` | `number` | yes | — | Points scored by the attached card. |

@@ -6,9 +6,7 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "../CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { LayerName } from "../../types/layer-name";
 import { resolveSource } from "../../runtime/localization/runtime";
-import type { DreamscapeNode } from "../../types/journey";
 import type {
   AtlasNodeModel,
   AtlasNodePrimary,
@@ -183,27 +181,6 @@ function placedPrimary(): {
   };
 }
 
-function makeNode(
-  id: string,
-  state: DreamscapeNode["state"],
-  layer: LayerName,
-): DreamscapeNode {
-  return {
-    id,
-    layer,
-    indexInLayer: 0,
-    dreamscapeId: null,
-    biomeName: "",
-    sites: [],
-    position: { x: 0, y: 0 },
-    state,
-    enhancedSiteType: null,
-    forwardIds: [],
-    backwardIds: [],
-    knownDreamsignId: null,
-  };
-}
-
 function emptyPrimary(): AtlasNodePrimary {
   return {
     sceneArt: null,
@@ -245,8 +222,7 @@ function residentModel(): Pick<
 
 function nodeItem(
   id: string,
-  state: DreamscapeNode["state"],
-  layer: LayerName,
+  state: AtlasNodeModel["state"],
   extra: {
     role?: AtlasNodeModel["role"];
     semantic?: Partial<
@@ -255,7 +231,9 @@ function nodeItem(
   } = {},
 ): AtlasNodePlacementView {
   const model: AtlasNodeModel = {
-    node: makeNode(id, state, layer),
+    id,
+    name: assertLocalized(id),
+    state,
     role: extra.role ?? "regular",
     isReachable: true,
     iconRef: null,
@@ -275,9 +253,9 @@ function makeView(): AtlasView {
     stageWidth: 1080,
     stageHeight: 1920,
     nodes: [
-      nodeItem("starter", "completed", LayerName.One, { role: "starter" }),
-      nodeItem("frontier", "available", LayerName.Two),
-      nodeItem("boss", "revealedLocked", LayerName.Seven, { role: "boss" }),
+      nodeItem("starter", "completed", { role: "starter" }),
+      nodeItem("frontier", "available"),
+      nodeItem("boss", "revealedLocked", { role: "boss" }),
     ],
     edges: [
       {
@@ -522,7 +500,7 @@ describe("Cumulus AtlasScreen", () => {
     });
     const view = makeView();
     const resident = residentModel();
-    view.nodes[1] = nodeItem("frontier", "available", LayerName.Two, {
+    view.nodes[1] = nodeItem("frontier", "available", {
       semantic: resident,
     });
     const { container, root } = mount(

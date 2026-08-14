@@ -63,7 +63,6 @@ function makeNode(
     layer,
     indexInLayer: 0,
     dreamscapeId: null,
-    biomeName: "",
     sites: [],
     position,
     state: "unrevealed",
@@ -370,7 +369,7 @@ describe("buildAtlasMapNodes", () => {
     };
     const items = buildAtlasMapNodes(makeVerticalAtlas(), content);
     expect(items).toHaveLength(3);
-    const boss = items.find((item) => item.model.node.id === "boss");
+    const boss = items.find((item) => item.model.id === "boss");
     expect(boss?.model.role).toBe("boss");
     expect(resolveSource(boss!.model.primary.placeName!)).toBe(
       "Synthetic boss place",
@@ -381,14 +380,14 @@ describe("buildAtlasMapNodes", () => {
     });
     // An available (revealed) node's card is not the unrevealed variant, even
     // with no dreamscape content resolved.
-    const middle = items.find((item) => item.model.node.id === "middle");
+    const middle = items.find((item) => item.model.id === "middle");
     expect(middle?.model.primary.sceneArt).toBeNull(); // available but no dreamscape content
   });
 
   it("fades a forgone sibling and renders it as an unrevealed, badge-free frame", () => {
     const items = buildAtlasMapNodes(makeForgoneAtlas(), EMPTY_CONTENT);
-    const chosen = items.find((item) => item.model.node.id === "chosen");
-    const passed = items.find((item) => item.model.node.id === "passed");
+    const chosen = items.find((item) => item.model.id === "chosen");
+    const passed = items.find((item) => item.model.id === "passed");
     // Every positioned node still renders — the passed-by sibling is faded, not
     // dropped.
     expect(items).toHaveLength(4);
@@ -406,7 +405,6 @@ describe("buildAtlasMapNodes", () => {
   it("carries a resident dreamscape's signature site as a standard site info card", () => {
     const atlas = makeVerticalAtlas();
     atlas.nodes.middle.dreamscapeId = "wilderveil";
-    atlas.nodes.middle.biomeName = "Wilderveil";
     atlas.nodes.middle.sites = [
       {
         id: "00000000-0000-4000-8000-000000000091",
@@ -468,7 +466,7 @@ describe("buildAtlasMapNodes", () => {
     };
 
     const items = buildAtlasMapNodes(atlas, content);
-    const middle = items.find((item) => item.model.node.id === "middle");
+    const middle = items.find((item) => item.model.id === "middle");
 
     expect(resolveSource(middle!.model.site!.name)).toBe("Augury");
     expect(resolveSource(middle!.model.site!.blurb).length).toBeGreaterThan(0);

@@ -53,19 +53,16 @@ function dreamscapeBasePath(state: JourneyState): string {
 }
 
 /**
- * URL slug for the player's current dreamscape node, `<layer>-<biome>` (e.g.
- * layer-2 Ember Wood -> `2-ember-wood`). Biome names repeat across the atlas, so
- * the layer prefix disambiguates them; it is also an exact locator, since the
- * player occupies exactly one node per layer. The biome falls back to the node
- * id slug when the node is unnamed. `null` when the player is not inside a
- * dreamscape (e.g. on the Atlas).
+ * URL slug for the player's current dreamscape node, `<layer>-<dreamscape-id>`.
+ * The node id is used while its dreamscape identity is concealed. `null` when
+ * the player is not inside a dreamscape (e.g. on the Atlas).
  */
 function dreamscapeSlug(state: JourneyState): string | null {
   const nodeId = state.currentDreamscape;
   if (nodeId === null) return null;
   const node = state.atlas.nodes[nodeId];
   if (node === undefined) return null;
-  const name = slugify(node.biomeName) || slugify(node.id);
+  const name = slugify(node.dreamscapeId ?? node.id);
   return `${String(layerOrdinal(node.layer))}-${name}`;
 }
 

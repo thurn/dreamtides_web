@@ -33,7 +33,6 @@ import type { MerchantDeckSnapshot } from "../../journey_v2/trace/deckSnapshot";
 import type { CardData } from "../../types/cards";
 import type { LocalizedString } from "@trox/runtime";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
-import { asCardId } from "../../types/card-identity";
 import type { DreamGuideContent } from "../../types/content";
 import type { SitesData } from "../../types/sites-data";
 import type {
@@ -45,7 +44,6 @@ import type {
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type {
-  OfferTileCard,
   OfferTileBundleCards,
   OfferTileCardChoices,
   OfferTileCategory,
@@ -88,9 +86,9 @@ export interface AuguryLogEntry {
 
 export function resolveAuguryGuide(
   guides: readonly DreamGuideContent[],
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent {
-  return requireGuideForSiteType(guides, "Augury", guideIdOverride);
+  return requireGuideForSiteType(guides, "Augury", presentingGuideId);
 }
 
 export function buildAuguryGuideView(
@@ -123,12 +121,9 @@ function sitePreviewModel(
   sitesData: SitesData,
 ): DreamscapeSiteModel {
   return {
-    site: {
-      id: `augury-preview:${siteType}`,
-      type: siteType,
-      isEnhanced: false,
-      isVisited: false,
-    },
+    id: `augury-preview:${siteType}`,
+    type: siteType,
+    isVisited: false,
     pos: { x: 50, y: 50 },
     index: 0,
     isBattle: siteType === "Battle",
@@ -172,7 +167,7 @@ function unavailable(message: string): never {
   throw new Error(`Augury offer unavailable: ${message}`);
 }
 
-function tileCard(object: CardObject, preview = false): OfferTileCard {
+function tileCard(object: CardObject, preview = false): Readonly<CardData> {
   const displaySnapshot =
     preview &&
     object.objectType === "deckCard" &&
@@ -182,14 +177,14 @@ function tileCard(object: CardObject, preview = false): OfferTileCard {
   if (displaySnapshot.id !== object.cardUuid) {
     unavailable(`card UUID mismatch for ${object.cardUuid}`);
   }
-  return { cardId: asCardId(object.cardUuid), displaySnapshot };
+  return displaySnapshot;
 }
 
 function requiredCard(
   objects: readonly MerchantGameObject[],
   label: string,
   preview = false,
-): OfferTileCard {
+): Readonly<CardData> {
   const object = firstCard(objects);
   if (object === undefined) unavailable(`${label} has no card`);
   return tileCard(object, preview);
@@ -199,7 +194,7 @@ function candidateCards(
   offer: MerchantOffer,
   allowedCounts: readonly number[],
   preview = false,
-): readonly OfferTileCard[] {
+): readonly Readonly<CardData>[] {
   const candidates = offer.choiceRequest?.candidates;
   if (candidates === undefined || !allowedCounts.includes(candidates.length)) {
     unavailable(
@@ -215,27 +210,33 @@ function candidateCards(
   );
 }
 
-function fourCards(cards: readonly OfferTileCard[]): OfferTileCardChoices {
+function fourCards(
+  cards: readonly Readonly<CardData>[],
+): OfferTileCardChoices {
   if (cards.length === 2) return [cards[0], cards[1]];
   if (cards.length === 3) return [cards[0], cards[1], cards[2]];
   if (cards.length === 4) return [cards[0], cards[1], cards[2], cards[3]];
   return unavailable("expected 2 to 4 cards");
 }
 
-function bundleCards(cards: readonly OfferTileCard[]): OfferTileBundleCards {
+function bundleCards(
+  cards: readonly Readonly<CardData>[],
+): OfferTileBundleCards {
   if (cards.length === 2) return [cards[0], cards[1]];
   if (cards.length === 3) return [cards[0], cards[1], cards[2]];
   return unavailable("card_bundle requires 2 or 3 cards");
 }
 
-function starterCards(cards: readonly OfferTileCard[]): OfferTileStarterCards {
+function starterCards(
+  cards: readonly Readonly<CardData>[],
+): OfferTileStarterCards {
   if (cards.length === 1) return [cards[0]];
   if (cards.length === 2) return [cards[0], cards[1]];
   return unavailable("starter_transfigure requires 1 or 2 cards");
 }
 
 function duplicateCards(
-  cards: readonly OfferTileCard[],
+  cards: readonly Readonly<CardData>[],
 ): OfferTileDuplicateCards {
   if (cards.length === 1) return [cards[0]];
   if (cards.length === 2) return [cards[0], cards[1]];

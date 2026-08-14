@@ -387,11 +387,11 @@ function makeRandomSite(
   return {
     ...makeSite("RandomSite", true, draftPickCount),
     data: draftSiteData(draftPickCount),
-    ...(guideId === null ? {} : { guideIdOverride: guideId }),
     randomSite: {
       mode,
       candidateSiteTypes: candidates,
       ...(destinationSiteType === undefined ? {} : { destinationSiteType }),
+      ...(guideId === null ? {} : { presentingGuideId: guideId }),
     },
   };
 }
@@ -908,9 +908,6 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
     dreamscapeId: isBoss
       ? state.context.atlasData.boss.dreamscapeId
       : (dreamscape?.id ?? null),
-    biomeName: isBoss
-      ? state.context.atlasData.boss.place
-      : (dreamscape?.name ?? ""),
     sites,
     enhancedSiteType,
   };
@@ -1095,7 +1092,6 @@ function generateInitialAtlasInternal(
         layer: layerName,
         indexInLayer,
         dreamscapeId: null,
-        biomeName: "",
         sites: [],
         position: nodePosition(ordinal, indexInLayer, widths[ordinal]),
         state: "unrevealed",

@@ -24,9 +24,9 @@ import type { TransfigurationData } from "../../types/transfiguration-data";
 /** Resolve Deacon Holt, the resident guide for Duplication. */
 export function resolveDuplicationGuide(
   guides: readonly DreamGuideContent[],
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent {
-  return requireGuideForSiteType(guides, "Duplication", guideIdOverride);
+  return requireGuideForSiteType(guides, "Duplication", presentingGuideId);
 }
 
 /** Build the guide art and stable greeting used by the shared site layout. */

@@ -167,8 +167,6 @@ export interface SiteState {
   isVisited: boolean;
   /** Random Site wrapper/origin metadata persisted for deterministic replay. */
   randomSite?: RandomSiteMetadata;
-  /** Dream Guide displayed instead of the resident guide for this site. */
-  guideIdOverride?: string;
   data?: Record<string, unknown>;
 }
 
@@ -177,6 +175,8 @@ export interface RandomSiteMetadata {
   mode: "single" | "homeChoice";
   candidateSiteTypes: RandomSiteDestinationType[];
   destinationSiteType?: RandomSiteDestinationType;
+  /** Random Site guide that continues presenting the materialized destination. */
+  presentingGuideId?: string;
   /** Set once the wrapper becomes the selected concrete destination. */
   materialized?: boolean;
 }
@@ -199,8 +199,6 @@ export interface DreamscapeNode {
   indexInLayer: number;
   /** The dreamscape assigned to this node, or `null` while unrevealed. */
   dreamscapeId: string | null;
-  /** Display name of the assigned dreamscape (`""` while unrevealed). */
-  biomeName: string;
   sites: SiteState[];
   position: { x: number; y: number };
   state: AtlasNodeState;

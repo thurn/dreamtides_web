@@ -58,10 +58,22 @@
         "name": "AtlasNodeModel",
         "fields": [
           {
-            "name": "node",
-            "tsType": "DreamscapeNode",
+            "name": "id",
+            "tsType": "string",
             "optional": false,
-            "description": ""
+            "description": "Stable Atlas node identity."
+          },
+          {
+            "name": "name",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": "Localized accessible name for the assigned or unrevealed dreamscape."
+          },
+          {
+            "name": "state",
+            "tsType": "AtlasNodeState",
+            "optional": false,
+            "description": "Journey presentation state that selects the node treatment."
           },
           {
             "name": "role",
@@ -1129,7 +1141,7 @@
   "CardView": [
     {
       "name": "card",
-      "tsType": "CardData | Readonly<CardData>",
+      "tsType": "Readonly<CardData>",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -2411,7 +2423,7 @@
             "name": "displaySnapshot",
             "tsType": "Readonly<CardData>",
             "optional": false,
-            "description": "Complete, already-resolved card data for this exact rendered state. This is\na display snapshot rather than a catalog reference: adapters must apply\ntransfigurations, battle-effective stats, journey overrides, generated-card\nidentity, and any other state that changes what the player reads before\nconstructing the model. GameCard renders this value in place and reuses the\nsame value for its reading reveal, so the compact source and full reveal\ncannot disagree. Its `id` must equal `cardId`.\n\n`FrozenCardData` provides shallow compile-time readonly fields. It does not\nfreeze the object at runtime; callers should replace the snapshot whenever\neffective display state changes rather than mutating it in place."
+            "description": "Complete, already-resolved card data for this exact rendered state. This is\na display snapshot rather than a catalog reference: adapters must apply\ntransfigurations, battle-effective stats, journey overrides, generated-card\nidentity, and any other state that changes what the player reads before\nconstructing the model. GameCard renders this value in place and reuses the\nsame value for its reading reveal, so the compact source and full reveal\ncannot disagree. Its `id` must equal `cardId`.\n\nThe snapshot is shallow-readonly at compile time. Callers should replace it\nwhenever effective display state changes rather than mutating it in place."
           },
           {
             "name": "transfiguration",
@@ -3619,10 +3631,10 @@
   "PlayingCard": [
     {
       "name": "size",
-      "tsType": "WagerPrizeCardSize",
+      "tsType": "PlayingCardSize",
       "unionMembers": [
-        "wagerCompact",
-        "wager"
+        "compact",
+        "standard"
       ],
       "required": false,
       "defaultValue": null,
@@ -3701,6 +3713,95 @@
       "required": false,
       "defaultValue": null,
       "description": "Flip the concealed four-suit face to the committed result.\nFlip the face-down card to its committed rank and suit."
+    }
+  ],
+  "PlayingCardPrize": [
+    {
+      "name": "objectId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Stable identity for this prize object."
+    },
+    {
+      "name": "title",
+      "tsType": "LocalizedString",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Localized heading printed on the prize face."
+    },
+    {
+      "name": "description",
+      "tsType": "LocalizedString",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Localized supporting copy printed beneath the heading."
+    },
+    {
+      "name": "accessibilityLabel",
+      "tsType": "LocalizedString",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Complete localized accessible name for the concealed prize face."
+    },
+    {
+      "name": "size",
+      "tsType": "PlayingCardSize",
+      "unionMembers": [
+        "compact",
+        "standard"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Named compact or standard square size. Defaults to `standard`."
+    },
+    {
+      "name": "drawnCard",
+      "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Committed card shown on the reverse face after a bet."
+    },
+    {
+      "name": "revealDrawnCard",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Turn the prize face over to its committed card."
+    },
+    {
+      "name": "relatedDreamsignTestId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional stable selector for the related Dreamsign name."
+    },
+    {
+      "name": "emphasis",
+      "tsType": "PlayingCardPrizeEmphasis",
+      "unionMembers": [
+        "standard",
+        "current",
+        "muted"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accent current tier, foreground-muted alternative, or standard priority."
+    },
+    {
+      "name": "relatedDreamsign",
+      "tsType": "LocalizedDreamsign | null",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Dreamsign related to the prize copy, when present."
     }
   ],
   "PlayingCardSuitMark": [
@@ -4037,12 +4138,12 @@
     },
     {
       "name": "size",
-      "tsType": "\"compact\" | \"standard\" | \"wager\" | \"mini\"",
+      "tsType": "\"compact\" | \"standard\" | \"mini\" | \"wager\"",
       "unionMembers": [
         "compact",
         "standard",
-        "wager",
-        "mini"
+        "mini",
+        "wager"
       ],
       "required": false,
       "defaultValue": "standard",
@@ -4353,7 +4454,7 @@
       "description": "Resolved scene art, or null for the canonical atmospheric fallback."
     },
     {
-      "name": "atmosphere",
+      "name": "moteTint",
       "tsType": "\"warm\" | \"violet\"",
       "unionMembers": [
         "warm",
@@ -4361,7 +4462,7 @@
       ],
       "required": true,
       "defaultValue": null,
-      "description": "Named atmospheric treatment for the routed site stage."
+      "description": "Named tint for the routed site's deterministic Motes layer."
     },
     {
       "name": "guide",
@@ -4373,6 +4474,12 @@
       "nested": {
         "name": "SiteLayoutGuide",
         "fields": [
+          {
+            "name": "presence",
+            "tsType": "\"speaking\" | \"portrait-only\"",
+            "optional": false,
+            "description": "Whether the guide speaks or appears as a portrait without dialogue."
+          },
           {
             "name": "id",
             "tsType": "string",
@@ -4396,23 +4503,16 @@
             "tsType": "ArtRef",
             "optional": false,
             "description": "Transparent resident-guide artwork."
-          },
-          {
-            "name": "presence",
-            "tsType": "\"speaking\" | \"portrait-only\"",
-            "optional": false,
-            "description": "Whether the guide speaks or appears as a portrait without dialogue."
           }
         ]
       }
     },
     {
       "name": "composition",
-      "tsType": "SiteLayoutComposition",
+      "tsType": "\"balanced-gallery\" | \"content-led-gallery\" | \"balanced-revelation\" | \"content-led-revelation\" | \"balanced-expanded-revelation\" | \"content-led-expanded-revelation\"",
       "unionMembers": [
         "balanced-gallery",
         "content-led-gallery",
-        "balanced-dialogue",
         "balanced-revelation",
         "content-led-revelation",
         "balanced-expanded-revelation",
@@ -4443,10 +4543,22 @@
         "name": "DreamscapeSiteModel",
         "fields": [
           {
-            "name": "site",
-            "tsType": "SiteState",
+            "name": "id",
+            "tsType": "string",
             "optional": false,
-            "description": ""
+            "description": "Stable site identity."
+          },
+          {
+            "name": "type",
+            "tsType": "\"Battle\" | \"Draft\" | \"Shop\" | \"Purge\" | \"Essence\" | \"Transfiguration\" | \"Duplication\" | \"Reward\" | \"Augury\" | \"DreamsignBazaar\" | \"DreamsignRevelation\" | \"RandomSite\" | \"Gamble\" | \"Exploration\"",
+            "optional": false,
+            "description": "Site category exposed for diagnostics."
+          },
+          {
+            "name": "isVisited",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Whether this site has already been completed."
           },
           {
             "name": "pos",
@@ -5227,110 +5339,6 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional tutorial-state diagnostics retained on semantic attributes."
-    }
-  ],
-  "WagerPrizeCard": [
-    {
-      "name": "prizeId",
-      "tsType": "WagerPrizeCardId",
-      "unionMembers": [
-        "six",
-        "nine",
-        "jack",
-        "ladder-climb",
-        "starway-1",
-        "starway-2",
-        "starway-3",
-        "blackjack"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Stable Gamble choice represented by this prize object."
-    },
-    {
-      "name": "minimumWinningRank",
-      "tsType": "StandardPlayingCardRank",
-      "unionMembers": [
-        "A",
-        "2",
-        "3",
-        "4",
-        "5",
-        "6",
-        "7",
-        "8",
-        "9",
-        "10",
-        "J",
-        "Q",
-        "K"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "Lowest rank in the inclusive winning range through Ace."
-    },
-    {
-      "name": "size",
-      "tsType": "WagerPrizeCardSize",
-      "unionMembers": [
-        "wagerCompact",
-        "wager"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Named desktop or mobile square size. Defaults to `wager`."
-    },
-    {
-      "name": "drawnCard",
-      "tsType": "{ rank: StandardPlayingCardRank; suit: StandardPlayingCardSuit; } | null",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Committed card shown on the reverse face after a bet."
-    },
-    {
-      "name": "revealDrawnCard",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Turn the prize face over to its committed card."
-    },
-    {
-      "name": "dreamsignTestId",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional stable selector for the prize Dreamsign name."
-    },
-    {
-      "name": "emphasis",
-      "tsType": "WagerPrizeCardEmphasis",
-      "unionMembers": [
-        "standard",
-        "current",
-        "muted"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Accent current tier, foreground-muted alternative, or standard priority."
-    },
-    {
-      "name": "essenceReward",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Essence awarded on a win."
-    },
-    {
-      "name": "rewardDreamsign",
-      "tsType": "LocalizedDreamsign | null",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Dreamsign appended to the Essence reward, when present."
     }
   ]
 }

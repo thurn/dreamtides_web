@@ -8,7 +8,7 @@ Atlas & Sites · Live demo & interactive props: `/cumulus#/site-layout`
 
 Real consumers: **11** (imports outside `src/cumulus/docs/` and tests).
 
-The responsive full-stage composition for routed character-led sites, with scene, atmosphere, guide, speech, safe areas, and one site-body region.
+The responsive full-stage composition for routed character-led sites, with scene, mote tint, guide, speech, safe areas, and one site-body region.
 
 > **Guidance:** Choose one named composition and let the site body choose its own material.
 
@@ -22,23 +22,23 @@ Site content chooses its own material and floating panels should hug their conte
 | --- | --- | --- | --- | --- |
 | `siteId` | `string` | yes | — | Stable site identity exposed for diagnostics. |
 | `scene` | `ArtRef \| null` | yes | — | Resolved scene art, or null for the canonical atmospheric fallback. |
-| `atmosphere` | `"warm" \| "violet"` | yes | — | Named atmospheric treatment for the routed site stage. |
+| `moteTint` | `"warm" \| "violet"` | yes | — | Named tint for the routed site's deterministic Motes layer. |
 | `guide` | `SiteLayoutGuide` | yes | — | Resolved resident-guide presentation. |
-| `composition` | `SiteLayoutComposition` = `"balanced-gallery" \| "content-led-gallery" \| "balanced-dialogue" \| "balanced-revelation" \| "content-led-revelation" \| "balanced-expanded-revelation" \| "content-led-expanded-revelation"` | yes | — | Named recipe that owns desktop, intermediate, and narrow composition. |
+| `composition` | `"balanced-gallery" \| "content-led-gallery" \| "balanced-revelation" \| "content-led-revelation" \| "balanced-expanded-revelation" \| "content-led-expanded-revelation"` | yes | — | Named recipe that owns desktop, intermediate, and narrow composition. |
 | `children` | `ReactElement<unknown, string \| JSXElementConstructor<any>>` | yes | — | The one screen-specific site body mounted in the layout's content region. |
 
 ### `guide`: the `SiteLayoutGuide` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
+| `presence` | `"speaking" \| "portrait-only"` | no | Whether the guide speaks or appears as a portrait without dialogue. |
 | `id` | `string` | no | Stable Dream Guide identity. |
 | `name` | `LocalizedString` | no | Localized guide name used by visible and accessible presentation. |
 | `line` | `LocalizedString` | no | Localized line spoken by the guide when present. |
 | `art` | `ArtRef` | no | Transparent resident-guide artwork. |
-| `presence` | `"speaking" \| "portrait-only"` | no | Whether the guide speaks or appears as a portrait without dialogue. |
 
 ## Usage
 
 ```tsx
-<SiteLayout siteId="shop" scene={scene} atmosphere="warm" guide={guide} composition="balanced-gallery"><ShopGallery /></SiteLayout>
+<SiteLayout siteId="shop" scene={scene} moteTint="warm" guide={guide} composition="balanced-gallery"><ShopGallery /></SiteLayout>
 ```

@@ -1,33 +1,30 @@
 import { asCardId, asCardName } from "../../../types/card-identity";
 import {
   OfferTile,
-  type OfferTileCard,
   type OfferTileModel,
 } from "../../components/controls/OfferTile";
+import type { CardData } from "../../../types/cards";
 import type { CumulusComponent } from "../registry";
 
 function card(
   cardId: string,
   imageNumber: number,
   cardNumber: number,
-): OfferTileCard {
+): Readonly<CardData> {
   const id = asCardId(cardId);
   return {
-    cardId: id,
-    displaySnapshot: {
-      id,
-      name: asCardName(`Offer Card ${String(cardNumber)}`),
-      cardNumber,
-      cardType: "Character",
-      subtype: "Spirit Animal",
-      isStarter: false,
-      energyCost: 2,
-      spark: 3,
-      isFast: false,
-      renderedText: "▸Dawn: Draw a card.",
-      imageNumber,
-      artOwned: true,
-    },
+    id,
+    name: asCardName(`Offer Card ${String(cardNumber)}`),
+    cardNumber,
+    cardType: "Character",
+    subtype: "Spirit Animal",
+    isStarter: false,
+    energyCost: 2,
+    spark: 3,
+    isFast: false,
+    renderedText: "▸Dawn: Draw a card.",
+    imageNumber,
+    artOwned: true,
   };
 }
 
@@ -80,7 +77,7 @@ export const offerTileDemo: CumulusComponent = {
   model={{
     id: encounterSignature + ":" + offerId,
     kind: "card-draft",
-    cards: offeredCards.map((card) => ({ cardId: card.id, displaySnapshot: card })),
+    cards: offeredCards,
   }}
   presentation={offerPresentation}
   onPress={chooseOffer}

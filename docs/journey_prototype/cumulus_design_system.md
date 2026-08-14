@@ -458,9 +458,9 @@ text.
 `GameCard` uses the same snapshot for the visible source and the full reading
 reveal, preventing compact and expanded presentations from disagreeing. The
 model's canonical `cardId` and `displaySnapshot.id` must match. The
-`FrozenCardData` type makes top-level fields shallow-readonly at compile time;
-it does not freeze arbitrary objects at runtime. State changes produce a new
-snapshot rather than mutating the existing value.
+The `Readonly<CardData>` snapshot makes top-level fields readonly at compile
+time. State changes produce a new snapshot rather than mutating the existing
+value.
 
 ### OfferTile content and composition
 

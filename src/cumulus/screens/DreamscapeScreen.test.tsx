@@ -53,10 +53,12 @@ vi.mock("framer-motion", () => ({
 
 function siteModel(
   site: SiteState,
-  overrides: Partial<Omit<DreamscapeSiteModel, "site">> = {},
+  overrides: Partial<DreamscapeSiteModel> = {},
 ): DreamscapeSiteModel {
   return {
-    site,
+    id: site.id,
+    type: site.type,
+    isVisited: site.isVisited,
     pos: { x: 40, y: 40 },
     index: 0,
     isBattle: site.type === "Battle",

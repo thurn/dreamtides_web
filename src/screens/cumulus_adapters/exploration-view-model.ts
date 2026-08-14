@@ -64,9 +64,9 @@ import { localizedTransfigurationPresentation } from "../../cumulus/components/c
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
   guides: readonly DreamGuideContent[],
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent {
-  return requireGuideForSiteType(guides, "Exploration", guideIdOverride);
+  return requireGuideForSiteType(guides, "Exploration", presentingGuideId);
 }
 
 function matchesPredicate(
@@ -513,7 +513,9 @@ function siteTypeChoiceFollowup(
         {
           siteType: choice.siteType,
           model: {
-            site: choice.insertedSite,
+            id: choice.insertedSite.id,
+            type: choice.insertedSite.type,
+            isVisited: choice.insertedSite.isVisited,
             pos: { x: 50, y: 50 },
             index,
             isBattle: false,
@@ -3873,7 +3875,9 @@ function rewardForResolution(
       return null;
     }
     const model: DreamscapeSiteModel = {
-      site: insertedSite,
+      id: insertedSite.id,
+      type: insertedSite.type,
+      isVisited: insertedSite.isVisited,
       pos: { x: 50, y: 50 },
       index: insertion.insertionIndex,
       isBattle: false,

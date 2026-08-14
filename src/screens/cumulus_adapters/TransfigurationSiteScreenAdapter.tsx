@@ -28,7 +28,7 @@ export function TransfigurationSiteScreenAdapter({
       : null;
   const guide = resolveTransfigurationGuide(
     journeyContent.guides,
-    site?.guideIdOverride,
+    site?.randomSite?.presentingGuideId,
   );
   const guideLine = useGuideDialogue(guide, "site");
 

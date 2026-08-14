@@ -3,12 +3,12 @@ import {
   type FigmentCatalogEntry,
 } from "../battle/state/figment-catalog";
 import { asCardId, asCardName } from "../types/card-identity";
-import type { FrozenCardData } from "../types/cards";
+import type { CardData } from "../types/cards";
 
 /** A figment card explicitly named by a materialize instruction. */
 export interface MaterializedFigmentPreview {
   /** Stable authored figment UUID and complete display snapshot. */
-  readonly card: FrozenCardData;
+  readonly card: Readonly<CardData>;
 }
 
 const MATERIALIZED_FIGMENT_PATTERN =

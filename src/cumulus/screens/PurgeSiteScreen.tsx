@@ -8,7 +8,7 @@ import type { GlassButtonWidthReservation } from "../components/controls/GlassBu
 import type { ArtRef } from "../primitives/art";
 import {
   SiteLayout,
-  type SiteLayoutGuide,
+  type SiteLayoutGuideView,
 } from "../components/layout/SiteLayout";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
@@ -16,7 +16,7 @@ import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial
 import { ViewportTutorialDialogue } from "../components/overlay/ViewportTutorialDialogue";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 
-export type PurgeGuideView = Omit<SiteLayoutGuide, "presence">;
+export type PurgeGuideView = SiteLayoutGuideView;
 
 export type PurgeActionWidthLabel =
   | { readonly kind: "decline" }
@@ -156,7 +156,7 @@ export function PurgeSiteScreen({
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{ ...view.guide, presence: "speaking" }}
         composition="balanced-gallery"
       >

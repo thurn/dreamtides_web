@@ -99,10 +99,3 @@ export interface CardData {
   /** Art crop applied to the card's image; absent cards use the default crop. */
   art?: ArtCrop;
 }
-
-/**
- * A `CardData` view whose top-level fields are readonly at compile time.
- * Producers may additionally freeze particular values at runtime, but this
- * shallow type alias does not perform or guarantee runtime freezing.
- */
-export type FrozenCardData = Readonly<CardData>;

@@ -42,7 +42,7 @@ import { OfferTile } from "src/cumulus/components/controls/OfferTile";
   model={{
     id: encounterSignature + ":" + offerId,
     kind: "card-draft",
-    cards: offeredCards.map((card) => ({ cardId: card.id, displaySnapshot: card })),
+    cards: offeredCards,
   }}
   presentation={offerPresentation}
   onPress={chooseOffer}

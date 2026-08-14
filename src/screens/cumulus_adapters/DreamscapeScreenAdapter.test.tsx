@@ -17,6 +17,7 @@ import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
 import { makeTutorialConfiguration } from "../../test/tutorial-configuration-fixture";
 import {
   MINIMAL_ATLAS_DATA,
+  MINIMAL_DREAMSCAPES,
   MINIMAL_SITES_DATA,
 } from "../../__test-helpers__/atlas-fixtures";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
@@ -54,7 +55,6 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
     layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: "ember_wood",
-    biomeName: "Ember Wood",
     sites: [
       {
         id: "s-essence",
@@ -121,6 +121,7 @@ function setJourneyContext(
     mutations,
     journeyContent: {
       atlasData: MINIMAL_ATLAS_DATA,
+      dreamscapes: MINIMAL_DREAMSCAPES,
       sitesData: MINIMAL_SITES_DATA,
       draftData: draftDataFixture(),
       ...journeyContent,

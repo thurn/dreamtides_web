@@ -122,7 +122,6 @@ function makeNode(sites: SiteState[]): DreamscapeNode {
     layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: "d1",
-    biomeName: "Biome",
     sites,
     position: { x: 0, y: 0 },
     state: "available",

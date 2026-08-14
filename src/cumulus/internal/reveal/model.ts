@@ -1,4 +1,4 @@
-import type { FrozenCardData } from "../../../types/cards";
+import type { CardData } from "../../../types/cards";
 import type { CardId } from "../../../types/card-identity";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import type {
@@ -36,7 +36,7 @@ export interface RevealGameCard {
   readonly kind: "gameCard";
   readonly cardId: CardId;
   /** Strict resolved display semantics; its id must equal the canonical cardId. */
-  readonly displaySnapshot: FrozenCardData;
+  readonly displaySnapshot: Readonly<CardData>;
   /** Optional applied transfiguration rendered on the reading copy. */
   readonly transfiguration?: CardTransfigurationDisplay;
   /** Semantic selection state inherited from the source card. */

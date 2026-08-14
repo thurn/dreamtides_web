@@ -35,7 +35,6 @@ function node(id: string, state: DreamscapeNode["state"]): DreamscapeNode {
     layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: null,
-    biomeName: "",
     sites: [],
     position: { x: 0, y: 0 },
     state,

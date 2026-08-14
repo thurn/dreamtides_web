@@ -31,9 +31,9 @@ const STANDARD_CANDIDATE_COUNT = 3;
 /** Resolve Durgan, the resident guide for Transfiguration. */
 export function resolveTransfigurationGuide(
   guides: readonly DreamGuideContent[],
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent {
-  return requireGuideForSiteType(guides, "Transfiguration", guideIdOverride);
+  return requireGuideForSiteType(guides, "Transfiguration", presentingGuideId);
 }
 
 /** Build the guide art and one stable greeting for the site layout. */

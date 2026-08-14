@@ -12,18 +12,54 @@ import { token } from "../../primitives/tokens";
 import { useTutorialAnchor } from "../overlay/tutorial-placement";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
 
-/** A complete responsive composition used by the routed site family. */
-export type SiteLayoutComposition =
-  | "balanced-gallery"
-  | "content-led-gallery"
-  | "balanced-dialogue"
-  | "balanced-revelation"
-  | "content-led-revelation"
-  | "balanced-expanded-revelation"
-  | "content-led-expanded-revelation";
+/**
+ * Responsive recipes for the routed site family.
+ *
+ * `balanced-gallery` gives the guide and content equal desktop prominence and
+ * starts content below the compact guide on narrow screens.
+ * `content-led-gallery` narrows the guide and gives the content more desktop
+ * width while retaining the standard narrow stacking.
+ * `balanced-revelation` and `content-led-revelation` use the corresponding
+ * desktop balance with the tall, left-cropped narrow guide treatment.
+ * The expanded Revelation recipes move narrow content upward for taller bodies.
+ */
+export const SITE_LAYOUT_COMPOSITIONS = {
+  "balanced-gallery": {
+    contentLed: false,
+    revelation: false,
+    expanded: false,
+  },
+  "content-led-gallery": {
+    contentLed: true,
+    revelation: false,
+    expanded: false,
+  },
+  "balanced-revelation": {
+    contentLed: false,
+    revelation: true,
+    expanded: false,
+  },
+  "content-led-revelation": {
+    contentLed: true,
+    revelation: true,
+    expanded: false,
+  },
+  "balanced-expanded-revelation": {
+    contentLed: false,
+    revelation: true,
+    expanded: true,
+  },
+  "content-led-expanded-revelation": {
+    contentLed: true,
+    revelation: true,
+    expanded: true,
+  },
+} as const;
 
-/** The resolved resident guide displayed by a routed site. */
-export interface SiteLayoutGuide {
+export type SiteLayoutComposition = keyof typeof SITE_LAYOUT_COMPOSITIONS;
+
+/** Resolved Dream Guide content shared by every guide-bearing site view. */
+export interface SiteLayoutGuideView {
   /** Stable Dream Guide identity. */
   readonly id: string;
   /** Localized guide name used by visible and accessible presentation. */
@@ -32,6 +68,10 @@ export interface SiteLayoutGuide {
   readonly line: LocalizedString;
   /** Transparent resident-guide artwork. */
   readonly art: ArtRef;
+}
+
+/** The resolved resident guide displayed by one SiteLayout composition. */
+export interface SiteLayoutGuide extends SiteLayoutGuideView {
   /** Whether the guide speaks or appears as a portrait without dialogue. */
   readonly presence: "speaking" | "portrait-only";
 }
@@ -41,8 +81,8 @@ export interface SiteLayoutProps {
   readonly siteId: string;
   /** Resolved scene art, or null for the canonical atmospheric fallback. */
   readonly scene: ArtRef | null;
-  /** Named atmospheric treatment for the routed site stage. */
-  readonly atmosphere: "warm" | "violet";
+  /** Named tint for the routed site's deterministic Motes layer. */
+  readonly moteTint: "warm" | "violet";
   /** Resolved resident-guide presentation. */
   readonly guide: SiteLayoutGuide;
   /** Named recipe that owns desktop, intermediate, and narrow composition. */
@@ -76,23 +116,11 @@ function useMedia(queryText: string): boolean {
   return matches;
 }
 
-function contentLed(composition: SiteLayoutComposition): boolean {
-  return composition.startsWith("content-led");
-}
-
-function revelation(composition: SiteLayoutComposition): boolean {
-  return composition.includes("revelation");
-}
-
-function expanded(composition: SiteLayoutComposition): boolean {
-  return composition.includes("expanded");
-}
-
 /** The full-viewport stage shared by routed character-led sites. */
 export function SiteLayout({
   siteId,
   scene,
-  atmosphere,
+  moteTint,
   guide,
   composition,
   children,
@@ -102,9 +130,10 @@ export function SiteLayout({
   const compactDesktop = useMedia(COMPACT_DESKTOP_QUERY);
   const sceneUrl = scene === null ? null : resolveArtRef(scene);
   const guideUrl = resolveArtRef(guide.art);
-  const isRevelation = revelation(composition);
-  const isContentLed = contentLed(composition);
-  const isExpanded = expanded(composition);
+  const recipe = SITE_LAYOUT_COMPOSITIONS[composition];
+  const isRevelation = recipe.revelation;
+  const isContentLed = recipe.contentLed;
+  const isExpanded = recipe.expanded;
   const contentAnchorRef = useTutorialAnchor("site-content");
 
   return (
@@ -114,7 +143,7 @@ export function SiteLayout({
       data-site-id={siteId}
       data-site-layout-composition={composition}
       data-site-layout-guide-presence={guide.presence}
-      data-site-layout-atmosphere={atmosphere}
+      data-site-layout-mote-tint={moteTint}
       data-site-layout-viewport={desktop ? "desktop" : "narrow"}
       style={{
         position: "fixed",
@@ -151,7 +180,7 @@ export function SiteLayout({
           }}
         />
       )}
-      <Motes on tint={atmosphere} />
+      <Motes on tint={moteTint} />
 
       <section
         data-site-layout-stage=""

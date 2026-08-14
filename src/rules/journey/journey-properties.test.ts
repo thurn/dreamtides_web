@@ -240,7 +240,6 @@ function shopNode(): DreamscapeNode {
     layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: null,
-    biomeName: "",
     sites: [
       { id: SHOP_SITE_ID, type: "Shop", isEnhanced: false, isVisited: false },
     ],

@@ -79,9 +79,9 @@ export function gravokRevealGateId(
 /** Resolve the resident Dream Guide for Gamble. */
 export function resolveGambleGuide(
   guides: readonly DreamGuideContent[],
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent {
-  return requireGuideForSiteType(guides, "Gamble", guideIdOverride);
+  return requireGuideForSiteType(guides, "Gamble", presentingGuideId);
 }
 
 /** Map the authoritative rules table and locked jackpot into three choices. */

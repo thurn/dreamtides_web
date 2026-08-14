@@ -14,9 +14,9 @@ import type { OfferTileModel } from "./OfferTile";
 
 type Presentation = AuguryArchetypeData["presentation"];
 function cardName(model: {
-  readonly displaySnapshot: { readonly name: string };
+  readonly name: string;
 }): LocalizedString {
-  return localizedSourceText(model.displaySnapshot.name);
+  return localizedSourceText(model.name);
 }
 
 function countFor(model: OfferTileModel): number | null {

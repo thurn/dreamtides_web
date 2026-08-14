@@ -186,7 +186,6 @@ function fixtureNode(
     layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: "dreamscape-start",
-    biomeName: "Fixture Beginning",
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -203,7 +202,6 @@ function fixtureNextNode(): DreamscapeNode {
     layer: LayerName.Two,
     indexInLayer: 0,
     dreamscapeId: null,
-    biomeName: "",
     sites: [],
     position: { x: 0, y: 1 },
     state: "unrevealed",
@@ -556,7 +554,6 @@ function fixtureBattleCompletionProvider(): BattleCompletionProvider {
           [NEXT_NODE_ID]: {
             ...journey.atlas.nodes[NEXT_NODE_ID],
             dreamscapeId: "dreamscape-next",
-            biomeName: "Fixture Continuation",
             state: "available",
           },
         },

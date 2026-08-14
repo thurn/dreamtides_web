@@ -34,9 +34,9 @@ import { bindSourceTransport } from "../../runtime/localization/runtime";
 /** Resolve Master Takeshi, the resident guide for Purge. */
 export function resolvePurgeGuide(
   guides: readonly DreamGuideContent[],
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent {
-  return requireGuideForSiteType(guides, "Purge", guideIdOverride);
+  return requireGuideForSiteType(guides, "Purge", presentingGuideId);
 }
 
 /** Build the guide slice shown at the top of the purge screen. */

@@ -12,7 +12,7 @@ const invalidLayout: ReactElement = (
   <SiteLayout
     siteId="fixture"
     scene={art}
-    atmosphere="warm"
+    moteTint="warm"
     guide={guide}
     // @ts-expect-error callers choose one supported responsive composition recipe.
     composition="custom-grid"

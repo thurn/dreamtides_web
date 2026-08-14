@@ -5367,7 +5367,6 @@ describe("exploration-view-model", () => {
       layer: LayerName.One,
       indexInLayer: 0,
       dreamscapeId: "fixture-dreamscape",
-      biomeName: "Fixture Dreamscape",
       sites: [explorationSite, siblingSite],
       position: { x: 0, y: 0 },
       state: "available",
@@ -5506,7 +5505,9 @@ describe("exploration-view-model", () => {
         insertionIndex: 2,
         siblingSiteIdsBefore: [explorationSite.id, siblingSite.id],
         model: {
-          site: insertedSite,
+          id: insertedSite.id,
+          type: insertedSite.type,
+          isVisited: insertedSite.isVisited,
           index: 2,
           isInteractive: false,
           icon: MINIMAL_SITES_DATA.siteTypes.Duplication.icon,
@@ -5562,7 +5563,6 @@ describe("exploration-view-model", () => {
       layer: LayerName.One,
       indexInLayer: 0,
       dreamscapeId: "fixture-choice-dreamscape",
-      biomeName: "Fixture Choice Dreamscape",
       sites: [explorationSite, siblingSite],
       position: { x: 0, y: 0 },
       state: "available",
@@ -5695,11 +5695,29 @@ describe("exploration-view-model", () => {
       followup: {
         kind: "site-types",
         choices: [
-          { siteType: "Shop", model: { site: choices[0].insertedSite } },
-          { siteType: "Purge", model: { site: choices[1].insertedSite } },
+          {
+            siteType: "Shop",
+            model: {
+              id: choices[0].insertedSite.id,
+              type: choices[0].insertedSite.type,
+              isVisited: choices[0].insertedSite.isVisited,
+            },
+          },
+          {
+            siteType: "Purge",
+            model: {
+              id: choices[1].insertedSite.id,
+              type: choices[1].insertedSite.type,
+              isVisited: choices[1].insertedSite.isVisited,
+            },
+          },
           {
             siteType: "Transfiguration",
-            model: { site: choices[2].insertedSite },
+            model: {
+              id: choices[2].insertedSite.id,
+              type: choices[2].insertedSite.type,
+              isVisited: choices[2].insertedSite.isVisited,
+            },
           },
         ],
       },
@@ -5751,7 +5769,9 @@ describe("exploration-view-model", () => {
         targetNodeId: nodeId,
         insertionIndex: 2,
         model: {
-          site: chosen.insertedSite,
+          id: chosen.insertedSite.id,
+          type: chosen.insertedSite.type,
+          isVisited: chosen.insertedSite.isVisited,
           isInteractive: false,
           icon: MINIMAL_SITES_DATA.siteTypes.Purge.icon,
         },

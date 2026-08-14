@@ -18,7 +18,7 @@ The rankSuit variant requires rank and suit. The faceDown and fourSuit variants 
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `size` | `WagerPrizeCardSize` = `"wagerCompact" \| "wager"` | no | — | Named Gamble playing-card size. Defaults to `wager`. |
+| `size` | `PlayingCardSize` = `"compact" \| "standard"` | no | — | Named Gamble playing-card size. Defaults to `wager`. |
 | `emphasis` | `"standard" \| "current"` | no | — | Accent the card rim when it is the current choice. |
 | `variant` | `"fourSuit" \| "rankSuit" \| "faceDown"` | yes | — | Render a visible rank-and-suit card face. Render the concealed four-suit face, optionally flipping to a committed draw. Render a conventional face-down card, optionally flipping to its committed face. |
 | `rank` | `StandardPlayingCardRank` = `"A" \| "2" \| "3" \| "4" \| "5" \| "6" \| "7" \| "8" \| "9" \| "10" \| "J" \| "Q" \| "K"` | no | — | Rank shown on the visible card face. |

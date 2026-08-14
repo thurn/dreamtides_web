@@ -120,13 +120,11 @@ function debugSite(
     type,
     isEnhanced: true,
     isVisited: false,
-    ...(provider?.sitesData.randomSite.guideId === undefined
-      ? {}
-      : { guideIdOverride: provider.sitesData.randomSite.guideId }),
     randomSite: {
       mode: "single",
       candidateSiteTypes: [destinationSiteType],
       destinationSiteType,
+      presentingGuideId: provider.sitesData.randomSite.guideId,
     },
   };
 }

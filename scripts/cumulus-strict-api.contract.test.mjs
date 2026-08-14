@@ -68,10 +68,10 @@ const strictComponentSurface = extractPropMeta(
 
 const PROMOTED_COMPONENT_PROP_MANIFEST = {
   SiteLayout: [
-    "atmosphere",
     "children",
     "composition",
     "guide",
+    "moteTint",
     "scene",
     "siteId",
   ],

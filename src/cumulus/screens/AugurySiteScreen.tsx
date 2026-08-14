@@ -38,12 +38,12 @@ import type { AuguryArchetypeData } from "../../types/augury-data";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
   SiteLayout,
-  type SiteLayoutGuide,
+  type SiteLayoutGuideView,
 } from "../components/layout/SiteLayout";
 import { debugRerollCornerStyle } from "../primitives/chrome-geometry";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 
-export type AuguryGuideView = Omit<SiteLayoutGuide, "presence">;
+export type AuguryGuideView = SiteLayoutGuideView;
 
 export interface AuguryCardView {
   id: string;
@@ -219,7 +219,7 @@ export function AugurySiteScreen({
       <SiteLayout
         siteId={view.siteId}
         scene={view.scene}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{
           ...guide,
           presence: inspectedOffer === null ? "speaking" : "portrait-only",

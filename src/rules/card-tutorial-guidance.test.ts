@@ -119,7 +119,6 @@ function siteState(siteId = "site-a", siteType: SiteType = "Shop"): FoldState {
             layer: LayerName.One,
             indexInLayer: 0,
             dreamscapeId: "fixture",
-            biomeName: "Fixture",
             sites: [
               {
                 id: siteId,

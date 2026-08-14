@@ -9,7 +9,6 @@ import { SiteLayout, type SiteLayoutComposition } from "./SiteLayout";
 const compositions: readonly SiteLayoutComposition[] = [
   "balanced-gallery",
   "content-led-gallery",
-  "balanced-dialogue",
   "balanced-revelation",
   "content-led-revelation",
   "balanced-expanded-revelation",
@@ -51,7 +50,7 @@ describe("SiteLayout", () => {
           <SiteLayout
             siteId={composition}
             scene={null}
-            atmosphere="warm"
+            moteTint="warm"
             guide={{
               id: "guide",
               name: assertLocalized("Guide"),
@@ -101,7 +100,7 @@ describe("SiteLayout", () => {
       <SiteLayout
         siteId="fixture"
         scene={artRef.dreamscapeScene("fixture")}
-        atmosphere="violet"
+        moteTint="violet"
         guide={{
           id: "guide",
           name: assertLocalized("Guide"),
@@ -109,7 +108,7 @@ describe("SiteLayout", () => {
           art: artRef.dreamGuide("guide"),
           presence: "portrait-only",
         }}
-        composition="balanced-dialogue"
+        composition="balanced-gallery"
       >
         <div />
       </SiteLayout>,
@@ -127,7 +126,7 @@ describe("SiteLayout", () => {
       <SiteLayout
         siteId="intermediate"
         scene={null}
-        atmosphere="warm"
+        moteTint="warm"
         guide={{
           id: "guide",
           name: assertLocalized("Guide"),

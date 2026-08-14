@@ -1,4 +1,4 @@
-import type { CardData, FrozenCardData } from "../types/cards";
+import type { CardData } from "../types/cards";
 import type { ResolvedDreamAvatarPackage } from "../types/content";
 import type {
   CardSourceDebugEntry,
@@ -7,7 +7,7 @@ import type {
 } from "../types/journey";
 
 function buildCardSourceDebugEntry(
-  card: CardData | FrozenCardData,
+  card: Readonly<CardData>,
   resolvedPackage: ResolvedDreamAvatarPackage | null,
 ): CardSourceDebugEntry {
   const draftPoolCopies =
@@ -23,7 +23,7 @@ function buildCardSourceDebugEntry(
 export function buildCardSourceDebugState(
   screenLabel: string,
   surface: CardSourceDebugSurface,
-  cards: readonly (CardData | FrozenCardData)[],
+  cards: readonly Readonly<CardData>[],
   resolvedPackage: ResolvedDreamAvatarPackage | null,
 ): CardSourceDebugState | null {
   if (cards.length === 0) {

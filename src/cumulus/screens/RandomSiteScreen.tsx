@@ -1,6 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useCallback, useRef, useState } from "react";
-import type { RandomSiteDestinationType, SiteState } from "../../types/journey";
+import type { RandomSiteDestinationType } from "../../types/journey";
 import type { ArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
 import type { Glyph } from "../primitives/glyph";
@@ -9,7 +9,10 @@ import {
   SiteNode,
   type DreamscapeSiteModel,
 } from "../components/dreamscape/SiteNode";
-import { SiteLayout, type SiteLayoutGuide } from "../components/layout/SiteLayout";
+import {
+  SiteLayout,
+  type SiteLayoutGuideView,
+} from "../components/layout/SiteLayout";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import type { LocalizedString } from "@trox/runtime";
@@ -25,7 +28,7 @@ export interface RandomSiteView {
   title: LocalizedString;
   siteId: string;
   scene: ArtRef | null;
-  guide: Omit<SiteLayoutGuide, "presence">;
+  guide: SiteLayoutGuideView;
   choices: readonly RandomSiteChoiceView[];
 }
 
@@ -61,7 +64,7 @@ export function RandomSiteScreen({
     <SiteLayout
       siteId={view.siteId}
       scene={view.scene}
-      atmosphere="warm"
+      moteTint="warm"
       guide={{ ...view.guide, presence: "speaking" }}
       composition="content-led-revelation"
     >
@@ -104,15 +107,10 @@ export function RandomSiteScreen({
               }}
             >
               {view.choices.map((choice, index) => {
-                const choiceSite: SiteState = {
+                const model: DreamscapeSiteModel = {
                   id: `${view.siteId}:random:${choice.siteType}`,
                   type: choice.siteType,
-                  isEnhanced: true,
                   isVisited: false,
-                  guideIdOverride: view.guide.id,
-                };
-                const model: DreamscapeSiteModel = {
-                  site: choiceSite,
                   pos: { x: 50, y: 50 },
                   index,
                   isBattle: false,

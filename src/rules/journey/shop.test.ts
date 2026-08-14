@@ -104,7 +104,6 @@ function makeNode(sites: SiteState[]): DreamscapeNode {
     layer: LayerName.Two,
     indexInLayer: 0,
     dreamscapeId: "d1",
-    biomeName: "Biome",
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -979,9 +978,9 @@ describe("atlas edits", () => {
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.atlas.nodes[NODE_ID].sites[1]).toMatchObject({
       type: "RandomSite",
-      guideIdOverride: "fixture-random-guide",
       randomSite: {
         mode: "single",
+        presentingGuideId: "fixture-random-guide",
         candidateSiteTypes: ["Exploration"],
         destinationSiteType: "Exploration",
       },

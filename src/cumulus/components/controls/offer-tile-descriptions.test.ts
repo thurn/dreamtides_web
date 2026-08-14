@@ -4,7 +4,8 @@ import { localizedStringSourceEquality } from "../../../runtime/localization/tes
 import { resolveSource } from "../../../runtime/localization/runtime";
 import { asCardId, asCardName } from "../../../types/card-identity";
 import type { AuguryArchetypeData } from "../../../types/augury-data";
-import type { OfferTileCard, OfferTileModel } from "./OfferTile";
+import type { CardData } from "../../../types/cards";
+import type { OfferTileModel } from "./OfferTile";
 import {
   auguryOfferHeadline,
   offerTileDescription,
@@ -13,22 +14,19 @@ import {
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
-const CARD: OfferTileCard = {
-  cardId: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
-  displaySnapshot: {
-    id: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
-    name: asCardName("Fixture Card"),
-    cardNumber: 1,
-    cardType: "Character",
-    subtype: "Spirit Animal",
-    isStarter: false,
-    energyCost: 2,
-    spark: 3,
-    isFast: false,
-    renderedText: "",
-    imageNumber: 1,
-    artOwned: true,
-  },
+const CARD: Readonly<CardData> = {
+  id: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
+  name: asCardName("Fixture Card"),
+  cardNumber: 1,
+  cardType: "Character",
+  subtype: "Spirit Animal",
+  isStarter: false,
+  energyCost: 2,
+  spark: 3,
+  isFast: false,
+  renderedText: "",
+  imageNumber: 1,
+  artOwned: true,
 };
 
 const textPresentation = (

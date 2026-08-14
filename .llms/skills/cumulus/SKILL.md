@@ -163,9 +163,8 @@ That implementation term does not cross the component API boundary.
 | Atlas Node | Atlas & Sites | 2 | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — including a frame-shaped violet outline that visibly widens and contracts around the next selectable dreamscape — and which reveals its scene / detail card on hover or press. |
 | Atlas Edge | Atlas & Sites | 1 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
 | Site Node | Atlas & Sites | 4 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
-| Site Layout | Atlas & Sites | 11 | [components/site-layout.md](components/site-layout.md) | The responsive full-stage composition for routed character-led sites, with scene, atmosphere, guide, speech, safe areas, and one site-body region. |
+| Site Layout | Atlas & Sites | 11 | [components/site-layout.md](components/site-layout.md) | The responsive full-stage composition for routed character-led sites, with scene, mote tint, guide, speech, safe areas, and one site-body region. |
 | Offer Tile | Atlas & Sites | 2 | [components/offer-tile.md](components/offer-tile.md) | The circular symbolic Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame. |
-| Wager Prize Card | Atlas & Sites | 1 | [components/wager-prize-card.md](components/wager-prize-card.md) | The shared Gamble reward object: a playing-card superellipse with threshold-and-reverse or flat-reward presentations. |
 <!-- END GENERATED COMPONENT INDEX -->
 
 ## Customization: step back before adding any knob

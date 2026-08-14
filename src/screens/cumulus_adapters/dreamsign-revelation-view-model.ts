@@ -24,12 +24,12 @@ import { localizedDreamsign } from "../../cumulus/components/hud/localized-dream
 /** Resolve Sigrun, the resident guide for Dreamsign Revelation. */
 export function resolveDreamsignRevelationGuide(
   guides: readonly DreamGuideContent[],
-  guideIdOverride?: string,
+  presentingGuideId?: string,
 ): DreamGuideContent {
   return requireGuideForSiteType(
     guides,
     "DreamsignRevelation",
-    guideIdOverride,
+    presentingGuideId,
   );
 }
 
