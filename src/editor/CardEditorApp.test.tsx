@@ -2443,6 +2443,25 @@ describe("CardEditorApp", () => {
     });
     expect(amplifiedField.textContent).toContain("Draw three cards.");
 
+    const clearAmplifiedText = editorCard?.querySelector<HTMLButtonElement>(
+      '[aria-label="Clear amplified text"]',
+    );
+    if (clearAmplifiedText === null || clearAmplifiedText === undefined) {
+      throw new Error("Missing clear amplified text button");
+    }
+
+    await act(async () => {
+      clearAmplifiedText.click();
+      await flushAsyncWork();
+    });
+
+    expect(saveEditorCardField.mock.calls[1]?.[0]).toMatchObject({
+      id: "amplified-card",
+      field: "amplified-text",
+      value: "",
+    });
+    expect(editorCardIds(container)).toEqual([]);
+
     act(() => root.unmount());
   });
 

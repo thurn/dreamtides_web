@@ -909,6 +909,15 @@ export default function CardEditorApp({
           ),
         );
         replaceConfirmedCard(response.card);
+        if (
+          field === "amplified-text" &&
+          card["amplified-text"].trim() !== "" &&
+          response.card["amplified-text"].trim() === ""
+        ) {
+          logEvent("card_editor_amplified_text_cleared", {
+            cardId: card.id,
+          });
+        }
       })
       .catch((error: unknown) => {
         const message = errorMessageFor(error);

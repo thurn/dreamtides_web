@@ -2,8 +2,10 @@ import { asCardName } from "../types/card-identity";
 import { useCallback, useRef, useState, type ReactNode } from "react";
 import { CardView } from "../cumulus/components/card/CardView";
 import type { CardViewSlots } from "../cumulus/components/card/CardView";
+import { IconButton } from "../cumulus/components/controls/IconButton";
 import { extractGlossaryTerms } from "../data/glossary-terms";
 import { GLYPHS } from "../cumulus/primitives/glyph";
+import { assertLocalized } from "@trox/runtime";
 import { MtgNameTooltip } from "./card-browser/MtgNameTooltip";
 import type { CardDuplicateUsage } from "./card-duplicate-usage";
 import CardTagEditor from "./CardTagEditor";
@@ -436,6 +438,30 @@ export default function EditableCard({
       {card["rendered-text"]}
     </div>
   ) : null;
+  const clearAmplifiedTextControl =
+    showAmplifiedText &&
+    !rulesTextEditing &&
+    confirmedVisibleRulesText.trim() !== "" ? (
+      <span
+        className="cumulus"
+        data-editor-clear-amplified-text={card.id}
+        title="Clear amplified text"
+        style={{
+          position: "absolute",
+          top: "var(--space-4xl)",
+          right: "var(--space-xs)",
+          zIndex: 7,
+        }}
+      >
+        <IconButton
+          glyph={GLYPHS.close}
+          label={assertLocalized("Clear amplified text")}
+          size="sm"
+          disabled={visibleRulesSaveEntry?.status === "saving"}
+          onPress={() => onFieldSave(card, "amplified-text", "")}
+        />
+      </span>
+    ) : null;
 
   // Common props for an editable region. EditableField is a `display: contents`
   // wrapper, so the rendered card geometry is exactly CardView's; the editor
@@ -601,6 +627,7 @@ export default function EditableCard({
           eagerRulesFit={eagerRulesFit}
           glossaryInfoOnHover={shouldShowGlossaryInfoOnHover}
         />
+        {clearAmplifiedTextControl}
         {fontSizeOverlay}
         {originalRulesCaption}
         {checkboxControl}
@@ -630,6 +657,7 @@ export default function EditableCard({
         rulesTextboxExpanded={rulesTextEditing}
         glossaryInfoOnHover={shouldShowGlossaryInfoOnHover}
       />
+      {clearAmplifiedTextControl}
       {fontSizeOverlay}
       {originalRulesCaption}
       {/* Checkbox tagging hides the tag and tide chip editors so only the one
