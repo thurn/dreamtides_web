@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { format } from "prettier";
 import { test } from "vitest";
 
 import { buildImagePublication } from "../.llms/skills/dda/scripts/dda-image-publisher-lib.mjs";
@@ -375,7 +376,7 @@ test("warns about implementation leakage without failing", async () => {
   });
 });
 
-test("format and measurement CLIs operate on a flat anthology", async () => {
+test("format CLI writes a flat anthology", async () => {
   await withAnthology(validFiles(), async (anthologyDirectory) => {
     const writeResult = spawnSync(
       process.execPath,
@@ -387,7 +388,20 @@ test("format and measurement CLIs operate on a flat anthology", async () => {
       0,
       `${writeResult.stdout}\n${writeResult.stderr}`,
     );
+    assert.ok(writeResult.stdout.includes("DDA Markdown formatted"));
+  });
+});
 
+test("format CLI checks a flat anthology", async () => {
+  const files = validFiles();
+  for (const [filename, source] of Object.entries(files)) {
+    files[filename] = await format(source, {
+      parser: "markdown",
+      printWidth: 80,
+      proseWrap: "always",
+    });
+  }
+  await withAnthology(files, async (anthologyDirectory) => {
     const formatResult = spawnSync(
       process.execPath,
       [cliPath, "--check", "--anthology", anthologyDirectory],
@@ -399,7 +413,11 @@ test("format and measurement CLIs operate on a flat anthology", async () => {
       `${formatResult.stdout}\n${formatResult.stderr}`,
     );
     assert.ok(formatResult.stdout.includes("DDA Markdown checked"));
+  });
+});
 
+test("measurement CLI reports essays from a flat anthology", async () => {
+  await withAnthology(validFiles(), async (anthologyDirectory) => {
     const measurementResult = spawnSync(
       process.execPath,
       [measurementCliPath, "--anthology", anthologyDirectory],

@@ -1,6 +1,6 @@
 import auguryJson from "../generated/config/augury-data.json";
-import sitesJson from "../../public/sites-data.json";
-import tidesJson from "../../public/tides4-data.json";
+import sitesJson from "../generated/config/sites-data.json";
+import tidesJson from "../generated/config/tides4-data.json";
 import { parseAuguryData } from "../data/augury-data";
 import { buildRewardSelectionData } from "../data/reward-selection-data";
 import { parseSitesData } from "../data/sites-data";

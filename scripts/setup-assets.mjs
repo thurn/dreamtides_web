@@ -1552,6 +1552,7 @@ export function setupAssets({
   const dreamscapesJsonPath = join(publicDir, "dreamscapes-data.json");
   const dreamGuidesJsonPath = join(publicDir, "dream-guides-data.json");
   const sitesJsonPath = join(publicDir, "sites-data.json");
+  const generatedSitesJsonPath = join(generatedConfigDir, "sites-data.json");
   const explorationJsonPath = join(publicDir, "exploration-data.json");
   const auguryJsonPath = join(publicDir, "augury-data.json");
   const generatedAuguryJsonPath = join(generatedConfigDir, "augury-data.json");
@@ -1580,6 +1581,8 @@ export function setupAssets({
   const figmentJsonPath = join(publicDir, "figments-data.json");
   const tutorialJsonPath = join(publicDir, "tutorial-data.json");
   const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
+
+  mkdirSync(generatedConfigDir, { recursive: true });
 
   const { jsonCards, jsonCardsV2, cardMaps } = regenerateCardData({
     cardTomlPath,
@@ -1622,12 +1625,18 @@ export function setupAssets({
   // pool composition consumed by the tides4 pool variant.
   const tidesSourcePath = join(DATA_DIR, "tides.toml");
   const tides4JsonPath = join(publicDir, "tides4-data.json");
+  const generatedTides4JsonPath = join(
+    generatedConfigDir,
+    "tides4-data.json",
+  );
   if (existsSync(tidesSourcePath) && existsSync(dreamAvatarV2TomlPath)) {
     const served = compileTidesData(
       parse(readFileSync(tidesSourcePath, "utf8")),
       parse(readFileSync(dreamAvatarV2TomlPath, "utf8")),
     );
-    writeFileSync(tides4JsonPath, `${JSON.stringify(served)}\n`);
+    const serialized = `${JSON.stringify(served)}\n`;
+    writeFileSync(tides4JsonPath, serialized);
+    writeFileSync(generatedTides4JsonPath, serialized);
     console.log("Compiled tide catalogs to tides4-data.json");
   } else {
     console.log(
@@ -1948,7 +1957,9 @@ export function setupAssets({
       economy: jsonEconomyData,
     },
   );
-  writeFileSync(sitesJsonPath, JSON.stringify(jsonSitesData, null, 2) + "\n");
+  const serializedSitesData = JSON.stringify(jsonSitesData, null, 2) + "\n";
+  writeFileSync(sitesJsonPath, serializedSitesData);
+  writeFileSync(generatedSitesJsonPath, serializedSitesData);
   console.log("Wrote Sites data to sites-data.json");
 
   console.log("Parsing draft.toml...");

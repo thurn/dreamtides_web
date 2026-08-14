@@ -1,9 +1,7 @@
-`scripts/dda-markdown.test.mjs` can exceed Vitest's 15-second default timeout
-during `npm run review:full` under sustained repository-wide test load. The
-test passes unchanged when run in isolation; its synchronous CLI subprocess
-coverage is load-sensitive and unrelated to the localization migration.
-
-`cargo check --locked --manifest-path tabula/src-tauri/Cargo.toml` fails before
-compilation because `tabula/src-tauri/Cargo.lock` needs an update for the
-current `tools/game-data` dependency graph. The stale Tabula lockfile predates
-and is unrelated to the GitHub Actions repair.
+`scripts/regenerate-assets.sh` fails in its Trox extraction step with
+`trox.literal-required` errors across canonical RON catalogs. The current Trox
+extractor accepts the single-literal `Tx("...")` form but rejects structured
+`Tx(text: "...", placeholders: {...})` values, including entries in
+`data/atlas.ron`, `data/augury.ron`, `data/draft.ron`, `data/exploration.ron`,
+`data/glossary.ron`, and `data/sites.ron`. Asset setup and the other generation
+steps complete before extraction aborts.

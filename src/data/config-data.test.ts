@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import auguryJson from "../generated/config/augury-data.json";
-import sitesJson from "../../public/sites-data.json";
-import tidesJson from "../../public/tides4-data.json";
+import sitesJson from "../generated/config/sites-data.json";
+import tidesJson from "../generated/config/tides4-data.json";
 import { parseAuguryData } from "./augury-data";
 import { buildRewardSelectionData } from "./reward-selection-data";
 import { parseSitesData } from "./sites-data";
