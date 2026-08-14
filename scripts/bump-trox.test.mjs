@@ -98,4 +98,28 @@ describe("Trox version bump", () => {
       rmSync(root, { recursive: true, force: true });
     }
   });
+
+  it("rejects a Trox HEAD behind the current pin before modifying Quest", () => {
+    const root = createFixture();
+    const troxRoot = resolve(root, "trox");
+    mkdirSync(troxRoot);
+    const run = (command, arguments_) => {
+      if (command === "git" && arguments_[0] === "status") return "\n";
+      if (command === "git" && arguments_[0] === "rev-parse") return `${NEXT_REVISION}\n`;
+      if (command === "git" && arguments_[0] === "merge-base") {
+        throw new Error("exit status 1");
+      }
+      throw new Error(`Unexpected command: ${command} ${arguments_.join(" ")}`);
+    };
+    try {
+      expect(() => bumpTrox({ environment: {}, questRoot: root, run, troxRoot }))
+        .toThrow(/does not descend from Quest's pinned revision/);
+      expect(readFileSync(resolve(root, ".trox-revision"), "utf8"))
+        .toBe(`${PREVIOUS_REVISION}\n`);
+      expect(readFileSync(resolve(root, "tools/game-data/Cargo.toml"), "utf8"))
+        .toContain(`rev = "${PREVIOUS_REVISION}"`);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
 });

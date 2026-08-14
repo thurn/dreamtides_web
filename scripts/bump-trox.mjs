@@ -36,6 +36,26 @@ export function checkoutRevision(troxRoot, run = execFileSync) {
   return revision;
 }
 
+export function assertForwardRevision({
+  previousRevision,
+  nextRevision,
+  troxRoot,
+  run = execFileSync,
+}) {
+  try {
+    run("git", ["merge-base", "--is-ancestor", previousRevision, nextRevision], {
+      cwd: troxRoot,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+  } catch {
+    throw new Error(
+      `Trox HEAD ${nextRevision} does not descend from Quest's pinned revision ${previousRevision}. `
+      + `Update the Trox checkout at ${troxRoot} before bumping.`,
+    );
+  }
+}
+
 export function updateTroxPins({
   questRoot = QUEST_ROOT,
   previousRevision,
@@ -79,6 +99,7 @@ export function bumpTrox(options = {}) {
   if (nextRevision === previousRevision) {
     throw new Error(`Quest already vendors Trox revision ${nextRevision}.`);
   }
+  assertForwardRevision({ previousRevision, nextRevision, troxRoot, run });
 
   updateTroxPins({ questRoot, previousRevision, nextRevision });
 
