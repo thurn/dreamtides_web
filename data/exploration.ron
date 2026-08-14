@@ -16032,9 +16032,7 @@
 
   EncounterDefinition(
     card_id: "a7820b34-9fdc-46cc-8357-53c8caa056b1",
-    prose: Tx(
-      "A horned machine broker coils bladed cables around an orange mask and glowing circuitry."
-    ),
+    prose: Tx("A horned broker leans forward, bladed cables coiling around glowing circuitry."),
     actions: [
       ActionDefinition(
         label: Tx("Trade one warrior"),

@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { cpSync, existsSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -9,11 +9,42 @@ import {
   sourceRevision,
   stageAndPublishGameDataEdit,
 } from "./game-data-pipeline.mjs";
+import { runTrox } from "./trox.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/exploration";
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 const EXPLORATION_SOURCE_PATHS = ["data/exploration.ron"];
+export const EXPLORATION_LOCALIZATION_PATHS = [
+  "localization/reports/en-US.csv",
+  "localization/qa/ar.csv",
+  "localization/qa/es.csv",
+  "localization/qa/ja.csv",
+  "localization/qa/ru.csv",
+  "src/generated/localization/en-US.trox.json",
+  "src/generated/localization/ar.trox.json",
+  "src/generated/localization/es.trox.json",
+  "src/generated/localization/ja.trox.json",
+  "src/generated/localization/ru.trox.json",
+];
+
+export function refreshExplorationLocalizationArtifacts({
+  rootDir,
+  stageRoot,
+  copy = cpSync,
+  runTroxCommand = runTrox,
+}) {
+  copy(join(rootDir, "localization"), join(stageRoot, "localization"), {
+    recursive: true,
+  });
+  copy(join(rootDir, "trox.ron"), join(stageRoot, "trox.ron"));
+  const troxOptions = {
+    configPath: join(stageRoot, "trox.ron"),
+    cwd: stageRoot,
+  };
+  runTroxCommand(["extract"], troxOptions);
+  runTroxCommand(["bundle", "--allow-missing"], troxOptions);
+}
 
 function respond(res, status, body) {
   res.writeHead(status, { "Content-Type": "application/json; charset=utf-8" });
@@ -85,6 +116,11 @@ function statusFor(error) {
 export function createExplorationEditorApiMiddleware(options = {}) {
   const rootDir = options.rootDir ?? ROOT;
   const onChanged = options.onChanged ?? (() => {});
+  const publishEdit = options.publishEdit ?? stageAndPublishGameDataEdit;
+  const readData = options.readData ?? readExplorationEditorData;
+  const refreshLocalizationArtifacts =
+    options.refreshLocalizationArtifacts ??
+    refreshExplorationLocalizationArtifacts;
   const dataOptions = {
     rootDir,
     ...(options.fileSystem === undefined ? {} : { fileSystem: options.fileSystem }),
@@ -119,7 +155,7 @@ export function createExplorationEditorApiMiddleware(options = {}) {
         return;
       }
       try {
-        const data = readExplorationEditorData(dataOptions);
+        const data = readData(dataOptions);
         respond(res, 200, ronBacked ? {
           ...data,
           sourceRevision: sourceRevision(rootDir, EXPLORATION_SOURCE_PATHS),
@@ -154,7 +190,7 @@ export function createExplorationEditorApiMiddleware(options = {}) {
           }
           if (route.kind === "encounter") {
             if (ronBacked) {
-              const result = await stageAndPublishGameDataEdit({
+              const result = await publishEdit({
                 rootDir,
                 dataset: "exploration",
                 expectedSourceRevision: body.expectedSourceRevision,
@@ -164,9 +200,13 @@ export function createExplorationEditorApiMiddleware(options = {}) {
                   card_id: route.cardId,
                   prose: body.value,
                 }],
+                prepareDerivedArtifacts: ({ stageRoot }) => {
+                  refreshLocalizationArtifacts({ rootDir, stageRoot });
+                },
+                additionalPublishPaths: EXPLORATION_LOCALIZATION_PATHS,
               });
               data = {
-                ...readExplorationEditorData(dataOptions),
+                ...readData(dataOptions),
                 sourceRevision: result.sourceRevision,
               };
             } else throw new Error("Exploration editor writes require typed RON.");
@@ -178,7 +218,7 @@ export function createExplorationEditorApiMiddleware(options = {}) {
               throw error;
             }
             if (ronBacked) {
-              const current = readExplorationEditorData(dataOptions);
+              const current = readData(dataOptions);
               const encounter = current.encounters.find((entry) =>
                 entry.cardId.toLowerCase() === route.cardId.toLowerCase());
               const expectedActionId = encounter?.actions[Number(route.slot)]?.id;
@@ -192,7 +232,7 @@ export function createExplorationEditorApiMiddleware(options = {}) {
                 dreamsignIds: new Set(current.dreamsigns.flatMap((dreamsign) =>
                   dreamsign.id === undefined ? [] : [dreamsign.id.toLowerCase()])),
               });
-              const result = await stageAndPublishGameDataEdit({
+              const result = await publishEdit({
                 rootDir,
                 dataset: "exploration",
                 expectedSourceRevision: body.expectedSourceRevision,
@@ -204,9 +244,13 @@ export function createExplorationEditorApiMiddleware(options = {}) {
                   expected_action_id: expectedActionId,
                   action,
                 }],
+                prepareDerivedArtifacts: ({ stageRoot }) => {
+                  refreshLocalizationArtifacts({ rootDir, stageRoot });
+                },
+                additionalPublishPaths: EXPLORATION_LOCALIZATION_PATHS,
               });
               data = {
-                ...readExplorationEditorData(dataOptions),
+                ...readData(dataOptions),
                 sourceRevision: result.sourceRevision,
               };
             } else throw new Error("Exploration editor writes require typed RON.");
@@ -229,7 +273,7 @@ export function createExplorationEditorApiMiddleware(options = {}) {
             code: "STALE_SOURCE",
             message: error.message,
             currentSourceRevision: error.currentSourceRevision,
-            confirmed: readExplorationEditorData(dataOptions),
+            confirmed: readData(dataOptions),
             datasetId: "exploration",
             source: EXPLORATION_SOURCE_PATHS[0],
           },

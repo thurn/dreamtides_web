@@ -261,13 +261,34 @@ function flatGroup(group) {
 class Writer {
   constructor(indentWidth) {
     this.indentWidth = indentWidth;
-    this.output = "";
+    this.chunks = [];
+    this.lastCharacter = "";
     this.column = 0;
     this.lineHasContent = false;
   }
 
+  push(text) {
+    if (text.length === 0) return;
+    this.chunks.push(text);
+    this.lastCharacter = text.at(-1);
+  }
+
+  trimTrailingHorizontalWhitespace() {
+    while (this.chunks.length > 0) {
+      const lastIndex = this.chunks.length - 1;
+      const trimmed = this.chunks[lastIndex].replace(/[ \t]+$/u, "");
+      if (trimmed.length > 0) {
+        this.chunks[lastIndex] = trimmed;
+        this.lastCharacter = trimmed.at(-1);
+        return;
+      }
+      this.chunks.pop();
+    }
+    this.lastCharacter = "";
+  }
+
   append(text) {
-    this.output += text;
+    this.push(text);
     const newline = text.lastIndexOf("\n");
     if (newline === -1) {
       this.column += text.length;
@@ -279,27 +300,31 @@ class Writer {
   }
 
   space() {
-    if (this.output.endsWith(" ") || this.output.endsWith("\n")) return;
+    if (this.lastCharacter === " " || this.lastCharacter === "\n") return;
     this.append(" ");
   }
 
   newline(indentLevel = 0) {
-    this.output = this.output.replace(/[ \t]+$/u, "");
-    if (!this.output.endsWith("\n")) this.output += "\n";
+    this.trimTrailingHorizontalWhitespace();
+    if (this.lastCharacter !== "\n") this.push("\n");
     const indentation = " ".repeat(indentLevel * this.indentWidth);
-    this.output += indentation;
+    this.push(indentation);
     this.column = indentation.length;
     this.lineHasContent = false;
   }
 
   blankLine(indentLevel = 0) {
-    this.output = this.output.replace(/[ \t]+$/u, "");
-    if (!this.output.endsWith("\n")) this.output += "\n";
-    this.output += "\n";
+    this.trimTrailingHorizontalWhitespace();
+    if (this.lastCharacter !== "\n") this.push("\n");
+    this.push("\n");
     const indentation = " ".repeat(indentLevel * this.indentWidth);
-    this.output += indentation;
+    this.push(indentation);
     this.column = indentation.length;
     this.lineHasContent = false;
+  }
+
+  toString() {
+    return this.chunks.join("");
   }
 }
 
@@ -546,7 +571,7 @@ export function formatRon(source, options = {}) {
     else if (!isComment) sawTopLevelValue = true;
   }
 
-  const formatted = `${writer.output.trimEnd()}\n`;
+  const formatted = `${writer.toString().trimEnd()}\n`;
   const before = comparableTokens(source);
   const after = comparableTokens(formatted);
   if (

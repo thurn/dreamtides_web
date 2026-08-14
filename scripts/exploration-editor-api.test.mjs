@@ -2,7 +2,11 @@
 
 import { EventEmitter } from "node:events";
 import { describe, expect, it, vi } from "vitest";
-import { createExplorationEditorApiMiddleware } from "./exploration-editor-api.mjs";
+import {
+  createExplorationEditorApiMiddleware,
+  EXPLORATION_LOCALIZATION_PATHS,
+  refreshExplorationLocalizationArtifacts,
+} from "./exploration-editor-api.mjs";
 
 function request(method, url, body) {
   const req = new EventEmitter();
@@ -45,6 +49,78 @@ describe("exploration editor API", () => {
     expect(result.body.effectSchemas).toHaveLength(66);
     expect(result.body).not.toHaveProperty("templates");
     expect(result.body.sourceRevision).toMatch(/^[0-9a-f]{64}$/u);
+  });
+
+  it("refreshes every Trox artifact inside the staged publication root", () => {
+    const copy = vi.fn();
+    const runTroxCommand = vi.fn();
+
+    refreshExplorationLocalizationArtifacts({
+      rootDir: "/quest",
+      stageRoot: "/stage",
+      copy,
+      runTroxCommand,
+    });
+
+    expect(copy.mock.calls).toEqual([
+      ["/quest/localization", "/stage/localization", { recursive: true }],
+      ["/quest/trox.ron", "/stage/trox.ron"],
+    ]);
+    expect(runTroxCommand.mock.calls).toEqual([
+      [["extract"], {
+        configPath: "/stage/trox.ron",
+        cwd: "/stage",
+      }],
+      [["bundle", "--allow-missing"], {
+        configPath: "/stage/trox.ron",
+        cwd: "/stage",
+      }],
+    ]);
+  });
+
+  it("publishes prose and its refreshed Trox catalogs in one transaction", async () => {
+    const cardId = "161482b6-af07-4d9e-822d-8c738672beb9";
+    const readData = vi.fn(() => ({
+      encounters: [{ cardId, prose: "Fixture prose", actions: [] }],
+      cards: [],
+      dreamsigns: [],
+      effectSchemas: [],
+      predicates: [],
+      transfigurations: [],
+      subtypes: [],
+    }));
+    const refreshLocalizationArtifacts = vi.fn();
+    const publishEdit = vi.fn(async (options) => {
+      options.prepareDerivedArtifacts({ stageRoot: "/stage" });
+      return { sourceRevision: "next-revision" };
+    });
+    const isolated = createExplorationEditorApiMiddleware({
+      rootDir: process.cwd(),
+      readData,
+      publishEdit,
+      refreshLocalizationArtifacts,
+    });
+    const res = response();
+    await isolated(request(
+      "PATCH",
+      `/api/editor/exploration/encounters/${cardId}`,
+      { value: "Revised fixture prose", expectedSourceRevision: "revision" },
+    ), res, vi.fn());
+
+    expect(res.status).toBe(200);
+    expect(publishEdit).toHaveBeenCalledWith(expect.objectContaining({
+      dataset: "exploration",
+      operations: [{
+        operation: "set_encounter_prose",
+        card_id: cardId,
+        prose: "Revised fixture prose",
+      }],
+      additionalPublishPaths: EXPLORATION_LOCALIZATION_PATHS,
+    }));
+    expect(refreshLocalizationArtifacts).toHaveBeenCalledWith({
+      rootDir: process.cwd(),
+      stageRoot: "/stage",
+    });
   });
 
   it("rejects removed template routes and malformed mutations", async () => {

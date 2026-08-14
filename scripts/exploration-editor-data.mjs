@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readFileSync, statSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
@@ -90,19 +90,32 @@ function requiredString(value, label) {
 
 const sourceCatalogs = new Map();
 
-function sourceAuthoringText(value, label, rootDir) {
-  if (typeof value === "string") return requiredString(value, label);
+function sourceCatalogFor(rootDir, options = {}) {
+  const bundlePath = join(
+    rootDir,
+    "src",
+    "generated",
+    "localization",
+    "en-US.trox.json",
+  );
+  const stat = (options.stat ?? statSync)(bundlePath);
+  const version = [stat.dev, stat.ino, stat.size, stat.mtimeMs].join(":");
   let cached = sourceCatalogs.get(rootDir);
-  if (cached === undefined) {
-    const bundle = JSON.parse(
-      readFileSync(
-        join(rootDir, "src", "generated", "localization", "en-US.trox.json"),
-        "utf8",
-      ),
-    );
-    cached = { bundle, catalog: new SourceCatalog(bundle) };
+  if (cached?.version !== version) {
+    const bundle = JSON.parse((options.read ?? readFileSync)(bundlePath, "utf8"));
+    cached = {
+      version,
+      bundle,
+      catalog: (options.create ?? ((value) => new SourceCatalog(value)))(bundle),
+    };
     sourceCatalogs.set(rootDir, cached);
   }
+  return cached;
+}
+
+function sourceAuthoringText(value, label, sourceCatalog) {
+  if (typeof value === "string") return requiredString(value, label);
+  const cached = sourceCatalog();
   try {
     cached.catalog.sourceMessageFromValue(value);
   } catch (error) {
@@ -121,14 +134,14 @@ function sourceAuthoringText(value, label, rootDir) {
   return requiredString(pattern.text, label);
 }
 
-function authoringAction(raw, rootDir) {
+function authoringAction(raw, sourceCatalog) {
   return {
     ...raw,
-    label: sourceAuthoringText(raw.label, "action label", rootDir),
+    label: sourceAuthoringText(raw.label, "action label", sourceCatalog),
     "effect-text": sourceAuthoringText(
       raw["effect-text"],
       "action effect text",
-      rootDir,
+      sourceCatalog,
     ),
     ...(raw["followup-title"] === undefined
       ? {}
@@ -136,7 +149,7 @@ function authoringAction(raw, rootDir) {
           "followup-title": sourceAuthoringText(
             raw["followup-title"],
             "action followup title",
-            rootDir,
+            sourceCatalog,
           ),
         }),
     ...(raw["followup-subtitle"] === undefined
@@ -145,7 +158,7 @@ function authoringAction(raw, rootDir) {
           "followup-subtitle": sourceAuthoringText(
             raw["followup-subtitle"],
             "action followup subtitle",
-            rootDir,
+            sourceCatalog,
           ),
         }),
   };
@@ -391,6 +404,9 @@ export function readExplorationEditorData(options = {}) {
     dreamsignIds: catalogs.dreamsignIds,
   };
   const random = options.random ?? Math.random;
+  let currentSourceCatalog;
+  const sourceCatalog = () =>
+    (currentSourceCatalog ??= sourceCatalogFor(rootDir));
   const catalog = [...catalogs.cards.values()];
   const playerDeck = buildSimulatedPlayerDeck(catalog, random);
   const encounters = (document.encounter ?? []).map((encounter) => {
@@ -403,13 +419,17 @@ export function readExplorationEditorData(options = {}) {
       );
     return {
       cardId,
-      prose: sourceAuthoringText(encounter.prose, "encounter prose", rootDir),
+      prose: sourceAuthoringText(
+        encounter.prose,
+        "encounter prose",
+        sourceCatalog,
+      ),
       cardName: card.name,
       cardAbilityText: card.renderedText,
       imageNumber: card.imageNumber,
       actions: (encounter.action ?? []).map((rawAction) => {
         const action = normalizeExplorationAction(
-          camelAction(authoringAction(rawAction, rootDir)),
+          camelAction(authoringAction(rawAction, sourceCatalog)),
           references,
         );
         return {
@@ -430,4 +450,4 @@ export function readExplorationEditorData(options = {}) {
   };
 }
 
-export const explorationEditorInternals = { camelAction };
+export const explorationEditorInternals = { camelAction, sourceCatalogFor };

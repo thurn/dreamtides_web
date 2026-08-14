@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   explorationEditorInternals,
   normalizeExplorationAction,
@@ -7,6 +7,33 @@ import {
 import { EXPLORATION_EFFECT_SCHEMAS } from "./exploration-editor-schema.mjs";
 
 describe("exploration editor data", () => {
+  it("reloads the source catalog when its published bundle changes", () => {
+    let version = { dev: 1, ino: 2, size: 3, mtimeMs: 4 };
+    const stat = vi.fn(() => version);
+    const read = vi.fn(() => JSON.stringify({ marker: read.mock.calls.length }));
+    const create = vi.fn((bundle) => ({ bundle }));
+    const options = { stat, read, create };
+
+    const first = explorationEditorInternals.sourceCatalogFor(
+      "/virtual/exploration-catalog-refresh",
+      options,
+    );
+    const cached = explorationEditorInternals.sourceCatalogFor(
+      "/virtual/exploration-catalog-refresh",
+      options,
+    );
+    version = { ...version, ino: 5, mtimeMs: 6 };
+    const refreshed = explorationEditorInternals.sourceCatalogFor(
+      "/virtual/exploration-catalog-refresh",
+      options,
+    );
+
+    expect(cached).toBe(first);
+    expect(refreshed).not.toBe(first);
+    expect(read).toHaveBeenCalledTimes(2);
+    expect(create).toHaveBeenCalledTimes(2);
+  });
+
   it("maps compatibility site-type to the editor siteType field", () => {
     expect(explorationEditorInternals.camelAction({
       id: "fixed-site-action",
