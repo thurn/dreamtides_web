@@ -6,7 +6,7 @@ use indexmap::IndexMap;
 use serde::{Deserialize, Deserializer, Serialize, Serializer, de::Error as _};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::{source_text, source_transport_value};
+use super::localization::source_text;
 
 macro_rules! uuid_id {
     ($name:ident) => {
@@ -63,7 +63,7 @@ pub struct AtlasCatalog {
     pub fill_profiles: IndexMap<FillProfileId, FillProfile>,
     pub known_dreamsign: KnownDreamsignRules,
     pub boss: BossDefinition,
-    pub presentation: Presentation,
+    pub assets: AtlasAssets,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -271,25 +271,8 @@ pub struct AssetReference {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct Presentation {
-    pub unrevealed: UnrevealedPresentation,
-    pub starter_body: LocalizedString,
-    pub affiliation: AffiliationPresentation,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct UnrevealedPresentation {
-    pub title: LocalizedString,
-    pub body: LocalizedString,
-    pub frame: AssetReference,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct AffiliationPresentation {
-    pub title_template: LocalizedString,
-    pub body_template: LocalizedString,
+pub struct AtlasAssets {
+    pub unrevealed_frame: AssetReference,
 }
 
 pub fn lower(source: AtlasCatalog) -> Result<toml::Value> {
@@ -334,12 +317,8 @@ pub fn lower(source: AtlasCatalog) -> Result<toml::Value> {
         "known-dreamsign".into(),
         toml::Value::Table(lower_known_dreamsign(source.known_dreamsign)),
     );
-    let assets = lower_assets(&source.presentation, &source.boss.art);
+    let assets = lower_assets(&source.assets, &source.boss.art);
     root.insert("boss".into(), toml::Value::Table(lower_boss(source.boss)?));
-    root.insert(
-        "presentation".into(),
-        toml::Value::Table(lower_presentation(&source.presentation)?),
-    );
     root.insert("assets".into(), toml::Value::Table(assets));
     Ok(toml::Value::Table(root))
 }
@@ -442,15 +421,6 @@ fn validate(source: &AtlasCatalog) -> Result<()> {
         source.known_dreamsign.early_reveal_bias.is_finite()
             && source.known_dreamsign.early_reveal_bias >= 0.0,
         "early_reveal_bias must be finite and nonnegative"
-    );
-    ensure!(
-        source_text(&source.presentation.affiliation.title_template)?
-            .contains("{affiliation_name}"),
-        "affiliation title template must contain {{affiliation_name}}"
-    );
-    ensure!(
-        source_text(&source.presentation.affiliation.body_template)?.contains("{card_theme}"),
-        "affiliation body template must contain {{card_theme}}"
     );
     ensure!(
         !source.boss.compatibility_dreamscape_id.trim().is_empty(),
@@ -670,43 +640,18 @@ fn lower_boss(value: BossDefinition) -> Result<toml::map::Map<String, toml::Valu
     ]))
 }
 
-fn lower_presentation(value: &Presentation) -> Result<toml::map::Map<String, toml::Value>> {
-    Ok(toml::map::Map::from_iter([
-        (
-            "unseen-title".into(),
-            source_transport_value(&value.unrevealed.title)?,
-        ),
-        (
-            "unseen-body".into(),
-            source_transport_value(&value.unrevealed.body)?,
-        ),
-        (
-            "starter-body".into(),
-            source_transport_value(&value.starter_body)?,
-        ),
-        (
-            "affiliation-title-template".into(),
-            source_transport_value(&value.affiliation.title_template)?,
-        ),
-        (
-            "affiliation-body-template".into(),
-            source_transport_value(&value.affiliation.body_template)?,
-        ),
-    ]))
-}
-
 fn lower_assets(
-    presentation: &Presentation,
+    assets: &AtlasAssets,
     boss: &BossArt,
 ) -> toml::map::Map<String, toml::Value> {
     toml::map::Map::from_iter([
         (
             "unrevealed-frame-source".into(),
-            presentation.unrevealed.frame.source.clone().into(),
+            assets.unrevealed_frame.source.clone().into(),
         ),
         (
             "unrevealed-frame-key".into(),
-            presentation.unrevealed.frame.key.clone().into(),
+            assets.unrevealed_frame.key.clone().into(),
         ),
         ("boss-scene-source".into(), boss.scene.source.clone().into()),
         ("boss-icon-source".into(), boss.icon.source.clone().into()),
@@ -829,19 +774,10 @@ mod tests {
                     },
                 },
             },
-            presentation: Presentation {
-                unrevealed: UnrevealedPresentation {
-                    title: ls("Unknown"),
-                    body: ls("Hidden"),
-                    frame: AssetReference {
-                        key: "frame-key".into(),
-                        source: "frame.png".into(),
-                    },
-                },
-                starter_body: ls("Start"),
-                affiliation: AffiliationPresentation {
-                    title_template: ls("Affiliation: {affiliation_name}"),
-                    body_template: ls("{card_theme} affinity"),
+            assets: AtlasAssets {
+                unrevealed_frame: AssetReference {
+                    key: "frame.png".into(),
+                    source: "frame.png".into(),
                 },
             },
         }
@@ -891,6 +827,10 @@ mod tests {
         assert_eq!(
             output["assets"]["boss-icon-source"].as_str(),
             Some("icon.png")
+        );
+        assert_eq!(
+            output["assets"]["unrevealed-frame-key"].as_str(),
+            Some("frame.png")
         );
     }
 

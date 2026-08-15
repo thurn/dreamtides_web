@@ -11,6 +11,16 @@
       "Purge",
       "Battle"
     ],
+    "atlasDescription": {
+      "contract_signature": "9566472c1962b87e2c9e78ca952fce733dd51554b6634be064b106f6a8d1c7e8",
+      "entry_id": "tx1_dn4ynkauz7tgtsyfxzyknam3qu",
+      "format": "trox-source-message-ref",
+      "source_signature": "1b7986a814cfe669cb05be70a6819b85c20c4eee4c755c7f4f0728105c6d2dcf",
+      "version": {
+        "major": 1,
+        "minor": 0
+      }
+    },
     "guideId": null,
     "affiliationId": null,
     "dreamAvatarIds": []

@@ -28,13 +28,15 @@ import type {
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
-import { localizedSitePresentation } from "../../cumulus/screens/localized-site-presentation";
 import {
   buildShopFreePurchaseStatus,
   hasFreePurchase,
 } from "./shop-free-purchase-view-model";
 import type { GuideId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
+import { bindSourceTransport } from "../../runtime/localization/runtime";
+import { tx } from "@trox/runtime";
+import { SHOP_FLOW_PRESENTATION } from "./shop-flow-presentation-view-model";
 
 /** Resolve Amunet, the resident Dream Guide for Dreamsign Bazaars. */
 export function resolveDreamsignBazaarGuide(
@@ -67,7 +69,9 @@ export function buildDreamsignBazaarOffers(
     );
     const price = effectivePrice(slot, priceModifiers);
     offers.push({
-      entryId: parseDeckEntryId(`shop-slot-${String(slotIndex)}-${dreamsignId}`),
+      entryId: parseDeckEntryId(
+        `shop-slot-${String(slotIndex)}-${dreamsignId}`,
+      ),
       slotIndex,
       dreamsign: localizedDreamsign(slot.dreamsign, "Dreamsign Bazaar offer"),
       price,
@@ -141,12 +145,22 @@ export function buildDreamsignBazaarSiteView(params: {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
   return {
-    presentation: localizedSitePresentation(
-      params.sitesData.siteTypes.DreamsignBazaar.presentation as Extract<
+    presentation: (() => {
+      const identity = params.sitesData.siteTypes.DreamsignBazaar
+        .presentation as Extract<
         import("../../types/sites-data").SitePresentation,
         { kind: "dreamsign-bazaar" }
-      >,
-    ),
+      >;
+      return {
+        kind: identity.kind,
+        title: bindSourceTransport(identity.title),
+        ...SHOP_FLOW_PRESENTATION,
+        replacementTitle: tx(
+          "Choose a Dreamsign to Replace",
+          "[dreamsign] Heading for choosing which held Dreamsign to replace after gaining one while at capacity.",
+        ),
+      };
+    })(),
     siteId: params.site.id,
     scene,
     guide: buildDreamsignBazaarGuideView(params.guide, params.guideLine),

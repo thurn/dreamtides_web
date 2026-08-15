@@ -7,38 +7,20 @@ export type SitePresentation =
       kind: "battle";
       label: SourceTransport;
       finalBossLabel: SourceTransport;
-      lockedGuidance: SourceTransport;
     }
   | { kind: "draft"; label: SourceTransport }
   | {
       kind: "shop";
       title: SourceTransport;
-      restocked: SourceTransport;
-      restockOffersAction: SourceTransport;
-      restockAction: SourceTransport;
-      freePrice: SourceTransport;
     }
   | {
       kind: "purge";
       title: SourceTransport;
-      instruction: SourceTransport;
-      purgeAction: SourceTransport;
     }
   | {
       kind: "dreamsign-bazaar";
       title: SourceTransport;
-      restocked: SourceTransport;
-      restockOffersAction: SourceTransport;
-      restockAction: SourceTransport;
-      freePrice: SourceTransport;
-      replacementTitle: SourceTransport;
-    }
-  | {
-      kind: "dreamsign-revelation";
-      loading: SourceTransport;
-      exhausted: SourceTransport;
-    }
-  | { kind: "random-site"; title: SourceTransport };
+    };
 
 export interface DuplicationSiteRules {
   kind: "duplication";

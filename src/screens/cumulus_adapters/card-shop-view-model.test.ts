@@ -17,10 +17,14 @@ import {
   buildCardShopSiteView,
   buildCardShopTransfiguredOfferLog,
 } from "./card-shop-view-model";
-import { localizedSitePresentation } from "../../cumulus/screens/localized-site-presentation";
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testCardId, testDreamscapeId, testExplorationActionId, testGuideId } from "../../types/test-identities";
+import {
+  testCardId,
+  testDreamscapeId,
+  testExplorationActionId,
+  testGuideId,
+} from "../../types/test-identities";
 
 function makeCard(cardNumber: number, idSeed: string): CardData {
   return {
@@ -156,12 +160,14 @@ describe("buildCardShopOffers", () => {
     expect(
       buildCardShopTransfiguredOfferLog(
         {
-          presentation: localizedSitePresentation(
-            MINIMAL_SITES_DATA.siteTypes.Shop.presentation as Extract<
-              import("../../types/sites-data").SitePresentation,
-              { kind: "shop" }
-            >,
-          ),
+          presentation: {
+            kind: "shop",
+            title: assertLocalized("Shop"),
+            restocked: assertLocalized("Restocked"),
+            restockOffersAction: assertLocalized("Restock Offers"),
+            restockAction: assertLocalized("Restock"),
+            freePrice: assertLocalized("Free"),
+          },
           siteId: parseSiteId("shop-site"),
           scene: null,
           guide: {

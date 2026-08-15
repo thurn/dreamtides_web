@@ -75,32 +75,13 @@ const PRESENTATION_KIND_BY_SITE: Readonly<Partial<Record<SiteType, string>>> = {
   Shop: "shop",
   Purge: "purge",
   DreamsignBazaar: "dreamsign-bazaar",
-  DreamsignRevelation: "dreamsign-revelation",
-  RandomSite: "random-site",
 };
 const PRESENTATION_KEYS: Readonly<Record<string, readonly string[]>> = {
-  battle: ["kind", "label", "finalBossLabel", "lockedGuidance"],
+  battle: ["kind", "label", "finalBossLabel"],
   draft: ["kind", "label"],
-  shop: [
-    "kind",
-    "title",
-    "restocked",
-    "restockOffersAction",
-    "restockAction",
-    "freePrice",
-  ],
-  purge: ["kind", "title", "instruction", "purgeAction"],
-  "dreamsign-bazaar": [
-    "kind",
-    "title",
-    "restocked",
-    "restockOffersAction",
-    "restockAction",
-    "freePrice",
-    "replacementTitle",
-  ],
-  "dreamsign-revelation": ["kind", "loading", "exhausted"],
-  "random-site": ["kind", "title"],
+  shop: ["kind", "title"],
+  purge: ["kind", "title"],
+  "dreamsign-bazaar": ["kind", "title"],
 };
 
 function isSitePresentation(value: unknown, siteType: SiteType): boolean {

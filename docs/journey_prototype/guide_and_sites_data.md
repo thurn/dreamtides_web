@@ -8,9 +8,10 @@ browser loads both documents before constructing `JourneyContent`.
 
 TypeScript owns structural identities and algorithms: `SiteType`, Gamble game
 IDs, the standard card deck, fixed gate and suit identities, routing, reducers,
-and screen composition. RON owns guide identity and dialogue, site
-presentation, selection tuning, and rule tables that designers and modders are
-expected to revise.
+screen composition, and screen-local flow copy. RON owns guide identity and
+dialogue, site icons and glossary mappings, list-facing site labels and titles,
+selection tuning, and rule tables that designers and modders are expected to
+revise.
 
 ## Dream guides
 
@@ -36,7 +37,7 @@ compatibility document carries `schema-version = 1`. The source contains:
 
 | Section                        | Authored contract                                                                              |
 | ------------------------------ | ---------------------------------------------------------------------------------------------- |
-| `site_types`                   | Exactly one metadata record for every `SiteType`, including presentation and site-local rules. |
+| `site_types`                   | Exactly one metadata record for every `SiteType`, including icons, glossary mappings, optional list-facing identity copy, and site-local rules. |
 | `random_site`                  | Eligible destinations, home and away choice counts, and the insufficient-destination policy.   |
 | `site_types.Duplication.rules` | Eligible deck-entry candidates shown by standard and enhanced Duplication sites.               |
 | `gamble.selection`             | Game weights and a guaranteed supported fallback.                                              |

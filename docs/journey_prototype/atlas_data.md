@@ -23,13 +23,11 @@ The document contains these sections:
 | `fill-profiles`        | Signature-site and explicit site weights selected by layer.                                                         |
 | `known-dreamsign`      | Per-Atlas maximum, eligible layers, placement probability, and early-reveal bias.                                   |
 | `boss`                 | Limbo identity and copy plus stable scene, icon, and Apollyon figure keys.                                          |
-| `presentation`         | Unseen/starter copy and validated affiliation templates.                                                            |
-| `assets`               | Source filenames and emitted Atlas asset keys.                                                                      |
+| `assets`               | Shared renderer chrome with its source filename and emitted asset key.                                              |
 
-Affiliations provide `atlas-card-theme` in `affiliations.ron`. Atlas templates
-may use `{name}` in the affiliation title and `{card-theme}` in the affiliation
-body. The compiler rejects any other placeholder or a missing required
-placeholder.
+Starter Dreamscapes provide `atlas_description` in `dreamscapes.ron`, and
+Affiliations provide `atlas-card-theme` in `affiliations.ron`. The Atlas view
+model combines those entity-specific fields with its localized UI templates.
 
 ## Layer VII
 
@@ -55,8 +53,8 @@ validated Sites catalog. See [Dream Guide and Site Data](guide_and_sites_data.md
 The compiled document contains two SHA-256 diagnostics:
 
 - `contentHash` covers the complete normalized Atlas document.
-- `foldHash` covers Atlas graph-generation and reducer inputs. Presentation
-  copy and artwork are outside this hash.
+- `foldHash` covers Atlas graph-generation and reducer inputs. Boss copy and
+  artwork are outside this hash.
 
 Atlas generation logs both hashes, the resolved rules, graph edges, candidate
 weights, selections, site compositions, known-dreamsign placement, and the boss

@@ -1,7 +1,10 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { describe, expect, it } from "vitest";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { resolveSource } from "../../runtime/localization/runtime";
+import {
+  bindSourceTransport,
+  resolveSource,
+} from "../../runtime/localization/runtime";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import { economyFixture } from "../../testing/economy-fixture";
@@ -39,7 +42,13 @@ import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseJourneyId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
-import { testAffiliationId, testDreamscapeId, testDreamsignId, testGuideId, testTideId } from "../../types/test-identities";
+import {
+  testAffiliationId,
+  testDreamscapeId,
+  testDreamsignId,
+  testGuideId,
+  testTideId,
+} from "../../types/test-identities";
 
 const STARTER_NODE_ID = parseAtlasNodeId("starter");
 const MIDDLE_NODE_ID = parseAtlasNodeId("middle");
@@ -226,7 +235,9 @@ describe("resolveAtlasNodeGeometry", () => {
 
   it("sizes the starter and boss larger than a regular node", () => {
     const geometry = resolveAtlasNodeGeometry(makeVerticalAtlas());
-    expect(geometry.get(STARTER_NODE_ID)!.size).toBe(geometry.get(BOSS_NODE_ID)!.size);
+    expect(geometry.get(STARTER_NODE_ID)!.size).toBe(
+      geometry.get(BOSS_NODE_ID)!.size,
+    );
     expect(geometry.get(MIDDLE_NODE_ID)!.size).toBeLessThan(
       geometry.get(STARTER_NODE_ID)!.size,
     );
@@ -439,6 +450,62 @@ describe("buildAtlasMapNodes", () => {
     expect(passed?.model.primary.sceneArt).toBeNull();
   });
 
+  it("uses the starter Dreamscape's authored Atlas description", () => {
+    const atlas = makeVerticalAtlas();
+    const starterId = testDreamscapeId("starter-description");
+    atlas.nodes[STARTER_NODE_ID].dreamscapeId = starterId;
+    const atlasDescription = "Synthetic starter Atlas description";
+    const content: JourneyContent = {
+      ...EMPTY_CONTENT,
+      dreamscapes: [
+        {
+          id: starterId,
+          name: "Synthetic Starter",
+          guideId: null,
+          signatureSite: "Draft",
+          affiliationId: null,
+          isStarter: true,
+          atlasDescription,
+          fixedSites: ["Draft", "Battle"],
+          dreamAvatarIds: [],
+        },
+      ],
+    };
+
+    const starter = buildAtlasMapNodes(atlas, content).find(
+      (item) => item.model.id === STARTER_NODE_ID,
+    );
+
+    expect(starter?.model.primary.body).toEqual(
+      bindSourceTransport(atlasDescription),
+    );
+  });
+
+  it("rejects a guideless starter without authored Atlas copy", () => {
+    const atlas = makeVerticalAtlas();
+    const starterId = testDreamscapeId("starter-without-description");
+    atlas.nodes[STARTER_NODE_ID].dreamscapeId = starterId;
+    const content: JourneyContent = {
+      ...EMPTY_CONTENT,
+      dreamscapes: [
+        {
+          id: starterId,
+          name: "Synthetic Starter",
+          guideId: null,
+          signatureSite: "Draft",
+          affiliationId: null,
+          isStarter: true,
+          fixedSites: ["Draft", "Battle"],
+          dreamAvatarIds: [],
+        },
+      ],
+    };
+
+    expect(() => buildAtlasMapNodes(atlas, content)).toThrow(
+      /has no Atlas description/u,
+    );
+  });
+
   it("carries a resident dreamscape's signature site as a standard site info card", () => {
     const atlas = makeVerticalAtlas();
     atlas.nodes[MIDDLE_NODE_ID].dreamscapeId = testDreamscapeId("wilderveil");
@@ -452,14 +519,7 @@ describe("buildAtlasMapNodes", () => {
     ];
     const content: JourneyContent = {
       ...EMPTY_CONTENT,
-      atlasData: {
-        ...MINIMAL_ATLAS_DATA,
-        presentation: {
-          ...MINIMAL_ATLAS_DATA.presentation,
-          affiliationTitleTemplate: "Fixture title {name}",
-          affiliationBodyTemplate: "Fixture body {card-theme}",
-        },
-      },
+      atlasData: MINIMAL_ATLAS_DATA,
       sitesData: {
         ...MINIMAL_SITES_DATA,
         siteTypes: {
@@ -497,7 +557,11 @@ describe("buildAtlasMapNodes", () => {
           id: testAffiliationId("figments"),
           name: "Figments",
           atlasCardTheme: "Figment",
-          tideIds: [testTideId("tide-a"), testTideId("tide-b"), testTideId("tide-c")],
+          tideIds: [
+            testTideId("tide-a"),
+            testTideId("tide-b"),
+            testTideId("tide-c"),
+          ],
         },
       ],
     };
@@ -508,12 +572,7 @@ describe("buildAtlasMapNodes", () => {
     expect(resolveSource(middle!.model.site!.name)).toBe("Augury");
     expect(resolveSource(middle!.model.site!.blurb).length).toBeGreaterThan(0);
     expect(middle?.model.site?.icon).toBe("fixture-atlas-icon");
-    expect(resolveSource(middle!.model.affiliation!.title)).toBe(
-      "Fixture title Figments",
-    );
-    expect(resolveSource(middle!.model.affiliation!.body)).toBe(
-      "Fixture body Figment",
-    );
+    expect(middle?.model.affiliation).not.toBeNull();
   });
 });
 

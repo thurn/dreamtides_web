@@ -7,7 +7,7 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::source_text;
+use super::localization::{source_text, source_transport_value};
 
 use super::atlas::SiteType;
 
@@ -53,6 +53,7 @@ pub struct AssetReference {
 #[serde(deny_unknown_fields)]
 pub enum DreamscapeKind {
     Starter {
+        atlas_description: LocalizedString,
         signature_site: SiteType,
         fixed_sites: Vec<SiteType>,
     },
@@ -131,6 +132,8 @@ struct CompatibilityDreamscape {
     is_starter: Option<bool>,
     #[serde(rename = "fixed-sites", skip_serializing_if = "Option::is_none")]
     fixed_sites: Option<Vec<&'static str>>,
+    #[serde(rename = "atlas-description", skip_serializing_if = "Option::is_none")]
+    atlas_description: Option<toml::Value>,
     #[serde(rename = "affiliation-id", skip_serializing_if = "Option::is_none")]
     affiliation_id: Option<String>,
     #[serde(rename = "dream-avatar-ids", skip_serializing_if = "Option::is_none")]
@@ -143,41 +146,51 @@ pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
         .into_iter()
         .map(|dreamscape| {
             let id = compatibility_key(dreamscape.id)?;
-            let (signature_site, is_starter, fixed_sites, affiliation_id, dream_avatar_ids) =
-                match dreamscape.kind {
-                    DreamscapeKind::Starter {
-                        signature_site,
-                        fixed_sites,
-                    } => (
-                        Some(signature_site.as_compat()),
-                        Some(true),
-                        Some(fixed_sites.into_iter().map(SiteType::as_compat).collect()),
-                        None,
-                        None,
+            let (
+                signature_site,
+                is_starter,
+                fixed_sites,
+                atlas_description,
+                affiliation_id,
+                dream_avatar_ids,
+            ) = match dreamscape.kind {
+                DreamscapeKind::Starter {
+                    atlas_description,
+                    signature_site,
+                    fixed_sites,
+                } => (
+                    Some(signature_site.as_compat()),
+                    Some(true),
+                    Some(fixed_sites.into_iter().map(SiteType::as_compat).collect()),
+                    Some(source_transport_value(&atlas_description)?),
+                    None,
+                    None,
+                ),
+                DreamscapeKind::Standard {
+                    affiliation_id,
+                    opponent_dream_avatar_ids,
+                } => (
+                    None,
+                    None,
+                    None,
+                    None,
+                    Some(affiliation_id.to_string()),
+                    Some(
+                        opponent_dream_avatar_ids
+                            .into_iter()
+                            .map(|avatar_id| avatar_id.to_string())
+                            .collect(),
                     ),
-                    DreamscapeKind::Standard {
-                        affiliation_id,
-                        opponent_dream_avatar_ids,
-                    } => (
-                        None,
-                        None,
-                        None,
-                        Some(affiliation_id.to_string()),
-                        Some(
-                            opponent_dream_avatar_ids
-                                .into_iter()
-                                .map(|avatar_id| avatar_id.to_string())
-                                .collect(),
-                        ),
-                    ),
-                    DreamscapeKind::Boss => return Ok(None),
-                };
+                ),
+                DreamscapeKind::Boss => return Ok(None),
+            };
             Ok(Some(CompatibilityDreamscape {
                 id,
                 name: source_text(&dreamscape.name)?,
                 signature_site,
                 is_starter,
                 fixed_sites,
+                atlas_description,
                 affiliation_id,
                 dream_avatar_ids,
             }))
@@ -232,10 +245,16 @@ pub(crate) fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
 
         match &dreamscape.kind {
             DreamscapeKind::Starter {
+                atlas_description,
                 signature_site,
                 fixed_sites,
             } => {
                 starter_count += 1;
+                ensure!(
+                    !source_text(atlas_description)?.trim().is_empty(),
+                    "starter Dreamscape {} has an empty Atlas description",
+                    dreamscape.id
+                );
                 ensure!(
                     !fixed_sites.is_empty(),
                     "starter Dreamscape {} has no fixed sites",
@@ -373,6 +392,7 @@ mod tests {
       atlas_node: (key: "firstlight_meadow", source: "opening_icon.png"),
     ),
     kind: Starter(
+      atlas_description: Tx("A starting region."),
       signature_site: Draft,
       fixed_sites: [Draft, Draft, DreamsignRevelation, Battle],
     ),
@@ -497,7 +517,7 @@ mod tests {
             &format!(
                 "kind: Standard(\n      affiliation_id: \"{AFFILIATION_ID}\",\n      opponent_dream_avatar_ids: [\"{AVATAR_ONE}\", \"{AVATAR_TWO}\", \"{AVATAR_THREE}\"],\n    )"
             ),
-            "kind: Starter(signature_site: Battle, fixed_sites: [Battle])",
+            "kind: Starter(atlas_description: Tx(\"Another start.\"), signature_site: Battle, fixed_sites: [Battle])",
         );
         assert_error_contains(&multiple_starters, "exactly one starter");
 

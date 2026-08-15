@@ -72,16 +72,9 @@ function fixtureSource() {
       "icon-art-id": "fixture-boss-icon",
       "figure-art-id": "fixture-boss-figure",
     },
-    presentation: {
-      "unseen-title": "Fixture unseen title",
-      "unseen-body": "Fixture unseen body.",
-      "starter-body": "Fixture starter body.",
-      "affiliation-title-template": "Fixture {name}",
-      "affiliation-body-template": "Fixture {card-theme}",
-    },
     assets: {
       "unrevealed-frame-source": "fixture-frame.png",
-      "unrevealed-frame-key": "fixture-frame-output.png",
+      "unrevealed-frame-key": "fixture-frame.png",
       "boss-scene-source": "fixture-scene.png",
       "boss-icon-source": "fixture-icon.png",
       "boss-figure-source": "fixture-figure.png",
@@ -136,12 +129,13 @@ describe("compileAtlasData", () => {
     expect(first.foldHash).toMatch(/^[0-9a-f]{64}$/u);
   });
 
-  it("keeps presentation and artwork outside the fold hash", () => {
+  it("keeps boss artwork outside the fold hash", () => {
     const baseline = compile();
     const source = fixtureSource();
-    source.presentation["unseen-body"] = "Changed fixture presentation.";
-    source.assets["unrevealed-frame-key"] = "changed-frame-output.png";
-    const changed = compile(source);
+    source.assets["boss-figure-source"] = "changed-fixture-figure.png";
+    const catalogs = fixtureCatalogs();
+    catalogs.assetSources.bossFigures.add("changed-fixture-figure.png");
+    const changed = compile(source, catalogs);
     expect(changed.contentHash).not.toBe(baseline.contentHash);
     expect(changed.foldHash).toBe(baseline.foldHash);
   });
@@ -203,15 +197,6 @@ describe("compileAtlasData", () => {
     }, /unknown profile/);
   });
 
-  it("rejects unsupported or incomplete presentation templates", () => {
-    expectFailure((source) => {
-      source.presentation["affiliation-title-template"] = "Fixture {unknown}";
-    }, /unsupported placeholder/);
-    expectFailure((source) => {
-      source.presentation["affiliation-body-template"] = "Fixture body";
-    }, /missing placeholder/);
-  });
-
   it("rejects unresolved catalog and artwork references", () => {
     expectFailure(
       () => {},
@@ -219,6 +204,11 @@ describe("compileAtlasData", () => {
       (catalogs) => {
         catalogs.dreamscapes[1]["affiliation-id"] = "missing";
       },
+    );
+    expectFailure(
+      () => {},
+      /unresolved asset source/,
+      (catalogs) => catalogs.assetSources.bossScenes.clear(),
     );
     expectFailure(
       () => {},

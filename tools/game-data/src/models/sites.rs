@@ -117,36 +117,17 @@ pub enum SitePresentation {
     Battle {
         label: LocalizedString,
         final_boss_label: LocalizedString,
-        locked_guidance: LocalizedString,
     },
     Draft {
         label: LocalizedString,
     },
     Shop {
         title: LocalizedString,
-        restocked: LocalizedString,
-        restock_offers_action: LocalizedString,
-        restock_action: LocalizedString,
-        free_price: LocalizedString,
     },
     Purge {
         title: LocalizedString,
-        instruction: LocalizedString,
-        purge_action: LocalizedString,
     },
     DreamsignBazaar {
-        title: LocalizedString,
-        restocked: LocalizedString,
-        restock_offers_action: LocalizedString,
-        restock_action: LocalizedString,
-        free_price: LocalizedString,
-        replacement_title: LocalizedString,
-    },
-    DreamsignRevelation {
-        loading: LocalizedString,
-        exhausted: LocalizedString,
-    },
-    RandomSite {
         title: LocalizedString,
     },
 }
@@ -345,7 +326,6 @@ fn lower_presentation(source: SitePresentation) -> Result<toml::Value> {
         SitePresentation::Battle {
             label,
             final_boss_label,
-            locked_guidance,
         } => {
             put("kind", "battle".into());
             put("label", source_transport_value(&label)?);
@@ -353,68 +333,21 @@ fn lower_presentation(source: SitePresentation) -> Result<toml::Value> {
                 "final-boss-label",
                 source_transport_value(&final_boss_label)?,
             );
-            put("locked-guidance", source_transport_value(&locked_guidance)?);
         }
         SitePresentation::Draft { label } => {
             put("kind", "draft".into());
             put("label", source_transport_value(&label)?);
         }
-        SitePresentation::Shop {
-            title,
-            restocked,
-            restock_offers_action,
-            restock_action,
-            free_price,
-        } => {
+        SitePresentation::Shop { title } => {
             put("kind", "shop".into());
             put("title", source_transport_value(&title)?);
-            put("restocked", source_transport_value(&restocked)?);
-            put(
-                "restock-offers-action",
-                source_transport_value(&restock_offers_action)?,
-            );
-            put("restock-action", source_transport_value(&restock_action)?);
-            put("free-price", source_transport_value(&free_price)?);
         }
-        SitePresentation::Purge {
-            title,
-            instruction,
-            purge_action,
-        } => {
+        SitePresentation::Purge { title } => {
             put("kind", "purge".into());
             put("title", source_transport_value(&title)?);
-            put("instruction", source_transport_value(&instruction)?);
-            put("purge-action", source_transport_value(&purge_action)?);
         }
-        SitePresentation::DreamsignBazaar {
-            title,
-            restocked,
-            restock_offers_action,
-            restock_action,
-            free_price,
-            replacement_title,
-        } => {
+        SitePresentation::DreamsignBazaar { title } => {
             put("kind", "dreamsign-bazaar".into());
-            put("title", source_transport_value(&title)?);
-            put("restocked", source_transport_value(&restocked)?);
-            put(
-                "restock-offers-action",
-                source_transport_value(&restock_offers_action)?,
-            );
-            put("restock-action", source_transport_value(&restock_action)?);
-            put("free-price", source_transport_value(&free_price)?);
-            put(
-                "replacement-title",
-                source_transport_value(&replacement_title)?,
-            );
-        }
-        SitePresentation::DreamsignRevelation { loading, exhausted } => {
-            put("kind", "dreamsign-revelation".into());
-            put("loading", source_transport_value(&loading)?);
-            put("exhausted", source_transport_value(&exhausted)?);
-        }
-        SitePresentation::RandomSite { title } => {
-            put("kind", "random-site".into());
             put("title", source_transport_value(&title)?);
         }
     }
@@ -547,8 +480,6 @@ fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
         SiteType::Shop => Some("shop"),
         SiteType::Purge => Some("purge"),
         SiteType::DreamsignBazaar => Some("dreamsign-bazaar"),
-        SiteType::DreamsignRevelation => Some("dreamsign-revelation"),
-        SiteType::RandomSite => Some("random-site"),
         _ => None,
     };
     let actual = metadata.presentation.as_ref().map(|value| match value {
@@ -557,8 +488,6 @@ fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
         SitePresentation::Shop { .. } => "shop",
         SitePresentation::Purge { .. } => "purge",
         SitePresentation::DreamsignBazaar { .. } => "dreamsign-bazaar",
-        SitePresentation::DreamsignRevelation { .. } => "dreamsign-revelation",
-        SitePresentation::RandomSite { .. } => "random-site",
     });
     ensure!(
         actual == expected,
@@ -570,64 +499,15 @@ fn validate_presentation(metadata: &SiteMetadata) -> Result<()> {
             SitePresentation::Battle {
                 label,
                 final_boss_label,
-                locked_guidance,
-            } => vec![
-                source_text(label)?,
-                source_text(final_boss_label)?,
-                source_text(locked_guidance)?,
-            ],
+            } => vec![source_text(label)?, source_text(final_boss_label)?],
             SitePresentation::Draft { label } => {
                 let label = source_text(label)?;
                 validate_slots("Draft label", &label, &["pick_count"])?;
                 vec![label]
             }
-            SitePresentation::Shop {
-                title,
-                restocked,
-                restock_offers_action,
-                restock_action,
-                free_price,
-            } => [
-                title,
-                restocked,
-                restock_offers_action,
-                restock_action,
-                free_price,
-            ]
-            .into_iter()
-            .map(source_text)
-            .collect::<Result<Vec<_>>>()?,
-            SitePresentation::Purge {
-                title,
-                instruction,
-                purge_action,
-            } => {
-                let purge_action = source_text(purge_action)?;
-                validate_slots("Purge action", &purge_action, &["count"])?;
-                vec![source_text(title)?, source_text(instruction)?, purge_action]
-            }
-            SitePresentation::DreamsignBazaar {
-                title,
-                restocked,
-                restock_offers_action,
-                restock_action,
-                free_price,
-                replacement_title,
-            } => [
-                title,
-                restocked,
-                restock_offers_action,
-                restock_action,
-                free_price,
-                replacement_title,
-            ]
-            .into_iter()
-            .map(source_text)
-            .collect::<Result<Vec<_>>>()?,
-            SitePresentation::DreamsignRevelation { loading, exhausted } => {
-                vec![source_text(loading)?, source_text(exhausted)?]
-            }
-            SitePresentation::RandomSite { title } => vec![source_text(title)?],
+            SitePresentation::Shop { title }
+            | SitePresentation::Purge { title }
+            | SitePresentation::DreamsignBazaar { title } => vec![source_text(title)?],
         };
         for value in values {
             validate_text("site presentation text", &value)?;
@@ -769,37 +649,14 @@ mod tests {
             SiteType::Battle => Some(SitePresentation::Battle {
                 label: ls("Battle"),
                 final_boss_label: ls("Boss"),
-                locked_guidance: ls("Locked"),
             }),
             SiteType::Draft => Some(SitePresentation::Draft {
                 label: ls("Draft {pick_count}x"),
             }),
-            SiteType::Shop => Some(SitePresentation::Shop {
-                title: ls("Shop"),
-                restocked: ls("Restocked"),
-                restock_offers_action: ls("Offers"),
-                restock_action: ls("Restock"),
-                free_price: ls("Free"),
-            }),
-            SiteType::Purge => Some(SitePresentation::Purge {
-                title: ls("Purge"),
-                instruction: ls("Choose"),
-                purge_action: ls("Purge {count}"),
-            }),
+            SiteType::Shop => Some(SitePresentation::Shop { title: ls("Shop") }),
+            SiteType::Purge => Some(SitePresentation::Purge { title: ls("Purge") }),
             SiteType::DreamsignBazaar => Some(SitePresentation::DreamsignBazaar {
                 title: ls("Bazaar"),
-                restocked: ls("Restocked"),
-                restock_offers_action: ls("Offers"),
-                restock_action: ls("Restock"),
-                free_price: ls("Free"),
-                replacement_title: ls("Replace"),
-            }),
-            SiteType::DreamsignRevelation => Some(SitePresentation::DreamsignRevelation {
-                loading: ls("Loading"),
-                exhausted: ls("Exhausted"),
-            }),
-            SiteType::RandomSite => Some(SitePresentation::RandomSite {
-                title: ls("Choose"),
             }),
             _ => None,
         }

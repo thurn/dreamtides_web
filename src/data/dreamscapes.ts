@@ -58,10 +58,21 @@ async function fetchJson<T>(path: string, label: string): Promise<T> {
 
 /** Fetches the dreamscape definitions from the asset pipeline output. */
 export async function loadDreamscapes(): Promise<DreamscapeContent[]> {
-  return fetchJson<DreamscapeContent[]>(
+  const dreamscapes = await fetchJson<DreamscapeContent[]>(
     DREAMSCAPES_JSON_PATH,
     "dreamscape data",
   );
+  return dreamscapes.map((dreamscape) => ({
+    ...dreamscape,
+    ...(dreamscape.atlasDescription === undefined
+      ? {}
+      : {
+          atlasDescription: hydrateSourceTransport(
+            dreamscape.atlasDescription,
+            `Dreamscape ${dreamscape.id} Atlas description`,
+          ),
+        }),
+  }));
 }
 
 /** Fetches the Dream Guide definitions from the asset pipeline output. */

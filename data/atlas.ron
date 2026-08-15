@@ -172,32 +172,6 @@ AtlasCatalog(
     ),
   ),
 
-  presentation: (
-    // Text-card copy and node-face artwork used before a dreamscape is revealed
-    // (and for dreamscapes that are no longer reachable).
-    unrevealed: (
-      title: Tx("An Unseen Dream"),
-      body: Tx(
-        "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here."
-      ),
-      // As with boss art, `source` is the build input and `key` is the runtime
-      // asset name used by the Atlas node component.
-      frame: (key: "Round_frame_main.png", source: "Round_frame_main.png"),
-    ),
-    // Fallback body for the guideless starter node's reveal card.
-    starter_body: Tx("A quiet place where every dream journey begins."),
-    // Templates for a revealed dreamscape's affiliation card. `{affiliation_name}` is the
-    // affiliation name; `{card_theme}` comes from that affiliation's
-    // `atlas_card_theme`. The compiler requires exactly these placeholders.
-    affiliation: (
-      title_template: Tx(
-        text: "Affiliation: {affiliation_name}",
-        placeholders: {"affiliation_name": Opaque},
-      ),
-      body_template: Tx(
-        text: "{card_theme} cards are more likely here.",
-        placeholders: {"card_theme": Opaque},
-      ),
-    ),
-  ),
+  // Shared Atlas chrome that the asset build publishes for the renderer.
+  assets: (unrevealed_frame: (key: "Round_frame_main.png", source: "Round_frame_main.png")),
 )

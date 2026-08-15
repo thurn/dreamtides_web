@@ -15,8 +15,7 @@ import { LayerName } from "../types/layer-name";
 import { SITE_TYPES } from "../types/site-type";
 import type { SitesData } from "../types/sites-data";
 import { GLOSSARY_IDS } from "../data/glossary";
-import { parseAtlasNodeId } from "../types/identifiers";
-import { parseArtAssetKey } from "../types/identifiers";
+import { parseArtAssetKey, parseAtlasNodeId } from "../types/identifiers";
 import {
   testAffiliationId,
   testAtlasFillProfileId,
@@ -26,8 +25,7 @@ import {
   testGuideId,
 } from "../types/test-identities";
 
-export const EARLY_ATLAS_FILL_PROFILE_ID =
-  testAtlasFillProfileId("early");
+export const EARLY_ATLAS_FILL_PROFILE_ID = testAtlasFillProfileId("early");
 export const LATE_ATLAS_FILL_PROFILE_ID = testAtlasFillProfileId("late");
 
 /**
@@ -44,6 +42,7 @@ export const MINIMAL_DREAMSCAPES: DreamscapeContent[] = [
     signatureSite: "Draft",
     affiliationId: null,
     isStarter: true,
+    atlasDescription: "Fixture starter description",
     fixedSites: ["Draft", "Draft", "Battle"],
     dreamAvatarIds: [],
   },
@@ -92,7 +91,6 @@ const SYNTHETIC_SITE_TYPES = Object.fromEntries(
               kind: "battle",
               label: "Battle",
               finalBossLabel: "Final Boss",
-              lockedGuidance: "Visit the other sites first.",
             }
           : type === "Draft"
             ? { kind: "draft", label: "Draft {pickCount}x" }
@@ -100,38 +98,18 @@ const SYNTHETIC_SITE_TYPES = Object.fromEntries(
               ? {
                   kind: "shop",
                   title: "Dream Market",
-                  restocked: "Restocked",
-                  restockOffersAction: "Restock Offers",
-                  restockAction: "Restock",
-                  freePrice: "Free",
                 }
               : type === "Purge"
                 ? {
                     kind: "purge",
                     title: "Purge Cards",
-                    instruction:
-                      "Choose any number of cards to remove from your deck for an essence cost",
-                    purgeAction: "Purge {count}",
                   }
                 : type === "DreamsignBazaar"
                   ? {
                       kind: "dreamsign-bazaar",
                       title: "Dreamsign Bazaar",
-                      restocked: "Restocked",
-                      restockOffersAction: "Restock Offers",
-                      restockAction: "Restock",
-                      freePrice: "Free",
-                      replacementTitle: "Choose a Dreamsign to Replace",
                     }
-                  : type === "DreamsignRevelation"
-                    ? {
-                        kind: "dreamsign-revelation",
-                        loading: "Revealing Dreamsigns...",
-                        exhausted: "The Dreamsign pool is exhausted.",
-                      }
-                    : type === "RandomSite"
-                      ? { kind: "random-site", title: "Choose a Site" }
-                      : null,
+                  : null,
       rules:
         type === "Duplication"
           ? {
@@ -304,13 +282,6 @@ export function makeSyntheticAtlasData(): AtlasData {
       sceneArtId: testDreamscapeId("fixture-boss-scene"),
       iconArtId: testDreamscapeId("fixture-boss-icon"),
       figureArtId: testGuideId("fixture-boss-figure"),
-    },
-    presentation: {
-      unseenTitle: "Fixture unseen title",
-      unseenBody: "Fixture unseen body",
-      starterBody: "Fixture starter body",
-      affiliationTitleTemplate: "Fixture affiliation {name}",
-      affiliationBodyTemplate: "Fixture theme {card-theme}",
     },
     assets: {
       unrevealedFrameSource: "fixture-frame.png",

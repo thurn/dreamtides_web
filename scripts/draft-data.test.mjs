@@ -4,7 +4,6 @@ import { compileDraftData } from "./draft-data.mjs";
 function fixture() {
   return {
     "schema-version": 1,
-    presentation: { progress: "Draft ({pickNumber}/{pickTotal})" },
     offers: { "cards-per-offer": 4, "picks-per-site": 5 },
     "rarity-caps": [
       {
@@ -44,10 +43,6 @@ describe("compileDraftData", () => {
     ]);
     expect(first.contentHash).toMatch(/^[0-9a-f]{64}$/u);
     expect(first.foldHash).toMatch(/^[0-9a-f]{64}$/u);
-    source.presentation.progress = "Pick {pickNumber} of {pickTotal}";
-    expect(compileDraftData(source).contentHash).not.toBe(first.contentHash);
-    expect(compileDraftData(source).foldHash).toBe(first.foldHash);
-
     source.pool.tides4["max-facets"] += 1;
     expect(compileDraftData(source).foldHash).not.toBe(first.foldHash);
   });

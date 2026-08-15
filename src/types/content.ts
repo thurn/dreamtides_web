@@ -20,8 +20,8 @@ import type {
   DreamsignId,
   TideId,
 } from "./identifiers";
-import type { ContentHash } from "./content-hash";
 import type { SourceTransport } from "../runtime/localization/runtime";
+import type { ContentHash } from "./content-hash";
 
 /** Normalized point locating a DreamAvatar's head in its portrait artwork. */
 export interface DreamAvatarPortraitFocus {
@@ -87,6 +87,8 @@ export interface DreamscapeContent {
   signatureSite: SiteType;
   affiliationId: AffiliationId | null;
   isStarter: boolean;
+  /** Authored Atlas reveal-card body for the guideless starter region. */
+  atlasDescription?: SourceTransport;
   fixedSites?: SiteType[];
   dreamAvatarIds: DreamAvatarId[];
 }
@@ -229,10 +231,7 @@ export interface Tides4ProvenanceSummary {
    */
   tides: Tides4TideSummary[];
   /** Per-card provenance, keyed by card number (as a string). */
-  cardProvenanceByNumber: Record<
-    SerializedCardNumber,
-    Tides4CardProvenance
-  >;
+  cardProvenanceByNumber: Record<SerializedCardNumber, Tides4CardProvenance>;
 }
 
 export interface ResolvedDreamAvatarPackage {

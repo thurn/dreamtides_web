@@ -50,6 +50,11 @@ import { parsePresentationId } from "../../types/identifiers";
 /** The completion level at which the guardian battle is the final boss. */
 const FINAL_BOSS_COMPLETION_LEVEL = 6;
 
+const LOCKED_BATTLE_GUIDANCE = tx(
+  "You must visit the other sites in this dreamscape first.",
+  "[dreamscape] Guidance shown when the guardian Battle is locked until every other site has been visited.",
+);
+
 /** Fallback scatter point when a site index has no seeded position. */
 const FALLBACK_POS = { x: 50, y: 58 } as const;
 
@@ -147,11 +152,6 @@ export function buildSiteModels(
     const isBattle = site.type === "Battle";
     const isLocked = isBattle && !allNonBattleVisited;
     const isInteractive = !site.isVisited && !isLocked;
-    const battlePresentation = sitesData.siteTypes.Battle
-      .presentation as Extract<
-      import("../../types/sites-data").SitePresentation,
-      { kind: "battle" }
-    >;
     const draftPresentation = sitesData.siteTypes.Draft.presentation as Extract<
       import("../../types/sites-data").SitePresentation,
       { kind: "draft" }
@@ -173,7 +173,7 @@ export function buildSiteModels(
       isLocked,
       isInteractive,
       label,
-      lockedGuidance: bindSourceTransport(battlePresentation.lockedGuidance),
+      lockedGuidance: LOCKED_BATTLE_GUIDANCE,
       blurb: localizedSourceText(siteTypeDescription(sitesData, site.type)),
       icon: glyph(siteTypeIcon(sitesData, site.type)),
     };
@@ -340,9 +340,7 @@ export function buildDreamscapeGuideDialogue(
   }
   const speechBubble = configuration.speechBubble;
   return {
-    id: parsePresentationId(
-      `${state.runId ?? state.seed}:dreamscape-guidance`,
-    ),
+    id: parsePresentationId(`${state.runId ?? state.seed}:dreamscape-guidance`),
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
       portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),

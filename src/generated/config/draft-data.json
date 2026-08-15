@@ -1,17 +1,5 @@
 {
   "schemaVersion": 1,
-  "presentation": {
-    "progress": {
-      "contract_signature": "cd50ad9613cf174720f2eabfa55c26d79c0960ba7b9f7c44eefce58d8550806b",
-      "entry_id": "tx1_z7llnesa2wtzpqmq3duhaigxji",
-      "format": "trox-source-message-ref",
-      "source_signature": "cfd6b69240d5a797c190d8e87020d74aab4bd44875c80a712466075eeee43c41",
-      "version": {
-        "major": 1,
-        "minor": 0
-      }
-    }
-  },
   "offers": {
     "cardsPerOffer": 4,
     "picksPerSite": 5
@@ -31,6 +19,6 @@
       "maxFacets": 3
     }
   },
-  "contentHash": "c167e7654262bf13f0a856eea9bcd633f65d44ac65f3cf1f10b025fc5649027e",
+  "contentHash": "c2c67dab49ea873e81360208d63aac5c746f4a00d2e8401111c729bb727cbb69",
   "foldHash": "c2c67dab49ea873e81360208d63aac5c746f4a00d2e8401111c729bb727cbb69"
 }

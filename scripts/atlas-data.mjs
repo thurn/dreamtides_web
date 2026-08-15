@@ -34,16 +34,6 @@ function string(value, path) {
   return value;
 }
 
-function isSourceMessageRef(value) {
-  return value !== null &&
-    typeof value === "object" &&
-    !Array.isArray(value) &&
-    value.format === "trox-source-message-ref" &&
-    typeof value.entry_id === "string" &&
-    typeof value.source_signature === "string" &&
-    typeof value.contract_signature === "string";
-}
-
 function boolean(value, path) {
   if (typeof value !== "boolean") fail(path, "expected a boolean");
   return value;
@@ -114,34 +104,6 @@ function siteWeightMap(value, path) {
   return result;
 }
 
-function placeholders(template) {
-  return [...template.matchAll(/\{([^{}]+)\}/gu)].map((match) => match[1]);
-}
-
-function template(value, path, allowed) {
-  if (isSourceMessageRef(value)) return value;
-  const result = string(value, path);
-  const found = placeholders(result).map((entry) =>
-    entry === "name"
-      ? "affiliation_name"
-      : entry
-          .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
-          .replaceAll("-", "_")
-          .toLowerCase(),
-  );
-  const unknown = found.filter((entry) => !allowed.has(entry));
-  if (unknown.length > 0) fail(path, `unsupported placeholder {${unknown[0]}}`);
-  for (const required of allowed) {
-    if (!found.includes(required))
-      fail(path, `missing placeholder {${required}}`);
-  }
-  return result;
-}
-
-function localized(value, path) {
-  return isSourceMessageRef(value) ? value : string(value, path);
-}
-
 function stableValue(value) {
   if (Array.isArray(value)) return value.map(stableValue);
   if (typeof value !== "object" || value === null) return value;
@@ -175,12 +137,11 @@ export function collectAtlasAssetSources({
   ) {
     return undefined;
   }
-  const bossIcons = new Set(readdirSync(bossIconDir));
   return {
     bossScenes: new Set(readdirSync(bossSceneDir)),
-    bossIcons,
+    bossIcons: new Set(readdirSync(bossIconDir)),
     bossFigures: new Set(readdirSync(bossFigureDir)),
-    frames: bossIcons,
+    frames: new Set(readdirSync(bossIconDir)),
   };
 }
 
@@ -567,32 +528,6 @@ export function compileAtlasData(sourceValue, catalogs = {}) {
     figureArtId: string(bossSource["figure-art-id"], "boss.figure-art-id"),
   };
 
-  const presentationSource = record(source.presentation, "presentation");
-  const presentation = {
-    unseenTitle: localized(
-      presentationSource["unseen-title"],
-      "presentation.unseen-title",
-    ),
-    unseenBody: localized(
-      presentationSource["unseen-body"],
-      "presentation.unseen-body",
-    ),
-    starterBody: localized(
-      presentationSource["starter-body"],
-      "presentation.starter-body",
-    ),
-    affiliationTitleTemplate: template(
-      presentationSource["affiliation-title-template"],
-      "presentation.affiliation-title-template",
-      new Set(["affiliation_name"]),
-    ),
-    affiliationBodyTemplate: template(
-      presentationSource["affiliation-body-template"],
-      "presentation.affiliation-body-template",
-      new Set(["card_theme"]),
-    ),
-  };
-
   const assetsSource = record(source.assets, "assets");
   const assets = {
     unrevealedFrameSource: string(
@@ -626,7 +561,6 @@ export function compileAtlasData(sourceValue, catalogs = {}) {
     fillProfiles,
     knownDreamsign,
     boss,
-    presentation,
     assets,
   };
   validateCatalogs(normalized, catalogs);

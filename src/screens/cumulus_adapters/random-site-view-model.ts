@@ -15,7 +15,8 @@ import type {
 } from "../../types/journey";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
-import { bindSourceTransport, localizedSourceText } from "../../runtime/localization/runtime";
+import { localizedSourceText } from "../../runtime/localization/runtime";
+import { tx, type LocalizedString } from "@trox/runtime";
 
 export function buildRandomSiteView(params: {
   sceneNode: DreamscapeNode | null;
@@ -28,13 +29,9 @@ export function buildRandomSiteView(params: {
   const scene: ArtRef | null =
     params.sceneNode === null ? null : dreamscapeSceneRef(params.sceneNode);
   return {
-    title: bindSourceTransport(
-      (
-        params.sitesData.siteTypes.RandomSite.presentation as Extract<
-          import("../../types/sites-data").SitePresentation,
-          { kind: "random-site" }
-        >
-      ).title,
+    title: tx(
+      "Choose a Site",
+      "[random site] Heading above the available destination choices.",
     ),
     siteId: params.site.id,
     scene,
@@ -49,4 +46,3 @@ export function buildRandomSiteView(params: {
     })),
   };
 }
-import type { LocalizedString } from "@trox/runtime";

@@ -34,16 +34,6 @@
             "major": 1,
             "minor": 0
           }
-        },
-        "lockedGuidance": {
-          "contract_signature": "66c4bcff5922580129cc0750c045d5ed1b6b5c5fbfa38183472e6c877bf21108",
-          "entry_id": "tx1_hpezoyebtfsqgumqlfa4ocvteq",
-          "format": "trox-source-message-ref",
-          "source_signature": "3bc997608199650351905941c70ab324e43a99d052790141a5a7fcf12853f86c",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
         }
       },
       "rules": null
@@ -80,46 +70,6 @@
             "major": 1,
             "minor": 0
           }
-        },
-        "restocked": {
-          "contract_signature": "9cb261ab42ac3d7d6f7a408bec92c2f9343f53e4bc9f877d78e1ca5e328f6a26",
-          "entry_id": "tx1_emqvsrthdmpq4r6aohj64pslh4",
-          "format": "trox-source-message-ref",
-          "source_signature": "23215946671b1f0e47c071d3ee3e4b3f922951bd7da31303b15b7d33436815db",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        },
-        "restockOffersAction": {
-          "contract_signature": "8032ee8859a46a25565494b5c522f453a805435bb1130d74850d241be4c15d85",
-          "entry_id": "tx1_kz6mnrjq3kglbezejollzbrcoe",
-          "format": "trox-source-message-ref",
-          "source_signature": "567cc6c530da8cb093244b96bc86227101ba5f1eb13dff98313bb32234967384",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        },
-        "restockAction": {
-          "contract_signature": "7b4e5026947791d7adca58e12fad790422ec2105933f720497e063706d3a8728",
-          "entry_id": "tx1_pg6e7j2v2z6xao6mboyqlul4aa",
-          "format": "trox-source-message-ref",
-          "source_signature": "79bc4fa755d67d703bcc0bb105d17c00dd5df72df6ebca029ea4db34f5d0467d",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        },
-        "freePrice": {
-          "contract_signature": "78e68ca0294b4d7deaf451903e806be10b43a6d196e0451731ae1f2a47b10198",
-          "entry_id": "tx1_es5gt6slzxs3fm6iucrhdolnp4",
-          "format": "trox-source-message-ref",
-          "source_signature": "24ba69fa4bcde5b2b3c8a0a271b96d7f2a141c2c2cc4732a48e1a5743b2b815e",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
         }
       },
       "rules": null
@@ -134,26 +84,6 @@
           "entry_id": "tx1_ftzk46g2gzatwlmg4gw4zwavye",
           "format": "trox-source-message-ref",
           "source_signature": "2cf2ae78da36413b2d86e1adccd815c1efde2601733eb1b5598cfdaeb83d723f",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        },
-        "instruction": {
-          "contract_signature": "c5ec41065b157a4aa50934f150cc1302b3c25d142d70d11c4b6a5b80167f550b",
-          "entry_id": "tx1_qal5psv3j3q2pc6pxds7bpokvu",
-          "format": "trox-source-message-ref",
-          "source_signature": "8017d7cabb4ee1a78bcfb8e5f0bdcaadc74654e731ededd68508cc50da45f235",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        },
-        "purgeAction": {
-          "contract_signature": "94c07d48d3712d35f8bedbfdf48ad4eb76efb7c29cee734aa7abd065302917cb",
-          "entry_id": "tx1_iikymm2ne2uag4xqy4refjbcmm",
-          "format": "trox-source-message-ref",
-          "source_signature": "421586334d26a80372f0c72242a422635b349f73536ffe33b2fc5ad63d8f29ce",
           "version": {
             "major": 1,
             "minor": 0
@@ -212,56 +142,6 @@
             "major": 1,
             "minor": 0
           }
-        },
-        "restocked": {
-          "contract_signature": "9cb261ab42ac3d7d6f7a408bec92c2f9343f53e4bc9f877d78e1ca5e328f6a26",
-          "entry_id": "tx1_emqvsrthdmpq4r6aohj64pslh4",
-          "format": "trox-source-message-ref",
-          "source_signature": "23215946671b1f0e47c071d3ee3e4b3f922951bd7da31303b15b7d33436815db",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        },
-        "restockOffersAction": {
-          "contract_signature": "8032ee8859a46a25565494b5c522f453a805435bb1130d74850d241be4c15d85",
-          "entry_id": "tx1_kz6mnrjq3kglbezejollzbrcoe",
-          "format": "trox-source-message-ref",
-          "source_signature": "567cc6c530da8cb093244b96bc86227101ba5f1eb13dff98313bb32234967384",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        },
-        "restockAction": {
-          "contract_signature": "7b4e5026947791d7adca58e12fad790422ec2105933f720497e063706d3a8728",
-          "entry_id": "tx1_pg6e7j2v2z6xao6mboyqlul4aa",
-          "format": "trox-source-message-ref",
-          "source_signature": "79bc4fa755d67d703bcc0bb105d17c00dd5df72df6ebca029ea4db34f5d0467d",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        },
-        "freePrice": {
-          "contract_signature": "78e68ca0294b4d7deaf451903e806be10b43a6d196e0451731ae1f2a47b10198",
-          "entry_id": "tx1_es5gt6slzxs3fm6iucrhdolnp4",
-          "format": "trox-source-message-ref",
-          "source_signature": "24ba69fa4bcde5b2b3c8a0a271b96d7f2a141c2c2cc4732a48e1a5743b2b815e",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        },
-        "replacementTitle": {
-          "contract_signature": "de84ed32449cc51adcc085df443cb45eb05a0f0b99c24a9864c662714048db14",
-          "entry_id": "tx1_w4pf2m4swjwc7v5pdm3jg2vwvq",
-          "format": "trox-source-message-ref",
-          "source_signature": "b71e5d3392b26c2fd7af1b36936ab6ac9668301d2b988d1f1028b0c92c5fb561",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
         }
       },
       "rules": null
@@ -269,47 +149,13 @@
     "DreamsignRevelation": {
       "icon": "bxf bx-meteor",
       "glossaryId": "ac70fd6b-a91a-407f-b7b7-255668cd6bec",
-      "presentation": {
-        "kind": "dreamsign-revelation",
-        "loading": {
-          "contract_signature": "fa08d9d2bc62d1080ef4baa19169e8af2c44ee8c1caf1c8fc2b0e47b021421f2",
-          "entry_id": "tx1_grap5nxrxdo45e5d56nc55nosa",
-          "format": "trox-source-message-ref",
-          "source_signature": "3440feb6f1b8ddce93a3ef9a2ef5ae90f463c32aafd10e9219e2921fc30098db",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        },
-        "exhausted": {
-          "contract_signature": "800be6824d2e9e9ac880728474ab03dc6c1181b702cc879da446e76fba2eda9e",
-          "entry_id": "tx1_wdzdopgmtgludjal37qwgjqveq",
-          "format": "trox-source-message-ref",
-          "source_signature": "b0f2373ccc999741a40bdfe1632615249cb78bbb5b01948c3474f7bb26afe9bf",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        }
-      },
+      "presentation": null,
       "rules": null
     },
     "RandomSite": {
       "icon": "fa-solid fa-question",
       "glossaryId": "1aeb05bc-53e1-4ea4-9e73-9239160799dc",
-      "presentation": {
-        "kind": "random-site",
-        "title": {
-          "contract_signature": "9b617f001be94f0dc851d6e05a4a06ad9fb53e8f2cee51da8efff59fa7fab949",
-          "entry_id": "tx1_iv7akp4juzwg5qnheacjndosrq",
-          "format": "trox-source-message-ref",
-          "source_signature": "457e053f89a66c6ec1a72004968dd28caa8e5d6414d206f2367e996c0f2fc88b",
-          "version": {
-            "major": 1,
-            "minor": 0
-          }
-        }
-      },
+      "presentation": null,
       "rules": null
     },
     "Gamble": {
@@ -383,6 +229,6 @@
       "homeDreamscapeId": "grid_city"
     }
   },
-  "contentHash": "463f94205bbf6e780ce3846905f7408dd76dd07c1eb8253cbfcabf888e0e2986",
+  "contentHash": "6f271194e9a734d2ed3d51f792b7c1b45216ed6d42aea3f584b6b38f1dbcd8ba",
   "foldHash": "c08cfad0a6b5a1675bb482e0833783effbc44abe7886a50c5726d197044183ec"
 }

@@ -37,16 +37,6 @@ function positiveInteger(value, path) {
   return value;
 }
 
-function isSourceMessageRef(value) {
-  return value !== null &&
-    typeof value === "object" &&
-    !Array.isArray(value) &&
-    value.format === "trox-source-message-ref" &&
-    typeof value.entry_id === "string" &&
-    typeof value.source_signature === "string" &&
-    typeof value.contract_signature === "string";
-}
-
 function stable(value) {
   if (Array.isArray(value)) return value.map(stable);
   if (typeof value !== "object" || value === null) return value;
@@ -67,7 +57,6 @@ function hash(value) {
 export function compileDraftData(sourceValue) {
   const root = keys(sourceValue, "root", [
     "schema-version",
-    "presentation",
     "offers",
     "rarity-caps",
     "pool",
@@ -75,31 +64,6 @@ export function compileDraftData(sourceValue) {
   if (positiveInteger(root["schema-version"], "schema-version") !== 1) {
     fail("schema-version", "only schema version 1 is supported");
   }
-  const presentationSource = keys(root.presentation, "presentation", [
-    "progress",
-  ]);
-  const progress = presentationSource.progress;
-  const progressSlots = typeof progress === "string"
-    ? [...progress.matchAll(/\{([^{}]+)\}/gu)]
-      .map((match) => match[1]
-        .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
-        .replaceAll("-", "_")
-        .toLowerCase())
-      .sort()
-      .join(",")
-    : "";
-  if (
-    !isSourceMessageRef(progress) && (
-    typeof progress !== "string" ||
-    progress.trim() === "" ||
-    progressSlots !== "pick_number,pick_total")
-  ) {
-    fail(
-      "presentation.progress",
-      "expected exactly {pick_number} and {pick_total}",
-    );
-  }
-
   const offers = keys(root.offers, "offers", [
     "cards-per-offer",
     "picks-per-site",
@@ -178,7 +142,6 @@ export function compileDraftData(sourceValue) {
 
   const payload = {
     schemaVersion: 1,
-    presentation: { progress },
     offers: { cardsPerOffer, picksPerSite },
     rarityCaps,
     pool: {

@@ -1,7 +1,7 @@
 // CardShopSiteScreen — Tobias Tanglefur's Cumulus card shop. Five direct-buy
 // cards and one restock action share a two-row glass gallery.
 
-import { tx } from "@trox/runtime";
+import { tx, type LocalizedString } from "@trox/runtime";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import type { GameCardModel } from "../components/card/CardView";
@@ -47,9 +47,14 @@ export interface CardShopRestockView {
 }
 
 export interface CardShopSiteView {
-  presentation: import("./localized-site-presentation").LocalizedSitePresentation<
-    Extract<import("../../types/sites-data").SitePresentation, { kind: "shop" }>
-  >;
+  presentation: {
+    readonly kind: "shop";
+    readonly title: LocalizedString;
+    readonly restocked: LocalizedString;
+    readonly restockOffersAction: LocalizedString;
+    readonly restockAction: LocalizedString;
+    readonly freePrice: LocalizedString;
+  };
   /** Stable site id used by the shared character-gallery layout. */
   siteId: SiteId;
   /** Current dreamscape scene art behind the site, if resolved. */
@@ -139,7 +144,9 @@ function CardShopGallery({
           .map((offer) => offer.entryId),
       );
       return current.size === persisted.size &&
-        [...current].every((entryId) => persisted.has(parseDeckEntryId(entryId)))
+        [...current].every((entryId) =>
+          persisted.has(parseDeckEntryId(entryId)),
+        )
         ? current
         : persisted;
     });

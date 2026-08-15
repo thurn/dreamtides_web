@@ -107,11 +107,12 @@ The important ownership boundaries are:
   `CoopJourneyProvider`, and shared experience router for main, loading,
   tutorial, live battle, victory, and journey.
 
-Atlas graph generation, boss content, presentation copy, and asset references
-are authored in `data/atlas.ron`. See [Dream Atlas Data](atlas_data.md)
-for the schema, validation rules, hashing, and Layer VII Limbo semantics. Guide
-identity, home and specialty assignments, dialogue, site presentation, and
-cross-site mechanics are documented in
+Atlas graph generation, boss content, and boss asset references are authored in
+`data/atlas.ron`. Starter Atlas descriptions are part of the Dreamscape catalog,
+and the Atlas view model owns generic UI copy. See
+[Dream Atlas Data](atlas_data.md) for the schema, validation rules, hashing, and
+Layer VII Limbo semantics. Guide identity, home and specialty assignments,
+dialogue, site metadata, and cross-site mechanics are documented in
 [Dream Guide and Site Data](guide_and_sites_data.md).
 
 `LogClient` keeps a confirmed fold and an ordered pending-intent queue. A local

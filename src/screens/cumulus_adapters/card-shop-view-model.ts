@@ -12,7 +12,6 @@ import type { CardData } from "../../types/cards";
 import type { EconomyData } from "../../types/economy-data";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { SitesData } from "../../types/sites-data";
-import { localizedSitePresentation } from "../../cumulus/screens/localized-site-presentation";
 import type {
   DreamGuideContent,
   ResolvedDreamAvatarPackage,
@@ -41,6 +40,8 @@ import type { GuideId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import type { ExplorationActionId } from "../../types/identifiers";
+import { bindSourceTransport } from "../../runtime/localization/runtime";
+import { SHOP_FLOW_PRESENTATION } from "./shop-flow-presentation-view-model";
 
 /** Resolve Tobias, the resident Dream Guide for Card Shops. */
 export function resolveCardShopGuide(
@@ -179,12 +180,17 @@ export function buildCardShopSiteView(params: {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
   return {
-    presentation: localizedSitePresentation(
-      params.sitesData.siteTypes.Shop.presentation as Extract<
+    presentation: (() => {
+      const identity = params.sitesData.siteTypes.Shop.presentation as Extract<
         import("../../types/sites-data").SitePresentation,
         { kind: "shop" }
-      >,
-    ),
+      >;
+      return {
+        kind: identity.kind,
+        title: bindSourceTransport(identity.title),
+        ...SHOP_FLOW_PRESENTATION,
+      };
+    })(),
     siteId: params.site.id,
     scene,
     guide: buildCardShopGuideView(params.guide, params.guideLine),

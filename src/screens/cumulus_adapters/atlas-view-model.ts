@@ -48,7 +48,7 @@ import {
   bindSourceTransport,
   localizedSourceText,
 } from "../../runtime/localization/runtime";
-import { tx } from "@trox/runtime";
+import { opaque, tx, txa } from "@trox/runtime";
 import {
   siteTypeDescription,
   siteTypeIcon,
@@ -64,6 +64,15 @@ import type { TutorialAtlasConfiguration } from "../../types/tutorial";
 import { type LayerName, layerOrdinal } from "../../types/layer-name";
 import type { AtlasNodeId } from "../../types/identifiers";
 import { parsePresentationId } from "../../types/identifiers";
+
+const UNSEEN_DREAM_TITLE = tx(
+  "An Unseen Dream",
+  "[atlas] Title of the compact information card for an unrevealed or unreachable Dreamscape.",
+);
+const UNSEEN_DREAM_BODY = tx(
+  "This dreamscape is revealed only as you draw near. Travel onward to learn what waits here.",
+  "[atlas] Body of the compact information card explaining that an unrevealed Dreamscape becomes known as the player approaches it.",
+);
 
 /**
  * The portrait design canvas the mobile atlas stage scales to fit (letterboxed).
@@ -379,23 +388,20 @@ function buildSignatureSiteCard(
 /** Resolves the affiliation explanatory InfoCard payload. */
 function buildAffiliationCard(
   affiliation: JourneyContent["affiliations"][number] | null,
-  journeyContent: JourneyContent,
 ): AtlasNodeAffiliation | null {
   return affiliation !== null
     ? {
-        title: bindSourceTransport(
-          journeyContent.atlasData.presentation.affiliationTitleTemplate,
-          {
-            affiliation_name: localizedSourceText(affiliation.name),
-            card_theme: localizedSourceText(affiliation.atlasCardTheme),
-          },
+        title: txa(
+          "Affiliation: {affiliation_name}",
+          { affiliation_name: opaque(localizedSourceText(affiliation.name)) },
+          "[atlas] Title of an Atlas Dreamscape's affiliation information card. affiliation_name is the canonical authored proper name of that Dreamscape's affiliation.",
         ),
-        body: bindSourceTransport(
-          journeyContent.atlasData.presentation.affiliationBodyTemplate,
+        body: txa(
+          "{card_theme} cards are more likely here.",
           {
-            affiliation_name: localizedSourceText(affiliation.name),
-            card_theme: localizedSourceText(affiliation.atlasCardTheme),
+            card_theme: opaque(localizedSourceText(affiliation.atlasCardTheme)),
           },
+          "[atlas] Body of an Atlas Dreamscape's affiliation information card. card_theme is the canonical authored invariant card-theme label associated with that affiliation.",
         ),
       }
     : null;
@@ -474,12 +480,8 @@ function buildNodeCard(
       primary: {
         sceneArt: null,
         figureArt: null,
-        title: bindSourceTransport(
-          journeyContent.atlasData.presentation.unseenTitle,
-        ),
-        body: bindSourceTransport(
-          journeyContent.atlasData.presentation.unseenBody,
-        ),
+        title: UNSEEN_DREAM_TITLE,
+        body: UNSEEN_DREAM_BODY,
         // A still-unseen dream can carry a pre-revealed known dreamsign (its badge
         // already shows on the node); pressing it reveals that dreamsign's own
         // companion card beneath the "unseen dream" text. Unreachable nodes hide
@@ -522,12 +524,17 @@ function buildNodeCard(
       sceneArt: artRef.dreamscapeScene(dreamscape.id),
       figureArt: guide != null ? artRef.dreamGuide(guide.id) : null,
       title: localizedSourceText(guide?.name ?? dreamscape.name),
-      body:
-        guide?.homeSpecialty !== undefined
-          ? localizedSourceText(guide.homeSpecialty)
-          : bindSourceTransport(
-              journeyContent.atlasData.presentation.starterBody,
-            ),
+      body: (() => {
+        if (guide?.homeSpecialty !== undefined) {
+          return localizedSourceText(guide.homeSpecialty);
+        }
+        if (dreamscape.atlasDescription === undefined) {
+          throw new Error(
+            `Starter Dreamscape ${dreamscape.id} has no Atlas description.`,
+          );
+        }
+        return bindSourceTransport(dreamscape.atlasDescription);
+      })(),
       // The large desktop hover card presents the place, its resident guide, the
       // signature site, and the dreamscape's affiliation as distinct fields.
       placeName: localizedSourceText(dreamscape.name),
@@ -535,7 +542,7 @@ function buildNodeCard(
     },
     dreamsign,
     site,
-    affiliation: buildAffiliationCard(affiliation, journeyContent),
+    affiliation: buildAffiliationCard(affiliation),
   };
 }
 

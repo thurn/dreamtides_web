@@ -1,8 +1,6 @@
 import type { DraftData, DraftRarityCap } from "../types/draft-data";
 import { CARD_RARITIES, type Rarity } from "../types/cards";
 import generatedDraftData from "../generated/config/draft-data.json";
-import { SourceMessage } from "@trox/runtime";
-import { hydrateSourceTransport } from "../runtime/localization/runtime";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 export type {
@@ -16,8 +14,9 @@ const SHA256_HEX = /^[0-9a-f]{64}$/u;
 const RARITIES: ReadonlySet<Rarity> = new Set(CARD_RARITIES);
 
 function isRarity(value: unknown): value is Rarity {
-  return typeof value === "string" &&
-    (RARITIES as ReadonlySet<string>).has(value);
+  return (
+    typeof value === "string" && (RARITIES as ReadonlySet<string>).has(value)
+  );
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -47,7 +46,6 @@ export function parseDraftData(value: unknown): DraftData {
       "schemaVersion",
       "contentHash",
       "foldHash",
-      "presentation",
       "offers",
       "rarityCaps",
       "pool",
@@ -57,8 +55,6 @@ export function parseDraftData(value: unknown): DraftData {
     !SHA256_HEX.test(value.contentHash) ||
     typeof value.foldHash !== "string" ||
     !SHA256_HEX.test(value.foldHash) ||
-    !isRecord(value.presentation) ||
-    !hasExactKeys(value.presentation, ["progress"]) ||
     !isRecord(value.offers) ||
     !hasExactKeys(value.offers, ["cardsPerOffer", "picksPerSite"]) ||
     !isPositiveInteger(value.offers.cardsPerOffer) ||
@@ -75,33 +71,6 @@ export function parseDraftData(value: unknown): DraftData {
   ) {
     throw new Error("Failed to load draft data: malformed draft-data.json");
   }
-  let progress;
-  try {
-    progress = hydrateSourceTransport(
-      value.presentation.progress,
-      "Draft progress presentation",
-    );
-  } catch {
-    throw new Error("Failed to load draft data: malformed draft-data.json");
-  }
-  if (progress instanceof SourceMessage) {
-    const schemas = progress.argumentSchemas;
-    if (
-      Object.keys(schemas).sort().join(",") !== "pick_number,pick_total" ||
-      Object.values(schemas).some((schema) => schema.kind !== "scalar")
-    ) {
-      throw new Error("Failed to load draft data: malformed draft-data.json");
-    }
-  } else if (
-    typeof progress === "string" &&
-    [...progress.matchAll(/\{([^{}]+)\}/gu)]
-      .map((match) => match[1])
-      .sort()
-      .join(",") !== "pick_number,pick_total"
-  ) {
-    throw new Error("Failed to load draft data: malformed draft-data.json");
-  }
-
   const seen = new Set<Rarity>();
   const rarityCaps: DraftRarityCap[] = [];
   for (const cap of value.rarityCaps) {
@@ -134,7 +103,6 @@ export function parseDraftData(value: unknown): DraftData {
     schemaVersion: 1,
     contentHash: parseContentHash(value.contentHash),
     foldHash: parseFoldHash(value.foldHash),
-    presentation: { progress },
     offers: {
       cardsPerOffer: value.offers.cardsPerOffer,
       picksPerSite: value.offers.picksPerSite,

@@ -1,6 +1,6 @@
 // Pure view-model builder for the Cumulus Dreamsign Revelation screen.
 
-import type { LocalizedString } from "@trox/runtime";
+import { tx, type LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -9,7 +9,6 @@ import type {
   JourneyState,
 } from "../../types/journey";
 import type { TutorialSiteConfiguration } from "../../types/tutorial";
-import type { SitesData } from "../../types/sites-data";
 import type { ArtRef } from "../../cumulus/primitives/art";
 import type {
   DreamsignRevelationGuideView,
@@ -18,7 +17,6 @@ import type {
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
-import { localizedSitePresentation } from "../../cumulus/screens/localized-site-presentation";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import type { GuideId } from "../../types/identifiers";
 
@@ -51,17 +49,21 @@ export function buildDreamsignRevelationView(params: {
   offeredDreamsigns: readonly Dreamsign[] | null;
   pendingPurgeDreamsign: Dreamsign | null;
   tutorialConfiguration?: TutorialSiteConfiguration;
-  sitesData: SitesData;
 }): DreamsignRevelationView {
   const scene: ArtRef | null =
     params.sceneNode !== null ? dreamscapeSceneRef(params.sceneNode) : null;
   return {
-    presentation: localizedSitePresentation(
-      params.sitesData.siteTypes.DreamsignRevelation.presentation as Extract<
-        import("../../types/sites-data").SitePresentation,
-        { kind: "dreamsign-revelation" }
-      >,
-    ),
+    presentation: {
+      kind: "dreamsign-revelation",
+      loading: tx(
+        "Revealing Dreamsigns...",
+        "[dreamsign revelation] Status shown while the offered Dreamsigns are being prepared.",
+      ),
+      exhausted: tx(
+        "The Dreamsign pool is exhausted.",
+        "[dreamsign revelation] Message shown when no Dreamsign remains available to offer.",
+      ),
+    },
     scene,
     guide: buildDreamsignRevelationGuideView(params.guide, params.guideLine),
     offer: (params.offeredDreamsigns ?? []).map((dreamsign) =>

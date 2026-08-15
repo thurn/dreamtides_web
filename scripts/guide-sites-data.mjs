@@ -55,13 +55,15 @@ function requiredString(value, file, path) {
 }
 
 function isSourceMessageRef(value) {
-  return value !== null &&
+  return (
+    value !== null &&
     typeof value === "object" &&
     !Array.isArray(value) &&
     value.format === "trox-source-message-ref" &&
     typeof value.entry_id === "string" &&
     typeof value.source_signature === "string" &&
-    typeof value.contract_signature === "string";
+    typeof value.contract_signature === "string"
+  );
 }
 
 function localized(value, file, path) {
@@ -134,10 +136,11 @@ function dialogueLines(
   );
   if (lines.length === 0) fail(file, path, "must not be empty");
   if (lines.some(isSourceMessageRef)) return lines;
-  const canonical = (slot) => slot
-    .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
-    .replaceAll("-", "_")
-    .toLowerCase();
+  const canonical = (slot) =>
+    slot
+      .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
+      .replaceAll("-", "_")
+      .toLowerCase();
   const allowed = new Set(allowedSlots.map(canonical));
   const found = lines.flatMap(placeholders).map(canonical);
   for (const slot of found) {
@@ -366,28 +369,11 @@ function compileChoiceLimit(value, file, path) {
 }
 
 const PRESENTATION_KEYS = {
-  battle: ["kind", "label", "final-boss-label", "locked-guidance"],
+  battle: ["kind", "label", "final-boss-label"],
   draft: ["kind", "label"],
-  shop: [
-    "kind",
-    "title",
-    "restocked",
-    "restock-offers-action",
-    "restock-action",
-    "free-price",
-  ],
-  purge: ["kind", "title", "instruction", "purge-action"],
-  "dreamsign-bazaar": [
-    "kind",
-    "title",
-    "restocked",
-    "restock-offers-action",
-    "restock-action",
-    "free-price",
-    "replacement-title",
-  ],
-  "dreamsign-revelation": ["kind", "loading", "exhausted"],
-  "random-site": ["kind", "title"],
+  shop: ["kind", "title"],
+  purge: ["kind", "title"],
+  "dreamsign-bazaar": ["kind", "title"],
 };
 const PRESENTATION_KIND_BY_SITE = {
   Battle: "battle",
@@ -395,17 +381,16 @@ const PRESENTATION_KIND_BY_SITE = {
   Shop: "shop",
   Purge: "purge",
   DreamsignBazaar: "dreamsign-bazaar",
-  DreamsignRevelation: "dreamsign-revelation",
-  RandomSite: "random-site",
 };
 
 function presentationTemplate(value, file, path, slots) {
   if (isSourceMessageRef(value)) return value;
   const result = requiredString(value, file, path);
-  const canonical = (slot) => slot
-    .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
-    .replaceAll("-", "_")
-    .toLowerCase();
+  const canonical = (slot) =>
+    slot
+      .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
+      .replaceAll("-", "_")
+      .toLowerCase();
   const found = placeholders(result).map(canonical).sort();
   if (found.join(",") !== [...slots].sort().join(",")) {
     fail(
@@ -434,7 +419,6 @@ function compileSitePresentation(value, type, file, path) {
         kind,
         label: text("label"),
         finalBossLabel: text("final-boss-label"),
-        lockedGuidance: text("locked-guidance"),
       };
     case "draft":
       return {
@@ -444,39 +428,10 @@ function compileSitePresentation(value, type, file, path) {
         ]),
       };
     case "shop":
-      return {
-        kind,
-        title: text("title"),
-        restocked: text("restocked"),
-        restockOffersAction: text("restock-offers-action"),
-        restockAction: text("restock-action"),
-        freePrice: text("free-price"),
-      };
+      return { kind, title: text("title") };
     case "purge":
-      return {
-        kind,
-        title: text("title"),
-        instruction: text("instruction"),
-        purgeAction: presentationTemplate(
-          source["purge-action"],
-          file,
-          `${path}.purge-action`,
-          ["count"],
-        ),
-      };
+      return { kind, title: text("title") };
     case "dreamsign-bazaar":
-      return {
-        kind,
-        title: text("title"),
-        restocked: text("restocked"),
-        restockOffersAction: text("restock-offers-action"),
-        restockAction: text("restock-action"),
-        freePrice: text("free-price"),
-        replacementTitle: text("replacement-title"),
-      };
-    case "dreamsign-revelation":
-      return { kind, loading: text("loading"), exhausted: text("exhausted") };
-    case "random-site":
       return { kind, title: text("title") };
     default:
       throw new Error(`unreachable presentation kind ${kind}`);
@@ -528,23 +483,31 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     "placeable-types",
   ]);
   const placeableTypes = unique(
-    array(rawSelection["placeable-types"], file, "selection.placeable-types")
-      .map((entry, index) => siteType(
-        entry,
-        file,
-        `selection.placeable-types[${String(index)}]`,
-      )),
+    array(
+      rawSelection["placeable-types"],
+      file,
+      "selection.placeable-types",
+    ).map((entry, index) =>
+      siteType(entry, file, `selection.placeable-types[${String(index)}]`),
+    ),
     file,
     "selection.placeable-types",
   );
   const allowedPlaceableTypes = new Set([
-    "Shop", "Purge", "Transfiguration", "Duplication",
+    "Shop",
+    "Purge",
+    "Transfiguration",
+    "Duplication",
   ]);
   if (
     placeableTypes.length === 0 ||
     placeableTypes.some((type) => !allowedPlaceableTypes.has(type))
   ) {
-    fail(file, "selection.placeable-types", "contains an unsupported site type");
+    fail(
+      file,
+      "selection.placeable-types",
+      "contains an unsupported site type",
+    );
   }
   const selection = {
     minDeckForPurge: number(
@@ -574,7 +537,11 @@ export function compileSitesData(sourceValue, catalogs = {}) {
       fail(file, `${path}.type`, `duplicate metadata for ${type}`);
     siteTypes[type] = {
       icon: requiredString(metadata.icon, file, `${path}.icon`),
-      glossaryId: requiredString(metadata["glossary-id"], file, `${path}.glossary-id`),
+      glossaryId: requiredString(
+        metadata["glossary-id"],
+        file,
+        `${path}.glossary-id`,
+      ),
       presentation: compileSitePresentation(
         metadata.presentation,
         type,

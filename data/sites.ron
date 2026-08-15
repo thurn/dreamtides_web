@@ -1,4 +1,4 @@
-// Journey site presentation, placement, random-site behavior, and shared card choices.
+// Journey site metadata, placement, random-site behavior, and shared card choices.
 
 #![enable(implicit_some)]
 SitesCatalog(
@@ -9,11 +9,7 @@ SitesCatalog(
       site: Battle,
       icon: "bxf bx-sword-alt",
       glossary_id: "85ffab8d-f972-4340-9b45-99f6aff6ccec",
-      presentation: Battle(
-        label: Tx("Battle"),
-        final_boss_label: Tx("Final Boss"),
-        locked_guidance: Tx("You must visit the other sites in this dreamscape first."),
-      ),
+      presentation: Battle(label: Tx("Battle"), final_boss_label: Tx("Final Boss")),
     ),
 
     SiteMetadata(
@@ -29,24 +25,14 @@ SitesCatalog(
       site: Shop,
       icon: "bxf bx-store-alt-2",
       glossary_id: "25f28ed1-5729-4240-a352-80f92fce530c",
-      presentation: Shop(
-        title: Tx("Dream Market"),
-        restocked: Tx("Restocked"),
-        restock_offers_action: Tx("Restock Offers"),
-        restock_action: Tx("Restock"),
-        free_price: Tx("Free"),
-      ),
+      presentation: Shop(title: Tx("Dream Market")),
     ),
 
     SiteMetadata(
       site: Purge,
       icon: "bxf bx-hot",
       glossary_id: "4873bddf-7bf5-41e8-979e-36eb193db5a6",
-      presentation: Purge(
-        title: Tx("Purge Cards"),
-        instruction: Tx("Choose any number of cards to remove from your deck for an essence cost"),
-        purge_action: Tx(text: "Purge {count}", placeholders: {"count": Scalar}),
-      ),
+      presentation: Purge(title: Tx("Purge Cards")),
     ),
 
     SiteMetadata(
@@ -88,31 +74,19 @@ SitesCatalog(
       site: DreamsignBazaar,
       icon: "bxf bx-pyramid",
       glossary_id: "5b5b47d6-c858-4b42-af96-a520c84666eb",
-      presentation: DreamsignBazaar(
-        title: Tx("Dreamsign Bazaar"),
-        restocked: Tx("Restocked"),
-        restock_offers_action: Tx("Restock Offers"),
-        restock_action: Tx("Restock"),
-        free_price: Tx("Free"),
-        replacement_title: Tx("Choose a Dreamsign to Replace"),
-      ),
+      presentation: DreamsignBazaar(title: Tx("Dreamsign Bazaar")),
     ),
 
     SiteMetadata(
       site: DreamsignRevelation,
       icon: "bxf bx-meteor",
       glossary_id: "ac70fd6b-a91a-407f-b7b7-255668cd6bec",
-      presentation: DreamsignRevelation(
-        loading: Tx("Revealing Dreamsigns..."),
-        exhausted: Tx("The Dreamsign pool is exhausted."),
-      ),
     ),
 
     SiteMetadata(
       site: RandomSite,
       icon: "fa-solid fa-question",
       glossary_id: "1aeb05bc-53e1-4ea4-9e73-9239160799dc",
-      presentation: RandomSite(title: Tx("Choose a Site")),
     ),
 
     SiteMetadata(

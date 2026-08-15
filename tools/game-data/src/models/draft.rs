@@ -1,22 +1,12 @@
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-use trox::LocalizedString;
-
-use super::localization::{source_text, source_transport_value};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DraftDocument {
-    pub presentation: DraftPresentation,
     pub offers: Offers,
     pub rarity_caps: IndexMap<Rarity, RarityCap>,
     pub pool: Pool,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct DraftPresentation {
-    pub progress: LocalizedString,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -67,21 +57,8 @@ impl Rarity {
 }
 
 pub fn lower(source: DraftDocument) -> anyhow::Result<toml::Value> {
-    let progress = source_text(&source.presentation.progress)?;
-    anyhow::ensure!(
-        progress.matches("{pick_number}").count() == 1
-            && progress.matches("{pick_total}").count() == 1,
-        "draft progress must contain {{pick_number}} and {{pick_total}} exactly once"
-    );
     let mut root = toml::map::Map::new();
     root.insert("schema-version".into(), 1_i64.into());
-    root.insert(
-        "presentation".into(),
-        toml::Value::Table(toml::map::Map::from_iter([(
-            "progress".into(),
-            source_transport_value(&source.presentation.progress)?,
-        )])),
-    );
     root.insert(
         "offers".into(),
         toml::Value::Table(toml::map::Map::from_iter([
@@ -133,15 +110,8 @@ pub fn lower(source: DraftDocument) -> anyhow::Result<toml::Value> {
 mod tests {
     use super::*;
 
-    fn ls(text: impl Into<String>) -> LocalizedString {
-        super::super::localization::localized_source(text.into()).unwrap()
-    }
-
     fn document() -> DraftDocument {
         DraftDocument {
-            presentation: DraftPresentation {
-                progress: ls("Draft ({pick_number}/{pick_total})"),
-            },
             offers: Offers {
                 cards_per_offer: 4,
                 picks_per_site: 5,
@@ -171,18 +141,6 @@ mod tests {
         assert_eq!(
             output["rarity-caps"][0]["rarity"].as_str(),
             Some("Legendary")
-        );
-    }
-
-    #[test]
-    fn rejects_invalid_progress_placeholders() {
-        let mut source = document();
-        source.presentation.progress = ls("Draft ({pick_number})");
-        assert!(
-            lower(source)
-                .unwrap_err()
-                .to_string()
-                .contains("pick_total")
         );
     }
 }

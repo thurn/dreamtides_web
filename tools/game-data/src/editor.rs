@@ -4118,7 +4118,11 @@ CardMetadataCatalog(
       scene: (key: "firstlight_meadow", source: "firstlight_meadow.png"),
       atlas_node: (key: "firstlight_meadow", source: "firstlight_meadow_icon.png"),
     ),
-    kind: Starter(signature_site: Draft, fixed_sites: [Draft, Battle]),
+    kind: Starter(
+      atlas_description: Tx("A quiet place."),
+      signature_site: Draft,
+      fixed_sites: [Draft, Battle],
+    ),
   ),
   // Editable nested fields.
   DreamscapeDefinition(

@@ -20,7 +20,7 @@ import {
   ShopFreePurchaseStatus,
   type ShopFreePurchaseStatusView,
 } from "./ShopFreePurchaseStatus";
-import { meaning, tx } from "@trox/runtime";
+import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
@@ -63,12 +63,15 @@ export interface DreamsignBazaarPurgeView {
 }
 
 export interface DreamsignBazaarSiteView {
-  presentation: import("./localized-site-presentation").LocalizedSitePresentation<
-    Extract<
-      import("../../types/sites-data").SitePresentation,
-      { kind: "dreamsign-bazaar" }
-    >
-  >;
+  presentation: {
+    readonly kind: "dreamsign-bazaar";
+    readonly title: LocalizedString;
+    readonly restocked: LocalizedString;
+    readonly restockOffersAction: LocalizedString;
+    readonly restockAction: LocalizedString;
+    readonly freePrice: LocalizedString;
+    readonly replacementTitle: LocalizedString;
+  };
   /** Stable site id. */
   siteId: SiteId;
   /** Current dreamscape scene art behind the site, if resolved. */

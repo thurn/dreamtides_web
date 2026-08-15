@@ -1,6 +1,6 @@
 // Pure view-model builder for the Cumulus Purge site.
 
-import type { LocalizedString } from "@trox/runtime";
+import { tx, txa, type LocalizedString } from "@trox/runtime";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import {
   maxAffordablePurgeCount,
@@ -112,17 +112,23 @@ export function buildPurgeSiteView(params: {
 
   return {
     presentation: (() => {
-      const presentation = params.sitesData.siteTypes.Purge
-        .presentation as Extract<
+      const identity = params.sitesData.siteTypes.Purge.presentation as Extract<
         import("../../types/sites-data").SitePresentation,
         { kind: "purge" }
       >;
       return {
-        kind: presentation.kind,
-        title: bindSourceTransport(presentation.title),
-        instruction: bindSourceTransport(presentation.instruction),
+        kind: identity.kind,
+        title: bindSourceTransport(identity.title),
+        instruction: tx(
+          "Choose any number of cards to remove from your deck for an essence cost",
+          "[purge] Instruction above the deck explaining that selected cards can be removed by spending essence.",
+        ),
         purgeAction: (count: number) =>
-          bindSourceTransport(presentation.purgeAction, { count }),
+          txa(
+            "Purge {count}",
+            { count },
+            "[purge] Confirmation button for removing selected cards. count is the number of cards selected.",
+          ),
       };
     })(),
     siteId: params.site.id,

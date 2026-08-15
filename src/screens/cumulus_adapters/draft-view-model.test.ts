@@ -9,20 +9,18 @@ import {
 } from "./draft-view-model";
 import { draftOfferKey } from "../../data/draft-site-bootstrap";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
-import { draftDataFixture } from "../../testing/draft-data-fixture";
 import { parseSiteId } from "../../types/identifiers";
-import { testCardId, testExplorationActionId } from "../../types/test-identities";
+import {
+  testCardId,
+  testExplorationActionId,
+} from "../../types/test-identities";
 
 const buildDraftView = (
-  params: Omit<
-    Parameters<typeof buildDraftViewImpl>[0],
-    "transfigurationData" | "presentation"
-  >,
+  params: Omit<Parameters<typeof buildDraftViewImpl>[0], "transfigurationData">,
 ) =>
   buildDraftViewImpl({
     ...params,
     transfigurationData: transfigurationFixture(),
-    presentation: draftDataFixture().presentation,
   });
 
 function card(overrides: Partial<CardData> & { cardNumber: number }): CardData {

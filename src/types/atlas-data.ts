@@ -1,6 +1,5 @@
 import type { LayerName } from "./layer-name";
 import type { SiteType } from "./site-type";
-import type { SourceTransport } from "../runtime/localization/runtime";
 import type {
   ArtAssetKey,
   AtlasFillProfileId,
@@ -75,13 +74,6 @@ export interface AtlasData {
     sceneArtId: DreamscapeId;
     iconArtId: DreamscapeId;
     figureArtId: GuideId;
-  };
-  presentation: {
-    unseenTitle: SourceTransport;
-    unseenBody: SourceTransport;
-    starterBody: SourceTransport;
-    affiliationTitleTemplate: SourceTransport;
-    affiliationBodyTemplate: SourceTransport;
   };
   assets: {
     unrevealedFrameSource: string;

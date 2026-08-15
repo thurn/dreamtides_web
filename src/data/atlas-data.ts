@@ -1,5 +1,4 @@
 import type { AtlasData } from "../types/atlas-data";
-import { hydrateSourceTransport } from "../runtime/localization/runtime";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 export type { AtlasData } from "../types/atlas-data";
@@ -31,39 +30,5 @@ export async function loadAtlasData(): Promise<AtlasData> {
     ...raw,
     contentHash: parseContentHash(raw.contentHash),
     foldHash: parseFoldHash(raw.foldHash),
-    presentation: {
-      ...raw.presentation,
-      unseenTitle: hydrateSourceTransport(
-        raw.presentation.unseenTitle,
-        "Atlas unseen title",
-      ),
-      unseenBody: hydrateSourceTransport(
-        raw.presentation.unseenBody,
-        "Atlas unseen body",
-      ),
-      starterBody: hydrateSourceTransport(
-        raw.presentation.starterBody,
-        "Atlas starter body",
-      ),
-      affiliationTitleTemplate: hydrateSourceTransport(
-        raw.presentation.affiliationTitleTemplate,
-        "Atlas affiliation title template",
-      ),
-      affiliationBodyTemplate: hydrateSourceTransport(
-        raw.presentation.affiliationBodyTemplate,
-        "Atlas affiliation body template",
-      ),
-    },
   };
-}
-
-/** Expands one validated Atlas presentation template. */
-export function atlasTemplate(
-  template: string,
-  values: Readonly<Record<string, string>>,
-): string {
-  return template.replace(
-    /\{([^{}]+)\}/gu,
-    (_match, key: string) => values[key] ?? "",
-  );
 }
