@@ -14,6 +14,8 @@ The responsive full-stage composition for routed character-led sites, with scene
 
 The stage preserves router-owned journey chrome and exposes stable composition and guide-presence diagnostics.
 
+Guide speech projects alpha-derived head-edge targets through the contained artwork on desktop and narrow layouts; compact content-led compositions use a reserved clear band.
+
 Site content chooses its own material and floating panels should hug their content rather than fill the allocated region.
 
 ## Props

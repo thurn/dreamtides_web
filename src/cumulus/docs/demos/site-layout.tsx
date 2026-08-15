@@ -156,6 +156,7 @@ export const siteLayoutDemo: CumulusComponent = {
     "Choose one named composition and let the site body choose its own material.",
   details: [
     "The stage preserves router-owned journey chrome and exposes stable composition and guide-presence diagnostics.",
+    "Guide speech projects alpha-derived head-edge targets through the contained artwork on desktop and narrow layouts; compact content-led compositions use a reserved clear band.",
     "Site content chooses its own material and floating panels should hug their content rather than fill the allocated region.",
   ],
   relatedSystems: ["journey-screen-host-chrome"],
