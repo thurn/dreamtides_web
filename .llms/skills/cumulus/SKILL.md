@@ -14,15 +14,16 @@ component past its typed surface is not an available move at all (see
 
 ## Where the component documentation lives
 
-- **Per-component reference** (generated): `components/<id>.md` in this skill
-  directory — blurb, usage guidance, full props table with types and
-  defaults, nested model shapes, and real usage snippets. Read the file for
-  each component you touch; they are short.
-- **Component index** (generated): the table below — use it to pick the right
-  component before writing any UI.
-- **Design tokens** (generated): [tokens.md](tokens.md) — every semantic
-  token, grouped by role, with values and notes. Usage rules are in the
-  "Tokens" section below.
+- **Component catalog**: `src/cumulus/docs/registry.ts` is the exhaustive,
+  ordered component list. Use it to pick the right component before writing UI.
+- **Per-component guidance and examples**:
+  `src/cumulus/docs/demos/<id>.tsx` carries the blurb, callout, details, and
+  usage snippets; the matching file under `src/cumulus/components/` or
+  `src/cumulus/primitives/` carries the typed API and prop JSDoc. Read both for
+  every component you touch.
+- **Design tokens**: `src/cumulus/primitives/cumulus-tokens.css` is the
+  canonical semantic vocabulary, with grouping annotations and usage notes.
+  Usage rules are in the "Tokens" section below.
 - **Materials** (hand-written): [materials.md](materials.md) — the one
   liquid-glass material (who wears it, its `--glass-*` tokens, the
   `--glass-fill-popover` reveal tint, and the blur-preservation constraint) and
@@ -39,13 +40,11 @@ component past its typed surface is not an available move at all (see
 - **Screen composition current state**:
   [docs/journey_prototype/cumulus_screen_composition.md](../../../docs/journey_prototype/cumulus_screen_composition.md).
 
-The reference files and the index are projections of the component sources
-(prop JSDoc via `npm run cumulus-metadata`, prose via the demo entries in
-`src/cumulus/docs/demos/`). A demo's tinted `callout` is exactly one sentence;
-put longer guidance into its `details` paragraph array so the live page and
-generated reference keep the explanation readable below the callout. Regenerate
-with `npm run cumulus-docs` (included in `npm run regenerate-assets`); edit the
-sources, never the generated files.
+The live page and disposable build metadata are projections of the component
+sources. A demo's tinted `callout` is exactly one sentence; put longer guidance
+into its `details` paragraph array so the live page keeps the explanation
+readable below the callout. Ordinary development, review, and build commands
+materialize the metadata automatically.
 
 Component documentation describes reusable visual roles, typed props, and
 component-local constraints. UI-system documentation describes contracts that
@@ -99,73 +98,6 @@ The entity-reveal coordinator may use “activation” internally for the gestur
 state-machine outcome that distinguishes a quick press from a hold-to-read.
 That implementation term does not cross the component API boundary.
 
-## Component index
-
-<!-- BEGIN GENERATED COMPONENT INDEX (npm run cumulus-docs) -->
-| Component | Group | Consumers | Reference | What it is |
-| --- | --- | --- | --- | --- |
-| Pressable | Primitives | 32 | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
-| Inline Glyph | Primitives | 12 | [components/inline-glyph.md](components/inline-glyph.md) | The Boxicons renderer for flowing text: a one-em square whose midpoint follows the surrounding font's capital height at every type size. |
-| Standalone Glyph | Primitives | 21 | [components/standalone-glyph.md](components/standalone-glyph.md) | The Boxicons renderer for controls, badges, overlays, and card marks: a centered one-em square whose surrounding layout owns its size and placement. |
-| Exploration Choice | Actions & Inputs | 1 | [components/exploration-choice.md](components/exploration-choice.md) | A reveal-aware semantic action whose ordered description can mix localized text, rules, and UUID-backed entities. |
-| Icon Button | Actions & Inputs | 20 | [components/icon-button.md](components/icon-button.md) | The compact glyph-only glass disc, with placement-aware recipes for scene media or an existing glass surface, and made fully round so it reads as one family with the filter/sort controls. |
-| Main Menu Button | Actions & Inputs | 1 | [components/main-menu-button.md](components/main-menu-button.md) | The text-first action for the Dreamtides main menu: outlined white at rest, showing the shared Cumulus liquid-glass material on hover or focus. |
-| Glass Button | Actions & Inputs | 30 | [components/glass-button.md](components/glass-button.md) | The labeled glass action — a bold text label with optional Essence cost or non-cost value on the shared liquid-glass surface, with neutral, danger, and purple accent treatments plus placement-aware recipes for media or an existing glass surface. |
-| Segmented Control | Actions & Inputs | 6 | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
-| Select | Actions & Inputs | 10 | [components/select.md](components/select.md) | The compact dropdown control, and Cumulus's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
-| TextField | Actions & Inputs | 8 | [components/text-field.md](components/text-field.md) | The reusable labeled text and search input on Cumulus control chrome, with supporting and validation messaging. |
-| Text Area | Actions & Inputs | 1 | [components/text-area.md](components/text-area.md) | The reusable multiline authoring field on Cumulus control chrome, with explicit draft and commit callbacks. |
-| NumberStepper | Actions & Inputs | 6 | [components/number-stepper.md](components/number-stepper.md) | A labeled, accessible decrement/value/increment row with optional canonical resource notation. |
-| DisclosureSection | Actions & Inputs | 5 | [components/disclosure-section.md](components/disclosure-section.md) | A controlled, surface-aware Cumulus section for progressively revealing dense secondary information. |
-| Transfiguration Button | Actions & Inputs | 1 | [components/transfiguration-button.md](components/transfiguration-button.md) | The canonical forge-form choice: compact and optionally priced controls with shared glyph, color, state, and accessibility behavior. |
-| Glass Panel | Surfaces & Overlays | 20 | [components/glass-panel.md](components/glass-panel.md) | The persistent, non-modal, content-hugging liquid-glass container: an optional structured header, a composed body, and an optional footer on the canonical floating material. |
-| Glass Dialog | Surfaces & Overlays | 14 | [components/glass-dialog.md](components/glass-dialog.md) | The glass overlay shell: a modal dialog with a bounded desktop panel and a full-bleed mobile overlay by default, plus centered content-sized and companion-paired popup presentations. |
-| Dreamsign Replacement Dialog | Surfaces & Overlays | 4 | [components/dreamsign-replacement-dialog.md](components/dreamsign-replacement-dialog.md) | A UUID-routed capacity-resolution dialog that keeps the incoming and held Dreamsigns fully readable. |
-| Developer Rail | Surfaces & Overlays | 2 | [components/developer-rail.md](components/developer-rail.md) | The shared edge-attached shell for persistent developer tools, with canonical glass, header hierarchy, close action, scrolling body, and optional footer. |
-| Command Menu | Surfaces & Overlays | 2 | [components/command-menu.md](components/command-menu.md) | The single command offering: one strict model renders fixed app-chrome commands or card and pointer actions through the same typed hierarchy. |
-| Info Card | Surfaces & Overlays | 4 | [components/info-card.md](components/info-card.md) | The strict information-card presentation. |
-| Editable Info Card | Surfaces & Overlays | 4 | [components/editable-info-card.md](components/editable-info-card.md) | The constrained authoring form of InfoCard. |
-| Rules Text | Text & Guidance | 15 | [components/rules-text.md](components/rules-text.md) | The canonical Dreamtides rules-copy source: resource symbols and keywords render in place, while hovering, focusing, or touch-holding anywhere in the complete block reveals one contextual glossary card. |
-| Tutorial Feature Callout | Text & Guidance | 1 | [components/tutorial-feature-callout.md](components/tutorial-feature-callout.md) | A compact speech-inspired glass label for teaching one semantic region of a full GameCard, with canonical energy and spark glyph treatments. |
-| Speech Bubble | Text & Guidance | 3 | [components/speech-bubble.md](components/speech-bubble.md) | A guide-dialog bubble for character-led screens: the same frosted information material as an InfoCard, with a strict left, top-left, or bottom-left pointer toward the speaker and shared tutorial instruction formatting backed by the canonical inline rules-glyph renderer. |
-| Character Dialogue | Text & Guidance | 8 | [components/character-dialogue.md](components/character-dialogue.md) | A character portrait in the canonical round frame, paired with SpeechBubble and presented as one fadeable guide-dialogue object in compact, wide, or prominent scale. |
-| Viewport Tutorial Dialogue | Text & Guidance | 3 | [components/viewport-tutorial-dialogue.md](components/viewport-tutorial-dialogue.md) | A measured CharacterDialogue surface placed from registered semantic anchors and obstacles within viewport safe space. |
-| Essence Value | Status, Feedback & Effects | 12 | [components/essence-value.md](components/essence-value.md) | The canonical Essence amount: a tight inline value for player-facing currency text, with a named solid reward badge for values placed over art. |
-| Tide Disc | Status, Feedback & Effects | 1 | [components/tide-disc.md](components/tide-disc.md) | The single semantic tide mark: a colored disc carrying the tide's glyph and its own strict tide reveal. |
-| Tides Info Label | Status, Feedback & Effects | 1 | [components/tides-info-label.md](components/tides-info-label.md) | The typographic Tides eyebrow: a filled one-em information glyph followed by uppercase copy, with one shared definition reveal across the complete label. |
-| Transient Status Toast | Status, Feedback & Effects | 3 | [components/transient-status-toast.md](components/transient-status-toast.md) | The fixed, safe-area-aware short-lived warning surface for structured player-facing status copy. |
-| Radial Announcement | Status, Feedback & Effects | 5 | [components/radial-announcement.md](components/radial-announcement.md) | The single orbiting circular status system for scene announcements, card scoring, merge targets, playing-hand totals, and terminal victory. |
-| Motes | Status, Feedback & Effects | 10 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
-| Journey Status Bar | Status, Feedback & Effects | 5 | [components/journey-status-bar.md](components/journey-status-bar.md) | The persistent, transparent bottom HUD for journey screens. |
-| Coop Presence Status | Status, Feedback & Effects | 1 | [components/coop-presence-status.md](components/coop-presence-status.md) | The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count. |
-| Battle Status Display | Battle | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Avatar portrait or loading placeholder at center, and centered current and target points at right. |
-| Battle Phase Indicator | Battle | 1 | [components/battle-phase-indicator.md](components/battle-phase-indicator.md) | A controlled, oriented comet marker for the five presentation-level battle phases. |
-| Battlefield Card | Battle | 1 | [components/battlefield-card.md](components/battlefield-card.md) | The complete face-up battle-instance presentation for exhaustion, memory, figments, selection, challenge markers, score announcements, press, and pointer drag. |
-| Battle Foresee Editor | Battle | 2 | [components/battle-foresee-editor.md](components/battle-foresee-editor.md) | A commit-gated local editor for a prepared deck prefix, count choices, deck order, and Void partition. |
-| CardOrderEditor | Battle | 1 | [components/card-order-editor.md](components/card-order-editor.md) | A surface-aware, identity-safe drag-to-reorder control for the battle deck-order workflow, with arrow-key reordering on each drag handle. |
-| Game Card | Cards | 32 | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
-| Playing Card | Cards | 1 | [components/playing-card.md](components/playing-card.md) | The shared outlined playing-card face, with conventional face-down and Four-Suit Reprise variants. |
-| Card Back | Cards | 5 | [components/card-back.md](components/card-back.md) | The canonical face-down Dreamtides card object: the shipped card-back sprite on the shared 5:7 card geometry, with fixed crop, edge, and elevation. |
-| Card Pile | Cards | 1 | [components/card-pile.md](components/card-pile.md) | A physical deck or void stack built from structured, topmost-first card instances. |
-| Dreamwell Card | Cards | 5 | [components/dreamwell-card.md](components/dreamwell-card.md) | The static landscape card drawn from the Dreamwell: UUID-keyed art, energy grant, name, and complete rules text in one readable object. |
-| Card Stat Orb | Cards | 3 | [components/card-stat-orb.md](components/card-stat-orb.md) | The card-corner resource stat: a fitted white numeral over the energy, spark, or Dreamwell-energy glyph, with an optional monochrome transfiguration badge. |
-| Card Choice Grid | Card Workflows | 3 | [components/card-choice-grid.md](components/card-choice-grid.md) | A frameless, responsive grid that turns a small set of resolved GameCards into selectable choices inside an existing site or panel. |
-| Card Browser Panel | Card Workflows | 4 | [components/card-browser-panel.md](components/card-browser-panel.md) | The collection-browsing card surface: canonical responsive grid, optional search and sorting controls, and physical-card gestures in one scrolling panel. |
-| Card Picker Panel | Card Workflows | 7 | [components/card-picker-panel.md](components/card-picker-panel.md) | The transactional card-choice surface: count-aware responsive cards with header, footer, and trailing choice actions. |
-| Transfiguration Picker Panel | Card Workflows | 2 | [components/transfiguration-picker-panel.md](components/transfiguration-picker-panel.md) | A Transfiguration-specific card picker with closed loading, offer, open-deck, availability, and reforged display states. |
-| Transfiguration Detail Panel | Card Workflows | 3 | [components/transfiguration-detail-panel.md](components/transfiguration-detail-panel.md) | A controlled form chooser for one prepared candidate, including previews, affordability, quoted costs, navigation, and commit state. |
-| Card Change Pair | Card Workflows | 2 | [components/card-change-pair.md](components/card-change-pair.md) | A resolved before-and-after card presentation for replacements, copies, Transfigurations, keyword changes, and card-type changes. |
-| Avatar Portrait | Characters & Collectibles | 12 | [components/avatar-portrait.md](components/avatar-portrait.md) | The shared framed Avatar profile surface: a square `panel` crop for profile cards and popovers, or a close `thumb` crop for HUD rows and resident lists. |
-| Avatar Stage | Characters & Collectibles | 3 | [components/avatar-stage.md](components/avatar-stage.md) | The full-body Avatar art layer for a caller-owned stage: `standing` adds a low ambient glow, `cutout` preserves the underlying scene, and `fullBleed` supplies a cinematic backdrop and head-focused composition. |
-| Dreamsign | Characters & Collectibles | 13 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
-| Dreamsign Gallery Panel | Characters & Collectibles | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
-| Atlas Node | Atlas & Sites | 2 | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — including a frame-shaped violet outline that visibly widens and contracts around the next selectable dreamscape — and which reveals its scene / detail card on hover or press. |
-| Atlas Edge | Atlas & Sites | 1 | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
-| Site Node | Atlas & Sites | 4 | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node carrying a glyph and accent ring. |
-| Site Layout | Atlas & Sites | 10 | [components/site-layout.md](components/site-layout.md) | The responsive full-stage composition for routed character-led sites, with scene, mote tint, guide, speech, safe areas, and one site-body region. |
-| Offer Tile | Atlas & Sites | 2 | [components/offer-tile.md](components/offer-tile.md) | The circular symbolic Augury offer button in named 300×300 desktop and 240×240 mobile sizes: UUID-backed full-bleed card art, Dreamsigns and site glyphs over authored full-art fields, and centered operation marks inside the gold-and-feather frame. |
-<!-- END GENERATED COMPONENT INDEX -->
-
 ## Customization: step back before adding any knob
 
 The system's value is uniformity: a component reads identically on every
@@ -175,8 +107,8 @@ level — "what does this screen need?" is the wrong altitude; ask "how does the
 system express this?" Work down this ladder and stop at the first rung that
 fits:
 
-1. **Use an existing component or variant as-is.** Check the index above and
-   the component's reference file — the variant you want usually exists.
+1. **Use an existing component or variant as-is.** Check the registry, demo,
+   and component prop types — the variant you want usually exists.
    Look at how other screens solve the same problem and match them.
 2. **Wrap it for layout.** Size, position, spacing, and arrangement are the
    caller's concern: put the component inside your own wrapper element and
@@ -249,9 +181,9 @@ system — see "Tokens" below.
 
 Every visual value you write in UI code — a margin, a color, a font, a corner
 radius, a shadow, an animation duration — comes from the token vocabulary in
-`src/cumulus/primitives/cumulus-tokens.css`. The full generated reference, grouped
-by role with values and notes, is [tokens.md](tokens.md); the live specimen
-view is the Design Tokens section of `/cumulus`.
+`src/cumulus/primitives/cumulus-tokens.css`. Its declarations carry their roles,
+values, and notes; the live specimen view is the Design Tokens section of
+`/cumulus`.
 
 **How to reference a token.** In Cumulus TS/TSX, call `token("--space-l")` from
 `src/cumulus/primitives/tokens.ts` — it is typed against the real token names
@@ -282,8 +214,8 @@ tokens (`--dur-*`, `--ease-*`, `--motion-object-travel`,
 hex; use `--space-l` because the layout needs a large rhythm step, not because
 16px looked right. Spacing from `--space-xs` upward sits on the 4px content
 grid; reserve `--space-xxs` for tight optical separation. If no existing token expresses the role, that is a
-token-system conversation (add a named token in `cumulus-tokens.css`, then run
-`npm run cumulus-tokens`) — never a raw px/hex literal in product UI code. This is
+token-system conversation (add a named token in `cumulus-tokens.css`) — never a
+raw px/hex literal in product UI code. This is
 lint-enforced in product UI: `no-hardcoded-values` catches raw colors,
 `no-untokenized-lengths` catches raw px spacing and radii,
 `no-composed-type-voice` catches hand-assembled font shorthands, and
@@ -499,13 +431,11 @@ the panel leaves no residue in the tree.
 ## Adding or changing a component
 
 1. Component source lives in `src/cumulus/components/` (or `primitives/`).
-   Document every prop with JSDoc — the props tables and reference files are
-   generated from those comments, so the prop comment is the primary
+   Document every prop with JSDoc; the prop comment is the primary API
    documentation surface.
 2. Add or update the demo entry in `src/cumulus/docs/demos/<id>.tsx` (blurb,
    one-sentence callout, supporting `details`, usage snippets) and register it in
    `src/cumulus/docs/registry.ts`. Keep doc fields as plain string literals —
    the docs generator extracts them statically.
-3. Run `npm run cumulus-metadata && npm run cumulus-docs` (or
-   `npm run regenerate-assets`) and commit the regenerated files with the
-   change.
+3. Run the ordinary focused checks and `npm run review`; they materialize and
+   validate the documentation metadata automatically.

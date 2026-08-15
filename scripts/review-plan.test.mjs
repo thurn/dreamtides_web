@@ -1,9 +1,24 @@
 // @vitest-environment node
 
 import { describe, expect, it } from "vitest";
-import { buildReviewPlan } from "./review-plan.mjs";
+import {
+  buildReviewPlan,
+  reviewNeedsPreparedWorkspace,
+} from "./review-plan.mjs";
 
 describe("fast review plan", () => {
+  it("prepares only when selected checks consume disposable artifacts", () => {
+    expect(
+      reviewNeedsPreparedWorkspace(buildReviewPlan(["docs/notes.md"])),
+    ).toBe(false);
+    expect(
+      reviewNeedsPreparedWorkspace(buildReviewPlan(["src/state/example.ts"])),
+    ).toBe(true);
+    expect(
+      reviewNeedsPreparedWorkspace(buildReviewPlan(["data/cards.ron"])),
+    ).toBe(true);
+  });
+
   it("skips executable checks for documentation-only changes", () => {
     expect(buildReviewPlan(["docs/notes.md"])).toEqual({
       changedFiles: ["docs/notes.md"],

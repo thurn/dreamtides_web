@@ -44,6 +44,16 @@ const LOCALIZATION_CONTRACT_INPUTS = new Set([
   "scripts/trox-generated-check.mjs",
   "scripts/trox-source-workspace.mjs",
 ]);
+
+export function reviewNeedsPreparedWorkspace(reviewPlan) {
+  return (
+    reviewPlan.shouldValidate ||
+    reviewPlan.shouldCheckTrox ||
+    reviewPlan.shouldTypecheck ||
+    reviewPlan.testInputs.length > 0
+  );
+}
+
 const LOCALIZATION_CONTRACT_TESTS = [
   "scripts/bump-trox.test.mjs",
   "scripts/canonical-localization-audit.test.mjs",

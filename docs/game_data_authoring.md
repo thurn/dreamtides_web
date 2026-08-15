@@ -32,10 +32,10 @@ npm run game-data:compile     # validate and publish generated TOML and JSON
 npm run game-data:check       # verify visible generated data is current
 npm run game-data:rust-test   # compiler, adapter, and edit-operation tests
 npm run game-data:clean-test  # generation with an empty TOML cache
-npm run regenerate-assets     # complete repository asset regeneration
+npm run prepare-workspace     # explicitly refresh disposable generated artifacts
 ```
 
-Normal development, review, build, regeneration, and deployment entry points
+Normal development, review, build, and deployment entry points
 run the generation gate before consuming game data. Generated TOML carries a
 header with the source hash, compiler build fingerprint, adapter version, and
 manifest fingerprint. Generated TOML is gitignored and is replaced by the next

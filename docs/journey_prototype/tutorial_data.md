@@ -2,10 +2,10 @@
 
 `data/tutorial.ron` is the authoritative source for the standalone
 tutorial scenario, the playable battle handoff, tutorial-journey guidance, and
-supplemental first-occurrence explanations. Run `npm run regenerate-assets`
-after editing it. The typed `tutorial_v1` adapter validates the source, emits
-the compatibility boundary at `data/tutorial.toml`, and writes the complete
-normalized browser artifact to `public/tutorial-data.json`.
+supplemental first-occurrence explanations. Normal development, review, test,
+build, and deploy commands run the typed `tutorial_v1` adapter, validate the
+source, emit the compatibility boundary at `data/tutorial.toml`, and write the
+complete normalized browser artifact to `public/tutorial-data.json`.
 
 ## Scenario identity
 

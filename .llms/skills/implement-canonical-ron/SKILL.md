@@ -186,7 +186,8 @@ Run focused checks while iterating, then at minimum:
 4. run semantic parity against the saved pre-cutover oracle or a valid tracked
    historical baseline;
 5. run affected TypeScript validators and generated-artifact tests;
-6. run `scripts/regenerate-assets.sh` and include its tracked output;
+6. run `npm run prepare-workspace` and confirm generated outputs remain
+   disposable;
 7. run `npm run review`; and
 8. confirm one production RON source, no suffixed candidate, the production
    source hash equals the recorded input hash, and the expected generated-file

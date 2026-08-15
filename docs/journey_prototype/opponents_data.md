@@ -54,13 +54,13 @@ unknown preset references,
 sample counts above the safety cap, non-positive deck counts, and AI deck UUIDs
 absent from `cards.ron`. Failures identify the RON path that needs correction.
 
-## Generated artifact and hashes
+## Workspace materialization and hashes
 
-Run `scripts/regenerate-assets.sh` after editing any of the four catalogs. The
-game-data compiler generates their compatibility TOML and composes
-`data/opponents.toml`; `scripts/opponents-data.mjs` validates that document and
-generates the runtime JSON. Generated TOML and runtime JSON are reproducible and
-gitignored.
+Normal development, review, test, build, and deploy commands run the game-data
+compiler, generate compatibility TOML, and compose `data/opponents.toml`.
+`scripts/opponents-data.mjs` validates that document and generates the runtime
+JSON. Generated TOML and runtime JSON are reproducible disposable workspace
+state.
 
 The normalized document contains SHA-256 `contentHash` and `foldHash` fields.
 Both cover the complete v1 normalized document and therefore have the same

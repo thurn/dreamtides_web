@@ -163,9 +163,8 @@ npm run review
 Related tests selected by `npm run review` include the affected Cumulus
 contract tests: strict component APIs
 (`cumulus-strict-api.contract.test.mjs`, which also scans
-`src/cumulus/screens/`) and generated-docs freshness
-(`cumulus-generated-docs-drift.test.mjs` — if you touched a component, a demo
-entry, or the token stylesheet, run `npm run cumulus-metadata && npm run
-cumulus-docs` / `npm run cumulus-tokens` and commit the regenerated artifacts).
+`src/cumulus/screens/`) and disposable materialization contracts
+(`cumulus-generated-docs-drift.test.mjs`). Review prepares and validates the
+typed token mirror and component metadata automatically.
 
 Commit with a detailed description and push (AGENTS.md).

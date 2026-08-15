@@ -85,8 +85,8 @@ npm install
 npm run dev
 ```
 
-`npm run dev` runs `scripts/setup-assets.mjs` automatically first. That setup
-script is idempotent and refreshes:
+`npm run dev` runs `scripts/prepare-workspace.mjs` automatically first. The
+preparation is idempotent and refreshes:
 
 - `public/card-data.json`
 - `public/avatars-v2-data.json`
@@ -95,7 +95,7 @@ script is idempotent and refreshes:
 Useful one-offs:
 
 ```bash
-npm run setup-assets
+npm run prepare-workspace
 npm run review
 npm test -- src/path/to/affected.test.ts
 npm run review:full  # test infrastructure, cross-cutting changes, releases

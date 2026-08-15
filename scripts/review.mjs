@@ -5,7 +5,10 @@ import {
   mkdirSync,
 } from "node:fs";
 import { dirname, join, resolve } from "node:path";
-import { buildReviewPlan } from "./review-plan.mjs";
+import {
+  buildReviewPlan,
+  reviewNeedsPreparedWorkspace,
+} from "./review-plan.mjs";
 import {
   readReviewLockOwner,
   removeReviewLockIfUnchanged,
@@ -239,6 +242,9 @@ function commandFor(step, extraArgs = []) {
   if (step === "validate") {
     return [process.execPath, [join(root, "scripts", "setup-assets.mjs"), ...extraArgs]];
   }
+  if (step === "prepare") {
+    return [process.execPath, [join(root, "scripts", "prepare-workspace.mjs")]];
+  }
   if (step === "rust-test") {
     return ["cargo", ["test", "--locked", "--manifest-path", "tools/game-data/Cargo.toml"]];
   }
@@ -301,9 +307,11 @@ async function runStep(step, extraArgs = []) {
 }
 
 function executionPlan() {
+  const needsPreparedWorkspace = reviewNeedsPreparedWorkspace(reviewPlan);
+
   if (task === "full") {
     return [
-      { step: "validate", args: [] },
+      { step: "prepare", args: [] },
       { step: "trox-source-check", args: [] },
       { step: "ron-format-check", args: [] },
       { step: "rust-format-check", args: [] },
@@ -316,6 +324,7 @@ function executionPlan() {
   }
   if (task === "lint-full") {
     return [
+      { step: "prepare", args: [] },
       { step: "trox-source-check", args: [] },
       { step: "ron-format-check", args: [] },
       { step: "rust-format-check", args: [] },
@@ -324,12 +333,13 @@ function executionPlan() {
   }
   if (task === "test-full") {
     return [
-      { step: "game-data-compile", args: [] },
+      { step: "prepare", args: [] },
       { step: "test", args: passthrough },
     ];
   }
   if (task === "lint") {
     const steps = [];
+    if (needsPreparedWorkspace) steps.push({ step: "prepare", args: [] });
     if (reviewPlan.shouldCheckTrox) {
       steps.push({ step: "trox-source-check", args: [] });
     }
@@ -350,20 +360,20 @@ function executionPlan() {
   if (task === "test") {
     if (passthrough.length > 0) {
       return [
-        { step: "game-data-compile", args: [] },
+        { step: "prepare", args: [] },
         { step: "test", args: passthrough },
       ];
     }
     return reviewPlan.testInputs.length === 0
       ? []
       : [
-          { step: "game-data-compile", args: [] },
+          { step: "prepare", args: [] },
           { step: "test-related", args: reviewPlan.testInputs },
         ];
   }
   if (task === "quick") {
     const steps = [];
-    if (reviewPlan.shouldValidate) steps.push({ step: "validate", args: [] });
+    if (needsPreparedWorkspace) steps.push({ step: "prepare", args: [] });
     if (reviewPlan.shouldCheckTrox) {
       steps.push({ step: "trox-source-check", args: [] });
     }
@@ -383,7 +393,13 @@ function executionPlan() {
     }
     return steps;
   }
-  return [{ step: task, args: passthrough }];
+  if (task === "validate") {
+    return [{ step: "prepare", args: [] }];
+  }
+  return [
+    { step: "prepare", args: [] },
+    { step: task, args: passthrough },
+  ];
 }
 
 const requiresFullReviewSlot = ["full", "lint-full", "test-full"].includes(task);

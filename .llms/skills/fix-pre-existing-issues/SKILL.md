@@ -28,10 +28,9 @@ skill drains that backlog: read it, fix each entry, verify, and clear the file.
    - If an issue turns out to be already fixed or no longer reproducible, note
      that and treat it as resolved (it still gets removed from the file).
    - Respect `AGENTS.md`: do not write tests that fail when TOML game-design
-     data or default algorithm choices change. Some entries (e.g. stale baked
-     artifacts) are fixed by re-baking via `scripts/regenerate-assets.sh` or the
-     specific `npm run bake-*` command named in the entry, then committing the
-     regenerated `data/` files.
+     data or default algorithm choices change. Disposable runtime artifacts are
+     refreshed by ordinary review commands; tracked bake outputs use the
+     specific `npm run bake-*` command named in the entry.
 
 4. **Verify.** Run the diff-aware review from the repository root:
 

@@ -48,7 +48,7 @@ jobs:
         with:
           workspaces: ${{ runner.temp }}/trox
           shared-key: trox-cli
-      - run: npm ci && npm run setup-assets && npm run trox:release && npm run build
+      - run: npm ci && npm run trox:release && tsc && vite build
         env:
           TROX_ROOT: ${{ runner.temp }}/trox
           TROX_VERIFY_REVISION: "1"

@@ -352,7 +352,9 @@ export async function runDevWithEmulator(argv = process.argv.slice(2)) {
     const builtArtifact = argv.includes("--built-artifact");
     const forwardedArgs = argv.filter((arg) => arg !== "--built-artifact");
 
-    await waitForExit(spawnChild(process.execPath, ["scripts/setup-assets.mjs"]));
+    await waitForExit(
+      spawnChild(process.execPath, ["scripts/prepare-workspace.mjs"]),
+    );
     await waitForDatabaseEmulator(databasePort);
 
     if (builtArtifact) {

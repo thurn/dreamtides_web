@@ -14,12 +14,13 @@ state.
 ```bash
 cd ~/quest_prototype
 npm install          # required; node_modules is not committed
-npm run dev          # runs setup-assets.mjs then starts Vite
+npm run dev          # prepares disposable artifacts, then starts Vite
 ```
 
-`npm run dev` invokes `scripts/setup-assets.mjs` automatically before starting
-Vite. The setup script first compiles every manifest-declared RON catalog to
-validated, generated compatibility TOML. It is idempotent and then:
+`npm run dev` invokes `scripts/prepare-workspace.mjs` automatically before
+starting Vite. Its data and art phase first compiles every manifest-declared
+RON catalog to validated, generated compatibility TOML. It is idempotent and
+then:
 
 1. Parses generated `cards.toml` into `public/card-data.json`.
 2. Parses generated `avatars.toml` into `public/avatars-v2-data.json`.

@@ -52,14 +52,17 @@ step() {
 step "Installing locked dependencies"
 npm ci --include=dev
 
-step "1/5  setup — compile current canonical game data"
-npm run setup-assets
+step "1/5  prepare — materialize current canonical workspace data"
+npm run prepare-workspace
 
 step "2/5  localization — generate and validate release artifacts"
-npm run trox:release
+npm run trox:extract
+npm run trox:check-artifacts -- --deny warnings
+npm run trox:bundle -- --allow-missing
+npm run trox:check-generated
 
 step "3/5  build — compile + bundle code, HTML, and data catalogs into dist/"
-npm run build
+tsc && vite build
 
 if [[ "$DRY_RUN" == true ]]; then
   step "Dry run complete — generation and production build passed"

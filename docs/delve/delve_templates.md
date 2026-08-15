@@ -85,5 +85,5 @@ That schema is development tooling metadata. Standard mechanical copy is
 derived in TypeScript; encounter labels and encounter-specific copy overrides
 are saved on the individual action in `data/exploration_site.ron`.
 
-After editing canonical data, run `scripts/regenerate-assets.sh` to regenerate
-the compatibility TOML and browser JSON.
+Ordinary development, review, build, and deployment commands refresh the
+compatibility TOML and browser JSON from canonical data automatically.

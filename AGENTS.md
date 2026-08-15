@@ -68,9 +68,11 @@ UUIDs.
 
 # Generation
 
-You can run `scripts/regenerate-assets.sh` to update generated artifacts
-based on RON data changes etc. Run this script after creating a new worktree
-and include its output with your commit.
+Generated compatibility data, runtime catalogs, typed token mirrors, Cumulus
+metadata, and localization adapters are disposable workspace materializations.
+Normal development, review, test, build, and deploy commands refresh them
+automatically through `scripts/prepare-workspace.mjs`. Do not edit or commit
+generated outputs.
 
 # Draft Pools
 

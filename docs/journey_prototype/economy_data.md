@@ -34,12 +34,13 @@ costs, and its enhanced discount. `battle.ron` validates its battle rules and
 reward fields. Every `PurgeForEssence` Exploration effect supplies a positive
 `essence_per_spark` value in its own definition.
 
-## Generated artifact and hot reload
+## Workspace materialization and hot reload
 
-Run `scripts/regenerate-assets.sh` to regenerate all derived artifacts. The Rust
-adapters own RON-to-TOML lowering, and `scripts/economy-data.mjs` validates and
-assembles the browser aggregate. Generated TOML and JSON files are gitignored
-because they are reproduced from RON.
+Normal development, review, test, build, and deploy commands materialize all
+derived artifacts automatically. The Rust adapters own RON-to-TOML lowering,
+and `scripts/economy-data.mjs` validates and assembles the browser aggregate.
+Generated TOML and JSON files are disposable workspace state reproduced from
+RON.
 
 During Vite development, saving `journey.ron`, `shop_site.ron`, `sites.ron`, or
 `battle.ron` recompiles the affected compatibility TOML and

@@ -262,8 +262,8 @@ adopts these values verbatim.
 - **Source of truth:** a `src/cumulus/primitives/cumulus-tokens.css` scoped under a
   `.cumulus` root class, holding the custom properties.
 - **Typed mirror:** a generated `src/cumulus/primitives/tokens.ts` of typed
-  constants for TS/inline-style use and for the demo harness. Generation is
-  wired into `scripts/regenerate-assets.sh`.
+  constants for TS/inline-style use and for the demo harness. Development,
+  review, and production builds materialize it automatically.
 
 ### One public vocabulary
 
@@ -353,7 +353,8 @@ metadata source.
   `boolean → toggle`, string-union → segmented control / select, `number →
 slider`, `string → text field`, with per-component demo files supplying only
   sample values / default args and any content the types can't infer.
-- Regeneration is wired into `scripts/regenerate-assets.sh`.
+- Development, review, and production builds materialize the metadata
+  automatically before TypeScript or Vite reads it.
 
 The design's own `.d.ts` files already carry rich JSDoc (see the prop surfaces
 for `GlassButton`, `InfoCard`, `Motes`, and the overlay controls), so the Cumulus
@@ -365,23 +366,12 @@ The [Cumulus helper reference](cumulus_helpers.md) documents the shared art,
 atlas-display, card-aspect, and color modules used by product screens and
 component adapters.
 
-The same sources project into a second, markdown renderer for coding agents:
-`scripts/generate-cumulus-docs.mjs` (`npm run cumulus-docs`, wired into
-`regenerate-assets.sh` right after `cumulus-metadata`) statically extracts each
-registry entry's prose (blurb, callout, usage snippets — the demo files keep
-these as plain string literals so no module execution is needed) and joins it
-with the docgen props to write one reference file per component to
-`.llms/skills/cumulus/components/<id>.md`, plus a component index spliced into
-`.llms/skills/cumulus/SKILL.md` between its GENERATED COMPONENT INDEX markers.
-It also renders `.llms/skills/cumulus/tokens.md`, the token reference:
-cumulus-tokens.css is parsed with the shared `parseCssTokens` library, deduped
-last-wins, and grouped by role family with each declaration's trailing
-same-line comment carried through as its note.
-The generator sweeps stale `.md` files from the components output directory,
-so a renamed or unregistered component's reference disappears with it.
-SKILL.md itself is hand-authored (design philosophy, customization rules,
-token-usage policy, pointers); everything factual about a component or token
-flows from the generator.
+`SKILL.md` routes coding agents to the exhaustive registry, the matching demo
+entry, the component's typed props and JSDoc, and the canonical token
+stylesheet. Those are the same sources rendered by the live documentation
+site. `npm run cumulus-docs` can export a disposable Markdown snapshot under
+`.generated/cumulus-docs/` for offline inspection; the source tree remains the
+authoritative agent reference.
 
 ---
 
@@ -631,7 +621,7 @@ reference, not by a from-scratch subagent rewrite.
 - **Phase 4 — Atlas & unifications.** Port AtlasNode / AtlasEdge / AtlasEdgeDefs
   / `atlas-display`; unify Dreamsign and SiteNode through InfoCard.
 - **Phase 5 — Mockups & polish.** Full-screen mockup detail page per component;
-  finalize docgen regeneration in `regenerate-assets.sh`; QA sweep.
+  automatic docgen preparation; QA sweep.
 
 ---
 

@@ -38,8 +38,8 @@ When a finding is real but the right fix needs a product decision, file it
 
 ## 0. Scope the sweep
 
-- Work in a fresh worktree per repo convention; run `npm install` and
-  `scripts/regenerate-assets.sh` first.
+- Work in a fresh worktree per repo convention and run `npm install`; ordinary
+  review commands prepare the disposable workspace artifacts.
 - Find the previous sweep report: the newest file in `docs/cumulus-sweeps/`.
   Its header records the commit it audited up to. The sweep range is
   `<that commit>..HEAD`. If the directory is empty, this is the first sweep:
@@ -79,8 +79,8 @@ Dispatch the passes in parallel, one subagent each. Every pass returns
 findings as **claim + file:line evidence**, in the audit's format. Pass
 prompts must demand evidence, not conclusions.
 
-- **Adoption & catalog honesty.** Regenerate docs (`npm run cumulus-metadata
-  && npm run cumulus-docs`), then read the generated "Real consumers" counts.
+- **Adoption & catalog honesty.** Run `npm run cumulus-docs`, then read the
+  disposable export's "Real consumers" counts under `.generated/cumulus-docs/`.
   Flag: documented components at 0–1 consumers (delete, or find why screens
   avoid them); undocumented modules with high consumer counts — the
   workhorse inventory (grep import counts for modules under
@@ -148,9 +148,10 @@ coherent commits (per category, not per finding), each passing:
 npm run review:full
 ```
 
-- Touched a component, demo entry, or the token stylesheet → run
-  `npm run cumulus-metadata && npm run cumulus-docs` / `npm run cumulus-tokens`
-  and commit the regenerated artifacts (the drift test enforces this).
+- Touched a component, demo entry, or the token stylesheet → rely on
+  `npm run review:full` to materialize and validate the typed token mirror and
+  component metadata. Use `npm run cumulus-docs` only when the disposable
+  Markdown snapshot helps the audit.
 - Any visually observable change → browser QA per AGENTS.md
   ("Verification"): isolated `agent-browser` session, non-default port,
   relevant `?goto=` scenes and responsive branches, DOM measurements for

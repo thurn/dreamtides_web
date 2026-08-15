@@ -305,8 +305,8 @@ fixes:
 Fix every confirmed issue in docs/journey_prototype/react_effect_coop_audit.md.
 
 Read the repository AGENTS.md first and follow it exactly. Work in the required
-isolated worktree, run scripts/regenerate-assets.sh after creating it, commit
-with a detailed message, and push immediately after committing. Do not work on
+isolated worktree, run npm run prepare-workspace after creating it, commit with
+a detailed message, and push immediately after committing. Do not work on
 master unless explicitly instructed.
 
 Treat the audit as evidence and requirements, not as a mandate to apply its
