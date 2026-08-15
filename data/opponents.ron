@@ -3,10 +3,6 @@
 // Layer values are zero-indexed Atlas completion levels: layer 0 is the first
 // battle and the final layer is `layer_count - 1`. Curve endpoints are sampled
 // at those two ends and linearly interpolated between them.
-//
-// Shared battle setup belongs to battle.ron. Dreamwell cards and construction
-// rules belong to dreamwell.ron. Automated-play search tuning and the journey
-// AI deck belong to internal/internal_ai.ron.
 
 #![enable(implicit_some)]
 OpponentsCatalog(
