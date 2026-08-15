@@ -2,23 +2,39 @@
 
 #![enable(implicit_some)]
 BattleRules(
+  // Minimum number of cards prepared battle decks must contain. Short player
+  // decks repeat their whole deck; short opponent decks add distinct cards.
   minimum_deck_size: 25,
 
+  // Number of cards dealt to the player at the start of a battle, before any
+  // active journey modifiers adjust the player's hand.
   player_opening_hand_size: 5,
 
+  // Number of cards dealt to the opponent at the start of a battle.
   enemy_opening_hand_size: 5,
 
+  // Points needed to win at each zero-indexed Atlas completion level. Battles
+  // beyond the last listed level continue using the final target.
   score_targets: [10, 25],
 
+  // Highest numbered battle round. Advancing beyond it without a winner ends
+  // the battle in a draw.
   turn_limit: 50,
 
+  // Maximum energy available to either side under the standard energy ramp.
   energy_cap: 10,
 
+  // Maximum cards a side keeps when end-of-turn automation discards excess
+  // cards from its hand.
   hand_limit: 10,
 
+  // Side that takes the first turn. Valid values are `Player` and `Enemy`.
   starting_side: Player,
 
+  // Whether the player omits the normal Draw phase on their first turn.
   skip_player_opening_draw: true,
 
+  // Number of representative opponent deck cards featured on the Battle Start
+  // screen as that Dream Avatar's signature cards.
   opponent_signature_card_count: 3,
 )
