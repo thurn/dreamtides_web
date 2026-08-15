@@ -114,8 +114,10 @@ reference shape. Newly serialized application and coop state uses version 25.
 1. Author or edit inline Trox messages or canonical RON text.
 2. Run `npm run review`; Trox extraction and validation occur in a temporary
    workspace and leave the checkout unchanged.
-3. Run `npm run trox:release` to materialize reports, QA catalogs, and bundles
-   under `.generated/localization/` and verify deterministic regeneration.
+3. Tollgate runs `npm run trox:gate` as a voting pre-promotion check in its
+   disposable validation slot. The gate verifies the vendored runtime and runs
+   the complete release extraction, validation, bundling, clean-regeneration,
+   and canonical-localization audit contract.
 4. Inspect the generated source report, descriptions and `Conditions:`
    context, placeholders, status, source locations, and expanded rows.
 5. Deploy through `npm run deploy`, which runs the release generation gate
@@ -132,8 +134,9 @@ summary.
 `npm run review` selects isolated Trox extraction and validation for configured
 source, runtime, profile, wrapper, or vendored-runtime changes.
 `npm run review:full` applies the same source-validity gate with lint,
-typecheck, and the complete test suite. `npm run trox:release` owns generated
-artifact validation at the packaging boundary.
+typecheck, and the complete test suite. `npm run trox:gate` is the
+pre-promotion release contract. `npm run trox:release` owns generated artifact
+validation at the packaging and deployment boundaries.
 
 `npm run trox:check` is the isolated source-validity entry point used by commit
 gates. `npm run trox:check-artifacts` validates materialized release outputs and

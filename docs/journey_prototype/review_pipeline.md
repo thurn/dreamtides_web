@@ -62,6 +62,19 @@ directory. Linked worktrees queue only when they each request exhaustive work.
 The waiting command prints the owning worktree and stage every 15 seconds, and
 a lock whose wrapper and child PIDs have exited is recovered automatically.
 
+## Promotion and deployment
+
+Tollgate runs the tracked `npm run trox:gate` entry point as a voting
+pre-promotion step before `npm run review:full`. The Trox gate verifies the
+vendored runtime and the complete release extraction, validation, bundling,
+clean-regeneration, and canonical-localization audit contract in a disposable
+validation slot.
+
+GitHub Checks runs `npm run review:full`. Production deployment runs
+`npm run trox:release` before the application build as a defense-in-depth
+packaging check. This keeps the deployment contract at the promotion boundary
+without adding a second release-generation pass to GitHub Checks.
+
 ## CPU budgets
 
 - Related-test review uses one Vitest worker.
