@@ -24,6 +24,7 @@ const tides: Tides4DecksJson = {
     {
       id: TIDE_A_ID,
       displayName: "A",
+      auguryPackageReference: "A package",
       displayDescription: "A synthetic tide.",
       resonance: "ember",
       role: "facet",
@@ -35,6 +36,7 @@ const tides: Tides4DecksJson = {
     {
       id: TIDE_B_ID,
       displayName: "B",
+      auguryPackageReference: "B package",
       displayDescription: "Another synthetic tide.",
       resonance: "vision",
       role: "neutral",

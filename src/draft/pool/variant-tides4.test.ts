@@ -45,6 +45,7 @@ function makeTides4(
     {
       id: SIGNATURE_TIDE_ID,
       displayName: "Sig 1",
+      auguryPackageReference: "Sig 1 package",
       displayDescription: "Signature description",
       role: "signature",
       resonance: "shadow",
@@ -53,6 +54,7 @@ function makeTides4(
     ...Array.from({ length: facetCount }, (_, f) => ({
       id: testTideId(`tide-fac-${String(f + 1)}`),
       displayName: `Facet ${String(f + 1)}`,
+      auguryPackageReference: `Facet ${String(f + 1)} package`,
       displayDescription: `Facet ${String(f + 1)} description`,
       role: "facet" as const,
       resonance: "wild" as const,
@@ -61,6 +63,7 @@ function makeTides4(
     ...Array.from({ length: neutralCount }, (_, n) => ({
       id: testTideId(`tide-neu-${String(n + 1)}`),
       displayName: `Neutral ${String(n + 1)}`,
+      auguryPackageReference: `Neutral ${String(n + 1)} package`,
       displayDescription: `Neutral ${String(n + 1)} description`,
       role: "neutral" as const,
       resonance: "vision" as const,
@@ -226,6 +229,7 @@ describe("generateTides4", () => {
     data.tides.push({
       id: testTideId("tide-sig-2"),
       displayName: "Sig 2",
+      auguryPackageReference: "Sig 2 package",
       displayDescription: "Second signature description",
       role: "signature",
       resonance: "valor",
@@ -267,6 +271,7 @@ describe("generateTides4", () => {
     const second = {
       id: testTideId("tide-sig-0"),
       displayName: "Lexicographically First",
+      auguryPackageReference: "Lexicographically First package",
       displayDescription: "Second authored archetype",
       role: "signature" as const,
       resonance: "valor" as const,

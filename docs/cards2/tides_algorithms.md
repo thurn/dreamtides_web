@@ -14,14 +14,14 @@ The catalog defines three tide roles:
 - Facet tides capture coherent leans sampled for run-to-run variety.
 - Neutral tides provide broad, reusable fill for every pool.
 
-Each tide contains its player-facing display name and description, resonance,
-kind, and an ordered map of card UUIDs to copy counts. `data/tides.ron` also
-owns the universal top-band selection fraction and minimum. Every Dream Avatar
-owns its signature, facet, and neutral composition in its `tide_pool` field.
-The game-data compiler validates UUIDs, kind-correct pool references, complete
-Dream Avatar coverage, and card-catalog references. The tides and Dream Avatar
-editors publish revision-checked semantic operations to the owning canonical
-RON source.
+Each tide contains its player-facing display name and description, an Augury
+package reference localized as a complete grammatical phrase, resonance, kind,
+and an ordered map of card UUIDs to copy counts. `data/tides.ron` also owns the
+universal top-band selection fraction and minimum. Every Dream Avatar owns its
+signature, facet, and neutral composition in its `tide_pool` field. The
+game-data compiler validates UUIDs, kind-correct pool references, complete Dream
+Avatar coverage, and card-catalog references. The tides and Dream Avatar editors
+publish revision-checked semantic operations to the owning canonical RON source.
 
 ## Runtime construction
 

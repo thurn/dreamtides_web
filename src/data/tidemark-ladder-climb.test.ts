@@ -152,6 +152,7 @@ describe("Tidemark Ladder Climb rules", () => {
         {
           id: testTideId("wolf-tide"),
           displayName: "Wolf Tide",
+          auguryPackageReference: "Wolf Tide package",
           displayDescription: "",
           resonance: "ember",
           role: "neutral",
@@ -160,6 +161,7 @@ describe("Tidemark Ladder Climb rules", () => {
         {
           id: testTideId("dragon-tide"),
           displayName: "Dragon Tide",
+          auguryPackageReference: "Dragon Tide package",
           displayDescription: "",
           resonance: "ember",
           role: "neutral",

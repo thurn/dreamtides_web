@@ -27,6 +27,7 @@ function tide(idSeed: string, cardCount: number): Tides4DeckJson {
   return {
     id: testTideId(idSeed),
     displayName: idSeed,
+    auguryPackageReference: `${idSeed} package`,
     displayDescription: `${idSeed} description`,
     role: "facet",
     resonance: "shadow",
@@ -76,6 +77,7 @@ describe("largestTides", () => {
     const big: Tides4DeckJson = {
       id: testTideId("big"),
       displayName: "big",
+      auguryPackageReference: "big package",
       displayDescription: "big description",
       role: "facet",
       resonance: "shadow",

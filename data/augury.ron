@@ -19,7 +19,7 @@ AuguryCatalog(
   ),
 
   archetypes: [
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "77ad1a09-aba0-4875-b462-e6efe94bdc3d",
       // Internal label used by debugging and authoring tools.
       name: "Grant: Fit card (gift)",
@@ -35,7 +35,7 @@ AuguryCatalog(
       weight: 10,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "8f8db592-b62c-414e-9195-68641722cf50",
       name: "Grant: Fit card draft",
       presentation: (
@@ -46,7 +46,7 @@ AuguryCatalog(
       weight: 10,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "b4ccca83-2a1d-4474-ba6d-4b95aefeed9b",
       name: "Grant: Copies draft",
       presentation: (
@@ -66,7 +66,7 @@ AuguryCatalog(
       weight: 6,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "c4ac3d68-e814-43ea-9be3-ced3fd1bbe89",
       name: "Grant: Strong card",
       presentation: (
@@ -77,7 +77,7 @@ AuguryCatalog(
       weight: 8,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "beecc1d9-9546-4ca2-858c-214527c7e530",
       name: "Grant: Category draft",
       presentation: (
@@ -90,12 +90,14 @@ AuguryCatalog(
           expensive: Tx("Choose an expensive card to add to your deck."),
           fast: Tx("Choose a fast card to add to your deck."),
           subtype: Tx(
-            text: "Choose one {category_name} card to add to your deck.",
-            placeholders: {"category_name": Opaque},
+            text: "Choose one {subtype_name} card to add to your deck.",
+            description: "[augury] Offer detail directing the player to choose a card from one card subtype. subtype_name is the independently localized canonical subtype title, such as Spirit Animal. Translators may reposition the placeholder or restructure the sentence so the title remains grammatically independent.",
+            placeholders: {"subtype_name": Opaque},
           ),
           package: Tx(
-            text: "Choose one card from the {category_name} to add to your deck.",
-            placeholders: {"category_name": Opaque},
+            text: "Choose one card from the {package_reference} to add to your deck.",
+            description: "[augury] Offer detail directing the player to choose a card from one authored tide package. package_reference is an independently localized grammatical reference authored for this sentence, such as Returning Legion package. Translators may reposition the placeholder or restructure the sentence.",
+            placeholders: {"package_reference": Opaque},
           ),
         ),
       ),
@@ -103,7 +105,7 @@ AuguryCatalog(
       weight: 10,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "dfd3976a-b1dc-44fe-9aab-c13bd2c195e4",
       name: "Grant: Card bundle",
       presentation: (
@@ -120,7 +122,7 @@ AuguryCatalog(
       weight: 8,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "a5ac636d-9269-4379-9c61-567583fe9926",
       name: "Grant: Transfigured draft",
       presentation: (
@@ -131,7 +133,7 @@ AuguryCatalog(
       weight: 6,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "ec872e81-b7b4-4d81-9c69-1ca5317f6144",
       name: "Improve: Transfigure",
       presentation: (
@@ -142,7 +144,7 @@ AuguryCatalog(
       weight: 10,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "65a59007-6618-4f82-82ae-7da3bc6a205a",
       name: "Improve: Starter transfigure",
       presentation: (
@@ -159,7 +161,7 @@ AuguryCatalog(
       weight: 6,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "df34c427-5e27-42d1-b903-c1d6d6dddd78",
       name: "Remove: Purge",
       presentation: (
@@ -170,7 +172,7 @@ AuguryCatalog(
       weight: 8,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "521bd487-0b3e-429e-a2f6-56010dd029c4",
       name: "Duplicate: Duplicate card",
       presentation: (
@@ -187,7 +189,7 @@ AuguryCatalog(
       weight: 8,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "432102c0-91c0-4954-acd0-3404d2148a25",
       name: "Dreamsign: Grant dreamsign",
       presentation: (
@@ -199,7 +201,7 @@ AuguryCatalog(
       weight: 8,
     ),
 
-    ArchetypeDefinition(
+    AuguryArchetypeDefinition(
       id: "1003a54d-1659-490b-aa48-b88b9da5df68",
       name: "Site: Add a site",
       presentation: (

@@ -3830,6 +3830,7 @@ TidesCatalog(
   TideDefinition(
     id: "00000000-0000-4000-8000-000000000041",
     display_name: Tx(r#"Raw Tide"#),
+    augury_package_reference: Tx("Raw Tide package"),
     display_description: Tx("First description"),
     resonance: Shadow,
     kind: Signature,
@@ -3840,6 +3841,7 @@ TidesCatalog(
   TideDefinition(
     id: "00000000-0000-4000-8000-000000000042",
     display_name: Tx("Facet Tide"),
+    augury_package_reference: Tx("Facet Tide package"),
     display_description: Tx("Second description"),
     resonance: Wild,
     kind: Facet,
@@ -3849,6 +3851,7 @@ TidesCatalog(
   TideDefinition(
     id: "00000000-0000-4000-8000-000000000043",
     display_name: Tx("Neutral Tide"),
+    augury_package_reference: Tx("Neutral Tide package"),
     display_description: Tx("Third description"),
     resonance: Vision,
     kind: Neutral,

@@ -18,6 +18,7 @@ export function compileTidesData(tidesSource, avatarsSource) {
   const tides = tidesSource.tide.map((tide) => ({
     id: tide.id,
     displayName: tide["display-name"],
+    auguryPackageReference: tide["augury-package-reference"],
     displayDescription: tide["display-description"],
     resonance: tide.resonance,
     role: tide.role,

@@ -101,7 +101,7 @@ export function buildCategoryUniverse(
       if (memberUuids.length > 0) {
         categories.push({
           id: parseMerchantCategoryId(`tide:${tide.id}`),
-          label: `${tide.displayName} package`,
+          label: tide.auguryPackageReference,
           memberUuids,
         });
       }

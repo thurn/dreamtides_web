@@ -41,12 +41,14 @@ function variablesFor(
     case "purge-card":
       return { card_name: cardName(model.card) };
     case "category-draft":
-      return {
-        ...(model.category.kind === "subtype" ||
-        model.category.kind === "package"
-          ? { category_name: model.category.name }
-          : {}),
-      };
+      switch (model.category.kind) {
+        case "subtype":
+          return { subtype_name: model.category.name };
+        case "package":
+          return { package_reference: model.category.name };
+        default:
+          return {};
+      }
     case "copies-draft":
       return { count: model.copyCount };
     case "card-bundle":

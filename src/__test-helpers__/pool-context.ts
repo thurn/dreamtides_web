@@ -111,6 +111,7 @@ export function makeTestPoolContext(
     tides: decklistIds.map((ids, index) => ({
       id: testTideId(`test-tide-${String(index + 1)}`),
       displayName: `Test Tide ${String(index + 1)}`,
+      auguryPackageReference: `Test Tide ${String(index + 1)} package`,
       displayDescription: `Test Tide ${String(index + 1)} description`,
       role: index === 0 ? "signature" : index === 1 ? "facet" : "neutral",
       resonance: index === 0 ? "shadow" : index === 1 ? "wild" : "vision",

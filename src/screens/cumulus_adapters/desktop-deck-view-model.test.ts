@@ -90,6 +90,7 @@ function tidesContext(
         {
           id: TIDE_ID,
           displayName: "Kindled Path",
+          auguryPackageReference: "Kindled Path package",
           displayDescription:
             "Gather strength before releasing a decisive surge.",
           role: "signature",

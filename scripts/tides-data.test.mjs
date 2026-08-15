@@ -12,6 +12,7 @@ describe("compileTidesData", () => {
           {
             id: "00000000-0000-4000-8000-000000000001",
             "display-name": "Fixture Tide",
+            "augury-package-reference": "Fixture Tide package",
             "display-description": "A stable synthetic description.",
             resonance: "shadow",
             role: "signature",
@@ -44,6 +45,7 @@ describe("compileTidesData", () => {
         {
           id: "00000000-0000-4000-8000-000000000001",
           displayName: "Fixture Tide",
+          auguryPackageReference: "Fixture Tide package",
           displayDescription: "A stable synthetic description.",
           resonance: "shadow",
           role: "signature",

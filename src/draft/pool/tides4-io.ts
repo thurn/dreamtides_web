@@ -50,6 +50,8 @@ export interface Tides4DeckJson {
   id: TideId;
   /** Player-facing narrative label. */
   displayName: string;
+  /** Localized grammatical reference used by Augury package offers. */
+  auguryPackageReference: string;
   /** Player-facing explanation of the tide's mechanical identity. */
   displayDescription: string;
   /**
@@ -164,6 +166,13 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
     if (typeof displayName !== "string") {
       return fail(`tide "${id}" without a display name`);
     }
+    const auguryPackageReference = rawTide["auguryPackageReference"];
+    if (
+      typeof auguryPackageReference !== "string" ||
+      auguryPackageReference.trim() === ""
+    ) {
+      return fail(`tide "${id}" without an Augury package reference`);
+    }
     const displayDescription = rawTide["displayDescription"];
     if (typeof displayDescription !== "string") {
       return fail(`tide "${id}" without a display description`);
@@ -209,6 +218,7 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
     return {
       id,
       displayName,
+      auguryPackageReference,
       displayDescription,
       resonance,
       role,

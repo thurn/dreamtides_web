@@ -26,6 +26,7 @@ function makeDeck(cards: Tides4DeckJson["cards"]): Tides4DeckJson {
   return {
     id: testTideId("tide-fac-01"),
     displayName: "Test tide",
+    auguryPackageReference: "Test tide package",
     displayDescription: "Test description",
     resonance: "shadow",
     role: "facet",

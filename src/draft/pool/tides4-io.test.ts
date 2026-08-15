@@ -33,6 +33,7 @@ function makeArtifact(): Tides4DecksJson {
       {
         id: SIGNATURE_TIDE_ID,
         displayName: "Rael signature",
+        auguryPackageReference: "Rael signature package",
         displayDescription: "Signature description",
         role: "signature",
         resonance: "shadow",
@@ -44,6 +45,7 @@ function makeArtifact(): Tides4DecksJson {
       {
         id: FACET_TIDE_ID,
         displayName: "Lean: Card A",
+        auguryPackageReference: "Lean Card A package",
         displayDescription: "Facet description",
         role: "facet",
         resonance: "wild",
@@ -55,6 +57,7 @@ function makeArtifact(): Tides4DecksJson {
       {
         id: NEUTRAL_TIDE_ID,
         displayName: "Broad: Card C / Card D",
+        auguryPackageReference: "Broad Card C and Card D package",
         displayDescription: "Neutral description",
         role: "neutral",
         resonance: "vision",
@@ -115,6 +118,14 @@ describe("validateTides4Decks", () => {
     const data = clone(makeArtifact()) as Tides4DecksJson;
     (data.tides[0] as { role: string }).role = "broad";
     expect(() => validateTides4Decks(data)).toThrow(/unknown role/);
+  });
+
+  it("rejects a tide without a grammatical Augury package reference", () => {
+    const data = makeArtifact();
+    data.tides[0].auguryPackageReference = "";
+    expect(() => validateTides4Decks(clone(data))).toThrow(
+      /Augury package reference/u,
+    );
   });
 
   it("rejects an unknown resonance", () => {

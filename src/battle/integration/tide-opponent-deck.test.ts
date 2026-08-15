@@ -65,6 +65,7 @@ const TIDES: Tides4DecksJson = {
     {
       id: testTideId("signature-a"),
       displayName: "Signature",
+      auguryPackageReference: "Signature package",
       displayDescription: "Synthetic signature.",
       resonance: "shadow",
       role: "signature",
@@ -76,6 +77,7 @@ const TIDES: Tides4DecksJson = {
     {
       id: FACET_TIDE_ID,
       displayName: "Facet",
+      auguryPackageReference: "Facet package",
       displayDescription: "Synthetic facet.",
       resonance: "ember",
       role: "facet",
@@ -84,6 +86,7 @@ const TIDES: Tides4DecksJson = {
     {
       id: testTideId("neutral-a"),
       displayName: "Neutral",
+      auguryPackageReference: "Neutral package",
       displayDescription: "Synthetic neutral.",
       resonance: "vision",
       role: "neutral",

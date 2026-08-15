@@ -62,6 +62,7 @@ describe("loadJourneyContent", () => {
         {
           id: testTideId("tide-a"),
           displayName: "Tide A",
+          auguryPackageReference: "Tide A package",
           displayDescription: "A synthetic tide.",
           resonance: "ember",
           role: "neutral",

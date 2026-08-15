@@ -93,8 +93,8 @@ describe("offer tile descriptions", () => {
         midCost: "Fixture mid-cost",
         expensive: "Fixture expensive",
         fast: "Fixture fast",
-        subtype: "Fixture subtype {categoryName}",
-        package: "Fixture package {categoryName}",
+        subtype: "Fixture subtype {subtypeName}",
+        package: "Fixture package {packageReference}",
       },
     };
     const model: OfferTileModel = {
@@ -107,6 +107,19 @@ describe("offer tile descriptions", () => {
     expect(resolveSource(offerTileDescription(model, presentation))).toBe(
       "Fixture subtype Spirit Animal",
     );
+
+    const packageModel: OfferTileModel = {
+      id: testOfferTileId("package-category"),
+      kind: "category-draft",
+      cards: [CARD, CARD],
+      category: {
+        kind: "package",
+        name: assertLocalized("Fixture Tide package"),
+      },
+    };
+    expect(
+      resolveSource(offerTileDescription(packageModel, presentation)),
+    ).toBe("Fixture package Fixture Tide package");
   });
 
   it("rejects copy whose placeholders do not match the offer model", () => {

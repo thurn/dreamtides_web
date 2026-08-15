@@ -32,6 +32,7 @@ function makeTides4(): Tides4DecksJson {
     {
       id: SIGNATURE_TIDE_ID,
       displayName: "Sig 1",
+      auguryPackageReference: "Sig 1 package",
       displayDescription: "Signature description",
       role: "signature",
       resonance: "shadow",
@@ -40,6 +41,7 @@ function makeTides4(): Tides4DecksJson {
     ...Array.from({ length: 6 }, (_, f) => ({
       id: testTideId(`tide-fac-${String(f + 1)}`),
       displayName: `Facet ${String(f + 1)}`,
+      auguryPackageReference: `Facet ${String(f + 1)} package`,
       displayDescription: `Facet ${String(f + 1)} description`,
       role: "facet" as const,
       resonance: "wild" as const,
@@ -48,6 +50,7 @@ function makeTides4(): Tides4DecksJson {
     ...Array.from({ length: 2 }, (_, n) => ({
       id: testTideId(`tide-neu-${String(n + 1)}`),
       displayName: `Neutral ${String(n + 1)}`,
+      auguryPackageReference: `Neutral ${String(n + 1)} package`,
       displayDescription: `Neutral ${String(n + 1)} description`,
       role: "neutral" as const,
       resonance: "vision" as const,

@@ -7,7 +7,7 @@ const count = (one, other) => ({ kind: "count", one, other });
 const category = {
   kind: "category",
   character: [], event: [], cheap: [], "mid-cost": [], expensive: [], fast: [],
-  subtype: ["category_name"], package: ["category_name"],
+  subtype: ["subtype_name"], package: ["package_reference"],
 };
 const presentation = (headline, subtitle) => ({ headline, subtitle });
 const ARCHETYPE_CONTRACTS = new Map(Object.entries({
@@ -26,7 +26,7 @@ const ARCHETYPE_CONTRACTS = new Map(Object.entries({
   add_site: { family: "site", mechanicId: "add-site", policies: ["site-uniform"], quantities: {}, presentation: presentation(text(), text("site_name")) },
 }));
 const PRESENTATION_SLOTS = new Set([
-  "card_name", "category_name", "count", "dreamsign_name", "first_card_name",
+  "card_name", "count", "dreamsign_name", "first_card_name", "package_reference",
   "second_card_name", "site_name", "subtype_name",
 ]);
 function fail(path, message) {

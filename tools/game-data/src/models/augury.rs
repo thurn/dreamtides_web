@@ -11,10 +11,10 @@ use super::localization::{source_text, source_transport_value};
 
 const PRESENTATION_SLOTS: [&str; 8] = [
     "card_name",
-    "category_name",
     "count",
     "dreamsign_name",
     "first_card_name",
+    "package_reference",
     "second_card_name",
     "site_name",
     "subtype_name",
@@ -25,7 +25,7 @@ const PRESENTATION_SLOTS: [&str; 8] = [
 pub struct AuguryCatalog {
     pub encounter: EncounterRules,
     pub selection: AugurySelectionRules,
-    pub archetypes: Vec<ArchetypeDefinition>,
+    pub archetypes: Vec<AuguryArchetypeDefinition>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -53,7 +53,7 @@ pub struct EncounterRules {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct ArchetypeDefinition {
+pub struct AuguryArchetypeDefinition {
     pub id: AuguryId,
     pub name: String,
     pub presentation: ArchetypePresentation,
@@ -530,7 +530,7 @@ pub fn lower(source: AuguryCatalog) -> Result<toml::Value> {
     Ok(toml::Value::Table(root))
 }
 
-fn lower_archetype(source: ArchetypeDefinition) -> Result<toml::Value> {
+fn lower_archetype(source: AuguryArchetypeDefinition) -> Result<toml::Value> {
     let kind = source.ability.kind();
     let mut output = toml::map::Map::new();
     output.insert("id".into(), kind.as_compat().into());
@@ -794,9 +794,9 @@ mod tests {
         super::super::localization::localized_source(text.into()).unwrap()
     }
 
-    fn definition(ability: ArchetypeAbility) -> ArchetypeDefinition {
+    fn definition(ability: ArchetypeAbility) -> AuguryArchetypeDefinition {
         let id = AuguryId::parse(ability.kind().canonical_id()).unwrap();
-        ArchetypeDefinition {
+        AuguryArchetypeDefinition {
             id,
             name: format!("Synthetic {}", ability.kind().as_compat()),
             presentation: ArchetypePresentation {
@@ -944,8 +944,8 @@ mod tests {
             mid_cost: ls("Mid-cost"),
             expensive: ls("Expensive"),
             fast: ls("Fast"),
-            subtype: ls("Subtype {category_name}"),
-            package: ls("Package {category_name}"),
+            subtype: ls("Subtype {subtype_name}"),
+            package: ls("Package {package_reference}"),
         })
         .unwrap();
         assert_eq!(category["kind"].as_str(), Some("category"));

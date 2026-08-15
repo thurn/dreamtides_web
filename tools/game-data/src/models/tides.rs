@@ -31,6 +31,7 @@ pub struct SelectionRules {
 pub struct TideDefinition {
     pub id: TideId,
     pub display_name: LocalizedString,
+    pub augury_package_reference: LocalizedString,
     pub display_description: LocalizedString,
     pub resonance: Resonance,
     pub kind: TideKind,
@@ -126,6 +127,12 @@ pub fn validate(catalog: &TidesCatalog) -> Result<()> {
         if !tide_ids.insert(tide.id) {
             bail!("duplicate Tide UUID {}", tide.id);
         }
+        if source_text(&tide.augury_package_reference)?.trim().is_empty() {
+            bail!(
+                "Tide {} must define a non-empty Augury package reference",
+                tide.id
+            );
+        }
         if tide.cards.is_empty() {
             bail!("Tide {} must contain at least one card", tide.id);
         }
@@ -197,6 +204,10 @@ pub fn lower(catalog: TidesCatalog) -> Result<toml::Value> {
                         source_text(&tide.display_name)?.into(),
                     );
                     table.insert(
+                        "augury-package-reference".into(),
+                        source_text(&tide.augury_package_reference)?.into(),
+                    );
+                    table.insert(
                         "display-description".into(),
                         source_text(&tide.display_description)?.into(),
                     );
@@ -259,6 +270,7 @@ mod tests {
                 .map(|(((tide_id, card_id), kind), resonance)| TideDefinition {
                     id: TideId::parse(tide_id).unwrap(),
                     display_name: ls(format!("Display {tide_id}")),
+                    augury_package_reference: ls(format!("Reference {tide_id}")),
                     display_description: ls("Unicode tide — exact copy"),
                     resonance,
                     kind,
@@ -299,6 +311,15 @@ mod tests {
                 .unwrap_err()
                 .to_string()
                 .contains("unknown card UUID")
+        );
+
+        let mut missing_reference = catalog();
+        missing_reference.tides[0].augury_package_reference = ls("   ");
+        assert!(
+            validate(&missing_reference)
+                .unwrap_err()
+                .to_string()
+                .contains("Augury package reference")
         );
     }
 
