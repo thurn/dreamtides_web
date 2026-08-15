@@ -905,7 +905,7 @@ describe("ExplorationEditorApp", () => {
     act(() => root.unmount());
   });
 
-  it("seeds the required paired followup when switching to the site chooser", async () => {
+  it("seeds the followup override when switching to the site chooser", async () => {
     const loaded = loadResult();
     loaded.effectSchemas.push(structuredClone(SITE_TYPE_CHOOSER_SCHEMA));
     const saveAction = vi.fn(
@@ -1016,7 +1016,7 @@ describe("ExplorationEditorApp", () => {
     act(() => root.unmount());
   });
 
-  it("renders a locked offer count and paired followup controls for the site chooser", async () => {
+  it("renders a locked offer count and followup controls for the site chooser", async () => {
     const loaded = loadResult();
     loaded.effectSchemas.push(structuredClone(SITE_TYPE_CHOOSER_SCHEMA));
     loaded.encounters[0].actions[0] = {

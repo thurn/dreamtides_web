@@ -24,6 +24,11 @@ import {
   type ExplorationActionContent,
   type ExplorationPredicate,
 } from "../../data/exploration";
+import {
+  derivedExplorationEffectArgumentNames,
+  derivedExplorationEffectText,
+  sharedExplorationFollowupSubtitle,
+} from "../../data/exploration-presentation";
 import { createDreamsign } from "../../data/dreamsigns";
 import { toJourneyAvatar } from "../../data/avatar-selection";
 import type { JourneyContent } from "../../data/journey-content";
@@ -112,9 +117,8 @@ function matchesPredicate(
 
 function cardById(content: JourneyContent, cardId: CardId): CardData | null {
   return (
-    [...content.cardDatabase.values()].find(
-      (card) => card.id === cardId,
-    ) ?? null
+    [...content.cardDatabase.values()].find((card) => card.id === cardId) ??
+    null
   );
 }
 
@@ -272,10 +276,7 @@ function preparedMultiCardTransfigurationCandidates(
   );
   return preparation.eligibleCards.flatMap((binding) => {
     const candidate = candidatesByEntryId.get(binding.entryId);
-    if (
-      candidate === undefined ||
-      candidate.model.cardId !== binding.cardId
-    ) {
+    if (candidate === undefined || candidate.model.cardId !== binding.cardId) {
       return [];
     }
     const allowedForms = new Set(binding.transfigurations);
@@ -315,8 +316,7 @@ function preparedMultiCardReplacementCards(
     );
     if (entry === undefined) return [];
     const choice = deckCardChoice(entry, content);
-    return choice !== null &&
-      choice.model.cardId === binding.sourceCardId
+    return choice !== null && choice.model.cardId === binding.sourceCardId
       ? [choice]
       : [];
   });
@@ -487,8 +487,14 @@ function configuredFollowupCopy(
   fallback: string | LocalizedString | SourceMessage,
 ): LocalizedString {
   const template = action[key];
+  const codeDefault =
+    key === "followupSubtitle"
+      ? sharedExplorationFollowupSubtitle(action)
+      : undefined;
   const selected =
-    template === undefined || template === "" ? fallback : template;
+    template === undefined || template === ""
+      ? (codeDefault ?? fallback)
+      : template;
   const valueFor = (name: string): number | LocalizedString => {
     switch (name) {
       case "count":
@@ -590,7 +596,7 @@ function siteTypeChoiceFollowup(
       action,
       content,
       "followupSubtitle",
-      action.effectText,
+      action.label,
     ),
     choices,
   };
@@ -1305,7 +1311,7 @@ function effectReferencesForAction(
   starterCardEntity?: DeckCardVariableTarget["entity"],
 ): readonly ExplorationEffectReference[] {
   const references: ExplorationEffectReference[] = [];
-  const argumentNames = explorationEffectArgumentNames(action.effectText);
+  const argumentNames = explorationEffectArgumentNames(action);
   if (argumentNames.includes("offered_card")) {
     const offeredCardId = offer.offeredCardIds[0];
     const offeredCard =
@@ -1373,7 +1379,7 @@ function effectReferencesForAction(
     const dreamsign = dreamsignById(content, action.dreamsignId);
     if (dreamsign !== null) {
       references.push({
-        needle: dreamsign.name,
+        needle: "{dreamsign}",
         part: {
           kind: "entity",
           entity: {
@@ -1391,8 +1397,11 @@ function effectReferencesForAction(
 }
 
 function explorationEffectArgumentNames(
-  message: ExplorationActionContent["effectText"],
+  action: ExplorationActionContent,
 ): readonly string[] {
+  const message = action.effectText;
+  if (message === undefined)
+    return derivedExplorationEffectArgumentNames(action);
   if (message instanceof SourceMessage)
     return Object.keys(message.argumentSchemas);
   if (typeof message === "string") {
@@ -1414,6 +1423,12 @@ function localizedAuthoredMessage(
 function localizedUnpreparedEffect(
   message: ExplorationActionContent["effectText"],
 ): LocalizedString {
+  if (message === undefined) {
+    return tx(
+      "Exploration effect resolved",
+      "[exploration] Generic player-safe Exploration outcome used when a resolved typed effect requires presentation arguments that are unavailable.",
+    );
+  }
   if (message instanceof LocalizedString) return message;
   if (message instanceof SourceMessage) {
     if (Object.keys(message.argumentSchemas).length === 0)
@@ -1424,6 +1439,37 @@ function localizedUnpreparedEffect(
     );
   }
   return localizedSourceText(message);
+}
+
+function localizedExplorationPredicate(
+  predicate: ExplorationPredicate | undefined,
+): LocalizedString {
+  switch (predicate) {
+    case "character":
+      return localizedSourceText("Character");
+    case "event":
+      return localizedSourceText("Event");
+    case "cheap-character":
+      return tx(
+        "≤2● cost Character",
+        "[exploration] Card predicate name in a derived mechanical effect.",
+      );
+    case "legendary":
+      return tx(
+        "legendary",
+        "[exploration] Card predicate name in a derived mechanical effect.",
+      );
+    case "spirit-animal":
+      return localizedSourceText("Spirit Animal");
+    case "survivor":
+      return localizedSourceText("Survivor");
+    case "warrior":
+      return localizedSourceText("Warrior");
+    default:
+      throw new Error(
+        "Missing predicate for derived Exploration presentation.",
+      );
+  }
 }
 
 /** Build UUID-backed inline entity parts for an Exploration option's effect. */
@@ -1447,7 +1493,7 @@ export function buildExplorationActionEffect(
   const localizedEffect = (
     concealedTargets: Readonly<Record<string, LocalizedString>> = {},
   ): LocalizedString => {
-    const argumentNames = explorationEffectArgumentNames(action.effectText);
+    const argumentNames = explorationEffectArgumentNames(action);
     const localizedValues: Record<string, LocalizedString> = Object.fromEntries(
       argumentNames.map((argumentName) => {
         const concealedTarget = concealedTargets[argumentName];
@@ -1458,6 +1504,34 @@ export function buildExplorationActionEffect(
           (candidate) => candidate.needle === `{${argumentName}}`,
         );
         if (reference === undefined) {
+          switch (argumentName) {
+            case "card_type":
+              if (action.cardType !== undefined)
+                return [argumentName, localizedSourceText(action.cardType)];
+              break;
+            case "predicate":
+              return [
+                argumentName,
+                localizedExplorationPredicate(action.predicate),
+              ];
+            case "subtype":
+              if (action.subtype !== undefined)
+                return [argumentName, localizedSourceText(action.subtype)];
+              break;
+            case "transfiguration":
+              if (action.transfiguration !== undefined) {
+                return [
+                  argumentName,
+                  localizedTransfigurationPresentation(
+                    transfigurationForm(
+                      content.transfigurationData,
+                      action.transfiguration,
+                    ),
+                  ).name,
+                ];
+              }
+              break;
+          }
           throw new Error(
             `Missing localized Exploration effect argument {${argumentName}}.`,
           );
@@ -1485,9 +1559,14 @@ export function buildExplorationActionEffect(
       );
     }
     if (action.effectText instanceof LocalizedString) return action.effectText;
-    return localizedSourceText(action.effectText, localizedValues);
+    if (typeof action.effectText === "string")
+      return localizedSourceText(action.effectText, localizedValues);
+    return derivedExplorationEffectText(
+      action,
+      localizedValues,
+    );
   };
-  const argumentNames = explorationEffectArgumentNames(action.effectText);
+  const argumentNames = explorationEffectArgumentNames(action);
   if (
     argumentNames.includes("deck_card") &&
     !references.some((reference) => reference.needle === "{deck_card}")
@@ -1750,8 +1829,7 @@ function hasUsableStarterCardTransfigurationPreparation(
           ? undefined
           : content.cardDatabase.get(entry.cardNumber);
       return (
-        eligibleCardIdByEntryId.get(target.entryId) !==
-          target.cardId ||
+        eligibleCardIdByEntryId.get(target.entryId) !== target.cardId ||
         base === undefined ||
         (entry?.transfiguration !== null &&
           entry?.transfiguration !== target.transfiguration) ||
@@ -2046,10 +2124,7 @@ function hasUsableRandomDeckTargetPreparation(
       (candidate) => candidate.entryId === binding.entryId,
     );
     const card = entry === undefined ? null : deckCardChoice(entry, content);
-    if (
-      card === null ||
-      card.model.cardId !== binding.cardId
-    ) {
+    if (card === null || card.model.cardId !== binding.cardId) {
       return false;
     }
     if (
@@ -2137,8 +2212,7 @@ function hasUsableDisclosedDeckTargetPreparation(
   }
   return preparation.eligibleCards.some(
     (binding) =>
-      binding.entryId === target.entryId &&
-      binding.cardId === target.cardId,
+      binding.entryId === target.entryId && binding.cardId === target.cardId,
   );
 }
 
@@ -2173,10 +2247,7 @@ function hasUsableCompoundActionPreparation(
   const currentCard = (entryId: DeckEntryId, cardId: CardId) => {
     const entry = state.deck.find((candidate) => candidate.entryId === entryId);
     const card = entry === undefined ? null : deckCardChoice(entry, content);
-    return card !== null &&
-      card.model.cardId === cardId
-      ? card
-      : null;
+    return card !== null && card.model.cardId === cardId ? card : null;
   };
   const hasDistinctEntries = (
     bindings: readonly { readonly entryId: DeckEntryId }[],
@@ -2233,8 +2304,7 @@ function hasUsableCompoundActionPreparation(
         preparation.eligiblePurgeTargets.some(
           (candidate) =>
             candidate.entryId === preparation.target?.entryId &&
-            candidate.cardId ===
-              preparation.target.cardId &&
+            candidate.cardId === preparation.target.cardId &&
             candidate.effectiveCardType ===
               preparation.target.effectiveCardType,
         ) &&
@@ -2871,8 +2941,7 @@ function compoundActionRewardForResolution(
       copyEntry === undefined ? null : deckCardChoice(copyEntry, content);
     return source !== null &&
       copy !== null &&
-      source.model.cardId ===
-        mapping.sourceCardId &&
+      source.model.cardId === mapping.sourceCardId &&
       copy.model.cardId === mapping.mintedCardId &&
       source.model.cardId === copy.model.cardId
       ? [{ source, copy }]
@@ -2947,8 +3016,7 @@ function compoundActionRewardForResolution(
         sameOrderedIds(selectedIds, [preparation.target.entryId]) &&
         purged.length === 1 &&
         purged[0]?.entryId === preparation.target.entryId &&
-        purged[0]?.model.cardId ===
-          preparation.target.cardId &&
+        purged[0]?.model.cardId === preparation.target.cardId &&
         matchesPreparedTransfigurations(preparation.companionTargets) &&
         sameOrderedIds(resolution.affectedEntryIds, [
           preparation.target.entryId,
@@ -3074,8 +3142,7 @@ function compoundActionRewardForResolution(
         purged.length === 1 &&
         purged[0]?.entryId === selectedId &&
         purged[0]?.model.cardId ===
-          preparation.targets
-            .find((target) => target.entryId === selectedId)
+          preparation.targets.find((target) => target.entryId === selectedId)
             ?.cardId &&
         matchesPreparedTransfigurations(companionTargets) &&
         sameOrderedIds(resolution.affectedEntryIds, [
@@ -3090,8 +3157,7 @@ function compoundActionRewardForResolution(
           return (
             target !== undefined &&
             mapping.sourceEntryId === target.entryId &&
-            mapping.sourceCardId ===
-              target.cardId &&
+            mapping.sourceCardId === target.cardId &&
             mapping.mintedCardId === target.cardId
           );
         }) &&
@@ -3210,14 +3276,10 @@ function multiCardReplacementRewardForResolution(
       prepared === undefined ||
       source === null ||
       replacement === null ||
-      prepared.sourceCardId !==
-        mapping.sourceCardId ||
-      prepared.replacementCardId !==
-        mapping.replacementCardId ||
-      source.model.cardId !==
-        mapping.sourceCardId ||
-      replacement.model.cardId !==
-        mapping.replacementCardId
+      prepared.sourceCardId !== mapping.sourceCardId ||
+      prepared.replacementCardId !== mapping.replacementCardId ||
+      source.model.cardId !== mapping.sourceCardId ||
+      replacement.model.cardId !== mapping.replacementCardId
     ) {
       return [];
     }
@@ -3301,8 +3363,7 @@ function randomFixedCardReplacementRewardForResolution(
     purged === null ||
     gained === null ||
     purged.model.cardId !== mapping.sourceCardId ||
-    gained.model.cardId !==
-      mapping.replacementCardId
+    gained.model.cardId !== mapping.replacementCardId
   ) {
     return null;
   }
@@ -3374,8 +3435,7 @@ function randomCardCopiesRewardForResolution(
       source === null ||
       copy === null ||
       target.cardId !== mapping.sourceCardId ||
-      source.model.cardId !==
-        mapping.sourceCardId ||
+      source.model.cardId !== mapping.sourceCardId ||
       copy.model.cardId !== mapping.mintedCardId ||
       mapping.sourceCardId !== mapping.mintedCardId
     ) {

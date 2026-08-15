@@ -64,9 +64,10 @@ revision returns `STALE_SOURCE` without writing.
 
 Cards uses UUID-routed card-field operations and ordered tag/tide registry
 diffs. Exploration uses UUID plus action-slot/action-ID routing. Each action
-stores its label, effect text, optional followup copy, and typed effect together
-in `data/exploration_site.ron`. Selection policy and canonical mechanic values are
-derived from the typed effect variant.
+stores its label, typed effect, and optional encounter-specific presentation
+overrides in `data/exploration_site.ron`. TypeScript derives standard effect and
+followup copy from the typed effect. Selection policy and canonical mechanic
+values are derived from the typed effect variant.
 
 Shape-preserving editor catalogs reuse their established endpoint-specific
 request validation and mutation logic inside the isolated staging root. Rust

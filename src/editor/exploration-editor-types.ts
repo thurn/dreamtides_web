@@ -91,7 +91,7 @@ export interface ExplorationEditorEffectSchema {
 export interface ExplorationEditorAction {
   id: ExplorationActionId;
   label: string;
-  effectText: string;
+  effectText?: string;
   renderedEffectText: string;
   renderedEffectParts: EncounterRenderedTemplatePart[];
   runtimeCardSelections: EncounterRuntimeCardSelection[];

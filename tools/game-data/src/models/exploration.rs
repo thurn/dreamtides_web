@@ -458,18 +458,20 @@ impl<'de> Deserialize<'de> for ActionId {
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct Followup {
+pub struct FollowupOverride {
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub title: Option<LocalizedString>,
-    pub subtitle: LocalizedString,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub subtitle: Option<LocalizedString>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct ActionPresentation {
-    pub effect_text: LocalizedString,
-    #[serde(default)]
-    pub followup: Option<Followup>,
+pub struct ActionPresentationOverride {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub effect_text: Option<LocalizedString>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub followup: Option<FollowupOverride>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -485,7 +487,8 @@ pub struct EncounterDefinition {
 pub struct ActionDefinition {
     pub label: LocalizedString,
     pub id: ActionId,
-    pub presentation: ActionPresentation,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub presentation_override: Option<ActionPresentationOverride>,
     pub effect: ActionEffect,
 }
 
@@ -930,22 +933,18 @@ fn lower_action(action: ActionDefinition) -> Result<toml::map::Map<String, toml:
     let label = source_value(&action.label)?;
     output.insert("id".into(), action.id.to_string().into());
     output.insert("label".into(), label.clone());
-    output.insert(
-        "effect-text".into(),
-        source_value(&action.presentation.effect_text)?,
-    );
-    if let Some(followup) = action.presentation.followup {
-        output.insert(
-            "followup-title".into(),
-            match followup.title {
-                Some(title) => source_value(&title)?,
-                None => label,
-            },
-        );
-        output.insert(
-            "followup-subtitle".into(),
-            source_value(&followup.subtitle)?,
-        );
+    if let Some(presentation) = action.presentation_override {
+        if let Some(effect_text) = presentation.effect_text {
+            output.insert("effect-text".into(), source_value(&effect_text)?);
+        }
+        if let Some(followup) = presentation.followup {
+            if let Some(title) = followup.title {
+                output.insert("followup-title".into(), source_value(&title)?);
+            }
+            if let Some(subtitle) = followup.subtitle {
+                output.insert("followup-subtitle".into(), source_value(&subtitle)?);
+            }
+        }
     }
     let kind = action.effect.kind();
     output.insert(
@@ -1398,25 +1397,25 @@ mod tests {
       ActionDefinition(
         label: Tx("Take the named card"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Gain {{fixed_card}}"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Gain {{fixed_card}}"), followup: None),
         effect: GainNamedCard(card_id: "22222222-2222-4222-8222-222222222222"),
       ),
       ActionDefinition(
         label: Tx("Take the generated card"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Gain {{offered_card}}"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Gain {{offered_card}}"), followup: None),
         effect: GainGeneratedCard(predicate: Character, count: None),
       ),
       ActionDefinition(
         label: Tx("Swear a synthetic oath"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: Tx("Purge a random Warrior and strengthen the rest."), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Purge a random Warrior and strengthen the rest."), followup: None),
         effect: PurgeRandomSubtypeAndIncreaseSpark(subtype: "Warrior", spark_bonus: 1),
       ),
       ActionDefinition(
         label: Tx("Enter synthetic light"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: Tx("Spend essence to transfigure Events."), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Spend essence to transfigure Events."), followup: None),
         effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: Inspired),
       ),
     ],
@@ -1433,9 +1432,9 @@ mod tests {
       ActionDefinition(
         label: Tx("Stand Down the Escort"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(
+        presentation_override: ActionPresentationOverride(
           effect_text: Tx("Purge up to 2 chosen Warrior cards"),
-          followup: Followup(
+          followup: FollowupOverride(
             subtitle: Tx("Choose up to two Warrior cards to purge."),
           ),
         ),
@@ -1455,19 +1454,19 @@ mod tests {
       ActionDefinition(
         label: Tx("Gather the Light"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Gain 100 essence"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Gain 100 essence"), followup: None),
         effect: GainEssence(essence: 100),
       ),
       ActionDefinition(
         label: Tx("Chance the Light"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Gain 50 to 150 essence"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Gain 50 to 150 essence"), followup: None),
         effect: GainRandomEssence(minimum_essence: 50, maximum_essence: 150),
       ),
       ActionDefinition(
         label: Tx("Reflect the Light"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: Tx("Double your essence"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Double your essence"), followup: None),
         effect: DoubleEssence,
       ),
     ],
@@ -1484,25 +1483,25 @@ mod tests {
       ActionDefinition(
         label: Tx("Accept an Offered Sign"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Gain an offered Dreamsign"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Gain an offered Dreamsign"), followup: None),
         effect: GainOfferedDreamsign(offer_count: 3),
       ),
       ActionDefinition(
         label: Tx("Replace a Chosen Sign"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Replace a chosen Dreamsign"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Replace a chosen Dreamsign"), followup: None),
         effect: ReplaceSelectedDreamsignWithOffered(offer_count: 4),
       ),
       ActionDefinition(
         label: Tx("Replace Every Sign"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: Tx("Replace all Dreamsigns"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Replace all Dreamsigns"), followup: None),
         effect: ReplaceAllDreamsignsRandom,
       ),
       ActionDefinition(
         label: Tx("Purge and Replace a Sign"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: Tx("Purge and replace a Dreamsign"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Purge and replace a Dreamsign"), followup: None),
         effect: PurgeSelectedDreamsignAndGainRandom(count: 2),
       ),
     ],
@@ -1519,7 +1518,7 @@ mod tests {
       ActionDefinition(
         label: Tx("Accept the Marked Sign"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Gain a Dreamsign and a Nightmare"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Gain a Dreamsign and a Nightmare"), followup: None),
         effect: GainNightmareAndDreamsign(
           dreamsign_id: "00000000-0000-4000-8000-000000000002",
           nightmare_count: 1,
@@ -1528,7 +1527,7 @@ mod tests {
       ActionDefinition(
         label: Tx("Choose Among Dark Signs"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Choose a Dreamsign and gain two Nightmares"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Choose a Dreamsign and gain two Nightmares"), followup: None),
         effect: GainNightmareAndOfferedDreamsign(
           offer_count: 3,
           nightmare_count: 2,
@@ -1548,25 +1547,25 @@ mod tests {
       ActionDefinition(
         label: Tx("Release the Disclosed Beginning"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Purge {{starter_card}}"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Purge {{starter_card}}"), followup: None),
         effect: PurgeStarterCard,
       ),
       ActionDefinition(
         label: Tx("Release a Hidden Beginning"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Purge a random starter card"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Purge a random starter card"), followup: None),
         effect: PurgeRandomStarterCard,
       ),
       ActionDefinition(
         label: Tx("Trade One Beginning"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: Tx("Purge a random starter card and gain a Character"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Purge a random starter card and gain a Character"), followup: None),
         effect: PurgeRandomStarterAndGainCard(predicate: Character),
       ),
       ActionDefinition(
         label: Tx("Trade Every Beginning"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: Tx("Replace all starter cards with Events"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Replace all starter cards with Events"), followup: None),
         effect: ReplaceAllStarterCards(predicate: Event),
       ),
     ],
@@ -1583,13 +1582,13 @@ mod tests {
       ActionDefinition(
         label: Tx("Reshape Two Beginnings"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Transfigure 2 random starter cards"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Transfigure 2 random starter cards"), followup: None),
         effect: TransfigureRandomStarterCards(count: 2),
       ),
       ActionDefinition(
         label: Tx("Reshape Every Beginning"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Transfigure all starter cards"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Transfigure all starter cards"), followup: None),
         effect: TransfigureAllStarterCards,
       ),
     ],
@@ -1606,25 +1605,25 @@ mod tests {
       ActionDefinition(
         label: Tx("Reshape One Chosen Card"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Transfigure a chosen card"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Transfigure a chosen card"), followup: None),
         effect: TransfigureSelected(count: 1),
       ),
       ActionDefinition(
         label: Tx("Reshape Two Chosen Events"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Transfigure 2 chosen Events"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Transfigure 2 chosen Events"), followup: None),
         effect: TransfigureSelected(predicate: Event, count: 2),
       ),
       ActionDefinition(
         label: Tx("Reshape Two Random Events"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: Tx("Transfigure 2 random Events"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Transfigure 2 random Events"), followup: None),
         effect: TransfigureRandomCards(predicate: Event, count: 2),
       ),
       ActionDefinition(
         label: Tx("Kindle Two Random Events"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: Tx("Kindle 2 random Events"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Kindle 2 random Events"), followup: None),
         effect: TransfigureFixedRandomCards(
           predicate: Event,
           count: 2,
@@ -1645,13 +1644,13 @@ mod tests {
       ActionDefinition(
         label: Tx("Replace Two Events"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Replace up to 2 Events"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Replace up to 2 Events"), followup: None),
         effect: ReplaceSelected(predicate: Event, count: 2),
       ),
       ActionDefinition(
         label: Tx("Kindle Two Events"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Kindle 2 chosen Events"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Kindle 2 chosen Events"), followup: None),
         effect: TransfigureFixedSelected(
           predicate: Event,
           transfiguration: Kindled,
@@ -1662,13 +1661,13 @@ mod tests {
       ActionDefinition(
         label: Tx("Copy Two Events"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: Tx("Copy 2 random Events"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Copy 2 random Events"), followup: None),
         effect: CopyRandomCards(predicate: Event, count: 2),
       ),
       ActionDefinition(
         label: Tx("Make Two Characters"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: Tx("Make 2 random cards Characters"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Make 2 random cards Characters"), followup: None),
         effect: ChangeRandomCardType(count: 2, card_type: Character),
       ),
     ],
@@ -1685,7 +1684,7 @@ mod tests {
       ActionDefinition(
         label: Tx("Replace a Legend"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Replace a random legendary card"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Replace a random legendary card"), followup: None),
         effect: ReplaceRandomWithCard(
           predicate: Legendary,
           card_id: "00000000-0000-4000-8000-000000000001",
@@ -1694,13 +1693,13 @@ mod tests {
       ActionDefinition(
         label: Tx("Change an Offered Card"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Change {{deck_card}} into an Event"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Change {{deck_card}} into an Event"), followup: None),
         effect: ChangeCardTypeSelected(card_type: Event, target: Offered),
       ),
       ActionDefinition(
         label: Tx("Change a Chosen Card"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: Tx("Change a chosen card into a Character"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Change a chosen card into a Character"), followup: None),
         effect: ChangeCardTypeSelected(card_type: Character, target: Chosen),
       ),
     ],
@@ -1717,7 +1716,7 @@ mod tests {
       ActionDefinition(
         label: Tx("Open a Duplication Site"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Add a duplication site"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Add a duplication site"), followup: None),
         effect: AddFixedSite(site_type: Duplication),
       ),
     ],
@@ -1734,7 +1733,7 @@ mod tests {
       ActionDefinition(
         label: Tx("Choose a Site"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Choose 1 of 3 sites to add"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Choose 1 of 3 sites to add"), followup: None),
         effect: ChooseSiteType(offer_count: 3),
       ),
     ],
@@ -1751,13 +1750,13 @@ mod tests {
       ActionDefinition(
         label: Tx("Claim the Open Market"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("The next shop is free"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("The next shop is free"), followup: None),
         effect: FreeNextShop,
       ),
       ActionDefinition(
         label: Tx("Pay Half the Price"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Lose half your essence; the next 3 purchases are free"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Lose half your essence; the next 3 purchases are free"), followup: None),
         effect: LoseHalfEssenceAndFreePurchases(count: 3),
       ),
     ],
@@ -1774,19 +1773,19 @@ mod tests {
       ActionDefinition(
         label: Tx("Transfigure all"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("Transfigure all cards"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Transfigure all cards"), followup: None),
         effect: TransfigureAllCards,
       ),
       ActionDefinition(
         label: Tx("Purge the disclosed card"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Purge and transfigure its peers"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Purge and transfigure its peers"), followup: None),
         effect: PurgeDisclosedAndTransfigureSameType(transfiguration: Inspired),
       ),
       ActionDefinition(
         label: Tx("Hasten events"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: Tx("Make events fast and gain 2 Nightmares"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Make events fast and gain 2 Nightmares"), followup: None),
         effect: MakePredicateFastAndGainNightmares(predicate: Event, nightmare_count: 2),
       ),
     ],
@@ -1798,7 +1797,7 @@ mod tests {
       ActionDefinition(
         label: Tx("Take transformed cards"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: Tx("Take transformed cards and gain a Nightmare"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Take transformed cards and gain a Nightmare"), followup: None),
         effect: TakeTransfiguredCardsAndGainNightmares(
           predicate: Character,
           offer_count: 4,
@@ -1809,7 +1808,7 @@ mod tests {
       ActionDefinition(
         label: Tx("Choose one to purge"),
         id: "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
-        presentation: ActionPresentation(effect_text: Tx("Purge one, transfigure and copy the others"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Purge one, transfigure and copy the others"), followup: None),
         effect: PurgeOneTransfigureAndCopyOthers(
           offer_count: 4,
           transfiguration: Perfected,
@@ -2751,7 +2750,7 @@ mod tests {
         assert_eq!(action["effect-kind"].as_str(), Some("purge-selected"));
         assert_eq!(action["predicate"].as_str(), Some("warrior"));
         assert_eq!(action["count"].as_integer(), Some(2));
-        assert_eq!(action["followup-title"], action["label"]);
+        assert!(action.get("followup-title").is_none());
 
         let malformed: ExplorationCatalog =
             ron::from_str(&PURGE_SOURCE.replace("count: 2", "count: 0")).unwrap();

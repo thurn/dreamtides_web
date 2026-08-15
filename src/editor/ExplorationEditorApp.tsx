@@ -861,7 +861,7 @@ function ExplorationEditorRow({
             ),
             field: "effectText",
           },
-          action.effectText,
+          action.effectText ?? "",
           <p>{renderedEffect(action.renderedEffectParts, catalog)}</p>,
           (value, revision) =>
             saveActionText(slot, "effectText", value, revision),
@@ -886,9 +886,7 @@ function ExplorationEditorRow({
               }))}
               value={action.effectKind}
               onChange={(value) => {
-                const nextDefinition = definitions.get(
-                  value,
-                );
+                const nextDefinition = definitions.get(value);
                 if (nextDefinition === undefined) return;
                 const nextAction = { ...action };
                 const currentFieldKeys = new Set(
@@ -946,7 +944,8 @@ function ExplorationEditorRow({
                   action.followupSubtitle.trim() !== "";
                 if (nextDefinition.requiresFollowup && !hasPairedFollowup) {
                   nextAction.followupTitle = action.label;
-                  nextAction.followupSubtitle = action.effectText;
+                  if (action.effectText !== undefined)
+                    nextAction.followupSubtitle = action.effectText;
                 } else if (!FOLLOWUP_EFFECT_KINDS.has(nextDefinition.kind)) {
                   delete nextAction.followupTitle;
                   delete nextAction.followupSubtitle;
@@ -999,8 +998,10 @@ function ExplorationEditorRow({
                 ),
                 field: "followupSubtitle",
               },
-              action.followupSubtitle ?? action.effectText,
-              <span>{action.followupSubtitle ?? action.effectText}</span>,
+              action.followupSubtitle ?? "",
+              <span>
+                {action.followupSubtitle ?? "Derived from typed effect"}
+              </span>,
               (value, revision) =>
                 saveActionText(slot, "followupSubtitle", value, revision),
             )}
@@ -1146,15 +1147,11 @@ export default function ExplorationEditorApp({
         setData(serverData(loaded));
         setCatalog({
           cards: loaded.cards,
-          cardsById: new Map(
-            loaded.cards.map((card) => [card.id, card]),
-          ),
+          cardsById: new Map(loaded.cards.map((card) => [card.id, card])),
           dreamsigns: loaded.dreamsigns,
           dreamsignsById: new Map(
             loaded.dreamsigns.flatMap((dreamsign) =>
-              dreamsign.id === undefined
-                ? []
-                : [[dreamsign.id, dreamsign]],
+              dreamsign.id === undefined ? [] : [[dreamsign.id, dreamsign]],
             ),
           ),
         });

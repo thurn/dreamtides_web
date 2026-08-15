@@ -4,6 +4,12 @@ import { EXPLORATION_EFFECT_KINDS } from "./exploration-effect-kinds.mjs";
 import { transformExplorationData } from "./setup-assets.mjs";
 
 const CARD_ID = "00000000-0000-4000-8000-000000000001";
+const SOURCE_MESSAGE_REF = {
+  format: "trox-source-message-ref",
+  entry_id: "tx1_synthetic",
+  source_signature: "synthetic-source-signature",
+  contract_signature: "synthetic-contract-signature",
+};
 const TOML_KEYS = new Map([
   ["effectText", "effect-text"],
   ["followupTitle", "followup-title"],
@@ -162,6 +168,19 @@ const invalidActions = [
 ];
 
 describe("shared Exploration effect validation", () => {
+  it("accepts localized followup references without an effect override", () => {
+    expect(() =>
+      transformExplorationData(
+        generatorSource({
+          ...validActions[6],
+          effectText: undefined,
+          followupTitle: SOURCE_MESSAGE_REF,
+          followupSubtitle: SOURCE_MESSAGE_REF,
+        }),
+      ),
+    ).not.toThrow();
+  });
+
   it.each([
     ...validActions.map((action) => [action.effectKind, action, true]),
     ...invalidActions.map((action) => [

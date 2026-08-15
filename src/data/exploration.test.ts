@@ -121,7 +121,6 @@ describe("Exploration Wave 8 compound content", () => {
     { ...actions[3], canonicalMechanicId: "gain-card" },
     { ...actions[3], offerCount: 3 },
     { ...actions[3], followupSubtitle: "" },
-    { ...actions[4], followupTitle: undefined },
     { ...actions[4], predicate: "event" },
   ])("rejects malformed Wave 8 fields %#", async (action) => {
     mockContent(fixture(action));
@@ -572,7 +571,6 @@ describe("Exploration site-type chooser content", () => {
     { offerCount: 4 },
     { canonicalMechanicId: "gain-card" },
     { selectionPolicyId: "fixed" },
-    { followupTitle: undefined },
     { followupSubtitle: "" },
     { siteType: "Shop" },
     { count: 1 },
@@ -790,15 +788,6 @@ describe("Exploration multi-card transfiguration content", () => {
     ],
     [
       {
-        effectKind: "transfigure-selected",
-        canonicalMechanicId: "transfigure-deck-entry",
-        selectionPolicyId: "transfiguration-value",
-        predicate: "event",
-        count: 2,
-      },
-    ],
-    [
-      {
         effectKind: "transfigure-random-cards",
         canonicalMechanicId: "transfigure-deck-entry",
         selectionPolicyId: "uniform",
@@ -988,15 +977,6 @@ describe("Exploration counted deck mutation content", () => {
         selectionPolicyId: "card-fit-quality",
         predicate: "event",
         count: 0,
-      },
-    ],
-    [
-      {
-        effectKind: "replace-selected",
-        canonicalMechanicId: "replace-deck-entry",
-        selectionPolicyId: "card-fit-quality",
-        predicate: "event",
-        count: 2,
       },
     ],
     [

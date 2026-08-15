@@ -91,7 +91,8 @@ export interface ExplorationActionContent {
   id: ExplorationActionId;
   /** Strings are accepted only by synthetic fixtures; loaded content is typed. */
   label: string | LocalizedString;
-  effectText: string | LocalizedString | SourceMessage;
+  /** Optional encounter-specific override; typed mechanics own the default copy. */
+  effectText?: string | LocalizedString | SourceMessage;
   followupTitle?: string | LocalizedString | SourceMessage;
   followupSubtitle?: string | LocalizedString | SourceMessage;
   effectKind: ExplorationEffectKind;
@@ -195,6 +196,7 @@ function hydrateEffectMessage(
 function messageArgumentNames(
   value: ExplorationActionContent["effectText"],
 ): readonly string[] {
+  if (value === undefined) return [];
   if (value instanceof SourceMessage) return Object.keys(value.argumentSchemas);
   if (typeof value === "string") {
     return [...value.matchAll(/\{([a-z][a-z0-9_]*)\}/gu)].map(
@@ -396,18 +398,12 @@ function validateWave8CompoundFields(raw: ExplorationActionContent): void {
       `Invalid Exploration data: ${raw.effectKind} requires offerCount 4`,
     );
   }
-  const requiresFollowup =
+  const supportsFollowup =
     raw.effectKind === "take-transfigured-cards-and-gain-nightmares" ||
     raw.effectKind === "purge-one-transfigure-and-copy-others";
-  if (requiresFollowup) {
-    if (raw.followupTitle === undefined || raw.followupSubtitle === undefined) {
-      throw new Error(
-        `Invalid Exploration data: ${raw.effectKind} requires a paired nonblank followup`,
-      );
-    }
-  } else if (
-    raw.followupTitle !== undefined ||
-    raw.followupSubtitle !== undefined
+  if (
+    !supportsFollowup &&
+    (raw.followupTitle !== undefined || raw.followupSubtitle !== undefined)
   ) {
     throw new Error(
       `Invalid Exploration data: ${raw.effectKind} does not support a followup`,
@@ -415,7 +411,10 @@ function validateWave8CompoundFields(raw: ExplorationActionContent): void {
   }
   const tokens = messageArgumentNames(raw.effectText);
   if (raw.effectKind === "purge-disclosed-and-transfigure-same-type") {
-    if (tokens.length !== 1 || tokens[0] !== "deck_card") {
+    if (
+      raw.effectText !== undefined &&
+      (tokens.length !== 1 || tokens[0] !== "deck_card")
+    ) {
       throw new Error(
         "Invalid Exploration data: purge-disclosed-and-transfigure-same-type requires exactly the deck-card presentation token",
       );
@@ -551,11 +550,6 @@ function validateSiteTypeChoiceFields(raw: ExplorationActionContent): void {
   if (raw.offerCount !== 3) {
     throw new Error(
       "Invalid Exploration data: choose-site-type requires offerCount 3",
-    );
-  }
-  if (raw.followupTitle === undefined || raw.followupSubtitle === undefined) {
-    throw new Error(
-      "Invalid Exploration data: choose-site-type requires a paired followup",
     );
   }
   if (messageArgumentNames(raw.effectText).length !== 0) {
@@ -780,15 +774,6 @@ function validateMultiCardTransfigurationFields(
       `Invalid Exploration data: transfiguration does not apply to ${raw.effectKind}`,
     );
   }
-  if (
-    raw.effectKind === "transfigure-selected" &&
-    (raw.count ?? 0) > 1 &&
-    (raw.followupTitle === undefined || raw.followupSubtitle === undefined)
-  ) {
-    throw new Error(
-      "Invalid Exploration data: multi-card transfigure-selected requires a paired followup",
-    );
-  }
   if (AUTOMATIC_MULTI_CARD_TRANSFIGURATION_EFFECT_KINDS.has(raw.effectKind)) {
     if (raw.followupTitle !== undefined || raw.followupSubtitle !== undefined) {
       throw new Error(
@@ -920,16 +905,6 @@ function validateWave4bFields(raw: ExplorationActionContent): void {
     }
   }
   if (
-    (raw.effectKind === "replace-selected" ||
-      raw.effectKind === "transfigure-fixed-selected") &&
-    count > 1 &&
-    (raw.followupTitle === undefined || raw.followupSubtitle === undefined)
-  ) {
-    throw new Error(
-      `Invalid Exploration data: ${raw.effectKind} with count greater than one requires a paired followup`,
-    );
-  }
-  if (
     raw.effectKind === "change-random-card-type" &&
     raw.cardType !== "Character" &&
     raw.cardType !== "Event"
@@ -1041,8 +1016,9 @@ function validateWave7DeckMutationFields(raw: ExplorationActionContent): void {
     }
     const tokens = messageArgumentNames(raw.effectText);
     if (
-      !tokens.includes("fixed_card") ||
-      tokens.some((token) => token !== "fixed_card")
+      raw.effectText !== undefined &&
+      (!tokens.includes("fixed_card") ||
+        tokens.some((token) => token !== "fixed_card"))
     ) {
       throw new Error(
         "Invalid Exploration data: replace-random-with-card requires only the fixed-card presentation token",
@@ -1068,7 +1044,7 @@ function validateWave7DeckMutationFields(raw: ExplorationActionContent): void {
     }
     if (raw.deckTarget === "offered") {
       if (
-        !tokens.includes("deck_card") ||
+        (raw.effectText !== undefined && !tokens.includes("deck_card")) ||
         raw.followupTitle !== undefined ||
         raw.followupSubtitle !== undefined
       ) {
@@ -1076,13 +1052,9 @@ function validateWave7DeckMutationFields(raw: ExplorationActionContent): void {
           "Invalid Exploration data: offered change-card-type-selected requires a deck-card token and no followup",
         );
       }
-    } else if (
-      raw.deckTarget !== "chosen" ||
-      raw.followupTitle === undefined ||
-      raw.followupSubtitle === undefined
-    ) {
+    } else if (raw.deckTarget !== "chosen") {
       throw new Error(
-        "Invalid Exploration data: chosen change-card-type-selected requires a paired followup",
+        "Invalid Exploration data: change-card-type-selected requires a chosen or offered target",
       );
     }
   }
@@ -1114,7 +1086,9 @@ function validateAction(
   raw = {
     ...raw,
     label: hydrateStaticMessage(raw.label, "action label"),
-    effectText: hydrateEffectMessage(raw.effectText),
+    ...(raw.effectText === undefined
+      ? {}
+      : { effectText: hydrateEffectMessage(raw.effectText) }),
     ...(raw.followupTitle === undefined
       ? {}
       : { followupTitle: hydrateEffectMessage(raw.followupTitle) }),
@@ -1141,14 +1115,6 @@ function validateAction(
   validateMultiCardTransfigurationFields(raw);
   validateWave4bFields(raw);
   validateWave7DeckMutationFields(raw);
-  if (
-    (raw.followupTitle === undefined) !==
-    (raw.followupSubtitle === undefined)
-  ) {
-    throw new Error(
-      "Invalid Exploration data: action followup fields must be paired",
-    );
-  }
   const targeted = new Set<ExplorationEffectKind>([
     "change-subtype-selected",
     "change-card-type-selected",
@@ -1276,7 +1242,9 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
       );
     }
     return {
-      cardId: parseCardId(requiredString(encounter.cardId, "encounter card id")),
+      cardId: parseCardId(
+        requiredString(encounter.cardId, "encounter card id"),
+      ),
       prose: hydrateStaticMessage(encounter.prose, "encounter prose"),
       actions: actions.map(validateAction),
     } satisfies ExplorationEncounterContent;

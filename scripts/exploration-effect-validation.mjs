@@ -110,11 +110,13 @@ export function validateExplorationEffectAuthoredFields(action, { fail }) {
 }
 
 function hasTokens(text) {
-  return /\$[A-Z][A-Z0-9_]*|\{[^{}]+\}/u.test(text);
+  return typeof text === "string" && /\$[A-Z][A-Z0-9_]*|\{[^{}]+\}/u.test(text);
 }
 
 function presentationTokens(text) {
-  return text.match(/\{[a-z][a-z0-9_]*\}/gu) ?? [];
+  return typeof text === "string"
+    ? (text.match(/\{[a-z][a-z0-9_]*\}/gu) ?? [])
+    : [];
 }
 
 function rejectUnsupportedFields(action, allowedFields, fail, effectKindLabel) {
@@ -138,16 +140,31 @@ function requireNoFollowup(action, fail) {
   }
 }
 
-function requirePairedFollowup(action, fail, nonblank = false) {
-  const titleValid =
-    typeof action.followupTitle === "string" &&
-    (!nonblank || action.followupTitle.trim() !== "");
-  const subtitleValid =
-    typeof action.followupSubtitle === "string" &&
-    (!nonblank || action.followupSubtitle.trim() !== "");
+function validFollowupOverride(value, nonblank) {
+  if (value === undefined) return true;
+  if (typeof value === "string") return !nonblank || value.trim() !== "";
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    value.format === "trox-source-message-ref" &&
+    typeof value.entry_id === "string"
+  );
+}
+
+function validateFollowupOverrides(action, fail, nonblank = false) {
+  if (
+    action.followupTitle === undefined &&
+    action.followupSubtitle === undefined
+  )
+    return;
+  const titleValid = validFollowupOverride(action.followupTitle, nonblank);
+  const subtitleValid = validFollowupOverride(
+    action.followupSubtitle,
+    nonblank,
+  );
   if (!titleValid || !subtitleValid) {
     fail(
-      `${action.effectKind} requires a paired followup${nonblank ? " with nonblank text" : ""}`,
+      `${action.effectKind} has an invalid followup override${nonblank ? " with blank text" : ""}`,
     );
   }
 }
@@ -235,14 +252,23 @@ export function validateExplorationEffectAction(
         "purge-one-transfigure-and-copy-others",
       ].includes(kind)
     ) {
-      requirePairedFollowup(action, fail, true);
+      validateFollowupOverrides(action, fail, true);
     } else requireNoFollowup(action, fail);
-    const tokens = action.effectText.match(/\{[^{}]+\}/gu) ?? [];
-    if (/\$[A-Z][A-Z0-9_]*/u.test(action.effectText)) {
+    const tokens =
+      typeof action.effectText === "string"
+        ? (action.effectText.match(/\{[^{}]+\}/gu) ?? [])
+        : [];
+    if (
+      typeof action.effectText === "string" &&
+      /\$[A-Z][A-Z0-9_]*/u.test(action.effectText)
+    ) {
       fail(`${kind} has an unsupported presentation token`);
     }
     if (kind === "purge-disclosed-and-transfigure-same-type") {
-      if (tokens.length !== 1 || tokens[0] !== "{deck_card}") {
+      if (
+        action.effectText !== undefined &&
+        (tokens.length !== 1 || tokens[0] !== "{deck_card}")
+      ) {
         fail(`${kind} requires exactly the deck-card presentation token`);
       }
     } else {
@@ -323,7 +349,11 @@ export function validateExplorationEffectAction(
     ) {
       fail(`${kind} does not support presentation tokens`);
     }
-    if (kind === "purge-starter-card" && !tokens.includes("{starter_card}")) {
+    if (
+      kind === "purge-starter-card" &&
+      action.effectText !== undefined &&
+      !tokens.includes("{starter_card}")
+    ) {
       fail(`${kind} must present {starter_card}`);
     }
     requireNoFollowup(action, fail);
@@ -361,7 +391,7 @@ export function validateExplorationEffectAction(
       requireTransfiguration(action, transfigurations, fail);
     }
     if (kind === "transfigure-selected" && action.count > 1) {
-      requirePairedFollowup(action, fail);
+      validateFollowupOverrides(action, fail);
     } else if (kind !== "transfigure-selected") {
       requireNoFollowup(action, fail);
       if (hasTokens(action.effectText))
@@ -415,7 +445,7 @@ export function validateExplorationEffectAction(
           `multi-card ${kind} requires a chosen target and supported predicate; chosen deck-target required`,
         );
       }
-      requirePairedFollowup(action, fail);
+      validateFollowupOverrides(action, fail);
     }
     return;
   }
@@ -522,7 +552,7 @@ export function validateExplorationEffectAction(
     requireMetadata(action, "add-site", ["site-uniform"], fail);
     rejectUnsupportedFields(action, ["offerCount"], fail, effectKindLabel);
     if (action.offerCount !== 3) fail(`${kind} requires ${offerCountLabel} 3`);
-    requirePairedFollowup(action, fail, true);
+    validateFollowupOverrides(action, fail, true);
     if (hasTokens(action.effectText))
       fail(`${kind} does not support presentation tokens`);
   }

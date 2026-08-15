@@ -418,9 +418,7 @@ export function buildCardMaps(cardsV2) {
  * case-insensitively. Returns a `{ id -> count }` summary for logging.
  */
 export function validateAvatarMapping(dreamscapes, avatarIds) {
-  const known = new Map(
-    [...avatarIds].map((id) => [id.toLowerCase(), id]),
-  );
+  const known = new Map([...avatarIds].map((id) => [id.toLowerCase(), id]));
   const assignedTo = new Map(); // lowercased avatar id -> dreamscape id
   const unknown = [];
   const counts = {};
@@ -553,13 +551,15 @@ function transformTomlRecord(record) {
 }
 
 function isSourceMessageRef(value) {
-  return value !== null &&
+  return (
+    value !== null &&
     typeof value === "object" &&
     !Array.isArray(value) &&
     value.format === "trox-source-message-ref" &&
     typeof value.entry_id === "string" &&
     typeof value.source_signature === "string" &&
-    typeof value.contract_signature === "string";
+    typeof value.contract_signature === "string"
+  );
 }
 
 /** Convert and validate the authored Exploration encounter catalog. */
@@ -629,7 +629,7 @@ export function transformExplorationData(source) {
         const action = {
           id,
           label,
-          effectText,
+          ...(effectText === undefined ? {} : { effectText }),
           ...(followupTitle === undefined ? {} : { followupTitle }),
           ...(followupSubtitle === undefined ? {} : { followupSubtitle }),
           effectKind,
@@ -685,7 +685,9 @@ export function transformExplorationData(source) {
   const actionIds = new Set();
   for (const encounter of encounters) {
     if (typeof encounter.cardId !== "string" || encounter.cardId.length === 0) {
-      throw new Error("exploration_site.toml: every encounter requires card-id");
+      throw new Error(
+        "exploration_site.toml: every encounter requires card-id",
+      );
     }
     if (encounterIds.has(encounter.cardId.toLowerCase())) {
       throw new Error(
@@ -723,7 +725,7 @@ export function transformExplorationData(source) {
           `exploration_site.toml: action ${action.id} has unsupported selection-policy-id ${String(action.selectionPolicyId)}`,
         );
       }
-      for (const key of ["label", "effectText"]) {
+      for (const key of ["label"]) {
         if (
           !isSourceMessageRef(action[key]) &&
           (typeof action[key] !== "string" || action[key].trim() === "")
@@ -733,7 +735,7 @@ export function transformExplorationData(source) {
           );
         }
       }
-      if (typeof action.effectText === "string") validateExplorationEffectAction(action, {
+      validateExplorationEffectAction(action, {
         predicates: new Set(
           REWARD_CARD_PREDICATES.filter((predicate) => predicate !== "any"),
         ),
@@ -762,7 +764,9 @@ export function transformExplorationData(source) {
               );
             }
           }
-          throw new Error(`exploration_site.toml: action ${action.id} ${message}`);
+          throw new Error(
+            `exploration_site.toml: action ${action.id} ${message}`,
+          );
         },
         terminology: {
           effectKind: "effect-kind",
@@ -1027,14 +1031,6 @@ export function transformExplorationData(source) {
           );
         }
         if (
-          (action.followupTitle === undefined) !==
-          (action.followupSubtitle === undefined)
-        ) {
-          throw new Error(
-            `exploration_site.toml: action ${action.id} requires both followup fields`,
-          );
-        }
-        if (
           typeof action.effectText === "string" &&
           /\$[A-Z][A-Z0-9_]*/u.test(action.effectText)
         ) {
@@ -1042,9 +1038,14 @@ export function transformExplorationData(source) {
             `exploration_site.toml: action ${action.id} uses an untyped presentation token`,
           );
         }
-        const presentationSlots = typeof action.effectText === "string" ? [
-          ...new Set(action.effectText.match(/\{([a-z][a-z0-9_]*)\}/gu) ?? []),
-        ] : null;
+        const presentationSlots =
+          typeof action.effectText === "string"
+            ? [
+                ...new Set(
+                  action.effectText.match(/\{([a-z][a-z0-9_]*)\}/gu) ?? [],
+                ),
+              ]
+            : null;
         const allowedSlots = new Set([
           ...(action.effectKind === "gain-offered-card"
             ? ["{offered_card}"]
@@ -1115,9 +1116,7 @@ export function transformExplorationData(source) {
           ? `${action.followupTitle}\n${action.followupSubtitle}`
           : "";
       const followupSlots = [
-        ...new Set(
-          followupText.match(/\{([a-z][a-z0-9_]*)\}/gu) ?? [],
-        ),
+        ...new Set(followupText.match(/\{([a-z][a-z0-9_]*)\}/gu) ?? []),
       ];
       const allowedFollowupSlots = new Set([
         "{action_label}",
@@ -1479,9 +1478,7 @@ function setupCatalogFixture({
   const parsedCards = parse(readFileSync(cardTomlPath, "utf8"));
   const jsonCards = (parsedCards.cards ?? []).map(transformCard);
   const parsedAvatars = parse(readFileSync(avatarV2TomlPath, "utf8"));
-  const jsonAvatars = (parsedAvatars.avatar ?? []).map(
-    transformAvatar,
-  );
+  const jsonAvatars = (parsedAvatars.avatar ?? []).map(transformAvatar);
   const parsedDreamsigns = parse(readFileSync(dreamsignTomlPath, "utf8"));
   const altTextByImageName = readDreamsignAltText(dreamsignArtDir);
   const jsonDreamsigns = (parsedDreamsigns.dreamsign ?? []).map((dreamsign) =>
@@ -1655,9 +1652,7 @@ export function setupAssets({
     rootDir: ROOT,
     tutorialTomlPath,
   });
-  const tutorialAvatars = parse(
-    readFileSync(avatarV2TomlPath, "utf8"),
-  ).avatar;
+  const tutorialAvatars = parse(readFileSync(avatarV2TomlPath, "utf8")).avatar;
   const tutorialDreamwellCards = parse(
     readFileSync(dreamwellTomlPath, "utf8"),
   ).dreamwell;
@@ -1684,10 +1679,7 @@ export function setupAssets({
   // pool composition consumed by the tides4 pool variant.
   const tidesSourcePath = join(DATA_DIR, "tides.toml");
   const tides4JsonPath = join(publicDir, "tides4-data.json");
-  const generatedTides4JsonPath = join(
-    generatedConfigDir,
-    "tides4-data.json",
-  );
+  const generatedTides4JsonPath = join(generatedConfigDir, "tides4-data.json");
   if (existsSync(tidesSourcePath) && existsSync(avatarV2TomlPath)) {
     const served = compileTidesData(
       parse(readFileSync(tidesSourcePath, "utf8")),
@@ -1734,9 +1726,7 @@ export function setupAssets({
     avatarV2JsonPath,
     JSON.stringify(jsonAvatarsV2, null, 2) + "\n",
   );
-  console.log(
-    `Wrote ${jsonAvatarsV2.length} avatars to avatars-v2-data.json`,
-  );
+  console.log(`Wrote ${jsonAvatarsV2.length} avatars to avatars-v2-data.json`);
 
   // Dreamwell cards: the shared deck both players draw from one per turn during
   // the Dreamwell phase (docs/battle_rules/battle_rules.md). Parsed with the
@@ -1918,12 +1908,19 @@ export function setupAssets({
     ),
   );
   for (const affiliation of jsonAffiliations) {
-    if (!Array.isArray(affiliation.tideIds) || affiliation.tideIds.length !== 3) {
-      throw new Error(`affiliations.toml (${affiliation.id}) must declare exactly three tides`);
+    if (
+      !Array.isArray(affiliation.tideIds) ||
+      affiliation.tideIds.length !== 3
+    ) {
+      throw new Error(
+        `affiliations.toml (${affiliation.id}) must declare exactly three tides`,
+      );
     }
     for (const tideId of affiliation.tideIds) {
       if (!knownTideIds.has(tideId)) {
-        throw new Error(`affiliations.toml (${affiliation.id}) references unknown tide ${tideId}`);
+        throw new Error(
+          `affiliations.toml (${affiliation.id}) references unknown tide ${tideId}`,
+        );
       }
     }
   }
@@ -1956,7 +1953,9 @@ export function setupAssets({
   writeFileSync(atlasJsonPath, JSON.stringify(jsonAtlasData, null, 2) + "\n");
   console.log("Wrote Atlas data to atlas-data.json");
 
-  console.log("Assembling economy data from journey, shop-site, sites, and battle catalogs...");
+  console.log(
+    "Assembling economy data from journey, shop-site, sites, and battle catalogs...",
+  );
   const parsedSites = parse(readFileSync(sitesTomlPath, "utf8"));
   const jsonEconomyData = compileEconomyData({
     journey: parse(readFileSync(journeyTomlPath, "utf8")),
@@ -2009,16 +2008,13 @@ export function setupAssets({
   }
 
   console.log("Parsing sites.toml...");
-  const jsonSitesData = compileSitesData(
-    parsedSites,
-    {
-      guides: jsonDreamGuides,
-      dreamscapes: jsonDreamscapes,
-      glossaryIds: Array.isArray(parsedGlossary.entries)
-        ? parsedGlossary.entries.map((entry) => entry.id)
-        : [],
-    },
-  );
+  const jsonSitesData = compileSitesData(parsedSites, {
+    guides: jsonDreamGuides,
+    dreamscapes: jsonDreamscapes,
+    glossaryIds: Array.isArray(parsedGlossary.entries)
+      ? parsedGlossary.entries.map((entry) => entry.id)
+      : [],
+  });
   const serializedSitesData = JSON.stringify(jsonSitesData, null, 2) + "\n";
   writeFileSync(sitesJsonPath, serializedSitesData);
   writeFileSync(generatedSitesJsonPath, serializedSitesData);
@@ -2274,10 +2270,7 @@ export function setupAssets({
   const avatarArtByImageNumber = new Map();
   for (const avatar of jsonAvatarsV2) {
     if (!avatarArtByImageNumber.has(avatar.imageNumber)) {
-      avatarArtByImageNumber.set(
-        avatar.imageNumber,
-        avatar.name,
-      );
+      avatarArtByImageNumber.set(avatar.imageNumber, avatar.name);
     }
   }
 

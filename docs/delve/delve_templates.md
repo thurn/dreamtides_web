@@ -5,8 +5,8 @@ narrative focus. The player enters a short event inspired by that card and
 chooses between two actions.
 
 Every production encounter is authored in
-[`../../data/exploration_site.ron`](../../data/exploration_site.ron). An action colocates
-its player-facing presentation with one closed typed gameplay effect:
+[`../../data/exploration_site.ron`](../../data/exploration_site.ron). An action stores its
+encounter-specific label beside one closed typed gameplay effect:
 
 ```ron
 [
@@ -17,9 +17,6 @@ its player-facing presentation with one closed typed gameplay effect:
       ActionDefinition(
         label: "Invite someone through",
         id: "6662e7ce-9ea7-49bf-85fe-4bbe6728f282",
-        presentation: ActionPresentation(
-          effect_text: "Gain {offered_card}",
-        ),
         effect: GainGeneratedCard(
           predicate: Character,
           count: None,
@@ -30,15 +27,26 @@ its player-facing presentation with one closed typed gameplay effect:
 ]
 ```
 
-The `presentation` record owns text shown to the player. `effect` owns all
-gameplay semantics. Changing presentation text cannot change which cards are
-eligible, whether a target is chosen, or how the effect resolves.
+TypeScript derives the mechanical effect summary and standard followup copy
+from `effect`. An optional `presentation_override` record stores wording that
+is specific to one encounter:
+
+```ron
+presentation_override: ActionPresentationOverride(
+  followup: FollowupOverride(
+    subtitle: Tx("Choose the figure reflected in the lantern glass."),
+  ),
+),
+```
+
+Presentation overrides cannot change which cards are eligible, whether a
+target is chosen, or how the effect resolves.
 Each action has its own lowercase UUIDv4 identity.
 
 ## Presentation slots
 
-Effect text supports typed card-reference slots where a runtime-selected card
-must be shown inline:
+Effect-text overrides support typed card-reference slots where a
+runtime-selected card must be shown inline:
 
 - `{offered_card}` displays the card produced by `GainGeneratedCard`.
 - `{deck_card}` displays the deck entry automatically offered by an effect whose
@@ -73,8 +81,9 @@ it with `{deck_card}`.
 The browser editor obtains labels, controls, and safe field defaults from the
 closed code-owned schema in
 [`../../scripts/exploration-effect-definitions.mjs`](../../scripts/exploration-effect-definitions.mjs).
-That schema is development tooling metadata. Player-facing action and followup
-copy stays in `data/exploration_site.ron` and is saved on the individual action.
+That schema is development tooling metadata. Standard mechanical copy is
+derived in TypeScript; encounter labels and encounter-specific copy overrides
+are saved on the individual action in `data/exploration_site.ron`.
 
 After editing canonical data, run `scripts/regenerate-assets.sh` to regenerate
 the compatibility TOML and browser JSON.

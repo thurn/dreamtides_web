@@ -29,8 +29,8 @@ use crate::models::dreamwell::{
     self, ArtCrop, DeckTier, DreamwellCardDefinition, DreamwellCatalog,
 };
 use crate::models::exploration::{
-    ActionDefinition, ActionEffect, ActionId, ActionPresentation, CardTypeTarget, DeckTarget,
-    EffectKind, ExplorationCatalog, FixedSiteType, Followup, Predicate,
+    ActionDefinition, ActionEffect, ActionId, ActionPresentationOverride, CardTypeTarget,
+    DeckTarget, EffectKind, ExplorationCatalog, FixedSiteType, FollowupOverride, Predicate,
 };
 use crate::models::figments::{
     ArtCrop as FigmentArtCrop, CharacterType as FigmentCharacterType, FigmentBehavior,
@@ -2287,27 +2287,11 @@ fn patch_exploration_action(source: &str, action: &ActionDefinition) -> Result<S
             &ron::to_string(&action.label)?,
         )?;
     }
-    if existing.presentation.effect_text != action.presentation.effect_text
-        && existing.presentation.followup == action.presentation.followup
-    {
-        let action_record =
-            typed_record_range_at_indent(&patched, "ActionDefinition", "id", &action_id, 6)?;
-        let presentation = top_level_field_value_range(&patched, action_record, "presentation")?
-            .context("MALFORMED_SOURCE: Exploration action has no presentation field")?;
-        let effect_text = top_level_field_value_range(&patched, presentation, "effect_text")?
-            .context("MALFORMED_SOURCE: Exploration presentation has no effect_text field")?;
-        patched = format!(
-            "{}{}{}",
-            &patched[..effect_text.start],
-            ron::to_string(&action.presentation.effect_text)?,
-            &patched[effect_text.end..],
-        );
-    } else if existing.presentation != action.presentation {
-        patched = patch_exploration_action_field(
+    if existing.presentation_override != action.presentation_override {
+        patched = patch_exploration_presentation_override(
             &patched,
             &action_id,
-            "presentation",
-            &render_ron_value(&action.presentation, true)?,
+            action.presentation_override.as_ref(),
         )?;
     }
     if existing.effect != action.effect {
@@ -2319,6 +2303,49 @@ fn patch_exploration_action(source: &str, action: &ActionDefinition) -> Result<S
         )?;
     }
     Ok(patched)
+}
+
+fn patch_exploration_presentation_override(
+    source: &str,
+    action_id: &str,
+    replacement: Option<&ActionPresentationOverride>,
+) -> Result<String> {
+    let record = typed_record_range_at_indent(source, "ActionDefinition", "id", action_id, 6)?;
+    let existing = top_level_field_value_range(source, record.clone(), "presentation_override")?;
+    match (existing, replacement) {
+        (Some(value), Some(replacement)) => Ok(format!(
+            "{}{}{}",
+            &source[..value.start],
+            render_ron_value(replacement, true)?,
+            &source[value.end..],
+        )),
+        (Some(value), None) => {
+            let line_start = source[..value.start]
+                .rfind('\n')
+                .map_or(0, |index| index + 1);
+            let mut line_end = source[value.end..]
+                .find('\n')
+                .map_or(source.len(), |offset| value.end + offset + 1);
+            if line_end < line_start {
+                line_end = value.end;
+            }
+            Ok(format!("{}{}", &source[..line_start], &source[line_end..]))
+        }
+        (None, Some(replacement)) => {
+            let id = top_level_field_value_range(source, record, "id")?
+                .context("MALFORMED_SOURCE: Exploration action has no id field")?;
+            let line_end = source[id.end..]
+                .find('\n')
+                .map_or(id.end, |offset| id.end + offset + 1);
+            Ok(format!(
+                "{}        presentation_override: {},\n{}",
+                &source[..line_end],
+                render_ron_value(replacement, true)?,
+                &source[line_end..],
+            ))
+        }
+        (None, None) => Ok(source.to_owned()),
+    }
 }
 
 fn patch_exploration_action_field(
@@ -2720,29 +2747,35 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
         );
     }
     let label = required_json_string(object, "label")?;
+    let effect_text = optional_json_string(object, "effectText")?;
     let followup_title = optional_json_string(object, "followupTitle")?;
     let followup_subtitle = optional_json_string(object, "followupSubtitle")?;
-    if followup_title.is_some() && followup_subtitle.is_none() {
-        bail!("INVALID_EDIT: followupTitle requires followupSubtitle");
-    }
+    let followup = if followup_title.is_some() || followup_subtitle.is_some() {
+        Some(FollowupOverride {
+            title: followup_title
+                .filter(|title| title != &label)
+                .map(exploration_template_source)
+                .transpose()?,
+            subtitle: followup_subtitle
+                .map(exploration_template_source)
+                .transpose()?,
+        })
+    } else {
+        None
+    };
+    let presentation_override = if effect_text.is_some() || followup.is_some() {
+        Some(ActionPresentationOverride {
+            effect_text: effect_text.map(exploration_template_source).transpose()?,
+            followup,
+        })
+    } else {
+        None
+    };
     Ok(ActionDefinition {
         label: localized_source(label.clone())?,
         id: ActionId::parse(&required_json_string(object, "id")?)
             .map_err(|error| anyhow::anyhow!("INVALID_EDIT: {error}"))?,
-        presentation: ActionPresentation {
-            effect_text: exploration_template_source(required_json_string(object, "effectText")?)?,
-            followup: followup_subtitle
-                .map(|subtitle| {
-                    Ok::<Followup, anyhow::Error>(Followup {
-                        title: followup_title
-                            .filter(|title| title != &label)
-                            .map(exploration_template_source)
-                            .transpose()?,
-                        subtitle: exploration_template_source(subtitle)?,
-                    })
-                })
-                .transpose()?,
-        },
+        presentation_override,
         effect,
     })
 }
@@ -3858,13 +3891,13 @@ TidesCatalog(
       ActionDefinition(
         label: Tx("First"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation: ActionPresentation(effect_text: Tx("First effect"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("First effect"), followup: None),
         effect: MakeFastAll,
       ),
       ActionDefinition(
         label: Tx("Second"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-        presentation: ActionPresentation(effect_text: Tx("Second effect"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Second effect"), followup: None),
         effect: AddSite,
       ),
     ],
@@ -3877,13 +3910,13 @@ TidesCatalog(
       ActionDefinition(
         label: Tx("Third"),
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-        presentation: ActionPresentation(effect_text: Tx("Third effect"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Third effect"), followup: None),
         effect: MakeFastAll,
       ),
       ActionDefinition(
         label: Tx("Fourth"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation: ActionPresentation(effect_text: Tx("Fourth effect"), followup: None),
+        presentation_override: ActionPresentationOverride(effect_text: Tx("Fourth effect"), followup: None),
         effect: AddSite,
       ),
     ],
@@ -6405,7 +6438,11 @@ DreamwellCatalog(
     #[test]
     fn exploration_presentation_edit_preserves_unrelated_source() {
         let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
-        catalog[0].actions[0].presentation.effect_text = ls("Edited effect");
+        catalog[0].actions[0]
+            .presentation_override
+            .as_mut()
+            .unwrap()
+            .effect_text = Some(ls("Edited effect"));
         let patched = patch_exploration_action(EXPLORATION_SOURCE, &catalog[0].actions[0]).unwrap();
 
         assert!(patched.starts_with("// Stable Exploration guidance."));
@@ -6425,6 +6462,25 @@ DreamwellCatalog(
     }
 
     #[test]
+    fn exploration_presentation_override_can_be_removed_and_inserted() {
+        let mut without_override: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+        without_override[0].actions[0].presentation_override = None;
+        let removed =
+            patch_exploration_action(EXPLORATION_SOURCE, &without_override[0].actions[0]).unwrap();
+        assert_eq!(
+            ron::from_str::<ExplorationCatalog>(&removed).unwrap(),
+            without_override
+        );
+
+        let with_override: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
+        let inserted = patch_exploration_action(&removed, &with_override[0].actions[0]).unwrap();
+        assert_eq!(
+            ron::from_str::<ExplorationCatalog>(&inserted).unwrap(),
+            with_override
+        );
+    }
+
+    #[test]
     fn exploration_editor_preserves_typed_presentation_placeholders() {
         let mut value = action(EffectKind::GainDreamsign);
         value
@@ -6433,8 +6489,12 @@ DreamwellCatalog(
             .insert("effectText".into(), json!("Gain {nightmare_card}"));
         let action = action_from_compat(value).unwrap();
         let arguments = action
-            .presentation
+            .presentation_override
+            .as_ref()
+            .unwrap()
             .effect_text
+            .as_ref()
+            .unwrap()
             .ron_template_arguments()
             .expect("placeholder-bearing editor copy must remain a RON template");
         assert_eq!(
@@ -6458,7 +6518,9 @@ DreamwellCatalog(
         let inherited = action_from_compat(inherited).unwrap();
         assert!(
             inherited
-                .presentation
+                .presentation_override
+                .as_ref()
+                .unwrap()
                 .followup
                 .as_ref()
                 .unwrap()
@@ -6478,7 +6540,9 @@ DreamwellCatalog(
         let custom = action_from_compat(custom).unwrap();
         assert!(
             custom
-                .presentation
+                .presentation_override
+                .as_ref()
+                .unwrap()
                 .followup
                 .as_ref()
                 .unwrap()

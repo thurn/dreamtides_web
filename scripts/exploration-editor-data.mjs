@@ -23,7 +23,10 @@ import {
 } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_EXPLORATION_TOML_PATH = join("data", "exploration_site.toml");
+export const DEFAULT_EXPLORATION_TOML_PATH = join(
+  "data",
+  "exploration_site.toml",
+);
 export const DEFAULT_EXPLORATION_CARDS_PATH = join("data", "cards.toml");
 export const DEFAULT_EXPLORATION_DREAMSIGNS_PATH = join(
   "data",
@@ -104,7 +107,9 @@ function sourceCatalogFor(rootDir, options = {}) {
     cached = {
       version,
       bundle,
-      catalog: (options.create ?? ((value) => new SourceCatalog(value)))(bundle),
+      catalog: (options.create ?? ((value) => new SourceCatalog(value)))(
+        bundle,
+      ),
     };
     sourceCatalogs.set(rootDir, cached);
   }
@@ -136,11 +141,15 @@ function authoringAction(raw, sourceCatalog) {
   return {
     ...raw,
     label: sourceAuthoringText(raw.label, "action label", sourceCatalog),
-    "effect-text": sourceAuthoringText(
-      raw["effect-text"],
-      "action effect text",
-      sourceCatalog,
-    ),
+    ...(raw["effect-text"] === undefined
+      ? {}
+      : {
+          "effect-text": sourceAuthoringText(
+            raw["effect-text"],
+            "action effect text",
+            sourceCatalog,
+          ),
+        }),
     ...(raw["followup-title"] === undefined
       ? {}
       : {
@@ -181,7 +190,9 @@ function camelAction(raw) {
   const action = {
     id: raw.id,
     label: raw.label,
-    effectText: raw["effect-text"],
+    ...(raw["effect-text"] === undefined
+      ? {}
+      : { effectText: raw["effect-text"] }),
     ...(raw["followup-title"] === undefined
       ? {}
       : { followupTitle: raw["followup-title"] }),
@@ -285,7 +296,9 @@ export function normalizeExplorationAction(rawAction, references = undefined) {
     ...rawAction,
     id: requiredString(rawAction.id, "action id"),
     label: requiredString(rawAction.label, "action label").trim(),
-    effectText: requiredString(rawAction.effectText, "effect text"),
+    ...(rawAction.effectText === undefined
+      ? {}
+      : { effectText: requiredString(rawAction.effectText, "effect text") }),
     effectKind,
     canonicalMechanicId: definition.canonicalMechanicId,
   };
@@ -295,15 +308,6 @@ export function normalizeExplorationAction(rawAction, references = undefined) {
     !definition.allowedSelectionPolicyIds.includes(action.selectionPolicyId)
   ) {
     action.selectionPolicyId = definition.defaultSelectionPolicyId;
-  }
-  if (
-    (action.followupTitle === undefined) !==
-    (action.followupSubtitle === undefined)
-  ) {
-    throw editorError(
-      "INVALID_EFFECT_FIELD",
-      "Followup title and subtitle must be authored together.",
-    );
   }
   const applicableFields = new Set(definition.fields.map((field) => field.key));
   validateExplorationEffectAction(action, {

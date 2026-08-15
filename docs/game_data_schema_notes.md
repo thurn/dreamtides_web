@@ -548,9 +548,12 @@ Two-choice screen contract: every authored encounter must present two actions.
 
 Exploration encounters are keyed by the UUID of the card whose artwork and
 mechanics inspire the scene. Each encounter has exactly two player actions.
-Each action contains its player-facing presentation and one typed gameplay
-effect. Presentation slots reference runtime entities for display; the effect
-variant defines selection, targeting, and resolution semantics.
+Each action contains an encounter-specific label and one typed gameplay effect.
+TypeScript derives standard effect and followup presentation from the effect
+variant. Optional `presentation_override` fields hold wording specific to the
+encounter. Presentation slots in an override reference runtime entities for
+display; the effect variant defines selection, targeting, and resolution
+semantics.
 selected prose: pair-2 (rank 2)
 selected actions: pair-5 (rank 4)
 
