@@ -31,7 +31,7 @@ import {
   BATTLE_CARD_FORESEE,
   BATTLE_SITE_ID,
   DETERMINISTIC_SLOT,
-  DREAM_AVATAR_ID,
+  AVATAR_ID,
   ESSENCE_SITE_ID,
   FIXTURE_PROVIDER_SET,
   FORESEE_SLOT,
@@ -113,14 +113,14 @@ function expectOutcomes(label, events, gen, expected) {
 }
 
 // ---------------------------------------------------------------------------
-// (a) journey-only: start -> dreamAvatar -> open/accept -> shop buy
+// (a) journey-only: start -> avatar -> open/accept -> shop buy
 // ---------------------------------------------------------------------------
 
 function journeyOnlyFixture() {
   const gen = genesis("fixture-journey-only");
   const events = chain("p1", [
-    ["START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }],
-    ["SELECT_DREAM_AVATAR", { dreamAvatarId: DREAM_AVATAR_ID }],
+    ["START_JOURNEY", { avatarId: AVATAR_ID }],
+    ["SELECT_AVATAR", { avatarId: AVATAR_ID }],
     ["OPEN_SITE", { siteId: ESSENCE_SITE_ID }],
     ["ACCEPT_ESSENCE", { siteId: ESSENCE_SITE_ID }],
     ["OPEN_SITE", { siteId: SHOP_SITE_ID }],
@@ -145,7 +145,7 @@ function battleFixture() {
   const gen = genesis("fixture-battle");
   // Events up to the prompt-parking command; discover the promptId by folding.
   const prefix = chain("p1", [
-    ["START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }],
+    ["START_JOURNEY", { avatarId: AVATAR_ID }],
     ["ENTER_SITE", { siteId: BATTLE_SITE_ID }],
     ["BEGIN_BATTLE", { siteId: BATTLE_SITE_ID }],
     ["BATTLE_COMMAND", moveToFront(BATTLE_CARD_DETERMINISTIC, DETERMINISTIC_SLOT)],
@@ -197,7 +197,7 @@ function battleFixture() {
 function adversarialFixture() {
   const gen = genesis("fixture-adversarial");
   const prefix = [
-    ev(1, "START_JOURNEY", { dreamAvatarId: DREAM_AVATAR_ID }, "alice", 0),
+    ev(1, "START_JOURNEY", { avatarId: AVATAR_ID }, "alice", 0),
     // bob's essence adjust applies; alice's, based on the pre-bob state, sees
     // bob's applied non-neutral event in its window and BOUNCES (CAS rule 3).
     ev(2, "ADJUST_ESSENCE", { delta: 10 }, "bob", 1),

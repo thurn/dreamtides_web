@@ -64,11 +64,11 @@ describe("readTidesArtifact", () => {
       ].join("\n"),
     );
     writeFileSync(
-      join(rootDir, "data", "dream_avatars.toml"),
+      join(rootDir, "data", "avatars.toml"),
       [
-        "[[dreamAvatar]]",
+        "[[avatar]]",
         'id = "00000000-0000-4000-8000-000000000021"',
-        "[dreamAvatar.tide-pool]",
+        "[avatar.tide-pool]",
         'facets = ["00000000-0000-4000-8000-000000000001"]',
         "neutral = []",
         "",

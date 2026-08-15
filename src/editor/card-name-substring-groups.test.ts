@@ -40,7 +40,7 @@ function card(idSeed: string, name: string, cardNumber: number): EditorCardRecor
 describe("buildCardNameSubstringGroups", () => {
   it("keeps distinct overlapping matches so one UUID can appear in multiple groups", () => {
     const dreamlight = card("uuid-dreamlight", "Dreamlight Guide", 1);
-    const dream = card("uuid-dream", "Dream Avatar", 2);
+    const dream = card("uuid-dream", "Dream Walker", 2);
     const light = card("uuid-light", "Starlight Keeper", 3);
     const groups = buildCardNameSubstringGroups([
       dreamlight,

@@ -48,7 +48,7 @@ Internal coordinator files/tests and the named Cumulus component layer are the e
 - popup and press-in-place GameCard;
 - unavailable GameCard;
 - strict standalone InfoCard visual content;
-- Dream AvatarPortrait full-bleed primary with ordered Bane, Discover, and
+- AvatarPortrait full-bleed primary with ordered Bane, Discover, and
   Ephemeral text secondaries;
 - inline GlossaryTerm;
 - AtlasNode;
@@ -88,9 +88,9 @@ Runtime: `http://localhost:5174`, unique session `q6-entity-5174`, device scale 
 - Atlas: `/atlas?goto=atlas&ui=cumulus&seed=task6&game=f9ft3g`, 1440×900. Seventeen Atlas nodes. Available-node hover produced 248×294.08 primary plus two 248px top-aligned secondaries to its right.
 - Draft: `/dreamscape/0-firstlight-meadow/draft?goto=draft&ui=cumulus&seed=task6&game=jespnf`, 1440×900. Four GameCards. Hover produced 340×476 primary plus three ordered secondaries.
 - Shop: `/dreamscape/0-firstlight-meadow/shop?goto=shop&ui=cumulus&seed=task6&game=mysfdm`, 1440×900. Five GameCards. Hover produced a 340×476 reading copy and 248px secondary.
-- Deck/HUD: `/dreamscape/0-firstlight-meadow?goto=deckviewer&ui=cumulus&seed=task6&game=ezty56`, 1440×900. Semantic-source inventory included site, dream avatar, resource-essence, dreamsign, game-card, card-spark-stat, and card-energy-stat. Dreamsign hover produced a 248×239.30 reveal above the HUD.
+- Deck/HUD: `/dreamscape/0-firstlight-meadow?goto=deckviewer&ui=cumulus&seed=task6&game=ezty56`, 1440×900. Semantic-source inventory included site, avatar, resource-essence, dreamsign, game-card, card-spark-stat, and card-energy-stat. Dreamsign hover produced a 248×239.30 reveal above the HUD.
 - Battle: `/dreamscape/0-firstlight-meadow/battle?startInBattle=1&ui=cumulus&seed=task6&game=77esaw`, 1440×900 after **Begin Battle**. Five battle hand cards, all using named GameCard sources. Hover produced 340×476 primary plus a 248×120.30 Support secondary; drag dismissed it.
-- Conformance/documentation coverage supplied GlossaryTerm, InfoCard variants, unavailable, Atlas, and battle-labelled canonical card spot checks; normal HUD supplied sites, Dream Avatar, resources, Dreamsigns, GameCards, and stat orbs.
+- Conformance/documentation coverage supplied GlossaryTerm, InfoCard variants, unavailable, Atlas, and battle-labelled canonical card spot checks; normal HUD supplied sites, Avatar, resources, Dreamsigns, GameCards, and stat orbs.
 
 ### Screenshots
 
@@ -138,7 +138,7 @@ Stable path: `screenshots/entity-reveals/`
   wrapper contracts expressed through interfaces, type literals, JSX props,
   and destructured arrow parameters. Ordinary dialogs, stacks, ReactNode
   content, and local functions named `createPortal` remain valid.
-- The conformance demo now uses a real `DreamAvatarPortrait` group source with
+- The conformance demo now uses a real `AvatarPortrait` group source with
   ordered Bane, Discover, and Ephemeral secondaries, and a 29-term card fixture
   that deterministically exercises truncation. Scenario controls materially
   position their named sources; top-edge, best-effort, and safe-area sources
@@ -159,7 +159,7 @@ Stable path: `screenshots/entity-reveals/`
 - Review-remediation browser QA used `http://localhost:5175` and isolated
   session `q6-remediation-5175`, always at device scale 2. Desktop side fallback
   recorded five shown / 24 dropped secondaries and `sideFallback: true`; the
-  real Dream Avatar source rendered one primary plus the three ordered glossary
+  real Avatar source rendered one primary plus the three ordered glossary
   cards. Mobile best-effort recorded eight shown / 21 dropped,
   `bestEffortPrimaryOverlap: true`, and `circleClearance: -4.5`. Safe-area
   placement started exactly at y=52, reduced-motion transition was `none`, and
@@ -180,7 +180,7 @@ Stable path: `screenshots/entity-reveals/`
   enumerates statically knowable object-spread properties. Benign named-source
   spreads, opaque visual aliases, and non-portal computed ReactDOM members stay
   legal. The focused rule suite passes 30 cases.
-- The conformance Dream Avatar fixture uses fixed verified art key `0071`. Browser
+- The conformance Avatar fixture uses fixed verified art key `0071`. Browser
   QA measured the loaded cutout at 1024×1536; no image fell back or failed.
 - Authoritative side-fallback evidence uses stable keyboard focus at
   `http://localhost:5177/?demo=entity-reveals`, 1200×800, device scale 2, in
@@ -234,7 +234,7 @@ Stable path: `screenshots/entity-reveals/`
   generation-guarded microtask: StrictMode's immediate setup replay cancels the
   pending cleanup, while a real unmount still clears the debug surface.
 - Conformance fixtures use verified immutable art keys: card `485518048.webp`
-  (390×280), Dreamsign `runes.png` (256×256), and Dream Avatar cutout `0071.png`
+  (390×280), Dreamsign `runes.png` (256×256), and Avatar cutout `0071.png`
   (1024×1536). The demo test pins all three URLs. Browser QA found zero broken
   images before the authoritative capture.
 - The authoritative side-fallback capture overwrites the misleading artifact at
@@ -323,4 +323,4 @@ Stable path: `screenshots/entity-reveals/`
 - Desktop side fallback derives `bestEffortPrimaryOverlap` from the final primary rectangle and its source gap. Dropping an unfit secondary column therefore leaves a clear primary marked as non-overlapping.
 - Deleted token aliases are absent from primitive token comments. Regeneration completed all 12 stages with no generated tracked-file drift.
 - Focused verification passed 62 tests. `npm run lint`, `npm run typecheck`, and the full suite passed: 392 files passed and 1 skipped; 4,277 tests passed and 4 skipped. `git diff --check` passed.
-- Browser QA used `http://localhost:5189/?demo=entity-reveals` and session `q8-focus-5189`. A focused GameCard survived temporary Dream Avatar hover precedence, reopened with keyboard/focus metadata and a fresh interaction id, and emitted paired lifecycle logs. The browser error buffer was empty. The session and task-owned server were closed; port 5189 is free.
+- Browser QA used `http://localhost:5189/?demo=entity-reveals` and session `q8-focus-5189`. A focused GameCard survived temporary Avatar hover precedence, reopened with keyboard/focus metadata and a fresh interaction id, and emitted paired lifecycle logs. The browser error buffer was empty. The session and task-owned server were closed; port 5189 is free.

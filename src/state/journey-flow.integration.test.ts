@@ -8,7 +8,7 @@ import { genesisFoldState } from "../rules/fold-state";
 import { reduceGameEvent } from "../rules/reducer";
 import {
   BATTLE_SITE_ID,
-  DREAM_AVATAR_ID,
+  AVATAR_ID,
   DRAFT_SITE_ID,
   ESSENCE_SITE_ID,
   NEXT_NODE_ID,
@@ -18,7 +18,7 @@ import {
   registerReplayFixtureProviders,
 } from "../rules/replay/fixture-providers";
 import { parseSiteId } from "../types/identifiers";
-import { testDreamscapeId, testDreamAvatarId } from "../types/test-identities";
+import { testDreamscapeId, testAvatarId } from "../types/test-identities";
 
 const GENESIS: Genesis = {
   seed: testJourneySeed("journey-flow-reducer"),
@@ -57,7 +57,7 @@ function reachBattle(): { state: FoldState; seq: number } {
   let state = genesisFoldState(GENESIS);
   let seq = 1;
   state = apply(state, seq++, "START_JOURNEY", {
-    dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+    avatarId: testAvatarId(AVATAR_ID),
   });
   for (const siteId of [ESSENCE_SITE_ID, SHOP_SITE_ID, DRAFT_SITE_ID]) {
     state = apply(state, seq++, "ENTER_SITE", { siteId: parseSiteId(siteId) });

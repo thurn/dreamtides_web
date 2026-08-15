@@ -15,19 +15,19 @@ import { tx } from "@trox/runtime";
 
 const INACTIVE_TUTORIAL_AVATAR_ABILITY = tx(
   "Avatar ability is not active",
-  "[battle] [tutorial] [dream-avatar] Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
+  "[battle] [tutorial] [avatar] Unavailable-state description for an Avatar whose ability is disabled during the tutorial battle.",
 );
 
 function withInactiveTutorialAvatarAbility(
   side: MobileBattleSideView,
 ): MobileBattleSideView {
-  const profile = side.status.dreamAvatarProfile;
+  const profile = side.status.avatarProfile;
   if (profile === undefined) return side;
   return {
     ...side,
     status: {
       ...side.status,
-      dreamAvatarProfile: {
+      avatarProfile: {
         ...profile,
         ability: INACTIVE_TUTORIAL_AVATAR_ABILITY,
         unavailable: true,
@@ -110,7 +110,7 @@ export function buildTutorialBattleView(
   previewVictory = false,
 ): TutorialBattleView {
   const presentation = battle.tutorialPresentation ?? null;
-  const enemyDreamAvatar = {
+  const enemyAvatar = {
     id: battle.init.enemyDescriptor.id,
     imageNumber: battle.init.enemyDescriptor.imageNumber ?? "001",
     name: battle.init.enemyDescriptor.name,
@@ -130,7 +130,7 @@ export function buildTutorialBattleView(
     const projected = buildMobileBattleView(
       battle.init,
       board,
-      enemyDreamAvatar,
+      enemyAvatar,
       null,
       mobileOptions,
     );

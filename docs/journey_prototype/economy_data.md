@@ -9,8 +9,8 @@ browser loads the JSON as `EconomyData` before a room begins folding events.
 TypeScript owns pricing formulas, eligibility, reward modifiers, seeded random
 streams, weighted sampling, and Gamble algorithms. RON owns the coefficients,
 ranges, distributions, caps, stock composition, and payout tables those
-algorithms consume. DreamAvatar-specific starting essence remains in
-`dream_avatars.ron`, and Exploration encounter-specific essence-per-spark
+algorithms consume. Avatar-specific starting essence remains in
+`avatars.ron`, and Exploration encounter-specific essence-per-spark
 remains in `exploration.ron`.
 
 ## Schema
@@ -67,7 +67,7 @@ the immutable content configuration through replay. A client joins a room only
 when its economy hash matches; an economy edit therefore starts a distinct
 compatible game configuration.
 
-DreamAvatar records with `starting-essence` override the journey default,
+Avatar records with `starting-essence` override the journey default,
 including an authored value of zero. Records that omit the field receive the
 economy default after both catalogs have loaded.
 

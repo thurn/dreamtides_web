@@ -12,7 +12,7 @@ import {
 
 /**
  * A small hand-authored corpus for tests that drive the journey-start build path
- * (`buildDreamAvatarPackage`). It provides three real-ish decklists of twenty
+ * (`buildAvatarPackage`). It provides three real-ish decklists of twenty
  * card names each and a UUID index covering every name, so tides4 has a usable
  * synthetic artifact and `resolvePool` can map the generated ids back onto
  * card numbers. Assertions over the resulting pool should be property-based
@@ -90,7 +90,7 @@ function idForName(name: string): string {
 }
 
 /**
- * Builds a {@link RunPoolContext} usable by `buildDreamAvatarPackage`. The
+ * Builds a {@link RunPoolContext} usable by `buildAvatarPackage`. The
  * generated pool is keyed by the corpus card ids (`corpus-<cardNumber>`), all of
  * which resolve through the id index built from the same card records, so
  * `resolvePool` maps the pool onto card numbers through the collision-free id
@@ -120,7 +120,7 @@ export function makeTestPoolContext(
         copies: 2,
       })),
     })),
-    tidePoolByDreamAvatar: {},
+    tidePoolByAvatar: {},
   };
   return {
     poolData,

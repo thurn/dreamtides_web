@@ -8,7 +8,7 @@ Battle · Live demo & interactive props: `/cumulus#/battle-status-display`
 
 Source-module importers: **1** (value imports outside docs and test/type fixtures; not a production-liveness measure).
 
-The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current and target points at right.
+The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Avatar portrait or loading placeholder at center, and centered current and target points at right.
 
 > **Guidance:** Pass the canonical owner and its near/far relationship separately so accessibility copy follows the current perspective.
 
@@ -18,19 +18,19 @@ The glass status card for one battle participant: centered current and maximum e
 | --- | --- | --- | --- | --- |
 | `owner` | `BattleStatusOwner` = `"player" \| "enemy"` | yes | — | Combatant represented by this status card. |
 | `relationship` | `BattleStatusRelationship` = `"near" \| "far"` | yes | — | Relationship of this canonical combatant to the current local perspective. |
-| `dreamAvatar` | `DreamAvatarVisual \| null` | yes | — | DreamAvatar whose head portrait anchors the card, or null while it loads. |
-| `dreamAvatarProfile` | `BattleStatusDreamAvatarProfile` | no | — | Optional identity and ability copy revealed from the portrait. |
+| `avatar` | `AvatarVisual \| null` | yes | — | Avatar whose head portrait anchors the card, or null while it loads. |
+| `avatarProfile` | `BattleStatusAvatarProfile` | no | — | Optional identity and ability copy revealed from the portrait. |
 | `currentEnergy` | `number` | yes | — | Energy currently available to this combatant. |
 | `maxEnergy` | `number` | yes | — | Maximum energy available to this combatant. |
 | `points` | `number` | yes | — | Current battle points. |
 | `pointsToWin` | `number` | yes | — | Battle points required to win. |
 | `testId` | `string` | no | — | Optional stable test id for the complete status card. |
 
-### `dreamAvatarProfile`: the `BattleStatusDreamAvatarProfile` model
+### `avatarProfile`: the `BattleStatusAvatarProfile` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `DreamAvatarId \| OpponentId` | no |  |
+| `id` | `AvatarId \| OpponentId` | no |  |
 | `ability` | `LocalizedString` | no |  |
 | `unavailable` | `boolean` | yes |  |
 
@@ -38,7 +38,7 @@ The glass status card for one battle participant: centered current and maximum e
 
 ### Variant 1
 
-One complete participant status card. Energy and points use the component's fixed battle notation; the portrait uses DreamAvatarPortrait's thumb framing.
+One complete participant status card. Energy and points use the component's fixed battle notation; the portrait uses AvatarPortrait's thumb framing.
 
 ```tsx
 import { BattleStatusDisplay } from "src/cumulus/components/battle/BattleStatusDisplay";
@@ -46,7 +46,7 @@ import { BattleStatusDisplay } from "src/cumulus/components/battle/BattleStatusD
 <BattleStatusDisplay
   owner="player"
   relationship="near"
-  dreamAvatar={playerDreamAvatar}
+  avatar={playerAvatar}
   currentEnergy={2}
   maxEnergy={3}
   points={4}
@@ -62,7 +62,7 @@ Use the null portrait state while the participant identity is being populated.
 <BattleStatusDisplay
   owner="enemy"
   relationship="far"
-  dreamAvatar={null}
+  avatar={null}
   currentEnergy={0}
   maxEnergy={0}
   points={0}

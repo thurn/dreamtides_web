@@ -6,7 +6,7 @@ import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { BattleStatusDisplay } from "./BattleStatusDisplay";
-import { testDreamAvatarId } from "../../../types/test-identities";
+import { testAvatarId } from "../../../types/test-identities";
 
 function LocalizedBattleStatusDisplay(
   props: ComponentProps<typeof BattleStatusDisplay>,
@@ -35,7 +35,7 @@ describe("BattleStatusDisplay", () => {
         <LocalizedBattleStatusDisplay
           owner="enemy"
           relationship="near"
-          dreamAvatar={null}
+          avatar={null}
           currentEnergy={1}
           maxEnergy={2}
           points={3}
@@ -61,7 +61,7 @@ describe("BattleStatusDisplay", () => {
         <LocalizedBattleStatusDisplay
           owner="enemy"
           relationship="far"
-          dreamAvatar={{
+          avatar={{
             imageNumber: "0042",
             name: assertLocalized("Astra"),
             title: assertLocalized("The Dawnbound"),
@@ -117,7 +117,7 @@ describe("BattleStatusDisplay", () => {
     expect(container.querySelector("img")?.alt).not.toBe("");
     expect(
       container.querySelector<HTMLElement>(
-        "[data-battle-status-dream-avatar-slot]",
+        "[data-battle-status-avatar-slot]",
       )?.style.width,
     ).toBe("var(--touch-min)");
     expect(container.querySelector("button")).toBeNull();
@@ -137,7 +137,7 @@ describe("BattleStatusDisplay", () => {
         <LocalizedBattleStatusDisplay
           owner="player"
           relationship="near"
-          dreamAvatar={null}
+          avatar={null}
           currentEnergy={0}
           maxEnergy={0}
           points={0}
@@ -147,7 +147,7 @@ describe("BattleStatusDisplay", () => {
     });
 
     const placeholder = container.querySelector<HTMLElement>(
-      "[data-battle-status-dream-avatar-placeholder]",
+      "[data-battle-status-avatar-placeholder]",
     );
     expect(placeholder?.getAttribute("aria-label")?.trim()).not.toBe("");
     expect(placeholder?.style.width).toBe("100%");
@@ -170,13 +170,13 @@ describe("BattleStatusDisplay", () => {
         <LocalizedBattleStatusDisplay
           owner="player"
           relationship="near"
-          dreamAvatar={{
+          avatar={{
             imageNumber: "0029",
             name: assertLocalized("Tensho"),
             title: assertLocalized("Daimyo of Lacquered Fury"),
           }}
-          dreamAvatarProfile={{
-            id: testDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
+          avatarProfile={{
+            id: testAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
             ability: assertLocalized("Avatar ability is not active"),
             unavailable: true,
           }}
@@ -189,7 +189,7 @@ describe("BattleStatusDisplay", () => {
     });
 
     const source = container.querySelector<HTMLElement>(
-      "[data-dream-avatar-source]",
+      "[data-avatar-source]",
     );
     expect(source?.dataset.revealEntityId).toBe(
       "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",

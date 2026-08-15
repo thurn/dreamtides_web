@@ -140,7 +140,7 @@ function makeState(): JourneyState {
     remainingDreamsignPool: ["dreamsign-2"],
     essence: 0,
     deck: [],
-    dreamAvatar: null,
+    avatar: null,
     dreamsigns: [],
     maxDreamsigns: 12,
   } as unknown as JourneyState;

@@ -3,10 +3,10 @@ import type { CSSProperties } from "react";
 import { resonance } from "../data/resonance-data";
 import type { Resonance } from "../types/resonance-data";
 import type {
-  EditorDreamAvatarRecord,
+  EditorAvatarRecord,
   EditorTideOption,
   EditorTidePool,
-} from "./dream-avatar-types";
+} from "./avatar-types";
 import type { TideId } from "../types/identifiers";
 
 export function tideDotColor(id: Resonance): string {
@@ -14,7 +14,7 @@ export function tideDotColor(id: Resonance): string {
 }
 
 export interface TidePoolModalProps {
-  dreamAvatar: EditorDreamAvatarRecord;
+  avatar: EditorAvatarRecord;
   tides: readonly EditorTideOption[];
   saving: boolean;
   saveError: string | null;
@@ -96,7 +96,7 @@ function ColorDot({ color }: { color: string }) {
 }
 
 export default function TidePoolModal({
-  dreamAvatar,
+  avatar,
   tides,
   saving,
   saveError,
@@ -104,11 +104,11 @@ export default function TidePoolModal({
   onClose,
 }: TidePoolModalProps) {
   const [starter, setStarter] = useState<TideId | null>(
-    dreamAvatar.tidePool.starter,
+    avatar.tidePool.starter,
   );
-  const [facets, setFacets] = useState<TideId[]>(dreamAvatar.tidePool.facets);
+  const [facets, setFacets] = useState<TideId[]>(avatar.tidePool.facets);
   const [neutral, setNeutral] = useState<TideId[]>(
-    dreamAvatar.tidePool.neutral,
+    avatar.tidePool.neutral,
   );
 
   const { signatureTides, facetTides, neutralTides } = useMemo(() => {
@@ -129,8 +129,8 @@ export default function TidePoolModal({
     <div
       role="dialog"
       aria-modal="true"
-      aria-label={`Edit tides for ${dreamAvatar.name}`}
-      data-dream-avatar-tide-modal={dreamAvatar.id}
+      aria-label={`Edit tides for ${avatar.name}`}
+      data-avatar-tide-modal={avatar.id}
       style={overlayStyle}
       onMouseDown={(event) => {
         if (event.target === event.currentTarget && !saving) {
@@ -155,7 +155,7 @@ export default function TidePoolModal({
           <span
             style={{ color: "#8edbd1", fontSize: "0.85rem", fontWeight: 700 }}
           >
-            {dreamAvatar.name}
+            {avatar.name}
           </span>
         </header>
 

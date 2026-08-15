@@ -20,7 +20,7 @@ import {
   setupAssets,
   transformCard,
   transformExplorationData,
-  validateDreamAvatarMapping,
+  validateAvatarMapping,
 } from "./setup-assets.mjs";
 import { EXPLORATION_EFFECT_KINDS } from "./exploration-effect-kinds.mjs";
 
@@ -105,7 +105,7 @@ describe("transformExplorationData", () => {
         "copy-offered-deck-card",
         "next-battle-opening-hand",
         "next-battle-starting-energy",
-        "choose-dream-avatar",
+        "choose-avatar",
         "purge-duplicates-and-grant-reclaim",
       ]),
     );
@@ -1036,7 +1036,7 @@ describe("transformExplorationData", () => {
     offerSource.encounter[0].action[0] = {
       ...offerSource.encounter[0].action[0],
       "effect-text": "Synthetic effect",
-      "effect-kind": "choose-dream-avatar",
+      "effect-kind": "choose-avatar",
       "offer-count": 0,
     };
     expect(() => transformExplorationData(offerSource)).toThrow(
@@ -1164,18 +1164,18 @@ afterEach(() => {
   vi.restoreAllMocks();
 });
 
-describe("validateDreamAvatarMapping", () => {
+describe("validateAvatarMapping", () => {
   // Synthetic fixtures only — this exercises the invariant logic, never the
   // production TOML, so editing the real mapping cannot break these tests.
-  const scape = (id, dreamAvatarIds, isStarter = false) => ({
+  const scape = (id, avatarIds, isStarter = false) => ({
     id,
     isStarter,
-    dreamAvatarIds,
+    avatarIds,
   });
 
   it("accepts a starter plus 3-4 caller regions and returns per-region counts", () => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
-    const counts = validateDreamAvatarMapping(
+    const counts = validateAvatarMapping(
       [
         scape("starter", [], true),
         scape("a", ["dc-1", "dc-2", "dc-3"]),
@@ -1189,16 +1189,16 @@ describe("validateDreamAvatarMapping", () => {
 
   it("matches ids case-insensitively", () => {
     vi.spyOn(console, "warn").mockImplementation(() => {});
-    validateDreamAvatarMapping(
+    validateAvatarMapping(
       [scape("a", ["DC-1", "dc-2", "Dc-3"])],
       ["dc-1", "DC-2", "dc-3"],
     );
     expect(console.warn).not.toHaveBeenCalled();
   });
 
-  it("throws when one DreamAvatar is assigned to two dreamscapes", () => {
+  it("throws when one Avatar is assigned to two dreamscapes", () => {
     expect(() =>
-      validateDreamAvatarMapping(
+      validateAvatarMapping(
         [
           scape("a", ["dc-1", "dc-2", "dc-3"]),
           scape("b", ["dc-3", "dc-4", "dc-5"]),
@@ -1210,13 +1210,13 @@ describe("validateDreamAvatarMapping", () => {
 
   it("throws when a non-starter region has fewer than 3 or more than 4", () => {
     expect(() =>
-      validateDreamAvatarMapping(
+      validateAvatarMapping(
         [scape("a", ["dc-1", "dc-2"])],
         ["dc-1", "dc-2"],
       ),
     ).toThrow(/must have 3-4/);
     expect(() =>
-      validateDreamAvatarMapping(
+      validateAvatarMapping(
         [scape("a", ["dc-1", "dc-2", "dc-3", "dc-4", "dc-5"])],
         ["dc-1", "dc-2", "dc-3", "dc-4", "dc-5"],
       ),
@@ -1225,28 +1225,28 @@ describe("validateDreamAvatarMapping", () => {
 
   it("throws when the starter dreamscape lists residents", () => {
     expect(() =>
-      validateDreamAvatarMapping([scape("starter", ["dc-1"], true)], ["dc-1"]),
+      validateAvatarMapping([scape("starter", ["dc-1"], true)], ["dc-1"]),
     ).toThrow(/starter dreamscape/);
   });
 
   it("warns (does not throw) on unknown and unassigned ids", () => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    validateDreamAvatarMapping(
+    validateAvatarMapping(
       [scape("a", ["dc-1", "dc-2", "ghost"])],
       ["dc-1", "dc-2", "dc-orphan"],
     );
     const messages = warn.mock.calls.map((call) => call[0]).join("\n");
-    expect(messages).toMatch(/resolve to no DreamAvatar/);
+    expect(messages).toMatch(/resolve to no Avatar/);
     expect(messages).toMatch(/not assigned to any dreamscape/);
   });
 });
 
 describe("setupAssets", () => {
-  it("normalizes TOML cards and dreamAvatars into runtime JSON artifacts", () => {
+  it("normalizes TOML cards and avatars into runtime JSON artifacts", () => {
     const tempRoot = mkdtempSync(join(tmpdir(), "journey-setup-assets-"));
     const publicDir = join(tempRoot, "public");
     const imageCacheDir = join(tempRoot, "image-cache");
-    const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
+    const avatarArtDir = join(tempRoot, "avatar-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
     const mainMenuBackgroundArtPath = join(
       tempRoot,
@@ -1259,17 +1259,17 @@ describe("setupAssets", () => {
       "tutorial-round-frame.png",
     );
     const cardTomlPath = join(tempRoot, "cards.toml");
-    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars.toml");
+    const avatarV2TomlPath = join(tempRoot, "avatars.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
     const cachedImagePath = join(imageCacheDir, imageHash(101));
 
     mkdirSync(imageCacheDir, { recursive: true });
-    mkdirSync(dreamAvatarArtDir, { recursive: true });
+    mkdirSync(avatarArtDir, { recursive: true });
     mkdirSync(dreamsignArtDir, { recursive: true });
     mkdirSync(dirname(mainMenuBackgroundArtPath), { recursive: true });
     mkdirSync(dirname(cachedImagePath), { recursive: true });
     writeFileSync(cachedImagePath, "fake-webp");
-    writeFileSync(join(dreamAvatarArtDir, "0007.png"), "fake-png");
+    writeFileSync(join(avatarArtDir, "0007.png"), "fake-png");
     writeFileSync(join(dreamsignArtDir, "test-sign.png"), "fake-png");
     writeFileSync(mainMenuBackgroundArtPath, "fake-jpg");
     writeFileSync(tutorialDialogueFrameArtPath, "fake-png");
@@ -1322,10 +1322,10 @@ art-owned = true
 `,
     );
     writeFileSync(
-      dreamAvatarV2TomlPath,
-      `[[dreamAvatar]]
+      avatarV2TomlPath,
+      `[[avatar]]
 id = "dc-1"
-name = "DreamAvatar One"
+name = "Avatar One"
 title = "Keeper of Test Cases"
 rendered-text = "Trigger an ability."
 image-number = "0007"
@@ -1346,11 +1346,11 @@ rendered-text = "Use the canonical Dreamsign text."
     setupAssets({
       catalogFixtureOnly: true,
       cardTomlPath,
-      dreamAvatarV2TomlPath,
+      avatarV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,
-      dreamAvatarArtDir,
+      avatarArtDir,
       dreamsignArtDir,
       mainMenuBackgroundArtPath,
       tutorialDialogueFrameArtPath,
@@ -1359,8 +1359,8 @@ rendered-text = "Use the canonical Dreamsign text."
     const cards = JSON.parse(
       readFileSync(join(publicDir, "card-data.json"), "utf8"),
     );
-    const dreamAvatars = JSON.parse(
-      readFileSync(join(publicDir, "dream-avatars-v2-data.json"), "utf8"),
+    const avatars = JSON.parse(
+      readFileSync(join(publicDir, "avatars-v2-data.json"), "utf8"),
     );
     const dreamsigns = JSON.parse(
       readFileSync(join(publicDir, "dreamsign-data.json"), "utf8"),
@@ -1418,10 +1418,10 @@ rendered-text = "Use the canonical Dreamsign text."
         artOwned: true,
       },
     ]);
-    expect(dreamAvatars).toEqual([
+    expect(avatars).toEqual([
       {
         id: "dc-1",
-        name: "DreamAvatar One",
+        name: "Avatar One",
         title: "Keeper of Test Cases",
         renderedText: "Trigger an ability.",
         imageNumber: "0007",
@@ -1438,7 +1438,7 @@ rendered-text = "Use the canonical Dreamsign text."
       },
     ]);
     expect(existsSync(join(publicDir, "cards", "101.webp"))).toBe(true);
-    expect(existsSync(join(publicDir, "dream-avatars", "0007.png"))).toBe(true);
+    expect(existsSync(join(publicDir, "avatars", "0007.png"))).toBe(true);
     expect(existsSync(join(publicDir, "dreamsigns", "test-sign.png"))).toBe(
       true,
     );
@@ -1448,17 +1448,17 @@ rendered-text = "Use the canonical Dreamsign text."
     const tempRoot = mkdtempSync(join(tmpdir(), "journey-setup-assets-"));
     const publicDir = join(tempRoot, "public");
     const imageCacheDir = join(tempRoot, "image-cache");
-    const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
+    const avatarArtDir = join(tempRoot, "avatar-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
     const cardTomlPath = join(tempRoot, "cards.toml");
-    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars.toml");
+    const avatarV2TomlPath = join(tempRoot, "avatars.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
 
     mkdirSync(imageCacheDir, { recursive: true });
-    mkdirSync(dreamAvatarArtDir, { recursive: true });
+    mkdirSync(avatarArtDir, { recursive: true });
     mkdirSync(dreamsignArtDir, { recursive: true });
-    writeFileSync(join(dreamAvatarArtDir, "0007.png"), "fake-png");
-    writeFileSync(join(dreamAvatarArtDir, "0008.png"), "fake-png");
+    writeFileSync(join(avatarArtDir, "0007.png"), "fake-png");
+    writeFileSync(join(avatarArtDir, "0008.png"), "fake-png");
     writeFileSync(cardTomlPath, "");
     writeFileSync(
       cardTomlPath,
@@ -1479,8 +1479,8 @@ art-owned = true
 `,
     );
     writeFileSync(
-      dreamAvatarV2TomlPath,
-      `[[dreamAvatar]]
+      avatarV2TomlPath,
+      `[[avatar]]
 id = "dc-low"
 name = "Discount Caller"
 title = "Cheap Engine"
@@ -1488,7 +1488,7 @@ rendered-text = "Strong opener."
 image-number = "0007"
 starting-essence = 220
 
-[[dreamAvatar]]
+[[avatar]]
 id = "dc-default"
 name = "Steady Caller"
 title = "Average Engine"
@@ -1513,35 +1513,35 @@ rendered-text = ""
     setupAssets({
       catalogFixtureOnly: true,
       cardTomlPath,
-      dreamAvatarV2TomlPath,
+      avatarV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,
-      dreamAvatarArtDir,
+      avatarArtDir,
       dreamsignArtDir,
     });
 
-    const dreamAvatars = JSON.parse(
-      readFileSync(join(publicDir, "dream-avatars-v2-data.json"), "utf8"),
+    const avatars = JSON.parse(
+      readFileSync(join(publicDir, "avatars-v2-data.json"), "utf8"),
     );
-    expect(dreamAvatars[0].startingEssence).toBe(220);
-    expect(dreamAvatars[1]).not.toHaveProperty("startingEssence");
+    expect(avatars[0].startingEssence).toBe(220);
+    expect(avatars[1]).not.toHaveProperty("startingEssence");
   });
 
   it("retains the rarity field on Legendary cards and omits it otherwise", () => {
     const tempRoot = mkdtempSync(join(tmpdir(), "journey-setup-assets-"));
     const publicDir = join(tempRoot, "public");
     const imageCacheDir = join(tempRoot, "image-cache");
-    const dreamAvatarArtDir = join(tempRoot, "dream-avatar-art");
+    const avatarArtDir = join(tempRoot, "avatar-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
     const cardTomlPath = join(tempRoot, "cards.toml");
-    const dreamAvatarV2TomlPath = join(tempRoot, "dream_avatars.toml");
+    const avatarV2TomlPath = join(tempRoot, "avatars.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
 
     mkdirSync(imageCacheDir, { recursive: true });
-    mkdirSync(dreamAvatarArtDir, { recursive: true });
+    mkdirSync(avatarArtDir, { recursive: true });
     mkdirSync(dreamsignArtDir, { recursive: true });
-    writeFileSync(join(dreamAvatarArtDir, "0007.png"), "fake-png");
+    writeFileSync(join(avatarArtDir, "0007.png"), "fake-png");
     writeFileSync(
       cardTomlPath,
       `[[cards]]
@@ -1574,8 +1574,8 @@ art-owned = true
 `,
     );
     writeFileSync(
-      dreamAvatarV2TomlPath,
-      `[[dreamAvatar]]
+      avatarV2TomlPath,
+      `[[avatar]]
 id = "dc-1"
 name = "Caller"
 title = "Title"
@@ -1600,11 +1600,11 @@ rendered-text = ""
     setupAssets({
       catalogFixtureOnly: true,
       cardTomlPath,
-      dreamAvatarV2TomlPath,
+      avatarV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,
-      dreamAvatarArtDir,
+      avatarArtDir,
       dreamsignArtDir,
     });
 

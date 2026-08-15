@@ -47,8 +47,8 @@ describe("generated card data drift Vite integration", () => {
     // reload the page. The .worktrees and
     // .claude/worktrees directories are ignored so creating a git worktree
     // (which writes a full repo copy, including a tsconfig.json) does not force
-    // a full reload. The canonical tide sources and public DreamAvatar/tides JSON catalogs
-    // (all rewritten by the dreamAvatar editor) are ignored so those editor saves do
+    // a full reload. The canonical tide sources and public Avatar/tides JSON catalogs
+    // (all rewritten by the avatar editor) are ignored so those editor saves do
     // not reload the page either. Exploration's canonical templates and generated public catalog
     // are ignored because its API sends a targeted journey reload event. The
     // public dreamwell JSON catalog (rewritten
@@ -65,8 +65,8 @@ describe("generated card data drift Vite integration", () => {
       resolve(join(rootDir, ".claude", "worktrees")) + "/**",
       ...gameDataPipelineWatchPatterns,
       resolve(join(rootDir, "data", "tides.ron")),
-      resolve(join(rootDir, "data", "dream_avatars.ron")),
-      resolve(join(rootDir, "public", "dream-avatars-v2-data.json")),
+      resolve(join(rootDir, "data", "avatars.ron")),
+      resolve(join(rootDir, "public", "avatars-v2-data.json")),
       resolve(join(rootDir, "public", "tides4-data.json")),
       resolve(join(rootDir, "public", "dreamwell-data.json")),
       ...cardEditorSourceWatchPaths,

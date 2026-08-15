@@ -1,8 +1,8 @@
 import { EditorApiRequestError, editorTomlParam } from "./editor-api";
 import type { EditorApiErrorBody } from "./types";
 import type {
-  DreamAvatarAssignmentRequest,
-  DreamAvatarAssignmentResponse,
+  AvatarAssignmentRequest,
+  AvatarAssignmentResponse,
   DreamscapeCatalog,
   LoadEditorDreamscapesResponse,
   SaveEditorDreamscapeFieldRequest,
@@ -89,7 +89,7 @@ export async function loadEditorDreamscapes(
     dreamscapes: body.dreamscapes,
     guides: body.guides,
     affiliations: body.affiliations,
-    dreamAvatars: body.dreamAvatars,
+    avatars: body.avatars,
     siteTypes: body.siteTypes,
   };
 }
@@ -121,13 +121,13 @@ export async function saveEditorDreamscapeField(
   });
 }
 
-export async function assignDreamscapeDreamAvatar(
-  request: DreamAvatarAssignmentRequest,
-): Promise<DreamAvatarAssignmentResponse> {
+export async function assignDreamscapeAvatar(
+  request: AvatarAssignmentRequest,
+): Promise<AvatarAssignmentResponse> {
   return queueSourceSave(SOURCE, async () => {
     const response = await fetch(
       withTomlParam(
-        `/api/editor/dreamscapes/${request.dreamscapeId}/dream-avatars`,
+        `/api/editor/dreamscapes/${request.dreamscapeId}/avatars`,
       ),
       {
         method: "POST",
@@ -146,7 +146,7 @@ export async function assignDreamscapeDreamAvatar(
     );
 
     const body =
-      await readJsonResponse<DreamAvatarAssignmentResponse>(response);
+      await readJsonResponse<AvatarAssignmentResponse>(response);
     confirmSourceRevision(SOURCE, body);
     return body;
   });

@@ -6,7 +6,7 @@
 //
 // The media props are seeded so that EVERY variant renders real content the
 // moment the reader switches the `variant` control: `image` is a real
-// Dream Avatar `ArtRef` (drives the object / fullBleed media) and `glyph` is a
+// Avatar `ArtRef` (drives the object / fullBleed media) and `glyph` is a
 // named `Glyph` (drives the icon-disc variant), the same production art the
 // full-screen mockup uses.
 //
@@ -59,7 +59,7 @@ import { richText } from "src/cumulus/components/card/rich-text";
     },
     {
       label: "Text variant with epithet",
-      note: "Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Used for the Dream Avatar profile reveal.",
+      note: "Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Avatar-select name/epithet pairing. Used for the Avatar profile reveal.",
       code: `<InfoCard
   variant="text"
   title={assertLocalized("Kragg")}
@@ -72,7 +72,7 @@ import { richText } from "src/cumulus/components/card/rich-text";
       note: "A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, omit it for a contained transparent object.",
       code: `<InfoCard
   variant="object"
-  image={artRef.dreamAvatar("0025")}
+  image={artRef.avatar("0025")}
   frame
   title={assertLocalized("Seld Rakor")}
   body={richText.rules(assertLocalized("Whenever you Reclaim a card, deal 1 damage."))}
@@ -80,7 +80,7 @@ import { richText } from "src/cumulus/components/card/rich-text";
     },
     {
       label: "Full-bleed variant",
-      note: "A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dream Avatar profile reveal and the compact atlas node reveals.",
+      note: "A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Avatar profile reveal and the compact atlas node reveals.",
       code: `<InfoCard
   variant="fullBleed"
   image={artRef.dreamscapeScene("firstlight_meadow")}
@@ -134,11 +134,11 @@ const scale = infoCardTextScale(window.innerWidth); // 0.86 below ~551px; otherw
     defaultArgs: {
       variant: "text",
       // Real media so switching `variant` to object / fullBleed / icon renders
-      // genuine art rather than an empty frame. `image` is a real Dream Avatar
+      // genuine art rather than an empty frame. `image` is a real Avatar
       // portrait, `figure` gives image-led variants a real foreground subject,
       // `frame` gives the object variant its framed treatment, and `glyph`
       // fills the icon-disc variant.
-      image: artRef.dreamAvatar("0025"),
+      image: artRef.avatar("0025"),
       figure: artRef.dreamGuide(parseGuideId("tobias_tanglefur")),
       frame: true,
       glyph: glyph("bxf bx-store-alt-2"),

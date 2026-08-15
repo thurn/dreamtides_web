@@ -71,7 +71,7 @@ string_enum!(EffectKind {
     CopyOfferedDeckCard => "copy-offered-deck-card", NextBattleOpeningHand => "next-battle-opening-hand",
     NextBattleStartingEnergy => "next-battle-starting-energy",
     NextBattleSmallerHandAndCostDiscount => "next-battle-smaller-hand-and-cost-discount",
-    ChooseDreamAvatar => "choose-dream-avatar",
+    ChooseAvatar => "choose-avatar",
     PurgeDuplicatesAndGrantReclaim => "purge-duplicates-and-grant-reclaim",
     TakeTransfiguredCardsAndGainNightmares => "take-transfigured-cards-and-gain-nightmares",
     TransfiguredCardDraft => "transfigured-card-draft", AddFixedSite => "add-fixed-site",
@@ -95,7 +95,7 @@ string_enum!(Mechanic {
     IncreaseDeckSpark => "increase-deck-spark", PurgeDreamsignForEssence => "purge-dreamsign-for-essence",
     MakeDeckFast => "make-deck-fast", ReduceDeckCostAndAddNightmares => "reduce-deck-cost-and-add-nightmares",
     DuplicateDeckEntry => "duplicate-deck-entry", NextBattleModifier => "next-battle-modifier",
-    ChooseDreamAvatar => "choose-dream-avatar",
+    ChooseAvatar => "choose-avatar",
     PurgeDuplicatesAndGrantReclaim => "purge-duplicates-and-grant-reclaim",
     TransfiguredCardChooser => "transfigured-card-chooser", AddSite => "add-site",
     ShopPurchaseModifier => "shop-purchase-modifier"
@@ -183,7 +183,7 @@ impl EffectKind {
         Self::NextBattleOpeningHand,
         Self::NextBattleStartingEnergy,
         Self::NextBattleSmallerHandAndCostDiscount,
-        Self::ChooseDreamAvatar,
+        Self::ChooseAvatar,
         Self::PurgeDuplicatesAndGrantReclaim,
         Self::TransfiguredCardDraft,
         Self::AddFixedSite,
@@ -249,7 +249,7 @@ impl EffectKind {
             Self::NextBattleOpeningHand
             | Self::NextBattleStartingEnergy
             | Self::NextBattleSmallerHandAndCostDiscount => Mechanic::NextBattleModifier,
-            Self::ChooseDreamAvatar => Mechanic::ChooseDreamAvatar,
+            Self::ChooseAvatar => Mechanic::ChooseAvatar,
             Self::PurgeDuplicatesAndGrantReclaim => Mechanic::PurgeDuplicatesAndGrantReclaim,
             Self::TransfiguredCardDraft | Self::TakeTransfiguredCardsAndGainNightmares => {
                 Mechanic::TransfiguredCardChooser
@@ -306,7 +306,7 @@ impl EffectKind {
                 Some(SelectionPolicy::DuplicateValue)
             }
             Self::CopyRandomCards => Some(SelectionPolicy::Uniform),
-            Self::ChooseDreamAvatar => Some(SelectionPolicy::Uniform),
+            Self::ChooseAvatar => Some(SelectionPolicy::Uniform),
             Self::GainRandomEssence => Some(SelectionPolicy::Uniform),
             Self::ChooseSiteType | Self::AddSite => Some(SelectionPolicy::SiteUniform),
             _ => None,
@@ -385,7 +385,7 @@ impl ActionEffect {
             Self::NextBattleSmallerHandAndCostDiscount => {
                 EffectKind::NextBattleSmallerHandAndCostDiscount
             }
-            Self::ChooseDreamAvatar { .. } => EffectKind::ChooseDreamAvatar,
+            Self::ChooseAvatar { .. } => EffectKind::ChooseAvatar,
             Self::PurgeDuplicatesAndGrantReclaim => EffectKind::PurgeDuplicatesAndGrantReclaim,
             Self::TakeCards { .. } => EffectKind::TakeCards,
             Self::TakeTransfiguredCardsAndGainNightmares { .. } => {
@@ -653,7 +653,7 @@ pub enum ActionEffect {
         count: i64,
     },
     NextBattleSmallerHandAndCostDiscount,
-    ChooseDreamAvatar {
+    ChooseAvatar {
         offer_count: i64,
     },
     PurgeDuplicatesAndGrantReclaim,
@@ -1292,8 +1292,8 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
         ActionEffect::NextBattleSmallerHandAndCostDiscount => {
             kind!(NextBattleSmallerHandAndCostDiscount);
         }
-        ActionEffect::ChooseDreamAvatar { offer_count } => {
-            kind!(ChooseDreamAvatar);
+        ActionEffect::ChooseAvatar { offer_count } => {
+            kind!(ChooseAvatar);
             int!("offer-count", offer_count);
         }
         ActionEffect::PurgeDuplicatesAndGrantReclaim => {

@@ -60,7 +60,7 @@ pub enum DreamscapeKind {
     },
     Standard {
         affiliation_id: AffiliationId,
-        opponent_dream_avatar_ids: Vec<DreamAvatarId>,
+        opponent_avatar_ids: Vec<AvatarId>,
     },
     Boss,
 }
@@ -116,7 +116,7 @@ macro_rules! canonical_uuid {
 
 canonical_uuid!(DreamscapeId, "Dreamscape identifier");
 canonical_uuid!(AffiliationId, "affiliation identifier");
-canonical_uuid!(DreamAvatarId, "DreamAvatar identifier");
+canonical_uuid!(AvatarId, "Avatar identifier");
 
 #[derive(Serialize)]
 struct CompatibilityCatalog {
@@ -137,8 +137,8 @@ struct CompatibilityDreamscape {
     atlas_description: Option<toml::Value>,
     #[serde(rename = "affiliation-id", skip_serializing_if = "Option::is_none")]
     affiliation_id: Option<String>,
-    #[serde(rename = "dream-avatar-ids", skip_serializing_if = "Option::is_none")]
-    dream_avatar_ids: Option<Vec<String>>,
+    #[serde(rename = "avatar-ids", skip_serializing_if = "Option::is_none")]
+    avatar_ids: Option<Vec<String>>,
 }
 
 pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
@@ -153,7 +153,7 @@ pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
                 fixed_sites,
                 atlas_description,
                 affiliation_id,
-                dream_avatar_ids,
+                avatar_ids,
             ) = match dreamscape.kind {
                 DreamscapeKind::Starter {
                     atlas_description,
@@ -169,7 +169,7 @@ pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
                 ),
                 DreamscapeKind::Standard {
                     affiliation_id,
-                    opponent_dream_avatar_ids,
+                    opponent_avatar_ids,
                 } => (
                     None,
                     None,
@@ -177,7 +177,7 @@ pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
                     None,
                     Some(affiliation_id.to_string()),
                     Some(
-                        opponent_dream_avatar_ids
+                        opponent_avatar_ids
                             .into_iter()
                             .map(|avatar_id| avatar_id.to_string())
                             .collect(),
@@ -193,7 +193,7 @@ pub fn lower(source: Vec<DreamscapeDefinition>) -> Result<toml::Value> {
                 fixed_sites,
                 atlas_description,
                 affiliation_id,
-                dream_avatar_ids,
+                avatar_ids,
             }))
         })
         .collect::<Result<Vec<_>>>()?
@@ -207,7 +207,7 @@ pub(crate) fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
     ensure!(!source.is_empty(), "Dreamscape catalog must not be empty");
     let mut dreamscape_ids = BTreeSet::new();
     let mut affiliation_ids = BTreeSet::new();
-    let mut dream_avatar_ids = BTreeSet::new();
+    let mut avatar_ids = BTreeSet::new();
     let mut scene_keys = BTreeSet::new();
     let mut scene_sources = BTreeSet::new();
     let mut atlas_node_keys = BTreeSet::new();
@@ -269,7 +269,7 @@ pub(crate) fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
             }
             DreamscapeKind::Standard {
                 affiliation_id,
-                opponent_dream_avatar_ids,
+                opponent_avatar_ids,
             } => {
                 ensure!(
                     legacy_id != "limbo",
@@ -280,20 +280,20 @@ pub(crate) fn validate(source: &[DreamscapeDefinition]) -> Result<()> {
                     "Dreamscapes repeat affiliation id {affiliation_id}"
                 );
                 ensure!(
-                    (3..=4).contains(&opponent_dream_avatar_ids.len()),
-                    "Dreamscape {} must have three or four opponent DreamAvatars",
+                    (3..=4).contains(&opponent_avatar_ids.len()),
+                    "Dreamscape {} must have three or four opponent Avatars",
                     dreamscape.id
                 );
                 let mut local_opponents = BTreeSet::new();
-                for opponent_id in opponent_dream_avatar_ids {
+                for opponent_id in opponent_avatar_ids {
                     ensure!(
                         local_opponents.insert(*opponent_id),
-                        "Dreamscape {} repeats opponent DreamAvatar {opponent_id}",
+                        "Dreamscape {} repeats opponent Avatar {opponent_id}",
                         dreamscape.id
                     );
                     ensure!(
-                        dream_avatar_ids.insert(*opponent_id),
-                        "opponent DreamAvatar {opponent_id} belongs to more than one Dreamscape"
+                        avatar_ids.insert(*opponent_id),
+                        "opponent Avatar {opponent_id} belongs to more than one Dreamscape"
                     );
                 }
             }
@@ -402,7 +402,7 @@ mod tests {
     ),
     kind: Standard(
       affiliation_id: "{AFFILIATION_ID}",
-      opponent_dream_avatar_ids: ["{AVATAR_ONE}", "{AVATAR_TWO}", "{AVATAR_THREE}"],
+      opponent_avatar_ids: ["{AVATAR_ONE}", "{AVATAR_TWO}", "{AVATAR_THREE}"],
     ),
   ),
   DreamscapeDefinition(
@@ -441,7 +441,7 @@ mod tests {
         assert_eq!(dreamscapes[1]["id"].as_str(), Some("tumbleleaf_village"));
         assert_eq!(dreamscapes[1]["name"].as_str(), Some("Région"));
         assert_eq!(
-            dreamscapes[1]["dream-avatar-ids"].as_array().unwrap()[0].as_str(),
+            dreamscapes[1]["avatar-ids"].as_array().unwrap()[0].as_str(),
             Some("94e7c651-25e9-4a62-9de4-eaf5ba20542c")
         );
         assert!(
@@ -511,7 +511,7 @@ mod tests {
 
         let multiple_starters = synthetic_source().replace(
             &format!(
-                "kind: Standard(\n      affiliation_id: \"{AFFILIATION_ID}\",\n      opponent_dream_avatar_ids: [\"{AVATAR_ONE}\", \"{AVATAR_TWO}\", \"{AVATAR_THREE}\"],\n    )"
+                "kind: Standard(\n      affiliation_id: \"{AFFILIATION_ID}\",\n      opponent_avatar_ids: [\"{AVATAR_ONE}\", \"{AVATAR_TWO}\", \"{AVATAR_THREE}\"],\n    )"
             ),
             "kind: Starter(atlas_description: Tx(\"Another start.\"), signature_site: Battle, fixed_sites: [Battle])",
         );
@@ -538,7 +538,7 @@ mod tests {
         assert_error_contains(&too_few_residents, "three or four opponent");
 
         let duplicate_opponent = synthetic_source().replace(AVATAR_THREE, AVATAR_ONE);
-        assert_error_contains(&duplicate_opponent, "repeats opponent DreamAvatar");
+        assert_error_contains(&duplicate_opponent, "repeats opponent Avatar");
 
         let empty_name = synthetic_source().replace("name: Tx(\"Opening\")", "name: Tx(\"  \")");
         assert_error_contains(&empty_name, "empty name");

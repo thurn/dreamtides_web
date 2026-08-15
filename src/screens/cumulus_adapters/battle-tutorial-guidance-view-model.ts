@@ -12,26 +12,26 @@ function guidanceDialogue(
   message: TutorialGuidanceMessage,
 ): BattleTutorialGuidanceView["dialogue"] {
   if (message.speaker === "player") {
-    const dreamAvatar = battle.init.dreamAvatarSummary;
+    const avatar = battle.init.avatarSummary;
     return {
       portrait: {
-        kind: "dreamAvatar",
-        imageNumber: dreamAvatar?.imageNumber ?? "001",
+        kind: "avatar",
+        imageNumber: avatar?.imageNumber ?? "001",
       },
       portraitAlt:
-        dreamAvatar === null || dreamAvatar === undefined
+        avatar === null || avatar === undefined
           ? tx(
               "Player Avatar",
-              "[battle] [tutorial] [dream-avatar] Fallback name for the player's Dream Avatar.",
+              "[battle] [tutorial] [avatar] Fallback name for the player's Avatar.",
             )
-          : localizedSourceText(dreamAvatar.name),
+          : localizedSourceText(avatar.name),
       speakerName:
-        dreamAvatar === null || dreamAvatar === undefined
+        avatar === null || avatar === undefined
           ? tx(
               "Dreamer",
               "[battle] [tutorial] Fallback speaker name for the player.",
             )
-          : localizedSourceText(dreamAvatar.name),
+          : localizedSourceText(avatar.name),
       text: localizedSourceText(message.text),
     };
   }
@@ -39,7 +39,7 @@ function guidanceDialogue(
     const enemy = battle.init.enemyDescriptor;
     return {
       portrait: {
-        kind: "dreamAvatar",
+        kind: "avatar",
         imageNumber: enemy.imageNumber ?? "001",
       },
       portraitAlt: localizedSourceText(enemy.name),

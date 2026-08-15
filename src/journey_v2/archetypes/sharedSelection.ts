@@ -31,7 +31,7 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
             ? "entry_modification"
             : "scored_cards";
   const keyKind =
-    selection.trace.keyKind === "dreamAvatarId"
+    selection.trace.keyKind === "avatarId"
       ? "entryId"
       : selection.trace.keyKind;
   const dreamsignTier = selection.trace.fallback.includes(

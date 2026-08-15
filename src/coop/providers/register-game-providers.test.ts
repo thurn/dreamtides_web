@@ -13,7 +13,7 @@ import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import { loadTestSitesData } from "../../__test-helpers__/atlas-fixtures";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
 //
-//   START_JOURNEY -> SELECT_DREAM_AVATAR -> OPEN_SITE (every content-coupled site
+//   START_JOURNEY -> SELECT_AVATAR -> OPEN_SITE (every content-coupled site
 //   type) -> REROLL_SHOP -> BEGIN_BATTLE
 //
 // Two invariants:
@@ -27,7 +27,7 @@ import { gambleGameByRulesKind } from "../../data/gamble-data";
 //
 // Data-resilient per AGENTS.md: the JourneyContent is built from the shared
 // __test-helpers__ (live compiled dreamscape / atlas-data bundles) plus a
-// hand-authored card/dreamsign corpus. Site ids and the dreamAvatar id are
+// hand-authored card/dreamsign corpus. Site ids and the avatar id are
 // RESOLVED from the folded state / content, never hardcoded, and the assertions
 // are over OUTCOMES and HASHES, never TOML content — so a data edit cannot
 // break the suite.
@@ -44,7 +44,7 @@ import { reduceGameEvent } from "../../rules/reducer";
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type {
-  DreamAvatarContent,
+  AvatarContent,
   DreamsignTemplate,
 } from "../../types/content";
 import type { FoldState } from "../../rules/fold-state";
@@ -81,9 +81,9 @@ import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import type { AtlasNodeId, SiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testDreamscapeId, testExplorationActionId, testDreamsignId, testCardId, testDreamAvatarId } from "../../types/test-identities";
+import { testDreamscapeId, testExplorationActionId, testDreamsignId, testCardId, testAvatarId } from "../../types/test-identities";
 
-const DREAM_AVATAR_ID = "dream-avatar-real-provider";
+const AVATAR_ID = "avatar-real-provider";
 const TIMESTAMP = "1970-01-01T00:00:00.000Z";
 const GENESIS: Genesis = {
   seed: testJourneySeed("real-provider-seed"),
@@ -122,10 +122,10 @@ function makeCard(cardNumber: number, isStarter: boolean): CardData {
   };
 }
 
-function makeDreamAvatar(idSeed: string): DreamAvatarContent {
+function makeAvatar(idSeed: string): AvatarContent {
   return {
-    id: testDreamAvatarId(idSeed),
-    name: `DreamAvatar ${idSeed}`,
+    id: testAvatarId(idSeed),
+    name: `Avatar ${idSeed}`,
     title: "Provider Witness",
     renderedText: "Test ability.",
     imageNumber: "0006",
@@ -153,7 +153,7 @@ function makeJourneyContent(): JourneyContent {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase,
-    dreamAvatars: [makeDreamAvatar(DREAM_AVATAR_ID)],
+    avatars: [makeAvatar(AVATAR_ID)],
     dreamwellCards: [],
     dreamsignTemplates,
     dreamscapes: loadTestDreamscapes(),
@@ -212,16 +212,16 @@ describe("registerGameProviders (real content providers)", () => {
     clearGameProviders();
   });
 
-  it("folds START_JOURNEY -> SELECT_DREAM_AVATAR -> OPEN_SITE(each type) -> REROLL_SHOP -> BEGIN_BATTLE, all applied, deterministically", () => {
+  it("folds START_JOURNEY -> SELECT_AVATAR -> OPEN_SITE(each type) -> REROLL_SHOP -> BEGIN_BATTLE, all applied, deterministically", () => {
     // Phase 1: start the run and add one site of every content-coupled type
     // (plus a Battle site) to the starting node, so OPEN_SITE / BEGIN_BATTLE
     // have live targets regardless of what the atlas generator rolled.
     const prefix: SeqEvent[] = [
       ev(1, "START_JOURNEY", {
-        dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+        avatarId: testAvatarId(AVATAR_ID),
       }),
-      ev(2, "SELECT_DREAM_AVATAR", {
-        dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+      ev(2, "SELECT_AVATAR", {
+        avatarId: testAvatarId(AVATAR_ID),
       }),
     ];
     const started = replayLog({ genesis: GENESIS, events: prefix });
@@ -383,10 +383,10 @@ describe("registerGameProviders (real content providers)", () => {
       genesis: GENESIS,
       events: [
         ev(1, "START_JOURNEY", {
-          dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+          avatarId: testAvatarId(AVATAR_ID),
         }),
-        ev(2, "SELECT_DREAM_AVATAR", {
-          dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+        ev(2, "SELECT_AVATAR", {
+          avatarId: testAvatarId(AVATAR_ID),
         }),
       ],
     }).finalState.journey;
@@ -438,10 +438,10 @@ describe("registerGameProviders (real content providers)", () => {
       genesis: GENESIS,
       events: [
         ev(1, "START_JOURNEY", {
-          dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+          avatarId: testAvatarId(AVATAR_ID),
         }),
-        ev(2, "SELECT_DREAM_AVATAR", {
-          dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+        ev(2, "SELECT_AVATAR", {
+          avatarId: testAvatarId(AVATAR_ID),
         }),
       ],
     }).finalState.journey;
@@ -504,10 +504,10 @@ describe("registerGameProviders (real content providers)", () => {
       genesis: GENESIS,
       events: [
         ev(1, "START_JOURNEY", {
-          dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+          avatarId: testAvatarId(AVATAR_ID),
         }),
-        ev(2, "SELECT_DREAM_AVATAR", {
-          dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+        ev(2, "SELECT_AVATAR", {
+          avatarId: testAvatarId(AVATAR_ID),
         }),
       ],
     }).finalState.journey;
@@ -554,10 +554,10 @@ describe("registerGameProviders (real content providers)", () => {
       genesis: GENESIS,
       events: [
         ev(1, "START_JOURNEY", {
-          dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+          avatarId: testAvatarId(AVATAR_ID),
         }),
-        ev(2, "SELECT_DREAM_AVATAR", {
-          dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+        ev(2, "SELECT_AVATAR", {
+          avatarId: testAvatarId(AVATAR_ID),
         }),
       ],
     }).finalState.journey;
@@ -625,7 +625,7 @@ describe("registerGameProviders (real content providers)", () => {
   it("rebuilds debug progress as one consistent Atlas transition", () => {
     const events = [
       ev(1, "START_JOURNEY", {
-        dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
+        avatarId: testAvatarId(AVATAR_ID),
       }),
       ev(2, "REGENERATE_ATLAS", { completionLevel: 3 }),
     ];
@@ -679,7 +679,7 @@ describe("registerGameProviders (real content providers)", () => {
       seq += 1;
     };
 
-    apply("START_JOURNEY", { dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID) });
+    apply("START_JOURNEY", { avatarId: testAvatarId(AVATAR_ID) });
     const layerCount = state.journey.atlas.layers.length;
     for (let layer = 0; layer < layerCount; layer += 1) {
       const nodeId = state.journey.currentDreamscape;

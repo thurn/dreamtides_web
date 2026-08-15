@@ -26,7 +26,7 @@ InfoCardProps is a discriminated union. The flattened table combines every varia
 | `body` | `RichText` | no | — | The reveal copy, as a structured {@link RichText} value. Canonical rules symbols and explicit glyph parts render as cap-height-aligned inline icons. |
 | `imageCrop` | `ImageCrop` = `"center" \| "top"` | no | — | How the hero image is cropped. Default `"center"`. |
 | `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
-| `subtitle` | `LocalizedString` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. The resident guide / boss title; rules symbols render as icons. An epithet under the name — a smaller serif subtitle in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. |
+| `subtitle` | `LocalizedString` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. The resident guide / boss title; rules symbols render as icons. An epithet under the name — a smaller serif subtitle in white, mirroring the Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
 | `tide` | `Resonance` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc color/mark and the resonance label. |
 
@@ -55,7 +55,7 @@ import { richText } from "src/cumulus/components/card/rich-text";
 
 ### Text variant with epithet
 
-Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Used for the Dream Avatar profile reveal.
+Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Avatar-select name/epithet pairing. Used for the Avatar profile reveal.
 
 ```tsx
 <InfoCard
@@ -73,7 +73,7 @@ A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, om
 ```tsx
 <InfoCard
   variant="object"
-  image={artRef.dreamAvatar("0025")}
+  image={artRef.avatar("0025")}
   frame
   title={assertLocalized("Seld Rakor")}
   body={richText.rules(assertLocalized("Whenever you Reclaim a card, deal 1 damage."))}
@@ -82,7 +82,7 @@ A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, om
 
 ### Full-bleed variant
 
-A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Dream Avatar profile reveal and the compact atlas node reveals.
+A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Pass an optional `figure` (a transparent character render) to stand a subject centered and prominent over the hero, above the glass card. Used for the Avatar profile reveal and the compact atlas node reveals.
 
 ```tsx
 <InfoCard

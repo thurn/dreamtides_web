@@ -92,7 +92,7 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
     completionLevel: 1,
     essence: 240,
     deck: [],
-    dreamAvatar: null,
+    avatar: null,
     dreamsigns: [],
     siteRuntime: {
       "s-essence": { kind: "essence", amount: 275, accepted: false },

@@ -8,7 +8,7 @@ import { createTestBattleInit } from "../../testing/create-battle-init";
 import { createInitialBattleState } from "../state/create-initial-state";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamAvatars,
+  makeBattleTestAvatars,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
@@ -34,7 +34,7 @@ function state(): BattleMutableState {
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
-      dreamAvatars: makeBattleTestDreamAvatars(),
+      avatars: makeBattleTestAvatars(),
     }),
   );
 }

@@ -1,5 +1,5 @@
 // TideDisc — the single tide mark: a colored disc carrying the tide's glyph.
-// This is the Tide family's atom: both the desktop and the mobile DreamAvatar
+// This is the Tide family's atom: both the desktop and the mobile Avatar
 // select render their reveal-trigger tide rows from it, so the disc's tint,
 // ring, and glyph treatment read identically on every surface and cannot drift
 // apart. Colors and glyphs come from `tideVisual` (tide-spec), also used by the
@@ -42,7 +42,7 @@ export interface TideDiscProps {
 /**
  * TideDisc — the single tide mark: a colored disc carrying the tide's fixed
  * glyph, sized to the canonical {@link TIDE_DISC_LG_PX}px diameter.
- * The atom both DreamAvatar-select layouts render their tide discs from, so the
+ * The atom both Avatar-select layouts render their tide discs from, so the
  * treatment is identical everywhere a tide disc appears.
  */
 export function TideDisc({ tide, id, label, description }: TideDiscProps) {

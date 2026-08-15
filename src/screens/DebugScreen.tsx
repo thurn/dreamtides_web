@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import type { CardData } from "../types/cards";
 import type {
   DreamsignTemplate,
-  ResolvedDreamAvatarPackage,
+  ResolvedAvatarPackage,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
 import type { JourneyState } from "../types/journey";
@@ -35,7 +35,7 @@ export function DebugScreen({
   onClose: () => void;
   draftState: DraftState | null;
   cardDatabase: ReadonlyMap<number, CardData>;
-  resolvedPackage: ResolvedDreamAvatarPackage | null;
+  resolvedPackage: ResolvedAvatarPackage | null;
   remainingDreamsignPool: readonly DreamsignId[];
   dreamsignTemplates: readonly DreamsignTemplate[];
   onForceLegendaryOffer?: (

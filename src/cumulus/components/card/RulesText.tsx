@@ -30,7 +30,7 @@ import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { localizedSourceText } from "../../../runtime/localization/runtime";
 import type { CardId } from "../../../types/card-identity";
 import type {
-  DreamAvatarId,
+  AvatarId,
   DreamwellCardId,
   DreamsignId,
   OpponentId,
@@ -54,7 +54,7 @@ import type { SemanticEntityNamespace } from "../../../types/semantic-identity";
  *     plain-language definitions travel with named entity reveal specifications
  *     through the shared reveal coordinator.
  *
- * `RulesText` is the canonical block component for card, DreamAvatar,
+ * `RulesText` is the canonical block component for card, Avatar,
  * Dreamsign, battle, editor, and reward surfaces. The lower render helpers are
  * passive formatters for structured-copy components whose outer entity owns
  * glossary interaction.
@@ -191,8 +191,8 @@ export function isHighlightedRulesTextTerm(word: string): boolean {
 /** Semantic game object whose authored rules text is being rendered. */
 export type RulesTextOwner =
   | { readonly kind: "card"; readonly id: CardId }
-  | { readonly kind: "dreamAvatar"; readonly id: DreamAvatarId }
-  | { readonly kind: "opponentDreamAvatar"; readonly id: OpponentId }
+  | { readonly kind: "avatar"; readonly id: AvatarId }
+  | { readonly kind: "opponentAvatar"; readonly id: OpponentId }
   | { readonly kind: "dreamsign"; readonly id: DreamsignId }
   | { readonly kind: "dreamwellCard"; readonly id: DreamwellCardId };
 
@@ -572,10 +572,10 @@ function rulesTextEntityType(
   switch (owner.kind) {
     case "card":
       return "card-rules-text";
-    case "dreamAvatar":
-      return "dream-avatar-rules-text";
-    case "opponentDreamAvatar":
-      return "opponent-dream-avatar-rules-text";
+    case "avatar":
+      return "avatar-rules-text";
+    case "opponentAvatar":
+      return "opponent-avatar-rules-text";
     case "dreamsign":
       return "dreamsign-rules-text";
     case "dreamwellCard":
@@ -587,7 +587,7 @@ function rulesTextGlossaryOwner(
   owner: RulesTextOwner,
 ): RulesTextGlossaryOwner {
   if (owner.kind === "dreamwellCard") return "card";
-  if (owner.kind === "opponentDreamAvatar") return "dreamAvatar";
+  if (owner.kind === "opponentAvatar") return "avatar";
   return owner.kind;
 }
 
@@ -599,11 +599,11 @@ function rulesTextAriaLabel(owner: RulesTextOwner, text: LocalizedString) {
       "[accessibility] Name for interactive authored card rules text.",
     );
   }
-  if (owner.kind === "dreamAvatar" || owner.kind === "opponentDreamAvatar") {
+  if (owner.kind === "avatar" || owner.kind === "opponentAvatar") {
     return txa(
       "Avatar ability: {rules_text}",
       { rules_text: opaque(text) },
-      "[accessibility] [dream-avatar] Name for interactive authored Dream Avatar rules text.",
+      "[accessibility] [avatar] Name for interactive authored Avatar rules text.",
     );
   }
   return txa(
@@ -661,7 +661,7 @@ function RulesTextSource({
  * Renders rules text in authored ability paragraphs.
  *
  * Use as a drop-in for any place that prints `card.renderedText`,
- * `dreamAvatar.renderedText`, or `dreamsign.effectDescription` raw — the
+ * `avatar.renderedText`, or `dreamsign.effectDescription` raw — the
  * tokenizer handles the symbol substitution and glossary-term emphasis.
  */
 export function RulesText({

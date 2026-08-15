@@ -20,7 +20,7 @@ import { token } from "../primitives/tokens";
 import type {
   TutorialAction,
   TutorialActionName,
-  TutorialDreamAvatarOwner,
+  TutorialAvatarOwner,
   TutorialEditorSaveStatus,
   TutorialHowToPlayCompanion,
   TutorialHowToPlayTrigger,
@@ -72,7 +72,7 @@ const ACTION_OPTIONS = [
   { value: "display-speech-bubble", label: "Display Speech Bubble" },
   { value: "display-how-to-play", label: "Display How to Play" },
   {
-    value: "animate-dream-avatar-portrait",
+    value: "animate-avatar-portrait",
     label: "Animate Avatar Portrait",
   },
   { value: "draw-card", label: "Draw Card" },
@@ -94,10 +94,10 @@ const ACTION_OPTIONS = [
   { value: "end-turn", label: "End Turn" },
 ] satisfies readonly { value: TutorialActionName; label: string }[];
 
-const DREAM_AVATAR_OWNER_OPTIONS = [
+const AVATAR_OWNER_OPTIONS = [
   { value: "player", label: "Player" },
   { value: "enemy", label: "Opponent" },
-] satisfies readonly { value: TutorialDreamAvatarOwner; label: string }[];
+] satisfies readonly { value: TutorialAvatarOwner; label: string }[];
 
 const SPEECH_BUBBLE_SPEAKER_OPTIONS = [
   { value: "mira", label: "Mira" },
@@ -156,10 +156,10 @@ function defaultAction(
       wait: 0,
     };
   }
-  if (actionName === "animate-dream-avatar-portrait") {
+  if (actionName === "animate-avatar-portrait") {
     return {
       id: parseTutorialActionId(id),
-      action: "animate-dream-avatar-portrait",
+      action: "animate-avatar-portrait",
       owner: "player",
       pause: 1,
       duration: 0.6,
@@ -393,12 +393,12 @@ function changedActionType(
     id: action.id,
     action: actionName,
     owner:
-      action.action === "animate-dream-avatar-portrait"
+      action.action === "animate-avatar-portrait"
         ? action.owner
         : "player",
-    pause: action.action === "animate-dream-avatar-portrait" ? action.pause : 1,
+    pause: action.action === "animate-avatar-portrait" ? action.pause : 1,
     duration:
-      action.action === "animate-dream-avatar-portrait" ? action.duration : 0.6,
+      action.action === "animate-avatar-portrait" ? action.duration : 0.6,
     wait: action.wait,
   };
 }
@@ -825,7 +825,7 @@ function TutorialActionRow({
                 if (
                   value !== "display-speech-bubble" &&
                   value !== "display-how-to-play" &&
-                  value !== "animate-dream-avatar-portrait" &&
+                  value !== "animate-avatar-portrait" &&
                   value !== "draw-card" &&
                   value !== "draw-opponent-card" &&
                   value !== "reveal-and-play-opponent-card" &&
@@ -1004,15 +1004,15 @@ function TutorialActionRow({
           </>
         ) : null}
 
-        {action.action === "animate-dream-avatar-portrait" ? (
+        {action.action === "animate-avatar-portrait" ? (
           <>
             <Select
               full
               size="sm"
               ariaLabel={assertLocalized(
-                `DreamAvatar owner for action ${String(index + 1)}`,
+                `Avatar owner for action ${String(index + 1)}`,
               )}
-              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({
+              options={[...AVATAR_OWNER_OPTIONS].map((option) => ({
                 ...option,
                 label: assertLocalized(option.label),
                 ...("triggerLabel" in option &&
@@ -1121,7 +1121,7 @@ function TutorialActionRow({
               ariaLabel={assertLocalized(
                 `Card owner for action ${String(index + 1)}`,
               )}
-              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({
+              options={[...AVATAR_OWNER_OPTIONS].map((option) => ({
                 ...option,
                 label: assertLocalized(option.label),
                 ...("triggerLabel" in option &&
@@ -1250,7 +1250,7 @@ function TutorialActionRow({
               ariaLabel={assertLocalized(
                 `Dreamwell owner for action ${String(index + 1)}`,
               )}
-              options={[...DREAM_AVATAR_OWNER_OPTIONS].map((option) => ({
+              options={[...AVATAR_OWNER_OPTIONS].map((option) => ({
                 ...option,
                 label: assertLocalized(option.label),
                 ...("triggerLabel" in option &&
@@ -1583,7 +1583,7 @@ function TutorialEditorContent({
           if (
             value !== "display-speech-bubble" &&
             value !== "display-how-to-play" &&
-            value !== "animate-dream-avatar-portrait" &&
+            value !== "animate-avatar-portrait" &&
             value !== "draw-card" &&
             value !== "draw-opponent-card" &&
             value !== "reveal-and-play-opponent-card" &&

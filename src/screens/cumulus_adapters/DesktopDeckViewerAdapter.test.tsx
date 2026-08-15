@@ -15,7 +15,7 @@ import type { JourneyState } from "../../types/journey";
 import { parseCardName } from "../../types/card-identity";
 import { parseJourneyId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testCardId, testDreamAvatarId, testDreamsignId } from "../../types/test-identities";
+import { testCardId, testAvatarId, testDreamsignId } from "../../types/test-identities";
 
 vi.mock("../../state/journey-context", () => ({
   useJourney: vi.fn(),
@@ -71,11 +71,11 @@ function makeState(): JourneyState {
         isBane: false,
       },
     ],
-    dreamAvatar: {
-      id: testDreamAvatarId("caller-1"),
+    avatar: {
+      id: testAvatarId("caller-1"),
       name: "Mira of Lanterns",
       title: "Keeper of Lantern Glass",
-      renderedText: "DreamAvatar rules.",
+      renderedText: "Avatar rules.",
       imageNumber: "0005",
       startingEssence: 250,
     },
@@ -175,7 +175,7 @@ describe("DesktopDeckViewerAdapter", () => {
     expect(logEvent).toHaveBeenLastCalledWith("desktop_deck_viewer_opened", {
       cardCount: 1,
       dreamsignCount: 1,
-      hasDreamAvatar: true,
+      hasAvatar: true,
     });
 
     setJourneyContext(makeState());

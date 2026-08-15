@@ -147,6 +147,131 @@
       "description": "Enter the node's dreamscape. Available nodes invoke this with their UUID."
     }
   ],
+  "AvatarPortrait": [
+    {
+      "name": "avatar",
+      "tsType": "AvatarVisual",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The avatar whose art and identity the portrait shows.",
+      "nested": {
+        "name": "AvatarVisual",
+        "fields": [
+          {
+            "name": "imageNumber",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "title",
+            "tsType": "LocalizedString",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "portraitFocus",
+            "tsType": "AvatarPortraitFocus",
+            "optional": true,
+            "description": "Normalized head position used to center subject-aware crops."
+          }
+        ]
+      }
+    },
+    {
+      "name": "variant",
+      "tsType": "AvatarPortraitVariant",
+      "unionMembers": [
+        "panel",
+        "thumb"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Square framing: `panel` for profile surfaces or `thumb` for compact rows. Default `panel`."
+    },
+    {
+      "name": "profile",
+      "tsType": "{ id: AvatarId | OpponentId; ability: LocalizedString; }",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Semantic Avatar profile represented by this portrait. Omit for decorative art."
+    },
+    {
+      "name": "onPress",
+      "tsType": "(() => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional primary press action for selectable profile portraits."
+    },
+    {
+      "name": "unavailable",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Keeps the profile readable while suppressing activation."
+    }
+  ],
+  "AvatarStage": [
+    {
+      "name": "avatar",
+      "tsType": "AvatarVisual",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The Avatar whose full-body art fills the stage.",
+      "nested": {
+        "name": "AvatarVisual",
+        "fields": [
+          {
+            "name": "imageNumber",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "LocalizedString",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "title",
+            "tsType": "LocalizedString",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "portraitFocus",
+            "tsType": "AvatarPortraitFocus",
+            "optional": true,
+            "description": "Normalized head position used to center subject-aware crops."
+          }
+        ]
+      }
+    },
+    {
+      "name": "variant",
+      "tsType": "AvatarStageVariant",
+      "unionMembers": [
+        "fullBleed",
+        "standing",
+        "cutout"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "`standing` adds an ambient glow, `cutout` preserves the scene, and `fullBleed` adds a cinematic backdrop."
+    }
+  ],
   "BattleForeseeEditor": [
     {
       "name": "model",
@@ -245,26 +370,26 @@
       "description": "Relationship of this canonical combatant to the current local perspective."
     },
     {
-      "name": "dreamAvatar",
-      "tsType": "DreamAvatarVisual | null",
+      "name": "avatar",
+      "tsType": "AvatarVisual | null",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "DreamAvatar whose head portrait anchors the card, or null while it loads."
+      "description": "Avatar whose head portrait anchors the card, or null while it loads."
     },
     {
-      "name": "dreamAvatarProfile",
-      "tsType": "BattleStatusDreamAvatarProfile",
+      "name": "avatarProfile",
+      "tsType": "BattleStatusAvatarProfile",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "Optional identity and ability copy revealed from the portrait.",
       "nested": {
-        "name": "BattleStatusDreamAvatarProfile",
+        "name": "BattleStatusAvatarProfile",
         "fields": [
           {
             "name": "id",
-            "tsType": "DreamAvatarId | OpponentId",
+            "tsType": "AvatarId | OpponentId",
             "optional": false,
             "description": ""
           },
@@ -1480,131 +1605,6 @@
       "required": true,
       "defaultValue": null,
       "description": "Content revealed beneath the trigger."
-    }
-  ],
-  "DreamAvatarPortrait": [
-    {
-      "name": "dreamAvatar",
-      "tsType": "DreamAvatarVisual",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The dreamAvatar whose art and identity the portrait shows.",
-      "nested": {
-        "name": "DreamAvatarVisual",
-        "fields": [
-          {
-            "name": "imageNumber",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "name",
-            "tsType": "LocalizedString",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "title",
-            "tsType": "LocalizedString",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "portraitFocus",
-            "tsType": "DreamAvatarPortraitFocus",
-            "optional": true,
-            "description": "Normalized head position used to center subject-aware crops."
-          }
-        ]
-      }
-    },
-    {
-      "name": "variant",
-      "tsType": "DreamAvatarPortraitVariant",
-      "unionMembers": [
-        "panel",
-        "thumb"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Square framing: `panel` for profile surfaces or `thumb` for compact rows. Default `panel`."
-    },
-    {
-      "name": "profile",
-      "tsType": "{ id: DreamAvatarId | OpponentId; ability: LocalizedString; }",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Semantic DreamAvatar profile represented by this portrait. Omit for decorative art."
-    },
-    {
-      "name": "onPress",
-      "tsType": "(() => void)",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Optional primary press action for selectable profile portraits."
-    },
-    {
-      "name": "unavailable",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "false",
-      "description": "Keeps the profile readable while suppressing activation."
-    }
-  ],
-  "DreamAvatarStage": [
-    {
-      "name": "dreamAvatar",
-      "tsType": "DreamAvatarVisual",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "The DreamAvatar whose full-body art fills the stage.",
-      "nested": {
-        "name": "DreamAvatarVisual",
-        "fields": [
-          {
-            "name": "imageNumber",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "name",
-            "tsType": "LocalizedString",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "title",
-            "tsType": "LocalizedString",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "portraitFocus",
-            "tsType": "DreamAvatarPortraitFocus",
-            "optional": true,
-            "description": "Normalized head position used to center subject-aware crops."
-          }
-        ]
-      }
-    },
-    {
-      "name": "variant",
-      "tsType": "DreamAvatarStageVariant",
-      "unionMembers": [
-        "fullBleed",
-        "standing",
-        "cutout"
-      ],
-      "required": true,
-      "defaultValue": null,
-      "description": "`standing` adds an ambient glow, `cutout` preserves the scene, and `fullBleed` adds a cinematic backdrop."
     }
   ],
   "Dreamsign": [
@@ -2940,7 +2940,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "An epithet under the name — a smaller serif line in white, mirroring the\nDream Avatar-select name/epithet pairing. Resolve before display; rules\nsymbols render as icons.\nThe resident guide / boss title; rules symbols render as icons.\nAn epithet under the name — a smaller serif subtitle in white, mirroring\nthe Dream Avatar-select name/epithet pairing. Resolve before display;\nrules symbols render as icons."
+      "description": "An epithet under the name — a smaller serif line in white, mirroring the\nAvatar-select name/epithet pairing. Resolve before display; rules\nsymbols render as icons.\nThe resident guide / boss title; rules symbols render as icons.\nAn epithet under the name — a smaller serif subtitle in white, mirroring\nthe Avatar-select name/epithet pairing. Resolve before display;\nrules symbols render as icons."
     },
     {
       "name": "glyph",
@@ -3081,20 +3081,20 @@
       "description": "Open the deck viewer — fired on a tap / click of the deck sprite."
     },
     {
-      "name": "dreamAvatar",
-      "tsType": "QsbDreamAvatar",
+      "name": "avatar",
+      "tsType": "QsbAvatar",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "",
       "nested": {
-        "name": "QsbDreamAvatar",
+        "name": "QsbAvatar",
         "fields": [
           {
             "name": "id",
-            "tsType": "DreamAvatarId",
+            "tsType": "AvatarId",
             "optional": false,
-            "description": "Stable DreamAvatar UUID."
+            "description": "Stable Avatar UUID."
           },
           {
             "name": "name",
@@ -3112,11 +3112,11 @@
             "name": "portrait",
             "tsType": "ArtRef",
             "optional": false,
-            "description": "The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art."
+            "description": "The portrait art as an {@link ArtRef}. Required — a docked Avatar always has art."
           },
           {
             "name": "portraitFocus",
-            "tsType": "DreamAvatarPortraitFocus",
+            "tsType": "AvatarPortraitFocus",
             "optional": true,
             "description": "Normalized head position used to center the square HUD crop."
           },
@@ -3980,13 +3980,13 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "\"card\" | \"dreamAvatar\" | \"opponentDreamAvatar\" | \"dreamsign\" | \"dreamwellCard\"",
+            "tsType": "\"card\" | \"avatar\" | \"opponentAvatar\" | \"dreamsign\" | \"dreamwellCard\"",
             "optional": false,
             "description": ""
           },
           {
             "name": "id",
-            "tsType": "DreamAvatarId | OpponentId | DreamwellCardId | CardId | DreamsignId",
+            "tsType": "AvatarId | OpponentId | DreamwellCardId | CardId | DreamsignId",
             "optional": false,
             "description": ""
           }

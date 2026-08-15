@@ -42,7 +42,7 @@ function battleWithMessage(message: TutorialGuidanceMessage): BattleFoldState {
           imageNumber: 1,
         },
       ],
-      dreamAvatarSummary: {
+      avatarSummary: {
         id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
         name: "Tensho",
         title: "Daimyo of Lacquered Fury",
@@ -73,12 +73,12 @@ describe("buildBattleTutorialGuidanceView", () => {
     {
       speaker: "player" as const,
       speakerName: "Tensho",
-      portrait: { kind: "dreamAvatar", imageNumber: "0029" },
+      portrait: { kind: "avatar", imageNumber: "0029" },
     },
     {
       speaker: "enemy" as const,
       speakerName: "Threxan",
-      portrait: { kind: "dreamAvatar", imageNumber: "0025" },
+      portrait: { kind: "avatar", imageNumber: "0025" },
     },
   ])(
     "maps $speaker trigger speech to its authored speaker",

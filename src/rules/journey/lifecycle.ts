@@ -16,8 +16,8 @@
 import { genesisFoldState } from "../fold-state";
 import type { BattleFoldState, FoldState } from "../fold-state";
 import { battleModeOf, resolveScript } from "../battle/fold";
-import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
-import type { ResolvedDreamAvatarPackage } from "../../types/content";
+import { toJourneyAvatar } from "../../data/avatar-selection";
+import type { ResolvedAvatarPackage } from "../../types/content";
 import type { JourneyState, SiteType } from "../../types/journey";
 import type { EffectStep } from "../battle/effect-step";
 import type { EffectRun, ScriptRef } from "../battle/fold";
@@ -41,53 +41,53 @@ import {
   isLegacyPromptText,
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
-import { parseDreamAvatarId } from "../../types/identifiers";
+import { parseAvatarId } from "../../types/identifiers";
 import { parseJourneyId } from "../../types/identifiers";
 import type { JourneySeed } from "../../types/journey-seed";
 
 // ---------------------------------------------------------------------------
-// Content-provider seam (SELECT_DREAM_AVATAR / START_JOURNEY)
+// Content-provider seam (SELECT_AVATAR / START_JOURNEY)
 // ---------------------------------------------------------------------------
 
 /**
  * The deterministic content the two run-assembly cases need but cannot compute
- * inside a pure reducer: the real DreamAvatar pool, atlas, and draft state are
- * generated from TOML-sourced card/dreamAvatar data that only loads
+ * inside a pure reducer: the real Avatar pool, atlas, and draft state are
+ * generated from TOML-sourced card/avatar data that only loads
  * asynchronously (`loadJourneyContent` in src/data/), while the reducer must fold
  * synchronously from `(state, event, ctx)` alone.
  *
  * The impure side (app/coop bootstrap, which has already loaded the content)
  * registers a provider whose functions are PURE and DETERMINISTIC in
- * `(dreamAvatarId, seed)`: the run `seed` is always `journey.seed` (fixed per
+ * `(avatarId, seed)`: the run `seed` is always `journey.seed` (fixed per
  * room at genesis), never a freshly-minted one, so two clients folding the same
- * log resolve byte-identical packages. Legacy `startJourneyFromDreamAvatar` minted
+ * log resolve byte-identical packages. Legacy `startJourneyFromAvatar` minted
  * a fresh `generateJourneySeed()` (a `crypto`/`Math.random` source); pinning the
  * generation seed to `journey.seed` is the determinism fix.
  *
  * SEAM: real content registration is deferred to the integration task that
  * wires the reducer into src/coop/. Until a provider is registered,
- * SELECT_DREAM_AVATAR and START_JOURNEY bounce (a recorded no-op, never a throw).
+ * SELECT_AVATAR and START_JOURNEY bounce (a recorded no-op, never a throw).
  */
 export interface JourneyLifecycleContentProvider {
   /**
-   * Resolve one DreamAvatar's package deterministically from its id and the
+   * Resolve one Avatar's package deterministically from its id and the
    * run seed. Returns `null` when the id is unknown (the case bounces).
    */
-  resolveDreamAvatarPackage(
-    dreamAvatarId: DreamAvatarId,
+  resolveAvatarPackage(
+    avatarId: AvatarId,
     seed: JourneySeed,
-  ): ResolvedDreamAvatarPackage | null;
+  ): ResolvedAvatarPackage | null;
   /**
    * Assemble the full started-run journey state (starter deck, atlas, draft
    * state, essence, opening screen) deterministically. Must preserve
-   * `input.journey.seed`. Returns `null` to bounce (e.g. unknown dreamAvatar).
+   * `input.journey.seed`. Returns `null` to bounce (e.g. unknown avatar).
    */
   startJourney(input: {
     journey: JourneyState;
-    dreamAvatarId: DreamAvatarId;
+    avatarId: AvatarId;
     seed: JourneySeed;
   }): JourneyState | null;
   /** Rebuild the Atlas at the journey's authoritative progress depth. */
@@ -312,17 +312,17 @@ export function dismissStartingDeckPopup(
 }
 
 /**
- * `REROLL_DREAM_AVATAR_OFFER { }` — increment the shared journey-start reroll
+ * `REROLL_AVATAR_OFFER { }` — increment the shared journey-start reroll
  * count. The screen adapter combines this count with the immutable room seed,
  * so the event log reproduces the same offer on every client and reload.
  */
-export function rerollDreamAvatarOffer(
+export function rerollAvatarOffer(
   journey: JourneyState,
 ): JourneyState | null {
   if (
-    journey.dreamAvatar !== null ||
+    journey.avatar !== null ||
     journey.screen.type !== "journeyStart" ||
-    journey.screen.tutorialDreamAvatarId !== undefined
+    journey.screen.tutorialAvatarId !== undefined
   ) {
     return null;
   }
@@ -336,47 +336,47 @@ export function rerollDreamAvatarOffer(
 }
 
 // ---------------------------------------------------------------------------
-// DreamAvatar selection & run assembly
+// Avatar selection & run assembly
 // ---------------------------------------------------------------------------
 
 /**
- * `SELECT_DREAM_AVATAR { dreamAvatarId }` — legacy `setDreamAvatarSelection`,
+ * `SELECT_AVATAR { avatarId }` — legacy `setAvatarSelection`,
  * with the package resolution the legacy mutation trusted from the client
  * moved in-reducer: the package is derived deterministically from
- * `(dreamAvatarId, journey.seed)` via the registered content provider (see
+ * `(avatarId, journey.seed)` via the registered content provider (see
  * {@link JourneyLifecycleContentProvider}). Bounces with no provider or an
- * unknown dreamAvatar. The state merge mirrors legacy `applyDreamAvatarSelection`.
+ * unknown avatar. The state merge mirrors legacy `applyAvatarSelection`.
  */
-export function selectDreamAvatar(
+export function selectAvatar(
   journey: JourneyState,
   payload: Record<string, unknown>,
 ): JourneyState | null {
-  const dreamAvatarId = payload.dreamAvatarId;
-  if (typeof dreamAvatarId !== "string") return null;
+  const avatarId = payload.avatarId;
+  if (typeof avatarId !== "string") return null;
   const provider = contentProvider;
   if (provider === null) return null;
-  const resolvedPackage = provider.resolveDreamAvatarPackage(
-    parseDreamAvatarId(dreamAvatarId),
+  const resolvedPackage = provider.resolveAvatarPackage(
+    parseAvatarId(avatarId),
     journey.seed,
   );
   if (resolvedPackage === null) return null;
   return {
     ...journey,
-    dreamAvatar: toJourneyDreamAvatar(resolvedPackage.dreamAvatar),
+    avatar: toJourneyAvatar(resolvedPackage.avatar),
     resolvedPackage,
     remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],
   };
 }
 
 /**
- * `START_JOURNEY { dreamAvatarId }` — legacy `startJourney` / `startJourneyFromDreamAvatar`.
+ * `START_JOURNEY { avatarId }` — legacy `startJourney` / `startJourneyFromAvatar`.
  *
  * The full run assembly (pool package, starter deck, atlas generation, draft
  * state) is content- and generator-heavy, so it is delegated to the registered
- * content provider, which is deterministic in `(dreamAvatarId, journey.seed)`.
+ * content provider, which is deterministic in `(avatarId, journey.seed)`.
  * The reducer owns the guards the legacy transaction owned: it is a no-op once a
- * dreamAvatar is already selected (legacy checked `journeyState.dreamAvatar !==
- * null`), and it bounces when no provider is wired or the dreamAvatar is unknown.
+ * avatar is already selected (legacy checked `journeyState.avatar !==
+ * null`), and it bounces when no provider is wired or the avatar is unknown.
  *
  * The provider MUST preserve `journey.seed` (the room seed pinned at genesis) so
  * RESET_JOURNEY can always reconstruct the genesis fold.
@@ -386,14 +386,14 @@ export function startJourney(
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  if (journey.dreamAvatar !== null) return null;
-  const dreamAvatarId = payload.dreamAvatarId;
-  if (typeof dreamAvatarId !== "string") return null;
+  if (journey.avatar !== null) return null;
+  const avatarId = payload.avatarId;
+  if (typeof avatarId !== "string") return null;
   const provider = contentProvider;
   if (provider === null) return null;
   const started = provider.startJourney({
     journey,
-    dreamAvatarId: parseDreamAvatarId(dreamAvatarId),
+    avatarId: parseAvatarId(avatarId),
     seed: journey.seed,
   });
   return started === null
@@ -477,7 +477,7 @@ export function loadState(
  *   - `snapshot.seed === state.journey.seed` (the room seed, pinned equal to
  *     `genesis.seed` at creation) — a foreign seed would desync every derived
  *     generator;
- *   - no run field (`dreamAvatar` / `resolvedPackage` / `draftState`) that is
+ *   - no run field (`avatar` / `resolvedPackage` / `draftState`) that is
  *     currently non-null is nulled by the snapshot (the run-field nullability
  *     invariant the property sweep protects);
  *   - if a battle slice is supplied, it is a well-formed {@link BattleFoldState}
@@ -498,7 +498,7 @@ export function validateLoadedState(
   if (snapshot.seed !== state.journey.seed) return null;
 
   const before = state.journey;
-  if (before.dreamAvatar != null && snapshot.dreamAvatar == null) return null;
+  if (before.avatar != null && snapshot.avatar == null) return null;
   if (before.resolvedPackage != null && snapshot.resolvedPackage == null)
     return null;
   if (before.draftState != null && snapshot.draftState == null) return null;
@@ -605,7 +605,7 @@ function isJourneyStateShape(value: unknown): value is JourneyState {
     return false;
   }
   // Nullable structural fields: null or an object.
-  for (const key of ["dreamAvatar", "resolvedPackage", "draftState"]) {
+  for (const key of ["avatar", "resolvedPackage", "draftState"]) {
     const field = value[key];
     if (field !== null && !isRecord(field)) return false;
   }

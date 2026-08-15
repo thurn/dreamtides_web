@@ -1,10 +1,10 @@
-// The mobile (narrow-viewport) DreamAvatar-select layout: a full-bleed swipe
-// carousel, one DreamAvatar per page, with the full-body character cutout
+// The mobile (narrow-viewport) Avatar-select layout: a full-bleed swipe
+// carousel, one Avatar per page, with the full-body character cutout
 // standing on an ambient backdrop behind a liquid-glass console. It shares
 // the view types and console primitives with the desktop triptych via
 // `journey-start-shared`, and both layouts compose the canonical RulesText
 // source; `JourneyStartScreen` picks between the two by viewport.
-// PURE: renders from a view-model and reports the chosen DreamAvatar via `onPick`.
+// PURE: renders from a view-model and reports the chosen Avatar via `onPick`.
 
 import { tx, type LocalizedString } from "@trox/runtime";
 import { useRef, useState } from "react";
@@ -14,7 +14,7 @@ import { IconButton } from "../components/controls/IconButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import { DreamAvatarStage } from "../components/hud/DreamAvatarStage";
+import { AvatarStage } from "../components/hud/AvatarStage";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import {
   ConsoleDivider,
@@ -23,7 +23,7 @@ import {
   OnMediaEyebrow,
   JourneyStartRerollControl,
   TidesEssenceBlock,
-  type DreamAvatarOfferView,
+  type AvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
 
@@ -34,17 +34,17 @@ const TIDE_HIT_SLOP = token("--space-xs");
 
 /** The mobile carousel's glass console beneath a portrait: ability text, a
  * hairline, the tides cluster + starting essence, and the Choose action. */
-function DreamAvatarConsole({
-  dreamAvatar,
+function AvatarConsole({
+  avatar,
   chooseLabel,
   onChoose,
 }: {
-  dreamAvatar: DreamAvatarOfferView;
+  avatar: AvatarOfferView;
   chooseLabel: LocalizedString;
   onChoose: () => void;
 }) {
   return (
-    <GlassPanel testId={`dream-avatar-glass-panel-${dreamAvatar.id}`}>
+    <GlassPanel testId={`avatar-glass-panel-${avatar.id}`}>
       <div
         style={{
           padding: token("--space-l"),
@@ -52,7 +52,7 @@ function DreamAvatarConsole({
           flexDirection: "column",
         }}
       >
-        <JourneyStartAbilityCopy dreamAvatar={dreamAvatar} />
+        <JourneyStartAbilityCopy avatar={avatar} />
 
         {/* An even --space-l rhythm around the divider, matching the desktop
             panel: one step above and one below. */}
@@ -62,13 +62,13 @@ function DreamAvatarConsole({
 
         <div style={{ marginTop: token("--space-l") }}>
           <TidesEssenceBlock
-            dreamAvatar={dreamAvatar}
+            avatar={avatar}
             hitSlop={TIDE_HIT_SLOP}
           />
         </div>
 
         <div
-          data-choose-dream-avatar={dreamAvatar.id}
+          data-choose-avatar={avatar.id}
           style={{ marginTop: token("--space-l"), display: "grid" }}
         >
           <GlassButton
@@ -83,12 +83,12 @@ function DreamAvatarConsole({
   );
 }
 
-/** The DreamAvatar's name and epithet, sitting directly on the portrait so it
+/** The Avatar's name and epithet, sitting directly on the portrait so it
  * earns legibility from the on-media outline dilation rather than a plate. */
-function DreamAvatarTitle({
-  dreamAvatar,
+function AvatarTitle({
+  avatar,
 }: {
-  dreamAvatar: DreamAvatarOfferView;
+  avatar: AvatarOfferView;
 }) {
   const resolve = useLocalizer();
   return (
@@ -112,7 +112,7 @@ function DreamAvatarTitle({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {resolve(dreamAvatar.name)}
+          {resolve(avatar.name)}
         </span>
         <span
           style={{
@@ -123,7 +123,7 @@ function DreamAvatarTitle({
             textShadow: token("--text-outline-media"),
           }}
         >
-          {resolve(dreamAvatar.title)}
+          {resolve(avatar.title)}
         </span>
       </h1>
     </div>
@@ -178,11 +178,11 @@ function EdgeChevron({
           dir === "left"
             ? tx(
                 "Previous",
-                "[dream-avatar] [journey] Command that moves to the previous Dream Avatar offer.",
+                "[avatar] [journey] Command that moves to the previous Avatar offer.",
               )
             : tx(
                 "Next",
-                "[dream-avatar] [journey] Command that moves to the next Dream Avatar offer.",
+                "[avatar] [journey] Command that moves to the next Avatar offer.",
               )
         }
         onPress={onClick}
@@ -194,18 +194,18 @@ function EdgeChevron({
 /** One mobile carousel page: portrait + title, sized to a fraction of the swipe
  * track. The glass console stays outside this transformed track so it can blur
  * the live scene. */
-function DreamAvatarPage({
-  dreamAvatar,
+function AvatarPage({
+  avatar,
   active,
   count,
 }: {
-  dreamAvatar: DreamAvatarOfferView;
+  avatar: AvatarOfferView;
   active: boolean;
   count: number;
 }) {
   return (
     <div
-      data-dream-avatar-page={dreamAvatar.id}
+      data-avatar-page={avatar.id}
       style={{
         width: `${100 / count}%`,
         height: "100%",
@@ -213,18 +213,18 @@ function DreamAvatarPage({
         overflow: "hidden",
       }}
     >
-      <DreamAvatarStage dreamAvatar={dreamAvatar} variant="fullBleed" />
+      <AvatarStage avatar={avatar} variant="fullBleed" />
       <Motes on={active} tint="warm" zIndex={1} />
 
-      <DreamAvatarTitle dreamAvatar={dreamAvatar} />
+      <AvatarTitle avatar={avatar} />
     </div>
   );
 }
 
-/** The mobile DreamAvatar-selection carousel: a full-bleed swipe carousel of
- * the offered DreamAvatars, one per page. */
+/** The mobile Avatar-selection carousel: a full-bleed swipe carousel of
+ * the offered Avatars, one per page. */
 export function CarouselSelect({
-  dreamAvatars,
+  avatars,
   guideDialogue,
   onPick,
   onReroll,
@@ -236,8 +236,8 @@ export function CarouselSelect({
     active: false,
     x0: 0,
   });
-  const count = dreamAvatars.length;
-  const activeDreamAvatar = dreamAvatars[index];
+  const count = avatars.length;
+  const activeAvatar = avatars[index];
 
   const clamp = (next: number): number =>
     Math.max(0, Math.min(count - 1, next));
@@ -279,7 +279,7 @@ export function CarouselSelect({
       <ScreenHeader
         title={tx(
           "Choose Your Avatar",
-          "[dream-avatar] [journey] Title and actions on the Dream Avatar selection screen.",
+          "[avatar] [journey] Title and actions on the Avatar selection screen.",
         )}
       />
       {guideDialogue !== undefined && (
@@ -309,19 +309,19 @@ export function CarouselSelect({
             : `transform ${token("--dur-slow")} ${token("--ease-out")}`,
         }}
       >
-        {dreamAvatars.map((dreamAvatar, i) => (
-          <DreamAvatarPage
-            key={dreamAvatar.id}
-            dreamAvatar={dreamAvatar}
+        {avatars.map((avatar, i) => (
+          <AvatarPage
+            key={avatar.id}
+            avatar={avatar}
             active={i === index}
             count={count}
           />
         ))}
       </div>
 
-      {activeDreamAvatar !== undefined && (
+      {activeAvatar !== undefined && (
         <div
-          data-dream-avatar-console={activeDreamAvatar.id}
+          data-avatar-console={activeAvatar.id}
           onPointerDown={(event) => {
             event.stopPropagation();
           }}
@@ -334,14 +334,14 @@ export function CarouselSelect({
             padding: `0 ${token("--gutter")} calc(${token("--safe-bottom")} + ${token("--space-m")})`,
           }}
         >
-          <DreamAvatarConsole
-            dreamAvatar={activeDreamAvatar}
+          <AvatarConsole
+            avatar={activeAvatar}
             chooseLabel={tx(
               "Choose",
-              "[dream-avatar] [journey] Command that chooses the currently selected Dream Avatar or starting-deck option.",
+              "[avatar] [journey] Command that chooses the currently selected Avatar or starting-deck option.",
             )}
             onChoose={() => {
-              onPick(activeDreamAvatar.id);
+              onPick(activeAvatar.id);
             }}
           />
         </div>

@@ -223,7 +223,7 @@ const routePolicies = [
     resolver: "screenFor",
     chrome: "Bypass",
     contract:
-      "The selection screen owns the opening composition. A run inventory and DreamAvatar-backed utility menu are not available yet.",
+      "The selection screen owns the opening composition. A run inventory and Avatar-backed utility menu are not available yet.",
   },
   {
     id: "active-run",
@@ -255,7 +255,7 @@ const routePolicies = [
     resolver: "siteDispositionFor → battle",
     chrome: "Journey",
     contract:
-      "The opposing-DreamAvatar preview remains part of journey navigation, including the complete HUD, menu, presence, and journey tutorial layer.",
+      "The opposing-Avatar preview remains part of journey navigation, including the complete HUD, menu, presence, and journey tutorial layer.",
   },
   {
     id: "playable-battle",
@@ -401,7 +401,7 @@ export function JourneyScreenHostChromeDocs() {
           </li>
           <li>
             The utility CommandMenu appears for journey chrome once a
-            DreamAvatar exists. It uses the top-end gear on desktop and the
+            Avatar exists. It uses the top-end gear on desktop and the
             top-start menu glyph on mobile, combines app actions with built-in
             commands, and accepts host-resolved contextual actions.
           </li>

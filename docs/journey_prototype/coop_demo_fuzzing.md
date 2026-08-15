@@ -40,7 +40,7 @@ printed seed reproduces the generated schedule.
 The browser harness starts an isolated Firebase Database emulator and serves a
 fresh production-style Vite build, launches publisher and host contexts, and
 drives the visible UI. The
-smoke profile covers the fixed tutorial Dream Avatar selection, a second-client
+smoke profile covers the fixed tutorial Avatar selection, a second-client
 join, an Augury exit back to its Dreamscape, a playable battle,
 **Control Opponent**, and an opponent score edit through the battle inspector.
 It then skips to rewards, continues to the Atlas, checks the complete victory
@@ -145,6 +145,6 @@ Use this sequence on the intended demo revision:
 5. Replay and fix every failure; keep its original artifact directory until the
    same seed passes.
 6. Perform one manual two-window rehearsal through `/main?game=<room>`, the
-   fixed tutorial Dream Avatar route, several dreamscapes, and multiple battles.
+   fixed tutorial Avatar route, several dreamscapes, and multiple battles.
 7. Treat any fold error, JavaScript error, crash, controller-policy failure,
    divergence, or visible action failure as a release blocker.

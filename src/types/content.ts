@@ -1,5 +1,5 @@
 /**
- * Default starting essence used when a DreamAvatar record omits a tuned
+ * Default starting essence used when an Avatar record omits a tuned
  * value. Persistence helpers (see `normalizeJourneyState`) also fall back to
  * this constant so RTDB-stripped rooms render with a sensible value.
  */
@@ -12,7 +12,7 @@ import type {
   SerializedCardNumber,
 } from "./draft";
 import type { GuideId } from "./identifiers";
-import type { DreamAvatarId } from "./identifiers";
+import type { AvatarId } from "./identifiers";
 import type { DreamscapeId } from "./identifiers";
 import type {
   AffiliationId,
@@ -23,24 +23,24 @@ import type {
 import type { SourceTransport } from "../runtime/localization/runtime";
 import type { ContentHash } from "./content-hash";
 
-/** Normalized point locating a DreamAvatar's head in its portrait artwork. */
-export interface DreamAvatarPortraitFocus {
+/** Normalized point locating an Avatar's head in its portrait artwork. */
+export interface AvatarPortraitFocus {
   /** Horizontal position from the artwork's left edge, in the range 0..1. */
   x: number;
   /** Vertical position from the artwork's top edge, in the range 0..1. */
   y: number;
 }
 
-export interface DreamAvatarContent {
-  id: DreamAvatarId;
+export interface AvatarContent {
+  id: AvatarId;
   name: string;
   title: string;
   renderedText: string;
   imageNumber: string;
   /** Authored head position shared by full-body and square portrait crops. */
-  portraitFocus?: DreamAvatarPortraitFocus;
+  portraitFocus?: AvatarPortraitFocus;
   /**
-   * Per-DreamAvatar starting essence, compensating for differences in opening
+   * Per-Avatar starting essence, compensating for differences in opening
    * power and engine ramp speed. The economy catalog supplies the default when
    * omitted from source data.
    */
@@ -75,9 +75,9 @@ export interface DreamsignTemplate {
  * and carries no guide or affiliation; every other dreamscape has a resident
  * `guideId` and a thematic `affiliationId`.
  *
- * `dreamAvatarIds` lists the 3-4 DreamAvatars resident in this region (empty for
+ * `avatarIds` lists the 3-4 Avatars resident in this region (empty for
  * the starter). Across all dreamscapes these lists partition
- * dream_avatars.toml: every non-starter DreamAvatar appears under exactly one
+ * avatars.toml: every non-starter Avatar appears under exactly one
  * dreamscape, an invariant the asset build enforces.
  */
 export interface DreamscapeContent {
@@ -90,7 +90,7 @@ export interface DreamscapeContent {
   /** Authored Atlas reveal-card body for the guideless starter region. */
   atlasDescription?: SourceTransport;
   fixedSites?: SiteType[];
-  dreamAvatarIds: DreamAvatarId[];
+  avatarIds: AvatarId[];
 }
 
 /**
@@ -194,7 +194,7 @@ export interface Tides4CardProvenance {
 }
 
 /**
- * Full provenance for one DreamAvatar's resolved `tides4` pool, keyed by card
+ * Full provenance for one Avatar's resolved `tides4` pool, keyed by card
  * number. Records the tides the pool combined — the always-joined signature
  * tide, the random subset of theme tides, and the broad tail — and which tide
  * each pooled card came from, so the Pool Viewer can show every individual tide
@@ -203,16 +203,16 @@ export interface Tides4CardProvenance {
  * persisted.
  */
 export interface Tides4ProvenanceSummary {
-  /** The DreamAvatar this pool was built for. */
-  dreamAvatarId: DreamAvatarId | null;
+  /** The Avatar this pool was built for. */
+  avatarId: AvatarId | null;
   /**
-   * Whether the DreamAvatar has no signature. A signatureless DreamAvatar borrows
-   * a random signatured DreamAvatar's whole pool, leaning a coherent archetype.
+   * Whether the Avatar has no signature. A signatureless Avatar borrows
+   * a random signatured Avatar's whole pool, leaning a coherent archetype.
    */
   signatureless: boolean;
   /**
-   * For a signatureless DreamAvatar, the name of the borrowed signature tide (the
-   * archetype it leaned this run); null for a signatured DreamAvatar.
+   * For a signatureless Avatar, the name of the borrowed signature tide (the
+   * archetype it leaned this run); null for a signatured Avatar.
    */
   borrowedArchetypeName: string | null;
   /** Total copies dealt into the pool. */
@@ -234,8 +234,8 @@ export interface Tides4ProvenanceSummary {
   cardProvenanceByNumber: Record<SerializedCardNumber, Tides4CardProvenance>;
 }
 
-export interface ResolvedDreamAvatarPackage {
-  dreamAvatar: DreamAvatarContent;
+export interface ResolvedAvatarPackage {
+  avatar: AvatarContent;
   /** Joined tide UUIDs for this run, persisted for reconstructable affinity selection. */
   joinedTideIds?: TideId[];
   draftPoolCopiesByCard: DraftPoolCopiesByCard;

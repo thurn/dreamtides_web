@@ -36,8 +36,8 @@ export function BattleStartScreenAdapter({
       "battle_start_screen_opened",
       {
         battleId: init.battleId,
-        enemyId: view.dreamAvatar.id,
-        enemyName: view.dreamAvatar.name,
+        enemyId: view.avatar.id,
+        enemyName: view.avatar.name,
         scoreToWin: view.pointsToWin,
         essenceReward: view.essenceReward,
         dreamsignCount: view.dreamsigns.length,
@@ -49,10 +49,10 @@ export function BattleStartScreenAdapter({
   const handleBegin = useCallback(() => {
     logEvent("battle_start_screen_begin_clicked", {
       battleId: init.battleId,
-      enemyId: view.dreamAvatar.id,
+      enemyId: view.avatar.id,
     });
     onBegin();
-  }, [init.battleId, onBegin, view.dreamAvatar.id]);
+  }, [init.battleId, onBegin, view.avatar.id]);
 
   const handleGuideDialogueShown = useCallback(() => {
     const guideDialogue = view.guideDialogue;

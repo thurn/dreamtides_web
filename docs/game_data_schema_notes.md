@@ -20,7 +20,7 @@ tide_ids Three distinct Tide UUIDs defining the affiliation.
 
 ### `[[incarnations]]`
 
-Apollyon incarnations: the final DreamAvatar's ten guises. During Dreamscape
+Apollyon incarnations: the final Avatar's ten guises. During Dreamscape
 generation one incarnation is chosen to present Apollyon, swapping in that
 guise's title and short deck description.
 
@@ -155,7 +155,7 @@ contributes weight 2 to a Tide when its count is 2 and weight 1 when its count i
 seeded top-band sampler used after candidates are ranked. The compiler validates
 all Tide and card references and lowers the catalog to `data/tides.toml`.
 
-## `data/dream_avatars.ron`
+## `data/avatars.ron`
 
 The canonical catalog is an ordered RON list of `AvatarDefinition` records.
 Every record contains a lowercase UUIDv4 `id`, player-facing `name` and `title`,
@@ -168,12 +168,12 @@ deck intent. The `tide_pool` record owns the optional signature Tide, the
 available facet Tides, and neutral fill Tides used by Tides4 and opponent deck
 construction. The compiler validates each reference against the Tide's declared
 kind. The associated MTG archetype labels live in the internal
-`data/internal/internal_avatar_metadata.ron` catalog, keyed by Dream Avatar UUID.
+`data/internal/internal_avatar_metadata.ron` catalog, keyed by Avatar UUID.
 
-The compiler validates unique Dream Avatar IDs and portrait images, canonical
+The compiler validates unique Avatar IDs and portrait images, canonical
 UUID formatting, non-empty display and ability fields, focus coordinates in
 `[0, 1]`, unique signature references, and the internal metadata relationship.
-It lowers the typed catalog to generated `data/dream_avatars.toml` for runtime
+It lowers the typed catalog to generated `data/avatars.toml` for runtime
 consumers.
 
 ## `data/dream_guides.ron`
@@ -208,7 +208,7 @@ kind Closed `Starter`, `Standard`, or `Boss` role variant.
 
 `Starter` defines the signature site and ordered fixed-site sequence.
 `Standard` defines one affiliation UUID and an ordered roster of three or four
-DreamAvatar UUIDs. `Boss` carries the Limbo identity and art while the Atlas
+Avatar UUIDs. `Boss` carries the Limbo identity and art while the Atlas
 catalog owns its encounter configuration. Guide residency and signature sites
 are derived from `data/dream_guides.ron`.
 
@@ -217,62 +217,62 @@ source. Name and affiliation edits patch one value span; resident changes patch
 the affected roster spans in one revisioned transaction. Every save validates
 the typed catalog and generated artifacts before atomic publication.
 
-### `dream-avatar-ids = [`
+### `avatar-ids = [`
 
 Spirit-animal payoffs: Grath rewards allied spirit animals directly; Radulf
 and Demetrios are the go-wide character builders whose signature decks lean on
 spirit-animal bodies (Starrunner, Sunshadow Eagle, Moonbound Wolf).
 
-### `dream-avatar-ids = [`
+### `avatar-ids = [`
 
 The Void: the deepest reclaim/void-matters pool. Seld Rakor, Seraveth, and
 Vaela all key off cards in the void; Vethran's cost-X Discover rounds out the
 region's grindy value plan. One of two four-avatar regions.
 
-### `dream-avatar-ids = [`
+### `avatar-ids = [`
 
 Tempo: proactive, fast-starting plans. Yveth Coravel bounces to reuse and
 undercut; Drusus Calvus spends his opening turn pulling ahead on energy. Edran
 is a deliberate, slightly unintuitive placement here — his outsider-figment
 bodies give the Fjords a recurring tempo engine rather than a figment payoff.
 
-### `dream-avatar-ids = [`
+### `avatar-ids = [`
 
 Events: every resident is an event-cast payoff. Kasane copies events, Rael
 foresees off a second event, and Ovanel refills events after playing one.
 
-### `dream-avatar-ids = [`
+### `avatar-ids = [`
 
 Characters: flood the board and reward each body. Korrax buffs an ally every
 night, Kaleth awakens allies, and Senemhet turns a wide board's energy into
 more characters.
 
-### `dream-avatar-ids = [`
+### `avatar-ids = [`
 
 Warriors: the whole warrior tribe lives here. Gunnar Deepforge copies the last
 warrior played, Tensho discounts the first warrior drawn, and Valdren reclaims
 warriors from the void.
 
-### `dream-avatar-ids = [`
+### `avatar-ids = [`
 
 Abandon: sacrifice your own allies for value. Ossian abandons to draw, Caedryn
 abandons to materialize a bigger body, and Kragg discounts the next character
 after abandoning.
 
-### `dream-avatar-ids = [`
+### `avatar-ids = [`
 
 Survivors: grind-it-out attrition in the wasteland. Kell Tarn's signature deck
 is built on survivor bodies (Wreckland Maverick); Karev Soltis punishes the
 opponent's scoring, and Calloway Flint is the scavenging raider admiral.
 
-### `dream-avatar-ids = [`
+### `avatar-ids = [`
 
 Figments: token-makers and figment payoffs. Serenath Veyl rewards
 materializing a figment and Kael Voss discards to materialize a survivor
 figment; Threxan fills the third slot, his turn-one card draw a clean fit for
 the station's gamble-for-tempo identity.
 
-### `dream-avatar-ids = [`
+### `avatar-ids = [`
 
 Discard: turn discarding into advantage. Vrakmoth and Corvath both convert a
 discard into a card or reclaim, Tessa loots (draw-then-discard), and Zeva
@@ -361,7 +361,7 @@ Version of the economy authoring contract consumed by the asset compiler.
 
 ### `default-starting-essence = 200`
 
-Essence granted at journey genesis when the selected DreamAvatar has no
+Essence granted at journey genesis when the selected Avatar has no
 starting-essence override of its own.
 
 ### `dreamsign-cap = 12`
@@ -756,7 +756,7 @@ Whether the player omits their normal draw on their first turn.
 
 ### `opponent_signature_card_count: 3`
 
-Number of opponent deck cards highlighted as DreamAvatar signature cards.
+Number of opponent deck cards highlighted as Avatar signature cards.
 
 ## `data/opponents.ron`
 
@@ -767,7 +767,7 @@ Dreamwell, and internal AI catalogs for the generated opponent runtime data.
 ### `progression.ability_active_from_layer: 1`
 
 All layer values are zero-indexed completion levels.
-First layer where the opposing DreamAvatar's ability is enabled.
+First layer where the opposing Avatar's ability is enabled.
 
 ### `progression.dreamsigns_from_layer: 3`
 

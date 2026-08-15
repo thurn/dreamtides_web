@@ -14,7 +14,7 @@ import {
 } from "../state/figment-catalog";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamAvatars,
+  makeBattleTestAvatars,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
@@ -40,7 +40,7 @@ function state() {
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
-      dreamAvatars: makeBattleTestDreamAvatars(),
+      avatars: makeBattleTestAvatars(),
     }),
   );
 }

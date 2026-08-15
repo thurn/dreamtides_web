@@ -38,13 +38,13 @@ fixed-sites = ["Draft", "Battle"]
 id = "realm_one"
 name = "Realm One"
 affiliation-id = "affiliation_one"
-dream-avatar-ids = ["${AVATARS[0]}", "${AVATARS[1]}", "${AVATARS[2]}"]
+avatar-ids = ["${AVATARS[0]}", "${AVATARS[1]}", "${AVATARS[2]}"]
 
 [[dreamscapes]]
 id = "realm_two"
 name = "Realm Two"
 affiliation-id = "affiliation_two"
-dream-avatar-ids = ["${AVATARS[3]}", "${AVATARS[4]}", "${AVATARS[5]}"]
+avatar-ids = ["${AVATARS[3]}", "${AVATARS[4]}", "${AVATARS[5]}"]
 `,
   );
   writeFileSync(
@@ -76,10 +76,10 @@ name = "Two"
 `,
   );
   writeFileSync(
-    join(root, "data", "dream_avatars.toml"),
+    join(root, "data", "avatars.toml"),
     AVATARS.map(
       (id, index) => `
-[[dreamAvatar]]
+[[avatar]]
 id = "${id}"
 name = "Avatar ${String(index)}"
 title = "Title"
@@ -206,7 +206,7 @@ describe("typed Dreamscape editor API", () => {
     const result = await invoke(
       middleware,
       "POST",
-      "/api/editor/dreamscapes/realm_one/dream-avatars",
+      "/api/editor/dreamscapes/realm_one/avatars",
       {
         action: "replace",
         inId: AVATARS[3],

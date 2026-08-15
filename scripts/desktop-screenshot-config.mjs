@@ -10,7 +10,7 @@ export class UsageError extends Error {
 }
 
 export const CORE_SCENE_IDS = [
-  "dream-avatar-select",
+  "avatar-select",
   "dreamscape",
   "atlas",
   "draft",
@@ -26,7 +26,7 @@ export const CORE_SCENE_IDS = [
 ];
 
 export const SMOKE_SCENE_IDS = [
-  "dream-avatar-select",
+  "avatar-select",
   "dreamscape",
   "atlas",
   "draft",
@@ -57,8 +57,8 @@ export const VIEWPORT_PRESETS = {
 export const SCENE_PRESET_NAMES = ["core", "smoke", "full"];
 
 const JOURNEY_SCENES = new Set([
-  "dream-avatar-select",
-  "tutorial-dream-avatar-select",
+  "avatar-select",
+  "tutorial-avatar-select",
   "dreamscape",
   "dreamscape-with-essence",
   "atlas",

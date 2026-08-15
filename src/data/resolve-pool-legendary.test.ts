@@ -3,7 +3,7 @@ import type { CardData } from "../types/cards";
 import type { GeneratedPool } from "../draft/pool";
 import { buildIdIndex, resolvePool } from "./cards-v2-database";
 import { parseCardName } from "../types/card-identity";
-import { testDreamAvatarId, testCardId } from "../types/test-identities";
+import { testAvatarId, testCardId } from "../types/test-identities";
 
 /** The synthetic card id a `makeCard` record carries for a given card number. */
 function idFor(cardNumber: number): string {
@@ -56,7 +56,7 @@ function makePool(copiesByCardNumber: Record<number, number>): GeneratedPool {
     variant: "tides4",
     tideDeckIds: [],
     tides4Provenance: {
-      dreamAvatarId: testDreamAvatarId("test-avatar"),
+      avatarId: testAvatarId("test-avatar"),
       signatureless: false,
       borrowedArchetypeName: null,
       dealSize: size,

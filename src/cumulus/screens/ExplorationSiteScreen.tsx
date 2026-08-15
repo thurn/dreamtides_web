@@ -53,7 +53,7 @@ import {
   Dreamsign,
   type LocalizedDreamsign,
 } from "../components/hud/Dreamsign";
-import { DreamAvatarPortrait } from "../components/hud/DreamAvatarPortrait";
+import { AvatarPortrait } from "../components/hud/AvatarPortrait";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import {
@@ -92,7 +92,7 @@ import type { CardData, CardType } from "../../types/cards";
 import type {
   CardKeywordModification,
   CardTypeChange,
-  DreamAvatar,
+  Avatar,
   TransfigurationType,
 } from "../../types/journey";
 import type {
@@ -264,9 +264,9 @@ export type ExplorationRewardView =
       readonly battlesRemaining: number;
     }
   | {
-      readonly kind: "dream-avatar";
-      readonly previous: DreamAvatar | null;
-      readonly current: DreamAvatar;
+      readonly kind: "avatar";
+      readonly previous: Avatar | null;
+      readonly current: Avatar;
     }
   | {
       readonly kind: "site-offer-modifier";
@@ -586,10 +586,10 @@ export type ExplorationFollowupView =
       readonly requiredOverflowReplacementCount: number;
     }
   | {
-      readonly kind: "dreamAvatars";
+      readonly kind: "avatars";
       readonly title: LocalizedString;
       readonly subtitle: LocalizedString;
-      readonly dreamAvatars: readonly DreamAvatar[];
+      readonly avatars: readonly Avatar[];
     }
   | {
       readonly kind: "site-types";
@@ -1416,7 +1416,7 @@ function explorationRewardIdentity(
         reward.openingHandDelta,
         reward.energyCostReduction,
       ].join("|");
-    case "dream-avatar":
+    case "avatar":
       return [actionId, reward.kind, reward.current.id].join("|");
     case "site-offer-modifier":
       return [
@@ -2459,8 +2459,8 @@ export function ExplorationSiteScreen({
     effectReward?.kind === "smaller-hand-and-cost-discount"
       ? effectReward
       : null;
-  const dreamAvatarReward =
-    effectReward?.kind === "dream-avatar" ? effectReward : null;
+  const avatarReward =
+    effectReward?.kind === "avatar" ? effectReward : null;
   const siteOfferModifierReward =
     effectReward?.kind === "site-offer-modifier" ? effectReward : null;
   const shopModifierReward =
@@ -3261,7 +3261,7 @@ export function ExplorationSiteScreen({
       frameBreakPhase !== "open" ||
       (battleModifierReward === null &&
         smallerHandDiscountReward === null &&
-        dreamAvatarReward === null &&
+        avatarReward === null &&
         siteOfferModifierReward === null &&
         shopModifierReward === null &&
         !emptyObjectOutcome)
@@ -3276,7 +3276,7 @@ export function ExplorationSiteScreen({
   }, [
     battleModifierReward,
     completeExit,
-    dreamAvatarReward,
+    avatarReward,
     emptyObjectOutcome,
     frameBreakPhase,
     siteOfferModifierReward,
@@ -3784,7 +3784,7 @@ export function ExplorationSiteScreen({
             : activeAction?.followup.kind === "dreamsigns" ||
                 activeAction?.followup.kind === "dreamsign-flow"
               ? `min(max(420px, calc(${String(dreamsignChoiceColumns)} * ${String(DESKTOP_DREAMSIGN_CHOICE_SIZE)}px + ${String(dreamsignChoiceColumns - 1)} * ${token("--space-3xl")} + 2 * ${token("--space-2xl")})), calc(100vw - 64px))`
-              : activeAction?.followup.kind === "dreamAvatars"
+              : activeAction?.followup.kind === "avatars"
                 ? "min(960px, calc(100vw - 64px))"
                 : null;
 
@@ -4816,19 +4816,19 @@ export function ExplorationSiteScreen({
       {frameBreakGeometry !== null &&
         frameBreakPhase === "open" &&
         activeAction === null &&
-        dreamAvatarReward !== null && (
+        avatarReward !== null && (
           <motion.section
-            data-exploration-outcome="dream-avatar"
-            data-exploration-previous-dream-avatar-id={
-              dreamAvatarReward.previous?.id
+            data-exploration-outcome="avatar"
+            data-exploration-previous-avatar-id={
+              avatarReward.previous?.id
             }
-            data-exploration-dream-avatar-id={dreamAvatarReward.current.id}
+            data-exploration-avatar-id={avatarReward.current.id}
             role="status"
             aria-label={resolve(
               txa(
-                "{dream_avatar_name} is now your Dream Avatar",
-                { dream_avatar_name: dreamAvatarReward.current.name },
-                "[accessibility] [exploration] [dream-avatar] Announcement after an Exploration outcome changes the player's Dream Avatar. dream_avatar_name is the canonical display name with unknown grammatical gender; “your” addresses the current local player.",
+                "{avatar_name} is now your Avatar",
+                { avatar_name: avatarReward.current.name },
+                "[accessibility] [exploration] [avatar] Announcement after an Exploration outcome changes the player's Avatar. avatar_name is the canonical display name with unknown grammatical gender; “your” addresses the current local player.",
               ),
             )}
             initial={{ opacity: 0, scale: reduceMotion ? 1 : 0.9 }}
@@ -4851,18 +4851,18 @@ export function ExplorationSiteScreen({
             }}
           >
             <div style={{ width: isDesktop ? 260 : 210 }}>
-              <DreamAvatarPortrait
-                dreamAvatar={{
-                  ...dreamAvatarReward.current,
-                  name: localizedSourceText(dreamAvatarReward.current.name),
-                  title: localizedSourceText(dreamAvatarReward.current.title),
+              <AvatarPortrait
+                avatar={{
+                  ...avatarReward.current,
+                  name: localizedSourceText(avatarReward.current.name),
+                  title: localizedSourceText(avatarReward.current.title),
                 }}
                 variant="panel"
               />
             </div>
             <div style={{ display: "grid", gap: token("--space-xxs") }}>
               <strong style={{ font: token("--t-title") }}>
-                {resolve(localizedSourceText(dreamAvatarReward.current.name))}
+                {resolve(localizedSourceText(avatarReward.current.name))}
               </strong>
               <span
                 style={{
@@ -4870,7 +4870,7 @@ export function ExplorationSiteScreen({
                   color: token("--text-secondary"),
                 }}
               >
-                {dreamAvatarReward.current.title}
+                {avatarReward.current.title}
               </span>
             </div>
           </motion.section>
@@ -8096,7 +8096,7 @@ export function ExplorationSiteScreen({
                 </div>
               </GlassPanel>
             )}
-            {activeAction.followup.kind === "dreamAvatars" && (
+            {activeAction.followup.kind === "avatars" && (
               <GlassPanel
                 eyebrow={tx(
                   "Exploration",
@@ -8107,7 +8107,7 @@ export function ExplorationSiteScreen({
                 headingLevel="h1"
               >
                 <div
-                  data-exploration-dream-avatar-choices=""
+                  data-exploration-avatar-choices=""
                   role="group"
                   aria-label={resolve(activeAction.followup.subtitle)}
                   style={{
@@ -8123,10 +8123,10 @@ export function ExplorationSiteScreen({
                     overflow: "auto",
                   }}
                 >
-                  {activeAction.followup.dreamAvatars.map((dreamAvatar) => (
+                  {activeAction.followup.avatars.map((avatar) => (
                     <div
-                      key={dreamAvatar.id}
-                      data-exploration-dream-avatar-choice={dreamAvatar.id}
+                      key={avatar.id}
+                      data-exploration-avatar-choice={avatar.id}
                       style={{
                         display: "grid",
                         justifyItems: "center",
@@ -8136,22 +8136,22 @@ export function ExplorationSiteScreen({
                       }}
                     >
                       <div style={{ width: isDesktop ? 196 : 150 }}>
-                        <DreamAvatarPortrait
-                          dreamAvatar={{
-                            ...dreamAvatar,
-                            name: localizedSourceText(dreamAvatar.name),
-                            title: localizedSourceText(dreamAvatar.title),
+                        <AvatarPortrait
+                          avatar={{
+                            ...avatar,
+                            name: localizedSourceText(avatar.name),
+                            title: localizedSourceText(avatar.title),
                           }}
                           variant="panel"
                           profile={{
-                            id: dreamAvatar.id,
+                            id: avatar.id,
                             ability: localizedSourceText(
-                              dreamAvatar.renderedText,
+                              avatar.renderedText,
                             ),
                           }}
                           onPress={() =>
                             onResolve(activeAction.id, {
-                              dreamAvatarId: dreamAvatar.id,
+                              avatarId: avatar.id,
                             })
                           }
                         />
@@ -8160,7 +8160,7 @@ export function ExplorationSiteScreen({
                         style={{ display: "grid", gap: token("--space-xxs") }}
                       >
                         <strong style={{ font: token("--t-button") }}>
-                          {dreamAvatar.name}
+                          {avatar.name}
                         </strong>
                         <span
                           style={{
@@ -8168,7 +8168,7 @@ export function ExplorationSiteScreen({
                             color: token("--text-on-glass-muted"),
                           }}
                         >
-                          {dreamAvatar.title}
+                          {avatar.title}
                         </span>
                       </div>
                     </div>

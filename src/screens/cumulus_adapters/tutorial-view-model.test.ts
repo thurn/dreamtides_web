@@ -5,7 +5,7 @@ import { resolveSource } from "../../runtime/localization/runtime";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DreamwellCard } from "../../data/dreamwell-database";
-import type { DreamAvatarContent } from "../../types/content";
+import type { AvatarContent } from "../../types/content";
 import {
   buildTutorialView as buildTutorialViewFromCatalog,
   TUTORIAL_PLAYER_CARD_INSTANCE_ID,
@@ -21,7 +21,7 @@ import {
 } from "../../test/tutorial-configuration-fixture";
 import { parseTutorialRunId } from "../../types/identifiers";
 import { parseBattleSlotViewId } from "../../types/identifiers";
-import { testTutorialActionId, testDreamAvatarId, testDreamwellCardId, testCardId } from "../../types/test-identities";
+import { testTutorialActionId, testAvatarId, testDreamwellCardId, testCardId } from "../../types/test-identities";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -40,9 +40,9 @@ function tutorialActionLogDetails(action: TutorialAction) {
   );
 }
 
-const TUTORIAL_DREAM_AVATARS: readonly DreamAvatarContent[] = [
+const TUTORIAL_AVATARS: readonly AvatarContent[] = [
   {
-    id: testDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
+    id: testAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
     name: "Tensho",
     title: "Daimyo of Lacquered Fury",
     renderedText: "Player ability.",
@@ -51,7 +51,7 @@ const TUTORIAL_DREAM_AVATARS: readonly DreamAvatarContent[] = [
     startingEssence: 0,
   },
   {
-    id: testDreamAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
+    id: testAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
     name: "Threxan",
     title: "the Resounding Wrath",
     renderedText: "Opponent ability.",
@@ -67,7 +67,7 @@ function buildTutorialView(
   dreamwellCards: Parameters<typeof buildTutorialViewFromCatalog>[4] = null,
 ) {
   return buildTutorialViewFromCatalog(
-    TUTORIAL_DREAM_AVATARS,
+    TUTORIAL_AVATARS,
     TUTORIAL_BATTLE_CONFIGURATION,
     playback,
     cards,
@@ -173,8 +173,8 @@ describe("buildTutorialView", () => {
         ...TEST_TUTORIAL_CARD_CONSTANTS,
         tutorialPlayerCharacterCardId: RUNEBOUND_CHAMPION.id,
       },
-      playerDreamAvatarId: TUTORIAL_DREAM_AVATARS[1].id,
-      enemyDreamAvatarId: TUTORIAL_DREAM_AVATARS[0].id,
+      playerAvatarId: TUTORIAL_AVATARS[1].id,
+      enemyAvatarId: TUTORIAL_AVATARS[0].id,
       startingEnergy: 9,
       scoreToWin: 17,
       starterDeck: [{ cardId: RUNEBOUND_CHAMPION.id, copies: 7 }],
@@ -216,7 +216,7 @@ describe("buildTutorialView", () => {
       },
     ];
     const tutorial = buildTutorialViewFromCatalog(
-      TUTORIAL_DREAM_AVATARS,
+      TUTORIAL_AVATARS,
       battleConfiguration,
       {
         runId: parseTutorialRunId("synthetic-config"),
@@ -231,8 +231,8 @@ describe("buildTutorialView", () => {
       [RUNEBOUND_CHAMPION, OPPONENT_CARD],
     );
 
-    expect(tutorial.dreamAvatars.player.profile.id).toBe(
-      TUTORIAL_DREAM_AVATARS[1].id,
+    expect(tutorial.avatars.player.profile.id).toBe(
+      TUTORIAL_AVATARS[1].id,
     );
     expect(tutorial.battle.player.deckCardIds).toHaveLength(6);
     expect(tutorial.battle.player.status).toMatchObject({
@@ -245,31 +245,31 @@ describe("buildTutorialView", () => {
     );
   });
 
-  it("resolves tutorial Dream Avatar display identity from the catalog by UUID", () => {
-    const dreamAvatars = TUTORIAL_DREAM_AVATARS.map((dreamAvatar) =>
-      dreamAvatar.id === "bfc40414-5264-41bf-86e1-a0f41ee4f5b5"
+  it("resolves tutorial Avatar display identity from the catalog by UUID", () => {
+    const avatars = TUTORIAL_AVATARS.map((avatar) =>
+      avatar.id === "bfc40414-5264-41bf-86e1-a0f41ee4f5b5"
         ? {
-            ...dreamAvatar,
+            ...avatar,
             name: "Gunnar Deepforge",
             title: "The Hammer's Echo",
             imageNumber: "0108",
             portraitFocus: { x: 0.58, y: 0.233 },
           }
-        : dreamAvatar,
+        : avatar,
     );
 
     const tutorial = buildTutorialViewFromCatalog(
-      dreamAvatars,
+      avatars,
       TUTORIAL_BATTLE_CONFIGURATION,
     );
 
-    expect(tutorial.dreamAvatars.player.visual).toEqual({
+    expect(tutorial.avatars.player.visual).toEqual({
       name: "Gunnar Deepforge",
       title: "The Hammer's Echo",
       imageNumber: "0108",
       portraitFocus: { x: 0.58, y: 0.233 },
     });
-    expect(tutorial.dreamAvatars.player.profile.id).toBe(
+    expect(tutorial.avatars.player.profile.id).toBe(
       "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
     );
   });
@@ -477,7 +477,7 @@ describe("buildTutorialView", () => {
       },
       {
         id: testTutorialActionId("player-arrival"),
-        action: "animate-dream-avatar-portrait" as const,
+        action: "animate-avatar-portrait" as const,
         owner: "player" as const,
         pause: 1,
         duration: 0.6,
@@ -485,7 +485,7 @@ describe("buildTutorialView", () => {
       },
       {
         id: testTutorialActionId("enemy-arrival"),
-        action: "animate-dream-avatar-portrait" as const,
+        action: "animate-avatar-portrait" as const,
         owner: "enemy" as const,
         pause: 1,
         duration: 0.6,
@@ -525,12 +525,12 @@ describe("buildTutorialView", () => {
     );
 
     expect(tail.currentAction?.id).toBe(testTutorialActionId("enemy-taunt"));
-    expect(tail.dreamAvatars.player.settled).toBe(true);
-    expect(tail.dreamAvatars.enemy.settled).toBe(true);
+    expect(tail.avatars.player.settled).toBe(true);
+    expect(tail.avatars.enemy.settled).toBe(true);
     expect(tail.battle.enemy.deckCardIds).toHaveLength(30);
     expect(tail.battle.enemyHandCardIds).toEqual([]);
     expect(tail.dialogue).toMatchObject({
-      kind: "dreamAvatar",
+      kind: "avatar",
       owner: "enemy",
       bubbleWidth: 450,
       text: "For the Abyss!",
@@ -777,8 +777,8 @@ describe("buildTutorialView", () => {
           wait: 1.5,
         },
         {
-          id: testTutorialActionId("dream-avatar-arrival"),
-          action: "animate-dream-avatar-portrait",
+          id: testTutorialActionId("avatar-arrival"),
+          action: "animate-avatar-portrait",
           owner: "player",
           pause: 1,
           duration: 0.6,
@@ -811,7 +811,7 @@ describe("buildTutorialView", () => {
     });
     expect(tutorial.playbackRunId).toBe("event:7");
     expect(tutorial.currentAction?.id).toBe(testTutorialActionId("greeting"));
-    expect(tutorial.dreamAvatars.player).toMatchObject({
+    expect(tutorial.avatars.player).toMatchObject({
       visual: { imageNumber: "0029", name: "Tensho" },
       profile: {
         id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
@@ -836,14 +836,14 @@ describe("buildTutorialView", () => {
       expect(side.frontRank.every((slot) => slot.card === null)).toBe(true);
     }
     expect(view.player.status).toEqual({
-      dreamAvatar: null,
+      avatar: null,
       currentEnergy: 4,
       maxEnergy: 4,
       points: 0,
       pointsToWin: 10,
     });
     expect(view.enemy.status).toEqual({
-      dreamAvatar: null,
+      avatar: null,
       currentEnergy: 4,
       maxEnergy: 4,
       points: 0,
@@ -866,8 +866,8 @@ describe("buildTutorialView", () => {
           wait: 3,
         },
         {
-          id: testTutorialActionId("dream-avatar-arrival"),
-          action: "animate-dream-avatar-portrait",
+          id: testTutorialActionId("avatar-arrival"),
+          action: "animate-avatar-portrait",
           owner: "player",
           pause: 1,
           duration: 0.6,
@@ -896,8 +896,8 @@ describe("buildTutorialView", () => {
         ? tutorial.dialogue.verticalOffset
         : null,
     ).toBe(100);
-    expect(tutorial.dreamAvatars.player.settled).toBe(true);
-    expect(tutorial.dreamAvatars.enemy).toMatchObject({
+    expect(tutorial.avatars.player.settled).toBe(true);
+    expect(tutorial.avatars.enemy).toMatchObject({
       visual: { imageNumber: "0025", name: "Threxan" },
       profile: { id: "b99936ca-97f9-4930-af5a-fa9ef92557ef" },
       settled: false,
@@ -913,8 +913,8 @@ describe("buildTutorialView", () => {
         wait: 3,
       },
       {
-        id: testTutorialActionId("dream-avatar-arrival"),
-        action: "animate-dream-avatar-portrait" as const,
+        id: testTutorialActionId("avatar-arrival"),
+        action: "animate-avatar-portrait" as const,
         owner: "player" as const,
         pause: 1,
         duration: 0.6,
@@ -984,14 +984,14 @@ describe("buildTutorialView", () => {
     ).toBeNull();
   });
 
-  it("attaches authored DreamAvatar speech to that side's battle portrait", () => {
+  it("attaches authored Avatar speech to that side's battle portrait", () => {
     const tutorial = buildTutorialView({
       runId: parseTutorialRunId("event:11"),
       currentActionIndex: 1,
       actions: [
         {
           id: testTutorialActionId("vrakmoth-arrival"),
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           owner: "enemy",
           pause: 1,
           duration: 0.6,
@@ -1006,11 +1006,11 @@ describe("buildTutorialView", () => {
       ],
     });
 
-    expect(tutorial.dreamAvatars.enemy.settled).toBe(true);
+    expect(tutorial.avatars.enemy.settled).toBe(true);
     expect(tutorial.dialogue).toEqual({
       actionId: testTutorialActionId("vrakmoth-taunt"),
       parentAction: "display-speech-bubble",
-      kind: "dreamAvatar",
+      kind: "avatar",
       owner: "enemy",
       duration: 3,
       horizontalOffset: 0,
@@ -1378,7 +1378,7 @@ describe("buildTutorialView", () => {
     expect(worthyChallenger.dialogue).toEqual({
       actionId: testTutorialActionId("vrakmoth-worthy-challenger"),
       parentAction: "display-speech-bubble",
-      kind: "dreamAvatar",
+      kind: "avatar",
       owner: "enemy",
       duration: 3,
       horizontalOffset: 0,
@@ -1835,8 +1835,8 @@ describe("buildTutorialView", () => {
   it("settles Threxan only after the opponent portrait action advances", () => {
     const actions = [
       {
-        id: testTutorialActionId("dream-avatar-arrival"),
-        action: "animate-dream-avatar-portrait" as const,
+        id: testTutorialActionId("avatar-arrival"),
+        action: "animate-avatar-portrait" as const,
         owner: "player" as const,
         pause: 1,
         duration: 0.6,
@@ -1852,7 +1852,7 @@ describe("buildTutorialView", () => {
       },
       {
         id: testTutorialActionId("vrakmoth-arrival"),
-        action: "animate-dream-avatar-portrait" as const,
+        action: "animate-avatar-portrait" as const,
         owner: "enemy" as const,
         pause: 1,
         duration: 0.6,
@@ -1865,8 +1865,8 @@ describe("buildTutorialView", () => {
       currentActionIndex: 2,
       actions: actions,
     });
-    expect(arriving.dreamAvatars.player.settled).toBe(true);
-    expect(arriving.dreamAvatars.enemy.settled).toBe(false);
+    expect(arriving.avatars.player.settled).toBe(true);
+    expect(arriving.avatars.enemy.settled).toBe(false);
     expect(arriving.currentAction?.id).toBe(testTutorialActionId("vrakmoth-arrival"));
     expect(arriving.dialogue).toBeNull();
 
@@ -1875,8 +1875,8 @@ describe("buildTutorialView", () => {
       currentActionIndex: null,
       actions: actions,
     });
-    expect(complete.dreamAvatars.player.settled).toBe(true);
-    expect(complete.dreamAvatars.enemy.settled).toBe(true);
+    expect(complete.avatars.player.settled).toBe(true);
+    expect(complete.avatars.enemy.settled).toBe(true);
     expect(complete.dialogue).toBeNull();
   });
 });

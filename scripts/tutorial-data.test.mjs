@@ -28,8 +28,8 @@ const FIXTURE_BATTLE = {
     handoffEnemyCharacterCardId: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
     tutorialDreamwellCardId: "7171ff89-ebe4-42d0-8863-9b4b0531cad2",
   },
-  playerDreamAvatarId: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
-  enemyDreamAvatarId: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+  playerAvatarId: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+  enemyAvatarId: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
   startingEnergy: 7,
   scoreToWin: 12,
   starterDeck: [
@@ -105,7 +105,7 @@ const FIXTURE_JOURNEY_START = {
     horizontalOffset: 40,
     verticalOffset: 0,
     bubbleWidth: 550,
-    text: "Choose a [purple]Dream Avatar[/purple].",
+    text: "Choose a [purple]Avatar[/purple].",
   },
 };
 
@@ -179,8 +179,8 @@ const FIXTURE_ACTIONS = [
     wait: 1.5,
   },
   {
-    id: "dream-avatar-arrival",
-    action: "animate-dream-avatar-portrait",
+    id: "avatar-arrival",
+    action: "animate-avatar-portrait",
     owner: "player",
     pause: 1,
     duration: 0.6,
@@ -346,14 +346,14 @@ describe("tutorial data", () => {
     const configuration = readTutorialConfiguration();
     const cardSource = parse(readFileSync("data/cards.toml", "utf8"));
     const avatarSource = parse(
-      readFileSync("data/dream_avatars.toml", "utf8"),
+      readFileSync("data/avatars.toml", "utf8"),
     );
     const dreamwellSource = parse(
       readFileSync("data/dreamwell.toml", "utf8"),
     );
     const catalogs = {
       cardIds: cardSource.cards.map((card) => card.id),
-      dreamAvatarIds: avatarSource.dreamAvatar.map((avatar) => avatar.id),
+      avatarIds: avatarSource.avatar.map((avatar) => avatar.id),
       dreamwellCardIds: dreamwellSource.dreamwell.map((card) => card.id),
     };
     expect(validateTutorialCatalogReferences(configuration, catalogs)).toBe(
@@ -771,14 +771,14 @@ describe("tutorial data", () => {
       validateTutorialActions([
         {
           id: "legacy-arrival",
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           wait: 0,
         },
       ]),
     ).toEqual([
       {
         id: "legacy-arrival",
-        action: "animate-dream-avatar-portrait",
+        action: "animate-avatar-portrait",
         owner: "player",
         pause: 0,
         duration: 1.2,

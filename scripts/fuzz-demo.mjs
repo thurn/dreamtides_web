@@ -358,7 +358,7 @@ async function clickRecorded(page, locator, label, actions) {
 
 async function avatarScenario(baseUrl, seed, publisher, host, actions) {
   const entryUrl =
-    `${baseUrl}/?goto=tutorial-dream-avatar-select&seed=` +
+    `${baseUrl}/?goto=tutorial-avatar-select&seed=` +
     encodeURIComponent(`${seed}:avatar`);
   await publisher.goto(entryUrl);
   await waitForProbe(publisher);

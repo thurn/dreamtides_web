@@ -1,9 +1,9 @@
 import { assertLocalized } from "@trox/runtime";
 import { BattleStatusDisplay } from "../../components/battle/BattleStatusDisplay";
-import type { DreamAvatarVisual } from "../../components/hud/DreamAvatarPortrait";
+import type { AvatarVisual } from "../../components/hud/AvatarPortrait";
 import type { CumulusComponent } from "../registry";
 
-const DREAM_AVATAR: DreamAvatarVisual = {
+const AVATAR: AvatarVisual = {
   imageNumber: "0025",
   name: assertLocalized("Threxan"),
   title: assertLocalized("the Resounding Wrath"),
@@ -12,7 +12,7 @@ const DREAM_AVATAR: DreamAvatarVisual = {
 function BattleStatusDisplayDemo(args: Record<string, unknown>) {
   const owner = args.owner === "enemy" ? "enemy" : "player";
   const relationship = args.relationship === "far" ? "far" : "near";
-  const dreamAvatar = args.placeholder === true ? null : DREAM_AVATAR;
+  const avatar = args.placeholder === true ? null : AVATAR;
   const currentEnergy =
     typeof args.currentEnergy === "number" ? args.currentEnergy : 2;
   const maxEnergy = typeof args.maxEnergy === "number" ? args.maxEnergy : 3;
@@ -24,7 +24,7 @@ function BattleStatusDisplayDemo(args: Record<string, unknown>) {
       <BattleStatusDisplay
         owner={owner}
         relationship={relationship}
-        dreamAvatar={dreamAvatar}
+        avatar={avatar}
         currentEnergy={currentEnergy}
         maxEnergy={maxEnergy}
         points={points}
@@ -38,7 +38,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
   id: "battle-status-display",
   title: "Battle Status Display",
   blurb:
-    "The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current and target points at right.",
+    "The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Avatar portrait or loading placeholder at center, and centered current and target points at right.",
   callout:
     "Pass the canonical owner and its near/far relationship separately so accessibility copy follows the current perspective.",
   group: "Battle",
@@ -46,13 +46,13 @@ export const battleStatusDisplayDemo: CumulusComponent = {
   Component: BattleStatusDisplayDemo,
   usage: [
     {
-      note: "One complete participant status card. Energy and points use the component's fixed battle notation; the portrait uses DreamAvatarPortrait's thumb framing.",
+      note: "One complete participant status card. Energy and points use the component's fixed battle notation; the portrait uses AvatarPortrait's thumb framing.",
       code: `import { BattleStatusDisplay } from "src/cumulus/components/battle/BattleStatusDisplay";
 
 <BattleStatusDisplay
   owner="player"
   relationship="near"
-  dreamAvatar={playerDreamAvatar}
+  avatar={playerAvatar}
   currentEnergy={2}
   maxEnergy={3}
   points={4}
@@ -64,7 +64,7 @@ export const battleStatusDisplayDemo: CumulusComponent = {
       code: `<BattleStatusDisplay
   owner="enemy"
   relationship="far"
-  dreamAvatar={null}
+  avatar={null}
   currentEnergy={0}
   maxEnergy={0}
   points={0}

@@ -21,7 +21,7 @@ import { parseBattleSlotViewId } from "../../types/identifiers";
 import { parseTutorialRunId } from "../../types/identifiers";
 import {
   testCardId,
-  testDreamAvatarId,
+  testAvatarId,
   testDreamwellCardId,
   testTutorialActionId,
 } from "../../types/test-identities";
@@ -93,7 +93,7 @@ interface MotionMainStubInput {
 interface MotionDivStubInput {
   readonly animate?: unknown;
   readonly children?: ReactNode;
-  readonly "data-tutorial-dream-avatar-arrival"?: string;
+  readonly "data-tutorial-avatar-arrival"?: string;
   readonly "data-tutorial-card-battlefield-layer"?: string;
   readonly "data-tutorial-card-flip-layer"?: string;
   readonly "data-tutorial-card-full-layer"?: string;
@@ -291,12 +291,12 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
             <div data-battle-pile-frame="" />
           </div>
           <div data-testid="enemy-battle-status">
-            {enemyStatus?.dreamAvatar === undefined ||
-            enemyStatus.dreamAvatar === null ? (
-              <div data-battle-status-dream-avatar-placeholder="" />
+            {enemyStatus?.avatar === undefined ||
+            enemyStatus.avatar === null ? (
+              <div data-battle-status-avatar-placeholder="" />
             ) : (
               <span
-                data-dream-avatar-source={enemyStatus.dreamAvatarProfile?.id}
+                data-avatar-source={enemyStatus.avatarProfile?.id}
               />
             )}
           </div>
@@ -312,12 +312,12 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
             )}
           </div>
           <div data-testid="player-battle-status">
-            {playerStatus?.dreamAvatar === undefined ||
-            playerStatus.dreamAvatar === null ? (
-              <div data-battle-status-dream-avatar-placeholder="" />
+            {playerStatus?.avatar === undefined ||
+            playerStatus.avatar === null ? (
+              <div data-battle-status-avatar-placeholder="" />
             ) : (
               <span
-                data-dream-avatar-source={playerStatus.dreamAvatarProfile?.id}
+                data-avatar-source={playerStatus.avatarProfile?.id}
               />
             )}
           </div>
@@ -327,7 +327,7 @@ vi.mock("./MobileBattleScreen", async (importOriginal) => {
   };
 });
 
-const TUTORIAL_DREAM_AVATARS: TutorialView["dreamAvatars"] = {
+const TUTORIAL_AVATARS: TutorialView["avatars"] = {
   player: {
     visual: {
       imageNumber: "0029",
@@ -336,7 +336,7 @@ const TUTORIAL_DREAM_AVATARS: TutorialView["dreamAvatars"] = {
       portraitFocus: { x: 0.5, y: 0.22 },
     },
     profile: {
-      id: testDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
+      id: testAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
       ability: assertLocalized("Avatar ability is not active"),
       unavailable: true,
     },
@@ -350,7 +350,7 @@ const TUTORIAL_DREAM_AVATARS: TutorialView["dreamAvatars"] = {
       portraitFocus: { x: 0.5, y: 0.2 },
     },
     profile: {
-      id: testDreamAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
+      id: testAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
       ability: assertLocalized("Avatar ability is not active"),
       unavailable: true,
     },
@@ -496,7 +496,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: {
                 kind: "guide",
                 delay: 1,
@@ -563,7 +563,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: {
                 kind: "guide",
                 delay: 1,
@@ -641,7 +641,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: {
                 kind: "guide",
                 horizontalOffset: 40,
@@ -747,7 +747,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: {
                 kind: "guide",
                 horizontalOffset: 0,
@@ -808,7 +808,7 @@ describe("TutorialScreen", () => {
   it("finishes the portrait animation before applying its authored wait", () => {
     vi.useFakeTimers();
     const onActionComplete = vi.fn();
-    const onDreamAvatarArrivalComplete = vi.fn();
+    const onAvatarArrivalComplete = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -818,7 +818,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: {
                 kind: "guide",
                 horizontalOffset: 0,
@@ -837,8 +837,8 @@ describe("TutorialScreen", () => {
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: testTutorialActionId("dream-avatar-arrival"),
-                action: "animate-dream-avatar-portrait",
+                id: testTutorialActionId("avatar-arrival"),
+                action: "animate-avatar-portrait",
                 owner: "player",
                 pause: 1,
                 duration: 0.6,
@@ -848,7 +848,7 @@ describe("TutorialScreen", () => {
                 battleId: parseBattleId("tutorial-battle"),
                 player: {
                   status: {
-                    dreamAvatar: null,
+                    avatar: null,
                     currentEnergy: 0,
                     maxEnergy: 0,
                     points: 0,
@@ -857,7 +857,7 @@ describe("TutorialScreen", () => {
               } as unknown as MobileBattleView,
             }}
             onActionComplete={onActionComplete}
-            onDreamAvatarArrivalComplete={onDreamAvatarArrivalComplete}
+            onAvatarArrivalComplete={onAvatarArrivalComplete}
           />
         </CumulusRoot>,
       );
@@ -867,7 +867,7 @@ describe("TutorialScreen", () => {
       "[data-tutorial-screen]",
     );
     const playerTarget = container.querySelector<HTMLElement>(
-      '[data-testid="player-battle-status"] [data-battle-status-dream-avatar-placeholder]',
+      '[data-testid="player-battle-status"] [data-battle-status-avatar-placeholder]',
     );
     const dialoguePortrait = container.querySelector<HTMLElement>(
       "[data-character-dialogue-portrait-frame]",
@@ -882,7 +882,7 @@ describe("TutorialScreen", () => {
     act(() => screenMocks.sceneAnimationComplete?.());
 
     expect(
-      container.querySelector("[data-tutorial-dream-avatar-arrival]"),
+      container.querySelector("[data-tutorial-avatar-arrival]"),
     ).not.toBeNull();
     expect(screenMocks.dialogueProps).toMatchObject({
       dialogue: { text: "Welcome, Dreamer." },
@@ -911,13 +911,13 @@ describe("TutorialScreen", () => {
 
     act(() => screenMocks.arrivalAnimationComplete?.());
 
-    expect(onDreamAvatarArrivalComplete).toHaveBeenCalledWith(
-      TUTORIAL_DREAM_AVATARS.player.profile.id,
+    expect(onAvatarArrivalComplete).toHaveBeenCalledWith(
+      TUTORIAL_AVATARS.player.profile.id,
       "player",
     );
     expect(screenMocks.props?.view.player.status).toMatchObject({
-      dreamAvatar: TUTORIAL_DREAM_AVATARS.player.visual,
-      dreamAvatarProfile: TUTORIAL_DREAM_AVATARS.player.profile,
+      avatar: TUTORIAL_AVATARS.player.visual,
+      avatarProfile: TUTORIAL_AVATARS.player.profile,
     });
     act(() => {
       vi.advanceTimersByTime(499);
@@ -928,7 +928,7 @@ describe("TutorialScreen", () => {
     });
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:2",
-      testTutorialActionId("dream-avatar-arrival"),
+      testTutorialActionId("avatar-arrival"),
     );
 
     act(() => root.unmount());
@@ -936,7 +936,7 @@ describe("TutorialScreen", () => {
   });
 
   it("animates the opponent portrait into the enemy battle status", () => {
-    const onDreamAvatarArrivalComplete = vi.fn();
+    const onAvatarArrivalComplete = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -946,9 +946,9 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: {
-                ...TUTORIAL_DREAM_AVATARS,
-                player: { ...TUTORIAL_DREAM_AVATARS.player, settled: true },
+              avatars: {
+                ...TUTORIAL_AVATARS,
+                player: { ...TUTORIAL_AVATARS.player, settled: true },
               },
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:3"),
@@ -956,7 +956,7 @@ describe("TutorialScreen", () => {
               howToPlay: null,
               currentAction: {
                 id: testTutorialActionId("vrakmoth-arrival"),
-                action: "animate-dream-avatar-portrait",
+                action: "animate-avatar-portrait",
                 owner: "enemy",
                 pause: 1.5,
                 duration: 0.6,
@@ -966,7 +966,7 @@ describe("TutorialScreen", () => {
                 battleId: parseBattleId("tutorial-battle"),
                 enemy: {
                   status: {
-                    dreamAvatar: null,
+                    avatar: null,
                     currentEnergy: 0,
                     maxEnergy: 0,
                     points: 0,
@@ -974,7 +974,7 @@ describe("TutorialScreen", () => {
                 },
                 player: {
                   status: {
-                    dreamAvatar: null,
+                    avatar: null,
                     currentEnergy: 0,
                     maxEnergy: 0,
                     points: 0,
@@ -983,7 +983,7 @@ describe("TutorialScreen", () => {
                 inspector: { opponentName: "Awaiting Avatar" },
               } as MobileBattleView,
             }}
-            onDreamAvatarArrivalComplete={onDreamAvatarArrivalComplete}
+            onAvatarArrivalComplete={onAvatarArrivalComplete}
           />
         </CumulusRoot>,
       );
@@ -993,10 +993,10 @@ describe("TutorialScreen", () => {
       "[data-tutorial-screen]",
     );
     const enemyTarget = container.querySelector<HTMLElement>(
-      '[data-testid="enemy-battle-status"] [data-battle-status-dream-avatar-placeholder]',
+      '[data-testid="enemy-battle-status"] [data-battle-status-avatar-placeholder]',
     );
     const playerTarget = container.querySelector<HTMLElement>(
-      '[data-testid="player-battle-status"] [data-dream-avatar-source]',
+      '[data-testid="player-battle-status"] [data-avatar-source]',
     );
     tutorialScreen!.getBoundingClientRect = () =>
       DOMRect.fromRect({ x: 0, y: 0, width: 390, height: 844 });
@@ -1009,7 +1009,7 @@ describe("TutorialScreen", () => {
 
     expect(
       container.querySelector(
-        '[data-tutorial-dream-avatar-arrival][data-tutorial-dream-avatar-owner="enemy"]',
+        '[data-tutorial-avatar-arrival][data-tutorial-avatar-owner="enemy"]',
       ),
     ).not.toBeNull();
     expect(screenMocks.arrivalInitial).toMatchObject({
@@ -1026,13 +1026,13 @@ describe("TutorialScreen", () => {
 
     act(() => screenMocks.arrivalAnimationComplete?.());
 
-    expect(onDreamAvatarArrivalComplete).toHaveBeenCalledWith(
-      TUTORIAL_DREAM_AVATARS.enemy.profile.id,
+    expect(onAvatarArrivalComplete).toHaveBeenCalledWith(
+      TUTORIAL_AVATARS.enemy.profile.id,
       "enemy",
     );
     expect(screenMocks.props?.view.enemy.status).toMatchObject({
-      dreamAvatar: TUTORIAL_DREAM_AVATARS.enemy.visual,
-      dreamAvatarProfile: TUTORIAL_DREAM_AVATARS.enemy.profile,
+      avatar: TUTORIAL_AVATARS.enemy.visual,
+      avatarProfile: TUTORIAL_AVATARS.enemy.profile,
     });
     expect(screenMocks.props?.view.inspector.opponentName).toBe("Threxan");
 
@@ -1052,9 +1052,9 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: {
-                kind: "dreamAvatar",
+                kind: "avatar",
                 owner: "enemy",
                 bubbleWidth: 450,
                 speakerName: assertLocalized("Threxan"),
@@ -1198,7 +1198,7 @@ describe("TutorialScreen", () => {
         card: null,
       })),
       status: {
-        dreamAvatar: null,
+        avatar: null,
         currentEnergy: 0,
         maxEnergy: 0,
         points: 0,
@@ -1210,7 +1210,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: {
                 kind: "guide",
                 horizontalOffset: 0,
@@ -1379,7 +1379,7 @@ describe("TutorialScreen", () => {
         card: null,
       })),
       status: {
-        dreamAvatar: null,
+        avatar: null,
         currentEnergy: 0,
         maxEnergy: 0,
         points: 0,
@@ -1391,7 +1391,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:mobile-play"),
               endTurn: null,
@@ -1489,7 +1489,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:reposition"),
               endTurn: null,
@@ -1617,7 +1617,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:player-turn"),
               endTurn: null,
@@ -1824,7 +1824,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:dreamwell"),
               endTurn: null,
@@ -1899,7 +1899,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:dreamwell-pair"),
               endTurn: null,
@@ -2054,7 +2054,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:dreamwell-continuity"),
               endTurn: null,
@@ -2175,7 +2175,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:dreamwell"),
               endTurn: null,
@@ -2257,7 +2257,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:voltsurge"),
               endTurn: null,
@@ -2332,7 +2332,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:player-turn"),
               currentAction: {
@@ -2421,7 +2421,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:player-card-position"),
               currentAction: {
@@ -2478,7 +2478,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:block"),
               currentAction: {
@@ -2591,7 +2591,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:challenge"),
               currentAction: {
@@ -2735,7 +2735,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: null,
               playbackRunId: parseTutorialRunId("event:player-turn"),
               currentAction: {
@@ -2780,10 +2780,10 @@ describe("TutorialScreen", () => {
         if (this.matches("[data-tutorial-screen]")) {
           return DOMRect.fromRect({ x: 0, y: 0, width: 390, height: 844 });
         }
-        if (this.matches("[data-dream-avatar-source]")) {
+        if (this.matches("[data-avatar-source]")) {
           return DOMRect.fromRect({ x: 173, y: 100, width: 44, height: 44 });
         }
-        if (this.matches("[data-tutorial-dream-avatar-dialogue] aside")) {
+        if (this.matches("[data-tutorial-avatar-dialogue] aside")) {
           return DOMRect.fromRect({ x: 0, y: 0, width: 150, height: 90 });
         }
         return DOMRect.fromRect();
@@ -2798,12 +2798,12 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: {
-                ...TUTORIAL_DREAM_AVATARS,
-                enemy: { ...TUTORIAL_DREAM_AVATARS.enemy, settled: true },
+              avatars: {
+                ...TUTORIAL_AVATARS,
+                enemy: { ...TUTORIAL_AVATARS.enemy, settled: true },
               },
               dialogue: {
-                kind: "dreamAvatar",
+                kind: "avatar",
                 owner: "enemy",
                 speakerName: assertLocalized("Threxan"),
                 text: assertLocalized("For the Abyss!"),
@@ -2828,8 +2828,8 @@ describe("TutorialScreen", () => {
                 battleId: parseBattleId("tutorial-battle"),
                 enemy: {
                   status: {
-                    dreamAvatar: TUTORIAL_DREAM_AVATARS.enemy.visual,
-                    dreamAvatarProfile: TUTORIAL_DREAM_AVATARS.enemy.profile,
+                    avatar: TUTORIAL_AVATARS.enemy.visual,
+                    avatarProfile: TUTORIAL_AVATARS.enemy.profile,
                     currentEnergy: 0,
                     maxEnergy: 0,
                     points: 0,
@@ -2845,13 +2845,13 @@ describe("TutorialScreen", () => {
     act(() => screenMocks.sceneAnimationComplete?.());
 
     const overlay = container.querySelector<HTMLElement>(
-      '[data-tutorial-dream-avatar-dialogue-owner="enemy"]',
+      '[data-tutorial-avatar-dialogue-owner="enemy"]',
     );
     const bubble = container.querySelector<HTMLElement>(
-      '[data-testid="tutorial-enemy-dream-avatar-speech-bubble"]',
+      '[data-testid="tutorial-enemy-avatar-speech-bubble"]',
     );
     const source = container.querySelector<HTMLElement>(
-      "[data-dream-avatar-source]",
+      "[data-avatar-source]",
     );
     expect(source).not.toBeNull();
     expect(source?.getBoundingClientRect()).toMatchObject({
@@ -2903,7 +2903,7 @@ describe("TutorialScreen", () => {
         <CumulusRoot>
           <TutorialScreen
             view={{
-              dreamAvatars: TUTORIAL_DREAM_AVATARS,
+              avatars: TUTORIAL_AVATARS,
               dialogue: {
                 kind: "guide",
                 horizontalOffset: 0,

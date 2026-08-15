@@ -85,7 +85,7 @@ Their centered summaries carry the final run or battle readout, and their
 bottom actions start the next journey.
 
 The journey-start choice is the explicit exception because a run has no selected
-Dream Avatar or persistent journey inventory yet. The battle route applies the
+Avatar or persistent journey inventory yet. The battle route applies the
 same wrapper to its Cumulus opponent preview and leaves the playable battle shell
 in its battle-specific chrome.
 
@@ -112,7 +112,7 @@ The live Cumulus reference documents this cross-component contract on the
 that page when their behavior participates in the coordinator.
 
 Screens render named semantic sources such as `GameCard`, `AtlasNode`,
-`Dreamsign`, `DreamAvatarPortrait`, `TideDisc`, `EssenceValue`, `SiteNode`, and
+`Dreamsign`, `AvatarPortrait`, `TideDisc`, `EssenceValue`, `SiteNode`, and
 `GlossaryTerm`. Each component derives one strict primary plus ordered
 `InfoCard` secondaries from UUID-backed domain data. `InfoCard` itself is a
 visual content component with strict variants.

@@ -557,10 +557,10 @@
         label: Tx("Follow the astronaut"),
         id: "4b837e9e-fefb-435c-8de1-4539fb4a5566",
         presentation: ActionPresentation(
-          effect_text: Tx("Pick a new Dream Avatar from 3 choices"),
-          followup: Followup(subtitle: Tx("Choose your new Dream Avatar.")),
+          effect_text: Tx("Pick a new Avatar from 3 choices"),
+          followup: Followup(subtitle: Tx("Choose your new Avatar.")),
         ),
-        effect: ChooseDreamAvatar(offer_count: 3),
+        effect: ChooseAvatar(offer_count: 3),
       ),
 
       ActionDefinition(
@@ -3827,10 +3827,10 @@
         label: Tx("Choose Living Vision"),
         id: "564b95e4-804e-411e-baad-c847f8b96e51",
         presentation: ActionPresentation(
-          effect_text: Tx("Pick a new Dream Avatar from 3 choices"),
-          followup: Followup(subtitle: Tx("Choose one offered Dream Avatar.")),
+          effect_text: Tx("Pick a new Avatar from 3 choices"),
+          followup: Followup(subtitle: Tx("Choose one offered Avatar.")),
         ),
-        effect: ChooseDreamAvatar(offer_count: 3),
+        effect: ChooseAvatar(offer_count: 3),
       ),
     ],
   ),
@@ -9221,10 +9221,10 @@
         label: Tx("Accept Alien Command"),
         id: "8383e42e-37a7-45cb-9eb0-6e54a4362340",
         presentation: ActionPresentation(
-          effect_text: Tx("Pick a new Dream Avatar from 3 choices"),
-          followup: Followup(subtitle: Tx("Choose one offered Dream Avatar.")),
+          effect_text: Tx("Pick a new Avatar from 3 choices"),
+          followup: Followup(subtitle: Tx("Choose one offered Avatar.")),
         ),
-        effect: ChooseDreamAvatar(offer_count: 3),
+        effect: ChooseAvatar(offer_count: 3),
       ),
 
       ActionDefinition(
@@ -14334,10 +14334,10 @@
         label: Tx("Wear its hidden face"),
         id: "f163368d-e8f5-40dd-bf4f-f8dc4b5f1106",
         presentation: ActionPresentation(
-          effect_text: Tx("Pick a new Dream Avatar from 3 choices"),
-          followup: Followup(subtitle: Tx("Choose one offered Dream Avatar.")),
+          effect_text: Tx("Pick a new Avatar from 3 choices"),
+          followup: Followup(subtitle: Tx("Choose one offered Avatar.")),
         ),
-        effect: ChooseDreamAvatar(offer_count: 3),
+        effect: ChooseAvatar(offer_count: 3),
       ),
     ],
   ),

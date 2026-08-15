@@ -1,5 +1,5 @@
-// The desktop (wide-viewport) DreamAvatar-select layout: a small purple eyebrow
-// title near the top of a shared background, then the offered DreamAvatars side
+// The desktop (wide-viewport) Avatar-select layout: a small purple eyebrow
+// title near the top of a shared background, then the offered Avatars side
 // by side — each the standing full-body cutout over a soft glow, the name
 // floating above the head, and a liquid-glass console panel riding up over the
 // legs (ability text, a row of hover-only tide discs + starting-essence chip,
@@ -7,21 +7,21 @@
 // the same size. It shares the view types and console primitives with the mobile
 // carousel via `journey-start-shared`, and both layouts use the same named
 // canonical RulesText source; `JourneyStartScreen` picks by viewport.
-// PURE: renders from a view-model and reports the chosen DreamAvatar via `onPick`.
+// PURE: renders from a view-model and reports the chosen Avatar via `onPick`.
 
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GlassButton } from "../components/controls/GlassButton";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { token } from "../primitives/tokens";
-import { DreamAvatarStage } from "../components/hud/DreamAvatarStage";
+import { AvatarStage } from "../components/hud/AvatarStage";
 import {
   ConsoleDivider,
   JourneyStartAbilityCopy,
   JourneyStartGuideDialogue,
   JourneyStartRerollControl,
   TidesEssenceBlock,
-  type DreamAvatarOfferView,
+  type AvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
 import { tx, type LocalizedString } from "@trox/runtime";
@@ -38,7 +38,7 @@ const CARD_OVERLAP = 275; // how far the panel's center rides up over the figure
 /** The smallest aligned ability-text scale. Longer copy grows vertically. */
 const ABILITY_MIN_SCALE = 0.9;
 
-/** Two lines of the rules voice in the desktop DreamAvatar selection card. */
+/** Two lines of the rules voice in the desktop Avatar selection card. */
 const ALIGNED_ABILITY_MIN_HEIGHT = 40;
 
 /**
@@ -114,9 +114,9 @@ function DesktopTitle({ title }: { readonly title: LocalizedString }) {
   );
 }
 
-/** The DreamAvatar's name + epithet, floating on the portrait above the head.
+/** The Avatar's name + epithet, floating on the portrait above the head.
  * On-media, so it earns legibility from the outline dilation, not a plate. */
-function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
+function PortraitName({ avatar }: { avatar: AvatarOfferView }) {
   const resolve = useLocalizer();
   return (
     <div
@@ -138,7 +138,7 @@ function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
           lineHeight: 1.05,
         }}
       >
-        {resolve(dreamAvatar.name)}
+        {resolve(avatar.name)}
       </div>
       <div
         style={{
@@ -148,31 +148,31 @@ function PortraitName({ dreamAvatar }: { dreamAvatar: DreamAvatarOfferView }) {
           textShadow: token("--text-outline-media"),
         }}
       >
-        {resolve(dreamAvatar.title)}
+        {resolve(avatar.title)}
       </div>
     </div>
   );
 }
 
-/** The console panel for one DreamAvatar. It is narrower than its column and
+/** The console panel for one Avatar. It is narrower than its column and
  * center-aligned under the figure, riding up over the legs; its interior is an
  * even --space-l rhythm stack — padding, then the ability text, divider, tides
  * row, and Choose button each separated by one step. The ability region takes
  * its natural height. A fixed alignment zone centers panels of different
  * heights on one line without transforming the glass or its ancestors, which
  * preserves backdrop blur. */
-function DreamAvatarCard({
-  dreamAvatar,
+function AvatarCard({
+  avatar,
   chooseLabel,
   onChoose,
 }: {
-  dreamAvatar: DreamAvatarOfferView;
+  avatar: AvatarOfferView;
   chooseLabel: LocalizedString;
   onChoose: () => void;
 }) {
   return (
     <div
-      data-dream-avatar-column={dreamAvatar.id}
+      data-avatar-column={avatar.id}
       style={{
         position: "relative",
         zIndex: 1,
@@ -184,7 +184,7 @@ function DreamAvatarCard({
         alignItems: "center",
       }}
     >
-      <GlassPanel testId={`dream-avatar-glass-panel-${dreamAvatar.id}`}>
+      <GlassPanel testId={`avatar-glass-panel-${avatar.id}`}>
         <div
           style={{
             padding: token("--space-l"),
@@ -193,7 +193,7 @@ function DreamAvatarCard({
           }}
         >
           <AlignedAbilityBox>
-            <JourneyStartAbilityCopy dreamAvatar={dreamAvatar} />
+            <JourneyStartAbilityCopy avatar={avatar} />
           </AlignedAbilityBox>
 
           <div style={{ marginTop: token("--space-l") }}>
@@ -204,11 +204,11 @@ function DreamAvatarCard({
               the tide discs stacked below the caption at the larger 'lg' size —
               the same shared arrangement the mobile carousel renders. */}
           <div style={{ marginTop: token("--space-l") }}>
-            <TidesEssenceBlock dreamAvatar={dreamAvatar} />
+            <TidesEssenceBlock avatar={avatar} />
           </div>
 
           <div
-            data-choose-dream-avatar={dreamAvatar.id}
+            data-choose-avatar={avatar.id}
             style={{ marginTop: token("--space-l"), display: "grid" }}
           >
             <GlassButton
@@ -224,15 +224,15 @@ function DreamAvatarCard({
   );
 }
 
-/** One desktop DreamAvatar column: a fixed-width stack of the portrait stage
+/** One desktop Avatar column: a fixed-width stack of the portrait stage
  * (the standing cutout with the name floating above the head) and the console
  * panel, which rides up over the legs and takes its natural height. */
-function DreamAvatarColumn({
-  dreamAvatar,
+function AvatarColumn({
+  avatar,
   chooseLabel,
   onChoose,
 }: {
-  dreamAvatar: DreamAvatarOfferView;
+  avatar: AvatarOfferView;
   chooseLabel: LocalizedString;
   onChoose: () => void;
 }) {
@@ -252,11 +252,11 @@ function DreamAvatarColumn({
           flex: "none",
         }}
       >
-        <DreamAvatarStage dreamAvatar={dreamAvatar} variant="standing" />
-        <PortraitName dreamAvatar={dreamAvatar} />
+        <AvatarStage avatar={avatar} variant="standing" />
+        <PortraitName avatar={avatar} />
       </div>
-      <DreamAvatarCard
-        dreamAvatar={dreamAvatar}
+      <AvatarCard
+        avatar={avatar}
         chooseLabel={chooseLabel}
         onChoose={onChoose}
       />
@@ -264,11 +264,11 @@ function DreamAvatarColumn({
   );
 }
 
-/** The desktop DreamAvatar-selection layout: a small purple eyebrow title near
- * the top of a shared background, then the offered DreamAvatars side by side as
+/** The desktop Avatar-selection layout: a small purple eyebrow title near
+ * the top of a shared background, then the offered Avatars side by side as
  * fixed-width portrait columns. */
 export function DesktopSelect({
-  dreamAvatars,
+  avatars,
   guideDialogue,
   onPick,
   onReroll,
@@ -326,12 +326,12 @@ export function DesktopSelect({
         <DesktopTitle
           title={tx(
             "Choose Your Avatar",
-            "[dream-avatar] [journey] Title and actions on the Dream Avatar selection screen.",
+            "[avatar] [journey] Title and actions on the Avatar selection screen.",
           )}
         />
       </div>
 
-      {/* The offered DreamAvatars, centered in the remaining space. The inner
+      {/* The offered Avatars, centered in the remaining space. The inner
           triptych aligns the columns at the top (`alignItems: flex-start`) so
           the fixed-height figure stages keep their feet on one line; each card
           then center-aligns itself within its own footprint. */}
@@ -355,16 +355,16 @@ export function DesktopSelect({
             gap: token("--space-2xl"),
           }}
         >
-          {dreamAvatars.map((dreamAvatar) => (
-            <DreamAvatarColumn
-              key={dreamAvatar.id}
-              dreamAvatar={dreamAvatar}
+          {avatars.map((avatar) => (
+            <AvatarColumn
+              key={avatar.id}
+              avatar={avatar}
               chooseLabel={tx(
                 "Choose",
-                "[dream-avatar] [journey] Command that chooses the currently selected Dream Avatar or starting-deck option.",
+                "[avatar] [journey] Command that chooses the currently selected Avatar or starting-deck option.",
               )}
               onChoose={() => {
-                onPick(dreamAvatar.id);
+                onPick(avatar.id);
               }}
             />
           ))}

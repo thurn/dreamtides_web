@@ -15,18 +15,18 @@ import {
   useTutorialHowToPlayLogging,
   useTutorialPresentationLogging,
 } from "../../state/use-tutorial-presentation-logging";
-import type { DreamAvatarContent } from "../../types/content";
-import type { TutorialDreamAvatarOwner } from "../../types/tutorial";
+import type { AvatarContent } from "../../types/content";
+import type { TutorialAvatarOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
 import { useJourney } from "../../state/journey-context";
-import type { DreamAvatarId, IntentKey } from "../../types/identifiers";
+import type { AvatarId, IntentKey } from "../../types/identifiers";
 import { parseIntentKey } from "../../types/identifiers";
 export function TutorialScreenAdapter({
-  dreamAvatars,
+  avatars,
   playbackSpeed = 1,
   directLive = false,
 }: {
-  readonly dreamAvatars: readonly DreamAvatarContent[];
+  readonly avatars: readonly AvatarContent[];
   readonly playbackSpeed?: number;
   readonly directLive?: boolean;
 }) {
@@ -85,13 +85,13 @@ export function TutorialScreenAdapter({
   const view = useMemo(
     () =>
       tutorialView.buildTutorialView(
-        dreamAvatars,
+        avatars,
         battleConfiguration,
         state.tutorial,
         tutorialCards?.cards ?? null,
         tutorialCards?.dreamwell ?? null,
       ),
-    [battleConfiguration, dreamAvatars, state.tutorial, tutorialCards],
+    [battleConfiguration, avatars, state.tutorial, tutorialCards],
   );
   useTutorialPresentationLogging(
     state.tutorial,
@@ -102,11 +102,11 @@ export function TutorialScreenAdapter({
   const howToPlayLogging = useTutorialHowToPlayLogging(view.battle.battleId);
   const completeAction = mutations.completeTutorialAction;
   const handleActionComplete = useTutorialActionComplete(completeAction);
-  const handleDreamAvatarArrivalComplete = useCallback(
-    (dreamAvatarId: DreamAvatarId, owner: TutorialDreamAvatarOwner): void => {
-      logEvent("tutorial_dream_avatar_arrived", {
+  const handleAvatarArrivalComplete = useCallback(
+    (avatarId: AvatarId, owner: TutorialAvatarOwner): void => {
+      logEvent("tutorial_avatar_arrived", {
         battleId: view.battle.battleId,
-        dreamAvatarId,
+        avatarId,
         owner,
         actionId: view.currentAction?.id ?? null,
         abilityActive: false,
@@ -141,7 +141,7 @@ export function TutorialScreenAdapter({
           : undefined
       }
       onActionComplete={handleActionComplete}
-      onDreamAvatarArrivalComplete={handleDreamAvatarArrivalComplete}
+      onAvatarArrivalComplete={handleAvatarArrivalComplete}
       {...howToPlayLogging}
       onPlayerCardPlay={handlePlayerCardPlay}
       onEndTurn={handleEndTurn}

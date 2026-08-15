@@ -22,7 +22,7 @@ import type { FoldState } from "../rules/fold-state";
 import { foldInvariantViolations } from "../rules/invariants";
 import {
   BATTLE_SITE_ID,
-  DREAM_AVATAR_ID,
+  AVATAR_ID,
   ESSENCE_SITE_ID,
   NEXT_NODE_ID,
   NODE_ID,
@@ -33,7 +33,7 @@ import {
   parseSiteId,
   type ClientId,
 } from "../types/identifiers";
-import { testClientId, testDreamAvatarId } from "../types/test-identities";
+import { testClientId, testAvatarId } from "../types/test-identities";
 
 export type FuzzActor = "publisher" | "host";
 export type DeliveryShape = "object" | "array" | "firebase-omissions";
@@ -149,7 +149,7 @@ function stateAwareDraft(state: FoldState, value: number): EventDraft {
   if (state.journey.runId === null) {
     return {
       type: "START_JOURNEY",
-      payload: { dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID) },
+      payload: { avatarId: testAvatarId(AVATAR_ID) },
       intentKey: parseIntentKey("fuzz:start-journey"),
     };
   }

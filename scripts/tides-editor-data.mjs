@@ -12,7 +12,7 @@ const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const DATA_DIR = "data";
 
 export const DEFAULT_TIDES_FILE = "tides";
-export const DREAM_AVATARS_TOML_PATH = join(DATA_DIR, "dream_avatars.toml");
+export const AVATARS_TOML_PATH = join(DATA_DIR, "avatars.toml");
 export const RESONANCES = ["ember", "valor", "vision", "wild", "shadow"];
 export const EDITABLE_TIDE_FIELDS = new Set([
   "displayName",
@@ -41,11 +41,11 @@ export function resolveTidesFile(rootDir, requested) {
 export function readTidesArtifact({
   rootDir = ROOT,
   tomlPath,
-  dreamAvatarsTomlPath = DREAM_AVATARS_TOML_PATH,
+  avatarsTomlPath = AVATARS_TOML_PATH,
 } = {}) {
   return compileTidesData(
     parse(readFileSync(join(rootDir, tomlPath), "utf8")),
-    parse(readFileSync(join(rootDir, dreamAvatarsTomlPath), "utf8")),
+    parse(readFileSync(join(rootDir, avatarsTomlPath), "utf8")),
   );
 }
 

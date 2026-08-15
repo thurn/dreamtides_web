@@ -47,7 +47,7 @@ import type { SiteId } from "../../types/identifiers";
 import type { BattleId } from "../../types/identifiers";
 import type {
   BattleCardId,
-  DreamAvatarId,
+  AvatarId,
   DreamwellCardId,
 } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
@@ -114,7 +114,7 @@ function buildBattleInit(
     site,
     state: journey,
     cardDatabase: content.cardDatabase,
-    dreamAvatars: content.dreamAvatars,
+    avatars: content.avatars,
     dreamscapes: content.dreamscapes,
     affiliations: content.affiliations,
     dreamwellCards: content.dreamwellCards,
@@ -278,13 +278,13 @@ function createTutorialBattleInit(
       "playerDeckOrder",
     ).shuffle(definitions);
   };
-  const playerDreamAvatar = dreamAvatarById(
+  const playerAvatar = avatarById(
     content,
-    battleConfiguration.playerDreamAvatarId,
+    battleConfiguration.playerAvatarId,
   );
-  const enemyDreamAvatar = dreamAvatarById(
+  const enemyAvatar = avatarById(
     content,
-    battleConfiguration.enemyDreamAvatarId,
+    battleConfiguration.enemyAvatarId,
   );
   return {
     battleId,
@@ -318,16 +318,16 @@ function createTutorialBattleInit(
       key,
       battleConfiguration.dreamwellDraws,
     ),
-    enemyDescriptor: tutorialEnemyDescriptor(enemyDreamAvatar),
+    enemyDescriptor: tutorialEnemyDescriptor(enemyAvatar),
     enemyDeckDefinition: makeDeck("enemy"),
-    dreamAvatarSummary: {
-      id: playerDreamAvatar.id,
-      name: playerDreamAvatar.name,
-      title: playerDreamAvatar.title,
-      renderedText: playerDreamAvatar.renderedText,
-      imageNumber: playerDreamAvatar.imageNumber,
-      ...(playerDreamAvatar.portraitFocus
-        ? { portraitFocus: playerDreamAvatar.portraitFocus }
+    avatarSummary: {
+      id: playerAvatar.id,
+      name: playerAvatar.name,
+      title: playerAvatar.title,
+      renderedText: playerAvatar.renderedText,
+      imageNumber: playerAvatar.imageNumber,
+      ...(playerAvatar.portraitFocus
+        ? { portraitFocus: playerAvatar.portraitFocus }
         : {}),
     },
     dreamsignSummaries: [],
@@ -594,19 +594,19 @@ function cardById(content: JourneyContent, cardId: CardId) {
   return card;
 }
 
-function dreamAvatarById(content: JourneyContent, id: DreamAvatarId) {
-  const dreamAvatar = content.dreamAvatars.find(
+function avatarById(content: JourneyContent, id: AvatarId) {
+  const avatar = content.avatars.find(
     (candidate) => candidate.id === id,
   );
-  if (dreamAvatar === undefined)
+  if (avatar === undefined)
     throw new Error(
-      `Tutorial DreamAvatar ${id} is missing from the runtime catalog.`,
+      `Tutorial Avatar ${id} is missing from the runtime catalog.`,
     );
-  return dreamAvatar;
+  return avatar;
 }
 
 function tutorialEnemyDescriptor(
-  threxan: JourneyContent["dreamAvatars"][number],
+  threxan: JourneyContent["avatars"][number],
 ): BattleEnemyDescriptor {
   return {
     id: parseOpponentId(`tutorial:${threxan.id}`),
@@ -614,7 +614,7 @@ function tutorialEnemyDescriptor(
     subtitle: threxan.title,
     imageNumber: threxan.imageNumber,
     portraitSeed: 0,
-    // The tutorial presents both DreamAvatars; no DreamAvatar ability is
+    // The tutorial presents both Avatars; no Avatar ability is
     // scheduled into the tutorial battle's automation.
     abilityText: threxan.renderedText,
     dreamsigns: [],

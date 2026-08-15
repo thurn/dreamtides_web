@@ -46,7 +46,7 @@ const tides: Tides4DecksJson = {
       ],
     },
   ],
-  tidePoolByDreamAvatar: {},
+  tidePoolByAvatar: {},
 };
 
 describe("Tide affinity", () => {

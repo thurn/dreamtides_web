@@ -70,7 +70,7 @@ def classify_legacy_action(action: dict[str, Any]) -> int:
         "replace-selected-with-card": 47,
         "copy-selected-cards": 51,
         "copy-offered-deck-card": 55,
-        "choose-dream-avatar": 57,
+        "choose-avatar": 57,
         "change-subtype-selected": 58,
         "gain-essence-per-card": 59,
         "purge-for-essence": 60,

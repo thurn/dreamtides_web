@@ -8,7 +8,7 @@ import { testEventActor } from "../../types/test-identities";
 // per-case unit test can express:
 //
 //   (a) Run-field nullability — no NORMAL gameplay event ever
-//       transitions `draftState` / `resolvedPackage` / `dreamAvatar` from
+//       transitions `draftState` / `resolvedPackage` / `avatar` from
 //       non-null to null. Only `RESET_JOURNEY` and the debug `SET_DRAFT_STATE`
 //       may null a run field, so we draw the random sequences from the
 //       NON-DEBUG journey event union (those two, plus the other debug/QA edits,
@@ -35,7 +35,7 @@ import { testEventActor } from "../../types/test-identities";
 // (`register*(null)`) in `afterAll`, so no registration leaks into other
 // suites:
 //   - Lifecycle fake — `START_JOURNEY` populates all three run fields
-//     (`dreamAvatar`, `resolvedPackage`, a non-null `draftState`) AND seeds a
+//     (`avatar`, `resolvedPackage`, a non-null `draftState`) AND seeds a
 //     Shop atlas site with a shop `siteRuntime`, so the nullability invariant
 //     has a real precondition and `REROLL_SHOP` has a runtime to restock.
 //   - Deck fake — `ADD_CARD` / `ADD_DREAMSIGN` apply.
@@ -64,8 +64,8 @@ import type {
   Genesis,
 } from "../../eventlog/types";
 import type {
-  DreamAvatarContent,
-  ResolvedDreamAvatarPackage,
+  AvatarContent,
+  ResolvedAvatarPackage,
 } from "../../types/content";
 import type { DraftState, PoolDraftState } from "../../types/draft";
 import type { Dreamsign, DreamscapeNode } from "../../types/journey";
@@ -86,10 +86,10 @@ import { registerSiteContentProvider, type SiteContentProvider } from "./sites";
 import { registerBattleInitProvider } from "../battle/battle-events";
 import { fixtureBattleInitProvider } from "../replay/fixture-providers";
 import { parseAtlasNodeId } from "../../types/identifiers";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { testDreamAvatarId, testCardId, testDreamsignId } from "../../types/test-identities";
+import { testAvatarId, testCardId, testDreamsignId } from "../../types/test-identities";
 
 // ---------------------------------------------------------------------------
 // Fixtures & engine config
@@ -147,30 +147,30 @@ function hashNumber(text: string): number {
 // ---------------------------------------------------------------------------
 
 /**
- * A deterministic package derived only from `(dreamAvatarId, seed)`. The
+ * A deterministic package derived only from `(avatarId, seed)`. The
  * `startJourney` result populates ALL THREE run fields, including a non-null
  * `draftState`, so the nullability invariant (a) has a live precondition.
  */
 function lifecycleProvider(): JourneyLifecycleContentProvider {
   function packageFor(
-    dreamAvatarId: DreamAvatarId,
+    avatarId: AvatarId,
     seed: string,
-  ): ResolvedDreamAvatarPackage {
-    const dreamAvatar: DreamAvatarContent = {
-      id: dreamAvatarId,
-      name: `caller-${dreamAvatarId}`,
+  ): ResolvedAvatarPackage {
+    const avatar: AvatarContent = {
+      id: avatarId,
+      name: `caller-${avatarId}`,
       title: "title",
       renderedText: "text",
       imageNumber: "1",
       startingEssence: 150,
     };
-    const rng = makePrng(hashNumber(`${dreamAvatarId}:${seed}`));
+    const rng = makePrng(hashNumber(`${avatarId}:${seed}`));
     const dreamsignPoolIds = Array.from(
       { length: 8 },
       () => `ds-${String(Math.floor(rng() * 1_000_000))}`,
     );
     return {
-      dreamAvatar,
+      avatar,
       draftPoolCopiesByCard: { "100": 4, "101": 4, "102": 4 },
       dreamsignPoolIds: dreamsignPoolIds.map(testDreamsignId),
       mandatoryOnlyPoolSize: 3,
@@ -182,21 +182,21 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
   }
 
   return {
-    resolveDreamAvatarPackage: (dreamAvatarId, seed) =>
-      packageFor(dreamAvatarId, seed),
-    startJourney: ({ journey, dreamAvatarId, seed }) => {
-      const pkg = packageFor(dreamAvatarId, seed);
+    resolveAvatarPackage: (avatarId, seed) =>
+      packageFor(avatarId, seed),
+    startJourney: ({ journey, avatarId, seed }) => {
+      const pkg = packageFor(avatarId, seed);
       return {
         ...journey,
         seed: journey.seed,
-        essence: pkg.dreamAvatar.startingEssence,
-        dreamAvatar: {
-          id: pkg.dreamAvatar.id,
-          name: pkg.dreamAvatar.name,
-          title: pkg.dreamAvatar.title,
-          renderedText: pkg.dreamAvatar.renderedText,
-          imageNumber: pkg.dreamAvatar.imageNumber,
-          startingEssence: pkg.dreamAvatar.startingEssence,
+        essence: pkg.avatar.startingEssence,
+        avatar: {
+          id: pkg.avatar.id,
+          name: pkg.avatar.name,
+          title: pkg.avatar.title,
+          renderedText: pkg.avatar.renderedText,
+          imageNumber: pkg.avatar.imageNumber,
+          startingEssence: pkg.avatar.startingEssence,
         },
         resolvedPackage: pkg,
         remainingDreamsignPool: [...pkg.dreamsignPoolIds],
@@ -381,13 +381,13 @@ const DEBUG_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
   "SET_DECK_ENTRY_KEYWORDS",
   "SET_CARD_SOURCE_DEBUG",
   "REROLL_AUGURY",
-  "REROLL_DREAM_AVATAR_OFFER",
+  "REROLL_AVATAR_OFFER",
   "FORCE_AUGURY_ARCHETYPE",
   "RESET_JOURNEY",
 ]);
 
 /** The three run fields the nullability invariant protects. */
-const RUN_FIELDS = ["draftState", "resolvedPackage", "dreamAvatar"] as const;
+const RUN_FIELDS = ["draftState", "resolvedPackage", "avatar"] as const;
 
 /**
  * The nullability checker: returns the name of the first run field that
@@ -779,7 +779,7 @@ const START_JOURNEY_ENTRY: { seq: number; event: GameEvent } = {
   seq: 1,
   event: {
     type: "START_JOURNEY",
-    payload: { dreamAvatarId: testDreamAvatarId("dc-1") },
+    payload: { avatarId: testAvatarId("dc-1") },
     actor: ACTOR,
     clientTimestamp: TIMESTAMP,
     basedOnSeq: 0,
@@ -814,7 +814,7 @@ function allSequences(): Array<{
 // ---------------------------------------------------------------------------
 
 describe("populated start fixture", () => {
-  it("START_JOURNEY yields non-null dreamAvatar / resolvedPackage / draftState", () => {
+  it("START_JOURNEY yields non-null avatar / resolvedPackage / draftState", () => {
     const result = foldEvents(
       ENGINE_CONFIG,
       GENESIS,
@@ -911,12 +911,12 @@ describe("(a) run-field nullability", () => {
     };
     expect(firstNulledRunField(populated, nulledDraft)).toBe("draftState");
 
-    // And it also catches a dreamAvatar / resolvedPackage regression.
+    // And it also catches an avatar / resolvedPackage regression.
     const nulledCaller: FoldState = {
       ...populated,
-      journey: { ...populated.journey, dreamAvatar: null },
+      journey: { ...populated.journey, avatar: null },
     };
-    expect(firstNulledRunField(populated, nulledCaller)).toBe("dreamAvatar");
+    expect(firstNulledRunField(populated, nulledCaller)).toBe("avatar");
 
     // A step that PRESERVES the run fields must NOT be flagged (no false positive).
     expect(firstNulledRunField(populated, populated)).toBeNull();

@@ -2,71 +2,71 @@ import { localizedSourceText } from "../../runtime/localization/runtime";
 // Pure view-model builder for the desktop deck viewer. Resolves the deck to the
 // cards the player actually holds (reusing the shared mobile resolution so both
 // viewers show a card identically), and pairs them with the run profile the
-// desktop sidebar shows: the DreamAvatar and the collected dreamsigns. No React,
+// desktop sidebar shows: the Avatar and the collected dreamsigns. No React,
 // no state hooks — the adapter acquires live state and calls this; this module
 // maps domain data to the screen's view types and nothing else. The run's
 // stable avatar UUID and seed resolve the same selected tide preview shown at
 // journey start.
 
 import type { CardData } from "../../types/cards";
-import type { DreamAvatarContent } from "../../types/content";
+import type { AvatarContent } from "../../types/content";
 import type { RunPoolContext } from "../../data/journey-content";
-import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/journey";
+import type { DeckEntry, Avatar, Dreamsign } from "../../types/journey";
 import type {
-  DeckDreamAvatarView,
+  DeckAvatarView,
   DesktopDeckView,
 } from "../../cumulus/screens/DesktopDeckViewer";
 import { buildMobileDeckView } from "./mobile-deck-view-model";
-import { buildDreamAvatarTideViews } from "./journey-start-view-model";
+import { buildAvatarTideViews } from "./journey-start-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { JourneySeed } from "../../types/journey-seed";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 
-/** Map the run's DreamAvatar to the sidebar view (portrait visual + rules text). */
-function toDreamAvatarView(
-  dreamAvatar: DreamAvatar | null,
-): DeckDreamAvatarView | null {
-  if (dreamAvatar === null) return null;
+/** Map the run's Avatar to the sidebar view (portrait visual + rules text). */
+function toAvatarView(
+  avatar: Avatar | null,
+): DeckAvatarView | null {
+  if (avatar === null) return null;
   return {
-    id: dreamAvatar.id,
-    imageNumber: dreamAvatar.imageNumber,
-    name: localizedSourceText(dreamAvatar.name),
-    title: localizedSourceText(dreamAvatar.title),
-    renderedText: localizedSourceText(dreamAvatar.renderedText),
+    id: avatar.id,
+    imageNumber: avatar.imageNumber,
+    name: localizedSourceText(avatar.name),
+    title: localizedSourceText(avatar.title),
+    renderedText: localizedSourceText(avatar.renderedText),
   };
 }
 
 /**
  * The full desktop deck view: every resolvable deck entry in acquisition order,
- * plus the run's DreamAvatar and collected dreamsigns for the sidebar.
+ * plus the run's Avatar and collected dreamsigns for the sidebar.
  * Deterministic in its arguments.
  */
 export function buildDesktopDeckView(
   transfigurationData: TransfigurationData,
   deck: readonly DeckEntry[],
   cardDatabase: Map<number, CardData>,
-  dreamAvatar: DreamAvatar | null,
+  avatar: Avatar | null,
   dreamsigns: readonly Dreamsign[],
-  dreamAvatars: readonly DreamAvatarContent[] = [],
+  avatars: readonly AvatarContent[] = [],
   poolContext?: RunPoolContext,
   journeySeed?: JourneySeed,
 ): DesktopDeckView {
-  const dreamAvatarContent =
-    dreamAvatar === null
+  const avatarContent =
+    avatar === null
       ? undefined
-      : dreamAvatars.find((candidate) => candidate.id === dreamAvatar.id);
+      : avatars.find((candidate) => candidate.id === avatar.id);
   return {
     cards: buildMobileDeckView(transfigurationData, deck, cardDatabase).cards,
-    dreamAvatar: toDreamAvatarView(dreamAvatar),
+    avatar: toAvatarView(avatar),
     dreamsigns: dreamsigns.map((dreamsign) =>
       localizedDreamsign(dreamsign, "Desktop deck viewer"),
     ),
     tides:
-      dreamAvatarContent === undefined || journeySeed === undefined
+      avatarContent === undefined || journeySeed === undefined
         ? []
-        : buildDreamAvatarTideViews(
+        : buildAvatarTideViews(
             poolContext,
-            dreamAvatarContent,
+            avatarContent,
             journeySeed,
           ),
   };

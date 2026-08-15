@@ -6,7 +6,7 @@ import type {
   CardTutorialScreenKey,
   ClientId,
   DeckEntryId,
-  DreamAvatarId,
+  AvatarId,
   DreamsignId,
   ExplorationActionId,
   FrontDoorActionId,
@@ -90,9 +90,9 @@ export interface EventPayloads {
   RESET_JOURNEY: Record<string, never>;
   LOAD_STATE: { snapshot: unknown; battle?: unknown };
 
-  // --- dreamAvatar ---
-  SELECT_DREAM_AVATAR: { dreamAvatarId: DreamAvatarId };
-  REROLL_DREAM_AVATAR_OFFER: Record<string, never>;
+  // --- avatar ---
+  SELECT_AVATAR: { avatarId: AvatarId };
+  REROLL_AVATAR_OFFER: Record<string, never>;
 
   // --- navigation ---
   ENTER_SITE: { siteId: SiteId };
@@ -365,8 +365,8 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   START_JOURNEY: true,
   RESET_JOURNEY: true,
   LOAD_STATE: true,
-  SELECT_DREAM_AVATAR: true,
-  REROLL_DREAM_AVATAR_OFFER: true,
+  SELECT_AVATAR: true,
+  REROLL_AVATAR_OFFER: true,
   ENTER_SITE: true,
   TRAVEL_TO_DREAMSCAPE: true,
   REGENERATE_ATLAS: true,

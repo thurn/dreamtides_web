@@ -31,13 +31,13 @@ import { parseSiteId } from "./types/identifiers";
 import { parseDeckEntryId } from "./types/identifiers";
 import { parseRoomId } from "./types/identifiers";
 import type { RoomId } from "./types/identifiers";
-import { testDreamAvatarId, testDreamscapeId, testCardId } from "./types/test-identities";
+import { testAvatarId, testDreamscapeId, testCardId } from "./types/test-identities";
 
 vi.mock("./data/journey-content", () => ({
   AFFINITY_GROWN_POOL_VARIANTS: new Set<string>(),
-  buildDreamAvatarProvenance: vi.fn(() => null),
-  buildDreamAvatarSeedProvenance: vi.fn(() => null),
-  buildDreamAvatarTides4Provenance: vi.fn(() => null),
+  buildAvatarProvenance: vi.fn(() => null),
+  buildAvatarSeedProvenance: vi.fn(() => null),
+  buildAvatarTides4Provenance: vi.fn(() => null),
   loadJourneyContent: vi.fn(),
   poolVariantNeedsTides4: vi.fn(() => false),
 }));
@@ -139,8 +139,8 @@ vi.mock("./data/tutorial-actions", () => ({
           handoffEnemyCharacterCardId: "00000000-0000-4000-8000-000000000003",
           tutorialDreamwellCardId: "00000000-0000-4000-8000-000000000005",
         },
-        playerDreamAvatarId: "00000000-0000-4000-8000-000000000006",
-        enemyDreamAvatarId: "00000000-0000-4000-8000-000000000007",
+        playerAvatarId: "00000000-0000-4000-8000-000000000006",
+        enemyAvatarId: "00000000-0000-4000-8000-000000000007",
         startingEnergy: 4,
         scoreToWin: 10,
         starterDeck: [
@@ -292,7 +292,7 @@ function makeMutations(): JourneyMutations {
   return {
     changeEssence: vi.fn(),
     startJourney: vi.fn(),
-    rerollDreamAvatarOffer: vi.fn(),
+    rerollAvatarOffer: vi.fn(),
     completeSite: vi.fn(),
     ensureGambleSiteRuntime: vi.fn(),
     ensureExplorationSiteRuntime: vi.fn(),
@@ -342,7 +342,7 @@ function makeMutations(): JourneyMutations {
     transfigureCard: vi.fn(),
     changeDeckEntryType: vi.fn(),
     changeDeckEntryKeywords: vi.fn(),
-    setDreamAvatarSelection: vi.fn(),
+    setAvatarSelection: vi.fn(),
     setCardSourceDebug: vi.fn(),
     addDreamsign: vi.fn(),
     removeDreamsign: vi.fn(),
@@ -379,7 +379,7 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
     essence: 250,
     maxDreamsigns: 12,
     deck: [],
-    dreamAvatar: null,
+    avatar: null,
     resolvedPackage: null,
     cardSourceDebug: null,
     remainingDreamsignPool: [],
@@ -419,7 +419,7 @@ function makeJourneyContent(): JourneyContent {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase: new Map<number, CardData>(),
-    dreamAvatars: [],
+    avatars: [],
 
     dreamwellCards: [],
     dreamsignTemplates: [],
@@ -442,7 +442,7 @@ function setJourneyState(state: JourneyState): void {
       ...CONFIG_DATA_FIXTURE,
       draftData: draftDataFixture(),
       cardDatabase: new Map(),
-      dreamAvatars: [],
+      avatars: [],
 
       dreamwellCards: [],
       dreamsignTemplates: [],
@@ -645,8 +645,8 @@ describe("JourneyApp", () => {
         transfiguration: null,
         isBane: false,
       })),
-      dreamAvatar: {
-        id: testDreamAvatarId("caller-1"),
+      avatar: {
+        id: testAvatarId("caller-1"),
         name: "Starter Caller",
         title: "Of the First Hand",
         renderedText: "Pick your path.",
@@ -657,7 +657,7 @@ describe("JourneyApp", () => {
       ...overrides,
     });
 
-  it("keeps the deck viewer and starting-deck modal closed before any dreamAvatar is selected", () => {
+  it("keeps the deck viewer and starting-deck modal closed before any avatar is selected", () => {
     setJourneyState(makeState());
 
     const { container, root } = mount(
@@ -687,7 +687,7 @@ describe("JourneyApp", () => {
     });
   });
 
-  it("opens the starting-deck modal (not the full DeckViewer) immediately after a dreamAvatar is picked", () => {
+  it("opens the starting-deck modal (not the full DeckViewer) immediately after an avatar is picked", () => {
     setJourneyState(starterCallerState());
 
     const { container, root } = mount(
@@ -729,7 +729,7 @@ describe("JourneyApp", () => {
         ...CONFIG_DATA_FIXTURE,
         draftData: draftDataFixture(),
         cardDatabase: new Map(),
-        dreamAvatars: [],
+        avatars: [],
 
         dreamwellCards: [],
         dreamsignTemplates: [],

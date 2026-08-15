@@ -47,7 +47,7 @@ import { parseSelectionKey } from "../../types/identifiers";
 import { parseRewardCandidateKey } from "../../types/identifiers";
 import { parseSelectionContentRevision } from "../../types/selection-content-revision";
 import { parseSelectionRulesVersion } from "../../reward-selection/types";
-import { testDreamAvatarId, testDreamscapeId, testDreamsignId, testExplorationActionId, testGuideId, testCardId } from "../../types/test-identities";
+import { testAvatarId, testDreamscapeId, testDreamsignId, testExplorationActionId, testGuideId, testCardId } from "../../types/test-identities";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -161,7 +161,7 @@ describe("exploration-view-model", () => {
     };
     const content = {
       cardDatabase: new Map([[source.cardNumber, source]]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -312,7 +312,7 @@ describe("exploration-view-model", () => {
         [event.cardNumber, event],
         [purged.cardNumber, purged],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -408,7 +408,7 @@ describe("exploration-view-model", () => {
         [source.cardNumber, source],
         [nightmare.cardNumber, nightmare],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -605,7 +605,7 @@ describe("exploration-view-model", () => {
         [source.cardNumber, source],
         [zeroCost.cardNumber, zeroCost],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -717,7 +717,7 @@ describe("exploration-view-model", () => {
         [source.cardNumber, source],
         [target.cardNumber, target],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -832,7 +832,7 @@ describe("exploration-view-model", () => {
         [source.cardNumber, source],
         [target.cardNumber, target],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -971,7 +971,7 @@ describe("exploration-view-model", () => {
         [source.cardNumber, source],
         [target.cardNumber, target],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -1075,7 +1075,7 @@ describe("exploration-view-model", () => {
         [firstEvent.cardNumber, firstEvent],
         [secondEvent.cardNumber, secondEvent],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -1248,7 +1248,7 @@ describe("exploration-view-model", () => {
     };
     const content = {
       cardDatabase: new Map([[source.cardNumber, source]]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -1373,7 +1373,7 @@ describe("exploration-view-model", () => {
         [firstSpiritAnimal.cardNumber, firstSpiritAnimal],
         [secondSpiritAnimal.cardNumber, secondSpiritAnimal],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -1478,7 +1478,7 @@ describe("exploration-view-model", () => {
         [source.cardNumber, source],
         [offered.cardNumber, offered],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -1559,7 +1559,7 @@ describe("exploration-view-model", () => {
         [fixedCard.cardNumber, fixedCard],
         [nightmareCard.cardNumber, nightmareCard],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [
         {
@@ -1697,7 +1697,7 @@ describe("exploration-view-model", () => {
           [source.cardNumber, source],
           [starter.cardNumber, starter],
         ]),
-        dreamAvatars: [],
+        avatars: [],
         dreamwellCards: [],
         dreamsignTemplates: [],
         dreamscapes: [],
@@ -1878,7 +1878,7 @@ describe("exploration-view-model", () => {
     };
     const content = {
       cardDatabase: new Map([[source.cardNumber, source]]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -2053,7 +2053,7 @@ describe("exploration-view-model", () => {
         [source.cardNumber, source],
         [nightmare.cardNumber, nightmare],
       ]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [fixedDreamsign, heldDreamsign, ...offeredDreamsigns],
       dreamscapes: [],
@@ -2347,7 +2347,7 @@ describe("exploration-view-model", () => {
     };
     const content = {
       cardDatabase: new Map([[source.cardNumber, source]]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -2557,11 +2557,11 @@ describe("exploration-view-model", () => {
     expect(unavailable?.actions[0]?.available).toBe(false);
   });
 
-  it("builds semantic outcomes for copied cards, next-battle modifiers, Reclaim, and Dream Avatar replacement", () => {
+  it("builds semantic outcomes for copied cards, next-battle modifiers, Reclaim, and Avatar replacement", () => {
     const source = card(sourceId, 17);
     const survivor = card(testCardId("f0000000-0000-4000-8000-000000000018"), 18);
-    const dreamAvatars = Array.from({ length: 4 }, (_, index) => ({
-      id: testDreamAvatarId(`avatar-${String(index)}`),
+    const avatars = Array.from({ length: 4 }, (_, index) => ({
+      id: testAvatarId(`avatar-${String(index)}`),
       name: `Avatar ${String(index)}`,
       title: "Synthetic",
       renderedText: "A synthetic ability.",
@@ -2598,8 +2598,8 @@ describe("exploration-view-model", () => {
           isBane: false,
         },
       ],
-      dreamAvatar: {
-        id: testDreamAvatarId("avatar-2"),
+      avatar: {
+        id: testAvatarId("avatar-2"),
         name: "Avatar 2",
         title: "Synthetic",
         renderedText: "A synthetic ability.",
@@ -2627,7 +2627,7 @@ describe("exploration-view-model", () => {
           [source.cardNumber, source],
           [survivor.cardNumber, survivor],
         ]),
-        dreamAvatars,
+        avatars,
         dreamwellCards: [],
         dreamsignTemplates: [],
         dreamscapes: [],
@@ -2662,10 +2662,10 @@ describe("exploration-view-model", () => {
             {
               actionId: action.id,
               offeredCardIds: [],
-              offeredDreamAvatarIds: [
-                testDreamAvatarId("avatar-1"),
-                testDreamAvatarId("avatar-2"),
-                testDreamAvatarId("avatar-3"),
+              offeredAvatarIds: [
+                testAvatarId("avatar-1"),
+                testAvatarId("avatar-2"),
+                testAvatarId("avatar-3"),
               ],
               packCardIds: [],
               replacementCardIdByEntryId: {},
@@ -2969,31 +2969,31 @@ describe("exploration-view-model", () => {
       {
         id: testExplorationActionId("avatar"),
         label: "Follow",
-        effectText: "Pick a new Dream Avatar from 3 choices",
-        effectKind: "choose-dream-avatar",
+        effectText: "Pick a new Avatar from 3 choices",
+        effectKind: "choose-avatar",
         offerCount: 3,
       },
       {
         ...emptyResolution(testExplorationActionId("avatar")),
-        previousDreamAvatarId: testDreamAvatarId("avatar-0"),
-        chosenDreamAvatarId: testDreamAvatarId("avatar-2"),
+        previousAvatarId: testAvatarId("avatar-0"),
+        chosenAvatarId: testAvatarId("avatar-2"),
       },
     );
     expect(avatar).toMatchObject({
-      outcomeKind: "dream-avatar",
+      outcomeKind: "avatar",
       reward: {
-        kind: "dream-avatar",
-        previous: { id: testDreamAvatarId("avatar-0") },
-        current: { id: testDreamAvatarId("avatar-2") },
+        kind: "avatar",
+        previous: { id: testAvatarId("avatar-0") },
+        current: { id: testAvatarId("avatar-2") },
       },
     });
     expect(avatar?.actions[0]).toMatchObject({
       followup: {
-        kind: "dreamAvatars",
-        dreamAvatars: [
-          { id: testDreamAvatarId("avatar-1") },
-          { id: testDreamAvatarId("avatar-2") },
-          { id: testDreamAvatarId("avatar-3") },
+        kind: "avatars",
+        avatars: [
+          { id: testAvatarId("avatar-1") },
+          { id: testAvatarId("avatar-2") },
+          { id: testAvatarId("avatar-3") },
         ],
       },
     });
@@ -3507,7 +3507,7 @@ describe("exploration-view-model", () => {
           fixtureCard,
         ]),
       ),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -3837,7 +3837,7 @@ describe("exploration-view-model", () => {
           fixtureCard,
         ]),
       ),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -4096,7 +4096,7 @@ describe("exploration-view-model", () => {
           [first.cardNumber, first],
           [second.cardNumber, second],
         ]),
-        dreamAvatars: [],
+        avatars: [],
         dreamwellCards: [],
         dreamsignTemplates: [],
         dreamscapes: [],
@@ -4435,7 +4435,7 @@ describe("exploration-view-model", () => {
           [firstStarter.cardNumber, firstStarter],
           [secondStarter.cardNumber, secondStarter],
         ]),
-        dreamAvatars: [],
+        avatars: [],
         dreamwellCards: [],
         dreamsignTemplates: [],
         dreamscapes: [],
@@ -4684,7 +4684,7 @@ describe("exploration-view-model", () => {
           secondReplacement,
         ].map((candidate) => [candidate.cardNumber, candidate]),
       ),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -4937,7 +4937,7 @@ describe("exploration-view-model", () => {
             candidate,
           ]),
         ),
-        dreamAvatars: [],
+        avatars: [],
         dreamwellCards: [],
         dreamsignTemplates: [],
         dreamscapes: [],
@@ -5543,7 +5543,7 @@ describe("exploration-view-model", () => {
     };
     const content = {
       cardDatabase: new Map([[source.cardNumber, source]]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -5779,7 +5779,7 @@ describe("exploration-view-model", () => {
     };
     const content = {
       cardDatabase: new Map([[source.cardNumber, source]]),
-      dreamAvatars: [],
+      avatars: [],
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: [],
@@ -5991,7 +5991,7 @@ describe("exploration-view-model", () => {
       };
       const content = {
         cardDatabase: new Map([[source.cardNumber, source]]),
-        dreamAvatars: [],
+        avatars: [],
         dreamwellCards: [],
         dreamsignTemplates: [],
         dreamscapes: [],

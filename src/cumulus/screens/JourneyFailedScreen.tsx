@@ -2,9 +2,9 @@ import type { ReactElement } from "react";
 import type { LocalizedString } from "@trox/runtime";
 import { GlassButton } from "../components/controls/GlassButton";
 import {
-  DreamAvatarPortrait,
-  type DreamAvatarVisual,
-} from "../components/hud/DreamAvatarPortrait";
+  AvatarPortrait,
+  type AvatarVisual,
+} from "../components/hud/AvatarPortrait";
 import { Motes } from "../components/hud/Motes";
 import { GlassPanel } from "../components/overlay/GlassPanel";
 import { token } from "../primitives/tokens";
@@ -20,22 +20,22 @@ import {
 } from "./journey-result-layout";
 import { tx } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 
 export interface JourneyFailedStatView {
   id: "battles" | "round" | "playerScore" | "enemyScore";
   value: number;
 }
 
-export interface JourneyFailedDreamAvatarView extends DreamAvatarVisual {
-  id: DreamAvatarId;
+export interface JourneyFailedAvatarView extends AvatarVisual {
+  id: AvatarId;
   ability: LocalizedString;
 }
 
 export interface JourneyFailedView {
   result: JourneyFailureBattleResult;
   reason: JourneyFailureReason;
-  dreamAvatar: JourneyFailedDreamAvatarView | null;
+  avatar: JourneyFailedAvatarView | null;
   stats: readonly JourneyFailedStatView[];
 }
 
@@ -176,10 +176,10 @@ export function JourneyFailedScreen({
                 </p>
               </header>
 
-              {view.dreamAvatar !== null && (
+              {view.avatar !== null && (
                 <div
                   data-journey-failed-section="portrait"
-                  data-journey-failed-dream-avatar={view.dreamAvatar.id}
+                  data-journey-failed-avatar={view.avatar.id}
                   style={{
                     alignSelf: "center",
                     display: "flex",
@@ -188,12 +188,12 @@ export function JourneyFailedScreen({
                     marginTop: token("--space-l"),
                   }}
                 >
-                  <DreamAvatarPortrait
-                    dreamAvatar={view.dreamAvatar}
+                  <AvatarPortrait
+                    avatar={view.avatar}
                     variant="panel"
                     profile={{
-                      id: view.dreamAvatar.id,
-                      ability: view.dreamAvatar.ability,
+                      id: view.avatar.id,
+                      ability: view.avatar.ability,
                     }}
                   />
                 </div>

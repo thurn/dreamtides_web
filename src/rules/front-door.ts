@@ -11,14 +11,14 @@ import {
 import type { CardId } from "../types/card-identity";
 import type {
   BattleSlotViewId,
-  DreamAvatarId,
+  AvatarId,
   FrontDoorActionId,
 } from "../types/identifiers";
 
 /** Fold-safe identities loaded from the pinned tutorial scenario. */
 export interface TutorialFrontDoorContentProvider {
   readonly playerCardId: CardId;
-  readonly journeyDreamAvatarId: DreamAvatarId;
+  readonly journeyAvatarId: AvatarId;
 }
 
 let tutorialContentProvider: TutorialFrontDoorContentProvider | null = null;
@@ -31,8 +31,8 @@ export function registerTutorialFrontDoorContentProvider(
 }
 
 /** Resolve the configured post-victory avatar for pure battle decisions. */
-export function configuredTutorialJourneyDreamAvatarId(): DreamAvatarId | null {
-  return tutorialContentProvider?.journeyDreamAvatarId ?? null;
+export function configuredTutorialJourneyAvatarId(): AvatarId | null {
+  return tutorialContentProvider?.journeyAvatarId ?? null;
 }
 
 const MAIN_ACTION_IDS: ReadonlySet<FrontDoorActionId> = new Set([

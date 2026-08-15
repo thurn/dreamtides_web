@@ -14,7 +14,7 @@ import {
 } from "./journey-complete-view-model";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
-import { testDreamAvatarId, testDreamsignId, testCardId } from "../../types/test-identities";
+import { testAvatarId, testDreamsignId, testCardId } from "../../types/test-identities";
 
 function card(cardNumber: number, idSeed: string): CardData {
   return {
@@ -55,8 +55,8 @@ function state(): JourneyState {
     ...base,
     essence: 140,
     completionLevel: 7,
-    dreamAvatar: {
-      id: testDreamAvatarId("dream-avatar-uuid"),
+    avatar: {
+      id: testAvatarId("avatar-uuid"),
       name: "The Wayfinder",
       title: "Bearer of the Last Light",
       renderedText: "A fixture ability.",
@@ -96,17 +96,17 @@ function state(): JourneyState {
 }
 
 describe("buildJourneyCompleteView", () => {
-  it("builds the interactive DreamAvatar portrait and victory statistics from run state", () => {
+  it("builds the interactive Avatar portrait and victory statistics from run state", () => {
     const journey = state();
     const view = buildJourneyCompleteView(journey);
 
-    expect(view.dreamAvatar).toMatchObject({
-      id: journey.dreamAvatar?.id,
+    expect(view.avatar).toMatchObject({
+      id: journey.avatar?.id,
       imageNumber: "001",
     });
-    expect(view.dreamAvatar?.name).toBeInstanceOf(LocalizedString);
-    expect(view.dreamAvatar?.title).toBeInstanceOf(LocalizedString);
-    expect(view.dreamAvatar?.ability).toBeInstanceOf(LocalizedString);
+    expect(view.avatar?.name).toBeInstanceOf(LocalizedString);
+    expect(view.avatar?.title).toBeInstanceOf(LocalizedString);
+    expect(view.avatar?.ability).toBeInstanceOf(LocalizedString);
     expect(view.stats.map(({ id, value }) => [id, value])).toEqual([
       ["battles", 7],
       ["dreamscapes", 2],

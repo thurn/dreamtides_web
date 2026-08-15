@@ -1,4 +1,4 @@
-// Shared core for the Cumulus DreamAvatar-select screen. Both the mobile carousel
+// Shared core for the Cumulus Avatar-select screen. Both the mobile carousel
 // (`journey-start-mobile`) and the desktop triptych (`journey-start-desktop`) render
 // from these view types and reuse the essence/tide interaction primitives and
 // console hairline, while both compose the canonical RulesText source.
@@ -21,19 +21,19 @@ import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { type Tide } from "../components/hud/tide-spec";
 import { token } from "../primitives/tokens";
 import { GLYPHS } from "../primitives/glyph";
-import type { DreamAvatarPortraitFocus } from "../../types/content";
+import type { AvatarPortraitFocus } from "../../types/content";
 import { GLOSSARY_IDS } from "../../data/glossary";
 import { DEBUG_REROLL_TOP } from "../primitives/chrome-geometry";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 
 /** Canonical rules copy in the Journey Start console's inherited type voice. */
 export function JourneyStartAbilityCopy({
-  dreamAvatar,
+  avatar,
 }: {
-  readonly dreamAvatar: Pick<DreamAvatarOfferView, "id" | "renderedText">;
+  readonly avatar: Pick<AvatarOfferView, "id" | "renderedText">;
 }) {
   return (
     <div
@@ -45,17 +45,17 @@ export function JourneyStartAbilityCopy({
       }}
     >
       <RulesText
-        text={dreamAvatar.renderedText}
-        owner={{ kind: "dreamAvatar", id: dreamAvatar.id }}
+        text={avatar.renderedText}
+        owner={{ kind: "avatar", id: avatar.id }}
       />
     </div>
   );
 }
 
-/** One tide shown on a DreamAvatar, already resolved to display copy. Both the
+/** One tide shown on an Avatar, already resolved to display copy. Both the
  * desktop triptych and the mobile carousel render their tide discs (and each
  * disc's InfoCard reveal) from this view. */
-export interface DreamAvatarTideView {
+export interface AvatarTideView {
   /** Stable id (a tide deck id) for the React key / QA hook. */
   id: TideId | TutorialJourneyTideId;
   /** Display name shown on the tide's reveal card. */
@@ -66,7 +66,7 @@ export interface DreamAvatarTideView {
   tide: Tide;
 }
 
-/** How many tide discs render at most; a DreamAvatar with more shows the first
+/** How many tide discs render at most; an Avatar with more shows the first
  * few (the rest are the same pools, just less prominent). Shared by both
  * layouts so the cap reads identically on desktop and mobile. */
 export const MAX_TIDE_DISCS = 4;
@@ -78,7 +78,7 @@ export const MAX_TIDE_DISCS = 4;
  * general definition beside it as a secondary text card. Informational: the
  * disc brightens on hover, and — like every
  * Cumulus pressable — scales up on hover and down on press, so a touch press is
- * acknowledged. Both DreamAvatar-select layouts render their tide rows from
+ * acknowledged. Both Avatar-select layouts render their tide rows from
  * this, so the reveal reads identically on each.
  *
  * `hitSlop` pads the pressable around the disc (mobile touch targets) without
@@ -88,7 +88,7 @@ export function TideDiscReveal({
   tide,
   hitSlop,
 }: {
-  tide: DreamAvatarTideView;
+  tide: AvatarTideView;
   hitSlop?: string;
 }) {
   const disc = (
@@ -106,7 +106,7 @@ export function TideDiscReveal({
   );
 }
 
-/** The tides cluster shared by BOTH DreamAvatar-select layouts: a top row with
+/** The tides cluster shared by BOTH Avatar-select layouts: a top row with
  * the revealing "Tides: (i)" label on the left and starting essence on the
  * right, and —
  * below it, left-aligned under the caption — the tide discs at the larger 'lg'
@@ -120,13 +120,13 @@ export function TideDiscReveal({
  * Without it (the desktop triptych, a fine pointer) the row spaces its discs
  * with an explicit gap that matches the mobile inter-disc distance. */
 export function TidesEssenceBlock({
-  dreamAvatar,
+  avatar,
   hitSlop,
 }: {
-  dreamAvatar: DreamAvatarOfferView;
+  avatar: AvatarOfferView;
   hitSlop?: string;
 }) {
-  const hasTides = dreamAvatar.tides.length > 0;
+  const hasTides = avatar.tides.length > 0;
   return (
     <div>
       {/* Top row: the "Tides:" caption on the left and the starting essence on
@@ -141,12 +141,12 @@ export function TidesEssenceBlock({
         }}
       >
         {hasTides ? <TidesInfoLabel /> : <span />}
-        <EssenceReveal dreamAvatar={dreamAvatar} />
+        <EssenceReveal avatar={avatar} />
       </div>
 
       {hasTides && (
         <div
-          data-dream-avatar-tides={dreamAvatar.id}
+          data-avatar-tides={avatar.id}
           style={{
             display: "flex",
             flexWrap: "wrap",
@@ -161,7 +161,7 @@ export function TidesEssenceBlock({
             marginBottom: hitSlop != null ? `calc(-1 * ${hitSlop})` : undefined,
           }}
         >
-          {dreamAvatar.tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
+          {avatar.tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
             <TideDiscReveal key={tide.id} tide={tide} hitSlop={hitSlop} />
           ))}
         </div>
@@ -171,34 +171,34 @@ export function TidesEssenceBlock({
 }
 
 /** One signature card (kept for the shared view type; unused by the carousel). */
-export interface DreamAvatarSignatureCardView {
+export interface AvatarSignatureCardView {
   id: CardId | null;
   name: LocalizedString;
 }
 
-/** A single DreamAvatar offered on the select screen, as display data. */
-export interface DreamAvatarOfferView {
-  id: DreamAvatarId;
+/** A single Avatar offered on the select screen, as display data. */
+export interface AvatarOfferView {
+  id: AvatarId;
   name: LocalizedString;
   title: LocalizedString;
   imageNumber: string;
-  portraitFocus?: DreamAvatarPortraitFocus;
+  portraitFocus?: AvatarPortraitFocus;
   renderedText: LocalizedString;
   startingEssence: number;
-  signatureCards: DreamAvatarSignatureCardView[];
-  tides: DreamAvatarTideView[];
+  signatureCards: AvatarSignatureCardView[];
+  tides: AvatarTideView[];
 }
 
 /** Character-led guidance shown only for the fixed tutorial offer. */
 export type JourneyStartGuideDialogueView = TutorialSpeechBubbleView;
 
 export interface JourneyStartScreenProps {
-  /** The DreamAvatars offered this run (three normally; one in the tutorial). */
-  dreamAvatars: DreamAvatarOfferView[];
-  /** Mira's introduction to the fixed tutorial DreamAvatar choice. */
+  /** The Avatars offered this run (three normally; one in the tutorial). */
+  avatars: AvatarOfferView[];
+  /** Mira's introduction to the fixed tutorial Avatar choice. */
   guideDialogue?: JourneyStartGuideDialogueView;
-  /** Called with a DreamAvatar's id when the player commits to it. */
-  onPick: (dreamAvatarId: DreamAvatarId) => void;
+  /** Called with an Avatar's id when the player commits to it. */
+  onPick: (avatarId: AvatarId) => void;
   /** Reports when the authored journey-start speech bubble becomes visible. */
   onGuideDialogueShown?: () => void;
   /** Requests a shared debug reroll. Omitted for a fixed tutorial offer. */
@@ -269,7 +269,7 @@ export function JourneyStartRerollControl({
 }) {
   return (
     <div
-      data-dream-avatar-reroll-control
+      data-avatar-reroll-control
       onPointerDown={(event) => {
         event.stopPropagation();
       }}
@@ -284,7 +284,7 @@ export function JourneyStartRerollControl({
         glyph={GLYPHS.refresh}
         label={label}
         onPress={onReroll}
-        testId="reroll-dream-avatars"
+        testId="reroll-avatars"
       />
     </div>
   );
@@ -331,13 +331,13 @@ export function ConsoleDivider({ flush = false }: { flush?: boolean }) {
  * hovering brightens it subtly and, like every Cumulus pressable, it scales up on
  * hover and down on press, so a touch press is acknowledged. */
 export function EssenceReveal({
-  dreamAvatar,
+  avatar,
 }: {
-  dreamAvatar: DreamAvatarOfferView;
+  avatar: AvatarOfferView;
 }) {
   return (
     <span
-      data-starting-essence-value={dreamAvatar.id}
+      data-starting-essence-value={avatar.id}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -346,10 +346,10 @@ export function EssenceReveal({
       }}
     >
       <EssenceValue
-        amount={dreamAvatar.startingEssence}
+        amount={avatar.startingEssence}
         tone="mark"
         entity={{
-          id: semanticEntityId("essence-source", dreamAvatar.id),
+          id: semanticEntityId("essence-source", avatar.id),
           glossaryId: GLOSSARY_IDS.startingEssence,
         }}
       />

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CardData } from "../types/cards";
 import type { CardId } from "../types/card-identity";
-import type { DreamAvatarId, TideId } from "../types/identifiers";
+import type { AvatarId, TideId } from "../types/identifiers";
 import type { CardSizePreset } from "./card-size";
 import { loadCardsV2Database } from "../data/cards-v2-database";
 import TidesListView from "./TidesListView";
@@ -16,7 +16,7 @@ import {
 } from "./tides-editor-url-state";
 import type {
   EditableTideField,
-  EditorDreamAvatar,
+  EditorAvatar,
   TidesArtifact,
   TidesEditorApiClient,
 } from "./tides-types";
@@ -32,7 +32,7 @@ type LoadStatus =
       kind: "loaded";
       artifact: TidesArtifact;
       cardById: ReadonlyMap<CardId, CardData>;
-      dreamAvatarById: ReadonlyMap<DreamAvatarId, EditorDreamAvatar>;
+      avatarById: ReadonlyMap<AvatarId, EditorAvatar>;
     }
   | { kind: "error"; message: string };
 
@@ -55,15 +55,15 @@ function buildCardById(database: Map<number, CardData>): Map<CardId, CardData> {
   return byId;
 }
 
-async function loadDreamAvatarById(
+async function loadAvatarById(
   signal?: AbortSignal,
-): Promise<Map<DreamAvatarId, EditorDreamAvatar>> {
-  const response = await fetch("/dream-avatars-v2-data.json", { signal });
-  const byId = new Map<DreamAvatarId, EditorDreamAvatar>();
+): Promise<Map<AvatarId, EditorAvatar>> {
+  const response = await fetch("/avatars-v2-data.json", { signal });
+  const byId = new Map<AvatarId, EditorAvatar>();
   if (!response.ok) return byId;
-  const dreamAvatars = (await response.json()) as EditorDreamAvatar[];
-  for (const dreamAvatar of dreamAvatars) {
-    byId.set(dreamAvatar.id, dreamAvatar);
+  const avatars = (await response.json()) as EditorAvatar[];
+  for (const avatar of avatars) {
+    byId.set(avatar.id, avatar);
   }
   return byId;
 }
@@ -86,21 +86,21 @@ export default function TidesEditorApp({
     async function load() {
       setLoadStatus({ kind: "loading" });
       try {
-        const [artifact, cardDatabase, dreamAvatarById] = await Promise.all([
+        const [artifact, cardDatabase, avatarById] = await Promise.all([
           apiClient.loadTidesArtifact(file, controller.signal),
           loadCardsV2Database(),
-          loadDreamAvatarById(controller.signal),
+          loadAvatarById(controller.signal),
         ]);
         if (cancelled) return;
         console.info(
           `[tides-editor] loaded ${file}: ${artifact.tides.length} tides, ` +
-            `${cardDatabase.size} cards, ${dreamAvatarById.size} avatars.`,
+            `${cardDatabase.size} cards, ${avatarById.size} avatars.`,
         );
         setLoadStatus({
           kind: "loaded",
           artifact,
           cardById: buildCardById(cardDatabase),
-          dreamAvatarById,
+          avatarById,
         });
       } catch (error) {
         if (isAbortError(error) || cancelled) return;
@@ -275,7 +275,7 @@ export default function TidesEditorApp({
           <TidesDetailView
             key={selectedTide.id}
             tide={selectedTide}
-            dreamAvatarById={loadStatus.dreamAvatarById}
+            avatarById={loadStatus.avatarById}
             cardById={loadStatus.cardById}
             size={urlState.size}
             saveStatus={saveStatus}
@@ -288,7 +288,7 @@ export default function TidesEditorApp({
         {loadStatus.kind === "loaded" && selectedTide === null && urlState.tideId === null ? (
           <TidesListView
             tides={loadStatus.artifact.tides}
-            dreamAvatarById={loadStatus.dreamAvatarById}
+            avatarById={loadStatus.avatarById}
             cardById={loadStatus.cardById}
             onSelectTide={handleSelectTide}
           />

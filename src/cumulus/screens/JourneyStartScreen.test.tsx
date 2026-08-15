@@ -6,14 +6,14 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   JourneyStartScreen,
-  type DreamAvatarOfferView,
+  type AvatarOfferView,
 } from "./JourneyStartScreen";
 import { CumulusRoot } from "../CumulusRoot";
 import { lookupGlossaryTerm } from "../../data/glossary";
 import { assertLocalized } from "@trox/runtime";
 import {
   testCardId,
-  testDreamAvatarId,
+  testAvatarId,
   testTideId,
 } from "../../types/test-identities";
 import { testPresentationId } from "../../types/test-identities";
@@ -25,13 +25,13 @@ class ResizeObserverStub {
   disconnect() {}
 }
 
-const OFFERED: DreamAvatarOfferView[] = [
+const OFFERED: AvatarOfferView[] = [
   {
-    id: testDreamAvatarId("caller-1"),
+    id: testAvatarId("caller-1"),
     name: assertLocalized("Mira of Lanterns"),
     title: assertLocalized("Keeper of the Threshold Flame"),
     imageNumber: "0009",
-    renderedText: assertLocalized("First dreamAvatar."),
+    renderedText: assertLocalized("First avatar."),
     startingEssence: 230,
     signatureCards: [
       { id: testCardId("sig-1-0"), name: assertLocalized("Lantern Seer") },
@@ -39,11 +39,11 @@ const OFFERED: DreamAvatarOfferView[] = [
     tides: [],
   },
   {
-    id: testDreamAvatarId("caller-2"),
+    id: testAvatarId("caller-2"),
     name: assertLocalized("Vey of Embers"),
     title: assertLocalized("The Ashen Cartographer"),
     imageNumber: "0010",
-    renderedText: assertLocalized("Second dreamAvatar."),
+    renderedText: assertLocalized("Second avatar."),
     startingEssence: 250,
     signatureCards: [],
     tides: [
@@ -105,10 +105,10 @@ function mount(element: ReactElement): {
 }
 
 describe("Cumulus JourneyStartScreen (carousel)", () => {
-  it("renders every portrait page and a glass console for the active DreamAvatar", () => {
+  it("renders every portrait page and a glass console for the active Avatar", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={OFFERED}
+        avatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
       />,
@@ -120,7 +120,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     );
     for (const dc of OFFERED) {
       expect(
-        container.querySelector(`[data-dream-avatar-page="${dc.id}"]`),
+        container.querySelector(`[data-avatar-page="${dc.id}"]`),
       ).not.toBeNull();
     }
     expect(container.querySelectorAll("[data-glass-panel-frame]")).toHaveLength(
@@ -128,12 +128,12 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     );
     expect(
       container.querySelector(
-        `[data-dream-avatar-console="${OFFERED[0].id}"]`,
+        `[data-avatar-console="${OFFERED[0].id}"]`,
       ),
     ).not.toBeNull();
     expect(
       container.querySelector(
-        `[data-choose-dream-avatar="${OFFERED[0].id}"] [data-glass-placement="onGlass"]`,
+        `[data-choose-avatar="${OFFERED[0].id}"] [data-glass-placement="onGlass"]`,
       ),
     ).not.toBeNull();
     const essence = container.querySelector(
@@ -146,10 +146,10 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     });
   });
 
-  it("shows the tides cluster only for DreamAvatars that have tides", () => {
+  it("shows the tides cluster only for Avatars that have tides", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={OFFERED}
+        avatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
       />,
@@ -158,7 +158,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     // caller-1 has no tides → no cluster.
     expect(
       container.querySelector(
-        `[data-dream-avatar-tides="${OFFERED[0].id}"]`,
+        `[data-avatar-tides="${OFFERED[0].id}"]`,
       ),
     ).toBeNull();
 
@@ -171,12 +171,12 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
 
     // caller-2 has two tides → its active console shows two collapsed discs.
     const cluster = container.querySelector(
-      `[data-dream-avatar-tides="${OFFERED[1].id}"]`,
+      `[data-avatar-tides="${OFFERED[1].id}"]`,
     );
     expect(cluster).not.toBeNull();
     expect(cluster?.querySelectorAll("[data-tide-disc]")).toHaveLength(2);
     const label = container.querySelector<HTMLElement>(
-      `[data-dream-avatar-console="${OFFERED[1].id}"] [data-tides-info-label]`,
+      `[data-avatar-console="${OFFERED[1].id}"] [data-tides-info-label]`,
     );
     expect(label?.getAttribute("aria-label")).toBe("Tides information");
     expect(label?.querySelector("i")?.className).toBe("bxf bx-info-circle");
@@ -188,11 +188,11 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     });
   });
 
-  it("calls onPick with the DreamAvatar's id when its Choose action is pressed", () => {
+  it("calls onPick with the Avatar's id when its Choose action is pressed", () => {
     const onPick = vi.fn();
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={OFFERED}
+        avatars={OFFERED}
         onPick={onPick}
         onReroll={vi.fn()}
       />,
@@ -206,7 +206,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     });
 
     const button = container.querySelector<HTMLButtonElement>(
-      `[data-choose-dream-avatar="${OFFERED[1].id}"] button`,
+      `[data-choose-avatar="${OFFERED[1].id}"] button`,
     );
     if (button === null) {
       throw new Error("Missing Choose button");
@@ -226,17 +226,17 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const onReroll = vi.fn();
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={OFFERED}
+        avatars={OFFERED}
         onPick={vi.fn()}
         onReroll={onReroll}
       />,
     );
 
     const control = container.querySelector<HTMLElement>(
-      "[data-dream-avatar-reroll-control]",
+      "[data-avatar-reroll-control]",
     );
     const button = container.querySelector<HTMLButtonElement>(
-      '[data-testid="reroll-dream-avatars"]',
+      '[data-testid="reroll-avatars"]',
     );
     expect(control?.style.position).toBe("absolute");
     expect(control?.style.right).not.toBe("");
@@ -252,24 +252,24 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
   });
 
   it("shows one tutorial page without the reroll or carousel navigation controls", () => {
-    const tutorialDreamAvatar = OFFERED[0];
+    const tutorialAvatar = OFFERED[0];
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={[tutorialDreamAvatar]}
+        avatars={[tutorialAvatar]}
         onPick={vi.fn()}
       />,
     );
 
-    expect(container.querySelectorAll("[data-dream-avatar-page]")).toHaveLength(
+    expect(container.querySelectorAll("[data-avatar-page]")).toHaveLength(
       1,
     );
     expect(
       container.querySelector(
-        `[data-dream-avatar-page="${tutorialDreamAvatar.id}"]`,
+        `[data-avatar-page="${tutorialAvatar.id}"]`,
       ),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-dream-avatar-reroll-control]"),
+      container.querySelector("[data-avatar-reroll-control]"),
     ).toBeNull();
     expect(container.querySelector('[aria-label="Previous"]')).toBeNull();
     expect(container.querySelector('[aria-label="Next"]')).toBeNull();
@@ -279,17 +279,17 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     });
   });
 
-  it("fades in Mira's tutorial guidance with highlighted Dream Avatar copy", () => {
+  it("fades in Mira's tutorial guidance with highlighted Avatar copy", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={[OFFERED[0]]}
+        avatars={[OFFERED[0]]}
         guideDialogue={{
           id: testPresentationId("journey-start-guide-dialogue"),
           model: {
             portrait: { kind: "character-portrait", characterId: "mira" },
             portraitAlt: assertLocalized("Mira"),
             speakerName: assertLocalized("Mira"),
-            text: assertLocalized("Choose a [purple]Dream Avatar[/purple]."),
+            text: assertLocalized("Choose a [purple]Avatar[/purple]."),
           },
           horizontalOffset: 30,
           verticalOffset: 10,
@@ -322,36 +322,36 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     const highlighted = dialogue?.querySelector<HTMLElement>(
       '[data-tutorial-instruction-highlight="purple"]',
     );
-    expect(highlighted?.textContent).toBe("Dream Avatar");
+    expect(highlighted?.textContent).toBe("Avatar");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("reveals every defined term from the whole DreamAvatar ability box", () => {
+  it("reveals every defined term from the whole Avatar ability box", () => {
     const reclaim = lookupGlossaryTerm("reclaim");
     const bane = lookupGlossaryTerm("bane");
     if (reclaim === undefined || bane === undefined) {
       throw new Error("Expected representative glossary fixtures");
     }
     const ability = `Reclaim Nightmare, the Bane card, then ${reclaim.variants?.[0] ?? "reclaim"} it.`;
-    const dreamAvatar = {
+    const avatar = {
       ...OFFERED[0],
       renderedText: assertLocalized(ability),
     };
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={[dreamAvatar]}
+        avatars={[avatar]}
         onPick={vi.fn()}
         onReroll={vi.fn()}
       />,
     );
 
     const source = container.querySelector<HTMLElement>(
-      `[data-rules-text-source="${dreamAvatar.id}"]`,
+      `[data-rules-text-source="${avatar.id}"]`,
     );
-    expect(source?.dataset.rulesTextOwner).toBe("dreamAvatar");
+    expect(source?.dataset.rulesTextOwner).toBe("avatar");
     expect(source?.getAttribute("aria-describedby")).toBeTruthy();
     expect(source?.dataset.revealPrimaryVariant).toBe("source");
     expect(source?.dataset.revealSecondaryTitles).toBe("");
@@ -385,10 +385,10 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     stubViewport(true);
   });
 
-  it("renders every DreamAvatar as a standalone column, not a carousel", () => {
+  it("renders every Avatar as a standalone column, not a carousel", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={OFFERED}
+        avatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
       />,
@@ -396,27 +396,27 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
 
     expect(container.textContent).toContain("Choose Your Avatar");
     // No carousel pages on desktop.
-    expect(container.querySelector("[data-dream-avatar-page]")).toBeNull();
+    expect(container.querySelector("[data-avatar-page]")).toBeNull();
     for (const dc of OFFERED) {
       expect(
-        container.querySelector(`[data-dream-avatar-column="${dc.id}"]`),
+        container.querySelector(`[data-avatar-column="${dc.id}"]`),
       ).not.toBeNull();
       expect(
-        container.querySelector(`[data-choose-dream-avatar="${dc.id}"]`),
+        container.querySelector(`[data-choose-avatar="${dc.id}"]`),
       ).not.toBeNull();
       expect(
         container.querySelector(
-          `[data-choose-dream-avatar="${dc.id}"] [data-glass-variant="accent"]`,
+          `[data-choose-avatar="${dc.id}"] [data-glass-variant="accent"]`,
         ),
       ).not.toBeNull();
       expect(
         container.querySelector(
-          `[data-choose-dream-avatar="${dc.id}"] [data-glass-placement="onGlass"]`,
+          `[data-choose-avatar="${dc.id}"] [data-glass-placement="onGlass"]`,
         ),
       ).not.toBeNull();
       expect(
         container.querySelector(
-          `[data-testid="dream-avatar-glass-panel-${dc.id}"][data-glass-panel-height-contract="content"]`,
+          `[data-testid="avatar-glass-panel-${dc.id}"][data-glass-panel-height-contract="content"]`,
         ),
       ).not.toBeNull();
       const essence = container.querySelector(
@@ -433,25 +433,25 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     });
   });
 
-  it("renders the tutorial DreamAvatar as the only desktop column", () => {
-    const tutorialDreamAvatar = OFFERED[0];
+  it("renders the tutorial Avatar as the only desktop column", () => {
+    const tutorialAvatar = OFFERED[0];
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={[tutorialDreamAvatar]}
+        avatars={[tutorialAvatar]}
         onPick={vi.fn()}
       />,
     );
 
     expect(
-      container.querySelectorAll("[data-dream-avatar-column]"),
+      container.querySelectorAll("[data-avatar-column]"),
     ).toHaveLength(1);
     expect(
       container.querySelector(
-        `[data-dream-avatar-column="${tutorialDreamAvatar.id}"]`,
+        `[data-avatar-column="${tutorialAvatar.id}"]`,
       ),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-dream-avatar-reroll-control]"),
+      container.querySelector("[data-avatar-reroll-control]"),
     ).toBeNull();
 
     act(() => {
@@ -462,14 +462,14 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
   it("renders tutorial guidance at the prominent desktop scale", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={[OFFERED[0]]}
+        avatars={[OFFERED[0]]}
         guideDialogue={{
           id: testPresentationId("journey-start-guide-dialogue-desktop"),
           model: {
             portrait: { kind: "character-portrait", characterId: "mira" },
             portraitAlt: assertLocalized("Mira"),
             speakerName: assertLocalized("Mira"),
-            text: assertLocalized("Choose a [purple]Dream Avatar[/purple]."),
+            text: assertLocalized("Choose a [purple]Avatar[/purple]."),
           },
           horizontalOffset: 30,
           verticalOffset: 10,
@@ -497,10 +497,10 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     });
   });
 
-  it("shows a hover-only tide disc per tide for tided DreamAvatars", () => {
+  it("shows a hover-only tide disc per tide for tided Avatars", () => {
     const { container, root } = mount(
       <JourneyStartScreen
-        dreamAvatars={OFFERED}
+        avatars={OFFERED}
         onPick={vi.fn()}
         onReroll={vi.fn()}
       />,
@@ -509,19 +509,19 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     // caller-1 has no tides → no tides node.
     expect(
       container.querySelector(
-        `[data-dream-avatar-tides="${OFFERED[0].id}"]`,
+        `[data-avatar-tides="${OFFERED[0].id}"]`,
       ),
     ).toBeNull();
 
     // caller-2 has two tides → one hover-only disc per tide (no expand/collapse).
     const tides = container.querySelector(
-      `[data-dream-avatar-tides="${OFFERED[1].id}"]`,
+      `[data-avatar-tides="${OFFERED[1].id}"]`,
     );
     expect(tides).not.toBeNull();
     expect(tides?.querySelectorAll("[data-tide-disc]")).toHaveLength(2);
     expect(
       container.querySelector(
-        `[data-dream-avatar-column="${OFFERED[1].id}"] [data-tides-info-label]`,
+        `[data-avatar-column="${OFFERED[1].id}"] [data-tides-info-label]`,
       ),
     ).not.toBeNull();
 

@@ -1,6 +1,6 @@
 // Adapter bridging live journey state to the pure desktop deck viewer
 // (`src/cumulus/screens/DesktopDeckViewer`). Wiring only: it acquires `useJourney()`,
-// builds the view-model from the live deck, card database, DreamAvatar,
+// builds the view-model from the live deck, card database, Avatar,
 // dreamsigns, run seed, and pool context; logs the open; and renders nothing
 // while closed. All resolution logic lives in the pure builder
 // (`desktop-deck-view-model.ts`); the screen itself stays pure.
@@ -34,18 +34,18 @@ export function DesktopDeckViewerAdapter({
         journeyContent.transfigurationData,
         state.deck,
         journeyContent.cardDatabase,
-        state.dreamAvatar,
+        state.avatar,
         state.dreamsigns,
-        journeyContent.dreamAvatars,
+        journeyContent.avatars,
         journeyContent.poolContext,
         state.seed,
       ),
     [
       state.deck,
       journeyContent.cardDatabase,
-      state.dreamAvatar,
+      state.avatar,
       state.dreamsigns,
-      journeyContent.dreamAvatars,
+      journeyContent.avatars,
       journeyContent.poolContext,
       journeyContent.transfigurationData,
       state.seed,
@@ -53,7 +53,7 @@ export function DesktopDeckViewerAdapter({
   );
   const cardCount = view.cards.length;
   const dreamsignCount = view.dreamsigns.length;
-  const hasDreamAvatar = view.dreamAvatar !== null;
+  const hasAvatar = view.avatar !== null;
 
   useEffect(() => {
     const wasOpen = wasOpenRef.current;
@@ -62,9 +62,9 @@ export function DesktopDeckViewerAdapter({
     logEvent("desktop_deck_viewer_opened", {
       cardCount,
       dreamsignCount,
-      hasDreamAvatar,
+      hasAvatar,
     });
-  }, [cardCount, dreamsignCount, hasDreamAvatar, isOpen]);
+  }, [cardCount, dreamsignCount, hasAvatar, isOpen]);
 
   if (!isOpen) return null;
   return <DesktopDeckViewer view={view} onClose={onClose} />;

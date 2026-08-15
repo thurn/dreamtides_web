@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 const mocks = vi.hoisted(() => ({
   appImport: vi.fn(),
   createRoot: vi.fn(),
-  dreamAvatarEditorComponent: vi.fn(() => null),
+  avatarEditorComponent: vi.fn(() => null),
   render: vi.fn(),
 }));
 
@@ -38,8 +38,8 @@ vi.mock("./DreamscapeEditorApp", () => ({
   },
 }));
 
-vi.mock("./DreamAvatarEditorApp", () => ({
-  default: mocks.dreamAvatarEditorComponent,
+vi.mock("./AvatarEditorApp", () => ({
+  default: mocks.avatarEditorComponent,
 }));
 
 vi.mock("./GlossaryEditorApp", () => ({
@@ -90,7 +90,7 @@ beforeEach(() => {
   document.body.innerHTML = '<div id="root"></div>';
   mocks.appImport.mockClear();
   mocks.createRoot.mockClear();
-  mocks.dreamAvatarEditorComponent.mockClear();
+  mocks.avatarEditorComponent.mockClear();
   mocks.render.mockClear();
   mocks.createRoot.mockReturnValue({ render: mocks.render });
   vi.resetModules();
@@ -169,26 +169,23 @@ describe("main editor route", () => {
     expect(mocks.render).toHaveBeenCalledTimes(1);
   });
 
-  it.each(["/avatars/", "/dreamavatars/"])(
-    "mounts the Dream Avatar editor and canonicalizes the %s alias",
-    async (alias) => {
-      window.history.pushState(null, "", `${alias}?q=Aurora#results`);
+  it("mounts the Avatar editor for the Vite-served /avatars/ path", async () => {
+      window.history.pushState(null, "", "/avatars/?q=Aurora#results");
 
       await import("../main.tsx");
 
       expect(mocks.appImport).not.toHaveBeenCalled();
       expect(renderedRouteComponent().type).toBe(
-        mocks.dreamAvatarEditorComponent,
+        mocks.avatarEditorComponent,
       );
-      expect(window.location.pathname).toBe("/dream-avatars");
+      expect(window.location.pathname).toBe("/avatars/");
       expect(window.location.search).toBe("?q=Aurora");
       expect(window.location.hash).toBe("#results");
       expect(mocks.createRoot).toHaveBeenCalledWith(
         document.getElementById("root"),
       );
       expect(mocks.render).toHaveBeenCalledTimes(1);
-    },
-  );
+  });
 
   it("mounts the isolated glossary editor for the Vite-served /glossary/ path", async () => {
     window.history.pushState(null, "", "/glossary/");

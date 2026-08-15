@@ -11,7 +11,7 @@ import type { CardData } from "./types/cards";
 import { parseFoldHash } from "./types/content-hash";
 import type { JourneyContent } from "./data/journey-content";
 import {
-  buildDreamAvatarTides4Provenance,
+  buildAvatarTides4Provenance,
   loadJourneyContent,
 } from "./data/journey-content";
 import { loadTutorialConfiguration } from "./data/tutorial-actions";
@@ -75,15 +75,15 @@ export function JourneyApp({
   // query param remains the resume key. See `useJourneyUrlSync`.
   useJourneyUrlSync();
   // The starter-deck reveal popup is shown the first time a player picks a
-  // DreamAvatar. Visibility is driven entirely by persisted journey state
-  // (`dreamAvatar` set + `hasSeenStartingDeckPopup` false) so a reload of the
+  // Avatar. Visibility is driven entirely by persisted journey state
+  // (`avatar` set + `hasSeenStartingDeckPopup` false) so a reload of the
   // same `?game=` URL does not re-open the popup. The flag round-trips
   // through `normalizeJourneyState` so a fresh client joining the same room
   // also sees the correct state. The popup uses a full-bleed alpha scrim on
   // mobile and a centered bounded glass panel on desktop, layered on top of the
   // live dreamscape; the HUD and screen return once it is dismissed.
   const showStarterDeckIntro =
-    state.dreamAvatar !== null && !state.hasSeenStartingDeckPopup;
+    state.avatar !== null && !state.hasSeenStartingDeckPopup;
   const isDesktopViewport = useIsDesktop();
   const activeSite = resolveActiveSite(state);
   const activeSiteType = activeSite?.type ?? null;
@@ -114,14 +114,14 @@ export function JourneyApp({
   // one parked on a developer QA scene (e.g. `?goto=atlas`), letting browser QA
   // open screens that are otherwise reachable only by playing battles forward.
   // Fires once per mount, and the multiplayer mutation guards on
-  // `dreamAvatar === null` so a reload is a no-op.
+  // `avatar === null` so a reload is a no-op.
   useEffect(() => {
     const gotoScene = runtimeConfig.gotoScene ?? null;
     if (
       gotoScene === null ||
       gotoSceneFiredRef.current ||
       confirmedHead !== 0 ||
-      state.dreamAvatar !== null
+      state.avatar !== null
     ) {
       return;
     }
@@ -144,37 +144,37 @@ export function JourneyApp({
     runtimeConfig.explorationDreamsignCount,
     runtimeConfig.explorationStarterCount,
     runtimeConfig.gotoScene,
-    state.dreamAvatar,
+    state.avatar,
     mutations,
   ]);
 
   // `?goto=deckviewer`: the deck-viewer overlay is App-local state, not a
   // `Screen`, so its QA scene parks on the dreamscape (via `bootstrapQaScene`
   // above, giving the run a deck) and this effect opens the overlay once the
-  // dreamAvatar exists. Fires once per mount.
+  // avatar exists. Fires once per mount.
   useEffect(() => {
     if (
       runtimeConfig.gotoScene !== DECK_VIEWER_SCENE_ID ||
       openDeckFiredRef.current ||
-      state.dreamAvatar === null
+      state.avatar === null
     ) {
       return;
     }
     openDeckFiredRef.current = true;
     setDeckViewerOpen(true);
-  }, [runtimeConfig.gotoScene, state.dreamAvatar]);
+  }, [runtimeConfig.gotoScene, state.avatar]);
 
   useEffect(() => {
     if (
       runtimeConfig.gotoScene !== POOL_VIEWER_SCENE_ID ||
       openPoolViewerFiredRef.current ||
-      state.dreamAvatar === null
+      state.avatar === null
     ) {
       return;
     }
     openPoolViewerFiredRef.current = true;
     setPoolViewerOpen(true);
-  }, [runtimeConfig.gotoScene, state.dreamAvatar]);
+  }, [runtimeConfig.gotoScene, state.avatar]);
 
   // `?loadJourney=<name>`: fetch the named snapshot from the dev server and
   // replace the room's journey state with it, then render the loaded run. Once
@@ -226,7 +226,7 @@ export function JourneyApp({
   const hasDraftData = state.resolvedPackage !== null;
   const hasCardSourceDebug = state.cardSourceDebug !== null;
 
-  const resolvedDreamAvatarId = state.resolvedPackage?.dreamAvatar.id ?? null;
+  const resolvedAvatarId = state.resolvedPackage?.avatar.id ?? null;
   // Tide provenance: which preconstructed tides the run's pool was dealt from
   // (the signature tide, the random subset of theme tides, the broad tail) and
   // which tide each pooled card rode in on. Recomputed on demand (same
@@ -237,21 +237,21 @@ export function JourneyApp({
   const tides4Provenance = useMemo(() => {
     const poolContext = journeyContent.poolContext;
     if (!tides4ProvenanceNeeded || poolContext === undefined) return null;
-    if (resolvedDreamAvatarId === null) return null;
-    const dreamAvatar = journeyContent.dreamAvatars.find(
-      (dc) => dc.id === resolvedDreamAvatarId,
+    if (resolvedAvatarId === null) return null;
+    const avatar = journeyContent.avatars.find(
+      (dc) => dc.id === resolvedAvatarId,
     );
-    if (dreamAvatar === undefined) return null;
-    return buildDreamAvatarTides4Provenance(
-      dreamAvatar,
+    if (avatar === undefined) return null;
+    return buildAvatarTides4Provenance(
+      avatar,
       poolContext,
       state.seed,
     );
   }, [
     tides4ProvenanceNeeded,
     journeyContent.poolContext,
-    journeyContent.dreamAvatars,
-    resolvedDreamAvatarId,
+    journeyContent.avatars,
+    resolvedAvatarId,
     state.seed,
   ]);
 
@@ -264,7 +264,7 @@ export function JourneyApp({
     // up-to-date in case future logic needs it.
     //
     previousScreenTypeRef.current = state.screen.type;
-  }, [state.deck, state.dreamAvatar, state.screen.type]);
+  }, [state.deck, state.avatar, state.screen.type]);
 
   useEffect(() => {
     if (!hasCardSourceDebug) {
@@ -320,18 +320,18 @@ export function JourneyApp({
     mutations.regenerateAtlas?.();
   }, [mutations]);
 
-  // `?goto=<scene>`: hold a loading screen — rather than the DreamAvatar
+  // `?goto=<scene>`: hold a loading screen — rather than the Avatar
   // selection screen — until `bootstrapQaScene` round-trips through Firebase,
   // so QA lands directly on the requested scene (e.g. the Dream Atlas). Scenes
-  // whose destination *is* the DreamAvatar selection screen (`landsOnJourneyStart`)
-  // are exempt: their state keeps `dreamAvatar` null, so this gate — which waits
-  // for a DreamAvatar to be selected — would otherwise spin forever.
+  // whose destination *is* the Avatar selection screen (`landsOnJourneyStart`)
+  // are exempt: their state keeps `avatar` null, so this gate — which waits
+  // for an Avatar to be selected — would otherwise spin forever.
   const gotoSceneName = runtimeConfig.gotoScene ?? null;
   const gotoScene = gotoSceneName === null ? null : findQaScene(gotoSceneName);
   if (
     gotoScene !== null &&
     gotoScene.landsOnJourneyStart !== true &&
-    state.dreamAvatar === null
+    state.avatar === null
   ) {
     return (
       <ApplicationStateScreen
@@ -356,7 +356,7 @@ export function JourneyApp({
 
   // Hold a loading screen while the `?loadJourney=` snapshot is being fetched and
   // applied, so the player lands directly on the loaded run rather than the
-  // DreamAvatar selection screen.
+  // Avatar selection screen.
   if (loadJourneyStatus === "pending") {
     return (
       <ApplicationStateScreen
@@ -589,8 +589,8 @@ export default function App({
           contentHash: tutorial.contentHash,
           foldHash: tutorial.foldHash,
           tutorialCardConstants: tutorial.battle.tutorialCardConstants,
-          playerDreamAvatarId: tutorial.battle.playerDreamAvatarId,
-          enemyDreamAvatarId: tutorial.battle.enemyDreamAvatarId,
+          playerAvatarId: tutorial.battle.playerAvatarId,
+          enemyAvatarId: tutorial.battle.enemyAvatarId,
           derivedDeckSize: tutorialStarterDeckSize(tutorial.battle),
           startingEnergy: tutorial.battle.startingEnergy,
           scoreToWin: tutorial.battle.scoreToWin,
@@ -602,7 +602,7 @@ export default function App({
         };
         // Register the reducer content providers from the loaded
         // content BEFORE any room folds an event. Until this runs, every
-        // provider-backed event (START_JOURNEY, SELECT_DREAM_AVATAR, ADD_CARD,
+        // provider-backed event (START_JOURNEY, SELECT_AVATAR, ADD_CARD,
         // ADD_DREAMSIGN, content-coupled OPEN_SITE / REROLL_SHOP / BEGIN_BATTLE)
         // bounces. Registering here — before `setJourneyContent` unblocks the
         // render that mounts RoomGate / CoopProvider — guarantees the ordering,
@@ -779,7 +779,7 @@ export default function App({
             <FrontDoorProvider>
               <HostedPlaytestShell claimUnownedBattle={directTutorialBattle}>
                 <FrontDoorRouter
-                  dreamAvatars={journeyContent.dreamAvatars}
+                  avatars={journeyContent.avatars}
                   tutorialPlaybackSpeed={
                     runtimeConfig.tutorialPlaybackSpeed ?? 1
                   }

@@ -147,7 +147,7 @@ describe("Tidemark Ladder Climb rules", () => {
     const affinityIndex = buildTideAffinityIndex({
       version: 2,
       selection: { bandFraction: 0.25, bandMinimum: 5 },
-      tidePoolByDreamAvatar: {},
+      tidePoolByAvatar: {},
       tides: [
         {
           id: testTideId("wolf-tide"),

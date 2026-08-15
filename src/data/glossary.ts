@@ -22,7 +22,7 @@ export interface GlossaryEntry {
 /** A RON-authored projection of one canonical entry. */
 export interface GlossaryProjection {
   /** Limit this projection to rules text owned by this entity type. */
-  readonly owner?: "card" | "dreamAvatar";
+  readonly owner?: "card" | "avatar";
   /** Case-insensitive regular expression which the source sentence must match. */
   readonly pattern?: string;
   /** Display-term template; `{term}` and numbered captures such as `{1}` expand. */

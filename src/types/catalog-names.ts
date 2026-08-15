@@ -5,7 +5,7 @@ type CatalogName<Name extends string> = string & {
 };
 
 export type DreamwellCardName = CatalogName<"DreamwellCardName">;
-export type DreamAvatarName = CatalogName<"DreamAvatarName">;
+export type AvatarName = CatalogName<"AvatarName">;
 export type DreamsignName = CatalogName<"DreamsignName">;
 
 function parseCatalogName<Name extends string>(
@@ -20,7 +20,7 @@ function parseCatalogName<Name extends string>(
 
 export const parseDreamwellCardName = (value: unknown): DreamwellCardName =>
   parseCatalogName(value, "DreamwellCardName");
-export const parseDreamAvatarName = (value: unknown): DreamAvatarName =>
-  parseCatalogName(value, "DreamAvatarName");
+export const parseAvatarName = (value: unknown): AvatarName =>
+  parseCatalogName(value, "AvatarName");
 export const parseDreamsignName = (value: unknown): DreamsignName =>
   parseCatalogName(value, "DreamsignName");

@@ -9,11 +9,11 @@ import {
   JourneyCompleteScreen,
   type JourneyCompleteView,
 } from "./JourneyCompleteScreen";
-import { testDreamAvatarId } from "../../types/test-identities";
+import { testAvatarId } from "../../types/test-identities";
 
 const VIEW: JourneyCompleteView = {
-  dreamAvatar: {
-    id: testDreamAvatarId("00000000-0000-4000-8000-000000000061"),
+  avatar: {
+    id: testAvatarId("00000000-0000-4000-8000-000000000061"),
     name: assertLocalized("The Wayfinder"),
     title: assertLocalized("Bearer of the Last Light"),
     ability: assertLocalized("Whenever you map a dream, gain 1 essence."),
@@ -73,7 +73,7 @@ describe("Cumulus JourneyCompleteScreen", () => {
       "[data-journey-complete-hierarchy]",
     );
     const portrait = hierarchy?.querySelector<HTMLElement>(
-      "[data-journey-complete-dream-avatar]",
+      "[data-journey-complete-avatar]",
     );
     expect(
       Array.from(hierarchy?.children ?? []).map((element) =>
@@ -87,7 +87,7 @@ describe("Cumulus JourneyCompleteScreen", () => {
     expect(statsSection?.style.justifyContent).toBe("center");
     expect(portrait?.textContent).toBe("");
     expect(
-      portrait?.querySelector("[data-dream-avatar-source]"),
+      portrait?.querySelector("[data-avatar-source]"),
     ).not.toBeNull();
     expect(portrait?.querySelector("img")?.getAttribute("alt")).toContain(
       "The Wayfinder",

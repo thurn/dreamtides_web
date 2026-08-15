@@ -9,13 +9,13 @@ import {
   JourneyFailedScreen,
   type JourneyFailedView,
 } from "./JourneyFailedScreen";
-import { testDreamAvatarId } from "../../types/test-identities";
+import { testAvatarId } from "../../types/test-identities";
 
 const VIEW: JourneyFailedView = {
   result: "defeat",
   reason: "score_target_reached",
-  dreamAvatar: {
-    id: testDreamAvatarId("00000000-0000-4000-8000-000000000061"),
+  avatar: {
+    id: testAvatarId("00000000-0000-4000-8000-000000000061"),
     name: assertLocalized("The Wayfinder"),
     title: assertLocalized("Bearer of the Last Light"),
     ability: assertLocalized("Whenever you map a dream, gain 1 essence."),
@@ -76,7 +76,7 @@ describe("Cumulus JourneyFailedScreen", () => {
       "[data-journey-failed-hierarchy]",
     );
     const portrait = hierarchy?.querySelector<HTMLElement>(
-      "[data-journey-failed-dream-avatar]",
+      "[data-journey-failed-avatar]",
     );
 
     expect(screen?.dataset.journeyFailedScreen).toBe("defeat");
@@ -106,7 +106,7 @@ describe("Cumulus JourneyFailedScreen", () => {
     ).toEqual(["title", "portrait", "stats"]);
     expect(portrait?.textContent).toBe("");
     expect(
-      portrait?.querySelector("[data-dream-avatar-source]"),
+      portrait?.querySelector("[data-avatar-source]"),
     ).not.toBeNull();
     expect(
       container.querySelectorAll("[data-journey-failed-stat]"),

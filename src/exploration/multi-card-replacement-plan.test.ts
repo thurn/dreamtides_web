@@ -24,7 +24,7 @@ import { parseDeckEntryId } from "../types/identifiers";
 import {
   testCardId,
   testCardSubtype,
-  testDreamAvatarId,
+  testAvatarId,
   testExplorationActionId,
 } from "../types/test-identities";
 
@@ -70,9 +70,9 @@ function contentFixture(): JourneyContent {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase: new Map(cards.map((entry) => [entry.cardNumber, entry])),
-    dreamAvatars: [
+    avatars: [
       {
-        id: testDreamAvatarId("multi-replacement-avatar"),
+        id: testAvatarId("multi-replacement-avatar"),
         name: "Synthetic Avatar",
         title: "Synthetic",
         renderedText: "Synthetic.",
@@ -104,9 +104,9 @@ function journeyFixture(
   content: JourneyContent,
   draftPoolCardNumbers: readonly number[] = [1, 2, 3, 10, 11],
 ): JourneyState {
-  const dreamAvatar = content.dreamAvatars[0];
-  if (dreamAvatar === undefined)
-    throw new Error("Expected Dream Avatar fixture");
+  const avatar = content.avatars[0];
+  if (avatar === undefined)
+    throw new Error("Expected Avatar fixture");
   return {
     ...createDefaultState(),
     seed: testJourneySeed("multi-card-replacement-plan-test"),
@@ -137,7 +137,7 @@ function journeyFixture(
       },
     ],
     resolvedPackage: {
-      dreamAvatar,
+      avatar,
       draftPoolCopiesByCard: Object.fromEntries(
         draftPoolCardNumbers.map((cardNumber) => [String(cardNumber), 1]),
       ),

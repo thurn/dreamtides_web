@@ -8,9 +8,9 @@
 //
 // The viewer is three regions:
 //   - a header naming the screen and carrying the corner close disc;
-//   - a LEFT SIDEBAR profiling the run — the DreamAvatar as a bare portrait
+//   - a LEFT SIDEBAR profiling the run — the Avatar as a bare portrait
 //     that reveals its name, title, and ability on hover / press through the
-//     shared InfoCard (the same reveal the journey status bar's DreamAvatar bust
+//     shared InfoCard (the same reveal the journey status bar's Avatar bust
 //     uses), then the collected dreamsigns and current journey tides;
 //   - the MAIN column: a control bar, then a scrolling grid of the deck's cards.
 //
@@ -46,9 +46,9 @@ import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import { GameCard } from "../components/card/CardView";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import {
-  DreamAvatarPortrait,
-  type DreamAvatarVisual,
-} from "../components/hud/DreamAvatarPortrait";
+  AvatarPortrait,
+  type AvatarVisual,
+} from "../components/hud/AvatarPortrait";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { Select } from "../components/controls/Select";
 import { SegmentedControl } from "../components/controls/SegmentedControl";
@@ -59,9 +59,9 @@ import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { DeckCardView } from "./MobileDeckViewer";
 import {
   TideDiscReveal,
-  type DreamAvatarTideView,
+  type AvatarTideView,
 } from "./journey-start-shared";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
 import {
   type DesktopDeckFilterSort,
@@ -76,11 +76,11 @@ import {
   filterAndSortDesktopDeckCards,
 } from "./desktop-deck-filter";
 
-/** The DreamAvatar shown in the sidebar: the portrait's visual plus rules text. */
-export interface DeckDreamAvatarView extends DreamAvatarVisual {
-  /** Stable DreamAvatar UUID. */
-  id: DreamAvatarId;
-  /** The DreamAvatar's ability text, revealed through the shared InfoCard. */
+/** The Avatar shown in the sidebar: the portrait's visual plus rules text. */
+export interface DeckAvatarView extends AvatarVisual {
+  /** Stable Avatar UUID. */
+  id: AvatarId;
+  /** The Avatar's ability text, revealed through the shared InfoCard. */
   renderedText: LocalizedString;
 }
 
@@ -88,12 +88,12 @@ export interface DeckDreamAvatarView extends DreamAvatarVisual {
 export interface DesktopDeckView {
   /** The deck's cards in acquisition order. */
   cards: DeckCardView[];
-  /** The run's DreamAvatar, or null before one is chosen. */
-  dreamAvatar: DeckDreamAvatarView | null;
+  /** The run's Avatar, or null before one is chosen. */
+  avatar: DeckAvatarView | null;
   /** The dreamsigns collected so far, in collection order. */
   dreamsigns: LocalizedDreamsign[];
   /** The exact tide set selected for this run, matching the journey-start preview. */
-  tides: DreamAvatarTideView[];
+  tides: AvatarTideView[];
 }
 
 /** Props for {@link DesktopDeckViewer}. */
@@ -122,11 +122,11 @@ const SIDEBAR_WIDTH_PX = 268;
 const DREAMSIGN_TILE_PX = 92;
 
 /**
- * Edge length of the DreamAvatar portrait in the sidebar. Matched to a
- * dreamsign tile so the run's collectibles — the DreamAvatar and its
+ * Edge length of the Avatar portrait in the sidebar. Matched to a
+ * dreamsign tile so the run's collectibles — the Avatar and its
  * dreamsigns — read at one consistent scale down the column.
  */
-const DREAM_AVATAR_PORTRAIT_PX = DREAMSIGN_TILE_PX;
+const AVATAR_PORTRAIT_PX = DREAMSIGN_TILE_PX;
 
 /**
  * The desktop deck viewer: a full-screen alpha scrim over the unblurred scene,
@@ -216,7 +216,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
         <Header count={view.cards.length} onClose={onClose} />
         <div style={{ display: "flex", flex: 1, minHeight: 0 }}>
           <Sidebar
-            dreamAvatar={view.dreamAvatar}
+            avatar={view.avatar}
             dreamsigns={view.dreamsigns}
             tides={view.tides}
           />
@@ -341,17 +341,17 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
 }
 
 /**
- * The left profile sidebar: the run's DreamAvatar (portrait, name, title, rules
+ * The left profile sidebar: the run's Avatar (portrait, name, title, rules
  * text) above the collected dreamsigns as hoverable art tiles.
  */
 function Sidebar({
-  dreamAvatar,
+  avatar,
   dreamsigns,
   tides,
 }: {
-  dreamAvatar: DeckDreamAvatarView | null;
+  avatar: DeckAvatarView | null;
   dreamsigns: LocalizedDreamsign[];
-  tides: DreamAvatarTideView[];
+  tides: AvatarTideView[];
 }) {
   return (
     <aside
@@ -365,7 +365,7 @@ function Sidebar({
         gap: token("--space-xl"),
       }}
     >
-      {dreamAvatar !== null && <DreamAvatarBlock dreamAvatar={dreamAvatar} />}
+      {avatar !== null && <AvatarBlock avatar={avatar} />}
       <DreamsignsBlock dreamsigns={dreamsigns} />
       <TidesBlock tides={tides} />
     </aside>
@@ -373,17 +373,17 @@ function Sidebar({
 }
 
 /**
- * The DreamAvatar profile: a bare portrait alone, with its name, title, and
+ * The Avatar profile: a bare portrait alone, with its name, title, and
  * ability tucked into a hover / press reveal instead of laid out beneath it.
  * The reveal is the shared InfoCard `fullBleed` variant driven by the one
  * press-reveal engine (hover on a fine pointer, press-hold on touch) and
  * portalled into the screen stage — the same reveal the journey status bar's
- * DreamAvatar bust uses, so the two read identically.
+ * Avatar bust uses, so the two read identically.
  */
-function DreamAvatarBlock({
-  dreamAvatar,
+function AvatarBlock({
+  avatar,
 }: {
-  dreamAvatar: DeckDreamAvatarView;
+  avatar: DeckAvatarView;
 }) {
   return (
     <section
@@ -404,12 +404,12 @@ function DreamAvatarBlock({
             shared press/hover scale, while the reveal coordinator (its pointer handlers
             chained through) owns the show/hide of the portalled InfoCard. The
             button carries the accent frame — the same 2px violet border, glow,
-            and control radius the journey status bar's DreamAvatar bust wears — so
+            and control radius the journey status bar's Avatar bust wears — so
             the two portraits read as the same object; `overflow: hidden` clips
             the art to that rounded frame. */}
         <div
           style={{
-            width: DREAM_AVATAR_PORTRAIT_PX,
+            width: AVATAR_PORTRAIT_PX,
             padding: 0,
             background: "none",
             borderRadius: token("--radius-control"),
@@ -419,12 +419,12 @@ function DreamAvatarBlock({
             lineHeight: 0,
           }}
         >
-          <DreamAvatarPortrait
-            dreamAvatar={dreamAvatar}
+          <AvatarPortrait
+            avatar={avatar}
             variant="panel"
             profile={{
-              id: dreamAvatar.id,
-              ability: dreamAvatar.renderedText,
+              id: avatar.id,
+              ability: avatar.renderedText,
             }}
           />
         </div>
@@ -486,7 +486,7 @@ function DreamsignsBlock({ dreamsigns }: { dreamsigns: LocalizedDreamsign[] }) {
 }
 
 /** The run's selected tides, using the journey-start discs and reveal behavior. */
-function TidesBlock({ tides }: { tides: DreamAvatarTideView[] }) {
+function TidesBlock({ tides }: { tides: AvatarTideView[] }) {
   if (tides.length === 0) return null;
   return (
     <section

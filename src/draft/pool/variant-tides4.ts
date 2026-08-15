@@ -2,19 +2,19 @@
 // sentence:
 //
 //   "There are preconstructed decks called tides — each has a known decklist you
-//    can go read. Your DreamAvatar has a small signature tide plus several theme
+//    can go read. Your Avatar has a small signature tide plus several theme
 //    tides; we always include the signature tide, mix in a random few theme
 //    tides, shuffle them together, and deal your draft pool, never more than 2
 //    copies of a card."
 //
 // `data/tides.ron` curates the axes of an avatar's identity as separate decks:
-//   * a SIGNATURE tide is one signatured DreamAvatar's signature cards themselves
+//   * a SIGNATURE tide is one signatured Avatar's signature cards themselves
 //     — the always-joined identity floor;
 //   * a FACET tide is a single-anchor affinity pool — the coherent lean one
 //     signature-region card grows into. Drawing a random few of an avatar's
 //     facets each run makes different runs lean the same identity different ways;
 //   * a NEUTRAL tide is a broad, format-spanning deck — the generic tail a
-//     body of a signatureless DreamAvatar's pool.
+//     body of a signatureless Avatar's pool.
 //
 // At runtime the whole algorithm is the tide selection, one shuffle, and the
 // two-pass deal below: join the starter, draw a random subset of facets, top up
@@ -23,9 +23,9 @@
 // seeding the starter's (signature) cards first so the signature tide is
 // guaranteed into the pool rather than risking being cut by the bag overflow. A
 // signatured
-// DreamAvatar leans its own identity a different way each run (the facet subset).
-// A signatureless DreamAvatar has no identity to anchor on, so it borrows a
-// random signatured DreamAvatar's whole pool (that archetype's signature core plus
+// Avatar leans its own identity a different way each run (the facet subset).
+// A signatureless Avatar has no identity to anchor on, so it borrows a
+// random signatured Avatar's whole pool (that archetype's signature core plus
 // its own facets), leaning toward a different coherent archetype each run rather
 // than a blend of unrelated leans. The pool is keyed by cards_v2 UUID; the
 // catalog index (`poolData.cardNameById`) gates which UUIDs are dealable.
@@ -45,7 +45,7 @@ import type { Tides4DecksJson } from "./tides4-io.ts";
 import type { Tides4Tuning } from "../../types/draft-data";
 import type { TideId } from "../../types/identifiers";
 import { DEFAULT_DRAFT_DATA } from "../../data/draft-data";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 
 /** Developer/test fallback; production injects the compiled draft.toml values. */
 export const DEFAULT_TIDES4_TUNING: Tides4Tuning =
@@ -59,29 +59,29 @@ export const DEFAULT_TIDES4_TUNING: Tides4Tuning =
  * whole bag and deal the configured size with at most the configured copies of
  * any card, seeding the starter's signature cards first so the signature tide is
  * always present in the dealt pool. The random facet subset is the variety engine,
- * so a DreamAvatar leans its identity a different way each run. A signatureless
- * DreamAvatar (null starter) instead borrows
- * a random signatured DreamAvatar's pool, so it leans a different coherent archetype
+ * so an Avatar leans its identity a different way each run. A signatureless
+ * Avatar (null starter) instead borrows
+ * a random signatured Avatar's pool, so it leans a different coherent archetype
  * each run. Tide-deck cards are keyed by cards_v2 UUID; the catalog index
  * (`poolData.cardNameById`) gates membership, so a UUID absent from it (a card
- * dropped from the catalog) is skipped. Without a `dreamAvatarId` or a baked tide
+ * dropped from the catalog) is skipped. Without a `avatarId` or a baked tide
  * pool, every
  * tide is shuffled together (a robustness fallback; load-time validation requires an
- * entry per DreamAvatar).
+ * entry per Avatar).
  */
 export function generateTides4(
   rng: () => number,
   poolData: PoolData,
-  dreamAvatarId?: DreamAvatarId,
+  avatarId?: AvatarId,
   tuning: Tides4Tuning = DEFAULT_TIDES4_TUNING,
 ): Tides4GenerationResult {
   const data: Tides4DecksJson | undefined = poolData.tides4Decks;
   if (!data) {
     missingPoolData(
-      "no tide decks are bundled (data/tides.ron and data/dream_avatars.ron, served as /tides4-data.json)",
+      "no tide decks are bundled (data/tides.ron and data/avatars.ron, served as /tides4-data.json)",
     );
   }
-  return combineTidesPool(rng, poolData, data, dreamAvatarId, tuning);
+  return combineTidesPool(rng, poolData, data, avatarId, tuning);
 }
 
 /**
@@ -91,7 +91,7 @@ export function combineTidesPool(
   rng: () => number,
   poolData: PoolData,
   data: Tides4DecksJson,
-  dreamAvatarId: DreamAvatarId | undefined,
+  avatarId: AvatarId | undefined,
   tuning: Tides4Tuning = DEFAULT_TIDES4_TUNING,
 ): Tides4GenerationResult {
   const dealSize = tuning.dealSize;
@@ -100,22 +100,22 @@ export function combineTidesPool(
   // facets, and queue the neutral tail plus any undrawn facets as fill. A missing
   // entry falls back to a shuffled draw over every tide so the variant still
   // produces a pool.
-  const own = dreamAvatarId
-    ? data.tidePoolByDreamAvatar[dreamAvatarId]
+  const own = avatarId
+    ? data.tidePoolByAvatar[avatarId]
     : undefined;
-  // A signatureless DreamAvatar (null starter) leans a random coherent archetype
+  // A signatureless Avatar (null starter) leans a random coherent archetype
   // each run by borrowing a random
-  // signatured DreamAvatar's whole pool — that archetype's signature core plus its
+  // signatured Avatar's whole pool — that archetype's signature core plus its
   // own on-identity facets — so the pool is a single coherent archetype rather than
   // a blend of unrelated facet leans. The archetype draw consumes one `rng()` and
-  // happens only for signatureless DreamAvatars, so a signatured DreamAvatar's draw
+  // happens only for signatureless Avatars, so a signatured Avatar's draw
   // is unchanged.
   const signatureless = own !== undefined && own.starter === null;
   let entry = own;
   if (signatureless) {
     // Canonical pool order is authored and stable. Using it keeps the random
     // archetype slot independent of the opaque UUID values assigned to tides.
-    const archetypes = Object.values(data.tidePoolByDreamAvatar).filter(
+    const archetypes = Object.values(data.tidePoolByAvatar).filter(
       (candidate) => candidate.starter !== null,
     );
     if (archetypes.length > 0) {
@@ -123,7 +123,7 @@ export function combineTidesPool(
     }
   }
   const tideById = new Map(data.tides.map((t) => [t.id, t]));
-  // The borrowed archetype's name (for a signatureless DreamAvatar): the name of
+  // The borrowed archetype's name (for a signatureless Avatar): the name of
   // the signature tide the pool leaned on this run, surfaced by the debug
   // surfaces so the player can read which coherent archetype they got.
   const borrowedArchetypeName =
@@ -163,7 +163,7 @@ export function combineTidesPool(
     }
   } else {
     // Robustness fallback (load-time validation requires an entry per
-    // DreamAvatar): shuffle every tide together, tagging each by its own role.
+    // Avatar): shuffle every tide together, tagging each by its own role.
     for (const id of shuffle(
       rng,
       data.tides.map((t) => t.id),
@@ -324,7 +324,7 @@ export function combineTidesPool(
   }
 
   const tides4Provenance: Tides4PoolProvenance = {
-    dreamAvatarId: dreamAvatarId ?? null,
+    avatarId: avatarId ?? null,
     signatureless,
     borrowedArchetypeName,
     dealSize,

@@ -225,7 +225,7 @@ describe("projected glossary definitions", () => {
     );
   });
 
-  it("uses dream-avatar-specific exhaust instructions", () => {
+  it("uses avatar-specific exhaust instructions", () => {
     const exhaust = fixture(
       "exhaust-cost",
       "Exhaust Cost",
@@ -233,18 +233,18 @@ describe("projected glossary definitions", () => {
       0,
       [
         {
-          owner: "dreamAvatar",
+          owner: "avatar",
           definition:
-            "You may exhaust (☾) this dreamAvatar to activate this ability once per turn.",
+            "You may exhaust (☾) this avatar to activate this ability once per turn.",
         },
       ],
     );
 
     expect(
-      projectGlossaryEntry(exhaust, "2●, ☾: Draw a card.", "dreamAvatar")
+      projectGlossaryEntry(exhaust, "2●, ☾: Draw a card.", "avatar")
         .definition,
     ).toBe(
-      "You may exhaust (☾) this dreamAvatar to activate this ability once per turn.",
+      "You may exhaust (☾) this avatar to activate this ability once per turn.",
     );
   });
 });

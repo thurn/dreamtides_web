@@ -544,12 +544,12 @@
     },
     {
       "id": 57,
-      "concept": "Pick a new Dream Avatar from 3 choices",
+      "concept": "Pick a new Avatar from 3 choices",
       "balance_class": "standard",
       "implementation": {
         "status": "reuse",
-        "effect_variant": "ChooseDreamAvatar",
-        "runtime_effect_kind": "choose-dream-avatar"
+        "effect_variant": "ChooseAvatar",
+        "runtime_effect_kind": "choose-avatar"
       }
     },
     {

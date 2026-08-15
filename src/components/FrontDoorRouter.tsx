@@ -6,17 +6,17 @@ import { TutorialScreenAdapter } from "../screens/cumulus_adapters/TutorialScree
 import { TutorialBattleScreenAdapter } from "../screens/cumulus_adapters/TutorialBattleScreenAdapter";
 import { battleModeOf } from "../rules/battle/fold";
 import { useFrontDoor } from "../state/front-door-context";
-import type { DreamAvatarContent } from "../types/content";
+import type { AvatarContent } from "../types/content";
 
 /** Reflects the room's shared front-door fold and renders its current scene. */
 export function FrontDoorRouter({
-  dreamAvatars,
+  avatars,
   tutorialPlaybackSpeed = 1,
   directTutorialBattle = false,
   previewTutorialVictory = false,
   journey = null,
 }: {
-  readonly dreamAvatars: readonly DreamAvatarContent[];
+  readonly avatars: readonly AvatarContent[];
   readonly tutorialPlaybackSpeed?: number;
   readonly directTutorialBattle?: boolean;
   readonly previewTutorialVictory?: boolean;
@@ -65,7 +65,7 @@ export function FrontDoorRouter({
     }
     return (
       <TutorialScreenAdapter
-        dreamAvatars={dreamAvatars}
+        avatars={avatars}
         playbackSpeed={tutorialPlaybackSpeed}
         directLive={directTutorialBattle || previewTutorialVictory}
       />

@@ -46,10 +46,10 @@ export async function loadCardsV2Database(): Promise<Map<number, CardData>> {
 
 /**
  * Fetch the browser projection compiled from `data/tides.ron` and
- * the per-avatar pools embedded in `data/dream_avatars.ron` to
+ * the per-avatar pools embedded in `data/avatars.ron` to
  * `/tides4-data.json` by `scripts/setup-assets.mjs`. The `tides4` pool variant
  * combines into pools — the signature, facet, and neutral tide decks and the
- * per-DreamAvatar tide pools in one file. Returns `null` if the asset is missing
+ * per-Avatar tide pools in one file. Returns `null` if the asset is missing
  * so the caller can surface a clear configuration error when the variant runs.
  */
 export async function loadTides4Decks(): Promise<Tides4DecksJson | null> {

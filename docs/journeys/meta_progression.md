@@ -17,10 +17,10 @@ Examples of meta progression rewards are:
 - Unlocking the ability to mulligan in battles and get a new opening hand
 - Increasing starting energy in battles
 - Increasing starting hand size in battles
-- Unlocking additional Dream Avatars
+- Unlocking additional Avatars
 - Waiving the battle in Firstlight Meadow (layer 1), letting the player refine
   their deck more before running their first battle
-- Adding an additional Dream Avatar to the Dream Avatar Draft
+- Adding an additional Avatar to the Avatar Draft
 - Unlocking each of the enhanced sites
 - Allowing the player to lose one battle and continue the journey
 - Increasing starting essence

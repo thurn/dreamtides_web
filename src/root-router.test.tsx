@@ -154,11 +154,6 @@ describe("top-level route render smoke", () => {
 
   it.each([
     ["/editor?sort=cost#cards", "/cards?sort=cost#cards"],
-    ["/avatars?identicons=1#details", "/dream-avatars?identicons=1#details"],
-    [
-      "/dreamavatars?identicons=1#details",
-      "/dream-avatars?identicons=1#details",
-    ],
   ])("canonicalizes route alias %s", async (source, canonical) => {
     await expectRouteToRender(source, "standalone");
     expect(

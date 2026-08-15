@@ -36,7 +36,7 @@ import type { DeckEntryId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import {
-  testDreamAvatarId,
+  testAvatarId,
   testDreamsignId,
   testExplorationActionId,
   testGuideId,
@@ -1159,16 +1159,16 @@ function smallerHandDiscountRewardView(): ExplorationSiteView {
   };
 }
 
-function dreamAvatarRewardView(): ExplorationSiteView {
+function avatarRewardView(): ExplorationSiteView {
   return {
     ...view(true),
-    outcomeKind: "dream-avatar",
+    outcomeKind: "avatar",
     reward: {
-      kind: "dream-avatar",
+      kind: "avatar",
       previous: null,
       current: {
-        id: testDreamAvatarId("dream-avatar-new"),
-        name: "New Dream Avatar",
+        id: testAvatarId("avatar-new"),
+        name: "New Avatar",
         title: "The Synthetic",
         renderedText: "A synthetic ability.",
         imageNumber: "017",
@@ -5880,27 +5880,27 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("presents the exact persisted replacement Dream Avatar", () => {
+  it("presents the exact persisted replacement Avatar", () => {
     vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
     const { container, root } = mount(
       <ExplorationSiteScreen
-        view={dreamAvatarRewardView()}
+        view={avatarRewardView()}
         onChannel={vi.fn()}
         onResolve={vi.fn()}
         onExit={vi.fn()}
       />,
     );
     const outcome = container.querySelector<HTMLElement>(
-      '[data-exploration-outcome="dream-avatar"]',
+      '[data-exploration-outcome="avatar"]',
     );
-    expect(outcome?.dataset.explorationDreamAvatarId).toBe(
-      testDreamAvatarId("dream-avatar-new"),
+    expect(outcome?.dataset.explorationAvatarId).toBe(
+      testAvatarId("avatar-new"),
     );
-    expect(outcome?.textContent).toContain("New Dream Avatar");
-    expect(outcome?.getAttribute("aria-label")).toContain("New Dream Avatar");
+    expect(outcome?.textContent).toContain("New Avatar");
+    expect(outcome?.getAttribute("aria-label")).toContain("New Avatar");
     act(() => root.unmount());
   });
 

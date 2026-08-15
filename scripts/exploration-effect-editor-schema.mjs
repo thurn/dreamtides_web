@@ -1133,9 +1133,9 @@ export const EXPLORATION_EFFECT_SCHEMAS = [
     "fields": []
   },
   {
-    "kind": "choose-dream-avatar",
-    "label": "Choose a new Dream Avatar",
-    "canonicalMechanicId": "choose-dream-avatar",
+    "kind": "choose-avatar",
+    "label": "Choose a new Avatar",
+    "canonicalMechanicId": "choose-avatar",
     "defaultSelectionPolicyId": "uniform",
     "allowedSelectionPolicyIds": [
       "uniform"

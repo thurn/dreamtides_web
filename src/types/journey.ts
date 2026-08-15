@@ -1,6 +1,6 @@
 import type {
-  DreamAvatarPortraitFocus,
-  ResolvedDreamAvatarPackage,
+  AvatarPortraitFocus,
+  ResolvedAvatarPackage,
 } from "./content";
 import type { CardData, CardType } from "./cards";
 import type {
@@ -42,7 +42,7 @@ import type {
   BattleId,
   CardTypeChangePredicateId,
   DeckEntryId,
-  DreamAvatarId,
+  AvatarId,
   DreamscapeId,
   DreamsignId,
   ExplorationActionId,
@@ -137,18 +137,18 @@ export interface DeckEntry {
   isBane: boolean;
 }
 
-/** The selected DreamAvatar package shown in player-facing UI. */
-export interface DreamAvatar {
-  id: DreamAvatarId;
+/** The selected Avatar package shown in player-facing UI. */
+export interface Avatar {
+  id: AvatarId;
   name: string;
   title: string;
   renderedText: string;
   imageNumber: string;
   /** Authored head position shared by full-body and square portrait crops. */
-  portraitFocus?: DreamAvatarPortraitFocus;
+  portraitFocus?: AvatarPortraitFocus;
   /**
    * Starting essence the player begins the journey with. Captured on the
-   * DreamAvatar record so the HUD inspector and persisted state always know
+   * Avatar record so the HUD inspector and persisted state always know
    * the chosen value, even after Firebase round-trips.
    */
   startingEssence: number;
@@ -758,8 +758,8 @@ export interface ExplorationActionOfferRuntime {
   offeredDeckEntryIds?: DeckEntryId[];
   /** Deterministic eligible deck-entry UUIDs captured when a bulk effect is prepared. */
   eligibleDeckEntryIds?: DeckEntryId[];
-  /** Randomly offered DreamAvatar UUIDs for identity replacement effects. */
-  offeredDreamAvatarIds?: DreamAvatarId[];
+  /** Randomly offered Avatar UUIDs for identity replacement effects. */
+  offeredAvatarIds?: AvatarId[];
   packCardIds: CardId[][];
   replacementCardIdByEntryId: IdentityRecord<DeckEntryId, CardId>;
   transfigurationByEntryId: IdentityRecord<DeckEntryId, TransfigurationType>;
@@ -874,8 +874,8 @@ export interface ExplorationResolution {
         energyCostReduction: 1;
         battlesRemaining: number;
       };
-  previousDreamAvatarId?: DreamAvatarId;
-  chosenDreamAvatarId?: DreamAvatarId;
+  previousAvatarId?: AvatarId;
+  chosenAvatarId?: AvatarId;
   /** Exact one-use future-site modifier created by the resolution. */
   siteOfferModifier?: TransfiguredSiteOfferModifier;
   /** Exact FIFO shop modifier appended by this resolution. */
@@ -1070,13 +1070,13 @@ export type SiteRuntimeState =
 export type Screen =
   | {
       type: "journeyStart";
-      /** Shared debug-reroll count used to derive the shown DreamAvatar offer. */
+      /** Shared debug-reroll count used to derive the shown Avatar offer. */
       rerollCount?: number;
       /**
-       * Shared tutorial override that presents exactly this DreamAvatar UUID.
+       * Shared tutorial override that presents exactly this Avatar UUID.
        * Absent for the normal seeded three-avatar offer.
        */
-      tutorialDreamAvatarId?: DreamAvatarId;
+      tutorialAvatarId?: AvatarId;
     }
   | { type: "atlas" }
   | { type: "dreamscape" }
@@ -1200,8 +1200,8 @@ export interface JourneyState {
    */
   maxDreamsigns: number;
   deck: DeckEntry[];
-  dreamAvatar: DreamAvatar | null;
-  resolvedPackage: ResolvedDreamAvatarPackage | null;
+  avatar: Avatar | null;
+  resolvedPackage: ResolvedAvatarPackage | null;
   cardSourceDebug: CardSourceDebugState | null;
   remainingDreamsignPool: DreamsignId[];
   dreamsigns: Dreamsign[];
@@ -1216,7 +1216,7 @@ export interface JourneyState {
   failureSummary: JourneyFailureSummary | null;
   /**
    * Whether the player has dismissed the one-time starter-deck reveal popup
-   * shown immediately after picking a DreamAvatar. Persisted on the journey
+   * shown immediately after picking an Avatar. Persisted on the journey
    * state so reloads of the same room (or other clients) do not see the
    * popup again. Defaults to `false`; flipped to `true` when the player
    * clicks the popup's "Continue" action.

@@ -73,7 +73,7 @@ function makeView(): BattleStartView {
   return {
     battleId: parseBattleId("battle-test"),
     scene: artRef.dreamscapeScene(testDreamscapeId("test_dreamscape")),
-    dreamAvatar: {
+    avatar: {
       id: testOpponentId("opponent-uuid"),
       name: assertLocalized("Aeris, the Prism Guide"),
       title: assertLocalized("Storm Archivist"),
@@ -128,10 +128,10 @@ describe("Cumulus BattleStartScreen", () => {
       container
         .querySelector("[data-battle-start-opponent]")
         ?.getAttribute("data-battle-start-opponent"),
-    ).toBe(view.dreamAvatar.id);
+    ).toBe(view.avatar.id);
     expect(container.querySelector("h1")?.textContent).not.toBe("");
     expect(container.querySelector("h1")?.textContent).not.toContain(
-      view.dreamAvatar.id,
+      view.avatar.id,
     );
     const desktopSectionTitles = Array.from(
       container.querySelectorAll("h2"),
@@ -427,7 +427,7 @@ describe("Cumulus BattleStartScreen", () => {
     const view = makeView();
     const { container, root } = mount({
       ...view,
-      dreamAvatar: { ...view.dreamAvatar, abilityActive: false },
+      avatar: { ...view.avatar, abilityActive: false },
     });
 
     expect(container.textContent).toContain(
@@ -441,7 +441,7 @@ describe("Cumulus BattleStartScreen", () => {
     const view = makeView();
     const { container, root } = mount({
       ...view,
-      dreamAvatar: { ...view.dreamAvatar, abilityActive: false },
+      avatar: { ...view.avatar, abilityActive: false },
     });
     expect(container.textContent).toContain(
       "Opponent avatar ability is not active.",

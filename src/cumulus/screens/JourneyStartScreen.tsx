@@ -1,14 +1,14 @@
-// JourneyStartScreen — the Cumulus rendering of DreamAvatar selection (the journey's
+// JourneyStartScreen — the Cumulus rendering of Avatar selection (the journey's
 // opening screen). Two layouts share one view-model and switch on viewport:
-//   - Mobile (narrow): a full-bleed swipe carousel, one DreamAvatar per page
+//   - Mobile (narrow): a full-bleed swipe carousel, one Avatar per page
 //     (`journey-start-mobile`).
-//   - Desktop (wide): the offered DreamAvatars side by side as standing figures
+//   - Desktop (wide): the offered Avatars side by side as standing figures
 //     over locked-size console cards (`journey-start-desktop`).
 // Shared view types and console primitives live in `journey-start-shared`; both
-// layouts compose the named DreamAvatar ability source. This module is the
+// layouts compose the named Avatar ability source. This module is the
 // public entry: it re-exports the view types the adapter and view-model builder
 // import, and switches layouts by viewport.
-// PURE: it renders from a view-model and reports the chosen DreamAvatar through
+// PURE: it renders from a view-model and reports the chosen Avatar through
 // `onPick`; the adapter owns state, the offer, the seed, and startJourney.
 
 import { DesktopSelect } from "./journey-start-desktop";
@@ -16,17 +16,17 @@ import { CarouselSelect } from "./journey-start-mobile";
 import { useIsDesktop, type JourneyStartScreenProps } from "./journey-start-shared";
 
 export type {
-  DreamAvatarOfferView,
-  DreamAvatarSignatureCardView,
-  DreamAvatarTideView,
+  AvatarOfferView,
+  AvatarSignatureCardView,
+  AvatarTideView,
   JourneyStartGuideDialogueView,
   JourneyStartScreenProps,
 } from "./journey-start-shared";
 
 /**
- * The Cumulus DreamAvatar-selection screen. Pure and props-driven — it renders
- * {@link JourneyStartScreenProps.dreamAvatars} and calls {@link
- * JourneyStartScreenProps.onPick} with the chosen DreamAvatar's id. The layout
+ * The Cumulus Avatar-selection screen. Pure and props-driven — it renders
+ * {@link JourneyStartScreenProps.avatars} and calls {@link
+ * JourneyStartScreenProps.onPick} with the chosen Avatar's id. The layout
  * follows the viewport: a swipe carousel on mobile, a side-by-side triptych of
  * standalone portraits on desktop.
  */

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  assignDreamscapeDreamAvatar,
+  assignDreamscapeAvatar,
   loadEditorDreamscapes,
   saveEditorDreamscapeField,
 } from "./dreamscape-editor-api";
@@ -24,19 +24,19 @@ import {
 } from "./save-state";
 import type { EditableFieldValue, EditableSaveState } from "./save-state";
 import type {
-  DreamAvatarAssignmentAction,
+  AvatarAssignmentAction,
   DreamscapeCatalog,
   DreamscapeDisplayState,
   EditableDreamscapeField,
   EditorDreamscapeRecord,
 } from "./dreamscape-types";
-import type { DreamAvatarId } from "../types/identifiers";
+import type { AvatarId } from "../types/identifiers";
 import type { DreamscapeEditorApiClient } from "./dreamscape-types";
 
 const DEFAULT_DREAMSCAPE_API_CLIENT: DreamscapeEditorApiClient = {
   loadEditorDreamscapes,
   saveEditorDreamscapeField,
-  assignDreamscapeDreamAvatar,
+  assignDreamscapeAvatar,
 };
 
 type LoadStatus =
@@ -180,13 +180,13 @@ export default function DreamscapeEditorApp({
     [dreamscapes, displayState],
   );
 
-  // DreamAvatar id -> the name of the region that currently hosts it,
+  // Avatar id -> the name of the region that currently hosts it,
   // so each resident picker can show where a caller lives before it is moved.
-  const regionNameByDreamAvatar = useMemo(() => {
-    const map = new Map<DreamAvatarId, string>();
+  const regionNameByAvatar = useMemo(() => {
+    const map = new Map<AvatarId, string>();
     for (const dreamscape of dreamscapes) {
-      for (const dreamAvatarId of dreamscape.dreamAvatarIds) {
-        map.set(dreamAvatarId, dreamscape.name);
+      for (const avatarId of dreamscape.avatarIds) {
+        map.set(avatarId, dreamscape.name);
       }
     }
     return map;
@@ -289,10 +289,10 @@ export default function DreamscapeEditorApp({
     });
   }
 
-  function handleAssignDreamAvatar(
+  function handleAssignAvatar(
     record: EditorDreamscapeRecord,
-    action: DreamAvatarAssignmentAction,
-    params: { inId?: DreamAvatarId; outId?: DreamAvatarId },
+    action: AvatarAssignmentAction,
+    params: { inId?: AvatarId; outId?: AvatarId },
   ) {
     if (residentPendingId !== null) {
       return;
@@ -304,7 +304,7 @@ export default function DreamscapeEditorApp({
     });
 
     void apiClient
-      .assignDreamscapeDreamAvatar({
+      .assignDreamscapeAvatar({
         dreamscapeId: record.id,
         action,
         ...params,
@@ -559,13 +559,13 @@ export default function DreamscapeEditorApp({
                       guides={catalog.guides}
                       affiliations={catalog.affiliations}
                       siteTypes={catalog.siteTypes}
-                      dreamAvatars={catalog.dreamAvatars}
-                      regionNameByDreamAvatar={regionNameByDreamAvatar}
+                      avatars={catalog.avatars}
+                      regionNameByAvatar={regionNameByAvatar}
                       residentStatus={{
                         pending: residentPendingId === record.id,
                         message: residentErrors[record.id] ?? null,
                       }}
-                      onAssignDreamAvatar={handleAssignDreamAvatar}
+                      onAssignAvatar={handleAssignAvatar}
                       saveEntryFor={(field) =>
                         fieldSaveEntry(saveState, { cardId: record.id, field })
                       }

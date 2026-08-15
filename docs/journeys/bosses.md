@@ -1,9 +1,9 @@
-# Boss Dream Avatars
+# Boss Avatars
 
 The final boss of every dream journey is **Apollyon, the Doom of Humanity**,
 encountered in [Limbo](journeys.md) at the 7th battle. Apollyon is always the same
 named character, but it manifests in many different **forms** — each form plays a
-different deck and takes on its own unique dream avatar ability that defines its
+different deck and takes on its own unique avatar ability that defines its
 archetype. The forms Apollyon can take are listed below.
 
 ### 1. Pyrra, Ember Dancer

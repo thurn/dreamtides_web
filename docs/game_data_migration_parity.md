@@ -13,7 +13,7 @@ revision while preserving array order, then checks the runtime JSON artifacts
 against the same revision.
 
 The parity command validates all 26 catalogs: affiliations, Apollyon
-incarnations, Atlas, Augury, Cards, card tags, card tides, Draft, Dream Avatars,
+incarnations, Atlas, Augury, Cards, card tags, card tides, Draft, Avatars,
 Dream Guides, Dreamscapes, Dreamsign profiles, Dreamsign signatures,
 Dreamsigns, Dreamsign tags, Dreamwell, economy, Exploration, Exploration
 candidates, Figments, glossary, opponents, reward selection, sites, tutorial,

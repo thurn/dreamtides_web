@@ -11,9 +11,9 @@ import {
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type {
-  DreamAvatarContent,
+  AvatarContent,
   DreamsignTemplate,
-  ResolvedDreamAvatarPackage,
+  ResolvedAvatarPackage,
 } from "../../types/content";
 import type {
   DeckEntry,
@@ -26,7 +26,7 @@ import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import { parseSiteId } from "../../types/identifiers";
 import {
   testCardSubtype,
-  testDreamAvatarId,
+  testAvatarId,
   testDreamsignId,
 } from "../../types/test-identities";
 
@@ -119,10 +119,10 @@ export function makeMerchantTestJourneyState(
   };
 }
 
-function makeMerchantTestDreamAvatarContent(): DreamAvatarContent {
+function makeMerchantTestAvatarContent(): AvatarContent {
   return {
-    id: testDreamAvatarId("dream-avatar-fixture"),
-    name: "Fixture DreamAvatar",
+    id: testAvatarId("avatar-fixture"),
+    name: "Fixture Avatar",
     title: "Fixture",
     renderedText: "",
     imageNumber: "0000",
@@ -131,10 +131,10 @@ function makeMerchantTestDreamAvatarContent(): DreamAvatarContent {
 }
 
 export function makeMerchantTestResolvedPackage(
-  overrides: Partial<ResolvedDreamAvatarPackage> = {},
-): ResolvedDreamAvatarPackage {
+  overrides: Partial<ResolvedAvatarPackage> = {},
+): ResolvedAvatarPackage {
   return {
-    dreamAvatar: makeMerchantTestDreamAvatarContent(),
+    avatar: makeMerchantTestAvatarContent(),
     draftPoolCopiesByCard: {},
     dreamsignPoolIds: [],
     mandatoryOnlyPoolSize: 0,
@@ -160,7 +160,7 @@ export function makeMerchantTestContent({
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase: new Map(cards.map((card) => [card.cardNumber, card])),
-    dreamAvatars: [],
+    avatars: [],
     dreamwellCards: [],
     dreamsignTemplates,
     dreamscapes: MINIMAL_DREAMSCAPES,

@@ -48,10 +48,10 @@ export interface QaScene {
   /** What the scene shows and why it is otherwise hard to reach. */
   description: string;
   /**
-   * When true, this scene's destination is the DreamAvatar-selection
+   * When true, this scene's destination is the Avatar-selection
    * (`journeyStart`) screen the fresh room already opens on — i.e. its built
-   * state keeps `dreamAvatar: null`. App must not hold the "Opening QA scene…"
-   * loading gate for such a scene: that gate waits for a DreamAvatar to be
+   * state keeps `avatar: null`. App must not hold the "Opening QA scene…"
+   * loading gate for such a scene: that gate waits for an Avatar to be
    * selected and would otherwise spin forever.
    */
   landsOnJourneyStart?: boolean;
@@ -68,14 +68,14 @@ export interface QaScene {
 }
 
 /**
- * The DreamAvatar selection screen a run opens on. This is the fresh-room
- * `journeyStart` state ({@link createDefaultState}, `dreamAvatar: null`), which
+ * The Avatar selection screen a run opens on. This is the fresh-room
+ * `journeyStart` state ({@link createDefaultState}, `avatar: null`), which
  * the "Create Game" lobby button also lands on — parking a room directly on it
  * lets the choose-your-avatar UI be QA'd from a `?goto=` URL without
  * clicking through the lobby first.
  */
-const DREAM_AVATAR_SELECT_SCENE: QaScene = {
-  id: parseQaSceneId("dream-avatar-select"),
+const AVATAR_SELECT_SCENE: QaScene = {
+  id: parseQaSceneId("avatar-select"),
   label: "Avatar Select",
   description:
     "The choose-your-avatar screen a run opens on, parked directly on " +
@@ -86,26 +86,26 @@ const DREAM_AVATAR_SELECT_SCENE: QaScene = {
 };
 
 /**
- * Tutorial DreamAvatar selection: the normal journey-start presentation and
+ * Tutorial Avatar selection: the normal journey-start presentation and
  * start-journey action with one fixed, centered offer and no reroll control.
  */
-const TUTORIAL_DREAM_AVATAR_SELECT_SCENE: QaScene = {
-  id: parseQaSceneId("tutorial-dream-avatar-select"),
+const TUTORIAL_AVATAR_SELECT_SCENE: QaScene = {
+  id: parseQaSceneId("tutorial-avatar-select"),
   label: "Tutorial Avatar Select",
   description:
-    "The tutorial DreamAvatar selection screen with its one fixed avatar.",
+    "The tutorial Avatar selection screen with its one fixed avatar.",
   landsOnJourneyStart: true,
   build: (journeyContent) => {
-    const tutorialDreamAvatar = journeyContent.dreamAvatars.find(
-      (dreamAvatar) =>
-        dreamAvatar.id === journeyContent.tutorial?.battle.playerDreamAvatarId,
+    const tutorialAvatar = journeyContent.avatars.find(
+      (avatar) =>
+        avatar.id === journeyContent.tutorial?.battle.playerAvatarId,
     );
-    if (tutorialDreamAvatar === undefined) return null;
+    if (tutorialAvatar === undefined) return null;
     return {
       ...createDefaultState(journeyContent.economyData.journey),
       screen: {
         type: "journeyStart",
-        tutorialDreamAvatarId: tutorialDreamAvatar.id,
+        tutorialAvatarId: tutorialAvatar.id,
       },
     };
   },
@@ -607,7 +607,7 @@ const POOL_VIEWER_SCENE: QaScene = {
 
 /**
  * The starting-deck reveal popup over the starter dreamscape. The popup is
- * driven by persisted state — it shows the first time a run has a DreamAvatar
+ * driven by persisted state — it shows the first time a run has an Avatar
  * and has not yet seen it — so this scene builds the starter dreamscape and
  * clears `hasSeenStartingDeckPopup`, and `JourneyApp` reveals the popup on its
  * own. Otherwise reached only on the very first entry into a fresh dreamscape;
@@ -1156,8 +1156,8 @@ function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
 
 /** All registered QA scenes, keyed by `id`. */
 export const QA_SCENES: readonly QaScene[] = [
-  DREAM_AVATAR_SELECT_SCENE,
-  TUTORIAL_DREAM_AVATAR_SELECT_SCENE,
+  AVATAR_SELECT_SCENE,
+  TUTORIAL_AVATAR_SELECT_SCENE,
   ATLAS_SCENE,
   RANDOM_SITE_ATLAS_SCENE,
   TUTORIAL_ATLAS_SCENE,

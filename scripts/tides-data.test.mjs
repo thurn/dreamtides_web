@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { compileTidesData } from "./tides-data.mjs";
 
 describe("compileTidesData", () => {
-  it("composes tides and embedded Dream Avatar pools", () => {
+  it("composes tides and embedded Avatar pools", () => {
     const result = compileTidesData(
       {
         "schema-version": 1,
@@ -26,7 +26,7 @@ describe("compileTidesData", () => {
         ],
       },
       {
-        dreamAvatar: [
+        avatar: [
           {
             id: "00000000-0000-4000-8000-000000000021",
             "tide-pool": {
@@ -57,7 +57,7 @@ describe("compileTidesData", () => {
           ],
         },
       ],
-      tidePoolByDreamAvatar: {
+      tidePoolByAvatar: {
         "00000000-0000-4000-8000-000000000021": {
           starter: null,
           facets: ["00000000-0000-4000-8000-000000000001"],
@@ -82,6 +82,6 @@ describe("compileTidesData", () => {
         },
         {},
       ),
-    ).toThrow(/dream_avatars\.toml/u);
+    ).toThrow(/avatars\.toml/u);
   });
 });

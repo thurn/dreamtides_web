@@ -31,11 +31,11 @@ room genesis.
 These rooms are single-controller hosted playtests. The first valid manual
 tutorial gameplay action, including a first live-battle input, claims control
 for that browser's room-scoped session identity. Other clients watch the same
-scripted tutorial, live battle, victory, and fixed Dream Avatar selection
+scripted tutorial, live battle, victory, and fixed Avatar selection
 read-only. A disconnected controller leaves those phases paused until a viewer
 explicitly chooses **Take Control**.
 
-Selecting the fixed Dream Avatar starts the authored tutorial journey and
+Selecting the fixed Avatar starts the authored tutorial journey and
 changes the room to normal collaborative control in the same event. Both
 players can take journey actions and manually control either battle side while
 the journey continues to use the guidance and first-occurrence triggers authored
@@ -86,7 +86,7 @@ Only the exact value `ai=1` enables the journey battle AI. Any other value
 
 The AI is a local actor that runs on a single client, so it stays off in a
 shared multiplayer room (when two or more clients are connected). `goto=battle`
-opens the first opposing-Dream Avatar preview; pair it with `ai=1` for an AI
+opens the first opposing-Avatar preview; pair it with `ai=1` for an AI
 battle (`?goto=battle&ai=1`).
 
 The standalone tutorial battle uses its own event-log-driven automated opponent.
@@ -154,7 +154,7 @@ battle handoff. The fresh battle starts on the player's turn with three cards
 in the player's hand and two cards in the opponent's hand.
 
 `goto=tutorial-victory` opens the tutorial battle victory payoff directly. Its
-New Journey action enters the fixed tutorial Dream Avatar selection in the same
+New Journey action enters the fixed tutorial Avatar selection in the same
 room. That selection presents the three authored Valor tides from
 `data/tutorial_journey_pool.toml`; choosing the avatar starts a journey with
 their 150-card pool and collaborative room control.
@@ -168,7 +168,7 @@ of duplicated cards have a deterministic browser-QA fixture.
 ```
 http://localhost:5173/?goto=atlas
 http://localhost:5173/?goto=augury
-http://localhost:5173/?goto=tutorial-dream-avatar-select
+http://localhost:5173/?goto=tutorial-avatar-select
 http://localhost:5173/?goto=duplication-enhanced
 http://localhost:5173/?goto=tutorial-battle
 http://localhost:5173/?goto=tutorial-victory
@@ -239,13 +239,11 @@ Example:
 http://localhost:5173/editor?q=moon&type=event&sort=name&dir=desc&size=large
 ```
 
-## Dream Avatar Editor
+## Avatar Editor
 
-The standalone Dream Avatar editor is available at `/dream-avatars`.
-`/avatars` and `/dreamavatars` are aliases that preserve the query string and
-hash while opening the canonical editor URL. Identity edits publish semantic
-operations to `data/dream_avatars.ron`; tide-pool edits publish typed semantic
-operations to the embedded `tide_pool` field in `data/dream_avatars.ron` in the
+The standalone Avatar editor is available at `/avatars`.
+Identity edits publish semantic operations to `data/avatars.ron`; tide-pool edits publish typed semantic
+operations to the embedded `tide_pool` field in `data/avatars.ron` in the
 same revision-checked transaction. Successful saves validate and regenerate the
 compatibility and runtime artifacts.
 

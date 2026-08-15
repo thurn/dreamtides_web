@@ -13,7 +13,7 @@ OpponentsCatalog(
   // Journey opponent difficulty schedule. Ability and Dreamsign unlocks apply
   // to every opponent; Legendary retention and Starter dilution tune decks.
   progression: ProgressionRules(
-    // The opponent DreamAvatar's ability is inactive below this layer.
+    // The opponent Avatar's ability is inactive below this layer.
     ability_active_from_layer: 1,
     // Opponents receive one deterministically selected Dreamsign from this
     // layer onward, provided Dreamsign templates are available.

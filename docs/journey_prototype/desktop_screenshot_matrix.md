@@ -83,7 +83,7 @@ npm run --silent screenshots:desktop -- --start --smoke --json
 
 The default `core` scene preset covers distinct layout families:
 
-- `dream-avatar-select`
+- `avatar-select`
 - `dreamscape`
 - `atlas`
 - `draft`
@@ -99,7 +99,7 @@ The default `core` scene preset covers distinct layout families:
 
 The `smoke` scene preset contains:
 
-- `dream-avatar-select`
+- `avatar-select`
 - `dreamscape`
 - `atlas`
 - `draft`

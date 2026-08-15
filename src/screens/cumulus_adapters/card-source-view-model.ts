@@ -41,7 +41,7 @@ export function buildCardSourceView(
     return {
       title: assertLocalized(debug.screenLabel),
       subtitle: assertLocalized(
-        `${surface(debug.surface)} dealt from your DreamAvatar's tides.`,
+        `${surface(debug.surface)} dealt from your Avatar's tides.`,
       ),
       construction: {
         id: "construction",

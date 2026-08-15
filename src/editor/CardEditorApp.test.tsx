@@ -3257,7 +3257,7 @@ describe("CardEditorApp", () => {
 
     expect(container.textContent).toContain("Card Editor");
     expect(container.textContent).not.toContain("Create Game");
-    expect(container.textContent).not.toContain("DreamAvatar");
+    expect(container.textContent).not.toContain("Avatar");
     expect(container.querySelector("[data-room-gate]")).toBeNull();
     expect(container.querySelector("[data-multiplayer-provider]")).toBeNull();
 
@@ -3746,9 +3746,9 @@ describe("CardEditorApp", () => {
         preview: makePreview({ id: "dreamlight", name: "Dreamlight Guide" }),
       }),
       makeEditorCard({
-        id: testCardId("dream-avatar"),
-        name: "Dream Avatar",
-        preview: makePreview({ id: "dream-avatar", name: "Dream Avatar" }),
+        id: testCardId("avatar"),
+        name: "Dream Walker",
+        preview: makePreview({ id: "avatar", name: "Dream Walker" }),
       }),
       makeEditorCard({
         id: testCardId("starlight"),
@@ -3792,7 +3792,7 @@ describe("CardEditorApp", () => {
     expect(container.textContent).toContain("“light”");
     expect(editorCardIds(container)).toEqual(
       expectedCardIds(
-        "dream-avatar",
+        "avatar",
         "dreamlight",
         "dreamlight",
         "starlight",
@@ -3808,7 +3808,7 @@ describe("CardEditorApp", () => {
         "starlight",
         "dreamlight",
         "dreamlight",
-        "dream-avatar",
+        "avatar",
       ),
     );
 

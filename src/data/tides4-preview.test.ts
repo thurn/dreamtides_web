@@ -10,16 +10,16 @@ import { makeRng } from "../draft/pool/rng.ts";
 import type { Tides4DecksJson } from "../draft/pool/tides4-io.ts";
 import { generateTides4 } from "../draft/pool/variant-tides4.ts";
 import type { PoolData } from "../draft/pool/types.ts";
-import type { DreamAvatarContent } from "../types/content.ts";
+import type { AvatarContent } from "../types/content.ts";
 import { hashStringToSeed, type RunPoolContext } from "./journey-content.ts";
 import { selectedTides4Decks } from "./tides4-preview.ts";
 import {
   testCardId,
-  testDreamAvatarId,
+  testAvatarId,
   testTideId,
 } from "../types/test-identities";
 
-const DREAM_AVATAR_ID = testDreamAvatarId("dc-a");
+const AVATAR_ID = testAvatarId("dc-a");
 const SIGNATURE_TIDE_ID = testTideId("tide-sig-1");
 
 function makeTides4(): Tides4DecksJson {
@@ -63,8 +63,8 @@ function makeTides4(): Tides4DecksJson {
     version: 2,
     selection: { bandFraction: 0.25, bandMinimum: 5 },
     tides,
-    tidePoolByDreamAvatar: {
-      [DREAM_AVATAR_ID]: {
+    tidePoolByAvatar: {
+      [AVATAR_ID]: {
         starter: SIGNATURE_TIDE_ID,
         facets: facetIds,
         neutral: neutralIds,
@@ -89,9 +89,9 @@ function makeContext(
   };
 }
 
-const DREAM_AVATAR: DreamAvatarContent = {
-  id: DREAM_AVATAR_ID,
-  name: "Fixture Dream Avatar",
+const AVATAR: AvatarContent = {
+  id: AVATAR_ID,
+  name: "Fixture Avatar",
   title: "Fixture",
   renderedText: "",
   imageNumber: "0000",
@@ -104,11 +104,11 @@ describe("selectedTides4Decks", () => {
     const ctx = makeContext(decks, "tides4");
     const seed = "journey-seed-1";
 
-    const preview = selectedTides4Decks(ctx, DREAM_AVATAR, testJourneySeed(seed));
+    const preview = selectedTides4Decks(ctx, AVATAR, testJourneySeed(seed));
     const direct = generateTides4(
-      makeRng(hashStringToSeed(`${seed}:${DREAM_AVATAR.id}`)),
+      makeRng(hashStringToSeed(`${seed}:${AVATAR.id}`)),
       ctx.poolData,
-      DREAM_AVATAR.id,
+      AVATAR.id,
     );
 
     expect(preview.map((t) => t.id)).toEqual(direct.selected.slice(1));
@@ -118,17 +118,17 @@ describe("selectedTides4Decks", () => {
 
   it("is deterministic for a given seed", () => {
     const ctx = makeContext(makeTides4(), "tides4");
-    const a = selectedTides4Decks(ctx, DREAM_AVATAR, testJourneySeed("seed-x"));
-    const b = selectedTides4Decks(ctx, DREAM_AVATAR, testJourneySeed("seed-x"));
+    const a = selectedTides4Decks(ctx, AVATAR, testJourneySeed("seed-x"));
+    const b = selectedTides4Decks(ctx, AVATAR, testJourneySeed("seed-x"));
     expect(a.map((t) => t.id)).toEqual(b.map((t) => t.id));
   });
 
   it("returns nothing when no tide artifact is loaded", () => {
     const ctx = makeContext(undefined, "tides4");
-    expect(selectedTides4Decks(ctx, DREAM_AVATAR, testJourneySeed("seed-x"))).toEqual([]);
+    expect(selectedTides4Decks(ctx, AVATAR, testJourneySeed("seed-x"))).toEqual([]);
   });
 
   it("returns nothing when there is no pool context", () => {
-    expect(selectedTides4Decks(undefined, DREAM_AVATAR, testJourneySeed("seed-x"))).toEqual([]);
+    expect(selectedTides4Decks(undefined, AVATAR, testJourneySeed("seed-x"))).toEqual([]);
   });
 });

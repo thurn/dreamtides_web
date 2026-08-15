@@ -214,7 +214,7 @@ Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal f
 
 2. A lone woman stands beneath an elephant towering through the luminous haze.
    - ***Honor the Colossal Beast*** — Gain a random legendary card.
-   - ***Approach the Lone Traveler*** — Pick a new Dream Avatar from 3 choices
+   - ***Approach the Lone Traveler*** — Pick a new Avatar from 3 choices
 
 3. Radiant mist surrounds a vast elephant watching a solitary traveler.
    - ***Follow the Luminous Tusks*** — Add a card market site to this dreamscape

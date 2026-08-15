@@ -55,7 +55,7 @@ export interface RichTextDefinition {
  *  - `plain` — a run of plain prose; no markup parsing.
  *  - `rules` — Dreamtides rules text (see `RulesText`): glossary keywords gain
  *    the spark-amber emphasis and resource symbols (`◆`, `●`, `⍏N`) render as
- *    their inline glyphs. Use for card / dreamAvatar / dreamsign ability text.
+ *    their inline glyphs. Use for card / avatar / dreamsign ability text.
  *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a
  *    "Locked" / "Visited" status shown under a site blurb.
  *  - `stack` — several parts laid out vertically as separate lines.

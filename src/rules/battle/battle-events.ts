@@ -15,7 +15,7 @@
 //     Defeat/draw freezes the failure summary and tears down the battle.
 //
 // The src/rules/ lint rails forbid Firebase, React, and any live clock/rng.
-// Battle init reads TOML-sourced card / deck / dreamAvatar data that only loads
+// Battle init reads TOML-sourced card / deck / avatar data that only loads
 // asynchronously, which the pure reducer cannot statically reach, so its
 // construction is delegated to the injectable {@link BattleInitProvider} seam
 // (mirroring `SiteContentProvider`): the reducer forwards the provider
@@ -25,7 +25,7 @@
 // content, so `END_BATTLE` delegates that one deterministic calculation to
 // {@link BattleCompletionProvider}; all state bookkeeping remains here.
 //
-// Cards / dreamAvatars are keyed by UUID and deck entries by entry-id — never
+// Cards / avatars are keyed by UUID and deck entries by entry-id — never
 // by name (AGENTS.md).
 
 import type { EventActor, EventContext } from "../../eventlog/types";
@@ -141,7 +141,7 @@ import {
   selectStarterCardLegalTargetIds,
   starterCardRequiresTarget,
 } from "../../battle/starter-card-targets";
-import { configuredTutorialJourneyDreamAvatarId } from "../front-door";
+import { configuredTutorialJourneyAvatarId } from "../front-door";
 import { resetJourney } from "../journey/lifecycle";
 import { canVisitSite, completeJourneySite, findSite } from "../journey/sites";
 import type {
@@ -165,8 +165,8 @@ import { parseCardId } from "../../types/card-identity";
 /**
  * The deterministic construction `BEGIN_BATTLE` needs to turn journey state into
  * a fresh {@link BattleFoldState}. The reducer resolves double-begin itself,
- * then delegates the immutable `init` (`BattleInit`) plus board / dreamAvatar /
- * opponent-deck construction — which reads async-loaded card, dreamAvatar, and
+ * then delegates the immutable `init` (`BattleInit`) plus board / avatar /
+ * opponent-deck construction — which reads async-loaded card, avatar, and
  * dreamwell data — to this provider.
  *
  * The registered provider (`createBattleInitProvider`) constructs the battle
@@ -425,8 +425,8 @@ export function exitTutorialBattle(
     return null;
   }
   const reset = resetJourney(state, ctx);
-  const tutorialDreamAvatarId = configuredTutorialJourneyDreamAvatarId();
-  if (tutorialDreamAvatarId === null) return null;
+  const tutorialAvatarId = configuredTutorialJourneyAvatarId();
+  if (tutorialAvatarId === null) return null;
   return {
     ...reset,
     frontDoor: { phase: "journey", journeyId: null, tutorial: null },
@@ -435,7 +435,7 @@ export function exitTutorialBattle(
       ...reset.journey,
       screen: {
         type: "journeyStart",
-        tutorialDreamAvatarId: tutorialDreamAvatarId,
+        tutorialAvatarId: tutorialAvatarId,
       },
     },
   };

@@ -291,7 +291,7 @@
     projections: [
       GlossaryProjection(
         // Limit this projection to rules text owned by the selected entity type.
-        owner: DreamAvatar,
+        owner: Avatar,
         definition: Tx("You may exhaust (☾) this avatar to activate this ability once per turn."),
       ),
     ],

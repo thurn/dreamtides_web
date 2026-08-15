@@ -5,7 +5,7 @@ import type { Tides4Tuning } from "../../types/draft-data";
 import type { CardData } from "../../types/cards";
 import type {
   AffiliationContent,
-  DreamAvatarContent,
+  AvatarContent,
   DreamsignTemplate,
 } from "../../types/content";
 import type { OpponentsData } from "../../types/opponents-data";
@@ -122,7 +122,7 @@ function iterativeDeck(args: {
 }
 
 export function buildTideOpponentDeck(args: {
-  opponentDreamAvatar: DreamAvatarContent | null;
+  opponentAvatar: AvatarContent | null;
   affiliation: AffiliationContent | null;
   cardDatabase: ReadonlyMap<number, CardData>;
   dreamsignTemplates: readonly DreamsignTemplate[];
@@ -136,14 +136,14 @@ export function buildTideOpponentDeck(args: {
   tides4Tuning: Tides4Tuning;
   deferLog?: (emit: () => void) => void;
 }): TideOpponentDeckBuild | null {
-  if (args.opponentDreamAvatar === null) return null;
+  if (args.opponentAvatar === null) return null;
   const cardNameById = new Map(
     [...args.cardDatabase.values()].map((card) => [card.id, card.name]),
   );
   const generated = generatePoolFromData(
     { tides4Decks: args.tides4Decks, cardNameById },
     args.poolSeed,
-    args.opponentDreamAvatar.id,
+    args.opponentAvatar.id,
     args.tides4Tuning,
   );
   const index = buildTideAffinityIndex(args.tides4Decks);
@@ -234,7 +234,7 @@ export function buildTideOpponentDeck(args: {
       algorithm: "unified-tide-affinity-v1",
       opponentsContentHash: args.opponentsContentHash,
       poolSeed: args.poolSeed,
-      dreamAvatarId: args.opponentDreamAvatar?.id ?? null,
+      avatarId: args.opponentAvatar?.id ?? null,
       affiliationId: args.affiliation?.id ?? null,
       affiliationTideIds: args.affiliation?.tideIds ?? [],
       joinedTideIds,

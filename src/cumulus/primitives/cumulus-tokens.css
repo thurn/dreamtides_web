@@ -153,7 +153,7 @@
   --positive: #22c55e;     /* player / grant green */
   --selected: #f97316;  /* default card selection ring */
   --reward: #d4a017;      /* victory and earned-reward moments */
-  --portrait-warmth: #d4a017; /* warm ambient light in DreamAvatar portrait stages */
+  --portrait-warmth: #d4a017; /* warm ambient light in Avatar portrait stages */
 
   /* ---- Lines / borders ---- */
   --border-soft: rgba(255, 255, 255, 0.07);
@@ -210,7 +210,7 @@
   /* ---- Display / serif scale (titles, place names) ---- */
   --t-wordmark: 600 clamp(72px, 10vw, 150px)/0.9 'EB Garamond', Georgia, 'Times New Roman', serif; /* Dreamtides main-menu wordmark */
   --t-display: 600 40px/1.04 'EB Garamond', Georgia, 'Times New Roman', serif;    /* screen hero title */
-  --t-hero: 600 46px/1.05 'EB Garamond', Georgia, 'Times New Roman', serif;       /* dream-avatar-select hero name */
+  --t-hero: 600 46px/1.05 'EB Garamond', Georgia, 'Times New Roman', serif;       /* avatar-select hero name */
   --t-hero-epithet: 500 21px/1.15 'EB Garamond', Georgia, 'Times New Roman', serif; /* the epithet under the hero name */
   --t-title: 600 30px/1.08 'EB Garamond', Georgia, 'Times New Roman', serif;      /* place / screen name */
   --t-title-sm: 600 23px/1.12 'EB Garamond', Georgia, 'Times New Roman', serif;   /* card-detail name, section */

@@ -62,7 +62,7 @@ id = "affiliation_one"
 name = "Affiliation One"
 `,
   );
-  writeFileSync(join(root, "data", "dream_avatars.toml"), "dreamAvatar = []\n");
+  writeFileSync(join(root, "data", "avatars.toml"), "avatar = []\n");
   return root;
 }
 

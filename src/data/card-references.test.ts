@@ -1,6 +1,6 @@
 // Guards the UUID-keyed card-reference systems against drift. Every hand-authored
 // place that names cards in data — the `signature-cards` in
-// `dream_avatars.toml` and the tutorial journey pool reference cards by stable
+// `avatars.toml` and the tutorial journey pool reference cards by stable
 // UUID from
 // `cards.toml`. These tests fail if any reference points at a UUID that is not
 // a real card, so renaming a card can never silently desynchronize one of these
@@ -30,7 +30,7 @@ interface RawCard {
   "card-number": number;
   roles?: string[];
 }
-interface RawDreamAvatar {
+interface RawAvatar {
   name: string;
   "signature-cards"?: unknown[];
 }
@@ -59,13 +59,13 @@ function expectCard(label: string, ref: CardId): CardName {
 
 describe("card references resolve to real cards", () => {
   it("every signature card is a real card UUID", () => {
-    const dreamAvatars = (
+    const avatars = (
       parseToml(
-        readFileSync(join(DATA_DIR, "dream_avatars.toml"), "utf8"),
-      ) as { dreamAvatar?: RawDreamAvatar[] }
-    ).dreamAvatar ?? [];
+        readFileSync(join(DATA_DIR, "avatars.toml"), "utf8"),
+      ) as { avatar?: RawAvatar[] }
+    ).avatar ?? [];
     let checked = 0;
-    for (const dc of dreamAvatars) {
+    for (const dc of avatars) {
       for (const rawRef of dc["signature-cards"] ?? []) {
         const ref = parseCardId(rawRef);
         expectCard(`signature[${dc.name}]`, ref);

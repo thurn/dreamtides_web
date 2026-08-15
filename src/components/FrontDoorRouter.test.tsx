@@ -23,7 +23,7 @@ const adapterMocks = vi.hoisted(() => ({
   tutorialDirectLive: null as boolean | null,
   tutorialVictoryPreview: null as boolean | null,
 }));
-const DREAM_AVATARS = [] as const;
+const AVATARS = [] as const;
 
 vi.mock("../state/front-door-context", () => ({
   useFrontDoor: () => ({
@@ -100,7 +100,7 @@ describe("FrontDoorRouter", () => {
     act(() =>
       root.render(
         <FrontDoorRouter
-          dreamAvatars={DREAM_AVATARS}
+          avatars={AVATARS}
           tutorialPlaybackSpeed={4}
         />,
       ),
@@ -112,7 +112,7 @@ describe("FrontDoorRouter", () => {
     act(() =>
       root.render(
         <FrontDoorRouter
-          dreamAvatars={DREAM_AVATARS}
+          avatars={AVATARS}
           tutorialPlaybackSpeed={4}
         />,
       ),
@@ -127,7 +127,7 @@ describe("FrontDoorRouter", () => {
     act(() =>
       root.render(
         <FrontDoorRouter
-          dreamAvatars={DREAM_AVATARS}
+          avatars={AVATARS}
           tutorialPlaybackSpeed={4}
         />,
       ),
@@ -140,7 +140,7 @@ describe("FrontDoorRouter", () => {
     act(() =>
       root.render(
         <FrontDoorRouter
-          dreamAvatars={DREAM_AVATARS}
+          avatars={AVATARS}
           tutorialPlaybackSpeed={4}
         />,
       ),
@@ -153,7 +153,7 @@ describe("FrontDoorRouter", () => {
     act(() =>
       root.render(
         <FrontDoorRouter
-          dreamAvatars={DREAM_AVATARS}
+          avatars={AVATARS}
           tutorialPlaybackSpeed={4}
           journey={<main data-journey-screen />}
         />,
@@ -171,7 +171,7 @@ describe("FrontDoorRouter", () => {
     const root = createRoot(container);
     act(() =>
       root.render(
-        <FrontDoorRouter dreamAvatars={DREAM_AVATARS} directTutorialBattle />,
+        <FrontDoorRouter avatars={AVATARS} directTutorialBattle />,
       ),
     );
     expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
@@ -187,7 +187,7 @@ describe("FrontDoorRouter", () => {
 
     act(() =>
       root.render(
-        <FrontDoorRouter dreamAvatars={DREAM_AVATARS} previewTutorialVictory />,
+        <FrontDoorRouter avatars={AVATARS} previewTutorialVictory />,
       ),
     );
     expect(adapterMocks.tutorialDirectLive).toBe(true);
@@ -195,7 +195,7 @@ describe("FrontDoorRouter", () => {
     stateMocks.battle = { mode: { kind: "tutorial" } };
     act(() =>
       root.render(
-        <FrontDoorRouter dreamAvatars={DREAM_AVATARS} previewTutorialVictory />,
+        <FrontDoorRouter avatars={AVATARS} previewTutorialVictory />,
       ),
     );
     expect(adapterMocks.tutorialVictoryPreview).toBe(true);

@@ -215,7 +215,7 @@ const OFFER_COUNT_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> = new Set([
   "gain-offered-dreamsign",
   "replace-selected-dreamsign-with-offered",
   "copy-offered-deck-card",
-  "choose-dream-avatar",
+  "choose-avatar",
   "transfigured-card-draft",
   "choose-site-type",
   "take-transfigured-cards-and-gain-nightmares",

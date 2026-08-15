@@ -103,7 +103,7 @@ function genesisJourneyState(genesis: Genesis): JourneyState {
     essence: defaultStartingEssence,
     maxDreamsigns: dreamsignCap,
     deck: [],
-    dreamAvatar: null,
+    avatar: null,
     resolvedPackage: null,
     cardSourceDebug: null,
     remainingDreamsignPool: [],

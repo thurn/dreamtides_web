@@ -4,7 +4,7 @@
 // irreducibly-arbitrary string that no type can meaningfully constrain, and
 // resolving it at the call site scatters the id → URL mapping across screens.
 // Instead a component takes an `ArtRef` — a small discriminated union naming
-// WHAT art to show (a dreamsign by its image name, a dreamAvatar by its number,
+// WHAT art to show (a dreamsign by its image name, an avatar by its number,
 // a dreamscape by its id) — and resolves the URL itself via `resolveArtRef`.
 // The id → URL mapping lives here, once.
 
@@ -38,15 +38,15 @@ export type ArtRef =
       readonly imageName: string;
     }
   | {
-      /** A dreamAvatar portrait, keyed by its zero-padded image number. */
-      readonly kind: "dreamAvatar";
+      /** An avatar portrait, keyed by its zero-padded image number. */
+      readonly kind: "avatar";
       readonly imageNumber: string;
     }
   | {
-      /** A dreamAvatar's transparent full-body cutout (the character render
+      /** An avatar's transparent full-body cutout (the character render
        * with the scene background removed), keyed by its zero-padded image
        * number. */
-      readonly kind: "dream-avatar-cutout";
+      readonly kind: "avatar-cutout";
       readonly imageNumber: string;
     }
   | {
@@ -84,10 +84,10 @@ export function resolveArtRef(ref: ArtRef): string {
       return assetUrl("/main-menu/background.jpg");
     case "dreamsign":
       return assetUrl(`/dreamsigns/${ref.imageName}`);
-    case "dreamAvatar":
-      return assetUrl(`/dream-avatars/${ref.imageNumber}.png`);
-    case "dream-avatar-cutout":
-      return assetUrl(`/dream-avatars/cutout/${ref.imageNumber}.png`);
+    case "avatar":
+      return assetUrl(`/avatars/${ref.imageNumber}.png`);
+    case "avatar-cutout":
+      return assetUrl(`/avatars/cutout/${ref.imageNumber}.png`);
     case "dreamscape-icon":
       return assetUrl(`/dreamscape-icons/${ref.dreamscapeId}.png`);
     case "dreamscape-scene":
@@ -110,12 +110,12 @@ export function resolveArtRef(ref: ArtRef): string {
 export const artRef = {
   mainMenuBackground: (): ArtRef => ({ kind: "main-menu-background" }),
   dreamsign: (imageName: string): ArtRef => ({ kind: "dreamsign", imageName }),
-  dreamAvatar: (imageNumber: string): ArtRef => ({
-    kind: "dreamAvatar",
+  avatar: (imageNumber: string): ArtRef => ({
+    kind: "avatar",
     imageNumber,
   }),
-  dreamAvatarCutout: (imageNumber: string): ArtRef => ({
-    kind: "dream-avatar-cutout",
+  avatarCutout: (imageNumber: string): ArtRef => ({
+    kind: "avatar-cutout",
     imageNumber,
   }),
   dreamscapeIcon: (dreamscapeId: DreamscapeId): ArtRef => ({

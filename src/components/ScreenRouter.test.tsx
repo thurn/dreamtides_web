@@ -43,7 +43,7 @@ import { parseAtlasNodeId } from "../types/identifiers";
 import { parseBattleId } from "../types/identifiers";
 import { parseShuffleCommitment } from "../types/identifiers";
 import { parseDeckEntryId } from "../types/identifiers";
-import { testDreamscapeId, testDreamsignId, testExplorationActionId, testCardId, testDreamAvatarId } from "../types/test-identities";
+import { testDreamscapeId, testDreamsignId, testExplorationActionId, testCardId, testAvatarId } from "../types/test-identities";
 
 const motionPreference = vi.hoisted(() => ({
   reduced: false,
@@ -228,7 +228,7 @@ function makeMutations(): JourneyMutations {
   return {
     changeEssence: vi.fn(),
     startJourney: vi.fn(),
-    rerollDreamAvatarOffer: vi.fn(),
+    rerollAvatarOffer: vi.fn(),
     completeSite: vi.fn(),
     ensureGambleSiteRuntime: vi.fn(),
     ensureExplorationSiteRuntime: vi.fn(),
@@ -278,7 +278,7 @@ function makeMutations(): JourneyMutations {
     addCard: vi.fn(),
     removeCard: vi.fn(),
     transfigureCard: vi.fn(),
-    setDreamAvatarSelection: vi.fn(),
+    setAvatarSelection: vi.fn(),
     setCardSourceDebug: vi.fn(),
     addDreamsign: vi.fn(),
     removeDreamsign: vi.fn(),
@@ -535,8 +535,8 @@ describe("ScreenRouter Augury routing", () => {
     const site = makeSite("Augury");
     const mutations = makeMutations();
     const state = makeStateFor(site);
-    state.dreamAvatar = {
-      id: testDreamAvatarId("72000000-0000-4000-8000-000000000001"),
+    state.avatar = {
+      id: testAvatarId("72000000-0000-4000-8000-000000000001"),
       name: "Menu Fixture",
       title: "Keeper of Tests",
       renderedText: "",
@@ -808,8 +808,8 @@ describe("ScreenRouter terminal Cumulus routing", () => {
     const state = createDefaultState();
     state.screen = { type: "journeyFailed" };
     state.completionLevel = 2;
-    state.dreamAvatar = {
-      id: testDreamAvatarId("73000000-0000-4000-8000-000000000001"),
+    state.avatar = {
+      id: testAvatarId("73000000-0000-4000-8000-000000000001"),
       name: "Failure Fixture",
       title: "Keeper of the Last Test",
       renderedText: "A fixture ability.",

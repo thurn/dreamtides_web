@@ -26,9 +26,9 @@ Read these first:
   derives `state` from `session.room.journeyState` (defaulting via
   `createDefaultState()` when the room has no journey yet) and exposes
   `useJourney()` so screens see the same shape as the single-player path.
-- Journey start is a **Dream Avatar selection** screen with 3 choices. Picking a
-  Dream Avatar resolves a fixed package, builds the starter deck, draft state,
-  and atlas via `startJourneyFromDreamAvatar`, and transitions
+- Journey start is a **Avatar selection** screen with 3 choices. Picking a
+  Avatar resolves a fixed package, builds the starter deck, draft state,
+  and atlas via `startJourneyFromAvatar`, and transitions
   `state.screen` straight to the first dreamscape.
 - Top-level state is `JourneyState` in `src/types/journey.ts`. Routing is driven
   by `state.screen` and dispatched in
@@ -89,7 +89,7 @@ npm run dev
 script is idempotent and refreshes:
 
 - `public/card-data.json`
-- `public/dream-avatars-v2-data.json`
+- `public/avatars-v2-data.json`
 - `public/cards/` symlinks into the local image cache
 
 Useful one-offs:
@@ -118,9 +118,9 @@ typecheck, lint, tests, or browser QA in a fresh worktree.
 | `src/state/journey-context.tsx` | `useJourney()` consumer hook, `createDefaultState()`, single-player provider for tests |
 | `src/types/journey.ts` | `JourneyState`, `Screen`, `SiteType`, atlas/site types |
 | `src/components/ScreenRouter.tsx` | Dispatches `state.screen` and site screens |
-| `src/screens/JourneyStartScreen.tsx` | Dream Avatar offer UI |
-| `src/state/journey-state-actions.ts` | `startJourneyFromDreamAvatar`, screen/site/atlas transitions |
-| `src/data/journey-content.ts` | Loads normalized journey content and validates Dream Avatar packages |
+| `src/screens/JourneyStartScreen.tsx` | Avatar offer UI |
+| `src/state/journey-state-actions.ts` | `startJourneyFromAvatar`, screen/site/atlas transitions |
+| `src/data/journey-content.ts` | Loads normalized journey content and validates Avatar packages |
 | `src/atlas/atlas-generator.ts` | Atlas generation, site pools, site metadata, dreamscape creation |
 | `src/draft/draft-engine.ts` | Fixed-pool draft logic with 4-card offers and persisted draft state |
 | `src/firebase/app-config.ts` | Reads `VITE_FIREBASE_*` env vars and initializes the Firebase app + database |
@@ -205,8 +205,8 @@ agent-browser --session <unique-name> snapshot -i -c
 ```
 
 The landing screen exposes a single `Create Game` button. Click it; the URL
-becomes `?game=<roomId>` and the snapshot reveals the 3-Dream Avatar selection.
-Picking a Dream Avatar transitions straight to the first dreamscape.
+becomes `?game=<roomId>` and the snapshot reveals the 3-Avatar selection.
+Picking an Avatar transitions straight to the first dreamscape.
 
 ### Capturing Render-Time Errors
 
@@ -268,8 +268,8 @@ change can affect journey-wide progression or persistence:
 1. Open the app and confirm the landing screen renders a single
    **Create Game** button.
 2. Click **Create Game**. Confirm the URL gains `?game=<6-char-id>` and the
-   snapshot shows exactly 3 Dream Avatar buttons.
-3. Pick a Dream Avatar. Confirm the snapshot transitions to the dreamscape
+   snapshot shows exactly 3 Avatar buttons.
+3. Pick an Avatar. Confirm the snapshot transitions to the dreamscape
    view (biome heading, list of sites, HUD with Essence/Cards/Signs counts,
    `1 connected` presence indicator).
 4. Enter a non-battle site. Battle should stay locked until the other sites
@@ -300,7 +300,7 @@ agent-browser --session <unique-name> screenshot /tmp/qs-interaction.png
 
 Inspect screenshots visually after capture. Verify:
 
-- card art and Dream Avatar portraits load
+- card art and Avatar portraits load
 - layout spacing is stable
 - battle/site buttons are not clipped or overlapped
 - HUD values make sense for the current state

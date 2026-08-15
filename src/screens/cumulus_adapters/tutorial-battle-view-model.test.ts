@@ -29,8 +29,8 @@ const player = {
   owner: "player",
   position: "near",
   status: {
-    dreamAvatar: null,
-    dreamAvatarProfile: {
+    avatar: null,
+    avatarProfile: {
       id: "player-avatar-uuid",
       ability: assertLocalized("Player printed ability."),
     },
@@ -44,8 +44,8 @@ const enemy = {
   owner: "enemy",
   position: "far",
   status: {
-    dreamAvatar: null,
-    dreamAvatarProfile: {
+    avatar: null,
+    avatarProfile: {
       id: "enemy-avatar-uuid",
       ability: assertLocalized("Enemy printed ability."),
     },
@@ -488,7 +488,7 @@ describe("buildTutorialBattleView", () => {
     });
   });
 
-  it("keeps both DreamAvatar abilities unavailable after the scripted handoff", () => {
+  it("keeps both Avatar abilities unavailable after the scripted handoff", () => {
     vi.mocked(buildMobileBattleView).mockReturnValue({
       perspective: "player",
       player,
@@ -520,12 +520,12 @@ describe("buildTutorialBattleView", () => {
       null,
     );
 
-    expect(view.battle.player.status.dreamAvatarProfile).toEqual({
+    expect(view.battle.player.status.avatarProfile).toEqual({
       id: "player-avatar-uuid",
       ability: "Avatar ability is not active",
       unavailable: true,
     });
-    expect(view.battle.enemy.status.dreamAvatarProfile).toEqual({
+    expect(view.battle.enemy.status.avatarProfile).toEqual({
       id: "enemy-avatar-uuid",
       ability: "Avatar ability is not active",
       unavailable: true,

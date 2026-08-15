@@ -36,7 +36,7 @@ import { openSite, registerSiteContentProvider } from "../rules/journey/sites";
 import { buyShopSlot, rerollShop } from "../rules/journey/shop";
 import type {
   ApollyonIncarnationContent,
-  DreamAvatarContent,
+  AvatarContent,
 } from "../types/content";
 import {
   buildTestCorpusCards,
@@ -57,14 +57,14 @@ import type { CardId } from "../types/card-identity";
 import type { SiteId } from "../types/identifiers";
 import type { ExplorationActionId } from "../types/identifiers";
 import { parseDeckEntryId } from "../types/identifiers";
-import { testApollyonIncarnationId, testCardId, testDreamscapeId, testExplorationActionId, testGuideId, testDreamAvatarId, testDreamsignId } from "../types/test-identities";
+import { testApollyonIncarnationId, testCardId, testDreamscapeId, testExplorationActionId, testGuideId, testAvatarId, testDreamsignId } from "../types/test-identities";
 
-const TUTORIAL_DREAM_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
+const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
-function makeDreamAvatar(id = "dream-avatar-1"): DreamAvatarContent {
+function makeAvatar(id = "avatar-1"): AvatarContent {
   return {
-    id: testDreamAvatarId(id),
-    name: "Test DreamAvatar",
+    id: testAvatarId(id),
+    name: "Test Avatar",
     title: "Caller of Tests",
     renderedText: "Test ability.",
     imageNumber: "0001",
@@ -101,7 +101,7 @@ function makeJourneyContent(
     draftData: draftDataFixture(),
     cardDatabase,
     tutorial: makeTutorialConfiguration(),
-    dreamAvatars: [makeDreamAvatar()],
+    avatars: [makeAvatar()],
     dreamwellCards: [],
     dreamsignTemplates: [],
     dreamscapes: MINIMAL_DREAMSCAPES,
@@ -149,47 +149,47 @@ describe("QA scenes", () => {
   });
 });
 
-describe('the "dream-avatar-select" QA scene', () => {
-  it("parks the run on the journeyStart DreamAvatar selection screen", () => {
+describe('the "avatar-select" QA scene', () => {
+  it("parks the run on the journeyStart Avatar selection screen", () => {
     const state = buildQaScene(
-      parseQaSceneId("dream-avatar-select"),
+      parseQaSceneId("avatar-select"),
       makeJourneyContent(),
     );
 
     expect(state).not.toBeNull();
     expect(state?.screen.type).toBe("journeyStart");
-    // The selection screen is shown before a DreamAvatar is chosen, so no
-    // DreamAvatar, package, or draft state has been resolved yet.
-    expect(state?.dreamAvatar).toBeNull();
+    // The selection screen is shown before an Avatar is chosen, so no
+    // Avatar, package, or draft state has been resolved yet.
+    expect(state?.avatar).toBeNull();
     expect(state?.resolvedPackage).toBeNull();
     expect(state?.draftState).toBeNull();
   });
 });
 
-describe('the "tutorial-dream-avatar-select" QA scene', () => {
-  it("parks journeyStart on the one fixed tutorial DreamAvatar UUID", () => {
+describe('the "tutorial-avatar-select" QA scene', () => {
+  it("parks journeyStart on the one fixed tutorial Avatar UUID", () => {
     const content = makeJourneyContent();
-    content.dreamAvatars = [makeDreamAvatar(TUTORIAL_DREAM_AVATAR_ID)];
+    content.avatars = [makeAvatar(TUTORIAL_AVATAR_ID)];
 
     const state = buildQaScene(
-      parseQaSceneId("tutorial-dream-avatar-select"),
+      parseQaSceneId("tutorial-avatar-select"),
       content,
     );
 
     expect(state).not.toBeNull();
     expect(state?.screen).toEqual({
       type: "journeyStart",
-      tutorialDreamAvatarId: testDreamAvatarId(TUTORIAL_DREAM_AVATAR_ID),
+      tutorialAvatarId: testAvatarId(TUTORIAL_AVATAR_ID),
     });
-    expect(state?.dreamAvatar).toBeNull();
+    expect(state?.avatar).toBeNull();
     expect(state?.resolvedPackage).toBeNull();
     expect(state?.draftState).toBeNull();
   });
 
-  it("fails to build when the required tutorial DreamAvatar is unavailable", () => {
+  it("fails to build when the required tutorial Avatar is unavailable", () => {
     expect(
       buildQaScene(
-        parseQaSceneId("tutorial-dream-avatar-select"),
+        parseQaSceneId("tutorial-avatar-select"),
         makeJourneyContent(),
       ),
     ).toBeNull();
@@ -205,7 +205,7 @@ describe('the "atlas" QA scene', () => {
     // Between dreamscapes: no dreamscape entered and no active site.
     expect(state?.currentDreamscape).toBeNull();
     expect(state?.activeSiteId).toBeNull();
-    expect(state?.dreamAvatar?.id).toBe(testDreamAvatarId("dream-avatar-1"));
+    expect(state?.avatar?.id).toBe(testAvatarId("avatar-1"));
 
     const bossNodeId = state?.atlas.bossNodeId;
     expect(bossNodeId).toBeTruthy();
@@ -253,7 +253,7 @@ describe('the "random-site-atlas" QA scene', () => {
         signatureSite: "RandomSite",
         affiliationId: null,
         isStarter: false,
-        dreamAvatarIds: [],
+        avatarIds: [],
       },
     ];
     content.guides = [
@@ -2098,7 +2098,7 @@ describe('the "exploration" QA scene', () => {
       canonicalMechanicId: "shop-purchase-modifier",
       offeredCardIds: [],
       offeredDeckEntryIds: [],
-      offeredDreamAvatarIds: [],
+      offeredAvatarIds: [],
       offeredDreamsignIds: [],
       packCardIds: [],
       replacementCardIdByEntryId: {},
@@ -2249,7 +2249,7 @@ describe('the "exploration" QA scene', () => {
       canonicalMechanicId: "shop-purchase-modifier",
       offeredCardIds: [],
       offeredDeckEntryIds: [],
-      offeredDreamAvatarIds: [],
+      offeredAvatarIds: [],
       offeredDreamsignIds: [],
       packCardIds: [],
       replacementCardIdByEntryId: {},

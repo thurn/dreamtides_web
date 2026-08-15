@@ -9,12 +9,12 @@ import type { CardData } from "../types/cards";
 import { parseCardName } from "../types/card-identity";
 import type {
   DreamsignTemplate,
-  ResolvedDreamAvatarPackage,
+  ResolvedAvatarPackage,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
 import { DebugScreen } from "./DebugScreen";
 import { parseSiteId } from "../types/identifiers";
-import { testDreamAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
+import { testAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -69,10 +69,10 @@ function makeCard(cardNumber: number, name: string): CardData {
   };
 }
 
-function makeResolvedPackage(): ResolvedDreamAvatarPackage {
+function makeResolvedPackage(): ResolvedAvatarPackage {
   return {
-    dreamAvatar: {
-      id: testDreamAvatarId("caller-1"),
+    avatar: {
+      id: testAvatarId("caller-1"),
       name: "Caller of Lanterns",
       title: "Auditor of Debug Panels",
       renderedText: "Test rules text.",

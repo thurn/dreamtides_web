@@ -1,11 +1,11 @@
 import { assertLocalized } from "@trox/runtime";
 // Full-screen mockup for JourneyStatusBar — the transparent journey HUD docked over
 // a real dreamscape backdrop. JourneyStatusBar positions itself against `stageRef`
-// (the screen root) and reveals its essence / DreamAvatar / dreamsign info cards
+// (the screen root) and reveals its essence / Avatar / dreamsign info cards
 // through the shared reveal engine, so the mockup supplies a full-viewport
 // scene-art stage, owns the stageRef, and lets the HUD sit at the bottom over the
 // art — the `.hud-outline` legibility treatment visibly earning its keep. The
-// DreamAvatar portrait and dreamsign art resolve from real assets in `public/`.
+// Avatar portrait and dreamsign art resolve from real assets in `public/`.
 
 import { useRef } from "react";
 import { JourneyStatusBar } from "../../components/hud/JourneyStatusBar";
@@ -16,7 +16,7 @@ import { sceneRoot } from "./scene";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { parseDreamscapeId } from "../../../types/identifiers";
 import { parseDreamsignId } from "../../../types/identifiers";
-import { parseDreamAvatarId } from "../../../types/identifiers";
+import { parseAvatarId } from "../../../types/identifiers";
 
 export function JourneyStatusBarMockup() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -53,7 +53,7 @@ export function JourneyStatusBarMockup() {
             marginTop: token("--space-xs"),
           }}
         >
-          Press essence, the DreamAvatar, or a dreamsign to read it.
+          Press essence, the Avatar, or a dreamsign to read it.
         </div>
       </div>
 
@@ -62,11 +62,11 @@ export function JourneyStatusBarMockup() {
         stageRef={stageRef}
         essence={240}
         deck={23}
-        dreamAvatar={{
-          id: parseDreamAvatarId("00000000-0000-4000-8000-000000000051"),
+        avatar={{
+          id: parseAvatarId("00000000-0000-4000-8000-000000000051"),
           name: assertLocalized("Threxan"),
           epithet: assertLocalized("the Resounding Wrath"),
-          portrait: artRef.dreamAvatar("0025"),
+          portrait: artRef.avatar("0025"),
           ability: assertLocalized(
             "At the start of your first turn, draw a card.",
           ),

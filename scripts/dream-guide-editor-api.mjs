@@ -4,7 +4,7 @@ import {
   SITE_TYPES,
   makeValidateDreamscapeEdit,
   readAffiliationOptions,
-  readDreamAvatarOptions,
+  readAvatarOptions,
   readDreamGuideOptions,
   readEditorDreamscapes,
 } from "./dreamscape-editor-data.mjs";
@@ -52,7 +52,7 @@ function collectionPayload(rootDir, revision) {
     dreamscapes: readEditorDreamscapes({ rootDir }),
     guides: readDreamGuideOptions({ rootDir }),
     affiliations: readAffiliationOptions({ rootDir }),
-    dreamAvatars: readDreamAvatarOptions({ rootDir }),
+    avatars: readAvatarOptions({ rootDir }),
     siteTypes: SITE_TYPES,
     sourceRevision: revision(rootDir, DREAM_GUIDE_EDITOR_SOURCE_PATHS),
   };

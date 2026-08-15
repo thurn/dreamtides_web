@@ -7,7 +7,7 @@ import {
 import type { CardId, CardName } from "../../types/card-identity";
 
 /**
- * A card chosen to represent an opponent DreamAvatar's ability before battle.
+ * A card chosen to represent an opponent Avatar's ability before battle.
  * Carried on {@link BattleEnemyDescriptor} so the Battle Start screen can show
  * the three cards that best embody what the opponent is trying to do.
  *
@@ -21,7 +21,7 @@ export interface SignatureCardSelection {
   cardNumber: number;
   name: CardName;
   /**
-   * The glossary keywords this card shares with the DreamAvatar's ability text,
+   * The glossary keywords this card shares with the Avatar's ability text,
    * in canonical form (e.g. `"Abandon"`, `"Reclaim"`). Empty when the card was
    * chosen purely on the rarity / cost tie-breakers (no shared mechanic). Kept
    * for the reconstruction log so a production pick can be explained.
@@ -84,14 +84,14 @@ function cardTypeRank(cardType: CardData["cardType"]): number {
 
 /**
  * Selects the cards from an opponent's deck that are most representative of its
- * DreamAvatar's ability — a small, deterministic "signature card" algorithm.
+ * Avatar's ability — a small, deterministic "signature card" algorithm.
  *
  * The intent: an opponent's ability names a mechanic (abandon, reclaim,
  * materialize, …), and the cards that best embody the opponent are the ones
  * that lean into that same mechanic. We measure this through the shared
  * controlled vocabulary (the {@link GLOSSARY}):
  *
- *   1. Reduce the DreamAvatar's ability text to its set of glossary keywords.
+ *   1. Reduce the Avatar's ability text to its set of glossary keywords.
  *   2. Reduce each candidate card's rules text to its glossary keywords.
  *   3. Weight each keyword by its inverse document frequency across the deck, so
  *      a keyword that defines the deck (held by few cards) counts for more than
@@ -113,7 +113,7 @@ function cardTypeRank(cardType: CardData["cardType"]): number {
  * signature set rather than an empty one).
  */
 export function selectSignatureCards(args: {
-  /** The opponent DreamAvatar's ability text (`renderedText`). */
+  /** The opponent Avatar's ability text (`renderedText`). */
   abilityText: string;
   /** The opponent's deck cards. Deduplicated and filtered internally. */
   candidates: readonly CardData[];

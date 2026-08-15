@@ -7,7 +7,7 @@ import { createDefaultState, useJourney } from "../state/journey-context";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { CumulusJourneyChrome } from "./CumulusJourneyChrome";
 import { parseDeckEntryId } from "../types/identifiers";
-import { testDreamAvatarId, testDreamsignId } from "../types/test-identities";
+import { testAvatarId, testDreamsignId } from "../types/test-identities";
 
 vi.mock("../state/journey-context", async (importOriginal) => {
   const actual =
@@ -54,9 +54,9 @@ beforeEach(() => {
     transfiguration: null,
     isBane: false,
   }));
-  state.dreamAvatar = {
-    id: testDreamAvatarId("00000000-0000-4000-8000-000000000001"),
-    name: "Test DreamAvatar",
+  state.avatar = {
+    id: testAvatarId("00000000-0000-4000-8000-000000000001"),
+    name: "Test Avatar",
     title: "Keeper of Chrome",
     renderedText: "Draw a card.",
     imageNumber: "0001",
@@ -220,7 +220,7 @@ describe("CumulusJourneyChrome", () => {
       ["1", "2"],
     ]);
     expect(container.querySelector('[aria-label^="View deck"]')).toBeNull();
-    expect(container.querySelector('[aria-label="DreamAvatar"]')).toBeNull();
+    expect(container.querySelector('[aria-label="Avatar"]')).toBeNull();
     expect(
       container.querySelector('[data-testid="dreamscape-menu-button"]'),
     ).toBeNull();

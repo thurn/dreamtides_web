@@ -3,17 +3,17 @@ import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type {
   AffiliationContent,
-  DreamAvatarContent,
+  AvatarContent,
   DreamsignTemplate,
 } from "../../types/content";
 import type { Tides4DecksJson } from "../../draft/pool/tides4-io";
 import { buildTideOpponentDeck } from "./tide-opponent-deck";
-import { testAffiliationId, testDreamAvatarId, testTideId, testCardId, testDreamsignId, testContentHash } from "../../types/test-identities";
+import { testAffiliationId, testAvatarId, testTideId, testCardId, testDreamsignId, testContentHash } from "../../types/test-identities";
 
 const FACET_TIDE_ID = testTideId("facet-a");
 
-const AVATAR: DreamAvatarContent = {
-  id: testDreamAvatarId("avatar-a"),
+const AVATAR: AvatarContent = {
+  id: testAvatarId("avatar-a"),
   name: "Synthetic Avatar",
   title: "Fixture",
   renderedText: "A synthetic ability.",
@@ -93,7 +93,7 @@ const TIDES: Tides4DecksJson = {
       cards: POOL_CARDS.slice(22).map((entry) => ({ id: entry.id, copies: 1 })),
     },
   ],
-  tidePoolByDreamAvatar: {
+  tidePoolByAvatar: {
     [AVATAR.id]: {
       starter: testTideId("signature-a"),
       facets: [FACET_TIDE_ID],
@@ -117,7 +117,7 @@ function build(completionLevel: number, reverse = false) {
   const cards = [...POOL_CARDS, ...STARTERS];
   if (reverse) cards.reverse();
   return buildTideOpponentDeck({
-    opponentDreamAvatar: AVATAR,
+    opponentAvatar: AVATAR,
     affiliation: AFFILIATION,
     cardDatabase: new Map(cards.map((entry) => [entry.cardNumber, entry])),
     dreamsignTemplates: DREAMSIGNS,

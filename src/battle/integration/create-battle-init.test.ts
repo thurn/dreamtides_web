@@ -2,7 +2,7 @@ import { testJourneySeed } from "../../types/test-identities";
 import { describe, expect, it } from "vitest";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamAvatars,
+  makeBattleTestAvatars,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../test-support";
@@ -13,7 +13,7 @@ import {
 import { deriveBattleSeed } from "../random";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
-import type { DreamAvatarContent } from "../../types/content";
+import type { AvatarContent } from "../../types/content";
 import type {
   CardKeywordModification,
   CardTypeChange,
@@ -33,7 +33,7 @@ import { parseCardTypeChangePredicateId } from "../../types/identifiers";
 import {
   testCardId,
   testContentHash,
-  testDreamAvatarId,
+  testAvatarId,
   testDreamsignId,
 } from "../../types/test-identities";
 import { testJourneyMutationSource } from "../../types/test-identities";
@@ -49,7 +49,7 @@ function makeBaseInput(): CreateBattleInitInput {
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
-    dreamAvatars: makeBattleTestDreamAvatars(),
+    avatars: makeBattleTestAvatars(),
   };
 }
 
@@ -84,16 +84,16 @@ function makePackageCard(
 }
 
 /**
- * Returns a single-DreamAvatar set whose DreamAvatar carries the given signature
+ * Returns a single-Avatar set whose Avatar carries the given signature
  * cards, so the enemy descriptor is deterministic and its signature steers the
  * enemy deck.
  */
-function makeSignatureDreamAvatars(
+function makeSignatureAvatars(
   signatureCards: readonly string[],
-): DreamAvatarContent[] {
+): AvatarContent[] {
   return [
     {
-      id: testDreamAvatarId("signature-dc"),
+      id: testAvatarId("signature-dc"),
       name: "Signature Sentinel",
       title: "Steering Test",
       renderedText: "",
@@ -161,7 +161,7 @@ describe("createBattleInit", () => {
       opponentsData,
       state,
       cardDatabase,
-      dreamAvatars: makeSignatureDreamAvatars(signatureCardIds),
+      avatars: makeSignatureAvatars(signatureCardIds),
     });
 
     expect(init.playerDeckOrder).toHaveLength(16);
@@ -888,27 +888,27 @@ describe("createBattleInit", () => {
       expect(Object.isFrozen(init.enemyDescriptor)).toBe(true);
     });
 
-    it("uses the selected DreamAvatar's exact identity for real enemies", () => {
+    it("uses the selected Avatar's exact identity for real enemies", () => {
       const input = makeBaseInput();
       const init = createBattleInit(input);
-      const selectedDreamAvatar = input.dreamAvatars.find((dreamAvatar) =>
-        init.enemyDescriptor.id.startsWith(`enemy:${dreamAvatar.id}:`),
+      const selectedAvatar = input.avatars.find((avatar) =>
+        init.enemyDescriptor.id.startsWith(`enemy:${avatar.id}:`),
       );
 
-      expect(selectedDreamAvatar).toBeDefined();
-      expect(init.enemyDescriptor.name).toBe(selectedDreamAvatar?.name);
-      // The descriptor carries the DreamAvatar's title as its subtitle so the
+      expect(selectedAvatar).toBeDefined();
+      expect(init.enemyDescriptor.name).toBe(selectedAvatar?.name);
+      // The descriptor carries the Avatar's title as its subtitle so the
       // Battle Start name plate and the in-battle side summary can show it.
-      expect(init.enemyDescriptor.subtitle).toBe(selectedDreamAvatar?.title);
+      expect(init.enemyDescriptor.subtitle).toBe(selectedAvatar?.title);
       for (const prefix of ["Shadow", "Nightmare", "Phantom", "Dark"]) {
         expect(init.enemyDescriptor.name.startsWith(`${prefix} `)).toBe(false);
       }
     });
 
-    it("falls back to a synthetic descriptor when no dreamAvatars are available", () => {
+    it("falls back to a synthetic descriptor when no avatars are available", () => {
       const init = createBattleInit({
         ...makeBaseInput(),
-        dreamAvatars: [],
+        avatars: [],
       });
 
       expect(init.enemyDescriptor.id).toBe("enemy:fallback");
@@ -1081,8 +1081,8 @@ describe("createBattleInit", () => {
       for (const summary of init.dreamsignSummaries) {
         expect(Object.isFrozen(summary)).toBe(true);
       }
-      if (init.dreamAvatarSummary !== null) {
-        expect(Object.isFrozen(init.dreamAvatarSummary)).toBe(true);
+      if (init.avatarSummary !== null) {
+        expect(Object.isFrozen(init.avatarSummary)).toBe(true);
       }
       expect(Object.isFrozen(init.atlasSnapshot)).toBe(true);
     });

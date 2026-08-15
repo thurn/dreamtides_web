@@ -38,7 +38,7 @@ const SUPPORTED_TUTORIAL_HIGHLIGHT_TAGS = new Set([
   "[/yellow]",
 ]);
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
-const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
+const DEFAULT_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
 const TUTORIAL_TRIGGER_EVENTS = new Set([
   "card-seen",
   "card-play",
@@ -341,13 +341,13 @@ export function validateTutorialBattleConfiguration(value) {
   }
   const battle = {
     tutorialCardConstants: validateTutorialCardConstants(value.tutorialCardConstants),
-    playerDreamAvatarId: validateUuid(
-      value.playerDreamAvatarId,
-      "playerDreamAvatarId",
+    playerAvatarId: validateUuid(
+      value.playerAvatarId,
+      "playerAvatarId",
     ),
-    enemyDreamAvatarId: validateUuid(
-      value.enemyDreamAvatarId,
-      "enemyDreamAvatarId",
+    enemyAvatarId: validateUuid(
+      value.enemyAvatarId,
+      "enemyAvatarId",
     ),
     startingEnergy: validateInteger(value.startingEnergy, "startingEnergy"),
     scoreToWin: validateInteger(value.scoreToWin, "scoreToWin", 1),
@@ -503,7 +503,7 @@ function validateTutorialSpeechBubble(value, actionId, required) {
     value.bubbleWidth ??
     (speaker === "mira"
       ? DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH
-      : DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH);
+      : DEFAULT_AVATAR_SPEECH_BUBBLE_WIDTH);
   if (
     typeof bubbleWidth !== "number" ||
     !Number.isFinite(bubbleWidth) ||
@@ -705,7 +705,7 @@ export function validateTutorialActions(value) {
         wait,
       };
     }
-    if (action === "animate-dream-avatar-portrait") {
+    if (action === "animate-avatar-portrait") {
       const owner = candidate.owner ?? "player";
       const pause = candidate.pause ?? 0;
       const duration = candidate.duration ?? 1.2;
@@ -1071,10 +1071,10 @@ export function normalizeTutorialConfiguration(parsed) {
 /** Fail asset generation when tutorial UUIDs do not resolve in their catalogs. */
 export function validateTutorialCatalogReferences(
   configuration,
-  { cardIds, dreamAvatarIds, dreamwellCardIds },
+  { cardIds, avatarIds, dreamwellCardIds },
 ) {
   const cards = new Set(cardIds);
-  const avatars = new Set(dreamAvatarIds);
+  const avatars = new Set(avatarIds);
   const dreamwell = new Set(dreamwellCardIds);
   const battle = configuration.battle;
   const requiredCards = new Set([
@@ -1109,12 +1109,12 @@ export function validateTutorialCatalogReferences(
     }
   }
   for (const avatarId of [
-    battle.playerDreamAvatarId,
-    battle.enemyDreamAvatarId,
+    battle.playerAvatarId,
+    battle.enemyAvatarId,
   ]) {
     if (!avatars.has(avatarId)) {
       throw invalid(
-        `Tutorial references Dream Avatar ${avatarId}, which is absent from dream_avatars.toml.`,
+        `Tutorial references Avatar ${avatarId}, which is absent from avatars.toml.`,
       );
     }
   }

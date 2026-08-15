@@ -1,22 +1,22 @@
 // Schema and validation for the browser projection of `data/tides.ron` and the
-// embedded tide pools in `data/dream_avatars.ron`, served as `/tides4-data.json`. The tides4
+// embedded tide pools in `data/avatars.ron`, served as `/tides4-data.json`. The tides4
 // pool algorithm recombines these manually curated decks into a seeded draft pool.
 //
 // The artifact carries both halves of the algorithm so it is self-contained:
 //   * `tides` — the preconstructed decklists. Each tide has a `role`:
-//       - a `signature` tide is one signatured DreamAvatar's signature cards
+//       - a `signature` tide is one signatured Avatar's signature cards
 //         themselves (the always-included identity floor for its pool);
 //       - a `facet` tide is a coherent lean around one signature-region card and
 //         is the variety engine: a
-//         pool draws a random few of a DreamAvatar's facets, so different runs
+//         pool draws a random few of an Avatar's facets, so different runs
 //         lean its identity different ways;
 //       - a `neutral` tide is a broad, format-spanning deck used as the generic
-//         tail of a pool and as the body of a signatureless DreamAvatar's pool.
-//   * `tidePoolByDreamAvatar` — per DreamAvatar UUID, the tides a pool combines:
-//     a `starter` (its signature tide, or null for a signatureless DreamAvatar,
+//         tail of a pool and as the body of a signatureless Avatar's pool.
+//   * `tidePoolByAvatar` — per Avatar UUID, the tides a pool combines:
+//     a `starter` (its signature tide, or null for a signatureless Avatar,
 //     always joined when present), `facets` (the on-identity facet tides a random
 //     subset is drawn from each run), and `neutral` (the broad tail tides joined
-//     to top the pool up to full size). Every DreamAvatar has an entry.
+//     to top the pool up to full size). Every Avatar has an entry.
 //
 // Cards and tides are keyed by stable UUID. Display copy is retained only for
 // tide labels; card display data resolves from the card catalog at render time.
@@ -26,12 +26,12 @@ import type { Resonance } from "../../types/resonance-data";
 import type { CardId } from "../../types/card-identity";
 import { parseCardId } from "../../types/card-identity";
 import type {
-  DreamAvatarId,
+  AvatarId,
   IdentityRecord,
   TideId,
 } from "../../types/identifiers";
 import {
-  parseDreamAvatarId,
+  parseAvatarId,
   parseTideId,
 } from "../../types/identifiers";
 
@@ -67,15 +67,15 @@ export interface Tides4DeckJson {
 }
 
 /**
- * The tides one DreamAvatar's pool combines. The `starter` (when present) is
+ * The tides one Avatar's pool combines. The `starter` (when present) is
  * always joined; a random SUBSET of `facets` is drawn each run (the variety
  * engine); `neutral` tides are joined as needed to top the pool up to full size.
- * A signatured DreamAvatar has a `starter` (its signature tide) and on-identity
- * `facets`; a signatureless DreamAvatar has a null `starter` and draws its subset
+ * A signatured Avatar has a `starter` (its signature tide) and on-identity
+ * `facets`; a signatureless Avatar has a null `starter` and draws its subset
  * from the broad set of `facets`.
  */
-export interface Tides4DreamAvatarPool {
-  /** The always-joined signature tide id, or null for a signatureless DreamAvatar. */
+export interface Tides4AvatarPool {
+  /** The always-joined signature tide id, or null for a signatureless Avatar. */
   starter: TideId | null;
   /** Facet tide ids a random subset is drawn from each run (at least one). */
   facets: TideId[];
@@ -94,13 +94,13 @@ export interface Tides4DecksJson {
   /** All tide decks (signature floors, directional facets, broad neutrals). */
   tides: Tides4DeckJson[];
   /**
-   * Per DreamAvatar UUID: the starter, facets, and neutral tides its pool
-   * combines. Every DreamAvatar has an entry; every id in it names a tide in
+   * Per Avatar UUID: the starter, facets, and neutral tides its pool
+   * combines. Every Avatar has an entry; every id in it names a tide in
    * {@link tides}.
    */
-  tidePoolByDreamAvatar: IdentityRecord<
-    DreamAvatarId,
-    Tides4DreamAvatarPool
+  tidePoolByAvatar: IdentityRecord<
+    AvatarId,
+    Tides4AvatarPool
   >;
 }
 
@@ -225,25 +225,25 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
       cards,
     };
   });
-  const rawPools = json["tidePoolByDreamAvatar"];
+  const rawPools = json["tidePoolByAvatar"];
   if (!isRecord(rawPools)) {
-    fail("missing `tidePoolByDreamAvatar` object");
+    fail("missing `tidePoolByAvatar` object");
   }
-  const tidePoolByDreamAvatar: IdentityRecord<
-    DreamAvatarId,
-    Tides4DreamAvatarPool
+  const tidePoolByAvatar: IdentityRecord<
+    AvatarId,
+    Tides4AvatarPool
   > = {};
-  for (const [rawDreamAvatarId, rawEntry] of Object.entries(rawPools)) {
-    let dreamAvatarId: DreamAvatarId;
+  for (const [rawAvatarId, rawEntry] of Object.entries(rawPools)) {
+    let avatarId: AvatarId;
     try {
-      dreamAvatarId = parseDreamAvatarId(rawDreamAvatarId);
+      avatarId = parseAvatarId(rawAvatarId);
     } catch {
-      return fail(`tide pool key "${rawDreamAvatarId}" is not a DreamAvatar UUID`);
+      return fail(`tide pool key "${rawAvatarId}" is not an Avatar UUID`);
     }
     if (!isRecord(rawEntry)) {
-      return fail(`tide pool for "${dreamAvatarId}" is not an object`);
+      return fail(`tide pool for "${avatarId}" is not an object`);
     }
-    // `starter` is the only optional/nullable id: a signatureless DreamAvatar has
+    // `starter` is the only optional/nullable id: a signatureless Avatar has
     // none. A non-null starter must name a tide.
     const starter =
       rawEntry["starter"] === null
@@ -251,18 +251,18 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
         : parseKnownTideId(
             rawEntry["starter"],
             ids,
-            `tide pool for "${dreamAvatarId}" has an unknown \`starter\``,
+            `tide pool for "${avatarId}" has an unknown \`starter\``,
           );
     // `facets` is the variety engine and must be non-empty; `neutral` may be empty
-    // when a DreamAvatar's facets alone can already fill a pool.
+    // when an Avatar's facets alone can already fill a pool.
     const rawFacets = rawEntry["facets"];
     if (!Array.isArray(rawFacets) || rawFacets.length === 0) {
-      return fail(`tide pool for "${dreamAvatarId}" has no \`facets\``);
+      return fail(`tide pool for "${avatarId}" has no \`facets\``);
     }
     const rawNeutral = rawEntry["neutral"];
     if (!Array.isArray(rawNeutral)) {
       return fail(
-        `tide pool for "${dreamAvatarId}" has a non-array \`neutral\``,
+        `tide pool for "${avatarId}" has a non-array \`neutral\``,
       );
     }
     const parsePoolIds = (values: readonly unknown[], key: "facets" | "neutral") =>
@@ -270,10 +270,10 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
         parseKnownTideId(
           value,
           ids,
-          `tide "${String(value)}" in "${dreamAvatarId}".${key} names no tide`,
+          `tide "${String(value)}" in "${avatarId}".${key} names no tide`,
         ),
       );
-    tidePoolByDreamAvatar[dreamAvatarId] = {
+    tidePoolByAvatar[avatarId] = {
       starter,
       facets: parsePoolIds(rawFacets, "facets"),
       neutral: parsePoolIds(rawNeutral, "neutral"),
@@ -286,6 +286,6 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
       bandMinimum: rawSelection["bandMinimum"],
     },
     tides,
-    tidePoolByDreamAvatar,
+    tidePoolByAvatar,
   };
 }

@@ -2,7 +2,7 @@
 
 A standalone web prototype of Dreamtides Journey Mode living in this repository
 (`~/quest_prototype/`). It reflects the hidden-tides package-based journey flow:
-the player chooses from 3 Dream Avatars, the selected Dream Avatar resolves a
+the player chooses from 3 Avatars, the selected Avatar resolves a
 fixed package once at journey start, and the run proceeds through draft sites,
 Dreamsign surfaces, playable battles, and atlas progression. All state is
 derived from a Firebase room event log, so connected clients share the same
@@ -22,7 +22,7 @@ Vite. The setup script first compiles every manifest-declared RON catalog to
 validated, generated compatibility TOML. It is idempotent and then:
 
 1. Parses generated `cards.toml` into `public/card-data.json`.
-2. Parses generated `dream_avatars.toml` into `public/dream-avatars-v2-data.json`.
+2. Parses generated `avatars.toml` into `public/avatars-v2-data.json`.
 3. Symlinks `public/cards/{cardNumber}.webp` into the local image cache at
    `~/Library/Caches/io.github.dreamtides.tv/image_cache/`.
 4. Compiles generated `data/tides.toml` into `public/tides4-data.json`.
@@ -36,7 +36,7 @@ validated, generated compatibility TOML. It is idempotent and then:
    `public/opponents-data.json`.
 
 The generated `public/cards/`, `public/card-data.json`,
-`public/dream-avatars-v2-data.json`, `public/tides4-data.json`,
+`public/avatars-v2-data.json`, `public/tides4-data.json`,
 `public/exploration-data.json`, and `public/opponents-data.json` paths are
 gitignored.
 
@@ -270,7 +270,7 @@ The first valid manual tutorial gameplay intent atomically records the room
 controller. This can be a card play in the scripted segment or the first live
 battle input when the scripted segment reaches battle before an input is
 needed. That controller remains authoritative through the live battle, victory,
-and fixed Dream Avatar selection. Connected viewers render those phases from
+and fixed Avatar selection. Connected viewers render those phases from
 the same fold inside an inert shell. If presence shows the controller has
 disconnected, a viewer can choose **Take Control**; the compare-and-swap control
 event preserves the board, prompt, presentation checkpoint, terminal result,
@@ -285,7 +285,7 @@ same room event log.
 
 ## Hidden-Tides Behavior
 
-- Dream Avatar selection is a journey-start choice, not a mid-run site.
+- Avatar selection is a journey-start choice, not a mid-run site.
 - Draft sites reveal 4 unique cards when possible and consume the revealed cards
   from the fixed pool.
 - Dreamsign-bearing surfaces spend from a shared pool as soon as a sign is

@@ -41,8 +41,8 @@ export type CharacterDialoguePortraitArt = Extract<
   ArtRef,
   {
     readonly kind:
-      | "dreamAvatar"
-      | "dream-avatar-cutout"
+      | "avatar"
+      | "avatar-cutout"
       | "dream-guide"
       | "character-portrait";
   }

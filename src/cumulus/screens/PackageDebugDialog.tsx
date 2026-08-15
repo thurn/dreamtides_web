@@ -40,7 +40,7 @@ export interface PackageDebugEntryView<Id extends string> {
 /** Plain presentation model for the package-state diagnostic. */
 export interface PackageDebugView {
   values: readonly PackageDebugValueView[];
-  dreamAvatar: LocalizedString | null;
+  avatar: LocalizedString | null;
   validation: readonly PackageDebugValueView[];
   remainingDreamsigns: readonly PackageDebugEntryView<DreamsignId>[];
   spentDreamsigns: readonly PackageDebugEntryView<DreamsignId>[];
@@ -180,9 +180,9 @@ export function PackageDebugDialog(
           <DiagnosticSection
             title={assertLocalized("Avatar")}
             entries={
-              props.view.dreamAvatar === null
+              props.view.avatar === null
                 ? []
-                : [{ id: "dreamAvatar", label: props.view.dreamAvatar }]
+                : [{ id: "avatar", label: props.view.avatar }]
             }
             emptyLabel={assertLocalized("No package data available yet.")}
           />

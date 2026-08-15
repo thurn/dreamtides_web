@@ -52,7 +52,7 @@ export function glossaryDefinitionsCardModel(
 
 /**
  * Build the secondary-card projection expected by the reveal coordinator.
- * GameCard, DreamAvatar, and Dreamsign reveals all use this path, so every
+ * GameCard, Avatar, and Dreamsign reveals all use this path, so every
  * rules-text owner presents its definitions in one shared glossary card.
  */
 export function rulesTextDefinitionCards(

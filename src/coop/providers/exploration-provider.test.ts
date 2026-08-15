@@ -54,7 +54,7 @@ import type { DreamsignId, ExplorationActionId } from "../../types/identifiers";
 import {
   testCardId,
   testCardSubtype,
-  testDreamAvatarId,
+  testAvatarId,
   testDreamscapeId,
   testDreamsignId,
   testExplorationActionId,
@@ -140,11 +140,11 @@ function contentFixture(
     draftData: draftDataFixture(),
     cardDatabase: new Map(cards.map((entry) => [entry.cardNumber, entry])),
     exploration,
-    dreamAvatars: Array.from({ length: 4 }, (_, index) => ({
-      id: testDreamAvatarId(`dream-avatar-${String(index)}`),
-      name: `Dream Avatar ${String(index)}`,
+    avatars: Array.from({ length: 4 }, (_, index) => ({
+      id: testAvatarId(`avatar-${String(index)}`),
+      name: `Avatar ${String(index)}`,
       title: "Synthetic",
-      renderedText: "A synthetic Dream Avatar ability.",
+      renderedText: "A synthetic Avatar ability.",
       imageNumber: String(index),
       startingEssence: 250,
       signatureCards: [],
@@ -320,16 +320,16 @@ function withDreamsignPool(
   const allIds = content.dreamsignTemplates.map(({ id }) => id);
   const remainingIds = options.remainingIds ?? allIds.slice(heldCount);
   const packageIds = options.packageIds ?? allIds;
-  const dreamAvatar = content.dreamAvatars[0];
-  if (dreamAvatar === undefined)
-    throw new Error("Expected a Dream Avatar fixture");
+  const avatar = content.avatars[0];
+  if (avatar === undefined)
+    throw new Error("Expected an Avatar fixture");
   return {
     ...journeyFixture(content),
     maxDreamsigns: options.maxDreamsigns ?? 12,
     dreamsigns: heldTemplates.map((template) => ({ ...template })),
     remainingDreamsignPool: [...remainingIds],
     resolvedPackage: {
-      dreamAvatar,
+      avatar,
       draftPoolCopiesByCard: {},
       dreamsignPoolIds: [...packageIds],
       mandatoryOnlyPoolSize: 0,
@@ -689,7 +689,7 @@ describe("Exploration provider", () => {
       offeredCardIds: [],
       offeredDreamsignIds: [],
       offeredDeckEntryIds: [],
-      offeredDreamAvatarIds: [],
+      offeredAvatarIds: [],
       packCardIds: [],
       replacementCardIdByEntryId: {},
       transfigurationByEntryId: {},
@@ -3402,12 +3402,12 @@ describe("Exploration provider", () => {
     });
   });
 
-  it("offers a replacement Dream Avatar and atomically purges duplicated UUIDs before granting Reclaim", () => {
+  it("offers a replacement Avatar and atomically purges duplicated UUIDs before granting Reclaim", () => {
     const chooseAvatar: ExplorationActionContent = {
       id: testExplorationActionId("choose-avatar"),
       label: "Choose an avatar",
-      effectText: "Pick a new Dream Avatar from 3 choices",
-      effectKind: "choose-dream-avatar",
+      effectText: "Pick a new Avatar from 3 choices",
+      effectKind: "choose-avatar",
       offerCount: 3,
     };
     const uniqueDeck: ExplorationActionContent = {
@@ -3417,22 +3417,22 @@ describe("Exploration provider", () => {
       effectKind: "purge-duplicates-and-grant-reclaim",
     };
     const baseContent = contentFixture([chooseAvatar, uniqueDeck]);
-    const avatarTemplate = baseContent.dreamAvatars[0];
+    const avatarTemplate = baseContent.avatars[0];
     if (avatarTemplate === undefined)
-      throw new Error("Expected a Dream Avatar");
+      throw new Error("Expected an Avatar");
     const content: JourneyContent = {
       ...baseContent,
-      dreamAvatars: Array.from({ length: 32 }, (_, index) => ({
+      avatars: Array.from({ length: 32 }, (_, index) => ({
         ...avatarTemplate,
-        id: testDreamAvatarId(`dream-avatar-${String(index)}`),
-        name: `Dream Avatar ${String(index)}`,
+        id: testAvatarId(`avatar-${String(index)}`),
+        name: `Avatar ${String(index)}`,
       })),
     };
-    const initialAvatar = content.dreamAvatars[0];
-    if (initialAvatar === undefined) throw new Error("Expected a Dream Avatar");
+    const initialAvatar = content.avatars[0];
+    if (initialAvatar === undefined) throw new Error("Expected an Avatar");
     const avatarState = buildState(content, {
       ...journeyFixture(content),
-      dreamAvatar: {
+      avatar: {
         id: initialAvatar.id,
         name: initialAvatar.name,
         title: initialAvatar.title,
@@ -3442,7 +3442,7 @@ describe("Exploration provider", () => {
       },
     });
     const offeredAvatarIds =
-      avatarState.runtime.actionOffers[0]?.offeredDreamAvatarIds ?? [];
+      avatarState.runtime.actionOffers[0]?.offeredAvatarIds ?? [];
     expect(offeredAvatarIds).toHaveLength(3);
     expect(offeredAvatarIds).not.toContain(initialAvatar.id);
     const chosenAvatarId = offeredAvatarIds[0];
@@ -3453,15 +3453,15 @@ describe("Exploration provider", () => {
       avatarState.journey,
       chooseAvatar.id,
       {
-        dreamAvatarId: chosenAvatarId,
+        avatarId: chosenAvatarId,
       },
     );
-    expect(avatarResult.dreamAvatar?.id).toBe(chosenAvatarId);
+    expect(avatarResult.avatar?.id).toBe(chosenAvatarId);
     expect(avatarResult.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: {
-        previousDreamAvatarId: initialAvatar.id,
-        chosenDreamAvatarId: chosenAvatarId,
+        previousAvatarId: initialAvatar.id,
+        chosenAvatarId: chosenAvatarId,
       },
     });
 

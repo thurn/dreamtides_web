@@ -31,7 +31,7 @@ const ACTIONS_RESPONSE = {
       horizontalOffset: 40,
       verticalOffset: 0,
       bubbleWidth: 550,
-      text: "Choose a [purple]Dream Avatar[/purple].",
+      text: "Choose a [purple]Avatar[/purple].",
     },
   },
   dreamscape: {
@@ -153,7 +153,7 @@ describe("loadTutorialActions", () => {
 });
 
 describe("parseTutorialActions", () => {
-  it("preserves a DreamAvatar speech target and rejects unknown speakers", () => {
+  it("preserves an Avatar speech target and rejects unknown speakers", () => {
     expect(
       parseTutorialActions([
         {
@@ -424,12 +424,12 @@ describe("parseTutorialActions", () => {
       parseTutorialActions([
         {
           id: testTutorialActionId("legacy-arrival"),
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           wait: 0,
         },
         {
           id: testTutorialActionId("opponent-arrival"),
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           owner: "enemy",
           pause: 2.5,
           duration: 0.7,
@@ -439,7 +439,7 @@ describe("parseTutorialActions", () => {
     ).toEqual([
       {
         id: testTutorialActionId("legacy-arrival"),
-        action: "animate-dream-avatar-portrait",
+        action: "animate-avatar-portrait",
         owner: "player",
         pause: 0,
         duration: 1.2,
@@ -447,7 +447,7 @@ describe("parseTutorialActions", () => {
       },
       {
         id: testTutorialActionId("opponent-arrival"),
-        action: "animate-dream-avatar-portrait",
+        action: "animate-avatar-portrait",
         owner: "enemy",
         pause: 2.5,
         duration: 0.7,
@@ -788,7 +788,7 @@ describe("parseTutorialActions", () => {
       parseTutorialActions([
         {
           id: testTutorialActionId("bad-owner"),
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           owner: "spectator",
           pause: 1,
           duration: 0.6,
@@ -800,7 +800,7 @@ describe("parseTutorialActions", () => {
       parseTutorialActions([
         {
           id: testTutorialActionId("bad-pause"),
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           owner: "player",
           pause: -1,
           duration: 0.6,
@@ -812,7 +812,7 @@ describe("parseTutorialActions", () => {
       parseTutorialActions([
         {
           id: testTutorialActionId("bad-duration"),
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           owner: "player",
           pause: 1,
           duration: -1,

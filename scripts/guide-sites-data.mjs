@@ -356,8 +356,8 @@ export function deriveDreamscapesData(sourceDreamscapes, guideCatalog) {
         : guide.siteType,
       affiliationId: dreamscape.affiliationId ?? null,
       isStarter,
-      dreamAvatarIds: Array.isArray(dreamscape.dreamAvatarIds)
-        ? dreamscape.dreamAvatarIds
+      avatarIds: Array.isArray(dreamscape.avatarIds)
+        ? dreamscape.avatarIds
         : [],
     };
   });

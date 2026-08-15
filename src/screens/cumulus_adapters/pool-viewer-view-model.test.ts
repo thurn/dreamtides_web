@@ -8,7 +8,7 @@ import {
   buildPoolViewerView,
   DEFAULT_POOL_VIEWER_FILTERS,
 } from "./pool-viewer-view-model";
-import { testCardId, testDreamAvatarId, testTideId } from "../../types/test-identities";
+import { testCardId, testAvatarId, testTideId } from "../../types/test-identities";
 
 function card(
   idSeed: string,
@@ -94,7 +94,7 @@ describe("buildPoolViewerView", () => {
     const view = build({
       source: "tides",
       tides4Provenance: {
-        dreamAvatarId: testDreamAvatarId("dc"),
+        avatarId: testAvatarId("dc"),
         signatureless: false,
         borrowedArchetypeName: null,
         dealSize: 10,
@@ -123,8 +123,8 @@ describe("buildPoolViewerView", () => {
 
   it("maps catalog and signature sources without display-name identity", () => {
     const resolvedPackage = {
-      dreamAvatar: {
-        id: testDreamAvatarId("dc"),
+      avatar: {
+        id: testAvatarId("dc"),
         name: "Fixture",
         title: "",
         renderedText: "",

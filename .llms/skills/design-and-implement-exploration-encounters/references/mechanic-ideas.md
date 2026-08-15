@@ -63,7 +63,7 @@ new or extended implementation before it can be authored live.
 | 54 | Modify {count} random cards to become {card_type} cards | standard | reuse `ChangeRandomCardType` |
 | 55 | Draw 4 cards from your deck and choose one to gain a copy of. | standard | reuse `CopyOfferedDeckCard` |
 | 56 | All items in the next shop you visit are free | standard | reuse `FreeNextShop` |
-| 57 | Pick a new Dream Avatar from 3 choices | standard | reuse `ChooseDreamAvatar` |
+| 57 | Pick a new Avatar from 3 choices | standard | reuse `ChooseAvatar` |
 | 58 | Change a chosen character card to be a {subtype} | standard | reuse `ChangeSubtypeSelected` |
 | 59 | Gain {essence_per_card} essence for each {predicate} card in your deck | standard | reuse `GainEssencePerCard` |
 | 60 | Purge a chosen card and gain {essence_per_spark} essence for each ✦ it had | standard | reuse `PurgeForEssence` |

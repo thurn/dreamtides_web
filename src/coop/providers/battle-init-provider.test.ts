@@ -10,7 +10,7 @@ import {
 } from "../../__test-helpers__/atlas-fixtures";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamAvatars,
+  makeBattleTestAvatars,
   makeBattleTestState,
 } from "../../battle/test-support";
 import type { JourneyContent } from "../../data/journey-content";
@@ -35,7 +35,7 @@ function makeContent(): JourneyContent {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase: makeBattleTestCardDatabase(),
-    dreamAvatars: makeBattleTestDreamAvatars(),
+    avatars: makeBattleTestAvatars(),
     dreamwellCards: [
       {
         id: testDreamwellCardId("json-safe-battle"),

@@ -7,7 +7,7 @@ additional information about entities in Cumulus. It governs `GameCard`,
 `InfoCard`, their trigger behavior, their supporting-card layout, and every
 entity or control fragment that reveals either component.
 
-The same system covers cards, Dream Avatars, Dreamsigns, tides, sites, Atlas
+The same system covers cards, Avatars, Dreamsigns, tides, sites, Atlas
 nodes, glossary terms, resource marks, stat orbs, and similar game concepts.
 The entity being described determines whether the primary reveal is a
 `GameCard` or an `InfoCard`; the trigger may be a full entity, a compact tile,
@@ -147,7 +147,7 @@ named Cumulus component already has the semantic data needed to describe itself:
   state, mobile popup, and automatic press-in-place eligibility.
 - `AtlasNode` owns its face, source element, primary Atlas card, related
   Dreamsign/site/affiliation secondaries, activation, and reveal registration.
-- Dreamsign, Dream Avatar, tide, site, resource, and stat components derive their
+- Dreamsign, Avatar, tide, site, resource, and stat components derive their
   standard `InfoCard` models from their semantic model.
 - A named glossary-term or rules-text Cumulus component derives definition cards
   from its glossary terms and owns the stationary inline trigger behavior.

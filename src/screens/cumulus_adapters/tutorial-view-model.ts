@@ -9,11 +9,11 @@ import type {
 import type { TutorialView } from "../../cumulus/screens/TutorialScreen";
 import type { CardData } from "../../types/cards";
 import type { DreamwellCard } from "../../data/dreamwell-database";
-import type { DreamAvatarContent } from "../../types/content";
+import type { AvatarContent } from "../../types/content";
 import type {
   TutorialAction,
   TutorialBattleConfiguration,
-  TutorialDreamAvatarOwner,
+  TutorialAvatarOwner,
   TutorialPlaybackState,
   TutorialSpeechBubble,
 } from "../../types/tutorial";
@@ -23,7 +23,7 @@ import { tutorialStarterDeckSize } from "../../data/tutorial-actions";
 import type { CardId } from "../../types/card-identity";
 import type {
   BattleCardId,
-  DreamAvatarId,
+  AvatarId,
   DreamwellCardId,
 } from "../../types/identifiers";
 import type { TutorialActionId } from "../../types/identifiers";
@@ -54,7 +54,7 @@ export function tutorialActionLogDetails(
   action: TutorialAction,
   featuredDreamwellCardId: DreamwellCardId,
 ) {
-  if (action.action === "animate-dream-avatar-portrait") {
+  if (action.action === "animate-avatar-portrait") {
     return {
       actionId: action.id,
       action: action.action,
@@ -303,7 +303,7 @@ function emptySide(
     backRank: emptySlots("back", 3),
     frontRank: emptySlots("front", 2),
     status: {
-      dreamAvatar: null,
+      avatar: null,
       currentEnergy: 0,
       maxEnergy: 0,
       points: 0,
@@ -375,7 +375,7 @@ function activeDialogue(playback: TutorialPlaybackState | null): {
 
 /** Build the journey-independent opening state for the tutorial battle. */
 export function buildTutorialView(
-  dreamAvatars: readonly DreamAvatarContent[],
+  avatars: readonly AvatarContent[],
   battleConfiguration: TutorialBattleConfiguration,
   playback: TutorialPlaybackState | null = null,
   cards: readonly CardData[] | null = null,
@@ -383,13 +383,13 @@ export function buildTutorialView(
 ): TutorialView {
   const deckSize = tutorialStarterDeckSize(battleConfiguration);
   const { tutorialCardConstants } = battleConfiguration;
-  const playerDreamAvatar = dreamAvatarById(
-    dreamAvatars,
-    battleConfiguration.playerDreamAvatarId,
+  const playerAvatar = avatarById(
+    avatars,
+    battleConfiguration.playerAvatarId,
   );
-  const opponentDreamAvatar = dreamAvatarById(
-    dreamAvatars,
-    battleConfiguration.enemyDreamAvatarId,
+  const opponentAvatar = avatarById(
+    avatars,
+    battleConfiguration.enemyAvatarId,
   );
   const playerCard =
     cards?.find(
@@ -743,11 +743,11 @@ export function buildTutorialView(
     (playerTurnStarted ? 1 : 0) + completedPlayerDrawCount,
   );
   const enemyInspector = emptyInspectorSide("enemy", deckSize);
-  const dreamAvatarSettled = (owner: TutorialDreamAvatarOwner): boolean => {
+  const avatarSettled = (owner: TutorialAvatarOwner): boolean => {
     const actionIndex =
       playback?.actions.findIndex(
         (action) =>
-          action.action === "animate-dream-avatar-portrait" &&
+          action.action === "animate-avatar-portrait" &&
           action.owner === owner,
       ) ?? -1;
     return (
@@ -862,44 +862,44 @@ export function buildTutorialView(
         };
   });
   return {
-    dreamAvatars: {
+    avatars: {
       player: {
         visual: {
-          imageNumber: playerDreamAvatar.imageNumber,
-          name: localizedSourceText(playerDreamAvatar.name),
-          title: localizedSourceText(playerDreamAvatar.title),
-          ...(playerDreamAvatar.portraitFocus === undefined
+          imageNumber: playerAvatar.imageNumber,
+          name: localizedSourceText(playerAvatar.name),
+          title: localizedSourceText(playerAvatar.title),
+          ...(playerAvatar.portraitFocus === undefined
             ? {}
-            : { portraitFocus: playerDreamAvatar.portraitFocus }),
+            : { portraitFocus: playerAvatar.portraitFocus }),
         },
         profile: {
-          id: battleConfiguration.playerDreamAvatarId,
+          id: battleConfiguration.playerAvatarId,
           ability: tx(
             "Avatar ability is not active",
-            "[battle] [tutorial] [dream-avatar] Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
+            "[battle] [tutorial] [avatar] Unavailable-state description for an Avatar whose ability is disabled during the tutorial battle.",
           ),
           unavailable: true,
         },
-        settled: dreamAvatarSettled("player"),
+        settled: avatarSettled("player"),
       },
       enemy: {
         visual: {
-          imageNumber: opponentDreamAvatar.imageNumber,
-          name: localizedSourceText(opponentDreamAvatar.name),
-          title: localizedSourceText(opponentDreamAvatar.title),
-          ...(opponentDreamAvatar.portraitFocus === undefined
+          imageNumber: opponentAvatar.imageNumber,
+          name: localizedSourceText(opponentAvatar.name),
+          title: localizedSourceText(opponentAvatar.title),
+          ...(opponentAvatar.portraitFocus === undefined
             ? {}
-            : { portraitFocus: opponentDreamAvatar.portraitFocus }),
+            : { portraitFocus: opponentAvatar.portraitFocus }),
         },
         profile: {
-          id: battleConfiguration.enemyDreamAvatarId,
+          id: battleConfiguration.enemyAvatarId,
           ability: tx(
             "Avatar ability is not active",
-            "[battle] [tutorial] [dream-avatar] Unavailable-state description for a Dream Avatar whose ability is disabled during the tutorial battle.",
+            "[battle] [tutorial] [avatar] Unavailable-state description for an Avatar whose ability is disabled during the tutorial battle.",
           ),
           unavailable: true,
         },
-        settled: dreamAvatarSettled("enemy"),
+        settled: avatarSettled("enemy"),
       },
     },
     opponentCardToReveal,
@@ -912,7 +912,7 @@ export function buildTutorialView(
           ? {
               actionId: dialogue.actionId,
               parentAction: dialogue.parentAction,
-              kind: "dreamAvatar",
+              kind: "avatar",
               owner: dialogue.speechBubble.speaker,
               ...(tutorialSpeechBubbleDelaySeconds(dialogue.speechBubble) === 0
                 ? {}
@@ -927,8 +927,8 @@ export function buildTutorialView(
               bubbleWidth: dialogue.speechBubble.bubbleWidth,
               speakerName:
                 dialogue.speechBubble.speaker === "player"
-                  ? localizedSourceText(playerDreamAvatar.name)
-                  : localizedSourceText(opponentDreamAvatar.name),
+                  ? localizedSourceText(playerAvatar.name)
+                  : localizedSourceText(opponentAvatar.name),
               text: localizedSourceText(dialogue.speechBubble.text),
             }
           : {
@@ -1244,17 +1244,17 @@ export function buildTutorialView(
   };
 }
 
-function dreamAvatarById(
-  dreamAvatars: readonly DreamAvatarContent[],
-  dreamAvatarId: DreamAvatarId,
-): DreamAvatarContent {
-  const dreamAvatar = dreamAvatars.find(
-    (candidate) => candidate.id === dreamAvatarId,
+function avatarById(
+  avatars: readonly AvatarContent[],
+  avatarId: AvatarId,
+): AvatarContent {
+  const avatar = avatars.find(
+    (candidate) => candidate.id === avatarId,
   );
-  if (dreamAvatar === undefined) {
+  if (avatar === undefined) {
     throw new Error(
-      `Tutorial Dream Avatar ${dreamAvatarId} is missing from the Dream Avatar catalog.`,
+      `Tutorial Avatar ${avatarId} is missing from the Avatar catalog.`,
     );
   }
-  return dreamAvatar;
+  return avatar;
 }

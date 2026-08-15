@@ -1,7 +1,7 @@
 import { generateInitialAtlas } from "../atlas/atlas-generator";
-import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
+import { toJourneyAvatar } from "../data/avatar-selection";
 import { initializeDraftState } from "../draft/draft-engine";
-import { buildDreamAvatarPackage } from "../data/journey-content";
+import { buildAvatarPackage } from "../data/journey-content";
 import type { JourneyContent } from "../data/journey-content";
 import type {
   DreamAtlas,
@@ -27,7 +27,7 @@ export interface QaJourneyFoundation {
 
 /**
  * Builds the common foundation for `?goto=<scene>` developer flows: the first
- * DreamAvatar, its resolved draft package, the starter deck, and a freshly
+ * Avatar, its resolved draft package, the starter deck, and a freshly
  * generated atlas with its boss node and Apollyon incarnation. Returns null
  * when required journey content is missing. The returned `state` is the resting
  * atlas state; nothing here is specific to any one target screen.
@@ -35,9 +35,9 @@ export interface QaJourneyFoundation {
 export function createQaJourneyFoundation(
   journeyContent: JourneyContent,
 ): QaJourneyFoundation | null {
-  const dreamAvatar = journeyContent.dreamAvatars[0];
+  const avatar = journeyContent.avatars[0];
 
-  if (dreamAvatar === undefined) {
+  if (avatar === undefined) {
     return null;
   }
 
@@ -47,8 +47,8 @@ export function createQaJourneyFoundation(
   }
 
   const seed = generateJourneySeed();
-  const resolvedPackage = buildDreamAvatarPackage(
-    dreamAvatar,
+  const resolvedPackage = buildAvatarPackage(
+    avatar,
     poolContext,
     seed,
   );
@@ -74,7 +74,7 @@ export function createQaJourneyFoundation(
   const state: JourneyState = {
     runId: null,
     seed,
-    essence: dreamAvatar.startingEssence,
+    essence: avatar.startingEssence,
     maxDreamsigns: journeyContent.economyData.journey.dreamsignCap,
     deck: poolContext.starterCardNumbers.map((cardNumber, index) => ({
       entryId: parseDeckEntryId(`deck-${String(index + 1)}`),
@@ -82,7 +82,7 @@ export function createQaJourneyFoundation(
       transfiguration: null,
       isBane: false,
     })),
-    dreamAvatar: toJourneyDreamAvatar(dreamAvatar),
+    avatar: toJourneyAvatar(avatar),
     resolvedPackage,
     cardSourceDebug: null,
     remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],

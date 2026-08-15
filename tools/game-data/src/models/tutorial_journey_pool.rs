@@ -25,7 +25,7 @@ const LEGACY_TIDE_ID_MAP: [(&str, &str); 3] = [
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct TutorialJourneyDraftPool {
-    pub tutorial_dream_avatar_id: DreamAvatarId,
+    pub tutorial_avatar_id: AvatarId,
     pub pool_size: u32,
     pub tutorial_opening_draft_picks: TutorialOpeningDraftPicks,
     pub tutorial_tides: Vec<TideDefinition>,
@@ -105,13 +105,13 @@ macro_rules! canonical_uuid {
 
 canonical_uuid!(TideId, "Tide identifier");
 canonical_uuid!(CardId, "card identifier");
-canonical_uuid!(DreamAvatarId, "DreamAvatar identifier");
+canonical_uuid!(AvatarId, "Avatar identifier");
 canonical_uuid!(DreamsignId, "Dreamsign identifier");
 
 #[derive(Serialize)]
 #[serde(rename_all = "kebab-case")]
 struct CompatibilityCatalog {
-    dream_avatar_id: String,
+    avatar_id: String,
     pool_size: u32,
     opening_dreamsigns: Vec<String>,
     opening_offers: Vec<Vec<String>>,
@@ -169,7 +169,7 @@ fn lower_with_tide_map(
         })
         .collect::<Result<_>>()?;
     Ok(toml::Value::try_from(CompatibilityCatalog {
-        dream_avatar_id: source.tutorial_dream_avatar_id.to_string(),
+        avatar_id: source.tutorial_avatar_id.to_string(),
         pool_size: source.pool_size,
         opening_dreamsigns: source
             .tutorial_opening_draft_picks
@@ -320,13 +320,13 @@ pub(crate) fn validate(source: &TutorialJourneyDraftPool) -> Result<()> {
 pub fn validate_references(
     source: &TutorialJourneyDraftPool,
     known_card_ids: &BTreeSet<String>,
-    known_dream_avatar_ids: &BTreeSet<String>,
+    known_avatar_ids: &BTreeSet<String>,
     known_dreamsign_ids: &BTreeSet<String>,
 ) -> Result<()> {
     ensure!(
-        known_dream_avatar_ids.contains(&source.tutorial_dream_avatar_id.to_string()),
-        "tutorial journey pool references unknown DreamAvatar {}",
-        source.tutorial_dream_avatar_id
+        known_avatar_ids.contains(&source.tutorial_avatar_id.to_string()),
+        "tutorial journey pool references unknown Avatar {}",
+        source.tutorial_avatar_id
     );
     for dreamsign_id in &source.tutorial_opening_draft_picks.dreamsign_ids {
         ensure!(
@@ -368,7 +368,7 @@ mod tests {
             .collect::<Vec<_>>();
         format!(
             r#"TutorialJourneyDraftPool(
-                tutorial_dream_avatar_id: "30000000-0000-4000-8000-000000000001",
+                tutorial_avatar_id: "30000000-0000-4000-8000-000000000001",
                 pool_size: 9,
                 tutorial_opening_draft_picks: TutorialOpeningDraftPicks(
                     dreamsign_ids: [
@@ -439,7 +439,7 @@ mod tests {
         assert_eq!(
             root.keys().map(String::as_str).collect::<Vec<_>>(),
             [
-                "dream-avatar-id",
+                "avatar-id",
                 "pool-size",
                 "opening-dreamsigns",
                 "opening-offers",
@@ -447,7 +447,7 @@ mod tests {
             ]
         );
         assert_eq!(
-            root["dream-avatar-id"].as_str().unwrap(),
+            root["avatar-id"].as_str().unwrap(),
             "30000000-0000-4000-8000-000000000001"
         );
         assert_eq!(root["pool-size"].as_integer(), Some(9));
@@ -596,19 +596,19 @@ mod tests {
             .flat_map(|tide| tide.cards.keys())
             .map(ToString::to_string)
             .collect::<BTreeSet<_>>();
-        let dream_avatar_ids = BTreeSet::from([catalog.tutorial_dream_avatar_id.to_string()]);
+        let avatar_ids = BTreeSet::from([catalog.tutorial_avatar_id.to_string()]);
         let dreamsign_ids = catalog
             .tutorial_opening_draft_picks
             .dreamsign_ids
             .iter()
             .map(ToString::to_string)
             .collect::<BTreeSet<_>>();
-        validate_references(&catalog, &card_ids, &dream_avatar_ids, &dreamsign_ids).unwrap();
+        validate_references(&catalog, &card_ids, &avatar_ids, &dreamsign_ids).unwrap();
 
         let mut missing_cards = card_ids.clone();
         missing_cards.pop_first();
         assert!(
-            validate_references(&catalog, &missing_cards, &dream_avatar_ids, &dreamsign_ids,)
+            validate_references(&catalog, &missing_cards, &avatar_ids, &dreamsign_ids,)
                 .unwrap_err()
                 .to_string()
                 .contains("unknown card")
@@ -617,10 +617,10 @@ mod tests {
             validate_references(&catalog, &card_ids, &BTreeSet::new(), &dreamsign_ids)
                 .unwrap_err()
                 .to_string()
-                .contains("unknown DreamAvatar")
+                .contains("unknown Avatar")
         );
         assert!(
-            validate_references(&catalog, &card_ids, &dream_avatar_ids, &BTreeSet::new())
+            validate_references(&catalog, &card_ids, &avatar_ids, &BTreeSet::new())
                 .unwrap_err()
                 .to_string()
                 .contains("unknown Dreamsign")

@@ -72,7 +72,7 @@ export function TidesInfoLabel() {
       {resolve(
         tx(
           "Tides:",
-          "[dream-avatar] Visible eyebrow labeling the list of a Dream Avatar's Tides.",
+          "[avatar] Visible eyebrow labeling the list of an Avatar's Tides.",
         ),
       )}
     </Pressable>

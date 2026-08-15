@@ -7,7 +7,7 @@ import type {
 import {
   testCardId,
   testContentHash,
-  testDreamAvatarId,
+  testAvatarId,
   testDreamwellCardId,
   testFoldHash,
 } from "../types/test-identities";
@@ -39,8 +39,8 @@ export function makeTutorialBattleConfiguration(
 ): TutorialBattleConfiguration {
   return {
     tutorialCardConstants: TEST_TUTORIAL_CARD_CONSTANTS,
-    playerDreamAvatarId: testDreamAvatarId(TEST_TUTORIAL_PLAYER_AVATAR_ID),
-    enemyDreamAvatarId: testDreamAvatarId(TEST_TUTORIAL_ENEMY_AVATAR_ID),
+    playerAvatarId: testAvatarId(TEST_TUTORIAL_PLAYER_AVATAR_ID),
+    enemyAvatarId: testAvatarId(TEST_TUTORIAL_ENEMY_AVATAR_ID),
     startingEnergy: 4,
     scoreToWin: 10,
     starterDeck: [

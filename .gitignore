@@ -3,7 +3,7 @@ dist/
 public/cards/
 public/card-frame/
 public/exploration/
-public/dream-avatars/
+public/avatars/
 public/dreamsigns/
 public/journeys/
 public/main-menu/
@@ -16,8 +16,8 @@ public/cards_v2-data.json
 public/decklist-ids-data.json
 public/draft-records-data.json
 public/tides4-data.json
-public/dream-avatar-data.json
-public/dream-avatars-v2-data.json
+public/avatar-data.json
+public/avatars-v2-data.json
 public/dreamsign-data.json
 public/dreamsign-profiles-data.json
 public/dreamwell-data.json

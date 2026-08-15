@@ -1,5 +1,5 @@
 export interface GlossaryProjection {
-  readonly owner?: "card" | "dreamAvatar";
+  readonly owner?: "card" | "avatar";
   readonly pattern?: string;
   readonly term?: string;
   readonly definition?: string;

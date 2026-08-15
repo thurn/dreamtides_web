@@ -8,7 +8,7 @@ import { GameCard } from "../components/card/CardView";
 import { RulesText } from "../components/card/RulesText";
 import { GlassButton } from "../components/controls/GlassButton";
 import { InlineGlyph } from "../components/typography/InlineGlyph";
-import { DreamAvatarStage } from "../components/hud/DreamAvatarStage";
+import { AvatarStage } from "../components/hud/AvatarStage";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { EssenceValue } from "../components/hud/EssenceValue";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
@@ -33,7 +33,7 @@ import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { CardId } from "../../types/card-identity";
 import type { BattleId, OpponentId } from "../../types/identifiers";
 
-export interface BattleStartDreamAvatarView {
+export interface BattleStartAvatarView {
   id: OpponentId;
   name: LocalizedString;
   title: LocalizedString;
@@ -50,7 +50,7 @@ export interface BattleStartSignatureCardView {
 export interface BattleStartView {
   battleId: BattleId;
   scene: ArtRef | null;
-  dreamAvatar: BattleStartDreamAvatarView;
+  avatar: BattleStartAvatarView;
   dreamsigns: readonly LocalizedDreamsign[];
   signatureCards: readonly BattleStartSignatureCardView[];
   pointsToWin: number;
@@ -173,7 +173,7 @@ function DesktopBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
       }}
     >
       <section
-        data-battle-start-opponent={view.dreamAvatar.id}
+        data-battle-start-opponent={view.avatar.id}
         style={{
           position: "relative",
           width: "100%",
@@ -183,7 +183,7 @@ function DesktopBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           alignSelf: "stretch",
         }}
       >
-        <OpponentPortrait dreamAvatar={view.dreamAvatar} />
+        <OpponentPortrait avatar={view.avatar} />
       </section>
 
       <BattleStartPanel view={view} onBegin={onBegin} density="standard" />
@@ -198,7 +198,7 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
       style={{ position: "absolute", inset: 0 }}
     >
       <section
-        data-battle-start-opponent={view.dreamAvatar.id}
+        data-battle-start-opponent={view.avatar.id}
         data-battle-start-opponent-framing="cutout"
         style={{
           position: "absolute",
@@ -211,7 +211,7 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
           zIndex: 1,
         }}
       >
-        <OpponentPortrait dreamAvatar={view.dreamAvatar} />
+        <OpponentPortrait avatar={view.avatar} />
       </section>
 
       <BattleStartPanel view={view} onBegin={onBegin} density="compact" />
@@ -220,16 +220,16 @@ function MobileBattleStartLayout({ view, onBegin }: BattleStartScreenProps) {
 }
 
 function OpponentPortrait({
-  dreamAvatar,
+  avatar,
 }: {
-  readonly dreamAvatar: BattleStartDreamAvatarView;
+  readonly avatar: BattleStartAvatarView;
 }) {
   return (
-    <DreamAvatarStage
-      dreamAvatar={{
-        imageNumber: dreamAvatar.imageNumber,
-        name: dreamAvatar.name,
-        title: dreamAvatar.title,
+    <AvatarStage
+      avatar={{
+        imageNumber: avatar.imageNumber,
+        name: avatar.name,
+        title: avatar.title,
       }}
       variant="cutout"
     />
@@ -320,12 +320,12 @@ function BattleStartPanel({
               {resolve(
                 txa(
                   "Battle vs. {avatar_name}",
-                  { avatar_name: opaque(view.dreamAvatar.name) },
+                  { avatar_name: opaque(view.avatar.name) },
                   "[battle] Start title.",
                 ),
               )}
             </h1>
-            {resolve(view.dreamAvatar.title) !== "" && (
+            {resolve(view.avatar.title) !== "" && (
               <p
                 style={{
                   margin: 0,
@@ -334,12 +334,12 @@ function BattleStartPanel({
                   color: token("--text-on-glass-muted"),
                 }}
               >
-                {resolve(view.dreamAvatar.title)}
+                {resolve(view.avatar.title)}
               </p>
             )}
           </header>
 
-          {resolve(view.dreamAvatar.ability) !== "" && (
+          {resolve(view.avatar.ability) !== "" && (
             <PanelSection
               section="ability"
               label={tx(
@@ -349,12 +349,12 @@ function BattleStartPanel({
               density={density}
             >
               <div style={{ font: token("--t-rules") }}>
-                {view.dreamAvatar.abilityActive ? (
+                {view.avatar.abilityActive ? (
                   <RulesText
-                    text={view.dreamAvatar.ability}
+                    text={view.avatar.ability}
                     owner={{
-                      kind: "opponentDreamAvatar",
-                      id: view.dreamAvatar.id,
+                      kind: "opponentAvatar",
+                      id: view.avatar.id,
                     }}
                   />
                 ) : (
@@ -362,7 +362,7 @@ function BattleStartPanel({
                     {resolve(
                       tx(
                         "Opponent avatar ability is not active.",
-                        "[battle] [tutorial] [dream-avatar] Unavailable-state description for an opponent Dream Avatar whose ability is disabled during a tutorial battle.",
+                        "[battle] [tutorial] [avatar] Unavailable-state description for an opponent Avatar whose ability is disabled during a tutorial battle.",
                       ),
                     )}
                   </span>
@@ -383,7 +383,7 @@ function BattleStartPanel({
                       )
                     : tx(
                         "Signature Cards",
-                        "[dream-avatar] Collection label for the active Dream Avatar's authored signature cards.",
+                        "[avatar] Collection label for the active Avatar's authored signature cards.",
                       )
                 }
                 density={density}
@@ -407,7 +407,7 @@ function BattleStartPanel({
               section="signature-cards"
               label={tx(
                 "Signature Cards",
-                "[dream-avatar] Collection label for the active Dream Avatar's authored signature cards.",
+                "[avatar] Collection label for the active Avatar's authored signature cards.",
               )}
               density={density}
             >

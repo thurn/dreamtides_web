@@ -30,10 +30,10 @@ The scene id is trimmed and matched case-insensitively. An empty value
 Each load writes a `debug_qa_scene_loaded` event to `logs/journey-log.jsonl`,
 stamped with the room `gameId`.
 
-The bootstrap guards on `dreamAvatar === null`, so it only fires on a brand-new
+The bootstrap guards on `avatar === null`, so it only fires on a brand-new
 empty room. Once the room exists (the URL gains `&game=<id>`), reloading resumes
 that room rather than rebuilding the scene. An unknown id, or a scene whose
-required content is missing, leaves the room on the normal Dream Avatar selection
+required content is missing, leaves the room on the normal Avatar selection
 screen and logs the outcome (`unknown_scene` or `build_failed`).
 
 Site scenes retype one of the starter dreamscape's non-battle sites to the target
@@ -375,12 +375,12 @@ Each scene builds its atlas by replaying the preceding real dreamscape
 completions, enters an available dreamscape on the requested layer, marks its
 non-Battle sites visited, and opens the Battle site. The route constructs the
 opponent with the normal battle generator for that completion level, including
-the layer-based deck tuning, Dream Avatar ability, Legendary access, and
+the layer-based deck tuning, Avatar ability, Legendary access, and
 Dreamsign schedule. This makes later scenes materially stronger; for example,
 the Layer V opponent has an active ability and an active Dreamsign.
 
 Every battle scene stops on the **Battle Start** screen that previews the
-opposing Dream Avatar, ability, Dreamsigns, and signature cards. Select **Begin
+opposing Avatar, ability, Dreamsigns, and signature cards. Select **Begin
 Battle** to enter the playable board. Plain `?goto=battle` is the same Layer I
 entry point as `battle1`.
 
@@ -414,7 +414,7 @@ http://localhost:5174/?goto=draft&deviceFrame=iphone16
 `?goto=tutorial-victory` opens its animated victory payoff. These routes mount
 the standalone tutorial runtime rather than bootstrapping a `QA_SCENES` journey
 snapshot. New Journey on the victory payoff resets the shared journey slice to
-the fixed tutorial Dream Avatar selection and enters the journey runtime in the
+the fixed tutorial Avatar selection and enters the journey runtime in the
 same room.
 
 ## Registered scenes
@@ -423,8 +423,8 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 
 | `?goto=` id                     | Screen                                                                                                                                                                                                          |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `dream-avatar-select`            | Choose-your-Dream Avatar screen a run opens on (`journeyStart`), without the lobby                                                                                                                                 |
-| `tutorial-dream-avatar-select`   | Tutorial Dream Avatar selection with only `bfc40414-5264-41bf-86e1-a0f41ee4f5b5` shown, centered beside its three authored Valor tides; choosing it starts a journey with their 150-card pool                    |
+| `avatar-select`            | Choose-your-Avatar screen a run opens on (`journeyStart`), without the lobby                                                                                                                                 |
+| `tutorial-avatar-select`   | Tutorial Avatar selection with only `bfc40414-5264-41bf-86e1-a0f41ee4f5b5` shown, centered beside its three authored Valor tides; choosing it starts a journey with their 150-card pool                    |
 | `atlas`                         | Dream Atlas resting screen at the first frontier the UI labels "Layer II" (one dreamscape completed), with a generated boss node and Apollyon incarnation (atlas UI + boss-preview QA); same screen as `atlas2` |
 | `tutorial-atlas`                | Tutorial journey's first Dream Atlas visit, including the delayed Mira guidance                                                                                                                                |
 | `atlas2` … `atlas7`             | Dream Atlas resting screen the UI labels "Layer N", with the available frontier on column N (see "Atlas layers" below)                                                                                          |

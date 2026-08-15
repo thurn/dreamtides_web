@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type {
-  DreamAvatarContent,
+  AvatarContent,
   DreamsignTemplate,
 } from "../../types/content";
 import type { BattleRng } from "../random";
@@ -9,13 +9,13 @@ import {
   opponentAbilityIsActive,
   opponentCarriesDreamsign,
   resolveRunLayerCount,
-  selectOpponentDreamAvatar,
+  selectOpponentAvatar,
 } from "./opponent-deck";
-import { testDreamAvatarId, testDreamsignId } from "../../types/test-identities";
+import { testAvatarId, testDreamsignId } from "../../types/test-identities";
 
-function dreamAvatar(idSeed: string): DreamAvatarContent {
+function avatar(idSeed: string): AvatarContent {
   return {
-    id: testDreamAvatarId(idSeed),
+    id: testAvatarId(idSeed),
     name: "Fixture Avatar",
     title: "Fixture",
     renderedText: "Fixture ability.",
@@ -45,21 +45,21 @@ describe("opponent descriptor helpers", () => {
     expect(resolveRunLayerCount([{}, {}, {}])).toBe(3);
   });
 
-  it("selects from eligible DreamAvatar UUIDs case-insensitively", () => {
-    const first = dreamAvatar("00000000-0000-4000-8000-000000000001");
-    const second = dreamAvatar("00000000-0000-4000-8000-000000000002");
+  it("selects from eligible Avatar UUIDs case-insensitively", () => {
+    const first = avatar("00000000-0000-4000-8000-000000000001");
+    const second = avatar("00000000-0000-4000-8000-000000000002");
     expect(
-      selectOpponentDreamAvatar([first, second], null, fixedRng(0), [
-        testDreamAvatarId(second.id.toUpperCase()),
+      selectOpponentAvatar([first, second], null, fixedRng(0), [
+        testAvatarId(second.id.toUpperCase()),
       ]),
     ).toBe(second);
   });
 
-  it("excludes the player's DreamAvatar when another candidate exists", () => {
-    const first = dreamAvatar("00000000-0000-4000-8000-000000000001");
-    const second = dreamAvatar("00000000-0000-4000-8000-000000000002");
+  it("excludes the player's Avatar when another candidate exists", () => {
+    const first = avatar("00000000-0000-4000-8000-000000000001");
+    const second = avatar("00000000-0000-4000-8000-000000000002");
     expect(
-      selectOpponentDreamAvatar([first, second], first.id, fixedRng(0)),
+      selectOpponentAvatar([first, second], first.id, fixedRng(0)),
     ).toBe(second);
   });
 

@@ -63,7 +63,7 @@ describe("DesktopDeckViewer", () => {
   it("uses the standard alpha scrim without blurring the scene", () => {
     const { container, root } = mount(
       <DesktopDeckViewer
-        view={{ cards: [], dreamAvatar: null, dreamsigns: [], tides: [] }}
+        view={{ cards: [], avatar: null, dreamsigns: [], tides: [] }}
         onClose={vi.fn()}
       />,
     );
@@ -83,7 +83,7 @@ describe("DesktopDeckViewer", () => {
   it("selects sort direction from a two-arrow segmented control", () => {
     const { container, root } = mount(
       <DesktopDeckViewer
-        view={{ cards: [], dreamAvatar: null, dreamsigns: [], tides: [] }}
+        view={{ cards: [], avatar: null, dreamsigns: [], tides: [] }}
         onClose={vi.fn()}
       />,
     );
@@ -117,7 +117,7 @@ describe("DesktopDeckViewer", () => {
       <DesktopDeckViewer
         view={{
           cards: [deckCard(1), deckCard(2), deckCard(3)],
-          dreamAvatar: null,
+          avatar: null,
           dreamsigns: [],
           tides: [],
         }}
@@ -138,7 +138,7 @@ describe("DesktopDeckViewer", () => {
       <DesktopDeckViewer
         view={{
           cards: [],
-          dreamAvatar: null,
+          avatar: null,
           dreamsigns: [],
           tides: [
             {
@@ -181,7 +181,7 @@ describe("DesktopDeckViewer", () => {
   it("omits the tide section when the run has no selected tides", () => {
     const { container, root } = mount(
       <DesktopDeckViewer
-        view={{ cards: [], dreamAvatar: null, dreamsigns: [], tides: [] }}
+        view={{ cards: [], avatar: null, dreamsigns: [], tides: [] }}
         onClose={vi.fn()}
       />,
     );

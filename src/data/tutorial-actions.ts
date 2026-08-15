@@ -29,7 +29,7 @@ import {
   tutorialCardConstantId as resolveTutorialCardConstantId,
 } from "../../scripts/tutorial-battle-contracts.mjs";
 import {
-  parseDreamAvatarId,
+  parseAvatarId,
   parseTutorialActionId,
   parseTutorialTriggerId,
 } from "../types/identifiers";
@@ -44,7 +44,7 @@ import { isBackRankSlotId, isFrontRankSlotId } from "../battle/types";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
-const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
+const DEFAULT_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
 const SEMANTIC_PLAY_CARD_IDS: ReadonlySet<CardId> = new Set(
   semanticPlayCardIds.map(parseCardId),
 );
@@ -275,8 +275,8 @@ export function parseTutorialBattleConfiguration(
     tutorialCardConstants: parseTutorialCardConstants(
       record.tutorialCardConstants,
     ),
-    playerDreamAvatarId: parseDreamAvatarId(record.playerDreamAvatarId),
-    enemyDreamAvatarId: parseDreamAvatarId(record.enemyDreamAvatarId),
+    playerAvatarId: parseAvatarId(record.playerAvatarId),
+    enemyAvatarId: parseAvatarId(record.enemyAvatarId),
     startingEnergy: parseInteger(record.startingEnergy, "startingEnergy"),
     scoreToWin: parseInteger(record.scoreToWin, "scoreToWin", 1),
     starterDeck: parseStarterDeck(record.starterDeck),
@@ -402,7 +402,7 @@ function parseTutorialSpeechBubble(
     record.bubbleWidth ??
     (speaker === "mira"
       ? DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH
-      : DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH);
+      : DEFAULT_AVATAR_SPEECH_BUBBLE_WIDTH);
   if (
     typeof bubbleWidth !== "number" ||
     !Number.isFinite(bubbleWidth) ||
@@ -641,7 +641,7 @@ export function parseTutorialActions(
         wait,
       } satisfies TutorialAction;
     }
-    if (record.action === "animate-dream-avatar-portrait") {
+    if (record.action === "animate-avatar-portrait") {
       const owner = record.owner ?? "player";
       const pause = record.pause ?? 0;
       const duration = record.duration ?? 1.2;
@@ -666,7 +666,7 @@ export function parseTutorialActions(
       }
       return {
         id: parseTutorialActionId(id),
-        action: "animate-dream-avatar-portrait",
+        action: "animate-avatar-portrait",
         owner,
         pause,
         duration,

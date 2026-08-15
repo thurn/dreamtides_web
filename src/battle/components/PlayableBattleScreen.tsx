@@ -27,7 +27,7 @@ import {
 import type {
   BattleCommandSourceSurface,
   BattleDeckCardDefinition,
-  BattleDreamAvatarSummary,
+  BattleAvatarSummary,
   BattleEnemyDescriptor,
   BattleFieldSlotAddress,
   BattleHistory,
@@ -80,13 +80,13 @@ import { BattleTutorialGuidance } from "../../cumulus/screens/BattleTutorialGuid
 import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/battle-tutorial-guidance-view-model";
 import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
 import { selectBattlefieldFigmentMergeTargets } from "../state/figments";
-import type { BattleCardId, DreamAvatarId } from "../../types/identifiers";
+import type { BattleCardId, AvatarId } from "../../types/identifiers";
 import { parseBattleCardId } from "../../types/identifiers";
 import { parseBattleSlotViewId } from "../../types/identifiers";
 import { parseBattleHistoryCommandId } from "../../types/identifiers";
 import { parseBattleEffectScriptId } from "../../types/identifiers";
 import { parseIntentKey } from "../../types/identifiers";
-import { parseDreamAvatarId } from "../../types/identifiers";
+import { parseAvatarId } from "../../types/identifiers";
 
 // `BattleLogDrawer` renders from the append-only coop fold, so its
 // `history` prop is supplied an empty undo/redo envelope.
@@ -1328,7 +1328,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     setPendingDrag(null);
   }
 
-  const enemyDreamAvatarSummary = resolveEnemyDreamAvatarSummary(
+  const enemyAvatarSummary = resolveEnemyAvatarSummary(
     battleInit.enemyDescriptor,
     journeyContent,
   );
@@ -1644,7 +1644,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       <MobileBattleScreenAdapter
         init={battleInit}
         board={board}
-        enemyDreamAvatar={enemyDreamAvatarSummary}
+        enemyAvatar={enemyAvatarSummary}
         aiProposal={aiDriverEnabled ? proposal : null}
         aiMode={aiMode}
         isOpponentHandRevealed={isOpponentHandRevealed}
@@ -1865,35 +1865,35 @@ function decrementBattleTurnPair(
   return { activeSide: "enemy", turnNumber: Math.max(1, turnNumber - 1) };
 }
 
-function resolveEnemyDreamAvatarSummary(
+function resolveEnemyAvatarSummary(
   enemyDescriptor: BattleEnemyDescriptor,
   journeyContent: JourneyContent,
-): BattleDreamAvatarSummary {
-  const sourceDreamAvatar = findEnemySourceDreamAvatar(
+): BattleAvatarSummary {
+  const sourceAvatar = findEnemySourceAvatar(
     enemyDescriptor,
     journeyContent,
   );
   return {
-    id: sourceDreamAvatar?.id ?? enemyDescriptor.id,
+    id: sourceAvatar?.id ?? enemyDescriptor.id,
     imageNumber:
-      enemyDescriptor.imageNumber ?? sourceDreamAvatar?.imageNumber ?? "001",
+      enemyDescriptor.imageNumber ?? sourceAvatar?.imageNumber ?? "001",
     name: enemyDescriptor.name,
     renderedText: enemyDescriptor.abilityText,
     title: enemyDescriptor.subtitle,
-    ...(sourceDreamAvatar?.portraitFocus === undefined
+    ...(sourceAvatar?.portraitFocus === undefined
       ? {}
-      : { portraitFocus: sourceDreamAvatar.portraitFocus }),
+      : { portraitFocus: sourceAvatar.portraitFocus }),
   };
 }
 
-function findEnemySourceDreamAvatar(
+function findEnemySourceAvatar(
   enemyDescriptor: BattleEnemyDescriptor,
   journeyContent: JourneyContent,
 ) {
-  const sourceId = parseEnemySourceDreamAvatarId(enemyDescriptor.id);
+  const sourceId = parseEnemySourceAvatarId(enemyDescriptor.id);
   if (sourceId !== null) {
-    const byId = journeyContent.dreamAvatars.find(
-      (dreamAvatar) => dreamAvatar.id === sourceId,
+    const byId = journeyContent.avatars.find(
+      (avatar) => avatar.id === sourceId,
     );
     if (byId !== undefined) {
       return byId;
@@ -1901,8 +1901,8 @@ function findEnemySourceDreamAvatar(
   }
 
   const descriptorName = enemyDescriptor.name.toLocaleLowerCase();
-  return journeyContent.dreamAvatars.find((dreamAvatar) => {
-    const fullName = dreamAvatar.name.toLocaleLowerCase();
+  return journeyContent.avatars.find((avatar) => {
+    const fullName = avatar.name.toLocaleLowerCase();
     const shortName = fullName.split(",")[0] ?? fullName;
     return (
       descriptorName === fullName ||
@@ -1913,9 +1913,9 @@ function findEnemySourceDreamAvatar(
   });
 }
 
-function parseEnemySourceDreamAvatarId(
+function parseEnemySourceAvatarId(
   enemyId: OpponentId,
-): DreamAvatarId | null {
+): AvatarId | null {
   const prefix = "enemy:";
   if (!enemyId.startsWith(prefix)) {
     return null;
@@ -1925,7 +1925,7 @@ function parseEnemySourceDreamAvatarId(
   if (seedSeparator <= 0) {
     return null;
   }
-  return parseDreamAvatarId(sourceAndSeed.slice(0, seedSeparator));
+  return parseAvatarId(sourceAndSeed.slice(0, seedSeparator));
 }
 
 function resolveDragSourceSurface(

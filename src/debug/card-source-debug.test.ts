@@ -2,8 +2,8 @@ import { describe, expect, it } from "vitest";
 import { buildCardSourceDebugState } from "./card-source-debug";
 import type { CardData } from "../types/cards";
 import { parseCardName } from "../types/card-identity";
-import type { ResolvedDreamAvatarPackage } from "../types/content";
-import { testDreamAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
+import type { ResolvedAvatarPackage } from "../types/content";
+import { testAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
 
 function makeCard(cardNumber: number, name: string): CardData {
   return {
@@ -22,10 +22,10 @@ function makeCard(cardNumber: number, name: string): CardData {
   };
 }
 
-function makeResolvedPackage(): ResolvedDreamAvatarPackage {
+function makeResolvedPackage(): ResolvedAvatarPackage {
   return {
-    dreamAvatar: {
-      id: testDreamAvatarId("caller-1"),
+    avatar: {
+      id: testAvatarId("caller-1"),
       name: "Caller",
       title: "Debug Witness",
       renderedText: "Test rules text.",

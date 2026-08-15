@@ -44,7 +44,7 @@ describe("isCardNameExpression", () => {
 
   it("does not match non-card names or card ids", () => {
     for (const source of [
-      "dreamAvatar.name",
+      "avatar.name",
       "site.name",
       "card.id",
       "selectedCard.id",

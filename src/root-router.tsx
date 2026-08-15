@@ -7,7 +7,7 @@ type StandaloneRouteId =
   | "dreamsigns"
   | "glossary"
   | "exploration"
-  | "dream-avatars"
+  | "avatars"
   | "tides"
   | "dreamscapes"
   | "figments"
@@ -64,30 +64,12 @@ const STANDALONE_ROUTES: Readonly<Partial<Record<string, StandaloneRoute>>> = {
       return <ExplorationEditorApp />;
     },
   },
-  "/dream-avatars": {
-    id: "dream-avatars",
-    render: async () => {
-      const { default: DreamAvatarEditorApp } =
-        await import("./editor/DreamAvatarEditorApp");
-      return <DreamAvatarEditorApp />;
-    },
-  },
   "/avatars": {
-    id: "dream-avatars",
-    canonicalPath: "/dream-avatars",
+    id: "avatars",
     render: async () => {
-      const { default: DreamAvatarEditorApp } =
-        await import("./editor/DreamAvatarEditorApp");
-      return <DreamAvatarEditorApp />;
-    },
-  },
-  "/dreamavatars": {
-    id: "dream-avatars",
-    canonicalPath: "/dream-avatars",
-    render: async () => {
-      const { default: DreamAvatarEditorApp } =
-        await import("./editor/DreamAvatarEditorApp");
-      return <DreamAvatarEditorApp />;
+      const { default: AvatarEditorApp } =
+        await import("./editor/AvatarEditorApp");
+      return <AvatarEditorApp />;
     },
   },
   "/tides": {

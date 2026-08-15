@@ -3,7 +3,7 @@ import { getLogEntries, resetLog } from "../logging";
 import type { CardData } from "../types/cards";
 import { parseCardName } from "../types/card-identity";
 import type { DraftConfig, PoolDraftState } from "../types/draft";
-import type { ResolvedDreamAvatarPackage } from "../types/content";
+import type { ResolvedAvatarPackage } from "../types/content";
 import {
   enterDraftSite,
   getCurrentOffer,
@@ -12,7 +12,7 @@ import {
   SITE_PICKS,
 } from "./draft-engine";
 import { parseSiteId } from "../types/identifiers";
-import { testDreamAvatarId, testCardId } from "../types/test-identities";
+import { testAvatarId, testCardId } from "../types/test-identities";
 
 function makeCard(
   cardNumber: number,
@@ -41,11 +41,11 @@ function buildDB(cards: CardData[]): Map<number, CardData> {
 
 function buildResolvedPackage(
   copiesByCard: Record<number, number>,
-): ResolvedDreamAvatarPackage {
+): ResolvedAvatarPackage {
   return {
-    dreamAvatar: {
-      id: testDreamAvatarId("test-dream-avatar"),
-      name: "Test DreamAvatar",
+    avatar: {
+      id: testAvatarId("test-avatar"),
+      name: "Test Avatar",
       title: "Draft Architect",
       renderedText: "Test rules text.",
       imageNumber: "0003",

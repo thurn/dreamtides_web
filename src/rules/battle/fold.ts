@@ -118,7 +118,7 @@ export interface PendingPrompt {
  *
  * - `init` is the IMMUTABLE per-battle metadata (`BattleInit`): `scoreToWin`,
  *   `turnLimit`, the shared `dreamwellDeck` array, `siteId`, `dreamscapeId`,
- *   `isFinalBoss`, and the enemy / dreamAvatar / dreamsign summaries. The
+ *   `isFinalBoss`, and the enemy / avatar / dreamsign summaries. The
  *   mutable `board` carries only INDICES into it (`dreamwellDeckIndex` /
  *   `dreamwellCardIndex`), so the deck array, the win/turn-limit thresholds,
  *   and the site/dreamscape identity are unreachable without it. Keeping it on

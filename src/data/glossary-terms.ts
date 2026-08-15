@@ -14,7 +14,7 @@ import {
 } from "../runtime/localization/runtime";
 
 /** The semantic owner whose rules text is being explained. */
-export type RulesTextGlossaryOwner = "card" | "dreamAvatar" | "dreamsign";
+export type RulesTextGlossaryOwner = "card" | "avatar" | "dreamsign";
 
 export interface ProjectedGlossaryCatalogEntry extends GlossaryCatalogEntry {
   readonly localizedTerm: LocalizedString;

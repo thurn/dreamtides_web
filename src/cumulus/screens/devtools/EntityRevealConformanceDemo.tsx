@@ -13,14 +13,14 @@ import {
 import { GameCard } from "../../components/card/CardView";
 import { GlossaryTerm } from "../../components/card/GlossaryTerm";
 import { richText } from "../../components/card/rich-text";
-import { DreamAvatarPortrait } from "../../components/hud/DreamAvatarPortrait";
+import { AvatarPortrait } from "../../components/hud/AvatarPortrait";
 import { InfoCard } from "../../components/overlay/InfoCard";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
 import { parseDreamscapeId } from "../../../types/identifiers";
 import { parseAtlasNodeId } from "../../../types/identifiers";
 import { parseArtAssetKey } from "../../../types/identifiers";
-import { parseDreamAvatarId } from "../../../types/identifiers";
+import { parseAvatarId } from "../../../types/identifiers";
 
 const CARD_ID = parseCardId("11111111-1111-4111-8111-111111111111");
 const BATTLE_CARD_ID = parseCardId("22222222-2222-4222-8222-222222222222");
@@ -100,8 +100,8 @@ const TRUNCATION_CARD: CardData = {
   renderedText:
     "Figment. Materialize. Rematerialize. Dissolve. Banish. Abandon. Score. Reclaim. Foresee. Discover. Erode. Fast. Awakened. Veil. Vengeful. Support. Challenger. Prevent. Offering. Phasing. Ephemeral. Transfigure. Purge. Duplicate. Bane. Essence. Enhanced.",
 };
-const DREAM_AVATAR = {
-  id: parseDreamAvatarId("99999999-9999-4999-8999-999999999999"),
+const AVATAR = {
+  id: parseAvatarId("99999999-9999-4999-8999-999999999999"),
   name: assertLocalized("Conformance Guide"),
   title: assertLocalized("Keeper of Context"),
   imageNumber: "0071",
@@ -222,11 +222,11 @@ export function EntityRevealConformanceDemo() {
           }}
         >
           {scenario === "above" ? (
-            <DreamAvatarPortrait
-              dreamAvatar={DREAM_AVATAR}
+            <AvatarPortrait
+              avatar={AVATAR}
               variant="thumb"
               profile={{
-                id: DREAM_AVATAR.id,
+                id: AVATAR.id,
                 ability: assertLocalized(
                   "Nightmare is a Bane. Discover. Ephemeral.",
                 ),
@@ -283,11 +283,11 @@ export function EntityRevealConformanceDemo() {
         </article>
         <article data-conformance-info-secondaries="" style={{ width: 120 }}>
           <h2>InfoCard group source</h2>
-          <DreamAvatarPortrait
-            dreamAvatar={DREAM_AVATAR}
+          <AvatarPortrait
+            avatar={AVATAR}
             variant="thumb"
             profile={{
-              id: DREAM_AVATAR.id,
+              id: AVATAR.id,
               ability: assertLocalized(
                 "Nightmare is a Bane. Discover. Ephemeral.",
               ),

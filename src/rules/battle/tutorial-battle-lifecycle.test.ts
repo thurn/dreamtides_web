@@ -32,9 +32,9 @@ import type { BattleCardId } from "../../types/identifiers";
 import { parseTutorialRunId } from "../../types/identifiers";
 import { parseJourneyId } from "../../types/identifiers";
 import { parseClientId } from "../../types/identifiers";
-import { testDreamwellCardId, testTutorialActionId, testTutorialTriggerId, testCardId, testDreamAvatarId, testTutorialAiActionOverrideId, testGlossaryEntryId, testDreamwellCardName } from "../../types/test-identities";
+import { testDreamwellCardId, testTutorialActionId, testTutorialTriggerId, testCardId, testAvatarId, testTutorialAiActionOverrideId, testGlossaryEntryId, testDreamwellCardName } from "../../types/test-identities";
 
-const TUTORIAL_DREAM_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
+const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
 const GENESIS = {
   seed: testJourneySeed("tutorial-room-seed"),
@@ -198,7 +198,7 @@ function card(cardNumber: number, idSeed: string): CardData {
 function content(): JourneyContent {
   registerTutorialFrontDoorContentProvider({
     playerCardId: testCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
-    journeyDreamAvatarId: testDreamAvatarId(TUTORIAL_DREAM_AVATAR_ID),
+    journeyAvatarId: testAvatarId(TUTORIAL_AVATAR_ID),
   });
   const cards = [
     ...STARTERS.map(([number, id]) => card(number, id)),
@@ -208,9 +208,9 @@ function content(): JourneyContent {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase: new Map(cards.map((item) => [item.cardNumber, item])),
-    dreamAvatars: [
+    avatars: [
       {
-        id: testDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
+        id: testAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
         name: "Tensho",
         title: "Tutor",
         renderedText: "inactive",
@@ -219,7 +219,7 @@ function content(): JourneyContent {
         signatureCards: [],
       },
       {
-        id: testDreamAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
+        id: testAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
         name: "Threxan",
         title: "Tutor",
         renderedText: "inactive",
@@ -1545,22 +1545,22 @@ describe("tutorial battle lifecycle", () => {
     });
   });
 
-  it("restarts under transferred room control, then hands victory into the tutorial DreamAvatar offer", () => {
+  it("restarts under transferred room control, then hands victory into the tutorial Avatar offer", () => {
     const tutorialContent = content();
     const configuredAvatarId =
-      tutorialContent.tutorial!.battle.enemyDreamAvatarId;
+      tutorialContent.tutorial!.battle.enemyAvatarId;
     tutorialContent.tutorial = {
       ...tutorialContent.tutorial!,
       battle: {
         ...tutorialContent.tutorial!.battle,
-        playerDreamAvatarId: configuredAvatarId,
+        playerAvatarId: configuredAvatarId,
       },
     };
     registerTutorialFrontDoorContentProvider({
       playerCardId:
         tutorialContent.tutorial.battle.tutorialCardConstants
           .tutorialPlayerCharacterCardId,
-      journeyDreamAvatarId: configuredAvatarId,
+      journeyAvatarId: configuredAvatarId,
     });
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(tutorialContent),
@@ -1631,7 +1631,7 @@ describe("tutorial battle lifecycle", () => {
         ...beforeJourney,
         screen: {
           type: "journeyStart",
-          tutorialDreamAvatarId: configuredAvatarId,
+          tutorialAvatarId: configuredAvatarId,
         },
       },
     });

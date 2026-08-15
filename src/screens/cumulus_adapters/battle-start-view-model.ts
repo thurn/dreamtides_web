@@ -46,7 +46,7 @@ export function buildBattleStartView(
       node?.dreamscapeId !== null && node?.dreamscapeId !== undefined
         ? artRef.dreamscapeScene(node.dreamscapeId)
         : null,
-    dreamAvatar: {
+    avatar: {
       id: enemy.id,
       name: localizedSourceText(enemy.name),
       title: localizedSourceText(enemy.subtitle),

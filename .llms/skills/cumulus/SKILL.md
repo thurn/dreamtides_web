@@ -138,7 +138,7 @@ That implementation term does not cross the component API boundary.
 | Motes | Status, Feedback & Effects | 10 | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Journey Status Bar | Status, Feedback & Effects | 5 | [components/journey-status-bar.md](components/journey-status-bar.md) | The persistent, transparent bottom HUD for journey screens. |
 | Coop Presence Status | Status, Feedback & Effects | 1 | [components/coop-presence-status.md](components/coop-presence-status.md) | The compact, non-interactive app chrome that reports connected room participants from an explicit view-model count. |
-| Battle Status Display | Battle | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused DreamAvatar portrait or loading placeholder at center, and centered current and target points at right. |
+| Battle Status Display | Battle | 1 | [components/battle-status-display.md](components/battle-status-display.md) | The glass status card for one battle participant: centered current and maximum energy at left, a head-focused Avatar portrait or loading placeholder at center, and centered current and target points at right. |
 | Battle Phase Indicator | Battle | 1 | [components/battle-phase-indicator.md](components/battle-phase-indicator.md) | A controlled, oriented comet marker for the five presentation-level battle phases. |
 | Battlefield Card | Battle | 1 | [components/battlefield-card.md](components/battlefield-card.md) | The complete face-up battle-instance presentation for exhaustion, memory, figments, selection, challenge markers, score announcements, press, and pointer drag. |
 | Battle Foresee Editor | Battle | 2 | [components/battle-foresee-editor.md](components/battle-foresee-editor.md) | A commit-gated local editor for a prepared deck prefix, count choices, deck order, and Void partition. |
@@ -155,8 +155,8 @@ That implementation term does not cross the component API boundary.
 | Transfiguration Picker Panel | Card Workflows | 2 | [components/transfiguration-picker-panel.md](components/transfiguration-picker-panel.md) | A Transfiguration-specific card picker with closed loading, offer, open-deck, availability, and reforged display states. |
 | Transfiguration Detail Panel | Card Workflows | 3 | [components/transfiguration-detail-panel.md](components/transfiguration-detail-panel.md) | A controlled form chooser for one prepared candidate, including previews, affordability, quoted costs, navigation, and commit state. |
 | Card Change Pair | Card Workflows | 2 | [components/card-change-pair.md](components/card-change-pair.md) | A resolved before-and-after card presentation for replacements, copies, Transfigurations, keyword changes, and card-type changes. |
-| DreamAvatar Portrait | Characters & Collectibles | 12 | [components/dream-avatar-portrait.md](components/dream-avatar-portrait.md) | The shared framed DreamAvatar profile surface: a square `panel` crop for profile cards and popovers, or a close `thumb` crop for HUD rows and resident lists. |
-| DreamAvatar Stage | Characters & Collectibles | 3 | [components/dream-avatar-stage.md](components/dream-avatar-stage.md) | The full-body DreamAvatar art layer for a caller-owned stage: `standing` adds a low ambient glow, `cutout` preserves the underlying scene, and `fullBleed` supplies a cinematic backdrop and head-focused composition. |
+| Avatar Portrait | Characters & Collectibles | 12 | [components/avatar-portrait.md](components/avatar-portrait.md) | The shared framed Avatar profile surface: a square `panel` crop for profile cards and popovers, or a close `thumb` crop for HUD rows and resident lists. |
+| Avatar Stage | Characters & Collectibles | 3 | [components/avatar-stage.md](components/avatar-stage.md) | The full-body Avatar art layer for a caller-owned stage: `standing` adds a low ambient glow, `cutout` preserves the underlying scene, and `fullBleed` supplies a cinematic backdrop and head-focused composition. |
 | Dreamsign | Characters & Collectibles | 13 | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
 | Dreamsign Gallery Panel | Characters & Collectibles | 1 | [components/dreamsign-gallery-panel.md](components/dreamsign-gallery-panel.md) | The liquid-glass purchase shelf for Dreamsign offers: UUID-keyed collectible art, essence captions, a close disc, and one bare-glyph end action. |
 | Atlas Node | Atlas & Sites | 2 | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — including a frame-shaped violet outline that visibly widens and contracts around the next selectable dreamscape — and which reveals its scene / detail card on hover or press. |
@@ -225,7 +225,7 @@ parking lot for a fork created by the current change. A component fork that is
 already present in the tree must be treated as debt to drain: promote it into
 the component family or replace it with an existing component before clearing
 the issue. The case study is the collapsed tide disc in
-[docs/postmortems/2026-07-05-desktop-dream-avatar-select.md](../../../docs/postmortems/2026-07-05-desktop-dream-avatar-select.md),
+[docs/postmortems/2026-07-05-desktop-avatar-select.md](../../../docs/postmortems/2026-07-05-desktop-avatar-select.md),
 which reached three independent declarations of the same diameter across
 three files.
 
@@ -461,7 +461,7 @@ when it clears all five bars below.
    it, or put an early side-by-side in front of the user before the full suite.
 
 Case study for why these five exist:
-[docs/postmortems/2026-07-05-desktop-dream-avatar-select.md](../../../docs/postmortems/2026-07-05-desktop-dream-avatar-select.md).
+[docs/postmortems/2026-07-05-desktop-avatar-select.md](../../../docs/postmortems/2026-07-05-desktop-avatar-select.md).
 
 ## Tuning taste values: the tweaks-panel loop
 

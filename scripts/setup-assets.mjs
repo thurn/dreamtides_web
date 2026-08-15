@@ -83,9 +83,9 @@ export const IMAGE_CACHE_DIR = join(
   "io.github.dreamtides.tv",
   "image_cache",
 );
-const DREAM_AVATAR_ART_DIR_CANDIDATES = [
-  join(LOCAL_ASSET_HOME, "Documents", "synty", "dream-avatars"),
-  join(LOCAL_ASSET_HOME, "Documents", "sytny", "dream-avatars"),
+const AVATAR_ART_DIR_CANDIDATES = [
+  join(LOCAL_ASSET_HOME, "Documents", "synty", "avatars"),
+  join(LOCAL_ASSET_HOME, "Documents", "sytny", "avatars"),
   join(LOCAL_ASSET_HOME, "Documents", "synty", "dream" + "callers"),
   join(LOCAL_ASSET_HOME, "Documents", "sytny", "dream" + "callers"),
 ];
@@ -361,38 +361,38 @@ export function buildCardMaps(cardsV2) {
 }
 
 /**
- * Enforce the dreamscape <-> DreamAvatar mapping invariant at build time:
- * non-starter dreamscapes partition `dream_avatars.toml` into resident groups.
- * `dreamscapes` are the transformed dreamscape records and `dreamAvatarIds` the
- * set of every real DreamAvatar id. Fatal violations depend only on
+ * Enforce the dreamscape <-> Avatar mapping invariant at build time:
+ * non-starter dreamscapes partition `avatars.toml` into resident groups.
+ * `dreamscapes` are the transformed dreamscape records and `avatarIds` the
+ * set of every real Avatar id. Fatal violations depend only on
  * `dreamscapes.toml` itself, so a routine edit elsewhere can never trip them:
- * the same DreamAvatar listed under two dreamscapes, the starter carrying
+ * the same Avatar listed under two dreamscapes, the starter carrying
  * residents, or a non-starter region outside the 3-4 band. Referential checks
- * against the DreamAvatar set are non-fatal warnings instead, because the build
- * may run against a reduced DreamAvatar fixture (the asset tests swap one in): a
- * `dream-avatar-id` that resolves to no DreamAvatar, and a DreamAvatar assigned
+ * against the Avatar set are non-fatal warnings instead, because the build
+ * may run against a reduced Avatar fixture (the asset tests swap one in): a
+ * `avatar-id` that resolves to no Avatar, and an Avatar assigned
  * to no dreamscape, are each reported as a warning. In a full production build
  * both files are real, so a stray id surfaces as paired warnings (the bad id is
- * unknown and the orphaned DreamAvatar is unassigned). Ids are compared
+ * unknown and the orphaned Avatar is unassigned). Ids are compared
  * case-insensitively. Returns a `{ id -> count }` summary for logging.
  */
-export function validateDreamAvatarMapping(dreamscapes, dreamAvatarIds) {
+export function validateAvatarMapping(dreamscapes, avatarIds) {
   const known = new Map(
-    [...dreamAvatarIds].map((id) => [id.toLowerCase(), id]),
+    [...avatarIds].map((id) => [id.toLowerCase(), id]),
   );
-  const assignedTo = new Map(); // lowercased dreamAvatar id -> dreamscape id
+  const assignedTo = new Map(); // lowercased avatar id -> dreamscape id
   const unknown = [];
   const counts = {};
 
   for (const scape of dreamscapes) {
-    const ids = scape.dreamAvatarIds ?? [];
+    const ids = scape.avatarIds ?? [];
     counts[scape.id] = ids.length;
 
     if (scape.isStarter) {
       if (ids.length > 0) {
         throw new Error(
           `dreamscapes.toml: starter dreamscape "${scape.id}" must not list ` +
-            `dream-avatar-ids (found ${String(ids.length)})`,
+            `avatar-ids (found ${String(ids.length)})`,
         );
       }
       continue;
@@ -401,7 +401,7 @@ export function validateDreamAvatarMapping(dreamscapes, dreamAvatarIds) {
     if (ids.length < 3 || ids.length > 4) {
       throw new Error(
         `dreamscapes.toml: dreamscape "${scape.id}" has ${String(ids.length)} ` +
-          `dream-avatar-ids; each non-starter region must have 3-4`,
+          `avatar-ids; each non-starter region must have 3-4`,
       );
     }
 
@@ -414,8 +414,8 @@ export function validateDreamAvatarMapping(dreamscapes, dreamAvatarIds) {
       const prior = assignedTo.get(key);
       if (prior !== undefined) {
         throw new Error(
-          `dreamscapes.toml: dreamAvatar ${rawId} is assigned to both ` +
-            `"${prior}" and "${scape.id}"; each DreamAvatar belongs to exactly ` +
+          `dreamscapes.toml: avatar ${rawId} is assigned to both ` +
+            `"${prior}" and "${scape.id}"; each Avatar belongs to exactly ` +
             `one dreamscape`,
         );
       }
@@ -426,7 +426,7 @@ export function validateDreamAvatarMapping(dreamscapes, dreamAvatarIds) {
   if (unknown.length > 0) {
     console.warn(
       `WARNING: dreamscapes.toml references ${String(unknown.length)} ` +
-        `dreamAvatar id(s) that resolve to no DreamAvatar: ` +
+        `avatar id(s) that resolve to no Avatar: ` +
         `${unknown.slice(0, 5).join(", ")}` +
         (unknown.length > 5 ? ", ..." : ""),
     );
@@ -437,7 +437,7 @@ export function validateDreamAvatarMapping(dreamscapes, dreamAvatarIds) {
     .map(([, id]) => id);
   if (unassigned.length > 0) {
     console.warn(
-      `WARNING: ${String(unassigned.length)} dreamAvatar(s) are not assigned ` +
+      `WARNING: ${String(unassigned.length)} avatar(s) are not assigned ` +
         `to any dreamscape: ${unassigned.slice(0, 5).join(", ")}` +
         (unassigned.length > 5 ? ", ..." : ""),
     );
@@ -464,13 +464,13 @@ export function transformDreamwell(dreamwell) {
 }
 
 /**
- * Convert a TOML DreamAvatar record to its JSON representation with camelCase keys.
+ * Convert a TOML Avatar record to its JSON representation with camelCase keys.
  * Omitted `starting-essence` values remain omitted until both this catalog and
  * economy data have loaded, when the runtime applies the authored default.
  */
-export function transformDreamAvatar(dreamAvatar) {
+export function transformAvatar(avatar) {
   const result = {};
-  for (const [key, value] of Object.entries(dreamAvatar)) {
+  for (const [key, value] of Object.entries(avatar)) {
     result[kebabToCamel(key)] = value;
   }
   return result;
@@ -898,7 +898,7 @@ export function transformExplorationData(source) {
               "gain-offered-dreamsign",
               "replace-selected-dreamsign-with-offered",
               "copy-offered-deck-card",
-              "choose-dream-avatar",
+              "choose-avatar",
             ],
           ],
           [
@@ -948,7 +948,7 @@ export function transformExplorationData(source) {
           );
         }
         if (
-          ["copy-offered-deck-card", "choose-dream-avatar"].includes(
+          ["copy-offered-deck-card", "choose-avatar"].includes(
             action.effectKind,
           ) &&
           (typeof action.offerCount !== "number" ||
@@ -1225,14 +1225,14 @@ export function linkExplorationArt({
   };
 }
 
-function defaultDreamAvatarArtDir() {
-  for (const candidate of DREAM_AVATAR_ART_DIR_CANDIDATES) {
+function defaultAvatarArtDir() {
+  for (const candidate of AVATAR_ART_DIR_CANDIDATES) {
     if (existsSync(candidate)) {
       return candidate;
     }
   }
 
-  return DREAM_AVATAR_ART_DIR_CANDIDATES[0];
+  return AVATAR_ART_DIR_CANDIDATES[0];
 }
 
 function readDreamsignAltText(dreamsignArtDir) {
@@ -1268,7 +1268,7 @@ function readDreamsignAltText(dreamsignArtDir) {
  * renamed kebab->camel. The starter dreamscape omits `guide-id`/`affiliation-id`
  * in the TOML; those normalize to `null` so the runtime always sees an explicit
  * value, and `is-starter` defaults to `false` for the non-starter regions. A
- * dreamscape without `dream-avatar-ids` (the starter) normalizes to an empty
+ * dreamscape without `avatar-ids` (the starter) normalizes to an empty
  * list so the runtime always sees an array.
  */
 export function transformDreamscape(dreamscape) {
@@ -1279,7 +1279,7 @@ export function transformDreamscape(dreamscape) {
   if (result.guideId == null) result.guideId = null;
   if (result.affiliationId == null) result.affiliationId = null;
   if (typeof result.isStarter !== "boolean") result.isStarter = false;
-  if (!Array.isArray(result.dreamAvatarIds)) result.dreamAvatarIds = [];
+  if (!Array.isArray(result.avatarIds)) result.avatarIds = [];
   return result;
 }
 
@@ -1410,20 +1410,20 @@ export function regenerateCardData({
 
 function setupCatalogFixture({
   cardTomlPath,
-  dreamAvatarV2TomlPath,
+  avatarV2TomlPath,
   dreamsignTomlPath,
   publicDir,
   imageCacheDir,
-  dreamAvatarArtDir,
+  avatarArtDir,
   dreamsignArtDir,
   mainMenuBackgroundArtPath,
   tutorialDialogueFrameArtPath,
 }) {
   const parsedCards = parse(readFileSync(cardTomlPath, "utf8"));
   const jsonCards = (parsedCards.cards ?? []).map(transformCard);
-  const parsedDreamAvatars = parse(readFileSync(dreamAvatarV2TomlPath, "utf8"));
-  const jsonDreamAvatars = (parsedDreamAvatars.dreamAvatar ?? []).map(
-    transformDreamAvatar,
+  const parsedAvatars = parse(readFileSync(avatarV2TomlPath, "utf8"));
+  const jsonAvatars = (parsedAvatars.avatar ?? []).map(
+    transformAvatar,
   );
   const parsedDreamsigns = parse(readFileSync(dreamsignTomlPath, "utf8"));
   const altTextByImageName = readDreamsignAltText(dreamsignArtDir);
@@ -1437,8 +1437,8 @@ function setupCatalogFixture({
     `${JSON.stringify(jsonCards, null, 2)}\n`,
   );
   writeFileSync(
-    join(publicDir, "dream-avatars-v2-data.json"),
-    `${JSON.stringify(jsonDreamAvatars, null, 2)}\n`,
+    join(publicDir, "avatars-v2-data.json"),
+    `${JSON.stringify(jsonAvatars, null, 2)}\n`,
   );
   writeFileSync(
     join(publicDir, "dreamsign-data.json"),
@@ -1457,11 +1457,11 @@ function setupCatalogFixture({
       join(publicDir, "cards", `${card.imageNumber}.webp`),
     );
   }
-  for (const dreamAvatar of jsonDreamAvatars) {
-    if (typeof dreamAvatar.imageNumber !== "string") continue;
+  for (const avatar of jsonAvatars) {
+    if (typeof avatar.imageNumber !== "string") continue;
     linkCatalogArt(
-      join(dreamAvatarArtDir, `${dreamAvatar.imageNumber}.png`),
-      join(publicDir, "dream-avatars", `${dreamAvatar.imageNumber}.png`),
+      join(avatarArtDir, `${avatar.imageNumber}.png`),
+      join(publicDir, "avatars", `${avatar.imageNumber}.png`),
     );
   }
   for (const dreamsign of jsonDreamsigns) {
@@ -1483,7 +1483,7 @@ function setupCatalogFixture({
 export function setupAssets({
   cardTomlPath = join(DATA_DIR, "cards.toml"),
   cardV2TomlPath = join(DATA_DIR, "cards.toml"),
-  dreamAvatarV2TomlPath = join(DATA_DIR, "dream_avatars.toml"),
+  avatarV2TomlPath = join(DATA_DIR, "avatars.toml"),
   dreamwellTomlPath = join(DATA_DIR, "dreamwell.toml"),
   dreamsignTomlPath = join(DATA_DIR, "dreamsigns.toml"),
   dreamscapesTomlPath = join(DATA_DIR, "dreamscapes.toml"),
@@ -1506,7 +1506,7 @@ export function setupAssets({
   publicDir = PUBLIC_DIR,
   generatedConfigDir = join(ROOT, "src", "generated", "config"),
   imageCacheDir = IMAGE_CACHE_DIR,
-  dreamAvatarArtDir = defaultDreamAvatarArtDir(),
+  avatarArtDir = defaultAvatarArtDir(),
   dreamsignArtDir = DREAMSIGN_ART_DIR,
   journeyArtDir = JOURNEY_ART_DIR,
   mainMenuBackgroundArtPath = MAIN_MENU_BACKGROUND_ART_PATH,
@@ -1522,11 +1522,11 @@ export function setupAssets({
   if (catalogFixtureOnly) {
     setupCatalogFixture({
       cardTomlPath,
-      dreamAvatarV2TomlPath,
+      avatarV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,
-      dreamAvatarArtDir,
+      avatarArtDir,
       dreamsignArtDir,
       mainMenuBackgroundArtPath,
       tutorialDialogueFrameArtPath,
@@ -1535,7 +1535,7 @@ export function setupAssets({
   }
   const cardsDir = join(publicDir, "cards");
   const cardFrameDir = join(publicDir, "card-frame");
-  const dreamAvatarsDir = join(publicDir, "dream-avatars");
+  const avatarsDir = join(publicDir, "avatars");
   const dreamsignsDir = join(publicDir, "dreamsigns");
   const journeysDir = join(publicDir, "journeys");
   const mainMenuDir = join(publicDir, "main-menu");
@@ -1546,7 +1546,7 @@ export function setupAssets({
   const atlasArtDir = join(publicDir, "atlas");
   const cardJsonPath = join(publicDir, "card-data.json");
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
-  const dreamAvatarV2JsonPath = join(publicDir, "dream-avatars-v2-data.json");
+  const avatarV2JsonPath = join(publicDir, "avatars-v2-data.json");
   const dreamwellJsonPath = join(publicDir, "dreamwell-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
   const dreamscapesJsonPath = join(publicDir, "dreamscapes-data.json");
@@ -1596,21 +1596,21 @@ export function setupAssets({
     rootDir: ROOT,
     tutorialTomlPath,
   });
-  const tutorialDreamAvatars = parse(
-    readFileSync(dreamAvatarV2TomlPath, "utf8"),
-  ).dreamAvatar;
+  const tutorialAvatars = parse(
+    readFileSync(avatarV2TomlPath, "utf8"),
+  ).avatar;
   const tutorialDreamwellCards = parse(
     readFileSync(dreamwellTomlPath, "utf8"),
   ).dreamwell;
-  if (!Array.isArray(tutorialDreamAvatars)) {
-    throw new Error("Expected [[dreamAvatar]] array in dream_avatars.toml");
+  if (!Array.isArray(tutorialAvatars)) {
+    throw new Error("Expected [[avatar]] array in avatars.toml");
   }
   if (!Array.isArray(tutorialDreamwellCards)) {
     throw new Error("Expected [[dreamwell]] array in dreamwell.toml");
   }
   validateTutorialCatalogReferences(tutorialConfiguration, {
     cardIds: jsonCards.map((card) => card.id),
-    dreamAvatarIds: tutorialDreamAvatars.map((avatar) => avatar.id),
+    avatarIds: tutorialAvatars.map((avatar) => avatar.id),
     dreamwellCardIds: tutorialDreamwellCards.map((card) => card.id),
   });
   writeFileSync(
@@ -1629,10 +1629,10 @@ export function setupAssets({
     generatedConfigDir,
     "tides4-data.json",
   );
-  if (existsSync(tidesSourcePath) && existsSync(dreamAvatarV2TomlPath)) {
+  if (existsSync(tidesSourcePath) && existsSync(avatarV2TomlPath)) {
     const served = compileTidesData(
       parse(readFileSync(tidesSourcePath, "utf8")),
-      parse(readFileSync(dreamAvatarV2TomlPath, "utf8")),
+      parse(readFileSync(avatarV2TomlPath, "utf8")),
     );
     const serialized = `${JSON.stringify(served)}\n`;
     writeFileSync(tides4JsonPath, serialized);
@@ -1640,28 +1640,28 @@ export function setupAssets({
     console.log("Compiled tide catalogs to tides4-data.json");
   } else {
     console.log(
-      "No compiled tides or Dream Avatars found; run `npm run game-data:compile`.",
+      "No compiled tides or Avatars found; run `npm run game-data:compile`.",
     );
   }
 
-  // The v2 DreamAvatar identities (`dream_avatars.toml`) drive the standalone
+  // The v2 Avatar identities (`avatars.toml`) drive the standalone
   // draft test harness. They carry a kebab->camel normalization and a
   // `signature-cards` list used by tides4 baking and display surfaces.
-  console.log("Parsing dream_avatars.toml...");
-  const dreamAvatarV2TomlContent = readFileSync(dreamAvatarV2TomlPath, "utf8");
-  const parsedDreamAvatarsV2 = parse(dreamAvatarV2TomlContent);
-  const allDreamAvatarsV2 = parsedDreamAvatarsV2.dreamAvatar;
+  console.log("Parsing avatars.toml...");
+  const avatarV2TomlContent = readFileSync(avatarV2TomlPath, "utf8");
+  const parsedAvatarsV2 = parse(avatarV2TomlContent);
+  const allAvatarsV2 = parsedAvatarsV2.avatar;
 
-  if (!Array.isArray(allDreamAvatarsV2)) {
-    throw new Error("Expected [[dreamAvatar]] array in dream_avatars.toml");
+  if (!Array.isArray(allAvatarsV2)) {
+    throw new Error("Expected [[avatar]] array in avatars.toml");
   }
 
   // Signatures are authored as stable card UUIDs. Resolve them to current card
   // names for display and fail the build for a dangling reference. The UUIDs are
   // emitted as `signatureCardIds` (index-aligned with `signatureCards`) so
   // consumers that must distinguish two cards sharing a name can key on the id.
-  const jsonDreamAvatarsV2 = allDreamAvatarsV2.map((dreamAvatar) => {
-    const transformed = transformDreamAvatar(dreamAvatar);
+  const jsonAvatarsV2 = allAvatarsV2.map((avatar) => {
+    const transformed = transformAvatar(avatar);
     if (Array.isArray(transformed.signatureCards)) {
       const resolved = transformed.signatureCards.map((ref) =>
         resolveToken(ref, cardMaps),
@@ -1672,11 +1672,11 @@ export function setupAssets({
     return transformed;
   });
   writeFileSync(
-    dreamAvatarV2JsonPath,
-    JSON.stringify(jsonDreamAvatarsV2, null, 2) + "\n",
+    avatarV2JsonPath,
+    JSON.stringify(jsonAvatarsV2, null, 2) + "\n",
   );
   console.log(
-    `Wrote ${jsonDreamAvatarsV2.length} dreamAvatars to dream-avatars-v2-data.json`,
+    `Wrote ${jsonAvatarsV2.length} avatars to avatars-v2-data.json`,
   );
 
   // Dreamwell cards: the shared deck both players draw from one per turn during
@@ -1818,19 +1818,19 @@ export function setupAssets({
     allDreamscapes,
     jsonDreamGuides,
   );
-  // Enforce the resident-DreamAvatar invariant: non-starter dreamscapes
-  // partition dream_avatars.toml into 3-4 per region with no DreamAvatar in
-  // two regions. `jsonDreamAvatarsV2` was parsed above, so its ids are the
+  // Enforce the resident-Avatar invariant: non-starter dreamscapes
+  // partition avatars.toml into 3-4 per region with no Avatar in
+  // two regions. `jsonAvatarsV2` was parsed above, so its ids are the
   // authoritative set checked against.
-  const dreamAvatarCounts = validateDreamAvatarMapping(
+  const avatarCounts = validateAvatarMapping(
     jsonDreamscapes,
-    jsonDreamAvatarsV2.map((dreamAvatar) => dreamAvatar.id),
+    jsonAvatarsV2.map((avatar) => avatar.id),
   );
   for (const scape of jsonDreamscapes) {
     if (scape.isStarter) continue;
     console.log(
-      `  ${scape.id}: ${String(dreamAvatarCounts[scape.id])} dreamAvatars` +
-        ` -> ${scape.dreamAvatarIds.join(", ")}`,
+      `  ${scape.id}: ${String(avatarCounts[scape.id])} avatars` +
+        ` -> ${scape.avatarIds.join(", ")}`,
     );
   }
   writeFileSync(
@@ -1989,7 +1989,7 @@ export function setupAssets({
   });
   console.log("Wrote Opponent data to opponents-data.json");
 
-  // Apollyon incarnations: the final DreamAvatar's ten guises. Parse the TOML
+  // Apollyon incarnations: the final Avatar's ten guises. Parse the TOML
   // and write the kebab->camel JSON the runtime loader fetches at
   // /apollyon-incarnations-data.json; Atlas generation picks one to present the
   // boss node.
@@ -2203,69 +2203,69 @@ export function setupAssets({
     `Linked ${linkedDreamwell} of ${jsonDreamwell.length} dreamwell images (${missingDreamwell} missing)`,
   );
 
-  recreateDir(dreamAvatarsDir);
-  let linkedDreamAvatarArt = 0;
-  let missingDreamAvatarArt = 0;
+  recreateDir(avatarsDir);
+  let linkedAvatarArt = 0;
+  let missingAvatarArt = 0;
 
-  // Link portraits for the v2 draft-test DreamAvatars, keyed by image number so
-  // a portrait shared between several DreamAvatars is linked once.
-  const dreamAvatarArtByImageNumber = new Map();
-  for (const dreamAvatar of jsonDreamAvatarsV2) {
-    if (!dreamAvatarArtByImageNumber.has(dreamAvatar.imageNumber)) {
-      dreamAvatarArtByImageNumber.set(
-        dreamAvatar.imageNumber,
-        dreamAvatar.name,
+  // Link portraits for the v2 draft-test Avatars, keyed by image number so
+  // a portrait shared between several Avatars is linked once.
+  const avatarArtByImageNumber = new Map();
+  for (const avatar of jsonAvatarsV2) {
+    if (!avatarArtByImageNumber.has(avatar.imageNumber)) {
+      avatarArtByImageNumber.set(
+        avatar.imageNumber,
+        avatar.name,
       );
     }
   }
 
-  for (const [imageNumber, name] of dreamAvatarArtByImageNumber) {
+  for (const [imageNumber, name] of avatarArtByImageNumber) {
     const filename = `${imageNumber}.png`;
-    const sourcePath = join(dreamAvatarArtDir, filename);
-    const symlinkPath = join(dreamAvatarsDir, filename);
+    const sourcePath = join(avatarArtDir, filename);
+    const symlinkPath = join(avatarsDir, filename);
 
     if (existsSync(sourcePath)) {
       symlinkSync(sourcePath, symlinkPath);
-      linkedDreamAvatarArt++;
+      linkedAvatarArt++;
     } else {
       console.warn(
-        `  Warning: missing dreamAvatar art for ${name} (${imageNumber})`,
+        `  Warning: missing avatar art for ${name} (${imageNumber})`,
       );
-      missingDreamAvatarArt++;
+      missingAvatarArt++;
     }
   }
 
   console.log(
-    `Linked ${linkedDreamAvatarArt} of ${dreamAvatarArtByImageNumber.size} dreamAvatar portraits (${missingDreamAvatarArt} missing)`,
+    `Linked ${linkedAvatarArt} of ${avatarArtByImageNumber.size} avatar portraits (${missingAvatarArt} missing)`,
   );
 
   // Link the transparent full-body cutouts (`cutout/<imageNumber>.png` in the
-  // art source dir) to `public/dream-avatars/cutout/`. These are the character
-  // renders with the scene background removed, used wherever the DreamAvatar
-  // stands directly on UI chrome (DreamAvatar selection, portraits). Same
+  // art source dir) to `public/avatars/cutout/`. These are the character
+  // renders with the scene background removed, used wherever the Avatar
+  // stands directly on UI chrome (Avatar selection, portraits). Same
   // warn-and-continue policy as the scene portraits above.
-  const dreamAvatarCutoutSourceDir = join(dreamAvatarArtDir, "cutout");
-  const dreamAvatarCutoutsDir = join(dreamAvatarsDir, "cutout");
-  mkdirSync(dreamAvatarCutoutsDir, { recursive: true });
-  let linkedDreamAvatarCutouts = 0;
-  let missingDreamAvatarCutouts = 0;
-  for (const [imageNumber, name] of dreamAvatarArtByImageNumber) {
+  const avatarCutoutSourceDir = join(avatarArtDir, "cutout");
+  const avatarCutoutsDir = join(avatarsDir, "cutout");
+  mkdirSync(avatarCutoutsDir, { recursive: true });
+  let linkedAvatarCutouts = 0;
+  let missingAvatarCutouts = 0;
+  for (const [imageNumber, name] of avatarArtByImageNumber) {
     const filename = `${imageNumber}.png`;
-    const sourcePath = join(dreamAvatarCutoutSourceDir, filename);
-    const symlinkPath = join(dreamAvatarCutoutsDir, filename);
+    const sourcePath = join(avatarCutoutSourceDir, filename);
+    const symlinkPath = join(avatarCutoutsDir, filename);
 
     if (existsSync(sourcePath)) {
       symlinkSync(sourcePath, symlinkPath);
-      linkedDreamAvatarCutouts++;
+      linkedAvatarCutouts++;
     } else {
       console.warn(
-        `  Warning: missing dreamAvatar cutout for ${name} (${imageNumber})`,
+        `  Warning: missing avatar cutout for ${name} (${imageNumber})`,
       );
-      missingDreamAvatarCutouts++;
+      missingAvatarCutouts++;
     }
   }
   console.log(
-    `Linked ${linkedDreamAvatarCutouts} of ${dreamAvatarArtByImageNumber.size} dreamAvatar cutouts (${missingDreamAvatarCutouts} missing)`,
+    `Linked ${linkedAvatarCutouts} of ${avatarArtByImageNumber.size} avatar cutouts (${missingAvatarCutouts} missing)`,
   );
 
   recreateDir(dreamsignsDir);
@@ -2339,7 +2339,7 @@ export function setupAssets({
     // Graceful degradation when the developer's machine has no shutterstock
     // cache: the dream-art matcher still runs (the bundled TOML ledger is
     // independent of the on-disk image files), it just produces URLs that
-    // 404. Mirrors the existing dream-avatar/dreamsign warn-and-continue
+    // 404. Mirrors the existing avatar/dreamsign warn-and-continue
     // behaviour. Write an empty extension map so the runtime fetch succeeds.
     writeFileSync(journeyExtensionJsonPath, "{}\n");
     console.warn(

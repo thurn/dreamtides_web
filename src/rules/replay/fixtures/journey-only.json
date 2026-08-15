@@ -14,7 +14,7 @@
       "event": {
         "type": "START_JOURNEY",
         "payload": {
-          "dreamAvatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
+          "avatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -24,9 +24,9 @@
     {
       "seq": 2,
       "event": {
-        "type": "SELECT_DREAM_AVATAR",
+        "type": "SELECT_AVATAR",
         "payload": {
-          "dreamAvatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
+          "avatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -83,5 +83,5 @@
       }
     }
   ],
-  "finalHash": "2af0254a48a84fe176613552984fa51e21ea1e0ae59bea45ac8f9dcbf6cf86ca"
+  "finalHash": "72c4db530c41b9ba8b922245ac75ae6266e1858979cc43976db4362e44084814"
 }

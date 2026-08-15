@@ -1,13 +1,13 @@
 # How tides are generated
 
 During a journey, **tides** are preconstructed multisets of cards that supply
-the player's draft pool. A Dream Avatar does not point directly at one fixed
+the player's draft pool. A Avatar does not point directly at one fixed
 pool. It points at several tides with different roles, allowing later pool
 construction to preserve the Avatar's identity while varying its emphasis from
 one journey to another.
 
 The committed Tide catalog is generated before a journey begins. Its generator
-turns complete human draft records and authored Dream Avatar signatures into a
+turns complete human draft records and authored Avatar signatures into a
 deterministic library of decklists, then records which decklists belong to each
 Avatar. This essay explains that generation process. It stops at the catalog
 boundary: choosing tides for a particular journey, shuffling their cards, and
@@ -17,7 +17,7 @@ dealing a draft pool are separate rules.
 
 Every generated tide has one of three roles:
 
-- A **signature tide** is the dense identity floor for one Dream Avatar. Its
+- A **signature tide** is the dense identity floor for one Avatar. Its
   **seed cards**, the starting cards from which the tide grows, are all of that
   Avatar's signature cards that occur in the draft corpus.
 - A **facet tide** is a smaller, directional variation grown from one signature
@@ -125,7 +125,7 @@ reproducible without sampling randomness.
 
 ## Choosing signature and facet seeds
 
-For each Dream Avatar with signature cards represented in the corpus, the
+For each Avatar with signature cards represented in the corpus, the
 generator creates one signature tide. All represented signature cards seed the
 same growth to 110 copies. A signature card absent from the corpus cannot
 contribute affinity and is omitted from the seeds. If none of an Avatar's
@@ -197,9 +197,9 @@ have the final word. Both override forms identify cards by stable identifier.
 They alter the generated card lists without changing how the statistical corpus
 or the three tide roles are constructed.
 
-## Assigning tides to Dream Avatars
+## Assigning tides to Avatars
 
-The catalog records a Tide menu for every Dream Avatar after curation. A menu
+The catalog records a Tide menu for every Avatar after curation. A menu
 contains a starter tide, a ranked facet list, and a ranked neutral list.
 
 For an Avatar with a signature tide, each candidate facet anchor receives a
@@ -244,7 +244,7 @@ authored color replaces that default on later bakes. Claims are validated
 against the resulting deck so an interpretation that has drifted away from the
 cards can be rejected for review.
 
-The generated catalog identifies signature tides by their Dream Avatar and facet
+The generated catalog identifies signature tides by their Avatar and facet
 or neutral tides by their anchor card. Deck entries identify every card and copy
 count. Current names, subtypes, and rules text are refreshed for human use, but
 stable identifiers remain the authority.

@@ -1,11 +1,11 @@
 import { parseJourneySeed } from "../types/journey-seed";
 import { createContext, useContext, type ReactNode } from "react";
 import type { JourneyContent } from "../data/journey-content";
-import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
+import { toJourneyAvatar } from "../data/avatar-selection";
 import type { CardData } from "../types/cards";
 import type {
-  DreamAvatarContent,
-  ResolvedDreamAvatarPackage,
+  AvatarContent,
+  ResolvedAvatarPackage,
 } from "../types/content";
 import type {
   CardKeywordModification,
@@ -49,11 +49,11 @@ export { deriveEntryIdCounter };
 export interface JourneyMutations {
   changeEssence: (delta: number, source: JourneyMutationSource) => void;
   startJourney: (
-    dreamAvatar: DreamAvatarContent,
+    avatar: AvatarContent,
     seedOverride?: string,
   ) => void;
-  /** Request a shared debug reroll of the journey-start DreamAvatar offer. */
-  rerollDreamAvatarOffer: () => void;
+  /** Request a shared debug reroll of the journey-start Avatar offer. */
+  rerollAvatarOffer: () => void;
   completeSite: (siteId: SiteId, source: JourneyMutationSource) => void;
   /** Materialize the shared Three-Gate Wager deck commitment and Dreamsign. */
   ensureGambleSiteRuntime: (
@@ -257,8 +257,8 @@ export interface JourneyMutations {
     effectDescription: string,
     effectDetails: Record<string, unknown>,
   ) => void;
-  setDreamAvatarSelection: (
-    resolvedPackage: ResolvedDreamAvatarPackage,
+  setAvatarSelection: (
+    resolvedPackage: ResolvedAvatarPackage,
   ) => void;
   setCardSourceDebug: (
     cardSourceDebug: CardSourceDebugState | null,
@@ -295,10 +295,10 @@ export interface JourneyMutations {
   dismissStartingDeckPopup: () => void;
   /**
    * Debug-only: replaces an uninitialized journey state with one parked on a
-   * developer QA scene (see `src/runtime/qa-scenes.ts`), skipping DreamAvatar
+   * developer QA scene (see `src/runtime/qa-scenes.ts`), skipping Avatar
    * selection so screens reachable only by playing battles forward — such as
    * the Dream Atlas boss preview — can be opened directly for browser QA.
-   * Drives the `?goto=<scene>` runtime flag. No-op once a DreamAvatar is
+   * Drives the `?goto=<scene>` runtime flag. No-op once an Avatar is
    * selected. Optional because only the live multiplayer provider implements
    * it; lightweight test/demo mutation stubs omit it.
    */
@@ -492,7 +492,7 @@ export function createDefaultState(
     essence: economy.defaultStartingEssence,
     maxDreamsigns: economy.dreamsignCap,
     deck: [],
-    dreamAvatar: null,
+    avatar: null,
     resolvedPackage: null,
     cardSourceDebug: null,
     remainingDreamsignPool: [],
@@ -527,13 +527,13 @@ export function createDefaultState(
   };
 }
 
-export function applyDreamAvatarSelection(
+export function applyAvatarSelection(
   prev: JourneyState,
-  resolvedPackage: ResolvedDreamAvatarPackage,
+  resolvedPackage: ResolvedAvatarPackage,
 ): JourneyState {
   return {
     ...prev,
-    dreamAvatar: toJourneyDreamAvatar(resolvedPackage.dreamAvatar),
+    avatar: toJourneyAvatar(resolvedPackage.avatar),
     resolvedPackage,
     remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],
   };

@@ -112,7 +112,7 @@ export function IntroSection(): ReactElement {
         <Principle title="Material Continuity">
           <p style={bodyStyle}>
             Nothing in Cumulus fades into existence. The entities that carry
-            meaning — cards, dreamsigns, essence, and DreamAvatars — travel and
+            meaning — cards, dreamsigns, essence, and Avatars — travel and
             expand between the states they occupy rather than appearing or
             disappearing. Two canonical transitions cover every case:
             object-travel, when a value moves between two anchors, and
@@ -156,7 +156,7 @@ export function IntroSection(): ReactElement {
         <Principle title="The Popup Rule">
           <p style={bodyStyle}>
             Every reveal-on-interaction popup — a tide description, the
-            DreamAvatar profile, a dreamsign&rsquo;s ability text, a site
+            Avatar profile, a dreamsign&rsquo;s ability text, a site
             description, essence — participates in the single{" "}
             <a
               href="#/systems/entity-reveals"

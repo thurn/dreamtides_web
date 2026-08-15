@@ -3,7 +3,7 @@ import {
   resolveDeckEntryCard,
 } from "../../card-type-change";
 import { createDreamsign } from "../../data/dreamsigns";
-import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
+import { toJourneyAvatar } from "../../data/avatar-selection";
 import {
   EXPLORATION_CHOOSABLE_SITE_TYPES,
   explorationActionUsesOfferedDeckTarget,
@@ -126,7 +126,7 @@ interface ExplorationSelection {
   subtype?: unknown;
   replacedDreamsignId?: unknown;
   dreamsignId?: unknown;
-  dreamAvatarId?: unknown;
+  avatarId?: unknown;
   offeredDreamsignId?: unknown;
   purgedDreamsignId?: unknown;
   overflowReplacementDreamsignIds?: unknown;
@@ -466,7 +466,7 @@ function emptyOffer(
     offeredCardIds: [],
     offeredDreamsignIds: [],
     offeredDeckEntryIds: [],
-    offeredDreamAvatarIds: [],
+    offeredAvatarIds: [],
     packCardIds: [],
     replacementCardIdByEntryId: {},
     transfigurationByEntryId: {},
@@ -830,14 +830,14 @@ function buildLegacyActionOffer(
       .map((entry) => entry.entryId);
     return offer;
   }
-  if (action.effectKind === "choose-dream-avatar") {
-    const currentId = journey.dreamAvatar?.id;
-    const candidates = content.dreamAvatars
-      .filter((dreamAvatar) => dreamAvatar.id !== currentId)
+  if (action.effectKind === "choose-avatar") {
+    const currentId = journey.avatar?.id;
+    const candidates = content.avatars
+      .filter((avatar) => avatar.id !== currentId)
       .sort((left, right) => left.id.localeCompare(right.id));
-    offer.offeredDreamAvatarIds = legacyShuffled(candidates, rng)
+    offer.offeredAvatarIds = legacyShuffled(candidates, rng)
       .slice(0, action.offerCount ?? 3)
-      .map((dreamAvatar) => dreamAvatar.id);
+      .map((avatar) => avatar.id);
     return offer;
   }
   if (
@@ -1007,8 +1007,8 @@ function canonicalSelectionForAction(action: ExplorationActionContent): {
         mechanicId: "change-entry-card-type",
         policyId: "deck-entry-centrality",
       };
-    case "choose-dream-avatar":
-      return { mechanicId: "choose-dream-avatar", policyId: "uniform" };
+    case "choose-avatar":
+      return { mechanicId: "choose-avatar", policyId: "uniform" };
     case "transfigured-card-draft":
       return { mechanicId: "transfigured-card-chooser", policyId: "card-fit" };
     case "add-fixed-site":
@@ -1546,17 +1546,17 @@ function buildActionOffer(
     offer.offeredDeckEntryIds = [...selected.bindings.deckEntryIds];
     return withSelection(offer, selected);
   }
-  if (action.effectKind === "choose-dream-avatar") {
+  if (action.effectKind === "choose-avatar") {
     const selected = select({
       count: action.offerCount ?? 3,
       constraints: {
-        excludedDreamAvatarIds:
-          journey.dreamAvatar === null ? [] : [journey.dreamAvatar.id],
+        excludedAvatarIds:
+          journey.avatar === null ? [] : [journey.avatar.id],
       },
     });
     if (selected === null) return null;
-    offer.offeredDreamAvatarIds = [...selected.bindings.dreamAvatarIds];
-    if (offer.offeredDreamAvatarIds.length !== (action.offerCount ?? 3))
+    offer.offeredAvatarIds = [...selected.bindings.avatarIds];
+    if (offer.offeredAvatarIds.length !== (action.offerCount ?? 3))
       return null;
     return withSelection(offer, selected);
   }
@@ -3994,27 +3994,27 @@ export function resolveExplorationChoice(input: {
       };
       break;
     }
-    case "choose-dream-avatar": {
-      const dreamAvatarId = stringValue(selection.dreamAvatarId);
-      if (dreamAvatarId === null) return null;
-      const offeredDreamAvatarId = offer.offeredDreamAvatarIds?.find(
-        (candidate) => candidate === dreamAvatarId,
+    case "choose-avatar": {
+      const avatarId = stringValue(selection.avatarId);
+      if (avatarId === null) return null;
+      const offeredAvatarId = offer.offeredAvatarIds?.find(
+        (candidate) => candidate === avatarId,
       );
-      if (offeredDreamAvatarId === undefined) return null;
-      const dreamAvatar = content.dreamAvatars.find(
-        (candidate) => candidate.id === offeredDreamAvatarId,
+      if (offeredAvatarId === undefined) return null;
+      const avatar = content.avatars.find(
+        (candidate) => candidate.id === offeredAvatarId,
       );
-      if (dreamAvatar === undefined) return null;
-      result.previousDreamAvatarId = next.dreamAvatar?.id;
-      result.chosenDreamAvatarId = dreamAvatar.id;
-      result.selection = { dreamAvatarId: dreamAvatar.id };
+      if (avatar === undefined) return null;
+      result.previousAvatarId = next.avatar?.id;
+      result.chosenAvatarId = avatar.id;
+      result.selection = { avatarId: avatar.id };
       next = {
         ...next,
-        dreamAvatar: toJourneyDreamAvatar(dreamAvatar),
+        avatar: toJourneyAvatar(avatar),
         resolvedPackage:
           next.resolvedPackage === null
             ? null
-            : { ...next.resolvedPackage, dreamAvatar },
+            : { ...next.resolvedPackage, avatar },
       };
       break;
     }

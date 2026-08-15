@@ -19,7 +19,7 @@ properties and one reusable selector:
 - Seeded top-band sampling turns an ordered candidate set into a varied,
   replayable choice.
 
-Cards, Dreamsigns, affiliations, Dream Avatars, rewards, and opponent decks all
+Cards, Dreamsigns, affiliations, Avatars, rewards, and opponent decks all
 use this vocabulary. The Tides4 algorithm remains the production constructor for
 each journey's 150-card draft pool.
 
@@ -91,11 +91,11 @@ Their unweighted sum is the affiliation vector. Exactly three makes each
 affiliation equally expressive and prevents authored magnitude from becoming a
 hidden weighting control.
 
-### Dream Avatars
+### Avatars
 
-Each entry in `data/dream_avatars.ron` owns its Tides4 `tide_pool`: an optional
+Each entry in `data/avatars.ron` owns its Tides4 `tide_pool`: an optional
 signature Tide, one or more facet Tides, and neutral fill Tides. This structure
-defines the card universe available to that Dream Avatar and supplies the
+defines the card universe available to that Avatar and supplies the
 identity basis used when constructing its opponents.
 
 ### Feature tuning
@@ -201,7 +201,7 @@ isolated purposes so adding one kind of random draw cannot perturb another.
 
 Normal Journey opponents use the following pipeline:
 
-1. Select a Dream Avatar from the current dreamscape's resident roster.
+1. Select an Avatar from the current dreamscape's resident roster.
 2. Run the exact production Tides4 generator for that avatar and seed.
 3. Form the initial context from the pool's joined Tides and the affiliation's
    three Tides.
@@ -214,7 +214,7 @@ Normal Journey opponents use the following pipeline:
 8. Below the configured Legendary layer, exclude Legendary candidates.
 9. At early layers, cut the least-affine selected non-Starters and insert the
    exact configured number of Starter cards while preserving deck size.
-10. Activate the opponent Dream Avatar ability at its configured layer.
+10. Activate the opponent Avatar ability at its configured layer.
 
 The ordinary mature deck size is 30. The first two layers insert 10 and 5
 Starter cards respectively, producing 33% and 17% Starter dilution while
@@ -365,7 +365,7 @@ Deterministic synthetic tests must prove:
   persistence workflow.
 
 Post-cutover telemetry should compare deck size, rarity mix, event share, curve,
-affiliation cosine, Dream Avatar cosine, repeat-deck rate, battle win rate, and
+affiliation cosine, Avatar cosine, repeat-deck rate, battle win rate, and
 player reward acceptance. A material regression should first be addressed by
 RON tuning or rarity curation; a new learned data source requires a separate
 design decision.

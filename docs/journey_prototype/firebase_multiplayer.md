@@ -228,8 +228,8 @@ state without starting Firebase.
    connected participants.
 4. Make the first tutorial gameplay move in one client. Confirm it becomes the
    controller and the second client remains on the shared screen with player
-   interaction inert through the fixed Dream Avatar selection.
-5. Select the tutorial Dream Avatar. Confirm both clients become interactive
+   interaction inert through the fixed Avatar selection.
+5. Select the tutorial Avatar. Confirm both clients become interactive
    on the first dreamscape and retain the shared tutorial guidance.
 6. Open a draft site, pick a card in one client, and confirm the other client
    advances to the same next offer and deck.
@@ -247,7 +247,7 @@ state without starting Firebase.
     return to the same journey route.
 13. Reload either client during journey play and battle; confirm the shared
     collaborative state is restored.
-14. Before Dream Avatar selection, close the controller, confirm the observer
+14. Before Avatar selection, close the controller, confirm the observer
     shows **Player Disconnected**,
     choose **Take Control**, and continue from the same fold.
 15. Open `?viewLogs=<roomId>` and confirm the persisted diagnostic records are

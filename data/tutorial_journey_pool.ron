@@ -2,8 +2,8 @@
 
 #![enable(implicit_some)]
 TutorialJourneyDraftPool(
-  // The Dream Avatar offered after the standalone tutorial and used to start its journey.
-  tutorial_dream_avatar_id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+  // The Avatar offered after the standalone tutorial and used to start its journey.
+  tutorial_avatar_id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
 
   // Matches the ordinary journey deal size and the sum of all Tide card copies.
   pool_size: 150,

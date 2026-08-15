@@ -1,5 +1,5 @@
 import type { CardData } from "../types/cards";
-import type { ResolvedDreamAvatarPackage } from "../types/content";
+import type { ResolvedAvatarPackage } from "../types/content";
 import type {
   CardSourceDebugEntry,
   CardSourceDebugState,
@@ -9,7 +9,7 @@ import { serializeCardNumber } from "../types/draft";
 
 function buildCardSourceDebugEntry(
   card: Readonly<CardData>,
-  resolvedPackage: ResolvedDreamAvatarPackage | null,
+  resolvedPackage: ResolvedAvatarPackage | null,
 ): CardSourceDebugEntry {
   const draftPoolCopies =
     resolvedPackage?.draftPoolCopiesByCard[
@@ -27,7 +27,7 @@ export function buildCardSourceDebugState(
   screenLabel: string,
   surface: CardSourceDebugSurface,
   cards: readonly Readonly<CardData>[],
-  resolvedPackage: ResolvedDreamAvatarPackage | null,
+  resolvedPackage: ResolvedAvatarPackage | null,
 ): CardSourceDebugState | null {
   if (cards.length === 0) {
     return null;

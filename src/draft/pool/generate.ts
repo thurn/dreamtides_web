@@ -8,27 +8,27 @@ import {
   type PoolData,
 } from "./types.ts";
 import { DEFAULT_TIDES4_TUNING, generateTides4 } from "./variant-tides4.ts";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 
 export function generatePool(
   cards: readonly PoolCard[],
   seed?: number,
-  dreamAvatarId?: DreamAvatarId,
+  avatarId?: AvatarId,
   tides4Tuning?: Tides4Tuning,
 ): GeneratedPool {
   return generatePoolFromData(
     buildPoolData(cards),
     seed,
-    dreamAvatarId,
+    avatarId,
     tides4Tuning,
   );
 }
 
-/** Generate the production tides4 pool for one Dream Avatar. */
+/** Generate the production tides4 pool for one Avatar. */
 export function generatePoolFromData(
   poolData: PoolData,
   seed?: number,
-  dreamAvatarId?: DreamAvatarId,
+  avatarId?: AvatarId,
   tides4Tuning: Tides4Tuning = DEFAULT_TIDES4_TUNING,
 ): GeneratedPool {
   const resolvedSeed =
@@ -36,7 +36,7 @@ export function generatePoolFromData(
   const generated = generateTides4(
     makeRng(resolvedSeed),
     poolData,
-    dreamAvatarId,
+    avatarId,
     tides4Tuning,
   );
   const counts = new Map(

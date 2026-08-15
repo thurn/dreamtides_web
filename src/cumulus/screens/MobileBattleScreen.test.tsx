@@ -123,7 +123,7 @@ function makeSide(
       { id: parseBattleSlotViewId(`${owner}-front-empty`), card: null },
     ],
     status: {
-      dreamAvatar: {
+      avatar: {
         imageNumber: owner === "enemy" ? "0042" : "0007",
         name: assertLocalized(
           owner === "enemy" ? "Enemy Avatar" : "Player Avatar",

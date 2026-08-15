@@ -8,10 +8,10 @@
 // `docName` still points at the real JourneyStatusBar so the props table reports
 // its actual API.
 //
-// Each dreamsign's `imageName` and the DreamAvatar `portrait` resolve from real
+// Each dreamsign's `imageName` and the Avatar `portrait` resolve from real
 // production art in `public/` — the same assets the full-screen mockup uses — so the demo
-// shows genuine dreamsign icons and a real DreamAvatar bust rather than
-// stand-in glyphs. `dreamsigns` / `dreamAvatar` are ReactNode-free object props
+// shows genuine dreamsign icons and a real Avatar bust rather than
+// stand-in glyphs. `dreamsigns` / `avatar` are ReactNode-free object props
 // seeded via defaultArgs.
 
 import { useRef } from "react";
@@ -21,7 +21,7 @@ import type { JourneyStatusBarProps } from "../../components/hud/JourneyStatusBa
 import { artRef } from "../../primitives/art";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
-import { parseDreamAvatarId } from "../../../types/identifiers";
+import { parseAvatarId } from "../../../types/identifiers";
 import { demoDreamsign } from "./promotion-fixtures";
 
 function JourneyStatusBarDemo(args: Omit<JourneyStatusBarProps, "stageRef">) {
@@ -63,7 +63,7 @@ export const journeyStatusBarDemo: CumulusComponent = {
   Component: JourneyStatusBarDemo,
   usage: [
     {
-      note: "A transparent HUD that positions itself against the screen root and reveals the DreamAvatar / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it. Mobile screen-level floating glass panels use `JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE` for their bottom edge so every screen preserves the same separation from the HUD.",
+      note: "A transparent HUD that positions itself against the screen root and reveals the Avatar / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it. Mobile screen-level floating glass panels use `JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE` for their bottom edge so every screen preserves the same separation from the HUD.",
       code: `import { useRef } from "react";
 import { JourneyStatusBar } from "src/cumulus/components/hud/JourneyStatusBar";
 
@@ -75,7 +75,7 @@ const stageRef = useRef<HTMLDivElement>(null);
     stageRef={stageRef}
     essence={200}
     deck={22}
-    dreamAvatar={dreamAvatar}
+    avatar={avatar}
     dreamsigns={dreamsigns}
   />
 </div>`,
@@ -87,11 +87,11 @@ const stageRef = useRef<HTMLDivElement>(null);
       size: "compact",
       essence: 200,
       deck: 22,
-      dreamAvatar: {
-        id: parseDreamAvatarId("84e7020c-7384-4cc3-a20f-ab05f03cc375"),
+      avatar: {
+        id: parseAvatarId("84e7020c-7384-4cc3-a20f-ab05f03cc375"),
         name: assertLocalized("Threxan"),
         epithet: assertLocalized("the Resounding Wrath"),
-        portrait: artRef.dreamAvatar("0025"),
+        portrait: artRef.avatar("0025"),
         ability: assertLocalized(
           "At the start of your first turn, draw a card.",
         ),

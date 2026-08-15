@@ -10,17 +10,17 @@ const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 export const DEFAULT_DREAMSCAPE_TOML_PATH = join("data", "dreamscapes.toml");
 export const DREAM_GUIDES_TOML_PATH = join("data", "dream_guides.toml");
 const AFFILIATIONS_TOML_PATH = join("data", "affiliations.toml");
-const DREAM_AVATARS_TOML_PATH = join("data", "dream_avatars.toml");
+const AVATARS_TOML_PATH = join("data", "avatars.toml");
 
 /**
- * Each non-starter dreamscape must list 3-4 resident DreamAvatars and every
- * DreamAvatar belongs to at most one region (see `validateDreamAvatarMapping` in
+ * Each non-starter dreamscape must list 3-4 resident Avatars and every
+ * Avatar belongs to at most one region (see `validateAvatarMapping` in
  * setup-assets, which is fatal on a duplicate assignment or an out-of-range
  * count). The editor enforces these same bounds on every reassignment so a save
  * is rejected before the canonical RON transaction can publish.
  */
-export const MIN_DREAM_AVATARS_PER_REGION = 3;
-export const MAX_DREAM_AVATARS_PER_REGION = 4;
+export const MIN_AVATARS_PER_REGION = 3;
+export const MAX_AVATARS_PER_REGION = 4;
 
 /**
  * Dreamscape fields the editor can save. `name` is free text; `signature-site`
@@ -76,8 +76,8 @@ function editorRecordFromDreamscape(dreamscape, index, guideByHome) {
     fixedSites: Array.isArray(dreamscape["fixed-sites"])
       ? dreamscape["fixed-sites"].filter((entry) => typeof entry === "string")
       : [],
-    dreamAvatarIds: Array.isArray(dreamscape["dream-avatar-ids"])
-      ? dreamscape["dream-avatar-ids"].filter(
+    avatarIds: Array.isArray(dreamscape["avatar-ids"])
+      ? dreamscape["avatar-ids"].filter(
           (entry) => typeof entry === "string",
         )
       : [],
@@ -211,49 +211,49 @@ export function makeValidateDreamscapeEdit({ guideIds, affiliationIds }) {
 }
 
 /**
- * Read the DreamAvatar catalog as `{ id, name, title, imageNumber, renderedText }`
- * options for the editor's resident-DreamAvatar picker, portraits, and ability
+ * Read the Avatar catalog as `{ id, name, title, imageNumber, renderedText }`
+ * options for the editor's resident-Avatar picker, portraits, and ability
  * hover popovers. Ids are the canonical UUID key written into a dreamscape's
- * `dream-avatar-ids`.
+ * `avatar-ids`.
  */
-export function readDreamAvatarOptions({ rootDir = ROOT } = {}) {
+export function readAvatarOptions({ rootDir = ROOT } = {}) {
   const parsed = parse(
-    readFileSync(join(rootDir, DREAM_AVATARS_TOML_PATH), "utf8"),
+    readFileSync(join(rootDir, AVATARS_TOML_PATH), "utf8"),
   );
-  const dreamAvatars = Array.isArray(parsed.dreamAvatar)
-    ? parsed.dreamAvatar
+  const avatars = Array.isArray(parsed.avatar)
+    ? parsed.avatar
     : [];
-  return dreamAvatars
-    .filter((dreamAvatar) => typeof dreamAvatar.id === "string")
-    .map((dreamAvatar) => ({
-      id: dreamAvatar.id,
+  return avatars
+    .filter((avatar) => typeof avatar.id === "string")
+    .map((avatar) => ({
+      id: avatar.id,
       name:
-        typeof dreamAvatar.name === "string"
-          ? dreamAvatar.name
-          : dreamAvatar.id,
-      title: typeof dreamAvatar.title === "string" ? dreamAvatar.title : "",
+        typeof avatar.name === "string"
+          ? avatar.name
+          : avatar.id,
+      title: typeof avatar.title === "string" ? avatar.title : "",
       imageNumber:
-        typeof dreamAvatar["image-number"] === "string"
-          ? dreamAvatar["image-number"]
+        typeof avatar["image-number"] === "string"
+          ? avatar["image-number"]
           : "",
       renderedText:
-        typeof dreamAvatar["rendered-text"] === "string"
-          ? dreamAvatar["rendered-text"]
+        typeof avatar["rendered-text"] === "string"
+          ? avatar["rendered-text"]
           : "",
     }));
 }
 
-function regionForDreamAvatar(dreamscapes, dreamAvatarId) {
-  const key = dreamAvatarId.toLowerCase();
+function regionForAvatar(dreamscapes, avatarId) {
+  const key = avatarId.toLowerCase();
   return (
     dreamscapes.find((scape) =>
-      scape.dreamAvatarIds.some((id) => id.toLowerCase() === key),
+      scape.avatarIds.some((id) => id.toLowerCase() === key),
     ) ?? null
   );
 }
 
-function withoutId(ids, dreamAvatarId) {
-  const key = dreamAvatarId.toLowerCase();
+function withoutId(ids, avatarId) {
+  const key = avatarId.toLowerCase();
   return ids.filter((id) => id.toLowerCase() !== key);
 }
 
@@ -267,7 +267,7 @@ function planFailure(message) {
 }
 
 /**
- * Compute the set of `dream-avatar-ids` array changes for one reassignment,
+ * Compute the set of `avatar-ids` array changes for one reassignment,
  * enforcing every build invariant so the result is always a valid mapping:
  *
  *   - `replace`: swap resident `outId` out of `dreamscapeId` and `inId` in. When
@@ -282,7 +282,7 @@ function planFailure(message) {
  * Returns `{ ok: true, changes: [{ id, ids }] }` listing only the regions whose
  * arrays change, or `{ ok: false, message }` describing why the move is illegal.
  */
-export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
+export function planAvatarAssignment(dreamscapes, catalogIds, request) {
   const knownById = new Map(catalogIds.map((id) => [id.toLowerCase(), id]));
   const { action, dreamscapeId } = request;
 
@@ -291,7 +291,7 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
     return planFailure(`Dreamscape ${String(dreamscapeId)} was not found.`);
   }
   if (target.isStarter) {
-    return planFailure("The starter dreamscape cannot host DreamAvatars.");
+    return planFailure("The starter dreamscape cannot host Avatars.");
   }
 
   const canonicalIn =
@@ -301,36 +301,36 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
   const canonicalOut =
     request.outId === undefined
       ? null
-      : (target.dreamAvatarIds.find(
+      : (target.avatarIds.find(
           (id) => id.toLowerCase() === String(request.outId).toLowerCase(),
         ) ?? null);
 
   const targetHas = (id) =>
-    target.dreamAvatarIds.some(
+    target.avatarIds.some(
       (existing) => existing.toLowerCase() === id.toLowerCase(),
     );
 
   if (action === "replace") {
     if (canonicalOut === null) {
       return planFailure(
-        "The DreamAvatar to replace is not a resident of this region.",
+        "The Avatar to replace is not a resident of this region.",
       );
     }
     if (request.inId !== undefined && canonicalIn === null) {
-      return planFailure("The replacement is not a known DreamAvatar.");
+      return planFailure("The replacement is not a known Avatar.");
     }
     if (canonicalIn === null) {
-      return planFailure("Choose a replacement DreamAvatar.");
+      return planFailure("Choose a replacement Avatar.");
     }
     if (targetHas(canonicalIn)) {
-      return planFailure("That DreamAvatar already lives in this region.");
+      return planFailure("That Avatar already lives in this region.");
     }
 
-    const source = regionForDreamAvatar(dreamscapes, canonicalIn);
+    const source = regionForAvatar(dreamscapes, canonicalIn);
     const changes = [
       {
         id: target.id,
-        ids: replaceId(target.dreamAvatarIds, canonicalOut, canonicalIn),
+        ids: replaceId(target.avatarIds, canonicalOut, canonicalIn),
       },
     ];
     if (source !== null) {
@@ -338,7 +338,7 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
       // the source region keeps its count.
       changes.push({
         id: source.id,
-        ids: replaceId(source.dreamAvatarIds, canonicalIn, canonicalOut),
+        ids: replaceId(source.avatarIds, canonicalIn, canonicalOut),
       });
     }
     return { ok: true, changes };
@@ -346,35 +346,35 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
 
   if (action === "add") {
     if (canonicalIn === null) {
-      return planFailure("Choose a DreamAvatar to add.");
+      return planFailure("Choose an Avatar to add.");
     }
     if (targetHas(canonicalIn)) {
-      return planFailure("That DreamAvatar already lives in this region.");
+      return planFailure("That Avatar already lives in this region.");
     }
-    if (target.dreamAvatarIds.length >= MAX_DREAM_AVATARS_PER_REGION) {
+    if (target.avatarIds.length >= MAX_AVATARS_PER_REGION) {
       return planFailure(
-        `A region can host at most ${String(MAX_DREAM_AVATARS_PER_REGION)} DreamAvatars.`,
+        `A region can host at most ${String(MAX_AVATARS_PER_REGION)} Avatars.`,
       );
     }
 
-    const source = regionForDreamAvatar(dreamscapes, canonicalIn);
+    const source = regionForAvatar(dreamscapes, canonicalIn);
     if (
       source !== null &&
-      source.dreamAvatarIds.length <= MIN_DREAM_AVATARS_PER_REGION
+      source.avatarIds.length <= MIN_AVATARS_PER_REGION
     ) {
       return planFailure(
-        `${source.name} would drop below ${String(MIN_DREAM_AVATARS_PER_REGION)} DreamAvatars. ` +
+        `${source.name} would drop below ${String(MIN_AVATARS_PER_REGION)} Avatars. ` +
           "Swap with one of its residents instead.",
       );
     }
 
     const changes = [
-      { id: target.id, ids: [...target.dreamAvatarIds, canonicalIn] },
+      { id: target.id, ids: [...target.avatarIds, canonicalIn] },
     ];
     if (source !== null) {
       changes.push({
         id: source.id,
-        ids: withoutId(source.dreamAvatarIds, canonicalIn),
+        ids: withoutId(source.avatarIds, canonicalIn),
       });
     }
     return { ok: true, changes };
@@ -383,19 +383,19 @@ export function planDreamAvatarAssignment(dreamscapes, catalogIds, request) {
   if (action === "remove") {
     if (canonicalOut === null) {
       return planFailure(
-        "The DreamAvatar to remove is not a resident of this region.",
+        "The Avatar to remove is not a resident of this region.",
       );
     }
-    if (target.dreamAvatarIds.length <= MIN_DREAM_AVATARS_PER_REGION) {
+    if (target.avatarIds.length <= MIN_AVATARS_PER_REGION) {
       return planFailure(
-        `A region must keep at least ${String(MIN_DREAM_AVATARS_PER_REGION)} DreamAvatars. ` +
+        `A region must keep at least ${String(MIN_AVATARS_PER_REGION)} Avatars. ` +
           "Replace this one instead of removing it.",
       );
     }
     return {
       ok: true,
       changes: [
-        { id: target.id, ids: withoutId(target.dreamAvatarIds, canonicalOut) },
+        { id: target.id, ids: withoutId(target.avatarIds, canonicalOut) },
       ],
     };
   }

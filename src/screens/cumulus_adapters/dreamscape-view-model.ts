@@ -16,7 +16,7 @@ import {
 } from "../../cumulus/components/dreamscape/dreamscape-scatter";
 import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/SiteNode";
 import type {
-  QsbDreamAvatar,
+  QsbAvatar,
   QsbDreamsign,
 } from "../../cumulus/components/hud/JourneyStatusBar";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
@@ -34,7 +34,7 @@ import type {
 } from "../../cumulus/screens/DreamscapeScreen";
 import type { DreamsignReplacementModel } from "../../cumulus/components/overlay/DreamsignReplacementDialog";
 import type {
-  DreamAvatar,
+  Avatar,
   Dreamsign,
   DreamscapeNode,
   JourneyState,
@@ -62,7 +62,7 @@ const FALLBACK_POS = { x: 50, y: 58 } as const;
 export interface JourneyChromeHudView {
   essence: number;
   deck: number;
-  dreamAvatar?: QsbDreamAvatar;
+  avatar?: QsbAvatar;
   dreamsigns: QsbDreamsign[];
 }
 
@@ -180,20 +180,20 @@ export function buildSiteModels(
   });
 }
 
-/** Map the active DreamAvatar to the bust the JourneyStatusBar docks. */
-export function toQsbDreamAvatar(
-  dreamAvatar: DreamAvatar | null,
-): QsbDreamAvatar | undefined {
-  if (dreamAvatar === null) {
+/** Map the active Avatar to the bust the JourneyStatusBar docks. */
+export function toQsbAvatar(
+  avatar: Avatar | null,
+): QsbAvatar | undefined {
+  if (avatar === null) {
     return undefined;
   }
   return {
-    id: dreamAvatar.id,
-    name: localizedSourceText(dreamAvatar.name),
-    epithet: localizedSourceText(dreamAvatar.title),
-    portrait: artRef.dreamAvatar(dreamAvatar.imageNumber),
-    portraitFocus: dreamAvatar.portraitFocus,
-    ability: localizedSourceText(dreamAvatar.renderedText),
+    id: avatar.id,
+    name: localizedSourceText(avatar.name),
+    epithet: localizedSourceText(avatar.title),
+    portrait: artRef.avatar(avatar.imageNumber),
+    portraitFocus: avatar.portraitFocus,
+    ability: localizedSourceText(avatar.renderedText),
   };
 }
 
@@ -230,7 +230,7 @@ export function buildDreamscapeHudView(
   return {
     essence: Math.max(0, state.essence - pendingExplorationEssence),
     deck: state.deck.length,
-    dreamAvatar: toQsbDreamAvatar(state.dreamAvatar),
+    avatar: toQsbAvatar(state.avatar),
     dreamsigns: toQsbDreamsigns(state.dreamsigns),
   };
 }

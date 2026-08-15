@@ -24,8 +24,8 @@ import { cardStatOrbDemo } from "./demos/card-stat-orb";
 import { characterDialogueDemo } from "./demos/character-dialogue";
 import { coopPresenceStatusDemo } from "./demos/coop-presence-status";
 import { commandMenuDemo } from "./demos/command-menu";
-import { dreamAvatarPortraitDemo } from "./demos/dream-avatar-portrait";
-import { dreamAvatarStageDemo } from "./demos/dream-avatar-stage";
+import { avatarPortraitDemo } from "./demos/avatar-portrait";
+import { avatarStageDemo } from "./demos/avatar-stage";
 import { dreamwellCardDemo } from "./demos/dreamwell-card";
 import { dreamsignDemo } from "./demos/dreamsign";
 import { dreamsignGalleryPanelDemo } from "./demos/dreamsign-gallery-panel";
@@ -127,8 +127,8 @@ export type CumulusComponentId =
   | "coop-presence-status"
   | "developer-rail"
   | "disclosure-section"
-  | "dream-avatar-portrait"
-  | "dream-avatar-stage"
+  | "avatar-portrait"
+  | "avatar-stage"
   | "dreamsign"
   | "dreamsign-gallery-panel"
   | "dreamsign-replacement-dialog"
@@ -313,8 +313,8 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
   transfigurationDetailPanelDemo,
   cardChangePairDemo,
 
-  dreamAvatarPortraitDemo,
-  dreamAvatarStageDemo,
+  avatarPortraitDemo,
+  avatarStageDemo,
   dreamsignDemo,
   dreamsignGalleryPanelDemo,
 

@@ -6,7 +6,7 @@ import type { JourneyContent } from "../../data/journey-content";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import type {
-  DreamAvatar,
+  Avatar,
   Dreamsign,
   DreamscapeNode,
   JourneyState,
@@ -23,14 +23,14 @@ import {
   buildSiteModels as buildSiteModelsImpl,
   dreamscapeSceneRef,
   dreamscapeTitle,
-  toQsbDreamAvatar,
+  toQsbAvatar,
   toQsbDreamsigns,
 } from "./dreamscape-view-model";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
-import { testCardId, testDreamAvatarId, testDreamsignId, testExplorationActionId } from "../../types/test-identities";
+import { testCardId, testAvatarId, testDreamsignId, testExplorationActionId } from "../../types/test-identities";
 
 const buildSiteModels = (
   dreamscapeNode: DreamscapeNode,
@@ -131,14 +131,14 @@ describe("buildSiteModels", () => {
   });
 });
 
-describe("toQsbDreamAvatar", () => {
-  it("returns undefined before a DreamAvatar is chosen", () => {
-    expect(toQsbDreamAvatar(null)).toBeUndefined();
+describe("toQsbAvatar", () => {
+  it("returns undefined before an Avatar is chosen", () => {
+    expect(toQsbAvatar(null)).toBeUndefined();
   });
 
-  it("maps the DreamAvatar's title to the epithet and its imageNumber to a portrait ref", () => {
-    const dreamAvatar: DreamAvatar = {
-      id: testDreamAvatarId("dc-1"),
+  it("maps the Avatar's title to the epithet and its imageNumber to a portrait ref", () => {
+    const avatar: Avatar = {
+      id: testAvatarId("dc-1"),
       name: "Drusus Calvus",
       title: "Triumphator",
       renderedText: "Gain 1 essence.",
@@ -146,7 +146,7 @@ describe("toQsbDreamAvatar", () => {
       portraitFocus: { x: 0.42, y: 0.18 },
       startingEssence: 200,
     };
-    const qsb = toQsbDreamAvatar(dreamAvatar);
+    const qsb = toQsbAvatar(avatar);
     expect(resolveSource(qsb!.name)).toBe("Drusus Calvus");
     expect(resolveSource(qsb!.epithet!)).toBe("Triumphator");
     expect(resolveSource(qsb!.ability!)).toBe("Gain 1 essence.");
@@ -278,7 +278,7 @@ describe("buildDreamscapeView", () => {
     const state = {
       essence: 240,
       deck: [{}, {}, {}],
-      dreamAvatar: null,
+      avatar: null,
       dreamsigns: [],
       completionLevel: 2,
     } as unknown as JourneyState;
@@ -295,7 +295,7 @@ describe("buildDreamscapeView", () => {
     const state = {
       essence: 240,
       deck: [],
-      dreamAvatar: null,
+      avatar: null,
       dreamsigns: [],
       completionLevel: 2,
       siteRuntime: {
@@ -323,7 +323,7 @@ describe("buildDreamscapeView", () => {
     const state = {
       essence: 240,
       deck: [],
-      dreamAvatar: null,
+      avatar: null,
       dreamsigns: [],
       completionLevel: 2,
       siteRuntime: {
@@ -393,7 +393,7 @@ describe("buildDreamscapeView", () => {
 });
 
 describe("buildDreamscapeHudView", () => {
-  it("reads essence, deck size, dreamAvatar, and dreamsigns from live state", () => {
+  it("reads essence, deck size, avatar, and dreamsigns from live state", () => {
     const state = {
       ...createDefaultState(),
       essence: 10,
@@ -411,7 +411,7 @@ describe("buildDreamscapeHudView", () => {
           isBane: false,
         },
       ],
-      dreamAvatar: null,
+      avatar: null,
       dreamsigns: [],
     } satisfies JourneyState;
     const hud = buildDreamscapeHudView(state);

@@ -9,7 +9,7 @@ import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
 import { createExplorationEditorApiMiddleware } from "./scripts/exploration-editor-api.mjs";
 import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
-import { createDreamAvatarEditorApiMiddleware } from "./scripts/dream-avatar-editor-api.mjs";
+import { createAvatarEditorApiMiddleware } from "./scripts/avatar-editor-api.mjs";
 import { createTidesEditorApiMiddleware } from "./scripts/tides-editor-api.mjs";
 import { createDreamscapeEditorApiMiddleware } from "./scripts/dreamscape-editor-api.mjs";
 import { createDreamGuideEditorApiMiddleware } from "./scripts/dream-guide-editor-api.mjs";
@@ -354,15 +354,15 @@ export function glossaryDataHotReloadPlugin(
   };
 }
 
-/** Vite plugin that serves local dreamAvatar editor read/write endpoints. */
-function dreamAvatarEditorApiPlugin(): Plugin {
+/** Vite plugin that serves local avatar editor read/write endpoints. */
+function avatarEditorApiPlugin(): Plugin {
   return {
-    name: "dream-avatar-editor-api",
+    name: "avatar-editor-api",
     apply: "serve",
     configureServer(server) {
       const editorRoot = process.env.DREAMTIDES_EDITOR_DATA_ROOT;
       server.middlewares.use(
-        createDreamAvatarEditorApiMiddleware({
+        createAvatarEditorApiMiddleware({
           rootDir:
             editorRoot === undefined ? __dirname : path.resolve(editorRoot),
         }),
@@ -1046,7 +1046,7 @@ export default defineConfig({
     dreamsignEditorApiPlugin(),
     glossaryEditorApiPlugin(),
     glossaryDataHotReloadPlugin(),
-    dreamAvatarEditorApiPlugin(),
+    avatarEditorApiPlugin(),
     tidesEditorApiPlugin(),
     dreamscapeEditorApiPlugin(),
     figmentEditorApiPlugin(),
@@ -1088,14 +1088,14 @@ export default defineConfig({
         path.resolve(path.join(__dirname, ".worktrees")) + "/**",
         path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
         ...gameDataPipelineWatchPatterns,
-        // The DreamAvatar and tides editors write the canonical tide catalogs and
-        // regenerate the public DreamAvatar/tides JSON catalogs on every save.
+        // The Avatar and tides editors write the canonical tide catalogs and
+        // regenerate the public Avatar/tides JSON catalogs on every save.
         // These files are otherwise watched; ignoring them keeps a
-        // dream-avatar-editor save from reloading the page mid-edit.
+        // avatar-editor save from reloading the page mid-edit.
         path.resolve(path.join(__dirname, "data", "tides.ron")),
-        path.resolve(path.join(__dirname, "data", "dream_avatars.ron")),
+        path.resolve(path.join(__dirname, "data", "avatars.ron")),
         path.resolve(
-          path.join(__dirname, "public", "dream-avatars-v2-data.json"),
+          path.join(__dirname, "public", "avatars-v2-data.json"),
         ),
         path.resolve(path.join(__dirname, "public", "tides4-data.json")),
         // The Dreamwell editor regenerates public/dreamwell-data.json on every

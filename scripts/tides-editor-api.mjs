@@ -18,7 +18,7 @@ const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/tide-decks";
 export const TIDES_EDITOR_SOURCE_PATHS = [
   join("data", "tides.ron"),
-  join("data", "dream_avatars.ron"),
+  join("data", "avatars.ron"),
 ];
 
 function jsonResponse(res, statusCode, body) {

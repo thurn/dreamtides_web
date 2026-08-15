@@ -102,7 +102,7 @@ function contentFixture(): JourneyContent {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase: new Map(cards.map((entry) => [entry.cardNumber, entry])),
-    dreamAvatars: [],
+    avatars: [],
     dreamwellCards: [],
     dreamsignTemplates: [],
     dreamscapes: [],

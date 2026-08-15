@@ -23,7 +23,7 @@ TutorialCatalog(
     TutorialActionDefinition(
       id: "c06dbc13-a48c-499e-83b3-b24e555ed008",
       wait_seconds: 0,
-      behavior: AnimateDreamAvatarPortrait(owner: Player, pause_seconds: 1, duration_seconds: 0.6),
+      behavior: AnimateAvatarPortrait(owner: Player, pause_seconds: 1, duration_seconds: 0.6),
     ),
 
     TutorialActionDefinition(
@@ -42,7 +42,7 @@ TutorialCatalog(
     TutorialActionDefinition(
       id: "548ef8f2-44d2-4af8-ae92-b13f089a42e1",
       wait_seconds: 0,
-      behavior: AnimateDreamAvatarPortrait(owner: Enemy, pause_seconds: 1, duration_seconds: 0.6),
+      behavior: AnimateAvatarPortrait(owner: Enemy, pause_seconds: 1, duration_seconds: 0.6),
     ),
 
     TutorialActionDefinition(
@@ -279,8 +279,8 @@ TutorialCatalog(
   ],
 
   battle: TutorialBattleConfiguration(
-    player_dream_avatar_id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
-    enemy_dream_avatar_id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+    player_avatar_id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+    enemy_avatar_id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
     starting_energy: 4,
     score_to_win: 10,
     starter_deck: {
@@ -390,7 +390,7 @@ TutorialCatalog(
       // Desktop maximum width of the speech bubble, in pixels.
       maximum_width_pixels: 550,
       text: Tx(
-        "For each journey, you must choose a [purple]Dream Avatar[/purple] who provides a permanent ability."
+        "For each journey, you must choose a [purple]Avatar[/purple] who provides a permanent ability."
       ),
     ),
     dreamscape: TutorialSpeechBubble(

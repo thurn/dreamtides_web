@@ -1,7 +1,7 @@
 import { logEvent } from "../logging";
 import type {
-  DreamAvatarContent,
-  ResolvedDreamAvatarPackage,
+  AvatarContent,
+  ResolvedAvatarPackage,
 } from "../types/content";
 import type { CardData } from "../types/cards";
 import type { RunPoolContext } from "./journey-content";
@@ -22,14 +22,14 @@ const RULES_TEXT_SYMBOL_RE = /[●⍏✦▸⍟☾⧗❖]/u;
  * an ordinary generated journey pool.
  */
 export function buildTutorialJourneyPackage(
-  dreamAvatar: DreamAvatarContent,
+  avatar: AvatarContent,
   context: RunPoolContext,
   tutorialPool: TutorialJourneyPool,
   cardDatabase: ReadonlyMap<number, CardData>,
-): ResolvedDreamAvatarPackage {
-  if (dreamAvatar.id !== tutorialPool.dreamAvatarId) {
+): ResolvedAvatarPackage {
+  if (avatar.id !== tutorialPool.avatarId) {
     throw new Error(
-      `Tutorial journey pool targets ${tutorialPool.dreamAvatarId}, received ${dreamAvatar.id}.`,
+      `Tutorial journey pool targets ${tutorialPool.avatarId}, received ${avatar.id}.`,
     );
   }
 
@@ -137,7 +137,7 @@ export function buildTutorialJourneyPackage(
   }
 
   logEvent("draft_pool_constructed", {
-    dreamAvatarId: dreamAvatar.id,
+    avatarId: avatar.id,
     source: "authored_tutorial",
     seed: "authored",
     poolSize: draftPoolSize,
@@ -147,7 +147,7 @@ export function buildTutorialJourneyPackage(
   });
 
   return {
-    dreamAvatar,
+    avatar,
     draftPoolCopiesByCard,
     openingDraftOffers,
     openingDreamsignOfferIds: [...tutorialPool.openingDreamsignIds],

@@ -1,10 +1,10 @@
 import { richText } from "../card/rich-text";
-import type { DreamAvatarId } from "../../../types/identifiers";
+import type { AvatarId } from "../../../types/identifiers";
 // JourneyStatusBar — the persistent, TRANSPARENT bottom HUD for journey screens
 // (dreamscape, atlas, site views).
 //
 // It is a TRANSPARENT HUD — no background, no border, no top rule (Principle
-// two): the essence total, deck sprite, DreamAvatar bust, and docked dreamsign
+// two): the essence total, deck sprite, Avatar bust, and docked dreamsign
 // strip sit DIRECTLY on the scene art, made legible by the `.hud-outline` glyph
 // dilation (ported into journey-status-bar.css), not by a bar behind them.
 // There is no menu-dots button — the menu lives in a top-left menu button on
@@ -12,7 +12,7 @@ import type { DreamAvatarId } from "../../../types/identifiers";
 //
 // Every semantic HUD entity reveals through the shared coordinator:
 //   - the essence value           → InfoCard 'text'
-//   - the DreamAvatar bust (pops ABOVE the bar) → InfoCard 'hero'
+//   - the Avatar bust (pops ABOVE the bar) → InfoCard 'hero'
 //   - each docked dreamsign        → InfoCard 'object'
 //   - journey Dreamsigns beyond a fixed count collapse into an overflow stack →
 //     a centered viewer window (not a bottom sheet); battle Dreamsigns flow in
@@ -25,7 +25,7 @@ import type { DreamAvatarId } from "../../../types/identifiers";
 // Cumulus:
 //   - The design source resolves the shared engine + RulesText from a global
 //     DS bundle at render time; here it imports Cumulus's InfoCard engine
-//     directly. Dreamsign / DreamAvatar ability text renders as `richText.rules`
+//     directly. Dreamsign / Avatar ability text renders as `richText.rules`
 //     so glossary keywords highlight in place; UI copy (the essence blurb) uses
 //     `richText.plain`.
 //   - Each bespoke press target wires `onPointerEnter`/`onPointerLeave` to
@@ -63,11 +63,11 @@ import {
   type LocalizedDreamsign,
 } from "./Dreamsign";
 import { requireDreamsignId } from "../../../data/dreamsigns";
-import type { DreamAvatarPortraitFocus } from "../../../types/content";
+import type { AvatarPortraitFocus } from "../../../types/content";
 import {
-  DEFAULT_DREAM_AVATAR_PORTRAIT_FOCUS,
-  dreamAvatarRevealSpec,
-} from "./DreamAvatarPortrait";
+  DEFAULT_AVATAR_PORTRAIT_FOCUS,
+  avatarRevealSpec,
+} from "./AvatarPortrait";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
@@ -77,10 +77,10 @@ import {
 } from "../../primitives/battle-hud-layout";
 import "./journey-status-bar.css";
 
-/** Zooms the dreamAvatar bust render so the face fills the circular frame. A
+/** Zooms the avatar bust render so the face fills the circular frame. A
  * bespoke crop factor, named so it reads as an intentional framing crop rather
  * than a magic number in a transform. */
-const DREAM_AVATAR_BUST_CROP_SCALE = 2.9;
+const AVATAR_BUST_CROP_SCALE = 2.9;
 
 /** The docked deck sprite, embedded so there is no separate asset to load. */
 const DECK_SPRITE =
@@ -88,7 +88,7 @@ const DECK_SPRITE =
 
 /** How much the `grand` (desktop) HUD scales up from the `compact` (mobile)
  * one. Every HUD measure — the essence type, deck sprite, dreamsign discs, the
- * DreamAvatar bust, and the bar's own height — multiplies by this, so the bar
+ * Avatar bust, and the bar's own height — multiplies by this, so the bar
  * reads identically at desktop widths, just larger. The one factor keeps the
  * whole HUD in proportion. */
 const GRAND_SCALE = 1.6;
@@ -126,16 +126,16 @@ export const JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE = `calc(${JOURNEY_STATU
  * name). The HUD renders each through `<Dreamsign variant="hud">`. */
 export type QsbDreamsign = LocalizedDreamsign;
 
-/** The active DreamAvatar shown as a bust in the HUD. */
-export interface QsbDreamAvatar {
-  /** Stable DreamAvatar UUID. */
-  id: DreamAvatarId;
+/** The active Avatar shown as a bust in the HUD. */
+export interface QsbAvatar {
+  /** Stable Avatar UUID. */
+  id: AvatarId;
   name: LocalizedString;
   epithet?: LocalizedString;
-  /** The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art. */
+  /** The portrait art as an {@link ArtRef}. Required — a docked Avatar always has art. */
   portrait: ArtRef;
   /** Normalized head position used to center the square HUD crop. */
-  portraitFocus?: DreamAvatarPortraitFocus;
+  portraitFocus?: AvatarPortraitFocus;
   ability?: LocalizedString;
 }
 
@@ -151,7 +151,7 @@ export interface JourneyStatusBarProps {
   deck?: number;
   /** Open the deck viewer — fired on a tap / click of the deck sprite. */
   onViewDeck?: () => void;
-  dreamAvatar?: QsbDreamAvatar;
+  avatar?: QsbAvatar;
   /** HUD size. `compact` (default) is the mobile / touch size; `grand` is the
    * larger desktop size the dreamscape screen picks above the wide-viewport
    * breakpoint. */
@@ -412,21 +412,21 @@ function QsbDreamsignWindow({
   );
 }
 
-/* QsbDreamAvatarBust — the DreamAvatar portrait button and semantic source. */
-function QsbDreamAvatarBust({
-  dreamAvatar,
+/* QsbAvatarBust — the Avatar portrait button and semantic source. */
+function QsbAvatarBust({
+  avatar,
 }: {
-  /** The docked DreamAvatar, or undefined for the empty placeholder frame. */
-  dreamAvatar?: QsbDreamAvatar;
+  /** The docked Avatar, or undefined for the empty placeholder frame. */
+  avatar?: QsbAvatar;
 }): ReactElement {
   const resolve = useLocalizer();
   const binding = useRevealSource({
     identity: {
-      entityType: "dreamAvatar",
-      entityId: revealEntityId("dreamAvatar", dreamAvatar?.id ?? "empty"),
+      entityType: "avatar",
+      entityId: revealEntityId("avatar", avatar?.id ?? "empty"),
     },
     spec:
-      dreamAvatar === undefined
+      avatar === undefined
         ? {
             primary: {
               kind: "infoCard",
@@ -443,23 +443,23 @@ function QsbDreamAvatarBust({
             },
             secondaries: [],
           }
-        : dreamAvatarRevealSpec(
+        : avatarRevealSpec(
             {
               imageNumber: "",
-              name: dreamAvatar.name,
-              title: dreamAvatar.epithet,
+              name: avatar.name,
+              title: avatar.epithet,
             },
-            dreamAvatar.ability,
-            dreamAvatar.portrait,
+            avatar.ability,
+            avatar.portrait,
           ),
   });
   const focus =
-    dreamAvatar?.portraitFocus ?? DEFAULT_DREAM_AVATAR_PORTRAIT_FOCUS;
+    avatar?.portraitFocus ?? DEFAULT_AVATAR_PORTRAIT_FOCUS;
   const focusX = Math.max(0, Math.min(1, focus.x));
   const focusY = Math.max(0, Math.min(1, focus.y));
   const objectPositionY = Math.max(
     0,
-    Math.min(1, 3 * focusY - 1 / DREAM_AVATAR_BUST_CROP_SCALE),
+    Math.min(1, 3 * focusY - 1 / AVATAR_BUST_CROP_SCALE),
   );
   return (
     <Pressable
@@ -468,7 +468,7 @@ function QsbDreamAvatarBust({
       {...binding.sourceProps}
       ariaLabelMessage={tx(
         meaning("journey-avatar-control", "Avatar"),
-        "[accessibility] [dream-avatar] [journey] Name for the active Dream Avatar control in the Journey status bar.",
+        "[accessibility] [avatar] [journey] Name for the active Avatar control in the Journey status bar.",
       )}
       tabIndex={0}
       style={{
@@ -492,10 +492,10 @@ function QsbDreamAvatarBust({
         ...binding.sourceProps.style,
       }}
     >
-      {dreamAvatar && (
+      {avatar && (
         <img
-          src={resolveArtRef(dreamAvatar.portrait)}
-          alt={resolve(dreamAvatar.name)}
+          src={resolveArtRef(avatar.portrait)}
+          alt={resolve(avatar.name)}
           style={{
             position: "relative",
             left: `${String((0.5 - focusX) * 100)}%`,
@@ -503,7 +503,7 @@ function QsbDreamAvatarBust({
             height: "100%",
             objectFit: "cover",
             objectPosition: `50% ${String(objectPositionY * 100)}%`,
-            transform: `scale(${String(DREAM_AVATAR_BUST_CROP_SCALE)})`,
+            transform: `scale(${String(AVATAR_BUST_CROP_SCALE)})`,
             transformOrigin: "50% 0%",
           }}
         />
@@ -578,20 +578,20 @@ function QsbEssence({
   );
 }
 
-/* QsbHudBar — the bottom HUD row (DreamAvatar bust · essence total · deck
+/* QsbHudBar — the bottom HUD row (Avatar bust · essence total · deck
    sprite). The aria-labels + DOM shape match what journey-status-bar.css and the
    press-reveal logic target. */
 function QsbHudBar({
   essence = 0,
   deck = 0,
   onViewDeck,
-  dreamAvatar,
+  avatar,
   scale = 1,
 }: {
   essence?: number;
   deck?: number;
   onViewDeck?: () => void;
-  dreamAvatar?: QsbDreamAvatar;
+  avatar?: QsbAvatar;
   scale?: number;
 }): ReactElement {
   return (
@@ -608,7 +608,7 @@ function QsbHudBar({
         paddingLeft: `calc(${token("--space-m")} * ${String(scale)})`,
       }}
     >
-      <QsbDreamAvatarBust dreamAvatar={dreamAvatar} />
+      <QsbAvatarBust avatar={avatar} />
       <div
         style={{
           display: "flex",
@@ -810,7 +810,7 @@ function QsbBattleHudBar({
 
 /**
  * JourneyStatusBar — the persistent, TRANSPARENT bottom HUD for journey screens.
- * Essence total, deck action, DreamAvatar bust, and a docked dreamsign strip
+ * Essence total, deck action, Avatar bust, and a docked dreamsign strip
  * sit directly on scene art (legible via `.hud-outline`). Semantic entities
  * reveal through the shared coordinator; the deck action opens the deck view.
  */
@@ -820,13 +820,13 @@ export function JourneyStatusBar({
   dreamsigns = [],
   deck = 0,
   onViewDeck,
-  dreamAvatar,
+  avatar,
   size = "compact",
   variant = "journey",
 }: JourneyStatusBarProps): ReactElement {
   const [signWindow, setSignWindow] = React.useState(false);
   const scale = size === "grand" ? GRAND_SCALE : 1;
-  // The DreamAvatar bust, HUD height, and essence-cluster elevation are sized
+  // The Avatar bust, HUD height, and essence-cluster elevation are sized
   // in journey-status-bar.css from these component vars; scaling them here grows
   // that CSS-driven half of the bar in lockstep with the inline-sized half
   // (essence type, deck sprite, dreamsigns) threaded through as `scale`.
@@ -852,8 +852,8 @@ export function JourneyStatusBar({
     );
   }
 
-  // The essence value and DreamAvatar bust each own their press-reveal
-  // (QsbEssence / QsbDreamAvatarBust) with per-element onPointerEnter/Leave, so
+  // The essence value and Avatar bust each own their press-reveal
+  // (QsbEssence / QsbAvatarBust) with per-element onPointerEnter/Leave, so
   // hover reveals on a fine pointer and press reveals on touch. A container-
   // level pointerenter can't drive this — native pointerenter does not refire
   // when the pointer moves between children of the same ancestor.
@@ -875,7 +875,7 @@ export function JourneyStatusBar({
           essence={essence}
           deck={deck}
           onViewDeck={onViewDeck}
-          dreamAvatar={dreamAvatar}
+          avatar={avatar}
           scale={scale}
         />
       </div>

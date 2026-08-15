@@ -188,7 +188,7 @@ prove behavior or appearance by itself.
 For battle UI edits, cover the relevant subset of:
 
 - side-summary open, close, and switching between sides
-- Dream Avatar panel open/close
+- Avatar panel open/close
 - deck browser open/close
 - `Reveal Top`, `Play From Top`, `Hide Top`, `Foresee…`, `Reorder Full Deck`
 - enemy hand `Reveal All` / `Hide All`

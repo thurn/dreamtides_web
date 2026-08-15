@@ -41,7 +41,7 @@ import {
   BattlefieldCard,
   type BattlefieldCardInteraction,
 } from "../components/battle/BattlefieldCard";
-import type { BattleStatusDreamAvatarProfile } from "../components/battle/BattleStatusDisplay";
+import type { BattleStatusAvatarProfile } from "../components/battle/BattleStatusDisplay";
 import {
   DreamwellCard,
   type DreamwellCardModel,
@@ -67,7 +67,7 @@ import {
   RADIAL_ANNOUNCEMENT_DURATION_MS,
   RadialAnnouncement,
 } from "../components/status/RadialAnnouncement";
-import type { DreamAvatarVisual } from "../components/hud/DreamAvatarPortrait";
+import type { AvatarVisual } from "../components/hud/AvatarPortrait";
 import { GLYPHS } from "../primitives/glyph";
 import { DOUBLE_TAP_WINDOW_MS } from "../primitives/pointer-gesture";
 import { SAFE_AREA_INSET_PROPERTIES } from "../primitives/safe-area";
@@ -125,10 +125,10 @@ export interface MobileBattleSlotView {
   readonly card: MobileBattleCardView | null;
 }
 
-/** The compact resources and DreamAvatar identity shown for one side. */
+/** The compact resources and Avatar identity shown for one side. */
 export interface MobileBattleStatusView {
-  readonly dreamAvatar: DreamAvatarVisual | null;
-  readonly dreamAvatarProfile?: BattleStatusDreamAvatarProfile;
+  readonly avatar: AvatarVisual | null;
+  readonly avatarProfile?: BattleStatusAvatarProfile;
   readonly currentEnergy: number;
   readonly maxEnergy: number;
   readonly points: number;
@@ -1248,8 +1248,8 @@ function SideZones({
           <BattleStatusDisplay
             owner={owner}
             relationship={position}
-            dreamAvatar={side.status.dreamAvatar}
-            dreamAvatarProfile={side.status.dreamAvatarProfile}
+            avatar={side.status.avatar}
+            avatarProfile={side.status.avatarProfile}
             currentEnergy={side.status.currentEnergy}
             maxEnergy={side.status.maxEnergy}
             points={side.status.points}

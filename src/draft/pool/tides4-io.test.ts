@@ -1,5 +1,5 @@
 // Structural-contract tests for the `tides4` artifact validator. These pin the
-// schema invariants (every tide has an id, role, and cards; every DreamAvatar
+// schema invariants (every tide has an id, role, and cards; every Avatar
 // pool has a non-empty facet list, an array neutral list, and a starter that is
 // null or an existing tide; every referenced id names an existing tide) against
 // synthetic fixtures — never against the manually curated production catalog.
@@ -10,7 +10,7 @@ import type { Tides4DecksJson } from "./tides4-io.ts";
 import { validateTides4Decks } from "./tides4-io.ts";
 import {
   testCardId,
-  testDreamAvatarId,
+  testAvatarId,
   testTideId,
 } from "../../types/test-identities";
 
@@ -18,10 +18,10 @@ const SIGNATURE_TIDE_ID = testTideId("10000000-0000-4000-8000-000000000001");
 const FACET_TIDE_ID = testTideId("10000000-0000-4000-8000-000000000002");
 const NEUTRAL_TIDE_ID = testTideId("10000000-0000-4000-8000-000000000003");
 const MISSING_TIDE_ID = testTideId("10000000-0000-4000-8000-000000000004");
-const SIGNATURED_AVATAR_ID = testDreamAvatarId(
+const SIGNATURED_AVATAR_ID = testAvatarId(
   "20000000-0000-4000-8000-000000000001",
 );
-const SIGNATURELESS_AVATAR_ID = testDreamAvatarId(
+const SIGNATURELESS_AVATAR_ID = testAvatarId(
   "20000000-0000-4000-8000-000000000002",
 );
 
@@ -66,14 +66,14 @@ function makeArtifact(): Tides4DecksJson {
         ],
       },
     ],
-    tidePoolByDreamAvatar: {
-      // A signatured DreamAvatar: a starter, on-identity facets, a broad tail.
+    tidePoolByAvatar: {
+      // A signatured Avatar: a starter, on-identity facets, a broad tail.
       [SIGNATURED_AVATAR_ID]: {
         starter: SIGNATURE_TIDE_ID,
         facets: [FACET_TIDE_ID],
         neutral: [NEUTRAL_TIDE_ID],
       },
-      // A signatureless DreamAvatar: no starter, draws from the facet library.
+      // A signatureless Avatar: no starter, draws from the facet library.
       [SIGNATURELESS_AVATAR_ID]: {
         starter: null,
         facets: [FACET_TIDE_ID],
@@ -158,16 +158,16 @@ describe("validateTides4Decks", () => {
     expect(() => validateTides4Decks(clone(data))).toThrow(/invalid copies/);
   });
 
-  it("rejects a missing tidePoolByDreamAvatar", () => {
+  it("rejects a missing tidePoolByAvatar", () => {
     const data = clone(makeArtifact()) as Record<string, unknown>;
-    delete data.tidePoolByDreamAvatar;
-    expect(() => validateTides4Decks(data)).toThrow(/tidePoolByDreamAvatar/);
+    delete data.tidePoolByAvatar;
+    expect(() => validateTides4Decks(data)).toThrow(/tidePoolByAvatar/);
   });
 
-  it("accepts a null starter (a signatureless DreamAvatar)", () => {
+  it("accepts a null starter (a signatureless Avatar)", () => {
     const data = makeArtifact();
     expect(
-      validateTides4Decks(clone(data)).tidePoolByDreamAvatar[
+      validateTides4Decks(clone(data)).tidePoolByAvatar[
         SIGNATURELESS_AVATAR_ID
       ].starter,
     ).toBe(null);
@@ -175,25 +175,25 @@ describe("validateTides4Decks", () => {
 
   it("rejects a starter that names no tide", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamAvatar[SIGNATURED_AVATAR_ID].starter = MISSING_TIDE_ID;
+    data.tidePoolByAvatar[SIGNATURED_AVATAR_ID].starter = MISSING_TIDE_ID;
     expect(() => validateTides4Decks(clone(data))).toThrow(/unknown `starter`/);
   });
 
   it("rejects an empty facet list", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamAvatar[SIGNATURED_AVATAR_ID].facets = [];
+    data.tidePoolByAvatar[SIGNATURED_AVATAR_ID].facets = [];
     expect(() => validateTides4Decks(clone(data))).toThrow(/no `facets`/);
   });
 
   it("accepts an empty neutral list", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamAvatar[SIGNATURED_AVATAR_ID].neutral = [];
+    data.tidePoolByAvatar[SIGNATURED_AVATAR_ID].neutral = [];
     expect(() => validateTides4Decks(clone(data))).not.toThrow();
   });
 
   it("rejects a tide-pool id that names no tide (a stale combination)", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamAvatar[SIGNATURED_AVATAR_ID].facets = [
+    data.tidePoolByAvatar[SIGNATURED_AVATAR_ID].facets = [
       FACET_TIDE_ID,
       MISSING_TIDE_ID,
     ];

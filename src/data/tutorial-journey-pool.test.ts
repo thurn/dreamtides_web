@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
-import type { DreamAvatarContent } from "../types/content";
+import type { AvatarContent } from "../types/content";
 import { parseCardName } from "../types/card-identity";
 import type { RunPoolContext } from "./journey-content";
 import { buildTutorialJourneyPackage } from "./tutorial-journey-package";
 import { validateTutorialJourneyPool } from "./tutorial-journey-pool";
 import { GLOSSARY, glossaryRulesTextForms } from "./glossary";
-import { testCardId, testDreamAvatarId, testDreamsignId } from "../types/test-identities";
+import { testCardId, testAvatarId, testDreamsignId } from "../types/test-identities";
 
 const CARD_IDS = [
   "00000000-0000-4000-8000-000000000001",
@@ -22,7 +22,7 @@ const OPENING_DREAMSIGN_ID = "00000000-0000-4000-8000-000000000020";
 
 function syntheticSource(): Record<string, unknown> {
   return {
-    "dream-avatar-id": "00000000-0000-4000-8000-000000000010",
+    "avatar-id": "00000000-0000-4000-8000-000000000010",
     "pool-size": 8,
     "opening-dreamsigns": [OPENING_DREAMSIGN_ID],
     "opening-offers": [CARD_IDS.slice(0, 4), CARD_IDS.slice(4, 8)],
@@ -52,9 +52,9 @@ function syntheticSource(): Record<string, unknown> {
   };
 }
 
-function dreamAvatar(idSeed: string): DreamAvatarContent {
+function avatar(idSeed: string): AvatarContent {
   return {
-    id: testDreamAvatarId(idSeed),
+    id: testAvatarId(idSeed),
     name: "Tutorial Avatar",
     title: "Keeper of the Example",
     renderedText: "The first warrior costs less.",
@@ -161,7 +161,7 @@ describe("buildTutorialJourneyPackage", () => {
     } satisfies RunPoolContext;
 
     const pkg = buildTutorialJourneyPackage(
-      dreamAvatar(pool.dreamAvatarId),
+      avatar(pool.avatarId),
       context,
       pool,
       buildCardDatabase(),
@@ -210,7 +210,7 @@ describe("buildTutorialJourneyPackage", () => {
 
     expect(() =>
       buildTutorialJourneyPackage(
-        dreamAvatar(pool.dreamAvatarId),
+        avatar(pool.avatarId),
         context,
         pool,
         new Map(),
@@ -231,7 +231,7 @@ describe("buildTutorialJourneyPackage", () => {
 
     expect(() =>
       buildTutorialJourneyPackage(
-        dreamAvatar(pool.dreamAvatarId),
+        avatar(pool.avatarId),
         context,
         pool,
         buildCardDatabase(),
@@ -277,7 +277,7 @@ describe("buildTutorialJourneyPackage", () => {
 
     expect(() =>
       buildTutorialJourneyPackage(
-        dreamAvatar(pool.dreamAvatarId),
+        avatar(pool.avatarId),
         context,
         pool,
         buildCardDatabase(overrides),

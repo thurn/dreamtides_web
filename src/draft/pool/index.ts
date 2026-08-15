@@ -4,7 +4,7 @@ export { validateTides4Decks } from "./tides4-io.ts";
 export type {
   Tides4DeckJson,
   Tides4DecksJson,
-  Tides4DreamAvatarPool,
+  Tides4AvatarPool,
   Tides4Role,
 } from "./tides4-io.ts";
 export { DEFAULT_POOL_VARIANT } from "./types.ts";

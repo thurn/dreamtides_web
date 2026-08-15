@@ -1,4 +1,4 @@
-// Internal MTG archetype references used to maintain DreamAvatar signature profiles.
+// Internal MTG archetype references used to maintain Avatar signature profiles.
 
 #![enable(implicit_some)]
 [

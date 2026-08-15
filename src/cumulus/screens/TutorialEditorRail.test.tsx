@@ -405,7 +405,7 @@ describe("TutorialEditorRail", () => {
     container.remove();
   });
 
-  it("authors speech against the opposing DreamAvatar portrait", () => {
+  it("authors speech against the opposing Avatar portrait", () => {
     const onChange = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
@@ -648,7 +648,7 @@ describe("TutorialEditorRail", () => {
     container.remove();
   });
 
-  it("adds the fixed DreamAvatar portrait animation without speech parameters", () => {
+  it("adds the fixed Avatar portrait animation without speech parameters", () => {
     const onChange = vi.fn();
     const container = document.createElement("div");
     document.body.append(container);
@@ -672,7 +672,7 @@ describe("TutorialEditorRail", () => {
         INITIAL_ACTIONS[0],
         {
           id: testTutorialActionId(NEW_ACTION_ID),
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           owner: "player",
           pause: 1,
           duration: 0.6,
@@ -688,7 +688,7 @@ describe("TutorialEditorRail", () => {
     ).toHaveLength(1);
 
     const ownerTrigger = container.querySelector<HTMLButtonElement>(
-      'button[aria-label="DreamAvatar owner for action 2"]',
+      'button[aria-label="Avatar owner for action 2"]',
     );
     expect(ownerTrigger?.textContent).toContain("Player");
     act(() => ownerTrigger?.click());
@@ -703,7 +703,7 @@ describe("TutorialEditorRail", () => {
         INITIAL_ACTIONS[0],
         {
           id: testTutorialActionId(NEW_ACTION_ID),
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           owner: "enemy",
           pause: 1,
           duration: 0.6,
@@ -722,7 +722,7 @@ describe("TutorialEditorRail", () => {
         INITIAL_ACTIONS[0],
         {
           id: testTutorialActionId(NEW_ACTION_ID),
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           owner: "enemy",
           pause: 1.5,
           duration: 0.6,
@@ -741,7 +741,7 @@ describe("TutorialEditorRail", () => {
         INITIAL_ACTIONS[0],
         {
           id: testTutorialActionId(NEW_ACTION_ID),
-          action: "animate-dream-avatar-portrait",
+          action: "animate-avatar-portrait",
           owner: "enemy",
           pause: 1.5,
           duration: 0.5,

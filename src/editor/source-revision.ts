@@ -7,7 +7,7 @@ export { parseSourceRevision, type SourceRevision } from "../types/source-revisi
 
 export type EditorSourceId =
   | "cards"
-  | "dream-avatars"
+  | "avatars"
   | "dreamscapes"
   | "dreamsigns"
   | "dreamwell"

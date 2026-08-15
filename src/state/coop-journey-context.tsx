@@ -130,11 +130,11 @@ export function CoopJourneyProvider({
       setMaxDreamsigns: (value) => dispatch(actions.setMaxDreamsigns(value)),
 
       // ---- lifecycle ----
-      startJourney: (dreamAvatar) =>
-        dispatch(actions.startJourney({ dreamAvatarId: dreamAvatar.id })),
-      rerollDreamAvatarOffer: () => dispatch(actions.rerollDreamAvatarOffer()),
-      setDreamAvatarSelection: (resolvedPackage) =>
-        dispatch(actions.selectDreamAvatar(resolvedPackage.dreamAvatar.id)),
+      startJourney: (avatar) =>
+        dispatch(actions.startJourney({ avatarId: avatar.id })),
+      rerollAvatarOffer: () => dispatch(actions.rerollAvatarOffer()),
+      setAvatarSelection: (resolvedPackage) =>
+        dispatch(actions.selectAvatar(resolvedPackage.avatar.id)),
       resetJourney: () => dispatch(actions.resetJourney()),
       // The room seed is fixed at genesis, so a loaded snapshot must adopt it —
       // the reducer's LOAD_STATE validator bounces a foreign seed. These debug /

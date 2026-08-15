@@ -14,7 +14,7 @@ import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { SitesData } from "../../types/sites-data";
 import type {
   DreamGuideContent,
-  ResolvedDreamAvatarPackage,
+  ResolvedAvatarPackage,
 } from "../../types/content";
 import type {
   CardSourceDebugState,
@@ -126,7 +126,7 @@ export function buildCardShopRestock(
 /** Build the debug provenance state for the cards currently on the shelf. */
 export function buildCardShopDebugState(
   offers: readonly CardShopOfferView[],
-  resolvedPackage: ResolvedDreamAvatarPackage | null,
+  resolvedPackage: ResolvedAvatarPackage | null,
 ): CardSourceDebugState | null {
   return buildCardSourceDebugState(
     "Shop Offers",

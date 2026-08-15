@@ -80,14 +80,14 @@ export function CumulusJourneyChrome({
             essence={hud.essence}
             deck={hud.deck}
             onViewDeck={handlers.onViewDeck}
-            dreamAvatar={hud.dreamAvatar}
+            avatar={hud.avatar}
             dreamsigns={hud.dreamsigns}
             size={isDesktop ? "grand" : "compact"}
             variant={variant}
           />
         </ErrorBoundary>
       )}
-      {variant === "journey" && state.dreamAvatar !== null && (
+      {variant === "journey" && state.avatar !== null && (
         <ErrorBoundary scope="overlay:cumulus-journey-menu">
           <DreamscapeJourneyMenu
             onOpenDeckViewer={handlers.onViewDeck ?? NOOP}

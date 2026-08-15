@@ -11,8 +11,8 @@ import { RESONANCE_DATA } from "../data/resonance-data";
 import { tideAccentColor, tideColorChip } from "./tide-visuals";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { Resonance } from "../types/resonance-data";
-import type { EditableTideField, EditorDreamAvatar } from "./tides-types";
-import type { DreamAvatarId } from "../types/identifiers";
+import type { EditableTideField, EditorAvatar } from "./tides-types";
+import type { AvatarId } from "../types/identifiers";
 
 export type TideSaveStatus =
   | { status: "idle" }
@@ -22,7 +22,7 @@ export type TideSaveStatus =
 
 interface TidesDetailViewProps {
   tide: Tides4DeckJson;
-  dreamAvatarById: ReadonlyMap<DreamAvatarId, EditorDreamAvatar>;
+  avatarById: ReadonlyMap<AvatarId, EditorAvatar>;
   cardById: ReadonlyMap<CardId, CardData>;
   size: CardSizePreset;
   saveStatus: TideSaveStatus;

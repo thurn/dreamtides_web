@@ -1,4 +1,4 @@
-// The `tides4` variant builds a pool by joining a DreamAvatar's starter tide,
+// The `tides4` variant builds a pool by joining an Avatar's starter tide,
 // drawing a random subset of its facet tides, topping up with the remaining
 // facets and broad tides, and dealing to the configured size. These tests pin the
 // structural contract (determinism per seed, the deal size and copy cap, the
@@ -14,20 +14,20 @@ import { DEFAULT_TIDES4_TUNING, generateTides4 } from "./variant-tides4.ts";
 import type { CardId } from "../../types/card-identity";
 import type { TideId } from "../../types/identifiers";
 import {
-  testDreamAvatarId,
+  testAvatarId,
   testCardId,
   testTideId,
 } from "../../types/test-identities";
 
-const AVATAR_A_ID = testDreamAvatarId("dc-a");
-const AVATAR_B_ID = testDreamAvatarId("dc-b");
-const AVATAR_C_ID = testDreamAvatarId("dc-c");
+const AVATAR_A_ID = testAvatarId("dc-a");
+const AVATAR_B_ID = testAvatarId("dc-b");
+const AVATAR_C_ID = testAvatarId("dc-c");
 const SIGNATURE_TIDE_ID = testTideId("tide-sig-1");
 
 // A synthetic artifact: one starter tide, `facetCount` facet tides, and
 // `neutralCount` neutral tides, each with `cardsPerTide` disjoint cards (so
-// dealable copies sum across tides). "dc-a" is a signatured DreamAvatar (its
-// starter plus all facets and neutrals); "dc-b" is a signatureless DreamAvatar
+// dealable copies sum across tides). "dc-a" is a signatured Avatar (its
+// starter plus all facets and neutrals); "dc-b" is a signatureless Avatar
 // (null starter, drawing its subset from every facet). Card UUIDs are minted
 // deterministically from tide-specific test seeds; copies default to 2.
 function makeTides4(
@@ -76,7 +76,7 @@ function makeTides4(
     version: 2,
     selection: { bandFraction: 0.25, bandMinimum: 5 },
     tides,
-    tidePoolByDreamAvatar: {
+    tidePoolByAvatar: {
       [AVATAR_A_ID]: {
         starter: SIGNATURE_TIDE_ID,
         facets: facetIds,
@@ -185,7 +185,7 @@ describe("generateTides4", () => {
     }
   });
 
-  it("always joins a signatured DreamAvatar's starter first", () => {
+  it("always joins a signatured Avatar's starter first", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     for (let seed = 0; seed < 20; seed += 1) {
       const result = generateTides4(
@@ -220,9 +220,9 @@ describe("generateTides4", () => {
     expect(firstFacetSeen.size).toBeGreaterThan(1);
   });
 
-  it("leans a signatureless DreamAvatar on a varying coherent archetype core", () => {
+  it("leans a signatureless Avatar on a varying coherent archetype core", () => {
     // Two signatured archetypes (each its own signature core) plus a signatureless
-    // DreamAvatar "dc-b" with a null starter. The neutral pool borrows a signatured
+    // Avatar "dc-b" with a null starter. The neutral pool borrows a signatured
     // archetype each run, leading with a signature tide (a coherent archetype, not a
     // bare facet), and across runs draws more than one archetype.
     const data = makeTides4(4, 30);
@@ -241,7 +241,7 @@ describe("generateTides4", () => {
     const facetIds = data.tides
       .filter((t) => t.role === "facet")
       .map((t) => t.id);
-    data.tidePoolByDreamAvatar[AVATAR_C_ID] = {
+    data.tidePoolByAvatar[AVATAR_C_ID] = {
       starter: testTideId("tide-sig-2"),
       facets: facetIds,
       neutral: data.tides.filter((t) => t.role === "neutral").map((t) => t.id),
@@ -278,11 +278,11 @@ describe("generateTides4", () => {
       cards: [{ id: testCardId("second-signature-card"), copies: 2 }],
     };
     data.tides.push(second);
-    const authoredFirstAvatarId = testDreamAvatarId("avatar-authored-first");
-    const authoredSecondAvatarId = testDreamAvatarId("avatar-authored-second");
-    const signaturelessAvatarId = testDreamAvatarId("avatar-signatureless");
-    const basePool = data.tidePoolByDreamAvatar[AVATAR_A_ID];
-    data.tidePoolByDreamAvatar = {
+    const authoredFirstAvatarId = testAvatarId("avatar-authored-first");
+    const authoredSecondAvatarId = testAvatarId("avatar-authored-second");
+    const signaturelessAvatarId = testAvatarId("avatar-signatureless");
+    const basePool = data.tidePoolByAvatar[AVATAR_A_ID];
+    data.tidePoolByAvatar = {
       [authoredFirstAvatarId]: basePool,
       [authoredSecondAvatarId]: {
         starter: second.id,
@@ -306,13 +306,13 @@ describe("generateTides4", () => {
     expect(result.tides4Provenance.borrowedArchetypeName).toBe("Sig 1");
   });
 
-  it("shuffles all tides together without a dreamAvatar id or pool entry", () => {
+  it("shuffles all tides together without an avatar id or pool entry", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     const noId = generateTides4(makeRng(11), poolData, undefined);
     const unknownId = generateTides4(
       makeRng(11),
       poolData,
-      testDreamAvatarId("dc-unknown"),
+      testAvatarId("dc-unknown"),
     );
     expect(noId.selected).toEqual(unknownId.selected);
     expect(poolSize(noId.counts)).toBe(DEFAULT_TIDES4_TUNING.dealSize);
@@ -357,7 +357,7 @@ describe("generateTides4 provenance", () => {
     expect(provenance).toBeDefined();
     if (provenance === undefined) return;
 
-    expect(provenance.dreamAvatarId).toBe(AVATAR_A_ID);
+    expect(provenance.avatarId).toBe(AVATAR_A_ID);
     expect(provenance.signatureless).toBe(false);
     expect(provenance.borrowedArchetypeName).toBeNull();
     expect(provenance.cap).toBe(DEFAULT_TIDES4_TUNING.copyCap);
@@ -419,7 +419,7 @@ describe("generateTides4 provenance", () => {
     expect(totalContribution).toBe(result.counts.size);
   });
 
-  it("marks a signatureless DreamAvatar and names the borrowed archetype", () => {
+  it("marks a signatureless Avatar and names the borrowed archetype", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     const provenance = generateTides4(
       makeRng(5),

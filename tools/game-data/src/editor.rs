@@ -14,12 +14,12 @@ use trox::RonPlaceholder;
 use crate::compiler::{EditReport, sha256};
 use crate::manifest::{Adapter, Manifest};
 use crate::models::affiliations::{self, AffiliationCatalog, CanonicalUuid};
+use crate::models::avatars::{self, AvatarDefinition, AvatarId, TidePool};
 use crate::models::cards::{CardDefinition, CardKind, Crop, OrbValue};
 use crate::models::compat::CompatDocument;
-use crate::models::dream_avatars::{self, AvatarDefinition, DreamAvatarId, TidePool};
 use crate::models::dream_guides::{self, GuideDefinition, GuideId};
 use crate::models::dreamscapes::{
-    self, AffiliationId, DreamAvatarId as DreamscapeAvatarId, DreamscapeDefinition, DreamscapeId,
+    self, AffiliationId, AvatarId as DreamscapeAvatarId, DreamscapeDefinition, DreamscapeId,
     DreamscapeKind,
 };
 use crate::models::dreamsigns::{
@@ -83,7 +83,7 @@ enum EditOperation {
         card_id: String,
         prose: String,
     },
-    SetDreamAvatarField {
+    SetAvatarField {
         avatar_id: String,
         field: String,
         value: JsonValue,
@@ -93,8 +93,8 @@ enum EditOperation {
         field: String,
         value: JsonValue,
     },
-    SetDreamAvatarTidePool {
-        dream_avatar_id: String,
+    SetAvatarTidePool {
+        avatar_id: String,
         starter: Option<String>,
         facets: Vec<String>,
         neutral: Vec<String>,
@@ -172,7 +172,7 @@ pub fn stage_edit(
     match request.dataset.as_str() {
         "affiliations" => edit_affiliations(manifest, staging_root, request.operations),
         "cards" => edit_cards(manifest, staging_root, request.operations),
-        "dream-avatars" => edit_dream_avatars(manifest, staging_root, request.operations),
+        "avatars" => edit_avatars(manifest, staging_root, request.operations),
         "dream-guides" => edit_dream_guides(manifest, staging_root, request.operations),
         "dreamscapes" => edit_dreamscapes(manifest, staging_root, request.operations),
         "dreamsigns" => edit_dreamsigns(manifest, staging_root, request.operations),
@@ -689,7 +689,7 @@ fn edit_dreamscapes(
                 source_text = patch_dreamscape_source_field(
                     &source_text,
                     &dreamscapes[index],
-                    "opponent_dream_avatar_ids",
+                    "opponent_avatar_ids",
                 )?;
             }
             _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Dreamscapes"),
@@ -779,9 +779,9 @@ fn set_dreamscape_opponents(
         .collect::<Result<Vec<_>>>()?;
     match &mut dreamscape.kind {
         DreamscapeKind::Standard {
-            opponent_dream_avatar_ids,
+            opponent_avatar_ids,
             ..
-        } => *opponent_dream_avatar_ids = opponent_ids,
+        } => *opponent_avatar_ids = opponent_ids,
         _ => bail!("FIELD_NOT_APPLICABLE: opponent assignments apply only to Standard Dreamscapes"),
     }
     Ok(())
@@ -808,14 +808,14 @@ fn patch_dreamscape_source_field(
             ),
             _ => bail!("FIELD_NOT_APPLICABLE: affiliation-id applies only to Standard Dreamscapes"),
         },
-        "opponent_dream_avatar_ids" => match &dreamscape.kind {
+        "opponent_avatar_ids" => match &dreamscape.kind {
             DreamscapeKind::Standard {
-                opponent_dream_avatar_ids,
+                opponent_avatar_ids,
                 ..
             } => (
-                "opponent_dream_avatar_ids",
+                "opponent_avatar_ids",
                 ron::to_string(
-                    &opponent_dream_avatar_ids
+                    &opponent_avatar_ids
                         .iter()
                         .map(ToString::to_string)
                         .collect::<Vec<_>>(),
@@ -1954,17 +1954,17 @@ fn edit_cards(
     })
 }
 
-fn edit_dream_avatars(
+fn edit_avatars(
     manifest: &Manifest,
     staging_root: &Path,
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
-    let dataset = manifest.dataset("dream-avatars")?;
+    let dataset = manifest.dataset("avatars")?;
     let source_path = staging_root.join(&dataset.source);
     let original_text = fs::read_to_string(&source_path)
-        .with_context(|| format!("read staged DreamAvatar source {}", source_path.display()))?;
-    let original: Vec<AvatarDefinition> = ron::from_str(&original_text)
-        .context("MALFORMED_SOURCE: staged DreamAvatar RON is invalid")?;
+        .with_context(|| format!("read staged Avatar source {}", source_path.display()))?;
+    let original: Vec<AvatarDefinition> =
+        ron::from_str(&original_text).context("MALFORMED_SOURCE: staged Avatar RON is invalid")?;
     let tides_dataset = manifest.dataset("tides")?;
     let tides: TidesCatalog = ron::from_str(&fs::read_to_string(
         staging_root.join(&tides_dataset.source),
@@ -1972,47 +1972,45 @@ fn edit_dream_avatars(
     .context("MALFORMED_SOURCE: staged tides RON is invalid")?;
     let tide_kinds =
         tides::tide_kinds(&tides).context("MALFORMED_SOURCE: staged tides catalog is invalid")?;
-    dream_avatars::validate_tide_references(&original, &tide_kinds)
-        .context("MALFORMED_SOURCE: staged DreamAvatar catalog is invalid")?;
+    avatars::validate_tide_references(&original, &tide_kinds)
+        .context("MALFORMED_SOURCE: staged Avatar catalog is invalid")?;
     let mut avatars = original.clone();
     let mut source_text = original_text;
 
     for operation in operations {
         match operation {
-            EditOperation::SetDreamAvatarField {
+            EditOperation::SetAvatarField {
                 avatar_id,
                 field,
                 value,
             } => {
-                let index = unique_dream_avatar_index(&avatars, &avatar_id)?;
+                let index = unique_avatar_index(&avatars, &avatar_id)?;
                 let before = avatars[index].clone();
-                set_dream_avatar_field(&mut avatars[index], &field, value)?;
-                dream_avatars::validate(&avatars)
-                    .context("INVALID_EDIT: DreamAvatar edit violates the catalog contract")?;
+                set_avatar_field(&mut avatars[index], &field, value)?;
+                avatars::validate(&avatars)
+                    .context("INVALID_EDIT: Avatar edit violates the catalog contract")?;
                 if avatars[index] != before {
-                    source_text =
-                        patch_dream_avatar_source_field(&source_text, &avatars[index], &field)?;
+                    source_text = patch_avatar_source_field(&source_text, &avatars[index], &field)?;
                 }
             }
-            EditOperation::SetDreamAvatarTidePool {
-                dream_avatar_id,
+            EditOperation::SetAvatarTidePool {
+                avatar_id,
                 starter,
                 facets,
                 neutral,
             } => {
-                let index = unique_dream_avatar_index(&avatars, &dream_avatar_id)?;
+                let index = unique_avatar_index(&avatars, &avatar_id)?;
                 avatars[index].tide_pool = TidePool {
                     starter: parse_optional_tide_id(starter.as_deref())?,
                     facets: parse_tide_ids(&facets)?,
                     neutral: parse_tide_ids(&neutral)?,
                 };
-                dream_avatars::validate_tide_references(&avatars, &tide_kinds).context(
-                    "INVALID_EDIT: DreamAvatar tide-pool edit violates the catalog contract",
-                )?;
+                avatars::validate_tide_references(&avatars, &tide_kinds)
+                    .context("INVALID_EDIT: Avatar tide-pool edit violates the catalog contract")?;
                 source_text =
-                    patch_dream_avatar_source_field(&source_text, &avatars[index], "tide-pool")?;
+                    patch_avatar_source_field(&source_text, &avatars[index], "tide-pool")?;
             }
-            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to DreamAvatars"),
+            _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Avatars"),
         }
     }
 
@@ -2024,15 +2022,15 @@ fn edit_dream_avatars(
     Ok(EditReport {
         ok: true,
         changed,
-        dataset_id: "dream-avatars".into(),
-        source_revision: revision(staging_root, manifest, &["dream-avatars"])?,
+        dataset_id: "avatars".into(),
+        source_revision: revision(staging_root, manifest, &["avatars"])?,
     })
 }
 
-fn unique_dream_avatar_index(avatars: &[AvatarDefinition], id: &str) -> Result<usize> {
+fn unique_avatar_index(avatars: &[AvatarDefinition], id: &str) -> Result<usize> {
     let id_literal = ron::to_string(id)?;
-    let requested: DreamAvatarId = ron::from_str(&id_literal)
-        .context("INVALID_EDIT: DreamAvatar route identity must be a canonical UUIDv4")?;
+    let requested: AvatarId = ron::from_str(&id_literal)
+        .context("INVALID_EDIT: Avatar route identity must be a canonical UUIDv4")?;
     let matches = avatars
         .iter()
         .enumerate()
@@ -2040,31 +2038,27 @@ fn unique_dream_avatar_index(avatars: &[AvatarDefinition], id: &str) -> Result<u
         .map(|(index, _)| index)
         .collect::<Vec<_>>();
     if matches.is_empty() {
-        bail!("RECORD_NOT_FOUND: DreamAvatar UUID {id}");
+        bail!("RECORD_NOT_FOUND: Avatar UUID {id}");
     }
     if matches.len() > 1 {
-        bail!("MALFORMED_SOURCE: duplicate DreamAvatar UUID {id}");
+        bail!("MALFORMED_SOURCE: duplicate Avatar UUID {id}");
     }
     Ok(matches[0])
 }
 
-fn set_dream_avatar_field(
-    avatar: &mut AvatarDefinition,
-    field: &str,
-    value: JsonValue,
-) -> Result<()> {
+fn set_avatar_field(avatar: &mut AvatarDefinition, field: &str, value: JsonValue) -> Result<()> {
     match field {
         "name" => {
             let value = json_string(value, field)?.trim().to_owned();
             if value.is_empty() {
-                bail!("INVALID_EDIT: DreamAvatar name cannot be blank");
+                bail!("INVALID_EDIT: Avatar name cannot be blank");
             }
             avatar.name = localized_source(value)?;
         }
         "title" => {
             let value = json_string(value, field)?.trim().to_owned();
             if value.is_empty() {
-                bail!("INVALID_EDIT: DreamAvatar title cannot be blank");
+                bail!("INVALID_EDIT: Avatar title cannot be blank");
             }
             avatar.title = localized_source(value)?;
         }
@@ -2076,7 +2070,7 @@ fn set_dream_avatar_field(
                     .iter()
                     .any(|paragraph| paragraph.trim().is_empty())
             {
-                bail!("INVALID_EDIT: DreamAvatar ability text must contain non-empty paragraphs");
+                bail!("INVALID_EDIT: Avatar ability text must contain non-empty paragraphs");
             }
             avatar.ability_text = paragraphs
                 .into_iter()
@@ -2086,14 +2080,14 @@ fn set_dream_avatar_field(
         "image-number" | "image_number" => {
             let image = json_u32(value, field)?;
             if !(1..=9_999).contains(&image) {
-                bail!("INVALID_EDIT: DreamAvatar image number must be in [1, 9999]");
+                bail!("INVALID_EDIT: Avatar image number must be in [1, 9999]");
             }
             avatar.portrait.image = image;
         }
         "starting-essence" | "starting_essence" => {
             avatar.starting_essence = Some(json_u32(value, field)?);
         }
-        _ => bail!("INVALID_EDIT: unsupported DreamAvatar field {field}"),
+        _ => bail!("INVALID_EDIT: unsupported Avatar field {field}"),
     }
     Ok(())
 }
@@ -2110,7 +2104,7 @@ fn json_u32(value: JsonValue, field: &str) -> Result<u32> {
         .with_context(|| format!("INVALID_EDIT: {field} must be a non-negative integer"))
 }
 
-fn patch_dream_avatar_source_field(
+fn patch_avatar_source_field(
     source: &str,
     avatar: &AvatarDefinition,
     field: &str,
@@ -2122,18 +2116,18 @@ fn patch_dream_avatar_source_field(
         "image-number" | "image_number" => "portrait.image",
         "starting-essence" | "starting_essence" => "starting_essence",
         "tide-pool" | "tide_pool" => "tide_pool",
-        _ => bail!("INVALID_EDIT: unsupported DreamAvatar field {field}"),
+        _ => bail!("INVALID_EDIT: unsupported Avatar field {field}"),
     };
     let record = typed_record_range(source, "AvatarDefinition", "id", &avatar.id.to_string())?;
     let value = if source_field == "portrait.image" {
         let portrait = top_level_field_value_range(source, record.clone(), "portrait")?
-            .context("MALFORMED_SOURCE: DreamAvatar record is missing portrait")?;
+            .context("MALFORMED_SOURCE: Avatar record is missing portrait")?;
         top_level_field_value_range(source, portrait, "image")?
     } else {
         top_level_field_value_range(source, record.clone(), source_field)?
     };
     if let Some(value) = value {
-        let replacement = render_dream_avatar_source_field(avatar, source_field)?;
+        let replacement = render_avatar_source_field(avatar, source_field)?;
         return Ok(format!(
             "{}{}{}",
             &source[..value.start],
@@ -2143,12 +2137,12 @@ fn patch_dream_avatar_source_field(
     }
     if source_field == "starting_essence" {
         let portrait = top_level_field_value_range(source, record.clone(), "portrait")?
-            .context("MALFORMED_SOURCE: DreamAvatar record is missing portrait")?;
+            .context("MALFORMED_SOURCE: Avatar record is missing portrait")?;
         let comma_offset = source[portrait.end..record.end]
             .find(',')
             .context("MALFORMED_SOURCE: portrait field is missing its trailing comma")?;
         let insertion = portrait.end + comma_offset + 1;
-        let replacement = render_dream_avatar_source_field(avatar, source_field)?;
+        let replacement = render_avatar_source_field(avatar, source_field)?;
         return Ok(format!(
             "{}\n    starting_essence: {},{}",
             &source[..insertion],
@@ -2157,12 +2151,12 @@ fn patch_dream_avatar_source_field(
         ));
     }
     bail!(
-        "MALFORMED_SOURCE: missing field {source_field} on DreamAvatar {}",
+        "MALFORMED_SOURCE: missing field {source_field} on Avatar {}",
         avatar.id
     )
 }
 
-fn render_dream_avatar_source_field(avatar: &AvatarDefinition, field: &str) -> Result<String> {
+fn render_avatar_source_field(avatar: &AvatarDefinition, field: &str) -> Result<String> {
     match field {
         "name" => Ok(ron::to_string(&avatar.name)?),
         "title" => Ok(ron::to_string(&avatar.title)?),
@@ -2173,7 +2167,7 @@ fn render_dream_avatar_source_field(avatar: &AvatarDefinition, field: &str) -> R
             .context("starting_essence must be present when rendering")?
             .to_string()),
         "tide_pool" => render_ron_value(&avatar.tide_pool, true),
-        _ => bail!("INVALID_EDIT: unsupported DreamAvatar source field {field}"),
+        _ => bail!("INVALID_EDIT: unsupported Avatar source field {field}"),
     }
 }
 
@@ -2646,7 +2640,7 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
         EffectKind::NextBattleSmallerHandAndCostDiscount => {
             ActionEffect::NextBattleSmallerHandAndCostDiscount
         }
-        EffectKind::ChooseDreamAvatar => ActionEffect::ChooseDreamAvatar {
+        EffectKind::ChooseAvatar => ActionEffect::ChooseAvatar {
             offer_count: positive_int(object, "offerCount")?,
         },
         EffectKind::PurgeDuplicatesAndGrantReclaim => ActionEffect::PurgeDuplicatesAndGrantReclaim,
@@ -2813,7 +2807,7 @@ fn validate_action_fields(
         EffectKind::CopyOfferedDeckCard => &["offerCount"],
         EffectKind::NextBattleOpeningHand => &["count"],
         EffectKind::NextBattleStartingEnergy => &["count"],
-        EffectKind::ChooseDreamAvatar => &["offerCount"],
+        EffectKind::ChooseAvatar => &["offerCount"],
         EffectKind::TakeCards => &["predicate", "offerCount"],
         EffectKind::TakeTransfiguredCardsAndGainNightmares => &[
             "predicate",
@@ -3958,7 +3952,7 @@ CardMetadataCatalog(
 )
 "###;
 
-    const DREAM_AVATAR_SOURCE: &str = r###"// Stable catalog guidance.
+    const AVATAR_SOURCE: &str = r###"// Stable catalog guidance.
 
 #![enable(implicit_some)]
 [
@@ -4137,7 +4131,7 @@ CardMetadataCatalog(
     ),
     kind: Standard(
       affiliation_id: "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
-      opponent_dream_avatar_ids: [
+      opponent_avatar_ids: [
         "94e7c651-25e9-4a62-9de4-eaf5ba20542c",
         "3ebaba62-9000-429d-b203-2a5a9724389a",
         "2c53b1b9-9291-4bba-8d3a-f40b545c8f3c",
@@ -4523,14 +4517,13 @@ DreamwellCatalog(
     }
 
     #[test]
-    fn dream_avatar_scalar_patch_changes_one_line_and_preserves_unrelated_source() {
-        let mut avatars: Vec<AvatarDefinition> = ron::from_str(DREAM_AVATAR_SOURCE).unwrap();
-        let index = unique_dream_avatar_index(&avatars, AVATAR_ID).unwrap();
-        set_dream_avatar_field(&mut avatars[index], "name", json!("Edited Name")).unwrap();
-        let patched =
-            patch_dream_avatar_source_field(DREAM_AVATAR_SOURCE, &avatars[index], "name").unwrap();
+    fn avatar_scalar_patch_changes_one_line_and_preserves_unrelated_source() {
+        let mut avatars: Vec<AvatarDefinition> = ron::from_str(AVATAR_SOURCE).unwrap();
+        let index = unique_avatar_index(&avatars, AVATAR_ID).unwrap();
+        set_avatar_field(&mut avatars[index], "name", json!("Edited Name")).unwrap();
+        let patched = patch_avatar_source_field(AVATAR_SOURCE, &avatars[index], "name").unwrap();
 
-        let changed_lines = DREAM_AVATAR_SOURCE
+        let changed_lines = AVATAR_SOURCE
             .lines()
             .zip(patched.lines())
             .filter(|(before, after)| before != after)
@@ -4803,12 +4796,8 @@ DreamwellCatalog(
             ],
         )
         .unwrap();
-        source = patch_dreamscape_source_field(
-            &source,
-            &dreamscapes[index],
-            "opponent_dream_avatar_ids",
-        )
-        .unwrap();
+        source = patch_dreamscape_source_field(&source, &dreamscapes[index], "opponent_avatar_ids")
+            .unwrap();
 
         dreamscapes::validate(&dreamscapes).unwrap();
         assert!(source.contains("/* Unrelated record comment. */"));
@@ -4842,18 +4831,18 @@ DreamwellCatalog(
     }
 
     #[test]
-    fn dream_avatar_patches_every_editable_field_shape_and_absent_optional_field() {
-        let mut source = DREAM_AVATAR_SOURCE.to_owned();
+    fn avatar_patches_every_editable_field_shape_and_absent_optional_field() {
+        let mut source = AVATAR_SOURCE.to_owned();
         let mut avatars: Vec<AvatarDefinition> = ron::from_str(&source).unwrap();
-        let index = unique_dream_avatar_index(&avatars, AVATAR_ID).unwrap();
+        let index = unique_avatar_index(&avatars, AVATAR_ID).unwrap();
         for (field, value) in [
             ("title", json!("Edited Title")),
             ("rendered-text", json!("One paragraph\n\nAnother paragraph")),
             ("image-number", json!("0099")),
             ("starting-essence", json!(137)),
         ] {
-            set_dream_avatar_field(&mut avatars[index], field, value).unwrap();
-            source = patch_dream_avatar_source_field(&source, &avatars[index], field).unwrap();
+            set_avatar_field(&mut avatars[index], field, value).unwrap();
+            source = patch_avatar_source_field(&source, &avatars[index], field).unwrap();
             assert_eq!(
                 ron::from_str::<Vec<AvatarDefinition>>(&source).unwrap(),
                 avatars
@@ -4878,9 +4867,9 @@ DreamwellCatalog(
     }
 
     #[test]
-    fn dream_avatar_editor_rejects_invalid_fields_values_and_identities() {
-        let mut avatars: Vec<AvatarDefinition> = ron::from_str(DREAM_AVATAR_SOURCE).unwrap();
-        let index = unique_dream_avatar_index(&avatars, AVATAR_ID).unwrap();
+    fn avatar_editor_rejects_invalid_fields_values_and_identities() {
+        let mut avatars: Vec<AvatarDefinition> = ron::from_str(AVATAR_SOURCE).unwrap();
+        let index = unique_avatar_index(&avatars, AVATAR_ID).unwrap();
         for (field, value) in [
             ("name", json!("   ")),
             ("title", json!("")),
@@ -4888,15 +4877,15 @@ DreamwellCatalog(
             ("image-number", json!(0)),
             ("id", json!("00000000-0000-4000-8000-000000000099")),
         ] {
-            assert!(set_dream_avatar_field(&mut avatars[index], field, value).is_err());
+            assert!(set_avatar_field(&mut avatars[index], field, value).is_err());
         }
         assert!(
-            unique_dream_avatar_index(&avatars, "00000000-0000-4000-8000-000000000099")
+            unique_avatar_index(&avatars, "00000000-0000-4000-8000-000000000099")
                 .unwrap_err()
                 .to_string()
                 .contains("RECORD_NOT_FOUND")
         );
-        assert!(unique_dream_avatar_index(&avatars, "not-a-uuid").is_err());
+        assert!(unique_avatar_index(&avatars, "not-a-uuid").is_err());
     }
 
     #[test]
@@ -4948,16 +4937,13 @@ DreamwellCatalog(
         assert!(set_tide_field(&mut catalog.tides[index], "resonance", json!("harmony")).is_err());
         assert!(set_tide_field(&mut catalog.tides[index], "kind", json!("neutral")).is_err());
 
-        let mut avatars: Vec<AvatarDefinition> = ron::from_str(DREAM_AVATAR_SOURCE).unwrap();
+        let mut avatars: Vec<AvatarDefinition> = ron::from_str(AVATAR_SOURCE).unwrap();
         avatars[0].tide_pool.facets = vec![TideId::parse(TIDE_ID).unwrap()];
         assert!(
-            dream_avatars::validate_tide_references(
-                &avatars,
-                &tides::tide_kinds(&catalog).unwrap()
-            )
-            .unwrap_err()
-            .to_string()
-            .contains("facet reference")
+            avatars::validate_tide_references(&avatars, &tides::tide_kinds(&catalog).unwrap())
+                .unwrap_err()
+                .to_string()
+                .contains("facet reference")
         );
     }
 
@@ -5064,7 +5050,7 @@ DreamwellCatalog(
             EffectKind::CopyOfferedDeckCard => &[("offerCount", json!(3))],
             EffectKind::NextBattleOpeningHand => &[("count", json!(1))],
             EffectKind::NextBattleStartingEnergy => &[("count", json!(1))],
-            EffectKind::ChooseDreamAvatar => &[("offerCount", json!(2))],
+            EffectKind::ChooseAvatar => &[("offerCount", json!(2))],
             EffectKind::TakeCards => &[("predicate", json!("character")), ("offerCount", json!(2))],
             EffectKind::TakeTransfiguredCardsAndGainNightmares => &[
                 ("predicate", json!("character")),

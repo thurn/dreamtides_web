@@ -73,7 +73,7 @@ tester.run("no-entity-reveal-escape-hatches", rule, {
       filename: "src/cumulus/components/card/RulesText.tsx",
       code: `import { useRevealSource } from "../../internal/reveal/context";
         import { revealEntityId } from "../../internal/reveal/identity";
-        const binding = useRevealSource({ identity: { entityType: "dream-avatar-rules-text", entityId: revealEntityId("dream-avatar-rules-text", id) }, spec });`,
+        const binding = useRevealSource({ identity: { entityType: "avatar-rules-text", entityId: revealEntityId("avatar-rules-text", id) }, spec });`,
     },
     {
       name: "Tides info label owns its semantic reveal and identity",

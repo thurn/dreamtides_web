@@ -35,7 +35,7 @@ function fixture() {
         cards: [{ id: "00000000-0000-4000-8000-000000000011", copies: 2 }],
       },
     ],
-    tidePoolByDreamAvatar: {},
+    tidePoolByAvatar: {},
   };
   return { rootDir, artifact };
 }

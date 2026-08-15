@@ -2,12 +2,12 @@ import { parse } from "smol-toml";
 import tutorialJourneyPoolSource from "../../data/tutorial_journey_pool.toml?raw";
 import { DEFAULT_TIDES4_TUNING } from "../draft/pool/variant-tides4";
 import type {
-  DreamAvatarId,
+  AvatarId,
   DreamsignId,
   TutorialJourneyTideId,
 } from "../types/identifiers";
 import {
-  parseDreamAvatarId,
+  parseAvatarId,
   parseDreamsignId,
   parseTutorialJourneyTideId,
 } from "../types/identifiers";
@@ -27,7 +27,7 @@ export interface TutorialJourneyTide {
 }
 
 export interface TutorialJourneyPool {
-  readonly dreamAvatarId: DreamAvatarId;
+  readonly avatarId: AvatarId;
   readonly poolSize: number;
   readonly openingOffers: readonly (readonly CardId[])[];
   readonly openingDreamsignIds: readonly DreamsignId[];
@@ -73,12 +73,12 @@ export function validateTutorialJourneyPool(
   expectedPoolSize: number = DEFAULT_TIDES4_TUNING.dealSize,
 ): TutorialJourneyPool {
   const source = record(input, "root");
-  const dreamAvatarId = nonBlankString(
-    source["dream-avatar-id"],
-    "dream-avatar-id",
+  const avatarId = nonBlankString(
+    source["avatar-id"],
+    "avatar-id",
   );
-  if (!UUID_RE.test(dreamAvatarId)) {
-    invalid("dream-avatar-id must be a UUID");
+  if (!UUID_RE.test(avatarId)) {
+    invalid("avatar-id must be a UUID");
   }
 
   const poolSize = positiveInteger(source["pool-size"], "pool-size");
@@ -220,7 +220,7 @@ export function validateTutorialJourneyPool(
   }
 
   return {
-    dreamAvatarId: parseDreamAvatarId(dreamAvatarId),
+    avatarId: parseAvatarId(avatarId),
     poolSize,
     openingOffers,
     openingDreamsignIds,

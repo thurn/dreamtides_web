@@ -2,7 +2,7 @@ import type { PoolVariant } from "../../draft/pool/types";
 import type { CardData } from "../../types/cards";
 import type { CardId } from "../../types/card-identity";
 import type {
-  ResolvedDreamAvatarPackage,
+  ResolvedAvatarPackage,
   Tides4ProvenanceSummary,
 } from "../../types/content";
 import { serializeCardNumber, type DraftState } from "../../types/draft";
@@ -39,7 +39,7 @@ interface PoolEntry {
 export interface BuildPoolViewerViewInput {
   cardDatabase: ReadonlyMap<number, CardData>;
   draftState: DraftState | null;
-  resolvedPackage: ResolvedDreamAvatarPackage | null;
+  resolvedPackage: ResolvedAvatarPackage | null;
   poolVariant: PoolVariant | null;
   tides4Provenance: Tides4ProvenanceSummary | null;
   source: PoolViewerSourceId;
@@ -57,7 +57,7 @@ export interface PoolViewerAdapterInput {
   onPoolCardDragEnd?: () => void;
   onPoolCardDragStart?: (card: CardData) => void;
   poolVariant?: PoolVariant | null;
-  resolvedPackage?: ResolvedDreamAvatarPackage | null;
+  resolvedPackage?: ResolvedAvatarPackage | null;
   tides4Provenance?: Tides4ProvenanceSummary | null;
   title?: PoolViewerTitleKind;
   variant?: "overlay" | "floating";
@@ -101,7 +101,7 @@ function cardsById(
 }
 
 function sourceOptions(
-  pkg: ResolvedDreamAvatarPackage | null,
+  pkg: ResolvedAvatarPackage | null,
   tides: Tides4ProvenanceSummary | null,
 ) {
   const ids: PoolViewerSourceId[] = [
@@ -109,7 +109,7 @@ function sourceOptions(
     ...(tides?.tides.length ? ["tides" as const] : []),
     "catalog",
   ];
-  if ((pkg?.dreamAvatar.signatureCardIds?.length ?? 0) > 0)
+  if ((pkg?.avatar.signatureCardIds?.length ?? 0) > 0)
     ids.push("signature");
   return ids;
 }
@@ -135,7 +135,7 @@ function entriesFor(
           },
         );
   if (source === "signature")
-    return (input.resolvedPackage?.dreamAvatar.signatureCardIds ?? []).flatMap(
+    return (input.resolvedPackage?.avatar.signatureCardIds ?? []).flatMap(
       (id, index) => {
         const card = byId.get(id);
         return card === undefined

@@ -1,9 +1,9 @@
 import { loadDreamsignTemplates } from "./dreamsigns";
 import { logEvent } from "../logging";
 import {
-  type DreamAvatarContent,
+  type AvatarContent,
   type DreamsignTemplate,
-  type ResolvedDreamAvatarPackage,
+  type ResolvedAvatarPackage,
   type Tides4CardProvenance,
   type Tides4ProvenanceSummary,
   type Tides4TideSummary,
@@ -31,7 +31,7 @@ import {
   loadTides4Decks,
   resolvePool,
 } from "./cards-v2-database";
-import { loadDreamAvatarsV2 } from "./dream-avatars-v2-database";
+import { loadAvatarsV2 } from "./avatars-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import {
   loadAffiliations,
@@ -71,7 +71,7 @@ import {
   type TutorialJourneyPool,
 } from "./tutorial-journey-pool";
 import type { DreamsignId, TideId } from "../types/identifiers";
-import { parseDreamAvatarId } from "../types/identifiers";
+import { parseAvatarId } from "../types/identifiers";
 
 export interface JourneyContent {
   cardDatabase: Map<number, CardData>;
@@ -81,7 +81,7 @@ export interface JourneyContent {
   rewardSelectionData: RewardSelectionData;
   /** Augury composition, archetype weights, policies, and quantities. */
   auguryData: AuguryData;
-  dreamAvatars: DreamAvatarContent[];
+  avatars: AvatarContent[];
   /** The shared Dreamwell deck source, drawn from during battle. */
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates: readonly DreamsignTemplate[];
@@ -133,7 +133,7 @@ export interface JourneyContent {
 }
 
 /**
- * Inputs shared across every DreamAvatar package build for a single journey run:
+ * Inputs shared across every Avatar package build for a single journey run:
  * the prebuilt pool data, the card-name -> card-number index, and the run's
  * dreamsign pool ids.
  */
@@ -166,7 +166,7 @@ export interface RunPoolContext {
 
 /**
  * FNV-1a hash of a string into a 32-bit unsigned integer, used to derive the
- * tides4 generator's numeric seed from the journey seed and DreamAvatar id so each
+ * tides4 generator's numeric seed from the journey seed and Avatar id so each
  * run's pool is reproducible.
  */
 export function hashStringToSeed(input: string): number {
@@ -179,20 +179,20 @@ export function hashStringToSeed(input: string): number {
 }
 
 /**
- * Generate the tides4 draft pool for one DreamAvatar, pinned to the run's
+ * Generate the tides4 draft pool for one Avatar, pinned to the run's
  * deterministic seed. This is the single source of pool generation for both the
  * draft package and its provenance summary, so they always describe the same
  * pool.
  */
-function generateDreamAvatarPool(
-  dreamAvatar: DreamAvatarContent,
+function generateAvatarPool(
+  avatar: AvatarContent,
   ctx: RunPoolContext,
   journeySeed: JourneySeed,
 ): GeneratedPool {
   return generatePoolFromData(
     ctx.poolData,
-    hashStringToSeed(`${journeySeed}:${dreamAvatar.id}`),
-    dreamAvatar.id,
+    hashStringToSeed(`${journeySeed}:${avatar.id}`),
+    avatar.id,
     ctx.tides4Tuning,
   );
 }
@@ -204,11 +204,11 @@ function generateDreamAvatarPool(
  * make the pool construction reconstructable from the production log.
  */
 function logPoolConstructed(
-  dreamAvatar: DreamAvatarContent,
+  avatar: AvatarContent,
   pool: GeneratedPool,
 ): void {
   logEvent("draft_pool_constructed", {
-    dreamAvatarId: dreamAvatar.id,
+    avatarId: avatar.id,
     algo: pool.variant,
     seed: pool.seed,
     poolSize: pool.size,
@@ -223,17 +223,17 @@ function logPoolConstructed(
 }
 
 /**
- * Build the draft package for one DreamAvatar by generating its pool with the
+ * Build the draft package for one Avatar by generating its pool with the
  * tides4, resolving it against the run's UUID index, and excluding starter
- * cards. Deterministic per `(journeySeed, dreamAvatar.id)`.
+ * cards. Deterministic per `(journeySeed, avatar.id)`.
  */
-export function buildDreamAvatarPackage(
-  dreamAvatar: DreamAvatarContent,
+export function buildAvatarPackage(
+  avatar: AvatarContent,
   ctx: RunPoolContext,
   journeySeed: JourneySeed,
-): ResolvedDreamAvatarPackage {
-  const pool = generateDreamAvatarPool(dreamAvatar, ctx, journeySeed);
-  logPoolConstructed(dreamAvatar, pool);
+): ResolvedAvatarPackage {
+  const pool = generateAvatarPool(avatar, ctx, journeySeed);
+  logPoolConstructed(avatar, pool);
 
   const {
     draftPoolCopiesByCard,
@@ -250,8 +250,8 @@ export function buildDreamAvatarPackage(
     // A pool card whose UUID is not in the catalog id index (a card dropped from
     // the catalog). Logged so a production pool stays reconstructable: the
     // variant emitted these ids and the resolver left them out.
-    logEvent("build_dream_avatar_package_unresolved_ids", {
-      dreamAvatarId: dreamAvatar.id,
+    logEvent("build_avatar_package_unresolved_ids", {
+      avatarId: avatar.id,
       algo: pool.variant,
       unresolvedCount: unresolvedIds.length,
       unresolvedIds,
@@ -261,15 +261,15 @@ export function buildDreamAvatarPackage(
     // Two distinct pool ids resolved to one card number — impossible under the
     // collision-free id index, so this records a data anomaly (a stale or
     // duplicate id) rather than the same-name merge the id-keyed pool prevents.
-    logEvent("build_dream_avatar_package_id_collision", {
-      dreamAvatarId: dreamAvatar.id,
+    logEvent("build_avatar_package_id_collision", {
+      avatarId: avatar.id,
       algo: pool.variant,
       collidedCardNumbers,
     });
   }
   if (cappedCardNumbers.length > 0) {
-    logEvent("build_dream_avatar_package_rarity_capped", {
-      dreamAvatarId: dreamAvatar.id,
+    logEvent("build_avatar_package_rarity_capped", {
+      avatarId: avatar.id,
       cappedCount: cappedCardNumbers.length,
       cappedCardNumbers,
     });
@@ -282,7 +282,7 @@ export function buildDreamAvatarPackage(
   const doubledCardCount = countDoubledCards(draftPoolCopiesByCard);
 
   return {
-    dreamAvatar,
+    avatar,
     joinedTideIds: pool.tides4Provenance.tides
       .filter((tide) => tide.joined)
       .map((tide) => tide.id),
@@ -297,10 +297,10 @@ export function buildDreamAvatarPackage(
 }
 
 /**
- * Recompute the full `tides4` tide provenance for one DreamAvatar's pool,
+ * Recompute the full `tides4` tide provenance for one Avatar's pool,
  * resolved against the run's name index so per-card entries and per-tide
  * decklists are keyed by card number. Reproduces the exact pool
- * {@link buildDreamAvatarPackage} built (same seed and inputs), so the Pool
+ * {@link buildAvatarPackage} built (same seed and inputs), so the Pool
  * Viewer can show each individual tide deck and the "Why Cards" surface can
  * attribute every offered card to its source tide without the provenance ever
  * being persisted. Returns `null` for non-`tides4` pools. Starter cards (never
@@ -308,12 +308,12 @@ export function buildDreamAvatarPackage(
  * and each tide's `contributedCardCount` is recounted over the dropped-starter
  * pool so it matches what a player actually sees.
  */
-export function buildDreamAvatarTides4Provenance(
-  dreamAvatar: DreamAvatarContent,
+export function buildAvatarTides4Provenance(
+  avatar: AvatarContent,
   ctx: RunPoolContext,
   journeySeed: JourneySeed,
 ): Tides4ProvenanceSummary | null {
-  const pool = generateDreamAvatarPool(dreamAvatar, ctx, journeySeed);
+  const pool = generateAvatarPool(avatar, ctx, journeySeed);
   const provenance = pool.tides4Provenance;
   if (provenance === undefined) return null;
 
@@ -367,7 +367,7 @@ export function buildDreamAvatarTides4Provenance(
   }));
 
   return {
-    dreamAvatarId: provenance.dreamAvatarId,
+    avatarId: provenance.avatarId,
     signatureless: provenance.signatureless,
     borrowedArchetypeName: provenance.borrowedArchetypeName,
     dealSize: provenance.dealSize,
@@ -389,7 +389,7 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     cardDatabase,
     exploration,
     auguryData,
-    draftDreamAvatars,
+    draftAvatars,
     dreamwellCards,
     dreamsignTemplates,
     tides4Decks,
@@ -408,7 +408,7 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     loadCardsV2Database(),
     loadExplorationContent(),
     loadAuguryData(),
-    loadDreamAvatarsV2(),
+    loadAvatarsV2(),
     loadDreamwellCards(),
     loadDreamsignTemplates(),
     loadTides4Decks(),
@@ -447,8 +447,8 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     cardDatabase.set(customCard.cardNumber, customCard);
   }
 
-  const dreamAvatars: DreamAvatarContent[] = draftDreamAvatars.map((dc) => ({
-    id: parseDreamAvatarId(dc.id),
+  const avatars: AvatarContent[] = draftAvatars.map((dc) => ({
+    id: parseAvatarId(dc.id),
     name: dc.name,
     title: dc.title,
     renderedText: dc.renderedText,
@@ -497,7 +497,7 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     exploration,
     rewardSelectionData,
     auguryData,
-    dreamAvatars,
+    avatars,
     dreamwellCards,
     dreamsignTemplates,
     tutorialJourneyPool: TUTORIAL_JOURNEY_POOL,

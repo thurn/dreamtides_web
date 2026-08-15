@@ -11,14 +11,14 @@ import DreamscapeResidents, {
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type {
   AffiliationOption,
-  DreamAvatarAssignmentAction,
-  DreamAvatarOption,
+  AvatarAssignmentAction,
+  AvatarOption,
   DreamscapeCardSize,
   EditableDreamscapeField,
   EditorDreamscapeRecord,
   GuideOption,
 } from "./dreamscape-types";
-import type { DreamAvatarId } from "../types/identifiers";
+import type { AvatarId } from "../types/identifiers";
 import type { SiteType } from "../types/journey";
 
 export interface EditableDreamscapeProps {
@@ -27,13 +27,13 @@ export interface EditableDreamscapeProps {
   guides: GuideOption[];
   affiliations: AffiliationOption[];
   siteTypes: SiteType[];
-  dreamAvatars: DreamAvatarOption[];
-  regionNameByDreamAvatar: Map<DreamAvatarId, string>;
+  avatars: AvatarOption[];
+  regionNameByAvatar: Map<AvatarId, string>;
   residentStatus: ResidentAssignmentStatus;
-  onAssignDreamAvatar: (
+  onAssignAvatar: (
     record: EditorDreamscapeRecord,
-    action: DreamAvatarAssignmentAction,
-    params: { inId?: DreamAvatarId; outId?: DreamAvatarId },
+    action: AvatarAssignmentAction,
+    params: { inId?: AvatarId; outId?: AvatarId },
   ) => void;
   saveEntryFor: (field: EditableDreamscapeField) => EditableFieldSaveEntry | null;
   onFieldBeginEdit: (
@@ -191,10 +191,10 @@ export default function EditableDreamscape({
   guides,
   affiliations,
   siteTypes,
-  dreamAvatars,
-  regionNameByDreamAvatar,
+  avatars,
+  regionNameByAvatar,
   residentStatus,
-  onAssignDreamAvatar,
+  onAssignAvatar,
   saveEntryFor,
   onFieldBeginEdit,
   onFieldDraftChange,
@@ -447,10 +447,10 @@ export default function EditableDreamscape({
           <DreamscapeResidents
             record={record}
             size={size}
-            dreamAvatars={dreamAvatars}
-            regionNameByDreamAvatar={regionNameByDreamAvatar}
+            avatars={avatars}
+            regionNameByAvatar={regionNameByAvatar}
             status={residentStatus}
-            onAssign={(action, params) => onAssignDreamAvatar(record, action, params)}
+            onAssign={(action, params) => onAssignAvatar(record, action, params)}
           />
         ) : null}
       </div>

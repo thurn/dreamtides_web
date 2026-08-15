@@ -1,7 +1,7 @@
 import type { SiteType } from "../types/journey";
 import type {
   AffiliationId,
-  DreamAvatarId,
+  AvatarId,
   DreamscapeId,
   GuideId,
 } from "../types/identifiers";
@@ -21,8 +21,8 @@ export interface EditorDreamscapeRecord {
   "affiliation-id": AffiliationId | null;
   isStarter: boolean;
   fixedSites: string[];
-  /** UUIDs of the DreamAvatars resident in this region (3-4 for non-starters). */
-  dreamAvatarIds: DreamAvatarId[];
+  /** UUIDs of the Avatars resident in this region (3-4 for non-starters). */
+  avatarIds: AvatarId[];
   sourceIndex: number;
 }
 
@@ -40,13 +40,13 @@ export interface AffiliationOption {
   name: string;
 }
 
-/** A DreamAvatar assignable as a resident of a dreamscape. */
-export interface DreamAvatarOption {
-  id: DreamAvatarId;
+/** A Avatar assignable as a resident of a dreamscape. */
+export interface AvatarOption {
+  id: AvatarId;
   name: string;
   title: string;
   imageNumber: string;
-  /** The DreamAvatar's ability text, shown in the resident hover popover. */
+  /** The Avatar's ability text, shown in the resident hover popover. */
   renderedText: string;
 }
 
@@ -54,7 +54,7 @@ export interface LoadEditorDreamscapesResponse {
   dreamscapes: EditorDreamscapeRecord[];
   guides: GuideOption[];
   affiliations: AffiliationOption[];
-  dreamAvatars: DreamAvatarOption[];
+  avatars: AvatarOption[];
   siteTypes: SiteType[];
 }
 
@@ -63,22 +63,22 @@ export interface DreamscapeCatalog {
   dreamscapes: EditorDreamscapeRecord[];
   guides: GuideOption[];
   affiliations: AffiliationOption[];
-  dreamAvatars: DreamAvatarOption[];
+  avatars: AvatarOption[];
   siteTypes: SiteType[];
 }
 
-export type DreamAvatarAssignmentAction = "replace" | "add" | "remove";
+export type AvatarAssignmentAction = "replace" | "add" | "remove";
 
-export interface DreamAvatarAssignmentRequest {
+export interface AvatarAssignmentRequest {
   dreamscapeId: DreamscapeId;
-  action: DreamAvatarAssignmentAction;
-  /** The incoming DreamAvatar (for "replace" / "add"). */
-  inId?: DreamAvatarId;
+  action: AvatarAssignmentAction;
+  /** The incoming Avatar (for "replace" / "add"). */
+  inId?: AvatarId;
   /** The resident being displaced (for "replace" / "remove"). */
-  outId?: DreamAvatarId;
+  outId?: AvatarId;
 }
 
-export interface DreamAvatarAssignmentResponse {
+export interface AvatarAssignmentResponse {
   dreamscapes: EditorDreamscapeRecord[];
   changed: DreamscapeId[];
 }
@@ -106,9 +106,9 @@ export interface DreamscapeEditorApiClient {
   saveEditorDreamscapeField: (
     request: SaveEditorDreamscapeFieldRequest,
   ) => Promise<SaveEditorDreamscapeFieldResponse>;
-  assignDreamscapeDreamAvatar: (
-    request: DreamAvatarAssignmentRequest,
-  ) => Promise<DreamAvatarAssignmentResponse>;
+  assignDreamscapeAvatar: (
+    request: AvatarAssignmentRequest,
+  ) => Promise<AvatarAssignmentResponse>;
 }
 
 export type DreamscapeCardSize = "small" | "medium" | "large";

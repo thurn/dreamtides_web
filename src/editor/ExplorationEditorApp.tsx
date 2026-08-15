@@ -217,7 +217,7 @@ const FOLLOWUP_EFFECT_KINDS: ReadonlySet<
   "purge-selected-dreamsign-and-gain-random",
   "gain-nightmare-and-dreamsign",
   "purge-dreamsign-for-essence",
-  "choose-dream-avatar",
+  "choose-avatar",
   "choose-site-type",
   "take-transfigured-cards-and-gain-nightmares",
   "purge-one-transfigure-and-copy-others",

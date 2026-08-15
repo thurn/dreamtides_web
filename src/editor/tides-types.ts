@@ -1,9 +1,9 @@
 import type {
   Tides4DeckJson,
-  Tides4DreamAvatarPool,
+  Tides4AvatarPool,
 } from "../draft/pool/tides4-io";
 import type {
-  DreamAvatarId,
+  AvatarId,
   IdentityRecord,
   TideId,
 } from "../types/identifiers";
@@ -20,16 +20,16 @@ export type EditableTideField =
 /**
  * The full committed tides artifact as returned by the tides editor API
  * (`GET /api/editor/tides`). Carries the editable tide list and the per
- * DreamAvatar pools, plus which `file` (e.g. `tides4`) it was read from.
+ * Avatar pools, plus which `file` (e.g. `tides4`) it was read from.
  */
 export interface TidesArtifact {
   file: TidesCatalogFile;
   sourceRevision: SourceRevision;
   version: number;
   tides: Tides4DeckJson[];
-  tidePoolByDreamAvatar: IdentityRecord<
-    DreamAvatarId,
-    Tides4DreamAvatarPool
+  tidePoolByAvatar: IdentityRecord<
+    AvatarId,
+    Tides4AvatarPool
   >;
 }
 
@@ -50,11 +50,11 @@ export interface SaveTideFieldResponse {
 }
 
 /**
- * A DreamAvatar as served by `/dream-avatars-v2-data.json` — the identity behind a
- * signature tide. Used to render the DreamAvatar portrait and ability text.
+ * A Avatar as served by `/avatars-v2-data.json` — the identity behind a
+ * signature tide. Used to render the Avatar portrait and ability text.
  */
-export interface EditorDreamAvatar {
-  id: DreamAvatarId;
+export interface EditorAvatar {
+  id: AvatarId;
   name: string;
   title: string;
   imageNumber: string;

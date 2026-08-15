@@ -1,5 +1,5 @@
 import type { CardData } from "../types/cards";
-import type { ResolvedDreamAvatarPackage } from "../types/content";
+import type { ResolvedAvatarPackage } from "../types/content";
 import type {
   DraftConfig,
   DraftPoolCopiesByCard,
@@ -351,7 +351,7 @@ export function countRemainingUniqueCards(
 
 export function createInitialDraftState(
   cardDatabase: Map<number, CardData>,
-  resolvedPackage: ResolvedDreamAvatarPackage,
+  resolvedPackage: ResolvedAvatarPackage,
 ): PoolDraftState {
   const draftPoolCopiesByCard = sanitizeDraftPoolCopies(
     cardDatabase,
@@ -377,10 +377,10 @@ export function createInitialDraftState(
   };
 }
 
-/** Create initial DraftState from the resolved DreamAvatar package. */
+/** Create initial DraftState from the resolved Avatar package. */
 export function initializeDraftState(
   cardDatabase: Map<number, CardData>,
-  resolvedPackage: ResolvedDreamAvatarPackage,
+  resolvedPackage: ResolvedAvatarPackage,
 ): PoolDraftState {
   const draftState = createInitialDraftState(cardDatabase, resolvedPackage);
 
@@ -389,7 +389,7 @@ export function initializeDraftState(
     uniqueCardCount: countRemainingUniqueCards(
       draftState.remainingCopiesByCard,
     ),
-    dreamAvatarId: resolvedPackage.dreamAvatar.id,
+    avatarId: resolvedPackage.avatar.id,
   });
 
   return draftState;

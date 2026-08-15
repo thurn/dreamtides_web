@@ -14,7 +14,7 @@
       "event": {
         "type": "START_JOURNEY",
         "payload": {
-          "dreamAvatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
+          "avatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
         },
         "actor": "alice",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -167,5 +167,5 @@
       }
     }
   ],
-  "finalHash": "501117440836ac934d01fca44d075d166f8f14c9416ba7579e663f8ed7df78cb"
+  "finalHash": "890d6194d16441209bf16d67812e394286121e3a279f1bf7e3fa2b13d3f22f84"
 }

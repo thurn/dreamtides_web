@@ -56,7 +56,7 @@ Read logs for all production game design debugging.
 
 Card data lives in data/cards.ron
 
-Dream Avatars live in data/dream_avatars.ron
+Avatars live in data/avatars.ron
 
 Please always identify cards by UUID, *never* by card name.
 
@@ -76,12 +76,12 @@ and include its output with your commit.
 
 Unless otherwise specified, assume all draft questions are about the "tides4"
 draft pool construction algorithm and that the source data for drafts lives
-in data/tides.ron and the embedded tide pools in data/dream_avatars.ron.
+in data/tides.ron and the embedded tide pools in data/avatars.ron.
 
 
 # Selection Data
 
-Card, Dreamsign, Dream Avatar, and affiliation selection derives from the
+Card, Dreamsign, Avatar, and affiliation selection derives from the
 canonical RON catalogs. `data/tides.ron` defines the shared affinity space.
 
 # Verification

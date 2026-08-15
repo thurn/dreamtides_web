@@ -218,7 +218,7 @@ export function buildExplorationEntryLog(
       offeredDreamsignIds: offer.offeredDreamsignIds ?? [],
       offeredDeckEntryIds: offer.offeredDeckEntryIds ?? [],
       eligibleDeckEntryIds: offer.eligibleDeckEntryIds ?? [],
-      offeredDreamAvatarIds: offer.offeredDreamAvatarIds ?? [],
+      offeredAvatarIds: offer.offeredAvatarIds ?? [],
       packCardIds: offer.packCardIds,
       replacementCardIdByEntryId: offer.replacementCardIdByEntryId,
       transfigurationByEntryId: offer.transfigurationByEntryId,
@@ -444,7 +444,7 @@ export function buildExplorationCompletionLog(
       offer?.selectionContentRevision ??
       null,
     battleModifier: resolution.battleModifier ?? null,
-    chosenDreamAvatarId: resolution.chosenDreamAvatarId ?? null,
+    chosenAvatarId: resolution.chosenAvatarId ?? null,
     reclaimCostByEntryId: resolution.reclaimCostByEntryId ?? {},
     siteOfferModifier: resolution.siteOfferModifier ?? null,
     shopModifier: resolution.shopModifier ?? null,

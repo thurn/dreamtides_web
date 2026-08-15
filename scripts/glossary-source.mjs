@@ -89,9 +89,9 @@ function projectionArray(value, index) {
       );
     }
     const owner = optionalString(projection.owner, "projection owner", index);
-    if (owner !== undefined && owner !== "card" && owner !== "dreamAvatar") {
+    if (owner !== undefined && owner !== "card" && owner !== "avatar") {
       throw invalid(
-        `Glossary entry ${String(index + 1)} projection ${String(projectionIndex + 1)} owner must be "card" or "dreamAvatar".`,
+        `Glossary entry ${String(index + 1)} projection ${String(projectionIndex + 1)} owner must be "card" or "avatar".`,
       );
     }
     const pattern = optionalString(

@@ -1,7 +1,7 @@
-// Real JourneyLifecycleContentProvider: resolves a DreamAvatar's package and
+// Real JourneyLifecycleContentProvider: resolves an Avatar's package and
 // assembles the full started-run journey state from the loaded content.
 //
-// The legacy `startJourneyFromDreamAvatar` is seed-string based (pool generation,
+// The legacy `startJourneyFromAvatar` is seed-string based (pool generation,
 // draft state, and pricing all derive from the run seed), so it is a
 // content-lookup + seed pass-through. Its one non-deterministic dependency was
 // atlas generation (raw `Math.random`); this adapter closes that hole by
@@ -9,10 +9,10 @@
 // `START_JOURNEY` build a byte-identical atlas.
 
 import type { JourneyContent } from "../../data/journey-content";
-import type { ResolvedDreamAvatarPackage } from "../../types/content";
-import { buildDreamAvatarPackage } from "../../data/journey-content";
+import type { ResolvedAvatarPackage } from "../../types/content";
+import { buildAvatarPackage } from "../../data/journey-content";
 import { buildTutorialJourneyPackage } from "../../data/tutorial-journey-package";
-import { startJourneyFromDreamAvatar } from "../../state/journey-state-actions";
+import { startJourneyFromAvatar } from "../../state/journey-state-actions";
 import type { JourneyLifecycleContentProvider } from "../../rules/journey/lifecycle";
 import { seededJourneyRng } from "./rng-stream";
 import { regenerateAtlasForProgress } from "../../atlas/atlas-generator";
@@ -20,43 +20,43 @@ import { regenerateAtlasForProgress } from "../../atlas/atlas-generator";
 export function createJourneyLifecycleContentProvider(
   content: JourneyContent,
 ): JourneyLifecycleContentProvider {
-  const dreamAvatarById = new Map(
-    content.dreamAvatars.map((dreamAvatar) => [dreamAvatar.id, dreamAvatar]),
+  const avatarById = new Map(
+    content.avatars.map((avatar) => [avatar.id, avatar]),
   );
 
   return {
-    resolveDreamAvatarPackage: (
-      dreamAvatarId,
+    resolveAvatarPackage: (
+      avatarId,
       seed,
-    ): ResolvedDreamAvatarPackage | null => {
-      const dreamAvatar = dreamAvatarById.get(dreamAvatarId);
-      if (dreamAvatar === undefined) return null;
+    ): ResolvedAvatarPackage | null => {
+      const avatar = avatarById.get(avatarId);
+      if (avatar === undefined) return null;
       if (content.poolContext === undefined) return null;
-      return buildDreamAvatarPackage(dreamAvatar, content.poolContext, seed);
+      return buildAvatarPackage(avatar, content.poolContext, seed);
     },
-    startJourney: ({ journey, dreamAvatarId, seed }) => {
-      const dreamAvatar = dreamAvatarById.get(dreamAvatarId);
-      if (dreamAvatar === undefined) return null;
+    startJourney: ({ journey, avatarId, seed }) => {
+      const avatar = avatarById.get(avatarId);
+      if (avatar === undefined) return null;
       if (content.poolContext === undefined) return null;
       const tutorialJourneyPool = content.tutorialJourneyPool;
       const isTutorialJourney =
         journey.screen.type === "journeyStart" &&
-        journey.screen.tutorialDreamAvatarId === dreamAvatarId &&
-        tutorialJourneyPool?.dreamAvatarId === dreamAvatarId;
+        journey.screen.tutorialAvatarId === avatarId &&
+        tutorialJourneyPool?.avatarId === avatarId;
       const resolvedPackageOverride = isTutorialJourney
         ? buildTutorialJourneyPackage(
-            dreamAvatar,
+            avatar,
             content.poolContext,
             tutorialJourneyPool,
             content.cardDatabase,
           )
         : undefined;
       // Seed atlas generation from the run seed so the assembled atlas is
-      // identical on every client. `startJourneyFromDreamAvatar` preserves
+      // identical on every client. `startJourneyFromAvatar` preserves
       // `journey.seed` because `seedOverride` is passed the run seed.
-      return startJourneyFromDreamAvatar({
+      return startJourneyFromAvatar({
         prev: journey,
-        dreamAvatar,
+        avatar,
         journeyContent: content,
         seedOverride: seed,
         atlasRng: seededJourneyRng(seed, "atlas"),

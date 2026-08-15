@@ -2,7 +2,7 @@
 
 import type { CardId } from "../../types/card-identity.ts";
 import type { Tides4DecksJson, Tides4Role } from "./tides4-io.ts";
-import type { DreamAvatarId, TideId } from "../../types/identifiers";
+import type { AvatarId, TideId } from "../../types/identifiers";
 
 /** The single production draft-pool construction strategy. */
 export type PoolVariant = "tides4";
@@ -52,7 +52,7 @@ export interface Tides4PoolCardProvenance {
 }
 
 export interface Tides4PoolProvenance {
-  dreamAvatarId: DreamAvatarId | null;
+  avatarId: AvatarId | null;
   signatureless: boolean;
   borrowedArchetypeName: string | null;
   dealSize: number;

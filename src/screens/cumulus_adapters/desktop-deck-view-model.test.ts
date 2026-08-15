@@ -5,8 +5,8 @@ import { LocalizedString } from "@trox/runtime";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import type { CardData } from "../../types/cards";
-import type { DreamAvatarContent } from "../../types/content";
-import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/journey";
+import type { AvatarContent } from "../../types/content";
+import type { DeckEntry, Avatar, Dreamsign } from "../../types/journey";
 import type { RunPoolContext } from "../../data/journey-content";
 import type { PoolData } from "../../draft/pool/types";
 import { parseCardName } from "../../types/card-identity";
@@ -15,7 +15,7 @@ import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 import { parseDeckEntryId } from "../../types/identifiers";
 import {
   testCardId,
-  testDreamAvatarId,
+  testAvatarId,
   testDreamsignId,
   testTideId,
 } from "../../types/test-identities";
@@ -55,8 +55,8 @@ function database(...cards: CardData[]): Map<number, CardData> {
   return new Map(cards.map((card) => [card.cardNumber, card]));
 }
 
-const dreamAvatar: DreamAvatar = {
-  id: testDreamAvatarId("dc-1"),
+const avatar: Avatar = {
+  id: testAvatarId("dc-1"),
   name: "Sable",
   title: "The Unmaker",
   renderedText: "Banish a card.",
@@ -70,13 +70,13 @@ const dreamsign: Dreamsign = {
   effectDescription: "Draw an extra card.",
 };
 
-const dreamAvatarContent: DreamAvatarContent = {
-  id: dreamAvatar.id,
-  name: dreamAvatar.name,
-  title: dreamAvatar.title,
-  renderedText: dreamAvatar.renderedText,
-  imageNumber: dreamAvatar.imageNumber,
-  startingEssence: dreamAvatar.startingEssence,
+const avatarContent: AvatarContent = {
+  id: avatar.id,
+  name: avatar.name,
+  title: avatar.title,
+  renderedText: avatar.renderedText,
+  imageNumber: avatar.imageNumber,
+  startingEssence: avatar.startingEssence,
 };
 
 function tidesContext(
@@ -103,8 +103,8 @@ function tidesContext(
           })),
         },
       ],
-      tidePoolByDreamAvatar: {
-        [dreamAvatar.id]: {
+      tidePoolByAvatar: {
+        [avatar.id]: {
           starter: TIDE_ID,
           facets: [],
           neutral: [],
@@ -144,25 +144,25 @@ describe("buildDesktopDeckView", () => {
     ]);
   });
 
-  it("maps the DreamAvatar to the sidebar view (portrait visual + rules text)", () => {
+  it("maps the Avatar to the sidebar view (portrait visual + rules text)", () => {
     const view = buildDesktopDeckView(
       transfigurationData,
       [],
       database(),
-      dreamAvatar,
+      avatar,
       [],
     );
 
-    expect(view.dreamAvatar).toMatchObject({
-      id: dreamAvatar.id,
+    expect(view.avatar).toMatchObject({
+      id: avatar.id,
       imageNumber: "12",
     });
-    expect(view.dreamAvatar?.name).toBeInstanceOf(LocalizedString);
-    expect(view.dreamAvatar?.title).toBeInstanceOf(LocalizedString);
-    expect(view.dreamAvatar?.renderedText).toBeInstanceOf(LocalizedString);
+    expect(view.avatar?.name).toBeInstanceOf(LocalizedString);
+    expect(view.avatar?.title).toBeInstanceOf(LocalizedString);
+    expect(view.avatar?.renderedText).toBeInstanceOf(LocalizedString);
   });
 
-  it("carries a null DreamAvatar through as null", () => {
+  it("carries a null Avatar through as null", () => {
     const view = buildDesktopDeckView(
       transfigurationData,
       [],
@@ -170,7 +170,7 @@ describe("buildDesktopDeckView", () => {
       null,
       [],
     );
-    expect(view.dreamAvatar).toBeNull();
+    expect(view.avatar).toBeNull();
   });
 
   it("copies the dreamsigns into the view", () => {
@@ -193,9 +193,9 @@ describe("buildDesktopDeckView", () => {
       transfigurationData,
       [],
       database(),
-      dreamAvatar,
+      avatar,
       [],
-      [dreamAvatarContent],
+      [avatarContent],
       tidesContext("tides4"),
       testJourneySeed("run-seed"),
     );

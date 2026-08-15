@@ -10,7 +10,7 @@ use sha2::{Digest, Sha256};
 
 use crate::manifest::{Adapter, Dataset, Manifest, MigrationState};
 use crate::models::{
-    affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
+    affiliations, apollyon_incarnations, atlas, augury, avatars, cards, compat, draft,
     dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments, gamble,
     glossary, internal_card_metadata, opponents, resonance, sites, tides, transfiguration,
     tutorial, tutorial_journey_pool,
@@ -153,18 +153,16 @@ fn adapt(
         Adapter::AuguryV1 => augury::lower(parse_ron(source, dataset)?),
         Adapter::BattleV1 => opponents::lower_battle(parse_ron(source, dataset)?),
         Adapter::DraftV1 => draft::lower(parse_ron(source, dataset)?),
-        Adapter::DreamAvatarMetadataV1 => {
-            dream_avatars::lower_metadata(parse_ron(source, dataset)?)
-        }
-        Adapter::DreamAvatarsV1 => {
-            let avatars: Vec<dream_avatars::AvatarDefinition> = parse_ron(source, dataset)?;
+        Adapter::AvatarMetadataV1 => avatars::lower_metadata(parse_ron(source, dataset)?),
+        Adapter::AvatarsV1 => {
+            let avatars: Vec<avatars::AvatarDefinition> = parse_ron(source, dataset)?;
             let tides_dataset = manifest.dataset("tides")?;
             let tides_catalog: tides::TidesCatalog = parse_ron(
                 &fs::read_to_string(root.join(&tides_dataset.source))
                     .with_context(|| format!("read tides source {}", tides_dataset.source))?,
                 tides_dataset,
             )?;
-            dream_avatars::validate_tide_references(&avatars, &tides::tide_kinds(&tides_catalog)?)?;
+            avatars::validate_tide_references(&avatars, &tides::tide_kinds(&tides_catalog)?)?;
             let metadata_dataset = manifest.dataset("internal-card-metadata")?;
             let metadata_source = fs::read_to_string(root.join(&metadata_dataset.source))
                 .with_context(|| {
@@ -181,20 +179,20 @@ fn adapt(
                 .into_iter()
                 .map(|entry| entry.id.to_string())
                 .collect();
-            dream_avatars::validate_signature_card_references(&avatars, &known_card_ids)?;
+            avatars::validate_signature_card_references(&avatars, &known_card_ids)?;
 
             let avatar_metadata_dataset = manifest.dataset("internal-avatar-metadata")?;
             let avatar_metadata_path = root.join(&avatar_metadata_dataset.source);
-            let avatar_metadata: Vec<dream_avatars::AvatarMetadata> =
+            let avatar_metadata: Vec<avatars::AvatarMetadata> =
                 ron::from_str(&fs::read_to_string(&avatar_metadata_path).with_context(|| {
                     format!(
-                        "read internal DreamAvatar metadata source {}",
+                        "read internal Avatar metadata source {}",
                         avatar_metadata_path.display()
                     )
                 })?)
-                .context("parse internal DreamAvatar metadata source")?;
-            dream_avatars::validate_internal_metadata(&avatars, &avatar_metadata)?;
-            dream_avatars::lower(avatars)
+                .context("parse internal Avatar metadata source")?;
+            avatars::validate_internal_metadata(&avatars, &avatar_metadata)?;
+            avatars::lower(avatars)
         }
         Adapter::DreamGuidesV1 => dream_guides::lower(parse_ron(source, dataset)?),
         Adapter::DreamscapesV1 => dreamscapes::lower(parse_ron(source, dataset)?),
@@ -294,11 +292,10 @@ fn adapt(
                     .with_context(|| format!("read cards source {}", cards_dataset.source))?,
                 cards_dataset,
             )?;
-            let avatars_dataset = manifest.dataset("dream-avatars")?;
-            let avatars: Vec<dream_avatars::AvatarDefinition> = parse_ron(
-                &fs::read_to_string(root.join(&avatars_dataset.source)).with_context(|| {
-                    format!("read DreamAvatars source {}", avatars_dataset.source)
-                })?,
+            let avatars_dataset = manifest.dataset("avatars")?;
+            let avatars: Vec<avatars::AvatarDefinition> = parse_ron(
+                &fs::read_to_string(root.join(&avatars_dataset.source))
+                    .with_context(|| format!("read Avatars source {}", avatars_dataset.source))?,
                 avatars_dataset,
             )?;
             let dreamsigns_dataset = manifest.dataset("dreamsigns")?;
@@ -546,7 +543,7 @@ fn inferred_record_count(value: &toml::Value) -> Option<usize> {
 mod tests {
     use super::*;
     use crate::models::{
-        cards::CardDefinition, draft::DraftDocument, dream_avatars::AvatarDefinition,
+        avatars::AvatarDefinition, cards::CardDefinition, draft::DraftDocument,
         exploration::ExplorationCatalog,
     };
 
@@ -614,10 +611,10 @@ mod tests {
                 Adapter::DraftV1 => {
                     canonical::<DraftDocument>(&source, false);
                 }
-                Adapter::DreamAvatarMetadataV1 => {
-                    canonical::<Vec<dream_avatars::AvatarMetadata>>(&source, true);
+                Adapter::AvatarMetadataV1 => {
+                    canonical::<Vec<avatars::AvatarMetadata>>(&source, true);
                 }
-                Adapter::DreamAvatarsV1 => {
+                Adapter::AvatarsV1 => {
                     canonical::<Vec<AvatarDefinition>>(&source, true);
                 }
                 Adapter::DreamGuidesV1 => {

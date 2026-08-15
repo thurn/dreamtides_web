@@ -1,4 +1,4 @@
-// Adapter bridging live journey state to the pure Cumulus DreamAvatar-select screen
+// Adapter bridging live journey state to the pure Cumulus Avatar-select screen
 // (`src/cumulus/screens/JourneyStartScreen`). Adapters are wiring only: this one
 // owns `useJourney()`, derives the shared offer from the room seed, and wires the
 // pick→`startJourney` callback. All mapping
@@ -10,86 +10,86 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useJourney } from "../../state/journey-context";
 import { logEventOnce } from "../../logging";
 import {
-  buildDreamAvatarOfferViews,
+  buildAvatarOfferViews,
   buildJourneyStartGuideDialogue,
-  resolveDreamAvatarOffer,
+  resolveAvatarOffer,
 } from "./journey-start-view-model";
 import { JourneyStartScreen } from "../../cumulus/screens/JourneyStartScreen";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 
 /**
- * Live DreamAvatar-select screen: derives the offer and preview from the room's
- * immutable seed, then hands the chosen DreamAvatar to `startJourney`.
+ * Live Avatar-select screen: derives the offer and preview from the room's
+ * immutable seed, then hands the chosen Avatar to `startJourney`.
  */
 export function JourneyStartScreenAdapter() {
   const { state, mutations, journeyContent } = useJourney();
   const journeySeed = state.seed;
   const rerollCount =
     state.screen.type === "journeyStart" ? (state.screen.rerollCount ?? 0) : 0;
-  const tutorialDreamAvatarId =
+  const tutorialAvatarId =
     state.screen.type === "journeyStart"
-      ? state.screen.tutorialDreamAvatarId
+      ? state.screen.tutorialAvatarId
       : undefined;
   const offered = useMemo(
     () =>
-      resolveDreamAvatarOffer(
-        journeyContent.dreamAvatars,
+      resolveAvatarOffer(
+        journeyContent.avatars,
         journeySeed,
         rerollCount,
-        tutorialDreamAvatarId,
+        tutorialAvatarId,
       ),
     [
-      journeyContent.dreamAvatars,
+      journeyContent.avatars,
       journeySeed,
       rerollCount,
-      tutorialDreamAvatarId,
+      tutorialAvatarId,
     ],
   );
 
   useEffect(() => {
-    const dreamAvatarIds = offered.map((dreamAvatar) => dreamAvatar.id);
+    const avatarIds = offered.map((avatar) => avatar.id);
     logEventOnce(
-      `dream-avatar-offer:${journeySeed}:${String(rerollCount)}:${dreamAvatarIds.join(",")}`,
-      "dream_avatar_offer_shown",
-      { dreamAvatarIds, journeySeed, rerollCount },
+      `avatar-offer:${journeySeed}:${String(rerollCount)}:${avatarIds.join(",")}`,
+      "avatar_offer_shown",
+      { avatarIds, journeySeed, rerollCount },
     );
   }, [offered, journeySeed, rerollCount]);
 
-  const dreamAvatars = useMemo(
+  const avatars = useMemo(
     () =>
-      buildDreamAvatarOfferViews(
+      buildAvatarOfferViews(
         offered,
         journeyContent.poolContext,
         journeySeed,
         journeyContent.tutorialJourneyPool,
-        tutorialDreamAvatarId,
+        tutorialAvatarId,
       ),
     [
       offered,
       journeyContent.poolContext,
       journeyContent.tutorialJourneyPool,
       journeySeed,
-      tutorialDreamAvatarId,
+      tutorialAvatarId,
     ],
   );
   const guideDialogue = useMemo(
     () =>
       buildJourneyStartGuideDialogue(
-        tutorialDreamAvatarId,
+        tutorialAvatarId,
         journeyContent.tutorial?.journeyStart.speechBubble,
       ),
-    [journeyContent.tutorial?.journeyStart.speechBubble, tutorialDreamAvatarId],
+    [journeyContent.tutorial?.journeyStart.speechBubble, tutorialAvatarId],
   );
 
   const handleGuideDialogueShown = useCallback(() => {
-    if (tutorialDreamAvatarId === undefined || guideDialogue === undefined) {
+    if (tutorialAvatarId === undefined || guideDialogue === undefined) {
       return;
     }
     logEventOnce(
-      `tutorial-dream-avatar-guidance:${journeySeed}:${tutorialDreamAvatarId}`,
-      "tutorial_dream_avatar_guidance_shown",
+      `tutorial-avatar-guidance:${journeySeed}:${tutorialAvatarId}`,
+      "tutorial_avatar_guidance_shown",
       {
-        dreamAvatarId: tutorialDreamAvatarId,
+        avatarId: tutorialAvatarId,
         speakerName: guideDialogue.model.speakerName,
         delaySeconds: guideDialogue.delaySeconds,
         horizontalOffsetPx: guideDialogue.horizontalOffset,
@@ -98,31 +98,31 @@ export function JourneyStartScreenAdapter() {
         text: guideDialogue.model.text,
       },
     );
-  }, [guideDialogue, journeySeed, tutorialDreamAvatarId]);
+  }, [guideDialogue, journeySeed, tutorialAvatarId]);
 
   const handlePick = useCallback(
-    (dreamAvatarId: DreamAvatarId) => {
-      const dreamAvatar = offered.find(
-        (candidate) => candidate.id === dreamAvatarId,
+    (avatarId: AvatarId) => {
+      const avatar = offered.find(
+        (candidate) => candidate.id === avatarId,
       );
-      if (dreamAvatar === undefined) return;
-      mutations.startJourney(dreamAvatar, journeySeed);
+      if (avatar === undefined) return;
+      mutations.startJourney(avatar, journeySeed);
     },
     [mutations, offered, journeySeed],
   );
 
   const handleReroll = useCallback(() => {
-    mutations.rerollDreamAvatarOffer();
+    mutations.rerollAvatarOffer();
   }, [mutations]);
 
   return (
     <JourneyStartScreen
       key={rerollCount}
-      dreamAvatars={dreamAvatars}
+      avatars={avatars}
       guideDialogue={guideDialogue}
       onGuideDialogueShown={handleGuideDialogueShown}
       onPick={handlePick}
-      onReroll={tutorialDreamAvatarId === undefined ? handleReroll : undefined}
+      onReroll={tutorialAvatarId === undefined ? handleReroll : undefined}
     />
   );
 }

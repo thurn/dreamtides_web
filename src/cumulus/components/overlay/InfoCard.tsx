@@ -263,7 +263,7 @@ export interface InfoCardObjectProps extends InfoCardCommonProps {
  * it: the image fills the whole card (rounded corners), and the shared
  * liquid-glass text card floats over its lower portion carrying the name,
  * epithet, and body. It is literally "an image, with a text info card placed on
- * top of it". Built for the Dream Avatar profile reveal and the atlas node
+ * top of it". Built for the Avatar profile reveal and the atlas node
  * reveals. The image IS its media, so `image` is required.
  */
 export interface InfoCardFullBleedProps extends InfoCardCommonProps {
@@ -281,7 +281,7 @@ export interface InfoCardFullBleedProps extends InfoCardCommonProps {
   figure?: ArtRef;
   /**
    * An epithet under the name — a smaller serif line in white, mirroring the
-   * Dream Avatar-select name/epithet pairing. Resolve before display; rules
+   * Avatar-select name/epithet pairing. Resolve before display; rules
    * symbols render as icons.
    */
   subtitle?: LocalizedString;
@@ -337,7 +337,7 @@ export interface InfoCardTextProps extends InfoCardCommonProps {
   variant?: "text";
   /**
    * An epithet under the name — a smaller serif subtitle in white, mirroring
-   * the Dream Avatar-select name/epithet pairing. Resolve before display;
+   * the Avatar-select name/epithet pairing. Resolve before display;
    * rules symbols render as icons.
    */
   subtitle?: LocalizedString;

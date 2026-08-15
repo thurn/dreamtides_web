@@ -2,7 +2,7 @@ import type {
   CardKeywordModification,
   CardTypeChange,
   DreamAtlas,
-  DreamAvatar,
+  Avatar,
   Dreamsign,
   TransfigurationType,
 } from "../types/journey";
@@ -224,7 +224,7 @@ export type BattleCommandSourceSurface =
   | "card-badges"
   | "side-summary"
   | "status-strip"
-  | "dream-avatar-panel"
+  | "avatar-panel"
   | "pool-viewer"
   | "debug-menu"
   | "debug-panel"
@@ -339,7 +339,7 @@ export interface DreamwellCardDefinition {
 }
 
 /**
- * A card chosen to typify an opponent DreamAvatar's ability, shown on the
+ * A card chosen to typify an opponent Avatar's ability, shown on the
  * Battle Start screen before hands are dealt. Identity is the stable cards_v2
  * UUID (`cardId`); `cardNumber` is the card-database key the screen resolves the
  * full card from for rendering. Selected by `selectSignatureCards`
@@ -355,7 +355,7 @@ export interface BattleEnemyDescriptor {
   id: OpponentId;
   name: string;
   subtitle: string;
-  imageNumber?: DreamAvatar["imageNumber"];
+  imageNumber?: Avatar["imageNumber"];
   portraitSeed: number;
   abilityText: string;
   /**
@@ -366,19 +366,19 @@ export interface BattleEnemyDescriptor {
   dreamsigns: readonly BattleDreamsignSummary[];
   /**
    * The three cards from the opponent's deck most representative of its
-   * DreamAvatar's ability, shown on the Battle Start screen. Empty only when the
+   * Avatar's ability, shown on the Battle Start screen. Empty only when the
    * opponent has no deck (synthetic fallback descriptor).
    */
   signatureCards: readonly BattleSignatureCard[];
 }
 
-export interface BattleDreamAvatarSummary {
-  id: DreamAvatar["id"] | OpponentId;
-  name: DreamAvatar["name"];
-  title: DreamAvatar["title"];
-  renderedText: DreamAvatar["renderedText"];
-  imageNumber: DreamAvatar["imageNumber"];
-  portraitFocus?: DreamAvatar["portraitFocus"];
+export interface BattleAvatarSummary {
+  id: Avatar["id"] | OpponentId;
+  name: Avatar["name"];
+  title: Avatar["title"];
+  renderedText: Avatar["renderedText"];
+  imageNumber: Avatar["imageNumber"];
+  portraitFocus?: Avatar["portraitFocus"];
 }
 
 export interface BattleDreamsignSummary {
@@ -429,7 +429,7 @@ export interface BattleInit {
   dreamwellDeck: readonly DreamwellCardDefinition[];
   enemyDescriptor: BattleEnemyDescriptor;
   enemyDeckDefinition: readonly BattleDeckCardDefinition[];
-  dreamAvatarSummary: BattleDreamAvatarSummary | null;
+  avatarSummary: BattleAvatarSummary | null;
   dreamsignSummaries: readonly BattleDreamsignSummary[];
   atlasSnapshot: DreamAtlas;
 }
@@ -585,14 +585,14 @@ export interface BattleSideMutableState {
  * `BattleInit`) and a mutable runtime slice (this interface). `battleId` is
  * duplicated for cross-referencing invariants; the remainder of the spec's
  * metadata fields (`siteId`, `dreamscapeId`, `completionLevelAtStart`,
- * `enemyDescriptor`, `playerDreamAvatarSummary`, `playerDreamsignSummaries`)
+ * `enemyDescriptor`, `playerAvatarSummary`, `playerDreamsignSummaries`)
  * live on `BattleInit`. Code that needs both should read them from
  * `BattleInit` directly rather than re-denormalising them here (bug-034).
  *
- * The spec names `playerDreamAvatarSummary` and `playerDreamsignSummaries`;
- * the codebase uses the shorter `dreamAvatarSummary` / `dreamsignSummaries`
+ * The spec names `playerAvatarSummary` and `playerDreamsignSummaries`;
+ * the codebase uses the shorter `avatarSummary` / `dreamsignSummaries`
  * on `BattleInit` because Phase 2 only models the player side — the enemy has
- * no dreamAvatar or dreamsigns, so the `player` prefix is implicit (bug-034).
+ * no avatar or dreamsigns, so the `player` prefix is implicit (bug-034).
  */
 export interface BattleMutableState {
   battleId: BattleId;

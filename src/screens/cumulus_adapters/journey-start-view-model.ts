@@ -1,13 +1,13 @@
-// The pure view-model builder for the Cumulus DreamAvatar-select screen. Every
+// The pure view-model builder for the Cumulus Avatar-select screen. Every
 // mapping rule between journey domain data and `JourneyStartScreen`'s view types
 // lives here as plain, unit-testable functions — no React, no state hooks, no
 // effects. `JourneyStartScreenAdapter` acquires live state and calls
-// `buildDreamAvatarOfferViews`; this module never acquires anything itself.
+// `buildAvatarOfferViews`; this module never acquires anything itself.
 
 import { selectedTides4Decks } from "../../data/tides4-preview";
-import { selectDreamAvatarOfferForReroll } from "../../data/dream-avatar-selection";
+import { selectAvatarOfferForReroll } from "../../data/avatar-selection";
 import type { RunPoolContext } from "../../data/journey-content";
-import type { DreamAvatarContent } from "../../types/content";
+import type { AvatarContent } from "../../types/content";
 import type { JourneySeed } from "../../types/journey-seed";
 import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
 import type {
@@ -16,17 +16,17 @@ import type {
 } from "../../data/tutorial-journey-pool";
 import type { TutorialJourneyStartConfiguration } from "../../types/tutorial";
 import type {
-  DreamAvatarOfferView,
-  DreamAvatarTideView,
+  AvatarOfferView,
+  AvatarTideView,
   JourneyStartGuideDialogueView,
 } from "../../cumulus/screens/JourneyStartScreen";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import { localizedSourceText } from "../../runtime/localization/runtime";
 import { tx } from "@trox/runtime";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 import { parsePresentationId } from "../../types/identifiers";
 
-/** The select screen shows at most this many tides per DreamAvatar. */
+/** The select screen shows at most this many tides per Avatar. */
 const MAX_TIDES_SHOWN = 4;
 
 /**
@@ -34,36 +34,36 @@ const MAX_TIDES_SHOWN = 4;
  * UUID in journey state; ordinary runs derive their three choices from the room
  * seed and shared reroll count.
  */
-export function resolveDreamAvatarOffer(
-  dreamAvatars: readonly DreamAvatarContent[],
+export function resolveAvatarOffer(
+  avatars: readonly AvatarContent[],
   journeySeed: JourneySeed,
   rerollCount: number,
-  tutorialDreamAvatarId?: DreamAvatarId,
-): DreamAvatarContent[] {
-  if (tutorialDreamAvatarId !== undefined) {
-    const tutorialDreamAvatar = dreamAvatars.find(
-      (candidate) => candidate.id === tutorialDreamAvatarId,
+  tutorialAvatarId?: AvatarId,
+): AvatarContent[] {
+  if (tutorialAvatarId !== undefined) {
+    const tutorialAvatar = avatars.find(
+      (candidate) => candidate.id === tutorialAvatarId,
     );
-    return tutorialDreamAvatar === undefined ? [] : [tutorialDreamAvatar];
+    return tutorialAvatar === undefined ? [] : [tutorialAvatar];
   }
-  return selectDreamAvatarOfferForReroll(
-    dreamAvatars,
+  return selectAvatarOfferForReroll(
+    avatars,
     journeySeed,
     rerollCount,
   );
 }
 
-/** Build Mira's fixed guidance for the tutorial-only DreamAvatar offer. */
+/** Build Mira's fixed guidance for the tutorial-only Avatar offer. */
 export function buildJourneyStartGuideDialogue(
-  tutorialDreamAvatarId?: DreamAvatarId,
+  tutorialAvatarId?: AvatarId,
   speechBubble?: TutorialJourneyStartConfiguration["speechBubble"],
 ): JourneyStartGuideDialogueView | undefined {
-  if (tutorialDreamAvatarId === undefined || speechBubble === undefined) {
+  if (tutorialAvatarId === undefined || speechBubble === undefined) {
     return undefined;
   }
   return {
     id: parsePresentationId(
-      `journey-start-guidance:${tutorialDreamAvatarId}`,
+      `journey-start-guidance:${tutorialAvatarId}`,
     ),
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
@@ -84,7 +84,7 @@ function tideCardCount(tide: Tides4DeckJson): number {
 }
 
 /**
- * Cap the tides shown for a DreamAvatar at {@link MAX_TIDES_SHOWN}, keeping the
+ * Cap the tides shown for an Avatar at {@link MAX_TIDES_SHOWN}, keeping the
  * largest by card count while preserving their original (join) order.
  */
 export function largestTides(tides: Tides4DeckJson[]): Tides4DeckJson[] {
@@ -98,7 +98,7 @@ export function largestTides(tides: Tides4DeckJson[]): Tides4DeckJson[] {
 }
 
 /** Resolve a tide deck to the display copy shown on its pill. */
-function toTideView(tide: Tides4DeckJson): DreamAvatarTideView {
+function toTideView(tide: Tides4DeckJson): AvatarTideView {
   return {
     id: tide.id,
     label: localizedSourceText(
@@ -109,7 +109,7 @@ function toTideView(tide: Tides4DeckJson): DreamAvatarTideView {
   };
 }
 
-function toTutorialTideView(tide: TutorialJourneyTide): DreamAvatarTideView {
+function toTutorialTideView(tide: TutorialJourneyTide): AvatarTideView {
   return {
     id: tide.id,
     label: localizedSourceText(tide.name),
@@ -119,22 +119,22 @@ function toTutorialTideView(tide: TutorialJourneyTide): DreamAvatarTideView {
 }
 
 /**
- * Resolve the exact tides selected for one DreamAvatar under a run seed to the
+ * Resolve the exact tides selected for one Avatar under a run seed to the
  * shared player-facing tide view. The largest-four cap matches the selection
  * screen, so later references show the same tide set the player chose.
  */
-export function buildDreamAvatarTideViews(
+export function buildAvatarTideViews(
   poolContext: RunPoolContext | undefined,
-  dreamAvatar: DreamAvatarContent,
+  avatar: AvatarContent,
   journeySeed: JourneySeed,
-): DreamAvatarTideView[] {
+): AvatarTideView[] {
   return largestTides(
-    selectedTides4Decks(poolContext, dreamAvatar, journeySeed),
+    selectedTides4Decks(poolContext, avatar, journeySeed),
   ).map(toTideView);
 }
 
 /**
- * Map one offered DreamAvatar (with the tide decks its pool would be dealt
+ * Map one offered Avatar (with the tide decks its pool would be dealt
  * from) to the screen's view type, capped by {@link largestTides}.
  *
  * A `tides4` run shows its dealt tides in place of the signature cards, so the
@@ -142,60 +142,60 @@ export function buildDreamAvatarTideViews(
  * paired with its index-aligned stable UUID so keys stay unique when two
  * signature cards share a display name.
  */
-export function toDreamAvatarOfferView(
-  dreamAvatar: DreamAvatarContent,
+export function toAvatarOfferView(
+  avatar: AvatarContent,
   tides: Tides4DeckJson[],
-): DreamAvatarOfferView {
-  const signatureCardIds = dreamAvatar.signatureCardIds ?? [];
+): AvatarOfferView {
+  const signatureCardIds = avatar.signatureCardIds ?? [];
   const signatureCards =
     tides.length > 0
       ? []
-      : (dreamAvatar.signatureCards ?? []).map((name, index) => ({
+      : (avatar.signatureCards ?? []).map((name, index) => ({
           id: signatureCardIds[index] ?? null,
           name: localizedSourceText(name),
         }));
   return {
-    id: dreamAvatar.id,
-    name: localizedSourceText(dreamAvatar.name),
-    title: localizedSourceText(dreamAvatar.title),
-    imageNumber: dreamAvatar.imageNumber,
-    portraitFocus: dreamAvatar.portraitFocus,
-    renderedText: localizedSourceText(dreamAvatar.renderedText),
-    startingEssence: dreamAvatar.startingEssence,
+    id: avatar.id,
+    name: localizedSourceText(avatar.name),
+    title: localizedSourceText(avatar.title),
+    imageNumber: avatar.imageNumber,
+    portraitFocus: avatar.portraitFocus,
+    renderedText: localizedSourceText(avatar.renderedText),
+    startingEssence: avatar.startingEssence,
     signatureCards,
     tides: largestTides(tides).map(toTideView),
   };
 }
 
 /**
- * The full view-model for the DreamAvatar-select screen: each offered
- * DreamAvatar with the (capped) tide preview its pool would be dealt from
+ * The full view-model for the Avatar-select screen: each offered
+ * Avatar with the (capped) tide preview its pool would be dealt from
  * under `journeySeed`. Deterministic in its arguments — the caller owns minting
  * the offer and the seed.
  */
-export function buildDreamAvatarOfferViews(
-  offered: DreamAvatarContent[],
+export function buildAvatarOfferViews(
+  offered: AvatarContent[],
   poolContext: RunPoolContext | undefined,
   journeySeed: JourneySeed,
   tutorialJourneyPool?: TutorialJourneyPool,
-  tutorialDreamAvatarId?: DreamAvatarId,
-): DreamAvatarOfferView[] {
-  return offered.map((dreamAvatar) => {
+  tutorialAvatarId?: AvatarId,
+): AvatarOfferView[] {
+  return offered.map((avatar) => {
     const tutorialTides =
-      tutorialDreamAvatarId === dreamAvatar.id &&
-      tutorialJourneyPool?.dreamAvatarId === dreamAvatar.id
+      tutorialAvatarId === avatar.id &&
+      tutorialJourneyPool?.avatarId === avatar.id
         ? tutorialJourneyPool.tides
         : undefined;
     if (tutorialTides !== undefined) {
       return {
-        ...toDreamAvatarOfferView(dreamAvatar, []),
+        ...toAvatarOfferView(avatar, []),
         signatureCards: [],
         tides: tutorialTides.map(toTutorialTideView),
       };
     }
-    return toDreamAvatarOfferView(
-      dreamAvatar,
-      selectedTides4Decks(poolContext, dreamAvatar, journeySeed),
+    return toAvatarOfferView(
+      avatar,
+      selectedTides4Decks(poolContext, avatar, journeySeed),
     );
   });
 }

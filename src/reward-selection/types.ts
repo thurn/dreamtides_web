@@ -16,7 +16,7 @@ import type {
 } from "../../scripts/reward-selection-contracts.mjs";
 import type { DeckEntryId } from "../types/identifiers";
 import type { DreamsignId } from "../types/identifiers";
-import type { DreamAvatarId } from "../types/identifiers";
+import type { AvatarId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import type {
   RewardCandidateKey,
@@ -53,7 +53,7 @@ export type RewardCandidateKeyKind =
   | "dreamsignId"
   | "entryId"
   | "entryModification"
-  | "dreamAvatarId"
+  | "avatarId"
   | "siteType";
 
 export interface RewardSelectionScope {
@@ -100,7 +100,7 @@ export interface RewardSelectionConstraints {
   starterOnly?: boolean;
   allowNightmare?: boolean;
   allowedSiteTypes?: readonly SiteType[];
-  excludedDreamAvatarIds?: readonly DreamAvatarId[];
+  excludedAvatarIds?: readonly AvatarId[];
   distinctCards?: boolean;
   distinctDeckEntries?: boolean;
 }
@@ -126,7 +126,7 @@ export interface RewardSelectionCandidateTrace {
   cardNumber?: number;
   entryId?: DeckEntryId;
   dreamsignId?: DreamsignId;
-  dreamAvatarId?: DreamAvatarId;
+  avatarId?: AvatarId;
   siteType?: SiteType;
   transfiguration?: TransfigurationType;
   inDraftPool?: boolean;
@@ -176,7 +176,7 @@ export interface RewardSelectionBindings {
   cardNumbers: readonly number[];
   deckEntryIds: readonly DeckEntryId[];
   dreamsignIds: readonly DreamsignId[];
-  dreamAvatarIds: readonly DreamAvatarId[];
+  avatarIds: readonly AvatarId[];
   siteTypes: readonly SiteType[];
   transfigurations: readonly {
     entryId?: DeckEntryId;

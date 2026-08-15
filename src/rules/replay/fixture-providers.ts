@@ -5,7 +5,7 @@
 // REAL generators register through `src/coop/providers/registerGameProviders`,
 // but the permanent replay regression net deliberately uses these minimal
 // DETERMINISTIC fakes instead: baking real-content hashes would couple the
-// fixtures to the TOML card/dream-avatar/atlas data, which AGENTS.md forbids
+// fixtures to the TOML card/avatar/atlas data, which AGENTS.md forbids
 // (tests must not break on a data edit). The real providers' determinism is
 // covered separately by `src/coop/providers/register-game-providers.test.ts`.
 // These fakes let the fixture event logs fold to a stable, reproducible state.
@@ -24,7 +24,7 @@
 // fixtures stay resilient to TOML card-data edits while still covering the
 // active automation runner.
 
-import type { ResolvedDreamAvatarPackage } from "../../types/content";
+import type { ResolvedAvatarPackage } from "../../types/content";
 import {
   parseCardName,
   parseCardSubtype,
@@ -77,7 +77,7 @@ import {
   registerSiteContentProvider,
   type SiteContentProvider,
 } from "../journey/sites";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 import type { JourneySeed } from "../../types/journey-seed";
 import type { BattleCardId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
@@ -94,7 +94,7 @@ import { resolveBattleAiConfiguration } from "../../types/opponents-data";
 import {
   testCardId,
   testContentHash,
-  testDreamAvatarId,
+  testAvatarId,
   testDreamscapeId,
   testDreamsignId,
 } from "../../types/test-identities";
@@ -106,7 +106,7 @@ import {
 /** A synthetic provider-set identifier stamped into every fixture. */
 export const FIXTURE_PROVIDER_SET = "synthetic-deterministic-v1";
 
-export const DREAM_AVATAR_ID = testDreamAvatarId("dc-fixture");
+export const AVATAR_ID = testAvatarId("dc-fixture");
 export const NODE_ID = parseAtlasNodeId("node-start");
 export const NEXT_NODE_ID = parseAtlasNodeId("node-next");
 export const ESSENCE_SITE_ID = parseSiteId("site-essence");
@@ -161,18 +161,18 @@ function makePrng(seed: number): () => number {
 // ---------------------------------------------------------------------------
 
 function fixturePackage(
-  dreamAvatarId: DreamAvatarId,
+  avatarId: AvatarId,
   seed: JourneySeed,
-): ResolvedDreamAvatarPackage {
-  const rng = makePrng(hashNumber(`${dreamAvatarId}:${seed}`));
+): ResolvedAvatarPackage {
+  const rng = makePrng(hashNumber(`${avatarId}:${seed}`));
   const dreamsignPoolIds = Array.from(
     { length: 6 },
     () => `ds-${String(Math.floor(rng() * 1_000_000))}`,
   );
   return {
-    dreamAvatar: {
-      id: dreamAvatarId,
-      name: `caller-${dreamAvatarId}`,
+    avatar: {
+      id: avatarId,
+      name: `caller-${avatarId}`,
       title: "title",
       renderedText: "text",
       imageNumber: "1",
@@ -276,10 +276,10 @@ function fixtureDraftState(): PoolDraftState {
 
 function lifecycleProvider(): JourneyLifecycleContentProvider {
   return {
-    resolveDreamAvatarPackage: (dreamAvatarId, seed) =>
-      fixturePackage(dreamAvatarId, seed),
-    startJourney: ({ journey, dreamAvatarId, seed }) => {
-      const pkg = fixturePackage(dreamAvatarId, seed);
+    resolveAvatarPackage: (avatarId, seed) =>
+      fixturePackage(avatarId, seed),
+    startJourney: ({ journey, avatarId, seed }) => {
+      const pkg = fixturePackage(avatarId, seed);
       const includedSiteTypes =
         seed === "fixture-battle"
           ? new Set<SiteState["type"]>(["Battle"])
@@ -289,14 +289,14 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
       return {
         ...journey,
         seed: journey.seed,
-        essence: pkg.dreamAvatar.startingEssence,
-        dreamAvatar: {
-          id: pkg.dreamAvatar.id,
-          name: pkg.dreamAvatar.name,
-          title: pkg.dreamAvatar.title,
-          renderedText: pkg.dreamAvatar.renderedText,
-          imageNumber: pkg.dreamAvatar.imageNumber,
-          startingEssence: pkg.dreamAvatar.startingEssence,
+        essence: pkg.avatar.startingEssence,
+        avatar: {
+          id: pkg.avatar.id,
+          name: pkg.avatar.name,
+          title: pkg.avatar.title,
+          renderedText: pkg.avatar.renderedText,
+          imageNumber: pkg.avatar.imageNumber,
+          startingEssence: pkg.avatar.startingEssence,
         },
         resolvedPackage: pkg,
         remainingDreamsignPool: [...pkg.dreamsignPoolIds],
@@ -514,7 +514,7 @@ function makeInit(siteId: SiteId): BattleInit {
       signatureCards: [],
     },
     enemyDeckDefinition: [],
-    dreamAvatarSummary: null,
+    avatarSummary: null,
     dreamsignSummaries: [],
     atlasSnapshot: {
       layers: [[NODE_ID], [NEXT_NODE_ID]],

@@ -468,11 +468,11 @@ export function routeDomain(
     case "DISMISS_STARTING_DECK_POPUP":
       return journeyCase(state, lifecycle.dismissStartingDeckPopup(journey));
 
-    // --- dreamAvatar & run assembly ---
-    case "SELECT_DREAM_AVATAR":
-      return journeyCase(state, lifecycle.selectDreamAvatar(journey, payload));
-    case "REROLL_DREAM_AVATAR_OFFER":
-      return journeyCase(state, lifecycle.rerollDreamAvatarOffer(journey));
+    // --- avatar & run assembly ---
+    case "SELECT_AVATAR":
+      return journeyCase(state, lifecycle.selectAvatar(journey, payload));
+    case "REROLL_AVATAR_OFFER":
+      return journeyCase(state, lifecycle.rerollAvatarOffer(journey));
     case "START_JOURNEY":
       return startJourneyCase(
         state,
@@ -787,7 +787,7 @@ function journeyCase(
 /**
  * Apply a successfully assembled run and release hosted tutorial authority at
  * the exact event that enters the authored tutorial journey. The lifecycle
- * provider derives `isTutorialJourney` from the pinned DreamAvatar offer and
+ * provider derives `isTutorialJourney` from the pinned Avatar offer and
  * loaded tutorial pool, so the control policy never trusts URL or payload
  * hints. A rejected start returns the untouched single-controller fold.
  */

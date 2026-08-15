@@ -37,7 +37,7 @@ import {
 } from "../reward-selection";
 import type { BattleId } from "../types/identifiers";
 import type { PresentationId } from "../types/identifiers";
-import type { DreamAvatarId } from "../types/identifiers";
+import type { AvatarId } from "../types/identifiers";
 import type { SiteId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
@@ -116,9 +116,9 @@ export interface CoopActions {
   resetJourney: () => Promise<number>;
   loadState: (snapshot: unknown, battle?: unknown) => Promise<number>;
 
-  // --- dreamAvatar ---
-  selectDreamAvatar: (dreamAvatarId: DreamAvatarId) => Promise<number>;
-  rerollDreamAvatarOffer: () => Promise<number>;
+  // --- avatar ---
+  selectAvatar: (avatarId: AvatarId) => Promise<number>;
+  rerollAvatarOffer: () => Promise<number>;
 
   // --- navigation ---
   enterSite: (siteId: SiteId) => Promise<number>;
@@ -506,10 +506,10 @@ export function makeActions(
         battle === undefined ? { snapshot } : { snapshot, battle },
       ),
 
-    // --- dreamAvatar ---
-    selectDreamAvatar: (dreamAvatarId) =>
-      emit("SELECT_DREAM_AVATAR", { dreamAvatarId }),
-    rerollDreamAvatarOffer: () => emit("REROLL_DREAM_AVATAR_OFFER", {}),
+    // --- avatar ---
+    selectAvatar: (avatarId) =>
+      emit("SELECT_AVATAR", { avatarId }),
+    rerollAvatarOffer: () => emit("REROLL_AVATAR_OFFER", {}),
 
     // --- navigation ---
     enterSite: (siteId) => emit("ENTER_SITE", { siteId }),

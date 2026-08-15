@@ -16,7 +16,7 @@ export const REWARD_MECHANIC_IDS = Object.freeze([
   "essence-mutation",
   "increase-deck-spark", "purge-dreamsign-for-essence", "make-deck-fast",
   "reduce-deck-cost-and-add-nightmares", "next-battle-modifier",
-  "choose-dream-avatar", "purge-duplicates-and-grant-reclaim", "add-site",
+  "choose-avatar", "purge-duplicates-and-grant-reclaim", "add-site",
   "shop-purchase-modifier",
 ]);
 
@@ -45,7 +45,7 @@ const MECHANIC_POLICY_IDS = new Map([
   ["change-entry-card-type", ["uniform", "deck-entry-centrality"]],
   ["gain-nightmare-and-card", ["fixed"]],
   ["essence-mutation", ["uniform"]],
-  ["choose-dream-avatar", ["uniform"]],
+  ["choose-avatar", ["uniform"]],
   ["add-site", ["fixed", "site-uniform"]],
 ]);
 

@@ -10,7 +10,7 @@ mounted in `JourneyApp`.
 ## Path grammar
 
 ```
-/                                  DreamAvatar selection (journeyStart)
+/                                  Avatar selection (journeyStart)
 /atlas                             Dream Atlas
 /dreamscape/<layer>-<biome>        a dreamscape's site-selection screen
 /dreamscape/<layer>-<biome>/<site> a specific site within a dreamscape

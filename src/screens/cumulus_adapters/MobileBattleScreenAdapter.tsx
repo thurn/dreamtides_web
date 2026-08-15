@@ -7,7 +7,7 @@ import {
   buildMobileBattleView,
   type MobileBattleAiProposal,
   type MobileBattleBoard,
-  type MobileBattleDreamAvatar,
+  type MobileBattleAvatar,
   type MobileBattleInit,
   type MobileBattlePendingPrompt,
 } from "./mobile-battle-view-model";
@@ -16,7 +16,7 @@ import { logEvent } from "../../logging";
 export function MobileBattleScreenAdapter({
   init,
   board,
-  enemyDreamAvatar,
+  enemyAvatar,
   aiProposal,
   aiMode,
   isOpponentHandRevealed,
@@ -29,7 +29,7 @@ export function MobileBattleScreenAdapter({
 }: {
   init: MobileBattleInit;
   board: MobileBattleBoard;
-  enemyDreamAvatar: MobileBattleDreamAvatar;
+  enemyAvatar: MobileBattleAvatar;
   aiProposal: MobileBattleAiProposal | null;
   aiMode: boolean;
   isOpponentHandRevealed: boolean;
@@ -42,7 +42,7 @@ export function MobileBattleScreenAdapter({
 }) {
   const view = useMemo(
     () =>
-      buildMobileBattleView(init, board, enemyDreamAvatar, aiProposal, {
+      buildMobileBattleView(init, board, enemyAvatar, aiProposal, {
         aiMode,
         isOpponentHandRevealed,
         isPlayerHandHidden,
@@ -56,7 +56,7 @@ export function MobileBattleScreenAdapter({
     [
       init,
       board,
-      enemyDreamAvatar,
+      enemyAvatar,
       aiProposal,
       aiMode,
       isOpponentHandRevealed,

@@ -9,15 +9,15 @@ import { buildJourneyFailedView } from "./journey-failed-view-model";
 import { parseBattleId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
-import { testDreamAvatarId } from "../../types/test-identities";
+import { testAvatarId } from "../../types/test-identities";
 
 function state(overrides: Partial<JourneyState> = {}): JourneyState {
   const base = createDefaultState();
   return {
     ...base,
     completionLevel: 2,
-    dreamAvatar: {
-      id: testDreamAvatarId("dream-avatar-uuid"),
+    avatar: {
+      id: testAvatarId("avatar-uuid"),
       name: "The Wayfinder",
       title: "Bearer of the Last Light",
       renderedText: "A fixture ability.",
@@ -40,21 +40,21 @@ function state(overrides: Partial<JourneyState> = {}): JourneyState {
 }
 
 describe("buildJourneyFailedView", () => {
-  it("builds the interactive DreamAvatar portrait and terminal battle summary", () => {
+  it("builds the interactive Avatar portrait and terminal battle summary", () => {
     const journey = state();
     const view = buildJourneyFailedView(journey);
 
     expect(view).toMatchObject({
       result: "defeat",
       reason: "score_target_reached",
-      dreamAvatar: {
-        id: journey.dreamAvatar?.id,
+      avatar: {
+        id: journey.avatar?.id,
         imageNumber: "001",
       },
     });
-    expect(view?.dreamAvatar?.name).toBeInstanceOf(LocalizedString);
-    expect(view?.dreamAvatar?.title).toBeInstanceOf(LocalizedString);
-    expect(view?.dreamAvatar?.ability).toBeInstanceOf(LocalizedString);
+    expect(view?.avatar?.name).toBeInstanceOf(LocalizedString);
+    expect(view?.avatar?.title).toBeInstanceOf(LocalizedString);
+    expect(view?.avatar?.ability).toBeInstanceOf(LocalizedString);
     expect(view?.stats.map(({ id, value }) => [id, value])).toEqual([
       ["battles", 2],
       ["round", 6],
@@ -79,10 +79,10 @@ describe("buildJourneyFailedView", () => {
     },
   );
 
-  it("uses the draw copy and tolerates a missing DreamAvatar", () => {
+  it("uses the draw copy and tolerates a missing Avatar", () => {
     const view = buildJourneyFailedView(
       state({
-        dreamAvatar: null,
+        avatar: null,
         failureSummary: {
           ...state().failureSummary!,
           result: "draw",
@@ -92,7 +92,7 @@ describe("buildJourneyFailedView", () => {
 
     expect(view).toMatchObject({
       result: "draw",
-      dreamAvatar: null,
+      avatar: null,
     });
   });
 

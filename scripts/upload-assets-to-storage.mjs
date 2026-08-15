@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Publishes the binary game art (card / dreamAvatar / dreamsign / atlas images)
+ * Publishes the binary game art (card / avatar / dreamsign / atlas images)
  * to the Firebase Storage bucket that serves it in production.
  *
  * The art is intentionally kept out of git: `scripts/setup-assets.mjs` symlinks
@@ -41,7 +41,7 @@ const BUCKET =
  */
 const ART_DIRS = [
   "cards",
-  "dream-avatars",
+  "avatars",
   "dreamsigns",
   "journeys",
   "main-menu",

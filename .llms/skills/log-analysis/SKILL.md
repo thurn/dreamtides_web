@@ -44,7 +44,7 @@ grep '"gameId":"7koodm"' logs/journey-log.jsonl | python3 -m json.tool --json-li
 ```
 
 If a question references a game with no `gameId` on its events, fall back to the
-nearest timestamp window and the relevant `dreamAvatarId` / `siteId`.
+nearest timestamp window and the relevant `avatarId` / `siteId`.
 
 Always pretty-print with `python3 -c` reading the file — avoid `cat`/`sed`/`head`
 on raw JSONL when you actually need a field.
@@ -95,8 +95,8 @@ game). Non-CLI alternative: open `https://redacted-firebase-project.web.app/?vie
 
 | Event | What it records |
 |---|---|
-| `dream_avatar_package_validation_summary` / `dream_avatar_package_skipped` | Which dream avatars were eligible to seed a pool and which were rejected, **with the `reason`** (e.g. `mandatory-only pool size 109 is outside 110-150`). This is the first gate — a card's dream avatar may never have qualified. |
-| `draft_pool_constructed` | The authoritative tides4 provenance record: `algo`, `seed`, `dreamAvatarId`, `poolSize`, `distinctCardCount`, `tideDeckIds`, and `tides4Tuning`. |
+| `avatar_package_validation_summary` / `avatar_package_skipped` | Which avatars were eligible to seed a pool and which were rejected, **with the `reason`** (e.g. `mandatory-only pool size 109 is outside 110-150`). This is the first gate — a card's avatar may never have qualified. |
+| `draft_pool_constructed` | The authoritative tides4 provenance record: `algo`, `seed`, `avatarId`, `poolSize`, `distinctCardCount`, `tideDeckIds`, and `tides4Tuning`. |
 | `draft_pool_initialized` | Tide/color breakdown of the finished pool (`cardCountByTide`, `selectedPackageTides`). |
 | `draft_offer_revealed` / `draft_site_entered` | The actual 4-card offers (`offerCards` = card numbers) shown at each `pickNumber`. |
 | `draft_pick_player` | What the player picked from each offer. |
@@ -105,12 +105,12 @@ game). Non-CLI alternative: open `https://redacted-firebase-project.web.app/?vie
 
 The `tides4` pool is the union of the dealt tide decks in `tideDeckIds`, subject
 to the logged `tides4Tuning` values (`dealSize`, `copyCap`, and `maxFacets`). The
-first selected tide is the Dream Avatar's signature tide; the remaining ids are
+first selected tide is the Avatar's signature tide; the remaining ids are
 dealt from its authored facet/neutral tide pool. Cross-reference those ids with
 `data/tides.ron` to see the exact UUID-keyed card lists.
 
 For "Why is card UUID X in my pool?", isolate the game's
-`draft_pool_constructed`, confirm its `dreamAvatarId`, then find X in the cards
+`draft_pool_constructed`, confirm its `avatarId`, then find X in the cards
 of the logged `tideDeckIds`. Report the tide id and role that contributed it. If
 X appears in more than one selected tide, `copyCap` explains whether it receives
 an additional copy. If the trace lacks `tideDeckIds` or tuning, report the
@@ -118,7 +118,7 @@ missing provenance instead of inventing a rationale.
 
 ### Determinism
 
-`algo` + `seed` + `dreamAvatarId` fully determine the pool. To reproduce or dig
+`algo` + `seed` + `avatarId` fully determine the pool. To reproduce or dig
 deeper than the log captures, re-run construction with that seed.
 
 ## Phase 2: Dream journey & merchant offer questions
@@ -192,7 +192,7 @@ the whole decision process.
 
 Filter to the game and battle (`battleEntryKey`). Key fields:
 
-- `opponentDreamAvatarId`, `completionLevel`, `layerCount`,
+- `opponentAvatarId`, `completionLevel`, `layerCount`,
   `midpointCompletionLevel`, `carriesDreamsign`, `dreamsignIds` — who the
   opponent is and the run depth that scaled it.
 - `poolSeed` — the seed the whole construction is a pure function of; re-running
@@ -228,7 +228,7 @@ predates this construction — reconstruct only what those fields allow.
 
 Structure the answer as a reconstruction, not an assertion:
 
-1. **Identify the game** (`gameId`, `dreamAvatarId`, `seed`).
+1. **Identify the game** (`gameId`, `avatarId`, `seed`).
 2. **Cite the deciding event(s)** by `event` name and the specific fields that
    drove the outcome (quote the `blendedScore`, `targetKey`, `needId`,
    `reason`, etc.).

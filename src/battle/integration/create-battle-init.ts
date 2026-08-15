@@ -2,7 +2,7 @@ import type { CardData } from "../../types/cards";
 import type { JourneySeed } from "../../types/journey-seed";
 import type {
   AffiliationContent,
-  DreamAvatarContent,
+  AvatarContent,
   DreamscapeContent,
   DreamsignTemplate,
 } from "../../types/content";
@@ -15,7 +15,7 @@ import type {
 import type {
   BattleEntryKey,
   BattleId,
-  DreamAvatarId,
+  AvatarId,
 } from "../../types/identifiers";
 import {
   applyCardKeywordModification,
@@ -33,14 +33,14 @@ import {
   buildOpponentDreamsigns,
   resolveBattleAffiliation,
   resolveRunLayerCount,
-  selectOpponentDreamAvatar,
+  selectOpponentAvatar,
 } from "./opponent-deck";
 import { buildTideOpponentDeck } from "./tide-opponent-deck";
 import { selectSignatureCards } from "./signature-cards";
 import { logEvent } from "../../logging";
 import type {
   BattleDeckCardDefinition,
-  BattleDreamAvatarSummary,
+  BattleAvatarSummary,
   BattleDreamsignSummary,
   BattleEnemyDescriptor,
   BattleInit,
@@ -107,13 +107,13 @@ export interface CreateBattleInitInput {
     | "completionLevel"
     | "currentDreamscape"
     | "deck"
-    | "dreamAvatar"
+    | "avatar"
     | "dreamsigns"
     | "resolvedPackage"
     | "seed"
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
-  dreamAvatars: readonly DreamAvatarContent[];
+  avatars: readonly AvatarContent[];
   /**
    * Dreamscape definitions, used to resolve the affiliation backing the
    * dreamscape this battle takes place in so the opponent deck can lean toward
@@ -153,7 +153,7 @@ export interface CreateBattleInitInput {
   aiMode?: boolean;
   /**
    * Logging hand-off for the opponent build's reconstruction events
-   * (`corpus_opponent_dream_avatar_selected` +
+   * (`corpus_opponent_avatar_selected` +
    * `corpus_opponent_deck_constructed`). When omitted,
    * {@link createBattleInit} emits the events inline at construction time. The
    * battle-fold provider passes a callback that captures the emit thunk and
@@ -202,7 +202,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     site,
     state,
     cardDatabase,
-    dreamAvatars,
+    avatars,
     dreamsignTemplates = [],
     seedOverride,
   } = input;
@@ -256,9 +256,9 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
         ),
       );
     });
-  // The opponent is built by emulating its DreamAvatar's journey to the
+  // The opponent is built by emulating its Avatar's journey to the
   // equivalent run depth (journeys doc "Battle"): a deterministic opponent
-  // DreamAvatar drawn from the dreamscape's residents, a single dreamsign from
+  // Avatar drawn from the dreamscape's residents, a single dreamsign from
   // the configured layer onward, and a deck selected from that avatar's exact
   // Tides4 pool using the shared Tide-affinity ranking.
   const completionLevelAtStart = state.completionLevel;
@@ -267,19 +267,19 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     state.currentDreamscape === null
       ? null
       : (state.atlas.nodes[state.currentDreamscape] ?? null);
-  // The opponent DreamAvatar is one of the dreamscape's residents. A neutral or
+  // The opponent Avatar is one of the dreamscape's residents. A neutral or
   // starter dreamscape, or a
   // battle whose dreamscape content is absent, has no residents and the full
   // roster is used. Resolved before selection so it narrows the pick pool.
-  const residentDreamAvatarIds = resolveDreamscapeResidentIds(
+  const residentAvatarIds = resolveDreamscapeResidentIds(
     currentNode,
     input.dreamscapes ?? [],
   );
-  const opponentDreamAvatar = selectOpponentDreamAvatar(
-    dreamAvatars,
-    state.dreamAvatar?.id ?? null,
+  const opponentAvatar = selectOpponentAvatar(
+    avatars,
+    state.avatar?.id ?? null,
     streams.enemyDescriptor,
-    residentDreamAvatarIds,
+    residentAvatarIds,
   );
   const battleAffiliation = resolveBattleAffiliation(
     currentNode,
@@ -299,7 +299,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     input.tides4Tuning === undefined
       ? null
       : buildTideOpponentDeck({
-          opponentDreamAvatar,
+          opponentAvatar,
           affiliation: battleAffiliation,
           cardDatabase,
           dreamsignTemplates,
@@ -326,7 +326,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
         )
       : [tideBuild.dreamsign];
   const enemyDescriptorBase = buildEnemyDescriptor(
-    opponentDreamAvatar,
+    opponentAvatar,
     opponentDreamsigns,
     streams.enemyDescriptor.nextFloat,
   );
@@ -341,7 +341,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   ).map(freezeBattleDeckCardDefinition);
 
   // The opponent's signature cards: the three deck cards most representative of
-  // its DreamAvatar's ability, shown on the Battle Start screen. Resolved from
+  // its Avatar's ability, shown on the Battle Start screen. Resolved from
   // the finalized enemy deck back to the catalog `CardData` so the selection can
   // weigh rules text, rarity, and cost. `selectSignatureCards` excludes
   // Legendary cards and prefers non-starter ones, falling back to starters only
@@ -351,7 +351,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     .map((definition) => cardDatabase.get(definition.cardNumber))
     .filter((card): card is CardData => card !== undefined);
   const signatureSelections = selectSignatureCards({
-    abilityText: opponentDreamAvatar?.renderedText ?? "",
+    abilityText: opponentAvatar?.renderedText ?? "",
     candidates: signatureCandidates,
     count: opponentsData.battle.opponentSignatureCardCount,
   });
@@ -371,14 +371,14 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     // The signature-card pick is independent of opponent deck construction
     // ran, so it is recorded for every battle. `matchedTerms` / `score` make the
     // pick reconstructable: each card is chosen for the glossary keywords it
-    // shares with the DreamAvatar's ability (idf-weighted across the deck).
+    // shares with the Avatar's ability (idf-weighted across the deck).
     logEvent("opponent_signature_cards_selected", {
       battleEntryKey: battleEntryKey,
       dreamscapeId: state.currentDreamscape,
       completionLevel: completionLevelAtStart,
-      dreamAvatarId: opponentDreamAvatar?.id ?? null,
-      dreamAvatarName: opponentDreamAvatar?.name ?? null,
-      abilityText: opponentDreamAvatar?.renderedText ?? null,
+      avatarId: opponentAvatar?.id ?? null,
+      avatarName: opponentAvatar?.name ?? null,
+      abilityText: opponentAvatar?.renderedText ?? null,
       signatureCards: signatureSelections.map((selection) => ({
         cardId: selection.cardId,
         cardNumber: selection.cardNumber,
@@ -388,15 +388,15 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       })),
     });
     if (tideBuild === null) return;
-    logEvent("tide_opponent_dream_avatar_selected", {
+    logEvent("tide_opponent_avatar_selected", {
       battleEntryKey: battleEntryKey,
       dreamscapeId: state.currentDreamscape,
       completionLevel: completionLevelAtStart,
       restrictedToDreamscapeResidents:
-        residentDreamAvatarIds != null && residentDreamAvatarIds.length > 0,
-      eligibleDreamAvatarIds: residentDreamAvatarIds ?? [],
-      selectedDreamAvatarId: opponentDreamAvatar?.id ?? null,
-      selectedDreamAvatarName: opponentDreamAvatar?.name ?? null,
+        residentAvatarIds != null && residentAvatarIds.length > 0,
+      eligibleAvatarIds: residentAvatarIds ?? [],
+      selectedAvatarId: opponentAvatar?.id ?? null,
+      selectedAvatarName: opponentAvatar?.name ?? null,
     });
     emitTideDeckLog?.();
   };
@@ -413,7 +413,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     streams.dreamwellDeck,
     opponentsData.dreamwell,
   ).map((definition) => Object.freeze(definition));
-  const dreamAvatarSummary = freezeBattleDreamAvatarSummary(state.dreamAvatar);
+  const avatarSummary = freezeBattleAvatarSummary(state.avatar);
   const dreamsignSummaries = state.dreamsigns.map(freezeBattleDreamsignSummary);
   const battleReward = input.economyData?.battleReward ?? {
     baseEssence: 100,
@@ -506,7 +506,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     dreamwellDeck: Object.freeze(dreamwellDeck),
     enemyDescriptor,
     enemyDeckDefinition: Object.freeze(enemyDeckDefinition),
-    dreamAvatarSummary,
+    avatarSummary,
     dreamsignSummaries: Object.freeze(dreamsignSummaries),
     atlasSnapshot: freezeAtlasSnapshot(state.atlas),
   });
@@ -631,15 +631,15 @@ function resolveSeed(
 
 /**
  * Assembles the enemy descriptor shown before the battle (journeys doc "Battle"):
- * the chosen opponent DreamAvatar's identity and ability text, plus the concrete
+ * the chosen opponent Avatar's identity and ability text, plus the concrete
  * dreamsigns it carries (none before the run midpoint, one from the midpoint on).
  * The dreamsigns are resolved by the caller via
  * {@link buildOpponentDreamsigns} so the midpoint gating lives in one place;
  * this only renders them for display. Falls back to a synthetic descriptor when
- * no opponent DreamAvatar is available.
+ * no opponent Avatar is available.
  */
 export function buildEnemyDescriptor(
-  opponentDreamAvatar: DreamAvatarContent | null,
+  opponentAvatar: AvatarContent | null,
   dreamsignTemplates: readonly DreamsignTemplate[],
   random: () => number,
 ): BattleEnemyDescriptor {
@@ -653,7 +653,7 @@ export function buildEnemyDescriptor(
     }),
   );
 
-  if (opponentDreamAvatar === null) {
+  if (opponentAvatar === null) {
     return {
       id: parseOpponentId("enemy:fallback"),
       name: "Spectral Rival",
@@ -668,15 +668,15 @@ export function buildEnemyDescriptor(
 
   const portraitSeed = Math.floor(random() * 1_000_000);
   return {
-    id: parseOpponentId(`enemy:${opponentDreamAvatar.id}:${String(portraitSeed)}`),
-    name: opponentDreamAvatar.name,
-    // The DreamAvatar's title (e.g. "Wreckoner") rides the descriptor as its
+    id: parseOpponentId(`enemy:${opponentAvatar.id}:${String(portraitSeed)}`),
+    name: opponentAvatar.name,
+    // The Avatar's title (e.g. "Wreckoner") rides the descriptor as its
     // subtitle so the Battle Start name plate and the in-battle side summary can
     // show it under the name.
-    subtitle: opponentDreamAvatar.title,
-    imageNumber: opponentDreamAvatar.imageNumber,
+    subtitle: opponentAvatar.title,
+    imageNumber: opponentAvatar.imageNumber,
     portraitSeed,
-    abilityText: opponentDreamAvatar.renderedText,
+    abilityText: opponentAvatar.renderedText,
     dreamsigns,
     // Filled in by the caller once the enemy deck is built.
     signatureCards: [],
@@ -684,7 +684,7 @@ export function buildEnemyDescriptor(
 }
 
 /**
- * The resident DreamAvatar ids of the dreamscape this battle takes place in, so
+ * The resident Avatar ids of the dreamscape this battle takes place in, so
  * the opponent is one of the region's own rivals (corpus algorithm). Returns
  * `null` when the battle has no dreamscape node, the node's dreamscape content
  * is absent (e.g. battle-engine tests omit `dreamscapes`), or the dreamscape is
@@ -693,11 +693,11 @@ export function buildEnemyDescriptor(
 function resolveDreamscapeResidentIds(
   node: DreamscapeNode | null,
   dreamscapes: readonly DreamscapeContent[],
-): readonly DreamAvatarId[] | null {
+): readonly AvatarId[] | null {
   const dreamscapeId = node?.dreamscapeId;
   if (dreamscapeId == null) return null;
   const dreamscape = dreamscapes.find((d) => d.id === dreamscapeId);
-  const residents = dreamscape?.dreamAvatarIds ?? null;
+  const residents = dreamscape?.avatarIds ?? null;
   return residents !== null && residents.length > 0 ? residents : null;
 }
 
@@ -915,23 +915,23 @@ function freezeBattleEnemyDescriptor(
   });
 }
 
-function freezeBattleDreamAvatarSummary(
-  dreamAvatar: JourneyState["dreamAvatar"],
-): BattleDreamAvatarSummary | null {
-  if (dreamAvatar === null) {
+function freezeBattleAvatarSummary(
+  avatar: JourneyState["avatar"],
+): BattleAvatarSummary | null {
+  if (avatar === null) {
     return null;
   }
 
   return Object.freeze({
-    id: dreamAvatar.id,
-    name: dreamAvatar.name,
-    title: dreamAvatar.title,
-    renderedText: dreamAvatar.renderedText,
-    imageNumber: dreamAvatar.imageNumber,
-    ...(dreamAvatar.portraitFocus === undefined
+    id: avatar.id,
+    name: avatar.name,
+    title: avatar.title,
+    renderedText: avatar.renderedText,
+    imageNumber: avatar.imageNumber,
+    ...(avatar.portraitFocus === undefined
       ? {}
       : {
-          portraitFocus: Object.freeze({ ...dreamAvatar.portraitFocus }),
+          portraitFocus: Object.freeze({ ...avatar.portraitFocus }),
         }),
   });
 }

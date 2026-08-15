@@ -1,4 +1,4 @@
-/** Compose the generated tide and Dream Avatar TOML projections for tides4. */
+/** Compose the generated tide and Avatar TOML projections for tides4. */
 export function compileTidesData(tidesSource, avatarsSource) {
   if (tidesSource?.["schema-version"] !== 1) {
     throw new Error("Expected tides schema-version = 1");
@@ -6,8 +6,8 @@ export function compileTidesData(tidesSource, avatarsSource) {
   if (!Array.isArray(tidesSource.tide) || tidesSource.tide.length === 0) {
     throw new Error("Expected a non-empty [[tide]] array in tides.toml");
   }
-  if (!Array.isArray(avatarsSource?.dreamAvatar) || avatarsSource.dreamAvatar.length === 0) {
-    throw new Error("Expected a non-empty [[dreamAvatar]] array in dream_avatars.toml");
+  if (!Array.isArray(avatarsSource?.avatar) || avatarsSource.avatar.length === 0) {
+    throw new Error("Expected a non-empty [[avatar]] array in avatars.toml");
   }
   const selection = tidesSource.selection;
   if (
@@ -27,8 +27,8 @@ export function compileTidesData(tidesSource, avatarsSource) {
       copies: card.copies,
     })),
   }));
-  const tidePoolByDreamAvatar = Object.fromEntries(
-    avatarsSource.dreamAvatar.map((avatar) => [
+  const tidePoolByAvatar = Object.fromEntries(
+    avatarsSource.avatar.map((avatar) => [
       avatar.id,
       {
         starter: avatar["tide-pool"]?.starter ?? null,
@@ -44,6 +44,6 @@ export function compileTidesData(tidesSource, avatarsSource) {
       bandMinimum: selection["band-minimum"],
     },
     tides,
-    tidePoolByDreamAvatar,
+    tidePoolByAvatar,
   };
 }

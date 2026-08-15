@@ -38,7 +38,7 @@ state (hover, selection, animation phase) lives here.
 
 - The screen **owns and exports its view types** (`FooView`,
   `FooScreenProps`). Callbacks carry **ids**, not domain objects
-  (`onPick(dreamAvatarId: string)`); the adapter re-resolves the id.
+  (`onPick(avatarId: string)`); the adapter re-resolves the id.
 - The root element carries `className="cumulus"` — the design tokens are scoped
   to that class — plus `minHeight: "100vh"` and its own layout styles. This is
   the only `className` in the file; all other styling is token-valued inline
@@ -51,7 +51,7 @@ state (hover, selection, animation phase) lives here.
   popups go through `InfoCard`. A `<div onClick>` is a lint error
   (`cumulus/no-raw-interactive-elements`).
 - Give every element a test will need to find a `data-*` attribute keyed by
-  the entity's **id** (`data-dream-avatar-tide={`${dream avatarId}:${tideId}`}`),
+  the entity's **id** (`data-avatar-tide={`${avatarId}:${tideId}`}`),
   matching the pilot's pattern.
 - The screen may import only Cumulus code plus the allowlisted non-UI
   infrastructure (`src/data`, `src/types`, `src/logging`, `src/runtime`) —

@@ -8,9 +8,9 @@ import type { CardData } from "../types/cards";
 import { parseCardName } from "../types/card-identity";
 import type {
   DreamsignTemplate,
-  ResolvedDreamAvatarPackage,
+  ResolvedAvatarPackage,
 } from "../types/content";
-import { testDreamAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
+import { testAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
 
 function makeCard(num: number, name: string): CardData {
   return {
@@ -44,10 +44,10 @@ function makeDraftState(
   };
 }
 
-function makeResolvedPackage(): ResolvedDreamAvatarPackage {
+function makeResolvedPackage(): ResolvedAvatarPackage {
   return {
-    dreamAvatar: {
-      id: testDreamAvatarId("dream-avatar-1"),
+    avatar: {
+      id: testAvatarId("avatar-1"),
       name: "Caller of Depths",
       title: "Witness of Logs",
       renderedText: "Test",
@@ -154,7 +154,7 @@ describe("extractPackageDebugInfo", () => {
       DREAMSIGN_TEMPLATES,
     );
 
-    expect(result?.dreamAvatarName).toBe("Caller of Depths");
+    expect(result?.avatarName).toBe("Caller of Depths");
     expect(result?.startingEssence).toBe(245);
     expect(result?.initialDreamsignPoolSize).toBe(3);
     expect(result?.remainingDreamsigns).toEqual([

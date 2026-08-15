@@ -35,6 +35,6 @@ BattleRules(
   skip_player_opening_draw: true,
 
   // Number of representative opponent deck cards featured on the Battle Start
-  // screen as that Dream Avatar's signature cards.
+  // screen as that Avatar's signature cards.
   opponent_signature_card_count: 3,
 )

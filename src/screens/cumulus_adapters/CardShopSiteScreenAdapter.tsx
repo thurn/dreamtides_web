@@ -52,7 +52,7 @@ export function CardShopSiteScreenAdapter({ siteId }: { siteId: SiteId }) {
     [
       state.essence,
       state.deck,
-      state.dreamAvatar,
+      state.avatar,
       state.dreamsigns,
       state.shopModifiers.essenceDiscountPercent,
       state.shopModifiers.freePurchaseModifiers,

@@ -3,9 +3,9 @@ import { fileURLToPath } from "node:url";
 import {
   SITE_TYPES,
   makeValidateDreamscapeEdit,
-  planDreamAvatarAssignment,
+  planAvatarAssignment,
   readAffiliationOptions,
-  readDreamAvatarOptions,
+  readAvatarOptions,
   readDreamGuideOptions,
   readEditorDreamscapes,
 } from "./dreamscape-editor-data.mjs";
@@ -80,7 +80,7 @@ function routeForRawPath(rawPath) {
   const remainder = rawPath.slice(BASE_PATH.length + 1);
   const segments = remainder.split("/");
   const residentRoute =
-    segments.length === 2 && segments[1] === "dream-avatars";
+    segments.length === 2 && segments[1] === "avatars";
   if (segments[0] === "" || (segments.length > 1 && !residentRoute)) {
     return {
       ok: false,
@@ -116,7 +116,7 @@ function routeForRawPath(rawPath) {
   }
   return {
     ok: true,
-    resource: residentRoute ? "dream-avatars" : "dreamscape",
+    resource: residentRoute ? "avatars" : "dreamscape",
     dreamscapeId,
   };
 }
@@ -148,7 +148,7 @@ function collectionPayload(rootDir, revision) {
     dreamscapes: readEditorDreamscapes({ rootDir }),
     guides: readDreamGuideOptions({ rootDir }),
     affiliations: readAffiliationOptions({ rootDir }),
-    dreamAvatars: readDreamAvatarOptions({ rootDir }),
+    avatars: readAvatarOptions({ rootDir }),
     siteTypes: SITE_TYPES,
     sourceRevision: revision(rootDir, DREAMSCAPE_EDITOR_SOURCE_PATHS),
   };
@@ -308,15 +308,15 @@ function assertAssignmentBody(body) {
     return 'action must be "replace", "add", or "remove".';
   }
   if (body.inId !== undefined && typeof body.inId !== "string") {
-    return "inId must be a DreamAvatar id string.";
+    return "inId must be an Avatar id string.";
   }
   if (body.outId !== undefined && typeof body.outId !== "string") {
-    return "outId must be a DreamAvatar id string.";
+    return "outId must be an Avatar id string.";
   }
   return null;
 }
 
-async function handleDreamAvatarAssignment(req, res, options, dreamscapeId) {
+async function handleAvatarAssignment(req, res, options, dreamscapeId) {
   const body = await readJsonRequest(req);
   const bodyError = assertAssignmentBody(body);
   if (bodyError !== null) {
@@ -336,10 +336,10 @@ async function handleDreamAvatarAssignment(req, res, options, dreamscapeId) {
     );
     return;
   }
-  const dreamAvatars = readDreamAvatarOptions({ rootDir: options.rootDir });
-  const plan = planDreamAvatarAssignment(
+  const avatars = readAvatarOptions({ rootDir: options.rootDir });
+  const plan = planAvatarAssignment(
     dreamscapes,
-    dreamAvatars.map((dreamAvatar) => dreamAvatar.id),
+    avatars.map((avatar) => avatar.id),
     {
       action: body.action,
       dreamscapeId,
@@ -417,8 +417,8 @@ export function createDreamscapeEditorApiMiddleware({
         await handlePatch(req, res, options, route.dreamscapeId);
         return;
       }
-      if (req.method === "POST" && route.resource === "dream-avatars") {
-        await handleDreamAvatarAssignment(
+      if (req.method === "POST" && route.resource === "avatars") {
+        await handleAvatarAssignment(
           req,
           res,
           options,

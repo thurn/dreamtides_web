@@ -133,9 +133,9 @@ Define a term where the reader first needs it:
 If a term appears before its full treatment, explain enough to continue and
 link to the relevant essay:
 
-> The player chooses a **Dream Avatar**, the character that supplies the
+> The player chooses a **Avatar**, the character that supplies the
 > starting deck and abilities. See
-> [Dream Avatar construction](dream_avatar_construction.md).
+> [Avatar construction](avatar_construction.md).
 
 For a calculation without separate identity, use ordinary prose:
 

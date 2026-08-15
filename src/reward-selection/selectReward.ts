@@ -38,7 +38,7 @@ import {
   type RewardSelectionResult,
 } from "./types";
 import type { DeckEntryId } from "../types/identifiers";
-import type { DreamAvatarId } from "../types/identifiers";
+import type { AvatarId } from "../types/identifiers";
 import type { TideId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import {
@@ -54,7 +54,7 @@ interface Candidate {
   card?: CardData;
   entryId?: DeckEntryId;
   dreamsign?: DreamsignTemplate;
-  dreamAvatarId?: DreamAvatarId;
+  avatarId?: AvatarId;
   siteType?: SiteType;
   transfiguration?: TransfigurationType;
 }
@@ -565,15 +565,15 @@ function otherCandidates(
   context: RewardSelectionContext,
   request: RewardSelectionRequest,
 ): Candidate[] | RewardSelectionFailure {
-  if (request.mechanicId === "choose-dream-avatar") {
+  if (request.mechanicId === "choose-avatar") {
     if (request.policyId !== "uniform")
       return failure(request, "unsupported_mechanic_policy");
-    const excluded = new Set(request.constraints?.excludedDreamAvatarIds ?? []);
-    return context.content.dreamAvatars
+    const excluded = new Set(request.constraints?.excludedAvatarIds ?? []);
+    return context.content.avatars
       .filter((avatar) => !excluded.has(avatar.id))
       .map((avatar) => ({
         key: parseRewardCandidateKey(avatar.id),
-        dreamAvatarId: avatar.id,
+        avatarId: avatar.id,
         rank: [0],
         score: 0,
         components: {},
@@ -627,7 +627,7 @@ function candidatesFor(
     case "change-entry-subtype":
     case "change-entry-card-type":
       return deckEntryCandidates(context, request);
-    case "choose-dream-avatar":
+    case "choose-avatar":
     case "add-site":
       return otherCandidates(context, request);
     default:
@@ -665,8 +665,8 @@ function keyKind(request: RewardSelectionRequest): RewardCandidateKeyKind {
     case "reduce-deck-cost-and-add-nightmares":
     case "purge-duplicates-and-grant-reclaim":
       return "entryId";
-    case "choose-dream-avatar":
-      return "dreamAvatarId";
+    case "choose-avatar":
+      return "avatarId";
     case "add-site":
       return "siteType";
     case "essence-mutation":
@@ -717,8 +717,8 @@ function bindingsFor(
     dreamsignIds: selected.flatMap((candidate) =>
       candidate.dreamsign === undefined ? [] : [candidate.dreamsign.id],
     ),
-    dreamAvatarIds: selected.flatMap((candidate) =>
-      candidate.dreamAvatarId === undefined ? [] : [candidate.dreamAvatarId],
+    avatarIds: selected.flatMap((candidate) =>
+      candidate.avatarId === undefined ? [] : [candidate.avatarId],
     ),
     siteTypes: selected.flatMap((candidate) =>
       candidate.siteType === undefined ? [] : [candidate.siteType],
@@ -888,9 +888,9 @@ export function selectReward(
       ...(candidate.dreamsign === undefined
         ? {}
         : { dreamsignId: candidate.dreamsign.id }),
-      ...(candidate.dreamAvatarId === undefined
+      ...(candidate.avatarId === undefined
         ? {}
-        : { dreamAvatarId: candidate.dreamAvatarId }),
+        : { avatarId: candidate.avatarId }),
       ...(candidate.siteType === undefined
         ? {}
         : { siteType: candidate.siteType }),

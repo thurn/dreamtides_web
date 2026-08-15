@@ -6,7 +6,7 @@ const STRONG_MECHANICAL_PROPS = new Set(["anchorRect", "portalTarget", "revealSi
 const CONTROLLED_PROPS = new Set(["open", "shown", "isOpen", "isShown", "revealOpen", "revealShown"]);
 const INTERACTION_ESCAPE_PROPS = new Set(["onMouseEnter", "onMouseMove", "onMouseLeave", "onPointerEnter", "onPointerMove", "onPointerLeave", "onPointerDown", "onPointerUp", "onPointerCancel", "onMouseDown", "onMouseUp", "onTouchStart", "onTouchMove", "onTouchEnd"]);
 const CONTENT_PROPS = new Set(["content", "children", "card", "reveal", "renderedContent"]);
-const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "InfoCard", "AtlasNode", "GlossaryTerm", "RulesText", "BattleGameCard", "DreamwellCard", "Dreamsign", "WagerPrizeCard", "DreamAvatarPortrait", "TideDisc", "TidesInfoLabel", "EssenceValue", "CardStatOrb", "JourneyStatusBar", "SiteNode", "TransfigurationButton", "OfferTile"]);
+const NAMED_REVEAL_COMPONENTS = new Set(["GameCard", "InfoCard", "AtlasNode", "GlossaryTerm", "RulesText", "BattleGameCard", "DreamwellCard", "Dreamsign", "WagerPrizeCard", "AvatarPortrait", "TideDisc", "TidesInfoLabel", "EssenceValue", "CardStatOrb", "JourneyStatusBar", "SiteNode", "TransfigurationButton", "OfferTile"]);
 const GENERIC_REVEAL_WRAPPERS = new Set(["HoverPopover", "RevealPopover", "EntityReveal", "GenericReveal", "RevealWrapper", "EntityRevealWrapper"]);
 
 const CONTEXT_COMPONENTS = [
@@ -26,7 +26,7 @@ const CONTEXT_COMPONENTS = [
   "src/cumulus/components/controls/TransfigurationButton.tsx",
   "src/cumulus/components/controls/ExplorationChoice.tsx",
   "src/cumulus/components/dreamscape/SiteNode.tsx",
-  "src/cumulus/components/hud/DreamAvatarPortrait.tsx",
+  "src/cumulus/components/hud/AvatarPortrait.tsx",
   "src/cumulus/components/hud/Dreamsign.tsx",
   "src/cumulus/components/hud/JourneyStatusBar.tsx",
   "src/cumulus/components/hud/EssenceValue.tsx",
@@ -41,7 +41,7 @@ for (const file of CONTEXT_COMPONENTS) APPROVED_INTERNAL_IMPORTS.set(`${file}|sr
 for (const file of IDENTITY_COMPONENTS) APPROVED_INTERNAL_IMPORTS.set(`${file}|src/cumulus/internal/reveal/identity`, new Set(["revealEntityId"]));
 APPROVED_INTERNAL_IMPORTS.set("src/cumulus/CumulusRoot.tsx|src/cumulus/internal/reveal/context", new Set(["RevealCoordinatorProvider"]));
 APPROVED_INTERNAL_IMPORTS.set("src/cumulus/components/atlas/AtlasNode.tsx|src/cumulus/internal/reveal/model", new Set(["RevealInfoCardModel", "RevealSpec"]));
-APPROVED_INTERNAL_IMPORTS.set("src/cumulus/components/hud/DreamAvatarPortrait.tsx|src/cumulus/internal/reveal/model", new Set(["RevealSpec"]));
+APPROVED_INTERNAL_IMPORTS.set("src/cumulus/components/hud/AvatarPortrait.tsx|src/cumulus/internal/reveal/model", new Set(["RevealSpec"]));
 
 const PORTAL_OWNER_ALLOWLIST = new Set([
   "src/cumulus/internal/reveal/RevealOverlay.tsx",

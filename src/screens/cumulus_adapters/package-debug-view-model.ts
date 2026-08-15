@@ -1,7 +1,7 @@
 import type { CardData } from "../../types/cards";
 import type {
   DreamsignTemplate,
-  ResolvedDreamAvatarPackage,
+  ResolvedAvatarPackage,
 } from "../../types/content";
 import type { DraftState } from "../../types/draft";
 import type {
@@ -33,7 +33,7 @@ const VALUE_LABELS: Readonly<Record<PackageDebugValueId, LocalizedString>> = {
 export function buildPackageDebugView(
   draftState: DraftState | null,
   cardDatabase: ReadonlyMap<number, CardData>,
-  resolvedPackage: ResolvedDreamAvatarPackage | null,
+  resolvedPackage: ResolvedAvatarPackage | null,
   remainingDreamsignPool: readonly DreamsignId[],
   dreamsignTemplates: readonly DreamsignTemplate[],
 ): PackageDebugView {
@@ -60,10 +60,10 @@ export function buildPackageDebugView(
                   value("unique", draft.remainingUniqueCards),
                 ]),
           ],
-    dreamAvatar:
-      pkg?.dreamAvatarName === undefined
+    avatar:
+      pkg?.avatarName === undefined
         ? null
-        : assertLocalized(pkg.dreamAvatarName),
+        : assertLocalized(pkg.avatarName),
     validation:
       pkg === null
         ? []

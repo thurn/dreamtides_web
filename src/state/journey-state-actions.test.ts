@@ -15,8 +15,8 @@ import {
 import type { CardData } from "../types/cards";
 import { parseCardName } from "../types/card-identity";
 import type {
-  DreamAvatarContent,
-  ResolvedDreamAvatarPackage,
+  AvatarContent,
+  ResolvedAvatarPackage,
 } from "../types/content";
 import type { JourneyContent } from "../data/journey-content";
 import {
@@ -26,7 +26,7 @@ import {
 } from "../__test-helpers__/pool-context";
 import type { DreamAtlas, JourneyState } from "../types/journey";
 import type { PoolDraftState } from "../types/draft";
-import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
+import { toJourneyAvatar } from "../data/avatar-selection";
 import { createDefaultState } from "./journey-context";
 import {
   addCardToJourneyState,
@@ -38,13 +38,13 @@ import {
   pickDraftCardInJourneyState,
   prepareDraftCardPickInJourneyState,
   setJourneyScreen,
-  startJourneyFromDreamAvatar,
+  startJourneyFromAvatar,
   updateJourneyAtlas,
 } from "./journey-state-actions";
 import { parseAtlasNodeId } from "../types/identifiers";
 import { parseSiteId } from "../types/identifiers";
 import { parseDeckEntryId } from "../types/identifiers";
-import { testDreamAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
+import { testAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
 
 function makeCard(
   cardNumber: number,
@@ -67,10 +67,10 @@ function makeCard(
   };
 }
 
-function makeDreamAvatar(): DreamAvatarContent {
+function makeAvatar(): AvatarContent {
   return {
-    id: testDreamAvatarId("dream-avatar-1"),
-    name: "Test DreamAvatar",
+    id: testAvatarId("avatar-1"),
+    name: "Test Avatar",
     title: "State Witness",
     renderedText: "Test ability.",
     imageNumber: "0006",
@@ -81,7 +81,7 @@ function makeDreamAvatar(): DreamAvatarContent {
 }
 
 function makeJourneyContent(
-  dreamAvatar: DreamAvatarContent = makeDreamAvatar(),
+  avatar: AvatarContent = makeAvatar(),
 ): JourneyContent {
   const starterCards = TEST_STARTER_CARD_NUMBERS.map((cardNumber) =>
     makeCard(cardNumber, { isStarter: true }),
@@ -95,7 +95,7 @@ function makeJourneyContent(
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase,
-    dreamAvatars: [dreamAvatar],
+    avatars: [avatar],
 
     dreamwellCards: [],
     dreamsignTemplates: [],
@@ -350,15 +350,15 @@ describe("journey state actions", () => {
     expect(console.log).not.toHaveBeenCalled();
   });
 
-  it("starts a journey from a DreamAvatar in one state transition", () => {
+  it("starts a journey from an Avatar in one state transition", () => {
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    const dreamAvatar = makeDreamAvatar();
-    const journeyContent = makeJourneyContent(dreamAvatar);
+    const avatar = makeAvatar();
+    const journeyContent = makeJourneyContent(avatar);
     const prev = createDefaultState();
 
-    const next = startJourneyFromDreamAvatar({
+    const next = startJourneyFromAvatar({
       prev,
-      dreamAvatar,
+      avatar,
       journeyContent,
       seedOverride: testJourneySeed("journey-seed-1"),
     });
@@ -366,10 +366,10 @@ describe("journey state actions", () => {
       (node) => node.state === "available",
     );
 
-    expect(next.dreamAvatar).toEqual(toJourneyDreamAvatar(dreamAvatar));
-    expect(next.dreamAvatar?.portraitFocus).toEqual({ x: 0.42, y: 0.18 });
-    expect(next.dreamAvatar?.startingEssence).toBe(275);
-    expect(next.essence).toBe(dreamAvatar.startingEssence);
+    expect(next.avatar).toEqual(toJourneyAvatar(avatar));
+    expect(next.avatar?.portraitFocus).toEqual({ x: 0.42, y: 0.18 });
+    expect(next.avatar?.startingEssence).toBe(275);
+    expect(next.essence).toBe(avatar.startingEssence);
     expect(prev.essence).toBe(createDefaultState().essence);
     // The package is built from the run pool context at journey start; assert a
     // non-empty draft pool was produced rather than checking exact card numbers.
@@ -418,7 +418,7 @@ describe("journey state actions", () => {
     expect(next.activeSiteId).toBeNull();
     // The starter-deck reveal popup is gated entirely by the
     // `hasSeenStartingDeckPopup` flag. A fresh journey start leaves the flag
-    // at the default `false` so the popup opens once when the dreamAvatar
+    // at the default `false` so the popup opens once when the avatar
     // is first picked.
     expect(next.hasSeenStartingDeckPopup).toBe(false);
     // Journey start builds the draft pool, which emits exactly one provenance log
@@ -429,13 +429,13 @@ describe("journey state actions", () => {
       unknown
     >;
     expect(constructed.event).toBe("draft_pool_constructed");
-    expect(constructed.dreamAvatarId).toBe(dreamAvatar.id);
+    expect(constructed.avatarId).toBe(avatar.id);
     expect(typeof constructed.seed).toBe("number");
   });
 
   it("uses an authored package override for a tutorial journey start", () => {
-    const dreamAvatar = makeDreamAvatar();
-    const journeyContent = makeJourneyContent(dreamAvatar);
+    const avatar = makeAvatar();
+    const journeyContent = makeJourneyContent(avatar);
     const authoredCardNumbers = [...journeyContent.cardDatabase.keys()]
       .filter(
         (cardNumber) =>
@@ -449,8 +449,8 @@ describe("journey state actions", () => {
       [String(authoredCardNumbers[1])]: 1,
     };
     const dreamsignAId = testDreamsignId("dreamsign-a");
-    const authoredPackage: ResolvedDreamAvatarPackage = {
-      dreamAvatar,
+    const authoredPackage: ResolvedAvatarPackage = {
+      avatar,
       draftPoolCopiesByCard: authoredCopies,
       openingDreamsignOfferIds: [dreamsignAId],
       dreamsignPoolIds: [
@@ -464,9 +464,9 @@ describe("journey state actions", () => {
       preferredSubsetCount: 1,
     };
 
-    const next = startJourneyFromDreamAvatar({
+    const next = startJourneyFromAvatar({
       prev: createDefaultState(),
-      dreamAvatar,
+      avatar,
       journeyContent,
       seedOverride: testJourneySeed("tutorial-seed"),
       atlasRng: () => 0,

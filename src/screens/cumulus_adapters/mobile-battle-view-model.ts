@@ -11,7 +11,7 @@ import {
   backRankSlotIds,
   frontRankSlotIds,
   type BattleCardInstance,
-  type BattleDreamAvatarSummary,
+  type BattleAvatarSummary,
   type BattleInit,
   type BattleMutableState,
   type BattleSide,
@@ -51,7 +51,7 @@ import type { BattleCardId } from "../../types/identifiers";
 import { parseBattleCardId } from "../../types/identifiers";
 import { parseBattleSlotViewId } from "../../types/identifiers";
 
-const FALLBACK_PLAYER_DREAM_AVATAR = {
+const FALLBACK_PLAYER_AVATAR = {
   imageNumber: "001",
   name: "Avatar",
   title: "",
@@ -59,12 +59,12 @@ const FALLBACK_PLAYER_DREAM_AVATAR = {
 
 const INACTIVE_OPPONENT_AVATAR_ABILITY = tx(
   "Opponent avatar ability is not active.",
-  "[battle] [tutorial] [dream-avatar] Unavailable-state description for an opponent Dream Avatar whose ability is disabled during a tutorial battle.",
+  "[battle] [tutorial] [avatar] Unavailable-state description for an opponent Avatar whose ability is disabled during a tutorial battle.",
 );
 
 export type MobileBattleInit = BattleInit;
 export type MobileBattleBoard = BattleMutableState;
-export type MobileBattleDreamAvatar = BattleDreamAvatarSummary;
+export type MobileBattleAvatar = BattleAvatarSummary;
 export type MobileBattlePendingPrompt = PendingPrompt;
 export type MobileBattleAiProposal = Pick<AiProposal, "kind" | "description"> &
   Partial<Pick<AiProposal, "trace">>;
@@ -88,7 +88,7 @@ export interface MobileBattleViewOptions {
 export function buildMobileBattleView(
   init: BattleInit,
   board: BattleMutableState,
-  enemyDreamAvatar: BattleDreamAvatarSummary,
+  enemyAvatar: BattleAvatarSummary,
   aiProposal: MobileBattleAiProposal | null = null,
   viewOptions: MobileBattleViewOptions = {
     aiMode: false,
@@ -101,14 +101,14 @@ export function buildMobileBattleView(
   const player = buildSideView(
     "player",
     "player" === perspective ? "near" : "far",
-    init.dreamAvatarSummary ?? FALLBACK_PLAYER_DREAM_AVATAR,
+    init.avatarSummary ?? FALLBACK_PLAYER_AVATAR,
     board,
     init.scoreToWin,
   );
   const enemy = buildSideView(
     "enemy",
     "enemy" === perspective ? "near" : "far",
-    enemyDreamAvatar,
+    enemyAvatar,
     board,
     init.scoreToWin,
     !init.opponentAbilityActive,
@@ -505,7 +505,7 @@ export function buildMobileBattleCardView(
 function buildSideView(
   side: BattleSide,
   position: BattleBoardPosition,
-  dreamAvatar: BattleDreamAvatarSummary | typeof FALLBACK_PLAYER_DREAM_AVATAR,
+  avatar: BattleAvatarSummary | typeof FALLBACK_PLAYER_AVATAR,
   board: BattleMutableState,
   pointsToWin: number,
   abilityUnavailable = false,
@@ -525,7 +525,7 @@ function buildSideView(
       buildSlotView(slotId, sideState.frontRank[slotId] ?? null, board),
     ),
     status: buildStatusView(
-      dreamAvatar,
+      avatar,
       sideState,
       pointsToWin,
       abilityUnavailable,
@@ -560,37 +560,37 @@ function buildSlotView(
 }
 
 function buildStatusView(
-  dreamAvatar: BattleDreamAvatarSummary | typeof FALLBACK_PLAYER_DREAM_AVATAR,
+  avatar: BattleAvatarSummary | typeof FALLBACK_PLAYER_AVATAR,
   sideState: BattleMutableState["sides"][BattleSide],
   pointsToWin: number,
   abilityUnavailable: boolean,
 ): MobileBattleStatusView {
   return {
-    dreamAvatar: {
-      imageNumber: dreamAvatar.imageNumber,
+    avatar: {
+      imageNumber: avatar.imageNumber,
       name:
-        "id" in dreamAvatar
-          ? localizedSourceText(dreamAvatar.name)
+        "id" in avatar
+          ? localizedSourceText(avatar.name)
           : tx(
               "Avatar",
-              "[battle] [dream-avatar] Fallback Dream Avatar name while battle identity data is unavailable.",
+              "[battle] [avatar] Fallback Avatar name while battle identity data is unavailable.",
             ),
       title:
-        dreamAvatar.title === ""
+        avatar.title === ""
           ? undefined
-          : localizedSourceText(dreamAvatar.title),
-      ...("portraitFocus" in dreamAvatar &&
-      dreamAvatar.portraitFocus !== undefined
-        ? { portraitFocus: dreamAvatar.portraitFocus }
+          : localizedSourceText(avatar.title),
+      ...("portraitFocus" in avatar &&
+      avatar.portraitFocus !== undefined
+        ? { portraitFocus: avatar.portraitFocus }
         : {}),
     },
-    ...("id" in dreamAvatar && "renderedText" in dreamAvatar
+    ...("id" in avatar && "renderedText" in avatar
       ? {
-          dreamAvatarProfile: {
-            id: dreamAvatar.id,
+          avatarProfile: {
+            id: avatar.id,
             ability: abilityUnavailable
               ? INACTIVE_OPPONENT_AVATAR_ABILITY
-              : localizedSourceText(dreamAvatar.renderedText),
+              : localizedSourceText(avatar.renderedText),
             ...(abilityUnavailable ? { unavailable: true } : {}),
           },
         }

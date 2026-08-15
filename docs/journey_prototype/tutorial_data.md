@@ -25,8 +25,8 @@ presentation, scripted actions, and the playable handoff:
 
 Every field is a catalog UUID. Ordinary card roles resolve against
 `cards.ron`; `tutorialDreamwellCardId` resolves against `dreamwell.ron`.
-`player_dream_avatar_id` and `enemy_dream_avatar_id` resolve against
-`dream_avatars.ron`.
+`player_avatar_id` and `enemy_avatar_id` resolve against
+`avatars.ron`.
 
 The loading-screen character and handoff enemy character must use different
 card UUIDs.

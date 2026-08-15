@@ -1,6 +1,6 @@
 // The single entry point that wires the REAL content generators behind the
 // reducer content seams. Until this runs, every provider-backed event
-// (`START_JOURNEY`, `SELECT_DREAM_AVATAR`, `ADD_CARD`, `ADD_DREAMSIGN`,
+// (`START_JOURNEY`, `SELECT_AVATAR`, `ADD_CARD`, `ADD_DREAMSIGN`,
 // content-coupled `OPEN_SITE`, `REROLL_SHOP`, `BEGIN_BATTLE`) BOUNCES.
 //
 // The five adapters live OUTSIDE `src/rules/**` because they import impure
@@ -54,7 +54,7 @@ export function registerGameProviders(content: JourneyContent): void {
       ? null
       : {
           playerCardId: content.tutorial.battle.tutorialCardConstants.tutorialPlayerCharacterCardId,
-          journeyDreamAvatarId: content.tutorial.battle.playerDreamAvatarId,
+          journeyAvatarId: content.tutorial.battle.playerAvatarId,
         },
   );
   registerJourneyLifecycleContentProvider(

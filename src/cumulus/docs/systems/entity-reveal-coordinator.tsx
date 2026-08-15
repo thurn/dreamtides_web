@@ -50,10 +50,10 @@ const revealComponents = [
     note: "The model supplies a UUID and a complete display snapshot. The reveal includes the full card, status and glossary definitions, and referenced Figments when present.",
   },
   {
-    id: "dream-avatar-portrait",
-    name: "DreamAvatarPortrait",
+    id: "avatar-portrait",
+    name: "AvatarPortrait",
     use: "Avatar portraits that should expose the avatar's title and ability.",
-    api: "dreamAvatar; profile to enable the reveal; optional onPress and unavailable",
+    api: "avatar; profile to enable the reveal; optional onPress and unavailable",
     note: "Without profile, the portrait is decorative art and has no reveal behavior.",
   },
   {

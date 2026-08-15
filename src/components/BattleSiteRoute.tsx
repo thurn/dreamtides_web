@@ -16,7 +16,7 @@ import { tx } from "@trox/runtime";
 
 /**
  * Drives the coop event-sourced battle fold. A null folded battle renders the
- * deterministic opposing-DreamAvatar preview; its Begin action appends
+ * deterministic opposing-Avatar preview; its Begin action appends
  * `BEGIN_BATTLE`. A non-null folded battle renders the playable surface on
  * every client, including after reload.
  */

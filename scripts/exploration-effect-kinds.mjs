@@ -25,7 +25,7 @@ export const EXPLORATION_EFFECT_KINDS = Object.freeze([
   "reduce-cost-all-and-gain-nightmares", "copy-selected-card", "copy-selected-cards",
   "copy-random-cards", "copy-offered-deck-card", "next-battle-opening-hand",
   "next-battle-starting-energy",
-  "next-battle-smaller-hand-and-cost-discount", "choose-dream-avatar",
+  "next-battle-smaller-hand-and-cost-discount", "choose-avatar",
   "purge-duplicates-and-grant-reclaim", "transfigured-card-draft", "add-fixed-site",
   "choose-site-type", "add-site",
   "free-next-shop", "lose-half-essence-and-free-purchases",

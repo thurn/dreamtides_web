@@ -103,7 +103,7 @@ export type CardTutorialScreenKey = DomainIdentity<"CardTutorialScreenKey">;
 export type CardTypeChangePredicateId =
   DomainIdentity<"CardTypeChangePredicateId">;
 export type DeckEntryId = DomainIdentity<"DeckEntryId">;
-export type DreamAvatarId = DomainIdentity<"DreamAvatarId">;
+export type AvatarId = DomainIdentity<"AvatarId">;
 export type DreamscapeId = DomainIdentity<"DreamscapeId">;
 export type DreamsignId = DomainIdentity<"DreamsignId">;
 export type DreamwellCardId = DomainIdentity<"DreamwellCardId">;
@@ -174,7 +174,7 @@ const brandCardTutorialScreenKey =
 const brandCardTypeChangePredicateId =
   identityConstructor<CardTypeChangePredicateId>();
 const brandDeckEntryId = identityConstructor<DeckEntryId>();
-const brandDreamAvatarId = identityConstructor<DreamAvatarId>();
+const brandAvatarId = identityConstructor<AvatarId>();
 const brandDreamscapeId = identityConstructor<DreamscapeId>();
 const brandDreamsignId = identityConstructor<DreamsignId>();
 const brandDreamwellCardId = identityConstructor<DreamwellCardId>();
@@ -311,9 +311,9 @@ export const parseCardTypeChangePredicateId = identityParser(
   brandCardTypeChangePredicateId,
 );
 export const parseDeckEntryId = identityParser("Deck entry id", brandDeckEntryId);
-export const parseDreamAvatarId = identityParser(
-  "Dream Avatar id",
-  brandDreamAvatarId,
+export const parseAvatarId = identityParser(
+  "Avatar id",
+  brandAvatarId,
   (value) => UUID_PATTERN.test(value),
   (value) => value.toLowerCase(),
 );
@@ -495,7 +495,7 @@ export const cardTypeChangePredicateIdFromUnknown = identityDecoder(
   parseCardTypeChangePredicateId,
 );
 export const deckEntryIdFromUnknown = identityDecoder(parseDeckEntryId);
-export const dreamAvatarIdFromUnknown = identityDecoder(parseDreamAvatarId);
+export const avatarIdFromUnknown = identityDecoder(parseAvatarId);
 export const dreamscapeIdFromUnknown = identityDecoder(parseDreamscapeId);
 export const dreamsignIdFromUnknown = identityDecoder(parseDreamsignId);
 export const dreamwellCardIdFromUnknown = identityDecoder(parseDreamwellCardId);

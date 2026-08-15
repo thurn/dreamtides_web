@@ -61,7 +61,7 @@ const EMPTY_CONTENT: JourneyContent = {
   ...CONFIG_DATA_FIXTURE,
   draftData: draftDataFixture(),
   cardDatabase: new Map(),
-  dreamAvatars: [],
+  avatars: [],
   dreamwellCards: [],
   dreamsignTemplates: [],
   dreamscapes: [],
@@ -467,7 +467,7 @@ describe("buildAtlasMapNodes", () => {
           isStarter: true,
           atlasDescription,
           fixedSites: ["Draft", "Battle"],
-          dreamAvatarIds: [],
+          avatarIds: [],
         },
       ],
     };
@@ -496,7 +496,7 @@ describe("buildAtlasMapNodes", () => {
           affiliationId: null,
           isStarter: true,
           fixedSites: ["Draft", "Battle"],
-          dreamAvatarIds: [],
+          avatarIds: [],
         },
       ],
     };
@@ -538,7 +538,7 @@ describe("buildAtlasMapNodes", () => {
           signatureSite: "Augury",
           affiliationId: testAffiliationId("figments"),
           isStarter: false,
-          dreamAvatarIds: [],
+          avatarIds: [],
         },
       ],
       guides: [

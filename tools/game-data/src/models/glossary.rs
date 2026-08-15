@@ -166,14 +166,14 @@ pub struct GlossaryProjection {
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash, Ord, PartialOrd)]
 pub enum ProjectionOwner {
     Card,
-    DreamAvatar,
+    Avatar,
 }
 
 impl ProjectionOwner {
     fn compatibility_name(self) -> &'static str {
         match self {
             Self::Card => "card",
-            Self::DreamAvatar => "dreamAvatar",
+            Self::Avatar => "avatar",
         }
     }
 }
@@ -544,7 +544,7 @@ mod tests {
     priority: -3,
     variants: ["☾"],
     rules_symbol: RulesSymbol(token: lunar, glyph: Exhaust, accessible_label: Tx("lunar")),
-    projections: [GlossaryProjection(owner: DreamAvatar, definition: Tx("Avatar moon.") )],
+    projections: [GlossaryProjection(owner: Avatar, definition: Tx("Avatar moon.") )],
   ),
   GlossaryDefinition(
     id: "00000000-0000-4000-8000-000000000003",
@@ -625,7 +625,7 @@ mod tests {
         assert!(entries[1].get("term-presentation").is_none());
         assert_eq!(
             entries[1]["projections"][0]["owner"].as_str(),
-            Some("dreamAvatar")
+            Some("avatar")
         );
     }
 
@@ -677,9 +677,9 @@ mod tests {
             ["symbol-only", "definition-only"]
         );
         assert_eq!(
-            [ProjectionOwner::Card, ProjectionOwner::DreamAvatar]
+            [ProjectionOwner::Card, ProjectionOwner::Avatar]
                 .map(ProjectionOwner::compatibility_name),
-            ["card", "dreamAvatar"]
+            ["card", "avatar"]
         );
     }
 
@@ -737,8 +737,8 @@ mod tests {
         );
         assert_error_contains(
             &synthetic_source().replace(
-                "owner: DreamAvatar, definition: Tx(\"Avatar moon.\")",
-                "owner: DreamAvatar",
+                "owner: Avatar, definition: Tx(\"Avatar moon.\")",
+                "owner: Avatar",
             ),
             "without a term or definition",
         );
@@ -885,7 +885,7 @@ mod tests {
                     .filter_map(|projection| projection.owner)
             })
             .collect();
-        assert_eq!(owners, [ProjectionOwner::DreamAvatar].into_iter().collect());
+        assert_eq!(owners, [ProjectionOwner::Avatar].into_iter().collect());
         let symbols: BTreeSet<_> = canonical
             .iter()
             .filter_map(|entry| entry.definition_symbol)

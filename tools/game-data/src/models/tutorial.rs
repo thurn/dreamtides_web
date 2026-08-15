@@ -133,8 +133,8 @@ impl<'de> Deserialize<'de> for EntityId {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct TutorialBattleConfiguration {
-    pub player_dream_avatar_id: EntityId,
-    pub enemy_dream_avatar_id: EntityId,
+    pub player_avatar_id: EntityId,
+    pub enemy_avatar_id: EntityId,
     pub starting_energy: u32,
     pub score_to_win: u32,
     #[serde(deserialize_with = "super::card_counts::deserialize")]
@@ -278,7 +278,7 @@ pub enum TutorialAction {
         card_width_pixels: Option<u32>,
         text: LocalizedString,
     },
-    AnimateDreamAvatarPortrait {
+    AnimateAvatarPortrait {
         owner: TutorialSide,
         pause_seconds: Scalar,
         duration_seconds: Scalar,
@@ -523,7 +523,7 @@ fn validate_action(
             }
             validate_text(&source_text(text)?, "How to Play text")
         }
-        TutorialAction::AnimateDreamAvatarPortrait {
+        TutorialAction::AnimateAvatarPortrait {
             pause_seconds,
             duration_seconds,
             ..
@@ -759,8 +759,8 @@ struct CompatibilitySpeechBubble {
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 struct CompatibilityBattle {
-    player_dream_avatar_id: String,
-    enemy_dream_avatar_id: String,
+    player_avatar_id: String,
+    enemy_avatar_id: String,
     starting_energy: u32,
     score_to_win: u32,
     forced_player_draws: Vec<String>,
@@ -868,7 +868,7 @@ enum CompatibilityActionBehavior {
         card_width: Option<u32>,
         text: String,
     },
-    AnimateDreamAvatarPortrait {
+    AnimateAvatarPortrait {
         owner: String,
         pause: Scalar,
         duration: Scalar,
@@ -1013,8 +1013,8 @@ fn guidance(
 
 fn lower_battle(value: TutorialBattleConfiguration) -> Result<CompatibilityBattle> {
     Ok(CompatibilityBattle {
-        player_dream_avatar_id: value.player_dream_avatar_id.to_string(),
-        enemy_dream_avatar_id: value.enemy_dream_avatar_id.to_string(),
+        player_avatar_id: value.player_avatar_id.to_string(),
+        enemy_avatar_id: value.enemy_avatar_id.to_string(),
         starting_energy: value.starting_energy,
         score_to_win: value.score_to_win,
         forced_player_draws: ids(value.forced_player_draws),
@@ -1160,11 +1160,11 @@ fn lower_action(
             card_width: card_width_pixels,
             text: source_text(&text)?,
         },
-        TutorialAction::AnimateDreamAvatarPortrait {
+        TutorialAction::AnimateAvatarPortrait {
             owner,
             pause_seconds,
             duration_seconds,
-        } => CompatibilityActionBehavior::AnimateDreamAvatarPortrait {
+        } => CompatibilityActionBehavior::AnimateAvatarPortrait {
             owner: side(owner).into(),
             pause: pause_seconds,
             duration: duration_seconds,
@@ -1491,11 +1491,11 @@ impl TryFrom<CompatibilityAction> for TutorialActionDefinition {
                 card_width_pixels: card_width,
                 text: localized_source(text)?,
             },
-            CompatibilityActionBehavior::AnimateDreamAvatarPortrait {
+            CompatibilityActionBehavior::AnimateAvatarPortrait {
                 owner,
                 pause,
                 duration,
-            } => TutorialAction::AnimateDreamAvatarPortrait {
+            } => TutorialAction::AnimateAvatarPortrait {
                 owner: parse_side(&owner)?,
                 pause_seconds: pause,
                 duration_seconds: duration,
@@ -1601,10 +1601,7 @@ fn parse_side(value: &str) -> Result<TutorialSide> {
 
 const ACTION_IDS: &[(&str, &str)] = &[
     ("welcome", "3f7f1086-8a50-4bc9-a7d2-6bf68fde992f"),
-    (
-        "dream-avatar-arrival",
-        "c06dbc13-a48c-499e-83b3-b24e555ed008",
-    ),
+    ("avatar-arrival", "c06dbc13-a48c-499e-83b3-b24e555ed008"),
     ("nightmare-call", "8bae0625-6f94-472b-8752-1719166d0fb4"),
     ("vrakmoth-arrival", "548ef8f2-44d2-4af8-ae92-b13f089a42e1"),
     ("vrakmoth-taunt", "54325d07-bf55-4709-bb4a-fbfe098c81f5"),
@@ -1786,7 +1783,7 @@ mod tests {
                 card_width_pixels: Some(480),
                 text: ls("How to play"),
             },
-            TutorialAction::AnimateDreamAvatarPortrait {
+            TutorialAction::AnimateAvatarPortrait {
                 owner: TutorialSide::Enemy,
                 pause_seconds: Scalar::Integer(1),
                 duration_seconds: Scalar::Float(0.75),
@@ -1850,8 +1847,8 @@ mod tests {
                 second_battle: persistent,
             },
             battle: TutorialBattleConfiguration {
-                player_dream_avatar_id: entity("00000000-0000-4000-8000-000000000301"),
-                enemy_dream_avatar_id: entity("00000000-0000-4000-8000-000000000302"),
+                player_avatar_id: entity("00000000-0000-4000-8000-000000000301"),
+                enemy_avatar_id: entity("00000000-0000-4000-8000-000000000302"),
                 starting_energy: 7,
                 score_to_win: 19,
                 starter_deck: IndexMap::from_iter([(
@@ -2185,7 +2182,7 @@ mod tests {
             vec![
                 "display-speech-bubble",
                 "display-how-to-play",
-                "animate-dream-avatar-portrait",
+                "animate-avatar-portrait",
                 "draw-card",
                 "draw-opponent-card",
                 "reveal-and-play-opponent-card",

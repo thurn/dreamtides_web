@@ -4,7 +4,7 @@ import { assertLocalized } from "@trox/runtime";
 // reveal engine and the variants on one shell.
 // Each trigger anchors its card to the full-viewport stageRef so the cards clamp
 // against the real screen edges. The full-bleed and object media resolve from a
-// real asset in `public/` (a DreamAvatar portrait); the icon and text variants
+// real asset in `public/` (an Avatar portrait); the icon and text variants
 // use tokenized glyphs, and the epithet trigger shows the text variant's
 // name/epithet pairing.
 
@@ -146,7 +146,7 @@ export function InfoCardMockup() {
           card={
             <InfoCard
               variant="fullBleed"
-              image={artRef.dreamAvatar("0025")}
+              image={artRef.avatar("0025")}
               title={assertLocalized("Threxan")}
               subtitle={assertLocalized("the Resounding Wrath")}
               body={richText.rules(
@@ -164,7 +164,7 @@ export function InfoCardMockup() {
           card={
             <InfoCard
               variant="object"
-              image={artRef.dreamAvatar("0025")}
+              image={artRef.avatar("0025")}
               title={assertLocalized("Seld Rakor")}
               body={richText.rules(
                 assertLocalized(

@@ -16,7 +16,7 @@ import explorationJson from "../../public/exploration-data.json";
 import { loadJourneyContent } from "./journey-content";
 import {
   testCardId,
-  testDreamAvatarId,
+  testAvatarId,
   testExplorationActionId,
   testTideId,
 } from "../types/test-identities";
@@ -45,7 +45,7 @@ beforeEach(() => vi.restoreAllMocks());
 describe("loadJourneyContent", () => {
   function stubFetch(input: {
     cards: CardData[];
-    dreamAvatars: unknown[];
+    avatars: unknown[];
     failingPaths?: string[];
     economy?: ReturnType<typeof economyFixture>;
   }): void {
@@ -69,7 +69,7 @@ describe("loadJourneyContent", () => {
           cards: [{ id: testCardId("card-1"), copies: 1 }],
         },
       ],
-      tidePoolByDreamAvatar: {},
+      tidePoolByAvatar: {},
     };
     const exploration = {
       schemaVersion: explorationJson.schemaVersion,
@@ -100,7 +100,7 @@ describe("loadJourneyContent", () => {
       ["/cards_v2-data.json", input.cards],
       ["/exploration-data.json", exploration],
       ["/augury-data.json", CONFIG_DATA_FIXTURE.auguryData],
-      ["/dream-avatars-v2-data.json", input.dreamAvatars],
+      ["/avatars-v2-data.json", input.avatars],
       ["/dreamwell-data.json", []],
       ["/dreamsign-data.json", []],
       ["/tides4-data.json", tides],
@@ -144,9 +144,9 @@ describe("loadJourneyContent", () => {
   it("loads the current catalogs and assembles selection tuning from their owners", async () => {
     stubFetch({
       cards: [makeCard(1), makeCard(2)],
-      dreamAvatars: [
+      avatars: [
         {
-          id: testDreamAvatarId("avatar-1"),
+          id: testAvatarId("avatar-1"),
           name: "Test Avatar",
           title: "Speaker of Tests",
           renderedText: "Test rules text.",
@@ -171,7 +171,7 @@ describe("loadJourneyContent", () => {
   it("rejects when the Tides catalog is unavailable", async () => {
     stubFetch({
       cards: [makeCard(1)],
-      dreamAvatars: [],
+      avatars: [],
       failingPaths: ["/tides4-data.json"],
     });
     await expect(loadJourneyContent()).rejects.toThrow(
@@ -185,9 +185,9 @@ describe("loadJourneyContent", () => {
     stubFetch({
       cards: [makeCard(1)],
       economy,
-      dreamAvatars: [
+      avatars: [
         {
-          id: testDreamAvatarId("avatar-defaulted"),
+          id: testAvatarId("avatar-defaulted"),
           name: "Defaulted",
           title: "D",
           renderedText: "",
@@ -198,6 +198,6 @@ describe("loadJourneyContent", () => {
       ],
     });
     const content = await loadJourneyContent();
-    expect(content.dreamAvatars[0].startingEssence).toBe(137);
+    expect(content.avatars[0].startingEssence).toBe(137);
   });
 });

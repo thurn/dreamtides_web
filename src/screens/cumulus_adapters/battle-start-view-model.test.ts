@@ -7,7 +7,7 @@ expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createTestBattleInit } from "../../testing/create-battle-init";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamAvatars,
+  makeBattleTestAvatars,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../../battle/test-support";
@@ -23,7 +23,7 @@ function makeInit() {
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase,
-    dreamAvatars: makeBattleTestDreamAvatars(),
+    avatars: makeBattleTestAvatars(),
     dreamwellCards: [],
     seedOverride: 1234,
   });
@@ -68,7 +68,7 @@ describe("buildBattleStartView", () => {
       kind: "dreamscape-scene",
       dreamscapeId: testDreamscapeId("test_dreamscape"),
     });
-    expect(view.dreamAvatar).toMatchObject({
+    expect(view.avatar).toMatchObject({
       id: "opponent-uuid",
       name: "The Long-Named Opponent",
       title: "Keeper of the Last Horizon",
@@ -98,7 +98,7 @@ describe("buildBattleStartView", () => {
       cardDatabase,
     );
 
-    expect(view.dreamAvatar.abilityActive).toBe(false);
+    expect(view.avatar.abilityActive).toBe(false);
   });
 
   it("maps authored Mira guidance for the first two tutorial-journey battles", () => {

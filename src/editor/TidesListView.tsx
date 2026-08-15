@@ -3,13 +3,13 @@ import type { Tides4DeckJson, Tides4Role } from "../draft/pool/tides4-io";
 import { tideColorChip } from "./tide-visuals";
 import { TideSourcePreview } from "./TideSourcePreview";
 import { StandaloneGlyph } from "../cumulus/components/controls/StandaloneGlyph";
-import type { EditorDreamAvatar } from "./tides-types";
+import type { EditorAvatar } from "./tides-types";
 import type { CardId } from "../types/card-identity";
-import type { DreamAvatarId, TideId } from "../types/identifiers";
+import type { AvatarId, TideId } from "../types/identifiers";
 
 interface TidesListViewProps {
   tides: readonly Tides4DeckJson[];
-  dreamAvatarById: ReadonlyMap<DreamAvatarId, EditorDreamAvatar>;
+  avatarById: ReadonlyMap<AvatarId, EditorAvatar>;
   cardById: ReadonlyMap<CardId, CardData>;
   onSelectTide: (tideId: TideId) => void;
 }
@@ -45,12 +45,12 @@ function tideCardCount(tide: Tides4DeckJson): number {
 
 function TideTile({
   tide,
-  dreamAvatarById,
+  avatarById,
   cardById,
   onSelectTide,
 }: {
   tide: Tides4DeckJson;
-  dreamAvatarById: ReadonlyMap<DreamAvatarId, EditorDreamAvatar>;
+  avatarById: ReadonlyMap<AvatarId, EditorAvatar>;
   cardById: ReadonlyMap<CardId, CardData>;
   onSelectTide: (tideId: TideId) => void;
 }) {
@@ -88,7 +88,7 @@ function TideTile({
       >
         <TideSourcePreview
           tide={tide}
-          dreamAvatarById={dreamAvatarById}
+          avatarById={avatarById}
           cardById={cardById}
           size={thumbSize}
         />
@@ -133,7 +133,7 @@ function TideTile({
 
 export default function TidesListView({
   tides,
-  dreamAvatarById,
+  avatarById,
   cardById,
   onSelectTide,
 }: TidesListViewProps) {
@@ -184,7 +184,7 @@ export default function TidesListView({
                 <TideTile
                   key={tide.id}
                   tide={tide}
-                  dreamAvatarById={dreamAvatarById}
+                  avatarById={avatarById}
                   cardById={cardById}
                   onSelectTide={onSelectTide}
                 />

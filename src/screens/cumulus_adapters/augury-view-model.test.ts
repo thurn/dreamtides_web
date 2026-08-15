@@ -229,7 +229,7 @@ function mappingContentWithTide() {
               })),
             },
           ],
-          tidePoolByDreamAvatar: {},
+          tidePoolByAvatar: {},
         },
       },
     },

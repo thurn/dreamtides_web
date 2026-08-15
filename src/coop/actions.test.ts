@@ -42,7 +42,7 @@ import { parseTutorialRunId } from "../types/identifiers";
 import { parseCardTutorialScreenKey } from "../types/identifiers";
 import { parseIntentKey } from "../types/identifiers";
 import { parseFrontDoorActionId } from "../types/identifiers";
-import { testCardId, testDreamAvatarId, testDreamsignId, testExplorationActionId, testTutorialActionId } from "../types/test-identities";
+import { testCardId, testAvatarId, testDreamsignId, testExplorationActionId, testTutorialActionId } from "../types/test-identities";
 
 const GENESIS: Genesis = {
   seed: testJourneySeed("actions-test-seed"),
@@ -112,8 +112,8 @@ function captureAllDrafts(): EventDraft[] {
   void actions.startJourney({});
   void actions.resetJourney();
   void actions.loadState({});
-  void actions.selectDreamAvatar(testDreamAvatarId("dc-1"));
-  void actions.rerollDreamAvatarOffer();
+  void actions.selectAvatar(testAvatarId("dc-1"));
+  void actions.rerollAvatarOffer();
   void actions.enterSite(parseSiteId("site-1"));
   void actions.travelToDreamscape(parseAtlasNodeId("node-1"));
   void actions.regenerateAtlas();

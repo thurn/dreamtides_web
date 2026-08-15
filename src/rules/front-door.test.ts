@@ -10,7 +10,7 @@ import {
 import { registerTutorialFrontDoorContentProvider } from "./front-door";
 import { genesisFoldState } from "./fold-state";
 import { reduceGameEvent } from "./reducer";
-import { testTutorialActionId, testDreamAvatarId } from "../types/test-identities";
+import { testTutorialActionId, testAvatarId } from "../types/test-identities";
 
 const TUTORIAL_OPPONENT_CARD_ID =
   TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId;
@@ -20,7 +20,7 @@ const TUTORIAL_PLAYER_CARD_ID =
 beforeEach(() => {
   registerTutorialFrontDoorContentProvider({
     playerCardId: TUTORIAL_PLAYER_CARD_ID,
-    journeyDreamAvatarId: testDreamAvatarId(TEST_TUTORIAL_PLAYER_AVATAR_ID),
+    journeyAvatarId: testAvatarId(TEST_TUTORIAL_PLAYER_AVATAR_ID),
   });
 });
 

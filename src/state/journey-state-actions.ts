@@ -1,6 +1,6 @@
 import { generateInitialAtlas } from "../atlas/atlas-generator";
-import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
-import { buildDreamAvatarPackage } from "../data/journey-content";
+import { toJourneyAvatar } from "../data/avatar-selection";
+import { buildAvatarPackage } from "../data/journey-content";
 import type { JourneyContent } from "../data/journey-content";
 import {
   DEFAULT_DRAFT_CONFIG,
@@ -9,8 +9,8 @@ import {
 } from "../draft/draft-engine";
 import type { CardData } from "../types/cards";
 import type {
-  DreamAvatarContent,
-  ResolvedDreamAvatarPackage,
+  AvatarContent,
+  ResolvedAvatarPackage,
 } from "../types/content";
 import type {
   DeckEntry,
@@ -477,9 +477,9 @@ export function generateJourneySeed(): JourneySeed {
   return parseJourneySeed(`${part()}${part()}${part()}${part()}`);
 }
 
-export function startJourneyFromDreamAvatar({
+export function startJourneyFromAvatar({
   prev,
-  dreamAvatar,
+  avatar,
   journeyContent,
   seedOverride,
   atlasRng,
@@ -487,7 +487,7 @@ export function startJourneyFromDreamAvatar({
   isTutorialJourney = false,
 }: {
   prev: JourneyState;
-  dreamAvatar: DreamAvatarContent;
+  avatar: AvatarContent;
   journeyContent: JourneyContent;
   /**
    * Optional caller-supplied per-journey seed. The multiplayer provider passes
@@ -505,7 +505,7 @@ export function startJourneyFromDreamAvatar({
    */
   atlasRng?: () => number;
   /** Authored package for flows such as the tutorial journey handoff. */
-  resolvedPackageOverride?: ResolvedDreamAvatarPackage;
+  resolvedPackageOverride?: ResolvedAvatarPackage;
   /** Marks the assembled run as the authored tutorial journey. */
   isTutorialJourney?: boolean;
 }): JourneyState {
@@ -513,12 +513,12 @@ export function startJourneyFromDreamAvatar({
   const poolContext = journeyContent.poolContext;
   if (poolContext === undefined) {
     throw new Error(
-      "startJourneyFromDreamAvatar: journeyContent.poolContext is required",
+      "startJourneyFromAvatar: journeyContent.poolContext is required",
     );
   }
   const resolvedPackage =
     resolvedPackageOverride ??
-    buildDreamAvatarPackage(dreamAvatar, poolContext, seed);
+    buildAvatarPackage(avatar, poolContext, seed);
 
   const deck = [...prev.deck];
   for (const cardNumber of poolContext.starterCardNumbers) {
@@ -577,10 +577,10 @@ export function startJourneyFromDreamAvatar({
     ...prev,
     seed,
     isTutorialJourney,
-    essence: dreamAvatar.startingEssence,
+    essence: avatar.startingEssence,
     maxDreamsigns: journeyContent.economyData.journey.dreamsignCap,
     deck,
-    dreamAvatar: toJourneyDreamAvatar(dreamAvatar),
+    avatar: toJourneyAvatar(avatar),
     resolvedPackage,
     remainingDreamsignPool,
     draftState,

@@ -1,22 +1,22 @@
 // Opponent descriptor primitives for the Battle site. Every battle uses
 // this module's helpers —
-// `selectOpponentDreamAvatar`, `buildOpponentDreamsigns`,
+// `selectOpponentAvatar`, `buildOpponentDreamsigns`,
 // `resolveBattleAffiliation`, and the run-scaling helpers — to assemble the
-// enemy DreamAvatar, its dreamsigns (none in early battles; one from the run
+// enemy Avatar, its dreamsigns (none in early battles; one from the run
 // midpoint onward), and the affiliation the deck leans toward.
 import type {
   AffiliationContent,
-  DreamAvatarContent,
+  AvatarContent,
   DreamscapeContent,
   DreamsignTemplate,
 } from "../../types/content";
 import type { DreamscapeNode } from "../../types/journey";
 import { resolveNodeAffiliation } from "../../affiliations/affiliation-weights";
 import type { BattleRng } from "../random";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 
 /**
- * Whether the opposing DreamAvatar's ability is active at this run layer.
+ * Whether the opposing Avatar's ability is active at this run layer.
  * The opening battle is the sole dormant layer.
  */
 export function opponentAbilityIsActive(
@@ -47,41 +47,41 @@ export function opponentCarriesDreamsign(
 }
 
 /**
- * Deterministically selects the opponent DreamAvatar for a battle from the run's
- * `dreamAvatars`. The choice is pinned to the battle seed so it is reproducible
- * per battle entry, and the player's own DreamAvatar is excluded when another
+ * Deterministically selects the opponent Avatar for a battle from the run's
+ * `avatars`. The choice is pinned to the battle seed so it is reproducible
+ * per battle entry, and the player's own Avatar is excluded when another
  * candidate exists (the player should face a different rival each battle). Returns
- * `null` only when there are no DreamAvatars at all.
+ * `null` only when there are no Avatars at all.
  *
- * When `eligibleDreamAvatarIds` is supplied and non-empty the candidate pool is
- * first narrowed to that set — the resident DreamAvatars of a dreamscape, so the
+ * When `eligibleAvatarIds` is supplied and non-empty the candidate pool is
+ * first narrowed to that set — the resident Avatars of a dreamscape, so the
  * opponent faced in a dreamscape is one of its own residents. The ids are matched
  * case-insensitively. An empty or absent list (e.g. the starter dreamscape, which
  * has no residents) imposes no restriction and the full roster is used. If the
  * restriction would empty the pool it is ignored, so a non-empty roster always
- * yields a DreamAvatar.
+ * yields an Avatar.
  */
-export function selectOpponentDreamAvatar(
-  dreamAvatars: readonly DreamAvatarContent[],
-  playerDreamAvatarId: DreamAvatarId | null,
+export function selectOpponentAvatar(
+  avatars: readonly AvatarContent[],
+  playerAvatarId: AvatarId | null,
   rng: BattleRng,
-  eligibleDreamAvatarIds?: readonly DreamAvatarId[] | null,
-): DreamAvatarContent | null {
-  if (dreamAvatars.length === 0) {
+  eligibleAvatarIds?: readonly AvatarId[] | null,
+): AvatarContent | null {
+  if (avatars.length === 0) {
     return null;
   }
-  let roster = dreamAvatars;
-  if (eligibleDreamAvatarIds != null && eligibleDreamAvatarIds.length > 0) {
+  let roster = avatars;
+  if (eligibleAvatarIds != null && eligibleAvatarIds.length > 0) {
     const eligible = new Set(
-      eligibleDreamAvatarIds.map((id) => id.toLowerCase()),
+      eligibleAvatarIds.map((id) => id.toLowerCase()),
     );
-    const resident = dreamAvatars.filter((dreamAvatar) =>
-      eligible.has(dreamAvatar.id.toLowerCase()),
+    const resident = avatars.filter((avatar) =>
+      eligible.has(avatar.id.toLowerCase()),
     );
     if (resident.length > 0) roster = resident;
   }
   const candidates = roster.filter(
-    (dreamAvatar) => dreamAvatar.id !== playerDreamAvatarId,
+    (avatar) => avatar.id !== playerAvatarId,
   );
   const pool = candidates.length > 0 ? candidates : roster;
   return pool[rng.nextInt(pool.length)];

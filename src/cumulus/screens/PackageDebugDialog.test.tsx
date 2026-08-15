@@ -8,7 +8,7 @@ import { PackageDebugDialog, type PackageDebugView } from "./PackageDebugDialog"
 
 const EMPTY_VIEW: PackageDebugView = {
   values: [],
-  dreamAvatar: null,
+  avatar: null,
   validation: [],
   remainingDreamsigns: [],
   spentDreamsigns: [],

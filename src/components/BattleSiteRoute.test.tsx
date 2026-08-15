@@ -20,7 +20,7 @@ import type { FoldState } from "../rules/fold-state";
 import type { CardSourceDebugState, Screen, SiteState } from "../types/journey";
 import {
   makeBattleTestCardDatabase,
-  makeBattleTestDreamAvatars,
+  makeBattleTestAvatars,
   makeBattleTestSite,
   makeBattleTestState,
 } from "../battle/test-support";
@@ -116,7 +116,7 @@ function makeFoldStateWithBattle(): FoldState {
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
-    dreamAvatars: makeBattleTestDreamAvatars(),
+    avatars: makeBattleTestAvatars(),
     dreamwellCards: [],
     seedOverride: 1234,
   });
@@ -184,7 +184,7 @@ function setJourneyState(
       ...CONFIG_DATA_FIXTURE,
       draftData: draftDataFixture(),
       cardDatabase: makeBattleTestCardDatabase(),
-      dreamAvatars: makeBattleTestDreamAvatars(),
+      avatars: makeBattleTestAvatars(),
       dreamwellCards: [],
       dreamsignTemplates: [],
       dreamscapes: MINIMAL_DREAMSCAPES,
@@ -326,7 +326,7 @@ describe("BattleSiteRoute", () => {
       container.querySelector('[data-journey-status-bar-variant="battle"]'),
     ).not.toBeNull();
     expect(container.querySelector('[aria-label^="View deck"]')).toBeNull();
-    expect(container.querySelector('[aria-label="DreamAvatar"]')).toBeNull();
+    expect(container.querySelector('[aria-label="Avatar"]')).toBeNull();
   });
 
   it("opens the Cumulus playable surface when the playable QA scene loads a battle", () => {
@@ -451,7 +451,7 @@ describe("BattleSiteRoute", () => {
       />,
     );
 
-    // The opposing DreamAvatar is revealed before the playable surface mounts.
+    // The opposing Avatar is revealed before the playable surface mounts.
     const startScreen = container.querySelector(
       '[data-screen="cumulus-battle-start"]',
     );

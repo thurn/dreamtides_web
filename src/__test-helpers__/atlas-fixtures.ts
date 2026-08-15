@@ -44,7 +44,7 @@ export const MINIMAL_DREAMSCAPES: DreamscapeContent[] = [
     isStarter: true,
     atlasDescription: "Fixture starter description",
     fixedSites: ["Draft", "Draft", "Battle"],
-    dreamAvatarIds: [],
+    avatarIds: [],
   },
 ];
 
@@ -75,7 +75,7 @@ export const SYNTHETIC_ATLAS_DREAMSCAPES: DreamscapeContent[] = [
     signatureSite,
     affiliationId: testAffiliationId(`fixture-affiliation-${String(index)}`),
     isStarter: false,
-    dreamAvatarIds: [],
+    avatarIds: [],
   })),
 ];
 

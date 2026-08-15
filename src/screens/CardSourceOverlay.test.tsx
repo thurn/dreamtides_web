@@ -4,7 +4,7 @@ import { resolveSource } from "../runtime/localization/runtime";
 import type { Tides4ProvenanceSummary } from "../types/content";
 import type { CardSourceDebugState } from "../types/journey";
 import { buildCardSourceView } from "./cumulus_adapters/card-source-view-model";
-import { testDreamAvatarId, testTideId } from "../types/test-identities";
+import { testAvatarId, testTideId } from "../types/test-identities";
 
 const DEBUG: CardSourceDebugState = {
   screenLabel: "Draft",
@@ -13,7 +13,7 @@ const DEBUG: CardSourceDebugState = {
 };
 
 const PROVENANCE: Tides4ProvenanceSummary = {
-  dreamAvatarId: testDreamAvatarId("avatar-a"),
+  avatarId: testAvatarId("avatar-a"),
   signatureless: false,
   borrowedArchetypeName: null,
   dealSize: 150,

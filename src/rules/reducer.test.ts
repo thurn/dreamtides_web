@@ -28,7 +28,7 @@ import type { BattleCardId } from "../types/identifiers";
 import { parseBattleId } from "../types/identifiers";
 import { parseBattleCardId } from "../types/identifiers";
 import { parseNoteId } from "../types/identifiers";
-import { testCardId, testDreamAvatarId, testFoldHash } from "../types/test-identities";
+import { testCardId, testAvatarId, testFoldHash } from "../types/test-identities";
 
 // ---------------------------------------------------------------------------
 // Fixtures
@@ -653,8 +653,8 @@ describe("reducer containment at the foldEvents layer", () => {
     // A lifecycle provider whose START_JOURNEY assembly THROWS — a stand-in for a
     // programmer error deep inside a domain case (the reducer never swallows it).
     registerJourneyLifecycleContentProvider({
-      resolveDreamAvatarPackage: () => {
-        throw new Error("resolveDreamAvatarPackage exploded");
+      resolveAvatarPackage: () => {
+        throw new Error("resolveAvatarPackage exploded");
       },
       startJourney: () => {
         throw new Error("startJourney exploded");
@@ -666,7 +666,7 @@ describe("reducer containment at the foldEvents layer", () => {
         {
           seq: 1,
           event: event("START_JOURNEY", {
-            dreamAvatarId: testDreamAvatarId("dc-x"),
+            avatarId: testAvatarId("dc-x"),
           }),
         },
       ];

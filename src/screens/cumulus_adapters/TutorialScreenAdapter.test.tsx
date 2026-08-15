@@ -9,7 +9,7 @@ import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { getLogEntries, resetLog } from "../../logging";
 import { TutorialScreenAdapter } from "./TutorialScreenAdapter";
 import type { TutorialScreenProps } from "../../cumulus/screens/TutorialScreen";
-import type { DreamAvatarContent } from "../../types/content";
+import type { AvatarContent } from "../../types/content";
 import { makeTutorialConfiguration } from "../../test/tutorial-configuration-fixture";
 import type { CardId } from "../../types/card-identity";
 import { parseBattleId } from "../../types/identifiers";
@@ -19,7 +19,7 @@ import { parseBattleSlotViewId } from "../../types/identifiers";
 import {
   testCardId,
   testDreamwellCardId,
-  testDreamAvatarId,
+  testAvatarId,
   testJourneyId,
   testTutorialActionId,
   testTutorialRunId,
@@ -34,9 +34,9 @@ const TUTORIAL_CONFIGURATION = makeTutorialConfiguration();
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
-const DREAM_AVATARS: readonly DreamAvatarContent[] = [
+const AVATARS: readonly AvatarContent[] = [
   {
-    id: testDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
+    id: testAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
     name: "Gunnar Deepforge",
     title: "The Hammer's Echo",
     renderedText: "Player ability.",
@@ -45,7 +45,7 @@ const DREAM_AVATARS: readonly DreamAvatarContent[] = [
     startingEssence: 0,
   },
   {
-    id: testDreamAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
+    id: testAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
     name: "Threxan",
     title: "the Resounding Wrath",
     renderedText: "Opponent ability.",
@@ -85,8 +85,8 @@ const tutorialState: NonNullable<FrontDoorState["tutorial"]> = {
         wait: 3,
       },
       {
-        id: testTutorialActionId("dream-avatar-arrival"),
-        action: "animate-dream-avatar-portrait",
+        id: testTutorialActionId("avatar-arrival"),
+        action: "animate-avatar-portrait",
         owner: "player",
         pause: 1,
         duration: 0.6,
@@ -269,7 +269,7 @@ describe("TutorialScreenAdapter", () => {
     await act(async () => {
       root.render(
         <CumulusRoot>
-          <TutorialScreenAdapter dreamAvatars={DREAM_AVATARS} />
+          <TutorialScreenAdapter avatars={AVATARS} />
         </CumulusRoot>,
       );
       await Promise.resolve();
@@ -298,7 +298,7 @@ describe("TutorialScreenAdapter", () => {
       root.render(
         <CumulusRoot>
           <TutorialScreenAdapter
-            dreamAvatars={DREAM_AVATARS}
+            avatars={AVATARS}
             playbackSpeed={4}
           />
         </CumulusRoot>,
@@ -308,7 +308,7 @@ describe("TutorialScreenAdapter", () => {
 
     expect(container.querySelector("[data-tutorial-screen]")).not.toBeNull();
     expect(adapterMocks.props?.playbackSpeed).toBe(4);
-    expect(adapterMocks.props?.view.dreamAvatars.player.visual).toMatchObject({
+    expect(adapterMocks.props?.view.avatars.player.visual).toMatchObject({
       imageNumber: "0108",
       name: "Gunnar Deepforge",
       title: "The Hammer's Echo",
@@ -320,7 +320,7 @@ describe("TutorialScreenAdapter", () => {
           actionCount: 7,
           actionIds: [
             testTutorialActionId("welcome"),
-            testTutorialActionId("dream-avatar-arrival"),
+            testTutorialActionId("avatar-arrival"),
             testTutorialActionId("nightmare-call"),
             testTutorialActionId("how-to-play"),
             testTutorialActionId("end-turn"),
@@ -331,8 +331,8 @@ describe("TutorialScreenAdapter", () => {
         expect.objectContaining({
           event: "tutorial_action_presented",
           runId: "event:1",
-          actionId: testTutorialActionId("dream-avatar-arrival"),
-          action: "animate-dream-avatar-portrait",
+          actionId: testTutorialActionId("avatar-arrival"),
+          action: "animate-avatar-portrait",
           dialogueVisible: false,
           dialogueText: null,
           owner: "player",
@@ -345,21 +345,21 @@ describe("TutorialScreenAdapter", () => {
     );
 
     act(() => {
-      adapterMocks.props?.onDreamAvatarArrivalComplete?.(
-        testDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
+      adapterMocks.props?.onAvatarArrivalComplete?.(
+        testAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
         "player",
       );
     });
     expect(getLogEntries()).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          event: "tutorial_dream_avatar_arrived",
+          event: "tutorial_avatar_arrived",
           battleId: parseBattleId("tutorial-battle"),
-          dreamAvatarId: testDreamAvatarId(
+          avatarId: testAvatarId(
             "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
           ),
           owner: "player",
-          actionId: testTutorialActionId("dream-avatar-arrival"),
+          actionId: testTutorialActionId("avatar-arrival"),
           abilityActive: false,
         }),
       ]),
@@ -382,7 +382,7 @@ describe("TutorialScreenAdapter", () => {
     await act(async () => {
       root.render(
         <CumulusRoot>
-          <TutorialScreenAdapter dreamAvatars={DREAM_AVATARS} />
+          <TutorialScreenAdapter avatars={AVATARS} />
         </CumulusRoot>,
       );
       await Promise.resolve();
@@ -547,7 +547,7 @@ describe("TutorialScreenAdapter", () => {
     await act(async () => {
       root.render(
         <CumulusRoot>
-          <TutorialScreenAdapter dreamAvatars={DREAM_AVATARS} />
+          <TutorialScreenAdapter avatars={AVATARS} />
         </CumulusRoot>,
       );
       await Promise.resolve();
@@ -600,7 +600,7 @@ describe("TutorialScreenAdapter", () => {
     await act(async () => {
       root.render(
         <CumulusRoot>
-          <TutorialScreenAdapter dreamAvatars={DREAM_AVATARS} />
+          <TutorialScreenAdapter avatars={AVATARS} />
         </CumulusRoot>,
       );
       await Promise.resolve();

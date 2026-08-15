@@ -53,7 +53,7 @@ describe("JourneyStatusBar documentation demo", () => {
 
   it("provides presentation-ready collectible art in its default model", () => {
     const defaults = journeyStatusBarDemo.demo.defaultArgs;
-    const dreamAvatar = defaults.dreamAvatar as {
+    const avatar = defaults.avatar as {
       readonly id?: unknown;
       readonly portrait?: { readonly kind?: string };
     };
@@ -63,8 +63,8 @@ describe("JourneyStatusBar documentation demo", () => {
       readonly imageAlt?: unknown;
     }[];
 
-    expect(dreamAvatar.id).toMatch(/^[0-9a-f-]{36}$/);
-    expect(dreamAvatar.portrait?.kind).toBe("dreamAvatar");
+    expect(avatar.id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(avatar.portrait?.kind).toBe("avatar");
     expect(dreamsigns).toHaveLength(3);
     for (const dreamsign of dreamsigns) {
       expect(dreamsign.id).toMatch(/^[0-9a-f-]{36}$/);

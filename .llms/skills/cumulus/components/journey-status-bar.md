@@ -19,7 +19,7 @@ The persistent, transparent bottom HUD for journey screens. Its journey variant 
 | `dreamsigns` | `LocalizedDreamsign[]` | no | `[]` | The Dreamsigns to dock. Journey overflow opens a viewer; battle Dreamsigns flow bottom-up and right-to-left in two-high columns. |
 | `deck` | `number` | no | `0` | Deck size (used in the deck button's aria-label). |
 | `onViewDeck` | `(() => void)` | no | — | Open the deck viewer — fired on a tap / click of the deck sprite. |
-| `dreamAvatar` | `QsbDreamAvatar` | no | — |  |
+| `avatar` | `QsbAvatar` | no | — |  |
 | `size` | `"compact" \| "grand"` | no | `compact` | HUD size. `compact` (default) is the mobile / touch size; `grand` is the larger desktop size the dreamscape screen picks above the wide-viewport breakpoint. |
 | `variant` | `"journey" \| "battle"` | no | `journey` | Content arrangement. `journey` shows the complete run inventory; `battle` keeps only essence at the lower start edge and bottom-up, right-to-left Dreamsign columns at the lower end edge of the playable battle board. |
 
@@ -33,20 +33,20 @@ The persistent, transparent bottom HUD for journey screens. Its journey variant 
 | `imageName` | `string` | yes | Hosted art key. |
 | `imageAlt` | `LocalizedString` | no | Localized alternative text for the art. |
 
-### `dreamAvatar`: the `QsbDreamAvatar` model
+### `avatar`: the `QsbAvatar` model
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `DreamAvatarId` | no | Stable DreamAvatar UUID. |
+| `id` | `AvatarId` | no | Stable Avatar UUID. |
 | `name` | `LocalizedString` | no |  |
 | `epithet` | `LocalizedString` | yes |  |
-| `portrait` | `ArtRef` | no | The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art. |
-| `portraitFocus` | `DreamAvatarPortraitFocus` | yes | Normalized head position used to center the square HUD crop. |
+| `portrait` | `ArtRef` | no | The portrait art as an {@link ArtRef}. Required — a docked Avatar always has art. |
+| `portraitFocus` | `AvatarPortraitFocus` | yes | Normalized head position used to center the square HUD crop. |
 | `ability` | `LocalizedString` | yes |  |
 
 ## Usage
 
-A transparent HUD that positions itself against the screen root and reveals the DreamAvatar / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it. Mobile screen-level floating glass panels use `JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE` for their bottom edge so every screen preserves the same separation from the HUD.
+A transparent HUD that positions itself against the screen root and reveals the Avatar / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root. Its shared bottom anchor adds one small visible gap after the real device safe area; screens should not reposition it. Mobile screen-level floating glass panels use `JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE` for their bottom edge so every screen preserves the same separation from the HUD.
 
 ```tsx
 import { useRef } from "react";
@@ -60,7 +60,7 @@ const stageRef = useRef<HTMLDivElement>(null);
     stageRef={stageRef}
     essence={200}
     deck={22}
-    dreamAvatar={dreamAvatar}
+    avatar={avatar}
     dreamsigns={dreamsigns}
   />
 </div>

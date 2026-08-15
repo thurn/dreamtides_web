@@ -402,7 +402,7 @@ function sourceOptionLabel(source: PoolViewerSourceId): LocalizedString {
     case "signature":
       return tx(
         "Signature Cards",
-        "[dream-avatar] Collection label for the active Dream Avatar's authored signature cards.",
+        "[avatar] Collection label for the active Avatar's authored signature cards.",
       );
   }
 }
@@ -427,7 +427,7 @@ function emptySourceLabel(source: PoolViewerSourceId): LocalizedString {
     case "signature":
       return tx(
         "This avatar has no signature cards.",
-        "[dream-avatar] [pool-viewer] Visible Pool Viewer empty-state sentence when the Dream Avatar has no authored signature cards.",
+        "[avatar] [pool-viewer] Visible Pool Viewer empty-state sentence when the Avatar has no authored signature cards.",
       );
   }
 }

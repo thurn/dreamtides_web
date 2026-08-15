@@ -15,7 +15,7 @@ import type { RewardSelectionContext, RewardSelectionRequest } from "./types";
 import { parseSiteId } from "../types/identifiers";
 import { parseDeckEntryId } from "../types/identifiers";
 import { parseSelectionKey } from "../types/identifiers";
-import { testDreamAvatarId, testCardId, testDreamsignId } from "../types/test-identities";
+import { testAvatarId, testCardId, testDreamsignId } from "../types/test-identities";
 
 const ids = Array.from({ length: 10 }, (_, index) =>
   testCardId(`a0000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`),
@@ -266,9 +266,9 @@ describe("shared reward selection", () => {
       journeyState: journey,
       journeyContent: {
         ...makeMerchantTestContent({ cards }),
-        dreamAvatars: [
+        avatars: [
           {
-            id: testDreamAvatarId("selection-avatar"),
+            id: testAvatarId("selection-avatar"),
             name: "Selection Avatar",
             title: "Synthetic",
             renderedText: "A synthetic ability.",

@@ -25,7 +25,7 @@ import {
   type ExplorationPredicate,
 } from "../../data/exploration";
 import { createDreamsign } from "../../data/dreamsigns";
-import { toJourneyDreamAvatar } from "../../data/dream-avatar-selection";
+import { toJourneyAvatar } from "../../data/avatar-selection";
 import type { JourneyContent } from "../../data/journey-content";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
@@ -63,7 +63,7 @@ import { localizedTransfigurationPresentation } from "../../cumulus/components/c
 import type { GuideId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import type { DreamsignId } from "../../types/identifiers";
-import type { DreamAvatarId } from "../../types/identifiers";
+import type { AvatarId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { IdentityRecord } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
@@ -138,15 +138,15 @@ function dreamsignById(
   return template === undefined ? null : createDreamsign(template);
 }
 
-function dreamAvatarById(
+function avatarById(
   content: JourneyContent,
-  dreamAvatarId: DreamAvatarId,
+  avatarId: AvatarId,
 ) {
-  const normalized = dreamAvatarId.toLowerCase();
-  const dreamAvatar = content.dreamAvatars.find(
+  const normalized = avatarId.toLowerCase();
+  const avatar = content.avatars.find(
     (candidate) => candidate.id.toLowerCase() === normalized,
   );
-  return dreamAvatar === undefined ? null : toJourneyDreamAvatar(dreamAvatar);
+  return avatar === undefined ? null : toJourneyAvatar(avatar);
 }
 
 function modelForCard(card: CardData): GameCardModel {
@@ -1125,9 +1125,9 @@ function followupForAction(
         selectionKey: "dreamsignId",
         dreamsigns: heldDreamsignChoices(state),
       };
-    case "choose-dream-avatar":
+    case "choose-avatar":
       return {
-        kind: "dreamAvatars",
+        kind: "avatars",
         title: configuredFollowupCopy(
           action,
           content,
@@ -1138,11 +1138,11 @@ function followupForAction(
           action,
           content,
           "followupSubtitle",
-          "Choose your new Dream Avatar.",
+          "Choose your new Avatar.",
         ),
-        dreamAvatars: (offer.offeredDreamAvatarIds ?? []).flatMap((id) => {
-          const dreamAvatar = dreamAvatarById(content, id);
-          return dreamAvatar === null ? [] : [dreamAvatar];
+        avatars: (offer.offeredAvatarIds ?? []).flatMap((id) => {
+          const avatar = avatarById(content, id);
+          return avatar === null ? [] : [avatar];
         }),
       };
     case "gain-card":
@@ -2515,8 +2515,8 @@ function actionView(
                                     "purge-random-subtype-and-increase-spark"
                                   ? (offer.offeredDeckEntryIds?.length ?? 0) ===
                                     1
-                                  : action.effectKind === "choose-dream-avatar"
-                                    ? (offer.offeredDreamAvatarIds?.length ??
+                                  : action.effectKind === "choose-avatar"
+                                    ? (offer.offeredAvatarIds?.length ??
                                         0) > 0
                                     : action.effectKind === "add-site"
                                       ? offer.offeredSiteType !== undefined
@@ -2535,7 +2535,7 @@ function actionView(
       (followup.kind === "dreamsigns" && followup.dreamsigns.length > 0) ||
       (followup.kind === "dreamsign-flow" &&
         (followup.offered.length > 0 || followup.held.length > 0)) ||
-      (followup.kind === "dreamAvatars" && followup.dreamAvatars.length > 0) ||
+      (followup.kind === "avatars" && followup.avatars.length > 0) ||
       (followup.kind === "site-types" && followup.choices.length > 0));
   const effect = buildExplorationActionEffect(
     action,
@@ -4249,16 +4249,16 @@ function rewardForResolution(
       };
     }
   }
-  if (resolvedAction?.effectKind === "choose-dream-avatar") {
-    const currentId = resolution.chosenDreamAvatarId;
+  if (resolvedAction?.effectKind === "choose-avatar") {
+    const currentId = resolution.chosenAvatarId;
     const current =
-      currentId === undefined ? null : dreamAvatarById(content, currentId);
+      currentId === undefined ? null : avatarById(content, currentId);
     const previous =
-      resolution.previousDreamAvatarId === undefined
+      resolution.previousAvatarId === undefined
         ? null
-        : dreamAvatarById(content, resolution.previousDreamAvatarId);
+        : avatarById(content, resolution.previousAvatarId);
     if (current !== null) {
-      return { kind: "dream-avatar", previous, current };
+      return { kind: "avatar", previous, current };
     }
   }
   if (

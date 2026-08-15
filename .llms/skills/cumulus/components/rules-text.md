@@ -22,8 +22,8 @@ The canonical Dreamtides rules-copy source: resource symbols and keywords render
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `"card" \| "dreamAvatar" \| "opponentDreamAvatar" \| "dreamsign" \| "dreamwellCard"` | no |  |
-| `id` | `DreamAvatarId \| OpponentId \| DreamwellCardId \| CardId \| DreamsignId` | no |  |
+| `kind` | `"card" \| "avatar" \| "opponentAvatar" \| "dreamsign" \| "dreamwellCard"` | no |  |
+| `id` | `AvatarId \| OpponentId \| DreamwellCardId \| CardId \| DreamsignId` | no |  |
 
 ## Usage
 

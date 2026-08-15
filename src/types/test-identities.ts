@@ -25,7 +25,7 @@ import {
   parseArtAssetKey,
   parseBattleCardId,
   parseClientId,
-  parseDreamAvatarId,
+  parseAvatarId,
   parseDreamscapeId,
   parseDreamsignId,
   parseDreamwellCardId,
@@ -56,7 +56,7 @@ import {
   type ArtAssetKey,
   type BattleCardId,
   type ClientId,
-  type DreamAvatarId,
+  type AvatarId,
   type DreamscapeId,
   type DreamsignId,
   type DreamwellCardId,
@@ -136,8 +136,8 @@ export const testApollyonIncarnationId = (
 ): ApollyonIncarnationId => parseApollyonIncarnationId(testUuid(seed));
 export const testAffiliationId = (seed: string): AffiliationId =>
   parseAffiliationId(testUuid(seed));
-export const testDreamAvatarId = (seed: string): DreamAvatarId =>
-  parseDreamAvatarId(testUuid(seed));
+export const testAvatarId = (seed: string): AvatarId =>
+  parseAvatarId(testUuid(seed));
 export const testDreamscapeId = (seed: string): DreamscapeId =>
   parseDreamscapeId(seed);
 export const testDreamsignId = (seed: string): DreamsignId =>

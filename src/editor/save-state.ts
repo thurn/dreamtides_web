@@ -1,6 +1,6 @@
 import type { CardId } from "../types/card-identity";
 import type {
-  DreamAvatarId,
+  AvatarId,
   DreamscapeId,
   DreamsignId,
   DreamwellCardId,
@@ -39,7 +39,7 @@ export type EditableFieldStatus =
 
 export type EditorEntityId =
   | CardId
-  | DreamAvatarId
+  | AvatarId
   | DreamscapeId
   | DreamsignId
   | DreamwellCardId

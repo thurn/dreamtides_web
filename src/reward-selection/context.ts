@@ -19,7 +19,7 @@ const EMPTY_TIDES: Tides4DecksJson = {
   version: 2,
   selection: { bandFraction: 0.25, bandMinimum: 5 },
   tides: [],
-  tidePoolByDreamAvatar: {},
+  tidePoolByAvatar: {},
 };
 
 function draftPoolUuids(
@@ -51,7 +51,7 @@ function selectionContentRevision(content: JourneyContent): SelectionContentRevi
       (left, right) =>
         (left.id ?? "").localeCompare(right.id ?? ""),
     ),
-    dreamAvatars: [...content.dreamAvatars].sort((left, right) =>
+    avatars: [...content.avatars].sort((left, right) =>
       left.id.localeCompare(right.id),
     ),
     tides: content.poolContext?.poolData.tides4Decks,
