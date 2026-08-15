@@ -1562,7 +1562,6 @@
     name: Tx("Bloom Guard"),
     id: "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c",
     ability_text: [Tx("▸Materialized, Dissolved: Draw a card.")],
-    amplified_text: [Tx("▸Materialized, Dissolved: Draw 2 cards.")],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     rarity: Uncommon,
@@ -3144,7 +3143,6 @@
     ability_text: [
       Tx("When you materialize a character, awaken each other character you control."),
     ],
-    amplified_text: [Tx("When you materialize a character, awaken each character you control.")],
     energy_cost: Fixed(4),
     kind: Character(subtype: "Monster", spark: Fixed(2)),
     rarity: Rare,
@@ -4235,10 +4233,6 @@
       Tx("☾, Discard a card: Erode 2."),
       Tx("4●, Abandon this character: Return a character from your void to your hand."),
     ],
-    amplified_text: [
-      Tx("☾, Discard a card: Erode 3."),
-      Tx("4●, Abandon this character: Return a character from your void to your hand."),
-    ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     rarity: Common,
@@ -5245,11 +5239,11 @@
     id: "99101fce-f2b4-4032-b999-317ce3e4a6dd",
     ability_text: [
       Tx("▸Materialized: Prevent a played ≤2● cost card."),
-      Tx("❖ – 1●: Move this character to an unoccupied character position."),
+      Tx("❖ – 1●: Reposition this character."),
     ],
     amplified_text: [
       Tx("▸Materialized: Prevent a played ≤3● cost card."),
-      Tx("❖ – 1●: Move this character to an unoccupied character position."),
+      Tx("❖ – 1●: Reposition this character."),
     ],
     energy_cost: Fixed(2),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
