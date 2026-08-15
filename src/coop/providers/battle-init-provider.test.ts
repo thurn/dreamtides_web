@@ -101,6 +101,9 @@ describe("battle init provider", () => {
     expect(battle?.init).toEqual(preview);
     expect(battle?.init.seed).toBe(4242);
     expect(() => hashState(battle)).not.toThrow();
+    expect(hashState(JSON.parse(JSON.stringify(battle)))).toBe(
+      hashState(battle),
+    );
     expect(getLogEntries()).toEqual([]);
 
     expect(settleDeferredOpponentLog(17, true)).toBe(true);

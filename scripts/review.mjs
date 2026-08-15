@@ -198,6 +198,19 @@ function commandFor(step, extraArgs = []) {
       [join(root, "scripts", "format-ron.mjs"), "--check"],
     ];
   }
+  if (step === "rust-format-check") {
+    return [
+      "cargo",
+      [
+        "fmt",
+        "--manifest-path",
+        "tools/game-data/Cargo.toml",
+        "--all",
+        "--",
+        "--check",
+      ],
+    ];
+  }
   if (step === "trox-check") {
     return [
       process.execPath,
@@ -293,6 +306,7 @@ function executionPlan() {
       { step: "validate", args: [] },
       { step: "trox-check", args: [] },
       { step: "ron-format-check", args: [] },
+      { step: "rust-format-check", args: [] },
       { step: "rust-test", args: [] },
       { step: "clean-game-data", args: [] },
       { step: "trox-generated-check", args: [] },
@@ -305,6 +319,7 @@ function executionPlan() {
     return [
       { step: "trox-check", args: [] },
       { step: "ron-format-check", args: [] },
+      { step: "rust-format-check", args: [] },
       { step: "lint", args: passthrough },
     ];
   }
@@ -321,6 +336,9 @@ function executionPlan() {
     }
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });
+    }
+    if (reviewPlan.shouldCheckRustFormatting) {
+      steps.push({ step: "rust-format-check", args: [] });
     }
     if (reviewPlan.lintFiles.length > 0 || passthrough.length > 0) {
       steps.push({
@@ -352,6 +370,9 @@ function executionPlan() {
     }
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });
+    }
+    if (reviewPlan.shouldCheckRustFormatting) {
+      steps.push({ step: "rust-format-check", args: [] });
     }
     if (reviewPlan.shouldTestGameData) steps.push({ step: "rust-test", args: [] });
     if (reviewPlan.lintFiles.length > 0) {

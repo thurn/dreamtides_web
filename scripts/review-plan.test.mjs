@@ -10,6 +10,7 @@ describe("fast review plan", () => {
       lintFiles: [],
       shouldCheckTrox: false,
       shouldCheckRonFormatting: false,
+      shouldCheckRustFormatting: false,
       shouldTypecheck: false,
       shouldTestGameData: false,
       shouldValidate: false,
@@ -34,6 +35,7 @@ describe("fast review plan", () => {
       ],
       shouldCheckTrox: true,
       shouldCheckRonFormatting: false,
+      shouldCheckRustFormatting: false,
       shouldTypecheck: true,
       shouldTestGameData: false,
       shouldValidate: false,
@@ -125,6 +127,14 @@ describe("fast review plan", () => {
   it("selects the RON formatting gate for RON sources and formatter config", () => {
     expect(buildReviewPlan([".ronfmt.json", "data/cards.ron"])).toMatchObject({
       shouldCheckRonFormatting: true,
+    });
+  });
+
+  it("selects the Rust formatting gate for Rust sources and formatter config", () => {
+    expect(
+      buildReviewPlan(["rustfmt.toml", "tools/game-data/src/compiler.rs"]),
+    ).toMatchObject({
+      shouldCheckRustFormatting: true,
     });
   });
 

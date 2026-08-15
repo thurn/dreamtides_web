@@ -104,6 +104,15 @@ function isRonFormattingInput(file) {
   );
 }
 
+function isRustFormattingInput(file) {
+  return (
+    file.endsWith(".rs") ||
+    file === "rustfmt.toml" ||
+    file === ".rustfmt.toml" ||
+    file === "rust-toolchain.toml"
+  );
+}
+
 export function buildReviewPlan(files, fileExists = () => true) {
   const changedFiles = [...new Set(files)].sort();
   const existingFiles = changedFiles.filter(fileExists);
@@ -137,6 +146,7 @@ export function buildReviewPlan(files, fileExists = () => true) {
     shouldTypecheck: changedFiles.some(isTypecheckInput),
     shouldValidate: changedFiles.some(isValidationInput),
     shouldCheckRonFormatting: changedFiles.some(isRonFormattingInput),
+    shouldCheckRustFormatting: changedFiles.some(isRustFormattingInput),
     shouldTestGameData: changedFiles.some(
       (file) =>
         file.endsWith(".ron") ||
