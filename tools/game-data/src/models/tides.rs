@@ -127,7 +127,10 @@ pub fn validate(catalog: &TidesCatalog) -> Result<()> {
         if !tide_ids.insert(tide.id) {
             bail!("duplicate Tide UUID {}", tide.id);
         }
-        if source_text(&tide.augury_package_reference)?.trim().is_empty() {
+        if source_text(&tide.augury_package_reference)?
+            .trim()
+            .is_empty()
+        {
             bail!(
                 "Tide {} must define a non-empty Augury package reference",
                 tide.id
