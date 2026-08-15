@@ -334,7 +334,7 @@ export function AugurySiteScreen({
                     <OfferTile
                       model={offer.tile}
                       presentation={{
-                        subtitle: offer.presentation.subtitle,
+                        headline: offer.presentation.headline,
                         ...(offer.presentation.backgroundArt === undefined
                           ? {}
                           : {

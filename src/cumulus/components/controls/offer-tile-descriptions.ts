@@ -13,6 +13,7 @@ import { richText, type RichText } from "../card/rich-text";
 import type { OfferTileModel } from "./OfferTile";
 
 type Presentation = AuguryArchetypeData["presentation"];
+type HeadlinePresentation = Pick<Presentation, "headline">;
 type SubtitlePresentation = Pick<Presentation, "subtitle">;
 function cardName(model: { readonly name: string }): LocalizedString {
   return localizedSourceText(model.name);
@@ -115,8 +116,8 @@ function selectedTemplate(
 function localizedPresentationText(
   text: AuguryPresentationText,
   model: OfferTileModel,
+  variables: Readonly<Record<string, LocalizedString | number>>,
 ): LocalizedString {
-  const variables = variablesFor(model);
   const selected = selectedTemplate(text, model);
   if (typeof selected !== "string") {
     return bindSourceTransport(selected, variables);
@@ -138,9 +139,14 @@ function localizedPresentationText(
 /** Complete authored detail title for an Augury offer's semantic model. */
 export function auguryOfferHeadline(
   model: OfferTileModel,
-  presentation: Presentation,
+  presentation: HeadlinePresentation,
 ): LocalizedString {
-  return localizedPresentationText(presentation.headline, model);
+  const count = countFor(model);
+  return localizedPresentationText(
+    presentation.headline,
+    model,
+    count === null ? {} : { count },
+  );
 }
 
 /** Complete authored description for an Augury offer's semantic model. */
@@ -148,13 +154,17 @@ export function offerTileDescription(
   model: OfferTileModel,
   presentation: SubtitlePresentation,
 ): LocalizedString {
-  return localizedPresentationText(presentation.subtitle, model);
+  return localizedPresentationText(
+    presentation.subtitle,
+    model,
+    variablesFor(model),
+  );
 }
 
-/** InfoCard copy derived from the authored Augury presentation. */
+/** Generic InfoCard copy that cannot interpolate surfaced object identities. */
 export function offerTileRichDescription(
   model: OfferTileModel,
-  presentation: SubtitlePresentation,
+  presentation: HeadlinePresentation,
 ): RichText {
-  return richText.plain(offerTileDescription(model, presentation));
+  return richText.plain(auguryOfferHeadline(model, presentation));
 }

@@ -33,7 +33,7 @@ The circular symbolic Augury offer button in named 300×300 desktop and 240×240
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `subtitle` | `AuguryPresentationText` | no |  |
+| `headline` | `AuguryPresentationText` | no | Generic action headline used for the tile's hover and accessible copy. |
 | `backgroundArt` | `Readonly<{ imageNumber: number; }>` | yes |  |
 
 ## Usage

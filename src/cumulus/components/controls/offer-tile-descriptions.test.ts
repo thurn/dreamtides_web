@@ -125,13 +125,38 @@ describe("offer tile descriptions", () => {
     ).toThrow(/missing value for \{cardName\}/u);
   });
 
-  it("returns authored descriptions as plain rich text", () => {
-    const model: OfferTileModel = { id: testOfferTileId("gift"), kind: "card-gift", card: CARD };
-    const presentation = textPresentation("Fixture headline", "Fixture body");
+  it("keeps surfaced identities out of hover copy", () => {
+    const model: OfferTileModel = {
+      id: testOfferTileId("gift"),
+      kind: "card-gift",
+      card: CARD,
+    };
+    const presentation = textPresentation(
+      "Fixture headline",
+      "Target {cardName}",
+    );
+    const richDescription = offerTileRichDescription(model, presentation);
 
-    expect(offerTileRichDescription(model, presentation)).toEqual({
-      kind: "plain",
-      text: "Fixture body",
-    });
+    expect(richDescription.kind).toBe("plain");
+    if (richDescription.kind !== "plain") return;
+    expect(resolveSource(richDescription.text)).toBe(
+      resolveSource(auguryOfferHeadline(model, presentation)),
+    );
+    expect(resolveSource(richDescription.text)).not.toBe(
+      resolveSource(offerTileDescription(model, presentation)),
+    );
+  });
+
+  it("rejects identity placeholders in generic headlines", () => {
+    const model: OfferTileModel = {
+      id: testOfferTileId("gift"),
+      kind: "card-gift",
+      card: CARD,
+    };
+    const presentation = textPresentation("Target {cardName}", "Fixture body");
+
+    expect(() => offerTileRichDescription(model, presentation)).toThrow(
+      /missing value for \{cardName\}/u,
+    );
   });
 });

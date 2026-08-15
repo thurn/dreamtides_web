@@ -22,7 +22,7 @@ import {
   resolveCardArtImageStyle,
 } from "../card/card-art-crop";
 import {
-  offerTileDescription,
+  auguryOfferHeadline,
   offerTileRichDescription,
 } from "./offer-tile-descriptions";
 import offerFrameUrl from "../../assets/dreamsign_card_frame_2.png";
@@ -169,7 +169,8 @@ export interface OfferTileProps {
 
 /** Authored Augury copy and optional art consumed by the tile itself. */
 export interface OfferTilePresentation {
-  readonly subtitle: AuguryPresentationText;
+  /** Generic action headline used for the tile's hover and accessible copy. */
+  readonly headline: AuguryPresentationText;
   readonly backgroundArt?: Readonly<{ imageNumber: number }>;
 }
 
@@ -190,7 +191,7 @@ export function OfferTile({
   size = "standard",
   testId = "offer-tile",
 }: OfferTileProps): ReactElement {
-  const description = offerTileDescription(model, presentation);
+  const description = auguryOfferHeadline(model, presentation);
   const binding = useRevealSource({
     identity: {
       entityType: "offer",

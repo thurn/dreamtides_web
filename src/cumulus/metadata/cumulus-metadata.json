@@ -3366,10 +3366,10 @@
         "name": "OfferTilePresentation",
         "fields": [
           {
-            "name": "subtitle",
+            "name": "headline",
             "tsType": "AuguryPresentationText",
             "optional": false,
-            "description": ""
+            "description": "Generic action headline used for the tile's hover and accessible copy."
           },
           {
             "name": "backgroundArt",

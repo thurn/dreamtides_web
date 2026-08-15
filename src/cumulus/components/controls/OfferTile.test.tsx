@@ -14,6 +14,8 @@ import {
   type OfferTileFourCards,
   type OfferTileModel,
 } from "./OfferTile";
+import { auguryOfferHeadline } from "./offer-tile-descriptions";
+import { resolveSource } from "../../../runtime/localization/runtime";
 import type { CardData } from "../../../types/cards";
 import {
   testCardId,
@@ -392,7 +394,7 @@ describe("OfferTile", () => {
       "augury-offer-above-source",
     );
     expect(source.getAttribute("aria-label")).toBe(
-      "Choose a card to add to your deck.",
+      resolveSource(auguryOfferHeadline(MODEL, PRESENTATION)),
     );
 
     act(() => source.click());
