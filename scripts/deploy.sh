@@ -62,7 +62,7 @@ npm run trox:bundle -- --allow-missing
 npm run trox:check-generated
 
 step "3/5  build — compile + bundle code, HTML, and data catalogs into dist/"
-tsc && vite build
+npm run build:prepared
 
 if [[ "$DRY_RUN" == true ]]; then
   step "Dry run complete — generation and production build passed"
