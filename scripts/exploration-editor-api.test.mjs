@@ -6,6 +6,36 @@ import {
   createExplorationEditorApiMiddleware,
   refreshExplorationLocalizationArtifacts,
 } from "./exploration-editor-api.mjs";
+import { EXPLORATION_EFFECT_SCHEMAS } from "./exploration-editor-schema.mjs";
+
+const FIXTURE_CARD_ID = "161482b6-af07-4d9e-822d-8c738672beb9";
+const FIXTURE_ACTION_ID = "6662e7ce-9ea7-49bf-85fe-4bbe6728f282";
+
+function editorDataFixture() {
+  return {
+    encounters: [{
+      cardId: FIXTURE_CARD_ID,
+      prose: "Fixture prose",
+      actions: [{
+        id: FIXTURE_ACTION_ID,
+        label: "Fixture action",
+        effectKind: "gain-offered-card",
+        canonicalMechanicId: "gain-card",
+        selectionPolicyId: "card-fit-quality",
+        predicate: "cheap-character",
+        renderedEffectText: "Derived from typed effect",
+        renderedEffectParts: [],
+        runtimeCardSelections: [],
+      }],
+    }],
+    cards: [{ id: FIXTURE_CARD_ID }],
+    dreamsigns: [],
+    effectSchemas: EXPLORATION_EFFECT_SCHEMAS,
+    predicates: [],
+    transfigurations: [],
+    subtypes: [],
+  };
+}
 
 function request(method, url, body) {
   const req = new EventEmitter();
@@ -28,7 +58,10 @@ function response() {
 }
 
 describe("exploration editor API", () => {
-  const middleware = createExplorationEditorApiMiddleware({ rootDir: process.cwd() });
+  const middleware = createExplorationEditorApiMiddleware({
+    rootDir: process.cwd(),
+    readData: editorDataFixture,
+  });
 
   async function call(method, url, body) {
     const res = response();

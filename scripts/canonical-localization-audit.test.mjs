@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { describe, expect, it } from "vitest";
 import {
   auditCanonicalLocalizationContract,
+  canonicalLocalizationInternals,
   canonicalRonFiles,
 } from "./canonical-localization-audit.mjs";
 
@@ -27,6 +28,24 @@ function bundle(entries) {
 }
 
 describe("canonical localization audit", () => {
+  it("excludes compact Amplified replacement metadata", () => {
+    const compositeValues = [];
+    canonicalLocalizationInternals.collectCompositeValues(
+      {
+        cards: [{
+          "amplified-replacement": "replacement one\n\nreplacement two",
+          "rendered-text": "paragraph one\n\nparagraph two",
+        }],
+      },
+      "data/cards.toml",
+      compositeValues,
+    );
+
+    expect(compositeValues.map(({ path }) => path)).toEqual([
+      "data/cards.toml.cards[0].rendered-text",
+    ]);
+  });
+
   it("discovers canonical RON catalogs recursively", () => {
     const root = mkdtempSync(join(tmpdir(), "canonical-ron-audit-"));
     try {

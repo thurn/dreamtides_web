@@ -1,10 +1,71 @@
+import {
+  mkdtempSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
 import {
   explorationEditorInternals,
   normalizeExplorationAction,
   readExplorationEditorData,
 } from "./exploration-editor-data.mjs";
+import { EXPLORATION_EFFECT_KINDS } from "./exploration-effect-kinds.mjs";
 import { EXPLORATION_EFFECT_SCHEMAS } from "./exploration-editor-schema.mjs";
+
+const FIXTURE_CARD_ID = "161482b6-af07-4d9e-822d-8c738672beb9";
+const NIGHTMARE_CARD_ID = "b0a2c3d4-e5f6-4789-8abc-0def12345678";
+
+function writeEditorCatalogFixture(root) {
+  writeFileSync(join(root, "exploration.toml"), `
+schema-version = 2
+effect-kinds = ${JSON.stringify(EXPLORATION_EFFECT_KINDS)}
+
+[[encounter]]
+card-id = "${FIXTURE_CARD_ID}"
+prose = "Fixture encounter prose."
+
+[[encounter.action]]
+id = "6662e7ce-9ea7-49bf-85fe-4bbe6728f282"
+label = "Take the fixed card"
+effect-text = "Gain {fixed_card}."
+effect-kind = "gain-card"
+card-id = "${FIXTURE_CARD_ID}"
+
+[[encounter.action]]
+id = "3db8188a-e2f8-4b86-a6fa-a19bed59e0b1"
+label = "Take both cards"
+effect-text = "Gain {fixed_card} and {nightmare_card}."
+effect-kind = "gain-nightmare-and-card"
+card-id = "${FIXTURE_CARD_ID}"
+nightmare-count = 1
+followup-title = "Choose a reward"
+followup-subtitle = "Take one of the offered rewards"
+`);
+  writeFileSync(join(root, "cards.toml"), `
+[[cards]]
+id = "${FIXTURE_CARD_ID}"
+name = "Fixture card"
+rendered-text = "Fixture rules."
+energy-cost = 1
+card-type = "Character"
+subtype = "Guide"
+rarity = "Uncommon"
+image-number = 1
+
+[[cards]]
+id = "${NIGHTMARE_CARD_ID}"
+name = "Fixture Nightmare"
+rendered-text = "Fixture Nightmare rules."
+energy-cost = 1
+card-type = "Event"
+subtype = ""
+rarity = "Special"
+image-number = 2
+`);
+  writeFileSync(join(root, "dreamsigns.toml"), "");
+}
 
 describe("exploration editor data", () => {
   it("reloads the ephemeral source catalog when canonical source changes", () => {
@@ -69,50 +130,62 @@ describe("exploration editor data", () => {
   });
 
   it("loads action-local presentation with UUID-backed previews", () => {
-    const data = readExplorationEditorData({ random: () => 0 });
-    const actions = data.encounters.flatMap((encounter) => encounter.actions);
+    const root = mkdtempSync(join(tmpdir(), "exploration-editor-data-"));
+    try {
+      writeEditorCatalogFixture(root);
+      const data = readExplorationEditorData({
+        rootDir: root,
+        explorationTomlPath: "exploration.toml",
+        cardsTomlPath: "cards.toml",
+        dreamsignsTomlPath: "dreamsigns.toml",
+        random: () => 0,
+      });
+      const actions = data.encounters.flatMap((encounter) => encounter.actions);
 
-    expect(data.encounters.length).toBeGreaterThan(0);
-    expect(actions).toHaveLength(data.encounters.length * 2);
-    expect(
-      actions.every(
-        (action) =>
-          action.effectText === undefined || action.effectText.length > 0,
-      ),
-    ).toBe(true);
-    expect(
-      actions
-        .flatMap((action) => action.runtimeCardSelections)
-        .every((selection) => /^[0-9a-f-]{36}$/u.test(selection.cardId)),
-    ).toBe(true);
-    expect(
-      actions
-        .filter(
+      expect(data.encounters).toHaveLength(1);
+      expect(actions).toHaveLength(2);
+      expect(
+        actions.every(
           (action) =>
-            action.cardId !== undefined &&
-            action.effectText?.includes("{fixed_card}"),
-        )
-        .every((action) =>
-          action.runtimeCardSelections.some(
-            (selection) =>
-              selection.placeholder === "{fixed_card}" &&
-              selection.cardId.toLowerCase() === action.cardId.toLowerCase() &&
-              selection.source === "fixed_reference",
-          ),
+            action.effectText === undefined || action.effectText.length > 0,
         ),
-    ).toBe(true);
-    expect(
-      actions
-        .filter((action) => action.effectText?.includes("{nightmare_card}"))
-        .every((action) =>
-          action.runtimeCardSelections.some(
-            (selection) =>
-              selection.placeholder === "{nightmare_card}" &&
-              selection.source === "fixed_reference",
+      ).toBe(true);
+      expect(
+        actions
+          .flatMap((action) => action.runtimeCardSelections)
+          .every((selection) => /^[0-9a-f-]{36}$/u.test(selection.cardId)),
+      ).toBe(true);
+      expect(
+        actions
+          .filter(
+            (action) =>
+              action.cardId !== undefined &&
+              action.effectText?.includes("{fixed_card}"),
+          )
+          .every((action) =>
+            action.runtimeCardSelections.some(
+              (selection) =>
+                selection.placeholder === "{fixed_card}" &&
+                selection.cardId.toLowerCase() === action.cardId.toLowerCase() &&
+                selection.source === "fixed_reference",
+            ),
           ),
-        ),
-    ).toBe(true);
-    expect(data).not.toHaveProperty("templates");
+      ).toBe(true);
+      expect(
+        actions
+          .filter((action) => action.effectText?.includes("{nightmare_card}"))
+          .every((action) =>
+            action.runtimeCardSelections.some(
+              (selection) =>
+                selection.placeholder === "{nightmare_card}" &&
+                selection.source === "fixed_reference",
+            ),
+          ),
+      ).toBe(true);
+      expect(data).not.toHaveProperty("templates");
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 
   it("publishes a closed code-owned schema without player copy", () => {
@@ -1217,27 +1290,40 @@ describe("exploration editor data", () => {
   });
 
   it("keeps encounter-specific followup overrides on individual actions", () => {
-    const data = readExplorationEditorData({ random: () => 0 });
-    const actions = data.encounters.flatMap((encounter) => encounter.actions);
-    const withFollowup = actions.filter(
-      (action) =>
-        action.followupTitle !== undefined ||
-        action.followupSubtitle !== undefined,
-    );
+    const root = mkdtempSync(join(tmpdir(), "exploration-editor-data-"));
+    try {
+      writeEditorCatalogFixture(root);
+      const data = readExplorationEditorData({
+        rootDir: root,
+        explorationTomlPath: "exploration.toml",
+        cardsTomlPath: "cards.toml",
+        dreamsignsTomlPath: "dreamsigns.toml",
+        random: () => 0,
+      });
+      const actions = data.encounters.flatMap((encounter) => encounter.actions);
+      const withFollowup = actions.filter(
+        (action) =>
+          action.followupTitle !== undefined ||
+          action.followupSubtitle !== undefined,
+      );
 
-    expect(withFollowup.length).toBeGreaterThan(0);
-    expect(
-      withFollowup.every(
-        (action) =>
-          action.followupTitle === undefined || action.followupTitle.length > 0,
-      ),
-    ).toBe(true);
-    expect(
-      withFollowup.every(
-        (action) =>
-          action.followupSubtitle === undefined ||
-          action.followupSubtitle.length > 0,
-      ),
-    ).toBe(true);
+      expect(withFollowup).toHaveLength(1);
+      expect(
+        withFollowup.every(
+          (action) =>
+            action.followupTitle === undefined ||
+            action.followupTitle.length > 0,
+        ),
+      ).toBe(true);
+      expect(
+        withFollowup.every(
+          (action) =>
+            action.followupSubtitle === undefined ||
+            action.followupSubtitle.length > 0,
+        ),
+      ).toBe(true);
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
   });
 });

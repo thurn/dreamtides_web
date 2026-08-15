@@ -38,9 +38,14 @@ function collectCompositeValues(value, path, result) {
     return;
   }
   if (value !== null && typeof value === "object") {
-    Object.entries(value).forEach(([key, entry]) =>
-      collectCompositeValues(entry, `${path}.${key}`, result),
-    );
+    Object.entries(value).forEach(([key, entry]) => {
+      const compactAmplifiedReplacement =
+        key === "amplified-replacement" &&
+        /^data\/cards\.toml\.cards\[\d+\]$/u.test(path);
+      if (!compactAmplifiedReplacement) {
+        collectCompositeValues(entry, `${path}.${key}`, result);
+      }
+    });
     return;
   }
   if (typeof value === "string" && value.includes("\n\n")) {
@@ -275,6 +280,8 @@ export function canonicalLocalizationInputs(root) {
     sourceReferences,
   };
 }
+
+export const canonicalLocalizationInternals = { collectCompositeValues };
 
 export function assertCanonicalLocalizationContract(root) {
   const bundle = JSON.parse(
