@@ -17,7 +17,7 @@ export interface RewardSelectionTuning {
     bigMinimum: number;
     cheapCharacterMaximum: number;
   }>;
-  placeableSiteTypes: readonly SiteType[];
+  placeableSites: readonly SiteType[];
 }
 
 /** Runtime selector tuning assembled from its owning RON catalogs. */

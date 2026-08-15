@@ -893,9 +893,10 @@ the authored icons, glossary mappings, list-facing labels and titles, and tuning
 for those fixed identities. Screen flow copy is authored by the corresponding
 TypeScript view model. The Sites adapter emits the `schema-version = 1`
 compatibility TOML consumed by asset generation.
-`selection.min_deck_for_purge` gates purge targeting, while
-`selection.placeable_types` defines which site kinds unified selection may
-offer for placement.
+Encounter sites are Augury and Exploration. Their shared
+`encounter_sites.min_deck_for_purge` value gates purge-misfit targeting, while
+`encounter_sites.placeable_sites` defines which sites their rewards may offer
+for placement in the current Dreamscape.
 
 ## `data/tutorial.ron`
 

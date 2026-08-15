@@ -735,7 +735,7 @@ function buildLegacyActionOffer(
       },
       count: action.offerCount,
       constraints: {
-        allowedSiteTypes: context.tuning.placeableSiteTypes,
+        allowedSiteTypes: context.tuning.placeableSites,
       },
     });
     if (
@@ -1249,7 +1249,7 @@ function buildActionOffer(
     const selected = select({
       count: action.offerCount,
       constraints: {
-        allowedSiteTypes: context.tuning.placeableSiteTypes,
+        allowedSiteTypes: context.tuning.placeableSites,
       },
     });
     if (selected === null || selected.bindings.siteTypes.length !== 3)
@@ -4446,7 +4446,7 @@ export function resolveExplorationChoice(input: {
         },
         count: action.offerCount,
         constraints: {
-          allowedSiteTypes: context.tuning.placeableSiteTypes,
+          allowedSiteTypes: context.tuning.placeableSites,
         },
       });
       if (!selected.ok || selected.bindings.siteTypes.length !== 3) return null;

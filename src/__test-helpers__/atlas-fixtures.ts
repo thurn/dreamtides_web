@@ -126,9 +126,9 @@ export const MINIMAL_SITES_DATA: SitesData = {
   schemaVersion: 1,
   contentHash: testContentHash("c"),
   foldHash: testFoldHash("d"),
-  selection: {
+  encounterSites: {
     minDeckForPurge: 8,
-    placeableTypes: ["Shop", "Purge", "Transfiguration", "Duplication"],
+    placeableSites: ["Shop", "Purge", "Transfiguration", "Duplication"],
   },
   siteTypes: SYNTHETIC_SITE_TYPES,
   randomSite: {

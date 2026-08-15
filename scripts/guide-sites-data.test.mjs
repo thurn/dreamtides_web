@@ -73,9 +73,9 @@ function sitesFixture() {
   };
   return {
     "schema-version": 1,
-    selection: {
+    "encounter-sites": {
       "min-deck-for-purge": 8,
-      "placeable-types": ["Shop", "Purge", "Transfiguration", "Duplication"],
+      "placeable-sites": ["Shop", "Purge", "Transfiguration", "Duplication"],
     },
     "site-types": SITE_TYPES.map((type) => ({
       type,
@@ -130,6 +130,10 @@ describe("canonical Dream Guide and Sites compilers", () => {
     expect(first.guides.contentHash).toMatch(/^[0-9a-f]{64}$/u);
     expect(first.sites.contentHash).toMatch(/^[0-9a-f]{64}$/u);
     expect(first.sites.foldHash).toMatch(/^[0-9a-f]{64}$/u);
+    expect(first.sites.encounterSites).toEqual({
+      minDeckForPurge: 8,
+      placeableSites: ["Shop", "Purge", "Transfiguration", "Duplication"],
+    });
     for (const guide of first.guides.guides) {
       const home = first.dreamscapes.find(
         (dreamscape) => dreamscape.id === guide.homeDreamscapeId,

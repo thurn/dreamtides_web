@@ -10,19 +10,19 @@ import { MERCHANT_TUNING } from "../tuning";
 import { parseMerchantTargetKey } from "../../types/identifiers";
 
 /**
- * Site types the merchant can place on the current dreamscape.
+ * Sites an encounter can place on the current dreamscape.
  *
  * Excludes types that are structural (Battle, Draft, Augury) or that the
  * player already controls via dedicated mechanics. The list covers all the
  * rewarding/utility sites a player would be excited to add.
  */
 /** Generated compatibility view of the TOML-authored placeable site list. */
-export const MERCHANT_PLACEABLE_SITE_TYPES = MERCHANT_TUNING.placeableSiteTypes;
+export const MERCHANT_PLACEABLE_SITES = MERCHANT_TUNING.placeableSites;
 
 /**
  * `add_site` — *Add a site to the current dreamscape.*
  *
- * Samples one site type uniformly from `MERCHANT_PLACEABLE_SITE_TYPES` and
+ * Samples one site uniformly from `MERCHANT_PLACEABLE_SITES` and
  * adds it to the current dreamscape. The offer title names the site type.
  * Always eligible. Face-up (the offer names the site type).
  *
@@ -49,7 +49,7 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
       policyId: augurySelectionPolicy(context, "add_site"),
       request: {
         constraints: {
-          allowedSiteTypes: context.rewardSelection.tuning.placeableSiteTypes,
+          allowedSiteTypes: context.rewardSelection.tuning.placeableSites,
         },
       },
     });

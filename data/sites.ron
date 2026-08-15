@@ -2,7 +2,14 @@
 
 #![enable(implicit_some)]
 SitesCatalog(
-  selection: (min_deck_for_purge: 8, placeable_types: [Shop, Purge, Transfiguration, Duplication]),
+  // Encounter sites are Augury and Exploration. They share these rules for
+  // selecting deck entries and sites offered by their encounters.
+  encounter_sites: (
+    // Purge-misfit encounters require at least this many deck entries.
+    min_deck_for_purge: 8,
+    // Encounter rewards may place only these sites in the current Dreamscape.
+    placeable_sites: [Shop, Purge, Transfiguration, Duplication],
+  ),
 
   site_types: [
     SiteMetadata(

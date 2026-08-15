@@ -16,10 +16,10 @@ export function buildRewardSelectionData(input: {
   const tuning = {
     bandFraction: input.tides.selection.bandFraction,
     bandMinimum: input.tides.selection.bandMinimum,
-    minDeckForPurge: input.sites.selection.minDeckForPurge,
+    minDeckForPurge: input.sites.encounterSites.minDeckForPurge,
     subtypeMinPoolCards: input.augury.selection.subtypeMinPoolCards,
     costBands: input.augury.selection.costBands,
-    placeableSiteTypes: input.sites.selection.placeableTypes,
+    placeableSites: input.sites.encounterSites.placeableSites,
   } as const;
   const payload = { schemaVersion: 2 as const, rulesVersion: "2" as const, tuning };
   const digest = stableDigest(payload);

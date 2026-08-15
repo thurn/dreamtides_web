@@ -162,7 +162,7 @@ describe("loadJourneyContent", () => {
     expect(content.poolContext?.poolData.tides4Decks?.version).toBe(2);
     expect(content.rewardSelectionData.tuning).toMatchObject({
       bandFraction: 0.25,
-      minDeckForPurge: MINIMAL_SITES_DATA.selection.minDeckForPurge,
+      minDeckForPurge: MINIMAL_SITES_DATA.encounterSites.minDeckForPurge,
       subtypeMinPoolCards:
         CONFIG_DATA_FIXTURE.auguryData.selection.subtypeMinPoolCards,
     });

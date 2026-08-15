@@ -90,16 +90,16 @@ const GLOSSARY_ID_MAP: [(&str, &str); 14] = [
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct SitesCatalog {
-    pub selection: SiteSelectionRules,
+    pub encounter_sites: EncounterSiteRules,
     pub site_types: Vec<SiteMetadata>,
     pub random_site: RandomSiteRules,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct SiteSelectionRules {
+pub struct EncounterSiteRules {
     pub min_deck_for_purge: u32,
-    pub placeable_types: Vec<SiteType>,
+    pub placeable_sites: Vec<SiteType>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -202,7 +202,8 @@ impl<'de> Deserialize<'de> for GlossaryId {
 struct CompatibilityCatalog {
     #[serde(rename = "schema-version")]
     schema_version: u32,
-    selection: CompatibilitySiteSelectionRules,
+    #[serde(rename = "encounter-sites")]
+    encounter_sites: CompatibilityEncounterSiteRules,
     #[serde(rename = "site-types")]
     site_types: Vec<CompatibilitySiteMetadata>,
     #[serde(rename = "random-site")]
@@ -210,11 +211,11 @@ struct CompatibilityCatalog {
 }
 
 #[derive(Serialize)]
-struct CompatibilitySiteSelectionRules {
+struct CompatibilityEncounterSiteRules {
     #[serde(rename = "min-deck-for-purge")]
     min_deck_for_purge: u32,
-    #[serde(rename = "placeable-types")]
-    placeable_types: Vec<&'static str>,
+    #[serde(rename = "placeable-sites")]
+    placeable_sites: Vec<&'static str>,
 }
 
 #[derive(Serialize)]
@@ -263,11 +264,11 @@ fn lower_with_glossary_map(
     glossary_ids: &[(&'static str, &'static str)],
 ) -> Result<toml::Value> {
     validate(&source)?;
-    let selection = CompatibilitySiteSelectionRules {
-        min_deck_for_purge: source.selection.min_deck_for_purge,
-        placeable_types: source
-            .selection
-            .placeable_types
+    let encounter_sites = CompatibilityEncounterSiteRules {
+        min_deck_for_purge: source.encounter_sites.min_deck_for_purge,
+        placeable_sites: source
+            .encounter_sites
+            .placeable_sites
             .into_iter()
             .map(SiteType::as_compat)
             .collect(),
@@ -297,7 +298,7 @@ fn lower_with_glossary_map(
     };
     Ok(toml::Value::try_from(CompatibilityCatalog {
         schema_version: 1,
-        selection,
+        encounter_sites,
         site_types,
         random_site,
     })?)
@@ -381,23 +382,23 @@ fn compatibility_glossary_id(
 
 fn validate(source: &SitesCatalog) -> Result<()> {
     ensure!(
-        source.selection.min_deck_for_purge > 0,
-        "selection min_deck_for_purge must be positive"
+        source.encounter_sites.min_deck_for_purge > 0,
+        "encounter_sites min_deck_for_purge must be positive"
     );
     let allowed_placeable = BTreeSet::from(["Shop", "Purge", "Transfiguration", "Duplication"]);
     let placeable = source
-        .selection
-        .placeable_types
+        .encounter_sites
+        .placeable_sites
         .iter()
         .map(|site| site.as_compat())
         .collect::<BTreeSet<_>>();
     ensure!(
-        !placeable.is_empty() && placeable.len() == source.selection.placeable_types.len(),
-        "selection placeable_types must be non-empty and unique"
+        !placeable.is_empty() && placeable.len() == source.encounter_sites.placeable_sites.len(),
+        "encounter_sites placeable_sites must be non-empty and unique"
     );
     ensure!(
         placeable.is_subset(&allowed_placeable),
-        "selection placeable_types contains an unsupported site"
+        "encounter_sites placeable_sites contains an unsupported site"
     );
     let mut sites = BTreeSet::new();
     let mut glossary_ids = BTreeSet::new();
@@ -605,9 +606,9 @@ mod tests {
             })
             .collect();
         SitesCatalog {
-            selection: SiteSelectionRules {
+            encounter_sites: EncounterSiteRules {
                 min_deck_for_purge: 8,
-                placeable_types: vec![
+                placeable_sites: vec![
                     SiteType::Shop,
                     SiteType::Purge,
                     SiteType::Transfiguration,
@@ -668,6 +669,17 @@ mod tests {
             lower_with_glossary_map(synthetic_catalog(), &SYNTHETIC_GLOSSARY_ID_MAP).unwrap();
 
         assert_eq!(lowered["schema-version"].as_integer(), Some(1));
+        assert_eq!(
+            lowered["encounter-sites"]["min-deck-for-purge"].as_integer(),
+            Some(8)
+        );
+        assert_eq!(
+            lowered["encounter-sites"]["placeable-sites"]
+                .as_array()
+                .unwrap()
+                .len(),
+            4
+        );
         let site_types = lowered["site-types"].as_array().unwrap();
         assert_eq!(site_types.len(), 14);
         assert_eq!(site_types[0]["type"].as_str(), Some("Battle"));
@@ -689,11 +701,13 @@ mod tests {
     #[test]
     fn rejects_unknown_fields_and_noncanonical_glossary_identifiers() {
         let serialized = ron::to_string(&synthetic_catalog()).unwrap();
-        let unknown = serialized.replacen("(selection:", "(surprise:true,selection:", 1);
+        let unknown =
+            serialized.replacen("(encounter_sites:", "(surprise:true,encounter_sites:", 1);
         assert!(ron::from_str::<SitesCatalog>(&unknown).is_err());
         let nested_unknown = serialized.replacen("(site:", "(surprise:true,site:", 1);
         assert!(ron::from_str::<SitesCatalog>(&nested_unknown).is_err());
-        let obsolete_gamble = serialized.replacen("(selection:", "(gamble:(),selection:", 1);
+        let obsolete_gamble =
+            serialized.replacen("(encounter_sites:", "(gamble:(),encounter_sites:", 1);
         assert!(ron::from_str::<SitesCatalog>(&obsolete_gamble).is_err());
 
         for invalid in [

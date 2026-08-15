@@ -471,52 +471,58 @@ export function compileSitesData(sourceValue, catalogs = {}) {
   const file = "sites.toml";
   const root = keys(sourceValue, file, "root", [
     "schema-version",
-    "selection",
+    "encounter-sites",
     "site-types",
     "random-site",
   ]);
   if (number(root["schema-version"], file, "schema-version") !== 1) {
     fail(file, "schema-version", "only schema version 1 is supported");
   }
-  const rawSelection = keys(root.selection, file, "selection", [
-    "min-deck-for-purge",
-    "placeable-types",
-  ]);
-  const placeableTypes = unique(
+  const rawEncounterSites = keys(
+    root["encounter-sites"],
+    file,
+    "encounter-sites",
+    ["min-deck-for-purge", "placeable-sites"],
+  );
+  const placeableSites = unique(
     array(
-      rawSelection["placeable-types"],
+      rawEncounterSites["placeable-sites"],
       file,
-      "selection.placeable-types",
+      "encounter-sites.placeable-sites",
     ).map((entry, index) =>
-      siteType(entry, file, `selection.placeable-types[${String(index)}]`),
+      siteType(
+        entry,
+        file,
+        `encounter-sites.placeable-sites[${String(index)}]`,
+      ),
     ),
     file,
-    "selection.placeable-types",
+    "encounter-sites.placeable-sites",
   );
-  const allowedPlaceableTypes = new Set([
+  const allowedPlaceableSites = new Set([
     "Shop",
     "Purge",
     "Transfiguration",
     "Duplication",
   ]);
   if (
-    placeableTypes.length === 0 ||
-    placeableTypes.some((type) => !allowedPlaceableTypes.has(type))
+    placeableSites.length === 0 ||
+    placeableSites.some((type) => !allowedPlaceableSites.has(type))
   ) {
     fail(
       file,
-      "selection.placeable-types",
+      "encounter-sites.placeable-sites",
       "contains an unsupported site type",
     );
   }
-  const selection = {
+  const encounterSites = {
     minDeckForPurge: number(
-      rawSelection["min-deck-for-purge"],
+      rawEncounterSites["min-deck-for-purge"],
       file,
-      "selection.min-deck-for-purge",
+      "encounter-sites.min-deck-for-purge",
       { min: 1 },
     ),
-    placeableTypes,
+    placeableSites,
   };
   const siteTypes = {};
   for (const [index, rawMetadata] of array(
@@ -627,14 +633,14 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     fail(file, "gamble", "requires exactly one Gamble guide");
   const normalized = {
     schemaVersion: 1,
-    selection,
+    encounterSites,
     siteTypes,
     randomSite: { ...randomSite, guideId: randomSiteGuideId },
     guideAssignments,
   };
   const behavior = {
     schemaVersion: 1,
-    selection,
+    encounterSites,
     randomSite: normalized.randomSite,
     rulesBySiteType: Object.fromEntries(
       Object.entries(siteTypes).flatMap(([type, metadata]) =>

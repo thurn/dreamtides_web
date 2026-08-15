@@ -1,8 +1,8 @@
 {
   "schemaVersion": 1,
-  "selection": {
+  "encounterSites": {
     "minDeckForPurge": 8,
-    "placeableTypes": [
+    "placeableSites": [
       "Shop",
       "Purge",
       "Transfiguration",
@@ -229,6 +229,6 @@
       "homeDreamscapeId": "grid_city"
     }
   },
-  "contentHash": "6f271194e9a734d2ed3d51f792b7c1b45216ed6d42aea3f584b6b38f1dbcd8ba",
-  "foldHash": "c08cfad0a6b5a1675bb482e0833783effbc44abe7886a50c5726d197044183ec"
+  "contentHash": "b912abc4c2296af3ce27a52e03e55382df59ec7906d3fdd0366e95d088163b1a",
+  "foldHash": "907dfa9e6fadbde20c196e31db9086fdaf4825303b8a20f9ebd2de3e488e01d2"
 }

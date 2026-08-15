@@ -123,7 +123,7 @@ function isSitesData(value: unknown): value is SitesData {
       "schemaVersion",
       "contentHash",
       "foldHash",
-      "selection",
+      "encounterSites",
       "siteTypes",
       "randomSite",
       "guideAssignments",
@@ -133,11 +133,11 @@ function isSitesData(value: unknown): value is SitesData {
     !SHA256_HEX.test(value.contentHash) ||
     typeof value.foldHash !== "string" ||
     !SHA256_HEX.test(value.foldHash) ||
-    !isRecord(value.selection) ||
-    !isInteger(value.selection.minDeckForPurge, { min: 1 }) ||
-    !Array.isArray(value.selection.placeableTypes) ||
-    value.selection.placeableTypes.length === 0 ||
-    value.selection.placeableTypes.some(
+    !isRecord(value.encounterSites) ||
+    !isInteger(value.encounterSites.minDeckForPurge, { min: 1 }) ||
+    !Array.isArray(value.encounterSites.placeableSites) ||
+    value.encounterSites.placeableSites.length === 0 ||
+    value.encounterSites.placeableSites.some(
       (entry) => !SITE_TYPES.includes(entry as SiteType),
     ) ||
     !isRecord(value.siteTypes) ||

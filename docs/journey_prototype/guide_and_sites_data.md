@@ -37,6 +37,7 @@ compatibility document carries `schema-version = 1`. The source contains:
 
 | Section                        | Authored contract                                                                              |
 | ------------------------------ | ---------------------------------------------------------------------------------------------- |
+| `encounter_sites`              | Shared selection rules for Augury and Exploration encounters: the Purge deck-size floor and the sites their rewards may place. |
 | `site_types`                   | Exactly one metadata record for every `SiteType`, including icons, glossary mappings, optional list-facing identity copy, and site-local rules. |
 | `random_site`                  | Eligible destinations, home and away choice counts, and the insufficient-destination policy.   |
 | `site_types.Duplication.rules` | Eligible deck-entry candidates shown by standard and enhanced Duplication sites.               |

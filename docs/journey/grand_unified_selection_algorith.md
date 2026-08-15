@@ -105,7 +105,8 @@ Selection tuning lives with the feature that owns it:
 - `data/tides.ron`: universal top-band fraction and minimum;
 - `data/augury.ron`: archetype weights, chooser quantities, package categories,
   subtype eligibility, and cost bands;
-- `data/sites.ron`: purge deck-size threshold and placeable site types;
+- `data/sites.ron`: the purge deck-size threshold and placeable sites shared by
+  Augury and Exploration encounters;
 - `data/opponents.ron`: deck size, ability and Dreamsign unlock layers,
   Legendary gating, and Starter dilution.
 

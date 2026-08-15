@@ -582,7 +582,7 @@ function otherCandidates(
   if (request.mechanicId === "add-site") {
     if (request.policyId !== "site-uniform")
       return failure(request, "unsupported_mechanic_policy");
-    const configured = context.tuning.placeableSiteTypes;
+    const configured = context.tuning.placeableSites;
     const allowed = request.constraints?.allowedSiteTypes ?? configured;
     if (
       allowed.length === 0 ||

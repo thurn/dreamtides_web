@@ -17,7 +17,9 @@ describe("generated game configuration trust boundaries", () => {
     });
     expect(selection.schemaVersion).toBe(2);
     expect(selection.tuning.bandFraction).toBe(tidesJson.selection.bandFraction);
-    expect(selection.tuning.minDeckForPurge).toBe(sitesJson.selection.minDeckForPurge);
+    expect(selection.tuning.minDeckForPurge).toBe(
+      sitesJson.encounterSites.minDeckForPurge,
+    );
     expect(selection.tuning.costBands).toEqual(augury.selection.costBands);
     expect(parseAuguryData(auguryJson).archetypes).toHaveLength(13);
   });

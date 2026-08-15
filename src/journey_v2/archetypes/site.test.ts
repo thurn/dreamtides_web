@@ -11,7 +11,7 @@ import {
 import type { JourneyState } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
 import type { MerchantContext } from "../types";
-import { addSiteBuilder, MERCHANT_PLACEABLE_SITE_TYPES } from "./site";
+import { addSiteBuilder, MERCHANT_PLACEABLE_SITES } from "./site";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { testDreamscapeId, testCardId } from "../../types/test-identities";
@@ -264,11 +264,11 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
 // Bug-class: add_site builder samples from placeable list
 // ---------------------------------------------------------------------------
 
-describe("add_site — builder samples from placeable site types", () => {
-  it("sampled site type comes from the MERCHANT_PLACEABLE_SITE_TYPES list", () => {
+describe("add_site — builder samples from placeable sites", () => {
+  it("sampled site comes from the MERCHANT_PLACEABLE_SITES list", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
-    const placeableSet = new Set(MERCHANT_PLACEABLE_SITE_TYPES);
+    const placeableSet = new Set(MERCHANT_PLACEABLE_SITES);
 
     for (let seed = 0; seed < 20; seed += 1) {
       const rng = merchantRng("add-site-placeable-test", String(seed));
