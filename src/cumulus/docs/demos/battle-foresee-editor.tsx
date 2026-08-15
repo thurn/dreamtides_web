@@ -39,7 +39,7 @@ function Demo() {
           allowedCounts: [1, 2, 3],
           cards: [1, 2, 3].map((index) => ({
             battleCardId: parseBattleCardId(demoIdentitySeed(index)),
-            card: demoCard(index, `Foreseen ${String(index)}`),
+            card: demoCard(index),
           })),
           ...(showSource ? { source } : {}),
         }}

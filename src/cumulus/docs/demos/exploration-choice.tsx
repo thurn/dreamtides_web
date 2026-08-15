@@ -10,13 +10,13 @@ import {
 import { DemoControls, DemoLog, DemoSelect } from "./promotion-demo-controls";
 import { parseDeckEntryId } from "../../../types/identifiers";
 import { parseExplorationActionId } from "../../../types/identifiers";
-import { parseCardId } from "../../../types/card-identity";
+const previewCard = demoCard(1);
 const cardEntity = {
   kind: "card" as const,
-  id: parseCardId("90000000-0000-4000-8000-000000000001"),
+  id: previewCard.cardId,
   entryId: parseDeckEntryId(demoIdentitySeed(1)),
-  label: assertLocalized("Wayfinder"),
-  card: demoCard(1, "Wayfinder"),
+  label: assertLocalized(previewCard.displaySnapshot.name),
+  card: previewCard,
 };
 const dreamsign = demoDreamsign(1);
 const dreamsignEntity = {

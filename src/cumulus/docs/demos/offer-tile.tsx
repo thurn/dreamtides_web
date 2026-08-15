@@ -1,47 +1,19 @@
 import {
-  parseCardId,
-  parseCardName,
-  parseCardSubtype,
-} from "../../../types/card-identity";
-import {
   OfferTile,
   type OfferTileModel,
 } from "../../components/controls/OfferTile";
-import type { CardData } from "../../../types/cards";
 import type { CumulusComponent } from "../registry";
-import type { CardId } from "../../../types/card-identity";
 import { parseOfferTileId } from "../../../types/identifiers";
-
-function card(
-  cardId: CardId,
-  imageNumber: number,
-  cardNumber: number,
-): Readonly<CardData> {
-  const id = cardId;
-  return {
-    id,
-    name: parseCardName(`Offer Card ${String(cardNumber)}`),
-    cardNumber,
-    cardType: "Character",
-    subtype: parseCardSubtype("Spirit Animal"),
-    isStarter: false,
-    energyCost: 2,
-    spark: 3,
-    isFast: false,
-    renderedText: "▸Dawn: Draw a card.",
-    imageNumber,
-    artOwned: true,
-  };
-}
+import { demoCardData } from "./promotion-fixtures";
 
 const MODEL: OfferTileModel = {
   id: parseOfferTileId("cumulus-demo-card-draft"),
   kind: "card-draft",
   cards: [
-    card(parseCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), 287269511, 1),
-    card(parseCardId("161482b6-af07-4d9e-822d-8c738672beb9"), 2022594419, 2),
-    card(parseCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"), 618071684, 3),
-    card(parseCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"), 1196004046, 4),
+    demoCardData(1),
+    demoCardData(2),
+    demoCardData(3),
+    demoCardData(4),
   ],
 };
 

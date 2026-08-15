@@ -93,7 +93,7 @@ function Demo() {
               top: obstacles === "shifted" ? 90 : 120,
             }}
           >
-            <GameCard model={demoCard(1, "Registered obstacle")} />
+            <GameCard model={demoCard(1)} />
           </div>
         )}
         {obstacles === "crowded" && (

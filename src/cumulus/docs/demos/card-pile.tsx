@@ -1,33 +1,11 @@
 import { assertLocalized } from "@trox/runtime";
-import {
-  parseCardId,
-  parseCardName,
-  parseCardSubtype,
-} from "../../../types/card-identity";
 import { CardPile } from "../../components/battle/CardPile";
-import type { GameCardModel } from "../../components/card/CardView";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
 import { parseBattleCardId } from "../../../types/identifiers";
+import { demoCard } from "./promotion-fixtures";
 
-const DEMO_CARD_ID = parseCardId("1268a899-b209-46bb-bce4-6def1dcd0404");
-const DEMO_CARD: GameCardModel = {
-  cardId: DEMO_CARD_ID,
-  displaySnapshot: {
-    id: DEMO_CARD_ID,
-    name: parseCardName("Woodland Apparition"),
-    cardNumber: 1,
-    cardType: "Character",
-    subtype: parseCardSubtype("Visitor"),
-    isStarter: false,
-    energyCost: 2,
-    spark: 2,
-    isFast: false,
-    renderedText: "",
-    imageNumber: 1,
-    artOwned: true,
-  },
-};
+const DEMO_CARD = demoCard(1);
 
 function CardPileDemo() {
   const width = 152;

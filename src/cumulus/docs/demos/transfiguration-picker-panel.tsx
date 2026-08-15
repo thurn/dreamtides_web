@@ -18,7 +18,7 @@ function Demo() {
     const index = offset + 1;
     return {
       entryId: parseDeckEntryId(demoIdentitySeed(index)),
-      card: demoCard(index, offset === 1 ? "Wayfinder" : `Candidate ${index}`),
+      card: demoCard(index),
       availability: offset === 0 ? availability : ("available" as const),
       ...(offset === 0 && availability === "reforged"
         ? { reforgedType: "Empowered" as const }

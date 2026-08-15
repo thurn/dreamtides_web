@@ -74,7 +74,7 @@ function Demo() {
         <BattlefieldCard
           model={{
             battleCardId: parseBattleCardId(demoIdentitySeed(1)),
-            card: demoCard(1, "Wayfinder"),
+            card: demoCard(1),
             exhausted,
             storedMemory: 2,
             figment,

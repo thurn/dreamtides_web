@@ -50,4 +50,26 @@ describe("JourneyStatusBar documentation demo", () => {
 
     act(() => root.unmount());
   });
+
+  it("provides presentation-ready collectible art in its default model", () => {
+    const defaults = journeyStatusBarDemo.demo.defaultArgs;
+    const dreamAvatar = defaults.dreamAvatar as {
+      readonly id?: unknown;
+      readonly portrait?: { readonly kind?: string };
+    };
+    const dreamsigns = defaults.dreamsigns as readonly {
+      readonly id?: unknown;
+      readonly imageName?: string;
+      readonly imageAlt?: unknown;
+    }[];
+
+    expect(dreamAvatar.id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(dreamAvatar.portrait?.kind).toBe("dreamAvatar");
+    expect(dreamsigns).toHaveLength(3);
+    for (const dreamsign of dreamsigns) {
+      expect(dreamsign.id).toMatch(/^[0-9a-f-]{36}$/);
+      expect(dreamsign.imageName).toMatch(/\.png$/);
+      expect(dreamsign.imageAlt).toBeDefined();
+    }
+  });
 });

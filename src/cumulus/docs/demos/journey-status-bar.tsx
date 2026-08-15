@@ -15,12 +15,14 @@
 // seeded via defaultArgs.
 
 import { useRef } from "react";
+import { assertLocalized } from "@trox/runtime";
 import { JourneyStatusBar } from "../../components/hud/JourneyStatusBar";
 import type { JourneyStatusBarProps } from "../../components/hud/JourneyStatusBar";
 import { artRef } from "../../primitives/art";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
-import { parseDreamsignId } from "../../../types/identifiers";
+import { parseDreamAvatarId } from "../../../types/identifiers";
+import { demoDreamsign } from "./promotion-fixtures";
 
 function JourneyStatusBarDemo(args: Omit<JourneyStatusBarProps, "stageRef">) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -86,34 +88,15 @@ const stageRef = useRef<HTMLDivElement>(null);
       essence: 200,
       deck: 22,
       dreamAvatar: {
-        name: "Threxan",
-        epithet: "the Resounding Wrath",
+        id: parseDreamAvatarId("84e7020c-7384-4cc3-a20f-ab05f03cc375"),
+        name: assertLocalized("Threxan"),
+        epithet: assertLocalized("the Resounding Wrath"),
         portrait: artRef.dreamAvatar("0025"),
-        ability: "At the start of your first turn, draw a card.",
+        ability: assertLocalized(
+          "At the start of your first turn, draw a card.",
+        ),
       },
-      dreamsigns: [
-        {
-          id: parseDreamsignId("c706d0ba-2f41-4b14-95d8-db168ac6246c"),
-          name: "Amplified Acorn",
-          imageName: "acorn_gold.png",
-          effectDescription:
-            "Once per turn, when you discard a card, your next card this turn costs 2● less.",
-        },
-        {
-          id: parseDreamsignId("278ec1ab-f532-4862-84ae-63df5e49548c"),
-          name: "Pyramid Relic",
-          imageName: "aertfact.png",
-          effectDescription:
-            "The second character you play each turn costs 1● less.",
-        },
-        {
-          id: parseDreamsignId("d1fdbe21-56f6-43c0-aaac-1e4683964da5"),
-          name: "Bell",
-          imageName: "bell.png",
-          effectDescription:
-            "When you play a character from your void, rematerialize it.",
-        },
-      ],
+      dreamsigns: [demoDreamsign(1), demoDreamsign(2), demoDreamsign(3)],
     },
   },
 };

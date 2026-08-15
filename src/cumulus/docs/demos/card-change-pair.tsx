@@ -38,11 +38,11 @@ function Demo() {
           kind,
           before: {
             entryId: parseDeckEntryId(demoIdentitySeed(1)),
-            card: demoCard(1, "Wayfinder"),
+            card: demoCard(1),
           },
           after: {
             entryId: parseDeckEntryId(demoIdentitySeed(2)),
-            card: demoCard(2, "Wayfinder"),
+            card: demoCard(2),
           },
         }}
         reveal={reveal}
