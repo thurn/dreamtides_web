@@ -24,6 +24,17 @@ const SOURCE_TREE_CONTRACT_TESTS = [
   "scripts/domain-string-audit.test.mjs",
 ];
 
+const RUST_TOOLCHAIN_CONTRACT_TEST =
+  "scripts/rust-toolchain-contract.test.mjs";
+
+function isRustToolchainContractInput(file) {
+  return (
+    file === "rust-toolchain.toml" ||
+    file === "scripts/review.mjs" ||
+    file.startsWith(".github/workflows/")
+  );
+}
+
 const LOCALIZATION_CONTRACT_INPUTS = new Set([
   ".trox-revision",
   "trox.ron",
@@ -119,6 +130,9 @@ export function buildReviewPlan(files, fileExists = () => true) {
   const testInputs = existingFiles.filter(isTestInput);
   if (changedFiles.some(isProductionSourceInput)) {
     testInputs.push(...SOURCE_TREE_CONTRACT_TESTS);
+  }
+  if (changedFiles.some(isRustToolchainContractInput)) {
+    testInputs.push(RUST_TOOLCHAIN_CONTRACT_TEST);
   }
   if (
     changedFiles.some(

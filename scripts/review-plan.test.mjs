@@ -120,7 +120,10 @@ describe("fast review plan", () => {
     expect(buildReviewPlan(["scripts/review.mjs"])).toMatchObject({
       lintFiles: [],
       shouldTypecheck: false,
-      testInputs: ["scripts/review.mjs"],
+      testInputs: [
+        "scripts/review.mjs",
+        "scripts/rust-toolchain-contract.test.mjs",
+      ],
     });
   });
 
@@ -136,6 +139,20 @@ describe("fast review plan", () => {
     ).toMatchObject({
       shouldCheckRustFormatting: true,
     });
+  });
+
+  it("selects the Rust toolchain contract for either side of the CI contract", () => {
+    for (const input of [
+      "rust-toolchain.toml",
+      "scripts/review.mjs",
+      ".github/workflows/checks.yml",
+    ]) {
+      expect(buildReviewPlan([input])).toMatchObject({
+        testInputs: expect.arrayContaining([
+          "scripts/rust-toolchain-contract.test.mjs",
+        ]),
+      });
+    }
   });
 
   it("does not pass deleted files to lint or Vitest", () => {
