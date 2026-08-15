@@ -2427,7 +2427,6 @@ fn parse_dreamsign_reference(value: &str) -> Result<DreamsignId> {
 
 fn exploration_template_source(text: String) -> Result<trox::LocalizedString> {
     let contract = BTreeMap::from([
-        ("action_label", RonPlaceholder::Opaque),
         ("card_type", RonPlaceholder::Opaque),
         ("deck_card", RonPlaceholder::Opaque),
         ("fixed_card", RonPlaceholder::Opaque),
@@ -2734,22 +2733,25 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             "INVALID_EDIT: transfigure-fixed-selected with count greater than one requires a chosen target and predicate"
         );
     }
+    let label = required_json_string(object, "label")?;
     let followup_title = optional_json_string(object, "followupTitle")?;
     let followup_subtitle = optional_json_string(object, "followupSubtitle")?;
-    if followup_title.is_some() != followup_subtitle.is_some() {
-        bail!("INVALID_EDIT: followupTitle and followupSubtitle must be provided together");
+    if followup_title.is_some() && followup_subtitle.is_none() {
+        bail!("INVALID_EDIT: followupTitle requires followupSubtitle");
     }
     Ok(ActionDefinition {
-        label: localized_source(required_json_string(object, "label")?)?,
+        label: localized_source(label.clone())?,
         id: ActionId::parse(&required_json_string(object, "id")?)
             .map_err(|error| anyhow::anyhow!("INVALID_EDIT: {error}"))?,
         presentation: ActionPresentation {
             effect_text: exploration_template_source(required_json_string(object, "effectText")?)?,
-            followup: followup_title
-                .zip(followup_subtitle)
-                .map(|(title, subtitle)| {
+            followup: followup_subtitle
+                .map(|subtitle| {
                     Ok::<Followup, anyhow::Error>(Followup {
-                        title: exploration_template_source(title)?,
+                        title: followup_title
+                            .filter(|title| title != &label)
+                            .map(exploration_template_source)
+                            .transpose()?,
                         subtitle: exploration_template_source(subtitle)?,
                     })
                 })
@@ -6462,6 +6464,60 @@ DreamwellCatalog(
             .expect("placeholder-bearing editor copy must remain a RON template");
         assert_eq!(arguments.get("nightmare_card"), Some(&trox::ArgumentSchema::Opaque));
         assert_eq!(arguments.len(), 1);
+    }
+
+    #[test]
+    fn exploration_editor_canonicalizes_inherited_followup_titles() {
+        let mut inherited = action(EffectKind::PurgeSelected);
+        inherited
+            .as_object_mut()
+            .unwrap()
+            .insert("followupTitle".into(), json!("Choose"));
+        inherited
+            .as_object_mut()
+            .unwrap()
+            .insert("followupSubtitle".into(), json!("Instructions"));
+        let inherited = action_from_compat(inherited).unwrap();
+        assert!(
+            inherited
+                .presentation
+                .followup
+                .as_ref()
+                .unwrap()
+                .title
+                .is_none()
+        );
+
+        let mut custom = action(EffectKind::PurgeSelected);
+        custom
+            .as_object_mut()
+            .unwrap()
+            .insert("followupTitle".into(), json!("Custom"));
+        custom
+            .as_object_mut()
+            .unwrap()
+            .insert("followupSubtitle".into(), json!("Instructions"));
+        let custom = action_from_compat(custom).unwrap();
+        assert!(
+            custom
+                .presentation
+                .followup
+                .as_ref()
+                .unwrap()
+                .title
+                .is_some()
+        );
+
+        let mut placeholder = action(EffectKind::PurgeSelected);
+        placeholder
+            .as_object_mut()
+            .unwrap()
+            .insert("followupTitle".into(), json!("{action_label}"));
+        placeholder
+            .as_object_mut()
+            .unwrap()
+            .insert("followupSubtitle".into(), json!("Instructions"));
+        assert!(action_from_compat(placeholder).is_err());
     }
 
     #[test]

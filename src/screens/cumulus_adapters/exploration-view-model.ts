@@ -491,8 +491,6 @@ function configuredFollowupCopy(
     template === undefined || template === "" ? fallback : template;
   const valueFor = (name: string): number | LocalizedString => {
     switch (name) {
-      case "action_label":
-        return localizedAuthoredMessage(action.label);
       case "count":
         return action.count ?? 1;
       case "subtype":

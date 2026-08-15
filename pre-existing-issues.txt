@@ -22,3 +22,7 @@ successfully, but `models::glossary::tests::production_catalog_preserves_reviewe
 fails because it opens `data/glossary.ron` relative to the crate working directory
 (`tools/game-data/`) instead of resolving the repository root. The test is
 working-directory-sensitive and cannot find the production catalog.
+
+`cargo fmt --all -- --check` from `tools/game-data` reports pre-existing Rust
+formatting drift across unrelated files, including affiliations, compiler,
+augury, cards, dream avatars, dream guides, dreamsigns, opponents, and sites.

@@ -459,7 +459,8 @@ impl<'de> Deserialize<'de> for ActionId {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct Followup {
-    pub title: LocalizedString,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title: Option<LocalizedString>,
     pub subtitle: LocalizedString,
 }
 
@@ -926,8 +927,9 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
 
 fn lower_action(action: ActionDefinition) -> Result<toml::map::Map<String, toml::Value>> {
     let mut output = toml::map::Map::new();
+    let label = source_value(&action.label)?;
     output.insert("id".into(), action.id.to_string().into());
-    output.insert("label".into(), source_value(&action.label)?);
+    output.insert("label".into(), label.clone());
     output.insert(
         "effect-text".into(),
         source_value(&action.presentation.effect_text)?,
@@ -935,7 +937,10 @@ fn lower_action(action: ActionDefinition) -> Result<toml::map::Map<String, toml:
     if let Some(followup) = action.presentation.followup {
         output.insert(
             "followup-title".into(),
-            source_value(&followup.title)?,
+            match followup.title {
+                Some(title) => source_value(&title)?,
+                None => label,
+            },
         );
         output.insert(
             "followup-subtitle".into(),
@@ -1431,7 +1436,6 @@ mod tests {
         presentation: ActionPresentation(
           effect_text: Tx("Purge up to 2 chosen Warrior cards"),
           followup: Followup(
-            title: Tx(text: "{action_label}", placeholders: {"action_label": Opaque}),
             subtitle: Tx("Choose up to two Warrior cards to purge."),
           ),
         ),
@@ -2748,6 +2752,7 @@ mod tests {
         assert_eq!(action["effect-kind"].as_str(), Some("purge-selected"));
         assert_eq!(action["predicate"].as_str(), Some("warrior"));
         assert_eq!(action["count"].as_integer(), Some(2));
+        assert_eq!(action["followup-title"], action["label"]);
 
         let malformed: ExplorationCatalog =
             ron::from_str(&PURGE_SOURCE.replace("count: 2", "count: 0")).unwrap();
