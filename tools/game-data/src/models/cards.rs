@@ -57,7 +57,7 @@ pub struct CardDefinition {
     pub id: String,
     pub ability_text: Vec<LocalizedString>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
-    pub amplified_text: Option<Vec<LocalizedString>>,
+    pub amplified_text: Option<LocalizedString>,
     pub energy_cost: OrbValue,
     pub kind: CardKind,
     #[serde(default, skip_serializing_if = "speed_is_normal")]
@@ -229,15 +229,27 @@ pub fn lower(
         record.insert("name".into(), source_text(&card.name)?.into());
         record.insert("mtg-name".into(), metadata.mtg_origin.into());
         record.insert("id".into(), card.id.clone().into());
-        record.insert(
-            "rendered-text".into(),
-            joined_source_text(card.ability_text, "\n\n")?.into(),
-        );
+        let rendered_text = joined_source_text(card.ability_text, "\n\n")?;
+        record.insert("rendered-text".into(), rendered_text.clone().into());
         if let Some(amplified_text) = card.amplified_text {
-            record.insert(
-                "amplified-text".into(),
-                joined_source_text(amplified_text, "\n\n")?.into(),
-            );
+            let replacement = source_text(&amplified_text)?;
+            let expanded = fuzzy_replace(&rendered_text, &replacement).with_context(|| {
+                format!(
+                    "card {} amplified_text cannot be applied unambiguously",
+                    card.id
+                )
+            })?;
+            if expanded == rendered_text {
+                bail!(
+                    "card {} amplified_text replacement does not change ability_text",
+                    card.id
+                );
+            }
+            record.insert("amplified-text".into(), expanded.into());
+            // The compatibility catalog carries the compact authoring value for
+            // the card editor. Runtime JSON deliberately drops this field and
+            // continues to expose only the fully expanded Amplified rules text.
+            record.insert("amplified-replacement".into(), replacement.into());
         }
         record.insert("energy-cost".into(), card.energy_cost.compatibility_value());
         record.insert("card-type".into(), card_type.into());
@@ -289,6 +301,171 @@ pub fn lower(
     )])))
 }
 
+#[derive(Clone, Debug, Eq, PartialEq)]
+struct ReplacementCandidate {
+    start: usize,
+    end: usize,
+    distance: usize,
+}
+
+/// Replace the unique ability-text span most similar to the authored Amplified
+/// replacement. Candidate spans begin and end at whitespace boundaries, which
+/// lets authors name a word, phrase, sentence, or paragraph without allowing a
+/// match to split a Unicode scalar or the middle of a word.
+pub fn fuzzy_replace(base: &str, replacement: &str) -> Result<String> {
+    if replacement.trim().is_empty() {
+        bail!("amplified replacement must not be blank");
+    }
+    if base.trim().is_empty() {
+        bail!("amplified replacement requires nonempty ability text");
+    }
+
+    let starts = candidate_starts(base);
+    let ends = candidate_ends(base);
+    let replacement_chars = replacement.chars().collect::<Vec<_>>();
+    let mut candidates = Vec::new();
+    for start in starts {
+        for &end in &ends {
+            if end <= start {
+                continue;
+            }
+            let candidate = &base[start..end];
+            if !compatible_match_boundaries(candidate, replacement) {
+                continue;
+            }
+            let distance =
+                levenshtein_chars(&candidate.chars().collect::<Vec<_>>(), &replacement_chars);
+            candidates.push(ReplacementCandidate {
+                start,
+                end,
+                distance,
+            });
+        }
+    }
+
+    let best_distance = candidates
+        .iter()
+        .map(|candidate| candidate.distance)
+        .min()
+        .context("amplified replacement found no candidate spans")?;
+    let best = candidates
+        .iter()
+        .filter(|candidate| candidate.distance == best_distance)
+        .collect::<Vec<_>>();
+    if best.len() != 1 {
+        let matches = best
+            .iter()
+            .map(|candidate| {
+                format!(
+                    "{}..{} {:?}",
+                    candidate.start,
+                    candidate.end,
+                    &base[candidate.start..candidate.end]
+                )
+            })
+            .collect::<Vec<_>>()
+            .join(", ");
+        bail!(
+            "ambiguous amplified replacement {:?}: {} spans tie at edit distance {} ({})",
+            replacement,
+            best.len(),
+            best_distance,
+            matches
+        );
+    }
+
+    let selected = best[0];
+    let candidate_length = base[selected.start..selected.end].chars().count();
+    let comparison_length = candidate_length.max(replacement_chars.len());
+    let similarity = comparison_length
+        .checked_sub(best_distance)
+        .map(|overlap| overlap as f64 / comparison_length as f64)
+        .unwrap_or_default();
+    if similarity < 0.30 {
+        bail!(
+            "amplified replacement {:?} has no sufficiently similar ability-text span; closest was {:?} ({:.0}% similarity)",
+            replacement,
+            &base[selected.start..selected.end],
+            similarity * 100.0
+        );
+    }
+
+    Ok(format!(
+        "{}{}{}",
+        &base[..selected.start],
+        replacement,
+        &base[selected.end..]
+    ))
+}
+
+fn compatible_match_boundaries(candidate: &str, replacement: &str) -> bool {
+    let replacement_terminal = replacement.chars().next_back();
+    let candidate_terminal = candidate.trim_end().chars().next_back();
+    let terminal_is_sentence_punctuation = |character: Option<char>| {
+        character.is_some_and(|character| matches!(character, '.' | '!' | '?'))
+    };
+    if terminal_is_sentence_punctuation(replacement_terminal)
+        && !terminal_is_sentence_punctuation(candidate_terminal)
+    {
+        return false;
+    }
+    if replacement.starts_with('▸') && !candidate.starts_with('▸') {
+        return false;
+    }
+    true
+}
+
+fn candidate_starts(text: &str) -> Vec<usize> {
+    let mut starts = vec![0];
+    let mut in_whitespace = false;
+    for (index, character) in text.char_indices() {
+        if character.is_whitespace() {
+            in_whitespace = true;
+        } else if in_whitespace {
+            starts.push(index);
+            in_whitespace = false;
+        }
+    }
+    starts
+}
+
+fn candidate_ends(text: &str) -> Vec<usize> {
+    let mut ends = Vec::new();
+    let mut in_whitespace = false;
+    for (index, character) in text.char_indices() {
+        if character.is_whitespace() {
+            if !in_whitespace {
+                ends.push(index);
+            }
+            in_whitespace = true;
+        } else {
+            in_whitespace = false;
+        }
+    }
+    if text.chars().next_back().is_some_and(char::is_whitespace) {
+        ends.pop();
+    }
+    ends.push(text.len());
+    ends
+}
+
+fn levenshtein_chars(left: &[char], right: &[char]) -> usize {
+    let mut previous = (0..=right.len()).collect::<Vec<_>>();
+    let mut current = vec![0; right.len() + 1];
+    for (left_index, left_character) in left.iter().enumerate() {
+        current[0] = left_index + 1;
+        for (right_index, right_character) in right.iter().enumerate() {
+            let substitution =
+                previous[right_index] + usize::from(left_character != right_character);
+            current[right_index + 1] = (current[right_index] + 1)
+                .min(previous[right_index + 1] + 1)
+                .min(substitution);
+        }
+        std::mem::swap(&mut previous, &mut current);
+    }
+    previous[right.len()]
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -303,7 +480,7 @@ mod tests {
             name: ls("Unicode ✦ card"),
             id: "00000000-0000-4000-8000-000000000001".into(),
             ability_text: vec![ls("quoted \"text\""), ls("multiline {value}")],
-            amplified_text: Some(vec![ls("stronger quoted \"text\"")]),
+            amplified_text: Some(ls("stronger quoted \"text\"")),
             energy_cost,
             kind,
             speed: Speed::Interrupt,
@@ -334,28 +511,27 @@ mod tests {
 
     #[test]
     fn lowers_every_card_kind_and_optional_shape() {
-        let output = lower(
-            vec![card(
-                OrbValue::FixedAndVariable(2),
-                CardKind::Character {
-                    subtype: "Guide".into(),
-                    spark: None,
-                },
-            )],
-            metadata(1),
-        )
-        .unwrap();
+        let mut fixture = card(
+            OrbValue::FixedAndVariable(2),
+            CardKind::Character {
+                subtype: "Guide".into(),
+                spark: None,
+            },
+        );
+        fixture.ability_text = vec![ls("quoted \"text\"")];
+        let output = lower(vec![fixture], metadata(1)).unwrap();
         let record = output["cards"][0].as_table().unwrap();
         assert_eq!(record["energy-cost"].as_str(), Some("2,X"));
         assert_eq!(record["spark"].as_str(), Some(""));
         assert_eq!(record["is-interrupt"].as_bool(), Some(true));
         assert_eq!(record["tags"][0].as_str(), Some("first"));
-        assert_eq!(
-            record["rendered-text"].as_str(),
-            Some("quoted \"text\"\n\nmultiline {value}")
-        );
+        assert_eq!(record["rendered-text"].as_str(), Some("quoted \"text\""));
         assert_eq!(
             record["amplified-text"].as_str(),
+            Some("stronger quoted \"text\"")
+        );
+        assert_eq!(
+            record["amplified-replacement"].as_str(),
             Some("stronger quoted \"text\"")
         );
 
@@ -367,6 +543,50 @@ mod tests {
         assert_eq!(event["cards"][0]["subtype"].as_str(), Some(""));
         assert!(event["cards"][0].get("amplified-text").is_none());
         assert_eq!(event["cards"][0]["roles"][0].as_str(), Some("nightmare"));
+    }
+
+    #[test]
+    fn fuzzy_replacement_expands_short_and_contextual_amplified_text() {
+        assert_eq!(
+            fuzzy_replace(
+                "When you discard this card, materialize it.",
+                "materialize it with awakened.",
+            )
+            .unwrap(),
+            "When you discard this card, materialize it with awakened."
+        );
+        assert_eq!(
+            fuzzy_replace(
+                "Spirit animals you control have +1✦.\n\nWhen you play a spirit animal, you may pay 1● to draw a card.",
+                "+2✦.",
+            )
+            .unwrap(),
+            "Spirit animals you control have +2✦.\n\nWhen you play a spirit animal, you may pay 1● to draw a card."
+        );
+    }
+
+    #[test]
+    fn fuzzy_replacement_rejects_ambiguous_and_unrelated_text() {
+        let ambiguous = fuzzy_replace("Gain 1●.\n\nGain 1●.", "Gain 2●.")
+            .unwrap_err()
+            .to_string();
+        assert!(ambiguous.contains("ambiguous amplified replacement"));
+
+        let unrelated = fuzzy_replace("Gain 1●.", "Banish every enemy forever.")
+            .unwrap_err()
+            .to_string();
+        assert!(unrelated.contains("no sufficiently similar ability-text span"));
+    }
+
+    #[test]
+    fn card_lowering_rejects_ambiguous_amplified_replacements() {
+        let mut fixture = card(OrbValue::Fixed(1), CardKind::Event);
+        fixture.ability_text = vec![ls("Gain 1●."), ls("Gain 1●.")];
+        fixture.amplified_text = Some(ls("Gain 2●."));
+        let error = lower(vec![fixture], metadata(1)).unwrap_err();
+        let diagnostic = format!("{error:#}");
+        assert!(diagnostic.contains("card 00000000-0000-4000-8000-000000000001"));
+        assert!(diagnostic.contains("ambiguous amplified replacement"));
     }
 
     #[test]

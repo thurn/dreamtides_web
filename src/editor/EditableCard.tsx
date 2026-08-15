@@ -383,19 +383,14 @@ export default function EditableCard({
       />
     ) : null;
 
-  // While the rules-text field is open, grow the card's text box so the inline
-  // editing textarea has room to show several lines instead of the three-line
-  // display cap.
-  const visibleRulesSaveEntry = showAmplifiedText
-    ? amplifiedTextSaveEntry
-    : rulesTextSaveEntry;
-  const visibleRulesField: EditableCardField = showAmplifiedText
-    ? "amplified-text"
-    : "rendered-text";
+  // The expanded Amplified form is generated from the base rules plus the
+  // compact replacement. It remains read-only on the physical card; the
+  // replacement has its own editor below the card.
   const confirmedVisibleRulesText = showAmplifiedText
-    ? card["amplified-text"]
+    ? card.preview.amplifiedText ?? ""
     : card["rendered-text"];
-  const rulesTextEditing = visibleRulesSaveEntry?.status === "editing";
+  const rulesTextEditing =
+    !showAmplifiedText && rulesTextSaveEntry?.status === "editing";
   const visibleName = String(nameSaveEntry?.draftValue ?? card.name);
   const visibleEnergy = energyPreviewValue(
     energySaveEntry?.draftValue ?? card["energy-cost"],
@@ -408,7 +403,8 @@ export default function EditableCard({
   const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? card.subtype);
   const previewSubtype = parseCardSubtype(visibleSubtype);
   const visibleRulesText = String(
-    visibleRulesSaveEntry?.draftValue ?? confirmedVisibleRulesText,
+    (showAmplifiedText ? null : rulesTextSaveEntry?.draftValue) ??
+      confirmedVisibleRulesText,
   );
   const visibleCard = {
     ...card.preview,
@@ -423,50 +419,6 @@ export default function EditableCard({
   const shouldShowGlossaryInfoOnHover =
     showGlossaryInfoOnHover &&
     extractGlossaryTerms(visibleRulesText).length > 0;
-  const originalRulesCaption = showAmplifiedText ? (
-    <div
-      data-editor-original-rules-text="true"
-      style={{
-        marginTop: "6px",
-        color: "rgba(217, 225, 221, 0.78)",
-        fontSize: "0.72rem",
-        fontWeight: 600,
-        lineHeight: 1.35,
-        display: "-webkit-box",
-        WebkitBoxOrient: "vertical",
-        WebkitLineClamp: 3,
-        overflow: "hidden",
-      }}
-    >
-      <strong style={{ color: "#8edbd1" }}>Original:</strong>{" "}
-      {card["rendered-text"]}
-    </div>
-  ) : null;
-  const clearAmplifiedTextControl =
-    showAmplifiedText &&
-    !rulesTextEditing &&
-    confirmedVisibleRulesText.trim() !== "" ? (
-      <span
-        className="cumulus"
-        data-editor-clear-amplified-text={card.id}
-        title="Clear amplified text"
-        style={{
-          position: "absolute",
-          top: "var(--space-4xl)",
-          right: "var(--space-xs)",
-          zIndex: 7,
-        }}
-      >
-        <IconButton
-          glyph={GLYPHS.close}
-          label={assertLocalized("Clear amplified text")}
-          size="sm"
-          disabled={visibleRulesSaveEntry?.status === "saving"}
-          onPress={() => onFieldSave(card, "amplified-text", "")}
-        />
-      </span>
-    ) : null;
-
   // Common props for an editable region. EditableField is a `display: contents`
   // wrapper, so the rendered card geometry is exactly CardView's; the editor
   // only swaps in an input on the same spot while a field is being edited and
@@ -497,6 +449,77 @@ export default function EditableCard({
       {children}
     </EditableField>
   );
+
+  const amplifiedEditorPanel = showAmplifiedText ? (
+    <div
+      data-editor-amplified-authoring="true"
+      style={{
+        marginTop: "8px",
+        display: "grid",
+        gap: "8px",
+        padding: "10px",
+        border: "1px solid rgba(142, 219, 209, 0.32)",
+        borderRadius: "8px",
+        background: "rgba(6, 16, 18, 0.86)",
+        color: "rgba(217, 225, 221, 0.9)",
+        fontSize: "0.72rem",
+        fontWeight: 600,
+        lineHeight: 1.35,
+      }}
+    >
+      <div data-editor-original-rules-text="true">
+        <strong style={{ color: "#8edbd1" }}>Original:</strong>{" "}
+        {card["rendered-text"]}
+      </div>
+      <div style={{ display: "grid", gap: "4px" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            gap: "8px",
+          }}
+        >
+          <strong style={{ color: "#8edbd1" }}>Amplified replacement:</strong>
+          {card["amplified-text"].trim() !== "" ? (
+            <span className="cumulus" data-editor-clear-amplified-text={card.id}>
+              <IconButton
+                glyph={GLYPHS.close}
+                label={assertLocalized("Clear amplified text")}
+                size="sm"
+                disabled={amplifiedTextSaveEntry?.status === "saving"}
+                onPress={() => onFieldSave(card, "amplified-text", "")}
+              />
+            </span>
+          ) : null}
+        </div>
+        <EditableField
+          {...fieldProps(
+            "amplified-text",
+            card["amplified-text"],
+            amplifiedTextSaveEntry,
+          )}
+          activation="click"
+          mode="multiline"
+          multilineSize="expanded"
+        >
+          <div
+            style={{
+              minHeight: "3.2em",
+              padding: "6px 8px",
+              border: "1px solid rgba(247, 241, 223, 0.2)",
+              borderRadius: "6px",
+              background: "rgba(15, 23, 25, 0.72)",
+              whiteSpace: "pre-wrap",
+              cursor: "text",
+            }}
+          >
+            {card["amplified-text"]}
+          </div>
+        </EditableField>
+      </div>
+    </div>
+  ) : null;
 
   const slots: CardViewSlots = {
     energy: (_context, defaultNode) => (
@@ -557,18 +580,21 @@ export default function EditableCard({
 
       return defaultNode;
     },
-    rulesText: (_context, defaultNode) => (
-      <EditableField
-        {...fieldProps(
-          visibleRulesField,
-          confirmedVisibleRulesText,
-          visibleRulesSaveEntry,
-        )}
-        mode="multiline"
-      >
-        {defaultNode}
-      </EditableField>
-    ),
+    rulesText: (_context, defaultNode) =>
+      showAmplifiedText ? (
+        defaultNode
+      ) : (
+        <EditableField
+          {...fieldProps(
+            "rendered-text",
+            confirmedVisibleRulesText,
+            rulesTextSaveEntry,
+          )}
+          mode="multiline"
+        >
+          {defaultNode}
+        </EditableField>
+      ),
     spark: (_context, defaultNode) => {
       const sparkActive =
         sparkSaveEntry !== null && sparkSaveEntry.status !== "idle";
@@ -631,9 +657,8 @@ export default function EditableCard({
           eagerRulesFit={eagerRulesFit}
           glossaryInfoOnHover={shouldShowGlossaryInfoOnHover}
         />
-        {clearAmplifiedTextControl}
         {fontSizeOverlay}
-        {originalRulesCaption}
+        {amplifiedEditorPanel}
         {checkboxControl}
         {hovering && mtgName !== "" ? (
           <MtgNameTooltip anchorRef={cardRef} mtgName={mtgName} />
@@ -661,9 +686,8 @@ export default function EditableCard({
         rulesTextboxExpanded={rulesTextEditing}
         glossaryInfoOnHover={shouldShowGlossaryInfoOnHover}
       />
-      {clearAmplifiedTextControl}
       {fontSizeOverlay}
-      {originalRulesCaption}
+      {amplifiedEditorPanel}
       {/* Checkbox tagging hides the tag and tide chip editors so only the one
           selected tag is in play. */}
       {!checkboxActive && tagEditing ? (

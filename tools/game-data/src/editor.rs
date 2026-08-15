@@ -3050,14 +3050,11 @@ fn render_card_source_field(card: &CardDefinition, field: &str) -> Result<String
             Ok(format!("[{}]", clauses.join(", ")))
         }
         "amplified_text" => {
-            let clauses = card
+            let replacement = card
                 .amplified_text
                 .as_ref()
-                .context("amplified_text must be present when rendering")?
-                .iter()
-                .map(ron::to_string)
-                .collect::<Result<Vec<_>, _>>()?;
-            Ok(format!("[{}]", clauses.join(", ")))
+                .context("amplified_text must be present when rendering")?;
+            Ok(ron::to_string(replacement)?)
         }
         "energy_cost" => Ok(render_orb(&card.energy_cost)),
         "kind" => match &card.kind {
@@ -3379,12 +3376,7 @@ fn set_card_field(card: &mut CardDefinition, field: &str, value: JsonValue) -> R
             card.amplified_text = if rendered_text.is_empty() {
                 None
             } else {
-                Some(
-                    rendered_text
-                        .split("\n\n")
-                        .map(|paragraph| localized_source(paragraph.to_owned()))
-                        .collect::<Result<_>>()?,
-                )
+                Some(localized_source(rendered_text)?)
             };
         }
         "energy_cost" | "energy-cost" => card.energy_cost = parse_orb(value, false)?,
@@ -6654,7 +6646,7 @@ DreamwellCatalog(
         let inserted =
             patch_card_source_field(CARD_SOURCE, &cards[index], "amplified-text").unwrap();
         assert!(inserted.contains(
-            "amplified_text: [Tx(\"Offering\"), Tx(\"▸Materialized: Dissolve up to two enemies.\")],"
+            "amplified_text: Tx(\"Offering\\n\\n▸Materialized: Dissolve up to two enemies.\"),"
         ));
         assert_eq!(
             ron::from_str::<Vec<CardDefinition>>(&inserted).unwrap(),

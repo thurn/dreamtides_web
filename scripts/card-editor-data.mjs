@@ -143,7 +143,8 @@ function editorRecordFromCard(card) {
     name: card.name,
     spark: card.spark ?? "",
     "rendered-text": card["rendered-text"] ?? "",
-    "amplified-text": card["amplified-text"] ?? "",
+    "amplified-text":
+      card["amplified-replacement"] ?? card["amplified-text"] ?? "",
     tags: normalizeTagList(card.tags),
     tides: normalizeTagList(card.tides),
     mtgName: typeof card["mtg-name"] === "string" ? card["mtg-name"] : "",

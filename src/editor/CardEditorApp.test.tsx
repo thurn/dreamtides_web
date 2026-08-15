@@ -2377,6 +2377,7 @@ describe("CardEditorApp", () => {
   it("filters, previews, and edits canonical amplified text on card faces", async () => {
     window.history.pushState(null, "", "/editor?amplified=1&amplifiedonly=1");
     const amplifiedText = "Draw two cards.";
+    const amplifiedReplacement = "two cards.";
     const saveEditorCardField = vi.fn<EditorApiClient["saveEditorCardField"]>(
       (request) =>
         Promise.resolve({
@@ -2386,7 +2387,7 @@ describe("CardEditorApp", () => {
             preview: makePreview({
               id: request.id,
               renderedText: "Draw a card.",
-              amplifiedText: String(request.value),
+              amplifiedText: `Draw ${String(request.value)}`,
             }),
           }),
           clientRevision: request.clientRevision,
@@ -2401,7 +2402,7 @@ describe("CardEditorApp", () => {
               makeEditorCard({ id: testCardId("base-only-card") }),
               makeEditorCard({
                 id: testCardId("amplified-card"),
-                "amplified-text": amplifiedText,
+                "amplified-text": amplifiedReplacement,
                 preview: makePreview({
                   id: "amplified-card",
                   renderedText: "Draw a card.",
@@ -2430,7 +2431,8 @@ describe("CardEditorApp", () => {
     expect(editorCard?.getAttribute("data-editor-rules-variant")).toBe(
       "amplified",
     );
-    expect(amplifiedField?.textContent).toContain(amplifiedText);
+    expect(editorCard?.textContent).toContain(amplifiedText);
+    expect(amplifiedField?.textContent).toContain(amplifiedReplacement);
     const originalCaption = editorCard?.querySelector<HTMLElement>(
       '[data-editor-original-rules-text="true"]',
     );
@@ -2441,9 +2443,7 @@ describe("CardEditorApp", () => {
     }
 
     act(() => {
-      amplifiedField.dispatchEvent(
-        new MouseEvent("dblclick", { bubbles: true }),
-      );
+      amplifiedField.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     const textarea = container.querySelector<HTMLTextAreaElement>(
       '[data-editor-input-field="amplified-text"]',
@@ -2453,7 +2453,7 @@ describe("CardEditorApp", () => {
     }
 
     await act(async () => {
-      setTextareaValue(textarea, "Draw three cards.");
+      setTextareaValue(textarea, "three cards.");
       pressKey(textarea, "Enter");
       await flushAsyncWork();
     });
@@ -2461,9 +2461,10 @@ describe("CardEditorApp", () => {
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
       id: testCardId("amplified-card"),
       field: "amplified-text",
-      value: "Draw three cards.",
+      value: "three cards.",
     });
-    expect(amplifiedField.textContent).toContain("Draw three cards.");
+    expect(amplifiedField.textContent).toContain("three cards.");
+    expect(editorCard?.textContent).toContain("Draw three cards.");
 
     const clearAmplifiedText = editorCard?.querySelector<HTMLButtonElement>(
       '[aria-label="Clear amplified text"]',

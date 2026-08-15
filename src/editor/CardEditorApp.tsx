@@ -456,13 +456,11 @@ function cardPreviewWithDrafts(
   if (typeof subtype === "string") {
     next.subtype = parseCardSubtype(subtype);
   }
-  const renderedText = showAmplifiedText
-    ? drafts["amplified-text"]
-    : drafts["rendered-text"];
-  if (typeof renderedText === "string") {
-    next.renderedText = renderedText;
-  } else if (showAmplifiedText) {
+  const renderedText = drafts["rendered-text"];
+  if (showAmplifiedText) {
     next.renderedText = preview.amplifiedText ?? "";
+  } else if (typeof renderedText === "string") {
+    next.renderedText = renderedText;
   }
   return next;
 }

@@ -22,7 +22,11 @@
         "src/cumulus/docs/**",
       ],
     ),
-    (language: Ron, include: ["data/**/*.ron"], exclude: ["data/internal/**/*.ron"]),
+    (
+      language: Ron,
+      include: ["data/**/*.ron"],
+      exclude: ["data/internal/**/*.ron", "data/cards.ron"],
+    ),
   ],
 
   locales: {

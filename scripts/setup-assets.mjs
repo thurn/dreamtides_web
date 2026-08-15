@@ -51,6 +51,7 @@ import {
   compileTransfigurationData,
 } from "./data-driven-catalogs.mjs";
 import { compileTidesData } from "./tides-data.mjs";
+import { formatRon } from "./ron-format.mjs";
 
 // Re-exported for `setup-assets.test.mjs`, which exercises the JSONC comment
 // stripper alongside the asset-build helpers defined here.
@@ -73,6 +74,10 @@ const ROOT = resolve(
   process.env.DREAMTIDES_DATA_ROOT ?? resolve(import.meta.dirname, ".."),
 );
 const DATA_DIR = join(ROOT, "data");
+// Keep generated RON byte-stable with the repository's .ronfmt.json. The game
+// data staging validator copies scripts but intentionally not repository-root
+// configuration files, so this generated-artifact contract is explicit here.
+const RON_FORMAT_CONFIG = { indentWidth: 2, printWidth: 100 };
 const LOCAL_ASSET_HOME = resolve(
   process.env.DREAMTIDES_LOCAL_ASSET_HOME ?? homedir(),
 );
@@ -330,6 +335,9 @@ export function transformCard(card) {
       }
     } else if (camelKey === "tides") {
       // Tides are not part of runtime card data; drop any authored value.
+    } else if (camelKey === "amplifiedReplacement") {
+      // Compact Amplified authoring is editor/localization-build metadata. The
+      // runtime receives only the expanded `amplifiedText` rules text.
     } else {
       result[camelKey] = value;
     }
@@ -342,6 +350,39 @@ export function transformCard(card) {
     result.subtype = "";
   }
   return result;
+}
+
+function ronTx(text) {
+  const escapedBraces = String(text)
+    .replaceAll("{", "{{")
+    .replaceAll("}", "}}");
+  return `Tx(${JSON.stringify(escapedBraces)})`;
+}
+
+/**
+ * Generate the complete card messages Trox extracts. Canonical cards.ron keeps
+ * Amplified authoring compact, but translators need complete messages rather
+ * than language-dependent replacement fragments. The generated projection
+ * retains CardDefinition field paths so existing message identities and
+ * translator history stay stable.
+ */
+export function generateCardLocalizationProjection(cards) {
+  const records = cards.map((card) => {
+    const abilityText = String(card["rendered-text"] ?? "")
+      .split("\n\n")
+      .map(ronTx)
+      .join(", ");
+    const amplifiedText = card["amplified-text"];
+    const amplifiedField =
+      amplifiedText === undefined
+        ? ""
+        : `\n    amplified_text: [${String(amplifiedText)
+            .split("\n\n")
+            .map(ronTx)
+            .join(", ")}],`;
+    return `  CardDefinition(\n    name: ${ronTx(card.name)},\n    ability_text: [${abilityText}],${amplifiedField}\n  ),`;
+  });
+  return `// GENERATED FILE — DO NOT EDIT. Complete localization messages projected from data/cards.ron.\n[\n${records.join("\n\n")}\n]\n`;
 }
 
 /**
@@ -1351,6 +1392,11 @@ export function regenerateCardData({
     "config",
     "card-role-data.json",
   ),
+  cardLocalizationRonPath = join(
+    dirname(cardTomlPath),
+    "generated",
+    "cards_localization.ron",
+  ),
 } = {}) {
   console.log("Parsing cards.toml for the runtime card catalog...");
   const cardTomlContent = readFileSync(cardTomlPath, "utf8");
@@ -1366,6 +1412,17 @@ export function regenerateCardData({
   const cardRoleData = compileCardRoleData(allCards);
   mkdirSync(dirname(cardRoleJsonPath), { recursive: true });
   writeFileSync(cardRoleJsonPath, `${JSON.stringify(cardRoleData, null, 2)}\n`);
+  mkdirSync(dirname(cardLocalizationRonPath), { recursive: true });
+  writeFileSync(
+    cardLocalizationRonPath,
+    formatRon(
+      formatRon(
+        generateCardLocalizationProjection(allCards),
+        RON_FORMAT_CONFIG,
+      ),
+      RON_FORMAT_CONFIG,
+    ),
+  );
 
   // Filter out Special-rarity cards from the runtime pool, except the
   // RON-role card required by Nightmare journey effects.

@@ -1,0 +1,3675 @@
+// GENERATED FILE — DO NOT EDIT. Complete localization messages projected from data/cards.ron.
+
+[
+  CardDefinition(
+    name: Tx("Windcutter"),
+    ability_text: [Tx("▸Challenge: Banish an enemy until end of turn.")],
+    amplified_text: [Tx("▸Challenge: Banish an enemy until your next turn.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Starlight Guide"),
+    ability_text: [Tx("▸Challenge: Rematerialize a character you control.")],
+    amplified_text: [Tx("▸Challenge: Rematerialize up to two characters you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Light of Emergence"),
+    ability_text: [Tx("Offering"), Tx("Draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Kindlehorn"),
+    ability_text: [Tx("▸Dawn: Gain 1●."), Tx("4●, ☾: This character gains +1✦.")],
+    amplified_text: [Tx("▸Dawn: Gain 2●."), Tx("4●, ☾: This character gains +1✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Passage Through Oblivion"),
+    ability_text: [Tx("Rematerialize a character you control."), Tx("Reclaim 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Graywatch"),
+    ability_text: [
+      Tx("Vengeful"),
+      Tx("When you play a card from your void, return this character to play."),
+    ],
+    amplified_text: [
+      Tx("Vengeful"),
+      Tx("When you play a card from your void, return this character to play with awakened."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Wheel of the Heavens"),
+    ability_text: [
+      Tx(
+        "Each player shuffles their hand and void into their deck, then draws 5 cards. Banish this card."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Chronicle Claimer"),
+    ability_text: [Tx("❖ – ☾: Draw a card, then discard a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Radiants' Captain"),
+    ability_text: [
+      Tx("2●, ☾: Draw a card, then discard a card."),
+      Tx("Once per turn, when you discard a card, materialize a 2✦ shadow figment."),
+    ],
+    amplified_text: [
+      Tx("2●, ☾: Draw a card, then discard a card."),
+      Tx("Once per turn, when you discard a card, materialize a 3✦ shadow figment."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("The Deathsworn"),
+    ability_text: [
+      Tx("When you materialize a character with 1✦, materialize this character from your void."),
+    ],
+    amplified_text: [
+      Tx("When you materialize a ≤1✦ character, materialize this character from your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Arc Gate Opening"),
+    ability_text: [Tx("Gain 4●.")],
+    amplified_text: [Tx("Gain 5●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Ossuary Offering"),
+    ability_text: [Tx("Draw 2 cards. The opponent gains 2⍟.")],
+    amplified_text: [Tx("Draw 2 cards. The opponent gains 1⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Spirit Bond"),
+    ability_text: [
+      Tx(
+        "Until end of turn, characters you control have +X✦ where X is the number of characters you control."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Fading Farewell"),
+    ability_text: [
+      Tx("Until end of turn, when a character you control is dissolved, return it to your hand."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ethereal Trailblazer"),
+    ability_text: [Tx("▸Materialized, Dawn: If you control 3 or more warriors, gain 1●.")],
+    amplified_text: [Tx("▸Materialized, Dawn: If you control 2 or more warriors, gain 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Synapse Engineer"),
+    ability_text: [Tx("When you play an event, draw a card, then discard a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Shadow Balladeer"),
+    ability_text: [Tx("When you play an event, awaken each character you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Minstrel of Falling Light"),
+    ability_text: [
+      Tx("When you play an event, characters you control gain +1✦ until end of turn."),
+    ],
+    amplified_text: [
+      Tx("When you play an event, characters you control gain +2✦ until end of turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Rift Pilgrim"),
+    ability_text: [Tx("▸Materialized: Discover a ≤2✦ character.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Door to Possibility"),
+    ability_text: [Tx("Choose a value of X. Discover an event with cost X.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Seeker of Lost Paths"),
+    ability_text: [
+      Tx("Cards you reclaim are not banished when they leave play."),
+      Tx("2●, ☾: Choose a character in your void to gain reclaim."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Clockwork Salvager"),
+    ability_text: [Tx("When you discard a card, you may play that card from your void this turn.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Soulkindler"),
+    ability_text: [
+      Tx("Abandon this character: Return a character from your void to your hand."),
+      Tx("▸Dawn: If this card is in your void, erode 3."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Void Salvager"),
+    ability_text: [
+      Tx("Awakened"),
+
+      Tx(
+        "2●, ☾, Discard a card: Return up to two ≤2● cost characters from your void to your hand."
+      ),
+    ],
+    amplified_text: [
+      Tx("Awakened"),
+
+      Tx(
+        "2●, ☾, Discard a card: Return up to two ≤3● cost characters from your void to your hand."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Shadowbinder"),
+    ability_text: [Tx("Abandon another character: Gain 2●.")],
+    amplified_text: [Tx("Abandon another character: Gain 3●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Echo Architect"),
+    ability_text: [Tx("Events cost you 1● more."), Tx("When you play an event, copy it.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Oracle of Shifting Skies"),
+    ability_text: [Tx("When you play an event, foresee 1.")],
+    amplified_text: [Tx("When you play an event, foresee 2.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Inheritor of Sorrows"),
+    ability_text: [
+      Tx("If there are 3 or more events in your void, this character has +4✦ and gains awakened."),
+    ],
+    amplified_text: [
+      Tx("If there are 2 or more events in your void, this character has +4✦ and gains awakened."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Blind Butcher"),
+    ability_text: [Tx("▸Materialized: Dissolve a ≤2✦ enemy.")],
+    amplified_text: [Tx("▸Materialized: Dissolve a ≤3✦ enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Molten Duel"),
+    ability_text: [Tx("Dissolve a ≤3✦ character.")],
+    amplified_text: [Tx("Dissolve a ≤4✦ character.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Unbroken"),
+    ability_text: [Tx("When you discard a card, this character gains +1✦.")],
+    amplified_text: [Tx("When you discard a card, this character gains +2✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Cloudstrider"),
+    ability_text: [Tx("Veil"), Tx("When you play a ≤2● cost character, gain 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Spirit Field Reclaimer"),
+    ability_text: [
+      Tx("Support – Supported characters have +1✦ for each stored ⧗."),
+      Tx("1●, Banish a character from a void: Store 1⧗."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Resonance Surveyor"),
+    ability_text: [
+      Tx("When you play your second card in a turn, draw a card, then discard a card."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Woodland Apparition"),
+    ability_text: [
+      Tx("Support – Supported characters have +2✦."),
+      Tx("Reclaim – 3●, Banish 3 cards from your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Wasteland Holdout"),
+    ability_text: [Tx("When you materialize a figment, store 1⧗."), Tx("1⧗, ☾: Draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Curio Dealer"),
+    ability_text: [
+      Tx("Veil"),
+      Tx("1●, Discard a character with cost X●: Discover a character with cost X●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Moment Rewound"),
+    ability_text: [Tx("Take an extra turn after this one.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Starsea Traveler"),
+    ability_text: [Tx("Once per turn, you may play a ≤2● cost character from your void.")],
+    amplified_text: [Tx("Once per turn, you may play a ≤3● cost character from your void.")],
+  ),
+
+  CardDefinition(
+    name: Tx("The Waking Titan"),
+    ability_text: [
+      Tx("When you play an event, store 1⧗."),
+      Tx("5⧗: Return all other characters to hand."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Surge Evoker"),
+    ability_text: [Tx("When you play an event, store 1⧗."), Tx("3⧗: This character gains +5✦.")],
+    amplified_text: [Tx("When you play an event, store 2⧗."), Tx("3⧗: This character gains +5✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Horizon Chaser"),
+    ability_text: [
+      Tx(
+        "When you materialize a non-figment character, it gains +X✦ where X is this character's ✦."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Riftwalker"),
+    ability_text: [Tx("1●, Abandon this character: Return a character to its controller's hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Desolation's Edge"),
+    ability_text: [
+      Tx("☾: Store 1⧗."),
+
+      Tx(
+        "Abandon this character: Dissolve each character with cost less than or equal to the stored ⧗."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Soulflame Predator"),
+    ability_text: [Tx("▸Materialized: Banish a card from the opponent's void.")],
+    amplified_text: [Tx("▸Materialized: Banish up to two cards from the opponent's void.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Brawler Battlesuit"),
+    ability_text: [Tx("▸Materialized: Return a character you control to hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Driftcaller Sovereign"),
+    ability_text: [Tx("Abandon this character: Gain 1●.")],
+    amplified_text: [Tx("Abandon this character: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Ghostlight Wolves"),
+    ability_text: [
+      Tx("Support – Supported spirit animals have +2✦."),
+      Tx("☾: Gain 1● for each spirit animal you control."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Eternal Stag"),
+    ability_text: [
+      Tx("Support – Supported spirit animals have +1✦."),
+      Tx("2●, ☾: Draw a spirit animal."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Silent Mourner"),
+    ability_text: [
+      Tx("▸Materialized: Materialize a 1✦ ethereal figment."),
+      Tx("When a character you control is dissolved, gain 1⍟."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized: Materialize a 2✦ ethereal figment."),
+      Tx("When a character you control is dissolved, gain 1⍟."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ashen Remnant"),
+    ability_text: [
+      Tx("This character has +1✦ for each character in your void."),
+      Tx("Abandon another character: Erode 1."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("The Dread Sovereign"),
+    ability_text: [
+      Tx(
+        "X●, ☾, Abandon another character: Discover a character with cost X●, then materialize it."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "X●, ☾, Abandon another character: Discover a character with cost X●, then materialize it with awakened."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Consumed Marksman"),
+    ability_text: [Tx("▸Materialized, Dissolved: Draw a card with ephemeral.")],
+    amplified_text: [Tx("▸Materialized, Dissolved: Draw 2 cards with ephemeral.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Frostbound Defiant"),
+    ability_text: [
+      Tx(
+        "Abandon this character: Shuffle up to 3 cards from your void into your deck. Draw a card."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Battlefield Medic"),
+    ability_text: [
+      Tx("Support – Supported characters have +2✦."),
+      Tx("❖ – 1●: Move this character to an unoccupied character position."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Skyflame Commander"),
+    ability_text: [Tx("Support – Supported characters have +1✦ for each warrior you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Salvage Colossus"),
+    ability_text: [
+      Tx("▸Materialized: Draw 2 cards."),
+      Tx("Reclaim – 3●, Banish 7 cards from your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Skybreak Ascendant"),
+    ability_text: [Tx("▸Materialized: Discard your hand, then draw 3 cards.")],
+    amplified_text: [Tx("▸Materialized: Discard 3 cards, then draw 3 cards.")],
+  ),
+
+  CardDefinition(name: Tx("Shard Wielder"), ability_text: [Tx("▸Materialized: Draw a warrior.")]),
+
+  CardDefinition(
+    name: Tx("Fallen Angel"),
+    ability_text: [Tx("Abandon another character: Foresee 1.")],
+    amplified_text: [Tx("Abandon another character: Foresee 2.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Nightprowler"),
+    ability_text: [Tx("Abandon this character: Gain 1●."), Tx("Reclaim 0●")],
+    amplified_text: [Tx("Abandon this character: Gain 2●."), Tx("Reclaim 0●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Cloudtop Chronicler"),
+    ability_text: [Tx("▸Materialized: Return an event from your void to your hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Scuttled Fortune"),
+    ability_text: [Tx("Draw a card for each character you controlled that dissolved this turn.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Key to the Moment"),
+    ability_text: [
+      Tx(
+        "Return all but one character you control to hand. Draw a card for each character returned."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Dream Sever"),
+    ability_text: [Tx("Prevent a played event unless the opponent pays 2●.")],
+    amplified_text: [Tx("Prevent a played event unless the opponent pays 3●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Angel of Memory"),
+    ability_text: [
+      Tx("This character has +4✦ if there are three or more ≤2● cost characters in your void."),
+    ],
+    amplified_text: [
+      Tx("This character has +4✦ if there are two or more ≤2● cost characters in your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Fathomless Maw"),
+    ability_text: [Tx("When you abandon a character, gain 1⍟.")],
+    amplified_text: [Tx("When you abandon a character, gain 2⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Blight Weaver"),
+    ability_text: [
+      Tx("When you abandon a character, store 1⧗."),
+      Tx("X⧗: Dissolve an enemy with X✦."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Foundry Horror"),
+    ability_text: [Tx("Phasing"), Tx("▸Materialized: Return an enemy to hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Skull Weaver"),
+    ability_text: [Tx("When a character you control leaves play, gain 1⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Fragments of Vision"),
+    ability_text: [Tx("Draw 3 cards, then shuffle 2 cards from your hand into your deck.")],
+    amplified_text: [Tx("Draw 3 cards, then shuffle a card from your hand into your deck.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Sunken Radiance"),
+    ability_text: [Tx("Draw 2 cards, then discard 2 cards."), Tx("Reclaim 2●.")],
+    amplified_text: [Tx("Draw 2 cards, then discard 1 card."), Tx("Reclaim 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Salvage Engine"),
+    ability_text: [Tx("Discard a card: This character gains +2✦ until end of turn.")],
+    amplified_text: [Tx("Discard a card: This character gains +3✦ until end of turn.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Cosmonaut of Tides"),
+    ability_text: [
+      Tx("▸Materialized: The next time you play a ≤2● cost event this turn, copy it twice."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized: The next time you play a ≤3● cost event this turn, copy it twice."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Abyssal Deputy"),
+    ability_text: [Tx("Phasing"), Tx("When an outsider you control scores ⍟, draw a card.")],
+  ),
+
+  CardDefinition(name: Tx("Epiphany Unfolded"), ability_text: [Tx("Draw 3 cards.")]),
+
+  CardDefinition(
+    name: Tx("Scorched Reckoning"),
+    ability_text: [Tx("Dissolve a ≤3✦ enemy.")],
+    amplified_text: [Tx("Dissolve a ≤4✦ enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Headtaker"),
+    ability_text: [Tx("Veil"), Tx("Abandon a character: Gain 1⍟.")],
+    amplified_text: [Tx("Veil"), Tx("Abandon a character: Gain 2⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Eviscerator of Hope"),
+    ability_text: [Tx("Abandon a character: Store 1⧗."), Tx("X⧗: Dissolve an enemy with X✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Vault Infiltrator"),
+    ability_text: [Tx("Players may only play one card per turn.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Blood Altar Monarch"),
+    ability_text: [Tx("1●, Abandon 2 warriors: Draw a card.")],
+    amplified_text: [Tx("1●, Abandon 2 warriors: Draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Battle Herald"),
+    ability_text: [Tx("When you play a warrior, materialize a 1✦ warrior figment.")],
+    amplified_text: [Tx("When you play a warrior, materialize a 2✦ warrior figment.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Neural Interrogator"),
+    ability_text: [
+      Tx("▸Materialized: Discard a chosen card from the opponent's hand. They draw a card."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Echoes of the Journey"),
+    ability_text: [
+      Tx(
+        "For each card you have played this turn, draw a card with ephemeral. They cost 0● this turn."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Reforged Construct"),
+    ability_text: [Tx("When you reclaim this character, it gains +1✦."), Tx("Reclaim 0●")],
+    amplified_text: [Tx("When you reclaim this character, it gains +2✦."), Tx("Reclaim 0●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Rower of Changing Seas"),
+    ability_text: [Tx("Return a character you control to hand: Awaken a character you control.")],
+    amplified_text: [
+      Tx("Return a character you control to hand: Awaken up to two characters you control."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Whisper Forager"),
+    ability_text: [Tx("▸Materialized: Choose an event in your void to gain reclaim.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Part the Veil"),
+    ability_text: [
+      Tx("Erode 4. You may put two of those cards into your hand."),
+      Tx("When you discard this card, it gains reclaim 2●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Catastrophe Broker"),
+    ability_text: [Tx("▸Challenge: Discard your hand, then draw 3 cards.")],
+    amplified_text: [Tx("▸Challenge: Discard your hand, then draw 4 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Ordained Collapse"),
+    ability_text: [Tx("Dissolve each character with cost X●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Annular Recall"),
+    ability_text: [Tx("Return a character with cost X● to hand. Draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Seeker for the Way"),
+    ability_text: [Tx("▸Materialized: You may discard a card to draw a card."), Tx("Reclaim 2●")],
+    amplified_text: [
+      Tx("▸Materialized: You may discard a card to draw 2 cards."),
+      Tx("Reclaim 2●"),
+    ],
+  ),
+
+  CardDefinition(name: Tx("Inverted Reflection"), ability_text: [Tx("Discover an event.")]),
+
+  CardDefinition(
+    name: Tx("Flameforged"),
+    ability_text: [
+      Tx("☾, Discard an event: Draw an event."),
+      Tx("This character has +1✦ for each event in your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Key Sifter"),
+    ability_text: [Tx("Once per turn, when you discard one or more cards, draw that many cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Return to Nowhere"),
+    ability_text: [
+      Tx(
+        "Choose one: Dissolve a ≤2✦ enemy, draw 2 cards and discard 2 cards, or return a ≤2● cost character from your void to hand."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Terminus"),
+    ability_text: [Tx("If you have no cards in your deck, you win the game.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Spirit of the Lightgrove"),
+    ability_text: [Tx("This character has all character types."), Tx("Reclaim 0●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Amethyst Aurelia"),
+    ability_text: [Tx("Veil"), Tx("▸Dawn: Gain 1●.")],
+    amplified_text: [Tx("Veil"), Tx("▸Dawn: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Skysign"),
+    ability_text: [
+      Tx("Look at the top 4 cards of your deck. Draw one of them and shuffle the rest back."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Pyre Wight"),
+    ability_text: [
+      Tx("Awakened"),
+      Tx("☾: Materialize two 1✦ ember figments with awakened. Abandon them at end of turn."),
+    ],
+    amplified_text: [
+      Tx("Awakened"),
+      Tx("☾: Materialize two 2✦ ember figments with awakened. Abandon them at end of turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Keeper of the Lightpath"),
+    ability_text: [Tx("☾: Choose a ≤3● cost event in your void to gain reclaim.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Frontline Martyr"),
+    ability_text: [Tx("Abandon this character: Gain 3●.")],
+    amplified_text: [Tx("Abandon this character: Gain 4●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Unleash Ruin"),
+    ability_text: [Tx("Dissolve a ≤3● cost enemy.")],
+    amplified_text: [Tx("Dissolve a ≤4● cost enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Canopy Lookout"),
+    ability_text: [Tx("Abandon this character: Draw a card.")],
+    amplified_text: [Tx("Abandon this character: Draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Moonbound Wolf"),
+    ability_text: [
+      Tx("Awakened"),
+
+      Tx(
+        "☾, Return a character you control to hand: Trigger the 'Dawn' ability of a spirit animal you control."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Pastward Wanderer"),
+    ability_text: [
+      Tx(
+        "▸Dawn: Choose an event in your void with cost less than or equal to this character's ✦. That event gains reclaim 0●."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Worldbreacher"),
+    ability_text: [Tx("☾: Materialize a 1✦ warrior figment.")],
+    amplified_text: [Tx("☾: Materialize a 2✦ warrior figment.")],
+  ),
+
+  CardDefinition(name: Tx("Sun Clan Lieutenant"), ability_text: [Tx("Warriors cost you 1● less.")]),
+
+  CardDefinition(
+    name: Tx("Petal-Seer"),
+    ability_text: [
+      Tx(
+        "If you control 3 or more characters, reveal the top card of your deck. You may play characters from the top of your deck."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "If you control 2 or more characters, reveal the top card of your deck. You may play characters from the top of your deck."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Silent Gatherer"),
+    ability_text: [Tx("Veil"), Tx("▸Dawn: Gain 1● for each figment you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Flagbearer of Decay"),
+    ability_text: [Tx("When a character card leaves your void, materialize a 2✦ shadow figment.")],
+    amplified_text: [
+      Tx("When a character card leaves your void, materialize a 3✦ shadow figment."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Vigilant Howler"),
+    ability_text: [Tx("When you materialize a spirit animal, store 1⧗."), Tx("3⧗: Gain 3●.")],
+    amplified_text: [Tx("When you materialize a spirit animal, store 2⧗."), Tx("3⧗: Gain 3●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Break the Veil"),
+    ability_text: [Tx("Discard a chosen card from the opponent's hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Tethered Hollow"),
+    ability_text: [Tx("The first warrior you play each turn costs 3● less.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Call the Lost"),
+    ability_text: [
+      Tx("For each card you've played this turn, materialize a 2✦ shadow figment."),
+      Tx("Reclaim 2●"),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Blood Reaver"),
+    ability_text: [Tx("Abandon a warrior: Gain 2●.")],
+    amplified_text: [Tx("Abandon a warrior: Gain 3●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Toll of Passage"),
+    ability_text: [Tx("Prevent a played ≤2● cost card.")],
+    amplified_text: [Tx("Prevent a played ≤3● cost card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Keeper of Forgotten Light"),
+    ability_text: [
+      Tx("When you materialize a non-figment ≤2● cost character, draw a card with ephemeral."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Wreckborn"),
+    ability_text: [
+      Tx(
+        "▸Materialized: Banish a chosen character from the opponent's hand until this character leaves play."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Fangbound"),
+    ability_text: [
+      Tx("To play this card, banish a card from hand."),
+      Tx("▸Materialized, ▸Dawn: Gain 1●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Emberwatch Rescuer"),
+    ability_text: [
+      Tx("▸Materialized: Erode 3."),
+      Tx("▸Dissolved: Return a character from your void to your hand."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized: Erode 4."),
+      Tx("▸Dissolved: Return a character from your void to your hand."),
+    ],
+  ),
+
+  CardDefinition(name: Tx("Frost Visionary"), ability_text: [Tx("▸Materialized: Draw a card.")]),
+
+  CardDefinition(
+    name: Tx("Cleansing Flame"),
+    ability_text: [Tx("Choose a player. That player discard X cards, then draws X cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Dawnblade"),
+    ability_text: [Tx("Once per turn, when you materialize a character, gain 1●.")],
+    amplified_text: [Tx("Once per turn, when you materialize a character, gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Nebula's Wake"),
+    ability_text: [Tx("Play this event only if there are 3 or more events in your void. Gain 5●.")],
+    amplified_text: [
+      Tx("Play this event only if there are 2 or more events in your void. Gain 5●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Paradox Corps Enforcer"),
+    ability_text: [
+      Tx("Phasing"),
+      Tx("When an outsider you control scores ⍟, foresee 1 and draw a card."),
+    ],
+    amplified_text: [
+      Tx("Phasing"),
+      Tx("When an outsider you control scores ⍟, foresee 2 and draw a card."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Unleashed Destruction"),
+    ability_text: [Tx("Dissolve a ≤2● cost enemy."), Tx("Reclaim 5●.")],
+    amplified_text: [Tx("Dissolve a ≤3● cost enemy."), Tx("Reclaim 5●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Bloom Guard"),
+    ability_text: [Tx("▸Materialized, Dissolved: Draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Forsaken Pact"),
+    ability_text: [
+      Tx(
+        "To play this card, abandon a ≤2● cost character. Discover a ≤2● cost character and materialize it."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Burst of Obliteration"),
+    ability_text: [Tx("Choose one: Gain X⍟ or dissolve an enemy with X✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Ripple of Defiance"),
+    ability_text: [Tx("Offering"), Tx("Prevent a played event.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Blood Moon Ronin"),
+    ability_text: [Tx("Abandon this character: Draw a card with ephemeral.")],
+    amplified_text: [Tx("Abandon this character: Draw 2 cards with ephemeral.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Duneguard Captain"),
+    ability_text: [
+      Tx("☾: Materialize a 1✦ survivor figment."),
+      Tx("☾: Draw a card for each 3 survivors you control."),
+    ],
+    amplified_text: [
+      Tx("☾: Materialize a 2✦ survivor figment."),
+      Tx("☾: Draw a card for each 3 survivors you control."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Tidewreck Navigator"),
+    ability_text: [
+      Tx("☾, Discard a card: Materialize a 1✦ survivor figment."),
+      Tx("☾, Abandon a survivor: Return a survivor from your void to your hand."),
+    ],
+    amplified_text: [
+      Tx("☾, Discard a card: Materialize a 2✦ survivor figment."),
+      Tx("☾, Abandon a survivor: Return a survivor from your void to your hand."),
+    ],
+  ),
+
+  CardDefinition(name: Tx("Young Huntress"), ability_text: [Tx("")]),
+
+  CardDefinition(
+    name: Tx("Cost of Victory"),
+    ability_text: [
+      Tx(
+        "You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "You may discard a card as an additional cost to play this event. Dissolve a ≤3● cost enemy. If the additional cost was paid, dissolve any enemy instead."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Iconoclast"),
+    ability_text: [Tx("When you play a character, erode 1."), Tx("Reclaim 2●")],
+    amplified_text: [Tx("When you play a character, erode 2."), Tx("Reclaim 2●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Sage of the High Hills"),
+    ability_text: [Tx("When you materialize another character, gain 1⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Aurora Conductor"),
+    ability_text: [Tx("▸Night: If you have only one challenger, give that character +3✦.")],
+    amplified_text: [Tx("▸Night: If you have only one challenger, give that character +4✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Looming Oracle"),
+    ability_text: [Tx("▸Materialized: Foresee 1."), Tx("▸Dawn: Gain 1●.")],
+    amplified_text: [Tx("▸Materialized: Foresee 2."), Tx("▸Dawn: Gain 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Haunted Betrayer"),
+    ability_text: [Tx("▸Materialized: Gain 3●."), Tx("▸Dawn: The opponent gains 1⍟.")],
+    amplified_text: [Tx("▸Materialized: Gain 4●."), Tx("▸Dawn: The opponent gains 1⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Night Scavenger"),
+    ability_text: [Tx("▸Materialized: Erode 1."), Tx("Reclaim 0●")],
+    amplified_text: [Tx("▸Materialized: Erode 2."), Tx("Reclaim 0●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Shattering Gambit"),
+    ability_text: [Tx("Banish an enemy. The opponent gains 5⍟.")],
+    amplified_text: [Tx("Banish an enemy. The opponent gains 4⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Ash Sower"),
+    ability_text: [
+      Tx("Support – Supported characters have +3✦."),
+      Tx("❖ – Abandon a character: Move this character to the abandoned character's position."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Seer of the Fallen"),
+    ability_text: [
+      Tx(
+        "When a non-figment character you control is dissolved, create 'Contemplation' in your hand."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "When a non-figment character you control is dissolved, create 'Contemplation' in your hand. If it was a survivor, create two instead."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Relic Collector"),
+    ability_text: [Tx("▸Materialized: Return a card from your void to your hand.")],
+    amplified_text: [Tx("▸Materialized: Return up to two cards from your void to your hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Blood Moon Triad"),
+    ability_text: [Tx("☾: Gain 1● for each spirit animal you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Lurking Regent"),
+    ability_text: [
+      Tx("▸Materialized: Banish a ≤4● cost enemy."),
+      Tx("When this character leaves play, the opponent draws a card."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized: Banish a ≤5● cost enemy."),
+      Tx("When this character leaves play, the opponent draws a card."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Essence Devourer"),
+    ability_text: [Tx("Abandon a ≤2● cost character: Gain 1●.")],
+    amplified_text: [Tx("Abandon a ≤2● cost character: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Augur Crow"),
+    ability_text: [
+      Tx("▸Materialized: Put all cards in a player's void on the bottom of their deck."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Flash of Power"),
+    ability_text: [Tx("Gain 5●.")],
+    amplified_text: [Tx("Gain 6●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Iron Pharaoh"),
+    ability_text: [Tx("▸Dawn: Gain 1●."), Tx("☾, Abandon a character: Gain 1●.")],
+    amplified_text: [Tx("▸Dawn: Gain 2●."), Tx("☾, Abandon a character: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Fiery Apparition"),
+    ability_text: [
+      Tx(
+        "When a non-figment character you control is dissolved, materialize a 1✦ ember figment with awakened. When an ember figment is dissolved, this character gains +1✦."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "When a non-figment character you control is dissolved, materialize a 2✦ ember figment with awakened. When an ember figment is dissolved, this character gains +1✦."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Gloomantler"),
+    ability_text: [
+      Tx(
+        "Once per turn, if you have one or fewer cards in hand, you may play a character from your void."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "Once per turn, if you have two or fewer cards in hand, you may play a character from your void."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Phantom Angler"),
+    ability_text: [Tx("☾: Choose a ≤2● cost character in your void to gain reclaim.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Call of Corruption"),
+    ability_text: [Tx("Discard a chosen event from the opponent's hand.")],
+  ),
+
+  CardDefinition(name: Tx("Dreamvale Monarch"), ability_text: [Tx("▸Materialized: Draw a card.")]),
+
+  CardDefinition(
+    name: Tx("Sky Voyager"),
+    ability_text: [Tx("This character has all character types."), Tx("▸Dawn: Gain 1●.")],
+    amplified_text: [Tx("This character has all character types."), Tx("▸Dawn: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Soulcleft Spinner"),
+    ability_text: [Tx("▸Materialized: Banish an enemy warrior.")],
+    amplified_text: [Tx("▸Materialized: Banish an enemy warrior or monster.")],
+  ),
+
+  CardDefinition(name: Tx("Harvest the Forgotten"), ability_text: [Tx("Erode 3. Draw a card.")]),
+
+  CardDefinition(
+    name: Tx("Lurking Dread"),
+    ability_text: [Tx("Discard a chosen ≤2● cost card from the opponent's hand.")],
+    amplified_text: [Tx("Discard a chosen ≤3● cost card from the opponent's hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Emperor of Eternity"),
+    ability_text: [Tx("If this card is in your void, characters you control have +1✦.")],
+    amplified_text: [Tx("If this card is in your void, characters you control have +2✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Sunrise Virtuoso"),
+    ability_text: [Tx("When you materialize a character, trigger its \"▸Dawn\" ability.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Pyrestone Avatar"),
+    ability_text: [Tx("Offering"), Tx("Characters you control have awakened.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Pinnacle Ascendant"),
+    ability_text: [
+      Tx("Characters you control have awakened."),
+      Tx("When you discard or erode this card, it gains reclaim 0●."),
+    ],
+  ),
+
+  CardDefinition(name: Tx("Immolate"), ability_text: [Tx("Offering"), Tx("Dissolve an enemy.")]),
+
+  CardDefinition(
+    name: Tx("Emberfang"),
+    ability_text: [
+      Tx("When a character you control gains ✦, it gains an additional +1✦."),
+      Tx("2●, ☾: Give a character you control +1✦."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Smoke Siphoner"),
+    ability_text: [
+      Tx("▸Challenge: You may discard a card to draw a card."),
+      Tx("When you discard a card, this character gains +2✦ until end of turn."),
+    ],
+    amplified_text: [
+      Tx("▸Challenge: You may discard a card to draw a card."),
+      Tx("When you discard a card, this character gains +3✦ until end of turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Threshold Seeker"),
+    ability_text: [
+      Tx("2●, ☾, Discard a card: Draw a card."),
+      Tx("When you discard a card, it gains reclaim."),
+    ],
+    amplified_text: [
+      Tx("2●, ☾, Discard a card: Draw 2 cards."),
+      Tx("When you discard a card, it gains reclaim."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Railgun Reinforcer"),
+    ability_text: [
+      Tx(
+        "Once per turn, when a warrior you control is dissolved, materialize a 1✦ warrior figment."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "Once per turn, when a warrior you control is dissolved, materialize a 2✦ warrior figment."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ruthless Conqueror"),
+    ability_text: [
+      Tx("When a warrior you control is dissolved, this character gains +1✦."),
+      Tx("☾, Abandon a warrior: Gain 1⍟."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Collapse Protocol"),
+    ability_text: [Tx("Banish up to three cards from the opponent's void. Draw a card.")],
+    amplified_text: [Tx("Banish up to three cards from the opponent's void. Draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("The Thinning"),
+    ability_text: [Tx("Banish a chosen character from the opponent's hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Spiral Offering"),
+    ability_text: [Tx("To play this event, discard 2 cards. Draw 3 cards.")],
+    amplified_text: [Tx("To play this event, discard 2 cards. Draw 4 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Gateweaver"),
+    ability_text: [Tx("When you play an event, materialize a 1✦ ethereal figment.")],
+    amplified_text: [Tx("When you play an event, materialize a 2✦ ethereal figment.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Rebirth"),
+    ability_text: [Tx("Shuffle your hand and void into your deck. Draw 5 cards. Gain 5●.")],
+    amplified_text: [Tx("Shuffle your hand and void into your deck. Draw 6 cards. Gain 5●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Glimmerwood Scout"),
+    ability_text: [
+      Tx("Abandon this character: Reveal the opponent's hand. Draw a card with ephemeral."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("The Annihilator"),
+    ability_text: [
+      Tx("▸Dawn: Abandon a character. Erode 1."),
+      Tx("When a ≤2● cost character is put into your void, draw a card."),
+    ],
+    amplified_text: [
+      Tx("▸Dawn: Abandon a character. Erode 2."),
+      Tx("When a ≤2● cost character is put into your void, draw a card."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Dreamborne Leviathan"),
+    ability_text: [
+      Tx("Once per turn, when you play a spirit animal, materialize a 1✦ spirit animal figment."),
+    ],
+    amplified_text: [
+      Tx("Once per turn, when you play a spirit animal, materialize a 2✦ spirit animal figment."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Spiritbound Alpha"),
+    ability_text: [
+      Tx("❖ – 5●: Spirit animals you control gain +3✦ and vengeful until end of turn."),
+    ],
+    amplified_text: [
+      Tx("❖ – 5●: Spirit animals you control gain +4✦ and vengeful until end of turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Exile"),
+    ability_text: [
+      Tx("This event costs 1● less for each character you control. Dissolve an enemy."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Rite of Summoning"),
+    ability_text: [Tx("Discover a card with cost X●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Defiant Holdout"),
+    ability_text: [
+      Tx("▸Dissolved: Materialize X 1✦ survivor figments, where X is this character's ✦."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Scrap Reclaimer"),
+    ability_text: [
+      Tx(
+        "▸Materialized: You may discard a card to discover a character with cost greater than that card's cost."
+      ),
+    ],
+  ),
+
+  CardDefinition(name: Tx("Nullifier"), ability_text: [Tx("Events cost 1● more.")]),
+
+  CardDefinition(
+    name: Tx("Veil Crosser"),
+    ability_text: [
+      Tx("☾, Abandon another character: Discover a ≤2● cost character, then materialize it."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Barren Path Walker"),
+    ability_text: [Tx("This character has +1✦ for each character in your void.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Ripple Through Reality"),
+    ability_text: [Tx("Prevent a played card. Put it on top of the opponent's deck.")],
+    amplified_text: [Tx("Prevent a played card. Put it on the bottom of the opponent's deck.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Clockwork Conductor"),
+    ability_text: [Tx("Cards you reclaim are not banished when they leave play.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Revenant Automaton"),
+    ability_text: [
+      Tx("▸Materialized: Gain 1⍟."),
+      Tx("Abandon a character: Materialize this character from your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Exiles of the Last Light"),
+    ability_text: [Tx("Abandon another character: Gain 1●. The opponent gains 1⍟.")],
+    amplified_text: [Tx("Abandon another character: Gain 2●. The opponent gains 1⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Cloudback Courier"),
+    ability_text: [Tx("Awakened"), Tx("▸Challenge: This character gains +1✦.")],
+    amplified_text: [Tx("Awakened"), Tx("▸Challenge: This character gains +2✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Thornwood Delver"),
+    ability_text: [
+      Tx(
+        "Once per turn, when you reclaim a card, gain X⍟ where X is this character's ✦. Then this character gains +1✦."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Infernal Rest"),
+    ability_text: [Tx("Prevent a played card unless the opponent pays 1●.")],
+    amplified_text: [Tx("Prevent a played card unless the opponent pays 2●.")],
+  ),
+
+  CardDefinition(name: Tx("Dreamscatter"), ability_text: [Tx("Draw X cards.")]),
+
+  CardDefinition(
+    name: Tx("Echoes of Eternity"),
+    ability_text: [Tx("The next time you play a ≤2● cost event this turn, copy it.")],
+    amplified_text: [Tx("The next time you play a ≤3● cost event this turn, copy it.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Weight of Memory"),
+    ability_text: [
+      Tx("Dissolve an enemy with ✦ less than or equal to the number of cards in your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("The Forsaker"),
+    ability_text: [Tx("Abandon a ≤2● cost character: Gain 1⍟.")],
+    amplified_text: [Tx("Abandon a ≤2● cost character: Gain 2⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Ruptured Dynamo"),
+    ability_text: [Tx("Abandon a character: Return a character from your void to your hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Blade of Unity"),
+    ability_text: [Tx("This character has +1✦ for each warrior you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Vanguard Charger"),
+    ability_text: [
+      Tx("❖ – ☾: Give a character you control +1✦ for each warrior you control until end of turn."),
+    ],
+    amplified_text: [
+      Tx(
+        "❖ – ☾: Give a character you control +1✦ for each warrior you control until the start of your next turn."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Illumination of Glory"),
+    ability_text: [
+      Tx("This event cannot be prevented. Gain 2⍟ for each card you have played this turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ruin Scavenger"),
+    ability_text: [Tx("1●, Banish a card from the opponent's void: This character gains +1✦.")],
+    amplified_text: [Tx("1●, Banish a card from the opponent's void: This character gains +2✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Vigil Keeper"),
+    ability_text: [Tx("When a survivor you control is dissolved, draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Sanctum Approach"),
+    ability_text: [
+      Tx(
+        "Draw X cards, then discard X cards. Materialize a 1✦ ethereal figment for each event discarded."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "Draw X cards, then discard X cards. Materialize a 2✦ ethereal figment for each event discarded."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Gateway Defender"),
+    ability_text: [
+      Tx(
+        "❖❖ – Abandon this character: A character you control cannot be targeted by effects this turn."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "❖❖ – Abandon this character: Up to two characters you control cannot be targeted by effects this turn."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Repulsion Detail"),
+    ability_text: [Tx("▸Materialized: Return an enemy to hand. It costs 2● more.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Celestial Reverie"),
+    ability_text: [Tx("Until end of turn, when you play a character, draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Vizier of Portents"),
+    ability_text: [
+      Tx(
+        "▸Materialized: Erode 4. You may return a ≤2● cost character from among those cards to your hand."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Steel Abomination"),
+    ability_text: [
+      Tx("1●, Abandon another character: Store 1⧗."),
+      Tx("Abandon this character: Gain X⍟ where X is the stored ⧗."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Immolate and Rise"),
+    ability_text: [Tx("Draw a card."), Tx("Reclaim – Abandon a character.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Sky Collapse"),
+    ability_text: [Tx("Discard a chosen card from the opponent's hand."), Tx("Reclaim 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Abandon Constraints"),
+    ability_text: [Tx("To play this card, abandon a character or discard a card. Draw 2 cards.")],
+    amplified_text: [Tx("To play this card, abandon a character or discard a card. Draw 3 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Stratospheric Voyage"),
+    ability_text: [Tx("Return a character to its controller's hand. Gain 2●.")],
+    amplified_text: [Tx("Return a character to its controller's hand. Gain 3●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Dreadmount Sovereign"),
+    ability_text: [
+      Tx(
+        "❖❖ – Abandon a character: Give a character you control +X✦ where X is the abandoned character's ✦."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Forsworn Champion"),
+    ability_text: [Tx("❖❖ – Abandon a warrior: This character gains +1✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Legion Lieutenant"),
+    ability_text: [Tx("▸Materialized: Materialize a Legionnaire figment.")],
+    amplified_text: [Tx("▸Materialized: Materialize a Legionnaire figment with awakened.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Speaker for the Forgotten"),
+    ability_text: [Tx("5●: Erode 1. That card gains reclaim 0●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Crescendo Channeler"),
+    ability_text: [
+      Tx("▸Dawn: Materialize a 1✦ warrior figment."),
+      Tx("2●, ☾: Gain 1● for each warrior you control."),
+    ],
+    amplified_text: [
+      Tx("▸Dawn: Materialize a 2✦ warrior figment."),
+      Tx("2●, ☾: Gain 1● for each warrior you control."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Assault Leader"),
+    ability_text: [Tx("▸Dawn: Each warrior you control gains +1✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Null Sphere"),
+    ability_text: [Tx("Prevent a played ≤2✦ character.")],
+    amplified_text: [Tx("Prevent a played ≤3✦ character.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Abyssal Plunge"),
+    ability_text: [Tx("To play this event, discard X cards. Draw X+1 cards.")],
+    amplified_text: [Tx("To play this event, discard X cards. Draw X+2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Titan of Forgotten Echoes"),
+    ability_text: [
+      Tx("When you play your second card in a turn, materialize this character from your void."),
+    ],
+    amplified_text: [
+      Tx(
+        "When you play your second card in a turn, materialize this character from your void with awakened."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ancient Descent"),
+    ability_text: [Tx("Foresee 1. Draw a card.")],
+    amplified_text: [Tx("Foresee 2. Draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Soul Harvester"),
+    ability_text: [
+      Tx("2●, ☾, Abandon two other characters: This character gains +2✦. Draw 2 cards."),
+    ],
+    amplified_text: [
+      Tx("2●, ☾, Abandon two other characters: This character gains +3✦. Draw 2 cards."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Sundown Surfer"),
+    ability_text: [
+      Tx("Awakened"),
+      Tx("Abandon this character: Characters you control gain awakened this turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Skies of Change"),
+    ability_text: [Tx("To play this event, discard a card. Draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Circuit Breaker"),
+    ability_text: [Tx("▸Materialized: Gain 1⍟."), Tx("Reclaim 0●")],
+    amplified_text: [Tx("▸Materialized: Gain 2⍟."), Tx("Reclaim 0●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Luminwings"),
+    ability_text: [Tx("▸Dawn: Gain 1●. If you control 3 or more spirit animals, gain 2● instead.")],
+    amplified_text: [
+      Tx("▸Dawn: Gain 2●. If you control 3 or more spirit animals, gain 3● instead."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Vengeance Taker"),
+    ability_text: [Tx("▸Dissolved: Dissolve a ≤2✦ enemy.")],
+    amplified_text: [Tx("▸Dissolved: Dissolve a ≤3✦ enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Paleclaw Panther"),
+    ability_text: [
+      Tx(
+        "When you materialize a spirit animal, gain 1●. When you materialize your second spirit animal in a turn, draw a spirit animal."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Standard Bearer"),
+    ability_text: [Tx("When you play a character, materialize a 1✦ warrior figment.")],
+    amplified_text: [Tx("When you play a character, materialize a 2✦ warrior figment.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Silent Avenger"),
+    ability_text: [Tx("▸Materialized: Each player abandons a non-figment character.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Soulrender"),
+    ability_text: [Tx("Discard a ≤2● cost character: Dissolve a ≤2● cost enemy.")],
+    amplified_text: [Tx("Discard a ≤2● cost character: Dissolve a ≤3● cost enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Guiding Light"),
+    ability_text: [Tx("Foresee 1. Draw a card."), Tx("Reclaim 4●")],
+    amplified_text: [Tx("Foresee 2. Draw a card."), Tx("Reclaim 4●")],
+  ),
+
+  CardDefinition(
+    name: Tx("First Encounter"),
+    ability_text: [
+      Tx("Materialize all characters in your void which were discarded this turn."),
+      Tx("When you discard this card, it gains reclaim 0●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Wake the Fallen"),
+    ability_text: [Tx("Materialize all characters in your void which dissolved this turn.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Secrets of the Deep"),
+    ability_text: [Tx("Gain 3⍟. If you reclaimed this card, gain 6⍟ instead."), Tx("Reclaim 4●")],
+    amplified_text: [Tx("Gain 4⍟. If you reclaimed this card, gain 8⍟ instead."), Tx("Reclaim 4●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Impending Fury"),
+    ability_text: [Tx("▸Night: Draw a card, then discard a card unless you control a challenger.")],
+    amplified_text: [
+      Tx("▸Night: Draw a card, then discard a card unless you control a challenger or blocker."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Dustway Ringleader"),
+    ability_text: [
+      Tx("3●, ☾: Materialize a 1✦ outsider figment."),
+      Tx("When an outsider you control scores ⍟, draw a card and gain 2⍟."),
+    ],
+    amplified_text: [
+      Tx("3●, ☾: Materialize a 2✦ outsider figment."),
+      Tx("When an outsider you control scores ⍟, draw a card and gain 2⍟."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Judgment of the Blade"),
+    ability_text: [Tx("Dissolve an enemy warrior.")],
+    amplified_text: [Tx("Dissolve an enemy warrior or an enemy with 2✦ or less.")],
+  ),
+
+  CardDefinition(
+    name: Tx("The Calling Night"),
+    ability_text: [Tx("▸Dawn: Draw a card. The opponent gains 2⍟.")],
+    amplified_text: [Tx("▸Dawn: Draw a card. The opponent gains 1⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Spirit of the Greenwood"),
+    ability_text: [Tx("Awakened"), Tx("1●, ☾: Gain 1● for each character you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Sworn Defender"),
+    ability_text: [
+      Tx("❖❖ – ☾: Another character you control cannot be targeted by effects this turn."),
+    ],
+    amplified_text: [
+      Tx("❖❖ – ☾: Up to two other characters you control cannot be targeted by effects this turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Cascade of Reflections"),
+    ability_text: [Tx("Until end of turn, when you play an event, copy it.")],
+  ),
+
+  CardDefinition(name: Tx("Collateral Damage"), ability_text: [Tx("Dissolve each ≤X✦ character.")]),
+
+  CardDefinition(
+    name: Tx("Sunshadow Eagle"),
+    ability_text: [
+      Tx("5●, ☾: The base ✦ of each spirit animal you control becomes 7 until end of turn."),
+    ],
+    amplified_text: [
+      Tx("5●, ☾: The base ✦ of each spirit animal you control becomes 8 until end of turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Duskreaper"),
+    ability_text: [Tx("When a character you control is dissolved, gain 1⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Revelation Explorer"),
+    ability_text: [Tx("▸Materialized: Discover a ≤2● cost event.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Surge of Fury"),
+    ability_text: [
+      Tx(
+        "Trigger the '▸Dawn' ability of each character you control. Awaken each character you control."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Threadbreaker"),
+    ability_text: [Tx("Offering"), Tx("▸Materialized: Prevent a played card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Prismatic Portal"),
+    ability_text: [
+      Tx("Gain 2●. Draw a card. If this event was reclaimed, copy it."),
+      Tx("Reclaim 6●"),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Phantom Flotilla"),
+    ability_text: [
+      Tx("Materialize up to two ≤2● cost characters from your void."),
+      Tx("Reclaim 5●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Twice-Lit Portal"),
+    ability_text: [Tx("Offering"), Tx("The next time you play an event this turn, copy it.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Thought Merchant"),
+    ability_text: [Tx("Once per turn, when you discard a card, draw a card and gain 1●.")],
+    amplified_text: [Tx("Once per turn, when you discard a card, draw a card and gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Crescent Dancer"),
+    ability_text: [
+      Tx("When you materialize a character, awaken each other character you control."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Conduit of Resonance"),
+    ability_text: [
+      Tx(
+        "When you play a character, trigger the '▸Dawn' ability of each other character you control."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Battlefield Calligrapher"),
+    ability_text: [Tx("When you play an event, materialize a 1✦ warrior figment.")],
+    amplified_text: [Tx("When you play an event, materialize a 2✦ warrior figment.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Simulacra"),
+    ability_text: [
+      Tx("2●, ☾: Materialize a figment copy of a character you control until end of turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("The Ringleader"),
+    ability_text: [
+      Tx(
+        "▸Materialized: The next time you play an event this turn, create a 0● ephemeral copy of that event in your hand."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ambersting"),
+    ability_text: [Tx("Vengeful"), Tx("▸Dawn: Gain 1●.")],
+    amplified_text: [Tx("Vengeful"), Tx("▸Dawn: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Storm Soloist"),
+    ability_text: [
+      Tx("When you play a card, gain 1⍟ for each other card you've played this turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Oathbound Pair"),
+    ability_text: [Tx("▸Materialized, Dawn: Give a character you control +1✦.")],
+    amplified_text: [Tx("▸Materialized, Dawn: Give a character you control +2✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Blazing Emberwing"),
+    ability_text: [Tx("☾: Gain 1● for each character you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Cragfall"),
+    ability_text: [
+      Tx("Prevent a played card unless the opponent abandons a non-figment character."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Canopy of Stars"),
+    ability_text: [Tx("Gain 2●.")],
+    amplified_text: [Tx("Gain 3●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Prism Caller"),
+    ability_text: [
+      Tx(
+        "▸Materialized: If the top card of your deck is a ≤2● cost character, materialize it. Otherwise, draw that card."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Quiet Reflection"),
+    ability_text: [
+      Tx("Until end of turn, when you materialize a character, draw a card."),
+      Tx("Reclaim 4●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Heavenward Penitent"),
+    ability_text: [Tx("Veil"), Tx("The first ≤2● cost character you play each turn costs you 0●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Void Claimant"),
+    ability_text: [
+      Tx("When you materialize a non-figment character, store 1⧗."),
+      Tx("3⧗: Return a character from your void to your hand."),
+    ],
+    amplified_text: [
+      Tx("When you materialize a non-figment character, store 2⧗."),
+      Tx("3⧗: Return a character from your void to your hand."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Shadowpaw"),
+    ability_text: [Tx("▸Dawn: Gain 1●.")],
+    amplified_text: [Tx("▸Dawn: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Sunrise Strummer"),
+    ability_text: [Tx("▸Dawn: Materialize a 1✦ ethereal figment.")],
+    amplified_text: [Tx("▸Dawn: Materialize a 2✦ ethereal figment.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Aether Diver"),
+    ability_text: [Tx("▸Materialized: You may materialize a ≤2● cost character from your hand.")],
+    amplified_text: [Tx("▸Materialized: You may materialize a ≤3● cost character from your hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Fell the Mighty"),
+    ability_text: [
+      Tx(
+        "You may pay an additional 3● to play this event. Dissolve a ≤2✦ enemy. If the additional cost was paid, dissolve any enemy instead."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "You may pay an additional 3● to play this event. Dissolve a ≤3✦ enemy. If the additional cost was paid, dissolve any enemy instead."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Shared Revelation"),
+    ability_text: [
+      Tx("Draw two cards, then discard a card unless you played another event this turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Volcanic Channeler"),
+    ability_text: [Tx("When a character you control is dissolved, gain 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Grief Shaman"),
+    ability_text: [Tx("☾, Abandon a character: Materialize a 2✦ shadow figment.")],
+    amplified_text: [Tx("☾, Abandon a character: Materialize a 3✦ shadow figment.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Nomad of Endless Paths"),
+    ability_text: [Tx("Cards in your hand have offering.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Echoing Denial"),
+    ability_text: [Tx("Offering"), Tx("Prevent a played card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Infernal Ascendant"),
+    ability_text: [Tx("Abandon another character: Gain 1●.")],
+    amplified_text: [Tx("Abandon another character: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Shatter the Frail"),
+    ability_text: [Tx("Dissolve a ≤1✦ enemy."), Tx("Reclaim 1●")],
+    amplified_text: [Tx("Dissolve a ≤2✦ enemy."), Tx("Reclaim 1●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Whisper of the Past"),
+    ability_text: [
+      Tx("Choose an event in your void to gain reclaim."),
+
+      Tx(
+        "At the start of your turn, if this card is in your void, you may erode 3 to place this card on top of your deck."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Consumed Berserker"),
+    ability_text: [Tx("Phasing"), Tx("When this character scores ⍟, draw a card.")],
+    amplified_text: [Tx("Phasing"), Tx("When this character scores ⍟, draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Data Pulse"),
+    ability_text: [Tx("Gain 2●. Draw a card.")],
+    amplified_text: [Tx("Gain 3●. Draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Prophet of the Consumed"),
+    ability_text: [Tx("☾, Abandon a warrior: Materialize a warrior from your void.")],
+    amplified_text: [
+      Tx("☾, Abandon a warrior: Materialize a warrior from your void with awakened."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ethereal Army"),
+    ability_text: [Tx("Materialize X 1✦ ethereal figments.")],
+    amplified_text: [Tx("Materialize X 2✦ ethereal figments.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Kindred Sparks"),
+    ability_text: [
+      Tx("If you control a survivor, you may play this card from your hand or void for 1●."),
+    ],
+    amplified_text: [
+      Tx(
+        "If you control a survivor, you may play this card from your hand or void for 1●. If played this way, it materializes with awakened."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Lunar Hart"),
+    ability_text: [Tx("▸Materialized, Dawn: Gain 2●.")],
+    amplified_text: [Tx("▸Materialized, Dawn: Gain 3●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Revered Prince"),
+    ability_text: [Tx("This character costs 1● less for each warrior you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Echo Technician"),
+    ability_text: [Tx("▸Materialized: Erode 4."), Tx("☾: You may play an event from your void.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Winterbough Guide"),
+    ability_text: [
+      Tx("▸Materialized, Dawn: Erode 1."),
+      Tx("Once per turn, you may play a warrior from your void."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized, Dawn: Erode 2."),
+      Tx("Once per turn, you may play a warrior from your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Dreamcatcher's Call"),
+    ability_text: [Tx("Discover a character with cost X and materialize it.")],
+    amplified_text: [Tx("Discover a character with cost X and materialize it with awakened.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Cinderheart"),
+    ability_text: [
+      Tx("When you abandon a character, this character gains +1✦."),
+      Tx("▸Dissolved: Gain ⍟ equal to this character's ✦."),
+    ],
+    amplified_text: [
+      Tx("When you abandon a character, this character gains +2✦."),
+      Tx("▸Dissolved: Gain ⍟ equal to this character's ✦."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Urban Desperado"),
+    ability_text: [Tx("▸Materialized: The opponent cannot play events this turn.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Verdant Pioneer"),
+    ability_text: [Tx("▸Materialized: Discover a ≤1● cost character and materialize it.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Abomination of Memory"),
+    ability_text: [
+      Tx(
+        "To play this character, banish 7 cards from your void. You may play this character from your void."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Wildpath Companions"),
+    ability_text: [
+      Tx(
+        "▸Challenge: Erode 3. You may put a ≤2● cost character from among those cards into your hand."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Memory Tracer"),
+    ability_text: [Tx("☾: Choose a card in your void to gain reclaim.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Liminal Dreamer"),
+    ability_text: [Tx("▸Dawn: Store 1⧗."), Tx("Discard your hand: Draw one card per stored ⧗.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Nightmare Shepherd"),
+    ability_text: [Tx("▸Materialized: Materialize a 4✦ monstrosity figment.")],
+    amplified_text: [Tx("▸Materialized: Materialize a 5✦ monstrosity figment.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Endless Projection"),
+    ability_text: [Tx("When you play a character, materialize a 1✦ ethereal figment.")],
+    amplified_text: [Tx("When you play a character, materialize a 2✦ ethereal figment.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Dawnprowler"),
+    ability_text: [
+      Tx(
+        "When you materialize a spirit animal, if it is not the first spirit animal you have materialized this turn, gain 1●."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Thief of Memory"),
+    ability_text: [
+      Tx(
+        "☾: Banish a character from a player's void. This character gains the abilities of that character."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Mirrorsea Pilgrim"),
+    ability_text: [
+      Tx("▸Materialized: Look at the top 4 cards of your deck and banish one."),
+      Tx("▸Dissolved: Put the banished card into your hand."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Sunset Chronicler"),
+    ability_text: [Tx("When a character you control is dissolved, draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Vanishing Inquisitor"),
+    ability_text: [
+      Tx("Phasing"),
+      Tx("When this character scores ⍟, draw a card, then discard a card."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Heroic Rescue"),
+    ability_text: [
+      Tx("Materialize up to three chosen characters in your void which dissolved this turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Haunted Mariner"),
+    ability_text: [
+      Tx("▸Night: If you control no shadow figments, materialize a 2✦ shadow figment."),
+    ],
+    amplified_text: [
+      Tx("▸Night: If you control no shadow figments, materialize a 3✦ shadow figment."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Overstory Explorer"),
+    ability_text: [Tx("▸Dissolved: Gain 1 maximum ●.")],
+    amplified_text: [Tx("▸Dissolved: Gain 2 maximum ●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Renounce Reality"),
+    ability_text: [Tx("Banish your hand and void. Draw 5 cards."), Tx("Reclaim 3●")],
+    amplified_text: [Tx("Banish your hand. Draw 5 cards."), Tx("Reclaim 3●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Dragonfly Engine"),
+    ability_text: [Tx("▸Materialized: Return a character you control to hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Extractor of Souls"),
+    ability_text: [Tx("Abandon a non-figment warrior: Materialize a 1✦ warrior figment.")],
+    amplified_text: [Tx("Abandon a non-figment warrior: Materialize two 1✦ warrior figments.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Lanternhearted"),
+    ability_text: [Tx("Awakened, Reclaim 1●"), Tx("☾: Awaken a character you control.")],
+    amplified_text: [Tx("Awakened, Reclaim 1●"), Tx("☾: Awaken up to two characters you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Grim Pursuer"),
+    ability_text: [
+      Tx(
+        "▸Materialized: Choose a card in the opponent's hand. That card cannot be played while this character is in play."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Signal Hijacker"),
+    ability_text: [
+      Tx("▸Materialized: An enemy loses all abilities. This character gains those abilities."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Silent Observer"),
+    ability_text: [Tx("Once per turn, when the opponent plays an event, draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Underroot Diviner"),
+    ability_text: [Tx("☾, Banish 3 cards from your void: Draw a card.")],
+    amplified_text: [Tx("☾, Banish 3 cards from your void: Draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Defiant Parry"),
+    ability_text: [Tx("Offering"), Tx("Prevent a played card unless the opponent pays 1●.")],
+    amplified_text: [Tx("Offering"), Tx("Prevent a played card unless the opponent pays 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Remnant Scavenger"),
+    ability_text: [
+      Tx("This character has +1✦ for each ≤2● cost character in your void."),
+      Tx("☾, Discard a card: Draw a ≤2● cost character."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Flesh Cultivator"),
+    ability_text: [
+      Tx(
+        "☾, Abandon a ≤2● cost character: Materialize a random ≤2● cost character from your deck. This character gains +1✦."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Wrathful Gearwright"),
+    ability_text: [Tx("Vengeful"), Tx("▸Materialized: Draw a card.")],
+  ),
+
+  CardDefinition(name: Tx("Genesis Burst"), ability_text: [Tx("Double your current ●.")]),
+
+  CardDefinition(
+    name: Tx("Sylvan Matriarch"),
+    ability_text: [
+      Tx("▸Materialized: Draw a warrior."),
+      Tx("When you materialize a non-figment warrior, this character gains +1 spark."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized: Draw a warrior."),
+      Tx("When you materialize a non-figment warrior, this character gains +2✦."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Empyreal Light"),
+    ability_text: [Tx("☾: Awaken a character you control.")],
+    amplified_text: [Tx("☾: Awaken up to two characters you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Fell Swoop"),
+    ability_text: [Tx("Dissolve a ≤1✦ enemy."), Tx("Reclaim – Discard a card")],
+    amplified_text: [Tx("Dissolve a ≤2✦ enemy."), Tx("Reclaim – Discard a card")],
+  ),
+
+  CardDefinition(
+    name: Tx("Remnant Curator"),
+    ability_text: [
+      Tx("1●: Return a ≤2● cost character from your void to your hand."),
+      Tx("1●, ☾, Abandon a character: Draw a card."),
+    ],
+    amplified_text: [
+      Tx("1●: Return a ≤3● cost character from your void to your hand."),
+      Tx("1●, ☾, Abandon a character: Draw a card."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Combat Extractor"),
+    ability_text: [
+      Tx("2●, Discard a character: Dissolve a ≤2✦ enemy."),
+      Tx("1●: Return a character you control to hand."),
+    ],
+    amplified_text: [
+      Tx("2●, Discard a character: Dissolve a ≤3✦ enemy."),
+      Tx("1●: Return a character you control to hand."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Forgotten Sleeper"),
+    ability_text: [Tx("If you've discarded a card this turn, this character costs 3● less.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Ash Harbinger"),
+    ability_text: [
+      Tx("☾, Discard a card: Materialize a 1✦ warrior figment."),
+      Tx("☾, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy."),
+    ],
+    amplified_text: [
+      Tx("☾, Discard a card: Materialize a 2✦ warrior figment."),
+      Tx("☾, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Desperation"),
+    ability_text: [
+      Tx("To play this event, abandon a character or discard a card. Dissolve an enemy."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Flamestride Rider"),
+    ability_text: [
+      Tx("1●, Abandon this character: Choose one: Draw a card or dissolve a ≤2✦ enemy."),
+    ],
+    amplified_text: [
+      Tx("1●, Abandon this character: Choose one: Draw a card or dissolve a ≤3✦ enemy."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Pactbound Challenger"),
+    ability_text: [Tx("Awakened"), Tx("▸Dawn: Gain 1●.")],
+    amplified_text: [Tx("Awakened"), Tx("▸Dawn: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Sanctum Awakened"),
+    ability_text: [Tx("Draw two cards."), Tx("Reclaim 2●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Blooming Horror"),
+    ability_text: [
+      Tx("Choose a player. For each card you've played this turn, that player erodes 2."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Fury of the Clan"),
+    ability_text: [
+      Tx(
+        "If you control 3 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy.\n"
+      ),
+    ],
+    amplified_text: [
+      Tx("If you control 2 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Cosmic Puppeteer"),
+    ability_text: [Tx("▸Materialized: Gain control of a ≤X● cost enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Symphonic Muse"),
+    ability_text: [
+      Tx("▸Materialized: Draw a card."),
+      Tx("Support - Supported characters have +2✦.\n"),
+    ],
+    amplified_text: [
+      Tx("▸Materialized: Draw a card."),
+      Tx("Support – Supported characters have +3✦."),
+    ],
+  ),
+
+  CardDefinition(name: Tx("Bladefall"), ability_text: [Tx("Banish an enemy.")]),
+
+  CardDefinition(
+    name: Tx("Carrion Lord"),
+    ability_text: [
+      Tx("When you abandon a ≤2● cost character, materialize a 4✦ monstrosity figment."),
+      Tx("4●: Abandon a ≤2● cost character."),
+    ],
+    amplified_text: [
+      Tx("When you abandon a ≤2● cost character, materialize a 5✦ monstrosity figment."),
+      Tx("4●: Abandon a ≤2● cost character."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Gleam Below"),
+    ability_text: [Tx("Draw a card. Foresee 2.")],
+    amplified_text: [Tx("Draw a card. Foresee 3.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Momentum's Edge"),
+    ability_text: [
+      Tx("▸Materialized: Choose a character type. This character is that character type."),
+      Tx("Characters of the chosen type have +1✦."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized: Choose a character type. This character is that character type."),
+      Tx("Characters of the chosen type have +2✦."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Company Commander"),
+    ability_text: [Tx("When you play a warrior, this character gains +1✦.")],
+    amplified_text: [Tx("When you play a warrior, this character gains +2✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Chaos Crasher"),
+    ability_text: [
+      Tx("☾, Discard a card: Erode 2."),
+      Tx("4●, Abandon this character: Return a character from your void to your hand."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Reckless Vigilante"),
+    ability_text: [
+      Tx(
+        "❖❖ – Abandon another character: A character you control cannot be targeted by effects this turn."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "❖❖ – Abandon another character: Up to two characters you control cannot be targeted by effects this turn."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ecliptic Vantage"),
+    ability_text: [Tx("Foresee 2. Draw a card.")],
+    amplified_text: [Tx("Foresee 3. Draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Pulse of Sacrifice"),
+    ability_text: [Tx("Discard your hand. Gain 3●.")],
+    amplified_text: [Tx("Discard your hand. Gain 4●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Warrior's Path"),
+    ability_text: [Tx("Give a character you control +1✦ for each warrior you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Nexus Wayfinder"),
+    ability_text: [Tx("≤2● cost characters cost you 0●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Specter of Silent Snow"),
+    ability_text: [
+      Tx("▸Dawn: Abandon a character."),
+      Tx("When you abandon a character, draw a card and this character gains +1✦."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Night Stalker"),
+    ability_text: [
+      Tx("To play this character, discard a character."),
+      Tx("▸Materialized, Dawn: Gain 1●."),
+    ],
+    amplified_text: [
+      Tx("To play this character, discard a character."),
+      Tx("▸Materialized, Dawn: Gain 2●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Firebrand Saboteur"),
+    ability_text: [Tx("▸Materialized: The opponent discards a card. If they can't, draw a card.")],
+    amplified_text: [
+      Tx("▸Materialized: The opponent discards a card. If they can't, draw 2 cards."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Wired Duelist"),
+    ability_text: [
+      Tx("▸Dawn: This character gains +1✦."),
+      Tx("▸Dissolved: Give a character you control +X✦ where X is this character's ✦."),
+    ],
+    amplified_text: [
+      Tx("▸Dawn: This character gains +2✦."),
+      Tx("▸Dissolved: Give a character you control +X✦ where X is this character's ✦."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Veilpath Gatekeeper"),
+    ability_text: [
+      Tx("▸Materialized, Dissolved: Return a ≤2● cost character from your void to your hand."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized, Dissolved: Return a ≤3● cost character from your void to your hand."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Advance Gunner"),
+    ability_text: [Tx("Abandon this character: Erode 1."), Tx("▸Dissolved: Draw a card.")],
+    amplified_text: [Tx("Abandon this character: Erode 1."), Tx("▸Dissolved: Draw two cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Signal Resonant"),
+    ability_text: [
+      Tx("This character has all character types."),
+      Tx("❖ – 1●: Move this character to an unoccupied character position."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Soul Channeling"),
+    ability_text: [Tx("To play this event, pay 2⍟. Dissolve an enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Shared Ruin"),
+    ability_text: [Tx("The opponent discards a card."), Tx("Reclaim – Discard a card.")],
+    amplified_text: [
+      Tx(
+        "The opponent discards a card. If they have 5 or more cards in hand, they discard two cards instead."
+      ),
+
+      Tx("Reclaim – Discard a card."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Cloud Drifter"),
+    ability_text: [
+      Tx("▸Materialized: Foresee 2."),
+      Tx("❖ – 1●: Move this character to an unoccupied character position."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized: Foresee 3."),
+      Tx("❖ – 1●: Move this character to an unoccupied character position."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("God of the Veil"),
+    ability_text: [Tx("You may play ≤2● cost characters from your void.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Shadowsinger"),
+    ability_text: [
+      Tx(
+        "When a character you control is dissolved, materialize a 1✦ survivor figment. When you discard or erode this card, it gains reclaim 0●."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "When a character you control is dissolved, materialize a 2✦ survivor figment. When you discard or erode this card, it gains reclaim 0●."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Sky Legion Captain"),
+    ability_text: [
+      Tx("When you play a warrior, you may pay 2● to materialize a Legionnaire figment."),
+    ],
+    amplified_text: [
+      Tx("When you play a warrior, you may pay 2● to materialize a 2✦ Legionnaire figment."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("The Rising God"),
+    ability_text: [Tx("Reclaim – 2●, Abandon two characters.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Flamboyant Flamingo"),
+    ability_text: [Tx("▸Dawn: Gain 1●.")],
+    amplified_text: [Tx("▸Dawn: Gain 2●.")],
+  ),
+
+  CardDefinition(name: Tx("Aspiring Guardian"), ability_text: [Tx("")]),
+
+  CardDefinition(
+    name: Tx("Flamecaller"),
+    ability_text: [Tx("▸Materialized: Banish a ≤2● cost enemy.")],
+    amplified_text: [Tx("▸Materialized: Banish a ≤3● cost enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Weaver of Rhapsody"),
+    ability_text: [Tx("☾: Each player draws two cards.")],
+    amplified_text: [Tx("☾: Draw 3 cards. The opponent draws 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Annihilation from Below"),
+    ability_text: [
+      Tx("Dissolve a ≤2✦ enemy."),
+      Tx("When you discard this card, it gains reclaim 0●.\n"),
+    ],
+    amplified_text: [
+      Tx("Dissolve a ≤3✦ enemy."),
+      Tx("When you discard this card, it gains reclaim 0●.\n"),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Cinderblade Legionnaire"),
+    ability_text: [
+      Tx("Vengeful"),
+      Tx("▸Dissolved: Return another warrior from your void to your hand."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Borrowed Minutes"),
+    ability_text: [
+      Tx("Materialize each ≤X● cost character in your void. Banish them at end of turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Lumineth"),
+    ability_text: [Tx("☾, Discard a character: Discover a character with cost 1● higher.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Bloodbroker"),
+    ability_text: [
+      Tx("☾, Abandon a warrior: Discover a warrior with cost 1● higher and materialize it."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Lightning Channeler"),
+    ability_text: [Tx("▸Materialized: Banish a ≤2● cost enemy until this character leaves play.")],
+    amplified_text: [
+      Tx("▸Materialized: Banish a ≤3● cost enemy until this character leaves play."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Fallen One"),
+    ability_text: [
+      Tx("❖ – Discard a card: Move this character to an empty character position."),
+      Tx("X●: This character gains +X✦ until end of turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Oblivion Guide"),
+    ability_text: [Tx("When you discard this card, it gains reclaim 0●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Cast Beyond the Horizon"),
+    ability_text: [Tx("Put an enemy on top of the opponent's deck.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Eclipse Herald"),
+    ability_text: [Tx("3●: Store 1⧗."), Tx("X⧗: Dissolve a ≤X✦ enemy.")],
+    amplified_text: [Tx("3●: Store 2⧗."), Tx("X⧗: Dissolve a ≤X✦ enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Containment Specialist"),
+    ability_text: [Tx("4●: Gain 1⍟. This character gains +1✦.")],
+    amplified_text: [Tx("4●: Gain 2⍟. This character gains +1✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Shapeshifter Spirit"),
+    ability_text: [Tx("This character has all character types.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Duskwall Delver"),
+    ability_text: [
+      Tx(
+        "When a character you control is dissolved, you may pay 1● to materialize this character from your void."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "When a character you control is dissolved, you may pay 1● to materialize this character from your void with awakened."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Clifftop Marksman"),
+    ability_text: [
+      Tx("Awakened"),
+      Tx("❖ – 1●: Move this character to an unoccupied character position."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ebonwing"),
+    ability_text: [Tx("▸Materialized: Erode 2."), Tx("▸Dawn: Gain 1●.")],
+    amplified_text: [Tx("▸Materialized: Erode 3."), Tx("▸Dawn: Gain 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Emerald Guardian"),
+    ability_text: [Tx("▸Materialized: Draw a card."), Tx("▸Dawn: Gain 1●.")],
+    amplified_text: [Tx("▸Materialized: Draw a card."), Tx("▸Dawn: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Spirit of Smoldering Echoes"),
+    ability_text: [Tx("2●: Choose an event in your void to gain reclaim.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Lantern Keeper"),
+    ability_text: [Tx("☾, Discard a card: Draw a card.")],
+    amplified_text: [Tx("☾, Discard a card: Draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Bloodsun Oppressor"),
+    ability_text: [
+      Tx(
+        "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Temporal Aperture"),
+    ability_text: [
+      Tx(
+        "To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it with awakened."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Evacuation Enforcer"),
+    ability_text: [Tx("Awakened"), Tx("☾: Draw 2 cards, then discard 3 cards.")],
+    amplified_text: [Tx("Awakened"), Tx("☾: Draw 2 cards, then discard 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Pallid Arbiter"),
+    ability_text: [
+      Tx(
+        "▸Materialized: Disable the triggered abilities of an enemy while this character is in play."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "▸Materialized: Disable the triggered and activated abilities of an enemy while this character is in play."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Angel of the Eclipse"),
+    ability_text: [Tx("Veil"), Tx("When you play a character, gain 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Embrace the Infinite"),
+    ability_text: [Tx("Gain X⍟."), Tx("Reclaim – Discard X cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Celestial Lookout"),
+    ability_text: [
+      Tx("When you play a character, store 1⧗."),
+      Tx("X⧗: Materialize a random character with cost X● from the opponent's deck."),
+    ],
+    amplified_text: [
+      Tx("When you play a character, store 2⧗."),
+      Tx("X⧗: Materialize a random character with cost X● from the opponent's deck."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Entropy Cascade"),
+    ability_text: [
+      Tx("The next time you play an event this turn, copy it twice."),
+      Tx("Reclaim 5●."),
+    ],
+    amplified_text: [
+      Tx(
+        "The next time you play an event this turn, copy it twice. You may choose new targets for the copies."
+      ),
+
+      Tx("Reclaim 5●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Price of Redemption"),
+    ability_text: [
+      Tx("Materialize a ≤2● cost character from your void."),
+      Tx("Reclaim – Abandon a character."),
+    ],
+    amplified_text: [
+      Tx("Materialize a ≤3● cost character from your void."),
+      Tx("Reclaim – Abandon a character."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Dreadcall Warden"),
+    ability_text: [Tx("2●, Abandon a 1✦ character: Draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Vaultbreaker"),
+    ability_text: [
+      Tx(
+        "Abandon a character, reveal this card from your hand: Reduce the cost of this card by 1●."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Voidsire"),
+    ability_text: [
+      Tx("▸Materialized: Erode 3."),
+      Tx("5●, ☾, Abandon this character: Return all ≤2● cost characters from your void to play."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Veil Shatter"),
+    ability_text: [Tx("Offering"), Tx("Banish a ≤3● cost enemy.")],
+    amplified_text: [Tx("Offering"), Tx("Banish a ≤4● cost enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Night Raid Commando"),
+    ability_text: [Tx("Abandon this character: Gain 1●."), Tx("▸Dissolved: Draw a card.")],
+    amplified_text: [Tx("Abandon this character: Gain 2●."), Tx("▸Dissolved: Draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Inferno's Herald"),
+    ability_text: [
+      Tx("▸Dawn: This character gains +1✦."),
+      Tx("▸Dissolved: Materialize a 1✦ warrior figment for each ✦ this character has."),
+    ],
+    amplified_text: [
+      Tx("▸Dawn: This character gains +2✦."),
+      Tx("▸Dissolved: Materialize a 1✦ warrior figment for each ✦ this character has."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Knowledge Restored"),
+    ability_text: [Tx("To play this card, banish 5 cards from your void. Draw 3 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Shatterpoint Agent"),
+    ability_text: [
+      Tx("When this character scores ⍟, the opponent loses an equivalent quantity of ⍟."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Relentless Pursuer"),
+    ability_text: [Tx("▸Challenge: Draw a card, then discard a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Pathfinder"),
+    ability_text: [Tx("▸Dissolved: Return another warrior from your void to your hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Aurora Rider"),
+    ability_text: [
+      Tx("When you play a warrior, you may materialize a ≤2● cost character from your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Melodist of the Finale"),
+    ability_text: [Tx("When you challenge with two or more warriors, draw a card.")],
+    amplified_text: [Tx("When you challenge with two or more warriors, draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Sky Legion Invoker"),
+    ability_text: [Tx("Once per turn, when you materialize a warrior, draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Overwhelm"),
+    ability_text: [Tx("Prevent a played card, then put that card into your hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Turquoise Aurelia"),
+    ability_text: [Tx("▸Dawn: Gain 1●."), Tx("▸Dissolved: Gain 1●.")],
+    amplified_text: [Tx("▸Dawn: Gain 1●."), Tx("▸Dissolved: Gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Break the Sequence"),
+    ability_text: [Tx("Prevent a played card. Each player draws a card.")],
+    amplified_text: [Tx("Prevent a played card. Draw 2 cards. The opponent draws a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Amber Aurelia"),
+    ability_text: [Tx("▸Dawn: Gain 1●."), Tx("Reclaim 3●")],
+    amplified_text: [Tx("▸Dawn: Gain 2●."), Tx("Reclaim 3●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Crimson Pilgrimage"),
+    ability_text: [
+      Tx(
+        "Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("He Who Lies Dreaming"),
+    ability_text: [Tx("To play this character, pay 4⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Underworld Witch"),
+    ability_text: [
+      Tx("▸Materialized: Erode 3."),
+      Tx("☾, Abandon a warrior: Materialize a ≤2● cost warrior from your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Portal of Twin Paths"),
+    ability_text: [Tx("Materialize two random ≤2● cost characters from your deck.")],
+  ),
+
+  CardDefinition(name: Tx("Apocalypse"), ability_text: [Tx("Dissolve all characters.")]),
+
+  CardDefinition(
+    name: Tx("Cloudmantle Ray"),
+    ability_text: [Tx("▸Dawn: Gain 1● for each ≤2● cost character you control.")],
+    amplified_text: [Tx("▸Dawn: Gain 1● for each ≤3● cost character you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Wreckheap Lookout"),
+    ability_text: [
+      Tx(
+        "▸Night: If you control a challenger, you may pay 2● to return this character from your void to play."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "▸Night: If you control a challenger, you may pay 2● to return this character from your void to play with awakened."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Soulbinder"),
+    ability_text: [Tx("Abandon a character: Store 1⧗."), Tx("2⧗: Gain 1●.")],
+    amplified_text: [Tx("Abandon a character: Store 2⧗."), Tx("2⧗: Gain 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Frost Hewer"),
+    ability_text: [Tx("Discard a card: This character gains vengeful this turn.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Vessel of Echoes"),
+    ability_text: [
+      Tx("If there are 6 or more cards in your void, this character has +5✦."),
+      Tx("Reclaim 1●."),
+    ],
+    amplified_text: [
+      Tx("If there are 5 or more cards in your void, this character has +5✦."),
+      Tx("Reclaim 1●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Hope's Vanguard"),
+    ability_text: [Tx("Discard a card: Materialize a 1✦ survivor figment.")],
+    amplified_text: [Tx("Discard a card: Materialize a 2✦ survivor figment.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Dune Interceptor"),
+    ability_text: [
+      Tx("▸Materialized: Prevent a played ≤2● cost card."),
+      Tx("❖ – 1●: Reposition this character."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized: Prevent a played ≤3● cost card."),
+      Tx("❖ – 1●: Reposition this character."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Dustborn Veteran"),
+    ability_text: [
+      Tx(
+        "When a non-figment survivor you control is dissolved, materialize a 1✦ survivor figment."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "When a non-figment survivor you control is dissolved, materialize a 2✦ survivor figment."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Futuresight Host"),
+    ability_text: [Tx("Veil"), Tx("▸Materialized: Draw a card.")],
+    amplified_text: [Tx("Veil"), Tx("▸Materialized: Draw 2 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Ethereal Call"),
+    ability_text: [Tx("For each card you've played this turn, materialize a 1✦ ethereal figment.")],
+    amplified_text: [
+      Tx("For each card you've played this turn, materialize a 2✦ ethereal figment."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Boundless Wanderer"),
+    ability_text: [
+      Tx("This character has all character types."),
+      Tx("1●: Characters you control have all character types until end of turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Field Reverent"),
+    ability_text: [Tx("X●: The ✦ of each character you control becomes X until end of turn.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Together Against the Tide"),
+    ability_text: [Tx("Materialize two 1✦ ethereal figments."), Tx("Reclaim 2●")],
+    amplified_text: [Tx("Materialize three 1✦ ethereal figments."), Tx("Reclaim 2●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Dawnhorn Elder"),
+    ability_text: [Tx("2●, ☾: Store 1⧗."), Tx("▸Dawn: Gain 1● for each stored ⧗.")],
+    amplified_text: [Tx("2●, ☾: Store 2⧗."), Tx("▸Dawn: Gain 1● for each stored ⧗.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Embersummoner"),
+    ability_text: [Tx("When you materialize a figment, materialize a 1✦ ethereal figment.")],
+    amplified_text: [Tx("When you materialize a figment, materialize a 2✦ ethereal figment.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Shardwoven Tyrant"),
+    ability_text: [
+      Tx("▸Dawn: Materialize 1✦ ethereal figment."),
+      Tx("1●, Abandon X figments: Dissolve an enemy with X✦."),
+    ],
+    amplified_text: [
+      Tx("▸Dawn: Materialize a 2✦ ethereal figment."),
+      Tx("1●, Abandon X figments: Dissolve an enemy with X✦."),
+    ],
+  ),
+
+  CardDefinition(name: Tx("Grounded"), ability_text: [Tx("Banish an enemy with cost X●.")]),
+
+  CardDefinition(
+    name: Tx("Through the Rift"),
+    ability_text: [
+      Tx(
+        "Choose a character type. Discover a character of that type and put it on top of your deck."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Twilight Suppressor"),
+    ability_text: [
+      Tx("When you play a character, store 1⧗."),
+      Tx("1⧗, Abandon a character: Gain 1⍟."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Trance Diviner"),
+    ability_text: [Tx("Discard a card: Draw two cards with ephemeral.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Starcatcher"),
+    ability_text: [Tx("When you play an event, gain 1●.")],
+    amplified_text: [Tx("When you play an event, gain 2●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Seedling Sage"),
+    ability_text: [Tx("When you play a character, store 1⧗."), Tx("2⧗: Gain 1●.")],
+    amplified_text: [Tx("When you play a character, store 2⧗."), Tx("2⧗: Gain 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Reset"),
+    ability_text: [Tx("Each player discards their hand, then draws 6 cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Fractured Veil"),
+    ability_text: [
+      Tx(
+        "To play this event, banish X cards from your void. Look at the top X cards of your deck. Put two of them into your hand and the rest on the bottom."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ancient Battlesuit"),
+    ability_text: [Tx("Awakened"), Tx("▸Materialized: Return a character you control to hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("The Power Within"),
+    ability_text: [
+      Tx(
+        "Look at the top 3 cards of your deck. Put one on top of your deck, one on the bottom of your deck, and one into your hand."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "Look at the top 4 cards of your deck. Put one on top of your deck, one on the bottom of your deck, and one into your hand. Put the rest into your void."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Barrage Specialist"),
+    ability_text: [Tx("▸Challenge: Each other challenging character gains +1✦.")],
+    amplified_text: [Tx("▸Challenge: Each other challenging character gains +2✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Inspiring Templar"),
+    ability_text: [
+      Tx(
+        "This character has +1✦ for each warrior you control. Other warriors you control have +1✦."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "This character has +1✦ for each warrior you control. Other warriors you control have +2✦."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ferryman of the Falls"),
+    ability_text: [
+      Tx("▸Materialized: Return a character you control to hand."),
+      Tx("When you return another character to your hand, reduce its cost by 1●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ethereal Courser"),
+    ability_text: [
+      Tx("When you play a spirit animal, return this character to hand. It costs 0● this turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("A New Adventure"),
+    ability_text: [Tx("Draw two cards, then discard two cards. Gain 3●.")],
+    amplified_text: [Tx("Draw two cards, then discard one card. Gain 3●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Mystic Boatman"),
+    ability_text: [Tx("▸Materialized: Discover a ≤2● cost character.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Watcher in the Ruins"),
+    ability_text: [Tx("When a non-figment character you control is dissolved, draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Entropy Spike"),
+    ability_text: [Tx("▸Dissolved: Choose one: Gain 1●, or gain 1 maximum ●.")],
+    amplified_text: [Tx("▸Dissolved: Choose one: Gain 2●, or gain 1 maximum ●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Glimpse of Infinity"),
+    ability_text: [Tx("Gain 3●.")],
+    amplified_text: [Tx("Gain 4●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Fractured Vessel"),
+    ability_text: [Tx("▸Dawn: If this character is in your void, return it to your hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Archive of the Forgotten"),
+    ability_text: [Tx("Choose up to two ≤X● cost events in your void to gain reclaim 0●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Mirrorlight Architect"),
+    ability_text: [
+      Tx("▸Dawn: Store 1⧗."),
+      Tx("❖ – ☾: Materialize a ≤X● cost character from your hand, where X is the stored ⧗."),
+    ],
+    amplified_text: [
+      Tx("▸Dawn: Store 2⧗."),
+      Tx("❖ – ☾: Materialize a ≤X● cost character from your hand, where X is the stored ⧗."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Aerie Defender"),
+    ability_text: [Tx("▸Challenge: You may discard a card to give this character +2✦.")],
+    amplified_text: [Tx("▸Challenge: You may discard a card to give this character +4✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Pattern Seeker"),
+    ability_text: [Tx("When you discard a card, draw a card with ephemeral.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Shadow March"),
+    ability_text: [
+      Tx("Materialize all ≤2● cost characters in your void which dissolved this turn."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ashborn Necromancer"),
+    ability_text: [Tx("Abandon a character: Erode 2.")],
+    amplified_text: [Tx("Abandon a character: Erode 3.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Lord of Hidden Paths"),
+    ability_text: [
+      Tx("Spirit animals you control have +1✦."),
+      Tx("When you play a spirit animal, you may pay 1● to draw a card."),
+    ],
+    amplified_text: [
+      Tx("Spirit animals you control have +2✦."),
+      Tx("When you play a spirit animal, you may pay 1● to draw a card."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("The Bondweaver"),
+    ability_text: [Tx("▸Materialized: Draw a ≤2● cost card. It costs 0●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Guide of Lost Souls"),
+    ability_text: [Tx("When a character is dissolved, gain 1⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Mnemonic Operator"),
+    ability_text: [
+      Tx("2●, ☾: Draw a card, then discard a card."),
+      Tx("When you discard a card, gain 1⍟."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Threshold Scout"),
+    ability_text: [Tx("▸Challenge: You may pay 2● and discard a card to draw two cards.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Veilpiercer"),
+    ability_text: [
+      Tx("▸Materialized: Return a played ≤3● cost card to the opponent's hand. It costs 2● more."),
+    ],
+    amplified_text: [
+      Tx("▸Materialized: Return a played ≤4● cost card to the opponent's hand. It costs 2● more."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ridge Vortex Explorer"),
+    ability_text: [Tx("When you discard this card, materialize it.")],
+    amplified_text: [Tx("When you discard this card, materialize it with awakened.")],
+  ),
+
+  CardDefinition(
+    name: Tx("God of Wrath"),
+    ability_text: [Tx("Other characters you control have 10✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Beacon of Tomorrow"),
+    ability_text: [Tx("Choose a value of X. Discover a character with cost X●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Eternal Soul"),
+    ability_text: [Tx("▸Dissolved: Choose a survivor in your void to gain reclaim.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Returned Vanguard"),
+    ability_text: [Tx("▸Dissolved: You may pay 1● to return this character to hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Corrupted Host"),
+    ability_text: [Tx("Abandon another character: This character gains +1✦.")],
+    amplified_text: [Tx("Abandon another character: This character gains +2✦.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Bloodpact Berserker"),
+    ability_text: [Tx("▸Materialized, ▸Dawn: Gain 2●. The opponent gains 3⍟.")],
+    amplified_text: [Tx("▸Materialized, ▸Dawn: Gain 2●. The opponent gains 2⍟.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Pyreling"),
+    ability_text: [
+      Tx("When you abandon a character, this character gains +1✦."),
+      Tx("3●, Abandon a character: Draw a card."),
+    ],
+    amplified_text: [
+      Tx("When you abandon a character, this character gains +2✦."),
+      Tx("3●, Abandon a character: Draw a card."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Starfall"),
+    ability_text: [Tx("Gain 3●.")],
+    amplified_text: [Tx("Gain 4●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Tranquil Duelist"),
+    ability_text: [
+      Tx("4●: This character gains +1✦."),
+      Tx("▸Dissolved: Draw a card for each ✦ this character has."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Hungering Mass"),
+    ability_text: [
+      Tx(
+        "▸Night: If a character you control left play this turn, materialize a 1✦ ethereal figment."
+      ),
+
+      Tx("1●, Abandon another character: Foresee 1."),
+    ],
+    amplified_text: [
+      Tx(
+        "▸Night: If a character you control left play this turn, materialize a 2✦ ethereal figment."
+      ),
+
+      Tx("1●, Abandon another character: Foresee 1."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Obliterator of Worlds"),
+    ability_text: [Tx("Offering"), Tx("▸Materialized: Dissolve an enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Searcher in the Mists"),
+    ability_text: [Tx("▸Materialized, Dissolved: Erode 4.")],
+    amplified_text: [Tx("▸Materialized, Dissolved: Erode 5.")],
+  ),
+
+  CardDefinition(name: Tx("Assault Trooper"), ability_text: [Tx("")]),
+
+  CardDefinition(
+    name: Tx("Ghostcaller"),
+    ability_text: [
+      Tx(
+        "▸Dawn: Give a wraith you control +1✦. If you control no wraiths, materialize a 0✦ wraith figment with vengeful instead."
+      ),
+    ],
+    amplified_text: [
+      Tx(
+        "▸Dawn: Give a wraith you control +2✦. If you control no wraiths, materialize a 0✦ wraith figment with vengeful instead."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Grim Recruiter"),
+    ability_text: [
+      Tx("Abandon a character: Store 1⧗."),
+      Tx("2●, 2⧗: Materialize two 1✦ warrior figments."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Duskmount Rider"),
+    ability_text: [
+      Tx("Awakened"),
+      Tx("☾: Rematerialize a character you control. This character gains +1✦."),
+    ],
+    amplified_text: [
+      Tx("Awakened"),
+      Tx("☾: Rematerialize a character you control. This character gains +2✦."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Veil of the Wastes"),
+    ability_text: [
+      Tx("When you materialize a ≤2● cost character, return this card from your void to play."),
+    ],
+  ),
+
+  CardDefinition(name: Tx("Abolish"), ability_text: [Tx("Prevent a played card.")]),
+
+  CardDefinition(
+    name: Tx("Wasteland Arbitrator"),
+    ability_text: [Tx("▸Materialized: Each player discards a card."), Tx("Reclaim 1●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Gilded Catalyst"),
+    ability_text: [Tx("☾, Discard your hand, abandon this character: Gain 3●.")],
+    amplified_text: [Tx("☾, Discard your hand, abandon this character: Gain 4●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Wolfbond Chieftain"),
+    ability_text: [Tx("Awakened"), Tx("☾: Gain 1● for each warrior you control.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Lumin-Gate Seer"),
+    ability_text: [Tx("Veil"), Tx("When you materialize a character with cost X●, draw a card.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Dune Reaper"),
+    ability_text: [Tx("Abandon a character: A player erodes X, where X is that character's cost.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Burning Revenant"),
+    ability_text: [
+      Tx(
+        "When a warrior you control is dissolved, return a warrior with lesser cost from your void to hand."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Dark Lord's Champion"),
+    ability_text: [
+      Tx("When you draw your third card in a turn, materialize this character from your void."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Breach Artist"),
+    ability_text: [
+      Tx("Phasing"),
+      Tx("When you return a character you control to hand, reduce its cost by 2●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Immortal Reaper"),
+    ability_text: [
+      Tx("2●, Banish a card from your void: Materialize this character from your void."),
+    ],
+    amplified_text: [
+      Tx(
+        "2●, Banish a card from your void: Materialize this character from your void with awakened."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Path to Redemption"),
+    ability_text: [Tx("Until end of turn, cards in your void gain reclaim.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Pyrokinetic Surge"),
+    ability_text: [Tx("To play this card, discard a card or pay 5⍟. Dissolve an enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Infernal Cavalier"),
+    ability_text: [Tx("▸Dissolved: Return another warrior from your void to your hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("From the Barrow"),
+    ability_text: [
+      Tx("Until end of turn, events in your void gain reclaim."),
+      Tx("When you discard or erode this card, it gains reclaim 3●."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Resilient Wanderer"),
+    ability_text: [
+      Tx("▸Dissolved: Draw a card."),
+      Tx("▸Dawn: If this card is in your void, you may pay 1● to return it to your hand."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Dragonward"),
+    ability_text: [
+      Tx("This character costs 1● less for each warrior you control."),
+      Tx("Support – Supported warriors have +3✦."),
+    ],
+  ),
+
+  CardDefinition(name: Tx("Harbor Warden"), ability_text: [Tx("▸Materialized: Draw 2 cards.")]),
+
+  CardDefinition(
+    name: Tx("Final Gambit"),
+    ability_text: [
+      Tx("You may play this card for 0● by giving the opponent 5⍟. Dissolve an enemy."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Ritekeeper"),
+    ability_text: [Tx("Discard a card: Choose an event in your void to gain reclaim.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Stoneborn Leviathan"),
+    ability_text: [
+      Tx("1●, Return a character you control to hand: Give a character you control +1✦."),
+    ],
+    amplified_text: [
+      Tx("1●, Return a character you control to hand: Give a character you control +2✦."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Stolen Genesis"),
+    ability_text: [
+      Tx(
+        "To play this card, abandon a character. Materialize a random character with higher cost from your deck."
+      ),
+
+      Tx("Reclaim 3●"),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Mind's Door"),
+    ability_text: [Tx("Look at the opponent's hand. Put a card from it into your hand.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Seek Answers"),
+    ability_text: [
+      Tx("Draw 2 cards, then discard a card."),
+      Tx("When you discard this card, it gains reclaim."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Profane Summons"),
+    ability_text: [Tx("Materialize a 4✦ monstrosity figment."), Tx("Reclaim 4●")],
+    amplified_text: [Tx("Materialize a 5✦ monstrosity figment."), Tx("Reclaim 4●")],
+  ),
+
+  CardDefinition(
+    name: Tx("Cloaked Sentinel"),
+    ability_text: [
+      Tx(
+        "Abandon this character: Dissolve an enemy with ✦ less than or equal to this character's ✦."
+      ),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Eruption"),
+    ability_text: [
+      Tx("Dissolve a ≤2✦ enemy."),
+      Tx("When an enemy scores ⍟, return this card from your void to your hand."),
+    ],
+    amplified_text: [
+      Tx("Dissolve a ≤3✦ enemy."),
+      Tx("When an enemy scores ⍟, return this card from your void to your hand."),
+    ],
+  ),
+
+  CardDefinition(
+    name: Tx("Fracture Fate"),
+    ability_text: [Tx("An enemy loses all abilities  until the opponent pays 3●.")],
+    amplified_text: [Tx("An enemy loses all abilities until the opponent pays 4●.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Nocturne Strummer"),
+    ability_text: [Tx("Support – Supported characters have +2✦.")],
+  ),
+
+  CardDefinition(name: Tx("Ringwatcher"), ability_text: [Tx("▸Materialized: Foresee 1.")]),
+
+  CardDefinition(name: Tx("Marked Direwolf"), ability_text: [Tx("")]),
+
+  CardDefinition(name: Tx("Runebound Champion"), ability_text: [Tx("▸Dawn: Gain 1⍟.")]),
+
+  CardDefinition(name: Tx("Final Witness"), ability_text: [Tx("▸Dissolved: Draw a card.")]),
+
+  CardDefinition(
+    name: Tx("Rusted Colossus"),
+    ability_text: [Tx("This character has +2✦ for each character supporting it.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Flashpoint Detonation"),
+    ability_text: [Tx("Dissolve a ≤2● cost enemy.")],
+  ),
+
+  CardDefinition(
+    name: Tx("Glimpse of What Was"),
+    ability_text: [Tx("Draw a card, then foresee 1.")],
+  ),
+
+  CardDefinition(name: Tx("Sign of Arrival"), ability_text: [Tx("Discover a character.")]),
+
+  CardDefinition(name: Tx("Worlds Await"), ability_text: [Tx("Give a character you control +3✦.")]),
+
+  CardDefinition(name: Tx("Twilight Troubadour"), ability_text: [Tx("")]),
+
+  CardDefinition(name: Tx("Nightmare"), ability_text: [Tx("Draw a card.")]),
+]

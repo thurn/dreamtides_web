@@ -12,6 +12,7 @@ import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { parse } from "smol-toml";
 import {
+  generateCardLocalizationProjection,
   generateOpponentsData,
   imageHash,
   linkExplorationArt,
@@ -1726,6 +1727,43 @@ describe("transformCard energy cost", () => {
 });
 
 describe("transformCard Amplified text", () => {
+  it("drops compact replacement metadata from the runtime shape", () => {
+    const result = transformCard({
+      name: "Amplified fixture",
+      id: "amplified-fixture",
+      "card-number": 1,
+      "card-type": "Event",
+      "energy-cost": 2,
+      "is-fast": false,
+      "rendered-text": "Gain 2●.",
+      "amplified-text": "Gain 3●.",
+      "amplified-replacement": "3●.",
+      "image-number": 1,
+      "art-owned": false,
+    });
+    expect(result.amplifiedText).toBe("Gain 3●.");
+    expect(result).not.toHaveProperty("amplifiedReplacement");
+  });
+
+  it("projects complete card messages for localization", () => {
+    const projection = generateCardLocalizationProjection([
+      {
+        name: "Amplified fixture",
+        "rendered-text": "Gain 2●.\n\nDraw a card.",
+        "amplified-text": "Gain 3●.\n\nDraw a card.",
+        "amplified-replacement": "3●.",
+      },
+    ]);
+    expect(projection).toContain("CardDefinition(");
+    expect(projection).toContain(
+      'ability_text: [Tx("Gain 2●."), Tx("Draw a card.")]',
+    );
+    expect(projection).toContain(
+      'amplified_text: [Tx("Gain 3●."), Tx("Draw a card.")]',
+    );
+    expect(projection).not.toContain("amplified_replacement");
+  });
+
   it("carries an authored Amplified form into the runtime shape", () => {
     const result = transformCard({
       name: "Amplified fixture",

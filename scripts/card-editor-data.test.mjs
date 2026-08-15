@@ -29,6 +29,7 @@ id = "${FIRST_ID}"
 tides = ["event_chain"]
 rendered-text = "Draw a card."
 amplified-text = "Draw two cards."
+amplified-replacement = "two cards."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
@@ -135,9 +136,11 @@ describe("readEditorCards", () => {
       name: "First Card",
       spark: "",
       "rendered-text": "Draw a card.",
-      "amplified-text": "Draw two cards.",
-      preview: transformCard(cards[0].source),
+      "amplified-text": "two cards.",
+      preview: expect.objectContaining({ amplifiedText: "Draw two cards." }),
     });
+    expect(cards[0].preview).toEqual(transformCard(cards[0].source));
+    expect(cards[0].preview).not.toHaveProperty("amplifiedReplacement");
     expect(cards[1]).toMatchObject({
       id: SECOND_ID,
       cardNumber: 7,
