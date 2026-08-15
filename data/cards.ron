@@ -4386,7 +4386,7 @@
     name: Tx("Advance Gunner"),
     id: "e4ab6a18-c3b2-4149-a446-c7c1e8d66714",
     ability_text: [Tx("Abandon this character: Erode 1."), Tx("▸Dissolved: Draw a card.")],
-    amplified_text: [Tx("Abandon this character: Erode 4."), Tx("▸Dissolved: Draw a card.")],
+    amplified_text: [Tx("Abandon this character: Erode 1."), Tx("▸Dissolved: Draw two cards.")],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Warrior", spark: Fixed(1)),
     rarity: Common,
