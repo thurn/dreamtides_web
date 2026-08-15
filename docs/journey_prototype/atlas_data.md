@@ -22,8 +22,8 @@ The document contains these sections:
 | `site-composition`     | Site uniqueness, the known-dreamsign carrier site, and mandatory-capacity behavior.                                 |
 | `fill-profiles`        | Signature-site and explicit site weights selected by layer.                                                         |
 | `known-dreamsign`      | Per-Atlas maximum, eligible layers, placement probability, and early-reveal bias.                                   |
-| `boss`                 | Limbo identity and copy plus stable scene, icon, and Apollyon figure keys.                                          |
-| `assets`               | Shared renderer chrome with its source filename and emitted asset key.                                              |
+| `boss`                 | Limbo identity and copy plus typed scene, icon, and Apollyon figure asset keys.                                     |
+| `assets`               | Shared renderer chrome with its source filename and typed asset key.                                                |
 
 Starter Dreamscapes provide `atlas_description` in `dreamscapes.ron`, and
 Affiliations provide `atlas-card-theme` in `affiliations.ron`. The Atlas view

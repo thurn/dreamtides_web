@@ -9,6 +9,7 @@ use uuid::{Uuid, Variant, Version};
 
 use super::localization::{source_text, source_transport_value};
 
+use super::assets::AssetKey;
 use super::atlas::SiteType;
 
 const LEGACY_ID_MAP: [(&str, &str); 12] = [
@@ -45,7 +46,7 @@ pub struct DreamscapeArt {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct AssetReference {
-    pub key: String,
+    pub key: AssetKey,
     pub source: String,
 }
 
@@ -319,28 +320,23 @@ fn validate_asset_reference(
     role: &str,
     asset: &AssetReference,
     compatibility_key: &str,
-    keys: &mut BTreeSet<String>,
+    keys: &mut BTreeSet<AssetKey>,
     sources: &mut BTreeSet<String>,
 ) -> Result<()> {
-    ensure!(
-        !asset.key.trim().is_empty(),
-        "Dreamscape {} has an empty {role} art key",
-        dreamscape.id
-    );
     ensure!(
         !asset.source.trim().is_empty(),
         "Dreamscape {} has an empty {role} art source",
         dreamscape.id
     );
     ensure!(
-        asset.key == compatibility_key,
+        asset.key.as_compat() == compatibility_key,
         "Dreamscape {} {role} art key must match its legacy compatibility key",
         dreamscape.id
     );
     ensure!(
-        keys.insert(asset.key.clone()),
+        keys.insert(asset.key),
         "Dreamscapes repeat {role} art key {}",
-        asset.key
+        asset.key.as_compat()
     );
     ensure!(
         sources.insert(asset.source.clone()),
@@ -388,8 +384,8 @@ mod tests {
     id: "{STARTER_ID}",
     name: Tx("Opening"),
     art: (
-      scene: (key: "firstlight_meadow", source: "opening.png"),
-      atlas_node: (key: "firstlight_meadow", source: "opening_icon.png"),
+      scene: (key: FirstlightMeadow, source: "opening.png"),
+      atlas_node: (key: FirstlightMeadow, source: "opening_icon.png"),
     ),
     kind: Starter(
       atlas_description: Tx("A starting region."),
@@ -401,8 +397,8 @@ mod tests {
     id: "{REGION_ID}",
     name: Tx("Région"),
     art: (
-      scene: (key: "tumbleleaf_village", source: "region.png"),
-      atlas_node: (key: "tumbleleaf_village", source: "region_icon.png"),
+      scene: (key: TumbleleafVillage, source: "region.png"),
+      atlas_node: (key: TumbleleafVillage, source: "region_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "{AFFILIATION_ID}",
@@ -413,8 +409,8 @@ mod tests {
     id: "{BOSS_ID}",
     name: Tx("Final Dream"),
     art: (
-      scene: (key: "limbo", source: "final.png"),
-      atlas_node: (key: "limbo", source: "final_icon.png"),
+      scene: (key: Limbo, source: "final.png"),
+      atlas_node: (key: Limbo, source: "final_icon.png"),
     ),
     kind: Boss,
   ),
@@ -523,7 +519,7 @@ mod tests {
 
         let no_boss = synthetic_source().replace(
             &format!(
-                "  DreamscapeDefinition(\n    id: \"{BOSS_ID}\",\n    name: Tx(\"Final Dream\"),\n    art: (\n      scene: (key: \"limbo\", source: \"final.png\"),\n      atlas_node: (key: \"limbo\", source: \"final_icon.png\"),\n    ),\n    kind: Boss,\n  ),\n"
+                "  DreamscapeDefinition(\n    id: \"{BOSS_ID}\",\n    name: Tx(\"Final Dream\"),\n    art: (\n      scene: (key: Limbo, source: \"final.png\"),\n      atlas_node: (key: Limbo, source: \"final_icon.png\"),\n    ),\n    kind: Boss,\n  ),\n"
             ),
             "",
         );
@@ -548,13 +544,23 @@ mod tests {
         assert_error_contains(&empty_name, "empty name");
 
         let wrong_art_key = synthetic_source().replace(
-            "scene: (key: \"tumbleleaf_village\", source: \"region.png\")",
-            "scene: (key: \"wrong\", source: \"region.png\")",
+            "scene: (key: TumbleleafVillage, source: \"region.png\")",
+            "scene: (key: FirstlightMeadow, source: \"region.png\")",
         );
         assert_error_contains(&wrong_art_key, "must match its legacy compatibility key");
 
         let duplicate_art_source = synthetic_source().replace("region.png", "opening.png");
         assert_error_contains(&duplicate_art_source, "repeat scene art source");
+    }
+
+    #[test]
+    fn rejects_string_and_unknown_art_keys() {
+        let quoted =
+            synthetic_source().replace("key: FirstlightMeadow", "key: \"firstlight_meadow\"");
+        assert!(ron::from_str::<Vec<DreamscapeDefinition>>(&quoted).is_err());
+
+        let unknown = synthetic_source().replace("key: FirstlightMeadow", "key: UnknownAsset");
+        assert!(ron::from_str::<Vec<DreamscapeDefinition>>(&unknown).is_err());
     }
 
     fn assert_error_contains(source: &str, expected: &str) {

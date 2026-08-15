@@ -7,8 +7,8 @@
     name: Tx("Firstlight Meadow"),
     // Each asset pairs its stable runtime lookup key with its authoring filename.
     art: (
-      scene: (key: "firstlight_meadow", source: "firstlight_meadow.png"),
-      atlas_node: (key: "firstlight_meadow", source: "firstlight_meadow_icon.png"),
+      scene: (key: FirstlightMeadow, source: "firstlight_meadow.png"),
+      atlas_node: (key: FirstlightMeadow, source: "firstlight_meadow_icon.png"),
     ),
     kind: Starter(
       atlas_description: Tx("A quiet place where every dream journey begins."),
@@ -23,8 +23,8 @@
     id: "08e11635-9f04-48fd-a9c8-5a9f68c80958",
     name: Tx("Tumbleleaf Village"),
     art: (
-      scene: (key: "tumbleleaf_village", source: "tumbleleaf_village.png"),
-      atlas_node: (key: "tumbleleaf_village", source: "tumbleleaf_village_icon.png"),
+      scene: (key: TumbleleafVillage, source: "tumbleleaf_village.png"),
+      atlas_node: (key: TumbleleafVillage, source: "tumbleleaf_village_icon.png"),
     ),
     kind: Standard(
       // Shapes card selection and opponent construction in this region.
@@ -42,8 +42,8 @@
     id: "b25b9906-8380-45bf-9435-678ce18316ea",
     name: Tx("Pharaoh's Gate"),
     art: (
-      scene: (key: "pharaohs_gate", source: "pharaohs_gate.png"),
-      atlas_node: (key: "pharaohs_gate", source: "pharaohs_gate_icon.png"),
+      scene: (key: PharaohsGate, source: "pharaohs_gate.png"),
+      atlas_node: (key: PharaohsGate, source: "pharaohs_gate_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "c3815562-e80d-4afc-8ba6-91bd60ad323e",
@@ -60,8 +60,8 @@
     id: "7d793d30-8a0f-4f84-a446-cdde502710e8",
     name: Tx("Winterwake Fjords"),
     art: (
-      scene: (key: "winterwake_fjords", source: "winterwake_fjords.png"),
-      atlas_node: (key: "winterwake_fjords", source: "winterwake_fjords_icon.png"),
+      scene: (key: WinterwakeFjords, source: "winterwake_fjords.png"),
+      atlas_node: (key: WinterwakeFjords, source: "winterwake_fjords_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "a544314c-2e90-42b1-ba04-06c7f2f0a6f9",
@@ -77,8 +77,8 @@
     id: "8e7d0818-ba6a-4dc9-8b3d-a12c62aefa44",
     name: Tx("Frostforge"),
     art: (
-      scene: (key: "frostforge", source: "frostforge.png"),
-      atlas_node: (key: "frostforge", source: "frostforge_icon.png"),
+      scene: (key: Frostforge, source: "frostforge.png"),
+      atlas_node: (key: Frostforge, source: "frostforge_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "04103386-ca4e-42a0-9a90-150297a20e91",
@@ -94,8 +94,8 @@
     id: "562f9d1f-5bbf-4dc5-9edd-7e8d538a1651",
     name: Tx("Hope's End"),
     art: (
-      scene: (key: "hopes_end", source: "hopes_end.png"),
-      atlas_node: (key: "hopes_end", source: "hopes_end_icon.png"),
+      scene: (key: HopesEnd, source: "hopes_end.png"),
+      atlas_node: (key: HopesEnd, source: "hopes_end_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "8b30f0bf-6b9d-47c0-92ba-80f62ae8899d",
@@ -111,8 +111,8 @@
     id: "823dc726-db0f-4367-8442-70600a20ad2e",
     name: Tx("Tsukiren"),
     art: (
-      scene: (key: "tsukiren", source: "tsukiren.png"),
-      atlas_node: (key: "tsukiren", source: "tsukiren_icon.png"),
+      scene: (key: Tsukiren, source: "tsukiren.png"),
+      atlas_node: (key: Tsukiren, source: "tsukiren_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "33dee3b4-19d2-4788-9cef-b69057385844",
@@ -128,8 +128,8 @@
     id: "f52bdeb1-0db6-44ee-80ea-b99bd18dff7d",
     name: Tx("Wilderveil"),
     art: (
-      scene: (key: "wilderveil", source: "wilderveil.png"),
-      atlas_node: (key: "wilderveil", source: "wilderveil_icon.png"),
+      scene: (key: Wilderveil, source: "wilderveil.png"),
+      atlas_node: (key: Wilderveil, source: "wilderveil_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "c674a92f-3860-4851-8357-dd4f3e469674",
@@ -145,8 +145,8 @@
     id: "6f16a1c9-c2fa-494d-9d9d-4da00e011491",
     name: Tx("The Rust Expanse"),
     art: (
-      scene: (key: "rust_expanse", source: "rust_expanse.png"),
-      atlas_node: (key: "rust_expanse", source: "rust_expanse_icon.png"),
+      scene: (key: RustExpanse, source: "rust_expanse.png"),
+      atlas_node: (key: RustExpanse, source: "rust_expanse_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "d1a8f46d-0efe-4ae6-bda3-0866d5d20633",
@@ -162,8 +162,8 @@
     id: "138eff95-3301-4f76-aeb1-31bf0dc8963d",
     name: Tx("Farpoint Station"),
     art: (
-      scene: (key: "farpoint_station", source: "farpoint_station.png"),
-      atlas_node: (key: "farpoint_station", source: "farpoint_station_icon.png"),
+      scene: (key: FarpointStation, source: "farpoint_station.png"),
+      atlas_node: (key: FarpointStation, source: "farpoint_station_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "96258dfd-33c9-44a7-96a5-6747eb42cc60",
@@ -179,8 +179,8 @@
     id: "6c03e9d1-21fe-4c13-b940-2325d308cb14",
     name: Tx("Grid City"),
     art: (
-      scene: (key: "grid_city", source: "grid_city.png"),
-      atlas_node: (key: "grid_city", source: "grid_city_icon.png"),
+      scene: (key: GridCity, source: "grid_city.png"),
+      atlas_node: (key: GridCity, source: "grid_city_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "0f09352d-3a1d-44db-a58e-229ab834cdc3",
@@ -197,8 +197,8 @@
     id: "f31e1199-70bc-4110-85f9-505afebb02c4",
     name: Tx("Limbo"),
     art: (
-      scene: (key: "limbo", source: "limbo.png"),
-      atlas_node: (key: "limbo", source: "limbo_icon.png"),
+      scene: (key: Limbo, source: "limbo.png"),
+      atlas_node: (key: Limbo, source: "limbo_icon.png"),
     ),
     // Boss composition and presentation are defined by the Atlas catalog.
     kind: Boss,

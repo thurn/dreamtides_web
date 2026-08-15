@@ -1,5 +1,6 @@
 pub mod affiliations;
 pub mod apollyon_incarnations;
+pub mod assets;
 pub mod atlas;
 pub mod augury;
 pub mod card_counts;

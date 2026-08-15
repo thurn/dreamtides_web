@@ -202,8 +202,8 @@ compatibility boundary consumed by the journey prototype.
 Fields:
 id Lowercase UUIDv4 identity referenced by authored catalogs.
 name Player-facing dreamscape name.
-art Scene and atlas-node asset references, each pairing a stable runtime
-key with its authoring filename.
+art Scene and atlas-node asset references, each pairing a typed `AssetKey`
+variant with its authoring filename.
 kind Closed `Starter`, `Standard`, or `Boss` role variant.
 
 `Starter` defines the signature site and ordered fixed-site sequence.

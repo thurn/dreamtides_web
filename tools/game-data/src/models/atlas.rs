@@ -6,6 +6,7 @@ use indexmap::IndexMap;
 use serde::{Deserialize, Deserializer, Serialize, Serializer, de::Error as _};
 use uuid::{Uuid, Variant, Version};
 
+use super::assets::AssetKey;
 use super::localization::source_text;
 
 macro_rules! uuid_id {
@@ -265,7 +266,7 @@ pub struct BossArt {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct AssetReference {
-    pub key: String,
+    pub key: AssetKey,
     pub source: String,
 }
 
@@ -634,9 +635,15 @@ fn lower_boss(value: BossDefinition) -> Result<toml::map::Map<String, toml::Valu
             "fallback-introduction".into(),
             source_text(&value.fallback_introduction)?.into(),
         ),
-        ("scene-art-id".into(), value.art.scene.key.into()),
-        ("icon-art-id".into(), value.art.icon.key.into()),
-        ("figure-art-id".into(), value.art.figure.key.into()),
+        (
+            "scene-art-id".into(),
+            value.art.scene.key.as_compat().into(),
+        ),
+        ("icon-art-id".into(), value.art.icon.key.as_compat().into()),
+        (
+            "figure-art-id".into(),
+            value.art.figure.key.as_compat().into(),
+        ),
     ]))
 }
 
@@ -648,7 +655,7 @@ fn lower_assets(assets: &AtlasAssets, boss: &BossArt) -> toml::map::Map<String, 
         ),
         (
             "unrevealed-frame-key".into(),
-            assets.unrevealed_frame.key.clone().into(),
+            assets.unrevealed_frame.key.as_compat().into(),
         ),
         ("boss-scene-source".into(), boss.scene.source.clone().into()),
         ("boss-icon-source".into(), boss.icon.source.clone().into()),
@@ -758,22 +765,22 @@ mod tests {
                 fallback_introduction: ls("First line\nSecond line"),
                 art: BossArt {
                     scene: AssetReference {
-                        key: "scene".into(),
+                        key: AssetKey::Limbo,
                         source: "scene.png".into(),
                     },
                     icon: AssetReference {
-                        key: "icon".into(),
+                        key: AssetKey::Limbo,
                         source: "icon.png".into(),
                     },
                     figure: AssetReference {
-                        key: "figure".into(),
+                        key: AssetKey::Apollyon,
                         source: "figure.png".into(),
                     },
                 },
             },
             assets: AtlasAssets {
                 unrevealed_frame: AssetReference {
-                    key: "frame.png".into(),
+                    key: AssetKey::RoundFrameMain,
                     source: "frame.png".into(),
                 },
             },
@@ -827,7 +834,7 @@ mod tests {
         );
         assert_eq!(
             output["assets"]["unrevealed-frame-key"].as_str(),
-            Some("frame.png")
+            Some("Round_frame_main.png")
         );
     }
 

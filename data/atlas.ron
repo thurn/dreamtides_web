@@ -164,14 +164,14 @@ AtlasCatalog(
     // lookup identity (`key`) under which the asset build publishes it.
     art: (
       // Full-bleed Limbo background on the boss reveal card.
-      scene: (key: "limbo", source: "limbo.png"),
+      scene: (key: Limbo, source: "limbo.png"),
       // Circular image drawn on the Layer Seven Atlas node.
-      icon: (key: "limbo", source: "limbo_icon.png"),
+      icon: (key: Limbo, source: "limbo_icon.png"),
       // Apollyon character figure composited over the Limbo scene.
-      figure: (key: "apollyon", source: "apollyon.png"),
+      figure: (key: Apollyon, source: "apollyon.png"),
     ),
   ),
 
   // Shared Atlas chrome that the asset build publishes for the renderer.
-  assets: (unrevealed_frame: (key: "Round_frame_main.png", source: "Round_frame_main.png")),
+  assets: (unrevealed_frame: (key: RoundFrameMain, source: "Round_frame_main.png")),
 )

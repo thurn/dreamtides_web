@@ -4118,8 +4118,8 @@ CardMetadataCatalog(
     id: "0217b10e-bf48-4e27-95f0-846fd802b730",
     name: Tx(r#"Raw Starter"#),
     art: (
-      scene: (key: "firstlight_meadow", source: "firstlight_meadow.png"),
-      atlas_node: (key: "firstlight_meadow", source: "firstlight_meadow_icon.png"),
+      scene: (key: FirstlightMeadow, source: "firstlight_meadow.png"),
+      atlas_node: (key: FirstlightMeadow, source: "firstlight_meadow_icon.png"),
     ),
     kind: Starter(
       atlas_description: Tx("A quiet place."),
@@ -4132,8 +4132,8 @@ CardMetadataCatalog(
     id: "08e11635-9f04-48fd-a9c8-5a9f68c80958",
     name: Tx("Region"),
     art: (
-      scene: (key: "tumbleleaf_village", source: "tumbleleaf_village.png"),
-      atlas_node: (key: "tumbleleaf_village", source: "tumbleleaf_village_icon.png"),
+      scene: (key: TumbleleafVillage, source: "tumbleleaf_village.png"),
+      atlas_node: (key: TumbleleafVillage, source: "tumbleleaf_village_icon.png"),
     ),
     kind: Standard(
       affiliation_id: "4b715cd0-8b41-4b82-9cef-c47b15e8992b",
@@ -4149,8 +4149,8 @@ CardMetadataCatalog(
     id: "f31e1199-70bc-4110-85f9-505afebb02c4",
     name: Tx("Final Dream"),
     art: (
-      scene: (key: "limbo", source: "limbo.png"),
-      atlas_node: (key: "limbo", source: "limbo_icon.png"),
+      scene: (key: Limbo, source: "limbo.png"),
+      atlas_node: (key: Limbo, source: "limbo_icon.png"),
     ),
     kind: Boss,
   ),
