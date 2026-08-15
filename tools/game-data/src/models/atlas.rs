@@ -640,10 +640,7 @@ fn lower_boss(value: BossDefinition) -> Result<toml::map::Map<String, toml::Valu
     ]))
 }
 
-fn lower_assets(
-    assets: &AtlasAssets,
-    boss: &BossArt,
-) -> toml::map::Map<String, toml::Value> {
+fn lower_assets(assets: &AtlasAssets, boss: &BossArt) -> toml::map::Map<String, toml::Value> {
     toml::map::Map::from_iter([
         (
             "unrevealed-frame-source".into(),
