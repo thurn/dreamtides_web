@@ -2,12 +2,8 @@ GambleCatalog(
   games: [
     GambleGameDefinition(
       id: GravokThreeGateWager,
-      // Selection controls which Gamble game a newly opened site receives.
       // Weight is this game's relative chance in the deterministic weighted draw.
-      // Exactly one game is the fallback: the safe game used when the selected
-      // game has no legal setup for the current journey, and the deterministic
-      // default before the weighted draw resolves.
-      selection: GambleSelection(weight: 1.0, fallback: true),
+      selection: GambleSelection(weight: 1.0),
       economy: ThreeGate(
         standard_wager: 50,
         enhanced_wager: 45,
@@ -47,7 +43,7 @@ GambleCatalog(
 
     GambleGameDefinition(
       id: TidemarkLadderClimb,
-      selection: GambleSelection(weight: 1.0, fallback: false),
+      selection: GambleSelection(weight: 1.0),
       economy: LadderClimb(
         win_essence: 25,
         attempts: [
@@ -71,7 +67,7 @@ GambleCatalog(
 
     GambleGameDefinition(
       id: StarwayStairs,
-      selection: GambleSelection(weight: 1.0, fallback: false),
+      selection: GambleSelection(weight: 1.0),
       economy: StarwayStairs(
         standard_wager: 30,
         enhanced_wager: 20,
@@ -94,7 +90,7 @@ GambleCatalog(
 
     GambleGameDefinition(
       id: FourSuitReprise,
-      selection: GambleSelection(weight: 1.0, fallback: false),
+      selection: GambleSelection(weight: 1.0),
       economy: FourSuitReprise(
         standard_draw_price: 25,
         enhanced_draw_price: 15,
@@ -115,7 +111,7 @@ GambleCatalog(
 
     GambleGameDefinition(
       id: Blackjack,
-      selection: GambleSelection(weight: 1.0, fallback: false),
+      selection: GambleSelection(weight: 1.0),
       economy: Blackjack(standard_wager: 90, enhanced_wager: 40, prize_essence: 300),
       rules: Blackjack(
         standard_deck_size: 52,

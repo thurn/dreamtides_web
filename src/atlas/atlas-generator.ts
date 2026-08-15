@@ -23,6 +23,7 @@ import type { RandomSiteDestinationType } from "../types/journey";
 import { atlasLayerData } from "../types/atlas-data";
 import type { SitesData } from "../types/sites-data";
 import type { GambleData } from "../types/gamble-data";
+import { GAMBLE_FALLBACK_GAME_ID } from "../types/gamble";
 import type { DreamsignId, GuideId } from "../types/identifiers";
 import type { DreamscapeId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
@@ -1228,9 +1229,7 @@ function generateInitialAtlasInternal(
         foldHash: build.sitesData.foldHash,
         randomSite: build.sitesData.randomSite,
         gambleSelection: {
-          fallbackGame: build.gambleData.games.find(
-            (game) => game.selection.fallback,
-          )?.id,
+          fallbackGame: GAMBLE_FALLBACK_GAME_ID,
           games: build.gambleData.games.map((game) => ({
             id: game.id,
             weight: game.selection.weight,

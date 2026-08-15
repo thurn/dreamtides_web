@@ -12,7 +12,7 @@ export type FourSuitRepriseOutcome =
 
 interface GambleGameBase {
   id: GambleGameId;
-  selection: { weight: number; fallback: boolean };
+  selection: { weight: number };
 }
 
 export interface ThreeGateGame extends GambleGameBase {

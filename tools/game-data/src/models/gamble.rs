@@ -42,8 +42,9 @@ impl GambleGameId {
 #[serde(deny_unknown_fields)]
 pub struct GambleSelection {
     pub weight: f64,
-    pub fallback: bool,
 }
+
+const FALLBACK_GAME_ID: GambleGameId = GambleGameId::GravokThreeGateWager;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 pub enum GambleEconomy {
@@ -217,13 +218,8 @@ pub(crate) fn validate(source: &GambleCatalog) -> Result<()> {
         "gamble.games must contain at least one game and must not repeat stable ids"
     );
     ensure!(
-        source
-            .games
-            .iter()
-            .filter(|game| game.selection.fallback)
-            .count()
-            == 1,
-        "gamble.games must define exactly one deterministic fallback"
+        ids.contains(&FALLBACK_GAME_ID),
+        "gamble.games must include GravokThreeGateWager"
     );
     for (index, game) in source.games.iter().enumerate() {
         let path = format!("games[{index}]");
@@ -635,10 +631,7 @@ mod tests {
         };
         GambleGameDefinition {
             id,
-            selection: GambleSelection {
-                weight: 1.0,
-                fallback: id == GambleGameId::GravokThreeGateWager,
-            },
+            selection: GambleSelection { weight: 1.0 },
             economy,
             rules,
         }
@@ -659,6 +652,14 @@ mod tests {
         let mut subset = catalog();
         subset.games.pop();
         validate(&subset).unwrap();
+        let mut missing_fallback = catalog();
+        missing_fallback.games.remove(0);
+        assert!(
+            validate(&missing_fallback)
+                .unwrap_err()
+                .to_string()
+                .contains("must include GravokThreeGateWager")
+        );
         let mut duplicate = catalog();
         duplicate.games[1].id = duplicate.games[0].id;
         assert!(

@@ -3,7 +3,10 @@ import type {
   GambleGameDefinition,
   GambleRulesKind,
 } from "../types/gamble-data";
-import type { GambleGameId } from "../types/gamble";
+import {
+  GAMBLE_FALLBACK_GAME_ID,
+  type GambleGameId,
+} from "../types/gamble";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 const GAMBLE_DATA_JSON_PATH = "/gamble-data.json";
@@ -52,7 +55,6 @@ function isGambleData(value: unknown): boolean {
         !isRecord(game.selection) ||
         typeof game.selection.weight !== "number" ||
         game.selection.weight <= 0 ||
-        typeof game.selection.fallback !== "boolean" ||
         !isRecord(game.economy) ||
         !isRecord(game.rules) ||
         game.economy.kind !== ruleKind ||
@@ -62,13 +64,7 @@ function isGambleData(value: unknown): boolean {
       }
       ids.add(gameId);
       return true;
-    }) &&
-    value.games.filter(
-      (game) =>
-        isRecord(game) &&
-        isRecord(game.selection) &&
-        game.selection.fallback === true,
-    ).length === 1
+    }) && ids.has(GAMBLE_FALLBACK_GAME_ID)
   );
 }
 

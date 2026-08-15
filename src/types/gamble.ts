@@ -50,6 +50,10 @@ export type GambleGameId =
   | "four-suit-reprise"
   | "blackjack";
 
+/** Safe game used when a selected Gamble game cannot prepare a legal runtime. */
+export const GAMBLE_FALLBACK_GAME_ID: GambleGameId =
+  "gravok-three-gate-wager";
+
 /** One-based attempt number in Tidemark Ladder Climb. */
 export type TidemarkLadderClimbAttemptNumber = number;
 

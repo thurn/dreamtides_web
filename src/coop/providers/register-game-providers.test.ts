@@ -945,7 +945,7 @@ describe("createSiteContentProvider — Gamble", () => {
         candidates: fixture.content.gambleData.games.map((game) => ({
           gameId: game.id,
           weight: game.selection.weight,
-          fallback: game.selection.fallback,
+          fallback: game.id === "gravok-three-gate-wager",
         })),
         selectedGameId: "gravok-three-gate-wager",
       },

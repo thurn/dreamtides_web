@@ -4,8 +4,7 @@
     {
       "id": "gravok-three-gate-wager",
       "selection": {
-        "weight": 1,
-        "fallback": true
+        "weight": 1
       },
       "economy": {
         "kind": "threeGate",
@@ -55,8 +54,7 @@
     {
       "id": "tidemark-ladder-climb",
       "selection": {
-        "weight": 1,
-        "fallback": false
+        "weight": 1
       },
       "economy": {
         "kind": "ladderClimb",
@@ -115,8 +113,7 @@
     {
       "id": "starway-stairs",
       "selection": {
-        "weight": 1,
-        "fallback": false
+        "weight": 1
       },
       "economy": {
         "kind": "starwayStairs",
@@ -163,8 +160,7 @@
     {
       "id": "four-suit-reprise",
       "selection": {
-        "weight": 1,
-        "fallback": false
+        "weight": 1
       },
       "economy": {
         "kind": "fourSuitReprise",
@@ -200,8 +196,7 @@
     {
       "id": "blackjack",
       "selection": {
-        "weight": 1,
-        "fallback": false
+        "weight": 1
       },
       "economy": {
         "kind": "blackjack",
@@ -218,6 +213,6 @@
       }
     }
   ],
-  "contentHash": "a55b84fd0cf93d6b94bd5221c59011632f11d85a59f61b15824e0d03e88e7f63",
-  "foldHash": "a55b84fd0cf93d6b94bd5221c59011632f11d85a59f61b15824e0d03e88e7f63"
+  "contentHash": "428c42df4e2bc152db086f420ce92a2c6e04ef58e7804225d36d56108efd660b",
+  "foldHash": "428c42df4e2bc152db086f420ce92a2c6e04ef58e7804225d36d56108efd660b"
 }

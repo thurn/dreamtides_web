@@ -30,6 +30,7 @@ describe("data-driven catalog runtime generation", () => {
     for (const game of first.games) {
       expect(game).not.toHaveProperty("rulesVersion");
       expect(game).not.toHaveProperty("presentation");
+      expect(game.selection).not.toHaveProperty("fallback");
     }
   });
 

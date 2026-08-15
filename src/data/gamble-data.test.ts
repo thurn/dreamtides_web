@@ -61,4 +61,23 @@ describe("loadGambleData", () => {
 
     await expect(loadGambleData()).rejects.toThrow(/malformed gamble-data/u);
   });
+
+  it("rejects a catalog without the code-defined fallback game", async () => {
+    const fixture = generatedFixture();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            ...fixture,
+            games: fixture.games.filter(
+              (game) => game.id !== "gravok-three-gate-wager",
+            ),
+          }),
+      }),
+    );
+
+    await expect(loadGambleData()).rejects.toThrow(/malformed gamble-data/u);
+  });
 });

@@ -8,7 +8,7 @@ const FIXTURE: GambleData = {
   games: [
     {
       id: "gravok-three-gate-wager",
-      selection: { weight: 1, fallback: true },
+      selection: { weight: 1 },
       economy: {
         kind: "threeGate",
         standardWager: 50,
@@ -47,7 +47,7 @@ const FIXTURE: GambleData = {
     },
     {
       id: "tidemark-ladder-climb",
-      selection: { weight: 1, fallback: false },
+      selection: { weight: 1 },
       economy: {
         kind: "ladderClimb",
         winEssence: 25,
@@ -72,7 +72,7 @@ const FIXTURE: GambleData = {
     },
     {
       id: "starway-stairs",
-      selection: { weight: 1, fallback: false },
+      selection: { weight: 1 },
       economy: {
         kind: "starwayStairs",
         standardWager: 30,
@@ -96,7 +96,7 @@ const FIXTURE: GambleData = {
     },
     {
       id: "four-suit-reprise",
-      selection: { weight: 1, fallback: false },
+      selection: { weight: 1 },
       economy: {
         kind: "fourSuitReprise",
         standardDrawPrice: 25,
@@ -118,7 +118,7 @@ const FIXTURE: GambleData = {
     },
     {
       id: "blackjack",
-      selection: { weight: 1, fallback: false },
+      selection: { weight: 1 },
       economy: {
         kind: "blackjack",
         standardWager: 90,

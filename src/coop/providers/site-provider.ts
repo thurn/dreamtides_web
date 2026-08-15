@@ -22,7 +22,10 @@ import type {
   JourneyState,
   RuntimeShopSlot,
 } from "../../types/journey";
-import type { GambleGameId } from "../../types/gamble";
+import {
+  GAMBLE_FALLBACK_GAME_ID,
+  type GambleGameId,
+} from "../../types/gamble";
 import type {
   BlackjackGame,
   FourSuitRepriseGame,
@@ -393,11 +396,7 @@ function buildGambleRuntime(
   );
   const selectionRoll = rng() * totalWeight;
   let roll = selectionRoll;
-  let selectedGameId = configuredGames.find(
-    (game) => game.selection.fallback,
-  )?.id;
-  if (selectedGameId === undefined)
-    throw new Error("Gamble catalog has no fallback game");
+  let selectedGameId = GAMBLE_FALLBACK_GAME_ID;
   for (const game of configuredGames) {
     roll -= game.selection.weight;
     if (roll <= 0) {
@@ -423,7 +422,7 @@ function buildGambleRuntime(
       candidates: configuredGames.map((game) => ({
         gameId: game.id,
         weight: game.selection.weight,
-        fallback: game.selection.fallback,
+        fallback: game.id === GAMBLE_FALLBACK_GAME_ID,
       })),
       selectedGameId: runtime.gameId,
     },
@@ -495,9 +494,9 @@ function buildGambleFallbackRuntime(
   rng: () => number,
 ): GambleSiteRuntime {
   const gambleData = content.gambleData;
-  const fallback = gambleData?.games.find((game) => game.selection.fallback);
-  if (fallback === undefined)
-    throw new Error("Gamble catalog has no fallback game");
+  if (gambleData === undefined)
+    throw new Error("Journey content is missing Gamble data");
+  const fallback = gambleGame(gambleData, GAMBLE_FALLBACK_GAME_ID);
   return buildGambleRuntimeFromDefinition(
     journey,
     site,
