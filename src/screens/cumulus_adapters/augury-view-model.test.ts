@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { stableDigest } from "../../reward-selection/stable";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { resolveSource } from "../../runtime/localization/runtime";
+import {
+  localizedSourceText,
+  resolveSource,
+} from "../../runtime/localization/runtime";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import { parseCardName } from "../../types/card-identity";
@@ -21,12 +24,16 @@ import type {
 } from "../../journey_v2/types";
 import {
   makeMerchantTestCard,
+  makeMerchantTestContent,
   makeMerchantTestDeckEntry,
+  makeMerchantTestJourneyState,
+  makeMerchantTestSite,
 } from "../../journey_v2/testing/fixtures";
 import {
   buildAuguryAcceptRequest,
   buildAuguryOfferTileModel,
   buildAuguryOfferViews,
+  buildAugurySiteModel,
   projectOfferTileCategory,
 } from "./augury-view-model";
 import {
@@ -42,7 +49,19 @@ import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { parseMerchantTargetKey } from "../../types/identifiers";
 import { parseMerchantCategoryId } from "../../types/identifiers";
-import { testCardId, testDreamsignId } from "../../types/test-identities";
+import type { DreamGuideContent } from "../../types/content";
+import { makeTestPoolContext } from "../../__test-helpers__/pool-context";
+import {
+  testCardId,
+  testDreamscapeId,
+  testDreamsignId,
+  testGuideId,
+  testTideId,
+} from "../../types/test-identities";
+
+const PACKAGE_TIDE_ID = testTideId(
+  "f7072be7-f12b-482a-b9e1-4d3925622eb2",
+);
 
 const card = makeMerchantTestCard({
   id: testCardId("81000000-0000-4000-8000-000000000012"),
@@ -174,6 +193,48 @@ const mappingContext = {
     content: { auguryData: CONFIG_DATA_FIXTURE.auguryData },
   },
 } as unknown as MerchantContext;
+
+const GUIDE = {
+  id: testGuideId("fixture-augury-guide"),
+  name: "Fixture Augury Guide",
+  homeDreamscapeId: testDreamscapeId("fixture-home"),
+  siteType: "Augury",
+  portraitSource: "fixture-guide.png",
+  dialogue: { site: ["Fixture line."] },
+  homeSpecialty: "Fixture specialty.",
+} satisfies DreamGuideContent;
+
+function mappingContentWithTide() {
+  const poolContext = makeTestPoolContext();
+  return {
+    ...makeMerchantTestContent({ cards: mappingCards }),
+    poolContext: {
+      ...poolContext,
+      poolData: {
+        ...poolContext.poolData,
+        tides4Decks: {
+          version: 2 as const,
+          selection: { bandFraction: 0.25, bandMinimum: 5 },
+          tides: [
+            {
+              id: PACKAGE_TIDE_ID,
+              displayName: "Harvest of the Fallen",
+              displayDescription: "Fixture package.",
+              auguryPackageReference: "Harvest of the Fallen package",
+              role: "signature" as const,
+              resonance: "shadow" as const,
+              cards: mappingCards.slice(0, 4).map((value) => ({
+                id: value.id,
+                copies: 2,
+              })),
+            },
+          ],
+          tidePoolByDreamAvatar: {},
+        },
+      },
+    },
+  };
+}
 
 function fourCandidates(payloadCopies = 1): MerchantChoiceCandidate[] {
   return mappingCards.slice(0, 4).map((_unused, index) => {
@@ -574,9 +635,9 @@ describe("augury view model", () => {
       ["fast", "fast card", { kind: "fast" }],
       ["subtype:Ancient", "Ancient", { kind: "subtype", name: "Ancient" }],
       [
-        "tide:00000000-0000-4000-8000-000000000007",
-        "Skull Weaver package",
-        { kind: "package", name: "Skull Weaver package" },
+        `tide:${PACKAGE_TIDE_ID}`,
+        "Harvest of the Fallen package",
+        { kind: "package", name: "Harvest of the Fallen package" },
       ],
     ] as const;
 
@@ -589,5 +650,53 @@ describe("augury view model", () => {
         }),
       ).toEqual(expected);
     }
+  });
+
+  it("keeps a persisted tide-package category reroll in the offer state", () => {
+    const site = makeMerchantTestSite({
+      id: parseSiteId("site-augury-tide-reroll"),
+      type: "Augury",
+    });
+    const packageOffer = mappedOffer("category_draft_known", {
+      targetKey: parseMerchantTargetKey(
+        `tide:${PACKAGE_TIDE_ID}:${mappingCards
+          .slice(0, 4)
+          .map((value) => value.id)
+          .join(",")}`,
+      ),
+      choiceRequest: choiceRequest(fourCandidates()),
+    });
+    const persistedEncounter = {
+      ...encounter(),
+      siteId: site.id,
+      offers: [packageOffer, directOffer()],
+    };
+    const state = makeMerchantTestJourneyState({
+      siteRuntime: {
+        [site.id]: {
+          kind: "augury",
+          completed: false,
+          rerollNonce: 5,
+          encounter: persistedEncounter,
+        },
+      },
+    });
+
+    const result = buildAugurySiteModel({
+      state,
+      sceneNode: null,
+      site,
+      journeyContent: mappingContentWithTide(),
+      guide: GUIDE,
+      guideLine: localizedSourceText("Fixture line."),
+    });
+
+    expect(result.errorMessage).toBeNull();
+    expect(result.encounter).toBe(persistedEncounter);
+    expect(result.view.unavailableMessage).toBeNull();
+    expect(result.view.offers[0]?.tile).toMatchObject({
+      kind: "category-draft",
+      category: { kind: "package" },
+    });
   });
 });
