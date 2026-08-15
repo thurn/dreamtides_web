@@ -1,4 +1,14 @@
 import { sha256 } from "js-sha256";
+import {
+  parseStableDigest,
+  type StableDigest,
+} from "../types/stable-digest";
+
+export {
+  isStableDigest,
+  parseStableDigest,
+  type StableDigest,
+} from "../types/stable-digest";
 
 export function compareStableKeys(left: string, right: string): number {
   return left < right ? -1 : left > right ? 1 : 0;
@@ -32,6 +42,6 @@ export function stableStringify(value: unknown): string {
   return JSON.stringify(stableValue(value));
 }
 
-export function stableDigest(value: unknown): string {
-  return sha256(stableStringify(value));
+export function stableDigest(value: unknown): StableDigest {
+  return parseStableDigest(sha256(stableStringify(value)));
 }

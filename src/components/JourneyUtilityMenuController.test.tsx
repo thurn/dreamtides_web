@@ -4,6 +4,7 @@ import { act } from "react";
 import { assertLocalized } from "@trox/runtime";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { parseBuildGitSha } from "../types/build-identity";
 import { GLYPHS } from "../cumulus/primitives/glyph";
 import { logEvent } from "../logging";
 import {
@@ -131,7 +132,7 @@ describe("useJourneyUtilityMenuController", () => {
         version: 1,
         name: "before atlas",
         savedAt: "2026-07-29T12:00:00.000Z",
-        buildGitSha: "abc123",
+        buildGitSha: parseBuildGitSha("abc123"),
         journeyState: { screen: { type: "atlas" } },
       } as ReturnType<typeof downloadJourneySaveFile>["save"],
     });
@@ -170,7 +171,7 @@ describe("useJourneyUtilityMenuController", () => {
       fileName: "before-atlas.json",
       name: "before atlas",
       savedAt: "2026-07-29T12:00:00.000Z",
-      buildGitSha: "abc123",
+      buildGitSha: parseBuildGitSha("abc123"),
       journeyState: { screen: { type: "atlas" } },
     });
     const container = document.createElement("div");

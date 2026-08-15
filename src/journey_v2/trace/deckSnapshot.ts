@@ -1,6 +1,11 @@
 import { sha256 } from "js-sha256";
-import type { CardData } from "../../types/cards";
+import type { CardData, CardType } from "../../types/cards";
+import type { CardSubtype } from "../../types/card-identity";
 import type { MerchantContext } from "../types";
+import {
+  parseStableDigest,
+  type StableDigest,
+} from "../../reward-selection/stable";
 
 /**
  * A compact, explanatory snapshot of the deck the merchant scored against.
@@ -23,7 +28,7 @@ export interface MerchantDeckSnapshot {
   /** Sorted printed card numbers — the exact deck the scores ran against. */
   cardNumbers: readonly number[];
   /** Stable hash of the deck's card content and per-entry modifications. */
-  hash: string;
+  hash: StableDigest;
   /** Derived feature tallies the dreamsign / tribal scorers key off. */
   features: MerchantDeckFeatureTallies;
 }
@@ -31,16 +36,19 @@ export interface MerchantDeckSnapshot {
 /** Feature tallies the merchant scorers derive from the deck. */
 export interface MerchantDeckFeatureTallies {
   /** Count of deck cards per card type (Character, Event, …). */
-  cardType: Record<string, number>;
+  cardType: Partial<Record<CardType, number>>;
   /** Count of deck cards per subtype (Warrior, Spirit Animal, …). */
-  subtype: Record<string, number>;
+  subtype: Partial<Record<CardSubtype, number>>;
   /** Count of deck cards per cost band: cheap (<=1), mid (2-3), big (>=4), variable. */
-  costBand: Record<string, number>;
+  costBand: Partial<Record<MerchantDeckCostBand, number>>;
   /** Count of deck cards carrying each keyword: reclaim, fast. */
-  keyword: Record<string, number>;
+  keyword: Partial<Record<MerchantDeckKeyword, number>>;
 }
 
-function costBandOf(card: CardData): string {
+type MerchantDeckCostBand = "variable" | "cheap" | "mid" | "big";
+type MerchantDeckKeyword = "reclaim" | "fast";
+
+function costBandOf(card: CardData): MerchantDeckCostBand {
   const cost = card.energyCost;
   if (cost === null) return "variable";
   if (cost <= 1) return "cheap";
@@ -48,7 +56,10 @@ function costBandOf(card: CardData): string {
   return "big";
 }
 
-function increment(tally: Record<string, number>, key: string): void {
+function increment<Key extends string>(
+  tally: Partial<Record<Key, number>>,
+  key: Key,
+): void {
   tally[key] = (tally[key] ?? 0) + 1;
 }
 
@@ -56,10 +67,10 @@ function increment(tally: Record<string, number>, key: string): void {
 export function deckFeatureTallies(
   cards: readonly CardData[],
 ): MerchantDeckFeatureTallies {
-  const cardType: Record<string, number> = {};
-  const subtype: Record<string, number> = {};
-  const costBand: Record<string, number> = {};
-  const keyword: Record<string, number> = {};
+  const cardType: Partial<Record<CardType, number>> = {};
+  const subtype: Partial<Record<CardSubtype, number>> = {};
+  const costBand: Partial<Record<MerchantDeckCostBand, number>> = {};
+  const keyword: Partial<Record<MerchantDeckKeyword, number>> = {};
   for (const card of cards) {
     increment(cardType, card.cardType);
     increment(subtype, card.subtype);
@@ -100,7 +111,7 @@ export function buildMerchantDeckSnapshot(
   return {
     size: context.deckCards.length,
     cardNumbers,
-    hash: sha256(hashInput),
+    hash: parseStableDigest(sha256(hashInput)),
     features: deckFeatureTallies(cards),
   };
 }

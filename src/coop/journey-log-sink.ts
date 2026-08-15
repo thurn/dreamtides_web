@@ -390,8 +390,8 @@ export interface SemanticIntentKeyCollisionRecord {
   event: "semantic_intent_key_collision";
   intentKey: IntentKey;
   winningSeq: number;
-  winnerType: string;
-  contenderType: string;
+  winnerType: EventType;
+  contenderType: EventType;
   winnerPayload: Record<string, unknown>;
   contenderPayload: Record<string, unknown>;
   observingClientId: ClientId;

@@ -14,6 +14,10 @@ import type {
 } from "../types";
 import type { OfferId } from "../../types/identifiers";
 import { parseOfferId, parseSelectionKey } from "../../types/identifiers";
+import {
+  parseStableDigest,
+  type StableDigest,
+} from "../../reward-selection/stable";
 
 /**
  * One archetype build attempt during a slot roll. A `built: false` entry is a
@@ -35,7 +39,7 @@ export interface MerchantEncounterGenerationDebug {
   rollsB: readonly MerchantRollAttempt[];
   /** The debug-forced archetype that was honored for slot A, when any. */
   forcedArchetypeId: MerchantArchetypeId | null;
-  encounterSignature: string;
+  encounterSignature: StableDigest;
 }
 
 /** Build attempts for a debug-forced slot before giving up and rolling normally. */
@@ -213,13 +217,13 @@ function inputSignature(context: MerchantContext): unknown {
 function signatureFor(
   context: MerchantContext,
   offers: readonly Omit<MerchantOffer, "encounterSignature">[],
-): string {
-  return sha256(
+): StableDigest {
+  return parseStableDigest(sha256(
     stableJson({
       input: inputSignature(context),
       offers: offers.map((offer) => offerIdentity(offer as MerchantOffer)),
     }),
-  );
+  ));
 }
 
 function draftToOffer(

@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { parseBuildGitSha } from "../types/build-identity";
 import type { JourneyState } from "../types/journey";
 import {
   JOURNEY_SAVE_FILE_FORMAT,
@@ -28,7 +29,7 @@ describe("journey save files", () => {
   it("serializes and parses the versioned portable envelope", () => {
     const save = createJourneySaveFile("  Before Atlas  ", JOURNEY_STATE, {
       savedAt: "2026-07-29T12:00:00.000Z",
-      buildGitSha: "abc123",
+      buildGitSha: parseBuildGitSha("abc123"),
     });
 
     expect(save).toEqual({
@@ -36,13 +37,13 @@ describe("journey save files", () => {
       version: JOURNEY_SAVE_FILE_VERSION,
       name: "Before Atlas",
       savedAt: "2026-07-29T12:00:00.000Z",
-      buildGitSha: "abc123",
+      buildGitSha: parseBuildGitSha("abc123"),
       journeyState: JOURNEY_STATE,
     });
     expect(parseJourneySaveFile(serializeJourneySaveFile(save))).toEqual({
       name: "Before Atlas",
       savedAt: "2026-07-29T12:00:00.000Z",
-      buildGitSha: "abc123",
+      buildGitSha: parseBuildGitSha("abc123"),
       journeyState: JOURNEY_STATE,
     });
   });
@@ -117,7 +118,7 @@ describe("journey save files", () => {
   it("reads the selected file and preserves its local filename", async () => {
     const save = createJourneySaveFile("Portable", JOURNEY_STATE, {
       savedAt: "2026-07-29T12:00:00.000Z",
-      buildGitSha: "abc123",
+      buildGitSha: parseBuildGitSha("abc123"),
     });
     const imported = await readJourneySaveFile({
       name: "portable.json",
@@ -127,7 +128,7 @@ describe("journey save files", () => {
     expect(imported).toMatchObject({
       fileName: "portable.json",
       name: "Portable",
-      buildGitSha: "abc123",
+      buildGitSha: parseBuildGitSha("abc123"),
       journeyState: JOURNEY_STATE,
     });
   });
@@ -135,7 +136,7 @@ describe("journey save files", () => {
   it("resolves a browser file choice and treats cancellation as no action", async () => {
     const save = createJourneySaveFile("Chosen", JOURNEY_STATE, {
       savedAt: "2026-07-29T12:00:00.000Z",
-      buildGitSha: "abc123",
+      buildGitSha: parseBuildGitSha("abc123"),
     });
     const selectedFile = {
       name: "chosen.json",

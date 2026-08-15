@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { stableDigest } from "../../reward-selection/stable";
 import type { ExplorationSiteView } from "../../cumulus/screens/ExplorationSiteScreen";
 import type { ExplorationSiteRuntime } from "../../types/journey";
 import {
@@ -55,7 +56,7 @@ describe("exploration logging view model", () => {
       selectionKey: actionId,
       selectorSignatures: ["selector-signature"],
       selectorTraces: [{ selectedKeys: ["entry-a", "entry-b"] }],
-      planSignature: "compound-plan-signature",
+      planSignature: stableDigest("compound-plan-signature"),
     };
     const cardTransfigurations = preparation.targets.slice(1).map((target) => ({
       ...target,
@@ -86,7 +87,7 @@ describe("exploration logging view model", () => {
     const runtime = {
       kind: "exploration" as const,
       encounterCardId: testCardId("encounter-card-uuid"),
-      encounterSignature: "encounter-signature",
+      encounterSignature: stableDigest("encounter-signature"),
       actionOffers: [
         {
           actionId,
@@ -116,7 +117,7 @@ describe("exploration logging view model", () => {
         actionId,
         selectionRulesVersion: preparation.selectionRulesVersion,
         selectionContentRevision: preparation.selectionContentRevision,
-        encounterSignature: "encounter-signature",
+        encounterSignature: stableDigest("encounter-signature"),
         selectionSignature: preparation.planSignature,
         selection,
         gainedCardIds: [
@@ -541,7 +542,7 @@ describe("exploration logging view model", () => {
       kind: "exploration",
       selectionRulesVersion: parseSelectionRulesVersion("exploration-selection-v1"),
       selectionContentRevision: parseSelectionContentRevision("content-revision"),
-      encounterSignature: "encounter-signature",
+      encounterSignature: stableDigest("encounter-signature"),
       encounterCardId: testCardId("encounter-card-uuid"),
       actionOffers: [
         {
@@ -549,7 +550,7 @@ describe("exploration logging view model", () => {
           canonicalMechanicId: "essence-mutation",
           selectionPolicyId: "uniform",
           selectionKey: parseSelectionKey("prepared-essence-key"),
-          selectionSignature: "prepared-essence-signature",
+          selectionSignature: stableDigest("prepared-essence-signature"),
           preparedEssenceAmount: 87,
           essencePreparation,
           offeredCardIds: [],
@@ -562,8 +563,8 @@ describe("exploration logging view model", () => {
         actionId: actionId,
         selectionRulesVersion: parseSelectionRulesVersion("exploration-selection-v1"),
         selectionContentRevision: parseSelectionContentRevision("content-revision"),
-        encounterSignature: "encounter-signature",
-        selectionSignature: "prepared-essence-signature",
+        encounterSignature: stableDigest("encounter-signature"),
+        selectionSignature: stableDigest("prepared-essence-signature"),
         selection: {},
         gainedCardIds: [],
         gainedDreamsignIds: [],
@@ -812,7 +813,7 @@ describe("exploration logging view model", () => {
         {
           actionId: actionId,
           canonicalMechanicId: "transfigure-deck-for-essence",
-          selectionSignature: "bulk-target-signature",
+          selectionSignature: stableDigest("bulk-target-signature"),
           eligibleDeckEntryIds: affectedEntryIds.map(parseDeckEntryId),
           offeredCardIds: [],
           packCardIds: [],
@@ -823,7 +824,7 @@ describe("exploration logging view model", () => {
       resolution: {
         actionId: actionId,
         selectionContentRevision: parseSelectionContentRevision("bulk-content-revision"),
-        selectionSignature: "bulk-target-signature",
+        selectionSignature: stableDigest("bulk-target-signature"),
         gainedCardIds: [],
         gainedDreamsignIds: [],
         purgedCardIds: [],
@@ -839,7 +840,7 @@ describe("exploration logging view model", () => {
       offers: [
         {
           canonicalMechanicId: "transfigure-deck-for-essence",
-          selectionSignature: "bulk-target-signature",
+          selectionSignature: stableDigest("bulk-target-signature"),
           eligibleDeckEntryIds: affectedEntryIds,
         },
       ],
@@ -894,7 +895,7 @@ describe("exploration logging view model", () => {
         poolRegenerated: true,
         preparedDreamsignIds: preparedIds.map(testDreamsignId),
         requiredOverflowReplacementCount: 1,
-        planSignature: "dreamsign-plan-signature",
+        planSignature: stableDigest("dreamsign-plan-signature"),
       };
       const dreamsignMutation = {
         beforeIds: heldIds,
@@ -961,7 +962,7 @@ describe("exploration logging view model", () => {
         encounterCardId: testCardId("b0000000-0000-4000-8000-000000000007"),
         selectionRulesVersion: parseSelectionRulesVersion("2"),
         selectionContentRevision: parseSelectionContentRevision("dreamsign-content-revision"),
-        encounterSignature: "encounter-signature",
+        encounterSignature: stableDigest("encounter-signature"),
         actionOffers: [
           {
             actionId,
@@ -970,7 +971,7 @@ describe("exploration logging view model", () => {
             selectionRulesVersion: parseSelectionRulesVersion("2"),
             selectionContentRevision: parseSelectionContentRevision("dreamsign-content-revision"),
             selectionKey: "dreamsign-selection-key",
-            selectionSignature: "selector-signature",
+            selectionSignature: stableDigest("selector-signature"),
             selectionTrace,
             dreamsignPreparation,
             offeredCardIds: [],
@@ -984,8 +985,8 @@ describe("exploration logging view model", () => {
           actionId,
           selectionRulesVersion: parseSelectionRulesVersion("2"),
           selectionContentRevision: parseSelectionContentRevision("dreamsign-content-revision"),
-          encounterSignature: "encounter-signature",
-          selectionSignature: "selector-signature",
+          encounterSignature: stableDigest("encounter-signature"),
+          selectionSignature: stableDigest("selector-signature"),
           selection,
           gainedCardIds: [],
           gainedDreamsignIds: preparedIds.map(testDreamsignId),
@@ -1002,7 +1003,7 @@ describe("exploration logging view model", () => {
         offers: [
           {
             selectionPolicyId: "uniform",
-            selectionSignature: "selector-signature",
+            selectionSignature: stableDigest("selector-signature"),
             selectionTrace,
             dreamsignPreparation,
             excludedDreamsignIds: heldIds,
@@ -1021,7 +1022,7 @@ describe("exploration logging view model", () => {
       ).toMatchObject({
         effectKind,
         requestedSelection: selection,
-        selectionSignature: "selector-signature",
+        selectionSignature: stableDigest("selector-signature"),
         dreamsignPreparation,
         excludedDreamsignIds: heldIds,
       });
@@ -1095,7 +1096,7 @@ describe("exploration logging view model", () => {
           : [...fixture.offeredDreamsignIds]
         ),
         requiredOverflowReplacementCount: 1,
-        planSignature: "compound-plan-signature",
+        planSignature: stableDigest("compound-plan-signature"),
       };
       const dreamsignMutation = {
         beforeIds: [testDreamsignId("held-dreamsign-id")],
@@ -1131,7 +1132,7 @@ describe("exploration logging view model", () => {
             actionId,
             canonicalMechanicId: "gain-dreamsign",
             selectionPolicyId: fixture.selectionPolicyId,
-            selectionSignature: "selector-signature",
+            selectionSignature: stableDigest("selector-signature"),
             selectionTrace: { selectedKeys: ["gained-dreamsign-id"] },
             dreamsignPreparation,
             offeredCardIds: [],
@@ -1259,7 +1260,7 @@ describe("exploration logging view model", () => {
             selectedKeys: [purgedEntry.entryId],
           },
         ],
-        planSignature: "starter-plan-signature",
+        planSignature: stableDigest("starter-plan-signature"),
       };
       const view = {
         actions: [
@@ -1407,7 +1408,7 @@ describe("exploration logging view model", () => {
           "starter-form-selection",
         ],
         selectorTraces: [],
-        planSignature: "starter-transfiguration-plan-signature",
+        planSignature: stableDigest("starter-transfiguration-plan-signature"),
       };
       const mappings = targets.map((target) => ({
         entryId: target.entryId,
@@ -1607,7 +1608,7 @@ describe("exploration logging view model", () => {
         selectionKey: "multi-card-selection-key",
         selectorSignatures: ["target-signature", "form-signature"],
         selectorTraces,
-        planSignature: "multi-card-plan-signature",
+        planSignature: stableDigest("multi-card-plan-signature"),
       };
       const cardTransfigurations = resolvedTargets.map((target) => ({
         entryId: target.entryId,
@@ -1636,7 +1637,7 @@ describe("exploration logging view model", () => {
       const runtime = {
         kind: "exploration",
         encounterCardId: testCardId(encounterCardId),
-        encounterSignature: "encounter-signature",
+        encounterSignature: stableDigest("encounter-signature"),
         actionOffers: [
           {
             actionId: fixture.actionId,
@@ -1661,7 +1662,7 @@ describe("exploration logging view model", () => {
         ],
         resolution: {
           actionId: fixture.actionId,
-          encounterSignature: "encounter-signature",
+          encounterSignature: stableDigest("encounter-signature"),
           selectionRulesVersion: preparation.selectionRulesVersion,
           selectionContentRevision: preparation.selectionContentRevision,
           selectionSignature: preparation.planSignature,
@@ -1814,7 +1815,7 @@ describe("exploration logging view model", () => {
           "replacement-signature-b",
         ],
         selectorTraces,
-        planSignature: "replacement-plan-signature",
+        planSignature: stableDigest("replacement-plan-signature"),
       };
       const selectedEntryIdSet = new Set<string>(selectedEntryIds);
       const selectedBindings = bindings.filter((binding) =>
@@ -1856,7 +1857,7 @@ describe("exploration logging view model", () => {
       const runtime = {
         kind: "exploration",
         encounterCardId: testCardId(encounterCardId),
-        encounterSignature: "replacement-encounter-signature",
+        encounterSignature: stableDigest("replacement-encounter-signature"),
         actionOffers: [
           {
             actionId,
@@ -1876,7 +1877,7 @@ describe("exploration logging view model", () => {
         ],
         resolution: {
           actionId,
-          encounterSignature: "replacement-encounter-signature",
+          encounterSignature: stableDigest("replacement-encounter-signature"),
           selectionRulesVersion: preparation.selectionRulesVersion,
           selectionContentRevision: preparation.selectionContentRevision,
           selectionSignature: preparation.planSignature,
@@ -1979,7 +1980,7 @@ describe("exploration logging view model", () => {
       selectorSignatures: [],
       selectorTraces: [],
       unavailableReason: "requires-eligible-card" as const,
-      planSignature: "unavailable-replacement-plan-signature",
+      planSignature: stableDigest("unavailable-replacement-plan-signature"),
     };
     const view = {
       actions: [
@@ -2052,7 +2053,7 @@ describe("exploration logging view model", () => {
       selectionKey: actionId,
       selectorSignatures: [],
       selectorTraces: [],
-      planSignature: "fixed-transfiguration-plan-signature",
+      planSignature: stableDigest("fixed-transfiguration-plan-signature"),
     };
     const selection = {
       entryIds: eligibleCards.map((binding) => binding.entryId),
@@ -2173,9 +2174,9 @@ describe("exploration logging view model", () => {
       selectionRulesVersion: parseSelectionRulesVersion("random-target-rules-v1"),
       selectionContentRevision: parseSelectionContentRevision("random-target-content-revision"),
       selectionKey: actionId,
-      selectorSignature: "random-copy-selector-signature",
+      selectorSignature: stableDigest("random-copy-selector-signature"),
       selectorTrace,
-      planSignature: "random-copy-plan-signature",
+      planSignature: stableDigest("random-copy-plan-signature"),
     };
     const cardCopies = targets.map((target, index) => ({
       sourceEntryId: target.entryId,
@@ -2309,9 +2310,9 @@ describe("exploration logging view model", () => {
       selectionRulesVersion: parseSelectionRulesVersion("random-target-rules-v1"),
       selectionContentRevision: parseSelectionContentRevision("random-target-content-revision"),
       selectionKey: actionId,
-      selectorSignature: "random-type-selector-signature",
+      selectorSignature: stableDigest("random-type-selector-signature"),
       selectorTrace,
-      planSignature: "random-type-plan-signature",
+      planSignature: stableDigest("random-type-plan-signature"),
     };
     const afterTypeChange = {
       predicateId: "exploration:card-type:Event",
@@ -2451,9 +2452,9 @@ describe("exploration logging view model", () => {
       selectionRulesVersion: parseSelectionRulesVersion("2"),
       selectionContentRevision: parseSelectionContentRevision("disclosed-content-revision"),
       selectionKey: `${actionId}:disclosed-deck-target`,
-      selectorSignature: "disclosed-selector-signature",
+      selectorSignature: stableDigest("disclosed-selector-signature"),
       selectorTrace: selectorTrace as never,
-      planSignature: "disclosed-plan-signature",
+      planSignature: stableDigest("disclosed-plan-signature"),
     };
     const afterTypeChange = {
       predicateId: "exploration:card-type:character",
@@ -2583,7 +2584,7 @@ describe("exploration logging view model", () => {
         parseSiteId("source-exploration-site"),
       ],
       insertedSite,
-      planSignature: "site-insertion-plan-signature",
+      planSignature: stableDigest("site-insertion-plan-signature"),
     };
     const insertion = {
       targetNodeId: preparation.targetNodeId,
@@ -2708,8 +2709,8 @@ describe("exploration logging view model", () => {
       insertionIndex: 3,
       siblingSiteIdsBefore: ["site-a", "site-b", "source-exploration-site"],
       choices,
-      selectorSignature: "site-type-selector-signature",
-      planSignature: "site-type-choice-plan-signature",
+      selectorSignature: stableDigest("site-type-selector-signature"),
+      planSignature: stableDigest("site-type-choice-plan-signature"),
     };
     const selectionTrace = {
       mechanicId: "add-site",
@@ -2863,7 +2864,7 @@ describe("exploration logging view model", () => {
           actionId,
           canonicalMechanicId: "add-site",
           selectionPolicyId: "uniform",
-          selectionSignature: "template-84-selection-signature",
+          selectionSignature: stableDigest("template-84-selection-signature"),
           selectionTrace,
           offeredSiteType: "Shop",
           offeredCardIds: [],
@@ -2879,7 +2880,7 @@ describe("exploration logging view model", () => {
       offers: [
         {
           offeredSiteType: "Shop",
-          selectionSignature: "template-84-selection-signature",
+          selectionSignature: stableDigest("template-84-selection-signature"),
           selectionTrace,
           siteInsertionPreparation: null,
         },
@@ -2896,7 +2897,7 @@ describe("exploration logging view model", () => {
       ),
     ).toMatchObject({
       offeredSiteType: "Shop",
-      selectionSignature: "template-84-selection-signature",
+      selectionSignature: stableDigest("template-84-selection-signature"),
       selectionTrace,
       siteInsertionPreparation: null,
     });

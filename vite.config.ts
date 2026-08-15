@@ -37,6 +37,10 @@ import {
   parseGameDataDatasetId,
   type GameDataDatasetId,
 } from "./src/types/tool-identifiers.ts";
+import {
+  parseBuildGitSha,
+  type BuildGitRevision,
+} from "./src/types/build-identity.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const buildGitSha = resolveBuildGitSha();
@@ -67,13 +71,15 @@ export const gameDataPipelineWatchPatterns = [
   path.resolve(path.join(__dirname, ".game-data.lock")),
 ];
 
-function resolveBuildGitSha(): string {
+function resolveBuildGitSha(): BuildGitRevision {
   try {
-    return execFileSync("git", ["rev-parse", "--short=12", "HEAD"], {
-      cwd: __dirname,
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-    }).trim();
+    return parseBuildGitSha(
+      execFileSync("git", ["rev-parse", "--short=12", "HEAD"], {
+        cwd: __dirname,
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "ignore"],
+      }).trim(),
+    );
   } catch {
     return "unknown";
   }

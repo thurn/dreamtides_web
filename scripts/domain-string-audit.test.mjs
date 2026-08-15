@@ -19,6 +19,10 @@ describe("domain string audit", () => {
           id?: ReadonlyArray<string>;
           cardsById: ReadonlyMap<string, CardData>;
           nodesById: Record<string, Node>;
+          planSignature: string;
+          candidateDigest: string;
+          textHash: string;
+          winnerType: string;
         }
       `,
       "src/example.ts",
@@ -29,6 +33,10 @@ describe("domain string audit", () => {
       "id",
       "cardsById",
       "nodesById",
+      "planSignature",
+      "candidateDigest",
+      "textHash",
+      "winnerType",
     ]);
   });
 

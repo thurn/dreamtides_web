@@ -3,7 +3,7 @@ import type { ExplorationPredicate } from "../data/exploration";
 import type { JourneyContent } from "../data/journey-content";
 import { buildRewardSelectionContext } from "../reward-selection/context";
 import { selectReward } from "../reward-selection/selectReward";
-import { stableDigest } from "../reward-selection/stable";
+import { stableDigest, type StableDigest } from "../reward-selection/stable";
 import {
   SELECTION_RULES_VERSION,
   type RewardSelectionRequest,
@@ -32,10 +32,10 @@ export interface MultiCardReplacementPreparation {
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
-  selectorSignatures: readonly string[];
+  selectorSignatures: readonly StableDigest[];
   selectorTraces: readonly RewardSelectionTrace[];
   unavailableReason?: "requires-eligible-card";
-  planSignature: string;
+  planSignature: StableDigest;
 }
 
 export interface MultiCardReplacementPlanInput {
@@ -138,7 +138,7 @@ export function prepareMultiCardReplacementPlan(
     site: input.site,
   });
   const bindings: MultiCardReplacementBinding[] = [];
-  const selectorSignatures: string[] = [];
+  const selectorSignatures: StableDigest[] = [];
   const selectorTraces: RewardSelectionTrace[] = [];
 
   const sourceEntries = input.journey.deck

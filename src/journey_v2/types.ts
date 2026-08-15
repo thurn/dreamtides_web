@@ -25,6 +25,7 @@ import type { OfferId } from "../types/identifiers";
 import type { SiteId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import type { SelectionContentRevision } from "../types/selection-content-revision";
+import type { StableDigest } from "../types/stable-digest";
 import type {
   AuguryArchetypeId,
   MerchantTargetKey,
@@ -154,7 +155,7 @@ export interface MerchantChoiceCandidate {
 
 export interface MerchantOffer {
   offerId: OfferId;
-  encounterSignature: string;
+  encounterSignature: StableDigest;
   archetypeId: MerchantArchetypeId;
   family: MerchantOfferFamily;
   targetKey: MerchantTargetKey;
@@ -172,7 +173,7 @@ export interface MerchantOffer {
 }
 
 export interface MerchantEncounter {
-  encounterSignature: string;
+  encounterSignature: StableDigest;
   siteId: SiteId;
   selectionRulesVersion?: SelectionRulesVersion;
   selectionContentRevision?: SelectionContentRevision;
@@ -180,7 +181,7 @@ export interface MerchantEncounter {
 }
 
 export interface MerchantAcceptRequest {
-  encounterSignature: string;
+  encounterSignature: StableDigest;
   offerId: OfferId;
   archetypeId: MerchantArchetypeId;
   selectionRulesVersion?: SelectionRulesVersion;
@@ -207,7 +208,7 @@ export type MerchantOfferActionResult =
     };
 
 export interface MerchantDeclineRequest {
-  encounterSignature: string;
+  encounterSignature: StableDigest;
   offerId: OfferId;
   selectionRulesVersion?: SelectionRulesVersion;
   choice?: MerchantChoice;

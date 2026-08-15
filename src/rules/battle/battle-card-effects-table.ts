@@ -13,7 +13,11 @@ import { rankSlotIds } from "../../battle/types";
 import type { StepContext } from "./effect-step";
 import type { EffectStep } from "./effect-step";
 import type { BattleScriptTrigger } from "./fold";
-import { fnv1aHex } from "./rules-text-hash";
+import {
+  fnv1aHex,
+  parseRulesTextHash,
+  type RulesTextHash,
+} from "./rules-text-hash";
 import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 import type { CardId } from "../../types/card-identity";
 import type {
@@ -35,7 +39,7 @@ export interface BattleCardEffectScript {
   id: CardId;
   trigger: "support";
   /** `fnv1aHex` of the `renderedText` this script targets. */
-  textHash: string;
+  textHash: RulesTextHash;
   support: SupportScript;
 }
 
@@ -47,7 +51,7 @@ export interface BattleCardEffectScript {
 export interface BattleTriggeredEffectScript {
   id: CardId;
   /** `fnv1aHex` of the exact authored text this script implements. */
-  textHash?: string;
+  textHash?: RulesTextHash;
   triggers: Partial<Record<BattleScriptTrigger, readonly EffectStep[]>>;
 }
 
@@ -78,24 +82,24 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
   // truth; names are intentionally absent because card names are not unique.
   "5a980eff-6ec7-44d8-9977-b98e66bbc2c8": {
     id: parseCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
-    textHash: "a4a7189e",
+    textHash: parseRulesTextHash("a4a7189e"),
     triggers: {},
   },
   "647f5150-b2e0-424b-9480-27557642524e": {
     id: parseCardId("647f5150-b2e0-424b-9480-27557642524e"),
-    textHash: "153cdaf2",
+    textHash: parseRulesTextHash("153cdaf2"),
     triggers: {
       materialized: [{ kind: "prompt", prompt: { kind: "foresee", count: 1 } }],
     },
   },
   "e83014d3-9d35-4e80-a1b3-9b25360ad2af": {
     id: parseCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
-    textHash: "811c9dc5",
+    textHash: parseRulesTextHash("811c9dc5"),
     triggers: {},
   },
   "a28ad36d-fa74-4190-a463-7efd3a6233d0": {
     id: parseCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
-    textHash: "ce8fae02",
+    textHash: parseRulesTextHash("ce8fae02"),
     triggers: {
       dawn: [
         {
@@ -107,7 +111,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
   },
   "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481": {
     id: parseCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
-    textHash: "9a004bcb",
+    textHash: parseRulesTextHash("9a004bcb"),
     triggers: {
       dissolved: [
         {
@@ -125,12 +129,12 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
   },
   "5ab11bef-5dcd-49f5-be49-ae2ccde76e70": {
     id: parseCardId("5ab11bef-5dcd-49f5-be49-ae2ccde76e70"),
-    textHash: "42ad9866",
+    textHash: parseRulesTextHash("42ad9866"),
     triggers: {},
   },
   "4408b942-09a0-4f4e-a403-10c708c6e3c5": {
     id: parseCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
-    textHash: "ad1c27c7",
+    textHash: parseRulesTextHash("ad1c27c7"),
     triggers: {
       played: [
         {
@@ -168,7 +172,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
   },
   "2162742c-09d0-4e62-ae49-0f8f79b45adc": {
     id: parseCardId("2162742c-09d0-4e62-ae49-0f8f79b45adc"),
-    textHash: "7776dd2f",
+    textHash: parseRulesTextHash("7776dd2f"),
     triggers: {
       played: [
         {
@@ -181,7 +185,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
   },
   "910b4cf9-dec7-4e03-af4f-7d5ae342eeba": {
     id: parseCardId("910b4cf9-dec7-4e03-af4f-7d5ae342eeba"),
-    textHash: "469120a4",
+    textHash: parseRulesTextHash("469120a4"),
     triggers: {
       played: [
         {
@@ -200,7 +204,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
   },
   "944e15d2-d680-4ebe-8d18-36826f4b1535": {
     id: parseCardId("944e15d2-d680-4ebe-8d18-36826f4b1535"),
-    textHash: "03e76b70",
+    textHash: parseRulesTextHash("03e76b70"),
     triggers: {
       played: [
         {
@@ -226,7 +230,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
   },
   "229ab3a1-3720-41a2-924c-8fe112188f8e": {
     id: parseCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
-    textHash: "811c9dc5",
+    textHash: parseRulesTextHash("811c9dc5"),
     triggers: {},
   },
   [BATTLE_EFFECT_FIXTURE_CARD_ID]: {
@@ -324,7 +328,7 @@ const BATTLE_CARD_EFFECT_SCRIPTS = [
   {
     id: parseCardId("4e3c04a9-1cdd-468a-b42a-40157ed9c9d6"),
     trigger: "support",
-    textHash: "c72e97a0",
+    textHash: parseRulesTextHash("c72e97a0"),
     support: {
       bonus: () => 1,
       applies: (ally) => ally.definition.subtype === "Spirit Animal",
@@ -333,7 +337,7 @@ const BATTLE_CARD_EFFECT_SCRIPTS = [
   {
     id: parseCardId("56411ed4-bda9-4fdf-82e5-b5492de67039"),
     trigger: "support",
-    textHash: "84f5be41",
+    textHash: parseRulesTextHash("84f5be41"),
     support: {
       bonus: (ctx) => countAlliedWarriors(ctx.state, ctx.side),
     },
@@ -341,19 +345,19 @@ const BATTLE_CARD_EFFECT_SCRIPTS = [
   {
     id: parseCardId("1268a899-b209-46bb-bce4-6def1dcd0404"),
     trigger: "support",
-    textHash: "04484014",
+    textHash: parseRulesTextHash("04484014"),
     support: { bonus: () => 2 },
   },
   {
     id: parseCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
     trigger: "support",
-    textHash: "a4a7189e",
+    textHash: parseRulesTextHash("a4a7189e"),
     support: { bonus: () => 2 },
   },
   {
     id: parseCardId("6497d8b1-85b8-486d-99e2-5c141486d508"),
     trigger: "support",
-    textHash: "a2c043a8",
+    textHash: parseRulesTextHash("a2c043a8"),
     support: {
       bonus: () => 3,
       applies: (ally) => ally.definition.subtype === "Warrior",
@@ -362,19 +366,19 @@ const BATTLE_CARD_EFFECT_SCRIPTS = [
   {
     id: parseCardId("8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd"),
     trigger: "support",
-    textHash: "b82fe41f",
+    textHash: parseRulesTextHash("b82fe41f"),
     support: { bonus: () => 3 },
   },
   {
     id: parseCardId("c61c8b29-6911-4bbf-b1c4-0c18b22ed33f"),
     trigger: "support",
-    textHash: "b027ad8e",
+    textHash: parseRulesTextHash("b027ad8e"),
     support: { bonus: () => 2 },
   },
   {
     id: parseCardId("c8579b20-95ff-4b1d-b4c6-6bd049fc4760"),
     trigger: "support",
-    textHash: "7415a86e",
+    textHash: parseRulesTextHash("7415a86e"),
     support: {
       bonus: () => 2,
       applies: (ally) => ally.definition.subtype === "Spirit Animal",
@@ -392,8 +396,12 @@ export const BATTLE_CARD_EFFECTS: IdentityRecord<
 /** Returns registered scripts whose live rules text differs from its hash. */
 export function collectAutomationHashDrift(
   cardsById: ReadonlyMap<CardId, string>,
-): { id: CardId; expected: string; actual: string | null }[] {
-  const drift: { id: CardId; expected: string; actual: string | null }[] = [];
+): { id: CardId; expected: RulesTextHash; actual: RulesTextHash | null }[] {
+  const drift: {
+    id: CardId;
+    expected: RulesTextHash;
+    actual: RulesTextHash | null;
+  }[] = [];
   for (const [id, script] of Object.entries(BATTLE_CARD_EFFECTS)) {
     const cardId = parseCardId(id);
     const text = cardsById.get(cardId);

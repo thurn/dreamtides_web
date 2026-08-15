@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { stableDigest } from "../../reward-selection/stable";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 import { resolveSource } from "../../runtime/localization/runtime";
 
@@ -72,7 +73,7 @@ function candidate(choiceId: ChoiceId): MerchantChoiceCandidate {
 function chooserOffer(): MerchantOffer {
   return {
     offerId: parseOfferId("A"),
-    encounterSignature: "encounter-fixture",
+    encounterSignature: stableDigest("encounter-fixture"),
     archetypeId: "fit_card_draft",
     family: "grant",
     targetKey: parseMerchantTargetKey("fixture-target"),
@@ -92,7 +93,7 @@ function chooserOffer(): MerchantOffer {
 function directOffer(): MerchantOffer {
   return {
     offerId: parseOfferId("B"),
-    encounterSignature: "encounter-fixture",
+    encounterSignature: stableDigest("encounter-fixture"),
     archetypeId: "strong_card",
     family: "grant",
     targetKey: parseMerchantTargetKey(card.id),
@@ -107,7 +108,7 @@ function directOffer(): MerchantOffer {
 
 function encounter(): MerchantEncounter {
   return {
-    encounterSignature: "encounter-fixture",
+    encounterSignature: stableDigest("encounter-fixture"),
     siteId: parseSiteId("site-fixture"),
     offers: [chooserOffer(), directOffer()],
   };
@@ -202,7 +203,7 @@ function mappedOffer(
 ): MerchantOffer {
   return {
     offerId: parseOfferId("A"),
-    encounterSignature: "mapping-encounter",
+    encounterSignature: stableDigest("mapping-encounter"),
     archetypeId,
     family: "grant",
     targetKey: parseMerchantTargetKey("fixture"),
@@ -383,7 +384,7 @@ describe("augury view model", () => {
         parseChoiceId("choice-2"),
       ),
     ).toEqual({
-      encounterSignature: "encounter-fixture",
+      encounterSignature: stableDigest("encounter-fixture"),
       offerId: parseOfferId("A"),
       archetypeId: "fit_card_draft",
       choice: { choiceId: parseChoiceId("choice-2") },
@@ -498,7 +499,9 @@ describe("augury view model", () => {
     for (const [offer, expectedKind] of cases) {
       const model = buildAuguryOfferTileModel(offer, mappingContext);
       expect(model.kind, offer.archetypeId).toBe(expectedKind);
-      expect(model.id).toBe(`mapping-encounter:${offer.offerId}`);
+      expect(model.id).toBe(
+        `${stableDigest("mapping-encounter")}:${offer.offerId}`,
+      );
       expect(
         auguryOfferHeadline(
           model,

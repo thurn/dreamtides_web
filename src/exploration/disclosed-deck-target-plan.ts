@@ -1,7 +1,7 @@
 import type { JourneyContent } from "../data/journey-content";
 import { buildRewardSelectionContext } from "../reward-selection/context";
 import { selectReward } from "../reward-selection/selectReward";
-import { stableDigest } from "../reward-selection/stable";
+import { stableDigest, type StableDigest } from "../reward-selection/stable";
 import {
   SELECTION_RULES_VERSION,
   type RewardSelectionContext,
@@ -37,10 +37,10 @@ export interface ExplorationDisclosedDeckTargetPreparation {
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
-  selectorSignature?: string;
+  selectorSignature?: StableDigest;
   selectorTrace?: RewardSelectionTrace;
   unavailableReason?: ExplorationDisclosedDeckTargetUnavailableReason;
-  planSignature: string;
+  planSignature: StableDigest;
 }
 
 export interface ExplorationDisclosedDeckTargetPlanInput {

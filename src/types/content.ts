@@ -21,6 +21,7 @@ import type {
   TideId,
 } from "./identifiers";
 import type { ContentHash } from "./content-hash";
+import type { SourceTransport } from "../runtime/localization/runtime";
 
 /** Normalized point locating a DreamAvatar's head in its portrait artwork. */
 export interface DreamAvatarPortraitFocus {
@@ -128,7 +129,7 @@ export interface ApollyonIncarnationContent {
   id: ApollyonIncarnationId;
   title: string;
   description: string;
-  deckType: string;
+  deckType: SourceTransport;
 }
 
 /**

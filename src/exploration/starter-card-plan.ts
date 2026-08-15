@@ -1,7 +1,7 @@
 import type { JourneyContent } from "../data/journey-content";
 import { buildRewardSelectionContext } from "../reward-selection/context";
 import { selectReward } from "../reward-selection/selectReward";
-import { stableDigest } from "../reward-selection/stable";
+import { stableDigest, type StableDigest } from "../reward-selection/stable";
 import {
   SELECTION_RULES_VERSION,
   type RewardCardPredicate,
@@ -84,7 +84,7 @@ function selectionRequest(input: {
 
 function planSignature(
   preparation: Omit<ExplorationStarterCardPreparation, "planSignature">,
-): string {
+): StableDigest {
   return stableDigest(preparation);
 }
 

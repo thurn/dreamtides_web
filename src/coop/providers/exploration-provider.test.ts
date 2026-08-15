@@ -1,5 +1,6 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { testEventActor } from "../../types/test-identities";
+import { stableDigest } from "../../reward-selection/stable";
 import { describe, expect, it } from "vitest";
 import { parseCardTypeChangePredicateId } from "../../types/identifiers";
 import { economyFixture } from "../../testing/economy-fixture";
@@ -3913,7 +3914,7 @@ describe("Exploration provider", () => {
           ...firstOffer,
           starterCardPreparation: {
             ...firstOffer.starterCardPreparation,
-            planSignature: "tampered-plan",
+            planSignature: stableDigest("tampered-plan"),
           },
         },
         state.runtime.actionOffers[1],
@@ -4877,7 +4878,7 @@ describe("Exploration provider", () => {
       ...offer,
       multiCardTransfigurationPreparation: {
         ...preparation,
-        planSignature: "tampered-plan",
+        planSignature: stableDigest("tampered-plan"),
       },
     };
     const tamperedState = {
@@ -5897,7 +5898,7 @@ describe("Exploration provider", () => {
     expect(offer.offeredSiteType).toBeUndefined();
     expect(offer.selectionTrace).toBeUndefined();
     const tamperedStates = [
-      tamper((plan) => ({ ...plan, planSignature: "forged" })),
+      tamper((plan) => ({ ...plan, planSignature: stableDigest("forged") })),
       tamper((plan) => ({ ...plan, targetNodeId: parseAtlasNodeId("forged") })),
       tamper((plan) => ({
         ...plan,
@@ -6123,8 +6124,8 @@ describe("Exploration provider", () => {
     const firstChoice = preparation.choices[0];
     if (firstChoice === undefined) throw new Error("Expected first choice");
     const forgedStates = [
-      mutatePlan((plan) => ({ ...plan, planSignature: "forged" })),
-      mutatePlan((plan) => ({ ...plan, selectorSignature: "forged" })),
+      mutatePlan((plan) => ({ ...plan, planSignature: stableDigest("forged") })),
+      mutatePlan((plan) => ({ ...plan, selectorSignature: stableDigest("forged") })),
       mutatePlan((plan) => ({
         ...plan,
         targetNodeId: parseAtlasNodeId("forged"),
@@ -6148,7 +6149,7 @@ describe("Exploration provider", () => {
           ...plan.choices.slice(1),
         ],
       })),
-      replaceOffer({ ...offer, selectionSignature: "forged" }),
+      replaceOffer({ ...offer, selectionSignature: stableDigest("forged") }),
       replaceOffer({
         ...offer,
         selectionTrace: {
@@ -6166,7 +6167,7 @@ describe("Exploration provider", () => {
           insertionIndex: 1,
           siblingSiteIdsBefore: [site.id],
           insertedSite: firstChoice.insertedSite,
-          planSignature: "forged",
+          planSignature: stableDigest("forged"),
         },
       }),
     ];

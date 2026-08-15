@@ -11,7 +11,7 @@ export const EDITABLE_CARD_FIELDS: ReadonlySet<EditableCardField>;
 export interface CardEditorRecord {
   id: CardId;
   cardNumber: number;
-  cardType?: string;
+  cardType?: CardType;
   rarity?: string;
   "energy-cost": number | string;
   subtype: string;
@@ -50,3 +50,4 @@ export function refreshCardDataJson(options?: { rootDir?: string }): {
   path: string;
 };
 import type { CardId } from "../src/types/card-identity";
+import type { CardType } from "../src/types/cards";

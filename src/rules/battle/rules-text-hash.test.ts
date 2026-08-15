@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { fnv1aHex } from "./rules-text-hash";
+import { fnv1aHex, parseRulesTextHash } from "./rules-text-hash";
 
 describe("fnv1aHex", () => {
   it("matches the deterministic golden value for a known rules string", () => {
@@ -27,4 +27,13 @@ describe("fnv1aHex", () => {
     // input whose hash has leading zeros to exercise padding if one arises.
     expect(fnv1aHex("")).toMatch(/^[0-9a-f]{8}$/);
   });
+
+  it.each(["", "1234567", "123456789", "ABCDEF12", "not-hash"])(
+    "rejects noncanonical serialized hashes: %s",
+    (value) => {
+      expect(() => parseRulesTextHash(value)).toThrow(
+        "Rules text hash must be 8 lowercase hexadecimal digits",
+      );
+    },
+  );
 });

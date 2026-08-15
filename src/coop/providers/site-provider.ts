@@ -78,6 +78,7 @@ import {
   parseSelectionRulesVersion,
   SELECTION_RULES_VERSION,
 } from "../../reward-selection";
+import { isStableDigest } from "../../reward-selection/stable";
 import { resolveDeckEntryCard } from "../../card-type-change";
 import type { DeckEntryId, DreamsignId } from "../../types/identifiers";
 import { offerIdFromUnknown } from "../../types/identifiers";
@@ -932,7 +933,9 @@ export function createSiteContentProvider(
       payload,
       seq,
     }): JourneyState | null => {
-      const encounterSignature = asString(payload.encounterSignature);
+      const encounterSignature = isStableDigest(payload.encounterSignature)
+        ? payload.encounterSignature
+        : null;
       const offerId = offerIdFromUnknown(payload.offerId);
       const rawSelectionRulesVersion = asString(payload.selectionRulesVersion);
       const selectionRulesVersion = rawSelectionRulesVersion === null

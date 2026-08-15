@@ -98,7 +98,7 @@ import {
   type RewardSelectionRequest,
   type RewardSelectionResult,
 } from "../../reward-selection/types";
-import { stableDigest } from "../../reward-selection/stable";
+import { stableDigest, type StableDigest } from "../../reward-selection/stable";
 import type { CardId } from "../../types/card-identity";
 import type { DeckEntryId, SelectionKey } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
@@ -1100,7 +1100,7 @@ function essenceSelectionSignature(
   action: ExplorationActionContent,
   encounterCardId: CardId,
   offer: ExplorationActionOfferRuntime,
-): string {
+): StableDigest {
   return stableDigest({
     mechanicId: offer.canonicalMechanicId,
     policyId: offer.selectionPolicyId ?? null,
@@ -1736,7 +1736,7 @@ function buildActionOffer(
 function explorationEncounterSignature(
   cardId: CardId,
   actionOffers: readonly ExplorationActionOfferRuntime[],
-): string {
+): StableDigest {
   return stableDigest({
     cardId,
     actionOffers: actionOffers.map((offer) => ({

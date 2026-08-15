@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { stableDigest } from "../reward-selection/stable";
 import { createDefaultState } from "../state/journey-context";
 import { LayerName } from "../types/layer-name";
 import type { JourneyState, SiteState } from "../types/journey";
@@ -154,7 +155,7 @@ describe("Exploration fixed-site insertion planning", () => {
           },
         },
       },
-      { ...plan, planSignature: "forged" },
+      { ...plan, planSignature: stableDigest("forged") },
     ];
 
     for (const variant of variants) {
@@ -175,7 +176,7 @@ function prepareChoice(
     sourceActionId: CHOICE_ACTION_ID,
     encounterCardId: testCardId("encounter-card"),
     siteTypes,
-    selectorSignature: "selector-signature",
+    selectorSignature: stableDigest("selector-signature"),
     selectionRulesVersion: parseSelectionRulesVersion("rules-v1"),
     selectionContentRevision: parseSelectionContentRevision("content-v1"),
   });
@@ -190,7 +191,7 @@ describe("Exploration site-type choice planning", () => {
       targetNodeId: parseAtlasNodeId("current-node"),
       insertionIndex: 2,
       siblingSiteIdsBefore: [sourceSite.id, battleSite.id],
-      selectorSignature: "selector-signature",
+      selectorSignature: stableDigest("selector-signature"),
       choices: [
         { siteType: "Shop" },
         { siteType: "Purge" },
@@ -247,7 +248,7 @@ describe("Exploration site-type choice planning", () => {
         sourceActionId: CHOICE_ACTION_ID,
         encounterCardId: testCardId("encounter-card"),
         siteTypes: ["Shop", "Purge"],
-        selectorSignature: "selector-signature",
+        selectorSignature: stableDigest("selector-signature"),
         selectionRulesVersion: parseSelectionRulesVersion("rules-v1"),
         selectionContentRevision: parseSelectionContentRevision("content-v1"),
       }),
@@ -259,7 +260,7 @@ describe("Exploration site-type choice planning", () => {
         sourceActionId: CHOICE_ACTION_ID,
         encounterCardId: testCardId("encounter-card"),
         siteTypes: ["Shop", "Shop", "Purge"],
-        selectorSignature: "selector-signature",
+        selectorSignature: stableDigest("selector-signature"),
         selectionRulesVersion: parseSelectionRulesVersion("rules-v1"),
         selectionContentRevision: parseSelectionContentRevision("content-v1"),
       }),
@@ -279,8 +280,8 @@ describe("Exploration site-type choice planning", () => {
     const plan = prepareChoice();
     if (plan === null) throw new Error("Expected a choice plan");
     const variants = [
-      { ...plan, selectorSignature: "forged" },
-      { ...plan, planSignature: "forged" },
+      { ...plan, selectorSignature: stableDigest("forged") },
+      { ...plan, planSignature: stableDigest("forged") },
       { ...plan, targetNodeId: parseAtlasNodeId("forged") },
       { ...plan, insertionIndex: plan.insertionIndex + 1 },
       {

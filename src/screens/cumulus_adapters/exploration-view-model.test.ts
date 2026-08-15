@@ -1,5 +1,6 @@
 import { assertLocalized } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
+import { stableDigest } from "../../reward-selection/stable";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 import { resolveSource } from "../../runtime/localization/runtime";
 import type { JourneyContent } from "../../data/journey-content";
@@ -1682,10 +1683,10 @@ describe("exploration-view-model", () => {
       selectionRulesVersion: parseSelectionRulesVersion("starter-rules-v1"),
       selectionContentRevision: parseSelectionContentRevision("starter-content-v1"),
       selectionKey: parseSelectionKey("fixture-starter-selection"),
-      selectorSignatures: ["starter-selector-signature"],
+      selectorSignatures: [stableDigest("starter-selector-signature")],
       selectorTraces: [],
       ...(unavailableReason === undefined ? {} : { unavailableReason }),
-      planSignature: "starter-plan-signature",
+      planSignature: stableDigest("starter-plan-signature"),
     });
     const build = (
       action: ExplorationActionContent,
@@ -2025,7 +2026,9 @@ describe("exploration-view-model", () => {
       poolRegenerated: false,
       preparedDreamsignIds,
       requiredOverflowReplacementCount,
-      planSignature: `signed:${kind}:${String(requiredOverflowReplacementCount)}`,
+      planSignature: stableDigest(
+        `signed:${kind}:${String(requiredOverflowReplacementCount)}`,
+      ),
     });
     const actions = [
       {
@@ -2275,7 +2278,7 @@ describe("exploration-view-model", () => {
       poolRegenerated: false,
       preparedDreamsignIds,
       requiredOverflowReplacementCount,
-      planSignature: `signed:${kind}`,
+      planSignature: stableDigest(`signed:${kind}`),
     });
     const actionIds = {
       gain: testExplorationActionId("gain-offered"),
@@ -3489,9 +3492,9 @@ describe("exploration-view-model", () => {
     const commonPreparation = {
       selectionRulesVersion: parseSelectionRulesVersion("2"),
       selectionContentRevision: parseSelectionContentRevision("compound-content-revision"),
-      selectorSignatures: [] as string[],
+      selectorSignatures: [],
       selectorTraces: [],
-      planSignature: "compound-plan-signature",
+      planSignature: stableDigest("compound-plan-signature"),
     };
     const bindings = state.deck.map((entry, index) => ({
       entryId: entry.entryId,
@@ -3797,7 +3800,7 @@ describe("exploration-view-model", () => {
       selectionKey: parseSelectionKey(action.id),
       selectorSignatures: [],
       selectorTraces: [],
-      planSignature: "compound-resolution-plan",
+      planSignature: stableDigest("compound-resolution-plan"),
     };
     const gainedEntries = [
       {
@@ -4063,9 +4066,9 @@ describe("exploration-view-model", () => {
         selectorSignatures:
           mode === "chosen-flexible" || mode === "chosen-fixed"
             ? []
-            : ["targets", "forms"],
+            : [stableDigest("targets"), stableDigest("forms")],
         selectorTraces: [],
-        planSignature: "multi-transfiguration-plan",
+        planSignature: stableDigest("multi-transfiguration-plan"),
       };
       const action: ExplorationActionContent = {
         id: testExplorationActionId(`multi-${effectKind}`),
@@ -4216,7 +4219,7 @@ describe("exploration-view-model", () => {
         expect(concealed).not.toContain(eligibleCards[0].entryId);
       }
       expect(
-        build(baseState, null, { selectionSignature: "tampered" })?.actions[0]
+        build(baseState, null, { selectionSignature: stableDigest("tampered") })?.actions[0]
           .available,
       ).toBe(false);
 
@@ -4403,9 +4406,12 @@ describe("exploration-view-model", () => {
         selectionRulesVersion: parseSelectionRulesVersion("starter-transfiguration-rules-v1"),
         selectionContentRevision: parseSelectionContentRevision("starter-transfiguration-content-v1"),
         selectionKey: parseSelectionKey("starter-transfiguration-key"),
-        selectorSignatures: ["starter-targets", "starter-forms"],
+        selectorSignatures: [
+          stableDigest("starter-targets"),
+          stableDigest("starter-forms"),
+        ],
         selectorTraces: [],
-        planSignature: "starter-transfiguration-plan",
+        planSignature: stableDigest("starter-transfiguration-plan"),
       };
       const action: ExplorationActionContent = {
         id: testExplorationActionId(`starter-transfiguration-${effectKind}`),
@@ -4530,7 +4536,7 @@ describe("exploration-view-model", () => {
       expect(concealedView).not.toContain(starterCards[0].entryId);
       expect(concealedView).not.toContain(targets[0].transfiguration);
       expect(
-        runtime(baseState, null, { selectionSignature: "tampered-plan" })
+        runtime(baseState, null, { selectionSignature: stableDigest("tampered-plan") })
           ?.actions[0].available,
       ).toBe(false);
 
@@ -4649,9 +4655,12 @@ describe("exploration-view-model", () => {
       selectionRulesVersion: parseSelectionRulesVersion("2"),
       selectionContentRevision: parseSelectionContentRevision("replacement-content-v1"),
       selectionKey: parseSelectionKey("replacement-action"),
-      selectorSignatures: ["replacement-a", "replacement-b"],
+      selectorSignatures: [
+        stableDigest("replacement-a"),
+        stableDigest("replacement-b"),
+      ],
       selectorTraces,
-      planSignature: "replacement-plan",
+      planSignature: stableDigest("replacement-plan"),
     };
     const action: ExplorationActionContent = {
       id: testExplorationActionId("replacement-action"),
@@ -4760,7 +4769,7 @@ describe("exploration-view-model", () => {
       firstReplacement.id,
     );
     expect(
-      build(beforeState, null, { selectionSignature: "tampered" })?.actions[0]
+      build(beforeState, null, { selectionSignature: stableDigest("tampered") })?.actions[0]
         .available,
     ).toBe(false);
 
@@ -4906,9 +4915,9 @@ describe("exploration-view-model", () => {
         selectionKey: parseSelectionKey(
           "random-target-action:random-deck-targets",
         ),
-        selectorSignature: "random-target-selector",
+        selectorSignature: stableDigest("random-target-selector"),
         selectorTrace,
-        planSignature: "random-target-plan",
+        planSignature: stableDigest("random-target-plan"),
       };
       const action: ExplorationActionContent = {
         id: testExplorationActionId("random-target-action"),
@@ -5001,7 +5010,7 @@ describe("exploration-view-model", () => {
       expect(concealed).not.toContain(bindings[0].entryId);
       expect(concealed).not.toContain(bindings[1].entryId);
       expect(
-        build(beforeState, null, { selectionSignature: "tampered" })?.actions[0]
+        build(beforeState, null, { selectionSignature: stableDigest("tampered") })?.actions[0]
           .available,
       ).toBe(false);
 
@@ -5197,9 +5206,9 @@ describe("exploration-view-model", () => {
       selectionRulesVersion: parseSelectionRulesVersion("2"),
       selectionContentRevision: parseSelectionContentRevision("replacement-content-v1"),
       selectionKey: parseSelectionKey(`${action.id}:random-deck-targets`),
-      selectorSignature: "replacement-selector",
+      selectorSignature: stableDigest("replacement-selector"),
       selectorTrace: { fixture: "replacement" } as never,
-      planSignature: "replacement-plan",
+      planSignature: stableDigest("replacement-plan"),
     };
     const content = {
       cardDatabase: new Map(
@@ -5343,9 +5352,9 @@ describe("exploration-view-model", () => {
       selectionRulesVersion: parseSelectionRulesVersion("2"),
       selectionContentRevision: parseSelectionContentRevision("disclosed-content-v1"),
       selectionKey: parseSelectionKey(`${action.id}:disclosed-deck-target`),
-      selectorSignature: "disclosed-selector",
+      selectorSignature: stableDigest("disclosed-selector"),
       selectorTrace: { fixture: "disclosed" } as never,
-      planSignature: "disclosed-plan",
+      planSignature: stableDigest("disclosed-plan"),
     };
     const content = {
       cardDatabase: new Map(
@@ -5516,7 +5525,7 @@ describe("exploration-view-model", () => {
       insertionIndex: node.sites.length,
       siblingSiteIdsBefore: node.sites.map((site) => site.id),
       insertedSite,
-      planSignature: "fixed-site-plan-signature",
+      planSignature: stableDigest("fixed-site-plan-signature"),
     };
     const offer = {
       actionId: action.id,
@@ -5723,8 +5732,8 @@ describe("exploration-view-model", () => {
       insertionIndex: node.sites.length,
       siblingSiteIdsBefore: node.sites.map((site) => site.id),
       choices,
-      selectorSignature: "site-selector-signature",
-      planSignature: "site-choice-plan-signature",
+      selectorSignature: stableDigest("site-selector-signature"),
+      planSignature: stableDigest("site-choice-plan-signature"),
     };
     const selectionTrace = {
       selectionRulesVersion: parseSelectionRulesVersion("2"),
@@ -5739,7 +5748,7 @@ describe("exploration-view-model", () => {
       streams: [],
       constraints: {},
       candidateCount: 4,
-      candidateDigest: "candidate-digest",
+      candidateDigest: stableDigest("candidate-digest"),
       band: {
         fraction: 1,
         minimum: 3,
@@ -5751,7 +5760,7 @@ describe("exploration-view-model", () => {
       fallback: [],
       tuning: {},
       effectiveDeck: [],
-      effectiveDeckDigest: "effective-deck-digest",
+      effectiveDeckDigest: stableDigest("effective-deck-digest"),
     };
     const offer = {
       actionId: action.id,

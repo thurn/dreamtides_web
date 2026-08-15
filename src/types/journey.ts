@@ -34,6 +34,7 @@ import type {
 import type { CardId, CardSubtype } from "./card-identity";
 import type { JourneyMutationSource } from "./journey-source";
 import type { JourneySeed } from "./journey-seed";
+import type { StableDigest } from "./stable-digest";
 import type { SelectionContentRevision } from "./selection-content-revision";
 import type {
   AtlasNodeId,
@@ -565,7 +566,7 @@ export interface ExplorationDreamsignPreparation {
   preparedDreamsignIds: DreamsignId[];
   requiredOverflowReplacementCount: number;
   unavailableReason?: DreamsignActionUnavailableReason;
-  planSignature: string;
+  planSignature: StableDigest;
 }
 
 export interface ExplorationDreamsignReplacement {
@@ -611,10 +612,10 @@ export interface ExplorationStarterCardPreparation {
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
-  selectorSignatures: string[];
+  selectorSignatures: StableDigest[];
   selectorTraces: RewardSelectionTrace[];
   unavailableReason?: ExplorationStarterCardUnavailableReason;
-  planSignature: string;
+  planSignature: StableDigest;
 }
 
 /** Exact persisted identity mapping for one atomic starter-card replacement. */
@@ -653,10 +654,10 @@ export interface ExplorationStarterCardTransfigurationPreparation {
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
-  selectorSignatures: readonly string[];
+  selectorSignatures: readonly StableDigest[];
   selectorTraces: readonly RewardSelectionTrace[];
   unavailableReason?: ExplorationStarterCardTransfigurationUnavailableReason;
-  planSignature: string;
+  planSignature: StableDigest;
 }
 
 /** Exact persisted before/after mapping for one starter-card transfiguration. */
@@ -723,7 +724,7 @@ export interface ExplorationActionOfferRuntime {
   selectionRulesVersion?: SelectionRulesVersion;
   selectionContentRevision?: SelectionContentRevision;
   selectionKey?: SelectionKey;
-  selectionSignature?: string;
+  selectionSignature?: StableDigest;
   selectionTrace?: RewardSelectionTrace;
   /** Every trace when one action prepares independent targets per deck entry. */
   selectionTraces?: RewardSelectionTrace[];
@@ -774,7 +775,7 @@ export interface ExplorationSiteInsertionPreparation {
   insertionIndex: number;
   siblingSiteIdsBefore: readonly SiteId[];
   insertedSite: SiteState & { type: ExplorationFixedSiteType };
-  planSignature: string;
+  planSignature: StableDigest;
 }
 
 /** One offered destination and the exact site record it would append. */
@@ -791,8 +792,8 @@ export interface ExplorationSiteTypeChoicePreparation {
   insertionIndex: number;
   siblingSiteIdsBefore: readonly SiteId[];
   choices: readonly ExplorationPreparedSiteChoice[];
-  selectorSignature: string;
-  planSignature: string;
+  selectorSignature: StableDigest;
+  planSignature: StableDigest;
 }
 
 /** Exact site insertion persisted by a resolved Exploration action. */
@@ -808,8 +809,8 @@ export interface ExplorationResolution {
   actionId: ExplorationActionId;
   selectionRulesVersion?: SelectionRulesVersion;
   selectionContentRevision?: SelectionContentRevision;
-  encounterSignature?: string;
-  selectionSignature?: string;
+  encounterSignature?: StableDigest;
+  selectionSignature?: StableDigest;
   /** Validated UUID-only player intent persisted for replay and diagnostics. */
   selection?: Record<string, string | string[] | number>;
   gainedCardIds: CardId[];
@@ -888,7 +889,7 @@ export interface ExplorationSiteRuntime {
   kind: "exploration";
   selectionRulesVersion?: SelectionRulesVersion;
   selectionContentRevision?: SelectionContentRevision;
-  encounterSignature?: string;
+  encounterSignature?: StableDigest;
   encounterCardId: CardId;
   actionOffers: ExplorationActionOfferRuntime[];
   resolution: ExplorationResolution | null;

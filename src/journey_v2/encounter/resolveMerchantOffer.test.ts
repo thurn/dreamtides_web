@@ -1,5 +1,6 @@
 import { testJourneySeed } from "../../types/test-identities";
 import { describe, expect, it } from "vitest";
+import { stableDigest } from "../../reward-selection/stable";
 import { parseCardName } from "../../types/card-identity";
 import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
@@ -139,7 +140,7 @@ describe("resolveMerchantOffer", () => {
       state: fixture.state,
       journeyContent: fixture.journeyContent,
       site: fixture.site,
-      request: { ...requestFor(offer), encounterSignature: "stale" },
+      request: { ...requestFor(offer), encounterSignature: stableDigest("stale") },
     });
     expect(result.ok).toBe(false);
     if (!result.ok) {

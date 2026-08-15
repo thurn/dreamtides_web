@@ -4,6 +4,7 @@ import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { assertLocalized } from "@trox/runtime";
+import { parseStableDigest } from "../../types/stable-digest";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { artRef } from "../primitives/art";
@@ -91,7 +92,9 @@ function view(): AugurySiteView {
   return {
     siteId: parseSiteId("augury-site"),
     scene: null,
-    encounterSignature: "encounter-fixture",
+    encounterSignature: parseStableDigest(
+      "4c5aecf36130bcce907ec76f5ed298eb2f19cc3c48a12668a0d08126daef56df",
+    ),
     guide: {
       id: testGuideId("aldric_the_seer"),
       name: assertLocalized("Aldric, the Seer"),

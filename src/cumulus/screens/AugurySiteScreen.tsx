@@ -44,6 +44,7 @@ import type { ChoiceId } from "../../types/identifiers";
 import type { AuguryCardViewId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
+import type { StableDigest } from "../../types/stable-digest";
 
 export type AuguryGuideView = SiteLayoutGuideView;
 
@@ -94,7 +95,7 @@ export interface AuguryOfferView {
 export interface AugurySiteView {
   siteId: SiteId;
   scene: ArtRef | null;
-  encounterSignature: string | null;
+  encounterSignature: StableDigest | null;
   guide: AuguryGuideView;
   offers: readonly AuguryOfferView[];
   unavailableMessage: LocalizedString | null;

@@ -6,7 +6,7 @@ import {
 } from "../journey_v2/archetypes/improve";
 import { buildRewardSelectionContext } from "../reward-selection/context";
 import { selectReward } from "../reward-selection/selectReward";
-import { stableDigest } from "../reward-selection/stable";
+import { stableDigest, type StableDigest } from "../reward-selection/stable";
 import {
   SELECTION_RULES_VERSION,
   type RewardSelectionContext,
@@ -61,10 +61,10 @@ interface ExplorationCompoundActionPreparationCommon {
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
-  selectorSignatures: readonly string[];
+  selectorSignatures: readonly StableDigest[];
   selectorTraces: readonly RewardSelectionTrace[];
   unavailableReason?: ExplorationCompoundActionUnavailableReason;
-  planSignature: string;
+  planSignature: StableDigest;
 }
 
 export interface ExplorationAllCardTransfigurationBinding extends ExplorationCompoundActionBinding {
@@ -115,7 +115,7 @@ export type ExplorationCompoundActionPreparation =
 
 type ExplorationUnsignedCompoundActionPreparation =
   ExplorationCompoundActionPreparation extends infer Preparation
-    ? Preparation extends { planSignature: string }
+    ? Preparation extends { planSignature: StableDigest }
       ? Omit<Preparation, "planSignature">
       : never
     : never;

@@ -1,6 +1,8 @@
 import type { ExplorationSiteView } from "../../cumulus/screens/ExplorationSiteScreen";
 import type { ExplorationSiteRuntime } from "../../types/journey";
 import type { ExplorationActionId } from "../../types/identifiers";
+import type { StableDigest } from "../../reward-selection/stable";
+import { isSiteType, type SiteType } from "../../types/site-type";
 
 function compoundAuthoredFields(
   action: ExplorationSiteView["actions"][number] | undefined,
@@ -36,7 +38,7 @@ function compoundAuthoredFields(
 
 function preparedSelectorSignatures(
   offer: ExplorationSiteRuntime["actionOffers"][number] | undefined,
-): readonly string[] {
+): readonly StableDigest[] {
   if (offer === undefined) return [];
   if (offer.multiCardReplacementPreparation !== undefined) {
     return offer.multiCardReplacementPreparation.selectorSignatures;
@@ -78,10 +80,10 @@ function preparedSiteFields(
   };
 }
 
-function selectedSiteType(selection: unknown): string | null {
+function selectedSiteType(selection: unknown): SiteType | null {
   if (typeof selection !== "object" || selection === null) return null;
   const siteType = (selection as Readonly<Record<string, unknown>>).siteType;
-  return typeof siteType === "string" ? siteType : null;
+  return isSiteType(siteType) ? siteType : null;
 }
 
 function terminalOutcome(

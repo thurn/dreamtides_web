@@ -1,7 +1,7 @@
 import type { JourneyContent } from "../data/journey-content";
 import { buildRewardSelectionContext } from "../reward-selection/context";
 import { selectReward } from "../reward-selection/selectReward";
-import { stableDigest } from "../reward-selection/stable";
+import { stableDigest, type StableDigest } from "../reward-selection/stable";
 import {
   SELECTION_RULES_VERSION,
   type RewardSelectionPolicyId,
@@ -50,7 +50,7 @@ interface PlanContract {
 }
 
 interface SelectorProof {
-  signature: string;
+  signature: StableDigest;
   trace: RewardSelectionResult["trace"];
 }
 
@@ -443,7 +443,7 @@ export function resolveExplorationDreamsignPlan(input: {
   fixedDreamsignId?: DreamsignId;
   actionId: ExplorationActionId;
   preparation: ExplorationDreamsignPreparation;
-  selectorSignature?: string;
+  selectorSignature?: StableDigest;
   selectorTrace?: RewardSelectionResult["trace"];
   journey: JourneyState;
   content: JourneyContent;

@@ -3,7 +3,7 @@ import {
   type ExplorationChoosableSiteType,
   type ExplorationFixedSiteType,
 } from "../data/exploration";
-import { stableDigest } from "../reward-selection/stable";
+import { stableDigest, type StableDigest } from "../reward-selection/stable";
 import type { SelectionRulesVersion } from "../reward-selection/types";
 import type {
   ExplorationSiteInsertionPreparation,
@@ -151,7 +151,7 @@ export function prepareExplorationSiteTypeChoice(input: {
   sourceActionId: ExplorationActionId;
   encounterCardId: CardId;
   siteTypes: readonly ExplorationChoosableSiteType[];
-  selectorSignature: string;
+  selectorSignature: StableDigest;
   selectionRulesVersion: SelectionRulesVersion;
   selectionContentRevision: SelectionContentRevision;
 }): ExplorationSiteTypeChoicePreparation | null {

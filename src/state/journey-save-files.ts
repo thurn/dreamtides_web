@@ -1,5 +1,9 @@
 import { BUILD_GIT_SHA } from "../runtime/build-info";
-import type { JourneyState } from "../types/journey";
+import type { JourneyState, Screen } from "../types/journey";
+import {
+  buildGitRevisionFromUnknown,
+  type BuildGitRevision,
+} from "../types/build-identity";
 
 export const JOURNEY_SAVE_FILE_FORMAT = "dreamtides-journey";
 export const JOURNEY_SAVE_FILE_VERSION = 1;
@@ -10,7 +14,7 @@ export interface JourneySaveFile {
   version: typeof JOURNEY_SAVE_FILE_VERSION;
   name: string;
   savedAt: string;
-  buildGitSha: string;
+  buildGitSha: BuildGitRevision;
   journeyState: JourneyState;
 }
 
@@ -19,23 +23,39 @@ export interface ImportedJourneySave {
   fileName: string;
   name: string;
   savedAt: string;
-  buildGitSha: string | null;
+  buildGitSha: BuildGitRevision | null;
   journeyState: Readonly<Record<string, unknown>>;
+}
+
+const JOURNEY_SCREEN_TYPES = [
+  "journeyStart",
+  "atlas",
+  "dreamscape",
+  "site",
+  "journeyComplete",
+  "journeyFailed",
+] as const satisfies readonly Screen["type"][];
+
+function isJourneyScreenType(value: unknown): value is Screen["type"] {
+  return (
+    typeof value === "string" &&
+    (JOURNEY_SCREEN_TYPES as readonly string[]).includes(value)
+  );
 }
 
 /** Diagnostic screen label from an untrusted serialized journey snapshot. */
 export function serializedJourneyScreenType(
   journeyState: Readonly<Record<string, unknown>>,
-): string {
+): Screen["type"] | "unknown" {
   const screen = journeyState.screen;
-  return isRecord(screen) && typeof screen.type === "string"
+  return isRecord(screen) && isJourneyScreenType(screen.type)
     ? screen.type
     : "unknown";
 }
 
 interface JourneySaveOptions {
   savedAt?: string;
-  buildGitSha?: string;
+  buildGitSha?: BuildGitRevision;
 }
 
 /** Builds the stable JSON envelope used for portable journey save files. */
@@ -105,8 +125,7 @@ export function parseJourneySaveFile(
   return {
     name,
     savedAt,
-    buildGitSha:
-      typeof parsed.buildGitSha === "string" ? parsed.buildGitSha : null,
+    buildGitSha: buildGitRevisionFromUnknown(parsed.buildGitSha),
     journeyState,
   };
 }

@@ -24,6 +24,7 @@ import type {
   SiteId,
 } from "../types/identifiers";
 import type { SelectionContentRevision } from "../types/selection-content-revision";
+import type { StableDigest } from "./stable";
 
 declare const selectionRulesVersionBrand: unique symbol;
 
@@ -150,7 +151,7 @@ export interface RewardSelectionTrace {
   }[];
   constraints: RewardSelectionConstraints;
   candidateCount: number;
-  candidateDigest: string;
+  candidateDigest: StableDigest;
   band: {
     fraction: number;
     minimum: number;
@@ -167,7 +168,7 @@ export interface RewardSelectionTrace {
     cardNumber: number;
     transfiguration: TransfigurationType | null;
   }[];
-  effectiveDeckDigest: string;
+  effectiveDeckDigest: StableDigest;
 }
 
 export interface RewardSelectionBindings {
@@ -193,7 +194,7 @@ export interface RewardSelectionResult {
   mechanicId: RewardMechanicId;
   policyId: RewardSelectionPolicyId;
   selectionKey: SelectionKey;
-  signature: string;
+  signature: StableDigest;
   bindings: RewardSelectionBindings;
   trace: RewardSelectionTrace;
 }

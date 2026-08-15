@@ -1,5 +1,6 @@
 import { testJourneySeed } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
+import { stableDigest } from "../reward-selection/stable";
 import type { JourneyContent } from "../data/journey-content";
 import {
   makeMerchantTestCard,
@@ -243,7 +244,7 @@ describe("Exploration disclosed deck target plan", () => {
     };
     const tamperedSelector = {
       ...plan,
-      selectorSignature: "forged-selector-signature",
+      selectorSignature: stableDigest("forged-selector-signature"),
     };
     const tamperedRevision = {
       ...plan,
@@ -251,7 +252,7 @@ describe("Exploration disclosed deck target plan", () => {
     };
     const tamperedPlanSignature = {
       ...plan,
-      planSignature: "forged-plan-signature",
+      planSignature: stableDigest("forged-plan-signature"),
     };
 
     expect(

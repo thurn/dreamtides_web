@@ -10,6 +10,14 @@ const CHECKED_IDENTITY_MINT_BOUNDARIES = new Set([
   "src/types/card-identity.ts:brandCardId:CardId",
   "src/editor/card-name-substring-groups.ts:cardNameSubstringKey:CardNameSubstringKey",
   "src/editor/card-name-substring-groups.ts:participantKey:CardParticipantSetKey",
+  "src/cumulus/docs/route.ts:parseCumulusRoute:hash",
+  "src/coop/build-hash.ts::__BUILD_HASH__",
+  "src/rules/battle/battle-events.test.ts:parkForeseePrompt:parkedBoardHash",
+  "src/rules/replay/replay.test.ts::finalHash",
+  "src/rules/replay/replay.test.ts:parseReplayFixture:finalHash",
+  "src/cumulus/docs/PropsTable.tsx::formatPropType",
+  "src/cumulus/docs/controls.ts::tsType",
+  "src/cumulus/docs/syntax-highlight.test.ts::valuesOfType",
 ]);
 const RAW_SEMANTIC_STRING_BOUNDARIES = new Set([
   "src/data/tutorial-journey-pool.ts:parseTutorialJourneyPool:source",
@@ -35,7 +43,15 @@ const IGNORED_DIRECTORIES = new Set([
 ]);
 
 function identityLikeName(name) {
-  return name === "id" || /(?:Id|Ids|Key|Keys|Uuid|Uuids)$/u.test(name);
+  return (
+    name === "id" ||
+    name === "signature" ||
+    name === "digest" ||
+    name === "hash" ||
+    /(?:Id|Ids|Key|Keys|Uuid|Uuids|Signature|Signatures|Digest|Digests|Hash|Hashes|Type|Types|Sha|Shas)$/u.test(
+      name,
+    )
+  );
 }
 
 function rawStringType(typeNode) {
@@ -104,6 +120,22 @@ export function findRawStringIdentityDeclarationsInSource(source, fileName) {
   );
   const findings = [];
 
+  const enclosingFunctionName = (node) => {
+    for (let current = node.parent; current !== undefined; current = current.parent) {
+      if (
+        (ts.isFunctionDeclaration(current) ||
+          ts.isFunctionExpression(current) ||
+          ts.isArrowFunction(current) ||
+          ts.isMethodDeclaration(current)) &&
+        current.name !== undefined &&
+        ts.isIdentifier(current.name)
+      ) {
+        return current.name.text;
+      }
+    }
+    return null;
+  };
+
   function visit(node) {
     const name = declarationName(node);
     if (
@@ -121,6 +153,7 @@ export function findRawStringIdentityDeclarationsInSource(source, fileName) {
         column: position.character + 1,
         name,
         type: node.type.getText(sourceFile),
+        functionName: enclosingFunctionName(node),
       });
     }
     ts.forEachChild(node, visit);

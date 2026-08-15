@@ -31,7 +31,7 @@ import {
   CardView,
   DEFAULT_ART_CROP,
 } from "../cumulus/components/card/CardView";
-import type { ArtCrop, CardData } from "../types/cards";
+import type { ArtCrop, CardData, CardType } from "../types/cards";
 import {
   parseEditorDisplayState,
   replaceEditorDisplayStateInUrl,
@@ -147,7 +147,7 @@ function cardSearchText(
   return `${card.name} ${card.preview.name}`;
 }
 
-function displayType(card: EditorCardRecord): string {
+function displayType(card: EditorCardRecord): CardType {
   return card.preview.cardType ?? card.cardType;
 }
 
