@@ -3,7 +3,6 @@ and journey foundation are created. The journey log stops after
 `draft_pool_initialized` without writing `debug_qa_scene_loaded`. This reproduces
 on both the existing localhost:5173 build and the isolated worktree server, so
 the playable-battle browser workflow cannot currently reach its battle surface.
-
 The Augury OfferTile category projection recognizes package categories only when
 their id begins with `cluster:` (`src/screens/cumulus_adapters/augury-view-model.ts`),
 while the production category generator emits tide packages with `tide:` ids
@@ -18,8 +17,8 @@ front-door fold returns the unchanged state for each action
 (`src/rules/front-door.ts`). Only New Journey has an effect. These visible
 controls need either implemented outcomes or removal from the production menu.
 
-`npm run review:full` is blocked at `trox check` because
-`localization/reports/en-US.csv` and the QA locale reports for ar, es, ja, and ru
-are out of date. The Cumulus production-liveness audit does not change localized
-copy; its focused Cumulus integrity suite passes before this repository-wide
-localization contract is reached.
+`cargo test --manifest-path tools/game-data/Cargo.toml` runs 197 game-data tests
+successfully, but `models::glossary::tests::production_catalog_preserves_reviewed_identity_contract`
+fails because it opens `data/glossary.ron` relative to the crate working directory
+(`tools/game-data/`) instead of resolving the repository root. The test is
+working-directory-sensitive and cannot find the production catalog.

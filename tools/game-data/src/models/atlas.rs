@@ -60,7 +60,7 @@ pub struct AtlasCatalog {
     pub graph: GraphRules,
     pub dreamscape_selection: DreamscapeSelectionRules,
     pub site_composition: SiteCompositionRules,
-    pub fill_profiles: IndexMap<String, FillProfile>,
+    pub fill_profiles: IndexMap<FillProfileId, FillProfile>,
     pub known_dreamsign: KnownDreamsignRules,
     pub boss: BossDefinition,
     pub presentation: Presentation,
@@ -87,13 +87,13 @@ pub enum LayerRules {
     Standard {
         node_count: IntegerRange,
         site_count: IntegerRange,
-        fill_profile: String,
+        fill_profile: FillProfileId,
         #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
         mandatory_sites: IndexMap<SiteType, u32>,
     },
     Boss {
         site_count: IntegerRange,
-        fill_profile: String,
+        fill_profile: FillProfileId,
         #[serde(default, skip_serializing_if = "IndexMap::is_empty")]
         mandatory_sites: IndexMap<SiteType, u32>,
     },
@@ -177,6 +177,21 @@ pub struct SiteCompositionRules {
 pub struct FillProfile {
     pub signature_site_weight: f64,
     pub site_weights: IndexMap<SiteType, f64>,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
+pub enum FillProfileId {
+    Early,
+    Late,
+}
+
+impl FillProfileId {
+    fn as_compat(self) -> &'static str {
+        match self {
+            Self::Early => "early",
+            Self::Late => "late",
+        }
+    }
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq, Hash)]
@@ -384,8 +399,7 @@ fn validate(source: &AtlasCatalog) -> Result<()> {
         !source.fill_profiles.is_empty(),
         "fill profiles must contain at least one profile"
     );
-    for (id, profile) in &source.fill_profiles {
-        ensure!(!id.trim().is_empty(), "fill profile id must not be blank");
+    for profile in source.fill_profiles.values() {
         validate_positive_finite("signature_site_weight", profile.signature_site_weight)?;
         for weight in profile.site_weights.values() {
             validate_positive_finite("site weight", *weight)?;
@@ -498,7 +512,7 @@ fn lower_layer(layer: LayerDefinition, defaults: &LayerDefaults) -> toml::Value 
             table.insert("role".into(), "standard".into());
             table.insert("node-count".into(), range_table(node_count));
             table.insert("site-count".into(), range_table(site_count));
-            table.insert("fill-profile".into(), fill_profile.into());
+            table.insert("fill-profile".into(), fill_profile.as_compat().into());
             table.insert("mandatory-sites".into(), site_count_table(mandatory_sites));
         }
         LayerRules::Boss {
@@ -509,7 +523,7 @@ fn lower_layer(layer: LayerDefinition, defaults: &LayerDefaults) -> toml::Value 
             table.insert("role".into(), "boss".into());
             table.insert("node-count".into(), range_table(defaults.boss_node_count));
             table.insert("site-count".into(), range_table(site_count));
-            table.insert("fill-profile".into(), fill_profile.into());
+            table.insert("fill-profile".into(), fill_profile.as_compat().into());
             table.insert("mandatory-sites".into(), site_count_table(mandatory_sites));
         }
     }
@@ -596,9 +610,9 @@ fn lower_site_composition(value: SiteCompositionRules) -> toml::map::Map<String,
     ])
 }
 
-fn lower_fill_profile(id: String, profile: FillProfile) -> toml::Value {
+fn lower_fill_profile(id: FillProfileId, profile: FillProfile) -> toml::Value {
     toml::Value::Table(toml::map::Map::from_iter([
-        ("id".into(), id.into()),
+        ("id".into(), id.as_compat().into()),
         (
             "signature-site-weight".into(),
             profile.signature_site_weight.into(),
@@ -720,13 +734,17 @@ mod tests {
                     LayerPosition::One => LayerRules::Starter,
                     LayerPosition::Seven => LayerRules::Boss {
                         site_count: IntegerRange { min: 4, max: 8 },
-                        fill_profile: "late".into(),
+                        fill_profile: FillProfileId::Late,
                         mandatory_sites: IndexMap::new(),
                     },
                     _ => LayerRules::Standard {
                         node_count: IntegerRange { min: 2, max: 4 },
                         site_count: IntegerRange { min: 4, max: 8 },
-                        fill_profile: if index < 4 { "early" } else { "late" }.into(),
+                        fill_profile: if index < 4 {
+                            FillProfileId::Early
+                        } else {
+                            FillProfileId::Late
+                        },
                         mandatory_sites: if index == 1 {
                             IndexMap::from([(SiteType::Draft, 2), (SiteType::Augury, 1)])
                         } else {
@@ -763,7 +781,7 @@ mod tests {
             },
             fill_profiles: IndexMap::from([
                 (
-                    "early".into(),
+                    FillProfileId::Early,
                     FillProfile {
                         signature_site_weight: 4.0,
                         site_weights: IndexMap::from([
@@ -773,7 +791,7 @@ mod tests {
                     },
                 ),
                 (
-                    "late".into(),
+                    FillProfileId::Late,
                     FillProfile {
                         signature_site_weight: 6.0,
                         site_weights: IndexMap::from([
@@ -889,18 +907,10 @@ mod tests {
 
     #[test]
     fn rejects_missing_referenced_profiles_invalid_order_and_ranges() {
-        let mut custom_profile = catalog();
-        let profile = custom_profile.fill_profiles["early"].clone();
-        custom_profile
-            .fill_profiles
-            .insert("middle".into(), profile);
-        if let LayerRules::Standard { fill_profile, .. } = &mut custom_profile.layers[2].rules {
-            *fill_profile = "middle".into();
-        }
-        lower(custom_profile).unwrap();
-
         let mut missing_profile = catalog();
-        missing_profile.fill_profiles.shift_remove("early");
+        missing_profile
+            .fill_profiles
+            .shift_remove(&FillProfileId::Early);
         assert!(
             lower(missing_profile)
                 .unwrap_err()
@@ -934,6 +944,16 @@ mod tests {
                 .to_string()
                 .contains("minimum exceeds maximum")
         );
+    }
+
+    #[test]
+    fn fill_profile_ids_use_ron_enum_variants() {
+        assert_eq!(
+            ron::from_str::<FillProfileId>("Early").unwrap(),
+            FillProfileId::Early
+        );
+        assert!(ron::from_str::<FillProfileId>(r#""early""#).is_err());
+        assert!(ron::from_str::<FillProfileId>("Middle").is_err());
     }
 
     #[test]

@@ -80,8 +80,27 @@ pub enum TransfigurationFormId {
     Perfected,
 }
 
-#[cfg(test)]
 impl TransfigurationFormId {
+    pub(crate) fn as_compat(self) -> &'static str {
+        match self {
+            Self::Empowered => "Empowered",
+            Self::Amplified => "Amplified",
+            Self::Kindled => "Kindled",
+            Self::Inspired => "Inspired",
+            Self::Enduring => "Enduring",
+            Self::Hastened => "Hastened",
+            Self::Resonant => "Resonant",
+            Self::Attuned => "Attuned",
+            Self::Perfected => "Perfected",
+        }
+    }
+
+    pub(crate) fn from_compat(value: &str) -> Option<Self> {
+        Self::ALL
+            .into_iter()
+            .find(|form| form.as_compat() == value)
+    }
+
     const ALL: [Self; 9] = [
         Self::Empowered,
         Self::Amplified,

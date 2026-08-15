@@ -371,7 +371,7 @@
         ),
         effect: TransfigureFixedSelected(
           predicate: Event,
-          transfiguration: "Inspired",
+          transfiguration: Inspired,
           target: Offered,
         ),
       ),
@@ -413,7 +413,7 @@
         ),
         effect: TransfigureFixedSelected(
           predicate: Survivor,
-          transfiguration: "Kindled",
+          transfiguration: Kindled,
           target: Offered,
         ),
       ),
@@ -779,7 +779,7 @@
         ),
         effect: TransfigureFixedSelected(
           predicate: None,
-          transfiguration: "Empowered",
+          transfiguration: Empowered,
           target: Chosen,
         ),
       ),
@@ -2126,7 +2126,7 @@
         ),
         effect: TransfigureFixedSelected(
           predicate: Warrior,
-          transfiguration: "Kindled",
+          transfiguration: Kindled,
           target: Chosen,
           count: 2,
         ),
@@ -5866,7 +5866,7 @@
         ),
         effect: TransfigureFixedSelected(
           predicate: Event,
-          transfiguration: "Inspired",
+          transfiguration: Inspired,
           target: Chosen,
         ),
       ),
@@ -7400,11 +7400,7 @@
           ),
           followup: None,
         ),
-        effect: TransfigureAllForEssence(
-          essence: 100,
-          predicate: Event,
-          transfiguration: "Inspired",
-        ),
+        effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: Inspired),
       ),
     ],
   ),
@@ -8800,11 +8796,7 @@
           ),
           followup: None,
         ),
-        effect: TransfigureAllForEssence(
-          essence: 100,
-          predicate: Event,
-          transfiguration: "Inspired",
-        ),
+        effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: Inspired),
       ),
 
       ActionDefinition(
@@ -8945,7 +8937,7 @@
         effect: TransfigureAllForEssence(
           essence: 100,
           predicate: CheapCharacter,
-          transfiguration: "Kindled",
+          transfiguration: Kindled,
         ),
       ),
     ],
@@ -9433,11 +9425,7 @@
           ),
           followup: None,
         ),
-        effect: TransfigureAllForEssence(
-          essence: 100,
-          predicate: Event,
-          transfiguration: "Inspired",
-        ),
+        effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: Inspired),
       ),
     ],
   ),
@@ -9777,7 +9765,7 @@
           ),
           followup: None,
         ),
-        effect: PurgeDisclosedAndTransfigureSameType(transfiguration: "Resonant"),
+        effect: PurgeDisclosedAndTransfigureSameType(transfiguration: Resonant),
       ),
 
       ActionDefinition(
@@ -10096,11 +10084,7 @@
           ),
           followup: None,
         ),
-        effect: TransfigureAllForEssence(
-          essence: 100,
-          predicate: Event,
-          transfiguration: "Inspired",
-        ),
+        effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: Inspired),
       ),
 
       ActionDefinition(
@@ -10145,7 +10129,7 @@
         effect: TransfigureAllForEssence(
           essence: 100,
           predicate: Character,
-          transfiguration: "Kindled",
+          transfiguration: Kindled,
         ),
       ),
     ],
@@ -12310,7 +12294,7 @@
         effect: TakeTransfiguredCardsAndGainNightmares(
           predicate: Event,
           offer_count: 4,
-          transfiguration: "Enduring",
+          transfiguration: Enduring,
           nightmare_count: 2,
         ),
       ),
@@ -12386,11 +12370,7 @@
           ),
           followup: None,
         ),
-        effect: TransfigureAllForEssence(
-          essence: 100,
-          predicate: Event,
-          transfiguration: "Inspired",
-        ),
+        effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: Inspired),
       ),
     ],
   ),
@@ -14718,11 +14698,7 @@
           ),
           followup: None,
         ),
-        effect: TransfigureAllForEssence(
-          essence: 100,
-          predicate: Event,
-          transfiguration: "Inspired",
-        ),
+        effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: Inspired),
       ),
     ],
   ),
@@ -15093,7 +15069,7 @@
         effect: TransfigureFixedRandomCards(
           predicate: CheapCharacter,
           count: 2,
-          transfiguration: "Kindled",
+          transfiguration: Kindled,
         ),
       ),
 
@@ -15142,7 +15118,7 @@
         effect: TransfigureAllForEssence(
           essence: 100,
           predicate: Character,
-          transfiguration: "Kindled",
+          transfiguration: Kindled,
         ),
       ),
     ],
@@ -15407,7 +15383,7 @@
         effect: TransfigureAllForEssence(
           essence: 100,
           predicate: Warrior,
-          transfiguration: "Kindled",
+          transfiguration: Kindled,
         ),
       ),
 
@@ -15441,7 +15417,7 @@
             ),
           ),
         ),
-        effect: PurgeOneTransfigureAndCopyOthers(offer_count: 4, transfiguration: "Attuned"),
+        effect: PurgeOneTransfigureAndCopyOthers(offer_count: 4, transfiguration: Attuned),
       ),
 
       ActionDefinition(

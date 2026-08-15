@@ -20,7 +20,7 @@ pub struct Dataset {
     pub source: String,
     pub output: String,
     pub schema: String,
-    pub adapter: String,
+    pub adapter: Adapter,
     pub adapter_version: u32,
     #[serde(default)]
     pub dependencies: Vec<String>,
@@ -42,6 +42,84 @@ pub enum EditorCapability {
 pub enum MigrationState {
     Ron,
     Toml,
+}
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
+#[serde(rename_all = "snake_case")]
+pub enum Adapter {
+    AffiliationsV1,
+    ApollyonIncarnationsV1,
+    AtlasV1,
+    AuguryV1,
+    BattleV1,
+    CardsV2,
+    CompatV1,
+    DraftV1,
+    DreamAvatarMetadataV1,
+    DreamAvatarsV1,
+    DreamGuidesV1,
+    DreamscapesV1,
+    DreamsignTagsV1,
+    DreamsignsV1,
+    DreamwellMetadataV1,
+    DreamwellV2,
+    EconomyV1,
+    ExplorationV2,
+    FigmentsV1,
+    GambleV1,
+    GlossaryV1,
+    InternalAiV1,
+    InternalCardMetadataV1,
+    OpponentsV1,
+    ResonanceV1,
+    SitesV1,
+    TidesV1,
+    TransfigurationV1,
+    TutorialJourneyPoolV1,
+    TutorialV1,
+}
+
+impl Adapter {
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::AffiliationsV1 => "affiliations_v1",
+            Self::ApollyonIncarnationsV1 => "apollyon_incarnations_v1",
+            Self::AtlasV1 => "atlas_v1",
+            Self::AuguryV1 => "augury_v1",
+            Self::BattleV1 => "battle_v1",
+            Self::CardsV2 => "cards_v2",
+            Self::CompatV1 => "compat_v1",
+            Self::DraftV1 => "draft_v1",
+            Self::DreamAvatarMetadataV1 => "dream_avatar_metadata_v1",
+            Self::DreamAvatarsV1 => "dream_avatars_v1",
+            Self::DreamGuidesV1 => "dream_guides_v1",
+            Self::DreamscapesV1 => "dreamscapes_v1",
+            Self::DreamsignTagsV1 => "dreamsign_tags_v1",
+            Self::DreamsignsV1 => "dreamsigns_v1",
+            Self::DreamwellMetadataV1 => "dreamwell_metadata_v1",
+            Self::DreamwellV2 => "dreamwell_v2",
+            Self::EconomyV1 => "economy_v1",
+            Self::ExplorationV2 => "exploration_v2",
+            Self::FigmentsV1 => "figments_v1",
+            Self::GambleV1 => "gamble_v1",
+            Self::GlossaryV1 => "glossary_v1",
+            Self::InternalAiV1 => "internal_ai_v1",
+            Self::InternalCardMetadataV1 => "internal_card_metadata_v1",
+            Self::OpponentsV1 => "opponents_v1",
+            Self::ResonanceV1 => "resonance_v1",
+            Self::SitesV1 => "sites_v1",
+            Self::TidesV1 => "tides_v1",
+            Self::TransfigurationV1 => "transfiguration_v1",
+            Self::TutorialJourneyPoolV1 => "tutorial_journey_pool_v1",
+            Self::TutorialV1 => "tutorial_v1",
+        }
+    }
+}
+
+impl std::fmt::Display for Adapter {
+    fn fmt(&self, formatter: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        formatter.write_str(self.as_str())
+    }
 }
 
 #[derive(Debug, Serialize)]
@@ -74,39 +152,6 @@ impl Manifest {
         let mut ids = BTreeSet::new();
         let mut sources = BTreeSet::new();
         let mut outputs = BTreeSet::new();
-        let adapters = [
-            "affiliations_v1",
-            "apollyon_incarnations_v1",
-            "atlas_v1",
-            "augury_v1",
-            "battle_v1",
-            "draft_v1",
-            "dream_avatar_metadata_v1",
-            "dream_avatars_v1",
-            "dream_guides_v1",
-            "dreamscapes_v1",
-            "dreamsign_metadata_v1",
-            "dreamsign_tags_v1",
-            "dreamsigns_v1",
-            "dreamwell_metadata_v1",
-            "dreamwell_v2",
-            "cards_v2",
-            "economy_v1",
-            "exploration_v2",
-            "internal_ai_v1",
-            "internal_card_metadata_v1",
-            "opponents_v1",
-            "figments_v1",
-            "gamble_v1",
-            "glossary_v1",
-            "sites_v1",
-            "resonance_v1",
-            "tides_v1",
-            "transfiguration_v1",
-            "tutorial_v1",
-            "tutorial_journey_pool_v1",
-            "compat_v1",
-        ];
         for dataset in &self.datasets {
             if !ids.insert(&dataset.id) {
                 bail!("duplicate dataset id: {}", dataset.id);
@@ -116,13 +161,6 @@ impl Manifest {
             }
             if !outputs.insert(&dataset.output) {
                 bail!("duplicate generated output path: {}", dataset.output);
-            }
-            if !adapters.contains(&dataset.adapter.as_str()) {
-                bail!(
-                    "dataset {} registers unknown adapter {}",
-                    dataset.id,
-                    dataset.adapter
-                );
             }
             validate_relative_data_path(&dataset.source, ".ron")?;
             validate_relative_data_path(&dataset.output, ".toml")?;
@@ -252,7 +290,7 @@ mod tests {
             source: source.into(),
             output: output.into(),
             schema: "Fixture".into(),
-            adapter: "compat_v1".into(),
+            adapter: Adapter::CompatV1,
             adapter_version: 1,
             dependencies: vec![],
             refresh: "fixture".into(),
@@ -263,7 +301,7 @@ mod tests {
     }
 
     #[test]
-    fn rejects_path_traversal_and_unregistered_adapters() {
+    fn rejects_path_traversal_and_string_backed_adapters() {
         let root = tempfile::tempdir().unwrap();
         let traversal = Manifest {
             datasets: vec![dataset("bad", "data/../escape.ron", "data/out.toml")],
@@ -276,17 +314,12 @@ mod tests {
                 .contains("invalid manifest data path")
         );
 
-        let mut unknown = dataset("bad", "data/source.ron", "data/out.toml");
-        unknown.adapter = "unknown".into();
-        assert!(
-            Manifest {
-                datasets: vec![unknown]
-            }
-            .validate(root.path())
-            .unwrap_err()
-            .to_string()
-            .contains("unknown adapter")
+        assert_eq!(
+            ron::from_str::<Adapter>("compat_v1").unwrap(),
+            Adapter::CompatV1
         );
+        assert!(ron::from_str::<Adapter>(r#""compat_v1""#).is_err());
+        assert!(ron::from_str::<Adapter>("unknown").is_err());
     }
 
     #[test]

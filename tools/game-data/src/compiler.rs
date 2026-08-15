@@ -8,7 +8,7 @@ use ron::ser::PrettyConfig;
 use serde::Serialize;
 use sha2::{Digest, Sha256};
 
-use crate::manifest::{Dataset, Manifest, MigrationState};
+use crate::manifest::{Adapter, Dataset, Manifest, MigrationState};
 use crate::models::{
     affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft,
     dream_avatars, dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments,
@@ -127,8 +127,8 @@ fn adapt(
     source: &[u8],
 ) -> Result<toml::Value> {
     let source = std::str::from_utf8(source).context("RON source is not UTF-8")?;
-    match dataset.adapter.as_str() {
-        "affiliations_v1" => {
+    match dataset.adapter {
+        Adapter::AffiliationsV1 => {
             let catalog: affiliations::AffiliationCatalog = parse_ron(source, dataset)?;
             let tides_dataset = manifest.dataset("tides")?;
             let tides_catalog: tides::TidesCatalog = parse_ron(
@@ -146,13 +146,17 @@ fn adapt(
             )?;
             affiliations::lower(catalog)
         }
-        "apollyon_incarnations_v1" => apollyon_incarnations::lower(parse_ron(source, dataset)?),
-        "atlas_v1" => atlas::lower(parse_ron(source, dataset)?),
-        "augury_v1" => augury::lower(parse_ron(source, dataset)?),
-        "battle_v1" => opponents::lower_battle(parse_ron(source, dataset)?),
-        "draft_v1" => draft::lower(parse_ron(source, dataset)?),
-        "dream_avatar_metadata_v1" => dream_avatars::lower_metadata(parse_ron(source, dataset)?),
-        "dream_avatars_v1" => {
+        Adapter::ApollyonIncarnationsV1 => {
+            apollyon_incarnations::lower(parse_ron(source, dataset)?)
+        }
+        Adapter::AtlasV1 => atlas::lower(parse_ron(source, dataset)?),
+        Adapter::AuguryV1 => augury::lower(parse_ron(source, dataset)?),
+        Adapter::BattleV1 => opponents::lower_battle(parse_ron(source, dataset)?),
+        Adapter::DraftV1 => draft::lower(parse_ron(source, dataset)?),
+        Adapter::DreamAvatarMetadataV1 => {
+            dream_avatars::lower_metadata(parse_ron(source, dataset)?)
+        }
+        Adapter::DreamAvatarsV1 => {
             let avatars: Vec<dream_avatars::AvatarDefinition> = parse_ron(source, dataset)?;
             let tides_dataset = manifest.dataset("tides")?;
             let tides_catalog: tides::TidesCatalog = parse_ron(
@@ -195,10 +199,10 @@ fn adapt(
             dream_avatars::validate_internal_metadata(&avatars, &avatar_metadata)?;
             dream_avatars::lower(avatars)
         }
-        "dream_guides_v1" => dream_guides::lower(parse_ron(source, dataset)?),
-        "dreamscapes_v1" => dreamscapes::lower(parse_ron(source, dataset)?),
-        "dreamsign_tags_v1" => dreamsigns::lower_tags(parse_ron(source, dataset)?),
-        "dreamsigns_v1" => {
+        Adapter::DreamGuidesV1 => dream_guides::lower(parse_ron(source, dataset)?),
+        Adapter::DreamscapesV1 => dreamscapes::lower(parse_ron(source, dataset)?),
+        Adapter::DreamsignTagsV1 => dreamsigns::lower_tags(parse_ron(source, dataset)?),
+        Adapter::DreamsignsV1 => {
             let definitions: Vec<dreamsigns::DreamsignDefinition> = parse_ron(source, dataset)?;
             let tides_dataset = manifest.dataset("tides")?;
             let tides_catalog: tides::TidesCatalog = parse_ron(
@@ -216,8 +220,8 @@ fn adapt(
             )?;
             dreamsigns::lower(definitions)
         }
-        "dreamwell_metadata_v1" => dreamwell::lower_metadata(parse_ron(source, dataset)?),
-        "dreamwell_v2" => {
+        Adapter::DreamwellMetadataV1 => dreamwell::lower_metadata(parse_ron(source, dataset)?),
+        Adapter::DreamwellV2 => {
             let catalog: dreamwell::DreamwellCatalog = parse_ron(source, dataset)?;
             let metadata_dataset = manifest.dataset("internal-dreamwell-metadata")?;
             let metadata_path = root.join(&metadata_dataset.source);
@@ -232,7 +236,7 @@ fn adapt(
             )?;
             dreamwell::lower(catalog, metadata)
         }
-        "cards_v2" => {
+        Adapter::CardsV2 => {
             let metadata_dataset = manifest.dataset("internal-card-metadata")?;
             let metadata_source = fs::read_to_string(root.join(&metadata_dataset.source))
                 .with_context(|| {
@@ -249,16 +253,18 @@ fn adapt(
                 cards::metadata_by_id(&compatibility_metadata)?,
             )
         }
-        "economy_v1" => economy::lower(parse_ron(source, dataset)?),
-        "exploration_v2" => exploration::lower(parse_ron(source, dataset)?),
-        "internal_ai_v1" => {
+        Adapter::EconomyV1 => economy::lower(parse_ron(source, dataset)?),
+        Adapter::ExplorationV2 => exploration::lower(parse_ron(source, dataset)?),
+        Adapter::InternalAiV1 => {
             let catalog: opponents::InternalAiCatalog = parse_ron(source, dataset)?;
             let known_card_ids = known_opponent_card_ids(root, manifest)?;
             opponents::validate_card_references(&catalog, &known_card_ids)?;
             opponents::lower_internal_ai(catalog)
         }
-        "internal_card_metadata_v1" => internal_card_metadata::lower(parse_ron(source, dataset)?),
-        "opponents_v1" => {
+        Adapter::InternalCardMetadataV1 => {
+            internal_card_metadata::lower(parse_ron(source, dataset)?)
+        }
+        Adapter::OpponentsV1 => {
             let catalog: opponents::OpponentsCatalog = parse_ron(source, dataset)?;
             let battle_dataset = manifest.dataset("battle")?;
             let battle_source = fs::read_to_string(root.join(&battle_dataset.source))
@@ -277,12 +283,12 @@ fn adapt(
             opponents::validate_card_references(&internal_ai, &known_card_ids)?;
             opponents::lower(catalog, battle, dreamwell.rules, internal_ai)
         }
-        "figments_v1" => figments::lower(parse_ron(source, dataset)?),
-        "gamble_v1" => gamble::lower(parse_ron(source, dataset)?),
-        "glossary_v1" => glossary::lower(parse_ron(source, dataset)?),
-        "sites_v1" => sites::lower(parse_ron(source, dataset)?),
-        "tutorial_v1" => tutorial::lower(parse_ron(source, dataset)?),
-        "tutorial_journey_pool_v1" => {
+        Adapter::FigmentsV1 => figments::lower(parse_ron(source, dataset)?),
+        Adapter::GambleV1 => gamble::lower(parse_ron(source, dataset)?),
+        Adapter::GlossaryV1 => glossary::lower(parse_ron(source, dataset)?),
+        Adapter::SitesV1 => sites::lower(parse_ron(source, dataset)?),
+        Adapter::TutorialV1 => tutorial::lower(parse_ron(source, dataset)?),
+        Adapter::TutorialJourneyPoolV1 => {
             let catalog: tutorial_journey_pool::TutorialJourneyDraftPool =
                 parse_ron(source, dataset)?;
             let cards_dataset = manifest.dataset("cards")?;
@@ -319,8 +325,8 @@ fn adapt(
             )?;
             tutorial_journey_pool::lower(catalog)
         }
-        "resonance_v1" => resonance::lower(parse_ron(source, dataset)?),
-        "tides_v1" => {
+        Adapter::ResonanceV1 => resonance::lower(parse_ron(source, dataset)?),
+        Adapter::TidesV1 => {
             let catalog: tides::TidesCatalog = parse_ron(source, dataset)?;
             let cards_dataset = manifest.dataset("cards")?;
             let cards: Vec<cards::CardDefinition> = parse_ron(
@@ -331,12 +337,11 @@ fn adapt(
             tides::validate_references(&catalog, &cards.into_iter().map(|card| card.id).collect())?;
             tides::lower(catalog)
         }
-        "transfiguration_v1" => transfiguration::lower(parse_ron(source, dataset)?),
-        "compat_v1" => {
+        Adapter::TransfigurationV1 => transfiguration::lower(parse_ron(source, dataset)?),
+        Adapter::CompatV1 => {
             let document: compat::CompatDocument = parse_ron(source, dataset)?;
             Ok(document.data)
         }
-        adapter => bail!("dataset {} has unsupported adapter {adapter}", dataset.id),
     }
 }
 
@@ -404,7 +409,7 @@ pub fn migrate(
     requested_output: Option<&Path>,
 ) -> Result<MigrationReport> {
     let dataset = manifest.dataset(id)?;
-    if dataset.adapter != "compat_v1" {
+    if dataset.adapter != Adapter::CompatV1 {
         bail!(
             "dataset {} uses typed adapter {}; its reviewed RON source must be supplied directly",
             id,
@@ -590,98 +595,97 @@ mod tests {
         let manifest = Manifest::load(&root).unwrap();
         for dataset in &manifest.datasets {
             let source = fs::read_to_string(root.join(&dataset.source)).unwrap();
-            match dataset.adapter.as_str() {
-                "affiliations_v1" => {
+            match dataset.adapter {
+                Adapter::AffiliationsV1 => {
                     canonical::<affiliations::AffiliationCatalog>(&source, true);
                 }
-                "apollyon_incarnations_v1" => {
+                Adapter::ApollyonIncarnationsV1 => {
                     canonical::<Vec<apollyon_incarnations::ApollyonIncarnation>>(&source, true);
                 }
-                "atlas_v1" => {
+                Adapter::AtlasV1 => {
                     canonical::<atlas::AtlasCatalog>(&source, true);
                 }
-                "augury_v1" => {
+                Adapter::AuguryV1 => {
                     canonical::<augury::AuguryCatalog>(&source, true);
                 }
-                "battle_v1" => {
+                Adapter::BattleV1 => {
                     canonical::<opponents::BattleRules>(&source, true);
                 }
-                "cards_v2" => {
+                Adapter::CardsV2 => {
                     canonical::<Vec<CardDefinition>>(&source, true);
                 }
-                "draft_v1" => {
+                Adapter::DraftV1 => {
                     canonical::<DraftDocument>(&source, false);
                 }
-                "dream_avatar_metadata_v1" => {
+                Adapter::DreamAvatarMetadataV1 => {
                     canonical::<Vec<dream_avatars::AvatarMetadata>>(&source, true);
                 }
-                "dream_avatars_v1" => {
+                Adapter::DreamAvatarsV1 => {
                     canonical::<Vec<AvatarDefinition>>(&source, true);
                 }
-                "dream_guides_v1" => {
+                Adapter::DreamGuidesV1 => {
                     canonical::<Vec<dream_guides::GuideDefinition>>(&source, true);
                 }
-                "dreamscapes_v1" => {
+                Adapter::DreamscapesV1 => {
                     canonical::<Vec<dreamscapes::DreamscapeDefinition>>(&source, true);
                 }
-                "dreamsign_tags_v1" => {
+                Adapter::DreamsignTagsV1 => {
                     canonical::<dreamsigns::DreamsignTagCatalog>(&source, true);
                 }
-                "dreamsigns_v1" => {
+                Adapter::DreamsignsV1 => {
                     canonical::<Vec<dreamsigns::DreamsignDefinition>>(&source, true);
                 }
-                "economy_v1" => {
+                Adapter::EconomyV1 => {
                     canonical::<economy::EconomyCatalog>(&source, true);
                 }
-                "dreamwell_v2" => {
+                Adapter::DreamwellV2 => {
                     canonical::<dreamwell::DreamwellCatalog>(&source, true);
                 }
-                "dreamwell_metadata_v1" => {
+                Adapter::DreamwellMetadataV1 => {
                     canonical::<Vec<dreamwell::DreamwellCardMetadata>>(&source, true);
                 }
-                "exploration_v2" => {
+                Adapter::ExplorationV2 => {
                     canonical::<ExplorationCatalog>(&source, true);
                 }
-                "internal_ai_v1" => {
+                Adapter::InternalAiV1 => {
                     canonical::<opponents::InternalAiCatalog>(&source, true);
                 }
-                "internal_card_metadata_v1" => {
+                Adapter::InternalCardMetadataV1 => {
                     canonical::<internal_card_metadata::CardMetadataCatalog>(&source, true);
                 }
-                "opponents_v1" => {
+                Adapter::OpponentsV1 => {
                     canonical::<opponents::OpponentsCatalog>(&source, true);
                 }
-                "figments_v1" => {
+                Adapter::FigmentsV1 => {
                     canonical::<Vec<figments::FigmentDefinition>>(&source, true);
                 }
-                "gamble_v1" => {
+                Adapter::GambleV1 => {
                     canonical::<gamble::GambleCatalog>(&source, false);
                 }
-                "glossary_v1" => {
+                Adapter::GlossaryV1 => {
                     canonical::<Vec<glossary::GlossaryDefinition>>(&source, true);
                 }
-                "sites_v1" => {
+                Adapter::SitesV1 => {
                     canonical::<sites::SitesCatalog>(&source, true);
                 }
-                "tutorial_v1" => {
+                Adapter::TutorialV1 => {
                     canonical::<tutorial::TutorialCatalog>(&source, true);
                 }
-                "tutorial_journey_pool_v1" => {
+                Adapter::TutorialJourneyPoolV1 => {
                     canonical::<tutorial_journey_pool::TutorialJourneyDraftPool>(&source, true);
                 }
-                "resonance_v1" => {
+                Adapter::ResonanceV1 => {
                     canonical::<resonance::ResonanceCatalog>(&source, false);
                 }
-                "tides_v1" => {
+                Adapter::TidesV1 => {
                     canonical::<tides::TidesCatalog>(&source, true);
                 }
-                "transfiguration_v1" => {
+                Adapter::TransfigurationV1 => {
                     canonical::<transfiguration::TransfigurationCatalog>(&source, true);
                 }
-                "compat_v1" => {
+                Adapter::CompatV1 => {
                     canonical::<compat::CompatDocument>(&source, false);
                 }
-                other => panic!("untested adapter {other}"),
             }
         }
     }
@@ -724,7 +728,7 @@ mod tests {
             source: "data/fixture.ron".into(),
             output: "data/fixture.toml".into(),
             schema: "Fixture".into(),
-            adapter: "compat_v1".into(),
+            adapter: Adapter::CompatV1,
             adapter_version: 1,
             dependencies: vec![],
             refresh: "fixture".into(),

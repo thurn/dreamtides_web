@@ -12,7 +12,7 @@ use serde_json::Value as JsonValue;
 use trox::RonPlaceholder;
 
 use crate::compiler::{EditReport, sha256};
-use crate::manifest::Manifest;
+use crate::manifest::{Adapter, Manifest};
 use crate::models::affiliations::{self, AffiliationCatalog, CanonicalUuid};
 use crate::models::cards::{CardDefinition, CardKind, Crop, OrbValue};
 use crate::models::compat::CompatDocument;
@@ -43,6 +43,7 @@ use crate::models::internal_card_metadata::{
 use crate::models::localization::{localized_source, localized_template_source};
 use crate::models::resonance::Resonance;
 use crate::models::tides::{self, TideDefinition, TideId, TidesCatalog};
+use crate::models::transfiguration::TransfigurationFormId;
 use crate::models::tutorial::{self, TutorialActionDefinition, TutorialCatalog};
 
 #[derive(Debug, Deserialize)]
@@ -191,7 +192,7 @@ fn edit_tides(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset("tides")?;
-    if dataset.adapter != "tides_v1"
+    if dataset.adapter != Adapter::TidesV1
         || dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for tides");
@@ -318,7 +319,7 @@ fn edit_tutorial(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset("tutorial")?;
-    if dataset.adapter != "tutorial_v1"
+    if dataset.adapter != Adapter::TutorialV1
         || dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for Tutorial");
@@ -455,7 +456,7 @@ fn edit_affiliations(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset("affiliations")?;
-    if dataset.adapter != "affiliations_v1"
+    if dataset.adapter != Adapter::AffiliationsV1
         || dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for affiliations");
@@ -655,7 +656,7 @@ fn edit_dreamscapes(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset("dreamscapes")?;
-    if dataset.adapter != "dreamscapes_v1"
+    if dataset.adapter != Adapter::DreamscapesV1
         || dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dreamscapes");
@@ -847,7 +848,7 @@ fn edit_dreamwell(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset("dreamwell")?;
-    if dataset.adapter != "dreamwell_v2"
+    if dataset.adapter != Adapter::DreamwellV2
         || dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dreamwell");
@@ -1057,7 +1058,7 @@ fn edit_dreamsigns(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset("dreamsigns")?;
-    if dataset.adapter != "dreamsigns_v1"
+    if dataset.adapter != Adapter::DreamsignsV1
         || dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dreamsigns");
@@ -1268,7 +1269,7 @@ fn edit_dream_guides(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset("dream-guides")?;
-    if dataset.adapter != "dream_guides_v1"
+    if dataset.adapter != Adapter::DreamGuidesV1
         || dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dream-guides");
@@ -1411,7 +1412,7 @@ fn edit_figments(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset("figments")?;
-    if dataset.adapter != "figments_v1"
+    if dataset.adapter != Adapter::FigmentsV1
         || dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for Figments");
@@ -1590,7 +1591,7 @@ fn edit_compat(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset(dataset_id)?;
-    if dataset.adapter != "compat_v1"
+    if dataset.adapter != Adapter::CompatV1
         || dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dataset {dataset_id}");
@@ -1640,7 +1641,7 @@ fn edit_glossary(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let dataset = manifest.dataset("glossary")?;
-    if dataset.adapter != "glossary_v1" {
+    if dataset.adapter != Adapter::GlossaryV1 {
         bail!("FIELD_NOT_APPLICABLE: Glossary editor requires glossary_v1");
     }
     let source_path = staging_root.join(&dataset.source);
@@ -1854,7 +1855,7 @@ fn edit_cards(
     operations: Vec<EditOperation>,
 ) -> Result<EditReport> {
     let cards_dataset = manifest.dataset("cards")?;
-    if cards_dataset.adapter != "cards_v2"
+    if cards_dataset.adapter != Adapter::CardsV2
         || cards_dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for Cards");
@@ -1868,7 +1869,7 @@ fn edit_cards(
     let mut cards = original.clone();
     let mut cards_text = original_text;
     let metadata_dataset = manifest.dataset("internal-card-metadata")?;
-    if metadata_dataset.adapter != "internal_card_metadata_v1"
+    if metadata_dataset.adapter != Adapter::InternalCardMetadataV1
         || metadata_dataset.editor != crate::manifest::EditorCapability::Semantic
     {
         bail!("FIELD_NOT_APPLICABLE: canonical internal card metadata is not editable");
@@ -2479,7 +2480,7 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
         EffectKind::TransfigureFixedRandomCards => ActionEffect::TransfigureFixedRandomCards {
             predicate: json_predicate(object, "predicate")?,
             count: positive_int(object, "count")?,
-            transfiguration: required_json_string(object, "transfiguration")?,
+            transfiguration: json_transfiguration(object)?,
         },
         EffectKind::PurgeSelected => ActionEffect::PurgeSelected {
             predicate: optional_predicate(object, "predicate")?,
@@ -2593,23 +2594,23 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             }
             ActionEffect::PurgeOneTransfigureAndCopyOthers {
                 offer_count,
-                transfiguration: required_json_string(object, "transfiguration")?,
+                transfiguration: json_transfiguration(object)?,
             }
         }
         EffectKind::TransfigureFixedSelected => ActionEffect::TransfigureFixedSelected {
             predicate: optional_predicate(object, "predicate")?,
-            transfiguration: required_json_string(object, "transfiguration")?,
+            transfiguration: json_transfiguration(object)?,
             target: json_deck_target(object)?,
             count: optional_positive_int(object, "count")?,
         },
         EffectKind::TransfigureAllForEssence => ActionEffect::TransfigureAllForEssence {
             essence: positive_int(object, "essence")?,
             predicate: json_predicate(object, "predicate")?,
-            transfiguration: required_json_string(object, "transfiguration")?,
+            transfiguration: json_transfiguration(object)?,
         },
         EffectKind::PurgeDisclosedAndTransfigureSameType => {
             ActionEffect::PurgeDisclosedAndTransfigureSameType {
-                transfiguration: required_json_string(object, "transfiguration")?,
+                transfiguration: json_transfiguration(object)?,
             }
         }
         EffectKind::GainRandomDreamsign => ActionEffect::GainRandomDreamsign,
@@ -2670,7 +2671,7 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             ActionEffect::TakeTransfiguredCardsAndGainNightmares {
                 predicate: json_predicate(object, "predicate")?,
                 offer_count,
-                transfiguration: required_json_string(object, "transfiguration")?,
+                transfiguration: json_transfiguration(object)?,
                 nightmare_count: positive_int(object, "nightmareCount")?,
             }
         }
@@ -2952,6 +2953,14 @@ fn json_fixed_site_type(object: &serde_json::Map<String, JsonValue>) -> Result<F
     let value = required_json_string(object, "siteType")?;
     FixedSiteType::from_compat(&value)
         .with_context(|| format!("INVALID_EDIT: unknown fixed site type {value}"))
+}
+
+fn json_transfiguration(
+    object: &serde_json::Map<String, JsonValue>,
+) -> Result<TransfigurationFormId> {
+    let value = required_json_string(object, "transfiguration")?;
+    TransfigurationFormId::from_compat(&value)
+        .with_context(|| format!("INVALID_EDIT: unknown transfiguration form {value}"))
 }
 
 fn string_array(object: &serde_json::Map<String, JsonValue>, key: &str) -> Result<Vec<String>> {
@@ -5034,7 +5043,7 @@ DreamwellCatalog(
                 ("transfiguration", json!("Kindled")),
             ],
             EffectKind::TransfigureFixedSelected => &[
-                ("transfiguration", json!("DoubledSpark")),
+                ("transfiguration", json!("Perfected")),
                 ("deckTarget", json!("chosen")),
             ],
             EffectKind::TransfigureAllForEssence => &[
@@ -5138,7 +5147,7 @@ DreamwellCatalog(
                 .unwrap()
                 .effect,
             ActionEffect::PurgeDisclosedAndTransfigureSameType { transfiguration }
-                if transfiguration == "Inspired"
+                if transfiguration == TransfigurationFormId::Inspired
         ));
         assert!(matches!(
             action_from_compat(action(EffectKind::MakePredicateFastAndGainNightmares))
@@ -5158,7 +5167,7 @@ DreamwellCatalog(
                 offer_count: 4,
                 transfiguration,
                 nightmare_count: 2,
-            } if transfiguration == "Inspired"
+            } if transfiguration == TransfigurationFormId::Inspired
         ));
         assert!(matches!(
             action_from_compat(action(EffectKind::PurgeOneTransfigureAndCopyOthers))
@@ -5167,7 +5176,7 @@ DreamwellCatalog(
             ActionEffect::PurgeOneTransfigureAndCopyOthers {
                 offer_count: 4,
                 transfiguration,
-            } if transfiguration == "Kindled"
+            } if transfiguration == TransfigurationFormId::Kindled
         ));
 
         for kind in [
@@ -5230,7 +5239,7 @@ DreamwellCatalog(
         for effect in [
             ActionEffect::TransfigureAllCards,
             ActionEffect::PurgeDisclosedAndTransfigureSameType {
-                transfiguration: "Inspired".into(),
+                transfiguration: TransfigurationFormId::Inspired,
             },
             ActionEffect::MakePredicateFastAndGainNightmares {
                 predicate: Predicate::Event,
@@ -5239,12 +5248,12 @@ DreamwellCatalog(
             ActionEffect::TakeTransfiguredCardsAndGainNightmares {
                 predicate: Predicate::Character,
                 offer_count: 4,
-                transfiguration: "Kindled".into(),
+                transfiguration: TransfigurationFormId::Kindled,
                 nightmare_count: 1,
             },
             ActionEffect::PurgeOneTransfigureAndCopyOthers {
                 offer_count: 4,
-                transfiguration: "DoubledSpark".into(),
+                transfiguration: TransfigurationFormId::Perfected,
             },
         ] {
             let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
@@ -5667,7 +5676,7 @@ DreamwellCatalog(
             ActionEffect::TransfigureFixedRandomCards {
                 predicate: Predicate::Event,
                 count: 2,
-                transfiguration: "Kindled".into(),
+                transfiguration: TransfigurationFormId::Kindled,
             }
         );
 
@@ -5733,6 +5742,18 @@ DreamwellCatalog(
                 .to_string()
                 .contains("requires string field transfiguration")
         );
+
+        let mut unknown_transfiguration = action(EffectKind::TransfigureFixedRandomCards);
+        unknown_transfiguration
+            .as_object_mut()
+            .unwrap()
+            .insert("transfiguration".into(), json!("Unknown"));
+        assert!(
+            action_from_compat(unknown_transfiguration)
+                .unwrap_err()
+                .to_string()
+                .contains("unknown transfiguration form Unknown")
+        );
     }
 
     #[test]
@@ -5752,7 +5773,7 @@ DreamwellCatalog(
                 .effect,
             ActionEffect::TransfigureFixedSelected {
                 predicate: None,
-                transfiguration: "DoubledSpark".into(),
+                transfiguration: TransfigurationFormId::Perfected,
                 target: DeckTarget::Chosen,
                 count: None,
             }
@@ -5983,7 +6004,7 @@ DreamwellCatalog(
             ActionEffect::TransfigureFixedRandomCards {
                 predicate: Predicate::Event,
                 count: 2,
-                transfiguration: "Kindled".into(),
+                transfiguration: TransfigurationFormId::Kindled,
             },
         ] {
             let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();
@@ -6004,7 +6025,7 @@ DreamwellCatalog(
             },
             ActionEffect::TransfigureFixedSelected {
                 predicate: Some(Predicate::Event),
-                transfiguration: "Kindled".into(),
+                transfiguration: TransfigurationFormId::Kindled,
                 target: DeckTarget::Chosen,
                 count: Some(2),
             },

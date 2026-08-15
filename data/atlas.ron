@@ -25,7 +25,7 @@ AtlasCatalog(
         site_count: (min: 3, max: 6),
         // Names the weighted pool used to fill any slots left after structural
         // and mandatory sites have been placed.
-        fill_profile: "early",
+        fill_profile: Early,
         // Per-node required sites. Draft may repeat; another type is skipped if
         // it duplicates the node's signature site. An omitted map means none.
         mandatory_sites: {Draft: 2, Purge: 1, Augury: 1},
@@ -37,7 +37,7 @@ AtlasCatalog(
       rules: Standard(
         node_count: (min: 3, max: 3),
         site_count: (min: 3, max: 6),
-        fill_profile: "early",
+        fill_profile: Early,
         mandatory_sites: {Draft: 1, Purge: 1},
       ),
     ),
@@ -47,7 +47,7 @@ AtlasCatalog(
       rules: Standard(
         node_count: (min: 3, max: 4),
         site_count: (min: 3, max: 6),
-        fill_profile: "early",
+        fill_profile: Early,
         mandatory_sites: {Draft: 1},
       ),
     ),
@@ -57,7 +57,7 @@ AtlasCatalog(
       rules: Standard(
         node_count: (min: 3, max: 5),
         site_count: (min: 3, max: 6),
-        fill_profile: "late",
+        fill_profile: Late,
       ),
     ),
 
@@ -66,17 +66,14 @@ AtlasCatalog(
       rules: Standard(
         node_count: (min: 3, max: 5),
         site_count: (min: 3, max: 6),
-        fill_profile: "late",
+        fill_profile: Late,
       ),
     ),
 
     // The boss rule always creates one special Limbo node. It has no normal
     // dreamscape signature site, but its utility sites use the named profile
     // and still end with Battle.
-    LayerDefinition(
-      position: Seven,
-      rules: Boss(site_count: (min: 3, max: 6), fill_profile: "late"),
-    ),
+    LayerDefinition(position: Seven, rules: Boss(site_count: (min: 3, max: 6), fill_profile: Late)),
   ],
 
   graph: (
@@ -116,7 +113,7 @@ AtlasCatalog(
   // profile above; its node samples from that profile without replacement until
   // the rolled site count is reached.
   fill_profiles: {
-    "early": FillProfile(
+    Early: FillProfile(
       // Default weight for the signature site types belonging to other guides.
       // The resident guide's own signature site is already added as enhanced
       // and is therefore excluded from this pool.
@@ -125,7 +122,7 @@ AtlasCatalog(
       // default above when an entry is also another guide's signature type.
       site_weights: {Essence: 3.0, Transfiguration: 1.0, Duplication: 1.0},
     ),
-    "late": FillProfile(
+    Late: FillProfile(
       signature_site_weight: 3.0,
       site_weights: {Essence: 3.0, Transfiguration: 5.0, Duplication: 5.0},
     ),

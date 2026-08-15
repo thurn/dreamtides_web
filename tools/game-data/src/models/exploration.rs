@@ -8,6 +8,7 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
 use super::localization::source_value;
+use super::transfiguration::TransfigurationFormId;
 
 macro_rules! string_enum {
     ($name:ident { $($variant:ident => $value:literal),+ $(,)? }) => {
@@ -505,7 +506,7 @@ pub enum ActionEffect {
     TransfigureFixedRandomCards {
         predicate: Predicate,
         count: i64,
-        transfiguration: String,
+        transfiguration: TransfigurationFormId,
     },
     PurgeSelected {
         predicate: Option<Predicate>,
@@ -599,21 +600,21 @@ pub enum ActionEffect {
     PurgeAndCopy,
     PurgeOneTransfigureAndCopyOthers {
         offer_count: i64,
-        transfiguration: String,
+        transfiguration: TransfigurationFormId,
     },
     TransfigureFixedSelected {
         predicate: Option<Predicate>,
-        transfiguration: String,
+        transfiguration: TransfigurationFormId,
         target: DeckTarget,
         count: Option<i64>,
     },
     TransfigureAllForEssence {
         essence: i64,
         predicate: Predicate,
-        transfiguration: String,
+        transfiguration: TransfigurationFormId,
     },
     PurgeDisclosedAndTransfigureSameType {
-        transfiguration: String,
+        transfiguration: TransfigurationFormId,
     },
     GainRandomDreamsign,
     PurgeDreamsignForEssence {
@@ -662,7 +663,7 @@ pub enum ActionEffect {
     TakeTransfiguredCardsAndGainNightmares {
         predicate: Predicate,
         offer_count: i64,
-        transfiguration: String,
+        transfiguration: TransfigurationFormId,
         nightmare_count: i64,
     },
     ReplaceSelectedWithCard {
@@ -1011,7 +1012,7 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
             kind!(TransfigureFixedRandomCards);
             predicate!(value);
             int!("count", count);
-            text!("transfiguration", transfiguration);
+            text!("transfiguration", transfiguration.as_compat());
         }
         ActionEffect::PurgeSelected {
             predicate: value,
@@ -1193,7 +1194,7 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
         } => {
             kind!(PurgeOneTransfigureAndCopyOthers);
             int!("offer-count", offer_count);
-            text!("transfiguration", transfiguration);
+            text!("transfiguration", transfiguration.as_compat());
         }
         ActionEffect::TransfigureFixedSelected {
             predicate: value,
@@ -1208,7 +1209,7 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
             if let Some(value) = count {
                 int!("count", value);
             }
-            text!("transfiguration", transfiguration);
+            text!("transfiguration", transfiguration.as_compat());
             text!("deck-target", target.as_compat());
         }
         ActionEffect::TransfigureAllForEssence {
@@ -1219,11 +1220,11 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
             kind!(TransfigureAllForEssence);
             int!("essence", essence);
             predicate!(value);
-            text!("transfiguration", transfiguration);
+            text!("transfiguration", transfiguration.as_compat());
         }
         ActionEffect::PurgeDisclosedAndTransfigureSameType { transfiguration } => {
             kind!(PurgeDisclosedAndTransfigureSameType);
-            text!("transfiguration", transfiguration);
+            text!("transfiguration", transfiguration.as_compat());
         }
         ActionEffect::GainRandomDreamsign => {
             kind!(GainRandomDreamsign);
@@ -1310,7 +1311,7 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
             kind!(TakeTransfiguredCardsAndGainNightmares);
             predicate!(value);
             int!("offer-count", offer_count);
-            text!("transfiguration", transfiguration);
+            text!("transfiguration", transfiguration.as_compat());
             int!("nightmare-count", nightmare_count);
         }
         ActionEffect::ReplaceSelectedWithCard { card_id } => {
@@ -1411,7 +1412,7 @@ mod tests {
         label: Tx("Enter synthetic light"),
         id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
         presentation: ActionPresentation(effect_text: Tx("Spend essence to transfigure Events."), followup: None),
-        effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: "Inspired"),
+        effect: TransfigureAllForEssence(essence: 100, predicate: Event, transfiguration: Inspired),
       ),
     ],
   ),
@@ -1623,7 +1624,7 @@ mod tests {
         effect: TransfigureFixedRandomCards(
           predicate: Event,
           count: 2,
-          transfiguration: "Kindled",
+          transfiguration: Kindled,
         ),
       ),
     ],
@@ -1649,7 +1650,7 @@ mod tests {
         presentation: ActionPresentation(effect_text: Tx("Kindle 2 chosen Events"), followup: None),
         effect: TransfigureFixedSelected(
           predicate: Event,
-          transfiguration: "Kindled",
+          transfiguration: Kindled,
           target: Chosen,
           count: 2,
         ),
@@ -1776,7 +1777,7 @@ mod tests {
         label: Tx("Purge the disclosed card"),
         id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
         presentation: ActionPresentation(effect_text: Tx("Purge and transfigure its peers"), followup: None),
-        effect: PurgeDisclosedAndTransfigureSameType(transfiguration: "Inspired"),
+        effect: PurgeDisclosedAndTransfigureSameType(transfiguration: Inspired),
       ),
       ActionDefinition(
         label: Tx("Hasten events"),
@@ -1797,7 +1798,7 @@ mod tests {
         effect: TakeTransfiguredCardsAndGainNightmares(
           predicate: Character,
           offer_count: 4,
-          transfiguration: "Kindled",
+          transfiguration: Kindled,
           nightmare_count: 1,
         ),
       ),
@@ -1807,7 +1808,7 @@ mod tests {
         presentation: ActionPresentation(effect_text: Tx("Purge one, transfigure and copy the others"), followup: None),
         effect: PurgeOneTransfigureAndCopyOthers(
           offer_count: 4,
-          transfiguration: "DoubledSpark",
+          transfiguration: Perfected,
         ),
       ),
     ],
@@ -1878,7 +1879,7 @@ mod tests {
             Some("purge-one-transfigure-and-copy-others")
         );
         assert_eq!(second[1]["offer-count"].as_integer(), Some(4));
-        assert_eq!(second[1]["transfiguration"].as_str(), Some("DoubledSpark"));
+        assert_eq!(second[1]["transfiguration"].as_str(), Some("Perfected"));
         assert_eq!(
             second[1]["canonical-mechanic-id"].as_str(),
             Some("transfigure-deck-entry")
@@ -1903,14 +1904,14 @@ mod tests {
                 "effect: TransfigureAllCards(count: 1),",
             ),
             (
-                "transfiguration: \"Inspired\"",
-                "transfiguration: \"Inspired\", count: 1",
+                "transfiguration: Inspired",
+                "transfiguration: Inspired, count: 1",
             ),
             ("nightmare_count: 2", "nightmare_count: 2, count: 1"),
             ("nightmare_count: 1", "nightmare_count: 1, count: 1"),
             (
-                "transfiguration: \"DoubledSpark\"",
-                "transfiguration: \"DoubledSpark\", count: 1",
+                "transfiguration: Perfected",
+                "transfiguration: Perfected, count: 1",
             ),
         ] {
             assert!(
@@ -1961,6 +1962,16 @@ mod tests {
             catalog[0].actions[3].effect,
             ActionEffect::TransfigureAllForEssence { .. }
         ));
+    }
+
+    #[test]
+    fn transfiguration_references_use_ron_enum_variants() {
+        let bare = "TransfigureAllForEssence(essence: 10, predicate: Event, transfiguration: Inspired)";
+        assert!(ron::from_str::<ActionEffect>(bare).is_ok());
+        assert!(
+            ron::from_str::<ActionEffect>(&bare.replace("Inspired", r#""Inspired""#)).is_err()
+        );
+        assert!(ron::from_str::<ActionEffect>(&bare.replace("Inspired", "Unknown")).is_err());
     }
 
     #[test]
@@ -2425,8 +2436,8 @@ mod tests {
                 "TransfigureRandomCards(predicate: Event, count: 0)",
             ),
             (
-                "count: 2,\n          transfiguration: \"Kindled\"",
-                "count: 0,\n          transfiguration: \"Kindled\"",
+                "count: 2,\n          transfiguration: Kindled",
+                "count: 0,\n          transfiguration: Kindled",
             ),
         ] {
             let malformed: ExplorationCatalog =
