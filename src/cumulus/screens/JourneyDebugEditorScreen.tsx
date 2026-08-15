@@ -15,17 +15,25 @@ import type {
   CardTypeChange,
   TransfigurationType,
 } from "../../types/journey";
+import type { CardType } from "../../types/cards";
 import { token } from "../primitives/tokens";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import type { CardId } from "../../types/card-identity";
-import type { DeckEntryId } from "../../types/identifiers";
-import { asCardTypeChangePredicateId } from "../../types/identifiers";
+import {
+  parseCardSubtype,
+  type CardId,
+} from "../../types/card-identity";
+import type {
+  DeckEntryId,
+  DreamsignId,
+} from "../../types/identifiers";
+import { parseCardTypeChangePredicateId } from "../../types/identifiers";
 
 export type JourneyDebugResourceId =
   "essence" | "maxDreamsigns" | "completionLevel";
+export type JourneyDebugDreamsignActionId = `dreamsign:${number}`;
 export interface JourneyDebugDreamsignView {
-  actionId: string;
-  templateId: string;
+  actionId: JourneyDebugDreamsignActionId;
+  templateId: DreamsignId | null;
   name: LocalizedString;
 }
 export interface JourneyDebugCardSearchView {
@@ -35,7 +43,6 @@ export interface JourneyDebugCardSearchView {
 }
 export interface JourneyDebugDeckEntryView {
   entryId: DeckEntryId;
-  cardId: CardId;
   name: LocalizedString;
   detail: LocalizedString;
   isBane: boolean;
@@ -50,19 +57,22 @@ export interface JourneyDebugEditorView {
   maxDreamsigns: number;
   completionLevel: number;
   dreamsigns: readonly JourneyDebugDreamsignView[];
-  dreamsignOptions: readonly { id: string; name: LocalizedString }[];
+  dreamsignOptions: readonly { id: DreamsignId; name: LocalizedString }[];
   cards: readonly JourneyDebugCardSearchView[];
   deck: readonly JourneyDebugDeckEntryView[];
-  transfigurationOptions: readonly { value: string; label: LocalizedString }[];
+  transfigurationOptions: readonly {
+    value: TransfigurationType | "none";
+    label: LocalizedString;
+  }[];
 }
 export interface JourneyDebugEditorScreenProps {
   isOpen: boolean;
   view: JourneyDebugEditorView;
   onClose: () => void;
   onResourceChange: (id: JourneyDebugResourceId, delta: number) => void;
-  onAddDreamsign: (id: string) => void;
-  onRemoveDreamsign: (actionId: string) => void;
-  onAddCard: (id: string) => void;
+  onAddDreamsign: (id: DreamsignId) => void;
+  onRemoveDreamsign: (actionId: JourneyDebugDreamsignActionId) => void;
+  onAddCard: (id: CardId) => void;
   onRemoveCard: (entryId: DeckEntryId) => void;
   onSetStatOverride: (
     entryId: DeckEntryId,
@@ -97,7 +107,7 @@ const headingStyle: CSSProperties = {
   font: token("--t-title-sm"),
   color: token("--text-on-glass"),
 };
-const CARD_TYPES: { value: string; label: string }[] = [
+const CARD_TYPES: { value: CardType; label: CardType }[] = [
   { value: "Character", label: "Character" },
   { value: "Event", label: "Event" },
 ];
@@ -453,13 +463,17 @@ function DeckEditControls({
       ? ""
       : String(entry.statOverride.spark),
   );
-  const [transfiguration, setTransfiguration] = useState<string>(
+  const [transfiguration, setTransfiguration] = useState<
+    TransfigurationType | "none"
+  >(
     entry.transfiguration ?? "none",
   );
-  const [cardType, setCardType] = useState<string>(
+  const [cardType, setCardType] = useState<CardType>(
     entry.typeChange?.cardType ?? "Character",
   );
-  const [subtype, setSubtype] = useState(entry.typeChange?.subtype ?? "");
+  const [subtype, setSubtype] = useState<string>(
+    entry.typeChange?.subtype ?? "",
+  );
   const [fast, setFast] = useState(
     entry.keywordModification?.fast === true ? "fast" : "normal",
   );
@@ -556,7 +570,7 @@ function DeckEditControls({
             entry.entryId,
             transfiguration === "none"
               ? null
-              : (transfiguration as TransfigurationType),
+              : transfiguration,
           )
         }
         placement="onGlass"
@@ -583,14 +597,14 @@ function DeckEditControls({
       />
       <GlassButton
         label={assertLocalized("Commit type")}
-        onPress={() =>
+        onPress={() => {
           onSetTypeChange(entry.entryId, {
-            predicateId: asCardTypeChangePredicateId("debug"),
-            cardType: cardType as CardTypeChange["cardType"],
-            subtype,
+            predicateId: parseCardTypeChangePredicateId("debug"),
+            cardType,
+            subtype: parseCardSubtype(subtype),
             label: "Debug edit",
-          })
-        }
+          });
+        }}
         placement="onGlass"
         testId={`journey-debug-commit-type-${entry.entryId}`}
       />

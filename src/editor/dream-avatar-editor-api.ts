@@ -7,6 +7,12 @@ import type {
   SaveEditorDreamAvatarTidePoolRequest,
 } from "./dream-avatar-types";
 import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+import {
+  parseSourceRevisionResponse,
+  type ParsedSourceRevisionResponse,
+  type RawSourceRevisionResponse,
+  type SourceRevision,
+} from "../types/source-revision";
 
 const SOURCE = "dream-avatars";
 
@@ -54,6 +60,14 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
+async function readRevisionedJsonResponse<
+  Result extends { readonly sourceRevision: SourceRevision },
+>(response: Response): Promise<ParsedSourceRevisionResponse<Result>> {
+  return parseSourceRevisionResponse<Result>(
+    await readJsonResponse<RawSourceRevisionResponse<Result>>(response),
+  );
+}
+
 function withTomlParam(path: string): string {
   const toml = editorTomlParam();
   if (toml === null) {
@@ -70,7 +84,7 @@ export async function loadEditorDreamAvatars(
     headers: { Accept: "application/json" },
     signal,
   });
-  const body = await readJsonResponse<LoadEditorDreamAvatarsResponse>(response);
+  const body = await readRevisionedJsonResponse<LoadEditorDreamAvatarsResponse>(response);
   confirmSourceRevision(SOURCE, body);
   return body;
 }
@@ -84,7 +98,7 @@ export async function saveEditorDreamAvatarField(
       headers: { Accept: "application/json", "Content-Type": "application/json" },
       body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
     });
-    const body = await readJsonResponse<SaveEditorDreamAvatarFieldResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorDreamAvatarFieldResponse>(response);
     confirmSourceRevision(SOURCE, body);
     return body;
   });
@@ -101,7 +115,7 @@ export async function saveEditorDreamAvatarTidePool(
         id: request.id, field: "tide-pool", value: request.pool,
       })),
     });
-    const body = await readJsonResponse<SaveEditorDreamAvatarFieldResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorDreamAvatarFieldResponse>(response);
     confirmSourceRevision(SOURCE, body);
     return body;
   });

@@ -3,7 +3,6 @@ import type { CardTutorialGuidancePresentation } from "../../rules/card-tutorial
 import type { CardData } from "../../types/cards";
 import { tx } from "@trox/runtime";
 import { localizedSourceText } from "../../runtime/localization/runtime";
-import { asPresentationId } from "../../types/identifiers";
 
 /** Map one shared site-card tutorial to stationary inline Mira guidance. */
 export function buildCardTutorialGuidanceView(
@@ -19,7 +18,7 @@ export function buildCardTutorialGuidanceView(
         ) ?? null);
   if (presentation.cardId !== null && card === null) return null;
   return {
-    presentationId: asPresentationId(presentation.id),
+    presentationId: presentation.id,
     triggerId: presentation.triggerId,
     messageIndex: 0,
     messageCount: 1,

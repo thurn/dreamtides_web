@@ -1,4 +1,5 @@
 import { localizedSourceText } from "../../runtime/localization/runtime";
+import type { CardSubtype } from "../../types/card-identity";
 // ExplorationSiteScreen — Layaway draws one possibility from the player's
 // deck anchor, flips it face up, and holds it in the encounter panel.
 
@@ -94,17 +95,20 @@ import type {
   DreamAvatar,
   TransfigurationType,
 } from "../../types/journey";
-import type { ExplorationChoosableSiteType } from "../../data/exploration";
-import { asDreamAvatarId } from "../../types/identifiers";
+import type {
+  ExplorationChoosableSiteType,
+  ExplorationEffectKind,
+} from "../../data/exploration";
 import type { SiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import type { ExplorationActionId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asExplorationActionId } from "../../types/identifiers";
+import type { IdentityRecord } from "../../types/identifiers";
+import {
+  parseDeckEntryId,
+} from "../../types/identifiers";
 
 export interface ExplorationSiteView {
   /** Stable site id exposed to QA and logging. */
@@ -126,7 +130,7 @@ export interface ExplorationSiteView {
   /** Exact UUID-backed objects granted by the persisted resolution. */
   reward: ExplorationRewardView | null;
   /** Semantic outcome variant presented for logging and browser QA. */
-  outcomeKind: string | null;
+  outcomeKind: ExplorationOutcomeKind | null;
 }
 
 export interface ExplorationTransfigurationChangeView {
@@ -440,13 +444,33 @@ export type ExplorationRewardView =
       }[];
     };
 
+type ExplicitRewardKind<Reward> = Reward extends {
+  readonly kind: infer Kind extends string;
+}
+  ? Kind
+  : never;
+
+type SemanticRewardKind<Reward> = Reward extends {
+  readonly semanticKind?: infer Kind;
+}
+  ? Exclude<Kind, undefined>
+  : never;
+
+export type ExplorationOutcomeKind =
+  | ExplicitRewardKind<ExplorationRewardView>
+  | SemanticRewardKind<ExplorationRewardView>
+  | ExplorationDeckModificationView["kind"]
+  | "objects";
+
 interface ExplorationDeckModificationViewBase {
   /** Complete authored effect copy or localized fallback exposed to assistive technology. */
   readonly announcement: LocalizedString;
   /** Exact post-resolution snapshots of the affected deck entries. */
   readonly cards: readonly ExplorationCardChoiceView[];
   /** Exact Reclaim cost by deck-entry UUID for the Reclaim outcome. */
-  readonly reclaimCostByEntryId?: Readonly<Record<string, number>>;
+  readonly reclaimCostByEntryId?: Readonly<
+    IdentityRecord<DeckEntryId, number>
+  >;
 }
 
 export type ExplorationDeckModificationView =
@@ -466,7 +490,7 @@ export type ExplorationDeckModificationView =
   | (ExplorationDeckModificationViewBase & {
       /** Authored subtype selected for the affected cards, when available. */
       readonly kind: "subtype";
-      readonly subtype: string | null;
+      readonly subtype: CardSubtype | null;
     })
   | (ExplorationDeckModificationViewBase & {
       readonly kind: "reclaim";
@@ -480,7 +504,7 @@ export type ExplorationDeckModificationView =
     });
 
 export interface ExplorationCardChoiceView<
-  Id extends ExplorationCardChoiceId = ExplorationCardChoiceId,
+  Id extends ExplorationCardChoiceId = DeckEntryId,
 > {
   /** Deck-entry UUID for deck cards, card UUID for catalog offers. */
   entryId: Id;
@@ -536,7 +560,7 @@ export type ExplorationFollowupView =
       readonly subtitle: LocalizedString;
       readonly packs: readonly {
         readonly index: number;
-        readonly cards: readonly ExplorationCardChoiceView[];
+        readonly cards: readonly ExplorationCardChoiceView<CardId>[];
       }[];
     }
   | {
@@ -582,8 +606,8 @@ export type ExplorationFollowupView =
     };
 
 export interface ExplorationActionView {
-  readonly id: string;
-  readonly effectKind: string;
+  readonly id: ExplorationActionId;
+  readonly effectKind: ExplorationEffectKind;
   readonly mechanics: Readonly<Record<string, unknown>>;
   readonly label: LocalizedString;
   readonly effectText: LocalizedString;
@@ -662,7 +686,7 @@ function previewEntityForAction(
 }
 
 interface ExplorationEntityDetails {
-  readonly id: string;
+  readonly id: CardId | DreamsignId;
   readonly entryId?: DeckEntryId;
   readonly name: LocalizedString;
   readonly copies: number;
@@ -744,16 +768,13 @@ function preparedExplorationChoiceEntity(
   entity: ExplorationEntityView,
 ): ExplorationChoiceEntity {
   const details = explorationEntityDetails(entity);
-  const base = {
-    id: details.id,
-    ...(details.entryId === undefined ? {} : { entryId: details.entryId }),
-    copies: details.copies,
-    label: details.name,
-  };
   return entity.kind === "card"
     ? {
-        ...base,
         kind: "card",
+        id: entity.card.id,
+        ...(details.entryId === undefined ? {} : { entryId: details.entryId }),
+        copies: details.copies,
+        label: details.name,
         card: {
           cardId: entity.card.id,
           displaySnapshot: entity.card,
@@ -762,7 +783,13 @@ function preparedExplorationChoiceEntity(
             : { transfiguration: entity.transfiguration }),
         },
       }
-    : { ...base, kind: "dreamsign", dreamsign: entity.dreamsign };
+    : {
+        kind: "dreamsign",
+        id: requireDreamsignId(entity.dreamsign, "Exploration choice"),
+        copies: details.copies,
+        label: details.name,
+        dreamsign: entity.dreamsign,
+      };
 }
 
 interface ExplorationEffectToken {
@@ -832,17 +859,21 @@ function prepareExplorationChoiceDescription(
   return rendered;
 }
 
+type CardRewardItemKey = `card:${number}:${CardId}`;
+type DreamsignRewardItemKey = `dreamsign:${number}:${DreamsignId}`;
+type ExplorationRewardItemKey = CardRewardItemKey | DreamsignRewardItemKey;
+
 type ExplorationRewardItem =
   | {
-      readonly key: string;
+      readonly key: ExplorationRewardItemKey;
       readonly kind: "card";
-      readonly id: string;
+      readonly id: CardId;
       readonly card: GameCardModel;
     }
   | {
-      readonly key: string;
+      readonly key: ExplorationRewardItemKey;
       readonly kind: "dreamsign";
-      readonly id: string;
+      readonly id: DreamsignId;
       readonly dreamsign: LocalizedDreamsign;
     };
 
@@ -1080,7 +1111,7 @@ function ExplorationNarrativeChoices({
             >
               <ExplorationChoiceControl
                 model={{
-                  actionId: asExplorationActionId(action.id),
+                  actionId: action.id,
                   label: action.label,
                   description:
                     action.effectFallback !== undefined
@@ -1135,8 +1166,8 @@ function cardChoiceColumns(
 function selectedCardOperation(
   entryId: DeckEntryId,
   followup: ExplorationFollowupView,
-  selectedEntryIds: readonly ExplorationCardChoiceId[],
-  purgeEntryId: ExplorationCardChoiceId | null,
+  selectedEntryIds: readonly DeckEntryId[],
+  purgeEntryId: DeckEntryId | null,
 ): ExplorationCardSelectionOperation | undefined {
   if (followup.kind !== "cards") return undefined;
   if (entryId === purgeEntryId) return "purge";
@@ -1268,18 +1299,29 @@ function rewardItemsFor(
   if (reward === null || "kind" in reward) return [];
   return [
     ...reward.objects.cards.map((card, index) => ({
-      key: `card:${String(index)}:${card.cardId}`,
+      key: cardRewardItemKey(index, card.cardId),
       kind: "card" as const,
       id: card.cardId,
       card,
     })),
     ...reward.objects.dreamsigns.map((dreamsign, index) => ({
-      key: `dreamsign:${String(index)}:${dreamsign.id ?? "missing"}`,
+      key: dreamsignRewardItemKey(index, dreamsign.id),
       kind: "dreamsign" as const,
-      id: dreamsign.id ?? "missing",
+      id: dreamsign.id,
       dreamsign,
     })),
   ];
+}
+
+function cardRewardItemKey(index: number, cardId: CardId): CardRewardItemKey {
+  return `card:${index}:${cardId}`;
+}
+
+function dreamsignRewardItemKey(
+  index: number,
+  dreamsignId: DreamsignId,
+): DreamsignRewardItemKey {
+  return `dreamsign:${index}:${dreamsignId}`;
 }
 
 function explorationRewardIdentity(
@@ -1553,7 +1595,7 @@ function rewardTargetFor(
   source: RectSnapshot,
 ): RewardTrajectory {
   if (item.kind === "dreamsign") {
-    const dreamsignTarget = visibleHudDreamsign(asDreamsignId(item.id));
+    const dreamsignTarget = visibleHudDreamsign(item.id);
     const dreamsignRect = dreamsignTarget?.getBoundingClientRect();
     if (
       dreamsignRect !== undefined &&
@@ -1753,11 +1795,11 @@ function CardReplacementPresentation({
           changeId: `${scope}-${pair.purged.entryId}-${pair.gained.entryId}`,
           kind: "replacement",
           before: {
-            entryId: asDeckEntryId(pair.purged.entryId),
+            entryId: parseDeckEntryId(pair.purged.entryId),
             card: pair.purged.model,
           },
           after: {
-            entryId: asDeckEntryId(pair.gained.entryId),
+            entryId: parseDeckEntryId(pair.gained.entryId),
             card: pair.gained.model,
           },
         }}
@@ -1912,10 +1954,10 @@ function CompoundCardPairPresentation({
           changeId: `${kind}-${before.entryId}-${after.entryId}`,
           kind,
           before: {
-            entryId: asDeckEntryId(before.entryId),
+            entryId: parseDeckEntryId(before.entryId),
             card: before.model,
           },
-          after: { entryId: asDeckEntryId(after.entryId), card: after.model },
+          after: { entryId: parseDeckEntryId(after.entryId), card: after.model },
         }}
         reveal="complete"
       />
@@ -2210,7 +2252,7 @@ function ExplorationDreamsignChoiceGroup({
                 dreamsign={dreamsign}
                 variant="revelation"
                 testid={`cumulus-exploration-dreamsign-${role}-${dreamsign.id}`}
-                onPress={() => onChoose(asDreamsignId(dreamsign.id))}
+                onPress={() => onChoose(dreamsign.id)}
               />
             </div>
           );
@@ -2268,14 +2310,16 @@ export function ExplorationSiteScreen({
   const cardTargetRef = useRef<HTMLDivElement>(null);
   const exitCompletedRef = useRef(false);
   const resumedResolutionRef = useRef<string | null>(null);
-  const rewardItemRefs = useRef(new Map<string, HTMLDivElement>());
-  const cardCopyRefs = useRef(new Map<string, HTMLDivElement>());
+  const rewardItemRefs = useRef(
+    new Map<ExplorationRewardItemKey, HTMLDivElement>(),
+  );
+  const cardCopyRefs = useRef(new Map<DeckEntryId, HTMLDivElement>());
   const transfigurationCardRef = useRef<HTMLDivElement>(null);
   const starterCardTransfigurationPairsRef = useRef<HTMLElement>(null);
   const cardReplacementPairsRef = useRef<HTMLElement>(null);
   const dreamsignFlowRef = useRef<HTMLDivElement>(null);
-  const completedRewardItemsRef = useRef(new Set<string>());
-  const completedCardCopyItemsRef = useRef(new Set<string>());
+  const completedRewardItemsRef = useRef(new Set<ExplorationRewardItemKey>());
+  const completedCardCopyItemsRef = useRef(new Set<DeckEntryId>());
   const [revealed, setRevealed] = useState(reduceMotion);
   const [frameBreakGeometry, setFrameBreakGeometry] =
     useState<FrameBreakGeometry | null>(null);
@@ -2288,32 +2332,32 @@ export function ExplorationSiteScreen({
     useState<CardTrajectory | null>(null);
   const [activeActionId, setActiveActionId] =
     useState<ExplorationActionId | null>(null);
-  const [selectedIds, setSelectedIds] = useState<
-    readonly ExplorationCardChoiceId[]
+  const [selectedEntryIds, setSelectedEntryIds] = useState<
+    readonly DeckEntryId[]
   >([]);
+  const [selectedCardIds, setSelectedCardIds] = useState<readonly CardId[]>([]);
   const [selectedOfferedDreamsignId, setSelectedOfferedDreamsignId] =
     useState<DreamsignId | null>(null);
   const [selectedPurgedDreamsignId, setSelectedPurgedDreamsignId] =
     useState<DreamsignId | null>(null);
   const [selectedDreamsignReplacementIds, setSelectedDreamsignReplacementIds] =
     useState<readonly DreamsignId[]>([]);
-  const [purgeEntryId, setPurgeEntryId] =
-    useState<ExplorationCardChoiceId | null>(null);
+  const [purgeEntryId, setPurgeEntryId] = useState<DeckEntryId | null>(null);
   const [selectedSubtype, setSelectedSubtype] = useState<string | null>(null);
   const [selectedTransfigurationEntryId, setSelectedTransfigurationEntryId] =
-    useState<string | null>(null);
+    useState<DeckEntryId | null>(null);
   const [selectedTransfigurationFormType, setSelectedTransfigurationFormType] =
     useState<TransfigurationType | null>(null);
   const [multiTransfigurationStep, setMultiTransfigurationStep] = useState<
     number | null
   >(null);
   const [multiTransfigurationForms, setMultiTransfigurationForms] = useState<
-    Readonly<Record<string, TransfigurationType>>
+    Readonly<IdentityRecord<DeckEntryId, TransfigurationType>>
   >({});
   const [transfigurationConfirming, setTransfigurationConfirming] =
     useState(false);
   const [rewardTrajectories, setRewardTrajectories] = useState<ReadonlyMap<
-    string,
+    ExplorationRewardItemKey,
     RewardTrajectory
   > | null>(null);
   const [cardCopiesPhase, setCardCopiesPhase] =
@@ -2321,7 +2365,7 @@ export function ExplorationSiteScreen({
   const [purgeAndCopyPhase, setPurgeAndCopyPhase] =
     useState<PurgeAndCopyPhase>("purging");
   const [cardCopyTrajectories, setCardCopyTrajectories] = useState<ReadonlyMap<
-    string,
+    DeckEntryId,
     RewardTrajectory
   > | null>(null);
   const [essenceRewardPhase, setEssenceRewardPhase] = useState<
@@ -2546,7 +2590,8 @@ export function ExplorationSiteScreen({
   useEffect(() => {
     if (view.resolvedActionId === null) return;
     setActiveActionId(null);
-    setSelectedIds([]);
+    setSelectedEntryIds([]);
+    setSelectedCardIds([]);
     setSelectedOfferedDreamsignId(null);
     setSelectedPurgedDreamsignId(null);
     setSelectedDreamsignReplacementIds([]);
@@ -2652,7 +2697,8 @@ export function ExplorationSiteScreen({
       if (view.resolvedActionId !== null || view.reward !== null) return;
       if (activeAction !== null) {
         setActiveActionId(null);
-        setSelectedIds([]);
+        setSelectedEntryIds([]);
+        setSelectedCardIds([]);
         setSelectedOfferedDreamsignId(null);
         setSelectedPurgedDreamsignId(null);
         setSelectedDreamsignReplacementIds([]);
@@ -2802,7 +2848,7 @@ export function ExplorationSiteScreen({
     const hideDockedDreamsigns = (): void => {
       for (const dreamsign of objectReward.dreamsigns) {
         if (dreamsign.id === undefined) continue;
-        const target = visibleHudDreamsign(asDreamsignId(dreamsign.id));
+        const target = visibleHudDreamsign(dreamsign.id);
         if (target === null || hiddenTargets.has(target)) continue;
         hiddenTargets.set(target, target.style.visibility);
         target.style.visibility = "hidden";
@@ -2832,7 +2878,7 @@ export function ExplorationSiteScreen({
         completeExit();
         return;
       }
-      const trajectories = new Map<string, RewardTrajectory>();
+      const trajectories = new Map<ExplorationRewardItemKey, RewardTrajectory>();
       for (const item of rewardItems) {
         const sourceRect = rewardItemRefs.current
           .get(item.key)
@@ -3291,7 +3337,7 @@ export function ExplorationSiteScreen({
         completeExit();
         return;
       }
-      const trajectories = new Map<string, RewardTrajectory>();
+      const trajectories = new Map<DeckEntryId, RewardTrajectory>();
       for (const item of cardCopyItems) {
         const card = item.card;
         const sourceRect = cardCopyRefs.current
@@ -3330,7 +3376,7 @@ export function ExplorationSiteScreen({
     reduceMotion,
   ]);
 
-  const finishRewardItem = (itemKey: string): void => {
+  const finishRewardItem = (itemKey: ExplorationRewardItemKey): void => {
     completedRewardItemsRef.current.add(itemKey);
     if (
       completedRewardItemsRef.current.size >=
@@ -3411,14 +3457,15 @@ export function ExplorationSiteScreen({
   const openAction = (action: ExplorationActionView): void => {
     if (action.followup.kind === "none") {
       if (action.automaticSelection === undefined) {
-        onResolve(asExplorationActionId(action.id));
+        onResolve(action.id);
       } else {
-        onResolve(asExplorationActionId(action.id), action.automaticSelection);
+        onResolve(action.id, action.automaticSelection);
       }
       return;
     }
-    setActiveActionId(asExplorationActionId(action.id));
-    setSelectedIds([]);
+    setActiveActionId(action.id);
+    setSelectedEntryIds([]);
+    setSelectedCardIds([]);
     setSelectedOfferedDreamsignId(null);
     setSelectedPurgedDreamsignId(null);
     setSelectedDreamsignReplacementIds([]);
@@ -3431,12 +3478,12 @@ export function ExplorationSiteScreen({
     setTransfigurationConfirming(false);
   };
 
-  const toggleCard = (entryId: ExplorationCardChoiceId): void => {
+  const toggleDeckEntry = (entryId: DeckEntryId): void => {
     if (activeAction?.followup.kind === "multi-card-transfiguration") {
       if (multiTransfigurationStep !== null) return;
       const followup = activeAction.followup;
-      if (selectedIds.includes(entryId)) {
-        setSelectedIds((current) =>
+      if (selectedEntryIds.includes(entryId)) {
+        setSelectedEntryIds((current) =>
           current.filter((candidate) => candidate !== entryId),
         );
         setMultiTransfigurationForms((forms) => {
@@ -3444,28 +3491,32 @@ export function ExplorationSiteScreen({
           delete remaining[entryId];
           return remaining;
         });
-      } else if (selectedIds.length < followup.count) {
-        setSelectedIds((current) => [...current, entryId]);
+      } else if (selectedEntryIds.length < followup.count) {
+        setSelectedEntryIds((current) => [...current, entryId]);
       }
       return;
     }
-    if (activeAction?.followup.kind !== "cards") return;
+    if (
+      activeAction?.followup.kind !== "cards" ||
+      activeAction.followup.selectionKey !== "entryIds"
+    )
+      return;
     const followup = activeAction.followup;
     if (followup.mode === "purge-and-copy") {
       if (purgeEntryId === null) {
         setPurgeEntryId(entryId);
-        setSelectedIds([]);
+        setSelectedEntryIds([]);
       } else if (entryId === purgeEntryId) {
         setPurgeEntryId(null);
-        setSelectedIds([]);
+        setSelectedEntryIds([]);
       } else {
-        setSelectedIds((current) =>
+        setSelectedEntryIds((current) =>
           current.includes(entryId) ? [] : [entryId],
         );
       }
       return;
     }
-    setSelectedIds((current) => {
+    setSelectedEntryIds((current) => {
       if (current.includes(entryId)) {
         return current.filter((candidate) => candidate !== entryId);
       }
@@ -3475,25 +3526,46 @@ export function ExplorationSiteScreen({
     });
   };
 
+  const toggleCatalogCard = (cardId: CardId): void => {
+    if (
+      activeAction?.followup.kind !== "cards" ||
+      activeAction.followup.selectionKey !== "cardIds"
+    )
+      return;
+    const followup = activeAction.followup;
+    setSelectedCardIds((current) => {
+      if (current.includes(cardId)) {
+        return current.filter((candidate) => candidate !== cardId);
+      }
+      if (followup.mode === "single") return [cardId];
+      if (current.length >= followup.max) return current;
+      return [...current, cardId];
+    });
+  };
+
   const commitFollowup = (): void => {
     if (activeAction === null) return;
     const followup = activeAction.followup;
     if (followup.kind === "cards") {
       if (followup.mode === "purge-and-copy") {
-        const copyEntryId = selectedIds[0];
+        const copyEntryId = selectedEntryIds[0];
         if (purgeEntryId === null || copyEntryId === undefined) return;
-        onResolve(asExplorationActionId(activeAction.id), {
+        onResolve(activeAction.id, {
           purgeEntryId,
           copyEntryId,
         });
         return;
       }
+      const selectedIds =
+        followup.selectionKey === "entryIds"
+          ? selectedEntryIds
+          : selectedCardIds;
       if (
         selectedIds.length < followup.min ||
         selectedIds.length > followup.max
       )
         return;
-      onResolve(asExplorationActionId(activeAction.id), {
+      onResolve(activeAction.id, {
         [followup.selectionKey]: selectedIds,
       });
       return;
@@ -3501,7 +3573,7 @@ export function ExplorationSiteScreen({
     if (followup.kind === "multi-card-transfiguration") {
       if (
         multiTransfigurationStep !== null ||
-        selectedIds.length !== followup.count
+        selectedEntryIds.length !== followup.count
       ) {
         return;
       }
@@ -3510,7 +3582,7 @@ export function ExplorationSiteScreen({
     }
     if (followup.kind === "subtypes") {
       if (selectedSubtype === null) return;
-      onResolve(asExplorationActionId(activeAction.id), {
+      onResolve(activeAction.id, {
         subtype: selectedSubtype,
       });
       return;
@@ -3519,7 +3591,7 @@ export function ExplorationSiteScreen({
 
   const chooseDreamsign = (dreamsignId: DreamsignId): void => {
     if (activeAction?.followup.kind !== "dreamsigns") return;
-    onResolve(asExplorationActionId(activeAction.id), {
+    onResolve(activeAction.id, {
       [activeAction.followup.selectionKey]: dreamsignId,
     });
   };
@@ -3563,7 +3635,7 @@ export function ExplorationSiteScreen({
       dreamsignFlow.mode === "gain-offered" &&
       dreamsignFlow.requiredOverflowReplacementCount === 0
     ) {
-      onResolve(asExplorationActionId(activeAction.id), {
+      onResolve(activeAction.id, {
         offeredDreamsignId: dreamsignId,
       });
       return;
@@ -3580,7 +3652,7 @@ export function ExplorationSiteScreen({
       selectedPurgedDreamsignId === null
     ) {
       if (dreamsignFlow.requiredOverflowReplacementCount === 0) {
-        onResolve(asExplorationActionId(activeAction.id), {
+        onResolve(activeAction.id, {
           purgedDreamsignId: dreamsignId,
           overflowReplacementDreamsignIds: [],
         });
@@ -3620,11 +3692,11 @@ export function ExplorationSiteScreen({
       ) {
         return;
       }
-      onResolve(asExplorationActionId(activeAction.id), {
-        offeredDreamsignId: asDreamsignId(selectedOfferedDreamsignId),
+      onResolve(activeAction.id, {
+        offeredDreamsignId: selectedOfferedDreamsignId,
         ...(replacedDreamsignId === undefined
           ? {}
-          : { replacedDreamsignId: asDreamsignId(replacedDreamsignId) }),
+          : { replacedDreamsignId: replacedDreamsignId }),
       });
       return;
     }
@@ -3635,7 +3707,7 @@ export function ExplorationSiteScreen({
     ) {
       return;
     }
-    onResolve(asExplorationActionId(activeAction.id), {
+    onResolve(activeAction.id, {
       purgedDreamsignId: selectedPurgedDreamsignId,
       overflowReplacementDreamsignIds: selectedDreamsignReplacementIds,
     });
@@ -3648,14 +3720,17 @@ export function ExplorationSiteScreen({
     if (followup.kind === "multi-card-transfiguration") {
       return (
         multiTransfigurationStep === null &&
-        selectedIds.length === followup.count
+        selectedEntryIds.length === followup.count
       );
     }
     if (followup.kind === "cards") {
+      const selectedCount =
+        followup.selectionKey === "entryIds"
+          ? selectedEntryIds.length
+          : selectedCardIds.length;
       return followup.mode === "purge-and-copy"
-        ? purgeEntryId !== null && selectedIds.length === 1
-        : selectedIds.length >= followup.min &&
-            selectedIds.length <= followup.max;
+        ? purgeEntryId !== null && selectedCount === 1
+        : selectedCount >= followup.min && selectedCount <= followup.max;
     }
     if (followup.kind === "packs") return false;
     if (followup.kind === "subtypes") return selectedSubtype !== null;
@@ -4587,7 +4662,7 @@ export function ExplorationSiteScreen({
                 ease: DREAM_EASE,
               }}
               onAnimationComplete={() =>
-                finishCardCopyItem(asDeckEntryId(card.entryId))
+                finishCardCopyItem(parseDeckEntryId(card.entryId))
               }
               style={{
                 position: "fixed",
@@ -4743,7 +4818,7 @@ export function ExplorationSiteScreen({
           <motion.section
             data-exploration-outcome="dream-avatar"
             data-exploration-previous-dream-avatar-id={
-              dreamAvatarReward.previous?.id ?? asDreamAvatarId("")
+              dreamAvatarReward.previous?.id
             }
             data-exploration-dream-avatar-id={dreamAvatarReward.current.id}
             role="status"
@@ -7261,7 +7336,7 @@ export function ExplorationSiteScreen({
                     }
                     onConfirm={(type) => {
                       setTransfigurationConfirming(true);
-                      onResolve(asExplorationActionId(activeAction.id), {
+                      onResolve(activeAction.id, {
                         entryIds: [candidate.entryId],
                         transfiguration: type,
                       });
@@ -7279,7 +7354,7 @@ export function ExplorationSiteScreen({
                       data-exploration-multi-transfiguration-required-count={
                         followup.count
                       }
-                      data-exploration-multi-transfiguration-selected-entry-ids={selectedIds.join(
+                      data-exploration-multi-transfiguration-selected-entry-ids={selectedEntryIds.join(
                         ",",
                       )}
                       style={{ width: "100%", minHeight: 0 }}
@@ -7303,10 +7378,10 @@ export function ExplorationSiteScreen({
                         cards={followup.candidates.map((candidate) => ({
                           entryId: candidate.entryId,
                           model: candidate.model,
-                          selection: selectedIds.includes(candidate.entryId)
+                          selection: selectedEntryIds.includes(candidate.entryId)
                             ? "selected"
                             : undefined,
-                          operation: selectedIds.includes(candidate.entryId)
+                          operation: selectedEntryIds.includes(candidate.entryId)
                             ? "transfigure"
                             : undefined,
                           testId: `cumulus-exploration-multi-transfiguration-card-${candidate.entryId}`,
@@ -7316,12 +7391,12 @@ export function ExplorationSiteScreen({
                           "[exploration] Empty state for an Exploration card choice with no eligible deck entries.",
                         )}
                         testId="cumulus-exploration-multi-transfiguration-card-picker"
-                        onCardPress={toggleCard}
+                        onCardPress={toggleDeckEntry}
                       />
                     </div>
                   );
                 }
-                const entryId = selectedIds[multiTransfigurationStep];
+                const entryId = selectedEntryIds[multiTransfigurationStep];
                 const candidate = followup.candidates.find(
                   (choice) => choice.entryId === entryId,
                 );
@@ -7343,10 +7418,10 @@ export function ExplorationSiteScreen({
                     data-exploration-multi-transfiguration-current-form={
                       selectedForm ?? undefined
                     }
-                    data-exploration-multi-transfiguration-selected-entry-ids={selectedIds.join(
+                    data-exploration-multi-transfiguration-selected-entry-ids={selectedEntryIds.join(
                       ",",
                     )}
-                    data-exploration-multi-transfiguration-selected-forms={selectedIds
+                    data-exploration-multi-transfiguration-selected-forms={selectedEntryIds
                       .map(
                         (selectedEntryId) =>
                           multiTransfigurationForms[selectedEntryId] ?? "",
@@ -7393,7 +7468,10 @@ export function ExplorationSiteScreen({
                         }))
                       }
                       onConfirm={(type) => {
-                        const nextForms = {
+                        const nextForms: IdentityRecord<
+                          DeckEntryId,
+                          TransfigurationType
+                        > = {
                           ...multiTransfigurationForms,
                           [entryId]: type,
                         };
@@ -7404,17 +7482,17 @@ export function ExplorationSiteScreen({
                           );
                           return;
                         }
-                        const transfigurations = selectedIds.flatMap(
+                        const transfigurations = selectedEntryIds.flatMap(
                           (selectedEntryId) => {
                             const type = nextForms[selectedEntryId];
                             return type === undefined ? [] : [type];
                           },
                         );
-                        if (transfigurations.length !== selectedIds.length)
+                        if (transfigurations.length !== selectedEntryIds.length)
                           return;
                         setTransfigurationConfirming(true);
-                        onResolve(asExplorationActionId(activeAction.id), {
-                          entryIds: selectedIds.map(asDeckEntryId),
+                        onResolve(activeAction.id, {
+                          entryIds: selectedEntryIds,
                           transfigurations,
                         });
                       }}
@@ -7483,7 +7561,7 @@ export function ExplorationSiteScreen({
                         cards={activeAction.followup.cards.map((card) => ({
                           entryId: card.entryId,
                           model: card.model,
-                          selection: selectedIds.includes(card.entryId)
+                          selection: selectedCardIds.includes(card.entryId)
                             ? "highlighted"
                             : undefined,
                           testId: `cumulus-exploration-card-${card.entryId}`,
@@ -7497,7 +7575,7 @@ export function ExplorationSiteScreen({
                           viewport: isDesktop ? "desktop" : "mobile",
                           fit: "choice",
                         }}
-                        onCardPress={toggleCard}
+                        onCardPress={toggleCatalogCard}
                       />
                     </div>
                   </GlassPanel>
@@ -7518,7 +7596,7 @@ export function ExplorationSiteScreen({
                               "[exploration] Followup choice purge.",
                             )
                           : activeAction.followup.mode === "purge-and-copy" &&
-                              selectedIds.length === 0
+                              selectedEntryIds.length === 0
                             ? tx(
                                 "Choose a card to copy",
                                 "[card] Instruction for choosing one concrete card to copy into the player's deck.",
@@ -7539,14 +7617,14 @@ export function ExplorationSiteScreen({
                     selection:
                       card.entryId === purgeEntryId
                         ? "danger"
-                        : selectedIds.includes(card.entryId)
+                        : selectedEntryIds.includes(card.entryId)
                           ? "selected"
                           : undefined,
                     emphasis: card.isBane ? "danger" : undefined,
                     operation: selectedCardOperation(
                       card.entryId,
                       activeAction.followup,
-                      selectedIds,
+                      selectedEntryIds,
                       purgeEntryId,
                     ),
                     testId: `cumulus-exploration-card-${card.entryId}`,
@@ -7556,7 +7634,7 @@ export function ExplorationSiteScreen({
                     "[exploration] Empty state for an Exploration card choice with no eligible deck entries.",
                   )}
                   testId="cumulus-exploration-card-followup"
-                  onCardPress={toggleCard}
+                  onCardPress={toggleDeckEntry}
                 />
               )}
             {activeAction.followup.kind === "packs" && (
@@ -7653,7 +7731,7 @@ export function ExplorationSiteScreen({
                             placement="onGlass"
                             onPress={() =>
                               onResolve(
-                                asExplorationActionId(activeAction.id),
+                                activeAction.id,
                                 {
                                   packIndex: pack.index,
                                 },
@@ -7792,7 +7870,7 @@ export function ExplorationSiteScreen({
                         motion={!reduceMotion}
                         presentation="choice"
                         onSelect={() =>
-                          onResolve(asExplorationActionId(activeAction.id), {
+                          onResolve(activeAction.id, {
                             siteType: choice.siteType,
                           })
                         }
@@ -8011,7 +8089,7 @@ export function ExplorationSiteScreen({
                         dreamsign={dreamsign}
                         testid={`cumulus-exploration-dreamsign-${dreamsign.id}`}
                         onPress={() =>
-                          chooseDreamsign(asDreamsignId(dreamsign.id))
+                          chooseDreamsign(dreamsign.id)
                         }
                       />
                     </div>
@@ -8073,7 +8151,7 @@ export function ExplorationSiteScreen({
                             ),
                           }}
                           onPress={() =>
-                            onResolve(asExplorationActionId(activeAction.id), {
+                            onResolve(activeAction.id, {
                               dreamAvatarId: dreamAvatar.id,
                             })
                           }

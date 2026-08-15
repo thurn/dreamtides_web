@@ -3,7 +3,7 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { asRoomId } from "../types/identifiers";
+import { parseRoomId, type RoomId } from "../types/identifiers";
 
 const fake = vi.hoisted(() => ({
   onCorrupt: null as (() => void) | null,
@@ -12,7 +12,7 @@ const fake = vi.hoisted(() => ({
 vi.mock("../eventlog/subscribe", () => ({
   subscribeToLog: (
     _db: unknown,
-    _gameId: string,
+    _gameId: RoomId,
     _onNode: unknown,
     onCorrupt?: () => void,
   ) => {
@@ -48,7 +48,7 @@ describe("EventLogViewer", () => {
   it("surfaces a corrupt decoded event log instead of waiting forever", async () => {
     await act(async () => {
       root.render(
-        <EventLogViewer db={{} as never} gameId={asRoomId("room1")} />,
+        <EventLogViewer db={{} as never} gameId={parseRoomId("room1")} />,
       );
       await Promise.resolve();
     });

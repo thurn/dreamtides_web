@@ -2,7 +2,7 @@ import {
   figmentCatalogEntries,
   type FigmentCatalogEntry,
 } from "../battle/state/figment-catalog";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName, type CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 
 /** A figment card explicitly named by a materialize instruction. */
@@ -72,8 +72,8 @@ function previewFor(
   const name = entry.name?.trim() || entry.subtype.trim();
   return Object.freeze({
     card: Object.freeze({
-      id: asCardId(entry.id),
-      name: asCardName(name),
+      id: entry.id,
+      name: parseCardName(name),
       cardNumber,
       cardType: "Character",
       subtype: entry.subtype,
@@ -99,7 +99,7 @@ export function extractMaterializedFigmentPreviews(
 ): readonly MaterializedFigmentPreview[] {
   const entries = figmentCatalogEntries();
   const indexById = new Map(entries.map((entry, index) => [entry.id, index]));
-  const seen = new Set<string>();
+  const seen = new Set<CardId>();
   const previews: MaterializedFigmentPreview[] = [];
   for (const match of text.matchAll(MATERIALIZED_FIGMENT_PATTERN)) {
     const entry = referencedEntry(match[1] ?? "", entries);

@@ -14,13 +14,13 @@ import {
   makeBattleTestState,
 } from "../test-support";
 import { CumulusBattleZoneBrowser } from "./CumulusBattleZoneBrowser";
-import { asBattleCardId } from "../../types/identifiers";
-import { asBattleEntryKey } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
 
 function createState() {
   return createInitialBattleState(
     createTestBattleInit({
-      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
+      battleEntryKey: parseBattleEntryKey("site-7::2::dreamscape-2"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
@@ -209,7 +209,7 @@ describe("CumulusBattleZoneBrowser", () => {
         state.sides.player.hand = state.sides.player.hand.filter(
           (cardId) => cardId !== zoneCardId,
         );
-        state.sides.player[zone] = [asBattleCardId(zoneCardId)];
+        state.sides.player[zone] = [parseBattleCardId(zoneCardId)];
       });
       const entry = mounted.container.querySelector<HTMLElement>(
         `[data-gallery-entry-id="${zoneCardId}"]`,
@@ -282,7 +282,7 @@ describe("CumulusBattleZoneBrowser", () => {
         state.sides.player.hand = state.sides.player.hand.filter(
           (cardId) => cardId !== zoneCardId,
         );
-        state.sides.player[zone] = [asBattleCardId(zoneCardId)];
+        state.sides.player[zone] = [parseBattleCardId(zoneCardId)];
       });
       const card = mounted.container.querySelector<HTMLElement>(
         `[data-gallery-entry-id="${zoneCardId}"] [data-game-card-source]`,
@@ -314,7 +314,9 @@ describe("CumulusBattleZoneBrowser", () => {
       removeEventListener: vi.fn(),
     });
     const mounted = mount("void", (state) => {
-      const voidCardId = state.sides.player.hand[0] ?? asBattleCardId("");
+      const voidCardId = state.sides.player.hand[0];
+      expect(voidCardId).toBeDefined();
+      if (voidCardId === undefined) return;
       state.sides.player.hand = state.sides.player.hand.filter(
         (cardId) => cardId !== voidCardId,
       );

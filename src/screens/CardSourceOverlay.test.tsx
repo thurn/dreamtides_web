@@ -4,8 +4,7 @@ import { resolveSource } from "../runtime/localization/runtime";
 import type { Tides4ProvenanceSummary } from "../types/content";
 import type { CardSourceDebugState } from "../types/journey";
 import { buildCardSourceView } from "./cumulus_adapters/card-source-view-model";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asTideId } from "../types/identifiers";
+import { testDreamAvatarId, testTideId } from "../types/test-identities";
 
 const DEBUG: CardSourceDebugState = {
   screenLabel: "Draft",
@@ -14,7 +13,7 @@ const DEBUG: CardSourceDebugState = {
 };
 
 const PROVENANCE: Tides4ProvenanceSummary = {
-  dreamAvatarId: asDreamAvatarId("avatar-a"),
+  dreamAvatarId: testDreamAvatarId("avatar-a"),
   signatureless: false,
   borrowedArchetypeName: null,
   dealSize: 150,
@@ -24,7 +23,7 @@ const PROVENANCE: Tides4ProvenanceSummary = {
   facetAvailableCount: 2,
   tides: [
     {
-      id: asTideId("tide-a"),
+      id: testTideId("tide-a"),
       displayName: "Signature A",
       displayDescription: "Signature description",
       role: "signature",
@@ -37,8 +36,8 @@ const PROVENANCE: Tides4ProvenanceSummary = {
   cardProvenanceByNumber: {
     "1": {
       copies: 2,
-      tideIds: [asTideId("tide-a")],
-      primaryTideId: asTideId("tide-a"),
+      tideIds: [testTideId("tide-a")],
+      primaryTideId: testTideId("tide-a"),
     },
   },
 };

@@ -26,7 +26,7 @@ import { richText } from "../../components/card/rich-text";
 import { artRef } from "../../primitives/art";
 import { glyph } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";
-import { asGuideId } from "../../../types/identifiers";
+import { parseGuideId } from "../../../types/identifiers";
 
 export const infoCardDemo: CumulusComponent = {
   id: "info-card",
@@ -139,7 +139,7 @@ const scale = infoCardTextScale(window.innerWidth); // 0.86 below ~551px; otherw
       // `frame` gives the object variant its framed treatment, and `glyph`
       // fills the icon-disc variant.
       image: artRef.dreamAvatar("0025"),
-      figure: artRef.dreamGuide(asGuideId("tobias_tanglefur")),
+      figure: artRef.dreamGuide(parseGuideId("tobias_tanglefur")),
       frame: true,
       glyph: glyph("bxf bx-store-alt-2"),
       // Seeds the tide-disc variant so switching `variant` to tide renders a

@@ -8,7 +8,7 @@ import type {
 } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import type { TutorialRunId } from "../types/identifiers";
-import { asFrontDoorActionId } from "../types/identifiers";
+import { parseFrontDoorActionId } from "../types/identifiers";
 
 /** Submit and log the tutorial player's authoritative first card play. */
 export function useTutorialCardPlay(
@@ -31,7 +31,7 @@ export function useTutorialCardPlay(
         destinationZone: "player-back-rank",
         targetSlotId,
       });
-      void action("tutorial", asFrontDoorActionId("play-card"), {
+      void action("tutorial", parseFrontDoorActionId("play-card"), {
         runId,
         cardInstanceId,
         cardId,

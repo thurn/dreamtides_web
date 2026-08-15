@@ -74,7 +74,7 @@ type DreamwellEffectStep =
   | { kind: "prompt"; prompt: DreamwellPrompt };
 
 interface DreamwellEffectScript {
-  id: string;                       // Dreamwell card UUID
+  id: DreamwellCardId;              // Dreamwell card UUID
   steps: DreamwellEffectStep[];
 }
 

@@ -1,4 +1,4 @@
-import type { RevealPlacementException, RevealPoint, RevealReason, RevealRect } from "./model";
+import type { RevealPlacementException, RevealPlacementFamily, RevealPlacementOrientation, RevealPoint, RevealReason, RevealRect } from "./model";
 import type { VisualViewportSnapshot } from "./viewport";
 
 const MOBILE_WIDTH_FRACTION = 0.45;
@@ -32,8 +32,8 @@ export interface RevealPlacementInput {
 }
 
 export interface RevealPlacementDecision {
-  readonly family: string;
-  readonly orientation: "primary-left" | "primary-right";
+  readonly family: RevealPlacementFamily;
+  readonly orientation: RevealPlacementOrientation;
   readonly primaryRect: RevealRect;
   readonly secondaryRects: readonly RevealRect[];
   readonly adjacentRects: readonly RevealRect[];
@@ -359,7 +359,7 @@ function mobilePlacement(input: RevealPlacementInput): RevealPlacementDecision {
     : sourceRect.y - CARD_GAP;
   const desiredTop = targetBottom - primarySize.height;
   let primaryY = Math.max(safeTop, desiredTop);
-  let family = "mobile-touch-up";
+  let family: RevealPlacementFamily = "mobile-touch-up";
   let bestEffortPrimaryOverlap = false;
 
   if (desiredTop < safeTop) {

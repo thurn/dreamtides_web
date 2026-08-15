@@ -2,6 +2,7 @@ import {
   ALL_CATEGORY,
   COLUMN_OPTIONS,
   DEFAULT_COLUMNS,
+  parseImageViewerCategory,
   type ColumnCount,
   type ImageViewerDisplayState,
 } from "./types";
@@ -39,7 +40,9 @@ export function parseImageViewerDisplayState(
 
   return {
     category:
-      category !== null && category.trim() !== "" ? category : ALL_CATEGORY,
+      category !== null && category.trim() !== ""
+        ? parseImageViewerCategory(category)
+        : ALL_CATEGORY,
     showUsed: used === "1" || used === "true",
     onlyNamed: named === "1" || named === "true",
     randomOrder: random === "1" || random === "true",

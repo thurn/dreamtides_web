@@ -4,25 +4,27 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import * as glossary from "../../../data/glossary";
 import { extractProjectedGlossaryTerms } from "../../../data/glossary-terms";
 import { extractMaterializedFigmentPreviews } from "../../../data/materialized-figments";
 import { GameCard, type GameCardModel } from "./CardView";
 import { transfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
+import { testGlossaryEntryId, testCardId } from "../../../types/test-identities";
+import type { GlossaryEntryId } from "../../../types/identifiers";
 
 vi.mock("../../../data/materialized-figments", () => ({
   extractMaterializedFigmentPreviews: vi.fn(() => []),
 }));
 
-const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
+const CARD_ID = testCardId("11111111-1111-4111-8111-111111111111");
 let resizeCallbacks: ResizeObserverCallback[] = [];
 
 function card(overrides: Partial<CardData> = {}): CardData {
   return {
     id: CARD_ID,
-    name: asCardName("Archive Sentry"),
+    name: parseCardName("Archive Sentry"),
     cardNumber: 1,
     cardType: "Character",
     subtype: "Synth",
@@ -186,7 +188,9 @@ describe("GameCard reveal contract", () => {
     expect(description).not.toContain("Put a character into play");
     expect(description).not.toContain("Your discard pile");
     expect(description).toContain(
-      glossary.requireGlossaryEntry("a70ebef7-797a-491b-a888-382a0d7a7656")
+      glossary.requireGlossaryEntry(
+        testGlossaryEntryId("a70ebef7-797a-491b-a888-382a0d7a7656"),
+      )
         .definition,
     );
 
@@ -210,7 +214,7 @@ describe("GameCard reveal contract", () => {
     const description =
       document.getElementById(source?.getAttribute("aria-describedby") ?? "")
         ?.textContent ?? "";
-    const numericGlossaryIds: readonly string[] = [
+    const numericGlossaryIds: readonly GlossaryEntryId[] = [
       glossary.GLOSSARY_IDS.erode,
       glossary.GLOSSARY_IDS.foresee,
       glossary.GLOSSARY_IDS.reclaim,
@@ -247,7 +251,9 @@ describe("GameCard reveal contract", () => {
     );
     expect(description.indexOf("Exhausted")).toBeLessThan(
       description.indexOf(
-        glossary.requireGlossaryEntry("a9799416-d2d4-4f1b-a3b5-fec790119fae")
+        glossary.requireGlossaryEntry(
+          testGlossaryEntryId("a9799416-d2d4-4f1b-a3b5-fec790119fae"),
+        )
           .definition,
       ),
     );
@@ -297,7 +303,9 @@ describe("GameCard reveal contract", () => {
     );
     expect(description.indexOf("Figment")).toBeLessThan(
       description.indexOf(
-        glossary.requireGlossaryEntry("a9799416-d2d4-4f1b-a3b5-fec790119fae")
+        glossary.requireGlossaryEntry(
+          testGlossaryEntryId("a9799416-d2d4-4f1b-a3b5-fec790119fae"),
+        )
           .definition,
       ),
     );
@@ -373,7 +381,7 @@ describe("GameCard reveal contract", () => {
         id === glossaryId
           ? {
               id,
-              category: "Test",
+              category: "Keywords",
               term: "Timing",
               definition,
               priority: 95,
@@ -500,8 +508,8 @@ describe("GameCard reveal contract", () => {
     vi.mocked(extractMaterializedFigmentPreviews).mockReturnValue([
       {
         card: Object.freeze({
-          id: asCardId("bb1a5acd-1a03-4aa3-826d-f0a301843845"),
-          name: asCardName("Legionnaire"),
+          id: testCardId("bb1a5acd-1a03-4aa3-826d-f0a301843845"),
+          name: parseCardName("Legionnaire"),
           cardNumber: 1,
           cardType: "Character",
           subtype: "Warrior",

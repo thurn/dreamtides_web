@@ -1,4 +1,4 @@
-import { assertLocalized } from "@trox/runtime";
+import { assertLocalized, LocalizedString } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 import { resolveSource } from "../../runtime/localization/runtime";
@@ -18,7 +18,7 @@ import type {
 } from "../../types/journey";
 import type { CardData } from "../../types/cards";
 import type { GambleData } from "../../types/gamble-data";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type {
   GambleSiteView,
   GravokWagerSiteView,
@@ -29,12 +29,10 @@ import {
   gravokRevealGateId,
   resolveGambleGuide,
 } from "./gamble-site-view-model";
-import { asSiteId } from "../../types/identifiers";
-import { asShuffleCommitment } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseShuffleCommitment } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testDreamscapeId, testDreamsignId, testGuideId, testCardId } from "../../types/test-identities";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -53,9 +51,9 @@ const buildGambleSiteView = (
 const GUIDE_LINE_SOURCE = "Fixture game line.";
 const GUIDE_LINE = assertLocalized(GUIDE_LINE_SOURCE);
 const GUIDE = {
-  id: asGuideId("fixture-gamble-guide"),
+  id: testGuideId("fixture-gamble-guide"),
   name: "Fixture Gamble Guide",
-  homeDreamscapeId: asDreamscapeId("fixture-home"),
+  homeDreamscapeId: testDreamscapeId("fixture-home"),
   siteType: "Gamble",
   portraitSource: "fixture-guide.png",
   dialogue: { site: [GUIDE_LINE_SOURCE] },
@@ -63,11 +61,13 @@ const GUIDE = {
 } satisfies DreamGuideContent;
 
 const GAMBLE_SITE: SiteState & { type: "Gamble" } = {
-  id: asSiteId("fixture-gamble-site"),
+  id: parseSiteId("fixture-gamble-site"),
   type: "Gamble",
   isEnhanced: false,
   isVisited: false,
 };
+
+const FIXTURE_SIGN_ID = testDreamsignId("fixture-sign");
 
 const RUNTIME: GravokWagerSiteRuntime = {
   kind: "gamble",
@@ -75,11 +75,11 @@ const RUNTIME: GravokWagerSiteRuntime = {
   roundNumber: 1,
   isFarpoint: false,
   wagerCost: 50,
-  shuffleCommitment: asShuffleCommitment("fixture-commitment"),
+  shuffleCommitment: parseShuffleCommitment("fixture-commitment"),
   committedCard: { rank: "Q", suit: "hearts" },
-  dreamsignCandidateIds: [asDreamsignId("fixture-sign")],
+  dreamsignCandidateIds: [FIXTURE_SIGN_ID],
   rewardDreamsign: {
-    id: asDreamsignId("fixture-sign"),
+    id: FIXTURE_SIGN_ID,
     name: "Fixture Sign",
     effectDescription: "A fixture effect.",
   },
@@ -130,12 +130,14 @@ describe("gamble-site-view-model", () => {
       {
         id: "jack",
         minimumWinningRank: "J",
-        chanceLabel: "30.77%",
         essenceReward: 200,
-        rewardDreamsign: { id: "fixture-sign" },
+        rewardDreamsign: { id: FIXTURE_SIGN_ID },
         available: true,
       },
     ]);
+    expect(gates.every(({ chanceLabel }) => chanceLabel instanceof LocalizedString)).toBe(
+      true,
+    );
   });
 
   it("keeps the committed card concealed until the shared result exists", () => {
@@ -242,7 +244,7 @@ describe("gamble-site-view-model", () => {
       maxDreamsigns: 1,
       dreamsigns: [
         {
-          id: asDreamsignId("held-sign"),
+          id: testDreamsignId("held-sign"),
           name: "Held Sign",
           effectDescription: "Held effect.",
         },
@@ -264,12 +266,12 @@ describe("gamble-site-view-model", () => {
       revealGateId: "six",
       won: true,
       essenceSettled: false,
-      rewardDreamsign: { id: "fixture-sign" },
+      rewardDreamsign: { id: FIXTURE_SIGN_ID },
       pendingDreamsignReplacement: true,
     });
     expect(view.replacement).toMatchObject({
-      incoming: { id: "fixture-sign" },
-      held: [{ id: "held-sign" }],
+      incoming: { id: FIXTURE_SIGN_ID },
+      held: [{ id: testDreamsignId("held-sign") }],
       capacity: 1,
     });
     expect(view.canPlayAgain).toBe(false);
@@ -278,9 +280,9 @@ describe("gamble-site-view-model", () => {
   it("resolves the resident Gamble guide without production copy assertions", () => {
     const guides: readonly DreamGuideContent[] = [
       {
-        id: asGuideId("fixture-gambler"),
+        id: testGuideId("fixture-gambler"),
         name: "Fixture Gambler",
-        homeDreamscapeId: asDreamscapeId("fixture-dreamscape"),
+        homeDreamscapeId: testDreamscapeId("fixture-dreamscape"),
         siteType: "Gamble",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["A fixture greeting."] },
@@ -288,7 +290,7 @@ describe("gamble-site-view-model", () => {
       },
     ];
 
-    expect(resolveGambleGuide(guides)?.id).toBe("fixture-gambler");
+    expect(resolveGambleGuide(guides)?.id).toBe(guides[0]?.id);
   });
 });
 
@@ -297,10 +299,10 @@ const LADDER_RUNTIME: TidemarkLadderClimbSiteRuntime = {
   gameId: "tidemark-ladder-climb",
   isFarpoint: false,
   shuffleCommitments: [
-    asShuffleCommitment("attempt-1"),
-    asShuffleCommitment("attempt-2"),
-    asShuffleCommitment("attempt-3"),
-    asShuffleCommitment("attempt-4"),
+    parseShuffleCommitment("attempt-1"),
+    parseShuffleCommitment("attempt-2"),
+    parseShuffleCommitment("attempt-3"),
+    parseShuffleCommitment("attempt-4"),
   ],
   committedCards: [
     { rank: "J", suit: "clubs" },
@@ -309,7 +311,7 @@ const LADDER_RUNTIME: TidemarkLadderClimbSiteRuntime = {
     { rank: "6", suit: "spades" },
   ],
   dreamsignCandidateScores: [
-    { dreamsignId: asDreamsignId("fixture-sign"), score: 1 },
+    { dreamsignId: FIXTURE_SIGN_ID, score: 1 },
   ],
   strongPoolSize: 1,
   strongPoolCutoffScore: 1,
@@ -347,7 +349,7 @@ describe("gamble-site-view-model — Ladder Climb", () => {
     });
     expect(view.result).toBeNull();
     expect(view.essenceReward).toBe(25);
-    expect(view.rewardDreamsign?.id).toBe("fixture-sign");
+    expect(view.rewardDreamsign?.id).toBe(FIXTURE_SIGN_ID);
   });
 
   it("reveals only the next cost after a settled miss", () => {
@@ -394,7 +396,7 @@ describe("gamble-site-view-model — Ladder Climb", () => {
       targetRank: "Q",
       won: false,
     });
-    expect(view.rewardDreamsign?.id).toBe("fixture-sign");
+    expect(view.rewardDreamsign?.id).toBe(FIXTURE_SIGN_ID);
   });
 
   it("keeps the locked Dreamsign stable while a winning result settles", () => {
@@ -437,8 +439,8 @@ describe("gamble-site-view-model — Ladder Climb", () => {
     ) {
       throw new Error("expected Ladder Climb views");
     }
-    expect(before.rewardDreamsign?.id).toBe("fixture-sign");
-    expect(after.rewardDreamsign?.id).toBe("fixture-sign");
+    expect(before.rewardDreamsign?.id).toBe(FIXTURE_SIGN_ID);
+    expect(after.rewardDreamsign?.id).toBe(FIXTURE_SIGN_ID);
     expect(after.nextDraw).toBeNull();
   });
 
@@ -528,9 +530,9 @@ const STARWAY_RUNTIME: StarwayStairsSiteRuntime = {
   isFarpoint: false,
   wagerAmount: 30,
   shuffleCommitments: [
-    asShuffleCommitment("tier-1"),
-    asShuffleCommitment("tier-2"),
-    asShuffleCommitment("tier-3"),
+    parseShuffleCommitment("tier-1"),
+    parseShuffleCommitment("tier-2"),
+    parseShuffleCommitment("tier-3"),
   ],
   committedCards: [
     { rank: "3", suit: "clubs" },
@@ -744,8 +746,8 @@ describe("gamble-site-view-model — Starway Stairs", () => {
 
 function fourSuitCard(index: number): CardData {
   return {
-    name: asCardName(`Four Suit Fixture ${String(index)}`),
-    id: asCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    name: parseCardName(`Four Suit Fixture ${String(index)}`),
+    id: testCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
     cardNumber: index,
     cardType: "Character",
     subtype: "",
@@ -765,13 +767,13 @@ function fourSuitTarget(
 ): FourSuitRepriseTarget {
   const card = fourSuitCard(index);
   return {
-    entryId: asDeckEntryId(entryId),
+    entryId: parseDeckEntryId(entryId),
     cardId: card.id,
     cardNumber: card.cardNumber,
     cardSnapshot: card,
     transfigurationOffers: [
       {
-        entryId: asDeckEntryId(entryId),
+        entryId: parseDeckEntryId(entryId),
         type: "Empowered",
         effectDescription: "Fixture form.",
         effectDetails: { fixture: true },
@@ -797,9 +799,9 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
       isFarpoint: false,
       drawCost: 25,
       shuffleCommitments: [
-        asShuffleCommitment("round-1"),
-        asShuffleCommitment("round-2"),
-        asShuffleCommitment("round-3"),
+        parseShuffleCommitment("round-1"),
+        parseShuffleCommitment("round-2"),
+        parseShuffleCommitment("round-3"),
       ],
       committedCards: [
         { rank: "4", suit: "diamonds" },
@@ -810,7 +812,7 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
       rounds: [
         {
           roundNumber: 1,
-          shuffleCommitment: asShuffleCommitment("round-1"),
+          shuffleCommitment: parseShuffleCommitment("round-1"),
           card: { rank: "4", suit: "diamonds" },
           targetEntryId: target.entryId,
           targetCardId: target.cardId,
@@ -898,7 +900,7 @@ describe("gamble-site-view-model — Blackjack", () => {
     wagerCost: 50,
     prizeEssence: 300,
     attemptNumber: 1,
-    shuffleCommitment: asShuffleCommitment("fixture-blackjack-commitment"),
+    shuffleCommitment: parseShuffleCommitment("fixture-blackjack-commitment"),
     committedDeck: [
       { rank: "10", suit: "clubs" },
       { rank: "6", suit: "hearts" },

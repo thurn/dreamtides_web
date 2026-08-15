@@ -11,6 +11,12 @@ import {
 import { CumulusRoot } from "../CumulusRoot";
 import { lookupGlossaryTerm } from "../../data/glossary";
 import { assertLocalized } from "@trox/runtime";
+import {
+  testCardId,
+  testDreamAvatarId,
+  testTideId,
+} from "../../types/test-identities";
+import { testPresentationId } from "../../types/test-identities";
 
 class ResizeObserverStub {
   constructor(_callback: ResizeObserverCallback) {}
@@ -21,19 +27,19 @@ class ResizeObserverStub {
 
 const OFFERED: DreamAvatarOfferView[] = [
   {
-    id: "caller-1",
+    id: testDreamAvatarId("caller-1"),
     name: assertLocalized("Mira of Lanterns"),
     title: assertLocalized("Keeper of the Threshold Flame"),
     imageNumber: "0009",
     renderedText: assertLocalized("First dreamAvatar."),
     startingEssence: 230,
     signatureCards: [
-      { id: "sig-1-0", name: assertLocalized("Lantern Seer") },
+      { id: testCardId("sig-1-0"), name: assertLocalized("Lantern Seer") },
     ],
     tides: [],
   },
   {
-    id: "caller-2",
+    id: testDreamAvatarId("caller-2"),
     name: assertLocalized("Vey of Embers"),
     title: assertLocalized("The Ashen Cartographer"),
     imageNumber: "0010",
@@ -42,13 +48,13 @@ const OFFERED: DreamAvatarOfferView[] = [
     signatureCards: [],
     tides: [
       {
-        id: "tide-01",
+        id: testTideId("tide-01"),
         label: assertLocalized("Ember Rush"),
         description: assertLocalized("Aggressive early pressure."),
         tide: "ember",
       },
       {
-        id: "tide-02",
+        id: testTideId("tide-02"),
         label: assertLocalized("Verdant Growth"),
         description: assertLocalized("Ramps into large threats."),
         tide: "wild",
@@ -121,15 +127,17 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       1,
     );
     expect(
-      container.querySelector('[data-dream-avatar-console="caller-1"]'),
+      container.querySelector(
+        `[data-dream-avatar-console="${OFFERED[0].id}"]`,
+      ),
     ).not.toBeNull();
     expect(
       container.querySelector(
-        '[data-choose-dream-avatar="caller-1"] [data-glass-placement="onGlass"]',
+        `[data-choose-dream-avatar="${OFFERED[0].id}"] [data-glass-placement="onGlass"]`,
       ),
     ).not.toBeNull();
     const essence = container.querySelector(
-      '[data-starting-essence-value="caller-1"]',
+      `[data-starting-essence-value="${OFFERED[0].id}"]`,
     );
     expect(essence?.textContent).toContain(String(OFFERED[0].startingEssence));
 
@@ -149,7 +157,9 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
 
     // caller-1 has no tides → no cluster.
     expect(
-      container.querySelector(`[data-dream-avatar-tides="caller-1"]`),
+      container.querySelector(
+        `[data-dream-avatar-tides="${OFFERED[0].id}"]`,
+      ),
     ).toBeNull();
 
     const next = container.querySelector<HTMLButtonElement>(
@@ -161,12 +171,12 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
 
     // caller-2 has two tides → its active console shows two collapsed discs.
     const cluster = container.querySelector(
-      `[data-dream-avatar-tides="caller-2"]`,
+      `[data-dream-avatar-tides="${OFFERED[1].id}"]`,
     );
     expect(cluster).not.toBeNull();
     expect(cluster?.querySelectorAll("[data-tide-disc]")).toHaveLength(2);
     const label = container.querySelector<HTMLElement>(
-      '[data-dream-avatar-console="caller-2"] [data-tides-info-label]',
+      `[data-dream-avatar-console="${OFFERED[1].id}"] [data-tides-info-label]`,
     );
     expect(label?.getAttribute("aria-label")).toBe("Tides information");
     expect(label?.querySelector("i")?.className).toBe("bxf bx-info-circle");
@@ -196,7 +206,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     });
 
     const button = container.querySelector<HTMLButtonElement>(
-      `[data-choose-dream-avatar="caller-2"] button`,
+      `[data-choose-dream-avatar="${OFFERED[1].id}"] button`,
     );
     if (button === null) {
       throw new Error("Missing Choose button");
@@ -205,7 +215,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(onPick).toHaveBeenCalledWith("caller-2");
+    expect(onPick).toHaveBeenCalledWith(OFFERED[1].id);
 
     act(() => {
       root.unmount();
@@ -274,7 +284,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       <JourneyStartScreen
         dreamAvatars={[OFFERED[0]]}
         guideDialogue={{
-          id: "journey-start-guide-dialogue",
+          id: testPresentationId("journey-start-guide-dialogue"),
           model: {
             portrait: { kind: "character-portrait", characterId: "mira" },
             portraitAlt: assertLocalized("Mira"),
@@ -454,7 +464,7 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
       <JourneyStartScreen
         dreamAvatars={[OFFERED[0]]}
         guideDialogue={{
-          id: "journey-start-guide-dialogue-desktop",
+          id: testPresentationId("journey-start-guide-dialogue-desktop"),
           model: {
             portrait: { kind: "character-portrait", characterId: "mira" },
             portraitAlt: assertLocalized("Mira"),
@@ -498,18 +508,20 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
 
     // caller-1 has no tides → no tides node.
     expect(
-      container.querySelector(`[data-dream-avatar-tides="caller-1"]`),
+      container.querySelector(
+        `[data-dream-avatar-tides="${OFFERED[0].id}"]`,
+      ),
     ).toBeNull();
 
     // caller-2 has two tides → one hover-only disc per tide (no expand/collapse).
     const tides = container.querySelector(
-      `[data-dream-avatar-tides="caller-2"]`,
+      `[data-dream-avatar-tides="${OFFERED[1].id}"]`,
     );
     expect(tides).not.toBeNull();
     expect(tides?.querySelectorAll("[data-tide-disc]")).toHaveLength(2);
     expect(
       container.querySelector(
-        '[data-dream-avatar-column="caller-2"] [data-tides-info-label]',
+        `[data-dream-avatar-column="${OFFERED[1].id}"] [data-tides-info-label]`,
       ),
     ).not.toBeNull();
 

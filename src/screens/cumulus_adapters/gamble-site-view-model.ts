@@ -64,8 +64,19 @@ import type { GravokGateId } from "../../types/gamble";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
-import { asShuffleCommitment } from "../../types/identifiers";
-import type { GuideId } from "../../types/identifiers";
+import { parseGambleResultId } from "../../types/identifiers";
+import type {
+  GambleResultId,
+  GuideId,
+  SiteId,
+} from "../../types/identifiers";
+
+function gambleResultId(
+  siteId: SiteId,
+  ...parts: readonly (string | number)[]
+): GambleResultId {
+  return parseGambleResultId([siteId, ...parts].join(":"));
+}
 
 /** The next gate in display order supplies the non-selected reveal object. */
 export function gravokRevealGateId(
@@ -180,7 +191,12 @@ function buildGravokWagerSiteView(params: {
       result === null
         ? null
         : {
-            id: `${params.site.id}:${runtime.shuffleCommitment}:${result.gateId}:${result.card.rank}-${result.card.suit}`,
+            id: gambleResultId(
+              params.site.id,
+              runtime.shuffleCommitment,
+              result.gateId,
+              `${result.card.rank}-${result.card.suit}`,
+            ),
             gateId: result.gateId,
             revealGateId: gravokRevealGateId(params.game.rules, result.gateId),
             won: result.won,
@@ -265,7 +281,12 @@ function buildLadderClimbSiteView(params: {
       result === null
         ? null
         : {
-            id: `${params.site.id}:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? asShuffleCommitment("unprepared")}:${String(result.attemptNumber)}`,
+            id: gambleResultId(
+              params.site.id,
+              runtime.shuffleCommitments[result.attemptNumber - 1] ??
+                "unprepared",
+              result.attemptNumber,
+            ),
             attemptNumber: result.attemptNumber,
             targetRank: tidemarkLadderClimbAttemptRule(
               params.game.rules,
@@ -361,7 +382,12 @@ function buildStarwayStairsSiteView(params: {
       latestResult === null
         ? null
         : {
-            id: `${params.site.id}:${runtime.shuffleCommitments[latestResult.tierNumber - 1] ?? asShuffleCommitment("unprepared")}:${String(latestResult.tierNumber)}`,
+            id: gambleResultId(
+              params.site.id,
+              runtime.shuffleCommitments[latestResult.tierNumber - 1] ??
+                "unprepared",
+              latestResult.tierNumber,
+            ),
             tierNumber: latestResult.tierNumber,
             busted: latestResult.busted,
             resultSettled: latestResult.resultSettled,
@@ -433,7 +459,12 @@ function buildBlackjackSiteView(params: {
     resultId:
       runtime.outcome === null
         ? null
-        : `${params.site.id}:${runtime.shuffleCommitment}:${runtime.outcome}:${String(runtime.deckCursor)}`,
+        : gambleResultId(
+            params.site.id,
+            runtime.shuffleCommitment,
+            runtime.outcome,
+            runtime.deckCursor,
+          ),
     canPlayAgain:
       (runtime.outcome === "push" ||
         (runtime.outcome === "dealer-win" &&
@@ -576,7 +607,11 @@ function buildFourSuitRepriseSiteView(params: {
       resultTarget === null
         ? null
         : {
-            id: `${params.site.id}:${latestRound.shuffleCommitment}:${latestRound.targetEntryId}`,
+            id: gambleResultId(
+              params.site.id,
+              latestRound.shuffleCommitment,
+              latestRound.targetEntryId,
+            ),
             roundNumber: latestRound.roundNumber,
             card: latestRound.card,
             outcome: latestRound.outcome,

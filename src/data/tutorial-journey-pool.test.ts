@@ -1,13 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
 import type { DreamAvatarContent } from "../types/content";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import type { RunPoolContext } from "./journey-content";
 import { buildTutorialJourneyPackage } from "./tutorial-journey-package";
 import { validateTutorialJourneyPool } from "./tutorial-journey-pool";
 import { GLOSSARY, glossaryRulesTextForms } from "./glossary";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asDreamsignId } from "../types/identifiers";
+import { testCardId, testDreamAvatarId, testDreamsignId } from "../types/test-identities";
 
 const CARD_IDS = [
   "00000000-0000-4000-8000-000000000001",
@@ -53,9 +52,9 @@ function syntheticSource(): Record<string, unknown> {
   };
 }
 
-function dreamAvatar(id: string): DreamAvatarContent {
+function dreamAvatar(idSeed: string): DreamAvatarContent {
   return {
-    id: asDreamAvatarId(id),
+    id: testDreamAvatarId(idSeed),
     name: "Tutorial Avatar",
     title: "Keeper of the Example",
     renderedText: "The first warrior costs less.",
@@ -74,8 +73,8 @@ function buildCardDatabase(
       return [
         cardNumber,
         {
-          id: asCardId(id),
-          name: asCardName(`Tutorial card ${String(index + 1)}`),
+          id: testCardId(id),
+          name: parseCardName(`Tutorial card ${String(index + 1)}`),
           cardNumber,
           cardType: "Character",
           subtype: "Warrior",
@@ -154,10 +153,10 @@ describe("buildTutorialJourneyPackage", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map(
-        CARD_IDS.map((id, index) => [asCardId(id), index + 101]),
+        CARD_IDS.map((id, index) => [testCardId(id), index + 101]),
       ),
       starterCardNumbers: [],
-      allDreamsignPoolIds: [asDreamsignId(OPENING_DREAMSIGN_ID)],
+      allDreamsignPoolIds: [testDreamsignId(OPENING_DREAMSIGN_ID)],
       poolData: {},
     } satisfies RunPoolContext;
 
@@ -203,9 +202,9 @@ describe("buildTutorialJourneyPackage", () => {
     vi.spyOn(console, "log").mockImplementation(() => {});
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
-      idIndex: new Map([[asCardId(CARD_IDS[0]), 101]]),
+      idIndex: new Map([[testCardId(CARD_IDS[0]), 101]]),
       starterCardNumbers: [],
-      allDreamsignPoolIds: [asDreamsignId(OPENING_DREAMSIGN_ID)],
+      allDreamsignPoolIds: [testDreamsignId(OPENING_DREAMSIGN_ID)],
       poolData: {},
     } satisfies RunPoolContext;
 
@@ -223,7 +222,7 @@ describe("buildTutorialJourneyPackage", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map(
-        CARD_IDS.map((id, index) => [asCardId(id), index + 101]),
+        CARD_IDS.map((id, index) => [testCardId(id), index + 101]),
       ),
       starterCardNumbers: [],
       allDreamsignPoolIds: [],
@@ -269,10 +268,10 @@ describe("buildTutorialJourneyPackage", () => {
     const pool = validateTutorialJourneyPool(syntheticSource(), 8);
     const context = {
       idIndex: new Map(
-        CARD_IDS.map((id, index) => [asCardId(id), index + 101]),
+        CARD_IDS.map((id, index) => [testCardId(id), index + 101]),
       ),
       starterCardNumbers: [],
-      allDreamsignPoolIds: [asDreamsignId(OPENING_DREAMSIGN_ID)],
+      allDreamsignPoolIds: [testDreamsignId(OPENING_DREAMSIGN_ID)],
       poolData: {},
     } satisfies RunPoolContext;
 

@@ -221,7 +221,7 @@ export function runtimeSlotsToShopSlots(
  * shop renders empty.
  */
 function summarizeDraftPool(state: DraftState | null): {
-  mode: string | null;
+  mode: DraftState["mode"] | null;
   distinctRemaining?: number;
   copiesRemaining?: number;
 } {

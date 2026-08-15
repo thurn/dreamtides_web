@@ -13,7 +13,8 @@ import {
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { CumulusRoot } from "../../CumulusRoot";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
-import { asDreamsignId } from "../../../types/identifiers";
+import { testDreamsignId } from "../../../types/test-identities";
+import type { DreamsignId } from "../../../types/identifiers";
 
 /**
  * The unified dreamsign entity (formerly `DreamsignArtTile` +
@@ -29,7 +30,7 @@ import { asDreamsignId } from "../../../types/identifiers";
 
 function makeDreamsign(
   overrides: { name: string } & Partial<{
-    id: string;
+    id: DreamsignId;
     effectDescription: string | null;
     imageName: string;
     imageAlt: string;
@@ -41,7 +42,9 @@ function makeDreamsign(
       overrides.effectDescription ?? `${overrides.name} effect.`,
     imageName: overrides.imageName,
     imageAlt: overrides.imageAlt,
-    id: asDreamsignId(overrides.id ?? "00000000-0000-4000-8000-000000000031"),
+    id:
+      overrides.id ??
+      testDreamsignId("00000000-0000-4000-8000-000000000031"),
   });
 }
 
@@ -135,7 +138,7 @@ describe("Dreamsign", () => {
     "keeps $glossaryId card timing prose on the card definition",
     ({ id, effect, glossaryId }) => {
       const sign = makeDreamsign({
-        id,
+        id: testDreamsignId(id),
         name: "Card timing sign",
         effectDescription: effect,
       });

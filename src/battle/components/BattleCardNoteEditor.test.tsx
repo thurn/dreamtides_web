@@ -14,8 +14,8 @@ import {
 } from "../test-support";
 import { BattleCardNoteEditor } from "./BattleCardNoteEditor";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
-import { asBattleEntryKey } from "../../types/identifiers";
-import { asNoteId } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
+import { parseNoteId } from "../../types/identifiers";
 
 function LocalizedBattleCardNoteEditor(
   props: ComponentProps<typeof BattleCardNoteEditor>,
@@ -30,7 +30,7 @@ function LocalizedBattleCardNoteEditor(
 function createState() {
   return createInitialBattleState(
     createTestBattleInit({
-      battleEntryKey: asBattleEntryKey("test"),
+      battleEntryKey: parseBattleEntryKey("test"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
@@ -70,7 +70,7 @@ describe("BattleCardNoteEditor", () => {
         <LocalizedBattleCardNoteEditor
           battleCardId={battleCardId}
           state={state}
-          generateNoteId={() => asNoteId("note-1")}
+          generateNoteId={() => parseNoteId("note-1")}
           onClose={() => undefined}
           onSubmit={onSubmit}
         />,
@@ -96,7 +96,7 @@ describe("BattleCardNoteEditor", () => {
     expect(submitted).toMatchObject({
       kind: "ADD_CARD_NOTE",
       battleCardId,
-      noteId: asNoteId("note-1"),
+      noteId: parseNoteId("note-1"),
       text: "remember this",
       expiry: { kind: "atStartOfTurn" },
     });
@@ -115,7 +115,7 @@ describe("BattleCardNoteEditor", () => {
         <LocalizedBattleCardNoteEditor
           battleCardId={battleCardId}
           state={state}
-          generateNoteId={() => asNoteId("note-2")}
+          generateNoteId={() => parseNoteId("note-2")}
           onClose={() => undefined}
           onSubmit={onSubmit}
         />,

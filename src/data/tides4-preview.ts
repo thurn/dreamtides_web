@@ -12,6 +12,7 @@ import { makeRng } from "../draft/pool/rng.ts";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io.ts";
 import { generateTides4 } from "../draft/pool/variant-tides4.ts";
 import type { DreamAvatarContent } from "../types/content.ts";
+import type { JourneySeed } from "../types/journey-seed.ts";
 import { hashStringToSeed, type RunPoolContext } from "./journey-content.ts";
 
 /**
@@ -24,7 +25,7 @@ import { hashStringToSeed, type RunPoolContext } from "./journey-content.ts";
 export function selectedTides4Decks(
   poolContext: RunPoolContext | undefined,
   dreamAvatar: DreamAvatarContent,
-  journeySeed: string,
+  journeySeed: JourneySeed,
 ): Tides4DeckJson[] {
   if (poolContext === undefined) return [];
   if (poolContext.poolVariant !== "tides4") return [];
@@ -38,12 +39,9 @@ export function selectedTides4Decks(
     dreamAvatar.id,
     poolContext.tides4Tuning,
   );
-  // `selected` is `["tides4", ...tideDeckIds]`; drop the leading algorithm label.
-  const deckIds = result.selected.slice(1);
-
   const tideById = new Map(decks.tides.map((tide) => [tide.id, tide]));
   const selected: Tides4DeckJson[] = [];
-  for (const id of deckIds) {
+  for (const id of result.tideDeckIds) {
     const tide = tideById.get(id);
     if (tide !== undefined) selected.push(tide);
   }

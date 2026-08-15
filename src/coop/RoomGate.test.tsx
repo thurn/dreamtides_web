@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../types/test-identities";
 // @vitest-environment jsdom
 
 // Rendering tests for RoomGate's content-config gate: a delivered genesis whose
@@ -10,6 +11,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { Genesis, LogNode } from "../eventlog/types";
+import { parseReducerVersion } from "../types/reducer-version";
 import { getLogEntries, resetLog } from "../logging";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { economyFixture } from "../testing/economy-fixture";
@@ -18,11 +20,12 @@ import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { CARD_ROLE_DATA } from "../data/card-roles";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
-import { asRoomId } from "../types/identifiers";
+import { parseRoomId } from "../types/identifiers";
+import { testFoldHash } from "../types/test-identities";
 
 const REDUCER_VERSION = "dreamtides-coop-v25";
-const ATLAS_FOLD_HASH = "fixture-atlas-fold-hash";
-const SITES_FOLD_HASH = "fixture-sites-fold-hash";
+const ATLAS_FOLD_HASH = testFoldHash("fixture-atlas-fold-hash");
+const SITES_FOLD_HASH = testFoldHash("fixture-sites-fold-hash");
 const DRAFT_DATA = draftDataFixture();
 const ECONOMY = economyFixture();
 const PINNED_ECONOMY = {
@@ -35,8 +38,8 @@ const PINNED_ECONOMY = {
   opponentsFoldHash: opponentsFixture().foldHash,
   rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
   auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
-  explorationFoldHash: "fixture-exploration-fold-hash",
-  tutorialFoldHash: "fixture-tutorial-fold-hash",
+  explorationFoldHash: testFoldHash("fixture-exploration-fold-hash"),
+  tutorialFoldHash: testFoldHash("fixture-tutorial-fold-hash"),
 };
 
 // Captured subscriber so a test can hand RoomGate a chosen log node.
@@ -94,7 +97,7 @@ function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
   return {
     seedOverride: null,
     aiMode: true,
-    gameId: asRoomId("abc123"),
+    gameId: parseRoomId("abc123"),
     databaseMode: "emulator",
     ...overrides,
   };
@@ -102,7 +105,7 @@ function runtimeConfig(overrides: Partial<RuntimeConfig> = {}): RuntimeConfig {
 
 function genesisWith(contentConfig: Genesis["contentConfig"]): Genesis {
   return {
-    seed: "seed-1",
+    seed: testJourneySeed("seed-1"),
     reducerVersion: REDUCER_VERSION,
     createdAt: 0,
     contentConfig,
@@ -143,8 +146,8 @@ function mount(config: RuntimeConfig): void {
           opponentsData={opponentsFixture()}
           rewardSelectionData={CONFIG_DATA_FIXTURE.rewardSelectionData}
           auguryData={CONFIG_DATA_FIXTURE.auguryData}
-          explorationFoldHash="fixture-exploration-fold-hash"
-          tutorialFoldHash="fixture-tutorial-fold-hash"
+          explorationFoldHash={testFoldHash("fixture-exploration-fold-hash")}
+          tutorialFoldHash={testFoldHash("fixture-tutorial-fold-hash")}
         >
           {() => <div data-room-children="true">room children</div>}
         </RoomGate>
@@ -201,7 +204,7 @@ describe("RoomGate content-config gate", () => {
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            atlasFoldHash: "different-atlas-fold-hash",
+            atlasFoldHash: testFoldHash("different-atlas-fold-hash"),
             sitesFoldHash: SITES_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
@@ -258,7 +261,7 @@ describe("RoomGate content-config gate", () => {
             sitesFoldHash: SITES_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
-            opponentsFoldHash: "c".repeat(64),
+            opponentsFoldHash: testFoldHash("c"),
           }),
         ),
       );
@@ -281,7 +284,7 @@ describe("RoomGate content-config gate", () => {
             atlasFoldHash: ATLAS_FOLD_HASH,
             draftFoldHash: DRAFT_DATA.foldHash,
             ...PINNED_ECONOMY,
-            tutorialFoldHash: "c".repeat(64),
+            tutorialFoldHash: testFoldHash("c"),
           }),
         ),
       );
@@ -303,7 +306,7 @@ describe("RoomGate content-config gate", () => {
             poolVariant: "tides4",
             atlasFoldHash: ATLAS_FOLD_HASH,
             sitesFoldHash: SITES_FOLD_HASH,
-            draftFoldHash: "different-draft-fold-hash",
+            draftFoldHash: testFoldHash("different-draft-fold-hash"),
             ...PINNED_ECONOMY,
           }),
         ),
@@ -322,7 +325,7 @@ describe("RoomGate content-config gate", () => {
     await flush();
 
     const legacyGenesis: Genesis = {
-      seed: "seed-1",
+      seed: testJourneySeed("seed-1"),
       reducerVersion: REDUCER_VERSION,
       createdAt: 0,
     };
@@ -347,7 +350,7 @@ describe("RoomGate content-config gate", () => {
         nodeWith(
           genesisWith({
             poolVariant: "tides4",
-            atlasFoldHash: "different-atlas-fold-hash",
+            atlasFoldHash: testFoldHash("different-atlas-fold-hash"),
             sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
           }),
@@ -372,7 +375,7 @@ describe("RoomGate content-config gate", () => {
           genesisWith({
             poolVariant: "tides4",
             atlasFoldHash: ATLAS_FOLD_HASH,
-            sitesFoldHash: "different-sites-fold-hash",
+            sitesFoldHash: testFoldHash("different-sites-fold-hash"),
             ...PINNED_ECONOMY,
           }),
         ),
@@ -398,7 +401,7 @@ describe("RoomGate content-config gate", () => {
             atlasFoldHash: ATLAS_FOLD_HASH,
             sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
-            economyFoldHash: "different-economy-fold-hash",
+            economyFoldHash: testFoldHash("different-economy-fold-hash"),
           }),
         ),
       );
@@ -445,7 +448,7 @@ describe("RoomGate content-config gate", () => {
             sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
           }),
-          reducerVersion: "0dfbc840a6a3-6d94b82e9b7a",
+          reducerVersion: parseReducerVersion("0dfbc840a6a3-6d94b82e9b7a"),
         }),
       );
     });
@@ -468,7 +471,7 @@ describe("RoomGate content-config gate", () => {
             sitesFoldHash: SITES_FOLD_HASH,
             ...PINNED_ECONOMY,
           }),
-          reducerVersion: "incompatible-rules-v2",
+          reducerVersion: parseReducerVersion("incompatible-rules-v2"),
         }),
       );
     });
@@ -489,8 +492,8 @@ describe("room-scoped client identity", () => {
       },
     };
 
-    const first = roomScopedClientId(asRoomId("room42"), storage);
-    const reloaded = roomScopedClientId(asRoomId("room42"), storage);
+    const first = roomScopedClientId(parseRoomId("room42"), storage);
+    const reloaded = roomScopedClientId(parseRoomId("room42"), storage);
 
     expect(reloaded).toBe(first);
   });

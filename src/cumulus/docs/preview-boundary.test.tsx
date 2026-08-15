@@ -17,7 +17,7 @@ import { DemoStage } from "./DemoStage";
   .IS_REACT_ACT_ENVIRONMENT = true;
 
 const entry: CumulusComponent = {
-  id: "fixed-preview",
+  id: "pressable",
   title: "Fixed Preview",
   blurb: "A fixed-position preview fixture.",
   group: "Primitives",

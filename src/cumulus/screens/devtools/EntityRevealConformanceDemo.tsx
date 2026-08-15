@@ -1,6 +1,10 @@
 import { assertLocalized } from "@trox/runtime";
 import { useEffect, useState } from "react";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import {
+  parseCardId,
+  parseCardName,
+  parseCardSubtype,
+} from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import {
   AtlasNode,
@@ -13,25 +17,27 @@ import { DreamAvatarPortrait } from "../../components/hud/DreamAvatarPortrait";
 import { InfoCard } from "../../components/overlay/InfoCard";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
-import { asDreamscapeId } from "../../../types/identifiers";
-import { asDreamsignId } from "../../../types/identifiers";
-import { asAtlasNodeId } from "../../../types/identifiers";
-import { asSiteId } from "../../../types/identifiers";
-import { asAffiliationId } from "../../../types/identifiers";
+import { parseDreamscapeId } from "../../../types/identifiers";
+import { parseDreamsignId } from "../../../types/identifiers";
+import { parseAtlasNodeId } from "../../../types/identifiers";
+import { parseSiteId } from "../../../types/identifiers";
+import { parseAffiliationId } from "../../../types/identifiers";
+import { parseArtAssetKey } from "../../../types/identifiers";
+import { parseDreamAvatarId } from "../../../types/identifiers";
 
-const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
-const BATTLE_CARD_ID = asCardId("22222222-2222-4222-8222-222222222222");
+const CARD_ID = parseCardId("11111111-1111-4111-8111-111111111111");
+const BATTLE_CARD_ID = parseCardId("22222222-2222-4222-8222-222222222222");
 const CONFORMANCE_CARD_IMAGE = 485518048;
-const ATLAS_NODE_ID = asAtlasNodeId(
+const ATLAS_NODE_ID = parseAtlasNodeId(
   "33333333-3333-4333-8333-333333333333",
 );
 
 const CARD: CardData = {
   id: CARD_ID,
-  name: asCardName("Conformance Sentry"),
+  name: parseCardName("Conformance Sentry"),
   cardNumber: 1,
   cardType: "Character",
-  subtype: "Guide",
+  subtype: parseCardSubtype("Guide"),
   isStarter: false,
   rarity: "Special",
   energyCost: 2,
@@ -48,12 +54,12 @@ const ATLAS_MODEL: AtlasNodeModel = {
   state: "available",
   role: "regular",
   isReachable: true,
-  iconRef: artRef.dreamscapeIcon(asDreamscapeId("wilderveil")),
+  iconRef: artRef.dreamscapeIcon(parseDreamscapeId("wilderveil")),
   siteBadgeGlyph: GLYPHS.water,
-  unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
+  unrevealedFrameRef: artRef.atlasAsset(parseArtAssetKey("fixture-frame.png")),
   knownDreamsignRef: artRef.dreamsign("runes.png"),
   primary: {
-    sceneArt: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
+    sceneArt: artRef.dreamscapeScene(parseDreamscapeId("wilderveil")),
     figureArt: null,
     placeName: assertLocalized("Conformance Veil"),
     guideName: null,
@@ -61,19 +67,19 @@ const ATLAS_MODEL: AtlasNodeModel = {
     body: assertLocalized("A fixed Atlas fixture."),
   },
   dreamsign: {
-    id: asDreamsignId("44444444-4444-4444-8444-444444444444"),
+    id: parseDreamsignId("44444444-4444-4444-8444-444444444444"),
     name: assertLocalized("Measured Sign"),
     art: null,
     rulesText: assertLocalized("The first vision is fixed."),
   },
   site: {
-    id: asSiteId("55555555-5555-4555-8555-555555555555"),
+    id: parseSiteId("55555555-5555-4555-8555-555555555555"),
     name: assertLocalized("Measured Site"),
     blurb: assertLocalized("A fixed semantic site."),
     icon: GLYPHS.water,
   },
   affiliation: {
-    id: asAffiliationId("66666666-6666-4666-8666-666666666666"),
+    id: parseAffiliationId("66666666-6666-4666-8666-666666666666"),
     title: assertLocalized("Fixture affiliation"),
     body: assertLocalized("Fixture cards are more likely here."),
   },
@@ -82,7 +88,7 @@ const ATLAS_MODEL: AtlasNodeModel = {
 const BATTLE_CARD: CardData = {
   ...CARD,
   id: BATTLE_CARD_ID,
-  name: asCardName("Battle Conformance"),
+  name: parseCardName("Battle Conformance"),
   cardNumber: 2,
   energyCost: 1,
   spark: 2,
@@ -91,19 +97,19 @@ const BATTLE_CARD: CardData = {
 };
 const GENERATED_BATTLE_CARD: CardData = {
   ...BATTLE_CARD,
-  id: asCardId("77777777-7777-4777-8777-777777777777"),
-  name: asCardName("Generated Conformance Figment"),
+  id: parseCardId("77777777-7777-4777-8777-777777777777"),
+  name: parseCardName("Generated Conformance Figment"),
 };
 const TRUNCATION_CARD: CardData = {
   ...CARD,
-  id: asCardId("88888888-8888-4888-8888-888888888888"),
-  name: asCardName("Conformance Lexicon"),
+  id: parseCardId("88888888-8888-4888-8888-888888888888"),
+  name: parseCardName("Conformance Lexicon"),
   cardNumber: 8,
   renderedText:
     "Figment. Materialize. Rematerialize. Dissolve. Banish. Abandon. Score. Reclaim. Foresee. Discover. Erode. Fast. Awakened. Veil. Vengeful. Support. Challenger. Prevent. Offering. Phasing. Ephemeral. Transfigure. Purge. Duplicate. Bane. Essence. Enhanced.",
 };
 const DREAM_AVATAR = {
-  id: "99999999-9999-4999-8999-999999999999",
+  id: parseDreamAvatarId("99999999-9999-4999-8999-999999999999"),
   name: assertLocalized("Conformance Guide"),
   title: assertLocalized("Keeper of Context"),
   imageNumber: "0071",

@@ -1,3 +1,5 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
 import { buildAppliedIndex, decodeAppliedIndex, foldEvents } from "./fold";
 import { hashState } from "./hash";
@@ -17,7 +19,7 @@ interface ToyState {
   log: string[];
 }
 
-const GENESIS: Genesis = { seed: "toy-seed", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
+const GENESIS: Genesis = { seed: testJourneySeed("toy-seed"), reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
 
 /**
  * Toy reducer:
@@ -69,12 +71,18 @@ function ev(
   seq: number,
   actor: string,
   basedOnSeq: number,
-  type = "ADD",
+  type: GameEvent["type"] = "ADD",
   payload: Record<string, unknown> = { x: 1 },
 ): { seq: number; event: GameEvent } {
   return {
     seq,
-    event: { type, payload, actor, clientTimestamp: `t${seq}`, basedOnSeq },
+    event: {
+      type,
+      payload,
+      actor: testEventActor(actor),
+      clientTimestamp: `t${seq}`,
+      basedOnSeq,
+    },
   };
 }
 
@@ -259,8 +267,8 @@ describe("foldEvents applied-index horizon coverage", () => {
     const live = foldEvents(spyConfig, GENESIS, GENESIS_BASE(), liveEvents);
     expect(new Map(live.outcomes.map((o) => [o.seq, o.outcome])).get(6)).toBe("bounced");
     expect(liveWindow).toEqual([
-      { seq: 4, actor: "B", type: "ADD" },
-      { seq: 5, actor: "A", type: "ADD" },
+      { seq: 4, actor: testEventActor("B"), type: "ADD" },
+      { seq: 5, actor: testEventActor("A"), type: "ADD" },
     ]);
 
     // Joiner: starts from a snapshot at the compaction horizon base.seq = 5,
@@ -315,17 +323,17 @@ describe("decodeAppliedIndex", () => {
   it("skips malformed appliedIndex entries and keeps valid integer-keyed entries", () => {
     const decoded = decodeAppliedIndex(
       JSON.stringify({
-        1: { actor: "a", type: "T" },
-        nope: { actor: "b", type: "T" },
-        2: { actor: "missing-type" },
+        1: { actor: testEventActor("a"), type: "T" },
+        nope: { actor: testEventActor("b"), type: "T" },
+        2: { actor: testEventActor("missing-type") },
         3: null,
-        4: { actor: "c", type: "U" },
+        4: { actor: testEventActor("c"), type: "U" },
       }),
     );
 
     expect([...decoded.entries()]).toEqual([
-      [1, { actor: "a", type: "T" }],
-      [4, { actor: "c", type: "U" }],
+      [1, { actor: testEventActor("a"), type: "T" }],
+      [4, { actor: testEventActor("c"), type: "U" }],
     ]);
   });
 });
@@ -424,7 +432,7 @@ describe("buildAppliedIndex", () => {
     const result = foldEvents(CONFIG, GENESIS, GENESIS_BASE(), events);
     const index = buildAppliedIndex(events, result.outcomes);
     expect([...index.keys()].sort((a, b) => a - b)).toEqual([1, 3]);
-    expect(index.get(1)).toEqual({ actor: "A", type: "ADD" });
+    expect(index.get(1)).toEqual({ actor: testEventActor("A"), type: "ADD" });
     expect(index.has(2)).toBe(false);
   });
 });

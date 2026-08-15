@@ -6,6 +6,7 @@ import type { ReactElement } from "react";
 import { assetUrl } from "../../../runtime/asset-url";
 import { motionTimeSeconds } from "../../primitives/motion-time";
 import { resolveArtRef, type ArtRef } from "../../primitives/art";
+import type { DomTestId } from "../../types/dom";
 import { token } from "../../primitives/tokens";
 import { SpeechBubble } from "./SpeechBubble";
 import { opaque, txa, type LocalizedString } from "@trox/runtime";
@@ -67,7 +68,7 @@ export interface CharacterDialogueProps {
   /** Authored scale for compact, wide, or prominent character-led placement. */
   readonly size?: CharacterDialogueSize;
   /** Optional stable test id for product-screen QA. */
-  readonly testId?: string;
+  readonly testId?: DomTestId;
   /** Multiplier applied to this dialogue's presence transition. */
   readonly playbackSpeed?: number;
 }

@@ -7,10 +7,11 @@ export const GLOSSARY_EDITOR_SOURCE_PATHS: readonly string[];
 export function createGlossaryEditorApiMiddleware(options?: {
   rootDir?: string;
   loadEntries?: (rootDir: string) => unknown[];
-  revision?: (rootDir: string, sourcePaths: readonly string[]) => string;
+  revision?: (rootDir: string, sourcePaths: readonly string[]) => SourceRevision;
   publishEdit?: (request: unknown) => Promise<{
     changed: readonly string[];
-    sourceRevision: string;
+    sourceRevision: SourceRevision;
   }>;
   onChanged?: () => void;
 }): (req: unknown, res: unknown, next: GlossaryEditorApiNext) => Promise<void>;
+import type { SourceRevision } from "../src/types/source-revision";

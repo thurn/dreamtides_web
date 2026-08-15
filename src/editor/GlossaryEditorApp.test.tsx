@@ -6,10 +6,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { GlossaryCatalogEntry } from "../data/glossary";
 import GlossaryEditorApp from "./GlossaryEditorApp";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
+import { testGlossaryEntryId } from "../types/test-identities";
+
+const SPARK_ID = testGlossaryEntryId("spark");
 
 const ENTRIES: readonly GlossaryCatalogEntry[] = [
   {
-    id: "spark",
+    id: SPARK_ID,
     category: "Resources",
     term: "Spark",
     definition: "A character's challenge power.",
@@ -18,7 +21,7 @@ const ENTRIES: readonly GlossaryCatalogEntry[] = [
     variants: [],
   },
   {
-    id: "site-draft",
+    id: testGlossaryEntryId("site-draft"),
     category: "Sites",
     term: "Draft",
     definition: "Choose cards for your deck.",
@@ -123,7 +126,7 @@ describe("GlossaryEditorApp", () => {
     });
 
     expect(saveEntry).toHaveBeenCalledWith({
-      id: "spark",
+      id: SPARK_ID,
       term: "Spark",
       definition: "Power used during a challenge.",
       variants: [],
@@ -170,7 +173,7 @@ describe("GlossaryEditorApp", () => {
     });
 
     expect(saveEntry).toHaveBeenCalledWith({
-      id: "spark",
+      id: SPARK_ID,
       term: "Spark",
       definition: "A character's challenge power.",
       variants: ["Sparks", "Sparked"],
@@ -182,7 +185,7 @@ describe("GlossaryEditorApp", () => {
   it("previews and edits a definition-only entry without a visible title", async () => {
     const definitionOnlyEntry: GlossaryCatalogEntry = {
       ...ENTRIES[0],
-      id: "score",
+      id: testGlossaryEntryId("score"),
       term: "Score",
       definition:
         "Characters score points (⍟) when they challenge and are not blocked.",
@@ -255,7 +258,7 @@ describe("GlossaryEditorApp", () => {
     });
 
     expect(saveEntry).toHaveBeenCalledWith({
-      id: "spark",
+      id: SPARK_ID,
       termPresentation: "definitionOnly",
     });
     expect(

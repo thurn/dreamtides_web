@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { DeckCardView } from "./MobileDeckViewer";
 import {
   DEFAULT_DESKTOP_DECK_FILTER_SORT,
@@ -8,12 +8,13 @@ import {
   filterAndSortDesktopDeckCards,
 } from "./desktop-deck-filter";
 import type { DeckEntryId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: asCardName("Test Card"),
-    id: asCardId("test-card"),
+    name: parseCardName("Test Card"),
+    id: testCardId("test-card"),
     cardNumber: 1,
     cardType: "Event",
     subtype: "",
@@ -46,14 +47,14 @@ const values = <T extends string>(options: readonly { value: T }[]): T[] =>
 
 describe("filterAndSortDesktopDeckCards — type + subtype filtering", () => {
   const deck: DeckCardView[] = [
-    view(asDeckEntryId("char-warrior"), {
+    view(parseDeckEntryId("char-warrior"), {
       cardType: "Character",
       subtype: "Warrior",
     }),
-    view(asDeckEntryId("event-a"), { cardType: "Event", subtype: "" }),
-    view(asDeckEntryId("char-beast"), {
+    view(parseDeckEntryId("event-a"), { cardType: "Event", subtype: "" }),
+    view(parseDeckEntryId("char-beast"), {
       cardType: "Character",
-      subtype: "Beast",
+      subtype: "Monster",
     }),
   ];
 
@@ -94,23 +95,23 @@ describe("filterAndSortDesktopDeckCards — type + subtype filtering", () => {
 describe("buildSubtypeFilterOptions", () => {
   it("lists an 'all' entry then every present subtype, alphabetical", () => {
     const deck = [
-      view(asDeckEntryId("a"), { subtype: "Wizard" }),
-      view(asDeckEntryId("b"), { subtype: "Beast" }),
-      view(asDeckEntryId("c"), { subtype: "Beast" }),
-      view(asDeckEntryId("d"), { subtype: "" }),
-      view(asDeckEntryId("e"), { subtype: "*" }),
+      view(parseDeckEntryId("a"), { subtype: "Mage" }),
+      view(parseDeckEntryId("b"), { subtype: "Monster" }),
+      view(parseDeckEntryId("c"), { subtype: "Monster" }),
+      view(parseDeckEntryId("d"), { subtype: "" }),
+      view(parseDeckEntryId("e"), { subtype: "*" }),
     ];
     expect(values(buildSubtypeFilterOptions(deck))).toEqual([
       "all",
-      "Beast",
-      "Wizard",
+      "Mage",
+      "Monster",
     ]);
   });
 
   it("returns only the 'all' entry when no card has a subtype", () => {
     const deck = [
-      view(asDeckEntryId("a"), { subtype: "" }),
-      view(asDeckEntryId("b"), { subtype: "" }),
+      view(parseDeckEntryId("a"), { subtype: "" }),
+      view(parseDeckEntryId("b"), { subtype: "" }),
     ];
     expect(values(buildSubtypeFilterOptions(deck))).toEqual(["all"]);
   });
@@ -118,9 +119,9 @@ describe("buildSubtypeFilterOptions", () => {
 
 describe("filterAndSortDesktopDeckCards — sort key + direction", () => {
   const deck: DeckCardView[] = [
-    view(asDeckEntryId("three"), { energyCost: 3 }),
-    view(asDeckEntryId("one"), { energyCost: 1 }),
-    view(asDeckEntryId("two"), { energyCost: 2 }),
+    view(parseDeckEntryId("three"), { energyCost: 3 }),
+    view(parseDeckEntryId("one"), { energyCost: 1 }),
+    view(parseDeckEntryId("two"), { energyCost: 2 }),
   ];
 
   it("preserves acquisition order for drafted ascending", () => {

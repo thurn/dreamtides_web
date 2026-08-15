@@ -1,5 +1,4 @@
 import type { SitesData } from "../types/sites-data";
-import { asGlossaryEntryId } from "../types/identifiers";
 import {
   RANDOM_SITE_DESTINATION_TYPES,
   SITE_TYPES,
@@ -7,6 +6,13 @@ import {
 } from "../types/site-type";
 import { requireGlossaryEntry } from "./glossary";
 import { hydrateSourceTransport } from "../runtime/localization/runtime";
+import {
+  dreamscapeIdFromUnknown,
+  guideIdFromUnknown,
+  type DreamscapeId,
+  type GuideId,
+} from "../types/identifiers";
+import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 const SITES_DATA_JSON_PATH = "/sites-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
@@ -206,22 +212,28 @@ function isSitesData(value: unknown): value is SitesData {
   )
     return false;
 
-  const guideIds = new Set<string>();
-  const homeDreamscapeIds = new Set<string>();
+  const guideIds = new Set<GuideId>();
+  const homeDreamscapeIds = new Set<DreamscapeId>();
   for (const siteType of GUIDE_SITE_TYPES) {
     const assignment = value.guideAssignments[siteType];
+    const guideId = isRecord(assignment)
+      ? guideIdFromUnknown(assignment.guideId)
+      : null;
+    const homeDreamscapeId = isRecord(assignment)
+      ? dreamscapeIdFromUnknown(assignment.homeDreamscapeId)
+      : null;
     if (
       !isRecord(assignment) ||
       !hasExactKeys(assignment, ["guideId", "homeDreamscapeId"]) ||
-      !isNonEmptyString(assignment.guideId) ||
-      !isNonEmptyString(assignment.homeDreamscapeId) ||
-      guideIds.has(assignment.guideId) ||
-      homeDreamscapeIds.has(assignment.homeDreamscapeId)
+      guideId === null ||
+      homeDreamscapeId === null ||
+      guideIds.has(guideId) ||
+      homeDreamscapeIds.has(homeDreamscapeId)
     ) {
       return false;
     }
-    guideIds.add(assignment.guideId);
-    homeDreamscapeIds.add(assignment.homeDreamscapeId);
+    guideIds.add(guideId);
+    homeDreamscapeIds.add(homeDreamscapeId);
   }
   const randomAssignment = value.guideAssignments.RandomSite;
   const gambleAssignment = value.guideAssignments.Gamble;
@@ -249,6 +261,8 @@ export function parseSitesData(value: unknown): SitesData {
   }
   return {
     ...value,
+    contentHash: parseContentHash(value.contentHash),
+    foldHash: parseFoldHash(value.foldHash),
     siteTypes: Object.fromEntries(
       SITE_TYPES.map((siteType) => {
         const metadata = value.siteTypes[siteType];
@@ -257,7 +271,7 @@ export function parseSitesData(value: unknown): SitesData {
           siteType,
           {
             ...metadata,
-            glossaryId: asGlossaryEntryId(metadata.glossaryId),
+            glossaryId: metadata.glossaryId,
             presentation:
               presentation === null
                 ? null

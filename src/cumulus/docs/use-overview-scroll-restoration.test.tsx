@@ -65,7 +65,9 @@ describe("useOverviewScrollRestoration", () => {
       window.scrollY = 418;
       window.dispatchEvent(new Event("scroll"));
       root.render(
-        <ScrollRestorationHarness route={{ view: "component", id: "button" }} />,
+        <ScrollRestorationHarness
+          route={{ view: "component", id: "glass-button" }}
+        />,
       );
     });
     expect(window.scrollY).toBe(0);

@@ -22,7 +22,7 @@ import {
 } from "./ShopFreePurchaseStatus";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
 
 export interface CardShopOfferView {
   /** Stable UUID-derived tile id. */
@@ -127,7 +127,7 @@ function CardShopGallery({
 }) {
   const desktop = layout === "desktop";
   const [locallyPurchasedEntryIds, setLocallyPurchasedEntryIds] = useState(
-    () => new Set<string>(),
+    () => new Set<DeckEntryId>(),
   );
   const [purchaseTravels, setPurchaseTravels] = useState<PurchaseTravel[]>([]);
 
@@ -139,7 +139,7 @@ function CardShopGallery({
           .map((offer) => offer.entryId),
       );
       return current.size === persisted.size &&
-        [...current].every((entryId) => persisted.has(asDeckEntryId(entryId)))
+        [...current].every((entryId) => persisted.has(parseDeckEntryId(entryId)))
         ? current
         : persisted;
     });

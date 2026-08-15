@@ -18,9 +18,9 @@ Set placement to onGlass inside GlassPanel, GlassDialog, or DeveloperRail so the
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `items` | `readonly CardOrderEditorItem[]` | yes | — | Ordered cards, from top to bottom. |
+| `items` | `readonly CardOrderEditorItem<Id>[]` | yes | — | Ordered cards, from top to bottom. |
 | `label` | `LocalizedString` | yes | — | Accessible name for the ordered collection. |
-| `onOrderChange` | `(orderedIds: readonly string[]) => void` | yes | — | Returns the complete top-to-bottom sequence of card ids after a move. |
+| `onOrderChange` | `(orderedIds: readonly Id[]) => void` | yes | — | Returns the complete top-to-bottom sequence of card ids after a move. |
 | `placement` | `GlassControlPlacement` = `"onMedia" \| "onGlass"` | no | `onMedia` | Surface beneath the editor. `onMedia` gives the editor its own liquid glass boundary; `onGlass` uses a lighter tonal lens inside an existing glass panel or dialog. Defaults to `onMedia`. |
 
 ## Usage

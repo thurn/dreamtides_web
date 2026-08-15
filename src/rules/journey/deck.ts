@@ -25,11 +25,14 @@ import type {
 import type { CardId } from "../../types/card-identity";
 import type { DreamsignId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
-import { cardIdFromUnknown } from "../../types/card-identity";
+import {
+  cardIdFromUnknown,
+  cardSubtypeFromUnknown,
+} from "../../types/card-identity";
 import { deckEntryIdFromUnknown } from "../../types/identifiers";
 import { dreamsignIdFromUnknown } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asCardTypeChangePredicateId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseCardTypeChangePredicateId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (ADD_CARD / ADD_DREAMSIGN)
@@ -136,11 +139,11 @@ export function mintEntryId(
   const existing = new Set(deck.map((entry) => entry.entryId));
   let suffix = index;
   let candidate = `deck-${String(seq)}-${String(suffix)}`;
-  while (existing.has(asDeckEntryId(candidate))) {
+  while (existing.has(parseDeckEntryId(candidate))) {
     suffix += 1;
     candidate = `deck-${String(seq)}-${String(suffix)}`;
   }
-  return asDeckEntryId(candidate);
+  return parseDeckEntryId(candidate);
 }
 
 // ---------------------------------------------------------------------------
@@ -189,7 +192,7 @@ export function addCard(
   }
 
   const entry: DeckEntry = {
-    entryId: asDeckEntryId(mintEntryId(journey.deck, ctx.seq, 0)),
+    entryId: mintEntryId(journey.deck, ctx.seq, 0),
     cardNumber,
     transfiguration,
     isBane: isNightmareCardId(resolvedCardId),
@@ -228,7 +231,7 @@ export function duplicateDeckEntry(
   const entry = findEntry(journey, entryId);
   if (entry === undefined) return null;
   const copy: DeckEntry = {
-    entryId: asDeckEntryId(mintEntryId(journey.deck, ctx.seq, 0)),
+    entryId: mintEntryId(journey.deck, ctx.seq, 0),
     cardNumber: entry.cardNumber,
     transfiguration: entry.transfiguration,
     ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
@@ -311,10 +314,11 @@ function parseTypeChange(
 ): { drop: true } | { drop: false; value: CardTypeChange } | null {
   if (value === null || value === undefined) return { drop: true };
   if (!isPlainRecord(value)) return null;
+  const subtype = cardSubtypeFromUnknown(value.subtype);
   if (
     typeof value.predicateId !== "string" ||
     typeof value.cardType !== "string" ||
-    typeof value.subtype !== "string" ||
+    subtype === null ||
     typeof value.label !== "string"
   ) {
     return null;
@@ -322,9 +326,9 @@ function parseTypeChange(
   return {
     drop: false,
     value: {
-      predicateId: asCardTypeChangePredicateId(value.predicateId),
+      predicateId: parseCardTypeChangePredicateId(value.predicateId),
       cardType: value.cardType as CardType,
-      subtype: value.subtype,
+      subtype,
       label: value.label,
     },
   };

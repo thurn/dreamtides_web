@@ -1,4 +1,5 @@
-import { asCardName } from "../../types/card-identity";
+import { parseJourneySeed } from "../../types/journey-seed";
+import { parseCardName } from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
@@ -22,10 +23,12 @@ import type {
 } from "../../types/journey";
 import { createDefaultState } from "../../state/journey-context";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
-import { asSiteId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import {
+  testCardSubtype,
+  testDreamAvatarId,
+  testDreamsignId,
+} from "../../types/test-identities";
 
 export const TEST_CARD_UUIDS = {
   ordinary: "11111111-1111-4111-8111-111111111111",
@@ -41,11 +44,11 @@ export function makeMerchantTestCard(
 ): CardData {
   const { id, cardNumber, ...rest } = overrides;
   return {
-    name: asCardName(`Fixture Card ${cardNumber}`),
+    name: parseCardName(`Fixture Card ${cardNumber}`),
     id,
     cardNumber,
     cardType: "Character",
-    subtype: "Fixture",
+    subtype: testCardSubtype("Warrior"),
     isStarter: false,
     energyCost: 1,
     spark: 1,
@@ -62,7 +65,7 @@ export function makeMerchantTestDeckEntry(
 ): DeckEntry {
   const { entryId, cardNumber, ...rest } = overrides;
   return {
-    entryId: asDeckEntryId(entryId),
+    entryId: entryId,
     cardNumber,
     transfiguration: null,
     isBane: false,
@@ -74,7 +77,7 @@ export function makeMerchantTestSite(
   overrides: Partial<SiteState> = {},
 ): SiteState {
   return {
-    id: asSiteId("site-merchant-fixture"),
+    id: parseSiteId("site-merchant-fixture"),
     type: "Reward",
     isEnhanced: false,
     isVisited: false,
@@ -98,7 +101,7 @@ export function makeMerchantTestDreamsign(
   overrides: Partial<Dreamsign> = {},
 ): Dreamsign {
   return {
-    id: asDreamsignId("held-sign"),
+    id: testDreamsignId("held-sign"),
     name: "Held Sign",
     effectDescription: "",
     ...overrides,
@@ -110,7 +113,7 @@ export function makeMerchantTestJourneyState(
 ): JourneyState {
   return {
     ...createDefaultState(),
-    seed: "merchant-fixture-seed",
+    seed: parseJourneySeed("merchant-fixture-seed"),
     essence: 120,
     ...overrides,
   };
@@ -118,7 +121,7 @@ export function makeMerchantTestJourneyState(
 
 function makeMerchantTestDreamAvatarContent(): DreamAvatarContent {
   return {
-    id: asDreamAvatarId("dream-avatar-fixture"),
+    id: testDreamAvatarId("dream-avatar-fixture"),
     name: "Fixture DreamAvatar",
     title: "Fixture",
     renderedText: "",

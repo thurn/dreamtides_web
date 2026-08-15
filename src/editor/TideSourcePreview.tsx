@@ -2,11 +2,13 @@ import type { CardData } from "../types/cards";
 import { GameCard } from "../cumulus/components/card/CardView";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { EditorDreamAvatar } from "./tides-types";
+import type { CardId } from "../types/card-identity";
+import type { DreamAvatarId } from "../types/identifiers";
 
 interface TideSourcePreviewProps {
   tide: Tides4DeckJson;
-  dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
-  cardById: ReadonlyMap<string, CardData>;
+  dreamAvatarById: ReadonlyMap<DreamAvatarId, EditorDreamAvatar>;
+  cardById: ReadonlyMap<CardId, CardData>;
   /** Pixel size of the rendered thumbnail (square for a portrait, width for a card). */
   size: number;
 }
@@ -25,7 +27,7 @@ export function TideSourcePreview({
 }: TideSourcePreviewProps) {
   const first = tide.cards[0];
   if (first !== undefined) {
-    const card = cardById.get(first.id.toLowerCase());
+    const card = cardById.get(first.id);
     if (card === undefined) return null;
     return (
       <div style={{ width: size, flex: `0 0 ${size}px` }}>

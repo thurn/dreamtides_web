@@ -6,14 +6,17 @@ import {
 import { RANDOM_SITE_DESTINATION_TYPES } from "../types/site-type";
 import type { GuideId } from "../types/identifiers";
 
-const RANDOM_SITE_DESTINATION_SET: ReadonlySet<string> = new Set(
+const RANDOM_SITE_DESTINATION_SET: ReadonlySet<RandomSiteDestinationType> = new Set(
   RANDOM_SITE_DESTINATION_TYPES,
 );
 
 export function isRandomSiteDestinationType(
   value: unknown,
 ): value is RandomSiteDestinationType {
-  return typeof value === "string" && RANDOM_SITE_DESTINATION_SET.has(value);
+  return (
+    typeof value === "string" &&
+    (RANDOM_SITE_DESTINATION_SET as ReadonlySet<string>).has(value)
+  );
 }
 
 export function isRandomSiteMetadata(

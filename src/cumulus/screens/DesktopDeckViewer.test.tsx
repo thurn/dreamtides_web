@@ -5,20 +5,22 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { CumulusRoot } from "../CumulusRoot";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { DesktopDeckViewer } from "./DesktopDeckViewer";
 import { assertLocalized } from "@trox/runtime";
-import { asDeckEntryId } from "../../types/identifiers";
+import { testTideId } from "../../types/test-identities";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 function deckCard(index: number): DeckCardView {
   const card: CardData = {
-    name: asCardName(`Deck Fixture ${String(index)}`),
-    id: asCardId(`10000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    name: parseCardName(`Deck Fixture ${String(index)}`),
+    id: testCardId(`10000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
     cardNumber: index,
     cardType: "Character",
-    subtype: "Fixture",
+    subtype: "Warrior",
     isStarter: false,
     energyCost: 1,
     spark: 1,
@@ -28,7 +30,7 @@ function deckCard(index: number): DeckCardView {
     artOwned: false,
   };
   return {
-    entryId: asDeckEntryId(`entry-${String(index)}`),
+    entryId: parseDeckEntryId(`entry-${String(index)}`),
     model: { cardId: card.id, displaySnapshot: card },
     isBane: false,
   };
@@ -140,19 +142,19 @@ describe("DesktopDeckViewer", () => {
           dreamsigns: [],
           tides: [
             {
-              id: "tide-a",
+              id: testTideId("tide-a"),
               label: assertLocalized("First Tide"),
               description: assertLocalized("First path."),
               tide: "ember",
             },
             {
-              id: "tide-b",
+              id: testTideId("tide-b"),
               label: assertLocalized("Second Tide"),
               description: assertLocalized("Second path."),
               tide: "vision",
             },
             {
-              id: "tide-c",
+              id: testTideId("tide-c"),
               label: assertLocalized("Third Tide"),
               description: assertLocalized("Third path."),
               tide: "wild",

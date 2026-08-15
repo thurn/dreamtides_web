@@ -1,27 +1,30 @@
 import { useState } from "react";
-import { assertLocalized } from "@trox/runtime";
+import { assertLocalized, type LocalizedString } from "@trox/runtime";
 import {
   CardOrderEditor,
   type CardOrderEditorItem,
 } from "../../components/controls/CardOrderEditor";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { CumulusComponent } from "../registry";
+import { parseBattleCardId, type BattleCardId } from "../../../types/identifiers";
 
-const INITIAL: CardOrderEditorItem[] = [
-  { id: "instance-1", label: assertLocalized("First card") },
-  { id: "instance-2", label: assertLocalized("Second card") },
+const INITIAL: CardOrderEditorItem<BattleCardId>[] = [
+  { id: parseBattleCardId("instance-1"), label: assertLocalized("First card") },
+  { id: parseBattleCardId("instance-2"), label: assertLocalized("Second card") },
 ];
 function Demo({
-  label = "Deck order",
+  label = assertLocalized("Deck order"),
   placement = "onMedia",
 }: {
-  label?: string;
+  label?: LocalizedString | string;
   placement?: GlassControlPlacement;
 }) {
   const [items, setItems] = useState(INITIAL);
+  const localizedLabel =
+    typeof label === "string" ? assertLocalized(label) : label;
   return (
-    <CardOrderEditor
-      label={assertLocalized(label)}
+    <CardOrderEditor<BattleCardId>
+      label={localizedLabel}
       items={items}
       placement={placement}
       onOrderChange={(ids) =>

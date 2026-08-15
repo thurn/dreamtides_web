@@ -2,7 +2,7 @@ import { assertLocalized } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
 import { localizedStringSourceEquality } from "../../../runtime/localization/testing";
 import { resolveSource } from "../../../runtime/localization/runtime";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 import type { AuguryArchetypeData } from "../../../types/augury-data";
 import type { CardData } from "../../../types/cards";
 import type { OfferTileModel } from "./OfferTile";
@@ -11,12 +11,13 @@ import {
   offerTileDescription,
   offerTileRichDescription,
 } from "./offer-tile-descriptions";
+import { testCardId, testOfferTileId } from "../../../types/test-identities";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
 const CARD: Readonly<CardData> = {
-  id: asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
-  name: asCardName("Fixture Card"),
+  id: testCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"),
+  name: parseCardName("Fixture Card"),
   cardNumber: 1,
   cardType: "Character",
   subtype: "Spirit Animal",
@@ -39,7 +40,7 @@ const textPresentation = (
 
 describe("offer tile descriptions", () => {
   it("interpolates semantic values into authored text", () => {
-    const model: OfferTileModel = { id: "gift", kind: "card-gift", card: CARD };
+    const model: OfferTileModel = { id: testOfferTileId("gift"), kind: "card-gift", card: CARD };
     const presentation = textPresentation(
       "Fixture headline",
       "Target {cardName}",
@@ -63,12 +64,12 @@ describe("offer tile descriptions", () => {
       },
     };
     const one: OfferTileModel = {
-      id: "one",
+      id: testOfferTileId("one"),
       kind: "duplicate-card",
       cards: [CARD],
     };
     const two: OfferTileModel = {
-      id: "two",
+      id: testOfferTileId("two"),
       kind: "duplicate-card",
       cards: [CARD, CARD],
     };
@@ -97,7 +98,7 @@ describe("offer tile descriptions", () => {
       },
     };
     const model: OfferTileModel = {
-      id: "category",
+      id: testOfferTileId("category"),
       kind: "category-draft",
       cards: [CARD, CARD],
       category: { kind: "subtype", name: assertLocalized("Spirit Animal") },
@@ -110,7 +111,7 @@ describe("offer tile descriptions", () => {
 
   it("rejects copy whose placeholders do not match the offer model", () => {
     const model: OfferTileModel = {
-      id: "draft",
+      id: testOfferTileId("draft"),
       kind: "card-draft",
       cards: [CARD, CARD],
     };
@@ -125,7 +126,7 @@ describe("offer tile descriptions", () => {
   });
 
   it("returns authored descriptions as plain rich text", () => {
-    const model: OfferTileModel = { id: "gift", kind: "card-gift", card: CARD };
+    const model: OfferTileModel = { id: testOfferTileId("gift"), kind: "card-gift", card: CARD };
     const presentation = textPresentation("Fixture headline", "Fixture body");
 
     expect(offerTileRichDescription(model, presentation)).toEqual({

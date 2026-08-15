@@ -40,8 +40,8 @@ export interface ResolvedBattleAiConfiguration extends AiDifficultyPreset {
 
 export interface OpponentsData {
   schemaVersion: 1;
-  contentHash: string;
-  foldHash: string;
+  contentHash: ContentHash;
+  foldHash: FoldHash;
   opponentDeckSize: number;
   battle: {
     minimumDeckSize: number;
@@ -93,3 +93,4 @@ export function resolveBattleAiConfiguration(
     opponentModel: data.ai.opponentModel,
   };
 }
+import type { ContentHash, FoldHash } from "./content-hash";

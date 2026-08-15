@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../../types/test-identities";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -11,12 +12,10 @@ import type { JourneyContent } from "../../data/journey-content";
 import type { JourneyMutations } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { JourneyState } from "../../types/journey";
-import { asCardId, asCardName } from "../../types/card-identity";
-import { asJourneyId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
+import { parseCardName } from "../../types/card-identity";
+import { parseJourneyId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId, testDreamAvatarId, testDreamsignId } from "../../types/test-identities";
 
 vi.mock("../../state/journey-context", () => ({
   useJourney: vi.fn(),
@@ -41,8 +40,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       1,
       {
-        name: asCardName("Archive Sentry"),
-        id: asCardId("archive-sentry"),
+        name: parseCardName("Archive Sentry"),
+        id: testCardId("archive-sentry"),
         cardNumber: 1,
         cardType: "Character",
         subtype: "",
@@ -60,20 +59,20 @@ function makeCardDatabase(): Map<number, CardData> {
 
 function makeState(): JourneyState {
   return {
-    runId: asJourneyId("journey:test"),
-    seed: "test-seed",
+    runId: parseJourneyId("journey:test"),
+    seed: testJourneySeed("test-seed"),
     essence: 100,
     maxDreamsigns: 12,
     deck: [
       {
-        entryId: asDeckEntryId("entry-1"),
+        entryId: parseDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
       },
     ],
     dreamAvatar: {
-      id: asDreamAvatarId("caller-1"),
+      id: testDreamAvatarId("caller-1"),
       name: "Mira of Lanterns",
       title: "Keeper of Lantern Glass",
       renderedText: "DreamAvatar rules.",
@@ -85,7 +84,7 @@ function makeState(): JourneyState {
     remainingDreamsignPool: [],
     dreamsigns: [
       {
-        id: asDreamsignId("sign-1"),
+        id: testDreamsignId("sign-1"),
         name: "Night's Mark",
         effectDescription: "Draw deeper.",
       },
@@ -94,8 +93,8 @@ function makeState(): JourneyState {
     atlas: {
       layers: [],
       nodes: {},
-      startingNodeId: asAtlasNodeId(""),
-      bossNodeId: asAtlasNodeId(""),
+      startingNodeId: null,
+      bossNodeId: null,
       bossIncarnationId: null,
       currentNodeId: null,
       knownDreamsignCarrierIds: [],

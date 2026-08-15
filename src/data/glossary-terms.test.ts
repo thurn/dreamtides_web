@@ -3,6 +3,7 @@ import { describe, it, expect } from "vitest";
 import { projectGlossaryEntry, extractGlossaryTerms } from "./glossary-terms";
 import { GLOSSARY, glossaryRulesTextForms } from "./glossary";
 import type { GlossaryCatalogEntry } from "./glossary";
+import { testGlossaryEntryId } from "../types/test-identities";
 
 // Derive representative entries from the live glossary so these tests track the
 // data rather than hardcoding term names that churn as entries are added,
@@ -128,15 +129,15 @@ describe("extractGlossaryTerms", () => {
 });
 
 function fixture(
-  id: string,
+  idSeed: string,
   term: string,
   definition: string,
   priority = 0,
   projections: GlossaryCatalogEntry["projections"] = [],
 ): GlossaryCatalogEntry {
   return {
-    id,
-    category: "Test",
+    id: testGlossaryEntryId(idSeed),
+    category: "Keywords",
     term,
     definition,
     priority,

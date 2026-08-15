@@ -3,6 +3,10 @@ import { createRoot } from "react-dom/client";
 
 import "../../../src/cumulus/primitives/cumulus-tokens.css";
 import { glassSurfaceStyle } from "../../../src/cumulus/internal/glass-surface";
+import {
+  parseParityScenarioId,
+  type ParityScenarioId,
+} from "../../../src/types/tool-identifiers";
 
 type Manifest = {
   capture: {
@@ -11,26 +15,37 @@ type Manifest = {
     edgePanel: { x: number; y: number; width: number; height: number };
   };
   scenarios: Array<{
-    id: string;
+    id: ParityScenarioId;
     background: string;
     purpose: "interior" | "edge";
   }>;
 };
 
 const query = new URLSearchParams(window.location.search);
-const scenarioId = query.get("scenario");
+const requestedScenarioId = query.get("scenario");
 const mode = query.get("mode");
-if (!scenarioId || (mode !== "bare" && mode !== "glass")) {
+if (mode !== "bare" && mode !== "glass") {
   throw new Error("Expected ?scenario=<id>&mode=bare|glass");
 }
 
 const manifestUrl = new URL("../manifest.json", import.meta.url);
-const manifest = (await fetch(manifestUrl).then((response) => {
+const rawManifest = (await fetch(manifestUrl).then((response) => {
   if (!response.ok) throw new Error(`Could not load parity manifest: ${response.status}`);
   return response.json();
-})) as Manifest;
-const scenario = manifest.scenarios.find((candidate) => candidate.id === scenarioId);
-if (!scenario) throw new Error(`Unknown parity scenario: ${scenarioId}`);
+})) as Omit<Manifest, "scenarios"> & {
+  scenarios: Array<Omit<Manifest["scenarios"][number], "id"> & { id: unknown }>;
+};
+const manifest: Manifest = {
+  ...rawManifest,
+  scenarios: rawManifest.scenarios.map((scenario) => ({
+    ...scenario,
+    id: parseParityScenarioId(scenario.id),
+  })),
+};
+const scenario = manifest.scenarios.find(
+  (candidate) => candidate.id === requestedScenarioId,
+);
+if (!scenario) throw new Error(`Unknown parity scenario: ${String(requestedScenarioId)}`);
 const backgroundUrl = new URL(scenario.background, manifestUrl).href;
 const glassBounds =
   scenario.purpose === "edge"

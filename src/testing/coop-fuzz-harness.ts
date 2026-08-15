@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../types/test-identities";
 import fc from "fast-check";
 import { applyAppend, existingEventSeq } from "../eventlog/append";
 import {
@@ -8,7 +9,9 @@ import {
 } from "../eventlog/client";
 import { foldEvents } from "../eventlog/fold";
 import { decodeLogNode } from "../eventlog/subscribe";
-import type {
+import {
+  parseEventNonce,
+  type
   EncodedLogNode,
   EventOutcome,
   GameEvent,
@@ -25,9 +28,12 @@ import {
   NODE_ID,
 } from "../rules/replay/fixture-providers";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
-import { asDreamscapeId } from "../types/identifiers";
-import { asSiteId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
+import {
+  parseIntentKey,
+  parseSiteId,
+  type ClientId,
+} from "../types/identifiers";
+import { testClientId, testDreamAvatarId } from "../types/test-identities";
 
 export type FuzzActor = "publisher" | "host";
 export type DeliveryShape = "object" | "array" | "firebase-omissions";
@@ -86,13 +92,13 @@ interface ClientObservation {
   outcomes: FuzzEventResult[];
 }
 
-const CLIENT_IDS: Record<FuzzActor, string> = {
-  publisher: "publisher-client",
-  host: "host-client",
+const CLIENT_IDS: Record<FuzzActor, ClientId> = {
+  publisher: testClientId("publisher-client"),
+  host: testClientId("host-client"),
 };
 
 export const FUZZ_GENESIS: Genesis = {
-  seed: "coop-fuzz-synthetic",
+  seed: testJourneySeed("coop-fuzz-synthetic"),
   reducerVersion: "coop-fuzz-v1",
   createdAt: 0,
   contentConfig: {
@@ -143,8 +149,8 @@ function stateAwareDraft(state: FoldState, value: number): EventDraft {
   if (state.journey.runId === null) {
     return {
       type: "START_JOURNEY",
-      payload: { dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID) },
-      intentKey: "fuzz:start-journey",
+      payload: { dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID) },
+      intentKey: parseIntentKey("fuzz:start-journey"),
     };
   }
   if (state.battle !== null) {
@@ -161,9 +167,13 @@ function stateAwareDraft(state: FoldState, value: number): EventDraft {
   }
   if (state.journey.screen.type === "site") {
     const siteId = state.journey.screen.siteId;
-    const site = state.journey.atlas.nodes[
-      state.journey.currentDreamscape ?? asDreamscapeId("")
-    ]?.sites.find((candidate) => candidate.id === siteId);
+    const currentDreamscape = state.journey.currentDreamscape;
+    const site =
+      currentDreamscape === null
+        ? undefined
+        : state.journey.atlas.nodes[currentDreamscape]?.sites.find(
+            (candidate) => candidate.id === siteId,
+          );
     return site?.type === "Battle"
       ? { type: "BEGIN_BATTLE", payload: { siteId } }
       : { type: "COMPLETE_SITE", payload: { siteId } };
@@ -188,14 +198,18 @@ function stateAwareDraft(state: FoldState, value: number): EventDraft {
     return {
       type: "ENTER_SITE",
       payload: { siteId: nextSite.id },
-      intentKey: `fuzz:enter:${state.journey.runId}:${nextSite.id}`,
+      intentKey: parseIntentKey(
+        `fuzz:enter:${state.journey.runId}:${nextSite.id}`,
+      ),
     };
   }
   if (value % 3 === 0) {
     return {
       type: "OPEN_SITE",
-      payload: { siteId: asSiteId(ESSENCE_SITE_ID) },
-      intentKey: `fuzz:open:${state.journey.runId}:${ESSENCE_SITE_ID}`,
+      payload: { siteId: parseSiteId(ESSENCE_SITE_ID) },
+      intentKey: parseIntentKey(
+        `fuzz:open:${state.journey.runId}:${ESSENCE_SITE_ID}`,
+      ),
     };
   }
   return {
@@ -226,8 +240,14 @@ export class CoopFuzzRoom {
   private mount(actor: FuzzActor): void {
     const previous = this.observations.get(actor);
     previous?.client.close();
+    let client: LogClient | null = null;
     const observation: ClientObservation = {
-      client: null as unknown as LogClient,
+      get client(): LogClient {
+        if (client === null) {
+          throw new Error(`Fuzz client ${actor} was read before initialization`);
+        }
+        return client;
+      },
       confirmedState: null,
       displayedState: null,
       confirmedHead: null,
@@ -255,7 +275,7 @@ export class CoopFuzzRoom {
         return Promise.resolve(this.encoded.head);
       },
     };
-    observation.client = createLogClient(
+    client = createLogClient(
       GAME_ENGINE_CONFIG,
       io,
       {
@@ -314,13 +334,15 @@ export class CoopFuzzRoom {
 
   async submitSharedKey(actor: FuzzActor, value: number): Promise<void> {
     const canonical = this.replay().finalState;
-    const draft =
+    const draft: EventDraft =
       canonical.journey.runId === null
         ? stateAwareDraft(canonical, value)
         : {
             type: "OPEN_SITE",
-            payload: { siteId: asSiteId(ESSENCE_SITE_ID) },
-            intentKey: `fuzz:shared:${canonical.journey.runId}:${value % 3}`,
+            payload: { siteId: parseSiteId(ESSENCE_SITE_ID) },
+            intentKey: parseIntentKey(
+              `fuzz:shared:${canonical.journey.runId}:${value % 3}`,
+            ),
           };
     await this.observations.get(actor)!.client.submit(draft);
   }
@@ -373,7 +395,7 @@ export class CoopFuzzRoom {
         actor: CLIENT_IDS.publisher,
         clientTimestamp: "1970-01-01T00:00:00.000Z",
         basedOnSeq,
-        nonce: `compaction:${String(index)}`,
+        nonce: parseEventNonce(`compaction:${String(index)}`),
       };
       this.encoded = applyAppend(GAME_ENGINE_CONFIG, this.encoded, event);
     }
@@ -512,7 +534,7 @@ export async function runCoopFuzz(options: {
       victory.journey.atlas.nodes[NODE_ID]?.state !== "completed" ||
       victory.journey.atlas.nodes[NEXT_NODE_ID]?.state !== "available" ||
       victory.journey.atlas.nodes[NEXT_NODE_ID]?.dreamscapeId === null ||
-      !victory.journey.visitedSites.includes(asSiteId(BATTLE_SITE_ID))
+      !victory.journey.visitedSites.includes(parseSiteId(BATTLE_SITE_ID))
     ) {
       throw new Error("deterministic battle-victory sentinel failed");
     }

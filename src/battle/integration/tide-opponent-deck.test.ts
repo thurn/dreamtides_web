@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type {
   AffiliationContent,
@@ -8,13 +8,12 @@ import type {
 } from "../../types/content";
 import type { Tides4DecksJson } from "../../draft/pool/tides4-io";
 import { buildTideOpponentDeck } from "./tide-opponent-deck";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asAffiliationId } from "../../types/identifiers";
-import { asTideId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { testAffiliationId, testDreamAvatarId, testTideId, testCardId, testDreamsignId, testContentHash } from "../../types/test-identities";
+
+const FACET_TIDE_ID = testTideId("facet-a");
 
 const AVATAR: DreamAvatarContent = {
-  id: asDreamAvatarId("avatar-a"),
+  id: testDreamAvatarId("avatar-a"),
   name: "Synthetic Avatar",
   title: "Fixture",
   renderedText: "A synthetic ability.",
@@ -23,21 +22,21 @@ const AVATAR: DreamAvatarContent = {
 };
 
 const AFFILIATION: AffiliationContent = {
-  id: asAffiliationId("affiliation-a"),
+  id: testAffiliationId("affiliation-a"),
   name: "Synthetic Affiliation",
   atlasCardTheme: "Fixture",
   tideIds: [
-    asTideId("facet-a"),
-    asTideId("signature-a"),
-    asTideId("neutral-a"),
+    FACET_TIDE_ID,
+    testTideId("signature-a"),
+    testTideId("neutral-a"),
   ],
 };
 
 function card(index: number, rarity: CardData["rarity"] = "Common"): CardData {
   const suffix = String(index).padStart(12, "0");
   return {
-    id: asCardId(`a0000000-0000-4000-8000-${suffix}`),
-    name: asCardName(`Card ${String(index)}`),
+    id: testCardId(`a0000000-0000-4000-8000-${suffix}`),
+    name: parseCardName(`Card ${String(index)}`),
     cardNumber: index,
     cardType: index % 2 === 0 ? "Character" : "Event",
     subtype: index % 2 === 0 ? "Warrior" : "",
@@ -64,7 +63,7 @@ const TIDES: Tides4DecksJson = {
   selection: { bandFraction: 0.25, bandMinimum: 5 },
   tides: [
     {
-      id: "signature-a",
+      id: testTideId("signature-a"),
       displayName: "Signature",
       displayDescription: "Synthetic signature.",
       resonance: "shadow",
@@ -75,7 +74,7 @@ const TIDES: Tides4DecksJson = {
       })),
     },
     {
-      id: "facet-a",
+      id: FACET_TIDE_ID,
       displayName: "Facet",
       displayDescription: "Synthetic facet.",
       resonance: "ember",
@@ -83,7 +82,7 @@ const TIDES: Tides4DecksJson = {
       cards: POOL_CARDS.slice(12).map((entry) => ({ id: entry.id, copies: 1 })),
     },
     {
-      id: "neutral-a",
+      id: testTideId("neutral-a"),
       displayName: "Neutral",
       displayDescription: "Synthetic neutral.",
       resonance: "vision",
@@ -93,9 +92,9 @@ const TIDES: Tides4DecksJson = {
   ],
   tidePoolByDreamAvatar: {
     [AVATAR.id]: {
-      starter: "signature-a",
-      facets: ["facet-a"],
-      neutral: ["neutral-a"],
+      starter: testTideId("signature-a"),
+      facets: [FACET_TIDE_ID],
+      neutral: [testTideId("neutral-a")],
     },
   },
 };
@@ -103,11 +102,11 @@ const TIDES: Tides4DecksJson = {
 const DREAMSIGNS: DreamsignTemplate[] = Array.from(
   { length: 12 },
   (_, index) => ({
-    id: asDreamsignId(`dreamsign-${String(index)}`),
+    id: testDreamsignId(`dreamsign-${String(index)}`),
     name: `Dreamsign ${String(index)}`,
     effectDescription: "",
     rarity: index < 6 ? "Rare" : "Common",
-    tideIds: [asTideId(index < 6 ? "facet-a" : "other")],
+    tideIds: [index < 6 ? FACET_TIDE_ID : testTideId("other")],
   }),
 );
 
@@ -121,7 +120,7 @@ function build(completionLevel: number, reverse = false) {
     dreamsignTemplates: DREAMSIGNS,
     completionLevel,
     poolSeed: 1776,
-    opponentsContentHash: "fixture",
+    opponentsContentHash: testContentHash("opponents"),
     progression: {
       abilityActiveFromLayer: 1,
       dreamsignsFromLayer: 3,
@@ -144,7 +143,7 @@ describe("unified Tide opponent deck", () => {
     expect(forward).toEqual(reversed);
     expect(forward?.baseCards).toHaveLength(30);
     expect(new Set(forward?.finalCards.map((entry) => entry.id)).size).toBe(30);
-    expect(forward?.dreamsign?.tideIds).toEqual(["facet-a"]);
+    expect(forward?.dreamsign?.tideIds).toEqual([FACET_TIDE_ID]);
     expect(forward?.abilityActive).toBe(true);
   });
 

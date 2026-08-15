@@ -13,7 +13,12 @@
 
 import type { EventContext } from "../../eventlog/types";
 import type { CardData } from "../../types/cards";
-import type { DraftConfig, DraftState } from "../../types/draft";
+import type {
+  DraftConfig,
+  DraftState,
+  SerializedCardNumber,
+} from "../../types/draft";
+import { serializeCardNumber } from "../../types/draft";
 import type {
   DeckEntry,
   JourneyState,
@@ -30,7 +35,6 @@ import { findSite } from "./sites";
 import type { CardId } from "../../types/card-identity";
 import { cardIdFromUnknown } from "../../types/card-identity";
 import { siteIdFromUnknown } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (PICK_DRAFT_CARD)
@@ -116,14 +120,14 @@ function rollOfferTransfigurations(
   draftState: DraftState,
   provider: DraftContentProvider,
   rng: () => number,
-): Record<string, TransfigurationType> {
+): Record<SerializedCardNumber, TransfigurationType> {
   return Object.fromEntries(
     draftState.currentOffer.flatMap((cardNumber) => {
       const transfiguration =
         provider.transfigurationForCard?.(cardNumber, rng) ?? null;
       return transfiguration === null
         ? []
-        : [[String(cardNumber), transfiguration] as const];
+        : [[serializeCardNumber(cardNumber), transfiguration] as const];
     }),
   );
 }
@@ -178,10 +182,12 @@ export function pickDraftCard(
 
   // Append the picked card before advancing the persisted draft state.
   const entry: DeckEntry = {
-    entryId: asDeckEntryId(mintEntryId(journey.deck, ctx.seq, 0)),
+    entryId: mintEntryId(journey.deck, ctx.seq, 0),
     cardNumber,
     transfiguration:
-      draftState.currentOfferTransfigurations?.[String(cardNumber)] ?? null,
+      draftState.currentOfferTransfigurations?.[
+        serializeCardNumber(cardNumber)
+      ] ?? null,
     isBane: false,
   };
   const deck = [...journey.deck, entry];

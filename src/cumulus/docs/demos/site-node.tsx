@@ -17,12 +17,12 @@ import {
 import { glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
-import { asSiteId } from "../../../types/identifiers";
+import { parseSiteId } from "../../../types/identifiers";
 
 /** Representative placed-site models, one per node state. */
 const DEMO_MODELS: DreamscapeSiteModel[] = [
   {
-    id: asSiteId("s-shop"),
+    id: parseSiteId("s-shop"),
     type: "Shop",
     isVisited: false,
     pos: { x: 24, y: 40 },
@@ -35,7 +35,7 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-store-alt-2"),
   },
   {
-    id: asSiteId("s-reward"),
+    id: parseSiteId("s-reward"),
     type: "Reward",
     isVisited: false,
     pos: { x: 50, y: 26 },
@@ -48,7 +48,7 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-treasure-chest"),
   },
   {
-    id: asSiteId("s-battle"),
+    id: parseSiteId("s-battle"),
     type: "Battle",
     isVisited: false,
     pos: { x: 38, y: 74 },
@@ -61,7 +61,7 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     icon: glyph("bxf bx-sword-alt"),
   },
   {
-    id: asSiteId("s-locked"),
+    id: parseSiteId("s-locked"),
     type: "Battle",
     isVisited: false,
     pos: { x: 66, y: 74 },

@@ -27,7 +27,8 @@ import type {
 import type { DeckEntryId, SelectionKey } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import type { ExplorationActionId } from "../types/identifiers";
-import { asSelectionKey } from "../types/identifiers";
+import { parseSelectionKey } from "../types/identifiers";
+import type { SelectionContentRevision } from "../types/selection-content-revision";
 
 export type ExplorationMultiCardTransfigurationEffectKind =
   | "transfigure-selected"
@@ -58,7 +59,7 @@ export interface ExplorationMultiCardTransfigurationPreparation {
   eligibleCards: readonly ExplorationMultiCardTransfigurationEligibleBinding[];
   targets: readonly ExplorationMultiCardTransfigurationTarget[];
   selectionRulesVersion: SelectionRulesVersion;
-  selectionContentRevision: string;
+  selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
   selectorSignatures: readonly string[];
   selectorTraces: readonly RewardSelectionTrace[];
@@ -208,7 +209,7 @@ function selectionRequest(input: {
     scope: {
       journeySeed: input.plan.journey.seed,
       siteUuid: input.plan.site.id,
-      selectionKey: asSelectionKey(`${input.plan.actionId}:${input.suffix}`),
+      selectionKey: parseSelectionKey(`${input.plan.actionId}:${input.suffix}`),
     },
     count: input.count,
     constraints: input.constraints,
@@ -286,7 +287,7 @@ export function prepareExplorationMultiCardTransfigurationPlan(
     eligibleCards,
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
-    selectionKey: asSelectionKey(input.actionId),
+    selectionKey: parseSelectionKey(input.actionId),
   } as const;
   const unavailable = (
     unavailableReason: ExplorationMultiCardTransfigurationUnavailableReason,

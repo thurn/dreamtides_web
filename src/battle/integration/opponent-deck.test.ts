@@ -11,10 +11,17 @@ import {
   resolveRunLayerCount,
   selectOpponentDreamAvatar,
 } from "./opponent-deck";
-import { asDreamAvatarId, asDreamsignId } from "../../types/identifiers";
+import { testDreamAvatarId, testDreamsignId } from "../../types/test-identities";
 
-function dreamAvatar(id: string): DreamAvatarContent {
-  return { id } as DreamAvatarContent;
+function dreamAvatar(idSeed: string): DreamAvatarContent {
+  return {
+    id: testDreamAvatarId(idSeed),
+    name: "Fixture Avatar",
+    title: "Fixture",
+    renderedText: "Fixture ability.",
+    imageNumber: "0001",
+    startingEssence: 200,
+  };
 }
 
 function fixedRng(index: number): BattleRng {
@@ -43,7 +50,7 @@ describe("opponent descriptor helpers", () => {
     const second = dreamAvatar("00000000-0000-4000-8000-000000000002");
     expect(
       selectOpponentDreamAvatar([first, second], null, fixedRng(0), [
-        asDreamAvatarId(second.id.toUpperCase()),
+        testDreamAvatarId(second.id.toUpperCase()),
       ]),
     ).toBe(second);
   });
@@ -58,8 +65,8 @@ describe("opponent descriptor helpers", () => {
 
   it("selects one Dreamsign at the authored unlock layer", () => {
     const signs = [
-      { id: asDreamsignId("00000000-0000-4000-8000-000000000003") },
-      { id: asDreamsignId("00000000-0000-4000-8000-000000000004") },
+      { id: testDreamsignId("00000000-0000-4000-8000-000000000003") },
+      { id: testDreamsignId("00000000-0000-4000-8000-000000000004") },
     ] as DreamsignTemplate[];
     expect(buildOpponentDreamsigns(2, 3, signs, fixedRng(1))).toEqual([]);
     expect(buildOpponentDreamsigns(3, 3, signs, fixedRng(1))).toEqual([

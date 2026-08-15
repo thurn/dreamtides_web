@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../types/test-identities";
 import { evaluate as evaluateConfigured } from "./evaluate";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 import { opponentsFixture } from "../../testing/opponents-fixture";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
 
 const EVALUATION = opponentsFixture().ai.evaluation;
 
@@ -46,9 +47,9 @@ let nextId = 0;
 function makeCard(overrides: Partial<AiCard> = {}): AiCard {
   nextId += 1;
   return {
-    battleCardId: asBattleCardId(`card-${nextId}`),
+    battleCardId: parseBattleCardId(`card-${nextId}`),
     cardNumber: 999, // unmodeled by default: no static spark, no valueHint
-    name: "Test Body",
+    name: testCardName("Test Body"),
     energyCost: 0,
     basePrintedSpark: 0,
     sparkDelta: 0,
@@ -61,7 +62,7 @@ function makeCard(overrides: Partial<AiCard> = {}): AiCard {
 function opponentBody(overrides: Partial<AiOpponentBody> = {}): AiOpponentBody {
   nextId += 1;
   return {
-    battleCardId: asBattleCardId(`opp-${nextId}`),
+    battleCardId: parseBattleCardId(`opp-${nextId}`),
     effectiveSpark: 0,
     energyCost: 0,
     rank: "front",

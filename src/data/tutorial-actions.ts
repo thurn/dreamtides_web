@@ -29,31 +29,27 @@ import {
   tutorialCardConstantId as resolveTutorialCardConstantId,
 } from "../../scripts/tutorial-battle-contracts.mjs";
 import {
-  asDreamAvatarId,
-  asTutorialActionId,
-  asTutorialTriggerId,
+  parseDreamAvatarId,
+  parseTutorialActionId,
+  parseTutorialTriggerId,
 } from "../types/identifiers";
-import { asCardId, type CardId } from "../types/card-identity";
-import { asDreamwellCardId } from "../types/identifiers";
-import { asGlossaryEntryId } from "../types/identifiers";
-import type { TutorialActionId } from "../types/identifiers";
+import { parseCardId, type CardId } from "../types/card-identity";
+import { parseDreamwellCardId } from "../types/identifiers";
+import { parseGlossaryEntryId } from "../types/identifiers";
+import type {
+  TutorialActionId,
+  TutorialTriggerId,
+} from "../types/identifiers";
 import { isBackRankSlotId, isFrontRankSlotId } from "../battle/types";
+import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
-const ACTION_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
 const DEFAULT_DREAM_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
-const SEMANTIC_PLAY_CARD_IDS: ReadonlySet<string> = new Set(
-  semanticPlayCardIds,
+const SEMANTIC_PLAY_CARD_IDS: ReadonlySet<CardId> = new Set(
+  semanticPlayCardIds.map(parseCardId),
 );
 const SHA256_PATTERN = /^[0-9a-f]{64}$/u;
 const tutorialValidationError = (message: string): Error => new Error(message);
-
-function parseUuid(value: unknown, field: string): string {
-  if (typeof value !== "string" || !isCardId(value)) {
-    throw new Error(`Tutorial battle ${field} must be a UUID.`);
-  }
-  return value;
-}
 
 function parseInteger(value: unknown, field: string, minimum = 0): number {
   if (!Number.isInteger(value) || (value as number) < minimum) {
@@ -77,41 +73,21 @@ function parseTutorialCardConstants(value: unknown): TutorialCardConstants {
   }
   const record = value as Record<string, unknown>;
   return {
-    tutorialPlayerCharacterCardId: asCardId(
-      parseUuid(
-        record.tutorialPlayerCharacterCardId,
-        "tutorialCardConstants.tutorialPlayerCharacterCardId",
-      ),
+    tutorialPlayerCharacterCardId: parseCardId(
+      record.tutorialPlayerCharacterCardId,
     ),
-    tutorialOpponentCharacterCardId: asCardId(
-      parseUuid(
-        record.tutorialOpponentCharacterCardId,
-        "tutorialCardConstants.tutorialOpponentCharacterCardId",
-      ),
+    tutorialOpponentCharacterCardId: parseCardId(
+      record.tutorialOpponentCharacterCardId,
     ),
-    loadingScreenCharacterCardId: asCardId(
-      parseUuid(
-        record.loadingScreenCharacterCardId,
-        "tutorialCardConstants.loadingScreenCharacterCardId",
-      ),
+    loadingScreenCharacterCardId: parseCardId(
+      record.loadingScreenCharacterCardId,
     ),
-    loadingScreenEventCardId: asCardId(
-      parseUuid(
-        record.loadingScreenEventCardId,
-        "tutorialCardConstants.loadingScreenEventCardId",
-      ),
+    loadingScreenEventCardId: parseCardId(record.loadingScreenEventCardId),
+    handoffEnemyCharacterCardId: parseCardId(
+      record.handoffEnemyCharacterCardId,
     ),
-    handoffEnemyCharacterCardId: asCardId(
-      parseUuid(
-        record.handoffEnemyCharacterCardId,
-        "tutorialCardConstants.handoffEnemyCharacterCardId",
-      ),
-    ),
-    tutorialDreamwellCardId: asDreamwellCardId(
-      parseUuid(
-        record.tutorialDreamwellCardId,
-        "tutorialCardConstants.tutorialDreamwellCardId",
-      ),
+    tutorialDreamwellCardId: parseDreamwellCardId(
+      record.tutorialDreamwellCardId,
     ),
   };
 }
@@ -120,7 +96,7 @@ function parseStarterDeck(value: unknown) {
   if (!Array.isArray(value) || value.length === 0) {
     throw new Error("Tutorial battle starterDeck must be a non-empty array.");
   }
-  const seen = new Set<string>();
+  const seen = new Set<CardId>();
   return value.map((candidate, index) => {
     if (
       candidate === null ||
@@ -132,10 +108,7 @@ function parseStarterDeck(value: unknown) {
       );
     }
     const record = candidate as Record<string, unknown>;
-    const cardId = parseUuid(
-      record.cardId,
-      `starterDeck[${String(index)}].cardId`,
-    );
+    const cardId = parseCardId(record.cardId);
     if (seen.has(cardId)) {
       throw new Error(
         `Tutorial battle starterDeck repeats card UUID ${cardId}.`,
@@ -143,7 +116,7 @@ function parseStarterDeck(value: unknown) {
     }
     seen.add(cardId);
     return {
-      cardId: asCardId(cardId),
+      cardId,
       copies: parseInteger(
         record.copies,
         `starterDeck[${String(index)}].copies`,
@@ -285,7 +258,7 @@ function parseCardDrawList(
         `Tutorial battle ${field} must be an array of card UUIDs.`,
       );
     }
-    cardIds.push(asCardId(cardId));
+    cardIds.push(parseCardId(cardId));
   }
   return cardIds;
 }
@@ -302,12 +275,8 @@ export function parseTutorialBattleConfiguration(
     tutorialCardConstants: parseTutorialCardConstants(
       record.tutorialCardConstants,
     ),
-    playerDreamAvatarId: asDreamAvatarId(
-      parseUuid(record.playerDreamAvatarId, "playerDreamAvatarId"),
-    ),
-    enemyDreamAvatarId: asDreamAvatarId(
-      parseUuid(record.enemyDreamAvatarId, "enemyDreamAvatarId"),
-    ),
+    playerDreamAvatarId: parseDreamAvatarId(record.playerDreamAvatarId),
+    enemyDreamAvatarId: parseDreamAvatarId(record.enemyDreamAvatarId),
     startingEnergy: parseInteger(record.startingEnergy, "startingEnergy"),
     scoreToWin: parseInteger(record.scoreToWin, "scoreToWin", 1),
     starterDeck: parseStarterDeck(record.starterDeck),
@@ -315,15 +284,15 @@ export function parseTutorialBattleConfiguration(
     forcedPlayerDraws: parseCardDrawList(
       record.forcedPlayerDraws,
       "forcedPlayerDraws",
-    ).map(asCardId),
+    ).map(parseCardId),
     forcedEnemyDraws: parseCardDrawList(
       record.forcedEnemyDraws,
       "forcedEnemyDraws",
-    ).map(asCardId),
+    ).map(parseCardId),
     dreamwellDraws: parseCardDrawList(
       record.dreamwellDraws,
       "dreamwellDraws",
-    ).map(asDreamwellCardId),
+    ).map(parseDreamwellCardId),
     aiActionOverrides: parseTutorialBattleAiActionOverrides(
       record.aiActionOverrides ?? [],
     ),
@@ -354,7 +323,7 @@ export function tutorialCardConstantId(
   tutorialCardConstants: TutorialCardConstants,
   role: TutorialCardConstantRole,
 ): import("../types/card-identity").CardId {
-  return asCardId(resolveTutorialCardConstantId(tutorialCardConstants, role));
+  return parseCardId(resolveTutorialCardConstantId(tutorialCardConstants, role));
 }
 
 /** The deck-size value displayed and initialized from the starter-deck recipe. */
@@ -364,9 +333,19 @@ export function tutorialStarterDeckSize(
   return battle.starterDeck.reduce((total, entry) => total + entry.copies, 0);
 }
 
+type TutorialConfigurationId =
+  | "journeyStart"
+  | "dreamscape"
+  | "atlas"
+  | "draft"
+  | "purge"
+  | "dreamsign-revelation"
+  | "battle-start.first-battle"
+  | "battle-start.second-battle";
+
 function parseTutorialSpeechBubble(
   value: unknown,
-  actionId: TutorialActionId,
+  actionId: TutorialActionId | TutorialConfigurationId,
   required: boolean,
 ): TutorialSpeechBubble | undefined {
   if (value === undefined && !required) return undefined;
@@ -448,7 +427,7 @@ function parseTutorialSpeechBubble(
 function parseTutorialTriggerDelay(
   value: unknown,
   events: readonly TutorialTriggerEvent[],
-  triggerId: string,
+  triggerId: TutorialTriggerId,
 ): TutorialTriggerDelay {
   if (value === undefined) return {};
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
@@ -482,15 +461,7 @@ function parseTutorialTriggerDelay(
 
 function parsePersistentTutorialConfiguration(
   value: unknown,
-  configurationId:
-    | "journeyStart"
-    | "dreamscape"
-    | "atlas"
-    | "draft"
-    | "purge"
-    | "dreamsign-revelation"
-    | "battle-start.first-battle"
-    | "battle-start.second-battle",
+  configurationId: TutorialConfigurationId,
 ): TutorialJourneyStartConfiguration {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     throw new Error(`Tutorial data must contain a ${configurationId} table.`);
@@ -498,7 +469,7 @@ function parsePersistentTutorialConfiguration(
   const record = value as Record<string, unknown>;
   const parsed = parseTutorialSpeechBubble(
     record.speechBubble,
-    asTutorialActionId(configurationId),
+    configurationId,
     true,
   );
   if (parsed === undefined || parsed.speaker !== "mira") {
@@ -575,7 +546,7 @@ export function parseTutorialActions(
     throw new Error("Tutorial data must contain an actions array.");
   }
 
-  const ids = new Set<string>();
+  const ids = new Set<TutorialActionId>();
   return value.map((candidate, index) => {
     if (
       candidate === null ||
@@ -586,17 +557,20 @@ export function parseTutorialActions(
     }
     const record = candidate as Record<string, unknown>;
     const id = record.id;
-    if (typeof id !== "string" || !ACTION_ID_PATTERN.test(id)) {
+    let actionId: TutorialActionId;
+    try {
+      actionId = parseTutorialActionId(id);
+    } catch {
       throw new Error(
-        `Tutorial action ${String(index + 1)} has an invalid id. Use lowercase letters, numbers, and hyphens.`,
+        `Tutorial action ${String(index + 1)} must identify itself with a UUID.`,
       );
     }
-    if (ids.has(id)) {
+    if (ids.has(actionId)) {
       throw new Error(
         `Tutorial action id ${JSON.stringify(id)} is duplicated.`,
       );
     }
-    ids.add(id);
+    ids.add(actionId);
 
     const wait = record.wait;
     if (typeof wait !== "number" || !Number.isFinite(wait) || wait < 0) {
@@ -608,7 +582,7 @@ export function parseTutorialActions(
     if (record.action === "display-speech-bubble") {
       const speechBubble = parseTutorialSpeechBubble(
         record.speechBubble,
-        asTutorialActionId(id),
+        parseTutorialActionId(id),
         true,
       );
       if (speechBubble === undefined) {
@@ -617,7 +591,7 @@ export function parseTutorialActions(
         );
       }
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "display-speech-bubble",
         speechBubble,
         wait,
@@ -658,7 +632,7 @@ export function parseTutorialActions(
         );
       }
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "display-how-to-play",
         trigger,
         ...(companion === undefined ? {} : { companion }),
@@ -691,7 +665,7 @@ export function parseTutorialActions(
         );
       }
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "animate-dream-avatar-portrait",
         owner,
         pause,
@@ -706,9 +680,9 @@ export function parseTutorialActions(
         );
       }
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "draw-opponent-card",
-        cardId: asCardId(record.cardId),
+        cardId: parseCardId(record.cardId),
         wait,
       } satisfies TutorialAction;
     }
@@ -731,10 +705,10 @@ export function parseTutorialActions(
         );
       }
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "draw-card",
         owner,
-        cardId: asCardId(record.cardId),
+        cardId: parseCardId(record.cardId),
         reason,
         wait,
       } satisfies TutorialAction;
@@ -746,9 +720,9 @@ export function parseTutorialActions(
         );
       }
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "reposition-opponent-character",
-        cardId: asCardId(record.cardId),
+        cardId: parseCardId(record.cardId),
         wait,
       } satisfies TutorialAction;
     }
@@ -767,10 +741,10 @@ export function parseTutorialActions(
         );
       }
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "reposition-player-character",
-        cardId: asCardId(record.cardId),
-        opposingCardId: asCardId(record.opposingCardId),
+        cardId: parseCardId(record.cardId),
+        opposingCardId: parseCardId(record.opposingCardId),
         wait,
       } satisfies TutorialAction;
     }
@@ -797,10 +771,10 @@ export function parseTutorialActions(
         );
       }
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "resolve-challenge",
-        challengerCardId: asCardId(record.challengerCardId),
-        blockerCardId: asCardId(record.blockerCardId),
+        challengerCardId: parseCardId(record.challengerCardId),
+        blockerCardId: parseCardId(record.blockerCardId),
         wait,
       } satisfies TutorialAction;
     }
@@ -828,10 +802,10 @@ export function parseTutorialActions(
         );
       }
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "draw-dreamwell-card",
         owner,
-        cardId: asDreamwellCardId(record.cardId),
+        cardId: parseDreamwellCardId(record.cardId),
         ...(revealDuration === undefined ? {} : { revealDuration }),
         wait,
       } satisfies TutorialAction;
@@ -839,11 +813,11 @@ export function parseTutorialActions(
     if (record.action === "end-turn") {
       const speechBubble = parseTutorialSpeechBubble(
         record.speechBubble,
-        asTutorialActionId(id),
+        parseTutorialActionId(id),
         false,
       );
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "end-turn",
         ...(speechBubble === undefined ? {} : { speechBubble }),
         wait,
@@ -867,13 +841,13 @@ export function parseTutorialActions(
       }
       const speechBubble = parseTutorialSpeechBubble(
         record.speechBubble,
-        asTutorialActionId(id),
+        parseTutorialActionId(id),
         false,
       );
       return {
-        id: asTutorialActionId(id),
+        id: parseTutorialActionId(id),
         action: "reveal-and-play-opponent-card",
-        cardId: asCardId(record.cardId),
+        cardId: parseCardId(record.cardId),
         revealDuration,
         ...(speechBubble === undefined ? {} : { speechBubble }),
         wait,
@@ -905,7 +879,7 @@ export function parseTutorialTriggers(
   if (!Array.isArray(value)) {
     throw new Error("Tutorial data must contain a triggers array.");
   }
-  const ids = new Set<string>();
+  const ids = new Set<TutorialTriggerId>();
   return value.map((candidate, index) => {
     if (
       candidate === null ||
@@ -915,17 +889,20 @@ export function parseTutorialTriggers(
       throw new Error(`Tutorial trigger ${String(index + 1)} must be a table.`);
     }
     const record = candidate as Record<string, unknown>;
-    if (typeof record.id !== "string" || !ACTION_ID_PATTERN.test(record.id)) {
+    let triggerId: TutorialTriggerId;
+    try {
+      triggerId = parseTutorialTriggerId(record.id);
+    } catch {
       throw new Error(
-        `Tutorial trigger ${String(index + 1)} has an invalid id. Use lowercase letters, numbers, and hyphens.`,
+        `Tutorial trigger ${String(index + 1)} must identify itself with a UUID.`,
       );
     }
-    if (ids.has(record.id)) {
+    if (ids.has(triggerId)) {
       throw new Error(
         `Tutorial trigger id ${JSON.stringify(record.id)} is duplicated.`,
       );
     }
-    ids.add(record.id);
+    ids.add(triggerId);
     if (
       !Array.isArray(record.on) ||
       record.on.length === 0 ||
@@ -949,11 +926,11 @@ export function parseTutorialTriggers(
     const triggerDelay = parseTutorialTriggerDelay(
       record.delay,
       record.on,
-      record.id,
+      triggerId,
     );
     const speechBubble = parseTutorialSpeechBubble(
       { ...record, delay: 0 },
-      asTutorialActionId(record.id),
+      parseTutorialActionId(record.id),
       true,
     );
     if (speechBubble === undefined) {
@@ -981,15 +958,20 @@ export function parseTutorialTriggers(
     const match = record.match as Record<string, unknown>;
     let parsedMatch: TutorialTriggerDefinition["match"];
     if (match.kind === "glossary") {
-      if (
-        typeof match.id !== "string" ||
-        glossaryEntry(match.id) === undefined
-      ) {
+      let glossaryId;
+      try {
+        glossaryId = parseGlossaryEntryId(match.id);
+      } catch {
         throw new Error(
           `Tutorial trigger ${JSON.stringify(record.id)} must reference an existing glossary id.`,
         );
       }
-      parsedMatch = { kind: "glossary", id: asGlossaryEntryId(match.id) };
+      if (glossaryEntry(glossaryId) === undefined) {
+        throw new Error(
+          `Tutorial trigger ${JSON.stringify(record.id)} must reference an existing glossary id.`,
+        );
+      }
+      parsedMatch = { kind: "glossary", id: glossaryId };
     } else if (match.kind === "card-type") {
       if (match.cardType !== "event") {
         throw new Error(
@@ -1006,8 +988,8 @@ export function parseTutorialTriggers(
       parsedMatch = {
         kind: "card-id",
         cardId: record.on.includes("dreamwell-resolve")
-          ? asDreamwellCardId(match.cardId)
-          : asCardId(match.cardId),
+          ? parseDreamwellCardId(match.cardId)
+          : parseCardId(match.cardId),
       };
     } else if (match.kind === "any") {
       parsedMatch = { kind: "any" };
@@ -1030,7 +1012,7 @@ export function parseTutorialTriggers(
       );
     }
     return {
-      id: asTutorialTriggerId(record.id),
+      id: triggerId,
       on: [...record.on],
       priority,
       match: parsedMatch,
@@ -1090,8 +1072,8 @@ export async function loadTutorialConfiguration(
   const battle = parseTutorialBattleConfiguration(record.battle);
   assertTutorialDeckSufficiency(battle, actions, tutorialValidationError);
   return {
-    contentHash: record.contentHash,
-    foldHash: record.foldHash,
+    contentHash: parseContentHash(record.contentHash),
+    foldHash: parseFoldHash(record.foldHash),
     journeyStart: parseTutorialJourneyStartConfiguration(record.journeyStart),
     dreamscape: parseTutorialDreamscapeConfiguration(record.dreamscape),
     atlas: parseTutorialAtlasConfiguration(record.atlas),

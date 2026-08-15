@@ -11,11 +11,10 @@ import {
 import type { JourneyState } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
 import type { MerchantContext } from "../types";
-import { asCardId } from "../../types/card-identity";
 import { addSiteBuilder, MERCHANT_PLACEABLE_SITE_TYPES } from "./site";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { testDreamscapeId, testCardId } from "../../types/test-identities";
 
 function makeDreamscapeState(
   overrides: Partial<JourneyState> = {},
@@ -24,23 +23,23 @@ function makeDreamscapeState(
   // Set up a current dreamscape with some pre-existing sites
   return {
     ...base,
-    currentDreamscape: asAtlasNodeId("node-1"),
+    currentDreamscape: parseAtlasNodeId("node-1"),
     atlas: {
       nodes: {
-        [asAtlasNodeId("node-1")]: {
-          id: asAtlasNodeId("node-1"),
+        [parseAtlasNodeId("node-1")]: {
+          id: parseAtlasNodeId("node-1"),
           layer: LayerName.One,
           indexInLayer: 0,
-          dreamscapeId: asDreamscapeId("test_dreamscape"),
+          dreamscapeId: testDreamscapeId("test_dreamscape"),
           sites: [
             {
-              id: asSiteId("site-1"),
+              id: parseSiteId("site-1"),
               type: "Battle",
               isEnhanced: false,
               isVisited: false,
             },
             {
-              id: asSiteId("site-2"),
+              id: parseSiteId("site-2"),
               type: "Draft",
               isEnhanced: false,
               isVisited: false,
@@ -53,14 +52,14 @@ function makeDreamscapeState(
           backwardIds: [],
           knownDreamsignId: null,
         },
-        [asAtlasNodeId("node-2")]: {
-          id: asAtlasNodeId("node-2"),
+        [parseAtlasNodeId("node-2")]: {
+          id: parseAtlasNodeId("node-2"),
           layer: LayerName.One,
           indexInLayer: 0,
-          dreamscapeId: asDreamscapeId("test_dreamscape"),
+          dreamscapeId: testDreamscapeId("test_dreamscape"),
           sites: [
             {
-              id: asSiteId("site-10"),
+              id: parseSiteId("site-10"),
               type: "Shop",
               isEnhanced: false,
               isVisited: false,
@@ -74,9 +73,9 @@ function makeDreamscapeState(
           knownDreamsignId: null,
         },
       },
-      startingNodeId: asAtlasNodeId("node-1"),
-      bossNodeId: asAtlasNodeId("node-1"),
-      currentNodeId: asAtlasNodeId("node-1"),
+      startingNodeId: parseAtlasNodeId("node-1"),
+      bossNodeId: parseAtlasNodeId("node-1"),
+      currentNodeId: parseAtlasNodeId("node-1"),
       layers: [],
       knownDreamsignCarrierIds: [],
     },
@@ -87,7 +86,7 @@ function makeContext(state: JourneyState): MerchantContext {
   const journeyContent = makeMerchantTestContent({
     cards: [
       makeMerchantTestCard({
-        id: asCardId("11111111-1111-4111-8111-111111111111"),
+        id: testCardId("11111111-1111-4111-8111-111111111111"),
         cardNumber: 1,
       }),
     ],
@@ -128,7 +127,7 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     const journeyContent = makeMerchantTestContent({
       cards: [
         makeMerchantTestCard({
-          id: asCardId("11111111-1111-4111-8111-111111111111"),
+          id: testCardId("11111111-1111-4111-8111-111111111111"),
           cardNumber: 1,
         }),
       ],
@@ -153,8 +152,8 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     if (resultState === null) return;
 
     // Current dreamscape (node-1) has one MORE site
-    const currentNode = resultState.atlas.nodes[asAtlasNodeId("node-1")];
-    const originalNode = state.atlas.nodes[asAtlasNodeId("node-1")];
+    const currentNode = resultState.atlas.nodes[parseAtlasNodeId("node-1")];
+    const originalNode = state.atlas.nodes[parseAtlasNodeId("node-1")];
     expect(currentNode).toBeDefined();
     expect(originalNode).toBeDefined();
     if (currentNode === undefined || originalNode === undefined) return;
@@ -172,7 +171,7 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     const journeyContent = makeMerchantTestContent({
       cards: [
         makeMerchantTestCard({
-          id: asCardId("11111111-1111-4111-8111-111111111111"),
+          id: testCardId("11111111-1111-4111-8111-111111111111"),
           cardNumber: 1,
         }),
       ],
@@ -193,8 +192,8 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     if (resultState === null) return;
 
     // node-2 (not current) must be unchanged
-    expect(resultState.atlas.nodes[asAtlasNodeId("node-2")]?.sites.length).toBe(
-      state.atlas.nodes[asAtlasNodeId("node-2")]?.sites.length,
+    expect(resultState.atlas.nodes[parseAtlasNodeId("node-2")]?.sites.length).toBe(
+      state.atlas.nodes[parseAtlasNodeId("node-2")]?.sites.length,
     );
   });
 });
@@ -210,7 +209,7 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
     const journeyContent = makeMerchantTestContent({
       cards: [
         makeMerchantTestCard({
-          id: asCardId("11111111-1111-4111-8111-111111111111"),
+          id: testCardId("11111111-1111-4111-8111-111111111111"),
           cardNumber: 1,
         }),
       ],
@@ -242,8 +241,8 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
     if (state2 === null) return;
 
     // Both added sites must have distinct ids
-    const currentNode1 = state1.atlas.nodes[asAtlasNodeId("node-1")];
-    const currentNode2 = state2.atlas.nodes[asAtlasNodeId("node-1")];
+    const currentNode1 = state1.atlas.nodes[parseAtlasNodeId("node-1")];
+    const currentNode2 = state2.atlas.nodes[parseAtlasNodeId("node-1")];
     expect(currentNode1).toBeDefined();
     expect(currentNode2).toBeDefined();
     if (currentNode1 === undefined || currentNode2 === undefined) return;

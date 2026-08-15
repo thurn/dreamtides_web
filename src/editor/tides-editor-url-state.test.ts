@@ -5,6 +5,9 @@ import {
   parseTidesEditorUrlState,
   serializeTidesEditorUrlState,
 } from "./tides-editor-url-state";
+import { testTideId } from "../types/test-identities";
+
+const TIDE_ID = testTideId("10000000-0000-4000-8000-000000000001");
 
 describe("tides editor URL state", () => {
   it("defaults to the tides list view at medium size", () => {
@@ -13,8 +16,8 @@ describe("tides editor URL state", () => {
   });
 
   it("parses the selected tide and size", () => {
-    const state = parseTidesEditorUrlState("?tide=tide-fac-03&size=large");
-    expect(state).toEqual({ file: "tides", tideId: "tide-fac-03", size: "large" });
+    const state = parseTidesEditorUrlState(`?tide=${TIDE_ID}&size=large`);
+    expect(state).toEqual({ file: "tides", tideId: TIDE_ID, size: "large" });
   });
 
   it("rejects a malformed file selector and an unknown size", () => {
@@ -33,7 +36,11 @@ describe("tides editor URL state", () => {
   });
 
   it("round-trips a non-default view", () => {
-    const original = { file: "tides" as const, tideId: "tide-neu-01", size: "small" as const };
+    const original = {
+      file: "tides" as const,
+      tideId: TIDE_ID,
+      size: "small" as const,
+    };
     const params = serializeTidesEditorUrlState(original);
     expect(parseTidesEditorUrlState(`?${params.toString()}`)).toEqual(original);
   });

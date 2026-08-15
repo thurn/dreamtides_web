@@ -14,7 +14,7 @@
       "event": {
         "type": "START_JOURNEY",
         "payload": {
-          "dreamAvatarId": "dc-fixture"
+          "dreamAvatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -127,5 +127,5 @@
       }
     }
   ],
-  "finalHash": "862a09d7f77a9eb7295a220c773422887036f95e26750507da61a93c105a8a00"
+  "finalHash": "f96c21c17c8c3719fc898bf1268f8541c81fa5b30c3959f683e637d56549a720"
 }

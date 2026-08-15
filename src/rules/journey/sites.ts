@@ -31,6 +31,10 @@ import type { GambleData } from "../../types/gamble-data";
 import type { SitesData } from "../../types/sites-data";
 import type { DraftState } from "../../types/draft";
 import type { GambleGameId } from "../../types/gamble";
+import {
+  parseSelectionRulesVersion,
+  type SelectionRulesVersion,
+} from "../../reward-selection/types";
 import type {
   DeckEntry,
   AugurySiteRuntime,
@@ -49,12 +53,15 @@ import {
   materializeRandomSite,
 } from "../../random-site/random-site";
 import { SELECTION_RULES_VERSION } from "../../reward-selection";
-import type { DreamsignId, SiteId } from "../../types/identifiers";
-import { siteIdFromUnknown } from "../../types/identifiers";
+import type {
+  DeckEntryId,
+  DreamsignId,
+  SiteId,
+} from "../../types/identifiers";
+import { identityEntries, siteIdFromUnknown } from "../../types/identifiers";
 import { dreamsignIdFromUnknown } from "../../types/identifiers";
 import { deckEntryIdFromUnknown } from "../../types/identifiers";
 import { auguryArchetypeIdFromUnknown } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (OPEN_SITE generation for content-coupled site types)
@@ -106,7 +113,7 @@ export interface SiteContentProvider {
     journey: JourneyState;
     site: SiteState;
     rng: (drawIndex: number) => number;
-    selectionRulesVersion?: string;
+    selectionRulesVersion?: SelectionRulesVersion;
     /** Optional URL-selected Gamble game written into the OPEN_SITE intent. */
     gambleGameId?: GambleGameId;
   }): SiteOpenResult | null;
@@ -275,7 +282,7 @@ export function completeJourneySite(
 ): JourneyState {
   if (!canVisitSite(journey, siteId)) return journey;
   const updatedNodes = { ...journey.atlas.nodes };
-  for (const [nodeId, node] of Object.entries(updatedNodes)) {
+  for (const [nodeId, node] of identityEntries(updatedNodes)) {
     const siteIndex = node.sites.findIndex((site) => site.id === siteId);
     if (siteIndex === -1) continue;
     updatedNodes[nodeId] = {
@@ -358,7 +365,10 @@ export function openSite(
   const site = findSite(journey, siteId);
   if (site === null) return null;
   const rawGambleGameId = payload.gambleGameId;
-  const rawSelectionRulesVersion = asString(payload.selectionRulesVersion);
+  const rawSelectionRulesVersionValue = asString(payload.selectionRulesVersion);
+  const rawSelectionRulesVersion = rawSelectionRulesVersionValue === null
+    ? null
+    : parseSelectionRulesVersion(rawSelectionRulesVersionValue);
   if (
     rawGambleGameId !== undefined &&
     rawGambleGameId !== "gravok-three-gate-wager" &&
@@ -827,7 +837,7 @@ export function acceptDuplicationChoice(
   if (entry === undefined) return null;
 
   const copy: DeckEntry = {
-    entryId: asDeckEntryId(mintEntryId(journey.deck, ctx.seq, 0)),
+    entryId: mintEntryId(journey.deck, ctx.seq, 0),
     cardNumber: entry.cardNumber,
     transfiguration: null,
     isBane: false,
@@ -1015,15 +1025,15 @@ export function purgeDeckCards(
   payload: Record<string, unknown>,
 ): JourneyState | null {
   const raw = payload.entryIds;
-  if (
-    !Array.isArray(raw) ||
-    raw.length === 0 ||
-    !raw.every((id) => typeof id === "string")
-  ) {
-    return null;
+  if (!Array.isArray(raw) || raw.length === 0) return null;
+  const entryIds: DeckEntryId[] = [];
+  for (const value of raw) {
+    const entryId = deckEntryIdFromUnknown(value);
+    if (entryId === null) return null;
+    entryIds.push(entryId);
   }
-  const targets = new Set<string>(raw);
-  if (targets.size !== raw.length) return null;
+  const targets = new Set<DeckEntryId>(entryIds);
+  if (targets.size !== entryIds.length) return null;
   const removed = journey.deck.filter((entry) => targets.has(entry.entryId));
   if (removed.length !== targets.size) return null;
   const deck = journey.deck.filter((entry) => !targets.has(entry.entryId));

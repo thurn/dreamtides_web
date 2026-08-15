@@ -3,6 +3,7 @@ import { BattleDeckOrderOverlay } from "../../cumulus/screens/battle-overlays/Ba
 import type { BattleMutableState, BattleSide } from "../types";
 import { tx, txa } from "@trox/runtime";
 import { localizedSourceText } from "../../runtime/localization/runtime";
+import type { BattleCardId } from "../../types/identifiers";
 
 export type BattleDeckOrderPickerScope = "top-N" | "full";
 
@@ -14,16 +15,16 @@ export function BattleDeckOrderPicker({
   side,
   state,
 }: {
-  initialOrder: readonly string[];
+  initialOrder: readonly BattleCardId[];
   onCancel: () => void;
-  onConfirm: (order: readonly string[]) => void;
+  onConfirm: (order: readonly BattleCardId[]) => void;
   scopeLabel: BattleDeckOrderPickerScope;
   side: BattleSide;
   state: BattleMutableState;
 }) {
   const itemsById = useMemo(
     () =>
-      Object.fromEntries(
+      new Map(
         initialOrder.map((id) => {
           const instance = state.cardInstances[id];
           return [
@@ -99,16 +100,16 @@ export function BattleDeckOrderPicker({
       initialOrder={initialOrder}
       itemsById={itemsById}
       onCancel={onCancel}
-      onConfirm={(draftOrder) =>
+      onConfirm={(draftOrder) => {
         onConfirm(
           scopeLabel === "full"
-            ? [...draftOrder]
+            ? draftOrder
             : [
                 ...draftOrder,
                 ...state.sides[side].deck.slice(draftOrder.length),
               ],
-        )
-      }
+        );
+      }}
     />
   );
 }

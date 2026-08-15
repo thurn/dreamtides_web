@@ -9,8 +9,7 @@ import {
   useTutorialReplay,
   type TutorialEditorState,
 } from "./use-tutorial-editor";
-import { asCardId } from "../types/card-identity";
-import { asTutorialActionId } from "../types/identifiers";
+import { testTutorialActionId, testCardId } from "../types/test-identities";
 
 const mocks = vi.hoisted(() => ({
   loadTutorialActions: vi.fn(),
@@ -41,7 +40,7 @@ describe("useTutorialEditor", () => {
   it("replays the latest authored snapshot from a selected action", async () => {
     const actions: readonly TutorialAction[] = [
       {
-        id: asTutorialActionId("welcome"),
+        id: testTutorialActionId("welcome"),
         action: "display-speech-bubble",
         speechBubble: {
           speaker: "mira",
@@ -54,9 +53,9 @@ describe("useTutorialEditor", () => {
         wait: 1,
       },
       {
-        id: asTutorialActionId("tail-start"),
+        id: testTutorialActionId("tail-start"),
         action: "draw-opponent-card",
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         wait: 0,
       },
     ];
@@ -77,17 +76,20 @@ describe("useTutorialEditor", () => {
     const root = createRoot(container);
     act(() => root.render(<Probe />));
     await act(async () => {
-      replay?.(asTutorialActionId("tail-start"));
+      replay?.(testTutorialActionId("tail-start"));
       await Promise.resolve();
     });
 
     expect(beginTutorial).toHaveBeenCalledWith(actions, {
-      startActionId: "tail-start",
+      startActionId: testTutorialActionId("tail-start"),
     });
     expect(mocks.logEvent).toHaveBeenCalledWith("tutorial_replay_requested", {
       actionCount: 2,
-      actionIds: ["welcome", "tail-start"],
-      startActionId: "tail-start",
+      actionIds: [
+        testTutorialActionId("welcome"),
+        testTutorialActionId("tail-start"),
+      ],
+      startActionId: testTutorialActionId("tail-start"),
       startActionIndex: 1,
     });
 

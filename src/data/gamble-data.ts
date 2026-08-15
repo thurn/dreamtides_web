@@ -4,6 +4,7 @@ import type {
   GambleRulesKind,
 } from "../types/gamble-data";
 import type { GambleGameId } from "../types/gamble";
+import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 const GAMBLE_DATA_JSON_PATH = "/gamble-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
@@ -19,7 +20,14 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-function isGambleData(value: unknown): value is GambleData {
+function isGambleGameId(value: unknown): value is GambleGameId {
+  return (
+    typeof value === "string" &&
+    Object.prototype.hasOwnProperty.call(GAME_RULE_KIND, value)
+  );
+}
+
+function isGambleData(value: unknown): boolean {
   if (
     !isRecord(value) ||
     value.schemaVersion !== 1 ||
@@ -31,13 +39,10 @@ function isGambleData(value: unknown): value is GambleData {
   ) {
     return false;
   }
-  const ids = new Set<string>();
+  const ids = new Set<GambleGameId>();
   return (
     value.games.every((game) => {
-      const gameId =
-        isRecord(game) && typeof game.id === "string"
-          ? (game.id as GambleGameId)
-          : null;
+      const gameId = isRecord(game) && isGambleGameId(game.id) ? game.id : null;
       const ruleKind = gameId === null ? undefined : GAME_RULE_KIND[gameId];
       if (
         !isRecord(game) ||
@@ -79,7 +84,15 @@ export async function loadGambleData(): Promise<GambleData> {
   if (!isGambleData(value)) {
     throw new Error("Failed to load Gamble data: malformed gamble-data.json");
   }
-  return value;
+  const raw = value as Omit<GambleData, "contentHash" | "foldHash"> & {
+    contentHash: unknown;
+    foldHash: unknown;
+  };
+  return {
+    ...raw,
+    contentHash: parseContentHash(raw.contentHash),
+    foldHash: parseFoldHash(raw.foldHash),
+  };
 }
 
 export function gambleGame(

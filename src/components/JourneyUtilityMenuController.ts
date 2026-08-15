@@ -8,8 +8,12 @@ import { BUILD_GIT_SHA } from "../runtime/build-info";
 import {
   chooseJourneySaveFile,
   downloadJourneySaveFile,
+  serializedJourneyScreenType,
 } from "../state/journey-save-files";
-import { useJourney } from "../state/journey-context";
+import {
+  useJourney,
+  type JourneyMutationSource,
+} from "../state/journey-context";
 import type {
   CommandMenuAction,
   CommandMenuGroup,
@@ -17,7 +21,6 @@ import type {
   CommandMenuStatusCopy,
 } from "../cumulus/components/overlay/CommandMenu";
 import { GLYPHS } from "../cumulus/primitives/glyph";
-import type { JourneyState } from "../types/journey";
 import { tx, txa } from "@trox/runtime";
 import { useLocalizer } from "../runtime/localization/use-localizer";
 
@@ -129,9 +132,12 @@ export function buildJourneyUtilityMenuViewModel({
 export interface JourneyUtilityMenuControllerOptions {
   actions: readonly JourneyUtilityMenuAction[];
   builtIns: readonly JourneyUtilityMenuBuiltIn[];
-  onLoadJourneyState?: (state: JourneyState, source: string) => void;
-  saveSource: string;
-  loadSource: string;
+  onLoadJourneyState?: (
+    state: unknown,
+    source: JourneyMutationSource,
+  ) => void;
+  saveSource: JourneyMutationSource;
+  loadSource: JourneyMutationSource;
 }
 
 /**
@@ -234,7 +240,7 @@ export function useJourneyUtilityMenuController({
       logEvent("debug_journey_loaded", {
         source: loadSource,
         name: loaded.name,
-        screen: loaded.journeyState.screen?.type ?? "unknown",
+        screen: serializedJourneyScreenType(loaded.journeyState),
         fileName: loaded.fileName,
         buildGitSha: loaded.buildGitSha,
       });

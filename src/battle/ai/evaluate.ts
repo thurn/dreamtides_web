@@ -1,6 +1,7 @@
 import { buildSupportContribution } from "./cards/support-contribution";
 import { starterCardModels } from "./cards/index";
 import { rankSlotIds } from "../types";
+import type { AiOpponentSlotId } from "./forward-model";
 import type { AiCard, ForwardModel } from "./forward-model";
 import type { AiEvaluationWeights } from "../../types/opponents-data";
 
@@ -82,7 +83,7 @@ export function evaluate(
   let expectedPoints = 0;
   // Opponent front spark, per front-rank slot, used to floor the simple
   // expected-points estimate (a body opposite a blocker scores its excess).
-  const opponentFrontSparkBySlot = new Map<string, number>();
+  const opponentFrontSparkBySlot = new Map<AiOpponentSlotId, number>();
   for (const body of model.opponentBodies) {
     if (body.rank === "front") {
       opponentFrontSparkBySlot.set(

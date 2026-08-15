@@ -8,6 +8,7 @@ import { tx, txa, type LocalizedString } from "@trox/runtime";
 import "./cumulus/primitives/cumulus-base.css";
 import type { Database } from "firebase/database";
 import type { CardData } from "./types/cards";
+import { parseFoldHash } from "./types/content-hash";
 import type { JourneyContent } from "./data/journey-content";
 import {
   buildDreamAvatarTides4Provenance,
@@ -28,6 +29,10 @@ import { useJourney } from "./state/journey-context";
 import { CoopJourneyProvider } from "./state/coop-journey-context";
 import { FrontDoorProvider } from "./state/front-door-context";
 import { FrontDoorRouter } from "./components/FrontDoorRouter";
+
+const MISSING_EXPLORATION_FOLD_HASH = parseFoldHash(
+  "665bc1d7b9821fc8c95a0266d9773fda5414e05c9c19774b79c0b7a3f0365183",
+);
 import { HostedPlaytestShell } from "./coop/HostedPlaytestShell";
 import { FuzzProbe } from "./coop/FuzzProbe";
 import { ScreenRouter } from "./components/ScreenRouter";
@@ -762,7 +767,7 @@ export default function App({
       rewardSelectionData={journeyContent.rewardSelectionData}
       auguryData={journeyContent.auguryData}
       explorationFoldHash={
-        journeyContent.exploration?.foldHash ?? "missing-exploration-content"
+        journeyContent.exploration?.foldHash ?? MISSING_EXPLORATION_FOLD_HASH
       }
       tutorialFoldHash={journeyContent.tutorial.foldHash}
       frontDoorEntry={frontDoorEntry}

@@ -13,22 +13,22 @@ import { StandaloneGlyph } from "./StandaloneGlyph";
 import { opaque, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
-export interface CardOrderEditorItem {
+export interface CardOrderEditorItem<Id extends string> {
   /** Card UUID or battle-instance id returned unchanged by callbacks. */
-  id: string;
+  id: Id;
   /** Presentation-only card label. */
   label: LocalizedString;
   /** Optional secondary identifying detail. */
   summary?: LocalizedString;
 }
 
-export interface CardOrderEditorProps {
+export interface CardOrderEditorProps<Id extends string> {
   /** Ordered cards, from top to bottom. */
-  items: readonly CardOrderEditorItem[];
+  items: readonly CardOrderEditorItem<Id>[];
   /** Accessible name for the ordered collection. */
   label: LocalizedString;
   /** Returns the complete top-to-bottom sequence of card ids after a move. */
-  onOrderChange: (orderedIds: readonly string[]) => void;
+  onOrderChange: (orderedIds: readonly Id[]) => void;
   /**
    * Surface beneath the editor. `onMedia` gives the editor its own liquid glass
    * boundary; `onGlass` uses a lighter tonal lens inside an existing glass
@@ -38,12 +38,12 @@ export interface CardOrderEditorProps {
 }
 
 /** A structured, identity-safe drag-to-reorder control for a top-to-bottom card sequence. */
-export function CardOrderEditor({
+export function CardOrderEditor<Id extends string>({
   items,
   label,
   onOrderChange,
   placement = "onMedia",
-}: CardOrderEditorProps): ReactElement {
+}: CardOrderEditorProps<Id>): ReactElement {
   const resolve = useLocalizer();
   const move = (from: number, to: number): void => {
     const ids = items.map((item) => item.id);
@@ -81,13 +81,13 @@ export function CardOrderEditor({
   );
 }
 
-function CardOrderEditorRow({
+function CardOrderEditorRow<Id extends string>({
   item,
   index,
   itemCount,
   onMove,
 }: {
-  readonly item: CardOrderEditorItem;
+  readonly item: CardOrderEditorItem<Id>;
   readonly index: number;
   readonly itemCount: number;
   readonly onMove: (from: number, to: number) => void;

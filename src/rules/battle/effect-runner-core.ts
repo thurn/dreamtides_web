@@ -3,7 +3,7 @@ import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 import type { BattlePromptText } from "../../data/dreamwell-prompts";
 import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 import type { BattleCardId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -99,7 +99,7 @@ function buildActivePrompt(
         candidateIds,
         count: prompt.count,
         optional: prompt.optional,
-        highlightCardIds: highlightCardIds.map(asBattleCardId),
+        highlightCardIds: highlightCardIds.map(parseBattleCardId),
       };
     }
     case "choice":

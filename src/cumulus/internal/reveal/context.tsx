@@ -22,11 +22,14 @@ import { tideAccessibilityName } from "../../components/hud/tide-spec";
 import {
   infoCardVariant,
   type RevealCoordinatorSource,
+  type RevealDescriptionId,
   type RevealDescriptionUnit,
   type RevealDismissalReason,
   type RevealGameCard,
   type RevealInfoCardModel,
+  type RevealInteractionKey,
   type RevealPlacementException,
+  type RevealRegistrationId,
   type RevealSourceIdentity,
   type RevealSpec,
 } from "./model";
@@ -272,7 +275,7 @@ function isValidRegistration(
 }
 
 interface SourceRegistration {
-  readonly descriptionId: string;
+  readonly descriptionId: RevealDescriptionId;
   readonly descriptionUnits: readonly RevealDescriptionUnit[];
   readonly source: RevealCoordinatorSource;
   readonly spec: RevealSpec;
@@ -284,11 +287,11 @@ interface RevealCoordinatorValue {
   readonly state: ReturnType<typeof reduceRevealState>;
   readonly dispatch: Dispatch<Parameters<typeof reduceRevealState>[1]>;
   readonly registerSource: (
-    key: string,
+    key: RevealRegistrationId,
     value: SourceRegistration,
   ) => () => void;
   readonly updateSourceElement: (
-    key: string,
+    key: RevealRegistrationId,
     element: HTMLElement | null,
   ) => void;
   readonly unregisterSource: (source: RevealCoordinatorSource) => void;
@@ -303,7 +306,7 @@ interface RevealCoordinatorValue {
 
 interface InteractionSnapshot {
   readonly id: number;
-  readonly registrationId: string;
+  readonly registrationId: RevealRegistrationId;
   readonly reason: NonNullable<ReturnType<typeof reduceRevealState>["reason"]>;
   readonly sourceRect: {
     readonly x: number;
@@ -326,8 +329,20 @@ function captureSourceRect(
   });
 }
 
-function overlayInteractionKey(active: RevealOverlayActive): string {
-  return `${active.source.registrationId}:${active.reason}:${String(active.interactionId)}`;
+function overlayInteractionKey(active: RevealOverlayActive): RevealInteractionKey {
+  return `${active.source.registrationId}:${active.reason}:${active.interactionId}`;
+}
+
+function revealDescriptionId(
+  reactId: ReturnType<typeof useId>,
+): RevealDescriptionId {
+  return `cumulus-reveal-description-${reactId.replace(/:/g, "")}`;
+}
+
+function revealRegistrationId(
+  reactId: ReturnType<typeof useId>,
+): RevealRegistrationId {
+  return `cumulus-reveal-source-${reactId.replace(/:/g, "")}`;
 }
 
 const RevealCoordinatorContext = createContext<RevealCoordinatorValue | null>(
@@ -349,11 +364,13 @@ export function RevealCoordinatorProvider({
     reduceRevealState,
     initialRevealCoordinatorState,
   );
-  const sourcesRef = useRef(new Map<string, SourceRegistration>());
+  const sourcesRef = useRef(
+    new Map<RevealRegistrationId, SourceRegistration>(),
+  );
   const keyboardFocusEligibleRef = useRef(true);
   const [, renderDescriptions] = useState(0);
   const registerSource = useCallback(
-    (key: string, value: SourceRegistration) => {
+    (key: RevealRegistrationId, value: SourceRegistration) => {
       sourcesRef.current.set(key, value);
       renderDescriptions((version) => version + 1);
       return () => {
@@ -364,7 +381,7 @@ export function RevealCoordinatorProvider({
     [],
   );
   const updateSourceElement = useCallback(
-    (key: string, element: HTMLElement | null) => {
+    (key: RevealRegistrationId, element: HTMLElement | null) => {
       const source = sourcesRef.current.get(key);
       if (source !== undefined)
         sourcesRef.current.set(key, { ...source, element });
@@ -372,7 +389,7 @@ export function RevealCoordinatorProvider({
     [],
   );
   const openedInteractionRef = useRef<{
-    readonly key: string;
+    readonly key: RevealInteractionKey;
     readonly source: RevealCoordinatorSource;
     readonly interactionId: number;
     readonly reason: NonNullable<typeof state.reason>;
@@ -767,10 +784,10 @@ export function useRevealSource(
     );
   const resolve = coordinator.resolve;
   const reactId = useId();
-  const descriptionId = `cumulus-reveal-description-${reactId.replace(/:/g, "")}`;
+  const descriptionId = revealDescriptionId(reactId);
   const valid = isValidRegistration(registration.identity, registration.spec);
   const identity = registration.identity;
-  const registrationKey = `cumulus-reveal-source-${reactId.replace(/:/g, "")}`;
+  const registrationKey = revealRegistrationId(reactId);
   const mountedSource: RevealCoordinatorSource = {
     identity,
     registrationId: registrationKey,

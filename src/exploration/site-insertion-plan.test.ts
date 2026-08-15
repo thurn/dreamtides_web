@@ -8,22 +8,30 @@ import {
   prepareExplorationSiteInsertion,
   prepareExplorationSiteTypeChoice,
 } from "./site-insertion-plan";
-import { asSiteId } from "../types/identifiers";
-import { asDreamscapeId } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
-import { asCardId } from "../types/card-identity";
-import { asExplorationActionId } from "../types/identifiers";
-import { asGuideId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
+import type { ExplorationActionId } from "../types/identifiers";
+import { testCardId, testDreamscapeId, testExplorationActionId, testGuideId } from "../types/test-identities";
+import { parseSelectionContentRevision } from "../types/selection-content-revision";
+import { parseSelectionRulesVersion } from "../reward-selection/types";
+
+const FIXED_ACTION_ID = testExplorationActionId("fixed-action");
+const SECOND_ACTION_ID = testExplorationActionId("second-action");
+const CHOICE_ACTION_ID = testExplorationActionId("choice-action");
+
+function insertedSiteId(actionId: ExplorationActionId) {
+  return parseSiteId(`site-exploration-${sourceSite.id}-${actionId}`);
+}
 
 const sourceSite: SiteState = {
-  id: asSiteId("source-site"),
+  id: parseSiteId("source-site"),
   type: "Exploration",
   isEnhanced: false,
   isVisited: false,
 };
 
 const battleSite: SiteState = {
-  id: asSiteId("battle-site"),
+  id: parseSiteId("battle-site"),
   type: "Battle",
   isEnhanced: false,
   isVisited: false,
@@ -33,16 +41,16 @@ function journey(): JourneyState {
   const base = createDefaultState();
   return {
     ...base,
-    currentDreamscape: asAtlasNodeId("current-node"),
+    currentDreamscape: parseAtlasNodeId("current-node"),
     atlas: {
       ...base.atlas,
-      currentNodeId: asAtlasNodeId("current-node"),
+      currentNodeId: parseAtlasNodeId("current-node"),
       nodes: {
-        [asAtlasNodeId("current-node")]: {
-          id: asAtlasNodeId("current-node"),
+        [parseAtlasNodeId("current-node")]: {
+          id: parseAtlasNodeId("current-node"),
           layer: LayerName.Two,
           indexInLayer: 0,
-          dreamscapeId: asDreamscapeId("fixture-dreamscape"),
+          dreamscapeId: testDreamscapeId("fixture-dreamscape"),
           sites: [sourceSite, battleSite],
           position: { x: 0, y: 0 },
           state: "available",
@@ -56,15 +64,18 @@ function journey(): JourneyState {
   };
 }
 
-function prepare(state = journey(), sourceActionId = "fixed-action") {
+function prepare(
+  state = journey(),
+  sourceActionId: ExplorationActionId = FIXED_ACTION_ID,
+) {
   return prepareExplorationSiteInsertion({
     journey: state,
     sourceSite,
-    sourceActionId: asExplorationActionId(sourceActionId),
-    encounterCardId: asCardId("encounter-card"),
+    sourceActionId,
+    encounterCardId: testCardId("encounter-card"),
     siteType: "DreamsignBazaar",
-    selectionRulesVersion: "rules-v1",
-    selectionContentRevision: "content-v1",
+    selectionRulesVersion: parseSelectionRulesVersion("rules-v1"),
+    selectionContentRevision: parseSelectionContentRevision("content-v1"),
   });
 }
 
@@ -76,12 +87,12 @@ describe("Exploration fixed-site insertion planning", () => {
     expect(first).toEqual(replay);
     expect(first).toMatchObject({
       sourceSiteId: sourceSite.id,
-      sourceActionId: asExplorationActionId("fixed-action"),
-      targetNodeId: asAtlasNodeId("current-node"),
+      sourceActionId: FIXED_ACTION_ID,
+      targetNodeId: parseAtlasNodeId("current-node"),
       insertionIndex: 2,
       siblingSiteIdsBefore: [sourceSite.id, battleSite.id],
       insertedSite: {
-        id: asSiteId("site-exploration-source-site-fixed-action"),
+        id: insertedSiteId(FIXED_ACTION_ID),
         type: "DreamsignBazaar",
         isEnhanced: false,
         isVisited: false,
@@ -91,7 +102,7 @@ describe("Exploration fixed-site insertion planning", () => {
 
   it("binds the signature and identity to the source action", () => {
     const first = prepare();
-    const second = prepare(journey(), "second-action");
+    const second = prepare(journey(), SECOND_ACTION_ID);
 
     expect(first?.insertedSite.id).not.toBe(second?.insertedSite.id);
     expect(first?.planSignature).not.toBe(second?.planSignature);
@@ -99,14 +110,14 @@ describe("Exploration fixed-site insertion planning", () => {
 
   it("rejects a non-current owner and globally duplicated minted identity", () => {
     const offNode = journey();
-    offNode.atlas.currentNodeId = asAtlasNodeId("elsewhere");
+    offNode.atlas.currentNodeId = parseAtlasNodeId("elsewhere");
     expect(prepare(offNode)).toBeNull();
 
     const duplicated = journey();
-    const node = duplicated.atlas.nodes[asAtlasNodeId("current-node")];
+    const node = duplicated.atlas.nodes[parseAtlasNodeId("current-node")];
     if (node === undefined) throw new Error("Expected fixture node");
     node.sites.push({
-      id: asSiteId("site-exploration-source-site-fixed-action"),
+      id: insertedSiteId(FIXED_ACTION_ID),
       type: "Shop",
       isEnhanced: false,
       isVisited: false,
@@ -118,7 +129,7 @@ describe("Exploration fixed-site insertion planning", () => {
     const plan = prepare();
     if (plan === null) throw new Error("Expected a plan");
     const variants = [
-      { ...plan, targetNodeId: asAtlasNodeId("forged") },
+      { ...plan, targetNodeId: parseAtlasNodeId("forged") },
       { ...plan, insertionIndex: plan.insertionIndex + 1 },
       {
         ...plan,
@@ -126,7 +137,7 @@ describe("Exploration fixed-site insertion planning", () => {
       },
       {
         ...plan,
-        insertedSite: { ...plan.insertedSite, id: asSiteId("forged") },
+        insertedSite: { ...plan.insertedSite, id: parseSiteId("forged") },
       },
       {
         ...plan,
@@ -139,7 +150,7 @@ describe("Exploration fixed-site insertion planning", () => {
           randomSite: {
             mode: "single" as const,
             candidateSiteTypes: ["Shop" as const],
-            presentingGuideId: asGuideId("forged-guide"),
+            presentingGuideId: testGuideId("forged-guide"),
           },
         },
       },
@@ -161,12 +172,12 @@ function prepareChoice(
   return prepareExplorationSiteTypeChoice({
     journey: state,
     sourceSite,
-    sourceActionId: asExplorationActionId("choice-action"),
-    encounterCardId: asCardId("encounter-card"),
+    sourceActionId: CHOICE_ACTION_ID,
+    encounterCardId: testCardId("encounter-card"),
     siteTypes,
     selectorSignature: "selector-signature",
-    selectionRulesVersion: "rules-v1",
-    selectionContentRevision: "content-v1",
+    selectionRulesVersion: parseSelectionRulesVersion("rules-v1"),
+    selectionContentRevision: parseSelectionContentRevision("content-v1"),
   });
 }
 
@@ -175,8 +186,8 @@ describe("Exploration site-type choice planning", () => {
     const plan = prepareChoice();
     expect(plan).toMatchObject({
       sourceSiteId: sourceSite.id,
-      sourceActionId: asExplorationActionId("choice-action"),
-      targetNodeId: asAtlasNodeId("current-node"),
+      sourceActionId: CHOICE_ACTION_ID,
+      targetNodeId: parseAtlasNodeId("current-node"),
       insertionIndex: 2,
       siblingSiteIdsBefore: [sourceSite.id, battleSite.id],
       selectorSignature: "selector-signature",
@@ -187,9 +198,9 @@ describe("Exploration site-type choice planning", () => {
       ],
     });
     expect(plan?.choices.map(({ insertedSite }) => insertedSite.id)).toEqual([
-      "site-exploration-source-site-choice-action",
-      "site-exploration-source-site-choice-action",
-      "site-exploration-source-site-choice-action",
+      insertedSiteId(CHOICE_ACTION_ID),
+      insertedSiteId(CHOICE_ACTION_ID),
+      insertedSiteId(CHOICE_ACTION_ID),
     ]);
     expect(
       plan?.choices.map(({ siteType, insertedSite }) => ({
@@ -200,7 +211,7 @@ describe("Exploration site-type choice planning", () => {
       {
         siteType: "Shop",
         insertedSite: {
-          id: asSiteId("site-exploration-source-site-choice-action"),
+          id: insertedSiteId(CHOICE_ACTION_ID),
           type: "Shop",
           isEnhanced: false,
           isVisited: false,
@@ -209,7 +220,7 @@ describe("Exploration site-type choice planning", () => {
       {
         siteType: "Purge",
         insertedSite: {
-          id: asSiteId("site-exploration-source-site-choice-action"),
+          id: insertedSiteId(CHOICE_ACTION_ID),
           type: "Purge",
           isEnhanced: false,
           isVisited: false,
@@ -218,7 +229,7 @@ describe("Exploration site-type choice planning", () => {
       {
         siteType: "Duplication",
         insertedSite: {
-          id: asSiteId("site-exploration-source-site-choice-action"),
+          id: insertedSiteId(CHOICE_ACTION_ID),
           type: "Duplication",
           isEnhanced: false,
           isVisited: false,
@@ -233,30 +244,30 @@ describe("Exploration site-type choice planning", () => {
       prepareExplorationSiteTypeChoice({
         journey: journey(),
         sourceSite,
-        sourceActionId: asExplorationActionId("choice-action"),
-        encounterCardId: asCardId("encounter-card"),
+        sourceActionId: CHOICE_ACTION_ID,
+        encounterCardId: testCardId("encounter-card"),
         siteTypes: ["Shop", "Purge"],
         selectorSignature: "selector-signature",
-        selectionRulesVersion: "rules-v1",
-        selectionContentRevision: "content-v1",
+        selectionRulesVersion: parseSelectionRulesVersion("rules-v1"),
+        selectionContentRevision: parseSelectionContentRevision("content-v1"),
       }),
     ).toBeNull();
     expect(
       prepareExplorationSiteTypeChoice({
         journey: journey(),
         sourceSite,
-        sourceActionId: asExplorationActionId("choice-action"),
-        encounterCardId: asCardId("encounter-card"),
+        sourceActionId: CHOICE_ACTION_ID,
+        encounterCardId: testCardId("encounter-card"),
         siteTypes: ["Shop", "Shop", "Purge"],
         selectorSignature: "selector-signature",
-        selectionRulesVersion: "rules-v1",
-        selectionContentRevision: "content-v1",
+        selectionRulesVersion: parseSelectionRulesVersion("rules-v1"),
+        selectionContentRevision: parseSelectionContentRevision("content-v1"),
       }),
     ).toBeNull();
 
     const stale = journey();
-    stale.atlas.nodes[asAtlasNodeId("current-node")]?.sites.push({
-      id: asSiteId("site-exploration-source-site-choice-action"),
+    stale.atlas.nodes[parseAtlasNodeId("current-node")]?.sites.push({
+      id: insertedSiteId(CHOICE_ACTION_ID),
       type: "Purge",
       isEnhanced: false,
       isVisited: false,
@@ -270,7 +281,7 @@ describe("Exploration site-type choice planning", () => {
     const variants = [
       { ...plan, selectorSignature: "forged" },
       { ...plan, planSignature: "forged" },
-      { ...plan, targetNodeId: asAtlasNodeId("forged") },
+      { ...plan, targetNodeId: parseAtlasNodeId("forged") },
       { ...plan, insertionIndex: plan.insertionIndex + 1 },
       {
         ...plan,
@@ -285,7 +296,7 @@ describe("Exploration site-type choice planning", () => {
                 ...choice,
                 insertedSite: {
                   ...choice.insertedSite,
-                  id: asSiteId("forged"),
+                  id: parseSiteId("forged"),
                 },
               }
             : choice,

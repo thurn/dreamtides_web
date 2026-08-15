@@ -13,6 +13,27 @@ import type {
   SaveEditorTagRegistryResponse,
   SaveEditorTideRegistryRequest,
 } from "./types";
+import {
+  parseOptionalSourceRevisionResponse,
+  parseSourceRevision,
+  type ParsedOptionalSourceRevisionResponse,
+  type RawOptionalSourceRevisionResponse,
+  type SourceRevision,
+} from "../types/source-revision";
+import { parseCardSubtype } from "../types/card-identity";
+
+function decodeEditorCard(
+  record: LoadEditorCardsResponse["cards"][number],
+): LoadEditorCardsResponse["cards"][number] {
+  return {
+    ...record,
+    subtype: parseCardSubtype(record.subtype),
+    preview: {
+      ...record.preview,
+      subtype: parseCardSubtype(record.preview.subtype),
+    },
+  };
+}
 
 export class EditorApiRequestError extends Error {
   readonly code: string | undefined;
@@ -38,13 +59,13 @@ export class EditorApiRequestError extends Error {
   }
 }
 
-let currentSourceRevision: string | undefined;
+let currentSourceRevision: SourceRevision | undefined;
 let saveQueue: Promise<void> = Promise.resolve();
 let pausedSaveError: Error | null = null;
 
-function rememberSourceRevision(body: { sourceRevision?: string }): void {
+function rememberSourceRevision(body: { sourceRevision?: unknown }): void {
   if (body.sourceRevision !== undefined) {
-    currentSourceRevision = body.sourceRevision;
+    currentSourceRevision = parseSourceRevision(body.sourceRevision);
   }
 }
 
@@ -118,6 +139,14 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
+async function readRevisionedJsonResponse<
+  Result extends { readonly sourceRevision?: SourceRevision },
+>(response: Response): Promise<ParsedOptionalSourceRevisionResponse<Result>> {
+  return parseOptionalSourceRevisionResponse<Result>(
+    await readJsonResponse<RawOptionalSourceRevisionResponse<Result>>(response),
+  );
+}
+
 /**
  * The `source` URL parameter selects a canonical RON file under `data`.
  * When absent, the Cards dataset is selected. The same value is forwarded to
@@ -152,10 +181,10 @@ export async function loadEditorCards(
     },
     signal,
   });
-  const body = await readJsonResponse<LoadEditorCardsResponse>(response);
+  const body = await readRevisionedJsonResponse<LoadEditorCardsResponse>(response);
   rememberSourceRevision(body);
   pausedSaveError = null;
-  return body.cards;
+  return body.cards.map(decodeEditorCard);
 }
 
 export async function saveEditorCardField(
@@ -170,9 +199,9 @@ export async function saveEditorCardField(
       },
       body: JSON.stringify({ ...request, sourceRevision: currentSourceRevision }),
     });
-    const body = await readJsonResponse<SaveEditorCardFieldResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorCardFieldResponse>(response);
     rememberSourceRevision(body);
-    return body;
+    return { ...body, card: decodeEditorCard(body.card) };
   });
 }
 
@@ -203,7 +232,7 @@ export async function loadEditorTags(signal?: AbortSignal): Promise<EditorTag[]>
     },
     signal,
   });
-  const body = await readJsonResponse<LoadEditorTagsResponse>(response);
+  const body = await readRevisionedJsonResponse<LoadEditorTagsResponse>(response);
   rememberSourceRevision(body);
   return body.tags;
 }
@@ -230,9 +259,9 @@ export async function saveEditorTagRegistry(
       },
       body: JSON.stringify({ ...request, sourceRevision: currentSourceRevision }),
     });
-    const body = await readJsonResponse<SaveEditorTagRegistryResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorTagRegistryResponse>(response);
     rememberSourceRevision(body);
-    return body;
+    return { ...body, cards: body.cards.map(decodeEditorCard) };
   });
 }
 
@@ -243,7 +272,7 @@ export async function loadEditorTides(signal?: AbortSignal): Promise<EditorTag[]
     },
     signal,
   });
-  const body = await readJsonResponse<LoadEditorTagsResponse>(response);
+  const body = await readRevisionedJsonResponse<LoadEditorTagsResponse>(response);
   rememberSourceRevision(body);
   return body.tags;
 }
@@ -275,8 +304,8 @@ export async function saveEditorTideRegistry(
         sourceRevision: currentSourceRevision,
       }),
     });
-    const body = await readJsonResponse<SaveEditorTagRegistryResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorTagRegistryResponse>(response);
     rememberSourceRevision(body);
-    return body;
+    return { ...body, cards: body.cards.map(decodeEditorCard) };
   });
 }

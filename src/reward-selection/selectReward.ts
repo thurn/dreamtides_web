@@ -42,7 +42,7 @@ import type { DreamAvatarId } from "../types/identifiers";
 import type { TideId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import {
-  asRewardCandidateKey,
+  parseRewardCandidateKey,
   type RewardCandidateKey,
 } from "../types/identifiers";
 
@@ -201,7 +201,7 @@ function cardCandidates(
       );
     return [
       {
-        key: asRewardCandidateKey(card.id),
+        key: parseRewardCandidateKey(card.id),
         card,
         rank: [0],
         score: 0,
@@ -213,7 +213,7 @@ function cardCandidates(
   if (cards.length === 0) return failure(request, "no_legal_candidates");
   if (request.policyId === "uniform") {
     return cards.map((card) => ({
-      key: asRewardCandidateKey(card.id),
+      key: parseRewardCandidateKey(card.id),
       card,
       rank: [0],
       score: 0,
@@ -233,7 +233,7 @@ function cardCandidates(
       ? strongCardRank(context, card)
       : ordinaryCardRank(context, card);
     return {
-      key: asRewardCandidateKey(card.id),
+      key: parseRewardCandidateKey(card.id),
       card,
       rank: ranked.rank,
       score: ranked.rank[0] ?? 0,
@@ -293,7 +293,7 @@ function deckEntryCandidates(
   }
   if (request.policyId === "fixed" || request.policyId === "uniform") {
     return entries.map(({ entry, baseCard }) => ({
-      key: asRewardCandidateKey(entry.entryId),
+      key: parseRewardCandidateKey(entry.entryId),
       entryId: entry.entryId,
       card: baseCard,
       rank: [0],
@@ -334,7 +334,7 @@ function deckEntryCandidates(
           ? [affinity, rarity]
           : [-affinity];
     return {
-      key: asRewardCandidateKey(entry.entryId),
+      key: parseRewardCandidateKey(entry.entryId),
       entryId: entry.entryId,
       card: baseCard,
       rank,
@@ -405,7 +405,7 @@ function transfigurationCandidates(
           ? [benefit, affinity]
           : [0];
       result.push({
-        key: asRewardCandidateKey(`${entry.entryId}:${form}`),
+        key: parseRewardCandidateKey(`${entry.entryId}:${form}`),
         entryId: entry.entryId,
         card: baseCard,
         transfiguration: form,
@@ -471,7 +471,7 @@ function transfiguredCatalogCandidates(
     return [
       {
         ...candidate,
-        key: asRewardCandidateKey(`${candidate.card.id}:${best.form}`),
+        key: parseRewardCandidateKey(`${candidate.card.id}:${best.form}`),
         transfiguration: best.form,
         rank: [best.benefit, affinity, rarityStrength(candidate.card.rarity)],
         score: best.benefit,
@@ -516,7 +516,7 @@ function dreamsignCandidates(
       ? failure(request, "fixed_target_unavailable")
       : [
           {
-            key: asRewardCandidateKey(dreamsign.id),
+            key: parseRewardCandidateKey(dreamsign.id),
             dreamsign,
             rank: [0],
             score: 0,
@@ -539,7 +539,7 @@ function dreamsignCandidates(
   return legal.map((dreamsign): Candidate => {
     if (request.policyId === "uniform") {
       return {
-        key: asRewardCandidateKey(dreamsign.id),
+        key: parseRewardCandidateKey(dreamsign.id),
         dreamsign,
         rank: [0],
         score: 0,
@@ -552,7 +552,7 @@ function dreamsignCandidates(
     const rarity = rarityStrength(dreamsign.rarity);
     const rank = contextHasAffinity(context) ? [affinity, rarity] : [0];
     return {
-      key: asRewardCandidateKey(dreamsign.id),
+      key: parseRewardCandidateKey(dreamsign.id),
       dreamsign,
       rank,
       score: rank[0] ?? 0,
@@ -572,7 +572,7 @@ function otherCandidates(
     return context.content.dreamAvatars
       .filter((avatar) => !excluded.has(avatar.id))
       .map((avatar) => ({
-        key: asRewardCandidateKey(avatar.id),
+        key: parseRewardCandidateKey(avatar.id),
         dreamAvatarId: avatar.id,
         rank: [0],
         score: 0,
@@ -595,7 +595,7 @@ function otherCandidates(
       );
     }
     return [...new Set(allowed)].sort(compareStableKeys).map((siteType) => ({
-      key: asRewardCandidateKey(siteType),
+      key: parseRewardCandidateKey(siteType),
       siteType,
       rank: [0],
       score: 0,

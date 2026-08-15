@@ -24,7 +24,20 @@
 
 import { type Database, ref, runTransaction } from "firebase/database";
 import { buildAppliedIndex, decodeAppliedIndex, encodeAppliedIndex, foldEvents } from "./fold";
-import type { EncodedLogNode, EngineConfig, GameEvent } from "./types";
+import {
+  parseEventNonce,
+  parseEventActor,
+  parseEventType,
+  parseStateHash,
+  type EncodedLogNode,
+  type EngineConfig,
+  type GameEvent,
+} from "./types";
+import {
+  parseIntentKey,
+  type IntentKey,
+  type RoomId,
+} from "../types/identifiers";
 import { decodeAppendableLogNode, decodeGenesis } from "./wire";
 
 /**
@@ -73,18 +86,20 @@ export function decodeEvent(raw: string): GameEvent {
     throw new Error("event has an invalid shape");
   }
   return {
-    type: event.type,
+    type: parseEventType(event.type),
     payload: payload as Record<string, unknown>,
-    actor: event.actor,
+    actor: parseEventActor(event.actor),
     clientTimestamp: event.clientTimestamp,
     basedOnSeq: event.basedOnSeq,
-    ...(event.nonce === undefined ? {} : { nonce: event.nonce }),
+    ...(event.nonce === undefined
+      ? {}
+      : { nonce: parseEventNonce(event.nonce) }),
     ...(event.intentKey === undefined
       ? {}
-      : { intentKey: event.intentKey }),
+      : { intentKey: parseIntentKey(event.intentKey) }),
     ...(event.stateHashAfter === undefined
       ? {}
-      : { stateHashAfter: event.stateHashAfter }),
+      : { stateHashAfter: parseStateHash(event.stateHashAfter) }),
   };
 }
 
@@ -238,17 +253,17 @@ function liveWindowSeqForNonce(
   return null;
 }
 
-function decodeIntentKeyIndex(raw: string | undefined): Record<string, string> {
+function decodeIntentKeyIndex(raw: string | undefined): Record<string, IntentKey> {
   if (raw === undefined) return {};
   try {
     const parsed = JSON.parse(raw) as unknown;
     if (typeof parsed !== "object" || parsed === null || Array.isArray(parsed)) {
       return {};
     }
-    const valid: Record<string, string> = {};
+    const valid: Record<string, IntentKey> = {};
     for (const [seq, value] of Object.entries(parsed)) {
       if (Number.isInteger(Number(seq)) && typeof value === "string") {
-        valid[seq] = value;
+        valid[seq] = parseIntentKey(value);
       }
     }
     return valid;
@@ -259,7 +274,7 @@ function decodeIntentKeyIndex(raw: string | undefined): Record<string, string> {
 
 function intentKeyIndexSeq(
   raw: string | undefined,
-  intentKey: string,
+  intentKey: IntentKey,
   appliedIndex: ReadonlyMap<number, unknown>,
   baseSeq: number,
 ): number | null {
@@ -310,7 +325,7 @@ function foldLiveWindow<S>(
 function appliedEventSeqForIntentKey<S>(
   config: EngineConfig<S>,
   encoded: EncodedLogNode,
-  intentKey: string,
+  intentKey: IntentKey,
 ): number | null {
   const appliedIndex = decodeAppliedIndex(encoded.appliedIndex);
   const compactedSeq = intentKeyIndexSeq(
@@ -401,7 +416,7 @@ export function existingEventSeq<S>(
  */
 export async function appendEvent<S>(
   db: Database,
-  roomId: string,
+  roomId: RoomId,
   config: EngineConfig<S>,
   event: GameEvent,
 ): Promise<number> {

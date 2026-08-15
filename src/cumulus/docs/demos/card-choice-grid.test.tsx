@@ -4,7 +4,7 @@ import { act, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../../types/cards";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 
 const cardIds = [
   "1268a899-b209-46bb-bce4-6def1dcd0404",
@@ -13,10 +13,10 @@ const cardIds = [
   "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
 ] as const;
 
-function card(id: string, index: number): CardData {
+function card(idSeed: string, index: number): CardData {
   return {
-    id: asCardId(id),
-    name: asCardName(`Choice ${String(index)}`),
+    id: testCardId(idSeed),
+    name: parseCardName(`Choice ${String(index)}`),
     cardNumber: index,
     cardType: "Event",
     subtype: "",
@@ -71,6 +71,7 @@ vi.mock("../../components/overlay/GlassPanel", () => ({
 import { loadCardDatabase } from "../../../data/card-database";
 import { cardChoiceGridDemo } from "./card-choice-grid";
 import type { DeckEntryId } from "../../../types/identifiers";
+import { testCardId } from "../../../types/test-identities";
 
 describe("CardChoiceGrid documentation demo", () => {
   it("shows a selectable grid in a non-collapsing contextual surface", async () => {

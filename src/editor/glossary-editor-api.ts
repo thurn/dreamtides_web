@@ -2,11 +2,12 @@ import type { GlossaryCatalogEntry } from "../data/glossary";
 import { EditorApiRequestError } from "./editor-api";
 import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
 import type { EditorApiErrorBody } from "./types";
+import type { GlossaryEntryId } from "../types/identifiers";
 
 const SOURCE = "glossary";
 
 export interface GlossaryEntryEdit {
-  readonly id: string;
+  readonly id: GlossaryEntryId;
   readonly term?: string;
   readonly definition?: string;
   readonly variants?: readonly string[];

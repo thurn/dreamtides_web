@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { testDreamwellCardName } from "../../types/test-identities";
 import { buildDreamwellDeck as buildConfiguredDreamwellDeck } from "./create-battle-init";
 import { createBattleRng } from "../random";
 import type { DreamwellCard } from "../../data/dreamwell-database";
 import { opponentsFixture } from "../../testing/opponents-fixture";
-import { asDreamwellCardId } from "../../types/identifiers";
+import { testDreamwellCardId } from "../../types/test-identities";
 
 const DREAMWELL_CONFIG = opponentsFixture().dreamwell;
 
@@ -22,8 +23,8 @@ function buildTestDreamwellDeck(
  */
 function makeCard(order: number, n: number): DreamwellCard {
   return {
-    id: asDreamwellCardId(`dw-${String(order)}-${String(n)}`),
-    name: `Order ${String(order)} #${String(n)}`,
+    id: testDreamwellCardId(`dw-${String(order)}-${String(n)}`),
+    name: testDreamwellCardName(`Order ${String(order)} #${String(n)}`),
     renderedText: "",
     order,
     energyAdded: order === 0 ? 2 : 1,

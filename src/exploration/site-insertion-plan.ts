@@ -4,6 +4,7 @@ import {
   type ExplorationFixedSiteType,
 } from "../data/exploration";
 import { stableDigest } from "../reward-selection/stable";
+import type { SelectionRulesVersion } from "../reward-selection/types";
 import type {
   ExplorationSiteInsertionPreparation,
   ExplorationSiteTypeChoicePreparation,
@@ -13,8 +14,8 @@ import type {
 import type { AtlasNodeId, SiteId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import type { ExplorationActionId } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
-import { asSiteId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import type { SelectionContentRevision } from "../types/selection-content-revision";
 
 function orderedSiteIds(sites: readonly SiteState[]): SiteId[] {
   return sites.map(({ id }) => id);
@@ -38,8 +39,8 @@ function ownerNodeId(
 
 function signaturePayload(input: {
   encounterCardId: CardId;
-  selectionRulesVersion: string;
-  selectionContentRevision: string;
+  selectionRulesVersion: SelectionRulesVersion;
+  selectionContentRevision: SelectionContentRevision;
   preparation: Omit<ExplorationSiteInsertionPreparation, "planSignature">;
 }): unknown {
   return {
@@ -65,8 +66,8 @@ export function prepareExplorationSiteInsertion(input: {
   sourceActionId: ExplorationActionId;
   encounterCardId: CardId;
   siteType: ExplorationFixedSiteType;
-  selectionRulesVersion: string;
-  selectionContentRevision: string;
+  selectionRulesVersion: SelectionRulesVersion;
+  selectionContentRevision: SelectionContentRevision;
 }): ExplorationSiteInsertionPreparation | null {
   const targetNodeId = ownerNodeId(input.journey, input.sourceSite.id);
   if (
@@ -80,7 +81,7 @@ export function prepareExplorationSiteInsertion(input: {
   const targetNode = input.journey.atlas.nodes[targetNodeId];
   if (targetNode === undefined) return null;
   const insertedSite: ExplorationSiteInsertionPreparation["insertedSite"] = {
-    id: asSiteId(
+    id: parseSiteId(
       `site-exploration-${input.sourceSite.id}-${input.sourceActionId}`,
     ),
     type: input.siteType,
@@ -91,9 +92,9 @@ export function prepareExplorationSiteInsertion(input: {
   const unsigned: Omit<ExplorationSiteInsertionPreparation, "planSignature"> = {
     sourceSiteId: input.sourceSite.id,
     sourceActionId: input.sourceActionId,
-    targetNodeId: asAtlasNodeId(targetNodeId),
+    targetNodeId: targetNodeId,
     insertionIndex: targetNode.sites.length,
-    siblingSiteIdsBefore: orderedSiteIds(targetNode.sites).map(asSiteId),
+    siblingSiteIdsBefore: orderedSiteIds(targetNode.sites).map(parseSiteId),
     insertedSite,
   };
   return {
@@ -123,8 +124,8 @@ function sameSite(left: SiteState, right: SiteState): boolean {
 
 function choiceSignaturePayload(input: {
   encounterCardId: CardId;
-  selectionRulesVersion: string;
-  selectionContentRevision: string;
+  selectionRulesVersion: SelectionRulesVersion;
+  selectionContentRevision: SelectionContentRevision;
   preparation: Omit<ExplorationSiteTypeChoicePreparation, "planSignature">;
 }): unknown {
   return {
@@ -151,8 +152,8 @@ export function prepareExplorationSiteTypeChoice(input: {
   encounterCardId: CardId;
   siteTypes: readonly ExplorationChoosableSiteType[];
   selectorSignature: string;
-  selectionRulesVersion: string;
-  selectionContentRevision: string;
+  selectionRulesVersion: SelectionRulesVersion;
+  selectionContentRevision: SelectionContentRevision;
 }): ExplorationSiteTypeChoicePreparation | null {
   const targetNodeId = ownerNodeId(input.journey, input.sourceSite.id);
   const distinctSiteTypes = new Set(input.siteTypes);
@@ -173,11 +174,11 @@ export function prepareExplorationSiteTypeChoice(input: {
   const targetNode = input.journey.atlas.nodes[targetNodeId];
   if (targetNode === undefined) return null;
   const insertedSiteId = `site-exploration-${input.sourceSite.id}-${input.sourceActionId}`;
-  if (siteIdExists(input.journey, asSiteId(insertedSiteId))) return null;
+  if (siteIdExists(input.journey, parseSiteId(insertedSiteId))) return null;
   const choices = input.siteTypes.map((siteType) => ({
     siteType,
     insertedSite: {
-      id: asSiteId(insertedSiteId),
+      id: parseSiteId(insertedSiteId),
       type: siteType,
       isEnhanced: false,
       isVisited: false,
@@ -187,9 +188,9 @@ export function prepareExplorationSiteTypeChoice(input: {
     {
       sourceSiteId: input.sourceSite.id,
       sourceActionId: input.sourceActionId,
-      targetNodeId: asAtlasNodeId(targetNodeId),
+      targetNodeId: targetNodeId,
       insertionIndex: targetNode.sites.length,
-      siblingSiteIdsBefore: orderedSiteIds(targetNode.sites).map(asSiteId),
+      siblingSiteIdsBefore: orderedSiteIds(targetNode.sites).map(parseSiteId),
       choices: choices,
       selectorSignature: input.selectorSignature,
     };

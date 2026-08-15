@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { LocalizedString } from "@trox/runtime";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import { LayerName } from "../../types/layer-name";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { createDefaultState } from "../../state/journey-context";
 import type { DreamscapeNode, JourneyState } from "../../types/journey";
@@ -11,15 +12,14 @@ import {
   buildJourneyCompleteCardIds,
   buildJourneyCompleteView,
 } from "./journey-complete-view-model";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { testDreamAvatarId, testDreamsignId, testCardId } from "../../types/test-identities";
 
-function card(cardNumber: number, id: string): CardData {
+function card(cardNumber: number, idSeed: string): CardData {
   return {
-    id: asCardId(id),
-    name: asCardName("Shared Display Name"),
+    id: testCardId(idSeed),
+    name: parseCardName("Shared Display Name"),
     cardNumber,
     cardType: "Character",
     subtype: "",
@@ -33,9 +33,9 @@ function card(cardNumber: number, id: string): CardData {
   };
 }
 
-function node(id: string, state: DreamscapeNode["state"]): DreamscapeNode {
+function node(idSeed: string, state: DreamscapeNode["state"]): DreamscapeNode {
   return {
-    id: asAtlasNodeId(id),
+    id: parseAtlasNodeId(idSeed),
     layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: null,
@@ -56,7 +56,7 @@ function state(): JourneyState {
     essence: 140,
     completionLevel: 7,
     dreamAvatar: {
-      id: asDreamAvatarId("dream-avatar-uuid"),
+      id: testDreamAvatarId("dream-avatar-uuid"),
       name: "The Wayfinder",
       title: "Bearer of the Last Light",
       renderedText: "A fixture ability.",
@@ -65,13 +65,13 @@ function state(): JourneyState {
     },
     deck: [
       {
-        entryId: asDeckEntryId("entry-a"),
+        entryId: parseDeckEntryId("entry-a"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: asDeckEntryId("entry-b"),
+        entryId: parseDeckEntryId("entry-b"),
         cardNumber: 2,
         transfiguration: null,
         isBane: false,
@@ -79,7 +79,7 @@ function state(): JourneyState {
     ],
     dreamsigns: [
       {
-        id: asDreamsignId("dreamsign-uuid"),
+        id: testDreamsignId("dreamsign-uuid"),
         name: "Fixture Sign",
         effectDescription: "A fixture effect.",
       },
@@ -87,9 +87,9 @@ function state(): JourneyState {
     atlas: {
       ...base.atlas,
       nodes: {
-        [asAtlasNodeId("completedA")]: node("completed-a", "completed"),
-        [asAtlasNodeId("completedB")]: node("completed-b", "completed"),
-        [asAtlasNodeId("available")]: node("available", "available"),
+        [parseAtlasNodeId("completedA")]: node("completed-a", "completed"),
+        [parseAtlasNodeId("completedB")]: node("completed-b", "completed"),
+        [parseAtlasNodeId("available")]: node("available", "available"),
       },
     },
   };
@@ -97,15 +97,16 @@ function state(): JourneyState {
 
 describe("buildJourneyCompleteView", () => {
   it("builds the interactive DreamAvatar portrait and victory statistics from run state", () => {
-    const view = buildJourneyCompleteView(state());
+    const journey = state();
+    const view = buildJourneyCompleteView(journey);
 
-    expect(view.dreamAvatar).toEqual({
-      id: "dream-avatar-uuid",
-      name: "The Wayfinder",
-      title: "Bearer of the Last Light",
-      ability: "A fixture ability.",
+    expect(view.dreamAvatar).toMatchObject({
+      id: journey.dreamAvatar?.id,
       imageNumber: "001",
     });
+    expect(view.dreamAvatar?.name).toBeInstanceOf(LocalizedString);
+    expect(view.dreamAvatar?.title).toBeInstanceOf(LocalizedString);
+    expect(view.dreamAvatar?.ability).toBeInstanceOf(LocalizedString);
     expect(view.stats.map(({ id, value }) => [id, value])).toEqual([
       ["battles", 7],
       ["dreamscapes", 2],

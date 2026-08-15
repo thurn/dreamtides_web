@@ -9,6 +9,7 @@ import type {
   DreamsignTemplate,
 } from "../../types/content";
 import type { OpponentsData } from "../../types/opponents-data";
+import type { ContentHash } from "../../types/content-hash";
 import { logEvent } from "../../logging";
 import {
   addCardVector,
@@ -22,7 +23,6 @@ import {
   selectionBandSize,
 } from "../../selection/tide-affinity";
 import type { BattleEntryKey, TideId } from "../../types/identifiers";
-import { asTideId } from "../../types/identifiers";
 import type { TideVector } from "../../selection/tide-affinity";
 
 interface RankedCard {
@@ -129,7 +129,7 @@ export function buildTideOpponentDeck(args: {
   completionLevel: number;
   poolSeed: number;
   battleEntryKey?: BattleEntryKey;
-  opponentsContentHash: string;
+  opponentsContentHash: ContentHash;
   progression: OpponentsData["progression"];
   deckSize: number;
   tides4Decks: Tides4DecksJson;
@@ -152,7 +152,7 @@ export function buildTideOpponentDeck(args: {
   );
   const joinedTideIds = generated.tides4Provenance.tides
     .filter((tide) => tide.joined)
-    .map((tide) => asTideId(tide.id));
+    .map((tide) => tide.id);
   const context = new Map<TideId, number>();
   addTideIds(context, joinedTideIds);
   addTideIds(context, args.affiliation?.tideIds ?? []);

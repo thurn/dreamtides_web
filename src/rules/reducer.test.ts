@@ -1,4 +1,7 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../types/test-identities";
 
 import type { GameEvent, EventContext, Genesis } from "../eventlog/types";
 import { foldEvents } from "../eventlog/fold";
@@ -22,18 +25,17 @@ import {
   reduceGameEvent,
 } from "./reducer";
 import type { BattleCardId } from "../types/identifiers";
-import { asCardId } from "../types/card-identity";
-import { asBattleId } from "../types/identifiers";
-import { asBattleCardId } from "../types/identifiers";
-import { asNoteId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
+import { parseBattleId } from "../types/identifiers";
+import { parseBattleCardId } from "../types/identifiers";
+import { parseNoteId } from "../types/identifiers";
+import { testCardId, testDreamAvatarId, testFoldHash } from "../types/test-identities";
 
 // ---------------------------------------------------------------------------
 // Fixtures
 // ---------------------------------------------------------------------------
 
 const GENESIS: Genesis = {
-  seed: "test-seed",
+  seed: testJourneySeed("test-seed"),
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: { poolVariant: "tides4" },
@@ -62,14 +64,14 @@ function ctx(overrides: Partial<EventContext> = {}): EventContext {
 }
 
 function event(
-  type: string,
+  type: GameEvent["type"],
   payload: Record<string, unknown>,
   actor = "alice",
 ): GameEvent {
   return {
     type,
     payload,
-    actor,
+    actor: testEventActor(actor),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
     basedOnSeq: 0,
   };
@@ -90,7 +92,7 @@ describe("rule 3 — compare-and-swap window", () => {
       state,
       adjustEssence(10, "alice"),
       ctx({
-        intervening: [{ seq: 5, actor: "bob", type: "ADJUST_ESSENCE" }],
+        intervening: [{ seq: 5, actor: testEventActor("bob"), type: "ADJUST_ESSENCE" }],
       }),
     );
     expect(result.outcome).toBe("bounced");
@@ -104,7 +106,7 @@ describe("rule 3 — compare-and-swap window", () => {
       state,
       adjustEssence(10, "alice"),
       ctx({
-        intervening: [{ seq: 5, actor: "bob", type: "SET_CARD_NOTE" }],
+        intervening: [{ seq: 5, actor: testEventActor("bob"), type: "SET_CARD_NOTE" }],
       }),
     );
     expect(result.outcome).toBe("applied");
@@ -118,7 +120,7 @@ describe("rule 3 — compare-and-swap window", () => {
       adjustEssence(10, "alice"),
       ctx({
         intervening: [
-          { seq: 5, actor: "bob", type: "DISMISS_STARTING_DECK_POPUP" },
+          { seq: 5, actor: testEventActor("bob"), type: "DISMISS_STARTING_DECK_POPUP" },
         ],
       }),
     );
@@ -133,8 +135,8 @@ describe("rule 3 — compare-and-swap window", () => {
       adjustEssence(10, "alice"),
       ctx({
         intervening: [
-          { seq: 4, actor: "alice", type: "ADJUST_ESSENCE" },
-          { seq: 5, actor: "alice", type: "ENTER_SITE" },
+          { seq: 4, actor: testEventActor("alice"), type: "ADJUST_ESSENCE" },
+          { seq: 5, actor: testEventActor("alice"), type: "ENTER_SITE" },
         ],
       }),
     );
@@ -184,7 +186,7 @@ function stateWithPendingPrompt(promptId: number): FoldState {
 // A note payload matching the `{ noteId, text, expiry }` shape SET_CARD_NOTE
 // stores (the shape the battle note editor writes).
 const NOTE_PAYLOAD = {
-  noteId: asNoteId("n1"),
+  noteId: parseNoteId("n1"),
   text: "hi",
   expiry: { kind: "manual" },
 };
@@ -212,11 +214,11 @@ function makeCardInstance(battleCardId: BattleCardId): BattleCardInstance {
     battleCardId,
     definition: {
       sourceDeckEntryId: null,
-      cardId: asCardId("card-uuid"),
+      cardId: testCardId("card-uuid"),
       cardNumber: 0,
-      name: "Fixture Card",
+      name: testCardName("Fixture Card"),
       battleCardKind: "character",
-      subtype: "Unit",
+      subtype: "Warrior",
       energyCost: 0,
       printedEnergyCost: 0,
       printedSpark: 1,
@@ -267,7 +269,7 @@ function stateWithBattleCard(
 ): FoldState {
   const base = foldStateWithEssence(100);
   const board: BattleMutableState = {
-    battleId: asBattleId("b"),
+    battleId: parseBattleId("b"),
     activeSide: "player",
     turnNumber: 3,
     phase: "day",
@@ -316,7 +318,7 @@ describe("rule 4 — prompt gate", () => {
       ctx({
         // A partner-intervening event that WOULD bounce at rule 3 — the fast
         // path (rule 2) skips rules 3–4, so the matching resolve still applies.
-        intervening: [{ seq: 5, actor: "bob", type: "ADJUST_ESSENCE" }],
+        intervening: [{ seq: 5, actor: testEventActor("bob"), type: "ADJUST_ESSENCE" }],
       }),
     );
     // The domain case resolves the open prompt and clears it.
@@ -347,24 +349,24 @@ describe("rule 4 — prompt gate", () => {
 
 describe("rule 1 — CAS-exempt types", () => {
   it("applies SET_CARD_NOTE through a hostile partner window", () => {
-    const state = stateWithBattleCard(asBattleCardId("i1"));
+    const state = stateWithBattleCard(parseBattleCardId("i1"));
     const result = reduceGameEvent(
       state,
       event("SET_CARD_NOTE", { instanceId: "i1", note: NOTE_PAYLOAD }),
       ctx({
-        intervening: [{ seq: 5, actor: "bob", type: "ADJUST_ESSENCE" }],
+        intervening: [{ seq: 5, actor: testEventActor("bob"), type: "ADJUST_ESSENCE" }],
       }),
     );
     // CAS-exempt (rule 1): skips rules 2–4, so the hostile partner window never
     // gates it. The domain case stores the note on the card.
     expect(result.outcome).toBe("applied");
     expect(
-      result.state.battle?.board.cardInstances[asBattleCardId("i1")].notes,
+      result.state.battle?.board.cardInstances[parseBattleCardId("i1")].notes,
     ).toHaveLength(1);
   });
 
   it("applies SET_CARD_NOTE through an open prompt (rule 4 skipped)", () => {
-    const state = stateWithBattleCard(asBattleCardId("i1"), 1);
+    const state = stateWithBattleCard(parseBattleCardId("i1"), 1);
     const result = reduceGameEvent(
       state,
       event("SET_CARD_NOTE", { instanceId: "i1", note: NOTE_PAYLOAD }),
@@ -373,7 +375,7 @@ describe("rule 1 — CAS-exempt types", () => {
     // CAS-exempt: applies even while a prompt is open, and leaves it intact.
     expect(result.outcome).toBe("applied");
     expect(
-      result.state.battle?.board.cardInstances[asBattleCardId("i1")].notes,
+      result.state.battle?.board.cardInstances[parseBattleCardId("i1")].notes,
     ).toHaveLength(1);
     expect(result.state.battle?.pendingPrompt?.promptId).toBe(1);
   });
@@ -389,7 +391,7 @@ describe("rule 5 — routing and garbage tolerance", () => {
     const garbage = {
       type: "NOT_A_REAL_TYPE",
       payload: null as unknown as Record<string, unknown>,
-      actor: "alice",
+      actor: testEventActor("alice"),
       clientTimestamp: "x",
       basedOnSeq: 0,
     } as GameEvent;
@@ -519,21 +521,21 @@ describe("isMatchingResolve (rule 2)", () => {
 
 describe("isInterveningWindowClear (rule 3)", () => {
   it("is clear for an empty window", () => {
-    expect(isInterveningWindowClear([], "alice")).toBe(true);
+    expect(isInterveningWindowClear([], testEventActor("alice"))).toBe(true);
   });
 
   it("is not clear for an unknown window", () => {
-    expect(isInterveningWindowClear("unknown", "alice")).toBe(false);
+    expect(isInterveningWindowClear("unknown", testEventActor("alice"))).toBe(false);
   });
 
   it("is clear when only own-actor events intervened", () => {
     expect(
       isInterveningWindowClear(
         [
-          { seq: 1, actor: "alice", type: "ADJUST_ESSENCE" },
-          { seq: 2, actor: "alice", type: "ENTER_SITE" },
+          { seq: 1, actor: testEventActor("alice"), type: "ADJUST_ESSENCE" },
+          { seq: 2, actor: testEventActor("alice"), type: "ENTER_SITE" },
         ],
-        "alice",
+        testEventActor("alice"),
       ),
     ).toBe(true);
   });
@@ -541,8 +543,8 @@ describe("isInterveningWindowClear (rule 3)", () => {
   it("is not clear when a non-neutral partner event intervened", () => {
     expect(
       isInterveningWindowClear(
-        [{ seq: 1, actor: "bob", type: "ADJUST_ESSENCE" }],
-        "alice",
+        [{ seq: 1, actor: testEventActor("bob"), type: "ADJUST_ESSENCE" }],
+        testEventActor("alice"),
       ),
     ).toBe(false);
   });
@@ -550,8 +552,8 @@ describe("isInterveningWindowClear (rule 3)", () => {
   it("ignores a decision-neutral partner event", () => {
     expect(
       isInterveningWindowClear(
-        [{ seq: 1, actor: "bob", type: "SET_CARD_NOTE" }],
-        "alice",
+        [{ seq: 1, actor: testEventActor("bob"), type: "SET_CARD_NOTE" }],
+        testEventActor("alice"),
       ),
     ).toBe(true);
   });
@@ -559,8 +561,8 @@ describe("isInterveningWindowClear (rule 3)", () => {
   it("ignores a decision-neutral starting-deck dismissal", () => {
     expect(
       isInterveningWindowClear(
-        [{ seq: 2, actor: "bob", type: "DISMISS_STARTING_DECK_POPUP" }],
-        "alice",
+        [{ seq: 2, actor: testEventActor("bob"), type: "DISMISS_STARTING_DECK_POPUP" }],
+        testEventActor("alice"),
       ),
     ).toBe(true);
   });
@@ -568,8 +570,8 @@ describe("isInterveningWindowClear (rule 3)", () => {
   it("ignores a partner OPEN_SITE bootstrap", () => {
     expect(
       isInterveningWindowClear(
-        [{ seq: 1, actor: "bob", type: "OPEN_SITE" }],
-        "alice",
+        [{ seq: 1, actor: testEventActor("bob"), type: "OPEN_SITE" }],
+        testEventActor("alice"),
       ),
     ).toBe(true);
   });
@@ -577,8 +579,8 @@ describe("isInterveningWindowClear (rule 3)", () => {
   it("ignores a partner ENTER_DRAFT_SITE bootstrap", () => {
     expect(
       isInterveningWindowClear(
-        [{ seq: 1, actor: "bob", type: "ENTER_DRAFT_SITE" }],
-        "alice",
+        [{ seq: 1, actor: testEventActor("bob"), type: "ENTER_DRAFT_SITE" }],
+        testEventActor("alice"),
       ),
     ).toBe(true);
   });
@@ -586,8 +588,8 @@ describe("isInterveningWindowClear (rule 3)", () => {
   it("ignores client presentation provenance", () => {
     expect(
       isInterveningWindowClear(
-        [{ seq: 1, actor: "bob", type: "SET_CARD_SOURCE_DEBUG" }],
-        "alice",
+        [{ seq: 1, actor: testEventActor("bob"), type: "SET_CARD_SOURCE_DEBUG" }],
+        testEventActor("alice"),
       ),
     ).toBe(true);
   });
@@ -606,7 +608,7 @@ describe("genesisFoldState", () => {
       ...GENESIS,
       contentConfig: {
         poolVariant: "tides4",
-        economyFoldHash: "synthetic-economy",
+        economyFoldHash: testFoldHash("synthetic-economy"),
         defaultStartingEssence: 137,
         dreamsignCap: 9,
       },
@@ -621,8 +623,8 @@ describe("genesisFoldState", () => {
       ...GENESIS,
       contentConfig: {
         poolVariant: "tides4",
-        atlasFoldHash: "synthetic-atlas",
-        economyFoldHash: "synthetic-economy",
+        atlasFoldHash: testFoldHash("synthetic-atlas"),
+        economyFoldHash: testFoldHash("synthetic-economy"),
         defaultStartingEssence: 137,
         dreamsignCap: 9,
       },
@@ -664,7 +666,7 @@ describe("reducer containment at the foldEvents layer", () => {
         {
           seq: 1,
           event: event("START_JOURNEY", {
-            dreamAvatarId: asDreamAvatarId("dc-x"),
+            dreamAvatarId: testDreamAvatarId("dc-x"),
           }),
         },
       ];
@@ -702,7 +704,7 @@ describe("reducer containment at the foldEvents layer", () => {
 function stateWithPoisonedPrompt(promptId: number): FoldState {
   const base = foldStateWithEssence(100);
   const board: BattleMutableState = {
-    battleId: asBattleId("b"),
+    battleId: parseBattleId("b"),
     activeSide: "player",
     turnNumber: 3,
     phase: "day",

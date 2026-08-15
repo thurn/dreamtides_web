@@ -1,6 +1,6 @@
 import type { OpponentsData } from "../types/opponents-data";
-import { asCardId } from "../types/card-identity";
-import { asAiDifficultyPresetId } from "../types/identifiers";
+import { parseAiDifficultyPresetId } from "../types/identifiers";
+import { testCardId, testContentHash, testFoldHash } from "../types/test-identities";
 
 const STARTER_IDS = [
   "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
@@ -18,7 +18,7 @@ const STARTER_IDS = [
 /** Stable synthetic opponent input for tests which are not testing compilation. */
 export function opponentsFixture(): OpponentsData {
   const standard = {
-    id: asAiDifficultyPresetId("standard"),
+    id: parseAiDifficultyPresetId("standard"),
     beamWidth: 12,
     opponentMode: "expectiminimax" as const,
     sampleCount: 8,
@@ -28,8 +28,8 @@ export function opponentsFixture(): OpponentsData {
   };
   return {
     schemaVersion: 1,
-    contentHash: "b".repeat(64),
-    foldHash: "b".repeat(64),
+    contentHash: testContentHash("b"),
+    foldHash: testFoldHash("b"),
     opponentDeckSize: 30,
     battle: {
       minimumDeckSize: 25,
@@ -56,12 +56,12 @@ export function opponentsFixture(): OpponentsData {
       starterDilution: [10, 5],
     },
     journeyAiDeck: STARTER_IDS.map((cardId) => ({
-      cardId: asCardId(cardId),
+      cardId: testCardId(cardId),
       count: 3,
     })),
     ai: {
-      journeyDefaultPreset: asAiDifficultyPresetId("standard"),
-      tutorialDefaultPreset: asAiDifficultyPresetId("standard"),
+      journeyDefaultPreset: parseAiDifficultyPresetId("standard"),
+      tutorialDefaultPreset: parseAiDifficultyPresetId("standard"),
       evaluation: {
         scoreDifference: 10,
         frontRankSpark: 1,
@@ -80,7 +80,7 @@ export function opponentsFixture(): OpponentsData {
         },
         sampleSafetyCap: 16,
       },
-      presets: { standard },
+      presets: { [standard.id]: standard },
     },
   };
 }

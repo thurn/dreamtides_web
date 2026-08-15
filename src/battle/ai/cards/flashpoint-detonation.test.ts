@@ -1,14 +1,15 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../../types/test-identities";
 import { flashpointDetonation } from "./flashpoint-detonation";
 import type { AiCard, AiOpponentBody, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
-import { asBattleCardId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
 
 function makeCard(
   overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
 ): AiCard {
   return {
-    name: "card",
+    name: testCardName("card"),
     energyCost: 0,
     basePrintedSpark: 0,
     sparkDelta: 0,
@@ -52,7 +53,7 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 describe("Flashpoint Detonation (#516)", () => {
   it("canPlay is false with no opponent bodies", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("blast"),
+      battleCardId: parseBattleCardId("blast"),
       cardNumber: 516,
       energyCost: 2,
     });
@@ -63,14 +64,14 @@ describe("Flashpoint Detonation (#516)", () => {
 
   it("canPlay is false without enough energy", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("blast"),
+      battleCardId: parseBattleCardId("blast"),
       cardNumber: 516,
       energyCost: 2,
     });
     const model = makeModel({
       aiEnergy: 1,
       opponentBodies: [
-        makeBody({ battleCardId: asBattleCardId("x"), effectiveSpark: 3 }),
+        makeBody({ battleCardId: parseBattleCardId("x"), effectiveSpark: 3 }),
       ],
     });
     expect(flashpointDetonation.canPlay(model, self)).toBe(false);
@@ -78,20 +79,20 @@ describe("Flashpoint Detonation (#516)", () => {
 
   it("chooseTargets prefers a front-rank body when one exists", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("blast"),
+      battleCardId: parseBattleCardId("blast"),
       cardNumber: 516,
       energyCost: 2,
     });
     const model = makeModel({
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("bigBack"),
+          battleCardId: parseBattleCardId("bigBack"),
           rank: "back",
           slot: "B1",
           effectiveSpark: 9,
         }),
         makeBody({
-          battleCardId: asBattleCardId("front"),
+          battleCardId: parseBattleCardId("front"),
           rank: "front",
           slot: "F0",
           effectiveSpark: 2,
@@ -105,20 +106,20 @@ describe("Flashpoint Detonation (#516)", () => {
 
   it("chooseTargets picks the highest-spark body when none are front rank", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("blast"),
+      battleCardId: parseBattleCardId("blast"),
       cardNumber: 516,
       energyCost: 2,
     });
     const model = makeModel({
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("small"),
+          battleCardId: parseBattleCardId("small"),
           rank: "back",
           slot: "B0",
           effectiveSpark: 2,
         }),
         makeBody({
-          battleCardId: asBattleCardId("big"),
+          battleCardId: parseBattleCardId("big"),
           rank: "back",
           slot: "B1",
           effectiveSpark: 7,
@@ -132,14 +133,14 @@ describe("Flashpoint Detonation (#516)", () => {
 
   it("canPlay is false when every enemy body costs more than 2", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("blast"),
+      battleCardId: parseBattleCardId("blast"),
       cardNumber: 516,
       energyCost: 2,
     });
     const model = makeModel({
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("colossus"),
+          battleCardId: parseBattleCardId("colossus"),
           rank: "front",
           slot: "F0",
           effectiveSpark: 6,
@@ -152,7 +153,7 @@ describe("Flashpoint Detonation (#516)", () => {
 
   it("chooseTargets skips a body that costs more than 2", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("blast"),
+      battleCardId: parseBattleCardId("blast"),
       cardNumber: 516,
       energyCost: 2,
     });
@@ -160,14 +161,14 @@ describe("Flashpoint Detonation (#516)", () => {
       opponentBodies: [
         // Biggest threat, but too expensive to dissolve — must be ignored.
         makeBody({
-          battleCardId: asBattleCardId("colossus"),
+          battleCardId: parseBattleCardId("colossus"),
           rank: "front",
           slot: "F0",
           effectiveSpark: 9,
           energyCost: 6,
         }),
         makeBody({
-          battleCardId: asBattleCardId("cheap"),
+          battleCardId: parseBattleCardId("cheap"),
           rank: "front",
           slot: "F1",
           effectiveSpark: 2,
@@ -182,14 +183,14 @@ describe("Flashpoint Detonation (#516)", () => {
 
   it("chooseTargets returns null when no body is cheap enough", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("blast"),
+      battleCardId: parseBattleCardId("blast"),
       cardNumber: 516,
       energyCost: 2,
     });
     const model = makeModel({
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("colossus"),
+          battleCardId: parseBattleCardId("colossus"),
           rank: "front",
           slot: "F0",
           effectiveSpark: 6,
@@ -202,18 +203,18 @@ describe("Flashpoint Detonation (#516)", () => {
 
   it("play removes exactly the targeted body and bumps opponentVoidCount", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("blast"),
+      battleCardId: parseBattleCardId("blast"),
       cardNumber: 516,
       energyCost: 2,
     });
     const target = makeBody({
-      battleCardId: asBattleCardId("front"),
+      battleCardId: parseBattleCardId("front"),
       rank: "front",
       slot: "F0",
       effectiveSpark: 2,
     });
     const other = makeBody({
-      battleCardId: asBattleCardId("keep"),
+      battleCardId: parseBattleCardId("keep"),
       rank: "back",
       slot: "B0",
       effectiveSpark: 5,
@@ -226,7 +227,7 @@ describe("Flashpoint Detonation (#516)", () => {
     });
 
     flashpointDetonation.play(model, self, {
-      targetBattleCardId: asBattleCardId("front"),
+      targetBattleCardId: parseBattleCardId("front"),
     });
 
     expect(model.aiEnergy).toBe(3);

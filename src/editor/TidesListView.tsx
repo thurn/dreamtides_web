@@ -4,12 +4,14 @@ import { tideColorChip } from "./tide-visuals";
 import { TideSourcePreview } from "./TideSourcePreview";
 import { StandaloneGlyph } from "../cumulus/components/controls/StandaloneGlyph";
 import type { EditorDreamAvatar } from "./tides-types";
+import type { CardId } from "../types/card-identity";
+import type { DreamAvatarId, TideId } from "../types/identifiers";
 
 interface TidesListViewProps {
   tides: readonly Tides4DeckJson[];
-  dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
-  cardById: ReadonlyMap<string, CardData>;
-  onSelectTide: (tideId: string) => void;
+  dreamAvatarById: ReadonlyMap<DreamAvatarId, EditorDreamAvatar>;
+  cardById: ReadonlyMap<CardId, CardData>;
+  onSelectTide: (tideId: TideId) => void;
 }
 
 /** The role groups shown on the list, in display order, with section labels. */
@@ -48,9 +50,9 @@ function TideTile({
   onSelectTide,
 }: {
   tide: Tides4DeckJson;
-  dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
-  cardById: ReadonlyMap<string, CardData>;
-  onSelectTide: (tideId: string) => void;
+  dreamAvatarById: ReadonlyMap<DreamAvatarId, EditorDreamAvatar>;
+  cardById: ReadonlyMap<CardId, CardData>;
+  onSelectTide: (tideId: TideId) => void;
 }) {
   const chip = tideColorChip(tide.resonance);
   const label = tideLabel(tide);

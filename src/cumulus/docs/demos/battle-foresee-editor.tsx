@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { assertLocalized } from "@trox/runtime";
-import { asDreamwellCardId } from "../../../types/identifiers";
+import { parseDreamwellCardId } from "../../../types/identifiers";
 import {
   BattleForeseeEditor,
   type BattleForeseeResult,
 } from "../../components/battle/BattleForeseeEditor";
-import { demoCard, demoInstanceId } from "./promotion-fixtures";
+import { demoCard, demoIdentitySeed } from "./promotion-fixtures";
 import type { CumulusComponent } from "../registry";
 import { DemoControls, DemoToggle } from "./promotion-demo-controls";
-import { asBattleCardId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
 
-const sourceId = asDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15");
+const sourceId = parseDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15");
 const source = {
   cardId: sourceId,
   displaySnapshot: {
@@ -38,7 +38,7 @@ function Demo() {
           initialCount: 2,
           allowedCounts: [1, 2, 3],
           cards: [1, 2, 3].map((index) => ({
-            battleCardId: asBattleCardId(demoInstanceId(index)),
+            battleCardId: parseBattleCardId(demoIdentitySeed(index)),
             card: demoCard(index, `Foreseen ${String(index)}`),
           })),
           ...(showSource ? { source } : {}),

@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../types/test-identities";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   selectDreamAvatarOffer,
@@ -6,15 +7,15 @@ import {
   toJourneyDreamAvatar,
 } from "./dream-avatar-selection";
 import type { DreamAvatarContent } from "../types/content";
-import { asDreamAvatarId } from "../types/identifiers";
+import { testDreamAvatarId } from "../types/test-identities";
 
-function makeDreamAvatar(id: string): DreamAvatarContent {
+function makeDreamAvatar(idSeed: string): DreamAvatarContent {
   return {
-    id: asDreamAvatarId(id),
-    name: `DreamAvatar ${id}`,
-    title: `Title ${id}`,
-    renderedText: `Rules text for ${id}.`,
-    imageNumber: `00${id}`,
+    id: testDreamAvatarId(idSeed),
+    name: `DreamAvatar ${idSeed}`,
+    title: `Title ${idSeed}`,
+    renderedText: `Rules text for ${idSeed}.`,
+    imageNumber: `00${idSeed}`,
     portraitFocus: { x: 0.42, y: 0.18 },
     startingEssence: 250,
   };
@@ -53,8 +54,8 @@ describe("selectDreamAvatarOffer", () => {
   it("derives the same offer from the same room seed across remounts", () => {
     const dreamAvatars = ["a", "b", "c", "d", "e", "f"].map(makeDreamAvatar);
 
-    const first = selectDreamAvatarOfferForSeed(dreamAvatars, "room-seed");
-    const second = selectDreamAvatarOfferForSeed(dreamAvatars, "room-seed");
+    const first = selectDreamAvatarOfferForSeed(dreamAvatars, testJourneySeed("room-seed"));
+    const second = selectDreamAvatarOfferForSeed(dreamAvatars, testJourneySeed("room-seed"));
 
     expect(first.map((dreamAvatar) => dreamAvatar.id)).toEqual(
       second.map((dreamAvatar) => dreamAvatar.id),
@@ -65,17 +66,17 @@ describe("selectDreamAvatarOffer", () => {
     const dreamAvatars = ["a", "b", "c", "d", "e", "f"].map(makeDreamAvatar);
     const initial = selectDreamAvatarOfferForReroll(
       dreamAvatars,
-      "room-seed",
+      testJourneySeed("room-seed"),
       0,
     );
     const rerolled = selectDreamAvatarOfferForReroll(
       dreamAvatars,
-      "room-seed",
+      testJourneySeed("room-seed"),
       1,
     );
     const repeated = selectDreamAvatarOfferForReroll(
       dreamAvatars,
-      "room-seed",
+      testJourneySeed("room-seed"),
       1,
     );
 
@@ -93,7 +94,7 @@ describe("selectDreamAvatarOffer", () => {
 describe("toJourneyDreamAvatar", () => {
   it("returns the player-facing DreamAvatar display fields", () => {
     expect(toJourneyDreamAvatar(makeDreamAvatar("a"))).toEqual({
-      id: "a",
+      id: testDreamAvatarId("a"),
       name: "DreamAvatar a",
       title: "Title a",
       renderedText: "Rules text for a.",
@@ -110,7 +111,7 @@ describe("toJourneyDreamAvatar", () => {
     const result = toJourneyDreamAvatar(dreamAvatar);
 
     expect(result).toEqual({
-      id: "a",
+      id: testDreamAvatarId("a"),
       name: "DreamAvatar a",
       title: "Title a",
       renderedText: "Rules text for a.",

@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { bandSample, merchantRng, weightedSample } from "./rng";
 
+type ScoredItemId = `item-${number}`;
+
 interface ScoredItem {
-  id: string;
+  id: ScoredItemId;
   score: number;
 }
 
@@ -85,7 +87,7 @@ describe("bandSample", () => {
 
   it("spreads first picks across the band over 200 seeds (no residual argmax)", () => {
     const items = makeItems(20);
-    const firstPicks = new Set<string>();
+    const firstPicks = new Set<ScoredItemId>();
     for (let seed = 0; seed < 200; seed += 1) {
       const picks = bandSample(items, (t) => t.score, 3, merchantRng("dist", String(seed)), {
         bandFraction: 0.25,

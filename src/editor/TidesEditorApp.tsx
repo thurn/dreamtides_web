@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CardData } from "../types/cards";
+import type { CardId } from "../types/card-identity";
+import type { DreamAvatarId, TideId } from "../types/identifiers";
 import type { CardSizePreset } from "./card-size";
 import { loadCardsV2Database } from "../data/cards-v2-database";
 import TidesListView from "./TidesListView";
@@ -29,8 +31,8 @@ type LoadStatus =
   | {
       kind: "loaded";
       artifact: TidesArtifact;
-      cardById: ReadonlyMap<string, CardData>;
-      dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
+      cardById: ReadonlyMap<CardId, CardData>;
+      dreamAvatarById: ReadonlyMap<DreamAvatarId, EditorDreamAvatar>;
     }
   | { kind: "error"; message: string };
 
@@ -47,21 +49,21 @@ function isAbortError(error: unknown): boolean {
 }
 
 /** Build a UUID-keyed (lowercased) card index from the v2 card database. */
-function buildCardById(database: Map<number, CardData>): Map<string, CardData> {
-  const byId = new Map<string, CardData>();
-  for (const card of database.values()) byId.set(card.id.toLowerCase(), card);
+function buildCardById(database: Map<number, CardData>): Map<CardId, CardData> {
+  const byId = new Map<CardId, CardData>();
+  for (const card of database.values()) byId.set(card.id, card);
   return byId;
 }
 
 async function loadDreamAvatarById(
   signal?: AbortSignal,
-): Promise<Map<string, EditorDreamAvatar>> {
+): Promise<Map<DreamAvatarId, EditorDreamAvatar>> {
   const response = await fetch("/dream-avatars-v2-data.json", { signal });
-  const byId = new Map<string, EditorDreamAvatar>();
+  const byId = new Map<DreamAvatarId, EditorDreamAvatar>();
   if (!response.ok) return byId;
   const dreamAvatars = (await response.json()) as EditorDreamAvatar[];
   for (const dreamAvatar of dreamAvatars) {
-    byId.set(dreamAvatar.id.toLowerCase(), dreamAvatar);
+    byId.set(dreamAvatar.id, dreamAvatar);
   }
   return byId;
 }
@@ -133,7 +135,7 @@ export default function TidesEditorApp({
   );
 
   const handleSelectTide = useCallback(
-    (tideId: string) => {
+    (tideId: TideId) => {
       const next = { ...urlState, tideId };
       setUrlState(next);
       setSaveStatus({ status: "idle" });

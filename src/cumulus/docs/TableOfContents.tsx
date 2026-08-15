@@ -10,13 +10,14 @@
 // matching the rest of the doc site.
 
 import { useEffect, useState, type ReactElement } from "react";
+import type { DomElementId } from "../types/dom";
 import "./table-of-contents.css";
 
 /** One row in the table of contents. `depth` 0 is a top-level section, depth 1
  * is a section child, and depth 2 is a component nested under its group. `id`
  * is the DOM `id` of the anchor element the row scrolls to and observes. */
 export interface TocEntry {
-  id: string;
+  id: DomElementId;
   label: string;
   depth: 0 | 1 | 2;
 }
@@ -34,14 +35,13 @@ const ACTIVE_MARKER_PX = 96;
  * resize (both passive), and once on mount so the initial paint is correct even
  * when the page loads already scrolled.
  */
-function useActiveEntryId(entries: TocEntry[]): string | null {
-  const ids = entries.map((entry) => entry.id).join("|");
-  const [activeId, setActiveId] = useState<string | null>(
+function useActiveEntryId(entries: TocEntry[]): DomElementId | null {
+  const [activeId, setActiveId] = useState<DomElementId | null>(
     () => entries[0]?.id ?? null,
   );
 
   useEffect(() => {
-    const orderedIds = ids.length > 0 ? ids.split("|") : [];
+    const orderedIds = entries.map((entry) => entry.id);
     if (orderedIds.length === 0) {
       return undefined;
     }
@@ -72,7 +72,7 @@ function useActiveEntryId(entries: TocEntry[]): string | null {
       window.removeEventListener("scroll", recompute);
       window.removeEventListener("resize", recompute);
     };
-  }, [ids]);
+  }, [entries]);
 
   return activeId;
 }
@@ -80,12 +80,15 @@ function useActiveEntryId(entries: TocEntry[]): string | null {
 /** The ids of the entries that own the active entry, from its nearest parent
  * through its top-level section. These provide a trail for both levels of the
  * Components hierarchy. */
-function ancestorIdsOf(entries: TocEntry[], activeId: string | null): Set<string> {
+function ancestorIdsOf(
+  entries: TocEntry[],
+  activeId: DomElementId | null,
+): Set<DomElementId> {
   const activeIndex = entries.findIndex((entry) => entry.id === activeId);
   if (activeIndex === -1 || entries[activeIndex].depth === 0) {
     return new Set();
   }
-  const ancestors = new Set<string>();
+  const ancestors = new Set<DomElementId>();
   let nextDepth = entries[activeIndex].depth - 1;
   for (let index = activeIndex - 1; index >= 0; index -= 1) {
     if (entries[index].depth === nextDepth) {
@@ -102,7 +105,7 @@ function ancestorIdsOf(entries: TocEntry[], activeId: string | null): Set<string
 /** Smooth-scrolls to an anchor, landing it just below the viewport top rather
  * than flush against it, so the section heading is not clipped by the reading
  * band. Falls through silently if the anchor is missing. */
-function scrollToAnchor(id: string): void {
+function scrollToAnchor(id: DomElementId): void {
   const element = document.getElementById(id);
   if (element === null) {
     return;

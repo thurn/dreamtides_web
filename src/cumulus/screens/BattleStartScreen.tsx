@@ -31,10 +31,10 @@ import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial
 import { meaning, opaque, txa, tx, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { CardId } from "../../types/card-identity";
-import type { BattleId } from "../../types/identifiers";
+import type { BattleId, OpponentId } from "../../types/identifiers";
 
 export interface BattleStartDreamAvatarView {
-  id: string;
+  id: OpponentId;
   name: LocalizedString;
   title: LocalizedString;
   imageNumber: string;
@@ -352,7 +352,10 @@ function BattleStartPanel({
                 {view.dreamAvatar.abilityActive ? (
                   <RulesText
                     text={view.dreamAvatar.ability}
-                    owner={{ kind: "dreamAvatar", id: view.dreamAvatar.id }}
+                    owner={{
+                      kind: "opponentDreamAvatar",
+                      id: view.dreamAvatar.id,
+                    }}
                   />
                 ) : (
                   <span style={{ color: token("--text-on-glass-muted") }}>

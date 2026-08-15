@@ -1,9 +1,11 @@
+import { testJourneySeed } from "../../types/test-identities";
+import { testEventActor } from "../../types/test-identities";
 import { afterEach, describe, expect, it } from "vitest";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardId, parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { JourneyContent } from "../../data/journey-content";
 import { genesisFoldState } from "../fold-state";
@@ -11,7 +13,7 @@ import { reduceGameEvent } from "../reducer";
 import { registerTutorialBattleInitProvider } from "./battle-events";
 import { createTutorialBattleInitProvider } from "../../coop/providers/battle-init-provider";
 import { planTutorialBattleController } from "../../battle/tutorial-battle-controller";
-import type { EventContext } from "../../eventlog/types";
+import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type { FoldState } from "../fold-state";
 import {
   MINIMAL_ATLAS_DATA,
@@ -25,36 +27,33 @@ import {
 } from "../../test/tutorial-configuration-fixture";
 import { registerTutorialFrontDoorContentProvider } from "../front-door";
 import type { CardId } from "../../types/card-identity";
-import { asTutorialActionId } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asTutorialTriggerId } from "../../types/identifiers";
-import { asGlossaryEntryId } from "../../types/identifiers";
-import { asDreamwellCardId } from "../../types/identifiers";
-import { asTutorialAiActionOverrideId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
-import { asPresentationId } from "../../types/identifiers";
-import { asTutorialRunId } from "../../types/identifiers";
-import { asJourneyId } from "../../types/identifiers";
-import { asClientId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import type { BattleCardId } from "../../types/identifiers";
+import { parseTutorialRunId } from "../../types/identifiers";
+import { parseJourneyId } from "../../types/identifiers";
+import { parseClientId } from "../../types/identifiers";
+import { testDreamwellCardId, testTutorialActionId, testTutorialTriggerId, testCardId, testDreamAvatarId, testTutorialAiActionOverrideId, testGlossaryEntryId, testDreamwellCardName } from "../../types/test-identities";
 
 const TUTORIAL_DREAM_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
 const GENESIS = {
-  seed: "tutorial-room-seed",
+  seed: testJourneySeed("tutorial-room-seed"),
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: {
     poolVariant: "tides4",
   },
-};
+} satisfies Genesis;
 const RUN_ID = "event:41";
-const FIGMENT_DREAMWELL_CARD_ID = asDreamwellCardId(
+const FIGMENT_DREAMWELL_CARD_ID = testDreamwellCardId(
   "51caf26d-83bf-45a9-bc80-010d353277db",
 );
-const TUTORIAL_TWILIGHT_CARD_ID = asCardId(
+const TUTORIAL_TWILIGHT_CARD_ID = testCardId(
   "229ab3a1-3720-41a2-924c-8fe112188f8e",
 );
-const TWILIGHT_OVERRIDE_ID = "play-twilight-after-nomads-verge";
+const TWILIGHT_OVERRIDE_ID = testTutorialAiActionOverrideId(
+  "play-twilight-after-nomads-verge",
+);
 const CTX: EventContext = {
   seq: 42,
   rng: () => 0.25,
@@ -87,7 +86,7 @@ const DREAMWELL_SEQUENCE = [
   "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a",
   "a57f1276-3fb6-4527-b538-953fbace35cf",
   "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf",
-].map(asDreamwellCardId);
+].map(testDreamwellCardId);
 const PLAYER_DRAW_SEQUENCE = [
   "a28ad36d-fa74-4190-a463-7efd3a6233d0",
   "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
@@ -95,88 +94,88 @@ const PLAYER_DRAW_SEQUENCE = [
   "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
   "944e15d2-d680-4ebe-8d18-36826f4b1535",
   "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
-].map(asCardId);
+].map(testCardId);
 const ENEMY_DRAW_SEQUENCE = [
   "944e15d2-d680-4ebe-8d18-36826f4b1535",
   "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
   "647f5150-b2e0-424b-9480-27557642524e",
   "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
   "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-].map(asCardId);
+].map(testCardId);
 
 const TUTORIAL_ACTIONS = [
   {
-    id: asTutorialActionId("draw-first-opponent"),
+    id: testTutorialActionId("draw-first-opponent"),
     action: "draw-opponent-card",
-    cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+    cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
     wait: 0,
   },
   {
-    id: asTutorialActionId("play-first-opponent"),
+    id: testTutorialActionId("play-first-opponent"),
     action: "reveal-and-play-opponent-card",
-    cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+    cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
     revealDuration: 0,
     wait: 0,
   },
   {
-    id: asTutorialActionId("draw-second-opponent"),
+    id: testTutorialActionId("draw-second-opponent"),
     action: "draw-opponent-card",
-    cardId: asCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
+    cardId: testCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
     wait: 0,
   },
   {
-    id: asTutorialActionId("play-second-opponent"),
+    id: testTutorialActionId("play-second-opponent"),
     action: "reveal-and-play-opponent-card",
-    cardId: asCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
+    cardId: testCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
     revealDuration: 0,
     wait: 0,
   },
   {
-    id: asTutorialActionId("player-effect-one"),
+    id: testTutorialActionId("player-effect-one"),
     action: "draw-card",
     owner: "player",
-    cardId: asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
+    cardId: testCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
     reason: "dreamwell-effect",
     wait: 0,
   },
   {
-    id: asTutorialActionId("player-effect-two"),
+    id: testTutorialActionId("player-effect-two"),
     action: "draw-card",
     owner: "player",
-    cardId: asCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
+    cardId: testCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
     reason: "dreamwell-effect",
     wait: 0,
   },
   {
-    id: asTutorialActionId("enemy-effect-one"),
+    id: testTutorialActionId("enemy-effect-one"),
     action: "draw-card",
     owner: "enemy",
-    cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+    cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
     reason: "dreamwell-effect",
     wait: 0,
   },
   {
-    id: asTutorialActionId("enemy-effect-two"),
+    id: testTutorialActionId("enemy-effect-two"),
     action: "draw-card",
     owner: "enemy",
-    cardId: asCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
+    cardId: testCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
     reason: "dreamwell-effect",
     wait: 0,
   },
   {
-    id: asTutorialActionId("player-turn-draw"),
+    id: testTutorialActionId("player-turn-draw"),
     action: "draw-card",
     owner: "player",
-    cardId: asCardId("2162742c-09d0-4e62-ae49-0f8f79b45adc"),
+    cardId: testCardId("2162742c-09d0-4e62-ae49-0f8f79b45adc"),
     reason: "turn-draw",
     wait: 0,
   },
 ] as const satisfies readonly TutorialAction[];
 
-function card(cardNumber: number, id: string): CardData {
+function card(cardNumber: number, idSeed: string): CardData {
   return {
-    id: asCardId(id),
-    name: asCardName(`Synthetic ${String(cardNumber)}`),
+    id: testCardId(idSeed),
+    name: parseCardName(`Synthetic ${String(cardNumber)}`),
     cardNumber,
     cardType:
       cardNumber === 516 ||
@@ -198,8 +197,8 @@ function card(cardNumber: number, id: string): CardData {
 
 function content(): JourneyContent {
   registerTutorialFrontDoorContentProvider({
-    playerCardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
-    journeyDreamAvatarId: asDreamAvatarId(TUTORIAL_DREAM_AVATAR_ID),
+    playerCardId: testCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
+    journeyDreamAvatarId: testDreamAvatarId(TUTORIAL_DREAM_AVATAR_ID),
   });
   const cards = [
     ...STARTERS.map(([number, id]) => card(number, id)),
@@ -211,7 +210,7 @@ function content(): JourneyContent {
     cardDatabase: new Map(cards.map((item) => [item.cardNumber, item])),
     dreamAvatars: [
       {
-        id: asDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
+        id: testDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
         name: "Tensho",
         title: "Tutor",
         renderedText: "inactive",
@@ -220,7 +219,7 @@ function content(): JourneyContent {
         signatureCards: [],
       },
       {
-        id: asDreamAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
+        id: testDreamAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
         name: "Threxan",
         title: "Tutor",
         renderedText: "inactive",
@@ -232,7 +231,7 @@ function content(): JourneyContent {
     dreamwellCards: [
       ...DREAMWELL_SEQUENCE.map((id, index) => ({
         id,
-        name: `Dreamwell ${String(index)}`,
+        name: testDreamwellCardName(`Dreamwell ${String(index)}`),
         renderedText: "",
         energyAdded: 1,
         order: 1,
@@ -240,8 +239,8 @@ function content(): JourneyContent {
         imageNumber: index + 1,
       })),
       {
-        id: asDreamwellCardId("other"),
-        name: "Other",
+        id: testDreamwellCardId("other"),
+        name: testDreamwellCardName("Other"),
         renderedText: "",
         energyAdded: 1,
         order: 2,
@@ -252,23 +251,23 @@ function content(): JourneyContent {
     tutorial: makeTutorialConfiguration(
       makeTutorialBattleConfiguration({
         starterDeck: STARTERS.map(([, cardId]) => ({
-          cardId: asCardId(cardId),
+          cardId: testCardId(cardId),
           copies: 3,
         })),
-        forcedPlayerDraws: PLAYER_DRAW_SEQUENCE.map(asCardId),
-        forcedEnemyDraws: ENEMY_DRAW_SEQUENCE.map(asCardId),
-        dreamwellDraws: DREAMWELL_SEQUENCE.map(asDreamwellCardId),
+        forcedPlayerDraws: PLAYER_DRAW_SEQUENCE.map(testCardId),
+        forcedEnemyDraws: ENEMY_DRAW_SEQUENCE.map(testCardId),
+        dreamwellDraws: DREAMWELL_SEQUENCE.map(testDreamwellCardId),
         aiActionOverrides: [
           {
-            id: asTutorialAiActionOverrideId(TWILIGHT_OVERRIDE_ID),
+            id: TWILIGHT_OVERRIDE_ID,
             trigger: {
               kind: "after-dreamwell",
               side: "enemy",
-              cardId: asDreamwellCardId(FIGMENT_DREAMWELL_CARD_ID),
+              cardId: FIGMENT_DREAMWELL_CARD_ID,
             },
             action: {
               kind: "play-card",
-              cardId: asCardId(TUTORIAL_TWILIGHT_CARD_ID),
+              cardId: TUTORIAL_TWILIGHT_CARD_ID,
             },
           },
         ],
@@ -291,9 +290,9 @@ function terminalTutorialState(): FoldState {
     ...state,
     frontDoor: {
       phase: "tutorial" as const,
-      journeyId: asJourneyId(RUN_ID),
+      journeyId: parseJourneyId(RUN_ID),
       tutorial: {
-        runId: asTutorialRunId(RUN_ID),
+        runId: parseTutorialRunId(RUN_ID),
         actions: TUTORIAL_ACTIONS,
         currentActionIndex: null,
         playerCardPlay: null,
@@ -301,7 +300,7 @@ function terminalTutorialState(): FoldState {
     },
     playtestControl: {
       mode: "single-controller",
-      controllerClientId: asClientId("client-a"),
+      controllerClientId: parseClientId("client-a"),
     },
   };
 }
@@ -312,7 +311,7 @@ function begin(state: FoldState = terminalTutorialState()) {
     {
       type: "BEGIN_TUTORIAL_BATTLE",
       payload: { tutorialRunId: RUN_ID },
-      actor: "client-a",
+      actor: testEventActor("client-a"),
       basedOnSeq: 41,
       clientTimestamp: CTX.timestamp,
     },
@@ -322,7 +321,7 @@ function begin(state: FoldState = terminalTutorialState()) {
 
 function reduceTutorial(
   state: FoldState,
-  type: string,
+  type: GameEvent["type"],
   payload: Record<string, unknown>,
   actor = "client-a",
   context: EventContext = CTX,
@@ -332,7 +331,7 @@ function reduceTutorial(
     {
       type,
       payload,
-      actor,
+      actor: testEventActor(actor),
       basedOnSeq: 41,
       clientTimestamp: CTX.timestamp,
     },
@@ -354,7 +353,7 @@ function handInstanceId(
   battle: NonNullable<ReturnType<typeof begin>["state"]["battle"]>,
   side: "player" | "enemy",
   cardId: CardId,
-): string {
+): BattleCardId {
   const instanceId = battle.board.sides[side].hand.find(
     (candidate) =>
       battle.board.cardInstances[candidate]?.definition.cardId === cardId,
@@ -408,7 +407,7 @@ describe("tutorial battle lifecycle", () => {
       ...tutorialContent.tutorial!,
       triggers: [
         {
-          id: asTutorialTriggerId("support"),
+          id: testTutorialTriggerId("support"),
           on: ["card-play"],
           priority: 100,
           speaker: "player",
@@ -418,7 +417,7 @@ describe("tutorial battle lifecycle", () => {
           bubbleWidth: 300,
           match: {
             kind: "glossary",
-            id: asGlossaryEntryId("59f426ac-b9cb-47af-a00a-8cbab941c6c4"),
+            id: testGlossaryEntryId("59f426ac-b9cb-47af-a00a-8cbab941c6c4"),
           },
           text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
         },
@@ -457,7 +456,7 @@ describe("tutorial battle lifecycle", () => {
       source: { kind: "card", battleCardId, side: "player" },
       messages: [
         {
-          triggerId: "support",
+          triggerId: testTutorialTriggerId("support"),
           speaker: "player",
           duration: 5,
           horizontalOffset: 12,
@@ -470,7 +469,9 @@ describe("tutorial battle lifecycle", () => {
     expect(opened.state.battle?.board.sides.player.hand).toContain(
       battleCardId,
     );
-    expect(opened.state.tutorialTriggerIdsSeen).toEqual(["support"]);
+    expect(opened.state.tutorialTriggerIdsSeen).toEqual([
+      testTutorialTriggerId("support"),
+    ]);
 
     const continued = reduceTutorial(
       opened.state,
@@ -501,7 +502,7 @@ describe("tutorial battle lifecycle", () => {
       ...tutorialContent.tutorial!,
       triggers: [
         {
-          id: asTutorialTriggerId("support"),
+          id: testTutorialTriggerId("support"),
           on: ["card-play"],
           priority: 100,
           speaker: "mira",
@@ -511,7 +512,7 @@ describe("tutorial battle lifecycle", () => {
           bubbleWidth: 700,
           match: {
             kind: "glossary",
-            id: asGlossaryEntryId("59f426ac-b9cb-47af-a00a-8cbab941c6c4"),
+            id: testGlossaryEntryId("59f426ac-b9cb-47af-a00a-8cbab941c6c4"),
           },
           text: "A character with [yellow]support[/yellow] helps the characters in front of it.",
         },
@@ -524,7 +525,7 @@ describe("tutorial battle lifecycle", () => {
     const enemyCardId = handInstanceId(
       started.battle!,
       "enemy",
-      asCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
+      testCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
     );
     const targetCardId = started.battle!.board.sides.player.frontRank.F4!;
     const ready = {
@@ -549,7 +550,7 @@ describe("tutorial battle lifecycle", () => {
       ready,
       "BATTLE_PLAY_CARD",
       {
-        battleCardId: asBattleCardId(enemyCardId),
+        battleCardId: parseBattleCardId(enemyCardId),
         targetBattleCardIds: [targetCardId],
         aiChoices: [],
       },
@@ -561,10 +562,10 @@ describe("tutorial battle lifecycle", () => {
       kind: "tutorial-guidance",
       source: {
         kind: "card",
-        battleCardId: asBattleCardId(enemyCardId),
+        battleCardId: parseBattleCardId(enemyCardId),
         side: "enemy",
       },
-      messages: [{ triggerId: "support" }],
+      messages: [{ triggerId: testTutorialTriggerId("support") }],
     });
     expect(opened.state.battle?.board.sides.enemy.hand).toContain(enemyCardId);
 
@@ -593,7 +594,7 @@ describe("tutorial battle lifecycle", () => {
       ...tutorialContent.tutorial!,
       triggers: [
         {
-          id: asTutorialTriggerId("opponent-reposition-opportunity"),
+          id: testTutorialTriggerId("opponent-reposition-opportunity"),
           on: ["opponent-reposition-opportunity"],
           priority: 10,
           speaker: "mira",
@@ -642,11 +643,11 @@ describe("tutorial battle lifecycle", () => {
         activeSide: "player",
         turnNumber: opened.state.battle?.board.turnNumber,
       },
-      messages: [{ triggerId: "opponent-reposition-opportunity" }],
+      messages: [{ triggerId: testTutorialTriggerId("opponent-reposition-opportunity") }],
       continuation: { kind: "commands", commands: [] },
     });
     expect(opened.state.tutorialTriggerIdsSeen).toEqual([
-      "opponent-reposition-opportunity",
+      testTutorialTriggerId("opponent-reposition-opportunity"),
     ]);
 
     const continued = reduceTutorial(
@@ -668,7 +669,7 @@ describe("tutorial battle lifecycle", () => {
       ...tutorialContent.tutorial!,
       triggers: [
         {
-          id: asTutorialTriggerId("player-night-phase"),
+          id: testTutorialTriggerId("player-night-phase"),
           on: ["player-night-phase"],
           priority: 10,
           speaker: "mira",
@@ -719,10 +720,12 @@ describe("tutorial battle lifecycle", () => {
     expect(opened.state.battle?.tutorialPresentation).toMatchObject({
       kind: "tutorial-guidance",
       source: { kind: "battle", activeSide: "player", turnNumber: 4 },
-      messages: [{ triggerId: "player-night-phase", duration: 6 }],
+      messages: [{ triggerId: testTutorialTriggerId("player-night-phase"), duration: 6 }],
       continuation: { kind: "commands", commands: [] },
     });
-    expect(opened.state.tutorialTriggerIdsSeen).toEqual(["player-night-phase"]);
+    expect(opened.state.tutorialTriggerIdsSeen).toEqual([
+      testTutorialTriggerId("player-night-phase"),
+    ]);
   });
 
   it("accepts only the terminal tutorial cursor once and builds the canonical handoff", () => {
@@ -966,10 +969,12 @@ describe("tutorial battle lifecycle", () => {
     registerTutorialBattleInitProvider(
       createTutorialBattleInitProvider(content()),
     );
-    const changedCardId = "647f5150-b2e0-424b-9480-27557642524e";
+    const changedCardId = parseCardId(
+      "647f5150-b2e0-424b-9480-27557642524e",
+    );
     const actions = TUTORIAL_ACTIONS.map((action) =>
-      action.id === "player-effect-two"
-        ? { ...action, cardId: asCardId(changedCardId) }
+      action.id === testTutorialActionId("player-effect-two")
+        ? { ...action, cardId: changedCardId }
         : action,
     ) as readonly TutorialAction[];
     const initial = terminalTutorialState();
@@ -1001,8 +1006,8 @@ describe("tutorial battle lifecycle", () => {
     const plan = (state: FoldState) =>
       planTutorialBattleController({
         state,
-        clientId: asClientId("client-a"),
-        connectedClientIds: [asClientId("client-a")],
+        clientId: parseClientId("client-a"),
+        connectedClientIds: [parseClientId("client-a")],
       });
     const applyCommand = (state: FoldState) => {
       const planned = plan(state);
@@ -1032,7 +1037,7 @@ describe("tutorial battle lifecycle", () => {
           current,
           "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
           {
-            presentationId: asPresentationId(presentation.id),
+            presentationId: presentation.id,
             ...(presentation.kind === "tutorial-guidance"
               ? { messageIndex: presentation.messageIndex }
               : {}),
@@ -1136,7 +1141,7 @@ describe("tutorial battle lifecycle", () => {
     const twilightBattleCardId = handInstanceId(
       state.battle!,
       "enemy",
-      asCardId(TUTORIAL_TWILIGHT_CARD_ID),
+      TUTORIAL_TWILIGHT_CARD_ID,
     );
 
     const blockedState: FoldState = {
@@ -1158,13 +1163,15 @@ describe("tutorial battle lifecycle", () => {
     expect(plan(blockedState).intent).toMatchObject({
       aiActionOverrideMiss: {
         overrideId: TWILIGHT_OVERRIDE_ID,
-        triggerCardId: asCardId(FIGMENT_DREAMWELL_CARD_ID),
-        actionCardId: asCardId(TUTORIAL_TWILIGHT_CARD_ID),
+        triggerCardId: parseCardId(FIGMENT_DREAMWELL_CARD_ID),
+        actionCardId: TUTORIAL_TWILIGHT_CARD_ID,
         reason: "insufficient-energy",
       },
     });
 
-    const unregisteredCardId = "00000000-0000-4000-8000-000000000201";
+    const unregisteredCardId = parseCardId(
+      "00000000-0000-4000-8000-000000000201",
+    );
     const unregisteredState: FoldState = {
       ...state,
       battle: {
@@ -1172,7 +1179,7 @@ describe("tutorial battle lifecycle", () => {
         tutorialAiActionOverrides: [
           {
             ...state.battle!.tutorialAiActionOverrides![0],
-            action: { kind: "play-card", cardId: asCardId(unregisteredCardId) },
+            action: { kind: "play-card", cardId: unregisteredCardId },
           },
         ],
         board: {
@@ -1184,7 +1191,7 @@ describe("tutorial battle lifecycle", () => {
               definition: {
                 ...state.battle!.board.cardInstances[twilightBattleCardId]
                   .definition,
-                cardId: asCardId(unregisteredCardId),
+                cardId: unregisteredCardId,
               },
             },
           },
@@ -1196,11 +1203,11 @@ describe("tutorial battle lifecycle", () => {
         unregisteredState,
         "BATTLE_PLAY_CARD",
         {
-          battleCardId: asBattleCardId(twilightBattleCardId),
+          battleCardId: twilightBattleCardId,
           targetBattleCardIds: [],
           aiChoices: [],
           tutorialAiActionOverrideId:
-            asTutorialAiActionOverrideId(TWILIGHT_OVERRIDE_ID),
+            TWILIGHT_OVERRIDE_ID,
         },
         automaticActor,
       ).outcome,
@@ -1210,9 +1217,9 @@ describe("tutorial battle lifecycle", () => {
 
     expect(planned.intent).toMatchObject({
       kind: "battle-play-card",
-      battleCardId: asBattleCardId(twilightBattleCardId),
+      battleCardId: parseBattleCardId(twilightBattleCardId),
       tutorialAiActionOverrideId:
-        asTutorialAiActionOverrideId(TWILIGHT_OVERRIDE_ID),
+        TWILIGHT_OVERRIDE_ID,
       reason: "enemy-scripted-day-play",
       characterDestination: {
         side: "enemy",
@@ -1221,7 +1228,7 @@ describe("tutorial battle lifecycle", () => {
       aiChoices: [
         {
           choice: "PLAY_CARD",
-          battleCardId: asBattleCardId(twilightBattleCardId),
+          battleCardId: parseBattleCardId(twilightBattleCardId),
         },
       ],
     });
@@ -1256,9 +1263,9 @@ describe("tutorial battle lifecycle", () => {
       event: "battle_ai_action_override_applied",
       fields: {
         overrideId: TWILIGHT_OVERRIDE_ID,
-        triggerCardId: asCardId(FIGMENT_DREAMWELL_CARD_ID),
-        actionCardId: asCardId(TUTORIAL_TWILIGHT_CARD_ID),
-        battleCardId: asBattleCardId(twilightBattleCardId),
+        triggerCardId: parseCardId(FIGMENT_DREAMWELL_CARD_ID),
+        actionCardId: TUTORIAL_TWILIGHT_CARD_ID,
+        battleCardId: parseBattleCardId(twilightBattleCardId),
       },
     });
   });
@@ -1566,7 +1573,7 @@ describe("tutorial battle lifecycle", () => {
       {
         type: "TAKE_PLAYTEST_CONTROL",
         payload: { previousControllerClientId: "client-a" },
-        actor: "client-b",
+        actor: testEventActor("client-b"),
         basedOnSeq: 42,
         clientTimestamp: CTX.timestamp,
       },
@@ -1577,7 +1584,7 @@ describe("tutorial battle lifecycle", () => {
       {
         type: "RESTART_TUTORIAL_BATTLE",
         payload: { battleId: original.board.battleId },
-        actor: "client-b",
+        actor: testEventActor("client-b"),
         basedOnSeq: 43,
         clientTimestamp: CTX.timestamp,
       },
@@ -1595,7 +1602,7 @@ describe("tutorial battle lifecycle", () => {
     ).beginTutorialBattle({
       journey: beforeJourney,
       actions: TUTORIAL_ACTIONS,
-      tutorialRunId: asTutorialRunId(RUN_ID),
+      tutorialRunId: parseTutorialRunId(RUN_ID),
       restartNumber: 1,
       seq: 44,
       rng: () => 0,
@@ -1611,7 +1618,7 @@ describe("tutorial battle lifecycle", () => {
       {
         type: "EXIT_TUTORIAL_BATTLE",
         payload: { battleId: rebuilt.board.battleId },
-        actor: "client-b",
+        actor: testEventActor("client-b"),
         basedOnSeq: 44,
         clientTimestamp: CTX.timestamp,
       },
@@ -1641,7 +1648,7 @@ describe("tutorial battle lifecycle", () => {
       {
         type: "TAKE_PLAYTEST_CONTROL",
         payload: { previousControllerClientId: "client-a" },
-        actor: "client-b",
+        actor: testEventActor("client-b"),
         basedOnSeq: 0,
         clientTimestamp: CTX.timestamp,
       },
@@ -1768,7 +1775,7 @@ describe("tutorial battle lifecycle", () => {
     const enemyCardId = handInstanceId(
       battle,
       "enemy",
-      asCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
+      testCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
     );
     const targetCardId = battle.board.sides.player.frontRank.F4!;
     const activeBoard = {
@@ -1782,7 +1789,7 @@ describe("tutorial battle lifecycle", () => {
     };
     const active = { ...started, battle: { ...battle, board: activeBoard } };
     const payload = {
-      battleCardId: asBattleCardId(enemyCardId),
+      battleCardId: parseBattleCardId(enemyCardId),
       targetBattleCardIds: [targetCardId],
       aiChoices: [],
     };
@@ -1791,7 +1798,7 @@ describe("tutorial battle lifecycle", () => {
       {
         type: "BATTLE_PLAY_CARD",
         payload,
-        actor: "tutorial-ai:client-observer",
+        actor: testEventActor("tutorial-ai:client-observer"),
         basedOnSeq: 42,
         clientTimestamp: CTX.timestamp,
       },
@@ -1803,7 +1810,7 @@ describe("tutorial battle lifecycle", () => {
       {
         type: "BATTLE_PLAY_CARD",
         payload,
-        actor: "tutorial-ai:client-a",
+        actor: testEventActor("tutorial-ai:client-a"),
         basedOnSeq: 42,
         clientTimestamp: CTX.timestamp,
       },
@@ -1815,7 +1822,7 @@ describe("tutorial battle lifecycle", () => {
       {
         type: "BATTLE_PLAY_CARD",
         payload,
-        actor: "client-observer",
+        actor: testEventActor("client-observer"),
         basedOnSeq: 42,
         clientTimestamp: CTX.timestamp,
       },
@@ -1972,7 +1979,7 @@ describe("tutorial battle lifecycle", () => {
     const enemyCardId = handInstanceId(
       started.battle!,
       "enemy",
-      asCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
+      testCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
     );
     const targetCardId = started.battle!.board.sides.player.frontRank.F4!;
     const enemyPlayState = {
@@ -1991,7 +1998,7 @@ describe("tutorial battle lifecycle", () => {
       },
     };
     const enemyPlay = {
-      battleCardId: asBattleCardId(enemyCardId),
+      battleCardId: parseBattleCardId(enemyCardId),
       targetBattleCardIds: [targetCardId],
       aiChoices: [],
     };
@@ -2081,7 +2088,7 @@ describe("tutorial battle lifecycle", () => {
     expect(presentation).toMatchObject({
       kind: "opponent-play",
       battleCardId: ringwatcherId,
-      cardId: asCardId("647f5150-b2e0-424b-9480-27557642524e"),
+      cardId: testCardId("647f5150-b2e0-424b-9480-27557642524e"),
     });
     const resumed = reduceTutorial(
       opened.state,
@@ -2185,8 +2192,8 @@ describe("tutorial battle lifecycle", () => {
     const commandFrom = (state: FoldState) => {
       const plan = planTutorialBattleController({
         state,
-        clientId: asClientId("client-a"),
-        connectedClientIds: [asClientId("client-a")],
+        clientId: parseClientId("client-a"),
+        connectedClientIds: [parseClientId("client-a")],
       });
       expect(plan.intent?.kind).toBe("battle-command");
       if (plan.intent?.kind !== "battle-command")
@@ -2252,8 +2259,8 @@ describe("tutorial battle lifecycle", () => {
     });
     const presentationPlan = planTutorialBattleController({
       state: reveal.state,
-      clientId: asClientId("client-a"),
-      connectedClientIds: [asClientId("client-a")],
+      clientId: parseClientId("client-a"),
+      connectedClientIds: [parseClientId("client-a")],
     });
     expect(presentationPlan.intent).toMatchObject({
       kind: "complete-presentation",
@@ -2335,7 +2342,7 @@ describe("tutorial battle lifecycle", () => {
       const completed = reduceTutorial(
         handedOffState,
         "COMPLETE_TUTORIAL_BATTLE_PRESENTATION",
-        { presentationId: asPresentationId(presentation.id) },
+        { presentationId: presentation.id },
         automaticActor,
       );
       expect(completed.outcome).toBe("applied");
@@ -2352,8 +2359,8 @@ describe("tutorial battle lifecycle", () => {
 
     const revealPlan = planTutorialBattleController({
       state: handedOffState,
-      clientId: asClientId("client-a"),
-      connectedClientIds: [asClientId("client-a")],
+      clientId: parseClientId("client-a"),
+      connectedClientIds: [parseClientId("client-a")],
     });
     expect(revealPlan.intent).toMatchObject({
       kind: "battle-command",
@@ -2388,8 +2395,8 @@ describe("tutorial battle lifecycle", () => {
 
     const dawnPlan = planTutorialBattleController({
       state: dreamwellContinued.state,
-      clientId: asClientId("client-a"),
-      connectedClientIds: [asClientId("client-a")],
+      clientId: parseClientId("client-a"),
+      connectedClientIds: [parseClientId("client-a")],
     });
     expect(dawnPlan.intent).toMatchObject({
       kind: "battle-command",
@@ -2496,7 +2503,7 @@ describe("tutorial battle lifecycle", () => {
       ...tutorialContent.tutorial!,
       triggers: [
         {
-          id: asTutorialTriggerId("figment-created"),
+          id: testTutorialTriggerId("figment-created"),
           on: ["figment-created"],
           priority: 100,
           speaker: "mira",
@@ -2557,7 +2564,7 @@ describe("tutorial battle lifecycle", () => {
     expect(revealed.outcome).toBe("applied");
     expect(revealed.state.battle?.tutorialPresentation).toMatchObject({
       kind: "dreamwell-reveal",
-      cardId: asCardId(FIGMENT_DREAMWELL_CARD_ID),
+      cardId: parseCardId(FIGMENT_DREAMWELL_CARD_ID),
       side: "enemy",
     });
 
@@ -2574,10 +2581,12 @@ describe("tutorial battle lifecycle", () => {
     expect(continued.state.battle?.tutorialPresentation).toMatchObject({
       kind: "tutorial-guidance",
       source: { kind: "figment", side: "enemy" },
-      messages: [{ triggerId: "figment-created" }],
+      messages: [{ triggerId: testTutorialTriggerId("figment-created") }],
       messageIndex: 0,
     });
-    expect(continued.state.tutorialTriggerIdsSeen).toEqual(["figment-created"]);
+    expect(continued.state.tutorialTriggerIdsSeen).toEqual([
+      testTutorialTriggerId("figment-created"),
+    ]);
     expect(
       Object.values(continued.state.battle!.board.cardInstances).some(
         (instance) =>
@@ -2610,7 +2619,7 @@ describe("tutorial battle lifecycle", () => {
       {
         type: "LOAD_STATE",
         payload: { snapshot: state.journey, battle: legacy },
-        actor: "client-a",
+        actor: testEventActor("client-a"),
         basedOnSeq: 41,
         clientTimestamp: CTX.timestamp,
       },

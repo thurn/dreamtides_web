@@ -8,11 +8,12 @@ import { createQaJourneyFoundation } from "./qa-journey-foundation";
 import { buildExplorationRuntime } from "../coop/providers/exploration-provider";
 import { initializeDraftState } from "../draft/draft-engine";
 import { eligibleTransfigurations } from "../transfiguration/transfiguration-logic";
-import { asSiteId } from "../types/identifiers";
-import { asBattleId } from "../types/identifiers";
-import { asCardId, type CardId } from "../types/card-identity";
-import { asDeckEntryId } from "../types/identifiers";
-import { asQaSceneId, type QaSceneId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseBattleId } from "../types/identifiers";
+import { type CardId } from "../types/card-identity";
+import { parseDeckEntryId } from "../types/identifiers";
+import { parseQaSceneId, type QaSceneId } from "../types/identifiers";
+import type { JourneySeed } from "../types/journey-seed";
 
 export interface QaSceneBuildOptions {
   /** Exact authored encounter source-card UUID for Exploration QA scenes. */
@@ -24,7 +25,7 @@ export interface QaSceneBuildOptions {
   /** Number of authentic foundation starter-card entries retained in the deck. */
   explorationStarterCount?: number;
   /** Live room seed used by deterministic runtime offers in a QA snapshot. */
-  journeySeed?: string;
+  journeySeed?: JourneySeed;
 }
 
 /**
@@ -74,7 +75,7 @@ export interface QaScene {
  * clicking through the lobby first.
  */
 const DREAM_AVATAR_SELECT_SCENE: QaScene = {
-  id: asQaSceneId("dream-avatar-select"),
+  id: parseQaSceneId("dream-avatar-select"),
   label: "Avatar Select",
   description:
     "The choose-your-avatar screen a run opens on, parked directly on " +
@@ -89,7 +90,7 @@ const DREAM_AVATAR_SELECT_SCENE: QaScene = {
  * start-journey action with one fixed, centered offer and no reroll control.
  */
 const TUTORIAL_DREAM_AVATAR_SELECT_SCENE: QaScene = {
-  id: asQaSceneId("tutorial-dream-avatar-select"),
+  id: parseQaSceneId("tutorial-dream-avatar-select"),
   label: "Tutorial Avatar Select",
   description:
     "The tutorial DreamAvatar selection screen with its one fixed avatar.",
@@ -177,7 +178,7 @@ function atlasLayerSceneState(layer: number): QaScene["build"] {
  * layer-I view. Deeper frontiers are reachable via `atlas3`…`atlas7`.
  */
 const ATLAS_SCENE: QaScene = {
-  id: asQaSceneId("atlas"),
+  id: parseQaSceneId("atlas"),
   label: "Dream Atlas",
   description:
     "The between-dreamscapes atlas at the first frontier the UI labels " +
@@ -188,7 +189,7 @@ const ATLAS_SCENE: QaScene = {
 
 /** The first Atlas frontier with Random Site's home dreamscape available. */
 const RANDOM_SITE_ATLAS_SCENE: QaScene = {
-  id: asQaSceneId("random-site-atlas"),
+  id: parseQaSceneId("random-site-atlas"),
   label: "Dream Atlas (Random Site Home)",
   description:
     "The first Atlas frontier with Random Site's authored home available, " +
@@ -247,7 +248,7 @@ const RANDOM_SITE_ATLAS_SCENE: QaScene = {
 
 /** The first Atlas frontier in the authored tutorial journey. */
 const TUTORIAL_ATLAS_SCENE: QaScene = {
-  id: asQaSceneId("tutorial-atlas"),
+  id: parseQaSceneId("tutorial-atlas"),
   label: "Tutorial Dream Atlas",
   description:
     "The tutorial journey's first Atlas visit after completing the starter dream.",
@@ -265,7 +266,7 @@ const TUTORIAL_ATLAS_SCENE: QaScene = {
  */
 function atlasLayerScene(displayLayer: number): QaScene {
   return {
-    id: asQaSceneId(`atlas${String(displayLayer)}`),
+    id: parseQaSceneId(`atlas${String(displayLayer)}`),
     label: `Dream Atlas (Layer ${String(displayLayer)})`,
     description:
       `The between-dreamscapes atlas the UI labels "Layer ${String(displayLayer)}", ` +
@@ -347,7 +348,7 @@ function battleLayerSceneState(displayLayer: number): QaScene["build"] {
 /** Registers a `?goto=battleN` scene for the battle in UI Layer N. */
 function battleLayerScene(displayLayer: number): QaScene {
   return {
-    id: asQaSceneId(`battle${String(displayLayer)}`),
+    id: parseQaSceneId(`battle${String(displayLayer)}`),
     label: `Battle (Layer ${String(displayLayer)})`,
     description:
       `The Layer ${String(displayLayer)} keeper battle, parked on the opposing ` +
@@ -358,7 +359,7 @@ function battleLayerScene(displayLayer: number): QaScene {
 
 /** The first keeper battle, retained as the concise default battle scene id. */
 const BATTLE_SCENE: QaScene = {
-  id: asQaSceneId("battle"),
+  id: parseQaSceneId("battle"),
   label: "Battle (Layer 1)",
   description:
     "The Layer 1 keeper battle, parked on the opposing Avatar preview.",
@@ -368,7 +369,7 @@ const BATTLE_SCENE: QaScene = {
 /** A tutorial-journey keeper-battle preview with authored guidance. */
 function tutorialBattleScene(displayLayer: 1 | 2): QaScene {
   return {
-    id: asQaSceneId(`tutorial-battle${String(displayLayer)}`),
+    id: parseQaSceneId(`tutorial-battle${String(displayLayer)}`),
     label: `Tutorial Battle (Layer ${String(displayLayer)})`,
     description: `The tutorial journey's Layer ${String(displayLayer)} keeper battle, parked on the opposing Avatar preview.`,
     build: (journeyContent) => {
@@ -379,7 +380,7 @@ function tutorialBattleScene(displayLayer: 1 | 2): QaScene {
 }
 
 /** Developer entry point that mounts the Layer 1 playable battle board. */
-export const PLAYABLE_BATTLE_SCENE_ID = asQaSceneId("battle-playable");
+export const PLAYABLE_BATTLE_SCENE_ID = parseQaSceneId("battle-playable");
 const PLAYABLE_BATTLE_SCENE: QaScene = {
   id: PLAYABLE_BATTLE_SCENE_ID,
   label: "Playable Battle (Layer 1)",
@@ -431,7 +432,7 @@ function dreamscapeSceneState(dreamsignCount: number): QaScene["build"] {
  * HUD) be QA'd from a URL.
  */
 const DREAMSCAPE_SCENE: QaScene = {
-  id: asQaSceneId("dreamscape"),
+  id: parseQaSceneId("dreamscape"),
   label: "Dreamscape",
   description:
     "The inside-a-dreamscape overview with its floating site nodes and the " +
@@ -446,7 +447,7 @@ const DREAMSCAPE_SCENE: QaScene = {
  * the in-place Essence gain animation and the visited site's removal.
  */
 const DREAMSCAPE_WITH_ESSENCE_SCENE: QaScene = {
-  id: asQaSceneId("dreamscape-with-essence"),
+  id: parseQaSceneId("dreamscape-with-essence"),
   label: "Dreamscape with Essence",
   description:
     "The starter dreamscape overview with an Essence site ready to enter, " +
@@ -491,7 +492,7 @@ const DREAMSCAPE_WITH_ESSENCE_SCENE: QaScene = {
  * object-reveal animation, and grant without entering a site route.
  */
 const REWARD_SCENE: QaScene = {
-  id: asQaSceneId("reward"),
+  id: parseQaSceneId("reward"),
   label: "Reward",
   description:
     "The starter dreamscape overview with a Reward site ready to collect " +
@@ -531,7 +532,7 @@ const REWARD_SCENE: QaScene = {
 
 /** A Reward interaction with a full collection and a pending Dreamsign. */
 const REWARD_AT_CAP_SCENE: QaScene = {
-  id: asQaSceneId("reward-at-cap"),
+  id: parseQaSceneId("reward-at-cap"),
   label: "Reward at Dreamsign Cap",
   description:
     "The starter dreamscape with a Reward site whose Dreamsign opens the " +
@@ -575,10 +576,10 @@ const REWARD_AT_CAP_SCENE: QaScene = {
  * `JourneyApp` opens the overlay when it sees this scene id. Exported so App and
  * this registry name it from one place rather than duplicating the string.
  */
-export const DECK_VIEWER_SCENE_ID = asQaSceneId("deckviewer");
+export const DECK_VIEWER_SCENE_ID = parseQaSceneId("deckviewer");
 
 /** App-local Pool Viewer overlay scene, parked over a populated dreamscape. */
-export const POOL_VIEWER_SCENE_ID = asQaSceneId("poolviewer");
+export const POOL_VIEWER_SCENE_ID = parseQaSceneId("poolviewer");
 
 /**
  * The deck-viewer overlay, parked on the starter dreamscape so the run carries
@@ -613,7 +614,7 @@ const POOL_VIEWER_SCENE: QaScene = {
  * parking here lets the popup's frosted-glass chrome be QA'd from a URL.
  */
 const STARTING_DECK_SCENE: QaScene = {
-  id: asQaSceneId("startingdeck"),
+  id: parseQaSceneId("startingdeck"),
   label: "Starting Deck",
   description:
     "The starting-deck reveal popup over the starter dreamscape, shown on " +
@@ -709,7 +710,7 @@ function addExplorationPurchasePath(state: JourneyState): JourneyState | null {
     if (site.type === "Battle") {
       return [
         {
-          id: asSiteId(bazaarId),
+          id: parseSiteId(bazaarId),
           type: "DreamsignBazaar" as const,
           isEnhanced: false,
           isVisited: false,
@@ -742,7 +743,7 @@ function explorationScene(
   const hasDuplicates = preset === "duplicates";
   const hasPurchasePath = preset === "purchases";
   return {
-    id: asQaSceneId(
+    id: parseQaSceneId(
       hasDuplicates
         ? "exploration-duplicates"
         : hasPurchasePath
@@ -858,7 +859,7 @@ function explorationScene(
         const startsFast = card.cardType === "Event" && !seededFastEvent;
         if (startsFast) seededFastEvent = true;
         return {
-          entryId: asDeckEntryId(`exploration-qa-${String(index + 1)}`),
+          entryId: parseDeckEntryId(`exploration-qa-${String(index + 1)}`),
           cardNumber: card.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -882,7 +883,7 @@ function explorationScene(
       const duplicateEntries = hasDuplicates
         ? duplicateSources.map((entry, index) => ({
             ...entry,
-            entryId: asDeckEntryId(
+            entryId: parseDeckEntryId(
               `exploration-qa-duplicate-${String(index + 1)}`,
             ),
           }))
@@ -968,7 +969,7 @@ function explorationScene(
         site,
         journeyContent,
         () => 0.37,
-        asCardId(requestedCardId),
+        requestedCardId,
       );
       if (runtime === null) return null;
       return {
@@ -989,7 +990,7 @@ function explorationScene(
  * battles forward.
  */
 const JOURNEY_COMPLETE_SCENE: QaScene = {
-  id: asQaSceneId("journeycomplete"),
+  id: parseQaSceneId("journeycomplete"),
   label: "Journey Complete",
   description:
     "The victory end screen with completion stats and the final-deck reveal, " +
@@ -1042,7 +1043,7 @@ const JOURNEY_COMPLETE_SCENE: QaScene = {
  * summary grid can be QA'd without losing a real battle.
  */
 const JOURNEY_FAILED_SCENE: QaScene = {
-  id: asQaSceneId("journeyfailed"),
+  id: parseQaSceneId("journeyfailed"),
   label: "Journey Failed",
   description:
     "The defeat end screen with its failure summary, parked on the " +
@@ -1054,14 +1055,14 @@ const JOURNEY_FAILED_SCENE: QaScene = {
     }
     const node = foundation.starterNode;
     const battleSite = node.sites.find((site) => site.type === "Battle");
-    const siteId = battleSite?.id ?? node.sites[0]?.id ?? asSiteId("qa-site");
+    const siteId = battleSite?.id ?? node.sites[0]?.id ?? parseSiteId("qa-site");
     return {
       ...foundation.state,
       completionLevel: 2,
       currentDreamscape: node.id,
       screen: { type: "journeyFailed" },
       failureSummary: {
-        battleId: asBattleId("qa-battle"),
+        battleId: parseBattleId("qa-battle"),
         result: "defeat",
         reason: "score_target_reached",
         siteId,
@@ -1077,13 +1078,13 @@ const JOURNEY_FAILED_SCENE: QaScene = {
 
 /** Registers a `?goto=` site scene for the given site type. */
 function siteScene(
-  id: string,
+  id: QaSceneId,
   label: string,
   siteType: SiteType,
   isEnhanced = false,
 ): QaScene {
   return {
-    id: asQaSceneId(id),
+    id,
     label,
     description: `The ${label} site screen, parked directly on the site for UI QA.`,
     build: parkOnSite(siteType, isEnhanced),
@@ -1092,7 +1093,7 @@ function siteScene(
 
 function randomSiteScene(mode: "single" | "homeChoice"): QaScene {
   return {
-    id: asQaSceneId(mode === "single" ? "random-site" : "random-site-home"),
+    id: parseQaSceneId(mode === "single" ? "random-site" : "random-site-home"),
     label:
       mode === "single"
         ? "Random Site (Hosted Shop)"
@@ -1188,49 +1189,49 @@ export const QA_SCENES: readonly QaScene[] = [
   DECK_VIEWER_SCENE,
   POOL_VIEWER_SCENE,
   STARTING_DECK_SCENE,
-  siteScene("draft", "Draft", "Draft"),
-  siteScene("transfiguration", "Transfiguration", "Transfiguration"),
+  siteScene(parseQaSceneId("draft"), "Draft", "Draft"),
+  siteScene(parseQaSceneId("transfiguration"), "Transfiguration", "Transfiguration"),
   siteScene(
-    "transfiguration-enhanced",
+    parseQaSceneId("transfiguration-enhanced"),
     "Transfiguration (Enhanced)",
     "Transfiguration",
     true,
   ),
-  siteScene("duplication", "Duplication", "Duplication"),
+  siteScene(parseQaSceneId("duplication"), "Duplication", "Duplication"),
   siteScene(
-    "duplication-enhanced",
+    parseQaSceneId("duplication-enhanced"),
     "Duplication (Enhanced)",
     "Duplication",
     true,
   ),
-  siteScene("purge", "Purge", "Purge"),
-  siteScene("purge-enhanced", "Purge (Enhanced)", "Purge", true),
-  siteScene("shop", "Shop", "Shop"),
-  siteScene("shop-enhanced", "Shop (Enhanced)", "Shop", true),
-  siteScene("dreamsignbazaar", "Dreamsign Bazaar", "DreamsignBazaar"),
+  siteScene(parseQaSceneId("purge"), "Purge", "Purge"),
+  siteScene(parseQaSceneId("purge-enhanced"), "Purge (Enhanced)", "Purge", true),
+  siteScene(parseQaSceneId("shop"), "Shop", "Shop"),
+  siteScene(parseQaSceneId("shop-enhanced"), "Shop (Enhanced)", "Shop", true),
+  siteScene(parseQaSceneId("dreamsignbazaar"), "Dreamsign Bazaar", "DreamsignBazaar"),
   siteScene(
-    "dreamsignbazaar-enhanced",
+    parseQaSceneId("dreamsignbazaar-enhanced"),
     "Dreamsign Bazaar (Enhanced)",
     "DreamsignBazaar",
     true,
   ),
-  siteScene("augury", "Augury", "Augury"),
-  siteScene("augury-enhanced", "Augury (Enhanced)", "Augury", true),
+  siteScene(parseQaSceneId("augury"), "Augury", "Augury"),
+  siteScene(parseQaSceneId("augury-enhanced"), "Augury (Enhanced)", "Augury", true),
   randomSiteScene("single"),
   randomSiteScene("homeChoice"),
-  siteScene("gamble", "Gamble", "Gamble"),
-  siteScene("gamble-enhanced", "Gamble (Farpoint)", "Gamble", true),
+  siteScene(parseQaSceneId("gamble"), "Gamble", "Gamble"),
+  siteScene(parseQaSceneId("gamble-enhanced"), "Gamble (Farpoint)", "Gamble", true),
   explorationScene(false),
   explorationScene(true),
   explorationScene(false, "duplicates"),
   explorationScene(false, "purchases"),
   siteScene(
-    "dreamsign-revelation",
+    parseQaSceneId("dreamsign-revelation"),
     "Dreamsign Revelation",
     "DreamsignRevelation",
   ),
   siteScene(
-    "dreamsign-revelation-enhanced",
+    parseQaSceneId("dreamsign-revelation-enhanced"),
     "Dreamsign Revelation (Enhanced)",
     "DreamsignRevelation",
     true,

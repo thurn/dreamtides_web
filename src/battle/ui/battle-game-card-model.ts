@@ -1,7 +1,7 @@
 import { selectEffectiveSparkForInstance } from "../state/figments";
 import type { BattleCardInstance } from "../types";
 import type { GameCardModel } from "../../cumulus/components/card/CardView";
-import { asCardId, asCardName, isCardId } from "../../types/card-identity";
+import { parseCardId, parseCardName, isCardId } from "../../types/card-identity";
 import { semanticEntityId } from "../../types/semantic-identity";
 import {
   lookupFigmentCatalogEntry,
@@ -18,7 +18,7 @@ export function battleGameCardModel(instance: BattleCardInstance): GameCardModel
       : undefined;
   const imageNumber = definition.imageNumber || catalogEntry?.imageNumber || 0;
   const art = definition.art ?? catalogEntry?.art;
-  const cardId = asCardId(
+  const cardId = parseCardId(
     isCardId(definition.cardId)
       ? definition.cardId
       : semanticEntityId("generated-battle-card", instance.battleCardId),
@@ -28,7 +28,7 @@ export function battleGameCardModel(instance: BattleCardInstance): GameCardModel
     transfiguration: definition.transfigurationDisplay,
     displaySnapshot: {
       id: cardId,
-      name: asCardName(definition.name),
+      name: parseCardName(definition.name),
       cardNumber: definition.cardNumber,
       cardType: definition.battleCardKind === "character" ? "Character" : "Event",
       subtype: definition.subtype,

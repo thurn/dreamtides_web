@@ -23,7 +23,7 @@ import type {
   ExplorationActionId,
   IdentityRecord,
 } from "../types/identifiers";
-import { asSelectionKey } from "../types/identifiers";
+import { parseSelectionKey } from "../types/identifiers";
 
 export interface ExplorationStarterCardPlanInput {
   effectKind: ExplorationStarterCardEffectKind;
@@ -75,7 +75,7 @@ function selectionRequest(input: {
     scope: {
       journeySeed: input.journey.seed,
       siteUuid: input.site.id,
-      selectionKey: asSelectionKey(`${input.actionId}:${input.suffix}`),
+      selectionKey: parseSelectionKey(`${input.actionId}:${input.suffix}`),
     },
     count: input.count,
     constraints: input.constraints,
@@ -209,7 +209,7 @@ export function prepareExplorationStarterCardPlan(
     replacementCardIdByEntryId: replacementCardIdByEntryId,
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
-    selectionKey: asSelectionKey(input.actionId),
+    selectionKey: parseSelectionKey(input.actionId),
     selectorSignatures: selectors.map((selection) => selection.signature),
     selectorTraces: selectors.map((selection) => selection.trace),
     ...(unavailableReason === undefined ? {} : { unavailableReason }),

@@ -1,16 +1,17 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import {
   buildDraftTransfiguredOfferLog,
   buildDraftView as buildDraftViewImpl,
   resolveOfferCards,
   sortOfferCards,
 } from "./draft-view-model";
+import { draftOfferKey } from "../../data/draft-site-bootstrap";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
-import { asSiteId } from "../../types/identifiers";
-import { asExplorationActionId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { testCardId, testExplorationActionId } from "../../types/test-identities";
 
 const buildDraftView = (
   params: Omit<
@@ -26,8 +27,8 @@ const buildDraftView = (
 
 function card(overrides: Partial<CardData> & { cardNumber: number }): CardData {
   return {
-    name: asCardName(`Card ${String(overrides.cardNumber)}`),
-    id: asCardId(`card-${String(overrides.cardNumber)}`),
+    name: parseCardName(`Card ${String(overrides.cardNumber)}`),
+    id: testCardId(`card-${String(overrides.cardNumber)}`),
     cardType: "Character",
     subtype: "",
     isStarter: false,
@@ -48,9 +49,9 @@ function cardDatabase(cards: CardData[]): Map<number, CardData> {
 describe("sortOfferCards", () => {
   it("orders by energy cost ascending, then by name", () => {
     const cards = [
-      card({ cardNumber: 3, energyCost: 2, name: asCardName("Zephyr") }),
-      card({ cardNumber: 1, energyCost: 1, name: asCardName("Beacon") }),
-      card({ cardNumber: 2, energyCost: 2, name: asCardName("Anchor") }),
+      card({ cardNumber: 3, energyCost: 2, name: parseCardName("Zephyr") }),
+      card({ cardNumber: 1, energyCost: 1, name: parseCardName("Beacon") }),
+      card({ cardNumber: 2, energyCost: 2, name: parseCardName("Anchor") }),
     ];
     expect(sortOfferCards(cards).map((c) => c.cardNumber)).toEqual([1, 2, 3]);
   });
@@ -109,7 +110,7 @@ describe("buildDraftView", () => {
     });
     expect(view.offer.map((c) => c.displaySnapshot.cardNumber)).toEqual([6, 5]);
     // The key is the offered card numbers (identity), not names.
-    expect(view.offerKey).toBe("5,6");
+    expect(view.offerKey).toBe(draftOfferKey([5, 6]));
     expect(view.scene).toBeNull();
   });
 
@@ -148,7 +149,7 @@ describe("buildDraftView", () => {
       defaultPickCount: 5,
     });
     expect(view.offer).toEqual([]);
-    expect(view.offerKey).toBe("");
+    expect(view.offerKey).toBe(draftOfferKey([]));
   });
 
   it("renders and logs exact persisted transfigurations by offered card identity", () => {
@@ -170,16 +171,16 @@ describe("buildDraftView", () => {
     ]);
     expect(
       buildDraftTransfiguredOfferLog(view, {
-        siteId: asSiteId("exploration-site"),
-        actionId: asExplorationActionId("exploration-action"),
+        siteId: parseSiteId("exploration-site"),
+        actionId: testExplorationActionId("exploration-action"),
       }),
     ).toEqual({
-      sourceSiteId: asSiteId("exploration-site"),
-      sourceActionId: asExplorationActionId("exploration-action"),
+      sourceSiteId: parseSiteId("exploration-site"),
+      sourceActionId: testExplorationActionId("exploration-action"),
       pickNumber: 1,
       cards: [
-        { cardId: asCardId("card-6"), transfiguration: "Kindled" },
-        { cardId: asCardId("card-5"), transfiguration: "Empowered" },
+        { cardId: testCardId("card-6"), transfiguration: "Kindled" },
+        { cardId: testCardId("card-5"), transfiguration: "Empowered" },
       ],
     });
   });

@@ -32,7 +32,7 @@ import { opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
 
 /** A generated site reward ready to animate and grant on the dreamscape. */
 export type InlineRewardView =
@@ -148,7 +148,7 @@ export function DreamscapeScreen({
       if (completionRequestedRef.current === collectingSiteId) return;
       completionRequestedRef.current = collectingSiteId;
       setCollectingSiteId(null);
-      onInlineRewardAnimationCompleteRef.current(asSiteId(collectingSiteId));
+      onInlineRewardAnimationCompleteRef.current(parseSiteId(collectingSiteId));
     }, INLINE_REWARD_DURATION_SECONDS * 1000);
     return () => window.clearTimeout(timer);
   }, [collectingSiteId, collectingReward]);

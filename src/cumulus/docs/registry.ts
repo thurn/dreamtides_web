@@ -107,12 +107,76 @@ export const CUMULUS_COMPONENT_GROUPS = [
 
 export type CumulusComponentGroup = (typeof CUMULUS_COMPONENT_GROUPS)[number];
 
+/** Stable route identities for the finite documented component catalog. */
+export type CumulusComponentId =
+  | "atlas-edge"
+  | "atlas-node"
+  | "battle-foresee-editor"
+  | "battle-phase-indicator"
+  | "battle-status-display"
+  | "battlefield-card"
+  | "card-back"
+  | "card-browser-panel"
+  | "card-change-pair"
+  | "card-choice-grid"
+  | "card-order-editor"
+  | "card-picker-panel"
+  | "card-pile"
+  | "card-stat-orb"
+  | "character-dialogue"
+  | "command-menu"
+  | "coop-presence-status"
+  | "developer-rail"
+  | "disclosure-section"
+  | "dream-avatar-portrait"
+  | "dream-avatar-stage"
+  | "dreamsign"
+  | "dreamsign-gallery-panel"
+  | "dreamsign-replacement-dialog"
+  | "dreamwell-card"
+  | "editable-info-card"
+  | "essence-value"
+  | "exploration-choice"
+  | "game-card"
+  | "glass-button"
+  | "glass-dialog"
+  | "glass-panel"
+  | "icon-button"
+  | "info-card"
+  | "inline-glyph"
+  | "journey-status-bar"
+  | "main-menu-button"
+  | "motes"
+  | "number-stepper"
+  | "offer-tile"
+  | "playing-card"
+  | "pressable"
+  | "radial-announcement"
+  | "rich-text"
+  | "rules-text"
+  | "segmented-control"
+  | "select"
+  | "site-layout"
+  | "site-node"
+  | "speech-bubble"
+  | "standalone-glyph"
+  | "text-area"
+  | "text-field"
+  | "tide-disc"
+  | "tides-info-label"
+  | "transfiguration-button"
+  | "transfiguration-detail-panel"
+  | "transfiguration-picker-panel"
+  | "transient-status-toast"
+  | "tutorial-feature-callout"
+  | "viewport-tutorial-dialogue";
+
 /**
  * A single documented entry in the Cumulus catalog.
  */
 export interface CumulusComponent {
   /** Matches the hash route id, e.g. "pressable" (lowercased in routes). */
-  id: string;
+  id: CumulusComponentId;
   /** Human-readable display title, e.g. "Pressable". */
   title: string;
   /**
@@ -265,6 +329,8 @@ export const CUMULUS_COMPONENTS: CumulusComponent[] = [
 ];
 
 /** Look up a registry entry by its route id. */
-export function getComponent(id: string): CumulusComponent | undefined {
-  return CUMULUS_COMPONENTS.find((component) => component.id === id);
+export function getComponent(value: unknown): CumulusComponent | undefined {
+  return typeof value === "string"
+    ? CUMULUS_COMPONENTS.find((component) => component.id === value)
+    : undefined;
 }

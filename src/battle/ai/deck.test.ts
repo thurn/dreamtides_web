@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { buildAiConfiguredDeck } from "./deck";
+import { testCardId } from "../../types/test-identities";
 
 /** Minimal valid CardData for test fixtures. */
 function makeCard(
@@ -10,11 +11,11 @@ function makeCard(
   isStarter: boolean,
 ): CardData {
   return {
-    name: asCardName(name),
-    id: asCardId(`card-${String(cardNumber)}`),
+    name: parseCardName(name),
+    id: testCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
-    subtype: "Unit",
+    subtype: "Warrior",
     isStarter,
     energyCost: 2,
     spark: 2,

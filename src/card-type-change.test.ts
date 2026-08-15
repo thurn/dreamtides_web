@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { CardData } from "./types/cards";
 import type { DeckEntry } from "./types/journey";
-import { asCardId, asCardName } from "./types/card-identity";
+import { parseCardName } from "./types/card-identity";
 import {
   applyCardKeywordModification,
   applyCardSparkBonus,
@@ -10,15 +10,16 @@ import {
   resolveDeckEntryCard,
 } from "./card-type-change";
 import { transfigurationFixture } from "./testing/transfiguration-fixture";
-import { asDeckEntryId } from "./types/identifiers";
-import { asCardTypeChangePredicateId } from "./types/identifiers";
+import { parseDeckEntryId } from "./types/identifiers";
+import { parseCardTypeChangePredicateId } from "./types/identifiers";
+import { testCardId } from "./types/test-identities";
 
 const transfigurationData = transfigurationFixture();
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: asCardName("Test Event"),
-    id: asCardId("test-event"),
+    name: parseCardName("Test Event"),
+    id: testCardId("test-event"),
     cardNumber: 1,
     cardType: "Event",
     subtype: "",
@@ -76,7 +77,7 @@ describe("applyCardKeywordModification", () => {
 
 function makeDeckEntry(overrides: Partial<DeckEntry> = {}): DeckEntry {
   return {
-    entryId: asDeckEntryId("entry-1"),
+    entryId: parseDeckEntryId("entry-1"),
     cardNumber: 1,
     transfiguration: null,
     isBane: false,
@@ -147,9 +148,9 @@ describe("resolveDeckEntryCard", () => {
     const entry = makeDeckEntry({
       transfiguration: "Empowered",
       typeChange: {
-        predicateId: asCardTypeChangePredicateId("predicate-1"),
+        predicateId: parseCardTypeChangePredicateId("predicate-1"),
         cardType: "Character",
-        subtype: "Spirit",
+        subtype: "Spirit Animal",
         label: "Becomes a Spirit",
       },
       keywordModification: { fast: true, reclaim: 2, energyCostReduction: 1 },
@@ -161,7 +162,7 @@ describe("resolveDeckEntryCard", () => {
 
     // typeChange layer
     expect(result.cardType).toBe("Character");
-    expect(result.subtype).toBe("Spirit");
+    expect(result.subtype).toBe("Spirit Animal");
     // keyword layer
     expect(result.isFast).toBe(true);
     expect(result.reclaimCost).toBe(2);

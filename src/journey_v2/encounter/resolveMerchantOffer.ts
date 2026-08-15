@@ -12,20 +12,13 @@ import type {
   MerchantChoice,
   MerchantDeclineRequest,
   MerchantOffer,
+  MerchantOfferFailureReason,
 } from "../types";
 import { generateMerchantEncounter } from "./generateMerchantEncounter";
 import type { SiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 
-export type MerchantResolveFailureReason =
-  | "encounter_unavailable"
-  | "stale_encounter"
-  | "offer_not_found"
-  | "archetype_mismatch"
-  | "missing_choice"
-  | "invalid_choice"
-  | "target_unavailable"
-  | "site_unavailable";
+export type MerchantResolveFailureReason = MerchantOfferFailureReason;
 
 export type ResolveMerchantOfferResult =
   | {

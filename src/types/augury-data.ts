@@ -41,8 +41,8 @@ export type AuguryPresentationText =
 /** Validated browser data compiled from data/augury.toml. */
 export interface AuguryData {
   schemaVersion: 1;
-  contentHash: string;
-  foldHash: string;
+  contentHash: ContentHash;
+  foldHash: FoldHash;
   selection: Readonly<{
     subtypeMinPoolCards: number;
     costBands: Readonly<{
@@ -58,3 +58,4 @@ export interface AuguryData {
   }>;
   archetypes: readonly AuguryArchetypeData[];
 }
+import type { ContentHash, FoldHash } from "./content-hash";

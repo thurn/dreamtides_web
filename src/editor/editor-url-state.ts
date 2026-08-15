@@ -7,6 +7,7 @@ import type {
   EditorSortField,
   EditorTypeFilter,
 } from "./types";
+import { parseCardSubtype } from "../types/card-identity";
 
 export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   searchText: "",
@@ -139,12 +140,16 @@ export function parseEditorDisplayState(
 ): EditorDisplayState {
   const params = paramsFromSearch(search);
 
+  const rawSubtype = params.get("subtype");
   return {
     searchText: params.get("q") ?? DEFAULT_EDITOR_DISPLAY_STATE.searchText,
     searchScope: parseScope(params.get("scope")),
     type: parseType(params.get("type")),
     cost: parseCost(params.get("cost")),
-    subtype: params.get("subtype") ?? DEFAULT_EDITOR_DISPLAY_STATE.subtype,
+    subtype:
+      rawSubtype === null || rawSubtype === ""
+        ? DEFAULT_EDITOR_DISPLAY_STATE.subtype
+        : parseCardSubtype(rawSubtype),
     tagFilters: parseFacetFilters(params, "tag"),
     // Exclude filters are the tags a card must not carry. Drop any that also
     // appear as include filters so a tag is never both at once.

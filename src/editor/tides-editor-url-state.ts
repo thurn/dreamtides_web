@@ -1,4 +1,5 @@
 import type { CardSizePreset } from "./card-size";
+import { tideIdFromUnknown, type TideId } from "../types/identifiers";
 
 /**
  * All tides-editor view state lives in the URL so a view is shareable and
@@ -9,7 +10,7 @@ import type { CardSizePreset } from "./card-size";
  */
 export interface TidesEditorUrlState {
   file: typeof DEFAULT_TIDES_FILE;
-  tideId: string | null;
+  tideId: TideId | null;
   size: CardSizePreset;
 }
 
@@ -22,11 +23,11 @@ function isSize(value: string | null): value is CardSizePreset {
 
 export function parseTidesEditorUrlState(search: string): TidesEditorUrlState {
   const params = new URLSearchParams(search);
-  const tideId = params.get("tide");
+  const tideId = tideIdFromUnknown(params.get("tide"));
   const size = params.get("size");
   return {
     file: DEFAULT_TIDES_FILE,
-    tideId: tideId !== null && tideId !== "" ? tideId : null,
+    tideId,
     size: isSize(size) ? size : DEFAULT_SIZE,
   };
 }

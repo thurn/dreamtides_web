@@ -9,6 +9,73 @@
 // (§Architecture, §Data model) for the authoritative design this file
 // transcribes.
 
+import type { ClientId, IntentKey } from "../types/identifiers";
+import type { FoldHash } from "../types/content-hash";
+import type { PoolVariant } from "../draft/pool/types";
+import type { ReducerVersion } from "../types/reducer-version";
+import type { JourneySeed } from "../types/journey-seed";
+
+declare const eventEnvelopeBrand: unique symbol;
+declare const eventActorBrand: unique symbol;
+
+type EventEnvelopeIdentity<Name extends string> = string & {
+  readonly [eventEnvelopeBrand]: Name;
+};
+
+/** Client-minted identity used to reconcile one optimistic event submission. */
+export type EventNonce = EventEnvelopeIdentity<"EventNonce">;
+
+/** Canonical digest of one folded game state. */
+export type StateHash = EventEnvelopeIdentity<"StateHash">;
+
+/** Open event-envelope discriminator constrained to canonical uppercase tags. */
+export type EventType = Uppercase<string>;
+
+/** Opaque author of an event envelope. Client ids are valid actors directly. */
+export type EventActor =
+  | ClientId
+  | (string & { readonly [eventActorBrand]: "EventActor" });
+
+export function parseEventActor(value: unknown): EventActor {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error("Event actor must be a non-empty identifier.");
+  }
+  return value as EventActor;
+}
+
+export function aiEventActor(clientId: ClientId): EventActor {
+  return parseEventActor(`ai:${clientId}`);
+}
+
+export function tutorialAiEventActor(clientId: ClientId): EventActor {
+  return parseEventActor(`tutorial-ai:${clientId}`);
+}
+
+export function parseEventType(value: unknown): EventType {
+  if (
+    typeof value !== "string" ||
+    value.length === 0 ||
+    value !== value.toUpperCase()
+  ) {
+    throw new Error("Event type must be a non-empty uppercase discriminator.");
+  }
+  return value as EventType;
+}
+
+export function parseEventNonce(value: unknown): EventNonce {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error("Event nonce must be a non-empty string.");
+  }
+  return value as EventNonce;
+}
+
+export function parseStateHash(value: unknown): StateHash {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error("State hash must be a non-empty string.");
+  }
+  return value as StateHash;
+}
+
 /**
  * A single intent appended to a room's shared log.
  *
@@ -18,11 +85,11 @@
  */
 export interface GameEvent {
   /** e.g. "BATTLE_COMMAND" | "BEGIN_BATTLE" | ... */
-  type: string;
+  type: EventType;
   /** UUIDs, choice indices, etc. — never card names. */
   payload: Record<string, unknown>;
   /** clientId, or "ai:<clientId>" for AI-originated events. */
-  actor: string;
+  actor: EventActor;
   /** Display data only, stamped by the appender. Not used by reducers. */
   clientTimestamp: string;
   /** Newest confirmed seq folded into the state the actor saw when it built this event. */
@@ -32,14 +99,14 @@ export interface GameEvent {
    * appender's own pending-intent queue (optimistic echo reconciliation).
    * Ignored by reducers.
    */
-  nonce?: string;
+  nonce?: EventNonce;
   /**
    * Stable identity for a logical intent that may be observed and submitted by
    * multiple React mounts or connected clients. The append transaction keeps
    * at most one event for a key across the room's lifetime; reducers still
    * validate the winning event against durable state.
    */
-  intentKey?: string;
+  intentKey?: IntentKey;
   /**
    * The appender's local fold hash after applying this event, set only
    * when the appender's optimistic prediction matched the committed seq
@@ -48,7 +115,7 @@ export interface GameEvent {
    * hash. Observers compare their own post-apply hash against this value
    * and log `fold_divergence` on mismatch.
    */
-  stateHashAfter?: string;
+  stateHashAfter?: StateHash;
 }
 
 /**
@@ -61,8 +128,8 @@ export interface GameEvent {
  * an epoch number avoids parsing a string on every eviction sweep.
  */
 export interface Genesis {
-  seed: string;
-  reducerVersion: string;
+  seed: JourneySeed;
+  reducerVersion: ReducerVersion;
   /** Epoch milliseconds (see rationale above). */
   createdAt: number;
   /**
@@ -88,47 +155,47 @@ export interface Genesis {
  * module stays free of any src/rules or src/runtime import.
  */
 export interface ContentConfig {
-  poolVariant: string;
+  poolVariant: PoolVariant;
   /** Atlas generation/reducer content pinned independently of URL settings. */
-  atlasFoldHash?: string;
+  atlasFoldHash?: FoldHash;
   /** Site assignments and deterministic site rules pinned for room folding. */
-  sitesFoldHash?: string;
+  sitesFoldHash?: FoldHash;
   /** Draft offers, caps, and pool tuning pinned independently of URL settings. */
-  draftFoldHash?: string;
+  draftFoldHash?: FoldHash;
   /** Starter-deck and named gameplay identities derived from card roles. */
-  cardRolesFoldHash?: string;
+  cardRolesFoldHash?: FoldHash;
   /** Economy coefficients and genesis defaults pinned independently of URL settings. */
-  economyFoldHash?: string;
+  economyFoldHash?: FoldHash;
   /** Gamble game rules and economic outcomes. */
-  gambleFoldHash?: string;
+  gambleFoldHash?: FoldHash;
   /** Transfiguration predicates, operations, pricing, and benefits. */
-  transfigurationFoldHash?: string;
+  transfigurationFoldHash?: FoldHash;
   /** Shared reward-selection scoring and eligibility tuning. */
-  rewardSelectionFoldHash?: string;
+  rewardSelectionFoldHash?: FoldHash;
   /** Augury encounter rules, archetype weights, policies, and quantities. */
-  auguryFoldHash?: string;
+  auguryFoldHash?: FoldHash;
   /** Exploration effect definitions, defaults, copy, and encounter catalog. */
-  explorationFoldHash?: string;
+  explorationFoldHash?: FoldHash;
   /** Tutorial scenario fields which can change reducer outcomes. */
-  tutorialFoldHash?: string;
-  opponentsFoldHash?: string;
+  tutorialFoldHash?: FoldHash;
+  opponentsFoldHash?: FoldHash;
   defaultStartingEssence?: number;
   dreamsignCap?: number;
 }
 
 export interface PinnedContentConfig extends ContentConfig {
-  atlasFoldHash: string;
-  sitesFoldHash: string;
-  draftFoldHash: string;
-  cardRolesFoldHash: string;
-  economyFoldHash: string;
-  gambleFoldHash: string;
-  transfigurationFoldHash: string;
-  rewardSelectionFoldHash: string;
-  auguryFoldHash: string;
-  explorationFoldHash: string;
-  tutorialFoldHash: string;
-  opponentsFoldHash: string;
+  atlasFoldHash: FoldHash;
+  sitesFoldHash: FoldHash;
+  draftFoldHash: FoldHash;
+  cardRolesFoldHash: FoldHash;
+  economyFoldHash: FoldHash;
+  gambleFoldHash: FoldHash;
+  transfigurationFoldHash: FoldHash;
+  rewardSelectionFoldHash: FoldHash;
+  auguryFoldHash: FoldHash;
+  explorationFoldHash: FoldHash;
+  tutorialFoldHash: FoldHash;
+  opponentsFoldHash: FoldHash;
   defaultStartingEssence: number;
   dreamsignCap: number;
 }
@@ -170,8 +237,8 @@ export interface LogNode {
 
 /** Minimal identity of an applied event, as stored in the persisted applied index. */
 export interface AppliedIndexEntry {
-  actor: string;
-  type: string;
+  actor: EventActor;
+  type: EventType;
 }
 
 /**
@@ -272,7 +339,7 @@ export interface EventContext {
    * claim that nothing intervened, while "unknown" means the window can't
    * be inspected at all.
    */
-  intervening: Array<{ seq: number; actor: string; type: string }> | "unknown";
+  intervening: Array<{ seq: number; actor: EventActor; type: EventType }> | "unknown";
   timestamp: string;
 }
 
@@ -288,5 +355,5 @@ export interface EngineConfig<S> {
   /** For baseSnapshot. */
   encode: (s: S) => string;
   decode: (raw: string) => S;
-  hash: (s: S) => string;
+  hash: (s: S) => StateHash;
 }

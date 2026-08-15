@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../types/cards";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import { createBaseBattleDeckCardDefinition } from "./card-definition";
+import { testCardId } from "../types/test-identities";
 
 function makeSampleCard(): CardData {
   return {
-    name: asCardName("Sample Card"),
-    id: asCardId("11111111-2222-3333-4444-555555555555"),
+    name: parseCardName("Sample Card"),
+    id: testCardId("11111111-2222-3333-4444-555555555555"),
     cardNumber: 42,
     cardType: "Character",
     subtype: "Warrior",

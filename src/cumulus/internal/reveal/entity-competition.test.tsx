@@ -3,7 +3,7 @@ import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import { CumulusRoot } from "../../CumulusRoot";
 import { GameCard } from "../../components/card/CardView";
@@ -15,13 +15,13 @@ import {
 } from "../../components/dreamscape/SiteNode";
 import { glyph } from "../../primitives/glyph";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
-import { asSiteId } from "../../../types/identifiers";
-import { asDreamsignId } from "../../../types/identifiers";
+import { parseSiteId } from "../../../types/identifiers";
+import { testCardId, testDreamsignId } from "../../../types/test-identities";
 
-const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
+const CARD_ID = testCardId("11111111-1111-4111-8111-111111111111");
 const CARD: CardData = {
   id: CARD_ID,
-  name: asCardName("Fixture Card"),
+  name: parseCardName("Fixture Card"),
   cardNumber: 1,
   cardType: "Event",
   subtype: "",
@@ -35,12 +35,12 @@ const CARD: CardData = {
   artOwned: false,
 };
 const SIGN = localizedDreamsignFixture({
-  id: asDreamsignId("22222222-2222-4222-8222-222222222222"),
+  id: testDreamsignId("22222222-2222-4222-8222-222222222222"),
   name: "Fixture Sign",
   effectDescription: "Fixed effect.",
 });
 const SITE: DreamscapeSiteModel = {
-  id: asSiteId("33333333-3333-4333-8333-333333333333"),
+  id: parseSiteId("33333333-3333-4333-8333-333333333333"),
   type: "Battle",
   isVisited: false,
   pos: { x: 50, y: 50 },

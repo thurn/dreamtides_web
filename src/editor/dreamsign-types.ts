@@ -1,5 +1,6 @@
 import type { EditorTag } from "./types";
 import type { DreamsignId } from "../types/identifiers";
+import type { SourceRevision } from "../types/source-revision";
 
 export type EditableDreamsignField = "name" | "rendered-text";
 export type SavableDreamsignField = EditableDreamsignField | "tags";
@@ -37,7 +38,7 @@ export interface DreamsignDisplayState {
 
 export interface LoadEditorDreamsignsResponse {
   dreamsigns: EditorDreamsignRecord[];
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
 }
 
 export interface SaveEditorDreamsignFieldRequest {
@@ -57,14 +58,14 @@ export interface EditorSaveTiming {
 
 export interface SaveEditorDreamsignFieldResponse {
   dreamsign: EditorDreamsignRecord;
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
   clientRevision?: number;
   timing: EditorSaveTiming;
 }
 
 export interface LoadEditorDreamsignTagsResponse {
   tags: EditorTag[];
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
 }
 
 export interface SaveEditorDreamsignTagsRequest {
@@ -79,7 +80,7 @@ export interface SaveEditorDreamsignTagRegistryRequest {
 export interface SaveEditorDreamsignTagRegistryResponse {
   tags: EditorTag[];
   dreamsigns: EditorDreamsignRecord[];
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
 }
 
 export interface DreamsignEditorApiClient {

@@ -1,4 +1,10 @@
-import { asCardId, asCardName, type CardId } from "../types/card-identity";
+import {
+  parseCardId,
+  parseCardName,
+  parseCardSubtype,
+  type CardId,
+  type CardSubtype,
+} from "../types/card-identity";
 import type { CardData, CardType } from "../types/cards";
 import type { Dreamsign, TransfigurationType } from "../types/journey";
 import type {
@@ -16,7 +22,13 @@ import {
   sourceMessage,
 } from "../runtime/localization/runtime";
 import type { DreamsignId, ExplorationActionId } from "../types/identifiers";
-import { asExplorationActionId } from "../types/identifiers";
+import { parseExplorationActionId } from "../types/identifiers";
+import {
+  parseContentHash,
+  parseFoldHash,
+  type ContentHash,
+  type FoldHash,
+} from "../types/content-hash";
 
 const EXPLORATION_DATA_PATH = "/exploration-data.json";
 
@@ -101,8 +113,8 @@ export interface ExplorationActionContent {
   minimumEssence?: number;
   maximumEssence?: number;
   energyCostReduction?: number;
-  subtype?: string;
-  subtypeOptions?: readonly string[];
+  subtype?: CardSubtype;
+  subtypeOptions?: readonly CardSubtype[];
   nightmareCount?: number;
   transfiguration?: TransfigurationType;
   deckTarget?: "chosen" | "offered";
@@ -128,8 +140,8 @@ export interface ExplorationEncounterContent {
 export interface ExplorationContent {
   /** Present on compiler output; optional only for focused synthetic fixtures. */
   schemaVersion?: 2;
-  contentHash?: string;
-  foldHash?: string;
+  contentHash?: ContentHash;
+  foldHash?: FoldHash;
   customCards: readonly CardData[];
   customDreamsigns: readonly Dreamsign[];
   encounters: readonly ExplorationEncounterContent[];
@@ -137,8 +149,8 @@ export interface ExplorationContent {
 
 interface RawExplorationData {
   schemaVersion?: number;
-  contentHash?: string;
-  foldHash?: string;
+  contentHash?: unknown;
+  foldHash?: unknown;
   customCards?: CardData[];
   customDreamsigns?: Dreamsign[];
   encounters?: Array<{
@@ -1109,6 +1121,16 @@ function validateAction(
     ...(raw.followupSubtitle === undefined
       ? {}
       : { followupSubtitle: hydrateEffectMessage(raw.followupSubtitle) }),
+    ...(raw.subtype === undefined
+      ? {}
+      : { subtype: parseCardSubtype(raw.subtype) }),
+    ...(raw.subtypeOptions === undefined
+      ? {}
+      : {
+          subtypeOptions: raw.subtypeOptions.map((subtype) =>
+            parseCardSubtype(subtype),
+          ),
+        }),
   };
   validateWave8CompoundFields(raw);
   validateShopPurchaseModifierFields(raw);
@@ -1215,8 +1237,8 @@ function validateAction(
   }
   return {
     ...raw,
-    id: asExplorationActionId(requiredString(raw.id, "action id")),
-    ...(raw.cardId === undefined ? {} : { cardId: asCardId(raw.cardId) }),
+    id: parseExplorationActionId(requiredString(raw.id, "action id")),
+    ...(raw.cardId === undefined ? {} : { cardId: raw.cardId }),
   };
 }
 
@@ -1243,8 +1265,8 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
   }
   const customCards = (raw.customCards ?? []).map((card) => ({
     ...card,
-    id: asCardId(card.id),
-    name: asCardName(card.name),
+    id: card.id,
+    name: parseCardName(card.name),
   }));
   const encounters = (raw.encounters ?? []).map((encounter) => {
     const actions = encounter.action ?? [];
@@ -1254,7 +1276,7 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
       );
     }
     return {
-      cardId: asCardId(requiredString(encounter.cardId, "encounter card id")),
+      cardId: parseCardId(requiredString(encounter.cardId, "encounter card id")),
       prose: hydrateStaticMessage(encounter.prose, "encounter prose"),
       actions: actions.map(validateAction),
     } satisfies ExplorationEncounterContent;
@@ -1264,10 +1286,10 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
       "Invalid Exploration data: requires at least one encounter",
     );
   }
-  const encounterIds = new Set<string>();
-  const actionIds = new Set<string>();
+  const encounterIds = new Set<CardId>();
+  const actionIds = new Set<ExplorationActionId>();
   for (const encounter of encounters) {
-    const encounterId = encounter.cardId.toLowerCase();
+    const encounterId = encounter.cardId;
     if (encounterIds.has(encounterId)) {
       throw new Error(
         `Invalid Exploration data: duplicate encounter card id ${encounter.cardId}`,
@@ -1290,8 +1312,8 @@ export async function loadExplorationContent(): Promise<ExplorationContent> {
   }
   return {
     schemaVersion: 2,
-    contentHash: raw.contentHash,
-    foldHash: raw.foldHash,
+    contentHash: parseContentHash(raw.contentHash),
+    foldHash: parseFoldHash(raw.foldHash),
     customCards,
     customDreamsigns: raw.customDreamsigns ?? [],
     encounters,

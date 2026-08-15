@@ -1,10 +1,11 @@
 import type { PoolVariant } from "../../draft/pool/types";
 import type { CardData } from "../../types/cards";
+import type { CardId } from "../../types/card-identity";
 import type {
   ResolvedDreamAvatarPackage,
   Tides4ProvenanceSummary,
 } from "../../types/content";
-import type { DraftState } from "../../types/draft";
+import { serializeCardNumber, type DraftState } from "../../types/draft";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../../cumulus/components/card/CardChoiceGrid";
 import type {
   PoolViewerCostFilter,
@@ -18,7 +19,7 @@ import type {
 import { txa } from "@trox/runtime";
 import { localizedSourceText } from "../../runtime/localization/runtime";
 import type { DeckEntryId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
 
 export const DEFAULT_POOL_VIEWER_FILTERS: PoolViewerFilterView = {
   query: "",
@@ -95,10 +96,8 @@ export function buildPoolViewerView(
 
 function cardsById(
   database: ReadonlyMap<number, CardData>,
-): ReadonlyMap<string, CardData> {
-  return new Map(
-    [...database.values()].map((card) => [card.id.toLowerCase(), card]),
-  );
+): ReadonlyMap<CardId, CardData> {
+  return new Map([...database.values()].map((card) => [card.id, card]));
 }
 
 function sourceOptions(
@@ -118,7 +117,7 @@ function sourceOptions(
 function entriesFor(
   source: PoolViewerSourceId,
   input: BuildPoolViewerViewInput,
-  byId: ReadonlyMap<string, CardData>,
+  byId: ReadonlyMap<CardId, CardData>,
 ): PoolEntry[] {
   if (source === "catalog")
     return [...input.cardDatabase.values()].map((card) =>
@@ -138,13 +137,13 @@ function entriesFor(
   if (source === "signature")
     return (input.resolvedPackage?.dreamAvatar.signatureCardIds ?? []).flatMap(
       (id, index) => {
-        const card = byId.get(id.toLowerCase());
+        const card = byId.get(id);
         return card === undefined
           ? []
           : [
               {
                 ...entry("signature", card, null),
-                entryId: asDeckEntryId(`signature:${String(index)}:${card.id}`),
+                entryId: parseDeckEntryId(`signature:${String(index)}:${card.id}`),
               },
             ];
       },
@@ -155,11 +154,11 @@ function entriesFor(
 }
 
 function entry(
-  source: string,
+  source: PoolViewerSourceId,
   card: CardData,
   copies: number | null,
 ): PoolEntry {
-  return { entryId: asDeckEntryId(`${source}:${card.id}`), card, copies };
+  return { entryId: parseDeckEntryId(`${source}:${card.id}`), card, copies };
 }
 
 function tideEntries(
@@ -171,13 +170,14 @@ function tideEntries(
     tide.cardNumbers.flatMap((number, index) => {
       const card = database.get(number);
       const copies =
-        provenance.cardProvenanceByNumber[String(number)]?.copies ?? null;
+        provenance.cardProvenanceByNumber[serializeCardNumber(number)]?.copies ??
+        null;
       return card === undefined
         ? []
         : [
             {
               ...entry("tides", card, copies),
-              entryId: asDeckEntryId(
+              entryId: parseDeckEntryId(
                 `tides:${tide.id}:${String(index)}:${card.id}`,
               ),
             },

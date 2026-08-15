@@ -20,7 +20,17 @@ export interface ImportedJourneySave {
   name: string;
   savedAt: string;
   buildGitSha: string | null;
-  journeyState: JourneyState;
+  journeyState: Readonly<Record<string, unknown>>;
+}
+
+/** Diagnostic screen label from an untrusted serialized journey snapshot. */
+export function serializedJourneyScreenType(
+  journeyState: Readonly<Record<string, unknown>>,
+): string {
+  const screen = journeyState.screen;
+  return isRecord(screen) && typeof screen.type === "string"
+    ? screen.type
+    : "unknown";
 }
 
 interface JourneySaveOptions {
@@ -97,7 +107,7 @@ export function parseJourneySaveFile(
     savedAt,
     buildGitSha:
       typeof parsed.buildGitSha === "string" ? parsed.buildGitSha : null,
-    journeyState: journeyState as unknown as JourneyState,
+    journeyState,
   };
 }
 

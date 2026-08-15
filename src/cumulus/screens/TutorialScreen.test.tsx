@@ -14,13 +14,17 @@ import type {
   MobileBattleScreenProps,
   MobileBattleView,
 } from "./MobileBattleScreen";
-import { asCardId, asCardName } from "../../types/card-identity";
-import { asBattleId } from "../../types/identifiers";
-import { asTutorialActionId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
-import { asDreamwellCardId } from "../../types/identifiers";
-import { asBattleSlotViewId } from "../../types/identifiers";
-import { asTutorialRunId } from "../../types/identifiers";
+import { parseCardName } from "../../types/card-identity";
+import { parseBattleId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { parseBattleSlotViewId } from "../../types/identifiers";
+import { parseTutorialRunId } from "../../types/identifiers";
+import {
+  testCardId,
+  testDreamAvatarId,
+  testDreamwellCardId,
+  testTutorialActionId,
+} from "../../types/test-identities";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -332,7 +336,7 @@ const TUTORIAL_DREAM_AVATARS: TutorialView["dreamAvatars"] = {
       portraitFocus: { x: 0.5, y: 0.22 },
     },
     profile: {
-      id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+      id: testDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
       ability: assertLocalized("Avatar ability is not active"),
       unavailable: true,
     },
@@ -346,7 +350,7 @@ const TUTORIAL_DREAM_AVATARS: TutorialView["dreamAvatars"] = {
       portraitFocus: { x: 0.5, y: 0.2 },
     },
     profile: {
-      id: "b99936ca-97f9-4930-af5a-fa9ef92557ef",
+      id: testDreamAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
       ability: assertLocalized("Avatar ability is not active"),
       unavailable: true,
     },
@@ -355,12 +359,12 @@ const TUTORIAL_DREAM_AVATARS: TutorialView["dreamAvatars"] = {
 };
 
 const TUTORIAL_OPPONENT_CARD: MobileBattleView["enemyHand"][number] = {
-  id: asBattleCardId("tutorial-enemy-deck-1"),
+  id: parseBattleCardId("tutorial-enemy-deck-1"),
   model: {
-    cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+    cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
     displaySnapshot: {
-      id: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
-      name: asCardName("Twilight Troubadour"),
+      id: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+      name: parseCardName("Twilight Troubadour"),
       cardNumber: 519,
       cardType: "Character",
       subtype: "Musician",
@@ -381,14 +385,14 @@ const TUTORIAL_OPPONENT_CARD: MobileBattleView["enemyHand"][number] = {
 
 const TUTORIAL_PLAYER_CARD: MobileBattleView["playerHand"][number] = {
   ...TUTORIAL_OPPONENT_CARD,
-  id: asBattleCardId("tutorial-player-deck-1"),
+  id: parseBattleCardId("tutorial-player-deck-1"),
   model: {
     ...TUTORIAL_OPPONENT_CARD.model,
-    cardId: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
+    cardId: testCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
     displaySnapshot: {
       ...TUTORIAL_OPPONENT_CARD.model.displaySnapshot,
-      id: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
-      name: asCardName("Marked Direwolf"),
+      id: testCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
+      name: parseCardName("Marked Direwolf"),
       spark: 4,
     },
   },
@@ -399,9 +403,9 @@ const TUTORIAL_PLAYER_CARD: MobileBattleView["playerHand"][number] = {
 const TUTORIAL_DREAMWELL_CARD: NonNullable<
   MobileBattleView["dreamwell"]
 >["model"] = {
-  cardId: asDreamwellCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
+  cardId: testDreamwellCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
   displaySnapshot: {
-    id: asDreamwellCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
+    id: testDreamwellCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
     name: assertLocalized("Autumn Glade"),
     renderedText: assertLocalized("Gain 2⍟."),
     energyAdded: 1,
@@ -509,11 +513,11 @@ describe("TutorialScreen", () => {
                   text: assertLocalized("A custom greeting."),
                 },
               },
-              playbackRunId: asTutorialRunId("event:width"),
+              playbackRunId: parseTutorialRunId("event:width"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("greeting"),
+                id: testTutorialActionId("greeting"),
                 action: "display-speech-bubble",
                 speechBubble: {
                   speaker: "mira",
@@ -527,7 +531,7 @@ describe("TutorialScreen", () => {
                 wait: 1,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemy: { backRank: [], frontRank: [] },
                 player: { backRank: [], frontRank: [] },
               } as unknown as MobileBattleView,
@@ -572,11 +576,11 @@ describe("TutorialScreen", () => {
                   text: assertLocalized("Welcome, Dreamer."),
                 },
               },
-              playbackRunId: asTutorialRunId("event:1"),
+              playbackRunId: parseTutorialRunId("event:1"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("welcome"),
+                id: testTutorialActionId("welcome"),
                 action: "display-speech-bubble",
                 speechBubble: {
                   speaker: "mira",
@@ -590,7 +594,7 @@ describe("TutorialScreen", () => {
                 wait: 0,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
               } as MobileBattleView,
             }}
             playbackSpeed={4}
@@ -618,7 +622,10 @@ describe("TutorialScreen", () => {
     act(() => {
       vi.advanceTimersByTime(1);
     });
-    expect(onActionComplete).toHaveBeenCalledWith("event:1", "welcome");
+    expect(onActionComplete).toHaveBeenCalledWith(
+      "event:1",
+      testTutorialActionId("welcome"),
+    );
 
     act(() => root.unmount());
     container.remove();
@@ -650,11 +657,11 @@ describe("TutorialScreen", () => {
                   text: assertLocalized("Welcome, Dreamer."),
                 },
               },
-              playbackRunId: asTutorialRunId("event:1"),
+              playbackRunId: parseTutorialRunId("event:1"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("welcome"),
+                id: testTutorialActionId("welcome"),
                 action: "display-speech-bubble",
                 speechBubble: {
                   speaker: "mira",
@@ -667,7 +674,7 @@ describe("TutorialScreen", () => {
                 wait: 3,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemy: { backRank: [], frontRank: [] },
                 player: { backRank: [], frontRank: [] },
               } as unknown as MobileBattleView,
@@ -755,13 +762,13 @@ describe("TutorialScreen", () => {
                   text: assertLocalized("This card has a ▸Dawn ability."),
                 },
               },
-              playbackRunId: asTutorialRunId("event:reveal-dialogue"),
+              playbackRunId: parseTutorialRunId("event:reveal-dialogue"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("runebound-reveal"),
+                id: testTutorialActionId("runebound-reveal"),
                 action: "reveal-and-play-opponent-card",
-                cardId: asCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
+                cardId: testCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
                 revealDuration: 5,
                 speechBubble: {
                   speaker: "mira",
@@ -774,7 +781,7 @@ describe("TutorialScreen", () => {
                 wait: 0,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemyHand: [],
                 enemy: { backRank: [], frontRank: [] },
                 player: { backRank: [], frontRank: [] },
@@ -826,11 +833,11 @@ describe("TutorialScreen", () => {
                   text: assertLocalized("Welcome, Dreamer."),
                 },
               },
-              playbackRunId: asTutorialRunId("event:2"),
+              playbackRunId: parseTutorialRunId("event:2"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("dream-avatar-arrival"),
+                id: testTutorialActionId("dream-avatar-arrival"),
                 action: "animate-dream-avatar-portrait",
                 owner: "player",
                 pause: 1,
@@ -838,7 +845,7 @@ describe("TutorialScreen", () => {
                 wait: 0.5,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 player: {
                   status: {
                     dreamAvatar: null,
@@ -921,7 +928,7 @@ describe("TutorialScreen", () => {
     });
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:2",
-      "dream-avatar-arrival",
+      testTutorialActionId("dream-avatar-arrival"),
     );
 
     act(() => root.unmount());
@@ -944,11 +951,11 @@ describe("TutorialScreen", () => {
                 player: { ...TUTORIAL_DREAM_AVATARS.player, settled: true },
               },
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:3"),
+              playbackRunId: parseTutorialRunId("event:3"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("vrakmoth-arrival"),
+                id: testTutorialActionId("vrakmoth-arrival"),
                 action: "animate-dream-avatar-portrait",
                 owner: "enemy",
                 pause: 1.5,
@@ -956,7 +963,7 @@ describe("TutorialScreen", () => {
                 wait: 0,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemy: {
                   status: {
                     dreamAvatar: null,
@@ -1053,17 +1060,17 @@ describe("TutorialScreen", () => {
                 speakerName: assertLocalized("Threxan"),
                 text: assertLocalized("For the Abyss!"),
               },
-              playbackRunId: asTutorialRunId("event:draw"),
+              playbackRunId: parseTutorialRunId("event:draw"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("vrakmoth-draw"),
+                id: testTutorialActionId("vrakmoth-draw"),
                 action: "draw-opponent-card",
-                cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+                cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
                 wait: 0,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemyHandCardIds: [],
                 enemyHand: [],
                 farHand: {
@@ -1124,7 +1131,7 @@ describe("TutorialScreen", () => {
     });
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:draw",
-      "vrakmoth-draw",
+      testTutorialActionId("vrakmoth-draw"),
     );
 
     act(() => root.unmount());
@@ -1218,13 +1225,13 @@ describe("TutorialScreen", () => {
                   text: assertLocalized("This card has a ▸Dawn ability."),
                 },
               },
-              playbackRunId: asTutorialRunId("event:play"),
+              playbackRunId: parseTutorialRunId("event:play"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("vrakmoth-reveal-and-play"),
+                id: testTutorialActionId("vrakmoth-reveal-and-play"),
                 action: "reveal-and-play-opponent-card",
-                cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+                cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
                 revealDuration: 2,
                 speechBubble: {
                   speaker: "mira",
@@ -1238,7 +1245,7 @@ describe("TutorialScreen", () => {
               },
               opponentCardToReveal: TUTORIAL_OPPONENT_CARD,
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemyHandCardIds: [TUTORIAL_OPPONENT_CARD.id],
                 enemyHand: [],
                 farHand: {
@@ -1347,7 +1354,7 @@ describe("TutorialScreen", () => {
     expect(screenMocks.props?.view.enemy.backRank[5]?.card).toBeNull();
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:play",
-      "vrakmoth-reveal-and-play",
+      testTutorialActionId("vrakmoth-reveal-and-play"),
     );
 
     act(() => root.unmount());
@@ -1386,19 +1393,19 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:mobile-play"),
+              playbackRunId: parseTutorialRunId("event:mobile-play"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("vrakmoth-reveal-and-play"),
+                id: testTutorialActionId("vrakmoth-reveal-and-play"),
                 action: "reveal-and-play-opponent-card",
-                cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+                cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
                 revealDuration: 0,
                 wait: 0,
               },
               opponentCardToReveal: TUTORIAL_OPPONENT_CARD,
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemyHandCardIds: [TUTORIAL_OPPONENT_CARD.id],
                 enemyHand: [],
                 farHand: {
@@ -1454,11 +1461,11 @@ describe("TutorialScreen", () => {
       id: "tutorial-enemy-deck-2",
       model: {
         ...TUTORIAL_OPPONENT_CARD.model,
-        cardId: asCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
+        cardId: testCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
         displaySnapshot: {
           ...TUTORIAL_OPPONENT_CARD.model.displaySnapshot,
-          id: asCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
-          name: asCardName("Runebound Champion"),
+          id: testCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
+          name: parseCardName("Runebound Champion"),
         },
       },
     };
@@ -1484,17 +1491,17 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:reposition"),
+              playbackRunId: parseTutorialRunId("event:reposition"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("opponent-character-advance"),
+                id: testTutorialActionId("opponent-character-advance"),
                 action: "reposition-opponent-character",
                 cardId: TUTORIAL_OPPONENT_CARD.model.cardId,
                 wait: 0,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemy: {
                   backRank: enemyBackRank,
                   frontRank: enemyFrontRank,
@@ -1543,7 +1550,7 @@ describe("TutorialScreen", () => {
     expect(screenMocks.props?.view.enemy.backRank[4]?.card).toBeNull();
     expect(screenMocks.props?.view.enemy.backRank[5]?.card).toMatchObject({
       id: "tutorial-enemy-deck-2",
-      model: { cardId: asCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0") },
+      model: { cardId: testCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0") },
     });
     expect(screenMocks.props?.view.enemy.frontRank).toHaveLength(9);
     expect(screenMocks.props?.view.enemy.frontRank[4]?.card).toMatchObject({
@@ -1576,7 +1583,7 @@ describe("TutorialScreen", () => {
     });
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:reposition",
-      "opponent-character-advance",
+      testTutorialActionId("opponent-character-advance"),
     );
 
     act(() => root.unmount());
@@ -1598,6 +1605,7 @@ describe("TutorialScreen", () => {
     const onHowToPlayPresented = vi.fn();
     const onHowToPlayDismissed = vi.fn();
     const onActionComplete = vi.fn();
+    const howToPlayActionId = testTutorialActionId("how-to-play");
     const howToPlayText =
       "Play characters and [yellow]challenge[/yellow] with them to score points (⍟) equal to their spark (✦), or [yellow]block[/yellow] a challenger. An [purple]event[purple] resolves once.\n\nScore 12⍟ to win this configured battle.";
     const container = document.createElement("div");
@@ -1611,22 +1619,22 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:player-turn"),
+              playbackRunId: parseTutorialRunId("event:player-turn"),
               endTurn: null,
               currentAction: {
-                id: asTutorialActionId("how-to-play"),
+                id: howToPlayActionId,
                 action: "display-how-to-play",
                 text: howToPlayText,
                 wait: 0,
               },
               howToPlay: {
-                actionId: asTutorialActionId("how-to-play"),
+                actionId: howToPlayActionId,
                 text: assertLocalized(howToPlayText),
                 wait: 0,
                 trigger: "player-turn-announcement-complete",
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemy: { backRank: [], frontRank: [], deckCardIds: [] },
                 player: { backRank: [], frontRank: [] },
               } as unknown as MobileBattleView,
@@ -1776,7 +1784,7 @@ describe("TutorialScreen", () => {
     );
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:player-turn",
-      "how-to-play",
+      howToPlayActionId,
       "player-turn-announcement-complete",
     );
 
@@ -1790,7 +1798,7 @@ describe("TutorialScreen", () => {
     expect(container.querySelector('[role="dialog"]')).toBeNull();
     expect(onHowToPlayDismissed).toHaveBeenCalledWith(
       "event:player-turn",
-      "how-to-play",
+      howToPlayActionId,
       "player-turn-announcement-complete",
     );
     act(() => {
@@ -1798,7 +1806,7 @@ describe("TutorialScreen", () => {
     });
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:player-turn",
-      "how-to-play",
+      howToPlayActionId,
     );
 
     act(() => root.unmount());
@@ -1818,17 +1826,17 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:dreamwell"),
+              playbackRunId: parseTutorialRunId("event:dreamwell"),
               endTurn: null,
               currentAction: {
-                id: asTutorialActionId("dreamwell-how-to-play"),
+                id: testTutorialActionId("dreamwell-how-to-play"),
                 action: "display-how-to-play",
                 trigger: "enemy-turn-announcement-complete",
                 text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
                 wait: 0,
               },
               howToPlay: {
-                actionId: asTutorialActionId("dreamwell-how-to-play"),
+                actionId: testTutorialActionId("dreamwell-how-to-play"),
                 text: assertLocalized(
                   "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
                 ),
@@ -1836,7 +1844,7 @@ describe("TutorialScreen", () => {
                 trigger: "enemy-turn-announcement-complete",
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemy: { backRank: [], frontRank: [], deckCardIds: [] },
                 player: { backRank: [], frontRank: [] },
               } as unknown as MobileBattleView,
@@ -1861,7 +1869,7 @@ describe("TutorialScreen", () => {
     );
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:dreamwell",
-      "dreamwell-how-to-play",
+      testTutorialActionId("dreamwell-how-to-play"),
       "enemy-turn-announcement-complete",
     );
 
@@ -1893,10 +1901,10 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:dreamwell-pair"),
+              playbackRunId: parseTutorialRunId("event:dreamwell-pair"),
               endTurn: null,
               currentAction: {
-                id: asTutorialActionId("dreamwell-how-to-play"),
+                id: testTutorialActionId("dreamwell-how-to-play"),
                 action: "display-how-to-play",
                 trigger: "immediate",
                 companion: "dreamwell-card",
@@ -1904,7 +1912,7 @@ describe("TutorialScreen", () => {
                 wait: 0,
               },
               howToPlay: {
-                actionId: asTutorialActionId("dreamwell-how-to-play"),
+                actionId: testTutorialActionId("dreamwell-how-to-play"),
                 text: assertLocalized(
                   "From turn 2, players draw [yellow]dreamwell[/yellow] cards that increase their energy (●) production and have other effects.",
                 ),
@@ -1914,7 +1922,7 @@ describe("TutorialScreen", () => {
                 companion: TUTORIAL_DREAMWELL_CARD,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 dreamwell: {
                   side: "enemy",
                   model: TUTORIAL_DREAMWELL_CARD,
@@ -2017,7 +2025,7 @@ describe("TutorialScreen", () => {
     expect(dreamwellSideZone?.style.zIndex).toBe("");
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:dreamwell-pair",
-      "dreamwell-how-to-play",
+      testTutorialActionId("dreamwell-how-to-play"),
       "immediate",
     );
 
@@ -2048,10 +2056,10 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:dreamwell-continuity"),
+              playbackRunId: parseTutorialRunId("event:dreamwell-continuity"),
               endTurn: null,
               currentAction: {
-                id: asTutorialActionId("dreamwell-how-to-play"),
+                id: testTutorialActionId("dreamwell-how-to-play"),
                 action: "display-how-to-play",
                 trigger: "immediate",
                 companion: "dreamwell-card",
@@ -2059,7 +2067,7 @@ describe("TutorialScreen", () => {
                 wait: 0,
               },
               howToPlay: {
-                actionId: asTutorialActionId("dreamwell-how-to-play"),
+                actionId: testTutorialActionId("dreamwell-how-to-play"),
                 text: assertLocalized("Dreamwell guidance."),
                 wait: 0,
                 trigger: "immediate",
@@ -2067,7 +2075,7 @@ describe("TutorialScreen", () => {
                 companion: TUTORIAL_DREAMWELL_CARD,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 dreamwell: {
                   side: "enemy",
                   model: TUTORIAL_DREAMWELL_CARD,
@@ -2145,7 +2153,7 @@ describe("TutorialScreen", () => {
     expect(screenMocks.props?.view.dreamwell).toBeNull();
     expect(onHowToPlayPresented).toHaveBeenCalledWith(
       "event:dreamwell-continuity",
-      "dreamwell-how-to-play",
+      testTutorialActionId("dreamwell-how-to-play"),
       "immediate",
     );
 
@@ -2157,7 +2165,7 @@ describe("TutorialScreen", () => {
   it("keeps a tutorial Dreamwell hidden until the opponent announcement completes", () => {
     vi.useFakeTimers();
     const onActionComplete = vi.fn();
-    const cardId = asDreamwellCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3");
+    const cardId = testDreamwellCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3");
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -2169,18 +2177,18 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:dreamwell"),
+              playbackRunId: parseTutorialRunId("event:dreamwell"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("autumn-glade"),
+                id: testTutorialActionId("autumn-glade"),
                 action: "draw-dreamwell-card",
                 owner: "enemy",
                 cardId,
                 wait: 0.5,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 dreamwell: {
                   side: "enemy",
                   model: {
@@ -2229,7 +2237,7 @@ describe("TutorialScreen", () => {
     });
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:dreamwell",
-      "autumn-glade",
+      testTutorialActionId("autumn-glade"),
     );
 
     act(() => root.unmount());
@@ -2239,7 +2247,7 @@ describe("TutorialScreen", () => {
   it("holds an emerged player Dreamwell card for its full reading time", () => {
     vi.useFakeTimers();
     const onActionComplete = vi.fn();
-    const cardId = asDreamwellCardId("7171ff89-ebe4-42d0-8863-9b4b0531cad2");
+    const cardId = testDreamwellCardId("7171ff89-ebe4-42d0-8863-9b4b0531cad2");
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -2251,11 +2259,11 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:voltsurge"),
+              playbackRunId: parseTutorialRunId("event:voltsurge"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("player-voltsurge"),
+                id: testTutorialActionId("player-voltsurge"),
                 action: "draw-dreamwell-card",
                 owner: "player",
                 cardId,
@@ -2263,7 +2271,7 @@ describe("TutorialScreen", () => {
                 wait: 0,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 dreamwell: {
                   side: "player",
                   model: {
@@ -2306,7 +2314,7 @@ describe("TutorialScreen", () => {
     });
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:voltsurge",
-      "player-voltsurge",
+      testTutorialActionId("player-voltsurge"),
     );
 
     act(() => root.unmount());
@@ -2326,20 +2334,20 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:player-turn"),
+              playbackRunId: parseTutorialRunId("event:player-turn"),
               currentAction: {
-                id: asTutorialActionId("end-turn"),
+                id: testTutorialActionId("end-turn"),
                 action: "end-turn",
                 wait: 0,
               },
               howToPlay: null,
               endTurn: {
-                actionId: asTutorialActionId("end-turn"),
+                actionId: testTutorialActionId("end-turn"),
                 triggerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
                 ready: false,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 playerHand: [TUTORIAL_PLAYER_CARD],
                 enemy: { backRank: [], frontRank: [], deckCardIds: [] },
                 player: { backRank: [], frontRank: [] },
@@ -2360,7 +2368,7 @@ describe("TutorialScreen", () => {
 
     act(() => {
       screenMocks.props?.interactions?.onCardDragStart(
-        asBattleCardId(TUTORIAL_PLAYER_CARD.id),
+        TUTORIAL_PLAYER_CARD.id,
         "near-hand",
       );
     });
@@ -2374,7 +2382,7 @@ describe("TutorialScreen", () => {
       screenMocks.props?.interactions?.onSlotDrop({
         owner: "player",
         rank: "back",
-        slotId: asBattleSlotViewId("B4"),
+        slotId: parseBattleSlotViewId("B4"),
       });
     });
     expect(onPlayerCardPlay).toHaveBeenCalledWith(
@@ -2415,20 +2423,20 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:player-card-position"),
+              playbackRunId: parseTutorialRunId("event:player-card-position"),
               currentAction: {
-                id: asTutorialActionId("end-turn"),
+                id: testTutorialActionId("end-turn"),
                 action: "end-turn",
                 wait: 0,
               },
               howToPlay: null,
               endTurn: {
-                actionId: asTutorialActionId("end-turn"),
+                actionId: testTutorialActionId("end-turn"),
                 triggerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
                 ready: true,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 playerHand: [],
                 enemy: { backRank: [], frontRank: [], deckCardIds: [] },
                 player: {
@@ -2472,9 +2480,9 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:block"),
+              playbackRunId: parseTutorialRunId("event:block"),
               currentAction: {
-                id: asTutorialActionId("block-opponent"),
+                id: testTutorialActionId("block-opponent"),
                 action: "reposition-player-character",
                 cardId: TUTORIAL_PLAYER_CARD.model.cardId,
                 opposingCardId: TUTORIAL_OPPONENT_CARD.model.cardId,
@@ -2483,13 +2491,13 @@ describe("TutorialScreen", () => {
               howToPlay: null,
               endTurn: null,
               playerReposition: {
-                actionId: asTutorialActionId("block-opponent"),
+                actionId: testTutorialActionId("block-opponent"),
                 cardInstanceId: TUTORIAL_PLAYER_CARD.id,
                 cardId: TUTORIAL_PLAYER_CARD.model.cardId,
                 opposingCardId: TUTORIAL_OPPONENT_CARD.model.cardId,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 playerHand: [],
                 enemy: {
                   backRank: [],
@@ -2533,7 +2541,7 @@ describe("TutorialScreen", () => {
 
     act(() => {
       screenMocks.props?.interactions?.onCardDragStart(
-        asBattleCardId(TUTORIAL_PLAYER_CARD.id),
+        TUTORIAL_PLAYER_CARD.id,
         "battlefield",
       );
     });
@@ -2547,7 +2555,7 @@ describe("TutorialScreen", () => {
       screenMocks.props?.interactions?.onSlotDrop({
         owner: "player",
         rank: "front",
-        slotId: asBattleSlotViewId("player-front-1"),
+        slotId: parseBattleSlotViewId("player-front-1"),
       });
     });
     expect(onPlayerCharacterReposition).not.toHaveBeenCalled();
@@ -2556,12 +2564,12 @@ describe("TutorialScreen", () => {
       screenMocks.props?.interactions?.onSlotDrop({
         owner: "player",
         rank: "front",
-        slotId: asBattleSlotViewId("player-front-0"),
+        slotId: parseBattleSlotViewId("player-front-0"),
       });
     });
     expect(onPlayerCharacterReposition).toHaveBeenCalledWith(
       "event:block",
-      "block-opponent",
+      testTutorialActionId("block-opponent"),
       TUTORIAL_PLAYER_CARD.model.cardId,
       TUTORIAL_OPPONENT_CARD.model.cardId,
       "player-front-0",
@@ -2585,9 +2593,9 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:challenge"),
+              playbackRunId: parseTutorialRunId("event:challenge"),
               currentAction: {
-                id: asTutorialActionId("resolve-challenge"),
+                id: testTutorialActionId("resolve-challenge"),
                 action: "resolve-challenge",
                 challengerCardId: TUTORIAL_OPPONENT_CARD.model.cardId,
                 blockerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
@@ -2597,7 +2605,7 @@ describe("TutorialScreen", () => {
               endTurn: null,
               playerReposition: null,
               challenge: {
-                actionId: asTutorialActionId("resolve-challenge"),
+                actionId: testTutorialActionId("resolve-challenge"),
                 challenger: {
                   owner: "enemy",
                   card: TUTORIAL_OPPONENT_CARD,
@@ -2612,7 +2620,7 @@ describe("TutorialScreen", () => {
                 loserOwner: "enemy",
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 phase: "challenge",
                 playerHand: [],
                 enemy: {
@@ -2709,7 +2717,7 @@ describe("TutorialScreen", () => {
     act(() => screenMocks.challengeRematerializedAnimationComplete?.());
     expect(onActionComplete).toHaveBeenCalledWith(
       "event:challenge",
-      "resolve-challenge",
+      testTutorialActionId("resolve-challenge"),
     );
 
     act(() => root.unmount());
@@ -2729,20 +2737,20 @@ describe("TutorialScreen", () => {
             view={{
               dreamAvatars: TUTORIAL_DREAM_AVATARS,
               dialogue: null,
-              playbackRunId: asTutorialRunId("event:player-turn"),
+              playbackRunId: parseTutorialRunId("event:player-turn"),
               currentAction: {
-                id: asTutorialActionId("end-turn"),
+                id: testTutorialActionId("end-turn"),
                 action: "end-turn",
                 wait: 0,
               },
               howToPlay: null,
               endTurn: {
-                actionId: asTutorialActionId("end-turn"),
+                actionId: testTutorialActionId("end-turn"),
                 triggerCardId: TUTORIAL_PLAYER_CARD.model.cardId,
                 ready: true,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 playerHand: [],
                 enemy: { backRank: [], frontRank: [], deckCardIds: [] },
                 player: { backRank: [], frontRank: [] },
@@ -2757,7 +2765,10 @@ describe("TutorialScreen", () => {
     expect(screenMocks.props?.phaseNavigation).toBe("end-turn");
     expect(screenMocks.props?.interactions?.canInteract).toBe(true);
     act(() => screenMocks.props?.interactions?.onNextPhase());
-    expect(onEndTurn).toHaveBeenCalledWith("event:player-turn", "end-turn");
+    expect(onEndTurn).toHaveBeenCalledWith(
+      "event:player-turn",
+      testTutorialActionId("end-turn"),
+    );
 
     act(() => root.unmount());
     container.remove();
@@ -2797,11 +2808,11 @@ describe("TutorialScreen", () => {
                 speakerName: assertLocalized("Threxan"),
                 text: assertLocalized("For the Abyss!"),
               },
-              playbackRunId: asTutorialRunId("event:4"),
+              playbackRunId: parseTutorialRunId("event:4"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("vrakmoth-taunt"),
+                id: testTutorialActionId("vrakmoth-taunt"),
                 action: "display-speech-bubble",
                 speechBubble: {
                   speaker: "enemy",
@@ -2814,7 +2825,7 @@ describe("TutorialScreen", () => {
                 wait: 3,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemy: {
                   status: {
                     dreamAvatar: TUTORIAL_DREAM_AVATARS.enemy.visual,
@@ -2907,11 +2918,11 @@ describe("TutorialScreen", () => {
                   text: assertLocalized("Welcome, Dreamer."),
                 },
               },
-              playbackRunId: asTutorialRunId("event:1"),
+              playbackRunId: parseTutorialRunId("event:1"),
               endTurn: null,
               howToPlay: null,
               currentAction: {
-                id: asTutorialActionId("welcome"),
+                id: testTutorialActionId("welcome"),
                 action: "display-speech-bubble",
                 speechBubble: {
                   speaker: "mira",
@@ -2924,7 +2935,7 @@ describe("TutorialScreen", () => {
                 wait: 3,
               },
               battle: {
-                battleId: asBattleId("tutorial-battle"),
+                battleId: parseBattleId("tutorial-battle"),
                 enemy: { backRank: [], frontRank: [] },
                 player: { backRank: [], frontRank: [] },
               } as unknown as MobileBattleView,

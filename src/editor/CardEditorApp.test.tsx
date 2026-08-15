@@ -6,11 +6,20 @@ import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
-import { asCardId, asCardName } from "../types/card-identity";
+import {
+  parseCardId,
+  parseCardName,
+  parseCardSubtype,
+  type CardId,
+} from "../types/card-identity";
 import { SIZE_PRESETS } from "./card-size";
 import CardEditorApp from "./CardEditorApp";
 import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
 import type { EditorApiClient, EditorCardRecord } from "./types";
+import {
+  testCardId,
+  testCardSubtype,
+} from "../types/test-identities";
 
 function deferred<T>(): {
   promise: Promise<T>;
@@ -29,17 +38,20 @@ function deferred<T>(): {
 
 function makePreview(
   overrides: Omit<Partial<CardData>, "id" | "name"> & {
-    id?: string;
-    name?: string;
+    id?: unknown;
+    name?: unknown;
   } = {},
 ): CardData {
   const { id: overrideId, name: overrideName, ...rest } = overrides;
+  if (overrideId !== undefined && typeof overrideId !== "string") {
+    throw new Error("Synthetic card identity must be a string.");
+  }
   return {
-    id: asCardId("card-id-1"),
-    name: asCardName("Moonlit Envoy"),
+    id: testCardId("card-id-1"),
+    name: parseCardName("Moonlit Envoy"),
     cardNumber: 12,
     cardType: "Character",
-    subtype: "Scout",
+    subtype: testCardSubtype("Scout"),
     isStarter: false,
     energyCost: 2,
     spark: 1,
@@ -48,8 +60,8 @@ function makePreview(
     imageNumber: 12,
     artOwned: true,
     ...rest,
-    ...(overrideId !== undefined ? { id: asCardId(overrideId) } : {}),
-    ...(overrideName !== undefined ? { name: asCardName(overrideName) } : {}),
+    ...(overrideId !== undefined ? { id: testCardId(overrideId) } : {}),
+    ...(overrideName !== undefined ? { name: parseCardName(overrideName) } : {}),
   };
 }
 
@@ -190,10 +202,18 @@ async function flushAsyncWork(): Promise<void> {
   });
 }
 
-function editorCardIds(container: HTMLElement): string[] {
+function editorCardIds(container: HTMLElement): CardId[] {
   return Array.from(container.querySelectorAll("[data-editor-card-id]")).map(
-    (element) => element.getAttribute("data-editor-card-id") ?? "",
+    (element) => {
+      const value = element.getAttribute("data-editor-card-id");
+      if (value === null) throw new Error("Editor card is missing its identity.");
+      return parseCardId(value);
+    },
   );
+}
+
+function expectedCardIds(...seeds: string[]): CardId[] {
+  return seeds.map(testCardId);
 }
 
 async function mountLoadedApp(cards: EditorCardRecord[]): Promise<{
@@ -244,8 +264,8 @@ describe("CardEditorApp", () => {
 
   it("renders the title and visible-card count after a successful load", async () => {
     const cards = [
-      makeEditorCard({ id: asCardId("card-id-1") }),
-      makeEditorCard({ id: asCardId("card-id-2"), cardNumber: 13 }),
+      makeEditorCard({ id: testCardId("card-id-1") }),
+      makeEditorCard({ id: testCardId("card-id-2"), cardNumber: 13 }),
     ];
     const { container, root } = mount(
       <CardEditorApp apiClient={makeApiClient(() => Promise.resolve(cards))} />,
@@ -269,21 +289,21 @@ describe("CardEditorApp", () => {
   it("renders loaded editor cards through the shared read-only card grid", async () => {
     const cards = [
       makeEditorCard({
-        id: asCardId("uuid-card-1"),
+        id: testCardId("uuid-card-1"),
         cardType: "Character",
-        subtype: "Scout",
+        subtype: testCardSubtype("Scout"),
         source: { subtype: "Scout" },
         preview: makePreview({
           id: "uuid-card-1",
           cardType: "Character",
-          subtype: "Scout",
+          subtype: testCardSubtype("Scout"),
           renderedText: "Draw a card.",
         }),
       }),
     ];
     const { container, root } = await mountLoadedApp(cards);
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="uuid-card-1"]',
+      `[data-editor-card-id="${testCardId("uuid-card-1")}"]`,
     );
 
     expect(editorCard).not.toBeNull();
@@ -307,7 +327,7 @@ describe("CardEditorApp", () => {
     const sharedImageNumber = 404;
     const cards = [
       makeEditorCard({
-        id: asCardId("duplicate-both-1"),
+        id: testCardId("duplicate-both-1"),
         name: sharedName,
         preview: makePreview({
           id: "duplicate-both-1",
@@ -316,7 +336,7 @@ describe("CardEditorApp", () => {
         }),
       }),
       makeEditorCard({
-        id: asCardId("duplicate-name-2"),
+        id: testCardId("duplicate-name-2"),
         name: sharedName,
         preview: makePreview({
           id: "duplicate-name-2",
@@ -325,7 +345,7 @@ describe("CardEditorApp", () => {
         }),
       }),
       makeEditorCard({
-        id: asCardId("duplicate-art-2"),
+        id: testCardId("duplicate-art-2"),
         name: "Different Name",
         preview: makePreview({
           id: "duplicate-art-2",
@@ -334,7 +354,7 @@ describe("CardEditorApp", () => {
         }),
       }),
       makeEditorCard({
-        id: asCardId("unique-card"),
+        id: testCardId("unique-card"),
         name: "Unique Name",
         preview: makePreview({
           id: "unique-card",
@@ -346,13 +366,13 @@ describe("CardEditorApp", () => {
     const { container, root } = await mountLoadedApp(cards);
 
     const bothWarning = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="duplicate-both-1"] [data-editor-duplicate-warning="true"]',
+      `[data-editor-card-id="${testCardId("duplicate-both-1")}"] [data-editor-duplicate-warning="true"]`,
     );
     const nameWarning = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="duplicate-name-2"] [data-editor-duplicate-warning="true"]',
+      `[data-editor-card-id="${testCardId("duplicate-name-2")}"] [data-editor-duplicate-warning="true"]`,
     );
     const artWarning = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="duplicate-art-2"] [data-editor-duplicate-warning="true"]',
+      `[data-editor-card-id="${testCardId("duplicate-art-2")}"] [data-editor-duplicate-warning="true"]`,
     );
 
     expect(bothWarning?.getAttribute("data-editor-duplicate-name")).toBe(
@@ -373,7 +393,7 @@ describe("CardEditorApp", () => {
     expect(artWarning?.getAttribute("data-editor-duplicate-art")).toBe("true");
     expect(
       container.querySelector(
-        '[data-editor-card-id="unique-card"] [data-editor-duplicate-warning="true"]',
+        `[data-editor-card-id="${testCardId("unique-card")}"] [data-editor-duplicate-warning="true"]`,
       ),
     ).toBeNull();
 
@@ -386,7 +406,7 @@ describe("CardEditorApp", () => {
     window.history.pushState(null, "", "/cards?q=Visible&artedit=1");
     const cards = [
       makeEditorCard({
-        id: asCardId("visible-card"),
+        id: testCardId("visible-card"),
         name: "Visible Card",
         preview: makePreview({
           id: "visible-card",
@@ -395,7 +415,7 @@ describe("CardEditorApp", () => {
         }),
       }),
       makeEditorCard({
-        id: asCardId("hidden-card"),
+        id: testCardId("hidden-card"),
         name: "Hidden Card",
         preview: makePreview({
           id: "hidden-card",
@@ -406,10 +426,10 @@ describe("CardEditorApp", () => {
     ];
     const { container, root } = await mountLoadedApp(cards);
 
-    expect(editorCardIds(container)).toEqual(["visible-card"]);
+    expect(editorCardIds(container)).toEqual(expectedCardIds("visible-card"));
     expect(
       container.querySelector(
-        '[data-editor-card-id="visible-card"] [data-editor-duplicate-art="true"]',
+        `[data-editor-card-id="${testCardId("visible-card")}"] [data-editor-duplicate-art="true"]`,
       ),
     ).not.toBeNull();
 
@@ -420,8 +440,8 @@ describe("CardEditorApp", () => {
 
   it("keeps the desktop shell fixed and exposes narrow scroll-layout hooks", async () => {
     const { container, root } = await mountLoadedApp([
-      makeEditorCard({ id: asCardId("card-id-1") }),
-      makeEditorCard({ id: asCardId("card-id-2") }),
+      makeEditorCard({ id: testCardId("card-id-1") }),
+      makeEditorCard({ id: testCardId("card-id-2") }),
     ]);
     const shell = container.querySelector("main");
     const header = container.querySelector("header");
@@ -457,20 +477,20 @@ describe("CardEditorApp", () => {
   it("keeps card type display-only in the editor card type line", async () => {
     const { container, root } = await mountLoadedApp([
       makeEditorCard({
-        id: asCardId("event-card"),
+        id: testCardId("event-card"),
         cardType: "Event",
-        subtype: "Omen",
+        subtype: testCardSubtype("Omen"),
         source: { subtype: "Omen" },
         preview: makePreview({
           id: "event-card",
           cardType: "Event",
-          subtype: "Omen",
+          subtype: testCardSubtype("Omen"),
           spark: null,
         }),
       }),
     ]);
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="event-card"]',
+      `[data-editor-card-id="${testCardId("event-card")}"]`,
     );
     const typeLine = editorCard?.querySelector<HTMLElement>(
       '[data-testid="card-type-line"]',
@@ -501,12 +521,12 @@ describe("CardEditorApp", () => {
           card: makeEditorCard({
             id: request.id,
             cardType: "Event",
-            subtype: String(request.value),
-            source: { subtype: String(request.value) },
+            subtype: parseCardSubtype(request.value),
+            source: { subtype: parseCardSubtype(request.value) },
             preview: makePreview({
               id: request.id,
               cardType: "Event",
-              subtype: String(request.value),
+              subtype: parseCardSubtype(request.value),
               spark: null,
             }),
           }),
@@ -520,14 +540,14 @@ describe("CardEditorApp", () => {
           () =>
             Promise.resolve([
               makeEditorCard({
-                id: asCardId("event-card"),
+                id: testCardId("event-card"),
                 cardType: "Event",
-                subtype: "Omen",
+                subtype: testCardSubtype("Omen"),
                 source: { subtype: "Omen" },
                 preview: makePreview({
                   id: "event-card",
                   cardType: "Event",
-                  subtype: "Omen",
+                  subtype: testCardSubtype("Omen"),
                   spark: null,
                 }),
               }),
@@ -542,7 +562,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="event-card"]',
+      `[data-editor-card-id="${testCardId("event-card")}"]`,
     );
     const cardTypeText = editorCard?.querySelector<HTMLElement>(
       '[data-editor-type-line-card-type="true"]',
@@ -584,7 +604,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "event-card",
+      id: testCardId("event-card"),
       field: "subtype",
       value: "Vision",
     });
@@ -610,12 +630,12 @@ describe("CardEditorApp", () => {
           card: makeEditorCard({
             id: request.id,
             cardType: "Event",
-            subtype: String(request.value),
-            source: { subtype: String(request.value) },
+            subtype: parseCardSubtype(request.value),
+            source: { subtype: parseCardSubtype(request.value) },
             preview: makePreview({
               id: request.id,
               cardType: "Event",
-              subtype: String(request.value),
+              subtype: parseCardSubtype(request.value),
               spark: null,
             }),
           }),
@@ -629,14 +649,14 @@ describe("CardEditorApp", () => {
           () =>
             Promise.resolve([
               makeEditorCard({
-                id: asCardId("event-card"),
+                id: testCardId("event-card"),
                 cardType: "Event",
-                subtype: "Omen",
+                subtype: testCardSubtype("Omen"),
                 source: { subtype: "Omen" },
                 preview: makePreview({
                   id: "event-card",
                   cardType: "Event",
-                  subtype: "Omen",
+                  subtype: testCardSubtype("Omen"),
                   spark: null,
                 }),
               }),
@@ -651,7 +671,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="event-card"]',
+      `[data-editor-card-id="${testCardId("event-card")}"]`,
     );
     const subtypeField = editorCard?.querySelector<HTMLElement>(
       '[data-editor-field="subtype"]',
@@ -681,7 +701,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "event-card",
+      id: testCardId("event-card"),
       field: "subtype",
       value: "",
     });
@@ -711,12 +731,12 @@ describe("CardEditorApp", () => {
           card: makeEditorCard({
             id: request.id,
             cardType: "Event",
-            subtype: String(request.value),
-            source: { subtype: String(request.value) },
+            subtype: parseCardSubtype(request.value),
+            source: { subtype: parseCardSubtype(request.value) },
             preview: makePreview({
               id: request.id,
               cardType: "Event",
-              subtype: String(request.value),
+              subtype: parseCardSubtype(request.value),
               spark: null,
             }),
           }),
@@ -730,14 +750,14 @@ describe("CardEditorApp", () => {
           () =>
             Promise.resolve([
               makeEditorCard({
-                id: asCardId("event-card"),
+                id: testCardId("event-card"),
                 cardType: "Event",
-                subtype: "Omen",
+                subtype: testCardSubtype("Omen"),
                 source: { subtype: "Omen" },
                 preview: makePreview({
                   id: "event-card",
                   cardType: "Event",
-                  subtype: "Omen",
+                  subtype: testCardSubtype("Omen"),
                   spark: null,
                 }),
               }),
@@ -752,7 +772,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="event-card"]',
+      `[data-editor-card-id="${testCardId("event-card")}"]`,
     );
     const subtypeField = editorCard?.querySelector<HTMLElement>(
       '[data-editor-field="subtype"]',
@@ -782,7 +802,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "event-card",
+      id: testCardId("event-card"),
       field: "subtype",
       value: "   ",
     });
@@ -813,12 +833,12 @@ describe("CardEditorApp", () => {
           card: makeEditorCard({
             id: request.id,
             cardType: "Event",
-            subtype: String(request.value),
-            source: { subtype: String(request.value) },
+            subtype: parseCardSubtype(request.value),
+            source: { subtype: parseCardSubtype(request.value) },
             preview: makePreview({
               id: request.id,
               cardType: "Event",
-              subtype: String(request.value),
+              subtype: parseCardSubtype(request.value),
               spark: null,
             }),
           }),
@@ -832,14 +852,14 @@ describe("CardEditorApp", () => {
           () =>
             Promise.resolve([
               makeEditorCard({
-                id: asCardId("event-card"),
+                id: testCardId("event-card"),
                 cardType: "Event",
-                subtype: "Omen",
+                subtype: testCardSubtype("Omen"),
                 source: { subtype: "Omen" },
                 preview: makePreview({
                   id: "event-card",
                   cardType: "Event",
-                  subtype: "Omen",
+                  subtype: testCardSubtype("Omen"),
                   spark: null,
                 }),
               }),
@@ -854,7 +874,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="event-card"]',
+      `[data-editor-card-id="${testCardId("event-card")}"]`,
     );
     const subtypeField = editorCard?.querySelector<HTMLElement>(
       '[data-editor-field="subtype"]',
@@ -884,7 +904,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "event-card",
+      id: testCardId("event-card"),
       field: "subtype",
       value: "  Scout  ",
     });
@@ -895,7 +915,7 @@ describe("CardEditorApp", () => {
   });
 
   it.each([
-    { cardId: asCardId("character-blank-subtype"), initialSubtype: "" },
+    { cardId: testCardId("character-blank-subtype"), initialSubtype: "" },
   ])(
     "renders no subtype affordance for blank Character subtype '$initialSubtype'",
     async ({ cardId, initialSubtype }) => {
@@ -906,12 +926,12 @@ describe("CardEditorApp", () => {
               makeEditorCard({
                 id: cardId,
                 cardType: "Character",
-                subtype: initialSubtype,
-                source: { subtype: initialSubtype },
+                subtype: parseCardSubtype(initialSubtype),
+                source: { subtype: parseCardSubtype(initialSubtype) },
                 preview: makePreview({
                   id: cardId,
                   cardType: "Character",
-                  subtype: initialSubtype,
+                  subtype: parseCardSubtype(initialSubtype),
                 }),
               }),
             ]),
@@ -1006,7 +1026,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -1017,7 +1037,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -1047,7 +1067,7 @@ describe("CardEditorApp", () => {
 
     const savedRequest = saveEditorCardField.mock.calls[0]?.[0];
     expect(savedRequest).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "name",
       value: "Renamed Envoy",
     });
@@ -1081,7 +1101,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -1092,7 +1112,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"]`,
     );
     const cardButton =
       editorCard?.querySelector<HTMLElement>('[role="button"]');
@@ -1129,7 +1149,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "name",
       value: "Renamed Envoy",
     });
@@ -1147,10 +1167,10 @@ describe("CardEditorApp", () => {
   it("hides per-card tide editing from the focused editor for a RON source", async () => {
     window.history.pushState(null, "", "/editor?artedit=1&source=cards.ron");
     const { container, root } = await mountLoadedApp([
-      makeEditorCard({ id: asCardId("card-id-1") }),
+      makeEditorCard({ id: testCardId("card-id-1") }),
     ]);
     const cardButton = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [role="button"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [role="button"]`,
     );
     if (cardButton === null) {
       throw new Error("Missing art-edit card button");
@@ -1180,7 +1200,7 @@ describe("CardEditorApp", () => {
     const artSave =
       deferred<Awaited<ReturnType<EditorApiClient["saveEditorCardArt"]>>>();
     const originalCard = makeEditorCard({
-      id: asCardId("card-id-1"),
+      id: testCardId("card-id-1"),
       source: { "image-number": 12 },
       preview: makePreview({ id: "card-id-1", imageNumber: 12 }),
     });
@@ -1208,7 +1228,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"]`,
     );
     const cardButton =
       editorCard?.querySelector<HTMLElement>('[role="button"]');
@@ -1249,17 +1269,17 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardImageNumber).toHaveBeenCalledWith({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       imageNumber: 99,
     });
     const artSaveRequest = saveEditorCardArt.mock.calls[0]?.[0];
-    expect(artSaveRequest?.id).toBe("card-id-1");
+    expect(artSaveRequest?.id).toBe(testCardId("card-id-1"));
     expect(typeof artSaveRequest?.art.x).toBe("number");
 
     await act(async () => {
       imageSave.resolve({
         card: makeEditorCard({
-          id: asCardId("card-id-1"),
+          id: testCardId("card-id-1"),
           source: { "image-number": 99 },
           preview: makePreview({ id: "card-id-1", imageNumber: 99 }),
         }),
@@ -1276,7 +1296,7 @@ describe("CardEditorApp", () => {
     await act(async () => {
       artSave.resolve({
         card: makeEditorCard({
-          id: asCardId("card-id-1"),
+          id: testCardId("card-id-1"),
           source: {
             "image-number": 12,
             art: { x: 0.1, y: 0, scale: 1.17 },
@@ -1310,7 +1330,7 @@ describe("CardEditorApp", () => {
         apiClient={makeApiClient(() =>
           Promise.resolve([
             makeEditorCard({
-              id: asCardId("card-id-1"),
+              id: testCardId("card-id-1"),
               mtgName: "Dauthi Horror",
             }),
           ]),
@@ -1324,7 +1344,7 @@ describe("CardEditorApp", () => {
 
     expect(document.body.textContent).not.toContain("MTG: Dauthi Horror");
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"]`,
     );
     if (editorCard === null) {
       throw new Error("Missing art-mode editor card");
@@ -1367,7 +1387,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -1378,7 +1398,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -1426,7 +1446,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "name",
       value: "Blurred Name",
     });
@@ -1443,7 +1463,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -1454,7 +1474,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -1524,7 +1544,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -1535,7 +1555,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -1571,7 +1591,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "name",
       value: "Corrected Envoy",
     });
@@ -1606,7 +1626,7 @@ describe("CardEditorApp", () => {
         <CardEditorApp
           apiClient={makeApiClient(
             () =>
-              Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+              Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
             saveEditorCardField,
           )}
         />,
@@ -1617,7 +1637,7 @@ describe("CardEditorApp", () => {
       });
 
       const nameField = container.querySelector<HTMLElement>(
-        '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+        `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
       );
       if (nameField === null) {
         throw new Error("Missing name field");
@@ -1678,7 +1698,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -1689,7 +1709,7 @@ describe("CardEditorApp", () => {
     });
 
     const energyField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="energy-cost"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="energy-cost"]`,
     );
     if (energyField === null) {
       throw new Error("Missing energy field");
@@ -1712,7 +1732,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "energy-cost",
       value: "*",
     });
@@ -1736,7 +1756,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[1]?.[0]).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "energy-cost",
       value: 4,
     });
@@ -1757,7 +1777,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -1768,7 +1788,7 @@ describe("CardEditorApp", () => {
     });
 
     const energyField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="energy-cost"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="energy-cost"]`,
     );
     if (energyField === null) {
       throw new Error("Missing energy field");
@@ -1803,7 +1823,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -1814,7 +1834,7 @@ describe("CardEditorApp", () => {
     });
 
     const energyField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="energy-cost"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="energy-cost"]`,
     );
     if (energyField === null) {
       throw new Error("Missing energy field");
@@ -1870,7 +1890,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -1881,7 +1901,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"]`,
     );
     const sparkField = editorCard?.querySelector<HTMLElement>(
       '[data-editor-field="spark"]',
@@ -1911,7 +1931,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "spark",
       value: "",
     });
@@ -1936,7 +1956,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -1947,7 +1967,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"]`,
     );
     const sparkField = editorCard?.querySelector<HTMLElement>(
       '[data-editor-field="spark"]',
@@ -1976,7 +1996,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "spark",
       value: "",
     });
@@ -1997,7 +2017,7 @@ describe("CardEditorApp", () => {
         apiClient={makeApiClient(() =>
           Promise.resolve([
             makeEditorCard({
-              id: asCardId("card-id-1"),
+              id: testCardId("card-id-1"),
               spark: "*",
               preview: makePreview({
                 id: "card-id-1",
@@ -2015,7 +2035,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"]`,
     );
     if (editorCard === null) {
       throw new Error("Missing editor card");
@@ -2054,7 +2074,7 @@ describe("CardEditorApp", () => {
           () =>
             Promise.resolve([
               makeEditorCard({
-                id: asCardId("card-id-1"),
+                id: testCardId("card-id-1"),
                 spark: 2,
                 preview: makePreview({ id: "card-id-1", spark: 2 }),
               }),
@@ -2069,7 +2089,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"]`,
     );
     const sparkField = editorCard?.querySelector<HTMLElement>(
       '[data-editor-field="spark"]',
@@ -2099,7 +2119,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "spark",
       value: 3,
     });
@@ -2136,7 +2156,7 @@ describe("CardEditorApp", () => {
           () =>
             Promise.resolve([
               makeEditorCard({
-                id: asCardId("card-id-1"),
+                id: testCardId("card-id-1"),
                 spark: 2,
                 preview: makePreview({ id: "card-id-1", spark: 2 }),
               }),
@@ -2151,7 +2171,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"]`,
     );
     const sparkField = editorCard?.querySelector<HTMLElement>(
       '[data-editor-field="spark"]',
@@ -2185,7 +2205,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "spark",
       value: "*",
     });
@@ -2206,7 +2226,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -2217,7 +2237,7 @@ describe("CardEditorApp", () => {
     });
 
     const sparkField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="spark"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="spark"]`,
     );
     if (sparkField === null) {
       throw new Error("Missing spark field");
@@ -2275,7 +2295,7 @@ describe("CardEditorApp", () => {
           () =>
             Promise.resolve([
               makeEditorCard({
-                id: asCardId("card-id-1"),
+                id: testCardId("card-id-1"),
                 "rendered-text": "Draw a card.",
                 preview: makePreview({
                   id: "card-id-1",
@@ -2293,7 +2313,7 @@ describe("CardEditorApp", () => {
     });
 
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"]`,
     );
     const rulesField = editorCard?.querySelector<HTMLElement>(
       '[data-editor-field="rendered-text"]',
@@ -2333,7 +2353,7 @@ describe("CardEditorApp", () => {
 
     const savedRequest = saveEditorCardField.mock.calls[0]?.[0];
     expect(savedRequest).toMatchObject({
-      id: "card-id-1",
+      id: testCardId("card-id-1"),
       field: "rendered-text",
       value: renderedText,
     });
@@ -2378,9 +2398,9 @@ describe("CardEditorApp", () => {
         apiClient={makeApiClient(
           () =>
             Promise.resolve([
-              makeEditorCard({ id: asCardId("base-only-card") }),
+              makeEditorCard({ id: testCardId("base-only-card") }),
               makeEditorCard({
-                id: asCardId("amplified-card"),
+                id: testCardId("amplified-card"),
                 "amplified-text": amplifiedText,
                 preview: makePreview({
                   id: "amplified-card",
@@ -2398,9 +2418,11 @@ describe("CardEditorApp", () => {
       await Promise.resolve();
     });
 
-    expect(editorCardIds(container)).toEqual(["amplified-card"]);
+    expect(editorCardIds(container)).toEqual(
+      expectedCardIds("amplified-card"),
+    );
     const editorCard = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="amplified-card"]',
+      `[data-editor-card-id="${testCardId("amplified-card")}"]`,
     );
     const amplifiedField = editorCard?.querySelector<HTMLElement>(
       '[data-editor-field="amplified-text"]',
@@ -2437,7 +2459,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[0]?.[0]).toMatchObject({
-      id: "amplified-card",
+      id: testCardId("amplified-card"),
       field: "amplified-text",
       value: "Draw three cards.",
     });
@@ -2456,7 +2478,7 @@ describe("CardEditorApp", () => {
     });
 
     expect(saveEditorCardField.mock.calls[1]?.[0]).toMatchObject({
-      id: "amplified-card",
+      id: testCardId("amplified-card"),
       field: "amplified-text",
       value: "",
     });
@@ -2473,7 +2495,7 @@ describe("CardEditorApp", () => {
           () =>
             Promise.resolve([
               makeEditorCard({
-                id: asCardId("card-id-1"),
+                id: testCardId("card-id-1"),
                 "rendered-text": "Original rules text.",
                 preview: makePreview({
                   id: "card-id-1",
@@ -2491,7 +2513,7 @@ describe("CardEditorApp", () => {
     });
 
     const rulesField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="rendered-text"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="rendered-text"]`,
     );
     if (rulesField === null) {
       throw new Error("Missing rules text field");
@@ -2557,7 +2579,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -2568,7 +2590,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -2629,7 +2651,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -2640,7 +2662,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -2686,9 +2708,9 @@ describe("CardEditorApp", () => {
         apiClient={makeApiClient(
           () =>
             Promise.resolve([
-              makeEditorCard({ id: asCardId("card-id-1") }),
+              makeEditorCard({ id: testCardId("card-id-1") }),
               makeEditorCard({
-                id: asCardId("card-id-2"),
+                id: testCardId("card-id-2"),
                 cardNumber: 13,
                 name: "Other Envoy",
                 preview: makePreview({
@@ -2708,13 +2730,13 @@ describe("CardEditorApp", () => {
     });
 
     const firstNameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     const firstSubtypeField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="subtype"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="subtype"]`,
     );
     const secondNameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-2"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-2")}"] [data-editor-field="name"]`,
     );
     if (
       firstNameField === null ||
@@ -2769,7 +2791,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -2780,7 +2802,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -2817,7 +2839,7 @@ describe("CardEditorApp", () => {
     await act(async () => {
       pendingSave.resolve({
         card: makeEditorCard({
-          id: asCardId("card-id-1"),
+          id: testCardId("card-id-1"),
           name: "First Save",
           preview: makePreview({ id: "card-id-1", name: "First Save" }),
         }),
@@ -2858,7 +2880,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -2869,7 +2891,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -2907,7 +2929,7 @@ describe("CardEditorApp", () => {
     await act(async () => {
       secondSave.resolve({
         card: makeEditorCard({
-          id: asCardId("card-id-1"),
+          id: testCardId("card-id-1"),
           name: "Second Save",
           preview: makePreview({ id: "card-id-1", name: "Second Save" }),
         }),
@@ -2923,7 +2945,7 @@ describe("CardEditorApp", () => {
     await act(async () => {
       firstSave.resolve({
         card: makeEditorCard({
-          id: asCardId("card-id-1"),
+          id: testCardId("card-id-1"),
           name: "First Save",
           preview: makePreview({ id: "card-id-1", name: "First Save" }),
         }),
@@ -2951,7 +2973,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -2962,7 +2984,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -3025,7 +3047,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -3036,7 +3058,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -3064,7 +3086,7 @@ describe("CardEditorApp", () => {
     await act(async () => {
       pendingSave.resolve({
         card: makeEditorCard({
-          id: asCardId("card-id-1"),
+          id: testCardId("card-id-1"),
           name: "First Save",
           preview: makePreview({ id: "card-id-1", name: "First Save" }),
         }),
@@ -3108,7 +3130,7 @@ describe("CardEditorApp", () => {
       <CardEditorApp
         apiClient={makeApiClient(
           () =>
-            Promise.resolve([makeEditorCard({ id: asCardId("card-id-1") })]),
+            Promise.resolve([makeEditorCard({ id: testCardId("card-id-1") })]),
           saveEditorCardField,
         )}
       />,
@@ -3119,7 +3141,7 @@ describe("CardEditorApp", () => {
     });
 
     const nameField = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [data-editor-field="name"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [data-editor-field="name"]`,
     );
     if (nameField === null) {
       throw new Error("Missing name field");
@@ -3161,7 +3183,7 @@ describe("CardEditorApp", () => {
     await act(async () => {
       pendingSave.resolve({
         card: makeEditorCard({
-          id: asCardId("card-id-1"),
+          id: testCardId("card-id-1"),
           name: "First Save",
           preview: makePreview({ id: "card-id-1", name: "First Save" }),
         }),
@@ -3300,7 +3322,7 @@ describe("CardEditorApp", () => {
   it("scopes search to names, rules text, MTG names, or image numbers", async () => {
     const cards = [
       makeEditorCard({
-        id: asCardId("moon-card"),
+        id: testCardId("moon-card"),
         name: "Moonlit Envoy",
         "rendered-text": "Draw a card.",
         mtgName: "Serra Angel",
@@ -3312,7 +3334,7 @@ describe("CardEditorApp", () => {
         }),
       }),
       makeEditorCard({
-        id: asCardId("rules-card"),
+        id: testCardId("rules-card"),
         name: "Quiet Guide",
         "rendered-text": "Shield an ally.",
         mtgName: "Giant Growth",
@@ -3323,7 +3345,7 @@ describe("CardEditorApp", () => {
         }),
       }),
       makeEditorCard({
-        id: asCardId("other-card"),
+        id: testCardId("other-card"),
         name: "Sun Keeper",
         "rendered-text": "Gain energy.",
         mtgName: "Lightning Bolt",
@@ -3353,7 +3375,7 @@ describe("CardEditorApp", () => {
       setInputValue(searchInput, "moon");
     });
     expect(container.textContent).toContain("1 / 3 cards");
-    expect(editorCardIds(container)).toEqual(["moon-card"]);
+    expect(editorCardIds(container)).toEqual(expectedCardIds("moon-card"));
     expect(replaceState).toHaveBeenLastCalledWith(null, "", "/editor?q=moon");
 
     // A rules-text-only term matches nothing while scoped to names.
@@ -3369,7 +3391,7 @@ describe("CardEditorApp", () => {
       setSelectValue(scopeSelect, "all");
     });
     expect(container.textContent).toContain("1 / 3 cards");
-    expect(editorCardIds(container)).toEqual(["rules-card"]);
+    expect(editorCardIds(container)).toEqual(expectedCardIds("rules-card"));
     expect(replaceState).toHaveBeenLastCalledWith(
       null,
       "",
@@ -3384,7 +3406,7 @@ describe("CardEditorApp", () => {
       setSelectValue(scopeSelect, "mtg");
     });
     expect(container.textContent).toContain("1 / 3 cards");
-    expect(editorCardIds(container)).toEqual(["other-card"]);
+    expect(editorCardIds(container)).toEqual(expectedCardIds("other-card"));
     expect(replaceState).toHaveBeenLastCalledWith(
       null,
       "",
@@ -3399,7 +3421,7 @@ describe("CardEditorApp", () => {
       setSelectValue(scopeSelect, "imageNumber");
     });
     expect(container.textContent).toContain("1 / 3 cards");
-    expect(editorCardIds(container)).toEqual(["moon-card"]);
+    expect(editorCardIds(container)).toEqual(expectedCardIds("moon-card"));
     expect(replaceState).toHaveBeenLastCalledWith(
       null,
       "",
@@ -3415,7 +3437,7 @@ describe("CardEditorApp", () => {
   it("filters by display type, x cost, and nonblank source subtypes", async () => {
     const cards = [
       makeEditorCard({
-        id: asCardId("event-x"),
+        id: testCardId("event-x"),
         cardType: "Event",
         subtype: "",
         source: { subtype: "" },
@@ -3429,7 +3451,7 @@ describe("CardEditorApp", () => {
         }),
       }),
       makeEditorCard({
-        id: asCardId("character-guide"),
+        id: testCardId("character-guide"),
         cardType: "Character",
         subtype: "Guide",
         source: { subtype: "Guide" },
@@ -3442,15 +3464,15 @@ describe("CardEditorApp", () => {
         }),
       }),
       makeEditorCard({
-        id: asCardId("character-scout"),
+        id: testCardId("character-scout"),
         cardType: "Character",
-        subtype: "Scout",
+        subtype: testCardSubtype("Scout"),
         source: { subtype: "Scout" },
         preview: makePreview({
           id: "character-scout",
           name: "Scout",
           cardType: "Character",
-          subtype: "Scout",
+          subtype: testCardSubtype("Scout"),
           energyCost: 3,
         }),
       }),
@@ -3481,7 +3503,7 @@ describe("CardEditorApp", () => {
       setSelectValue(costSelect, "x");
     });
 
-    expect(editorCardIds(container)).toEqual(["event-x"]);
+    expect(editorCardIds(container)).toEqual(expectedCardIds("event-x"));
     expect(container.textContent).toContain("1 / 3 cards");
     expect(
       Array.from(container.querySelectorAll("[data-editor-card-id]")).every(
@@ -3507,20 +3529,20 @@ describe("CardEditorApp", () => {
   it("filters and sorts by trimmed source subtypes", async () => {
     const cards = [
       makeEditorCard({
-        id: asCardId("padded-scout"),
+        id: testCardId("padded-scout"),
         cardNumber: 2,
         name: "Padded Scout",
-        subtype: "Scout",
+        subtype: testCardSubtype("Scout"),
         source: { subtype: " Scout " },
         preview: makePreview({
           id: "padded-scout",
           cardNumber: 2,
           name: "Padded Scout",
-          subtype: "Scout",
+          subtype: testCardSubtype("Scout"),
         }),
       }),
       makeEditorCard({
-        id: asCardId("guide"),
+        id: testCardId("guide"),
         cardNumber: 1,
         name: "Guide",
         subtype: "Guide",
@@ -3552,13 +3574,15 @@ describe("CardEditorApp", () => {
     act(() => {
       setSelectValue(sortSelect, "subtype");
     });
-    expect(editorCardIds(container)).toEqual(["guide", "padded-scout"]);
+    expect(editorCardIds(container)).toEqual(
+      expectedCardIds("guide", "padded-scout"),
+    );
 
     act(() => {
       setSelectValue(subtypeSelect, "Scout");
     });
 
-    expect(editorCardIds(container)).toEqual(["padded-scout"]);
+    expect(editorCardIds(container)).toEqual(expectedCardIds("padded-scout"));
     expect(container.textContent).toContain("1 / 2 cards");
 
     act(() => {
@@ -3569,14 +3593,14 @@ describe("CardEditorApp", () => {
   it("replaces the URL for every toolbar display control", async () => {
     const cards = [
       makeEditorCard({
-        id: asCardId("event-x"),
+        id: testCardId("event-x"),
         cardType: "Event",
-        subtype: "Scout",
+        subtype: testCardSubtype("Scout"),
         source: { subtype: "Scout" },
         preview: makePreview({
           id: "event-x",
           cardType: "Event",
-          subtype: "Scout",
+          subtype: testCardSubtype("Scout"),
           energyCost: null,
         }),
       }),
@@ -3677,12 +3701,12 @@ describe("CardEditorApp", () => {
   it("sorts by selected field and direction", async () => {
     const cards = [
       makeEditorCard({
-        id: asCardId("beta"),
+        id: testCardId("beta"),
         name: "Beta",
         preview: makePreview({ id: "beta", name: "Beta" }),
       }),
       makeEditorCard({
-        id: asCardId("alpha"),
+        id: testCardId("alpha"),
         name: "Alpha",
         preview: makePreview({ id: "alpha", name: "Alpha" }),
       }),
@@ -3702,12 +3726,12 @@ describe("CardEditorApp", () => {
     act(() => {
       setSelectValue(sortSelect, "name");
     });
-    expect(editorCardIds(container)).toEqual(["alpha", "beta"]);
+    expect(editorCardIds(container)).toEqual(expectedCardIds("alpha", "beta"));
 
     act(() => {
       directionButton.click();
     });
-    expect(editorCardIds(container)).toEqual(["beta", "alpha"]);
+    expect(editorCardIds(container)).toEqual(expectedCardIds("beta", "alpha"));
 
     act(() => {
       root.unmount();
@@ -3717,22 +3741,22 @@ describe("CardEditorApp", () => {
   it("groups shared name substrings and repeats cards in each matching group", async () => {
     const cards = [
       makeEditorCard({
-        id: asCardId("dreamlight"),
+        id: testCardId("dreamlight"),
         name: "Dreamlight Guide",
         preview: makePreview({ id: "dreamlight", name: "Dreamlight Guide" }),
       }),
       makeEditorCard({
-        id: asCardId("dream-avatar"),
+        id: testCardId("dream-avatar"),
         name: "Dream Avatar",
         preview: makePreview({ id: "dream-avatar", name: "Dream Avatar" }),
       }),
       makeEditorCard({
-        id: asCardId("starlight"),
+        id: testCardId("starlight"),
         name: "Starlight Keeper",
         preview: makePreview({ id: "starlight", name: "Starlight Keeper" }),
       }),
       makeEditorCard({
-        id: asCardId("unmatched"),
+        id: testCardId("unmatched"),
         name: "Ash",
         preview: makePreview({ id: "unmatched", name: "Ash" }),
       }),
@@ -3766,23 +3790,27 @@ describe("CardEditorApp", () => {
     ).toEqual(["dream", "light"]);
     expect(container.textContent).toContain("“Dream”");
     expect(container.textContent).toContain("“light”");
-    expect(editorCardIds(container)).toEqual([
-      "dream-avatar",
-      "dreamlight",
-      "dreamlight",
-      "starlight",
-    ]);
+    expect(editorCardIds(container)).toEqual(
+      expectedCardIds(
+        "dream-avatar",
+        "dreamlight",
+        "dreamlight",
+        "starlight",
+      ),
+    );
     expect(container.textContent).toContain("3 / 4 cards");
 
     act(() => {
       directionButton.click();
     });
-    expect(editorCardIds(container)).toEqual([
-      "starlight",
-      "dreamlight",
-      "dreamlight",
-      "dream-avatar",
-    ]);
+    expect(editorCardIds(container)).toEqual(
+      expectedCardIds(
+        "starlight",
+        "dreamlight",
+        "dreamlight",
+        "dream-avatar",
+      ),
+    );
 
     act(() => {
       root.unmount();
@@ -3795,7 +3823,7 @@ describe("CardEditorApp", () => {
       window.history.pushState(null, "", `/editor?sort=${queryValue}`);
       const cards = [
         makeEditorCard({
-          id: asCardId("first"),
+          id: testCardId("first"),
           cardNumber: 1,
           name: "Same",
           subtype: "Guide",
@@ -3811,7 +3839,7 @@ describe("CardEditorApp", () => {
           }),
         }),
         makeEditorCard({
-          id: asCardId("second"),
+          id: testCardId("second"),
           cardNumber: 1,
           name: "Same",
           subtype: "Guide",
@@ -3829,7 +3857,9 @@ describe("CardEditorApp", () => {
       ];
       const { container, root } = await mountLoadedApp(cards);
 
-      expect(editorCardIds(container)).toEqual(["first", "second"]);
+      expect(editorCardIds(container)).toEqual(
+        expectedCardIds("first", "second"),
+      );
 
       act(() => {
         root.unmount();
@@ -3839,7 +3869,7 @@ describe("CardEditorApp", () => {
 
   function openFocusedEditor(container: HTMLElement): HTMLElement {
     const cardButton = container.querySelector<HTMLElement>(
-      '[data-editor-card-id="card-id-1"] [role="button"]',
+      `[data-editor-card-id="${testCardId("card-id-1")}"] [role="button"]`,
     );
     if (cardButton === null) {
       throw new Error("Missing art-edit card button");
@@ -3859,7 +3889,7 @@ describe("CardEditorApp", () => {
   it("closes the focused editor on Escape even when focus is outside the dialog", async () => {
     window.history.pushState(null, "", "/editor?artedit=1");
     const { container, root } = await mountLoadedApp([
-      makeEditorCard({ id: asCardId("card-id-1") }),
+      makeEditorCard({ id: testCardId("card-id-1") }),
     ]);
 
     openFocusedEditor(container);
@@ -3882,7 +3912,7 @@ describe("CardEditorApp", () => {
   it("dismisses the tag dropdown with Escape without closing the focused editor", async () => {
     window.history.pushState(null, "", "/editor?artedit=1&tagedit=1");
     const { container, root } = await mountLoadedApp([
-      makeEditorCard({ id: asCardId("card-id-1") }),
+      makeEditorCard({ id: testCardId("card-id-1") }),
     ]);
 
     const editor = openFocusedEditor(container);

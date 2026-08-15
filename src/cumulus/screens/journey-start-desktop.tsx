@@ -26,7 +26,6 @@ import {
 } from "./journey-start-shared";
 import { tx, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import { asDreamAvatarId } from "../../types/identifiers";
 
 /** Desktop column metrics. Box measures are content-driven layout, so these are
  * caller numbers. Each column is a fixed-width figure stage with a narrower,
@@ -365,7 +364,7 @@ export function DesktopSelect({
                 "[dream-avatar] [journey] Command that chooses the currently selected Dream Avatar or starting-deck option.",
               )}
               onChoose={() => {
-                onPick(asDreamAvatarId(dreamAvatar.id));
+                onPick(dreamAvatar.id);
               }}
             />
           ))}

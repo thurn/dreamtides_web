@@ -16,6 +16,7 @@ import type {
 } from "../types";
 import { frontRankSlotIds, rankSlotIds, slotIndex } from "../types";
 import type { BattleCardId } from "../../types/identifiers";
+import { lookupFigmentCatalogEntry } from "../state/figment-catalog";
 
 /**
  * The unified, keyword-aware Challenge resolver (rules §Challengers, Blockers,
@@ -52,7 +53,7 @@ export interface ChallengeInput {
    * Optional +✦ to add to a battleCardId's effective spark (Support / static
    * effects). Caller-supplied; empty for the human path (an unmodeled board).
    */
-  supportContribution?: ReadonlyMap<string, number>;
+  supportContribution?: ReadonlyMap<BattleCardId, number>;
 }
 
 export interface ChallengeResolution {
@@ -94,11 +95,6 @@ export type CombatKeyword = "vengeful" | "awakened";
  * resolver. The inherent keyword is carried by every figment of that type, so a
  * promoted reserve keeps it.
  */
-const FIGMENT_KEYWORDS: Readonly<Record<string, CombatKeyword>> = {
-  wraith: "vengeful",
-  ember: "awakened",
-};
-
 /**
  * The narrow, sanctioned text scan: the ONLY place the engine reads printed card
  * prose, and it is limited to detecting these combat-keyword lines. Each
@@ -139,8 +135,7 @@ export function hasCombatKeyword(
     return true;
   }
   if (isFigmentInstance(instance)) {
-    const subtype = instance.definition.subtype.trim().toLowerCase();
-    return FIGMENT_KEYWORDS[subtype] === keyword;
+    return lookupFigmentCatalogEntry(instance.definition.subtype)?.keyword === keyword;
   }
   return false;
 }
@@ -237,7 +232,7 @@ function resolveLane(params: {
   slotId: FrontRankSlotId;
   activeSide: BattleSide;
   opposingSide: BattleSide;
-  supportContribution: ReadonlyMap<string, number> | undefined;
+  supportContribution: ReadonlyMap<BattleCardId, number> | undefined;
   dissolved: { battleCardId: BattleCardId; side: BattleSide }[];
 }): LaneResolution {
   const {
@@ -380,7 +375,7 @@ function laneSpark(
   state: BattleMutableState,
   instance: BattleCardInstance | null,
   battleCardId: BattleCardId | null,
-  supportContribution: ReadonlyMap<string, number> | undefined,
+  supportContribution: ReadonlyMap<BattleCardId, number> | undefined,
 ): LaneSpark {
   if (instance === null) {
     return { compare: 0, total: 0, reserve: 0 };

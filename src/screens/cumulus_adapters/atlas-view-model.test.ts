@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../../types/test-identities";
 import { describe, expect, it } from "vitest";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 import { resolveSource } from "../../runtime/localization/runtime";
@@ -34,14 +35,17 @@ import {
   buildAtlasView,
   resolveAtlasNodeGeometry,
 } from "./atlas-view-model";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asJourneyId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asAffiliationId } from "../../types/identifiers";
-import { asTideId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { parseJourneyId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import type { AtlasNodeId } from "../../types/identifiers";
+import { testAffiliationId, testDreamscapeId, testDreamsignId, testGuideId, testTideId } from "../../types/test-identities";
+
+const STARTER_NODE_ID = parseAtlasNodeId("starter");
+const MIDDLE_NODE_ID = parseAtlasNodeId("middle");
+const BOSS_NODE_ID = parseAtlasNodeId("boss");
+const CHOSEN_NODE_ID = parseAtlasNodeId("chosen");
+const PASSED_NODE_ID = parseAtlasNodeId("passed");
 
 /** A structurally valid but content-free JourneyContent for builder tests. */
 const EMPTY_CONTENT: JourneyContent = {
@@ -61,13 +65,13 @@ const EMPTY_CONTENT: JourneyContent = {
 };
 
 function makeNode(
-  id: string,
+  id: AtlasNodeId,
   layer: LayerName,
   position: { x: number; y: number },
   overrides: Partial<DreamscapeNode> = {},
 ): DreamscapeNode {
   return {
-    id: asAtlasNodeId(id),
+    id,
     layer,
     indexInLayer: 0,
     dreamscapeId: null,
@@ -88,25 +92,25 @@ function makeNode(
  */
 function makeVerticalAtlas(): DreamAtlas {
   const starter = makeNode(
-    "starter",
+    STARTER_NODE_ID,
     LayerName.One,
     { x: 0, y: 0 },
     {
       state: "completed",
-      forwardIds: [asAtlasNodeId("middle")],
+      forwardIds: [MIDDLE_NODE_ID],
     },
   );
   const middle = makeNode(
-    "middle",
+    MIDDLE_NODE_ID,
     LayerName.Two,
     { x: 100, y: -40 },
     {
       state: "available",
-      forwardIds: [asAtlasNodeId("boss")],
+      forwardIds: [BOSS_NODE_ID],
     },
   );
   const boss = makeNode(
-    "boss",
+    BOSS_NODE_ID,
     LayerName.Seven,
     { x: 600, y: 40 },
     {
@@ -115,17 +119,21 @@ function makeVerticalAtlas(): DreamAtlas {
   );
   return {
     layers: [
-      [asAtlasNodeId("starter")],
-      [asAtlasNodeId("middle")],
+      [STARTER_NODE_ID],
+      [MIDDLE_NODE_ID],
       [],
       [],
       [],
       [],
-      [asAtlasNodeId("boss")],
+      [BOSS_NODE_ID],
     ],
-    nodes: { starter, middle, boss },
-    startingNodeId: asAtlasNodeId("starter"),
-    bossNodeId: asAtlasNodeId("boss"),
+    nodes: {
+      [STARTER_NODE_ID]: starter,
+      [MIDDLE_NODE_ID]: middle,
+      [BOSS_NODE_ID]: boss,
+    },
+    startingNodeId: STARTER_NODE_ID,
+    bossNodeId: BOSS_NODE_ID,
     currentNodeId: null,
     knownDreamsignCarrierIds: [],
   };
@@ -138,38 +146,38 @@ function makeVerticalAtlas(): DreamAtlas {
  */
 function makeForgoneAtlas(): DreamAtlas {
   const starter = makeNode(
-    "starter",
+    STARTER_NODE_ID,
     LayerName.One,
     { x: 0, y: 0 },
     {
       state: "completed",
-      forwardIds: [asAtlasNodeId("chosen"), asAtlasNodeId("passed")],
+      forwardIds: [CHOSEN_NODE_ID, PASSED_NODE_ID],
     },
   );
   const chosen = makeNode(
-    "chosen",
+    CHOSEN_NODE_ID,
     LayerName.Two,
     { x: 100, y: -40 },
     {
       state: "available",
-      forwardIds: [asAtlasNodeId("boss")],
-      dreamscapeId: asDreamscapeId("ds_chosen"),
-      knownDreamsignId: asDreamsignId("sign_chosen"),
+      forwardIds: [BOSS_NODE_ID],
+      dreamscapeId: testDreamscapeId("ds_chosen"),
+      knownDreamsignId: testDreamsignId("sign_chosen"),
     },
   );
   const passed = makeNode(
-    "passed",
+    PASSED_NODE_ID,
     LayerName.Two,
     { x: 100, y: 40 },
     {
       state: "forgone",
-      forwardIds: [asAtlasNodeId("boss")],
-      dreamscapeId: asDreamscapeId("ds_passed"),
-      knownDreamsignId: asDreamsignId("sign_passed"),
+      forwardIds: [BOSS_NODE_ID],
+      dreamscapeId: testDreamscapeId("ds_passed"),
+      knownDreamsignId: testDreamsignId("sign_passed"),
     },
   );
   const boss = makeNode(
-    "boss",
+    BOSS_NODE_ID,
     LayerName.Seven,
     { x: 600, y: 0 },
     {
@@ -178,17 +186,22 @@ function makeForgoneAtlas(): DreamAtlas {
   );
   return {
     layers: [
-      [asAtlasNodeId("starter")],
-      [asAtlasNodeId("chosen"), asAtlasNodeId("passed")],
+      [STARTER_NODE_ID],
+      [CHOSEN_NODE_ID, PASSED_NODE_ID],
       [],
       [],
       [],
       [],
-      [asAtlasNodeId("boss")],
+      [BOSS_NODE_ID],
     ],
-    nodes: { starter, chosen, passed, boss },
-    startingNodeId: asAtlasNodeId("starter"),
-    bossNodeId: asAtlasNodeId("boss"),
+    nodes: {
+      [STARTER_NODE_ID]: starter,
+      [CHOSEN_NODE_ID]: chosen,
+      [PASSED_NODE_ID]: passed,
+      [BOSS_NODE_ID]: boss,
+    },
+    startingNodeId: STARTER_NODE_ID,
+    bossNodeId: BOSS_NODE_ID,
     currentNodeId: null,
     knownDreamsignCarrierIds: [],
   };
@@ -197,9 +210,9 @@ function makeForgoneAtlas(): DreamAtlas {
 describe("resolveAtlasNodeGeometry", () => {
   it("runs the layer axis vertically bottom-up: starter at the bottom, boss at the top", () => {
     const geometry = resolveAtlasNodeGeometry(makeVerticalAtlas());
-    const starter = geometry.get("starter");
-    const middle = geometry.get("middle");
-    const boss = geometry.get("boss");
+    const starter = geometry.get(STARTER_NODE_ID);
+    const middle = geometry.get(MIDDLE_NODE_ID);
+    const boss = geometry.get(BOSS_NODE_ID);
     expect(starter && middle && boss).toBeTruthy();
     // The starter (layer axis min) is lowest on screen (largest `top`); the boss
     // (layer axis max) is highest (smallest `top`); the middle sits between them.
@@ -213,12 +226,12 @@ describe("resolveAtlasNodeGeometry", () => {
 
   it("sizes the starter and boss larger than a regular node", () => {
     const geometry = resolveAtlasNodeGeometry(makeVerticalAtlas());
-    expect(geometry.get("starter")!.size).toBe(geometry.get("boss")!.size);
-    expect(geometry.get("middle")!.size).toBeLessThan(
-      geometry.get("starter")!.size,
+    expect(geometry.get(STARTER_NODE_ID)!.size).toBe(geometry.get(BOSS_NODE_ID)!.size);
+    expect(geometry.get(MIDDLE_NODE_ID)!.size).toBeLessThan(
+      geometry.get(STARTER_NODE_ID)!.size,
     );
-    expect(geometry.get("starter")!.role).toBe("starter");
-    expect(geometry.get("boss")!.role).toBe("boss");
+    expect(geometry.get(STARTER_NODE_ID)!.role).toBe("starter");
+    expect(geometry.get(BOSS_NODE_ID)!.role).toBe("boss");
   });
 
   it("returns an empty map for an atlas with no positioned nodes", () => {
@@ -231,9 +244,9 @@ describe("resolveAtlasNodeGeometry", () => {
       makeVerticalAtlas(),
       ATLAS_LAYOUT_DESKTOP,
     );
-    const starter = geometry.get("starter");
-    const middle = geometry.get("middle");
-    const boss = geometry.get("boss");
+    const starter = geometry.get(STARTER_NODE_ID);
+    const middle = geometry.get(MIDDLE_NODE_ID);
+    const boss = geometry.get(BOSS_NODE_ID);
     expect(starter && middle && boss).toBeTruthy();
     // The starter (layer axis min) is leftmost (smallest `left`); the boss
     // (layer axis max) is rightmost (largest `left`); the middle sits between.
@@ -250,11 +263,11 @@ describe("resolveAtlasNodeGeometry", () => {
     const atlas = makeVerticalAtlas();
     const mobile = resolveAtlasNodeGeometry(atlas, ATLAS_LAYOUT_MOBILE);
     const desktop = resolveAtlasNodeGeometry(atlas, ATLAS_LAYOUT_DESKTOP);
-    expect(mobile.get("middle")!.size).toBeGreaterThan(
-      desktop.get("middle")!.size,
+    expect(mobile.get(MIDDLE_NODE_ID)!.size).toBeGreaterThan(
+      desktop.get(MIDDLE_NODE_ID)!.size,
     );
-    expect(mobile.get("starter")!.size).toBeGreaterThan(
-      desktop.get("starter")!.size,
+    expect(mobile.get(STARTER_NODE_ID)!.size).toBeGreaterThan(
+      desktop.get(STARTER_NODE_ID)!.size,
     );
   });
 });
@@ -266,7 +279,7 @@ describe("atlasChoiceLayer", () => {
 
   it("is null once no node is available", () => {
     const atlas = makeVerticalAtlas();
-    atlas.nodes.middle.state = "completed";
+    atlas.nodes[MIDDLE_NODE_ID].state = "completed";
     expect(atlasChoiceLayer(atlas)).toBeNull();
   });
 });
@@ -287,8 +300,8 @@ describe("buildAtlasGuideDialogue", () => {
     const firstAtlasState = {
       isTutorialJourney: true,
       completionLevel: 1,
-      runId: asJourneyId("tutorial-run"),
-      seed: "tutorial-seed",
+      runId: parseJourneyId("tutorial-run"),
+      seed: testJourneySeed("tutorial-seed"),
     } as JourneyState;
 
     expect(
@@ -333,9 +346,9 @@ describe("buildAtlasGuideDialogue", () => {
 
 describe("atlasEdgeKind", () => {
   const from = (state: DreamscapeNode["state"], layer: LayerName) =>
-    makeNode("f", layer, { x: 0, y: 0 }, { state });
+    makeNode(parseAtlasNodeId("f"), layer, { x: 0, y: 0 }, { state });
   const to = (state: DreamscapeNode["state"], layer: LayerName) =>
-    makeNode("t", layer, { x: 0, y: 0 }, { state });
+    makeNode(parseAtlasNodeId("t"), layer, { x: 0, y: 0 }, { state });
 
   it("draws a traveled edge between two completed nodes", () => {
     expect(
@@ -387,7 +400,7 @@ describe("buildAtlasMapNodes", () => {
         boss: {
           ...MINIMAL_ATLAS_DATA.boss,
           place: "Synthetic boss place",
-          sceneArtId: asDreamscapeId("synthetic-boss-scene"),
+          sceneArtId: testDreamscapeId("synthetic-boss-scene"),
         },
       },
     };
@@ -400,7 +413,7 @@ describe("buildAtlasMapNodes", () => {
     );
     expect(boss?.model.primary.sceneArt).toEqual({
       kind: "dreamscape-scene",
-      dreamscapeId: asDreamscapeId("synthetic-boss-scene"),
+      dreamscapeId: testDreamscapeId("synthetic-boss-scene"),
     });
     // An available (revealed) node's card is not the unrevealed variant, even
     // with no dreamscape content resolved.
@@ -428,10 +441,10 @@ describe("buildAtlasMapNodes", () => {
 
   it("carries a resident dreamscape's signature site as a standard site info card", () => {
     const atlas = makeVerticalAtlas();
-    atlas.nodes.middle.dreamscapeId = asDreamscapeId("wilderveil");
-    atlas.nodes.middle.sites = [
+    atlas.nodes[MIDDLE_NODE_ID].dreamscapeId = testDreamscapeId("wilderveil");
+    atlas.nodes[MIDDLE_NODE_ID].sites = [
       {
-        id: asSiteId("00000000-0000-4000-8000-000000000091"),
+        id: parseSiteId("00000000-0000-4000-8000-000000000091"),
         type: "Augury",
         isEnhanced: false,
         isVisited: false,
@@ -459,20 +472,20 @@ describe("buildAtlasMapNodes", () => {
       },
       dreamscapes: [
         {
-          id: asDreamscapeId("wilderveil"),
+          id: testDreamscapeId("wilderveil"),
           name: "Wilderveil",
-          guideId: asGuideId("aldric"),
+          guideId: testGuideId("aldric"),
           signatureSite: "Augury",
-          affiliationId: asAffiliationId("figments"),
+          affiliationId: testAffiliationId("figments"),
           isStarter: false,
           dreamAvatarIds: [],
         },
       ],
       guides: [
         {
-          id: asGuideId("aldric"),
+          id: testGuideId("aldric"),
           name: "Aldric, the Seer",
-          homeDreamscapeId: asDreamscapeId("wilderveil"),
+          homeDreamscapeId: testDreamscapeId("wilderveil"),
           siteType: "Augury",
           portraitSource: "fixture-guide.png",
           dialogue: { site: [] },
@@ -481,10 +494,10 @@ describe("buildAtlasMapNodes", () => {
       ],
       affiliations: [
         {
-          id: asAffiliationId("figments"),
+          id: testAffiliationId("figments"),
           name: "Figments",
           atlasCardTheme: "Figment",
-          tideIds: [asTideId("tide-a"), asTideId("tide-b"), asTideId("tide-c")],
+          tideIds: [testTideId("tide-a"), testTideId("tide-b"), testTideId("tide-c")],
         },
       ],
     };
@@ -495,7 +508,7 @@ describe("buildAtlasMapNodes", () => {
     expect(resolveSource(middle!.model.site!.name)).toBe("Augury");
     expect(resolveSource(middle!.model.site!.blurb).length).toBeGreaterThan(0);
     expect(middle?.model.site?.icon).toBe("fixture-atlas-icon");
-    expect(middle?.model.affiliation?.id).toBe("figments");
+    expect(middle?.model.affiliation?.id).toBe(content.affiliations[0]?.id);
     expect(resolveSource(middle!.model.affiliation!.title)).toBe(
       "Fixture title Figments",
     );

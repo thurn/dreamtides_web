@@ -8,7 +8,32 @@ import type {
 } from "../types/identifiers";
 
 export type EditableFieldValue = string | number;
-export type EditableFieldName = string;
+export type EditableFieldName =
+  | "amplified-text"
+  | "affiliation-id"
+  | "art"
+  | "card-type"
+  | "cardId"
+  | "effectText"
+  | "energy-added"
+  | "energy-cost"
+  | "followupSubtitle"
+  | "followupTitle"
+  | "guide-id"
+  | "image-number"
+  | "label"
+  | "name"
+  | "order"
+  | "prose"
+  | "rendered-text"
+  | "spark"
+  | "signature-site"
+  | "starting-essence"
+  | "subtype"
+  | "tags"
+  | "tide-pool"
+  | "tides"
+  | "title";
 export type EditableFieldStatus =
   "idle" | "editing" | "saving" | "saved" | "error";
 
@@ -19,6 +44,9 @@ export type EditorEntityId =
   | DreamsignId
   | DreamwellCardId
   | EditorFieldTargetId;
+
+export type EditorFieldSaveKey =
+  `${EditorEntityId}\u0000${EditableFieldName}`;
 
 export interface EditableFieldSaveEntry {
   cardId: EditorEntityId;
@@ -32,7 +60,7 @@ export interface EditableFieldSaveEntry {
 }
 
 export interface EditableSaveState {
-  fields: Record<string, EditableFieldSaveEntry>;
+  fields: Record<EditorFieldSaveKey, EditableFieldSaveEntry>;
 }
 
 export interface FieldTarget {
@@ -44,7 +72,10 @@ export const EMPTY_EDITOR_SAVE_STATE: EditableSaveState = {
   fields: {},
 };
 
-export function fieldSaveKey({ cardId, field }: FieldTarget): string {
+export function fieldSaveKey({
+  cardId,
+  field,
+}: FieldTarget): EditorFieldSaveKey {
   return `${cardId}\u0000${field}`;
 }
 

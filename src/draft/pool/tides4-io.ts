@@ -23,10 +23,21 @@
 
 import { isResonance } from "../../data/resonance-data";
 import type { Resonance } from "../../types/resonance-data";
+import type { CardId } from "../../types/card-identity";
+import { parseCardId } from "../../types/card-identity";
+import type {
+  DreamAvatarId,
+  IdentityRecord,
+  TideId,
+} from "../../types/identifiers";
+import {
+  parseDreamAvatarId,
+  parseTideId,
+} from "../../types/identifiers";
 
 /** One card entry in a committed tide deck. */
 export interface TideDeckCardJson {
-  id: string;
+  id: CardId;
   copies: number;
 }
 
@@ -36,7 +47,7 @@ export type Tides4Role = "signature" | "facet" | "neutral";
 /** One preconstructed `tides4` deck. */
 export interface Tides4DeckJson {
   /** Stable UUIDv4 tide identity. */
-  id: string;
+  id: TideId;
   /** Player-facing narrative label. */
   displayName: string;
   /** Player-facing explanation of the tide's mechanical identity. */
@@ -63,11 +74,11 @@ export interface Tides4DeckJson {
  */
 export interface Tides4DreamAvatarPool {
   /** The always-joined signature tide id, or null for a signatureless DreamAvatar. */
-  starter: string | null;
+  starter: TideId | null;
   /** Facet tide ids a random subset is drawn from each run (at least one). */
-  facets: string[];
+  facets: TideId[];
   /** Broad tail tide ids, joined as needed to top the pool up to full size. */
-  neutral: string[];
+  neutral: TideId[];
 }
 
 /** Browser projection compiled from the canonical tide catalog. */
@@ -85,11 +96,33 @@ export interface Tides4DecksJson {
    * combines. Every DreamAvatar has an entry; every id in it names a tide in
    * {@link tides}.
    */
-  tidePoolByDreamAvatar: Record<string, Tides4DreamAvatarPool>;
+  tidePoolByDreamAvatar: IdentityRecord<
+    DreamAvatarId,
+    Tides4DreamAvatarPool
+  >;
 }
 
 function fail(detail: string): never {
   throw new Error(`tides4 artifact is malformed: ${detail}.`);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function parseKnownTideId(
+  value: unknown,
+  knownIds: ReadonlySet<TideId>,
+  detail: string,
+): TideId {
+  let tideId: TideId;
+  try {
+    tideId = parseTideId(value);
+  } catch {
+    return fail(detail);
+  }
+  if (!knownIds.has(tideId)) return fail(detail);
+  return tideId;
 }
 
 /**
@@ -99,93 +132,150 @@ function fail(detail: string): never {
  * fails loudly at load time instead of producing a quietly wrong pool.
  */
 export function validateTides4Decks(json: unknown): Tides4DecksJson {
-  if (typeof json !== "object" || json === null) fail("not an object");
-  const data = json as Partial<Tides4DecksJson>;
-  if (data.version !== 2) fail("unsupported `version`");
+  if (!isRecord(json)) fail("not an object");
+  if (json["version"] !== 2) fail("unsupported `version`");
+  const rawSelection = json["selection"];
   if (
-    typeof data.selection?.bandFraction !== "number" ||
-    !Number.isFinite(data.selection.bandFraction) ||
-    data.selection.bandFraction <= 0 ||
-    data.selection.bandFraction > 1 ||
-    !Number.isInteger(data.selection.bandMinimum) ||
-    data.selection.bandMinimum <= 0
+    !isRecord(rawSelection) ||
+    typeof rawSelection["bandFraction"] !== "number" ||
+    !Number.isFinite(rawSelection["bandFraction"]) ||
+    rawSelection["bandFraction"] <= 0 ||
+    rawSelection["bandFraction"] > 1 ||
+    !Number.isInteger(rawSelection["bandMinimum"]) ||
+    typeof rawSelection["bandMinimum"] !== "number" ||
+    rawSelection["bandMinimum"] <= 0
   ) fail("invalid unified `selection` tuning");
-  if (!Array.isArray(data.tides) || data.tides.length === 0) {
+  const rawTides = json["tides"];
+  if (!Array.isArray(rawTides) || rawTides.length === 0) {
     fail("missing non-empty `tides` array");
   }
-  const ids = new Set<string>();
-  for (const tide of data.tides) {
-    if (typeof tide !== "object" || tide === null)
-      fail("tide is not an object");
-    if (typeof tide.id !== "string" || tide.id === "")
-      fail("tide without an id");
-    if (ids.has(tide.id)) fail(`duplicate tide id "${tide.id}"`);
-    ids.add(tide.id);
-    if (typeof tide.displayName !== "string") {
-      fail(`tide "${tide.id}" without a display name`);
+  const ids = new Set<TideId>();
+  const tides: Tides4DeckJson[] = rawTides.map((rawTide) => {
+    if (!isRecord(rawTide)) return fail("tide is not an object");
+    let id: TideId;
+    try {
+      id = parseTideId(rawTide["id"]);
+    } catch {
+      return fail("tide without a valid UUID id");
     }
-    if (typeof tide.displayDescription !== "string") {
-      fail(`tide "${tide.id}" without a display description`);
+    if (ids.has(id)) fail(`duplicate tide id "${id}"`);
+    ids.add(id);
+    const displayName = rawTide["displayName"];
+    if (typeof displayName !== "string") {
+      return fail(`tide "${id}" without a display name`);
     }
+    const displayDescription = rawTide["displayDescription"];
+    if (typeof displayDescription !== "string") {
+      return fail(`tide "${id}" without a display description`);
+    }
+    const role = rawTide["role"];
     if (
-      tide.role !== "signature" &&
-      tide.role !== "facet" &&
-      tide.role !== "neutral"
+      role !== "signature" &&
+      role !== "facet" &&
+      role !== "neutral"
     ) {
-      fail(`tide "${tide.id}" has an unknown role "${String(tide.role)}"`);
+      return fail(`tide "${id}" has an unknown role "${String(role)}"`);
     }
-    if (!isResonance(tide.resonance)) {
-      fail(
-        `tide "${tide.id}" has an unknown resonance "${String(tide.resonance)}"`,
+    const resonance = rawTide["resonance"];
+    if (!isResonance(resonance)) {
+      return fail(
+        `tide "${id}" has an unknown resonance "${String(resonance)}"`,
       );
     }
-    if (!Array.isArray(tide.cards) || tide.cards.length === 0) {
-      fail(`tide "${tide.id}" without cards`);
+    const rawCards = rawTide["cards"];
+    if (!Array.isArray(rawCards) || rawCards.length === 0) {
+      return fail(`tide "${id}" without cards`);
     }
-    for (const card of tide.cards) {
-      if (typeof card !== "object" || card === null) {
-        fail(`tide "${tide.id}" has a non-object card`);
+    const cards: TideDeckCardJson[] = rawCards.map((rawCard) => {
+      if (!isRecord(rawCard)) {
+        return fail(`tide "${id}" has a non-object card`);
       }
-      if (typeof card.id !== "string" || card.id === "") {
-        fail(`tide "${tide.id}" has a card without a UUID`);
+      let cardId: CardId;
+      try {
+        cardId = parseCardId(rawCard["id"]);
+      } catch {
+        return fail(`tide "${id}" has a card without a UUID`);
       }
-      if (typeof card.copies !== "number" || card.copies < 1) {
-        fail(`tide "${tide.id}" card "${card.id}" has invalid copies`);
+      const copies = rawCard["copies"];
+      if (
+        typeof copies !== "number" ||
+        !Number.isInteger(copies) ||
+        copies < 1
+      ) {
+        return fail(`tide "${id}" card "${cardId}" has invalid copies`);
       }
-    }
-  }
-  const pools = data.tidePoolByDreamAvatar;
-  if (typeof pools !== "object" || pools === null || Array.isArray(pools)) {
+      return { id: cardId, copies };
+    });
+    return {
+      id,
+      displayName,
+      displayDescription,
+      resonance,
+      role,
+      cards,
+    };
+  });
+  const rawPools = json["tidePoolByDreamAvatar"];
+  if (!isRecord(rawPools)) {
     fail("missing `tidePoolByDreamAvatar` object");
   }
-  for (const [dreamAvatarId, entry] of Object.entries(pools)) {
-    if (typeof entry !== "object" || entry === null || Array.isArray(entry)) {
-      fail(`tide pool for "${dreamAvatarId}" is not an object`);
+  const tidePoolByDreamAvatar: IdentityRecord<
+    DreamAvatarId,
+    Tides4DreamAvatarPool
+  > = {};
+  for (const [rawDreamAvatarId, rawEntry] of Object.entries(rawPools)) {
+    let dreamAvatarId: DreamAvatarId;
+    try {
+      dreamAvatarId = parseDreamAvatarId(rawDreamAvatarId);
+    } catch {
+      return fail(`tide pool key "${rawDreamAvatarId}" is not a DreamAvatar UUID`);
     }
-    const known = (tideId: unknown): boolean =>
-      typeof tideId === "string" && ids.has(tideId);
+    if (!isRecord(rawEntry)) {
+      return fail(`tide pool for "${dreamAvatarId}" is not an object`);
+    }
     // `starter` is the only optional/nullable id: a signatureless DreamAvatar has
     // none. A non-null starter must name a tide.
-    if (entry.starter !== null && !known(entry.starter)) {
-      fail(`tide pool for "${dreamAvatarId}" has an unknown \`starter\``);
-    }
+    const starter =
+      rawEntry["starter"] === null
+        ? null
+        : parseKnownTideId(
+            rawEntry["starter"],
+            ids,
+            `tide pool for "${dreamAvatarId}" has an unknown \`starter\``,
+          );
     // `facets` is the variety engine and must be non-empty; `neutral` may be empty
     // when a DreamAvatar's facets alone can already fill a pool.
-    if (!Array.isArray(entry.facets) || entry.facets.length === 0) {
-      fail(`tide pool for "${dreamAvatarId}" has no \`facets\``);
+    const rawFacets = rawEntry["facets"];
+    if (!Array.isArray(rawFacets) || rawFacets.length === 0) {
+      return fail(`tide pool for "${dreamAvatarId}" has no \`facets\``);
     }
-    if (!Array.isArray(entry.neutral)) {
-      fail(`tide pool for "${dreamAvatarId}" has a non-array \`neutral\``);
+    const rawNeutral = rawEntry["neutral"];
+    if (!Array.isArray(rawNeutral)) {
+      return fail(
+        `tide pool for "${dreamAvatarId}" has a non-array \`neutral\``,
+      );
     }
-    for (const key of ["facets", "neutral"] as const) {
-      for (const tideId of entry[key]) {
-        if (!known(tideId)) {
-          fail(
-            `tide "${String(tideId)}" in "${dreamAvatarId}".${key} names no tide`,
-          );
-        }
-      }
-    }
+    const parsePoolIds = (values: readonly unknown[], key: "facets" | "neutral") =>
+      values.map((value) =>
+        parseKnownTideId(
+          value,
+          ids,
+          `tide "${String(value)}" in "${dreamAvatarId}".${key} names no tide`,
+        ),
+      );
+    tidePoolByDreamAvatar[dreamAvatarId] = {
+      starter,
+      facets: parsePoolIds(rawFacets, "facets"),
+      neutral: parsePoolIds(rawNeutral, "neutral"),
+    };
   }
-  return data as Tides4DecksJson;
+  return {
+    version: 2,
+    selection: {
+      bandFraction: rawSelection["bandFraction"],
+      bandMinimum: rawSelection["bandMinimum"],
+    },
+    tides,
+    tidePoolByDreamAvatar,
+  };
 }

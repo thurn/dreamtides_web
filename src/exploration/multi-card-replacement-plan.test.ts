@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
 import {
   MINIMAL_ATLAS_DATA,
@@ -9,8 +10,8 @@ import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
-import { asCardId, asCardName } from "../types/card-identity";
-import { asCardTypeChangePredicateId } from "../types/identifiers";
+import { parseCardName } from "../types/card-identity";
+import { parseCardTypeChangePredicateId } from "../types/identifiers";
 import type { CardData } from "../types/cards";
 import type { JourneyState, SiteState } from "../types/journey";
 import {
@@ -18,10 +19,14 @@ import {
   prepareMultiCardReplacementPlan,
   type MultiCardReplacementPlanInput,
 } from "./multi-card-replacement-plan";
-import { asSiteId } from "../types/identifiers";
-import { asDeckEntryId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asExplorationActionId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseDeckEntryId } from "../types/identifiers";
+import {
+  testCardId,
+  testCardSubtype,
+  testDreamAvatarId,
+  testExplorationActionId,
+} from "../types/test-identities";
 
 const ENCOUNTER_CARD_ID = "b0000000-0000-4000-8000-000000000001";
 const DUPLICATED_SOURCE_CARD_ID = "b0000000-0000-4000-8000-000000000002";
@@ -31,17 +36,17 @@ const REPLACEMENT_ONE_ID = "b0000000-0000-4000-8000-000000000010";
 const REPLACEMENT_TWO_ID = "b0000000-0000-4000-8000-000000000011";
 
 function card(
-  id: string,
+  idSeed: string,
   cardNumber: number,
   cardType: CardData["cardType"],
   subtype: string,
 ): CardData {
   return {
-    id: asCardId(id),
-    name: asCardName(`Multi replacement fixture ${String(cardNumber)}`),
+    id: testCardId(idSeed),
+    name: parseCardName(`Multi replacement fixture ${String(cardNumber)}`),
     cardNumber,
     cardType,
-    subtype,
+    subtype: testCardSubtype(subtype),
     isStarter: false,
     energyCost: 2,
     spark: cardType === "Character" ? 2 : null,
@@ -67,7 +72,7 @@ function contentFixture(): JourneyContent {
     cardDatabase: new Map(cards.map((entry) => [entry.cardNumber, entry])),
     dreamAvatars: [
       {
-        id: asDreamAvatarId("multi-replacement-avatar"),
+        id: testDreamAvatarId("multi-replacement-avatar"),
         name: "Synthetic Avatar",
         title: "Synthetic",
         renderedText: "Synthetic.",
@@ -89,7 +94,7 @@ function contentFixture(): JourneyContent {
 }
 
 const site: SiteState = {
-  id: asSiteId("multi-card-replacement-site"),
+  id: parseSiteId("multi-card-replacement-site"),
   type: "Exploration",
   isEnhanced: false,
   isVisited: false,
@@ -104,28 +109,28 @@ function journeyFixture(
     throw new Error("Expected Dream Avatar fixture");
   return {
     ...createDefaultState(),
-    seed: "multi-card-replacement-plan-test",
+    seed: testJourneySeed("multi-card-replacement-plan-test"),
     deck: [
       {
-        entryId: asDeckEntryId("duplicate-source-b"),
+        entryId: parseDeckEntryId("duplicate-source-b"),
         cardNumber: 2,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: asDeckEntryId("owned-source"),
+        entryId: parseDeckEntryId("owned-source"),
         cardNumber: 3,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: asDeckEntryId("duplicate-source-a"),
+        entryId: parseDeckEntryId("duplicate-source-a"),
         cardNumber: 2,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: asDeckEntryId("event-source"),
+        entryId: parseDeckEntryId("event-source"),
         cardNumber: 4,
         transfiguration: null,
         isBane: false,
@@ -151,8 +156,8 @@ function inputFixture(
 ): MultiCardReplacementPlanInput {
   const content = options.content ?? contentFixture();
   return {
-    actionId: asExplorationActionId("multi-card-replacement-action"),
-    encounterCardId: asCardId(ENCOUNTER_CARD_ID),
+    actionId: testExplorationActionId("multi-card-replacement-action"),
+    encounterCardId: testCardId(ENCOUNTER_CARD_ID),
     predicate: "warrior",
     count: 2,
     journey: journeyFixture(content),
@@ -224,7 +229,7 @@ describe("multi-card replacement plan", () => {
           ? {
               ...entry,
               typeChange: {
-                predicateId: asCardTypeChangePredicateId("fixture:warrior"),
+                predicateId: parseCardTypeChangePredicateId("fixture:warrior"),
                 cardType: "Character" as const,
                 subtype: "Warrior",
                 label: "Warrior",
@@ -239,8 +244,8 @@ describe("multi-card replacement plan", () => {
     );
 
     expect(eventBinding).toMatchObject({
-      sourceEntryId: asDeckEntryId("event-source"),
-      sourceCardId: asCardId(EVENT_SOURCE_CARD_ID),
+      sourceEntryId: parseDeckEntryId("event-source"),
+      sourceCardId: testCardId(EVENT_SOURCE_CARD_ID),
     });
     expect(eventBinding?.replacementCardId).toMatch(/^b0000000-/u);
   });
@@ -261,7 +266,7 @@ describe("multi-card replacement plan", () => {
       ...baseContent,
       cardDatabase: new Map(baseContent.cardDatabase)
         .set(2, { ...duplicatedSource, rarity: "Legendary" })
-        .set(4, { ...eventSource, name: asCardName("Legendary") })
+        .set(4, { ...eventSource, name: parseCardName("Legendary") })
         .set(10, { ...replacement, rarity: "Legendary" }),
     };
     const input = inputFixture({
@@ -312,7 +317,7 @@ describe("multi-card replacement plan", () => {
     const tampered = {
       ...plan,
       bindings: [
-        { ...firstBinding, replacementCardId: asCardId(OWNED_SOURCE_CARD_ID) },
+        { ...firstBinding, replacementCardId: testCardId(OWNED_SOURCE_CARD_ID) },
         ...plan.bindings.slice(1),
       ],
     };
@@ -330,19 +335,19 @@ describe("multi-card replacement plan", () => {
     expect(
       prepareMultiCardReplacementPlan({
         ...input,
-        actionId: asExplorationActionId("different-action"),
+        actionId: testExplorationActionId("different-action"),
       }).planSignature,
     ).not.toBe(plan.planSignature);
     expect(
       prepareMultiCardReplacementPlan({
         ...input,
-        encounterCardId: asCardId(REPLACEMENT_TWO_ID),
+        encounterCardId: testCardId(REPLACEMENT_TWO_ID),
       }).planSignature,
     ).not.toBe(plan.planSignature);
     expect(
       prepareMultiCardReplacementPlan({
         ...input,
-        site: { ...site, id: asSiteId("different-site") },
+        site: { ...site, id: parseSiteId("different-site") },
       }).planSignature,
     ).not.toBe(plan.planSignature);
   });

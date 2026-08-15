@@ -9,6 +9,7 @@ import {
   type DreamAvatarVisual,
 } from "./DreamAvatarPortrait";
 import { CumulusRoot } from "../../CumulusRoot";
+import { testDreamAvatarId } from "../../../types/test-identities";
 
 const DC: DreamAvatarVisual = {
   imageNumber: "0042",
@@ -61,7 +62,7 @@ describe("DreamAvatarPortrait variants", () => {
         dreamAvatar={DC}
         variant="panel"
         profile={{
-          id: "00000000-0000-4000-8000-000000000061",
+          id: testDreamAvatarId("00000000-0000-4000-8000-000000000061"),
           ability: assertLocalized("Gain 1 essence."),
         }}
       />,

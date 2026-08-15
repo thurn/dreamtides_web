@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { testJourneySeed } from "../../types/test-identities";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { LocalizedString } from "@trox/runtime";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import type { CardData } from "../../types/cards";
@@ -7,19 +9,24 @@ import type { DreamAvatarContent } from "../../types/content";
 import type { DeckEntry, DreamAvatar, Dreamsign } from "../../types/journey";
 import type { RunPoolContext } from "../../data/journey-content";
 import type { PoolData } from "../../draft/pool/types";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { buildDesktopDeckView } from "./desktop-deck-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import {
+  testCardId,
+  testDreamAvatarId,
+  testDreamsignId,
+  testTideId,
+} from "../../types/test-identities";
 
 const transfigurationData = transfigurationFixture();
+const TIDE_ID = testTideId("tide-sig-fixture");
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: asCardName("Test Event"),
-    id: asCardId("test-event"),
+    name: parseCardName("Test Event"),
+    id: testCardId("test-event"),
     cardNumber: 1,
     cardType: "Event",
     subtype: "",
@@ -36,7 +43,7 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 
 function makeEntry(overrides: Partial<DeckEntry> = {}): DeckEntry {
   return {
-    entryId: asDeckEntryId("entry-1"),
+    entryId: parseDeckEntryId("entry-1"),
     cardNumber: 1,
     transfiguration: null,
     isBane: false,
@@ -49,7 +56,7 @@ function database(...cards: CardData[]): Map<number, CardData> {
 }
 
 const dreamAvatar: DreamAvatar = {
-  id: asDreamAvatarId("dc-1"),
+  id: testDreamAvatarId("dc-1"),
   name: "Sable",
   title: "The Unmaker",
   renderedText: "Banish a card.",
@@ -58,7 +65,7 @@ const dreamAvatar: DreamAvatar = {
 };
 
 const dreamsign: Dreamsign = {
-  id: asDreamsignId("ds-1"),
+  id: testDreamsignId("ds-1"),
   name: "First Sign",
   effectDescription: "Draw an extra card.",
 };
@@ -75,28 +82,29 @@ const dreamAvatarContent: DreamAvatarContent = {
 function tidesContext(
   poolVariant: RunPoolContext["poolVariant"],
 ): RunPoolContext {
-  const tideId = "tide-sig-fixture";
   const poolData: PoolData = {
     tides4Decks: {
       version: 2,
       selection: { bandFraction: 0.25, bandMinimum: 5 },
       tides: [
         {
-          id: tideId,
+          id: TIDE_ID,
           displayName: "Kindled Path",
           displayDescription:
             "Gather strength before releasing a decisive surge.",
           role: "signature",
           resonance: "ember",
           cards: Array.from({ length: 80 }, (_, index) => ({
-            id: `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+            id: testCardId(
+              `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+            ),
             copies: 2,
           })),
         },
       ],
       tidePoolByDreamAvatar: {
         [dreamAvatar.id]: {
-          starter: tideId,
+          starter: TIDE_ID,
           facets: [],
           neutral: [],
         },
@@ -114,11 +122,11 @@ function tidesContext(
 
 describe("buildDesktopDeckView", () => {
   it("resolves the deck in acquisition order", () => {
-    const a = makeCard({ cardNumber: 1, id: asCardId("a") });
-    const b = makeCard({ cardNumber: 2, id: asCardId("b") });
+    const a = makeCard({ cardNumber: 1, id: testCardId("a") });
+    const b = makeCard({ cardNumber: 2, id: testCardId("b") });
     const deck = [
-      makeEntry({ entryId: asDeckEntryId("e2"), cardNumber: 2 }),
-      makeEntry({ entryId: asDeckEntryId("e1"), cardNumber: 1 }),
+      makeEntry({ entryId: parseDeckEntryId("e2"), cardNumber: 2 }),
+      makeEntry({ entryId: parseDeckEntryId("e1"), cardNumber: 1 }),
     ];
 
     const view = buildDesktopDeckView(
@@ -129,7 +137,10 @@ describe("buildDesktopDeckView", () => {
       [],
     );
 
-    expect(view.cards.map((c) => c.entryId)).toEqual(["e2", "e1"]);
+    expect(view.cards.map((c) => c.entryId)).toEqual([
+      parseDeckEntryId("e2"),
+      parseDeckEntryId("e1"),
+    ]);
   });
 
   it("maps the DreamAvatar to the sidebar view (portrait visual + rules text)", () => {
@@ -141,13 +152,13 @@ describe("buildDesktopDeckView", () => {
       [],
     );
 
-    expect(view.dreamAvatar).toEqual({
-      id: "dc-1",
+    expect(view.dreamAvatar).toMatchObject({
+      id: dreamAvatar.id,
       imageNumber: "12",
-      name: "Sable",
-      title: "The Unmaker",
-      renderedText: "Banish a card.",
     });
+    expect(view.dreamAvatar?.name).toBeInstanceOf(LocalizedString);
+    expect(view.dreamAvatar?.title).toBeInstanceOf(LocalizedString);
+    expect(view.dreamAvatar?.renderedText).toBeInstanceOf(LocalizedString);
   });
 
   it("carries a null DreamAvatar through as null", () => {
@@ -185,16 +196,11 @@ describe("buildDesktopDeckView", () => {
       [],
       [dreamAvatarContent],
       tidesContext("tides4"),
-      "run-seed",
+      testJourneySeed("run-seed"),
     );
 
-    expect(view.tides).toEqual([
-      {
-        id: "tide-sig-fixture",
-        label: "Kindled Path",
-        description: "Gather strength before releasing a decisive surge.",
-        tide: "ember",
-      },
-    ]);
+    expect(view.tides).toMatchObject([{ id: TIDE_ID, tide: "ember" }]);
+    expect(view.tides[0]?.label).toBeInstanceOf(LocalizedString);
+    expect(view.tides[0]?.description).toBeInstanceOf(LocalizedString);
   });
 });

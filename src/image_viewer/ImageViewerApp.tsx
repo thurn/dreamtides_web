@@ -16,9 +16,11 @@ import {
 import {
   ALL_CATEGORY,
   GENERIC_CATEGORY,
+  type ImageCategory,
   type ImageManifest,
   type ImageManifestEntry,
   type ImageViewerDisplayState,
+  type ImageViewerCategory,
 } from "./types";
 
 type LoadStatus =
@@ -59,9 +61,9 @@ function shuffleBySeed(
 
 /** Resolve the set of category subdirectories a selection expands to. */
 function categoriesForSelection(
-  category: string,
+  category: ImageViewerCategory,
   manifest: ImageManifest,
-): Set<string> {
+): Set<ImageCategory> {
   if (category === ALL_CATEGORY) {
     return new Set(manifest.categories);
   }
@@ -281,7 +283,7 @@ export default function ImageViewerApp() {
   // Move an image to a different category subdirectory. The grid updates
   // optimistically and reverts to the original category if the move fails.
   const handleChangeCategory = useCallback(
-    (entry: ImageManifestEntry, targetCategory: string) => {
+    (entry: ImageManifestEntry, targetCategory: ImageCategory) => {
       if (targetCategory === entry.category) {
         return;
       }

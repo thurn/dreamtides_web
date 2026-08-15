@@ -5,7 +5,7 @@ import type { CardData } from "../../../types/cards";
 import { CardBrowserPanel } from "../../components/card/CardBrowserPanel";
 import type { CardChoiceGridCardView as CardGalleryCardView } from "../../components/card/CardChoiceGrid";
 import type { CumulusComponent } from "../registry";
-import { asDeckEntryId } from "../../../types/identifiers";
+import { parseDeckEntryId } from "../../../types/identifiers";
 
 const DEMO_CARD_IDS = [
   "1268a899-b209-46bb-bce4-6def1dcd0404",
@@ -31,7 +31,7 @@ function CardBrowserPanelDemo() {
           DEMO_CARD_IDS.map((id) => cardsById.get(id))
             .filter((card): card is CardData => card !== undefined)
             .map((card, index) => ({
-              entryId: asDeckEntryId(`browser-demo-${String(index)}`),
+              entryId: parseDeckEntryId(`browser-demo-${String(index)}`),
               model: { cardId: card.id, displaySnapshot: card },
             })),
         );

@@ -6,13 +6,14 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useTutorialBattleController } from "./use-tutorial-battle-controller";
 import type { FoldState } from "../rules/fold-state";
 import { TUTORIAL_CHALLENGE_PRESENTATION_DWELL_MS } from "./tutorial-presentation-timing";
-import { asCardId } from "../types/card-identity";
-import { asBattleCardId } from "../types/identifiers";
-import { asBattleId } from "../types/identifiers";
-import { asPresentationId } from "../types/identifiers";
-import { asJourneyId } from "../types/identifiers";
-import { asClientId } from "../types/identifiers";
-import { asTutorialRunId } from "../types/identifiers";
+import { parseBattleCardId } from "../types/identifiers";
+import { parseBattleId } from "../types/identifiers";
+import { parsePresentationId } from "../types/identifiers";
+import type { PresentationId } from "../types/identifiers";
+import { parseJourneyId } from "../types/identifiers";
+import { parseClientId } from "../types/identifiers";
+import { parseTutorialRunId } from "../types/identifiers";
+import { testCardId } from "../types/test-identities";
 
 const mocks = vi.hoisted(() => ({
   completePresentation: vi.fn(() => Promise.resolve(1)),
@@ -34,30 +35,30 @@ function presentationState(): FoldState {
   return {
     frontDoor: {
       phase: "tutorial",
-      journeyId: asJourneyId("journey"),
+      journeyId: parseJourneyId("journey"),
       tutorial: null,
     },
     playtestControl: {
       mode: "single-controller",
-      controllerClientId: asClientId("tutorial-driver"),
+      controllerClientId: parseClientId("tutorial-driver"),
     },
     journey: {} as FoldState["journey"],
     battle: {
       mode: {
         kind: "tutorial",
-        tutorialRunId: asTutorialRunId("tutorial-run"),
+        tutorialRunId: parseTutorialRunId("tutorial-run"),
         restartNumber: 0,
         resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
       },
       init: {} as never,
-      board: { battleId: asBattleId("tutorial-battle"), result: null } as never,
+      board: { battleId: parseBattleId("tutorial-battle"), result: null } as never,
       effectQueue: [],
       pendingPrompt: null,
       tutorialPresentation: {
-        id: asPresentationId("opponent-play:bc_0042"),
+        id: parsePresentationId("opponent-play:bc_0042"),
         kind: "opponent-play",
-        cardId: asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
-        battleCardId: asBattleCardId("bc_0042"),
+        cardId: testCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
+        battleCardId: parseBattleCardId("bc_0042"),
         cardKind: "character",
       },
       dawnFired: { player: null, enemy: null },
@@ -69,13 +70,13 @@ function Harness({
   visiblePresentationId,
   paused = false,
 }: {
-  readonly visiblePresentationId: string | null;
+  readonly visiblePresentationId: PresentationId | null;
   readonly paused?: boolean;
 }) {
   const controller = useTutorialBattleController({ paused });
   useEffect(() => {
     if (visiblePresentationId !== null) {
-      controller.onPresentationVisible(asPresentationId(visiblePresentationId));
+      controller.onPresentationVisible(visiblePresentationId);
     }
   }, [controller.onPresentationVisible, visiblePresentationId]);
   return null;
@@ -114,7 +115,11 @@ describe("useTutorialBattleController", () => {
     expect(mocks.completePresentation).not.toHaveBeenCalled();
 
     act(() => {
-      root.render(<Harness visiblePresentationId="opponent-play:bc_0042" />);
+      root.render(
+        <Harness
+          visiblePresentationId={parsePresentationId("opponent-play:bc_0042")}
+        />,
+      );
     });
     act(() => {
       vi.advanceTimersByTime(1_999);
@@ -142,14 +147,14 @@ describe("useTutorialBattleController", () => {
       battle: {
         ...presentationState().battle!,
         tutorialPresentation: {
-          id: asPresentationId("challenge-resolved:player:4:F0"),
+          id: parsePresentationId("challenge-resolved:player:4:F0"),
           kind: "challenge-resolved",
           activeSide: "player",
           slotId: "F0",
-          challengerBattleCardId: asBattleCardId("player-character-uuid"),
+          challengerBattleCardId: parseBattleCardId("player-character-uuid"),
           blockerBattleCardId: null,
           scored: {
-            battleCardId: asBattleCardId("player-character-uuid"),
+            battleCardId: parseBattleCardId("player-character-uuid"),
             side: "player",
             points: 2,
           },
@@ -160,7 +165,11 @@ describe("useTutorialBattleController", () => {
 
     act(() => {
       root.render(
-        <Harness visiblePresentationId="challenge-resolved:player:4:F0" />,
+        <Harness
+          visiblePresentationId={parsePresentationId(
+            "challenge-resolved:player:4:F0",
+          )}
+        />,
       );
     });
     act(() => {
@@ -183,7 +192,10 @@ describe("useTutorialBattleController", () => {
 
     act(() => {
       root.render(
-        <Harness visiblePresentationId="opponent-play:bc_0042" paused />,
+        <Harness
+          visiblePresentationId={parsePresentationId("opponent-play:bc_0042")}
+          paused
+        />,
       );
     });
     act(() => {

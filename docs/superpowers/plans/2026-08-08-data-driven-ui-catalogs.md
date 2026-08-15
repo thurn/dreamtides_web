@@ -158,7 +158,7 @@ Runtime state refers to prompt content semantically:
 
 ```ts
 type DreamwellPromptRef = {
-  cardUuid: string;
+  cardUuid: CardId;
   promptKey: string;
   args: Record<string, SemanticPromptArg>;
 };

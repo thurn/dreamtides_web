@@ -2,13 +2,13 @@ import type { JourneyContent } from "../../data/journey-content";
 import { isTransfigurationExplorationEffect } from "../../data/exploration";
 import type { CardTutorialGuidanceContentProvider } from "../../rules/card-tutorial-guidance";
 import type { CardData } from "../../types/cards";
+import type { CardId } from "../../types/card-identity";
 import type { JourneyState, SiteState } from "../../types/journey";
 import {
   buildMerchantContext,
   generateMerchantEncounter,
   isTransfigurationMerchantArchetype,
 } from "../../journey_v2";
-import { asExplorationActionId } from "../../types/identifiers";
 
 function explorationOffersTransfiguration(
   content: JourneyContent,
@@ -28,7 +28,7 @@ function explorationOffersTransfiguration(
   );
   return encounter.actions.some(
     (action) =>
-      visibleActionIds.has(asExplorationActionId(action.id)) &&
+      visibleActionIds.has(action.id) &&
       isTransfigurationExplorationEffect(action.effectKind),
   );
 }
@@ -37,7 +37,7 @@ function explorationOffersTransfiguration(
 export function createCardTutorialGuidanceContentProvider(
   content: JourneyContent,
 ): CardTutorialGuidanceContentProvider {
-  const cardsById = new Map<string, CardData>();
+  const cardsById = new Map<CardId, CardData>();
   for (const card of content.cardDatabase.values()) {
     cardsById.set(card.id, card);
   }

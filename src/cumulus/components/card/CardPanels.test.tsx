@@ -4,13 +4,16 @@ import { assertLocalized } from "@trox/runtime";
 import { act, isValidElement, type ReactNode } from "react";
 import { createRoot as createReactRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 import { GLYPHS } from "../../primitives/glyph";
 import { DOUBLE_TAP_WINDOW_MS } from "../../primitives/pointer-gesture";
 import { CumulusRoot } from "../../CumulusRoot";
 import { CardBrowserPanel } from "./CardBrowserPanel";
 import { CardPickerPanel } from "./CardPickerPanel";
-import { asDeckEntryId } from "../../../types/identifiers";
+import { parseDeckEntryId } from "../../../types/identifiers";
+import { testCardId } from "../../../types/test-identities";
+import type { DomTestId } from "../../types/dom";
+import type { GameCardModel } from "./CardView";
 
 function createRoot(container: Element) {
   const root = createReactRoot(container);
@@ -39,7 +42,7 @@ vi.mock("./CardView", () => ({
   }: {
     model: { displaySnapshot: { name: string } };
     onPress?: () => void;
-    testId?: string;
+    testId?: DomTestId;
     unavailable?: boolean;
   }) => (
     <button
@@ -52,13 +55,13 @@ vi.mock("./CardView", () => ({
   ),
 }));
 
-function model(name: string) {
-  const cardId = asCardId("11111111-1111-4111-8111-111111111111");
+function model(name: string): GameCardModel {
+  const cardId = testCardId("11111111-1111-4111-8111-111111111111");
   return {
     cardId,
     displaySnapshot: {
       id: cardId,
-      name: asCardName(name),
+      name: parseCardName(name),
       cardNumber: 1,
       cardType: "Event" as const,
       subtype: "",
@@ -105,7 +108,7 @@ describe("CardBrowserPanel", () => {
           subtitle={assertLocalized("Your cards")}
           cards={[
             {
-              entryId: asDeckEntryId("entry-a"),
+              entryId: parseDeckEntryId("entry-a"),
               model: model("Archive Sentry"),
               testId: "card-a",
             },
@@ -167,7 +170,7 @@ describe("CardBrowserPanel", () => {
           title={assertLocalized("Your Void")}
           cards={[
             {
-              entryId: asDeckEntryId("physical-card"),
+              entryId: parseDeckEntryId("physical-card"),
               model: model("Physical"),
               testId: "physical-card",
             },
@@ -210,7 +213,7 @@ describe("CardBrowserPanel", () => {
             title={assertLocalized("Your Deck")}
             cards={[
               {
-                entryId: asDeckEntryId("physical-card"),
+                entryId: parseDeckEntryId("physical-card"),
                 model: model("Physical"),
                 draggable: true,
               },
@@ -332,17 +335,17 @@ describe("CardPickerPanel", () => {
           title={assertLocalized("Shop")}
           cards={[
             {
-              entryId: asDeckEntryId("available"),
+              entryId: parseDeckEntryId("available"),
               model: model("Available"),
               testId: "available",
             },
             {
-              entryId: asDeckEntryId("locked"),
+              entryId: parseDeckEntryId("locked"),
               model: model("Locked"),
               testId: "locked",
               disabled: true,
             },
-            { entryId: asDeckEntryId("third"), model: model("Third") },
+            { entryId: parseDeckEntryId("third"), model: model("Third") },
           ]}
           onCardPress={activate}
         />,
@@ -388,7 +391,7 @@ describe("CardPickerPanel", () => {
           title={assertLocalized("Shop")}
           cards={[
             {
-              entryId: asDeckEntryId("reserved"),
+              entryId: parseDeckEntryId("reserved"),
               model: model("Purchased"),
               reserved: true,
             },
@@ -427,7 +430,7 @@ describe("CardPickerPanel", () => {
               },
             }}
             endAction={{
-              entryId: asDeckEntryId("restock"),
+              entryId: parseDeckEntryId("restock"),
               glyph: GLYPHS.refresh,
               label: assertLocalized("Restock"),
               caption: { kind: "essence", amount: 50 },
@@ -508,7 +511,7 @@ describe("CardPickerPanel", () => {
           title={assertLocalized("Duplication")}
           cards={[
             {
-              entryId: asDeckEntryId("selected"),
+              entryId: parseDeckEntryId("selected"),
               model: model("Selected"),
               stackedCopy: { shown, direction: "left" },
             },
@@ -558,7 +561,7 @@ describe("CardPickerPanel", () => {
           presentation="overlay"
           title={assertLocalized("Choose")}
           cards={Array.from({ length: 5 }, (_, index) => ({
-            entryId: asDeckEntryId(String(index)),
+            entryId: parseDeckEntryId(String(index)),
             model: model(String(index)),
           }))}
         />,

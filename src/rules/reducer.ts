@@ -16,7 +16,13 @@
 // and navigation cases live in `./journey/lifecycle` as pure `(journey, payload)`
 // functions; `routeDomain` wraps their result over the fold state.
 
-import type { BounceReason, EventContext, GameEvent } from "../eventlog/types";
+import type {
+  BounceReason,
+  EventActor,
+  EventContext,
+  EventType,
+  GameEvent,
+} from "../eventlog/types";
 import { intentKeyFromUnknown } from "../types/identifiers";
 import {
   CAS_EXEMPT_EVENT_TYPES,
@@ -38,8 +44,8 @@ import * as sites from "./journey/sites";
 import * as cardTutorial from "./card-tutorial-guidance";
 import { assertFoldInvariants } from "./invariants";
 import { NIGHTMARE_CARD_ID } from "../data/nightmare";
-import { asSiteId } from "../types/identifiers";
-import { asClientId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseClientId } from "../types/identifiers";
 
 /** The reducer's return shape (matches `EngineConfig.reducer`). */
 export type ReduceResult =
@@ -83,7 +89,7 @@ export function reduceGameEvent(
           ...state,
           playtestControl: {
             mode: "single-controller",
-            controllerClientId: asClientId(event.actor),
+            controllerClientId: parseClientId(event.actor),
           },
         }
       : state;
@@ -239,11 +245,11 @@ function isPassiveHostedHandoff(state: FoldState, event: GameEvent): boolean {
   if (event.type !== "COMPLETE_SITE") return false;
   const siteId = event.payload.siteId;
   if (typeof siteId !== "string") return false;
-  return readDraftSiteProgress(state.journey.draftState, asSiteId(siteId))
+  return readDraftSiteProgress(state.journey.draftState, parseSiteId(siteId))
     .isComplete;
 }
 
-const TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES: ReadonlySet<string> = new Set([
+const TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
   "BATTLE_COMMAND",
   "BATTLE_REPOSITION_CHARACTER",
   "BATTLE_PLAY_CARD",
@@ -264,11 +270,12 @@ function isFirstTutorialGameplayIntent(
   }
   return (
     state.battle?.mode?.kind === "tutorial" &&
+    isKnownEventType(event.type) &&
     TUTORIAL_BATTLE_GAMEPLAY_EVENT_TYPES.has(event.type)
   );
 }
 
-const PASSIVE_HOSTED_EVENT_TYPES: ReadonlySet<string> = new Set([
+const PASSIVE_HOSTED_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
   "ADVANCE_FRONT_DOOR",
   "BEGIN_TUTORIAL",
   "COMPLETE_TUTORIAL_ACTION",
@@ -280,7 +287,8 @@ const PASSIVE_HOSTED_EVENT_TYPES: ReadonlySet<string> = new Set([
 ]);
 
 function isPlayerControlledIntent(event: GameEvent): boolean {
-  if (PASSIVE_HOSTED_EVENT_TYPES.has(event.type)) return false;
+  if (isKnownEventType(event.type) && PASSIVE_HOSTED_EVENT_TYPES.has(event.type))
+    return false;
   if (event.actor.startsWith("tutorial-ai:") || event.actor.startsWith("ai:")) {
     return false;
   }
@@ -301,8 +309,8 @@ function isPlayerControlledIntent(event: GameEvent): boolean {
  * CAS-exempt type must uphold this same narrower invariant, not the broader
  * (and already false) one.
  */
-export function isCasExempt(type: string): boolean {
-  return CAS_EXEMPT_EVENT_TYPES.has(type);
+export function isCasExempt(type: EventType): boolean {
+  return isKnownEventType(type) && CAS_EXEMPT_EVENT_TYPES.has(type);
 }
 
 /**
@@ -337,7 +345,7 @@ export function isMatchingResolve(state: FoldState, event: GameEvent): boolean {
  */
 export function isInterveningWindowClear(
   intervening: EventContext["intervening"],
-  actor: string,
+  actor: EventActor,
 ): boolean {
   if (intervening === "unknown") {
     return false;
@@ -345,7 +353,8 @@ export function isInterveningWindowClear(
   for (const entry of intervening) {
     if (
       entry.actor !== actor &&
-      !DECISION_NEUTRAL_EVENT_TYPES.has(entry.type)
+      (!isKnownEventType(entry.type) ||
+        !DECISION_NEUTRAL_EVENT_TYPES.has(entry.type))
     ) {
       return false;
     }
@@ -733,7 +742,7 @@ export function routeDomain(
 function takePlaytestControl(
   state: FoldState,
   payload: Record<string, unknown>,
-  actor: string,
+  actor: EventActor,
 ): ReduceResult {
   if (
     state.playtestControl?.mode !== "single-controller" ||
@@ -751,7 +760,7 @@ function takePlaytestControl(
       ...state,
       playtestControl: {
         ...state.playtestControl,
-        controllerClientId: asClientId(actor),
+        controllerClientId: parseClientId(actor),
       },
     },
   };

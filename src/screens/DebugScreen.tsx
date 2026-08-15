@@ -6,11 +6,13 @@ import type {
 } from "../types/content";
 import type { DraftState } from "../types/draft";
 import type { JourneyState } from "../types/journey";
+import type { JourneyMutationSource } from "../state/journey-context";
 import type { DreamsignId } from "../types/identifiers";
 import { logEvent } from "../logging";
 import {
   chooseJourneySaveFile,
   downloadJourneySaveFile,
+  serializedJourneyScreenType,
 } from "../state/journey-save-files";
 import { PackageDebugDialog } from "../cumulus/screens/PackageDebugDialog";
 import { buildPackageDebugView } from "./cumulus_adapters/package-debug-view-model";
@@ -36,9 +38,15 @@ export function DebugScreen({
   resolvedPackage: ResolvedDreamAvatarPackage | null;
   remainingDreamsignPool: readonly DreamsignId[];
   dreamsignTemplates: readonly DreamsignTemplate[];
-  onForceLegendaryOffer?: (draftState: DraftState, source: string) => void;
+  onForceLegendaryOffer?: (
+    draftState: DraftState,
+    source: JourneyMutationSource,
+  ) => void;
   journeyState: JourneyState | null;
-  onLoadJourneyState?: (state: JourneyState, source: string) => void;
+  onLoadJourneyState?: (
+    state: unknown,
+    source: JourneyMutationSource,
+  ) => void;
 }) {
   const [saveName, setSaveName] = useState("");
   const [status, setStatus] = useState<string | null>(null);
@@ -107,7 +115,7 @@ export function DebugScreen({
       logEvent("debug_journey_loaded", {
         source: "debug_load_journey",
         name: loaded.name,
-        screen: loaded.journeyState.screen?.type ?? "unknown",
+        screen: serializedJourneyScreenType(loaded.journeyState),
         fileName: loaded.fileName,
         buildGitSha: loaded.buildGitSha,
       });

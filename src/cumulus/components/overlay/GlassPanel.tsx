@@ -6,6 +6,7 @@ import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { token } from "../../primitives/tokens";
+import type { DomTestId } from "../../types/dom";
 import { GlassButton, type GlassButtonProps } from "../controls/GlassButton";
 import { IconButton, type IconButtonProps } from "../controls/IconButton";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
@@ -105,7 +106,7 @@ export interface GlassPanelProps {
   /** Optional footer content rendered after the body. */
   footer?: ReactNode;
   /** Stable test id for the panel root. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 const FLOATING_ACCESSORY_PX = 48;

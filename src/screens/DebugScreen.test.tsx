@@ -6,16 +6,15 @@ import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import type {
   DreamsignTemplate,
   ResolvedDreamAvatarPackage,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
 import { DebugScreen } from "./DebugScreen";
-import { asSiteId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asDreamsignId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { testDreamAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -55,8 +54,8 @@ vi.mock("framer-motion", () => ({
 
 function makeCard(cardNumber: number, name: string): CardData {
   return {
-    name: asCardName(name),
-    id: asCardId(`card-${String(cardNumber)}`),
+    name: parseCardName(name),
+    id: testCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
     subtype: "",
@@ -73,7 +72,7 @@ function makeCard(cardNumber: number, name: string): CardData {
 function makeResolvedPackage(): ResolvedDreamAvatarPackage {
   return {
     dreamAvatar: {
-      id: asDreamAvatarId("caller-1"),
+      id: testDreamAvatarId("caller-1"),
       name: "Caller of Lanterns",
       title: "Auditor of Debug Panels",
       renderedText: "Test rules text.",
@@ -82,9 +81,9 @@ function makeResolvedPackage(): ResolvedDreamAvatarPackage {
     },
     draftPoolCopiesByCard: { "1": 2, "2": 1 },
     dreamsignPoolIds: [
-      asDreamsignId("sign-1"),
-      asDreamsignId("sign-2"),
-      asDreamsignId("sign-3"),
+      testDreamsignId("sign-1"),
+      testDreamsignId("sign-2"),
+      testDreamsignId("sign-3"),
     ],
     mandatoryOnlyPoolSize: 120,
     draftPoolSize: 198,
@@ -100,7 +99,7 @@ function makeDraftState(): DraftState {
     draftPoolCopiesByCard: { "1": 3, "2": 1 },
     remainingCopiesByCard: { "1": 3, "2": 1 },
     currentOffer: [1, 2],
-    activeSiteId: asSiteId("site-1"),
+    activeSiteId: parseSiteId("site-1"),
     pickNumber: 3,
     sitePicksCompleted: 2,
   };
@@ -108,17 +107,17 @@ function makeDraftState(): DraftState {
 
 const DREAMSIGN_TEMPLATES: readonly DreamsignTemplate[] = [
   {
-    id: asDreamsignId("sign-1"),
+    id: testDreamsignId("sign-1"),
     name: "First Sign",
     effectDescription: "First.",
   },
   {
-    id: asDreamsignId("sign-2"),
+    id: testDreamsignId("sign-2"),
     name: "Second Sign",
     effectDescription: "Second.",
   },
   {
-    id: asDreamsignId("sign-3"),
+    id: testDreamsignId("sign-3"),
     name: "Third Sign",
     effectDescription: "Third.",
   },
@@ -164,7 +163,7 @@ describe("DebugScreen", () => {
           ])
         }
         resolvedPackage={makeResolvedPackage()}
-        remainingDreamsignPool={[asDreamsignId("sign-2")]}
+        remainingDreamsignPool={[testDreamsignId("sign-2")]}
         dreamsignTemplates={DREAMSIGN_TEMPLATES}
         journeyState={null}
       />,

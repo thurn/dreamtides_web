@@ -6,6 +6,7 @@ import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { BattleStatusDisplay } from "./BattleStatusDisplay";
+import { testDreamAvatarId } from "../../../types/test-identities";
 
 function LocalizedBattleStatusDisplay(
   props: ComponentProps<typeof BattleStatusDisplay>,
@@ -175,7 +176,7 @@ describe("BattleStatusDisplay", () => {
             title: assertLocalized("Daimyo of Lacquered Fury"),
           }}
           dreamAvatarProfile={{
-            id: "bfc40414-5264-41bf-86e1-a0f41ee4f5b5",
+            id: testDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
             ability: assertLocalized("Avatar ability is not active"),
             unavailable: true,
           }}

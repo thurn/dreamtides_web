@@ -19,10 +19,19 @@ import type {
   BounceReason,
   EngineConfig,
   EventOutcome,
+  EventActor,
+  EventType,
   GameEvent,
   Genesis,
   LogNode,
+  StateHash,
 } from "./types";
+import { parseEventNonce } from "./types";
+import {
+  parseClientId,
+  type ClientId,
+  type IntentKey,
+} from "../types/identifiers";
 
 /**
  * Build-time dev flag mirroring `fold.ts`'s `ENV_DEV`. In dev the client runs a
@@ -68,7 +77,11 @@ export interface LogClientCallbacks<S> {
     },
   ) => void;
   /** A confirmed event's `stateHashAfter` disagreed with this client's fold. */
-  onDivergence: (info: { seq: number; expected: string; actual: string }) => void;
+  onDivergence: (info: {
+    seq: number;
+    expected: StateHash;
+    actual: StateHash;
+  }) => void;
   /**
    * A contained reducer throw or malformed entry (poison-event containment),
    * together with the exact event and confirmed fold transition that produced
@@ -91,7 +104,7 @@ export interface LogClientCallbacks<S> {
   }) => void;
   /** Equal intent keys were used for different semantic event contracts. */
   onIntentKeyCollision?: (info: {
-    intentKey: string;
+    intentKey: IntentKey;
     winningSeq: number;
     winner: GameEvent;
     contender: GameEvent;
@@ -100,30 +113,30 @@ export interface LogClientCallbacks<S> {
 
 /** A draft the caller submits; the client stamps the envelope fields. */
 export interface EventDraft {
-  type: string;
+  type: EventType;
   payload: Record<string, unknown>;
   /** Defaults to the client's own id when omitted. */
-  actor?: string;
+  actor?: EventActor;
   /** Stable cross-client identity for one logical automatic intent. */
-  intentKey?: string;
+  intentKey?: IntentKey;
 }
 
 export interface LogClient {
   /** Stamp, append, and optimistically echo an intent. Resolves to the committed seq. */
   submit: (draft: EventDraft) => Promise<number>;
   /** The client's actor id (also the nonce prefix). */
-  clientId: string;
+  clientId: ClientId;
   /** Tear down the subscription. */
   close: () => void;
 }
 
 export interface LogClientOptions {
   /** Stable per-tab id; also the actor default and nonce prefix. */
-  clientId?: string;
+  clientId?: ClientId;
 }
 
-function randomClientId(): string {
-  return `c-${Math.random().toString(36).slice(2, 10)}`;
+function randomClientId(): ClientId {
+  return parseClientId(`c-${Math.random().toString(36).slice(2, 10)}`);
 }
 
 /**
@@ -172,9 +185,9 @@ export function createLogClient<S>(
 
   // Ordered queue of this client's submitted-but-unconfirmed intents.
   const pending: GameEvent[] = [];
-  const submissionsByIntentKey = new Map<string, Promise<number>>();
-  const confirmedSeqByIntentKey = new Map<string, number>();
-  const confirmedEventByIntentKey = new Map<string, GameEvent>();
+  const submissionsByIntentKey = new Map<IntentKey, Promise<number>>();
+  const confirmedSeqByIntentKey = new Map<IntentKey, number>();
+  const confirmedEventByIntentKey = new Map<IntentKey, GameEvent>();
   let appendTail: Promise<void> | null = null;
   let nonceCounter = 0;
 
@@ -534,7 +547,7 @@ export function createLogClient<S>(
     }
     const g = requireGenesis();
     nonceCounter += 1;
-    const nonce = `${clientId}:${nonceScope}:${nonceCounter}`;
+    const nonce = parseEventNonce(`${clientId}:${nonceScope}:${nonceCounter}`);
 
     const event: GameEvent = {
       type: draft.type,
@@ -645,7 +658,7 @@ function firstChangedPrefixSeq(
 function reconcilePendingAgainstNode<S>(
   node: LogNode,
   pending: GameEvent[],
-  confirmedSeqByIntentKey: ReadonlyMap<string, number>,
+  confirmedSeqByIntentKey: ReadonlyMap<IntentKey, number>,
   callbacks: LogClientCallbacks<S>,
 ): void {
   for (const [seq, winner] of node.events) {

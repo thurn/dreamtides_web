@@ -5,18 +5,17 @@ import {
 } from "./debug-helpers";
 import type { PoolDraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import type {
   DreamsignTemplate,
   ResolvedDreamAvatarPackage,
 } from "../types/content";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asDreamsignId } from "../types/identifiers";
+import { testDreamAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
 
 function makeCard(num: number, name: string): CardData {
   return {
-    name: asCardName(name),
-    id: asCardId(`card-${String(num)}`),
+    name: parseCardName(name),
+    id: testCardId(`card-${String(num)}`),
     cardNumber: num,
     cardType: "Character",
     subtype: "",
@@ -48,7 +47,7 @@ function makeDraftState(
 function makeResolvedPackage(): ResolvedDreamAvatarPackage {
   return {
     dreamAvatar: {
-      id: asDreamAvatarId("dream-avatar-1"),
+      id: testDreamAvatarId("dream-avatar-1"),
       name: "Caller of Depths",
       title: "Witness of Logs",
       renderedText: "Test",
@@ -57,9 +56,9 @@ function makeResolvedPackage(): ResolvedDreamAvatarPackage {
     },
     draftPoolCopiesByCard: { "1": 2, "2": 1 },
     dreamsignPoolIds: [
-      asDreamsignId("sign-1"),
-      asDreamsignId("sign-2"),
-      asDreamsignId("sign-3"),
+      testDreamsignId("sign-1"),
+      testDreamsignId("sign-2"),
+      testDreamsignId("sign-3"),
     ],
     mandatoryOnlyPoolSize: 120,
     draftPoolSize: 198,
@@ -71,17 +70,17 @@ function makeResolvedPackage(): ResolvedDreamAvatarPackage {
 
 const DREAMSIGN_TEMPLATES: readonly DreamsignTemplate[] = [
   {
-    id: asDreamsignId("sign-1"),
+    id: testDreamsignId("sign-1"),
     name: "First Sign",
     effectDescription: "Test",
   },
   {
-    id: asDreamsignId("sign-2"),
+    id: testDreamsignId("sign-2"),
     name: "Second Sign",
     effectDescription: "Test",
   },
   {
-    id: asDreamsignId("sign-3"),
+    id: testDreamsignId("sign-3"),
     name: "Third Sign",
     effectDescription: "Test",
   },
@@ -146,9 +145,12 @@ describe("extractPackageDebugInfo", () => {
   });
 
   it("summarizes remaining and spent Dreamsign pool entries", () => {
+    const firstId = testDreamsignId("sign-1");
+    const secondId = testDreamsignId("sign-2");
+    const thirdId = testDreamsignId("sign-3");
     const result = extractPackageDebugInfo(
       makeResolvedPackage(),
-      [asDreamsignId("sign-2")],
+      [secondId],
       DREAMSIGN_TEMPLATES,
     );
 
@@ -156,11 +158,11 @@ describe("extractPackageDebugInfo", () => {
     expect(result?.startingEssence).toBe(245);
     expect(result?.initialDreamsignPoolSize).toBe(3);
     expect(result?.remainingDreamsigns).toEqual([
-      { id: "sign-2", name: "Second Sign" },
+      { id: secondId, name: "Second Sign" },
     ]);
     expect(result?.spentDreamsigns).toEqual([
-      { id: "sign-1", name: "First Sign" },
-      { id: "sign-3", name: "Third Sign" },
+      { id: firstId, name: "First Sign" },
+      { id: thirdId, name: "Third Sign" },
     ]);
   });
 });

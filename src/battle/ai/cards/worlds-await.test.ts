@@ -1,14 +1,15 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../../types/test-identities";
 import { worldsAwait } from "./worlds-await";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
-import { asBattleCardId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
 
 function makeCard(
   overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
 ): AiCard {
   return {
-    name: "card",
+    name: testCardName("card"),
     energyCost: 0,
     basePrintedSpark: 0,
     sparkDelta: 0,
@@ -39,7 +40,7 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 describe("Worlds Await (#519)", () => {
   it("canPlay is false with no allies on the board", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("dw"),
+      battleCardId: parseBattleCardId("dw"),
       cardNumber: 519,
       energyCost: 1,
     });
@@ -48,12 +49,12 @@ describe("Worlds Await (#519)", () => {
 
   it("canPlay is false without enough energy even with an ally", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("dw"),
+      battleCardId: parseBattleCardId("dw"),
       cardNumber: 519,
       energyCost: 1,
     });
     const ally = makeCard({
-      battleCardId: asBattleCardId("ally"),
+      battleCardId: parseBattleCardId("ally"),
       cardNumber: 512,
       basePrintedSpark: 4,
     });
@@ -66,12 +67,12 @@ describe("Worlds Await (#519)", () => {
 
   it("canPlay is true with a reserve ally and energy", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("dw"),
+      battleCardId: parseBattleCardId("dw"),
       cardNumber: 519,
       energyCost: 1,
     });
     const ally = makeCard({
-      battleCardId: asBattleCardId("ally"),
+      battleCardId: parseBattleCardId("ally"),
       cardNumber: 512,
       basePrintedSpark: 4,
     });
@@ -84,17 +85,17 @@ describe("Worlds Await (#519)", () => {
 
   it("play adds +3 to the chosen ally's sparkDelta and voids the event", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("dw"),
+      battleCardId: parseBattleCardId("dw"),
       cardNumber: 519,
       energyCost: 1,
     });
     const small = makeCard({
-      battleCardId: asBattleCardId("small"),
+      battleCardId: parseBattleCardId("small"),
       cardNumber: 514,
       basePrintedSpark: 2,
     });
     const big = makeCard({
-      battleCardId: asBattleCardId("big"),
+      battleCardId: parseBattleCardId("big"),
       cardNumber: 512,
       basePrintedSpark: 4,
     });
@@ -116,12 +117,12 @@ describe("Worlds Await (#519)", () => {
 
   it("pumps a reserve ally when no deployed ally exists", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("dw"),
+      battleCardId: parseBattleCardId("dw"),
       cardNumber: 519,
       energyCost: 1,
     });
     const ally = makeCard({
-      battleCardId: asBattleCardId("ally"),
+      battleCardId: parseBattleCardId("ally"),
       cardNumber: 512,
       basePrintedSpark: 4,
     });

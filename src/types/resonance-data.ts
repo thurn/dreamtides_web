@@ -19,6 +19,7 @@ export interface ResonanceDefinition {
 
 export interface ResonanceData {
   readonly schemaVersion: 1;
-  readonly contentHash: string;
+  readonly contentHash: ContentHash;
   readonly resonances: readonly ResonanceDefinition[];
 }
+import type { ContentHash } from "./content-hash";

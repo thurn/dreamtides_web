@@ -20,7 +20,7 @@ import type { TutorialDreamAvatarOwner } from "../../types/tutorial";
 import * as tutorialView from "./tutorial-view-model";
 import { useJourney } from "../../state/journey-context";
 import type { DreamAvatarId, IntentKey } from "../../types/identifiers";
-import { asIntentKey } from "../../types/identifiers";
+import { parseIntentKey } from "../../types/identifiers";
 export function TutorialScreenAdapter({
   dreamAvatars,
   playbackSpeed = 1,
@@ -57,7 +57,7 @@ export function TutorialScreenAdapter({
       state.journeyId === null
     )
       return;
-    const intentKey = asIntentKey(`tutorial:${state.journeyId}:begin`);
+    const intentKey = parseIntentKey(`tutorial:${state.journeyId}:begin`);
     if (beginRequestedKey.current === intentKey) return;
     beginRequestedKey.current = intentKey;
     void mutations

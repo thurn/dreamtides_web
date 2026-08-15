@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../types/test-identities";
 
 import { actionToCommands } from "./driver";
 import { buildTrace } from "./trace";
@@ -6,15 +7,15 @@ import type { PlannedAction } from "./planner";
 import type { AiCard } from "./forward-model";
 import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import type { BattleAiChoiceTrace, BattleSide } from "../types";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
 
 // --- Fixtures -------------------------------------------------------------
 
 function aiCard(overrides: Partial<AiCard> = {}): AiCard {
   return {
-    battleCardId: asBattleCardId("ai-card-1"),
+    battleCardId: parseBattleCardId("ai-card-1"),
     cardNumber: 510,
-    name: "Nocturne Strummer",
+    name: testCardName("Nocturne Strummer"),
     energyCost: 2,
     basePrintedSpark: 2,
     sparkDelta: 0,
@@ -30,8 +31,8 @@ function baseTrace(
   return {
     stage: "character",
     choice: "PLAY_CARD",
-    battleCardId: asBattleCardId("ai-card-1"),
-    cardName: "Nocturne Strummer",
+    battleCardId: parseBattleCardId("ai-card-1"),
+    cardName: testCardName("Nocturne Strummer"),
     sourceHandIndex: 0,
     sourceSlotId: null,
     targetSlotId: null,
@@ -60,7 +61,7 @@ function editOf(
 describe("actionToCommands — character play", () => {
   it("emits a reserve placement, exhausts the body, and pays the energy cost", () => {
     const self = aiCard({
-      battleCardId: asBattleCardId("strummer-1"),
+      battleCardId: parseBattleCardId("strummer-1"),
       cardNumber: 510,
       energyCost: 2,
     });
@@ -71,7 +72,7 @@ describe("actionToCommands — character play", () => {
       targets: null,
       toSlot: "B2",
       trace: baseTrace({
-        battleCardId: asBattleCardId("strummer-1"),
+        battleCardId: parseBattleCardId("strummer-1"),
         targetSlotId: "B2",
       }),
     };
@@ -111,7 +112,7 @@ describe("actionToCommands — character play", () => {
 describe("actionToCommands — reposition", () => {
   it("moves the card by id into the deployed toSlot", () => {
     const self = aiCard({
-      battleCardId: asBattleCardId("colossus-1"),
+      battleCardId: parseBattleCardId("colossus-1"),
       cardNumber: 515,
     });
     const action: PlannedAction = {
@@ -123,7 +124,7 @@ describe("actionToCommands — reposition", () => {
       trace: baseTrace({
         stage: "reposition",
         choice: "MOVE_CARD",
-        battleCardId: asBattleCardId("colossus-1"),
+        battleCardId: parseBattleCardId("colossus-1"),
         sourceSlotId: "B0",
         targetSlotId: "F1",
       }),
@@ -149,21 +150,21 @@ describe("actionToCommands — reposition", () => {
 describe("actionToCommands — Flashpoint Detonation", () => {
   it("pays energy, dissolves the enemy target to the opponent void, and voids itself", () => {
     const self = aiCard({
-      battleCardId: asBattleCardId("flash-1"),
+      battleCardId: parseBattleCardId("flash-1"),
       cardNumber: 516,
-      name: "Flashpoint Detonation",
+      name: testCardName("Flashpoint Detonation"),
       energyCost: 3,
     });
     const action: PlannedAction = {
       stage: "nonCharacter",
       kind: "PLAY_CARD",
       self,
-      targets: { targetBattleCardId: asBattleCardId("enemy-body-9") },
+      targets: { targetBattleCardId: parseBattleCardId("enemy-body-9") },
       toSlot: undefined,
       trace: baseTrace({
         stage: "nonCharacter",
-        battleCardId: asBattleCardId("flash-1"),
-        cardName: "Flashpoint Detonation",
+        battleCardId: parseBattleCardId("flash-1"),
+        cardName: testCardName("Flashpoint Detonation"),
       }),
     };
 
@@ -225,7 +226,7 @@ describe("actionToCommands — END_TURN", () => {
 describe("actionToCommands — envelope", () => {
   it("threads the aiSide through energy/void edits when the AI is the player side", () => {
     const self = aiCard({
-      battleCardId: asBattleCardId("strummer-2"),
+      battleCardId: parseBattleCardId("strummer-2"),
       cardNumber: 510,
       energyCost: 2,
     });
@@ -236,7 +237,7 @@ describe("actionToCommands — envelope", () => {
       targets: null,
       toSlot: "B0",
       trace: baseTrace({
-        battleCardId: asBattleCardId("strummer-2"),
+        battleCardId: parseBattleCardId("strummer-2"),
         targetSlotId: "B0",
       }),
     };
@@ -272,19 +273,19 @@ describe("actionToCommands — envelope", () => {
 describe("buildTrace", () => {
   it("enriches the planner trace with a rationale and targetBattleCardId", () => {
     const self = aiCard({
-      battleCardId: asBattleCardId("flash-1"),
+      battleCardId: parseBattleCardId("flash-1"),
       cardNumber: 516,
-      name: "Flashpoint Detonation",
+      name: testCardName("Flashpoint Detonation"),
     });
     const action: PlannedAction = {
       stage: "nonCharacter",
       kind: "PLAY_CARD",
       self,
-      targets: { targetBattleCardId: asBattleCardId("enemy-body-9") },
+      targets: { targetBattleCardId: parseBattleCardId("enemy-body-9") },
       trace: baseTrace({
         stage: "nonCharacter",
-        battleCardId: asBattleCardId("flash-1"),
-        cardName: "Flashpoint Detonation",
+        battleCardId: parseBattleCardId("flash-1"),
+        cardName: testCardName("Flashpoint Detonation"),
         heuristicScoreBefore: 4,
         heuristicScoreAfter: 7,
       }),
@@ -316,15 +317,15 @@ describe("buildTrace", () => {
       stage: "character",
       kind: "PLAY_CARD",
       self: aiCard({
-        battleCardId: asBattleCardId("strummer-1"),
+        battleCardId: parseBattleCardId("strummer-1"),
         cardNumber: 510,
-        name: "Nocturne Strummer",
+        name: testCardName("Nocturne Strummer"),
       }),
       targets: null,
       toSlot: "B2",
       trace: baseTrace({
-        battleCardId: asBattleCardId("strummer-1"),
-        cardName: "Nocturne Strummer",
+        battleCardId: parseBattleCardId("strummer-1"),
+        cardName: testCardName("Nocturne Strummer"),
       }),
     });
     expect(playTrace.rationale).toContain("Nocturne Strummer");
@@ -334,17 +335,17 @@ describe("buildTrace", () => {
       stage: "reposition",
       kind: "MOVE_CARD",
       self: aiCard({
-        battleCardId: asBattleCardId("colossus-1"),
+        battleCardId: parseBattleCardId("colossus-1"),
         cardNumber: 515,
-        name: "Wildflower Colossus",
+        name: testCardName("Wildflower Colossus"),
       }),
       targets: null,
       toSlot: "F1",
       trace: baseTrace({
         stage: "reposition",
         choice: "MOVE_CARD",
-        battleCardId: asBattleCardId("colossus-1"),
-        cardName: "Wildflower Colossus",
+        battleCardId: parseBattleCardId("colossus-1"),
+        cardName: testCardName("Wildflower Colossus"),
         targetSlotId: "F1",
       }),
     });

@@ -1,22 +1,48 @@
 import { invoke } from "@tauri-apps/api/core";
+import type {
+  AffiliationId,
+  IdentityRecord,
+  TideId,
+} from "../../src/types/identifiers";
+import {
+  parseAffiliationId,
+  parseTideId,
+} from "../../src/types/identifiers";
+import {
+  parseSourceRevision,
+  type SourceRevision,
+} from "../../src/types/source-revision";
+
+export type EditorDatasetId = "affiliations";
+
+export type AffiliationEditableField = "name" | "atlas_card_theme";
+export type AffiliationFieldKey =
+  `${AffiliationId}.${AffiliationEditableField | "tide_ids"}`;
+
+export function affiliationFieldKey(
+  affiliationId: AffiliationId,
+  field: AffiliationEditableField | "tide_ids",
+): AffiliationFieldKey {
+  return `${affiliationId}.${field}`;
+}
 
 export interface Affiliation {
-  id: string;
+  id: AffiliationId;
   name: string;
   atlas_card_theme: string;
-  tide_ids: string[];
+  tide_ids: TideId[];
 }
 
 export interface TideSummary {
-  id: string;
+  id: TideId;
   displayName: string;
-  role: string;
+  role: "signature" | "facet" | "neutral";
 }
 
 export interface EditorSnapshot {
-  dataset: "affiliations";
+  dataset: EditorDatasetId;
   repositoryRoot: string;
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
   affiliations: Affiliation[];
   tides: TideSummary[];
 }
@@ -26,12 +52,12 @@ export interface AffiliationDraft {
 }
 
 export type EditorOperation =
-  | { operation: "set_affiliation_field"; affiliation_id: string; field: "name" | "atlas_card_theme"; value: string }
-  | { operation: "replace_affiliation_tides"; affiliation_id: string; tide_ids: string[] };
+  | { operation: "set_affiliation_field"; affiliation_id: AffiliationId; field: AffiliationEditableField; value: string }
+  | { operation: "replace_affiliation_tides"; affiliation_id: AffiliationId; tide_ids: TideId[] };
 
 export interface DraftValidation {
-  fields: Record<string, string>;
-  unresolvedTideIds: Record<string, string[]>;
+  fields: Partial<Record<AffiliationFieldKey, string>>;
+  unresolvedTideIds: IdentityRecord<AffiliationId, TideId[]>;
   errorCount: number;
 }
 
@@ -39,7 +65,10 @@ export interface EditorTransport {
   persistence: "disk" | "memory";
   load(): Promise<EditorSnapshot>;
   open(path: string): Promise<EditorSnapshot>;
-  save(operations: readonly EditorOperation[], revision: string): Promise<EditorSnapshot>;
+  save(
+    operations: readonly EditorOperation[],
+    revision: SourceRevision,
+  ): Promise<EditorSnapshot>;
 }
 
 export function draftFromSnapshot(snapshot: EditorSnapshot): AffiliationDraft {
@@ -61,14 +90,14 @@ export function buildOperations(snapshot: EditorSnapshot, draft: AffiliationDraf
 }
 
 export function validateDraft(draft: AffiliationDraft, tides: readonly TideSummary[]): DraftValidation {
-  const fields: Record<string, string> = {};
-  const unresolvedTideIds: Record<string, string[]> = {};
+  const fields: Partial<Record<AffiliationFieldKey, string>> = {};
+  const unresolvedTideIds: IdentityRecord<AffiliationId, TideId[]> = {};
   const knownTides = new Set(tides.map((tide) => tide.id));
   for (const affiliation of draft.affiliations) {
-    if (!affiliation.name.trim()) fields[`${affiliation.id}.name`] = "Name is required.";
-    if (!affiliation.atlas_card_theme.trim()) fields[`${affiliation.id}.atlas_card_theme`] = "Atlas card theme is required.";
-    if (affiliation.tide_ids.length !== 3) fields[`${affiliation.id}.tide_ids`] = "Choose exactly three tides.";
-    if (new Set(affiliation.tide_ids).size !== affiliation.tide_ids.length) fields[`${affiliation.id}.tide_ids`] = "Each tide must be distinct.";
+    if (!affiliation.name.trim()) fields[affiliationFieldKey(affiliation.id, "name")] = "Name is required.";
+    if (!affiliation.atlas_card_theme.trim()) fields[affiliationFieldKey(affiliation.id, "atlas_card_theme")] = "Atlas card theme is required.";
+    if (affiliation.tide_ids.length !== 3) fields[affiliationFieldKey(affiliation.id, "tide_ids")] = "Choose exactly three tides.";
+    if (new Set(affiliation.tide_ids).size !== affiliation.tide_ids.length) fields[affiliationFieldKey(affiliation.id, "tide_ids")] = "Each tide must be distinct.";
     const unresolved = affiliation.tide_ids.filter((id) => !knownTides.has(id));
     if (unresolved.length) unresolvedTideIds[affiliation.id] = unresolved;
   }
@@ -81,17 +110,48 @@ export function validateDraft(draft: AffiliationDraft, tides: readonly TideSumma
 
 class NativeTransport implements EditorTransport {
   persistence = "disk" as const;
-  load = () => invoke<EditorSnapshot>("load_editor_snapshot");
-  open = (path: string) => invoke<EditorSnapshot>("open_repository", { path });
-  save = (operations: readonly EditorOperation[], revision: string) =>
-    invoke<EditorSnapshot>("save_editor_operations", { operations, expectedSourceRevision: revision });
+  load = () => invoke<RawEditorSnapshot>("load_editor_snapshot").then(parseEditorSnapshot);
+  open = (path: string) => invoke<RawEditorSnapshot>("open_repository", { path }).then(parseEditorSnapshot);
+  save = (operations: readonly EditorOperation[], revision: SourceRevision) =>
+    invoke<RawEditorSnapshot>("save_editor_operations", { operations, expectedSourceRevision: revision }).then(parseEditorSnapshot);
+}
+
+interface RawEditorSnapshot
+  extends Omit<
+    EditorSnapshot,
+    "affiliations" | "sourceRevision" | "tides"
+  > {
+  sourceRevision: unknown;
+  affiliations: Array<
+    Omit<Affiliation, "id" | "tide_ids"> & {
+      id: unknown;
+      tide_ids: unknown[];
+    }
+  >;
+  tides: Array<Omit<TideSummary, "id"> & { id: unknown }>;
+}
+
+function parseEditorSnapshot(snapshot: RawEditorSnapshot): EditorSnapshot {
+  return {
+    ...snapshot,
+    sourceRevision: parseSourceRevision(snapshot.sourceRevision),
+    affiliations: snapshot.affiliations.map((entry) => ({
+      ...entry,
+      id: parseAffiliationId(entry.id),
+      tide_ids: entry.tide_ids.map(parseTideId),
+    })),
+    tides: snapshot.tides.map((tide) => ({
+      ...tide,
+      id: parseTideId(tide.id),
+    })),
+  };
 }
 
 const FIXTURE_TIDES: TideSummary[] = [
-  { id: "00000000-0000-4000-8000-000000000101", displayName: "Dawn Chorus", role: "facet" },
-  { id: "00000000-0000-4000-8000-000000000102", displayName: "Unseen Paths", role: "facet" },
-  { id: "00000000-0000-4000-8000-000000000103", displayName: "Patient Embers", role: "neutral" },
-  { id: "00000000-0000-4000-8000-000000000104", displayName: "Falling Stars", role: "neutral" },
+  { id: parseTideId("00000000-0000-4000-8000-000000000101"), displayName: "Dawn Chorus", role: "facet" },
+  { id: parseTideId("00000000-0000-4000-8000-000000000102"), displayName: "Unseen Paths", role: "facet" },
+  { id: parseTideId("00000000-0000-4000-8000-000000000103"), displayName: "Patient Embers", role: "neutral" },
+  { id: parseTideId("00000000-0000-4000-8000-000000000104"), displayName: "Falling Stars", role: "neutral" },
 ];
 
 class DemoTransport implements EditorTransport {
@@ -100,34 +160,34 @@ class DemoTransport implements EditorTransport {
   async load() {
     if (this.snapshot) return structuredClone(this.snapshot);
     this.snapshot = {
-      dataset: "affiliations", repositoryRoot: "Demo repository", sourceRevision: "demo-1",
+      dataset: "affiliations", repositoryRoot: "Demo repository", sourceRevision: parseSourceRevision("demo-1"),
       affiliations: [
-        { id: "0ee6bf31-2588-4fb7-ac16-8348480c94bd", name: "Radiant Exiles", atlas_card_theme: "dawnlit ruins", tide_ids: FIXTURE_TIDES.slice(0, 3).map((tide) => tide.id) },
-        { id: "74f5d8bc-2db4-4075-9fab-7a95a9e5bcf4", name: "Keepers of the Deep", atlas_card_theme: "submerged archive", tide_ids: [FIXTURE_TIDES[1].id, FIXTURE_TIDES[2].id, FIXTURE_TIDES[3].id] },
+        { id: parseAffiliationId("0ee6bf31-2588-4fb7-ac16-8348480c94bd"), name: "Radiant Exiles", atlas_card_theme: "dawnlit ruins", tide_ids: FIXTURE_TIDES.slice(0, 3).map((tide) => tide.id) },
+        { id: parseAffiliationId("74f5d8bc-2db4-4075-9fab-7a95a9e5bcf4"), name: "Keepers of the Deep", atlas_card_theme: "submerged archive", tide_ids: [FIXTURE_TIDES[1].id, FIXTURE_TIDES[2].id, FIXTURE_TIDES[3].id] },
       ],
       tides: FIXTURE_TIDES,
     };
     return structuredClone(this.snapshot);
   }
   open = (_path: string) => this.load();
-  async save(operations: readonly EditorOperation[], _revision: string) {
+  async save(operations: readonly EditorOperation[], _revision: SourceRevision) {
     const snapshot = await this.load();
     applyOperations(snapshot, operations);
-    snapshot.sourceRevision = `demo-${Date.now()}`;
+    snapshot.sourceRevision = parseSourceRevision(`demo-${Date.now()}`);
     this.snapshot = snapshot;
     return structuredClone(snapshot);
   }
 }
 
 interface RuntimeAffiliation {
-  id: string;
+  id: unknown;
   name: string;
   atlasCardTheme: string;
-  tideIds: string[];
+  tideIds: unknown[];
 }
 
 interface RuntimeTides {
-  tides: TideSummary[];
+  tides: Array<Omit<TideSummary, "id"> & { id: unknown }>;
 }
 
 class RealDataPreviewTransport implements EditorTransport {
@@ -142,22 +202,24 @@ class RealDataPreviewTransport implements EditorTransport {
     this.snapshot = {
       dataset: "affiliations",
       repositoryRoot: "Current worktree data",
-      sourceRevision: "real-data-preview",
+      sourceRevision: parseSourceRevision("real-data-preview"),
       affiliations: affiliations.map((entry) => ({
-        id: entry.id,
+        id: parseAffiliationId(entry.id),
         name: entry.name,
         atlas_card_theme: entry.atlasCardTheme,
-        tide_ids: entry.tideIds,
+        tide_ids: entry.tideIds.map(parseTideId),
       })),
-      tides: tideCatalog.tides,
+      tides: tideCatalog.tides.map((tide) => ({ ...tide, id: parseTideId(tide.id) })),
     };
     return structuredClone(this.snapshot);
   }
   open = (_path: string) => this.load();
-  async save(operations: readonly EditorOperation[], _revision: string) {
+  async save(operations: readonly EditorOperation[], _revision: SourceRevision) {
     const snapshot = await this.load();
     applyOperations(snapshot, operations);
-    snapshot.sourceRevision = `real-data-preview-${Date.now()}`;
+    snapshot.sourceRevision = parseSourceRevision(
+      `real-data-preview-${Date.now()}`,
+    );
     this.snapshot = snapshot;
     return structuredClone(snapshot);
   }
@@ -171,7 +233,9 @@ function applyOperations(snapshot: EditorSnapshot, operations: readonly EditorOp
   }
 }
 
-export const editorRegistry = new Map<string, () => EditorTransport>([["affiliations", () => new NativeTransport()]]);
+export const editorRegistry = new Map<EditorDatasetId, () => EditorTransport>([
+  ["affiliations", () => new NativeTransport()],
+]);
 
 export function createTransport(): EditorTransport {
   const parameters = new URLSearchParams(location.search);

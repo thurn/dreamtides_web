@@ -61,8 +61,8 @@ export interface SiteTypeData {
 /** Validated browser data compiled from data/sites.toml. */
 export interface SitesData {
   schemaVersion: 1;
-  contentHash: string;
-  foldHash: string;
+  contentHash: ContentHash;
+  foldHash: FoldHash;
   selection: {
     minDeckForPurge: number;
     placeableTypes: readonly SiteType[];
@@ -86,3 +86,4 @@ export interface SitesData {
     >
   >;
 }
+import type { ContentHash, FoldHash } from "./content-hash";

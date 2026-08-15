@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { BattleDreamwellHistoryOverlay } from "../../cumulus/screens/battle-overlays/BattleDreamwellHistoryOverlay";
 import { dreamwellCardModel } from "../ui/dreamwell-card-model";
 import type { DreamwellCardDefinition } from "../types";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
 
 /**
  * A scrollable history of every Dreamwell card drawn so far this battle (rules
@@ -49,7 +49,7 @@ export function BattleDreamwellHistoryDrawer({
       entries={drawnCards.map(({ drawIndex, definition }) => ({
         // Draw order is the stable identity here: the same UUID can recur
         // when the shared deck cycles.
-        entryId: asDeckEntryId(`${String(drawIndex)}:${definition.id}`),
+        entryId: parseDeckEntryId(`${String(drawIndex)}:${definition.id}`),
         cardId: definition.id,
         model: dreamwellCardModel(definition),
       }))}

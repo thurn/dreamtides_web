@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import type { EditorCardRecord } from "./types";
 import { buildCardNameSubstringGroups } from "./card-name-substring-groups";
+import { testCardId } from "../types/test-identities";
 
-function card(id: string, name: string, cardNumber: number): EditorCardRecord {
+function card(idSeed: string, name: string, cardNumber: number): EditorCardRecord {
   return {
-    id: asCardId(id),
+    id: testCardId(idSeed),
     cardNumber,
     cardType: "Character",
     "energy-cost": 1,
@@ -19,9 +20,9 @@ function card(id: string, name: string, cardNumber: number): EditorCardRecord {
     mtgName: "",
     source: {},
     preview: {
-      id: asCardId(id),
+      id: testCardId(idSeed),
       cardNumber,
-      name: asCardName(name),
+      name: parseCardName(name),
       cardType: "Character",
       isStarter: false,
       energyCost: 1,
@@ -39,17 +40,19 @@ function card(id: string, name: string, cardNumber: number): EditorCardRecord {
 describe("buildCardNameSubstringGroups", () => {
   it("keeps distinct overlapping matches so one UUID can appear in multiple groups", () => {
     const dreamlight = card("uuid-dreamlight", "Dreamlight Guide", 1);
+    const dream = card("uuid-dream", "Dream Avatar", 2);
+    const light = card("uuid-light", "Starlight Keeper", 3);
     const groups = buildCardNameSubstringGroups([
       dreamlight,
-      card("uuid-dream", "Dream Avatar", 2),
-      card("uuid-light", "Starlight Keeper", 3),
+      dream,
+      light,
     ]);
 
     expect(groups.map((group) => group.key)).toEqual(["dream", "light"]);
     expect(groups.map((group) => group.cards.map((entry) => entry.id))).toEqual(
       [
-        ["uuid-dream", "uuid-dreamlight"],
-        ["uuid-dreamlight", "uuid-light"],
+        [dream.id, dreamlight.id],
+        [dreamlight.id, light.id],
       ],
     );
   });
@@ -90,16 +93,16 @@ describe("buildCardNameSubstringGroups", () => {
     expect(ascending.map((group) => group.key)).toEqual(["dream", "starlight"]);
     expect(ascending[1]?.substring).toBe("STARLIGHT");
     expect(ascending[1]?.cards.map((entry) => entry.id)).toEqual([
-      "uuid-alpha",
-      "uuid-beta",
+      testCardId("uuid-alpha"),
+      testCardId("uuid-beta"),
     ]);
     expect(descending.map((group) => group.key)).toEqual([
       "starlight",
       "dream",
     ]);
     expect(descending[0]?.cards.map((entry) => entry.id)).toEqual([
-      "uuid-beta",
-      "uuid-alpha",
+      testCardId("uuid-beta"),
+      testCardId("uuid-alpha"),
     ]);
   });
 

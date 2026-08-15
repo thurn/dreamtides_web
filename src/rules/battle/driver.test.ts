@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../types/test-identities";
 import type { EventContext } from "../../eventlog/types";
 import type {
   BattleEngineEmissionContext,
@@ -18,12 +19,12 @@ import type { BattleFoldState, EffectRun, ScriptRef } from "./fold";
 import { emptyDawnFired, newEffectRun, resolveScript } from "./fold";
 import { advanceEffectQueue, resolvePendingPrompt } from "./driver";
 import type { BattleCardId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asBattleId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
-import { asTutorialRunId } from "../../types/identifiers";
-import { asBattleEffectScriptId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { parseTutorialRunId } from "../../types/identifiers";
+import { parseBattleEffectScriptId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 // ---------------------------------------------------------------------------
 // Deterministic context + hashing
@@ -104,7 +105,7 @@ function editOnlyDreamwellRef(): ScriptRef {
       script.steps.length > 0 &&
       script.steps.every((s) => s.kind === "edits")
     ) {
-      return { table: "dreamwell", id: asBattleEffectScriptId(id) };
+      return { table: "dreamwell", id: parseBattleEffectScriptId(id) };
     }
   }
   throw new Error("no edit-only dreamwell script registered");
@@ -117,7 +118,7 @@ function twoEditOnlyDreamwellRefs(): [ScriptRef, ScriptRef] {
       script.steps.length > 0 &&
       script.steps.every((s) => s.kind === "edits")
     ) {
-      refs.push({ table: "dreamwell", id: asBattleEffectScriptId(id) });
+      refs.push({ table: "dreamwell", id: parseBattleEffectScriptId(id) });
     }
     if (refs.length === 2) return [refs[0], refs[1]];
   }
@@ -130,7 +131,7 @@ function topLevelPickCardsDreamwellRef(): ScriptRef {
   for (const [id, script] of Object.entries(DREAMWELL_EFFECTS)) {
     const first = script.steps[0];
     if (first?.kind === "prompt" && first.prompt.kind === "pick-cards") {
-      return { table: "dreamwell", id: asBattleEffectScriptId(id) };
+      return { table: "dreamwell", id: parseBattleEffectScriptId(id) };
     }
   }
   throw new Error("no top-level pick-cards dreamwell script registered");
@@ -142,7 +143,7 @@ function leadingEditThenPromptDreamwellRef(): ScriptRef {
   for (const [id, script] of Object.entries(DREAMWELL_EFFECTS)) {
     const [first, second] = script.steps;
     if (first?.kind === "edits" && second?.kind === "prompt") {
-      return { table: "dreamwell", id: asBattleEffectScriptId(id) };
+      return { table: "dreamwell", id: parseBattleEffectScriptId(id) };
     }
   }
   throw new Error("no leading-edit-then-prompt dreamwell script registered");
@@ -158,7 +159,7 @@ function nestedPromptDreamwellRef(): ScriptRef {
       first.prompt.kind === "confirm" &&
       first.prompt.onYes.some((s) => s.kind === "prompt")
     ) {
-      return { table: "dreamwell", id: asBattleEffectScriptId(id) };
+      return { table: "dreamwell", id: parseBattleEffectScriptId(id) };
     }
   }
   throw new Error("no nested-prompt dreamwell script registered");
@@ -227,11 +228,11 @@ function makeInstance(
     },
     definition: {
       sourceDeckEntryId: null,
-      cardId: asCardId(""),
+      cardId: testCardId("fixture-card"),
       cardNumber: 1,
-      name: `${kind}-${battleCardId}`,
+      name: testCardName(`${kind}-${battleCardId}`),
       battleCardKind: kind,
-      subtype: "warrior",
+      subtype: "Warrior",
       energyCost: 1,
       printedEnergyCost: 1,
       printedSpark: 2,
@@ -253,9 +254,9 @@ function makeBoard(): BattleMutableState {
   const voidIds: BattleCardId[] = [];
   const deckIds: BattleCardId[] = [];
   for (let i = 0; i < 4; i += 1) {
-    const h = asBattleCardId(`h${i}`);
-    const v = asBattleCardId(`v${i}`);
-    const d = asBattleCardId(`d${i}`);
+    const h = parseBattleCardId(`h${i}`);
+    const v = parseBattleCardId(`v${i}`);
+    const d = parseBattleCardId(`d${i}`);
     handIds.push(h);
     voidIds.push(v);
     deckIds.push(d);
@@ -276,7 +277,7 @@ function makeBoard(): BattleMutableState {
     );
   }
   return {
-    battleId: asBattleId("test-battle"),
+    battleId: parseBattleId("test-battle"),
     activeSide: "player",
     turnNumber: 1,
     phase: "day",
@@ -297,8 +298,8 @@ function makeBoard(): BattleMutableState {
 // enough to prove preservation; it is cast because the full shape is irrelevant
 // here (init construction is BEGIN_BATTLE's concern, tested in battle-events).
 const TEST_INIT = {
-  battleId: asBattleId("test-battle"),
-  siteId: asSiteId("site-1"),
+  battleId: parseBattleId("test-battle"),
+  siteId: parseSiteId("site-1"),
   dreamscapeId: null,
   scoreToWin: 30,
   turnLimit: 12,
@@ -389,7 +390,7 @@ describe("advanceEffectQueue — edit-only run", () => {
 describe("advanceEffectQueue — Nomad's Verge dreamwell placement", () => {
   const NOMADS_VERGE_REF: ScriptRef = {
     table: "dreamwell",
-    id: asBattleEffectScriptId("51caf26d-83bf-45a9-bc80-010d353277db"),
+    id: parseBattleEffectScriptId("51caf26d-83bf-45a9-bc80-010d353277db"),
   };
 
   it("places the figment at the leftmost open back-rank slot in a journey battle", () => {
@@ -406,7 +407,7 @@ describe("advanceEffectQueue — Nomad's Verge dreamwell placement", () => {
       ...foldState([newEffectRun(NOMADS_VERGE_REF, "enemy")]),
       mode: {
         kind: "tutorial",
-        tutorialRunId: asTutorialRunId("test-run"),
+        tutorialRunId: parseTutorialRunId("test-run"),
         restartNumber: 0,
         resultConfig: { playerOnlyVictory: true, turnLimitDisabled: true },
       },
@@ -425,7 +426,7 @@ describe("advanceEffectQueue — prompt parking", () => {
   it("drains 9954cede-8a16-4053-b6e9-da745f4540f5 when no enemy is in play", () => {
     const ref: ScriptRef = {
       table: "dreamwell",
-      id: asBattleEffectScriptId("9954cede-8a16-4053-b6e9-da745f4540f5"),
+      id: parseBattleEffectScriptId("9954cede-8a16-4053-b6e9-da745f4540f5"),
     };
     const result = advanceEffectQueue(
       foldState([newEffectRun(ref, "player")]),

@@ -13,9 +13,8 @@ import { loadSitesData } from "./sites-data";
 import { generateSiteComposition } from "../atlas/atlas-generator";
 import { LayerName } from "../types/layer-name";
 import type { DreamscapeContent } from "../types/content";
-import type { DreamscapeId } from "../types/identifiers";
-import { asGuideId } from "../types/identifiers";
-import { asAffiliationId } from "../types/identifiers";
+import type { SiteType } from "../types/journey";
+import { loadTides4Decks } from "./cards-v2-database";
 
 // Referential-integrity test for the dreamscape / guide / affiliation / atlas
 // content bundles. It runs against the *compiled* JSON the asset pipeline emits
@@ -30,10 +29,6 @@ import { asAffiliationId } from "../types/identifiers";
 // "exactly one starter", so authoring edits to the TOML never break it.
 
 const PUBLIC_DIR = join(import.meta.dirname, "..", "..", "public");
-
-function readPublicJson(filename: string): unknown {
-  return JSON.parse(readFileSync(join(PUBLIC_DIR, filename), "utf8"));
-}
 
 beforeAll(() => {
   // The compiled bundles are emitted by `npm run setup-assets`. If a fresh
@@ -106,12 +101,11 @@ describe("dreamscape content referential integrity", () => {
     const affiliationIds = new Set(affiliations.map((a) => a.id));
     for (const d of dreamscapes) {
       if (d.isStarter) continue;
-      expect(d.guideId).not.toBeNull();
-      expect(guideIds.has(asGuideId(d.guideId as string))).toBe(true);
-      expect(d.affiliationId).not.toBeNull();
-      expect(
-        affiliationIds.has(asAffiliationId(d.affiliationId as string)),
-      ).toBe(true);
+      if (d.guideId === null || d.affiliationId === null) {
+        throw new Error(`Dreamscape ${d.id} is missing catalog references.`);
+      }
+      expect(guideIds.has(d.guideId)).toBe(true);
+      expect(affiliationIds.has(d.affiliationId)).toBe(true);
     }
   });
 
@@ -129,9 +123,8 @@ describe("dreamscape content referential integrity", () => {
 
   it("every affiliation defines exactly three known tides", async () => {
     const affiliations = await loadAffiliations();
-    const artifact = readPublicJson("tides4-data.json") as {
-      tides: { id: string }[];
-    };
+    const artifact = await loadTides4Decks();
+    if (artifact === null) throw new Error("Missing tides4-data.json fixture.");
     const tideIds = new Set(artifact.tides.map((tide) => tide.id));
     expect(affiliations.length).toBeGreaterThan(0);
     for (const a of affiliations) {
@@ -150,15 +143,17 @@ describe("dreamscape content referential integrity", () => {
       if (d.isStarter) continue;
       // The guide who tends this dreamscape's signature site type...
       const guide = guideForSiteType(guides, d.signatureSite);
-      expect(guide).not.toBeNull();
+      if (guide === null) {
+        throw new Error(`No guide tends ${d.signatureSite}.`);
+      }
       // ...must be the guide whose home dreamscape this is. This is the
       // dreamscape <-> guide <-> signature-site contract the frame and the
       // home-enhancement trigger both rely on.
       expect(
-        (guide as { homeDreamscapeId: DreamscapeId }).homeDreamscapeId,
+        guide.homeDreamscapeId,
       ).toBe(d.id);
       // And that guide must be the one the dreamscape names as its resident.
-      expect((guide as { id: string }).id).toBe(d.guideId);
+      expect(guide.id).toBe(d.guideId);
     }
   });
 
@@ -170,7 +165,7 @@ describe("dreamscape content referential integrity", () => {
     ]);
     const context = { dreamscapeModifiers: [], draftPickCount: 5 };
     const sitesData = await loadSitesData();
-    const homeOf = (siteType: string): DreamscapeContent | undefined =>
+    const homeOf = (siteType: SiteType): DreamscapeContent | undefined =>
       dreamscapes.find((d) => !d.isStarter && d.signatureSite === siteType);
 
     for (const guide of guides) {

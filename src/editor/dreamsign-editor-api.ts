@@ -11,6 +11,12 @@ import type {
 } from "./dreamsign-types";
 import type { EditorTag } from "./types";
 import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+import {
+  parseSourceRevisionResponse,
+  type ParsedSourceRevisionResponse,
+  type RawSourceRevisionResponse,
+  type SourceRevision,
+} from "../types/source-revision";
 
 const SOURCE = "dreamsigns";
 
@@ -60,6 +66,14 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
+async function readRevisionedJsonResponse<
+  Result extends { readonly sourceRevision: SourceRevision },
+>(response: Response): Promise<ParsedSourceRevisionResponse<Result>> {
+  return parseSourceRevisionResponse<Result>(
+    await readJsonResponse<RawSourceRevisionResponse<Result>>(response),
+  );
+}
+
 function withTomlParam(path: string): string {
   const toml = editorTomlParam();
   if (toml === null) {
@@ -79,7 +93,7 @@ export async function loadEditorDreamsigns(
     },
     signal,
   });
-  const body = await readJsonResponse<LoadEditorDreamsignsResponse>(response);
+  const body = await readRevisionedJsonResponse<LoadEditorDreamsignsResponse>(response);
   confirmSourceRevision(SOURCE, body);
   return body.dreamsigns;
 }
@@ -100,7 +114,7 @@ export async function saveEditorDreamsignField(
     },
   );
 
-    const body = await readJsonResponse<SaveEditorDreamsignFieldResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorDreamsignFieldResponse>(response);
     confirmSourceRevision(SOURCE, body);
     return body;
   });
@@ -115,7 +129,7 @@ export async function loadEditorDreamsignTags(
     },
     signal,
   });
-  const body = await readJsonResponse<LoadEditorDreamsignTagsResponse>(response);
+  const body = await readRevisionedJsonResponse<LoadEditorDreamsignTagsResponse>(response);
   confirmSourceRevision(SOURCE, body);
   return body.tags;
 }
@@ -138,7 +152,7 @@ export async function saveEditorDreamsignTags(
     },
   );
 
-    const body = await readJsonResponse<SaveEditorDreamsignFieldResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorDreamsignFieldResponse>(response);
     confirmSourceRevision(SOURCE, body);
     return body;
   });
@@ -156,7 +170,7 @@ export async function saveEditorDreamsignTagRegistry(
       },
       body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
     });
-    const body = await readJsonResponse<SaveEditorDreamsignTagRegistryResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorDreamsignTagRegistryResponse>(response);
     confirmSourceRevision(SOURCE, body);
     return body;
   });

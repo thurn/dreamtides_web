@@ -10,6 +10,12 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parse as parseToml } from "smol-toml";
+import {
+  parseCardId,
+  parseCardName,
+  type CardId,
+  type CardName,
+} from "../types/card-identity";
 
 const ROOT = process.cwd();
 const DATA_DIR = join(ROOT, "data");
@@ -18,31 +24,37 @@ const CARD_ID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 
 interface RawCard {
-  id: string;
-  name: string;
+  id: unknown;
+  name: unknown;
   tags?: string[];
   "card-number": number;
   roles?: string[];
 }
 interface RawDreamAvatar {
   name: string;
-  "signature-cards"?: string[];
+  "signature-cards"?: unknown[];
 }
 
-const cards = (
+const rawCards = (
   parseToml(readFileSync(join(DATA_DIR, "cards.toml"), "utf8")) as {
     cards?: RawCard[];
   }
 ).cards ?? [];
+const cards = rawCards.map((card) => ({
+  ...card,
+  id: parseCardId(card.id),
+  name: parseCardName(card.name),
+}));
 const idToName = new Map(cards.map((c) => [c.id, c.name]));
 const idToCard = new Map(cards.map((card) => [card.id, card]));
 
 /** Assert a reference is a UUID that resolves to a real card; return its name. */
-function expectCard(label: string, ref: string): string {
+function expectCard(label: string, ref: CardId): CardName {
   expect(CARD_ID_RE.test(ref), `${label}: ${ref} is not a UUID`).toBe(true);
   const name = idToName.get(ref);
   expect(name, `${label}: ${ref} is not a card in cards.toml`).toBeDefined();
-  return name as string;
+  if (name === undefined) throw new Error(`${label}: unknown card ${ref}.`);
+  return name;
 }
 
 describe("card references resolve to real cards", () => {
@@ -54,7 +66,8 @@ describe("card references resolve to real cards", () => {
     ).dreamAvatar ?? [];
     let checked = 0;
     for (const dc of dreamAvatars) {
-      for (const ref of dc["signature-cards"] ?? []) {
+      for (const rawRef of dc["signature-cards"] ?? []) {
+        const ref = parseCardId(rawRef);
         expectCard(`signature[${dc.name}]`, ref);
         checked += 1;
       }
@@ -66,11 +79,11 @@ describe("card references resolve to real cards", () => {
     const tutorialPool = parseToml(
       readFileSync(join(DATA_DIR, "tutorial_journey_pool.toml"), "utf8"),
     ) as {
-      tides?: Array<{ cards?: Array<{ id: string }> }>;
+      tides?: Array<{ cards?: Array<{ id: unknown }> }>;
     };
     const poolCardIds = new Set(
       (tutorialPool.tides ?? []).flatMap((tide) =>
-        (tide.cards ?? []).map((card) => card.id),
+        (tide.cards ?? []).map((card) => parseCardId(card.id)),
       ),
     );
     expect(poolCardIds.size).toBeGreaterThan(0);

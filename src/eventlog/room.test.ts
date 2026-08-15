@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../types/test-identities";
 // Unit tests for the pure parts of room lifecycle: room-id alphabet/length
 // and the stale-room eviction boundary. Firebase-backed behavior (createRoom,
 // createRoomEvictingStale's RTDB update, writePresence) is covered by the
@@ -22,7 +23,7 @@ const CONTENT_CONFIG: ContentConfig = {
 
 function genesisAt(createdAt: number): string {
   const genesis: Genesis = {
-    seed: "s",
+    seed: testJourneySeed("s"),
     reducerVersion: "v1",
     createdAt,
     contentConfig: CONTENT_CONFIG,
@@ -121,7 +122,7 @@ describe("genesisLogNode (createRoom's written node)", () => {
       poolVariant: "tides4",
     };
     const genesis: Genesis = {
-      seed: "room-seed",
+      seed: testJourneySeed("room-seed"),
       reducerVersion: "build-abc",
       createdAt: 1_700_000_000_000,
       contentConfig,

@@ -6,7 +6,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { RevealOverlay, type RevealOverlayActive } from "./RevealOverlay";
 import { makeTextRevealSpec } from "./test-utils";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 import type { RevealGeometrySnapshot, RevealSpec } from "./model";
 import {
   DESKTOP_GAME_CARD_WIDTH,
@@ -15,9 +15,13 @@ import {
 import { CumulusRoot } from "../../CumulusRoot";
 import { GLYPHS } from "../../primitives/glyph";
 import { artRef } from "../../primitives/art";
-import { asDreamscapeId } from "../../../types/identifiers";
+import {
+  testCardId,
+  testDreamscapeId,
+  testSemanticEntityId,
+} from "../../../types/test-identities";
 
-const UUID = "00000000-0000-4000-8000-000000000001";
+const UUID = testSemanticEntityId("00000000-0000-4000-8000-000000000001");
 let root: Root;
 let container: HTMLDivElement;
 let resizeCallbacks: ResizeObserverCallback[];
@@ -45,7 +49,7 @@ function active(
   return {
     source: {
       identity: { entityType: "test", entityId: UUID },
-      registrationId: "one",
+      registrationId: "cumulus-reveal-source-one",
     },
     spec: makeTextRevealSpec("Primary", "Body", ["First", "Second"]),
     element: source,
@@ -397,7 +401,7 @@ describe("RevealOverlay", () => {
         kind: "infoCard",
         card: {
           variant: "atlasReveal",
-          image: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
+          image: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
           title: assertLocalized("Wilderveil"),
         },
       },
@@ -499,7 +503,7 @@ describe("RevealOverlay", () => {
       configurable: true,
       value: { width: 390, height: 844, offsetLeft: 0, offsetTop: 0 },
     });
-    const cardId = asCardId(UUID);
+    const cardId = testCardId(UUID);
     const spec: RevealSpec = {
       ...makeTextRevealSpec("Primary", "Body"),
       adjacentCards: [
@@ -508,7 +512,7 @@ describe("RevealOverlay", () => {
           cardId,
           displaySnapshot: {
             id: cardId,
-            name: asCardName("Warrior"),
+            name: parseCardName("Warrior"),
             cardNumber: 1,
             cardType: "Character",
             subtype: "Warrior",
@@ -558,14 +562,14 @@ describe("RevealOverlay", () => {
   });
 
   it("waits for the genuinely asynchronous GameCard renderer and remeasures its resolved size", async () => {
-    const cardId = asCardId(UUID);
+    const cardId = testCardId(UUID);
     const spec: RevealSpec = {
       primary: {
         kind: "gameCard",
         cardId,
         displaySnapshot: {
           id: cardId,
-          name: asCardName("Async Card"),
+          name: parseCardName("Async Card"),
           cardNumber: 2,
           cardType: "Event",
           subtype: "",
@@ -610,14 +614,14 @@ describe("RevealOverlay", () => {
   });
 
   it("keeps a desktop GameCard source and reading copy visually unique", () => {
-    const cardId = asCardId(UUID);
+    const cardId = testCardId(UUID);
     const spec: RevealSpec = {
       primary: {
         kind: "gameCard",
         cardId,
         displaySnapshot: {
           id: cardId,
-          name: asCardName("Reading Card"),
+          name: parseCardName("Reading Card"),
           cardNumber: 1,
           cardType: "Event",
           subtype: "",
@@ -641,14 +645,14 @@ describe("RevealOverlay", () => {
   });
 
   it("keeps a preview control visible while placing its GameCard beside it", () => {
-    const cardId = asCardId(UUID);
+    const cardId = testCardId(UUID);
     const spec: RevealSpec = {
       primary: {
         kind: "gameCard",
         cardId,
         displaySnapshot: {
           id: cardId,
-          name: asCardName("Referenced Card"),
+          name: parseCardName("Referenced Card"),
           cardNumber: 1,
           cardType: "Event",
           subtype: "",
@@ -680,7 +684,7 @@ describe("RevealOverlay", () => {
   });
 
   it("renders every copy in an exact repeated-card entity reveal", async () => {
-    const cardId = asCardId(UUID);
+    const cardId = testCardId(UUID);
     const spec: RevealSpec = {
       primary: {
         kind: "gameCard",
@@ -688,7 +692,7 @@ describe("RevealOverlay", () => {
         copies: 3,
         displaySnapshot: {
           id: cardId,
-          name: asCardName("Repeated Card"),
+          name: parseCardName("Repeated Card"),
           cardNumber: 1,
           cardType: "Event",
           subtype: "",

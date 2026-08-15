@@ -5,7 +5,7 @@ import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
 import { CumulusRoot } from "../CumulusRoot";
 import {
@@ -17,14 +17,14 @@ import {
   localizedTransfigurationFormFixture,
   transfigurationFormFixture,
 } from "../test-helpers/transfiguration-fixture";
-import { asSiteId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testGuideId, testCardId } from "../../types/test-identities";
 
 function makeCard(index: number): CardData {
   return {
-    name: asCardName(`Forge Fixture ${String(index)}`),
-    id: asCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    name: parseCardName(`Forge Fixture ${String(index)}`),
+    id: testCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
     cardNumber: index,
     cardType: "Character",
     subtype: "",
@@ -41,7 +41,7 @@ function makeCard(index: number): CardData {
 function candidate(index: number): TransfigurationCandidateView {
   const card = makeCard(index);
   return {
-    entryId: asDeckEntryId(`entry-${String(index)}`),
+    entryId: parseDeckEntryId(`entry-${String(index)}`),
     model: { cardId: card.id, displaySnapshot: card },
     availability: "available",
     reforgedType: null,
@@ -96,13 +96,13 @@ function candidate(index: number): TransfigurationCandidateView {
 
 function view(): TransfigurationSiteView {
   return {
-    siteId: asSiteId("transfiguration-site"),
+    siteId: parseSiteId("transfiguration-site"),
     scene: null,
     guide: {
-      id: "durgan_forgehammer",
+      id: testGuideId("durgan_forgehammer"),
       name: assertLocalized("Durgan Forgehammer"),
       line: assertLocalized("Any card, any temper you like."),
-      art: artRef.dreamGuide(asGuideId("durgan_forgehammer")),
+      art: artRef.dreamGuide(testGuideId("durgan_forgehammer")),
     },
     ready: true,
     isEnhanced: false,
@@ -122,7 +122,7 @@ function enhancedView(): TransfigurationSiteView {
       candidate(3),
       candidate(4),
       {
-        entryId: asDeckEntryId("entry-5"),
+        entryId: parseDeckEntryId("entry-5"),
         model: {
           cardId: reforgedCard.id,
           displaySnapshot: reforgedCard,

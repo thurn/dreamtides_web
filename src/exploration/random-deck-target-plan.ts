@@ -14,9 +14,9 @@ import type { CardData, CardType } from "../types/cards";
 import type { JourneyState, SiteState } from "../types/journey";
 import type { DeckEntryId, SelectionKey } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
-import { asDeckEntryId } from "../types/identifiers";
 import type { ExplorationActionId } from "../types/identifiers";
-import { asSelectionKey } from "../types/identifiers";
+import { parseSelectionKey } from "../types/identifiers";
+import type { SelectionContentRevision } from "../types/selection-content-revision";
 
 export type ExplorationRandomDeckTargetEffectKind =
   "copy-random-cards" | "change-random-card-type" | "replace-random-with-card";
@@ -38,7 +38,7 @@ export interface ExplorationRandomDeckTargetPreparation {
   eligibleCards: readonly ExplorationRandomDeckTargetBinding[];
   targets: readonly ExplorationRandomDeckTargetBinding[];
   selectionRulesVersion: SelectionRulesVersion;
-  selectionContentRevision: string;
+  selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
   selectorSignature?: string;
   selectorTrace?: RewardSelectionTrace;
@@ -161,7 +161,7 @@ function eligibleBindings(
 function selectionKey(
   input: ExplorationRandomDeckTargetPlanInput,
 ): SelectionKey {
-  return asSelectionKey(`${input.actionId}:random-deck-targets`);
+  return parseSelectionKey(`${input.actionId}:random-deck-targets`);
 }
 
 function signedPreparation(
@@ -189,7 +189,7 @@ function signedPreparation(
 function unavailablePreparation(input: {
   plan: ExplorationRandomDeckTargetPlanInput;
   eligibleCards: readonly ExplorationRandomDeckTargetBinding[];
-  selectionContentRevision: string;
+  selectionContentRevision: SelectionContentRevision;
   reason: ExplorationRandomDeckTargetUnavailableReason;
 }): ExplorationRandomDeckTargetPreparation {
   return signedPreparation(input.plan, {
@@ -277,7 +277,7 @@ export function prepareExplorationRandomDeckTargetPlan(
     eligibleCards.map((binding) => [binding.entryId, binding]),
   );
   const targets = selection.bindings.deckEntryIds.flatMap((entryId) => {
-    const binding = eligibleByEntry.get(asDeckEntryId(entryId));
+    const binding = eligibleByEntry.get(entryId);
     return binding === undefined ? [] : [binding];
   });
   if (

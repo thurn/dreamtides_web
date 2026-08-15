@@ -22,13 +22,13 @@ import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import type { DreamsignId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
+import type { DreamsignId, GuideId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
 
 /** The guide who speaks over the Revelation offer. */
 export interface DreamsignRevelationGuideView {
   /** Stable guide id, used for QA data attributes. */
-  id: string;
+  id: GuideId;
   /** Display name shown in the speech bubble. */
   name: LocalizedString;
   /** The dialog line shown in the speech bubble. */
@@ -118,7 +118,7 @@ export function DreamsignRevelationScreen({
       }}
     >
       <SiteLayout
-        siteId={asSiteId("dreamsign-revelation")}
+        siteId={parseSiteId("dreamsign-revelation")}
         scene={view.scene}
         moteTint="violet"
         guide={{ ...view.guide, presence: "speaking" }}

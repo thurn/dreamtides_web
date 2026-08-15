@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { act, useState, type ReactElement } from "react";
+import { testCardName } from "../../types/test-identities";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useBattleAi, type AiProposal } from "./use-battle-ai";
@@ -20,9 +21,9 @@ import type {
 } from "../types";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 import type { BattleCardId } from "../../types/identifiers";
-import { asBattleId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 vi.mock("../../logging", () => ({
   logEvent: vi.fn(),
@@ -57,7 +58,7 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
 
 function makeBareState(): BattleMutableState {
   return {
-    battleId: asBattleId("battle-ai-hook-test"),
+    battleId: parseBattleId("battle-ai-hook-test"),
     activeSide: "enemy",
     turnNumber: 2,
     phase: "day",
@@ -89,9 +90,9 @@ function journeyDeckProvenance(): BattleCardProvenance {
 function direwolfDefinition(): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
-    cardId: asCardId(""),
+    cardId: testCardId("fixture-card"),
     cardNumber: 512,
-    name: "Marked Direwolf",
+    name: testCardName("Marked Direwolf"),
     battleCardKind: "character",
     subtype: "Warrior",
     energyCost: 4,
@@ -111,7 +112,7 @@ function strummerDefinition(): BattleDeckCardDefinition {
   return {
     ...direwolfDefinition(),
     cardNumber: 510,
-    name: "Nocturne Strummer",
+    name: testCardName("Nocturne Strummer"),
     subtype: "Musician",
     energyCost: 2,
     printedEnergyCost: 2,
@@ -148,7 +149,7 @@ function makeEnemyTurnState(
     isRevealedToPlayer: false,
     provenance: journeyDeckProvenance(),
   });
-  mutable.sides.enemy.backRank.B0 = asBattleCardId(cardId);
+  mutable.sides.enemy.backRank.B0 = cardId;
   mutate?.(mutable);
   return createReducerState(mutable);
 }
@@ -175,9 +176,9 @@ function keywordCharacterDefinition(
 ): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
-    cardId: asCardId(""),
+    cardId: testCardId("fixture-card"),
     cardNumber: 0,
-    name,
+    name: testCardName(name),
     battleCardKind: "character",
     subtype: "Warrior",
     energyCost: 1,
@@ -213,7 +214,7 @@ function placeFrontRankCharacterInSlot(
     isRevealedToPlayer: side === "enemy" ? false : true,
     provenance: journeyDeckProvenance(),
   });
-  state.sides[side].frontRank[slot] = asBattleCardId(id);
+  state.sides[side].frontRank[slot] = id;
   return id;
 }
 
@@ -248,7 +249,7 @@ function placeBackRankCharacter(
     isRevealedToPlayer: side === "enemy" ? false : true,
     provenance: journeyDeckProvenance(),
   });
-  state.sides[side].backRank[slot] = asBattleCardId(id);
+  state.sides[side].backRank[slot] = id;
   return id;
 }
 
@@ -426,7 +427,7 @@ describe("useBattleAi", () => {
         provenance: journeyDeckProvenance(),
       });
       mutable.cardInstances[centerOccupantId].status.isExhausted = true;
-      mutable.sides.enemy.backRank.B4 = asBattleCardId(centerOccupantId);
+      mutable.sides.enemy.backRank.B4 = centerOccupantId;
       mutable.sides.enemy.currentEnergy = 2;
       const supportId = allocateBattleCardInstance(mutable, {
         definition: strummerDefinition(),
@@ -435,7 +436,7 @@ describe("useBattleAi", () => {
         isRevealedToPlayer: false,
         provenance: journeyDeckProvenance(),
       });
-      mutable.sides.enemy.hand = [asBattleCardId(supportId)];
+      mutable.sides.enemy.hand = [supportId];
     });
     const commandDispatch = vi.fn();
     const playCardDispatch = vi.fn();
@@ -768,12 +769,12 @@ describe("useBattleAi", () => {
 
       expect(edits).toContainEqual({
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: asBattleCardId(winner),
+        battleCardId: parseBattleCardId(winner),
         destination: { side: "enemy", zone: "void" },
       });
       expect(edits).toContainEqual({
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: asBattleCardId(loser),
+        battleCardId: parseBattleCardId(loser),
         destination: { side: "player", zone: "void" },
       });
     });

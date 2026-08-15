@@ -5,17 +5,34 @@ import { TextField } from "../components/controls/TextField";
 import { GlassDialog } from "../components/overlay/GlassDialog";
 import { token } from "../primitives/tokens";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type { CardId } from "../../types/card-identity";
+import type { DreamsignId } from "../../types/identifiers";
+
+export type PackageDebugValueId =
+  | "starting-essence"
+  | "draft-pool"
+  | "dreamsigns-left"
+  | "dreamsigns-spent"
+  | "pick"
+  | "remaining"
+  | "unique"
+  | "mandatory"
+  | "doubled"
+  | "legal"
+  | "preferred";
+
+export type PackageDebugCardEntryId = CardId | `card-number:${number}`;
 
 /** Stable, display-ready diagnostic value. */
 export interface PackageDebugValueView {
-  id: string;
+  id: PackageDebugValueId;
   label: LocalizedString;
   value: LocalizedString;
 }
 
 /** One UUID- or source-id-backed diagnostic entry. */
-export interface PackageDebugEntryView {
-  id: string;
+export interface PackageDebugEntryView<Id extends string> {
+  id: Id;
   label: LocalizedString;
   detail?: LocalizedString;
 }
@@ -25,10 +42,10 @@ export interface PackageDebugView {
   values: readonly PackageDebugValueView[];
   dreamAvatar: LocalizedString | null;
   validation: readonly PackageDebugValueView[];
-  remainingDreamsigns: readonly PackageDebugEntryView[];
-  spentDreamsigns: readonly PackageDebugEntryView[];
-  currentOffer: readonly PackageDebugEntryView[];
-  topRemainingCards: readonly PackageDebugEntryView[];
+  remainingDreamsigns: readonly PackageDebugEntryView<DreamsignId>[];
+  spentDreamsigns: readonly PackageDebugEntryView<DreamsignId>[];
+  currentOffer: readonly PackageDebugEntryView<CardId>[];
+  topRemainingCards: readonly PackageDebugEntryView<PackageDebugCardEntryId>[];
 }
 
 export interface PackageDebugDialogProps {
@@ -216,13 +233,13 @@ export function PackageDebugDialog(
   );
 }
 
-function DiagnosticSection({
+function DiagnosticSection<Id extends string>({
   title,
   entries,
   emptyLabel,
 }: {
   title: LocalizedString;
-  entries: readonly PackageDebugEntryView[];
+  entries: readonly PackageDebugEntryView<Id>[];
   emptyLabel: LocalizedString;
 }): ReactElement {
   const resolve = useLocalizer();

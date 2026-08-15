@@ -18,8 +18,7 @@ import {
   infoCardWidth,
 } from "./InfoCard";
 import { TroxLocalizationProvider } from "../../../runtime/localization/context";
-import { asDreamscapeId } from "../../../types/identifiers";
-import { asGuideId } from "../../../types/identifiers";
+import { testDreamscapeId, testGuideId } from "../../../types/test-identities";
 
 function renderToStaticMarkup(node: React.ReactNode): string {
   return renderReactToStaticMarkup(
@@ -119,8 +118,8 @@ describe("InfoCard shell treatment", () => {
     const html = renderToStaticMarkup(
       React.createElement(InfoCard, {
         variant: "atlasReveal",
-        image: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
-        figure: artRef.dreamGuide(asGuideId("aldric")),
+        image: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
+        figure: artRef.dreamGuide(testGuideId("aldric")),
         title: assertLocalized("Wilderveil"),
         subtitle: assertLocalized("Aldric, the Seer"),
         body: richText.plain(
@@ -200,7 +199,7 @@ describe("InfoCard shell treatment", () => {
     const fullBleed = renderToStaticMarkup(
       React.createElement(InfoCard, {
         variant: "fullBleed",
-        image: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
+        image: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
         title: assertLocalized("Gain 1● and score 2⍟"),
         subtitle: assertLocalized("Store 1⧗"),
         body: richText.plain(assertLocalized("Pay ☾.")),
@@ -209,7 +208,7 @@ describe("InfoCard shell treatment", () => {
     const atlasReveal = renderToStaticMarkup(
       React.createElement(InfoCard, {
         variant: "atlasReveal",
-        image: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
+        image: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
         title: assertLocalized("▸Dawn"),
         subtitle: assertLocalized("❖ Fast"),
         body: richText.plain(assertLocalized("Gain 1✦.")),

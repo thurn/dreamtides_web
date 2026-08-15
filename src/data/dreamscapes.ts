@@ -6,6 +6,7 @@ import type {
   DreamscapeContent,
 } from "../types/content";
 import type { SiteState, SiteType } from "../types/journey";
+import type { GuideId } from "../types/identifiers";
 import { SITE_TYPES } from "../types/site-type";
 import {
   bindSourceTransport,
@@ -263,7 +264,7 @@ export function otherGuideSignatureSites(
 export function guideForSiteType(
   guides: readonly DreamGuideContent[],
   siteType: SiteType,
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent | null {
   if (presentingGuideId !== undefined) {
     return guides.find((guide) => guide.id === presentingGuideId) ?? null;
@@ -275,7 +276,7 @@ export function guideForSiteType(
 export function requireGuideForSiteType(
   guides: readonly DreamGuideContent[],
   siteType: SiteType,
-  presentingGuideId?: string,
+  presentingGuideId?: GuideId,
 ): DreamGuideContent {
   const matches =
     presentingGuideId === undefined

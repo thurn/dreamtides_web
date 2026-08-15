@@ -20,11 +20,11 @@ InfoCardProps is a discriminated union. The flattened table combines every varia
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `"object" \| "fullBleed" \| "text" \| "atlasReveal" \| "icon" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
+| `variant` | `"object" \| "text" \| "fullBleed" \| "atlasReveal" \| "icon" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
 | `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. The square hero image the card is built on, as an {@link ArtRef}. Required. The scene hero image the card is built on, as an {@link ArtRef}. Required. |
 | `title` | `LocalizedString` | no | — | The card's headline. Resolve names before display; canonical rules symbols render as their inline icons. |
 | `body` | `RichText` | no | — | The reveal copy, as a structured {@link RichText} value. Canonical rules symbols and explicit glyph parts render as cap-height-aligned inline icons. |
-| `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the hero image is cropped. Default `"center"`. |
+| `imageCrop` | `ImageCrop` = `"center" \| "top"` | no | — | How the hero image is cropped. Default `"center"`. |
 | `figure` | `ArtRef` | no | — | An optional foreground character render (a transparent full-body cutout — a Dream Guide, the boss) laid centered and prominent OVER the hero image, standing above the glass text card. Its own subject of the card; omit for a scene-only hero. An {@link ArtRef}, resolved by the component. Optional transparent full-body figure standing on the card's right side. |
 | `subtitle` | `LocalizedString` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. The resident guide / boss title; rules symbols render as icons. An epithet under the name — a smaller serif subtitle in white, mirroring the Dream Avatar-select name/epithet pairing. Resolve before display; rules symbols render as icons. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |

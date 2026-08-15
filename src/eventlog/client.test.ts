@@ -1,3 +1,5 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 // Unit tests for the stateful LogClient: confirmed fold + pending-intent
 // queue + optimistic echo reconciliation + divergence tripwire + hash gating.
 //
@@ -9,11 +11,17 @@
 // rollback without pulling in src/rules/.
 
 import { describe, expect, it } from "vitest";
+import type { ClientId, IntentKey } from "../types/identifiers";
+import { testClientId } from "../types/test-identities";
+import { testIntentKey } from "../types/test-identities";
 import { createLogClient } from "./client";
-import type { LogClientIo } from "./client";
+import type { EventDraft, LogClientIo } from "./client";
 import { type AppliedEntry, foldEvents } from "./fold";
 import { hashState } from "./hash";
-import type {
+import {
+  parseEventNonce,
+  parseStateHash,
+  type
   BounceReason,
   EngineConfig,
   EventOutcome,
@@ -26,7 +34,7 @@ interface ToyState {
   applied: string[];
 }
 
-const GENESIS: Genesis = { seed: "toy-seed", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
+const GENESIS: Genesis = { seed: testJourneySeed("toy-seed"), reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
 
 const config: EngineConfig<ToyState> = {
   genesisState: () => ({ applied: [] }),
@@ -53,18 +61,21 @@ function confirmedEvent(opts: {
   actor: string;
   basedOnSeq: number;
   nonce?: string;
-  intentKey?: string;
+  intentKey?: IntentKey;
   stateHashAfter?: string;
 }): GameEvent {
   return {
     type: "T",
     payload: { tag: opts.tag },
-    actor: opts.actor,
+    actor: testEventActor(opts.actor),
     clientTimestamp: "0",
     basedOnSeq: opts.basedOnSeq,
-    nonce: opts.nonce,
+    nonce: opts.nonce === undefined ? undefined : parseEventNonce(opts.nonce),
     intentKey: opts.intentKey,
-    stateHashAfter: opts.stateHashAfter,
+    stateHashAfter:
+      opts.stateHashAfter === undefined
+        ? undefined
+        : parseStateHash(opts.stateHashAfter),
   };
 }
 
@@ -120,7 +131,7 @@ interface Harness {
     authoritativeHead: number;
   }>;
   collisions: Array<{
-    intentKey: string;
+    intentKey: IntentKey;
     winningSeq: number;
     winner: GameEvent;
     contender: GameEvent;
@@ -135,7 +146,7 @@ interface HarnessOptions {
   /** Optional append implementation for race-shaping tests. */
   append?: (event: GameEvent) => Promise<number>;
   /** Stable actor id for remount and nonce-scope tests. */
-  clientId?: string;
+  clientId?: ClientId;
 }
 
 function makeHarness(
@@ -245,7 +256,7 @@ describe("LogClient confirmed head", () => {
     harness.deliver(
       makeNode({
         events: {
-          1: confirmedEvent({ tag: "one", actor: "other", basedOnSeq: 0 }),
+          1: confirmedEvent({ tag: "one", actor: testEventActor("other"), basedOnSeq: 0 }),
         },
       }),
     );
@@ -256,17 +267,21 @@ describe("LogClient confirmed head", () => {
 /** A confirmed event whose `basedOnSeq` is nonsensical, so the fold's malformed
  *  guard reports a bounced no-op carrying a `FoldError` without reaching the reducer. */
 function malformedConfirmed(tag: string): GameEvent {
-  return { ...confirmedEvent({ tag, actor: "me", basedOnSeq: 0 }), basedOnSeq: -1 };
+  return { ...confirmedEvent({ tag, actor: testEventActor("me"), basedOnSeq: 0 }), basedOnSeq: -1 };
 }
 
 describe("LogClient double-apply of own intent", () => {
   it("does not repeat nonces when the same client id remounts", async () => {
-    const first = makeHarness(config, { clientId: "stable-client" });
+    const first = makeHarness(config, {
+      clientId: testClientId("stable-client"),
+    });
     first.harness.deliver(makeNode({ events: {} }));
     await first.client.submit({ type: "T", payload: { tag: "first" } });
     first.client.close();
 
-    const second = makeHarness(config, { clientId: "stable-client" });
+    const second = makeHarness(config, {
+      clientId: testClientId("stable-client"),
+    });
     second.harness.deliver(makeNode({ events: {} }));
     await second.client.submit({ type: "T", payload: { tag: "second" } });
 
@@ -281,7 +296,7 @@ describe("LogClient double-apply of own intent", () => {
     const { harness, client } = makeHarness();
     harness.deliver(makeNode({ events: {} }));
 
-    await client.submit({ type: "T", payload: { tag: "A" }, actor: "me" });
+    await client.submit({ type: "T", payload: { tag: "A" }, actor: testEventActor("me") });
     // Optimistic echo: A applied once.
     expect(harness.displayed()?.applied).toEqual(["A"]);
 
@@ -316,12 +331,12 @@ describe("LogClient double-apply of own intent", () => {
     const first = client.submit({
       type: "T",
       payload: { tag: "automatic" },
-      intentKey: "battle:b-1:dreamwell:player:2",
+      intentKey: testIntentKey("battle:b-1:dreamwell:player:2"),
     });
     const replay = client.submit({
       type: "T",
       payload: { tag: "automatic" },
-      intentKey: "battle:b-1:dreamwell:player:2",
+      intentKey: testIntentKey("battle:b-1:dreamwell:player:2"),
     });
 
     expect(harness.appended).toHaveLength(1);
@@ -329,10 +344,10 @@ describe("LogClient double-apply of own intent", () => {
 
     const partnerWinner = confirmedEvent({
       tag: "automatic",
-      actor: "partner",
+      actor: testEventActor("partner"),
       basedOnSeq: 0,
       nonce: "partner:1",
-      intentKey: "battle:b-1:dreamwell:player:2",
+      intentKey: testIntentKey("battle:b-1:dreamwell:player:2"),
     });
     harness.deliver(makeNode({ events: { 1: partnerWinner } }));
     resolveAppend?.(1);
@@ -351,10 +366,10 @@ describe("LogClient double-apply of own intent", () => {
     const { harness, client } = makeHarness();
     const confirmed = confirmedEvent({
       tag: "automatic",
-      actor: "partner",
+      actor: testEventActor("partner"),
       basedOnSeq: 0,
       nonce: "partner:1",
-      intentKey: "battle:b-1:dreamwell:player:2",
+      intentKey: testIntentKey("battle:b-1:dreamwell:player:2"),
     });
     harness.deliver(makeNode({ events: { 1: confirmed } }));
 
@@ -362,7 +377,7 @@ describe("LogClient double-apply of own intent", () => {
       client.submit({
         type: "T",
         payload: { tag: "automatic" },
-        intentKey: "battle:b-1:dreamwell:player:2",
+        intentKey: testIntentKey("battle:b-1:dreamwell:player:2"),
       }),
     ).resolves.toBe(1);
 
@@ -377,22 +392,22 @@ describe("LogClient double-apply of own intent", () => {
     const { harness, client } = makeHarness();
     const winner = confirmedEvent({
       tag: "winner",
-      actor: "partner",
+      actor: testEventActor("partner"),
       basedOnSeq: 0,
-      intentKey: "logical-transition",
+      intentKey: testIntentKey("logical-transition"),
     });
     harness.deliver(makeNode({ events: { 1: winner } }));
 
     await client.submit({
       type: "T",
       payload: { tag: "different-contract" },
-      intentKey: "logical-transition",
+      intentKey: testIntentKey("logical-transition"),
     });
 
     expect(harness.appended).toHaveLength(0);
     expect(harness.collisions).toHaveLength(1);
     expect(harness.collisions[0]).toMatchObject({
-      intentKey: "logical-transition",
+      intentKey: testIntentKey("logical-transition"),
       winningSeq: 1,
       winner,
     });
@@ -436,15 +451,15 @@ describe("LogClient double-apply of own intent", () => {
         baseSnapshot: { applied: ["confirmed"] },
         events: {},
         appliedIndex: new Map([
-          [5, { actor: "partner", type: "T" }],
+          [5, { actor: testEventActor("partner"), type: "T" }],
         ]),
       }),
     );
 
-    const draft = {
+    const draft: EventDraft = {
       type: "T",
       payload: { tag: "automatic" },
-      intentKey: "complete-site:journey:9:site-7",
+      intentKey: testIntentKey("complete-site:journey:9:site-7"),
     };
     await expect(client.submit(draft)).resolves.toBe(5);
     await expect(client.submit(draft)).resolves.toBe(5);
@@ -470,10 +485,10 @@ describe("LogClient optimistic echo rollback", () => {
     const { harness, client } = makeHarness(bounceBlockedConfig, {
       append: () => Promise.resolve(2),
     });
-    const intentKey = "open-site:journey:9:site-7";
+    const intentKey = testIntentKey("open-site:journey:9:site-7");
     const observer = confirmedEvent({
       tag: "blocked",
-      actor: "observer",
+      actor: testEventActor("observer"),
       basedOnSeq: 0,
       intentKey,
     });
@@ -483,7 +498,7 @@ describe("LogClient optimistic echo rollback", () => {
       client.submit({
         type: "T",
         payload: { tag: "controller" },
-        actor: "controller",
+        actor: testEventActor("controller"),
         intentKey,
       }),
     ).resolves.toBe(2);
@@ -513,16 +528,16 @@ describe("LogClient optimistic echo rollback", () => {
       append: () => appendResult,
     });
     harness.deliver(makeNode({ events: {} }));
-    const draft = {
+    const draft: EventDraft = {
       type: "T",
       payload: { tag: "controller" },
-      actor: "controller",
-      intentKey: "open-site:journey:9:site-7",
+      actor: testEventActor("controller"),
+      intentKey: testIntentKey("open-site:journey:9:site-7"),
     };
     const first = client.submit(draft);
     const observer = confirmedEvent({
       tag: "blocked",
-      actor: "observer",
+      actor: testEventActor("observer"),
       basedOnSeq: 0,
       intentKey: draft.intentKey,
     });
@@ -561,7 +576,7 @@ describe("LogClient optimistic echo rollback", () => {
       },
     });
     harness.deliver(makeNode({ events: {} }));
-    const intentKey = "complete-site:journey:9:site-7";
+    const intentKey = testIntentKey("complete-site:journey:9:site-7");
     const first = client.submit({
       type: "T",
       payload: { tag: "blocked" },
@@ -588,12 +603,12 @@ describe("LogClient optimistic echo rollback", () => {
     const { harness, client } = makeHarness();
     harness.deliver(makeNode({ events: {} }));
 
-    await client.submit({ type: "T", payload: { tag: "A" }, actor: "me" });
+    await client.submit({ type: "T", payload: { tag: "A" }, actor: testEventActor("me") });
     expect(harness.displayed()?.applied).toEqual(["A"]);
     const ownA = harness.appended[0];
 
     // Partner event lands FIRST at seq 1.
-    const partner = confirmedEvent({ tag: "P", actor: "partner", basedOnSeq: 0 });
+    const partner = confirmedEvent({ tag: "P", actor: testEventActor("partner"), basedOnSeq: 0 });
     harness.deliver(makeNode({ events: { 1: partner } }));
     // Echo rolls back: the pending A now re-folds after the partner and bounces.
     expect(harness.displayed()?.applied).toEqual(["P"]);
@@ -611,17 +626,17 @@ describe("LogClient refold after compaction", () => {
   it("re-folds from the snapshot when baseSeq advances past lastFoldedSeq", () => {
     const { harness } = makeHarness();
     // Fold up to seq 3.
-    const e1 = confirmedEvent({ tag: "a", actor: "me", basedOnSeq: 0 });
-    const e2 = confirmedEvent({ tag: "b", actor: "me", basedOnSeq: 1 });
-    const e3 = confirmedEvent({ tag: "c", actor: "me", basedOnSeq: 2 });
+    const e1 = confirmedEvent({ tag: "a", actor: testEventActor("me"), basedOnSeq: 0 });
+    const e2 = confirmedEvent({ tag: "b", actor: testEventActor("me"), basedOnSeq: 1 });
+    const e3 = confirmedEvent({ tag: "c", actor: testEventActor("me"), basedOnSeq: 2 });
     harness.deliver(makeNode({ events: { 1: e1, 2: e2, 3: e3 } }));
     expect(harness.displayed()?.applied).toEqual(["a", "b", "c"]);
 
     // A compacted node: baseSeq jumped to 5 (past our lastFoldedSeq of 3) with a
     // snapshot, plus live events 6 and 7.
     const snapshot: ToyState = { applied: ["a", "b", "c", "d", "e"] };
-    const e6 = confirmedEvent({ tag: "f", actor: "me", basedOnSeq: 5 });
-    const e7 = confirmedEvent({ tag: "g", actor: "me", basedOnSeq: 6 });
+    const e6 = confirmedEvent({ tag: "f", actor: testEventActor("me"), basedOnSeq: 5 });
+    const e7 = confirmedEvent({ tag: "g", actor: testEventActor("me"), basedOnSeq: 6 });
     harness.deliver(
       makeNode({ baseSeq: 5, baseSnapshot: snapshot, events: { 6: e6, 7: e7 } }),
     );
@@ -646,17 +661,17 @@ describe("LogClient authoritative-prefix correction", () => {
     const second = makeHarness();
     const provisionalA = confirmedEvent({
       tag: "provisional-a",
-      actor: "client-a",
+      actor: testEventActor("client-a"),
       basedOnSeq: 0,
     });
     const provisionalB = confirmedEvent({
       tag: "provisional-b",
-      actor: "client-b",
+      actor: testEventActor("client-b"),
       basedOnSeq: 0,
     });
     const winner = confirmedEvent({
       tag: "persisted-winner",
-      actor: "client-a",
+      actor: testEventActor("client-a"),
       basedOnSeq: 0,
     });
 
@@ -695,13 +710,13 @@ describe("LogClient authoritative-prefix correction", () => {
     const submission = client.submit({
       type: "T",
       payload: { tag: "contender" },
-      intentKey: "one-logical-transition",
+      intentKey: testIntentKey("one-logical-transition"),
     });
     const winner = confirmedEvent({
       tag: "winner",
-      actor: "partner",
+      actor: testEventActor("partner"),
       basedOnSeq: 0,
-      intentKey: "one-logical-transition",
+      intentKey: testIntentKey("one-logical-transition"),
     });
 
     harness.deliver(makeNode({ events: { 1: winner } }));
@@ -710,7 +725,7 @@ describe("LogClient authoritative-prefix correction", () => {
 
     expect(harness.collisions).toHaveLength(1);
     expect(harness.collisions[0]).toMatchObject({
-      intentKey: "one-logical-transition",
+      intentKey: testIntentKey("one-logical-transition"),
       winningSeq: 1,
       winner,
     });
@@ -752,10 +767,10 @@ describe("LogClient joiner seeds the applied index from the snapshot", () => {
     const { harness } = makeHarness();
     const snapshot: ToyState = { applied: ["a", "b", "c", "d"] };
     const appliedIndex = new Map<number, AppliedEntry>([
-      [4, { actor: "them", type: "T" }],
-      [5, { actor: "me", type: "T" }],
+      [4, { actor: testEventActor("them"), type: "T" }],
+      [5, { actor: testEventActor("me"), type: "T" }],
     ]);
-    const e6 = confirmedEvent({ tag: "z", actor: "me", basedOnSeq: 3 });
+    const e6 = confirmedEvent({ tag: "z", actor: testEventActor("me"), basedOnSeq: 3 });
     harness.deliver(
       makeNode({ baseSeq: 5, baseSnapshot: snapshot, appliedIndex, events: { 6: e6 } }),
     );
@@ -779,8 +794,8 @@ describe("LogClient stateHashAfter gating", () => {
     const { harness, client } = makeHarness();
     harness.deliver(makeNode({ events: {} }));
 
-    await client.submit({ type: "T", payload: { tag: "A" }, actor: "me" });
-    await client.submit({ type: "T", payload: { tag: "B" }, actor: "me" });
+    await client.submit({ type: "T", payload: { tag: "A" }, actor: testEventActor("me") });
+    await client.submit({ type: "T", payload: { tag: "B" }, actor: testEventActor("me") });
 
     // First submit had an empty pending queue and predicted seq lastConfirmed+1.
     expect(typeof harness.appended[0].stateHashAfter).toBe("string");
@@ -805,7 +820,7 @@ describe("LogClient divergence tripwire", () => {
 
     const bad = confirmedEvent({
       tag: "X",
-      actor: "partner",
+      actor: testEventActor("partner"),
       basedOnSeq: 0,
       stateHashAfter: "deadbeef",
     });
@@ -823,13 +838,13 @@ describe("LogClient divergence tripwire", () => {
   it("does not false-positive on an own skewed prediction that bounces", async () => {
     const { harness, client } = makeHarness();
     harness.deliver(makeNode({ events: {} }));
-    await client.submit({ type: "T", payload: { tag: "A" }, actor: "me" });
+    await client.submit({ type: "T", payload: { tag: "A" }, actor: testEventActor("me") });
     const ownA = harness.appended[0];
     expect(typeof ownA.stateHashAfter).toBe("string");
 
     // Partner wins seq 1; own A commits at seq 2 and bounces. Its stamped
     // (optimistic, applied) hash must NOT be read as divergence on a bounce.
-    const partner = confirmedEvent({ tag: "P", actor: "partner", basedOnSeq: 0 });
+    const partner = confirmedEvent({ tag: "P", actor: testEventActor("partner"), basedOnSeq: 0 });
     harness.deliver(makeNode({ events: { 1: partner, 2: ownA } }));
     expect(harness.divergences).toHaveLength(0);
   });
@@ -862,13 +877,13 @@ describe("LogClient divergence tripwire", () => {
     // Confirm events 1..5 so lastFoldedSeq == 5.
     const confirmed: Record<number, GameEvent> = {};
     for (let seq = 1; seq <= 5; seq++) {
-      confirmed[seq] = confirmedEvent({ tag: `c${seq}`, actor: "me", basedOnSeq: seq - 1 });
+      confirmed[seq] = confirmedEvent({ tag: `c${seq}`, actor: testEventActor("me"), basedOnSeq: seq - 1 });
     }
     harness.deliver(makeNode({ events: { ...confirmed } }));
 
     // Submit E: pending empty, basedOnSeq == 5, predicts seq 6, stamps the
     // hash of E folded at seq 6 (rng keyed by 6).
-    await client.submit({ type: "T", payload: { tag: "E" }, actor: "me" });
+    await client.submit({ type: "T", payload: { tag: "E" }, actor: testEventActor("me") });
     const ownE = harness.appended[0];
     expect(ownE.basedOnSeq).toBe(5);
     expect(typeof ownE.stateHashAfter).toBe("string");
@@ -877,7 +892,7 @@ describe("LogClient divergence tripwire", () => {
     // APPLIES (P bounced, so the (5,7) window has zero applied events). E now
     // folds with rng keyed by 7 -> a different hash than the stamped hash@6,
     // with NO nondeterminism bug. basedOnSeq(5) != seq-1(6), so no divergence.
-    const partnerBounce = confirmedEvent({ tag: "P", actor: "partner", basedOnSeq: 5 });
+    const partnerBounce = confirmedEvent({ tag: "P", actor: testEventActor("partner"), basedOnSeq: 5 });
     partnerBounce.payload.forceBounce = true;
     harness.deliver(makeNode({ events: { ...confirmed, 6: partnerBounce, 7: ownE } }));
 
@@ -896,7 +911,7 @@ describe("LogClient append rejection (P1-3)", () => {
     // The echo shows optimistically, then the append rejects and the intent is
     // swept out — `submit` rethrows the rejection.
     await expect(
-      client.submit({ type: "T", payload: { tag: "A" }, actor: "me" }),
+      client.submit({ type: "T", payload: { tag: "A" }, actor: testEventActor("me") }),
     ).rejects.toBe(boom);
 
     // The stranded echo was rolled back: displayed reverts to the confirmed
@@ -908,7 +923,7 @@ describe("LogClient append rejection (P1-3)", () => {
     expect(harness.appendFailures[0].error).toBe(boom);
 
     // A later confirmed node folds cleanly — nothing stale left in the queue.
-    const other = confirmedEvent({ tag: "Z", actor: "partner", basedOnSeq: 0 });
+    const other = confirmedEvent({ tag: "Z", actor: testEventActor("partner"), basedOnSeq: 0 });
     harness.deliver(makeNode({ events: { 1: other } }));
     expect(harness.displayed()?.applied).toEqual(["Z"]);
   });
@@ -924,7 +939,7 @@ describe("LogClient append rejection (P1-3)", () => {
     });
     harness.deliver(makeNode({ events: {} }));
 
-    const submit = client.submit({ type: "T", payload: { tag: "A" }, actor: "me" });
+    const submit = client.submit({ type: "T", payload: { tag: "A" }, actor: testEventActor("me") });
     const committed = harness.appended[0];
     harness.deliver(makeNode({ events: { 1: committed } }));
 
@@ -941,8 +956,8 @@ describe("LogClient full-refold pending sweep (P1-3)", () => {
     const { harness, client } = makeHarness();
     harness.deliver(makeNode({ events: {} }));
 
-    await client.submit({ type: "T", payload: { tag: "A" }, actor: "me" });
-    await client.submit({ type: "T", payload: { tag: "B" }, actor: "me" });
+    await client.submit({ type: "T", payload: { tag: "A" }, actor: testEventActor("me") });
+    await client.submit({ type: "T", payload: { tag: "B" }, actor: testEventActor("me") });
     expect(harness.displayed()?.applied).toEqual(["A", "B"]);
 
     // A compacted node advances baseSeq past our fold -> a full refold. The
@@ -960,9 +975,9 @@ describe("LogClient full-refold pending sweep (P1-3)", () => {
 describe("LogClient seq-gap handling (P1-7)", () => {
   it("stops folding at a seq gap and resumes when a complete node arrives", () => {
     const { harness } = makeHarness();
-    const e1 = confirmedEvent({ tag: "a", actor: "me", basedOnSeq: 0 });
-    const e2 = confirmedEvent({ tag: "b", actor: "me", basedOnSeq: 1 });
-    const e3 = confirmedEvent({ tag: "c", actor: "me", basedOnSeq: 2 });
+    const e1 = confirmedEvent({ tag: "a", actor: testEventActor("me"), basedOnSeq: 0 });
+    const e2 = confirmedEvent({ tag: "b", actor: testEventActor("me"), basedOnSeq: 1 });
+    const e3 = confirmedEvent({ tag: "c", actor: testEventActor("me"), basedOnSeq: 2 });
 
     // A node with a hole at seq 2: head 3 but only 1 and 3 are present.
     harness.deliver(makeNode({ events: { 1: e1, 3: e3 } }));
@@ -981,9 +996,9 @@ describe("LogClient seq-gap handling (P1-7)", () => {
 describe("LogClient rewind refold hygiene (P1-4)", () => {
   it("re-reports outcomes and fold errors once per seq across a rewind refold", () => {
     const { harness } = makeHarness();
-    const good1 = confirmedEvent({ tag: "a", actor: "me", basedOnSeq: 0 });
+    const good1 = confirmedEvent({ tag: "a", actor: testEventActor("me"), basedOnSeq: 0 });
     const malformed = malformedConfirmed("x");
-    const good3 = confirmedEvent({ tag: "c", actor: "me", basedOnSeq: 0 });
+    const good3 = confirmedEvent({ tag: "c", actor: testEventActor("me"), basedOnSeq: 0 });
 
     harness.deliver(makeNode({ events: { 1: good1, 2: malformed, 3: good3 } }));
     // The malformed seq 2 folded to a bounce carrying a FoldError, reported once.

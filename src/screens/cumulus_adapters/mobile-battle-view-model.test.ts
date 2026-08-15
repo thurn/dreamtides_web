@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import {
+  testCardName,
+  testDreamwellCardName,
+} from "../../types/test-identities";
 import { LocalizedString } from "@trox/runtime";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 import { createInitialBattleState } from "../../battle/state/create-initial-state";
@@ -32,17 +36,15 @@ import {
 import type { MobileBattlePromptCopy } from "../../cumulus/screens/MobileBattleScreen";
 import { assertLocalized } from "@trox/runtime";
 import { resolveChecked } from "../../runtime/localization/runtime";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asBattleId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asBattleEntryKey } from "../../types/identifiers";
-import { asDreamwellCardId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asOpponentId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { parseOpponentId } from "../../types/identifiers";
 import type { BattleCardId } from "../../types/identifiers";
-import { asBattleEffectScriptId } from "../../types/identifiers";
+import { parseBattleEffectScriptId } from "../../types/identifiers";
+import { identityKeys } from "../../types/identifiers";
+import { testDreamAvatarId, testCardId, testDreamwellCardId } from "../../types/test-identities";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -57,7 +59,7 @@ function resolveFixturePromptText(
 }
 
 const ENEMY_DREAM_AVATAR: BattleDreamAvatarSummary = {
-  id: asDreamAvatarId("enemy-dream-avatar-uuid"),
+  id: testDreamAvatarId("enemy-dream-avatar-uuid"),
   name: "Enemy Caller",
   title: "Keeper of Tests",
   renderedText: "A synthetic test ability.",
@@ -68,13 +70,13 @@ const ENEMY_DREAM_AVATAR: BattleDreamAvatarSummary = {
 function definition(index: number): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
-    cardId: asCardId(
+    cardId: testCardId(
       `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
     ),
     cardNumber: index,
-    name: `Fixture Card ${String(index)}`,
+    name: testCardName(`Fixture Card ${String(index)}`),
     battleCardKind: "character",
-    subtype: "Fixture",
+    subtype: "Warrior",
     energyCost: index % 5,
     printedEnergyCost: index % 5,
     printedSpark: (index % 4) + 1,
@@ -89,11 +91,11 @@ function definition(index: number): BattleDeckCardDefinition {
 
 function makeInit(): BattleInit {
   return {
-    battleId: asBattleId("mobile-battle-fixture"),
-    battleEntryKey: asBattleEntryKey("battle-entry-fixture"),
+    battleId: parseBattleId("mobile-battle-fixture"),
+    battleEntryKey: parseBattleEntryKey("battle-entry-fixture"),
     seed: 42,
-    siteId: asSiteId("battle-site-fixture"),
-    dreamscapeId: asAtlasNodeId("dreamscape-fixture"),
+    siteId: parseSiteId("battle-site-fixture"),
+    dreamscapeId: parseAtlasNodeId("dreamscape-fixture"),
     completionLevelAtStart: 2,
     isFinalBoss: false,
     essenceReward: 30,
@@ -116,7 +118,7 @@ function makeInit(): BattleInit {
     ),
     dreamwellDeck: [],
     enemyDescriptor: {
-      id: asOpponentId(ENEMY_DREAM_AVATAR.id),
+      id: parseOpponentId(ENEMY_DREAM_AVATAR.id),
       name: ENEMY_DREAM_AVATAR.name,
       subtitle: ENEMY_DREAM_AVATAR.title,
       imageNumber: ENEMY_DREAM_AVATAR.imageNumber,
@@ -129,7 +131,7 @@ function makeInit(): BattleInit {
       definition(index + 9),
     ),
     dreamAvatarSummary: {
-      id: asDreamAvatarId("player-dream-avatar-uuid"),
+      id: testDreamAvatarId("player-dream-avatar-uuid"),
       name: "Player Caller",
       title: "Builder of Fixtures",
       renderedText: "Another synthetic test ability.",
@@ -143,18 +145,18 @@ function makeInit(): BattleInit {
 
 function makeBoard(init: BattleInit): BattleMutableState {
   const board = createInitialBattleState(init);
-  const ids = Object.keys(board.cardInstances);
+  const ids = identityKeys(board.cardInstances);
 
-  board.sides.player.hand = ids.slice(0, 3).map(asBattleCardId);
-  board.sides.player.deck = ids.slice(3, 5).map(asBattleCardId);
-  board.sides.player.void = ids.slice(5, 7).map(asBattleCardId);
-  board.sides.player.frontRank.F3 = asBattleCardId(ids[7]);
+  board.sides.player.hand = ids.slice(0, 3);
+  board.sides.player.deck = ids.slice(3, 5);
+  board.sides.player.void = ids.slice(5, 7);
+  board.sides.player.frontRank.F3 = ids[7];
 
-  board.sides.enemy.hand = ids.slice(8, 10).map(asBattleCardId);
-  board.sides.enemy.deck = ids.slice(10, 12).map(asBattleCardId);
-  board.sides.enemy.void = ids.slice(12, 14).map(asBattleCardId);
-  board.sides.enemy.frontRank.F0 = asBattleCardId(ids[14]);
-  board.sides.enemy.backRank.B4 = asBattleCardId(ids[15]);
+  board.sides.enemy.hand = ids.slice(8, 10);
+  board.sides.enemy.deck = ids.slice(10, 12);
+  board.sides.enemy.void = ids.slice(12, 14);
+  board.sides.enemy.frontRank.F0 = ids[14];
+  board.sides.enemy.backRank.B4 = ids[15];
 
   board.sides.player.currentEnergy = 2;
   board.sides.player.maxEnergy = 4;
@@ -232,8 +234,8 @@ describe("buildMobileBattleView", () => {
       ...makeInit(),
       dreamwellDeck: [
         {
-          id: asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
-          name: "Fixture Beacon",
+          id: testDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
+          name: testDreamwellCardName("Fixture Beacon"),
           renderedText: "Draw a card.",
           energyAdded: 2,
           order: 2,
@@ -255,7 +257,7 @@ describe("buildMobileBattleView", () => {
     ).toEqual({
       side: "enemy",
       model: {
-        cardId: asCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
+        cardId: testCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
         displaySnapshot: {
           id: "3a4293da-55a1-4094-898a-df402ffa1c92",
           name: "Fixture Beacon",
@@ -414,7 +416,7 @@ describe("buildMobileBattleView", () => {
       run: {
         scriptRef: {
           table: "dreamwell",
-          id: asBattleEffectScriptId("prompt-fixture"),
+          id: parseBattleEffectScriptId("prompt-fixture"),
         },
         cursor: [0],
         side: "player",
@@ -447,7 +449,7 @@ describe("buildMobileBattleView", () => {
     expect(optimistic.cardPicker?.label).toBeInstanceOf(LocalizedString);
     expect(optimistic.cardPicker?.subtitle).toBeInstanceOf(LocalizedString);
     expect(optimistic.cardPicker).toMatchObject({
-      key: "42",
+      key: prompt.promptId,
       candidateIds: prompt.options.candidateIds,
       count: 2,
       optional: false,
@@ -515,7 +517,7 @@ describe("buildMobileBattleView", () => {
       run: {
         scriptRef: {
           table: "dreamwell",
-          id: asBattleEffectScriptId("prompt-fixture"),
+          id: parseBattleEffectScriptId("prompt-fixture"),
         },
         cursor: [0],
         side: "player",
@@ -552,7 +554,7 @@ describe("buildMobileBattleView", () => {
       LocalizedString,
     );
     expect(optimistic.choicePrompt).toMatchObject({
-      key: "44",
+      key: prompt.promptId,
       canResolve: false,
     });
 
@@ -597,7 +599,7 @@ describe("buildMobileBattleView", () => {
       run: {
         scriptRef: {
           table: "dreamwell",
-          id: asBattleEffectScriptId("prompt-fixture"),
+          id: parseBattleEffectScriptId("prompt-fixture"),
         },
         cursor: [0],
         side: "player",
@@ -646,7 +648,7 @@ describe("buildMobileBattleView", () => {
       run: {
         scriptRef: {
           table: "dreamwell",
-          id: asBattleEffectScriptId("prompt-fixture"),
+          id: parseBattleEffectScriptId("prompt-fixture"),
         },
         cursor: [0],
         side: "player",
@@ -696,7 +698,7 @@ describe("buildMobileBattleView", () => {
           stage: "character",
           choice: "PLAY_CARD",
           battleCardId: board.sides.enemy.hand[0],
-          cardName: "Display-only fixture",
+          cardName: testCardName("Display-only fixture"),
           sourceHandIndex: 0,
           sourceSlotId: null,
           targetSlotId: "B2",
@@ -791,7 +793,7 @@ describe("buildMobileBattleView", () => {
     ].filter((instanceId): instanceId is BattleCardId => instanceId !== null);
     board.phase = "day";
     board.activeSide = "player";
-    board.cardInstances[sourceInstanceId].definition.cardId = asCardId(
+    board.cardInstances[sourceInstanceId].definition.cardId = testCardId(
       "4408b942-09a0-4f4e-a403-10c708c6e3c5",
     );
     board.cardInstances[sourceInstanceId].definition.energyCost = 1;
@@ -912,49 +914,70 @@ describe("buildMobileBattleView", () => {
     const board = makeBoard(init);
     const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
 
-    expect(view.player.status).toEqual({
+    expect(view.player.status).toMatchObject({
       dreamAvatar: {
         imageNumber: "007",
-        name: "Player Caller",
-        title: "Builder of Fixtures",
         portraitFocus: { x: 0.48, y: 0.19 },
       },
       dreamAvatarProfile: {
-        id: "player-dream-avatar-uuid",
-        ability: "Another synthetic test ability.",
+        id: init.dreamAvatarSummary?.id,
       },
       currentEnergy: 2,
       maxEnergy: 4,
       points: 5,
       pointsToWin: 10,
     });
-    expect(view.enemy.status).toEqual({
+    expect(view.enemy.status).toMatchObject({
       dreamAvatar: {
         imageNumber: "008",
-        name: "Enemy Caller",
-        title: "Keeper of Tests",
         portraitFocus: { x: 0.58, y: 0.23 },
       },
       dreamAvatarProfile: {
-        id: "enemy-dream-avatar-uuid",
-        ability: "A synthetic test ability.",
+        id: ENEMY_DREAM_AVATAR.id,
       },
       currentEnergy: 1,
       maxEnergy: 3,
       points: 8,
       pointsToWin: 10,
     });
+    const playerAvatar = view.player.status.dreamAvatar;
+    const playerProfile = view.player.status.dreamAvatarProfile;
+    const enemyAvatar = view.enemy.status.dreamAvatar;
+    const enemyProfile = view.enemy.status.dreamAvatarProfile;
+    expect(playerAvatar).not.toBeNull();
+    expect(playerProfile).toBeDefined();
+    expect(enemyAvatar).not.toBeNull();
+    expect(enemyProfile).toBeDefined();
+    if (
+      playerAvatar === null ||
+      playerProfile === undefined ||
+      enemyAvatar === null ||
+      enemyProfile === undefined
+    ) return;
+    expect(playerAvatar.name).toBeInstanceOf(LocalizedString);
+    expect(playerAvatar.title).toBeInstanceOf(LocalizedString);
+    expect(playerProfile.ability).toBeInstanceOf(
+      LocalizedString,
+    );
+    expect(enemyAvatar.name).toBeInstanceOf(LocalizedString);
+    expect(enemyAvatar.title).toBeInstanceOf(LocalizedString);
+    expect(enemyProfile.ability).toBeInstanceOf(
+      LocalizedString,
+    );
 
     const fallback = buildMobileBattleView(
       { ...init, dreamAvatarSummary: null },
       board,
       ENEMY_DREAM_AVATAR,
     );
-    expect(fallback.player.status.dreamAvatar).toEqual({
+    expect(fallback.player.status.dreamAvatar).toMatchObject({
       imageNumber: "001",
-      name: "Avatar",
       title: undefined,
     });
+    const fallbackAvatar = fallback.player.status.dreamAvatar;
+    expect(fallbackAvatar).not.toBeNull();
+    if (fallbackAvatar === null) return;
+    expect(fallbackAvatar.name).toBeInstanceOf(LocalizedString);
   });
 
   it("replaces the opening opponent ability with dormant hover copy", () => {
@@ -966,15 +989,24 @@ describe("buildMobileBattleView", () => {
     const board = makeBoard(init);
     const view = buildMobileBattleView(init, board, ENEMY_DREAM_AVATAR);
 
-    expect(view.enemy.status.dreamAvatarProfile).toEqual({
-      id: "enemy-dream-avatar-uuid",
-      ability: "Opponent avatar ability is not active.",
+    expect(view.enemy.status.dreamAvatarProfile).toMatchObject({
+      id: ENEMY_DREAM_AVATAR.id,
       unavailable: true,
     });
-    expect(view.player.status.dreamAvatarProfile).toEqual({
-      id: "player-dream-avatar-uuid",
-      ability: "Another synthetic test ability.",
+    const enemyProfile = view.enemy.status.dreamAvatarProfile;
+    const playerProfile = view.player.status.dreamAvatarProfile;
+    expect(enemyProfile).toBeDefined();
+    expect(playerProfile).toBeDefined();
+    if (enemyProfile === undefined || playerProfile === undefined) return;
+    expect(enemyProfile.ability).toBeInstanceOf(
+      LocalizedString,
+    );
+    expect(view.player.status.dreamAvatarProfile).toMatchObject({
+      id: init.dreamAvatarSummary?.id,
     });
+    expect(playerProfile.ability).toBeInstanceOf(
+      LocalizedString,
+    );
   });
 });
 
@@ -1016,7 +1048,7 @@ describe("Cumulus Dreamwell prompt battle flow", () => {
           newEffectRun(
             {
               table: "dreamwell",
-              id: asBattleEffectScriptId(dreamwellCardUuid),
+              id: parseBattleEffectScriptId(dreamwellCardUuid),
             },
             "player",
           ),

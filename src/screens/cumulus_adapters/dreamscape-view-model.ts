@@ -45,6 +45,7 @@ import type { TutorialDreamscapeConfiguration } from "../../types/tutorial";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import type { SiteId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
+import { parsePresentationId } from "../../types/identifiers";
 
 /** The completion level at which the guardian battle is the final boss. */
 const FINAL_BOSS_COMPLETION_LEVEL = 6;
@@ -339,7 +340,9 @@ export function buildDreamscapeGuideDialogue(
   }
   const speechBubble = configuration.speechBubble;
   return {
-    id: `${state.runId ?? state.seed}:dreamscape-guidance`,
+    id: parsePresentationId(
+      `${state.runId ?? state.seed}:dreamscape-guidance`,
+    ),
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
       portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),

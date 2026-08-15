@@ -10,6 +10,7 @@ import type { InfoCardProps } from "../overlay/InfoCard";
 import { richText, richTextDefinitionSymbolText } from "./rich-text";
 import { opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { localizedSourceText } from "../../../runtime/localization/runtime";
+import type { GlossaryEntryId } from "../../../types/identifiers";
 
 type GlossaryCardPresentation =
   | { readonly variant?: "text" }
@@ -18,7 +19,7 @@ type GlossaryCardPresentation =
 
 /** Build a strict Info Card from one stable Glossary UUID. */
 export function glossaryInfoCard(
-  id: string,
+  id: GlossaryEntryId,
   presentation: GlossaryCardPresentation = { variant: "text" },
 ): InfoCardProps {
   const entry = glossaryEntry(id);

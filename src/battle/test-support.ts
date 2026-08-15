@@ -1,4 +1,5 @@
-import { asCardId, asCardName } from "../types/card-identity";
+import { testJourneySeed } from "../types/test-identities";
+import { parseCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type {
   DreamAvatarContent,
@@ -18,13 +19,17 @@ import {
   frontRankSlotIds,
 } from "./types";
 import type { BackRankSlotId, FrontRankSlotId } from "./types";
-import { asSiteId } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
-import { asDreamscapeId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
 import type { DeckEntryId } from "../types/identifiers";
-import { asDeckEntryId } from "../types/identifiers";
-import { asDreamsignId } from "../types/identifiers";
+import { parseDeckEntryId } from "../types/identifiers";
+import {
+  testCardId,
+  testCardSubtype,
+  testDreamAvatarId,
+  testDreamscapeId,
+  testDreamsignId,
+} from "../types/test-identities";
 
 /** A generous materialized window for test ranks. The play area grows without
  *  bound at runtime; tests build an explicit window and override slots by id. */
@@ -49,7 +54,7 @@ export function emptyBackRankSlots(): Record<BackRankSlotId, null> {
 
 export function makeBattleTestSite(): SiteState {
   return {
-    id: asSiteId("site-7"),
+    id: parseSiteId("site-7"),
     type: "Battle",
     isEnhanced: false,
     isVisited: false,
@@ -59,7 +64,7 @@ export function makeBattleTestSite(): SiteState {
 export function makeBattleTestDreamAvatars(): DreamAvatarContent[] {
   return [
     {
-      id: asDreamAvatarId("dream-avatar-arc"),
+      id: testDreamAvatarId("dream-avatar-arc"),
       name: "Aeris, the Prism Guide",
       title: "Storm Archivist",
       renderedText:
@@ -68,7 +73,7 @@ export function makeBattleTestDreamAvatars(): DreamAvatarContent[] {
       startingEssence: 250,
     },
     {
-      id: asDreamAvatarId("dream-avatar-bloom"),
+      id: testDreamAvatarId("dream-avatar-bloom"),
       name: "Talan, Keeper of Branches",
       title: "Verdant Witness",
       renderedText: "Your field grows harder to uproot with every turn passed.",
@@ -156,11 +161,11 @@ export function makeBattleTestState(): Pick<
   return {
     atlas: {
       nodes: {
-        [asAtlasNodeId("dreamscape-2")]: {
-          id: asAtlasNodeId("dreamscape-2"),
+        [parseAtlasNodeId("dreamscape-2")]: {
+          id: parseAtlasNodeId("dreamscape-2"),
           layer: LayerName.One,
           indexInLayer: 0,
-          dreamscapeId: asDreamscapeId("test_dreamscape"),
+          dreamscapeId: testDreamscapeId("test_dreamscape"),
           sites: [makeBattleTestSite()],
           position: { x: 0, y: 0 },
           state: "available",
@@ -170,39 +175,39 @@ export function makeBattleTestState(): Pick<
           knownDreamsignId: null,
         },
       },
-      startingNodeId: asAtlasNodeId("dreamscape-2"),
-      bossNodeId: asAtlasNodeId("dreamscape-2"),
-      currentNodeId: asAtlasNodeId("dreamscape-2"),
-      layers: [[asAtlasNodeId("dreamscape-2")], [], [], [], [], [], []],
+      startingNodeId: parseAtlasNodeId("dreamscape-2"),
+      bossNodeId: parseAtlasNodeId("dreamscape-2"),
+      currentNodeId: parseAtlasNodeId("dreamscape-2"),
+      layers: [[parseAtlasNodeId("dreamscape-2")], [], [], [], [], [], []],
       knownDreamsignCarrierIds: [],
     },
     battleModifiers: [],
     completionLevel: 2,
-    currentDreamscape: asAtlasNodeId("dreamscape-2"),
+    currentDreamscape: parseAtlasNodeId("dreamscape-2"),
     deck: makeBattleTestDeckEntries(),
     dreamAvatar: makeBattleTestDreamAvatar(),
     dreamsigns: makeBattleTestDreamsigns(),
     resolvedPackage: makeResolvedPackage(),
-    seed: "test-journey-seed",
+    seed: testJourneySeed("test-journey-seed"),
   };
 }
 
 function makeBattleTestDeckEntries(): DeckEntry[] {
   return [
-    makeDeckEntry(asDeckEntryId("deck-1"), 101),
-    makeDeckEntry(asDeckEntryId("deck-2"), 102),
-    makeDeckEntry(asDeckEntryId("deck-3"), 103),
-    makeDeckEntry(asDeckEntryId("deck-4"), 104),
-    makeDeckEntry(asDeckEntryId("deck-5"), 106),
-    makeDeckEntry(asDeckEntryId("deck-6"), 201),
-    makeDeckEntry(asDeckEntryId("deck-7"), 205),
-    makeDeckEntry(asDeckEntryId("deck-8"), 301),
+    makeDeckEntry(parseDeckEntryId("deck-1"), 101),
+    makeDeckEntry(parseDeckEntryId("deck-2"), 102),
+    makeDeckEntry(parseDeckEntryId("deck-3"), 103),
+    makeDeckEntry(parseDeckEntryId("deck-4"), 104),
+    makeDeckEntry(parseDeckEntryId("deck-5"), 106),
+    makeDeckEntry(parseDeckEntryId("deck-6"), 201),
+    makeDeckEntry(parseDeckEntryId("deck-7"), 205),
+    makeDeckEntry(parseDeckEntryId("deck-8"), 301),
   ];
 }
 
 function makeBattleTestDreamAvatar(): DreamAvatar {
   return {
-    id: asDreamAvatarId("dream-avatar-arc"),
+    id: testDreamAvatarId("dream-avatar-arc"),
     name: "Aeris",
     title: "Storm Archivist",
     renderedText: "Gain a fleeting advantage whenever your line bends first.",
@@ -233,7 +238,7 @@ function makeResolvedPackage(): ResolvedDreamAvatarPackage {
       "103": 2,
       "104": 2,
     },
-    dreamsignPoolIds: [asDreamsignId("sign-1"), asDreamsignId("sign-2")],
+    dreamsignPoolIds: [testDreamsignId("sign-1"), testDreamsignId("sign-2")],
     mandatoryOnlyPoolSize: 120,
     draftPoolSize: 200,
     doubledCardCount: 4,
@@ -250,11 +255,11 @@ function makeCard(
   spark: number | null,
 ): CardData {
   return {
-    name: asCardName(name),
-    id: asCardId(`card-${String(cardNumber)}`),
+    name: parseCardName(name),
+    id: testCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType,
-    subtype: cardType === "Character" ? "Unit" : "Spell",
+    subtype: testCardSubtype(cardType === "Character" ? "Warrior" : ""),
     isStarter: false,
     energyCost,
     spark,

@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import {
+  testCardName,
+  testDreamwellCardName,
+} from "../../types/test-identities";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
@@ -8,10 +12,9 @@ import type {
 } from "../../rules/battle/fold";
 import type { BattleCardInstance } from "../../battle/types";
 import { buildBattleTutorialGuidanceView } from "./battle-tutorial-guidance-view-model";
-import { asCardId } from "../../types/card-identity";
-import { asBattleCardId } from "../../types/identifiers";
-import { asTutorialTriggerId } from "../../types/identifiers";
-import { asPresentationId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { parsePresentationId } from "../../types/identifiers";
+import { testTutorialTriggerId, testCardId } from "../../types/test-identities";
 
 function battleWithMessage(message: TutorialGuidanceMessage): BattleFoldState {
   return {
@@ -20,7 +23,7 @@ function battleWithMessage(message: TutorialGuidanceMessage): BattleFoldState {
       kind: "tutorial-guidance",
       source: {
         kind: "dreamwell",
-        cardId: asCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
+        cardId: testCardId("03e4e701-4720-4278-8198-9b7e0514d4cf"),
         side: "player",
       },
       messages: [message],
@@ -31,7 +34,7 @@ function battleWithMessage(message: TutorialGuidanceMessage): BattleFoldState {
       dreamwellDeck: [
         {
           id: "03e4e701-4720-4278-8198-9b7e0514d4cf",
-          name: "Fixture Dreamwell",
+          name: testDreamwellCardName("Fixture Dreamwell"),
           renderedText: "Support.",
           energyAdded: 1,
           order: 1,
@@ -82,7 +85,7 @@ describe("buildBattleTutorialGuidanceView", () => {
     ({ speaker, speakerName, portrait }) => {
       const view = buildBattleTutorialGuidanceView(
         battleWithMessage({
-          triggerId: asTutorialTriggerId("support"),
+          triggerId: testTutorialTriggerId("support"),
           speaker,
           duration: 5,
           horizontalOffset: 24,
@@ -110,7 +113,7 @@ describe("buildBattleTutorialGuidanceView", () => {
     const battleCardId = "enemy-card";
     const cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e";
     const instance = {
-      battleCardId: asBattleCardId(battleCardId),
+      battleCardId: parseBattleCardId(battleCardId),
       owner: "enemy",
       controller: "enemy",
       sparkDelta: 0,
@@ -138,9 +141,9 @@ describe("buildBattleTutorialGuidanceView", () => {
       },
       definition: {
         sourceDeckEntryId: null,
-        cardId: asCardId(cardId),
+        cardId: testCardId(cardId),
         cardNumber: 520,
-        name: "Synthetic opponent card",
+        name: testCardName("Synthetic opponent card"),
         battleCardKind: "character",
         subtype: "Musician",
         energyCost: 2,
@@ -155,7 +158,7 @@ describe("buildBattleTutorialGuidanceView", () => {
       },
     } as BattleCardInstance;
     const battle = battleWithMessage({
-      triggerId: asTutorialTriggerId("support"),
+      triggerId: testTutorialTriggerId("support"),
       speaker: "mira",
       duration: 1,
       horizontalOffset: 0,
@@ -164,12 +167,12 @@ describe("buildBattleTutorialGuidanceView", () => {
       text: "Support helps the characters in front of it.",
     });
     battle.tutorialPresentation = {
-      id: asPresentationId("tutorial-guidance:support"),
+      id: parsePresentationId("tutorial-guidance:support"),
       kind: "tutorial-guidance",
       source: {
         kind: "card",
-        cardId: asCardId(cardId),
-        battleCardId: asBattleCardId(battleCardId),
+        cardId: testCardId(cardId),
+        battleCardId: parseBattleCardId(battleCardId),
         cardKind: "character",
         side: "enemy",
       },
@@ -180,7 +183,7 @@ describe("buildBattleTutorialGuidanceView", () => {
       messageIndex: 0,
       continuation: {
         kind: "play-card",
-        payload: { battleCardId: asBattleCardId(battleCardId) },
+        payload: { battleCardId: parseBattleCardId(battleCardId) },
         automatic: true,
       },
     };
@@ -192,15 +195,15 @@ describe("buildBattleTutorialGuidanceView", () => {
       duration: 2,
       source: {
         kind: "card",
-        battleCardId: asBattleCardId(battleCardId),
-        model: { cardId: asCardId(cardId) },
+        battleCardId: parseBattleCardId(battleCardId),
+        model: { cardId: testCardId(cardId) },
       },
     });
   });
 
   it("maps Challenge guidance to a bubble without a companion card", () => {
     const battle = battleWithMessage({
-      triggerId: asTutorialTriggerId("spark-tie"),
+      triggerId: testTutorialTriggerId("spark-tie"),
       speaker: "mira",
       duration: 5,
       horizontalOffset: 0,
@@ -209,7 +212,7 @@ describe("buildBattleTutorialGuidanceView", () => {
       text: "If spark values tie, both characters are dissolved.",
     });
     battle.tutorialPresentation = {
-      id: asPresentationId(
+      id: parsePresentationId(
         "tutorial-guidance:challenge-resolved:player:3:F0:spark-tie",
       ),
       kind: "tutorial-guidance",
@@ -228,7 +231,7 @@ describe("buildBattleTutorialGuidanceView", () => {
     };
 
     expect(buildBattleTutorialGuidanceView(battle)).toMatchObject({
-      triggerId: "spark-tie",
+      triggerId: testTutorialTriggerId("spark-tie"),
       duration: 5,
       source: { kind: "battle" },
     });
@@ -236,7 +239,7 @@ describe("buildBattleTutorialGuidanceView", () => {
 
   it("maps a phase-level trigger to a bubble without a companion card", () => {
     const battle = battleWithMessage({
-      triggerId: asTutorialTriggerId("opponent-reposition-opportunity"),
+      triggerId: testTutorialTriggerId("opponent-reposition-opportunity"),
       speaker: "mira",
       duration: 5,
       horizontalOffset: 0,
@@ -245,7 +248,7 @@ describe("buildBattleTutorialGuidanceView", () => {
       text: "Repositioning explanation.",
     });
     battle.tutorialPresentation = {
-      id: asPresentationId(
+      id: parsePresentationId(
         "tutorial-guidance:opponent-reposition-opportunity:player:3",
       ),
       kind: "tutorial-guidance",
@@ -263,7 +266,7 @@ describe("buildBattleTutorialGuidanceView", () => {
     };
 
     expect(buildBattleTutorialGuidanceView(battle)).toMatchObject({
-      triggerId: "opponent-reposition-opportunity",
+      triggerId: testTutorialTriggerId("opponent-reposition-opportunity"),
       duration: 5,
       source: { kind: "battle" },
     });

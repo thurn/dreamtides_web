@@ -1,4 +1,5 @@
 import type { CardData } from "../types/cards";
+import type { JourneySeed } from "../types/journey-seed";
 import type {
   DeckEntry,
   SiteState,
@@ -22,10 +23,22 @@ import type {
   SelectionKey,
   SiteId,
 } from "../types/identifiers";
+import type { SelectionContentRevision } from "../types/selection-content-revision";
 
-export const SELECTION_RULES_VERSION = "2" as const;
+declare const selectionRulesVersionBrand: unique symbol;
 
-export type SelectionRulesVersion = typeof SELECTION_RULES_VERSION;
+export type SelectionRulesVersion = string & {
+  readonly [selectionRulesVersionBrand]: "SelectionRulesVersion";
+};
+
+export function parseSelectionRulesVersion(value: unknown): SelectionRulesVersion {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error("Selection rules version must be a non-empty string.");
+  }
+  return value as SelectionRulesVersion;
+}
+
+export const SELECTION_RULES_VERSION = parseSelectionRulesVersion("2");
 
 export type RewardSelectionPolicyId =
   (typeof REWARD_SELECTION_POLICY_IDS)[number];
@@ -43,13 +56,13 @@ export type RewardCandidateKeyKind =
   | "siteType";
 
 export interface RewardSelectionScope {
-  journeySeed: string;
+  journeySeed: JourneySeed;
   siteUuid: SiteId;
   selectionKey: SelectionKey;
 }
 
 export interface RewardSelectionContext {
-  journeySeed: string;
+  journeySeed: JourneySeed;
   site: SiteState;
   content: JourneyContent;
   tuning: RewardSelectionTuning;
@@ -66,7 +79,7 @@ export interface RewardSelectionContext {
   remainingDreamsignIds: ReadonlySet<DreamsignId>;
   affinityIndex: TideAffinityIndex;
   affinityContext: TideVector;
-  selectionContentRevision: string;
+  selectionContentRevision: SelectionContentRevision;
 }
 
 export interface RewardSelectionConstraints {
@@ -122,7 +135,7 @@ export interface RewardSelectionCandidateTrace {
 
 export interface RewardSelectionTrace {
   selectionRulesVersion: SelectionRulesVersion;
-  selectionContentRevision: string;
+  selectionContentRevision: SelectionContentRevision;
   mechanicId: RewardMechanicId;
   policyId: RewardSelectionPolicyId;
   selectionKey: SelectionKey;
@@ -176,7 +189,7 @@ export interface RewardSelectionBindings {
 export interface RewardSelectionResult {
   ok: true;
   selectionRulesVersion: SelectionRulesVersion;
-  selectionContentRevision: string;
+  selectionContentRevision: SelectionContentRevision;
   mechanicId: RewardMechanicId;
   policyId: RewardSelectionPolicyId;
   selectionKey: SelectionKey;

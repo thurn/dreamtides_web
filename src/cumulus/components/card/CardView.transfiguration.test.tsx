@@ -4,7 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import {
@@ -13,13 +13,14 @@ import {
 } from "../../../runtime/transfigure-markers";
 import { CardView, type GameCardSelection } from "./CardView";
 import { transfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
+import { testCardId } from "../../../types/test-identities";
 
-const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
+const CARD_ID = testCardId("11111111-1111-4111-8111-111111111111");
 
 function card(overrides: Partial<CardData> = {}): CardData {
   return {
     id: CARD_ID,
-    name: asCardName("Archive Sentry"),
+    name: parseCardName("Archive Sentry"),
     cardNumber: 1,
     cardType: "Character",
     subtype: "Synth",

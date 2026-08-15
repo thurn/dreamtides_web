@@ -2,8 +2,8 @@ import { describe, it, expect } from "vitest";
 import type { CardData } from "../types/cards";
 import type { GeneratedPool } from "../draft/pool";
 import { buildIdIndex, resolvePool } from "./cards-v2-database";
-import { asCardId, asCardName } from "../types/card-identity";
-import { asDreamAvatarId } from "../types/identifiers";
+import { parseCardName } from "../types/card-identity";
+import { testDreamAvatarId, testCardId } from "../types/test-identities";
 
 /** The synthetic card id a `makeCard` record carries for a given card number. */
 function idFor(cardNumber: number): string {
@@ -21,9 +21,9 @@ function makeCard(
   },
 ): CardData {
   return {
-    id: asCardId(idFor(overrides.cardNumber)),
+    id: testCardId(idFor(overrides.cardNumber)),
     cardType: "Character",
-    subtype: "Beast",
+    subtype: "Monster",
     isStarter: false,
     energyCost: 1,
     spark: 1,
@@ -43,7 +43,7 @@ function makeCard(
 function makePool(copiesByCardNumber: Record<number, number>): GeneratedPool {
   const counts = new Map(
     Object.entries(copiesByCardNumber).map(([cardNumber, copies]) => [
-      asCardId(idFor(Number(cardNumber))),
+      testCardId(idFor(Number(cardNumber))),
       copies,
     ]),
   );
@@ -56,7 +56,7 @@ function makePool(copiesByCardNumber: Record<number, number>): GeneratedPool {
     variant: "tides4",
     tideDeckIds: [],
     tides4Provenance: {
-      dreamAvatarId: asDreamAvatarId("test-avatar"),
+      dreamAvatarId: testDreamAvatarId("test-avatar"),
       signatureless: false,
       borrowedArchetypeName: null,
       dealSize: size,
@@ -72,11 +72,11 @@ function makePool(copiesByCardNumber: Record<number, number>): GeneratedPool {
 
 describe("resolvePool copy caps", () => {
   const db = new Map<number, CardData>([
-    [10, makeCard({ name: asCardName("Common"), cardNumber: 10 })],
+    [10, makeCard({ name: parseCardName("Common"), cardNumber: 10 })],
     [
       11,
       makeCard({
-        name: asCardName("Special"),
+        name: parseCardName("Special"),
         cardNumber: 11,
         rarity: "Special",
       }),

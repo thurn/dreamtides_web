@@ -264,7 +264,7 @@
         "fields": [
           {
             "name": "id",
-            "tsType": "string",
+            "tsType": "DreamAvatarId | OpponentId",
             "optional": false,
             "description": ""
           },
@@ -617,40 +617,11 @@
   "CardChangePair": [
     {
       "name": "model",
-      "tsType": "CardChangePairModel",
+      "tsType": "CardChangePairModel<ChangeId>",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Complete resolved change to display.",
-      "nested": {
-        "name": "CardChangePairModel",
-        "fields": [
-          {
-            "name": "changeId",
-            "tsType": "string",
-            "optional": false,
-            "description": "Stable identity for this resolved change presentation."
-          },
-          {
-            "name": "kind",
-            "tsType": "CardChangeKind",
-            "optional": false,
-            "description": "Semantic visual and accessibility recipe."
-          },
-          {
-            "name": "before",
-            "tsType": "{ readonly entryId: DeckEntryId; readonly card: GameCardModel; }",
-            "optional": false,
-            "description": "Original deck entry and its complete card presentation."
-          },
-          {
-            "name": "after",
-            "tsType": "{ readonly entryId: DeckEntryId; readonly card: GameCardModel; }",
-            "optional": false,
-            "description": "Result deck entry and its complete card presentation."
-          }
-        ]
-      }
+      "description": "Complete resolved change to display."
     },
     {
       "name": "reveal",
@@ -758,7 +729,7 @@
   "CardOrderEditor": [
     {
       "name": "items",
-      "tsType": "readonly CardOrderEditorItem[]",
+      "tsType": "readonly CardOrderEditorItem<Id>[]",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -774,7 +745,7 @@
     },
     {
       "name": "onOrderChange",
-      "tsType": "(orderedIds: readonly string[]) => void",
+      "tsType": "(orderedIds: readonly Id[]) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -1348,104 +1319,11 @@
   "CommandMenu": [
     {
       "name": "model",
-      "tsType": "CommandMenuModel",
+      "tsType": "CommandMenuModel<Id>",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Commands and the semantic presentation selected for this offering.",
-      "nested": {
-        "name": "CommandMenuModel",
-        "variants": [
-          {
-            "name": "CommandMenuAppChromeModel",
-            "fields": [
-              {
-                "name": "kind",
-                "tsType": "\"appChrome\"",
-                "optional": false,
-                "description": ""
-              },
-              {
-                "name": "trigger",
-                "tsType": "CommandMenuTriggerModel",
-                "optional": false,
-                "description": "The fixed IconButton trigger rendered by the component."
-              },
-              {
-                "name": "actions",
-                "tsType": "readonly CommandMenuItem[]",
-                "optional": false,
-                "description": "Root utility commands and their nested groups."
-              },
-              {
-                "name": "status",
-                "tsType": "CommandMenuStatusModel",
-                "optional": true,
-                "description": "Optional transient result reported by the app-shell command controller."
-              },
-              {
-                "name": "elevated",
-                "tsType": "boolean",
-                "optional": true,
-                "description": "Lifts the fixed trigger above an app-shell full-screen overlay."
-              },
-              {
-                "name": "testId",
-                "tsType": "string",
-                "optional": true,
-                "description": "Optional test selector for the trigger."
-              }
-            ]
-          },
-          {
-            "name": "CommandMenuContextModel",
-            "fields": [
-              {
-                "name": "kind",
-                "tsType": "\"context\"",
-                "optional": false,
-                "description": ""
-              },
-              {
-                "name": "title",
-                "tsType": "LocalizedString",
-                "optional": false,
-                "description": "Describes the card/pointer subject in the menu's header."
-              },
-              {
-                "name": "subtitle",
-                "tsType": "LocalizedString",
-                "optional": true,
-                "description": "Optional structured secondary location/context copy."
-              },
-              {
-                "name": "actions",
-                "tsType": "readonly CommandMenuItem[]",
-                "optional": false,
-                "description": "Commands available for the activated card or pointer target."
-              },
-              {
-                "name": "anchor",
-                "tsType": "CommandMenuAnchor",
-                "optional": false,
-                "description": "Semantic location used to anchor the desktop pointer menu."
-              },
-              {
-                "name": "onDismiss",
-                "tsType": "() => void",
-                "optional": false,
-                "description": "Called after a leaf command, outside dismissal, or Escape."
-              },
-              {
-                "name": "testId",
-                "tsType": "string",
-                "optional": true,
-                "description": "Optional test selector for the root offering."
-              }
-            ]
-          }
-        ]
-      }
+      "description": "Commands and the semantic presentation selected for this offering."
     }
   ],
   "CoopPresenceStatus": [
@@ -1663,7 +1541,7 @@
     },
     {
       "name": "profile",
-      "tsType": "{ id: string; ability: LocalizedString; }",
+      "tsType": "{ id: DreamAvatarId | OpponentId; ability: LocalizedString; }",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -1865,7 +1743,7 @@
           },
           {
             "name": "glossaryId",
-            "tsType": "string",
+            "tsType": "GlossaryEntryId",
             "optional": false,
             "description": "Stable Glossary UUID for the action's explanatory Info Card."
           },
@@ -2198,8 +2076,8 @@
       "name": "tone",
       "tsType": "EssenceTone",
       "unionMembers": [
-        "value",
         "mark",
+        "value",
         "inherit"
       ],
       "required": false,
@@ -2229,13 +2107,13 @@
         "fields": [
           {
             "name": "id",
-            "tsType": "string",
+            "tsType": "SemanticEntityId",
             "optional": false,
             "description": "Stable identity of the Essence source."
           },
           {
             "name": "glossaryId",
-            "tsType": "string",
+            "tsType": "GlossaryEntryId",
             "optional": false,
             "description": "Stable Glossary UUID used for the explanatory Info Card."
           }
@@ -3022,11 +2900,11 @@
   "InfoCard": [
     {
       "name": "variant",
-      "tsType": "\"object\" | \"fullBleed\" | \"text\" | \"atlasReveal\" | \"icon\" | \"tide\"",
+      "tsType": "\"object\" | \"text\" | \"fullBleed\" | \"atlasReveal\" | \"icon\" | \"tide\"",
       "unionMembers": [
         "object",
-        "fullBleed",
         "text",
+        "fullBleed",
         "atlasReveal",
         "icon",
         "tide"
@@ -3074,8 +2952,8 @@
       "name": "imageCrop",
       "tsType": "ImageCrop",
       "unionMembers": [
-        "top",
-        "center"
+        "center",
+        "top"
       ],
       "required": false,
       "defaultValue": null,
@@ -3247,7 +3125,7 @@
         "fields": [
           {
             "name": "id",
-            "tsType": "string",
+            "tsType": "DreamAvatarId",
             "optional": false,
             "description": "Stable DreamAvatar UUID."
           },
@@ -3497,7 +3375,7 @@
         "fields": [
           {
             "name": "id",
-            "tsType": "string",
+            "tsType": "OfferTileId",
             "optional": false,
             "description": "Stable identity for this visible offer. Production callers should combine\nthe encounter signature and offer id so simultaneous offers never collide."
           },
@@ -3520,7 +3398,7 @@
     },
     {
       "name": "onPress",
-      "tsType": "(offerId: OfferId) => void",
+      "tsType": "(offerId: OfferTileId) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -3759,25 +3637,7 @@
       "unionMembers": [
         "symbol",
         "object",
-        "source",
-        "map",
-        "filter",
-        "text",
-        "search",
-        "mark",
-        "h1",
-        "h2",
-        "big",
-        "link",
-        "small",
-        "sub",
-        "sup",
-        "image",
-        "center",
-        "figure",
-        "slot",
-        "style",
-        "title",
+        "div",
         "a",
         "abbr",
         "address",
@@ -3789,12 +3649,14 @@
         "base",
         "bdi",
         "bdo",
+        "big",
         "blockquote",
         "body",
         "br",
         "button",
         "canvas",
         "caption",
+        "center",
         "cite",
         "code",
         "col",
@@ -3806,15 +3668,17 @@
         "details",
         "dfn",
         "dialog",
-        "div",
         "dl",
         "dt",
         "em",
         "embed",
         "fieldset",
         "figcaption",
+        "figure",
         "footer",
         "form",
+        "h1",
+        "h2",
         "h3",
         "h4",
         "h5",
@@ -3834,7 +3698,10 @@
         "label",
         "legend",
         "li",
+        "link",
         "main",
+        "map",
+        "mark",
         "menu",
         "menuitem",
         "meta",
@@ -3857,12 +3724,19 @@
         "ruby",
         "s",
         "samp",
+        "search",
+        "slot",
         "script",
         "section",
         "select",
+        "small",
+        "source",
         "span",
         "strong",
+        "style",
+        "sub",
         "summary",
+        "sup",
         "table",
         "template",
         "tbody",
@@ -3872,6 +3746,7 @@
         "th",
         "thead",
         "time",
+        "title",
         "tr",
         "track",
         "u",
@@ -3914,8 +3789,10 @@
         "feSpotLight",
         "feTile",
         "feTurbulence",
+        "filter",
         "foreignObject",
         "g",
+        "image",
         "line",
         "linearGradient",
         "marker",
@@ -3931,6 +3808,7 @@
         "set",
         "stop",
         "switch",
+        "text",
         "textPath",
         "tspan",
         "use",
@@ -4175,15 +4053,15 @@
         "fields": [
           {
             "name": "kind",
-            "tsType": "RulesTextGlossaryOwner",
+            "tsType": "\"card\" | \"dreamAvatar\" | \"opponentDreamAvatar\" | \"dreamsign\" | \"dreamwellCard\"",
             "optional": false,
-            "description": "Object type used to contextualize glossary definitions."
+            "description": ""
           },
           {
             "name": "id",
-            "tsType": "string",
+            "tsType": "DreamAvatarId | OpponentId | DreamwellCardId | CardId | DreamsignId",
             "optional": false,
-            "description": "Stable UUID or domain id for this exact rules-text owner."
+            "description": ""
           }
         ]
       }
@@ -4248,40 +4126,11 @@
   "Select": [
     {
       "name": "options",
-      "tsType": "SelectOption[]",
+      "tsType": "SelectOption<Value>[]",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The choices shown in the menu.",
-      "nested": {
-        "name": "SelectOption",
-        "fields": [
-          {
-            "name": "value",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "label",
-            "tsType": "LocalizedString",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "triggerLabel",
-            "tsType": "LocalizedString",
-            "optional": true,
-            "description": ""
-          },
-          {
-            "name": "disabled",
-            "tsType": "boolean",
-            "optional": true,
-            "description": ""
-          }
-        ]
-      }
+      "description": "The choices shown in the menu."
     },
     {
       "name": "value",
@@ -4293,7 +4142,7 @@
     },
     {
       "name": "onChange",
-      "tsType": "((value: string) => void)",
+      "tsType": "((value: Value) => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -4400,7 +4249,7 @@
           },
           {
             "name": "id",
-            "tsType": "string",
+            "tsType": "GuideId",
             "optional": false,
             "description": "Stable Dream Guide identity."
           },
@@ -4775,8 +4624,8 @@
       "name": "kind",
       "tsType": "TextFieldKind",
       "unionMembers": [
-        "text",
-        "search"
+        "search",
+        "text"
       ],
       "required": false,
       "defaultValue": "text",
@@ -4848,7 +4697,7 @@
     },
     {
       "name": "id",
-      "tsType": "string",
+      "tsType": "TideId | TutorialJourneyTideId",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
@@ -5252,7 +5101,7 @@
     },
     {
       "name": "diagnostics",
-      "tsType": "{ readonly triggerId?: string | undefined; readonly messageIndex?: number | undefined; }",
+      "tsType": "{ readonly triggerId?: TutorialTriggerId | undefined; readonly messageIndex?: number | undefined; }",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,

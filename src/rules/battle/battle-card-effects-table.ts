@@ -19,12 +19,10 @@ import type { CardId } from "../../types/card-identity";
 import type {
   BattleCardId,
   BattleEffectScriptId,
+  IdentityRecord,
 } from "../../types/identifiers";
-import {
-  asBattleCardId,
-  asBattleEffectScriptId,
-} from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
+import { parseBattleEffectScriptId } from "../../types/identifiers";
+import { parseCardId } from "../../types/card-identity";
 
 /** Describes the static spark a supporter grants to supported front-rank allies. */
 export interface SupportScript {
@@ -79,24 +77,24 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
   // Starter tutorial/automated battle rules.  These ids are the source of
   // truth; names are intentionally absent because card names are not unique.
   "5a980eff-6ec7-44d8-9977-b98e66bbc2c8": {
-    id: asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
+    id: parseCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
     textHash: "a4a7189e",
     triggers: {},
   },
   "647f5150-b2e0-424b-9480-27557642524e": {
-    id: asCardId("647f5150-b2e0-424b-9480-27557642524e"),
+    id: parseCardId("647f5150-b2e0-424b-9480-27557642524e"),
     textHash: "153cdaf2",
     triggers: {
       materialized: [{ kind: "prompt", prompt: { kind: "foresee", count: 1 } }],
     },
   },
   "e83014d3-9d35-4e80-a1b3-9b25360ad2af": {
-    id: asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
+    id: parseCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af"),
     textHash: "811c9dc5",
     triggers: {},
   },
   "a28ad36d-fa74-4190-a463-7efd3a6233d0": {
-    id: asCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
+    id: parseCardId("a28ad36d-fa74-4190-a463-7efd3a6233d0"),
     textHash: "ce8fae02",
     triggers: {
       dawn: [
@@ -108,7 +106,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
     },
   },
   "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481": {
-    id: asCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
+    id: parseCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
     textHash: "9a004bcb",
     triggers: {
       dissolved: [
@@ -126,12 +124,12 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
     },
   },
   "5ab11bef-5dcd-49f5-be49-ae2ccde76e70": {
-    id: asCardId("5ab11bef-5dcd-49f5-be49-ae2ccde76e70"),
+    id: parseCardId("5ab11bef-5dcd-49f5-be49-ae2ccde76e70"),
     textHash: "42ad9866",
     triggers: {},
   },
   "4408b942-09a0-4f4e-a403-10c708c6e3c5": {
-    id: asCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
+    id: parseCardId("4408b942-09a0-4f4e-a403-10c708c6e3c5"),
     textHash: "ad1c27c7",
     triggers: {
       played: [
@@ -169,7 +167,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
     },
   },
   "2162742c-09d0-4e62-ae49-0f8f79b45adc": {
-    id: asCardId("2162742c-09d0-4e62-ae49-0f8f79b45adc"),
+    id: parseCardId("2162742c-09d0-4e62-ae49-0f8f79b45adc"),
     textHash: "7776dd2f",
     triggers: {
       played: [
@@ -182,7 +180,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
     },
   },
   "910b4cf9-dec7-4e03-af4f-7d5ae342eeba": {
-    id: asCardId("910b4cf9-dec7-4e03-af4f-7d5ae342eeba"),
+    id: parseCardId("910b4cf9-dec7-4e03-af4f-7d5ae342eeba"),
     textHash: "469120a4",
     triggers: {
       played: [
@@ -201,7 +199,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
     },
   },
   "944e15d2-d680-4ebe-8d18-36826f4b1535": {
-    id: asCardId("944e15d2-d680-4ebe-8d18-36826f4b1535"),
+    id: parseCardId("944e15d2-d680-4ebe-8d18-36826f4b1535"),
     textHash: "03e76b70",
     triggers: {
       played: [
@@ -227,12 +225,12 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
     },
   },
   "229ab3a1-3720-41a2-924c-8fe112188f8e": {
-    id: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+    id: parseCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
     textHash: "811c9dc5",
     triggers: {},
   },
   [BATTLE_EFFECT_FIXTURE_CARD_ID]: {
-    id: asCardId(BATTLE_EFFECT_FIXTURE_CARD_ID),
+    id: parseCardId(BATTLE_EFFECT_FIXTURE_CARD_ID),
     triggers: {
       played: FIXTURE_TRIGGER_STEPS,
       materialized: FIXTURE_TRIGGER_STEPS,
@@ -243,7 +241,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
     },
   },
   [BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID]: {
-    id: asCardId(BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID),
+    id: parseCardId(BATTLE_EFFECT_PROMPT_FIXTURE_CARD_ID),
     triggers: {
       materialized: [
         {
@@ -268,7 +266,7 @@ export const BATTLE_TRIGGERED_EFFECTS: Record<
     },
   },
   [BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID]: {
-    id: asCardId(BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID),
+    id: parseCardId(BATTLE_EFFECT_DISSOLVE_SUPPORT_FIXTURE_CARD_ID),
     triggers: {
       // Framework-only fixture: proves an F0 dissolution can change F1's
       // support before the cursor evaluates F1.
@@ -300,7 +298,7 @@ export function battleTriggerScriptId(
   cardId: CardId,
   trigger: BattleScriptTrigger,
 ): BattleEffectScriptId {
-  return asBattleEffectScriptId(`${cardId}${TRIGGER_ID_SEPARATOR}${trigger}`);
+  return parseBattleEffectScriptId(`${cardId}${TRIGGER_ID_SEPARATOR}${trigger}`);
 }
 
 /** Returns the live steps for one UUID-keyed trigger script id, or null when unmodeled. */
@@ -322,9 +320,9 @@ export function selectBattleTriggeredEffectSteps(
  * Static Support scripts keyed by card UUID. Character-triggered effects are
  * resolved manually; this registry contains only Support spark grants.
  */
-export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
-  "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6": {
-    id: asCardId("4e3c04a9-1cdd-468a-b42a-40157ed9c9d6"),
+const BATTLE_CARD_EFFECT_SCRIPTS = [
+  {
+    id: parseCardId("4e3c04a9-1cdd-468a-b42a-40157ed9c9d6"),
     trigger: "support",
     textHash: "c72e97a0",
     support: {
@@ -332,28 +330,28 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
       applies: (ally) => ally.definition.subtype === "Spirit Animal",
     },
   },
-  "56411ed4-bda9-4fdf-82e5-b5492de67039": {
-    id: asCardId("56411ed4-bda9-4fdf-82e5-b5492de67039"),
+  {
+    id: parseCardId("56411ed4-bda9-4fdf-82e5-b5492de67039"),
     trigger: "support",
     textHash: "84f5be41",
     support: {
       bonus: (ctx) => countAlliedWarriors(ctx.state, ctx.side),
     },
   },
-  "1268a899-b209-46bb-bce4-6def1dcd0404": {
-    id: asCardId("1268a899-b209-46bb-bce4-6def1dcd0404"),
+  {
+    id: parseCardId("1268a899-b209-46bb-bce4-6def1dcd0404"),
     trigger: "support",
     textHash: "04484014",
     support: { bonus: () => 2 },
   },
-  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8": {
-    id: asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
+  {
+    id: parseCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
     trigger: "support",
     textHash: "a4a7189e",
     support: { bonus: () => 2 },
   },
-  "6497d8b1-85b8-486d-99e2-5c141486d508": {
-    id: asCardId("6497d8b1-85b8-486d-99e2-5c141486d508"),
+  {
+    id: parseCardId("6497d8b1-85b8-486d-99e2-5c141486d508"),
     trigger: "support",
     textHash: "a2c043a8",
     support: {
@@ -361,20 +359,20 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
       applies: (ally) => ally.definition.subtype === "Warrior",
     },
   },
-  "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd": {
-    id: asCardId("8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd"),
+  {
+    id: parseCardId("8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd"),
     trigger: "support",
     textHash: "b82fe41f",
     support: { bonus: () => 3 },
   },
-  "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f": {
-    id: asCardId("c61c8b29-6911-4bbf-b1c4-0c18b22ed33f"),
+  {
+    id: parseCardId("c61c8b29-6911-4bbf-b1c4-0c18b22ed33f"),
     trigger: "support",
     textHash: "b027ad8e",
     support: { bonus: () => 2 },
   },
-  "c8579b20-95ff-4b1d-b4c6-6bd049fc4760": {
-    id: asCardId("c8579b20-95ff-4b1d-b4c6-6bd049fc4760"),
+  {
+    id: parseCardId("c8579b20-95ff-4b1d-b4c6-6bd049fc4760"),
     trigger: "support",
     textHash: "7415a86e",
     support: {
@@ -382,7 +380,14 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
       applies: (ally) => ally.definition.subtype === "Spirit Animal",
     },
   },
-};
+] satisfies BattleCardEffectScript[];
+
+export const BATTLE_CARD_EFFECTS: IdentityRecord<
+  CardId,
+  BattleCardEffectScript
+> = Object.fromEntries(
+  BATTLE_CARD_EFFECT_SCRIPTS.map((script) => [script.id, script]),
+);
 
 /** Returns registered scripts whose live rules text differs from its hash. */
 export function collectAutomationHashDrift(
@@ -390,7 +395,7 @@ export function collectAutomationHashDrift(
 ): { id: CardId; expected: string; actual: string | null }[] {
   const drift: { id: CardId; expected: string; actual: string | null }[] = [];
   for (const [id, script] of Object.entries(BATTLE_CARD_EFFECTS)) {
-    const cardId = asCardId(id);
+    const cardId = parseCardId(id);
     const text = cardsById.get(cardId);
     const actual = text === undefined ? null : fnv1aHex(text);
     if (actual !== script.textHash) {
@@ -398,9 +403,12 @@ export function collectAutomationHashDrift(
     }
   }
   for (const [id, script] of Object.entries(BATTLE_TRIGGERED_EFFECTS)) {
-    if (script.textHash === undefined || BATTLE_CARD_EFFECTS[id] !== undefined)
+    const cardId = parseCardId(id);
+    if (
+      script.textHash === undefined ||
+      BATTLE_CARD_EFFECTS[cardId] !== undefined
+    )
       continue;
-    const cardId = asCardId(id);
     const text = cardsById.get(cardId);
     const actual = text === undefined ? null : fnv1aHex(text);
     if (actual !== script.textHash)
@@ -434,7 +442,7 @@ export function planStaticContributionSettlement(
   nowMs: number,
 ): BattleDebugEdit[] {
   const sides: BattleSide[] = ["player", "enemy"];
-  const targets = new Map<string, number>();
+  const targets = new Map<BattleCardId, number>();
 
   for (const side of sides) {
     for (const slotId of rankSlotIds(state.sides[side].backRank)) {
@@ -555,7 +563,7 @@ function resolveDiscoverChoice(
   return [
     {
       kind: "MOVE_CARD_TO_ZONE",
-      battleCardId: asBattleCardId(chosen),
+      battleCardId: chosen,
       destination: { side: ctx.side, zone: "hand" },
     },
     { kind: "REORDER_DECK", side: ctx.side, order: remaining },

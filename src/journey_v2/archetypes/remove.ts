@@ -10,7 +10,7 @@ import {
   selectionMetadata,
   selectMerchantReward,
 } from "./sharedSelection";
-import { asMerchantTargetKey } from "../../types/identifiers";
+import { parseMerchantTargetKey } from "../../types/identifiers";
 
 function removeDeckEntryPayload(
   card: MerchantDeckCard,
@@ -54,7 +54,7 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
       family: "remove",
       gameObjects: [{ ...target }],
       applyPayload: removeDeckEntryPayload(target),
-      targetKey: asMerchantTargetKey(target.entryId),
+      targetKey: parseMerchantTargetKey(target.entryId),
       ...selectionMetadata(selection),
     };
   },

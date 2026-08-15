@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { planHandoff } from "./handoff";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
-import type { BattleMutableState } from "../types";
+import type { BattleCardInstance, BattleMutableState } from "../types";
 import type { BattleCardId } from "../../types/identifiers";
-import { asBattleId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
 
 function makeEmptySide(): BattleMutableState["sides"]["player"] {
   return {
@@ -39,7 +39,7 @@ function makeHandoffState(
   playerSide.score = opts.playerScore ?? 0;
   enemySide.score = opts.enemyScore ?? 0;
   return {
-    battleId: asBattleId("battle-handoff-test"),
+    battleId: parseBattleId("battle-handoff-test"),
     activeSide: opts.activeSide ?? "player",
     turnNumber: opts.turnNumber ?? 1,
     phase: "day",
@@ -191,7 +191,7 @@ describe("planHandoff", () => {
 
     it("leaves the incoming deck untouched for the post-Dreamwell draw", () => {
       const state = makeHandoffState({ activeSide: "player", turnNumber: 2 });
-      state.sides.enemy.deck = [asBattleCardId("enemy-top")];
+      state.sides.enemy.deck = [parseBattleCardId("enemy-top")];
 
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
       const edits = [
@@ -213,7 +213,7 @@ describe("planHandoff", () => {
         ephemeral?: boolean;
         offering?: boolean;
       },
-    ): BattleMutableState["cardInstances"][string] {
+    ): BattleCardInstance {
       return {
         battleCardId,
         // The shape only needs `status` for these edit builders; the rest is
@@ -223,25 +223,25 @@ describe("planHandoff", () => {
           ephemeral: status.ephemeral ?? false,
           offering: status.offering ?? false,
         },
-      } as BattleMutableState["cardInstances"][string];
+      } as BattleCardInstance;
     }
 
     it("clears exhaustion from both sides' in-play characters", () => {
       const state = makeHandoffState({ activeSide: "enemy", turnNumber: 2 });
-      state.sides.enemy.frontRank.F0 = asBattleCardId("e-front");
-      state.sides.enemy.backRank.B0 = asBattleCardId("e-back");
-      state.sides.player.frontRank.F0 = asBattleCardId("p-front");
+      state.sides.enemy.frontRank.F0 = parseBattleCardId("e-front");
+      state.sides.enemy.backRank.B0 = parseBattleCardId("e-back");
+      state.sides.player.frontRank.F0 = parseBattleCardId("p-front");
       state.cardInstances = {
-        [asBattleCardId("e-front")]: instanceWithStatus(
-          asBattleCardId("e-front"),
+        [parseBattleCardId("e-front")]: instanceWithStatus(
+          parseBattleCardId("e-front"),
           { isExhausted: true },
         ),
-        [asBattleCardId("e-back")]: instanceWithStatus(
-          asBattleCardId("e-back"),
+        [parseBattleCardId("e-back")]: instanceWithStatus(
+          parseBattleCardId("e-back"),
           { isExhausted: false },
         ),
-        [asBattleCardId("p-front")]: instanceWithStatus(
-          asBattleCardId("p-front"),
+        [parseBattleCardId("p-front")]: instanceWithStatus(
+          parseBattleCardId("p-front"),
           { isExhausted: true },
         ),
       };
@@ -252,12 +252,12 @@ describe("planHandoff", () => {
       expect(plan.exhaustionClearEdits).toEqual([
         {
           kind: "SET_CARD_STATUS",
-          battleCardId: asBattleCardId("p-front"),
+          battleCardId: parseBattleCardId("p-front"),
           status: { isExhausted: false },
         },
         {
           kind: "SET_CARD_STATUS",
-          battleCardId: asBattleCardId("e-front"),
+          battleCardId: parseBattleCardId("e-front"),
           status: { isExhausted: false },
         },
       ]);
@@ -268,19 +268,19 @@ describe("planHandoff", () => {
       // player ends turn → player is the outgoing side whose Ending banishes.
       const state = makeHandoffState({ activeSide: "player", turnNumber: 3 });
       state.sides.player.hand = [
-        asBattleCardId("p-eph"),
-        asBattleCardId("p-keep"),
+        parseBattleCardId("p-eph"),
+        parseBattleCardId("p-keep"),
       ];
-      state.sides.player.frontRank.F0 = asBattleCardId("p-off");
+      state.sides.player.frontRank.F0 = parseBattleCardId("p-off");
       state.cardInstances = {
-        [asBattleCardId("p-eph")]: instanceWithStatus(asBattleCardId("p-eph"), {
+        [parseBattleCardId("p-eph")]: instanceWithStatus(parseBattleCardId("p-eph"), {
           ephemeral: true,
         }),
-        [asBattleCardId("p-keep")]: instanceWithStatus(
-          asBattleCardId("p-keep"),
+        [parseBattleCardId("p-keep")]: instanceWithStatus(
+          parseBattleCardId("p-keep"),
           {},
         ),
-        [asBattleCardId("p-off")]: instanceWithStatus(asBattleCardId("p-off"), {
+        [parseBattleCardId("p-off")]: instanceWithStatus(parseBattleCardId("p-off"), {
           offering: true,
         }),
       };

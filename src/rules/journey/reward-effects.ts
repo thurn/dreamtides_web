@@ -20,7 +20,7 @@ import type {
 import type { DreamsignId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import type { SiteId } from "../../types/identifiers";
 
@@ -126,7 +126,7 @@ function createEntryIdAllocator(
   return {
     next() {
       highWater += 1;
-      return asDeckEntryId(`deck-${String(highWater)}`);
+      return parseDeckEntryId(`deck-${String(highWater)}`);
     },
   };
 }
@@ -215,7 +215,7 @@ function applyEffect(
         ...state,
         deck: [
           ...state.deck,
-          { ...target, entryId: asDeckEntryId(entryIds.next()) },
+          { ...target, entryId: entryIds.next() },
         ],
       };
     }

@@ -6,18 +6,18 @@ import {
   syntheticGameCard,
 } from "../../test-helpers/component-test-fixtures";
 import { BattlefieldCard, type BattlefieldCardModel } from "./BattlefieldCard";
-import { asBattleCardId } from "../../../types/identifiers";
-import { asPresentationId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
+import { parsePresentationId } from "../../../types/identifiers";
 
 const model: BattlefieldCardModel = {
-  battleCardId: asBattleCardId("battle-instance"),
+  battleCardId: parseBattleCardId("battle-instance"),
   card: syntheticGameCard(1),
   exhausted: true,
   storedMemory: 2,
   figment: true,
   selection: "selected",
   challengeMarker: { owner: "player", side: "near" },
-  scoreAnnouncement: { points: 2, presentationId: asPresentationId("score") },
+  scoreAnnouncement: { points: 2, presentationId: parsePresentationId("score") },
   motion: "snap",
   presentation: "battlefield",
 };
@@ -105,7 +105,7 @@ describe("BattlefieldCard", () => {
     expect(onDrop).toHaveBeenCalledTimes(1);
     expect(onDrop).toHaveBeenCalledWith(
       expect.objectContaining({
-        battleCardId: asBattleCardId("battle-instance"),
+        battleCardId: parseBattleCardId("battle-instance"),
       }),
     );
     expect(onPress).not.toHaveBeenCalled();

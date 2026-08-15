@@ -19,6 +19,10 @@ import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { InlineGlyph } from "../typography/InlineGlyph";
+import type {
+  GlossaryEntryId,
+  SemanticEntityId,
+} from "../../../types/identifiers";
 
 /** The filled Boxicons crypto glyph — the essence currency mark everywhere. */
 const ESSENCE_ICON_CLASS = GLYPHS.essence;
@@ -40,9 +44,9 @@ export type EssenceValueVariant = "inline" | "rewardBadge";
 /** Domain identity for an Essence value that explains itself through an Info Card. */
 export interface EssenceEntity {
   /** Stable identity of the Essence source. */
-  id: string;
+  id: SemanticEntityId;
   /** Stable Glossary UUID used for the explanatory Info Card. */
-  glossaryId: string;
+  glossaryId: GlossaryEntryId;
 }
 
 export interface EssenceValueProps {

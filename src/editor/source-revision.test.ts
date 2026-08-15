@@ -6,19 +6,21 @@ import {
   withExpectedSourceRevision,
 } from "./source-revision";
 
+const FIXTURE_SOURCE = "tutorial";
+
 describe("per-source editor revision queues", () => {
   beforeEach(() => {
-    confirmSourceRevision("fixture", { sourceRevision: "reset" });
+    confirmSourceRevision(FIXTURE_SOURCE, { sourceRevision: "reset" });
   });
 
   it("injects the confirmed revision and advances it after a load", () => {
-    confirmSourceRevision("fixture", { sourceRevision: "one" });
-    expect(withExpectedSourceRevision("fixture", { field: "name" })).toEqual({
+    confirmSourceRevision(FIXTURE_SOURCE, { sourceRevision: "one" });
+    expect(withExpectedSourceRevision(FIXTURE_SOURCE, { field: "name" })).toEqual({
       field: "name",
       expectedSourceRevision: "one",
     });
-    confirmSourceRevision("fixture", { sourceRevision: "two" });
-    expect(withExpectedSourceRevision("fixture", {})).toEqual({
+    confirmSourceRevision(FIXTURE_SOURCE, { sourceRevision: "two" });
+    expect(withExpectedSourceRevision(FIXTURE_SOURCE, {})).toEqual({
       expectedSourceRevision: "two",
     });
   });
@@ -26,7 +28,7 @@ describe("per-source editor revision queues", () => {
   it("serializes saves and pauses later operations after a stale-source failure", async () => {
     const calls: string[] = [];
     let release: (() => void) | undefined;
-    const first = queueSourceSave("fixture", async () => {
+    const first = queueSourceSave(FIXTURE_SOURCE, async () => {
       calls.push("first-start");
       await new Promise<void>((resolve) => {
         release = resolve;
@@ -39,7 +41,7 @@ describe("per-source editor revision queues", () => {
       });
     });
     const secondOperation = vi.fn(() => Promise.resolve(calls.push("second")));
-    const second = queueSourceSave("fixture", secondOperation);
+    const second = queueSourceSave(FIXTURE_SOURCE, secondOperation);
     await Promise.resolve();
     expect(calls).toEqual(["first-start"]);
     if (release === undefined) {
@@ -50,19 +52,19 @@ describe("per-source editor revision queues", () => {
     await expect(second).rejects.toThrow("rejected");
     expect(secondOperation).not.toHaveBeenCalled();
 
-    confirmSourceRevision("fixture", { sourceRevision: "confirmed" });
+    confirmSourceRevision(FIXTURE_SOURCE, { sourceRevision: "confirmed" });
     await expect(
-      queueSourceSave("fixture", () => Promise.resolve("retried")),
+      queueSourceSave(FIXTURE_SOURCE, () => Promise.resolve("retried")),
     ).resolves.toBe("retried");
   });
 
   it("permits a retry after a transient save failure", async () => {
     await expect(
-      queueSourceSave("fixture", () => Promise.reject(new Error("network unavailable"))),
+      queueSourceSave(FIXTURE_SOURCE, () => Promise.reject(new Error("network unavailable"))),
     ).rejects.toThrow("network unavailable");
 
     const retry = vi.fn(() => Promise.resolve("retried"));
-    await expect(queueSourceSave("fixture", retry)).resolves.toBe("retried");
+    await expect(queueSourceSave(FIXTURE_SOURCE, retry)).resolves.toBe("retried");
     expect(retry).toHaveBeenCalledOnce();
   });
 });

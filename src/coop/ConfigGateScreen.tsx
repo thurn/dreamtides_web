@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import {
   ApplicationStateScreen,
   type ApplicationStateComparisonRow,
+  type ApplicationStateComparisonId,
   type ApplicationStateComparisonValue,
 } from "../cumulus/screens/ApplicationStateScreen";
 import type { ContentConfig } from "../eventlog/types";
@@ -71,15 +72,17 @@ export function configComparisonRows(
   }));
 }
 
-type ConfigKind =
-  | "atlas"
-  | "site"
-  | "draft-rules"
-  | "economy"
-  | "gamble"
-  | "transfiguration"
-  | "opponent"
-  | "tutorial";
+type ConfigKind = ApplicationStateComparisonId;
+type ConfigComparisonKey =
+  | `unavailable:${ConfigKind}`
+  | `hash:${string}`;
+
+function configComparisonKey(
+  kind: ConfigKind,
+  value: string | undefined,
+): ConfigComparisonKey {
+  return value === undefined ? `unavailable:${kind}` : `hash:${value}`;
+}
 
 function configLabel(kind: ConfigKind): LocalizedString {
   switch (kind) {
@@ -144,7 +147,7 @@ function describeConfig(config: ContentConfig | undefined): readonly {
   readonly kind: ConfigKind;
   readonly label: LocalizedString;
   readonly value: ApplicationStateComparisonValue;
-  readonly comparisonKey: string;
+  readonly comparisonKey: ConfigComparisonKey;
 }[] {
   if (config === undefined) {
     const unavailableRows = [
@@ -160,7 +163,7 @@ function describeConfig(config: ContentConfig | undefined): readonly {
         kind,
         label,
         value: rawConfigValue(undefined),
-        comparisonKey: kind,
+        comparisonKey: configComparisonKey(kind, undefined),
       })),
     ];
   }
@@ -169,50 +172,73 @@ function describeConfig(config: ContentConfig | undefined): readonly {
       kind: "atlas",
       label: configLabel("atlas"),
       value: rawConfigValue(config.atlasFoldHash?.slice(0, 12)),
-      comparisonKey: config.atlasFoldHash?.slice(0, 12) ?? "unavailable",
+      comparisonKey: configComparisonKey(
+        "atlas",
+        config.atlasFoldHash?.slice(0, 12),
+      ),
     },
     {
       kind: "site",
       label: configLabel("site"),
       value: rawConfigValue(config.sitesFoldHash?.slice(0, 12)),
-      comparisonKey: config.sitesFoldHash?.slice(0, 12) ?? "unavailable",
+      comparisonKey: configComparisonKey(
+        "site",
+        config.sitesFoldHash?.slice(0, 12),
+      ),
     },
     {
       kind: "draft-rules",
       label: configLabel("draft-rules"),
       value: rawConfigValue(config.draftFoldHash?.slice(0, 12)),
-      comparisonKey: config.draftFoldHash?.slice(0, 12) ?? "unavailable",
+      comparisonKey: configComparisonKey(
+        "draft-rules",
+        config.draftFoldHash?.slice(0, 12),
+      ),
     },
     {
       kind: "economy",
       label: configLabel("economy"),
       value: rawConfigValue(config.economyFoldHash?.slice(0, 12)),
-      comparisonKey: config.economyFoldHash?.slice(0, 12) ?? "unavailable",
+      comparisonKey: configComparisonKey(
+        "economy",
+        config.economyFoldHash?.slice(0, 12),
+      ),
     },
     {
       kind: "gamble",
       label: configLabel("gamble"),
       value: rawConfigValue(config.gambleFoldHash?.slice(0, 12)),
-      comparisonKey: config.gambleFoldHash?.slice(0, 12) ?? "unavailable",
+      comparisonKey: configComparisonKey(
+        "gamble",
+        config.gambleFoldHash?.slice(0, 12),
+      ),
     },
     {
       kind: "transfiguration",
       label: configLabel("transfiguration"),
       value: rawConfigValue(config.transfigurationFoldHash?.slice(0, 12)),
-      comparisonKey:
-        config.transfigurationFoldHash?.slice(0, 12) ?? "unavailable",
+      comparisonKey: configComparisonKey(
+        "transfiguration",
+        config.transfigurationFoldHash?.slice(0, 12),
+      ),
     },
     {
       kind: "opponent",
       label: configLabel("opponent"),
       value: rawConfigValue(config.opponentsFoldHash?.slice(0, 12)),
-      comparisonKey: config.opponentsFoldHash?.slice(0, 12) ?? "unavailable",
+      comparisonKey: configComparisonKey(
+        "opponent",
+        config.opponentsFoldHash?.slice(0, 12),
+      ),
     },
     {
       kind: "tutorial",
       label: configLabel("tutorial"),
       value: rawConfigValue(config.tutorialFoldHash?.slice(0, 12)),
-      comparisonKey: config.tutorialFoldHash?.slice(0, 12) ?? "unavailable",
+      comparisonKey: configComparisonKey(
+        "tutorial",
+        config.tutorialFoldHash?.slice(0, 12),
+      ),
     },
   ];
 }

@@ -5,6 +5,7 @@ import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { InlineGlyph } from "../typography/InlineGlyph";
 import { IconButton } from "./IconButton";
+import type { DomTestId } from "../../types/dom";
 
 /** The density presets for a NumberStepper row. */
 export type NumberStepperSize = "sm" | "md";
@@ -35,7 +36,7 @@ export interface NumberStepperProps {
   /** Compact or regular row density. Defaults to `md`. */
   size?: NumberStepperSize;
   /** Stable test id for the row. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 /**

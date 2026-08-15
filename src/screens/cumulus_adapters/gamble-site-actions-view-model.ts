@@ -3,7 +3,7 @@ import type { JourneyMutations } from "../../state/journey-context";
 import type { GambleSiteRuntime } from "../../types/journey";
 import { logGambleReplacement } from "./gamble-site-logging-view-model";
 import type { SiteId } from "../../types/identifiers";
-import { asShuffleCommitment } from "../../types/identifiers";
+import { parseShuffleCommitment } from "../../types/identifiers";
 
 type Actions = Omit<GambleSiteScreenProps, "view">;
 
@@ -36,17 +36,17 @@ export function gambleSiteActions(
     const commitment = latestCommitment(runtime);
     if (commitment === undefined) return;
     if (runtime.gameId === "gravok-three-gate-wager")
-      mutations.settleGravokWager(siteId, asShuffleCommitment(commitment));
+      mutations.settleGravokWager(siteId, parseShuffleCommitment(commitment));
     else if (runtime.gameId === "tidemark-ladder-climb")
       mutations.settleTidemarkLadderClimb(
         siteId,
-        asShuffleCommitment(commitment),
+        parseShuffleCommitment(commitment),
       );
     else if (runtime.gameId === "starway-stairs")
-      mutations.settleStarwayStairs(siteId, asShuffleCommitment(commitment));
+      mutations.settleStarwayStairs(siteId, parseShuffleCommitment(commitment));
     else if (runtime.gameId === "four-suit-reprise")
-      mutations.settleFourSuitReprise(siteId, asShuffleCommitment(commitment));
-    else mutations.settleBlackjack(siteId, asShuffleCommitment(commitment));
+      mutations.settleFourSuitReprise(siteId, parseShuffleCommitment(commitment));
+    else mutations.settleBlackjack(siteId, parseShuffleCommitment(commitment));
   };
   const playAgain = () => {
     if (runtime === null) return;
@@ -56,16 +56,16 @@ export function gambleSiteActions(
         : latestCommitment(runtime);
     if (commitment === undefined) return;
     if (runtime.gameId === "gravok-three-gate-wager")
-      mutations.playAgainGravokWager(siteId, asShuffleCommitment(commitment));
+      mutations.playAgainGravokWager(siteId, parseShuffleCommitment(commitment));
     else if (runtime.gameId === "starway-stairs")
-      mutations.playAgainStarwayStairs(siteId, asShuffleCommitment(commitment));
+      mutations.playAgainStarwayStairs(siteId, parseShuffleCommitment(commitment));
     else if (runtime.gameId === "four-suit-reprise")
       mutations.playAgainFourSuitReprise(
         siteId,
-        asShuffleCommitment(commitment),
+        parseShuffleCommitment(commitment),
       );
     else if (runtime.gameId === "blackjack")
-      mutations.playAgainBlackjack(siteId, asShuffleCommitment(commitment));
+      mutations.playAgainBlackjack(siteId, parseShuffleCommitment(commitment));
   };
   return {
     onChooseGate: (gateId) => mutations.placeGravokWager(siteId, gateId),
@@ -81,7 +81,7 @@ export function gambleSiteActions(
       if (runtime?.gameId !== "starway-stairs") return;
       const commitment = latestCommitment(runtime);
       if (commitment !== undefined)
-        mutations.cashOutStarwayStairs(siteId, asShuffleCommitment(commitment));
+        mutations.cashOutStarwayStairs(siteId, parseShuffleCommitment(commitment));
     },
     onDrawFourSuit: (entryId) => mutations.drawFourSuitReprise(siteId, entryId),
     onFourSuitOutcomeShown: settle,
@@ -91,7 +91,7 @@ export function gambleSiteActions(
       if (commitment !== undefined)
         mutations.chooseFourSuitRepriseTransfiguration(
           siteId,
-          asShuffleCommitment(commitment),
+          parseShuffleCommitment(commitment),
           type,
         );
     },

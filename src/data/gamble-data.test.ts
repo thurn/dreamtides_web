@@ -32,7 +32,12 @@ describe("loadGambleData", () => {
       "fetch",
       vi.fn().mockResolvedValue({
         ok: true,
-        json: () => Promise.resolve(gambleFixture()),
+        json: () =>
+          Promise.resolve({
+            ...gambleFixture(),
+            contentHash: "not-a-hash",
+            foldHash: "also-not-a-hash",
+          }),
       }),
     );
 

@@ -20,24 +20,15 @@ The menu opens above or below according to the available viewport space and scro
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `options` | `SelectOption[]` | yes | — | The choices shown in the menu. |
+| `options` | `SelectOption<Value>[]` | yes | — | The choices shown in the menu. |
 | `value` | `string` | yes | — | The currently-selected option's value. |
-| `onChange` | `((value: string) => void)` | no | — | Fires with the newly-selected value when the user picks a menu item. |
+| `onChange` | `((value: Value) => void)` | no | — | Fires with the newly-selected value when the user picks a menu item. |
 | `leadingGlyph` | `Glyph` | no | — | Leading glyph drawn at the start of the trigger — the control's identity (a filled funnel for a filter, filled up/down arrows for a sort). It stands in for a text label, keeping the trigger to a single font. |
 | `size` | `SelectSize` = `"sm" \| "md"` | no | `md` | Height/scale. Default 'md'. |
 | `full` | `boolean` | no | `false` | Stretch the trigger to fill the container width. |
 | `align` | `"start" \| "end"` | no | `start` | Which trigger edge the menu aligns to. 'start' (default) opens flush to the leading edge; 'end' opens flush to the trailing edge — use it when the Select sits against the right side of a bar so the menu stays on-screen. |
 | `ariaLabel` | `LocalizedString` | no | — | Accessible label for the trigger. |
 | `placeholder` | `LocalizedString` | no | — | Text shown when `value` does not match an option, for action-picker controls. |
-
-### `options`: the `SelectOption` model
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `value` | `string` | no |  |
-| `label` | `LocalizedString` | no |  |
-| `triggerLabel` | `LocalizedString` | yes |  |
-| `disabled` | `boolean` | yes |  |
 
 ## Usage
 

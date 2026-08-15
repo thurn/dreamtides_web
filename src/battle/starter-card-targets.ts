@@ -1,12 +1,12 @@
 import { selectBattleCardLocation } from "./state/selectors";
 import type { BattleMutableState } from "./types";
-import { asBattleCardId, type BattleCardId } from "../types/identifiers";
-import { asCardId, type CardId } from "../types/card-identity";
+import { parseBattleCardId, type BattleCardId } from "../types/identifiers";
+import { parseCardId, type CardId } from "../types/card-identity";
 
-const ENEMY_LOW_COST_CHARACTER_TARGET_CARD_UUID = asCardId(
+const ENEMY_LOW_COST_CHARACTER_TARGET_CARD_UUID = parseCardId(
   "4408b942-09a0-4f4e-a403-10c708c6e3c5",
 );
-const FRIENDLY_CHARACTER_TARGET_CARD_UUID = asCardId(
+const FRIENDLY_CHARACTER_TARGET_CARD_UUID = parseCardId(
   "944e15d2-d680-4ebe-8d18-36826f4b1535",
 );
 
@@ -27,7 +27,7 @@ export function selectStarterCardLegalTargetIds(
   if (!starterCardRequiresTarget(sourceCardUuid)) return [];
   return Object.entries(board.cardInstances).flatMap(
     ([rawTargetBattleCardId, target]) => {
-      const targetBattleCardId = asBattleCardId(rawTargetBattleCardId);
+      const targetBattleCardId = parseBattleCardId(rawTargetBattleCardId);
       const location = selectBattleCardLocation(board, targetBattleCardId);
       const onBattlefield =
         location?.zone === "frontRank" || location?.zone === "backRank";

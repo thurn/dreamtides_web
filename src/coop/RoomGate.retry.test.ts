@@ -10,8 +10,10 @@
 
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { PinnedContentConfig } from "../eventlog/types";
+import { testFoldHash, testRoomId } from "../types/test-identities";
+import type { RoomId } from "../types/identifiers";
 
-const ids: string[] = [];
+const ids: RoomId[] = [];
 let attempt = 0;
 
 vi.mock("../eventlog/room", async () => {
@@ -22,7 +24,7 @@ vi.mock("../eventlog/room", async () => {
   return {
     ...actual,
     generateRoomId: vi.fn(() => {
-      const id = `room-${String(attempt)}`;
+      const id = testRoomId(`room-${String(attempt)}`);
       ids.push(id);
       attempt += 1;
       return id;
@@ -37,18 +39,18 @@ const { createRoomEvictingStale, RoomExistsError } =
 
 const CONTENT_CONFIG: PinnedContentConfig = {
   poolVariant: "tides4",
-  atlasFoldHash: "fixture-atlas-fold-hash",
-  sitesFoldHash: "fixture-sites-fold-hash",
-  draftFoldHash: "fixture-draft-fold-hash",
-  cardRolesFoldHash: "fixture-card-roles-fold-hash",
-  economyFoldHash: "a".repeat(64),
-  gambleFoldHash: "g".repeat(64),
-  transfigurationFoldHash: "x".repeat(64),
-  rewardSelectionFoldHash: "c".repeat(64),
-  auguryFoldHash: "d".repeat(64),
-  explorationFoldHash: "e".repeat(64),
-  tutorialFoldHash: "t".repeat(64),
-  opponentsFoldHash: "b".repeat(64),
+  atlasFoldHash: testFoldHash("fixture-atlas-fold-hash"),
+  sitesFoldHash: testFoldHash("fixture-sites-fold-hash"),
+  draftFoldHash: testFoldHash("fixture-draft-fold-hash"),
+  cardRolesFoldHash: testFoldHash("fixture-card-roles-fold-hash"),
+  economyFoldHash: testFoldHash("a"),
+  gambleFoldHash: testFoldHash("g"),
+  transfigurationFoldHash: testFoldHash("x"),
+  rewardSelectionFoldHash: testFoldHash("c"),
+  auguryFoldHash: testFoldHash("d"),
+  explorationFoldHash: testFoldHash("e"),
+  tutorialFoldHash: testFoldHash("t"),
+  opponentsFoldHash: testFoldHash("b"),
   defaultStartingEssence: 17,
   dreamsignCap: 4,
 };
@@ -82,7 +84,7 @@ describe("createAndNavigateToRoom retry", () => {
 
   it("retries with a fresh id after a RoomExistsError collision", async () => {
     vi.mocked(createRoomEvictingStale)
-      .mockRejectedValueOnce(new RoomExistsError("room-0 exists"))
+      .mockRejectedValueOnce(new RoomExistsError(testRoomId("room-0")))
       .mockResolvedValueOnce(undefined);
     const roomId = await createAndNavigateToRoom(db, CONTENT_CONFIG);
     expect(roomId).toBe("room-1");
@@ -92,7 +94,7 @@ describe("createAndNavigateToRoom retry", () => {
 
   it("gives up after 3 collisions and rejects with the RoomExistsError", async () => {
     vi.mocked(createRoomEvictingStale).mockRejectedValue(
-      new RoomExistsError("collision"),
+      new RoomExistsError(testRoomId("collision")),
     );
     await expect(
       createAndNavigateToRoom(db, CONTENT_CONFIG),

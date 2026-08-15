@@ -23,6 +23,7 @@
 
 import { useEffect, type CSSProperties, type ReactElement } from "react";
 import { token, TOKENS } from "../primitives/tokens";
+import type { DomElementId } from "../types/dom";
 
 /** The generated shape of a TOKENS entry, widened away from the exact `as
  * const` literal union so this module can iterate every entry uniformly
@@ -30,7 +31,7 @@ import { token, TOKENS } from "../primitives/tokens";
 interface TokenEntry {
   var: string;
   value: string;
-  kind?: string;
+  kind?: "color" | "radius" | "shadow" | "font" | "other";
 }
 
 /** Every generated token, keyed by its `--name`, widened to `TokenEntry`. */
@@ -226,7 +227,7 @@ const ORDERED_BUCKETS: Bucket[] = [
 ];
 
 /** Stable DOM id for a token category's section (Color, Typography, ...). */
-function tokenCategoryId(bucket: Bucket): string {
+function tokenCategoryId(bucket: Bucket): DomElementId {
   return `cumulus-toc-tokencat-${bucket}`;
 }
 
@@ -239,7 +240,7 @@ const ICONOGRAPHY_ANCHOR_ID = "cumulus-toc-tokencat-icon";
  * Iconography. Derived from the same buckets the section renders, so it can
  * never drift from the on-page headings.
  */
-export const TOKEN_TOC_ENTRIES: { id: string; label: string }[] = [
+export const TOKEN_TOC_ENTRIES: { id: DomElementId; label: string }[] = [
   ...ORDERED_BUCKETS.filter((bucket) => TOKEN_BUCKETS[bucket].length > 0).map(
     (bucket) => ({ id: tokenCategoryId(bucket), label: BUCKET_TITLES[bucket] }),
   ),
@@ -349,7 +350,7 @@ function TokenGroup({
 }: {
   title: string;
   description: string;
-  id?: string;
+  id?: DomElementId;
   children: ReactElement | ReactElement[];
 }): ReactElement {
   return (

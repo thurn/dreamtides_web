@@ -1,6 +1,5 @@
 import type { OpponentsData } from "../types/opponents-data";
-import { asCardId } from "../types/card-identity";
-import { asAiDifficultyPresetId } from "../types/identifiers";
+import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 export type { OpponentsData } from "../types/opponents-data";
 
@@ -38,22 +37,20 @@ export async function loadOpponentsData(): Promise<OpponentsData> {
   const decoded = value as OpponentsData;
   return {
     ...decoded,
+    contentHash: parseContentHash(candidate.contentHash),
+    foldHash: parseFoldHash(candidate.foldHash),
     journeyAiDeck: decoded.journeyAiDeck.map((entry) => ({
       ...entry,
-      cardId: asCardId(entry.cardId),
+      cardId: entry.cardId,
     })),
     ai: {
       ...decoded.ai,
-      journeyDefaultPreset: asAiDifficultyPresetId(
-        decoded.ai.journeyDefaultPreset,
-      ),
-      tutorialDefaultPreset: asAiDifficultyPresetId(
-        decoded.ai.tutorialDefaultPreset,
-      ),
+      journeyDefaultPreset: decoded.ai.journeyDefaultPreset,
+      tutorialDefaultPreset: decoded.ai.tutorialDefaultPreset,
       presets: Object.fromEntries(
         Object.entries(decoded.ai.presets).map(([key, preset]) => [
           key,
-          { ...preset, id: asAiDifficultyPresetId(preset.id) },
+          { ...preset, id: preset.id },
         ]),
       ),
     },

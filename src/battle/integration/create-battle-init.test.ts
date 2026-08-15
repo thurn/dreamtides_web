@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../../types/test-identities";
 import { describe, expect, it } from "vitest";
 import {
   makeBattleTestCardDatabase,
@@ -11,7 +12,7 @@ import {
 } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { DreamAvatarContent } from "../../types/content";
 import type {
   CardKeywordModification,
@@ -26,11 +27,16 @@ import {
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
-import { asBattleEntryKey } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asCardTypeChangePredicateId } from "../../types/identifiers";
+import { identityKeys, parseBattleEntryKey } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseCardTypeChangePredicateId } from "../../types/identifiers";
+import {
+  testCardId,
+  testContentHash,
+  testDreamAvatarId,
+  testDreamsignId,
+} from "../../types/test-identities";
+import { testJourneyMutationSource } from "../../types/test-identities";
 
 // The padded minimum battle deck size; the enemy deck is padded up to this.
 const MIN_BATTLE_DECK_SIZE = 25;
@@ -39,7 +45,7 @@ function makeBaseInput(): CreateBattleInitInput {
   return {
     opponentsData: opponentsFixture(),
     transfigurationData: transfigurationFixture(),
-    battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
+    battleEntryKey: parseBattleEntryKey("site-7::2::dreamscape-2"),
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
@@ -62,11 +68,11 @@ function makePackageCard(
   packageTide: string,
 ): CardData {
   return {
-    name: asCardName(`${packageTide} ${String(cardNumber)}`),
-    id: asCardId(`${packageTide}-${String(cardNumber)}`),
+    name: parseCardName(`${packageTide} ${String(cardNumber)}`),
+    id: testCardId(`${packageTide}-${String(cardNumber)}`),
     cardNumber,
     cardType,
-    subtype: cardType === "Character" ? "Echo" : "Spell",
+    subtype: cardType === "Character" ? "Entity" : "",
     isStarter: false,
     energyCost,
     spark: cardType === "Character" ? energyCost : null,
@@ -87,13 +93,13 @@ function makeSignatureDreamAvatars(
 ): DreamAvatarContent[] {
   return [
     {
-      id: asDreamAvatarId("signature-dc"),
+      id: testDreamAvatarId("signature-dc"),
       name: "Signature Sentinel",
       title: "Steering Test",
       renderedText: "",
       imageNumber: "001",
       startingEssence: 250,
-      signatureCards: signatureCards.map(asCardName),
+      signatureCards: signatureCards.map(parseCardName),
     },
   ];
 }
@@ -121,7 +127,7 @@ describe("createBattleInit", () => {
 
   it("resolves non-default battle and AI values from opponent configuration", () => {
     const opponentsData = opponentsFixture();
-    opponentsData.contentHash = "c".repeat(64);
+    opponentsData.contentHash = testContentHash("c");
     opponentsData.battle = {
       ...opponentsData.battle,
       minimumDeckSize: 9,
@@ -139,8 +145,9 @@ describe("createBattleInit", () => {
       ...opponentsData.progression,
       abilityActiveFromLayer: 6,
     };
-    opponentsData.ai.presets.standard = {
-      ...opponentsData.ai.presets.standard,
+    const defaultPresetId = opponentsData.ai.journeyDefaultPreset;
+    opponentsData.ai.presets[defaultPresetId] = {
+      ...opponentsData.ai.presets[defaultPresetId],
       beamWidth: 5,
       searchDepth: 9,
     };
@@ -187,13 +194,13 @@ describe("createBattleInit", () => {
             kind: "opening_hand_bonus",
             count: 2,
             battlesRemaining: 1,
-            source: "exploration:test:hand",
+            source: testJourneyMutationSource("exploration:test:hand"),
           },
           {
             kind: "starting_energy_bonus",
             count: 3,
             battlesRemaining: 1,
-            source: "exploration:test:energy",
+            source: testJourneyMutationSource("exploration:test:energy"),
           },
         ],
       },
@@ -217,7 +224,7 @@ describe("createBattleInit", () => {
             openingHandDelta: -1,
             energyCostReduction: 1,
             battlesRemaining: 1,
-            source: "exploration:test:discount",
+            source: testJourneyMutationSource("exploration:test:discount"),
           },
         ],
       },
@@ -258,7 +265,7 @@ describe("createBattleInit", () => {
       const baseInput = makeBaseInput();
       const otherInput: CreateBattleInitInput = {
         ...baseInput,
-        battleEntryKey: asBattleEntryKey("site-9::4::dreamscape-99"),
+        battleEntryKey: parseBattleEntryKey("site-9::4::dreamscape-99"),
       };
 
       const a = createBattleInit(baseInput);
@@ -284,7 +291,7 @@ describe("createBattleInit", () => {
       const baseInput = makeBaseInput();
       const otherInput: CreateBattleInitInput = {
         ...baseInput,
-        state: { ...baseInput.state, seed: "another-journey-seed" },
+        state: { ...baseInput.state, seed: testJourneySeed("another-journey-seed") },
       };
 
       const a = createBattleInit(baseInput);
@@ -316,7 +323,7 @@ describe("createBattleInit", () => {
     it("falls back to the hash-derived seed when seedOverride is null or omitted", () => {
       const baseInput = makeBaseInput();
       const expectedSeed = deriveBattleSeed(
-        asBattleEntryKey(`${baseInput.state.seed}:${baseInput.battleEntryKey}`),
+        parseBattleEntryKey(`${baseInput.state.seed}:${baseInput.battleEntryKey}`),
       );
 
       const fromOmitted = createBattleInit(baseInput);
@@ -379,7 +386,7 @@ describe("createBattleInit", () => {
             kind: "reward_reduction_flat" as const,
             amount: 200,
             battlesRemaining: 1,
-            source: "journey:test",
+            source: testJourneyMutationSource("journey:test"),
           },
         ],
       };
@@ -423,7 +430,7 @@ describe("createBattleInit", () => {
               kind: "reward_reduction_flat",
               amount: 80,
               battlesRemaining: 2,
-              source: "journey:test",
+              source: testJourneyMutationSource("journey:test"),
             },
           ],
         },
@@ -437,7 +444,7 @@ describe("createBattleInit", () => {
               kind: "reward_reduction_flat",
               amount: 999,
               battlesRemaining: 1,
-              source: "journey:test",
+              source: testJourneyMutationSource("journey:test"),
             },
           ],
         },
@@ -459,7 +466,7 @@ describe("createBattleInit", () => {
               kind: "reward_reduction_percent",
               percent: 33,
               battlesRemaining: 2,
-              source: "journey:test",
+              source: testJourneyMutationSource("journey:test"),
             },
           ],
         },
@@ -473,7 +480,7 @@ describe("createBattleInit", () => {
               kind: "reward_reduction_percent",
               percent: 150,
               battlesRemaining: 1,
-              source: "journey:test",
+              source: testJourneyMutationSource("journey:test"),
             },
           ],
         },
@@ -643,9 +650,9 @@ describe("createBattleInit", () => {
       if (original === undefined) throw new Error("expected source card");
       const card: CardData = {
         ...original,
-        id: asCardId("11111111-1111-4111-8111-111111111111"),
+        id: testCardId("11111111-1111-4111-8111-111111111111"),
         cardType: "Event",
-        subtype: "Vision",
+        subtype: "Visionary",
         energyCost: 2,
         spark: null,
         isFast: false,
@@ -653,9 +660,9 @@ describe("createBattleInit", () => {
       };
       const keywordModification: CardKeywordModification = { reclaim: 2 };
       const typeChange: CardTypeChange = {
-        predicateId: asCardTypeChangePredicateId("visions"),
+        predicateId: parseCardTypeChangePredicateId("visions"),
         cardType: "Character",
-        subtype: "Seer",
+        subtype: "Visionary",
         label: "Seer",
       };
       const input: CreateBattleInitInput = {
@@ -704,7 +711,7 @@ describe("createBattleInit", () => {
       const baseInput = makeBaseInput();
       const changedEntryId = "deck-5";
       const typeChange: CardTypeChange = {
-        predicateId: asCardTypeChangePredicateId("spirit_animals"),
+        predicateId: parseCardTypeChangePredicateId("spirit_animals"),
         cardType: "Character",
         subtype: "Spirit Animal",
         label: "Spirit Animal",
@@ -861,7 +868,7 @@ describe("createBattleInit", () => {
         deck: [
           ...baseInput.state.deck,
           {
-            entryId: asDeckEntryId("deck-unknown"),
+            entryId: parseDeckEntryId("deck-unknown"),
             cardNumber: 9999,
             transfiguration: null,
             isBane: false,
@@ -912,14 +919,14 @@ describe("createBattleInit", () => {
       const baseState = makeBattleTestState();
       const templates = [
         {
-          id: asDreamsignId("enemy-sign-1"),
+          id: testDreamsignId("enemy-sign-1"),
           name: "Enemy Sign One",
           effectDescription: "An opposing boon.",
           imageName: "enemy-sign-one.webp",
           imageAlt: "A luminous enemy sigil",
         },
         {
-          id: asDreamsignId("enemy-sign-2"),
+          id: testDreamsignId("enemy-sign-2"),
           name: "Enemy Sign Two",
           effectDescription: "Another opposing boon.",
         },
@@ -958,7 +965,7 @@ describe("createBattleInit", () => {
         state: { ...baseState, completionLevel: 0 },
         dreamsignTemplates: [
           {
-            id: asDreamsignId("enemy-sign-1"),
+            id: testDreamsignId("enemy-sign-1"),
             name: "Enemy Sign One",
             effectDescription: "An opposing boon.",
           },
@@ -1034,7 +1041,7 @@ describe("createBattleInit", () => {
           opponentsFixture().journeyAiDeck[cardNumber - 510].cardId;
         augmented.set(cardNumber, {
           ...makePackageCard(cardNumber, "Character", 1, "starter"),
-          id: asCardId(cardId),
+          id: cardId,
           isStarter: true,
         });
       }
@@ -1090,7 +1097,7 @@ describe("createBattleInit", () => {
       expect(Object.isFrozen(snapshot)).toBe(true);
       expect(Object.isFrozen(snapshot.nodes)).toBe(true);
       expect(Object.isFrozen(snapshot.layers)).toBe(true);
-      for (const nodeId of Object.keys(snapshot.nodes)) {
+      for (const nodeId of identityKeys(snapshot.nodes)) {
         const node = snapshot.nodes[nodeId];
         expect(Object.isFrozen(node)).toBe(true);
         expect(Object.isFrozen(node.position)).toBe(true);
@@ -1103,7 +1110,7 @@ describe("createBattleInit", () => {
       // Mutating the source atlas after snapshotting must not affect the
       // snapshot's contents.
       const sourceAtlas = baseInput.state.atlas;
-      const firstNodeId = Object.keys(sourceAtlas.nodes)[0];
+      const firstNodeId = identityKeys(sourceAtlas.nodes)[0];
       const originalX = snapshot.nodes[firstNodeId].position.x;
       sourceAtlas.nodes[firstNodeId].position.x = originalX + 100;
       expect(snapshot.nodes[firstNodeId].position.x).toBe(originalX);

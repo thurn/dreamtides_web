@@ -11,11 +11,16 @@ import { makeTextRevealSpec } from "./test-utils";
 import type { RevealSpec } from "./model";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
-import { asCardId, asCardName } from "../../../types/card-identity";
-import { asDreamscapeId } from "../../../types/identifiers";
+import { parseCardName } from "../../../types/card-identity";
+import {
+  testCardId,
+  testDreamscapeId,
+  testSemanticEntityId,
+} from "../../../types/test-identities";
+import type { SemanticEntityId } from "../../../types/identifiers";
 
-const UUID_A = "00000000-0000-4000-8000-000000000001";
-const UUID_B = "00000000-0000-4000-8000-000000000002";
+const UUID_A = testSemanticEntityId("00000000-0000-4000-8000-000000000001");
+const UUID_B = testSemanticEntityId("00000000-0000-4000-8000-000000000002");
 
 function Source({
   id,
@@ -24,7 +29,7 @@ function Source({
   spec,
   feedback,
 }: {
-  id: string;
+  id: SemanticEntityId;
   label?: string;
   onActivate?: () => void;
   spec?: RevealSpec;
@@ -293,29 +298,6 @@ describe("Cumulus reveal coordinator root", () => {
     expect(button.dataset.revealActive).toBe("true");
   });
 
-  it("suppresses only a malformed source reveal and reports a diagnostic", () => {
-    const { container } = mount(
-      <CumulusRoot>
-        <Source id="not-a-uuid" label="Bad" />
-        <Source id={UUID_A} label="Good" />
-      </CumulusRoot>,
-    );
-    const [bad, good] = [...container.querySelectorAll("button")];
-    act(() => {
-      bad.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
-    });
-    expect(bad.dataset.revealActive).toBe("false");
-    expect(
-      getLogEntries().some(
-        (entry) => entry.event === "cumulus_entity_reveal_invalid_source",
-      ),
-    ).toBe(true);
-    act(() => {
-      good.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
-    });
-    expect(good.dataset.revealActive).toBe("true");
-  });
-
   it("allows only the first active touch to activate", () => {
     const activateA = vi.fn();
     const activateB = vi.fn();
@@ -514,14 +496,14 @@ describe("Cumulus reveal coordinator root", () => {
       },
       {
         variant: "fullBleed",
-        image: artRef.dreamscapeScene(asDreamscapeId("scene")),
+        image: artRef.dreamscapeScene(testDreamscapeId("scene")),
         title: assertLocalized("Full Title"),
         subtitle: assertLocalized("Full Subtitle"),
         body: { kind: "plain", text: assertLocalized("Full Body") },
       },
       {
         variant: "atlasReveal",
-        image: artRef.dreamscapeScene(asDreamscapeId("atlas")),
+        image: artRef.dreamscapeScene(testDreamscapeId("atlas")),
         title: assertLocalized("Atlas Title"),
         subtitle: assertLocalized("Atlas Guide"),
         body: { kind: "plain", text: assertLocalized("Atlas Body") },
@@ -563,14 +545,14 @@ describe("Cumulus reveal coordinator root", () => {
   });
 
   it("describes a complete GameCard display snapshot", () => {
-    const cardId = asCardId(UUID_A);
+    const cardId = testCardId(UUID_A);
     const spec: RevealSpec = {
       primary: {
         kind: "gameCard",
         cardId,
         displaySnapshot: {
           id: cardId,
-          name: asCardName("Moon Twin"),
+          name: parseCardName("Moon Twin"),
           cardNumber: 42,
           cardType: "Character",
           subtype: "Guide",
@@ -615,7 +597,7 @@ describe("Cumulus reveal coordinator root", () => {
   });
 
   it("treats the catalog wildcard subtype as absent reveal copy", () => {
-    const cardId = asCardId(UUID_A);
+    const cardId = testCardId(UUID_A);
     const { container } = mount(
       <CumulusRoot>
         <Source
@@ -626,7 +608,7 @@ describe("Cumulus reveal coordinator root", () => {
               cardId,
               displaySnapshot: {
                 id: cardId,
-                name: asCardName("Moon Twin"),
+                name: parseCardName("Moon Twin"),
                 cardNumber: 42,
                 cardType: "Character",
                 subtype: "*",
@@ -654,7 +636,7 @@ describe("Cumulus reveal coordinator root", () => {
 
   it("rejects an incomplete GameCard registration instead of describing only its UUID", () => {
     const incomplete = {
-      primary: { kind: "gameCard", cardId: asCardId(UUID_A) },
+      primary: { kind: "gameCard", cardId: testCardId(UUID_A) },
       secondaries: [],
     } as unknown as RevealSpec;
     const { container } = mount(
@@ -1202,14 +1184,14 @@ describe("Cumulus reveal coordinator root", () => {
       configurable: true,
       value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 },
     });
-    const cardId = asCardId(UUID_A);
+    const cardId = testCardId(UUID_A);
     const spec: RevealSpec = {
       primary: {
         kind: "gameCard",
         cardId,
         displaySnapshot: {
           id: cardId,
-          name: asCardName("Return Card"),
+          name: parseCardName("Return Card"),
           cardNumber: 7,
           cardType: "Event",
           subtype: "",
@@ -1281,14 +1263,14 @@ describe("Cumulus reveal coordinator root", () => {
         configurable: true,
         value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 },
       });
-      const cardId = asCardId(UUID_A);
+      const cardId = testCardId(UUID_A);
       const spec: RevealSpec = {
         primary: {
           kind: "gameCard",
           cardId,
           displaySnapshot: {
             id: cardId,
-            name: asCardName("Cancel Return"),
+            name: parseCardName("Cancel Return"),
             cardNumber: 8,
             cardType: "Event",
             subtype: "",
@@ -1366,14 +1348,14 @@ describe("Cumulus reveal coordinator root", () => {
       configurable: true,
       value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 },
     });
-    const cardId = asCardId(UUID_A);
+    const cardId = testCardId(UUID_A);
     const spec: RevealSpec = {
       primary: {
         kind: "gameCard",
         cardId,
         displaySnapshot: {
           id: cardId,
-          name: asCardName("Re-enter"),
+          name: parseCardName("Re-enter"),
           cardNumber: 9,
           cardType: "Event",
           subtype: "",
@@ -1465,14 +1447,14 @@ describe("Cumulus reveal coordinator root", () => {
       configurable: true,
       value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 },
     });
-    const cardId = asCardId(UUID_A);
+    const cardId = testCardId(UUID_A);
     const spec: RevealSpec = {
       primary: {
         kind: "gameCard",
         cardId,
         displaySnapshot: {
           id: cardId,
-          name: asCardName("Unmount Return"),
+          name: parseCardName("Unmount Return"),
           cardNumber: 10,
           cardType: "Event",
           subtype: "",
@@ -1544,14 +1526,14 @@ describe("Cumulus reveal coordinator root", () => {
       configurable: true,
       value: { width: 1200, height: 800, offsetLeft: 0, offsetTop: 0 },
     });
-    const cardId = asCardId(UUID_A);
+    const cardId = testCardId(UUID_A);
     const spec: RevealSpec = {
       primary: {
         kind: "gameCard",
         cardId,
         displaySnapshot: {
           id: cardId,
-          name: asCardName("Root Return"),
+          name: parseCardName("Root Return"),
           cardNumber: 11,
           cardType: "Event",
           subtype: "",

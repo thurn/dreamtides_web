@@ -1,5 +1,7 @@
 import type { DreamAvatarContent } from "../types/content";
+import type { DreamAvatarId } from "../types/identifiers";
 import type { DreamAvatar } from "../types/journey";
+import type { JourneySeed } from "../types/journey-seed";
 
 /**
  * Pick a stable random offer of DreamAvatars without replacement. Generic over
@@ -28,18 +30,33 @@ export function selectDreamAvatarOffer<T = DreamAvatarContent>(
 }
 
 /** FNV-1a hash of a room seed into the numeric seed used by mulberry32. */
-function hashSeed(seed: string): number {
+function hashSeed(seedMaterial: string): number {
   let hash = 2166136261;
-  for (let index = 0; index < seed.length; index += 1) {
-    hash ^= seed.charCodeAt(index);
+  for (let index = 0; index < seedMaterial.length; index += 1) {
+    hash ^= seedMaterial.charCodeAt(index);
     hash = Math.imul(hash, 16777619);
   }
   return hash >>> 0;
 }
 
+type DreamAvatarOfferRngScope =
+  | { readonly kind: "initial" }
+  | {
+      readonly kind: "debug-reroll";
+      readonly count: number;
+      readonly replacement: boolean;
+    };
+
 /** Deterministic `[0, 1)` stream used only for the shared journey-start offer. */
-function offerRng(seed: string): () => number {
-  let state = hashSeed(`${seed}:dream-avatar-offer`);
+function offerRng(
+  seed: JourneySeed,
+  scope: DreamAvatarOfferRngScope,
+): () => number {
+  const seedMaterial =
+    scope.kind === "initial"
+      ? `${seed}:dream-avatar-offer`
+      : `${seed}:debug-reroll:${String(scope.count)}${scope.replacement ? ":replacement" : ""}:dream-avatar-offer`;
+  let state = hashSeed(seedMaterial);
   return () => {
     state = (state + 0x6d2b79f5) >>> 0;
     let value = state;
@@ -55,10 +72,23 @@ function offerRng(seed: string): () => number {
  */
 export function selectDreamAvatarOfferForSeed<T = DreamAvatarContent>(
   dreamAvatars: readonly T[],
-  seed: string,
+  seed: JourneySeed,
   offerSize = 3,
 ): T[] {
-  return selectDreamAvatarOffer(dreamAvatars, offerSize, offerRng(seed));
+  return selectDreamAvatarOffer(
+    dreamAvatars,
+    offerSize,
+    offerRng(seed, { kind: "initial" }),
+  );
+}
+
+function selectDreamAvatarOfferForScope<T>(
+  dreamAvatars: readonly T[],
+  seed: JourneySeed,
+  scope: DreamAvatarOfferRngScope,
+  offerSize: number,
+): T[] {
+  return selectDreamAvatarOffer(dreamAvatars, offerSize, offerRng(seed, scope));
 }
 
 /**
@@ -68,10 +98,10 @@ export function selectDreamAvatarOfferForSeed<T = DreamAvatarContent>(
  * from the preceding offer.
  */
 export function selectDreamAvatarOfferForReroll<
-  T extends { readonly id: string } = DreamAvatarContent,
+  T extends { readonly id: DreamAvatarId } = DreamAvatarContent,
 >(
   dreamAvatars: readonly T[],
-  seed: string,
+  seed: JourneySeed,
   rerollCount: number,
   offerSize = 3,
 ): T[] {
@@ -83,10 +113,10 @@ export function selectDreamAvatarOfferForReroll<
     const replacementPool = dreamAvatars.filter(
       (dreamAvatar) => !previousIds.has(dreamAvatar.id),
     );
-    const rerollSeed = `${seed}:debug-reroll:${String(count)}`;
-    const candidate = selectDreamAvatarOfferForSeed(
+    const candidate = selectDreamAvatarOfferForScope(
       dreamAvatars,
-      rerollSeed,
+      seed,
+      { kind: "debug-reroll", count, replacement: false },
       offerSize,
     );
 
@@ -94,9 +124,10 @@ export function selectDreamAvatarOfferForReroll<
       replacementPool.length > 0 &&
       candidate.every((dreamAvatar) => previousIds.has(dreamAvatar.id))
     ) {
-      const replacement = selectDreamAvatarOfferForSeed(
+      const replacement = selectDreamAvatarOfferForScope(
         replacementPool,
-        `${rerollSeed}:replacement`,
+        seed,
+        { kind: "debug-reroll", count, replacement: true },
         1,
       )[0];
       offer = [...candidate.slice(0, -1), replacement];

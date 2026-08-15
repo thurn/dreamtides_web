@@ -1,6 +1,7 @@
 import type { Tides4Role } from "../draft/pool/tides4-io";
 import type { Resonance } from "../types/resonance-data";
 import type { DreamAvatarId, TideId } from "../types/identifiers";
+import type { SourceRevision } from "../types/source-revision";
 
 /** The inline-editable text fields on a DreamAvatar record. */
 export type EditableDreamAvatarField =
@@ -53,7 +54,7 @@ export interface DreamAvatarDisplayState {
 export interface LoadEditorDreamAvatarsResponse {
   dreamAvatars: EditorDreamAvatarRecord[];
   tides: EditorTideOption[];
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
 }
 
 export interface SaveEditorDreamAvatarFieldRequest {
@@ -70,7 +71,7 @@ export interface SaveEditorDreamAvatarTidePoolRequest {
 
 export interface SaveEditorDreamAvatarFieldResponse {
   dreamAvatar: EditorDreamAvatarRecord;
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
   clientRevision?: number;
 }
 

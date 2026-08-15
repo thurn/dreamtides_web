@@ -6,6 +6,11 @@
 import type { SiteType } from "./journey.ts";
 import type { Rarity } from "./cards.ts";
 import type { CardId, CardName } from "./card-identity";
+import type {
+  DraftPoolCopiesByCard,
+  OpeningDraftOffers,
+  SerializedCardNumber,
+} from "./draft";
 import type { GuideId } from "./identifiers";
 import type { DreamAvatarId } from "./identifiers";
 import type { DreamscapeId } from "./identifiers";
@@ -15,6 +20,7 @@ import type {
   DreamsignId,
   TideId,
 } from "./identifiers";
+import type { ContentHash } from "./content-hash";
 
 /** Normalized point locating a DreamAvatar's head in its portrait artwork. */
 export interface DreamAvatarPortraitFocus {
@@ -107,7 +113,7 @@ export interface DreamGuideContent {
 /** Versioned canonical Dream Guide catalog emitted by the asset compiler. */
 export interface DreamGuidesData {
   schemaVersion: 1;
-  contentHash: string;
+  contentHash: ContentHash;
   guides: readonly DreamGuideContent[];
 }
 
@@ -195,7 +201,7 @@ export interface Tides4CardProvenance {
  */
 export interface Tides4ProvenanceSummary {
   /** The DreamAvatar this pool was built for. */
-  dreamAvatarId: DreamAvatarId;
+  dreamAvatarId: DreamAvatarId | null;
   /**
    * Whether the DreamAvatar has no signature. A signatureless DreamAvatar borrows
    * a random signatured DreamAvatar's whole pool, leaning a coherent archetype.
@@ -222,19 +228,22 @@ export interface Tides4ProvenanceSummary {
    */
   tides: Tides4TideSummary[];
   /** Per-card provenance, keyed by card number (as a string). */
-  cardProvenanceByNumber: Record<string, Tides4CardProvenance>;
+  cardProvenanceByNumber: Record<
+    SerializedCardNumber,
+    Tides4CardProvenance
+  >;
 }
 
 export interface ResolvedDreamAvatarPackage {
   dreamAvatar: DreamAvatarContent;
   /** Joined tide UUIDs for this run, persisted for reconstructable affinity selection. */
   joinedTideIds?: TideId[];
-  draftPoolCopiesByCard: Record<string, number>;
+  draftPoolCopiesByCard: DraftPoolCopiesByCard;
   /**
    * Exact early offers keyed by their 1-indexed journey pick. Authored flows
    * can use this to teach with a stable opening before ordinary pool sampling.
    */
-  openingDraftOffers?: Record<string, number[]>;
+  openingDraftOffers?: OpeningDraftOffers;
   /**
    * Dreamsign UUIDs guaranteed to appear in the opening Revelation offer.
    * Authored tutorial flows use this to establish the run's theme while the

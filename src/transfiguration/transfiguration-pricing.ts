@@ -18,6 +18,7 @@
  */
 
 import type { CardData } from "../types/cards";
+import type { JourneySeed } from "../types/journey-seed";
 import type { TransfigurationType } from "../types/journey";
 import type {
   TransfigurationCostBand,
@@ -116,7 +117,7 @@ export function rollTransfigurationCost(
  */
 export function transfigurationEssenceCost(
   data: TransfigurationData,
-  seed: string,
+  seed: JourneySeed,
   siteId: SiteId,
   entryId: DeckEntryId,
   card: CardData,

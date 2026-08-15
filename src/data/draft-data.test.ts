@@ -2,11 +2,13 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import type { DraftData } from "../types/draft-data";
 import { loadDraftData, parseDraftData } from "./draft-data";
+import { testContentHash, testFoldHash } from "../types/test-identities";
 
-const HASH = "a".repeat(64);
+const CONTENT_HASH = testContentHash("a");
+const FOLD_HASH = testFoldHash("a");
 
 function fixture() {
-  return draftDataFixture({ contentHash: HASH, foldHash: HASH });
+  return draftDataFixture({ contentHash: CONTENT_HASH, foldHash: FOLD_HASH });
 }
 
 afterEach(() => {
@@ -23,7 +25,7 @@ describe("parseDraftData", () => {
     [
       "invalid fold hash",
       (value) => {
-        value.foldHash = "invalid";
+        Object.defineProperty(value, "foldHash", { value: "invalid" });
       },
     ],
     [

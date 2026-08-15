@@ -2,7 +2,8 @@ import { describe, expect, it } from "vitest";
 import { selectSignatureCards, glossaryTermsIn } from "./signature-cards";
 import { GLOSSARY, glossaryRulesTextForms } from "../../data/glossary";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
+import { testCardId } from "../../types/test-identities";
 
 /**
  * Distinct, single-word, letter-only glossary keywords, taken from the live
@@ -29,8 +30,8 @@ function makeCard(
   overrides: Partial<CardData> & { cardNumber: number; renderedText: string },
 ): CardData {
   return {
-    name: asCardName(`Card ${String(overrides.cardNumber)}`),
-    id: asCardId(`card-${String(overrides.cardNumber)}`),
+    name: parseCardName(`Card ${String(overrides.cardNumber)}`),
+    id: testCardId(`card-${String(overrides.cardNumber)}`),
     cardType: "Character",
     subtype: "Warrior",
     isStarter: false,
@@ -215,7 +216,7 @@ describe("selectSignatureCards", () => {
     const removalEvent = makeCard({
       cardNumber: 1,
       cardType: "Event",
-      subtype: "Event",
+      subtype: "",
       energyCost: 5,
       spark: null,
       renderedText: "A wordless removal spell.",

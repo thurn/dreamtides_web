@@ -20,7 +20,7 @@ Put width, flex behavior, and placement on that wrapper; the component owns only
 | --- | --- | --- | --- | --- |
 | `dreamAvatar` | `DreamAvatarVisual` | yes | — | The dreamAvatar whose art and identity the portrait shows. |
 | `variant` | `DreamAvatarPortraitVariant` = `"panel" \| "thumb"` | no | — | Square framing: `panel` for profile surfaces or `thumb` for compact rows. Default `panel`. |
-| `profile` | `{ id: string; ability: LocalizedString; }` | no | — | Semantic DreamAvatar profile represented by this portrait. Omit for decorative art. |
+| `profile` | `{ id: DreamAvatarId \| OpponentId; ability: LocalizedString; }` | no | — | Semantic DreamAvatar profile represented by this portrait. Omit for decorative art. |
 | `onPress` | `(() => void)` | no | — | Optional primary press action for selectable profile portraits. |
 | `unavailable` | `boolean` | no | `false` | Keeps the profile readable while suppressing activation. |
 

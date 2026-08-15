@@ -29,6 +29,18 @@ export interface StandardPlayingCard {
 
 /** The three wager choices in Gravok's Three-Gate Wager. */
 export type GravokGateId = "six" | "nine" | "jack";
+export const GRAVOK_GATE_IDS: readonly GravokGateId[] = [
+  "six",
+  "nine",
+  "jack",
+];
+
+export function isGravokGateId(value: unknown): value is GravokGateId {
+  return (
+    typeof value === "string" &&
+    GRAVOK_GATE_IDS.some((candidate) => candidate === value)
+  );
+}
 
 /** Stable game ids persisted by Gamble site runtimes. */
 export type GambleGameId =

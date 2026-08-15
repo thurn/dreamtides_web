@@ -11,7 +11,7 @@ import type {
   EditorDreamAvatarRecord,
   EditorTideOption,
 } from "./dream-avatar-types";
-import { asTideId } from "../types/identifiers";
+import type { TideId } from "../types/identifiers";
 
 export interface EditableDreamAvatarProps {
   dreamAvatar: EditorDreamAvatarRecord;
@@ -134,8 +134,8 @@ export default function EditableDreamAvatar({
       ? tideById.get(dreamAvatar.tidePool.starter)
       : undefined;
 
-  function tideLabel(id: string): string {
-    const tide = tideById.get(asTideId(id));
+  function tideLabel(id: TideId): string {
+    const tide = tideById.get(id);
     if (tide === undefined) {
       return id;
     }

@@ -6,6 +6,7 @@ import { createRoot } from "react-dom/client";
 import { describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { TideDisc } from "./TideDisc";
+import { testTideId } from "../../../types/test-identities";
 
 describe("TideDisc", () => {
   it("derives its tide primary and definition secondary internally", () => {
@@ -20,7 +21,7 @@ describe("TideDisc", () => {
         <CumulusRoot>
           <TideDisc
             tide="valor"
-            id="tide-valor"
+            id={testTideId("tide-valor")}
             label={assertLocalized("Rising Valor")}
             description={assertLocalized("Stand firm.")}
           />

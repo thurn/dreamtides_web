@@ -193,7 +193,7 @@ use. `src/data/dreamsign-profiles.ts` exports:
 
 ```typescript
 export interface DreamsignProfile {
-  id: string;             // dreamsign UUID
+  id: DreamsignId;        // dreamsign UUID
   subtypes: readonly string[];
   cardTypes: readonly string[];
   costBands: readonly ("cheap" | "mid" | "big")[];

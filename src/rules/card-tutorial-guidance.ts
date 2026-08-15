@@ -5,11 +5,11 @@ import { activeFirstVisitTutorialSite } from "../data/site-tutorial-guidance";
 import type { FoldState } from "./fold-state";
 import { matchTutorialGuidance } from "./battle/tutorial-guidance";
 import { tutorialSpeechBubbleDelaySeconds } from "../data/tutorial-speech-bubble";
-import { asCardId } from "../types/card-identity";
+import { parseCardId } from "../types/card-identity";
 import type { CardId } from "../types/card-identity";
 import {
-  asCardTutorialScreenKey,
-  asPresentationId,
+  parseCardTutorialScreenKey,
+  parsePresentationId,
 } from "../types/identifiers";
 import type {
   CardTutorialScreenKey,
@@ -93,7 +93,7 @@ export function currentCardTutorialContext(
       runtime.choiceKind === "transfiguration" &&
       runtime.transfigurationOffers.length > 0
       ? {
-          screenKey: asCardTutorialScreenKey(
+          screenKey: parseCardTutorialScreenKey(
             `${siteScreenKey}:concept:transfiguration`,
           ),
           event: "transfiguration-seen",
@@ -105,7 +105,7 @@ export function currentCardTutorialContext(
     provider?.hasVisibleTransfigurationReward(state.journey, site) === true
   ) {
     return {
-      screenKey: asCardTutorialScreenKey(
+      screenKey: parseCardTutorialScreenKey(
         `${siteScreenKey}:concept:transfiguration`,
       ),
       event: "transfiguration-seen",
@@ -117,7 +117,7 @@ export function currentCardTutorialContext(
     provider?.hasVisibleTransfigurationReward(state.journey, site) === true
   ) {
     return {
-      screenKey: asCardTutorialScreenKey(
+      screenKey: parseCardTutorialScreenKey(
         `${siteScreenKey}:concept:transfiguration`,
       ),
       event: "transfiguration-seen",
@@ -134,7 +134,7 @@ export function currentCardTutorialContext(
     return null;
   }
   return {
-    screenKey: asCardTutorialScreenKey(
+    screenKey: parseCardTutorialScreenKey(
       `${siteScreenKey}:draft-offer:${String(draft.pickNumber)}:` +
         draft.currentOffer.join(","),
     ),
@@ -237,14 +237,14 @@ export function openCardTutorialGuidance(
     contentProvider === null ||
     !cardIdsMatchCurrentDraftOffer(
       state,
-      payload.cardIds.map(asCardId),
+      payload.cardIds.map(parseCardId),
       contentProvider,
     )
   ) {
     return null;
   }
 
-  const cardIds = payload.cardIds.map(asCardId);
+  const cardIds = payload.cardIds.map(parseCardId);
   const match = selectCardTutorialGuidance(
     contentProvider,
     cardIds,
@@ -263,8 +263,8 @@ export function openCardTutorialGuidance(
       screenKey,
     ],
     cardTutorialPresentation: {
-      id: asPresentationId(
-        `card-tutorial:${screenKey}:${match.card?.id ?? asCardId("site")}:${match.trigger.id}`,
+      id: parsePresentationId(
+        `card-tutorial:${screenKey}:${match.card?.id ?? "site"}:${match.trigger.id}`,
       ),
       screenKey,
       cardId: match.card?.id ?? null,

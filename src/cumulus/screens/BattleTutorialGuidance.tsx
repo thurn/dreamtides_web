@@ -22,7 +22,11 @@ import { useLocalizer } from "../../runtime/localization/use-localizer";
 import { opaque, tx, txa } from "@trox/runtime";
 import type { BattleCardId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
-import type { PresentationId } from "../../types/identifiers";
+import {
+  parsePresentationId,
+  type PresentationId,
+} from "../../types/identifiers";
+import type { TutorialTriggerId } from "../../types/identifiers";
 
 export type BattleTutorialGuidanceSourceView =
   | {
@@ -50,7 +54,7 @@ export type BattleTutorialGuidanceSourceView =
 
 export interface BattleTutorialGuidanceView {
   readonly presentationId: PresentationId;
-  readonly triggerId: string;
+  readonly triggerId: TutorialTriggerId;
   readonly messageIndex: number;
   readonly messageCount: number;
   readonly delay?: number;
@@ -209,7 +213,9 @@ export function BattleTutorialGuidance({
   const dialogueVisible = useDelayedTutorialSpeechBubbleVisibility(
     view === null
       ? undefined
-      : `${view.presentationId}:${String(view.messageIndex)}`,
+      : parsePresentationId(
+          `${view.presentationId}:${String(view.messageIndex)}`,
+        ),
     view === null ? undefined : (view.delay ?? 0),
   );
 

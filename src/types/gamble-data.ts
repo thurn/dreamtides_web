@@ -122,7 +122,8 @@ export type GambleRulesKind = GambleGameDefinition["rules"]["kind"];
 
 export interface GambleData {
   schemaVersion: 1;
-  contentHash: string;
-  foldHash: string;
+  contentHash: ContentHash;
+  foldHash: FoldHash;
   games: readonly GambleGameDefinition[];
 }
+import type { ContentHash, FoldHash } from "./content-hash";

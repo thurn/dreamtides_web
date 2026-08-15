@@ -1,4 +1,7 @@
-import { asCardName } from "../types/card-identity";
+import {
+  parseCardName,
+  parseCardSubtype,
+} from "../types/card-identity";
 import { useCallback, useRef, useState, type ReactNode } from "react";
 import { CardView } from "../cumulus/components/card/CardView";
 import type { CardViewSlots } from "../cumulus/components/card/CardView";
@@ -403,6 +406,7 @@ export default function EditableCard({
   });
   const visibleSparkVariable = isVariableSparkValue(sparkDraftValue);
   const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? card.subtype);
+  const previewSubtype = parseCardSubtype(visibleSubtype);
   const visibleRulesText = String(
     visibleRulesSaveEntry?.draftValue ?? confirmedVisibleRulesText,
   );
@@ -410,11 +414,11 @@ export default function EditableCard({
     ...card.preview,
     energyCost: visibleEnergy.energyCost,
     energyCosts: visibleEnergy.energyCosts ?? undefined,
-    name: asCardName(visibleName),
+    name: visibleName.length === 0 ? card.preview.name : parseCardName(visibleName),
     renderedText: visibleRulesText,
     spark: visibleSpark,
     sparkVariable: visibleSparkVariable,
-    subtype: visibleSubtype,
+    subtype: previewSubtype,
   };
   const shouldShowGlossaryInfoOnHover =
     showGlossaryInfoOnHover &&

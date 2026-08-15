@@ -448,7 +448,7 @@ function DeckControls({
         onChange={(value) =>
           onFilterSortChange({
             ...filterSort,
-            typeFilter: value as DeckTypeFilter,
+            typeFilter: value,
           })
         }
       />
@@ -462,9 +462,14 @@ function DeckControls({
           label: sortOptionLabel(option.value),
         }))}
         value={filterSort.sort}
-        onChange={(value) =>
-          onFilterSortChange({ ...filterSort, sort: value as DeckSortId })
-        }
+        onChange={(value) => {
+          const sort = DECK_SORT_OPTIONS.find(
+            (option) => option.value === value,
+          )?.value;
+          if (sort !== undefined) {
+            onFilterSortChange({ ...filterSort, sort });
+          }
+        }}
       />
     </div>
   );

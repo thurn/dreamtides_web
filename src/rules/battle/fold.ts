@@ -17,6 +17,7 @@ import type {
   BattlePhase,
   BattleSide,
   BattleTransitionData,
+  BattleZoneId,
   FrontRankSlotId,
 } from "../../battle/types";
 import type { TutorialBattleAiActionOverride } from "../../types/tutorial";
@@ -36,7 +37,7 @@ import type {
   TutorialRunId,
   TutorialTriggerId,
 } from "../../types/identifiers";
-import { asDreamwellCardId } from "../../types/identifiers";
+import { parseDreamwellCardId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Cursor + run model
@@ -83,7 +84,7 @@ export interface EffectBindings {
   trigger?: BattleScriptTrigger;
   sourceCardId?: CardId;
   sourceController?: BattleSide;
-  sourceZone?: string;
+  sourceZone?: BattleZoneId;
   /** Targets selected as part of the semantic play intent.  They are instance
    * ids, captured before costs and carried through queued event resolution. */
   targetBattleCardIds?: readonly BattleCardId[];
@@ -395,7 +396,7 @@ export function resolveScript(ref: ScriptRef): EffectStep[] {
   if (ref.table === "battle") {
     return selectBattleTriggeredEffectSteps(ref.id) ?? [];
   }
-  return selectDreamwellEffectScript(asDreamwellCardId(ref.id))?.steps ?? [];
+  return selectDreamwellEffectScript(parseDreamwellCardId(ref.id))?.steps ?? [];
 }
 
 /**

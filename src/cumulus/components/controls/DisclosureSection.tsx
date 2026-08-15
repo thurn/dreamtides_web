@@ -6,6 +6,7 @@ import type { GlassControlPlacement } from "../../primitives/control-placement";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { StandaloneGlyph } from "./StandaloneGlyph";
+import type { DomTestId } from "../../types/dom";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
 export interface DisclosureSectionProps {
@@ -24,7 +25,7 @@ export interface DisclosureSectionProps {
    */
   placement?: GlassControlPlacement;
   /** Stable test id for the section. */
-  testId?: string;
+  testId?: DomTestId;
   /** Content revealed beneath the trigger. */
   children: ReactNode;
 }

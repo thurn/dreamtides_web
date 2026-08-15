@@ -5,9 +5,8 @@ import { assertLocalized } from "@trox/runtime";
 import { artRef } from "../../primitives/art";
 import { mountCumulus } from "../../test-helpers/component-test-fixtures";
 import { SiteLayout, type SiteLayoutComposition } from "./SiteLayout";
-import { asGuideId } from "../../../types/identifiers";
-import { asSiteId } from "../../../types/identifiers";
-import { asDreamscapeId } from "../../../types/identifiers";
+import { parseSiteId } from "../../../types/identifiers";
+import { testDreamscapeId, testGuideId } from "../../../types/test-identities";
 
 const compositions: readonly SiteLayoutComposition[] = [
   "balanced-gallery",
@@ -51,14 +50,14 @@ describe("SiteLayout", () => {
         installMatchMedia(width);
         const { container, root } = mountCumulus(
           <SiteLayout
-            siteId={asSiteId(composition)}
+            siteId={parseSiteId(composition)}
             scene={null}
             moteTint="warm"
             guide={{
-              id: "guide",
+              id: testGuideId("guide"),
               name: assertLocalized("Guide"),
               line: assertLocalized("Line"),
-              art: artRef.dreamGuide(asGuideId("guide")),
+              art: artRef.dreamGuide(testGuideId("guide")),
               presence: "speaking",
             }}
             composition={composition}
@@ -101,14 +100,14 @@ describe("SiteLayout", () => {
   it("keeps portrait-only guides free of speech and resolves a scene independently", () => {
     const { container, root } = mountCumulus(
       <SiteLayout
-        siteId={asSiteId("fixture")}
-        scene={artRef.dreamscapeScene(asDreamscapeId("fixture"))}
+        siteId={parseSiteId("fixture")}
+        scene={artRef.dreamscapeScene(testDreamscapeId("fixture"))}
         moteTint="violet"
         guide={{
-          id: "guide",
+          id: testGuideId("guide"),
           name: assertLocalized("Guide"),
           line: assertLocalized("Line"),
-          art: artRef.dreamGuide(asGuideId("guide")),
+          art: artRef.dreamGuide(testGuideId("guide")),
           presence: "portrait-only",
         }}
         composition="balanced-gallery"
@@ -127,14 +126,14 @@ describe("SiteLayout", () => {
     installMatchMedia(1000);
     const { container, root } = mountCumulus(
       <SiteLayout
-        siteId={asSiteId("intermediate")}
+        siteId={parseSiteId("intermediate")}
         scene={null}
         moteTint="warm"
         guide={{
-          id: "guide",
+          id: testGuideId("guide"),
           name: assertLocalized("Guide"),
           line: assertLocalized("Line"),
-          art: artRef.dreamGuide(asGuideId("guide")),
+          art: artRef.dreamGuide(testGuideId("guide")),
           presence: "speaking",
         }}
         composition="content-led-gallery"

@@ -10,7 +10,7 @@
 
 import { assetUrl } from "../../runtime/asset-url";
 import miraHeadCircleUrl from "../assets/dream-avatars/0020-head-circle.png";
-import type { DreamscapeId } from "../../types/identifiers";
+import type { ArtAssetKey, DreamscapeId } from "../../types/identifiers";
 import type { GuideId } from "../../types/identifiers";
 
 /** Character portraits authored as local Cumulus assets. */
@@ -68,7 +68,7 @@ export type ArtRef =
   | {
       /** An Atlas-specific asset emitted under the hosted `/atlas/` prefix. */
       readonly kind: "atlas-asset";
-      readonly assetKey: string;
+      readonly assetKey: ArtAssetKey;
     }
   | {
       /** Licensed full-resolution art used by the Exploration prototype. */
@@ -130,7 +130,7 @@ export const artRef = {
     kind: "dream-guide",
     guideId,
   }),
-  atlasAsset: (assetKey: string): ArtRef => ({
+  atlasAsset: (assetKey: ArtAssetKey): ArtRef => ({
     kind: "atlas-asset",
     assetKey,
   }),

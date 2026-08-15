@@ -21,6 +21,7 @@ import { token } from "../../primitives/tokens";
 import { opaque, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { DreamsignId } from "../../../types/identifiers";
+import type { DomTestId } from "../../types/dom";
 
 /** The dreamsign object's own drop-shadow + violet glow (its material, not a
  * legibility overlay) — a faithfully-copied literal with no token equivalent.
@@ -89,7 +90,7 @@ export interface DreamsignProps {
    * Override the tile's `data-testid`. Defaults to `"dreamsign-art-tile"` so the
    * shipped shop / reward / deck-viewer selectors keep working.
    */
-  testid?: string;
+  testid?: DomTestId;
   /** Fired on a tap / click that was not a deliberate hold-to-read. */
   onPress?: () => void;
   /** Keeps details readable while suppressing selection. */

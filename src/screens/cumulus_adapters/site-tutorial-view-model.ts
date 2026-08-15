@@ -5,6 +5,7 @@ import type { TutorialSiteConfiguration } from "../../types/tutorial";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
 import { tx } from "@trox/runtime";
 import { localizedSourceText } from "../../runtime/localization/runtime";
+import { parsePresentationId } from "../../types/identifiers";
 
 /** Map one authored first-visit site tutorial to persistent Mira dialogue. */
 export function buildFirstVisitSiteTutorialView(
@@ -22,7 +23,9 @@ export function buildFirstVisitSiteTutorialView(
   }
   const speechBubble = configuration.speechBubble;
   return {
-    id: `${state.runId ?? state.seed}:first-visit:${activeSite.siteId}:${siteType}`,
+    id: parsePresentationId(
+      `${state.runId ?? state.seed}:first-visit:${activeSite.siteId}:${siteType}`,
+    ),
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
       portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),

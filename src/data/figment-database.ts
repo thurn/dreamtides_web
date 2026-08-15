@@ -3,6 +3,7 @@ import {
   type FigmentCatalogRecord,
 } from "../battle/state/figment-catalog";
 import type { ArtCrop } from "../types/cards";
+import { parseCardId, parseCardSubtype } from "../types/card-identity";
 
 /**
  * The shape of a figment entry in `/figments-data.json` (generated from
@@ -10,9 +11,9 @@ import type { ArtCrop } from "../types/cards";
  * the figment editor writes.
  */
 interface FigmentDataEntry {
-  id: string;
+  id: unknown;
   name?: string;
-  subtype: string;
+  subtype: unknown;
   spark?: number;
   keyword?: string;
   renderedText?: string;
@@ -23,8 +24,8 @@ interface FigmentDataEntry {
 
 function toCatalogRecord(entry: FigmentDataEntry): FigmentCatalogRecord {
   return {
-    id: entry.id,
-    subtype: entry.subtype,
+    id: parseCardId(entry.id),
+    subtype: parseCardSubtype(entry.subtype),
     spark: typeof entry.spark === "number" ? entry.spark : 0,
     ...(entry.keyword === undefined ? {} : { keyword: entry.keyword }),
     ...(entry.name === undefined ? {} : { name: entry.name }),

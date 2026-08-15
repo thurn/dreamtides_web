@@ -11,9 +11,9 @@ import type { MerchantContext } from "../types";
 import { auguryArchetype } from "../../data/augury-data";
 import type { MerchantOfferTrace, MerchantTraceDecision } from "../trace/types";
 import {
-  asRewardCandidateKey,
-  asMerchantTargetKey,
-  asSelectionKey,
+  parseRewardCandidateKey,
+  parseMerchantTargetKey,
+  parseSelectionKey,
 } from "../../types/identifiers";
 
 function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
@@ -35,11 +35,11 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
       ? "entryId"
       : selection.trace.keyKind;
   const dreamsignTier = selection.trace.fallback.includes(
-    asRewardCandidateKey("dreamsign-signal-free"),
+    parseRewardCandidateKey("dreamsign-signal-free"),
   )
     ? ("fallback" as const)
     : selection.trace.fallback.includes(
-          asRewardCandidateKey("dreamsign-generic"),
+          parseRewardCandidateKey("dreamsign-generic"),
         )
       ? ("generic" as const)
       : ("covered" as const);
@@ -68,7 +68,7 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
     selection.policyId !== "uniform" &&
     selection.policyId !== "fixed";
   const coldStart = selection.trace.fallback.includes(
-    asRewardCandidateKey("fit-unavailable"),
+    parseRewardCandidateKey("fit-unavailable"),
   );
   return {
     decision,
@@ -82,7 +82,7 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
     },
     candidateCount: selection.trace.candidateCount,
     candidates: selection.trace.band.candidates.map((candidate) => ({
-      key: asMerchantTargetKey(candidate.key),
+      key: parseMerchantTargetKey(candidate.key),
       score: candidate.score,
       components: candidate.components,
       ...(candidate.cardUuid === undefined
@@ -152,7 +152,7 @@ export function selectMerchantReward(input: {
     scope: {
       journeySeed: context.journeySeed,
       siteUuid: context.site.id,
-      selectionKey: asSelectionKey(
+      selectionKey: parseSelectionKey(
         `${context.selectionKey ?? "slot"}:${archetypeId}`,
       ),
     },
@@ -199,7 +199,7 @@ export function selectMerchantCount(input: {
     scope: {
       journeySeed: input.context.journeySeed,
       siteUuid: input.context.site.id,
-      selectionKey: asSelectionKey(
+      selectionKey: parseSelectionKey(
         `${input.context.selectionKey ?? "slot"}:${input.archetypeId}`,
       ),
     },

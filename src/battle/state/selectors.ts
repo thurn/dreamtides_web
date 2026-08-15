@@ -10,7 +10,6 @@ import type {
   BattleSide,
   BattlefieldZone,
   FrontRankSlotId,
-  BackRankSlotId,
 } from "../types";
 import {
   BACK_RANK_SLOTS,
@@ -385,14 +384,12 @@ export function selectBattlefieldSlotOccupant(
   }
 
   if (target.zone === "backRank") {
-    return (
-      state.sides[target.side].backRank[target.slotId as BackRankSlotId] ?? null
-    );
+    if (!isBackRankSlotId(target.slotId)) return null;
+    return state.sides[target.side].backRank[target.slotId] ?? null;
   }
 
-  return (
-    state.sides[target.side].frontRank[target.slotId as FrontRankSlotId] ?? null
-  );
+  if (!isFrontRankSlotId(target.slotId)) return null;
+  return state.sides[target.side].frontRank[target.slotId] ?? null;
 }
 
 export function isBattleFieldSlotAddressValid(

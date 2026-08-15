@@ -7,7 +7,7 @@ import {
   selectMerchantReward,
 } from "./sharedSelection";
 import { MERCHANT_TUNING } from "../tuning";
-import { asMerchantTargetKey } from "../../types/identifiers";
+import { parseMerchantTargetKey } from "../../types/identifiers";
 
 /**
  * Site types the merchant can place on the current dreamscape.
@@ -64,7 +64,7 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
         kind: "add_site",
         siteType,
       },
-      targetKey: asMerchantTargetKey(siteType),
+      targetKey: parseMerchantTargetKey(siteType),
       ...selectionMetadata(selection),
     };
   },

@@ -8,7 +8,7 @@ import type {
 } from "../../cumulus/screens/GambleSiteScreen";
 import { getLogEntries, resetLog } from "../../logging";
 import { gambleFixture } from "../../testing/gamble-fixture";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type {
   FourSuitRepriseSiteRuntime,
@@ -21,14 +21,13 @@ import {
   logGambleSettled,
 } from "./gamble-site-logging-view-model";
 import { localizedDreamsignFixture } from "../../cumulus/test-helpers/dreamsign-fixture";
-import { asShuffleCommitment } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseShuffleCommitment } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { testGuideId, testDreamsignId, testCardId } from "../../types/test-identities";
 
 const REWARD_DREAMSIGN = {
-  id: asDreamsignId("00000000-0000-4000-8000-000000000025"),
+  id: testDreamsignId("00000000-0000-4000-8000-000000000025"),
   name: "Fixture Sign",
   effectDescription: "Fixture effect.",
 };
@@ -39,10 +38,10 @@ const RUNTIME: TidemarkLadderClimbSiteRuntime = {
   gameId: "tidemark-ladder-climb",
   isFarpoint: false,
   shuffleCommitments: [
-    asShuffleCommitment("attempt-1"),
-    asShuffleCommitment("attempt-2"),
-    asShuffleCommitment("attempt-3"),
-    asShuffleCommitment("attempt-4"),
+    parseShuffleCommitment("attempt-1"),
+    parseShuffleCommitment("attempt-2"),
+    parseShuffleCommitment("attempt-3"),
+    parseShuffleCommitment("attempt-4"),
   ],
   committedCards: [
     { rank: "Q", suit: "clubs" },
@@ -51,7 +50,7 @@ const RUNTIME: TidemarkLadderClimbSiteRuntime = {
     { rank: "6", suit: "spades" },
   ],
   dreamsignCandidateScores: [
-    { dreamsignId: asDreamsignId(REWARD_DREAMSIGN.id), score: 1 },
+    { dreamsignId: REWARD_DREAMSIGN.id, score: 1 },
   ],
   strongPoolSize: 1,
   strongPoolCutoffScore: 1,
@@ -72,7 +71,7 @@ const RUNTIME: TidemarkLadderClimbSiteRuntime = {
 
 const VIEW: LadderClimbSiteView = {
   gameId: "tidemark-ladder-climb",
-  siteId: asSiteId("fixture-site"),
+  siteId: parseSiteId("fixture-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
@@ -80,10 +79,10 @@ const VIEW: LadderClimbSiteView = {
   rewardDreamsign: LOCALIZED_REWARD_DREAMSIGN,
   nextDraw: null,
   guide: {
-    id: "fixture-guide",
+    id: testGuideId("fixture-guide"),
     name: assertLocalized("Fixture Guide"),
     line: assertLocalized("Fixture line."),
-    art: artRef.dreamGuide(asGuideId("fixture-guide")),
+    art: artRef.dreamGuide(testGuideId("fixture-guide")),
   },
   result: null,
   replacement: null,
@@ -101,7 +100,7 @@ describe("gamble-site-logging-view-model", () => {
   });
 
   it("records the Ladder Climb Essence payout and net settlement", () => {
-    logGambleSettled(asSiteId("fixture-site"), RUNTIME, VIEW, gambleFixture());
+    logGambleSettled(parseSiteId("fixture-site"), RUNTIME, VIEW, gambleFixture());
 
     expect(getLogEntries()).toHaveLength(1);
     expect(getLogEntries()[0]).toMatchObject({
@@ -113,15 +112,15 @@ describe("gamble-site-logging-view-model", () => {
       essenceGained: 25,
       essenceChangeAtSettlement: 25,
       netEssenceChange: 25,
-      dreamsignId: asDreamsignId(REWARD_DREAMSIGN.id),
+      dreamsignId: REWARD_DREAMSIGN.id,
       dreamsignAwarded: true,
     });
   });
 
   it("records enough Four-Suit data to reconstruct the paid deck mutation", () => {
     const card: CardData = {
-      name: asCardName("Fixture Card"),
-      id: asCardId("00000000-0000-4000-8000-000000000101"),
+      name: parseCardName("Fixture Card"),
+      id: testCardId("00000000-0000-4000-8000-000000000101"),
       cardNumber: 101,
       cardType: "Character",
       subtype: "",
@@ -139,9 +138,9 @@ describe("gamble-site-logging-view-model", () => {
       isFarpoint: false,
       drawCost: 25,
       shuffleCommitments: [
-        asShuffleCommitment("round-1"),
-        asShuffleCommitment("round-2"),
-        asShuffleCommitment("round-3"),
+        parseShuffleCommitment("round-1"),
+        parseShuffleCommitment("round-2"),
+        parseShuffleCommitment("round-3"),
       ],
       committedCards: [
         { rank: "7", suit: "hearts" },
@@ -150,13 +149,13 @@ describe("gamble-site-logging-view-model", () => {
       ],
       targets: [
         {
-          entryId: asDeckEntryId("entry-101"),
+          entryId: parseDeckEntryId("entry-101"),
           cardId: card.id,
           cardNumber: card.cardNumber,
           cardSnapshot: card,
           transfigurationOffers: [
             {
-              entryId: asDeckEntryId("entry-101"),
+              entryId: parseDeckEntryId("entry-101"),
               type: "Empowered",
               effectDescription: "Fixture form.",
               effectDetails: { fixture: true },
@@ -169,16 +168,16 @@ describe("gamble-site-logging-view-model", () => {
       rounds: [
         {
           roundNumber: 1,
-          shuffleCommitment: asShuffleCommitment("round-1"),
+          shuffleCommitment: parseShuffleCommitment("round-1"),
           card: { rank: "7", suit: "hearts" },
-          targetEntryId: asDeckEntryId("entry-101"),
+          targetEntryId: parseDeckEntryId("entry-101"),
           targetCardId: card.id,
           costPaid: 25,
           outcome: "duplication",
           resultRevealed: true,
           resultSettled: true,
           essenceGained: 0,
-          duplicatedEntryId: asDeckEntryId("duplicate-101"),
+          duplicatedEntryId: parseDeckEntryId("duplicate-101"),
         },
       ],
       phase: "result",
@@ -188,9 +187,9 @@ describe("gamble-site-logging-view-model", () => {
       cards: [],
     } as unknown as FourSuitRepriseSiteView;
 
-    logGamblePrepared(asSiteId("fixture-site"), runtime, view, gambleFixture());
-    logGambleResolved(asSiteId("fixture-site"), runtime, view, gambleFixture());
-    logGambleSettled(asSiteId("fixture-site"), runtime, view, gambleFixture());
+    logGamblePrepared(parseSiteId("fixture-site"), runtime, view, gambleFixture());
+    logGambleResolved(parseSiteId("fixture-site"), runtime, view, gambleFixture());
+    logGambleSettled(parseSiteId("fixture-site"), runtime, view, gambleFixture());
 
     expect(getLogEntries()).toHaveLength(3);
     expect(getLogEntries()[0]).toMatchObject({
@@ -216,7 +215,7 @@ describe("gamble-site-logging-view-model", () => {
       event: "gamble_wager_settled",
       gambleFoldHash: gambleFixture().foldHash,
       finalEffect: "duplication",
-      duplicatedEntryId: asDeckEntryId("duplicate-101"),
+      duplicatedEntryId: parseDeckEntryId("duplicate-101"),
     });
   });
 
@@ -228,7 +227,7 @@ describe("gamble-site-logging-view-model", () => {
       wagerCost: 50,
       prizeEssence: 300,
       attemptNumber: 1,
-      shuffleCommitment: asShuffleCommitment("blackjack-hand"),
+      shuffleCommitment: parseShuffleCommitment("blackjack-hand"),
       committedDeck: [
         { rank: "10", suit: "clubs" },
         { rank: "10", suit: "spades" },
@@ -253,9 +252,9 @@ describe("gamble-site-logging-view-model", () => {
     };
     const view = { gameId: "blackjack" } as unknown as BlackjackSiteView;
 
-    logGamblePrepared(asSiteId("fixture-site"), runtime, view, gambleFixture());
-    logGambleResolved(asSiteId("fixture-site"), runtime, view, gambleFixture());
-    logGambleSettled(asSiteId("fixture-site"), runtime, view, gambleFixture());
+    logGamblePrepared(parseSiteId("fixture-site"), runtime, view, gambleFixture());
+    logGambleResolved(parseSiteId("fixture-site"), runtime, view, gambleFixture());
+    logGambleSettled(parseSiteId("fixture-site"), runtime, view, gambleFixture());
 
     expect(getLogEntries()).toHaveLength(3);
     expect(getLogEntries()[0]).toMatchObject({

@@ -3,6 +3,7 @@ import type { SitesData } from "../types/sites-data";
 import type { Tides4DecksJson } from "../draft/pool/tides4-io";
 import { stableDigest } from "../reward-selection/stable";
 import type { RewardSelectionData } from "../types/reward-selection-data";
+import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 export type { RewardSelectionData, RewardSelectionTuning } from "../types/reward-selection-data";
 
@@ -21,6 +22,10 @@ export function buildRewardSelectionData(input: {
     placeableSiteTypes: input.sites.selection.placeableTypes,
   } as const;
   const payload = { schemaVersion: 2 as const, rulesVersion: "2" as const, tuning };
-  const contentHash = stableDigest(payload);
-  return { ...payload, contentHash, foldHash: contentHash };
+  const digest = stableDigest(payload);
+  return {
+    ...payload,
+    contentHash: parseContentHash(digest),
+    foldHash: parseFoldHash(digest),
+  };
 }

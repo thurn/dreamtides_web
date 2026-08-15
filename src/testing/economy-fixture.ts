@@ -1,11 +1,12 @@
 import type { EconomyData } from "../types/economy-data";
+import { testContentHash, testFoldHash } from "../types/test-identities";
 
 /** Stable synthetic economy input for unit tests which are not testing compilation. */
 export function economyFixture(): EconomyData {
   return {
     schemaVersion: 1,
-    contentHash: "a".repeat(64),
-    foldHash: "a".repeat(64),
+    contentHash: testContentHash("a"),
+    foldHash: testFoldHash("a"),
     journey: { defaultStartingEssence: 200, dreamsignCap: 12 },
     shop: {
       prices: { standardCard: 100, specialtyCard: 200, dreamsign: 50 },

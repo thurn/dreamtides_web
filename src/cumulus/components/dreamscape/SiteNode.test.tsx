@@ -7,10 +7,10 @@ import { describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { glyph } from "../../primitives/glyph";
 import { SiteNode, type DreamscapeSiteModel } from "./SiteNode";
-import { asSiteId } from "../../../types/identifiers";
+import { parseSiteId } from "../../../types/identifiers";
 
 const MODEL: DreamscapeSiteModel = {
-  id: asSiteId("00000000-0000-4000-8000-000000000041"),
+  id: parseSiteId("00000000-0000-4000-8000-000000000041"),
   type: "Battle",
   isVisited: false,
   pos: { x: 50, y: 50 },

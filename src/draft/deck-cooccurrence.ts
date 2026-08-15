@@ -1,7 +1,7 @@
 /**
  * UUID-keyed corpus co-occurrence helpers.
  *
- * All card identifiers are opaque lowercase UUID strings. No parsing,
+ * All card identifiers are opaque lowercase UUIDs. No parsing,
  * splitting, or name resolution is performed here.
  */
 
@@ -20,12 +20,12 @@
  * conditional co-occurrence strength in [0, 1].
  */
 export function buildCooccurrence(
-  decks: ReadonlyArray<ReadonlySet<string>>,
-): Map<string, Map<string, number>> {
+  decks: ReadonlyArray<ReadonlySet<CardId>>,
+): Map<CardId, Map<CardId, number>> {
   // pairCount.get(a)?.get(b)  = # decks where both a and b appear
   // deckCount.get(a)          = # decks containing a
-  const pairCount = new Map<string, Map<string, number>>();
-  const deckCount = new Map<string, number>();
+  const pairCount = new Map<CardId, Map<CardId, number>>();
+  const deckCount = new Map<CardId, number>();
 
   for (const deck of decks) {
     const cards = [...deck]; // distinct cards in this deck
@@ -39,7 +39,7 @@ export function buildCooccurrence(
         const b = cards[j];
         let inner = pairCount.get(a);
         if (inner === undefined) {
-          inner = new Map<string, number>();
+          inner = new Map<CardId, number>();
           pairCount.set(a, inner);
         }
         inner.set(b, (inner.get(b) ?? 0) + 1);
@@ -48,10 +48,10 @@ export function buildCooccurrence(
   }
 
   // Normalize: cooc(a, b) = pairCount(a, b) / deckCount(a)
-  const cooc = new Map<string, Map<string, number>>();
+  const cooc = new Map<CardId, Map<CardId, number>>();
   for (const [a, partners] of pairCount) {
     const totalA = deckCount.get(a) ?? 0;
-    const normalized = new Map<string, number>();
+    const normalized = new Map<CardId, number>();
     for (const [b, count] of partners) {
       normalized.set(b, totalA === 0 ? 0 : count / totalA);
     }
@@ -78,16 +78,16 @@ export function buildCooccurrence(
  * order (the least synergistic card, the one to prune first, comes first).
  */
 export function synergyAscending(
-  deck: ReadonlyArray<string>,
-  cooc: ReadonlyMap<string, ReadonlyMap<string, number>>,
-): string[] {
+  deck: ReadonlyArray<CardId>,
+  cooc: ReadonlyMap<CardId, ReadonlyMap<CardId, number>>,
+): CardId[] {
   // Deduplicate while preserving an ordered list to work from.
   const distinct = [...new Set(deck)];
 
   if (distinct.length === 0) return [];
 
   // Compute the synergy score for each card.
-  const scored: Array<{ card: string; score: number }> = distinct.map((card) => {
+  const scored: Array<{ card: CardId; score: number }> = distinct.map((card) => {
     const rest = distinct.filter((c) => c !== card);
     if (rest.length === 0) {
       return { card, score: 0 };
@@ -109,3 +109,4 @@ export function synergyAscending(
 
   return scored.map((s) => s.card);
 }
+import type { CardId } from "../types/card-identity";

@@ -90,7 +90,7 @@ export type DreamwellEffectStep =
   | { kind: "prompt"; prompt: DreamwellPrompt };
 
 export interface DreamwellEffectScript {
-  id: string; // Dreamwell card UUID
+  id: DreamwellCardId; // Dreamwell card UUID
   steps: DreamwellEffectStep[];
 }
 ```
@@ -382,7 +382,7 @@ Model both on `BattleForeseeOverlay`'s structure: a `fixed inset-0 z-[60]` scrim
 The only non-trivial logic in the picker is selection toggling with a cap. Extract it as a pure exported helper in `BattleCardPickerOverlay.tsx`:
 
 ```ts
-export function togglePick(selected: readonly string[], id: string, count: number): string[];
+export function togglePick(selected: readonly BattleCardId[], id: BattleCardId, count: number): BattleCardId[];
 ```
 
 Write tests (in `src/battle/automation/dreamwell-effects.test.ts` or a sibling `BattleCardPickerOverlay.test.ts` — match the repo's component-test convention; if none, put it beside the other automation tests): selecting an unselected id when `selected.length < count` adds it; clicking a selected id removes it; selecting when already at `count` leaves `selected` unchanged (for `count === 1`, selecting a different id replaces the current pick). Catches the picker letting the user over-select or failing to deselect.

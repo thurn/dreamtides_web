@@ -48,8 +48,8 @@ import {
 import { builtInBattlePromptMessage } from "../../runtime/localization/battle-prompt-messages";
 import { tx } from "@trox/runtime";
 import type { BattleCardId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
-import { asBattleSlotViewId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { parseBattleSlotViewId } from "../../types/identifiers";
 
 const FALLBACK_PLAYER_DREAM_AVATAR = {
   imageNumber: "001",
@@ -130,7 +130,7 @@ export function buildMobileBattleView(
   const promptCandidateIds =
     ownsPrompt && viewOptions.pendingPrompt?.options.kind === "pick-cards"
       ? new Set(viewOptions.pendingPrompt.options.candidateIds)
-      : new Set<string>();
+      : new Set<BattleCardId>();
   const farVisibleIds = board.sides[farSide].hand.filter((battleCardId) => {
     const instance = board.cardInstances[battleCardId];
     return (
@@ -255,7 +255,7 @@ function buildChoicePromptView(
     return null;
   }
   return {
-    key: String(pendingPrompt.promptId),
+    key: pendingPrompt.promptId,
     label: resolvePromptText(pendingPrompt.options.label, init, resolver),
     options: pendingPrompt.options.options.map((option) => ({
       label: resolvePromptText(option.label, init, resolver),
@@ -280,17 +280,17 @@ function buildCardPickerView(
       const instance = board.cardInstances[instanceId];
       const location = selectBattleCardLocation(
         board,
-        asBattleCardId(instanceId),
+        instanceId,
       );
       if (instance === undefined || location === null) return [];
       return [
         {
-          instanceId: asBattleCardId(instanceId),
+          instanceId: instanceId,
           cardUuid: instance.definition.cardId,
           owner: location.side,
           zone: location.zone,
           card: buildMobileBattleCardView(instance),
-          highlighted: highlightedIds.has(asBattleCardId(instanceId)),
+          highlighted: highlightedIds.has(instanceId),
         },
       ];
     },
@@ -302,7 +302,7 @@ function buildCardPickerView(
       candidate.zone === "frontRank",
   );
   return {
-    key: String(pendingPrompt.promptId),
+    key: pendingPrompt.promptId,
     label: resolvePromptText(pendingPrompt.options.label, init, resolver),
     ...(pendingPrompt.options.subtitle === undefined
       ? {}
@@ -316,7 +316,7 @@ function buildCardPickerView(
     side: pendingPrompt.run.side,
     candidateOwner: candidates[0]?.owner ?? null,
     candidates,
-    candidateIds: pendingPrompt.options.candidateIds.map(asBattleCardId),
+    candidateIds: pendingPrompt.options.candidateIds.map(parseBattleCardId),
     count: pendingPrompt.options.count,
     optional: pendingPrompt.options.optional,
     canResolve: confirmedPromptId === pendingPrompt.promptId,
@@ -439,7 +439,14 @@ function buildAiView(
   const after = trace?.heuristicScoreAfter;
   return {
     proposal: proposal?.description ?? "No active proposal",
-    kind: proposal === null ? "Idle" : titleCase(proposal.kind),
+    kind:
+      proposal === null
+        ? "Idle"
+        : proposal.kind === "action"
+          ? "Action"
+          : proposal.kind === "endPhase"
+            ? "End Phase"
+            : "End Turn",
     card: trace?.cardName ?? trace?.battleCardId ?? "—",
     target: trace?.targetSlotId ?? trace?.targetBattleCardId ?? "—",
     heuristicChange:
@@ -547,7 +554,7 @@ function buildSlotView(
   const instance =
     battleCardId === null ? undefined : board.cardInstances[battleCardId];
   return {
-    id: asBattleSlotViewId(id),
+    id: parseBattleSlotViewId(id),
     card: instance === undefined ? null : buildMobileBattleCardView(instance),
   };
 }

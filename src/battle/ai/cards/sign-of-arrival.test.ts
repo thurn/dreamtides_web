@@ -1,14 +1,15 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../../types/test-identities";
 import { signOfArrival } from "./sign-of-arrival";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
-import { asBattleCardId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
 
 function makeCard(
   overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
 ): AiCard {
   return {
-    name: "card",
+    name: testCardName("card"),
     energyCost: 0,
     basePrintedSpark: 0,
     sparkDelta: 0,
@@ -39,7 +40,7 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 describe("Sign of Arrival (#518)", () => {
   it("canPlay requires 2 energy", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("herald"),
+      battleCardId: parseBattleCardId("herald"),
       cardNumber: 518,
       energyCost: 2,
     });
@@ -49,7 +50,7 @@ describe("Sign of Arrival (#518)", () => {
 
   it("play adds one character AiCard to hand and voids the event", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("herald"),
+      battleCardId: parseBattleCardId("herald"),
       cardNumber: 518,
       energyCost: 2,
     });
@@ -69,7 +70,7 @@ describe("Sign of Arrival (#518)", () => {
 
   it("valueHint is a small positive card-advantage bonus", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("herald"),
+      battleCardId: parseBattleCardId("herald"),
       cardNumber: 518,
     });
     const hint = signOfArrival.valueHint?.(makeModel(), self) ?? 0;

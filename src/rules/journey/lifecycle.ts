@@ -42,10 +42,11 @@ import {
   type BattlePromptText,
 } from "../../data/dreamwell-prompts";
 import type { DreamAvatarId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asJourneyId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { parseDreamAvatarId } from "../../types/identifiers";
+import { parseJourneyId } from "../../types/identifiers";
+import type { JourneySeed } from "../../types/journey-seed";
 
 // ---------------------------------------------------------------------------
 // Content-provider seam (SELECT_DREAM_AVATAR / START_JOURNEY)
@@ -77,7 +78,7 @@ export interface JourneyLifecycleContentProvider {
    */
   resolveDreamAvatarPackage(
     dreamAvatarId: DreamAvatarId,
-    seed: string,
+    seed: JourneySeed,
   ): ResolvedDreamAvatarPackage | null;
   /**
    * Assemble the full started-run journey state (starter deck, atlas, draft
@@ -87,7 +88,7 @@ export interface JourneyLifecycleContentProvider {
   startJourney(input: {
     journey: JourneyState;
     dreamAvatarId: DreamAvatarId;
-    seed: string;
+    seed: JourneySeed;
   }): JourneyState | null;
   /** Rebuild the Atlas at the journey's authoritative progress depth. */
   regenerateAtlas?(input: {
@@ -183,7 +184,7 @@ export function enterSite(
     typeof siteId !== "string" ||
     journey.screen.type !== "dreamscape" ||
     journey.currentDreamscape === null ||
-    !canVisitSite(journey, asSiteId(siteId)) ||
+    !canVisitSite(journey, parseSiteId(siteId)) ||
     !journey.atlas.nodes[journey.currentDreamscape]?.sites.some(
       (site) => site.id === siteId,
     )
@@ -216,14 +217,14 @@ export function enterSite(
           },
         },
       },
-      screen: { type: "site", siteId: asSiteId(siteId) },
-      activeSiteId: asSiteId(siteId),
+      screen: { type: "site", siteId: parseSiteId(siteId) },
+      activeSiteId: parseSiteId(siteId),
     };
   }
   return {
     ...journey,
-    screen: { type: "site", siteId: asSiteId(siteId) },
-    activeSiteId: asSiteId(siteId),
+    screen: { type: "site", siteId: parseSiteId(siteId) },
+    activeSiteId: parseSiteId(siteId),
   };
 }
 
@@ -238,7 +239,8 @@ export function travelToDreamscape(
 ): JourneyState | null {
   const nodeId = payload.nodeId;
   if (typeof nodeId !== "string") return null;
-  const node = journey.atlas.nodes[nodeId];
+  const parsedNodeId = parseAtlasNodeId(nodeId);
+  const node = journey.atlas.nodes[parsedNodeId];
   if (
     node === undefined ||
     node.state !== "available" ||
@@ -249,14 +251,14 @@ export function travelToDreamscape(
   const currentNodeId = journey.atlas.currentNodeId;
   if (
     currentNodeId !== null &&
-    currentNodeId !== nodeId &&
+    currentNodeId !== parsedNodeId &&
     !journey.atlas.nodes[currentNodeId]?.forwardIds.includes(
-      asAtlasNodeId(nodeId),
+      parsedNodeId,
     )
   ) {
     return null;
   }
-  const isAdvancing = nodeId !== journey.currentDreamscape;
+  const isAdvancing = parsedNodeId !== journey.currentDreamscape;
   const dreamscapeModifiers = isAdvancing
     ? journey.dreamscapeModifiers
         .map((modifier) => ({
@@ -267,7 +269,7 @@ export function travelToDreamscape(
     : journey.dreamscapeModifiers;
   return {
     ...journey,
-    currentDreamscape: asAtlasNodeId(nodeId),
+    currentDreamscape: parsedNodeId,
     visitedSites: [],
     dreamscapeModifiers,
     screen: { type: "dreamscape" },
@@ -354,7 +356,7 @@ export function selectDreamAvatar(
   const provider = contentProvider;
   if (provider === null) return null;
   const resolvedPackage = provider.resolveDreamAvatarPackage(
-    asDreamAvatarId(dreamAvatarId),
+    parseDreamAvatarId(dreamAvatarId),
     journey.seed,
   );
   if (resolvedPackage === null) return null;
@@ -391,12 +393,12 @@ export function startJourney(
   if (provider === null) return null;
   const started = provider.startJourney({
     journey,
-    dreamAvatarId: asDreamAvatarId(dreamAvatarId),
+    dreamAvatarId: parseDreamAvatarId(dreamAvatarId),
     seed: journey.seed,
   });
   return started === null
     ? null
-    : { ...started, runId: asJourneyId(`journey:${String(ctx.seq)}`) };
+    : { ...started, runId: parseJourneyId(`journey:${String(ctx.seq)}`) };
 }
 
 // ---------------------------------------------------------------------------
@@ -416,7 +418,7 @@ export function resetJourney(state: FoldState, ctx: EventContext): FoldState {
   // creation time do not participate in journey initialization.
   const reset = genesisFoldState({
     seed: state.journey.seed,
-    reducerVersion: "",
+    reducerVersion: "internal-reset",
     createdAt: 0,
     contentConfig: ctx.contentConfig,
   });
@@ -456,7 +458,7 @@ export function loadState(
         ...loaded,
         journey: {
           ...loaded.journey,
-          runId: asJourneyId(`journey:${String(ctx.seq)}`),
+          runId: parseJourneyId(`journey:${String(ctx.seq)}`),
         },
         ...(state.tutorialTriggerIdsSeen === undefined
           ? {}

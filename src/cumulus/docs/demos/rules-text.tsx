@@ -19,6 +19,7 @@ import { assertLocalized } from "@trox/runtime";
 
 import { RulesText } from "../../components/card/RulesText";
 import type { CumulusComponent } from "../registry";
+import { parseCardId } from "../../../types/card-identity";
 
 const SAMPLE_RULES_TEXT = [
   "Support – Supported allies have +2✦.",
@@ -27,7 +28,7 @@ const SAMPLE_RULES_TEXT = [
   "",
   "▸Dawn: Store 1⧗. Gain 2⍟.",
 ].join("\n");
-const SAMPLE_CARD_ID = "11111111-1111-4111-8111-111111111111";
+const SAMPLE_CARD_ID = parseCardId("11111111-1111-4111-8111-111111111111");
 
 interface RulesTextDemoArgs {
   text?: string;

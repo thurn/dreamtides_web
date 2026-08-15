@@ -6,6 +6,7 @@ import type { LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { useRef, type ReactElement } from "react";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
+import type { DomTestId } from "../../types/dom";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
@@ -16,7 +17,10 @@ import { Dreamsign, type LocalizedDreamsign } from "../hud/Dreamsign";
 import { EssenceValue } from "../hud/EssenceValue";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { glossaryInfoCard } from "./glossary-info-card";
-import type { DeckEntryId } from "../../../types/identifiers";
+import type {
+  DeckEntryId,
+  GlossaryEntryId,
+} from "../../../types/identifiers";
 
 /** One UUID-keyed Dreamsign offered by a gallery. */
 export interface DreamsignGalleryEntryView {
@@ -39,7 +43,7 @@ export interface DreamsignGalleryActionView {
   /** Visible and accessible action label. */
   label: LocalizedString;
   /** Stable Glossary UUID for the action's explanatory Info Card. */
-  glossaryId: string;
+  glossaryId: GlossaryEntryId;
   /** Essence price, or null for a free/spent text caption. */
   price: number | null;
   /** Caption used when the action is free or already spent. */
@@ -66,7 +70,7 @@ export interface DreamsignGalleryPanelProps {
   /** Fires when the appended action is activated. */
   onEndActionPress: () => void;
   /** Stable test id for the panel root. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 const COMPACT_ITEM_WIDTH = 92;

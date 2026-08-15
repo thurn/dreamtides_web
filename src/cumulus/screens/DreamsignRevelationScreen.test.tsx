@@ -15,15 +15,16 @@ import { CumulusRoot } from "../CumulusRoot";
 import { DREAMSIGN_REVELATION_PRESENTATION } from "../test-helpers/presentation-fixtures";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
 import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
-import { asGuideId } from "../../types/identifiers";
+import { testGuideId } from "../../types/test-identities";
+import { testPresentationId } from "../../types/test-identities";
 
-function dreamsign(id: string, imageName: string): LocalizedDreamsign {
+function dreamsign(idSeed: string, imageName: string): LocalizedDreamsign {
   return localizedDreamsignFixture({
-    id,
-    name: `Dreamsign ${id}`,
+    idSeed,
+    name: `Dreamsign ${idSeed}`,
     effectDescription: "A test effect.",
     imageName,
-    imageAlt: `Art for ${id}`,
+    imageAlt: `Art for ${idSeed}`,
   });
 }
 
@@ -32,10 +33,10 @@ function view(): DreamsignRevelationView {
     presentation: DREAMSIGN_REVELATION_PRESENTATION,
     scene: null,
     guide: {
-      id: "sigrun",
+      id: testGuideId("sigrun"),
       name: assertLocalized("Sigrun"),
       line: assertLocalized("Choose one sign."),
-      art: artRef.dreamGuide(asGuideId("sigrun")),
+      art: artRef.dreamGuide(testGuideId("sigrun")),
     },
     offer: [
       dreamsign("left", "eye_3.png"),
@@ -100,7 +101,9 @@ describe("DreamsignRevelationScreen", () => {
     const tutorialView: DreamsignRevelationView = {
       ...view(),
       tutorial: {
-        id: "run-a:first-visit:revelation-a:DreamsignRevelation",
+        id: testPresentationId(
+          "run-a:first-visit:revelation-a:DreamsignRevelation",
+        ),
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: assertLocalized("Mira"),

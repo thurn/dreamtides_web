@@ -1,5 +1,6 @@
+import { testJourneySeed } from "../types/test-identities";
 import { afterEach, describe, expect, it } from "vitest";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { PoolDraftState } from "../types/draft";
 import type { SiteType } from "../types/journey";
@@ -16,21 +17,19 @@ import {
   selectCardTutorialGuidance,
   type CardTutorialGuidanceContentProvider,
 } from "./card-tutorial-guidance";
-import { asJourneyId } from "../types/identifiers";
-import { asSiteId } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
-import { asDreamscapeId } from "../types/identifiers";
-import { asDeckEntryId } from "../types/identifiers";
-import { asTutorialTriggerId } from "../types/identifiers";
-import { asGlossaryEntryId } from "../types/identifiers";
+import { parseJourneyId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
+import { parseDeckEntryId } from "../types/identifiers";
+import { testCardId, testDreamscapeId, testTutorialTriggerId, testGlossaryEntryId } from "../types/test-identities";
 
-function card(id: string, cardNumber: number, renderedText: string): CardData {
+function card(idSeed: string, cardNumber: number, renderedText: string): CardData {
   return {
-    id: asCardId(id),
-    name: asCardName(`Fixture ${id}`),
+    id: testCardId(idSeed),
+    name: parseCardName(`Fixture ${idSeed}`),
     cardNumber,
     cardType: "Character",
-    subtype: "Fixture",
+    subtype: "Warrior",
     isStarter: false,
     energyCost: 1,
     spark: 1,
@@ -41,9 +40,25 @@ function card(id: string, cardNumber: number, renderedText: string): CardData {
   };
 }
 
-function trigger(id: string, priority: number): TutorialTriggerDefinition {
+function cardIds(...idSeeds: string[]) {
+  return idSeeds.map(testCardId);
+}
+
+function trigger(idSeed: string, priority: number): TutorialTriggerDefinition {
+  const glossaryId = (() => {
+    switch (idSeed) {
+      case "support":
+        return GLOSSARY_IDS.support;
+      case "foresee":
+        return GLOSSARY_IDS.foresee;
+      case "erode":
+        return GLOSSARY_IDS.erode;
+      default:
+        return testGlossaryEntryId(idSeed);
+    }
+  })();
   return {
-    id: asTutorialTriggerId(id),
+    id: testTutorialTriggerId(idSeed),
     on: ["card-seen", "card-play"],
     priority,
     speaker: "mira",
@@ -53,29 +68,24 @@ function trigger(id: string, priority: number): TutorialTriggerDefinition {
     bubbleWidth: 500,
     match: {
       kind: "glossary",
-      id: asGlossaryEntryId(
-        {
-          support: GLOSSARY_IDS.support,
-          foresee: GLOSSARY_IDS.foresee,
-          erode: GLOSSARY_IDS.erode,
-        }[id] ?? id,
-      ),
+      id: glossaryId,
     },
-    text: `${id} explained.`,
+    text: `${idSeed} explained.`,
   };
 }
 
 function provider(): CardTutorialGuidanceContentProvider {
-  const cards = new Map([
-    ["card-a", card("card-a", 1, "Support. Foresee 1.")],
-    ["card-b", card("card-b", 2, "Erode 2.")],
-    ["card-c", card("card-c", 3, "")],
-    ["card-d", card("card-d", 4, "")],
-    ["card-e", card("card-e", 5, "Erode 2.")],
-    ["card-f", card("card-f", 6, "")],
-    ["card-g", card("card-g", 7, "")],
-    ["card-h", card("card-h", 8, "")],
-  ]);
+  const fixtures = [
+    card("card-a", 1, "Support. Foresee 1."),
+    card("card-b", 2, "Erode 2."),
+    card("card-c", 3, ""),
+    card("card-d", 4, ""),
+    card("card-e", 5, "Erode 2."),
+    card("card-f", 6, ""),
+    card("card-g", 7, ""),
+    card("card-h", 8, ""),
+  ];
+  const cards = new Map(fixtures.map((fixture) => [fixture.id, fixture]));
   return {
     triggers: [
       trigger("support", 100),
@@ -89,7 +99,7 @@ function provider(): CardTutorialGuidanceContentProvider {
 
 function transfigurationTrigger(): TutorialTriggerDefinition {
   return {
-    id: asTutorialTriggerId("transfiguration"),
+    id: testTutorialTriggerId("transfiguration"),
     on: ["transfiguration-seen"],
     priority: 100,
     speaker: "mira",
@@ -105,7 +115,7 @@ function transfigurationTrigger(): TutorialTriggerDefinition {
 
 function siteState(siteId = "site-a", siteType: SiteType = "Shop"): FoldState {
   const base = genesisFoldState({
-    seed: "card-tutorial-test",
+    seed: testJourneySeed("card-tutorial-test"),
     reducerVersion: "test",
     createdAt: 0,
     contentConfig: {
@@ -117,19 +127,19 @@ function siteState(siteId = "site-a", siteType: SiteType = "Shop"): FoldState {
     journey: {
       ...base.journey,
       hasSeenStartingDeckPopup: true,
-      runId: asJourneyId("journey:7"),
-      screen: { type: "site", siteId: asSiteId(siteId) },
+      runId: parseJourneyId("journey:7"),
+      screen: { type: "site", siteId: parseSiteId(siteId) },
       atlas: {
         ...base.journey.atlas,
         nodes: {
-          [asAtlasNodeId("node")]: {
-            id: asAtlasNodeId("node"),
+          [parseAtlasNodeId("node")]: {
+            id: parseAtlasNodeId("node"),
             layer: LayerName.One,
             indexInLayer: 0,
-            dreamscapeId: asDreamscapeId("fixture"),
+            dreamscapeId: testDreamscapeId("fixture"),
             sites: [
               {
-                id: asSiteId(siteId),
+                id: parseSiteId(siteId),
                 type: siteType,
                 isEnhanced: false,
                 isVisited: false,
@@ -155,14 +165,14 @@ function transfigurationSiteState(): FoldState {
     journey: {
       ...base.journey,
       siteRuntime: {
-        [asSiteId("site-a")]: {
+        [parseSiteId("site-a")]: {
           kind: "cardChoice",
           choiceKind: "transfiguration",
-          entryIds: [asDeckEntryId("entry-a")],
+          entryIds: [parseDeckEntryId("entry-a")],
           acceptedEntryIds: [],
           transfigurationOffers: [
             {
-              entryId: asDeckEntryId("entry-a"),
+              entryId: parseDeckEntryId("entry-a"),
               type: "Empowered",
               effectDescription: "Costs 1 less.",
               effectDetails: {},
@@ -183,12 +193,12 @@ function draftOfferState(
 ): FoldState {
   const siteId = "site-a";
   const base = siteState(siteId, "Draft");
-  const node = base.journey.atlas.nodes.node;
+  const node = base.journey.atlas.nodes[parseAtlasNodeId("node")];
   if (node === undefined) throw new Error("Fixture node is missing.");
   const draftState: PoolDraftState = {
     mode: "tides4",
     currentOffer,
-    activeSiteId: asSiteId(siteId),
+    activeSiteId: parseSiteId(siteId),
     pickNumber,
     sitePicksCompleted: pickNumber - 1,
     siteShownCardNumbers: [...currentOffer],
@@ -199,15 +209,15 @@ function draftOfferState(
     ...base,
     journey: {
       ...base.journey,
-      visitedSites: firstVisit ? [] : [asSiteId("prior-draft")],
+      visitedSites: firstVisit ? [] : [parseSiteId("prior-draft")],
       atlas: {
         ...base.journey.atlas,
         nodes: {
-          [asAtlasNodeId("node")]: {
+          [parseAtlasNodeId("node")]: {
             ...node,
             sites: [
               {
-                id: asSiteId("prior-draft"),
+                id: parseSiteId("prior-draft"),
                 type: "Draft",
                 isEnhanced: false,
                 isVisited: !firstVisit,
@@ -230,21 +240,21 @@ describe("card tutorial guidance selection", () => {
   it("uses screen order for cards and existing priority rules within a card", () => {
     const match = selectCardTutorialGuidance(
       provider(),
-      [asCardId("card-a"), asCardId("card-b")],
+      [testCardId("card-a"), testCardId("card-b")],
       new Set(),
     );
-    expect(match?.card?.id).toBe("card-a");
-    expect(match?.trigger.id).toBe("foresee");
+    expect(match?.card?.id).toBe(testCardId("card-a"));
+    expect(match?.trigger.id).toBe(testTutorialTriggerId("foresee"));
   });
 
   it("skips room-seen triggers before considering the next visible card", () => {
     const match = selectCardTutorialGuidance(
       provider(),
-      [asCardId("card-a"), asCardId("card-b")],
-      new Set([asTutorialTriggerId("support"), asTutorialTriggerId("foresee")]),
+      [testCardId("card-a"), testCardId("card-b")],
+      new Set([testTutorialTriggerId("support"), testTutorialTriggerId("foresee")]),
     );
-    expect(match?.card?.id).toBe("card-b");
-    expect(match?.trigger.id).toBe("erode");
+    expect(match?.card?.id).toBe(testCardId("card-b"));
+    expect(match?.trigger.id).toBe(testTutorialTriggerId("erode"));
   });
 
   it("selects a site concept without requiring a visible card", () => {
@@ -336,7 +346,7 @@ describe("card tutorial guidance fold", () => {
     expect(
       openCardTutorialGuidance(before, {
         screenKey: `${before.journey.runId}:site:site-a`,
-        cardIds: ["card-a", "card-b", "card-c", "card-d"],
+        cardIds: cardIds("card-a", "card-b", "card-c", "card-d"),
       }),
     ).toBeNull();
   });
@@ -353,13 +363,13 @@ describe("card tutorial guidance fold", () => {
     const screenKey = currentCardTutorialScreenKey(before);
     const opened = openCardTutorialGuidance(before, {
       screenKey,
-      cardIds: ["card-a", "card-b", "card-c", "card-d"],
+      cardIds: cardIds("card-a", "card-b", "card-c", "card-d"),
     });
 
     expect(opened?.cardTutorialPresentation).toMatchObject({
       screenKey,
-      cardId: asCardId("card-a"),
-      triggerId: "foresee",
+      cardId: testCardId("card-a"),
+      triggerId: testTutorialTriggerId("foresee"),
       speaker: "mira",
       duration: 4,
       horizontalOffset: 30,
@@ -367,7 +377,9 @@ describe("card tutorial guidance fold", () => {
       bubbleWidth: 500,
       text: "foresee explained.",
     });
-    expect(opened?.tutorialTriggerIdsSeen).toEqual(["foresee"]);
+    expect(opened?.tutorialTriggerIdsSeen).toEqual([
+      testTutorialTriggerId("foresee"),
+    ]);
     expect(opened?.cardTutorialScreenKeysSeen).toEqual([screenKey]);
   });
 
@@ -387,12 +399,14 @@ describe("card tutorial guidance fold", () => {
     expect(opened?.cardTutorialPresentation).toMatchObject({
       screenKey,
       cardId: null,
-      triggerId: "transfiguration",
+      triggerId: testTutorialTriggerId("transfiguration"),
       delay: 1,
       duration: 5,
       text: transfigurationTrigger().text,
     });
-    expect(opened?.tutorialTriggerIdsSeen).toEqual(["transfiguration"]);
+    expect(opened?.tutorialTriggerIdsSeen).toEqual([
+      testTutorialTriggerId("transfiguration"),
+    ]);
   });
 
   it("allows no second tutorial on the same screen after the first settles", () => {
@@ -401,7 +415,7 @@ describe("card tutorial guidance fold", () => {
     const screenKey = currentCardTutorialScreenKey(before);
     const opened = openCardTutorialGuidance(before, {
       screenKey,
-      cardIds: ["card-a", "card-b", "card-c", "card-d"],
+      cardIds: cardIds("card-a", "card-b", "card-c", "card-d"),
     });
     expect(opened).not.toBeNull();
     const settled = completeCardTutorialGuidance(opened!, {
@@ -411,7 +425,7 @@ describe("card tutorial guidance fold", () => {
     expect(
       openCardTutorialGuidance(settled!, {
         screenKey,
-        cardIds: ["card-b"],
+        cardIds: cardIds("card-b"),
       }),
     ).toBeNull();
   });
@@ -422,7 +436,7 @@ describe("card tutorial guidance fold", () => {
     const firstScreenKey = currentCardTutorialScreenKey(firstOffer);
     const firstOpened = openCardTutorialGuidance(firstOffer, {
       screenKey: firstScreenKey,
-      cardIds: ["card-a", "card-b", "card-c", "card-d"],
+      cardIds: cardIds("card-a", "card-b", "card-c", "card-d"),
     });
     const firstSettled = completeCardTutorialGuidance(firstOpened!, {
       presentationId: firstOpened!.cardTutorialPresentation?.id,
@@ -430,7 +444,7 @@ describe("card tutorial guidance fold", () => {
     expect(
       openCardTutorialGuidance(firstSettled!, {
         screenKey: firstScreenKey,
-        cardIds: ["card-a", "card-b", "card-c", "card-d"],
+        cardIds: cardIds("card-a", "card-b", "card-c", "card-d"),
       }),
     ).toBeNull();
 
@@ -451,18 +465,18 @@ describe("card tutorial guidance fold", () => {
     expect(
       openCardTutorialGuidance(secondOffer, {
         screenKey: secondScreenKey,
-        cardIds: ["card-a", "card-b", "card-c", "card-d"],
+        cardIds: cardIds("card-a", "card-b", "card-c", "card-d"),
       }),
     ).toBeNull();
 
     const secondOpened = openCardTutorialGuidance(secondOffer, {
       screenKey: secondScreenKey,
-      cardIds: ["card-e", "card-f", "card-g", "card-h"],
+      cardIds: cardIds("card-e", "card-f", "card-g", "card-h"),
     });
     expect(secondOpened?.cardTutorialPresentation).toMatchObject({
       screenKey: secondScreenKey,
-      cardId: asCardId("card-e"),
-      triggerId: "erode",
+      cardId: testCardId("card-e"),
+      triggerId: testTutorialTriggerId("erode"),
     });
     expect(secondOpened?.cardTutorialScreenKeysSeen).toEqual([
       firstScreenKey,

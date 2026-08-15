@@ -9,9 +9,10 @@ import {
   TEST_TUTORIAL_CARD_CONSTANTS,
 } from "../../test/tutorial-configuration-fixture";
 import { getLogEntries, resetLog } from "../../logging";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { LoadingScreenAdapter } from "./LoadingScreenAdapter";
+import { testCardId } from "../../types/test-identities";
 
 const coopMocks = vi.hoisted(() => ({
   frontDoor: { phase: "loading", journeyId: "genesis:seed" },
@@ -39,13 +40,13 @@ vi.mock("../../state/journey-context", () => ({
   }),
 }));
 
-function card(cardNumber: number, id: string): CardData {
+function card(cardNumber: number, idSeed: string): CardData {
   return {
-    id: asCardId(id),
-    name: asCardName(`Fixture ${String(cardNumber)}`),
+    id: testCardId(idSeed),
+    name: parseCardName(`Fixture ${String(cardNumber)}`),
     cardNumber,
     cardType: cardNumber === 1 ? "Character" : "Event",
-    subtype: cardNumber === 1 ? "Fixture" : "",
+    subtype: cardNumber === 1 ? "Warrior" : "",
     isStarter: true,
     energyCost: cardNumber,
     spark: cardNumber === 1 ? 3 : null,

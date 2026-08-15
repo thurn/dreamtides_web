@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import type { Database } from "firebase/database";
-import type { LogNode } from "../eventlog/types";
+import type { EventActor, EventType, LogNode } from "../eventlog/types";
 import { subscribeToLog } from "../eventlog/subscribe";
 import { readRoomLogLines } from "./journey-log-sink";
 import type { RoomId } from "../types/identifiers";
@@ -18,8 +18,8 @@ interface EventLogViewerProps {
 
 interface EventRow {
   seq: number;
-  type: string;
-  actor: string;
+  type: EventType;
+  actor: EventActor;
   /** Outcome cross-referenced from the JSONL sink's `coop_event` lines. */
   outcome: string;
 }

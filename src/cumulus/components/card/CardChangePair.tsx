@@ -14,9 +14,9 @@ export type CardChangeKind =
   "replacement" | "copy" | "transfiguration" | "keyword" | "card-type";
 
 /** Complete before-and-after presentation for one resolved change. */
-export interface CardChangePairModel {
+export interface CardChangePairModel<ChangeId extends string> {
   /** Stable identity for this resolved change presentation. */
-  readonly changeId: string;
+  readonly changeId: ChangeId;
   /** Semantic visual and accessibility recipe. */
   readonly kind: CardChangeKind;
   /** Original deck entry and its complete card presentation. */
@@ -35,9 +35,9 @@ export interface CardChangePairModel {
   };
 }
 
-export interface CardChangePairProps {
+export interface CardChangePairProps<ChangeId extends string> {
   /** Complete resolved change to display. */
-  readonly model: CardChangePairModel;
+  readonly model: CardChangePairModel<ChangeId>;
   /** Controlled choreography phase for concealing or revealing the result. */
   readonly reveal: "before" | "complete";
 }
@@ -56,10 +56,10 @@ function useReducedMotion(): boolean {
 }
 
 /** Displays one resolved before/after card change without applying a mutation. */
-export function CardChangePair({
+export function CardChangePair<ChangeId extends string>({
   model,
   reveal,
-}: CardChangePairProps): ReactElement {
+}: CardChangePairProps<ChangeId>): ReactElement {
   const resolve = useLocalizer();
   const reducedMotion = useReducedMotion();
   const complete = reveal === "complete" || reducedMotion;

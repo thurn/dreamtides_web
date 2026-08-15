@@ -5,6 +5,7 @@ import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
 import { DreamwellEditorPreview } from "./DreamwellEditorPreview";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
+import { testDreamwellCardId } from "../types/test-identities";
 
 beforeEach(() => {
   (
@@ -25,7 +26,7 @@ describe("DreamwellEditorPreview", () => {
         <CumulusRoot>
           <DreamwellEditorPreview
           card={{
-            id: "ee8e040e-f3de-4622-9cff-a9f1866e2fc3",
+            id: testDreamwellCardId("ee8e040e-f3de-4622-9cff-a9f1866e2fc3"),
             name: "Editable Beacon",
             renderedText: "",
             energyAdded: 2,

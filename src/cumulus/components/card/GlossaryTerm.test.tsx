@@ -7,6 +7,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { GlossaryTerm } from "./GlossaryTerm";
 import { RulesText } from "./RulesText";
+import { testCardId } from "../../../types/test-identities";
+
+const CARD_ID = testCardId("11111111-1111-4111-8111-111111111111");
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -77,7 +80,7 @@ describe("GlossaryTerm", () => {
     const { container } = mount(
       <RulesText
         text={assertLocalized(`${entry.term} 2● and 3✦.`)}
-        owner={{ kind: "card", id: "11111111-1111-4111-8111-111111111111" }}
+        owner={{ kind: "card", id: CARD_ID }}
       />,
     );
     const source = container.querySelector<HTMLElement>(
@@ -105,7 +108,7 @@ describe("GlossaryTerm", () => {
     const { container } = mount(
       <RulesText
         text={assertLocalized(`${FIXTURE.term} 2●.`)}
-        owner={{ kind: "card", id: "11111111-1111-4111-8111-111111111111" }}
+        owner={{ kind: "card", id: CARD_ID }}
         glossaryInteraction="delegated"
       />,
     );

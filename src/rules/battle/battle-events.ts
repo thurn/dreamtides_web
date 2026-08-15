@@ -28,18 +28,26 @@
 // Cards / dreamAvatars are keyed by UUID and deck entries by entry-id — never
 // by name (AGENTS.md).
 
-import type { EventContext } from "../../eventlog/types";
+import type { EventActor, EventContext } from "../../eventlog/types";
+import { tutorialAiEventActor } from "../../eventlog/types";
 import { isoTimestampToMs } from "./timestamp";
 import type {
+  BattleCardMarkers,
   BattleCardNoteExpiry,
+  BattleCardStatus,
+  BattleCardInstance,
   BattleAiChoiceTrace,
+  BattleDeferredLogEvent,
   BattleEngineEmissionContext,
   BattleFieldSlotAddress,
+  BattlefieldZone,
   BattlePhase,
   BattleInit,
   BattleMutableState,
   BattleResult,
   BattleSide,
+  BattleTransitionData,
+  BattleZoneId,
 } from "../../battle/types";
 import {
   FRONT_RANK_SLOTS,
@@ -62,6 +70,17 @@ import type {
 } from "../../types/journey";
 import type { FoldState } from "../fold-state";
 import type { ClientId } from "../../types/identifiers";
+import {
+  battleCardIdFromUnknown,
+  dreamwellCardIdFromUnknown,
+  noteIdFromUnknown,
+} from "../../types/identifiers";
+import {
+  cardIdFromUnknown,
+  cardSubtypeFromUnknown,
+  parseCardName,
+} from "../../types/card-identity";
+import { battleDeckCardDefinitionFromUnknown } from "../../battle/card-definition";
 import { applyDebugEdit, forceBattleResult } from "./apply-debug-edit";
 import { createEmptyTransitionData } from "../../battle/engine/result";
 import {
@@ -127,23 +146,17 @@ import { resetJourney } from "../journey/lifecycle";
 import { canVisitSite, completeJourneySite, findSite } from "../journey/sites";
 import type {
   BattleCardId,
+  BattleEffectScriptId,
+  DeckEntryId,
   IntentKey,
   NoteId,
   SiteId,
   TutorialAiActionOverrideId,
   TutorialRunId,
 } from "../../types/identifiers";
-import {
-  asBattleCardId,
-  asBattleEffectScriptId,
-  asDreamAvatarId,
-  asNoteId,
-  asPresentationId,
-  asSiteId,
-  battleCardIdFromUnknown,
-  tutorialAiActionOverrideIdFromUnknown,
-} from "../../types/identifiers";
-import { asTutorialRunId } from "../../types/identifiers";
+import { identityKeys, parseBattleCardId, parseBattleEffectScriptId, parseNoteId, parsePresentationId, parseSiteId, tutorialAiActionOverrideIdFromUnknown } from "../../types/identifiers";
+import { parseTutorialRunId } from "../../types/identifiers";
+import { parseCardId } from "../../types/card-identity";
 
 // ---------------------------------------------------------------------------
 // Battle-init provider seam (BEGIN_BATTLE construction)
@@ -281,8 +294,8 @@ export function beginBattle(
     state.journey.screen.type !== "site" ||
     state.journey.screen.siteId !== siteId ||
     state.journey.activeSiteId !== siteId ||
-    findSite(state.journey, asSiteId(siteId))?.type !== "Battle" ||
-    !canVisitSite(state.journey, asSiteId(siteId))
+    findSite(state.journey, parseSiteId(siteId))?.type !== "Battle" ||
+    !canVisitSite(state.journey, parseSiteId(siteId))
   ) {
     return null;
   }
@@ -308,7 +321,7 @@ export function beginBattle(
   }
   const battle = provider.beginBattle({
     journey: state.journey,
-    siteId: asSiteId(siteId),
+    siteId: parseSiteId(siteId),
     seedOverride,
     seq: ctx.seq,
     rng: ctx.rng,
@@ -345,7 +358,7 @@ export function beginTutorialBattle(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  _actor: string,
+  _actor: EventActor,
 ): FoldState | null {
   const tutorial = state.frontDoor.tutorial;
   const tutorialRunId = payload.tutorialRunId;
@@ -359,7 +372,7 @@ export function beginTutorialBattle(
   ) {
     return null;
   }
-  return buildTutorialBattle(state, asTutorialRunId(tutorialRunId), 0, ctx);
+  return buildTutorialBattle(state, parseTutorialRunId(tutorialRunId), 0, ctx);
 }
 
 /** Rebuild the original authored handoff with a fresh deterministic restart stream. */
@@ -367,7 +380,7 @@ export function restartTutorialBattle(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor: string,
+  actor: EventActor,
 ): FoldState | null {
   const battle = state.battle;
   const battleId = payload.battleId;
@@ -398,7 +411,7 @@ export function exitTutorialBattle(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor: string,
+  actor: EventActor,
 ): FoldState | null {
   const battleId = payload.battleId;
   const mode = state.battle === null ? null : battleModeOf(state.battle);
@@ -422,7 +435,7 @@ export function exitTutorialBattle(
       ...reset.journey,
       screen: {
         type: "journeyStart",
-        tutorialDreamAvatarId: asDreamAvatarId(tutorialDreamAvatarId),
+        tutorialDreamAvatarId: tutorialDreamAvatarId,
       },
     },
   };
@@ -542,7 +555,7 @@ function applyVictory(
   });
   if (atlas === null) return null;
 
-  const droppedNightmareEntryIds = new Set<string>();
+  const droppedNightmareEntryIds = new Set<DeckEntryId>();
   const battleModifiers: BattleModifier[] = [];
   for (const modifier of journey.battleModifiers) {
     const battlesRemaining = modifier.battlesRemaining - 1;
@@ -663,11 +676,16 @@ const EMISSION: BattleEngineEmissionContext = {
 
 /** Both battle sides, in the fixed order the per-side reveal check iterates. */
 const BATTLE_SIDES: readonly BattleSide[] = ["player", "enemy"];
-const DISCOVER_ANY_LOW_COST_SCRIPT_ID = "f61431f3-33bd-42ff-a229-b4013582e86e";
-const DISCOVER_CHARACTER_SCRIPT_IDS = new Set<string>([
-  "8f5f2e26-44b5-447b-90d0-eaf22ab29fed",
-  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+const DISCOVER_ANY_LOW_COST_SCRIPT_ID = parseBattleEffectScriptId(
+  "f61431f3-33bd-42ff-a229-b4013582e86e",
+);
+const DISCOVER_CHARACTER_SCRIPT_IDS = new Set<BattleEffectScriptId>([
+  parseBattleEffectScriptId("8f5f2e26-44b5-447b-90d0-eaf22ab29fed"),
+  parseBattleEffectScriptId("910b4cf9-dec7-4e03-af4f-7d5ae342eeba"),
 ]);
+const DISCOVER_CHARACTER_SOURCE_CARD_ID = parseCardId(
+  "910b4cf9-dec7-4e03-af4f-7d5ae342eeba",
+);
 
 function openTutorialGuidance(
   state: FoldState,
@@ -708,7 +726,7 @@ function openTutorialGuidance(
     battle: {
       ...battle,
       tutorialPresentation: {
-        id: asPresentationId(
+        id: parsePresentationId(
           `tutorial-guidance:${event}:${sourceIdentity}:${matches
             .map((match) => match.id)
             .join("+")}`,
@@ -913,7 +931,7 @@ function applyBattleCommandStep(
     if (script !== null && script.steps.length > 0) {
       queue.push(
         newEffectRun(
-          { table: "dreamwell", id: asBattleEffectScriptId(card.id) },
+          { table: "dreamwell", id: parseBattleEffectScriptId(card.id) },
           side,
         ),
       );
@@ -940,7 +958,7 @@ function applyBattleCommandStep(
           dawnFired,
           triggerDawnFired,
           tutorialPresentation: {
-            id: asPresentationId(
+            id: parsePresentationId(
               `dreamwell-reveal:${revealedSide}:${String(boardAfter.turnNumber)}:${card.id}`,
             ),
             kind: "dreamwell-reveal",
@@ -994,7 +1012,7 @@ export function battleCommand(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor?: string,
+  actor?: EventActor,
 ): FoldState | null {
   return battleCommandInternal(state, payload, ctx, actor, false);
 }
@@ -1053,7 +1071,7 @@ function battleCommandInternal(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor: string | undefined,
+  actor: EventActor | undefined,
   suppressGuidance: boolean,
 ): FoldState | null {
   const battle = state.battle;
@@ -1249,7 +1267,7 @@ export function battleRepositionCharacter(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor?: string,
+  actor?: EventActor,
 ): FoldState | null {
   const battle = state.battle;
   if (battle === null || battleModeOf(battle).kind !== "tutorial") return null;
@@ -1291,7 +1309,7 @@ export function battleRepositionCharacter(
   if (!isBattleFieldSlotAddressValid(destination)) return null;
   const edit = planTutorialCharacterReposition(
     battle.board,
-    asBattleCardId(battleCardId),
+    parseBattleCardId(battleCardId),
     destination,
   );
   if (edit === null) return null;
@@ -1341,7 +1359,7 @@ function voidPlaySourceIsLegal(
 /** Tutorial events are driver-owned; automation may only use its bound actor. */
 function tutorialActorIsAuthorized(
   battle: BattleFoldState,
-  actor: string | undefined,
+  actor: EventActor | undefined,
   automatic: boolean,
   controllerClientId: ClientId | null,
 ): boolean {
@@ -1358,7 +1376,7 @@ function tutorialActorIsAuthorized(
 function tutorialCommandIsAuthorized(
   battle: BattleFoldState,
   command: BattleCommand,
-  actor: string | undefined,
+  actor: EventActor | undefined,
   controllerClientId: ClientId | null,
 ): boolean {
   const mode = battleModeOf(battle);
@@ -1431,7 +1449,7 @@ export function battlePlayCard(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor?: string,
+  actor?: EventActor,
 ): FoldState | null {
   return battlePlayCardInternal(state, payload, ctx, actor, false);
 }
@@ -1440,7 +1458,7 @@ function battlePlayCardInternal(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor: string | undefined,
+  actor: EventActor | undefined,
   suppressGuidance: boolean,
 ): FoldState | null {
   const battle = state.battle;
@@ -1617,7 +1635,7 @@ function battlePlayCardInternal(
           effectQueue: queue,
           pendingPrompt: null,
           tutorialPresentation: {
-            id: asPresentationId(`opponent-play:${intent.battleCardId}`),
+            id: parsePresentationId(`opponent-play:${intent.battleCardId}`),
             kind: "opponent-play",
             cardId: instance.definition.cardId,
             battleCardId: intent.battleCardId,
@@ -1663,9 +1681,9 @@ function battlePlayCardInternal(
 function battlePlayCardTransition(
   battle: BattleFoldState,
   intent: BattlePlayCardIntent,
-  instance: BattleMutableState["cardInstances"][string],
+  instance: BattleCardInstance,
   scriptedOverride: ReturnType<typeof resolveTutorialAiPlayCardOverride>,
-) {
+): BattleTransitionData {
   return {
     ...createEmptyTransitionData(),
     aiChoices: intent.aiChoices,
@@ -1700,7 +1718,7 @@ export function completeTutorialBattlePresentation(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor?: string,
+  actor?: EventActor,
 ): FoldState | null {
   const battle = state.battle;
   const presentation = battle?.tutorialPresentation ?? null;
@@ -1737,12 +1755,16 @@ export function completeTutorialBattlePresentation(
       tutorialPresentation: null,
     };
     if (presentation.continuation.kind === "play-card") {
+      const controllerClientId =
+        state.playtestControl?.controllerClientId ?? null;
       return battlePlayCardInternal(
         { ...state, battle: cleared },
         { ...presentation.continuation.payload },
         ctx,
-        presentation.continuation.automatic && mode?.kind === "tutorial"
-          ? `tutorial-ai:${state.playtestControl?.controllerClientId ?? ""}`
+          presentation.continuation.automatic &&
+          mode?.kind === "tutorial" &&
+          controllerClientId !== null
+          ? tutorialAiEventActor(controllerClientId)
           : undefined,
         true,
       );
@@ -1839,13 +1861,12 @@ export function completeTutorialBattlePresentation(
 function coerceBattlePlayCardIntent(
   raw: Record<string, unknown>,
 ): BattlePlayCardIntent | null {
-  if (
-    !isNonEmptyString(raw.battleCardId) ||
-    !isStringArray(raw.targetBattleCardIds)
-  )
-    return null;
-  if (new Set(raw.targetBattleCardIds).size !== raw.targetBattleCardIds.length)
-    return null;
+  const battleCardId = battleCardIdFromUnknown(raw.battleCardId);
+  const targetBattleCardIds = battleCardIdArrayFromUnknown(
+    raw.targetBattleCardIds,
+  );
+  if (battleCardId === null || targetBattleCardIds === null) return null;
+  if (new Set(targetBattleCardIds).size !== targetBattleCardIds.length) return null;
   const aiChoices =
     raw.aiChoices === undefined ? [] : coerceAiChoices(raw.aiChoices);
   if (aiChoices === null) return null;
@@ -1861,8 +1882,8 @@ function coerceBattlePlayCardIntent(
         : undefined;
   if (tutorialAiActionOverrideId === undefined) return null;
   return {
-    battleCardId: asBattleCardId(raw.battleCardId),
-    targetBattleCardIds: [...raw.targetBattleCardIds.map(asBattleCardId)],
+    battleCardId,
+    targetBattleCardIds,
     aiChoices,
     characterDestination,
     tutorialAiActionOverrideId: tutorialAiActionOverrideId,
@@ -1929,7 +1950,7 @@ function coerceAiChoices(raw: unknown): BattleAiChoiceTrace[] | null {
       stage,
       choice,
       battleCardId: battleCardIdFromUnknown(battleCardId),
-      cardName,
+      cardName: cardName === null ? null : parseCardName(cardName),
       sourceHandIndex,
       sourceSlotId: sourceSlotId as BattleAiChoiceTrace["sourceSlotId"],
       targetSlotId: targetSlotId as BattleAiChoiceTrace["targetSlotId"],
@@ -1976,7 +1997,7 @@ export function battleGesture(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor?: string,
+  actor?: EventActor,
 ): FoldState | null {
   const battle = state.battle;
   if (battle === null) {
@@ -2103,7 +2124,7 @@ export function battleAiBlock(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor?: string,
+  actor?: EventActor,
 ): FoldState | null {
   const battle = state.battle;
   const aiSide = payload.aiSide;
@@ -2175,7 +2196,7 @@ export function battleAiBlock(
       ...(pacedBlock
         ? {
             tutorialPresentation: {
-              id: asPresentationId(
+              id: parsePresentationId(
                 `opponent-block:${battle.board.activeSide}:${String(battle.board.turnNumber)}`,
               ),
               kind: "opponent-block",
@@ -2191,7 +2212,7 @@ export function battleAiBlock(
           {
             event: "battle_ai_blocking_decision",
             fields: { ...blocking.decision },
-          },
+          } satisfies BattleDeferredLogEvent,
           ...(blockers.length === 0
             ? []
             : [
@@ -2204,7 +2225,7 @@ export function battleAiBlock(
                     paced: pacedBlock,
                     blockers: blockers.map((blocker) => ({ ...blocker })),
                   },
-                },
+                } satisfies BattleDeferredLogEvent,
               ]),
         ],
       },
@@ -2277,7 +2298,7 @@ function settleTemporaryDreamwellEffects(
   turnNumber: number,
 ): BattleDebugEdit[] {
   const edits: BattleDebugEdit[] = [];
-  for (const battleCardId of Object.keys(board.cardInstances).sort()) {
+  for (const battleCardId of identityKeys(board.cardInstances).sort()) {
     const instance = board.cardInstances[battleCardId];
     if (instance === undefined) continue;
     const reclaim = instance.status.temporaryReclaimUntilEnding;
@@ -2287,7 +2308,7 @@ function settleTemporaryDreamwellEffects(
     ) {
       edits.push({
         kind: "SET_CARD_STATUS",
-        battleCardId: asBattleCardId(battleCardId),
+        battleCardId,
         status: { temporaryReclaimUntilEnding: null },
       });
     }
@@ -2297,7 +2318,7 @@ function settleTemporaryDreamwellEffects(
       continue;
     const location = selectBattleCardLocation(
       board,
-      asBattleCardId(battleCardId),
+      battleCardId,
     );
     if (location?.zone !== "banished") continue;
     const backRank = board.sides[banish.priorController].backRank;
@@ -2310,12 +2331,12 @@ function settleTemporaryDreamwellEffects(
     edits.push(
       {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: asBattleCardId(battleCardId),
+        battleCardId,
         destination: { side: banish.priorController, zone: "backRank", slotId },
       },
       {
         kind: "SET_CARD_STATUS",
-        battleCardId: asBattleCardId(battleCardId),
+        battleCardId,
         status: { temporaryBanishUntilEnding: null },
       },
     );
@@ -2562,7 +2583,7 @@ function challengeResolvedPresentation(input: {
         : null;
   if (input.blockerBattleCardId === null && scored === null) return null;
   return {
-    id: asPresentationId(
+    id: parsePresentationId(
       `challenge-resolved:${input.activeSide}:${String(input.turnNumber)}:${input.slotId}`,
     ),
     kind: "challenge-resolved",
@@ -2628,162 +2649,313 @@ function coerceBattleDebugEdit(raw: unknown): BattleDebugEdit | null {
     case "SET_CURRENT_ENERGY":
     case "SET_MAX_ENERGY":
       return isBattleSide(raw.side) && isFiniteNumber(raw.value)
-        ? (raw as unknown as BattleDebugEdit)
+        ? { kind: raw.kind, side: raw.side, value: raw.value }
         : null;
     case "INCREASE_MAX_ENERGY_AND_FILL":
     case "DRAW_CARD":
       return isBattleSide(raw.side)
-        ? (raw as unknown as BattleDebugEdit)
+        ? { kind: raw.kind, side: raw.side }
         : null;
     case "ADJUST_SCORE":
     case "ADJUST_CURRENT_ENERGY":
     case "ADJUST_MAX_ENERGY":
-    case "KINDLE":
       return isBattleSide(raw.side) && isFiniteNumber(raw.amount)
-        ? (raw as unknown as BattleDebugEdit)
+        ? { kind: raw.kind, side: raw.side, amount: raw.amount }
         : null;
+    case "KINDLE": {
+      const preferredBattleCardId =
+        raw.preferredBattleCardId === undefined ||
+        raw.preferredBattleCardId === null
+          ? raw.preferredBattleCardId
+          : battleCardIdFromUnknown(raw.preferredBattleCardId);
+      if (
+        !isBattleSide(raw.side) ||
+        !isFiniteNumber(raw.amount) ||
+        (preferredBattleCardId === null && raw.preferredBattleCardId !== null)
+      ) {
+        return null;
+      }
+      return {
+        kind: "KINDLE",
+        side: raw.side,
+        amount: raw.amount,
+        ...(preferredBattleCardId === undefined
+          ? {}
+          : { preferredBattleCardId }),
+      };
+    }
     case "SET_CARD_SPARK":
     case "SET_CARD_SPARK_DELTA":
     case "SET_CARD_STATIC_SPARK_BONUS":
-    case "SET_COUNTERS":
-      return isNonEmptyString(raw.battleCardId) && isFiniteNumber(raw.value)
-        ? (raw as unknown as BattleDebugEdit)
+    case "SET_COUNTERS": {
+      const battleCardId = battleCardIdFromUnknown(raw.battleCardId);
+      return battleCardId !== null && isFiniteNumber(raw.value)
+        ? { kind: raw.kind, battleCardId, value: raw.value }
         : null;
-    case "MOVE_CARD_TO_ZONE":
-      return isNonEmptyString(raw.battleCardId) &&
-        isDebugZoneDestination(raw.destination)
-        ? (raw as unknown as BattleDebugEdit)
+    }
+    case "MOVE_CARD_TO_ZONE": {
+      const battleCardId = battleCardIdFromUnknown(raw.battleCardId);
+      return battleCardId !== null && isDebugZoneDestination(raw.destination)
+        ? {
+            kind: "MOVE_CARD_TO_ZONE",
+            battleCardId,
+            destination: raw.destination,
+          }
         : null;
+    }
     case "SWAP_BATTLEFIELD_SLOTS":
       return isBattleFieldSlotAddress(raw.source) &&
         isBattleFieldSlotAddress(raw.target)
-        ? (raw as unknown as BattleDebugEdit)
+        ? {
+            kind: "SWAP_BATTLEFIELD_SLOTS",
+            source: raw.source,
+            target: raw.target,
+          }
         : null;
     case "DRAW_DREAMWELL_CARD":
       return isBattleSide(raw.side) &&
-        Number.isInteger(raw.turnNumber) &&
+        isIntegerNumber(raw.turnNumber) &&
         (raw.additional === undefined || typeof raw.additional === "boolean")
-        ? (raw as unknown as BattleDebugEdit)
+        ? {
+            kind: "DRAW_DREAMWELL_CARD",
+            side: raw.side,
+            turnNumber: raw.turnNumber,
+            ...(raw.additional === undefined
+              ? {}
+              : { additional: raw.additional }),
+          }
         : null;
     case "ERODE":
     case "REVEAL_DECK_TOP":
     case "HIDE_DECK_TOP":
       return isBattleSide(raw.side) &&
-        Number.isInteger(raw.count) &&
+        isIntegerNumber(raw.count) &&
         (raw.viewer === undefined || isBattleSide(raw.viewer))
-        ? (raw as unknown as BattleDebugEdit)
+        ? {
+            kind: raw.kind,
+            side: raw.side,
+            count: raw.count,
+            ...(raw.viewer === undefined ? {} : { viewer: raw.viewer }),
+          }
         : null;
     case "DISCARD_CARD":
     case "ABANDON":
     case "REMATERIALIZE":
     case "CLEAR_CARD_NOTES":
-    case "REVEAL_HAND_CARD":
-      return isNonEmptyString(raw.battleCardId)
-        ? (raw as unknown as BattleDebugEdit)
-        : null;
-    case "SET_CARD_VISIBILITY":
-      return isNonEmptyString(raw.battleCardId) &&
+    case "REVEAL_HAND_CARD": {
+      const battleCardId = battleCardIdFromUnknown(raw.battleCardId);
+      return battleCardId === null
+        ? null
+        : { kind: raw.kind, battleCardId };
+    }
+    case "SET_CARD_VISIBILITY": {
+      const battleCardId = battleCardIdFromUnknown(raw.battleCardId);
+      return battleCardId !== null &&
         (raw.viewer === undefined || isBattleSide(raw.viewer)) &&
         (typeof raw.isRevealed === "boolean" ||
           typeof raw.isRevealedToPlayer === "boolean")
-        ? (raw as unknown as BattleDebugEdit)
+        ? {
+            kind: "SET_CARD_VISIBILITY",
+            battleCardId,
+            ...(raw.viewer === undefined ? {} : { viewer: raw.viewer }),
+            ...(typeof raw.isRevealed === "boolean"
+              ? { isRevealed: raw.isRevealed }
+              : {}),
+            ...(typeof raw.isRevealedToPlayer === "boolean"
+              ? { isRevealedToPlayer: raw.isRevealedToPlayer }
+              : {}),
+          }
         : null;
+    }
     case "SET_SIDE_HAND_VISIBILITY":
       return isBattleSide(raw.side) &&
         (raw.viewer === undefined || isBattleSide(raw.viewer)) &&
         (typeof raw.isRevealed === "boolean" ||
           typeof raw.isRevealedToPlayer === "boolean")
-        ? (raw as unknown as BattleDebugEdit)
+        ? {
+            kind: "SET_SIDE_HAND_VISIBILITY",
+            side: raw.side,
+            ...(raw.viewer === undefined ? {} : { viewer: raw.viewer }),
+            ...(typeof raw.isRevealed === "boolean"
+              ? { isRevealed: raw.isRevealed }
+              : {}),
+            ...(typeof raw.isRevealedToPlayer === "boolean"
+              ? { isRevealedToPlayer: raw.isRevealedToPlayer }
+              : {}),
+          }
         : null;
-    case "ADD_CARD_NOTE":
-      return isNonEmptyString(raw.battleCardId) &&
-        isNonEmptyString(raw.noteId) &&
+    case "ADD_CARD_NOTE": {
+      const battleCardId = battleCardIdFromUnknown(raw.battleCardId);
+      const noteId = noteIdFromUnknown(raw.noteId);
+      return battleCardId !== null &&
+        noteId !== null &&
         typeof raw.text === "string" &&
         isFiniteNumber(raw.createdAtMs) &&
         isBattleCardNoteExpiry(raw.expiry)
-        ? (raw as unknown as BattleDebugEdit)
+        ? {
+            kind: "ADD_CARD_NOTE",
+            battleCardId,
+            noteId,
+            text: raw.text,
+            createdAtMs: raw.createdAtMs,
+            expiry: raw.expiry,
+          }
         : null;
-    case "DISMISS_CARD_NOTE":
-      return isNonEmptyString(raw.battleCardId) && isNonEmptyString(raw.noteId)
-        ? (raw as unknown as BattleDebugEdit)
+    }
+    case "DISMISS_CARD_NOTE": {
+      const battleCardId = battleCardIdFromUnknown(raw.battleCardId);
+      const noteId = noteIdFromUnknown(raw.noteId);
+      return battleCardId !== null && noteId !== null
+        ? { kind: "DISMISS_CARD_NOTE", battleCardId, noteId }
         : null;
-    case "SET_CARD_MARKERS":
-      return isNonEmptyString(raw.battleCardId) && isPlainRecord(raw.markers)
-        ? (raw as unknown as BattleDebugEdit)
+    }
+    case "SET_CARD_MARKERS": {
+      const battleCardId = battleCardIdFromUnknown(raw.battleCardId);
+      const markers = battleCardMarkersFromUnknown(raw.markers);
+      return battleCardId !== null && markers !== null
+        ? { kind: "SET_CARD_MARKERS", battleCardId, markers }
         : null;
-    case "SET_CARD_STATUS":
-      return isNonEmptyString(raw.battleCardId) && isPlainRecord(raw.status)
-        ? (raw as unknown as BattleDebugEdit)
+    }
+    case "SET_CARD_STATUS": {
+      const battleCardId = battleCardIdFromUnknown(raw.battleCardId);
+      const status = partialBattleCardStatusFromUnknown(raw.status);
+      return battleCardId !== null && status !== null
+        ? { kind: "SET_CARD_STATUS", battleCardId, status }
         : null;
-    case "CREATE_CARD_COPY":
-      return isNonEmptyString(raw.sourceBattleCardId) &&
+    }
+    case "CREATE_CARD_COPY": {
+      const sourceBattleCardId = battleCardIdFromUnknown(raw.sourceBattleCardId);
+      return sourceBattleCardId !== null &&
         isDebugZoneDestination(raw.destination) &&
         isFiniteNumber(raw.createdAtMs)
-        ? (raw as unknown as BattleDebugEdit)
+        ? {
+            kind: "CREATE_CARD_COPY",
+            sourceBattleCardId,
+            destination: raw.destination,
+            createdAtMs: raw.createdAtMs,
+          }
         : null;
-    case "ADD_FIGMENTS":
-      return isNonEmptyString(raw.battleCardId) && Number.isInteger(raw.count)
-        ? (raw as unknown as BattleDebugEdit)
+    }
+    case "ADD_FIGMENTS": {
+      const battleCardId = battleCardIdFromUnknown(raw.battleCardId);
+      return battleCardId !== null && isIntegerNumber(raw.count)
+        ? { kind: "ADD_FIGMENTS", battleCardId, count: raw.count }
         : null;
+    }
     case "CREATE_FIGMENT":
-      return isBattleSide(raw.side) &&
-        (raw.chosenFigmentId === undefined ||
-          isNonEmptyString(raw.chosenFigmentId)) &&
+      {
+        const chosenFigmentId =
+          raw.chosenFigmentId === undefined
+            ? undefined
+            : cardIdFromUnknown(raw.chosenFigmentId);
+        const chosenSubtype = cardSubtypeFromUnknown(raw.chosenSubtype);
+        if (chosenFigmentId === null) return null;
+        return isBattleSide(raw.side) &&
         (raw.count === undefined ||
           (typeof raw.count === "number" &&
             Number.isInteger(raw.count) &&
             raw.count > 0 &&
             raw.count <= 10)) &&
-        typeof raw.chosenSubtype === "string" &&
+        chosenSubtype !== null &&
         isFiniteNumber(raw.chosenSpark) &&
         typeof raw.name === "string" &&
         isDebugZoneDestination(raw.destination) &&
         isFiniteNumber(raw.createdAtMs)
-        ? (raw as unknown as BattleDebugEdit)
+        ? {
+            kind: "CREATE_FIGMENT",
+            side: raw.side,
+            ...(chosenFigmentId === undefined
+              ? {}
+              : { chosenFigmentId }),
+            ...(raw.count === undefined ? {} : { count: raw.count }),
+            chosenSubtype,
+            chosenSpark: raw.chosenSpark,
+            name: parseCardName(raw.name),
+            destination: raw.destination,
+            createdAtMs: raw.createdAtMs,
+          }
         : null;
-    case "CREATE_CARD_FROM_DEFINITION":
-      return isPlainRecord(raw.definition) &&
+      }
+    case "CREATE_CARD_FROM_DEFINITION": {
+      const definition = battleDeckCardDefinitionFromUnknown(raw.definition);
+      return definition !== null &&
         isDebugZoneDestination(raw.destination) &&
         isFiniteNumber(raw.createdAtMs)
-        ? (raw as unknown as BattleDebugEdit)
-        : null;
-    case "FILL_BATTLEFIELD_PREVIEW": {
-      const definitions = raw.definitions;
-      return isPlainRecord(definitions) &&
-        isBattlefieldPreviewDefinitionList(definitions.player) &&
-        isBattlefieldPreviewDefinitionList(definitions.enemy) &&
-        isFiniteNumber(raw.createdAtMs)
-        ? (raw as unknown as BattleDebugEdit)
+        ? {
+            kind: "CREATE_CARD_FROM_DEFINITION",
+            definition,
+            destination: raw.destination,
+            createdAtMs: raw.createdAtMs,
+          }
         : null;
     }
-    case "REORDER_DECK":
-      return isBattleSide(raw.side) &&
-        Array.isArray(raw.order) &&
-        raw.order.every((id) => typeof id === "string")
-        ? (raw as unknown as BattleDebugEdit)
+    case "FILL_BATTLEFIELD_PREVIEW": {
+      const definitions = raw.definitions;
+      if (!isPlainRecord(definitions) || !isFiniteNumber(raw.createdAtMs)) {
+        return null;
+      }
+      const player = battlefieldPreviewDefinitionListFromUnknown(
+        definitions.player,
+      );
+      const enemy = battlefieldPreviewDefinitionListFromUnknown(
+        definitions.enemy,
+      );
+      return player === null || enemy === null
+        ? null
+        : {
+            kind: "FILL_BATTLEFIELD_PREVIEW",
+            definitions: { player, enemy },
+            createdAtMs: raw.createdAtMs,
+          };
+    }
+    case "REORDER_DECK": {
+      const order = battleCardIdArrayFromUnknown(raw.order);
+      return isBattleSide(raw.side) && order !== null
+        ? { kind: "REORDER_DECK", side: raw.side, order }
         : null;
-    case "FORESEE":
+    }
+    case "FORESEE": {
+      const viewedCardIds = battleCardIdArrayFromUnknown(raw.viewedCardIds);
+      const orderedCardIds = battleCardIdArrayFromUnknown(raw.orderedCardIds);
+      const voidCardIds = battleCardIdArrayFromUnknown(raw.voidCardIds);
       return isBattleSide(raw.side) &&
         (raw.viewer === undefined || isBattleSide(raw.viewer)) &&
-        isStringArray(raw.viewedCardIds) &&
-        isStringArray(raw.orderedCardIds) &&
-        isStringArray(raw.voidCardIds)
-        ? (raw as unknown as BattleDebugEdit)
+        viewedCardIds !== null &&
+        orderedCardIds !== null &&
+        voidCardIds !== null
+        ? {
+            kind: "FORESEE",
+            side: raw.side,
+            ...(raw.viewer === undefined ? {} : { viewer: raw.viewer }),
+            viewedCardIds,
+            orderedCardIds,
+            voidCardIds,
+          }
         : null;
+    }
     case "PLAY_FROM_DECK_TOP":
       return isBattleSide(raw.side) &&
         (raw.target === undefined || isBattleFieldSlotAddress(raw.target))
-        ? (raw as unknown as BattleDebugEdit)
+        ? {
+            kind: "PLAY_FROM_DECK_TOP",
+            side: raw.side,
+            ...(raw.target === undefined ? {} : { target: raw.target }),
+          }
         : null;
     case "SET_PHASE":
       return isBattlePhase(raw.phase)
-        ? (raw as unknown as BattleDebugEdit)
+        ? { kind: "SET_PHASE", phase: raw.phase }
         : null;
     case "SET_BATTLE_FLOW":
       return isBattlePhase(raw.phase) &&
         isBattleSide(raw.activeSide) &&
-        Number.isInteger(raw.turnNumber)
-        ? (raw as unknown as BattleDebugEdit)
+        isIntegerNumber(raw.turnNumber)
+        ? {
+            kind: "SET_BATTLE_FLOW",
+            phase: raw.phase,
+            activeSide: raw.activeSide,
+            turnNumber: raw.turnNumber,
+          }
         : null;
     default:
       return null;
@@ -2794,10 +2966,118 @@ function isBattleResult(value: unknown): value is BattleResult {
   return value === "victory" || value === "defeat" || value === "draw";
 }
 
-function isStringArray(value: unknown): value is string[] {
-  return (
-    Array.isArray(value) && value.every((entry) => typeof entry === "string")
-  );
+function battleCardIdArrayFromUnknown(
+  value: unknown,
+): import("../../types/identifiers").BattleCardId[] | null {
+  if (!Array.isArray(value)) return null;
+  const ids = value.map(battleCardIdFromUnknown);
+  return ids.some((id) => id === null)
+    ? null
+    : ids.filter((id): id is NonNullable<typeof id> => id !== null);
+}
+
+function battleCardMarkersFromUnknown(
+  value: unknown,
+): BattleCardMarkers | null {
+  if (
+    !isPlainRecord(value) ||
+    typeof value.isPrevented !== "boolean" ||
+    typeof value.isCopied !== "boolean"
+  ) {
+    return null;
+  }
+  return {
+    isPrevented: value.isPrevented,
+    isCopied: value.isCopied,
+  };
+}
+
+function partialBattleCardStatusFromUnknown(
+  value: unknown,
+): Partial<BattleCardStatus> | null {
+  if (!isPlainRecord(value)) return null;
+  const status: Partial<BattleCardStatus> = {};
+  const booleanFields = [
+    "isExhausted",
+    "reclaimed",
+    "offering",
+    "ephemeral",
+    "veil",
+    "grantedVengeful",
+    "grantedAwakened",
+  ] as const;
+  for (const field of booleanFields) {
+    const fieldValue = value[field];
+    if (fieldValue === undefined) continue;
+    if (typeof fieldValue !== "boolean") return null;
+    status[field] = fieldValue;
+  }
+  if (value.counters !== undefined) {
+    if (!isFiniteNumber(value.counters)) return null;
+    status.counters = value.counters;
+  }
+
+  if (value.temporaryReclaimUntilEnding !== undefined) {
+    if (value.temporaryReclaimUntilEnding === null) {
+      status.temporaryReclaimUntilEnding = null;
+    } else {
+      const ending = temporaryReclaimStatusFromUnknown(
+        value.temporaryReclaimUntilEnding,
+      );
+      if (ending === null) return null;
+      status.temporaryReclaimUntilEnding = ending;
+    }
+  }
+  if (value.temporaryBanishUntilEnding !== undefined) {
+    if (value.temporaryBanishUntilEnding === null) {
+      status.temporaryBanishUntilEnding = null;
+    } else {
+      const ending = temporaryBanishStatusFromUnknown(
+        value.temporaryBanishUntilEnding,
+      );
+      if (ending === null) return null;
+      status.temporaryBanishUntilEnding = ending;
+    }
+  }
+  return status;
+}
+
+function temporaryReclaimStatusFromUnknown(
+  value: unknown,
+): NonNullable<BattleCardStatus["temporaryReclaimUntilEnding"]> | null {
+  if (!isPlainRecord(value)) return null;
+  const sourceId = dreamwellCardIdFromUnknown(value.sourceId);
+  if (
+    !isBattleSide(value.activeSide) ||
+    !isIntegerNumber(value.turnNumber) ||
+    sourceId === null
+  ) {
+    return null;
+  }
+  return { activeSide: value.activeSide, turnNumber: value.turnNumber, sourceId };
+}
+
+function temporaryBanishStatusFromUnknown(
+  value: unknown,
+): NonNullable<BattleCardStatus["temporaryBanishUntilEnding"]> | null {
+  if (!isPlainRecord(value)) return null;
+  const sourceId = dreamwellCardIdFromUnknown(value.sourceId);
+  if (
+    !isBattleSide(value.activeSide) ||
+    !isIntegerNumber(value.turnNumber) ||
+    !isBattleSide(value.priorOwner) ||
+    !isBattleSide(value.priorController) ||
+    sourceId === null
+  ) {
+    return null;
+  }
+  return {
+    activeSide: value.activeSide,
+    turnNumber: value.turnNumber,
+    priorOwner: value.priorOwner,
+    priorController: value.priorController,
+    sourceId,
+  };
 }
 
 function isBattleSide(value: unknown): value is BattleSide {
@@ -2821,15 +3101,31 @@ function isFiniteNumber(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value);
 }
 
-function isBattlefieldPreviewDefinitionList(value: unknown): boolean {
-  return (
-    Array.isArray(value) &&
-    (value.length === 9 ||
+function isIntegerNumber(value: unknown): value is number {
+  return typeof value === "number" && Number.isInteger(value);
+}
+
+function battlefieldPreviewDefinitionListFromUnknown(
+  value: unknown,
+): import("../../battle/types").BattleDeckCardDefinition[] | null {
+  if (
+    !Array.isArray(value) ||
+    !(
+      value.length === 9 ||
       value.length === 14 ||
       value.length === 24 ||
-      value.length === 25) &&
-    value.every(isPlainRecord)
-  );
+      value.length === 25
+    )
+  ) {
+    return null;
+  }
+  const definitions = value.map(battleDeckCardDefinitionFromUnknown);
+  return definitions.some((definition) => definition === null)
+    ? null
+    : definitions.filter(
+        (definition): definition is NonNullable<typeof definition> =>
+          definition !== null,
+      );
 }
 
 function isNonEmptyString(value: unknown): value is string {
@@ -2855,7 +3151,9 @@ function isBattleFieldSlotAddress(
   );
 }
 
-function isDebugZoneDestination(value: unknown): boolean {
+function isDebugZoneDestination(
+  value: unknown,
+): value is import("../../battle/debug/commands").BattleDebugZoneDestination {
   if (!isPlainRecord(value) || !isBattleSide(value.side)) return false;
   if (value.zone === "frontRank" || value.zone === "backRank") {
     return isBattleFieldSlotAddress(value);
@@ -2924,7 +3222,7 @@ export function resolvePrompt(
   state: FoldState,
   payload: Record<string, unknown>,
   ctx: EventContext,
-  actor?: string,
+  actor?: EventActor,
 ): FoldState | null {
   const battle = state.battle;
   if (battle === null) {
@@ -3049,7 +3347,7 @@ function scheduleBattleTriggerEdges(
   }
 }
 
-function isBattlefieldZone(zone: string): boolean {
+function isBattlefieldZone(zone: BattleZoneId): zone is BattlefieldZone {
   return zone === "backRank" || zone === "frontRank";
 }
 
@@ -3153,8 +3451,7 @@ function promptResolutionIsValid(
     return false;
   }
   const isCharacterDiscover =
-    pending.run.bindings?.sourceCardId ===
-      "910b4cf9-dec7-4e03-af4f-7d5ae342eeba" ||
+    pending.run.bindings?.sourceCardId === DISCOVER_CHARACTER_SOURCE_CARD_ID ||
     DISCOVER_CHARACTER_SCRIPT_IDS.has(pending.run.scriptRef.id);
   const isLowCostDiscover =
     pending.run.scriptRef.id === DISCOVER_ANY_LOW_COST_SCRIPT_ID;
@@ -3165,7 +3462,7 @@ function promptResolutionIsValid(
     if (
       !chosen.every(
         (id) =>
-          board.sides[pending.run.side].deck.includes(asBattleCardId(id)) &&
+          board.sides[pending.run.side].deck.includes(id) &&
           (isCharacterDiscover
             ? board.cardInstances[id]?.definition.battleCardKind === "character"
             : (board.cardInstances[id]?.definition.energyCost ?? Infinity) <=
@@ -3206,7 +3503,7 @@ function coercePromptResolution(raw: unknown): PromptResolution | null {
     if (ids.length !== chosenIds.length) {
       return null;
     }
-    return { kind: "pick-cards", chosenIds: ids.map(asBattleCardId) };
+    return { kind: "pick-cards", chosenIds: ids.map(parseBattleCardId) };
   }
   if (kind === "choice") {
     const optionIndex = (raw as { optionIndex?: unknown }).optionIndex;
@@ -3244,9 +3541,9 @@ function coercePromptResolution(raw: unknown): PromptResolution | null {
       kind: "foresee",
       ...(viewedCardIds === undefined
         ? {}
-        : { viewedCardIds: (viewedCardIds as string[]).map(asBattleCardId) }),
-      orderedCardIds: (orderedCardIds as string[]).map(asBattleCardId),
-      voidCardIds: (voidCardIds as string[]).map(asBattleCardId),
+        : { viewedCardIds: (viewedCardIds as string[]).map(parseBattleCardId) }),
+      orderedCardIds: (orderedCardIds as string[]).map(parseBattleCardId),
+      voidCardIds: (voidCardIds as string[]).map(parseBattleCardId),
     };
   }
   return null;
@@ -3289,7 +3586,8 @@ export function setCardNote(
   if (typeof instanceId !== "string" || instanceId.length === 0) {
     return null;
   }
-  if (battle.board.cardInstances[instanceId] === undefined) {
+  const battleCardId = parseBattleCardId(instanceId);
+  if (battle.board.cardInstances[battleCardId] === undefined) {
     return null;
   }
   const note = coerceCardNote(payload.note);
@@ -3300,8 +3598,8 @@ export function setCardNote(
     battle.board,
     {
       kind: "ADD_CARD_NOTE",
-      battleCardId: asBattleCardId(instanceId),
-      noteId: asNoteId(note.noteId),
+      battleCardId,
+      noteId: note.noteId,
       text: note.text,
       createdAtMs: isoTimestampToMs(ctx.timestamp) ?? 0,
       expiry: note.expiry,
@@ -3333,7 +3631,7 @@ function coerceCardNote(
   if (expiry === null) {
     return null;
   }
-  return { noteId: asNoteId(noteId), text, expiry };
+  return { noteId: parseNoteId(noteId), text, expiry };
 }
 
 /** Validates a raw note expiry into a {@link BattleCardNoteExpiry}, else `null`. */

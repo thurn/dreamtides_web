@@ -6,6 +6,7 @@ import {
   useState,
 } from "react";
 import type { CSSProperties, ReactNode } from "react";
+import type { DomTestId } from "../cumulus/types/dom";
 import {
   DEFAULT_ART_CROP,
   FIGMENT_ART_SAFE_AREA_TARGET,
@@ -323,7 +324,7 @@ function StatusLine({
 }: {
   isError: boolean;
   text: string;
-  testId?: string;
+  testId?: DomTestId;
 }) {
   return (
     <span

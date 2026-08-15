@@ -23,8 +23,8 @@ import {
 } from "firebase/database";
 import type { EncodedLogNode, Genesis } from "./types";
 import {
-  asClientId,
-  asRoomId,
+  parseClientId,
+  parseRoomId,
   type ClientId,
   type RoomId,
 } from "../types/identifiers";
@@ -69,7 +69,7 @@ export function generateRoomId(
   }
 
   const bytes = randomBytes(length);
-  return asRoomId(
+  return parseRoomId(
     Array.from(
       bytes,
       (byte) => ROOM_ID_ALPHABET[byte % ROOM_ID_ALPHABET.length],
@@ -78,21 +78,21 @@ export function generateRoomId(
 }
 
 /** Whether `roomId` is 4-24 lowercase alphanumeric characters. */
-export function isValidRoomId(roomId: string): boolean {
-  return ROOM_ID_PATTERN.test(roomId);
+export function isValidRoomId(value: unknown): value is RoomId {
+  return typeof value === "string" && ROOM_ID_PATTERN.test(value);
 }
 
 /**
  * Trims and lowercases `roomId`, returning the normalized id when it is
  * valid or `null` otherwise (including when `roomId` is `null`).
  */
-export function normalizeRoomId(roomId: string | null): RoomId | null {
-  if (roomId === null) {
+export function normalizeRoomId(value: string | null): RoomId | null {
+  if (value === null) {
     return null;
   }
 
-  const normalized = roomId.trim().toLowerCase();
-  return isValidRoomId(normalized) ? asRoomId(normalized) : null;
+  const normalized = value.trim().toLowerCase();
+  return isValidRoomId(normalized) ? parseRoomId(normalized) : null;
 }
 
 // ---------------------------------------------------------------------------
@@ -107,14 +107,14 @@ export function normalizeRoomId(roomId: string | null): RoomId | null {
 export function mintClientId(
   randomBytes: RandomBytes = defaultRandomBytes,
 ): ClientId {
-  return asClientId(generateRoomId(randomBytes, MAX_ROOM_ID_LENGTH));
+  return parseClientId(generateRoomId(randomBytes, MAX_ROOM_ID_LENGTH));
 }
 
 // ---------------------------------------------------------------------------
 // Genesis write
 // ---------------------------------------------------------------------------
 
-function roomLogPath(roomId: string): string {
+function roomLogPath(roomId: RoomId): string {
   return `rooms/${roomId}/log`;
 }
 
@@ -142,7 +142,7 @@ export function genesisLogNode(genesis: Genesis): EncodedLogNode {
  * retry with a fresh id (see `RoomGate.createAndNavigateToRoom`).
  */
 export class RoomExistsError extends Error {
-  constructor(roomId: string) {
+  constructor(roomId: RoomId) {
     super(`Room ${roomId} already exists`);
     this.name = "RoomExistsError";
   }
@@ -157,7 +157,7 @@ export class RoomExistsError extends Error {
  */
 export async function createRoom(
   database: Database,
-  roomId: string,
+  roomId: RoomId,
   genesis: Genesis,
 ): Promise<void> {
   const result = await runTransaction(
@@ -240,7 +240,7 @@ export function shouldEvict(
  */
 export async function createRoomEvictingStale(
   database: Database,
-  roomId: string,
+  roomId: RoomId,
   genesis: Genesis,
   nowMs: number = Date.now(),
 ): Promise<void> {
@@ -319,7 +319,7 @@ function hasConnectedPresence(
   );
 }
 
-function presencePath(roomId: string, clientId: string): string {
+function presencePath(roomId: RoomId, clientId: ClientId): string {
   return `rooms/${roomId}/presence/${clientId}`;
 }
 
@@ -331,8 +331,8 @@ function presencePath(roomId: string, clientId: string): string {
  */
 export function writePresence(
   database: Database,
-  roomId: string,
-  clientId: string,
+  roomId: RoomId,
+  clientId: ClientId,
   nowIso: () => string = () => new Date().toISOString(),
   onError?: (error: unknown) => void,
 ): () => void {

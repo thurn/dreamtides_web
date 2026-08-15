@@ -3,8 +3,8 @@ import type { MobileBattleInspectorAction } from "../../cumulus/screens/MobileBa
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
 import type { BattleMutableState, BattleSideMutableState } from "../types";
 import { resolveBattleInspectorIntent } from "./battle-inspector-intents";
-import { asBattleId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
 
 function side(deck: string[], hand: string[]): BattleSideMutableState {
   return {
@@ -12,8 +12,8 @@ function side(deck: string[], hand: string[]): BattleSideMutableState {
     maxEnergy: 4,
     score: 3,
     visibility: {},
-    deck: deck.map(asBattleCardId),
-    hand: hand.map(asBattleCardId),
+    deck: deck.map(parseBattleCardId),
+    hand: hand.map(parseBattleCardId),
     void: [],
     banished: [],
     backRank: emptyBackRankSlots(),
@@ -26,7 +26,7 @@ function side(deck: string[], hand: string[]): BattleSideMutableState {
 
 function state(): BattleMutableState {
   return {
-    battleId: asBattleId("battle-inspector-fixture"),
+    battleId: parseBattleId("battle-inspector-fixture"),
     activeSide: "player",
     turnNumber: 2,
     phase: "day",

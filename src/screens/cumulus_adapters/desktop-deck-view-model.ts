@@ -19,6 +19,7 @@ import type {
 import { buildMobileDeckView } from "./mobile-deck-view-model";
 import { buildDreamAvatarTideViews } from "./journey-start-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
+import type { JourneySeed } from "../../types/journey-seed";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 
 /** Map the run's DreamAvatar to the sidebar view (portrait visual + rules text). */
@@ -48,7 +49,7 @@ export function buildDesktopDeckView(
   dreamsigns: readonly Dreamsign[],
   dreamAvatars: readonly DreamAvatarContent[] = [],
   poolContext?: RunPoolContext,
-  journeySeed = "",
+  journeySeed?: JourneySeed,
 ): DesktopDeckView {
   const dreamAvatarContent =
     dreamAvatar === null
@@ -61,7 +62,7 @@ export function buildDesktopDeckView(
       localizedDreamsign(dreamsign, "Desktop deck viewer"),
     ),
     tides:
-      dreamAvatarContent === undefined
+      dreamAvatarContent === undefined || journeySeed === undefined
         ? []
         : buildDreamAvatarTideViews(
             poolContext,

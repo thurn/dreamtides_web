@@ -10,6 +10,8 @@ import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { CardId } from "../../../types/card-identity";
+import type { BattlefieldSlotId } from "../../../types/identifiers";
 
 export type BattleFigmentSide = "player" | "enemy";
 export type BattleFigmentZone =
@@ -19,9 +21,9 @@ export type BattleFigmentDeckPosition = "top" | "bottom";
 export interface BattleFigmentCreatorOverlayProps {
   readonly name: string;
   readonly nameInputRef: Ref<HTMLInputElement>;
-  readonly typeId: string;
+  readonly typeId: CardId;
   readonly typeOptions: readonly {
-    readonly value: string;
+    readonly value: CardId;
     readonly label: LocalizedString;
   }[];
   readonly keywordText: LocalizedString;
@@ -33,18 +35,18 @@ export interface BattleFigmentCreatorOverlayProps {
   readonly side: BattleFigmentSide;
   readonly zone: BattleFigmentZone;
   readonly position: BattleFigmentDeckPosition;
-  readonly slot: string;
-  readonly slotOptions: readonly string[];
+  readonly slot: BattlefieldSlotId;
+  readonly slotOptions: readonly BattlefieldSlotId[];
   readonly canSubmit: boolean;
   readonly disabledReason: LocalizedString | null;
   readonly onNameChange: (value: string) => void;
   readonly onCountChange: (value: number) => void;
-  readonly onTypeChange: (value: string) => void;
+  readonly onTypeChange: (value: CardId) => void;
   readonly onSparkChange: (value: string) => void;
   readonly onSideChange: (value: BattleFigmentSide) => void;
   readonly onZoneChange: (value: BattleFigmentZone) => void;
   readonly onPositionChange: (value: BattleFigmentDeckPosition) => void;
-  readonly onSlotChange: (value: string) => void;
+  readonly onSlotChange: (value: BattlefieldSlotId) => void;
   readonly onCancel: () => void;
   readonly onSubmit: () => void;
 }
@@ -197,7 +199,7 @@ export function BattleFigmentCreatorOverlay({
                   : {}),
               }))}
             value={zone}
-            onChange={(value) => onZoneChange(value as BattleFigmentZone)}
+            onChange={onZoneChange}
           />
         </div>
         {zone === "deck" ? (

@@ -4,6 +4,7 @@ import type {
   TutorialCardConstantRole,
   TutorialCardConstants,
 } from "../src/types/tutorial";
+import type { CardId } from "../src/types/card-identity";
 
 type TutorialValidationErrorFactory = (message: string) => Error;
 
@@ -24,7 +25,7 @@ export function isTutorialHandoffSlotLegal(
 export function tutorialCardConstantId(
   tutorialCardConstants: TutorialCardConstants,
   role: TutorialCardConstantRole,
-): string;
+): CardId;
 
 export function assertTutorialBattleConfigurationContracts(
   battle: TutorialBattleConfiguration,

@@ -272,7 +272,7 @@ A new Cumulus component: closed, it shows a "Tides" label and the tides' overlap
 - Consumes: `TidePill`, `type Tide` from `./TidePill`; `token`, `GLYPHS` from primitives; `InfoCard` engine is not needed directly (pills own their reveal).
 - Produces:
   - `tideVisual(tide: Tide): { icon: Glyph; bg: string; fg: string; bd: string }` exported from `TidePill.tsx`.
-  - `interface TideClusterTideView { id: string; label: string; description: string; tide: Tide }`
+  - `interface TideClusterTideView { id: TideId; label: LocalizedString; description: LocalizedString; tide: Tide }`
   - `TideCluster({ tides, stageRef? }: { tides: TideClusterTideView[]; stageRef?: React.RefObject<HTMLElement | null> })` — renders the disclosure. Collapsed discs carry `data-tide-disc={id}`; expanded pill wrappers carry `data-tide-pill={id}`.
 
 - [ ] **Step 1: Export `tideVisual` from TidePill**
@@ -413,7 +413,7 @@ import { GLYPHS } from "../../primitives/glyph";
 /** One tide shown in the cluster, already resolved to display copy. */
 export interface TideClusterTideView {
   /** Stable id (a tide deck id) for the React key / QA hook. */
-  id: string;
+  id: TideId;
   /** Display name shown on the pill. */
   label: string;
   /** Description revealed through the pill's own InfoCard reveal. */
@@ -438,7 +438,7 @@ const DISC_PX = 24;
 type Phase = "closed" | "opening" | "open" | "closing";
 
 /** A single collapsed tide mark — a colored disc carrying the tide glyph. */
-function TideDisc({ tide, id }: { tide: Tide; id: string }): React.ReactElement {
+function TideDisc({ tide, id }: { tide: Tide; id: TideId }): React.ReactElement {
   const v = tideVisual(tide);
   return (
     <span
@@ -467,7 +467,7 @@ export function TideCluster({
 }: TideClusterProps): React.ReactElement {
   const [phase, setPhase] = React.useState<Phase>("closed");
   const [flyers, setFlyers] = React.useState<
-    { id: string; tide: Tide; disc: Box; pill: Box }[] | null
+    { id: TideId; tide: Tide; disc: Box; pill: Box }[] | null
   >(null);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
@@ -1073,13 +1073,13 @@ export type DreamAvatarTideView = TideClusterTideView;
 
 /** One signature card (kept for the shared view type; unused by the carousel). */
 export interface DreamAvatarSignatureCardView {
-  id: string;
+  id: TideId;
   name: string;
 }
 
 /** A single DreamAvatar offered on the select screen, as display data. */
 export interface DreamAvatarOfferView {
-  id: string;
+  id: TideId;
   name: string;
   title: string;
   imageNumber: string;

@@ -1,4 +1,8 @@
-import { asCardName } from "../types/card-identity";
+import {
+  parseCardName,
+  parseCardSubtype,
+  type CardSubtype,
+} from "../types/card-identity";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { logEvent } from "../logging";
 import "./card-editor.css";
@@ -55,6 +59,7 @@ import {
   type EditorTag,
 } from "./types";
 import type { CardId } from "../types/card-identity";
+import type { IdentityRecord } from "../types/identifiers";
 
 const DEFAULT_EDITOR_API_CLIENT: EditorApiClient = {
   loadEditorCards,
@@ -146,15 +151,12 @@ function displayType(card: EditorCardRecord): string {
   return card.preview.cardType ?? card.cardType;
 }
 
-function normalizeSubtype(subtype: unknown): string {
-  return typeof subtype === "string" ? subtype.trim() : "";
+function normalizeSubtype(subtype: unknown): CardSubtype {
+  return typeof subtype === "string" ? parseCardSubtype(subtype.trim()) : "";
 }
 
-function sourceSubtype(card: EditorCardRecord): string {
-  const sourceSubtype = card.source.subtype;
-  return typeof sourceSubtype === "string"
-    ? normalizeSubtype(sourceSubtype)
-    : normalizeSubtype(card.subtype);
+function sourceSubtype(card: EditorCardRecord): CardSubtype {
+  return normalizeSubtype(card.subtype);
 }
 
 function costFilterValue(card: EditorCardRecord): string {
@@ -178,7 +180,7 @@ function sortSparkValue(card: EditorCardRecord): number {
 function sortValue(
   card: EditorCardRecord,
   sort: EditorSortField,
-  fontSizes: Record<string, number>,
+  fontSizes: IdentityRecord<CardId, number>,
 ): string | number {
   switch (sort) {
     case "cardNumber":
@@ -229,7 +231,7 @@ function compareSortValues(
 function filteredAndSortedCards(
   cards: readonly EditorCardRecord[],
   displayState: EditorDisplayState,
-  fontSizes: Record<string, number>,
+  fontSizes: IdentityRecord<CardId, number>,
 ): EditorCardRecord[] {
   const searchText = displayState.searchText.trim().toLowerCase();
   const subtypeFilter = normalizeSubtype(displayState.subtype);
@@ -341,7 +343,9 @@ function reorderToFrozenOrder(
     .map(({ card }) => card);
 }
 
-function subtypeOptionsFromCards(cards: readonly EditorCardRecord[]): string[] {
+function subtypeOptionsFromCards(
+  cards: readonly EditorCardRecord[],
+): CardSubtype[] {
   return Array.from(
     new Set(
       cards
@@ -442,7 +446,7 @@ function cardPreviewWithDrafts(
   const next: CardData = { ...preview };
   const name = drafts.name;
   if (typeof name === "string" && name.trim().length > 0) {
-    next.name = asCardName(name);
+    next.name = parseCardName(name);
   }
   const cardType = drafts["card-type"];
   if (cardType === "Character" || cardType === "Event") {
@@ -450,7 +454,7 @@ function cardPreviewWithDrafts(
   }
   const subtype = drafts.subtype;
   if (typeof subtype === "string") {
-    next.subtype = subtype;
+    next.subtype = parseCardSubtype(subtype);
   }
   const renderedText = showAmplifiedText
     ? drafts["amplified-text"]
@@ -489,21 +493,21 @@ export default function CardEditorApp({
   const saveStateRef = useRef(saveState);
   const [tags, setTags] = useState<EditorTag[]>([]);
   const [tagSaveState, setTagSaveState] = useState<
-    Record<string, CardTagSaveState>
+    IdentityRecord<CardId, CardTagSaveState>
   >({});
   const [manageTagsOpen, setManageTagsOpen] = useState(false);
   const [registrySaving, setRegistrySaving] = useState(false);
   const [registryError, setRegistryError] = useState<string | null>(null);
   const [tides, setTides] = useState<EditorTag[]>([]);
   const [tideSaveState, setTideSaveState] = useState<
-    Record<string, CardTagSaveState>
+    IdentityRecord<CardId, CardTagSaveState>
   >({});
   const [manageTidesOpen, setManageTidesOpen] = useState(false);
   const [tideRegistrySaving, setTideRegistrySaving] = useState(false);
   const [tideRegistryError, setTideRegistryError] = useState<string | null>(
     null,
   );
-  const [artEditorCardId, setArtEditorCardId] = useState<string | null>(null);
+  const [artEditorCardId, setArtEditorCardId] = useState<CardId | null>(null);
   const [artSaveStatus, setArtSaveStatus] = useState<FocusedSaveStatus>("idle");
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
   const [imageNumberSaveStatus, setImageNumberSaveStatus] =
@@ -514,7 +518,7 @@ export default function CardEditorApp({
   // Fitted rules-text font sizes (px) keyed by card id, reported by each card as
   // it is measured. Only populated while sorting by font size, so font-size
   // measurements do not churn the sort in any other view.
-  const [fontSizes, setFontSizes] = useState<Record<string, number>>({});
+  const [fontSizes, setFontSizes] = useState<IdentityRecord<CardId, number>>({});
   const sortByFontSize = displayState.sort === "rulesTextFontSize";
   const groupByNameSubstring = displayState.sort === "nameSubstring";
 
@@ -960,8 +964,8 @@ export default function CardEditorApp({
     runSave: (values: string[]) => Promise<{ card: EditorCardRecord }>,
     setSaveState: (
       updater: (
-        current: Record<string, CardTagSaveState>,
-      ) => Record<string, CardTagSaveState>,
+        current: IdentityRecord<CardId, CardTagSaveState>,
+      ) => IdentityRecord<CardId, CardTagSaveState>,
     ) => void,
   ) {
     const previousValues = card[field];

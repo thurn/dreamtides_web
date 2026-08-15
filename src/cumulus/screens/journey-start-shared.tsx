@@ -5,9 +5,15 @@
 // PURE: no state ownership; the adapter owns the offer, the seed, and startJourney.
 
 import type { LocalizedString } from "@trox/runtime";
+import type { CardId } from "../../types/card-identity";
+import type {
+  TideId,
+  TutorialJourneyTideId,
+} from "../../types/identifiers";
 import { useEffect } from "react";
 import { RulesText } from "../components/card/RulesText";
 import { EssenceValue } from "../components/hud/EssenceValue";
+import { semanticEntityId } from "../../types/semantic-identity";
 import { IconButton } from "../components/controls/IconButton";
 import { TideDisc } from "../components/hud/TideDisc";
 import { TidesInfoLabel } from "../components/hud/TidesInfoLabel";
@@ -51,7 +57,7 @@ export function JourneyStartAbilityCopy({
  * disc's InfoCard reveal) from this view. */
 export interface DreamAvatarTideView {
   /** Stable id (a tide deck id) for the React key / QA hook. */
-  id: string;
+  id: TideId | TutorialJourneyTideId;
   /** Display name shown on the tide's reveal card. */
   label: LocalizedString;
   /** Description revealed through the disc's InfoCard reveal. */
@@ -166,13 +172,13 @@ export function TidesEssenceBlock({
 
 /** One signature card (kept for the shared view type; unused by the carousel). */
 export interface DreamAvatarSignatureCardView {
-  id: string;
+  id: CardId | null;
   name: LocalizedString;
 }
 
 /** A single DreamAvatar offered on the select screen, as display data. */
 export interface DreamAvatarOfferView {
-  id: string;
+  id: DreamAvatarId;
   name: LocalizedString;
   title: LocalizedString;
   imageNumber: string;
@@ -345,7 +351,7 @@ export function EssenceReveal({
         amount={dreamAvatar.startingEssence}
         tone="mark"
         entity={{
-          id: dreamAvatar.id,
+          id: semanticEntityId("essence-source", dreamAvatar.id),
           glossaryId: GLOSSARY_IDS.startingEssence,
         }}
       />

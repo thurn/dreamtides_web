@@ -6,6 +6,7 @@ import {
   hasAssignedImage,
 } from "../../../data/card-database";
 import { identiconsForced } from "../../../runtime/identicon-mode";
+import type { DomTestId } from "../../types/dom";
 import type { CardData } from "../../../types/cards";
 import type { TransfigurationType } from "../../../types/journey";
 import type { AuguryArchetypeData } from "../../../types/augury-data";
@@ -28,8 +29,11 @@ import {
 import offerFrameUrl from "../../assets/dreamsign_card_frame_2.png";
 import offerBlackFillUrl from "../../assets/offer_tile_black_fill.png";
 import "./offer-tile.css";
-import type { OfferId } from "../../../types/identifiers";
-import { asOfferId } from "../../../types/identifiers";
+import type {
+  DreamsignId,
+  OfferTileId,
+} from "../../../types/identifiers";
+import type { SiteType } from "../../../types/journey";
 
 /** Named OfferTile edge lengths, in pixels. */
 export const OFFER_TILE_STANDARD_SIZE = 300;
@@ -45,7 +49,7 @@ export const OFFER_TILE_DIMENSIONS: Readonly<Record<OfferTileSize, number>> = {
 /** UUID-backed dreamsign art shown symbolically inside an offer. */
 export interface OfferTileDreamsign {
   /** Canonical dreamsign UUID. */
-  id: string;
+  id: DreamsignId;
   /** Resolved display name retained with the surfaced object model. */
   name: LocalizedString;
   /** Dreamsign artwork as a named Cumulus art reference. */
@@ -55,7 +59,7 @@ export interface OfferTileDreamsign {
 /** A site symbol shown by the add-site offer. */
 export interface OfferTileSite {
   /** Stable site type or fixture id. */
-  id: string;
+  id: SiteType;
   /** Resolved display name retained with the surfaced object model. */
   name: LocalizedString;
   /** The site's named design-system glyph. */
@@ -97,7 +101,7 @@ interface OfferTileBase {
    * Stable identity for this visible offer. Production callers should combine
    * the encounter signature and offer id so simultaneous offers never collide.
    */
-  id: string;
+  id: OfferTileId;
 }
 
 export type OfferTileCategory =
@@ -162,11 +166,11 @@ export interface OfferTileProps {
   /** Archetype-authored copy for the surfaced reward. */
   presentation: AuguryArchetypeData["presentation"];
   /** Activates the offer, reporting the stable `model.id`. */
-  onPress: (offerId: OfferId) => void;
+  onPress: (offerId: OfferTileId) => void;
   /** Complete tile composition size. Defaults to the 300px standard tile. */
   size?: OfferTileSize;
   /** Optional test selector; defaults to `offer-tile`. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 /**
@@ -205,11 +209,11 @@ export function OfferTile({
     // One-off Augury exception: ordinary Cumulus InfoCards use the
     // coordinator's normal beside-source desktop placement.
     placementException: "augury-offer-above-source",
-    onActivate: () => onPress(asOfferId(model.id)),
+    onActivate: () => onPress(model.id),
   });
   const lastPointerType = useRef<string | null>(null);
   const pointerDown = binding.sourceProps.onPointerDown;
-  const motionDelay = offerTileMotionDelay(asOfferId(model.id));
+  const motionDelay = offerTileMotionDelay(model.id);
   const edge = OFFER_TILE_DIMENSIONS[size];
   const scale = edge / OFFER_TILE_STANDARD_SIZE;
 
@@ -229,7 +233,7 @@ export function OfferTile({
       }}
       onClick={(event) => {
         if (lastPointerType.current !== "touch" || event.detail === 0) {
-          onPress(asOfferId(model.id));
+          onPress(model.id);
         }
       }}
       style={{
@@ -301,7 +305,7 @@ export function OfferTile({
 }
 
 /** Stable negative phase so neighboring tiles drift independently on every render. */
-function offerTileMotionDelay(offerId: OfferId): string {
+function offerTileMotionDelay(offerId: OfferTileId): string {
   let hash = 0;
   for (const character of offerId) {
     hash = (hash * 31 + character.charCodeAt(0)) % 5800;

@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import CardEditorToolbar from "./CardEditorToolbar";
 import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
 import type { EditorDisplayState } from "./types";
+import { testCardSubtype } from "../types/test-identities";
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -57,7 +58,7 @@ function StatefulToolbar({
   return (
     <CardEditorToolbar
       displayState={displayState}
-      subtypeOptions={["Guide", "Scout"]}
+      subtypeOptions={["Guide", testCardSubtype("Scout")]}
       availableTags={[]}
       availableTides={[]}
       onOpenManageTags={vi.fn()}
@@ -91,7 +92,7 @@ describe("CardEditorToolbar", () => {
     const { container, root } = mount(
       <CardEditorToolbar
         displayState={DEFAULT_EDITOR_DISPLAY_STATE}
-        subtypeOptions={["Guide", "Scout"]}
+        subtypeOptions={["Guide", testCardSubtype("Scout")]}
       availableTags={[]}
       availableTides={[]}
       onOpenManageTags={vi.fn()}
@@ -277,7 +278,7 @@ describe("CardEditorToolbar", () => {
       ...DEFAULT_EDITOR_DISPLAY_STATE,
       type: "character",
       cost: "x",
-      subtype: "Scout",
+      subtype: testCardSubtype("Scout"),
       sort: "spark",
       dir: "desc",
       size: "large",
@@ -289,14 +290,14 @@ describe("CardEditorToolbar", () => {
   });
 
   it("keeps the active subtype visible when it is not in loaded options", () => {
-    const displayState = {
+    const displayState: EditorDisplayState = {
       ...DEFAULT_EDITOR_DISPLAY_STATE,
       subtype: "Visionary",
     };
     const { container, root } = mount(
       <CardEditorToolbar
         displayState={displayState}
-        subtypeOptions={["Guide", "Scout"]}
+        subtypeOptions={["Guide", testCardSubtype("Scout")]}
       availableTags={[]}
       availableTides={[]}
       onOpenManageTags={vi.fn()}
@@ -332,7 +333,12 @@ describe("CardEditorToolbar", () => {
     const { container, root } = mount(
       <CardEditorToolbar
         displayState={DEFAULT_EDITOR_DISPLAY_STATE}
-        subtypeOptions={["", "Guide", "  ", "Scout"]}
+        subtypeOptions={[
+          "",
+          "Guide",
+          testCardSubtype("  "),
+          testCardSubtype("Scout"),
+        ]}
         availableTags={[]}
         availableTides={[]}
         onOpenManageTags={vi.fn()}

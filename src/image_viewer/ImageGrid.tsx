@@ -1,20 +1,29 @@
 import type { CSSProperties } from "react";
 import { imageFileUrl } from "./image-viewer-api";
-import type { ColumnCount, ImageManifestEntry } from "./types";
+import {
+  parseImageCategory,
+  type ColumnCount,
+  type ImageCategory,
+  type ImageManifestEntry,
+  type ImageNumber,
+} from "./types";
 
 export interface ImageGridProps {
   images: readonly ImageManifestEntry[];
   columns: ColumnCount;
   /** Shutterstock image numbers favorited in tracked editor state. */
-  favoriteImageNumbers: ReadonlySet<string>;
+  favoriteImageNumbers: ReadonlySet<ImageNumber>;
   /** Every category an image can be moved into, in display order. */
-  categories: readonly string[];
+  categories: readonly ImageCategory[];
   /** Toggle the tracked favorite mark for an image. */
   onToggleFavorite: (image: ImageManifestEntry) => void;
   /** Toggle the curator's manual-used mark for an image. */
   onToggleUsed: (image: ImageManifestEntry) => void;
   /** Move an image into a different category subdirectory. */
-  onChangeCategory: (image: ImageManifestEntry, targetCategory: string) => void;
+  onChangeCategory: (
+    image: ImageManifestEntry,
+    targetCategory: ImageCategory,
+  ) => void;
 }
 
 /** Title-case a category subdirectory name for display in the selector. */
@@ -208,7 +217,10 @@ export default function ImageGrid({
                 aria-label={`Category for ${image.filename}`}
                 value={image.category}
                 onChange={(event) =>
-                  onChangeCategory(image, event.target.value)
+                  onChangeCategory(
+                    image,
+                    parseImageCategory(event.target.value),
+                  )
                 }
                 style={selectStyle}
               >

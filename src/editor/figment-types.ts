@@ -1,6 +1,13 @@
-import { asCardId, type CardId } from "../types/card-identity";
+import {
+  parseCardId,
+  type CardName,
+  type CardId,
+  type CardSubtype,
+} from "../types/card-identity";
 import type { ArtCrop, CardData } from "../types/cards";
 import { figmentCardDisplayName } from "../data/figment-card-display";
+import { semanticEntityId } from "../types/semantic-identity";
+import type { SourceRevision } from "../types/source-revision";
 
 /** Figment fields edited inline through the card frame. */
 export type EditableFigmentField =
@@ -19,8 +26,8 @@ export type FigmentSize = "small" | "medium" | "large";
 
 export interface EditorFigmentRecord {
   id: CardId;
-  name: string;
-  subtype: string;
+  name: CardName;
+  subtype: CardSubtype;
   spark: number;
   /** Implicit combat keyword carried by the type; not edited in the UI. */
   keyword: string;
@@ -41,7 +48,7 @@ export interface FigmentDisplayState {
 
 export interface LoadEditorFigmentsResponse {
   figments: EditorFigmentRecord[];
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
 }
 
 export interface SaveEditorFigmentFieldRequest {
@@ -73,7 +80,7 @@ export interface EditorSaveTiming {
 
 export interface SaveEditorFigmentFieldResponse {
   figment: EditorFigmentRecord;
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
   clientRevision?: number;
   timing: EditorSaveTiming;
 }
@@ -99,7 +106,7 @@ export interface FigmentEditorApiClient {
 export function figmentPreviewCard(record: EditorFigmentRecord): CardData {
   return {
     name: figmentCardDisplayName(record.name, record.subtype),
-    id: asCardId(`figment-${record.id}`),
+    id: parseCardId(semanticEntityId("figment", record.id)),
     cardNumber: record.sourceIndex,
     cardType: "Character",
     subtype: record.subtype,

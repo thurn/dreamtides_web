@@ -17,7 +17,8 @@ import type {
   EditorDreamAvatarRecord,
   EditorTideOption,
 } from "./dream-avatar-types";
-import { asTideId } from "../types/identifiers";
+import type { TideId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
 
 export interface DreamAvatarDetailViewProps {
   dreamAvatar: EditorDreamAvatarRecord;
@@ -39,7 +40,7 @@ export interface DreamAvatarDetailViewProps {
 }
 
 interface ResolvedTide {
-  id: string;
+  id: TideId;
   label: string;
   color: string;
   /** Tide identities the editor does not know about still render by id. */
@@ -97,8 +98,8 @@ function tideOptionLabel(tide: EditorTideOption): string {
 }
 
 function resolveTides(
-  ids: readonly string[],
-  tideById: Map<string, EditorTideOption>,
+  ids: readonly TideId[],
+  tideById: Map<TideId, EditorTideOption>,
 ): ResolvedTide[] {
   return ids.map((id) => {
     const tide = tideById.get(id);
@@ -121,7 +122,7 @@ function TideChip({
 }: {
   tide: ResolvedTide;
   selected: boolean;
-  onSelect: (id: string) => void;
+  onSelect: (id: TideId) => void;
 }) {
   return (
     <button
@@ -174,8 +175,8 @@ function TideGroup({
   title: string;
   tides: ResolvedTide[];
   emptyLabel: string;
-  selectedTideId: string | null;
-  onSelectTide: (id: string) => void;
+  selectedTideId: TideId | null;
+  onSelectTide: (id: TideId) => void;
 }) {
   return (
     <div>
@@ -413,10 +414,10 @@ export default function DreamAvatarDetailView({
   // a tide's `{ id, copies }` entries to renderable cards. Also used by the
   // signature-card panel below.
   const cardsByUuid = useMemo(() => {
-    const byId = new Map<string, CardData>();
+    const byId = new Map<CardId, CardData>();
     if (journeyContent !== null) {
       for (const card of journeyContent.cardDatabase.values()) {
-        byId.set(card.id.toLowerCase(), card);
+        byId.set(card.id, card);
       }
     }
     return byId;
@@ -445,7 +446,7 @@ export default function DreamAvatarDetailView({
     for (let i = 0; i < resolveCount; i++) {
       const uuid = ids[i];
       const card =
-        uuid !== undefined ? cardsByUuid.get(uuid.toLowerCase()) : undefined;
+        uuid !== undefined ? cardsByUuid.get(uuid) : undefined;
       if (card !== undefined) {
         cards.push(card);
       } else {
@@ -458,7 +459,7 @@ export default function DreamAvatarDetailView({
   }, [journeyContent, dreamAvatar.id, cardsByUuid]);
 
   // Which Tide (if any) the viewer has clicked to reveal its decklist.
-  const [selectedTideId, setSelectedTideId] = useState<string | null>(null);
+  const [selectedTideId, setSelectedTideId] = useState<TideId | null>(null);
 
   // Drop the open tide selection whenever the screen switches DreamAvatars so a
   // stale id (one not in the new DreamAvatar's pool) never lingers.
@@ -467,7 +468,7 @@ export default function DreamAvatarDetailView({
   }, [dreamAvatar.id]);
 
   const deckById = useMemo(() => {
-    const byId = new Map<string, Tides4DeckJson>();
+    const byId = new Map<TideId, Tides4DeckJson>();
     if (tideDecks !== null) {
       for (const deck of tideDecks.tides) {
         byId.set(deck.id, deck);
@@ -487,7 +488,7 @@ export default function DreamAvatarDetailView({
   const selectedTideMeta =
     selectedTideId === null
       ? null
-      : (tideById.get(asTideId(selectedTideId)) ?? null);
+      : (tideById.get(selectedTideId) ?? null);
   const selectedTideLabel =
     selectedTideMeta !== null
       ? tideOptionLabel(selectedTideMeta)
@@ -502,7 +503,7 @@ export default function DreamAvatarDetailView({
   const tideCardsLoading = journeyContent === null || tideDecks === null;
   const tideCardsError = tideDecksError ?? journeyContentError;
 
-  function handleSelectTide(id: string) {
+  function handleSelectTide(id: TideId) {
     setSelectedTideId((current) => (current === id ? null : id));
   }
 

@@ -213,7 +213,7 @@ type SiteLayoutComposition =
   | "content-led-expanded-revelation";
 
 interface SiteLayoutGuide {
-  id: string;
+  id: SiteLayoutGuideId;
   name: LocalizedString;
   line: LocalizedString;
   art: ArtRef;

@@ -7,7 +7,13 @@ import type { CardData } from "../types/cards";
 import type { RunPoolContext } from "./journey-content";
 import type { TutorialJourneyPool } from "./tutorial-journey-pool";
 import { extractGlossaryTerms } from "./glossary-terms";
-import { asCardId, type CardId } from "../types/card-identity";
+import { parseCardId, type CardId } from "../types/card-identity";
+import {
+  serializeCardNumber,
+  serializeDraftPickNumber,
+  type DraftPoolCopiesByCard,
+  type OpeningDraftOffers,
+} from "../types/draft";
 
 const RULES_TEXT_SYMBOL_RE = /[●⍏✦▸⍟☾⧗❖]/u;
 
@@ -28,15 +34,15 @@ export function buildTutorialJourneyPackage(
   }
 
   const starterCardNumbers = new Set(context.starterCardNumbers);
-  const draftPoolCopiesByCard: Record<string, number> = {};
+  const draftPoolCopiesByCard: DraftPoolCopiesByCard = {};
   const unresolvedCardIds: CardId[] = [];
   for (const tide of tutorialPool.tides) {
     for (const card of tide.cards) {
       const cardNumber = context.idIndex.get(
-        asCardId(card.id.toLocaleLowerCase()),
+        parseCardId(card.id.toLocaleLowerCase()),
       );
       if (cardNumber === undefined) {
-        unresolvedCardIds.push(asCardId(card.id));
+        unresolvedCardIds.push(card.id);
         continue;
       }
       if (starterCardNumbers.has(cardNumber)) {
@@ -53,7 +59,7 @@ export function buildTutorialJourneyPackage(
           `Tutorial journey pool exceeds the configured copy cap for ${card.id}.`,
         );
       }
-      const key = String(cardNumber);
+      const key = serializeCardNumber(cardNumber);
       if (draftPoolCopiesByCard[key] !== undefined) {
         throw new Error(
           `Tutorial journey pool UUIDs collide on card number ${key}.`,
@@ -81,12 +87,12 @@ export function buildTutorialJourneyPackage(
     );
   }
 
-  const openingDraftOffers: Record<string, number[]> = {};
+  const openingDraftOffers: OpeningDraftOffers = {};
   for (const [offerIndex, cardIds] of tutorialPool.openingOffers.entries()) {
     const cardNumbers: number[] = [];
     for (const cardId of cardIds) {
       const cardNumber = context.idIndex.get(
-        asCardId(cardId.toLocaleLowerCase()),
+        parseCardId(cardId.toLocaleLowerCase()),
       );
       if (cardNumber === undefined) {
         throw new Error(
@@ -117,7 +123,7 @@ export function buildTutorialJourneyPackage(
       }
       cardNumbers.push(cardNumber);
     }
-    openingDraftOffers[String(offerIndex + 1)] = cardNumbers;
+    openingDraftOffers[serializeDraftPickNumber(offerIndex + 1)] = cardNumbers;
   }
 
   const draftPoolSize = Object.values(draftPoolCopiesByCard).reduce(

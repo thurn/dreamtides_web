@@ -244,23 +244,28 @@ import {
   type RefCallback,
 } from "react";
 
-export type TutorialPlacementAnchorId = string;
+export type TutorialPlacementAnchorId = `tutorial-anchor:${string}`;
+export type TutorialObstacleId = `tutorial-obstacle:${string}`;
+type TutorialPlacementRegistrationId = ReturnType<typeof useId>;
+
+export const SITE_CONTENT_TUTORIAL_ANCHOR_ID =
+  "tutorial-anchor:site-content" satisfies TutorialPlacementAnchorId;
 export type TutorialObstacleRole = "card" | "chrome" | "dialogue" | "control";
 
 interface TutorialPlacementSnapshot {
   readonly anchors: ReadonlyMap<TutorialPlacementAnchorId, HTMLElement>;
   readonly obstacles: ReadonlyMap<
-    string,
+    TutorialObstacleId,
     { readonly element: HTMLElement; readonly role: TutorialObstacleRole }
   >;
   readonly registerAnchor: (
-    registrationId: string,
+    registrationId: TutorialPlacementRegistrationId,
     id: TutorialPlacementAnchorId,
     element: HTMLElement | null,
   ) => void;
   readonly registerObstacle: (
-    registrationId: string,
-    id: string,
+    registrationId: TutorialPlacementRegistrationId,
+    id: TutorialObstacleId,
     role: TutorialObstacleRole,
     element: HTMLElement | null,
   ) => void;
@@ -276,15 +281,15 @@ export function TutorialPlacementProvider({
 }) {
   const [anchorRegistrations, setAnchorRegistrations] = useState<
     ReadonlyMap<
-      string,
+      TutorialPlacementRegistrationId,
       { readonly id: TutorialPlacementAnchorId; readonly element: HTMLElement }
     >
   >(() => new Map());
   const [obstacleRegistrations, setObstacleRegistrations] = useState<
     ReadonlyMap<
-      string,
+      TutorialPlacementRegistrationId,
       {
-        readonly id: string;
+        readonly id: TutorialObstacleId;
         readonly element: HTMLElement;
         readonly role: TutorialObstacleRole;
       }
@@ -292,7 +297,7 @@ export function TutorialPlacementProvider({
   >(() => new Map());
   const registerAnchor = useCallback(
     (
-      registrationId: string,
+      registrationId: TutorialPlacementRegistrationId,
       id: TutorialPlacementAnchorId,
       element: HTMLElement | null,
     ): void => {
@@ -308,8 +313,8 @@ export function TutorialPlacementProvider({
   );
   const registerObstacle = useCallback(
     (
-      registrationId: string,
-      id: string,
+      registrationId: TutorialPlacementRegistrationId,
+      id: TutorialObstacleId,
       role: TutorialObstacleRole,
       element: HTMLElement | null,
     ): void => {
@@ -331,7 +336,7 @@ export function TutorialPlacementProvider({
   }, [anchorRegistrations]);
   const obstacles = useMemo(() => {
     const resolved = new Map<
-      string,
+      TutorialObstacleId,
       { readonly element: HTMLElement; readonly role: TutorialObstacleRole }
     >();
     for (const { id, element, role } of obstacleRegistrations.values())
@@ -368,7 +373,7 @@ export function useTutorialAnchor(
 }
 
 export function useTutorialObstacle(
-  id: string,
+  id: TutorialObstacleId,
   role: TutorialObstacleRole,
 ): RefCallback<HTMLElement> {
   const { registerObstacle } = useTutorialPlacementSnapshot();

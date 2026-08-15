@@ -5,7 +5,11 @@ import type {
   TransfigurationRewardScore,
 } from "../types/transfiguration-data";
 import type { TransfigurationType } from "../types/journey";
-import { asGlossaryEntryId } from "../types/identifiers";
+import {
+  testContentHash,
+  testFoldHash,
+  testGlossaryEntryId,
+} from "../types/test-identities";
 
 const FORM_IDS: readonly TransfigurationType[] = [
   "Empowered",
@@ -27,7 +31,7 @@ function fixtureForm(
 ): TransfigurationFormDefinition {
   return {
     id,
-    glossaryUuid: asGlossaryEntryId(
+    glossaryUuid: testGlossaryEntryId(
       `00000000-0000-4000-8000-00000000000${String(index + 1)}`,
     ),
     name: `Fixture ${id}`,
@@ -51,8 +55,8 @@ const FIXED_COSTS: Partial<Record<TransfigurationType, number>> = {
 
 const FIXTURE: TransfigurationData = {
   schemaVersion: 1,
-  contentHash: "a".repeat(64),
-  foldHash: "b".repeat(64),
+  contentHash: testContentHash("a"),
+  foldHash: testFoldHash("b"),
   site: {
     standardChoiceLimit: 3,
     enhancedChoiceLimit: null,

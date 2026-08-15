@@ -15,12 +15,20 @@ import { LayerName } from "../types/layer-name";
 import { SITE_TYPES } from "../types/site-type";
 import type { SitesData } from "../types/sites-data";
 import { GLOSSARY_IDS } from "../data/glossary";
-import { asDreamscapeId } from "../types/identifiers";
-import { asGuideId } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
-import { asAffiliationId } from "../types/identifiers";
-import { asAtlasFillProfileId } from "../types/identifiers";
-import { asArtAssetKey } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
+import { parseArtAssetKey } from "../types/identifiers";
+import {
+  testAffiliationId,
+  testAtlasFillProfileId,
+  testContentHash,
+  testDreamscapeId,
+  testFoldHash,
+  testGuideId,
+} from "../types/test-identities";
+
+export const EARLY_ATLAS_FILL_PROFILE_ID =
+  testAtlasFillProfileId("early");
+export const LATE_ATLAS_FILL_PROFILE_ID = testAtlasFillProfileId("late");
 
 /**
  * Shared synthetic Atlas fixtures plus explicit production-bundle loaders for
@@ -30,7 +38,7 @@ import { asArtAssetKey } from "../types/identifiers";
 /** Synthetic starter catalog for tests that need a structurally valid Atlas. */
 export const MINIMAL_DREAMSCAPES: DreamscapeContent[] = [
   {
-    id: asDreamscapeId("fixture-starter-dreamscape"),
+    id: testDreamscapeId("fixture-starter-dreamscape"),
     name: "Fixture Starter Dreamscape",
     guideId: null,
     signatureSite: "Draft",
@@ -58,15 +66,15 @@ export const SYNTHETIC_ATLAS_DREAMSCAPES: DreamscapeContent[] = [
       "Exploration",
     ] as const
   ).map((signatureSite, index) => ({
-    id: asDreamscapeId(`fixture-dreamscape-${String(index)}`),
+    id: testDreamscapeId(`fixture-dreamscape-${String(index)}`),
     name: `Fixture Dreamscape ${String(index)}`,
-    guideId: asGuideId(
+    guideId: testGuideId(
       signatureSite === "RandomSite"
         ? "fixture-random-guide"
         : `fixture-guide-${String(index)}`,
     ),
     signatureSite,
-    affiliationId: asAffiliationId(`fixture-affiliation-${String(index)}`),
+    affiliationId: testAffiliationId(`fixture-affiliation-${String(index)}`),
     isStarter: false,
     dreamAvatarIds: [],
   })),
@@ -138,8 +146,8 @@ const SYNTHETIC_SITE_TYPES = Object.fromEntries(
 /** Stable site presentation and mechanics for production-independent tests. */
 export const MINIMAL_SITES_DATA: SitesData = {
   schemaVersion: 1,
-  contentHash: "c".repeat(64),
-  foldHash: "d".repeat(64),
+  contentHash: testContentHash("c"),
+  foldHash: testFoldHash("d"),
   selection: {
     minDeckForPurge: 8,
     placeableTypes: ["Shop", "Purge", "Transfiguration", "Duplication"],
@@ -159,7 +167,7 @@ export const MINIMAL_SITES_DATA: SitesData = {
     ],
     homeChoiceCount: 3,
     insufficientDestinations: "fail",
-    guideId: asGuideId("fixture-random-guide"),
+    guideId: testGuideId("fixture-random-guide"),
   },
   guideAssignments: Object.fromEntries(
     SYNTHETIC_ATLAS_DREAMSCAPES.flatMap((dreamscape) =>
@@ -182,8 +190,8 @@ export const MINIMAL_SITES_DATA: SitesData = {
 export function makeSyntheticAtlasData(): AtlasData {
   return {
     schemaVersion: 1,
-    contentHash: "a".repeat(64),
-    foldHash: "b".repeat(64),
+    contentHash: testContentHash("a"),
+    foldHash: testFoldHash("b"),
     layers: [
       {
         name: LayerName.One,
@@ -198,7 +206,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "standard",
         nodeCount: { min: 2, max: 2 },
         siteCount: { min: 6, max: 6 },
-        fillProfile: asAtlasFillProfileId("early"),
+        fillProfile: EARLY_ATLAS_FILL_PROFILE_ID,
         mandatorySites: { Draft: 2, Purge: 1, Augury: 1 },
       },
       {
@@ -206,7 +214,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "standard",
         nodeCount: { min: 3, max: 3 },
         siteCount: { min: 4, max: 4 },
-        fillProfile: asAtlasFillProfileId("early"),
+        fillProfile: EARLY_ATLAS_FILL_PROFILE_ID,
         mandatorySites: { Draft: 1, Purge: 1 },
       },
       {
@@ -214,7 +222,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "standard",
         nodeCount: { min: 3, max: 4 },
         siteCount: { min: 3, max: 6 },
-        fillProfile: asAtlasFillProfileId("early"),
+        fillProfile: EARLY_ATLAS_FILL_PROFILE_ID,
         mandatorySites: { Draft: 1 },
       },
       {
@@ -222,7 +230,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "standard",
         nodeCount: { min: 3, max: 5 },
         siteCount: { min: 3, max: 6 },
-        fillProfile: asAtlasFillProfileId("late"),
+        fillProfile: LATE_ATLAS_FILL_PROFILE_ID,
         mandatorySites: {},
       },
       {
@@ -230,7 +238,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "standard",
         nodeCount: { min: 3, max: 5 },
         siteCount: { min: 3, max: 6 },
-        fillProfile: asAtlasFillProfileId("late"),
+        fillProfile: LATE_ATLAS_FILL_PROFILE_ID,
         mandatorySites: {},
       },
       {
@@ -238,7 +246,7 @@ export function makeSyntheticAtlasData(): AtlasData {
         role: "boss",
         nodeCount: { min: 1, max: 1 },
         siteCount: { min: 3, max: 6 },
-        fillProfile: asAtlasFillProfileId("late"),
+        fillProfile: LATE_ATLAS_FILL_PROFILE_ID,
         mandatorySites: {},
       },
     ],
@@ -265,13 +273,13 @@ export function makeSyntheticAtlasData(): AtlasData {
       mandatoryCapacityBehavior: "omit-fill",
     },
     fillProfiles: {
-      early: {
-        id: asAtlasFillProfileId("early"),
+      [EARLY_ATLAS_FILL_PROFILE_ID]: {
+        id: EARLY_ATLAS_FILL_PROFILE_ID,
         signatureSiteWeight: 3,
         siteWeights: { Essence: 3, Transfiguration: 1, Duplication: 1 },
       },
-      late: {
-        id: asAtlasFillProfileId("late"),
+      [LATE_ATLAS_FILL_PROFILE_ID]: {
+        id: LATE_ATLAS_FILL_PROFILE_ID,
         signatureSiteWeight: 3,
         siteWeights: { Essence: 3, Transfiguration: 5, Duplication: 5 },
       },
@@ -288,14 +296,14 @@ export function makeSyntheticAtlasData(): AtlasData {
       earlyRevealBias: 1,
     },
     boss: {
-      dreamscapeId: asDreamscapeId("fixture-boss-dreamscape"),
+      dreamscapeId: testDreamscapeId("fixture-boss-dreamscape"),
       place: "Fixture Boss Place",
       name: "Fixture Boss",
       fallbackTitle: "Fixture Boss Title",
       fallbackIntroduction: "A synthetic boss introduction.",
-      sceneArtId: asDreamscapeId("fixture-boss-scene"),
-      iconArtId: asDreamscapeId("fixture-boss-icon"),
-      figureArtId: asGuideId("fixture-boss-figure"),
+      sceneArtId: testDreamscapeId("fixture-boss-scene"),
+      iconArtId: testDreamscapeId("fixture-boss-icon"),
+      figureArtId: testGuideId("fixture-boss-figure"),
     },
     presentation: {
       unseenTitle: "Fixture unseen title",
@@ -306,7 +314,7 @@ export function makeSyntheticAtlasData(): AtlasData {
     },
     assets: {
       unrevealedFrameSource: "fixture-frame.png",
-      unrevealedFrameKey: asArtAssetKey("fixture-frame.png"),
+      unrevealedFrameKey: parseArtAssetKey("fixture-frame.png"),
       bossSceneSource: "fixture-boss-scene.png",
       bossIconSource: "fixture-boss-icon.png",
       bossFigureSource: "fixture-boss-figure.png",
@@ -355,15 +363,15 @@ export const MINIMAL_ATLAS_DATA: AtlasData = makeSyntheticAtlasData();
  * for tests that drive site/battle flows without a full generated atlas.
  */
 export function makeTestAtlasNode(
-  id: string,
+  idSeed: string,
   sites: SiteState[],
   overrides: Partial<DreamscapeNode> = {},
 ): DreamscapeNode {
   return {
-    id: asAtlasNodeId(id),
+    id: parseAtlasNodeId(idSeed),
     layer: LayerName.One,
     indexInLayer: 0,
-    dreamscapeId: asDreamscapeId("test_dreamscape"),
+    dreamscapeId: testDreamscapeId("test_dreamscape"),
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -379,7 +387,7 @@ export function makeTestAtlasNode(
  * Builds a minimal single-node atlas around `node` for tests that only need the
  * journey state to reference a current dreamscape and its sites.
  */
-export function makeTestAtlas(node: DreamscapeNode): DreamAtlas {
+export function makeTestAtlas(node: DreamscapeNode): DreamAtlas<true> {
   return {
     layers: [[node.id]],
     nodes: { [node.id]: node },

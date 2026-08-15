@@ -1,6 +1,10 @@
 import { useId, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import {
+  parseCardSubtype,
+  type CardSubtype,
+} from "../../types/card-identity";
+import {
   CARD_BROWSER_SORT_OPTIONS,
   DEFAULT_CARD_BROWSER_VALUES,
   type CardBrowserCostFilter,
@@ -14,7 +18,7 @@ import {
 export interface CardBrowserToolbarProps {
   values: CardBrowserToolbarValues;
   onPatch: (patch: Partial<CardBrowserToolbarValues>) => void;
-  subtypeOptions: string[];
+  subtypeOptions: CardSubtype[];
   visibleCount: number;
   totalCount: number;
   /** Sort fields offered in the Sort dropdown. Defaults to the common set. */
@@ -482,7 +486,12 @@ export default function CardBrowserToolbar({
             <select
               aria-label="Subtype filter"
               value={values.subtype}
-              onChange={(event) => onPatch({ subtype: event.currentTarget.value })}
+              onChange={(event) => {
+                const subtype = event.currentTarget.value;
+                onPatch({
+                  subtype: subtype === "" ? "" : parseCardSubtype(subtype),
+                });
+              }}
               style={inputStyle}
             >
               <option value="">Any subtype</option>

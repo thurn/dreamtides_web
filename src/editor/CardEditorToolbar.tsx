@@ -10,10 +10,11 @@ import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
 import TagFilterControl from "./TagFilterControl";
 import { tagColor } from "./tag-color";
 import type { EditorDisplayState, EditorTag } from "./types";
+import type { CardSubtype } from "../types/card-identity";
 
 interface CardEditorToolbarProps {
   displayState: EditorDisplayState;
-  subtypeOptions: string[];
+  subtypeOptions: CardSubtype[];
   availableTags: EditorTag[];
   availableTides: EditorTag[];
   visibleCount: number;

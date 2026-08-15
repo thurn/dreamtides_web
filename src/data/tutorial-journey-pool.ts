@@ -1,9 +1,17 @@
 import { parse } from "smol-toml";
 import tutorialJourneyPoolSource from "../../data/tutorial_journey_pool.toml?raw";
 import { DEFAULT_TIDES4_TUNING } from "../draft/pool/variant-tides4";
-import type { DreamAvatarId, DreamsignId, TideId } from "../types/identifiers";
-import { asDreamAvatarId, asDreamsignId, asTideId } from "../types/identifiers";
-import { asCardId, type CardId } from "../types/card-identity";
+import type {
+  DreamAvatarId,
+  DreamsignId,
+  TutorialJourneyTideId,
+} from "../types/identifiers";
+import {
+  parseDreamAvatarId,
+  parseDreamsignId,
+  parseTutorialJourneyTideId,
+} from "../types/identifiers";
+import { parseCardId, type CardId } from "../types/card-identity";
 
 export interface TutorialJourneyPoolCard {
   readonly id: CardId;
@@ -11,7 +19,7 @@ export interface TutorialJourneyPoolCard {
 }
 
 export interface TutorialJourneyTide {
-  readonly id: TideId;
+  readonly id: TutorialJourneyTideId;
   readonly name: string;
   readonly description: string;
   readonly type: "valor";
@@ -93,7 +101,7 @@ export function validateTutorialJourneyPool(
     if (!UUID_RE.test(id)) {
       invalid(`opening-dreamsigns[${String(index)}] must be a UUID`);
     }
-    return asDreamsignId(id);
+    return parseDreamsignId(id);
   });
   if (
     new Set(openingDreamsignIds.map((id) => id.toLocaleLowerCase())).size !==
@@ -110,7 +118,7 @@ export function validateTutorialJourneyPool(
   if (!Array.isArray(rawOpeningOffers) || rawOpeningOffers.length === 0) {
     invalid("opening-offers must contain at least one offer");
   }
-  const openingCardIds = new Set<string>();
+  const openingCardIds = new Set<CardId>();
   const openingOffers = rawOpeningOffers.map((value, offerIndex) => {
     const label = `opening-offers[${String(offerIndex)}]`;
     if (!Array.isArray(value) || value.length === 0 || value.length > 4) {
@@ -124,18 +132,18 @@ export function validateTutorialJourneyPool(
       if (!UUID_RE.test(cardId)) {
         invalid(`${label}[${String(cardIndex)}] must be a UUID`);
       }
-      const normalizedCardId = cardId.toLocaleLowerCase();
-      if (openingCardIds.has(normalizedCardId)) {
+      const parsedCardId = parseCardId(cardId);
+      if (openingCardIds.has(parsedCardId)) {
         invalid(`${label} duplicates opening card ${JSON.stringify(cardId)}`);
       }
-      openingCardIds.add(normalizedCardId);
-      return asCardId(cardId);
+      openingCardIds.add(parsedCardId);
+      return parsedCardId;
     });
   });
 
-  const seenTideIds = new Set<string>();
+  const seenTideIds = new Set<TutorialJourneyTideId>();
   const seenTideNames = new Set<string>();
-  const seenCardIds = new Set<string>();
+  const seenCardIds = new Set<CardId>();
   const tides = source.tides.map((value, tideIndex): TutorialJourneyTide => {
     const label = `tides[${String(tideIndex)}]`;
     const tide = record(value, label);
@@ -143,11 +151,11 @@ export function validateTutorialJourneyPool(
     if (!TIDE_ID_RE.test(rawId)) {
       invalid(`${label}.id must use lowercase kebab-case`);
     }
-    if (seenTideIds.has(rawId)) {
+    const id = parseTutorialJourneyTideId(rawId);
+    if (seenTideIds.has(id)) {
       invalid(`${label}.id duplicates ${JSON.stringify(rawId)}`);
     }
-    seenTideIds.add(rawId);
-    const id = asTideId(rawId);
+    seenTideIds.add(id);
 
     const name = nonBlankString(tide.name, `${label}.name`);
     const normalizedName = name.toLocaleLowerCase();
@@ -175,17 +183,17 @@ export function validateTutorialJourneyPool(
         if (!UUID_RE.test(cardId)) {
           invalid(`${cardLabel}.id must be a UUID`);
         }
-        const normalizedCardId = cardId.toLocaleLowerCase();
-        if (seenCardIds.has(normalizedCardId)) {
+        const parsedCardId = parseCardId(cardId);
+        if (seenCardIds.has(parsedCardId)) {
           invalid(`${cardLabel}.id duplicates ${JSON.stringify(cardId)}`);
         }
-        seenCardIds.add(normalizedCardId);
+        seenCardIds.add(parsedCardId);
 
         const copies = positiveInteger(card.copies, `${cardLabel}.copies`);
         if (copies > 2) {
           invalid(`${cardLabel}.copies exceeds the normal two-copy limit`);
         }
-        return { id: asCardId(cardId), copies };
+        return { id: parsedCardId, copies };
       },
     );
     return { id, name, description, type: "valor", cards };
@@ -212,7 +220,7 @@ export function validateTutorialJourneyPool(
   }
 
   return {
-    dreamAvatarId: asDreamAvatarId(dreamAvatarId),
+    dreamAvatarId: parseDreamAvatarId(dreamAvatarId),
     poolSize,
     openingOffers,
     openingDreamsignIds,

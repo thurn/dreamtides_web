@@ -19,6 +19,7 @@ import {
 import type { PresentationId } from "../types/identifiers";
 import type { BattleId } from "../types/identifiers";
 import type { ClientId } from "../types/identifiers";
+import { tutorialAiEventActor } from "../eventlog/types";
 
 /** Fixed readable dwell for each persisted tutorial reveal. */
 export const TUTORIAL_BATTLE_PRESENTATION_DWELL_MS = 3_000;
@@ -91,7 +92,7 @@ export function useTutorialBattleController({
     if (battle === null) return;
     logTutorialIntent(battle.board.battleId, clientId, intent);
     if (plan.status !== "driver") return;
-    const actor = `tutorial-ai:${clientId}`;
+    const actor = tutorialAiEventActor(clientId);
     switch (intent.kind) {
       case "complete-presentation": {
         if (battle.tutorialPresentation?.kind === "tutorial-guidance") return;

@@ -1,4 +1,5 @@
 import type { JourneyContent } from "../data/journey-content";
+import type { JourneySeed } from "../types/journey-seed";
 import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
@@ -15,6 +16,7 @@ import type {
   RewardSelectionContext,
   RewardSelectionPolicyId,
   RewardSelectionTrace,
+  SelectionRulesVersion,
 } from "../reward-selection/types";
 import type { DeckEntryId } from "../types/identifiers";
 import type { DreamsignId } from "../types/identifiers";
@@ -22,6 +24,7 @@ import type { ChoiceId } from "../types/identifiers";
 import type { OfferId } from "../types/identifiers";
 import type { SiteId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
+import type { SelectionContentRevision } from "../types/selection-content-revision";
 import type {
   AuguryArchetypeId,
   MerchantTargetKey,
@@ -68,7 +71,7 @@ export interface MerchantCatalogCard extends MerchantCardIdentity {
 
 export interface MerchantContext {
   sitesData: SitesData;
-  journeySeed: string;
+  journeySeed: JourneySeed;
   site: SiteState;
   /** Canonical Augury slot scope injected by encounter generation. */
   selectionKey?: SelectionKey;
@@ -163,16 +166,16 @@ export interface MerchantOffer {
   mechanicId?: RewardMechanicId;
   policyId?: RewardSelectionPolicyId;
   selectionKey?: SelectionKey;
-  selectionRulesVersion?: string;
-  selectionContentRevision?: string;
+  selectionRulesVersion?: SelectionRulesVersion;
+  selectionContentRevision?: SelectionContentRevision;
   selectionTrace?: RewardSelectionTrace;
 }
 
 export interface MerchantEncounter {
   encounterSignature: string;
   siteId: SiteId;
-  selectionRulesVersion?: string;
-  selectionContentRevision?: string;
+  selectionRulesVersion?: SelectionRulesVersion;
+  selectionContentRevision?: SelectionContentRevision;
   offers: readonly MerchantOffer[];
 }
 
@@ -180,9 +183,19 @@ export interface MerchantAcceptRequest {
   encounterSignature: string;
   offerId: OfferId;
   archetypeId: MerchantArchetypeId;
-  selectionRulesVersion?: string;
+  selectionRulesVersion?: SelectionRulesVersion;
   choice?: MerchantChoice;
 }
+
+export type MerchantOfferFailureReason =
+  | "encounter_unavailable"
+  | "stale_encounter"
+  | "offer_not_found"
+  | "archetype_mismatch"
+  | "missing_choice"
+  | "invalid_choice"
+  | "target_unavailable"
+  | "site_unavailable";
 
 export type MerchantOfferActionResult =
   | {
@@ -190,13 +203,13 @@ export type MerchantOfferActionResult =
     }
   | {
       ok: false;
-      reason: string;
+      reason: MerchantOfferFailureReason;
     };
 
 export interface MerchantDeclineRequest {
   encounterSignature: string;
   offerId: OfferId;
-  selectionRulesVersion?: string;
+  selectionRulesVersion?: SelectionRulesVersion;
   choice?: MerchantChoice;
 }
 

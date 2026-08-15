@@ -5,7 +5,7 @@ import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
 import {
   CardShopSiteScreen,
@@ -13,15 +13,14 @@ import {
 } from "./CardShopSiteScreen";
 import { CumulusRoot } from "../CumulusRoot";
 import { SHOP_PRESENTATION } from "../test-helpers/presentation-fixtures";
-import { asSiteId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asExplorationActionId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testExplorationActionId, testGuideId, testCardId } from "../../types/test-identities";
 
 function makeCard(index: number): CardData {
   return {
-    name: asCardName(`Shop Fixture ${String(index)}`),
-    id: asCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    name: parseCardName(`Shop Fixture ${String(index)}`),
+    id: testCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
     cardNumber: index,
     cardType: "Event",
     subtype: "",
@@ -38,16 +37,16 @@ function makeCard(index: number): CardData {
 function view(): CardShopSiteView {
   return {
     presentation: SHOP_PRESENTATION,
-    siteId: asSiteId("shop-site"),
+    siteId: parseSiteId("shop-site"),
     scene: null,
     guide: {
-      id: "tobias_tanglefur",
+      id: testGuideId("tobias_tanglefur"),
       name: assertLocalized("Tobias Tanglefur"),
       line: assertLocalized("I've set aside something just for you."),
-      art: artRef.dreamGuide(asGuideId("tobias_tanglefur")),
+      art: artRef.dreamGuide(testGuideId("tobias_tanglefur")),
     },
     offers: Array.from({ length: 5 }, (_, index) => ({
-      entryId: asDeckEntryId(`shop-offer-${String(index)}`),
+      entryId: parseDeckEntryId(`shop-offer-${String(index)}`),
       slotIndex: index,
       model: (() => {
         const displaySnapshot = makeCard(index + 1);
@@ -57,7 +56,7 @@ function view(): CardShopSiteView {
       state: index === 4 ? ("unaffordable" as const) : ("available" as const),
     })),
     restock: {
-      entryId: asDeckEntryId("shop-restock-shop-site"),
+      entryId: parseDeckEntryId("shop-restock-shop-site"),
       price: 50,
       state: "available",
     },
@@ -267,8 +266,8 @@ describe("CardShopSiteScreen", () => {
     const benefitView = view();
     benefitView.freePurchaseStatus = {
       freeNextShopSource: {
-        sourceSiteId: asSiteId("exploration-site"),
-        sourceActionId: asExplorationActionId("exploration-action"),
+        sourceSiteId: parseSiteId("exploration-site"),
+        sourceActionId: testExplorationActionId("exploration-action"),
       },
       freePurchasesRemaining: 2,
     };
@@ -296,8 +295,12 @@ describe("CardShopSiteScreen", () => {
     expect(region?.dataset.shopFreePurchasesRemaining).toBe("2");
     expect(status?.getAttribute("role")).toBe("status");
     expect(status?.getAttribute("aria-live")).toBe("polite");
-    expect(status?.dataset.shopFreeSourceSiteId).toBe("exploration-site");
-    expect(status?.dataset.shopFreeSourceActionId).toBe("exploration-action");
+    expect(status?.dataset.shopFreeSourceSiteId).toBe(
+      benefitView.freePurchaseStatus.freeNextShopSource?.sourceSiteId,
+    );
+    expect(status?.dataset.shopFreeSourceActionId).toBe(
+      benefitView.freePurchaseStatus.freeNextShopSource?.sourceActionId,
+    );
     expect(status?.textContent?.trim()).not.toBe("");
     expect(
       container.querySelectorAll('[data-gallery-caption="essence"]'),

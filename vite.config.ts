@@ -33,6 +33,10 @@ import { regenerateCardData } from "./scripts/setup-assets.mjs";
 import { resolveBuildHash } from "./scripts/build-hash.mjs";
 import { ensureGameData, listGameData } from "./scripts/game-data-pipeline.mjs";
 import { createRonEditorBridge } from "./scripts/ron-editor-bridge.mjs";
+import {
+  parseGameDataDatasetId,
+  type GameDataDatasetId,
+} from "./src/types/tool-identifiers.ts";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const buildGitSha = resolveBuildGitSha();
@@ -43,6 +47,7 @@ const imageViewerStatePath = path.join(
   "internal",
   "image-viewer-state.json",
 );
+
 export const generatedDataTomlWatchPattern =
   path.resolve(path.join(__dirname, "data")) + "/*.toml*";
 export const generatedCardDataWatchPaths = [
@@ -93,11 +98,17 @@ export function gameDataRonPlugin(options: RonGenerationOptions = {}): Plugin {
     async configureServer(server) {
       await ensure({ rootDir });
       const manifest = list({ rootDir });
-      const datasets = new Map<string, { id: string; source: string }>();
+      const datasets = new Map<
+        string,
+        { id: GameDataDatasetId; source: string }
+      >();
       const watchedDirectories = new Map<string, Set<string>>();
       for (const dataset of manifest.datasets) {
         const source = path.resolve(rootDir, dataset.source);
-        datasets.set(source, { id: dataset.id, source: dataset.source });
+        datasets.set(source, {
+          id: parseGameDataDatasetId(dataset.id),
+          source: dataset.source,
+        });
         const names =
           watchedDirectories.get(path.dirname(source)) ?? new Set<string>();
         names.add(path.basename(source));

@@ -1,3 +1,5 @@
+import { testJourneySeed } from "../../types/test-identities";
+import { testEventActor } from "../../types/test-identities";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
@@ -10,18 +12,28 @@ import {
   registerDeckContentProvider,
   type DeckContentProvider,
 } from "./deck";
-import type { DeckEntryId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asDreamsignId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
+import type { DeckEntryId, DreamsignId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { testCardId, testDreamsignId } from "../../types/test-identities";
+
+const KNOWN_CARD_ID = testCardId("known");
+const DREAMSIGN_ONE_ID = testDreamsignId("ds-1");
+const DREAMSIGN_TWO_ID = testDreamsignId("ds-2");
+const NEW_DREAMSIGN_ID = testDreamsignId("ds-new");
+const GHOST_DREAMSIGN_ID = testDreamsignId("ghost");
+const DREAMSIGN_POOL_IDS = [
+  testDreamsignId("pool-a"),
+  testDreamsignId("pool-b"),
+  testDreamsignId("pool-c"),
+] as const;
 
 // ---------------------------------------------------------------------------
 // Fixtures
 // ---------------------------------------------------------------------------
 
 const GENESIS: Genesis = {
-  seed: "deck-seed",
+  seed: testJourneySeed("deck-seed"),
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: { poolVariant: "tides4" },
@@ -38,14 +50,14 @@ function ctx(overrides: Partial<EventContext> = {}): EventContext {
 }
 
 function event(
-  type: string,
+  type: GameEvent["type"],
   payload: Record<string, unknown>,
   actor = "alice",
 ): GameEvent {
   return {
     type,
     payload,
-    actor,
+    actor: testEventActor(actor),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
     basedOnSeq: 0,
   };
@@ -53,7 +65,7 @@ function event(
 
 function reduce(
   state: FoldState,
-  type: string,
+  type: GameEvent["type"],
   payload: Record<string, unknown>,
   context: EventContext = ctx(),
 ): ReduceResult {
@@ -80,20 +92,20 @@ function stateWith(overrides: Partial<JourneyState>): FoldState {
 function stateWithDeck(): FoldState {
   return stateWith({
     deck: [
-      makeEntry({ entryId: asDeckEntryId("deck-1"), cardNumber: 10 }),
-      makeEntry({ entryId: asDeckEntryId("deck-2"), cardNumber: 20 }),
+      makeEntry({ entryId: parseDeckEntryId("deck-1"), cardNumber: 10 }),
+      makeEntry({ entryId: parseDeckEntryId("deck-2"), cardNumber: 20 }),
       makeEntry({
-        entryId: asDeckEntryId("deck-3"),
+        entryId: parseDeckEntryId("deck-3"),
         cardNumber: 10002,
         isBane: true,
       }),
       makeEntry({
-        entryId: asDeckEntryId("deck-4"),
+        entryId: parseDeckEntryId("deck-4"),
         cardNumber: 10002,
         isBane: true,
       }),
       makeEntry({
-        entryId: asDeckEntryId("deck-5"),
+        entryId: parseDeckEntryId("deck-5"),
         cardNumber: 10002,
         isBane: true,
       }),
@@ -101,8 +113,8 @@ function stateWithDeck(): FoldState {
   });
 }
 
-function dreamsign(id: string): Dreamsign {
-  return { id: asDreamsignId(id), name: "n", effectDescription: "e" };
+function dreamsign(id: DreamsignId): Dreamsign {
+  return { id, name: "n", effectDescription: "e" };
 }
 
 /** A deterministic PRNG bound to a seed so a purge draw is reproducible. */
@@ -137,7 +149,7 @@ describe("DUPLICATE_DECK_ENTRY", () => {
       },
     };
     const out = reduce(state, "DUPLICATE_DECK_ENTRY", {
-      entryId: asDeckEntryId("deck-2"),
+      entryId: parseDeckEntryId("deck-2"),
     });
     expect(out.outcome).toBe("applied");
     const deck = out.state.journey.deck;
@@ -154,10 +166,10 @@ describe("DUPLICATE_DECK_ENTRY", () => {
 
   it("is deterministic: same seed+seq folds the same new id", () => {
     const a = reduce(stateWithDeck(), "DUPLICATE_DECK_ENTRY", {
-      entryId: asDeckEntryId("deck-1"),
+      entryId: parseDeckEntryId("deck-1"),
     });
     const b = reduce(stateWithDeck(), "DUPLICATE_DECK_ENTRY", {
-      entryId: asDeckEntryId("deck-1"),
+      entryId: parseDeckEntryId("deck-1"),
     });
     const deckA = a.state.journey.deck;
     const deckB = b.state.journey.deck;
@@ -169,7 +181,7 @@ describe("DUPLICATE_DECK_ENTRY", () => {
   it("bounces a missing entry id and leaves state untouched by reference", () => {
     const state = stateWithDeck();
     const out = reduce(state, "DUPLICATE_DECK_ENTRY", {
-      entryId: asDeckEntryId("nope"),
+      entryId: parseDeckEntryId("nope"),
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
@@ -184,7 +196,7 @@ describe("stale-target bounce", () => {
   it("REMOVE_DECK_ENTRY bounces a missing target", () => {
     const state = stateWithDeck();
     const out = reduce(state, "REMOVE_DECK_ENTRY", {
-      entryId: asDeckEntryId("ghost"),
+      entryId: parseDeckEntryId("ghost"),
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
@@ -193,7 +205,7 @@ describe("stale-target bounce", () => {
   it("REMOVE_DECK_ENTRY removes a present target", () => {
     const state = stateWithDeck();
     const out = reduce(state, "REMOVE_DECK_ENTRY", {
-      entryId: asDeckEntryId("deck-2"),
+      entryId: parseDeckEntryId("deck-2"),
     });
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.deck.map((e) => e.entryId)).not.toContain(
@@ -205,7 +217,7 @@ describe("stale-target bounce", () => {
   it("TRANSFIGURE_CARD bounces a missing target", () => {
     const state = stateWithDeck();
     const out = reduce(state, "TRANSFIGURE_CARD", {
-      entryId: asDeckEntryId("ghost"),
+      entryId: parseDeckEntryId("ghost"),
       transfiguration: "Empowered",
     });
     expect(out.outcome).toBe("bounced");
@@ -215,7 +227,7 @@ describe("stale-target bounce", () => {
   it("TRANSFIGURE_CARD applies to a present target", () => {
     const state = stateWithDeck();
     const out = reduce(state, "TRANSFIGURE_CARD", {
-      entryId: asDeckEntryId("deck-1"),
+      entryId: parseDeckEntryId("deck-1"),
       transfiguration: "Empowered",
     });
     expect(out.outcome).toBe("applied");
@@ -225,7 +237,7 @@ describe("stale-target bounce", () => {
   it("SET_DECK_ENTRY_STAT_OVERRIDE bounces a missing target", () => {
     const state = stateWithDeck();
     const out = reduce(state, "SET_DECK_ENTRY_STAT_OVERRIDE", {
-      entryId: asDeckEntryId("ghost"),
+      entryId: parseDeckEntryId("ghost"),
       override: { spark: 3 },
     });
     expect(out.outcome).toBe("bounced");
@@ -235,7 +247,7 @@ describe("stale-target bounce", () => {
   it("SET_DECK_ENTRY_KEYWORDS bounces a missing target", () => {
     const state = stateWithDeck();
     const out = reduce(state, "SET_DECK_ENTRY_KEYWORDS", {
-      entryId: asDeckEntryId("ghost"),
+      entryId: parseDeckEntryId("ghost"),
       keywords: { fast: true },
     });
     expect(out.outcome).toBe("bounced");
@@ -245,7 +257,7 @@ describe("stale-target bounce", () => {
   it("SET_DECK_ENTRY_TYPE bounces a missing target", () => {
     const state = stateWithDeck();
     const out = reduce(state, "SET_DECK_ENTRY_TYPE", {
-      entryId: asDeckEntryId("ghost"),
+      entryId: parseDeckEntryId("ghost"),
       typeChange: null,
     });
     expect(out.outcome).toBe("bounced");
@@ -260,13 +272,13 @@ describe("stale-target bounce", () => {
 describe("SET_DECK_ENTRY_* apply", () => {
   it("SET_DECK_ENTRY_STAT_OVERRIDE sets then drops the override on null", () => {
     const set = reduce(stateWithDeck(), "SET_DECK_ENTRY_STAT_OVERRIDE", {
-      entryId: asDeckEntryId("deck-1"),
+      entryId: parseDeckEntryId("deck-1"),
       override: { spark: 4 },
     });
     expect(set.outcome).toBe("applied");
     expect(set.state.journey.deck[0].statOverride).toEqual({ spark: 4 });
     const drop = reduce(set.state, "SET_DECK_ENTRY_STAT_OVERRIDE", {
-      entryId: asDeckEntryId("deck-1"),
+      entryId: parseDeckEntryId("deck-1"),
       override: null,
     });
     expect(drop.outcome).toBe("applied");
@@ -275,7 +287,7 @@ describe("SET_DECK_ENTRY_* apply", () => {
 
   it("SET_DECK_ENTRY_KEYWORDS sets the keyword modification", () => {
     const out = reduce(stateWithDeck(), "SET_DECK_ENTRY_KEYWORDS", {
-      entryId: asDeckEntryId("deck-1"),
+      entryId: parseDeckEntryId("deck-1"),
       keywords: { fast: true, reclaim: 2, energyCostReduction: 1 },
     });
     expect(out.outcome).toBe("applied");
@@ -294,13 +306,13 @@ describe("SET_DECK_ENTRY_* apply", () => {
       label: "L",
     };
     const set = reduce(stateWithDeck(), "SET_DECK_ENTRY_TYPE", {
-      entryId: asDeckEntryId("deck-1"),
+      entryId: parseDeckEntryId("deck-1"),
       typeChange,
     });
     expect(set.outcome).toBe("applied");
     expect(set.state.journey.deck[0].typeChange).toEqual(typeChange);
     const drop = reduce(set.state, "SET_DECK_ENTRY_TYPE", {
-      entryId: asDeckEntryId("deck-1"),
+      entryId: parseDeckEntryId("deck-1"),
       typeChange: null,
     });
     expect(drop.outcome).toBe("applied");
@@ -313,19 +325,19 @@ describe("SET_DECK_ENTRY_* plain object guards", () => {
     const state = stateWithDeck();
     expect(
       reduce(state, "SET_DECK_ENTRY_STAT_OVERRIDE", {
-        entryId: asDeckEntryId("deck-1"),
+        entryId: parseDeckEntryId("deck-1"),
         override: [],
       }).outcome,
     ).toBe("bounced");
     expect(
       reduce(state, "SET_DECK_ENTRY_KEYWORDS", {
-        entryId: asDeckEntryId("deck-1"),
+        entryId: parseDeckEntryId("deck-1"),
         keywords: [],
       }).outcome,
     ).toBe("bounced");
     expect(
       reduce(state, "SET_DECK_ENTRY_TYPE", {
-        entryId: asDeckEntryId("deck-1"),
+        entryId: parseDeckEntryId("deck-1"),
         typeChange: [],
       }).outcome,
     ).toBe("bounced");
@@ -357,7 +369,7 @@ describe("Nightmare purges", () => {
 
   it("PURGE_ALL_NIGHTMARE_CARDS bounces when there are no Nightmares", () => {
     const state = stateWith({
-      deck: [makeEntry({ entryId: asDeckEntryId("deck-1") })],
+      deck: [makeEntry({ entryId: parseDeckEntryId("deck-1") })],
     });
     const out = reduce(state, "PURGE_ALL_NIGHTMARE_CARDS", {});
     expect(out.outcome).toBe("bounced");
@@ -390,7 +402,7 @@ describe("Nightmare purges", () => {
 
   it("PURGE_RANDOM_NIGHTMARE_CARDS bounces with no Nightmares or a non-positive count", () => {
     const noNightmares = stateWith({
-      deck: [makeEntry({ entryId: asDeckEntryId("deck-1") })],
+      deck: [makeEntry({ entryId: parseDeckEntryId("deck-1") })],
     });
     expect(
       reduce(noNightmares, "PURGE_RANDOM_NIGHTMARE_CARDS", { count: 3 })
@@ -411,7 +423,7 @@ describe("PURGE_DECK_CARDS", () => {
   it("requires an authoritative active Purge-site context", () => {
     const state = stateWithDeck();
     const out = reduce(state, "PURGE_DECK_CARDS", {
-      entryIds: [asDeckEntryId("deck-1"), asDeckEntryId("deck-3")],
+      entryIds: [parseDeckEntryId("deck-1"), parseDeckEntryId("deck-3")],
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
@@ -420,7 +432,7 @@ describe("PURGE_DECK_CARDS", () => {
   it("bounces when no listed entry is present", () => {
     const state = stateWithDeck();
     const out = reduce(state, "PURGE_DECK_CARDS", {
-      entryIds: [asDeckEntryId("ghost")],
+      entryIds: [parseDeckEntryId("ghost")],
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
@@ -434,13 +446,17 @@ describe("PURGE_DECK_CARDS", () => {
 describe("ADD_CARD", () => {
   const provider: DeckContentProvider = {
     resolveCardNumber: (cardId) =>
-      cardId === "known" ? 99 : cardId === NIGHTMARE_CARD_ID ? 10002 : null,
+      cardId === KNOWN_CARD_ID
+        ? 99
+        : cardId === NIGHTMARE_CARD_ID
+          ? 10002
+          : null,
     resolveDreamsign: () => null,
   };
 
   it("bounces when no content provider is registered", () => {
     const state = stateWithDeck();
-    const out = reduce(state, "ADD_CARD", { cardId: asCardId("known") });
+    const out = reduce(state, "ADD_CARD", { cardId: KNOWN_CARD_ID });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
   });
@@ -448,7 +464,7 @@ describe("ADD_CARD", () => {
   it("appends a resolved card with a fresh unique deterministic id", () => {
     registerDeckContentProvider(provider);
     const a = reduce(stateWithDeck(), "ADD_CARD", {
-      cardId: asCardId("known"),
+      cardId: KNOWN_CARD_ID,
     });
     expect(a.outcome).toBe("applied");
     const deckA = a.state.journey.deck;
@@ -459,7 +475,7 @@ describe("ADD_CARD", () => {
       added.entryId,
     );
     const b = reduce(stateWithDeck(), "ADD_CARD", {
-      cardId: asCardId("known"),
+      cardId: KNOWN_CARD_ID,
     });
     const deckB = b.state.journey.deck;
     expect(deckB[deckB.length - 1].entryId).toBe(added.entryId);
@@ -496,7 +512,7 @@ describe("ADD_CARD", () => {
   it("maps a historical Bane flag to Nightmare", () => {
     registerDeckContentProvider(provider);
     const out = reduce(stateWithDeck(), "ADD_CARD", {
-      cardId: asCardId("known"),
+      cardId: KNOWN_CARD_ID,
       isBane: true,
     });
     expect(out.outcome).toBe("applied");
@@ -511,7 +527,7 @@ describe("ADD_CARD", () => {
   it("bounces an unknown card id", () => {
     registerDeckContentProvider(provider);
     const state = stateWithDeck();
-    const out = reduce(state, "ADD_CARD", { cardId: asCardId("mystery") });
+    const out = reduce(state, "ADD_CARD", { cardId: testCardId("mystery") });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
   });
@@ -524,17 +540,18 @@ describe("ADD_CARD", () => {
 describe("dreamsigns", () => {
   const provider: DeckContentProvider = {
     resolveCardNumber: () => null,
-    resolveDreamsign: (id) => (id === "ds-new" ? dreamsign("ds-new") : null),
+    resolveDreamsign: (id) =>
+      id === NEW_DREAMSIGN_ID ? dreamsign(NEW_DREAMSIGN_ID) : null,
   };
 
   it("ADD_DREAMSIGN bounces at the maxDreamsigns limit", () => {
     registerDeckContentProvider(provider);
     const state = stateWith({
       maxDreamsigns: 2,
-      dreamsigns: [dreamsign("ds-1"), dreamsign("ds-2")],
+      dreamsigns: [dreamsign(DREAMSIGN_ONE_ID), dreamsign(DREAMSIGN_TWO_ID)],
     });
     const out = reduce(state, "ADD_DREAMSIGN", {
-      dreamsignId: asDreamsignId("ds-new"),
+      dreamsignId: NEW_DREAMSIGN_ID,
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
@@ -544,22 +561,22 @@ describe("dreamsigns", () => {
     registerDeckContentProvider(provider);
     const state = stateWith({
       maxDreamsigns: 3,
-      dreamsigns: [dreamsign("ds-1")],
+      dreamsigns: [dreamsign(DREAMSIGN_ONE_ID)],
     });
     const out = reduce(state, "ADD_DREAMSIGN", {
-      dreamsignId: asDreamsignId("ds-new"),
+      dreamsignId: NEW_DREAMSIGN_ID,
     });
     expect(out.outcome).toBe("applied");
     expect(out.state.journey.dreamsigns.map((d) => d.id)).toEqual([
-      "ds-1",
-      "ds-new",
+      DREAMSIGN_ONE_ID,
+      NEW_DREAMSIGN_ID,
     ]);
   });
 
   it("REMOVE_DREAMSIGN bounces a missing id", () => {
-    const state = stateWith({ dreamsigns: [dreamsign("ds-1")] });
+    const state = stateWith({ dreamsigns: [dreamsign(DREAMSIGN_ONE_ID)] });
     const out = reduce(state, "REMOVE_DREAMSIGN", {
-      dreamsignId: asDreamsignId("ghost"),
+      dreamsignId: GHOST_DREAMSIGN_ID,
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
@@ -567,21 +584,25 @@ describe("dreamsigns", () => {
 
   it("REMOVE_DREAMSIGN removes a present id", () => {
     const state = stateWith({
-      dreamsigns: [dreamsign("ds-1"), dreamsign("ds-2")],
+      dreamsigns: [dreamsign(DREAMSIGN_ONE_ID), dreamsign(DREAMSIGN_TWO_ID)],
     });
     const out = reduce(state, "REMOVE_DREAMSIGN", {
-      dreamsignId: asDreamsignId("ds-1"),
+      dreamsignId: DREAMSIGN_ONE_ID,
     });
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.dreamsigns.map((d) => d.id)).toEqual(["ds-2"]);
+    expect(out.state.journey.dreamsigns.map((d) => d.id)).toEqual([
+      DREAMSIGN_TWO_ID,
+    ]);
   });
 
   it("SET_DREAMSIGN_POOL replaces the remaining pool", () => {
     const out = reduce(stateWith({}), "SET_DREAMSIGN_POOL", {
-      ids: ["a", "b", "c"],
+      ids: DREAMSIGN_POOL_IDS,
     });
     expect(out.outcome).toBe("applied");
-    expect(out.state.journey.remainingDreamsignPool).toEqual(["a", "b", "c"]);
+    expect(out.state.journey.remainingDreamsignPool).toEqual(
+      DREAMSIGN_POOL_IDS,
+    );
   });
 });
 
@@ -593,8 +614,8 @@ describe("site-coupled acceptance (deferred to Task 14)", () => {
   it("ACCEPT_TRANSFIGURATION_CHOICE bounces (does not half-apply)", () => {
     const state = stateWithDeck();
     const out = reduce(state, "ACCEPT_TRANSFIGURATION_CHOICE", {
-      siteId: asSiteId("s1"),
-      entryId: asDeckEntryId("deck-1"),
+      siteId: parseSiteId("s1"),
+      entryId: parseDeckEntryId("deck-1"),
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
@@ -603,8 +624,8 @@ describe("site-coupled acceptance (deferred to Task 14)", () => {
   it("ACCEPT_DUPLICATION_CHOICE bounces (does not half-apply)", () => {
     const state = stateWithDeck();
     const out = reduce(state, "ACCEPT_DUPLICATION_CHOICE", {
-      siteId: asSiteId("s1"),
-      entryId: asDeckEntryId("deck-1"),
+      siteId: parseSiteId("s1"),
+      entryId: parseDeckEntryId("deck-1"),
     });
     expect(out.outcome).toBe("bounced");
     expect(out.state).toBe(state);
@@ -623,14 +644,14 @@ describe("mintEntryId", () => {
 
   it("two clients minting for the same (seq, index) derive the same id", () => {
     const deck = [
-      makeEntry({ entryId: asDeckEntryId("deck-1"), cardNumber: 10 }),
+      makeEntry({ entryId: parseDeckEntryId("deck-1"), cardNumber: 10 }),
     ];
     expect(mintEntryId(deck, 7, 0)).toBe(mintEntryId(deck, 7, 0));
   });
 
   it("bumps past a collision with an existing entry id", () => {
     const deck = [
-      makeEntry({ entryId: asDeckEntryId("deck-7-0"), cardNumber: 10 }),
+      makeEntry({ entryId: parseDeckEntryId("deck-7-0"), cardNumber: 10 }),
     ];
     expect(mintEntryId(deck, 7, 0)).toBe("deck-7-1");
   });

@@ -10,7 +10,7 @@ import { logEventOnce } from "../../logging";
 import type { GambleSiteRuntime, SiteState } from "../../types/journey";
 import type { GambleData } from "../../types/gamble-data";
 import { resolveSource } from "../../runtime/localization/runtime";
-import { asShuffleCommitment } from "../../types/identifiers";
+import { parseShuffleCommitment } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
 
@@ -104,7 +104,7 @@ export function logGamblePrepared(
     if (runtime.phase === "choose" && runtime.rounds.length > 0) {
       const previous = runtime.rounds[runtime.rounds.length - 1];
       logEventOnce(
-        `Gamble:${siteId}:four-suit-play-again:${previous?.shuffleCommitment ?? asShuffleCommitment("unknown")}`,
+        `Gamble:${siteId}:four-suit-play-again:${previous?.shuffleCommitment ?? parseShuffleCommitment("unknown")}`,
         "gamble_game_prepared",
         {
           siteId,
@@ -322,7 +322,7 @@ export function logGambleResolved(
       result.tierNumber,
     );
     logEventOnce(
-      `Gamble:${siteId}:starway-result:${runtime.shuffleCommitments[result.tierNumber - 1] ?? asShuffleCommitment("unknown")}`,
+      `Gamble:${siteId}:starway-result:${runtime.shuffleCommitments[result.tierNumber - 1] ?? parseShuffleCommitment("unknown")}`,
       "gamble_wager_resolved",
       {
         siteId,
@@ -350,7 +350,7 @@ export function logGambleResolved(
   const ladderGame = gambleGameByRulesKind(gambleData, "ladderClimb");
   const attempt = ladderGame.rules.attempts[result.attemptNumber - 1];
   logEventOnce(
-    `Gamble:${siteId}:ladder-result:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? asShuffleCommitment("unknown")}`,
+    `Gamble:${siteId}:ladder-result:${runtime.shuffleCommitments[result.attemptNumber - 1] ?? parseShuffleCommitment("unknown")}`,
     "gamble_wager_resolved",
     {
       siteId,
@@ -461,7 +461,7 @@ export function logGambleSettled(
     const result = runtime.results[runtime.results.length - 1];
     if (result === undefined || !result.resultSettled) return;
     logEventOnce(
-      `Gamble:${siteId}:starway-settled:${runtime.shuffleCommitments[result.tierNumber - 1] ?? asShuffleCommitment("unknown")}:${runtime.terminalReason ?? "continue"}`,
+      `Gamble:${siteId}:starway-settled:${runtime.shuffleCommitments[result.tierNumber - 1] ?? parseShuffleCommitment("unknown")}:${runtime.terminalReason ?? "continue"}`,
       "gamble_wager_settled",
       {
         siteId,
@@ -487,7 +487,7 @@ export function logGambleSettled(
   )
     return;
   logEventOnce(
-    `Gamble:${siteId}:ladder-settled:${runtime.shuffleCommitments[runtime.result.attemptNumber - 1] ?? asShuffleCommitment("unknown")}`,
+    `Gamble:${siteId}:ladder-settled:${runtime.shuffleCommitments[runtime.result.attemptNumber - 1] ?? parseShuffleCommitment("unknown")}`,
     "gamble_wager_settled",
     {
       siteId,

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BattlefieldCard } from "../../components/battle/BattlefieldCard";
 import type { GameCardSelection } from "../../components/card/CardView";
-import { demoCard, demoInstanceId } from "./promotion-fixtures";
+import { demoCard, demoIdentitySeed } from "./promotion-fixtures";
 import type { CumulusComponent } from "../registry";
 import {
   DemoControls,
@@ -10,8 +10,8 @@ import {
   DemoToggle,
 } from "./promotion-demo-controls";
 import type { BattleCardId } from "../../../types/identifiers";
-import { asPresentationId } from "../../../types/identifiers";
-import { asBattleCardId } from "../../../types/identifiers";
+import { parsePresentationId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
 function Demo() {
   const [last, setLast] = useState("No intent yet");
   const [interaction, setInteraction] = useState<
@@ -30,13 +30,13 @@ function Demo() {
       : interaction === "pressable"
         ? ({
             kind: "pressable" as const,
-            onPress: (id: string) => setLast(`press ${id}`),
+            onPress: (id: BattleCardId) => setLast(`press ${id}`),
           } as const)
         : ({
             kind: "draggable" as const,
-            onPress: (id: string) => setLast(`press ${id}`),
-            onDragStart: (id: string) => setLast(`drag-start ${id}`),
-            onDragEnd: (id: string) => setLast(`drag-end ${id}`),
+            onPress: (id: BattleCardId) => setLast(`press ${id}`),
+            onDragStart: (id: BattleCardId) => setLast(`drag-start ${id}`),
+            onDragEnd: (id: BattleCardId) => setLast(`drag-end ${id}`),
             onDrop: (drop: { readonly battleCardId: BattleCardId }) =>
               setLast(`drop ${drop.battleCardId}`),
           } as const);
@@ -73,7 +73,7 @@ function Demo() {
       <div style={{ width: 190 }}>
         <BattlefieldCard
           model={{
-            battleCardId: asBattleCardId(demoInstanceId(1)),
+            battleCardId: parseBattleCardId(demoIdentitySeed(1)),
             card: demoCard(1, "Wayfinder"),
             exhausted,
             storedMemory: 2,
@@ -91,7 +91,7 @@ function Demo() {
               ? {
                   scoreAnnouncement: {
                     points: 3,
-                    presentationId: asPresentationId("demo-score-3"),
+                    presentationId: parsePresentationId("demo-score-3"),
                   },
                 }
               : {}),

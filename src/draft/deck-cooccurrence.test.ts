@@ -1,16 +1,17 @@
 import { describe, expect, it } from "vitest";
 
 import { buildCooccurrence, synergyAscending } from "./deck-cooccurrence.js";
+import { testCardId } from "../types/test-identities";
+import type { CardId } from "../types/card-identity";
 
-// Opaque UUIDs — we never parse or split these; they're just unique strings.
-const A = "00000000-0000-0000-0000-000000000001";
-const B = "00000000-0000-0000-0000-000000000002";
-const C = "00000000-0000-0000-0000-000000000003";
+const A = testCardId("cooccurrence-a");
+const B = testCardId("cooccurrence-b");
+const C = testCardId("cooccurrence-c");
 
 describe("buildCooccurrence", () => {
   it("co-occurrence of always-together cards exceeds co-occurrence with isolated card", () => {
     // A and B always appear together; C appears alone.
-    const decks: ReadonlyArray<ReadonlySet<string>> = [
+    const decks: ReadonlyArray<ReadonlySet<CardId>> = [
       new Set([A, B]),
       new Set([A, B]),
       new Set([A, B]),
@@ -29,7 +30,7 @@ describe("buildCooccurrence", () => {
 
   it("returns the conditional probability normalization (cooc(a,b) = decks_with_both / decks_with_a)", () => {
     // A appears in 4 decks; B appears in 2 of those.
-    const decks: ReadonlyArray<ReadonlySet<string>> = [
+    const decks: ReadonlyArray<ReadonlySet<CardId>> = [
       new Set([A, B]),
       new Set([A, B]),
       new Set([A]),
@@ -46,7 +47,7 @@ describe("buildCooccurrence", () => {
   });
 
   it("handles single-card decks (no pairs)", () => {
-    const decks: ReadonlyArray<ReadonlySet<string>> = [new Set([A]), new Set([B])];
+    const decks: ReadonlyArray<ReadonlySet<CardId>> = [new Set([A]), new Set([B])];
     const cooc = buildCooccurrence(decks);
     // No card ever appears with another → all values should be 0 or absent.
     expect((cooc.get(A)?.get(B) ?? 0)).toBe(0);
@@ -57,7 +58,7 @@ describe("buildCooccurrence", () => {
 describe("synergyAscending", () => {
   it("places the isolated card C first (lowest mean co-occurrence)", () => {
     // A and B always co-occur; C is isolated.
-    const decks: ReadonlyArray<ReadonlySet<string>> = [
+    const decks: ReadonlyArray<ReadonlySet<CardId>> = [
       new Set([A, B]),
       new Set([A, B]),
       new Set([A, B]),
@@ -74,7 +75,7 @@ describe("synergyAscending", () => {
   });
 
   it("returns all distinct deck cards", () => {
-    const decks: ReadonlyArray<ReadonlySet<string>> = [
+    const decks: ReadonlyArray<ReadonlySet<CardId>> = [
       new Set([A, B]),
       new Set([A, C]),
     ];
@@ -88,16 +89,16 @@ describe("synergyAscending", () => {
   it("tie-break is deterministic: higher UUID string sorts first among tied cards", () => {
     // All cards unknown to cooc → mean co-occurrence = 0 for all; ties across the
     // board.  The tie-break should order by descending UUID string (higher first).
-    const X = "ffffffff-0000-0000-0000-000000000003";
-    const Y = "ffffffff-0000-0000-0000-000000000002";
-    const Z = "ffffffff-0000-0000-0000-000000000001";
+    const X = testCardId("cooccurrence-x");
+    const Y = testCardId("cooccurrence-y");
+    const Z = testCardId("cooccurrence-z");
 
     const cooc = buildCooccurrence([]);
     const deck = [Z, Y, X];
     const ordered = synergyAscending(deck, cooc);
 
-    // All have score 0; tie-break descending by string → X > Y > Z.
-    expect(ordered).toEqual([X, Y, Z]);
+    // All have score 0; tie-break descending by UUID.
+    expect(ordered).toEqual([X, Y, Z].sort((left, right) => right.localeCompare(left)));
   });
 
   it("handles an empty deck", () => {
@@ -106,13 +107,13 @@ describe("synergyAscending", () => {
   });
 
   it("handles a singleton deck (no rest → mean 0)", () => {
-    const decks: ReadonlyArray<ReadonlySet<string>> = [new Set([A, B])];
+    const decks: ReadonlyArray<ReadonlySet<CardId>> = [new Set([A, B])];
     const cooc = buildCooccurrence(decks);
     expect(synergyAscending([A], cooc)).toEqual([A]);
   });
 
   it("is stable/deterministic across multiple calls", () => {
-    const decks: ReadonlyArray<ReadonlySet<string>> = [
+    const decks: ReadonlyArray<ReadonlySet<CardId>> = [
       new Set([A, B]),
       new Set([A, C]),
     ];

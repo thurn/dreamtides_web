@@ -1,12 +1,13 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
+import { testDreamwellCardName } from "../../types/test-identities";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { DreamwellCardDefinition } from "../types";
 import { BattleDreamwellHistoryDrawer } from "./BattleDreamwellHistoryDrawer";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
-import { asDreamwellCardId } from "../../types/identifiers";
+import { testDreamwellCardId } from "../../types/test-identities";
 
 beforeEach(() => {
   (
@@ -17,8 +18,8 @@ beforeEach(() => {
 });
 
 const CARD: DreamwellCardDefinition = {
-  id: asDreamwellCardId("983e55a8-8f70-44c2-9e66-c47e3f020e34"),
-  name: "Recurring Beacon",
+  id: testDreamwellCardId("983e55a8-8f70-44c2-9e66-c47e3f020e34"),
+  name: testDreamwellCardName("Recurring Beacon"),
   renderedText: "Draw a card.",
   energyAdded: 1,
   order: 0,

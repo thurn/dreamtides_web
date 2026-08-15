@@ -10,17 +10,15 @@ import {
   makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../../journey_v2/testing/fixtures";
-import { asCardId } from "../../types/card-identity";
 import type { JourneyState, SiteState } from "../../types/journey";
 import { buildExplorationRuntime } from "./exploration-provider";
 import { createCardTutorialGuidanceContentProvider } from "./card-tutorial-guidance-provider";
-import { asSiteId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asExplorationActionId } from "../../types/identifiers";
-import { asAuguryArchetypeId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testExplorationActionId, testCardId } from "../../types/test-identities";
 
 function uuid(index: number) {
-  return asCardId(
+  return testCardId(
     `a0000000-0000-4000-8000-${index.toString(16).padStart(12, "0")}`,
   );
 }
@@ -38,13 +36,13 @@ describe("card tutorial guidance content provider", () => {
     );
     const content = makeMerchantTestContent({ cards });
     const site = makeMerchantTestSite({
-      id: asSiteId("augury-with-transfiguration"),
+      id: parseSiteId("augury-with-transfiguration"),
       type: "Augury",
     });
     const journey = makeMerchantTestJourneyState({
       deck: [
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId("deck-1"),
+          entryId: parseDeckEntryId("deck-1"),
           cardNumber: 1,
         }),
       ],
@@ -52,7 +50,7 @@ describe("card tutorial guidance content provider", () => {
         [site.id]: {
           kind: "augury",
           completed: false,
-          forcedArchetypeId: asAuguryArchetypeId("transfigured_draft"),
+          forcedArchetypeId: "transfigured_draft",
         },
       },
     });
@@ -77,13 +75,13 @@ describe("card tutorial guidance content provider", () => {
       spark: 2,
     });
     const transfigureAction: ExplorationActionContent = {
-      id: asExplorationActionId("transfigure-card"),
+      id: testExplorationActionId("transfigure-card"),
       label: "Change a card",
       effectText: "Transfigure a chosen card.",
       effectKind: "transfigure-selected",
     };
     const ordinaryAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-essence"),
+      id: testExplorationActionId("gain-essence"),
       label: "Gather essence",
       effectText: "Gain essence.",
       effectKind: "gain-essence-per-card",
@@ -105,7 +103,7 @@ describe("card tutorial guidance content provider", () => {
       exploration,
     };
     const site: SiteState = {
-      id: asSiteId("exploration-with-transfiguration"),
+      id: parseSiteId("exploration-with-transfiguration"),
       type: "Exploration",
       isEnhanced: false,
       isVisited: false,
@@ -113,7 +111,7 @@ describe("card tutorial guidance content provider", () => {
     const baseJourney = makeMerchantTestJourneyState({
       deck: [
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId("deck-1"),
+          entryId: parseDeckEntryId("deck-1"),
           cardNumber: 102,
         }),
       ],

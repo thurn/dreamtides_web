@@ -1,4 +1,8 @@
 import { NIGHTMARE_CARD_NUMBER } from "../data/nightmare";
+import {
+  deckEntryIdFromUnknown,
+  type DeckEntryId,
+} from "../types/identifiers";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -12,7 +16,7 @@ export function normalizePersistedNightmareJourney(value: unknown): unknown {
   if (!isRecord(value)) return value;
 
   let changed = false;
-  const temporaryNightmareEntryIds = new Set<string>();
+  const temporaryNightmareEntryIds = new Set<DeckEntryId>();
   if (Array.isArray(value.battleModifiers)) {
     for (const modifier of value.battleModifiers) {
       if (!isRecord(modifier) || modifier.kind !== "temporary_bane_grant") {
@@ -20,7 +24,8 @@ export function normalizePersistedNightmareJourney(value: unknown): unknown {
       }
       if (!Array.isArray(modifier.addedEntryIds)) continue;
       for (const entryId of modifier.addedEntryIds) {
-        if (typeof entryId === "string") temporaryNightmareEntryIds.add(entryId);
+        const parsedEntryId = deckEntryIdFromUnknown(entryId);
+        if (parsedEntryId !== null) temporaryNightmareEntryIds.add(parsedEntryId);
       }
     }
   }
@@ -30,11 +35,11 @@ export function normalizePersistedNightmareJourney(value: unknown): unknown {
     const entries: unknown[] = deck;
     deck = entries.map((entry): unknown => {
       if (!isRecord(entry) || typeof entry.isBane !== "boolean") return entry;
+      const entryId = deckEntryIdFromUnknown(entry.entryId);
       const isBane =
         entry.isBane ||
         entry.cardNumber === NIGHTMARE_CARD_NUMBER ||
-        (typeof entry.entryId === "string" &&
-          temporaryNightmareEntryIds.has(entry.entryId));
+        (entryId !== null && temporaryNightmareEntryIds.has(entryId));
       const cardNumber = isBane ? NIGHTMARE_CARD_NUMBER : entry.cardNumber;
       if (entry.isBane === isBane && entry.cardNumber === cardNumber) return entry;
       changed = true;
@@ -68,7 +73,8 @@ export function normalizePersistedNightmareJourney(value: unknown): unknown {
       changed = true;
       const addedEntryIds = Array.isArray(modifier.addedEntryIds)
         ? modifier.addedEntryIds.filter(
-            (entryId): entryId is string => typeof entryId === "string",
+            (entryId): entryId is DeckEntryId =>
+              deckEntryIdFromUnknown(entryId) !== null,
           )
         : [];
       if (addedEntryIds.length === 0) return [];

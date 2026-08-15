@@ -4,7 +4,10 @@ import { act, StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
 import type { CardSourceDebugState } from "../types/journey";
-import type { JourneyMutations } from "./journey-context";
+import {
+  parseJourneyMutationSource,
+  type JourneyMutations,
+} from "./journey-context";
 import { useCardSourceDebugPublication } from "./use-card-source-debug-publication";
 
 const debugState: CardSourceDebugState = {
@@ -14,7 +17,12 @@ const debugState: CardSourceDebugState = {
 };
 
 function Publisher({ publish }: { publish: JourneyMutations["setCardSourceDebug"] }) {
-  useCardSourceDebugPublication(publish, debugState, "shown", "hidden");
+  useCardSourceDebugPublication(
+    publish,
+    debugState,
+    parseJourneyMutationSource("shown"),
+    parseJourneyMutationSource("hidden"),
+  );
   return null;
 }
 

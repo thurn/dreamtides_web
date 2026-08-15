@@ -1,5 +1,6 @@
+import { testJourneySeed } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
@@ -11,14 +12,13 @@ import {
 import { buildRewardSelectionContext } from "./context";
 import { selectReward } from "./selectReward";
 import type { RewardSelectionContext, RewardSelectionRequest } from "./types";
-import { asSiteId } from "../types/identifiers";
-import { asDeckEntryId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asDreamsignId } from "../types/identifiers";
-import { asSelectionKey } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseDeckEntryId } from "../types/identifiers";
+import { parseSelectionKey } from "../types/identifiers";
+import { testDreamAvatarId, testCardId, testDreamsignId } from "../types/test-identities";
 
 const ids = Array.from({ length: 10 }, (_, index) =>
-  asCardId(`a0000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`),
+  testCardId(`a0000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`),
 );
 
 function context(reverse = false): RewardSelectionContext {
@@ -26,7 +26,7 @@ function context(reverse = false): RewardSelectionContext {
     makeMerchantTestCard({
       id,
       cardNumber: index + 1,
-      name: asCardName(
+      name: parseCardName(
         index < 2 ? "Shared display name" : `Card ${String(index)}`,
       ),
       cardType: index % 2 === 0 ? "Character" : "Event",
@@ -36,18 +36,18 @@ function context(reverse = false): RewardSelectionContext {
   );
   const ordered = reverse ? [...cards].reverse() : cards;
   const journey = makeMerchantTestJourneyState({
-    seed: "selection-seed",
+    seed: testJourneySeed("selection-seed"),
     deck: [
       makeMerchantTestDeckEntry({
-        entryId: asDeckEntryId("entry-a"),
+        entryId: parseDeckEntryId("entry-a"),
         cardNumber: 1,
       }),
       makeMerchantTestDeckEntry({
-        entryId: asDeckEntryId("entry-b"),
+        entryId: parseDeckEntryId("entry-b"),
         cardNumber: 1,
       }),
       makeMerchantTestDeckEntry({
-        entryId: asDeckEntryId("entry-c"),
+        entryId: parseDeckEntryId("entry-c"),
         cardNumber: 2,
       }),
     ],
@@ -61,7 +61,7 @@ function context(reverse = false): RewardSelectionContext {
     journeyState: journey,
     journeyContent: makeMerchantTestContent({ cards: ordered }),
     site: makeMerchantTestSite({
-      id: asSiteId("selection-site"),
+      id: parseSiteId("selection-site"),
       type: "Exploration",
     }),
   });
@@ -72,17 +72,17 @@ function legendaryContext(reverse = false): RewardSelectionContext {
     makeMerchantTestCard({
       id,
       cardNumber: index + 1,
-      name: asCardName(
+      name: parseCardName(
         index === 1 ? "Legendary" : `Synthetic card ${String(index)}`,
       ),
       ...(index === 1 ? {} : { rarity: "Legendary" as const }),
     }),
   );
   const journey = makeMerchantTestJourneyState({
-    seed: "selection-seed",
+    seed: testJourneySeed("selection-seed"),
     deck: [
       makeMerchantTestDeckEntry({
-        entryId: asDeckEntryId("owned-entry"),
+        entryId: parseDeckEntryId("owned-entry"),
         cardNumber: 6,
       }),
     ],
@@ -100,7 +100,7 @@ function legendaryContext(reverse = false): RewardSelectionContext {
       cards: reverse ? [...cards].reverse() : cards,
     }),
     site: makeMerchantTestSite({
-      id: asSiteId("selection-site"),
+      id: parseSiteId("selection-site"),
       type: "Exploration",
     }),
   });
@@ -113,9 +113,9 @@ function request(
     mechanicId: "catalog-card-chooser",
     policyId: "uniform",
     scope: {
-      journeySeed: "selection-seed",
-      siteUuid: asSiteId("selection-site"),
-      selectionKey: asSelectionKey("action-a"),
+      journeySeed: testJourneySeed("selection-seed"),
+      siteUuid: parseSiteId("selection-site"),
+      selectionKey: parseSelectionKey("action-a"),
     },
     count: 4,
     ...overrides,
@@ -216,14 +216,14 @@ describe("shared reward selection", () => {
 
   it("resolves a fixed custom Dreamsign by UUID", () => {
     const base = context();
-    const customDreamsignId = "custom-selection-dreamsign";
+    const customDreamsignId = testDreamsignId("custom-selection-dreamsign");
     const content = {
       ...base.content,
       exploration: {
         customCards: [],
         customDreamsigns: [
           {
-            id: asDreamsignId(customDreamsignId),
+            id: customDreamsignId,
             name: "Custom Selection Dreamsign",
             effectDescription: "A synthetic custom effect.",
           },
@@ -232,10 +232,10 @@ describe("shared reward selection", () => {
       },
     };
     const customContext = buildRewardSelectionContext({
-      journeyState: makeMerchantTestJourneyState({ seed: "selection-seed" }),
+      journeyState: makeMerchantTestJourneyState({ seed: testJourneySeed("selection-seed") }),
       journeyContent: content,
       site: makeMerchantTestSite({
-        id: asSiteId("selection-site"),
+        id: parseSiteId("selection-site"),
         type: "Exploration",
       }),
     });
@@ -245,7 +245,7 @@ describe("shared reward selection", () => {
         mechanicId: "gain-dreamsign",
         policyId: "fixed",
         count: 1,
-        constraints: { fixedDreamsignId: asDreamsignId(customDreamsignId) },
+        constraints: { fixedDreamsignId: customDreamsignId },
       }),
     );
 
@@ -257,9 +257,9 @@ describe("shared reward selection", () => {
   it("includes authored affinity inputs in the content revision", () => {
     const base = context();
     const cards = [...base.content.cardDatabase.values()];
-    const journey = makeMerchantTestJourneyState({ seed: "selection-seed" });
+    const journey = makeMerchantTestJourneyState({ seed: testJourneySeed("selection-seed") });
     const site = makeMerchantTestSite({
-      id: asSiteId("selection-site"),
+      id: parseSiteId("selection-site"),
       type: "Exploration",
     });
     const withAvatar = buildRewardSelectionContext({
@@ -268,7 +268,7 @@ describe("shared reward selection", () => {
         ...makeMerchantTestContent({ cards }),
         dreamAvatars: [
           {
-            id: asDreamAvatarId("selection-avatar"),
+            id: testDreamAvatarId("selection-avatar"),
             name: "Selection Avatar",
             title: "Synthetic",
             renderedText: "A synthetic ability.",
@@ -366,7 +366,7 @@ describe("shared reward selection", () => {
         allowStarters: true,
         allowNightmare: true,
         distinctDeckEntries: true,
-        excludedDeckEntryIds: [asDeckEntryId("entry-c")],
+        excludedDeckEntryIds: [parseDeckEntryId("entry-c")],
       },
     });
     const forward = selectReward(context(), typeChangeRequest);
@@ -406,8 +406,8 @@ describe("shared reward selection", () => {
         allowNightmare: true,
         distinctDeckEntries: true,
         excludedDeckEntryIds: [
-          asDeckEntryId("entry-a"),
-          asDeckEntryId("entry-b"),
+          parseDeckEntryId("entry-a"),
+          parseDeckEntryId("entry-b"),
         ],
       },
     });
@@ -433,7 +433,7 @@ describe("shared reward selection", () => {
       context(),
       request({
         count: 1,
-        scope: { ...request().scope, selectionKey: asSelectionKey("action-b") },
+        scope: { ...request().scope, selectionKey: parseSelectionKey("action-b") },
       }),
     );
     expect(first.ok && first.trace.saltParts).not.toEqual(

@@ -10,6 +10,7 @@ import type {
   FigmentSize,
 } from "./figment-types";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
+import { parseCardName, parseCardSubtype } from "../types/card-identity";
 
 export interface EditableFigmentProps {
   figment: EditorFigmentRecord;
@@ -72,6 +73,7 @@ export default function EditableFigment({
   const rulesTextEditing = rulesTextSaveEntry?.status === "editing";
   const visibleName = String(nameSaveEntry?.draftValue ?? figment.name);
   const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? figment.subtype);
+  const previewSubtype = parseCardSubtype(visibleSubtype);
   const visibleRulesText = String(
     rulesTextSaveEntry?.draftValue ?? figment["rendered-text"],
   );
@@ -80,8 +82,8 @@ export default function EditableFigment({
 
   const visibleCard = {
     ...figmentPreviewCard(figment),
-    name: figmentCardDisplayName(visibleName, visibleSubtype),
-    subtype: visibleSubtype,
+    name: figmentCardDisplayName(parseCardName(visibleName), previewSubtype),
+    subtype: previewSubtype,
     renderedText: visibleRulesText,
     spark: visibleSpark,
   };

@@ -31,8 +31,18 @@ import { get, push, ref, runTransaction, update, type Database } from "firebase/
 import type { LogEntry, LogSink } from "../logging";
 import { clearLogContext, setLogContext, setLogSink } from "../logging";
 import type { FoldError } from "../eventlog/fold";
-import type { BounceReason, EventOutcome, GameEvent } from "../eventlog/types";
+import type {
+  BounceReason,
+  EventActor,
+  EventNonce,
+  EventOutcome,
+  EventType,
+  GameEvent,
+  StateHash,
+} from "../eventlog/types";
+import { aiEventActor, tutorialAiEventActor } from "../eventlog/types";
 import type { FoldState } from "../rules/fold-state";
+import type { ClientId, IntentKey, RoomId } from "../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Limits
@@ -58,7 +68,7 @@ const DEFAULT_FLUSH_DELAY_MS = 4000;
 const DEFAULT_MAX_BUFFERED_ENTRIES = 150;
 
 /** RTDB path holding a room's persisted JSONL sink. */
-export function roomLogsPath(roomId: string): string {
+export function roomLogsPath(roomId: RoomId): string {
   return `rooms/${roomId}/logs`;
 }
 
@@ -114,7 +124,7 @@ export function pruneLogEntries(
  */
 export async function appendRoomLogEntries(
   database: Database,
-  roomId: string,
+  roomId: RoomId,
   entries: ReadonlyArray<SinkRecord>,
 ): Promise<number> {
   if (entries.length === 0) {
@@ -140,7 +150,7 @@ export async function appendRoomLogEntries(
  */
 export async function pruneRoomLog(
   database: Database,
-  roomId: string,
+  roomId: RoomId,
   limit: number = ROOM_LOG_LIMIT,
   slack: number = ROOM_LOG_PRUNE_SLACK,
 ): Promise<void> {
@@ -164,7 +174,7 @@ export async function pruneRoomLog(
  */
 export async function readRoomLogLines(
   database: Database,
-  roomId: string,
+  roomId: RoomId,
 ): Promise<string[]> {
   const snapshot = await get(ref(database, roomLogsPath(roomId)));
   if (!snapshot.exists()) {
@@ -279,7 +289,7 @@ export function createBufferedSink(options: BufferedSinkOptions): BufferedSink {
  */
 export function createRoomLogSink(
   database: Database,
-  roomId: string,
+  roomId: RoomId,
   limit: number = ROOM_LOG_LIMIT,
   slack: number = ROOM_LOG_PRUNE_SLACK,
 ): BufferedSink {
@@ -304,12 +314,12 @@ export function createRoomLogSink(
 export interface CoopEventRecord {
   event: "coop_event";
   seq: number;
-  type: string;
-  actor: string;
+  type: EventType;
+  actor: EventActor;
   outcome: EventOutcome;
-  intentKey?: string;
-  stateHashAfter?: string;
-  gameId: string;
+  intentKey?: IntentKey;
+  stateHashAfter?: StateHash;
+  gameId: RoomId;
 }
 
 /** The exact `event_bounced` log shape (spec §Logging). */
@@ -318,53 +328,53 @@ export interface EventBouncedRecord {
   seq: number;
   interveningSeqs: number[];
   bounceReason: BounceReason;
-  observingClientId: string;
-  gameId: string;
+  observingClientId: ClientId;
+  gameId: RoomId;
 }
 
 /** The exact `fold_divergence` log shape (spec §Logging). */
 export interface FoldDivergenceRecord {
   event: "fold_divergence";
   seq: number;
-  expected: string;
-  actual: string;
-  clientId: string;
-  gameId: string;
+  expected: StateHash;
+  actual: StateHash;
+  clientId: ClientId;
+  gameId: RoomId;
 }
 
 /** A contained fold failure with enough event and state context to replay it. */
 export interface FoldErrorRecord {
   event: "fold_error";
   seq: number;
-  type: string;
-  actor: string;
-  nonce: string | null;
-  intentKey: string | null;
+  type: EventType;
+  actor: EventActor;
+  nonce: EventNonce | null;
+  intentKey: IntentKey | null;
   message: string;
   invariantCodes?: string[];
   stack: string | null;
-  stateHashBefore: string;
-  stateHashAfter: string;
-  observingClientId: string;
-  gameId: string;
+  stateHashBefore: StateHash;
+  stateHashAfter: StateHash;
+  observingClientId: ClientId;
+  gameId: RoomId;
 }
 
 /** The `event_append_failed` log shape: an intent whose `io.append` rejected. */
 export interface EventAppendFailedRecord {
   event: "event_append_failed";
-  type: string;
-  nonce: string | null;
+  type: EventType;
+  nonce: EventNonce | null;
   error: string;
-  gameId: string;
+  gameId: RoomId;
 }
 
 /** The `pending_dropped` log shape: one unconfirmed intent discarded by a full
  *  refold (one record is emitted per dropped intent). */
 export interface PendingDroppedRecord {
   event: "pending_dropped";
-  type: string;
-  nonce: string | null;
-  gameId: string;
+  type: EventType;
+  nonce: EventNonce | null;
+  gameId: RoomId;
 }
 
 export interface AuthoritativePrefixCorrectionRecord {
@@ -372,35 +382,35 @@ export interface AuthoritativePrefixCorrectionRecord {
   firstChangedSeq: number;
   previousHead: number;
   authoritativeHead: number;
-  observingClientId: string;
-  gameId: string;
+  observingClientId: ClientId;
+  gameId: RoomId;
 }
 
 export interface SemanticIntentKeyCollisionRecord {
   event: "semantic_intent_key_collision";
-  intentKey: string;
+  intentKey: IntentKey;
   winningSeq: number;
   winnerType: string;
   contenderType: string;
   winnerPayload: Record<string, unknown>;
   contenderPayload: Record<string, unknown>;
-  observingClientId: string;
-  gameId: string;
+  observingClientId: ClientId;
+  gameId: RoomId;
 }
 
 export interface PlaytestControlRecord {
   event: "playtest_control_changed";
   kind: "claim" | "transfer" | "release";
-  controllerClientId: string | null;
-  previousControllerClientId: string | null;
+  controllerClientId: ClientId | null;
+  previousControllerClientId: ClientId | null;
   seq: number;
-  gameId: string;
+  gameId: RoomId;
 }
 
 export interface CoopLogRecorderOptions {
-  gameId: string;
+  gameId: RoomId;
   /** This client's actor id. Owns its own actor plus `ai:<clientId>`. */
-  clientId: string;
+  clientId: ClientId;
   /** Where shaped records are emitted. In production, the room `logs/` buffer. */
   emit: (record: SinkRecord) => void;
 }
@@ -424,13 +434,17 @@ export interface CoopLogRecorder {
     bounceReason: BounceReason,
   ): void;
   /** Mirror a fold divergence observed at `seq` (any client, stamped with clientId). */
-  recordDivergence(info: { seq: number; expected: string; actual: string }): void;
+  recordDivergence(info: {
+    seq: number;
+    expected: StateHash;
+    actual: StateHash;
+  }): void;
   /** Mirror a contained fold failure with its event and fold-state hashes. */
   recordFoldError(
     error: FoldError,
     event: GameEvent,
-    stateHashBefore: string,
-    stateHashAfter: string,
+    stateHashBefore: StateHash,
+    stateHashAfter: StateHash,
   ): void;
   /** Mirror an intent whose `io.append` rejected (always this client's own). */
   recordAppendFailed(event: GameEvent, error: unknown): void;
@@ -444,7 +458,7 @@ export interface CoopLogRecorder {
   }): void;
   /** Mirror equal intent keys that describe different semantic events. */
   recordIntentKeyCollision(info: {
-    intentKey: string;
+    intentKey: IntentKey;
     winningSeq: number;
     winner: GameEvent;
     contender: GameEvent;
@@ -459,10 +473,10 @@ export interface CoopLogRecorder {
 
 export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogRecorder {
   const { gameId, clientId, emit } = options;
-  const ownedActors = new Set([
+  const ownedActors = new Set<EventActor>([
     clientId,
-    `ai:${clientId}`,
-    `tutorial-ai:${clientId}`,
+    aiEventActor(clientId),
+    tutorialAiEventActor(clientId),
   ]);
   // Highest seq this client has already mirrored. A refold after reconnect or
   // compaction re-reports every confirmed outcome; the high-water makes those
@@ -473,7 +487,7 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
   const divergenceReported = new Set<number>();
   const foldErrorsReported = new Set<number>();
 
-  function owns(actor: string): boolean {
+  function owns(actor: EventActor): boolean {
     return ownedActors.has(actor);
   }
 
@@ -513,7 +527,11 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
       };
       emit({ ...record });
     },
-    recordDivergence(info: { seq: number; expected: string; actual: string }): void {
+    recordDivergence(info: {
+      seq: number;
+      expected: StateHash;
+      actual: StateHash;
+    }): void {
       if (divergenceReported.has(info.seq)) {
         return;
       }
@@ -531,8 +549,8 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
     recordFoldError(
       error: FoldError,
       event: GameEvent,
-      stateHashBefore: string,
-      stateHashAfter: string,
+      stateHashBefore: StateHash,
+      stateHashAfter: StateHash,
     ): void {
       if (foldErrorsReported.has(error.seq)) {
         return;
@@ -743,8 +761,8 @@ export function createCoopEmit(
 // ---------------------------------------------------------------------------
 
 export interface JourneyLogSinkOptions {
-  gameId: string;
-  clientId: string;
+  gameId: RoomId;
+  clientId: ClientId;
 }
 
 /**

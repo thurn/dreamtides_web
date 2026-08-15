@@ -45,8 +45,8 @@ export interface TransfigurationFormDefinition {
 
 export interface TransfigurationData {
   readonly schemaVersion: 1;
-  readonly contentHash: string;
-  readonly foldHash: string;
+  readonly contentHash: ContentHash;
+  readonly foldHash: FoldHash;
   readonly site: {
     readonly standardChoiceLimit: number | null;
     readonly enhancedChoiceLimit: number | null;
@@ -59,3 +59,4 @@ export interface TransfigurationData {
   };
   readonly forms: readonly TransfigurationFormDefinition[];
 }
+import type { ContentHash, FoldHash } from "./content-hash";

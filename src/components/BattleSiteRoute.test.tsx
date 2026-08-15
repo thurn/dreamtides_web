@@ -27,12 +27,12 @@ import {
 import { createTestBattleInit } from "../testing/create-battle-init";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import { emptyDawnFired } from "../rules/battle/fold";
-import { asSiteId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
 import type { AtlasNodeId, BattleId, SiteId } from "../types/identifiers";
-import { asBattleEntryKey } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
-import { asJourneyId } from "../types/identifiers";
-import { asQaSceneId, asRoomId } from "../types/identifiers";
+import { parseBattleEntryKey } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
+import { parseJourneyId } from "../types/identifiers";
+import { parseQaSceneId, parseRoomId } from "../types/identifiers";
 
 vi.mock("../state/journey-context", async (importOriginal) => ({
   ...(await importOriginal<typeof import("../state/journey-context")>()),
@@ -103,7 +103,7 @@ function stubViewport(isDesktop: boolean): void {
 
 function makeSite(): SiteState {
   return {
-    id: asSiteId("site-7"),
+    id: parseSiteId("site-7"),
     type: "Battle",
     isEnhanced: false,
     isVisited: false,
@@ -112,7 +112,7 @@ function makeSite(): SiteState {
 
 function makeFoldStateWithBattle(): FoldState {
   const init = createTestBattleInit({
-    battleEntryKey: asBattleEntryKey("site-7::3::dreamscape-2"),
+    battleEntryKey: parseBattleEntryKey("site-7::3::dreamscape-2"),
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
@@ -136,7 +136,7 @@ function makeFoldStateWithBattle(): FoldState {
 
 function makeJourneyState(
   overrides: {
-    atlasStartingNodeId?: string;
+    atlasStartingNodeId?: AtlasNodeId;
     cardSourceDebug?: CardSourceDebugState | null;
     completionLevel?: number;
     currentDreamscape?: AtlasNodeId | null;
@@ -145,31 +145,31 @@ function makeJourneyState(
   } = {},
 ) {
   const {
-    atlasStartingNodeId = "",
+    atlasStartingNodeId = parseAtlasNodeId("dreamscape-start"),
     cardSourceDebug = null,
     completionLevel = 3,
-    currentDreamscape = asAtlasNodeId("dreamscape-2"),
-    screen = { type: "site", siteId: asSiteId("site-7") },
+    currentDreamscape = parseAtlasNodeId("dreamscape-2"),
+    screen = { type: "site", siteId: parseSiteId("site-7") },
     visitedSites = [] as SiteId[],
   } = overrides;
   const battleState = makeBattleTestState();
   return {
     ...createDefaultState(),
     ...battleState,
-    runId: asJourneyId("journey:test"),
+    runId: parseJourneyId("journey:test"),
     essence: 250,
     cardSourceDebug,
     completionLevel,
     atlas: {
       ...battleState.atlas,
-      startingNodeId: asAtlasNodeId(atlasStartingNodeId),
-      bossNodeId: asAtlasNodeId(atlasStartingNodeId),
-      currentNodeId: asAtlasNodeId(atlasStartingNodeId),
+      startingNodeId: atlasStartingNodeId,
+      bossNodeId: atlasStartingNodeId,
+      currentNodeId: atlasStartingNodeId,
     },
     currentDreamscape,
     visitedSites,
     screen,
-    activeSiteId: asSiteId("site-7"),
+    activeSiteId: parseSiteId("site-7"),
   };
 }
 
@@ -256,7 +256,7 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          gameId: asRoomId("9a9qfv"),
+          gameId: parseRoomId("9a9qfv"),
           databaseMode: "emulator",
         }}
       />,
@@ -340,7 +340,7 @@ describe("BattleSiteRoute", () => {
           aiMode: false,
           gameId: null,
           databaseMode: "emulator",
-          gotoScene: asQaSceneId("battle-playable"),
+          gotoScene: parseQaSceneId("battle-playable"),
         }}
       />,
     );
@@ -554,7 +554,7 @@ describe("BattleSiteRoute", () => {
         runtimeConfig={{
           seedOverride: null,
           aiMode: false,
-          gameId: asRoomId("9a9qfv"),
+          gameId: parseRoomId("9a9qfv"),
           databaseMode: "emulator",
         }}
       />,
@@ -570,7 +570,7 @@ describe("BattleSiteRoute", () => {
         completionLevel: 4,
         currentDreamscape: null,
         screen: { type: "atlas" },
-        visitedSites: [asSiteId("site-7")],
+        visitedSites: [parseSiteId("site-7")],
       }),
       battle: null,
     };
@@ -578,7 +578,7 @@ describe("BattleSiteRoute", () => {
       completionLevel: 4,
       currentDreamscape: null,
       screen: { type: "atlas" },
-      visitedSites: [asSiteId("site-7")],
+      visitedSites: [parseSiteId("site-7")],
     });
     act(() => {
       root.render(
@@ -589,7 +589,7 @@ describe("BattleSiteRoute", () => {
             runtimeConfig={{
               seedOverride: null,
               aiMode: false,
-              gameId: asRoomId("9a9qfv"),
+              gameId: parseRoomId("9a9qfv"),
               databaseMode: "emulator",
             }}
           />

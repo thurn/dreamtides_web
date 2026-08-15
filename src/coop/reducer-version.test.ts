@@ -5,6 +5,7 @@ import {
   CURRENT_REDUCER_VERSION,
   isReducerVersionCompatible,
 } from "./reducer-version";
+import { parseReducerVersion } from "../types/reducer-version";
 
 describe("reducer compatibility", () => {
   it("accepts the current semantic reducer protocol", () => {
@@ -19,7 +20,8 @@ describe("reducer compatibility", () => {
   });
 
   it("rejects an unreviewed reducer identity", () => {
-    expect(classifyReducerVersion("unknown-build")).toBe("incompatible");
-    expect(isReducerVersionCompatible("unknown-build")).toBe(false);
+    const unknownBuild = parseReducerVersion("unknown-build");
+    expect(classifyReducerVersion(unknownBuild)).toBe("incompatible");
+    expect(isReducerVersionCompatible(unknownBuild)).toBe(false);
   });
 });

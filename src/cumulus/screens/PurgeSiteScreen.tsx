@@ -14,11 +14,12 @@ import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import type { FirstVisitSiteTutorialView } from "./site-tutorial-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { ViewportTutorialDialogue } from "../components/overlay/ViewportTutorialDialogue";
+import { SITE_CONTENT_TUTORIAL_ANCHOR_ID } from "../components/overlay/tutorial-placement";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import type { SiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asPresentationId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parsePresentationId } from "../../types/identifiers";
 
 export type PurgeGuideView = SiteLayoutGuideView;
 
@@ -89,7 +90,7 @@ export function PurgeSiteScreen({
     [view.cards],
   );
   const selectedPaidCount = selectedEntryIds.filter(
-    (entryId) => !freeEntryIds.has(asDeckEntryId(entryId)),
+    (entryId) => !freeEntryIds.has(entryId),
   ).length;
   const totalCost = view.visitCosts[selectedPaidCount] ?? 0;
   const canSelectPaid = selectedPaidCount < view.maxPaidSelections;
@@ -149,7 +150,7 @@ export function PurgeSiteScreen({
 
   const commitPurge = useCallback(() => {
     if (selectedEntryIds.length === 0) return;
-    onPurge(selectedEntryIds.map(asDeckEntryId), totalCost);
+    onPurge(selectedEntryIds.map(parseDeckEntryId), totalCost);
   }, [onPurge, selectedEntryIds, totalCost]);
 
   return (
@@ -180,10 +181,13 @@ export function PurgeSiteScreen({
       </SiteLayout>
       {tutorialVisible && view.tutorial !== undefined && (
         <ViewportTutorialDialogue
-          presentationId={asPresentationId(view.tutorial.id)}
+          presentationId={parsePresentationId(view.tutorial.id)}
           dialogue={view.tutorial.model}
           context="site"
-          placement={{ kind: "anchored", anchorId: "site-content" }}
+          placement={{
+            kind: "anchored",
+            anchorId: SITE_CONTENT_TUTORIAL_ANCHOR_ID,
+          }}
           visible
         />
       )}

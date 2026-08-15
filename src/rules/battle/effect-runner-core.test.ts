@@ -6,7 +6,7 @@ import {
   planNextEffectStep,
 } from "./effect-runner-core";
 import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
-import { asBattleCardId, type BattleCardId } from "../../types/identifiers";
+import { parseBattleCardId, type BattleCardId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Minimal fixture helpers
@@ -95,8 +95,8 @@ describe("planNextEffectStep — edits head", () => {
 describe("planNextEffectStep — pick-cards prompt head", () => {
   it("resolves candidateIds eagerly from ctx, not just stores the builder", () => {
     const expectedCandidates = [
-      asBattleCardId("card-a"),
-      asBattleCardId("card-b"),
+      parseBattleCardId("card-a"),
+      parseBattleCardId("card-b"),
     ];
     let candidatesFnCalled = false;
 
@@ -151,7 +151,7 @@ describe("planNextEffectStep — pick-cards prompt head", () => {
       label: FIXTURE_PROMPT,
       count: 2,
       optional: true,
-      candidates: () => [asBattleCardId("x"), asBattleCardId("y")],
+      candidates: () => [parseBattleCardId("x"), parseBattleCardId("y")],
       resolve: () => [],
     };
     const result = planNextEffectStep([{ kind: "prompt", prompt }], makeCtx());
@@ -259,7 +259,7 @@ describe("planNextEffectStep — foresee prompt head", () => {
 
 describe("applyPromptResolution — pick-cards", () => {
   it("edits === prompt.resolve(chosenIds, ctx) and rest is unchanged", () => {
-    const chosenIds = [asBattleCardId("card-x"), asBattleCardId("card-y")];
+    const chosenIds = [parseBattleCardId("card-x"), parseBattleCardId("card-y")];
     const resolvedEdits = [SENTINEL_EDIT, SENTINEL_EDIT_2];
     let resolveCalled = false;
     let capturedIds: BattleCardId[] | null = null;
@@ -447,8 +447,8 @@ describe("applyPromptResolution — foresee", () => {
       foreseePrompt,
       {
         kind: "foresee",
-        orderedCardIds: [asBattleCardId("card-b")],
-        voidCardIds: [asBattleCardId("card-a")],
+        orderedCardIds: [parseBattleCardId("card-b")],
+        voidCardIds: [parseBattleCardId("card-a")],
       },
       [tailStep],
       ctx,
@@ -459,9 +459,9 @@ describe("applyPromptResolution — foresee", () => {
         kind: "FORESEE",
         side: "player",
         viewer: "player",
-        viewedCardIds: [asBattleCardId("card-a"), asBattleCardId("card-b")],
-        orderedCardIds: [asBattleCardId("card-b")],
-        voidCardIds: [asBattleCardId("card-a")],
+        viewedCardIds: [parseBattleCardId("card-a"), parseBattleCardId("card-b")],
+        orderedCardIds: [parseBattleCardId("card-b")],
+        voidCardIds: [parseBattleCardId("card-a")],
       },
     ]);
 
@@ -481,12 +481,12 @@ describe("applyPromptResolution — foresee", () => {
       {
         kind: "foresee",
         viewedCardIds: [
-          asBattleCardId("card-a"),
-          asBattleCardId("card-b"),
-          asBattleCardId("card-c"),
+          parseBattleCardId("card-a"),
+          parseBattleCardId("card-b"),
+          parseBattleCardId("card-c"),
         ],
-        orderedCardIds: [asBattleCardId("card-c"), asBattleCardId("card-a")],
-        voidCardIds: [asBattleCardId("card-b")],
+        orderedCardIds: [parseBattleCardId("card-c"), parseBattleCardId("card-a")],
+        voidCardIds: [parseBattleCardId("card-b")],
       },
       [],
       ctx,
@@ -498,12 +498,12 @@ describe("applyPromptResolution — foresee", () => {
         side: "player",
         viewer: "player",
         viewedCardIds: [
-          asBattleCardId("card-a"),
-          asBattleCardId("card-b"),
-          asBattleCardId("card-c"),
+          parseBattleCardId("card-a"),
+          parseBattleCardId("card-b"),
+          parseBattleCardId("card-c"),
         ],
-        orderedCardIds: [asBattleCardId("card-c"), asBattleCardId("card-a")],
-        voidCardIds: [asBattleCardId("card-b")],
+        orderedCardIds: [parseBattleCardId("card-c"), parseBattleCardId("card-a")],
+        voidCardIds: [parseBattleCardId("card-b")],
       },
     ]);
   });

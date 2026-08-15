@@ -18,12 +18,16 @@ import type {
   BattleSide,
 } from "../types";
 import type {
+  CardName,
+  CardSubtype,
+} from "../../types/card-identity";
+import type {
   BattleCardId,
   BattleHistoryCommandId,
   NoteId,
 } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
-import { asBattleHistoryCommandId } from "../../types/identifiers";
+import { parseBattleHistoryCommandId } from "../../types/identifiers";
 
 export type BattleCommandId = "DEBUG_EDIT" | "FORCE_RESULT" | "SKIP_TO_REWARDS";
 
@@ -241,9 +245,9 @@ export type BattleDebugEdit =
       chosenFigmentId?: CardId;
       /** Number of independent figments to create. Defaults to 1 for legacy commands. */
       count?: number;
-      chosenSubtype: string;
+      chosenSubtype: CardSubtype;
       chosenSpark: number;
-      name: string;
+      name: CardName;
       destination: BattleDebugZoneDestination;
       createdAtMs: number;
     }
@@ -261,7 +265,7 @@ export type BattleDebugEdit =
   | {
       kind: "REORDER_DECK";
       side: BattleSide;
-      order: readonly string[];
+      order: readonly BattleCardId[];
     }
   | {
       /**
@@ -417,7 +421,7 @@ export function createDebugEditHistoryMetadata(
   envelope: BattleCommandMetadataEnvelope = {},
 ): BattleHistoryEntryMetadata {
   return createMetadata({
-    commandId: asBattleHistoryCommandId(formatDebugEditCommandId(edit)),
+    commandId: formatDebugEditCommandId(edit),
     label: createDebugEditLabel(edit, state),
     kind: resolveDebugEditKind(edit),
     isComposite: isCompositeDebugEdit(edit),
@@ -432,7 +436,7 @@ export function createForceResultHistoryMetadata(
   envelope: BattleCommandMetadataEnvelope = {},
 ): BattleHistoryEntryMetadata {
   return createMetadata({
-    commandId: asBattleHistoryCommandId("FORCE_RESULT"),
+    commandId: parseBattleHistoryCommandId("FORCE_RESULT"),
     label: `Force ${formatResultLabel(result)}`,
     kind: "result",
     isComposite: true,
@@ -446,7 +450,7 @@ export function createSkipToRewardsHistoryMetadata(
   envelope: BattleCommandMetadataEnvelope = {},
 ): BattleHistoryEntryMetadata {
   return createMetadata({
-    commandId: asBattleHistoryCommandId("SKIP_TO_REWARDS"),
+    commandId: parseBattleHistoryCommandId("SKIP_TO_REWARDS"),
     label: "Skip To Rewards",
     kind: "result",
     isComposite: true,
@@ -482,7 +486,7 @@ function createMetadata({
   defaultSourceSurface?: BattleCommandSourceSurface;
 }): BattleHistoryEntryMetadata {
   return {
-    commandId: asBattleHistoryCommandId(commandId),
+    commandId: commandId,
     label,
     kind,
     isComposite,
@@ -892,21 +896,21 @@ function formatDebugEditCommandId(
 ): BattleHistoryCommandId {
   switch (edit.kind) {
     case "SET_CARD_VISIBILITY":
-      return asBattleHistoryCommandId(
+      return parseBattleHistoryCommandId(
         visibilityEditValue(edit)
           ? "REVEAL_OPPONENT_HAND_CARD"
           : "HIDE_OPPONENT_HAND_CARD",
       );
     case "REVEAL_HAND_CARD":
-      return asBattleHistoryCommandId("REVEAL_HAND_CARD");
+      return parseBattleHistoryCommandId("REVEAL_HAND_CARD");
     case "SET_SIDE_HAND_VISIBILITY":
-      return asBattleHistoryCommandId(
+      return parseBattleHistoryCommandId(
         visibilityEditValue(edit)
           ? `REVEAL_ALL_${edit.side.toUpperCase()}_HAND_CARDS`
           : `HIDE_ALL_${edit.side.toUpperCase()}_HAND_CARDS`,
       );
     default:
-      return asBattleHistoryCommandId(edit.kind);
+      return parseBattleHistoryCommandId(edit.kind);
   }
 }
 

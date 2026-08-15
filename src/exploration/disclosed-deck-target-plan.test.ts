@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
 import type { JourneyContent } from "../data/journey-content";
 import {
@@ -7,7 +8,7 @@ import {
   makeMerchantTestJourneyState,
   makeMerchantTestSite,
 } from "../journey_v2/testing/fixtures";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import type { CardData, CardType } from "../types/cards";
 import type { JourneyState } from "../types/journey";
 import {
@@ -15,13 +16,14 @@ import {
   prepareExplorationDisclosedDeckTargetPlan,
   type ExplorationDisclosedDeckTargetPlanInput,
 } from "./disclosed-deck-target-plan";
-import { asSiteId } from "../types/identifiers";
-import { asDeckEntryId } from "../types/identifiers";
-import { asExplorationActionId } from "../types/identifiers";
-import { asCardTypeChangePredicateId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseDeckEntryId } from "../types/identifiers";
+import { parseCardTypeChangePredicateId } from "../types/identifiers";
+import { testCardId, testExplorationActionId } from "../types/test-identities";
+import { parseSelectionContentRevision } from "../types/selection-content-revision";
 
 const CARD_IDS = Array.from({ length: 7 }, (_, index) =>
-  asCardId(`c0000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`),
+  testCardId(`c0000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`),
 );
 const ACTION_ID = "c0000000-0000-4000-8000-000000000090";
 const ENCOUNTER_CARD_ID = CARD_IDS[1];
@@ -36,7 +38,7 @@ function card(
   return makeMerchantTestCard({
     id,
     cardNumber: index + 1,
-    name: asCardName(options.name ?? `Synthetic ${String(index + 1)}`),
+    name: parseCardName(options.name ?? `Synthetic ${String(index + 1)}`),
     cardType,
     subtype: cardType === "Character" ? "Warrior" : "",
     isStarter: options.isStarter ?? false,
@@ -62,45 +64,45 @@ function contentFixture(reverse = false): JourneyContent {
 function journeyFixture(reverse = false): JourneyState {
   const deck = [
     makeMerchantTestDeckEntry({
-      entryId: asDeckEntryId("entry-copy-a"),
+      entryId: parseDeckEntryId("entry-copy-a"),
       cardNumber: 1,
     }),
     makeMerchantTestDeckEntry({
-      entryId: asDeckEntryId("entry-copy-b"),
+      entryId: parseDeckEntryId("entry-copy-b"),
       cardNumber: 1,
     }),
     makeMerchantTestDeckEntry({
-      entryId: asDeckEntryId("entry-encounter"),
+      entryId: parseDeckEntryId("entry-encounter"),
       cardNumber: 2,
     }),
     makeMerchantTestDeckEntry({
-      entryId: asDeckEntryId("entry-event"),
+      entryId: parseDeckEntryId("entry-event"),
       cardNumber: 3,
     }),
     makeMerchantTestDeckEntry({
-      entryId: asDeckEntryId("entry-starter"),
+      entryId: parseDeckEntryId("entry-starter"),
       cardNumber: 4,
     }),
     makeMerchantTestDeckEntry({
-      entryId: asDeckEntryId("entry-nightmare"),
+      entryId: parseDeckEntryId("entry-nightmare"),
       cardNumber: 5,
       isBane: true,
     }),
     makeMerchantTestDeckEntry({
-      entryId: asDeckEntryId("entry-effective-character"),
+      entryId: parseDeckEntryId("entry-effective-character"),
       cardNumber: 6,
       typeChange: {
-        predicateId: asCardTypeChangePredicateId("fixture:effective-character"),
+        predicateId: parseCardTypeChangePredicateId("fixture:effective-character"),
         cardType: "Character",
         subtype: "Warrior",
         label: "Character",
       },
     }),
     makeMerchantTestDeckEntry({
-      entryId: asDeckEntryId("entry-effective-event"),
+      entryId: parseDeckEntryId("entry-effective-event"),
       cardNumber: 7,
       typeChange: {
-        predicateId: asCardTypeChangePredicateId("fixture:effective-event"),
+        predicateId: parseCardTypeChangePredicateId("fixture:effective-event"),
         cardType: "Event",
         subtype: "",
         label: "Event",
@@ -108,13 +110,13 @@ function journeyFixture(reverse = false): JourneyState {
     }),
   ];
   return makeMerchantTestJourneyState({
-    seed: "disclosed-deck-target-plan-test",
+    seed: testJourneySeed("disclosed-deck-target-plan-test"),
     deck: reverse ? deck.reverse() : deck,
   });
 }
 
 const site = makeMerchantTestSite({
-  id: asSiteId("disclosed-deck-target-site"),
+  id: parseSiteId("disclosed-deck-target-site"),
   type: "Exploration",
 });
 
@@ -124,7 +126,7 @@ function prepare(
   return prepareExplorationDisclosedDeckTargetPlan({
     effectKind: "change-card-type-selected",
     cardType: "Event",
-    actionId: asExplorationActionId(ACTION_ID),
+    actionId: testExplorationActionId(ACTION_ID),
     encounterCardId: ENCOUNTER_CARD_ID,
     journey: journeyFixture(),
     site,
@@ -144,17 +146,17 @@ describe("Exploration disclosed deck target plan", () => {
     });
     expect(plan.unavailableReason).toBeUndefined();
     expect(plan.eligibleCards).toEqual([
-      { entryId: asDeckEntryId("entry-copy-a"), cardId: CARD_IDS[0] },
-      { entryId: asDeckEntryId("entry-copy-b"), cardId: CARD_IDS[0] },
+      { entryId: parseDeckEntryId("entry-copy-a"), cardId: CARD_IDS[0] },
+      { entryId: parseDeckEntryId("entry-copy-b"), cardId: CARD_IDS[0] },
       {
-        entryId: asDeckEntryId("entry-effective-character"),
+        entryId: parseDeckEntryId("entry-effective-character"),
         cardId: CARD_IDS[5],
       },
-      { entryId: asDeckEntryId("entry-nightmare"), cardId: CARD_IDS[4] },
-      { entryId: asDeckEntryId("entry-starter"), cardId: CARD_IDS[3] },
+      { entryId: parseDeckEntryId("entry-nightmare"), cardId: CARD_IDS[4] },
+      { entryId: parseDeckEntryId("entry-starter"), cardId: CARD_IDS[3] },
     ]);
     expect(plan.eligibleCards).not.toContainEqual({
-      entryId: asDeckEntryId("entry-encounter"),
+      entryId: parseDeckEntryId("entry-encounter"),
       cardId: ENCOUNTER_CARD_ID,
     });
     expect(plan.target).not.toBeNull();
@@ -216,13 +218,13 @@ describe("Exploration disclosed deck target plan", () => {
   it("binds action, encounter, site, and authored type into the plan signature", () => {
     const original = prepare();
     const differentAction = prepare({
-      actionId: asExplorationActionId("c0000000-0000-4000-8000-000000000091"),
+      actionId: testExplorationActionId("c0000000-0000-4000-8000-000000000091"),
     });
     const differentEncounter = prepare({
       encounterCardId: CARD_IDS[2],
     });
     const differentSite = prepare({
-      site: { ...site, id: asSiteId("different-exploration-site") },
+      site: { ...site, id: parseSiteId("different-exploration-site") },
     });
     const differentType = prepare({ cardType: "Character" });
 
@@ -237,7 +239,7 @@ describe("Exploration disclosed deck target plan", () => {
     if (plan.target === null) throw new Error("Expected disclosed target");
     const tamperedTarget = {
       ...plan,
-      target: { ...plan.target, entryId: asDeckEntryId("foreign-entry") },
+      target: { ...plan.target, entryId: parseDeckEntryId("foreign-entry") },
     };
     const tamperedSelector = {
       ...plan,
@@ -245,7 +247,7 @@ describe("Exploration disclosed deck target plan", () => {
     };
     const tamperedRevision = {
       ...plan,
-      selectionContentRevision: "forged-content-revision",
+      selectionContentRevision: parseSelectionContentRevision("forged-content-revision"),
     };
     const tamperedPlanSignature = {
       ...plan,
@@ -275,10 +277,10 @@ describe("Exploration disclosed deck target plan", () => {
     });
     const noEligible = prepare({
       journey: makeMerchantTestJourneyState({
-        seed: "disclosed-deck-target-plan-test",
+        seed: testJourneySeed("disclosed-deck-target-plan-test"),
         deck: [
           makeMerchantTestDeckEntry({
-            entryId: asDeckEntryId("only-event"),
+            entryId: parseDeckEntryId("only-event"),
             cardNumber: 3,
           }),
         ],

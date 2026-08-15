@@ -18,6 +18,8 @@ import {
   FRONT_RANK_SLOTS,
   backRankSlotId,
   frontRankSlotId,
+  isBackRankSlotId,
+  isFrontRankSlotId,
   rankSlotIds,
   type BattleAiChoiceTrace,
   type BattleAiDecisionStage,
@@ -26,7 +28,7 @@ import {
   type BackRankSlotId,
 } from "../types";
 import type { AiDifficultyPresetId } from "../../types/identifiers";
-import { asAiActionKey, type AiActionKey } from "../../types/identifiers";
+import { parseAiActionKey, type AiActionKey } from "../../types/identifiers";
 
 /**
  * Staged beam-search planner with a deadline guard (`battle_ai.md`
@@ -165,9 +167,14 @@ function applyAction(model: ForwardModel, action: PlanAction): void {
     return;
   }
   // MOVE_CARD: back rank → empty front-rank slot.
-  const fromSlot = action.sourceSlotId as BackRankSlotId | null;
-  const toSlot = action.toSlot as FrontRankSlotId | null;
-  if (fromSlot === null || toSlot === null) {
+  const fromSlot = action.sourceSlotId;
+  const toSlot = action.toSlot;
+  if (
+    fromSlot === null ||
+    !isBackRankSlotId(fromSlot) ||
+    toSlot === null ||
+    !isFrontRankSlotId(toSlot)
+  ) {
     return;
   }
   const card = model.aiBackRank[fromSlot] ?? null;
@@ -315,7 +322,7 @@ const STAGE_ORDER: Record<BattleAiDecisionStage, number> = {
 };
 
 function actionSortKey(action: PlanAction): AiActionKey {
-  return asAiActionKey(
+  return parseAiActionKey(
     [
       STAGE_ORDER[action.stage],
       action.kind,
@@ -526,7 +533,7 @@ async function searchBestPlanAsync(
 }
 
 function planSortKey(entry: BeamEntry): AiActionKey {
-  return asAiActionKey(entry.actions.map(actionSortKey).join(">"));
+  return parseAiActionKey(entry.actions.map(actionSortKey).join(">"));
 }
 
 // --- Deadline guard -------------------------------------------------------

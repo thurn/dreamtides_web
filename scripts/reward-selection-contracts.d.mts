@@ -25,4 +25,9 @@ export const REWARD_CARD_PREDICATES: readonly [
 export function isRewardSelectionPolicyId(value: unknown): value is typeof REWARD_SELECTION_POLICY_IDS[number];
 export function isRewardMechanicId(value: unknown): value is typeof REWARD_MECHANIC_IDS[number];
 export function isRewardCardPredicate(value: unknown): value is typeof REWARD_CARD_PREDICATES[number];
-export function mechanicSupportsPolicy(mechanicId: string, policyId: string): boolean;
+export type RewardMechanicId = typeof REWARD_MECHANIC_IDS[number];
+export type RewardSelectionPolicyId = typeof REWARD_SELECTION_POLICY_IDS[number];
+export function mechanicSupportsPolicy(
+  mechanicId: RewardMechanicId,
+  policyId: RewardSelectionPolicyId,
+): boolean;

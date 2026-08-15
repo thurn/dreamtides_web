@@ -1,8 +1,9 @@
-import type { DraftData } from "../types/draft-data";
-import { CARD_RARITIES } from "../types/cards";
+import type { DraftData, DraftRarityCap } from "../types/draft-data";
+import { CARD_RARITIES, type Rarity } from "../types/cards";
 import generatedDraftData from "../generated/config/draft-data.json";
 import { SourceMessage } from "@trox/runtime";
 import { hydrateSourceTransport } from "../runtime/localization/runtime";
+import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 export type {
   DraftData,
@@ -12,7 +13,12 @@ export type {
 
 const PATH = "/draft-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
-const RARITIES = new Set<string>(CARD_RARITIES);
+const RARITIES: ReadonlySet<Rarity> = new Set(CARD_RARITIES);
+
+function isRarity(value: unknown): value is Rarity {
+  return typeof value === "string" &&
+    (RARITIES as ReadonlySet<string>).has(value);
+}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -96,13 +102,13 @@ export function parseDraftData(value: unknown): DraftData {
     throw new Error("Failed to load draft data: malformed draft-data.json");
   }
 
-  const seen = new Set<string>();
+  const seen = new Set<Rarity>();
+  const rarityCaps: DraftRarityCap[] = [];
   for (const cap of value.rarityCaps) {
     if (
       !isRecord(cap) ||
       !hasExactKeys(cap, ["rarity", "poolCopyCap", "maxPicksPerRun"]) ||
-      typeof cap.rarity !== "string" ||
-      !RARITIES.has(cap.rarity) ||
+      !isRarity(cap.rarity) ||
       seen.has(cap.rarity) ||
       !isPositiveInteger(cap.poolCopyCap) ||
       cap.poolCopyCap > value.pool.tides4.copyCap ||
@@ -111,6 +117,11 @@ export function parseDraftData(value: unknown): DraftData {
       throw new Error("Failed to load draft data: malformed draft-data.json");
     }
     seen.add(cap.rarity);
+    rarityCaps.push({
+      rarity: cap.rarity,
+      poolCopyCap: cap.poolCopyCap,
+      maxPicksPerRun: cap.maxPicksPerRun,
+    });
   }
 
   if (
@@ -120,8 +131,23 @@ export function parseDraftData(value: unknown): DraftData {
     throw new Error("Failed to load draft data: malformed draft-data.json");
   }
   return {
-    ...(value as unknown as DraftData),
+    schemaVersion: 1,
+    contentHash: parseContentHash(value.contentHash),
+    foldHash: parseFoldHash(value.foldHash),
     presentation: { progress },
+    offers: {
+      cardsPerOffer: value.offers.cardsPerOffer,
+      picksPerSite: value.offers.picksPerSite,
+    },
+    rarityCaps,
+    pool: {
+      defaultStrategy: "tides4",
+      tides4: {
+        dealSize: value.pool.tides4.dealSize,
+        copyCap: value.pool.tides4.copyCap,
+        maxFacets: value.pool.tides4.maxFacets,
+      },
+    },
   };
 }
 

@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import { token } from "../../primitives/tokens";
+import type { DomElementId } from "../../types/dom";
 
 const flowSteps = [
   ["Journey state", "The folded run selects one Screen and active site."],
@@ -47,7 +48,7 @@ function Section({
   title,
   children,
 }: {
-  readonly id: string;
+  readonly id: DomElementId;
   readonly title: string;
   readonly children: ReactNode;
 }) {

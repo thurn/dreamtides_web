@@ -21,7 +21,7 @@ Selection-provenance controls use role colors instead. tide-spec has no renderab
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `tide` | `Resonance` = `"shadow" \| "ember" \| "valor" \| "vision" \| "wild"` | yes | — | Which of the five tides. Fixes the disc's color and glyph. |
-| `id` | `string` | yes | — | Stable id (a tide deck id) for the `data-tide-disc` QA hook. |
+| `id` | `TideId \| TutorialJourneyTideId` | yes | — | Stable id (a tide deck id) for the `data-tide-disc` QA hook. |
 | `label` | `LocalizedString` | yes | — | Display name used by the source and its tide card. |
 | `description` | `LocalizedString` | yes | — | Semantic description revealed by this tide source. |
 

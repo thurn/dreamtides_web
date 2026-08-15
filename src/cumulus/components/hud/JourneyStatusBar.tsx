@@ -1,4 +1,5 @@
 import { richText } from "../card/rich-text";
+import type { DreamAvatarId } from "../../../types/identifiers";
 // JourneyStatusBar — the persistent, TRANSPARENT bottom HUD for journey screens
 // (dreamscape, atlas, site views).
 //
@@ -128,7 +129,7 @@ export type QsbDreamsign = LocalizedDreamsign;
 /** The active DreamAvatar shown as a bust in the HUD. */
 export interface QsbDreamAvatar {
   /** Stable DreamAvatar UUID. */
-  id: string;
+  id: DreamAvatarId;
   name: LocalizedString;
   epithet?: LocalizedString;
   /** The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art. */

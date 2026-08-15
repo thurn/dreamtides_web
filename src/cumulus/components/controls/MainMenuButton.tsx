@@ -4,6 +4,7 @@ import { controlChrome } from "../../internal/control-treatment";
 import { Pressable } from "../../primitives/Pressable";
 import "./main-menu-button.css";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { DomTestId } from "../../types/dom";
 
 export interface MainMenuButtonProps {
   /** Player-facing action label. */
@@ -11,7 +12,7 @@ export interface MainMenuButtonProps {
   /** Reports activation to the route adapter. */
   onPress: () => void;
   /** A `data-testid` for selecting the action in tests. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 /**

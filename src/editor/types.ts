@@ -1,5 +1,9 @@
 import type { ArtCrop, CardData, CardType, Rarity } from "../types/cards";
-import type { CardId } from "../types/card-identity";
+import type {
+  CardId,
+  CardSubtype,
+} from "../types/card-identity";
+import type { SourceRevision } from "../types/source-revision";
 
 export type EditableCardField =
   | "energy-cost"
@@ -30,7 +34,7 @@ export interface EditorCardRecord {
   cardType: CardType;
   rarity?: Rarity;
   "energy-cost": EditorFieldValue;
-  subtype: string;
+  subtype: CardSubtype;
   name: string;
   spark: EditorFieldValue;
   "rendered-text": string;
@@ -84,7 +88,7 @@ export interface EditorDisplayState {
   searchScope: EditorSearchScope;
   type: EditorTypeFilter;
   cost: EditorCostFilter;
-  subtype: string;
+  subtype: CardSubtype;
   /**
    * Tag names a card must all carry to remain visible (AND semantics). Empty
    * means no tag filtering.
@@ -156,7 +160,7 @@ export type EditorSaveState = Record<string, EditorFieldSaveState>;
 
 export interface LoadEditorCardsResponse {
   cards: EditorCardRecord[];
-  sourceRevision?: string;
+  sourceRevision?: SourceRevision;
 }
 
 export interface SaveEditorCardFieldRequest {
@@ -192,7 +196,7 @@ export interface EditorSaveTiming {
 export interface SaveEditorCardFieldResponse {
   card: EditorCardRecord;
   clientRevision?: number;
-  sourceRevision?: string;
+  sourceRevision?: SourceRevision;
   timing: EditorSaveTiming;
 }
 
@@ -206,7 +210,7 @@ export interface EditorApiErrorBody {
 
 export interface LoadEditorTagsResponse {
   tags: EditorTag[];
-  sourceRevision?: string;
+  sourceRevision?: SourceRevision;
 }
 
 export interface SaveEditorCardTagsRequest {
@@ -216,13 +220,13 @@ export interface SaveEditorCardTagsRequest {
 
 export interface SaveEditorTagRegistryRequest {
   tags: EditorTag[];
-  sourceRevision?: string;
+  sourceRevision?: SourceRevision;
 }
 
 export interface SaveEditorTagRegistryResponse {
   tags: EditorTag[];
   cards: EditorCardRecord[];
-  sourceRevision?: string;
+  sourceRevision?: SourceRevision;
 }
 
 export interface SaveEditorCardTidesRequest {
@@ -232,7 +236,7 @@ export interface SaveEditorCardTidesRequest {
 
 export interface SaveEditorTideRegistryRequest {
   tides: EditorTag[];
-  sourceRevision?: string;
+  sourceRevision?: SourceRevision;
 }
 
 export interface EditorApiClient {

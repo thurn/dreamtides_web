@@ -23,6 +23,7 @@ import type { GameCardModel } from "../components/card/CardView";
 import { DeckGalleryOverlay } from "./DeckGalleryOverlay";
 import { tx } from "@trox/runtime";
 import type { DeckEntryId } from "../../types/identifiers";
+import type { DomTestId } from "../types/dom";
 
 /**
  * One starting-deck card, resolved to the card the player actually holds
@@ -36,7 +37,7 @@ export interface StartingDeckCardView {
   /** Canonical UUID-backed card model. */
   model: GameCardModel;
   /** `data-testid` for the card's grid tile. */
-  testId: string;
+  testId: DomTestId;
 }
 
 /** The full starting-deck view: every resolvable entry in acquisition order. */

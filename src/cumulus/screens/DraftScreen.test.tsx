@@ -6,14 +6,17 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { DraftScreen, type DraftView } from "./DraftScreen";
 import { CumulusRoot } from "../CumulusRoot";
+import { testCardId } from "../../types/test-identities";
+import { testPresentationId } from "../../types/test-identities";
+import { draftOfferKey } from "../../data/draft-site-bootstrap";
 
 function card(cardNumber: number): CardData {
   return {
-    name: asCardName(`Card ${String(cardNumber)}`),
-    id: asCardId(`card-${String(cardNumber)}`),
+    name: parseCardName(`Card ${String(cardNumber)}`),
+    id: testCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
     subtype: "",
@@ -35,7 +38,7 @@ function view(offer: number[]): DraftView {
       const displaySnapshot = card(cardNumber);
       return { cardId: displaySnapshot.id, displaySnapshot };
     }),
-    offerKey: offer.join(","),
+    offerKey: draftOfferKey(offer),
     pickNumber: 1,
     pickTotal: 5,
   };
@@ -103,7 +106,7 @@ describe("Cumulus DraftScreen", () => {
     const tutorialView: DraftView = {
       ...view([101, 102, 103, 104]),
       tutorial: {
-        id: "run-a:first-visit:draft-a:Draft",
+        id: testPresentationId("run-a:first-visit:draft-a:Draft"),
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: assertLocalized("Mira"),

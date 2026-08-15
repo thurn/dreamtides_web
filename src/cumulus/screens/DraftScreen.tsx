@@ -39,7 +39,8 @@ import { ViewportTutorialDialogue } from "../components/overlay/ViewportTutorial
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import type { LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import { asPresentationId } from "../../types/identifiers";
+import { parsePresentationId } from "../../types/identifiers";
+import type { DraftOfferKey } from "../../data/draft-site-bootstrap";
 
 /** Everything the draft screen renders, mapped from live journey state. */
 export interface DraftView {
@@ -49,7 +50,7 @@ export interface DraftView {
   /** The offered pack, resolved to cards (by UUID) and sorted for display. */
   offer: readonly GameCardModel[];
   /** Stable key for the current pack, so a new offer cross-fades the grid. */
-  offerKey: string;
+  offerKey: DraftOfferKey;
   /** The 1-indexed pick the player is on (for the floating "Draft (n/total)"). */
   pickNumber: number;
   /** How many picks this draft site offers in total. */
@@ -216,7 +217,7 @@ export function DraftScreen({
 
       {tutorialVisible && availableTutorial !== undefined && (
         <ViewportTutorialDialogue
-          presentationId={asPresentationId(availableTutorial.id)}
+          presentationId={parsePresentationId(availableTutorial.id)}
           dialogue={availableTutorial.model}
           context="site"
           placement={{ kind: "floating", avoidance: "cards-and-chrome" }}

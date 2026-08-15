@@ -14,14 +14,13 @@
  * stops compiling, and a function that wants a `CardId` rejects a `CardName`
  * argument. The brands cost nothing at runtime — both values are still plain
  * strings; the only friction is that raw strings must be funnelled through the
- * helpers below at the boundaries where they enter (card-data load, network
- * payloads, route params, deck-entry ids, test fixtures). That friction is the
- * feature: every cast is a place that asserts "this string is a card id", and
- * the casts are greppable for audit.
+ * parsers below at the boundaries where they enter (card-data load, network
+ * payloads, route params, deck-entry ids, and test-fixture minting).
  */
 
 declare const cardIdBrand: unique symbol;
 declare const cardNameBrand: unique symbol;
+declare const cardSubtypeBrand: unique symbol;
 
 /** A card's stable UUID. The only safe key for card-identity data structures. */
 export type CardId = string & { readonly [cardIdBrand]: "CardId" };
@@ -33,6 +32,59 @@ export type CardId = string & { readonly [cardIdBrand]: "CardId" };
  */
 export type CardName = string & { readonly [cardNameBrand]: "CardName" };
 
+/**
+ * Canonical source-locale subtype text carried by a card. The subtype catalog
+ * is author-extensible: currently known values form a named vocabulary while
+ * newly authored values receive the nominal extension at a catalog/editor
+ * decoder. Events carry the deliberate empty subtype.
+ */
+export const KNOWN_CARD_SUBTYPES = [
+  "",
+  "*",
+  "Agent",
+  "Ancient",
+  "Child",
+  "Companions",
+  "Detective",
+  "Elemental",
+  "Ember",
+  "Emissary",
+  "Entity",
+  "Ethereal",
+  "Explorer",
+  "Guide",
+  "Hacker",
+  "Legion",
+  "Mage",
+  "Monster",
+  "Monstrosity",
+  "Musician",
+  "Noble",
+  "Outsider",
+  "Renegade",
+  "Shadow",
+  "Spirit Animal",
+  "Squad",
+  "Super",
+  "Survivor",
+  "Synth",
+  "Thopter",
+  "Tinkerer",
+  "Universal",
+  "Vehicle",
+  "Visionary",
+  "Visitor",
+  "Warrior",
+  "Wraith",
+  "X",
+] as const;
+
+export type KnownCardSubtype = (typeof KNOWN_CARD_SUBTYPES)[number];
+type AuthoredCardSubtype = string & {
+  readonly [cardSubtypeBrand]: "CardSubtype";
+};
+export type CardSubtype = KnownCardSubtype | AuthoredCardSubtype;
+
 /** Loose UUID shape check (8-4-4-4-12 hex, case-insensitive). */
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -42,50 +94,56 @@ export function isCardId(value: string): boolean {
   return UUID_PATTERN.test(value);
 }
 
-/**
- * Brands a raw string as a {@link CardId}.
- *
- * This is the ergonomic, no-runtime-cost helper for the common case: a string
- * already known to be a card id (a deck-entry `cardId`, a value read back from a
- * card record, a synthetic id in a test fixture). It performs no validation, so
- * it is safe on hot paths and on the synthetic non-UUID ids tests use.
- *
- * At a genuine *external* trust boundary — a payload off the network, a route
- * param, raw user input — prefer {@link parseCardId}, which rejects a value that
- * is not UUID-shaped (and so catches a display name passed where an id belongs).
- */
-export function asCardId(value: string): CardId {
+function brandCardId(value: string): CardId {
   return value as CardId;
 }
 
 /** Decode a JSON/network value as an internal card identity. */
 export function cardIdFromUnknown(value: unknown): CardId | null {
-  return typeof value === "string" ? asCardId(value) : null;
+  try {
+    return parseCardId(value);
+  } catch {
+    return null;
+  }
 }
 
 /**
  * Brands a raw string as a {@link CardId} after asserting it is UUID-shaped.
  *
- * Use at genuine external trust boundaries where a non-UUID would indicate a
- * real bug (a name leaked into an id channel). Throws on a malformed value
- * rather than letting a fake id propagate. Do not use on internal lookup paths
- * that tests exercise with synthetic ids — use {@link asCardId} there.
+ * Throws on a malformed value rather than letting a fake id propagate.
  */
-export function parseCardId(value: string): CardId {
-  if (!isCardId(value)) {
+export function parseCardId(value: unknown): CardId {
+  if (typeof value !== "string" || !isCardId(value)) {
     throw new Error(
       `parseCardId: expected a card UUID but got ${JSON.stringify(value)}. ` +
         `Card identity must be a UUID, never a display name.`,
     );
   }
-  return value as CardId;
+  return brandCardId(value.toLowerCase());
 }
 
 /**
- * Brands a raw string as a {@link CardName}. Use at the boundary where display
- * names enter the system (card-data load, content adapter, test fixtures).
- * Performs no validation; any string is a valid display name.
+ * Parses a non-empty source-locale card name at the catalog boundary.
+ * Player-facing consumers localize the catalog value before rendering it.
  */
-export function asCardName(value: string): CardName {
+export function parseCardName(value: unknown): CardName {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error("Card name must be a non-empty string.");
+  }
   return value as CardName;
+}
+
+export function parseCardSubtype(value: unknown): CardSubtype {
+  if (typeof value !== "string") {
+    throw new Error("Card subtype must be source text.");
+  }
+  return value as CardSubtype;
+}
+
+/** Canonical subtype carried by Event cards. */
+export const EVENT_CARD_SUBTYPE = parseCardSubtype("");
+
+/** Decode an optional transport/editor value without throwing. */
+export function cardSubtypeFromUnknown(value: unknown): CardSubtype | null {
+  return typeof value === "string" ? parseCardSubtype(value) : null;
 }

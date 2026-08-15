@@ -6,15 +6,22 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
 import { getLogEntries, resetLog } from "../../logging";
 import { MainMenuScreenAdapter } from "./MainMenuScreenAdapter";
+import type {
+  MainMenuActionId,
+  MainMenuScreenProps,
+  MainMenuSocialId,
+} from "../../cumulus/screens/MainMenuScreen";
+import type { JourneyId } from "../../types/identifiers";
+import { testJourneyId } from "../../types/test-identities";
 
 const screenMocks = vi.hoisted(() => ({
-  onAction: null as null | ((actionId: string) => void),
+  onAction: null as null | ((actionId: MainMenuActionId) => void),
   onExitComplete: null as null | (() => void),
-  onSocial: null as null | ((socialId: string) => void),
+  onSocial: null as null | ((socialId: MainMenuSocialId) => void),
 }));
 
 const coopMocks = vi.hoisted<{
-  frontDoor: { phase: string; journeyId: string | null };
+  frontDoor: { phase: string; journeyId: JourneyId | null };
   frontDoorAction: ReturnType<typeof vi.fn>;
   advanceFrontDoor: ReturnType<typeof vi.fn>;
 }>(() => ({
@@ -40,10 +47,10 @@ vi.mock("../../cumulus/screens/MainMenuScreen", () => ({
     onSocial,
     transitionPhase,
   }: {
-    onAction: (actionId: string) => void;
+    onAction: (actionId: MainMenuActionId) => void;
     onExitComplete?: () => void;
-    onSocial: (socialId: string) => void;
-    transitionPhase?: string;
+    onSocial: (socialId: MainMenuSocialId) => void;
+    transitionPhase?: MainMenuScreenProps["transitionPhase"];
   }) => {
     screenMocks.onAction = onAction;
     screenMocks.onExitComplete = onExitComplete ?? null;
@@ -101,7 +108,10 @@ describe("MainMenuScreenAdapter", () => {
       "new-journey",
     );
 
-    coopMocks.frontDoor = { phase: "mainExiting", journeyId: "event:1" };
+    coopMocks.frontDoor = {
+      phase: "mainExiting",
+      journeyId: testJourneyId("event:1"),
+    };
     act(() =>
       root.render(
         <CumulusRoot>

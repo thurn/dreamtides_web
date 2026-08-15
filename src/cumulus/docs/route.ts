@@ -4,12 +4,14 @@
 // server rewrites (see docs/superpowers/plans/2026-07-02-cumulus-design-system.md).
 
 import { useEffect, useState } from "react";
+import { getComponent, type CumulusComponentId } from "./registry";
+import { getUISystem, type CumulusUISystemId } from "./systems/registry";
 
 export type CumulusRoute =
   | { view: "overview" }
-  | { view: "system"; id: string }
-  | { view: "component"; id: string }
-  | { view: "mockup"; id: string };
+  | { view: "system"; id: CumulusUISystemId }
+  | { view: "component"; id: CumulusComponentId }
+  | { view: "mockup"; id: CumulusComponentId };
 
 /**
  * Parse a `window.location.hash` value (or an equivalent hash string with or
@@ -39,12 +41,17 @@ export function parseCumulusRoute(hash: string): CumulusRoute {
 
   const [id, second] = segments;
   if (id === "systems" && second !== undefined) {
-    return { view: "system", id: second };
+    const system = getUISystem(second);
+    return system === undefined
+      ? { view: "overview" }
+      : { view: "system", id: system.id };
   }
+  const component = getComponent(id);
+  if (component === undefined) return { view: "overview" };
   if (second === "mockup") {
-    return { view: "mockup", id };
+    return { view: "mockup", id: component.id };
   }
-  return { view: "component", id };
+  return { view: "component", id: component.id };
 }
 
 /**

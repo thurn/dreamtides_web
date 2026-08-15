@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../types/test-identities";
 // @vitest-environment jsdom
 
 import { act } from "react";
@@ -6,7 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { genesisFoldState } from "../rules/fold-state";
 
 const state = genesisFoldState({
-  seed: "probe",
+  seed: testJourneySeed("probe"),
   reducerVersion: "test",
   createdAt: 0,
 });

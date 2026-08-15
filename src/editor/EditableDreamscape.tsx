@@ -18,20 +18,22 @@ import type {
   EditorDreamscapeRecord,
   GuideOption,
 } from "./dreamscape-types";
+import type { DreamAvatarId } from "../types/identifiers";
+import type { SiteType } from "../types/journey";
 
 export interface EditableDreamscapeProps {
   record: EditorDreamscapeRecord;
   size: DreamscapeCardSize;
   guides: GuideOption[];
   affiliations: AffiliationOption[];
-  siteTypes: string[];
+  siteTypes: SiteType[];
   dreamAvatars: DreamAvatarOption[];
-  regionNameByDreamAvatar: Map<string, string>;
+  regionNameByDreamAvatar: Map<DreamAvatarId, string>;
   residentStatus: ResidentAssignmentStatus;
   onAssignDreamAvatar: (
     record: EditorDreamscapeRecord,
     action: DreamAvatarAssignmentAction,
-    params: { inId?: string; outId?: string },
+    params: { inId?: DreamAvatarId; outId?: DreamAvatarId },
   ) => void;
   saveEntryFor: (field: EditableDreamscapeField) => EditableFieldSaveEntry | null;
   onFieldBeginEdit: (

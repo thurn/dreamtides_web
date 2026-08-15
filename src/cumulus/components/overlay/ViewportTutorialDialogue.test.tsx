@@ -8,7 +8,8 @@ import {
 } from "../../test-helpers/component-test-fixtures";
 import { useTutorialAnchor, useTutorialObstacle } from "./tutorial-placement";
 import { ViewportTutorialDialogue } from "./ViewportTutorialDialogue";
-import { asPresentationId } from "../../../types/identifiers";
+import { parsePresentationId } from "../../../types/identifiers";
+import { testTutorialTriggerId } from "../../../types/test-identities";
 
 const resizeCallbacks: ResizeObserverCallback[] = [];
 const animationFrames: FrameRequestCallback[] = [];
@@ -22,19 +23,22 @@ class ResizeObserverStub {
 }
 
 function PlacementHost() {
-  const anchorRef = useTutorialAnchor("anchor");
-  const obstacleRef = useTutorialObstacle("obstacle", "chrome");
+  const anchorRef = useTutorialAnchor("tutorial-anchor:anchor");
+  const obstacleRef = useTutorialObstacle("tutorial-obstacle:obstacle", "chrome");
   return (
     <>
       <div ref={anchorRef} data-fixture-anchor="" />
       <div ref={obstacleRef} data-fixture-obstacle="" />
       <ViewportTutorialDialogue
-        presentationId={asPresentationId("tutorial")}
+        presentationId={parsePresentationId("tutorial")}
         dialogue={fixtureDialogue}
         context="site"
-        placement={{ kind: "anchored", anchorId: "anchor" }}
+        placement={{ kind: "anchored", anchorId: "tutorial-anchor:anchor" }}
         visible
-        diagnostics={{ triggerId: "trigger", messageIndex: 1 }}
+        diagnostics={{
+          triggerId: testTutorialTriggerId("trigger"),
+          messageIndex: 1,
+        }}
       />
     </>
   );
@@ -42,8 +46,8 @@ function PlacementHost() {
 
 function DuplicateAnchorHost() {
   const [showFirst, setShowFirst] = useState(true);
-  const firstRef = useTutorialAnchor("duplicate");
-  const secondRef = useTutorialAnchor("duplicate");
+  const firstRef = useTutorialAnchor("tutorial-anchor:duplicate");
+  const secondRef = useTutorialAnchor("tutorial-anchor:duplicate");
   return (
     <>
       {showFirst && <div ref={firstRef} data-first-anchor="" />}
@@ -52,10 +56,10 @@ function DuplicateAnchorHost() {
         Remove first
       </button>
       <ViewportTutorialDialogue
-        presentationId={asPresentationId("duplicate-tutorial")}
+        presentationId={parsePresentationId("duplicate-tutorial")}
         dialogue={fixtureDialogue}
         context="site"
-        placement={{ kind: "anchored", anchorId: "duplicate" }}
+        placement={{ kind: "anchored", anchorId: "tutorial-anchor:duplicate" }}
         visible
       />
     </>
@@ -64,7 +68,7 @@ function DuplicateAnchorHost() {
 
 function ReplacementAnchorHost() {
   const [replacement, setReplacement] = useState(false);
-  const anchorRef = useTutorialAnchor("route-anchor");
+  const anchorRef = useTutorialAnchor("tutorial-anchor:route-anchor");
   return (
     <>
       <div
@@ -76,10 +80,10 @@ function ReplacementAnchorHost() {
         Replace route
       </button>
       <ViewportTutorialDialogue
-        presentationId={asPresentationId("route-tutorial")}
+        presentationId={parsePresentationId("route-tutorial")}
         dialogue={fixtureDialogue}
         context="site"
-        placement={{ kind: "anchored", anchorId: "route-anchor" }}
+        placement={{ kind: "anchored", anchorId: "tutorial-anchor:route-anchor" }}
         visible
       />
     </>
@@ -88,7 +92,10 @@ function ReplacementAnchorHost() {
 
 function MovingObstacleHost() {
   const [moved, setMoved] = useState(false);
-  const obstacleRef = useTutorialObstacle("moving-card", "card");
+  const obstacleRef = useTutorialObstacle(
+    "tutorial-obstacle:moving-card",
+    "card",
+  );
   return (
     <>
       <div
@@ -100,7 +107,7 @@ function MovingObstacleHost() {
         Move obstacle
       </button>
       <ViewportTutorialDialogue
-        presentationId={asPresentationId("moving-tutorial")}
+        presentationId={parsePresentationId("moving-tutorial")}
         dialogue={{
           ...fixtureDialogue,
           text: assertLocalized(
@@ -260,7 +267,7 @@ describe("ViewportTutorialDialogue", () => {
   it("keeps hidden dialogue out of the accessibility announcement channel", () => {
     const { container, root } = mountCumulus(
       <ViewportTutorialDialogue
-        presentationId={asPresentationId("hidden")}
+        presentationId={parsePresentationId("hidden")}
         dialogue={fixtureDialogue}
         context="card"
         placement={{ kind: "floating", avoidance: "cards-and-chrome" }}

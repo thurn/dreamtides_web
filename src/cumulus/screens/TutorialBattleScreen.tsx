@@ -170,11 +170,11 @@ export function TutorialBattleScreen({
   const [
     startedChallengeTravelPresentationId,
     setStartedChallengeTravelPresentationId,
-  ] = useState<string | null>(null);
+  ] = useState<PresentationId | null>(null);
   const screenRef = useRef<HTMLDivElement>(null);
   const challengeOriginRectsRef = useRef<{
     readonly presentationId: PresentationId;
-    readonly rects: ReadonlyMap<string, DOMRect>;
+    readonly rects: ReadonlyMap<BattleCardId, DOMRect>;
   } | null>(null);
   const challengeTravelStarted =
     challengeTravel === null ||
@@ -210,7 +210,7 @@ export function TutorialBattleScreen({
     const paintedOriginFrame = window.requestAnimationFrame(() => {
       destinationFrame = window.requestAnimationFrame(() => {
         const root = screenRef.current;
-        const rects = new Map<string, DOMRect>();
+        const rects = new Map<BattleCardId, DOMRect>();
         if (root !== null && view.presentation?.kind === "challenge-resolved") {
           for (const entry of view.presentation.dissolved) {
             const source = renderedBattleCard(root, entry.battleCardId);

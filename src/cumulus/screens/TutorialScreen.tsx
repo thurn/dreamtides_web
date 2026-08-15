@@ -76,10 +76,19 @@ import type {
   BattleSlotViewId,
   DreamAvatarId,
 } from "../../types/identifiers";
-import { asBattleSlotViewId, asDreamAvatarId } from "../../types/identifiers";
+import { parseBattleSlotViewId, parseDreamAvatarId } from "../../types/identifiers";
 import type { TutorialActionId } from "../../types/identifiers";
 import type { TutorialRunId } from "../../types/identifiers";
-import { asTutorialRunId } from "../../types/identifiers";
+
+type TutorialActionPresentationKey = `${TutorialRunId}:${TutorialActionId}`;
+type TutorialDialogueLayoutKey = `${boolean}:${boolean}`;
+
+function tutorialActionPresentationKey(
+  runId: TutorialRunId,
+  actionId: TutorialActionId,
+): TutorialActionPresentationKey {
+  return `${runId}:${actionId}`;
+}
 
 export interface TutorialDreamAvatarView {
   readonly visual: DreamAvatarVisual;
@@ -361,7 +370,7 @@ function TutorialRepositionTargetResolver({
         onTargetSlotChange(null);
         return;
       }
-      onTargetSlotChange(asBattleSlotViewId(targetSlotId));
+      onTargetSlotChange(parseBattleSlotViewId(targetSlotId));
     };
 
     updateGeometry();
@@ -466,10 +475,10 @@ function TutorialDreamwellEmergence({
   onComplete,
 }: {
   readonly screen: HTMLElement;
-  readonly actionKey: string;
+  readonly actionKey: TutorialActionPresentationKey;
   readonly reduceMotion: boolean;
   readonly playbackSpeed: number;
-  readonly onComplete: (actionKey: string) => void;
+  readonly onComplete: (actionKey: TutorialActionPresentationKey) => void;
 }): null {
   useLayoutEffect(() => {
     const layer = screen.querySelector<HTMLElement>(
@@ -586,7 +595,7 @@ function expandedTutorialSide(
     ...Array.from(
       { length: Math.max(0, count - slots.length) },
       (_, offset) => ({
-        id: asBattleSlotViewId(
+        id: parseBattleSlotViewId(
           `${owner}-${rank}-${String(slots.length + offset)}`,
         ),
         card: null,
@@ -681,7 +690,7 @@ function TutorialDreamAvatarDialogue({
     { readonly kind: "dreamAvatar" }
   >;
   readonly visible: boolean;
-  readonly layoutKey: string;
+  readonly layoutKey: TutorialDialogueLayoutKey;
   readonly desktop: boolean;
 }): ReactElement {
   const bubbleFrameRef = useRef<HTMLDivElement | null>(null);
@@ -1711,21 +1720,24 @@ export function TutorialScreen({
   const [sceneEntered, setSceneEntered] = useState(reduceMotion);
   const [editorOpen, setEditorOpen] = useState(false);
   const [battleInspectorOpen, setBattleInspectorOpen] = useState(false);
-  const [arrivedActionKey, setArrivedActionKey] = useState<string | null>(null);
-  const [drawnActionKey, setDrawnActionKey] = useState<string | null>(null);
-  const [playedActionKey, setPlayedActionKey] = useState<string | null>(null);
+  const [arrivedActionKey, setArrivedActionKey] =
+    useState<TutorialActionPresentationKey | null>(null);
+  const [drawnActionKey, setDrawnActionKey] =
+    useState<TutorialActionPresentationKey | null>(null);
+  const [playedActionKey, setPlayedActionKey] =
+    useState<TutorialActionPresentationKey | null>(null);
   const [visibleDialogueActionKey, setVisibleDialogueActionKey] = useState<
-    string | null
+    TutorialActionPresentationKey | null
   >(null);
   const [completedDialogueActionKey, setCompletedDialogueActionKey] = useState<
-    string | null
+    TutorialActionPresentationKey | null
   >(null);
   const [howToPlayPresentedActionKey, setHowToPlayPresentedActionKey] =
-    useState<string | null>(null);
+    useState<TutorialActionPresentationKey | null>(null);
   const [howToPlayDismissedActionKey, setHowToPlayDismissedActionKey] =
-    useState<string | null>(null);
+    useState<TutorialActionPresentationKey | null>(null);
   const [dreamwellEmergedActionKey, setDreamwellEmergedActionKey] = useState<
-    string | null
+    TutorialActionPresentationKey | null
   >(null);
   const [completedTurnAnnouncementSide, setCompletedTurnAnnouncementSide] =
     useState<"enemy" | "player" | null>(null);
@@ -1734,12 +1746,12 @@ export function TutorialScreen({
   const [repositionTargetSlotId, setRepositionTargetSlotId] =
     useState<BattleSlotViewId | null>(null);
   const [repositionRequestedActionKey, setRepositionRequestedActionKey] =
-    useState<string | null>(null);
+    useState<TutorialActionPresentationKey | null>(null);
   const pendingTutorialCardIdRef = useRef<BattleCardId | null>(null);
   const tutorialCardDropHandledRef = useRef(false);
-  const reportedDrawKeys = useRef<Set<string>>(new Set());
-  const reportedArrivalKeys = useRef<Set<string>>(new Set());
-  const reportedPlayKeys = useRef<Set<string>>(new Set());
+  const reportedDrawKeys = useRef<Set<TutorialActionPresentationKey>>(new Set());
+  const reportedArrivalKeys = useRef<Set<TutorialActionPresentationKey>>(new Set());
+  const reportedPlayKeys = useRef<Set<TutorialActionPresentationKey>>(new Set());
   const [dialogueAnchor, setDialogueAnchor] =
     useState<TutorialDialogueAnchor | null>(null);
   const lastDialogue = useRef<TutorialDialogueView | null>(view.dialogue);
@@ -1751,7 +1763,7 @@ export function TutorialScreen({
       view.playbackRunId !== null &&
       view.currentAction?.action === "animate-dream-avatar-portrait"
         ? {
-            key: `${view.playbackRunId}:${view.currentAction.id}`,
+            key: tutorialActionPresentationKey(view.playbackRunId, view.currentAction.id),
             owner: view.currentAction.owner,
             pause: atPlaybackSpeed(view.currentAction.pause, playbackSpeed),
             duration: atPlaybackSpeed(
@@ -1769,7 +1781,7 @@ export function TutorialScreen({
       view.currentAction?.action === "draw-opponent-card" &&
       opponentDeckCardIds[0] !== undefined
         ? {
-            key: `${view.playbackRunId}:${view.currentAction.id}`,
+            key: tutorialActionPresentationKey(view.playbackRunId, view.currentAction.id),
             cardId: opponentDeckCardIds[0],
           }
         : null,
@@ -1781,7 +1793,7 @@ export function TutorialScreen({
       view.currentAction?.action === "draw-card" &&
       view.cardDraw?.actionId === view.currentAction.id
         ? {
-            key: `${view.playbackRunId}:${view.currentAction.id}`,
+            key: tutorialActionPresentationKey(view.playbackRunId, view.currentAction.id),
             owner: view.cardDraw.owner,
             card: view.cardDraw.card,
           }
@@ -1803,7 +1815,7 @@ export function TutorialScreen({
     return card === undefined
       ? null
       : {
-          key: `${view.playbackRunId}:${currentAction.id}`,
+          key: tutorialActionPresentationKey(view.playbackRunId, currentAction.id),
           card,
           revealDuration: currentAction.revealDuration,
         };
@@ -1842,7 +1854,7 @@ export function TutorialScreen({
     ) {
       return undefined;
     }
-    const actionKey = `${runId}:${dialogueActionId}`;
+    const actionKey = tutorialActionPresentationKey(runId, dialogueActionId);
     setCompletedDialogueActionKey((current) =>
       current === actionKey ? null : current,
     );
@@ -1894,7 +1906,7 @@ export function TutorialScreen({
     view.challenge !== null &&
     view.challenge !== undefined
       ? {
-          key: `${view.playbackRunId}:${view.currentAction.id}`,
+          key: tutorialActionPresentationKey(view.playbackRunId, view.currentAction.id),
           runId: view.playbackRunId,
           actionId: view.currentAction.id,
           wait: view.currentAction.wait,
@@ -2123,7 +2135,7 @@ export function TutorialScreen({
     reportedArrivalKeys.current.add(dreamAvatarArrival.key);
     setArrivedActionKey(dreamAvatarArrival.key);
     onDreamAvatarArrivalComplete?.(
-      asDreamAvatarId(dreamAvatarArrival.dreamAvatar.profile.id),
+      parseDreamAvatarId(dreamAvatarArrival.dreamAvatar.profile.id),
       dreamAvatarArrival.owner,
     );
   }, [dreamAvatarArrival, onDreamAvatarArrivalComplete]);
@@ -2148,7 +2160,7 @@ export function TutorialScreen({
           ? "player-turn-announcement-complete"
           : "enemy-turn-announcement-complete";
       if (view.howToPlay.trigger !== expectedTrigger) return;
-      const actionKey = `${runId}:${view.howToPlay.actionId}`;
+      const actionKey = tutorialActionPresentationKey(runId, view.howToPlay.actionId);
       if (
         view.howToPlay.companion !== null &&
         view.howToPlay.companion !== undefined &&
@@ -2164,7 +2176,7 @@ export function TutorialScreen({
       }
       setHowToPlayPresentedActionKey(actionKey);
       onHowToPlayPresented?.(
-        asTutorialRunId(runId),
+        runId,
         view.howToPlay.actionId,
         view.howToPlay.trigger,
       );
@@ -2196,7 +2208,7 @@ export function TutorialScreen({
     ) {
       return;
     }
-    const actionKey = `${runId}:${howToPlay.actionId}`;
+    const actionKey = tutorialActionPresentationKey(runId, howToPlay.actionId);
     if (
       howToPlay.companion !== null &&
       howToPlay.companion !== undefined &&
@@ -2212,7 +2224,7 @@ export function TutorialScreen({
     }
     setHowToPlayPresentedActionKey(actionKey);
     onHowToPlayPresented?.(
-      asTutorialRunId(runId),
+      runId,
       howToPlay.actionId,
       howToPlay.trigger,
     );
@@ -2233,18 +2245,18 @@ export function TutorialScreen({
       view.currentAction?.action !== "display-speech-bubble" ||
       view.playbackRunId === null ||
       completedDialogueActionKey !==
-        `${view.playbackRunId}:${view.currentAction.id}`
+        tutorialActionPresentationKey(view.playbackRunId, view.currentAction.id)
     ) {
       return undefined;
     }
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     if (wait === 0) {
-      onActionComplete?.(asTutorialRunId(runId), id);
+      onActionComplete?.(runId, id);
       return undefined;
     }
     const timeout = window.setTimeout(
-      () => onActionComplete?.(asTutorialRunId(runId), id),
+      () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
@@ -2283,7 +2295,7 @@ export function TutorialScreen({
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
-      () => onActionComplete?.(asTutorialRunId(runId), id),
+      () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(
         TUTORIAL_CARD_TRAVEL_SECONDS + wait,
         playbackSpeed,
@@ -2311,7 +2323,7 @@ export function TutorialScreen({
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
-      () => onActionComplete?.(asTutorialRunId(runId), id),
+      () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(
         TUTORIAL_CARD_TRAVEL_SECONDS + wait,
         playbackSpeed,
@@ -2336,18 +2348,18 @@ export function TutorialScreen({
       completedTurnAnnouncementSide !== view.currentAction.owner ||
       (view.currentAction.revealDuration !== undefined &&
         dreamwellEmergedActionKey !==
-          `${view.playbackRunId}:${view.currentAction.id}`)
+          tutorialActionPresentationKey(view.playbackRunId, view.currentAction.id))
     ) {
       return undefined;
     }
     const { id, revealDuration = 0, wait } = view.currentAction;
     const runId = view.playbackRunId;
     if (revealDuration + wait === 0) {
-      onActionComplete?.(asTutorialRunId(runId), id);
+      onActionComplete?.(runId, id);
       return undefined;
     }
     const timeout = window.setTimeout(
-      () => onActionComplete?.(asTutorialRunId(runId), id),
+      () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(revealDuration + wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
@@ -2370,18 +2382,18 @@ export function TutorialScreen({
       view.playbackRunId === null ||
       (view.currentAction.speechBubble !== undefined &&
         completedDialogueActionKey !==
-          `${view.playbackRunId}:${view.currentAction.id}`)
+          tutorialActionPresentationKey(view.playbackRunId, view.currentAction.id))
     ) {
       return undefined;
     }
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     if (wait === 0) {
-      onActionComplete?.(asTutorialRunId(runId), id);
+      onActionComplete?.(runId, id);
       return undefined;
     }
     const timeout = window.setTimeout(
-      () => onActionComplete?.(asTutorialRunId(runId), id),
+      () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
@@ -2406,7 +2418,7 @@ export function TutorialScreen({
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
-      () => onActionComplete?.(asTutorialRunId(runId), id),
+      () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(
         TUTORIAL_OPPONENT_REPOSITION_SECONDS + wait,
         playbackSpeed,
@@ -2425,9 +2437,9 @@ export function TutorialScreen({
     const runId = view.playbackRunId;
     const howToPlay = view.howToPlay;
     if (runId === null || howToPlay === null) return;
-    setHowToPlayDismissedActionKey(`${runId}:${howToPlay.actionId}`);
+    setHowToPlayDismissedActionKey(tutorialActionPresentationKey(runId, howToPlay.actionId));
     onHowToPlayDismissed?.(
-      asTutorialRunId(runId),
+      runId,
       howToPlay.actionId,
       howToPlay.trigger,
     );
@@ -2453,13 +2465,13 @@ export function TutorialScreen({
     view.playbackRunId !== null &&
     (view.currentAction.speechBubble === undefined ||
       completedDialogueActionKey ===
-        `${view.playbackRunId}:${view.currentAction.id}`) &&
+        tutorialActionPresentationKey(view.playbackRunId, view.currentAction.id)) &&
     onEndTurn !== undefined;
   const playerReposition = view.playerReposition ?? null;
   const playerRepositionActionKey =
     playerReposition === null || view.playbackRunId === null
       ? null
-      : `${view.playbackRunId}:${playerReposition.actionId}`;
+      : tutorialActionPresentationKey(view.playbackRunId, playerReposition.actionId);
   const canRepositionTutorialCard =
     playerReposition !== null &&
     playerRepositionActionKey !== repositionRequestedActionKey &&
@@ -2494,7 +2506,7 @@ export function TutorialScreen({
       pendingTutorialCardIdRef.current = null;
       setPendingTutorialCardId(null);
       onPlayerCardPlay(
-        asTutorialRunId(runId),
+        runId,
         card.id,
         card.model.cardId,
         targetSlotId,
@@ -2593,10 +2605,10 @@ export function TutorialScreen({
                 pendingTutorialCardIdRef.current = null;
                 setPendingTutorialCardId(null);
                 setRepositionRequestedActionKey(
-                  `${view.playbackRunId}:${playerReposition.actionId}`,
+                  tutorialActionPresentationKey(view.playbackRunId, playerReposition.actionId),
                 );
                 onPlayerCharacterReposition(
-                  asTutorialRunId(view.playbackRunId),
+                  view.playbackRunId,
                   playerReposition.actionId,
                   playerReposition.cardId,
                   playerReposition.opposingCardId,
@@ -2622,7 +2634,7 @@ export function TutorialScreen({
                 return;
               }
               onEndTurn?.(
-                asTutorialRunId(view.playbackRunId),
+                view.playbackRunId,
                 view.endTurn.actionId,
               );
             },
@@ -2649,12 +2661,12 @@ export function TutorialScreen({
     if (
       runId === null ||
       howToPlay === null ||
-      howToPlayDismissedActionKey !== `${runId}:${howToPlay.actionId}`
+      howToPlayDismissedActionKey !== tutorialActionPresentationKey(runId, howToPlay.actionId)
     ) {
       return undefined;
     }
     const timeout = window.setTimeout(
-      () => onActionComplete?.(asTutorialRunId(runId), howToPlay.actionId),
+      () => onActionComplete?.(runId, howToPlay.actionId),
       millisecondsAtPlaybackSpeed(howToPlay.wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
@@ -2696,7 +2708,7 @@ export function TutorialScreen({
     const { id, wait } = view.currentAction;
     const runId = view.playbackRunId;
     const timeout = window.setTimeout(
-      () => onActionComplete?.(asTutorialRunId(runId), id),
+      () => onActionComplete?.(runId, id),
       millisecondsAtPlaybackSpeed(wait, playbackSpeed),
     );
     return () => window.clearTimeout(timeout);
@@ -2864,13 +2876,13 @@ export function TutorialScreen({
   const howToPlayActionKey =
     view.howToPlay === null || view.playbackRunId === null
       ? null
-      : `${view.playbackRunId}:${view.howToPlay.actionId}`;
+      : tutorialActionPresentationKey(view.playbackRunId, view.howToPlay.actionId);
   const dreamwellEmergenceActionKey =
     view.playbackRunId !== null &&
     view.currentAction?.action === "draw-dreamwell-card" &&
     view.currentAction.revealDuration !== undefined &&
     completedTurnAnnouncementSide === view.currentAction.owner
-      ? `${view.playbackRunId}:${view.currentAction.id}`
+      ? tutorialActionPresentationKey(view.playbackRunId, view.currentAction.id)
       : howToPlayActionKey !== null &&
           view.howToPlay?.companion !== null &&
           view.howToPlay?.companion !== undefined
@@ -3104,7 +3116,7 @@ export function TutorialScreen({
             playbackSpeed={playbackSpeed}
             onComplete={() =>
               onActionComplete?.(
-                asTutorialRunId(challengeAnimation.runId),
+                challengeAnimation.runId,
                 challengeAnimation.actionId,
               )
             }
@@ -3186,7 +3198,7 @@ export function TutorialScreen({
                 view.playbackRunId !== null &&
                 dialogueActionId !== null &&
                 visibleDialogueActionKey ===
-                  `${view.playbackRunId}:${dialogueActionId}`
+                  tutorialActionPresentationKey(view.playbackRunId, dialogueActionId)
               }
               testId="tutorial-welcome-dialogue"
               playbackSpeed={playbackSpeed}
@@ -3202,9 +3214,9 @@ export function TutorialScreen({
               view.playbackRunId !== null &&
               dialogueActionId !== null &&
               visibleDialogueActionKey ===
-                `${view.playbackRunId}:${dialogueActionId}`
+                tutorialActionPresentationKey(view.playbackRunId, dialogueActionId)
             }
-            layoutKey={`${String(dockEditor)}:${String(editorOpen)}`}
+            layoutKey={`${dockEditor}:${editorOpen}`}
             desktop={desktop}
           />
         ) : null}

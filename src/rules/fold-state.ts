@@ -19,7 +19,7 @@ import type { CardTutorialGuidancePresentation } from "./card-tutorial-guidance"
 // `state.battle.pendingPrompt.promptId` (a number = the opening event's seq).
 export type { BattleFoldState, PendingPrompt } from "./battle/fold";
 import type { BattleFoldState } from "./battle/fold";
-import { asAtlasNodeId, asJourneyId } from "../types/identifiers";
+import { parseJourneyId } from "../types/identifiers";
 import type {
   CardTutorialScreenKey,
   ClientId,
@@ -76,7 +76,7 @@ export function genesisFoldState(genesis: Genesis): FoldState {
     frontDoor: {
       phase: entry,
       journeyId:
-        entry === "main" ? null : asJourneyId(`genesis:${genesis.seed}`),
+        entry === "main" ? null : parseJourneyId(`genesis:${genesis.seed}`),
       tutorial: null,
     },
     playtestControl: {
@@ -112,8 +112,8 @@ function genesisJourneyState(genesis: Genesis): JourneyState {
     atlas: {
       layers: [],
       nodes: {},
-      startingNodeId: asAtlasNodeId(""),
-      bossNodeId: asAtlasNodeId(""),
+      startingNodeId: null,
+      bossNodeId: null,
       bossIncarnationId: null,
       currentNodeId: null,
       knownDreamsignCarrierIds: [],

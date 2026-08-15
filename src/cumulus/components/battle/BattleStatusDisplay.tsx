@@ -1,4 +1,5 @@
 import { glassSurfaceStyle } from "../../internal/glass-surface";
+import type { DomTestId } from "../../types/dom";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import {
@@ -18,6 +19,7 @@ import {
 } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { LocalizedString } from "@trox/runtime";
+import type { DreamAvatarId, OpponentId } from "../../../types/identifiers";
 
 /** Which combatant this status card describes. */
 export type BattleStatusOwner = "player" | "enemy";
@@ -25,7 +27,7 @@ export type BattleStatusRelationship = "near" | "far";
 
 /** Semantic profile revealed from a populated battle DreamAvatar portrait. */
 export interface BattleStatusDreamAvatarProfile {
-  readonly id: string;
+  readonly id: DreamAvatarId | OpponentId;
   readonly ability: LocalizedString;
   readonly unavailable?: boolean;
 }
@@ -48,7 +50,7 @@ export interface BattleStatusDisplayProps {
   /** Battle points required to win. */
   readonly pointsToWin: number;
   /** Optional stable test id for the complete status card. */
-  readonly testId?: string;
+  readonly testId?: DomTestId;
 }
 
 /**

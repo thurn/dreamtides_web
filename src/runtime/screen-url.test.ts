@@ -9,26 +9,26 @@ import type {
 } from "../types/journey";
 import { screenToJourneyPath, siteTypeSlug, slugify } from "./screen-url";
 import { LayerName, layerAtOrdinal } from "../types/layer-name";
-import { asDreamscapeId } from "../types/identifiers";
-import { asSiteId } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
+import { testDreamscapeId } from "../types/test-identities";
 
-function makeSite(id: string, type: SiteType): SiteState {
-  return { id: asSiteId(id), type, isEnhanced: false, isVisited: false };
+function makeSite(idSeed: string, type: SiteType): SiteState {
+  return { id: parseSiteId(idSeed), type, isEnhanced: false, isVisited: false };
 }
 
 function makeNode(
-  id: string,
-  dreamscapeId: string | null,
+  idSeed: string,
+  dreamscapeIdSeed: string | null,
   sites: SiteState[],
   layerOrdinal = 2,
 ): DreamscapeNode {
   return {
-    id: asAtlasNodeId(id),
+    id: parseAtlasNodeId(idSeed),
     layer: layerAtOrdinal(layerOrdinal) ?? LayerName.One,
     indexInLayer: 0,
     dreamscapeId:
-      dreamscapeId === null ? null : asDreamscapeId(dreamscapeId),
+      dreamscapeIdSeed === null ? null : testDreamscapeId(dreamscapeIdSeed),
     sites,
     position: { x: 0, y: 0 },
     state: "available",
@@ -41,22 +41,22 @@ function makeNode(
 
 /** A default state parked in a single-node dreamscape with the given sites. */
 function stateInDreamscape(
-  dreamscapeId: string | null,
+  dreamscapeIdSeed: string | null,
   sites: SiteState[],
   nodeId = "dreamscape-3",
   layer = 2,
 ): JourneyState {
-  const node = makeNode(nodeId, dreamscapeId, sites, layer);
+  const node = makeNode(nodeId, dreamscapeIdSeed, sites, layer);
   const base = createDefaultState();
   return {
     ...base,
-    currentDreamscape: asAtlasNodeId(nodeId),
+    currentDreamscape: parseAtlasNodeId(nodeId),
     atlas: {
       ...base.atlas,
-      layers: [[asAtlasNodeId(nodeId)]],
+      layers: [[parseAtlasNodeId(nodeId)]],
       nodes: { [nodeId]: node },
-      startingNodeId: asAtlasNodeId(nodeId),
-      currentNodeId: asAtlasNodeId(nodeId),
+      startingNodeId: parseAtlasNodeId(nodeId),
+      currentNodeId: parseAtlasNodeId(nodeId),
     },
   };
 }
@@ -108,13 +108,13 @@ describe("screenToJourneyPath", () => {
     expect(
       screenToJourneyPath({
         ...state,
-        screen: { type: "site", siteId: asSiteId("site-7") },
+        screen: { type: "site", siteId: parseSiteId("site-7") },
       }),
     ).toBe("/dreamscape/2-ember-wood/purge");
     expect(
       screenToJourneyPath({
         ...state,
-        screen: { type: "site", siteId: asSiteId("site-8") },
+        screen: { type: "site", siteId: parseSiteId("site-8") },
       }),
     ).toBe("/dreamscape/2-ember-wood/augury");
   });
@@ -140,7 +140,7 @@ describe("screenToJourneyPath", () => {
     expect(
       screenToJourneyPath({
         ...state,
-        screen: { type: "site", siteId: asSiteId("does-not-exist") },
+        screen: { type: "site", siteId: parseSiteId("does-not-exist") },
       }),
     ).toBe("/dreamscape/2-ember-wood");
   });

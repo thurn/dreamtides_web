@@ -30,7 +30,7 @@
 // than a blend of unrelated leans. The pool is keyed by cards_v2 UUID; the
 // catalog index (`poolData.cardNameById`) gates which UUIDs are dealable.
 
-import { asCardId, type CardId } from "../../types/card-identity.ts";
+import type { CardId } from "../../types/card-identity.ts";
 import { shuffle } from "./rng.ts";
 import {
   missingPoolData,
@@ -43,10 +43,9 @@ import {
 } from "./types.ts";
 import type { Tides4DecksJson } from "./tides4-io.ts";
 import type { Tides4Tuning } from "../../types/draft-data";
-import { asTideId, type TideId } from "../../types/identifiers";
+import type { TideId } from "../../types/identifiers";
 import { DEFAULT_DRAFT_DATA } from "../../data/draft-data";
 import type { DreamAvatarId } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
 
 /** Developer/test fallback; production injects the compiled draft.toml values. */
 export const DEFAULT_TIDES4_TUNING: Tides4Tuning =
@@ -136,7 +135,7 @@ export function combineTidesPool(
   // was joined: the always-joined starter, the random facet subset (the variety
   // engine), then the fill (undrawn facets, kept ahead of the broad tail so a
   // pool only reaches for generic cards once its own theme is exhausted).
-  const joinSelections: { id: string; selection: Tides4PoolTideSelection }[] =
+  const joinSelections: { id: TideId; selection: Tides4PoolTideSelection }[] =
     [];
   let facetAvailableCount = 0;
   let facetDrawnCount = 0;
@@ -210,13 +209,13 @@ export function combineTidesPool(
   // overflow the way a facet or neutral card can be.
   const signatureCardIds = new Set<CardId>();
   const recordTide = (
-    id: string,
+    id: TideId,
     selection: Tides4PoolTideSelection,
     fold: boolean,
   ): void => {
     const tide = tideById.get(id);
     if (!tide) return;
-    const tideId = asTideId(id);
+    const tideId = id;
     const cardIds: CardId[] = [];
     const seenInTide = new Set<CardId>();
     for (const card of tide.cards) {
@@ -224,7 +223,7 @@ export function combineTidesPool(
       // present, is the source of truth for catalog membership).
       if (poolData.cardNameById && !poolData.cardNameById.has(card.id))
         continue;
-      const cardId = asCardId(card.id);
+      const cardId = card.id;
       if (!seenInTide.has(cardId)) {
         seenInTide.add(cardId);
         cardIds.push(cardId);
@@ -325,7 +324,7 @@ export function combineTidesPool(
   }
 
   const tides4Provenance: Tides4PoolProvenance = {
-    dreamAvatarId: dreamAvatarId ?? asDreamAvatarId(""),
+    dreamAvatarId: dreamAvatarId ?? null,
     signatureless,
     borrowedArchetypeName,
     dealSize,

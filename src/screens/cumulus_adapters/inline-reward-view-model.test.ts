@@ -5,14 +5,14 @@ import type {
   SiteState,
 } from "../../types/journey";
 import { buildInlineRewardCompletionLog } from "./inline-reward-view-model";
-import { asSiteId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { testDreamsignId } from "../../types/test-identities";
 
 const STATE = { essence: 90 };
 
 function site(type: SiteState["type"]): SiteState {
   return {
-    id: asSiteId("site-uuid"),
+    id: parseSiteId("site-uuid"),
     type,
     isEnhanced: false,
     isVisited: false,
@@ -33,19 +33,20 @@ describe("buildInlineRewardCompletionLog", () => {
       STATE,
     );
     expect(result?.kind).toBe("essence");
-    expect(result?.fields.siteId).toBe("site-uuid");
+    expect(result?.fields.siteId).toBe(parseSiteId("site-uuid"));
     expect(result?.fields.rewardAmount).toBe(25);
     expect(result?.fields.essenceBefore).toBe(90);
     expect(result?.fields.essenceAfter).toBe(115);
   });
 
   it("identifies a Dreamsign grant by UUID", () => {
+    const dreamsignId = testDreamsignId("dreamsign-uuid");
     const runtime: RewardSiteRuntime = {
       kind: "reward",
       reward: {
         rewardType: "dreamsign",
         dreamsign: {
-          id: asDreamsignId("dreamsign-uuid"),
+          id: dreamsignId,
           name: "Display name",
           effectDescription: "A test effect.",
         },
@@ -61,7 +62,7 @@ describe("buildInlineRewardCompletionLog", () => {
     );
     expect(result?.kind).toBe("reward");
     expect(result?.fields.rewardType).toBe("dreamsign");
-    expect(result?.fields.dreamsignId).toBe("dreamsign-uuid");
+    expect(result?.fields.dreamsignId).toBe(dreamsignId);
   });
 
   it("ignores an accepted runtime", () => {

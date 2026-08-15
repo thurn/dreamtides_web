@@ -4,16 +4,20 @@ import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
 import {
   BattleTutorialGuidance,
   type BattleTutorialGuidanceView,
 } from "./BattleTutorialGuidance";
-import { asPresentationId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
-import { asDreamwellCardId } from "../../types/identifiers";
+import { parsePresentationId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import {
+  testCardId,
+  testDreamwellCardId,
+  testTutorialTriggerId,
+} from "../../types/test-identities";
 
 class ResizeObserverStub {
   observe(_target: Element) {}
@@ -81,8 +85,8 @@ describe("BattleTutorialGuidance", () => {
         <CumulusRoot>
           <BattleTutorialGuidance
             view={{
-              presentationId: asPresentationId("guidance:erode"),
-              triggerId: "erode",
+              presentationId: parsePresentationId("guidance:erode"),
+              triggerId: testTutorialTriggerId("erode"),
               messageIndex: 0,
               messageCount: 1,
               ...guidanceFields(
@@ -97,11 +101,11 @@ describe("BattleTutorialGuidance", () => {
                 kind: "dreamwell",
                 side: "player",
                 model: {
-                  cardId: asDreamwellCardId(
+                  cardId: testDreamwellCardId(
                     "03e4e701-4720-4278-8198-9b7e0514d4cf",
                   ),
                   displaySnapshot: {
-                    id: asDreamwellCardId(
+                    id: testDreamwellCardId(
                       "03e4e701-4720-4278-8198-9b7e0514d4cf",
                     ),
                     name: assertLocalized("Shadow Passage"),
@@ -163,8 +167,8 @@ describe("BattleTutorialGuidance", () => {
         <CumulusRoot>
           <BattleTutorialGuidance
             view={{
-              presentationId: asPresentationId("guidance:erode"),
-              triggerId: "erode",
+              presentationId: parsePresentationId("guidance:erode"),
+              triggerId: testTutorialTriggerId("erode"),
               messageIndex: 0,
               messageCount: 1,
               delay: 1,
@@ -173,11 +177,11 @@ describe("BattleTutorialGuidance", () => {
                 kind: "dreamwell",
                 side: "player",
                 model: {
-                  cardId: asDreamwellCardId(
+                  cardId: testDreamwellCardId(
                     "03e4e701-4720-4278-8198-9b7e0514d4cf",
                   ),
                   displaySnapshot: {
-                    id: asDreamwellCardId(
+                    id: testDreamwellCardId(
                       "03e4e701-4720-4278-8198-9b7e0514d4cf",
                     ),
                     name: assertLocalized("Shadow Passage"),
@@ -235,8 +239,8 @@ describe("BattleTutorialGuidance", () => {
         <CumulusRoot>
           <BattleTutorialGuidance
             view={{
-              presentationId: asPresentationId("guidance:spark-tie"),
-              triggerId: "spark-tie",
+              presentationId: parsePresentationId("guidance:spark-tie"),
+              triggerId: testTutorialTriggerId("spark-tie"),
               messageIndex: 0,
               messageCount: 1,
               ...guidanceFields(
@@ -267,13 +271,13 @@ describe("BattleTutorialGuidance", () => {
 
   it("carries one battle-card identity from its source into guidance and on to its destination", () => {
     const battleCardId = "battle-card-1";
-    const cardId = asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
+    const cardId = testCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
     const displaySnapshot: CardData = {
       id: cardId,
-      name: asCardName("Fixture Traveler"),
+      name: parseCardName("Fixture Traveler"),
       cardNumber: 7,
       cardType: "Character",
-      subtype: "Fixture",
+      subtype: "Warrior",
       isStarter: true,
       energyCost: 1,
       spark: 2,
@@ -283,14 +287,14 @@ describe("BattleTutorialGuidance", () => {
       artOwned: true,
     };
     const view: BattleTutorialGuidanceView = {
-      presentationId: asPresentationId("guidance:support"),
-      triggerId: "support",
+      presentationId: parsePresentationId("guidance:support"),
+      triggerId: testTutorialTriggerId("support"),
       messageIndex: 0,
       messageCount: 1,
       ...guidanceFields("Support helps the character in front."),
       source: {
         kind: "card",
-        battleCardId: asBattleCardId(battleCardId),
+        battleCardId: parseBattleCardId(battleCardId),
         model: { cardId, displaySnapshot },
         figment: false,
       },
@@ -377,7 +381,7 @@ describe("BattleTutorialGuidance", () => {
           <BattleTutorialGuidance
             view={{
               ...view,
-              triggerId: "event-card",
+              triggerId: testTutorialTriggerId("event-card"),
               messageIndex: 1,
               messageCount: 2,
               dialogue: {
@@ -447,13 +451,13 @@ describe("BattleTutorialGuidance", () => {
 
   it("keeps journey cards in place and positions only Mira's dialogue outside them", () => {
     vi.useFakeTimers();
-    const cardId = asCardId("card-a");
+    const cardId = testCardId("card-a");
     const displaySnapshot: CardData = {
       id: cardId,
-      name: asCardName("Fixture Offer"),
+      name: parseCardName("Fixture Offer"),
       cardNumber: 8,
       cardType: "Character",
-      subtype: "Fixture",
+      subtype: "Warrior",
       isStarter: false,
       energyCost: 2,
       spark: 3,
@@ -509,8 +513,8 @@ describe("BattleTutorialGuidance", () => {
       },
     );
     const view: BattleTutorialGuidanceView = {
-      presentationId: asPresentationId("card-tutorial:fixture"),
-      triggerId: "support",
+      presentationId: parsePresentationId("card-tutorial:fixture"),
+      triggerId: testTutorialTriggerId("support"),
       messageIndex: 0,
       messageCount: 1,
       ...guidanceFields("Support helps the character in front."),
@@ -618,8 +622,8 @@ describe("BattleTutorialGuidance", () => {
         <CumulusRoot>
           <BattleTutorialGuidance
             view={{
-              presentationId: asPresentationId("site-tutorial:transfiguration"),
-              triggerId: "transfiguration",
+              presentationId: parsePresentationId("site-tutorial:transfiguration"),
+              triggerId: testTutorialTriggerId("transfiguration"),
               messageIndex: 0,
               messageCount: 1,
               delay: 1,

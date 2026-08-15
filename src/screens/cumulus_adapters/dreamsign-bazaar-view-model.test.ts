@@ -16,11 +16,11 @@ import {
 } from "./dreamsign-bazaar-view-model";
 import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
 
-function sign(id: string, name: string): Dreamsign {
+function sign(idSeed: string, name: string): Dreamsign {
   return {
-    id: asDreamsignId(id),
+    id: testDreamsignId(idSeed),
     name,
-    imageName: `${id}.png`,
+    imageName: `${idSeed}.png`,
     imageAlt: `${name} fixture art`,
     effectDescription: "Draw a card.",
   };
@@ -32,21 +32,21 @@ function runtime(): ShopSiteRuntime {
     slots: [
       {
         itemType: "dreamsign",
-        dreamsign: sign("dreamsign-uuid-a", "Fixture Alpha"),
+        dreamsign: { ...sign("dreamsign-uuid-a", "Fixture Alpha"), id: OFFER_A_ID },
         basePrice: 100,
         discountPercent: 20,
         purchased: false,
       },
       {
         itemType: "dreamsign",
-        dreamsign: sign("dreamsign-uuid-b", "Fixture Beta"),
+        dreamsign: { ...sign("dreamsign-uuid-b", "Fixture Beta"), id: OFFER_B_ID },
         basePrice: 200,
         discountPercent: 0,
         purchased: false,
       },
       {
         itemType: "dreamsign",
-        dreamsign: sign("dreamsign-uuid-c", "Fixture Gamma"),
+        dreamsign: { ...sign("dreamsign-uuid-c", "Fixture Gamma"), id: OFFER_C_ID },
         basePrice: 50,
         discountPercent: 0,
         purchased: true,
@@ -59,7 +59,7 @@ function runtime(): ShopSiteRuntime {
 }
 
 const site: SiteState = {
-  id: asSiteId("dreamsign-bazaar-site"),
+  id: parseSiteId("dreamsign-bazaar-site"),
   type: "DreamsignBazaar",
   isEnhanced: false,
   isVisited: false,
@@ -87,21 +87,21 @@ describe("buildDreamsignBazaarOffers", () => {
       })),
     ).toEqual([
       {
-        entryId: asDeckEntryId("shop-slot-0-dreamsign-uuid-a"),
+        entryId: offerEntryId(0, OFFER_A_ID),
         slotIndex: 0,
         price: 70,
         state: "available",
         requiresReplacement: true,
       },
       {
-        entryId: asDeckEntryId("shop-slot-1-dreamsign-uuid-b"),
+        entryId: offerEntryId(1, OFFER_B_ID),
         slotIndex: 1,
         price: 180,
         state: "unaffordable",
         requiresReplacement: true,
       },
       {
-        entryId: asDeckEntryId("shop-slot-2-dreamsign-uuid-c"),
+        entryId: offerEntryId(2, OFFER_C_ID),
         slotIndex: 2,
         price: 45,
         state: "purchased",
@@ -172,15 +172,16 @@ describe("buildDreamsignBazaarSiteView", () => {
       dreamsigns: [sign("owned-uuid", "Owned Fixture")],
     };
     const pendingDreamsign = sign("pending-uuid", "Pending Fixture");
+    const guideId = testGuideId("fixture-amunet");
     const view = buildDreamsignBazaarSiteView({
       state,
       sceneNode: null,
       site,
       runtime: runtime(),
       guide: {
-        id: asGuideId("fixture-amunet"),
+        id: guideId,
         name: "Amunet Fixture",
-        homeDreamscapeId: asDreamscapeId("fixture-dream"),
+        homeDreamscapeId: testDreamscapeId("fixture-dream"),
         siteType: "DreamsignBazaar",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["Choose carefully."] },
@@ -192,14 +193,14 @@ describe("buildDreamsignBazaarSiteView", () => {
       sitesData: MINIMAL_SITES_DATA,
     });
 
-    expect(view.siteId).toBe("dreamsign-bazaar-site");
+    expect(view.siteId).toBe(site.id);
     expect(view.guide).toMatchObject({
-      id: "fixture-amunet",
-      name: "Amunet Fixture",
-      line: "A chosen greeting.",
+      id: guideId,
     });
+    expect(view.guide.name).toBeInstanceOf(LocalizedString);
+    expect(view.guide.line).toBeInstanceOf(LocalizedString);
     expect(view.offers).toHaveLength(3);
-    expect(view.purge?.pendingDreamsign.id).toBe("pending-uuid");
+    expect(view.purge?.pendingDreamsign.id).toBe(pendingDreamsign.id);
   });
 
   it("uses counted free purchases for Bazaar wares while preserving reroll pricing", () => {
@@ -211,8 +212,8 @@ describe("buildDreamsignBazaarSiteView", () => {
         freePurchaseModifiers: [
           {
             kind: "free-purchases" as const,
-            sourceSiteId: asSiteId("exploration-site"),
-            sourceActionId: asExplorationActionId("exploration-action"),
+            sourceSiteId: parseSiteId("exploration-site"),
+            sourceActionId: testExplorationActionId("exploration-action"),
             initialCount: 4,
             remainingCount: 3,
           },
@@ -225,9 +226,9 @@ describe("buildDreamsignBazaarSiteView", () => {
       site,
       runtime: runtime(),
       guide: {
-        id: asGuideId("fixture-amunet"),
+        id: testGuideId("fixture-amunet"),
         name: "Amunet Fixture",
-        homeDreamscapeId: asDreamscapeId("fixture-dream"),
+        homeDreamscapeId: testDreamscapeId("fixture-dream"),
         siteType: "DreamsignBazaar",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["Choose carefully."] },
@@ -247,10 +248,15 @@ describe("buildDreamsignBazaarSiteView", () => {
     expect(view.restock.price).toBeGreaterThan(0);
   });
 });
-import { assertLocalized } from "@trox/runtime";
-import { asSiteId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asExplorationActionId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { assertLocalized, LocalizedString } from "@trox/runtime";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testDreamscapeId, testExplorationActionId, testGuideId, testDreamsignId } from "../../types/test-identities";
+
+const OFFER_A_ID = testDreamsignId("dreamsign-uuid-a");
+const OFFER_B_ID = testDreamsignId("dreamsign-uuid-b");
+const OFFER_C_ID = testDreamsignId("dreamsign-uuid-c");
+
+function offerEntryId(slotIndex: number, dreamsignId: Dreamsign["id"]) {
+  return parseDeckEntryId(`shop-slot-${String(slotIndex)}-${dreamsignId}`);
+}

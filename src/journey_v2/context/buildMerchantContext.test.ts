@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-import { asCardId } from "../../types/card-identity";
 import { buildMerchantContext } from "./buildMerchantContext";
 import {
   TEST_CARD_UUIDS,
@@ -12,17 +11,17 @@ import {
   makeMerchantTestResolvedPackage,
   makeMerchantTestSite,
 } from "../testing/fixtures";
-import { asDreamsignId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testDreamsignId, testCardId } from "../../types/test-identities";
 
 describe("buildMerchantContext", () => {
   it("indexes all catalog cards with UUIDs", () => {
     const ordinaryCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.ordinary),
+      id: testCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 101,
     });
     const deckCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.deckCopy),
+      id: testCardId(TEST_CARD_UUIDS.deckCopy),
       cardNumber: 102,
     });
 
@@ -34,21 +33,21 @@ describe("buildMerchantContext", () => {
       site: makeMerchantTestSite(),
     });
 
-    expect(context.cardByUuid.get(asCardId(TEST_CARD_UUIDS.ordinary))).toBe(
+    expect(context.cardByUuid.get(testCardId(TEST_CARD_UUIDS.ordinary))).toBe(
       ordinaryCard,
     );
-    expect(context.cardByUuid.get(asCardId(TEST_CARD_UUIDS.deckCopy))).toBe(
+    expect(context.cardByUuid.get(testCardId(TEST_CARD_UUIDS.deckCopy))).toBe(
       deckCard,
     );
   });
 
   it("projects deck entries to concrete entry ids and card UUIDs", () => {
     const deckCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.deckCopy),
+      id: testCardId(TEST_CARD_UUIDS.deckCopy),
       cardNumber: 201,
     });
     const deckEntry = makeMerchantTestDeckEntry({
-      entryId: asDeckEntryId("entry-201-a"),
+      entryId: parseDeckEntryId("entry-201-a"),
       cardNumber: deckCard.cardNumber,
     });
 
@@ -60,14 +59,14 @@ describe("buildMerchantContext", () => {
 
     expect(context.deckCards).toEqual([
       expect.objectContaining({
-        entryId: asDeckEntryId("entry-201-a"),
+        entryId: parseDeckEntryId("entry-201-a"),
         cardNumber: deckCard.cardNumber,
         cardUuid: TEST_CARD_UUIDS.deckCopy,
       }),
     ]);
-    expect(context.deckEntryById.get(asDeckEntryId("entry-201-a"))).toEqual(
+    expect(context.deckEntryById.get(parseDeckEntryId("entry-201-a"))).toEqual(
       expect.objectContaining({
-        entryId: asDeckEntryId("entry-201-a"),
+        entryId: parseDeckEntryId("entry-201-a"),
         cardUuid: TEST_CARD_UUIDS.deckCopy,
       }),
     );
@@ -78,7 +77,7 @@ describe("buildMerchantContext", () => {
       journeyState: makeMerchantTestJourneyState({
         deck: [
           makeMerchantTestDeckEntry({
-            entryId: asDeckEntryId("entry-missing-card"),
+            entryId: parseDeckEntryId("entry-missing-card"),
             cardNumber: 999,
           }),
         ],
@@ -88,28 +87,28 @@ describe("buildMerchantContext", () => {
     });
 
     expect(context.deckCards).toEqual([]);
-    expect(context.deckEntryById.has(asDeckEntryId("entry-missing-card"))).toBe(
+    expect(context.deckEntryById.has(parseDeckEntryId("entry-missing-card"))).toBe(
       false,
     );
   });
 
   it("excludes starter and special cards from grant candidates", () => {
     const ordinaryCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.ordinary),
+      id: testCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 301,
     });
     const starterFlagCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.starterFlag),
+      id: testCardId(TEST_CARD_UUIDS.starterFlag),
       cardNumber: 302,
       isStarter: true,
     });
     const starterRarityCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.starterRarity),
+      id: testCardId(TEST_CARD_UUIDS.starterRarity),
       cardNumber: 303,
       rarity: "Starter",
     });
     const specialRarityCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.specialRarity),
+      id: testCardId(TEST_CARD_UUIDS.specialRarity),
       cardNumber: 304,
       rarity: "Special",
     });
@@ -134,7 +133,7 @@ describe("buildMerchantContext", () => {
 
   it("uses loaded catalog cards for grant candidates without run pool data", () => {
     const ordinaryCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.ordinary),
+      id: testCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 305,
     });
 
@@ -151,20 +150,20 @@ describe("buildMerchantContext", () => {
 
   it("includes ordinary catalog cards outside the run pool", () => {
     const inPoolCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.ordinary),
+      id: testCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 401,
     });
     const outsidePoolCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.outsidePool),
+      id: testCardId(TEST_CARD_UUIDS.outsidePool),
       cardNumber: 402,
     });
     const inPoolStarterCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.starterRarity),
+      id: testCardId(TEST_CARD_UUIDS.starterRarity),
       cardNumber: 403,
       rarity: "Starter",
     });
     const inPoolSpecialCard = makeMerchantTestCard({
-      id: asCardId(TEST_CARD_UUIDS.specialRarity),
+      id: testCardId(TEST_CARD_UUIDS.specialRarity),
       cardNumber: 404,
       rarity: "Special",
     });
@@ -197,17 +196,19 @@ describe("buildMerchantContext", () => {
   });
 
   it("excludes held Dreamsign ids from Dreamsign candidates", () => {
+    const heldDreamsignId = testDreamsignId("sign-held");
+    const openDreamsignId = testDreamsignId("sign-open");
     const heldTemplate = makeMerchantTestDreamsignTemplate({
-      id: asDreamsignId("sign-held"),
+      id: heldDreamsignId,
     });
     const openTemplate = makeMerchantTestDreamsignTemplate({
-      id: asDreamsignId("sign-open"),
+      id: openDreamsignId,
     });
 
     const context = buildMerchantContext({
       journeyState: makeMerchantTestJourneyState({
         dreamsigns: [
-          makeMerchantTestDreamsign({ id: asDreamsignId("sign-held") }),
+          makeMerchantTestDreamsign({ id: heldDreamsignId }),
         ],
       }),
       journeyContent: makeMerchantTestContent({
@@ -217,18 +218,18 @@ describe("buildMerchantContext", () => {
       site: makeMerchantTestSite(),
     });
 
-    expect(context.heldDreamsignIds).toEqual(new Set(["sign-held"]));
+    expect(context.heldDreamsignIds).toEqual(new Set([heldDreamsignId]));
     expect(context.heldDreamsignFallbackNames).toEqual(new Set());
     expect(context.candidateDreamsigns).toEqual([openTemplate]);
   });
 
   it("keeps name fallback separate for held Dreamsigns missing ids", () => {
     const heldNameTemplate = makeMerchantTestDreamsignTemplate({
-      id: asDreamsignId("sign-held-name"),
+      id: testDreamsignId("sign-held-name"),
       name: "Shared Name",
     });
     const openTemplate = makeMerchantTestDreamsignTemplate({
-      id: asDreamsignId("sign-open"),
+      id: testDreamsignId("sign-open"),
     });
 
     const context = buildMerchantContext({

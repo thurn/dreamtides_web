@@ -9,22 +9,16 @@ import {
   buildTideAffinityIndex,
 } from "../selection/tide-affinity";
 import type { Tides4DecksJson } from "../draft/pool/tides4-io";
-import { asDreamsignId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
+import {
+  parseSelectionContentRevision,
+  type SelectionContentRevision,
+} from "../types/selection-content-revision";
 
 const EMPTY_TIDES: Tides4DecksJson = {
   version: 2,
   selection: { bandFraction: 0.25, bandMinimum: 5 },
-  tides: [
-    {
-      id: "unavailable",
-      displayName: "Unavailable",
-      displayDescription: "Unavailable",
-      resonance: "ember",
-      role: "neutral",
-      cards: [],
-    },
-  ],
+  tides: [],
   tidePoolByDreamAvatar: {},
 };
 
@@ -42,8 +36,8 @@ function draftPoolUuids(
   return result;
 }
 
-function selectionContentRevision(content: JourneyContent): string {
-  return stableDigest({
+function selectionContentRevision(content: JourneyContent): SelectionContentRevision {
+  return parseSelectionContentRevision(stableDigest({
     cards: [...content.cardDatabase.values()]
       .sort((left, right) => left.id.localeCompare(right.id))
       .map((card) => ({ ...card })),
@@ -55,7 +49,7 @@ function selectionContentRevision(content: JourneyContent): string {
     ),
     customDreamsigns: [...(content.exploration?.customDreamsigns ?? [])].sort(
       (left, right) =>
-        (left.id ?? asDreamsignId("")).localeCompare(right.id ?? ""),
+        (left.id ?? "").localeCompare(right.id ?? ""),
     ),
     dreamAvatars: [...content.dreamAvatars].sort((left, right) =>
       left.id.localeCompare(right.id),
@@ -64,7 +58,7 @@ function selectionContentRevision(content: JourneyContent): string {
     auguryFoldHash: content.auguryData.foldHash,
     sitesFoldHash: content.sitesData.foldHash,
     explorationFoldHash: content.exploration?.foldHash ?? null,
-  });
+  }));
 }
 
 export function buildRewardSelectionContext(input: {

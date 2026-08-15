@@ -4,7 +4,7 @@ import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
 import { artRef } from "../primitives/art";
@@ -12,9 +12,14 @@ import { CumulusRoot } from "../CumulusRoot";
 import { MENU_EDGE_INSET_MOBILE_PX } from "../primitives/chrome-geometry";
 import { BattleStartScreen, type BattleStartView } from "./BattleStartScreen";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
-import { asBattleId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import {
+  testCardId,
+  testDreamscapeId,
+  testDreamsignId,
+  testOpponentId,
+} from "../../types/test-identities";
+import { testPresentationId } from "../../types/test-identities";
 
 class ResizeObserverStub {
   constructor(_callback: ResizeObserverCallback) {}
@@ -50,13 +55,13 @@ afterEach(() => {
 
 function makeView(): BattleStartView {
   const cards: CardData[] = Array.from({ length: 3 }, (_, index) => ({
-    name: asCardName(`Signature ${String(index + 1)}`),
-    id: asCardId(
+    name: parseCardName(`Signature ${String(index + 1)}`),
+    id: testCardId(
       `00000000-0000-0000-0000-${String(index + 1).padStart(12, "0")}`,
     ),
     cardNumber: index + 1,
     cardType: "Character",
-    subtype: "Test",
+    subtype: "Warrior",
     isStarter: false,
     energyCost: index + 1,
     spark: index + 2,
@@ -66,10 +71,10 @@ function makeView(): BattleStartView {
     artOwned: true,
   }));
   return {
-    battleId: asBattleId("battle-test"),
-    scene: artRef.dreamscapeScene(asDreamscapeId("test_dreamscape")),
+    battleId: parseBattleId("battle-test"),
+    scene: artRef.dreamscapeScene(testDreamscapeId("test_dreamscape")),
     dreamAvatar: {
-      id: "opponent-uuid",
+      id: testOpponentId("opponent-uuid"),
       name: assertLocalized("Aeris, the Prism Guide"),
       title: assertLocalized("Storm Archivist"),
       imageNumber: "001",
@@ -78,7 +83,7 @@ function makeView(): BattleStartView {
     },
     dreamsigns: [
       localizedDreamsignFixture({
-        id: asDreamsignId("battle-test:dreamsign:0"),
+        id: testDreamsignId("battle-test:dreamsign:0"),
         name: "Sign of Quiet Thunder",
         effectDescription: "The first event each turn costs 1 less.",
         imageName: "quiet-thunder.webp",
@@ -196,7 +201,7 @@ describe("Cumulus BattleStartScreen", () => {
     const view: BattleStartView = {
       ...makeView(),
       guideDialogue: {
-        id: "first-battle-guidance",
+        id: testPresentationId("first-battle-guidance"),
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: assertLocalized("Mira"),

@@ -39,7 +39,7 @@ function searchMessage() {
   );
 }
 
-function algorithmMessage(algorithm_id: string) {
+function algorithmMessage(algorithm_id: "tides4") {
   return txa(
     "Algorithm: {algorithm_id}",
     { algorithm_id },

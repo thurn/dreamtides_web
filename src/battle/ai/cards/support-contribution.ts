@@ -24,8 +24,8 @@ import type { BattleCardId } from "../../../types/identifiers";
  */
 export function buildSupportContribution(
   model: ForwardModel,
-): Map<string, number> {
-  const contribution = new Map<string, number>();
+): Map<BattleCardId, number> {
+  const contribution = new Map<BattleCardId, number>();
   const add = (battleCardId: BattleCardId, amount: number): void => {
     if (amount === 0) {
       return;

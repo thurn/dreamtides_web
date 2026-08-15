@@ -5,15 +5,19 @@ import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FoldState } from "../rules/fold-state";
 import { JourneyCardTutorialController } from "./JourneyCardTutorialController";
+import type { CardId } from "../types/card-identity";
+import { parseCardTutorialScreenKey } from "../types/identifiers";
+import { testCardId } from "../types/test-identities";
+
+const CARD_A = testCardId("10000000-0000-4000-8000-000000000001");
+const CARD_B = testCardId("10000000-0000-4000-8000-000000000002");
+const CARD_C = testCardId("10000000-0000-4000-8000-000000000003");
 
 const mocks = vi.hoisted(() => {
-  const context: {
-    screenKey: string;
-    event: "card-seen" | "transfiguration-seen";
-    visibilityGate?: "exploration-actions";
-  } = {
-    screenKey: "journey:1:site:site-1",
-    event: "card-seen",
+  const context = {
+    screenKey: "journey:1:site:site-1" as unknown,
+    event: "card-seen" as "card-seen" | "transfiguration-seen",
+    visibilityGate: undefined as "exploration-actions" | undefined,
   };
   return {
     open: vi.fn(() => Promise.resolve(1)),
@@ -89,7 +93,7 @@ vi.mock("../cumulus/screens/BattleTutorialGuidance", () => ({
   ),
 }));
 
-function Harness({ cardIds }: { readonly cardIds: readonly string[] }) {
+function Harness({ cardIds }: { readonly cardIds: readonly CardId[] }) {
   const stageRef = useRef<HTMLDivElement>(null);
   return (
     <div ref={stageRef}>
@@ -132,12 +136,13 @@ beforeEach(() => {
     mocks.state as unknown as { cardTutorialPresentation: unknown }
   ).cardTutorialPresentation = null;
   mocks.context = {
-    screenKey: "journey:1:site:site-1",
+    screenKey: parseCardTutorialScreenKey("journey:1:site:site-1"),
     event: "card-seen",
+    visibilityGate: undefined,
   };
   mocks.select.mockReset();
   mocks.select.mockImplementation(
-    (_provider: unknown, cardIds: readonly string[]) => ({
+    (_provider: unknown, cardIds: readonly CardId[]) => ({
       card: { id: cardIds[0] },
       trigger: { id: "support" },
     }),
@@ -157,19 +162,21 @@ describe("JourneyCardTutorialController", () => {
     const root = createRoot(container);
 
     await act(async () => {
-      root.render(<Harness cardIds={["card-a", "card-b"]} />);
+      root.render(
+        <Harness cardIds={[CARD_A, CARD_B]} />,
+      );
       await Promise.resolve();
     });
 
     expect(mocks.select).toHaveBeenCalledOnce();
-    expect(mocks.select.mock.calls[0]?.[1]).toEqual(["card-a", "card-b"]);
+    expect(mocks.select.mock.calls[0]?.[1]).toEqual([CARD_A, CARD_B]);
     expect(mocks.open).toHaveBeenCalledWith(
       "journey:1:site:site-1",
-      ["card-a", "card-b"],
+      [CARD_A, CARD_B],
     );
 
     await act(async () => {
-      container.querySelector("[data-card-id=card-a]")?.append(
+      container.querySelector(`[data-card-id="${CARD_A}"]`)?.append(
         document.createElement("span"),
       );
       await Promise.resolve();
@@ -179,15 +186,15 @@ describe("JourneyCardTutorialController", () => {
 
     await act(async () => {
       container
-        .querySelector("[data-card-id=card-a]")
-        ?.setAttribute("data-card-id", "card-c");
+        .querySelector(`[data-card-id="${CARD_A}"]`)
+        ?.setAttribute("data-card-id", CARD_C);
       await Promise.resolve();
     });
     expect(mocks.select).toHaveBeenCalledTimes(2);
-    expect(mocks.select.mock.calls[1]?.[1]).toEqual(["card-c", "card-b"]);
+    expect(mocks.select.mock.calls[1]?.[1]).toEqual([CARD_C, CARD_B]);
     expect(mocks.open).toHaveBeenLastCalledWith(
       "journey:1:site:site-1",
-      ["card-c", "card-b"],
+      [CARD_C, CARD_B],
     );
 
     act(() => root.unmount());
@@ -195,8 +202,11 @@ describe("JourneyCardTutorialController", () => {
 
   it("submits a visible site concept without waiting for a GameCard", async () => {
     mocks.context = {
-      screenKey: "journey:1:site:augury:concept:transfiguration",
+      screenKey: parseCardTutorialScreenKey(
+        "journey:1:site:augury:concept:transfiguration",
+      ),
       event: "transfiguration-seen",
+      visibilityGate: undefined,
     };
     mocks.select.mockImplementation(() => ({
       card: null,
@@ -227,7 +237,9 @@ describe("JourneyCardTutorialController", () => {
 
   it("waits until Exploration presents its action offers", async () => {
     mocks.context = {
-      screenKey: "journey:1:site:exploration:concept:transfiguration",
+      screenKey: parseCardTutorialScreenKey(
+        "journey:1:site:exploration:concept:transfiguration",
+      ),
       event: "transfiguration-seen",
       visibilityGate: "exploration-actions",
     };
@@ -261,7 +273,9 @@ describe("JourneyCardTutorialController", () => {
 
   it("withholds a shared Exploration presentation until the local action surface is visible", async () => {
     mocks.context = {
-      screenKey: "journey:1:site:exploration:concept:transfiguration",
+      screenKey: parseCardTutorialScreenKey(
+        "journey:1:site:exploration:concept:transfiguration",
+      ),
       event: "transfiguration-seen",
       visibilityGate: "exploration-actions",
     };

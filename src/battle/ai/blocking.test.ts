@@ -1,15 +1,16 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../types/test-identities";
 import { planBlocking, planBlockingWithDecision } from "./blocking";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
 
 function makeCard(
   overrides: Partial<AiCard> & Pick<AiCard, "battleCardId">,
 ): AiCard {
   return {
     cardNumber: 512,
-    name: "body",
+    name: testCardName("body"),
     energyCost: 0,
     basePrintedSpark: 1,
     sparkDelta: 0,
@@ -58,13 +59,13 @@ describe("planBlocking", () => {
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({
-          battleCardId: asBattleCardId("blocker"),
+          battleCardId: parseBattleCardId("blocker"),
           basePrintedSpark: 5,
         }),
       },
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("back"),
+          battleCardId: parseBattleCardId("back"),
           rank: "back",
           slot: "B0",
         }),
@@ -78,13 +79,13 @@ describe("planBlocking", () => {
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({
-          battleCardId: asBattleCardId("wolf"),
+          battleCardId: parseBattleCardId("wolf"),
           basePrintedSpark: 4,
         }),
       },
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("challenger"),
+          battleCardId: parseBattleCardId("challenger"),
           slot: "F2",
           effectiveSpark: 3,
         }),
@@ -104,17 +105,17 @@ describe("planBlocking", () => {
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({
-          battleCardId: asBattleCardId("huge"),
+          battleCardId: parseBattleCardId("huge"),
           basePrintedSpark: 9,
         }),
         B1: makeCard({
-          battleCardId: asBattleCardId("just-enough"),
+          battleCardId: parseBattleCardId("just-enough"),
           basePrintedSpark: 4,
         }),
       },
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("challenger"),
+          battleCardId: parseBattleCardId("challenger"),
           slot: "F0",
           effectiveSpark: 3,
         }),
@@ -131,14 +132,14 @@ describe("planBlocking", () => {
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({
-          battleCardId: asBattleCardId("exhausted"),
+          battleCardId: parseBattleCardId("exhausted"),
           basePrintedSpark: 6,
           canChallengeThisTurn: false,
         }),
       },
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("challenger"),
+          battleCardId: parseBattleCardId("challenger"),
           slot: "F0",
           effectiveSpark: 3,
         }),
@@ -152,20 +153,20 @@ describe("planBlocking", () => {
       aiFrontRank: {
         ...emptyFrontRankSlots(),
         F0: makeCard({
-          battleCardId: asBattleCardId("onguard"),
+          battleCardId: parseBattleCardId("onguard"),
           basePrintedSpark: 2,
         }),
       },
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({
-          battleCardId: asBattleCardId("backRank"),
+          battleCardId: parseBattleCardId("backRank"),
           basePrintedSpark: 5,
         }),
       },
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("challenger"),
+          battleCardId: parseBattleCardId("challenger"),
           slot: "F0",
           effectiveSpark: 3,
         }),
@@ -181,13 +182,13 @@ describe("planBlocking", () => {
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({
-          battleCardId: asBattleCardId("2-spark-blocker"),
+          battleCardId: parseBattleCardId("2-spark-blocker"),
           basePrintedSpark: 2,
         }),
       },
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("8-spark-challenger"),
+          battleCardId: parseBattleCardId("8-spark-challenger"),
           effectiveSpark: 8,
         }),
       ],
@@ -210,17 +211,17 @@ describe("planBlocking", () => {
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({
-          battleCardId: asBattleCardId("small"),
+          battleCardId: parseBattleCardId("small"),
           basePrintedSpark: 1,
         }),
         B1: makeCard({
-          battleCardId: asBattleCardId("medium"),
+          battleCardId: parseBattleCardId("medium"),
           basePrintedSpark: 2,
         }),
       },
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("challenger"),
+          battleCardId: parseBattleCardId("challenger"),
           slot: "F1",
           effectiveSpark: 6,
         }),
@@ -240,14 +241,14 @@ describe("planBlocking", () => {
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({
-          battleCardId: asBattleCardId("precious"),
+          battleCardId: parseBattleCardId("precious"),
           basePrintedSpark: 5,
         }),
       },
       // Challenger outsparks the only blocker, and the hit is far from lethal.
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("challenger"),
+          battleCardId: parseBattleCardId("challenger"),
           slot: "F0",
           effectiveSpark: 8,
         }),
@@ -266,18 +267,18 @@ describe("planBlocking", () => {
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({
-          battleCardId: asBattleCardId(blockerId),
+          battleCardId: parseBattleCardId(blockerId),
           basePrintedSpark: 1,
         }),
       },
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId(largerChallengerId),
+          battleCardId: parseBattleCardId(largerChallengerId),
           slot: "F0",
           effectiveSpark: 3,
         }),
         makeBody({
-          battleCardId: asBattleCardId(smallerChallengerId),
+          battleCardId: parseBattleCardId(smallerChallengerId),
           slot: "F1",
           effectiveSpark: 2,
         }),
@@ -288,7 +289,7 @@ describe("planBlocking", () => {
     expect(plan.actions).toHaveLength(1);
     expect(plan.actions[0]).toMatchObject({
       kind: "MOVE_CARD",
-      self: { battleCardId: asBattleCardId(blockerId) },
+      self: { battleCardId: parseBattleCardId(blockerId) },
       toSlot: "F0",
     });
     expect(plan.decision).toMatchObject({
@@ -301,14 +302,14 @@ describe("planBlocking", () => {
       availableBlockerBattleCardIds: [blockerId],
       lanes: [
         {
-          challengerBattleCardId: asBattleCardId(largerChallengerId),
+          challengerBattleCardId: parseBattleCardId(largerChallengerId),
           lane: "F0",
           outcome: "blocked",
           reason: "prevent-lethal",
-          blockerBattleCardId: asBattleCardId(blockerId),
+          blockerBattleCardId: parseBattleCardId(blockerId),
         },
         {
-          challengerBattleCardId: asBattleCardId(smallerChallengerId),
+          challengerBattleCardId: parseBattleCardId(smallerChallengerId),
           lane: "F1",
           outcome: "declined",
           reason: "no-available-blocker",
@@ -323,22 +324,22 @@ describe("planBlocking", () => {
       aiBackRank: {
         ...emptyBackRankSlots(),
         B0: makeCard({
-          battleCardId: asBattleCardId("b3"),
+          battleCardId: parseBattleCardId("b3"),
           basePrintedSpark: 3,
         }),
         B1: makeCard({
-          battleCardId: asBattleCardId("b5"),
+          battleCardId: parseBattleCardId("b5"),
           basePrintedSpark: 5,
         }),
       },
       opponentBodies: [
         makeBody({
-          battleCardId: asBattleCardId("small"),
+          battleCardId: parseBattleCardId("small"),
           slot: "F0",
           effectiveSpark: 2,
         }),
         makeBody({
-          battleCardId: asBattleCardId("big"),
+          battleCardId: parseBattleCardId("big"),
           slot: "F1",
           effectiveSpark: 4,
         }),

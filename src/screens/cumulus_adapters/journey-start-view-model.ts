@@ -8,6 +8,7 @@ import { selectedTides4Decks } from "../../data/tides4-preview";
 import { selectDreamAvatarOfferForReroll } from "../../data/dream-avatar-selection";
 import type { RunPoolContext } from "../../data/journey-content";
 import type { DreamAvatarContent } from "../../types/content";
+import type { JourneySeed } from "../../types/journey-seed";
 import type { Tides4DeckJson } from "../../draft/pool/tides4-io";
 import type {
   TutorialJourneyPool,
@@ -23,6 +24,7 @@ import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bub
 import { localizedSourceText } from "../../runtime/localization/runtime";
 import { tx } from "@trox/runtime";
 import type { DreamAvatarId } from "../../types/identifiers";
+import { parsePresentationId } from "../../types/identifiers";
 
 /** The select screen shows at most this many tides per DreamAvatar. */
 const MAX_TIDES_SHOWN = 4;
@@ -34,7 +36,7 @@ const MAX_TIDES_SHOWN = 4;
  */
 export function resolveDreamAvatarOffer(
   dreamAvatars: readonly DreamAvatarContent[],
-  journeySeed: string,
+  journeySeed: JourneySeed,
   rerollCount: number,
   tutorialDreamAvatarId?: DreamAvatarId,
 ): DreamAvatarContent[] {
@@ -60,7 +62,9 @@ export function buildJourneyStartGuideDialogue(
     return undefined;
   }
   return {
-    id: `journey-start-guidance:${tutorialDreamAvatarId}`,
+    id: parsePresentationId(
+      `journey-start-guidance:${tutorialDreamAvatarId}`,
+    ),
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
       portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),
@@ -122,7 +126,7 @@ function toTutorialTideView(tide: TutorialJourneyTide): DreamAvatarTideView {
 export function buildDreamAvatarTideViews(
   poolContext: RunPoolContext | undefined,
   dreamAvatar: DreamAvatarContent,
-  journeySeed: string,
+  journeySeed: JourneySeed,
 ): DreamAvatarTideView[] {
   return largestTides(
     selectedTides4Decks(poolContext, dreamAvatar, journeySeed),
@@ -147,7 +151,7 @@ export function toDreamAvatarOfferView(
     tides.length > 0
       ? []
       : (dreamAvatar.signatureCards ?? []).map((name, index) => ({
-          id: signatureCardIds[index] ?? `${name}-${String(index)}`,
+          id: signatureCardIds[index] ?? null,
           name: localizedSourceText(name),
         }));
   return {
@@ -172,7 +176,7 @@ export function toDreamAvatarOfferView(
 export function buildDreamAvatarOfferViews(
   offered: DreamAvatarContent[],
   poolContext: RunPoolContext | undefined,
-  journeySeed: string,
+  journeySeed: JourneySeed,
   tutorialJourneyPool?: TutorialJourneyPool,
   tutorialDreamAvatarId?: DreamAvatarId,
 ): DreamAvatarOfferView[] {

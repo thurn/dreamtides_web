@@ -1,9 +1,10 @@
 import type { GambleData } from "../types/gamble-data";
+import { testContentHash, testFoldHash } from "../types/test-identities";
 
 const FIXTURE: GambleData = {
   schemaVersion: 1,
-  contentHash: "fixture-gamble-content-hash",
-  foldHash: "fixture-gamble-fold-hash",
+  contentHash: testContentHash("c"),
+  foldHash: testFoldHash("d"),
   games: [
     {
       id: "gravok-three-gate-wager",

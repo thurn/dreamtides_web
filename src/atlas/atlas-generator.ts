@@ -27,9 +27,9 @@ import type { DreamsignId, GuideId } from "../types/identifiers";
 import type { DreamscapeId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
 import type { SiteId } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
-import { asSiteId } from "../types/identifiers";
-import { asDreamsignId } from "../types/identifiers";
+import type { IdentityRecord } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
 
 /** Parameters for site generation that require external data. */
 export interface SiteGenerationContext {
@@ -97,15 +97,18 @@ let atlasRandom: () => number = Math.random;
 
 function nextNodeId(): AtlasNodeId {
   nodeIdCounter += 1;
-  return asAtlasNodeId(`dreamscape-${String(nodeIdCounter)}`);
+  return parseAtlasNodeId(`dreamscape-${String(nodeIdCounter)}`);
 }
 
 function nextSiteId(): SiteId {
   siteIdCounter += 1;
-  return asSiteId(`site-${String(siteIdCounter)}`);
+  return parseSiteId(`site-${String(siteIdCounter)}`);
 }
 
-function numericSuffix(id: string, prefix: string): number | null {
+function numericSuffix(
+  id: AtlasNodeId | SiteId,
+  prefix: "dreamscape" | "site",
+): number | null {
   const match = new RegExp(`^${prefix}-(\\d+)$`).exec(id);
   if (match === null) {
     return null;
@@ -116,12 +119,10 @@ function numericSuffix(id: string, prefix: string): number | null {
 
 function maxNodeIdSuffix(atlas: DreamAtlas): number {
   let max = 0;
-  for (const [key, node] of Object.entries(atlas.nodes)) {
-    for (const id of [key, node.id]) {
-      const suffix = numericSuffix(id, "dreamscape");
-      if (suffix !== null && suffix > max) {
-        max = suffix;
-      }
+  for (const node of Object.values(atlas.nodes)) {
+    const suffix = numericSuffix(node.id, "dreamscape");
+    if (suffix !== null && suffix > max) {
+      max = suffix;
     }
   }
   return max;
@@ -356,7 +357,7 @@ function makeSite(
   draftPickCount: number,
 ): SiteState {
   return {
-    id: asSiteId(nextSiteId()),
+    id: nextSiteId(),
     type,
     isEnhanced,
     isVisited: false,
@@ -676,7 +677,7 @@ export function edgesCross(
 // ---------------------------------------------------------------------------
 
 interface AtlasState {
-  atlas: DreamAtlas;
+  atlas: DreamAtlas<true>;
   context: AtlasBuildContext;
   siteContext: SiteGenerationContext;
   completionLevel: number;
@@ -685,7 +686,7 @@ interface AtlasState {
    * dreamscape and is reduced each time that dreamscape is placed, discouraging
    * (but never forbidding) repeats. Kept > 0 always.
    */
-  dreamscapeWeights: Map<string, number>;
+  dreamscapeWeights: Map<DreamscapeId, number>;
   /** Run dreamsign pool still available to grant as known dreamsigns. */
   remainingDreamsignIds: DreamsignId[];
   logEvents: boolean;
@@ -796,7 +797,7 @@ function drawDreamscapeForNode(
 ): DreamscapeContent {
   const nonStarter = state.context.dreamscapes.filter((d) => !d.isStarter);
   const selection = state.context.atlasData.dreamscapeSelection;
-  const ineligibleDreamscapeIds = new Set<string>();
+  const ineligibleDreamscapeIds = new Set<DreamscapeId>();
   if (selection.excludeConnectedRepeats) {
     const connectedIds = [...node.forwardIds, ...node.backwardIds];
     for (const id of connectedIds) {
@@ -972,7 +973,7 @@ function setNodeState(
  */
 function placeKnownDreamsigns(
   state: AtlasState,
-  startRevealedNodeIds: ReadonlySet<string>,
+  startRevealedNodeIds: ReadonlySet<AtlasNodeId>,
 ): void {
   const cfg = state.context.atlasData.knownDreamsign;
   if (cfg.maxPerAtlas <= 0 || state.remainingDreamsignIds.length === 0) {
@@ -986,7 +987,7 @@ function placeKnownDreamsigns(
 
   // Candidate nodes, biased toward earlier layers and toward the start-reveal
   // set so a known dreamsign tends to be visible from the start.
-  const candidates: Array<[string, number]> = [];
+  const candidates: Array<[AtlasNodeId, number]> = [];
   for (const ordinal of eligibleOrdinals) {
     for (const nodeId of state.atlas.layers[ordinal]) {
       const earlierWeight = 1 + cfg.earlyRevealBias / (ordinal + 1);
@@ -1000,7 +1001,7 @@ function placeKnownDreamsigns(
     return;
   }
 
-  const carriers: string[] = [];
+  const carriers: AtlasNodeId[] = [];
   const remainingCandidates = [...candidates];
   while (
     carriers.length < cfg.maxPerAtlas &&
@@ -1024,22 +1025,22 @@ function placeKnownDreamsigns(
     const node = state.atlas.nodes[chosen];
     state.atlas.nodes[chosen] = {
       ...node,
-      knownDreamsignId: asDreamsignId(dreamsignId),
+      knownDreamsignId: dreamsignId,
     };
     carriers.push(chosen);
 
     if (state.logEvents) {
       logEvent("atlas_known_dreamsign_placed", {
-        nodeId: asAtlasNodeId(chosen),
+        nodeId: chosen,
         layer: node.layer,
         indexInLayer: node.indexInLayer,
-        dreamsignId: asDreamsignId(dreamsignId),
+        dreamsignId: dreamsignId,
         amongStartReveal: startRevealedNodeIds.has(chosen),
       });
     }
   }
 
-  state.atlas.knownDreamsignCarrierIds = carriers.map(asAtlasNodeId);
+  state.atlas.knownDreamsignCarrierIds = carriers;
 }
 
 /**
@@ -1055,7 +1056,7 @@ export function generateInitialAtlas(
   context: SiteGenerationContext,
   build: AtlasBuildContext,
   options: AtlasGenerationOptions = {},
-): DreamAtlas {
+): DreamAtlas<true> {
   // Seed the module's generation helpers for the duration of this call, then
   // restore, so a caller-supplied `options.rng` makes the whole build
   // deterministic while other atlas mutators keep their own `Math.random`.
@@ -1078,13 +1079,13 @@ function generateInitialAtlasInternal(
   context: SiteGenerationContext,
   build: AtlasBuildContext,
   options: AtlasGenerationOptions = {},
-): DreamAtlas {
+): DreamAtlas<true> {
   resetAtlasGenerator();
   const logEvents = options.logEvents !== false;
 
   const widths = rollLayerWidths(build.atlasData);
   const layers: AtlasNodeId[][] = [];
-  const nodes: Record<string, DreamscapeNode> = {};
+  const nodes: IdentityRecord<AtlasNodeId, DreamscapeNode> = {};
 
   for (let ordinal = 0; ordinal < widths.length; ordinal++) {
     const layerName = layerAtOrdinal(ordinal);
@@ -1136,7 +1137,7 @@ function generateInitialAtlasInternal(
       ? incarnations[randomInt(0, incarnations.length - 1)].id
       : null;
 
-  const dreamscapeWeights = new Map<string, number>();
+  const dreamscapeWeights = new Map<DreamscapeId, number>();
   for (const dreamscape of build.dreamscapes) {
     if (!dreamscape.isStarter) {
       dreamscapeWeights.set(
@@ -1146,7 +1147,7 @@ function generateInitialAtlasInternal(
     }
   }
 
-  const atlas: DreamAtlas = {
+  const atlas: DreamAtlas<true> = {
     layers: layers,
     nodes,
     startingNodeId,
@@ -1172,10 +1173,10 @@ function generateInitialAtlasInternal(
     // phase. Logged both as a per-node map (forwardIds) and a flat per-gap edge
     // list ([fromLayer, fromIndex] -> [toLayer, toIndex]) so the exact graph can
     // be reconstructed from the log alone.
-    const forwardIds: Record<string, string[]> = {};
+    const forwardIds: IdentityRecord<AtlasNodeId, AtlasNodeId[]> = {};
     const edges: Array<{
-      from: string;
-      to: string;
+      from: AtlasNodeId;
+      to: AtlasNodeId;
       fromLayer: LayerName;
       fromIndex: number;
       toLayer: LayerName;
@@ -1198,8 +1199,8 @@ function generateInitialAtlasInternal(
     logEvent("atlas_generated", {
       layerWidths: widths,
       connectionAverage: cfg.graph.connectionAverage,
-      startingNodeId: asAtlasNodeId(startingNodeId),
-      bossNodeId: asAtlasNodeId(bossNodeId),
+      startingNodeId: startingNodeId,
+      bossNodeId: bossNodeId,
       // The Apollyon guise chosen for the boss node, plus the pool it was drawn
       // from, so a log read can reconstruct why this incarnation appeared.
       bossIncarnationId,
@@ -1252,7 +1253,7 @@ function generateInitialAtlasInternal(
     build.atlasData.graph.bonusReveal.max,
     build.atlasData.graph.bonusReveal.mode,
   );
-  const bonusPool: string[] = [];
+  const bonusPool: AtlasNodeId[] = [];
   for (const eligibleLayer of build.atlasData.graph.bonusReveal
     .eligibleLayers) {
     const ordinal = layerOrdinal(eligibleLayer);
@@ -1260,14 +1261,14 @@ function generateInitialAtlasInternal(
       bonusPool.push(...layers[ordinal]);
     }
   }
-  const bonusReveals: string[] = [];
+  const bonusReveals: AtlasNodeId[] = [];
   const shuffledBonus = [...bonusPool];
   for (let i = 0; i < bonusCount && shuffledBonus.length > 0; i++) {
     const idx = randomInt(0, shuffledBonus.length - 1);
     bonusReveals.push(shuffledBonus.splice(idx, 1)[0]);
   }
 
-  const startRevealed = new Set<string>([
+  const startRevealed = new Set<AtlasNodeId>([
     startingNodeId,
     bossNodeId,
     ...bonusReveals,
@@ -1279,16 +1280,16 @@ function generateInitialAtlasInternal(
 
   // The starter is entered directly; the boss and any bonus nodes are revealed
   // but locked.
-  setNodeState(state, asAtlasNodeId(startingNodeId), "available");
-  setNodeState(state, asAtlasNodeId(bossNodeId), "revealedLocked");
+  setNodeState(state, startingNodeId, "available");
+  setNodeState(state, bossNodeId, "revealedLocked");
   for (const nodeId of bonusReveals) {
-    setNodeState(state, asAtlasNodeId(nodeId), "revealedLocked");
+    setNodeState(state, parseAtlasNodeId(nodeId), "revealedLocked");
   }
 
   if (logEvents) {
     logEvent("atlas_initial_reveal", {
-      startingNodeId: asAtlasNodeId(startingNodeId),
-      bossNodeId: asAtlasNodeId(bossNodeId),
+      startingNodeId: startingNodeId,
+      bossNodeId: bossNodeId,
       bonusRevealCount: bonusReveals.length,
       bonusRevealNodeIds: bonusReveals,
     });
@@ -1305,13 +1306,13 @@ function generateInitialAtlasInternal(
  * `currentNodeId` is set to the completed node.
  */
 export function advanceAtlas(
-  atlas: DreamAtlas,
+  atlas: DreamAtlas<true>,
   completedNodeId: AtlasNodeId,
   completionLevel: number,
   context: SiteGenerationContext,
   build: AtlasBuildContext,
   options: AtlasGenerationOptions = {},
-): DreamAtlas {
+): DreamAtlas<true> {
   const previousAtlasRandom = atlasRandom;
   atlasRandom = options.rng ?? Math.random;
   try {
@@ -1329,13 +1330,13 @@ export function advanceAtlas(
 }
 
 function advanceAtlasInternal(
-  atlas: DreamAtlas,
+  atlas: DreamAtlas<true>,
   completedNodeId: AtlasNodeId,
   completionLevel: number,
   context: SiteGenerationContext,
   build: AtlasBuildContext,
   options: AtlasGenerationOptions,
-): DreamAtlas {
+): DreamAtlas<true> {
   const completedNode = atlas.nodes[completedNodeId];
   if (completedNode === undefined) {
     return atlas;
@@ -1346,7 +1347,7 @@ function advanceAtlasInternal(
 
   // Rebuild weights from already-revealed dreamscapes so repeat-discourage stays
   // consistent across a reload that reset the in-memory weights.
-  const dreamscapeWeights = new Map<string, number>();
+  const dreamscapeWeights = new Map<DreamscapeId, number>();
   for (const dreamscape of build.dreamscapes) {
     if (!dreamscape.isStarter) {
       dreamscapeWeights.set(
@@ -1377,10 +1378,10 @@ function advanceAtlasInternal(
       !Object.values(atlas.nodes).some((node) => node.knownDreamsignId === id),
   );
 
-  const nextAtlas: DreamAtlas = {
+  const nextAtlas: DreamAtlas<true> = {
     ...atlas,
     nodes: { ...atlas.nodes },
-    currentNodeId: asAtlasNodeId(completedNodeId),
+    currentNodeId: completedNodeId,
   };
   const state: AtlasState = {
     atlas: nextAtlas,
@@ -1392,7 +1393,7 @@ function advanceAtlasInternal(
     logEvents,
   };
 
-  setNodeState(state, asAtlasNodeId(completedNodeId), "completed");
+  setNodeState(state, completedNodeId, "completed");
 
   // A persisted atlas can arrive with empty arrays stripped (RTDB drops them on
   // write), so iterate every array field defensively rather than throwing while
@@ -1506,12 +1507,12 @@ function pickForwardFrontierNode(
  */
 function completedPathIsConnected(
   atlas: DreamAtlas,
-  path: readonly string[],
+  path: readonly AtlasNodeId[],
 ): boolean {
   for (let i = 0; i < path.length - 1; i++) {
     const node = atlas.nodes[path[i]];
     const forwardIds = Array.isArray(node?.forwardIds) ? node.forwardIds : [];
-    if (!forwardIds.includes(asAtlasNodeId(path[i + 1]))) {
+    if (!forwardIds.includes(path[i + 1])) {
       return false;
     }
   }
@@ -1548,7 +1549,7 @@ export function regenerateAtlasForProgress(
   context: SiteGenerationContext,
   build: AtlasBuildContext,
   options: AtlasGenerationOptions = {},
-): DreamAtlas {
+): DreamAtlas<true> {
   const logEvents = options.logEvents !== false;
   let atlas = generateInitialAtlas(0, context, build, options);
 
@@ -1652,9 +1653,9 @@ export function revealedAtlasSite(node: DreamscapeNode): SiteState | null {
  * walk; before the first choice the entire graph is reachable from the starter
  * `available` node, so nothing is hidden.
  */
-export function reachableAtlasNodeIds(atlas: DreamAtlas): Set<string> {
-  const reachable = new Set<string>();
-  const frontier: string[] = [];
+export function reachableAtlasNodeIds(atlas: DreamAtlas): Set<AtlasNodeId> {
+  const reachable = new Set<AtlasNodeId>();
+  const frontier: AtlasNodeId[] = [];
   for (const node of Object.values(atlas.nodes)) {
     // The traveled path is always kept.
     if (node.state === "completed") {

@@ -4,10 +4,12 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
 import { assertLocalized } from "@trox/runtime";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { CumulusRoot } from "../CumulusRoot";
 import { PoolViewerScreen, type PoolViewerView } from "./PoolViewerScreen";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
+import type { CardData } from "../../types/cards";
 
 (
   globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
@@ -26,12 +28,12 @@ Object.defineProperty(window, "matchMedia", {
   })),
 });
 
-const card = {
-  id: asCardId("00000000-0000-4000-8000-000000000001"),
+const card: CardData = {
+  id: testCardId("00000000-0000-4000-8000-000000000001"),
   cardNumber: 1,
-  name: asCardName("Pool Card"),
+  name: parseCardName("Pool Card"),
   cardType: "Character" as const,
-  subtype: "Fixture",
+  subtype: "Warrior",
   isStarter: false,
   energyCost: 1,
   spark: 1,
@@ -55,7 +57,7 @@ const view: PoolViewerView = {
   },
   cards: [
     {
-      entryId: asDeckEntryId("run:pool-card"),
+      entryId: parseDeckEntryId("run:pool-card"),
       model: { cardId: card.id, displaySnapshot: card },
     },
   ],

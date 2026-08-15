@@ -5,13 +5,16 @@ import type {
   CardSourceDebugState,
   CardSourceDebugSurface,
 } from "../types/journey";
+import { serializeCardNumber } from "../types/draft";
 
 function buildCardSourceDebugEntry(
   card: Readonly<CardData>,
   resolvedPackage: ResolvedDreamAvatarPackage | null,
 ): CardSourceDebugEntry {
   const draftPoolCopies =
-    resolvedPackage?.draftPoolCopiesByCard[String(card.cardNumber)] ?? 0;
+    resolvedPackage?.draftPoolCopiesByCard[
+      serializeCardNumber(card.cardNumber)
+    ] ?? 0;
 
   return {
     cardNumber: card.cardNumber,

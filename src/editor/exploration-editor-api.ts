@@ -4,12 +4,17 @@ import type {
   ExplorationEditorLoadResult,
   ExplorationEditorServerData,
 } from "./exploration-editor-types";
+import {
+  parseOptionalSourceRevisionResponse,
+  type RawOptionalSourceRevisionResponse,
+  type SourceRevision,
+} from "../types/source-revision";
 
-let currentSourceRevision: string | undefined;
+let currentSourceRevision: SourceRevision | undefined;
 let saveQueue: Promise<void> = Promise.resolve();
 let pausedSaveError: Error | null = null;
 
-function rememberSourceRevision(data: { sourceRevision?: string }): void {
+function rememberSourceRevision(data: { sourceRevision?: SourceRevision }): void {
   if (data.sourceRevision !== undefined) currentSourceRevision = data.sourceRevision;
 }
 
@@ -48,6 +53,13 @@ async function readResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
+async function readRevisionedResponse<
+  T extends { readonly sourceRevision?: SourceRevision },
+>(response: Response): Promise<T> {
+  const body = await readResponse<RawOptionalSourceRevisionResponse<T>>(response);
+  return parseOptionalSourceRevisionResponse<T>(body) as T;
+}
+
 async function patch(path: string, body: unknown) {
   return queueSave(async () => {
     const result = await readResponse<{
@@ -58,8 +70,11 @@ async function patch(path: string, body: unknown) {
       headers: { Accept: "application/json", "Content-Type": "application/json" },
       body: JSON.stringify({ ...body as object, expectedSourceRevision: currentSourceRevision }),
     }));
-    rememberSourceRevision(result.data);
-    return result;
+    const data = parseOptionalSourceRevisionResponse<ExplorationEditorServerData>(
+      result.data,
+    ) as ExplorationEditorServerData;
+    rememberSourceRevision(data);
+    return { ...result, data };
   });
 }
 
@@ -69,7 +84,7 @@ export const explorationEditorClient: ExplorationEditorClient = {
       headers: { Accept: "application/json" },
       signal,
     });
-    const result = await readResponse<ExplorationEditorLoadResult>(response);
+    const result = await readRevisionedResponse<ExplorationEditorLoadResult>(response);
     rememberSourceRevision(result);
     pausedSaveError = null;
     return result;

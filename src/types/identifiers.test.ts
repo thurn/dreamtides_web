@@ -1,8 +1,8 @@
 import { describe, expect, expectTypeOf, it } from "vitest";
 import {
-  asAuguryArchetypeId,
-  asDeckEntryId,
-  asSiteId,
+  parseAuguryArchetypeId,
+  parseDeckEntryId,
+  parseSiteId,
   auguryArchetypeIdFromUnknown,
   siteIdFromUnknown,
   type DeckEntryId,
@@ -11,8 +11,8 @@ import {
 
 describe("domain identifiers", () => {
   it("preserves string values while separating identity domains", () => {
-    const siteId = asSiteId("site-1");
-    const deckEntryId = asDeckEntryId("site-1");
+    const siteId = parseSiteId("site-1");
+    const deckEntryId = parseDeckEntryId("site-1");
 
     expect(siteId).toBe("site-1");
     expect(deckEntryId).toBe("site-1");
@@ -23,19 +23,19 @@ describe("domain identifiers", () => {
   });
 
   it("decodes string identity boundaries and rejects other JSON values", () => {
-    expect(siteIdFromUnknown("site-1")).toBe(asSiteId("site-1"));
+    expect(siteIdFromUnknown("site-1")).toBe(parseSiteId("site-1"));
     expect(siteIdFromUnknown(1)).toBeNull();
     expect(siteIdFromUnknown(null)).toBeNull();
   });
 
   it("validates named enumerations at untrusted boundaries", () => {
     expect(auguryArchetypeIdFromUnknown("fit_card_grant")).toBe(
-      asAuguryArchetypeId("fit_card_grant"),
+      "fit_card_grant",
     );
     expect(auguryArchetypeIdFromUnknown("unknown_archetype")).toBeNull();
 
     expectTypeOf<"unknown_archetype">().not.toMatchTypeOf<
-      Parameters<typeof asAuguryArchetypeId>[0]
+      ReturnType<typeof parseAuguryArchetypeId>
     >();
   });
 });

@@ -1,8 +1,11 @@
 import { isCardId } from "./card-identity";
 import type { TutorialBattleAiActionOverride } from "./tutorial";
-import { asTutorialAiActionOverrideId } from "./identifiers";
-import { asCardId } from "./card-identity";
-import { asDreamwellCardId } from "./identifiers";
+import {
+  parseTutorialAiActionOverrideId,
+  type TutorialAiActionOverrideId,
+} from "./identifiers";
+import { parseCardId } from "./card-identity";
+import { parseDreamwellCardId } from "./identifiers";
 
 const OVERRIDE_ID_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/u;
 
@@ -14,7 +17,7 @@ export function parseTutorialBattleAiActionOverrides(
     throw new Error("Tutorial battle aiActionOverrides must be an array.");
   }
   const overrides: TutorialBattleAiActionOverride[] = [];
-  const ids = new Set<string>();
+  const ids = new Set<TutorialAiActionOverrideId>();
   for (const candidate of value as unknown[]) {
     if (
       candidate === null ||
@@ -31,21 +34,24 @@ export function parseTutorialBattleAiActionOverrides(
         "Tutorial battle AI action override ids must use lowercase kebab-case.",
       );
     }
-    if (ids.has(record.id)) {
+    const overrideId = parseTutorialAiActionOverrideId(record.id);
+    if (ids.has(overrideId)) {
       throw new Error(
         `Tutorial battle AI action override id ${JSON.stringify(record.id)} is duplicated.`,
       );
     }
     const trigger = record.trigger;
     const action = record.action;
+    const triggerRecord = trigger as Record<string, unknown>;
+    const actionRecord = action as Record<string, unknown>;
     if (
       trigger === null ||
       typeof trigger !== "object" ||
       Array.isArray(trigger) ||
-      (trigger as Record<string, unknown>).kind !== "after-dreamwell" ||
-      (trigger as Record<string, unknown>).side !== "enemy" ||
-      typeof (trigger as Record<string, unknown>).cardId !== "string" ||
-      !isCardId((trigger as Record<string, unknown>).cardId as string)
+      triggerRecord.kind !== "after-dreamwell" ||
+      triggerRecord.side !== "enemy" ||
+      typeof triggerRecord.cardId !== "string" ||
+      !isCardId(triggerRecord.cardId)
     ) {
       throw new Error(
         `Tutorial battle AI action override ${JSON.stringify(record.id)} must have an enemy after-dreamwell trigger with a card UUID.`,
@@ -55,27 +61,25 @@ export function parseTutorialBattleAiActionOverrides(
       action === null ||
       typeof action !== "object" ||
       Array.isArray(action) ||
-      (action as Record<string, unknown>).kind !== "play-card" ||
-      typeof (action as Record<string, unknown>).cardId !== "string" ||
-      !isCardId((action as Record<string, unknown>).cardId as string)
+      actionRecord.kind !== "play-card" ||
+      typeof actionRecord.cardId !== "string" ||
+      !isCardId(actionRecord.cardId)
     ) {
       throw new Error(
         `Tutorial battle AI action override ${JSON.stringify(record.id)} must have a play-card action with a card UUID.`,
       );
     }
-    ids.add(record.id);
+    ids.add(overrideId);
     overrides.push({
-      id: asTutorialAiActionOverrideId(record.id),
+      id: overrideId,
       trigger: {
         kind: "after-dreamwell",
         side: "enemy",
-        cardId: asDreamwellCardId(
-          (trigger as Record<string, unknown>).cardId as string,
-        ),
+        cardId: parseDreamwellCardId(triggerRecord.cardId),
       },
       action: {
         kind: "play-card",
-        cardId: asCardId((action as Record<string, unknown>).cardId as string),
+        cardId: parseCardId(actionRecord.cardId),
       },
     });
   }

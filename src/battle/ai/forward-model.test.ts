@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../types/test-identities";
 import {
   cloneForwardModel,
   effectiveSpark,
@@ -17,9 +18,9 @@ import type {
 } from "../types";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 import type { BattleCardId } from "../../types/identifiers";
-import { asBattleId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 function makeEmptySide(): BattleMutableState["sides"]["player"] {
   return {
@@ -41,7 +42,7 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
 
 function makeBareState(): BattleMutableState {
   return {
-    battleId: asBattleId("battle-forward-model-test"),
+    battleId: parseBattleId("battle-forward-model-test"),
     activeSide: "player",
     turnNumber: 1,
     phase: "day",
@@ -65,9 +66,9 @@ function makeCharacterDefinition(
 ): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
-    cardId: asCardId(""),
+    cardId: testCardId("fixture-card"),
     cardNumber,
-    name,
+    name: testCardName(name),
     battleCardKind: "character",
     subtype: "Warrior",
     energyCost,
@@ -132,7 +133,7 @@ function addInstance(
       () => definition.printedSpark,
     );
   }
-  return asBattleCardId(id);
+  return id;
 }
 
 describe("forwardModelFromState", () => {
@@ -185,7 +186,7 @@ describe("forwardModelFromState", () => {
 
     const handBProjected = model.aiHand.find((card) => card.cardNumber === 102);
     expect(handBProjected).toMatchObject({
-      name: "HandB",
+      name: testCardName("HandB"),
       energyCost: 3,
       basePrintedSpark: 4,
       sparkDelta: 0,
@@ -202,13 +203,13 @@ describe("forwardModelFromState", () => {
       ai,
       makeCharacterDefinition("Deployed", 201, 3, 1),
     );
-    state.sides[ai].frontRank.F1 = asBattleCardId(deployed);
+    state.sides[ai].frontRank.F1 = deployed;
     const reserved = addInstance(
       state,
       ai,
       makeCharacterDefinition("Reserved", 202, 2, 1),
     );
-    state.sides[ai].backRank.B3 = asBattleCardId(reserved);
+    state.sides[ai].backRank.B3 = reserved;
 
     const model = forwardModelFromState(state, ai);
 
@@ -242,7 +243,7 @@ describe("forwardModelFromState", () => {
       makeCharacterDefinition("Exhausted", 201, 3, 1),
     );
     state.cardInstances[exhausted].status.isExhausted = true;
-    state.sides[ai].backRank.B0 = asBattleCardId(exhausted);
+    state.sides[ai].backRank.B0 = exhausted;
 
     const awakened = addInstance(
       state,
@@ -250,7 +251,7 @@ describe("forwardModelFromState", () => {
       makeCharacterDefinition("Awakened", 202, 2, 1),
     );
     state.cardInstances[awakened].status.isExhausted = false;
-    state.sides[ai].backRank.B1 = asBattleCardId(awakened);
+    state.sides[ai].backRank.B1 = awakened;
 
     const model = forwardModelFromState(state, ai);
 
@@ -272,7 +273,7 @@ describe("forwardModelFromState", () => {
       makeCharacterDefinition("Recent", 201, 3, 1),
     );
     state.cardInstances[stillExhausted].status.isExhausted = true;
-    state.sides[ai].backRank.B0 = asBattleCardId(stillExhausted);
+    state.sides[ai].backRank.B0 = stillExhausted;
 
     const cleared = addInstance(
       state,
@@ -280,7 +281,7 @@ describe("forwardModelFromState", () => {
       makeCharacterDefinition("Older", 202, 2, 1),
     );
     state.cardInstances[cleared].status.isExhausted = false;
-    state.sides[ai].backRank.B1 = asBattleCardId(cleared);
+    state.sides[ai].backRank.B1 = cleared;
 
     const model = forwardModelFromState(state, ai);
 
@@ -301,14 +302,14 @@ describe("forwardModelFromState", () => {
         sparkDelta: 2,
       },
     );
-    state.sides[opponent].frontRank.F0 = asBattleCardId(front);
+    state.sides[opponent].frontRank.F0 = front;
 
     const back = addInstance(
       state,
       opponent,
       makeCharacterDefinition("Back", 302, 3, 1),
     );
-    state.sides[opponent].backRank.B0 = asBattleCardId(back);
+    state.sides[opponent].backRank.B0 = back;
 
     const figment = addInstance(
       state,
@@ -316,10 +317,10 @@ describe("forwardModelFromState", () => {
       makeCharacterDefinition("Fig", 303, 1, 1),
       { figment: true, figmentCount: 4 },
     );
-    state.sides[opponent].frontRank.F2 = asBattleCardId(figment);
+    state.sides[opponent].frontRank.F2 = figment;
 
-    state.sides[opponent].hand = [asBattleCardId("x"), asBattleCardId("y")];
-    state.sides[opponent].void = [asBattleCardId("z")];
+    state.sides[opponent].hand = [parseBattleCardId("x"), parseBattleCardId("y")];
+    state.sides[opponent].void = [parseBattleCardId("z")];
 
     const model = forwardModelFromState(state, ai);
 
@@ -327,7 +328,7 @@ describe("forwardModelFromState", () => {
 
     const frontBody = model.opponentBodies.find((body) => body.slot === "F0");
     expect(frontBody).toEqual({
-      battleCardId: asBattleCardId(front),
+      battleCardId: front,
       effectiveSpark: 7,
       energyCost: 1,
       rank: "front",
@@ -337,7 +338,7 @@ describe("forwardModelFromState", () => {
 
     const backBody = model.opponentBodies.find((body) => body.slot === "B0");
     expect(backBody).toEqual({
-      battleCardId: asBattleCardId(back),
+      battleCardId: back,
       effectiveSpark: 3,
       energyCost: 1,
       rank: "back",
@@ -347,7 +348,7 @@ describe("forwardModelFromState", () => {
 
     const figmentBody = model.opponentBodies.find((body) => body.slot === "F2");
     expect(figmentBody).toEqual({
-      battleCardId: asBattleCardId(figment),
+      battleCardId: figment,
       effectiveSpark: 4,
       energyCost: 1,
       rank: "front",
@@ -404,14 +405,14 @@ describe("cloneForwardModel", () => {
       ai,
       makeCharacterDefinition("Deployed", 502, 3, 1),
     );
-    state.sides[ai].frontRank.F0 = asBattleCardId(deployed);
+    state.sides[ai].frontRank.F0 = deployed;
 
     const opp = addInstance(
       state,
       opponent,
       makeCharacterDefinition("Opp", 503, 4, 1),
     );
-    state.sides[opponent].frontRank.F0 = asBattleCardId(opp);
+    state.sides[opponent].frontRank.F0 = opp;
 
     return forwardModelFromState(state, ai);
   }
@@ -428,9 +429,9 @@ describe("cloneForwardModel", () => {
     const clone = cloneForwardModel(original);
     const before = original.aiHand.length;
     clone.aiHand.push({
-      battleCardId: asBattleCardId("new"),
+      battleCardId: parseBattleCardId("new"),
       cardNumber: 999,
-      name: "New",
+      name: testCardName("New"),
       energyCost: 0,
       basePrintedSpark: 0,
       sparkDelta: 0,
@@ -468,9 +469,9 @@ describe("cloneForwardModel", () => {
     const clone = cloneForwardModel(original);
     const slot: BackRankSlotId = "B0";
     clone.aiBackRank[slot] = {
-      battleCardId: asBattleCardId("r"),
+      battleCardId: parseBattleCardId("r"),
       cardNumber: 0,
-      name: "r",
+      name: testCardName("r"),
       energyCost: 0,
       basePrintedSpark: 0,
       sparkDelta: 0,
@@ -498,7 +499,7 @@ describe("effectiveSpark", () => {
     return {
       battleCardId,
       cardNumber: 1,
-      name: battleCardId,
+      name: testCardName(battleCardId),
       energyCost: 1,
       basePrintedSpark,
       sparkDelta,
@@ -532,18 +533,19 @@ describe("effectiveSpark", () => {
   it("computes base spark as basePrintedSpark * figmentCount + sparkDelta", () => {
     const model = makeEmptyModel();
     // basePrintedSpark=3, figmentCount=4, sparkDelta=2 → 3*4+2 = 14
-    model.aiFrontRank.F0 = makeAiCard(asBattleCardId("card-a"), 3, 2, 4);
+    model.aiFrontRank.F0 = makeAiCard(parseBattleCardId("card-a"), 3, 2, 4);
     expect(effectiveSpark(model, "F0", new Map())).toBe(14);
   });
 
   it("B1 supports F0 and F1 but not F2", () => {
     const model = makeEmptyModel();
     // base spark = 5*1+0 = 5
-    model.aiFrontRank.F0 = makeAiCard(asBattleCardId("body-d0"), 5, 0, 1);
-    model.aiFrontRank.F1 = makeAiCard(asBattleCardId("body-d1"), 5, 0, 1);
-    model.aiFrontRank.F2 = makeAiCard(asBattleCardId("body-d2"), 5, 0, 1);
-    model.aiBackRank.B1 = makeAiCard(asBattleCardId("r1-support"), 2, 0, 1);
-    const sources = new Map([["r1-support", 2]]);
+    model.aiFrontRank.F0 = makeAiCard(parseBattleCardId("body-d0"), 5, 0, 1);
+    model.aiFrontRank.F1 = makeAiCard(parseBattleCardId("body-d1"), 5, 0, 1);
+    model.aiFrontRank.F2 = makeAiCard(parseBattleCardId("body-d2"), 5, 0, 1);
+    const supporter = makeAiCard(parseBattleCardId("r1-support"), 2, 0, 1);
+    model.aiBackRank.B1 = supporter;
+    const sources = new Map([[supporter.battleCardId, 2]]);
 
     expect(effectiveSpark(model, "F0", sources)).toBe(7); // 5 + 2
     expect(effectiveSpark(model, "F1", sources)).toBe(7); // 5 + 2
@@ -552,10 +554,11 @@ describe("effectiveSpark", () => {
 
   it("B0 supports only F0, not F1", () => {
     const model = makeEmptyModel();
-    model.aiFrontRank.F0 = makeAiCard(asBattleCardId("body-d0"), 3, 0, 1);
-    model.aiFrontRank.F1 = makeAiCard(asBattleCardId("body-d1"), 3, 0, 1);
-    model.aiBackRank.B0 = makeAiCard(asBattleCardId("r0-support"), 1, 0, 1);
-    const sources = new Map([["r0-support", 2]]);
+    model.aiFrontRank.F0 = makeAiCard(parseBattleCardId("body-d0"), 3, 0, 1);
+    model.aiFrontRank.F1 = makeAiCard(parseBattleCardId("body-d1"), 3, 0, 1);
+    const supporter = makeAiCard(parseBattleCardId("r0-support"), 1, 0, 1);
+    model.aiBackRank.B0 = supporter;
+    const sources = new Map([[supporter.battleCardId, 2]]);
 
     expect(effectiveSpark(model, "F0", sources)).toBe(5); // 3 + 2
     expect(effectiveSpark(model, "F1", sources)).toBe(3); // unchanged
@@ -564,12 +567,14 @@ describe("effectiveSpark", () => {
   it("two sources both supporting the same slot stack additively", () => {
     const model = makeEmptyModel();
     // B1 supports F0,F1; B2 supports F1,F2 → F1 gets both
-    model.aiFrontRank.F1 = makeAiCard(asBattleCardId("body-d1"), 4, 0, 1);
-    model.aiBackRank.B1 = makeAiCard(asBattleCardId("r1-card"), 1, 0, 1);
-    model.aiBackRank.B2 = makeAiCard(asBattleCardId("r2-card"), 1, 0, 1);
+    model.aiFrontRank.F1 = makeAiCard(parseBattleCardId("body-d1"), 4, 0, 1);
+    const firstSupporter = makeAiCard(parseBattleCardId("r1-card"), 1, 0, 1);
+    const secondSupporter = makeAiCard(parseBattleCardId("r2-card"), 1, 0, 1);
+    model.aiBackRank.B1 = firstSupporter;
+    model.aiBackRank.B2 = secondSupporter;
     const sources = new Map([
-      ["r1-card", 2],
-      ["r2-card", 1],
+      [firstSupporter.battleCardId, 2],
+      [secondSupporter.battleCardId, 1],
     ]);
 
     // base=4, +2 from B1, +1 from B2 = 7
@@ -578,20 +583,21 @@ describe("effectiveSpark", () => {
 
   it("a reserve card absent from supportSources contributes nothing", () => {
     const model = makeEmptyModel();
-    model.aiFrontRank.F0 = makeAiCard(asBattleCardId("body-d0"), 5, 0, 1);
-    model.aiBackRank.B1 = makeAiCard(asBattleCardId("r1-no-support"), 2, 0, 1);
+    model.aiFrontRank.F0 = makeAiCard(parseBattleCardId("body-d0"), 5, 0, 1);
+    model.aiBackRank.B1 = makeAiCard(parseBattleCardId("r1-no-support"), 2, 0, 1);
     // r1-no-support is NOT in sources
-    const sources = new Map<string, number>();
+    const sources = new Map<BattleCardId, number>();
 
     expect(effectiveSpark(model, "F0", sources)).toBe(5);
   });
 
   it("support is not divided — each supported slot gets the full value", () => {
     const model = makeEmptyModel();
-    model.aiFrontRank.F0 = makeAiCard(asBattleCardId("body-d0"), 3, 0, 1);
-    model.aiFrontRank.F1 = makeAiCard(asBattleCardId("body-d1"), 3, 0, 1);
-    model.aiBackRank.B1 = makeAiCard(asBattleCardId("r1-wide"), 1, 0, 1);
-    const sources = new Map([["r1-wide", 3]]);
+    model.aiFrontRank.F0 = makeAiCard(parseBattleCardId("body-d0"), 3, 0, 1);
+    model.aiFrontRank.F1 = makeAiCard(parseBattleCardId("body-d1"), 3, 0, 1);
+    const supporter = makeAiCard(parseBattleCardId("r1-wide"), 1, 0, 1);
+    model.aiBackRank.B1 = supporter;
+    const sources = new Map([[supporter.battleCardId, 3]]);
 
     // Both slots get +3, not +1.5
     expect(effectiveSpark(model, "F0", sources)).toBe(6);
@@ -600,9 +606,10 @@ describe("effectiveSpark", () => {
 
   it("applies each support source once per figment in a stack", () => {
     const model = makeEmptyModel();
-    model.aiFrontRank.F0 = makeAiCard(asBattleCardId("figments"), 1, 0, 3);
-    model.aiBackRank.B0 = makeAiCard(asBattleCardId("supporter"), 1, 0, 1);
+    model.aiFrontRank.F0 = makeAiCard(parseBattleCardId("figments"), 1, 0, 3);
+    const supporter = makeAiCard(parseBattleCardId("supporter"), 1, 0, 1);
+    model.aiBackRank.B0 = supporter;
 
-    expect(effectiveSpark(model, "F0", new Map([["supporter", 2]]))).toBe(9);
+    expect(effectiveSpark(model, "F0", new Map([[supporter.battleCardId, 2]]))).toBe(9);
   });
 });

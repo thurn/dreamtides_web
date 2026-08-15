@@ -6,6 +6,7 @@ import type {
 } from "../../../types/journey";
 import { GLYPHS } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
+import type { DomTestId } from "../../types/dom";
 import { token } from "../../primitives/tokens";
 import { EssenceValue } from "../hud/EssenceValue";
 import { StandaloneGlyph } from "./StandaloneGlyph";
@@ -42,7 +43,7 @@ export interface TransfigurationButtonProps {
   /** Select the form after a press. */
   onPress: (type: TransfigurationType) => void;
   /** Optional stable test id for the semantic source. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 /**

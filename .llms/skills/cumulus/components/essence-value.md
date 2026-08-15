@@ -19,7 +19,7 @@ The reward badge is reserved for an Essence gain attached directly to reward art
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
 | `amount` | `string \| number` | yes | — | The essence amount. |
-| `tone` | `EssenceTone` = `"value" \| "mark" \| "inherit"` | no | `value` | Color role. `value` paints the complete value in Essence violet; `mark` keeps the amount in primary text and paints only the glyph; `inherit` takes the surrounding text color. |
+| `tone` | `EssenceTone` = `"mark" \| "value" \| "inherit"` | no | `value` | Color role. `value` paints the complete value in Essence violet; `mark` keeps the amount in primary text and paints only the glyph; `inherit` takes the surrounding text color. |
 | `variant` | `EssenceValueVariant` = `"inline" \| "rewardBadge"` | no | `inline` | Inline text or the solid pill used over reward art. |
 | `entity` | `EssenceEntity` | no | — | Optional semantic source that reveals an explanatory glossary Info Card. |
 
@@ -27,8 +27,8 @@ The reward badge is reserved for an Essence gain attached directly to reward art
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `string` | no | Stable identity of the Essence source. |
-| `glossaryId` | `string` | no | Stable Glossary UUID used for the explanatory Info Card. |
+| `id` | `SemanticEntityId` | no | Stable identity of the Essence source. |
+| `glossaryId` | `GlossaryEntryId` | no | Stable Glossary UUID used for the explanatory Info Card. |
 
 ## Usage
 

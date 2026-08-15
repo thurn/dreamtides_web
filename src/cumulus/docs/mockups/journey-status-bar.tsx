@@ -14,8 +14,9 @@ import { artRef } from "../../primitives/art";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
-import { asDreamscapeId } from "../../../types/identifiers";
-import { asDreamsignId } from "../../../types/identifiers";
+import { parseDreamscapeId } from "../../../types/identifiers";
+import { parseDreamsignId } from "../../../types/identifiers";
+import { parseDreamAvatarId } from "../../../types/identifiers";
 
 export function JourneyStatusBarMockup() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -24,7 +25,7 @@ export function JourneyStatusBarMockup() {
       ref={stageRef}
       style={{
         ...sceneRoot,
-        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.25) 0%, rgba(8,5,17,0.35) 55%, rgba(8,5,17,0.85) 100%), url(${dreamscapeSceneUrl(asDreamscapeId("frostforge"))})`,
+        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.25) 0%, rgba(8,5,17,0.35) 55%, rgba(8,5,17,0.85) 100%), url(${dreamscapeSceneUrl(parseDreamscapeId("frostforge"))})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         touchAction: "none",
@@ -62,7 +63,7 @@ export function JourneyStatusBarMockup() {
         essence={240}
         deck={23}
         dreamAvatar={{
-          id: "00000000-0000-4000-8000-000000000051",
+          id: parseDreamAvatarId("00000000-0000-4000-8000-000000000051"),
           name: assertLocalized("Threxan"),
           epithet: assertLocalized("the Resounding Wrath"),
           portrait: artRef.dreamAvatar("0025"),
@@ -72,21 +73,21 @@ export function JourneyStatusBarMockup() {
         }}
         dreamsigns={[
           {
-            id: asDreamsignId("c706d0ba-2f41-4b14-95d8-db168ac6246c"),
+            id: parseDreamsignId("c706d0ba-2f41-4b14-95d8-db168ac6246c"),
             name: "Amplified Acorn",
             imageName: "acorn_gold.png",
             effectDescription:
               "Once per turn, when you discard a card, your next card this turn costs 2● less.",
           },
           {
-            id: asDreamsignId("278ec1ab-f532-4862-84ae-63df5e49548c"),
+            id: parseDreamsignId("278ec1ab-f532-4862-84ae-63df5e49548c"),
             name: "Pyramid Relic",
             imageName: "aertfact.png",
             effectDescription:
               "The second character you play each turn costs 1● less.",
           },
           {
-            id: asDreamsignId("d1fdbe21-56f6-43c0-aaac-1e4683964da5"),
+            id: parseDreamsignId("d1fdbe21-56f6-43c0-aaac-1e4683964da5"),
             name: "Bell",
             imageName: "bell.png",
             effectDescription:

@@ -15,15 +15,14 @@ import {
 } from "./CumulusJourneyChrome";
 import { useAuguryJourneyMenuActions } from "./AuguryJourneyMenu";
 import { ErrorBoundary } from "./ErrorBoundary";
-import { asSiteId } from "../types/identifiers";
 import type { SiteId } from "../types/identifiers";
 import {
-  asScreenTransitionKey,
+  parseScreenTransitionKey,
   type ScreenTransitionKey,
 } from "../types/identifiers";
 
 function screenKey(screen: Screen): ScreenTransitionKey {
-  return asScreenTransitionKey(
+  return parseScreenTransitionKey(
     screen.type === "site"
       ? `screen-site-${screen.siteId}`
       : `screen-${screen.type}`,
@@ -44,7 +43,7 @@ export function ScreenRouter({
   const lastLoggedNavigationRef = useRef<string | null>(null);
 
   useEffect(() => {
-    const signature = `${screen.type}|${siteId ?? asSiteId("")}`;
+    const signature = `${screen.type}|${siteId ?? "none"}`;
     if (lastLoggedNavigationRef.current === signature) return;
     lastLoggedNavigationRef.current = signature;
     logEvent("screen_rendered", { screenType: screen.type, siteId });

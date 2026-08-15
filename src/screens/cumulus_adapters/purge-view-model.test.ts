@@ -6,7 +6,7 @@ expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
 import type { DeckEntry, SiteState } from "../../types/journey";
 import {
@@ -17,10 +17,9 @@ import {
 } from "./purge-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { testCardId, testDreamscapeId, testGuideId } from "../../types/test-identities";
 
 const transfigurationData = transfigurationFixture();
 const buildPurgeCardViews = (
@@ -44,9 +43,9 @@ const buildPurgeSiteView = (
   });
 
 const GUIDE = {
-  id: asGuideId("fixture-purge-guide"),
+  id: testGuideId("fixture-purge-guide"),
   name: "Fixture Purge Guide",
-  homeDreamscapeId: asDreamscapeId("fixture-home"),
+  homeDreamscapeId: testDreamscapeId("fixture-home"),
   siteType: "Purge",
   portraitSource: "fixture-guide.png",
   dialogue: { site: ["Fixture line."] },
@@ -55,8 +54,8 @@ const GUIDE = {
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: asCardName("Test Card"),
-    id: asCardId("test-card"),
+    name: parseCardName("Test Card"),
+    id: testCardId("test-card"),
     cardNumber: 1,
     cardType: "Event",
     subtype: "",
@@ -73,7 +72,7 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 
 function makeEntry(overrides: Partial<DeckEntry> = {}): DeckEntry {
   return {
-    entryId: asDeckEntryId("entry-1"),
+    entryId: parseDeckEntryId("entry-1"),
     cardNumber: 1,
     transfiguration: null,
     isBane: false,
@@ -86,7 +85,7 @@ function database(...cards: CardData[]): Map<number, CardData> {
 }
 
 const site: SiteState = {
-  id: asSiteId("site-purge"),
+  id: parseSiteId("site-purge"),
   type: "Purge",
   isEnhanced: false,
   isVisited: false,
@@ -96,9 +95,9 @@ describe("buildPurgeCardViews", () => {
   it("keeps concrete entry ids and marks Nightmare as free", () => {
     const cards = buildPurgeCardViews(
       [
-        makeEntry({ entryId: asDeckEntryId("paid"), cardNumber: 1 }),
+        makeEntry({ entryId: parseDeckEntryId("paid"), cardNumber: 1 }),
         makeEntry({
-          entryId: asDeckEntryId("nightmare"),
+          entryId: parseDeckEntryId("nightmare"),
           cardNumber: 10002,
           isBane: true,
         }),
@@ -117,9 +116,9 @@ describe("buildPurgeGuideView", () => {
   it("uses the resolved guide identity and supplied line", () => {
     const view = buildPurgeGuideView(
       {
-        id: asGuideId("takeshi"),
+        id: testGuideId("takeshi"),
         name: "Master Takeshi",
-        homeDreamscapeId: asDreamscapeId("tsukiren"),
+        homeDreamscapeId: testDreamscapeId("tsukiren"),
         siteType: "Purge",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["First line."] },
@@ -132,7 +131,7 @@ describe("buildPurgeGuideView", () => {
       id: "takeshi",
       name: "Master Takeshi",
       line: "Chosen line.",
-      art: { kind: "dream-guide", guideId: asGuideId("takeshi") },
+      art: { kind: "dream-guide", guideId: testGuideId("takeshi") },
     });
   });
 });
@@ -144,10 +143,10 @@ describe("buildPurgeSiteView", () => {
       ...base,
       essence: 0,
       deck: [
-        makeEntry({ entryId: asDeckEntryId("paid-a"), cardNumber: 1 }),
-        makeEntry({ entryId: asDeckEntryId("paid-b"), cardNumber: 2 }),
+        makeEntry({ entryId: parseDeckEntryId("paid-a"), cardNumber: 1 }),
+        makeEntry({ entryId: parseDeckEntryId("paid-b"), cardNumber: 2 }),
         makeEntry({
-          entryId: asDeckEntryId("nightmare"),
+          entryId: parseDeckEntryId("nightmare"),
           cardNumber: 10002,
           isBane: true,
         }),

@@ -6,7 +6,7 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
 import {
@@ -16,14 +16,15 @@ import {
 } from "./PurgeSiteScreen";
 import { CumulusRoot } from "../CumulusRoot";
 import { PURGE_PRESENTATION } from "../test-helpers/presentation-fixtures";
-import { asSiteId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId, testGuideId } from "../../types/test-identities";
+import { testPresentationId } from "../../types/test-identities";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: asCardName("Test Card"),
-    id: asCardId("test-card"),
+    name: parseCardName("Test Card"),
+    id: testCardId("test-card"),
     cardNumber: 1,
     cardType: "Event",
     subtype: "",
@@ -41,24 +42,24 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
 function view(cardCount = 2): PurgeSiteView {
   return {
     presentation: PURGE_PRESENTATION,
-    siteId: asSiteId("purge-site"),
+    siteId: parseSiteId("purge-site"),
     scene: null,
     guide: {
-      id: "takeshi",
+      id: testGuideId("takeshi"),
       name: assertLocalized("Master Takeshi"),
       line: assertLocalized("Cut only what the dream can spare."),
-      art: artRef.dreamGuide(asGuideId("takeshi")),
+      art: artRef.dreamGuide(testGuideId("takeshi")),
     },
     cards: Array.from({ length: cardCount }, (_, index) => {
       const cardNumber = index + 1;
       const suffix =
         cardNumber === 1 ? "a" : cardNumber === 2 ? "b" : String(cardNumber);
       return {
-        entryId: asDeckEntryId(`entry-${suffix}`),
+        entryId: parseDeckEntryId(`entry-${suffix}`),
         model: (() => {
           const displaySnapshot = makeCard({
-            name: asCardName(`Test Card ${String(cardNumber)}`),
-            id: asCardId(`card-${suffix}`),
+            name: parseCardName(`Test Card ${String(cardNumber)}`),
+            id: testCardId(`card-${suffix}`),
             cardNumber,
           });
           return { cardId: displaySnapshot.id, displaySnapshot };
@@ -229,7 +230,7 @@ describe("PurgeSiteScreen", () => {
   it("renders and reports authored first-visit guidance with the essence Boxicon", () => {
     const onTutorialShown = vi.fn();
     const tutorial = {
-      id: "run-a:first-visit:purge-site:Purge",
+      id: testPresentationId("run-a:first-visit:purge-site:Purge"),
       model: {
         portrait: artRef.characterPortrait("mira"),
         portraitAlt: assertLocalized("Mira"),

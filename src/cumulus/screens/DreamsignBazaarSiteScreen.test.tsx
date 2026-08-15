@@ -16,14 +16,13 @@ import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import { DreamsignGalleryPanel } from "../components/card/DreamsignGalleryPanel";
 import { GLYPHS } from "../primitives/glyph";
 import { GLOSSARY_IDS } from "../../data/glossary";
-import { asSiteId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testGuideId, testDreamsignId } from "../../types/test-identities";
 
 function sign(index: number): LocalizedDreamsign {
   return localizedDreamsignFixture({
-    id: asDreamsignId(`dreamsign-uuid-${String(index)}`),
+    id: testDreamsignId(`dreamsign-uuid-${String(index)}`),
     name: `Dreamsign Fixture ${String(index)}`,
     imageName: `fixture-${String(index)}.png`,
     imageAlt: `Dreamsign fixture ${String(index)}`,
@@ -34,16 +33,16 @@ function sign(index: number): LocalizedDreamsign {
 function view(): DreamsignBazaarSiteView {
   return {
     presentation: DREAMSIGN_MARKET_PRESENTATION,
-    siteId: asSiteId("dreamsign-bazaar-site"),
+    siteId: parseSiteId("dreamsign-bazaar-site"),
     scene: null,
     guide: {
-      id: "amunet_the_tomb_keeper",
+      id: testGuideId("amunet_the_tomb_keeper"),
       name: assertLocalized("Amunet, the Tomb-Keeper"),
       line: assertLocalized("The sands remember all dreams."),
-      art: artRef.dreamGuide(asGuideId("amunet_the_tomb_keeper")),
+      art: artRef.dreamGuide(testGuideId("amunet_the_tomb_keeper")),
     },
     offers: Array.from({ length: 3 }, (_, index) => ({
-      entryId: asDeckEntryId(`dreamsign-offer-${String(index)}`),
+      entryId: parseDeckEntryId(`dreamsign-offer-${String(index)}`),
       slotIndex: index,
       dreamsign: sign(index + 1),
       price: 100 + index * 25,
@@ -51,7 +50,7 @@ function view(): DreamsignBazaarSiteView {
       requiresReplacement: false,
     })),
     restock: {
-      entryId: asDeckEntryId("restock-dreamsign-bazaar-site"),
+      entryId: parseDeckEntryId("restock-dreamsign-bazaar-site"),
       price: 50,
       state: "available",
     },
@@ -167,7 +166,7 @@ describe("DreamsignBazaarSiteScreen", () => {
         title={assertLocalized("Fixture gallery")}
         entries={[]}
         endAction={{
-          entryId: asDeckEntryId("fixture-action"),
+          entryId: parseDeckEntryId("fixture-action"),
           glyph: GLYPHS.refresh,
           label: assertLocalized("Fixture action"),
           glossaryId: GLOSSARY_IDS.dreamsignRestock,

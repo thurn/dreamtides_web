@@ -4,9 +4,10 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { CumulusRoot } from "../../CumulusRoot";
 import { describe, expect, it } from "vitest";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { CardView } from "./CardView";
+import { testCardId } from "../../../types/test-identities";
 
 const RULES_TEXT = "Nightmare is a Bane.";
 
@@ -20,8 +21,8 @@ describe("CardView visual editor surface", () => {
         <CumulusRoot>
           <CardView
             card={{
-              id: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
-              name: asCardName("Twilight Troubadour"),
+              id: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+              name: parseCardName("Twilight Troubadour"),
               cardNumber: 520,
               cardType: "Character",
               subtype: "Musician",
@@ -65,8 +66,8 @@ describe("CardView visual editor surface", () => {
         <CumulusRoot>
           <CardView
             card={{
-              id: asCardId("11111111-1111-4111-8111-111111111111"),
-              name: asCardName("Archive Sentry"),
+              id: testCardId("11111111-1111-4111-8111-111111111111"),
+              name: parseCardName("Archive Sentry"),
               cardNumber: 1,
               cardType: "Character",
               subtype: "Synth",
@@ -101,8 +102,8 @@ describe("CardView visual editor surface", () => {
           <CardView
             glossaryInfoOnHover
             card={{
-              id: asCardId("11111111-1111-4111-8111-111111111111"),
-              name: asCardName("Archive Sentry"),
+              id: testCardId("11111111-1111-4111-8111-111111111111"),
+              name: parseCardName("Archive Sentry"),
               cardNumber: 1,
               cardType: "Character",
               subtype: "Synth",

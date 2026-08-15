@@ -3,6 +3,7 @@ import type { LocalizedString } from "@trox/runtime";
 import { controlChrome } from "../../internal/control-treatment";
 import { token } from "../../primitives/tokens";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { DomTestId } from "../../types/dom";
 
 /** Named input modes supported by the shared text field. */
 export type TextFieldKind = "text" | "search";
@@ -27,7 +28,7 @@ export interface TextFieldProps {
   /** Prevent editing. */
   disabled?: boolean;
   /** Stable test id for the input. */
-  testId?: string;
+  testId?: DomTestId;
   /** Optional ref to the native input for focus orchestration. */
   inputRef?: Ref<HTMLInputElement>;
 }

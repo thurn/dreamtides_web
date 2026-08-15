@@ -6,7 +6,7 @@ import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { DreamwellCard, type DreamwellCardModel } from "./DreamwellCard";
-import { asDreamwellCardId } from "../../../types/identifiers";
+import { testDreamwellCardId } from "../../../types/test-identities";
 
 beforeEach(() => {
   (
@@ -17,9 +17,9 @@ beforeEach(() => {
 });
 
 const MODEL: DreamwellCardModel = {
-  cardId: asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
+  cardId: testDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
   displaySnapshot: {
-    id: asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
+    id: testDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92"),
     name: assertLocalized("Fixture Beacon"),
     renderedText: assertLocalized(
       "Look at the top 2 cards of your deck. Put one into your hand.",

@@ -14,7 +14,20 @@
  */
 
 import type { ArtCrop } from "../../types/cards";
-import { asCardId, type CardId } from "../../types/card-identity";
+import {
+  parseCardId,
+  parseCardName,
+  parseCardSubtype,
+  type CardId,
+  type CardName,
+  type CardSubtype,
+} from "../../types/card-identity";
+import { semanticEntityId } from "../../types/semantic-identity";
+import {
+  parseFigmentCatalogKey,
+  type FigmentCatalogKey,
+  type IdentityRecord,
+} from "../../types/identifiers";
 
 /**
  * A keyword a figment type carries implicitly. Each maps onto the matching
@@ -26,9 +39,9 @@ export interface FigmentCatalogEntry {
   /** Stable identity for this authored figment type. */
   id: CardId;
   /** The normalized lookup key (`normalizeFigmentCatalogKey(subtype)`). */
-  key: string;
+  key: FigmentCatalogKey;
   /** The figment type as printed (display form). */
-  subtype: string;
+  subtype: CardSubtype;
   /** The base spark of a single figment of this type. */
   baseSpark: number;
   /** The implicit keyword this type carries, if any. */
@@ -38,7 +51,7 @@ export interface FigmentCatalogEntry {
    * is hydrated. Absent on the built-in defaults, where callers fall back to a
    * `"<Type> Figment"` derivation.
    */
-  name?: string;
+  name?: CardName;
   /** The figment's rules text, sourced from `figments.toml` when hydrated. */
   renderedText?: string;
   /** The figment's art image number, sourced from `figments.toml` when hydrated. */
@@ -56,8 +69,8 @@ export interface FigmentCatalogEntry {
  * art into the battle UI.
  */
 export interface FigmentCatalogRecord {
-  id: string;
-  subtype: string;
+  id: CardId;
+  subtype: CardSubtype;
   spark: number;
   keyword?: string;
   name?: string;
@@ -68,7 +81,7 @@ export interface FigmentCatalogRecord {
 }
 
 /** Stable authored identity for the Legionnaire figment. */
-export const LEGIONNAIRE_FIGMENT_ID = asCardId(
+export const LEGIONNAIRE_FIGMENT_ID = parseCardId(
   "e757b306-5bab-4a5a-8493-28c0f3aa6440",
 );
 
@@ -85,19 +98,21 @@ function normalizeHydratedKeyword(
  * Normalizes a figment subtype to its catalog lookup key: trimmed and
  * lower-cased. Mirrors the normalization used elsewhere for figment subtypes.
  */
-export function normalizeFigmentCatalogKey(subtype: string): string {
-  return subtype.trim().toLowerCase();
+export function normalizeFigmentCatalogKey(subtype: string): FigmentCatalogKey {
+  return parseFigmentCatalogKey(subtype.trim().toLowerCase());
 }
 
 function entry(
-  subtype: string,
+  subtype: CardSubtype,
   baseSpark: number,
   keyword?: FigmentKeyword,
 ): FigmentCatalogEntry {
   return {
-    id: asCardId(`builtin:${normalizeFigmentCatalogKey(subtype)}`),
+    id: parseCardId(
+      semanticEntityId("figment", normalizeFigmentCatalogKey(subtype)),
+    ),
     key: normalizeFigmentCatalogKey(subtype),
-    subtype,
+    subtype: parseCardSubtype(subtype),
     baseSpark,
     ...(keyword === undefined ? {} : { keyword }),
   };
@@ -124,7 +139,9 @@ export const FIGMENT_CATALOG_ENTRIES: readonly FigmentCatalogEntry[] = [
  * The catalog keyed by normalized subtype. Use `lookupFigmentCatalogEntry` for
  * tolerant (non-normalized) lookups.
  */
-export const FIGMENT_CATALOG: Readonly<Record<string, FigmentCatalogEntry>> =
+export const FIGMENT_CATALOG: Readonly<
+  IdentityRecord<FigmentCatalogKey, FigmentCatalogEntry>
+> =
   Object.fromEntries(FIGMENT_CATALOG_ENTRIES.map((item) => [item.key, item]));
 
 /**
@@ -133,7 +150,9 @@ export const FIGMENT_CATALOG: Readonly<Record<string, FigmentCatalogEntry>> =
  * takes precedence over the built-in defaults, so a figment renders with the
  * name, character type, spark, rules text, and art the figment editor saved.
  */
-let hydratedCatalog: Readonly<Record<string, FigmentCatalogEntry>> | null =
+let hydratedCatalog: Readonly<
+  IdentityRecord<FigmentCatalogKey, FigmentCatalogEntry>
+> | null =
   null;
 let hydratedEntries: readonly FigmentCatalogEntry[] | null = null;
 
@@ -149,12 +168,12 @@ export function hydrateFigmentCatalog(
   const entries = records.map((record) => {
     const keyword = normalizeHydratedKeyword(record.keyword);
     return {
-      id: asCardId(record.id),
+      id: record.id,
       key: normalizeFigmentCatalogKey(record.subtype),
       subtype: record.subtype,
       baseSpark: Number.isFinite(record.spark) ? record.spark : 0,
       ...(keyword === undefined ? {} : { keyword }),
-      ...(record.name === undefined ? {} : { name: record.name }),
+      ...(record.name === undefined ? {} : { name: parseCardName(record.name) }),
       ...(record.renderedText === undefined
         ? {}
         : { renderedText: record.renderedText }),
@@ -198,6 +217,7 @@ export function resetFigmentCatalogHydration(): void {
 export function lookupFigmentCatalogEntry(
   subtype: string,
 ): FigmentCatalogEntry | undefined {
+  if (subtype.trim() === "") return undefined;
   const key = normalizeFigmentCatalogKey(subtype);
   if (hydratedCatalog !== null) {
     return hydratedCatalog[key] ?? FIGMENT_CATALOG[key];

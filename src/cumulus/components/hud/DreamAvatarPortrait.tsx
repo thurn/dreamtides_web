@@ -30,6 +30,7 @@ import {
   type LocalizedString,
 } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { DreamAvatarId, OpponentId } from "../../../types/identifiers";
 
 /** The minimal dreamAvatar shape a portrait needs: which art to load and the
  * name/title that back the alt text and the fallback monogram. */
@@ -74,7 +75,10 @@ export interface DreamAvatarPortraitProps {
   /** Square framing: `panel` for profile surfaces or `thumb` for compact rows. Default `panel`. */
   variant?: DreamAvatarPortraitVariant;
   /** Semantic DreamAvatar profile represented by this portrait. Omit for decorative art. */
-  profile?: { id: string; ability: LocalizedString };
+  profile?: {
+    id: DreamAvatarId | OpponentId;
+    ability: LocalizedString;
+  };
   /** Optional primary press action for selectable profile portraits. */
   onPress?: () => void;
   /** Keeps the profile readable while suppressing activation. */

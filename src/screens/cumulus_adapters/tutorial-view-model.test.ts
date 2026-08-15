@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { testDreamwellCardName } from "../../types/test-identities";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 import { resolveSource } from "../../runtime/localization/runtime";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DreamwellCard } from "../../data/dreamwell-database";
 import type { DreamAvatarContent } from "../../types/content";
@@ -18,11 +19,9 @@ import {
   makeTutorialBattleConfiguration,
   TEST_TUTORIAL_CARD_CONSTANTS,
 } from "../../test/tutorial-configuration-fixture";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asTutorialActionId } from "../../types/identifiers";
-import { asTutorialRunId } from "../../types/identifiers";
-import { asDreamwellCardId } from "../../types/identifiers";
-import { asBattleSlotViewId } from "../../types/identifiers";
+import { parseTutorialRunId } from "../../types/identifiers";
+import { parseBattleSlotViewId } from "../../types/identifiers";
+import { testTutorialActionId, testDreamAvatarId, testDreamwellCardId, testCardId } from "../../types/test-identities";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -43,7 +42,7 @@ function tutorialActionLogDetails(action: TutorialAction) {
 
 const TUTORIAL_DREAM_AVATARS: readonly DreamAvatarContent[] = [
   {
-    id: asDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
+    id: testDreamAvatarId("bfc40414-5264-41bf-86e1-a0f41ee4f5b5"),
     name: "Tensho",
     title: "Daimyo of Lacquered Fury",
     renderedText: "Player ability.",
@@ -52,7 +51,7 @@ const TUTORIAL_DREAM_AVATARS: readonly DreamAvatarContent[] = [
     startingEssence: 0,
   },
   {
-    id: asDreamAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
+    id: testDreamAvatarId("b99936ca-97f9-4930-af5a-fa9ef92557ef"),
     name: "Threxan",
     title: "the Resounding Wrath",
     renderedText: "Opponent ability.",
@@ -92,8 +91,8 @@ function speechBubble(
 }
 
 const OPPONENT_CARD: CardData = {
-  id: asCardId(TUTORIAL_OPPONENT_CARD_ID),
-  name: asCardName("Tutorial Opponent Card"),
+  id: TUTORIAL_OPPONENT_CARD_ID,
+  name: parseCardName("Tutorial Opponent Card"),
   cardNumber: 519,
   cardType: "Character",
   subtype: "Musician",
@@ -108,8 +107,8 @@ const OPPONENT_CARD: CardData = {
 };
 
 const PLAYER_CARD: CardData = {
-  id: asCardId(TUTORIAL_PLAYER_CARD_ID),
-  name: asCardName("Tutorial Player Card"),
+  id: TUTORIAL_PLAYER_CARD_ID,
+  name: parseCardName("Tutorial Player Card"),
   cardNumber: 512,
   cardType: "Character",
   subtype: "Spirit Animal",
@@ -124,8 +123,8 @@ const PLAYER_CARD: CardData = {
 };
 
 const RUNEBOUND_CHAMPION: CardData = {
-  id: asCardId(TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID),
-  name: asCardName("Runebound Champion"),
+  id: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
+  name: parseCardName("Runebound Champion"),
   cardNumber: 512,
   cardType: "Character",
   subtype: "Warrior",
@@ -140,8 +139,8 @@ const RUNEBOUND_CHAMPION: CardData = {
 };
 
 const AUTUMN_GLADE: DreamwellCard = {
-  id: asDreamwellCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
-  name: "Autumn Glade",
+  id: testDreamwellCardId("02e8ea92-1218-413c-9f0b-4c865a3921d3"),
+  name: testDreamwellCardName("Autumn Glade"),
   renderedText: "Gain 2⍟.",
   order: 1,
   energyAdded: 1,
@@ -149,17 +148,17 @@ const AUTUMN_GLADE: DreamwellCard = {
   imageNumber: 1789989917,
 };
 
-function tutorialCard(id: string, name: string): CardData {
+function tutorialCard(idSeed: string, name: string): CardData {
   return {
     ...PLAYER_CARD,
-    id: asCardId(id),
-    name: asCardName(name),
+    id: testCardId(idSeed),
+    name: parseCardName(name),
   };
 }
 
 const VOLTSURGE: DreamwellCard = {
-  id: asDreamwellCardId("7171ff89-ebe4-42d0-8863-9b4b0531cad2"),
-  name: "The Voltsurge",
+  id: testDreamwellCardId("7171ff89-ebe4-42d0-8863-9b4b0531cad2"),
+  name: testDreamwellCardName("The Voltsurge"),
   renderedText: "Each player draws 2 cards.",
   order: 3,
   energyAdded: 1,
@@ -182,34 +181,34 @@ describe("buildTutorialView", () => {
     });
     const actions: readonly TutorialAction[] = [
       {
-        id: asTutorialActionId("opponent-draw"),
+        id: testTutorialActionId("opponent-draw"),
         action: "draw-opponent-card",
         cardId: OPPONENT_CARD.id,
         wait: 0,
       },
       {
-        id: asTutorialActionId("opponent-play"),
+        id: testTutorialActionId("opponent-play"),
         action: "reveal-and-play-opponent-card",
         cardId: OPPONENT_CARD.id,
         revealDuration: 0,
         wait: 0,
       },
       {
-        id: asTutorialActionId("opponent-reposition"),
+        id: testTutorialActionId("opponent-reposition"),
         action: "reposition-opponent-character",
         cardId: OPPONENT_CARD.id,
         wait: 0,
       },
       {
-        id: asTutorialActionId("how-to-play"),
+        id: testTutorialActionId("how-to-play"),
         action: "display-how-to-play",
         trigger: "immediate",
         text: "Fixture instructions.",
         wait: 0,
       },
-      { id: asTutorialActionId("end-turn"), action: "end-turn", wait: 0 },
+      { id: testTutorialActionId("end-turn"), action: "end-turn", wait: 0 },
       {
-        id: asTutorialActionId("player-reposition"),
+        id: testTutorialActionId("player-reposition"),
         action: "reposition-player-character",
         cardId: RUNEBOUND_CHAMPION.id,
         opposingCardId: OPPONENT_CARD.id,
@@ -220,7 +219,7 @@ describe("buildTutorialView", () => {
       TUTORIAL_DREAM_AVATARS,
       battleConfiguration,
       {
-        runId: asTutorialRunId("synthetic-config"),
+        runId: parseTutorialRunId("synthetic-config"),
         actions,
         currentActionIndex: null,
         playerCardPlay: {
@@ -294,60 +293,60 @@ describe("buildTutorialView", () => {
     );
     const actions = [
       {
-        id: asTutorialActionId("how-to-play"),
+        id: testTutorialActionId("how-to-play"),
         action: "display-how-to-play" as const,
         trigger: "immediate" as const,
         text: "Play.",
         wait: 0,
       },
       {
-        id: asTutorialActionId("end-turn"),
+        id: testTutorialActionId("end-turn"),
         action: "end-turn" as const,
         wait: 0,
       },
       {
-        id: asTutorialActionId("enemy-draw"),
+        id: testTutorialActionId("enemy-draw"),
         action: "draw-opponent-card" as const,
         cardId: OPPONENT_CARD.id,
         wait: 0,
       },
       {
-        id: asTutorialActionId("enemy-play"),
+        id: testTutorialActionId("enemy-play"),
         action: "reveal-and-play-opponent-card" as const,
         cardId: OPPONENT_CARD.id,
         revealDuration: 0,
         wait: 0,
       },
       {
-        id: asTutorialActionId("enemy-forward"),
+        id: testTutorialActionId("enemy-forward"),
         action: "reposition-opponent-character" as const,
         cardId: OPPONENT_CARD.id,
         wait: 0,
       },
       {
-        id: asTutorialActionId("player-forward"),
+        id: testTutorialActionId("player-forward"),
         action: "reposition-player-character" as const,
         cardId: PLAYER_CARD.id,
         opposingCardId: OPPONENT_CARD.id,
         wait: 0,
       },
       {
-        id: asTutorialActionId("resolve"),
+        id: testTutorialActionId("resolve"),
         action: "resolve-challenge" as const,
         challengerCardId: OPPONENT_CARD.id,
         blockerCardId: PLAYER_CARD.id,
         wait: 0,
       },
       {
-        id: asTutorialActionId("player-voltsurge"),
+        id: testTutorialActionId("player-voltsurge"),
         action: "draw-dreamwell-card" as const,
         owner: "player" as const,
-        cardId: asDreamwellCardId(VOLTSURGE.id),
+        cardId: VOLTSURGE.id,
         revealDuration: 5,
         wait: 0,
       },
       {
-        id: asTutorialActionId("draw-nocturne"),
+        id: testTutorialActionId("draw-nocturne"),
         action: "draw-card" as const,
         owner: "player" as const,
         cardId: nocturne.id,
@@ -355,7 +354,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("draw-final-witness"),
+        id: testTutorialActionId("draw-final-witness"),
         action: "draw-card" as const,
         owner: "player" as const,
         cardId: finalWitness.id,
@@ -363,7 +362,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("draw-troubadour"),
+        id: testTutorialActionId("draw-troubadour"),
         action: "draw-card" as const,
         owner: "enemy" as const,
         cardId: OPPONENT_CARD.id,
@@ -371,7 +370,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("draw-flashpoint"),
+        id: testTutorialActionId("draw-flashpoint"),
         action: "draw-card" as const,
         owner: "enemy" as const,
         cardId: flashpoint.id,
@@ -379,7 +378,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("turn-draw-glimpse"),
+        id: testTutorialActionId("turn-draw-glimpse"),
         action: "draw-card" as const,
         owner: "player" as const,
         cardId: glimpse.id,
@@ -390,11 +389,11 @@ describe("buildTutorialView", () => {
     const playerCardPlay = {
       cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
       cardId: PLAYER_CARD.id,
-      targetSlotId: asBattleSlotViewId("player-back-0"),
+      targetSlotId: parseBattleSlotViewId("player-back-0"),
     };
     const revealing = buildTutorialView(
       {
-        runId: asTutorialRunId("event:post-tutorial"),
+        runId: parseTutorialRunId("event:post-tutorial"),
         actions,
         currentActionIndex: 7,
         playerCardPlay,
@@ -407,14 +406,14 @@ describe("buildTutorialView", () => {
       phase: "dawn",
       dreamwell: {
         side: "player",
-        model: { cardId: asDreamwellCardId(VOLTSURGE.id) },
+        model: { cardId: VOLTSURGE.id },
       },
       player: { status: { currentEnergy: 4, maxEnergy: 4 } },
     });
 
     const drawingEffect = buildTutorialView(
       {
-        runId: asTutorialRunId("event:post-tutorial"),
+        runId: parseTutorialRunId("event:post-tutorial"),
         actions,
         currentActionIndex: 8,
         playerCardPlay,
@@ -433,7 +432,7 @@ describe("buildTutorialView", () => {
 
     const drawingCardAcrossOwners = buildTutorialView(
       {
-        runId: asTutorialRunId("event:post-tutorial"),
+        runId: parseTutorialRunId("event:post-tutorial"),
         actions,
         currentActionIndex: 9,
         playerCardPlay,
@@ -448,7 +447,7 @@ describe("buildTutorialView", () => {
 
     const complete = buildTutorialView(
       {
-        runId: asTutorialRunId("event:post-tutorial"),
+        runId: parseTutorialRunId("event:post-tutorial"),
         actions,
         currentActionIndex: null,
         playerCardPlay,
@@ -471,13 +470,13 @@ describe("buildTutorialView", () => {
   it("reconstructs the completed prefix when playback starts at the last three actions", () => {
     const actions = [
       {
-        id: asTutorialActionId("welcome"),
+        id: testTutorialActionId("welcome"),
         action: "display-speech-bubble" as const,
         speechBubble: speechBubble("Welcome."),
         wait: 1,
       },
       {
-        id: asTutorialActionId("player-arrival"),
+        id: testTutorialActionId("player-arrival"),
         action: "animate-dream-avatar-portrait" as const,
         owner: "player" as const,
         pause: 1,
@@ -485,7 +484,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("enemy-arrival"),
+        id: testTutorialActionId("enemy-arrival"),
         action: "animate-dream-avatar-portrait" as const,
         owner: "enemy" as const,
         pause: 1,
@@ -493,7 +492,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("enemy-taunt"),
+        id: testTutorialActionId("enemy-taunt"),
         action: "display-speech-bubble" as const,
         speechBubble: speechBubble("For the Abyss!", {
           speaker: "enemy",
@@ -502,15 +501,15 @@ describe("buildTutorialView", () => {
         wait: 1,
       },
       {
-        id: asTutorialActionId("enemy-draw"),
+        id: testTutorialActionId("enemy-draw"),
         action: "draw-opponent-card" as const,
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         wait: 0,
       },
       {
-        id: asTutorialActionId("enemy-play"),
+        id: testTutorialActionId("enemy-play"),
         action: "reveal-and-play-opponent-card" as const,
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         revealDuration: 2,
         wait: 0,
       },
@@ -518,14 +517,14 @@ describe("buildTutorialView", () => {
 
     const tail = buildTutorialView(
       {
-        runId: asTutorialRunId("event:tail"),
+        runId: parseTutorialRunId("event:tail"),
         actions: actions,
         currentActionIndex: actions.length - 3,
       },
       [OPPONENT_CARD],
     );
 
-    expect(tail.currentAction?.id).toBe("enemy-taunt");
+    expect(tail.currentAction?.id).toBe(testTutorialActionId("enemy-taunt"));
     expect(tail.dreamAvatars.player.settled).toBe(true);
     expect(tail.dreamAvatars.enemy.settled).toBe(true);
     expect(tail.battle.enemy.deckCardIds).toHaveLength(30);
@@ -541,7 +540,7 @@ describe("buildTutorialView", () => {
   it("logs the selected speech portrait for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
-        id: asTutorialActionId("enemy-taunt"),
+        id: testTutorialActionId("enemy-taunt"),
         action: "display-speech-bubble",
         speechBubble: speechBubble("For the Abyss!", {
           speaker: "enemy",
@@ -550,7 +549,7 @@ describe("buildTutorialView", () => {
         wait: 3,
       }),
     ).toEqual({
-      actionId: "enemy-taunt",
+      actionId: testTutorialActionId("enemy-taunt"),
       action: "display-speech-bubble",
       speechBubble: {
         speaker: "enemy",
@@ -567,14 +566,14 @@ describe("buildTutorialView", () => {
   it("logs UUID-backed challenge resolution details", () => {
     expect(
       tutorialActionLogDetails({
-        id: asTutorialActionId("resolve-challenge"),
+        id: testTutorialActionId("resolve-challenge"),
         action: "resolve-challenge",
         challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
         blockerCardId: TUTORIAL_PLAYER_CARD_ID,
         wait: 0,
       }),
     ).toEqual({
-      actionId: "resolve-challenge",
+      actionId: testTutorialActionId("resolve-challenge"),
       action: "resolve-challenge",
       waitSeconds: 0,
       challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
@@ -588,7 +587,7 @@ describe("buildTutorialView", () => {
   it("logs the authored How to Play copy for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
-        id: asTutorialActionId("how-to-play"),
+        id: testTutorialActionId("how-to-play"),
         action: "display-how-to-play",
         cardWidth: 650,
         companion: "dreamwell-card",
@@ -596,7 +595,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       }),
     ).toEqual({
-      actionId: "how-to-play",
+      actionId: testTutorialActionId("how-to-play"),
       action: "display-how-to-play",
       cardWidthPx: 650,
       companion: "dreamwell-card",
@@ -613,13 +612,13 @@ describe("buildTutorialView", () => {
   it("logs the face-down opponent draw path for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
-        id: asTutorialActionId("vrakmoth-draw"),
+        id: testTutorialActionId("vrakmoth-draw"),
         action: "draw-opponent-card",
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         wait: 0,
       }),
     ).toEqual({
-      actionId: "vrakmoth-draw",
+      actionId: testTutorialActionId("vrakmoth-draw"),
       action: "draw-opponent-card",
       waitSeconds: 0,
       cardId: TUTORIAL_OPPONENT_CARD_ID,
@@ -632,9 +631,9 @@ describe("buildTutorialView", () => {
   it("logs the UUID, reading time, and destination of the opponent card play", () => {
     expect(
       tutorialActionLogDetails({
-        id: asTutorialActionId("vrakmoth-reveal-and-play"),
+        id: testTutorialActionId("vrakmoth-reveal-and-play"),
         action: "reveal-and-play-opponent-card",
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         revealDuration: 2,
         speechBubble: speechBubble("This card has a ▸Dawn ability.", {
           duration: 4,
@@ -644,7 +643,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       }),
     ).toEqual({
-      actionId: "vrakmoth-reveal-and-play",
+      actionId: testTutorialActionId("vrakmoth-reveal-and-play"),
       action: "reveal-and-play-opponent-card",
       waitSeconds: 0,
       cardId: TUTORIAL_OPPONENT_CARD_ID,
@@ -670,7 +669,7 @@ describe("buildTutorialView", () => {
   it("logs the authored handoff destination for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
-        id: asTutorialActionId("end-turn"),
+        id: testTutorialActionId("end-turn"),
         action: "end-turn",
         speechBubble: speechBubble(
           "Good, you have now [yellow]materialized[/yellow] this character.",
@@ -678,7 +677,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       }),
     ).toEqual({
-      actionId: "end-turn",
+      actionId: testTutorialActionId("end-turn"),
       action: "end-turn",
       waitSeconds: 0,
       speechBubble: {
@@ -700,13 +699,13 @@ describe("buildTutorialView", () => {
   it("logs the UUID-backed opponent reposition for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
-        id: asTutorialActionId("opponent-character-advance"),
+        id: testTutorialActionId("opponent-character-advance"),
         action: "reposition-opponent-character",
         cardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       }),
     ).toEqual({
-      actionId: "opponent-character-advance",
+      actionId: testTutorialActionId("opponent-character-advance"),
       action: "reposition-opponent-character",
       waitSeconds: 0,
       cardId: TUTORIAL_OPPONENT_CARD_ID,
@@ -719,14 +718,14 @@ describe("buildTutorialView", () => {
   it("logs both UUIDs for the guided player block", () => {
     expect(
       tutorialActionLogDetails({
-        id: asTutorialActionId("block-opponent"),
+        id: testTutorialActionId("block-opponent"),
         action: "reposition-player-character",
         cardId: TUTORIAL_PLAYER_CARD_ID,
         opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       }),
     ).toEqual({
-      actionId: "block-opponent",
+      actionId: testTutorialActionId("block-opponent"),
       action: "reposition-player-character",
       waitSeconds: 0,
       cardId: TUTORIAL_PLAYER_CARD_ID,
@@ -740,17 +739,17 @@ describe("buildTutorialView", () => {
   it("logs a UUID-authored Dreamwell reveal for sequence reconstruction", () => {
     expect(
       tutorialActionLogDetails({
-        id: asTutorialActionId("autumn-glade"),
+        id: testTutorialActionId("autumn-glade"),
         action: "draw-dreamwell-card",
         owner: "enemy",
-        cardId: asDreamwellCardId(AUTUMN_GLADE.id),
+        cardId: AUTUMN_GLADE.id,
         wait: 0,
       }),
     ).toEqual({
-      actionId: "autumn-glade",
+      actionId: testTutorialActionId("autumn-glade"),
       action: "draw-dreamwell-card",
       waitSeconds: 0,
-      cardId: asDreamwellCardId(AUTUMN_GLADE.id),
+      cardId: AUTUMN_GLADE.id,
       cardFace: "up",
       owner: "enemy",
       sourceZone: "dreamwell",
@@ -766,11 +765,11 @@ describe("buildTutorialView", () => {
 
   it("builds a journey-independent opposing Day phase with full decks and empty hands", () => {
     const tutorial = buildTutorialView({
-      runId: asTutorialRunId("event:7"),
+      runId: parseTutorialRunId("event:7"),
       currentActionIndex: 0,
       actions: [
         {
-          id: asTutorialActionId("greeting"),
+          id: testTutorialActionId("greeting"),
           action: "display-speech-bubble",
           speechBubble: speechBubble("A custom greeting.", {
             bubbleWidth: 450,
@@ -778,7 +777,7 @@ describe("buildTutorialView", () => {
           wait: 1.5,
         },
         {
-          id: asTutorialActionId("dream-avatar-arrival"),
+          id: testTutorialActionId("dream-avatar-arrival"),
           action: "animate-dream-avatar-portrait",
           owner: "player",
           pause: 1,
@@ -786,7 +785,7 @@ describe("buildTutorialView", () => {
           wait: 0,
         },
         {
-          id: asTutorialActionId("nightmare-call"),
+          id: testTutorialActionId("nightmare-call"),
           action: "display-speech-bubble",
           speechBubble: speechBubble("A second message."),
           wait: 3,
@@ -796,7 +795,7 @@ describe("buildTutorialView", () => {
     const view = tutorial.battle;
 
     expect(tutorial.dialogue).toEqual({
-      actionId: "greeting",
+      actionId: testTutorialActionId("greeting"),
       parentAction: "display-speech-bubble",
       kind: "guide",
       duration: 3,
@@ -811,7 +810,7 @@ describe("buildTutorialView", () => {
       },
     });
     expect(tutorial.playbackRunId).toBe("event:7");
-    expect(tutorial.currentAction?.id).toBe("greeting");
+    expect(tutorial.currentAction?.id).toBe(testTutorialActionId("greeting"));
     expect(tutorial.dreamAvatars.player).toMatchObject({
       visual: { imageNumber: "0029", name: "Tensho" },
       profile: {
@@ -857,17 +856,17 @@ describe("buildTutorialView", () => {
 
   it("keeps Tensho settled after the portrait animation advances", () => {
     const tutorial = buildTutorialView({
-      runId: asTutorialRunId("event:9"),
+      runId: parseTutorialRunId("event:9"),
       currentActionIndex: 2,
       actions: [
         {
-          id: asTutorialActionId("welcome"),
+          id: testTutorialActionId("welcome"),
           action: "display-speech-bubble",
           speechBubble: speechBubble("Welcome, Dreamer."),
           wait: 3,
         },
         {
-          id: asTutorialActionId("dream-avatar-arrival"),
+          id: testTutorialActionId("dream-avatar-arrival"),
           action: "animate-dream-avatar-portrait",
           owner: "player",
           pause: 1,
@@ -875,7 +874,7 @@ describe("buildTutorialView", () => {
           wait: 0,
         },
         {
-          id: asTutorialActionId("nightmare-call"),
+          id: testTutorialActionId("nightmare-call"),
           action: "display-speech-bubble",
           speechBubble: speechBubble(
             "You are called to stand against Nightmare.",
@@ -886,7 +885,7 @@ describe("buildTutorialView", () => {
       ],
     });
 
-    expect(tutorial.currentAction?.id).toBe("nightmare-call");
+    expect(tutorial.currentAction?.id).toBe(testTutorialActionId("nightmare-call"));
     expect(
       tutorial.dialogue?.kind === "guide"
         ? resolveSource(tutorial.dialogue.model.text)
@@ -908,13 +907,13 @@ describe("buildTutorialView", () => {
   it("ends speech before a portrait action plays", () => {
     const actions = [
       {
-        id: asTutorialActionId("welcome"),
+        id: testTutorialActionId("welcome"),
         action: "display-speech-bubble" as const,
         speechBubble: speechBubble("Welcome, Dreamer."),
         wait: 3,
       },
       {
-        id: asTutorialActionId("dream-avatar-arrival"),
+        id: testTutorialActionId("dream-avatar-arrival"),
         action: "animate-dream-avatar-portrait" as const,
         owner: "player" as const,
         pause: 1,
@@ -922,7 +921,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("nightmare-call"),
+        id: testTutorialActionId("nightmare-call"),
         action: "display-speech-bubble" as const,
         speechBubble: speechBubble("The next line."),
         wait: 3,
@@ -930,12 +929,12 @@ describe("buildTutorialView", () => {
     ];
 
     const overlapping = buildTutorialView({
-      runId: asTutorialRunId("event:overlap"),
+      runId: parseTutorialRunId("event:overlap"),
       currentActionIndex: 1,
       actions: actions,
     }).dialogue;
     const next = buildTutorialView({
-      runId: asTutorialRunId("event:overlap"),
+      runId: parseTutorialRunId("event:overlap"),
       currentActionIndex: 2,
       actions: actions,
     }).dialogue;
@@ -949,21 +948,21 @@ describe("buildTutorialView", () => {
   it("dismisses completed speech while non-portrait actions play", () => {
     const actions = [
       {
-        id: asTutorialActionId("vrakmoth-taunt"),
+        id: testTutorialActionId("vrakmoth-taunt"),
         action: "display-speech-bubble" as const,
         speechBubble: speechBubble("For the Abyss!", { speaker: "enemy" }),
         wait: 3,
       },
       {
-        id: asTutorialActionId("vrakmoth-draw"),
+        id: testTutorialActionId("vrakmoth-draw"),
         action: "draw-opponent-card" as const,
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         wait: 0,
       },
       {
-        id: asTutorialActionId("vrakmoth-reveal-and-play"),
+        id: testTutorialActionId("vrakmoth-reveal-and-play"),
         action: "reveal-and-play-opponent-card" as const,
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         revealDuration: 2,
         wait: 0,
       },
@@ -971,14 +970,14 @@ describe("buildTutorialView", () => {
 
     expect(
       buildTutorialView({
-        runId: asTutorialRunId("event:dismiss-speech"),
+        runId: parseTutorialRunId("event:dismiss-speech"),
         currentActionIndex: 1,
         actions,
       }).dialogue,
     ).toBeNull();
     expect(
       buildTutorialView({
-        runId: asTutorialRunId("event:dismiss-speech"),
+        runId: parseTutorialRunId("event:dismiss-speech"),
         currentActionIndex: 2,
         actions,
       }).dialogue,
@@ -987,11 +986,11 @@ describe("buildTutorialView", () => {
 
   it("attaches authored DreamAvatar speech to that side's battle portrait", () => {
     const tutorial = buildTutorialView({
-      runId: asTutorialRunId("event:11"),
+      runId: parseTutorialRunId("event:11"),
       currentActionIndex: 1,
       actions: [
         {
-          id: asTutorialActionId("vrakmoth-arrival"),
+          id: testTutorialActionId("vrakmoth-arrival"),
           action: "animate-dream-avatar-portrait",
           owner: "enemy",
           pause: 1,
@@ -999,7 +998,7 @@ describe("buildTutorialView", () => {
           wait: 0,
         },
         {
-          id: asTutorialActionId("vrakmoth-taunt"),
+          id: testTutorialActionId("vrakmoth-taunt"),
           action: "display-speech-bubble",
           speechBubble: speechBubble("For the Abyss!", { speaker: "enemy" }),
           wait: 3,
@@ -1009,7 +1008,7 @@ describe("buildTutorialView", () => {
 
     expect(tutorial.dreamAvatars.enemy.settled).toBe(true);
     expect(tutorial.dialogue).toEqual({
-      actionId: "vrakmoth-taunt",
+      actionId: testTutorialActionId("vrakmoth-taunt"),
       parentAction: "display-speech-bubble",
       kind: "dreamAvatar",
       owner: "enemy",
@@ -1025,32 +1024,32 @@ describe("buildTutorialView", () => {
   it("keeps the current opponent draw in the deck, then reveals and plays that UUID-backed card", () => {
     const actions = [
       {
-        id: asTutorialActionId("vrakmoth-taunt"),
+        id: testTutorialActionId("vrakmoth-taunt"),
         action: "display-speech-bubble" as const,
         speechBubble: speechBubble("For the Abyss!", { speaker: "enemy" }),
         wait: 3,
       },
       {
-        id: asTutorialActionId("vrakmoth-draw"),
+        id: testTutorialActionId("vrakmoth-draw"),
         action: "draw-opponent-card" as const,
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         wait: 0,
       },
       {
-        id: asTutorialActionId("vrakmoth-reveal-and-play"),
+        id: testTutorialActionId("vrakmoth-reveal-and-play"),
         action: "reveal-and-play-opponent-card" as const,
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         revealDuration: 2,
         wait: 0,
       },
       {
-        id: asTutorialActionId("how-to-play"),
+        id: testTutorialActionId("how-to-play"),
         action: "display-how-to-play" as const,
         text: "Configured instructions.\n\nScore 10⍟ to win.",
         wait: 0,
       },
       {
-        id: asTutorialActionId("end-turn"),
+        id: testTutorialActionId("end-turn"),
         action: "end-turn" as const,
         speechBubble: speechBubble(
           "Good, you have now [yellow]materialized[/yellow] this character.",
@@ -1058,14 +1057,14 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("autumn-glade"),
+        id: testTutorialActionId("autumn-glade"),
         action: "draw-dreamwell-card" as const,
         owner: "enemy" as const,
-        cardId: asDreamwellCardId(AUTUMN_GLADE.id),
+        cardId: AUTUMN_GLADE.id,
         wait: 0,
       },
       {
-        id: asTutorialActionId("dreamwell-how-to-play"),
+        id: testTutorialActionId("dreamwell-how-to-play"),
         action: "display-how-to-play" as const,
         trigger: "immediate" as const,
         companion: "dreamwell-card" as const,
@@ -1073,7 +1072,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("vrakmoth-worthy-challenger"),
+        id: testTutorialActionId("vrakmoth-worthy-challenger"),
         action: "display-speech-bubble" as const,
         speechBubble: speechBubble("A worthy challenger!", {
           speaker: "enemy",
@@ -1081,20 +1080,20 @@ describe("buildTutorialView", () => {
         wait: 3,
       },
       {
-        id: asTutorialActionId("opponent-character-advance"),
+        id: testTutorialActionId("opponent-character-advance"),
         action: "reposition-opponent-character" as const,
         cardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       },
       {
-        id: asTutorialActionId("challenge-positioning-how-to-play"),
+        id: testTutorialActionId("challenge-positioning-how-to-play"),
         action: "display-how-to-play" as const,
         trigger: "immediate" as const,
         text: "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]block[/yellow] a challenger during the opponent's turn.",
         wait: 0,
       },
       {
-        id: asTutorialActionId("block-opponent"),
+        id: testTutorialActionId("block-opponent"),
         action: "reposition-player-character" as const,
         cardId: TUTORIAL_PLAYER_CARD_ID,
         opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
@@ -1103,7 +1102,7 @@ describe("buildTutorialView", () => {
     ];
 
     const drawing = buildTutorialView({
-      runId: asTutorialRunId("event:draw"),
+      runId: parseTutorialRunId("event:draw"),
       currentActionIndex: 1,
       actions,
     }).battle;
@@ -1117,7 +1116,7 @@ describe("buildTutorialView", () => {
 
     const drawn = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: 2,
         actions,
       },
@@ -1139,7 +1138,7 @@ describe("buildTutorialView", () => {
 
     const playedTutorial = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: 3,
         actions,
       },
@@ -1147,7 +1146,7 @@ describe("buildTutorialView", () => {
     );
     const played = playedTutorial.battle;
     expect(playedTutorial.howToPlay).toEqual({
-      actionId: "how-to-play",
+      actionId: testTutorialActionId("how-to-play"),
       text: "Configured instructions.\n\nScore 10⍟ to win.",
       wait: 0,
       trigger: "player-turn-announcement-complete",
@@ -1201,25 +1200,25 @@ describe("buildTutorialView", () => {
     });
     const afterPlayerCardPlay = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: 4,
         actions,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
           cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: asBattleSlotViewId("player-back-4"),
+          targetSlotId: parseBattleSlotViewId("player-back-4"),
         },
       },
       [OPPONENT_CARD, PLAYER_CARD],
     );
     expect(afterPlayerCardPlay.howToPlay).toBeNull();
     expect(afterPlayerCardPlay.endTurn).toEqual({
-      actionId: "end-turn",
+      actionId: testTutorialActionId("end-turn"),
       triggerCardId: TUTORIAL_PLAYER_CARD_ID,
       ready: true,
     });
     expect(afterPlayerCardPlay.dialogue).toEqual({
-      actionId: "end-turn",
+      actionId: testTutorialActionId("end-turn"),
       parentAction: "end-turn",
       kind: "guide",
       duration: 3,
@@ -1257,13 +1256,13 @@ describe("buildTutorialView", () => {
 
     const drawingDreamwell = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: 5,
         actions,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
           cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: asBattleSlotViewId("player-back-4"),
+          targetSlotId: parseBattleSlotViewId("player-back-4"),
         },
       },
       [OPPONENT_CARD, PLAYER_CARD],
@@ -1276,7 +1275,7 @@ describe("buildTutorialView", () => {
       dreamwell: {
         side: "enemy",
         model: {
-          cardId: asDreamwellCardId(AUTUMN_GLADE.id),
+          cardId: AUTUMN_GLADE.id,
           displaySnapshot: {
             name: "Autumn Glade",
             renderedText: "Gain 2⍟.",
@@ -1309,13 +1308,13 @@ describe("buildTutorialView", () => {
 
     const loadingDreamwellCatalog = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: 5,
         actions,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
           cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: asBattleSlotViewId("player-back-4"),
+          targetSlotId: parseBattleSlotViewId("player-back-4"),
         },
       },
       [OPPONENT_CARD, PLAYER_CARD],
@@ -1325,13 +1324,13 @@ describe("buildTutorialView", () => {
 
     const explainingDreamwell = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: 6,
         actions,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
           cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: asBattleSlotViewId("player-back-4"),
+          targetSlotId: parseBattleSlotViewId("player-back-4"),
         },
       },
       [OPPONENT_CARD, PLAYER_CARD],
@@ -1346,12 +1345,12 @@ describe("buildTutorialView", () => {
       points: 0,
     });
     expect(explainingDreamwell.howToPlay).toEqual({
-      actionId: "dreamwell-how-to-play",
+      actionId: testTutorialActionId("dreamwell-how-to-play"),
       text: "From turn 2, players draw dreamwell cards that increase their energy (●) production and have other effects.",
       wait: 0,
       trigger: "immediate",
       companion: {
-        cardId: asDreamwellCardId(AUTUMN_GLADE.id),
+        cardId: AUTUMN_GLADE.id,
         displaySnapshot: {
           id: AUTUMN_GLADE.id,
           name: "Autumn Glade",
@@ -1364,20 +1363,20 @@ describe("buildTutorialView", () => {
 
     const worthyChallenger = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: 7,
         actions,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
           cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: asBattleSlotViewId("player-back-4"),
+          targetSlotId: parseBattleSlotViewId("player-back-4"),
         },
       },
       [OPPONENT_CARD, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(worthyChallenger.dialogue).toEqual({
-      actionId: "vrakmoth-worthy-challenger",
+      actionId: testTutorialActionId("vrakmoth-worthy-challenger"),
       parentAction: "display-speech-bubble",
       kind: "dreamAvatar",
       owner: "enemy",
@@ -1419,13 +1418,13 @@ describe("buildTutorialView", () => {
 
     const advancing = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: 8,
         actions,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
           cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: asBattleSlotViewId("player-back-4"),
+          targetSlotId: parseBattleSlotViewId("player-back-4"),
         },
       },
       [OPPONENT_CARD, PLAYER_CARD],
@@ -1448,23 +1447,23 @@ describe("buildTutorialView", () => {
 
     const duskInstructions = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: 9,
         actions,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
           cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: asBattleSlotViewId("player-back-4"),
+          targetSlotId: parseBattleSlotViewId("player-back-4"),
         },
       },
       [OPPONENT_CARD, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(duskInstructions.currentAction?.id).toBe(
-      "challenge-positioning-how-to-play",
+      testTutorialActionId("challenge-positioning-how-to-play"),
     );
     expect(duskInstructions.howToPlay).toEqual({
-      actionId: "challenge-positioning-how-to-play",
+      actionId: testTutorialActionId("challenge-positioning-how-to-play"),
       text: "Position characters in the front rank to [yellow]challenge[/yellow] with them during your turn, or [yellow]block[/yellow] a challenger during the opponent's turn.",
       wait: 0,
       trigger: "immediate",
@@ -1481,20 +1480,20 @@ describe("buildTutorialView", () => {
 
     const guidedBlock = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: 10,
         actions,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
           cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: asBattleSlotViewId("player-back-4"),
+          targetSlotId: parseBattleSlotViewId("player-back-4"),
         },
       },
       [OPPONENT_CARD, PLAYER_CARD],
       [AUTUMN_GLADE],
     );
     expect(guidedBlock.playerReposition).toEqual({
-      actionId: "block-opponent",
+      actionId: testTutorialActionId("block-opponent"),
       cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
       cardId: TUTORIAL_PLAYER_CARD_ID,
       opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
@@ -1508,13 +1507,13 @@ describe("buildTutorialView", () => {
 
     const ended = buildTutorialView(
       {
-        runId: asTutorialRunId("event:draw"),
+        runId: parseTutorialRunId("event:draw"),
         currentActionIndex: null,
         actions,
         playerCardPlay: {
           cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
           cardId: TUTORIAL_PLAYER_CARD_ID,
-          targetSlotId: asBattleSlotViewId("player-back-4"),
+          targetSlotId: parseBattleSlotViewId("player-back-4"),
         },
       },
       [OPPONENT_CARD, PLAYER_CARD],
@@ -1556,39 +1555,39 @@ describe("buildTutorialView", () => {
       "This card has a ▸Dawn ability which triggers at the start of turn";
     const actions = [
       {
-        id: asTutorialActionId("first-draw"),
+        id: testTutorialActionId("first-draw"),
         action: "draw-opponent-card" as const,
         cardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       },
       {
-        id: asTutorialActionId("first-play"),
+        id: testTutorialActionId("first-play"),
         action: "reveal-and-play-opponent-card" as const,
         cardId: TUTORIAL_OPPONENT_CARD_ID,
         revealDuration: 2,
         wait: 0,
       },
       {
-        id: asTutorialActionId("player-turn"),
+        id: testTutorialActionId("player-turn"),
         action: "display-how-to-play" as const,
         trigger: "immediate" as const,
         text: "Play.",
         wait: 0,
       },
       {
-        id: asTutorialActionId("end-turn"),
+        id: testTutorialActionId("end-turn"),
         action: "end-turn" as const,
         wait: 0,
       },
       {
-        id: asTutorialActionId("autumn-glade"),
+        id: testTutorialActionId("autumn-glade"),
         action: "draw-dreamwell-card" as const,
         owner: "enemy" as const,
-        cardId: asDreamwellCardId(AUTUMN_GLADE.id),
+        cardId: AUTUMN_GLADE.id,
         wait: 0,
       },
       {
-        id: asTutorialActionId("dreamwell-explanation"),
+        id: testTutorialActionId("dreamwell-explanation"),
         action: "display-how-to-play" as const,
         trigger: "immediate" as const,
         companion: "dreamwell-card" as const,
@@ -1596,13 +1595,13 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("runebound-draw"),
+        id: testTutorialActionId("runebound-draw"),
         action: "draw-opponent-card" as const,
         cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
         wait: 0,
       },
       {
-        id: asTutorialActionId("worthy"),
+        id: testTutorialActionId("worthy"),
         action: "display-speech-bubble" as const,
         speechBubble: speechBubble("A worthy challenger!", {
           speaker: "enemy",
@@ -1610,7 +1609,7 @@ describe("buildTutorialView", () => {
         wait: 3,
       },
       {
-        id: asTutorialActionId("runebound-play"),
+        id: testTutorialActionId("runebound-play"),
         action: "reveal-and-play-opponent-card" as const,
         cardId: TUTORIAL_RUNEBOUND_CHAMPION_CARD_ID,
         revealDuration: 5,
@@ -1622,23 +1621,23 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("advance-first"),
+        id: testTutorialActionId("advance-first"),
         action: "reposition-opponent-character" as const,
         cardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       },
       {
-        id: asTutorialActionId("player-next-turn"),
+        id: testTutorialActionId("player-next-turn"),
         action: "draw-dreamwell-card" as const,
         owner: "player" as const,
-        cardId: asDreamwellCardId(VOLTSURGE.id),
+        cardId: VOLTSURGE.id,
         wait: 0,
       },
     ];
 
     const revealing = buildTutorialView(
       {
-        runId: asTutorialRunId("event:second-card"),
+        runId: parseTutorialRunId("event:second-card"),
         currentActionIndex: 8,
         actions,
       },
@@ -1678,7 +1677,7 @@ describe("buildTutorialView", () => {
 
     const repositioning = buildTutorialView(
       {
-        runId: asTutorialRunId("event:second-card"),
+        runId: parseTutorialRunId("event:second-card"),
         currentActionIndex: 9,
         actions,
       },
@@ -1703,7 +1702,7 @@ describe("buildTutorialView", () => {
 
     const playerNextTurn = buildTutorialView(
       {
-        runId: asTutorialRunId("event:second-card"),
+        runId: parseTutorialRunId("event:second-card"),
         currentActionIndex: 10,
         actions,
       },
@@ -1719,45 +1718,45 @@ describe("buildTutorialView", () => {
   it("enters Challenge, identifies the lower-spark loser, and moves it to its void after resolution", () => {
     const actions = [
       {
-        id: asTutorialActionId("opponent-draw"),
+        id: testTutorialActionId("opponent-draw"),
         action: "draw-opponent-card" as const,
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         wait: 0,
       },
       {
-        id: asTutorialActionId("opponent-play"),
+        id: testTutorialActionId("opponent-play"),
         action: "reveal-and-play-opponent-card" as const,
-        cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+        cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
         revealDuration: 0,
         wait: 0,
       },
       {
-        id: asTutorialActionId("player-turn"),
+        id: testTutorialActionId("player-turn"),
         action: "display-how-to-play" as const,
         trigger: "immediate" as const,
         text: "Play.",
         wait: 0,
       },
       {
-        id: asTutorialActionId("end-turn"),
+        id: testTutorialActionId("end-turn"),
         action: "end-turn" as const,
         wait: 0,
       },
       {
-        id: asTutorialActionId("opponent-advance"),
+        id: testTutorialActionId("opponent-advance"),
         action: "reposition-opponent-character" as const,
         cardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       },
       {
-        id: asTutorialActionId("player-block"),
+        id: testTutorialActionId("player-block"),
         action: "reposition-player-character" as const,
         cardId: TUTORIAL_PLAYER_CARD_ID,
         opposingCardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       },
       {
-        id: asTutorialActionId("resolve-challenge"),
+        id: testTutorialActionId("resolve-challenge"),
         action: "resolve-challenge" as const,
         challengerCardId: TUTORIAL_OPPONENT_CARD_ID,
         blockerCardId: TUTORIAL_PLAYER_CARD_ID,
@@ -1767,12 +1766,12 @@ describe("buildTutorialView", () => {
     const playerCardPlay = {
       cardInstanceId: TUTORIAL_PLAYER_CARD_INSTANCE_ID,
       cardId: TUTORIAL_PLAYER_CARD_ID,
-      targetSlotId: asBattleSlotViewId("player-back-1"),
+      targetSlotId: parseBattleSlotViewId("player-back-1"),
     };
 
     const resolving = buildTutorialView(
       {
-        runId: asTutorialRunId("event:challenge"),
+        runId: parseTutorialRunId("event:challenge"),
         actions,
         currentActionIndex: actions.length - 1,
         playerCardPlay,
@@ -1783,7 +1782,7 @@ describe("buildTutorialView", () => {
     expect(resolving.battle.phase).toBe("challenge");
     expect(resolving.battle.inspector.phase).toBe("Challenge");
     expect(resolving.challenge).toMatchObject({
-      actionId: "resolve-challenge",
+      actionId: testTutorialActionId("resolve-challenge"),
       challenger: {
         owner: "enemy",
         spark: 2,
@@ -1807,7 +1806,7 @@ describe("buildTutorialView", () => {
 
     const resolved = buildTutorialView(
       {
-        runId: asTutorialRunId("event:challenge"),
+        runId: parseTutorialRunId("event:challenge"),
         actions,
         currentActionIndex: null,
         playerCardPlay,
@@ -1836,7 +1835,7 @@ describe("buildTutorialView", () => {
   it("settles Threxan only after the opponent portrait action advances", () => {
     const actions = [
       {
-        id: asTutorialActionId("dream-avatar-arrival"),
+        id: testTutorialActionId("dream-avatar-arrival"),
         action: "animate-dream-avatar-portrait" as const,
         owner: "player" as const,
         pause: 1,
@@ -1844,7 +1843,7 @@ describe("buildTutorialView", () => {
         wait: 0,
       },
       {
-        id: asTutorialActionId("nightmare-call"),
+        id: testTutorialActionId("nightmare-call"),
         action: "display-speech-bubble" as const,
         speechBubble: speechBubble(
           "You are called to stand against\nthe power of Nightmare.",
@@ -1852,7 +1851,7 @@ describe("buildTutorialView", () => {
         wait: 3,
       },
       {
-        id: asTutorialActionId("vrakmoth-arrival"),
+        id: testTutorialActionId("vrakmoth-arrival"),
         action: "animate-dream-avatar-portrait" as const,
         owner: "enemy" as const,
         pause: 1,
@@ -1862,17 +1861,17 @@ describe("buildTutorialView", () => {
     ];
 
     const arriving = buildTutorialView({
-      runId: asTutorialRunId("event:10"),
+      runId: parseTutorialRunId("event:10"),
       currentActionIndex: 2,
       actions: actions,
     });
     expect(arriving.dreamAvatars.player.settled).toBe(true);
     expect(arriving.dreamAvatars.enemy.settled).toBe(false);
-    expect(arriving.currentAction?.id).toBe("vrakmoth-arrival");
+    expect(arriving.currentAction?.id).toBe(testTutorialActionId("vrakmoth-arrival"));
     expect(arriving.dialogue).toBeNull();
 
     const complete = buildTutorialView({
-      runId: asTutorialRunId("event:10"),
+      runId: parseTutorialRunId("event:10"),
       currentActionIndex: null,
       actions: actions,
     });

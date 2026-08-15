@@ -8,6 +8,22 @@ import { describe, expect, it } from "vitest";
 
 import type { Tides4DecksJson } from "./tides4-io.ts";
 import { validateTides4Decks } from "./tides4-io.ts";
+import {
+  testCardId,
+  testDreamAvatarId,
+  testTideId,
+} from "../../types/test-identities";
+
+const SIGNATURE_TIDE_ID = testTideId("10000000-0000-4000-8000-000000000001");
+const FACET_TIDE_ID = testTideId("10000000-0000-4000-8000-000000000002");
+const NEUTRAL_TIDE_ID = testTideId("10000000-0000-4000-8000-000000000003");
+const MISSING_TIDE_ID = testTideId("10000000-0000-4000-8000-000000000004");
+const SIGNATURED_AVATAR_ID = testDreamAvatarId(
+  "20000000-0000-4000-8000-000000000001",
+);
+const SIGNATURELESS_AVATAR_ID = testDreamAvatarId(
+  "20000000-0000-4000-8000-000000000002",
+);
 
 function makeArtifact(): Tides4DecksJson {
   return {
@@ -15,43 +31,51 @@ function makeArtifact(): Tides4DecksJson {
     selection: { bandFraction: 0.25, bandMinimum: 5 },
     tides: [
       {
-        id: "tide-sig-01",
+        id: SIGNATURE_TIDE_ID,
         displayName: "Rael signature",
         displayDescription: "Signature description",
         role: "signature",
         resonance: "shadow",
         cards: [
-          { id: "11111111-1111-1111-1111-111111111111", copies: 2 },
-          { id: "22222222-2222-2222-2222-222222222222", copies: 1 },
+          { id: testCardId("11111111-1111-1111-1111-111111111111"), copies: 2 },
+          { id: testCardId("22222222-2222-2222-2222-222222222222"), copies: 1 },
         ],
       },
       {
-        id: "tide-fac-01",
+        id: FACET_TIDE_ID,
         displayName: "Lean: Card A",
         displayDescription: "Facet description",
         role: "facet",
         resonance: "wild",
         cards: [
-          { id: "11111111-1111-1111-1111-111111111111", copies: 2 },
-          { id: "44444444-4444-4444-4444-444444444444", copies: 1 },
+          { id: testCardId("11111111-1111-1111-1111-111111111111"), copies: 2 },
+          { id: testCardId("44444444-4444-4444-4444-444444444444"), copies: 1 },
         ],
       },
       {
-        id: "tide-neu-01",
+        id: NEUTRAL_TIDE_ID,
         displayName: "Broad: Card C / Card D",
         displayDescription: "Neutral description",
         role: "neutral",
         resonance: "vision",
         cards: [
-          { id: "33333333-3333-3333-3333-333333333333", copies: 1 },
+          { id: testCardId("33333333-3333-3333-3333-333333333333"), copies: 1 },
         ],
       },
     ],
     tidePoolByDreamAvatar: {
       // A signatured DreamAvatar: a starter, on-identity facets, a broad tail.
-      "dc-a": { starter: "tide-sig-01", facets: ["tide-fac-01"], neutral: ["tide-neu-01"] },
+      [SIGNATURED_AVATAR_ID]: {
+        starter: SIGNATURE_TIDE_ID,
+        facets: [FACET_TIDE_ID],
+        neutral: [NEUTRAL_TIDE_ID],
+      },
       // A signatureless DreamAvatar: no starter, draws from the facet library.
-      "dc-b": { starter: null, facets: ["tide-fac-01"], neutral: ["tide-neu-01"] },
+      [SIGNATURELESS_AVATAR_ID]: {
+        starter: null,
+        facets: [FACET_TIDE_ID],
+        neutral: [NEUTRAL_TIDE_ID],
+      },
     },
   };
 }
@@ -113,7 +137,7 @@ describe("validateTides4Decks", () => {
 
   it("rejects a card without a UUID", () => {
     const data = clone(makeArtifact()) as Tides4DecksJson;
-    (data.tides[0].cards[0] as { id: string }).id = "";
+    (data.tides[0].cards[0] as { id: unknown }).id = "";
     expect(() => validateTides4Decks(data)).toThrow(/without a UUID/);
   });
 
@@ -131,32 +155,37 @@ describe("validateTides4Decks", () => {
 
   it("accepts a null starter (a signatureless DreamAvatar)", () => {
     const data = makeArtifact();
-    expect(validateTides4Decks(clone(data)).tidePoolByDreamAvatar["dc-b"].starter).toBe(
-      null,
-    );
+    expect(
+      validateTides4Decks(clone(data)).tidePoolByDreamAvatar[
+        SIGNATURELESS_AVATAR_ID
+      ].starter,
+    ).toBe(null);
   });
 
   it("rejects a starter that names no tide", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamAvatar["dc-a"].starter = "tide-missing";
+    data.tidePoolByDreamAvatar[SIGNATURED_AVATAR_ID].starter = MISSING_TIDE_ID;
     expect(() => validateTides4Decks(clone(data))).toThrow(/unknown `starter`/);
   });
 
   it("rejects an empty facet list", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamAvatar["dc-a"].facets = [];
+    data.tidePoolByDreamAvatar[SIGNATURED_AVATAR_ID].facets = [];
     expect(() => validateTides4Decks(clone(data))).toThrow(/no `facets`/);
   });
 
   it("accepts an empty neutral list", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamAvatar["dc-a"].neutral = [];
+    data.tidePoolByDreamAvatar[SIGNATURED_AVATAR_ID].neutral = [];
     expect(() => validateTides4Decks(clone(data))).not.toThrow();
   });
 
   it("rejects a tide-pool id that names no tide (a stale combination)", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamAvatar["dc-a"].facets = ["tide-fac-01", "tide-missing"];
+    data.tidePoolByDreamAvatar[SIGNATURED_AVATAR_ID].facets = [
+      FACET_TIDE_ID,
+      MISSING_TIDE_ID,
+    ];
     expect(() => validateTides4Decks(clone(data))).toThrow(/names no tide/);
   });
 });

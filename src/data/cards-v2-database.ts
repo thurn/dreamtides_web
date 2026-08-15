@@ -1,7 +1,16 @@
-import { asCardId, type CardId } from "../types/card-identity";
+import {
+  parseCardId,
+  parseCardName,
+  parseCardSubtype,
+  type CardId,
+} from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { GeneratedPool, Tides4DecksJson } from "../draft/pool";
 import { validateTides4Decks } from "../draft/pool";
+import {
+  serializeCardNumber,
+  type DraftPoolCopiesByCard,
+} from "../types/draft";
 
 /**
  * Fetches the experimental v2 card pool (generated from `cards.toml` by
@@ -16,10 +25,21 @@ export async function loadCardsV2Database(): Promise<Map<number, CardData>> {
       `Failed to load cards_v2 data: ${String(response.status)} ${response.statusText}`,
     );
   }
-  const cards = (await response.json()) as CardData[];
+  const cards = (await response.json()) as Array<
+    Omit<CardData, "id" | "name" | "subtype"> & {
+      id: unknown;
+      name: unknown;
+      subtype: unknown;
+    }
+  >;
   const database = new Map<number, CardData>();
   for (const card of cards) {
-    database.set(card.cardNumber, card);
+    database.set(card.cardNumber, {
+      ...card,
+      id: parseCardId(card.id),
+      name: parseCardName(card.name),
+      subtype: parseCardSubtype(card.subtype),
+    });
   }
   return database;
 }
@@ -51,7 +71,7 @@ export function buildIdIndex(
 ): Map<CardId, number> {
   const index = new Map<CardId, number>();
   for (const card of database.values()) {
-    index.set(asCardId(card.id.toLowerCase()), card.cardNumber);
+    index.set(parseCardId(card.id.toLowerCase()), card.cardNumber);
   }
   return index;
 }
@@ -59,7 +79,7 @@ export function buildIdIndex(
 /** A generated pool resolved against the v2 card database. */
 export interface ResolvedPool {
   /** Fixed draft multiset keyed by card number (as string), values 1 or 2. */
-  draftPoolCopiesByCard: Record<string, number>;
+  draftPoolCopiesByCard: DraftPoolCopiesByCard;
   /**
    * Pool card ids ({@link CardId}) that had no matching card in the v2 database
    * (a card no longer in the catalog). Surfaced so the caller can log them as a
@@ -94,7 +114,7 @@ export function resolvePool(
   defaultCopyCap: number = 2,
   copyCapsByCardNumber: ReadonlyMap<number, number> = new Map<number, number>(),
 ): ResolvedPool {
-  const draftPoolCopiesByCard: Record<string, number> = {};
+  const draftPoolCopiesByCard: DraftPoolCopiesByCard = {};
   const unresolvedIds: CardId[] = [];
   const collidedCardNumbers: number[] = [];
   const cappedCardNumbers: number[] = [];
@@ -113,9 +133,10 @@ export function resolvePool(
     // resolve to the same card number under normal data. Record it if it ever
     // does (a stale or duplicate id) so the caller can log the anomaly, then sum
     // and cap rather than silently overwrite.
-    const existing = draftPoolCopiesByCard[String(cardNumber)] ?? 0;
+    const serializedCardNumber = serializeCardNumber(cardNumber);
+    const existing = draftPoolCopiesByCard[serializedCardNumber] ?? 0;
     if (existing > 0) collidedCardNumbers.push(cardNumber);
-    draftPoolCopiesByCard[String(cardNumber)] = Math.min(
+    draftPoolCopiesByCard[serializedCardNumber] = Math.min(
       cap,
       existing + copies,
     );

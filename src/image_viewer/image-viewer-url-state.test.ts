@@ -4,6 +4,7 @@ import {
   parseImageViewerDisplayState,
   serializeImageViewerDisplayState,
 } from "./image-viewer-url-state";
+import { parseImageCategory } from "./types";
 
 describe("parseImageViewerDisplayState", () => {
   it("returns defaults for an empty query", () => {
@@ -56,7 +57,7 @@ describe("serializeImageViewerDisplayState", () => {
 
   it("round-trips a non-default state", () => {
     const state = {
-      category: "events",
+      category: parseImageCategory("events"),
       showUsed: true,
       onlyNamed: true,
       randomOrder: true,

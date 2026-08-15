@@ -64,7 +64,7 @@ describe("ApplicationStateScreen", () => {
       title: COPY,
       message: COPY,
       comparison: [{
-        id: "fixture",
+        id: "atlas",
         label: COPY,
         expected: { kind: "raw", value: "Room" },
         actual: { kind: "raw", value: "Local" },

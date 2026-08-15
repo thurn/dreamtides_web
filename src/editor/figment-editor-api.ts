@@ -8,6 +8,19 @@ import type {
   SaveEditorFigmentImageNumberRequest,
 } from "./figment-types";
 import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+import {
+  parseSourceRevisionResponse,
+  type ParsedSourceRevisionResponse,
+  type RawSourceRevisionResponse,
+  type SourceRevision,
+} from "../types/source-revision";
+import { parseCardSubtype } from "../types/card-identity";
+
+function decodeEditorFigment(
+  record: LoadEditorFigmentsResponse["figments"][number],
+): LoadEditorFigmentsResponse["figments"][number] {
+  return { ...record, subtype: parseCardSubtype(record.subtype) };
+}
 
 const SOURCE = "figments";
 
@@ -56,6 +69,14 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
+async function readRevisionedJsonResponse<
+  Result extends { readonly sourceRevision: SourceRevision },
+>(response: Response): Promise<ParsedSourceRevisionResponse<Result>> {
+  return parseSourceRevisionResponse<Result>(
+    await readJsonResponse<RawSourceRevisionResponse<Result>>(response),
+  );
+}
+
 function withTomlParam(path: string): string {
   const toml = editorTomlParam();
   if (toml === null) {
@@ -73,9 +94,9 @@ export async function loadEditorFigments(
     headers: { Accept: "application/json" },
     signal,
   });
-  const body = await readJsonResponse<LoadEditorFigmentsResponse>(response);
+  const body = await readRevisionedJsonResponse<LoadEditorFigmentsResponse>(response);
   confirmSourceRevision(SOURCE, body);
-  return body.figments;
+  return body.figments.map(decodeEditorFigment);
 }
 
 export async function saveEditorFigmentField(
@@ -90,9 +111,9 @@ export async function saveEditorFigmentField(
     },
       body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
     });
-    const body = await readJsonResponse<SaveEditorFigmentFieldResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorFigmentFieldResponse>(response);
     confirmSourceRevision(SOURCE, body);
-    return body;
+    return { ...body, figment: decodeEditorFigment(body.figment) };
   });
 }
 
@@ -110,9 +131,9 @@ export async function saveEditorFigmentArt(
         id: request.id, field: "art", value: request.art,
       })),
     });
-    const body = await readJsonResponse<SaveEditorFigmentFieldResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorFigmentFieldResponse>(response);
     confirmSourceRevision(SOURCE, body);
-    return body;
+    return { ...body, figment: decodeEditorFigment(body.figment) };
   });
 }
 
@@ -132,8 +153,8 @@ export async function saveEditorFigmentImageNumber(
       value: request.imageNumber,
       })),
     });
-    const body = await readJsonResponse<SaveEditorFigmentFieldResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorFigmentFieldResponse>(response);
     confirmSourceRevision(SOURCE, body);
-    return body;
+    return { ...body, figment: decodeEditorFigment(body.figment) };
   });
 }

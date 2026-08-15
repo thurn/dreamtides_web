@@ -1,4 +1,7 @@
 import type { ContentConfig, EncodedLogNode, Genesis } from "./types";
+import { parseFoldHash } from "../types/content-hash";
+import { parseReducerVersion } from "../types/reducer-version";
+import { journeySeedFromUnknown } from "../types/journey-seed";
 
 /** A validated RTDB log envelope whose native-tree values remain untrusted. */
 export interface RtdbLogNode {
@@ -19,6 +22,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isNonNegativeSafeInteger(value: unknown): value is number {
   return typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
+}
+
+function isFoldHash(value: unknown): value is string {
+  return typeof value === "string" && /^[0-9a-f]{64}$/u.test(value);
 }
 
 function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
@@ -43,30 +50,30 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
   } = value;
   if (
     poolVariant !== "tides4" ||
-    !(atlasFoldHash === undefined || typeof atlasFoldHash === "string") ||
-    !(sitesFoldHash === undefined || typeof sitesFoldHash === "string") ||
-    !(draftFoldHash === undefined || typeof draftFoldHash === "string") ||
+    !(atlasFoldHash === undefined || isFoldHash(atlasFoldHash)) ||
+    !(sitesFoldHash === undefined || isFoldHash(sitesFoldHash)) ||
+    !(draftFoldHash === undefined || isFoldHash(draftFoldHash)) ||
     !(
-      cardRolesFoldHash === undefined || typeof cardRolesFoldHash === "string"
+      cardRolesFoldHash === undefined || isFoldHash(cardRolesFoldHash)
     ) ||
-    !(economyFoldHash === undefined || typeof economyFoldHash === "string") ||
-    !(gambleFoldHash === undefined || typeof gambleFoldHash === "string") ||
+    !(economyFoldHash === undefined || isFoldHash(economyFoldHash)) ||
+    !(gambleFoldHash === undefined || isFoldHash(gambleFoldHash)) ||
     !(
       transfigurationFoldHash === undefined ||
-      typeof transfigurationFoldHash === "string"
+      isFoldHash(transfigurationFoldHash)
     ) ||
     !(
       rewardSelectionFoldHash === undefined ||
-      typeof rewardSelectionFoldHash === "string"
+      isFoldHash(rewardSelectionFoldHash)
     ) ||
-    !(auguryFoldHash === undefined || typeof auguryFoldHash === "string") ||
+    !(auguryFoldHash === undefined || isFoldHash(auguryFoldHash)) ||
     !(
       explorationFoldHash === undefined ||
-      typeof explorationFoldHash === "string"
+      isFoldHash(explorationFoldHash)
     ) ||
-    !(tutorialFoldHash === undefined || typeof tutorialFoldHash === "string") ||
+    !(tutorialFoldHash === undefined || isFoldHash(tutorialFoldHash)) ||
     !(
-      opponentsFoldHash === undefined || typeof opponentsFoldHash === "string"
+      opponentsFoldHash === undefined || isFoldHash(opponentsFoldHash)
     ) ||
     !(
       defaultStartingEssence === undefined ||
@@ -78,22 +85,22 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
   }
   return {
     poolVariant,
-    ...(atlasFoldHash === undefined ? {} : { atlasFoldHash }),
-    ...(sitesFoldHash === undefined ? {} : { sitesFoldHash }),
-    ...(draftFoldHash === undefined ? {} : { draftFoldHash }),
-    ...(cardRolesFoldHash === undefined ? {} : { cardRolesFoldHash }),
-    ...(economyFoldHash === undefined ? {} : { economyFoldHash }),
-    ...(gambleFoldHash === undefined ? {} : { gambleFoldHash }),
+    ...(atlasFoldHash === undefined ? {} : { atlasFoldHash: parseFoldHash(atlasFoldHash) }),
+    ...(sitesFoldHash === undefined ? {} : { sitesFoldHash: parseFoldHash(sitesFoldHash) }),
+    ...(draftFoldHash === undefined ? {} : { draftFoldHash: parseFoldHash(draftFoldHash) }),
+    ...(cardRolesFoldHash === undefined ? {} : { cardRolesFoldHash: parseFoldHash(cardRolesFoldHash) }),
+    ...(economyFoldHash === undefined ? {} : { economyFoldHash: parseFoldHash(economyFoldHash) }),
+    ...(gambleFoldHash === undefined ? {} : { gambleFoldHash: parseFoldHash(gambleFoldHash) }),
     ...(transfigurationFoldHash === undefined
       ? {}
-      : { transfigurationFoldHash }),
+      : { transfigurationFoldHash: parseFoldHash(transfigurationFoldHash) }),
     ...(rewardSelectionFoldHash === undefined
       ? {}
-      : { rewardSelectionFoldHash }),
-    ...(auguryFoldHash === undefined ? {} : { auguryFoldHash }),
-    ...(explorationFoldHash === undefined ? {} : { explorationFoldHash }),
-    ...(tutorialFoldHash === undefined ? {} : { tutorialFoldHash }),
-    ...(opponentsFoldHash === undefined ? {} : { opponentsFoldHash }),
+      : { rewardSelectionFoldHash: parseFoldHash(rewardSelectionFoldHash) }),
+    ...(auguryFoldHash === undefined ? {} : { auguryFoldHash: parseFoldHash(auguryFoldHash) }),
+    ...(explorationFoldHash === undefined ? {} : { explorationFoldHash: parseFoldHash(explorationFoldHash) }),
+    ...(tutorialFoldHash === undefined ? {} : { tutorialFoldHash: parseFoldHash(tutorialFoldHash) }),
+    ...(opponentsFoldHash === undefined ? {} : { opponentsFoldHash: parseFoldHash(opponentsFoldHash) }),
     ...(defaultStartingEssence === undefined ? {} : { defaultStartingEssence }),
     ...(dreamsignCap === undefined ? {} : { dreamsignCap }),
   };
@@ -110,9 +117,11 @@ export function decodeGenesis(raw: unknown): Genesis | null {
   }
   if (!isRecord(parsed)) return null;
   const { seed, reducerVersion, createdAt, frontDoorEntry } = parsed;
+  const journeySeed = journeySeedFromUnknown(seed);
   if (
-    typeof seed !== "string" ||
+    journeySeed === null ||
     typeof reducerVersion !== "string" ||
+    reducerVersion.trim() === "" ||
     typeof createdAt !== "number" ||
     !Number.isFinite(createdAt) ||
     !(
@@ -127,8 +136,8 @@ export function decodeGenesis(raw: unknown): Genesis | null {
   const contentConfig = decodeContentConfig(parsed.contentConfig);
   if (contentConfig === null) return null;
   return {
-    seed,
-    reducerVersion,
+    seed: journeySeed,
+    reducerVersion: parseReducerVersion(reducerVersion),
     createdAt,
     ...(frontDoorEntry === undefined ? {} : { frontDoorEntry }),
     ...(contentConfig === undefined ? {} : { contentConfig }),

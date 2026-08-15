@@ -18,8 +18,7 @@ import { BattleTutorialGuidance } from "../cumulus/screens/BattleTutorialGuidanc
 import { buildCardTutorialGuidanceView } from "../screens/cumulus_adapters/card-tutorial-guidance-view-model";
 import { createCardTutorialGuidanceContentProvider } from "../coop/providers/card-tutorial-guidance-provider";
 import { activeFirstVisitTutorialSite } from "../data/site-tutorial-guidance";
-import { asPresentationId } from "../types/identifiers";
-import { asCardId } from "../types/card-identity";
+import { parseCardId } from "../types/card-identity";
 import type { CardId } from "../types/card-identity";
 
 function visibleCardIds(stage: HTMLElement): readonly CardId[] {
@@ -33,7 +32,7 @@ function visibleCardIds(stage: HTMLElement): readonly CardId[] {
     if (rect.width <= 0 || rect.height <= 0) continue;
     const cardId = card.dataset.cardId;
     if (cardId === undefined) continue;
-    const identity = asCardId(cardId);
+    const identity = parseCardId(cardId);
     if (seen.has(identity)) continue;
     seen.add(identity);
     ids.push(identity);
@@ -185,7 +184,7 @@ export function JourneyCardTutorialController({
       const confirmed = confirmedState.cardTutorialPresentation ?? null;
       if (confirmed === null) return;
       logEvent("card_tutorial_guidance_advance_requested", {
-        presentationId: asPresentationId(confirmed.id),
+        presentationId: confirmed.id,
         screenKey: confirmed.screenKey,
         cardId: confirmed.cardId,
         triggerId: confirmed.triggerId,
@@ -193,7 +192,7 @@ export function JourneyCardTutorialController({
       });
       void actions
         .completeCardTutorialGuidance(
-          asPresentationId(confirmed.id),
+          confirmed.id,
           confirmed.screenKey,
         )
         .catch(() => undefined);
@@ -205,7 +204,7 @@ export function JourneyCardTutorialController({
     const confirmed = confirmedState.cardTutorialPresentation ?? null;
     if (confirmed === null) return;
     logEvent("card_tutorial_guidance_presented", {
-      presentationId: asPresentationId(confirmed.id),
+      presentationId: confirmed.id,
       screenKey: confirmed.screenKey,
       cardId: confirmed.cardId,
       triggerId: confirmed.triggerId,

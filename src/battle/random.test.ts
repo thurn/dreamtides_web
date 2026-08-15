@@ -1,15 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { createBattleRng, deriveBattleSeed } from "./random";
-import { asBattleEntryKey } from "../types/identifiers";
+import { parseBattleEntryKey } from "../types/identifiers";
 
 describe("deriveBattleSeed", () => {
   it("hashes the exact battle entry key contract deterministically", () => {
-    expect(deriveBattleSeed(asBattleEntryKey("site-7::3::dreamscape-2"))).toBe(
-      deriveBattleSeed(asBattleEntryKey("site-7::3::dreamscape-2")),
+    expect(deriveBattleSeed(parseBattleEntryKey("site-7::3::dreamscape-2"))).toBe(
+      deriveBattleSeed(parseBattleEntryKey("site-7::3::dreamscape-2")),
     );
     expect(
-      deriveBattleSeed(asBattleEntryKey("site-7::3::dreamscape-2")),
-    ).not.toBe(deriveBattleSeed(asBattleEntryKey("site-8::3::dreamscape-2")));
+      deriveBattleSeed(parseBattleEntryKey("site-7::3::dreamscape-2")),
+    ).not.toBe(deriveBattleSeed(parseBattleEntryKey("site-8::3::dreamscape-2")));
   });
 });
 

@@ -1,21 +1,22 @@
 import { describe, expect, it } from "vitest";
 import { TEST_TUTORIAL_CARD_CONSTANTS } from "../../test/tutorial-configuration-fixture";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { buildLoadingView } from "./loading-view-model";
+import { testCardId } from "../../types/test-identities";
 
 const TUTORIAL_LOADING_CHARACTER_CARD_ID =
   TEST_TUTORIAL_CARD_CONSTANTS.loadingScreenCharacterCardId;
 const TUTORIAL_LOADING_EVENT_CARD_ID =
   TEST_TUTORIAL_CARD_CONSTANTS.loadingScreenEventCardId;
 
-function card(cardNumber: number, id: string): CardData {
+function card(cardNumber: number, idSeed: string): CardData {
   return {
-    id: asCardId(id),
-    name: asCardName(`Fixture ${String(cardNumber)}`),
+    id: testCardId(idSeed),
+    name: parseCardName(`Fixture ${String(cardNumber)}`),
     cardNumber,
     cardType: cardNumber === 1 ? "Character" : "Event",
-    subtype: cardNumber === 1 ? "Fixture" : "",
+    subtype: cardNumber === 1 ? "Warrior" : "",
     isStarter: true,
     energyCost: cardNumber,
     spark: cardNumber === 1 ? 3 : null,

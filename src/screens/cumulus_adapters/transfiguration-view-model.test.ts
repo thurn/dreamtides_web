@@ -5,7 +5,7 @@ expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type {
   CardChoiceSiteRuntime,
   DeckEntry,
@@ -34,9 +34,9 @@ const buildTransfigurationSiteView = (
 ) => buildTransfigurationSiteViewImpl({ ...params, transfigurationData });
 
 const GUIDE = {
-  id: asGuideId("fixture-transfiguration-guide"),
+  id: testGuideId("fixture-transfiguration-guide"),
   name: "Fixture Transfiguration Guide",
-  homeDreamscapeId: asDreamscapeId("fixture-home"),
+  homeDreamscapeId: testDreamscapeId("fixture-home"),
   siteType: "Transfiguration",
   portraitSource: "fixture-guide.png",
   dialogue: { site: ["Fixture line."] },
@@ -45,8 +45,8 @@ const GUIDE = {
 
 function makeCard(cardNumber: number): CardData {
   return {
-    name: asCardName(`Fixture ${String(cardNumber)}`),
-    id: asCardId(
+    name: parseCardName(`Fixture ${String(cardNumber)}`),
+    id: testCardId(
       `00000000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`,
     ),
     cardNumber,
@@ -64,7 +64,7 @@ function makeCard(cardNumber: number): CardData {
 
 function makeEntry(cardNumber: number): DeckEntry {
   return {
-    entryId: asDeckEntryId(`entry-${String(cardNumber)}`),
+    entryId: parseDeckEntryId(`entry-${String(cardNumber)}`),
     cardNumber,
     transfiguration: null,
     isBane: false,
@@ -87,24 +87,24 @@ function runtime(): CardChoiceSiteRuntime {
     kind: "cardChoice",
     choiceKind: "transfiguration",
     entryIds: [
-      asDeckEntryId("entry-1"),
-      asDeckEntryId("entry-2"),
-      asDeckEntryId("entry-3"),
-      asDeckEntryId("entry-4"),
+      parseDeckEntryId("entry-1"),
+      parseDeckEntryId("entry-2"),
+      parseDeckEntryId("entry-3"),
+      parseDeckEntryId("entry-4"),
     ],
     acceptedEntryIds: [],
     transfigurationOffers: [
-      offer(asDeckEntryId("entry-1"), "Empowered", 40),
-      offer(asDeckEntryId("entry-1"), "Kindled", 70),
-      offer(asDeckEntryId("entry-2"), "Amplified", 20),
-      offer(asDeckEntryId("entry-3"), "Resonant", 30),
-      offer(asDeckEntryId("entry-4"), "Perfected", 50),
+      offer(parseDeckEntryId("entry-1"), "Empowered", 40),
+      offer(parseDeckEntryId("entry-1"), "Kindled", 70),
+      offer(parseDeckEntryId("entry-2"), "Amplified", 20),
+      offer(parseDeckEntryId("entry-3"), "Resonant", 30),
+      offer(parseDeckEntryId("entry-4"), "Perfected", 50),
     ],
   };
 }
 
 const site: SiteState = {
-  id: asSiteId("transfiguration-site"),
+  id: parseSiteId("transfiguration-site"),
   type: "Transfiguration",
   isEnhanced: false,
   isVisited: false,
@@ -232,8 +232,7 @@ describe("buildTransfigurationSiteView", () => {
   });
 });
 import { assertLocalized } from "@trox/runtime";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
+import { testDreamscapeId, testGuideId, testCardId } from "../../types/test-identities";

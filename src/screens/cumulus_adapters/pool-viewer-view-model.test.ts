@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DraftState } from "../../types/draft";
 import { createBaseBattleDeckCardDefinition } from "../../battle/card-definition";
@@ -8,21 +8,20 @@ import {
   buildPoolViewerView,
   DEFAULT_POOL_VIEWER_FILTERS,
 } from "./pool-viewer-view-model";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asTideId } from "../../types/identifiers";
+import { testCardId, testDreamAvatarId, testTideId } from "../../types/test-identities";
 
 function card(
-  id: string,
+  idSeed: string,
   number: number,
   name: string,
   cardType: CardData["cardType"] = "Character",
 ): CardData {
   return {
-    id: asCardId(id),
+    id: testCardId(idSeed),
     cardNumber: number,
-    name: asCardName(name),
+    name: parseCardName(name),
     cardType,
-    subtype: cardType === "Character" ? "Fixture" : "",
+    subtype: cardType === "Character" ? "Warrior" : "",
     isStarter: false,
     energyCost: number,
     spark: cardType === "Character" ? 1 : null,
@@ -95,7 +94,7 @@ describe("buildPoolViewerView", () => {
     const view = build({
       source: "tides",
       tides4Provenance: {
-        dreamAvatarId: asDreamAvatarId("dc"),
+        dreamAvatarId: testDreamAvatarId("dc"),
         signatureless: false,
         borrowedArchetypeName: null,
         dealSize: 10,
@@ -105,7 +104,7 @@ describe("buildPoolViewerView", () => {
         facetAvailableCount: 2,
         tides: [
           {
-            id: asTideId("missing"),
+            id: testTideId("missing"),
             displayName: "Missing",
             displayDescription: "Missing description",
             role: "facet",
@@ -125,13 +124,13 @@ describe("buildPoolViewerView", () => {
   it("maps catalog and signature sources without display-name identity", () => {
     const resolvedPackage = {
       dreamAvatar: {
-        id: asDreamAvatarId("dc"),
+        id: testDreamAvatarId("dc"),
         name: "Fixture",
         title: "",
         renderedText: "",
         imageNumber: "1",
         startingEssence: 0,
-        signatureCards: [asCardName("display-only")],
+        signatureCards: [parseCardName("display-only")],
         signatureCardIds: [beta.id],
       },
       draftPoolCopiesByCard: {},
@@ -169,9 +168,9 @@ describe("buildPoolViewerView", () => {
   });
 
   it("omits structural wildcard subtypes from player filter options", () => {
-    const wildcard = {
+    const wildcard: CardData = {
       ...alpha,
-      id: asCardId("wildcard-card"),
+      id: testCardId("wildcard-card"),
       cardNumber: 3,
       subtype: "*",
     };
@@ -183,7 +182,7 @@ describe("buildPoolViewerView", () => {
       ]),
     });
     expect(view.subtypeOptions.map((option) => option.value)).toEqual([
-      "Fixture",
+      "Warrior",
     ]);
   });
 });

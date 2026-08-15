@@ -8,8 +8,9 @@ import {
   type Tides4ProvenanceSummary,
   type Tides4TideSummary,
 } from "../types/content";
-import { asCardId, asCardName, type CardId } from "../types/card-identity";
+import { parseCardId, parseCardName, type CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
+import type { JourneySeed } from "../types/journey-seed";
 import type {
   GeneratedPool,
   PoolData,
@@ -47,6 +48,11 @@ import { loadDraftData } from "./draft-data";
 import { loadOpponentsData } from "./opponents-data";
 import type { EconomyData } from "../types/economy-data";
 import type { DraftData } from "../types/draft-data";
+import {
+  serializeCardNumber,
+  type DraftPoolCopiesByCard,
+  type SerializedCardNumber,
+} from "../types/draft";
 import type { OpponentsData } from "../types/opponents-data";
 import type { SitesData } from "../types/sites-data";
 import type { GambleData } from "../types/gamble-data";
@@ -65,7 +71,7 @@ import {
   type TutorialJourneyPool,
 } from "./tutorial-journey-pool";
 import type { DreamsignId, TideId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
+import { parseDreamAvatarId } from "../types/identifiers";
 
 export interface JourneyContent {
   cardDatabase: Map<number, CardData>;
@@ -181,7 +187,7 @@ export function hashStringToSeed(input: string): number {
 function generateDreamAvatarPool(
   dreamAvatar: DreamAvatarContent,
   ctx: RunPoolContext,
-  journeySeed: string,
+  journeySeed: JourneySeed,
 ): GeneratedPool {
   return generatePoolFromData(
     ctx.poolData,
@@ -224,7 +230,7 @@ function logPoolConstructed(
 export function buildDreamAvatarPackage(
   dreamAvatar: DreamAvatarContent,
   ctx: RunPoolContext,
-  journeySeed: string,
+  journeySeed: JourneySeed,
 ): ResolvedDreamAvatarPackage {
   const pool = generateDreamAvatarPool(dreamAvatar, ctx, journeySeed);
   logPoolConstructed(dreamAvatar, pool);
@@ -269,7 +275,7 @@ export function buildDreamAvatarPackage(
     });
   }
   for (const starter of ctx.starterCardNumbers) {
-    delete draftPoolCopiesByCard[String(starter)];
+    delete draftPoolCopiesByCard[serializeCardNumber(starter)];
   }
 
   const draftPoolSize = countDraftPoolSize(draftPoolCopiesByCard);
@@ -305,7 +311,7 @@ export function buildDreamAvatarPackage(
 export function buildDreamAvatarTides4Provenance(
   dreamAvatar: DreamAvatarContent,
   ctx: RunPoolContext,
-  journeySeed: string,
+  journeySeed: JourneySeed,
 ): Tides4ProvenanceSummary | null {
   const pool = generateDreamAvatarPool(dreamAvatar, ctx, journeySeed);
   const provenance = pool.tides4Provenance;
@@ -329,13 +335,16 @@ export function buildDreamAvatarTides4Provenance(
     return out;
   };
 
-  const cardProvenanceByNumber: Record<string, Tides4CardProvenance> = {};
+  const cardProvenanceByNumber: Record<
+    SerializedCardNumber,
+    Tides4CardProvenance
+  > = {};
   const contributionByTide = new Map<TideId, number>();
   for (const [key, entry] of Object.entries(provenance.cardProvenanceById)) {
-    const cardNumber = ctx.idIndex.get(asCardId(key));
+    const cardNumber = ctx.idIndex.get(parseCardId(key));
     if (cardNumber === undefined) continue;
     if (starterSet.has(cardNumber)) continue;
-    cardProvenanceByNumber[String(cardNumber)] = {
+    cardProvenanceByNumber[serializeCardNumber(cardNumber)] = {
       copies: entry.copies,
       tideIds: [...entry.tideIds],
       primaryTideId: entry.primaryTideId,
@@ -439,7 +448,7 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
   }
 
   const dreamAvatars: DreamAvatarContent[] = draftDreamAvatars.map((dc) => ({
-    id: asDreamAvatarId(dc.id),
+    id: parseDreamAvatarId(dc.id),
     name: dc.name,
     title: dc.title,
     renderedText: dc.renderedText,
@@ -447,7 +456,7 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     portraitFocus: dc.portraitFocus,
     startingEssence:
       dc.startingEssence ?? economyData.journey.defaultStartingEssence,
-    signatureCards: (dc.signatureCards ?? []).map(asCardName),
+    signatureCards: (dc.signatureCards ?? []).map(parseCardName),
     signatureCardIds: [...(dc.signatureCardIds ?? [])],
   }));
 
@@ -508,7 +517,7 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
 }
 
 function countDraftPoolSize(
-  draftPoolCopiesByCard: Record<string, number>,
+  draftPoolCopiesByCard: DraftPoolCopiesByCard,
 ): number {
   return Object.values(draftPoolCopiesByCard).reduce(
     (total, copies) => total + copies,
@@ -517,7 +526,7 @@ function countDraftPoolSize(
 }
 
 function countDoubledCards(
-  draftPoolCopiesByCard: Record<string, number>,
+  draftPoolCopiesByCard: DraftPoolCopiesByCard,
 ): number {
   return Object.values(draftPoolCopiesByCard).filter((copies) => copies === 2)
     .length;

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { CardData } from "../types/cards";
+import type { CardId } from "../types/card-identity";
 import type { CardSizePreset } from "./card-size";
 import { SIZE_PRESETS } from "./card-size";
 import { CardView } from "../cumulus/components/card/CardView";
@@ -11,6 +12,7 @@ import { tideAccentColor, tideColorChip } from "./tide-visuals";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { Resonance } from "../types/resonance-data";
 import type { EditableTideField, EditorDreamAvatar } from "./tides-types";
+import type { DreamAvatarId } from "../types/identifiers";
 
 export type TideSaveStatus =
   | { status: "idle" }
@@ -20,8 +22,8 @@ export type TideSaveStatus =
 
 interface TidesDetailViewProps {
   tide: Tides4DeckJson;
-  dreamAvatarById: ReadonlyMap<string, EditorDreamAvatar>;
-  cardById: ReadonlyMap<string, CardData>;
+  dreamAvatarById: ReadonlyMap<DreamAvatarId, EditorDreamAvatar>;
+  cardById: ReadonlyMap<CardId, CardData>;
   size: CardSizePreset;
   saveStatus: TideSaveStatus;
   onSizeChange: (size: CardSizePreset) => void;
@@ -39,11 +41,11 @@ interface ResolvedTideCard {
 
 function resolveTideCards(
   tide: Tides4DeckJson,
-  cardById: ReadonlyMap<string, CardData>,
+  cardById: ReadonlyMap<CardId, CardData>,
 ): ResolvedTideCard[] {
   const resolved: ResolvedTideCard[] = [];
   for (const entry of tide.cards) {
-    const card = cardById.get(entry.id.toLowerCase());
+    const card = cardById.get(entry.id);
     if (card === undefined) continue;
     resolved.push({ card, copies: entry.copies, key: entry.id });
   }
@@ -72,11 +74,11 @@ function FeaturedSource({
   cardById,
 }: {
   tide: Tides4DeckJson;
-  cardById: ReadonlyMap<string, CardData>;
+  cardById: ReadonlyMap<CardId, CardData>;
 }) {
   const first = tide.cards[0];
   if (first !== undefined) {
-    const card = cardById.get(first.id.toLowerCase());
+    const card = cardById.get(first.id);
     if (card === undefined) return null;
     return (
       <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>

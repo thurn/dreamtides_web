@@ -6,6 +6,12 @@ import type {
   SaveEditorDreamwellFieldResponse,
 } from "./dreamwell-types";
 import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+import {
+  parseSourceRevisionResponse,
+  type ParsedSourceRevisionResponse,
+  type RawSourceRevisionResponse,
+  type SourceRevision,
+} from "../types/source-revision";
 
 const SOURCE = "dreamwell";
 
@@ -54,6 +60,14 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
+async function readRevisionedJsonResponse<
+  Result extends { readonly sourceRevision: SourceRevision },
+>(response: Response): Promise<ParsedSourceRevisionResponse<Result>> {
+  return parseSourceRevisionResponse<Result>(
+    await readJsonResponse<RawSourceRevisionResponse<Result>>(response),
+  );
+}
+
 function withTomlParam(path: string): string {
   const toml = editorTomlParam();
   if (toml === null) {
@@ -71,7 +85,7 @@ export async function loadEditorDreamwell(
     headers: { Accept: "application/json" },
     signal,
   });
-  const body = await readJsonResponse<LoadEditorDreamwellResponse>(response);
+  const body = await readRevisionedJsonResponse<LoadEditorDreamwellResponse>(response);
   confirmSourceRevision(SOURCE, body);
   return body.dreamwell;
 }
@@ -88,7 +102,7 @@ export async function saveEditorDreamwellField(
       },
       body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
     });
-    const body = await readJsonResponse<SaveEditorDreamwellFieldResponse>(response);
+    const body = await readRevisionedJsonResponse<SaveEditorDreamwellFieldResponse>(response);
     confirmSourceRevision(SOURCE, body);
     return body;
   });

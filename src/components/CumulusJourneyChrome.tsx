@@ -10,7 +10,7 @@ import { useJourney } from "../state/journey-context";
 import { JourneyStatusBar } from "../cumulus/components/hud/JourneyStatusBar";
 import { CoopPresenceStatus } from "../cumulus/components/hud/CoopPresenceStatus";
 import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
-import type { JourneyState } from "../types/journey";
+import type { JourneyMutationSource } from "../state/journey-context";
 import { buildDreamscapeHudView } from "../screens/cumulus_adapters/dreamscape-view-model";
 import { JourneyCardTutorialController } from "./JourneyCardTutorialController";
 
@@ -25,7 +25,10 @@ export interface CumulusJourneyChromeHandlers {
   hasDraftData?: boolean;
   hasCardSourceDebug?: boolean;
   isCardSourceOverlayOpen?: boolean;
-  onLoadJourneyState?: (state: JourneyState, source: string) => void;
+  onLoadJourneyState?: (
+    state: unknown,
+    source: JourneyMutationSource,
+  ) => void;
   onRegenerateAtlas?: () => void;
   contextualActions?: readonly JourneyUtilityMenuAction[];
   elevated?: boolean;

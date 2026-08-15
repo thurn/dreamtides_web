@@ -10,15 +10,21 @@ import { economyFixture } from "../testing/economy-fixture";
 import { gambleFixture } from "../testing/gamble-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
 import { transfigurationFixture } from "../testing/transfiguration-fixture";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import explorationJson from "../../public/exploration-data.json";
 import { loadJourneyContent } from "./journey-content";
+import {
+  testCardId,
+  testDreamAvatarId,
+  testExplorationActionId,
+  testTideId,
+} from "../types/test-identities";
 
 function makeCard(cardNumber: number): CardData {
   return {
-    name: asCardName(`Card ${String(cardNumber)}`),
-    id: asCardId(`card-${String(cardNumber)}`),
+    name: parseCardName(`Card ${String(cardNumber)}`),
+    id: testCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
     subtype: "",
@@ -54,12 +60,12 @@ describe("loadJourneyContent", () => {
       selection: { bandFraction: 0.25, bandMinimum: 5 },
       tides: [
         {
-          id: "tide-a",
+          id: testTideId("tide-a"),
           displayName: "Tide A",
           displayDescription: "A synthetic tide.",
           resonance: "ember",
           role: "neutral",
-          cards: [{ id: "card-1", copies: 1 }],
+          cards: [{ id: testCardId("card-1"), copies: 1 }],
         },
       ],
       tidePoolByDreamAvatar: {},
@@ -72,11 +78,11 @@ describe("loadJourneyContent", () => {
       customDreamsigns: [],
       encounters: [
         {
-          cardId: asCardId("card-1"),
+          cardId: testCardId("card-1"),
           prose: "A fixture encounter.",
           action: [
             {
-              id: "fixture-action",
+              id: testExplorationActionId("fixture-action"),
               label: "Invite someone through",
               effectText: "Gain a card",
               effectKind: "gain-offered-card",
@@ -139,7 +145,7 @@ describe("loadJourneyContent", () => {
       cards: [makeCard(1), makeCard(2)],
       dreamAvatars: [
         {
-          id: "avatar-1",
+          id: testDreamAvatarId("avatar-1"),
           name: "Test Avatar",
           title: "Speaker of Tests",
           renderedText: "Test rules text.",
@@ -180,7 +186,7 @@ describe("loadJourneyContent", () => {
       economy,
       dreamAvatars: [
         {
-          id: "avatar-defaulted",
+          id: testDreamAvatarId("avatar-defaulted"),
           name: "Defaulted",
           title: "D",
           renderedText: "",

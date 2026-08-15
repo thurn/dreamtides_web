@@ -1,14 +1,15 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../../types/test-identities";
 import { glimpseOfWhatWas } from "./glimpse-of-what-was";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
-import { asBattleCardId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
 
 function makeCard(
   overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
 ): AiCard {
   return {
-    name: "card",
+    name: testCardName("card"),
     energyCost: 0,
     basePrintedSpark: 0,
     sparkDelta: 0,
@@ -39,7 +40,7 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
 describe("Glimpse of What Was (#517)", () => {
   it("canPlay requires 1 energy", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("glimpse"),
+      battleCardId: parseBattleCardId("glimpse"),
       cardNumber: 517,
       energyCost: 1,
     });
@@ -53,22 +54,22 @@ describe("Glimpse of What Was (#517)", () => {
 
   it("play draws one card and leaves the deck a permutation of the rest", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("glimpse"),
+      battleCardId: parseBattleCardId("glimpse"),
       cardNumber: 517,
       energyCost: 1,
     });
     const a = makeCard({
-      battleCardId: asBattleCardId("a"),
+      battleCardId: parseBattleCardId("a"),
       cardNumber: 512,
       energyCost: 4,
     });
     const b = makeCard({
-      battleCardId: asBattleCardId("b"),
+      battleCardId: parseBattleCardId("b"),
       cardNumber: 513,
       energyCost: 5,
     });
     const c = makeCard({
-      battleCardId: asBattleCardId("c"),
+      battleCardId: parseBattleCardId("c"),
       cardNumber: 514,
       energyCost: 3,
     });

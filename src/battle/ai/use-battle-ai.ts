@@ -20,7 +20,7 @@ import {
 } from "../types";
 import type { ResolvedBattleAiConfiguration } from "../../types/opponents-data";
 import type { AiActionKey, BattleCardId } from "../../types/identifiers";
-import { asAiActionKey, asBattleCardId } from "../../types/identifiers";
+import { parseAiActionKey } from "../../types/identifiers";
 
 /**
  * A held AI proposal: the plain-language description, the enriched trace, and
@@ -665,12 +665,12 @@ function makeAiCommand(
 
 /** Stable exclusion key for a planned action: card id + kind + destination. */
 function plannedActionExclusionKey(action: PlannedAction): AiActionKey {
-  return asAiActionKey(
+  return parseAiActionKey(
     [
       action.kind,
-      action.self?.battleCardId ?? asBattleCardId(""),
+      action.self?.battleCardId ?? "",
       action.toSlot ?? "",
-      action.targets?.targetBattleCardId ?? asBattleCardId(""),
+      action.targets?.targetBattleCardId ?? "",
     ].join("|"),
   );
 }
@@ -681,12 +681,12 @@ function proposalExclusionKey(proposal: AiProposal): AiActionKey | null {
   if (trace === null) {
     return null;
   }
-  return asAiActionKey(
+  return parseAiActionKey(
     [
       trace.choice,
-      trace.battleCardId ?? asBattleCardId(""),
+      trace.battleCardId ?? "",
       trace.targetSlotId ?? "",
-      trace.targetBattleCardId ?? asBattleCardId(""),
+      trace.targetBattleCardId ?? "",
     ].join("|"),
   );
 }

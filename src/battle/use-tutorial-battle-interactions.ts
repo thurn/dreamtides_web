@@ -27,12 +27,11 @@ import {
 } from "./starter-card-targets";
 import { planTutorialCharacterReposition } from "../rules/battle/tutorial-reposition";
 import type { BattleAttemptId, BattleCardId } from "../types/identifiers";
-import { asBattleCardId } from "../types/identifiers";
-import { asBattleSlotViewId } from "../types/identifiers";
-import { asBattleAttemptId } from "../types/identifiers";
+import { parseBattleSlotViewId } from "../types/identifiers";
+import { parseBattleAttemptId } from "../types/identifiers";
 import type { BackRankSlotId, FrontRankSlotId } from "./types";
 import { isBackRankSlotId, isFrontRankSlotId } from "./types";
-import { asIntentKey } from "../types/identifiers";
+import { parseIntentKey } from "../types/identifiers";
 
 const MOVEMENT_STATUS_DURATION_MS = 4_000;
 
@@ -48,6 +47,18 @@ interface PendingMovementOutcome {
   };
   readonly target: MobileBattleSlotTarget;
 }
+
+type TutorialBattleHumanIntentKind =
+  | PendingMovementOutcome["kind"]
+  | "target-selection-unavailable"
+  | "resolve-prompt"
+  | "target-selection-opened"
+  | "play-card"
+  | "target-selection-rejected"
+  | "target-selected"
+  | "done-blocking"
+  | "start-challenge"
+  | "end-turn";
 
 interface MovementFoldReceipt extends PendingMovementOutcome {
   readonly seq: number;
@@ -199,7 +210,7 @@ export function useTutorialBattleInteractions(
         return false;
       }
       return (
-        planTutorialCharacterReposition(board, asBattleCardId(pendingCard.id), {
+        planTutorialCharacterReposition(board, pendingCard.id, {
           side: target.owner,
           zone: target.rank === "back" ? "backRank" : "frontRank",
           slotId: target.slotId as `B${number}` | `F${number}`,
@@ -213,7 +224,10 @@ export function useTutorialBattleInteractions(
     return selectStarterCardLegalTargetIds(board, targetingCardId);
   }, [board, targetingCardId]);
   const logIntent = useCallback(
-    (kind: string, detail: Record<string, unknown> = {}) => {
+    (
+      kind: TutorialBattleHumanIntentKind,
+      detail: Record<string, unknown> = {},
+    ) => {
       if (board === null) return;
       logEvent("tutorial_battle_human_intent_requested", {
         battleId: board.battleId,
@@ -244,7 +258,7 @@ export function useTutorialBattleInteractions(
         .battlePlayCard(
           battleCardId,
           [],
-          asIntentKey(
+          parseIntentKey(
             `tutorial-battle:${board.battleId}:no-valid-targets:${battleCardId}`,
           ),
         )
@@ -345,7 +359,7 @@ export function useTutorialBattleInteractions(
       const source =
         battleCardId === null
           ? null
-          : selectBattleCardLocation(board, asBattleCardId(battleCardId));
+          : selectBattleCardLocation(board, battleCardId);
       const movementStatus =
         (reason === "no-eligible-slot" || reason === "ineligible-slot") &&
         instance?.status.isExhausted === true &&
@@ -391,7 +405,7 @@ export function useTutorialBattleInteractions(
         phase: board.phase,
         turnNumber: board.turnNumber,
         attemptId: pendingCard.attemptId,
-        battleCardId: asBattleCardId(pendingCard.id),
+        battleCardId: pendingCard.id,
         definitionId:
           board.cardInstances[pendingCard.id]?.definition.cardId ?? null,
         source: pendingCard.sourceTarget,
@@ -414,7 +428,7 @@ export function useTutorialBattleInteractions(
         .resolvePrompt(
           prompt.promptId,
           resolution,
-          asIntentKey(
+          parseIntentKey(
             `tutorial-battle:${state.battle?.board.battleId}:human-prompt:${String(prompt.promptId)}`,
           ),
         )
@@ -470,7 +484,7 @@ export function useTutorialBattleInteractions(
           .battlePlayCard(
             battleCardId,
             [],
-            asIntentKey(
+            parseIntentKey(
               `tutorial-battle:${board.battleId}:human-play:${String(board.turnNumber)}:${battleCardId}`,
             ),
           )
@@ -493,24 +507,24 @@ export function useTutorialBattleInteractions(
           onBattlefield &&
           selectStarterCardLegalTargetIds(
             board,
-            asBattleCardId(targetingCardId),
+            targetingCardId,
           ).includes(targetBattleCardId);
         if (!legal) {
           logIntent("target-selection-rejected", {
-            battleCardId: asBattleCardId(targetingCardId),
+            battleCardId: targetingCardId,
             targetBattleCardId,
           });
           return;
         }
         logIntent("target-selected", {
-          battleCardId: asBattleCardId(targetingCardId),
+          battleCardId: targetingCardId,
           targetBattleCardId,
         });
         void actions
           .battlePlayCard(
-            asBattleCardId(targetingCardId),
+            targetingCardId,
             [targetBattleCardId],
-            asIntentKey(
+            parseIntentKey(
               `tutorial-battle:${board.battleId}:human-play:${String(board.turnNumber)}:${targetingCardId}:${targetBattleCardId}`,
             ),
           )
@@ -525,7 +539,7 @@ export function useTutorialBattleInteractions(
         const instance = board.cardInstances[battleCardId];
         const location = selectBattleCardLocation(
           board,
-          asBattleCardId(battleCardId),
+          battleCardId,
         );
         if (
           instance?.controller !== "player" ||
@@ -541,11 +555,11 @@ export function useTutorialBattleInteractions(
         if (starterCardRequiresTarget(definitionId)) {
           const legalTargetIds = selectStarterCardLegalTargetIds(
             board,
-            asBattleCardId(battleCardId),
+            battleCardId,
           );
           if (legalTargetIds.length === 0) {
             submitUnavailableTargetAttempt(
-              asBattleCardId(battleCardId),
+              battleCardId,
               definitionId,
               "drag",
             );
@@ -554,7 +568,7 @@ export function useTutorialBattleInteractions(
           }
           setTargetingCardId(battleCardId);
           logIntent("target-selection-opened", {
-            battleCardId: asBattleCardId(battleCardId),
+            battleCardId: battleCardId,
             definitionId,
             input: "drag",
             legalTargetCount: legalTargetIds.length,
@@ -564,15 +578,15 @@ export function useTutorialBattleInteractions(
           return;
         }
         logIntent("play-card", {
-          battleCardId: asBattleCardId(battleCardId),
+          battleCardId: battleCardId,
           input: "drag",
           characterDestination: target ?? null,
         });
         void actions
           .battlePlayCard(
-            asBattleCardId(battleCardId),
+            battleCardId,
             [],
-            asIntentKey(
+            parseIntentKey(
               `tutorial-battle:${board.battleId}:human-play:${String(board.turnNumber)}:${battleCardId}`,
             ),
             undefined,
@@ -614,7 +628,7 @@ export function useTutorialBattleInteractions(
           (board.activeSide === "enemy" && board.phase === "dusk");
         if (!isPlayerCharacterOnBattlefield || !legalPhase) return;
         movementAttemptSequence.current += 1;
-        const attemptId = asBattleAttemptId(
+        const attemptId = parseBattleAttemptId(
           [
             clientId,
             board.battleId,
@@ -629,7 +643,7 @@ export function useTutorialBattleInteractions(
           sourceTarget: {
             owner: "player",
             rank: location.zone === "backRank" ? "back" : "front",
-            slotId: asBattleSlotViewId(location.slotId),
+            slotId: parseBattleSlotViewId(location.slotId),
           },
         });
       },
@@ -646,13 +660,13 @@ export function useTutorialBattleInteractions(
         const movementAttemptId =
           pendingCard?.source === "battlefield"
             ? pendingCard.attemptId
-            : asBattleAttemptId(
+            : parseBattleAttemptId(
                 `${clientId}:${board.battleId}:movement:untracked`,
               );
         if (target.owner !== "player") return;
         const source = selectBattleCardLocation(
           board,
-          asBattleCardId(battleCardId),
+          battleCardId,
         );
         const targetOccupant = selectBattlefieldSlotOccupant(board, {
           side: "player",
@@ -669,7 +683,7 @@ export function useTutorialBattleInteractions(
           submitMovement(
             "swap-battlefield-slots",
             movementAttemptId,
-            asBattleCardId(battleCardId),
+            battleCardId,
             {
               side: "player",
               zone: source.zone,
@@ -683,7 +697,7 @@ export function useTutorialBattleInteractions(
         submitMovement(
           "move-card",
           movementAttemptId,
-          asBattleCardId(battleCardId),
+          battleCardId,
           {
             side: "player",
             zone: source.zone,
@@ -717,7 +731,7 @@ export function useTutorialBattleInteractions(
               edit: { kind: "SET_PHASE", phase },
               sourceSurface: "tutorial-player",
             },
-            asIntentKey(
+            parseIntentKey(
               `tutorial-battle:${board.battleId}:human-phase:${String(board.turnNumber)}:${board.activeSide}:${phase}`,
             ),
           )

@@ -3,6 +3,7 @@ import type { LocalizedString } from "@trox/runtime";
 import { controlChrome } from "../../internal/control-treatment";
 import { token } from "../../primitives/tokens";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { DomTestId } from "../../types/dom";
 
 export interface TextAreaProps {
   /** Visible field label. */
@@ -20,7 +21,7 @@ export interface TextAreaProps {
   /** Validation copy; also marks the textarea invalid. */
   readonly error?: LocalizedString;
   /** Stable test id for product QA. */
-  readonly testId?: string;
+  readonly testId?: DomTestId;
   /** Optional ref to the native textarea. */
   readonly inputRef?: Ref<HTMLTextAreaElement>;
 }

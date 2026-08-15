@@ -9,8 +9,9 @@ import {
 import { createRoot } from "react-dom/client";
 import { assertLocalized } from "@trox/runtime";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 import type { GameCardModel } from "../card/CardView";
+import type { DomElementId } from "../../types/dom";
 import { CARD_ASPECT_H, CARD_ASPECT_W } from "../card/card-aspect";
 
 vi.mock("framer-motion", () => ({
@@ -20,7 +21,7 @@ vi.mock("framer-motion", () => ({
       children,
       ...props
     }: HTMLAttributes<HTMLDivElement> & {
-      readonly layoutId?: string;
+      readonly layoutId?: DomElementId;
       readonly children?: ReactNode;
     }) => (
       <div data-layout-id={layoutId} {...props}>
@@ -42,7 +43,8 @@ import {
   type BattlePileCard,
 } from "./CardPile";
 import { CumulusRoot } from "../../CumulusRoot";
-import { asBattleCardId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
+import { testCardId } from "../../../types/test-identities";
 
 function LocalizedCardPile(props: ComponentProps<typeof CardPile>) {
   return (
@@ -52,12 +54,12 @@ function LocalizedCardPile(props: ComponentProps<typeof CardPile>) {
   );
 }
 
-const CARD_ID = asCardId("11111111-1111-4111-8111-111111111111");
+const CARD_ID = testCardId("11111111-1111-4111-8111-111111111111");
 const MODEL: GameCardModel = {
   cardId: CARD_ID,
   displaySnapshot: {
     id: CARD_ID,
-    name: asCardName("Fixture Card"),
+    name: parseCardName("Fixture Card"),
     cardNumber: 1,
     cardType: "Event",
     subtype: "",
@@ -74,18 +76,18 @@ const MODEL: GameCardModel = {
 const CARDS: readonly BattlePileCard[] = [
   {
     face: "up",
-    id: asBattleCardId("instance-top"),
+    id: parseBattleCardId("instance-top"),
     model: MODEL,
     figment: true,
   },
-  { face: "down", id: asBattleCardId("instance-second") },
+  { face: "down", id: parseBattleCardId("instance-second") },
   {
     face: "up",
-    id: asBattleCardId("instance-third"),
+    id: parseBattleCardId("instance-third"),
     model: MODEL,
     figment: true,
   },
-  { face: "down", id: asBattleCardId("instance-hidden") },
+  { face: "down", id: parseBattleCardId("instance-hidden") },
 ];
 
 beforeEach(() => {
@@ -170,7 +172,7 @@ describe("CardPile", () => {
     act(() => {
       root.render(
         <LocalizedCardPile
-          cards={[{ face: "down", id: asBattleCardId("deck-top") }]}
+          cards={[{ face: "down", id: parseBattleCardId("deck-top") }]}
           label={assertLocalized("Player deck")}
         />,
       );
@@ -201,7 +203,7 @@ describe("CardPile", () => {
           cards={[
             {
               face: "up",
-              id: asBattleCardId("resolved-card"),
+              id: parseBattleCardId("resolved-card"),
               model: MODEL,
               layoutMotion: "snap",
             },
@@ -230,7 +232,7 @@ describe("CardPile", () => {
     act(() => {
       root.render(
         <LocalizedCardPile
-          cards={[{ face: "up", id: asBattleCardId("void-top"), model: MODEL }]}
+          cards={[{ face: "up", id: parseBattleCardId("void-top"), model: MODEL }]}
           label={assertLocalized("Player void")}
           onPress={onActivate}
         />,

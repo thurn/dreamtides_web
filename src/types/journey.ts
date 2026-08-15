@@ -8,6 +8,7 @@ import type {
   RewardMechanicId,
   RewardSelectionPolicyId,
   RewardSelectionTrace,
+  SelectionRulesVersion,
 } from "../reward-selection/types";
 import type { MerchantEncounter } from "../journey_v2/types";
 import type { FourSuitRepriseOutcome } from "../data/four-suit-reprise";
@@ -30,7 +31,10 @@ import type {
   ExplorationChoosableSiteType,
   ExplorationFixedSiteType,
 } from "../data/exploration";
-import type { CardId } from "./card-identity";
+import type { CardId, CardSubtype } from "./card-identity";
+import type { JourneyMutationSource } from "./journey-source";
+import type { JourneySeed } from "./journey-seed";
+import type { SelectionContentRevision } from "./selection-content-revision";
 import type {
   AtlasNodeId,
   ApollyonIncarnationId,
@@ -81,7 +85,7 @@ export type TransfigurationChange =
 export interface CardTypeChange {
   predicateId: CardTypeChangePredicateId;
   cardType: CardType;
-  subtype: string;
+  subtype: CardSubtype;
   label: string;
 }
 
@@ -241,7 +245,7 @@ export interface DreamscapeNode {
  * `layers` lists the node ids in each layer, ordered like {@link LAYER_ORDER}
  * (index 0..6); connections derive from each node's `forwardIds`.
  */
-export interface DreamAtlas {
+export interface DreamAtlas<Generated extends boolean = boolean> {
   /**
    * Node ids per layer, ordered like {@link LAYER_ORDER}: index 0 holds the
    * {@link LayerName.One} nodes, index 6 the {@link LayerName.Seven} boss.
@@ -253,9 +257,9 @@ export interface DreamAtlas {
    * Anchors the left edge of the Atlas and is the player's "you started here"
    * marker.
    */
-  startingNodeId: AtlasNodeId;
+  startingNodeId: Generated extends true ? AtlasNodeId : AtlasNodeId | null;
   /** The {@link LayerName.Seven} boss node, always revealed from the start of the run. */
-  bossNodeId: AtlasNodeId;
+  bossNodeId: Generated extends true ? AtlasNodeId : AtlasNodeId | null;
   /**
    * The Apollyon incarnation chosen for this run, identifying which guise the
    * boss node presents (title + short deck description). Resolves against
@@ -456,8 +460,8 @@ export interface AugurySiteRuntime {
   kind: "augury";
   completed: boolean;
   /** Shared-version runtimes persist their complete prepared encounter. */
-  selectionRulesVersion?: string;
-  selectionContentRevision?: string;
+  selectionRulesVersion?: SelectionRulesVersion;
+  selectionContentRevision?: SelectionContentRevision;
   encounter?: MerchantEncounter;
   /**
    * Debug reroll counter. Incremented by `rerollAugury` to regenerate the
@@ -604,8 +608,8 @@ export interface ExplorationStarterCardPreparation {
   purgedEntryIds: DeckEntryId[];
   purgedCardIds: CardId[];
   replacementCardIdByEntryId: IdentityRecord<DeckEntryId, CardId>;
-  selectionRulesVersion: string;
-  selectionContentRevision: string;
+  selectionRulesVersion: SelectionRulesVersion;
+  selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
   selectorSignatures: string[];
   selectorTraces: RewardSelectionTrace[];
@@ -646,8 +650,8 @@ export interface ExplorationStarterCardTransfigurationPreparation {
   starterCards: readonly ExplorationStarterCardTransfigurationBinding[];
   eligibleStarterCards: readonly ExplorationStarterCardTransfigurationBinding[];
   targets: readonly ExplorationStarterCardTransfigurationTarget[];
-  selectionRulesVersion: string;
-  selectionContentRevision: string;
+  selectionRulesVersion: SelectionRulesVersion;
+  selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
   selectorSignatures: readonly string[];
   selectorTraces: readonly RewardSelectionTrace[];
@@ -716,8 +720,8 @@ export interface ExplorationActionOfferRuntime {
   /** Canonical internal mechanic and policy; omitted on legacy runtimes. */
   canonicalMechanicId?: RewardMechanicId;
   selectionPolicyId?: RewardSelectionPolicyId;
-  selectionRulesVersion?: string;
-  selectionContentRevision?: string;
+  selectionRulesVersion?: SelectionRulesVersion;
+  selectionContentRevision?: SelectionContentRevision;
   selectionKey?: SelectionKey;
   selectionSignature?: string;
   selectionTrace?: RewardSelectionTrace;
@@ -802,8 +806,8 @@ export interface ExplorationSiteInsertionResolution {
 /** Persisted result shown with the authored response before leaving the site. */
 export interface ExplorationResolution {
   actionId: ExplorationActionId;
-  selectionRulesVersion?: string;
-  selectionContentRevision?: string;
+  selectionRulesVersion?: SelectionRulesVersion;
+  selectionContentRevision?: SelectionContentRevision;
   encounterSignature?: string;
   selectionSignature?: string;
   /** Validated UUID-only player intent persisted for replay and diagnostics. */
@@ -851,7 +855,7 @@ export interface ExplorationResolution {
   chosenTransfiguration?: TransfigurationType;
   /** Exact typed card predicate used to select a persisted bulk result. */
   resolvedPredicate?: Exclude<RewardCardPredicate, "any">;
-  chosenSubtype?: string;
+  chosenSubtype?: CardSubtype;
   /** Exact authored card type applied by a random type-change action. */
   resolvedCardType?: CardType;
   /** Exact Reclaim cost applied to each surviving concrete deck entry. */
@@ -882,8 +886,8 @@ export interface ExplorationResolution {
 /** Shared, replayable runtime for one Exploration encounter. */
 export interface ExplorationSiteRuntime {
   kind: "exploration";
-  selectionRulesVersion?: string;
-  selectionContentRevision?: string;
+  selectionRulesVersion?: SelectionRulesVersion;
+  selectionContentRevision?: SelectionContentRevision;
   encounterSignature?: string;
   encounterCardId: CardId;
   actionOffers: ExplorationActionOfferRuntime[];
@@ -1091,13 +1095,13 @@ export type BattleModifier =
       kind: "reward_reduction_flat";
       amount: number;
       battlesRemaining: number;
-      source: string;
+      source: JourneyMutationSource;
     }
   | {
       kind: "reward_reduction_percent";
       percent: number;
       battlesRemaining: number;
-      source: string;
+      source: JourneyMutationSource;
     }
   | {
       kind: "temporary_nightmare_grant";
@@ -1108,26 +1112,26 @@ export type BattleModifier =
        * `battlesRemaining` hits 0 so the temporary Nightmares leave the deck.
        */
       addedEntryIds: readonly DeckEntryId[];
-      source: string;
+      source: JourneyMutationSource;
     }
   | {
       kind: "opening_hand_bonus";
       count: number;
       battlesRemaining: number;
-      source: string;
+      source: JourneyMutationSource;
     }
   | {
       kind: "starting_energy_bonus";
       count: number;
       battlesRemaining: number;
-      source: string;
+      source: JourneyMutationSource;
     }
   | {
       kind: "smaller_hand_and_cost_discount";
       openingHandDelta: -1;
       energyCostReduction: 1;
       battlesRemaining: number;
-      source: string;
+      source: JourneyMutationSource;
     };
 
 /**
@@ -1140,14 +1144,14 @@ export type DreamscapeModifier =
   | {
       kind: "remove_shop_sites";
       dreamscapesRemaining: number;
-      source: string;
+      source: JourneyMutationSource;
     }
   | {
       kind: "boost_site_appearance";
       siteType: SiteType;
       percent: number;
       dreamscapesRemaining: number;
-      source: string;
+      source: JourneyMutationSource;
     };
 
 /**
@@ -1187,7 +1191,7 @@ export interface JourneyState {
    * two fresh journeys on the same atlas site land on different shapes and
    * dream art, while the same journey reloaded keeps the manifest byte-stable.
    */
-  readonly seed: string;
+  readonly seed: JourneySeed;
   essence: number;
   /**
    * Maximum number of Dreamsigns the player can hold at once. Defaults to 12;

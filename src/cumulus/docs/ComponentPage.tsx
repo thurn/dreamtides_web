@@ -7,7 +7,7 @@
 import { useState } from "react";
 import "./component-page.css";
 import { token } from "../primitives/tokens";
-import { getComponent } from "./registry";
+import { getComponent, type CumulusComponentId } from "./registry";
 import { hasMockup } from "./mockups/registry";
 import { metasFor } from "./metadata";
 import { DemoStage } from "./DemoStage";
@@ -112,7 +112,7 @@ function Details({ paragraphs }: { paragraphs: readonly string[] }) {
   );
 }
 
-export function ComponentPage({ id }: { id: string }) {
+export function ComponentPage({ id }: { id: CumulusComponentId }) {
   const entry = getComponent(id);
   const [args, setArgs] = useState<Record<string, unknown>>(() => ({
     ...entry?.demo.defaultArgs,

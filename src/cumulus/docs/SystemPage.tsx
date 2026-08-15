@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { token } from "../primitives/tokens";
-import { getUISystem } from "./systems/registry";
+import { getUISystem, type CumulusUISystemId } from "./systems/registry";
 import "./system-page.css";
 
 const stickyNavStyle: CSSProperties = {
@@ -14,7 +14,7 @@ const stickyNavStyle: CSSProperties = {
   borderBottom: `1px solid ${token("--border-soft")}`,
 };
 
-export function SystemPage({ id }: { readonly id: string }) {
+export function SystemPage({ id }: { readonly id: CumulusUISystemId }) {
   const system = getUISystem(id);
   if (system === undefined) {
     return (

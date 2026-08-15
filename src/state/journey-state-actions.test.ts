@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../types/test-identities";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { economyFixture } from "../testing/economy-fixture";
 import { opponentsFixture } from "../testing/opponents-fixture";
@@ -12,7 +13,7 @@ import {
   makeTestAtlasNode,
 } from "../__test-helpers__/atlas-fixtures";
 import type { CardData } from "../types/cards";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import type {
   DreamAvatarContent,
   ResolvedDreamAvatarPackage,
@@ -40,22 +41,21 @@ import {
   startJourneyFromDreamAvatar,
   updateJourneyAtlas,
 } from "./journey-state-actions";
-import { asAtlasNodeId } from "../types/identifiers";
-import { asSiteId } from "../types/identifiers";
-import { asDeckEntryId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asDreamsignId } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseDeckEntryId } from "../types/identifiers";
+import { testDreamAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
 
 function makeCard(
   cardNumber: number,
   overrides: Partial<CardData> = {},
 ): CardData {
   return {
-    name: asCardName(`Card ${String(cardNumber)}`),
-    id: asCardId(`card-${String(cardNumber)}`),
+    name: parseCardName(`Card ${String(cardNumber)}`),
+    id: testCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Event",
-    subtype: "Test",
+    subtype: "Warrior",
     isStarter: false,
     energyCost: 1,
     spark: null,
@@ -69,14 +69,14 @@ function makeCard(
 
 function makeDreamAvatar(): DreamAvatarContent {
   return {
-    id: asDreamAvatarId("dream-avatar-1"),
+    id: testDreamAvatarId("dream-avatar-1"),
     name: "Test DreamAvatar",
     title: "State Witness",
     renderedText: "Test ability.",
     imageNumber: "0006",
     portraitFocus: { x: 0.42, y: 0.18 },
     startingEssence: 275,
-    signatureCards: [asCardName("Alpha Card 1")],
+    signatureCards: [parseCardName("Alpha Card 1")],
   };
 }
 
@@ -112,23 +112,23 @@ function makeJourneyContent(
 
 function makeAtlas(): DreamAtlas {
   return {
-    layers: [[asAtlasNodeId("dreamscape-1")]],
-    startingNodeId: asAtlasNodeId("dreamscape-1"),
-    bossNodeId: asAtlasNodeId("dreamscape-1"),
-    currentNodeId: asAtlasNodeId("dreamscape-1"),
+    layers: [[parseAtlasNodeId("dreamscape-1")]],
+    startingNodeId: parseAtlasNodeId("dreamscape-1"),
+    bossNodeId: parseAtlasNodeId("dreamscape-1"),
+    currentNodeId: parseAtlasNodeId("dreamscape-1"),
     knownDreamsignCarrierIds: [],
     nodes: {
-      [asAtlasNodeId("dreamscape-1")]: makeTestAtlasNode(
+      [parseAtlasNodeId("dreamscape-1")]: makeTestAtlasNode(
         "dreamscape-1",
         [
           {
-            id: asSiteId("site-1"),
+            id: parseSiteId("site-1"),
             type: "Draft",
             isEnhanced: false,
             isVisited: false,
           },
           {
-            id: asSiteId("site-2"),
+            id: parseSiteId("site-2"),
             type: "Battle",
             isEnhanced: false,
             isVisited: false,
@@ -152,17 +152,17 @@ describe("journey state actions", () => {
   it("commits a prepared append only against the exact current sibling order", () => {
     const state: JourneyState = {
       ...createDefaultState(),
-      currentDreamscape: asAtlasNodeId("dreamscape-1"),
+      currentDreamscape: parseAtlasNodeId("dreamscape-1"),
       atlas: makeAtlas(),
     };
     const site = {
-      id: asSiteId("site-exploration-source-action"),
+      id: parseSiteId("site-exploration-source-action"),
       type: "Shop" as const,
       isEnhanced: false,
       isVisited: false,
     };
     const prepared = {
-      targetNodeId: asAtlasNodeId("dreamscape-1"),
+      targetNodeId: parseAtlasNodeId("dreamscape-1"),
       insertionIndex: 2,
       siblingSiteIdsBefore: ["site-1", "site-2"],
       site,
@@ -170,8 +170,8 @@ describe("journey state actions", () => {
 
     const inserted = insertPreparedSiteInJourneyState(state, prepared);
     if (inserted === null) throw new Error("Expected prepared site insertion");
-    expect(inserted.atlas.nodes[asAtlasNodeId("dreamscape-1")]?.sites).toEqual([
-      ...(makeAtlas().nodes[asAtlasNodeId("dreamscape-1")]?.sites ?? []),
+    expect(inserted.atlas.nodes[parseAtlasNodeId("dreamscape-1")]?.sites).toEqual([
+      ...(makeAtlas().nodes[parseAtlasNodeId("dreamscape-1")]?.sites ?? []),
       site,
     ]);
     expect(
@@ -187,19 +187,19 @@ describe("journey state actions", () => {
     expect(
       nextDeckEntryId([
         {
-          entryId: asDeckEntryId("deck-2"),
+          entryId: parseDeckEntryId("deck-2"),
           cardNumber: 101,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: asDeckEntryId("starter-99"),
+          entryId: parseDeckEntryId("starter-99"),
           cardNumber: 202,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: asDeckEntryId("deck-15"),
+          entryId: parseDeckEntryId("deck-15"),
           cardNumber: 10002,
           transfiguration: null,
           isBane: true,
@@ -223,7 +223,7 @@ describe("journey state actions", () => {
       ...createDefaultState(),
       deck: [
         {
-          entryId: asDeckEntryId("deck-7"),
+          entryId: parseDeckEntryId("deck-7"),
           cardNumber: 101,
           transfiguration: null,
           isBane: false,
@@ -236,7 +236,7 @@ describe("journey state actions", () => {
     expect(next.deck).toEqual([
       prev.deck[0],
       {
-        entryId: asDeckEntryId("deck-8"),
+        entryId: parseDeckEntryId("deck-8"),
         cardNumber: 202,
         transfiguration: null,
         isBane: false,
@@ -268,7 +268,7 @@ describe("journey state actions", () => {
           "204": 1,
         },
         currentOffer: [101, 102, 103, 104],
-        activeSiteId: asSiteId("site-1"),
+        activeSiteId: parseSiteId("site-1"),
         pickNumber: 1,
         sitePicksCompleted: 0,
       },
@@ -276,14 +276,14 @@ describe("journey state actions", () => {
 
     const next = pickDraftCardInJourneyState({
       prev,
-      siteId: asSiteId("site-1"),
+      siteId: parseSiteId("site-1"),
       cardNumber: 101,
       cardDatabase,
     });
 
     expect(next.deck).toEqual([
       {
-        entryId: asDeckEntryId("deck-1"),
+        entryId: parseDeckEntryId("deck-1"),
         cardNumber: 101,
         transfiguration: null,
         isBane: false,
@@ -322,14 +322,14 @@ describe("journey state actions", () => {
           "204": 1,
         },
         currentOffer: [101, 102, 103, 104],
-        activeSiteId: asSiteId("site-1"),
+        activeSiteId: parseSiteId("site-1"),
         pickNumber: 1,
         sitePicksCompleted: 0,
       },
     };
     const prepared = prepareDraftCardPickInJourneyState({
       prev,
-      siteId: asSiteId("site-1"),
+      siteId: parseSiteId("site-1"),
       cardNumber: 101,
       cardDatabase,
     });
@@ -360,7 +360,7 @@ describe("journey state actions", () => {
       prev,
       dreamAvatar,
       journeyContent,
-      seedOverride: "journey-seed-1",
+      seedOverride: testJourneySeed("journey-seed-1"),
     });
     const firstAvailableNode = Object.values(next.atlas.nodes).find(
       (node) => node.state === "available",
@@ -448,13 +448,14 @@ describe("journey state actions", () => {
       [String(authoredCardNumbers[0])]: 2,
       [String(authoredCardNumbers[1])]: 1,
     };
+    const dreamsignAId = testDreamsignId("dreamsign-a");
     const authoredPackage: ResolvedDreamAvatarPackage = {
       dreamAvatar,
       draftPoolCopiesByCard: authoredCopies,
-      openingDreamsignOfferIds: [asDreamsignId("dreamsign-a")],
+      openingDreamsignOfferIds: [dreamsignAId],
       dreamsignPoolIds: [
-        asDreamsignId("dreamsign-a"),
-        asDreamsignId("dreamsign-b"),
+        dreamsignAId,
+        testDreamsignId("dreamsign-b"),
       ],
       mandatoryOnlyPoolSize: 3,
       draftPoolSize: 3,
@@ -467,7 +468,7 @@ describe("journey state actions", () => {
       prev: createDefaultState(),
       dreamAvatar,
       journeyContent,
-      seedOverride: "tutorial-seed",
+      seedOverride: testJourneySeed("tutorial-seed"),
       atlasRng: () => 0,
       resolvedPackageOverride: authoredPackage,
       isTutorialJourney: true,
@@ -479,27 +480,27 @@ describe("journey state actions", () => {
     expect((next.draftState as PoolDraftState).draftPoolCopiesByCard).toEqual(
       authoredCopies,
     );
-    expect(next.remainingDreamsignPool).toContain("dreamsign-a");
+    expect(next.remainingDreamsignPool).toContain(dreamsignAId);
     expect(
       next.atlas.knownDreamsignCarrierIds
         .map((id) => next.atlas.nodes[id]?.knownDreamsignId)
         .filter(
           (id): id is NonNullable<typeof id> => id !== null && id !== undefined,
         ),
-    ).not.toContain("dreamsign-a");
+    ).not.toContain(dreamsignAId);
   });
 
   it("sets the journey screen and active site together", () => {
     const prev = createDefaultState();
     const siteScreen = setJourneyScreen(prev, {
       type: "site",
-      siteId: asSiteId("site-1"),
+      siteId: parseSiteId("site-1"),
     });
     const atlasScreen = setJourneyScreen(siteScreen, { type: "atlas" });
 
     expect(siteScreen.screen).toEqual({
       type: "site",
-      siteId: asSiteId("site-1"),
+      siteId: parseSiteId("site-1"),
     });
     expect(siteScreen.activeSiteId).toBe("site-1");
     expect(atlasScreen.screen).toEqual({ type: "atlas" });
@@ -515,8 +516,8 @@ describe("journey state actions", () => {
     expect(prev.atlas).toEqual({
       layers: [],
       nodes: {},
-      startingNodeId: asAtlasNodeId(""),
-      bossNodeId: asAtlasNodeId(""),
+      startingNodeId: null,
+      bossNodeId: null,
       bossIncarnationId: null,
       currentNodeId: null,
       knownDreamsignCarrierIds: [],
@@ -533,19 +534,19 @@ describe("journey state actions", () => {
       ...createDefaultState(),
       atlas: makeAtlas(),
       siteRuntime: {
-        [asSiteId("site-2")]: runtime,
+        [parseSiteId("site-2")]: runtime,
       },
     };
 
-    const next = completeJourneySite(prev, asSiteId("site-1"));
+    const next = completeJourneySite(prev, parseSiteId("site-1"));
 
     expect(next.visitedSites).toEqual(["site-1"]);
-    expect(next.atlas.nodes[asAtlasNodeId("dreamscape-1")].sites[0]).toEqual({
-      id: asSiteId("site-1"),
+    expect(next.atlas.nodes[parseAtlasNodeId("dreamscape-1")].sites[0]).toEqual({
+      id: parseSiteId("site-1"),
       type: "Draft",
       isEnhanced: false,
       isVisited: true,
     });
-    expect(next.siteRuntime[asSiteId("site-2")]).toBe(runtime);
+    expect(next.siteRuntime[parseSiteId("site-2")]).toBe(runtime);
   });
 });

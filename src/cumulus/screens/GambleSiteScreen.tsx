@@ -57,7 +57,11 @@ import type { SiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import type { DreamsignId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import type {
+  GambleResultId,
+  ShuffleCommitment,
+} from "../../types/identifiers";
+import type { DomTestId } from "../types/dom";
 
 export interface GambleGateView {
   /** Stable gate id used by the wager intent. */
@@ -80,7 +84,7 @@ export interface GambleGateView {
 
 export interface GambleResultView {
   /** Stable result identity for animation replay. */
-  id: string;
+  id: GambleResultId;
   /** Gate chosen by the player. */
   gateId: GravokGateId;
   /** Non-selected gate whose prize object turns into the drawn card. */
@@ -133,7 +137,7 @@ export interface GravokWagerSiteView {
 
 export interface LadderClimbResultView {
   /** Stable result identity for animation replay. */
-  id: string;
+  id: GambleResultId;
   /** One-based attempt that produced this card. */
   attemptNumber: number;
   /** Inclusive rank target shown before this attempt was drawn. */
@@ -183,7 +187,7 @@ export interface StarwayStairsTierView {
 }
 
 export interface StarwayStairsResultView {
-  id: string;
+  id: GambleResultId;
   tierNumber: StarwayStairsTierNumber;
   busted: boolean;
   resultSettled: boolean;
@@ -216,7 +220,7 @@ export interface FourSuitRepriseCardView {
 }
 
 export interface FourSuitRepriseResultView {
-  id: string;
+  id: GambleResultId;
   roundNumber: 1 | 2 | 3;
   card: { rank: PlayingCardRank; suit: PlayingCardSuit };
   outcome: FourSuitRepriseOutcome;
@@ -251,7 +255,7 @@ export interface BlackjackSiteView {
   gameId: "blackjack";
   siteId: SiteId;
   /** Stable committed-shoe identity for one animated hand. */
-  handId: string;
+  handId: ShuffleCommitment;
   scene: ArtRef | null;
   isFarpoint: boolean;
   runtimeReady: boolean;
@@ -269,7 +273,7 @@ export interface BlackjackSiteView {
   outcome: "player-win" | "dealer-win" | "push" | null;
   essenceAwarded: number;
   resultSettled: boolean;
-  resultId: string | null;
+  resultId: GambleResultId | null;
   /** Whether a settled push or eligible loss may start another paid hand. */
   canPlayAgain: boolean;
   guide: SiteLayoutGuideView;
@@ -880,7 +884,7 @@ function LadderDreamsignReward({
     }
     let animationFrame = 0;
     const hideHudTarget = (): void => {
-      const target = ladderHudDreamsignTarget(asDreamsignId(dreamsignId));
+      const target = ladderHudDreamsignTarget(dreamsignId);
       if (target === null) {
         animationFrame = window.requestAnimationFrame(hideHudTarget);
         return;
@@ -911,7 +915,7 @@ function LadderDreamsignReward({
     const readingTimer = window.setTimeout(() => {
       const measureTrajectory = (): void => {
         const source = sourceRef.current?.getBoundingClientRect();
-        const target = ladderHudDreamsignTarget(asDreamsignId(dreamsignId));
+        const target = ladderHudDreamsignTarget(dreamsignId);
         const targetRect = target?.getBoundingClientRect();
         if (
           source === undefined ||
@@ -1055,7 +1059,7 @@ interface WagerPrizeCardProps {
   size?: PlayingCardSize;
   drawnCard: { rank: PlayingCardRank; suit: PlayingCardSuit } | null;
   revealDrawnCard?: boolean;
-  dreamsignTestId?: string;
+  dreamsignTestId?: DomTestId;
   emphasis?: PlayingCardPrizeEmphasis;
   essenceReward: number;
   rewardDreamsign: LocalizedDreamsign | null;
@@ -1391,7 +1395,7 @@ function GravokWagerScreen({
   const [replacementVisible, setReplacementVisible] = useState(false);
   const [roundActionsVisible, setRoundActionsVisible] = useState(false);
   const onOutcomeShownRef = useRef(onOutcomeShown);
-  const settledResultIdRef = useRef<string | undefined>(undefined);
+  const settledResultIdRef = useRef<GambleResultId | undefined>(undefined);
   const resultId = view.result?.id;
   const pendingDreamsignReplacement =
     view.result?.pendingDreamsignReplacement === true;
@@ -1734,12 +1738,12 @@ function LadderClimbScreen({
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const layout = useIsDesktop() ? "desktop" : "mobile";
-  const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
-  const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
-  const [rewardResultId, setRewardResultId] = useState<string | null>(null);
+  const [revealedResultId, setRevealedResultId] = useState<GambleResultId | null>(null);
+  const [outcomeResultId, setOutcomeResultId] = useState<GambleResultId | null>(null);
+  const [rewardResultId, setRewardResultId] = useState<GambleResultId | null>(null);
   const [roundActionsVisible, setRoundActionsVisible] = useState(false);
   const [replacementVisible, setReplacementVisible] = useState(false);
-  const settledResultIdRef = useRef<string | undefined>(undefined);
+  const settledResultIdRef = useRef<GambleResultId | undefined>(undefined);
   const onOutcomeShownRef = useRef(onOutcomeShown);
   const resultId = view.result?.id;
 
@@ -2085,15 +2089,15 @@ function StarwayStairsScreen({
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const layout = useIsDesktop() ? "desktop" : "mobile";
-  const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
-  const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
+  const [revealedResultId, setRevealedResultId] = useState<GambleResultId | null>(null);
+  const [outcomeResultId, setOutcomeResultId] = useState<GambleResultId | null>(null);
   const [actionsVisible, setActionsVisible] = useState(view.result === null);
   const [decisionPending, setDecisionPending] = useState(false);
   const [emphasisTierNumber, setEmphasisTierNumber] =
     useState<StarwayStairsTierNumber | null>(
       view.result?.tierNumber ?? view.currentTierNumber,
     );
-  const settledResultIdRef = useRef<string | undefined>(undefined);
+  const settledResultIdRef = useRef<GambleResultId | undefined>(undefined);
   const onOutcomeShownRef = useRef(onOutcomeShown);
   const resultId = view.result?.id;
   const emphasisTierForResult =
@@ -2433,18 +2437,21 @@ type BlackjackDeparturePhase = "idle" | "concealing" | "departing";
 interface BlackjackPresentationState {
   readonly playerCardCount: number;
   readonly dealerCardCount: number;
-  readonly revealedCardKeys: readonly string[];
+  readonly revealedCardKeys: readonly BlackjackCardKey[];
   readonly departurePhase: BlackjackDeparturePhase;
-  readonly outcomeResultId: string | null;
+  readonly outcomeResultId: GambleResultId | null;
   readonly actionsVisible: boolean;
 }
+
+type BlackjackCardKey =
+  `${BlackjackHandOwner}:${number}:${PlayingCardRank}:${PlayingCardSuit}`;
 
 function blackjackCardKey(
   owner: BlackjackHandOwner,
   index: number,
   card: BlackjackSiteView["playerCards"][number],
-): string {
-  return `${owner}:${String(index)}:${card.rank}:${card.suit}`;
+): BlackjackCardKey {
+  return `${owner}:${index}:${card.rank}:${card.suit}`;
 }
 
 function blackjackCardDisplaySize(
@@ -2497,7 +2504,7 @@ function BlackjackScreen({
   const presentationRef = useRef(presentation);
   const lastHandIdRef = useRef(view.handId);
   const [decisionPending, setDecisionPending] = useState(false);
-  const settledResultIdRef = useRef<string | null>(null);
+  const settledResultIdRef = useRef<GambleResultId | null>(null);
   const onOutcomeShownRef = useRef(onOutcomeShown);
   const playAgainTimeoutsRef = useRef<number[]>([]);
 
@@ -3175,9 +3182,9 @@ function FourSuitRepriseScreen({
   const resolve = useLocalizer();
   const reduceMotion = useReducedMotion() === true;
   const layout = useIsDesktop() ? "desktop" : "mobile";
-  const [selectedEntryId, setSelectedEntryId] = useState<string | null>(null);
-  const [revealedResultId, setRevealedResultId] = useState<string | null>(null);
-  const [outcomeResultId, setOutcomeResultId] = useState<string | null>(null);
+  const [selectedEntryId, setSelectedEntryId] = useState<DeckEntryId | null>(null);
+  const [revealedResultId, setRevealedResultId] = useState<GambleResultId | null>(null);
+  const [outcomeResultId, setOutcomeResultId] = useState<GambleResultId | null>(null);
   const [actionsVisible, setActionsVisible] = useState(false);
   const [transfigurationVisible, setTransfigurationVisible] = useState(false);
   const [selectedFormType, setSelectedFormType] =
@@ -3185,7 +3192,7 @@ function FourSuitRepriseScreen({
   const [decisionPending, setDecisionPending] = useState(false);
   const [cardOutcomePhase, setCardOutcomePhase] =
     useState<FourSuitCardOutcomePhase>("idle");
-  const settledResultIdRef = useRef<string | undefined>(undefined);
+  const settledResultIdRef = useRef<GambleResultId | undefined>(undefined);
   const onOutcomeShownRef = useRef(onOutcomeShown);
   const resultId = view.result?.id;
 

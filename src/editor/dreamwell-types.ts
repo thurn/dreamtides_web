@@ -1,6 +1,7 @@
 import type { DreamwellEditorPreviewData } from "./DreamwellEditorPreview";
 import type { ArtCrop } from "../types/cards";
 import type { DreamwellCardId } from "../types/identifiers";
+import type { SourceRevision } from "../types/source-revision";
 
 /**
  * Dreamwell fields edited inline by double-clicking the card (the name heading,
@@ -61,7 +62,7 @@ export interface DreamwellDisplayState {
 
 export interface LoadEditorDreamwellResponse {
   dreamwell: EditorDreamwellRecord[];
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
 }
 
 export interface SaveEditorDreamwellFieldRequest {
@@ -81,7 +82,7 @@ export interface EditorSaveTiming {
 
 export interface SaveEditorDreamwellFieldResponse {
   dreamwell: EditorDreamwellRecord;
-  sourceRevision: string;
+  sourceRevision: SourceRevision;
   clientRevision?: number;
   timing: EditorSaveTiming;
 }

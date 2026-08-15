@@ -1,5 +1,6 @@
 import type { AtlasData } from "../types/atlas-data";
 import { hydrateSourceTransport } from "../runtime/localization/runtime";
+import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 export type { AtlasData } from "../types/atlas-data";
 
@@ -28,6 +29,8 @@ export async function loadAtlasData(): Promise<AtlasData> {
   const raw = value as AtlasData;
   return {
     ...raw,
+    contentHash: parseContentHash(raw.contentHash),
+    foldHash: parseFoldHash(raw.foldHash),
     presentation: {
       ...raw.presentation,
       unseenTitle: hydrateSourceTransport(

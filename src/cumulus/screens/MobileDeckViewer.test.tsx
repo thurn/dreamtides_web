@@ -3,11 +3,12 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { MobileDeckViewer, type MobileDeckView } from "./MobileDeckViewer";
 import { CumulusRoot } from "../CumulusRoot";
 import type { CardId } from "../../types/card-identity";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 vi.mock("../components/card/CardView", () => ({
   GameCard: ({ model }: { model: { cardId: CardId } }) => (
@@ -16,17 +17,17 @@ vi.mock("../components/card/CardView", () => ({
 }));
 
 function view(): MobileDeckView {
-  const cardId = asCardId("11111111-1111-4111-8111-111111111111");
+  const cardId = testCardId("11111111-1111-4111-8111-111111111111");
   return {
     cards: [
       {
-        entryId: asDeckEntryId("entry-a"),
+        entryId: parseDeckEntryId("entry-a"),
         isBane: false,
         model: {
           cardId,
           displaySnapshot: {
             id: cardId,
-            name: asCardName("Archive Sentry"),
+            name: parseCardName("Archive Sentry"),
             cardNumber: 1,
             cardType: "Character",
             subtype: "Synth",

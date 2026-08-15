@@ -1,11 +1,11 @@
-import { assertLocalized } from "@trox/runtime";
+import { assertLocalized, LocalizedString } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { artRef } from "../../cumulus/primitives/art";
 import { economyFixture } from "../../testing/economy-fixture";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
@@ -18,16 +18,14 @@ import {
   buildCardShopTransfiguredOfferLog,
 } from "./card-shop-view-model";
 import { localizedSitePresentation } from "../../cumulus/screens/localized-site-presentation";
-import { asSiteId } from "../../types/identifiers";
-import { asExplorationActionId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId, testDreamscapeId, testExplorationActionId, testGuideId } from "../../types/test-identities";
 
-function makeCard(cardNumber: number, id: string): CardData {
+function makeCard(cardNumber: number, idSeed: string): CardData {
   return {
-    name: asCardName(`Fixture ${String(cardNumber)}`),
-    id: asCardId(id),
+    name: parseCardName(`Fixture ${String(cardNumber)}`),
+    id: testCardId(idSeed),
     cardNumber,
     cardType: "Event",
     subtype: "",
@@ -82,7 +80,7 @@ function database(): Map<number, CardData> {
 }
 
 const site: SiteState = {
-  id: asSiteId("shop-site"),
+  id: parseSiteId("shop-site"),
   type: "Shop",
   isEnhanced: false,
   isVisited: false,
@@ -90,15 +88,22 @@ const site: SiteState = {
 
 describe("buildCardShopOffers", () => {
   it("uses UUID-derived tile ids and resolves purchase availability after discounts", () => {
+    const cardDatabase = database();
     const offers = buildCardShopOffers(
       transfigurationFixture(),
       runtime(),
-      database(),
+      cardDatabase,
       90,
       {
         essenceDiscountPercent: 10,
       },
     );
+    const cardA = cardDatabase.get(1);
+    const cardB = cardDatabase.get(2);
+    const cardC = cardDatabase.get(3);
+    if (cardA === undefined || cardB === undefined || cardC === undefined) {
+      throw new Error("Expected three card-shop fixture cards");
+    }
 
     expect(
       offers.map((offer) => ({
@@ -109,19 +114,19 @@ describe("buildCardShopOffers", () => {
       })),
     ).toEqual([
       {
-        entryId: asDeckEntryId("shop-slot-0-card-uuid-a"),
+        entryId: parseDeckEntryId(`shop-slot-0-${cardA.id}`),
         slotIndex: 0,
         price: 70,
         state: "available",
       },
       {
-        entryId: asDeckEntryId("shop-slot-1-card-uuid-b"),
+        entryId: parseDeckEntryId(`shop-slot-1-${cardB.id}`),
         slotIndex: 1,
         price: 180,
         state: "unaffordable",
       },
       {
-        entryId: asDeckEntryId("shop-slot-2-card-uuid-c"),
+        entryId: parseDeckEntryId(`shop-slot-2-${cardC.id}`),
         slotIndex: 2,
         price: 45,
         state: "purchased",
@@ -157,17 +162,17 @@ describe("buildCardShopOffers", () => {
               { kind: "shop" }
             >,
           ),
-          siteId: asSiteId("shop-site"),
+          siteId: parseSiteId("shop-site"),
           scene: null,
           guide: {
-            id: "guide",
+            id: testGuideId("guide"),
             name: assertLocalized("Guide"),
             line: assertLocalized("Line"),
-            art: artRef.dreamGuide(asGuideId("guide")),
+            art: artRef.dreamGuide(testGuideId("guide")),
           },
           offers,
           restock: {
-            entryId: asDeckEntryId("restock"),
+            entryId: parseDeckEntryId("restock"),
             price: 0,
             state: "available",
           },
@@ -177,16 +182,16 @@ describe("buildCardShopOffers", () => {
           },
         },
         {
-          siteId: asSiteId("exploration-site"),
-          actionId: asExplorationActionId("exploration-action"),
+          siteId: parseSiteId("exploration-site"),
+          actionId: testExplorationActionId("exploration-action"),
         },
       ),
     ).toMatchObject({
-      sourceSiteId: asSiteId("exploration-site"),
-      sourceActionId: asExplorationActionId("exploration-action"),
+      sourceSiteId: parseSiteId("exploration-site"),
+      sourceActionId: testExplorationActionId("exploration-action"),
       cards: [
         {
-          cardId: asCardId("card-uuid-a"),
+          cardId: testCardId("card-uuid-a"),
           slotIndex: 0,
           transfiguration: "Empowered",
         },
@@ -240,6 +245,7 @@ describe("buildCardShopRestock", () => {
 describe("buildCardShopSiteView", () => {
   it("builds Tobias, five-slot-compatible offers, and the shared HUD", () => {
     const state = { ...createDefaultState(), essence: 250 };
+    const guideId = testGuideId("fixture-tobias");
     const view = buildCardShopSiteView({
       state,
       sceneNode: null,
@@ -247,9 +253,9 @@ describe("buildCardShopSiteView", () => {
       runtime: runtime(),
       cardDatabase: database(),
       guide: {
-        id: asGuideId("fixture-tobias"),
+        id: guideId,
         name: "Tobias Fixture",
-        homeDreamscapeId: asDreamscapeId("fixture-dream"),
+        homeDreamscapeId: testDreamscapeId("fixture-dream"),
         siteType: "Shop",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["Browse a while."] },
@@ -261,12 +267,12 @@ describe("buildCardShopSiteView", () => {
       sitesData: MINIMAL_SITES_DATA,
     });
 
-    expect(view.siteId).toBe("shop-site");
+    expect(view.siteId).toBe(site.id);
     expect(view.guide).toMatchObject({
-      id: "fixture-tobias",
-      name: "Tobias Fixture",
-      line: "A chosen greeting.",
+      id: guideId,
     });
+    expect(view.guide.name).toBeInstanceOf(LocalizedString);
+    expect(view.guide.line).toBeInstanceOf(LocalizedString);
     expect(view.offers).toHaveLength(3);
   });
 
@@ -279,8 +285,8 @@ describe("buildCardShopSiteView", () => {
         freePurchaseModifiers: [
           {
             kind: "free-purchases" as const,
-            sourceSiteId: asSiteId("exploration-counted"),
-            sourceActionId: asExplorationActionId("counted-action"),
+            sourceSiteId: parseSiteId("exploration-counted"),
+            sourceActionId: testExplorationActionId("counted-action"),
             initialCount: 3,
             remainingCount: 2,
           },
@@ -294,15 +300,15 @@ describe("buildCardShopSiteView", () => {
       runtime: {
         ...runtime(),
         freePurchaseSource: {
-          sourceSiteId: asSiteId("exploration-visit"),
-          sourceActionId: asExplorationActionId("visit-action"),
+          sourceSiteId: parseSiteId("exploration-visit"),
+          sourceActionId: testExplorationActionId("visit-action"),
         },
       },
       cardDatabase: database(),
       guide: {
-        id: asGuideId("fixture-tobias"),
+        id: testGuideId("fixture-tobias"),
         name: "Tobias Fixture",
-        homeDreamscapeId: asDreamscapeId("fixture-dream"),
+        homeDreamscapeId: testDreamscapeId("fixture-dream"),
         siteType: "Shop",
         portraitSource: "fixture-guide.png",
         dialogue: { site: ["Browse a while."] },
@@ -320,8 +326,8 @@ describe("buildCardShopSiteView", () => {
     ).toBe(true);
     expect(view.freePurchaseStatus).toEqual({
       freeNextShopSource: {
-        sourceSiteId: asSiteId("exploration-visit"),
-        sourceActionId: asExplorationActionId("visit-action"),
+        sourceSiteId: parseSiteId("exploration-visit"),
+        sourceActionId: testExplorationActionId("visit-action"),
       },
       freePurchasesRemaining: 2,
     });

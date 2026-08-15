@@ -1,12 +1,14 @@
 import { describe, expect, it } from "vitest";
+import { testJourneySeed } from "../types/test-identities";
 import type { CardData } from "../types/cards";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import { transfigurationFixture } from "../testing/transfiguration-fixture";
 import {
   transfigurationCostBand,
   transfigurationEssenceCost,
 } from "./transfiguration-pricing";
-import { asDeckEntryId, asSiteId } from "../types/identifiers";
+import { parseDeckEntryId, parseSiteId } from "../types/identifiers";
+import { testCardId } from "../types/test-identities";
 
 const BASE = transfigurationFixture();
 const CONFIG = {
@@ -27,8 +29,8 @@ const CONFIG = {
 
 function card(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: asCardName("Synthetic"),
-    id: asCardId("synthetic-card"),
+    name: parseCardName("Synthetic"),
+    id: testCardId("synthetic-card"),
     cardNumber: 71,
     cardType: "Character",
     subtype: "",
@@ -62,9 +64,9 @@ describe("transfiguration pricing", () => {
   it("is deterministic and remains within authored bounds", () => {
     const args = [
       CONFIG,
-      "seed",
-      asSiteId("site"),
-      asDeckEntryId("entry"),
+      testJourneySeed("seed"),
+      parseSiteId("site"),
+      parseDeckEntryId("entry"),
       card(),
       "Inspired",
     ] as const;

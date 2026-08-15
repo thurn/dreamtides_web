@@ -18,7 +18,7 @@ import {
 } from "../../components/controls/SegmentedControl";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
-import { asDreamscapeId } from "../../../types/identifiers";
+import { parseDreamscapeId } from "../../../types/identifiers";
 
 // Curated real card UUIDs from data/cards.toml (a mix of Character
 // and Event so the filter has something to actually filter). Resolved and
@@ -80,7 +80,7 @@ export function SegmentedControlMockup() {
     <div
       style={{
         ...sceneRoot,
-        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.55) 0%, rgba(8,5,17,0.7) 50%, rgba(8,5,17,0.94) 100%), url(${dreamscapeSceneUrl(asDreamscapeId("grid_city"))})`,
+        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.55) 0%, rgba(8,5,17,0.7) 50%, rgba(8,5,17,0.94) 100%), url(${dreamscapeSceneUrl(parseDreamscapeId("grid_city"))})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",

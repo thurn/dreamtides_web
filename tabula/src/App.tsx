@@ -10,13 +10,16 @@ import { Pressable } from "../../src/cumulus/primitives/Pressable";
 import { GLYPHS } from "../../src/cumulus/primitives/glyph";
 import {
   buildOperations,
+  affiliationFieldKey,
   createTransport,
   draftFromSnapshot,
   validateDraft,
   type AffiliationDraft,
+  type AffiliationFieldKey,
   type EditorSnapshot,
   type TideSummary,
 } from "./editor";
+import type { AffiliationId, TideId } from "../../src/types/identifiers";
 
 const transport = createTransport();
 
@@ -33,7 +36,7 @@ function errorMessage(error: unknown): string {
 export function App() {
   const [snapshot, setSnapshot] = useState<EditorSnapshot>();
   const [draft, setDraft] = useState<AffiliationDraft>();
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState<AffiliationId | null>(null);
   const [recordSearch, setRecordSearch] = useState("");
   const [navigatorOpen, setNavigatorOpen] = useState(true);
   const [past, setPast] = useState<AffiliationDraft[]>([]);
@@ -42,7 +45,7 @@ export function App() {
   const [saveError, setSaveError] = useState("");
   const [saving, setSaving] = useState(false);
   const [stale, setStale] = useState(false);
-  const activeHistoryKey = useRef<string | undefined>(undefined);
+  const activeHistoryKey = useRef<AffiliationFieldKey | undefined>(undefined);
 
   const adopt = (next: EditorSnapshot) => {
     setSnapshot(next);
@@ -55,7 +58,7 @@ export function App() {
     setSelectedId((current) =>
       next.affiliations.some((entry) => entry.id === current)
         ? current
-        : (next.affiliations[0]?.id ?? ""),
+        : (next.affiliations[0]?.id ?? null),
     );
     setStatus("All changes saved");
   };
@@ -119,7 +122,7 @@ export function App() {
 
   const changeDraft = (
     change: (next: AffiliationDraft) => void,
-    historyKey?: string,
+    historyKey?: AffiliationFieldKey,
   ) => {
     if (!draft || saving || stale) return;
     const next = cloneDraft(draft);
@@ -231,9 +234,9 @@ export function App() {
       affiliation.id.toLocaleLowerCase().includes(normalizedSearch),
   );
   const updateAffiliation = (
-    id: string,
+    id: AffiliationId,
     change: (entry: AffiliationDraft["affiliations"][number]) => void,
-    historyKey?: string,
+    historyKey?: AffiliationFieldKey,
   ) =>
     changeDraft((next) => {
       const entry = next.affiliations.find((candidate) => candidate.id === id);
@@ -486,15 +489,15 @@ function AffiliationEditor({
 }: {
   affiliation: AffiliationDraft["affiliations"][number];
   tides: readonly TideSummary[];
-  validation: Record<string, string>;
-  unresolved: string[];
+  validation: Partial<Record<AffiliationFieldKey, string>>;
+  unresolved: TideId[];
   onChange: (
-    key: string | undefined,
+    key: AffiliationFieldKey | undefined,
     change: (entry: AffiliationDraft["affiliations"][number]) => void,
   ) => void;
   onCommit: () => void;
 }) {
-  const [copiedId, setCopiedId] = useState("");
+  const [copiedId, setCopiedId] = useState<AffiliationId | null>(null);
   const sortedTides = useMemo(
     () =>
       [...tides].sort(
@@ -504,7 +507,7 @@ function AffiliationEditor({
       ),
     [tides],
   );
-  useEffect(() => setCopiedId(""), [affiliation.id]);
+  useEffect(() => setCopiedId(null), [affiliation.id]);
   return (
     <div className="editor-page">
       <header className="editor-heading">
@@ -537,13 +540,13 @@ function AffiliationEditor({
           <TextField
             label={assertLocalized("Name")}
             error={
-              validation[`${affiliation.id}.name`] === undefined
+              validation[affiliationFieldKey(affiliation.id, "name")] === undefined
                 ? undefined
-                : assertLocalized(validation[`${affiliation.id}.name`])
+                : assertLocalized(validation[affiliationFieldKey(affiliation.id, "name")]!)
             }
             value={affiliation.name}
             onChange={(value) =>
-              onChange(`${affiliation.id}.name`, (entry) => {
+              onChange(affiliationFieldKey(affiliation.id, "name"), (entry) => {
                 entry.name = value;
               })
             }
@@ -552,15 +555,15 @@ function AffiliationEditor({
           <TextField
             label={assertLocalized("Atlas card theme")}
             error={
-              validation[`${affiliation.id}.atlas_card_theme`] === undefined
+              validation[affiliationFieldKey(affiliation.id, "atlas_card_theme")] === undefined
                 ? undefined
                 : assertLocalized(
-                    validation[`${affiliation.id}.atlas_card_theme`],
+                    validation[affiliationFieldKey(affiliation.id, "atlas_card_theme")]!,
                   )
             }
             value={affiliation.atlas_card_theme}
             onChange={(value) =>
-              onChange(`${affiliation.id}.atlas_card_theme`, (entry) => {
+              onChange(affiliationFieldKey(affiliation.id, "atlas_card_theme"), (entry) => {
                 entry.atlas_card_theme = value;
               })
             }

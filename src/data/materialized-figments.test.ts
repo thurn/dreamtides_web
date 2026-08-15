@@ -4,9 +4,10 @@ import {
   resetFigmentCatalogHydration,
 } from "../battle/state/figment-catalog";
 import { extractMaterializedFigmentPreviews } from "./materialized-figments";
+import { testCardId } from "../types/test-identities";
 
-const WARRIOR_ID = "bb1a5acd-1a03-4aa3-826d-f0a301843845";
-const LEGIONNAIRE_ID = "e757b306-5bab-4a5a-8493-28c0f3aa6440";
+const WARRIOR_ID = testCardId("bb1a5acd-1a03-4aa3-826d-f0a301843845");
+const LEGIONNAIRE_ID = testCardId("e757b306-5bab-4a5a-8493-28c0f3aa6440");
 
 function hydrate(): void {
   hydrateFigmentCatalog([

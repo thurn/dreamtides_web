@@ -344,7 +344,7 @@ export function BattlefieldCard({
 }: BattlefieldCardProps): ReactElement {
   const dragRef = useRef<DragState | null>(null);
   const tutorialObstacleRef = useTutorialObstacle(
-    `battle-card:${model.battleCardId}`,
+    `tutorial-obstacle:battle-card:${model.battleCardId}`,
     "card",
   );
   const suppressClickRef = useRef(false);

@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
 
 import { LayerName } from "../types/layer-name";
@@ -9,28 +10,29 @@ import {
   foldInvariantViolations,
 } from "./invariants";
 import type { DreamscapeId } from "../types/identifiers";
-import { asDreamscapeId } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
-import { asJourneyId } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
+import { parseJourneyId } from "../types/identifiers";
+import { testDreamscapeId } from "../types/test-identities";
+import type { Genesis } from "../eventlog/types";
 
 const GENESIS = {
-  seed: "invariant-test",
+  seed: testJourneySeed("invariant-test"),
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: {
     poolVariant: "tides4",
   },
-};
+} satisfies Genesis;
 
 function node(
-  id: string,
+  idSeed: string,
   layer: LayerName,
   state: DreamscapeNode["state"],
   dreamscapeId: DreamscapeId | null,
-  forwardIds: string[] = [],
+  forwardIdSeeds: string[] = [],
 ): DreamscapeNode {
   return {
-    id: asAtlasNodeId(id),
+    id: parseAtlasNodeId(idSeed),
     layer,
     indexInLayer: 0,
     dreamscapeId,
@@ -38,7 +40,7 @@ function node(
     position: { x: 0, y: 0 },
     state,
     enhancedSiteType: null,
-    forwardIds: forwardIds.map(asAtlasNodeId),
+    forwardIds: forwardIdSeeds.map(parseAtlasNodeId),
     backwardIds: [],
     knownDreamsignId: null,
   };
@@ -50,39 +52,39 @@ function postVictoryState() {
     ...base,
     journey: {
       ...base.journey,
-      runId: asJourneyId("journey:1"),
+      runId: parseJourneyId("journey:1"),
       completionLevel: 1,
       screen: { type: "atlas" as const },
       atlas: {
         ...base.journey.atlas,
         layers: [
-          [asAtlasNodeId("node-one")],
-          [asAtlasNodeId("node-two-a"), asAtlasNodeId("node-two-b")],
+          [parseAtlasNodeId("node-one")],
+          [parseAtlasNodeId("node-two-a"), parseAtlasNodeId("node-two-b")],
         ],
         nodes: {
           "node-one": node(
             "node-one",
             LayerName.One,
             "completed",
-            asDreamscapeId("dreamscape-one"),
+            testDreamscapeId("dreamscape-one"),
             ["node-two-a", "node-two-b"],
           ),
           "node-two-a": node(
             "node-two-a",
             LayerName.Two,
             "available",
-            asDreamscapeId("dreamscape-two-a"),
+            testDreamscapeId("dreamscape-two-a"),
           ),
           "node-two-b": node(
             "node-two-b",
             LayerName.Two,
             "available",
-            asDreamscapeId("dreamscape-two-b"),
+            testDreamscapeId("dreamscape-two-b"),
           ),
         },
-        startingNodeId: asAtlasNodeId("node-one"),
-        bossNodeId: asAtlasNodeId("node-two-a"),
-        currentNodeId: asAtlasNodeId("node-one"),
+        startingNodeId: parseAtlasNodeId("node-one"),
+        bossNodeId: parseAtlasNodeId("node-two-a"),
+        currentNodeId: parseAtlasNodeId("node-one"),
       },
     },
   };

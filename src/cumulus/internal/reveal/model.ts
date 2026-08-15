@@ -8,16 +8,21 @@ import type {
 import type { GameCardSelection } from "../../components/card/CardView";
 import type { Glyph } from "../../primitives/glyph";
 import type { LocalizedString } from "@trox/runtime";
+import type { SemanticEntityId } from "../../../types/identifiers";
+import type { SemanticEntityNamespace } from "../../../types/semantic-identity";
+
+export type RevealRegistrationId = `cumulus-reveal-source-${string}`;
+export type RevealDescriptionId = `cumulus-reveal-description-${string}`;
 
 export interface RevealSourceIdentity {
-  readonly entityType: string;
-  readonly entityId: string;
+  readonly entityType: SemanticEntityNamespace;
+  readonly entityId: SemanticEntityId;
 }
 
 /** Private mounted-instance key paired with a source's stable semantic UUID identity. */
 export interface RevealCoordinatorSource {
   readonly identity: RevealSourceIdentity;
-  readonly registrationId: string;
+  readonly registrationId: RevealRegistrationId;
 }
 
 export type RevealInfoCardModel = Readonly<InfoCardProps>;
@@ -75,6 +80,8 @@ export interface RevealSpec {
 
 export type RevealPointerType = "mouse" | "pen" | "touch";
 export type RevealReason = "hover" | "focus" | "press";
+export type RevealInteractionKey =
+  `${RevealRegistrationId}:${RevealReason}:${number}`;
 /**
  * The single one-off exception to normal Cumulus desktop reveal placement.
  * Only Augury OfferTile may use this value; every ordinary source relies
@@ -119,7 +126,7 @@ export interface RevealTouchState {
 export interface RevealCoordinatorState {
   readonly phase: "idle" | "hover" | "focus" | "touch-pending" | "touch-reveal";
   readonly activeSource: RevealSourceIdentity | null;
-  readonly activeRegistrationId: string | null;
+  readonly activeRegistrationId: RevealRegistrationId | null;
   readonly reason: RevealReason | null;
   readonly focusedSource: RevealCoordinatorSource | null;
   readonly hoveredSource: RevealCoordinatorSource | null;
@@ -206,7 +213,10 @@ export interface RevealGeometrySnapshot {
   };
   readonly sourceRect: RevealRect;
   readonly touchPoint?: RevealPoint;
-  readonly placement: { readonly family: string; readonly orientation: string };
+  readonly placement: {
+    readonly family: RevealPlacementFamily;
+    readonly orientation: RevealPlacementOrientation;
+  };
   readonly finalRects: {
     readonly primary: RevealRect;
     readonly secondaries: readonly RevealRect[];
@@ -214,6 +224,23 @@ export interface RevealGeometrySnapshot {
   };
   readonly circleClearance?: number;
 }
+
+export type RevealPlacementOrientation = "primary-left" | "primary-right";
+
+export type RevealPlacementFamily =
+  | "desktop-augury-above-source"
+  | "desktop-battlefield-near-left"
+  | "desktop-battlefield-near-right"
+  | "desktop-game-card-reading"
+  | "desktop-side-left"
+  | "desktop-side-right"
+  | "desktop-source-in-place"
+  | "mobile-focus-above"
+  | "mobile-focus-top"
+  | "mobile-press-in-place"
+  | "mobile-touch-corner"
+  | "mobile-touch-top"
+  | "mobile-touch-up";
 
 export function infoCardVariant(card: RevealInfoCardModel): InfoCardVariant {
   return card.variant ?? "text";

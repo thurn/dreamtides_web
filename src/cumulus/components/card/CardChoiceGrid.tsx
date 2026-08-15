@@ -6,6 +6,7 @@ import {
   type ReactElement,
 } from "react";
 import { useRevealSource } from "../../internal/reveal/context";
+import type { DomTestId } from "../../types/dom";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
@@ -88,7 +89,7 @@ export interface CardChoiceGridCardView<EntryId extends string = DeckEntryId> {
   /** Canonical semantic model rendered by GameCard. */
   model: GameCardModel;
   /** Optional test id on the GameCard. */
-  testId?: string;
+  testId?: DomTestId;
   /** Semantic reason to draw the card's selection ring. */
   selection?: GameCardSelection;
   /** Detach activation and physical gestures, then dim the tile. */
@@ -136,7 +137,7 @@ export interface CardChoiceGridActionView<
   /** Detach interaction and visually recede the action. */
   disabled?: boolean;
   /** Optional stable test id on the action button. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 /** Named column count for a frameless card-choice grid. */

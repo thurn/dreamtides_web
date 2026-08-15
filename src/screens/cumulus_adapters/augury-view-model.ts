@@ -31,10 +31,11 @@ import type {
 } from "../../journey_v2";
 import type { MerchantDeckSnapshot } from "../../journey_v2/trace/deckSnapshot";
 import {
-  asAuguryCardViewId,
-  asOfferId,
+  parseAuguryCardViewId,
+  parseOfferTileId,
 } from "../../types/identifiers";
 import type { CardData } from "../../types/cards";
+import type { CardId } from "../../types/card-identity";
 import type { LocalizedString } from "@trox/runtime";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
 import type { DreamGuideContent } from "../../types/content";
@@ -73,7 +74,7 @@ import type { GuideId } from "../../types/identifiers";
 import type { OfferId } from "../../types/identifiers";
 import type { ChoiceId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
 
 type CardObject = MerchantCatalogCard | MerchantDeckCard;
 
@@ -114,7 +115,7 @@ function toCardView(
   includeTransfiguration = true,
 ): AuguryCardView {
   return {
-    id: asAuguryCardViewId(`${object.cardUuid}${idSuffix}`),
+    id: parseAuguryCardViewId(`${object.cardUuid}${idSuffix}`),
     model: {
       cardId: card.id,
       displaySnapshot: card,
@@ -130,7 +131,7 @@ function sitePreviewModel(
   sitesData: SitesData,
 ): DreamscapeSiteModel {
   return {
-    id: asSiteId(`augury-preview:${siteType}`),
+    id: parseSiteId(`augury-preview:${siteType}`),
     type: siteType,
     isVisited: false,
     pos: { x: 50, y: 50 },
@@ -351,7 +352,9 @@ export function buildAuguryOfferTileModel(
   offer: MerchantOffer,
   context: MerchantContext,
 ): OfferTileModel {
-  const id = `${offer.encounterSignature}:${offer.offerId}`;
+  const id = parseOfferTileId(
+    `${offer.encounterSignature}:${offer.offerId}`,
+  );
   switch (offer.archetypeId) {
     case "fit_card_grant":
     case "strong_card":
@@ -573,7 +576,7 @@ export function buildAuguryOfferViews(
   return encounter.offers.map((offer) => {
     const tile = buildAuguryOfferTileModel(offer, context);
     return {
-      id: asOfferId(offer.offerId),
+      id: offer.offerId,
       requiresSelection: (offer.choiceRequest?.candidates.length ?? 0) > 0,
       tile,
       presentation: auguryArchetype(
@@ -586,7 +589,7 @@ export function buildAuguryOfferViews(
 }
 
 function collectVisibleGrantCards(encounter: MerchantEncounter): CardData[] {
-  const byUuid = new Map<string, CardData>();
+  const byUuid = new Map<CardId, CardData>();
   const collect = (objects: readonly MerchantGameObject[]) => {
     for (const object of objects) {
       if (object.objectType === "catalogCard") {

@@ -7,7 +7,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { FoldState } from "../rules/fold-state";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { useLocalizer } from "../runtime/localization/use-localizer";
-import { asClientId } from "../types/identifiers";
+import { parseClientId } from "../types/identifiers";
+import type { ClientId } from "../types/identifiers";
 
 const mocks = vi.hoisted(() => ({
   clientId: "viewer",
@@ -70,7 +71,7 @@ function HostedPlaytestShell(
   );
 }
 
-function state(controllerClientId: string | null): FoldState {
+function state(controllerClientId: ClientId | null): FoldState {
   return {
     frontDoor: {
       phase: "journey",
@@ -80,7 +81,7 @@ function state(controllerClientId: string | null): FoldState {
     playtestControl: {
       mode: "single-controller",
       controllerClientId:
-        controllerClientId === null ? null : asClientId(controllerClientId),
+        controllerClientId === null ? null : parseClientId(controllerClientId),
     },
     journey: {} as FoldState["journey"],
     battle: null,
@@ -125,7 +126,7 @@ describe("HostedPlaytestShell", () => {
     mocks.clientId = "viewer";
     mocks.connectedClientIds = ["controller", "viewer"];
     mocks.takeControl.mockClear();
-    mocks.state = state("controller");
+    mocks.state = state(parseClientId("controller"));
   });
 
   afterEach(() => {

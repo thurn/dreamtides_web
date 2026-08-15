@@ -20,6 +20,10 @@ import { richText } from "../card/rich-text";
 import { glossaryInfoCard } from "../card/glossary-info-card";
 import { GLOSSARY_IDS } from "../../../data/glossary";
 import { opaque, txa, type LocalizedString } from "@trox/runtime";
+import type {
+  TideId,
+  TutorialJourneyTideId,
+} from "../../../types/identifiers";
 
 /** The tide disc's touch-friendly diameter, in px. */
 export const TIDE_DISC_LG_PX = 40;
@@ -28,7 +32,7 @@ export interface TideDiscProps {
   /** Which of the five tides. Fixes the disc's color and glyph. */
   tide: Tide;
   /** Stable id (a tide deck id) for the `data-tide-disc` QA hook. */
-  id: string;
+  id: TideId | TutorialJourneyTideId;
   /** Display name used by the source and its tide card. */
   label: LocalizedString;
   /** Semantic description revealed by this tide source. */

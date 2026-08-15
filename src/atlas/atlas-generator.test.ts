@@ -16,6 +16,8 @@ import {
   makeTestAtlasNode,
   MINIMAL_SITES_DATA,
   SYNTHETIC_ATLAS_DREAMSCAPES,
+  EARLY_ATLAS_FILL_PROFILE_ID,
+  LATE_ATLAS_FILL_PROFILE_ID,
 } from "../__test-helpers__/atlas-fixtures";
 import { gambleFixture } from "../testing/gamble-fixture";
 import type {
@@ -26,14 +28,12 @@ import type {
   SiteType,
 } from "../types/journey";
 import { LayerName, layerAtOrdinal, layerOrdinal } from "../types/layer-name";
-import { asDreamscapeId } from "../types/identifiers";
-import type { DreamscapeId } from "../types/identifiers";
-import { asDreamsignId, asSiteId } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
-import {
-  asAtlasFillProfileId,
-  type AtlasFillProfileId,
-} from "../types/identifiers";
+import type { AtlasNodeId, DreamscapeId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
+import { type AtlasFillProfileId } from "../types/identifiers";
+import { testDreamsignId } from "../types/test-identities";
+import { testJourneyMutationSource } from "../types/test-identities";
 
 function defaultContext(
   overrides?: Partial<SiteGenerationContext>,
@@ -49,7 +49,7 @@ const TEST_ATLAS_DATA = makeSyntheticAtlasData();
 // Dreamsign ids the known-dreamsign placement can draw from; arbitrary unique
 // strings so the tests do not depend on any real dreamsign data.
 const TEST_DREAMSIGN_POOL = Array.from({ length: 8 }, (_, i) =>
-  asDreamsignId(`test-dreamsign-${String(i)}`),
+  testDreamsignId(`test-dreamsign-${String(i)}`),
 );
 
 let fixtureRandomState = 1;
@@ -200,7 +200,7 @@ describe("generateSiteComposition", () => {
           {
             kind: "remove_shop_sites",
             dreamscapesRemaining: 1,
-            source: "fixture",
+            source: testJourneyMutationSource("fixture"),
           },
         ],
       },
@@ -363,13 +363,13 @@ describe("generateSiteComposition", () => {
 
   it("uses the selected fill profile's exact weights", () => {
     const weightedProfiles = {
-      early: {
-        id: asAtlasFillProfileId("early"),
+      [EARLY_ATLAS_FILL_PROFILE_ID]: {
+        id: EARLY_ATLAS_FILL_PROFILE_ID,
         signatureSiteWeight: 0,
         siteWeights: { Transfiguration: 1, Duplication: 10 },
       },
-      late: {
-        id: asAtlasFillProfileId("late"),
+      [LATE_ATLAS_FILL_PROFILE_ID]: {
+        id: LATE_ATLAS_FILL_PROFILE_ID,
         signatureSiteWeight: 0,
         siteWeights: { Transfiguration: 10, Duplication: 1 },
       },
@@ -397,8 +397,8 @@ describe("generateSiteComposition", () => {
       return atlas.nodes[atlas.bossNodeId].sites[0].type;
     }
 
-    expect(bossFill(asAtlasFillProfileId("early"))).toBe("Duplication");
-    expect(bossFill(asAtlasFillProfileId("late"))).toBe("Transfiguration");
+    expect(bossFill(EARLY_ATLAS_FILL_PROFILE_ID)).toBe("Duplication");
+    expect(bossFill(LATE_ATLAS_FILL_PROFILE_ID)).toBe("Transfiguration");
   });
 
   it("leaves Draft site data attached and other sites unresolved", () => {
@@ -447,14 +447,14 @@ describe("generateSiteComposition", () => {
 // ---------------------------------------------------------------------------
 
 /** Builds a fresh atlas with logging suppressed. */
-function freshAtlas(): DreamAtlas {
+function freshAtlas(): DreamAtlas<true> {
   return generateInitialAtlas(0, defaultContext(), buildContext(), {
     logEvents: false,
   });
 }
 
 /** Returns every node in `atlas` reachable from the start via forward edges. */
-function reachableFromStart(atlas: DreamAtlas): Set<string> {
+function reachableFromStart(atlas: DreamAtlas<true>): Set<string> {
   const seen = new Set<string>([atlas.startingNodeId]);
   const queue = [atlas.startingNodeId];
   while (queue.length > 0) {
@@ -684,14 +684,13 @@ describe("generateInitialAtlas structural invariants", () => {
 
       // Different dreamscapes...
       expect(a.dreamscapeId).not.toBe(b.dreamscapeId);
+      if (a.dreamscapeId === null || b.dreamscapeId === null) {
+        throw new Error("Expected revealed nodes to have dreamscape identities.");
+      }
       // ...and therefore different signature site icons, since each dreamscape
       // has a unique signature site.
-      const siteA = dreamscapesById.get(
-        a.dreamscapeId ?? asDreamscapeId(""),
-      )?.signatureSite;
-      const siteB = dreamscapesById.get(
-        b.dreamscapeId ?? asDreamscapeId(""),
-      )?.signatureSite;
+      const siteA = dreamscapesById.get(a.dreamscapeId)?.signatureSite;
+      const siteB = dreamscapesById.get(b.dreamscapeId)?.signatureSite;
       expect(siteA).toBeDefined();
       expect(siteB).toBeDefined();
       expect(siteA).not.toBe(siteB);
@@ -830,7 +829,7 @@ describe("advanceAtlas", () => {
     const atlas = freshAtlas();
     const result = advanceAtlas(
       atlas,
-      asAtlasNodeId("nonexistent"),
+      parseAtlasNodeId("nonexistent"),
       1,
       defaultContext(),
       buildContext(),
@@ -846,7 +845,7 @@ describe("advanceAtlas", () => {
   // throw here strands the post-victory atlas handoff and blocks progression.
   it("advances a persisted atlas whose unrevealed nodes lack a sites array", () => {
     const atlas = freshAtlas();
-    const persisted: DreamAtlas = {
+    const persisted: DreamAtlas<true> = {
       ...atlas,
       nodes: Object.fromEntries(
         Object.entries(atlas.nodes).map(([id, node]) => {
@@ -896,8 +895,8 @@ describe("advanceAtlas", () => {
     // Capture the navigation path off the intact atlas before stripping, since a
     // stripped atlas can no longer report a node's forward targets. Always take
     // the first forward edge so the walk follows a real start-to-boss route.
-    const path: string[] = [original.startingNodeId];
-    let walkId: string = original.startingNodeId;
+    const path: AtlasNodeId[] = [original.startingNodeId];
+    let walkId: AtlasNodeId = original.startingNodeId;
     while (original.nodes[walkId].forwardIds.length > 0) {
       walkId = original.nodes[walkId].forwardIds[0];
       path.push(walkId);
@@ -942,7 +941,7 @@ describe("advanceAtlas", () => {
       for (const nodeId of path) {
         atlas = advanceAtlas(
           atlas,
-          asAtlasNodeId(nodeId),
+          parseAtlasNodeId(nodeId),
           completionLevel,
           defaultContext(),
           buildContext(),
@@ -966,7 +965,7 @@ describe("advanceAtlas", () => {
     let atlas = freshAtlas();
     const seenStates = new Set<AtlasNodeState>();
 
-    const recordStates = (a: DreamAtlas) => {
+    const recordStates = (a: DreamAtlas<true>) => {
       for (const node of Object.values(a.nodes)) {
         seenStates.add(node.state);
       }
@@ -976,14 +975,14 @@ describe("advanceAtlas", () => {
     // Walk forward layer by layer: complete the current node, then step to one of
     // its now-available forward targets, until the boss (a node with no forward
     // edges) is completed.
-    let currentId: string = atlas.startingNodeId;
+    let currentId: AtlasNodeId = atlas.startingNodeId;
     let completionLevel = 0;
     // Bounded by the fixed 7-layer depth; the guard prevents an infinite loop if
     // the graph were ever malformed.
     for (let step = 0; step < atlas.layers.length + 2; step++) {
       atlas = advanceAtlas(
         atlas,
-        asAtlasNodeId(currentId),
+        currentId,
         completionLevel,
         defaultContext(),
         buildContext(),
@@ -1048,7 +1047,7 @@ describe("advanceAtlas", () => {
         snapshotNodes[id] = node;
       }
     }
-    const snapshot: DreamAtlas = { ...original, nodes: snapshotNodes };
+    const snapshot: DreamAtlas<true> = { ...original, nodes: snapshotNodes };
 
     // Sanity: the layer-1 forward targets really did lose their dreamscapeId key.
     const forwardTargets = original.nodes[original.startingNodeId].forwardIds;
@@ -1083,10 +1082,10 @@ describe("advanceAtlas", () => {
 });
 
 describe("regenerateAtlasForProgress", () => {
-  const countCompleted = (atlas: DreamAtlas) =>
+  const countCompleted = (atlas: DreamAtlas<true>) =>
     Object.values(atlas.nodes).filter((node) => node.state === "completed")
       .length;
-  const countAvailable = (atlas: DreamAtlas) =>
+  const countAvailable = (atlas: DreamAtlas<true>) =>
     Object.values(atlas.nodes).filter((node) => node.state === "available")
       .length;
 
@@ -1177,16 +1176,18 @@ describe("regenerateAtlasForProgress", () => {
      * successor at each step, and returns the ids reached. If the completed
      * nodes form one connected chain, this visits every completed node.
      */
-    const walkCompletedChainFromStart = (atlas: DreamAtlas): string[] => {
-      const visited: string[] = [];
-      let current: string | null = atlas.startingNodeId;
+    const walkCompletedChainFromStart = (
+      atlas: DreamAtlas<true>,
+    ): AtlasNodeId[] => {
+      const visited: AtlasNodeId[] = [];
+      let current: AtlasNodeId | null = atlas.startingNodeId;
       while (current !== null) {
         const node: DreamscapeNode | undefined = atlas.nodes[current];
         if (node === undefined || node.state !== "completed") {
           break;
         }
         visited.push(current);
-        const forwardIds: readonly string[] = node.forwardIds ?? [];
+        const forwardIds: readonly AtlasNodeId[] = node.forwardIds ?? [];
         current =
           forwardIds.find((id) => atlas.nodes[id]?.state === "completed") ??
           null;
@@ -1238,16 +1239,20 @@ describe("edgesCross", () => {
 });
 
 describe("revealedAtlasSite", () => {
-  function makeSite(id: string, type: SiteType, isEnhanced = false): SiteState {
-    return { id: asSiteId(id), type, isEnhanced, isVisited: false };
+  function makeSite(
+    idSeed: string,
+    type: SiteType,
+    isEnhanced = false,
+  ): SiteState {
+    return { id: parseSiteId(idSeed), type, isEnhanced, isVisited: false };
   }
 
   function makeNode(
-    id: string,
+    idSeed: string,
     sites: SiteState[],
     enhancedSiteType: SiteType | null,
   ): DreamscapeNode {
-    return makeTestAtlasNode(id, sites, { enhancedSiteType });
+    return makeTestAtlasNode(idSeed, sites, { enhancedSiteType });
   }
 
   it("never reveals the Battle site even if it is the only marked-enhanced one", () => {

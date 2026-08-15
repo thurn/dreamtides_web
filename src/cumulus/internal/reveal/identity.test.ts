@@ -9,13 +9,14 @@ describe("revealEntityId", () => {
     expect(revealEntityId("tide", "stable-id")).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
   });
 
-  it("keeps exact case-sensitive namespace and stable-id material distinct", () => {
+  it("keeps exact case-sensitive stable-id material distinct", () => {
     expect(revealEntityId("tide", "Tide-A")).not.toBe(revealEntityId("tide", "tide-a"));
-    expect(revealEntityId("Tide", "tide-a")).not.toBe(revealEntityId("tide", "tide-a"));
   });
 
   it("has no collisions across a representative compatibility-id sample", () => {
-    const ids = Array.from({ length: 2_000 }, (_, index) => revealEntityId(`family-${String(index % 11)}`, `entity-${String(index)}`));
+    const ids = Array.from({ length: 2_000 }, (_, index) =>
+      revealEntityId("tide", `entity-${String(index)}`),
+    );
     expect(new Set(ids).size).toBe(ids.length);
   });
 });

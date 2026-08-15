@@ -21,11 +21,12 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { BATTLE_CARD_EFFECTS } from "./battle-card-effects-table";
+import { parseCardId, type CardId } from "../../types/card-identity";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
 interface CatalogEntry {
-  id: string;
+  id: CardId;
   scriptable: boolean;
 }
 
@@ -34,7 +35,15 @@ function loadCatalog(): { cards: CatalogEntry[] } {
     join(REPO_ROOT, "docs", "automation-audit.json"),
     "utf8"
   );
-  return JSON.parse(raw) as { cards: CatalogEntry[] };
+  const parsed = JSON.parse(raw) as {
+    cards: Array<Omit<CatalogEntry, "id"> & { id: unknown }>;
+  };
+  return {
+    cards: parsed.cards.map((card) => ({
+      ...card,
+      id: parseCardId(card.id),
+    })),
+  };
 }
 
 describe("battle-card automation registry coverage", () => {

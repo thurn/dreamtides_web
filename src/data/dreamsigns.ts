@@ -1,21 +1,21 @@
 import type { DreamsignTemplate } from "../types/content";
 import type { Dreamsign } from "../types/journey";
 import {
-  asDreamsignId,
-  asTideId,
+  parseDreamsignId,
+  parseTideId,
   type DreamsignId,
 } from "../types/identifiers";
 
 const DREAMSIGN_JSON_PATH = "/dreamsign-data.json";
 
 interface RawDreamsign {
-  id: string;
+  id: unknown;
   name: string;
   imageName: string;
   imageAlt: string;
   effectDescription: string;
   rarity: DreamsignTemplate["rarity"];
-  tideIds: string[];
+  tideIds: unknown;
   tags?: string[];
 }
 
@@ -28,16 +28,21 @@ export async function loadDreamsignTemplates(): Promise<DreamsignTemplate[]> {
     );
   }
   const raw = (await response.json()) as RawDreamsign[];
-  return raw.map((entry) => ({
-    id: asDreamsignId(entry.id),
-    name: entry.name,
-    effectDescription: entry.effectDescription,
-    imageName: entry.imageName,
-    imageAlt: entry.imageAlt,
-    rarity: entry.rarity,
-    tideIds: entry.tideIds.map(asTideId),
-    tags: entry.tags,
-  }));
+  return raw.map((entry) => {
+    if (!Array.isArray(entry.tideIds)) {
+      throw new Error("Dreamsign tide ids must be an array.");
+    }
+    return {
+      id: parseDreamsignId(entry.id),
+      name: entry.name,
+      effectDescription: entry.effectDescription,
+      imageName: entry.imageName,
+      imageAlt: entry.imageAlt,
+      rarity: entry.rarity,
+      tideIds: entry.tideIds.map(parseTideId),
+      tags: entry.tags,
+    };
+  });
 }
 
 /** Instantiates a collectible Dreamsign from a template. */

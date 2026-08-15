@@ -27,12 +27,7 @@ import type {
   DreamwellCardId,
 } from "../../types/identifiers";
 import type { TutorialActionId } from "../../types/identifiers";
-import {
-  asBattleCardId,
-  asBattleId,
-  asBattleSlotViewId,
-  asDreamwellCardId,
-} from "../../types/identifiers";
+import { parseBattleCardId, parseBattleId, parseBattleSlotViewId } from "../../types/identifiers";
 import { backRankSlotId, frontRankSlotId } from "../../battle/types";
 
 const TUTORIAL_BATTLE_ID = "tutorial-battle";
@@ -263,12 +258,12 @@ function tutorialDeckIds(
   deckSize: number,
 ): readonly BattleCardId[] {
   return Array.from({ length: deckSize }, (_unused, index) =>
-    asBattleCardId(`tutorial-${owner}-deck-${String(index + 1)}`),
+    parseBattleCardId(`tutorial-${owner}-deck-${String(index + 1)}`),
   );
 }
 
 function tutorialDreamwellModel(card: DreamwellCard) {
-  const cardId = asDreamwellCardId(card.id);
+  const cardId = card.id;
   return {
     cardId,
     displaySnapshot: {
@@ -287,7 +282,7 @@ function emptySlots(
   count: number,
 ): readonly MobileBattleSlotView[] {
   return Array.from({ length: count }, (_unused, index) => ({
-    id: asBattleSlotViewId(
+    id: parseBattleSlotViewId(
       rank === "back" ? backRankSlotId(index) : frontRankSlotId(index),
     ),
     card: null,
@@ -1112,7 +1107,7 @@ export function buildTutorialView(
                 ? "dusk"
                 : "day";
       return {
-        battleId: asBattleId(TUTORIAL_BATTLE_ID),
+        battleId: parseBattleId(TUTORIAL_BATTLE_ID),
         perspective: "player",
         aiApproval: null,
         cardPicker: null,

@@ -3,7 +3,7 @@ import { localizedStringSourceEquality } from "../../runtime/localization/testin
 import { resolveSource } from "../../runtime/localization/runtime";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import {
   MINIMAL_ATLAS_DATA,
   MINIMAL_SITES_DATA,
@@ -35,18 +35,18 @@ import {
 import { auguryArchetype } from "../../data/augury-data";
 import type { ChoiceId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
-import { asOfferId } from "../../types/identifiers";
-import { asChoiceId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asMerchantTargetKey } from "../../types/identifiers";
-import { asMerchantCategoryId } from "../../types/identifiers";
+import { parseOfferId } from "../../types/identifiers";
+import { parseChoiceId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseMerchantTargetKey } from "../../types/identifiers";
+import { parseMerchantCategoryId } from "../../types/identifiers";
+import { testCardId, testDreamsignId } from "../../types/test-identities";
 
 const card = makeMerchantTestCard({
-  id: asCardId("81000000-0000-4000-8000-000000000012"),
+  id: testCardId("81000000-0000-4000-8000-000000000012"),
   cardNumber: 12,
-  name: asCardName("Fixture Gift"),
+  name: parseCardName("Fixture Gift"),
 });
 
 function candidate(choiceId: ChoiceId): MerchantChoiceCandidate {
@@ -71,19 +71,19 @@ function candidate(choiceId: ChoiceId): MerchantChoiceCandidate {
 
 function chooserOffer(): MerchantOffer {
   return {
-    offerId: asOfferId("A"),
+    offerId: parseOfferId("A"),
     encounterSignature: "encounter-fixture",
     archetypeId: "fit_card_draft",
     family: "grant",
-    targetKey: asMerchantTargetKey("fixture-target"),
+    targetKey: parseMerchantTargetKey("fixture-target"),
     gameObjects: [],
     choiceRequest: {
       choiceType: "catalogCard",
       candidates: [
-        candidate(asChoiceId("choice-1")),
-        candidate(asChoiceId("choice-2")),
-        candidate(asChoiceId("choice-3")),
-        candidate(asChoiceId("choice-4")),
+        candidate(parseChoiceId("choice-1")),
+        candidate(parseChoiceId("choice-2")),
+        candidate(parseChoiceId("choice-3")),
+        candidate(parseChoiceId("choice-4")),
       ],
     },
   };
@@ -91,12 +91,12 @@ function chooserOffer(): MerchantOffer {
 
 function directOffer(): MerchantOffer {
   return {
-    offerId: asOfferId("B"),
+    offerId: parseOfferId("B"),
     encounterSignature: "encounter-fixture",
     archetypeId: "strong_card",
     family: "grant",
-    targetKey: asMerchantTargetKey(card.id),
-    gameObjects: [candidate(asChoiceId("direct")).gameObjects[0]],
+    targetKey: parseMerchantTargetKey(card.id),
+    gameObjects: [candidate(parseChoiceId("direct")).gameObjects[0]],
     applyPayload: {
       kind: "add_catalog_card",
       cardUuid: card.id,
@@ -108,16 +108,16 @@ function directOffer(): MerchantOffer {
 function encounter(): MerchantEncounter {
   return {
     encounterSignature: "encounter-fixture",
-    siteId: asSiteId("site-fixture"),
+    siteId: parseSiteId("site-fixture"),
     offers: [chooserOffer(), directOffer()],
   };
 }
 
 const mappingCards = [1, 2, 3, 4, 5].map((index) =>
   makeMerchantTestCard({
-    id: asCardId(`82000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    id: testCardId(`82000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
     cardNumber: 100 + index,
-    name: asCardName(`Mapping Fixture ${String(index)}`),
+    name: parseCardName(`Mapping Fixture ${String(index)}`),
     subtype: "Warrior",
     reclaimCost: index === 1 ? 3 : null,
   }),
@@ -156,7 +156,7 @@ function mappedDeckObject(
   };
 }
 
-const deckObject = mappedDeckObject(0, asDeckEntryId("entry-fixture"));
+const deckObject = mappedDeckObject(0, parseDeckEntryId("entry-fixture"));
 
 const mappingContext = {
   atlasData: MINIMAL_ATLAS_DATA,
@@ -183,7 +183,7 @@ function fourCandidates(payloadCopies = 1): MerchantChoiceCandidate[] {
       cardNumber: object.cardNumber,
     };
     return {
-      choiceId: asChoiceId(`mapping-choice-${String(index)}`),
+      choiceId: parseChoiceId(`mapping-choice-${String(index)}`),
       gameObjects: [object],
       applyPayload:
         payloadCopies === 1
@@ -201,11 +201,11 @@ function mappedOffer(
   overrides: Partial<MerchantOffer>,
 ): MerchantOffer {
   return {
-    offerId: asOfferId("A"),
+    offerId: parseOfferId("A"),
     encounterSignature: "mapping-encounter",
     archetypeId,
     family: "grant",
-    targetKey: asMerchantTargetKey("fixture"),
+    targetKey: parseMerchantTargetKey("fixture"),
     gameObjects: [],
     ...overrides,
   };
@@ -220,17 +220,17 @@ const choiceRequest = (
 });
 
 function dreamsignObject(
-  id: string,
+  idSeed: string,
 ): Extract<MerchantGameObject, { objectType: "dreamsign" }> {
   return {
     objectType: "dreamsign",
-    dreamsignId: asDreamsignId(id),
-    displayName: `Dreamsign ${id}`,
+    dreamsignId: testDreamsignId(idSeed),
+    displayName: `Dreamsign ${idSeed}`,
     dreamsignTemplate: {
-      id: asDreamsignId(id),
-      name: `Dreamsign ${id}`,
+      id: testDreamsignId(idSeed),
+      name: `Dreamsign ${idSeed}`,
       effectDescription: "Fixture",
-      imageName: `${id}.png`,
+      imageName: `${idSeed}.png`,
     },
   };
 }
@@ -355,7 +355,7 @@ describe("augury view model", () => {
   it("builds an added site as a canonical non-interactive site-node model", () => {
     const offer = mappedOffer("add_site", {
       family: "site",
-      targetKey: asMerchantTargetKey("Shop"),
+      targetKey: parseMerchantTargetKey("Shop"),
       applyPayload: { kind: "add_site", siteType: "Shop" },
     });
     const offers = buildAuguryOfferViews(
@@ -379,14 +379,14 @@ describe("augury view model", () => {
     expect(
       buildAuguryAcceptRequest(
         encounter(),
-        asOfferId("A"),
-        asChoiceId("choice-2"),
+        parseOfferId("A"),
+        parseChoiceId("choice-2"),
       ),
     ).toEqual({
       encounterSignature: "encounter-fixture",
-      offerId: asOfferId("A"),
+      offerId: parseOfferId("A"),
       archetypeId: "fit_card_draft",
-      choice: { choiceId: asChoiceId("choice-2") },
+      choice: { choiceId: parseChoiceId("choice-2") },
     });
   });
 
@@ -418,7 +418,7 @@ describe("augury view model", () => {
       ],
       [
         mappedOffer("category_draft_known", {
-          targetKey: asMerchantTargetKey(
+          targetKey: parseMerchantTargetKey(
             `type:Character:${mappingCards
               .slice(0, 4)
               .map((value) => value.id)
@@ -487,7 +487,7 @@ describe("augury view model", () => {
       [
         mappedOffer("add_site", {
           family: "site",
-          targetKey: asMerchantTargetKey("Shop"),
+          targetKey: parseMerchantTargetKey("Shop"),
           applyPayload: { kind: "add_site", siteType: "Shop" },
         }),
         "add-site",
@@ -528,7 +528,7 @@ describe("augury view model", () => {
   it("rejects malformed fixed counts and resolves structured category and copy data", () => {
     const category = buildAuguryOfferTileModel(
       mappedOffer("category_draft_known", {
-        targetKey: asMerchantTargetKey(
+        targetKey: parseMerchantTargetKey(
           `type:Character:${mappingCards
             .slice(0, 4)
             .map((value) => value.id)
@@ -580,7 +580,7 @@ describe("augury view model", () => {
     for (const [id, label, expected] of cases) {
       expect(
         projectOfferTileCategory({
-          id: asMerchantCategoryId(id),
+          id: parseMerchantCategoryId(id),
           label,
           memberUuids: [],
         }),

@@ -8,15 +8,16 @@ import {
   useGameState,
 } from "./hooks";
 import type { BattleId, ClientId } from "../types/identifiers";
+import type { StateHash } from "../eventlog/types";
 
 export interface FuzzProbeSnapshot {
   clientId: ClientId;
   confirmedHead: number | null;
-  displayedHash: string;
-  confirmedHash: string;
+  displayedHash: StateHash;
+  confirmedHash: StateHash;
   href: string;
   frontDoorPhase: FoldState["frontDoor"]["phase"];
-  screenType: string;
+  screenType: FoldState["journey"]["screen"]["type"];
   controllerClientId: ClientId | null;
   battleId: BattleId | null;
   displayedState: FoldState;

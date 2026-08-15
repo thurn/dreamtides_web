@@ -1,31 +1,41 @@
 import { describe, expect, it } from "vitest";
+import { testDreamwellCardName } from "../types/test-identities";
 import { parseDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import {
   dreamwellPromptRef,
   resolveDreamwellPromptRef,
 } from "./dreamwell-prompts";
 import { resolveSource } from "../runtime/localization/runtime";
-import { asDreamwellCardId } from "../types/identifiers";
+import {
+  testDreamwellCardId,
+  testDreamwellChoiceKey,
+  testDreamwellPromptKey,
+} from "../types/test-identities";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const CATALOG: readonly DreamwellCard[] = [
   {
-    id: asDreamwellCardId(CARD_ID),
-    name: "Fixture",
+    id: testDreamwellCardId(CARD_ID),
+    name: testDreamwellCardName("Fixture"),
     renderedText: "Fixture rules.",
     order: 1,
     energyAdded: 0,
     cardNumber: 1,
     automation: [
       {
-        key: "choose-value",
+        key: testDreamwellPromptKey("choose-value"),
         title: "Choose {count}",
         subtitle: "Up to {maximum_cost}",
         instructions: "Choose {count} value.",
-        choices: [{ key: "confirm", label: "Confirm {count}" }],
+        choices: [
+          {
+            key: testDreamwellChoiceKey("confirm"),
+            label: "Confirm {count}",
+          },
+        ],
         arguments: [
-          { name: "count", kind: "Count" },
-          { name: "maximum_cost", kind: "MaximumCost" },
+          { name: testDreamwellCardName("count"), kind: "Count" },
+          { name: testDreamwellCardName("maximum_cost"), kind: "MaximumCost" },
         ],
       },
     ],
@@ -39,8 +49,8 @@ describe("Dreamwell prompt references", () => {
       resolveSource(
         resolveDreamwellPromptRef(
           dreamwellPromptRef(
-            asDreamwellCardId(CARD_ID),
-            "choose-value",
+            testDreamwellCardId(CARD_ID),
+            testDreamwellPromptKey("choose-value"),
             "title",
             arguments_,
           ),
@@ -52,11 +62,11 @@ describe("Dreamwell prompt references", () => {
       resolveSource(
         resolveDreamwellPromptRef(
           dreamwellPromptRef(
-            asDreamwellCardId(CARD_ID),
-            "choose-value",
+            testDreamwellCardId(CARD_ID),
+            testDreamwellPromptKey("choose-value"),
             "choice",
             arguments_,
-            "confirm",
+            testDreamwellChoiceKey("confirm"),
           ),
           CATALOG,
         ),
@@ -67,15 +77,18 @@ describe("Dreamwell prompt references", () => {
   it("rejects missing prompts and invalid semantic argument types", () => {
     expect(() =>
       resolveDreamwellPromptRef(
-        dreamwellPromptRef(asDreamwellCardId(CARD_ID), "missing"),
+        dreamwellPromptRef(
+          testDreamwellCardId(CARD_ID),
+          testDreamwellPromptKey("missing"),
+        ),
         CATALOG,
       ),
     ).toThrow(/Unknown Dreamwell prompt/u);
     expect(() =>
       resolveDreamwellPromptRef(
         dreamwellPromptRef(
-          asDreamwellCardId(CARD_ID),
-          "choose-value",
+          testDreamwellCardId(CARD_ID),
+          testDreamwellPromptKey("choose-value"),
           "title",
           {
             count: "two",
@@ -92,7 +105,7 @@ describe("Dreamwell prompt references", () => {
       ...card,
       automation: card.automation?.map((prompt) => ({
         ...prompt,
-        arguments: [{ name: "count", kind: "Unknown" }],
+        arguments: [{ name: testDreamwellCardName("count"), kind: "Unknown" }],
       })),
     }));
     expect(() => parseDreamwellCards(malformed)).toThrow(/invalid argument/u);

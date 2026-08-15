@@ -61,6 +61,7 @@ import {
   TideDiscReveal,
   type DreamAvatarTideView,
 } from "./journey-start-shared";
+import type { DreamAvatarId } from "../../types/identifiers";
 import { DeckViewerBackdrop, GridPlaceholder } from "./deck-viewer-shared";
 import {
   type DesktopDeckFilterSort,
@@ -78,7 +79,7 @@ import {
 /** The DreamAvatar shown in the sidebar: the portrait's visual plus rules text. */
 export interface DeckDreamAvatarView extends DreamAvatarVisual {
   /** Stable DreamAvatar UUID. */
-  id: string;
+  id: DreamAvatarId;
   /** The DreamAvatar's ability text, revealed through the shared InfoCard. */
   renderedText: LocalizedString;
 }
@@ -672,7 +673,7 @@ function ControlBar({
         }))}
         value={filterSort.sort}
         onChange={(value) =>
-          onChange({ sort: value as DesktopDeckFilterSort["sort"] })
+          onChange({ sort: value })
         }
       />
       <SegmentedControl

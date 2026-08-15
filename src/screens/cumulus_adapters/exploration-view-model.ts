@@ -35,7 +35,7 @@ import {
   siteTypeIcon,
   siteTypeName,
 } from "../../data/sites-data";
-import { asCardId } from "../../types/card-identity";
+import { parseCardId } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
 import type {
@@ -65,11 +65,12 @@ import type { CardId } from "../../types/card-identity";
 import type { DreamsignId } from "../../types/identifiers";
 import type { DreamAvatarId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
+import type { IdentityRecord } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asSelectionKey } from "../../types/identifiers";
-import { asRewardCandidateKey } from "../../types/identifiers";
+import { parseDreamsignId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseSelectionKey } from "../../types/identifiers";
+import { parseRewardCandidateKey } from "../../types/identifiers";
 
 /** Resolve Layaway, the resident guide for Exploration. */
 export function resolveExplorationGuide(
@@ -110,10 +111,9 @@ function matchesPredicate(
 }
 
 function cardById(content: JourneyContent, cardId: CardId): CardData | null {
-  const normalized = cardId.toLowerCase();
   return (
     [...content.cardDatabase.values()].find(
-      (card) => card.id.toLowerCase() === normalized,
+      (card) => card.id === cardId,
     ) ?? null
   );
 }
@@ -128,13 +128,12 @@ function dreamsignById(
   content: JourneyContent,
   dreamsignId: DreamsignId,
 ): ReturnType<typeof createDreamsign> | null {
-  const normalized = dreamsignId.toLowerCase();
   const customDreamsign = content.exploration?.customDreamsigns.find(
-    (dreamsign) => dreamsign.id?.toLowerCase() === normalized,
+    (dreamsign) => dreamsign.id === dreamsignId,
   );
   if (customDreamsign !== undefined) return customDreamsign;
   const template = content.dreamsignTemplates.find(
-    (dreamsign) => dreamsign.id.toLowerCase() === normalized,
+    (dreamsign) => dreamsign.id === dreamsignId,
   );
   return template === undefined ? null : createDreamsign(template);
 }
@@ -275,7 +274,7 @@ function preparedMultiCardTransfigurationCandidates(
     const candidate = candidatesByEntryId.get(binding.entryId);
     if (
       candidate === undefined ||
-      candidate.model.cardId.toLowerCase() !== binding.cardId.toLowerCase()
+      candidate.model.cardId !== binding.cardId
     ) {
       return [];
     }
@@ -317,19 +316,21 @@ function preparedMultiCardReplacementCards(
     if (entry === undefined) return [];
     const choice = deckCardChoice(entry, content);
     return choice !== null &&
-      choice.model.cardId.toLowerCase() === binding.sourceCardId.toLowerCase()
+      choice.model.cardId === binding.sourceCardId
       ? [choice]
       : [];
   });
 }
 
 function offeredCards(
-  ids: readonly string[],
+  ids: readonly CardId[],
   content: JourneyContent,
-  transfigurationByCardId?: Readonly<Record<string, TransfigurationType>>,
+  transfigurationByCardId?: Readonly<
+    IdentityRecord<CardId, TransfigurationType>
+  >,
 ): readonly ExplorationCardChoiceView<CardId>[] {
   return ids.flatMap((id) => {
-    const card = cardById(content, asCardId(id));
+    const card = cardById(content, id);
     if (card === null) return [];
     const transfiguration = transfigurationByCardId?.[card.id];
     if (transfiguration === undefined) {
@@ -380,7 +381,7 @@ function dreamsignChoices(
   content: JourneyContent,
 ): readonly ReturnType<typeof localizedDreamsign>[] {
   return ids.flatMap((id) => {
-    const dreamsign = dreamsignById(content, asDreamsignId(id));
+    const dreamsign = dreamsignById(content, parseDreamsignId(id));
     if (dreamsign?.id === undefined) return [];
     return [localizedDreamsign(dreamsign, "Exploration Dreamsign choice")];
   });
@@ -437,53 +438,42 @@ function dreamsignFlowFollowup(
   }
 }
 
-function deckFollowup(
+function deckEntryFollowup(
   title: LocalizedString,
   subtitle: LocalizedString,
   cards: readonly ExplorationCardChoiceView<DeckEntryId>[],
   mode: "single" | "exact" | "purge-and-copy",
   selectionOperation: ExplorationCardSelectionOperation | undefined,
-  count?: number,
-  selectionKey?: "entryIds",
-): ExplorationFollowupView;
-function deckFollowup(
+  count = 1,
+): ExplorationFollowupView {
+  return {
+    kind: "cards",
+    title,
+    subtitle,
+    cards,
+    mode,
+    selectionKey: "entryIds",
+    ...(selectionOperation === undefined ? {} : { selectionOperation }),
+    min: count,
+    max: count,
+  };
+}
+
+function catalogCardFollowup(
   title: LocalizedString,
   subtitle: LocalizedString,
   cards: readonly ExplorationCardChoiceView<CardId>[],
   mode: "single" | "exact",
   selectionOperation: ExplorationCardSelectionOperation | undefined,
-  count: number,
-  selectionKey: "cardIds",
-): ExplorationFollowupView;
-function deckFollowup(
-  title: LocalizedString,
-  subtitle: LocalizedString,
-  cards: readonly ExplorationCardChoiceView[],
-  mode: "single" | "exact" | "purge-and-copy",
-  selectionOperation: ExplorationCardSelectionOperation | undefined,
   count = 1,
-  selectionKey: "entryIds" | "cardIds" = "entryIds",
 ): ExplorationFollowupView {
-  if (selectionKey === "cardIds") {
-    return {
-      kind: "cards",
-      title,
-      subtitle,
-      cards: cards as readonly ExplorationCardChoiceView<CardId>[],
-      mode: mode === "purge-and-copy" ? "exact" : mode,
-      selectionKey,
-      ...(selectionOperation === undefined ? {} : { selectionOperation }),
-      min: count,
-      max: count,
-    };
-  }
   return {
     kind: "cards",
     title,
     subtitle,
-    cards: cards as readonly ExplorationCardChoiceView<DeckEntryId>[],
+    cards,
     mode,
-    selectionKey: "entryIds",
+    selectionKey: "cardIds",
     ...(selectionOperation === undefined ? {} : { selectionOperation }),
     min: count,
     max: count,
@@ -617,7 +607,7 @@ function followupForAction(
   const hasMintedDeckCard = explorationActionUsesOfferedDeckTarget(action);
   switch (action.effectKind) {
     case "purge-and-copy":
-      return deckFollowup(
+      return deckEntryFollowup(
         configuredFollowupCopy(
           action,
           content,
@@ -694,7 +684,7 @@ function followupForAction(
         max: action.count ?? 1,
       };
     case "purge-for-essence":
-      return deckFollowup(
+      return deckEntryFollowup(
         configuredFollowupCopy(
           action,
           content,
@@ -713,7 +703,7 @@ function followupForAction(
       );
     case "change-subtype-selected":
       if (hasMintedDeckCard) return { kind: "none" };
-      return deckFollowup(
+      return deckEntryFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
         configuredFollowupCopy(
           action,
@@ -727,7 +717,7 @@ function followupForAction(
       );
     case "copy-selected-card":
       if (hasMintedDeckCard) return { kind: "none" };
-      return deckFollowup(
+      return deckEntryFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
         configuredFollowupCopy(
           action,
@@ -740,7 +730,7 @@ function followupForAction(
         "copy",
       );
     case "copy-selected-cards":
-      return deckFollowup(
+      return deckEntryFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
         configuredFollowupCopy(
           action,
@@ -754,7 +744,7 @@ function followupForAction(
         action.count ?? 2,
       );
     case "copy-offered-deck-card":
-      return deckFollowup(
+      return deckEntryFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
         configuredFollowupCopy(
           action,
@@ -791,7 +781,7 @@ function followupForAction(
           max: Math.min(action.count ?? 1, cards.length),
         };
       }
-      return deckFollowup(
+      return deckEntryFollowup(
         configuredFollowupCopy(
           action,
           content,
@@ -814,7 +804,7 @@ function followupForAction(
         "purge",
       );
     case "replace-selected-with-card":
-      return deckFollowup(
+      return deckEntryFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
         configuredFollowupCopy(
           action,
@@ -828,7 +818,7 @@ function followupForAction(
       );
     case "change-card-type-selected":
       if (hasMintedDeckCard) return { kind: "none" };
-      return deckFollowup(
+      return deckEntryFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
         configuredFollowupCopy(
           action,
@@ -869,7 +859,7 @@ function followupForAction(
           max: action.count ?? 1,
         };
       }
-      return deckFollowup(
+      return deckEntryFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
         configuredFollowupCopy(
           action,
@@ -891,7 +881,7 @@ function followupForAction(
         "transfigure",
       );
     case "draft-card":
-      return deckFollowup(
+      return catalogCardFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
         configuredFollowupCopy(
           action,
@@ -903,10 +893,9 @@ function followupForAction(
         "single",
         undefined,
         1,
-        "cardIds",
       );
     case "transfigured-card-draft":
-      return deckFollowup(
+      return catalogCardFollowup(
         configuredFollowupCopy(action, content, "followupTitle", action.label),
         configuredFollowupCopy(
           action,
@@ -922,7 +911,6 @@ function followupForAction(
         "single",
         undefined,
         1,
-        "cardIds",
       );
     case "gain-offered-card":
     case "add-site":
@@ -1737,7 +1725,7 @@ function hasUsableStarterCardTransfigurationPreparation(
         entry !== undefined &&
         base !== undefined &&
         hasStarterCardRole(base) &&
-        base.id.toLowerCase() === binding.cardId.toLowerCase()
+        base.id === binding.cardId
       );
     });
   if (
@@ -1750,7 +1738,7 @@ function hasUsableStarterCardTransfigurationPreparation(
   const eligibleCardIdByEntryId = new Map(
     preparation.eligibleStarterCards.map((binding) => [
       binding.entryId,
-      binding.cardId.toLowerCase(),
+      binding.cardId,
     ]),
   );
   if (
@@ -1764,7 +1752,7 @@ function hasUsableStarterCardTransfigurationPreparation(
           : content.cardDatabase.get(entry.cardNumber);
       return (
         eligibleCardIdByEntryId.get(target.entryId) !==
-          target.cardId.toLowerCase() ||
+          target.cardId ||
         base === undefined ||
         (entry?.transfiguration !== null &&
           entry?.transfiguration !== target.transfiguration) ||
@@ -1856,7 +1844,7 @@ function hasUsableMultiCardTransfigurationPreparation(
   ) {
     return false;
   }
-  const eligibleEntryIds = new Set<string>();
+  const eligibleEntryIds = new Set<DeckEntryId>();
   const validEligibleCards = preparation.eligibleCards.every((binding) => {
     if (
       eligibleEntryIds.has(binding.entryId) ||
@@ -1878,7 +1866,7 @@ function hasUsableMultiCardTransfigurationPreparation(
       base === undefined ||
       (entry.transfiguration !== null &&
         !binding.transfigurations.includes(entry.transfiguration)) ||
-      base.id.toLowerCase() !== binding.cardId.toLowerCase() ||
+      base.id !== binding.cardId ||
       (action.predicate !== undefined &&
         !matchesPredicate(base, action.predicate, content))
     ) {
@@ -1925,7 +1913,7 @@ function hasUsableMultiCardTransfigurationPreparation(
       const binding = eligibleByEntryId.get(target.entryId);
       return (
         binding === undefined ||
-        binding.cardId.toLowerCase() !== target.cardId.toLowerCase() ||
+        binding.cardId !== target.cardId ||
         !binding.transfigurations.includes(target.transfiguration)
       );
     })
@@ -1980,7 +1968,7 @@ function hasUsableMultiCardReplacementPreparation(
   ) {
     return false;
   }
-  const sourceIds = new Set<string>();
+  const sourceIds = new Set<DeckEntryId>();
   return preparation.bindings.every((binding) => {
     if (sourceIds.has(binding.sourceEntryId)) return false;
     sourceIds.add(binding.sourceEntryId);
@@ -1991,15 +1979,14 @@ function hasUsableMultiCardReplacementPreparation(
     const replacement = cardById(content, binding.replacementCardId);
     return (
       source !== null &&
-      source.model.cardId.toLowerCase() ===
-        binding.sourceCardId.toLowerCase() &&
+      source.model.cardId === binding.sourceCardId &&
       matchesPredicate(
         source.model.displaySnapshot,
         preparation.predicate,
         content,
       ) &&
       replacement !== null &&
-      replacement.id.toLowerCase() !== binding.sourceCardId.toLowerCase() &&
+      replacement.id !== binding.sourceCardId &&
       matchesPredicate(replacement, preparation.predicate, content)
     );
   });
@@ -2052,7 +2039,7 @@ function hasUsableRandomDeckTargetPreparation(
   ) {
     return false;
   }
-  const eligibleIds = new Set<string>();
+  const eligibleIds = new Set<DeckEntryId>();
   const validEligible = preparation.eligibleCards.every((binding) => {
     if (eligibleIds.has(binding.entryId)) return false;
     eligibleIds.add(binding.entryId);
@@ -2062,7 +2049,7 @@ function hasUsableRandomDeckTargetPreparation(
     const card = entry === undefined ? null : deckCardChoice(entry, content);
     if (
       card === null ||
-      card.model.cardId.toLowerCase() !== binding.cardId.toLowerCase()
+      card.model.cardId !== binding.cardId
     ) {
       return false;
     }
@@ -2089,7 +2076,7 @@ function hasUsableRandomDeckTargetPreparation(
       preparation.eligibleCards.some(
         (binding) =>
           binding.entryId === target.entryId &&
-          binding.cardId.toLowerCase() === target.cardId.toLowerCase(),
+          binding.cardId === target.cardId,
       ),
     )
   );
@@ -2130,7 +2117,7 @@ function hasUsableDisclosedDeckTargetPreparation(
   ) {
     return false;
   }
-  const uniqueEligible = new Set<string>();
+  const uniqueEligible = new Set<DeckEntryId>();
   if (
     !preparation.eligibleCards.every((binding) => {
       if (uniqueEligible.has(binding.entryId)) return false;
@@ -2141,7 +2128,7 @@ function hasUsableDisclosedDeckTargetPreparation(
       const card = entry === undefined ? null : deckCardChoice(entry, content);
       return (
         card !== null &&
-        card.model.cardId.toLowerCase() === binding.cardId.toLowerCase() &&
+        card.model.cardId === binding.cardId &&
         (allowResolvedTypeChange ||
           card.model.displaySnapshot.cardType !== action.cardType)
       );
@@ -2152,7 +2139,7 @@ function hasUsableDisclosedDeckTargetPreparation(
   return preparation.eligibleCards.some(
     (binding) =>
       binding.entryId === target.entryId &&
-      binding.cardId.toLowerCase() === target.cardId.toLowerCase(),
+      binding.cardId === target.cardId,
   );
 }
 
@@ -2188,7 +2175,7 @@ function hasUsableCompoundActionPreparation(
     const entry = state.deck.find((candidate) => candidate.entryId === entryId);
     const card = entry === undefined ? null : deckCardChoice(entry, content);
     return card !== null &&
-      card.model.cardId.toLowerCase() === cardId.toLowerCase()
+      card.model.cardId === cardId
       ? card
       : null;
   };
@@ -2214,7 +2201,7 @@ function hasUsableCompoundActionPreparation(
           const card = preparation.allCards[index];
           return (
             card !== undefined &&
-            card.cardId.toLowerCase() === target.cardId.toLowerCase() &&
+            card.cardId === target.cardId &&
             card.positiveForms.includes(target.transfiguration) &&
             currentCard(target.entryId, target.cardId) !== null
           );
@@ -2247,8 +2234,8 @@ function hasUsableCompoundActionPreparation(
         preparation.eligiblePurgeTargets.some(
           (candidate) =>
             candidate.entryId === preparation.target?.entryId &&
-            candidate.cardId.toLowerCase() ===
-              preparation.target.cardId.toLowerCase() &&
+            candidate.cardId ===
+              preparation.target.cardId &&
             candidate.effectiveCardType ===
               preparation.target.effectiveCardType,
         ) &&
@@ -2318,7 +2305,7 @@ function hasUsableCompoundActionPreparation(
             preparation.eligibleCards.some(
               (card) =>
                 card.entryId === target.entryId &&
-                card.cardId.toLowerCase() === target.cardId.toLowerCase(),
+                card.cardId === target.cardId,
             ),
         )
       );
@@ -2400,7 +2387,7 @@ function actionView(
       siteInsertionPreparation !== undefined &&
       offer.canonicalMechanicId === "add-site" &&
       offer.selectionPolicyId === "fixed" &&
-      offer.selectionKey === asSelectionKey(action.id) &&
+      offer.selectionKey === parseSelectionKey(action.id) &&
       offer.selectionSignature === siteInsertionPreparation.planSignature &&
       offer.selectionTrace === undefined &&
       offer.selectionTraces === undefined &&
@@ -2433,16 +2420,16 @@ function actionView(
       followup.kind === "site-types" &&
       offer.canonicalMechanicId === "add-site" &&
       offer.selectionPolicyId === "site-uniform" &&
-      offer.selectionKey === asSelectionKey(action.id) &&
+      offer.selectionKey === parseSelectionKey(action.id) &&
       offer.selectionSignature === siteTypeChoicePreparation.planSignature &&
       offer.selectionTrace !== undefined &&
       siteTypeChoicePreparation.selectorSignature.length > 0 &&
       offer.selectionTrace.mechanicId === "add-site" &&
       offer.selectionTrace.policyId === "site-uniform" &&
-      offer.selectionTrace.selectionKey === asSelectionKey(action.id) &&
+      offer.selectionTrace.selectionKey === parseSelectionKey(action.id) &&
       sameOrderedIds(
         offer.selectionTrace.selectedKeys,
-        preparedSiteTypes.map(asRewardCandidateKey),
+        preparedSiteTypes.map(parseRewardCandidateKey),
       ) &&
       offer.selectionTraces === undefined &&
       offer.offeredSiteType === undefined &&
@@ -2674,7 +2661,7 @@ function persistedSelectionIds(
   const entryIds = resolution.selection?.entryIds;
   return Array.isArray(entryIds) &&
     entryIds.every((entryId): entryId is string => typeof entryId === "string")
-    ? entryIds.map(asDeckEntryId)
+    ? entryIds.map(parseDeckEntryId)
     : null;
 }
 
@@ -2685,7 +2672,7 @@ function persistedSelectionCardIds(
   return Array.isArray(cardIds) &&
     cardIds.every((cardId): cardId is string => typeof cardId === "string") &&
     new Set(cardIds).size === cardIds.length
-    ? cardIds.map(asCardId)
+    ? cardIds.map(parseCardId)
     : null;
 }
 
@@ -2712,7 +2699,7 @@ function resolvedTransfigurationViews(
     if (
       entry === undefined ||
       base === undefined ||
-      base.id.toLowerCase() !== mapping.cardId.toLowerCase() ||
+      base.id !== mapping.cardId ||
       mapping.beforeTransfiguration !== null ||
       entry.transfiguration !== mapping.afterTransfiguration
     ) {
@@ -2820,7 +2807,7 @@ function compoundActionRewardForResolution(
     if (
       entry === undefined ||
       base === undefined ||
-      base.id.toLowerCase() !== mapping.cardId.toLowerCase() ||
+      base.id !== mapping.cardId ||
       JSON.stringify(entry.keywordModification ?? null) !==
         JSON.stringify(mapping.after)
     ) {
@@ -2885,10 +2872,10 @@ function compoundActionRewardForResolution(
       copyEntry === undefined ? null : deckCardChoice(copyEntry, content);
     return source !== null &&
       copy !== null &&
-      source.model.cardId.toLowerCase() ===
-        mapping.sourceCardId.toLowerCase() &&
-      copy.model.cardId.toLowerCase() === mapping.mintedCardId.toLowerCase() &&
-      source.model.cardId.toLowerCase() === copy.model.cardId.toLowerCase()
+      source.model.cardId ===
+        mapping.sourceCardId &&
+      copy.model.cardId === mapping.mintedCardId &&
+      source.model.cardId === copy.model.cardId
       ? [{ source, copy }]
       : [];
   });
@@ -2917,7 +2904,7 @@ function compoundActionRewardForResolution(
       return (
         target !== undefined &&
         mapping.entryId === target.entryId &&
-        mapping.cardId.toLowerCase() === target.cardId.toLowerCase() &&
+        mapping.cardId === target.cardId &&
         mapping.afterTransfiguration === target.transfiguration
       );
     });
@@ -2961,8 +2948,8 @@ function compoundActionRewardForResolution(
         sameOrderedIds(selectedIds, [preparation.target.entryId]) &&
         purged.length === 1 &&
         purged[0]?.entryId === preparation.target.entryId &&
-        purged[0]?.model.cardId.toLowerCase() ===
-          preparation.target.cardId.toLowerCase() &&
+        purged[0]?.model.cardId ===
+          preparation.target.cardId &&
         matchesPreparedTransfigurations(preparation.companionTargets) &&
         sameOrderedIds(resolution.affectedEntryIds, [
           preparation.target.entryId,
@@ -2997,7 +2984,7 @@ function compoundActionRewardForResolution(
           return (
             target !== undefined &&
             mapping.entryId === target.entryId &&
-            mapping.cardId.toLowerCase() === target.cardId.toLowerCase() &&
+            mapping.cardId === target.cardId &&
             JSON.stringify(mapping.after) ===
               JSON.stringify({ ...(mapping.before ?? {}), fast: true })
           );
@@ -3040,7 +3027,7 @@ function compoundActionRewardForResolution(
           const prepared = selectedPrepared[index];
           return (
             prepared !== undefined &&
-            mapping.cardId.toLowerCase() === prepared.cardId.toLowerCase() &&
+            mapping.cardId === prepared.cardId &&
             mapping.afterTransfiguration === prepared.transfiguration
           );
         }) &&
@@ -3087,10 +3074,10 @@ function compoundActionRewardForResolution(
         preparation.targets.some((target) => target.entryId === selectedId) &&
         purged.length === 1 &&
         purged[0]?.entryId === selectedId &&
-        purged[0]?.model.cardId.toLowerCase() ===
+        purged[0]?.model.cardId ===
           preparation.targets
             .find((target) => target.entryId === selectedId)
-            ?.cardId.toLowerCase() &&
+            ?.cardId &&
         matchesPreparedTransfigurations(companionTargets) &&
         sameOrderedIds(resolution.affectedEntryIds, [
           selectedId,
@@ -3104,9 +3091,9 @@ function compoundActionRewardForResolution(
           return (
             target !== undefined &&
             mapping.sourceEntryId === target.entryId &&
-            mapping.sourceCardId.toLowerCase() ===
-              target.cardId.toLowerCase() &&
-            mapping.mintedCardId.toLowerCase() === target.cardId.toLowerCase()
+            mapping.sourceCardId ===
+              target.cardId &&
+            mapping.mintedCardId === target.cardId
           );
         }) &&
         sameOrderedIds(
@@ -3224,14 +3211,14 @@ function multiCardReplacementRewardForResolution(
       prepared === undefined ||
       source === null ||
       replacement === null ||
-      prepared.sourceCardId.toLowerCase() !==
-        mapping.sourceCardId.toLowerCase() ||
-      prepared.replacementCardId.toLowerCase() !==
-        mapping.replacementCardId.toLowerCase() ||
-      source.model.cardId.toLowerCase() !==
-        mapping.sourceCardId.toLowerCase() ||
-      replacement.model.cardId.toLowerCase() !==
-        mapping.replacementCardId.toLowerCase()
+      prepared.sourceCardId !==
+        mapping.sourceCardId ||
+      prepared.replacementCardId !==
+        mapping.replacementCardId ||
+      source.model.cardId !==
+        mapping.sourceCardId ||
+      replacement.model.cardId !==
+        mapping.replacementCardId
     ) {
       return [];
     }
@@ -3290,8 +3277,8 @@ function randomFixedCardReplacementRewardForResolution(
     resolution.selection === undefined ||
     Object.keys(resolution.selection).length !== 0 ||
     mapping.sourceEntryId !== target.entryId ||
-    mapping.sourceCardId.toLowerCase() !== target.cardId.toLowerCase() ||
-    mapping.replacementCardId.toLowerCase() !== action.cardId.toLowerCase() ||
+    mapping.sourceCardId !== target.cardId ||
+    mapping.replacementCardId !== action.cardId ||
     sourceSnapshot.entryId !== mapping.sourceEntryId ||
     !sameOrderedIds(resolution.affectedEntryIds, [mapping.sourceEntryId]) ||
     !sameOrderedIds(resolution.purgedEntryIds ?? [], [mapping.sourceEntryId]) ||
@@ -3314,9 +3301,9 @@ function randomFixedCardReplacementRewardForResolution(
   if (
     purged === null ||
     gained === null ||
-    purged.model.cardId.toLowerCase() !== mapping.sourceCardId.toLowerCase() ||
-    gained.model.cardId.toLowerCase() !==
-      mapping.replacementCardId.toLowerCase()
+    purged.model.cardId !== mapping.sourceCardId ||
+    gained.model.cardId !==
+      mapping.replacementCardId
   ) {
     return null;
   }
@@ -3387,11 +3374,11 @@ function randomCardCopiesRewardForResolution(
       target === undefined ||
       source === null ||
       copy === null ||
-      target.cardId.toLowerCase() !== mapping.sourceCardId.toLowerCase() ||
-      source.model.cardId.toLowerCase() !==
-        mapping.sourceCardId.toLowerCase() ||
-      copy.model.cardId.toLowerCase() !== mapping.mintedCardId.toLowerCase() ||
-      mapping.sourceCardId.toLowerCase() !== mapping.mintedCardId.toLowerCase()
+      target.cardId !== mapping.sourceCardId ||
+      source.model.cardId !==
+        mapping.sourceCardId ||
+      copy.model.cardId !== mapping.mintedCardId ||
+      mapping.sourceCardId !== mapping.mintedCardId
     ) {
       return [];
     }
@@ -3485,8 +3472,8 @@ function cardTypeChangesRewardForResolution(
       target === undefined ||
       entry === undefined ||
       base === undefined ||
-      target.cardId.toLowerCase() !== mapping.cardId.toLowerCase() ||
-      base.id.toLowerCase() !== mapping.cardId.toLowerCase() ||
+      target.cardId !== mapping.cardId ||
+      base.id !== mapping.cardId ||
       mapping.beforeCardType === mapping.afterCardType ||
       mapping.afterCardType !== action.cardType ||
       mapping.afterTypeChange.cardType !== mapping.afterCardType ||
@@ -3577,7 +3564,7 @@ function multiCardTransfigurationRewardForResolution(
           const target = preparation.targets[index];
           return (
             target === undefined ||
-            mapping.cardId.toLowerCase() !== target.cardId.toLowerCase() ||
+            mapping.cardId !== target.cardId ||
             mapping.afterTransfiguration !== target.transfiguration
           );
         }))) ||
@@ -3604,8 +3591,8 @@ function multiCardTransfigurationRewardForResolution(
       binding === undefined ||
       entry === undefined ||
       base === undefined ||
-      mapping.cardId.toLowerCase() !== binding.cardId.toLowerCase() ||
-      mapping.cardId.toLowerCase() !== base.id.toLowerCase() ||
+      mapping.cardId !== binding.cardId ||
+      mapping.cardId !== base.id ||
       mapping.beforeTransfiguration !== null ||
       !binding.transfigurations.includes(mapping.afterTransfiguration) ||
       entry.transfiguration !== mapping.afterTransfiguration
@@ -3704,8 +3691,8 @@ function starterCardTransfigurationRewardForResolution(
       entry === undefined ||
       base === undefined ||
       !hasStarterCardRole(base) ||
-      mapping.cardId.toLowerCase() !== base.id.toLowerCase() ||
-      mapping.cardId.toLowerCase() !== target.cardId.toLowerCase() ||
+      mapping.cardId !== base.id ||
+      mapping.cardId !== target.cardId ||
       mapping.beforeTransfiguration !== null ||
       mapping.afterTransfiguration !== target.transfiguration ||
       entry.transfiguration !== mapping.afterTransfiguration
@@ -3717,8 +3704,8 @@ function starterCardTransfigurationRewardForResolution(
     if (
       before === null ||
       after === null ||
-      before.model.cardId.toLowerCase() !== mapping.cardId.toLowerCase() ||
-      after.model.cardId.toLowerCase() !== mapping.cardId.toLowerCase() ||
+      before.model.cardId !== mapping.cardId ||
+      after.model.cardId !== mapping.cardId ||
       before.model.transfiguration !== undefined ||
       after.model.transfiguration?.type !== mapping.afterTransfiguration
     ) {
@@ -4510,7 +4497,7 @@ function rewardForResolution(
             if (card === null) return [];
             return [
               {
-                entryId: asDeckEntryId(
+                entryId: parseDeckEntryId(
                   resolution.purgedEntryIds?.[index] ??
                     `purged:${String(index)}:${card.id}`,
                 ),
@@ -4521,9 +4508,8 @@ function rewardForResolution(
           })
         : [];
   const dreamsigns = resolution.gainedDreamsignIds.flatMap((dreamsignId) => {
-    const normalized = dreamsignId.toLowerCase();
     const dreamsign = state.dreamsigns.find(
-      (candidate) => candidate.id?.toLowerCase() === normalized,
+      (candidate) => candidate.id === dreamsignId,
     );
     return dreamsign === undefined
       ? []
@@ -4610,7 +4596,7 @@ export function buildExplorationSiteView(params: {
     scene,
     fullArt: artRef.explorationCard(sourceCard.imageNumber),
     guide: projectGuideView(params.guide, params.guideLine),
-    card: { cardId: asCardId(sourceCard.id), displaySnapshot: sourceCard },
+    card: { cardId: sourceCard.id, displaySnapshot: sourceCard },
     narrative: localizedAuthoredMessage(encounter.prose),
     actions,
     resolvedActionId: params.runtime.resolution?.actionId ?? null,

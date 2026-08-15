@@ -47,7 +47,7 @@ function array(value, file, path) {
   return value;
 }
 
-function string(value, file, path) {
+function requiredString(value, file, path) {
   if (typeof value !== "string" || value.trim() === "") {
     fail(file, path, "expected a non-empty string");
   }
@@ -65,7 +65,7 @@ function isSourceMessageRef(value) {
 }
 
 function localized(value, file, path) {
-  return isSourceMessageRef(value) ? value : string(value, file, path);
+  return isSourceMessageRef(value) ? value : requiredString(value, file, path);
 }
 
 function boolean(value, file, path) {
@@ -91,7 +91,7 @@ function number(value, file, path, { min = 0, max, integer = true } = {}) {
 }
 
 function exactIdentity(value, expected, file, path) {
-  const result = string(value, file, path);
+  const result = requiredString(value, file, path);
   if (result !== expected) fail(file, path, `expected ${expected}`);
   return result;
 }
@@ -152,7 +152,7 @@ function dialogueLines(
 }
 
 function siteType(value, file, path) {
-  const result = string(value, file, path);
+  const result = requiredString(value, file, path);
   if (!SITE_TYPE_SET.has(result))
     fail(file, path, `unknown site type ${result}`);
   return result;
@@ -201,20 +201,20 @@ export function compileDreamGuidesData(sourceValue, catalogs = {}) {
     if (dialogue.site === undefined)
       fail(file, `${path}.dialogue`, "missing site context");
     const normalized = {
-      id: string(guide.id, file, `${path}.id`),
-      name: string(guide.name, file, `${path}.name`),
-      homeDreamscapeId: string(
+      id: requiredString(guide.id, file, `${path}.id`),
+      name: requiredString(guide.name, file, `${path}.name`),
+      homeDreamscapeId: requiredString(
         guide["home-dreamscape-id"],
         file,
         `${path}.home-dreamscape-id`,
       ),
       siteType: siteType(guide["site-type"], file, `${path}.site-type`),
-      portraitSource: string(
+      portraitSource: requiredString(
         guide["portrait-source"],
         file,
         `${path}.portrait-source`,
       ),
-      homeSpecialty: string(
+      homeSpecialty: requiredString(
         guide["home-specialty"],
         file,
         `${path}.home-specialty`,
@@ -401,7 +401,7 @@ const PRESENTATION_KIND_BY_SITE = {
 
 function presentationTemplate(value, file, path, slots) {
   if (isSourceMessageRef(value)) return value;
-  const result = string(value, file, path);
+  const result = requiredString(value, file, path);
   const canonical = (slot) => slot
     .replace(/([a-z0-9])([A-Z])/gu, "$1_$2")
     .replaceAll("-", "_")
@@ -573,8 +573,8 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     if (siteTypes[type] !== undefined)
       fail(file, `${path}.type`, `duplicate metadata for ${type}`);
     siteTypes[type] = {
-      icon: string(metadata.icon, file, `${path}.icon`),
-      glossaryId: string(metadata["glossary-id"], file, `${path}.glossary-id`),
+      icon: requiredString(metadata.icon, file, `${path}.icon`),
+      glossaryId: requiredString(metadata["glossary-id"], file, `${path}.glossary-id`),
       presentation: compileSitePresentation(
         metadata.presentation,
         type,

@@ -4,13 +4,14 @@ import type {
   RevealReason, RevealSourceIdentity,
 } from "./model";
 import type { InfoCardVariant } from "../../components/overlay/InfoCard";
+import type { CardId } from "../../../types/card-identity";
 
 export interface RevealOpenedDiagnostic {
   readonly source: RevealSourceIdentity;
   readonly interactionId: number;
   readonly primary: { readonly kind: "source" | "gameCard" | "galleryAction" | "infoCard"; readonly variant: string };
   readonly secondaryVariants: readonly InfoCardVariant[];
-  readonly adjacentCardIds: readonly string[];
+  readonly adjacentCardIds: readonly CardId[];
   readonly modality: "mouse" | "pen" | "touch" | "keyboard";
   readonly reason: RevealReason;
   readonly geometry: RevealGeometrySnapshot;

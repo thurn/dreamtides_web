@@ -1,9 +1,9 @@
 import type { CardData } from "../types/cards";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
-import { asBattleCardId } from "../types/identifiers";
+import { parseBattleCardId } from "../types/identifiers";
 
 /** Stable internal instance identity used by the scripted player-card play. */
-export const TUTORIAL_PLAYER_CARD_INSTANCE_ID = asBattleCardId(
+export const TUTORIAL_PLAYER_CARD_INSTANCE_ID = parseBattleCardId(
   "tutorial-player-deck-1",
 );
 

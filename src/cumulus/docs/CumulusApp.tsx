@@ -16,6 +16,7 @@ import {
   CUMULUS_COMPONENTS,
   type CumulusComponent,
   type CumulusComponentGroup,
+  type CumulusComponentId,
 } from "./registry";
 import { getComponent } from "./registry";
 import { getMockup } from "./mockups/registry";
@@ -26,11 +27,13 @@ import { SystemShowcase } from "./SystemShowcase";
 import {
   CUMULUS_UI_SYSTEMS,
   type CumulusUISystem,
+  type CumulusUISystemId,
 } from "./systems/registry";
 import { IntroSection } from "./IntroSection";
 import { DesignTokensSection, TOKEN_TOC_ENTRIES } from "./DesignTokensSection";
 import { TableOfContents, type TocEntry } from "./TableOfContents";
 import { token } from "../primitives/tokens";
+import type { DomElementId } from "../types/dom";
 
 const pageStyle: CSSProperties = {
   minHeight: "100vh",
@@ -69,20 +72,20 @@ function groupComponents(
 
 /** Stable DOM-id slug for a component group's overview section, e.g.
  * "Components" -> "cumulus-toc-group-components". */
-function groupAnchorId(group: CumulusComponentGroup): string {
+function groupAnchorId(group: CumulusComponentGroup): DomElementId {
   const slug = group.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   return `cumulus-toc-group-${slug}`;
 }
 
 /** Stable DOM-id for a single component's showcase anchor. */
-function componentAnchorId(id: string): string {
+function componentAnchorId(id: CumulusComponentId): DomElementId {
   return `cumulus-toc-component-${id}`;
 }
 
 const UI_SYSTEMS_ANCHOR_ID = "cumulus-toc-ui-systems";
 const COMPONENTS_ANCHOR_ID = "cumulus-toc-components";
 
-function systemAnchorId(id: string): string {
+function systemAnchorId(id: CumulusUISystemId): DomElementId {
   return `cumulus-toc-system-${id}`;
 }
 
@@ -242,7 +245,13 @@ function Overview() {
 }
 
 /** Floating "← Back" affordance overlaid on a full-screen mockup. */
-function MockupBackLink({ id, label }: { id: string; label: string }) {
+function MockupBackLink({
+  id,
+  label,
+}: {
+  id: CumulusComponentId;
+  label: string;
+}) {
   return (
     <a
       href={`#/${id}`}
@@ -275,7 +284,7 @@ function MockupBackLink({ id, label }: { id: string; label: string }) {
  * back affordance to the component's doc page. Unknown / not-yet-built ids get a
  * graceful centered note with the same back link.
  */
-function MockupView({ id }: { id: string }) {
+function MockupView({ id }: { id: CumulusComponentId }) {
   const Mockup = getMockup(id);
   const title = getComponent(id)?.title ?? id;
   return (

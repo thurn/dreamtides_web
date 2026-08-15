@@ -1,5 +1,7 @@
+import { testJourneySeed } from "../../types/test-identities";
+import { testEventActor } from "../../types/test-identities";
 import { describe, expect, it } from "vitest";
-import { asCardTypeChangePredicateId } from "../../types/identifiers";
+import { parseCardTypeChangePredicateId } from "../../types/identifiers";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
@@ -23,15 +25,19 @@ import { GAME_ENGINE_CONFIG } from "../../rules/replay/replay";
 import { registerSiteContentProvider } from "../../rules/journey/sites";
 import { createDefaultState } from "../../state/journey-context";
 import { LayerName } from "../../types/layer-name";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { CardId } from "../../types/card-identity";
 import type {
+  CardTypeChange,
   ExplorationResolution,
   JourneyState,
   SiteState,
 } from "../../types/journey";
-import { SELECTION_RULES_VERSION } from "../../reward-selection";
+import {
+  parseSelectionRulesVersion,
+  SELECTION_RULES_VERSION,
+} from "../../reward-selection";
 import { makeActions } from "../actions";
 import {
   buildExplorationRuntime,
@@ -40,32 +46,37 @@ import {
   resolveExplorationChoice,
 } from "./exploration-provider";
 import { createSiteContentProvider } from "./site-provider";
-import { asSiteId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asExplorationActionId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
 import type { DreamsignId, ExplorationActionId } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
+import {
+  testCardId,
+  testCardSubtype,
+  testDreamAvatarId,
+  testDreamscapeId,
+  testDreamsignId,
+  testExplorationActionId,
+  testFoldHash,
+} from "../../types/test-identities";
 
-const SOURCE_CARD_ID = asCardId("161482b6-af07-4d9e-822d-8c738672beb9");
+const SOURCE_CARD_ID = testCardId("161482b6-af07-4d9e-822d-8c738672beb9");
 const CHARM_POUCH_ID = "2d4eb3ee-0931-45ed-8365-69f18096ead5";
 const NIGHTMARE_ID = NIGHTMARE_CARD_ID;
 
 function card(
-  id: string,
+  idSeed: string,
   cardNumber: number,
   cardType: CardData["cardType"],
   subtype: string,
   energyCost = 2,
 ): CardData {
   return {
-    id: asCardId(id),
-    name: asCardName(`Exploration fixture ${String(cardNumber)}`),
+    id: testCardId(idSeed),
+    name: parseCardName(`Exploration fixture ${String(cardNumber)}`),
     cardNumber,
     cardType,
-    subtype,
+    subtype: testCardSubtype(subtype),
     isStarter: false,
     energyCost,
     spark: cardType === "Character" ? 2 : null,
@@ -129,7 +140,7 @@ function contentFixture(
     cardDatabase: new Map(cards.map((entry) => [entry.cardNumber, entry])),
     exploration,
     dreamAvatars: Array.from({ length: 4 }, (_, index) => ({
-      id: asDreamAvatarId(`dream-avatar-${String(index)}`),
+      id: testDreamAvatarId(`dream-avatar-${String(index)}`),
       name: `Dream Avatar ${String(index)}`,
       title: "Synthetic",
       renderedText: "A synthetic Dream Avatar ability.",
@@ -140,7 +151,7 @@ function contentFixture(
     dreamwellCards: [],
     dreamsignTemplates: [
       {
-        id: asDreamsignId(CHARM_POUCH_ID),
+        id: testDreamsignId(CHARM_POUCH_ID),
         name: "Charm Pouch",
         effectDescription: "A fixture effect.",
       },
@@ -163,7 +174,7 @@ function journeyFixture(content: JourneyContent): JourneyState {
   }
   return {
     ...createDefaultState(),
-    seed: "exploration-provider-test",
+    seed: testJourneySeed("exploration-provider-test"),
     screen: { type: "site", siteId: site.id },
     activeSiteId: site.id,
     essence: 100,
@@ -171,7 +182,7 @@ function journeyFixture(content: JourneyContent): JourneyState {
     deck: Array.from({ length: 8 }, (_, index) =>
       index % 2 === 0 ? event : spiritAnimal,
     ).map((entry, index) => ({
-      entryId: asDeckEntryId(`entry-${String(index)}`),
+      entryId: parseDeckEntryId(`entry-${String(index)}`),
       cardNumber: entry.cardNumber,
       transfiguration: null,
       isBane: false,
@@ -180,7 +191,7 @@ function journeyFixture(content: JourneyContent): JourneyState {
 }
 
 const site: SiteState = {
-  id: asSiteId("exploration-site"),
+  id: parseSiteId("exploration-site"),
   type: "Exploration",
   isEnhanced: false,
   isVisited: false,
@@ -189,15 +200,15 @@ const site: SiteState = {
 function explorationFoldJourney(journey: JourneyState): JourneyState {
   return {
     ...journey,
-    currentDreamscape: asAtlasNodeId("exploration-node"),
+    currentDreamscape: parseAtlasNodeId("exploration-node"),
     atlas: {
       ...journey.atlas,
       nodes: {
-        [asAtlasNodeId("exploration-node")]: {
-          id: asAtlasNodeId("exploration-node"),
+        [parseAtlasNodeId("exploration-node")]: {
+          id: parseAtlasNodeId("exploration-node"),
           layer: LayerName.Two,
           indexInLayer: 0,
-          dreamscapeId: asDreamscapeId("fixture-dreamscape"),
+          dreamscapeId: testDreamscapeId("fixture-dreamscape"),
           sites: [site],
           position: { x: 0, y: 0 },
           state: "available",
@@ -207,8 +218,8 @@ function explorationFoldJourney(journey: JourneyState): JourneyState {
           knownDreamsignId: null,
         },
       },
-      startingNodeId: asAtlasNodeId("exploration-node"),
-      currentNodeId: asAtlasNodeId("exploration-node"),
+      startingNodeId: parseAtlasNodeId("exploration-node"),
+      currentNodeId: parseAtlasNodeId("exploration-node"),
     },
   };
 }
@@ -267,7 +278,7 @@ function explorationResolutionFor(
 }
 
 function dreamsignId(index: number): DreamsignId {
-  return asDreamsignId(
+  return testDreamsignId(
     `d0000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
   );
 }
@@ -277,7 +288,7 @@ function dreamsignContent(
   dreamsignCount = 10,
 ): JourneyContent {
   const fallback: ExplorationActionContent = {
-    id: asExplorationActionId(`${action.id}-fallback`),
+    id: testExplorationActionId(`${action.id}-fallback`),
     label: "Gain the source card",
     effectText: "Gain a card",
     effectKind: "gain-card",
@@ -287,7 +298,7 @@ function dreamsignContent(
   return {
     ...base,
     dreamsignTemplates: Array.from({ length: dreamsignCount }, (_, index) => ({
-      id: asDreamsignId(dreamsignId(index + 1)),
+      id: dreamsignId(index + 1),
       name: `Dreamsign ${String(index + 1)}`,
       effectDescription: `Synthetic Dreamsign ${String(index + 1)}.`,
     })),
@@ -364,7 +375,7 @@ function starterJourney(
   return {
     ...journeyFixture(content),
     deck: Array.from({ length: starterCount }, (_, index) => ({
-      entryId: asDeckEntryId(`starter-entry-${String(index + 1)}`),
+      entryId: parseDeckEntryId(`starter-entry-${String(index + 1)}`),
       cardNumber: starterNumbers[index % starterNumbers.length],
       transfiguration: null,
       isBane: false,
@@ -375,14 +386,14 @@ function starterJourney(
 describe("Exploration provider", () => {
   it("keeps the frozen unversioned offer algorithm available for legacy room replay", () => {
     const offeredAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-offered"),
+      id: testExplorationActionId("gain-offered"),
       label: "Invite someone through",
       effectText: "Gain $OFFERED_CARD",
       effectKind: "gain-offered-card",
       predicate: "cheap-character",
     };
     const fallbackAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-card"),
+      id: testExplorationActionId("gain-card"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -413,14 +424,14 @@ describe("Exploration provider", () => {
 
   it("routes unversioned opens to legacy replay and current opens to shared selection", () => {
     const offeredAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-offered"),
+      id: testExplorationActionId("gain-offered"),
       label: "Invite someone through",
       effectText: "Gain $OFFERED_CARD",
       effectKind: "gain-offered-card",
       predicate: "cheap-character",
     };
     const fallbackAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-card"),
+      id: testExplorationActionId("gain-card"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -447,7 +458,7 @@ describe("Exploration provider", () => {
     expect(
       provider.openSite({
         ...input,
-        selectionRulesVersion: "unsupported-selection-version",
+        selectionRulesVersion: parseSelectionRulesVersion("unsupported-selection-version"),
       }),
     ).toBeNull();
   });
@@ -462,14 +473,14 @@ describe("Exploration provider", () => {
 
   it("adds authored Essence once and persists the exact balance transition", () => {
     const gainEssence: ExplorationActionContent = {
-      id: asExplorationActionId("fixed-essence"),
+      id: testExplorationActionId("fixed-essence"),
       label: "Gather light",
       effectText: "Gain 100 essence",
       effectKind: "gain-essence",
       essence: 100,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -512,7 +523,7 @@ describe("Exploration provider", () => {
 
   it("prepares random Essence once, replays it stably, and rejects tampering", () => {
     const gainRandomEssence: ExplorationActionContent = {
-      id: asExplorationActionId("random-essence"),
+      id: testExplorationActionId("random-essence"),
       label: "Gather sparks",
       effectText: "Gain a random amount of essence between 50 and 150",
       effectKind: "gain-random-essence",
@@ -520,7 +531,7 @@ describe("Exploration provider", () => {
       maximumEssence: 150,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -608,13 +619,13 @@ describe("Exploration provider", () => {
 
   it("doubles positive and zero Essence as persisted successful resolutions", () => {
     const doubleEssence: ExplorationActionContent = {
-      id: asExplorationActionId("double-essence"),
+      id: testExplorationActionId("double-essence"),
       label: "Mirror the light",
       effectText: "Double your current essence",
       effectKind: "double-essence",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -645,14 +656,14 @@ describe("Exploration provider", () => {
 
   it("queues T56 modifiers in FIFO order and rejects a tampered persisted offer", () => {
     const freeNextShop: ExplorationActionContent = {
-      id: asExplorationActionId("free-next-shop-action"),
+      id: testExplorationActionId("free-next-shop-action"),
       label: "Carry the market's favor",
       effectText: "All items in the next shop you visit are free",
       effectKind: "free-next-shop",
       canonicalMechanicId: "shop-purchase-modifier",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("free-next-shop-fallback"),
+      id: testExplorationActionId("free-next-shop-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -661,8 +672,8 @@ describe("Exploration provider", () => {
     const content = contentFixture([freeNextShop, fallback]);
     const earlier = {
       kind: "free-next-shop" as const,
-      sourceSiteId: asSiteId("earlier-site"),
-      sourceActionId: asExplorationActionId("earlier-action"),
+      sourceSiteId: parseSiteId("earlier-site"),
+      sourceActionId: testExplorationActionId("earlier-action"),
     };
     const state = buildState(content, {
       ...journeyFixture(content),
@@ -729,7 +740,7 @@ describe("Exploration provider", () => {
 
   it("loses floor-half Essence, retains ceil-half, and appends T82 counters", () => {
     const freePurchases: ExplorationActionContent = {
-      id: asExplorationActionId("half-essence-free-purchases"),
+      id: testExplorationActionId("half-essence-free-purchases"),
       label: "Offer half the light",
       effectText: "Lose half your current essence. The next 3 items are free",
       effectKind: "lose-half-essence-and-free-purchases",
@@ -737,7 +748,7 @@ describe("Exploration provider", () => {
       count: 3,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("half-essence-fallback"),
+      id: testExplorationActionId("half-essence-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -746,8 +757,8 @@ describe("Exploration provider", () => {
     const content = contentFixture([freePurchases, fallback]);
     const earlier = {
       kind: "free-purchases" as const,
-      sourceSiteId: asSiteId("earlier-site"),
-      sourceActionId: asExplorationActionId("earlier-action"),
+      sourceSiteId: parseSiteId("earlier-site"),
+      sourceActionId: testExplorationActionId("earlier-action"),
       initialCount: 1,
       remainingCount: 1,
     };
@@ -793,7 +804,7 @@ describe("Exploration provider", () => {
 
   it("folds one T82 resolution once and replays the persisted counter byte-for-byte", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("folded-free-purchases"),
+      id: testExplorationActionId("folded-free-purchases"),
       label: "Offer half the light",
       effectText: "Lose half your current essence. The next 2 items are free",
       effectKind: "lose-half-essence-and-free-purchases",
@@ -801,7 +812,7 @@ describe("Exploration provider", () => {
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("folded-free-purchases-fallback"),
+      id: testExplorationActionId("folded-free-purchases-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -810,7 +821,7 @@ describe("Exploration provider", () => {
     const content = contentFixture([action, fallback]);
     const initialJourney = explorationFoldJourney(journeyFixture(content));
     const genesis: Genesis = {
-      seed: "free-purchases-fold",
+      seed: testJourneySeed("free-purchases-fold"),
       reducerVersion: "test",
       createdAt: 0,
       contentConfig: { poolVariant: "tides4" },
@@ -830,7 +841,7 @@ describe("Exploration provider", () => {
             siteId: site.id,
             selectionRulesVersion: SELECTION_RULES_VERSION,
           },
-          actor: "client-a",
+          actor: testEventActor("client-a"),
           clientTimestamp: "1970-01-01T00:00:00.000Z",
           basedOnSeq: 0,
         },
@@ -840,7 +851,7 @@ describe("Exploration provider", () => {
         event: {
           type: "RESOLVE_EXPLORATION_CHOICE",
           payload,
-          actor: "client-a",
+          actor: testEventActor("client-a"),
           clientTimestamp: "1970-01-01T00:00:01.000Z",
           basedOnSeq: 1,
         },
@@ -850,7 +861,7 @@ describe("Exploration provider", () => {
         event: {
           type: "RESOLVE_EXPLORATION_CHOICE",
           payload,
-          actor: "client-b",
+          actor: testEventActor("client-b"),
           clientTimestamp: "1970-01-01T00:00:02.000Z",
           basedOnSeq: 2,
         },
@@ -899,14 +910,14 @@ describe("Exploration provider", () => {
 
   it("applies an Essence mutation only once when duplicate intents are folded", () => {
     const gainEssence: ExplorationActionContent = {
-      id: asExplorationActionId("folded-essence"),
+      id: testExplorationActionId("folded-essence"),
       label: "Gather light",
       effectText: "Gain 75 essence",
       effectKind: "gain-essence",
       essence: 75,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -916,15 +927,15 @@ describe("Exploration provider", () => {
     const prepared = buildState(content);
     const foldJourney: JourneyState = {
       ...prepared.journey,
-      currentDreamscape: asAtlasNodeId("exploration-node"),
+      currentDreamscape: parseAtlasNodeId("exploration-node"),
       atlas: {
         ...prepared.journey.atlas,
         nodes: {
-          [asAtlasNodeId("exploration-node")]: {
-            id: asAtlasNodeId("exploration-node"),
+          [parseAtlasNodeId("exploration-node")]: {
+            id: parseAtlasNodeId("exploration-node"),
             layer: LayerName.Two,
             indexInLayer: 0,
-            dreamscapeId: asDreamscapeId("fixture-dreamscape"),
+            dreamscapeId: testDreamscapeId("fixture-dreamscape"),
             sites: [site],
             position: { x: 0, y: 0 },
             state: "available",
@@ -934,12 +945,12 @@ describe("Exploration provider", () => {
             knownDreamsignId: null,
           },
         },
-        startingNodeId: asAtlasNodeId("exploration-node"),
-        currentNodeId: asAtlasNodeId("exploration-node"),
+        startingNodeId: parseAtlasNodeId("exploration-node"),
+        currentNodeId: parseAtlasNodeId("exploration-node"),
       },
     };
     const genesis: Genesis = {
-      seed: "essence-mutation-fold",
+      seed: testJourneySeed("essence-mutation-fold"),
       reducerVersion: "test",
       createdAt: 0,
       contentConfig: { poolVariant: "tides4" },
@@ -956,7 +967,7 @@ describe("Exploration provider", () => {
         event: {
           type: "RESOLVE_EXPLORATION_CHOICE",
           payload,
-          actor: "client-a",
+          actor: testEventActor("client-a"),
           clientTimestamp: "1970-01-01T00:00:00.000Z",
           basedOnSeq: 0,
         },
@@ -966,7 +977,7 @@ describe("Exploration provider", () => {
         event: {
           type: "RESOLVE_EXPLORATION_CHOICE",
           payload,
-          actor: "client-a",
+          actor: testEventActor("client-a"),
           clientTimestamp: "1970-01-01T00:00:01.000Z",
           basedOnSeq: 1,
         },
@@ -1008,14 +1019,14 @@ describe("Exploration provider", () => {
 
   it("builds and resolves the offered-card and unrestricted transfiguration effects", () => {
     const offeredAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-offered"),
+      id: testExplorationActionId("gain-offered"),
       label: "Invite someone through",
       effectText: "Gain $OFFERED_CARD",
       effectKind: "gain-offered-card",
       predicate: "cheap-character",
     };
     const transfigureAction: ExplorationActionContent = {
-      id: asExplorationActionId("transfigure"),
+      id: testExplorationActionId("transfigure"),
       label: "Send a possession through",
       effectText: "Apply a transfiguration to a chosen card",
       effectKind: "transfigure-selected",
@@ -1076,7 +1087,7 @@ describe("Exploration provider", () => {
 
   it("persists and replays every eligible bulk transfiguration target for one essence cost", async () => {
     const transfigureAllAction: ExplorationActionContent = {
-      id: asExplorationActionId("transfigure-all-events"),
+      id: testExplorationActionId("transfigure-all-events"),
       label: "Enter Spiraling Light",
       effectText:
         "Lose 100 essence. Apply Inspired to every eligible Event card in your deck.",
@@ -1087,7 +1098,7 @@ describe("Exploration provider", () => {
       transfiguration: "Inspired",
     };
     const fallbackAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-source"),
+      id: testExplorationActionId("gain-source"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -1117,7 +1128,7 @@ describe("Exploration provider", () => {
             : entry,
         ),
         {
-          entryId: asDeckEntryId("entry-source"),
+          entryId: parseDeckEntryId("entry-source"),
           cardNumber: 1,
           transfiguration: null,
           isBane: false,
@@ -1156,7 +1167,7 @@ describe("Exploration provider", () => {
       ...content,
       exploration: {
         ...content.exploration,
-        foldHash: "revised-exploration-fold",
+        foldHash: testFoldHash("e"),
       },
     };
     const revised = buildState(revisedContent, prepared.journey);
@@ -1188,10 +1199,10 @@ describe("Exploration provider", () => {
       kind: "exploration",
       resolution: {
         affectedEntryIds: [
-          asDeckEntryId("entry-0"),
-          asDeckEntryId("entry-4"),
-          asDeckEntryId("entry-6"),
-          asDeckEntryId("entry-source"),
+          parseDeckEntryId("entry-0"),
+          parseDeckEntryId("entry-4"),
+          parseDeckEntryId("entry-6"),
+          parseDeckEntryId("entry-source"),
         ],
         chosenTransfiguration: "Inspired",
         resolvedPredicate: "event",
@@ -1211,7 +1222,7 @@ describe("Exploration provider", () => {
     const draft = drafts[0];
     if (draft === undefined) throw new Error("Expected a coop intent");
     const genesis: Genesis = {
-      seed: "bulk-transfiguration-fold",
+      seed: testJourneySeed("bulk-transfiguration-fold"),
       reducerVersion: "test",
       createdAt: 0,
       contentConfig: { poolVariant: "tides4" },
@@ -1219,22 +1230,22 @@ describe("Exploration provider", () => {
     const event: GameEvent = {
       type: draft.type,
       payload: draft.payload,
-      actor: "client-a",
+      actor: testEventActor("client-a"),
       clientTimestamp: "1970-01-01T00:00:00.000Z",
       basedOnSeq: 0,
       ...(draft.intentKey === undefined ? {} : { intentKey: draft.intentKey }),
     };
     const foldJourney: JourneyState = {
       ...prepared.journey,
-      currentDreamscape: asAtlasNodeId("exploration-node"),
+      currentDreamscape: parseAtlasNodeId("exploration-node"),
       atlas: {
         ...prepared.journey.atlas,
         nodes: {
-          [asAtlasNodeId("exploration-node")]: {
-            id: asAtlasNodeId("exploration-node"),
+          [parseAtlasNodeId("exploration-node")]: {
+            id: parseAtlasNodeId("exploration-node"),
             layer: LayerName.Two,
             indexInLayer: 0,
-            dreamscapeId: asDreamscapeId("fixture-dreamscape"),
+            dreamscapeId: testDreamscapeId("fixture-dreamscape"),
             sites: [site],
             position: { x: 0, y: 0 },
             state: "available",
@@ -1244,8 +1255,8 @@ describe("Exploration provider", () => {
             knownDreamsignId: null,
           },
         },
-        startingNodeId: asAtlasNodeId("exploration-node"),
-        currentNodeId: asAtlasNodeId("exploration-node"),
+        startingNodeId: parseAtlasNodeId("exploration-node"),
+        currentNodeId: parseAtlasNodeId("exploration-node"),
       },
     };
     const base = {
@@ -1312,7 +1323,7 @@ describe("Exploration provider", () => {
 
   it("excludes ineligible bulk targets and rejects tampered target snapshots atomically", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("bulk-hastened"),
+      id: testExplorationActionId("bulk-hastened"),
       label: "Enter Spiraling Light",
       effectText: "Spend essence to transfigure Events.",
       effectKind: "transfigure-all-for-essence",
@@ -1321,7 +1332,7 @@ describe("Exploration provider", () => {
       transfiguration: "Hastened",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -1332,7 +1343,7 @@ describe("Exploration provider", () => {
     if (supported === undefined) throw new Error("Expected Event fixture");
     const unsupported = {
       ...supported,
-      id: asCardId("f0000000-0000-4000-8000-000000000102"),
+      id: testCardId("f0000000-0000-4000-8000-000000000102"),
       cardNumber: 102,
       isFast: true,
     };
@@ -1345,19 +1356,19 @@ describe("Exploration provider", () => {
       essence: 150,
       deck: [
         {
-          entryId: asDeckEntryId("supported"),
+          entryId: parseDeckEntryId("supported"),
           cardNumber: 101,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: asDeckEntryId("already-transfigured"),
+          entryId: parseDeckEntryId("already-transfigured"),
           cardNumber: 101,
           transfiguration: "Hastened",
           isBane: false,
         },
         {
-          entryId: asDeckEntryId("unsupported"),
+          entryId: parseDeckEntryId("unsupported"),
           cardNumber: 102,
           transfiguration: null,
           isBane: false,
@@ -1376,8 +1387,8 @@ describe("Exploration provider", () => {
         {
           ...originalOffer,
           eligibleDeckEntryIds: [
-            asDeckEntryId("supported"),
-            asDeckEntryId("unsupported"),
+            parseDeckEntryId("supported"),
+            parseDeckEntryId("unsupported"),
           ],
         },
         ...prepared.runtime.actionOffers.slice(1),
@@ -1406,7 +1417,7 @@ describe("Exploration provider", () => {
       ...journeyFixture(content),
       deck: [
         {
-          entryId: asDeckEntryId("unsupported"),
+          entryId: parseDeckEntryId("unsupported"),
           cardNumber: 102,
           transfiguration: null,
           isBane: false,
@@ -1432,7 +1443,7 @@ describe("Exploration provider", () => {
 
   it("derives essence from matching deck entries and stacks spark on every Character", () => {
     const essenceAction: ExplorationActionContent = {
-      id: asExplorationActionId("essence-per-card"),
+      id: testExplorationActionId("essence-per-card"),
       label: "Sound a gathering call",
       effectText: "Gain 15 essence for each Spirit Animal card in your deck",
       effectKind: "gain-essence-per-card",
@@ -1440,7 +1451,7 @@ describe("Exploration provider", () => {
       essencePerCard: 15,
     };
     const sparkAction: ExplorationActionContent = {
-      id: asExplorationActionId("increase-spark"),
+      id: testExplorationActionId("increase-spark"),
       label: "Receive Their Blessing",
       effectText: "All characters in your deck gain +1✦",
       effectKind: "increase-spark-all",
@@ -1514,7 +1525,7 @@ describe("Exploration provider", () => {
 
   it("persists a uniformly purged subtype entry and exact survivor spark changes", () => {
     const oathAction: ExplorationActionContent = {
-      id: asExplorationActionId("blood-oath"),
+      id: testExplorationActionId("blood-oath"),
       label: "Swear a Blood Oath",
       effectText:
         "Purge a random Warrior. Every other Warrior in your deck gains +1✦.",
@@ -1523,7 +1534,7 @@ describe("Exploration provider", () => {
       sparkBonus: 1,
     };
     const fallbackAction: ExplorationActionContent = {
-      id: asExplorationActionId("battle-energy"),
+      id: testExplorationActionId("battle-energy"),
       label: "Take the high road",
       effectText: "Gain 1 additional energy at the start of your next battle",
       effectKind: "next-battle-starting-energy",
@@ -1531,7 +1542,7 @@ describe("Exploration provider", () => {
     };
     const content = contentFixture([oathAction, fallbackAction]);
     const warriors = [120, 121, 122].map((cardNumber, index) => ({
-      entryId: asDeckEntryId(`warrior-${String(index)}`),
+      entryId: parseDeckEntryId(`warrior-${String(index)}`),
       cardNumber,
       transfiguration: null,
       isBane: false,
@@ -1593,7 +1604,7 @@ describe("Exploration provider", () => {
 
   it("builds two distinct Warrior packs and resolves the selected pack", () => {
     const packAction: ExplorationActionContent = {
-      id: asExplorationActionId("warrior-packs"),
+      id: testExplorationActionId("warrior-packs"),
       label: "Answer Their Muster",
       effectText: "Choose one of 2 packs of Warrior cards to add to your deck",
       effectKind: "choose-pack",
@@ -1602,7 +1613,7 @@ describe("Exploration provider", () => {
       packSize: 3,
     };
     const randomAction: ExplorationActionContent = {
-      id: asExplorationActionId("random-survivors"),
+      id: testExplorationActionId("random-survivors"),
       label: "Open the Passage",
       effectText: "Gain 2 random Survivor cards",
       effectKind: "gain-random-cards",
@@ -1632,15 +1643,18 @@ describe("Exploration provider", () => {
   });
 
   it("replaces a UUID-selected Dreamsign at the collection cap", () => {
+    const heldDreamsignId = testDreamsignId(
+      "d0000000-0000-4000-8000-000000000099",
+    );
     const dreamsignAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-dreamsign"),
+      id: testExplorationActionId("gain-dreamsign"),
       label: "Reach toward the tusks",
       effectText: "Gain Charm Pouch",
       effectKind: "gain-dreamsign",
-      dreamsignId: asDreamsignId(CHARM_POUCH_ID),
+      dreamsignId: testDreamsignId(CHARM_POUCH_ID),
     };
     const gainCardAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-card"),
+      id: testExplorationActionId("gain-card"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -1652,7 +1666,7 @@ describe("Exploration provider", () => {
       maxDreamsigns: 1,
       dreamsigns: [
         {
-          id: asDreamsignId("held-dreamsign"),
+          id: heldDreamsignId,
           name: "Held Dreamsign",
           effectDescription: "A held fixture.",
         },
@@ -1660,7 +1674,7 @@ describe("Exploration provider", () => {
     };
     const state = buildState(content, journey);
     const result = resolve(content, state.journey, dreamsignAction.id, {
-      replacedDreamsignId: asDreamsignId("held-dreamsign"),
+      replacedDreamsignId: heldDreamsignId,
     });
 
     expect(result.dreamsigns).toHaveLength(1);
@@ -1670,14 +1684,14 @@ describe("Exploration provider", () => {
   it("resolves a fixed custom Dreamsign by UUID", () => {
     const customDreamsignId = "custom-exploration-dreamsign";
     const dreamsignAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-custom-dreamsign"),
+      id: testExplorationActionId("gain-custom-dreamsign"),
       label: "Take the custom sign",
       effectText: "Gain a custom Dreamsign",
       effectKind: "gain-dreamsign",
-      dreamsignId: asDreamsignId(customDreamsignId),
+      dreamsignId: testDreamsignId(customDreamsignId),
     };
     const fallbackAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-card"),
+      id: testExplorationActionId("gain-card"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -1693,7 +1707,7 @@ describe("Exploration provider", () => {
         ...base.exploration,
         customDreamsigns: [
           {
-            id: asDreamsignId(customDreamsignId),
+            id: testDreamsignId(customDreamsignId),
             name: "Custom Exploration Dreamsign",
             effectDescription: "A synthetic custom effect.",
           },
@@ -1704,7 +1718,7 @@ describe("Exploration provider", () => {
     const result = resolve(content, state.journey, dreamsignAction.id);
 
     expect(result.dreamsigns).toContainEqual({
-      id: asDreamsignId(customDreamsignId),
+      id: testDreamsignId(customDreamsignId),
       name: "Custom Exploration Dreamsign",
       effectDescription: "A synthetic custom effect.",
     });
@@ -1712,7 +1726,7 @@ describe("Exploration provider", () => {
 
   it("drafts one offered card and gains the authored number of copies", () => {
     const draftAction: ExplorationActionContent = {
-      id: asExplorationActionId("draft-two-copies"),
+      id: testExplorationActionId("draft-two-copies"),
       label: "Call for Reinforcements",
       effectText: "Draft a Survivor from 4 choices and gain 2 copies of it",
       effectKind: "draft-card",
@@ -1721,7 +1735,7 @@ describe("Exploration provider", () => {
       count: 2,
     };
     const fallbackAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-source"),
+      id: testExplorationActionId("gain-source"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -1745,14 +1759,14 @@ describe("Exploration provider", () => {
 
   it("purges an unrestricted selected card when the action has no predicate", () => {
     const purgeAction: ExplorationActionContent = {
-      id: asExplorationActionId("purge-any-card"),
+      id: testExplorationActionId("purge-any-card"),
       label: "Purge a chosen card",
       effectText: "Purge a chosen card",
       effectKind: "purge-selected",
       count: 1,
     };
     const fallbackAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-source"),
+      id: testExplorationActionId("gain-source"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -1785,7 +1799,7 @@ describe("Exploration provider", () => {
 
   it("replays zero, one, or two distinct selected Warriors for a bounded purge", () => {
     const purgeAction: ExplorationActionContent = {
-      id: asExplorationActionId("purge-up-to-two-warriors"),
+      id: testExplorationActionId("purge-up-to-two-warriors"),
       label: "Stand Down the Escort",
       effectText: "Purge up to 2 chosen Warrior cards",
       effectKind: "purge-selected",
@@ -1793,7 +1807,7 @@ describe("Exploration provider", () => {
       count: 2,
     };
     const fallbackAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-source"),
+      id: testExplorationActionId("gain-source"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -1801,13 +1815,13 @@ describe("Exploration provider", () => {
     };
     const content = contentFixture([purgeAction, fallbackAction]);
     const warriorEntries = [120, 121].map((cardNumber, index) => ({
-      entryId: asDeckEntryId(`warrior-entry-${String(index)}`),
+      entryId: parseDeckEntryId(`warrior-entry-${String(index)}`),
       cardNumber,
       transfiguration: null,
       isBane: false,
     }));
     const eventEntry = {
-      entryId: asDeckEntryId("event-entry"),
+      entryId: parseDeckEntryId("event-entry"),
       cardNumber: 101,
       transfiguration: null,
       isBane: false,
@@ -1833,18 +1847,18 @@ describe("Exploration provider", () => {
 
     const selectedEntryIds = warriorEntries.map((entry) => entry.entryId);
     const both = resolve(content, state.journey, purgeAction.id, {
-      entryIds: selectedEntryIds.map(asDeckEntryId),
+      entryIds: selectedEntryIds.map(parseDeckEntryId),
     });
     const replayed = resolve(content, state.journey, purgeAction.id, {
-      entryIds: selectedEntryIds.map(asDeckEntryId),
+      entryIds: selectedEntryIds.map(parseDeckEntryId),
     });
     expect(both.deck).toEqual([eventEntry]);
     expect(replayed).toEqual(both);
     expect(both.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: {
-        selection: { entryIds: selectedEntryIds.map(asDeckEntryId) },
-        purgedEntryIds: selectedEntryIds.map(asDeckEntryId),
+        selection: { entryIds: selectedEntryIds.map(parseDeckEntryId) },
+        purgedEntryIds: selectedEntryIds.map(parseDeckEntryId),
         purgedEntrySnapshots: warriorEntries,
       },
     });
@@ -1872,7 +1886,7 @@ describe("Exploration provider", () => {
 
   it("prepares an offered Dreamsign plan without spending the pool and resolves append or cap replacement", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("offered-dreamsign"),
+      id: testExplorationActionId("offered-dreamsign"),
       label: "Choose a sign",
       effectText: "Choose one of three Dreamsigns",
       effectKind: "gain-offered-dreamsign",
@@ -1886,7 +1900,7 @@ describe("Exploration provider", () => {
       "not-a-dreamsign",
       dreamsignId(4),
       dreamsignId(6),
-    ].map(asDreamsignId);
+    ].map(testDreamsignId);
     const state = buildState(
       content,
       withDreamsignPool(content, {
@@ -1976,7 +1990,7 @@ describe("Exploration provider", () => {
     ).toBeNull();
     const replaced = resolve(content, cappedState.journey, action.id, {
       offeredDreamsignId: cappedGain,
-      replacedDreamsignId: asDreamsignId(dreamsignId(2)),
+      replacedDreamsignId: dreamsignId(2),
     });
     expect(replaced.dreamsigns.map(({ id }) => id)).toEqual([
       dreamsignId(1),
@@ -1986,7 +2000,7 @@ describe("Exploration provider", () => {
       explorationResolutionFor(replaced).dreamsignMutation?.replacements,
     ).toEqual([
       {
-        removedDreamsignId: asDreamsignId(dreamsignId(2)),
+        removedDreamsignId: dreamsignId(2),
         gainedDreamsignId: cappedGain,
       },
     ]);
@@ -1995,11 +2009,11 @@ describe("Exploration provider", () => {
   it("atomically gains exact Nightmares with a fixed global or custom Dreamsign", () => {
     const fixedDreamsignId = dreamsignId(4);
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("nightmares-and-fixed-dreamsign"),
+      id: testExplorationActionId("nightmares-and-fixed-dreamsign"),
       label: "Take the marked sign",
       effectText: "Gain two Nightmares and a fixed Dreamsign",
       effectKind: "gain-nightmare-and-dreamsign",
-      dreamsignId: asDreamsignId(fixedDreamsignId),
+      dreamsignId: fixedDreamsignId,
       nightmareCount: 2,
     };
     const content = dreamsignContent(action, 8);
@@ -2016,7 +2030,7 @@ describe("Exploration provider", () => {
         kind: "fixed-gain",
         requestedCount: 1,
         nightmareCount: 2,
-        preparedDreamsignIds: [asDreamsignId(fixedDreamsignId)],
+        preparedDreamsignIds: [fixedDreamsignId],
         requiredOverflowReplacementCount: 0,
       },
     });
@@ -2034,8 +2048,8 @@ describe("Exploration provider", () => {
     expect(explorationResolutionFor(resolved)).toMatchObject({
       selection: {},
       gainedCardIds: [NIGHTMARE_ID, NIGHTMARE_ID],
-      gainedEntryIds: [asDeckEntryId("deck-91-0"), asDeckEntryId("deck-91-1")],
-      gainedDreamsignIds: [asDreamsignId(fixedDreamsignId)],
+      gainedEntryIds: [parseDeckEntryId("deck-91-0"), parseDeckEntryId("deck-91-1")],
+      gainedDreamsignIds: [fixedDreamsignId],
       dreamsignMutation: {
         beforeIds: [dreamsignId(1)],
         afterIds: [dreamsignId(1), fixedDreamsignId],
@@ -2070,7 +2084,7 @@ describe("Exploration provider", () => {
             selection:
               replacedDreamsignId === undefined
                 ? {}
-                : { replacedDreamsignId: asDreamsignId(replacedDreamsignId) },
+                : { replacedDreamsignId: testDreamsignId(replacedDreamsignId) },
             selectionRulesVersion: SELECTION_RULES_VERSION,
           },
           seq: 91,
@@ -2079,7 +2093,7 @@ describe("Exploration provider", () => {
       ).toBeNull();
     }
     const replaced = resolve(content, capped.journey, action.id, {
-      replacedDreamsignId: asDreamsignId(dreamsignId(2)),
+      replacedDreamsignId: dreamsignId(2),
     });
     expect(replaced.dreamsigns.map(({ id }) => id)).toEqual([
       dreamsignId(1),
@@ -2089,16 +2103,16 @@ describe("Exploration provider", () => {
       explorationResolutionFor(replaced).dreamsignMutation?.replacements,
     ).toEqual([
       {
-        removedDreamsignId: asDreamsignId(dreamsignId(2)),
-        gainedDreamsignId: asDreamsignId(fixedDreamsignId),
+        removedDreamsignId: dreamsignId(2),
+        gainedDreamsignId: fixedDreamsignId,
       },
     ]);
 
-    const customDreamsignId = "custom-nightmare-dreamsign";
+    const customDreamsignId = "d0000000-0000-4000-8000-000000000098";
     const customAction: ExplorationActionContent = {
       ...action,
-      id: asExplorationActionId("nightmares-and-custom-dreamsign"),
-      dreamsignId: asDreamsignId(customDreamsignId),
+      id: testExplorationActionId("nightmares-and-custom-dreamsign"),
+      dreamsignId: testDreamsignId(customDreamsignId),
     };
     const customBase = dreamsignContent(customAction, 4);
     if (customBase.exploration === undefined)
@@ -2109,7 +2123,7 @@ describe("Exploration provider", () => {
         ...customBase.exploration,
         customDreamsigns: [
           {
-            id: asDreamsignId(customDreamsignId),
+            id: testDreamsignId(customDreamsignId),
             name: "Custom Nightmare Sign",
             effectDescription: "A synthetic custom effect.",
           },
@@ -2119,7 +2133,7 @@ describe("Exploration provider", () => {
     const customState = buildState(customContent);
     const custom = resolve(customContent, customState.journey, customAction.id);
     expect(custom.dreamsigns).toContainEqual({
-      id: asDreamsignId(customDreamsignId),
+      id: testDreamsignId(customDreamsignId),
       name: "Custom Nightmare Sign",
       effectDescription: "A synthetic custom effect.",
     });
@@ -2131,11 +2145,11 @@ describe("Exploration provider", () => {
   it("rejects unavailable or tampered fixed Nightmare bundles without partial mutation", () => {
     const fixedDreamsignId = dreamsignId(1);
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("guarded-nightmare-and-fixed-dreamsign"),
+      id: testExplorationActionId("guarded-nightmare-and-fixed-dreamsign"),
       label: "Take the marked sign",
       effectText: "Gain a Nightmare and a fixed Dreamsign",
       effectKind: "gain-nightmare-and-dreamsign",
-      dreamsignId: asDreamsignId(fixedDreamsignId),
+      dreamsignId: fixedDreamsignId,
       nightmareCount: 1,
     };
     const content = dreamsignContent(action, 5);
@@ -2170,7 +2184,7 @@ describe("Exploration provider", () => {
 
     const validAction = {
       ...action,
-      dreamsignId: asDreamsignId(dreamsignId(3)),
+      dreamsignId: dreamsignId(3),
     };
     const validContent = dreamsignContent(validAction, 6);
     const prepared = buildState(validContent);
@@ -2231,7 +2245,7 @@ describe("Exploration provider", () => {
 
   it("prepares a non-spending offered Nightmare bundle and spends only the chosen Dreamsign", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("nightmares-and-offered-dreamsign"),
+      id: testExplorationActionId("nightmares-and-offered-dreamsign"),
       label: "Choose a dark sign",
       effectText: "Gain two Nightmares and one of three Dreamsigns",
       effectKind: "gain-nightmare-and-offered-dreamsign",
@@ -2244,7 +2258,7 @@ describe("Exploration provider", () => {
       dreamsignId(4),
       dreamsignId(5),
       dreamsignId(6),
-    ].map(asDreamsignId);
+    ].map(testDreamsignId);
     const state = buildState(
       content,
       withDreamsignPool(content, {
@@ -2283,7 +2297,7 @@ describe("Exploration provider", () => {
     expect(explorationResolutionFor(resolved)).toMatchObject({
       selection: { offeredDreamsignId: selected },
       gainedCardIds: [NIGHTMARE_ID, NIGHTMARE_ID],
-      gainedEntryIds: [asDeckEntryId("deck-91-0"), asDeckEntryId("deck-91-1")],
+      gainedEntryIds: [parseDeckEntryId("deck-91-0"), parseDeckEntryId("deck-91-1")],
       gainedDreamsignIds: [selected],
       dreamsignMutation: {
         offeredIds: plan?.preparedDreamsignIds,
@@ -2321,7 +2335,7 @@ describe("Exploration provider", () => {
     ).toBeNull();
     const replaced = resolve(content, capped.journey, action.id, {
       offeredDreamsignId: cappedSelected,
-      replacedDreamsignId: asDreamsignId(dreamsignId(1)),
+      replacedDreamsignId: dreamsignId(1),
     });
     expect(replaced.dreamsigns.map(({ id }) => id)).toEqual([
       cappedSelected,
@@ -2358,7 +2372,7 @@ describe("Exploration provider", () => {
           actionId: action.id,
           selection: {
             offeredDreamsignId: cappedSelected,
-            replacedDreamsignId: asDreamsignId(dreamsignId(1)),
+            replacedDreamsignId: dreamsignId(1),
           },
           selectionRulesVersion: SELECTION_RULES_VERSION,
         },
@@ -2370,7 +2384,7 @@ describe("Exploration provider", () => {
 
   it("replays one compound Nightmare and Dreamsign intent byte-identically and rejects its duplicate", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("replayed-nightmares-and-dreamsign"),
+      id: testExplorationActionId("replayed-nightmares-and-dreamsign"),
       label: "Choose a dark sign",
       effectText: "Gain two Nightmares and one of three Dreamsigns",
       effectKind: "gain-nightmare-and-offered-dreamsign",
@@ -2389,15 +2403,15 @@ describe("Exploration provider", () => {
       throw new Error("Expected a prepared Dreamsign");
     const foldJourney: JourneyState = {
       ...prepared.journey,
-      currentDreamscape: asAtlasNodeId("exploration-node"),
+      currentDreamscape: parseAtlasNodeId("exploration-node"),
       atlas: {
         ...prepared.journey.atlas,
         nodes: {
-          [asAtlasNodeId("exploration-node")]: {
-            id: asAtlasNodeId("exploration-node"),
+          [parseAtlasNodeId("exploration-node")]: {
+            id: parseAtlasNodeId("exploration-node"),
             layer: LayerName.Two,
             indexInLayer: 0,
-            dreamscapeId: asDreamscapeId("fixture-dreamscape"),
+            dreamscapeId: testDreamscapeId("fixture-dreamscape"),
             sites: [site],
             position: { x: 0, y: 0 },
             state: "available",
@@ -2407,12 +2421,12 @@ describe("Exploration provider", () => {
             knownDreamsignId: null,
           },
         },
-        startingNodeId: asAtlasNodeId("exploration-node"),
-        currentNodeId: asAtlasNodeId("exploration-node"),
+        startingNodeId: parseAtlasNodeId("exploration-node"),
+        currentNodeId: parseAtlasNodeId("exploration-node"),
       },
     };
     const genesis: Genesis = {
-      seed: "nightmare-dreamsign-fold",
+      seed: testJourneySeed("nightmare-dreamsign-fold"),
       reducerVersion: "test",
       createdAt: 0,
       contentConfig: { poolVariant: "tides4" },
@@ -2426,7 +2440,7 @@ describe("Exploration provider", () => {
     const event: GameEvent = {
       type: "RESOLVE_EXPLORATION_CHOICE",
       payload,
-      actor: "client-a",
+      actor: testEventActor("client-a"),
       clientTimestamp: "1970-01-01T00:00:00.000Z",
       basedOnSeq: 0,
     };
@@ -2485,8 +2499,8 @@ describe("Exploration provider", () => {
         resolution: {
           gainedCardIds: [NIGHTMARE_ID, NIGHTMARE_ID],
           gainedEntryIds: [
-            asDeckEntryId("deck-1-0"),
-            asDeckEntryId("deck-1-1"),
+            parseDeckEntryId("deck-1-0"),
+            parseDeckEntryId("deck-1-1"),
           ],
           gainedDreamsignIds: [offeredDreamsignId],
         },
@@ -2498,7 +2512,7 @@ describe("Exploration provider", () => {
 
   it("replaces one chosen held Dreamsign atomically even with free capacity", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("offered-dreamsign-replacement"),
+      id: testExplorationActionId("offered-dreamsign-replacement"),
       label: "Exchange a sign",
       effectText: "Replace a Dreamsign with one of three",
       effectKind: "replace-selected-dreamsign-with-offered",
@@ -2519,7 +2533,7 @@ describe("Exploration provider", () => {
 
     const result = resolve(content, state.journey, action.id, {
       offeredDreamsignId,
-      replacedDreamsignId: asDreamsignId(dreamsignId(1)),
+      replacedDreamsignId: dreamsignId(1),
     });
     expect(result.dreamsigns.map(({ id }) => id)).toEqual([
       offeredDreamsignId,
@@ -2528,16 +2542,16 @@ describe("Exploration provider", () => {
     for (const selection of [
       { offeredDreamsignId },
       {
-        offeredDreamsignId: asDreamsignId(dreamsignId(1)),
-        replacedDreamsignId: asDreamsignId(dreamsignId(2)),
+        offeredDreamsignId: dreamsignId(1),
+        replacedDreamsignId: dreamsignId(2),
       },
       {
         offeredDreamsignId,
-        replacedDreamsignId: asDreamsignId("not-held"),
+        replacedDreamsignId: testDreamsignId("not-held"),
       },
       {
         offeredDreamsignId,
-        replacedDreamsignId: asDreamsignId(dreamsignId(1)),
+        replacedDreamsignId: dreamsignId(1),
         purgedDreamsignId: dreamsignId(2),
       },
     ]) {
@@ -2559,7 +2573,7 @@ describe("Exploration provider", () => {
 
   it("renews once and replaces all held Dreamsigns in stable slot order", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("replace-all-dreamsigns"),
+      id: testExplorationActionId("replace-all-dreamsigns"),
       label: "Recast every sign",
       effectText: "Replace all Dreamsigns randomly",
       effectKind: "replace-all-dreamsigns-random",
@@ -2600,7 +2614,7 @@ describe("Exploration provider", () => {
     expect(mutation?.replacements).toEqual(
       [dreamsignId(1), dreamsignId(2), dreamsignId(3)].map(
         (removedDreamsignId, index) => ({
-          removedDreamsignId: asDreamsignId(removedDreamsignId),
+          removedDreamsignId: removedDreamsignId,
           gainedDreamsignId: plan?.preparedDreamsignIds[index],
         }),
       ),
@@ -2612,7 +2626,7 @@ describe("Exploration provider", () => {
 
   it("purges exactly one Dreamsign and handles zero, one, or two overflow replacements", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("purge-and-gain-dreamsigns"),
+      id: testExplorationActionId("purge-and-gain-dreamsigns"),
       label: "Break and gather signs",
       effectText: "Purge one Dreamsign and gain three random Dreamsigns",
       effectKind: "purge-selected-dreamsign-and-gain-random",
@@ -2648,7 +2662,7 @@ describe("Exploration provider", () => {
       expect(mutation?.purgedIds).toEqual([purgedDreamsignId]);
       expect(mutation?.replacements).toEqual(
         Array.from({ length: overflowCount }, (_, index) => ({
-          removedDreamsignId: asDreamsignId(dreamsignId(index + 2)),
+          removedDreamsignId: dreamsignId(index + 2),
           gainedDreamsignId: plan?.preparedDreamsignIds[index],
         })),
       );
@@ -2691,7 +2705,7 @@ describe("Exploration provider", () => {
 
   it("persists action-level Dreamsign unavailability and rejects stale or tampered plans", () => {
     const replaceAll: ExplorationActionContent = {
-      id: asExplorationActionId("unavailable-replace-all"),
+      id: testExplorationActionId("unavailable-replace-all"),
       label: "Recast every sign",
       effectText: "Replace all Dreamsigns randomly",
       effectKind: "replace-all-dreamsigns-random",
@@ -2721,7 +2735,7 @@ describe("Exploration provider", () => {
     ).toBeNull();
 
     const offered: ExplorationActionContent = {
-      id: asExplorationActionId("insufficient-offer"),
+      id: testExplorationActionId("insufficient-offer"),
       label: "Choose a sign",
       effectText: "Choose one of three Dreamsigns",
       effectKind: "gain-offered-dreamsign",
@@ -2748,7 +2762,7 @@ describe("Exploration provider", () => {
         site,
         payload: {
           actionId: offered.id,
-          selection: { offeredDreamsignId: asDreamsignId(dreamsignId(1)) },
+          selection: { offeredDreamsignId: dreamsignId(1) },
           selectionRulesVersion: SELECTION_RULES_VERSION,
         },
         seq: 91,
@@ -2757,7 +2771,7 @@ describe("Exploration provider", () => {
     ).toBeNull();
 
     const purgeAndGain: ExplorationActionContent = {
-      id: asExplorationActionId("capacity-too-small"),
+      id: testExplorationActionId("capacity-too-small"),
       label: "Break and gather signs",
       effectText: "Purge one and gain three",
       effectKind: "purge-selected-dreamsign-and-gain-random",
@@ -2822,7 +2836,7 @@ describe("Exploration provider", () => {
                 dreamsignPreparation: {
                   ...originalPlan,
                   preparedDreamsignIds: [
-                    asDreamsignId(dreamsignId(8)),
+                    dreamsignId(8),
                     ...originalPlan.preparedDreamsignIds.slice(1),
                   ],
                 },
@@ -2837,13 +2851,13 @@ describe("Exploration provider", () => {
 
   it("mints a random Dreamsign offer and purges a UUID-selected Dreamsign for essence", () => {
     const randomDreamsignAction: ExplorationActionContent = {
-      id: asExplorationActionId("random-dreamsign"),
+      id: testExplorationActionId("random-dreamsign"),
       label: "Read the suspended pattern",
       effectText: "Gain a random dreamsign",
       effectKind: "gain-random-dreamsign",
     };
     const purgeDreamsignAction: ExplorationActionContent = {
-      id: asExplorationActionId("purge-dreamsign"),
+      id: testExplorationActionId("purge-dreamsign"),
       label: "Break the suspended pattern",
       effectText: "Purge a chosen dreamsign and gain 50 essence",
       effectKind: "purge-dreamsign-for-essence",
@@ -2855,7 +2869,7 @@ describe("Exploration provider", () => {
     ]);
     const randomState = buildState(content, {
       ...journeyFixture(content),
-      remainingDreamsignPool: [asDreamsignId(CHARM_POUCH_ID)],
+      remainingDreamsignPool: [testDreamsignId(CHARM_POUCH_ID)],
     });
     expect(randomState.runtime.actionOffers[0]?.offeredDreamsignIds).toEqual([
       CHARM_POUCH_ID,
@@ -2876,7 +2890,7 @@ describe("Exploration provider", () => {
       dreamsignTemplates: [
         ...content.dreamsignTemplates,
         {
-          id: asDreamsignId(alternateDreamsignId),
+          id: testDreamsignId(alternateDreamsignId),
           name: "Alternate Sign",
           effectDescription: "Another fixture effect.",
         },
@@ -2886,19 +2900,19 @@ describe("Exploration provider", () => {
       ...journeyFixture(content),
       dreamsigns: [
         {
-          id: asDreamsignId(CHARM_POUCH_ID),
+          id: testDreamsignId(CHARM_POUCH_ID),
           name: "Charm Pouch",
           effectDescription: "A fixture effect.",
         },
       ],
-      remainingDreamsignPool: [asDreamsignId(alternateDreamsignId)],
+      remainingDreamsignPool: [testDreamsignId(alternateDreamsignId)],
     });
     const purged = resolve(
       purgeContent,
       purgeState.journey,
       purgeDreamsignAction.id,
       {
-        dreamsignId: asDreamsignId(CHARM_POUCH_ID),
+        dreamsignId: testDreamsignId(CHARM_POUCH_ID),
       },
     );
     expect(purged.dreamsigns).toEqual([]);
@@ -2914,13 +2928,13 @@ describe("Exploration provider", () => {
 
   it("makes the deck fast and applies cost reduction before adding Nightmare cards", () => {
     const fastAction: ExplorationActionContent = {
-      id: asExplorationActionId("make-fast"),
+      id: testExplorationActionId("make-fast"),
       label: "Accept the charge",
       effectText: "All cards in your deck become fast",
       effectKind: "make-fast-all",
     };
     const costAction: ExplorationActionContent = {
-      id: asExplorationActionId("reduce-and-nightmares"),
+      id: testExplorationActionId("reduce-and-nightmares"),
       label: "Overload the aperture",
       effectText: "Reduce all costs and gain three Nightmare cards",
       effectKind: "reduce-cost-all-and-gain-nightmares",
@@ -2964,7 +2978,7 @@ describe("Exploration provider", () => {
 
   it("mints deck-entry offers and persists exact duplicated entry UUIDs", () => {
     const selectedCopy: ExplorationActionContent = {
-      id: asExplorationActionId("copy-selected"),
+      id: testExplorationActionId("copy-selected"),
       label: "Copy a selected card",
       effectText: "Gain 2 copies of {deck_card}",
       effectKind: "copy-selected-card",
@@ -2973,7 +2987,7 @@ describe("Exploration provider", () => {
       count: 2,
     };
     const offeredCopy: ExplorationActionContent = {
-      id: asExplorationActionId("copy-offered"),
+      id: testExplorationActionId("copy-offered"),
       label: "Copy an offered card",
       effectText: "Choose one of four deck cards to copy",
       effectKind: "copy-offered-deck-card",
@@ -2996,8 +3010,8 @@ describe("Exploration provider", () => {
         selection: { entryIds: [selectedEntryId] },
         affectedEntryIds: [selectedEntryId],
         gainedEntryIds: [
-          asDeckEntryId("deck-91-0"),
-          asDeckEntryId("deck-91-1"),
+          parseDeckEntryId("deck-91-0"),
+          parseDeckEntryId("deck-91-1"),
         ],
       },
     });
@@ -3007,7 +3021,7 @@ describe("Exploration provider", () => {
         site,
         payload: {
           actionId: selectedCopy.id,
-          selection: { entryIds: [asDeckEntryId("foreign-entry")] },
+          selection: { entryIds: [parseDeckEntryId("foreign-entry")] },
         },
         seq: 91,
         content,
@@ -3030,7 +3044,7 @@ describe("Exploration provider", () => {
         site,
         payload: {
           actionId: offeredCopy.id,
-          selection: { entryIds: [asDeckEntryId("foreign-entry")] },
+          selection: { entryIds: [parseDeckEntryId("foreign-entry")] },
         },
         seq: 91,
         content,
@@ -3040,14 +3054,14 @@ describe("Exploration provider", () => {
 
   it("copies each of two UUID-selected deck entries atomically", () => {
     const copyTwo: ExplorationActionContent = {
-      id: asExplorationActionId("copy-two-selected"),
+      id: testExplorationActionId("copy-two-selected"),
       label: "Separate the fragments",
       effectText: "Gain one copy of each of 2 chosen cards",
       effectKind: "copy-selected-cards",
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -3073,8 +3087,8 @@ describe("Exploration provider", () => {
         selection: { entryIds: selectedEntryIds },
         affectedEntryIds: selectedEntryIds,
         gainedEntryIds: [
-          asDeckEntryId("deck-91-0"),
-          asDeckEntryId("deck-91-1"),
+          parseDeckEntryId("deck-91-0"),
+          parseDeckEntryId("deck-91-1"),
         ],
       },
     });
@@ -3085,7 +3099,7 @@ describe("Exploration provider", () => {
         payload: {
           actionId: copyTwo.id,
           selection: {
-            entryIds: [selectedEntryIds[0], asDeckEntryId("foreign-entry")],
+            entryIds: [selectedEntryIds[0], parseDeckEntryId("foreign-entry")],
           },
         },
         seq: 91,
@@ -3108,14 +3122,14 @@ describe("Exploration provider", () => {
 
   it("persists the exact modified card purged for its spark value", () => {
     const purgeForEssence: ExplorationActionContent = {
-      id: asExplorationActionId("purge-for-essence"),
+      id: testExplorationActionId("purge-for-essence"),
       label: "Yield",
       effectText: "Purge a chosen card and gain 20 essence for each ✦ it had",
       effectKind: "purge-for-essence",
       essencePerSpark: 20,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -3154,13 +3168,13 @@ describe("Exploration provider", () => {
 
   it("persists the purge snapshot, copied source, and minted copy entry for purge-and-copy", () => {
     const purgeAndCopy: ExplorationActionContent = {
-      id: asExplorationActionId("purge-and-copy"),
+      id: testExplorationActionId("purge-and-copy"),
       label: "Exchange",
       effectText: "Purge a chosen card and gain a copy of another chosen card",
       effectKind: "purge-and-copy",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -3201,7 +3215,7 @@ describe("Exploration provider", () => {
         purgedEntryIds: [purged.entryId],
         purgedEntrySnapshots: [purged],
         gainedCardIds: [copiedCardId],
-        gainedEntryIds: [asDeckEntryId("deck-91-0")],
+        gainedEntryIds: [parseDeckEntryId("deck-91-0")],
         affectedEntryIds: [copied.entryId],
       },
     });
@@ -3209,7 +3223,7 @@ describe("Exploration provider", () => {
 
   it("mints a non-matching subtype target and rejects another eligible card", () => {
     const subtypeAction: ExplorationActionContent = {
-      id: asExplorationActionId("become-survivor"),
+      id: testExplorationActionId("become-survivor"),
       label: "Fit a matching hood",
       effectText: "Change {deck_card} to become a Survivor",
       effectKind: "change-subtype-selected",
@@ -3218,7 +3232,7 @@ describe("Exploration provider", () => {
       subtype: "Survivor",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -3239,19 +3253,19 @@ describe("Exploration provider", () => {
       ...journeyFixture(content),
       deck: [
         {
-          entryId: asDeckEntryId("source-entry"),
+          entryId: parseDeckEntryId("source-entry"),
           cardNumber: source.cardNumber,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: asDeckEntryId("survivor-entry"),
+          entryId: parseDeckEntryId("survivor-entry"),
           cardNumber: survivor.cardNumber,
           transfiguration: null,
           isBane: false,
         },
         {
-          entryId: asDeckEntryId("warrior-entry"),
+          entryId: parseDeckEntryId("warrior-entry"),
           cardNumber: warrior.cardNumber,
           transfiguration: null,
           isBane: false,
@@ -3269,7 +3283,7 @@ describe("Exploration provider", () => {
         site,
         payload: {
           actionId: subtypeAction.id,
-          selection: { entryIds: [asDeckEntryId("survivor-entry")] },
+          selection: { entryIds: [parseDeckEntryId("survivor-entry")] },
         },
         seq: 91,
         content,
@@ -3277,7 +3291,7 @@ describe("Exploration provider", () => {
     ).toBeNull();
 
     const changed = resolve(content, state.journey, subtypeAction.id, {
-      entryIds: [asDeckEntryId("warrior-entry")],
+      entryIds: [parseDeckEntryId("warrior-entry")],
     });
     const changedEntry = changed.deck.find(
       (entry) => entry.entryId === "warrior-entry",
@@ -3293,8 +3307,8 @@ describe("Exploration provider", () => {
     expect(changed.siteRuntime[site.id]).toMatchObject({
       kind: "exploration",
       resolution: {
-        selection: { entryIds: [asDeckEntryId("warrior-entry")] },
-        affectedEntryIds: [asDeckEntryId("warrior-entry")],
+        selection: { entryIds: [parseDeckEntryId("warrior-entry")] },
+        affectedEntryIds: [parseDeckEntryId("warrior-entry")],
         chosenSubtype: "Survivor",
       },
     });
@@ -3302,14 +3316,14 @@ describe("Exploration provider", () => {
 
   it("persists one-battle opening-hand and starting-energy modifiers", () => {
     const openingHand: ExplorationActionContent = {
-      id: asExplorationActionId("opening-hand"),
+      id: testExplorationActionId("opening-hand"),
       label: "Draw more",
       effectText: "Draw 2 additional cards at the start of your next battle",
       effectKind: "next-battle-opening-hand",
       count: 2,
     };
     const startingEnergy: ExplorationActionContent = {
-      id: asExplorationActionId("starting-energy"),
+      id: testExplorationActionId("starting-energy"),
       label: "Gather energy",
       effectText: "Gain 2 additional energy at the start of your next battle",
       effectKind: "next-battle-starting-energy",
@@ -3350,14 +3364,14 @@ describe("Exploration provider", () => {
 
   it("persists the compound smaller-hand and cost-discount modifier", () => {
     const compound: ExplorationActionContent = {
-      id: asExplorationActionId("smaller-hand-discount"),
+      id: testExplorationActionId("smaller-hand-discount"),
       label: "Enter the blue radiance",
       effectText:
         "Draw one fewer card at the start of your next battle. All cards cost 1● less during that battle.",
       effectKind: "next-battle-smaller-hand-and-cost-discount",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -3389,14 +3403,14 @@ describe("Exploration provider", () => {
 
   it("offers a replacement Dream Avatar and atomically purges duplicated UUIDs before granting Reclaim", () => {
     const chooseAvatar: ExplorationActionContent = {
-      id: asExplorationActionId("choose-avatar"),
+      id: testExplorationActionId("choose-avatar"),
       label: "Choose an avatar",
       effectText: "Pick a new Dream Avatar from 3 choices",
       effectKind: "choose-dream-avatar",
       offerCount: 3,
     };
     const uniqueDeck: ExplorationActionContent = {
-      id: asExplorationActionId("unique-deck"),
+      id: testExplorationActionId("unique-deck"),
       label: "Enter alone",
       effectText: "Purge duplicates and grant reclaim",
       effectKind: "purge-duplicates-and-grant-reclaim",
@@ -3409,7 +3423,7 @@ describe("Exploration provider", () => {
       ...baseContent,
       dreamAvatars: Array.from({ length: 32 }, (_, index) => ({
         ...avatarTemplate,
-        id: asDreamAvatarId(`dream-avatar-${String(index)}`),
+        id: testDreamAvatarId(`dream-avatar-${String(index)}`),
         name: `Dream Avatar ${String(index)}`,
       })),
     };
@@ -3492,18 +3506,18 @@ describe("Exploration provider", () => {
 
   it("persists every generated replacement trace in one action signature", () => {
     const replaceAction: ExplorationActionContent = {
-      id: asExplorationActionId("generated-replacement"),
+      id: testExplorationActionId("generated-replacement"),
       label: "Change course",
       effectText: "Replace a chosen character",
       effectKind: "replace-selected",
       predicate: "character",
     };
     const otherAction: ExplorationActionContent = {
-      id: asExplorationActionId("gain-fixed"),
+      id: testExplorationActionId("gain-fixed"),
       label: "Take the relic",
       effectText: "Gain a fixed card",
       effectKind: "gain-card",
-      cardId: asCardId(SOURCE_CARD_ID),
+      cardId: SOURCE_CARD_ID,
     };
     const content = contentFixture([replaceAction, otherAction]);
     const { runtime } = buildState(content);
@@ -3519,7 +3533,7 @@ describe("Exploration provider", () => {
 
   it("prepares transfigured drafts and disclosed add-site rewards", () => {
     const transfiguredDraft: ExplorationActionContent = {
-      id: asExplorationActionId("transfigured-draft"),
+      id: testExplorationActionId("transfigured-draft"),
       label: "Follow the bright current",
       effectText: "Draft a transfigured Character from 4 choices.",
       effectKind: "transfigured-card-draft",
@@ -3527,7 +3541,7 @@ describe("Exploration provider", () => {
       offerCount: 4,
     };
     const addSite: ExplorationActionContent = {
-      id: asExplorationActionId("add-site"),
+      id: testExplorationActionId("add-site"),
       label: "Chart a new path",
       effectText: "Add a disclosed site to the current Dreamscape.",
       effectKind: "add-site",
@@ -3565,7 +3579,7 @@ describe("Exploration provider", () => {
 
   it("persists exact UUID selections for offered copies and any-number card takes", () => {
     const copiesAction: ExplorationActionContent = {
-      id: asExplorationActionId("offered-copies"),
+      id: testExplorationActionId("offered-copies"),
       label: "Echo the wingbeats",
       effectText: "Gain 3 copies of $OFFERED_CARD",
       effectKind: "gain-offered-card",
@@ -3573,7 +3587,7 @@ describe("Exploration provider", () => {
       count: 3,
     };
     const takeAction: ExplorationActionContent = {
-      id: asExplorationActionId("take-any"),
+      id: testExplorationActionId("take-any"),
       label: "Join the flight",
       effectText: "Take any number of Spirit Animal cards from 4 choices",
       effectKind: "take-cards",
@@ -3596,9 +3610,9 @@ describe("Exploration provider", () => {
         selection: { cardIds: [offeredCardId] },
         gainedCardIds: [offeredCardId, offeredCardId, offeredCardId],
         gainedEntryIds: [
-          asDeckEntryId("deck-91-0"),
-          asDeckEntryId("deck-91-1"),
-          asDeckEntryId("deck-91-2"),
+          parseDeckEntryId("deck-91-0"),
+          parseDeckEntryId("deck-91-1"),
+          parseDeckEntryId("deck-91-2"),
         ],
       },
     });
@@ -3646,14 +3660,14 @@ describe("Exploration provider", () => {
   it("atomically replaces a selected entry with a fixed UUID and transfigures an unrestricted card", () => {
     const replacementCardId = "f0000000-0000-4000-8000-000000000001";
     const replaceAction: ExplorationActionContent = {
-      id: asExplorationActionId("fixed-replacement"),
+      id: testExplorationActionId("fixed-replacement"),
       label: "Feed it, then gaze",
       effectText: "Choose a card to purge and replace it with a fixed card",
       effectKind: "replace-selected-with-card",
-      cardId: asCardId(replacementCardId),
+      cardId: testCardId(replacementCardId),
     };
     const transfigureAction: ExplorationActionContent = {
-      id: asExplorationActionId("fixed-transfiguration"),
+      id: testExplorationActionId("fixed-transfiguration"),
       label: "Touch a luminous seam",
       effectText: "Apply Empowered to a chosen card",
       effectKind: "transfigure-fixed-selected",
@@ -3677,8 +3691,8 @@ describe("Exploration provider", () => {
         selection: { entryIds: [target.entryId] },
         purgedCardIds: [purgedId],
         purgedEntryIds: [target.entryId],
-        gainedCardIds: [asCardId(replacementCardId)],
-        gainedEntryIds: [asDeckEntryId("deck-91-0")],
+        gainedCardIds: [testCardId(replacementCardId)],
+        gainedEntryIds: [parseDeckEntryId("deck-91-0")],
       },
     });
 
@@ -3709,13 +3723,13 @@ describe("Exploration provider", () => {
 
   it("persists a one-use transfigured Draft-or-Shop modifier", () => {
     const futureAction: ExplorationActionContent = {
-      id: asExplorationActionId("transfigure-next-site"),
+      id: testExplorationActionId("transfigure-next-site"),
       label: "Follow its lowered gaze",
       effectText: "The next draft or shop site will contain transfigured cards",
       effectKind: "transfigure-next-draft-or-shop",
     };
     const fallbackAction: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -3738,13 +3752,13 @@ describe("Exploration provider", () => {
 
   it("keeps versioned resolutions JSON-safe when an action has no selection signature", () => {
     const futureAction: ExplorationActionContent = {
-      id: asExplorationActionId("transfigure-next-site"),
+      id: testExplorationActionId("transfigure-next-site"),
       label: "Follow its lowered gaze",
       effectText: "The next draft or shop site will contain transfigured cards",
       effectKind: "transfigure-next-draft-or-shop",
     };
     const fallbackAction: ExplorationActionContent = {
-      id: asExplorationActionId("fallback"),
+      id: testExplorationActionId("fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -3764,13 +3778,13 @@ describe("Exploration provider", () => {
 
   it("discloses the prepared named starter purge while concealing the random purge", () => {
     const disclosed: ExplorationActionContent = {
-      id: asExplorationActionId("purge-starter-disclosed"),
+      id: testExplorationActionId("purge-starter-disclosed"),
       label: "Release the first lesson",
       effectText: "Purge {starter_card}",
       effectKind: "purge-starter-card",
     };
     const concealed: ExplorationActionContent = {
-      id: asExplorationActionId("purge-starter-random"),
+      id: testExplorationActionId("purge-starter-random"),
       label: "Let one lesson fade",
       effectText: "Purge a random starter card",
       effectKind: "purge-random-starter-card",
@@ -3783,9 +3797,9 @@ describe("Exploration provider", () => {
     expect(disclosedOffer?.starterCardPreparation).toMatchObject({
       kind: "purge-starter-card",
       eligibleStarterCards: [
-        { entryId: asDeckEntryId("starter-entry-1") },
-        { entryId: asDeckEntryId("starter-entry-2") },
-        { entryId: asDeckEntryId("starter-entry-3") },
+        { entryId: parseDeckEntryId("starter-entry-1") },
+        { entryId: parseDeckEntryId("starter-entry-2") },
+        { entryId: parseDeckEntryId("starter-entry-3") },
       ],
     });
     expect(
@@ -3833,14 +3847,14 @@ describe("Exploration provider", () => {
 
   it("atomically replaces one prepared starter and rejects tampering, replay, and stale state", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("replace-random-starter"),
+      id: testExplorationActionId("replace-random-starter"),
       label: "Trade the old lesson",
       effectText: "Purge a random starter card and gain a Warrior",
       effectKind: "purge-random-starter-and-gain-card",
       predicate: "warrior",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback-starter-replacement"),
+      id: testExplorationActionId("fallback-starter-replacement"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -3861,13 +3875,13 @@ describe("Exploration provider", () => {
       purgedEntryIds: preparation.purgedEntryIds,
       purgedCardIds: preparation.purgedCardIds,
       gainedCardIds: Object.values(preparation.replacementCardIdByEntryId),
-      gainedEntryIds: [asDeckEntryId("deck-91-0")],
+      gainedEntryIds: [parseDeckEntryId("deck-91-0")],
       resolvedPredicate: "warrior",
       starterCardReplacements: [
         {
           purgedEntryId: preparation.purgedEntryIds[0],
           purgedCardId: preparation.purgedCardIds[0],
-          gainedEntryId: asDeckEntryId("deck-91-0"),
+          gainedEntryId: parseDeckEntryId("deck-91-0"),
           gainedCardId: Object.values(
             preparation.replacementCardIdByEntryId,
           )[0],
@@ -3997,14 +4011,14 @@ describe("Exploration provider", () => {
 
   it("replaces every sorted starter with an exact distinct persisted bundle", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("replace-all-starters"),
+      id: testExplorationActionId("replace-all-starters"),
       label: "Graduate the old guard",
       effectText: "Replace all starter cards with Warriors",
       effectKind: "replace-all-starter-cards",
       predicate: "warrior",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback-all-starters"),
+      id: testExplorationActionId("fallback-all-starters"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -4043,7 +4057,7 @@ describe("Exploration provider", () => {
       preparation.purgedEntryIds.map((purgedEntryId, index) => ({
         purgedEntryId,
         purgedCardId: preparation.purgedCardIds[index],
-        gainedEntryId: asDeckEntryId(`deck-91-${String(index)}`),
+        gainedEntryId: parseDeckEntryId(`deck-91-${String(index)}`),
         gainedCardId: preparation.replacementCardIdByEntryId[purgedEntryId],
       })),
     );
@@ -4051,13 +4065,13 @@ describe("Exploration provider", () => {
 
   it("keeps unavailable starter plans signed without discarding the encounter", () => {
     const purgeAction: ExplorationActionContent = {
-      id: asExplorationActionId("unavailable-starter-purge"),
+      id: testExplorationActionId("unavailable-starter-purge"),
       label: "Release a lesson",
       effectText: "Purge a starter card",
       effectKind: "purge-random-starter-card",
     };
     const replaceAction: ExplorationActionContent = {
-      id: asExplorationActionId("unavailable-starter-bundle"),
+      id: testExplorationActionId("unavailable-starter-bundle"),
       label: "Graduate the old guard",
       effectText: "Replace all starter cards with Warriors",
       effectKind: "replace-all-starter-cards",
@@ -4104,8 +4118,8 @@ describe("Exploration provider", () => {
     ).toMatchObject({
       unavailableReason: "insufficient-replacement-cards",
       purgedEntryIds: [
-        asDeckEntryId("starter-entry-1"),
-        asDeckEntryId("starter-entry-2"),
+        parseDeckEntryId("starter-entry-1"),
+        parseDeckEntryId("starter-entry-2"),
       ],
       replacementCardIdByEntryId: {},
     });
@@ -4113,14 +4127,14 @@ describe("Exploration provider", () => {
 
   it("prepares concealed random starter transfigurations and persists their exact ordered forms", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("transfigure-random-starters"),
+      id: testExplorationActionId("transfigure-random-starters"),
       label: "Rewrite two lessons",
       effectText: "Transfigure 2 random starter cards",
       effectKind: "transfigure-random-starter-cards",
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback-random-starter-transfiguration"),
+      id: testExplorationActionId("fallback-random-starter-transfiguration"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -4137,10 +4151,10 @@ describe("Exploration provider", () => {
     expect(preparation).toMatchObject({
       kind: "random-count",
       starterCards: [
-        { entryId: asDeckEntryId("starter-entry-1") },
-        { entryId: asDeckEntryId("starter-entry-2") },
-        { entryId: asDeckEntryId("starter-entry-3") },
-        { entryId: asDeckEntryId("starter-entry-4") },
+        { entryId: parseDeckEntryId("starter-entry-1") },
+        { entryId: parseDeckEntryId("starter-entry-2") },
+        { entryId: parseDeckEntryId("starter-entry-3") },
+        { entryId: parseDeckEntryId("starter-entry-4") },
       ],
     });
     expect(preparation.unavailableReason).toBeUndefined();
@@ -4202,14 +4216,14 @@ describe("Exploration provider", () => {
 
   it("replays starter transfigurations as one deterministic event-log fold", async () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("fold-starter-transfigurations"),
+      id: testExplorationActionId("fold-starter-transfigurations"),
       label: "Rewrite two lessons",
       effectText: "Transfigure 2 random starter cards",
       effectKind: "transfigure-random-starter-cards",
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback-fold-starter-transfigurations"),
+      id: testExplorationActionId("fallback-fold-starter-transfigurations"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -4233,7 +4247,7 @@ describe("Exploration provider", () => {
     const draft = drafts[0];
     if (draft === undefined) throw new Error("Expected a coop intent");
     const genesis: Genesis = {
-      seed: "starter-transfiguration-fold",
+      seed: testJourneySeed("starter-transfiguration-fold"),
       reducerVersion: "test",
       createdAt: 0,
       contentConfig: { poolVariant: "tides4" },
@@ -4241,7 +4255,7 @@ describe("Exploration provider", () => {
     const event: GameEvent = {
       type: draft.type,
       payload: draft.payload,
-      actor: "client-a",
+      actor: testEventActor("client-a"),
       clientTimestamp: "1970-01-01T00:00:00.000Z",
       basedOnSeq: 0,
       ...(draft.intentKey === undefined ? {} : { intentKey: draft.intentKey }),
@@ -4312,13 +4326,13 @@ describe("Exploration provider", () => {
 
   it("transfigures literally every starter atomically in stable entry order", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("transfigure-all-starters"),
+      id: testExplorationActionId("transfigure-all-starters"),
       label: "Rewrite every lesson",
       effectText: "Transfigure all starter cards",
       effectKind: "transfigure-all-starter-cards",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback-all-starter-transfiguration"),
+      id: testExplorationActionId("fallback-all-starter-transfiguration"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -4356,14 +4370,14 @@ describe("Exploration provider", () => {
 
   it("rejects starter transfiguration replay, tampering, stale state, and partial application", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("guarded-starter-transfiguration"),
+      id: testExplorationActionId("guarded-starter-transfiguration"),
       label: "Rewrite two lessons",
       effectText: "Transfigure 2 random starter cards",
       effectKind: "transfigure-random-starter-cards",
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fallback-guarded-starter-transfiguration"),
+      id: testExplorationActionId("fallback-guarded-starter-transfiguration"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -4471,14 +4485,14 @@ describe("Exploration provider", () => {
 
   it("keeps signed unavailable starter transfiguration offers alongside their companion action", () => {
     const randomAction: ExplorationActionContent = {
-      id: asExplorationActionId("unavailable-random-starter-transfiguration"),
+      id: testExplorationActionId("unavailable-random-starter-transfiguration"),
       label: "Rewrite two lessons",
       effectText: "Transfigure 2 random starter cards",
       effectKind: "transfigure-random-starter-cards",
       count: 2,
     };
     const allAction: ExplorationActionContent = {
-      id: asExplorationActionId("unavailable-all-starter-transfiguration"),
+      id: testExplorationActionId("unavailable-all-starter-transfiguration"),
       label: "Rewrite every lesson",
       effectText: "Transfigure all starter cards",
       effectKind: "transfigure-all-starter-cards",
@@ -4527,14 +4541,14 @@ describe("Exploration provider", () => {
 
   it("preserves the legacy count-one transfiguration payload and runtime", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("single-chosen-transfiguration"),
+      id: testExplorationActionId("single-chosen-transfiguration"),
       label: "Rewrite one thread",
       effectText: "Transfigure a chosen card",
       effectKind: "transfigure-selected",
       count: 1,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("single-chosen-fallback"),
+      id: testExplorationActionId("single-chosen-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -4567,7 +4581,7 @@ describe("Exploration provider", () => {
 
   it("signs every eligible chosen form and atomically resolves exact zipped multi-card intent", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("chosen-multi-transfiguration"),
+      id: testExplorationActionId("chosen-multi-transfiguration"),
       label: "Rewrite two threads",
       effectText: "Transfigure 2 chosen Characters",
       effectKind: "transfigure-selected",
@@ -4575,7 +4589,7 @@ describe("Exploration provider", () => {
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("chosen-multi-fallback"),
+      id: testExplorationActionId("chosen-multi-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -4647,7 +4661,7 @@ describe("Exploration provider", () => {
         transfigurations: [repeatedForm, "foreign-form"],
       },
       {
-        entryIds: [entryIds[0], asDeckEntryId("foreign-entry-id")],
+        entryIds: [entryIds[0], parseDeckEntryId("foreign-entry-id")],
         transfigurations,
       },
       {
@@ -4677,7 +4691,7 @@ describe("Exploration provider", () => {
 
   it("replays one multi-card transfiguration event deterministically and bounces its duplicate", async () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("fold-multi-transfiguration"),
+      id: testExplorationActionId("fold-multi-transfiguration"),
       label: "Rewrite two threads",
       effectText: "Transfigure 2 chosen Characters",
       effectKind: "transfigure-selected",
@@ -4685,7 +4699,7 @@ describe("Exploration provider", () => {
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fold-multi-transfiguration-fallback"),
+      id: testExplorationActionId("fold-multi-transfiguration-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -4716,7 +4730,7 @@ describe("Exploration provider", () => {
     const draft = drafts[0];
     if (draft === undefined) throw new Error("Expected a coop intent");
     const genesis: Genesis = {
-      seed: "multi-card-transfiguration-fold",
+      seed: testJourneySeed("multi-card-transfiguration-fold"),
       reducerVersion: "test",
       createdAt: 0,
       contentConfig: { poolVariant: "tides4" },
@@ -4724,7 +4738,7 @@ describe("Exploration provider", () => {
     const event: GameEvent = {
       type: draft.type,
       payload: draft.payload,
-      actor: "client-a",
+      actor: testEventActor("client-a"),
       clientTimestamp: "1970-01-01T00:00:00.000Z",
       basedOnSeq: 0,
       ...(draft.intentKey === undefined ? {} : { intentKey: draft.intentKey }),
@@ -4795,7 +4809,7 @@ describe("Exploration provider", () => {
 
   it("prepares concealed flexible random targets and rejects plan, intent, and stale-state tampering", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("random-multi-transfiguration"),
+      id: testExplorationActionId("random-multi-transfiguration"),
       label: "Rewrite two wandering threads",
       effectText: "Transfigure 2 random Characters",
       effectKind: "transfigure-random-cards",
@@ -4803,7 +4817,7 @@ describe("Exploration provider", () => {
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("random-multi-fallback"),
+      id: testExplorationActionId("random-multi-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -4921,7 +4935,7 @@ describe("Exploration provider", () => {
 
   it("prepares exact fixed-form random targets and keeps insufficient plans signed", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("fixed-random-multi-transfiguration"),
+      id: testExplorationActionId("fixed-random-multi-transfiguration"),
       label: "Empower two wandering threads",
       effectText: "Apply Empowered to 2 random Characters",
       effectKind: "transfigure-fixed-random-cards",
@@ -4930,7 +4944,7 @@ describe("Exploration provider", () => {
       transfiguration: "Empowered",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fixed-random-multi-fallback"),
+      id: testExplorationActionId("fixed-random-multi-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -4962,7 +4976,7 @@ describe("Exploration provider", () => {
 
     const insufficientAction: ExplorationActionContent = {
       ...action,
-      id: asExplorationActionId(
+      id: testExplorationActionId(
         "insufficient-fixed-random-multi-transfiguration",
       ),
       count: 5,
@@ -4997,7 +5011,7 @@ describe("Exploration provider", () => {
 
   it("replaces one or two chosen entries from concealed signed source-bound replacements", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("replace-up-to-two-events"),
+      id: testExplorationActionId("replace-up-to-two-events"),
       label: "Rewrite up to two events",
       effectText: "Replace up to 2 Events with Events",
       effectKind: "replace-selected",
@@ -5005,7 +5019,7 @@ describe("Exploration provider", () => {
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("replace-up-to-two-fallback"),
+      id: testExplorationActionId("replace-up-to-two-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -5044,7 +5058,7 @@ describe("Exploration provider", () => {
       chosen.map((binding, index) => ({
         sourceEntryId: binding.sourceEntryId,
         sourceCardId: binding.sourceCardId,
-        replacementEntryId: asDeckEntryId(`deck-91-${String(index)}`),
+        replacementEntryId: parseDeckEntryId(`deck-91-${String(index)}`),
         replacementCardId: binding.replacementCardId,
       })),
     );
@@ -5063,7 +5077,7 @@ describe("Exploration provider", () => {
       { entryIds: [] },
       { entryIds: [entryIds[0], entryIds[0]] },
       { entryIds: [...entryIds, preparation.bindings[2]?.sourceEntryId] },
-      { entryIds: [asDeckEntryId("foreign-entry-id")] },
+      { entryIds: [parseDeckEntryId("foreign-entry-id")] },
       { entryIds, cardIds: [] },
     ]) {
       expect(
@@ -5085,7 +5099,7 @@ describe("Exploration provider", () => {
 
   it("rejects tampered and stale chosen replacement plans without partial mutation", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("guarded-multi-replacement"),
+      id: testExplorationActionId("guarded-multi-replacement"),
       label: "Rewrite up to two events",
       effectText: "Replace up to 2 Events with Events",
       effectKind: "replace-selected",
@@ -5093,7 +5107,7 @@ describe("Exploration provider", () => {
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("guarded-multi-replacement-fallback"),
+      id: testExplorationActionId("guarded-multi-replacement-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -5174,7 +5188,7 @@ describe("Exploration provider", () => {
 
   it("applies one fixed form to an exact signed multi-card chosen selection", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("fixed-chosen-multi-transfiguration"),
+      id: testExplorationActionId("fixed-chosen-multi-transfiguration"),
       label: "Empower two characters",
       effectText: "Apply Empowered to 2 chosen Characters",
       effectKind: "transfigure-fixed-selected",
@@ -5183,7 +5197,7 @@ describe("Exploration provider", () => {
       transfiguration: "Empowered",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("fixed-chosen-multi-fallback"),
+      id: testExplorationActionId("fixed-chosen-multi-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -5250,7 +5264,7 @@ describe("Exploration provider", () => {
 
   it("copies exact concealed random entries while preserving every source modification", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("copy-two-random-events"),
+      id: testExplorationActionId("copy-two-random-events"),
       label: "Echo two events",
       effectText: "Copy 2 random Events",
       effectKind: "copy-random-cards",
@@ -5258,7 +5272,7 @@ describe("Exploration provider", () => {
       count: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("copy-two-random-fallback"),
+      id: testExplorationActionId("copy-two-random-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -5301,7 +5315,7 @@ describe("Exploration provider", () => {
       preparation.targets.map((target, index) => ({
         sourceEntryId: target.entryId,
         sourceCardId: target.cardId,
-        mintedEntryId: asDeckEntryId(`deck-91-${String(index)}`),
+        mintedEntryId: parseDeckEntryId(`deck-91-${String(index)}`),
         mintedCardId: target.cardId,
       })),
     );
@@ -5312,7 +5326,7 @@ describe("Exploration provider", () => {
     ).toEqual(
       sources.map((source, index) => ({
         ...source,
-        entryId: asDeckEntryId(`deck-91-${String(index)}`),
+        entryId: parseDeckEntryId(`deck-91-${String(index)}`),
       })),
     );
     expect(
@@ -5413,7 +5427,7 @@ describe("Exploration provider", () => {
 
   it("changes exact random effective non-target types and persists complete before/after overrides", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("change-two-random-types"),
+      id: testExplorationActionId("change-two-random-types"),
       label: "Make two Characters",
       effectText: "Change 2 random non-Characters into Characters",
       effectKind: "change-random-card-type",
@@ -5421,15 +5435,15 @@ describe("Exploration provider", () => {
       cardType: "Character",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("change-two-random-types-fallback"),
+      id: testExplorationActionId("change-two-random-types-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
       cardId: SOURCE_CARD_ID,
     };
     const content = contentFixture([action, fallback]);
-    const beforeOverride = {
-      predicateId: asCardTypeChangePredicateId("fixture:event"),
+    const beforeOverride: CardTypeChange = {
+      predicateId: parseCardTypeChangePredicateId("fixture:event"),
       cardType: "Event" as const,
       subtype: "",
       label: "Event",
@@ -5461,7 +5475,7 @@ describe("Exploration provider", () => {
         afterCardType: "Character",
         beforeTypeChange: beforeOverride,
         afterTypeChange: {
-          predicateId: asCardTypeChangePredicateId(
+          predicateId: parseCardTypeChangePredicateId(
             "exploration:card-type:character",
           ),
           cardType: "Character",
@@ -5475,7 +5489,7 @@ describe("Exploration provider", () => {
         (candidate) => candidate.entryId === target.entryId,
       );
       expect(entry?.typeChange).toEqual({
-        predicateId: asCardTypeChangePredicateId(
+        predicateId: parseCardTypeChangePredicateId(
           "exploration:card-type:character",
         ),
         cardType: "Character",
@@ -5496,9 +5510,9 @@ describe("Exploration provider", () => {
   });
 
   it("atomically replaces one signed random target with a clean fixed catalog entry", () => {
-    const replacementCardId = asCardId("f0000000-0000-4000-8000-000000000001");
+    const replacementCardId = testCardId("f0000000-0000-4000-8000-000000000001");
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("replace-random-character-with-fixed"),
+      id: testExplorationActionId("replace-random-character-with-fixed"),
       label: "Trade one creature",
       effectText: "Replace a random Character with {fixed_card}",
       effectKind: "replace-random-with-card",
@@ -5508,7 +5522,7 @@ describe("Exploration provider", () => {
       cardId: replacementCardId,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("replace-random-character-fallback"),
+      id: testExplorationActionId("replace-random-character-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -5521,11 +5535,11 @@ describe("Exploration provider", () => {
         ...entry,
         transfiguration: "Empowered" as const,
         typeChange: {
-          predicateId: asCardTypeChangePredicateId("fixture:changed"),
+          predicateId: parseCardTypeChangePredicateId("fixture:changed"),
           cardType: "Character" as const,
           subtype: "Warrior",
           label: "Warrior",
-        },
+        } satisfies CardTypeChange,
         keywordModification: { reclaim: 2 },
         sparkBonus: 3,
       })),
@@ -5561,13 +5575,13 @@ describe("Exploration provider", () => {
       purgedCardIds: [target.cardId],
       purgedEntrySnapshots: [before],
       gainedCardIds: [replacementCardId],
-      gainedEntryIds: [asDeckEntryId("deck-91-0")],
+      gainedEntryIds: [parseDeckEntryId("deck-91-0")],
       resolvedPredicate: "character",
       cardReplacements: [
         {
           sourceEntryId: target.entryId,
           sourceCardId: target.cardId,
-          replacementEntryId: asDeckEntryId("deck-91-0"),
+          replacementEntryId: parseDeckEntryId("deck-91-0"),
           replacementCardId,
         },
       ],
@@ -5619,7 +5633,7 @@ describe("Exploration provider", () => {
 
   it("changes the exact disclosed deck target and rejects forged or extra intent", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("change-disclosed-event-to-character"),
+      id: testExplorationActionId("change-disclosed-event-to-character"),
       label: "Rewrite the revealed card",
       effectText: "Change {deck_card} to become a Character",
       effectKind: "change-card-type-selected",
@@ -5629,7 +5643,7 @@ describe("Exploration provider", () => {
       deckTarget: "offered",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("change-disclosed-type-fallback"),
+      id: testExplorationActionId("change-disclosed-type-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -5670,7 +5684,7 @@ describe("Exploration provider", () => {
           afterCardType: "Character",
           beforeTypeChange: null,
           afterTypeChange: {
-            predicateId: asCardTypeChangePredicateId(
+            predicateId: parseCardTypeChangePredicateId(
               "exploration:card-type:character",
             ),
             cardType: "Character",
@@ -5711,7 +5725,7 @@ describe("Exploration provider", () => {
     "prepares and resolves one signed fixed %s insertion",
     (siteType) => {
       const action: ExplorationActionContent = {
-        id: asExplorationActionId(`fixed-${siteType}`),
+        id: testExplorationActionId(`fixed-${siteType}`),
         label: "Open a passage",
         effectText: `Add a ${siteType} site`,
         effectKind: "add-fixed-site",
@@ -5720,7 +5734,7 @@ describe("Exploration provider", () => {
         siteType,
       };
       const fallback: ExplorationActionContent = {
-        id: asExplorationActionId(`fixed-${siteType}-fallback`),
+        id: testExplorationActionId(`fixed-${siteType}-fallback`),
         label: "Gain a card",
         effectText: "Gain a card",
         effectKind: "gain-card",
@@ -5764,7 +5778,7 @@ describe("Exploration provider", () => {
           content,
         });
         expect(
-          legacyResolved?.atlas.nodes[asAtlasNodeId("exploration-node")]
+          legacyResolved?.atlas.nodes[parseAtlasNodeId("exploration-node")]
             ?.sites[1],
         ).toEqual(preparation.insertedSite);
         expect(
@@ -5782,11 +5796,11 @@ describe("Exploration provider", () => {
         siteInsertionPreparation: {
           sourceSiteId: site.id,
           sourceActionId: action.id,
-          targetNodeId: asAtlasNodeId("exploration-node"),
+          targetNodeId: parseAtlasNodeId("exploration-node"),
           insertionIndex: 1,
           siblingSiteIdsBefore: [site.id],
           insertedSite: {
-            id: asSiteId(`site-exploration-${site.id}-${action.id}`),
+            id: parseSiteId(`site-exploration-${site.id}-${action.id}`),
             type: siteType,
             isEnhanced: false,
             isVisited: false,
@@ -5796,7 +5810,7 @@ describe("Exploration provider", () => {
 
       const resolved = resolve(content, first.journey, action.id);
       const inserted =
-        resolved.atlas.nodes[asAtlasNodeId("exploration-node")]?.sites[1];
+        resolved.atlas.nodes[parseAtlasNodeId("exploration-node")]?.sites[1];
       expect(inserted).toEqual(preparation.insertedSite);
       expect(explorationResolutionFor(resolved)).toMatchObject({
         selection: {},
@@ -5804,7 +5818,7 @@ describe("Exploration provider", () => {
         selectionContentRevision: offer.selectionContentRevision,
         selectionSignature: preparation.planSignature,
         siteInsertion: {
-          targetNodeId: asAtlasNodeId("exploration-node"),
+          targetNodeId: parseAtlasNodeId("exploration-node"),
           insertionIndex: 1,
           siblingSiteIdsBefore: [site.id],
           insertedSite: preparation.insertedSite,
@@ -5836,7 +5850,7 @@ describe("Exploration provider", () => {
 
   it("rejects fixed-site plan tampering, stale atlas state, and nonempty intent", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("guarded-fixed-site"),
+      id: testExplorationActionId("guarded-fixed-site"),
       label: "Open a passage",
       effectText: "Add a Shop site",
       effectKind: "add-fixed-site",
@@ -5845,7 +5859,7 @@ describe("Exploration provider", () => {
       siteType: "Shop",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("guarded-fixed-site-fallback"),
+      id: testExplorationActionId("guarded-fixed-site-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -5884,15 +5898,15 @@ describe("Exploration provider", () => {
     expect(offer.selectionTrace).toBeUndefined();
     const tamperedStates = [
       tamper((plan) => ({ ...plan, planSignature: "forged" })),
-      tamper((plan) => ({ ...plan, targetNodeId: asAtlasNodeId("forged") })),
+      tamper((plan) => ({ ...plan, targetNodeId: parseAtlasNodeId("forged") })),
       tamper((plan) => ({
         ...plan,
-        siblingSiteIdsBefore: [asSiteId("forged-sibling")],
+        siblingSiteIdsBefore: [parseSiteId("forged-sibling")],
       })),
       tamper((plan) => ({ ...plan, insertionIndex: 2 })),
       tamper((plan) => ({
         ...plan,
-        insertedSite: { ...plan.insertedSite, id: asSiteId("forged") },
+        insertedSite: { ...plan.insertedSite, id: parseSiteId("forged") },
       })),
       tamper((plan) => ({
         ...plan,
@@ -5915,10 +5929,10 @@ describe("Exploration provider", () => {
     }
 
     const stale = fresh();
-    const node = stale.journey.atlas.nodes[asAtlasNodeId("exploration-node")];
+    const node = stale.journey.atlas.nodes[parseAtlasNodeId("exploration-node")];
     if (node === undefined) throw new Error("Expected current node");
     node.sites.unshift({
-      id: asSiteId("new-sibling"),
+      id: parseSiteId("new-sibling"),
       type: "Essence",
       isEnhanced: false,
       isVisited: false,
@@ -5952,7 +5966,7 @@ describe("Exploration provider", () => {
 
   it("prepares three distinct signed site choices and inserts exactly the selected type", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("choose-site-type"),
+      id: testExplorationActionId("choose-site-type"),
       label: "Choose a destination",
       effectText: "Choose one of three sites to add",
       followupTitle: "Choose a site",
@@ -5963,7 +5977,7 @@ describe("Exploration provider", () => {
       offerCount: 3,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("choose-site-type-fallback"),
+      id: testExplorationActionId("choose-site-type-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -6002,7 +6016,7 @@ describe("Exploration provider", () => {
       siteTypeChoicePreparation: {
         sourceSiteId: site.id,
         sourceActionId: action.id,
-        targetNodeId: asAtlasNodeId("exploration-node"),
+        targetNodeId: parseAtlasNodeId("exploration-node"),
         insertionIndex: 1,
         siblingSiteIdsBefore: [site.id],
       },
@@ -6034,7 +6048,7 @@ describe("Exploration provider", () => {
       siteType: chosen.siteType,
     });
     expect(
-      resolved.atlas.nodes[asAtlasNodeId("exploration-node")]?.sites[1],
+      resolved.atlas.nodes[parseAtlasNodeId("exploration-node")]?.sites[1],
     ).toEqual(chosen.insertedSite);
     expect(explorationResolutionFor(resolved)).toMatchObject({
       selection: { siteType: chosen.siteType },
@@ -6042,7 +6056,7 @@ describe("Exploration provider", () => {
       selectionContentRevision: offer.selectionContentRevision,
       selectionSignature: preparation.planSignature,
       siteInsertion: {
-        targetNodeId: asAtlasNodeId("exploration-node"),
+        targetNodeId: parseAtlasNodeId("exploration-node"),
         insertionIndex: 1,
         siblingSiteIdsBefore: [site.id],
         insertedSite: chosen.insertedSite,
@@ -6053,7 +6067,7 @@ describe("Exploration provider", () => {
 
   it("rejects forged site-choice plans, selector traces, stale topology, and invalid intents", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("guarded-site-choice"),
+      id: testExplorationActionId("guarded-site-choice"),
       label: "Choose a destination",
       effectText: "Choose one of three sites to add",
       followupTitle: "Choose a site",
@@ -6064,7 +6078,7 @@ describe("Exploration provider", () => {
       offerCount: 3,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("guarded-site-choice-fallback"),
+      id: testExplorationActionId("guarded-site-choice-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -6113,12 +6127,12 @@ describe("Exploration provider", () => {
       mutatePlan((plan) => ({ ...plan, selectorSignature: "forged" })),
       mutatePlan((plan) => ({
         ...plan,
-        targetNodeId: asAtlasNodeId("forged"),
+        targetNodeId: parseAtlasNodeId("forged"),
       })),
       mutatePlan((plan) => ({ ...plan, insertionIndex: 2 })),
       mutatePlan((plan) => ({
         ...plan,
-        siblingSiteIdsBefore: [asSiteId("forged")],
+        siblingSiteIdsBefore: [parseSiteId("forged")],
       })),
       mutatePlan((plan) => ({ ...plan, choices: [...plan.choices].reverse() })),
       mutatePlan((plan) => ({
@@ -6128,7 +6142,7 @@ describe("Exploration provider", () => {
             ...firstChoice,
             insertedSite: {
               ...firstChoice.insertedSite,
-              id: asSiteId("forged"),
+              id: parseSiteId("forged"),
             },
           },
           ...plan.choices.slice(1),
@@ -6147,8 +6161,8 @@ describe("Exploration provider", () => {
         ...offer,
         siteInsertionPreparation: {
           sourceSiteId: site.id,
-          sourceActionId: asExplorationActionId(action.id),
-          targetNodeId: asAtlasNodeId("exploration-node"),
+          sourceActionId: action.id,
+          targetNodeId: parseAtlasNodeId("exploration-node"),
           insertionIndex: 1,
           siblingSiteIdsBefore: [site.id],
           insertedSite: firstChoice.insertedSite,
@@ -6173,8 +6187,8 @@ describe("Exploration provider", () => {
     }
 
     const stale = fresh();
-    stale.journey.atlas.nodes[asAtlasNodeId("exploration-node")]?.sites.push({
-      id: asSiteId("new-sibling"),
+    stale.journey.atlas.nodes[parseAtlasNodeId("exploration-node")]?.sites.push({
+      id: parseSiteId("new-sibling"),
       type: "Essence",
       isEnhanced: false,
       isVisited: false,
@@ -6219,7 +6233,7 @@ describe("Exploration provider", () => {
       ...content,
       sitesData: {
         ...content.sitesData,
-        foldHash: `${content.sitesData.foldHash}-changed`,
+        foldHash: testFoldHash("f"),
       },
     };
     expect(
@@ -6238,8 +6252,8 @@ describe("Exploration provider", () => {
   });
 
   it("isolates site choices by action key and replays one chosen insertion once", () => {
-    const action = (id: string): ExplorationActionContent => ({
-      id: asExplorationActionId(id),
+    const action = (idSeed: string): ExplorationActionContent => ({
+      id: testExplorationActionId(idSeed),
       label: "Choose a destination",
       effectText: "Choose one of three sites to add",
       followupTitle: "Choose a site",
@@ -6280,7 +6294,7 @@ describe("Exploration provider", () => {
       }),
     ).toBeNull();
     expect(JSON.parse(JSON.stringify(once))).toEqual(once);
-    expect(once.atlas.nodes[asAtlasNodeId("exploration-node")]?.sites).toEqual([
+    expect(once.atlas.nodes[parseAtlasNodeId("exploration-node")]?.sites).toEqual([
       site,
       chosen.insertedSite,
     ]);
@@ -6288,7 +6302,7 @@ describe("Exploration provider", () => {
 
   it("folds a chosen site insertion deterministically and bounces a duplicate intent", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("folded-site-choice"),
+      id: testExplorationActionId("folded-site-choice"),
       label: "Choose a destination",
       effectText: "Choose one of three sites to add",
       followupTitle: "Choose a site",
@@ -6299,7 +6313,7 @@ describe("Exploration provider", () => {
       offerCount: 3,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("folded-site-choice-fallback"),
+      id: testExplorationActionId("folded-site-choice-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -6318,7 +6332,7 @@ describe("Exploration provider", () => {
       prepared?.actionOffers[0]?.siteTypeChoicePreparation?.choices[0];
     if (chosen === undefined) throw new Error("Expected a folded site choice");
     const genesis: Genesis = {
-      seed: "site-choice-fold",
+      seed: testJourneySeed("site-choice-fold"),
       reducerVersion: "test",
       createdAt: 0,
       contentConfig: { poolVariant: "tides4" },
@@ -6338,7 +6352,7 @@ describe("Exploration provider", () => {
             siteId: site.id,
             selectionRulesVersion: SELECTION_RULES_VERSION,
           },
-          actor: "client-a",
+          actor: testEventActor("client-a"),
           clientTimestamp: "1970-01-01T00:00:00.000Z",
           basedOnSeq: 0,
         },
@@ -6348,7 +6362,7 @@ describe("Exploration provider", () => {
         event: {
           type: "RESOLVE_EXPLORATION_CHOICE",
           payload: resolvePayload,
-          actor: "client-a",
+          actor: testEventActor("client-a"),
           clientTimestamp: "1970-01-01T00:00:01.000Z",
           basedOnSeq: 1,
         },
@@ -6358,7 +6372,7 @@ describe("Exploration provider", () => {
         event: {
           type: "RESOLVE_EXPLORATION_CHOICE",
           payload: resolvePayload,
-          actor: "client-b",
+          actor: testEventActor("client-b"),
           clientTimestamp: "1970-01-01T00:00:02.000Z",
           basedOnSeq: 2,
         },
@@ -6391,7 +6405,7 @@ describe("Exploration provider", () => {
       expect(replay.state).toEqual(first.state);
       expect(JSON.parse(JSON.stringify(first.state))).toEqual(first.state);
       expect(
-        first.state.journey.atlas.nodes[asAtlasNodeId("exploration-node")]
+        first.state.journey.atlas.nodes[parseAtlasNodeId("exploration-node")]
           ?.sites,
       ).toEqual([site, chosen.insertedSite]);
       expect(explorationResolutionFor(first.state.journey).selection).toEqual({
@@ -6404,7 +6418,7 @@ describe("Exploration provider", () => {
 
   it("folds one fixed-site resolution once and survives JSON save/load", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("replayed-fixed-site"),
+      id: testExplorationActionId("replayed-fixed-site"),
       label: "Open a passage",
       effectText: "Add a Duplication site",
       effectKind: "add-fixed-site",
@@ -6413,7 +6427,7 @@ describe("Exploration provider", () => {
       siteType: "Duplication",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("replayed-fixed-site-fallback"),
+      id: testExplorationActionId("replayed-fixed-site-fallback"),
       label: "Gain a card",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -6421,7 +6435,7 @@ describe("Exploration provider", () => {
     };
     const content = contentFixture([action, fallback]);
     const genesis: Genesis = {
-      seed: "fixed-site-fold",
+      seed: testJourneySeed("fixed-site-fold"),
       reducerVersion: "test",
       createdAt: 0,
       contentConfig: { poolVariant: "tides4" },
@@ -6440,7 +6454,7 @@ describe("Exploration provider", () => {
             siteId: site.id,
             selectionRulesVersion: SELECTION_RULES_VERSION,
           },
-          actor: "client-a",
+          actor: testEventActor("client-a"),
           clientTimestamp: "1970-01-01T00:00:00.000Z",
           basedOnSeq: 0,
         },
@@ -6450,7 +6464,7 @@ describe("Exploration provider", () => {
         event: {
           type: "RESOLVE_EXPLORATION_CHOICE",
           payload,
-          actor: "client-a",
+          actor: testEventActor("client-a"),
           clientTimestamp: "1970-01-01T00:00:01.000Z",
           basedOnSeq: 1,
         },
@@ -6460,7 +6474,7 @@ describe("Exploration provider", () => {
         event: {
           type: "RESOLVE_EXPLORATION_CHOICE",
           payload,
-          actor: "client-b",
+          actor: testEventActor("client-b"),
           clientTimestamp: "1970-01-01T00:00:02.000Z",
           basedOnSeq: 2,
         },
@@ -6470,7 +6484,7 @@ describe("Exploration provider", () => {
         event: {
           type: "COMPLETE_SITE",
           payload: { siteId: site.id },
-          actor: "client-a",
+          actor: testEventActor("client-a"),
           clientTimestamp: "1970-01-01T00:00:03.000Z",
           basedOnSeq: 3,
         },
@@ -6505,13 +6519,13 @@ describe("Exploration provider", () => {
       expect(replay.state).toEqual(first.state);
       expect(JSON.parse(JSON.stringify(first.state))).toEqual(first.state);
       const node =
-        first.state.journey.atlas.nodes[asAtlasNodeId("exploration-node")];
+        first.state.journey.atlas.nodes[parseAtlasNodeId("exploration-node")];
       expect(node?.sites.map(({ id }) => id)).toEqual([
         site.id,
         `site-exploration-${site.id}-${action.id}`,
       ]);
       expect(node?.sites[1]).toEqual({
-        id: asSiteId(`site-exploration-${site.id}-${action.id}`),
+        id: parseSiteId(`site-exploration-${site.id}-${action.id}`),
         type: "Duplication",
         isEnhanced: false,
         isVisited: false,
@@ -6524,14 +6538,14 @@ describe("Exploration provider", () => {
 
   it("resolves all-card and disclosed same-type compound mutations exactly", () => {
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("wave8-fallback"),
+      id: testExplorationActionId("wave8-fallback"),
       label: "Take the source",
       effectText: "Gain a card",
       effectKind: "gain-card",
       cardId: SOURCE_CARD_ID,
     };
     const allAction: ExplorationActionContent = {
-      id: asExplorationActionId("wave8-transfigure-all"),
+      id: testExplorationActionId("wave8-transfigure-all"),
       label: "Rewrite every current",
       effectText: "Transfigure all cards in your deck",
       effectKind: "transfigure-all-cards",
@@ -6615,7 +6629,7 @@ describe("Exploration provider", () => {
     ).toBe(true);
 
     const purgeAction: ExplorationActionContent = {
-      id: asExplorationActionId("wave8-purge-same-type"),
+      id: testExplorationActionId("wave8-purge-same-type"),
       label: "Cut the dimmest thread",
       effectText: "Purge {deck_card} and Empower every other card of its type",
       effectKind: "purge-disclosed-and-transfigure-same-type",
@@ -6641,7 +6655,7 @@ describe("Exploration provider", () => {
     const purgeJourney = journeyFixture(purgeContent);
     purgeJourney.deck = [101, 101, 110, 111, 120, 121, 122, 130].map(
       (cardNumber, index) => ({
-        entryId: asDeckEntryId(`purge-entry-${String(index)}`),
+        entryId: parseDeckEntryId(`purge-entry-${String(index)}`),
         cardNumber,
         transfiguration: null,
         isBane: false,
@@ -6677,7 +6691,7 @@ describe("Exploration provider", () => {
 
   it("persists exact fast keyword transitions and minted Nightmares", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("wave8-fast-nightmares"),
+      id: testExplorationActionId("wave8-fast-nightmares"),
       label: "Outrun the dark",
       effectText: "Every Event becomes fast. Gain 2 Nightmares.",
       effectKind: "make-predicate-fast-and-gain-nightmares",
@@ -6685,7 +6699,7 @@ describe("Exploration provider", () => {
       nightmareCount: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("wave8-fast-nightmares-fallback"),
+      id: testExplorationActionId("wave8-fast-nightmares-fallback"),
       label: "Take the source",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -6719,8 +6733,8 @@ describe("Exploration provider", () => {
       })),
     );
     expect(resolution.nightmareGains).toEqual([
-      { entryId: asDeckEntryId("deck-91-0"), cardId: NIGHTMARE_ID },
-      { entryId: asDeckEntryId("deck-91-1"), cardId: NIGHTMARE_ID },
+      { entryId: parseDeckEntryId("deck-91-0"), cardId: NIGHTMARE_ID },
+      { entryId: parseDeckEntryId("deck-91-1"), cardId: NIGHTMARE_ID },
     ]);
     expect(resolution.gainedCardIds).toEqual([NIGHTMARE_ID, NIGHTMARE_ID]);
     expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
@@ -6728,7 +6742,7 @@ describe("Exploration provider", () => {
 
   it("mints selected fixed-form offers before its exact Nightmares", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("wave8-take-transfigured"),
+      id: testExplorationActionId("wave8-take-transfigured"),
       label: "Gather bright fragments",
       effectText: "Take Characters and Empower them. Gain 2 Nightmares.",
       followupTitle: "Choose fragments",
@@ -6740,7 +6754,7 @@ describe("Exploration provider", () => {
       nightmareCount: 2,
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("wave8-take-transfigured-fallback"),
+      id: testExplorationActionId("wave8-take-transfigured-fallback"),
       label: "Take the source",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -6803,7 +6817,7 @@ describe("Exploration provider", () => {
 
   it("purges one prepared entry then transfigures and copies the other three", () => {
     const action: ExplorationActionContent = {
-      id: asExplorationActionId("wave8-purge-transfigure-copy"),
+      id: testExplorationActionId("wave8-purge-transfigure-copy"),
       label: "Choose the severed echo",
       effectText: "Purge one card. Empower and copy the other three.",
       followupTitle: "Choose a card",
@@ -6813,7 +6827,7 @@ describe("Exploration provider", () => {
       transfiguration: "Empowered",
     };
     const fallback: ExplorationActionContent = {
-      id: asExplorationActionId("wave8-purge-transfigure-copy-fallback"),
+      id: testExplorationActionId("wave8-purge-transfigure-copy-fallback"),
       label: "Take the source",
       effectText: "Gain a card",
       effectKind: "gain-card",
@@ -6853,7 +6867,7 @@ describe("Exploration provider", () => {
       companions.map((target, index) => ({
         sourceEntryId: target.entryId,
         sourceCardId: target.cardId,
-        mintedEntryId: asDeckEntryId(`deck-91-${String(index)}`),
+        mintedEntryId: parseDeckEntryId(`deck-91-${String(index)}`),
         mintedCardId: target.cardId,
       })),
     );

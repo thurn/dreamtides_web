@@ -4,7 +4,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { assertLocalized } from "@trox/runtime";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
 import { BATTLE_HAND_CARD_HOVER_SCALE } from "../components/battle/battle-card-layout";
@@ -20,12 +20,12 @@ import {
   type MobileBattleSideView,
   type MobileBattleView,
 } from "./MobileBattleScreen";
-import { asBattleId } from "../../types/identifiers";
-import { asPresentationId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parsePresentationId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
 import type { BattleCardId } from "../../types/identifiers";
-import { asBattleSlotViewId } from "../../types/identifiers";
-import { asDreamwellCardId } from "../../types/identifiers";
+import { parseBattleSlotViewId } from "../../types/identifiers";
+import { testCardId, testDreamwellCardId } from "../../types/test-identities";
 
 function mockDesktopViewport(matches: boolean): void {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
@@ -64,15 +64,15 @@ function makeCard(
   index: number,
   instanceId: BattleCardId,
 ): MobileBattleCardView {
-  const cardId = asCardId(
+  const cardId = testCardId(
     `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
   );
   const card: CardData = {
     id: cardId,
-    name: asCardName(`Fixture Card ${String(index)}`),
+    name: parseCardName(`Fixture Card ${String(index)}`),
     cardNumber: index,
     cardType: index % 2 === 0 ? "Character" : "Event",
-    subtype: "Fixture",
+    subtype: "Warrior",
     isStarter: false,
     energyCost: index % 4,
     spark: index % 2 === 0 ? index % 5 : null,
@@ -101,26 +101,26 @@ function makeSide(
     deckCardIds: Array.from(
       { length: 4 },
       (_, index) => `${owner}-deck-${String(index)}`,
-    ).map(asBattleCardId),
+    ).map(parseBattleCardId),
     banishedCardCount: 0,
     voidCards: [
-      makeCard(cardOffset, asBattleCardId(`${owner}-void-top`)),
-      makeCard(cardOffset + 1, asBattleCardId(`${owner}-void-under`)),
+      makeCard(cardOffset, parseBattleCardId(`${owner}-void-top`)),
+      makeCard(cardOffset + 1, parseBattleCardId(`${owner}-void-under`)),
     ],
     backRank: [
-      { id: asBattleSlotViewId(`${owner}-back-empty`), card: null },
+      { id: parseBattleSlotViewId(`${owner}-back-empty`), card: null },
       {
-        id: asBattleSlotViewId(`${owner}-back-filled`),
-        card: makeCard(cardOffset + 2, asBattleCardId(`${owner}-back-card`)),
+        id: parseBattleSlotViewId(`${owner}-back-filled`),
+        card: makeCard(cardOffset + 2, parseBattleCardId(`${owner}-back-card`)),
       },
-      { id: asBattleSlotViewId(`${owner}-back-second-empty`), card: null },
+      { id: parseBattleSlotViewId(`${owner}-back-second-empty`), card: null },
     ],
     frontRank: [
       {
-        id: asBattleSlotViewId(`${owner}-front-filled`),
-        card: makeCard(cardOffset + 3, asBattleCardId(`${owner}-front-card`)),
+        id: parseBattleSlotViewId(`${owner}-front-filled`),
+        card: makeCard(cardOffset + 3, parseBattleCardId(`${owner}-front-card`)),
       },
-      { id: asBattleSlotViewId(`${owner}-front-empty`), card: null },
+      { id: parseBattleSlotViewId(`${owner}-front-empty`), card: null },
     ],
     status: {
       dreamAvatar: {
@@ -146,13 +146,13 @@ function makeView(): MobileBattleView {
     (_, index) => `enemy-hand-${String(index)}`,
   );
   const enemyHand = Array.from({ length: 8 }, (_, index) =>
-    makeCard(60 + index, asBattleCardId(`enemy-hand-${String(index)}`)),
+    makeCard(60 + index, parseBattleCardId(`enemy-hand-${String(index)}`)),
   );
   const playerHand = Array.from({ length: 4 }, (_, index) =>
-    makeCard(40 + index, asBattleCardId(`player-hand-${String(index)}`)),
+    makeCard(40 + index, parseBattleCardId(`player-hand-${String(index)}`)),
   );
   return {
-    battleId: asBattleId("battle-mobile-fixture"),
+    battleId: parseBattleId("battle-mobile-fixture"),
     perspective: "player",
     near: player,
     far: enemy,
@@ -165,7 +165,7 @@ function makeView(): MobileBattleView {
     farHand: {
       owner: "enemy",
       position: "far",
-      cardIds: enemyHandCardIds.map(asBattleCardId),
+      cardIds: enemyHandCardIds.map(parseBattleCardId),
       cards: [],
     },
     promptNotice: null,
@@ -176,7 +176,7 @@ function makeView(): MobileBattleView {
     activeSide: "player",
     isOpeningTurn: false,
     phase: "day",
-    enemyHandCardIds: enemyHandCardIds.map(asBattleCardId),
+    enemyHandCardIds: enemyHandCardIds.map(parseBattleCardId),
     enemyHand,
     enemy,
     player,
@@ -242,7 +242,7 @@ function makePickerCandidate(
   highlighted = false,
 ): MobileBattleCardPickerCandidateView {
   return {
-    instanceId: asBattleCardId(card.id),
+    instanceId: card.id,
     cardUuid: card.model.cardId,
     owner,
     zone,
@@ -480,10 +480,10 @@ describe("MobileBattleScreen", () => {
       ...baseView.player,
       frontRank: [
         {
-          id: asBattleSlotViewId("player-front-filled"),
-          card: makeCard(24, asBattleCardId("player-front-challenger")),
+          id: parseBattleSlotViewId("player-front-filled"),
+          card: makeCard(24, parseBattleCardId("player-front-challenger")),
         },
-        { id: asBattleSlotViewId("player-front-empty"), card: null },
+        { id: parseBattleSlotViewId("player-front-empty"), card: null },
       ],
     };
     const dayView: MobileBattleView = {
@@ -784,7 +784,7 @@ describe("MobileBattleScreen", () => {
     const { container, root } = mount(view, {
       canInteract: true,
       pendingCardId: null,
-      targetSelectionCardId: asBattleCardId("targeting-card"),
+      targetSelectionCardId: parseBattleCardId("targeting-card"),
       targetSelectionPrompt: "legal-target",
       targetableCardIds: [exhaustedTarget.id],
       onHandCardActivate: vi.fn(),
@@ -831,7 +831,7 @@ describe("MobileBattleScreen", () => {
       pendingCardId: null,
       targetSelectionCardId: targetingCard.id,
       targetSelectionPrompt: "legal-target",
-      targetableCardIds: [asBattleCardId("enemy-back-card")],
+      targetableCardIds: [parseBattleCardId("enemy-back-card")],
       onHandCardActivate: vi.fn(),
       onCardDragStart: vi.fn(),
       onCardDragEnd: vi.fn(),
@@ -897,8 +897,8 @@ describe("MobileBattleScreen", () => {
     const { container, root } = mount(makeView(), undefined, {
       cardOverlay: {
         kind: "points-scored",
-        presentationId: asPresentationId("challenge-resolved:player:5:F0"),
-        battleCardId: asBattleCardId("player-front-card"),
+        presentationId: parsePresentationId("challenge-resolved:player:5:F0"),
+        battleCardId: parseBattleCardId("player-front-card"),
         points: 2,
       },
     });
@@ -974,7 +974,7 @@ describe("MobileBattleScreen", () => {
   it("places an opponent Dreamwell card below the opponent status display", () => {
     vi.useFakeTimers();
     mockDesktopViewport(true);
-    const cardId = asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
+    const cardId = testDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
     const initialView = makeView();
     const view: MobileBattleView = {
       ...initialView,
@@ -1047,7 +1047,7 @@ describe("MobileBattleScreen", () => {
   });
 
   it("places a player Dreamwell card above the player status display", () => {
-    const cardId = asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
+    const cardId = testDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
     const view: MobileBattleView = {
       ...makeView(),
       dreamwell: {
@@ -2307,11 +2307,11 @@ describe("MobileBattleScreen", () => {
     const view = makeView();
     const enemyBackCard = makeCard(
       230,
-      asBattleCardId("tutorial-enemy-back-card"),
+      parseBattleCardId("tutorial-enemy-back-card"),
     );
     const playerFrontCard = makeCard(
       231,
-      asBattleCardId("tutorial-player-front-card"),
+      parseBattleCardId("tutorial-player-front-card"),
     );
     const canonicalRank = (
       rank: "back" | "front",
@@ -2320,7 +2320,7 @@ describe("MobileBattleScreen", () => {
       card: MobileBattleCardView | null,
     ) =>
       Array.from({ length: count }, (_unused, index) => ({
-        id: asBattleSlotViewId(
+        id: parseBattleSlotViewId(
           `${rank === "back" ? "B" : "F"}${String(index)}`,
         ),
         card: index === filledIndex ? card : null,
@@ -2386,10 +2386,10 @@ describe("MobileBattleScreen", () => {
 
   it("moves the shared mobile window to keep an occupied edge lane visible", () => {
     const view = makeView();
-    const edgeCard = makeCard(232, asBattleCardId("edge-back-card"));
+    const edgeCard = makeCard(232, parseBattleCardId("edge-back-card"));
     const canonicalRank = (rank: "back" | "front", count: number) =>
       Array.from({ length: count }, (_unused, index) => ({
-        id: asBattleSlotViewId(
+        id: parseBattleSlotViewId(
           `${rank === "back" ? "B" : "F"}${String(index)}`,
         ),
         card: rank === "back" && index === 0 ? edgeCard : null,
@@ -2528,7 +2528,7 @@ describe("MobileBattleScreen", () => {
     const pickerView: MobileBattleView = {
       ...view,
       cardPicker: {
-        key: "prompt-42",
+        key: 42,
         label: assertLocalized("Choose an option"),
         side: "player",
         candidates: view.playerHand
@@ -2625,13 +2625,13 @@ describe("MobileBattleScreen", () => {
       {
         ...view,
         cardPicker: {
-          key: "prompt-optional",
+          key: 42,
           label: assertLocalized("Choose an option"),
           side: "player",
           candidates: [
             makePickerCandidate(view.playerHand[0], "player", "hand"),
           ],
-          candidateIds: [view.playerHand[0]?.id ?? asBattleCardId("missing")],
+          candidateIds: [view.playerHand[0]?.id ?? parseBattleCardId("missing")],
           count: 1,
           optional: true,
           canResolve: true,
@@ -2670,7 +2670,7 @@ describe("MobileBattleScreen", () => {
       {
         ...makeView(),
         choicePrompt: {
-          key: "prompt-choice-42",
+          key: 42,
           label: assertLocalized("Choose an option"),
           options: [
             { label: assertLocalized("Yes") },
@@ -2733,7 +2733,7 @@ describe("MobileBattleScreen", () => {
       {
         ...view,
         cardPicker: {
-          key: "prompt-enemy",
+          key: 42,
           label: assertLocalized("Choose an option"),
           side: "enemy",
           candidates: view.enemyHand.map((card) =>
@@ -2824,7 +2824,7 @@ describe("MobileBattleScreen", () => {
       {
         ...view,
         cardPicker: {
-          key: "prompt-battlefield",
+          key: 42,
           label: assertLocalized("Choose an option"),
           side: "player",
           candidates: [
@@ -2890,12 +2890,12 @@ describe("MobileBattleScreen", () => {
       makePickerCandidate(view.player.voidCards[0], "player", "void"),
       makePickerCandidate(view.enemy.voidCards[0], "enemy", "void"),
       makePickerCandidate(
-        makeCard(90, asBattleCardId("player-deck-top")),
+        makeCard(90, parseBattleCardId("player-deck-top")),
         "player",
         "deck",
       ),
       makePickerCandidate(
-        makeCard(91, asBattleCardId("enemy-deck-top")),
+        makeCard(91, parseBattleCardId("enemy-deck-top")),
         "enemy",
         "deck",
       ),
@@ -2905,7 +2905,7 @@ describe("MobileBattleScreen", () => {
       {
         ...view,
         cardPicker: {
-          key: "prompt-gallery",
+          key: 42,
           label: assertLocalized("Choose an option"),
           subtitle: assertLocalized("Choose an available option to continue."),
           side: "player",
@@ -2990,7 +2990,7 @@ describe("MobileBattleScreen", () => {
     const { container, root } = mount({
       ...view,
       cardPicker: {
-        key: "prompt-mobile-gallery",
+        key: 42,
         label: assertLocalized("Choose an option"),
         side: "player",
         candidates: [candidate],
@@ -3026,7 +3026,7 @@ describe("MobileBattleScreen", () => {
     const { container, root } = mount({
       ...view,
       cardPicker: {
-        key: "prompt-highlighted",
+        key: 42,
         label: assertLocalized("Choose an option"),
         side: "player",
         candidates: [makePickerCandidate(highlighted, "player", "hand", true)],
@@ -3070,7 +3070,7 @@ describe("MobileBattleScreen", () => {
       {
         ...view,
         cardPicker: {
-          key: "prompt-empty",
+          key: 42,
           label: assertLocalized("Choose an option"),
           side: "player",
           candidates: [],
@@ -3109,22 +3109,22 @@ describe("MobileBattleScreen", () => {
   it("centers opening mobile ranks on one shared responsive card scale", () => {
     const view = makeView();
     const expandedBackRank = Array.from({ length: 6 }, (_, index) => ({
-      id: asBattleSlotViewId(`expanded-back-${String(index)}`),
+      id: parseBattleSlotViewId(`expanded-back-${String(index)}`),
       card:
         index < 5
           ? makeCard(
               60 + index,
-              asBattleCardId(`expanded-back-card-${String(index)}`),
+              parseBattleCardId(`expanded-back-card-${String(index)}`),
             )
           : null,
     }));
     const expandedFrontRank = Array.from({ length: 5 }, (_, index) => ({
-      id: asBattleSlotViewId(`expanded-front-${String(index)}`),
+      id: parseBattleSlotViewId(`expanded-front-${String(index)}`),
       card:
         index < 4
           ? makeCard(
               70 + index,
-              asBattleCardId(`expanded-front-card-${String(index)}`),
+              parseBattleCardId(`expanded-front-card-${String(index)}`),
             )
           : null,
     }));
@@ -3199,22 +3199,22 @@ describe("MobileBattleScreen", () => {
   it("expands one shared staggered pair when a mobile formation fills its visible ranks", () => {
     const view = makeView();
     const playerBackRank = Array.from({ length: 10 }, (_, index) => ({
-      id: asBattleSlotViewId(`B${String(index)}`),
+      id: parseBattleSlotViewId(`B${String(index)}`),
       card:
         index < 6
           ? makeCard(
               80 + index,
-              asBattleCardId(`player-expanded-back-card-${String(index)}`),
+              parseBattleCardId(`player-expanded-back-card-${String(index)}`),
             )
           : null,
     }));
     const playerFrontRank = Array.from({ length: 9 }, (_, index) => ({
-      id: asBattleSlotViewId(`F${String(index)}`),
+      id: parseBattleSlotViewId(`F${String(index)}`),
       card:
         index < 5
           ? makeCard(
               90 + index,
-              asBattleCardId(`player-expanded-front-card-${String(index)}`),
+              parseBattleCardId(`player-expanded-front-card-${String(index)}`),
             )
           : null,
     }));
@@ -3253,19 +3253,19 @@ describe("MobileBattleScreen", () => {
   it("reclaims mobile insets and spacing above eight back-rank columns", () => {
     const view = makeView();
     const denseBackRank = Array.from({ length: 10 }, (_, index) => ({
-      id: asBattleSlotViewId(`B${String(index)}`),
+      id: parseBattleSlotViewId(`B${String(index)}`),
       card:
         index < 9
-          ? makeCard(100 + index, asBattleCardId(`dense-back-${String(index)}`))
+          ? makeCard(100 + index, parseBattleCardId(`dense-back-${String(index)}`))
           : null,
     }));
     const denseFrontRank = Array.from({ length: 9 }, (_, index) => ({
-      id: asBattleSlotViewId(`F${String(index)}`),
+      id: parseBattleSlotViewId(`F${String(index)}`),
       card:
         index < 8
           ? makeCard(
               120 + index,
-              asBattleCardId(`dense-front-${String(index)}`),
+              parseBattleCardId(`dense-front-${String(index)}`),
             )
           : null,
     }));
@@ -3293,17 +3293,17 @@ describe("MobileBattleScreen", () => {
   it("fills the mobile viewport with ten square back-rank slots and caps both ranks", () => {
     const view = makeView();
     const overflowingBackRank = Array.from({ length: 12 }, (_, index) => ({
-      id: asBattleSlotViewId(`B${String(index)}`),
+      id: parseBattleSlotViewId(`B${String(index)}`),
       card: makeCard(
         160 + index,
-        asBattleCardId(`overflow-back-${String(index)}`),
+        parseBattleCardId(`overflow-back-${String(index)}`),
       ),
     }));
     const overflowingFrontRank = Array.from({ length: 11 }, (_, index) => ({
-      id: asBattleSlotViewId(`F${String(index)}`),
+      id: parseBattleSlotViewId(`F${String(index)}`),
       card: makeCard(
         180 + index,
-        asBattleCardId(`overflow-front-${String(index)}`),
+        parseBattleCardId(`overflow-front-${String(index)}`),
       ),
     }));
     const { container, root } = mount({
@@ -3348,31 +3348,31 @@ describe("MobileBattleScreen", () => {
     mockDesktopViewport(true);
     const view = makeView();
     const playerBackRank = Array.from({ length: 10 }, (_, index) => ({
-      id: asBattleSlotViewId(`B${String(index)}`),
+      id: parseBattleSlotViewId(`B${String(index)}`),
       card: makeCard(
         100 + index,
-        asBattleCardId(`player-full-back-${String(index)}`),
+        parseBattleCardId(`player-full-back-${String(index)}`),
       ),
     }));
     const playerFrontRank = Array.from({ length: 9 }, (_, index) => ({
-      id: asBattleSlotViewId(`F${String(index)}`),
+      id: parseBattleSlotViewId(`F${String(index)}`),
       card: makeCard(
         120 + index,
-        asBattleCardId(`player-full-front-${String(index)}`),
+        parseBattleCardId(`player-full-front-${String(index)}`),
       ),
     }));
     const enemyBackRank = Array.from({ length: 5 }, (_, index) => ({
-      id: asBattleSlotViewId(`B${String(index)}`),
+      id: parseBattleSlotViewId(`B${String(index)}`),
       card: makeCard(
         140 + index,
-        asBattleCardId(`enemy-small-back-${String(index)}`),
+        parseBattleCardId(`enemy-small-back-${String(index)}`),
       ),
     }));
     const enemyFrontRank = Array.from({ length: 4 }, (_, index) => ({
-      id: asBattleSlotViewId(`F${String(index)}`),
+      id: parseBattleSlotViewId(`F${String(index)}`),
       card: makeCard(
         150 + index,
-        asBattleCardId(`enemy-small-front-${String(index)}`),
+        parseBattleCardId(`enemy-small-front-${String(index)}`),
       ),
     }));
     const { container, root } = mount({
@@ -3559,7 +3559,7 @@ describe("MobileBattleScreen", () => {
       onPreviousPhase: vi.fn(),
       onNextPhase: vi.fn(),
     };
-    const cardId = asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
+    const cardId = testDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
     const view: MobileBattleView = {
       ...makeView(),
       dreamwell: {
@@ -3815,7 +3815,7 @@ describe("MobileBattleScreen", () => {
   it("routes a hand-card drop anywhere on the table through the semantic play intent", () => {
     const interactions = {
       canInteract: true,
-      pendingCardId: asBattleCardId("player-hand-0"),
+      pendingCardId: parseBattleCardId("player-hand-0"),
       pendingCardSource: "near-hand" as const,
       pendingCardOwner: "player" as const,
       onHandCardActivate: vi.fn(),
@@ -3863,7 +3863,7 @@ describe("MobileBattleScreen", () => {
   it("routes a hand-card drag to the closest open player back-row slot", () => {
     const interactions = {
       canInteract: true,
-      pendingCardId: asBattleCardId("player-hand-0"),
+      pendingCardId: parseBattleCardId("player-hand-0"),
       pendingCardSource: "near-hand" as const,
       pendingCardOwner: "player" as const,
       onHandCardActivate: vi.fn(),
@@ -3931,7 +3931,7 @@ describe("MobileBattleScreen", () => {
   it("offers battlefield drop targets only on the dragged card's own side", () => {
     const interactions = {
       canInteract: true,
-      pendingCardId: asBattleCardId("player-front-card"),
+      pendingCardId: parseBattleCardId("player-front-card"),
       pendingCardSource: "battlefield" as const,
       pendingCardOwner: "player" as const,
       onHandCardActivate: vi.fn(),
@@ -3990,12 +3990,12 @@ describe("MobileBattleScreen", () => {
       pendingCardOwner: "player",
       figmentMergeTargets: [
         {
-          sourceBattleCardId: asBattleCardId(sourceCard.id),
+          sourceBattleCardId: sourceCard.id,
           destinationBattleCardId: destinationCard.id,
           target: {
             owner: "player",
             rank: "back",
-            slotId: asBattleSlotViewId("player-back-filled"),
+            slotId: parseBattleSlotViewId("player-back-filled"),
           },
           figmentLabel: assertLocalized("Shadow"),
           status: "eligible",
@@ -4069,12 +4069,12 @@ describe("MobileBattleScreen", () => {
       pendingCardOwner: "player",
       figmentMergeTargets: [
         {
-          sourceBattleCardId: asBattleCardId(sourceCard.id),
+          sourceBattleCardId: sourceCard.id,
           destinationBattleCardId: destinationCard.id,
           target: {
             owner: "player",
             rank: "back",
-            slotId: asBattleSlotViewId("player-back-filled"),
+            slotId: parseBattleSlotViewId("player-back-filled"),
           },
           figmentLabel: assertLocalized("Shadow"),
           status: "blocked-exhaustion",
@@ -4133,12 +4133,12 @@ describe("MobileBattleScreen", () => {
       pendingCardOwner: "player",
       figmentMergeTargets: [
         {
-          sourceBattleCardId: asBattleCardId(sourceCard.id),
+          sourceBattleCardId: sourceCard.id,
           destinationBattleCardId: destinationCard.id,
           target: {
             owner: "player",
             rank: "back",
-            slotId: asBattleSlotViewId("player-back-filled"),
+            slotId: parseBattleSlotViewId("player-back-filled"),
           },
           figmentLabel: assertLocalized("Legionnaire"),
           status: "eligible",
@@ -4193,7 +4193,7 @@ describe("MobileBattleScreen", () => {
   });
 
   it("rejects the physical cell under a card instead of retargeting to an eligible cell", () => {
-    const cardUuid = asCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8");
+    const cardUuid = testCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8");
     const baseView = makeView();
     const baseSourceCard = baseView.player.backRank[1]?.card;
     if (baseSourceCard === null || baseSourceCard === undefined) {
@@ -4201,7 +4201,7 @@ describe("MobileBattleScreen", () => {
     }
     const sourceCard: MobileBattleCardView = {
       ...baseSourceCard,
-      id: asBattleCardId("bc_0018"),
+      id: parseBattleCardId("bc_0018"),
       model: {
         ...baseSourceCard.model,
         cardId: cardUuid,
@@ -4227,7 +4227,7 @@ describe("MobileBattleScreen", () => {
         {
           owner: "player",
           rank: "back",
-          slotId: asBattleSlotViewId("player-back-empty"),
+          slotId: parseBattleSlotViewId("player-back-empty"),
         },
       ],
       onHandCardActivate: vi.fn(),
@@ -4372,7 +4372,7 @@ describe("MobileBattleScreen", () => {
 
   it("keeps a long horizontal tutorial drag on the visible destination cell", () => {
     mockDesktopViewport(true);
-    const definitionUuid = asCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
+    const definitionUuid = testCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
     const baseView = makeView();
     const baseSourceCard = baseView.player.frontRank[0]?.card;
     if (baseSourceCard === null || baseSourceCard === undefined) {
@@ -4380,7 +4380,7 @@ describe("MobileBattleScreen", () => {
     }
     const sourceCard: MobileBattleCardView = {
       ...baseSourceCard,
-      id: asBattleCardId("bc_0007"),
+      id: parseBattleCardId("bc_0007"),
       exhausted: false,
       model: {
         ...baseSourceCard.model,
@@ -4394,13 +4394,13 @@ describe("MobileBattleScreen", () => {
     const player: MobileBattleSideView = {
       ...baseView.player,
       frontRank: [
-        { id: asBattleSlotViewId("F0"), card: null },
-        { id: asBattleSlotViewId("F1"), card: null },
-        { id: asBattleSlotViewId("F2"), card: sourceCard },
-        { id: asBattleSlotViewId("F3"), card: null },
+        { id: parseBattleSlotViewId("F0"), card: null },
+        { id: parseBattleSlotViewId("F1"), card: null },
+        { id: parseBattleSlotViewId("F2"), card: sourceCard },
+        { id: parseBattleSlotViewId("F3"), card: null },
       ],
       backRank: Array.from({ length: 5 }, (_unused, index) => ({
-        id: asBattleSlotViewId(`B${String(index)}`),
+        id: parseBattleSlotViewId(`B${String(index)}`),
         card: null,
       })),
     };
@@ -4421,7 +4421,7 @@ describe("MobileBattleScreen", () => {
       sourceSlotTarget: {
         owner: "player",
         rank: "front",
-        slotId: asBattleSlotViewId("F2"),
+        slotId: parseBattleSlotViewId("F2"),
       },
       onHandCardActivate: vi.fn(),
       onCardDragStart: vi.fn(),
@@ -4577,7 +4577,7 @@ describe("MobileBattleScreen", () => {
   it("reports a completed battlefield drag when there is no legal cell", () => {
     const interactions: MobileBattleInteractions = {
       canInteract: true,
-      pendingCardId: asBattleCardId("player-front-card"),
+      pendingCardId: parseBattleCardId("player-front-card"),
       pendingCardSource: "battlefield",
       pendingCardOwner: "player",
       eligibleSlotTargets: [],
@@ -4693,7 +4693,7 @@ describe("MobileBattleScreen", () => {
       guidedSlotHighlight: {
         owner: "player",
         rank: "front",
-        slotId: asBattleSlotViewId("player-front-empty"),
+        slotId: parseBattleSlotViewId("player-front-empty"),
         label: assertLocalized("Move this character here."),
       },
     });
@@ -4804,7 +4804,7 @@ describe("MobileBattleScreen", () => {
   it("ignores a pointer drop from an in-play card onto the opponent battlefield", () => {
     const interactions = {
       canInteract: true,
-      pendingCardId: asBattleCardId("player-front-card"),
+      pendingCardId: parseBattleCardId("player-front-card"),
       pendingCardSource: "battlefield" as const,
       pendingCardOwner: "player" as const,
       onHandCardActivate: vi.fn(),
@@ -5490,7 +5490,7 @@ describe("MobileBattleScreen", () => {
 
   it("presents a shared hand card at reading size over the battlefield with normal context actions", () => {
     mockDesktopViewport(true);
-    const card = makeCard(88, asBattleCardId("shared-hand-card"));
+    const card = makeCard(88, parseBattleCardId("shared-hand-card"));
     const interactions = {
       canInteract: true,
       pendingCardId: null,

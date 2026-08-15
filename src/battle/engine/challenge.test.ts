@@ -1,4 +1,8 @@
 import { describe, expect, it } from "vitest";
+import {
+  testCardName,
+  testCardSubtype,
+} from "../../types/test-identities";
 import { createDefaultBattleCardStatus } from "../state/create-initial-state";
 import type {
   BattleCardInstance,
@@ -20,9 +24,9 @@ import {
   type ChallengeResolution,
 } from "./challenge";
 import type { BattleCardId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asBattleId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 function makeInstance(
   battleCardId: BattleCardId,
@@ -51,11 +55,11 @@ function makeInstance(
     battleCardId,
     definition: {
       sourceDeckEntryId: null,
-      cardId: asCardId(""),
+      cardId: testCardId("fixture-card"),
       cardNumber: 1,
-      name: battleCardId,
+      name: testCardName(battleCardId),
       battleCardKind: options.kind ?? "character",
-      subtype: options.subtype ?? "Warrior",
+      subtype: testCardSubtype(options.subtype ?? "Warrior"),
       energyCost: 0,
       printedEnergyCost: 0,
       printedSpark: options.printedSpark ?? 0,
@@ -124,7 +128,7 @@ function makeState(options: {
   instances?: BattleCardInstance[];
 }): BattleMutableState {
   return {
-    battleId: asBattleId("battle-challenge-test"),
+    battleId: parseBattleId("battle-challenge-test"),
     activeSide: options.activeSide ?? "player",
     turnNumber: 1,
     phase: "challenge",
@@ -167,7 +171,7 @@ function lane0State(
 describe("resolveChallenge — plain spark comparison", () => {
   it("scores an unpaired challenger's spark for the active side", () => {
     const state = lane0State(
-      makeInstance(asBattleCardId("p0"), { owner: "player", printedSpark: 4 }),
+      makeInstance(parseBattleCardId("p0"), { owner: "player", printedSpark: 4 }),
       null,
     );
     const resolution = resolveChallenge({ state, activeSide: "player" });
@@ -182,13 +186,13 @@ describe("resolveChallenge — plain spark comparison", () => {
   });
 
   it("scores nothing for an empty lane or a blocker-only lane", () => {
-    const blockerOnly = makeInstance(asBattleCardId("e0"), {
+    const blockerOnly = makeInstance(parseBattleCardId("e0"), {
       owner: "enemy",
       printedSpark: 9,
     });
     const state = makeState({
       activeSide: "player",
-      enemy: { frontRank: frontRank({ F0: asBattleCardId("e0") }) },
+      enemy: { frontRank: frontRank({ F0: parseBattleCardId("e0") }) },
       instances: [blockerOnly],
     });
     const resolution = resolveChallenge({ state, activeSide: "player" });
@@ -200,8 +204,8 @@ describe("resolveChallenge — plain spark comparison", () => {
 
   it("scores a winning challenger's spark advantage in a blocked lane", () => {
     const state = lane0State(
-      makeInstance(asBattleCardId("p0"), { owner: "player", printedSpark: 8 }),
-      makeInstance(asBattleCardId("e0"), { owner: "enemy", printedSpark: 2 }),
+      makeInstance(parseBattleCardId("p0"), { owner: "player", printedSpark: 8 }),
+      makeInstance(parseBattleCardId("e0"), { owner: "enemy", printedSpark: 2 }),
     );
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution)).toEqual(["e0"]);
@@ -212,8 +216,8 @@ describe("resolveChallenge — plain spark comparison", () => {
 
   it("dissolves both characters on a spark tie", () => {
     const state = lane0State(
-      makeInstance(asBattleCardId("p0"), { owner: "player", printedSpark: 4 }),
-      makeInstance(asBattleCardId("e0"), { owner: "enemy", printedSpark: 4 }),
+      makeInstance(parseBattleCardId("p0"), { owner: "player", printedSpark: 4 }),
+      makeInstance(parseBattleCardId("e0"), { owner: "enemy", printedSpark: 4 }),
     );
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(dissolvedIds(resolution).sort()).toEqual(["e0", "p0"]);
@@ -222,12 +226,12 @@ describe("resolveChallenge — plain spark comparison", () => {
 
   it("includes sparkDelta in the effective spark", () => {
     const state = lane0State(
-      makeInstance(asBattleCardId("p0"), {
+      makeInstance(parseBattleCardId("p0"), {
         owner: "player",
         printedSpark: 2,
         sparkDelta: 3,
       }),
-      makeInstance(asBattleCardId("e0"), { owner: "enemy", printedSpark: 4 }),
+      makeInstance(parseBattleCardId("e0"), { owner: "enemy", printedSpark: 4 }),
     );
     const resolution = resolveChallenge({ state, activeSide: "player" });
     // Effective player spark 5 > enemy 4 → enemy dissolves.
@@ -238,9 +242,9 @@ describe("resolveChallenge — plain spark comparison", () => {
   it("resolves from the enemy's perspective when the enemy is active", () => {
     const state = makeState({
       activeSide: "enemy",
-      enemy: { frontRank: frontRank({ F0: asBattleCardId("e0") }) },
+      enemy: { frontRank: frontRank({ F0: parseBattleCardId("e0") }) },
       instances: [
-        makeInstance(asBattleCardId("e0"), { owner: "enemy", printedSpark: 6 }),
+        makeInstance(parseBattleCardId("e0"), { owner: "enemy", printedSpark: 6 }),
       ],
     });
     const resolution = resolveChallenge({ state, activeSide: "enemy" });
@@ -257,8 +261,8 @@ describe("resolveChallenge — plain spark comparison", () => {
 describe("resolveChallenge — Vengeful", () => {
   it("drags the winner down when the loser is Vengeful", () => {
     const state = lane0State(
-      makeInstance(asBattleCardId("p0"), { owner: "player", printedSpark: 5 }),
-      makeInstance(asBattleCardId("e0"), {
+      makeInstance(parseBattleCardId("p0"), { owner: "player", printedSpark: 5 }),
+      makeInstance(parseBattleCardId("e0"), {
         owner: "enemy",
         printedSpark: 2,
         renderedText: "Vengeful",
@@ -272,12 +276,12 @@ describe("resolveChallenge — Vengeful", () => {
 
   it("does not trigger Vengeful when its bearer survives", () => {
     const state = lane0State(
-      makeInstance(asBattleCardId("p0"), {
+      makeInstance(parseBattleCardId("p0"), {
         owner: "player",
         printedSpark: 5,
         renderedText: "Vengeful",
       }),
-      makeInstance(asBattleCardId("e0"), { owner: "enemy", printedSpark: 2 }),
+      makeInstance(parseBattleCardId("e0"), { owner: "enemy", printedSpark: 2 }),
     );
     // The Vengeful player character wins (5 > 2): only the enemy dissolves.
     const resolution = resolveChallenge({ state, activeSide: "player" });
@@ -289,16 +293,16 @@ describe("resolveChallenge — Vengeful", () => {
 describe("resolveChallenge — Awakened has no challenge effect", () => {
   it("does not change scoring or dissolution for an Awakened character", () => {
     const withAwakened = lane0State(
-      makeInstance(asBattleCardId("p0"), {
+      makeInstance(parseBattleCardId("p0"), {
         owner: "player",
         printedSpark: 3,
         renderedText: "Awakened",
       }),
-      makeInstance(asBattleCardId("e0"), { owner: "enemy", printedSpark: 5 }),
+      makeInstance(parseBattleCardId("e0"), { owner: "enemy", printedSpark: 5 }),
     );
     const without = lane0State(
-      makeInstance(asBattleCardId("p0"), { owner: "player", printedSpark: 3 }),
-      makeInstance(asBattleCardId("e0"), { owner: "enemy", printedSpark: 5 }),
+      makeInstance(parseBattleCardId("p0"), { owner: "player", printedSpark: 3 }),
+      makeInstance(parseBattleCardId("e0"), { owner: "enemy", printedSpark: 5 }),
     );
     const a = resolveChallenge({ state: withAwakened, activeSide: "player" });
     const b = resolveChallenge({ state: without, activeSide: "player" });
@@ -312,12 +316,12 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
   it("compares only the topmost figment, so a tall stack of small figments cannot dissolve a large blocker", () => {
     // Stack of three 2✦ figments (total 6). Only the topmost (2✦) fights the 3✦
     // blocker, so the topmost dissolves and the blocker survives.
-    const figment = makeInstance(asBattleCardId("fig"), {
+    const figment = makeInstance(parseBattleCardId("fig"), {
       owner: "player",
       isFigment: true,
       figmentSparks: [2, 2, 2],
     });
-    const blocker = makeInstance(asBattleCardId("e0"), {
+    const blocker = makeInstance(parseBattleCardId("e0"), {
       owner: "enemy",
       printedSpark: 3,
     });
@@ -332,13 +336,13 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
   it("scores reserve figments while the topmost wins and survives", () => {
     // Three 4✦ Monstrosity figments. Topmost 4 > blocker 3 → blocker dissolves;
     // the topmost scores its 1✦ advantage; the two reserves score 8⍟.
-    const figment = makeInstance(asBattleCardId("fig"), {
+    const figment = makeInstance(parseBattleCardId("fig"), {
       owner: "player",
       isFigment: true,
       subtype: "Monstrosity",
       figmentSparks: [4, 4, 4],
     });
-    const blocker = makeInstance(asBattleCardId("e0"), {
+    const blocker = makeInstance(parseBattleCardId("e0"), {
       owner: "enemy",
       printedSpark: 3,
     });
@@ -351,13 +355,13 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
   it("trades the topmost Wraith for the blocker via Vengeful and scores nothing", () => {
     // Three 0✦ Wraith figments (Vengeful) into a 5✦ blocker. The topmost is
     // dissolved and Vengeful drags the blocker down too; reserves score 0.
-    const figment = makeInstance(asBattleCardId("fig"), {
+    const figment = makeInstance(parseBattleCardId("fig"), {
       owner: "player",
       isFigment: true,
       subtype: "Wraith",
       figmentSparks: [0, 0, 0],
     });
-    const blocker = makeInstance(asBattleCardId("e0"), {
+    const blocker = makeInstance(parseBattleCardId("e0"), {
       owner: "enemy",
       printedSpark: 5,
     });
@@ -368,7 +372,7 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
   });
 
   it("scores the whole stack when it challenges unopposed", () => {
-    const figment = makeInstance(asBattleCardId("fig"), {
+    const figment = makeInstance(parseBattleCardId("fig"), {
       owner: "player",
       isFigment: true,
       figmentSparks: [2, 2, 2, 2],
@@ -383,12 +387,12 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
     // Challenger topmost 3 beats blocker topmost 1: the blocker stack sheds its
     // topmost; the challenger's topmost scores its 2✦ advantage and its reserve
     // scores 3⍟. The blocker stack, blocking, scores nothing.
-    const challenger = makeInstance(asBattleCardId("fig"), {
+    const challenger = makeInstance(parseBattleCardId("fig"), {
       owner: "player",
       isFigment: true,
       figmentSparks: [3, 3],
     });
-    const blocker = makeInstance(asBattleCardId("e0"), {
+    const blocker = makeInstance(parseBattleCardId("e0"), {
       owner: "enemy",
       isFigment: true,
       figmentSparks: [1, 1, 1],
@@ -403,11 +407,11 @@ describe("resolveChallenge — figment stacks (rules §Figments)", () => {
 
 describe("resolveChallenge — supportContribution", () => {
   it("raises a character over its blocker and flips the outcome", () => {
-    const challenger = makeInstance(asBattleCardId("p0"), {
+    const challenger = makeInstance(parseBattleCardId("p0"), {
       owner: "player",
       printedSpark: 3,
     });
-    const blocker = makeInstance(asBattleCardId("e0"), {
+    const blocker = makeInstance(parseBattleCardId("e0"), {
       owner: "enemy",
       printedSpark: 4,
     });
@@ -421,31 +425,32 @@ describe("resolveChallenge — supportContribution", () => {
     const supported = resolveChallenge({
       state,
       activeSide: "player",
-      supportContribution: new Map([["p0", 2]]),
+      supportContribution: new Map([[challenger.battleCardId, 2]]),
     });
     expect(dissolvedIds(supported)).toEqual(["e0"]);
   });
 
   it("adds support to an unpaired challenger's scored spark", () => {
-    const state = lane0State(
-      makeInstance(asBattleCardId("p0"), { owner: "player", printedSpark: 3 }),
-      null,
-    );
+    const challenger = makeInstance(parseBattleCardId("p0"), {
+      owner: "player",
+      printedSpark: 3,
+    });
+    const state = lane0State(challenger, null);
     const resolution = resolveChallenge({
       state,
       activeSide: "player",
-      supportContribution: new Map([["p0", 4]]),
+      supportContribution: new Map([[challenger.battleCardId, 4]]),
     });
     expect(resolution.playerScoreDelta).toBe(7);
   });
 
   it("applies a stack's total support contribution once per figment", () => {
-    const challenger = makeInstance(asBattleCardId("figments"), {
+    const challenger = makeInstance(parseBattleCardId("figments"), {
       owner: "player",
       isFigment: true,
       figmentSparks: [2, 2],
     });
-    const blocker = makeInstance(asBattleCardId("blocker"), {
+    const blocker = makeInstance(parseBattleCardId("blocker"), {
       owner: "enemy",
       printedSpark: 3,
     });
@@ -458,7 +463,7 @@ describe("resolveChallenge — supportContribution", () => {
       state,
       activeSide: "player",
       // +2 per member across a two-figment stack.
-      supportContribution: new Map([["figments", 4]]),
+      supportContribution: new Map([[challenger.battleCardId, 4]]),
     });
     expect(dissolvedIds(supported)).toEqual(["blocker"]);
     expect(supported.lanes[0]?.playerSpark).toBe(4);
@@ -472,35 +477,35 @@ describe("resolveChallenge — multiple lanes", () => {
       activeSide: "player",
       player: {
         frontRank: frontRank({
-          F0: asBattleCardId("p0"),
-          F1: asBattleCardId("p1"),
-          F2: asBattleCardId("p2"),
+          F0: parseBattleCardId("p0"),
+          F1: parseBattleCardId("p1"),
+          F2: parseBattleCardId("p2"),
         }),
       },
       enemy: {
         frontRank: frontRank({
-          F1: asBattleCardId("e1"),
-          F2: asBattleCardId("e2"),
+          F1: parseBattleCardId("e1"),
+          F2: parseBattleCardId("e2"),
         }),
       },
       instances: [
         // F0: unpaired challenger scores 3.
-        makeInstance(asBattleCardId("p0"), {
+        makeInstance(parseBattleCardId("p0"), {
           owner: "player",
           printedSpark: 3,
         }),
         // F1: player 6 > enemy 2 → enemy dissolves and player scores 4.
-        makeInstance(asBattleCardId("p1"), {
+        makeInstance(parseBattleCardId("p1"), {
           owner: "player",
           printedSpark: 6,
         }),
-        makeInstance(asBattleCardId("e1"), { owner: "enemy", printedSpark: 2 }),
+        makeInstance(parseBattleCardId("e1"), { owner: "enemy", printedSpark: 2 }),
         // F2: player 1 < enemy 5 → player dissolves.
-        makeInstance(asBattleCardId("p2"), {
+        makeInstance(parseBattleCardId("p2"), {
           owner: "player",
           printedSpark: 1,
         }),
-        makeInstance(asBattleCardId("e2"), { owner: "enemy", printedSpark: 5 }),
+        makeInstance(parseBattleCardId("e2"), { owner: "enemy", printedSpark: 5 }),
       ],
     });
     const resolution = resolveChallenge({ state, activeSide: "player" });
@@ -515,7 +520,7 @@ describe("resolveChallenge — multiple lanes", () => {
 
 describe("hasCombatKeyword — detection precedence", () => {
   it("detects a keyword granted by a status flag even with empty text", () => {
-    const instance = makeInstance(asBattleCardId("p0"), {
+    const instance = makeInstance(parseBattleCardId("p0"), {
       owner: "player",
       status: { grantedVengeful: true },
     });
@@ -525,7 +530,7 @@ describe("hasCombatKeyword — detection precedence", () => {
   it("detects each keyword from a printed-text scan", () => {
     expect(
       hasCombatKeyword(
-        makeInstance(asBattleCardId("b"), {
+        makeInstance(parseBattleCardId("b"), {
           owner: "player",
           renderedText: "Vengeful.",
         }),
@@ -534,7 +539,7 @@ describe("hasCombatKeyword — detection precedence", () => {
     ).toBe(true);
     expect(
       hasCombatKeyword(
-        makeInstance(asBattleCardId("d"), {
+        makeInstance(parseBattleCardId("d"), {
           owner: "player",
           renderedText: "Awakened, Veil",
         }),
@@ -544,7 +549,7 @@ describe("hasCombatKeyword — detection precedence", () => {
   });
 
   it("does not match a keyword substring inside another word", () => {
-    const instance = makeInstance(asBattleCardId("p0"), {
+    const instance = makeInstance(parseBattleCardId("p0"), {
       owner: "player",
       renderedText: "vengefulness",
     });
@@ -552,14 +557,14 @@ describe("hasCombatKeyword — detection precedence", () => {
   });
 
   it("detects a figment type's implicit keyword from its subtype", () => {
-    const wraith = makeInstance(asBattleCardId("fig2"), {
+    const wraith = makeInstance(parseBattleCardId("fig2"), {
       owner: "player",
       isFigment: true,
       subtype: "Wraith",
     });
     expect(hasCombatKeyword(wraith, "vengeful")).toBe(true);
 
-    const ember = makeInstance(asBattleCardId("fig4"), {
+    const ember = makeInstance(parseBattleCardId("fig4"), {
       owner: "player",
       isFigment: true,
       subtype: "Ember",
@@ -568,7 +573,7 @@ describe("hasCombatKeyword — detection precedence", () => {
   });
 
   it("does not read figment subtype keywords on a non-figment character", () => {
-    const instance = makeInstance(asBattleCardId("p0"), {
+    const instance = makeInstance(parseBattleCardId("p0"), {
       owner: "player",
       subtype: "Wraith",
     });

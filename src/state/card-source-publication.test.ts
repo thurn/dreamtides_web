@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { CardSourceDebugState } from "../types/journey";
 import { updateCardSourcePublication } from "./card-source-publication";
-import { asPublicationId } from "../types/identifiers";
+import { parsePublicationId } from "../types/identifiers";
 
 function debugState(label: string): CardSourceDebugState {
   return { screenLabel: label, surface: "Draft", entries: [] };
@@ -12,26 +12,26 @@ describe("updateCardSourcePublication", () => {
     const first = updateCardSourcePublication(
       null,
       debugState("Draft A"),
-      asPublicationId("screen-a"),
+      parsePublicationId("screen-a"),
     );
     const replacement = updateCardSourcePublication(
       first,
       debugState("Draft B"),
-      asPublicationId("screen-b"),
+      parsePublicationId("screen-b"),
     );
 
     expect(
       updateCardSourcePublication(
         replacement,
         null,
-        asPublicationId("screen-a"),
+        parsePublicationId("screen-a"),
       ),
     ).toBe(replacement);
     expect(
       updateCardSourcePublication(
         replacement,
         null,
-        asPublicationId("screen-b"),
+        parsePublicationId("screen-b"),
       ),
     ).toBeNull();
   });
@@ -40,7 +40,7 @@ describe("updateCardSourcePublication", () => {
     const owned = updateCardSourcePublication(
       null,
       debugState("Draft"),
-      asPublicationId("draft-screen"),
+      parsePublicationId("draft-screen"),
     );
 
     expect(updateCardSourcePublication(owned, null)).toBe(owned);

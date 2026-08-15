@@ -4,7 +4,7 @@ import {
   tokenizeRulesText,
   type TextSegment,
 } from "../../cumulus/components/card/card-text";
-import type { CardId } from "../../types/card-identity";
+import type { CardId, CardName } from "../../types/card-identity";
 
 /**
  * A card chosen to represent an opponent DreamAvatar's ability before battle.
@@ -19,7 +19,7 @@ import type { CardId } from "../../types/card-identity";
 export interface SignatureCardSelection {
   cardId: CardId;
   cardNumber: number;
-  name: string;
+  name: CardName;
   /**
    * The glossary keywords this card shares with the DreamAvatar's ability text,
    * in canonical form (e.g. `"Abandon"`, `"Reclaim"`). Empty when the card was
@@ -127,7 +127,7 @@ export function selectSignatureCards(args: {
   // can be preferred. Legendary cards are excluded outright.
   const distinctNonStarter: CardData[] = [];
   const distinctStarter: CardData[] = [];
-  const seen = new Set<string>();
+  const seen = new Set<CardId>();
   for (const card of candidates) {
     if (card.rarity === "Legendary") continue;
     if (seen.has(card.id)) continue;
@@ -148,7 +148,7 @@ export function selectSignatureCards(args: {
 
   // Per-card glossary terms, plus the document frequency of each term across the
   // candidate deck for the idf weighting.
-  const cardTermSets = new Map<string, Set<string>>();
+  const cardTermSets = new Map<CardId, Set<string>>();
   const documentFrequency = new Map<string, number>();
   for (const card of distinct) {
     const terms = glossaryTermsIn(card.renderedText);

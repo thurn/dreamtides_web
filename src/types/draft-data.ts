@@ -17,8 +17,8 @@ export interface Tides4Tuning {
 /** Validated browser data compiled from data/draft.toml. */
 export interface DraftData {
   schemaVersion: 1;
-  contentHash: string;
-  foldHash: string;
+  contentHash: ContentHash;
+  foldHash: FoldHash;
   presentation: {
     progress: SourceTransport;
   };
@@ -32,3 +32,4 @@ export interface DraftData {
     tides4: Tides4Tuning;
   };
 }
+import type { ContentHash, FoldHash } from "./content-hash";

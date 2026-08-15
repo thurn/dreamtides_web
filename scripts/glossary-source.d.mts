@@ -6,7 +6,7 @@ export interface GlossaryProjection {
 }
 
 export interface GlossarySourceEntry {
-  readonly id: string;
+  readonly id: GlossaryEntryId;
   readonly category: string;
   readonly term: string;
   readonly definition: string;
@@ -22,7 +22,7 @@ export function validateGlossaryEntries(input: unknown): GlossarySourceEntry[];
 export function parseGlossarySource(source: string): GlossarySourceEntry[];
 export function updateGlossaryEntrySource(
   source: string,
-  id: string,
+  id: GlossaryEntryId,
   changes: Partial<
     Pick<
       GlossarySourceEntry,
@@ -31,3 +31,4 @@ export function updateGlossaryEntrySource(
   >,
 ): string;
 export function serializeGlossarySource(entries: readonly GlossarySourceEntry[]): string;
+import type { GlossaryEntryId } from "../src/types/identifiers";

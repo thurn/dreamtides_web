@@ -20,11 +20,13 @@ import type {
   SiteState,
   SiteType,
 } from "../types/journey";
+import { parseJourneySeed, type JourneySeed } from "../types/journey-seed";
 import { deriveEntryIdCounter } from "./deck-entry-ids";
 import type { DeckEntryId, DreamsignId, SiteId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
-import { asDeckEntryId } from "../types/identifiers";
-import { asSiteId } from "../types/identifiers";
+import { parseDeckEntryId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { identityEntries } from "../types/identifiers";
 
 export interface PreparedDraftPick {
   expected: {
@@ -41,7 +43,7 @@ export interface PreparedDraftPick {
 }
 
 export function nextDeckEntryId(deck: readonly DeckEntry[]): DeckEntryId {
-  return asDeckEntryId(`deck-${String(deriveEntryIdCounter(deck) + 1)}`);
+  return parseDeckEntryId(`deck-${String(deriveEntryIdCounter(deck) + 1)}`);
 }
 
 /** Clamp an essence amount to zero or greater. */
@@ -68,7 +70,7 @@ export function addCardToJourneyState(
     deck: [
       ...prev.deck,
       {
-        entryId: asDeckEntryId(nextDeckEntryId(prev.deck)),
+        entryId: nextDeckEntryId(prev.deck),
         cardNumber,
         transfiguration: null,
         isBane: false,
@@ -290,7 +292,7 @@ export function completeJourneySite(
   }
 
   const updatedNodes = { ...prev.atlas.nodes };
-  for (const [nodeId, node] of Object.entries(updatedNodes)) {
+  for (const [nodeId, node] of identityEntries(updatedNodes)) {
     const siteIndex = node.sites.findIndex((site) => site.id === siteId);
     if (siteIndex === -1) {
       continue;
@@ -352,7 +354,7 @@ export function addSiteToCurrentDreamscape(
   }
   const count = totalSiteCount(prev.atlas);
   const newSite: SiteState = {
-    id: asSiteId(`site-merchant-${sourceId}-${String(count)}`),
+    id: parseSiteId(`site-merchant-${sourceId}-${String(count)}`),
     type: siteType,
     isEnhanced: false,
     isVisited: false,
@@ -462,17 +464,17 @@ export function insertPreparedSiteInJourneyState(
  * collide two distinct journeys onto the same shape and dream art for a given
  * atlas site.
  */
-export function generateJourneySeed(): string {
+export function generateJourneySeed(): JourneySeed {
   const cryptoCandidate: { randomUUID?: () => string } | undefined =
     typeof crypto === "undefined" ? undefined : crypto;
   if (cryptoCandidate?.randomUUID !== undefined) {
-    return cryptoCandidate.randomUUID();
+    return parseJourneySeed(cryptoCandidate.randomUUID());
   }
   const part = () =>
     Math.floor(Math.random() * 0x1_0000_0000)
       .toString(16)
       .padStart(8, "0");
-  return `${part()}${part()}${part()}${part()}`;
+  return parseJourneySeed(`${part()}${part()}${part()}${part()}`);
 }
 
 export function startJourneyFromDreamAvatar({
@@ -493,7 +495,7 @@ export function startJourneyFromDreamAvatar({
    * reuse the same value rather than minting a new one each attempt. When
    * omitted, a fresh seed is generated via {@link generateJourneySeed}.
    */
-  seedOverride?: string;
+  seedOverride?: JourneySeed;
   /**
    * Optional deterministic `[0, 1)` random source for atlas generation. The
    * coop event-sourcing lifecycle provider passes a stream seeded from the run
@@ -525,7 +527,7 @@ export function startJourneyFromDreamAvatar({
     }
 
     deck.push({
-      entryId: asDeckEntryId(nextDeckEntryId(deck)),
+      entryId: nextDeckEntryId(deck),
       cardNumber,
       transfiguration: null,
       isBane: false,

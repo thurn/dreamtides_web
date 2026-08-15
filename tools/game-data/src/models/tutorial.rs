@@ -1359,11 +1359,8 @@ fn trigger_event(value: TutorialTriggerEvent) -> &'static str {
     }
 }
 
-fn compatibility_id(id: EntityId, mapping: &[(&str, &str)]) -> Result<String> {
-    Ok(mapping
-        .iter()
-        .find_map(|(legacy, uuid)| (*uuid == id.to_string()).then(|| (*legacy).to_owned()))
-        .unwrap_or_else(|| id.to_string()))
+fn compatibility_id(id: EntityId, _mapping: &[(&str, &str)]) -> Result<String> {
+    Ok(id.to_string())
 }
 
 pub(crate) fn actions_from_compatibility_json(

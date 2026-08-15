@@ -160,7 +160,7 @@ interface BattleFoldState {
 }
 
 interface EffectRun {
-  scriptRef: { table: "battle" | "dreamwell"; id: string };  // key into static tables
+  scriptRef: BattleScriptRef;  // typed key into the corresponding static table
   stepIndex: number;
   side: BattleSide;
   sourceInstanceId?: string;

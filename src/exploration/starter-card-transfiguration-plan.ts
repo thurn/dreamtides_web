@@ -25,7 +25,8 @@ import type {
 } from "../types/journey";
 import type { CardId } from "../types/card-identity";
 import type { ExplorationActionId } from "../types/identifiers";
-import { asSelectionKey } from "../types/identifiers";
+import { parseSelectionKey } from "../types/identifiers";
+import type { SelectionContentRevision } from "../types/selection-content-revision";
 
 export interface ExplorationStarterCardTransfigurationPlanInput {
   effectKind: ExplorationStarterCardTransfigurationEffectKind;
@@ -113,7 +114,7 @@ function selectionRequest(input: {
     scope: {
       journeySeed: input.journey.seed,
       siteUuid: input.site.id,
-      selectionKey: asSelectionKey(`${input.actionId}:${input.suffix}`),
+      selectionKey: parseSelectionKey(`${input.actionId}:${input.suffix}`),
     },
     count: input.count,
     constraints: input.constraints,
@@ -152,7 +153,7 @@ function unavailablePreparation(input: {
   plan: ExplorationStarterCardTransfigurationPlanInput;
   starterCards: readonly ExplorationStarterCardTransfigurationBinding[];
   eligibleStarterCards: readonly ExplorationStarterCardTransfigurationBinding[];
-  selectionContentRevision: string;
+  selectionContentRevision: SelectionContentRevision;
   reason: ExplorationStarterCardTransfigurationUnavailableReason;
 }): ExplorationStarterCardTransfigurationPreparation {
   return signedPreparation(input.plan, {
@@ -162,7 +163,7 @@ function unavailablePreparation(input: {
     targets: [],
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: input.selectionContentRevision,
-    selectionKey: asSelectionKey(input.plan.actionId),
+    selectionKey: parseSelectionKey(input.plan.actionId),
     selectorSignatures: [],
     selectorTraces: [],
     unavailableReason: input.reason,
@@ -308,7 +309,7 @@ export function prepareExplorationStarterCardTransfigurationPlan(
     targets,
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
-    selectionKey: asSelectionKey(input.actionId),
+    selectionKey: parseSelectionKey(input.actionId),
     selectorSignatures: selectors.map((selection) => selection.signature),
     selectorTraces: selectors.map((selection) => selection.trace),
   });

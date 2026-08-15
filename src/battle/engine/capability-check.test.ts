@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../types/test-identities";
 import { needsManualResolution } from "./capability-check";
 import { createDefaultBattleCardStatus } from "../state/create-initial-state";
 import type { BattleCardInstance } from "../types";
-import { asCardId } from "../../types/card-identity";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 /**
  * Build a minimal BattleCardInstance for testing. Only `definition.cardNumber`
@@ -15,14 +16,14 @@ function makeInstance(
   cardNumber: number,
 ): BattleCardInstance {
   return {
-    battleCardId: asBattleCardId(`test-${cardNumber}`),
+    battleCardId: parseBattleCardId(`test-${cardNumber}`),
     definition: {
       sourceDeckEntryId: null,
-      cardId: asCardId(""),
+      cardId: testCardId("fixture-card"),
       cardNumber,
-      name: `Test Card ${cardNumber}`,
+      name: testCardName(`Test Card ${cardNumber}`),
       battleCardKind: "character",
-      subtype: "test",
+      subtype: "Warrior",
       energyCost: 1,
       printedEnergyCost: 1,
       printedSpark: 1,

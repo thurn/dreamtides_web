@@ -15,6 +15,7 @@
 
 import type { ReactElement } from "react";
 import type { LocalizedString } from "@trox/runtime";
+import type { DomTestId } from "../../types/dom";
 import { StandaloneGlyph } from "./StandaloneGlyph";
 import { Pressable } from "../../primitives/Pressable";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
@@ -68,7 +69,7 @@ export interface IconButtonProps {
   /** Id of the disclosure surface controlled by this button. */
   ariaControls?: string;
   /** A `data-testid` for selecting the disc in tests. */
-  testId?: string;
+  testId?: DomTestId;
   /** Localized accessible name forwarded unresolved to the final button. */
   label: LocalizedString;
 }

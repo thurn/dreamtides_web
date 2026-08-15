@@ -8,6 +8,8 @@
 // pure function of its inputs and every client folding the same log computes
 // byte-identical content.
 
+import type { JourneySeed } from "../../types/journey-seed";
+
 /**
  * Adapt a keyed `(drawIndex) => number` rng into the `() => number` stream the
  * legacy generators expect. A local counter advances the draw index on each
@@ -35,8 +37,11 @@ function hashStringToSeed(input: string): number {
  * folding the same `START_JOURNEY` derive the same stream and build a
  * byte-identical atlas.
  */
-export function seededRngFromString(seed: string): () => number {
-  let state = hashStringToSeed(seed);
+export function seededJourneyRng(
+  seed: JourneySeed,
+  namespace: "atlas",
+): () => number {
+  let state = hashStringToSeed(`${seed}:${namespace}`);
   return () => {
     state = (state + 0x6d2b79f5) >>> 0;
     let t = state;

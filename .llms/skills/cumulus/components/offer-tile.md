@@ -18,7 +18,7 @@ The circular symbolic Augury offer button in named 300×300 desktop and 240×240
 | --- | --- | --- | --- | --- |
 | `model` | `OfferTileModel` | yes | — | The offer's strict symbolic view model. |
 | `presentation` | `Readonly<{ headline: AuguryPresentationText; subtitle: AuguryPresentationText; backgroundArt?: Readonly<{ source: "card"; imageNumber: number; }> \| undefined; }>` | yes | — | Archetype-authored copy for the surfaced reward. |
-| `onPress` | `(offerId: OfferId) => void` | yes | — | Activates the offer, reporting the stable `model.id`. |
+| `onPress` | `(offerId: OfferTileId) => void` | yes | — | Activates the offer, reporting the stable `model.id`. |
 | `size` | `OfferTileSize` = `"compact" \| "standard"` | no | `standard` | Complete tile composition size. Defaults to the 300px standard tile. |
 | `testId` | `string` | no | `offer-tile` | Optional test selector; defaults to `offer-tile`. |
 
@@ -26,7 +26,7 @@ The circular symbolic Augury offer button in named 300×300 desktop and 240×240
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `string` | no | Stable identity for this visible offer. Production callers should combine the encounter signature and offer id so simultaneous offers never collide. |
+| `id` | `OfferTileId` | no | Stable identity for this visible offer. Production callers should combine the encounter signature and offer id so simultaneous offers never collide. |
 | `kind` | `"card-gift" \| "card-draft" \| "transfigured-draft" \| "category-draft" \| "copies-draft" \| "card-bundle" \| "transfigure-card" \| "transfigure-starters" \| "purge-card" \| "duplicate-card" \| "dreamsign-gift" \| "add-site"` | no |  |
 
 ## Usage

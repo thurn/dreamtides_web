@@ -9,6 +9,7 @@ import { TideDisc } from "../../components/hud/TideDisc";
 import { token } from "../../primitives/tokens";
 import { resonances } from "../../components/hud/tide-spec";
 import type { CumulusComponent } from "../registry";
+import { parseTutorialJourneyTideId } from "../../../types/identifiers";
 
 function TideDiscDemo() {
   return (
@@ -26,7 +27,7 @@ function TideDiscDemo() {
           <TideDisc
             key={resonance.id}
             tide={resonance.id}
-            id={`demo-sm-${resonance.id}`}
+            id={parseTutorialJourneyTideId(`demo-sm-${resonance.id}`)}
             label={assertLocalized(resonance.displayName)}
             description={assertLocalized(resonance.accessibilityName)}
           />
@@ -35,7 +36,7 @@ function TideDiscDemo() {
       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
         <TideDisc
           tide="valor"
-          id="demo-reveal-valor"
+          id={parseTutorialJourneyTideId("demo-reveal-valor")}
           label={assertLocalized("Rising Valor")}
           description={assertLocalized(
             "A tide of steadfast courage that rewards holding the line.",

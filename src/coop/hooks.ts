@@ -64,8 +64,7 @@ import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { CURRENT_REDUCER_VERSION } from "./reducer-version";
 import type { LocalizedString } from "@trox/runtime";
 import {
-  asClientId,
-  asDreamscapeId,
+  parseClientId,
   type ClientId,
 } from "../types/identifiers";
 
@@ -251,9 +250,9 @@ export function CoopProvider({
               const after = detail.stateAfter;
               const init = before.battle!.init;
               const completedNode =
-                before.journey.atlas.nodes[
-                  init.dreamscapeId ?? asDreamscapeId("")
-                ];
+                init.dreamscapeId === null
+                  ? undefined
+                  : before.journey.atlas.nodes[init.dreamscapeId];
               const availableForwardIds = (
                 completedNode?.forwardIds ?? []
               ).filter(
@@ -271,9 +270,10 @@ export function CoopProvider({
                 completionLevelBefore: before.journey.completionLevel,
                 completionLevelAfter: after.journey.completionLevel,
                 completedNodeState:
-                  after.journey.atlas.nodes[
-                    init.dreamscapeId ?? asDreamscapeId("")
-                  ]?.state ?? null,
+                  init.dreamscapeId === null
+                    ? null
+                    : (after.journey.atlas.nodes[init.dreamscapeId]?.state ??
+                      null),
                 availableForwardIds,
                 availableForwardDreamscapeIds: availableForwardIds.map(
                   (nodeId) =>
@@ -373,7 +373,7 @@ export function CoopProvider({
       setConnectedClientIds(
         Object.keys(presence ?? {})
           .filter((clientId) => presence?.[clientId]?.connected === true)
-          .map(asClientId)
+          .map(parseClientId)
           .sort(),
       );
     });

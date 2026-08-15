@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import type { PresentationId } from "../../types/identifiers";
 
 /** Reveal the active tutorial speech bubble after its authored delay. */
 export function useDelayedTutorialSpeechBubbleVisibility(
-  speechBubbleId: string | undefined,
+  speechBubbleId: PresentationId | undefined,
   delaySeconds: number | undefined,
 ): boolean {
-  const [visibleId, setVisibleId] = useState<string | null>(null);
+  const [visibleId, setVisibleId] = useState<PresentationId | null>(null);
 
   useEffect(() => {
     if (

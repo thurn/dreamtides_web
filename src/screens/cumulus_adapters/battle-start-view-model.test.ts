@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../types/test-identities";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { LocalizedString } from "@trox/runtime";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createTestBattleInit } from "../../testing/create-battle-init";
@@ -10,16 +12,14 @@ import {
   makeBattleTestState,
 } from "../../battle/test-support";
 import { buildBattleStartView } from "./battle-start-view-model";
-import { asCardId } from "../../types/card-identity";
-import { asBattleEntryKey } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asOpponentId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
+import { parseOpponentId } from "../../types/identifiers";
+import { testCardId, testDreamscapeId, testDreamsignId } from "../../types/test-identities";
 
 function makeInit() {
   const cardDatabase = makeBattleTestCardDatabase();
   const base = createTestBattleInit({
-    battleEntryKey: asBattleEntryKey("battle-entry"),
+    battleEntryKey: parseBattleEntryKey("battle-entry"),
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase,
@@ -36,13 +36,13 @@ function makeInit() {
       essenceReward: 90,
       enemyDescriptor: {
         ...base.enemyDescriptor,
-        id: asOpponentId("opponent-uuid"),
+        id: parseOpponentId("opponent-uuid"),
         name: "The Long-Named Opponent",
         subtitle: "Keeper of the Last Horizon",
         abilityText: "Whenever you score, foresee 1.",
         dreamsigns: [
           {
-            id: asDreamsignId("dreamsign-catalog-uuid"),
+            id: testDreamsignId("dreamsign-catalog-uuid"),
             name: "A Test Sign",
             effectDescription: "A stable test effect.",
             imageName: "test.webp",
@@ -66,7 +66,7 @@ describe("buildBattleStartView", () => {
 
     expect(view.scene).toEqual({
       kind: "dreamscape-scene",
-      dreamscapeId: asDreamscapeId("test_dreamscape"),
+      dreamscapeId: testDreamscapeId("test_dreamscape"),
     });
     expect(view.dreamAvatar).toMatchObject({
       id: "opponent-uuid",
@@ -79,10 +79,10 @@ describe("buildBattleStartView", () => {
       init.enemyDescriptor.signatureCards.map((card) => card.cardId),
     );
     expect(view.dreamsigns[0]).toMatchObject({
-      id: "dreamsign-catalog-uuid",
+      id: init.enemyDescriptor.dreamsigns[0]?.id,
       imageName: "test.webp",
-      imageAlt: "A test Dreamsign",
     });
+    expect(view.dreamsigns[0]?.imageAlt).toBeInstanceOf(LocalizedString);
     expect(view.pointsToWin).toBe(15);
     expect(view.essenceReward).toBe(90);
   });
@@ -190,9 +190,9 @@ describe("buildBattleStartView", () => {
           signatureCards: [
             ...init.enemyDescriptor.signatureCards,
             {
-              cardId: asCardId("missing-uuid"),
+              cardId: testCardId("missing-uuid"),
               cardNumber: missingNumber,
-              name: "Missing",
+              name: testCardName("Missing"),
             },
           ],
         },

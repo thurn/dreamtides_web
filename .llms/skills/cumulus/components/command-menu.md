@@ -18,32 +18,7 @@ Use Select for value choice, DisclosureSection for reading flow, and InfoCard fo
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `model` | `CommandMenuModel` | yes | — | Commands and the semantic presentation selected for this offering. |
-
-### `model`: the `CommandMenuModel` model
-
-#### `CommandMenuAppChromeModel`
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `kind` | `"appChrome"` | no |  |
-| `trigger` | `CommandMenuTriggerModel` | no | The fixed IconButton trigger rendered by the component. |
-| `actions` | `readonly CommandMenuItem[]` | no | Root utility commands and their nested groups. |
-| `status` | `CommandMenuStatusModel` | yes | Optional transient result reported by the app-shell command controller. |
-| `elevated` | `boolean` | yes | Lifts the fixed trigger above an app-shell full-screen overlay. |
-| `testId` | `string` | yes | Optional test selector for the trigger. |
-
-#### `CommandMenuContextModel`
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `kind` | `"context"` | no |  |
-| `title` | `LocalizedString` | no | Describes the card/pointer subject in the menu's header. |
-| `subtitle` | `LocalizedString` | yes | Optional structured secondary location/context copy. |
-| `actions` | `readonly CommandMenuItem[]` | no | Commands available for the activated card or pointer target. |
-| `anchor` | `CommandMenuAnchor` | no | Semantic location used to anchor the desktop pointer menu. |
-| `onDismiss` | `() => void` | no | Called after a leaf command, outside dismissal, or Escape. |
-| `testId` | `string` | yes | Optional test selector for the root offering. |
+| `model` | `CommandMenuModel<Id>` | yes | — | Commands and the semantic presentation selected for this offering. |
 
 ## Usage
 

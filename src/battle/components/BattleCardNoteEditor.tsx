@@ -10,7 +10,7 @@ import type { BattleCardNoteExpiry, BattleMutableState } from "../types";
 import { tx } from "@trox/runtime";
 import { localizedSourceText } from "../../runtime/localization/runtime";
 import type { BattleCardId, NoteId } from "../../types/identifiers";
-import { asNoteId } from "../../types/identifiers";
+import { parseNoteId } from "../../types/identifiers";
 
 const MIN_AFTER_N_TURNS = 1;
 const MAX_AFTER_N_TURNS = 10;
@@ -56,7 +56,7 @@ export function BattleCardNoteEditor({
     onSubmit({
       kind: "ADD_CARD_NOTE",
       battleCardId,
-      noteId: asNoteId(noteId),
+      noteId: noteId,
       text,
       createdAtMs: Date.now(),
       expiry,
@@ -139,7 +139,7 @@ function defaultGenerateNoteId(): NoteId {
     typeof crypto !== "undefined" &&
     typeof crypto.randomUUID === "function"
   ) {
-    return asNoteId(`note_${crypto.randomUUID()}`);
+    return parseNoteId(`note_${crypto.randomUUID()}`);
   }
-  return asNoteId(`note_${Math.random().toString(36).slice(2)}`);
+  return parseNoteId(`note_${Math.random().toString(36).slice(2)}`);
 }

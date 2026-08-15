@@ -11,7 +11,7 @@ import { Pressable } from "../../primitives/Pressable";
 import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
-import { asDreamscapeId } from "../../../types/identifiers";
+import { parseDreamscapeId } from "../../../types/identifiers";
 
 interface TileSpec {
   icon: string;
@@ -95,7 +95,7 @@ export function PressableMockup() {
     <div
       style={{
         ...sceneRoot,
-        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.45) 0%, rgba(8,5,17,0.6) 55%, rgba(8,5,17,0.92) 100%), url(${dreamscapeSceneUrl(asDreamscapeId("firstlight_meadow"))})`,
+        backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.45) 0%, rgba(8,5,17,0.6) 55%, rgba(8,5,17,0.92) 100%), url(${dreamscapeSceneUrl(parseDreamscapeId("firstlight_meadow"))})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         display: "flex",

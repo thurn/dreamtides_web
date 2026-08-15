@@ -41,7 +41,7 @@ import type {
 import { advanceAtlas } from "../../atlas/atlas-generator";
 import { resolveBattleAiConfiguration } from "../../types/opponents-data";
 import { tutorialCardConstantId } from "../../data/tutorial-actions";
-import { asJourneyId } from "../../types/identifiers";
+import { parseJourneyId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
 import type { BattleId } from "../../types/identifiers";
@@ -51,14 +51,13 @@ import type {
   DreamwellCardId,
 } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
-import { asSiteId } from "../../types/identifiers";
-import { asBattleId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asBattleEntryKey } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asOpponentId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { parseOpponentId } from "../../types/identifiers";
 
 const deferredOpponentLogs = new Map<number, () => void>();
 
@@ -71,7 +70,7 @@ function battleEntryKeyFor(
   siteId: SiteId,
   completionLevel: number,
 ): string {
-  return `${siteId}::${String(completionLevel)}::${dreamscapeId ?? asAtlasNodeId("none")}`;
+  return `${siteId}::${String(completionLevel)}::${dreamscapeId ?? parseAtlasNodeId("none")}`;
 }
 
 /**
@@ -107,9 +106,9 @@ function buildBattleInit(
   return createBattleInit({
     opponentsData: content.opponentsData,
     transfigurationData: content.transfigurationData,
-    battleEntryKey: asBattleEntryKey(battleEntryKey),
-    battleInstanceId: asBattleId(
-      `battle:${journey.runId ?? asJourneyId("unscoped")}:${battleEntryKey}`,
+    battleEntryKey: parseBattleEntryKey(battleEntryKey),
+    battleInstanceId: parseBattleId(
+      `battle:${journey.runId ?? parseJourneyId("unscoped")}:${battleEntryKey}`,
     ),
     seedOverride,
     site,
@@ -236,7 +235,7 @@ export function createTutorialBattleInitProvider(
         content,
         journey,
         key,
-        asBattleId(battleId),
+        parseBattleId(battleId),
         battleConfiguration,
       );
       const board = createInitialBattleState(init);
@@ -268,14 +267,14 @@ function createTutorialBattleInit(
           const card = cardById(content, cardId);
           return {
             ...createBaseBattleDeckCardDefinition(card),
-            sourceDeckEntryId: asDeckEntryId(
+            sourceDeckEntryId: parseDeckEntryId(
               `tutorial:${side}:${cardId}:${String(copy)}`,
             ),
           };
         }),
     );
     return createBattleRng(
-      deriveBattleSeed(asBattleEntryKey(`${key}:${side}`)),
+      deriveBattleSeed(parseBattleEntryKey(`${key}:${side}`)),
       "playerDeckOrder",
     ).shuffle(definitions);
   };
@@ -289,9 +288,9 @@ function createTutorialBattleInit(
   );
   return {
     battleId,
-    battleEntryKey: asBattleEntryKey(key),
-    seed: deriveBattleSeed(asBattleEntryKey(key)),
-    siteId: asSiteId("tutorial-handoff"),
+    battleEntryKey: parseBattleEntryKey(key),
+    seed: deriveBattleSeed(parseBattleEntryKey(key)),
+    siteId: parseSiteId("tutorial-handoff"),
     dreamscapeId: null,
     completionLevelAtStart: journey.completionLevel,
     isFinalBoss: false,
@@ -351,18 +350,18 @@ function arrangeTutorialHandoff(
       if (placement.source === "deck") {
         return {
           placement,
-          instanceId: takeCard(board, placement.side, asCardId(cardId)),
+          instanceId: takeCard(board, placement.side, cardId),
         };
       }
       const definition = createBaseBattleDeckCardDefinition(
-        cardById(content, asCardId(cardId)),
+        cardById(content, cardId),
       );
       return {
         placement,
         instanceId: allocateBattleCardInstance(board, {
           definition: {
             ...definition,
-            sourceDeckEntryId: asDeckEntryId(
+            sourceDeckEntryId: parseDeckEntryId(
               `tutorial:${placement.side}:handoff:${String(index)}:${cardId}`,
             ),
           },
@@ -394,9 +393,9 @@ function arrangeTutorialHandoff(
   board.phase = battleConfiguration.handoff.phase;
   board.dreamwellDeckIndex = battleConfiguration.handoff.dreamwellDeckIndex;
   applyTutorialHandoffSide(board, "player", battleConfiguration.handoff.player);
-  board.sides.player.hand = playerHand.map(asBattleCardId);
+  board.sides.player.hand = playerHand.map(parseBattleCardId);
   applyTutorialHandoffSide(board, "enemy", battleConfiguration.handoff.enemy);
-  board.sides.enemy.hand = enemyHand.map(asBattleCardId);
+  board.sides.enemy.hand = enemyHand.map(parseBattleCardId);
   for (const side of ["player", "enemy"] as const) {
     board.sides[side].void = [];
     clearRank(board.sides[side].frontRank);
@@ -474,7 +473,7 @@ function materializeAuthoredHand(
     return allocateBattleCardInstance(board, {
       definition: {
         ...definition,
-        sourceDeckEntryId: asDeckEntryId(
+        sourceDeckEntryId: parseDeckEntryId(
           `tutorial:${side}:authored-hand:${String(index)}:${cardId}`,
         ),
       },
@@ -558,7 +557,7 @@ function tutorialDreamwellDeck(
     (card) => !fixedIds.has(card.id),
   );
   const shuffled = createBattleRng(
-    deriveBattleSeed(asBattleEntryKey(`${key}:dreamwell`)),
+    deriveBattleSeed(parseBattleEntryKey(`${key}:dreamwell`)),
     "dreamwellDeck",
   ).shuffle(rest);
   return [...fixed, ...shuffled].map((card) => ({
@@ -611,7 +610,7 @@ function tutorialEnemyDescriptor(
   threxan: JourneyContent["dreamAvatars"][number],
 ): BattleEnemyDescriptor {
   return {
-    id: asOpponentId(`tutorial:${threxan.id}`),
+    id: parseOpponentId(`tutorial:${threxan.id}`),
     name: threxan.name,
     subtitle: threxan.title,
     imageNumber: threxan.imageNumber,

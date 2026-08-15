@@ -22,6 +22,7 @@ import type { DraftData } from "../../types/draft-data";
 import { bindSourceTransport } from "../../runtime/localization/runtime";
 import type { SiteId } from "../../types/identifiers";
 import type { ExplorationActionId } from "../../types/identifiers";
+import { draftOfferKey } from "../../data/draft-site-bootstrap";
 
 /**
  * Sort an offered pack for display: cheapest first, then alphabetically as a
@@ -100,7 +101,7 @@ export function buildDraftView(params: {
         };
       },
     ),
-    offerKey: params.offerCardNumbers.join(","),
+    offerKey: draftOfferKey(params.offerCardNumbers),
     // Clamp so the last pack never reads past the total (e.g. "(6/5)").
     pickNumber,
     pickTotal,

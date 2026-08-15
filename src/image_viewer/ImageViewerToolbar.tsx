@@ -3,7 +3,9 @@ import {
   ALL_CATEGORY,
   COLUMN_OPTIONS,
   GENERIC_CATEGORY,
+  parseImageViewerCategory,
   type ColumnCount,
+  type ImageCategory,
   type ImageViewerDisplayState,
 } from "./types";
 
@@ -13,7 +15,7 @@ export interface ImageViewerToolbarProps {
   favoritesCount: number;
   favoritesHref: string;
   allImagesHref: string;
-  categories: string[];
+  categories: ImageCategory[];
   hasGenericPool: boolean;
   visibleCount: number;
   totalCount: number;
@@ -102,7 +104,7 @@ export default function ImageViewerToolbar({
             onChange={(event) =>
               onDisplayStateChange({
                 ...displayState,
-                category: event.target.value,
+                category: parseImageViewerCategory(event.target.value),
               })
             }
             style={controlStyle}

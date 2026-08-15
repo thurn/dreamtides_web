@@ -1,11 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
+import { testCardName } from "../../types/test-identities";
 
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 import { scoreAgainstOpponent as scoreConfiguredAgainstOpponent } from "./opponent-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import type { BattleCardId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
 
 const OPPONENTS = opponentsFixture();
 
@@ -36,7 +37,7 @@ function makeCard(
 ): AiCard {
   return {
     cardNumber: 0,
-    name: "Test",
+    name: testCardName("Test"),
     energyCost: 0,
     basePrintedSpark: 0,
     sparkDelta: 0,
@@ -80,17 +81,17 @@ function emptyModel(): ForwardModel {
 function modelWithChallengers(): ForwardModel {
   const model = emptyModel();
   model.aiFrontRank.F0 = makeCard({
-    battleCardId: asBattleCardId("ai-0"),
+    battleCardId: parseBattleCardId("ai-0"),
     basePrintedSpark: 5,
     canChallengeThisTurn: true,
   });
   model.aiFrontRank.F1 = makeCard({
-    battleCardId: asBattleCardId("ai-1"),
+    battleCardId: parseBattleCardId("ai-1"),
     basePrintedSpark: 3,
     canChallengeThisTurn: true,
   });
   model.aiFrontRank.F2 = makeCard({
-    battleCardId: asBattleCardId("ai-2"),
+    battleCardId: parseBattleCardId("ai-2"),
     basePrintedSpark: 2,
     canChallengeThisTurn: true,
   });
@@ -104,12 +105,12 @@ describe("scoreAgainstOpponent", () => {
     const model = modelWithChallengers();
     model.opponentBodies = [
       makeBody({
-        battleCardId: asBattleCardId("op-0"),
+        battleCardId: parseBattleCardId("op-0"),
         effectiveSpark: 4,
         slot: "F0",
       }),
       makeBody({
-        battleCardId: asBattleCardId("op-1"),
+        battleCardId: parseBattleCardId("op-1"),
         effectiveSpark: 2,
         slot: "F1",
       }),
@@ -129,12 +130,12 @@ describe("scoreAgainstOpponent", () => {
     const model = modelWithChallengers();
     model.opponentBodies = [
       makeBody({
-        battleCardId: asBattleCardId("op-0"),
+        battleCardId: parseBattleCardId("op-0"),
         effectiveSpark: 6,
         slot: "F0",
       }),
       makeBody({
-        battleCardId: asBattleCardId("op-1"),
+        battleCardId: parseBattleCardId("op-1"),
         effectiveSpark: 4,
         slot: "F1",
       }),
@@ -153,17 +154,17 @@ describe("scoreAgainstOpponent", () => {
     const blocked = modelWithChallengers();
     blocked.opponentBodies = [
       makeBody({
-        battleCardId: asBattleCardId("op-0"),
+        battleCardId: parseBattleCardId("op-0"),
         effectiveSpark: 9,
         slot: "F0",
       }),
       makeBody({
-        battleCardId: asBattleCardId("op-1"),
+        battleCardId: parseBattleCardId("op-1"),
         effectiveSpark: 9,
         slot: "F1",
       }),
       makeBody({
-        battleCardId: asBattleCardId("op-2"),
+        battleCardId: parseBattleCardId("op-2"),
         effectiveSpark: 9,
         slot: "F2",
       }),
@@ -178,12 +179,12 @@ describe("scoreAgainstOpponent", () => {
     const model = emptyModel();
     model.aiScore = 19;
     model.aiFrontRank.F0 = makeCard({
-      battleCardId: asBattleCardId("8-spark-challenger"),
+      battleCardId: parseBattleCardId("8-spark-challenger"),
       basePrintedSpark: 8,
     });
     model.opponentBodies = [
       makeBody({
-        battleCardId: asBattleCardId("2-spark-blocker"),
+        battleCardId: parseBattleCardId("2-spark-blocker"),
         effectiveSpark: 2,
       }),
     ];
@@ -199,29 +200,29 @@ describe("scoreAgainstOpponent", () => {
 
     const model = modelWithChallengers();
     model.aiFrontRank.F3 = makeCard({
-      battleCardId: asBattleCardId("ai-3"),
+      battleCardId: parseBattleCardId("ai-3"),
       basePrintedSpark: 7,
       canChallengeThisTurn: true,
     });
     model.opponentBodies = [
       makeBody({
-        battleCardId: asBattleCardId("op-0"),
+        battleCardId: parseBattleCardId("op-0"),
         effectiveSpark: 8,
         slot: "F0",
       }),
       makeBody({
-        battleCardId: asBattleCardId("op-1"),
+        battleCardId: parseBattleCardId("op-1"),
         effectiveSpark: 7,
         slot: "F1",
       }),
       makeBody({
-        battleCardId: asBattleCardId("op-2"),
+        battleCardId: parseBattleCardId("op-2"),
         effectiveSpark: 6,
         slot: "F2",
         rank: "back",
       }),
       makeBody({
-        battleCardId: asBattleCardId("op-3"),
+        battleCardId: parseBattleCardId("op-3"),
         effectiveSpark: 5,
         slot: "F3",
       }),
@@ -239,14 +240,14 @@ describe("scoreAgainstOpponent", () => {
   it("does not explode on a large board with a small sampleCap", () => {
     const model = modelWithChallengers();
     model.aiFrontRank.F3 = makeCard({
-      battleCardId: asBattleCardId("ai-3"),
+      battleCardId: parseBattleCardId("ai-3"),
       basePrintedSpark: 9,
       canChallengeThisTurn: true,
     });
     for (let i = 0; i < 9; i += 1) {
       model.opponentBodies.push(
         makeBody({
-          battleCardId: asBattleCardId(`op-${String(i)}`),
+          battleCardId: parseBattleCardId(`op-${String(i)}`),
           effectiveSpark: 3 + i,
           slot: i < 4 ? `D${String(i)}` : `R${String(i - 4)}`,
           rank: i < 4 ? "front" : "back",
@@ -265,7 +266,7 @@ describe("scoreAgainstOpponent", () => {
     // any concrete card definition.
     const model = modelWithChallengers();
     model.opponentBodies = [
-      makeBody({ battleCardId: asBattleCardId("anon"), effectiveSpark: 4 }),
+      makeBody({ battleCardId: parseBattleCardId("anon"), effectiveSpark: 4 }),
     ];
     model.opponentHandCount = 4;
 
@@ -276,7 +277,7 @@ describe("scoreAgainstOpponent", () => {
   it("returns a finite number when the AI has no challengers", () => {
     const model = emptyModel();
     model.opponentBodies = [
-      makeBody({ battleCardId: asBattleCardId("op-0"), effectiveSpark: 5 }),
+      makeBody({ battleCardId: parseBattleCardId("op-0"), effectiveSpark: 5 }),
     ];
     const score = scoreAgainstOpponent(model, "expectiminimax", 8, 2);
     expect(Number.isFinite(score)).toBe(true);
@@ -296,14 +297,14 @@ describe("scoreAgainstOpponent", () => {
     model.playerScore = 25;
     // Single challenger with spark 5: unblocked it scores 5, reaching aiScore 25.
     model.aiFrontRank.F0 = makeCard({
-      battleCardId: asBattleCardId("ai-near-win"),
+      battleCardId: parseBattleCardId("ai-near-win"),
       basePrintedSpark: 5,
       canChallengeThisTurn: true,
     });
     // One big blocker to ensure "tradeEvenly" keeps the AI from scoring.
     model.opponentBodies = [
       makeBody({
-        battleCardId: asBattleCardId("op-blocker"),
+        battleCardId: parseBattleCardId("op-blocker"),
         effectiveSpark: 6,
         slot: "F0",
       }),

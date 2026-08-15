@@ -1,8 +1,14 @@
 import type { TransfigurationType } from "../types/journey";
 import type {
+  TransfigurationCostBand,
   TransfigurationData,
   TransfigurationFormDefinition,
+  TransfigurationPricing,
+  TransfigurationRewardScore,
+  TransfigurationStatDeltaBand,
 } from "../types/transfiguration-data";
+import { parseContentHash, parseFoldHash } from "../types/content-hash";
+import { glossaryEntryIdFromUnknown } from "../types/identifiers";
 
 const PATH = "/transfiguration-data.json";
 const HASH = /^[0-9a-f]{64}$/u;
@@ -16,13 +22,14 @@ function finite(value: unknown): value is number {
   return typeof value === "number" && Number.isFinite(value);
 }
 
-function isCostBand(value: unknown): boolean {
-  return (
-    isRecord(value) &&
-    finite(value.base) &&
-    finite(value.jitter) &&
-    finite(value.floor)
-  );
+function costBandFromUnknown(value: unknown): TransfigurationCostBand | null {
+  if (
+    !isRecord(value) ||
+    !finite(value.base) ||
+    !finite(value.jitter) ||
+    !finite(value.floor)
+  ) return null;
+  return { base: value.base, jitter: value.jitter, floor: value.floor };
 }
 
 function dataFormIds(): readonly TransfigurationType[] {
@@ -39,37 +46,105 @@ function dataFormIds(): readonly TransfigurationType[] {
   ];
 }
 
-function isPricing(value: unknown): boolean {
-  if (!isRecord(value)) return false;
-  return (
-    value.kind === "free" ||
-    value.kind === "statDelta" ||
-    (value.kind === "band" && isCostBand(value))
-  );
+function pricingFromUnknown(value: unknown): TransfigurationPricing | null {
+  if (!isRecord(value)) return null;
+  if (value.kind === "free" || value.kind === "statDelta") {
+    return { kind: value.kind };
+  }
+  if (value.kind !== "band") return null;
+  const band = costBandFromUnknown(value);
+  return band === null ? null : { kind: "band", ...band };
 }
 
-function isRewardScore(value: unknown): boolean {
-  if (!isRecord(value)) return false;
-  return (
-    (value.kind === "flat" && finite(value.value)) ||
-    (value.kind === "statDelta" && finite(value.divisor) && value.divisor > 0)
-  );
+function rewardScoreFromUnknown(
+  value: unknown,
+): TransfigurationRewardScore | null {
+  if (!isRecord(value)) return null;
+  if (value.kind === "flat" && finite(value.value)) {
+    return { kind: "flat", value: value.value };
+  }
+  if (
+    value.kind === "statDelta" &&
+    finite(value.divisor) &&
+    value.divisor > 0
+  ) {
+    return { kind: "statDelta", divisor: value.divisor };
+  }
+  return null;
 }
 
 function isFormId(value: unknown): value is TransfigurationType {
   return dataFormIds().some((expected) => expected === value);
 }
 
-function isTransfigurationGlyph(value: unknown): boolean {
+function isTransfigurationGlyph(
+  value: unknown,
+): value is TransfigurationFormDefinition["glyph"] {
   return dataFormIds().some((id) => value === `transfiguration${id}`);
+}
+
+function isColor(value: unknown): value is `#${string}` {
+  return typeof value === "string" && COLOR.test(value);
+}
+
+function statDeltaBandFromUnknown(
+  value: unknown,
+): TransfigurationStatDeltaBand | null {
+  if (!isRecord(value)) return null;
+  const band = costBandFromUnknown(value.band);
+  if (
+    !finite(value.minimumDelta) ||
+    value.minimumDelta <= 0 ||
+    value.maximumDelta !== undefined && !finite(value.maximumDelta) ||
+    band === null
+  ) return null;
+  return {
+    minimumDelta: value.minimumDelta,
+    ...(value.maximumDelta === undefined
+      ? {}
+      : { maximumDelta: value.maximumDelta }),
+    band,
+  };
+}
+
+function formFromUnknown(value: unknown): TransfigurationFormDefinition | null {
+  if (!isRecord(value) || !isFormId(value.id)) return null;
+  const glossaryUuid = glossaryEntryIdFromUnknown(value.glossaryUuid);
+  const pricing = pricingFromUnknown(value.pricing);
+  const rewardScore = rewardScoreFromUnknown(value.rewardScore);
+  if (
+    glossaryUuid === null ||
+    typeof value.name !== "string" ||
+    value.name.trim() === "" ||
+    typeof value.description !== "string" ||
+    value.description.trim() === "" ||
+    !isTransfigurationGlyph(value.glyph) ||
+    !isColor(value.accentColor) ||
+    !isColor(value.tintColor) ||
+    pricing === null ||
+    rewardScore === null
+  ) return null;
+  return {
+    id: value.id,
+    glossaryUuid,
+    name: value.name,
+    description: value.description,
+    glyph: value.glyph,
+    accentColor: value.accentColor,
+    tintColor: value.tintColor,
+    pricing,
+    rewardScore,
+  };
 }
 
 export function parseTransfigurationData(value: unknown): TransfigurationData {
   if (
     !isRecord(value) ||
     value.schemaVersion !== 1 ||
-    !HASH.test(String(value.contentHash)) ||
-    !HASH.test(String(value.foldHash)) ||
+    typeof value.contentHash !== "string" ||
+    !HASH.test(value.contentHash) ||
+    typeof value.foldHash !== "string" ||
+    !HASH.test(value.foldHash) ||
     !isRecord(value.site) ||
     !(
       value.site.standardChoiceLimit === null ||
@@ -88,14 +163,6 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
     value.site.pricing.step <= 0 ||
     !Array.isArray(value.site.pricing.statDeltaBands) ||
     value.site.pricing.statDeltaBands.length === 0 ||
-    !value.site.pricing.statDeltaBands.every(
-      (band) =>
-        isRecord(band) &&
-        finite(band.minimumDelta) &&
-        band.minimumDelta > 0 &&
-        (band.maximumDelta === undefined || finite(band.maximumDelta)) &&
-        isCostBand(band.band),
-    ) ||
     !Array.isArray(value.forms) ||
     value.forms.length < 1 ||
     value.forms.length > dataFormIds().length
@@ -103,35 +170,38 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
     throw new Error(
       "Failed to load Transfiguration data: malformed transfiguration-data.json",
     );
-  const formIds = new Set<TransfigurationType>();
-  for (const form of value.forms) {
-    if (!isRecord(form) || !isFormId(form.id) || formIds.has(form.id)) {
-      throw new Error(
-        "Failed to load Transfiguration data: malformed transfiguration-data.json",
-      );
-    }
-    formIds.add(form.id);
-  }
-  const valid = value.forms.every(
-    (form) =>
-      isRecord(form) &&
-      isFormId(form.id) &&
-      typeof form.name === "string" &&
-      form.name.trim() !== "" &&
-      typeof form.description === "string" &&
-      form.description.trim() !== "" &&
-      COLOR.test(String(form.accentColor)) &&
-      COLOR.test(String(form.tintColor)) &&
-      typeof form.glossaryUuid === "string" &&
-      isTransfigurationGlyph(form.glyph) &&
-      isPricing(form.pricing) &&
-      isRewardScore(form.rewardScore),
+  const statDeltaBands = value.site.pricing.statDeltaBands.map(
+    statDeltaBandFromUnknown,
   );
-  if (!valid)
+  const forms = value.forms.map(formFromUnknown);
+  if (
+    statDeltaBands.some((band) => band === null) ||
+    forms.some((form) => form === null) ||
+    new Set(forms.map((form) => form?.id)).size !== forms.length
+  )
     throw new Error(
       "Failed to load Transfiguration data: malformed transfiguration-data.json",
     );
-  return value as unknown as TransfigurationData;
+  return {
+    schemaVersion: 1,
+    contentHash: parseContentHash(value.contentHash),
+    foldHash: parseFoldHash(value.foldHash),
+    site: {
+      standardChoiceLimit: value.site.standardChoiceLimit,
+      enhancedChoiceLimit: value.site.enhancedChoiceLimit,
+      pricing: {
+        minimumCost: value.site.pricing.minimumCost,
+        maximumCost: value.site.pricing.maximumCost,
+        step: value.site.pricing.step,
+        statDeltaBands: statDeltaBands.filter(
+          (band): band is TransfigurationStatDeltaBand => band !== null,
+        ),
+      },
+    },
+    forms: forms.filter(
+      (form): form is TransfigurationFormDefinition => form !== null,
+    ),
+  };
 }
 
 export async function loadTransfigurationData(): Promise<TransfigurationData> {

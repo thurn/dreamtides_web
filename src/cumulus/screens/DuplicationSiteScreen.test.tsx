@@ -6,21 +6,21 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import {
   DuplicationSiteScreen,
   type DuplicationSiteView,
 } from "./DuplicationSiteScreen";
-import { asSiteId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testGuideId, testCardId } from "../../types/test-identities";
 
 function makeCard(index: number): CardData {
   return {
-    name: asCardName(`Copy Fixture ${String(index)}`),
-    id: asCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    name: parseCardName(`Copy Fixture ${String(index)}`),
+    id: testCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
     cardNumber: index,
     cardType: "Character",
     subtype: "",
@@ -36,13 +36,13 @@ function makeCard(index: number): CardData {
 
 function view(cardCount = 3, isEnhanced = false): DuplicationSiteView {
   return {
-    siteId: asSiteId("duplication-site"),
+    siteId: parseSiteId("duplication-site"),
     scene: null,
     guide: {
-      id: "deacon_holt",
+      id: testGuideId("deacon_holt"),
       name: assertLocalized("Deacon Holt"),
       line: assertLocalized("Pick one, and I'll make another."),
-      art: artRef.dreamGuide(asGuideId("deacon_holt")),
+      art: artRef.dreamGuide(testGuideId("deacon_holt")),
     },
     ready: true,
     alreadyAccepted: false,
@@ -51,7 +51,7 @@ function view(cardCount = 3, isEnhanced = false): DuplicationSiteView {
       const index = offset + 1;
       const card = makeCard(index);
       return {
-        entryId: asDeckEntryId(`entry-${String(index)}`),
+        entryId: parseDeckEntryId(`entry-${String(index)}`),
         model: { cardId: card.id, displaySnapshot: card },
       };
     }),

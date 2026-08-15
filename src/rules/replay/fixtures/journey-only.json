@@ -14,7 +14,7 @@
       "event": {
         "type": "START_JOURNEY",
         "payload": {
-          "dreamAvatarId": "dc-fixture"
+          "dreamAvatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -26,7 +26,7 @@
       "event": {
         "type": "SELECT_DREAM_AVATAR",
         "payload": {
-          "dreamAvatarId": "dc-fixture"
+          "dreamAvatarId": "03d89f7f-e857-42a2-bef2-2e3b3bbaf47c"
         },
         "actor": "p1",
         "clientTimestamp": "1970-01-01T00:00:00.000Z",
@@ -83,5 +83,5 @@
       }
     }
   ],
-  "finalHash": "07412e0e40d9ae5d7a5a062ad7866d7bdfab31128c7865fe816b4c7fe3b756ad"
+  "finalHash": "2af0254a48a84fe176613552984fa51e21ea1e0ae59bea45ac8f9dcbf6cf86ca"
 }

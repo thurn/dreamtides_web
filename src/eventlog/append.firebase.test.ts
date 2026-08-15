@@ -1,5 +1,17 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 import { describe, expect, it, vi } from "vitest";
-import type { EncodedLogNode, EngineConfig, GameEvent, Genesis } from "./types";
+import {
+  parseEventNonce,
+  type EncodedLogNode,
+  type EngineConfig,
+  type GameEvent,
+  type Genesis,
+} from "./types";
+import { hashState } from "./hash";
+import { testIntentKey, testRoomId } from "../types/test-identities";
+
+const ROOM_ID = testRoomId("room");
 
 const firebase = vi.hoisted<{
   current: unknown;
@@ -38,7 +50,7 @@ interface State {
 }
 
 const genesis: Genesis = {
-  seed: "seed",
+  seed: testJourneySeed("seed"),
   reducerVersion: "v1",
   createdAt: 0,
   contentConfig: {
@@ -54,17 +66,21 @@ const config: EngineConfig<State> = {
   }),
   encode: JSON.stringify,
   decode: (raw) => JSON.parse(raw) as State,
-  hash: JSON.stringify,
+  hash: hashState,
 };
 
-function event(overrides: Partial<GameEvent> = {}): GameEvent {
+function event(
+  overrides: Omit<Partial<GameEvent>, "nonce"> & { nonce?: string } = {},
+): GameEvent {
+  const { nonce, ...typedOverrides } = overrides;
   return {
     type: "T",
     payload: {},
-    actor: "client-a",
+    actor: testEventActor("client-a"),
     clientTimestamp: "0",
     basedOnSeq: 0,
-    ...overrides,
+    ...typedOverrides,
+    ...(nonce === undefined ? {} : { nonce: parseEventNonce(nonce) }),
   };
 }
 
@@ -82,7 +98,7 @@ describe("appendEvent Firebase transaction behavior", () => {
   it("disables Firebase local transaction events", async () => {
     firebase.current = emptyLog();
 
-    await appendEvent({} as never, "room", config, event({ nonce: "n-1" }));
+    await appendEvent({} as never, ROOM_ID, config, event({ nonce: "n-1" }));
 
     expect(firebase.options).toEqual({ applyLocally: false });
   });
@@ -92,20 +108,20 @@ describe("appendEvent Firebase transaction behavior", () => {
     await expect(
       appendEvent(
         {} as never,
-        "room",
+        ROOM_ID,
         config,
-        event({ nonce: "n-1", intentKey: "logical-transition" }),
+        event({ nonce: "n-1", intentKey: testIntentKey("logical-transition") }),
       ),
     ).resolves.toBe(1);
     await expect(
       appendEvent(
         {} as never,
-        "room",
+        ROOM_ID,
         config,
         event({
-          actor: "client-b",
+          actor: testEventActor("client-b"),
           nonce: "n-2",
-          intentKey: "logical-transition",
+          intentKey: testIntentKey("logical-transition"),
           payload: { different: true },
         }),
       ),
@@ -117,9 +133,12 @@ describe("appendEvent Firebase transaction behavior", () => {
     firebase.current = emptyLog();
     await appendEvent(
       {} as never,
-      "room",
+      ROOM_ID,
       config,
-      event({ nonce: "host-1", intentKey: "tutorial:journey-1:begin" }),
+      event({
+        nonce: "host-1",
+        intentKey: testIntentKey("tutorial:journey-1:begin"),
+      }),
     );
     const committed = firebase.current as EncodedLogNode;
     const {
@@ -135,12 +154,12 @@ describe("appendEvent Firebase transaction behavior", () => {
     await expect(
       appendEvent(
         {} as never,
-        "room",
+        ROOM_ID,
         config,
         event({
-          actor: "joining-client",
+          actor: testEventActor("joining-client"),
           nonce: "joiner-1",
-          intentKey: "tutorial:journey-1:begin",
+          intentKey: testIntentKey("tutorial:journey-1:begin"),
         }),
       ),
     ).resolves.toBe(1);
@@ -155,7 +174,7 @@ describe("appendEvent Firebase transaction behavior", () => {
     };
 
     await expect(
-      appendEvent({} as never, "room", config, event({ nonce: "n-1" })),
+      appendEvent({} as never, ROOM_ID, config, event({ nonce: "n-1" })),
     ).rejects.toThrow("appendEvent aborted");
   });
 
@@ -168,7 +187,7 @@ describe("appendEvent Firebase transaction behavior", () => {
     };
 
     await expect(
-      appendEvent({} as never, "room", config, event({ nonce: "n-2" })),
+      appendEvent({} as never, ROOM_ID, config, event({ nonce: "n-2" })),
     ).resolves.toBe(2);
     const committed = firebase.current as EncodedLogNode;
     expect(committed.head).toBe(2);

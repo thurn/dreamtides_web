@@ -1,12 +1,12 @@
 import { assertLocalized } from "@trox/runtime";
-import { asDreamwellCardId } from "../../../types/identifiers";
+import { parseDreamwellCardId } from "../../../types/identifiers";
 import {
   DreamwellCard,
   type DreamwellCardModel,
 } from "../../components/battle/DreamwellCard";
 import type { CumulusComponent } from "../registry";
 
-const CARD_ID = asDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
+const CARD_ID = parseDreamwellCardId("3a4293da-55a1-4094-898a-df402ffa1c92");
 
 const MODEL: DreamwellCardModel = {
   cardId: CARD_ID,

@@ -19,13 +19,17 @@ import type {
   TutorialAiActionOverrideId,
   TutorialRunId,
 } from "../types/identifiers";
+import { identityKeys } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
+import type { JourneyMutationSource } from "../types/journey-source";
 import type {
   RandomSiteDestinationType,
   SiteType,
   TransfigurationType,
 } from "../types/journey";
 import type { BattleSide } from "../battle/types";
+import type { SelectionRulesVersion } from "../reward-selection/types";
+import type { EventType } from "../eventlog/types";
 
 // The reducer-internal typed view of every event that folds over `FoldState`.
 //
@@ -128,7 +132,7 @@ export interface EventPayloads {
   // --- sites ---
   OPEN_SITE: {
     siteId: SiteId;
-    selectionRulesVersion?: string;
+    selectionRulesVersion?: SelectionRulesVersion;
     gambleGameId?:
       | "gravok-three-gate-wager"
       | "tidemark-ladder-climb"
@@ -140,7 +144,7 @@ export interface EventPayloads {
   RESOLVE_EXPLORATION_CHOICE: {
     siteId: SiteId;
     actionId: ExplorationActionId;
-    selectionRulesVersion?: string;
+    selectionRulesVersion?: SelectionRulesVersion;
     selection?: unknown;
   };
   COMPLETE_AUGURY: { siteId: SiteId };
@@ -223,7 +227,7 @@ export interface EventPayloads {
     cardId: CardId;
     count: number;
     battlesRemaining: number;
-    source: string;
+    source: JourneyMutationSource;
   };
   BAN_SITE_TYPE: { siteType: SiteType; dreamscapesRemaining: number };
   BOOST_SITE_APPEARANCE: {
@@ -299,7 +303,7 @@ export type TypedGameEvent<T extends GameEventType = GameEventType> = {
  * a partner's CAS window. Card notes and card-source provenance carry no
  * game-rules meaning.
  */
-export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
+export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<GameEventType> = new Set([
   "FRONT_DOOR_ACTION",
   "ADVANCE_FRONT_DOOR",
   "BEGIN_TUTORIAL",
@@ -318,8 +322,8 @@ export const CAS_EXEMPT_EVENT_TYPES: ReadonlySet<string> = new Set<string>([
  * state carries no game-rules meaning, and site bootstrap only materializes the
  * deterministic runtime or offer for an already-selected site.
  */
-export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<string> =
-  new Set<string>([
+export const DECISION_NEUTRAL_EVENT_TYPES: ReadonlySet<GameEventType> =
+  new Set([
     "FRONT_DOOR_ACTION",
     "ADVANCE_FRONT_DOOR",
     "BEGIN_TUTORIAL",
@@ -449,8 +453,8 @@ const _exhaustive: Record<keyof EventPayloads, true> =
 void _exhaustive;
 
 /** The set of all recognized event types (for routing / validation). */
-export const KNOWN_EVENT_TYPES: ReadonlySet<string> = new Set<string>(
-  Object.keys(KNOWN_EVENT_TYPES_AS_OBJECT),
+export const KNOWN_EVENT_TYPES: ReadonlySet<GameEventType> = new Set(
+  identityKeys(KNOWN_EVENT_TYPES_AS_OBJECT),
 );
 
 /**
@@ -460,10 +464,10 @@ export const KNOWN_EVENT_TYPES: ReadonlySet<string> = new Set<string>(
  * this set is the escape hatch for a type that is intentionally exempt from
  * that check. Empty today — every declared event type is routed.
  */
-export const INTENTIONALLY_UNROUTED_EVENT_TYPES: ReadonlySet<string> =
-  new Set<string>();
+export const INTENTIONALLY_UNROUTED_EVENT_TYPES: ReadonlySet<GameEventType> =
+  new Set();
 
 /** Narrows a raw event `type` string to a known `GameEventType`. */
-export function isKnownEventType(type: string): type is GameEventType {
-  return KNOWN_EVENT_TYPES.has(type);
+export function isKnownEventType(type: EventType): type is GameEventType {
+  return (KNOWN_EVENT_TYPES as ReadonlySet<EventType>).has(type);
 }

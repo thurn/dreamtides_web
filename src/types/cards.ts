@@ -1,4 +1,4 @@
-import type { CardId, CardName } from "./card-identity";
+import type { CardId, CardName, CardSubtype } from "./card-identity";
 
 /** The two card types in Dreamtides. */
 export type CardType = "Character" | "Event";
@@ -48,7 +48,7 @@ export interface CardData {
   id: CardId;
   cardNumber: number;
   cardType: CardType;
-  subtype: string;
+  subtype: CardSubtype;
   isStarter: boolean;
   /** Gameplay roles compiled from the canonical card's RON `roles` field. */
   roles?: CardRole[];

@@ -4,17 +4,18 @@ import {
   reduceRevealState,
 } from "./state-machine";
 import type { RevealCoordinatorEvent, RevealCoordinatorSource, RevealSourceIdentity } from "./model";
+import { testSemanticEntityId } from "../../../types/test-identities";
 
 const A: RevealSourceIdentity = {
-  entityType: "card",
-  entityId: "00000000-0000-4000-8000-000000000001",
+  entityType: "game-card",
+  entityId: testSemanticEntityId("00000000-0000-4000-8000-000000000001"),
 };
 const B: RevealSourceIdentity = {
   entityType: "site",
-  entityId: "00000000-0000-4000-8000-000000000002",
+  entityId: testSemanticEntityId("00000000-0000-4000-8000-000000000002"),
 };
-const SA: RevealCoordinatorSource = { identity: A, registrationId: "a" };
-const SB: RevealCoordinatorSource = { identity: B, registrationId: "b" };
+const SA: RevealCoordinatorSource = { identity: A, registrationId: "cumulus-reveal-source-a" };
+const SB: RevealCoordinatorSource = { identity: B, registrationId: "cumulus-reveal-source-b" };
 
 function run(...events: RevealCoordinatorEvent[]) {
   return events.reduce(reduceRevealState, initialRevealCoordinatorState);
@@ -180,7 +181,12 @@ describe("reveal interaction state machine", () => {
       { type: "pointer-enter", source: SB, pointerType: "mouse", hoverCapable: true, timestamp: 1 },
       { type: "source-unmount", source: SB, timestamp: 2 },
     );
-    expect(state).toMatchObject({ phase: "focus", activeSource: A, activeRegistrationId: "a", focusedSource: SA });
+    expect(state).toMatchObject({
+      phase: "focus",
+      activeSource: A,
+      activeRegistrationId: SA.registrationId,
+      focusedSource: SA,
+    });
   });
 
   it("does not restore an Escape-suppressed focus when the hover source unmounts", () => {

@@ -10,9 +10,11 @@ import type {
   RewardMechanicId,
   RewardSelectionPolicyId,
   RewardSelectionTrace,
+  SelectionRulesVersion,
 } from "../../reward-selection/types";
 import type { MerchantTargetKey, SelectionKey } from "../../types/identifiers";
 import type { AuguryArchetypeId } from "../../types/identifiers";
+import type { SelectionContentRevision } from "../../types/selection-content-revision";
 
 /** The 13 offer archetypes across the 6 families. */
 export type MerchantArchetypeId = AuguryArchetypeId;
@@ -83,8 +85,8 @@ export interface MerchantOfferDraft {
   mechanicId?: RewardMechanicId;
   policyId?: RewardSelectionPolicyId;
   selectionKey?: SelectionKey;
-  selectionRulesVersion?: string;
-  selectionContentRevision?: string;
+  selectionRulesVersion?: SelectionRulesVersion;
+  selectionContentRevision?: SelectionContentRevision;
   selectionTrace?: RewardSelectionTrace;
 }
 

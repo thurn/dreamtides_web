@@ -18,17 +18,8 @@ Both entry IDs and card UUIDs remain semantic diagnostics, even when display nam
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `model` | `CardChangePairModel` | yes | — | Complete resolved change to display. |
+| `model` | `CardChangePairModel<ChangeId>` | yes | — | Complete resolved change to display. |
 | `reveal` | `"before" \| "complete"` | yes | — | Controlled choreography phase for concealing or revealing the result. |
-
-### `model`: the `CardChangePairModel` model
-
-| Field | Type | Optional | Description |
-| --- | --- | --- | --- |
-| `changeId` | `string` | no | Stable identity for this resolved change presentation. |
-| `kind` | `CardChangeKind` | no | Semantic visual and accessibility recipe. |
-| `before` | `{ readonly entryId: DeckEntryId; readonly card: GameCardModel; }` | no | Original deck entry and its complete card presentation. |
-| `after` | `{ readonly entryId: DeckEntryId; readonly card: GameCardModel; }` | no | Result deck entry and its complete card presentation. |
 
 ## Usage
 

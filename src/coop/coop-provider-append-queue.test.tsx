@@ -5,7 +5,9 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AppendFn } from "./actions";
-import { asClientId, asRoomId } from "../types/identifiers";
+import { parseClientId, parseRoomId } from "../types/identifiers";
+import { testFoldHash } from "../types/test-identities";
+import type { EventDraft } from "../eventlog/client";
 
 // This test exercises the REAL `createLogClient`/`LogClient.submit` — including
 // its not-initialized gate (submit REJECTS until the first log node has folded
@@ -42,18 +44,18 @@ const fake = vi.hoisted(() => {
     createdAt: 0,
     contentConfig: {
       poolVariant: "tides4",
-      atlasFoldHash: "fixture-atlas-fold-hash",
-      sitesFoldHash: "fixture-sites-fold-hash",
-      draftFoldHash: "fixture-draft-fold-hash",
-      cardRolesFoldHash: "fixture-card-roles-fold-hash",
-      economyFoldHash: "a".repeat(64),
-      gambleFoldHash: "g".repeat(64),
-      transfigurationFoldHash: "x".repeat(64),
-      rewardSelectionFoldHash: "c".repeat(64),
-      auguryFoldHash: "d".repeat(64),
-      explorationFoldHash: "e".repeat(64),
-      tutorialFoldHash: "t".repeat(64),
-      opponentsFoldHash: "b".repeat(64),
+      atlasFoldHash: "1".repeat(64),
+      sitesFoldHash: "2".repeat(64),
+      draftFoldHash: "3".repeat(64),
+      cardRolesFoldHash: "4".repeat(64),
+      economyFoldHash: "5".repeat(64),
+      gambleFoldHash: "6".repeat(64),
+      transfigurationFoldHash: "7".repeat(64),
+      rewardSelectionFoldHash: "8".repeat(64),
+      auguryFoldHash: "9".repeat(64),
+      explorationFoldHash: "a".repeat(64),
+      tutorialFoldHash: "b".repeat(64),
+      opponentsFoldHash: "c".repeat(64),
       defaultStartingEssence: 17,
       dreamsignCap: 4,
     },
@@ -142,13 +144,39 @@ vi.mock("firebase/database", () => ({
 
 import { CoopProvider, useAppend, useEventOutcomes } from "./hooks";
 import type { RoomReadyContext } from "./RoomGate";
+import { parseReducerVersion } from "../types/reducer-version";
+import { testJourneySeed } from "../types/test-identities";
+
+function pinnedGenesis(): RoomReadyContext["genesis"] {
+  return {
+    ...fake.genesis,
+    seed: testJourneySeed(fake.genesis.seed),
+    reducerVersion: parseReducerVersion(fake.genesis.reducerVersion),
+    contentConfig: {
+      ...fake.genesis.contentConfig,
+      poolVariant: "tides4",
+      atlasFoldHash: testFoldHash("1"),
+      sitesFoldHash: testFoldHash("2"),
+      draftFoldHash: testFoldHash("3"),
+      cardRolesFoldHash: testFoldHash("4"),
+      economyFoldHash: testFoldHash("5"),
+      gambleFoldHash: testFoldHash("6"),
+      transfigurationFoldHash: testFoldHash("7"),
+      rewardSelectionFoldHash: testFoldHash("8"),
+      auguryFoldHash: testFoldHash("9"),
+      explorationFoldHash: testFoldHash("a"),
+      tutorialFoldHash: testFoldHash("b"),
+      opponentsFoldHash: testFoldHash("c"),
+    },
+  };
+}
 
 function makeContext(): RoomReadyContext {
   return {
     db: {} as RoomReadyContext["db"],
-    roomId: asRoomId("room-1"),
-    clientId: asClientId("client-test"),
-    genesis: fake.genesis,
+    roomId: parseRoomId("room-1"),
+    clientId: parseClientId("client-test"),
+    genesis: pinnedGenesis(),
     logSink: {
       recordCoopEvent: () => false,
       recordBounce: () => {},
@@ -167,8 +195,8 @@ function BootstrapChild({
   types,
   onSeq,
 }: {
-  types: string[];
-  onSeq: (type: string, seq: number) => void;
+  types: EventDraft["type"][];
+  onSeq: (type: EventDraft["type"], seq: number) => void;
 }): null {
   const append = useAppend();
   useEffect(() => {

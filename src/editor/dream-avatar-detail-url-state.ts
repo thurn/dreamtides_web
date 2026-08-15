@@ -6,6 +6,9 @@
 // parameter is layered on top of the list display-state parameters
 // (`q`, `sort`, `dir`, ...) without disturbing them.
 
+import type { DreamAvatarId } from "../types/identifiers";
+import { dreamAvatarIdFromUnknown } from "../types/identifiers";
+
 const DETAIL_PARAM = "detail";
 
 // Marker stored on history entries this module pushes, so closing the overlay
@@ -15,12 +18,12 @@ interface DreamAvatarDetailHistoryState {
   dreamAvatarDetailPushed?: boolean;
 }
 
-export function parseDetailIdFromUrl(search: string): string | null {
+export function parseDetailIdFromUrl(search: string): DreamAvatarId | null {
   const value = new URLSearchParams(search).get(DETAIL_PARAM);
-  return value === null || value === "" ? null : value;
+  return value === null || value === "" ? null : dreamAvatarIdFromUnknown(value);
 }
 
-function buildDetailUrl(detailId: string | null): string {
+function buildDetailUrl(detailId: DreamAvatarId | null): string {
   const url = new URL(window.location.href);
   if (detailId === null) {
     url.searchParams.delete(DETAIL_PARAM);
@@ -31,12 +34,12 @@ function buildDetailUrl(detailId: string | null): string {
   return `${url.pathname}${search === "" ? "" : `?${search}`}${url.hash}`;
 }
 
-export function pushDetailIdInUrl(detailId: string) {
+export function pushDetailIdInUrl(detailId: DreamAvatarId) {
   const state: DreamAvatarDetailHistoryState = { dreamAvatarDetailPushed: true };
   window.history.pushState(state, "", buildDetailUrl(detailId));
 }
 
-export function replaceDetailIdInUrl(detailId: string | null) {
+export function replaceDetailIdInUrl(detailId: DreamAvatarId | null) {
   window.history.replaceState(null, "", buildDetailUrl(detailId));
 }
 

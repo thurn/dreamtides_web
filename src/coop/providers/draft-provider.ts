@@ -11,7 +11,7 @@ import type { DraftContentProvider } from "../../rules/journey/draft";
 import { offeredTransfigurationForms } from "../../transfiguration/transfiguration-logic";
 import { draftSitePickCount } from "../../draft/draft-site-config";
 import type { SiteState } from "../../types/journey";
-import { asCardId } from "../../types/card-identity";
+import { parseCardId } from "../../types/card-identity";
 
 export function createDraftContentProvider(
   content: JourneyContent,
@@ -19,7 +19,7 @@ export function createDraftContentProvider(
   const idIndex = buildIdIndex(content.cardDatabase);
   return {
     resolveCardNumber: (cardId) =>
-      idIndex.get(asCardId(cardId.toLowerCase())) ?? null,
+      idIndex.get(parseCardId(cardId.toLowerCase())) ?? null,
     cardDatabase: (): Map<number, CardData> => content.cardDatabase,
     // SEAM (Task 27): the affiliation reweighting the legacy pick path applied is
     // keyed on the CURRENT dreamscape node, while this seam receives only the

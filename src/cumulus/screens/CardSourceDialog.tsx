@@ -8,13 +8,19 @@ import { token } from "../primitives/tokens";
 import type { LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
 
+export type CardSourceNarrativeLineId =
+  | `card:${number}:${number}`
+  | `copy:${number}`;
+
+export type CardSourceNarrativeSectionId = "construction" | "cards";
+
 export interface CardSourceNarrativeLine {
-  id: string;
+  id: CardSourceNarrativeLineId;
   text: LocalizedString;
   card: GameCardModel | null;
 }
 export interface CardSourceNarrativeSection {
-  id: string;
+  id: CardSourceNarrativeSectionId;
   title: LocalizedString;
   lines: readonly CardSourceNarrativeLine[];
 }

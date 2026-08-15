@@ -1,4 +1,4 @@
-import type { JourneyState } from "../types/journey";
+import type { JourneyState, Screen } from "../types/journey";
 
 /**
  * Named journey saves persisted to the developer's file system.
@@ -26,7 +26,7 @@ export interface SavedJourneySummary {
   /** ISO timestamp of when the snapshot was captured. */
   savedAt: string;
   /** The `screen.type` of the saved run, e.g. "dreamscape" or "site". */
-  screenType: string;
+  screenType: Screen["type"];
 }
 
 /** Normalizes a user-entered save name (trims surrounding whitespace). */

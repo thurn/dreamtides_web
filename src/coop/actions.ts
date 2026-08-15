@@ -23,6 +23,7 @@
 // §"Client layer" (actions facade).
 
 import type { EventDraft } from "../eventlog/client";
+import type { EventActor } from "../eventlog/types";
 import type { BeginTutorialOptions, TutorialAction } from "../types/tutorial";
 import type { GambleGameId, GravokGateId } from "../types/gamble";
 import type {
@@ -30,13 +31,17 @@ import type {
   SiteType,
   TransfigurationType,
 } from "../types/journey";
-import { SELECTION_RULES_VERSION } from "../reward-selection";
+import {
+  SELECTION_RULES_VERSION,
+  type SelectionRulesVersion,
+} from "../reward-selection";
 import type { BattleId } from "../types/identifiers";
 import type { PresentationId } from "../types/identifiers";
 import type { DreamAvatarId } from "../types/identifiers";
 import type { SiteId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
+import type { JourneyMutationSource } from "../types/journey-source";
 import type { DeckEntryId } from "../types/identifiers";
 import type { DreamsignId } from "../types/identifiers";
 import type { ShuffleCommitment } from "../types/identifiers";
@@ -55,7 +60,8 @@ import type {
   TutorialRunId,
 } from "../types/identifiers";
 import type { BattleSide, BattlefieldSlotId } from "../battle/types";
-import { asIntentKey } from "../types/identifiers";
+import { parseIntentKey } from "../types/identifiers";
+import type { GameEventType } from "../rules/events";
 
 /**
  * Appends a stamped event, resolving to its committed seq. In production this
@@ -287,7 +293,7 @@ export interface CoopActions {
     cardId: CardId;
     count: number;
     battlesRemaining: number;
-    source: string;
+    source: JourneyMutationSource;
   }) => Promise<number>;
   banSiteType: (
     siteType: SiteType,
@@ -321,7 +327,7 @@ export interface CoopActions {
   battleCommand: (
     command: unknown,
     intentKey?: IntentKey,
-    actor?: string,
+    actor?: EventActor,
   ) => Promise<number>;
   battleRepositionCharacter: (
     battleCardId: BattleCardId,
@@ -335,7 +341,7 @@ export interface CoopActions {
     battleCardId: BattleCardId,
     targetBattleCardIds: readonly BattleCardId[],
     intentKey?: IntentKey,
-    actor?: string,
+    actor?: EventActor,
     aiChoices?: unknown,
     characterDestination?: {
       readonly side: "player" | "enemy";
@@ -348,24 +354,24 @@ export interface CoopActions {
   battleGesture: (
     commands: readonly unknown[],
     intentKey?: IntentKey,
-    actor?: string,
+    actor?: EventActor,
   ) => Promise<number>;
   battleAiBlock: (
     aiSide: BattleSide,
-    actor: string,
+    actor: EventActor,
     intentKey?: IntentKey,
   ) => Promise<number>;
   completeTutorialBattlePresentation: (
     presentationId: PresentationId,
     intentKey: IntentKey,
-    actor: string,
+    actor: EventActor,
     messageIndex?: number,
   ) => Promise<number>;
   resolvePrompt: (
     promptId: number,
     resolution: unknown,
     intentKey?: IntentKey,
-    actor?: string,
+    actor?: EventActor,
   ) => Promise<number>;
   setCardNote: (
     instanceId: BattleCardId,
@@ -381,14 +387,14 @@ export interface CoopActions {
  */
 export function makeActions(
   append: AppendFn,
-  options: { selectionRulesVersion?: string | null } = {},
+  options: { selectionRulesVersion?: SelectionRulesVersion | null } = {},
 ): CoopActions {
   const selectionRulesVersion =
     options.selectionRulesVersion === undefined
       ? SELECTION_RULES_VERSION
       : options.selectionRulesVersion;
   const emit = (
-    type: string,
+    type: GameEventType,
     payload: Record<string, unknown>,
     intentKey?: IntentKey,
   ): Promise<number> =>
@@ -397,11 +403,25 @@ export function makeActions(
       payload,
       ...(intentKey === undefined ? {} : { intentKey }),
     });
+  type SiteIntentKind =
+    | "enter-draft-site"
+    | `open-site:${SiteType | "unknown"}`
+    | "accept-essence"
+    | "complete-site"
+    | "settle-gravok-wager"
+    | "play-again-gravok-wager"
+    | "settle-tidemark-ladder-climb"
+    | "settle-starway-stairs"
+    | "play-again-starway-stairs"
+    | "settle-four-suit-reprise"
+    | "play-again-four-suit-reprise"
+    | "settle-blackjack"
+    | "play-again-blackjack";
   const siteIntentKey = (
-    kind: string,
+    kind: SiteIntentKind,
     siteId: SiteId,
     runId?: JourneyId,
-  ): IntentKey => asIntentKey(`${kind}:${runId ?? "unscoped"}:${siteId}`);
+  ): IntentKey => parseIntentKey(`${kind}:${runId ?? "unscoped"}:${siteId}`);
 
   return {
     // --- standalone front door ---
@@ -416,7 +436,7 @@ export function makeActions(
       append({
         type: "ADVANCE_FRONT_DOOR",
         payload: { from, journeyId },
-        intentKey: `front-door:${journeyId}:${from}`,
+        intentKey: parseIntentKey(`front-door:${journeyId}:${from}`),
       }),
     beginTutorial: (actions, options) =>
       emit(
@@ -434,7 +454,7 @@ export function makeActions(
       emit(
         "COMPLETE_TUTORIAL_ACTION",
         { runId, actionId },
-        asIntentKey(`tutorial:${runId}:complete:${actionId}`),
+        parseIntentKey(`tutorial:${runId}:complete:${actionId}`),
       ),
     takePlaytestControl: (previousControllerClientId) =>
       emit("TAKE_PLAYTEST_CONTROL", { previousControllerClientId }),
@@ -442,19 +462,19 @@ export function makeActions(
       emit(
         "BEGIN_TUTORIAL_BATTLE",
         { tutorialRunId },
-        asIntentKey(`tutorial-battle:${tutorialRunId}:begin`),
+        parseIntentKey(`tutorial-battle:${tutorialRunId}:begin`),
       ),
     restartTutorialBattle: (battleId) =>
       emit(
         "RESTART_TUTORIAL_BATTLE",
         { battleId },
-        asIntentKey(`tutorial-battle:${battleId}:restart`),
+        parseIntentKey(`tutorial-battle:${battleId}:restart`),
       ),
     exitTutorialBattle: (battleId) =>
       emit(
         "EXIT_TUTORIAL_BATTLE",
         { battleId },
-        asIntentKey(`tutorial-battle:${battleId}:exit`),
+        parseIntentKey(`tutorial-battle:${battleId}:exit`),
       ),
     openCardTutorialGuidance: (screenKey, cardIds) =>
       emit(
@@ -463,13 +483,13 @@ export function makeActions(
           screenKey,
           cardIds: [...cardIds],
         },
-        asIntentKey(`card-tutorial:${screenKey}:open`),
+        parseIntentKey(`card-tutorial:${screenKey}:open`),
       ),
     completeCardTutorialGuidance: (presentationId, screenKey) =>
       emit(
         "COMPLETE_CARD_TUTORIAL_GUIDANCE",
         { presentationId },
-        asIntentKey(`card-tutorial:${screenKey}:complete`),
+        parseIntentKey(`card-tutorial:${screenKey}:complete`),
       ),
 
     // --- essence & limits ---
@@ -552,7 +572,7 @@ export function makeActions(
           ...(gambleGameId === undefined ? {} : { gambleGameId }),
           ...(selectionRulesVersion === null ? {} : { selectionRulesVersion }),
         },
-        asIntentKey(
+        parseIntentKey(
           gambleGameId === undefined
             ? siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)
             : `${siteIntentKey(`open-site:${siteType ?? "unknown"}`, siteId, runId)}:${gambleGameId}`,
@@ -598,7 +618,7 @@ export function makeActions(
       emit(
         "SETTLE_GRAVOK_WAGER",
         { siteId, shuffleCommitment },
-        asIntentKey(
+        parseIntentKey(
           `${siteIntentKey("settle-gravok-wager", siteId, runId)}:${shuffleCommitment}`,
         ),
       ),
@@ -606,7 +626,7 @@ export function makeActions(
       emit(
         "PLAY_AGAIN_GRAVOK_WAGER",
         { siteId, previousShuffleCommitment },
-        asIntentKey(
+        parseIntentKey(
           `${siteIntentKey("play-again-gravok-wager", siteId, runId)}:${previousShuffleCommitment}`,
         ),
       ),
@@ -621,7 +641,7 @@ export function makeActions(
       emit(
         "SETTLE_TIDEMARK_LADDER_CLIMB",
         { siteId, shuffleCommitment },
-        asIntentKey(
+        parseIntentKey(
           `${siteIntentKey("settle-tidemark-ladder-climb", siteId, runId)}:${shuffleCommitment}`,
         ),
       ),
@@ -635,7 +655,7 @@ export function makeActions(
       emit(
         "SETTLE_STARWAY_STAIRS",
         { siteId, shuffleCommitment },
-        asIntentKey(
+        parseIntentKey(
           `${siteIntentKey("settle-starway-stairs", siteId, runId)}:${shuffleCommitment}`,
         ),
       ),
@@ -645,7 +665,7 @@ export function makeActions(
       emit(
         "PLAY_AGAIN_STARWAY_STAIRS",
         { siteId, previousShuffleCommitment },
-        asIntentKey(
+        parseIntentKey(
           `${siteIntentKey("play-again-starway-stairs", siteId, runId)}:${previousShuffleCommitment}`,
         ),
       ),
@@ -655,7 +675,7 @@ export function makeActions(
       emit(
         "SETTLE_FOUR_SUIT_REPRISE",
         { siteId, shuffleCommitment },
-        asIntentKey(
+        parseIntentKey(
           `${siteIntentKey("settle-four-suit-reprise", siteId, runId)}:${shuffleCommitment}`,
         ),
       ),
@@ -669,7 +689,7 @@ export function makeActions(
       emit(
         "PLAY_AGAIN_FOUR_SUIT_REPRISE",
         { siteId, previousShuffleCommitment },
-        asIntentKey(
+        parseIntentKey(
           `${siteIntentKey("play-again-four-suit-reprise", siteId, runId)}:${previousShuffleCommitment}`,
         ),
       ),
@@ -680,7 +700,7 @@ export function makeActions(
       emit(
         "SETTLE_BLACKJACK",
         { siteId, shuffleCommitment },
-        asIntentKey(
+        parseIntentKey(
           `${siteIntentKey("settle-blackjack", siteId, runId)}:${shuffleCommitment}`,
         ),
       ),
@@ -688,7 +708,7 @@ export function makeActions(
       emit(
         "PLAY_AGAIN_BLACKJACK",
         { siteId, previousShuffleCommitment },
-        asIntentKey(
+        parseIntentKey(
           `${siteIntentKey("play-again-blackjack", siteId, runId)}:${previousShuffleCommitment}`,
         ),
       ),

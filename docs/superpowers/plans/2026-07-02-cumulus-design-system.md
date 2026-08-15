@@ -345,8 +345,8 @@ Guarantees pinned: each branch maps correctly (one assertion per branch is justi
 ```ts
 type CumulusRoute =
   | { view: "overview" }
-  | { view: "component"; id: string }
-  | { view: "mockup"; id: string };
+  | { view: "component"; id: CumulusComponentId }
+  | { view: "mockup"; id: CumulusComponentId };
 ```
 
 Guarantees pinned:

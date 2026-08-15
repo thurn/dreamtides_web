@@ -37,7 +37,7 @@ The persistent, transparent bottom HUD for journey screens. Its journey variant 
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `id` | `string` | no | Stable DreamAvatar UUID. |
+| `id` | `DreamAvatarId` | no | Stable DreamAvatar UUID. |
 | `name` | `LocalizedString` | no |  |
 | `epithet` | `LocalizedString` | yes |  |
 | `portrait` | `ArtRef` | no | The portrait art as an {@link ArtRef}. Required — a docked DreamAvatar always has art. |

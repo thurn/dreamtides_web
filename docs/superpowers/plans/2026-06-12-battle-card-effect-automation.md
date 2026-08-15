@@ -167,7 +167,7 @@ export interface SupportScript {
 }
 
 export interface BattleCardEffectScript {
-  id: string;                                    // card UUID; equals the map key
+  id: CardId;                                    // card UUID; equals the map key
   trigger: "dawn" | "materialized" | "support";
   textHash: string;                              // fnv1aHex of renderedText this script targets
   steps?: EffectStep[];                          // for "dawn" | "materialized"
@@ -222,8 +222,8 @@ This is the safeguard. **It is intentional that this test fails when a registere
  *  absent from the map are reported as `actual: null` (missing from catalog). */
 export function collectAutomationHashDrift(
   cardsById: ReadonlyMap<string, string>,
-): { id: string; expected: string; actual: string | null }[] {
-  const drift: { id: string; expected: string; actual: string | null }[] = [];
+): { id: CardId; expected: RulesTextHash; actual: RulesTextHash | null }[] {
+  const drift: { id: CardId; expected: RulesTextHash; actual: RulesTextHash | null }[] = [];
   for (const [id, script] of Object.entries(BATTLE_CARD_EFFECTS)) {
     const text = cardsById.get(id);
     const actual = text === undefined ? null : fnv1aHex(text);

@@ -6,6 +6,7 @@ import { opponentsFixture } from "../testing/opponents-fixture";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import { CONFIG_DATA_FIXTURE } from "../testing/config-data-fixture";
 import { CARD_ROLE_DATA } from "../data/card-roles";
+import { testFoldHash } from "../types/test-identities";
 import {
   contentConfigFromRuntime,
   contentConfigsEqual,
@@ -286,13 +287,13 @@ describe("removeUiParamFromSearch", () => {
 });
 
 describe("contentConfigFromRuntime", () => {
-  const atlasFoldHash = "fixture-atlas-fold-hash";
-  const sitesFoldHash = "fixture-sites-fold-hash";
+  const atlasFoldHash = testFoldHash("fixture-atlas-fold-hash");
+  const sitesFoldHash = testFoldHash("fixture-sites-fold-hash");
   const draftData = draftDataFixture();
   const economyData = economyFixture();
   const opponentsData = opponentsFixture();
-  const explorationFoldHash = "fixture-exploration-fold-hash";
-  const tutorialFoldHash = "fixture-tutorial-fold-hash";
+  const explorationFoldHash = testFoldHash("fixture-exploration-fold-hash");
+  const tutorialFoldHash = testFoldHash("fixture-tutorial-fold-hash");
 
   it("extracts the fold-relevant slice with defaults for absent optionals", () => {
     expect(
@@ -351,17 +352,17 @@ describe("contentConfigsEqual", () => {
   const economyData = economyFixture();
   const base: ContentConfig = {
     poolVariant: "tides4",
-    atlasFoldHash: "fixture-atlas-fold-hash",
-    sitesFoldHash: "fixture-sites-fold-hash",
-    draftFoldHash: "fixture-draft-fold-hash",
-    cardRolesFoldHash: "fixture-card-roles-fold-hash",
+    atlasFoldHash: testFoldHash("fixture-atlas-fold-hash"),
+    sitesFoldHash: testFoldHash("fixture-sites-fold-hash"),
+    draftFoldHash: testFoldHash("fixture-draft-fold-hash"),
+    cardRolesFoldHash: testFoldHash("fixture-card-roles-fold-hash"),
     economyFoldHash: economyData.foldHash,
     gambleFoldHash: CONFIG_DATA_FIXTURE.gambleData.foldHash,
     transfigurationFoldHash: CONFIG_DATA_FIXTURE.transfigurationData.foldHash,
     rewardSelectionFoldHash: CONFIG_DATA_FIXTURE.rewardSelectionData.foldHash,
     auguryFoldHash: CONFIG_DATA_FIXTURE.auguryData.foldHash,
-    explorationFoldHash: "fixture-exploration-fold-hash",
-    tutorialFoldHash: "fixture-tutorial-fold-hash",
+    explorationFoldHash: testFoldHash("fixture-exploration-fold-hash"),
+    tutorialFoldHash: testFoldHash("fixture-tutorial-fold-hash"),
     opponentsFoldHash: opponentsFixture().foldHash,
     defaultStartingEssence: economyData.journey.defaultStartingEssence,
     dreamsignCap: economyData.journey.dreamsignCap,
@@ -373,46 +374,46 @@ describe("contentConfigsEqual", () => {
 
   it("is false when any single field differs", () => {
     expect(
-      contentConfigsEqual(base, { ...base, atlasFoldHash: "different" }),
+      contentConfigsEqual(base, { ...base, atlasFoldHash: testFoldHash("different") }),
     ).toBe(false);
     expect(
-      contentConfigsEqual(base, { ...base, draftFoldHash: "different" }),
+      contentConfigsEqual(base, { ...base, draftFoldHash: testFoldHash("different") }),
     ).toBe(false);
     expect(
-      contentConfigsEqual(base, { ...base, cardRolesFoldHash: "different" }),
+      contentConfigsEqual(base, { ...base, cardRolesFoldHash: testFoldHash("different") }),
     ).toBe(false);
     expect(
-      contentConfigsEqual(base, { ...base, economyFoldHash: "different" }),
+      contentConfigsEqual(base, { ...base, economyFoldHash: testFoldHash("different") }),
     ).toBe(false);
     expect(
-      contentConfigsEqual(base, { ...base, gambleFoldHash: "different" }),
-    ).toBe(false);
-    expect(
-      contentConfigsEqual(base, {
-        ...base,
-        transfigurationFoldHash: "different",
-      }),
-    ).toBe(false);
-    expect(
-      contentConfigsEqual(base, { ...base, sitesFoldHash: "different" }),
+      contentConfigsEqual(base, { ...base, gambleFoldHash: testFoldHash("different") }),
     ).toBe(false);
     expect(
       contentConfigsEqual(base, {
         ...base,
-        rewardSelectionFoldHash: "different",
+        transfigurationFoldHash: testFoldHash("different"),
       }),
     ).toBe(false);
     expect(
-      contentConfigsEqual(base, { ...base, auguryFoldHash: "different" }),
+      contentConfigsEqual(base, { ...base, sitesFoldHash: testFoldHash("different") }),
     ).toBe(false);
     expect(
-      contentConfigsEqual(base, { ...base, explorationFoldHash: "different" }),
+      contentConfigsEqual(base, {
+        ...base,
+        rewardSelectionFoldHash: testFoldHash("different"),
+      }),
     ).toBe(false);
     expect(
-      contentConfigsEqual(base, { ...base, tutorialFoldHash: "different" }),
+      contentConfigsEqual(base, { ...base, auguryFoldHash: testFoldHash("different") }),
     ).toBe(false);
     expect(
-      contentConfigsEqual(base, { ...base, opponentsFoldHash: "different" }),
+      contentConfigsEqual(base, { ...base, explorationFoldHash: testFoldHash("different") }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, tutorialFoldHash: testFoldHash("different") }),
+    ).toBe(false);
+    expect(
+      contentConfigsEqual(base, { ...base, opponentsFoldHash: testFoldHash("different") }),
     ).toBe(false);
     expect(
       contentConfigsEqual(base, { ...base, defaultStartingEssence: 999 }),

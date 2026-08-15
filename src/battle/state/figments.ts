@@ -8,8 +8,10 @@ import { rankSlotIds } from "../types";
 import {
   LEGIONNAIRE_FIGMENT_ID,
   lookupFigmentCatalogEntryById,
+  normalizeFigmentCatalogKey,
 } from "./figment-catalog";
 import type { BattleCardId } from "../../types/identifiers";
+import type { CardSubtype } from "../../types/card-identity";
 
 export function isFigmentInstance(
   instance: BattleCardInstance | undefined | null,
@@ -61,7 +63,7 @@ export function selectFigmentCount(instance: BattleCardInstance): number {
   return instance.figments?.length ?? 1;
 }
 
-function normalizeFigmentSubtype(subtype: string): string {
+function normalizeFigmentSubtype(subtype: CardSubtype): string {
   return subtype.trim().toLowerCase();
 }
 
@@ -70,7 +72,7 @@ function normalizeFigmentSubtype(subtype: string): string {
  * `Warrior` and `Legion` figment types are warriors (a Legion is a Warrior),
  * and so is any non-figment character printed as a Warrior.
  */
-export function isWarriorSubtype(subtype: string): boolean {
+export function isWarriorSubtype(subtype: CardSubtype): boolean {
   const normalized = normalizeFigmentSubtype(subtype);
   return normalized === "warrior" || normalized === "legion";
 }
@@ -224,7 +226,7 @@ export function selectFigmentReserveSpark(
 export function findBattlefieldFigmentStack(
   state: BattleMutableState,
   side: BattleSide,
-  subtype: string,
+  subtype: CardSubtype,
   excludeBattleCardId: BattleCardId | null = null,
 ): { battleCardId: BattleCardId; location: BattleFieldSlotAddress } | null {
   const normalizedSubtype = normalizeFigmentSubtype(subtype);
@@ -342,7 +344,17 @@ function figmentCatalogIdentity(instance: BattleCardInstance): string {
 
 export function isLegionnaireFigment(instance: BattleCardInstance): boolean {
   const identity = figmentCatalogIdentity(instance);
-  return identity === LEGIONNAIRE_FIGMENT_ID || identity === "builtin:legion";
+  const catalogEntry = lookupFigmentCatalogEntryById(instance.definition.cardId);
+  return (
+    identity === LEGIONNAIRE_FIGMENT_ID ||
+    identity === "builtin:legion" ||
+    catalogEntry?.key === normalizeFigmentCatalogKey("legion") ||
+    (instance.provenance.kind === "generated-figment" &&
+      catalogEntry === undefined &&
+      normalizeFigmentSubtype(
+        instance.provenance.chosenSubtype ?? instance.definition.subtype,
+      ) === "legion")
+  );
 }
 
 /**

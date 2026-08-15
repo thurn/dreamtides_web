@@ -129,9 +129,9 @@ export interface TutorialTriggerDefinition extends Omit<
 /** Complete generated tutorial configuration. */
 export interface TutorialConfiguration {
   /** Hash of the complete normalized tutorial artifact. */
-  readonly contentHash: string;
+  readonly contentHash: ContentHash;
   /** Hash of configuration which can change the cooperative fold. */
-  readonly foldHash: string;
+  readonly foldHash: FoldHash;
   readonly journeyStart: TutorialJourneyStartConfiguration;
   readonly dreamscape: TutorialDreamscapeConfiguration;
   readonly atlas: TutorialAtlasConfiguration;
@@ -408,3 +408,4 @@ export interface TutorialPlaybackState {
   readonly currentActionIndex: number | null;
   readonly playerCardPlay?: TutorialPlayerCardPlay | null;
 }
+import type { ContentHash, FoldHash } from "./content-hash";

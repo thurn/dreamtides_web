@@ -14,6 +14,7 @@
 // `atlas-edge`).
 
 import type { ComponentType } from "react";
+import type { CumulusComponentId } from "../registry";
 import { AtlasScreenMockup } from "./atlas-screen";
 import { DreamsignMockup } from "./dreamsign";
 import { GameCardMockup } from "./game-card";
@@ -30,7 +31,7 @@ import { SiteNodeMockup } from "./site-node";
  * Route id → full-screen mockup component. The single place new mockups get
  * wired: add a file under `mockups/` and one entry here.
  */
-export const MOCKUPS: Record<string, ComponentType> = {
+export const MOCKUPS = {
   "game-card": GameCardMockup,
   "journey-status-bar": JourneyStatusBarMockup,
   "rules-text": RulesTextMockup,
@@ -43,14 +44,16 @@ export const MOCKUPS: Record<string, ComponentType> = {
   "glass-button": GlassButtonMockup,
   "segmented-control": SegmentedControlMockup,
   motes: MotesMockup,
-};
+} as const satisfies Partial<Record<CumulusComponentId, ComponentType>>;
+
+export type CumulusMockupId = keyof typeof MOCKUPS;
 
 /** True when a full-screen mockup is registered for the given route id. */
-export function hasMockup(id: string): boolean {
+export function hasMockup(id: CumulusComponentId): id is CumulusMockupId {
   return Object.prototype.hasOwnProperty.call(MOCKUPS, id);
 }
 
 /** The mockup component for a route id, or `undefined` when none is registered. */
-export function getMockup(id: string): ComponentType | undefined {
-  return MOCKUPS[id];
+export function getMockup(id: CumulusComponentId): ComponentType | undefined {
+  return Object.entries(MOCKUPS).find(([candidateId]) => candidateId === id)?.[1];
 }

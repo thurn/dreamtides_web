@@ -43,13 +43,13 @@ import { SITE_TYPES as SITE_TYPE_VALUES } from "../../types/site-type";
 import type { SiteId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
+import { journeyMutationSourceFromUnknown } from "../../types/journey-source";
 import { siteIdFromUnknown } from "../../types/identifiers";
 import { explorationActionIdFromUnknown } from "../../types/identifiers";
 import { cardIdFromUnknown } from "../../types/card-identity";
 import { atlasNodeIdFromUnknown } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDreamsignId } from "../../types/identifiers";
 
 // ---------------------------------------------------------------------------
 // Shared helpers
@@ -102,7 +102,7 @@ function nextSiteId(atlas: DreamAtlas): SiteId {
       if (Number.isFinite(num) && num > max) max = num;
     }
   }
-  return asSiteId(`site-${String(max + 1)}`);
+  return parseSiteId(`site-${String(max + 1)}`);
 }
 
 function debugSite(
@@ -126,7 +126,7 @@ function debugSite(
     throw new Error("Random Site has no configured destinations.");
   }
   return {
-    id: asSiteId(id),
+    id: id,
     type,
     isEnhanced: true,
     isVisited: false,
@@ -231,7 +231,7 @@ export function buyShopSlot(
 
   if (slot.itemType === "card") {
     const entry: DeckEntry = {
-      entryId: asDeckEntryId(mintEntryId(journey.deck, ctx.seq, 0)),
+      entryId: mintEntryId(journey.deck, ctx.seq, 0),
       cardNumber: slot.cardNumber,
       transfiguration: slot.transfiguration ?? null,
       isBane: false,
@@ -266,11 +266,11 @@ export function buyShopSlot(
     if (purgedDreamsign !== null) {
       const resolvedReplacedDreamsignId = asString(purgedDreamsign.id);
       if (resolvedReplacedDreamsignId === null) return null;
-      replacedDreamsignId = asDreamsignId(resolvedReplacedDreamsignId);
+      replacedDreamsignId = parseDreamsignId(resolvedReplacedDreamsignId);
     }
     item = {
       kind: "dreamsign",
-      dreamsignId: asDreamsignId(purchasedDreamsignId),
+      dreamsignId: parseDreamsignId(purchasedDreamsignId),
       ...(replacedDreamsignId === undefined ? {} : { replacedDreamsignId }),
     };
     next = {
@@ -401,13 +401,13 @@ export function rerollShop(
     slots: generated.slots,
     rerollCount: runtime.rerollCount + 1,
     remainingDreamsignPoolIds:
-      generated.remainingDreamsignPoolIds.map(asDreamsignId),
+      generated.remainingDreamsignPoolIds.map(parseDreamsignId),
   };
   return {
     ...journey,
     essence,
     shopModifiers,
-    remainingDreamsignPool: generated.remainingDreamsignPool.map(asDreamsignId),
+    remainingDreamsignPool: generated.remainingDreamsignPool.map(parseDreamsignId),
     draftState: generated.draftState,
     siteRuntime: { ...journey.siteRuntime, [siteId]: nextRuntime },
   };
@@ -541,7 +541,7 @@ function asRewardReductionModifier(value: unknown): BattleModifier | null {
   if (typeof value !== "object" || value === null) return null;
   const record = value as Record<string, unknown>;
   const battlesRemaining = finiteNumber(record.battlesRemaining);
-  const source = asString(record.source);
+  const source = journeyMutationSourceFromUnknown(record.source);
   if (battlesRemaining === null || source === null) return null;
   if (record.kind === "reward_reduction_flat") {
     const amount = finiteNumber(record.amount);
@@ -574,7 +574,7 @@ export function pushTemporaryNightmareGrant(
   const cardId = cardIdFromUnknown(payload.cardId);
   const count = integer(payload.count);
   const battlesRemaining = integer(payload.battlesRemaining);
-  const source = asString(payload.source);
+  const source = journeyMutationSourceFromUnknown(payload.source);
   if (
     cardId === null ||
     !isNightmareCardId(cardId) ||
@@ -593,7 +593,7 @@ export function pushTemporaryNightmareGrant(
   const addedEntryIds: DeckEntryId[] = [];
   for (let i = 0; i < count; i += 1) {
     const entry: DeckEntry = {
-      entryId: asDeckEntryId(mintEntryId(deck, ctx.seq, i)),
+      entryId: mintEntryId(deck, ctx.seq, i),
       cardNumber,
       transfiguration: null,
       isBane: true,
@@ -642,7 +642,8 @@ export function banSiteType(
   const modifier: DreamscapeModifier = {
     kind: "remove_shop_sites",
     dreamscapesRemaining,
-    source: asString(payload.source) ?? "ban_site_type",
+    source:
+      journeyMutationSourceFromUnknown(payload.source) ?? "ban_site_type",
   };
   return {
     ...journey,
@@ -677,7 +678,9 @@ export function boostSiteAppearance(
     siteType,
     percent,
     dreamscapesRemaining,
-    source: asString(payload.source) ?? "boost_site_appearance",
+    source:
+      journeyMutationSourceFromUnknown(payload.source) ??
+      "boost_site_appearance",
   };
   return {
     ...journey,

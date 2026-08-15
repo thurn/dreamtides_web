@@ -1,9 +1,9 @@
 import type { Tides4DecksJson } from "../draft/pool/tides4-io";
 import type { Rarity } from "../types/cards";
 import type { CardId } from "../types/card-identity";
-import { asCardId } from "../types/card-identity";
+import { parseCardId } from "../types/card-identity";
 import type { TideId } from "../types/identifiers";
-import { asTideId } from "../types/identifiers";
+import { parseTideId } from "../types/identifiers";
 
 export type TideVector = ReadonlyMap<TideId, number>;
 
@@ -18,10 +18,10 @@ export function buildTideAffinityIndex(
   const cardVectors = new Map<CardId, Map<TideId, number>>();
   const knownTideIds = new Set<TideId>();
   for (const tide of data.tides) {
-    const tideId = asTideId(tide.id);
+    const tideId = parseTideId(tide.id);
     knownTideIds.add(tideId);
     for (const card of tide.cards) {
-      const cardId = asCardId(card.id);
+      const cardId = parseCardId(card.id);
       const vector = cardVectors.get(cardId) ?? new Map<TideId, number>();
       vector.set(tideId, card.copies);
       cardVectors.set(cardId, vector);

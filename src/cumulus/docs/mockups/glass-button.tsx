@@ -12,10 +12,10 @@ import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
 import { sceneRoot } from "./scene";
-import { asDreamscapeId } from "../../../types/identifiers";
+import { parseDreamscapeId } from "../../../types/identifiers";
 
 interface MediaSample {
-  id: string;
+  id: "bright" | "cool" | "saturated";
   title: string;
   scene: Parameters<typeof dreamscapeSceneUrl>[0];
   position: string;
@@ -25,19 +25,19 @@ const mediaSamples: MediaSample[] = [
   {
     id: "bright",
     title: "Firstlight Meadow",
-    scene: asDreamscapeId("firstlight_meadow"),
+    scene: parseDreamscapeId("firstlight_meadow"),
     position: "center",
   },
   {
     id: "cool",
     title: "Winterwake Fjords",
-    scene: asDreamscapeId("winterwake_fjords"),
+    scene: parseDreamscapeId("winterwake_fjords"),
     position: "center",
   },
   {
     id: "saturated",
     title: "Grid City",
-    scene: asDreamscapeId("grid_city"),
+    scene: parseDreamscapeId("grid_city"),
     position: "center",
   },
 ];

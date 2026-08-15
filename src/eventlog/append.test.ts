@@ -1,3 +1,5 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 // Unit tests for the pure append updater and its in-transaction compaction.
 //
 // These tests use a TOY reducer/config only (no game imports). The single
@@ -7,6 +9,7 @@
 // meaning of the log, the engine would silently diverge between clients.
 
 import { describe, expect, it } from "vitest";
+import { testIntentKey } from "../types/test-identities";
 import {
   COMPACT_TARGET,
   COMPACT_THRESHOLD,
@@ -15,7 +18,17 @@ import {
 } from "./append";
 import { foldEvents } from "./fold";
 import { hashState } from "./hash";
-import type { EncodedLogNode, EngineConfig, EventContext, EventOutcome, GameEvent, Genesis } from "./types";
+import {
+  parseEventNonce,
+  parseEventType,
+  type AppliedIndexEntry,
+  type EncodedLogNode,
+  type EngineConfig,
+  type EventContext,
+  type EventOutcome,
+  type GameEvent,
+  type Genesis,
+} from "./types";
 import { decodeAppendableLogNode } from "./wire";
 
 interface ToyState {
@@ -23,7 +36,7 @@ interface ToyState {
   seqs: number[];
 }
 
-const GENESIS: Genesis = { seed: "toy-seed", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
+const GENESIS: Genesis = { seed: testJourneySeed("toy-seed"), reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
 
 // A pure left-fold whose result depends on (prior state, payload, seq-keyed
 // rng, seq) but NOT on `intervening` or the snapshot horizon. That makes a
@@ -46,7 +59,11 @@ const config: EngineConfig<ToyState> = {
 };
 
 function makeEvent(n: number): GameEvent {
-  return { type: "T", payload: { n }, actor: "a", clientTimestamp: "0", basedOnSeq: 0 };
+  return { type: "T", payload: { n }, actor: testEventActor("a"), clientTimestamp: "0", basedOnSeq: 0 };
+}
+
+function withNonce(event: GameEvent, nonce: string): GameEvent {
+  return { ...event, nonce: parseEventNonce(nonce) };
 }
 
 function emptyLog(): EncodedLogNode {
@@ -147,8 +164,8 @@ describe("applyAppend containment (P1-5)", () => {
 
 describe("applyAppend nonce dedup", () => {
   it("no-ops a duplicate nonce already present in the live event window", () => {
-    const first = { ...makeEvent(1), nonce: "client-a:1" };
-    const retry = { ...makeEvent(999), nonce: "client-a:1" };
+    const first = withNonce(makeEvent(1), "client-a:1");
+    const retry = withNonce(makeEvent(999), "client-a:1");
     const afterFirst = applyAppend(config, emptyLog(), first);
 
     const afterRetry = applyAppend(config, afterFirst, retry);
@@ -162,15 +179,15 @@ describe("applyAppend nonce dedup", () => {
   it("no-ops a repeated logical intent even when another client supplies a new nonce", () => {
     const first = {
       ...makeEvent(1),
-      actor: "client-a",
-      nonce: "client-a:1",
-      intentKey: "open-site:site-7",
+      actor: testEventActor("client-a"),
+      nonce: parseEventNonce("client-a:1"),
+      intentKey: testIntentKey("open-site:site-7"),
     };
     const retry = {
       ...makeEvent(999),
-      actor: "client-b",
-      nonce: "client-b:4",
-      intentKey: "open-site:site-7",
+      actor: testEventActor("client-b"),
+      nonce: parseEventNonce("client-b:4"),
+      intentKey: testIntentKey("open-site:site-7"),
     };
     const afterFirst = applyAppend(config, emptyLog(), first);
 
@@ -184,9 +201,9 @@ describe("applyAppend nonce dedup", () => {
   it("deduplicates a logical intent after RTDB omits a fresh room's null snapshot", () => {
     const first = {
       ...makeEvent(1),
-      actor: "client-a",
-      nonce: "client-a:1",
-      intentKey: "front-door:journey-1:loading",
+      actor: testEventActor("client-a"),
+      nonce: parseEventNonce("client-a:1"),
+      intentKey: testIntentKey("front-door:journey-1:loading"),
     };
     const afterFirst = applyAppend(config, emptyLog(), first);
     const {
@@ -197,8 +214,8 @@ describe("applyAppend nonce dedup", () => {
     expect(normalized).not.toBeNull();
     const contender = {
       ...makeEvent(999),
-      actor: "client-b",
-      nonce: "client-b:1",
+      actor: testEventActor("client-b"),
+      nonce: parseEventNonce("client-b:1"),
       intentKey: first.intentKey,
     };
 
@@ -221,17 +238,17 @@ describe("applyAppend nonce dedup", () => {
           ? { state, outcome: "bounced" }
           : config.reducer(state, event, ctx),
     };
-    const intentKey = "open-site:journey:9:site-7";
+    const intentKey = testIntentKey("open-site:journey:9:site-7");
     const observer = {
       ...makeEvent(1),
-      actor: "observer",
-      nonce: "observer:1",
+      actor: testEventActor("observer"),
+      nonce: parseEventNonce("observer:1"),
       intentKey,
     };
     const controller = {
       ...makeEvent(2),
-      actor: "controller",
-      nonce: "controller:1",
+      actor: testEventActor("controller"),
+      nonce: parseEventNonce("controller:1"),
       intentKey,
     };
 
@@ -248,7 +265,7 @@ describe("applyAppend nonce dedup", () => {
     const afterRetry = applyAppend(
       bounceObserverConfig,
       afterController,
-      { ...controller, nonce: "controller:2" },
+      { ...controller, nonce: parseEventNonce("controller:2") },
     );
 
     expect(afterObserver.head).toBe(1);
@@ -264,8 +281,8 @@ describe("applyAppend nonce dedup", () => {
   it("retains logical intent deduplication after the winning event is compacted", () => {
     const first = {
       ...makeEvent(1),
-      nonce: "client-a:1",
-      intentKey: "complete-site:journey:9:site-7",
+      nonce: parseEventNonce("client-a:1"),
+      intentKey: testIntentKey("complete-site:journey:9:site-7"),
     };
     let log = applyAppend(config, emptyLog(), first);
     for (let index = 2; index <= COMPACT_THRESHOLD + 1; index += 1) {
@@ -276,8 +293,8 @@ describe("applyAppend nonce dedup", () => {
 
     const retry = {
       ...makeEvent(999),
-      actor: "client-b",
-      nonce: "client-b:4",
+      actor: testEventActor("client-b"),
+      nonce: parseEventNonce("client-b:4"),
       intentKey: first.intentKey,
     };
     const afterRetry = applyAppend(config, log, retry);
@@ -358,7 +375,7 @@ interface CasState {
   applied: number[];
 }
 
-const CAS_GENESIS: Genesis = { seed: "cas-seed", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
+const CAS_GENESIS: Genesis = { seed: testJourneySeed("cas-seed"), reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
 
 const casConfig: EngineConfig<CasState> = {
   genesisState: () => ({ applied: [] }),
@@ -378,7 +395,7 @@ const casConfig: EngineConfig<CasState> = {
 
 function casEvent(): GameEvent {
   // Pure self-chain: same actor, always based on genesis (seq 0).
-  return { type: "ADD", payload: {}, actor: "A", clientTimestamp: "0", basedOnSeq: 0 };
+  return { type: "ADD", payload: {}, actor: testEventActor("A"), clientTimestamp: "0", basedOnSeq: 0 };
 }
 
 /** Appends `count` pure-self-chain CAS events one at a time via applyAppend. */
@@ -462,7 +479,7 @@ describe("applyAppend outcome-immutability across compaction", () => {
     for (const seq of keys) {
       expect(seq).toBeLessThanOrEqual(log.baseSeq);
     }
-    expect(index.get(1)).toEqual({ actor: "A", type: "ADD" });
+    expect(index.get(1)).toEqual({ actor: testEventActor("A"), type: "ADD" });
   });
 });
 
@@ -470,14 +487,17 @@ describe("applyAppend outcome-immutability across compaction", () => {
  * Test-only decode of the persisted appliedIndex JSON into a seq -> entry map.
  * Kept inline so the RED phase does not depend on a production export.
  */
-function decodeIndexForTest(raw: string | undefined): Map<number, AppliedEntryShape> {
-  const map = new Map<number, AppliedEntryShape>();
+function decodeIndexForTest(raw: string | undefined): Map<number, AppliedIndexEntry> {
+  const map = new Map<number, AppliedIndexEntry>();
   if (raw === undefined) {
     return map;
   }
   const record = JSON.parse(raw) as Record<string, AppliedEntryShape>;
   for (const [key, value] of Object.entries(record)) {
-    map.set(Number(key), value);
+    map.set(Number(key), {
+      actor: testEventActor(value.actor),
+      type: parseEventType(value.type),
+    });
   }
   return map;
 }

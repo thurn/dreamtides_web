@@ -61,7 +61,7 @@ describe("editor URL display state", () => {
       searchScope: "all",
       type: "character",
       cost: "5plus",
-      subtype: "Scout",
+      subtype: "Explorer",
       tagFilters: [],
       excludedTagFilters: [],
       tideFilters: [],
@@ -79,7 +79,7 @@ describe("editor URL display state", () => {
     };
 
     expect(serializeEditorDisplayState(state).toString()).toBe(
-      "scope=all&type=character&cost=5plus&subtype=Scout&sort=cost&dir=desc&size=small",
+      "scope=all&type=character&cost=5plus&subtype=Explorer&sort=cost&dir=desc&size=small",
     );
     expect(parseEditorDisplayState(serializeEditorDisplayState(state))).toEqual(
       state,

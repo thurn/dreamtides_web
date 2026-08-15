@@ -1,3 +1,4 @@
+import { parseJourneySeed } from "../types/journey-seed";
 import { createContext, useContext, type ReactNode } from "react";
 import type { JourneyContent } from "../data/journey-content";
 import { toJourneyDreamAvatar } from "../data/dream-avatar-selection";
@@ -26,7 +27,6 @@ import type {
   MerchantDeclineRequest,
   MerchantOfferActionResult,
 } from "../journey_v2";
-import { asAtlasNodeId } from "../types/identifiers";
 import type { SiteId } from "../types/identifiers";
 import type { ShuffleCommitment } from "../types/identifiers";
 import type { DreamsignId, ExplorationActionId } from "../types/identifiers";
@@ -35,19 +35,26 @@ import type { PublicationId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
 import type { QaSceneId } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
+import type { JourneyMutationSource } from "../types/journey-source";
+export {
+  KNOWN_JOURNEY_MUTATION_SOURCES,
+  parseJourneyMutationSource,
+  type JourneyMutationSource,
+  type KnownJourneyMutationSource,
+} from "../types/journey-source";
 
 export { deriveEntryIdCounter };
 
 /** Mutation functions exposed by the journey context. */
 export interface JourneyMutations {
-  changeEssence: (delta: number, source: string) => void;
+  changeEssence: (delta: number, source: JourneyMutationSource) => void;
   startJourney: (
     dreamAvatar: DreamAvatarContent,
     seedOverride?: string,
   ) => void;
   /** Request a shared debug reroll of the journey-start DreamAvatar offer. */
   rerollDreamAvatarOffer: () => void;
-  completeSite: (siteId: SiteId, source: string) => void;
+  completeSite: (siteId: SiteId, source: JourneyMutationSource) => void;
   /** Materialize the shared Three-Gate Wager deck commitment and Dreamsign. */
   ensureGambleSiteRuntime: (
     siteId: SiteId,
@@ -235,8 +242,8 @@ export interface JourneyMutations {
    * request it while the displayed fold catches up.
    */
   enterDraftSite: (siteId: SiteId) => void;
-  addCard: (cardNumber: number, source: string) => void;
-  removeCard: (entryId: DeckEntryId, source: string) => void;
+  addCard: (cardNumber: number, source: JourneyMutationSource) => void;
+  removeCard: (entryId: DeckEntryId, source: JourneyMutationSource) => void;
   /**
    * Apply a transfiguration to a deck entry, or clear it when `type` is
    * `null`. The null variant supports Augury reward templates that
@@ -255,7 +262,7 @@ export interface JourneyMutations {
   ) => void;
   setCardSourceDebug: (
     cardSourceDebug: CardSourceDebugState | null,
-    source: string,
+    source: JourneyMutationSource,
     publicationId?: PublicationId,
   ) => void;
   /**
@@ -265,18 +272,21 @@ export interface JourneyMutations {
    */
   addDreamsign: (
     dreamsign: Dreamsign,
-    sourceSiteType: string,
+    sourceSiteType: JourneyMutationSource,
     purgeIndex?: number,
   ) => void;
-  removeDreamsign: (index: number, reason: string) => void;
+  removeDreamsign: (index: number, reason: JourneyMutationSource) => void;
   setRemainingDreamsignPool: (
     remainingDreamsignPool: DreamsignId[],
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   enterSite: (siteId: SiteId) => void;
   travelToDreamscape: (nodeId: AtlasNodeId) => void;
   regenerateAtlas?: (completionLevel?: number) => void;
-  setDraftState: (draftState: DraftState, source: string) => void;
+  setDraftState: (
+    draftState: DraftState,
+    source: JourneyMutationSource,
+  ) => void;
   /**
    * Marks the one-time starter-deck reveal popup as dismissed. Called from
    * the popup's "Continue" button so subsequent reloads of the same room
@@ -306,34 +316,40 @@ export interface JourneyMutations {
    * because only the live multiplayer provider implements it; lightweight
    * test/demo mutation stubs omit it.
    */
-  loadJourneyState?: (state: JourneyState, source: string) => void;
+  loadJourneyState?: (
+    state: unknown,
+    source: JourneyMutationSource,
+  ) => void;
   /** Debug-only: set `maxDreamsigns` to `value`. */
-  setMaxDreamsigns?: (value: number, source: string) => void;
+  setMaxDreamsigns?: (
+    value: number,
+    source: JourneyMutationSource,
+  ) => void;
   /** Debug-only: set `completionLevel` to `value`. */
   /** Debug-only: set or clear absolute stat overrides on a deck entry. */
   setDeckEntryStatOverride?: (
     entryId: DeckEntryId,
     statOverride: { energyCost?: number; spark?: number } | null,
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   /** Debug-only: replace (not merge) a deck entry's keyword modification, or
    *  clear it with `null`. */
   setDeckEntryKeywords?: (
     entryId: DeckEntryId,
     keywordModification: CardKeywordModification | null,
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   /** Debug-only: replace or clear a deck entry's type/subtype override. */
   setDeckEntryTypeChange?: (
     entryId: DeckEntryId,
     typeChange: CardTypeChange | null,
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   resetJourney: () => void;
 
   // ---- Augury effect plumbing (Wave 1) ----
   /** Set essence to a non-negative `value`. */
-  setEssence: (value: number, source: string) => void;
+  setEssence: (value: number, source: JourneyMutationSource) => void;
   /**
    * Add a card to the deck by catalog `cardId`. Nightmare is marked as the
    * sole Bane by the rules reducer. Mirrors `addCard`,
@@ -341,14 +357,14 @@ export interface JourneyMutations {
    * card database (the same pattern `pushTemporaryNightmareGrant` uses). On a
    * miss this no-ops and logs a console warning.
    */
-  addCardById: (cardId: CardId, source: string) => string | null;
+  addCardById: (cardId: CardId, source: JourneyMutationSource) => string | null;
   addCardByIdWithTransfiguration: (
     cardId: CardId,
     type: TransfigurationType,
-    source: string,
+    source: JourneyMutationSource,
   ) => string | null;
   /** Remove the deck entry with the given entryId. Mirrors `removeCard`. */
-  removeDeckEntry: (entryId: DeckEntryId, source: string) => void;
+  removeDeckEntry: (entryId: DeckEntryId, source: JourneyMutationSource) => void;
   /**
    * Purge the given deck entries at a Purge site. The reducer derives the
    * authoritative price from the selected entries, site, and folded modifiers.
@@ -356,27 +372,27 @@ export interface JourneyMutations {
   purgeDeckCards: (
     siteId: SiteId,
     entryIds: readonly DeckEntryId[],
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   /** Add a duplicate of the deck entry with the given entryId. */
-  duplicateDeckEntry: (entryId: DeckEntryId, source: string) => void;
+  duplicateDeckEntry: (entryId: DeckEntryId, source: JourneyMutationSource) => void;
   changeDeckEntryType: (
     entryId: DeckEntryId,
     typeChange: CardTypeChange,
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   changeDeckEntryKeywords: (
     entryId: DeckEntryId,
     keywordModification: CardKeywordModification,
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   /**
    * Remove up to `count` Nightmare cards from the deck. When fewer Nightmares exist than `count`,
    * all of them are removed; non-positive counts no-op.
    */
-  purgeRandomNightmareCards: (count: number, source: string) => void;
+  purgeRandomNightmareCards: (count: number, source: JourneyMutationSource) => void;
   /** Remove every Nightmare card from the deck. */
-  purgeAllNightmareCards: (source: string) => void;
+  purgeAllNightmareCards: (source: JourneyMutationSource) => void;
   /**
    * Stack a battle-window reward-reduction modifier. Decremented per battle
    * by the authoritative victory transition; entries at zero drop.
@@ -385,7 +401,7 @@ export interface JourneyMutations {
     kind: "flat" | "percent",
     amount: number,
     battles: number,
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   /**
    * Add `count` Nightmare cards immediately and remove those exact entries
@@ -394,7 +410,7 @@ export interface JourneyMutations {
   pushTemporaryNightmareGrant: (
     count: number,
     battles: number,
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   /**
    * Add a fresh, unvisited site of `siteType` to either the current
@@ -405,13 +421,13 @@ export interface JourneyMutations {
   addSiteToDreamscape: (
     placement: "current" | "next",
     siteType: SiteType,
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   /**
    * Swap one unvisited site of `from` for a fresh site of `to` in the
    * current dreamscape. No-ops when no eligible site exists.
    */
-  replaceSiteType: (from: SiteType, to: SiteType, source: string) => void;
+  replaceSiteType: (from: SiteType, to: SiteType, source: JourneyMutationSource) => void;
   /**
    * Stack a dreamscape-window modifier that hides every site of `siteType`
    * for the next `dreamscapes` dreamscapes the player enters. The atlas
@@ -422,12 +438,12 @@ export interface JourneyMutations {
   removeSiteTypeFromNextDreamscapes: (
     siteType: "Shop",
     dreamscapes: number,
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
   /** Increment `shopModifiers.freeRerolls` by `count`. */
-  grantFreeShopRerolls: (count: number, source: string) => void;
+  grantFreeShopRerolls: (count: number, source: JourneyMutationSource) => void;
   /** Add `percent` to `shopModifiers.essenceDiscountPercent`. */
-  applyShopEssenceDiscount: (percent: number, source: string) => void;
+  applyShopEssenceDiscount: (percent: number, source: JourneyMutationSource) => void;
   /**
    * Stack a `boost_site_appearance` modifier for the next `dreamscapes`
    * dreamscapes; atlas generation consumes it during future site composition.
@@ -436,7 +452,7 @@ export interface JourneyMutations {
     siteType: SiteType,
     percent: number,
     dreamscapes: number,
-    source: string,
+    source: JourneyMutationSource,
   ) => void;
 }
 
@@ -472,7 +488,7 @@ export function createDefaultState(
 ): JourneyState {
   return {
     runId: null,
-    seed: "default",
+    seed: parseJourneySeed("default"),
     essence: economy.defaultStartingEssence,
     maxDreamsigns: economy.dreamsignCap,
     deck: [],
@@ -485,8 +501,8 @@ export function createDefaultState(
     atlas: {
       layers: [],
       nodes: {},
-      startingNodeId: asAtlasNodeId(""),
-      bossNodeId: asAtlasNodeId(""),
+      startingNodeId: null,
+      bossNodeId: null,
       bossIncarnationId: null,
       currentNodeId: null,
       knownDreamsignCarrierIds: [],

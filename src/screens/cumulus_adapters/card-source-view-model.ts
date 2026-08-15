@@ -1,8 +1,12 @@
 import { assertLocalized } from "@trox/runtime";
-import type { CardSourceView } from "../../cumulus/screens/CardSourceDialog";
+import type {
+  CardSourceNarrativeLine,
+  CardSourceView,
+} from "../../cumulus/screens/CardSourceDialog";
 import type { Tides4ProvenanceSummary } from "../../types/content";
 import type { CardData } from "../../types/cards";
 import type { CardSourceDebugState } from "../../types/journey";
+import { serializeCardNumber } from "../../types/draft";
 
 /** Maps computed developer provenance into display copy without recomputing it. */
 export function buildCardSourceView(
@@ -12,11 +16,13 @@ export function buildCardSourceView(
 ): CardSourceView | null {
   if (debug === null) return null;
   const cards = debug.entries ?? [];
-  const lines = (copy: (entry: (typeof cards)[number]) => string) =>
+  const lines = (
+    copy: (entry: (typeof cards)[number]) => string,
+  ): CardSourceNarrativeLine[] =>
     cards.map((entry, index) => {
       const card = cardDatabase.get(entry.cardNumber);
       return {
-        id: `card:${String(entry.cardNumber)}:${String(index)}`,
+        id: `card:${entry.cardNumber}:${index}`,
         text: assertLocalized(copy(entry)),
         card:
           card === undefined
@@ -24,9 +30,9 @@ export function buildCardSourceView(
             : { cardId: card.id, displaySnapshot: card },
       };
     });
-  const plain = (values: readonly string[]) =>
+  const plain = (values: readonly string[]): CardSourceNarrativeLine[] =>
     values.map((text, index) => ({
-      id: `copy:${String(index)}`,
+      id: `copy:${index}`,
       text: assertLocalized(text),
       card: null,
     }));
@@ -89,7 +95,7 @@ function tideLine(
   name: string,
   provenance: Tides4ProvenanceSummary,
 ): string {
-  const source = provenance.cardProvenanceByNumber[String(number)];
+  const source = provenance.cardProvenanceByNumber[serializeCardNumber(number)];
   const tide = provenance.tides.find(
     (value) => value.id === source?.primaryTideId,
   );

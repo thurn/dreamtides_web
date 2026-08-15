@@ -15,6 +15,7 @@ import {
   rulesSymbolGlossaryEntry,
 } from "./glossary";
 import { tokenizeRulesText } from "../cumulus/components/card/card-text";
+import { testGlossaryEntryId } from "../types/test-identities";
 
 const SRC_DIR = join(__dirname, "..");
 
@@ -93,7 +94,9 @@ describe("glossary", () => {
   });
 
   it("resolves supported through the canonical Support entry", () => {
-    const support = requireGlossaryEntry("59f426ac-b9cb-47af-a00a-8cbab941c6c4");
+    const support = requireGlossaryEntry(
+      testGlossaryEntryId("59f426ac-b9cb-47af-a00a-8cbab941c6c4"),
+    );
     expect(lookupGlossaryTerm("supported")).toBe(support);
   });
 
@@ -119,7 +122,7 @@ describe("glossary", () => {
 
   it("defines Challenge as an arrow-gated challenger declaration trigger", () => {
     const challengeTrigger = requireGlossaryEntry(
-      "3411c9fa-6606-4d69-ba30-d52637957cf7",
+      testGlossaryEntryId("3411c9fa-6606-4d69-ba30-d52637957cf7"),
     );
     expect(challengeTrigger).toMatchObject({
       term: "▸Challenge",

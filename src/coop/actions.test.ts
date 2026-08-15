@@ -1,3 +1,6 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
+import { testJourneyMutationSource } from "../types/test-identities";
 // Facade contract test for the coop actions facade.
 //
 // Bug class guarded: facade/event drift. Every named action creator must
@@ -23,31 +26,26 @@ import type { EventDraft } from "../eventlog/client";
 import { foldEvents } from "../eventlog/fold";
 import type { GameEvent, Genesis } from "../eventlog/types";
 import { NIGHTMARE_CARD_ID } from "../data/nightmare";
-import { KNOWN_EVENT_TYPES } from "../rules/events";
+import { isKnownEventType, KNOWN_EVENT_TYPES } from "../rules/events";
 import { GAME_ENGINE_CONFIG } from "../rules/replay/replay";
 import { makeActions } from "./actions";
-import { asBattleId } from "../types/identifiers";
-import { asPresentationId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asSiteId } from "../types/identifiers";
-import { asAtlasNodeId } from "../types/identifiers";
-import { asCardId } from "../types/card-identity";
-import { asDeckEntryId } from "../types/identifiers";
-import { asDreamsignId } from "../types/identifiers";
-import { asShuffleCommitment } from "../types/identifiers";
-import { asBattleCardId } from "../types/identifiers";
-import { asNoteId } from "../types/identifiers";
-import { asTutorialActionId } from "../types/identifiers";
-import { asJourneyId } from "../types/identifiers";
-import { asTutorialRunId } from "../types/identifiers";
-import { asCardTutorialScreenKey } from "../types/identifiers";
-import { asExplorationActionId } from "../types/identifiers";
-import { asAuguryArchetypeId } from "../types/identifiers";
-import { asIntentKey } from "../types/identifiers";
-import { asFrontDoorActionId } from "../types/identifiers";
+import { parseBattleId } from "../types/identifiers";
+import { parsePresentationId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { parseAtlasNodeId } from "../types/identifiers";
+import { parseDeckEntryId } from "../types/identifiers";
+import { parseShuffleCommitment } from "../types/identifiers";
+import { parseBattleCardId } from "../types/identifiers";
+import { parseNoteId } from "../types/identifiers";
+import { parseJourneyId } from "../types/identifiers";
+import { parseTutorialRunId } from "../types/identifiers";
+import { parseCardTutorialScreenKey } from "../types/identifiers";
+import { parseIntentKey } from "../types/identifiers";
+import { parseFrontDoorActionId } from "../types/identifiers";
+import { testCardId, testDreamAvatarId, testDreamsignId, testExplorationActionId, testTutorialActionId } from "../types/test-identities";
 
 const GENESIS: Genesis = {
-  seed: "actions-test-seed",
+  seed: testJourneySeed("actions-test-seed"),
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: {
@@ -60,7 +58,7 @@ function draftToEvent(draft: EventDraft, seq: number): GameEvent {
   return {
     type: draft.type,
     payload: draft.payload,
-    actor: draft.actor ?? "c-test",
+    actor: draft.actor ?? testEventActor("c-test"),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
     // basedOnSeq = seq - 1 keeps the intervening window empty (clear), so a
     // bounce can only come from an unknown type or invalid-in-state — never a
@@ -85,28 +83,28 @@ function captureAllDrafts(): EventDraft[] {
 
   // One call per creator. Minimal args; values are placeholders — the contract
   // is about the event type + routing, not the payload's game meaning.
-  void actions.frontDoorAction("main", asFrontDoorActionId("new-journey"));
-  void actions.advanceFrontDoor("loading", asJourneyId("journey-1"));
+  void actions.frontDoorAction("main", parseFrontDoorActionId("new-journey"));
+  void actions.advanceFrontDoor("loading", parseJourneyId("journey-1"));
   void actions.beginTutorial([], {
-    intentKey: asIntentKey("tutorial:journey-1:begin"),
+    intentKey: parseIntentKey("tutorial:journey-1:begin"),
   });
   void actions.completeTutorialAction(
-    asTutorialRunId("event:1"),
-    asTutorialActionId("welcome"),
+    parseTutorialRunId("event:1"),
+    testTutorialActionId("welcome"),
   );
   void actions.takePlaytestControl(null);
-  void actions.beginTutorialBattle(asTutorialRunId("event:1"));
-  void actions.restartTutorialBattle(asBattleId("tutorial-battle:event:1:0"));
+  void actions.beginTutorialBattle(parseTutorialRunId("event:1"));
+  void actions.restartTutorialBattle(parseBattleId("tutorial-battle:event:1:0"));
   void actions.exitTutorialBattle(
-    asBattleId("tutorial-battle:event:1:1:client-b"),
+    parseBattleId("tutorial-battle:event:1:1:client-b"),
   );
   void actions.openCardTutorialGuidance(
-    asCardTutorialScreenKey("journey:1:site:site-1"),
-    [asCardId("card-1")],
+    parseCardTutorialScreenKey("journey:1:site:site-1"),
+    [testCardId("card-1")],
   );
   void actions.completeCardTutorialGuidance(
-    asPresentationId("card-tutorial:journey:1:site:site-1:card-1:support"),
-    asCardTutorialScreenKey("journey:1:site:site-1"),
+    parsePresentationId("card-tutorial:journey:1:site:site-1:card-1:support"),
+    parseCardTutorialScreenKey("journey:1:site:site-1"),
   );
   void actions.changeEssence(1);
   void actions.setEssence(1);
@@ -114,124 +112,124 @@ function captureAllDrafts(): EventDraft[] {
   void actions.startJourney({});
   void actions.resetJourney();
   void actions.loadState({});
-  void actions.selectDreamAvatar(asDreamAvatarId("dc-1"));
+  void actions.selectDreamAvatar(testDreamAvatarId("dc-1"));
   void actions.rerollDreamAvatarOffer();
-  void actions.enterSite(asSiteId("site-1"));
-  void actions.travelToDreamscape(asAtlasNodeId("node-1"));
+  void actions.enterSite(parseSiteId("site-1"));
+  void actions.travelToDreamscape(parseAtlasNodeId("node-1"));
   void actions.regenerateAtlas();
   void actions.dismissStartingDeckPopup();
-  void actions.addCard({ cardId: asCardId("card-1") });
-  void actions.removeDeckEntry(asDeckEntryId("entry-1"));
-  void actions.purgeDeckCards(asSiteId("site-1"), [asDeckEntryId("entry-1")]);
-  void actions.duplicateDeckEntry(asDeckEntryId("entry-1"));
-  void actions.setDeckEntryStatOverride(asDeckEntryId("entry-1"), null);
-  void actions.setDeckEntryKeywords(asDeckEntryId("entry-1"), null);
-  void actions.setDeckEntryType(asDeckEntryId("entry-1"), null);
-  void actions.transfigureCard(asDeckEntryId("entry-1"), null);
+  void actions.addCard({ cardId: testCardId("card-1") });
+  void actions.removeDeckEntry(parseDeckEntryId("entry-1"));
+  void actions.purgeDeckCards(parseSiteId("site-1"), [parseDeckEntryId("entry-1")]);
+  void actions.duplicateDeckEntry(parseDeckEntryId("entry-1"));
+  void actions.setDeckEntryStatOverride(parseDeckEntryId("entry-1"), null);
+  void actions.setDeckEntryKeywords(parseDeckEntryId("entry-1"), null);
+  void actions.setDeckEntryType(parseDeckEntryId("entry-1"), null);
+  void actions.transfigureCard(parseDeckEntryId("entry-1"), null);
   void actions.acceptTransfigurationChoice(
-    asSiteId("site-1"),
-    asDeckEntryId("entry-1"),
+    parseSiteId("site-1"),
+    parseDeckEntryId("entry-1"),
   );
   void actions.acceptDuplicationChoice(
-    asSiteId("site-1"),
-    asDeckEntryId("entry-1"),
+    parseSiteId("site-1"),
+    parseDeckEntryId("entry-1"),
   );
   void actions.purgeAllNightmareCards();
   void actions.purgeRandomNightmareCards(1);
-  void actions.addDreamsign(asDreamsignId("ds-1"));
-  void actions.removeDreamsign(asDreamsignId("ds-1"));
-  void actions.setDreamsignPool([asDreamsignId("ds-1")]);
+  void actions.addDreamsign(testDreamsignId("ds-1"));
+  void actions.removeDreamsign(testDreamsignId("ds-1"));
+  void actions.setDreamsignPool([testDreamsignId("ds-1")]);
   void actions.setDraftState({});
-  void actions.pickDraftCard(0, asCardId("card-1"));
-  void actions.rerollDraftOffer(asSiteId("site-1"));
-  void actions.enterDraftSite(asSiteId("site-1"));
-  void actions.openSite(asSiteId("site-1"));
-  void actions.chooseRandomSite(asSiteId("site-1"), "Shop");
+  void actions.pickDraftCard(0, testCardId("card-1"));
+  void actions.rerollDraftOffer(parseSiteId("site-1"));
+  void actions.enterDraftSite(parseSiteId("site-1"));
+  void actions.openSite(parseSiteId("site-1"));
+  void actions.chooseRandomSite(parseSiteId("site-1"), "Shop");
   void actions.resolveExplorationChoice(
-    asSiteId("site-1"),
-    asExplorationActionId("action-1"),
+    parseSiteId("site-1"),
+    testExplorationActionId("action-1"),
     {
-      entryIds: [asDeckEntryId("entry-1")],
+      entryIds: [parseDeckEntryId("entry-1")],
     },
   );
-  void actions.completeAugury(asSiteId("site-1"));
-  void actions.acceptReward(asSiteId("site-1"));
-  void actions.acceptDreamsignOffer(asSiteId("site-1"), asDreamsignId("ds-1"));
-  void actions.rejectDreamsignOffer(asSiteId("site-1"));
-  void actions.acceptEssence(asSiteId("site-1"));
-  void actions.rerollAugury(asSiteId("site-1"));
+  void actions.completeAugury(parseSiteId("site-1"));
+  void actions.acceptReward(parseSiteId("site-1"));
+  void actions.acceptDreamsignOffer(parseSiteId("site-1"), testDreamsignId("ds-1"));
+  void actions.rejectDreamsignOffer(parseSiteId("site-1"));
+  void actions.acceptEssence(parseSiteId("site-1"));
+  void actions.rerollAugury(parseSiteId("site-1"));
   void actions.forceAuguryArchetype(
-    asSiteId("site-1"),
-    asAuguryArchetypeId("fit_card_grant"),
+    parseSiteId("site-1"),
+    "fit_card_grant",
   );
-  void actions.completeSite(asSiteId("site-1"));
-  void actions.placeGravokWager(asSiteId("site-1"), "six");
+  void actions.completeSite(parseSiteId("site-1"));
+  void actions.placeGravokWager(parseSiteId("site-1"), "six");
   void actions.settleGravokWager(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
   );
   void actions.playAgainGravokWager(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
   );
   void actions.replaceGravokWagerDreamsign(
-    asSiteId("site-1"),
-    asDreamsignId("ds-1"),
+    parseSiteId("site-1"),
+    testDreamsignId("ds-1"),
   );
-  void actions.drawTidemarkLadderClimb(asSiteId("site-1"));
+  void actions.drawTidemarkLadderClimb(parseSiteId("site-1"));
   void actions.settleTidemarkLadderClimb(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
   );
   void actions.replaceTidemarkLadderClimbDreamsign(
-    asSiteId("site-1"),
-    asDreamsignId("ds-1"),
+    parseSiteId("site-1"),
+    testDreamsignId("ds-1"),
   );
-  void actions.drawStarwayStairs(asSiteId("site-1"));
+  void actions.drawStarwayStairs(parseSiteId("site-1"));
   void actions.settleStarwayStairs(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
   );
   void actions.cashOutStarwayStairs(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
   );
   void actions.playAgainStarwayStairs(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
   );
   void actions.drawFourSuitReprise(
-    asSiteId("site-1"),
-    asDeckEntryId("entry-1"),
+    parseSiteId("site-1"),
+    parseDeckEntryId("entry-1"),
   );
   void actions.settleFourSuitReprise(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
   );
   void actions.chooseFourSuitRepriseTransfiguration(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
     "Empowered",
   );
   void actions.playAgainFourSuitReprise(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
   );
-  void actions.dealBlackjack(asSiteId("site-1"));
-  void actions.hitBlackjack(asSiteId("site-1"));
-  void actions.standBlackjack(asSiteId("site-1"));
+  void actions.dealBlackjack(parseSiteId("site-1"));
+  void actions.hitBlackjack(parseSiteId("site-1"));
+  void actions.standBlackjack(parseSiteId("site-1"));
   void actions.settleBlackjack(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
   );
   void actions.playAgainBlackjack(
-    asSiteId("site-1"),
-    asShuffleCommitment("commitment-1"),
+    parseSiteId("site-1"),
+    parseShuffleCommitment("commitment-1"),
   );
-  void actions.acceptMerchantOffer(asSiteId("site-1"));
-  void actions.declineMerchant(asSiteId("site-1"));
-  void actions.buyShopSlot(asSiteId("site-1"), 0);
-  void actions.rerollShop(asSiteId("site-1"));
+  void actions.acceptMerchantOffer(parseSiteId("site-1"));
+  void actions.declineMerchant(parseSiteId("site-1"));
+  void actions.buyShopSlot(parseSiteId("site-1"), 0);
+  void actions.rerollShop(parseSiteId("site-1"));
   void actions.grantFreeRerolls(1);
   void actions.applyShopDiscount(10);
   void actions.pushBattleModifier({});
@@ -239,33 +237,33 @@ function captureAllDrafts(): EventDraft[] {
     cardId: NIGHTMARE_CARD_ID,
     count: 1,
     battlesRemaining: 1,
-    source: "test",
+    source: testJourneyMutationSource("test"),
   });
   void actions.banSiteType("Shop", 1);
   void actions.boostSiteAppearance("Shop", 10, 1);
-  void actions.replaceSiteType(asAtlasNodeId("node-1"), "Shop", "Battle");
-  void actions.addSiteToDreamscape(asAtlasNodeId("node-1"), "Shop");
+  void actions.replaceSiteType(parseAtlasNodeId("node-1"), "Shop", "Battle");
+  void actions.addSiteToDreamscape(parseAtlasNodeId("node-1"), "Shop");
   void actions.setCardSourceDebug(null);
   void actions.endBattle();
-  void actions.beginBattle(asSiteId("site-1"));
+  void actions.beginBattle(parseSiteId("site-1"));
   void actions.setBattleAutomation(true);
   void actions.battleCommand({});
-  void actions.battleRepositionCharacter(asBattleCardId("battle-card-1"), {
+  void actions.battleRepositionCharacter(parseBattleCardId("battle-card-1"), {
     side: "player",
     zone: "backRank",
     slotId: "B0",
   });
-  void actions.battlePlayCard(asBattleCardId("battle-card-1"), []);
+  void actions.battlePlayCard(parseBattleCardId("battle-card-1"), []);
   void actions.battleGesture([{}, {}]);
-  void actions.battleAiBlock("enemy", "ai:test");
+  void actions.battleAiBlock("enemy", testEventActor("ai:test"));
   void actions.completeTutorialBattlePresentation(
-    asPresentationId("opponent-play:card-1"),
-    asIntentKey("battle:presentation:opponent-play:card-1"),
-    "tutorial-ai:client-a",
+    parsePresentationId("opponent-play:card-1"),
+    parseIntentKey("battle:presentation:opponent-play:card-1"),
+    testEventActor("tutorial-ai:client-a"),
   );
   void actions.resolvePrompt(1, {});
-  void actions.setCardNote(asBattleCardId("instance-1"), {
-    noteId: asNoteId("n1"),
+  void actions.setCardNote(parseBattleCardId("instance-1"), {
+    noteId: parseNoteId("n1"),
     text: "t",
     expiry: null,
   });
@@ -279,7 +277,7 @@ describe("coop actions facade", () => {
   it("produces a known event type for every creator", () => {
     for (const draft of drafts) {
       expect(
-        KNOWN_EVENT_TYPES.has(draft.type),
+        isKnownEventType(draft.type),
         `creator produced unknown event type "${draft.type}"`,
       ).toBe(true);
     }
@@ -326,53 +324,53 @@ describe("coop actions facade", () => {
       return Promise.resolve(captured.length);
     });
 
-    void actions.advanceFrontDoor("loading", asJourneyId("event:9"));
+    void actions.advanceFrontDoor("loading", parseJourneyId("event:9"));
     void actions.openSite(
-      asSiteId("site-7"),
-      asJourneyId("journey:12"),
+      parseSiteId("site-7"),
+      parseJourneyId("journey:12"),
       "RandomSite",
     );
-    void actions.enterDraftSite(asSiteId("site-7"), asJourneyId("journey:12"));
-    void actions.acceptEssence(asSiteId("site-7"), asJourneyId("journey:12"));
-    void actions.completeSite(asSiteId("site-7"), asJourneyId("journey:12"));
+    void actions.enterDraftSite(parseSiteId("site-7"), parseJourneyId("journey:12"));
+    void actions.acceptEssence(parseSiteId("site-7"), parseJourneyId("journey:12"));
+    void actions.completeSite(parseSiteId("site-7"), parseJourneyId("journey:12"));
     void actions.settleGravokWager(
-      asSiteId("site-7"),
-      asShuffleCommitment("commitment-1"),
-      asJourneyId("journey:12"),
+      parseSiteId("site-7"),
+      parseShuffleCommitment("commitment-1"),
+      parseJourneyId("journey:12"),
     );
     void actions.playAgainGravokWager(
-      asSiteId("site-7"),
-      asShuffleCommitment("commitment-1"),
-      asJourneyId("journey:12"),
+      parseSiteId("site-7"),
+      parseShuffleCommitment("commitment-1"),
+      parseJourneyId("journey:12"),
     );
     void actions.settleStarwayStairs(
-      asSiteId("site-7"),
-      asShuffleCommitment("commitment-2"),
-      asJourneyId("journey:12"),
+      parseSiteId("site-7"),
+      parseShuffleCommitment("commitment-2"),
+      parseJourneyId("journey:12"),
     );
     void actions.playAgainStarwayStairs(
-      asSiteId("site-7"),
-      asShuffleCommitment("commitment-2"),
-      asJourneyId("journey:12"),
+      parseSiteId("site-7"),
+      parseShuffleCommitment("commitment-2"),
+      parseJourneyId("journey:12"),
     );
     void actions.settleBlackjack(
-      asSiteId("site-7"),
-      asShuffleCommitment("commitment-3"),
-      asJourneyId("journey:12"),
+      parseSiteId("site-7"),
+      parseShuffleCommitment("commitment-3"),
+      parseJourneyId("journey:12"),
     );
     void actions.playAgainBlackjack(
-      asSiteId("site-7"),
-      asShuffleCommitment("commitment-3"),
-      asJourneyId("journey:12"),
+      parseSiteId("site-7"),
+      parseShuffleCommitment("commitment-3"),
+      parseJourneyId("journey:12"),
     );
     void actions.battleCommand(
       { id: "DEBUG_EDIT" },
-      asIntentKey("battle:b-1:dreamwell:player:2"),
+      parseIntentKey("battle:b-1:dreamwell:player:2"),
     );
-    void actions.beginTutorialBattle(asTutorialRunId("event:9"));
-    void actions.restartTutorialBattle(asBattleId("tutorial-battle:event:9:0"));
+    void actions.beginTutorialBattle(parseTutorialRunId("event:9"));
+    void actions.restartTutorialBattle(parseBattleId("tutorial-battle:event:9:0"));
     void actions.exitTutorialBattle(
-      asBattleId("tutorial-battle:event:9:1:client-b"),
+      parseBattleId("tutorial-battle:event:9:1:client-b"),
     );
 
     expect(captured.map((draft) => draft.intentKey)).toEqual([
@@ -405,24 +403,24 @@ describe("coop actions facade", () => {
     );
 
     void actions.openSite(
-      asSiteId("site-7"),
-      asJourneyId("journey:12"),
+      parseSiteId("site-7"),
+      parseJourneyId("journey:12"),
       "Exploration",
     );
     void actions.resolveExplorationChoice(
-      asSiteId("site-7"),
-      asExplorationActionId("action-1"),
+      parseSiteId("site-7"),
+      testExplorationActionId("action-1"),
       {
-        entryIds: [asDeckEntryId("entry-1")],
+        entryIds: [parseDeckEntryId("entry-1")],
       },
     );
 
     expect(captured.map((draft) => draft.payload)).toEqual([
-      { siteId: asSiteId("site-7") },
+      { siteId: parseSiteId("site-7") },
       {
-        siteId: asSiteId("site-7"),
-        actionId: "action-1",
-        selection: { entryIds: [asDeckEntryId("entry-1")] },
+        siteId: parseSiteId("site-7"),
+        actionId: testExplorationActionId("action-1"),
+        selection: { entryIds: [parseDeckEntryId("entry-1")] },
       },
     ]);
   });
@@ -435,8 +433,8 @@ describe("coop actions facade", () => {
     });
 
     void actions.openCardTutorialGuidance(
-      asCardTutorialScreenKey("journey:12:site:site-7"),
-      [asCardId("card-a")],
+      parseCardTutorialScreenKey("journey:12:site:site-7"),
+      [testCardId("card-a")],
     );
 
     expect(captured).toEqual([
@@ -444,7 +442,7 @@ describe("coop actions facade", () => {
         type: "OPEN_CARD_TUTORIAL_GUIDANCE",
         payload: {
           screenKey: "journey:12:site:site-7",
-          cardIds: ["card-a"],
+          cardIds: [testCardId("card-a")],
         },
         intentKey: "card-tutorial:journey:12:site:site-7:open",
       },
@@ -459,7 +457,7 @@ describe("coop actions facade", () => {
     });
     const tutorialActions = [
       {
-        id: asTutorialActionId("tail-start"),
+        id: testTutorialActionId("tail-start"),
         action: "display-speech-bubble" as const,
         speechBubble: {
           speaker: "mira" as const,
@@ -474,14 +472,17 @@ describe("coop actions facade", () => {
     ];
 
     void actions.beginTutorial(tutorialActions, {
-      startActionId: asTutorialActionId("tail-start"),
-      intentKey: asIntentKey("tutorial:test:tail-start"),
+      startActionId: testTutorialActionId("tail-start"),
+      intentKey: parseIntentKey("tutorial:test:tail-start"),
     });
 
     expect(captured).toEqual([
       {
         type: "BEGIN_TUTORIAL",
-        payload: { actions: tutorialActions, startActionId: "tail-start" },
+        payload: {
+          actions: tutorialActions,
+          startActionId: testTutorialActionId("tail-start"),
+        },
         intentKey: "tutorial:test:tail-start",
       },
     ]);
@@ -495,10 +496,10 @@ describe("coop actions facade", () => {
     });
     const tutorialActions = [
       {
-        id: asTutorialActionId("draw"),
+        id: testTutorialActionId("draw"),
         action: "draw-card" as const,
         owner: "player" as const,
-        cardId: asCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
+        cardId: testCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
         reason: "dreamwell-effect" as const,
         wait: 0,
       },
@@ -506,7 +507,7 @@ describe("coop actions facade", () => {
 
     void actions.beginTutorial(tutorialActions, {
       startAtEnd: true,
-      intentKey: asIntentKey("tutorial:test:terminal"),
+      intentKey: parseIntentKey("tutorial:test:terminal"),
     });
 
     expect(captured).toEqual([
@@ -525,15 +526,15 @@ describe("coop actions facade", () => {
       return Promise.resolve(captured.length);
     });
 
-    void actions.beginBattle(asSiteId("site-7"), 4242);
-    void actions.beginBattle(asSiteId("site-8"), null);
+    void actions.beginBattle(parseSiteId("site-7"), 4242);
+    void actions.beginBattle(parseSiteId("site-8"), null);
 
     expect(captured).toEqual([
       {
         type: "BEGIN_BATTLE",
-        payload: { siteId: asSiteId("site-7"), seedOverride: 4242 },
+        payload: { siteId: parseSiteId("site-7"), seedOverride: 4242 },
       },
-      { type: "BEGIN_BATTLE", payload: { siteId: asSiteId("site-8") } },
+      { type: "BEGIN_BATTLE", payload: { siteId: parseSiteId("site-8") } },
     ]);
   });
 });

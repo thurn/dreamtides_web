@@ -1,7 +1,7 @@
 import type { BattleCommand } from "./debug/commands";
 import type { BattleMutableState } from "./types";
 import type { BattleId, IntentKey } from "../types/identifiers";
-import { asIntentKey } from "../types/identifiers";
+import { parseIntentKey } from "../types/identifiers";
 
 /**
  * Returns the event-log identity for automatic battle flow that every client
@@ -19,7 +19,7 @@ export function automaticBattleIntentKey(
     command.edit.kind === "DRAW_DREAMWELL_CARD" &&
     command.edit.additional !== true
   ) {
-    return asIntentKey(
+    return parseIntentKey(
       [
         "battle",
         battleId,
@@ -33,7 +33,7 @@ export function automaticBattleIntentKey(
     command.edit.kind === "SET_PHASE" &&
     command.sourceSurface === "auto-system"
   ) {
-    return asIntentKey(
+    return parseIntentKey(
       [
         "battle",
         battleId,

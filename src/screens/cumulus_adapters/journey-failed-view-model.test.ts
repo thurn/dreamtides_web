@@ -1,14 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
+import { LocalizedString } from "@trox/runtime";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { JourneyState } from "../../types/journey";
 import { buildJourneyFailedView } from "./journey-failed-view-model";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asBattleId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { testDreamAvatarId } from "../../types/test-identities";
 
 function state(overrides: Partial<JourneyState> = {}): JourneyState {
   const base = createDefaultState();
@@ -16,7 +17,7 @@ function state(overrides: Partial<JourneyState> = {}): JourneyState {
     ...base,
     completionLevel: 2,
     dreamAvatar: {
-      id: asDreamAvatarId("dream-avatar-uuid"),
+      id: testDreamAvatarId("dream-avatar-uuid"),
       name: "The Wayfinder",
       title: "Bearer of the Last Light",
       renderedText: "A fixture ability.",
@@ -24,12 +25,12 @@ function state(overrides: Partial<JourneyState> = {}): JourneyState {
       startingEssence: 200,
     },
     failureSummary: {
-      battleId: asBattleId("battle-uuid"),
+      battleId: parseBattleId("battle-uuid"),
       result: "defeat",
       reason: "score_target_reached",
-      siteId: asSiteId("site-uuid"),
+      siteId: parseSiteId("site-uuid"),
       siteLabel: "Battle",
-      dreamscapeIdOrNone: asAtlasNodeId("dreamscape-uuid"),
+      dreamscapeIdOrNone: parseAtlasNodeId("dreamscape-uuid"),
       turnNumber: 6,
       playerScore: 4,
       enemyScore: 10,
@@ -40,19 +41,20 @@ function state(overrides: Partial<JourneyState> = {}): JourneyState {
 
 describe("buildJourneyFailedView", () => {
   it("builds the interactive DreamAvatar portrait and terminal battle summary", () => {
-    const view = buildJourneyFailedView(state());
+    const journey = state();
+    const view = buildJourneyFailedView(journey);
 
     expect(view).toMatchObject({
       result: "defeat",
       reason: "score_target_reached",
       dreamAvatar: {
-        id: "dream-avatar-uuid",
-        name: "The Wayfinder",
-        title: "Bearer of the Last Light",
-        ability: "A fixture ability.",
+        id: journey.dreamAvatar?.id,
         imageNumber: "001",
       },
     });
+    expect(view?.dreamAvatar?.name).toBeInstanceOf(LocalizedString);
+    expect(view?.dreamAvatar?.title).toBeInstanceOf(LocalizedString);
+    expect(view?.dreamAvatar?.ability).toBeInstanceOf(LocalizedString);
     expect(view?.stats.map(({ id, value }) => [id, value])).toEqual([
       ["battles", 2],
       ["round", 6],

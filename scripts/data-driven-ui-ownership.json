@@ -132,6 +132,11 @@
   },
   "typescriptTableAllowlist": [
     {
+      "id": "src/battle/card-definition.ts#TRANSFIGURATION_TYPES#transfiguration",
+      "classification": "closed-identity",
+      "rationale": "The serialized battle-card decoder validates the closed persisted Transfiguration form vocabulary."
+    },
+    {
       "id": "src/cumulus/components/card/CardStatOrb.tsx#ICON_BY_VARIANT#rulesSymbols",
       "classification": "unrelated-closed-renderer",
       "rationale": "Corner stat variants are not rules-text tokens."
@@ -182,7 +187,7 @@
       "rationale": "The loader validates compiler-derived resonance identities and glyphs at the generated JSON boundary."
     },
     {
-      "id": "src/rules/battle/dreamwell-effects-table.ts#DREAMWELL_EFFECTS#dreamwellPrompts",
+      "id": "src/rules/battle/dreamwell-effects-table.ts#DREAMWELL_EFFECT_SCRIPTS#dreamwellPrompts",
       "classification": "closed-behavior-registry",
       "rationale": "The scoped proposal keeps effect behavior in TypeScript while card-specific prompt content is catalog-owned."
     },

@@ -12,8 +12,6 @@ import {
 } from "./mobile-battle-view-model";
 import { rankSlotIds } from "../../battle/types";
 import { tx } from "@trox/runtime";
-import { asPresentationId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
 
 const INACTIVE_TUTORIAL_AVATAR_ABILITY = tx(
   "Avatar ability is not active",
@@ -60,7 +58,7 @@ function tutorialPresentationView(
         ? null
         : {
             kind: presentation.kind,
-            presentationId: asPresentationId(presentation.id),
+            presentationId: presentation.id,
             cardId: presentation.cardId,
             battleCardId: presentation.battleCardId,
             cardKind: presentation.cardKind,
@@ -75,7 +73,7 @@ function tutorialPresentationView(
         ? null
         : {
             kind: presentation.kind,
-            presentationId: asPresentationId(presentation.id),
+            presentationId: presentation.id,
             cardId: presentation.cardId,
             side: presentation.side,
           };
@@ -83,12 +81,12 @@ function tutorialPresentationView(
     case "opponent-block":
       return {
         kind: presentation.kind,
-        presentationId: asPresentationId(presentation.id),
+        presentationId: presentation.id,
       };
     case "challenge-resolved":
       return {
         kind: presentation.kind,
-        presentationId: asPresentationId(presentation.id),
+        presentationId: presentation.id,
         paired: presentation.blockerBattleCardId !== null,
         dissolved: presentation.dissolved.map((entry) => ({ ...entry })),
         scored: presentation.scored,
@@ -188,7 +186,7 @@ export function buildTutorialBattleView(
                 ? []
                 : [
                     {
-                      battleCardId: asBattleCardId(battleCardId),
+                      battleCardId: battleCardId,
                       card: battleGameCardModel(card),
                     },
                   ];
@@ -198,7 +196,7 @@ export function buildTutorialBattleView(
     presentationId:
       presentation === null || presentation.kind === "tutorial-guidance"
         ? null
-        : asPresentationId(presentation.id),
+        : presentation.id,
     presentation: tutorialPresentationView(presentation, battle),
     victoryVisible: previewVictory || battle.board.result === "victory",
   };

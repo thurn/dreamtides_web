@@ -11,7 +11,7 @@ import type { DreamsignId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import type { MerchantTargetKey } from "../../types/identifiers";
-import { asMerchantTargetKey } from "../../types/identifiers";
+import { parseMerchantTargetKey } from "../../types/identifiers";
 
 /**
  * Cap on the candidates carried per offer line. Small candidate sets (choosers
@@ -164,7 +164,7 @@ export function catalogTraceCandidates(
   draftPoolCardUuids?: ReadonlySet<CardId>,
 ): TraceCandidateInput[] {
   return pool.map((card) => ({
-    key: asMerchantTargetKey(card.cardUuid),
+    key: parseMerchantTargetKey(card.cardUuid),
     displayName: card.displayName,
     cardUuid: card.cardUuid,
     cardNumber: card.cardNumber,
@@ -191,7 +191,7 @@ export function deckEntryTraceCandidates(
   }[],
 ): TraceCandidateInput[] {
   return entries.map((entry) => ({
-    key: asMerchantTargetKey(entry.entryId),
+    key: parseMerchantTargetKey(entry.entryId),
     displayName: entry.deckCard.displayName,
     cardUuid: entry.deckCard.cardUuid,
     cardNumber: entry.deckCard.cardNumber,

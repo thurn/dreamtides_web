@@ -2,9 +2,18 @@ import type { EventContext } from "../eventlog/types";
 import { parseTutorialActions } from "../data/tutorial-actions";
 import { TUTORIAL_PLAYER_CARD_INSTANCE_ID } from "../data/tutorial-cards";
 import type { FrontDoorState } from "./fold-state";
-import { asJourneyId, asTutorialRunId } from "../types/identifiers";
+import {
+  frontDoorActionIdFromUnknown,
+  parseFrontDoorActionId,
+  parseJourneyId,
+  parseTutorialRunId,
+} from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
-import type { BattleSlotViewId, DreamAvatarId } from "../types/identifiers";
+import type {
+  BattleSlotViewId,
+  DreamAvatarId,
+  FrontDoorActionId,
+} from "../types/identifiers";
 
 /** Fold-safe identities loaded from the pinned tutorial scenario. */
 export interface TutorialFrontDoorContentProvider {
@@ -26,15 +35,15 @@ export function configuredTutorialJourneyDreamAvatarId(): DreamAvatarId | null {
   return tutorialContentProvider?.journeyDreamAvatarId ?? null;
 }
 
-const MAIN_ACTION_IDS: ReadonlySet<string> = new Set([
-  "new-journey",
-  "dream-codex",
-  "settings",
-  "about",
-  "quit",
-  "github",
-  "discord",
-  "reddit",
+const MAIN_ACTION_IDS: ReadonlySet<FrontDoorActionId> = new Set([
+  parseFrontDoorActionId("new-journey"),
+  parseFrontDoorActionId("dream-codex"),
+  parseFrontDoorActionId("settings"),
+  parseFrontDoorActionId("about"),
+  parseFrontDoorActionId("quit"),
+  parseFrontDoorActionId("github"),
+  parseFrontDoorActionId("discord"),
+  parseFrontDoorActionId("reddit"),
 ]);
 
 function isTutorialPlayerBackSlotId(value: unknown): value is BattleSlotViewId {
@@ -51,8 +60,8 @@ export function frontDoorAction(
   ctx: EventContext,
 ): FrontDoorState | null {
   const surface = payload.surface;
-  const actionId = payload.actionId;
-  if (typeof actionId !== "string") return null;
+  const actionId = frontDoorActionIdFromUnknown(payload.actionId);
+  if (actionId === null) return null;
 
   if (surface === "tutorial") {
     const configuredPlayerCardId = tutorialContentProvider?.playerCardId;
@@ -108,7 +117,7 @@ export function frontDoorAction(
 
   return {
     phase: "mainExiting",
-    journeyId: asJourneyId(`event:${String(ctx.seq)}`),
+    journeyId: parseJourneyId(`event:${String(ctx.seq)}`),
     tutorial: null,
   };
 }
@@ -182,7 +191,7 @@ export function beginTutorial(
   return {
     ...state,
     tutorial: {
-      runId: asTutorialRunId(`event:${String(ctx.seq)}`),
+      runId: parseTutorialRunId(`event:${String(ctx.seq)}`),
       actions,
       currentActionIndex: startActionIndex,
       playerCardPlay: playerCardPlay,

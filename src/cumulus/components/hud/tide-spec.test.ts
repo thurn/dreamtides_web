@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { ResonanceData } from "../../../types/resonance-data";
+import { testContentHash } from "../../../types/test-identities";
 import {
   tideAccessibilityName,
   tideResonanceLabel,
@@ -8,7 +9,7 @@ import {
 
 const SYNTHETIC_DATA = {
   schemaVersion: 1,
-  contentHash: "a".repeat(64),
+  contentHash: testContentHash("a"),
   resonances: [
     {
       id: "ember",
@@ -20,7 +21,7 @@ const SYNTHETIC_DATA = {
       accessibilityName: "Synthetic accessibility name",
     },
   ],
-} as ResonanceData;
+} satisfies ResonanceData;
 
 describe("tide-spec", () => {
   it("projects names, accessibility, glyphs, and colors from injected data", () => {

@@ -31,7 +31,7 @@ export interface GuideOption {
   id: GuideId;
   name: string;
   homeDreamscapeId: DreamscapeId | null;
-  siteType: string | null;
+  siteType: SiteType | null;
 }
 
 /** An affiliation pickable as a dreamscape's thematic faction. */
@@ -64,7 +64,7 @@ export interface DreamscapeCatalog {
   guides: GuideOption[];
   affiliations: AffiliationOption[];
   dreamAvatars: DreamAvatarOption[];
-  siteTypes: string[];
+  siteTypes: SiteType[];
 }
 
 export type DreamAvatarAssignmentAction = "replace" | "add" | "remove";
@@ -73,14 +73,14 @@ export interface DreamAvatarAssignmentRequest {
   dreamscapeId: DreamscapeId;
   action: DreamAvatarAssignmentAction;
   /** The incoming DreamAvatar (for "replace" / "add"). */
-  inId?: string;
+  inId?: DreamAvatarId;
   /** The resident being displaced (for "replace" / "remove"). */
-  outId?: string;
+  outId?: DreamAvatarId;
 }
 
 export interface DreamAvatarAssignmentResponse {
   dreamscapes: EditorDreamscapeRecord[];
-  changed: string[];
+  changed: DreamscapeId[];
 }
 
 export type EditableDreamscapeField =

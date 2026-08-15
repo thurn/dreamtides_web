@@ -19,6 +19,7 @@
 // `aria-disabled`, and detaches its click and press feedback.
 
 import type { LocalizedString } from "@trox/runtime";
+import type { DomTestId } from "../../types/dom";
 import type { ReactElement } from "react";
 import { StandaloneGlyph } from "./StandaloneGlyph";
 import { EssenceValue } from "../hud/EssenceValue";
@@ -68,7 +69,7 @@ export interface GlassButtonAction {
   /** Dims the control, detaches click / press feedback, and marks it `aria-disabled`. */
   disabled?: boolean;
   /** A `data-testid` for selecting the button in tests. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 /**

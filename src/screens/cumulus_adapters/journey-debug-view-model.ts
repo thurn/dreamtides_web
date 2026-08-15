@@ -10,7 +10,6 @@ import type {
   JourneyDebugDreamsignView,
 } from "../../cumulus/screens/JourneyDebugEditorScreen";
 import { assertLocalized } from "@trox/runtime";
-import { asCardId } from "../../types/card-identity";
 
 /**
  * Builds the diagnostic editor's complete presentation model from live journey
@@ -36,8 +35,8 @@ export function buildJourneyDebugEditorView(
     completionLevel: state.completionLevel,
     dreamsigns: state.dreamsigns.map(
       (dreamsign, index): JourneyDebugDreamsignView => ({
-        actionId: `dreamsign:${String(index)}`,
-        templateId: dreamsign.id ?? `unnamed:${String(index)}`,
+        actionId: `dreamsign:${index}`,
+        templateId: dreamsign.id ?? null,
         name: assertLocalized(dreamsign.name),
       }),
     ),
@@ -58,9 +57,6 @@ export function buildJourneyDebugEditorView(
           : resolveDeckEntryCard(transfigurationData, base, entry);
       return {
         entryId: entry.entryId,
-        cardId: asCardId(
-          displaySnapshot?.id ?? `unknown:${String(entry.cardNumber)}`,
-        ),
         name: assertLocalized(
           displaySnapshot?.name ?? `Unknown ${String(entry.cardNumber)}`,
         ),

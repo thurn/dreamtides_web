@@ -28,6 +28,14 @@ import { Pressable } from "../../primitives/Pressable";
 import { meaning, opaque, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { localizedSourceText } from "../../../runtime/localization/runtime";
+import type { CardId } from "../../../types/card-identity";
+import type {
+  DreamAvatarId,
+  DreamwellCardId,
+  DreamsignId,
+  OpponentId,
+} from "../../../types/identifiers";
+import type { SemanticEntityNamespace } from "../../../types/semantic-identity";
 
 /**
  * Renders rules text with:
@@ -181,12 +189,12 @@ export function isHighlightedRulesTextTerm(word: string): boolean {
 }
 
 /** Semantic game object whose authored rules text is being rendered. */
-export interface RulesTextOwner {
-  /** Object type used to contextualize glossary definitions. */
-  readonly kind: RulesTextGlossaryOwner;
-  /** Stable UUID or domain id for this exact rules-text owner. */
-  readonly id: string;
-}
+export type RulesTextOwner =
+  | { readonly kind: "card"; readonly id: CardId }
+  | { readonly kind: "dreamAvatar"; readonly id: DreamAvatarId }
+  | { readonly kind: "opponentDreamAvatar"; readonly id: OpponentId }
+  | { readonly kind: "dreamsign"; readonly id: DreamsignId }
+  | { readonly kind: "dreamwellCard"; readonly id: DreamwellCardId };
 
 export interface RulesTextProps {
   /** The rules text to render. */
@@ -558,26 +566,40 @@ export function renderRulesSymbolsInline(
   );
 }
 
-function rulesTextEntityType(owner: RulesTextOwner): string {
+function rulesTextEntityType(
+  owner: RulesTextOwner,
+): SemanticEntityNamespace {
   switch (owner.kind) {
     case "card":
       return "card-rules-text";
     case "dreamAvatar":
       return "dream-avatar-rules-text";
+    case "opponentDreamAvatar":
+      return "opponent-dream-avatar-rules-text";
     case "dreamsign":
       return "dreamsign-rules-text";
+    case "dreamwellCard":
+      return "dreamwell-card-rules-text";
   }
 }
 
+function rulesTextGlossaryOwner(
+  owner: RulesTextOwner,
+): RulesTextGlossaryOwner {
+  if (owner.kind === "dreamwellCard") return "card";
+  if (owner.kind === "opponentDreamAvatar") return "dreamAvatar";
+  return owner.kind;
+}
+
 function rulesTextAriaLabel(owner: RulesTextOwner, text: LocalizedString) {
-  if (owner.kind === "card") {
+  if (owner.kind === "card" || owner.kind === "dreamwellCard") {
     return txa(
       "Card rules: {rules_text}",
       { rules_text: opaque(text) },
       "[accessibility] Name for interactive authored card rules text.",
     );
   }
-  if (owner.kind === "dreamAvatar") {
+  if (owner.kind === "dreamAvatar" || owner.kind === "opponentDreamAvatar") {
     return txa(
       "Avatar ability: {rules_text}",
       { rules_text: opaque(text) },
@@ -608,7 +630,7 @@ function RulesTextSource({
     },
     spec: {
       primary: { kind: "source", description: text },
-      secondaries: rulesTextDefinitionCards(text, owner.kind),
+      secondaries: rulesTextDefinitionCards(text, rulesTextGlossaryOwner(owner)),
     },
     feedback: "stationary",
   });
@@ -649,7 +671,10 @@ export function RulesText({
 }: RulesTextProps) {
   const resolve = useLocalizer();
   const content = renderRulesText(resolve(text));
-  const hasDefinitions = rulesTextDefinitionCards(text, owner.kind).length > 0;
+  const hasDefinitions = rulesTextDefinitionCards(
+    text,
+    rulesTextGlossaryOwner(owner),
+  ).length > 0;
   if (glossaryInteraction === "delegated" || !hasDefinitions) {
     return <>{content}</>;
   }

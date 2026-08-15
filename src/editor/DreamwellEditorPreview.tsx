@@ -15,6 +15,9 @@ import {
 import type { ArtCrop } from "../types/cards";
 import { CardStatOrb } from "../cumulus/components/card/CardStatOrb";
 import { RulesText } from "../cumulus/components/card/RulesText";
+import type { DreamwellCardId } from "../types/identifiers";
+import { parseDreamwellCardId } from "../types/identifiers";
+import { parseDreamwellCardName } from "../types/catalog-names";
 
 /**
  * Optional render overrides for the Dreamwell card's editable regions. Each slot
@@ -47,7 +50,7 @@ const ENERGY_ORB_RATIO = 0.16;
  * the component does not depend on the battle module.
  */
 export interface DreamwellEditorPreviewData {
-  id: string;
+  id: DreamwellCardId;
   name: string;
   renderedText: string;
   energyAdded: number;
@@ -312,7 +315,11 @@ export function DreamwellEditorPreview({
     setArtErrored(false);
     setImageAspect(null);
   }, [card.id, card.imageNumber]);
-  const identiconUrl = cardIdenticonUri(card.id !== "" ? card.id : card.name);
+  const identiconUrl = cardIdenticonUri(
+    card.id !== ""
+      ? parseDreamwellCardId(card.id)
+      : parseDreamwellCardName(card.name),
+  );
   const usingAssignedArt = hasAssignedImage(card.imageNumber) && !artErrored;
   const artUrl = usingAssignedArt
     ? cardImageUrl(card.imageNumber)
@@ -587,7 +594,7 @@ export function DreamwellEditorPreview({
                 renderedText.trim() !== "" ? (
                   <RulesText
                     text={assertLocalized(renderedText)}
-                    owner={{ kind: "card", id: card.id }}
+                    owner={{ kind: "dreamwellCard", id: card.id }}
                   />
                 ) : null;
               return slots?.rulesText ? slots.rulesText(rulesNode) : rulesNode;

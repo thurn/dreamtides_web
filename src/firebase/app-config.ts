@@ -32,12 +32,40 @@ const REQUIRED_KEYS = [
   "VITE_FIREBASE_APP_ID",
 ] as const satisfies readonly (keyof FirebaseRuntimeEnv)[];
 
+type RequiredFirebaseConfigKey = (typeof REQUIRED_KEYS)[number];
+
 const EMULATOR_PROJECT_ID = "demo-journey-prototype";
 const EMULATOR_APP_NAME = "journey-prototype-emulator";
 const REALTIME_APP_NAME = "journey-prototype-realtime";
 const EMULATOR_DATABASE_HOST = "127.0.0.1";
 const EMULATOR_DATABASE_PORT = 9000;
 const connectedEmulatorDatabases = new WeakSet<Database>();
+
+function browserFirebaseRuntimeEnv(): FirebaseRuntimeEnv {
+  const runtimeEnv: unknown = import.meta.env;
+  if (typeof runtimeEnv !== "object" || runtimeEnv === null) return {};
+  const stringValue = (key: keyof FirebaseRuntimeEnv): string | undefined => {
+    const value: unknown = Reflect.get(runtimeEnv, key);
+    return typeof value === "string" ? value : undefined;
+  };
+  return {
+    VITE_FIREBASE_API_KEY: stringValue("VITE_FIREBASE_API_KEY"),
+    VITE_FIREBASE_AUTH_DOMAIN: stringValue("VITE_FIREBASE_AUTH_DOMAIN"),
+    VITE_FIREBASE_DATABASE_URL: stringValue("VITE_FIREBASE_DATABASE_URL"),
+    VITE_FIREBASE_PROJECT_ID: stringValue("VITE_FIREBASE_PROJECT_ID"),
+    VITE_FIREBASE_APP_ID: stringValue("VITE_FIREBASE_APP_ID"),
+    VITE_FIREBASE_STORAGE_BUCKET: stringValue("VITE_FIREBASE_STORAGE_BUCKET"),
+    VITE_FIREBASE_MESSAGING_SENDER_ID: stringValue(
+      "VITE_FIREBASE_MESSAGING_SENDER_ID",
+    ),
+    VITE_FIREBASE_DATABASE_EMULATOR_HOST: stringValue(
+      "VITE_FIREBASE_DATABASE_EMULATOR_HOST",
+    ),
+    VITE_FIREBASE_DATABASE_EMULATOR_PORT: stringValue(
+      "VITE_FIREBASE_DATABASE_EMULATOR_PORT",
+    ),
+  };
+}
 
 const EMULATOR_FIREBASE_CONFIG: FirebaseOptions = {
   apiKey: "demo-api-key",
@@ -48,9 +76,9 @@ const EMULATOR_FIREBASE_CONFIG: FirebaseOptions = {
 };
 
 export class FirebaseConfigError extends Error {
-  readonly missingKeys: string[];
+  readonly missingKeys: RequiredFirebaseConfigKey[];
 
-  constructor(missingKeys: readonly string[]) {
+  constructor(missingKeys: readonly RequiredFirebaseConfigKey[]) {
     super(`Missing Firebase config: ${missingKeys.join(", ")}`);
     this.name = "FirebaseConfigError";
     this.missingKeys = [...missingKeys];
@@ -117,7 +145,7 @@ function getNamedApp(name: string, options: FirebaseOptions): FirebaseApp {
 
 export function getFirebaseApp(
   mode: DatabaseMode = "emulator",
-  env: FirebaseRuntimeEnv = import.meta.env as unknown as FirebaseRuntimeEnv,
+  env: FirebaseRuntimeEnv = browserFirebaseRuntimeEnv(),
 ): FirebaseApp {
   if (mode === "emulator") {
     return getNamedApp(EMULATOR_APP_NAME, EMULATOR_FIREBASE_CONFIG);
@@ -128,7 +156,7 @@ export function getFirebaseApp(
 
 export function getFirebaseDatabase(
   mode: DatabaseMode = "emulator",
-  env: FirebaseRuntimeEnv = import.meta.env as unknown as FirebaseRuntimeEnv,
+  env: FirebaseRuntimeEnv = browserFirebaseRuntimeEnv(),
 ): Database {
   const database = getDatabase(getFirebaseApp(mode, env));
 

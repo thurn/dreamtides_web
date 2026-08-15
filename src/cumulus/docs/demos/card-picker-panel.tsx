@@ -6,7 +6,7 @@ import type { CardChoiceGridCardView as CardGalleryCardView } from "../../compon
 import { CardPickerPanel } from "../../components/card/CardPickerPanel";
 import { GLYPHS } from "../../primitives/glyph";
 import type { CumulusComponent } from "../registry";
-import { asDeckEntryId } from "../../../types/identifiers";
+import { parseDeckEntryId } from "../../../types/identifiers";
 
 const DEMO_CARD_IDS = [
   "1268a899-b209-46bb-bce4-6def1dcd0404",
@@ -29,7 +29,7 @@ function CardPickerPanelDemo() {
           DEMO_CARD_IDS.map((id) => cardsById.get(id))
             .filter((card): card is CardData => card !== undefined)
             .map((card, index) => ({
-              entryId: asDeckEntryId(`picker-demo-${String(index)}`),
+              entryId: parseDeckEntryId(`picker-demo-${String(index)}`),
               model: { cardId: card.id, displaySnapshot: card },
               selection:
                 selected === `picker-demo-${String(index)}`
@@ -73,7 +73,7 @@ function CardPickerPanelDemo() {
         ]}
         onCardPress={setSelected}
         endAction={{
-          entryId: asDeckEntryId("restock"),
+          entryId: parseDeckEntryId("restock"),
           glyph: GLYPHS.refresh,
           label: assertLocalized("Restock"),
           caption: { kind: "essence", amount: 50 },

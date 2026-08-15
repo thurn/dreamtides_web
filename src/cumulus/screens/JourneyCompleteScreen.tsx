@@ -23,6 +23,7 @@ import {
   type LocalizedString,
 } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type { DreamAvatarId } from "../../types/identifiers";
 
 export interface JourneyCompleteStatView {
   id: "battles" | "dreamscapes" | "cards" | "dreamsigns" | "essence";
@@ -31,7 +32,7 @@ export interface JourneyCompleteStatView {
 }
 
 export interface JourneyCompleteDreamAvatarView extends DreamAvatarVisual {
-  id: string;
+  id: DreamAvatarId;
   ability: LocalizedString;
 }
 

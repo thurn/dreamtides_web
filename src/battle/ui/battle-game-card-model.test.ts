@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
+import { testCardName } from "../../types/test-identities";
 import {
   hydrateFigmentCatalog,
   resetFigmentCatalogHydration,
@@ -6,17 +7,16 @@ import {
 import { createDefaultBattleCardStatus } from "../state/create-initial-state";
 import type { BattleCardInstance } from "../types";
 import { battleGameCardModel } from "./battle-game-card-model";
-import { asBattleCardId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
+import { testBattleCardId, testCardId } from "../../types/test-identities";
 
 function shadowFigment(): BattleCardInstance {
   return {
-    battleCardId: asBattleCardId("figment-instance-1"),
+    battleCardId: testBattleCardId("figment-instance-1"),
     definition: {
       sourceDeckEntryId: null,
-      cardId: asCardId(""),
+      cardId: testCardId("shadow-figment-definition"),
       cardNumber: 0,
-      name: "Shadow",
+      name: testCardName("Shadow"),
       battleCardKind: "character",
       subtype: "Shadow",
       energyCost: 0,
@@ -56,8 +56,8 @@ describe("battleGameCardModel", () => {
   it("restores authored figment art directives for persisted battle instances", () => {
     hydrateFigmentCatalog([
       {
-        id: "86125402-a7ca-4bf2-ab36-f8a91ddd27bf",
-        name: "Shadow",
+        id: testCardId("86125402-a7ca-4bf2-ab36-f8a91ddd27bf"),
+        name: testCardName("Shadow"),
         subtype: "Shadow",
         spark: 2,
         imageNumber: 277174382,

@@ -14,7 +14,12 @@
 
 import { foldEvents, type FoldOutcome } from "../../eventlog/fold";
 import { hashState } from "../../eventlog/hash";
-import type { EngineConfig, GameEvent, Genesis } from "../../eventlog/types";
+import type {
+  EngineConfig,
+  GameEvent,
+  Genesis,
+  StateHash,
+} from "../../eventlog/types";
 import { genesisFoldState, type FoldState } from "../fold-state";
 import { normalizePersistedNightmareState } from "../nightmare-migration";
 import { normalizePersistedShopPurchaseState } from "../shop-purchase-migration";
@@ -60,7 +65,7 @@ export interface ReplayInput {
 /** The result of replaying a log: the folded state, its hash, and outcomes. */
 export interface ReplayResult {
   finalState: FoldState;
-  finalHash: string;
+  finalHash: StateHash;
   outcomes: FoldOutcome[];
 }
 

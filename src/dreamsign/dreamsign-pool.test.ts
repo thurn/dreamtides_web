@@ -5,21 +5,21 @@ import {
   readDreamsignPool,
   resolveDreamsignTemplates,
 } from "./dreamsign-pool";
-import { asDreamsignId } from "../types/identifiers";
+import { testDreamsignId } from "../types/test-identities";
 
 const DREAMSIGN_TEMPLATES: DreamsignTemplate[] = [
   {
-    id: asDreamsignId("embers-whisper"),
+    id: testDreamsignId("embers-whisper"),
     name: "Ember's Whisper",
     effectDescription: "Fire.",
   },
   {
-    id: asDreamsignId("glacial-insight"),
+    id: testDreamsignId("glacial-insight"),
     name: "Glacial Insight",
     effectDescription: "Ice.",
   },
   {
-    id: asDreamsignId("verdant-accord"),
+    id: testDreamsignId("verdant-accord"),
     name: "Verdant Accord",
     effectDescription: "Growth.",
   },
@@ -29,15 +29,18 @@ describe("readDreamsignPool", () => {
   it("treats the pool as a unique set of stable template ids", () => {
     const pool = readDreamsignPool(
       [
-        asDreamsignId("glacial-insight"),
-        asDreamsignId("missing-id"),
-        asDreamsignId("glacial-insight"),
-        asDreamsignId("embers-whisper"),
+        testDreamsignId("glacial-insight"),
+        testDreamsignId("missing-id"),
+        testDreamsignId("glacial-insight"),
+        testDreamsignId("embers-whisper"),
       ],
       DREAMSIGN_TEMPLATES,
     );
 
-    expect(pool.availableIds).toEqual(["glacial-insight", "embers-whisper"]);
+    expect(pool.availableIds).toEqual([
+      testDreamsignId("glacial-insight"),
+      testDreamsignId("embers-whisper"),
+    ]);
   });
 });
 
@@ -45,9 +48,9 @@ describe("drawDreamsignOptions", () => {
   it("spends shown ids immediately from the shared pool", () => {
     const draw = drawDreamsignOptions(
       [
-        asDreamsignId("embers-whisper"),
-        asDreamsignId("glacial-insight"),
-        asDreamsignId("verdant-accord"),
+        testDreamsignId("embers-whisper"),
+        testDreamsignId("glacial-insight"),
+        testDreamsignId("verdant-accord"),
       ],
       DREAMSIGN_TEMPLATES,
       2,
@@ -63,28 +66,30 @@ describe("drawDreamsignOptions", () => {
   it("includes required available ids before filling the rest of the offer", () => {
     const draw = drawDreamsignOptions(
       [
-        asDreamsignId("embers-whisper"),
-        asDreamsignId("glacial-insight"),
-        asDreamsignId("verdant-accord"),
+        testDreamsignId("embers-whisper"),
+        testDreamsignId("glacial-insight"),
+        testDreamsignId("verdant-accord"),
       ],
       DREAMSIGN_TEMPLATES,
       2,
       undefined,
       () => 0,
-      [asDreamsignId("verdant-accord")],
+      [testDreamsignId("verdant-accord")],
     );
 
     expect(draw.offeredIds).toHaveLength(2);
-    expect(draw.offeredIds).toContain("verdant-accord");
-    expect(draw.remainingDreamsignPool).not.toContain("verdant-accord");
+    expect(draw.offeredIds).toContain(testDreamsignId("verdant-accord"));
+    expect(draw.remainingDreamsignPool).not.toContain(
+      testDreamsignId("verdant-accord"),
+    );
   });
 
   it("consumes the shared pool across sequential reveals without repeats", () => {
     const first = drawDreamsignOptions(
       [
-        asDreamsignId("embers-whisper"),
-        asDreamsignId("glacial-insight"),
-        asDreamsignId("verdant-accord"),
+        testDreamsignId("embers-whisper"),
+        testDreamsignId("glacial-insight"),
+        testDreamsignId("verdant-accord"),
       ],
       DREAMSIGN_TEMPLATES,
       2,
@@ -96,28 +101,28 @@ describe("drawDreamsignOptions", () => {
     );
 
     expect([...first.offeredIds, ...second.offeredIds].sort()).toEqual([
-      "embers-whisper",
-      "glacial-insight",
-      "verdant-accord",
+      testDreamsignId("glacial-insight"),
+      testDreamsignId("embers-whisper"),
+      testDreamsignId("verdant-accord"),
     ]);
     expect(second.remainingDreamsignPool).toEqual([]);
   });
 
   it("cleans up stale ids instead of preserving a fake non-empty pool", () => {
     const draw = drawDreamsignOptions(
-      [asDreamsignId("missing-id"), asDreamsignId("glacial-insight")],
+      [testDreamsignId("missing-id"), testDreamsignId("glacial-insight")],
       DREAMSIGN_TEMPLATES,
       2,
     );
 
-    expect(draw.offeredIds).toEqual(["glacial-insight"]);
+    expect(draw.offeredIds).toEqual([testDreamsignId("glacial-insight")]);
     expect(draw.remainingDreamsignPool).toEqual([]);
   });
 
   it("degrades to a clean no-offer path when the pool is exhausted", () => {
     expect(
       drawDreamsignOptions(
-        [asDreamsignId("missing-id")],
+        [testDreamsignId("missing-id")],
         DREAMSIGN_TEMPLATES,
         3,
       ),
@@ -134,13 +139,16 @@ describe("resolveDreamsignTemplates", () => {
     expect(
       resolveDreamsignTemplates(
         [
-          asDreamsignId("glacial-insight"),
-          asDreamsignId("missing-id"),
-          asDreamsignId("embers-whisper"),
-          asDreamsignId("glacial-insight"),
+          testDreamsignId("glacial-insight"),
+          testDreamsignId("missing-id"),
+          testDreamsignId("embers-whisper"),
+          testDreamsignId("glacial-insight"),
         ],
         DREAMSIGN_TEMPLATES,
       ).map((template) => template.id),
-    ).toEqual(["glacial-insight", "embers-whisper"]);
+    ).toEqual([
+      testDreamsignId("glacial-insight"),
+      testDreamsignId("embers-whisper"),
+    ]);
   });
 });

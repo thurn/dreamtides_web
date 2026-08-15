@@ -14,7 +14,7 @@ import { buildDreamAvatarPackage } from "../../data/journey-content";
 import { buildTutorialJourneyPackage } from "../../data/tutorial-journey-package";
 import { startJourneyFromDreamAvatar } from "../../state/journey-state-actions";
 import type { JourneyLifecycleContentProvider } from "../../rules/journey/lifecycle";
-import { seededRngFromString } from "./rng-stream";
+import { seededJourneyRng } from "./rng-stream";
 import { regenerateAtlasForProgress } from "../../atlas/atlas-generator";
 
 export function createJourneyLifecycleContentProvider(
@@ -59,7 +59,7 @@ export function createJourneyLifecycleContentProvider(
         dreamAvatar,
         journeyContent: content,
         seedOverride: seed,
-        atlasRng: seededRngFromString(`${seed}:atlas`),
+        atlasRng: seededJourneyRng(seed, "atlas"),
         resolvedPackageOverride,
         isTutorialJourney,
       });

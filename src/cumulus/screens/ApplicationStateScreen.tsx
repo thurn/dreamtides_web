@@ -10,9 +10,19 @@ export type ApplicationStateComparisonValue =
   | { readonly kind: "raw"; readonly value: string }
   | { readonly kind: "message"; readonly message: LocalizedString };
 
+export type ApplicationStateComparisonId =
+  | "atlas"
+  | "site"
+  | "draft-rules"
+  | "economy"
+  | "gamble"
+  | "transfiguration"
+  | "opponent"
+  | "tutorial";
+
 /** One labelled value in an application-state comparison. */
 export interface ApplicationStateComparisonRow {
-  readonly id: string;
+  readonly id: ApplicationStateComparisonId;
   readonly label: LocalizedString;
   readonly expected: ApplicationStateComparisonValue;
   readonly actual: ApplicationStateComparisonValue;

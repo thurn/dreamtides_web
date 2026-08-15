@@ -10,7 +10,10 @@ import {
   chooseJourneySaveFile,
   downloadJourneySaveFile,
 } from "../state/journey-save-files";
-import { useJourney } from "../state/journey-context";
+import {
+  useJourney,
+} from "../state/journey-context";
+import { parseJourneyMutationSource } from "../types/journey-source";
 import {
   buildJourneyUtilityMenuViewModel,
   useJourneyUtilityMenuController,
@@ -21,7 +24,8 @@ import { CumulusRoot } from "../cumulus/CumulusRoot";
 vi.mock("../state/journey-context", () => ({ useJourney: vi.fn() }));
 vi.mock("../logging", () => ({ downloadLog: vi.fn(), logEvent: vi.fn() }));
 vi.mock("../runtime/build-info", () => ({ BUILD_GIT_SHA: "abc123def456" }));
-vi.mock("../state/journey-save-files", () => ({
+vi.mock("../state/journey-save-files", async (importOriginal) => ({
+  ...(await importOriginal()),
   chooseJourneySaveFile: vi.fn(),
   downloadJourneySaveFile: vi.fn(),
 }));
@@ -33,14 +37,16 @@ function Probe(): null {
   latest = useJourneyUtilityMenuController({
     actions: [],
     builtIns: ["saveJourney", "loadJourney", "buildSha", "downloadLog"],
-    saveSource: "menu-save",
-    loadSource: "menu-load",
+    saveSource: parseJourneyMutationSource("menu-save"),
+    loadSource: parseJourneyMutationSource("menu-load"),
     onLoadJourneyState: loadJourneyState,
   });
   return null;
 }
 
-function actionFor(id: string) {
+type TestedActionId = "saveJourney" | "loadJourney" | "buildSha";
+
+function actionFor(id: TestedActionId) {
   const action = latest?.actions.find(
     (item) => item.kind === "action" && item.id === id,
   );
@@ -166,7 +172,7 @@ describe("useJourneyUtilityMenuController", () => {
       savedAt: "2026-07-29T12:00:00.000Z",
       buildGitSha: "abc123",
       journeyState: { screen: { type: "atlas" } },
-    } as Awaited<ReturnType<typeof chooseJourneySaveFile>>);
+    });
     const container = document.createElement("div");
     document.body.append(container);
     const root: Root = createRoot(container);
@@ -180,7 +186,7 @@ describe("useJourneyUtilityMenuController", () => {
 
     await act(async () => {
       actionFor("loadJourney").onCommand();
-      await Promise.resolve();
+      await vi.waitFor(() => expect(loadJourneyState).toHaveBeenCalled());
     });
 
     expect(loadJourneyState).toHaveBeenCalledWith(

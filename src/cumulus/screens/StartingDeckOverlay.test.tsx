@@ -5,11 +5,13 @@ import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { StartingDeckOverlay } from "./StartingDeckOverlay";
 import type { StartingDeckView } from "./StartingDeckOverlay";
 import { CumulusRoot } from "../CumulusRoot";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
+import type { DomTestId } from "../types/dom";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -44,14 +46,14 @@ vi.mock("../components/card/CardView", () => ({
     testId,
   }: {
     model: { displaySnapshot: CardData };
-    testId?: string;
+    testId?: DomTestId;
   }) => <div data-testid={testId}>{model.displaySnapshot.name}</div>,
 }));
 
 function makeCard(cardNumber: number, name: string, text: string): CardData {
   return {
-    name: asCardName(name),
-    id: asCardId(`card-${String(cardNumber)}`),
+    name: parseCardName(name),
+    id: testCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
     subtype: "",
@@ -70,7 +72,7 @@ function makeView(cardCount = 2): StartingDeckView {
     cards: Array.from({ length: cardCount }, (_, index) => {
       const cardNumber = index + 1;
       return {
-        entryId: asDeckEntryId(`entry-${String(cardNumber)}`),
+        entryId: parseDeckEntryId(`entry-${String(cardNumber)}`),
         model: (() => {
           const displaySnapshot = makeCard(
             cardNumber,

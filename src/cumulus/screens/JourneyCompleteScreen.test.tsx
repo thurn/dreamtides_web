@@ -9,10 +9,11 @@ import {
   JourneyCompleteScreen,
   type JourneyCompleteView,
 } from "./JourneyCompleteScreen";
+import { testDreamAvatarId } from "../../types/test-identities";
 
 const VIEW: JourneyCompleteView = {
   dreamAvatar: {
-    id: "00000000-0000-4000-8000-000000000061",
+    id: testDreamAvatarId("00000000-0000-4000-8000-000000000061"),
     name: assertLocalized("The Wayfinder"),
     title: assertLocalized("Bearer of the Last Light"),
     ability: assertLocalized("Whenever you map a dream, gain 1 essence."),

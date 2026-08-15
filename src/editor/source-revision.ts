@@ -1,14 +1,30 @@
 import { EditorApiRequestError } from "./editor-api";
+import {
+  parseSourceRevision,
+  type SourceRevision,
+} from "../types/source-revision";
+export { parseSourceRevision, type SourceRevision } from "../types/source-revision";
+
+export type EditorSourceId =
+  | "cards"
+  | "dream-avatars"
+  | "dreamscapes"
+  | "dreamsigns"
+  | "dreamwell"
+  | "exploration"
+  | "figments"
+  | "glossary"
+  | "tutorial";
 
 interface SourceState {
-  revision?: string;
+  revision?: SourceRevision;
   queue: Promise<void>;
   pausedError: Error | null;
 }
 
-const sources = new Map<string, SourceState>();
+const sources = new Map<EditorSourceId, SourceState>();
 
-function stateFor(source: string): SourceState {
+function stateFor(source: EditorSourceId): SourceState {
   let state = sources.get(source);
   if (state === undefined) {
     state = { queue: Promise.resolve(), pausedError: null };
@@ -17,18 +33,29 @@ function stateFor(source: string): SourceState {
   return state;
 }
 
-export function confirmSourceRevision(source: string, body: unknown): void {
+export function confirmSourceRevision(
+  source: EditorSourceId,
+  body: unknown,
+): void {
   const state = stateFor(source);
   if (body !== null && typeof body === "object" && "sourceRevision" in body &&
-      typeof body.sourceRevision === "string") state.revision = body.sourceRevision;
+      typeof body.sourceRevision === "string") {
+    state.revision = parseSourceRevision(body.sourceRevision);
+  }
   state.pausedError = null;
 }
 
-export function withExpectedSourceRevision(source: string, body: object): object {
+export function withExpectedSourceRevision(
+  source: EditorSourceId,
+  body: object,
+): object {
   return { ...body, expectedSourceRevision: stateFor(source).revision };
 }
 
-export function queueSourceSave<T>(source: string, operation: () => Promise<T>): Promise<T> {
+export function queueSourceSave<T>(
+  source: EditorSourceId,
+  operation: () => Promise<T>,
+): Promise<T> {
   const state = stateFor(source);
   const queued = state.queue.then(async () => {
     if (state.pausedError !== null) throw state.pausedError;

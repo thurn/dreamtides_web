@@ -1,23 +1,43 @@
 import type { EditorCardRecord, EditorSortDirection } from "./types";
+import type { CardId } from "../types/card-identity";
+
+declare const cardNameSubstringKeyBrand: unique symbol;
+declare const cardParticipantSetKeyBrand: unique symbol;
+
+export type CardNameSubstringKey = string & {
+  readonly [cardNameSubstringKeyBrand]: "CardNameSubstringKey";
+};
+
+type CardParticipantSetKey = string & {
+  readonly [cardParticipantSetKeyBrand]: "CardParticipantSetKey";
+};
+
+export type CardNameSubstringOccurrenceKey =
+  | CardId
+  | `${CardNameSubstringKey}\u0000${CardId}`;
 
 export const MIN_CARD_NAME_SUBSTRING_LENGTH = 5;
 
 export interface CardNameSubstringGroup {
   /** Case-folded substring used as the stable render occurrence key. */
-  key: string;
+  key: CardNameSubstringKey;
   /** Substring with casing preserved from the first matching card name. */
   substring: string;
   cards: readonly EditorCardRecord[];
 }
 
 interface CandidateGroup {
-  key: string;
+  key: CardNameSubstringKey;
   substring: string;
-  cardsById: Map<string, EditorCardRecord>;
+  cardsById: Map<CardId, EditorCardRecord>;
 }
 
-function participantKey(group: CandidateGroup): string {
-  return Array.from(group.cardsById.keys()).sort().join("\u0000");
+function cardNameSubstringKey(value: string): CardNameSubstringKey {
+  return value as CardNameSubstringKey;
+}
+
+function participantKey(group: CandidateGroup): CardParticipantSetKey {
+  return Array.from(group.cardsById.keys()).sort().join("\u0000") as CardParticipantSetKey;
 }
 
 function compareText(left: string, right: string): number {
@@ -39,11 +59,11 @@ export function buildCardNameSubstringGroups(
   cards: readonly EditorCardRecord[],
   direction: EditorSortDirection = "asc",
 ): CardNameSubstringGroup[] {
-  const candidatesByKey = new Map<string, CandidateGroup>();
+  const candidatesByKey = new Map<CardNameSubstringKey, CandidateGroup>();
 
   for (const card of cards) {
     const foldedName = card.name.toLocaleLowerCase();
-    const seenForCard = new Set<string>();
+    const seenForCard = new Set<CardNameSubstringKey>();
 
     for (let start = 0; start < foldedName.length; start += 1) {
       for (
@@ -52,7 +72,7 @@ export function buildCardNameSubstringGroups(
         end += 1
       ) {
         const raw = foldedName.slice(start, end);
-        const key = raw.trim();
+        const key = cardNameSubstringKey(raw.trim());
         if (
           key.replace(/\s/gu, "").length <
             MIN_CARD_NAME_SUBSTRING_LENGTH ||
@@ -71,7 +91,7 @@ export function buildCardNameSubstringGroups(
         const candidate = candidatesByKey.get(key) ?? {
           key,
           substring,
-          cardsById: new Map<string, EditorCardRecord>(),
+          cardsById: new Map<CardId, EditorCardRecord>(),
         };
         candidate.cardsById.set(card.id, card);
         candidatesByKey.set(key, candidate);
@@ -82,7 +102,7 @@ export function buildCardNameSubstringGroups(
   const matchingCandidates = Array.from(candidatesByKey.values()).filter(
     (candidate) => candidate.cardsById.size >= 2,
   );
-  const candidatesByParticipants = new Map<string, CandidateGroup[]>();
+  const candidatesByParticipants = new Map<CardParticipantSetKey, CandidateGroup[]>();
   for (const candidate of matchingCandidates) {
     const key = participantKey(candidate);
     const bucket = candidatesByParticipants.get(key) ?? [];

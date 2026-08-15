@@ -4,11 +4,7 @@ import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
-import {
-  asCardId,
-  asCardName,
-  type CardId,
-} from "../../../types/card-identity";
+import { parseCardName, type CardId } from "../../../types/card-identity";
 import { CumulusRoot } from "../../CumulusRoot";
 import { GLYPHS } from "../../primitives/glyph";
 import {
@@ -19,6 +15,11 @@ import {
   type OfferTileModel,
 } from "./OfferTile";
 import type { CardData } from "../../../types/cards";
+import {
+  testCardId,
+  testDreamsignId,
+  testOfferTileId,
+} from "../../../types/test-identities";
 
 (
   globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
@@ -30,10 +31,10 @@ function fixtureCard(
   cardNumber: number,
   art?: { readonly x: number; readonly y: number; readonly scale: number },
 ): Readonly<CardData> {
-  const id = asCardId(cardId);
+  const id = cardId;
   return {
     id,
-    name: asCardName(`Test Card ${String(cardNumber)}`),
+    name: parseCardName(`Test Card ${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
     subtype: "Spirit Animal",
@@ -49,18 +50,18 @@ function fixtureCard(
 }
 
 const CARDS = [
-  fixtureCard(asCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), 287269511, 1, {
+  fixtureCard(testCardId("7be2e6d7-abff-4c44-a0c3-35460da1693c"), 287269511, 1, {
     x: 0.5,
     y: -0.5,
     scale: 1.7,
   }),
-  fixtureCard(asCardId("161482b6-af07-4d9e-822d-8c738672beb9"), 2022594419, 2),
-  fixtureCard(asCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"), 618071684, 3),
-  fixtureCard(asCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"), 1196004046, 4),
+  fixtureCard(testCardId("161482b6-af07-4d9e-822d-8c738672beb9"), 2022594419, 2),
+  fixtureCard(testCardId("b56ef7e8-c634-4d40-ac08-fab591dfbc4a"), 618071684, 3),
+  fixtureCard(testCardId("9b9c2743-75b3-499d-b5fb-c3429c92d420"), 1196004046, 4),
 ] as const satisfies OfferTileFourCards;
 
 const MODEL: OfferTileModel = {
-  id: "debug-fit-card-draft",
+  id: testOfferTileId("debug-fit-card-draft"),
   kind: "card-draft",
   cards: CARDS,
 };
@@ -86,7 +87,7 @@ describe("OfferTile", () => {
           />
           <OfferTile
             presentation={PRESENTATION}
-            model={{ ...MODEL, id: "compact" }}
+            model={{ ...MODEL, id: testOfferTileId("compact") }}
             size="compact"
             onPress={() => {}}
             testId="compact"
@@ -119,16 +120,16 @@ describe("OfferTile", () => {
 
   it("fills the circle with one, two, three, and four original-art panels", () => {
     const models: readonly [string, OfferTileModel, string][] = [
-      ["one", { id: "one", kind: "card-gift", card: CARDS[0] }, "single"],
+      ["one", { id: testOfferTileId("one"), kind: "card-gift", card: CARDS[0] }, "single"],
       [
         "two",
-        { id: "two", kind: "card-bundle", cards: [CARDS[0], CARDS[1]] },
+        { id: testOfferTileId("two"), kind: "card-bundle", cards: [CARDS[0], CARDS[1]] },
         "split-2",
       ],
       [
         "three",
         {
-          id: "three",
+          id: testOfferTileId("three"),
           kind: "card-bundle",
           cards: [CARDS[0], CARDS[1], CARDS[2]],
         },
@@ -269,7 +270,7 @@ describe("OfferTile", () => {
       [
         "one",
         {
-          id: "transfigure",
+          id: testOfferTileId("transfigure"),
           kind: "transfigure-card",
           card: CARDS[0],
           transfiguration: "Empowered",
@@ -278,7 +279,7 @@ describe("OfferTile", () => {
       [
         "two",
         {
-          id: "starters",
+          id: testOfferTileId("starters"),
           kind: "transfigure-starters",
           cards: [CARDS[0], CARDS[1]],
         },
@@ -286,7 +287,7 @@ describe("OfferTile", () => {
       [
         "three",
         {
-          id: "duplicate",
+          id: testOfferTileId("duplicate"),
           kind: "duplicate-card",
           cards: [CARDS[0], CARDS[1], CARDS[2]],
         },
@@ -294,7 +295,7 @@ describe("OfferTile", () => {
       [
         "four",
         {
-          id: "category",
+          id: testOfferTileId("category"),
           kind: "category-draft",
           cards: CARDS,
           category: { kind: "character" },
@@ -391,16 +392,16 @@ describe("OfferTile", () => {
       backgroundArt: { source: "card", imageNumber: 654321 },
     } as const;
     const gift: OfferTileModel = {
-      id: "dreamsign-gift",
+      id: testOfferTileId("dreamsign-gift"),
       kind: "dreamsign-gift",
       dreamsign: {
-        id: "c706d0ba-2f41-4b14-95d8-db168ac6246c",
+        id: testDreamsignId("c706d0ba-2f41-4b14-95d8-db168ac6246c"),
         name: assertLocalized("Amplified Acorn"),
         art: { kind: "dreamsign", imageName: "acorn_gold.png" },
       },
     };
     const addSite: OfferTileModel = {
-      id: "add-site",
+      id: testOfferTileId("add-site"),
       kind: "add-site",
       site: {
         id: "Duplication",

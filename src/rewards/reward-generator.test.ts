@@ -4,7 +4,7 @@ import {
   generateRewardSiteData as generateRewardSiteDataRaw,
   type RewardGenerationOptions,
 } from "./reward-generator";
-import { asDreamsignId } from "../types/identifiers";
+import { testDreamsignId } from "../types/test-identities";
 
 const ECONOMY = { fallbackEssence: { min: 17, max: 29 } };
 function generateRewardSiteData(
@@ -15,14 +15,14 @@ function generateRewardSiteData(
 
 const DREAMSIGN_TEMPLATES: DreamsignTemplate[] = [
   {
-    id: asDreamsignId("dreamsign-1"),
+    id: testDreamsignId("dreamsign-1"),
     name: "Dreamsign One",
     effectDescription: "First effect.",
     imageName: "dreamsign_one.png",
     imageAlt: "Dreamsign One art",
   },
   {
-    id: asDreamsignId("dreamsign-2"),
+    id: testDreamsignId("dreamsign-2"),
     name: "Dreamsign Two",
     effectDescription: "Second effect.",
   },

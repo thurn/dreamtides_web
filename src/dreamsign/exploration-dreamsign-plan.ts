@@ -18,7 +18,7 @@ import type {
 import type { DreamsignId } from "../types/identifiers";
 import { dreamsignIdFromUnknown } from "../types/identifiers";
 import type { ExplorationActionId } from "../types/identifiers";
-import { asSelectionKey } from "../types/identifiers";
+import { parseSelectionKey } from "../types/identifiers";
 
 export type ExplorationDreamsignEffectKind =
   | "gain-nightmare-and-dreamsign"
@@ -116,14 +116,14 @@ function contractFor(
 
 function dreamsignIdIndex(
   content: JourneyContent,
-): ReadonlyMap<string, DreamsignId> {
-  const index = new Map<string, DreamsignId>();
+): ReadonlySet<DreamsignId> {
+  const index = new Set<DreamsignId>();
   for (const template of content.dreamsignTemplates) {
-    index.set(template.id.toLowerCase(), template.id);
+    index.add(template.id);
   }
   for (const dreamsign of content.exploration?.customDreamsigns ?? []) {
     if (dreamsign.id !== undefined) {
-      index.set(dreamsign.id.toLowerCase(), dreamsign.id);
+      index.add(dreamsign.id);
     }
   }
   return index;
@@ -131,25 +131,19 @@ function dreamsignIdIndex(
 
 function randomPoolIdIndex(
   content: JourneyContent,
-): ReadonlyMap<string, DreamsignId> {
-  return new Map(
-    content.dreamsignTemplates.map((template) => [
-      template.id.toLowerCase(),
-      template.id,
-    ]),
-  );
+): ReadonlySet<DreamsignId> {
+  return new Set(content.dreamsignTemplates.map((template) => template.id));
 }
 
 function canonicalIds(
   ids: readonly DreamsignId[],
-  index: ReadonlyMap<string, DreamsignId>,
-  excluded: ReadonlySet<string> = new Set(),
+  index: ReadonlySet<DreamsignId>,
+  excluded: ReadonlySet<DreamsignId> = new Set(),
 ): DreamsignId[] {
   const result = new Set<DreamsignId>();
   for (const id of ids) {
-    const canonical = index.get(id.toLowerCase());
-    if (canonical !== undefined && !excluded.has(canonical.toLowerCase())) {
-      result.add(canonical);
+    if (index.has(id) && !excluded.has(id)) {
+      result.add(id);
     }
   }
   return [...result].sort((left, right) => left.localeCompare(right));
@@ -157,18 +151,18 @@ function canonicalIds(
 
 function heldIds(
   journey: JourneyState,
-  index: ReadonlyMap<string, DreamsignId>,
+  index: ReadonlySet<DreamsignId>,
 ): DreamsignId[] | null {
   const result: DreamsignId[] = [];
-  const seen = new Set<string>();
+  const seen = new Set<DreamsignId>();
   for (const dreamsign of journey.dreamsigns) {
     const canonical =
-      dreamsign.id === undefined
-        ? undefined
-        : index.get(dreamsign.id.toLowerCase());
-    if (canonical === undefined || seen.has(canonical.toLowerCase()))
+      dreamsign.id !== undefined && index.has(dreamsign.id)
+        ? dreamsign.id
+        : undefined;
+    if (canonical === undefined || seen.has(canonical))
       return null;
-    seen.add(canonical.toLowerCase());
+    seen.add(canonical);
     result.push(canonical);
   }
   return result;
@@ -274,7 +268,7 @@ export function prepareExplorationDreamsignPlan(input: {
     input.authoredNightmareCount,
     input.fixedDreamsignId,
   );
-  const excluded = new Set((held ?? []).map((id) => id.toLowerCase()));
+  const excluded = new Set(held ?? []);
   const poolBeforeIds = canonicalIds(
     input.journey.remainingDreamsignPool,
     poolIndex,
@@ -338,7 +332,7 @@ export function prepareExplorationDreamsignPlan(input: {
         scope: {
           journeySeed: input.journey.seed,
           siteUuid: input.site.id,
-          selectionKey: asSelectionKey(input.actionId),
+          selectionKey: parseSelectionKey(input.actionId),
         },
         count: contract.requestedCount,
         ...(contract.fixedDreamsignId === undefined
@@ -411,8 +405,8 @@ function poolAfter(
   preparation: ExplorationDreamsignPreparation,
   gainedIds: readonly DreamsignId[],
 ): DreamsignId[] {
-  const gained = new Set(gainedIds.map((id) => id.toLowerCase()));
-  return preparation.poolBasisIds.filter((id) => !gained.has(id.toLowerCase()));
+  const gained = new Set(gainedIds);
+  return preparation.poolBasisIds.filter((id) => !gained.has(id));
 }
 
 function mutation(input: {
@@ -466,7 +460,7 @@ export function resolveExplorationDreamsignPlan(input: {
     input.authoredNightmareCount,
     input.fixedDreamsignId,
   );
-  const excluded = new Set(held.map((id) => id.toLowerCase()));
+  const excluded = new Set(held);
   const currentPool = canonicalIds(
     input.journey.remainingDreamsignPool,
     poolIndex,
@@ -534,7 +528,7 @@ export function resolveExplorationDreamsignPlan(input: {
       contract.requestedCount ||
     input.preparation.preparedDreamsignIds.some(
       (id) =>
-        excluded.has(id.toLowerCase()) ||
+        excluded.has(id) ||
         (contract.kind !== "fixed-gain" &&
           !input.preparation.poolBasisIds.includes(id)) ||
         (contract.kind === "fixed-gain" && id !== contract.fixedDreamsignId),

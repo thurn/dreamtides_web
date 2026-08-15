@@ -1,15 +1,16 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../../types/test-identities";
 import { emptyBackRankSlots, emptyFrontRankSlots } from "../../test-support";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { wildflowerColossus } from "./wildflower-colossus";
-import { asBattleCardId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
 
 describe("starter character #515", () => {
   it("plays the character into the back rank without resolving its rules text", () => {
     const self: AiCard = {
-      battleCardId: asBattleCardId("colossus"),
+      battleCardId: parseBattleCardId("colossus"),
       cardNumber: 515,
-      name: "card",
+      name: testCardName("card"),
       energyCost: 6,
       basePrintedSpark: 6,
       sparkDelta: 0,

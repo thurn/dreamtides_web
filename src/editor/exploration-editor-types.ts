@@ -9,8 +9,9 @@ import type {
   RewardMechanicId,
   RewardSelectionPolicyId,
 } from "../reward-selection";
-import type { CardId } from "../types/card-identity";
+import type { CardId, CardSubtype } from "../types/card-identity";
 import type { DreamsignId, ExplorationActionId } from "../types/identifiers";
+import type { SourceRevision } from "../types/source-revision";
 
 export type EncounterRenderedTemplatePart =
   | { kind: "text"; text: string }
@@ -112,8 +113,8 @@ export interface ExplorationEditorAction {
   sparkBonus?: number;
   essence?: number;
   energyCostReduction?: number;
-  subtype?: string;
-  subtypeOptions?: string[];
+  subtype?: CardSubtype;
+  subtypeOptions?: CardSubtype[];
   nightmareCount?: number;
   transfiguration?: TransfigurationType;
   deckTarget?: "chosen" | "offered";
@@ -135,8 +136,8 @@ export interface ExplorationEditorServerData {
   effectSchemas: ExplorationEditorEffectSchema[];
   predicates: Array<{ value: string; label: string }>;
   transfigurations: TransfigurationType[];
-  subtypes: string[];
-  sourceRevision?: string;
+  subtypes: CardSubtype[];
+  sourceRevision?: SourceRevision;
 }
 
 export interface ExplorationEditorLoadResult extends ExplorationEditorServerData {

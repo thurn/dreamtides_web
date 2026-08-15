@@ -62,20 +62,20 @@ type SelectSize = "sm" | "md";
  * the button stays narrow enough to share a line.
  */
 /** One option whose copy remains localized until its DOM text node. */
-export interface SelectOption {
-  value: string;
+export interface SelectOption<Value extends string = string> {
+  value: Value;
   label: LocalizedString;
   triggerLabel?: LocalizedString;
   disabled?: boolean;
 }
 
-export interface SelectProps {
+export interface SelectProps<Value extends string = string> {
   /** The choices shown in the menu. */
-  options: SelectOption[];
+  options: SelectOption<Value>[];
   /** The currently-selected option's value. */
-  value: string;
+  value: Value;
   /** Fires with the newly-selected value when the user picks a menu item. */
-  onChange?: (value: string) => void;
+  onChange?: (value: Value) => void;
   /**
    * Leading glyph drawn at the start of the trigger — the control's identity
    * (a filled funnel for a filter, filled up/down arrows for a sort). It stands
@@ -138,7 +138,7 @@ interface MenuAnchor {
  * surface and whose menu is a portaled raised popover. `options` is the choice list,
  * `value` the selected value, `onChange(value)` fires on pick.
  */
-export function Select({
+export function Select<Value extends string>({
   options,
   value,
   onChange,
@@ -148,7 +148,7 @@ export function Select({
   align = "start",
   ariaLabel,
   placeholder,
-}: SelectProps): ReactElement {
+}: SelectProps<Value>): ReactElement {
   const spec = SIZES[size];
   const chrome = controlChrome();
   const { pressed, hovered, bind } = usePress();
@@ -478,21 +478,21 @@ export function Select({
   );
 }
 
-interface MenuItemProps {
-  option: SelectOption;
+interface MenuItemProps<Value extends string> {
+  option: SelectOption<Value>;
   active: boolean;
   disabled: boolean;
-  onPick: (value: string) => void;
+  onPick: (value: Value) => void;
 }
 
 /** One option row in the dropdown menu — a pressable line with a check on the
  *  selected value. */
-function MenuItem({
+function MenuItem<Value extends string>({
   option,
   active,
   disabled,
   onPick,
-}: MenuItemProps): ReactElement {
+}: MenuItemProps<Value>): ReactElement {
   const { pressed, hovered, bind } = usePress();
   const resolve = useLocalizer();
   const lit = active || hovered || pressed;

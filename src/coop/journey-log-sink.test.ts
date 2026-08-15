@@ -1,5 +1,12 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 import { describe, expect, it, vi } from "vitest";
-import type { GameEvent, Genesis } from "../eventlog/types";
+import {
+  parseEventNonce,
+  parseStateHash,
+  type GameEvent,
+  type Genesis,
+} from "../eventlog/types";
 import {
   genesisFoldState,
   type FoldState,
@@ -15,29 +22,47 @@ import {
   pruneLogEntries,
   type SinkRecord,
 } from "./journey-log-sink";
-import { asClientId } from "../types/identifiers";
+import { parseClientId, type ClientId } from "../types/identifiers";
+import {
+  testClientId,
+  testIntentKey,
+  testRoomId,
+} from "../types/test-identities";
+
+const ROOM_ID = testRoomId("room-1");
+const CLIENT_A_ID = testClientId("client-a");
 
 /**
  * A push-key stand-in that sorts chronologically the way Firebase push ids do:
  * a fixed-width, zero-padded, lexicographically-increasing string.
  */
-function pushKey(index: number): string {
+function pushKey(index: number): `-key${string}` {
   return `-key${index.toString().padStart(8, "0")}`;
 }
 
-function makeEvent(overrides: Partial<GameEvent> = {}): GameEvent {
+function makeEvent(
+  overrides: Omit<Partial<GameEvent>, "nonce" | "stateHashAfter"> & {
+    nonce?: string;
+    stateHashAfter?: string;
+  } = {},
+): GameEvent {
+  const { nonce, stateHashAfter, ...typedOverrides } = overrides;
   return {
     type: "PICK_DRAFT_CARD",
     payload: {},
-    actor: "client-a",
+    actor: testEventActor("client-a"),
     clientTimestamp: "0",
     basedOnSeq: 0,
-    ...overrides,
+    ...typedOverrides,
+    ...(nonce === undefined ? {} : { nonce: parseEventNonce(nonce) }),
+    ...(stateHashAfter === undefined
+      ? {}
+      : { stateHashAfter: parseStateHash(stateHashAfter) }),
   };
 }
 
 const CONTROL_GENESIS: Genesis = {
-  seed: "control-log-seed",
+  seed: testJourneySeed("control-log-seed"),
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: {
@@ -146,10 +171,10 @@ describe("createBufferedSink", () => {
 });
 
 describe("createCoopLogRecorder single-writer rule", () => {
-  function setup(clientId = "client-a") {
+  function setup(clientId: ClientId = CLIENT_A_ID) {
     const emitted: SinkRecord[] = [];
     const recorder = createCoopLogRecorder({
-      gameId: "room-1",
+      gameId: ROOM_ID,
       clientId,
       emit: (record) => emitted.push(record),
     });
@@ -159,7 +184,7 @@ describe("createCoopLogRecorder single-writer rule", () => {
   it("mirrors an owned event as the coop_event shape", () => {
     const { emitted, recorder } = setup();
     const recorded = recorder.recordCoopEvent(
-      makeEvent({ actor: "client-a" }),
+      makeEvent({ actor: testEventActor("client-a") }),
       5,
       "applied",
     );
@@ -170,7 +195,7 @@ describe("createCoopLogRecorder single-writer rule", () => {
         event: "coop_event",
         seq: 5,
         type: "PICK_DRAFT_CARD",
-        actor: "client-a",
+        actor: testEventActor("client-a"),
         outcome: "applied",
         gameId: "room-1",
       },
@@ -180,15 +205,15 @@ describe("createCoopLogRecorder single-writer rule", () => {
   it("records a logical intent key for automatic-flow reconstruction", () => {
     const { emitted, recorder } = setup();
     const event = {
-      ...makeEvent({ actor: "client-a" }),
-      intentKey: "battle:b-1:dreamwell:player:2",
+      ...makeEvent({ actor: testEventActor("client-a") }),
+      intentKey: testIntentKey("battle:b-1:dreamwell:player:2"),
     };
 
     recorder.recordCoopEvent(event, 5, "applied");
 
     expect(emitted[0]).toMatchObject({
       event: "coop_event",
-      intentKey: "battle:b-1:dreamwell:player:2",
+      intentKey: testIntentKey("battle:b-1:dreamwell:player:2"),
       outcome: "applied",
     });
   });
@@ -196,7 +221,7 @@ describe("createCoopLogRecorder single-writer rule", () => {
   it("mirrors the client's own ai:<clientId> events", () => {
     const { emitted, recorder } = setup();
     const recorded = recorder.recordCoopEvent(
-      makeEvent({ actor: "ai:client-a" }),
+      makeEvent({ actor: testEventActor("ai:client-a") }),
       6,
       "applied",
     );
@@ -209,21 +234,21 @@ describe("createCoopLogRecorder single-writer rule", () => {
     const { emitted, recorder } = setup();
     expect(
       recorder.recordCoopEvent(
-        makeEvent({ actor: "tutorial-ai:client-a" }),
+        makeEvent({ actor: testEventActor("tutorial-ai:client-a") }),
         7,
         "applied",
       ),
     ).toBe(true);
     expect(emitted[0]).toMatchObject({
       event: "coop_event",
-      actor: "tutorial-ai:client-a",
+      actor: testEventActor("tutorial-ai:client-a"),
     });
   });
 
   it("does not mirror events appended by another actor", () => {
     const { emitted, recorder } = setup();
     const recorded = recorder.recordCoopEvent(
-      makeEvent({ actor: "client-b" }),
+      makeEvent({ actor: testEventActor("client-b") }),
       7,
       "applied",
     );
@@ -258,11 +283,11 @@ describe("createCoopLogRecorder single-writer rule", () => {
     });
     const controlledByA = stateWithControl({
       mode: "single-controller",
-      controllerClientId: asClientId("client-a"),
+      controllerClientId: parseClientId("client-a"),
     });
     const controlledByB = stateWithControl({
       mode: "single-controller",
-      controllerClientId: asClientId("client-b"),
+      controllerClientId: parseClientId("client-b"),
     });
     const collaborative = stateWithControl({
       mode: "collaborative",
@@ -319,8 +344,16 @@ describe("createCoopLogRecorder single-writer rule", () => {
 
   it("emits the fold_divergence shape stamped with clientId and dedupes by seq", () => {
     const { emitted, recorder } = setup();
-    recorder.recordDivergence({ seq: 4, expected: "h1", actual: "h2" });
-    recorder.recordDivergence({ seq: 4, expected: "h1", actual: "h2" });
+    recorder.recordDivergence({
+      seq: 4,
+      expected: parseStateHash("h1"),
+      actual: parseStateHash("h2"),
+    });
+    recorder.recordDivergence({
+      seq: 4,
+      expected: parseStateHash("h1"),
+      actual: parseStateHash("h2"),
+    });
     expect(emitted).toEqual([
       {
         event: "fold_divergence",
@@ -336,9 +369,9 @@ describe("createCoopLogRecorder single-writer rule", () => {
   it("records replayable fold errors and dedupes them by seq", () => {
     const { emitted, recorder } = setup();
     const event = makeEvent({
-      actor: "client-b",
+      actor: testEventActor("client-b"),
       nonce: "client-b:9",
-      intentKey: "tutorial:advance:9",
+      intentKey: testIntentKey("tutorial:advance:9"),
       type: "ADVANCE_TUTORIAL",
     });
     const error = {
@@ -347,17 +380,27 @@ describe("createCoopLogRecorder single-writer rule", () => {
       stack: "Error: tutorial-authoritative-player mismatch",
     };
 
-    recorder.recordFoldError(error, event, "before-hash", "after-hash");
-    recorder.recordFoldError(error, event, "before-hash", "after-hash");
+    recorder.recordFoldError(
+      error,
+      event,
+      parseStateHash("before-hash"),
+      parseStateHash("after-hash"),
+    );
+    recorder.recordFoldError(
+      error,
+      event,
+      parseStateHash("before-hash"),
+      parseStateHash("after-hash"),
+    );
 
     expect(emitted).toEqual([
       {
         event: "fold_error",
         seq: 9,
         type: "ADVANCE_TUTORIAL",
-        actor: "client-b",
+        actor: testEventActor("client-b"),
         nonce: "client-b:9",
-        intentKey: "tutorial:advance:9",
+        intentKey: testIntentKey("tutorial:advance:9"),
         message: "tutorial-authoritative-player mismatch",
         stack: "Error: tutorial-authoritative-player mismatch",
         stateHashBefore: "before-hash",
@@ -377,8 +420,8 @@ describe("createCoopLogRecorder single-writer rule", () => {
           "Fold invariant violation: atlas_frontier_missing (1); atlas_frontier_unseen (node-2)",
       },
       makeEvent({ type: "END_BATTLE" }),
-      "before-hash",
-      "after-hash",
+      parseStateHash("before-hash"),
+      parseStateHash("after-hash"),
     );
 
     expect(emitted[0]).toMatchObject({
@@ -401,7 +444,7 @@ describe("createCoopLogRecorder single-writer rule", () => {
       payload: { tutorialRunId: "different" },
     };
     recorder.recordIntentKeyCollision({
-      intentKey: "tutorial-battle:event:1:begin",
+      intentKey: testIntentKey("tutorial-battle:event:1:begin"),
       winningSeq: 33,
       winner,
       contender,
@@ -418,7 +461,7 @@ describe("createCoopLogRecorder single-writer rule", () => {
       },
       {
         event: "semantic_intent_key_collision",
-        intentKey: "tutorial-battle:event:1:begin",
+        intentKey: testIntentKey("tutorial-battle:event:1:begin"),
         winningSeq: 33,
         winnerType: "BEGIN_TUTORIAL_BATTLE",
         contenderType: "BEGIN_TUTORIAL_BATTLE",
@@ -483,7 +526,7 @@ describe("createJourneyLogMirror", () => {
       event: "coop_event",
       seq: 42,
       type: "PICK_DRAFT_CARD",
-      actor: "client-a",
+      actor: testEventActor("client-a"),
       outcome: "applied",
       gameId: "room-1",
     };
@@ -507,22 +550,22 @@ describe("createCoopEmit two-destination delivery (spec §Logging)", () => {
       journeyLog.push(r),
     );
     const recorder = createCoopLogRecorder({
-      gameId: "room-1",
-      clientId: "client-a",
+      gameId: ROOM_ID,
+      clientId: CLIENT_A_ID,
       emit,
     });
 
     // Owned event -> both destinations.
     expect(
-      recorder.recordCoopEvent(makeEvent({ actor: "client-a" }), 5, "applied"),
+      recorder.recordCoopEvent(makeEvent({ actor: testEventActor("client-a") }), 5, "applied"),
     ).toBe(true);
     // Peer event -> neither destination (single-writer gate upstream of emit).
     expect(
-      recorder.recordCoopEvent(makeEvent({ actor: "client-b" }), 6, "applied"),
+      recorder.recordCoopEvent(makeEvent({ actor: testEventActor("client-b") }), 6, "applied"),
     ).toBe(false);
     // Refold re-reports seq 5 -> no duplicate in either destination.
     expect(
-      recorder.recordCoopEvent(makeEvent({ actor: "client-a" }), 5, "applied"),
+      recorder.recordCoopEvent(makeEvent({ actor: testEventActor("client-a") }), 5, "applied"),
     ).toBe(false);
 
     // Both destinations received exactly the one owned coop_event, seq intact.
@@ -532,7 +575,7 @@ describe("createCoopEmit two-destination delivery (spec §Logging)", () => {
     expect(roomLogs[0]).toMatchObject({
       event: "coop_event",
       seq: 5,
-      actor: "client-a",
+      actor: testEventActor("client-a"),
     });
   });
 });

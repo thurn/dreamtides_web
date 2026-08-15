@@ -1,4 +1,5 @@
 import type { Connect } from "vite";
+import type { SourceRevision } from "../src/types/source-revision";
 
 export const EXPLORATION_LOCALIZATION_PATHS: readonly string[];
 
@@ -20,7 +21,7 @@ export function createExplorationEditorApiMiddleware(options?: {
   dreamsignsTomlPath?: string;
   explorationJsonPath?: string;
   publishEdit?: (options: Record<string, unknown>) => Promise<{
-    sourceRevision: string;
+    sourceRevision: SourceRevision;
   }>;
   readData?: (options: Record<string, unknown>) => unknown;
   refreshLocalizationArtifacts?: (options: {
@@ -29,7 +30,7 @@ export function createExplorationEditorApiMiddleware(options?: {
   }) => void;
   onChanged?: (change: {
     kind: "prose" | "action";
-    cardId?: string;
+    cardId?: CardId;
     slot?: number;
   }) => void;
 }): Connect.NextHandleFunction;

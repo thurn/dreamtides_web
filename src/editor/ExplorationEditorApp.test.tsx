@@ -4,7 +4,7 @@ import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { Dreamsign } from "../types/journey";
 import ExplorationEditorApp from "./ExplorationEditorApp";
@@ -15,8 +15,7 @@ import type {
   ExplorationEditorLoadResult,
   ExplorationEditorServerData,
 } from "./exploration-editor-types";
-import { asDreamsignId } from "../types/identifiers";
-import { asExplorationActionId } from "../types/identifiers";
+import { testCardId, testDreamsignId, testExplorationActionId } from "../types/test-identities";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const REWARD_CARD_ID = "22222222-2222-4222-8222-222222222222";
@@ -111,8 +110,8 @@ const COUNTED_FREE_PURCHASE_SCHEMA = {
 } satisfies ExplorationEditorEffectSchema;
 
 const SOURCE_CARD: CardData = {
-  id: asCardId(CARD_ID),
-  name: asCardName("Fixture Guide"),
+  id: testCardId(CARD_ID),
+  name: parseCardName("Fixture Guide"),
   cardNumber: 42,
   cardType: "Character",
   subtype: "Guide",
@@ -126,13 +125,13 @@ const SOURCE_CARD: CardData = {
 };
 const REWARD_CARD: CardData = {
   ...SOURCE_CARD,
-  id: asCardId(REWARD_CARD_ID),
-  name: asCardName("Fixture Ally"),
+  id: testCardId(REWARD_CARD_ID),
+  name: parseCardName("Fixture Ally"),
   cardNumber: 84,
   imageNumber: 84,
 };
 const DREAMSIGN: Dreamsign = {
-  id: asDreamsignId(DREAMSIGN_ID),
+  id: testDreamsignId(DREAMSIGN_ID),
   name: "Bell",
   effectDescription: "At the start of battle, gain 1●.",
   imageName: "bell.png",
@@ -142,14 +141,14 @@ const DREAMSIGN: Dreamsign = {
 const SERVER_DATA: ExplorationEditorServerData = {
   encounters: [
     {
-      cardId: asCardId(CARD_ID),
+      cardId: testCardId(CARD_ID),
       cardName: "Fixture Guide",
       cardAbilityText: "▸Materialized: Gain 1●.",
       imageNumber: 42,
       prose: "A guide waits beside a starlit crossing.",
       actions: [
         {
-          id: asExplorationActionId(`${CARD_ID}:first`),
+          id: testExplorationActionId(`${CARD_ID}:first`),
           label: "Gather a company",
           effectText:
             "Choose one of 2 packs of 3 Character cards to add to your deck",
@@ -189,7 +188,7 @@ const SERVER_DATA: ExplorationEditorServerData = {
           packSize: 3,
         },
         {
-          id: asExplorationActionId(`${CARD_ID}:second`),
+          id: testExplorationActionId(`${CARD_ID}:second`),
           label: "Invite an ally",
           effectText: "Gain {offered_card}",
           renderedEffectText: "Gain Fixture Ally",
@@ -198,7 +197,7 @@ const SERVER_DATA: ExplorationEditorServerData = {
             {
               kind: "card",
               placeholder: "{offered_card}",
-              cardId: asCardId(REWARD_CARD_ID),
+              cardId: testCardId(REWARD_CARD_ID),
               cardName: "Fixture Ally",
             },
           ],
@@ -206,7 +205,7 @@ const SERVER_DATA: ExplorationEditorServerData = {
             {
               placeholder: "{offered_card}",
               predicate: "Character",
-              cardId: asCardId(REWARD_CARD_ID),
+              cardId: testCardId(REWARD_CARD_ID),
               cardName: "Fixture Ally",
               source: "offer_pool",
             },
@@ -335,7 +334,7 @@ describe("ExplorationEditorApp", () => {
     const loaded = loadResult();
     loaded.encounters.push({
       ...structuredClone(loaded.encounters[0]),
-      cardId: asCardId(LAST_CARD_ID),
+      cardId: testCardId(LAST_CARD_ID),
       cardName: "Last Authored Encounter",
     });
 
@@ -358,7 +357,7 @@ describe("ExplorationEditorApp", () => {
     const loaded = loadResult();
     loaded.encounters.push({
       ...structuredClone(loaded.encounters[0]),
-      cardId: asCardId(LAST_CARD_ID),
+      cardId: testCardId(LAST_CARD_ID),
       cardName: "Last Authored Encounter",
     });
     window.history.replaceState(
@@ -520,7 +519,7 @@ describe("ExplorationEditorApp", () => {
   it("submits Any card for optional predicates and hides it for required predicates", async () => {
     const loaded = loadResult();
     loaded.encounters[0].actions[0] = {
-      id: asExplorationActionId(`${CARD_ID}:first`),
+      id: testExplorationActionId(`${CARD_ID}:first`),
       label: "Purge anything",
       effectText: "Purge a chosen Character card",
       renderedEffectText: "Purge a chosen Character card",
@@ -776,7 +775,7 @@ describe("ExplorationEditorApp", () => {
     const loaded = loadResult();
     loaded.effectSchemas.push(structuredClone(FIXED_SITE_SCHEMA));
     loaded.encounters[0].actions[0] = {
-      id: asExplorationActionId(`${CARD_ID}:first`),
+      id: testExplorationActionId(`${CARD_ID}:first`),
       label: "Synthetic fixed-site action",
       effectText: "Synthetic fixed-site effect",
       renderedEffectText: "Synthetic fixed-site effect",
@@ -1021,7 +1020,7 @@ describe("ExplorationEditorApp", () => {
     const loaded = loadResult();
     loaded.effectSchemas.push(structuredClone(SITE_TYPE_CHOOSER_SCHEMA));
     loaded.encounters[0].actions[0] = {
-      id: asExplorationActionId(`${CARD_ID}:first`),
+      id: testExplorationActionId(`${CARD_ID}:first`),
       label: "Synthetic chooser",
       effectText: "Synthetic chooser effect",
       renderedEffectText: "Synthetic chooser effect",

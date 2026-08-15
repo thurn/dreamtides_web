@@ -1,15 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { buildCardSourceDebugState } from "./card-source-debug";
 import type { CardData } from "../types/cards";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import type { ResolvedDreamAvatarPackage } from "../types/content";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asDreamsignId } from "../types/identifiers";
+import { testDreamAvatarId, testDreamsignId, testCardId } from "../types/test-identities";
 
 function makeCard(cardNumber: number, name: string): CardData {
   return {
-    name: asCardName(name),
-    id: asCardId(`card-${String(cardNumber)}`),
+    name: parseCardName(name),
+    id: testCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
     subtype: "",
@@ -26,16 +25,16 @@ function makeCard(cardNumber: number, name: string): CardData {
 function makeResolvedPackage(): ResolvedDreamAvatarPackage {
   return {
     dreamAvatar: {
-      id: asDreamAvatarId("caller-1"),
+      id: testDreamAvatarId("caller-1"),
       name: "Caller",
       title: "Debug Witness",
       renderedText: "Test rules text.",
       imageNumber: "0009",
       startingEssence: 250,
-      signatureCards: [asCardName("Lantern Witness")],
+      signatureCards: [parseCardName("Lantern Witness")],
     },
     draftPoolCopiesByCard: { "2": 2, "7": 1 },
-    dreamsignPoolIds: [asDreamsignId("sign-1")],
+    dreamsignPoolIds: [testDreamsignId("sign-1")],
     mandatoryOnlyPoolSize: 200,
     draftPoolSize: 200,
     doubledCardCount: 10,

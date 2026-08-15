@@ -14,7 +14,8 @@ import type { JourneyState, SiteState } from "../types/journey";
 import type { DeckEntryId, SelectionKey } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import type { ExplorationActionId } from "../types/identifiers";
-import { asSelectionKey } from "../types/identifiers";
+import { parseSelectionKey } from "../types/identifiers";
+import type { SelectionContentRevision } from "../types/selection-content-revision";
 
 export type ExplorationDisclosedDeckTargetEffectKind =
   "change-card-type-selected";
@@ -34,7 +35,7 @@ export interface ExplorationDisclosedDeckTargetPreparation {
   eligibleCards: readonly ExplorationDisclosedDeckTargetBinding[];
   target: ExplorationDisclosedDeckTargetBinding | null;
   selectionRulesVersion: SelectionRulesVersion;
-  selectionContentRevision: string;
+  selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
   selectorSignature?: string;
   selectorTrace?: RewardSelectionTrace;
@@ -64,7 +65,7 @@ function isValidAuthoredInput(
 function selectionKey(
   input: ExplorationDisclosedDeckTargetPlanInput,
 ): SelectionKey {
-  return asSelectionKey(`${input.actionId}:disclosed-deck-target`);
+  return parseSelectionKey(`${input.actionId}:disclosed-deck-target`);
 }
 
 function eligibleBindings(
@@ -108,7 +109,7 @@ function signedPreparation(
 function unavailablePreparation(input: {
   plan: ExplorationDisclosedDeckTargetPlanInput;
   eligibleCards: readonly ExplorationDisclosedDeckTargetBinding[];
-  selectionContentRevision: string;
+  selectionContentRevision: SelectionContentRevision;
   reason: ExplorationDisclosedDeckTargetUnavailableReason;
 }): ExplorationDisclosedDeckTargetPreparation {
   return signedPreparation(input.plan, {

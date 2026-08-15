@@ -3,9 +3,10 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { buildStartingDeckView as buildStartingDeckViewImpl } from "./starting-deck-view-model";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 const buildStartingDeckView = (
   deck: readonly DeckEntry[],
@@ -17,8 +18,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       1,
       {
-        name: asCardName("Archive Sentry"),
-        id: asCardId("archive-sentry"),
+        name: parseCardName("Archive Sentry"),
+        id: testCardId("archive-sentry"),
         cardNumber: 1,
         cardType: "Character",
         subtype: "",
@@ -34,8 +35,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       2,
       {
-        name: asCardName("Glimpse of What Was"),
-        id: asCardId("glimpse"),
+        name: parseCardName("Glimpse of What Was"),
+        id: testCardId("glimpse"),
         cardNumber: 2,
         cardType: "Event",
         subtype: "",
@@ -54,13 +55,13 @@ function makeCardDatabase(): Map<number, CardData> {
 function makeDeck(): DeckEntry[] {
   return [
     {
-      entryId: asDeckEntryId("entry-1"),
+      entryId: parseDeckEntryId("entry-1"),
       cardNumber: 1,
       transfiguration: null,
       isBane: false,
     },
     {
-      entryId: asDeckEntryId("entry-2"),
+      entryId: parseDeckEntryId("entry-2"),
       cardNumber: 2,
       transfiguration: null,
       isBane: false,
@@ -91,13 +92,13 @@ describe("buildStartingDeckView", () => {
     // order the entries were acquired.
     const deck: DeckEntry[] = [
       {
-        entryId: asDeckEntryId("entry-2"),
+        entryId: parseDeckEntryId("entry-2"),
         cardNumber: 2,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: asDeckEntryId("entry-1"),
+        entryId: parseDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
@@ -112,20 +113,20 @@ describe("buildStartingDeckView", () => {
   it("drops an entry whose card is not in the database", () => {
     const deck: DeckEntry[] = [
       {
-        entryId: asDeckEntryId("entry-1"),
+        entryId: parseDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
       },
       // cardNumber 99 is absent from the database.
       {
-        entryId: asDeckEntryId("entry-missing"),
+        entryId: parseDeckEntryId("entry-missing"),
         cardNumber: 99,
         transfiguration: null,
         isBane: false,
       },
       {
-        entryId: asDeckEntryId("entry-2"),
+        entryId: parseDeckEntryId("entry-2"),
         cardNumber: 2,
         transfiguration: null,
         isBane: false,
@@ -140,7 +141,7 @@ describe("buildStartingDeckView", () => {
   it("applies a debug stat override to the resolved card", () => {
     const deck: DeckEntry[] = [
       {
-        entryId: asDeckEntryId("entry-1"),
+        entryId: parseDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,
@@ -156,7 +157,7 @@ describe("buildStartingDeckView", () => {
   it("applies a persistent spark bonus to the resolved card", () => {
     const deck: DeckEntry[] = [
       {
-        entryId: asDeckEntryId("entry-1"),
+        entryId: parseDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,

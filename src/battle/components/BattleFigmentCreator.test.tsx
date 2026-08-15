@@ -20,7 +20,7 @@ import {
 } from "../test-support";
 import { BattleFigmentCreator } from "./BattleFigmentCreator";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
-import { asBattleEntryKey } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 
 function LocalizedBattleFigmentCreator(
@@ -36,7 +36,7 @@ function LocalizedBattleFigmentCreator(
 function state() {
   return createInitialBattleState(
     createTestBattleInit({
-      battleEntryKey: asBattleEntryKey("test"),
+      battleEntryKey: parseBattleEntryKey("test"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),

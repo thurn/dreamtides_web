@@ -1,16 +1,17 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../types/cards";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName, type CardId } from "../types/card-identity";
 import { resolveTideDeck } from "./tide-deck-resolution";
+import { testCardId, testTideId } from "../types/test-identities";
 
-function makeCard(id: string, cardNumber: number, name: string): CardData {
+function makeCard(idSeed: string, cardNumber: number, name: string): CardData {
   return {
-    name: asCardName(name),
-    id: asCardId(id),
+    name: parseCardName(name),
+    id: testCardId(idSeed),
     cardNumber,
     cardType: "Character",
-    subtype: "Unit",
+    subtype: "Warrior",
     isStarter: false,
     energyCost: 1,
     spark: 1,
@@ -23,7 +24,7 @@ function makeCard(id: string, cardNumber: number, name: string): CardData {
 
 function makeDeck(cards: Tides4DeckJson["cards"]): Tides4DeckJson {
   return {
-    id: "tide-fac-01",
+    id: testTideId("tide-fac-01"),
     displayName: "Test tide",
     displayDescription: "Test description",
     resonance: "shadow",
@@ -32,8 +33,8 @@ function makeDeck(cards: Tides4DeckJson["cards"]): Tides4DeckJson {
   };
 }
 
-function cardsByUuid(...cards: CardData[]): ReadonlyMap<string, CardData> {
-  return new Map(cards.map((card) => [card.id.toLowerCase(), card]));
+function cardsByUuid(...cards: CardData[]): ReadonlyMap<CardId, CardData> {
+  return new Map(cards.map((card) => [card.id, card]));
 }
 
 describe("resolveTideDeck", () => {
@@ -67,7 +68,7 @@ describe("resolveTideDeck", () => {
   it("matches UUIDs case-insensitively", () => {
     const a = makeCard("aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa", 7, "Alpha");
     const deck = makeDeck([
-      { id: a.id.toUpperCase(), copies: 1 },
+      { id: testCardId(a.id.toUpperCase()), copies: 1 },
     ]);
 
     const resolution = resolveTideDeck(deck, cardsByUuid(a));
@@ -81,8 +82,8 @@ describe("resolveTideDeck", () => {
     const a = makeCard("11111111-1111-1111-1111-111111111111", 1, "Alpha");
     const deck = makeDeck([
       { id: a.id, copies: 1 },
-      { id: "99999999-9999-9999-9999-999999999999", copies: 2 },
-      { id: "00000000-0000-0000-0000-000000000000", copies: 1 },
+      { id: testCardId("99999999-9999-9999-9999-999999999999"), copies: 2 },
+      { id: testCardId("00000000-0000-0000-0000-000000000000"), copies: 1 },
     ]);
 
     const resolution = resolveTideDeck(deck, cardsByUuid(a));

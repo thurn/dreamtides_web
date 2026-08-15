@@ -8,7 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import { PLAYING_CARD_DESIGN } from "../components/card/PlayingCard";
 import {
   GambleSiteScreen,
@@ -23,13 +23,18 @@ import {
   transfigurationFormFixture,
 } from "../test-helpers/transfiguration-fixture";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
-import { asSiteId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import {
+  testCardId,
+  testDreamsignId,
+  testGambleResultId,
+  testGuideId,
+  testShuffleCommitment,
+} from "../../types/test-identities";
 
 const JACKPOT_DREAMSIGN = localizedDreamsignFixture({
-  id: asDreamsignId("00000000-0000-4000-8000-000000000041"),
+  id: testDreamsignId("00000000-0000-4000-8000-000000000041"),
   name: "Fixture Jackpot",
   imageName: "fixture-jackpot.png",
   effectDescription: "Foresee 1.",
@@ -37,7 +42,7 @@ const JACKPOT_DREAMSIGN = localizedDreamsignFixture({
 
 const VIEW: GravokWagerSiteView = {
   gameId: "gravok-three-gate-wager",
-  siteId: asSiteId("fixture-gamble-site"),
+  siteId: parseSiteId("fixture-gamble-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
@@ -78,10 +83,10 @@ const VIEW: GravokWagerSiteView = {
     },
   ],
   guide: {
-    id: "fixture-guide",
+    id: testGuideId("fixture-guide"),
     name: assertLocalized("Fixture Guide"),
     line: assertLocalized("A fixture gamble."),
-    art: artRef.dreamGuide(asGuideId("fixture-guide")),
+    art: artRef.dreamGuide(testGuideId("fixture-guide")),
   },
   result: null,
   replacement: null,
@@ -89,7 +94,7 @@ const VIEW: GravokWagerSiteView = {
 
 const STARWAY_VIEW: StarwayStairsSiteView = {
   gameId: "starway-stairs",
-  siteId: asSiteId("fixture-gamble-site"),
+  siteId: parseSiteId("fixture-gamble-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
@@ -121,12 +126,12 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
   ],
   currentTierNumber: 1,
   guide: {
-    id: "gravok",
+    id: testGuideId("gravok"),
     name: assertLocalized("Gravok"),
     line: assertLocalized(
       "Starway Stairs is the game. Keep betting to see how high you can go!",
     ),
-    art: artRef.dreamGuide(asGuideId("gravok")),
+    art: artRef.dreamGuide(testGuideId("gravok")),
   },
   result: null,
   cashOutReward: null,
@@ -136,8 +141,8 @@ const STARWAY_VIEW: StarwayStairsSiteView = {
 
 function fourSuitCard(index: number): CardData {
   return {
-    name: asCardName(`Four Suit Fixture ${String(index)}`),
-    id: asCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    name: parseCardName(`Four Suit Fixture ${String(index)}`),
+    id: testCardId(`00000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
     cardNumber: index,
     cardType: "Character",
     subtype: "",
@@ -154,7 +159,7 @@ function fourSuitCard(index: number): CardData {
 function fourSuitCardView(index: number) {
   const card = fourSuitCard(index);
   return {
-    entryId: asDeckEntryId(`four-suit-entry-${String(index)}`),
+    entryId: parseDeckEntryId(`four-suit-entry-${String(index)}`),
     cardId: card.id,
     model: { cardId: card.id, displaySnapshot: card },
   };
@@ -162,7 +167,7 @@ function fourSuitCardView(index: number) {
 
 const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
   gameId: "four-suit-reprise",
-  siteId: asSiteId("fixture-gamble-site"),
+  siteId: parseSiteId("fixture-gamble-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
@@ -180,10 +185,10 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
   phase: "choose",
   cards: [fourSuitCardView(1), fourSuitCardView(2)],
   guide: {
-    id: "gravok",
+    id: testGuideId("gravok"),
     name: assertLocalized("Gravok"),
     line: assertLocalized("A fixture gamble."),
-    art: artRef.dreamGuide(asGuideId("gravok")),
+    art: artRef.dreamGuide(testGuideId("gravok")),
   },
   result: null,
   canPlayAgain: false,
@@ -191,8 +196,8 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
 
 const BLACKJACK_VIEW: BlackjackSiteView = {
   gameId: "blackjack",
-  siteId: asSiteId("fixture-gamble-site"),
-  handId: "fixture-blackjack-hand",
+  siteId: parseSiteId("fixture-gamble-site"),
+  handId: testShuffleCommitment("fixture-blackjack-hand"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
@@ -213,10 +218,10 @@ const BLACKJACK_VIEW: BlackjackSiteView = {
   resultId: null,
   canPlayAgain: false,
   guide: {
-    id: "gravok",
+    id: testGuideId("gravok"),
     name: assertLocalized("Gravok"),
     line: assertLocalized("A fixture gamble."),
-    art: artRef.dreamGuide(asGuideId("gravok")),
+    art: artRef.dreamGuide(testGuideId("gravok")),
   },
 };
 
@@ -230,7 +235,7 @@ function fourSuitResultView(
     phase: "result",
     cards: [FOUR_SUIT_VIEW.cards[1]],
     result: {
-      id: "four-suit-result-1",
+      id: testGambleResultId("four-suit-result-1"),
       roundNumber: 1,
       card: { rank: "A", suit: "spades" },
       outcome: "transfiguration",
@@ -433,7 +438,7 @@ describe("GambleSiteScreen", () => {
       ...VIEW,
       card: { rank: "Q", suit: "hearts" },
       result: {
-        id: "fixture-result",
+        id: testGambleResultId("fixture-result"),
         gateId: "nine",
         revealGateId: "jack",
         won: true,
@@ -607,11 +612,16 @@ describe("GambleSiteScreen", () => {
   it("opens the shared Dreamsign replacement flow after an at-cap jackpot", () => {
     vi.useFakeTimers();
     const onReplaceDreamsign = vi.fn();
+    const heldDreamsign = localizedDreamsignFixture({
+      id: testDreamsignId("held-sign"),
+      name: "Held Sign",
+      effectDescription: "A held effect.",
+    });
     const replacementView: GravokWagerSiteView = {
       ...VIEW,
       card: { rank: "A", suit: "clubs" },
       result: {
-        id: "fixture-jackpot-result",
+        id: testGambleResultId("fixture-jackpot-result"),
         gateId: "jack",
         revealGateId: "six",
         won: true,
@@ -622,13 +632,7 @@ describe("GambleSiteScreen", () => {
       },
       replacement: {
         incoming: JACKPOT_DREAMSIGN,
-        held: [
-          localizedDreamsignFixture({
-            id: asDreamsignId("held-sign"),
-            name: "Held Sign",
-            effectDescription: "A held effect.",
-          }),
-        ],
+        held: [heldDreamsign],
         capacity: 1,
       },
     };
@@ -653,11 +657,11 @@ describe("GambleSiteScreen", () => {
     act(() => {
       container
         .querySelector<HTMLButtonElement>(
-          '[data-replace-dreamsign-id="held-sign"] button',
+          `[data-replace-dreamsign-id="${heldDreamsign.id}"] button`,
         )
         ?.click();
     });
-    expect(onReplaceDreamsign).toHaveBeenCalledWith("held-sign");
+    expect(onReplaceDreamsign).toHaveBeenCalledWith(heldDreamsign.id);
 
     act(() => root.unmount());
   });
@@ -665,7 +669,7 @@ describe("GambleSiteScreen", () => {
 
 const LADDER_VIEW: LadderClimbSiteView = {
   gameId: "tidemark-ladder-climb",
-  siteId: asSiteId("fixture-gamble-site"),
+  siteId: parseSiteId("fixture-gamble-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
@@ -783,7 +787,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
               ...LADDER_VIEW,
               nextDraw: null,
               result: {
-                id: "ladder-continuity",
+                id: testGambleResultId("ladder-continuity"),
                 attemptNumber: 1,
                 targetRank: "Q",
                 card: { rank: "J", suit: "clubs" },
@@ -823,7 +827,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       ...LADDER_VIEW,
       nextDraw: null,
       result: {
-        id: "ladder-attempt-1",
+        id: testGambleResultId("ladder-attempt-1"),
         attemptNumber: 1,
         targetRank: "Q",
         card: { rank: "J", suit: "clubs" },
@@ -912,7 +916,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       ...LADDER_VIEW,
       nextDraw: null,
       result: {
-        id: "ladder-win",
+        id: testGambleResultId("ladder-win"),
         attemptNumber: 1,
         targetRank: "Q",
         card: { rank: "A", suit: "hearts" },
@@ -989,7 +993,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       ...LADDER_VIEW,
       nextDraw: null,
       result: {
-        id: "ladder-reward-flight",
+        id: testGambleResultId("ladder-reward-flight"),
         attemptNumber: 1,
         targetRank: "Q",
         card: { rank: "A", suit: "hearts" },
@@ -1124,7 +1128,7 @@ describe("GambleSiteScreen — Starway Stairs", () => {
       ),
       currentTierNumber: 2,
       result: {
-        id: "starway-tier-1",
+        id: testGambleResultId("starway-tier-1"),
         tierNumber: 1,
         busted: false,
         resultSettled: true,
@@ -1233,7 +1237,7 @@ describe("GambleSiteScreen — Starway Stairs", () => {
       ),
       currentTierNumber: null,
       result: {
-        id: "starway-tier-1-bust",
+        id: testGambleResultId("starway-tier-1-bust"),
         tierNumber: 1,
         busted: true,
         resultSettled: true,
@@ -1296,7 +1300,7 @@ describe("GambleSiteScreen — Starway Stairs", () => {
           currentTierNumber: null,
           terminalReason: "bust",
           result: {
-            id: "starway-final-round",
+            id: testGambleResultId("starway-final-round"),
             tierNumber: 1,
             busted: true,
             resultSettled: true,
@@ -1944,7 +1948,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
           outcome: "player-win",
           essenceAwarded: 300,
           resultSettled: true,
-          resultId: "fixture-blackjack-result",
+          resultId: testGambleResultId("fixture-blackjack-result"),
         }}
         onChooseGate={() => undefined}
         onLeave={() => undefined}
@@ -1996,7 +2000,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
           dealerRevealed: true,
           outcome: "player-win",
           essenceAwarded: 300,
-          resultId: "fixture-blackjack-unsettled",
+          resultId: testGambleResultId("fixture-blackjack-unsettled"),
         }}
         onChooseGate={() => undefined}
         onLeave={() => undefined}
@@ -2034,7 +2038,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
           outcome: "push",
           essenceAwarded: 50,
           resultSettled: true,
-          resultId: "fixture-blackjack-push",
+          resultId: testGambleResultId("fixture-blackjack-push"),
           canPlayAgain: true,
         }}
         onChooseGate={() => undefined}

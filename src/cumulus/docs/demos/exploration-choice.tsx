@@ -2,14 +2,15 @@ import { useState } from "react";
 import { assertLocalized } from "@trox/runtime";
 import { ExplorationChoice } from "../../components/controls/ExplorationChoice";
 import type { CumulusComponent } from "../registry";
-import { demoCard, demoDreamsign, demoInstanceId } from "./promotion-fixtures";
+import { demoCard, demoDreamsign, demoIdentitySeed } from "./promotion-fixtures";
 import { DemoControls, DemoLog, DemoSelect } from "./promotion-demo-controls";
-import { asDeckEntryId } from "../../../types/identifiers";
-import { asExplorationActionId } from "../../../types/identifiers";
+import { parseDeckEntryId } from "../../../types/identifiers";
+import { parseExplorationActionId } from "../../../types/identifiers";
+import { parseCardId } from "../../../types/card-identity";
 const cardEntity = {
   kind: "card" as const,
-  id: "90000000-0000-4000-8000-000000000001",
-  entryId: asDeckEntryId(demoInstanceId(1)),
+  id: parseCardId("90000000-0000-4000-8000-000000000001"),
+  entryId: parseDeckEntryId(demoIdentitySeed(1)),
   label: assertLocalized("Wayfinder"),
   card: demoCard(1, "Wayfinder"),
 };
@@ -48,7 +49,7 @@ function Demo() {
       </DemoControls>
       <ExplorationChoice
         model={{
-          actionId: asExplorationActionId(
+          actionId: parseExplorationActionId(
             "94000000-0000-4000-8000-000000000001",
           ),
           label: assertLocalized("Follow the signal"),

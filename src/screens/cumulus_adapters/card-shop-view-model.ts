@@ -39,7 +39,7 @@ import {
 } from "./shop-free-purchase-view-model";
 import type { GuideId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
 import type { ExplorationActionId } from "../../types/identifiers";
 
 /** Resolve Tobias, the resident Dream Guide for Card Shops. */
@@ -81,7 +81,7 @@ export function buildCardShopOffers(
           );
     const price = effectivePrice(slot, priceModifiers);
     offers.push({
-      entryId: asDeckEntryId(`shop-slot-${String(slotIndex)}-${card.id}`),
+      entryId: parseDeckEntryId(`shop-slot-${String(slotIndex)}-${card.id}`),
       slotIndex,
       model:
         transfigured === null
@@ -111,7 +111,7 @@ export function buildCardShopRestock(
 ): CardShopRestockView {
   const price = rerollCost(config, runtime.rerollCount, site.isEnhanced);
   return {
-    entryId: asDeckEntryId(`shop-restock-${site.id}`),
+    entryId: parseDeckEntryId(`shop-restock-${site.id}`),
     price,
     state:
       runtime.rerollCount >= config.maxPerVisit

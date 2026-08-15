@@ -1,12 +1,13 @@
 import type { DraftData } from "../types/draft-data";
+import { testContentHash, testFoldHash } from "../types/test-identities";
 
 export function draftDataFixture(
   overrides: Partial<DraftData> = {},
 ): DraftData {
   return {
     schemaVersion: 1,
-    contentHash: "a".repeat(64),
-    foldHash: "b".repeat(64),
+    contentHash: testContentHash("a"),
+    foldHash: testFoldHash("b"),
     presentation: { progress: "Draft ({pick_number}/{pick_total})" },
     offers: {
       cardsPerOffer: 4,

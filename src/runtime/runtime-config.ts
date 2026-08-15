@@ -8,9 +8,10 @@ import type { RewardSelectionData } from "../types/reward-selection-data";
 import type { AuguryData } from "../types/augury-data";
 import type { GambleData } from "../types/gamble-data";
 import type { TransfigurationData } from "../types/transfiguration-data";
-import { asCardId, isCardId, type CardId } from "../types/card-identity";
+import { parseCardId, isCardId, type CardId } from "../types/card-identity";
 import type { GambleGameId } from "../types/gamble";
-import { asQaSceneId, type QaSceneId, type RoomId } from "../types/identifiers";
+import { parseQaSceneId, type QaSceneId, type RoomId } from "../types/identifiers";
+import type { FoldHash } from "../types/content-hash";
 
 export interface RuntimeConfig {
   seedOverride: number | null;
@@ -82,8 +83,8 @@ export type DatabaseMode = "emulator" | "realtime";
  * differing purely in presentation still fold — and join — the same room.
  */
 export function contentConfigFromRuntime(
-  atlasFoldHash: string,
-  sitesFoldHash: string,
+  atlasFoldHash: FoldHash,
+  sitesFoldHash: FoldHash,
   draftData: DraftData,
   economyData: EconomyData,
   gambleData: GambleData,
@@ -91,8 +92,8 @@ export function contentConfigFromRuntime(
   opponentsData: OpponentsData,
   rewardSelectionData: RewardSelectionData,
   auguryData: AuguryData,
-  explorationFoldHash: string,
-  tutorialFoldHash: string,
+  explorationFoldHash: FoldHash,
+  tutorialFoldHash: FoldHash,
 ): PinnedContentConfig {
   return {
     poolVariant: draftData.pool.defaultStrategy,
@@ -189,10 +190,10 @@ function parseQaStarterInteger(rawValue: string | null): number | null {
     : null;
 }
 
-function parseExplorationCardId(rawCardId: string | null): CardId | null {
-  if (rawCardId === null) return null;
-  const normalized = rawCardId.trim().toLowerCase();
-  return isCardId(normalized) ? asCardId(normalized) : null;
+function parseExplorationCardId(rawValue: string | null): CardId | null {
+  if (rawValue === null) return null;
+  const normalized = rawValue.trim().toLowerCase();
+  return isCardId(normalized) ? parseCardId(normalized) : null;
 }
 
 function parseGambleGameId(rawGame: string | null): GambleGameId | null {
@@ -217,7 +218,7 @@ function parseGotoScene(rawScene: string | null): QaSceneId | null {
     return null;
   }
   const trimmed = rawScene.trim();
-  return trimmed === "" ? null : asQaSceneId(trimmed);
+  return trimmed === "" ? null : parseQaSceneId(trimmed);
 }
 
 function parseDatabaseMode(rawRealtime: string | null): DatabaseMode {

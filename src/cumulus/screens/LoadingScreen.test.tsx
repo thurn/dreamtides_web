@@ -3,10 +3,11 @@
 import { act, createElement, type ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { CumulusRoot } from "../CumulusRoot";
 import { LoadingScreen, type LoadingView } from "./LoadingScreen";
+import { testCardId } from "../../types/test-identities";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -75,16 +76,16 @@ vi.mock("framer-motion", () => ({
 }));
 
 function card(
-  id: string,
+  idSeed: string,
   cardNumber: number,
   cardType: CardData["cardType"],
 ): CardData {
   return {
-    id: asCardId(id),
-    name: asCardName(`Fixture ${String(cardNumber)}`),
+    id: testCardId(idSeed),
+    name: parseCardName(`Fixture ${String(cardNumber)}`),
     cardNumber,
     cardType,
-    subtype: cardType === "Character" ? "Fixture" : "",
+    subtype: cardType === "Character" ? "Warrior" : "",
     isStarter: true,
     energyCost: cardNumber,
     spark: cardType === "Character" ? 3 : null,

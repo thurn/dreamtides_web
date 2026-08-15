@@ -1,5 +1,8 @@
 import CardBrowserGrid from "./card-browser/CardBrowserGrid";
-import type { CardNameSubstringGroup } from "./card-name-substring-groups";
+import type {
+  CardNameSubstringGroup,
+  CardNameSubstringOccurrenceKey,
+} from "./card-name-substring-groups";
 import EditableCard from "./EditableCard";
 import type { CardDuplicateUsage } from "./card-duplicate-usage";
 import type { EditableSaveState, EditableFieldValue } from "./save-state";
@@ -11,17 +14,25 @@ import type {
   EditorTag,
 } from "./types";
 import type { CardId } from "../types/card-identity";
+import type { IdentityRecord } from "../types/identifiers";
 
 export interface CardTagSaveState {
   saving: boolean;
   error: string | null;
 }
 
+function groupedCardOccurrenceKey(
+  group: CardNameSubstringGroup,
+  cardId: CardId,
+): CardNameSubstringOccurrenceKey {
+  return `${group.key}\u0000${cardId}`;
+}
+
 export interface CardEditorGridProps {
   cards: readonly EditorCardRecord[];
   /** Grouped name-substring sections; omitted for conventional flat sorting. */
   substringGroups?: readonly CardNameSubstringGroup[];
-  duplicateUsageByCardId: ReadonlyMap<string, CardDuplicateUsage>;
+  duplicateUsageByCardId: ReadonlyMap<CardId, CardDuplicateUsage>;
   size: EditorDisplayState["size"];
   saveState: EditableSaveState;
   tagEditing: boolean;
@@ -34,8 +45,8 @@ export interface CardEditorGridProps {
   eagerRulesFit: boolean;
   availableTags: EditorTag[];
   availableTides: EditorTag[];
-  tagSaveState: Record<string, CardTagSaveState>;
-  tideSaveState: Record<string, CardTagSaveState>;
+  tagSaveState: IdentityRecord<CardId, CardTagSaveState>;
+  tideSaveState: IdentityRecord<CardId, CardTagSaveState>;
   onRulesFontSize?: (cardId: CardId, fontSizePx: number) => void;
   onOpenArtEditor: (card: EditorCardRecord) => void;
   onFieldBeginEdit: (
@@ -110,7 +121,7 @@ export default function CardEditorGrid({
     | {
         kind: "card";
         card: EditorCardRecord;
-        occurrenceKey: string;
+        occurrenceKey: CardNameSubstringOccurrenceKey;
       };
 
   const entries: GridEntry[] =
@@ -125,7 +136,7 @@ export default function CardEditorGrid({
           ...group.cards.map((card) => ({
             kind: "card" as const,
             card,
-            occurrenceKey: `${group.key}\u0000${card.id}`,
+            occurrenceKey: groupedCardOccurrenceKey(group, card.id),
           })),
         ]);
 

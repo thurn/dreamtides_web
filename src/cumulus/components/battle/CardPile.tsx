@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import type { CSSProperties } from "react";
 import { token } from "../../primitives/tokens";
+import type { DomTestId } from "../../types/dom";
 import { CardView, type GameCardModel } from "../card/CardView";
 import {
   CARD_ASPECT_H,
@@ -52,7 +53,7 @@ export interface CardPileProps {
   /** Primary press action for the pile as one zone control. */
   readonly onPress?: () => void;
   /** Optional stable test id for the pile as a whole. */
-  readonly testId?: string;
+  readonly testId?: DomTestId;
 }
 
 /** Maximum number of physical card layers a pile paints. */

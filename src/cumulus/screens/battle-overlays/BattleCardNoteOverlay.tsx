@@ -138,9 +138,7 @@ export function BattleCardNoteOverlay({
               },
             ]}
             value={expiryOption}
-            onChange={(value) =>
-              onExpiryChange(value as BattleCardNoteExpiryOption)
-            }
+            onChange={onExpiryChange}
           />
         </div>
         {expiryOption === "after-n-turns" ? (

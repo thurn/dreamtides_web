@@ -14,7 +14,10 @@ import {
 } from "./tutorial-placement";
 import { tx } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
-import type { PresentationId } from "../../../types/identifiers";
+import type {
+  PresentationId,
+  TutorialTriggerId,
+} from "../../../types/identifiers";
 
 function measuredRect(
   element: HTMLElement,
@@ -77,7 +80,7 @@ export interface ViewportTutorialDialogueProps {
   /** Optional tutorial-state diagnostics retained on semantic attributes. */
   readonly diagnostics?: {
     /** Stable tutorial trigger identity. */
-    readonly triggerId?: string;
+    readonly triggerId?: TutorialTriggerId;
     /** Zero-based message position within the active trigger. */
     readonly messageIndex?: number;
   };

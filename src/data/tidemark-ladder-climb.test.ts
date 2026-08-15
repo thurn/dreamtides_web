@@ -3,7 +3,6 @@ import {
   makeMerchantTestCard,
   makeMerchantTestDreamsignTemplate,
 } from "../journey_v2/testing/fixtures";
-import { asCardId } from "../types/card-identity";
 import {
   nextTidemarkLadderClimbAttemptNumber,
   rankWinsTidemarkLadderClimbAttempt,
@@ -16,8 +15,7 @@ import {
   buildAffinityContext,
   buildTideAffinityIndex,
 } from "../selection/tide-affinity";
-import { asDreamsignId } from "../types/identifiers";
-import { asTideId } from "../types/identifiers";
+import { testDreamsignId, testTideId, testCardId } from "../types/test-identities";
 
 describe("Tidemark Ladder Climb rules", () => {
   const economy = {
@@ -109,41 +107,41 @@ describe("Tidemark Ladder Climb rules", () => {
   it("sorts eligible Dreamsigns by tide affinity, rarity, and UUID", () => {
     const deckCards = [
       makeMerchantTestCard({
-        id: asCardId("00000000-0000-4000-8000-000000000001"),
+        id: testCardId("00000000-0000-4000-8000-000000000001"),
         cardNumber: 1,
-        subtype: "Wolf",
+        subtype: "Spirit Animal",
       }),
       makeMerchantTestCard({
-        id: asCardId("00000000-0000-4000-8000-000000000002"),
+        id: testCardId("00000000-0000-4000-8000-000000000002"),
         cardNumber: 2,
-        subtype: "Wolf",
+        subtype: "Spirit Animal",
       }),
       makeMerchantTestCard({
-        id: asCardId("00000000-0000-4000-8000-000000000003"),
+        id: testCardId("00000000-0000-4000-8000-000000000003"),
         cardNumber: 3,
-        subtype: "Wolf",
+        subtype: "Spirit Animal",
       }),
     ];
     const templates = [
       makeMerchantTestDreamsignTemplate({
-        id: asDreamsignId("sign-z-matched"),
+        id: testDreamsignId("sign-z-matched"),
         rarity: "Common",
-        tideIds: [asTideId("wolf-tide")],
+        tideIds: [testTideId("wolf-tide")],
       }),
       makeMerchantTestDreamsignTemplate({
-        id: asDreamsignId("sign-b-generic"),
+        id: testDreamsignId("sign-b-generic"),
         rarity: "Uncommon",
         tideIds: [],
       }),
       makeMerchantTestDreamsignTemplate({
-        id: asDreamsignId("sign-a-generic"),
+        id: testDreamsignId("sign-a-generic"),
         rarity: "Uncommon",
         tideIds: [],
       }),
       makeMerchantTestDreamsignTemplate({
-        id: asDreamsignId("sign-off-deck"),
+        id: testDreamsignId("sign-off-deck"),
         rarity: "Common",
-        tideIds: [asTideId("dragon-tide")],
+        tideIds: [testTideId("dragon-tide")],
       }),
     ];
     const affinityIndex = buildTideAffinityIndex({
@@ -152,7 +150,7 @@ describe("Tidemark Ladder Climb rules", () => {
       tidePoolByDreamAvatar: {},
       tides: [
         {
-          id: "wolf-tide",
+          id: testTideId("wolf-tide"),
           displayName: "Wolf Tide",
           displayDescription: "",
           resonance: "ember",
@@ -160,7 +158,7 @@ describe("Tidemark Ladder Climb rules", () => {
           cards: deckCards.map((card) => ({ id: card.id, copies: 1 as const })),
         },
         {
-          id: "dragon-tide",
+          id: testTideId("dragon-tide"),
           displayName: "Dragon Tide",
           displayDescription: "",
           resonance: "ember",
@@ -181,10 +179,10 @@ describe("Tidemark Ladder Climb rules", () => {
         affinityContext,
       }),
     ).toEqual([
-      { dreamsignId: asDreamsignId("sign-z-matched"), score: 1 },
-      { dreamsignId: asDreamsignId("sign-a-generic"), score: 0 },
-      { dreamsignId: asDreamsignId("sign-b-generic"), score: 0 },
-      { dreamsignId: asDreamsignId("sign-off-deck"), score: 0 },
+      { dreamsignId: testDreamsignId("sign-z-matched"), score: 1 },
+      { dreamsignId: testDreamsignId("sign-a-generic"), score: 0 },
+      { dreamsignId: testDreamsignId("sign-b-generic"), score: 0 },
+      { dreamsignId: testDreamsignId("sign-off-deck"), score: 0 },
     ]);
   });
 });

@@ -1,3 +1,5 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 // Unit tests for the pure decode half of the subscription wrapper.
 //
 // `subscribeToLog` itself is a thin `onValue` wrapper (Firebase, exercised by
@@ -12,6 +14,9 @@ import { foldEvents } from "./fold";
 import { hashState } from "./hash";
 import { decodeLogNode, subscribeToLog } from "./subscribe";
 import type { EncodedLogNode, EngineConfig, GameEvent, Genesis } from "./types";
+import { testRoomId } from "../types/test-identities";
+
+const ROOM_ID = testRoomId("room1");
 
 const firebase = vi.hoisted(() => ({
   callbacks: [] as Array<(snapshot: { val: () => unknown }) => void>,
@@ -30,7 +35,7 @@ interface ToyState {
   seqs: number[];
 }
 
-const GENESIS: Genesis = { seed: "s", reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
+const GENESIS: Genesis = { seed: testJourneySeed("s"), reducerVersion: "v1", createdAt: 0, contentConfig: { poolVariant: "tides4" } };
 
 const config: EngineConfig<ToyState> = {
   genesisState: () => ({ seqs: [] }),
@@ -48,7 +53,7 @@ function encodeEvent(event: GameEvent): string {
 }
 
 function goodEvent(basedOnSeq: number): GameEvent {
-  return { type: "T", payload: {}, actor: "a", clientTimestamp: "0", basedOnSeq };
+  return { type: "T", payload: {}, actor: testEventActor("a"), clientTimestamp: "0", basedOnSeq };
 }
 
 describe("decodeLogNode", () => {
@@ -111,13 +116,13 @@ describe("decodeLogNode", () => {
       baseSnapshot: JSON.stringify({ seqs: [1, 2] }),
       head: 3,
       events: { 3: encodeEvent(goodEvent(2)) },
-      appliedIndex: JSON.stringify({ 1: { actor: "a", type: "T" }, 2: { actor: "b", type: "T" } }),
+      appliedIndex: JSON.stringify({ 1: { actor: testEventActor("a"), type: "T" }, 2: { actor: testEventActor("b"), type: "T" } }),
     };
     const node = decodeLogNode(encoded);
     expect(node).not.toBeNull();
     expect([...(node?.appliedIndex.keys() ?? [])].sort((a, b) => a - b)).toEqual([1, 2]);
-    expect(node?.appliedIndex.get(1)).toEqual({ actor: "a", type: "T" });
-    expect(node?.appliedIndex.get(2)).toEqual({ actor: "b", type: "T" });
+    expect(node?.appliedIndex.get(1)).toEqual({ actor: testEventActor("a"), type: "T" });
+    expect(node?.appliedIndex.get(2)).toEqual({ actor: testEventActor("b"), type: "T" });
   });
 
   it("does not throw when the persisted appliedIndex is corrupt", () => {
@@ -226,7 +231,7 @@ describe("subscribeToLog", () => {
   it("waits on an initial null log node but reports corruption if a live node becomes null", () => {
     const onNode = vi.fn();
     const onCorrupt = vi.fn();
-    subscribeToLog({} as never, "room1", onNode, onCorrupt);
+    subscribeToLog({} as never, ROOM_ID, onNode, onCorrupt);
 
     emit(null);
     expect(onNode).not.toHaveBeenCalled();
@@ -249,7 +254,7 @@ describe("subscribeToLog", () => {
   it("reports unreadable live log nodes through onCorrupt", () => {
     const onNode = vi.fn();
     const onCorrupt = vi.fn();
-    subscribeToLog({} as never, "room1", onNode, onCorrupt);
+    subscribeToLog({} as never, ROOM_ID, onNode, onCorrupt);
 
     emit({
       genesis: "{ not valid json",

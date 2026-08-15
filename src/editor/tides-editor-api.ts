@@ -3,8 +3,13 @@ import type { EditorApiErrorBody } from "./types";
 import type {
   SaveTideFieldRequest,
   SaveTideFieldResponse,
+  TidesCatalogFile,
   TidesArtifact,
 } from "./tides-types";
+import {
+  parseSourceRevisionResponse,
+  type RawSourceRevisionResponse,
+} from "../types/source-revision";
 
 function readApiError(body: unknown): EditorApiErrorBody["error"] | undefined {
   if (
@@ -47,20 +52,22 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
   return body as T;
 }
 
-function withFileParam(path: string, file: string): string {
+function withFileParam(path: string, file: TidesCatalogFile): string {
   const separator = path.includes("?") ? "&" : "?";
   return `${path}${separator}file=${encodeURIComponent(file)}`;
 }
 
 export async function loadTidesArtifact(
-  file: string,
+  file: TidesCatalogFile,
   signal?: AbortSignal,
 ): Promise<TidesArtifact> {
   const response = await fetch(withFileParam("/api/editor/tide-decks", file), {
     headers: { Accept: "application/json" },
     signal,
   });
-  return readJsonResponse<TidesArtifact>(response);
+  return parseSourceRevisionResponse<TidesArtifact>(
+    await readJsonResponse<RawSourceRevisionResponse<TidesArtifact>>(response),
+  );
 }
 
 export async function saveTideField(
@@ -79,5 +86,9 @@ export async function saveTideField(
       }),
     },
   );
-  return readJsonResponse<SaveTideFieldResponse>(response);
+  return parseSourceRevisionResponse<SaveTideFieldResponse>(
+    await readJsonResponse<RawSourceRevisionResponse<SaveTideFieldResponse>>(
+      response,
+    ),
+  );
 }

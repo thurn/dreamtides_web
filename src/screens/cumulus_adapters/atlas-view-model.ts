@@ -62,9 +62,8 @@ import type {
 } from "../../types/journey";
 import type { TutorialAtlasConfiguration } from "../../types/tutorial";
 import { type LayerName, layerOrdinal } from "../../types/layer-name";
-import type { SiteId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
+import type { AtlasNodeId, SiteId } from "../../types/identifiers";
+import { parsePresentationId } from "../../types/identifiers";
 
 /**
  * The portrait design canvas the mobile atlas stage scales to fit (letterboxed).
@@ -177,7 +176,7 @@ interface NodeGeometry {
 export function resolveAtlasNodeGeometry(
   atlas: DreamAtlas,
   profile: AtlasLayoutProfile = ATLAS_LAYOUT_MOBILE,
-): Map<string, NodeGeometry> {
+): Map<AtlasNodeId, NodeGeometry> {
   const { nodeSize, anchorNodeSize } = profile;
   // Edge-aware bounds: push the widest row's outermost node centres out to a node
   // radius (plus a small inset) from the stage edge along the spread axis, so
@@ -202,7 +201,7 @@ export function resolveAtlasNodeGeometry(
   const positioned = Object.values(atlas.nodes).filter((node) =>
     Boolean(node.position),
   );
-  const geometry = new Map<string, NodeGeometry>();
+  const geometry = new Map<AtlasNodeId, NodeGeometry>();
   if (positioned.length === 0) {
     return geometry;
   }
@@ -443,9 +442,9 @@ function buildNodeCard(
         : null;
     return {
       primary: {
-        sceneArt: artRef.dreamscapeScene(asDreamscapeId(boss.sceneArtId)),
+        sceneArt: artRef.dreamscapeScene(boss.sceneArtId),
         // The boss stands over the Limbo scene as its prominent figure.
-        figureArt: artRef.dreamGuide(asGuideId(boss.figureArtId)),
+        figureArt: artRef.dreamGuide(boss.figureArtId),
         // Title with the run's chosen Apollyon incarnation (its full name, e.g.
         // "Apollyon, the World's End"), falling back to the default epithet when
         // no incarnation was assigned.
@@ -578,7 +577,7 @@ export function buildAtlasMapNodes(
     const iconRef =
       geo.role === "boss"
         ? artRef.dreamscapeIcon(
-            asDreamscapeId(journeyContent.atlasData.boss.iconArtId),
+            journeyContent.atlasData.boss.iconArtId,
           )
         : dreamscape === null
           ? null
@@ -677,7 +676,7 @@ export function buildAtlasGuideDialogue(
   }
   const speechBubble = configuration.speechBubble;
   return {
-    id: `${state.runId ?? state.seed}:atlas-guidance`,
+    id: parsePresentationId(`${state.runId ?? state.seed}:atlas-guidance`),
     model: {
       portrait: { kind: "character-portrait", characterId: "mira" },
       portraitAlt: tx("Mira", "[tutorial] Name of the tutorial guide."),

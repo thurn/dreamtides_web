@@ -11,7 +11,13 @@ import type { CardTransfigurationDisplay } from "../runtime/transfiguration-disp
 import type { BattleDebugEdit } from "./debug/commands";
 import type { TutorialTriggerDefinition } from "../types/tutorial";
 import type { DeckEntryId } from "../types/identifiers";
-import type { CardId } from "../types/card-identity";
+import type {
+  CardId,
+  CardName,
+  CardSubtype,
+} from "../types/card-identity";
+import type { ContentHash } from "../types/content-hash";
+import type { DreamwellCardName } from "../types/catalog-names";
 import type { BattleId } from "../types/identifiers";
 import type { SiteId } from "../types/identifiers";
 import type { AtlasNodeId } from "../types/identifiers";
@@ -24,17 +30,22 @@ import type {
   NoteId,
   OpponentId,
   IdentityRecord,
+  BackRankSlotId,
+  BattlefieldSlotId,
+  FrontRankSlotId,
 } from "../types/identifiers";
+import type { BattleSide } from "../types/battle";
 
-export type BattleSide = "player" | "enemy";
+export type {
+  BackRankSlotId,
+  BattlefieldSlotId,
+  BattleSide,
+  FrontRankSlotId,
+};
 
 // The play area is the fixed staggered grid in the battle rules: 9 front-rank
 // positions and 10 back-rank positions. Slots are addressed by stable ids
 // (`B<n>` / `F<n>`) so a card's rendered lane remains stable for the battle.
-export type BackRankSlotId = `B${number}`;
-export type FrontRankSlotId = `F${number}`;
-export type BattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
-
 /** Fixed battlefield capacity per side (rules §The Play Area). */
 export const FRONT_RANK_SLOTS = 9;
 export const BACK_RANK_SLOTS = 10;
@@ -225,10 +236,14 @@ export type BattleCommandSourceSurface =
  * `"side:zone:slotId"` for `"slot"`, the side name for `"side"`, and
  * `"side:zone"` for `"zone"`.
  */
-export interface BattleCommandTarget {
-  kind: "card" | "slot" | "side" | "zone";
-  ref: string;
-}
+export type BattleCommandTarget =
+  | { kind: "card"; ref: BattleCardId }
+  | {
+      kind: "slot";
+      ref: `${BattleSide}:${BattlefieldZone}:${BattlefieldSlotId}`;
+    }
+  | { kind: "side"; ref: BattleSide }
+  | { kind: "zone"; ref: `${BattleSide}:${BattleZoneId}` };
 
 /**
  * Emission context threaded from the reducer through engine helpers so log
@@ -272,9 +287,9 @@ export interface BattleDeckCardDefinition {
    *  (figments, generated copies) that have no catalog card. */
   cardId: CardId;
   cardNumber: number;
-  name: string;
+  name: CardName;
   battleCardKind: BattleCardKind;
-  subtype: string;
+  subtype: CardSubtype;
   energyCost: number;
   printedEnergyCost: number | null;
   /**
@@ -312,7 +327,7 @@ export interface BattleDeckCardDefinition {
  */
 export interface DreamwellCardDefinition {
   id: DreamwellCardId;
-  name: string;
+  name: DreamwellCardName;
   renderedText: string;
   energyAdded: number;
   order: number;
@@ -334,7 +349,7 @@ export interface DreamwellCardDefinition {
 export interface BattleSignatureCard {
   cardId: CardId;
   cardNumber: number;
-  name: string;
+  name: CardName;
 }
 
 export interface BattleEnemyDescriptor {
@@ -393,7 +408,7 @@ export interface BattleInit {
   turnLimit: number;
   maxEnergyCap: number;
   handLimit: number;
-  opponentsContentHash: string;
+  opponentsContentHash: ContentHash;
   opponentAbilityActive: boolean;
   aiConfiguration: import("../types/opponents-data").ResolvedBattleAiConfiguration;
   // bug-039: widened from the Phase 1 literals (`"player"` / `true`) so tests
@@ -489,7 +504,7 @@ export interface BattleCardProvenance {
   kind: BattleCardProvenanceKind;
   sourceBattleCardId: BattleCardId | null;
   chosenSpark: number | null;
-  chosenSubtype: string | null;
+  chosenSubtype: CardSubtype | null;
   createdAtTurnNumber: number | null;
   createdAtSide: BattleSide | null;
   createdAtMs: number | null;
@@ -687,7 +702,7 @@ export interface BattleAiChoiceTrace {
   stage: BattleAiDecisionStage;
   choice: "PLAY_CARD" | "MOVE_CARD" | "END_TURN";
   battleCardId: BattleCardId | null;
-  cardName: string | null;
+  cardName: CardName | null;
   sourceHandIndex: number | null;
   sourceSlotId: BattlefieldSlotId | null;
   targetSlotId: BattlefieldSlotId | null;
@@ -697,8 +712,27 @@ export interface BattleAiChoiceTrace {
   targetBattleCardId?: BattleCardId | null;
 }
 
+export type BattleDeferredLogEventName =
+  | "battle_ai_action_override_applied"
+  | "battle_ai_blockers_declared"
+  | "battle_ai_blocking_decision"
+  | "battle_proto_card_created"
+  | "battle_proto_deck_reordered"
+  | "battle_proto_energy_changed"
+  | "battle_proto_figments_merged"
+  | "battle_proto_foresee_resolved"
+  | "battle_proto_hand_card_revealed"
+  | "battle_proto_hand_visibility_set"
+  | "battle_proto_history_undo"
+  | "battle_proto_marker_set"
+  | "battle_proto_note_added"
+  | "battle_proto_note_cleared"
+  | "battle_proto_note_dismissed"
+  | "battle_proto_result_changed"
+  | "battle_proto_score_changed";
+
 export interface BattleDeferredLogEvent {
-  event: string;
+  event: BattleDeferredLogEventName;
   fields: Record<string, unknown>;
 }
 

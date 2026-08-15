@@ -11,9 +11,10 @@ import type { JourneyContent } from "../../data/journey-content";
 import type { JourneyMutations } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { JourneyState } from "../../types/journey";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { StartingDeckView } from "../../cumulus/screens/StartingDeckOverlay";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 vi.mock("../../state/journey-context", () => ({
   useJourney: vi.fn(),
@@ -51,8 +52,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       1,
       {
-        name: asCardName("Archive Sentry"),
-        id: asCardId("archive-sentry"),
+        name: parseCardName("Archive Sentry"),
+        id: testCardId("archive-sentry"),
         cardNumber: 1,
         cardType: "Character",
         subtype: "",
@@ -72,7 +73,7 @@ function makeState(): JourneyState {
   return {
     deck: [
       {
-        entryId: asDeckEntryId("entry-1"),
+        entryId: parseDeckEntryId("entry-1"),
         cardNumber: 1,
         transfiguration: null,
         isBane: false,

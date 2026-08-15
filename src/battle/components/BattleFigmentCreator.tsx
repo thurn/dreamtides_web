@@ -5,6 +5,7 @@ import {
   type BattleFigmentZone,
 } from "../../cumulus/screens/battle-overlays/BattleFigmentCreatorOverlay";
 import { assertLocalized } from "@trox/runtime";
+import { parseCardName } from "../../types/card-identity";
 import type {
   BattleDebugEdit,
   BattleDebugZoneDestination,
@@ -31,13 +32,14 @@ import {
   type FigmentCatalogEntry,
   type FigmentKeyword,
 } from "../state/figment-catalog";
-import { asCardId, type CardId } from "../../types/card-identity";
+import type { CardId } from "../../types/card-identity";
+import type { CardSubtype } from "../../types/card-identity";
 
 type FigmentBattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
 const DEFAULT_FIGMENT_SUBTYPE = "Shadow";
 const MAX_FIGMENT_CREATION_COUNT = 10;
 
-function figmentTypeName(subtype: string): string {
+function figmentTypeName(subtype: CardSubtype): string {
   return `${subtype} Figment`;
 }
 
@@ -106,16 +108,15 @@ export function BattleFigmentCreator({
   const subtype = selectedEntry.subtype;
   const selectedKeyword = selectedEntry?.keyword;
 
-  function handleSelectType(nextFigmentTypeId: string): void {
+  function handleSelectType(nextFigmentTypeId: CardId): void {
     // Selecting a catalog type pre-fills the figment's base spark and derives a
     // default name from the type. The spark stays editable for off-base
     // figments (rules §Figments). The name follows the type only while it still
     // matches the auto-derived pattern, so a hand-edited name is preserved.
-    const cardId = asCardId(nextFigmentTypeId);
-    const entry = lookupFigmentCatalogEntryById(cardId);
+    const entry = lookupFigmentCatalogEntryById(nextFigmentTypeId);
     if (entry === undefined) return;
-    setFigmentTypeId(cardId);
-    onTypeChange?.(cardId);
+    setFigmentTypeId(nextFigmentTypeId);
+    onTypeChange?.(nextFigmentTypeId);
     setSparkText(String(entry.baseSpark));
     setName((current) =>
       current.trim() === "" || isAutoDerivedFigmentName(current)
@@ -180,9 +181,9 @@ export function BattleFigmentCreator({
       side,
       chosenFigmentId: selectedEntry.id,
       count,
-      chosenSubtype: subtype.trim(),
+      chosenSubtype: subtype,
       chosenSpark: spark,
-      name: name.trim(),
+      name: parseCardName(name.trim()),
       destination,
       createdAtMs: Date.now(),
     });
@@ -232,7 +233,11 @@ export function BattleFigmentCreator({
         if (nextZone === "frontRank" && !isDeploySlot(slot)) setSlot("F0");
       }}
       onPositionChange={setPosition}
-      onSlotChange={(value) => setSlot(value as FigmentBattlefieldSlotId)}
+      onSlotChange={(value) => {
+        if (isBackRankSlotId(value) || isFrontRankSlotId(value)) {
+          setSlot(value);
+        }
+      }}
       onCancel={onClose}
       onSubmit={handleSubmit}
     />

@@ -1,7 +1,10 @@
 import { useEffect, useId, useRef } from "react";
 import type { CardSourceDebugState } from "../types/journey";
-import type { JourneyMutations } from "./journey-context";
-import { asPublicationId } from "../types/identifiers";
+import type {
+  JourneyMutationSource,
+  JourneyMutations,
+} from "./journey-context";
+import { parsePublicationId } from "../types/identifiers";
 
 /**
  * Publishes client-local card provenance once per logical mounted surface.
@@ -11,8 +14,8 @@ import { asPublicationId } from "../types/identifiers";
 export function useCardSourceDebugPublication(
   publish: JourneyMutations["setCardSourceDebug"],
   state: CardSourceDebugState | null,
-  shownSource: string,
-  hiddenSource: string,
+  shownSource: JourneyMutationSource,
+  hiddenSource: JourneyMutationSource,
 ): void {
   const publicationId = useId();
   const generationRef = useRef(0);
@@ -25,7 +28,7 @@ export function useCardSourceDebugPublication(
     const generation = generationRef.current;
     if (publishedStateRef.current !== state) {
       publishedStateRef.current = state;
-      publish(state, shownSource, asPublicationId(publicationId));
+      publish(state, shownSource, parsePublicationId(publicationId));
     }
 
     return () => {
@@ -34,7 +37,7 @@ export function useCardSourceDebugPublication(
           return;
         }
         publishedStateRef.current = undefined;
-        publish(null, hiddenSource, asPublicationId(publicationId));
+        publish(null, hiddenSource, parsePublicationId(publicationId));
       });
     };
   }, [hiddenSource, publicationId, publish, shownSource, state]);

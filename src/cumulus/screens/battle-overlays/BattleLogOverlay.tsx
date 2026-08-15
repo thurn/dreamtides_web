@@ -5,6 +5,9 @@ import { DisclosureSection } from "../../components/controls/DisclosureSection";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { token } from "../../primitives/tokens";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { BattleHistoryCommandId } from "../../../types/identifiers";
+
+export type BattleRawLogEntryId = `${number}-${string}`;
 
 export type BattleLogHistoryKind =
   | "numeric-state"
@@ -16,7 +19,7 @@ export type BattleLogHistoryKind =
   | "result";
 
 export interface BattleLogHistoryEntryView {
-  readonly id: string;
+  readonly id: BattleHistoryCommandId;
   readonly title: LocalizedString;
   readonly kind: BattleLogHistoryKind;
   readonly surface: LocalizedString;
@@ -32,7 +35,7 @@ export interface BattleLogTurnView {
 }
 
 export interface BattleRawLogEntryView {
-  readonly id: string;
+  readonly id: BattleRawLogEntryId;
   readonly kind: "ai" | "debug" | "judgment" | "info";
   readonly text: LocalizedString;
 }
@@ -61,11 +64,11 @@ export function BattleLogOverlay({
 }: BattleLogOverlayProps): ReactElement {
   const resolve = useLocalizer();
   const [expandedEntries, setExpandedEntries] = useState<
-    Record<string, boolean>
-  >({});
-  const [expandedTurns, setExpandedTurns] = useState<Record<string, boolean>>(
-    {},
-  );
+    ReadonlyMap<BattleHistoryCommandId, boolean>
+  >(() => new Map());
+  const [expandedTurns, setExpandedTurns] = useState<
+    ReadonlyMap<number, boolean>
+  >(() => new Map());
   const [expandedRaw, setExpandedRaw] = useState(false);
   const [enabledKinds, setEnabledKinds] = useState<
     ReadonlySet<BattleLogHistoryKind>
@@ -148,22 +151,21 @@ export function BattleLogOverlay({
             </p>
           ) : (
             visibleTurns.map((turn) => {
-              const turnKey = String(turn.turnNumber);
-              const isTurnExpanded = expandedTurns[turnKey] ?? true;
+              const turnKey = turn.turnNumber;
+              const isTurnExpanded = expandedTurns.get(turnKey) ?? true;
               return (
                 <DisclosureSection
                   key={turnKey}
-                  title={assertLocalized(`Turn ${turnKey}`)}
+                  title={assertLocalized(`Turn ${String(turnKey)}`)}
                   summary={assertLocalized(
                     `${String(turn.entries.length)} entries`,
                   )}
                   expanded={isTurnExpanded}
                   placement="onGlass"
                   onExpandedChange={(expanded) =>
-                    setExpandedTurns((current) => ({
-                      ...current,
-                      [turnKey]: expanded,
-                    }))
+                    setExpandedTurns((current) =>
+                      new Map(current).set(turnKey, expanded),
+                    )
                   }
                   testId={`battle-log-turn-${turnKey}`}
                 >
@@ -175,7 +177,7 @@ export function BattleLogOverlay({
                     }}
                   >
                     {turn.entries.map((entry) => {
-                      const isExpanded = expandedEntries[entry.id] ?? false;
+                      const isExpanded = expandedEntries.get(entry.id) ?? false;
                       return (
                         <DisclosureSection
                           key={entry.id}
@@ -184,10 +186,9 @@ export function BattleLogOverlay({
                           expanded={isExpanded}
                           placement="onGlass"
                           onExpandedChange={(expanded) =>
-                            setExpandedEntries((current) => ({
-                              ...current,
-                              [entry.id]: expanded,
-                            }))
+                            setExpandedEntries((current) =>
+                              new Map(current).set(entry.id, expanded),
+                            )
                           }
                           testId={`battle-log-history-entry-${entry.id}`}
                         >

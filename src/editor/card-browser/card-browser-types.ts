@@ -1,4 +1,5 @@
 import type { CardSizePreset } from "../card-size";
+import type { CardSubtype } from "../../types/card-identity";
 
 /**
  * Editor-owned vocabulary for card-browsing surfaces. These types describe the
@@ -54,7 +55,7 @@ export interface CardBrowserToolbarValues {
   searchScope: CardBrowserSearchScope;
   type: CardBrowserTypeFilter;
   cost: CardBrowserCostFilter;
-  subtype: string;
+  subtype: CardSubtype | "";
   sort: string;
   dir: CardBrowserSortDirection;
   size: CardBrowserSize;

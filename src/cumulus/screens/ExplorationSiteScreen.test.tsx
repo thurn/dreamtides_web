@@ -5,9 +5,13 @@ import { resolveChecked } from "../../runtime/localization/runtime";
 import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId, asCardName } from "../../types/card-identity";
-import { asCardTypeChangePredicateId } from "../../types/identifiers";
+import {
+  parseCardName,
+  parseCardSubtype,
+} from "../../types/card-identity";
+import { parseCardTypeChangePredicateId } from "../../types/identifiers";
 import type { CardData } from "../../types/cards";
+import type { CardTypeChange } from "../../types/journey";
 import { CumulusRoot } from "../CumulusRoot";
 import {
   ENERGY_ICON_COLOR,
@@ -30,16 +34,15 @@ import {
   transfigurationFormFixture,
 } from "../test-helpers/transfiguration-fixture";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
-import { asSiteId } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asExplorationActionId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testDreamAvatarId, testDreamsignId, testExplorationActionId, testGuideId, testCardId } from "../../types/test-identities";
 
 const reducedMotionPreference = vi.hoisted(() => ({ value: true }));
+const CHOICE_A_ID = testExplorationActionId("choice-a");
+const CHOICE_B_ID = testExplorationActionId("choice-b");
 
 vi.mock("framer-motion", async () => {
   const React = await import("react");
@@ -85,11 +88,11 @@ vi.mock("framer-motion", async () => {
 
 function makeCard(): CardData {
   return {
-    id: asCardId("00000000-0000-4000-8000-000000000017"),
-    name: asCardName("Exploration Fixture"),
+    id: testCardId("00000000-0000-4000-8000-000000000017"),
+    name: parseCardName("Exploration Fixture"),
     cardNumber: 17,
     cardType: "Character",
-    subtype: "Fixture",
+    subtype: "Warrior",
     isStarter: false,
     energyCost: 2,
     spark: 2,
@@ -103,15 +106,15 @@ function makeCard(): CardData {
 function view(resolved = false): ExplorationSiteView {
   const selected = makeCard();
   return {
-    siteId: asSiteId("exploration-site"),
+    siteId: parseSiteId("exploration-site"),
     scene: null,
     guide: {
-      id: "layaway",
+      id: testGuideId("layaway"),
       name: assertLocalized('"Layaway"'),
       line: assertLocalized(
         "Every card dreams, friend. Draw one, and we'll step inside.",
       ),
-      art: artRef.dreamGuide(asGuideId("layaway")),
+      art: artRef.dreamGuide(testGuideId("layaway")),
     },
     card: {
       cardId: selected.id,
@@ -121,7 +124,7 @@ function view(resolved = false): ExplorationSiteView {
     narrative: assertLocalized("A synthetic encounter waits in the dark."),
     actions: [
       {
-        id: asExplorationActionId("choice-a"),
+        id: CHOICE_A_ID,
         effectKind: "gain-card",
         mechanics: { effectKind: "gain-card" },
         label: assertLocalized("Choose A"),
@@ -130,7 +133,7 @@ function view(resolved = false): ExplorationSiteView {
         available: true,
       },
       {
-        id: asExplorationActionId("choice-b"),
+        id: CHOICE_B_ID,
         effectKind: "change-subtype-selected",
         mechanics: { effectKind: "change-subtype-selected" },
         label: assertLocalized("Choose B"),
@@ -139,7 +142,7 @@ function view(resolved = false): ExplorationSiteView {
         available: true,
       },
     ],
-    resolvedActionId: resolved ? asExplorationActionId("choice-a") : null,
+    resolvedActionId: resolved ? CHOICE_A_ID : null,
     reward: null,
     outcomeKind: null,
   };
@@ -153,15 +156,15 @@ function siteInsertionRewardView(): ExplorationSiteView {
     reward: {
       kind: "site-insertion",
       sourceKind: "add-fixed-site",
-      targetNodeId: asAtlasNodeId("current-atlas-node"),
+      targetNodeId: parseAtlasNodeId("current-atlas-node"),
       insertionIndex: 3,
       siblingSiteIdsBefore: [
-        asSiteId("site-a"),
-        asSiteId("site-b"),
-        asSiteId("exploration-site"),
+        parseSiteId("site-a"),
+        parseSiteId("site-b"),
+        parseSiteId("exploration-site"),
       ],
       model: {
-        id: asSiteId("site-exploration-source-action"),
+        id: parseSiteId("site-exploration-source-action"),
         type: "Duplication",
         isVisited: false,
         pos: { x: 50, y: 50 },
@@ -178,9 +181,9 @@ function siteInsertionRewardView(): ExplorationSiteView {
   };
 }
 
-function fixtureDreamsign(id: string, label: string) {
+function fixtureDreamsign(idSeed: string, label: string) {
   return localizedDreamsignFixture({
-    id,
+    idSeed,
     name: label,
     effectDescription: `Synthetic effect for ${label}.`,
     imageName: `${label.toLowerCase().replace(/ /gu, "-")}.webp`,
@@ -263,12 +266,12 @@ function nightmareDreamsignBundleRewardView(): ExplorationSiteView {
       sourceKind: "gain-nightmare-and-dreamsign",
       nightmares: [
         {
-          entryId: asDeckEntryId("nightmare-entry-a"),
+          entryId: parseDeckEntryId("nightmare-entry-a"),
           model: base.card,
           isBane: true,
         },
         {
-          entryId: asDeckEntryId("nightmare-entry-b"),
+          entryId: parseDeckEntryId("nightmare-entry-b"),
           model: base.card,
           isBane: true,
         },
@@ -290,11 +293,11 @@ function starterCardMutationRewardView(
   const base = view(true);
   const secondPurged = {
     ...base.card,
-    cardId: asCardId("00000000-0000-4000-8000-000000000032"),
+    cardId: testCardId("00000000-0000-4000-8000-000000000032"),
     displaySnapshot: {
       ...base.card.displaySnapshot,
-      id: asCardId("00000000-0000-4000-8000-000000000032"),
-      name: asCardName("Second Starter Fixture"),
+      id: testCardId("00000000-0000-4000-8000-000000000032"),
+      name: parseCardName("Second Starter Fixture"),
       cardNumber: 32,
       imageNumber: 32,
       isStarter: true,
@@ -302,34 +305,34 @@ function starterCardMutationRewardView(
   };
   const firstGained = {
     ...base.card,
-    cardId: asCardId("00000000-0000-4000-8000-000000000034"),
+    cardId: testCardId("00000000-0000-4000-8000-000000000034"),
     displaySnapshot: {
       ...base.card.displaySnapshot,
-      id: asCardId("00000000-0000-4000-8000-000000000034"),
-      name: asCardName("First Gained Fixture"),
+      id: testCardId("00000000-0000-4000-8000-000000000034"),
+      name: parseCardName("First Gained Fixture"),
       cardNumber: 34,
       imageNumber: 34,
     },
   };
   const secondGained = {
     ...base.card,
-    cardId: asCardId("00000000-0000-4000-8000-000000000035"),
+    cardId: testCardId("00000000-0000-4000-8000-000000000035"),
     displaySnapshot: {
       ...base.card.displaySnapshot,
-      id: asCardId("00000000-0000-4000-8000-000000000035"),
-      name: asCardName("Second Gained Fixture"),
+      id: testCardId("00000000-0000-4000-8000-000000000035"),
+      name: parseCardName("Second Gained Fixture"),
       cardNumber: 35,
       imageNumber: 35,
     },
   };
   const purged = [
     {
-      entryId: asDeckEntryId("starter-entry-a"),
+      entryId: parseDeckEntryId("starter-entry-a"),
       model: base.card,
       isBane: false,
     },
     {
-      entryId: asDeckEntryId("starter-entry-b"),
+      entryId: parseDeckEntryId("starter-entry-b"),
       model: secondPurged,
       isBane: false,
     },
@@ -341,7 +344,7 @@ function starterCardMutationRewardView(
           {
             purged: purged[0],
             gained: {
-              entryId: asDeckEntryId("gained-entry-a"),
+              entryId: parseDeckEntryId("gained-entry-a"),
               model: firstGained,
               isBane: false,
             },
@@ -349,7 +352,7 @@ function starterCardMutationRewardView(
           {
             purged: purged[1],
             gained: {
-              entryId: asDeckEntryId("gained-entry-b"),
+              entryId: parseDeckEntryId("gained-entry-b"),
               model: secondGained,
               isBane: false,
             },
@@ -376,9 +379,9 @@ function starterCardTransfigurationRewardView(count = 2): ExplorationSiteView {
   const suffixes = ["a", "b", "c", "d"] as const;
   const cardIds = [
     base.card.cardId,
-    asCardId("00000000-0000-4000-8000-000000000025"),
-    asCardId("00000000-0000-4000-8000-000000000026"),
-    asCardId("00000000-0000-4000-8000-000000000027"),
+    testCardId("00000000-0000-4000-8000-000000000025"),
+    testCardId("00000000-0000-4000-8000-000000000026"),
+    testCardId("00000000-0000-4000-8000-000000000027"),
   ] as const;
   const forms = ["Empowered", "Kindled", "Inspired", "Enduring"] as const;
   const beforeCards = Array.from({ length: count }, (_, index) => {
@@ -389,14 +392,14 @@ function starterCardTransfigurationRewardView(count = 2): ExplorationSiteView {
     }
     const cardNumber = index === 0 ? 17 : 24 + index;
     return {
-      entryId: asDeckEntryId(`starter-transfiguration-entry-${suffix}`),
+      entryId: parseDeckEntryId(`starter-transfiguration-entry-${suffix}`),
       model: {
         ...base.card,
         cardId,
         displaySnapshot: {
           ...base.card.displaySnapshot,
           id: cardId,
-          name: asCardName(`Starter Transfiguration Fixture ${suffix}`),
+          name: parseCardName(`Starter Transfiguration Fixture ${suffix}`),
           cardNumber,
           imageNumber: cardNumber,
           isStarter: true,
@@ -415,7 +418,7 @@ function starterCardTransfigurationRewardView(count = 2): ExplorationSiteView {
         const form = forms[index];
         if (form === undefined) throw new Error("fixture form is required");
         return {
-          entryId: asDeckEntryId(before.entryId),
+          entryId: before.entryId,
           cardId: before.model.cardId,
           beforeTransfiguration: null,
           afterTransfiguration: form,
@@ -501,22 +504,22 @@ function compoundCardMutationRewardView(
   }
   const originals = base.reward.transfigurations.map((mapping) => ({
     ...mapping.before,
-    entryId: asDeckEntryId(mapping.before.entryId),
+    entryId: parseDeckEntryId(mapping.before.entryId),
   }));
   const after = base.reward.transfigurations.map((mapping) => ({
     ...mapping.after,
-    entryId: asDeckEntryId(mapping.after.entryId),
+    entryId: parseDeckEntryId(mapping.after.entryId),
   }));
   const nightmares = originals.slice(0, 2).map((card, index) => ({
     ...card,
-    entryId: asDeckEntryId(`nightmare-entry-${String(index)}`),
+    entryId: parseDeckEntryId(`nightmare-entry-${String(index)}`),
     model: {
       ...card.model,
-      cardId: asCardId("ffffffff-ffff-4fff-8fff-ffffffffffff"),
+      cardId: testCardId("ffffffff-ffff-4fff-8fff-ffffffffffff"),
       displaySnapshot: {
         ...card.model.displaySnapshot,
-        id: asCardId("ffffffff-ffff-4fff-8fff-ffffffffffff"),
-        name: asCardName("Nightmare"),
+        id: testCardId("ffffffff-ffff-4fff-8fff-ffffffffffff"),
+        name: parseCardName("Nightmare"),
       },
     },
     isBane: true,
@@ -565,7 +568,7 @@ function compoundCardMutationRewardView(
               source: card,
               copy: {
                 ...card,
-                entryId: asDeckEntryId(`compound-copy-${String(index)}`),
+                entryId: parseDeckEntryId(`compound-copy-${String(index)}`),
               },
             }))
           : [],
@@ -618,7 +621,7 @@ function cardTypeChangesRewardView(
   count = 2,
 ): ExplorationSiteView {
   const base = view(true);
-  const secondId = asCardId("00000000-0000-4000-8000-000000000029");
+  const secondId = testCardId("00000000-0000-4000-8000-000000000029");
   const before = [
     base.card,
     {
@@ -627,14 +630,14 @@ function cardTypeChangesRewardView(
       displaySnapshot: {
         ...base.card.displaySnapshot,
         id: secondId,
-        name: asCardName("Second Type Change Fixture"),
+        name: parseCardName("Second Type Change Fixture"),
         cardNumber: 29,
         imageNumber: 29,
       },
     },
   ];
-  const afterTypeChange = {
-    predicateId: asCardTypeChangePredicateId("exploration:card-type:Event"),
+  const afterTypeChange: CardTypeChange = {
+    predicateId: parseCardTypeChangePredicateId("exploration:card-type:Event"),
     cardType: "Event" as const,
     subtype: "",
     label: "Event",
@@ -646,19 +649,19 @@ function cardTypeChangesRewardView(
       kind: "card-type-changes",
       sourceKind,
       changes: before.slice(0, count).map((model, index) => ({
-        entryId: asDeckEntryId(`type-change-entry-${String(index + 1)}`),
+        entryId: parseDeckEntryId(`type-change-entry-${String(index + 1)}`),
         cardId: model.cardId,
         beforeCardType: "Character" as const,
         afterCardType: "Event" as const,
         beforeTypeChange: null,
         afterTypeChange,
         before: {
-          entryId: asDeckEntryId(`type-change-entry-${String(index + 1)}`),
+          entryId: parseDeckEntryId(`type-change-entry-${String(index + 1)}`),
           model,
           isBane: false,
         },
         after: {
-          entryId: asDeckEntryId(`type-change-entry-${String(index + 1)}`),
+          entryId: parseDeckEntryId(`type-change-entry-${String(index + 1)}`),
           model: {
             ...model,
             displaySnapshot: {
@@ -678,11 +681,11 @@ function multiTransfigurationFollowupView(): ExplorationSiteView {
   const base = view();
   const secondCard = {
     ...base.card,
-    cardId: asCardId("00000000-0000-4000-8000-000000000028"),
+    cardId: testCardId("00000000-0000-4000-8000-000000000028"),
     displaySnapshot: {
       ...base.card.displaySnapshot,
-      id: asCardId("00000000-0000-4000-8000-000000000028"),
-      name: asCardName("Second Transfiguration Fixture"),
+      id: testCardId("00000000-0000-4000-8000-000000000028"),
+      name: parseCardName("Second Transfiguration Fixture"),
       cardNumber: 28,
       imageNumber: 28,
     },
@@ -738,11 +741,11 @@ function multiTransfigurationFollowupView(): ExplorationSiteView {
           subtitle: assertLocalized("Fixture exact selection"),
           count: 2,
           candidates: [
-            candidate(asDeckEntryId("multi-entry-a"), base.card, [
+            candidate(parseDeckEntryId("multi-entry-a"), base.card, [
               "Empowered",
               "Kindled",
             ]),
-            candidate(asDeckEntryId("multi-entry-b"), secondCard, [
+            candidate(parseDeckEntryId("multi-entry-b"), secondCard, [
               "Empowered",
               "Kindled",
             ]),
@@ -758,11 +761,11 @@ function twoCardRewardView(): ExplorationSiteView {
   const base = view(true);
   const second = {
     ...base.card,
-    cardId: asCardId("00000000-0000-4000-8000-000000000018"),
+    cardId: testCardId("00000000-0000-4000-8000-000000000018"),
     displaySnapshot: {
       ...base.card.displaySnapshot,
-      id: asCardId("00000000-0000-4000-8000-000000000018"),
-      name: asCardName("Second Survivor Fixture"),
+      id: testCardId("00000000-0000-4000-8000-000000000018"),
+      name: parseCardName("Second Survivor Fixture"),
       cardNumber: 18,
       imageNumber: 18,
     },
@@ -789,19 +792,19 @@ function purgeAndCopyRewardView(): ExplorationSiteView {
     reward: {
       kind: "purge-and-copy",
       purgedCard: {
-        entryId: asDeckEntryId("purged-entry"),
+        entryId: parseDeckEntryId("purged-entry"),
         model: purgedCardModel,
         isBane: false,
       },
-      sourceEntryId: asDeckEntryId("source-entry"),
+      sourceEntryId: parseDeckEntryId("source-entry"),
       source: {
-        entryId: asDeckEntryId("source-entry"),
+        entryId: parseDeckEntryId("source-entry"),
         model: copiedCardModel,
         isBane: false,
       },
       cards: [
         {
-          entryId: asDeckEntryId("copy-entry"),
+          entryId: parseDeckEntryId("copy-entry"),
           model: copiedCardModel,
           isBane: false,
         },
@@ -820,7 +823,7 @@ function dreamsignRewardView(): ExplorationSiteView {
         purgedCards: [],
         dreamsigns: [
           localizedDreamsignFixture({
-            id: asDreamsignId("reward-dreamsign-id"),
+            id: testDreamsignId("reward-dreamsign-id"),
             name: "Reward Dreamsign",
             effectDescription: "A synthetic reward sign.",
             imageName: "reward-dreamsign.webp",
@@ -839,7 +842,7 @@ function transfigurationRewardView(): ExplorationSiteView {
     ...base,
     reward: {
       kind: "transfiguration",
-      entryId: asDeckEntryId("deck-entry-transfigured"),
+      entryId: parseDeckEntryId("deck-entry-transfigured"),
       before: base.card,
       after: {
         cardId: base.card.cardId,
@@ -875,11 +878,11 @@ function deckModificationRewardView(
       : base.card;
   const second = {
     ...base.card,
-    cardId: asCardId("00000000-0000-4000-8000-000000000018"),
+    cardId: testCardId("00000000-0000-4000-8000-000000000018"),
     displaySnapshot: {
       ...base.card.displaySnapshot,
-      id: asCardId("00000000-0000-4000-8000-000000000018"),
-      name: asCardName("Second Modified Fixture"),
+      id: testCardId("00000000-0000-4000-8000-000000000018"),
+      name: parseCardName("Second Modified Fixture"),
       cardNumber: 18,
       spark: 4,
       isFast: kind === "fast",
@@ -893,8 +896,8 @@ function deckModificationRewardView(
         : "All cards in your deck become ❖ (fast)",
     ),
     cards: [
-      { entryId: asDeckEntryId("deck-entry-a"), model: first, isBane: false },
-      { entryId: asDeckEntryId("deck-entry-b"), model: second, isBane: false },
+      { entryId: parseDeckEntryId("deck-entry-a"), model: first, isBane: false },
+      { entryId: parseDeckEntryId("deck-entry-b"), model: second, isBane: false },
     ],
   };
   const deckModification: ExplorationDeckModificationView =
@@ -947,21 +950,21 @@ function bulkTransfigurationRewardView(): ExplorationSiteView {
 function essenceRewardView(): ExplorationSiteView {
   const base = view(true);
   const cards = Array.from({ length: 6 }, (_unused, index) => ({
-    entryId: asDeckEntryId(`spirit-animal-entry-${String(index + 1)}`),
+    entryId: parseDeckEntryId(`spirit-animal-entry-${String(index + 1)}`),
     model: {
       ...base.card,
-      cardId: asCardId(
+      cardId: testCardId(
         `00000000-0000-4000-8000-${String(index + 21).padStart(12, "0")}`,
       ),
       displaySnapshot: {
         ...base.card.displaySnapshot,
-        id: asCardId(
+        id: testCardId(
           `00000000-0000-4000-8000-${String(index + 21).padStart(12, "0")}`,
         ),
-        name: asCardName(`Spirit Animal ${String(index + 1)}`),
+        name: parseCardName(`Spirit Animal ${String(index + 1)}`),
         cardNumber: index + 21,
         imageNumber: index + 21,
-        subtype: "Spirit Animal",
+        subtype: parseCardSubtype("Spirit Animal"),
       },
     },
     isBane: false,
@@ -1014,7 +1017,7 @@ function purgedDreamsignEssenceRewardView(): ExplorationSiteView {
     reward: {
       kind: "purged-dreamsign-essence",
       dreamsign: localizedDreamsignFixture({
-        id: asDreamsignId("purged-dreamsign-id"),
+        id: testDreamsignId("purged-dreamsign-id"),
         name: "Purged Dreamsign",
         effectDescription: "A synthetic purged sign.",
         imageName: "purged-dreamsign.webp",
@@ -1032,21 +1035,21 @@ function cardCopiesRewardView(): ExplorationSiteView {
     outcomeKind: "card-copies",
     reward: {
       kind: "card-copies",
-      sourceEntryId: asDeckEntryId("source-entry"),
+      sourceEntryId: parseDeckEntryId("source-entry"),
       source: {
-        entryId: asDeckEntryId("source-entry"),
+        entryId: parseDeckEntryId("source-entry"),
         model: base.card,
         isBane: false,
       },
       count: 2,
       cards: [
         {
-          entryId: asDeckEntryId("copy-entry-a"),
+          entryId: parseDeckEntryId("copy-entry-a"),
           model: base.card,
           isBane: false,
         },
         {
-          entryId: asDeckEntryId("copy-entry-b"),
+          entryId: parseDeckEntryId("copy-entry-b"),
           model: base.card,
           isBane: false,
         },
@@ -1059,11 +1062,11 @@ function multipleCardCopiesRewardView(): ExplorationSiteView {
   const base = view(true);
   const secondCard = {
     ...base.card,
-    cardId: asCardId("00000000-0000-4000-8000-000000000018"),
+    cardId: testCardId("00000000-0000-4000-8000-000000000018"),
     displaySnapshot: {
       ...base.card.displaySnapshot,
-      id: asCardId("00000000-0000-4000-8000-000000000018"),
-      name: asCardName("Second Copy Fixture"),
+      id: testCardId("00000000-0000-4000-8000-000000000018"),
+      name: parseCardName("Second Copy Fixture"),
       cardNumber: 18,
       imageNumber: 18,
     },
@@ -1077,24 +1080,24 @@ function multipleCardCopiesRewardView(): ExplorationSiteView {
       pairs: [
         {
           source: {
-            entryId: asDeckEntryId("source-entry-a"),
+            entryId: parseDeckEntryId("source-entry-a"),
             model: base.card,
             isBane: false,
           },
           copy: {
-            entryId: asDeckEntryId("copy-entry-a"),
+            entryId: parseDeckEntryId("copy-entry-a"),
             model: base.card,
             isBane: false,
           },
         },
         {
           source: {
-            entryId: asDeckEntryId("source-entry-b"),
+            entryId: parseDeckEntryId("source-entry-b"),
             model: secondCard,
             isBane: false,
           },
           copy: {
-            entryId: asDeckEntryId("copy-entry-b"),
+            entryId: parseDeckEntryId("copy-entry-b"),
             model: secondCard,
             isBane: false,
           },
@@ -1112,7 +1115,7 @@ function purgedCardEssenceRewardView(): ExplorationSiteView {
     reward: {
       kind: "purged-card-essence",
       card: {
-        entryId: asDeckEntryId("purged-entry"),
+        entryId: parseDeckEntryId("purged-entry"),
         model: base.card,
         isBane: false,
       },
@@ -1157,7 +1160,7 @@ function dreamAvatarRewardView(): ExplorationSiteView {
       kind: "dream-avatar",
       previous: null,
       current: {
-        id: asDreamAvatarId("dream-avatar-new"),
+        id: testDreamAvatarId("dream-avatar-new"),
         name: "New Dream Avatar",
         title: "The Synthetic",
         renderedText: "A synthetic ability.",
@@ -1175,8 +1178,8 @@ function siteOfferModifierRewardView(): ExplorationSiteView {
     reward: {
       kind: "site-offer-modifier",
       modifier: "transfigure-next-draft-or-shop",
-      sourceSiteId: asSiteId("exploration-site"),
-      sourceActionId: asExplorationActionId("choice-a"),
+      sourceSiteId: parseSiteId("exploration-site"),
+      sourceActionId: CHOICE_A_ID,
     },
   };
 }
@@ -1192,14 +1195,14 @@ function shopModifierRewardView(
         ? {
             kind: "shop-modifier",
             modifier,
-            sourceSiteId: asSiteId("exploration-site"),
-            sourceActionId: asExplorationActionId("choice-a"),
+            sourceSiteId: parseSiteId("exploration-site"),
+            sourceActionId: CHOICE_A_ID,
           }
         : {
             kind: "shop-modifier",
             modifier,
-            sourceSiteId: asSiteId("exploration-site"),
-            sourceActionId: asExplorationActionId("choice-a"),
+            sourceSiteId: parseSiteId("exploration-site"),
+            sourceActionId: CHOICE_A_ID,
             freePurchaseCount: 3,
             essenceBefore: 255,
             essenceSpent: 127,
@@ -1495,7 +1498,7 @@ describe("ExplorationSiteScreen", () => {
       directView.actions[0].effectKind,
     );
     act(() => action?.click());
-    expect(onResolve).toHaveBeenCalledWith("choice-a");
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID);
     act(() => root.unmount());
   });
 
@@ -1510,7 +1513,7 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...base.actions[0],
-          automaticSelection: { entryIds: [asDeckEntryId("minted-entry")] },
+          automaticSelection: { entryIds: [parseDeckEntryId("minted-entry")] },
         },
         base.actions[1],
       ],
@@ -1540,8 +1543,8 @@ describe("ExplorationSiteScreen", () => {
     );
 
     expect(container.querySelector("[data-exploration-followup]")).toBeNull();
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
-      entryIds: [asDeckEntryId("minted-entry")],
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      entryIds: [parseDeckEntryId("minted-entry")],
     });
     act(() => root.unmount());
   });
@@ -1569,7 +1572,7 @@ describe("ExplorationSiteScreen", () => {
               entity: {
                 kind: "card",
                 card: base.card.displaySnapshot,
-                entryId: asDeckEntryId(starterEntryId),
+                entryId: parseDeckEntryId(starterEntryId),
               },
             },
           ],
@@ -1605,7 +1608,7 @@ describe("ExplorationSiteScreen", () => {
         ?.dataset.explorationDeckEntryId,
     ).toBe(starterEntryId);
     act(() => choice?.click());
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {});
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {});
     act(() => root.unmount());
   });
 
@@ -1671,7 +1674,7 @@ describe("ExplorationSiteScreen", () => {
     const first = makeCard();
     const second = {
       ...makeCard(),
-      id: asCardId("00000000-0000-4000-8000-000000000018"),
+      id: testCardId("00000000-0000-4000-8000-000000000018"),
       cardNumber: 18,
     };
     const base = view();
@@ -1952,7 +1955,7 @@ describe("ExplorationSiteScreen", () => {
       ).not.toBeNull(),
     );
     act(() => source?.click());
-    expect(onResolve).toHaveBeenCalledWith("choice-a");
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID);
     act(() => root.unmount());
   });
 
@@ -2055,7 +2058,7 @@ describe("ExplorationSiteScreen", () => {
             subtitle: assertLocalized("Choose one card."),
             cards: [
               {
-                entryId: asDeckEntryId("entry-fixture"),
+                entryId: parseDeckEntryId("entry-fixture"),
                 model: base.card,
                 isBane: false,
               },
@@ -2126,8 +2129,8 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
-      entryIds: [asDeckEntryId("entry-fixture")],
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      entryIds: [parseDeckEntryId("entry-fixture")],
     });
     act(() => root.unmount());
   });
@@ -2247,10 +2250,10 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     expect(onResolve).toHaveBeenCalledOnce();
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
       entryIds: [
-        asDeckEntryId("multi-entry-a"),
-        asDeckEntryId("multi-entry-b"),
+        parseDeckEntryId("multi-entry-a"),
+        parseDeckEntryId("multi-entry-b"),
       ],
       transfigurations: ["Empowered", "Kindled"],
     });
@@ -2262,7 +2265,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const base = view();
-    const dreamsignId = "held-dreamsign-id";
+    const dreamsignId = testDreamsignId("held-dreamsign-id");
     const followupView: ExplorationSiteView = {
       ...base,
       actions: [
@@ -2275,7 +2278,7 @@ describe("ExplorationSiteScreen", () => {
             selectionKey: "dreamsignId",
             dreamsigns: [
               localizedDreamsignFixture({
-                id: asDreamsignId(dreamsignId),
+                id: dreamsignId,
                 name: "Amplified Acorn",
                 effectDescription: "A synthetic Dreamsign effect.",
                 imageName: "amplified-acorn.webp",
@@ -2331,8 +2334,8 @@ describe("ExplorationSiteScreen", () => {
     ).toBeNull();
 
     act(() => choice?.click());
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
-      dreamsignId: asDreamsignId(dreamsignId),
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      dreamsignId,
     });
     act(() => root.unmount());
   });
@@ -2430,9 +2433,9 @@ describe("ExplorationSiteScreen", () => {
     expect(confirm?.disabled).toBe(false);
     act(() => confirm?.click());
     expect(onResolve).toHaveBeenCalledOnce();
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
-      offeredDreamsignId: asDreamsignId(offered.id),
-      replacedDreamsignId: asDreamsignId(held.id),
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      offeredDreamsignId: offered.id,
+      replacedDreamsignId: held.id,
     });
     act(() => root.unmount());
 
@@ -2482,8 +2485,8 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(belowCapacityResolve).toHaveBeenCalledWith("choice-a", {
-      offeredDreamsignId: asDreamsignId(offered.id),
+    expect(belowCapacityResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      offeredDreamsignId: offered.id,
     });
     expect(
       belowCapacity.container.querySelector(
@@ -2535,7 +2538,7 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(belowCapResolve).toHaveBeenCalledWith("choice-a");
+    expect(belowCapResolve).toHaveBeenCalledWith(CHOICE_A_ID);
     expect(
       belowCap.container.querySelector("[data-exploration-dreamsign-choices]"),
     ).toBeNull();
@@ -2587,8 +2590,8 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(atCapResolve).toHaveBeenCalledWith("choice-a", {
-      replacedDreamsignId: asDreamsignId(held.id),
+    expect(atCapResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      replacedDreamsignId: held.id,
     });
     act(() => atCap.root.unmount());
   });
@@ -2675,9 +2678,9 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
-      offeredDreamsignId: asDreamsignId(offered.id),
-      replacedDreamsignId: asDreamsignId(held.id),
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      offeredDreamsignId: offered.id,
+      replacedDreamsignId: held.id,
     });
     act(() => root.unmount());
   });
@@ -2774,7 +2777,7 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
       purgedDreamsignId: held[0].id,
       overflowReplacementDreamsignIds: [held[1].id, held[2].id],
     });
@@ -2819,7 +2822,7 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(directResolve).toHaveBeenCalledWith("choice-a");
+    expect(directResolve).toHaveBeenCalledWith(CHOICE_A_ID);
     act(() => direct.root.unmount());
 
     const onExit = vi.fn();
@@ -3662,7 +3665,7 @@ describe("ExplorationSiteScreen", () => {
             kind: "transfiguration",
             candidates: [
               {
-                entryId: asDeckEntryId("entry-fixture"),
+                entryId: parseDeckEntryId("entry-fixture"),
                 model: base.card,
                 availability: "available",
                 reforgedType: null,
@@ -3749,8 +3752,8 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
 
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
-      entryIds: [asDeckEntryId("entry-fixture")],
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      entryIds: [parseDeckEntryId("entry-fixture")],
       transfiguration: "Empowered",
     });
     act(() => root.unmount());
@@ -3773,7 +3776,7 @@ describe("ExplorationSiteScreen", () => {
             packs: [0, 1].map((index) => ({
               index,
               cards: [0, 1, 2].map((cardIndex) => ({
-                entryId: asDeckEntryId(
+                entryId: testCardId(
                   `pack-${String(index)}-card-${String(cardIndex)}`,
                 ),
                 model: base.card,
@@ -3832,7 +3835,7 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(onResolve).toHaveBeenCalledWith("choice-a", { packIndex: 1 });
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, { packIndex: 1 });
     act(() => root.unmount());
   });
 
@@ -3847,7 +3850,7 @@ describe("ExplorationSiteScreen", () => {
       "offered-c",
       "offered-d",
     ].map((entryId) => ({
-      entryId: asCardId(entryId),
+      entryId: testCardId(entryId),
       model: base.card,
       isBane: false,
     }));
@@ -3923,7 +3926,7 @@ describe("ExplorationSiteScreen", () => {
     act(() =>
       container
         .querySelector<HTMLElement>(
-          '[data-testid="cumulus-exploration-card-offered-c"]',
+          `[data-testid="cumulus-exploration-card-${testCardId("offered-c")}"]`,
         )
         ?.click(),
     );
@@ -3934,8 +3937,8 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
-      cardIds: ["offered-c"],
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      cardIds: [testCardId("offered-c")],
     });
     act(() => root.unmount());
   });
@@ -3958,12 +3961,12 @@ describe("ExplorationSiteScreen", () => {
             ),
             cards: [
               {
-                entryId: asDeckEntryId("entry-a"),
+                entryId: parseDeckEntryId("entry-a"),
                 model: base.card,
                 isBane: false,
               },
               {
-                entryId: asDeckEntryId("entry-b"),
+                entryId: parseDeckEntryId("entry-b"),
                 model: base.card,
                 isBane: false,
               },
@@ -4058,7 +4061,7 @@ describe("ExplorationSiteScreen", () => {
             title: assertLocalized("Copy two"),
             subtitle: assertLocalized("Choose two cards to copy."),
             cards: ["entry-a", "entry-b", "entry-c"].map((entryId) => ({
-              entryId: asDeckEntryId(entryId),
+              entryId: parseDeckEntryId(entryId),
               model: base.card,
               isBane: false,
             })),
@@ -4116,8 +4119,8 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
 
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
-      entryIds: [asDeckEntryId("entry-a"), asDeckEntryId("entry-b")],
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      entryIds: [parseDeckEntryId("entry-a"), parseDeckEntryId("entry-b")],
     });
     act(() => root.unmount());
   });
@@ -4140,7 +4143,7 @@ describe("ExplorationSiteScreen", () => {
               "Choose up to two Warrior cards to purge.",
             ),
             cards: ["entry-a", "entry-b", "entry-c"].map((entryId) => ({
-              entryId: asDeckEntryId(entryId),
+              entryId: parseDeckEntryId(entryId),
               model: base.card,
               isBane: false,
             })),
@@ -4186,7 +4189,7 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(emptyConfirm?.disabled).toBe(false);
     act(() => emptyConfirm?.click());
-    expect(resolveNone).toHaveBeenCalledWith("choice-a", { entryIds: [] });
+    expect(resolveNone).toHaveBeenCalledWith(CHOICE_A_ID, { entryIds: [] });
     act(() => empty.root.unmount());
 
     const resolveTwo = vi.fn();
@@ -4220,8 +4223,8 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(resolveTwo).toHaveBeenCalledWith("choice-a", {
-      entryIds: [asDeckEntryId("entry-a"), asDeckEntryId("entry-b")],
+    expect(resolveTwo).toHaveBeenCalledWith(CHOICE_A_ID, {
+      entryIds: [parseDeckEntryId("entry-a"), parseDeckEntryId("entry-b")],
     });
     act(() => selected.root.unmount());
   });
@@ -4248,7 +4251,7 @@ describe("ExplorationSiteScreen", () => {
             subtitle: assertLocalized("Choose one or two Events."),
             cards: ["replacement-source-a", "replacement-source-b"].map(
               (entryId) => ({
-                entryId: asDeckEntryId(entryId),
+                entryId: parseDeckEntryId(entryId),
                 model: base.card,
                 isBane: false,
               }),
@@ -4306,8 +4309,8 @@ describe("ExplorationSiteScreen", () => {
     ).toHaveLength(1);
     act(() => confirm?.click());
     expect(onResolve).toHaveBeenCalledOnce();
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
-      entryIds: [asDeckEntryId("replacement-source-a")],
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
+      entryIds: [parseDeckEntryId("replacement-source-a")],
     });
     act(() => root.unmount());
   });
@@ -4334,7 +4337,7 @@ describe("ExplorationSiteScreen", () => {
             title: assertLocalized("Share the fire"),
             subtitle: assertLocalized("Choose exactly two Warriors."),
             cards: ["fixed-source-a", "fixed-source-b"].map((entryId) => ({
-              entryId: asDeckEntryId(entryId),
+              entryId: parseDeckEntryId(entryId),
               model: base.card,
               isBane: false,
             })),
@@ -4394,10 +4397,10 @@ describe("ExplorationSiteScreen", () => {
       ),
     ).toBeNull();
     act(() => confirm?.click());
-    expect(onResolve).toHaveBeenCalledWith("choice-a", {
+    expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
       entryIds: [
-        asDeckEntryId("fixed-source-a"),
-        asDeckEntryId("fixed-source-b"),
+        parseDeckEntryId("fixed-source-a"),
+        parseDeckEntryId("fixed-source-b"),
       ],
     });
     act(() => root.unmount());
@@ -4721,8 +4724,8 @@ describe("ExplorationSiteScreen", () => {
         }),
       ),
     ).toEqual([
-      { role: "original", entryId: asDeckEntryId("source-entry") },
-      { role: "copy", entryId: asDeckEntryId("copy-entry") },
+      { role: "original", entryId: parseDeckEntryId("source-entry") },
+      { role: "copy", entryId: parseDeckEntryId("copy-entry") },
     ]);
 
     act(() => {
@@ -4749,12 +4752,12 @@ describe("ExplorationSiteScreen", () => {
     ).toEqual([
       {
         role: "original",
-        entryId: asDeckEntryId("source-entry"),
+        entryId: parseDeckEntryId("source-entry"),
         destination: "journey-deck",
       },
       {
         role: "copy",
-        entryId: asDeckEntryId("copy-entry"),
+        entryId: parseDeckEntryId("copy-entry"),
         destination: "journey-deck",
       },
     ]);
@@ -4937,12 +4940,12 @@ describe("ExplorationSiteScreen", () => {
       })),
     ).toEqual([
       {
-        entryId: asDeckEntryId("deck-entry-a"),
+        entryId: parseDeckEntryId("deck-entry-a"),
         essenceSpent: "100",
         transfiguration: "Inspired",
       },
       {
-        entryId: asDeckEntryId("deck-entry-b"),
+        entryId: parseDeckEntryId("deck-entry-b"),
         essenceSpent: "100",
         transfiguration: "Inspired",
       },
@@ -5108,6 +5111,8 @@ describe("ExplorationSiteScreen", () => {
     if (purgedCard === undefined || survivorCards === undefined) {
       throw new Error("fixture requires purged and surviving cards");
     }
+    const reclaimEntryA = parseDeckEntryId("deck-entry-a");
+    const reclaimEntryB = parseDeckEntryId("deck-entry-b");
     const reclaimView: ExplorationSiteView = {
       ...modified,
       reward: {
@@ -5115,12 +5120,12 @@ describe("ExplorationSiteScreen", () => {
           cards: [],
           purgedCards: [
             {
-              entryId: asDeckEntryId("purged-entry-a"),
+              entryId: parseDeckEntryId("purged-entry-a"),
               model: purgedCard,
               isBane: false,
             },
             {
-              entryId: asDeckEntryId("purged-entry-b"),
+              entryId: parseDeckEntryId("purged-entry-b"),
               model: purgedCard,
               isBane: false,
             },
@@ -5134,8 +5139,8 @@ describe("ExplorationSiteScreen", () => {
           ),
           cards: survivorCards,
           reclaimCostByEntryId: {
-            "deck-entry-a": 2,
-            "deck-entry-b": 4,
+            [reclaimEntryA]: 2,
+            [reclaimEntryB]: 4,
           },
         },
       },
@@ -5206,7 +5211,7 @@ describe("ExplorationSiteScreen", () => {
           cards: [],
           purgedCards: [
             {
-              entryId: asDeckEntryId("purged-warrior"),
+              entryId: parseDeckEntryId("purged-warrior"),
               model: purgedCard,
               isBane: false,
             },
@@ -5313,7 +5318,9 @@ describe("ExplorationSiteScreen", () => {
       },
     );
     const dreamsignTarget = document.createElement("span");
-    dreamsignTarget.dataset.dreamsignId = "reward-dreamsign-id";
+    dreamsignTarget.dataset.dreamsignId = testDreamsignId(
+      "reward-dreamsign-id",
+    );
     dreamsignTarget.getBoundingClientRect = () =>
       new DOMRect(1140, 730, 58, 58);
     document.body.append(dreamsignTarget);
@@ -5537,7 +5544,9 @@ describe("ExplorationSiteScreen", () => {
     const purgedDreamsign = container.querySelector<HTMLElement>(
       "[data-exploration-purged-dreamsign]",
     );
-    expect(purgedDreamsign?.dataset.dreamsignId).toBe("purged-dreamsign-id");
+    expect(purgedDreamsign?.dataset.dreamsignId).toBe(
+      testDreamsignId("purged-dreamsign-id"),
+    );
     expect(
       container.querySelector(
         "[data-exploration-purged-dreamsign-announcement]",
@@ -5726,9 +5735,9 @@ describe("ExplorationSiteScreen", () => {
         destination: flight.getAttribute("data-exploration-destination"),
       })),
     ).toEqual([
-      { entryId: asDeckEntryId("source-entry"), destination: "journey-deck" },
-      { entryId: asDeckEntryId("copy-entry-a"), destination: "journey-deck" },
-      { entryId: asDeckEntryId("copy-entry-b"), destination: "journey-deck" },
+      { entryId: parseDeckEntryId("source-entry"), destination: "journey-deck" },
+      { entryId: parseDeckEntryId("copy-entry-a"), destination: "journey-deck" },
+      { entryId: parseDeckEntryId("copy-entry-b"), destination: "journey-deck" },
     ]);
     expect(onExit).not.toHaveBeenCalled();
     act(() => {
@@ -5872,7 +5881,9 @@ describe("ExplorationSiteScreen", () => {
     const outcome = container.querySelector<HTMLElement>(
       '[data-exploration-outcome="dream-avatar"]',
     );
-    expect(outcome?.dataset.explorationDreamAvatarId).toBe("dream-avatar-new");
+    expect(outcome?.dataset.explorationDreamAvatarId).toBe(
+      testDreamAvatarId("dream-avatar-new"),
+    );
     expect(outcome?.textContent).toContain("New Dream Avatar");
     expect(outcome?.getAttribute("aria-label")).toContain("New Dream Avatar");
     act(() => root.unmount());
@@ -5900,7 +5911,7 @@ describe("ExplorationSiteScreen", () => {
       "transfigure-next-draft-or-shop",
     );
     expect(outcome?.dataset.explorationSourceSiteId).toBe("exploration-site");
-    expect(outcome?.dataset.explorationSourceActionId).toBe("choice-a");
+    expect(outcome?.dataset.explorationSourceActionId).toBe(CHOICE_A_ID);
     expect(outcome?.getAttribute("aria-label")?.trim()).not.toBe("");
     expect(outcome?.textContent?.trim()).not.toBe("");
     act(() => {
@@ -5936,7 +5947,7 @@ describe("ExplorationSiteScreen", () => {
       );
       expect(outcome?.dataset.explorationShopModifier).toBe(modifier);
       expect(outcome?.dataset.explorationSourceSiteId).toBe("exploration-site");
-      expect(outcome?.dataset.explorationSourceActionId).toBe("choice-a");
+      expect(outcome?.dataset.explorationSourceActionId).toBe(CHOICE_A_ID);
       expect(outcome?.dataset.explorationFreePurchaseCount).toBe(count);
       expect(outcome?.dataset.explorationEssenceBefore).toBe(essenceBefore);
       expect(outcome?.dataset.explorationEssenceSpent).toBe(essenceSpent);
@@ -6106,7 +6117,7 @@ describe("ExplorationSiteScreen", () => {
               choices: siteTypes.map((siteType, index) => ({
                 siteType,
                 model: {
-                  id: asSiteId(`prepared-site-${String(index)}`),
+                  id: parseSiteId(`prepared-site-${String(index)}`),
                   type: siteType,
                   isVisited: false,
                   pos: { x: 50, y: 50 },
@@ -6229,7 +6240,7 @@ describe("ExplorationSiteScreen", () => {
         }
       });
       expect(onResolve).toHaveBeenCalledOnce();
-      expect(onResolve).toHaveBeenCalledWith("choice-a", {
+      expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
         siteType: activation === "click" ? "Shop" : "Purge",
       });
       act(() => root.unmount());

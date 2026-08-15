@@ -7,6 +7,7 @@ import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bub
 import { localizedSourceText } from "../../runtime/localization/runtime";
 import { tx } from "@trox/runtime";
 import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import { parsePresentationId } from "../../types/identifiers";
 
 export type BattleStartInit = BattleInit;
 
@@ -74,7 +75,9 @@ export function buildBattleStartView(
     ...(battleStartGuidance !== undefined && battleOrdinal !== undefined
       ? {
           guideDialogue: {
-            id: `${init.battleId}:${battleOrdinal}-battle-start-guidance`,
+            id: parsePresentationId(
+              `${init.battleId}:${battleOrdinal}-battle-start-guidance`,
+            ),
             model: {
               portrait: {
                 kind: "character-portrait" as const,

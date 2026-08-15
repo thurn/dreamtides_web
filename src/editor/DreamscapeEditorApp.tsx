@@ -30,9 +30,8 @@ import type {
   EditableDreamscapeField,
   EditorDreamscapeRecord,
 } from "./dreamscape-types";
+import type { DreamAvatarId } from "../types/identifiers";
 import type { DreamscapeEditorApiClient } from "./dreamscape-types";
-import { asGuideId } from "../types/identifiers";
-import { asAffiliationId } from "../types/identifiers";
 
 const DEFAULT_DREAMSCAPE_API_CLIENT: DreamscapeEditorApiClient = {
   loadEditorDreamscapes,
@@ -112,7 +111,7 @@ function filteredDreamscapes(
   return dreamscapes.filter((record) => {
     const haystack =
       `${record.name} ${record.id} ${record["signature-site"]} ` +
-      `${record["guide-id"] ?? asGuideId("")} ${record["affiliation-id"] ?? asAffiliationId("")}`.toLowerCase();
+      `${record["guide-id"] ?? ""} ${record["affiliation-id"] ?? ""}`.toLowerCase();
     return haystack.includes(searchText);
   });
 }
@@ -181,13 +180,13 @@ export default function DreamscapeEditorApp({
     [dreamscapes, displayState],
   );
 
-  // Lowercased DreamAvatar id -> the name of the region that currently hosts it,
+  // DreamAvatar id -> the name of the region that currently hosts it,
   // so each resident picker can show where a caller lives before it is moved.
   const regionNameByDreamAvatar = useMemo(() => {
-    const map = new Map<string, string>();
+    const map = new Map<DreamAvatarId, string>();
     for (const dreamscape of dreamscapes) {
       for (const dreamAvatarId of dreamscape.dreamAvatarIds) {
-        map.set(dreamAvatarId.toLowerCase(), dreamscape.name);
+        map.set(dreamAvatarId, dreamscape.name);
       }
     }
     return map;
@@ -293,7 +292,7 @@ export default function DreamscapeEditorApp({
   function handleAssignDreamAvatar(
     record: EditorDreamscapeRecord,
     action: DreamAvatarAssignmentAction,
-    params: { inId?: string; outId?: string },
+    params: { inId?: DreamAvatarId; outId?: DreamAvatarId },
   ) {
     if (residentPendingId !== null) {
       return;

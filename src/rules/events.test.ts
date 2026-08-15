@@ -1,3 +1,5 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 // Registry-tie coverage (audit finding P3-5): `EventPayloads`, `GameEventType`,
 // and `KNOWN_EVENT_TYPES` are tied at COMPILE time in events.ts (the
 // `KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true>` literal plus its
@@ -11,17 +13,17 @@
 // that would crash on an empty payload, independent of the type-level proof.
 
 import { describe, expect, it } from "vitest";
-import type { EventContext, GameEvent } from "../eventlog/types";
+import type { EventContext, GameEvent, Genesis } from "../eventlog/types";
 import { genesisFoldState } from "./fold-state";
 import { routeDomain } from "./reducer";
 import { INTENTIONALLY_UNROUTED_EVENT_TYPES, KNOWN_EVENT_TYPES } from "./events";
 
 const GENESIS = {
-  seed: "events-registry-seed",
+  seed: testJourneySeed("events-registry-seed"),
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: { poolVariant: "tides4" },
-};
+} satisfies Genesis;
 
 const CTX: EventContext = {
   seq: 1,
@@ -30,11 +32,11 @@ const CTX: EventContext = {
   timestamp: "1970-01-01T00:00:00.000Z",
 };
 
-function event(type: string): GameEvent {
+function event(type: GameEvent["type"]): GameEvent {
   return {
     type,
     payload: {},
-    actor: "alice",
+    actor: testEventActor("alice"),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
     basedOnSeq: 0,
   };

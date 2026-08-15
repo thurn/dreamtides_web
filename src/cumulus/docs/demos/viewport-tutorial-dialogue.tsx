@@ -13,7 +13,10 @@ import {
   DemoSelect,
   DemoToggle,
 } from "./promotion-demo-controls";
-import { asPresentationId } from "../../../types/identifiers";
+import {
+  parsePresentationId,
+  parseTutorialTriggerId,
+} from "../../../types/identifiers";
 function Demo() {
   const [placement, setPlacement] = useState<"floating" | "anchored">(
     "floating",
@@ -23,9 +26,12 @@ function Demo() {
   const [obstacles, setObstacles] = useState<"open" | "crowded" | "shifted">(
     "crowded",
   );
-  const anchorRef = useTutorialAnchor("demo-site-anchor");
-  const cardRef = useTutorialObstacle("demo-card", "card");
-  const chromeRef = useTutorialObstacle("demo-chrome", "chrome");
+  const anchorRef = useTutorialAnchor("tutorial-anchor:demo-site-anchor");
+  const cardRef = useTutorialObstacle("tutorial-obstacle:demo-card", "card");
+  const chromeRef = useTutorialObstacle(
+    "tutorial-obstacle:demo-chrome",
+    "chrome",
+  );
   return (
     <div style={{ width: "100%", maxWidth: 760, display: "grid", gap: 12 }}>
       <DemoControls>
@@ -109,16 +115,24 @@ function Demo() {
         )}
       </div>
       <ViewportTutorialDialogue
-        presentationId={asPresentationId("demo-tutorial")}
+        presentationId={parsePresentationId("demo-tutorial")}
         dialogue={demoDialogue}
         context={context}
         placement={
           placement === "floating"
             ? { kind: "floating", avoidance: "cards-and-chrome" }
-            : { kind: "anchored", anchorId: "demo-site-anchor" }
+            : {
+                kind: "anchored",
+                anchorId: "tutorial-anchor:demo-site-anchor",
+              }
         }
         visible={visible}
-        diagnostics={{ triggerId: "demo", messageIndex: 0 }}
+        diagnostics={{
+          triggerId: parseTutorialTriggerId(
+            "00000000-0000-4000-8000-000000000001",
+          ),
+          messageIndex: 0,
+        }}
       />
     </div>
   );

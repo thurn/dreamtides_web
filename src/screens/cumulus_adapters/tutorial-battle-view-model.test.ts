@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
+import { testCardName } from "../../types/test-identities";
 import type { MobileBattleView } from "../../cumulus/screens/MobileBattleScreen";
 import type { BattleFoldState } from "../../rules/battle/fold";
 import type { TutorialBattleControllerPlan } from "../../battle/tutorial-battle-controller";
@@ -7,11 +8,11 @@ import { buildMobileBattleView } from "./mobile-battle-view-model";
 import { buildTutorialBattleView } from "./tutorial-battle-view-model";
 import { assertLocalized } from "@trox/runtime";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
-import { asBattleId } from "../../types/identifiers";
-import { asOpponentId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asBattleCardId } from "../../types/identifiers";
-import { asPresentationId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseOpponentId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { parsePresentationId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -85,7 +86,7 @@ describe("buildTutorialBattleView", () => {
           kind: "tutorial-guidance",
           source: {
             kind: "dreamwell",
-            cardId: asCardId("card-uuid"),
+            cardId: testCardId("card-uuid"),
             side: "player",
           },
           messages: [],
@@ -117,7 +118,7 @@ describe("buildTutorialBattleView", () => {
     const battleCardId = "enemy-card-instance";
     const cardId = "229ab3a1-3720-41a2-924c-8fe112188f8e";
     const instance = {
-      battleCardId: asBattleCardId(battleCardId),
+      battleCardId: parseBattleCardId(battleCardId),
       owner: "enemy",
       controller: "enemy",
       sparkDelta: 0,
@@ -147,9 +148,9 @@ describe("buildTutorialBattleView", () => {
       },
       definition: {
         sourceDeckEntryId: null,
-        cardId: asCardId(cardId),
+        cardId: testCardId(cardId),
         cardNumber: 520,
-        name: "Synthetic opponent card",
+        name: testCardName("Synthetic opponent card"),
         battleCardKind: "character",
         subtype: "Musician",
         energyCost: 2,
@@ -192,8 +193,8 @@ describe("buildTutorialBattleView", () => {
       tutorialPresentation: {
         id: `opponent-play:${battleCardId}`,
         kind: "opponent-play",
-        cardId: asCardId(cardId),
-        battleCardId: asBattleCardId(battleCardId),
+        cardId: testCardId(cardId),
+        battleCardId: parseBattleCardId(battleCardId),
         cardKind: "character",
       },
     } as unknown as BattleFoldState;
@@ -213,7 +214,7 @@ describe("buildTutorialBattleView", () => {
     expect(projectedBoard?.sides.enemy.backRank.B4).toBeNull();
     expect(view.presentation).toMatchObject({
       kind: "opponent-play",
-      battleCardId: asBattleCardId(battleCardId),
+      battleCardId: parseBattleCardId(battleCardId),
       card: { id: battleCardId },
     });
 
@@ -302,8 +303,8 @@ describe("buildTutorialBattleView", () => {
         tutorialPresentation: {
           id: presentationId,
           kind: "opponent-play",
-          cardId: asCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
-          battleCardId: asBattleCardId("missing-instance"),
+          cardId: testCardId("229ab3a1-3720-41a2-924c-8fe112188f8e"),
+          battleCardId: parseBattleCardId("missing-instance"),
           cardKind: "character",
         },
       } as unknown as BattleFoldState,
@@ -356,10 +357,10 @@ describe("buildTutorialBattleView", () => {
               ? { blockers: [] }
               : {
                   slotId: "F0",
-                  challengerBattleCardId: asBattleCardId(
+                  challengerBattleCardId: parseBattleCardId(
                     "enemy-challenger-uuid",
                   ),
-                  blockerBattleCardId: asBattleCardId("player-blocker-uuid"),
+                  blockerBattleCardId: parseBattleCardId("player-blocker-uuid"),
                   scored: null,
                   dissolved: [],
                 }),
@@ -376,7 +377,7 @@ describe("buildTutorialBattleView", () => {
 
       expect(view.presentation).toEqual({
         kind,
-        presentationId: asPresentationId(presentationId),
+        presentationId: parsePresentationId(presentationId),
         ...(kind === "challenge-resolved"
           ? { paired: true, dissolved: [], scored: null }
           : {}),
@@ -391,11 +392,11 @@ describe("buildTutorialBattleView", () => {
       enemy,
       near: player,
       far: enemy,
-      battleId: asBattleId("settled"),
+      battleId: parseBattleId("settled"),
     } as MobileBattleView;
     const originView = {
       ...settledView,
-      battleId: asBattleId("origin"),
+      battleId: parseBattleId("origin"),
     } as MobileBattleView;
     vi.mocked(buildMobileBattleView)
       .mockReturnValueOnce(settledView)
@@ -443,12 +444,12 @@ describe("buildTutorialBattleView", () => {
         kind: "challenge-resolved",
         activeSide: "player",
         slotId: "F4",
-        challengerBattleCardId: asBattleCardId(playerLoser),
-        blockerBattleCardId: asBattleCardId(enemyLoser),
+        challengerBattleCardId: parseBattleCardId(playerLoser),
+        blockerBattleCardId: parseBattleCardId(enemyLoser),
         scored: null,
         dissolved: [
-          { battleCardId: asBattleCardId(playerLoser), side: "player" },
-          { battleCardId: asBattleCardId(enemyLoser), side: "enemy" },
+          { battleCardId: parseBattleCardId(playerLoser), side: "player" },
+          { battleCardId: parseBattleCardId(enemyLoser), side: "enemy" },
         ],
       },
     } as unknown as BattleFoldState;
@@ -481,8 +482,8 @@ describe("buildTutorialBattleView", () => {
     expect(view.presentation).toMatchObject({
       kind: "challenge-resolved",
       dissolved: [
-        { battleCardId: asBattleCardId(playerLoser), side: "player" },
-        { battleCardId: asBattleCardId(enemyLoser), side: "enemy" },
+        { battleCardId: parseBattleCardId(playerLoser), side: "player" },
+        { battleCardId: parseBattleCardId(enemyLoser), side: "enemy" },
       ],
     });
   });
@@ -500,7 +501,7 @@ describe("buildTutorialBattleView", () => {
       {
         init: {
           enemyDescriptor: {
-            id: asOpponentId("enemy-avatar-uuid"),
+            id: parseOpponentId("enemy-avatar-uuid"),
             imageNumber: "0025",
             name: "Enemy",
             subtitle: "Opponent",

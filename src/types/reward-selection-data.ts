@@ -24,7 +24,8 @@ export interface RewardSelectionTuning {
 export interface RewardSelectionData {
   schemaVersion: 2;
   rulesVersion: "2";
-  contentHash: string;
-  foldHash: string;
+  contentHash: ContentHash;
+  foldHash: FoldHash;
   tuning: RewardSelectionTuning;
 }
+import type { ContentHash, FoldHash } from "./content-hash";

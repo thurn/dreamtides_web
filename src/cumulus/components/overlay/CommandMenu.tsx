@@ -25,6 +25,7 @@ import { GLYPHS } from "../../primitives/glyph";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { token } from "../../primitives/tokens";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
+import type { DomElementId, DomTestId } from "../../types/dom";
 import {
   MENU_EDGE_INSET_DESKTOP_PX,
   MENU_EDGE_INSET_MOBILE_PX,
@@ -35,9 +36,9 @@ export type CommandMenuCopy = LocalizedString;
 export type CommandMenuStatusCopy = LocalizedString;
 
 /** A single command row. `id` is stable domain identity, never display copy. */
-export interface CommandMenuAction {
+export interface CommandMenuAction<Id extends string = string> {
   kind: "action";
-  id: string;
+  id: Id;
   glyph: Glyph;
   label: CommandMenuCopy;
   active?: boolean;
@@ -45,28 +46,28 @@ export interface CommandMenuAction {
 }
 
 /** A named, nested group of command rows. */
-export interface CommandMenuGroup {
+export interface CommandMenuGroup<Id extends string = string> {
   kind: "group";
-  id: string;
+  id: Id;
   glyph: Glyph;
   label: CommandMenuCopy;
   active?: boolean;
   /** Runs when Cumulus opens this group, before its nested commands are shown. */
   onOpen?: () => void;
-  actions: readonly CommandMenuItem[];
+  actions: readonly CommandMenuItem<Id>[];
 }
 
 /** A structural separator with stable identity. */
-export interface CommandMenuDivider {
+export interface CommandMenuDivider<Id extends string = string> {
   kind: "divider";
-  id: string;
+  id: Id;
 }
 
 /** A signed, non-zero whole-number command committed from an inline field. */
-export interface CommandMenuSignedInteger {
+export interface CommandMenuSignedInteger<Id extends string = string> {
   kind: "signed-integer";
   /** Stable domain identity for the field command. */
-  id: string;
+  id: Id;
   /** Visible label above the field. */
   label: LocalizedString;
   /** Optional example value shown while the field is empty. */
@@ -78,13 +79,15 @@ export interface CommandMenuSignedInteger {
 }
 
 /** The full typed hierarchy accepted by Cumulus command menus. */
-export type CommandMenuItem =
-  | CommandMenuAction
-  | CommandMenuGroup
-  | CommandMenuSignedInteger
-  | CommandMenuDivider;
+export type CommandMenuItem<Id extends string = string> =
+  | CommandMenuAction<Id>
+  | CommandMenuGroup<Id>
+  | CommandMenuSignedInteger<Id>
+  | CommandMenuDivider<Id>;
 
-type CommandMenuInteractiveItem = CommandMenuAction | CommandMenuGroup;
+type CommandMenuInteractiveItem<Id extends string> =
+  | CommandMenuAction<Id>
+  | CommandMenuGroup<Id>;
 
 /** The fixed trigger rendered by an app-chrome command menu. */
 export interface CommandMenuTriggerModel {
@@ -98,22 +101,22 @@ export interface CommandMenuStatusModel {
   /** Player-facing status copy. */
   text: CommandMenuStatusCopy;
   /** Optional test selector for the status announcement. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 /** A command menu installed in the fixed journey app chrome. */
-export interface CommandMenuAppChromeModel {
+export interface CommandMenuAppChromeModel<Id extends string = string> {
   kind: "appChrome";
   /** The fixed IconButton trigger rendered by the component. */
   trigger: CommandMenuTriggerModel;
   /** Root utility commands and their nested groups. */
-  actions: readonly CommandMenuItem[];
+  actions: readonly CommandMenuItem<Id>[];
   /** Optional transient result reported by the app-shell command controller. */
   status?: CommandMenuStatusModel;
   /** Lifts the fixed trigger above an app-shell full-screen overlay. */
   elevated?: boolean;
   /** Optional test selector for the trigger. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 /** Anchor supplied by a pointer interaction. */
@@ -123,37 +126,39 @@ export interface CommandMenuAnchor {
 }
 
 /** A command menu opened for an activated card or pointer target. */
-export interface CommandMenuContextModel {
+export interface CommandMenuContextModel<Id extends string = string> {
   kind: "context";
   /** Describes the card/pointer subject in the menu's header. */
   title: LocalizedString;
   /** Optional structured secondary location/context copy. */
   subtitle?: LocalizedString;
   /** Commands available for the activated card or pointer target. */
-  actions: readonly CommandMenuItem[];
+  actions: readonly CommandMenuItem<Id>[];
   /** Semantic location used to anchor the desktop pointer menu. */
   anchor: CommandMenuAnchor;
   /** Called after a leaf command, outside dismissal, or Escape. */
   onDismiss: () => void;
   /** Optional test selector for the root offering. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 /** Complete data for either supported command-menu presentation. */
-export type CommandMenuModel =
-  CommandMenuAppChromeModel | CommandMenuContextModel;
+export type CommandMenuModel<Id extends string = string> =
+  CommandMenuAppChromeModel<Id> | CommandMenuContextModel<Id>;
 
 /** Props for {@link CommandMenu}. */
-export interface CommandMenuProps {
+export interface CommandMenuProps<Id extends string = string> {
   /** Commands and the semantic presentation selected for this offering. */
-  model: CommandMenuModel;
+  model: CommandMenuModel<Id>;
 }
 
 /**
  * The single Cumulus command offering. Its model selects fixed app chrome or
  * an activated card/pointer context while preserving one typed action model.
  */
-export function CommandMenu({ model }: CommandMenuProps): ReactElement {
+export function CommandMenu<Id extends string>({
+  model,
+}: CommandMenuProps<Id>): ReactElement {
   return model.kind === "appChrome" ? (
     <AppChromeCommandMenu model={model} />
   ) : (
@@ -161,10 +166,10 @@ export function CommandMenu({ model }: CommandMenuProps): ReactElement {
   );
 }
 
-function AppChromeCommandMenu({
+function AppChromeCommandMenu<Id extends string>({
   model,
 }: {
-  model: CommandMenuAppChromeModel;
+  model: CommandMenuAppChromeModel<Id>;
 }): ReactElement {
   const { trigger, actions, status, elevated = false, testId } = model;
   const [open, setOpen] = useState(false);
@@ -248,10 +253,10 @@ function AppChromeCommandMenu({
   return elevated ? createPortal(menu, document.body) : menu;
 }
 
-function ContextCommandMenu({
+function ContextCommandMenu<Id extends string>({
   model,
 }: {
-  model: CommandMenuContextModel;
+  model: CommandMenuContextModel<Id>;
 }): ReactElement {
   const { title, subtitle, actions, anchor, onDismiss, testId } = model;
   const isDesktop = useIsDesktop();
@@ -353,26 +358,26 @@ function ContextCommandMenu({
   );
 }
 
-function HierarchicalMenu({
+function HierarchicalMenu<Id extends string>({
   id,
   items,
   align = "start",
   onDismiss,
   mobile = false,
 }: {
-  id?: string;
-  items: readonly CommandMenuItem[];
+  id?: DomElementId;
+  items: readonly CommandMenuItem<Id>[];
   align?: "start" | "end";
   onDismiss: () => void;
   mobile?: boolean;
 }): ReactElement {
   const resolve = useLocalizer();
-  const [path, setPath] = useState<readonly string[]>([]);
+  const [path, setPath] = useState<readonly Id[]>([]);
   const menuRef = useRef<HTMLDivElement>(null);
   const leafItems = items.filter((item) => item.kind !== "divider");
   const currentItems = menuItemsAtPath(items, path);
   const interactive = currentItems.filter(
-    (item): item is CommandMenuInteractiveItem =>
+    (item): item is CommandMenuInteractiveItem<Id> =>
       item.kind === "action" || item.kind === "group",
   );
   const [activeIndex, setActiveIndex] = useState(0);
@@ -386,7 +391,7 @@ function HierarchicalMenu({
     else menuRef.current?.focus();
   }, [path]);
 
-  function choose(item: CommandMenuInteractiveItem): void {
+  function choose(item: CommandMenuInteractiveItem<Id>): void {
     if (item.kind === "group") {
       item.onOpen?.();
       setPath((previous) => [...previous, item.id]);
@@ -597,14 +602,14 @@ function SignedIntegerCommand({
   );
 }
 
-function CommandRow({
+function CommandRow<Id extends string>({
   item,
   label,
   active,
   mobile,
   onActivate,
 }: {
-  item: CommandMenuInteractiveItem;
+  item: CommandMenuInteractiveItem<Id>;
   label: LocalizedString;
   active: boolean;
   mobile: boolean;
@@ -648,14 +653,14 @@ function CommandRow({
   );
 }
 
-function menuItemsAtPath(
-  items: readonly CommandMenuItem[],
-  path: readonly string[],
-): readonly CommandMenuItem[] {
+function menuItemsAtPath<Id extends string>(
+  items: readonly CommandMenuItem<Id>[],
+  path: readonly Id[],
+): readonly CommandMenuItem<Id>[] {
   let current = items;
   for (const id of path) {
     const group = current.find(
-      (item): item is CommandMenuGroup =>
+      (item): item is CommandMenuGroup<Id> =>
         item.kind === "group" && item.id === id,
     );
     if (group === undefined) return items;

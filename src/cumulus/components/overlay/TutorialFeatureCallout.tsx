@@ -6,6 +6,7 @@ import { token } from "../../primitives/tokens";
 import { InlineGlyph } from "../typography/InlineGlyph";
 import { meaning, tx, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { DomTestId } from "../../types/dom";
 
 /** The four authored card regions taught by the loading-screen anatomy scene. */
 export type TutorialFeatureCalloutKind =
@@ -57,7 +58,7 @@ export interface TutorialFeatureCalloutProps {
   /** Semantic card region named by this callout. */
   readonly feature: TutorialFeatureCalloutKind;
   /** Optional stable test id for product-screen QA. */
-  readonly testId?: string;
+  readonly testId?: DomTestId;
 }
 
 /**

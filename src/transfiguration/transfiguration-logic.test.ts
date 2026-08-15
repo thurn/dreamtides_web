@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import { transfigurationFixture } from "../testing/transfiguration-fixture";
 import {
   applyTransfigurationToCard,
@@ -12,13 +12,14 @@ import {
   TRANSFIGURE_MARK_END,
   TRANSFIGURE_MARK_START,
 } from "./transfiguration-logic";
+import { testCardId } from "../types/test-identities";
 
 const data = transfigurationFixture();
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: asCardName("Fixture card"),
-    id: asCardId("00000000-0000-4000-8000-000000000101"),
+    name: parseCardName("Fixture card"),
+    id: testCardId("00000000-0000-4000-8000-000000000101"),
     cardNumber: 1,
     cardType: "Character",
     subtype: "",

@@ -4,11 +4,13 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { FrontDoorRouter } from "./FrontDoorRouter";
+import type { JourneyId } from "../types/identifiers";
+import { parseJourneyId } from "../types/identifiers";
 
 const stateMocks = vi.hoisted<{
   frontDoor: {
     phase: "main" | "mainExiting" | "loading" | "tutorial" | "journey";
-    journeyId: string | null;
+    journeyId: JourneyId | null;
   };
   battle?: { mode?: { kind: "tutorial" | "journey" } } | null;
 }>(() => ({
@@ -106,7 +108,7 @@ describe("FrontDoorRouter", () => {
     expect(container.querySelector("[data-main-menu]")).not.toBeNull();
     expect(adapterMocks.mainSpeed).toBe(4);
 
-    stateMocks.frontDoor = { phase: "loading", journeyId: "event:1" };
+    stateMocks.frontDoor = { phase: "loading", journeyId: parseJourneyId("event:1") };
     act(() =>
       root.render(
         <FrontDoorRouter
@@ -121,7 +123,7 @@ describe("FrontDoorRouter", () => {
     expect(window.location.search).toBe("?game=room42");
     expect(window.location.hash).toBe("#shared");
 
-    stateMocks.frontDoor = { phase: "tutorial", journeyId: "event:1" };
+    stateMocks.frontDoor = { phase: "tutorial", journeyId: parseJourneyId("event:1") };
     act(() =>
       root.render(
         <FrontDoorRouter
@@ -147,7 +149,7 @@ describe("FrontDoorRouter", () => {
       container.querySelector("[data-tutorial-live-battle]"),
     ).not.toBeNull();
 
-    stateMocks.frontDoor = { phase: "journey", journeyId: "event:1" };
+    stateMocks.frontDoor = { phase: "journey", journeyId: parseJourneyId("event:1") };
     act(() =>
       root.render(
         <FrontDoorRouter
@@ -163,7 +165,7 @@ describe("FrontDoorRouter", () => {
   });
 
   it("passes the direct tutorial-battle route flag only to the authored tutorial adapter", () => {
-    stateMocks.frontDoor = { phase: "tutorial", journeyId: "event:direct" };
+    stateMocks.frontDoor = { phase: "tutorial", journeyId: parseJourneyId("event:direct") };
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -178,7 +180,7 @@ describe("FrontDoorRouter", () => {
   });
 
   it("starts the live tutorial handoff and previews victory for its direct route", () => {
-    stateMocks.frontDoor = { phase: "tutorial", journeyId: "event:direct" };
+    stateMocks.frontDoor = { phase: "tutorial", journeyId: parseJourneyId("event:direct") };
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);

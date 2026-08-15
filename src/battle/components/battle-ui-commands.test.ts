@@ -12,13 +12,13 @@ import {
   createPoolCardDropCommand,
 } from "./battle-ui-commands";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
-import { asBattleEntryKey } from "../../types/identifiers";
-import { asBattleCardId, type BattleCardId } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
+import { type BattleCardId } from "../../types/identifiers";
 
 function board() {
   return createInitialBattleState(
     createTestBattleInit({
-      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
+      battleEntryKey: parseBattleEntryKey("site-7::2::dreamscape-2"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
@@ -109,7 +109,7 @@ describe("createPlayCardFromHandCommand", () => {
       id: "DEBUG_EDIT",
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
-        battleCardId: asBattleCardId(eventId),
+        battleCardId: eventId,
         destination: { side: "player", zone: "void" },
       },
     });

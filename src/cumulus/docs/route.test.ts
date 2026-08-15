@@ -14,9 +14,9 @@ describe("parseCumulusRoute", () => {
   );
 
   it("parses a single segment as a component route", () => {
-    expect(parseCumulusRoute("#/button")).toEqual({
+    expect(parseCumulusRoute("#/glass-button")).toEqual({
       view: "component",
-      id: "button",
+      id: "glass-button",
     });
   });
 
@@ -35,53 +35,55 @@ describe("parseCumulusRoute", () => {
   });
 
   it("parses a /mockup suffix as a mockup route for that id", () => {
-    expect(parseCumulusRoute("#/button/mockup")).toEqual({
+    expect(parseCumulusRoute("#/glass-button/mockup")).toEqual({
       view: "mockup",
-      id: "button",
+      id: "glass-button",
     });
   });
 
   it("falls back to the component view for an unrecognized trailing segment, rather than crashing or treating it as a mockup", () => {
-    expect(parseCumulusRoute("#/button/xyz")).toEqual({
+    expect(parseCumulusRoute("#/glass-button/xyz")).toEqual({
       view: "component",
-      id: "button",
+      id: "glass-button",
     });
   });
 
   it("canonicalizes ids by trimming and lowercasing so links can't diverge", () => {
-    expect(parseCumulusRoute("#/Button")).toEqual(parseCumulusRoute("#/button"));
-    expect(parseCumulusRoute("#/Button")).toEqual({
+    expect(parseCumulusRoute("#/Glass-Button")).toEqual(
+      parseCumulusRoute("#/glass-button"),
+    );
+    expect(parseCumulusRoute("#/Glass-Button")).toEqual({
       view: "component",
-      id: "button",
+      id: "glass-button",
     });
-    expect(parseCumulusRoute("#/ button ")).toEqual({
+    expect(parseCumulusRoute("#/ glass-button ")).toEqual({
       view: "component",
-      id: "button",
+      id: "glass-button",
     });
   });
 
   it("tolerates extra leading/trailing/duplicate slashes", () => {
-    expect(parseCumulusRoute("#//button//")).toEqual({
+    expect(parseCumulusRoute("#//glass-button//")).toEqual({
       view: "component",
-      id: "button",
+      id: "glass-button",
     });
   });
 
   it("accepts a hash value without the leading '#'", () => {
-    expect(parseCumulusRoute("/button")).toEqual({
+    expect(parseCumulusRoute("/glass-button")).toEqual({
       view: "component",
-      id: "button",
+      id: "glass-button",
     });
-    expect(parseCumulusRoute("button")).toEqual({
+    expect(parseCumulusRoute("glass-button")).toEqual({
       view: "component",
-      id: "button",
+      id: "glass-button",
     });
   });
 
   it("canonicalizes the mockup suffix's own case", () => {
-    expect(parseCumulusRoute("#/button/Mockup")).toEqual({
+    expect(parseCumulusRoute("#/glass-button/Mockup")).toEqual({
       view: "mockup",
-      id: "button",
+      id: "glass-button",
     });
   });
 });

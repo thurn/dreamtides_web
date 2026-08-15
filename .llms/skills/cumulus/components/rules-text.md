@@ -22,8 +22,8 @@ The canonical Dreamtides rules-copy source: resource symbols and keywords render
 
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
-| `kind` | `RulesTextGlossaryOwner` | no | Object type used to contextualize glossary definitions. |
-| `id` | `string` | no | Stable UUID or domain id for this exact rules-text owner. |
+| `kind` | `"card" \| "dreamAvatar" \| "opponentDreamAvatar" \| "dreamsign" \| "dreamwellCard"` | no |  |
+| `id` | `DreamAvatarId \| OpponentId \| DreamwellCardId \| CardId \| DreamsignId` | no |  |
 
 ## Usage
 

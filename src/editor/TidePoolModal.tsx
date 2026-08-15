@@ -7,7 +7,7 @@ import type {
   EditorTideOption,
   EditorTidePool,
 } from "./dream-avatar-types";
-import { asTideId } from "../types/identifiers";
+import type { TideId } from "../types/identifiers";
 
 export function tideDotColor(id: Resonance): string {
   return resonance(id).accentColor;
@@ -103,11 +103,11 @@ export default function TidePoolModal({
   onSave,
   onClose,
 }: TidePoolModalProps) {
-  const [starter, setStarter] = useState<string | null>(
+  const [starter, setStarter] = useState<TideId | null>(
     dreamAvatar.tidePool.starter,
   );
-  const [facets, setFacets] = useState<string[]>(dreamAvatar.tidePool.facets);
-  const [neutral, setNeutral] = useState<string[]>(
+  const [facets, setFacets] = useState<TideId[]>(dreamAvatar.tidePool.facets);
+  const [neutral, setNeutral] = useState<TideId[]>(
     dreamAvatar.tidePool.neutral,
   );
 
@@ -119,7 +119,7 @@ export default function TidePoolModal({
     };
   }, [tides]);
 
-  const toggle = (list: string[], id: string): string[] =>
+  const toggle = (list: TideId[], id: TideId): TideId[] =>
     list.includes(id) ? list.filter((entry) => entry !== id) : [...list, id];
 
   const facetsEmpty = facets.length === 0;
@@ -309,9 +309,9 @@ export default function TidePoolModal({
             disabled={!canSave}
             onClick={() =>
               onSave({
-                starter: starter === null ? null : asTideId(starter),
-                facets: facets.map(asTideId),
-                neutral: neutral.map(asTideId),
+                starter,
+                facets,
+                neutral,
               })
             }
             style={{

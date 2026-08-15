@@ -1,4 +1,5 @@
 import type { CardData } from "../types/cards";
+import type { CardId } from "../types/card-identity";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 
 /** A tide deck card resolved to renderable card data plus its copy count. */
@@ -13,7 +14,7 @@ export interface TideDeckResolution {
   /** Distinct cards in the tide, in decklist order. */
   cards: ResolvedTideCard[];
   /** Decklist UUIDs that match no card. */
-  unresolved: string[];
+  unresolved: CardId[];
   /** Total copies across the whole decklist. */
   totalCopies: number;
 }
@@ -27,17 +28,17 @@ export interface TideDeckResolution {
  */
 export function resolveTideDeck(
   deck: Tides4DeckJson | undefined,
-  cardsByUuid: ReadonlyMap<string, CardData>,
+  cardsByUuid: ReadonlyMap<CardId, CardData>,
 ): TideDeckResolution {
   if (deck === undefined) {
     return { found: false, cards: [], unresolved: [], totalCopies: 0 };
   }
   const cards: ResolvedTideCard[] = [];
-  const unresolved: string[] = [];
+  const unresolved: CardId[] = [];
   let totalCopies = 0;
   for (const entry of deck.cards) {
     totalCopies += entry.copies;
-    const card = cardsByUuid.get(entry.id.toLowerCase());
+    const card = cardsByUuid.get(entry.id);
     if (card === undefined) {
       unresolved.push(entry.id);
     } else {

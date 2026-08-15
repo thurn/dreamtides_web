@@ -98,7 +98,7 @@ export const FooScreenAdapter = () => <FooScreen />;
       code: `
 import { FooScreen } from "../../cumulus/screens/FooScreen";
 const POLL_MS = 250;
-type PickHandler = (id: string) => void;
+type PickHandler = (index: number) => void;
 export function FooScreenAdapter() {
   return <FooScreen pollMs={POLL_MS} />;
 }
@@ -201,7 +201,7 @@ export function FooScreenAdapter() {
       filename: ADAPTER,
       code: `
 import { FooScreen } from "../../cumulus/screens/FooScreen";
-export interface FooView { id: string }
+export interface FooView { value: number }
 export function FooScreenAdapter() {
   return <FooScreen />;
 }

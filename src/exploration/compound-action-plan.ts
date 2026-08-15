@@ -28,8 +28,8 @@ import type {
 import type { DeckEntryId, SelectionKey } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
 import type { ExplorationActionId } from "../types/identifiers";
-import { asCardId } from "../types/card-identity";
-import { asSelectionKey } from "../types/identifiers";
+import { parseSelectionKey } from "../types/identifiers";
+import type { SelectionContentRevision } from "../types/selection-content-revision";
 
 export type ExplorationCompoundActionKind =
   | "all-card-transfiguration"
@@ -59,7 +59,7 @@ export type ExplorationCompoundActionUnavailableReason =
 
 interface ExplorationCompoundActionPreparationCommon {
   selectionRulesVersion: SelectionRulesVersion;
-  selectionContentRevision: string;
+  selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
   selectorSignatures: readonly string[];
   selectorTraces: readonly RewardSelectionTrace[];
@@ -287,7 +287,7 @@ function request(
     scope: {
       journeySeed: input.journey.seed,
       siteUuid: input.site.id,
-      selectionKey: asSelectionKey(`${input.actionId}:${suffix}`),
+      selectionKey: parseSelectionKey(`${input.actionId}:${suffix}`),
     },
   };
 }
@@ -301,7 +301,7 @@ function common(
   return {
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
-    selectionKey: asSelectionKey(input.actionId),
+    selectionKey: parseSelectionKey(input.actionId),
     selectorSignatures: selectors.map(({ signature }) => signature),
     selectorTraces: selectors.map(({ trace }) => trace),
     ...(unavailableReason === undefined ? {} : { unavailableReason }),
@@ -690,7 +690,7 @@ function prepareTakeTransfiguredNightmares(
   const offeredCards = selection.ok
     ? selection.bindings.transfigurations.map(
         ({ cardUuid, transfiguration }) => ({
-          cardId: asCardId(cardUuid),
+          cardId: cardUuid,
           transfiguration,
         }),
       )

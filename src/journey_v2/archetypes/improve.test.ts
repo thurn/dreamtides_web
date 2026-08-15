@@ -19,13 +19,14 @@ import {
   transfigureCandidatePairs,
 } from "./improve";
 import { eligibleTransfigurations } from "../../transfiguration/transfiguration-logic";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardId } from "../../types/card-identity";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testCardId } from "../../types/test-identities";
 
 function uuid(n: number): CardId {
   const hex = n.toString(16).padStart(12, "0");
-  return asCardId(`00000000-0000-4000-8000-${hex}`);
+  return testCardId(`00000000-0000-4000-8000-${hex}`);
 }
 
 /**
@@ -103,7 +104,7 @@ describe("improve family — transfigure pair enumeration", () => {
       cards: [card],
       deckEntries: [
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId("e1"),
+          entryId: parseDeckEntryId("e1"),
           cardNumber: 100,
         }),
       ],
@@ -128,7 +129,7 @@ describe("improve family — transfigure pair enumeration", () => {
       cards: [card],
       deckEntries: [
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId("e1"),
+          entryId: parseDeckEntryId("e1"),
           cardNumber: 101,
           transfiguration: "Kindled",
         }),
@@ -160,11 +161,11 @@ describe("improve family — transfigure pair enumeration", () => {
       cards: [starter, nonStarter],
       deckEntries: [
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId("starter-e"),
+          entryId: parseDeckEntryId("starter-e"),
           cardNumber: 200,
         }),
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId("ns-e"),
+          entryId: parseDeckEntryId("ns-e"),
           cardNumber: 201,
         }),
       ],
@@ -178,7 +179,7 @@ describe("improve family — transfigure pair enumeration", () => {
       cards: [starter],
       deckEntries: [
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId("starter-e"),
+          entryId: parseDeckEntryId("starter-e"),
           cardNumber: 200,
         }),
       ],
@@ -204,7 +205,7 @@ describe("improve family — transfigure pair enumeration", () => {
       cards: [card],
       deckEntries: [
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId("e1"),
+          entryId: parseDeckEntryId("e1"),
           cardNumber: 300,
         }),
       ],
@@ -226,7 +227,7 @@ describe("improve family — transfigure pair enumeration", () => {
     const direwolf = makeMerchantTestCard({
       id: uuid(900),
       cardNumber: 900,
-      name: asCardName("Marked Direwolf"),
+      name: parseCardName("Marked Direwolf"),
       cardType: "Character",
       energyCost: 0, // not Empowered-eligible: Kindled is its ONLY eligibility
       spark: 4,
@@ -235,7 +236,7 @@ describe("improve family — transfigure pair enumeration", () => {
     cards.push(direwolf);
     deckEntries.push(
       makeMerchantTestDeckEntry({
-        entryId: asDeckEntryId("direwolf"),
+        entryId: parseDeckEntryId("direwolf"),
         cardNumber: 900,
       }),
     );
@@ -250,7 +251,7 @@ describe("improve family — transfigure pair enumeration", () => {
         makeMerchantTestCard({
           id: uuid(n),
           cardNumber: n,
-          name: asCardName(`Event ${String(n)}`),
+          name: parseCardName(`Event ${String(n)}`),
           cardType: "Event",
           energyCost: 0,
           spark: null,
@@ -259,7 +260,7 @@ describe("improve family — transfigure pair enumeration", () => {
       );
       deckEntries.push(
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId(`evt-${String(i)}`),
+          entryId: parseDeckEntryId(`evt-${String(i)}`),
           cardNumber: n,
         }),
       );
@@ -289,7 +290,7 @@ describe("improve family — transfigure pair enumeration", () => {
     });
     const deckEntries = [
       makeMerchantTestDeckEntry({
-        entryId: asDeckEntryId("e1"),
+        entryId: parseDeckEntryId("e1"),
         cardNumber: 400,
       }),
     ];
@@ -327,7 +328,7 @@ describe("improve family — starter_transfigure", () => {
       cards: [starter],
       deckEntries: [
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId("s1"),
+          entryId: parseDeckEntryId("s1"),
           cardNumber: 500,
         }),
       ],
@@ -338,7 +339,7 @@ describe("improve family — starter_transfigure", () => {
       cards: [starter],
       deckEntries: [
         makeMerchantTestDeckEntry({
-          entryId: asDeckEntryId("s1"),
+          entryId: parseDeckEntryId("s1"),
           cardNumber: 500,
           transfiguration: "Kindled",
         }),
@@ -368,15 +369,15 @@ describe("improve family — starter_transfigure", () => {
     });
     const deckEntries = [
       makeMerchantTestDeckEntry({
-        entryId: asDeckEntryId("s0"),
+        entryId: parseDeckEntryId("s0"),
         cardNumber: 600,
       }),
       makeMerchantTestDeckEntry({
-        entryId: asDeckEntryId("s1"),
+        entryId: parseDeckEntryId("s1"),
         cardNumber: 601,
       }),
       makeMerchantTestDeckEntry({
-        entryId: asDeckEntryId("ns"),
+        entryId: parseDeckEntryId("ns"),
         cardNumber: 610,
       }),
     ];

@@ -26,7 +26,6 @@ import {
   type DreamAvatarOfferView,
   type JourneyStartScreenProps,
 } from "./journey-start-shared";
-import { asDreamAvatarId } from "../../types/identifiers";
 
 /** Invisible touch slop padded around each mobile tide disc so it is easier to
  * press; the disc row reabsorbs it with negative margins so the visual layout
@@ -342,7 +341,7 @@ export function CarouselSelect({
               "[dream-avatar] [journey] Command that chooses the currently selected Dream Avatar or starting-deck option.",
             )}
             onChoose={() => {
-              onPick(asDreamAvatarId(activeDreamAvatar.id));
+              onPick(activeDreamAvatar.id);
             }}
           />
         </div>

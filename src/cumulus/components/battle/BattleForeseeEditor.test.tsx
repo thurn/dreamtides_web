@@ -4,15 +4,16 @@ import { act, useState, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../../types/cards";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 import {
   BattleForeseeEditor,
   type BattleForeseeEditorModel,
 } from "./BattleForeseeEditor";
 import { CumulusRoot } from "../../CumulusRoot";
 import { assertLocalized } from "@trox/runtime";
-import { asBattleCardId } from "../../../types/identifiers";
-import { asDreamwellCardId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
+import type { BattleCardId } from "../../../types/identifiers";
+import { testCardId, testDreamwellCardId } from "../../../types/test-identities";
 
 vi.mock("../card/CardView", () => ({
   GameCard: ({ model }: { model: { displaySnapshot: CardData } }) => (
@@ -24,8 +25,8 @@ vi.mock("../card/CardView", () => ({
 
 function makeCard(index: number): CardData {
   return {
-    id: asCardId(`00000000-0000-0000-0000-00000000000${String(index)}`),
-    name: asCardName(
+    id: testCardId(`00000000-0000-0000-0000-00000000000${String(index)}`),
+    name: parseCardName(
       ["First", "Second", "Third"][index - 1] ?? `Card ${String(index)}`,
     ),
     cardNumber: index,
@@ -48,7 +49,7 @@ function makeView(initialCount = 1): BattleForeseeEditorModel {
     cards: [1, 2, 3].map((index) => {
       const displaySnapshot = makeCard(index);
       return {
-        battleCardId: asBattleCardId(`battle-card-${String(index)}`),
+        battleCardId: parseBattleCardId(`battle-card-${String(index)}`),
         card: { cardId: displaySnapshot.id, displaySnapshot },
       };
     }),
@@ -56,9 +57,9 @@ function makeView(initialCount = 1): BattleForeseeEditorModel {
 }
 
 const SOURCE_DREAMWELL_CARD = {
-  cardId: asDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
+  cardId: testDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
   displaySnapshot: {
-    id: asDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
+    id: testDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
     name: assertLocalized("Skypath"),
     renderedText: assertLocalized("Foresee 1."),
     energyAdded: 1,
@@ -77,10 +78,13 @@ function mount(element: ReactElement): {
   return { container, root };
 }
 
-function deckIds(container: HTMLElement): (string | undefined)[] {
+function deckIds(container: HTMLElement): (BattleCardId | undefined)[] {
   return Array.from(
     container.querySelectorAll('[data-foresee-card-zone="deck"]'),
-    (element) => (element as HTMLElement).dataset.foreseeCardId,
+    (element) => {
+      const value = (element as HTMLElement).dataset.foreseeCardId;
+      return value === undefined ? undefined : parseBattleCardId(value);
+    },
   );
 }
 
@@ -400,15 +404,15 @@ describe("BattleForeseeEditor", () => {
     });
     expect(onConfirm).toHaveBeenCalledWith({
       viewedCardIds: [
-        asBattleCardId("battle-card-1"),
-        asBattleCardId("battle-card-2"),
-        asBattleCardId("battle-card-3"),
+        parseBattleCardId("battle-card-1"),
+        parseBattleCardId("battle-card-2"),
+        parseBattleCardId("battle-card-3"),
       ],
       orderedCardIds: [
-        asBattleCardId("battle-card-1"),
-        asBattleCardId("battle-card-3"),
+        parseBattleCardId("battle-card-1"),
+        parseBattleCardId("battle-card-3"),
       ],
-      voidCardIds: [asBattleCardId("battle-card-2")],
+      voidCardIds: [parseBattleCardId("battle-card-2")],
     });
 
     act(() => root.unmount());
@@ -426,7 +430,7 @@ describe("BattleForeseeEditor", () => {
         .cards.slice(0, 2)
         .map((card, index) => ({
           ...card,
-          battleCardId: asBattleCardId(cardInstanceIds[index]),
+          battleCardId: parseBattleCardId(cardInstanceIds[index]),
         })),
     };
     const { container, root } = mount(
@@ -587,7 +591,7 @@ describe("BattleForeseeEditor", () => {
             ...entry.card,
             displaySnapshot: {
               ...entry.card.displaySnapshot,
-              name: asCardName("Duplicate"),
+              name: parseCardName("Duplicate"),
             },
           },
         })),
@@ -597,15 +601,15 @@ describe("BattleForeseeEditor", () => {
     const { container, root } = mount(
       <BattleForeseeEditor model={model} onConfirm={onConfirm} />,
     );
-    const card = (id: string) =>
+    const card = (id: BattleCardId) =>
       container.querySelector<HTMLElement>(`[data-foresee-card-id="${id}"]`);
     act(() => {
-      card("battle-card-1")?.dispatchEvent(
+      card(parseBattleCardId("battle-card-1"))?.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }),
       );
     });
     act(() => {
-      card("battle-card-3")?.dispatchEvent(
+      card(parseBattleCardId("battle-card-3"))?.dispatchEvent(
         new KeyboardEvent("keydown", { key: "v", bubbles: true }),
       );
     });
@@ -618,15 +622,15 @@ describe("BattleForeseeEditor", () => {
     });
     expect(onConfirm).toHaveBeenCalledWith({
       viewedCardIds: [
-        asBattleCardId("battle-card-1"),
-        asBattleCardId("battle-card-2"),
-        asBattleCardId("battle-card-3"),
+        parseBattleCardId("battle-card-1"),
+        parseBattleCardId("battle-card-2"),
+        parseBattleCardId("battle-card-3"),
       ],
       orderedCardIds: [
-        asBattleCardId("battle-card-2"),
-        asBattleCardId("battle-card-1"),
+        parseBattleCardId("battle-card-2"),
+        parseBattleCardId("battle-card-1"),
       ],
-      voidCardIds: [asBattleCardId("battle-card-3")],
+      voidCardIds: [parseBattleCardId("battle-card-3")],
     });
     expect(JSON.stringify(model)).toBe(before);
     act(() => root.unmount());

@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import type { SiteState } from "../types/journey";
 import { isRandomSiteMetadata, materializeRandomSite } from "./random-site";
-import { asSiteId } from "../types/identifiers";
-import { asGuideId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { testGuideId } from "../types/test-identities";
 
 describe("Random Site metadata", () => {
   it("requires at least two distinct routed candidates for a home choice", () => {
@@ -34,8 +34,9 @@ describe("Random Site metadata", () => {
   });
 
   it("persists the configured presenting guide in Random Site metadata", () => {
+    const guideId = testGuideId("fixture-random-guide");
     const site: SiteState = {
-      id: asSiteId("fixture-random-site"),
+      id: parseSiteId("fixture-random-site"),
       type: "RandomSite",
       isEnhanced: true,
       isVisited: false,
@@ -49,11 +50,11 @@ describe("Random Site metadata", () => {
       materializeRandomSite(
         site,
         "Exploration",
-        asGuideId("fixture-random-guide"),
+        guideId,
       ),
     ).toMatchObject({
       type: "Exploration",
-      randomSite: { presentingGuideId: "fixture-random-guide" },
+      randomSite: { presentingGuideId: guideId },
     });
   });
 });

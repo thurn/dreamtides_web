@@ -8,9 +8,10 @@ import {
   glossaryDefinitionsCardModel,
   rulesTextDefinitionCards,
 } from "./rules-text-reveal";
+import { testGlossaryEntryId } from "../../../types/test-identities";
 
 function entry(
-  id: string,
+  idSeed: string,
   term: string,
   presentation: Pick<
     GlossaryCatalogEntry,
@@ -18,8 +19,8 @@ function entry(
   > = {},
 ): GlossaryCatalogEntry {
   return {
-    id,
-    category: "Test",
+    id: testGlossaryEntryId(idSeed),
+    category: "Keywords",
     term,
     definition: `${term} definition.`,
     priority: 0,
@@ -122,7 +123,7 @@ describe("glossaryDefinitionsCardModel", () => {
         entry("fast", "Fast", { definitionSymbol: "fast" }),
         entry("bane", "Nightmare Bane"),
       ],
-      ["fast", "interrupt"],
+      [testGlossaryEntryId("fast"), testGlossaryEntryId("interrupt")],
     );
 
     expect(card?.body).toEqual({

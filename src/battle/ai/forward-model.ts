@@ -24,6 +24,7 @@ import type {
 } from "../types";
 import { centerPreferredEmptySlot } from "../center-preferred-slot";
 import type { BattleCardId } from "../../types/identifiers";
+import type { CardName } from "../../types/card-identity";
 
 /**
  * Lightweight, mutable projection of a single battle card that the AI planner
@@ -33,7 +34,7 @@ import type { BattleCardId } from "../../types/identifiers";
 export interface AiCard {
   battleCardId: BattleCardId;
   cardNumber: number;
-  name: string;
+  name: CardName;
   energyCost: number;
   basePrintedSpark: number;
   sparkDelta: number;
@@ -62,6 +63,8 @@ export interface AiCard {
  * cardNumber, name, or text. The asymmetric-knowledge principle is preserved
  * because the handle carries no identity information the planner can read.
  */
+export type AiOpponentSlotId = BattlefieldSlotId | `D${string}` | `R${string}`;
+
 export interface AiOpponentBody {
   /** Opaque instance id used only to name this body as a target. */
   battleCardId: BattleCardId;
@@ -73,10 +76,10 @@ export interface AiOpponentBody {
    * to `0` for a card with no printed cost.
    */
   energyCost: number;
+  /** Opaque board position retained by the opponent projection. */
+  slot: AiOpponentSlotId;
   /** `front` = front rank, `back` = back rank. */
   rank: "front" | "back";
-  /** The slot id, e.g. "F0" / "B2". */
-  slot: string;
   isFigment: boolean;
 }
 
@@ -124,7 +127,7 @@ function projectAiCard(instance: BattleCardInstance): AiCard {
 
 function projectZone(
   state: BattleMutableState,
-  ids: readonly string[],
+  ids: readonly BattleCardId[],
 ): AiCard[] {
   const cards: AiCard[] = [];
   for (const id of ids) {
@@ -285,7 +288,7 @@ export function forwardModelFromState(
 export function effectiveSpark(
   model: ForwardModel,
   slot: FrontRankSlotId,
-  supportSources: ReadonlyMap<string, number>,
+  supportSources: ReadonlyMap<BattleCardId, number>,
 ): number {
   const card = model.aiFrontRank[slot];
   if (card === null) {

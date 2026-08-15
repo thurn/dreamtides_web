@@ -15,7 +15,7 @@ import {
 import type { BattleMutableState } from "../types";
 import { BattleContextMenu as RealBattleContextMenu } from "./BattleContextMenu";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
-import { asBattleEntryKey } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
 
 function BattleContextMenu(
   props: ComponentProps<typeof RealBattleContextMenu>,
@@ -30,7 +30,7 @@ function BattleContextMenu(
 function state(): BattleMutableState {
   return createInitialBattleState(
     createTestBattleInit({
-      battleEntryKey: asBattleEntryKey("test"),
+      battleEntryKey: parseBattleEntryKey("test"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),

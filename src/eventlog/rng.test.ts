@@ -1,10 +1,11 @@
+import { testJourneySeed } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
 import { eventRng } from "./rng";
 
 describe("eventRng", () => {
   it("is deterministic for the same (seed, seq, drawIndex)", () => {
-    const draw1 = eventRng("seed-a", 3)(7);
-    const draw2 = eventRng("seed-a", 3)(7);
+    const draw1 = eventRng(testJourneySeed("seed-a"), 3)(7);
+    const draw2 = eventRng(testJourneySeed("seed-a"), 3)(7);
     expect(draw1).toBe(draw2);
   });
 
@@ -18,9 +19,9 @@ describe("eventRng", () => {
     for (let i = 0; i < 100; i += 1) {
       const seq = i;
       const drawIndex = i * 2;
-      const base = eventRng(seed, seq)(drawIndex);
-      const variedSeq = eventRng(seed, seq + 1)(drawIndex);
-      const variedDrawIndex = eventRng(seed, seq)(drawIndex + 1);
+      const base = eventRng(testJourneySeed(seed), seq)(drawIndex);
+      const variedSeq = eventRng(testJourneySeed(seed), seq + 1)(drawIndex);
+      const variedDrawIndex = eventRng(testJourneySeed(seed), seq)(drawIndex + 1);
       if (base === variedSeq || base === variedDrawIndex) {
         collisions += 1;
       }
@@ -33,15 +34,15 @@ describe("eventRng", () => {
       const seed = `seed-${i % 7}`;
       const seq = i;
       const drawIndex = i * 3;
-      const value = eventRng(seed, seq)(drawIndex);
+      const value = eventRng(testJourneySeed(seed), seq)(drawIndex);
       expect(value).toBeGreaterThanOrEqual(0);
       expect(value).toBeLessThan(1);
     }
   });
 
   it("differs across different seeds for the same (seq, drawIndex)", () => {
-    const a = eventRng("seed-x", 1)(1);
-    const b = eventRng("seed-y", 1)(1);
+    const a = eventRng(testJourneySeed("seed-x"), 1)(1);
+    const b = eventRng(testJourneySeed("seed-y"), 1)(1);
     expect(a).not.toBe(b);
   });
 });

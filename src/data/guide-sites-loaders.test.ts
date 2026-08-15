@@ -4,9 +4,7 @@ import type { SiteType } from "../types/site-type";
 import type { SitesData } from "../types/sites-data";
 import { loadDreamGuides } from "./dreamscapes";
 import { loadSitesData, siteTypeIcon } from "./sites-data";
-import { asDreamscapeId } from "../types/identifiers";
-import { asGuideId } from "../types/identifiers";
-import { asGlossaryEntryId } from "../types/identifiers";
+import { testDreamscapeId, testGlossaryEntryId, testGuideId } from "../types/test-identities";
 
 function response(value: unknown): Response {
   return {
@@ -25,7 +23,7 @@ const GUIDE_CATALOG = {
       id: "fixture-guide",
       name: "Fixture Guide",
       portraitSource: "fixture-guide.png",
-      homeDreamscapeId: asDreamscapeId("fixture-home"),
+      homeDreamscapeId: testDreamscapeId("fixture-home"),
       siteType: "Shop",
       homeSpecialty: "Fixture specialty.",
       dialogue: { site: ["Fixture line."] },
@@ -91,7 +89,7 @@ describe("compiled guide and site artifact loaders", () => {
         sites.randomSite.homeChoiceCount = 4;
       },
       (sites) => {
-        sites.siteTypes.Shop.glossaryId = asGlossaryEntryId(
+        sites.siteTypes.Shop.glossaryId = testGlossaryEntryId(
           "missing-fixture-glossary",
         );
       },
@@ -103,8 +101,8 @@ describe("compiled guide and site artifact loaders", () => {
       },
       (sites) => {
         sites.guideAssignments.RandomSite = {
-          guideId: asGuideId("wrong-guide"),
-          homeDreamscapeId: asDreamscapeId("fixture-home"),
+          guideId: testGuideId("wrong-guide"),
+          homeDreamscapeId: testDreamscapeId("fixture-home"),
         };
       },
     ];

@@ -4,10 +4,11 @@ import { GLYPHS } from "../../primitives/glyph";
 import type { Glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { GlassPanel } from "./GlassPanel";
+import type { DomElementId, DomTestId } from "../../types/dom";
 
 export interface DeveloperRailProps {
   /** DOM id targeted by the rail disclosure trigger. */
-  readonly id: string;
+  readonly id: DomElementId;
   /** Developer tool name shown in the rail header. */
   readonly title: LocalizedString;
   /** Optional concise tool context. */
@@ -24,14 +25,14 @@ export interface DeveloperRailProps {
     readonly label: LocalizedString;
     readonly onPress: () => void;
     readonly disabled?: boolean;
-    readonly testId?: string;
+    readonly testId?: DomTestId;
   };
   /** Scrollable tool content. */
   readonly children: ReactNode;
   /** Optional fixed rail footer. */
   readonly footer?: ReactNode;
   /** Stable test id for product QA. */
-  readonly testId?: string;
+  readonly testId?: DomTestId;
 }
 
 /** Shared edge-attached shell for persistent developer tools. */

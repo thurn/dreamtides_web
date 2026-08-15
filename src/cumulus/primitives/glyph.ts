@@ -22,7 +22,10 @@ export type Glyph = string & { readonly __cumulusGlyph: unique symbol };
 
 /** Brand a raw icon-font class string as a {@link Glyph} (internal helper). */
 function g(className: string): Glyph {
-  return className as unknown as Glyph;
+  if (className.trim() === "") {
+    throw new Error("Glyph class name must be non-empty.");
+  }
+  return className as Glyph;
 }
 
 /**

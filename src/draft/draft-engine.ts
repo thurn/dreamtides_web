@@ -2,14 +2,20 @@ import type { CardData } from "../types/cards";
 import type { ResolvedDreamAvatarPackage } from "../types/content";
 import type {
   DraftConfig,
+  DraftPoolCopiesByCard,
   DraftState,
   PackContext,
   PoolDraftState,
+} from "../types/draft";
+import {
+  serializeCardNumber,
+  serializeDraftPickNumber,
 } from "../types/draft";
 import { logEvent } from "../logging";
 import { logAffiliationDraw } from "../affiliations/affiliation-weights";
 import { DEFAULT_DRAFT_DATA } from "../data/draft-data";
 import type { SiteId } from "../types/identifiers";
+import { identityKeys } from "../types/identifiers";
 
 /** Default shared draft configuration. */
 export const DEFAULT_DRAFT_CONFIG: Readonly<DraftConfig> = {
@@ -89,7 +95,7 @@ export function drawAndSpendUniqueCards(
   rng: () => number = Math.random,
 ): number[] {
   const buildEntries = (
-    copies: Record<string, number>,
+    copies: DraftPoolCopiesByCard,
   ): Array<{ cardNumber: number; weight: number }> => {
     const entries: Array<{ cardNumber: number; weight: number }> = [];
     for (const [cardNumberText, copies_] of Object.entries(copies)) {
@@ -161,7 +167,8 @@ function eligibleOpeningOffer(
   packSize: number,
   shownThisVisit: ReadonlySet<number>,
 ): number[] | null {
-  const authored = state.openingDraftOffers?.[String(state.pickNumber)];
+  const authored =
+    state.openingDraftOffers?.[serializeDraftPickNumber(state.pickNumber)];
   if (
     authored === undefined ||
     authored.length !== packSize ||
@@ -172,7 +179,7 @@ function eligibleOpeningOffer(
   for (const cardNumber of authored) {
     if (
       shownThisVisit.has(cardNumber) ||
-      (state.remainingCopiesByCard[String(cardNumber)] ?? 0) <= 0
+      (state.remainingCopiesByCard[serializeCardNumber(cardNumber)] ?? 0) <= 0
     ) {
       return null;
     }
@@ -186,7 +193,7 @@ function removeRarityFromPool(
   cardDatabase: Map<number, CardData>,
   rarity: NonNullable<CardData["rarity"]>,
 ): void {
-  for (const key of Object.keys(state.draftPoolCopiesByCard)) {
+  for (const key of identityKeys(state.draftPoolCopiesByCard)) {
     if (cardDatabase.get(Number(key))?.rarity === rarity) {
       delete state.draftPoolCopiesByCard[key];
       delete state.remainingCopiesByCard[key];
@@ -195,11 +202,11 @@ function removeRarityFromPool(
 }
 
 function spendShownOffer(
-  remainingCopiesByCard: Record<string, number>,
+  remainingCopiesByCard: DraftPoolCopiesByCard,
   offer: number[],
 ): void {
   for (const cardNumber of offer) {
-    const key = String(cardNumber);
+    const key = serializeCardNumber(cardNumber);
     const remainingCopies = remainingCopiesByCard[key];
     if (remainingCopies === undefined) {
       continue;
@@ -305,9 +312,9 @@ function revealOffer(
 
 function sanitizeDraftPoolCopies(
   cardDatabase: Map<number, CardData>,
-  draftPoolCopiesByCard: Record<string, number>,
-): Record<string, number> {
-  const remainingCopiesByCard: Record<string, number> = {};
+  draftPoolCopiesByCard: DraftPoolCopiesByCard,
+): DraftPoolCopiesByCard {
+  const remainingCopiesByCard: DraftPoolCopiesByCard = {};
 
   for (const [cardNumberText, copies] of Object.entries(
     draftPoolCopiesByCard,
@@ -321,14 +328,14 @@ function sanitizeDraftPoolCopies(
       continue;
     }
 
-    remainingCopiesByCard[String(cardNumber)] = copies;
+    remainingCopiesByCard[serializeCardNumber(cardNumber)] = copies;
   }
 
   return remainingCopiesByCard;
 }
 
 export function countRemainingCards(
-  remainingCopiesByCard: Record<string, number>,
+  remainingCopiesByCard: DraftPoolCopiesByCard,
 ): number {
   return Object.values(remainingCopiesByCard).reduce(
     (total, copies) => total + copies,
@@ -337,7 +344,7 @@ export function countRemainingCards(
 }
 
 export function countRemainingUniqueCards(
-  remainingCopiesByCard: Record<string, number>,
+  remainingCopiesByCard: DraftPoolCopiesByCard,
 ): number {
   return Object.keys(remainingCopiesByCard).length;
 }

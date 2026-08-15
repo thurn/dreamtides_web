@@ -1,14 +1,15 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../../types/test-identities";
 import { markedDirewolf } from "./marked-direwolf";
 import type { AiCard, ForwardModel } from "../forward-model";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
-import { asBattleCardId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
 
 function makeCard(
   overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">,
 ): AiCard {
   return {
-    name: "card",
+    name: testCardName("card"),
     energyCost: 0,
     basePrintedSpark: 0,
     sparkDelta: 0,
@@ -43,7 +44,7 @@ describe("Marked Direwolf (#512)", () => {
 
   it("play pays energy and occupies a reserve slot, exhausted", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("wolf"),
+      battleCardId: parseBattleCardId("wolf"),
       cardNumber: 512,
       energyCost: 4,
     });
@@ -57,7 +58,7 @@ describe("Marked Direwolf (#512)", () => {
 
   it("canPlay is false without enough energy", () => {
     const self = makeCard({
-      battleCardId: asBattleCardId("wolf"),
+      battleCardId: parseBattleCardId("wolf"),
       cardNumber: 512,
       energyCost: 4,
     });

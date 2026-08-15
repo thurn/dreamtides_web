@@ -5,14 +5,12 @@ import type { DreamscapeNode } from "../../types/journey";
 import type { AtlasNodeModel } from "../components/atlas/AtlasNode";
 import { artRef, resolveArtRef } from "../primitives/art";
 import { atlasPreflightImageUrls } from "./atlas-preflight";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { testDreamscapeId, testGuideId, testDreamsignId, testArtAssetKey } from "../../types/test-identities";
 
-function node(id: string): DreamscapeNode {
+function node(idSeed: string): DreamscapeNode {
   return {
-    id: asAtlasNodeId(id),
+    id: parseAtlasNodeId(idSeed),
     layer: LayerName.Two,
     indexInLayer: 0,
     dreamscapeId: null,
@@ -26,15 +24,18 @@ function node(id: string): DreamscapeNode {
   };
 }
 
-function item(id: string, overrides: Partial<AtlasNodeModel>): AtlasNodeModel {
+function item(
+  idSeed: string,
+  overrides: Partial<AtlasNodeModel>,
+): AtlasNodeModel {
   return {
-    id: asAtlasNodeId(id),
-    name: assertLocalized(id),
-    state: node(id).state,
+    id: parseAtlasNodeId(idSeed),
+    name: assertLocalized(idSeed),
+    state: node(idSeed).state,
     role: "regular",
     isReachable: true,
     iconRef: null,
-    unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
+    unrevealedFrameRef: artRef.atlasAsset(testArtAssetKey("fixture-frame.png")),
     siteBadgeGlyph: null,
     knownDreamsignRef: null,
     primary: {
@@ -54,9 +55,9 @@ function item(id: string, overrides: Partial<AtlasNodeModel>): AtlasNodeModel {
 
 describe("atlasPreflightImageUrls", () => {
   it("collects screen and reveal images once in first-seen order", () => {
-    const icon = artRef.dreamscapeIcon(asDreamscapeId("wilderveil"));
-    const scene = artRef.dreamscapeScene(asDreamscapeId("wilderveil"));
-    const guide = artRef.dreamGuide(asGuideId("aldric"));
+    const icon = artRef.dreamscapeIcon(testDreamscapeId("wilderveil"));
+    const scene = artRef.dreamscapeScene(testDreamscapeId("wilderveil"));
+    const guide = artRef.dreamGuide(testGuideId("aldric"));
     const dreamsign = artRef.dreamsign("magic-ball.png");
 
     const urls = atlasPreflightImageUrls([
@@ -69,7 +70,7 @@ describe("atlasPreflightImageUrls", () => {
           figureArt: guide,
         },
         dreamsign: {
-          id: asDreamsignId("00000000-0000-4000-8000-000000000061"),
+          id: testDreamsignId("00000000-0000-4000-8000-000000000061"),
           name: assertLocalized("The Held Star"),
           art: dreamsign,
           rulesText: assertLocalized("Gain 1 essence."),

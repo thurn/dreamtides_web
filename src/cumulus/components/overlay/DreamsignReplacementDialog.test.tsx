@@ -13,12 +13,12 @@ afterEach(() => {
 describe("DreamsignReplacementDialog", () => {
   it("routes replacement by UUID and both dismissal controls through one intent", () => {
     const incoming = localizedDreamsignFixture({
-      id: "10000000-0000-4000-8000-000000000001",
+      idSeed: "10000000-0000-4000-8000-000000000001",
       name: "Incoming",
     });
     const held = [1, 2].map((index) =>
       localizedDreamsignFixture({
-        id: `20000000-0000-4000-8000-00000000000${String(index)}`,
+        idSeed: `20000000-0000-4000-8000-00000000000${String(index)}`,
         name: `Held ${String(index)}`,
       }),
     );
@@ -61,12 +61,12 @@ describe("DreamsignReplacementDialog", () => {
     "renders a reveal-registered held collection at capacity $capacity with $heldCount entries",
     ({ capacity, heldCount }) => {
       const incoming = localizedDreamsignFixture({
-        id: "10000000-0000-4000-8000-000000000010",
+        idSeed: "10000000-0000-4000-8000-000000000010",
         name: "Incoming",
       });
       const held = Array.from({ length: heldCount }, (_, index) =>
         localizedDreamsignFixture({
-          id: `30000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
+          idSeed: `30000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
           name: `Held ${String(index + 1)}`,
         }),
       );

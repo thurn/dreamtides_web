@@ -1,9 +1,14 @@
-import { asCardId, asCardName } from "../types/card-identity";
+import { parseCardName } from "../types/card-identity";
 import { buildPoolData } from "../draft/pool/pool-data";
 import { buildIdIndex } from "../data/cards-v2-database";
 import type { CardData } from "../types/cards";
 import type { RunPoolContext } from "../data/journey-content";
-import { asDreamsignId } from "../types/identifiers";
+import {
+  testCardId,
+  testCardSubtype,
+  testDreamsignId,
+  testTideId,
+} from "../types/test-identities";
 
 /**
  * A small hand-authored corpus for tests that drive the journey-start build path
@@ -53,11 +58,11 @@ export function buildTestCorpusCards(): CardData[] {
   const cards: CardData[] = [];
   for (const [name, cardNumber] of buildTestNameIndex()) {
     cards.push({
-      name: asCardName(name),
-      id: asCardId(`corpus-${String(cardNumber)}`),
+      name: parseCardName(name),
+      id: testCardId(`corpus-${String(cardNumber)}`),
       cardNumber,
       cardType: "Character",
-      subtype: "",
+      subtype: testCardSubtype(""),
       isStarter: false,
       energyCost: 2,
       spark: 1,
@@ -92,7 +97,7 @@ function idForName(name: string): string {
  * path without merging same-name cards.
  */
 export function makeTestPoolContext(
-  allDreamsignPoolIds: string[] = ["dreamsign-a", "dreamsign-b"],
+  allDreamsignPoolIdSeeds: string[] = ["dreamsign-a", "dreamsign-b"],
 ): RunPoolContext {
   const cards = buildTestCorpusCards();
   const cardDatabase = new Map<number, CardData>(
@@ -104,13 +109,13 @@ export function makeTestPoolContext(
     version: 2,
     selection: { bandFraction: 0.25, bandMinimum: 5 },
     tides: decklistIds.map((ids, index) => ({
-      id: `test-tide-${String(index + 1)}`,
+      id: testTideId(`test-tide-${String(index + 1)}`),
       displayName: `Test Tide ${String(index + 1)}`,
       displayDescription: `Test Tide ${String(index + 1)} description`,
       role: index === 0 ? "signature" : index === 1 ? "facet" : "neutral",
       resonance: index === 0 ? "shadow" : index === 1 ? "wild" : "vision",
       cards: ids.map((id) => ({
-        id,
+        id: testCardId(id),
         copies: 2,
       })),
     })),
@@ -120,7 +125,7 @@ export function makeTestPoolContext(
     poolData,
     idIndex: buildIdIndex(cardDatabase),
     starterCardNumbers: TEST_STARTER_CARD_NUMBERS,
-    allDreamsignPoolIds: allDreamsignPoolIds.map(asDreamsignId),
+    allDreamsignPoolIds: allDreamsignPoolIdSeeds.map(testDreamsignId),
     poolVariant: "tides4",
     tides4Tuning: { dealSize: 60, copyCap: 2, maxFacets: 3 },
   };

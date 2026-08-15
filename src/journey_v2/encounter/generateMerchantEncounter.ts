@@ -13,7 +13,7 @@ import type {
   MerchantOffer,
 } from "../types";
 import type { OfferId } from "../../types/identifiers";
-import { asOfferId, asSelectionKey } from "../../types/identifiers";
+import { parseOfferId, parseSelectionKey } from "../../types/identifiers";
 
 /**
  * One archetype build attempt during a slot roll. A `built: false` entry is a
@@ -129,7 +129,7 @@ function rollSlot(
     const draft = builder.build(
       {
         ...context,
-        selectionKey: asSelectionKey(saltParts.slice(2).join(":")),
+        selectionKey: parseSelectionKey(saltParts.slice(2).join(":")),
       },
       buildRng,
     );
@@ -171,7 +171,7 @@ function forceSlot(
     const draft = builder.build(
       {
         ...context,
-        selectionKey: asSelectionKey(saltParts.slice(2).join(":")),
+        selectionKey: parseSelectionKey(saltParts.slice(2).join(":")),
       },
       buildRng,
     );
@@ -373,8 +373,8 @@ export function generateMerchantEncounterWithDebug(context: MerchantContext): {
   const slotB = rolledB.result;
 
   const unsignedOffers = [
-    draftToOffer(slotA.draft, asOfferId(OFFER_IDS[0])),
-    draftToOffer(slotB.draft, asOfferId(OFFER_IDS[1])),
+    draftToOffer(slotA.draft, parseOfferId(OFFER_IDS[0])),
+    draftToOffer(slotB.draft, parseOfferId(OFFER_IDS[1])),
   ];
   const encounterSignature = signatureFor(context, unsignedOffers);
   const offers: MerchantOffer[] = unsignedOffers.map((offer) => ({

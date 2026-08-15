@@ -2,7 +2,7 @@
 // screens (the dreamscape and the Dream Atlas). The shared JourneyUtilityMenu
 // renders its root actions here as app-shell corner chrome.
 
-import type { JourneyState } from "../types/journey";
+import type { JourneyMutationSource } from "../state/journey-context";
 import {GLYPHS } from "../cumulus/primitives/glyph";
 import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
 import { MENU_BUTTON_PX } from "../cumulus/primitives/chrome-geometry";
@@ -28,7 +28,10 @@ interface DreamscapeJourneyMenuProps {
    * Replaces the running journey with a saved snapshot loaded by name. Optional
    * because only the live multiplayer provider supplies it (matching the HUD).
    */
-  onLoadJourneyState?: (state: JourneyState, source: string) => void;
+  onLoadJourneyState?: (
+    state: unknown,
+    source: JourneyMutationSource,
+  ) => void;
   /**
    * Debug: rebuild the atlas with the current generation logic. Supplied only
    * on the atlas screen; when present, a "Regenerate Atlas" row is shown.

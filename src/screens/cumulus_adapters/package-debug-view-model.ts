@@ -4,13 +4,31 @@ import type {
   ResolvedDreamAvatarPackage,
 } from "../../types/content";
 import type { DraftState } from "../../types/draft";
-import type { PackageDebugView } from "../../cumulus/screens/PackageDebugDialog";
+import type {
+  PackageDebugCardEntryId,
+  PackageDebugValueId,
+  PackageDebugView,
+} from "../../cumulus/screens/PackageDebugDialog";
 import {
   extractDraftDebugInfo,
   extractPackageDebugInfo,
 } from "../debug-helpers";
-import { assertLocalized } from "@trox/runtime";
+import { assertLocalized, type LocalizedString } from "@trox/runtime";
 import type { DreamsignId } from "../../types/identifiers";
+
+const VALUE_LABELS: Readonly<Record<PackageDebugValueId, LocalizedString>> = {
+  "starting-essence": assertLocalized("Starting Essence"),
+  "draft-pool": assertLocalized("Draft Pool"),
+  "dreamsigns-left": assertLocalized("Dreamsigns Left"),
+  "dreamsigns-spent": assertLocalized("Dreamsigns Spent"),
+  pick: assertLocalized("Pick"),
+  remaining: assertLocalized("Remaining"),
+  unique: assertLocalized("Unique"),
+  mandatory: assertLocalized("Mandatory-only pool"),
+  doubled: assertLocalized("Doubled cards"),
+  legal: assertLocalized("Legal subsets"),
+  preferred: assertLocalized("Preferred subsets"),
+};
 
 export function buildPackageDebugView(
   draftState: DraftState | null,
@@ -30,24 +48,16 @@ export function buildPackageDebugView(
       pkg === null
         ? []
         : [
-            value("starting-essence", "Starting Essence", pkg.startingEssence),
-            value("draft-pool", "Draft Pool", pkg.draftPoolSize),
-            value(
-              "dreamsigns-left",
-              "Dreamsigns Left",
-              pkg.remainingDreamsigns.length,
-            ),
-            value(
-              "dreamsigns-spent",
-              "Dreamsigns Spent",
-              pkg.spentDreamsigns.length,
-            ),
+            value("starting-essence", pkg.startingEssence),
+            value("draft-pool", pkg.draftPoolSize),
+            value("dreamsigns-left", pkg.remainingDreamsigns.length),
+            value("dreamsigns-spent", pkg.spentDreamsigns.length),
             ...(draft === null
               ? []
               : [
-                  value("pick", "Pick", draft.pickNumber),
-                  value("remaining", "Remaining", draft.remainingCards),
-                  value("unique", "Unique", draft.remainingUniqueCards),
+                  value("pick", draft.pickNumber),
+                  value("remaining", draft.remainingCards),
+                  value("unique", draft.remainingUniqueCards),
                 ]),
           ],
     dreamAvatar:
@@ -58,14 +68,10 @@ export function buildPackageDebugView(
       pkg === null
         ? []
         : [
-            value(
-              "mandatory",
-              "Mandatory-only pool",
-              pkg.mandatoryOnlyPoolSize,
-            ),
-            value("doubled", "Doubled cards", pkg.doubledCardCount),
-            value("legal", "Legal subsets", pkg.legalSubsetCount),
-            value("preferred", "Preferred subsets", pkg.preferredSubsetCount),
+            value("mandatory", pkg.mandatoryOnlyPoolSize),
+            value("doubled", pkg.doubledCardCount),
+            value("legal", pkg.legalSubsetCount),
+            value("preferred", pkg.preferredSubsetCount),
           ],
     remainingDreamsigns: (pkg?.remainingDreamsigns ?? []).map((entry) => ({
       id: entry.id,
@@ -80,16 +86,20 @@ export function buildPackageDebugView(
       label: assertLocalized(card.name),
     })),
     topRemainingCards: (draft?.topRemainingCards ?? []).map((card) => ({
-      id: `card:${String(card.cardNumber)}`,
+      id: packageDebugCardEntryId(card.cardNumber),
       label: assertLocalized(`${card.name} ×${String(card.copiesRemaining)}`),
     })),
   };
 }
 
-function value(id: string, label: string, amount: number) {
+function value(id: PackageDebugValueId, amount: number) {
   return {
     id,
-    label: assertLocalized(label),
+    label: VALUE_LABELS[id],
     value: assertLocalized(String(amount)),
   };
+}
+
+function packageDebugCardEntryId(cardNumber: number): PackageDebugCardEntryId {
+  return `card-number:${cardNumber}`;
 }

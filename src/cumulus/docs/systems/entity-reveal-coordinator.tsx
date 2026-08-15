@@ -3,7 +3,9 @@ import type { CSSProperties, ReactNode } from "react";
 import { TideDisc } from "../../components/hud/TideDisc";
 import { TidesInfoLabel } from "../../components/hud/TidesInfoLabel";
 import { token } from "../../primitives/tokens";
+import type { DomElementId } from "../../types/dom";
 import { UsageSection } from "../UsageSection";
+import { parseTutorialJourneyTideId } from "../../../types/identifiers";
 
 const flowSteps = [
   [
@@ -136,7 +138,7 @@ function Section({
   title,
   children,
 }: {
-  readonly id: string;
+  readonly id: DomElementId;
   readonly title: string;
   readonly children: ReactNode;
 }) {
@@ -259,7 +261,7 @@ function LiveRevealStage() {
           </span>
           <TideDisc
             tide="valor"
-            id="cumulus-docs-entity-reveal-valor"
+            id={parseTutorialJourneyTideId("cumulus-docs-entity-reveal-valor")}
             label={assertLocalized("Rising Valor")}
             description={assertLocalized(
               "A steadfast tide that rewards holding the line.",
@@ -299,7 +301,7 @@ function LiveRevealStage() {
           </span>
           <TideDisc
             tide="vision"
-            id="cumulus-docs-entity-reveal-vision"
+            id={parseTutorialJourneyTideId("cumulus-docs-entity-reveal-vision")}
             label={assertLocalized("Rising Vision")}
             description={assertLocalized(
               "A lucid tide that rewards seeing the next possibility.",

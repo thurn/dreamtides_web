@@ -4,12 +4,12 @@ import {
   traceBandSize,
   type TraceCandidateInput,
 } from "./buildTrace";
-import { asMerchantTargetKey } from "../../types/identifiers";
+import { parseMerchantTargetKey } from "../../types/identifiers";
 
 /** Builds `n` candidates whose key/score is its index (higher index = higher). */
 function rankedCandidates(n: number): TraceCandidateInput[] {
   return Array.from({ length: n }, (_, i) => ({
-    key: asMerchantTargetKey(`k${String(i)}`),
+    key: parseMerchantTargetKey(`k${String(i)}`),
     score: i,
   }));
 }
@@ -40,7 +40,7 @@ describe("assembleOfferTrace", () => {
       decision: "scored_cards",
       keyKind: "cardUuid",
       candidates: rankedCandidates(5),
-      selectedKeys: [asMerchantTargetKey("k4")],
+      selectedKeys: [parseMerchantTargetKey("k4")],
       selectedCount: 1,
       bandFraction: 0.25,
       bandMinimum: 5,
@@ -61,7 +61,7 @@ describe("assembleOfferTrace", () => {
       decision: "scored_cards",
       keyKind: "cardUuid",
       candidates: rankedCandidates(40),
-      selectedKeys: [asMerchantTargetKey("k39")],
+      selectedKeys: [parseMerchantTargetKey("k39")],
       selectedCount: 1,
       bandFraction: 0.25,
       bandMinimum: 5,
@@ -81,7 +81,7 @@ describe("assembleOfferTrace", () => {
       decision: "scored_cards",
       keyKind: "cardUuid",
       candidates: rankedCandidates(5),
-      selectedKeys: [asMerchantTargetKey("k4"), asMerchantTargetKey("k2")],
+      selectedKeys: [parseMerchantTargetKey("k4"), parseMerchantTargetKey("k2")],
       selectedCount: 2,
       bandFraction: 1,
       bandMinimum: 5,
@@ -99,7 +99,7 @@ describe("assembleOfferTrace", () => {
       decision: "scored_cards",
       keyKind: "cardUuid",
       candidates: rankedCandidates(100),
-      selectedKeys: [asMerchantTargetKey("k0")],
+      selectedKeys: [parseMerchantTargetKey("k0")],
       selectedCount: 1,
       bandFraction: 0.25,
       bandMinimum: 5,
@@ -117,7 +117,7 @@ describe("assembleOfferTrace", () => {
       decision: "dreamsign_match",
       keyKind: "dreamsignId",
       candidates: rankedCandidates(3),
-      selectedKeys: [asMerchantTargetKey("k2")],
+      selectedKeys: [parseMerchantTargetKey("k2")],
       selectedCount: 1,
       bandFraction: 0.4,
       bandMinimum: 2,
@@ -135,7 +135,7 @@ describe("assembleOfferTrace", () => {
       decision: "uniform",
       keyKind: "siteType",
       candidates: rankedCandidates(3),
-      selectedKeys: [asMerchantTargetKey("k2")],
+      selectedKeys: [parseMerchantTargetKey("k2")],
       selectedCount: 1,
       bandFraction: 1,
     });

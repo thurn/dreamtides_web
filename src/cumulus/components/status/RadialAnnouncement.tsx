@@ -21,6 +21,7 @@ import {
   type LocalizedString,
 } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { DomElementId } from "../../types/dom";
 
 export const RADIAL_ANNOUNCEMENT_DURATION_MS = 2_100;
 export const RADIAL_ANNOUNCEMENT_EXTENDED_DURATION_MS = 3_360;
@@ -197,7 +198,7 @@ export type RadialAnnouncementDuration = "standard" | "extended";
 
 interface RadialAnnouncementCommonProps {
   /** Stable identifier exposed on the announcement root. */
-  announcementId?: string;
+  announcementId?: DomElementId;
 }
 
 /** A transient whole-scene announcement. */
@@ -598,7 +599,7 @@ function TransientAnnouncement({
   size,
   duration,
 }: {
-  readonly announcementId?: string;
+  readonly announcementId?: DomElementId;
   readonly headline: LocalizedString;
   readonly headlineGlyph?: Glyph;
   readonly detail?: LocalizedString;

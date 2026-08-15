@@ -16,17 +16,14 @@ import {
   atlasPrimaryInfoCard,
   type AtlasNodeModel,
 } from "./AtlasNode";
-import { asDreamscapeId } from "../../../types/identifiers";
-import { asGuideId } from "../../../types/identifiers";
-import { asAtlasNodeId } from "../../../types/identifiers";
-import { asDreamsignId } from "../../../types/identifiers";
-import { asSiteId } from "../../../types/identifiers";
-import { asAffiliationId } from "../../../types/identifiers";
+import { parseAtlasNodeId } from "../../../types/identifiers";
+import { parseSiteId } from "../../../types/identifiers";
+import { testDreamscapeId, testGuideId, testDreamsignId, testAffiliationId, testArtAssetKey } from "../../../types/test-identities";
 
-const NODE_ID = asAtlasNodeId("00000000-0000-4000-8000-000000000051");
-const DREAMSIGN_ID = asDreamsignId("00000000-0000-4000-8000-000000000052");
-const SITE_ID = asSiteId("00000000-0000-4000-8000-000000000053");
-const AFFILIATION_ID = asAffiliationId(
+const NODE_ID = parseAtlasNodeId("00000000-0000-4000-8000-000000000051");
+const DREAMSIGN_ID = testDreamsignId("00000000-0000-4000-8000-000000000052");
+const SITE_ID = parseSiteId("00000000-0000-4000-8000-000000000053");
+const AFFILIATION_ID = testAffiliationId(
   "00000000-0000-4000-8000-000000000054",
 );
 
@@ -34,8 +31,8 @@ describe("atlasPrimaryInfoCard", () => {
   it("selects the scene reveal for a known place and text for an unseen dream", () => {
     expect(
       atlasPrimaryInfoCard({
-        sceneArt: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
-        figureArt: artRef.dreamGuide(asGuideId("aldric")),
+        sceneArt: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
+        figureArt: artRef.dreamGuide(testGuideId("aldric")),
         placeName: assertLocalized("Wilderveil"),
         guideName: assertLocalized("Aldric, the Seer"),
         title: assertLocalized("Aldric, the Seer"),
@@ -69,13 +66,13 @@ function model(
     state,
     role: "regular",
     isReachable: true,
-    iconRef: artRef.dreamscapeIcon(asDreamscapeId("wilderveil")),
-    unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
+    iconRef: artRef.dreamscapeIcon(testDreamscapeId("wilderveil")),
+    unrevealedFrameRef: artRef.atlasAsset(testArtAssetKey("fixture-frame.png")),
     siteBadgeGlyph: GLYPHS.water,
     knownDreamsignRef: artRef.dreamsign("known.png"),
     primary: {
-      sceneArt: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
-      figureArt: artRef.dreamGuide(asGuideId("aldric")),
+      sceneArt: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
+      figureArt: artRef.dreamGuide(testGuideId("aldric")),
       placeName: assertLocalized("Wilderveil"),
       guideName: assertLocalized("Aldric, the Seer"),
       title: assertLocalized("Aldric, the Seer"),

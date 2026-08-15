@@ -13,7 +13,7 @@ import {
 } from "../test-support";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
 import { CumulusRoot } from "../../cumulus/CumulusRoot";
-import { asBattleEntryKey } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
 
 function LocalizedBattleDeckOrderPicker(
   props: ComponentProps<typeof BattleDeckOrderPicker>,
@@ -177,7 +177,7 @@ function pressReorderKey(slot: number, key: "ArrowUp" | "ArrowDown"): void {
 
 function createTestBattle() {
   const battleInit = createTestBattleInit({
-    battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
+    battleEntryKey: parseBattleEntryKey("site-7::2::dreamscape-2"),
     site: makeBattleTestSite(),
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),

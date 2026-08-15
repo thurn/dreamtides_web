@@ -5,7 +5,7 @@ expect.addEqualityTesters([localizedStringSourceEquality]);
 import { createDefaultState } from "../../state/journey-context";
 import type { CardData } from "../../types/cards";
 import type { DreamGuideContent } from "../../types/content";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type {
   CardChoiceSiteRuntime,
   DeckEntry,
@@ -35,9 +35,9 @@ const buildDuplicationSiteView = (
 ) => buildDuplicationSiteViewImpl({ ...params, transfigurationData });
 
 const GUIDE = {
-  id: asGuideId("fixture-duplication-guide"),
+  id: testGuideId("fixture-duplication-guide"),
   name: "Fixture Duplication Guide",
-  homeDreamscapeId: asDreamscapeId("fixture-home"),
+  homeDreamscapeId: testDreamscapeId("fixture-home"),
   siteType: "Duplication",
   portraitSource: "fixture-guide.png",
   dialogue: { site: ["Fixture line."] },
@@ -46,8 +46,8 @@ const GUIDE = {
 
 function makeCard(cardNumber: number): CardData {
   return {
-    name: asCardName(`Fixture ${String(cardNumber)}`),
-    id: asCardId(
+    name: parseCardName(`Fixture ${String(cardNumber)}`),
+    id: testCardId(
       `00000000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`,
     ),
     cardNumber,
@@ -65,7 +65,7 @@ function makeCard(cardNumber: number): CardData {
 
 function makeEntry(cardNumber: number): DeckEntry {
   return {
-    entryId: asDeckEntryId(`entry-${String(cardNumber)}`),
+    entryId: parseDeckEntryId(`entry-${String(cardNumber)}`),
     cardNumber,
     transfiguration: null,
     isBane: false,
@@ -77,16 +77,16 @@ function runtime(acceptedEntryIds: DeckEntryId[] = []): CardChoiceSiteRuntime {
     kind: "cardChoice",
     choiceKind: "duplication",
     entryIds: [
-      asDeckEntryId("entry-2"),
-      asDeckEntryId("missing-entry"),
-      asDeckEntryId("entry-1"),
+      parseDeckEntryId("entry-2"),
+      parseDeckEntryId("missing-entry"),
+      parseDeckEntryId("entry-1"),
     ],
     acceptedEntryIds,
   };
 }
 
 const site: SiteState = {
-  id: asSiteId("duplication-site"),
+  id: parseSiteId("duplication-site"),
   type: "Duplication",
   isEnhanced: true,
   isVisited: false,
@@ -119,7 +119,7 @@ describe("buildDuplicationCards", () => {
     };
     expect(
       buildDuplicationCards(state, runtime(), new Map([[1, makeCard(1)]])),
-    ).toMatchObject([{ entryId: asDeckEntryId("entry-1") }]);
+    ).toMatchObject([{ entryId: parseDeckEntryId("entry-1") }]);
   });
 });
 
@@ -135,8 +135,8 @@ describe("buildDuplicationOfferLog", () => {
     ]);
 
     expect(buildDuplicationOfferLog(state, runtime(), cardDatabase)).toEqual([
-      { entryId: asDeckEntryId("entry-2"), cardId: cardDatabase.get(2)?.id },
-      { entryId: asDeckEntryId("entry-1"), cardId: cardDatabase.get(1)?.id },
+      { entryId: parseDeckEntryId("entry-2"), cardId: cardDatabase.get(2)?.id },
+      { entryId: parseDeckEntryId("entry-1"), cardId: cardDatabase.get(1)?.id },
     ]);
   });
 });
@@ -148,7 +148,7 @@ describe("buildDuplicationSiteView", () => {
       state,
       sceneNode: null,
       site,
-      runtime: runtime([asDeckEntryId("entry-1")]),
+      runtime: runtime([parseDeckEntryId("entry-1")]),
       cardDatabase: new Map(),
       guide: GUIDE,
       guideLine: assertLocalized("Fixture line."),
@@ -178,8 +178,7 @@ describe("buildDuplicationSiteView", () => {
   });
 });
 import { assertLocalized } from "@trox/runtime";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
+import { testDreamscapeId, testGuideId, testCardId } from "../../types/test-identities";

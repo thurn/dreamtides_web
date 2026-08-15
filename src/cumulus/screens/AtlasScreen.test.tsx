@@ -18,11 +18,11 @@ import {
   type AtlasNodePlacementView,
   type AtlasView,
 } from "./AtlasScreen";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asGuideId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asAffiliationId } from "../../types/identifiers";
+import { testArtAssetKey } from "../../types/test-identities";
+import { testPresentationId } from "../../types/test-identities";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { testDreamscapeId, testGuideId, testAffiliationId } from "../../types/test-identities";
 
 /**
  * Stub matchMedia (jsdom lacks it; Pressable + useIsDesktop + the InfoCard
@@ -203,8 +203,8 @@ function residentModel(): Pick<
 > {
   return {
     primary: {
-      sceneArt: artRef.dreamscapeScene(asDreamscapeId("wilderveil")),
-      figureArt: artRef.dreamGuide(asGuideId("aldric")),
+      sceneArt: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
+      figureArt: artRef.dreamGuide(testGuideId("aldric")),
       title: assertLocalized("Aldric, the Seer"),
       body: assertLocalized("Aldric offers curated visions of the future."),
       placeName: assertLocalized("The Glass Orchard"),
@@ -212,13 +212,13 @@ function residentModel(): Pick<
     },
     dreamsign: null,
     site: {
-      id: asSiteId("00000000-0000-4000-8000-000000000072"),
+      id: parseSiteId("00000000-0000-4000-8000-000000000072"),
       name: assertLocalized("Augury"),
       blurb: assertLocalized("Study a curated vision of what waits ahead."),
       icon: GLYPHS.water,
     },
     affiliation: {
-      id: asAffiliationId("00000000-0000-4000-8000-000000000073"),
+      id: testAffiliationId("00000000-0000-4000-8000-000000000073"),
       title: assertLocalized("Fixture affiliation"),
       body: assertLocalized("Fixture cards are more likely here."),
     },
@@ -226,7 +226,7 @@ function residentModel(): Pick<
 }
 
 function nodeItem(
-  id: string,
+  idSeed: string,
   state: AtlasNodeModel["state"],
   extra: {
     role?: AtlasNodeModel["role"];
@@ -236,13 +236,13 @@ function nodeItem(
   } = {},
 ): AtlasNodePlacementView {
   const model: AtlasNodeModel = {
-    id: asAtlasNodeId(id),
-    name: assertLocalized(id),
+    id: parseAtlasNodeId(idSeed),
+    name: assertLocalized(idSeed),
     state,
     role: extra.role ?? "regular",
     isReachable: true,
     iconRef: null,
-    unrevealedFrameRef: artRef.atlasAsset("fixture-frame.png"),
+    unrevealedFrameRef: artRef.atlasAsset(testArtAssetKey("fixture-frame.png")),
     siteBadgeGlyph: null,
     knownDreamsignRef: null,
     primary: extra.semantic?.primary ?? emptyPrimary(),
@@ -282,7 +282,7 @@ describe("Cumulus AtlasScreen", () => {
     const view: AtlasView = {
       ...makeView(),
       guideDialogue: {
-        id: "tutorial-run:atlas-guidance",
+        id: testPresentationId("tutorial-run:atlas-guidance"),
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: assertLocalized("Mira"),

@@ -9,6 +9,14 @@ import { countRemainingCards } from "../draft/draft-engine";
 import type { DraftState } from "../types/draft";
 import type { SiteId } from "../types/identifiers";
 
+export type DraftOfferKey = `draft-offer:${string}`;
+
+export function draftOfferKey(
+  offerCardNumbers: readonly number[],
+): DraftOfferKey {
+  return `draft-offer:${offerCardNumbers.join(",")}`;
+}
+
 /** The derived draft progress for a site, read from the effective draft state. */
 export interface DraftSiteProgress {
   /** True when the effective draft state is advanced to this site. */
@@ -16,7 +24,7 @@ export interface DraftSiteProgress {
   /** The current offered pack's card numbers (empty when not active / exhausted). */
   offerCardNumbers: number[];
   /** Stable key for the current pack (the card numbers joined). */
-  offerKey: string;
+  offerKey: DraftOfferKey;
   /** How many picks the player has made at this site. */
   sitePicksCompleted: number;
   /** True once the site's picks are exhausted and the run should move on. */
@@ -38,14 +46,14 @@ export function readDraftSiteProgress(
     ? (effective?.sitePicksCompleted ?? 0)
     : 0;
   const offerCardNumbers = isActive ? [...(effective?.currentOffer ?? [])] : [];
-  const offerKey = offerCardNumbers.join(",");
+  const offerKey = draftOfferKey(offerCardNumbers);
   const remainingTotal =
     isActive && effective && effective.mode === "tides4"
       ? countRemainingCards(effective.remainingCopiesByCard)
       : 0;
   const isComplete =
     isActive &&
-    offerKey === "" &&
+    offerCardNumbers.length === 0 &&
     (sitePicksCompleted > 0 || remainingTotal < 4);
   return {
     isActive,

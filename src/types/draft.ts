@@ -1,6 +1,34 @@
 import type { DraftRarityCap } from "./draft-data";
 import type { AffiliationId, ExplorationActionId, SiteId } from "./identifiers";
 
+/** JSON object key carrying a canonical decimal card number. */
+export type SerializedCardNumber = `${number}`;
+
+/** JSON object key carrying a canonical decimal draft-pick number. */
+export type SerializedDraftPickNumber = `${number}`;
+
+export type DraftPoolCopiesByCard = Record<SerializedCardNumber, number>;
+export type OpeningDraftOffers = Record<
+  SerializedDraftPickNumber,
+  readonly number[]
+>;
+
+export function serializeCardNumber(cardNumber: number): SerializedCardNumber {
+  if (!Number.isSafeInteger(cardNumber)) {
+    throw new Error("Card number must be a safe integer.");
+  }
+  return `${cardNumber}`;
+}
+
+export function serializeDraftPickNumber(
+  pickNumber: number,
+): SerializedDraftPickNumber {
+  if (!Number.isSafeInteger(pickNumber) || pickNumber < 1) {
+    throw new Error("Draft pick number must be a positive safe integer.");
+  }
+  return `${pickNumber}`;
+}
+
 /** Configuration for the tides4 draft offer engine. */
 export interface DraftConfig {
   /** Number of cards shown per pick. */
@@ -28,7 +56,7 @@ export interface DraftConfig {
 /** Context provided to a pack generation strategy. */
 export interface PackContext {
   /** Remaining copies for each card number in the fixed run pool. */
-  remainingCopiesByCard: Record<string, number>;
+  remainingCopiesByCard: DraftPoolCopiesByCard;
   /** 1-indexed pick counter across the entire journey. */
   pickNumber: number;
   /** Number of cards to include in the pack. */
@@ -63,7 +91,7 @@ export interface DraftState {
   siteShownCardNumbers?: number[];
   /** Exact transfiguration rolled for each card in the currently visible offer. */
   currentOfferTransfigurations?: Record<
-    string,
+    SerializedCardNumber,
     import("./journey").TransfigurationType
   >;
   /** Exploration action whose one-use modifier transfigures this Draft visit. */
@@ -76,14 +104,14 @@ export interface DraftState {
    * when `remainingCopiesByCard` is exhausted the multiset is recreated from
    * this snapshot.
    */
-  draftPoolCopiesByCard: Record<string, number>;
+  draftPoolCopiesByCard: DraftPoolCopiesByCard;
   /**
    * Exact early offers keyed by their 1-indexed journey pick. When every
    * authored card remains eligible, the engine presents the authored order.
    */
-  openingDraftOffers?: Record<string, number[]>;
+  openingDraftOffers?: OpeningDraftOffers;
   /** Remaining copies for each card number in the fixed run pool. */
-  remainingCopiesByCard: Record<string, number>;
+  remainingCopiesByCard: DraftPoolCopiesByCard;
 }
 
 /** Explicit alias for code that consumes the fixed tides4 pool multiset. */

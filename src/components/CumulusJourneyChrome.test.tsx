@@ -6,9 +6,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDefaultState, useJourney } from "../state/journey-context";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { CumulusJourneyChrome } from "./CumulusJourneyChrome";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asDeckEntryId } from "../types/identifiers";
-import { asDreamsignId } from "../types/identifiers";
+import { parseDeckEntryId } from "../types/identifiers";
+import { testDreamAvatarId, testDreamsignId } from "../types/test-identities";
 
 vi.mock("../state/journey-context", async (importOriginal) => {
   const actual =
@@ -50,13 +49,13 @@ beforeEach(() => {
   const state = createDefaultState();
   state.essence = 275;
   state.deck = Array.from({ length: 17 }, (_, index) => ({
-    entryId: asDeckEntryId(`entry-${String(index)}`),
+    entryId: parseDeckEntryId(`entry-${String(index)}`),
     cardNumber: index + 1,
     transfiguration: null,
     isBane: false,
   }));
   state.dreamAvatar = {
-    id: asDreamAvatarId("00000000-0000-4000-8000-000000000001"),
+    id: testDreamAvatarId("00000000-0000-4000-8000-000000000001"),
     name: "Test DreamAvatar",
     title: "Keeper of Chrome",
     renderedText: "Draw a card.",
@@ -64,7 +63,7 @@ beforeEach(() => {
     startingEssence: 200,
   };
   state.dreamsigns = Array.from({ length: 5 }, (_, index) => ({
-    id: asDreamsignId(
+    id: testDreamsignId(
       `00000000-0000-4000-8000-${String(index + 2).padStart(12, "0")}`,
     ),
     name: `Test Dreamsign ${String(index + 1)}`,

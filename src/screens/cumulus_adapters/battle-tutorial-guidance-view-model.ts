@@ -6,7 +6,6 @@ import type { TutorialGuidanceMessage } from "../../rules/battle/fold";
 import { tutorialGuidanceMessageDurationSeconds } from "../../battle/tutorial-presentation-timing";
 import { tx } from "@trox/runtime";
 import { localizedSourceText } from "../../runtime/localization/runtime";
-import { asPresentationId } from "../../types/identifiers";
 
 function guidanceDialogue(
   battle: BattleFoldState,
@@ -69,7 +68,7 @@ export function buildBattleTutorialGuidanceView(
     presentation.source.kind === "battle"
   ) {
     return {
-      presentationId: asPresentationId(presentation.id),
+      presentationId: presentation.id,
       triggerId: message.triggerId,
       messageIndex: presentation.messageIndex,
       messageCount: presentation.messages.length,
@@ -89,7 +88,7 @@ export function buildBattleTutorialGuidanceView(
     );
     if (definition === undefined) return null;
     return {
-      presentationId: asPresentationId(presentation.id),
+      presentationId: presentation.id,
       triggerId: message.triggerId,
       messageIndex: presentation.messageIndex,
       messageCount: presentation.messages.length,
@@ -109,7 +108,7 @@ export function buildBattleTutorialGuidanceView(
   const instance = battle.board.cardInstances[presentation.source.battleCardId];
   if (instance === undefined) return null;
   return {
-    presentationId: asPresentationId(presentation.id),
+    presentationId: presentation.id,
     triggerId: message.triggerId,
     messageIndex: presentation.messageIndex,
     messageCount: presentation.messages.length,

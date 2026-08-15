@@ -9,33 +9,38 @@ import {
   sampleSelectionBand,
   selectionBandSize,
 } from "./tide-affinity";
-import { asCardId } from "../types/card-identity";
-import { asTideId } from "../types/identifiers";
+import { testCardId, testTideId } from "../types/test-identities";
+
+const TIDE_A_ID = testTideId("tide-a");
+const TIDE_B_ID = testTideId("tide-b");
+const CARD_A_ID = testCardId("card-a");
+const CARD_B_ID = testCardId("card-b");
+const SHARED_CARD_ID = testCardId("card-shared");
 
 const tides: Tides4DecksJson = {
   version: 2,
   selection: { bandFraction: 0.25, bandMinimum: 5 },
   tides: [
     {
-      id: "tide-a",
+      id: TIDE_A_ID,
       displayName: "A",
       displayDescription: "A synthetic tide.",
       resonance: "ember",
       role: "facet",
       cards: [
-        { id: "card-a", copies: 2 },
-        { id: "card-shared", copies: 1 },
+        { id: CARD_A_ID, copies: 2 },
+        { id: SHARED_CARD_ID, copies: 1 },
       ],
     },
     {
-      id: "tide-b",
+      id: TIDE_B_ID,
       displayName: "B",
       displayDescription: "Another synthetic tide.",
       resonance: "vision",
       role: "neutral",
       cards: [
-        { id: "card-b", copies: 2 },
-        { id: "card-shared", copies: 1 },
+        { id: CARD_B_ID, copies: 2 },
+        { id: SHARED_CARD_ID, copies: 1 },
       ],
     },
   ],
@@ -46,13 +51,13 @@ describe("Tide affinity", () => {
   it("uses authored copy counts as the card vector weights", () => {
     const index = buildTideAffinityIndex(tides);
 
-    expect([...(index.cardVectors.get(asCardId("card-a")) ?? [])]).toEqual([
-      ["tide-a", 2],
+    expect([...(index.cardVectors.get(CARD_A_ID) ?? [])]).toEqual([
+      [TIDE_A_ID, 2],
     ]);
-    expect([...(index.cardVectors.get(asCardId("card-shared")) ?? [])]).toEqual(
+    expect([...(index.cardVectors.get(SHARED_CARD_ID) ?? [])]).toEqual(
       [
-        ["tide-a", 1],
-        ["tide-b", 1],
+        [TIDE_A_ID, 1],
+        [TIDE_B_ID, 1],
       ],
     );
   });
@@ -61,20 +66,20 @@ describe("Tide affinity", () => {
     const index = buildTideAffinityIndex(tides);
     const context = buildAffinityContext({
       index,
-      joinedTideIds: [asTideId("tide-a")],
+      joinedTideIds: [TIDE_A_ID],
       deckCardUuids: [
-        asCardId("card-shared"),
-        asCardId("card-shared"),
-        asCardId("card-b"),
+        SHARED_CARD_ID,
+        SHARED_CARD_ID,
+        CARD_B_ID,
       ],
-      dreamsignTideIds: [asTideId("tide-b")],
+      dreamsignTideIds: [TIDE_B_ID],
     });
 
     expect([...context]).toEqual([
-      ["tide-a", 2],
-      ["tide-b", 4],
+      [TIDE_A_ID, 2],
+      [TIDE_B_ID, 4],
     ]);
-    expect(cardAffinity(asCardId("card-b"), context, index)).toBeCloseTo(
+    expect(cardAffinity(CARD_B_ID, context, index)).toBeCloseTo(
       4 / Math.sqrt(20),
     );
     expect(cosineAffinity(new Map(), context)).toBe(0);

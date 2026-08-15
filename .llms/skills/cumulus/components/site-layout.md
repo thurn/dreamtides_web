@@ -32,7 +32,7 @@ Site content chooses its own material and floating panels should hug their conte
 | Field | Type | Optional | Description |
 | --- | --- | --- | --- |
 | `presence` | `"speaking" \| "portrait-only"` | no | Whether the guide speaks or appears as a portrait without dialogue. |
-| `id` | `string` | no | Stable Dream Guide identity. |
+| `id` | `GuideId` | no | Stable Dream Guide identity. |
 | `name` | `LocalizedString` | no | Localized guide name used by visible and accessible presentation. |
 | `line` | `LocalizedString` | no | Localized line spoken by the guide when present. |
 | `art` | `ArtRef` | no | Transparent resident-guide artwork. |

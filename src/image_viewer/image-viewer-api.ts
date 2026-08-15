@@ -1,4 +1,85 @@
-import type { ImageManifest } from "./types";
+import {
+  parseImageCategory,
+  parseImageFileName,
+  parseImageNumber,
+  type ImageCategory,
+  type ImageFileName,
+  type ImageManifest,
+  type ImageNumber,
+} from "./types";
+import { parseCardName, parseCardSubtype } from "../types/card-identity";
+
+function recordFromUnknown(value: unknown): Record<string, unknown> {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    throw new Error("Image manifest entry must be an object.");
+  }
+  return value as Record<string, unknown>;
+}
+
+function stringFromUnknown(value: unknown, field: string): string {
+  if (typeof value !== "string") {
+    throw new Error(`Image manifest ${field} must be a string.`);
+  }
+  return value;
+}
+
+function booleanFromUnknown(value: unknown, field: string): boolean {
+  if (typeof value !== "boolean") {
+    throw new Error(`Image manifest ${field} must be a boolean.`);
+  }
+  return value;
+}
+
+function stringArrayFromUnknown(value: unknown, field: string): string[] {
+  if (!Array.isArray(value)) {
+    throw new Error(`Image manifest ${field} must be an array.`);
+  }
+  return value.map((entry) => stringFromUnknown(entry, field));
+}
+
+function parseImageManifest(value: unknown): ImageManifest {
+  const manifest = recordFromUnknown(value);
+  if (!Array.isArray(manifest.images)) {
+    throw new Error("Image manifest images must be an array.");
+  }
+  return {
+    categories: stringArrayFromUnknown(manifest.categories, "categories").map(
+      parseImageCategory,
+    ),
+    genericSubdirs: stringArrayFromUnknown(
+      manifest.genericSubdirs,
+      "genericSubdirs",
+    ).map(parseImageCategory),
+    images: manifest.images.map((rawEntry) => {
+      const entry = recordFromUnknown(rawEntry);
+      const cardName =
+        entry.cardName === null
+          ? null
+          : parseCardName(entry.cardName);
+      const subtype =
+        entry.subtype === null
+          ? null
+          : parseCardSubtype(entry.subtype);
+      return {
+        category: parseImageCategory(entry.category),
+        filename: parseImageFileName(entry.filename),
+        imageNumber: parseImageNumber(entry.imageNumber),
+        used: booleanFromUnknown(entry.used, "used"),
+        favorite: booleanFromUnknown(entry.favorite, "favorite"),
+        manuallyUsed: booleanFromUnknown(entry.manuallyUsed, "manuallyUsed"),
+        cardName,
+        narrative:
+          entry.narrative === null
+            ? null
+            : stringFromUnknown(entry.narrative, "narrative"),
+        subtype,
+        cardNames: stringArrayFromUnknown(entry.cardNames, "cardNames").map(
+          parseCardName,
+        ),
+      };
+    }),
+  };
+}
 
 /** Fetch the candidate-image manifest from the dev-server middleware. */
 export async function loadImageManifest(
@@ -24,11 +105,14 @@ export async function loadImageManifest(
     throw new Error(message);
   }
 
-  return (await response.json()) as ImageManifest;
+  return parseImageManifest(await response.json());
 }
 
 /** Build the dev-server URL that streams a single candidate image. */
-export function imageFileUrl(category: string, filename: string): string {
+export function imageFileUrl(
+  category: ImageCategory,
+  filename: ImageFileName,
+): string {
   return `/api/images/file/${encodeURIComponent(category)}/${encodeURIComponent(filename)}`;
 }
 
@@ -50,7 +134,7 @@ async function mutationErrorMessage(
 
 /** Mark or unmark an image number as manually used, persisting the change. */
 export async function setManualUsed(
-  imageNumber: string,
+  imageNumber: ImageNumber,
   used: boolean,
 ): Promise<void> {
   const response = await fetch("/api/images/manual-used", {
@@ -67,7 +151,7 @@ export async function setManualUsed(
 
 /** Mark or unmark an image number as a favorite in tracked editor state. */
 export async function setFavorite(
-  imageNumber: string,
+  imageNumber: ImageNumber,
   favorite: boolean,
 ): Promise<void> {
   const response = await fetch("/api/images/favorite", {
@@ -87,10 +171,10 @@ export async function setFavorite(
  * `{ category, filename }` (the filename is preserved).
  */
 export async function moveImageCategory(
-  category: string,
-  filename: string,
-  targetCategory: string,
-): Promise<{ category: string; filename: string }> {
+  category: ImageCategory,
+  filename: ImageFileName,
+  targetCategory: ImageCategory,
+): Promise<{ category: ImageCategory; filename: ImageFileName }> {
   const response = await fetch("/api/images/category", {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
@@ -101,5 +185,9 @@ export async function moveImageCategory(
       await mutationErrorMessage(response, "Failed to change the category."),
     );
   }
-  return (await response.json()) as { category: string; filename: string };
+  const result = recordFromUnknown(await response.json());
+  return {
+    category: parseImageCategory(result.category),
+    filename: parseImageFileName(result.filename),
+  };
 }

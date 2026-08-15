@@ -2,10 +2,11 @@ import type { BattleMutableState, BattleSide } from "./types";
 import { selectBattleCardLocation } from "./state/selectors";
 import semanticPlayCardIds from "./semantic-play-card-ids.json";
 import type { CardId } from "../types/card-identity";
+import { parseCardId } from "../types/card-identity";
 import type { BattleCardId } from "../types/identifiers";
 
-const SEMANTIC_PLAY_CARD_IDS: ReadonlySet<string> = new Set(
-  semanticPlayCardIds,
+const SEMANTIC_PLAY_CARD_IDS: ReadonlySet<CardId> = new Set(
+  semanticPlayCardIds.map(parseCardId),
 );
 
 /** Whether the semantic play event has a complete, explicitly audited rule. */

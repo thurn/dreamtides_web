@@ -7,6 +7,10 @@ import type {
   DreamscapeCardSize,
   EditorDreamscapeRecord,
 } from "./dreamscape-types";
+import {
+  parseDreamAvatarId,
+  type DreamAvatarId,
+} from "../types/identifiers";
 
 export interface ResidentAssignmentStatus {
   pending: boolean;
@@ -18,11 +22,11 @@ export interface DreamscapeResidentsProps {
   size: DreamscapeCardSize;
   dreamAvatars: DreamAvatarOption[];
   /** Lowercased DreamAvatar id -> the name of the region that currently hosts it. */
-  regionNameByDreamAvatar: Map<string, string>;
+  regionNameByDreamAvatar: Map<DreamAvatarId, string>;
   status: ResidentAssignmentStatus;
   onAssign: (
     action: DreamAvatarAssignmentAction,
-    params: { inId?: string; outId?: string },
+    params: { inId?: DreamAvatarId; outId?: DreamAvatarId },
   ) => void;
 }
 
@@ -65,14 +69,14 @@ const THUMB_SIZE: Record<DreamscapeCardSize, number> = {
  */
 function candidateOptions(
   dreamAvatars: DreamAvatarOption[],
-  residentIds: Set<string>,
-  regionNameByDreamAvatar: Map<string, string>,
+  residentIds: Set<DreamAvatarId>,
+  regionNameByDreamAvatar: Map<DreamAvatarId, string>,
   selfName: string,
 ) {
   return dreamAvatars
-    .filter((dreamAvatar) => !residentIds.has(dreamAvatar.id.toLowerCase()))
+    .filter((dreamAvatar) => !residentIds.has(dreamAvatar.id))
     .map((dreamAvatar) => {
-      const region = regionNameByDreamAvatar.get(dreamAvatar.id.toLowerCase());
+      const region = regionNameByDreamAvatar.get(dreamAvatar.id);
       const where =
         region === undefined
           ? "unassigned"
@@ -94,16 +98,16 @@ export default function DreamscapeResidents({
 }: DreamscapeResidentsProps) {
   const byId = new Map(
     dreamAvatars.map((dreamAvatar) => [
-      dreamAvatar.id.toLowerCase(),
+      dreamAvatar.id,
       dreamAvatar,
     ]),
   );
   const residentIds = new Set(
-    record.dreamAvatarIds.map((id) => id.toLowerCase()),
+    record.dreamAvatarIds,
   );
   const residents = record.dreamAvatarIds.map((id) => ({
     id,
-    option: byId.get(id.toLowerCase()) ?? null,
+    option: byId.get(id) ?? null,
   }));
   const candidates = candidateOptions(
     dreamAvatars,
@@ -216,9 +220,12 @@ export default function DreamscapeResidents({
                   value=""
                   disabled={status.pending}
                   onChange={(event) => {
-                    const inId = event.currentTarget.value;
-                    if (inId !== "") {
-                      onAssign("replace", { outId: resident.id, inId });
+                    const value = event.currentTarget.value;
+                    if (value !== "") {
+                      onAssign("replace", {
+                        outId: resident.id,
+                        inId: parseDreamAvatarId(value),
+                      });
                     }
                   }}
                   style={{ ...controlStyle, flex: "1 1 auto", minWidth: 0 }}
@@ -268,9 +275,9 @@ export default function DreamscapeResidents({
           value=""
           disabled={!canAdd || status.pending || candidates.length === 0}
           onChange={(event) => {
-            const inId = event.currentTarget.value;
-            if (inId !== "") {
-              onAssign("add", { inId });
+            const value = event.currentTarget.value;
+            if (value !== "") {
+              onAssign("add", { inId: parseDreamAvatarId(value) });
             }
           }}
           style={{

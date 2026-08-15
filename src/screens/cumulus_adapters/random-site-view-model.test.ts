@@ -21,16 +21,16 @@ describe("buildRandomSiteView", () => {
       },
     };
     const site: SiteState & { type: "RandomSite" } = {
-      id: asSiteId("fixture-random-site"),
+      id: parseSiteId("fixture-random-site"),
       type: "RandomSite",
       isEnhanced: true,
       isVisited: false,
     };
     const node: DreamscapeNode = {
-      id: asAtlasNodeId("fixture-node"),
+      id: parseAtlasNodeId("fixture-node"),
       layer: LayerName.Four,
       indexInLayer: 0,
-      dreamscapeId: asDreamscapeId("fixture-dreamscape"),
+      dreamscapeId: testDreamscapeId("fixture-dreamscape"),
       sites: [site],
       position: { x: 0, y: 0 },
       state: "available",
@@ -51,7 +51,7 @@ describe("buildRandomSiteView", () => {
       guide: {
         id: sitesData.randomSite.guideId,
         name: "Fixture Guide",
-        homeDreamscapeId: asDreamscapeId("fixture-dreamscape"),
+        homeDreamscapeId: testDreamscapeId("fixture-dreamscape"),
         siteType: "RandomSite",
         portraitSource: "fixture-guide.png",
         dialogue: { site: [] },
@@ -66,6 +66,6 @@ describe("buildRandomSiteView", () => {
   });
 });
 import { assertLocalized } from "@trox/runtime";
-import { asSiteId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asDreamscapeId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { testDreamscapeId } from "../../types/test-identities";

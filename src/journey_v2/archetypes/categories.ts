@@ -1,9 +1,9 @@
 import type { CardData } from "../../types/cards";
 import type { MerchantContext } from "../types";
 import type { CardId } from "../../types/card-identity";
-import { asCardId } from "../../types/card-identity";
+import { parseCardId } from "../../types/card-identity";
 import {
-  asMerchantCategoryId,
+  parseMerchantCategoryId,
   type MerchantCategoryId,
 } from "../../types/identifiers";
 
@@ -55,7 +55,7 @@ export function buildCategoryUniverse(
 
   for (const cardType of ["Character", "Event"] as const) {
     add(
-      asMerchantCategoryId(`type:${cardType}`),
+      parseMerchantCategoryId(`type:${cardType}`),
       cardType,
       (card) => card.cardType === cardType,
       1,
@@ -68,7 +68,7 @@ export function buildCategoryUniverse(
   );
   for (const subtype of [...subtypes].sort()) {
     add(
-      asMerchantCategoryId(`subtype:${subtype}`),
+      parseMerchantCategoryId(`subtype:${subtype}`),
       subtype,
       (card) => card.subtype === subtype,
       subtypeMinimum,
@@ -77,14 +77,14 @@ export function buildCategoryUniverse(
 
   for (const band of ["cheap", "mid", "big"] as const) {
     add(
-      asMerchantCategoryId(`cost:${band}`),
+      parseMerchantCategoryId(`cost:${band}`),
       COST_BAND_LABELS[band],
       (card) => costBandOf(card, context) === band,
       1,
     );
   }
   add(
-    asMerchantCategoryId("fast"),
+    parseMerchantCategoryId("fast"),
     "fast card",
     (card) => card.isFast,
     subtypeMinimum,
@@ -96,11 +96,11 @@ export function buildCategoryUniverse(
     const poolUuids = new Set(pool.map((member) => member.cardUuid));
     for (const tide of tideData.tides) {
       const memberUuids = tide.cards
-        .map((entry) => asCardId(entry.id))
+        .map((entry) => parseCardId(entry.id))
         .filter((id) => poolUuids.has(id));
       if (memberUuids.length > 0) {
         categories.push({
-          id: asMerchantCategoryId(`tide:${tide.id}`),
+          id: parseMerchantCategoryId(`tide:${tide.id}`),
           label: `${tide.displayName} package`,
           memberUuids,
         });

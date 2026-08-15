@@ -10,17 +10,27 @@ import { GLOSSARY_IDS, lookupGlossaryTerm } from "../../data/glossary";
 import { parseTutorialTriggers } from "../../data/tutorial-actions";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
 import { matchTutorialGuidance } from "./tutorial-guidance";
-import { asTutorialTriggerId } from "../../types/identifiers";
 import type { TutorialTriggerId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asGlossaryEntryId } from "../../types/identifiers";
+import { testTutorialTriggerId, testGlossaryEntryId, testCardId } from "../../types/test-identities";
 
 function glossaryTrigger(
-  id: string,
+  idSeed: string,
   priority: number,
 ): TutorialTriggerDefinition {
+  const glossaryId = (() => {
+    switch (idSeed) {
+      case "support":
+        return GLOSSARY_IDS.support;
+      case "foresee":
+        return GLOSSARY_IDS.foresee;
+      case "erode":
+        return GLOSSARY_IDS.erode;
+      default:
+        return testGlossaryEntryId(idSeed);
+    }
+  })();
   return {
-    id: asTutorialTriggerId(id),
+    id: testTutorialTriggerId(idSeed),
     on: ["card-play", "dreamwell-resolve"],
     priority,
     speaker: "mira",
@@ -30,15 +40,9 @@ function glossaryTrigger(
     bubbleWidth: 700,
     match: {
       kind: "glossary",
-      id: asGlossaryEntryId(
-        {
-          support: GLOSSARY_IDS.support,
-          foresee: GLOSSARY_IDS.foresee,
-          erode: GLOSSARY_IDS.erode,
-        }[id] ?? id,
-      ),
+      id: glossaryId,
     },
-    text: id,
+    text: idSeed,
   };
 }
 
@@ -56,13 +60,17 @@ describe("matchTutorialGuidance", () => {
     };
 
     const firstMatches = matchTutorialGuidance(triggers, input);
-    expect(firstMatches.map((match) => match.id)).toEqual(["foresee"]);
+    expect(firstMatches.map((match) => match.id)).toEqual([
+      testTutorialTriggerId("foresee"),
+    ]);
 
     const secondMatches = matchTutorialGuidance(triggers, {
       ...input,
       seenTriggerIds: new Set(firstMatches.map((match) => match.id)),
     });
-    expect(secondMatches.map((match) => match.id)).toEqual(["support"]);
+    expect(secondMatches.map((match) => match.id)).toEqual([
+      testTutorialTriggerId("support"),
+    ]);
   });
 
   it("suppresses room-seen ids and keeps source-order ties stable", () => {
@@ -72,16 +80,18 @@ describe("matchTutorialGuidance", () => {
         event: "card-play",
         renderedText: "Support. Foresee 1.",
         cardKind: "character",
-        seenTriggerIds: new Set([asTutorialTriggerId("support")]),
+        seenTriggerIds: new Set([testTutorialTriggerId("support")]),
       },
     );
-    expect(matches.map((match) => match.id)).toEqual(["foresee"]);
+    expect(matches.map((match) => match.id)).toEqual([
+      testTutorialTriggerId("foresee"),
+    ]);
   });
 
   it("defers a matching keyword until after the general Event explanation", () => {
     const triggers: readonly TutorialTriggerDefinition[] = [
       {
-        id: asTutorialTriggerId("event-card"),
+        id: testTutorialTriggerId("event-card"),
         on: ["card-play"],
         priority: 10,
         speaker: "mira",
@@ -102,13 +112,17 @@ describe("matchTutorialGuidance", () => {
     } as const;
 
     const firstMatches = matchTutorialGuidance(triggers, input);
-    expect(firstMatches.map((match) => match.id)).toEqual(["event-card"]);
+    expect(firstMatches.map((match) => match.id)).toEqual([
+      testTutorialTriggerId("event-card"),
+    ]);
 
     const secondMatches = matchTutorialGuidance(triggers, {
       ...input,
-      seenTriggerIds: new Set([asTutorialTriggerId("event-card")]),
+      seenTriggerIds: new Set([testTutorialTriggerId("event-card")]),
     });
-    expect(secondMatches.map((match) => match.id)).toEqual(["erode"]);
+    expect(secondMatches.map((match) => match.id)).toEqual([
+      testTutorialTriggerId("erode"),
+    ]);
   });
 
   it("matches a card-specific trigger by UUID", () => {
@@ -116,7 +130,7 @@ describe("matchTutorialGuidance", () => {
     const matches = matchTutorialGuidance(
       [
         {
-          id: asTutorialTriggerId("flashpoint-no-valid-targets"),
+          id: testTutorialTriggerId("flashpoint-no-valid-targets"),
           on: ["card-no-valid-targets"],
           priority: 10,
           speaker: "mira",
@@ -124,13 +138,13 @@ describe("matchTutorialGuidance", () => {
           horizontalOffset: 0,
           verticalOffset: 0,
           bubbleWidth: 500,
-          match: { kind: "card-id", cardId: asCardId(cardId) },
+          match: { kind: "card-id", cardId: testCardId(cardId) },
           text: "There are no valid targets for this card",
         },
       ],
       {
         event: "card-no-valid-targets",
-        cardId: asCardId(cardId),
+        cardId: testCardId(cardId),
         renderedText: "Dissolve a low-cost enemy.",
         cardKind: "event",
         seenTriggerIds: new Set(),
@@ -138,7 +152,7 @@ describe("matchTutorialGuidance", () => {
     );
 
     expect(matches.map((match) => match.id)).toEqual([
-      "flashpoint-no-valid-targets",
+      testTutorialTriggerId("flashpoint-no-valid-targets"),
     ]);
   });
 });

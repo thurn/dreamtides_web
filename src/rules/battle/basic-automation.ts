@@ -18,9 +18,10 @@ import type {
   DreamwellCardDefinition,
 } from "../../battle/types";
 import { hasTemporaryReclaimEligibility } from "./temporary-effects";
+import type { BattleCardId } from "../../types/identifiers";
 
 /** An empty support map: the human/automation path runs over an unmodeled board. */
-const NO_SUPPORT_CONTRIBUTION: ReadonlyMap<string, number> = new Map();
+const NO_SUPPORT_CONTRIBUTION: ReadonlyMap<BattleCardId, number> = new Map();
 
 /**
  * The eight battle phases in turn order (rules §Turn Structure). Five phases —

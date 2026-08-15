@@ -7,6 +7,9 @@ import {
   pushDetailIdInUrl,
   replaceDetailIdInUrl,
 } from "./dream-avatar-detail-url-state";
+import { testDreamAvatarId } from "../types/test-identities";
+
+const DETAIL_ID = testDreamAvatarId("detail");
 
 describe("DreamAvatar detail URL state", () => {
   beforeEach(() => {
@@ -20,24 +23,24 @@ describe("DreamAvatar detail URL state", () => {
   });
 
   it("reads the selected dreamAvatar id from the detail parameter", () => {
-    expect(parseDetailIdFromUrl("?detail=abc-123")).toBe("abc-123");
-    expect(parseDetailIdFromUrl("?q=Aurora&detail=abc-123&sort=name")).toBe("abc-123");
+    expect(parseDetailIdFromUrl(`?detail=${DETAIL_ID}`)).toBe(DETAIL_ID);
+    expect(parseDetailIdFromUrl(`?q=Aurora&detail=${DETAIL_ID}&sort=name`)).toBe(DETAIL_ID);
   });
 
   it("pushes a marked history entry that preserves existing list parameters", () => {
     window.history.replaceState(null, "", "/dream-avatars?q=Aurora&sort=name");
 
-    pushDetailIdInUrl("abc-123");
+    pushDetailIdInUrl(DETAIL_ID);
 
-    expect(parseDetailIdFromUrl(window.location.search)).toBe("abc-123");
+    expect(parseDetailIdFromUrl(window.location.search)).toBe(DETAIL_ID);
     expect(window.location.search).toContain("q=Aurora");
     expect(window.location.search).toContain("sort=name");
     expect(isPushedDetailHistoryEntry()).toBe(true);
   });
 
   it("replacing the detail parameter clears it without marking the entry", () => {
-    pushDetailIdInUrl("abc-123");
-    expect(parseDetailIdFromUrl(window.location.search)).toBe("abc-123");
+    pushDetailIdInUrl(DETAIL_ID);
+    expect(parseDetailIdFromUrl(window.location.search)).toBe(DETAIL_ID);
 
     replaceDetailIdInUrl(null);
 

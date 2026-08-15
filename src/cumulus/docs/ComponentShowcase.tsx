@@ -10,6 +10,7 @@
 import type { CSSProperties } from "react";
 import { token } from "../primitives/tokens";
 import type { CumulusComponent } from "./registry";
+import type { DomElementId } from "../types/dom";
 import { getMockup, hasMockup } from "./mockups/registry";
 import { DemoStage, FIXED_PREVIEW_BOUNDARY_STYLE } from "./DemoStage";
 
@@ -104,7 +105,7 @@ export function ComponentShowcase({
   entry: CumulusComponent;
   // DOM id the overview's table of contents scrolls to / tracks for this
   // showcase. Optional so the showcase still renders standalone without a TOC.
-  anchorId?: string;
+  anchorId?: DomElementId;
 }) {
   const Mockup = getMockup(entry.id);
   return (

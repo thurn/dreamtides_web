@@ -9,10 +9,11 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ENERGY_ICON_COLOR } from "../controls/StandaloneGlyph";
 import type { GlossaryCatalogEntry } from "../../../data/glossary";
 import { renderRulesSymbolsInline, RulesText } from "./RulesText";
+import { testCardId, testGlossaryEntryId } from "../../../types/test-identities";
 
 const CARD_OWNER = {
   kind: "card",
-  id: "11111111-1111-4111-8111-111111111111",
+  id: testCardId("11111111-1111-4111-8111-111111111111"),
 } as const;
 
 function mount(element: ReactElement): {
@@ -43,7 +44,7 @@ afterEach(() => {
 describe("RulesText", () => {
   it("renders a symbol's accessible name from injected glossary metadata", () => {
     const entry: GlossaryCatalogEntry = {
-      id: "fixture-symbol",
+      id: testGlossaryEntryId("fixture-symbol"),
       category: "Resources",
       term: "Fixture",
       definition: "Fixture definition.",

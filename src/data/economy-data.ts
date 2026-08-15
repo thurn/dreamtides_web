@@ -1,4 +1,5 @@
 import type { EconomyData } from "../types/economy-data";
+import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 export type { EconomyData } from "../types/economy-data";
 
@@ -28,5 +29,9 @@ export async function loadEconomyData(): Promise<EconomyData> {
   ) {
     throw new Error("Failed to load economy data: malformed economy-data.json");
   }
-  return value as EconomyData;
+  return {
+    ...(value as Omit<EconomyData, "contentHash" | "foldHash">),
+    contentHash: parseContentHash(candidate.contentHash),
+    foldHash: parseFoldHash(candidate.foldHash),
+  };
 }

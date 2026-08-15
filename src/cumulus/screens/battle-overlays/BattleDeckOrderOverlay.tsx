@@ -7,16 +7,21 @@ import {
 import { GlassButton } from "../../components/controls/GlassButton";
 import { GlassDialog } from "../../components/overlay/GlassDialog";
 import { token } from "../../primitives/tokens";
+import type { BattleSide } from "../../../types/battle";
+import type { BattleCardId } from "../../../types/identifiers";
 
 export interface BattleDeckOrderOverlayProps {
   readonly title: LocalizedString;
   readonly label: LocalizedString;
   readonly scope: "top-N" | "full";
-  readonly side: string;
-  readonly initialOrder: readonly string[];
-  readonly itemsById: Readonly<Record<string, CardOrderEditorItem>>;
+  readonly side: BattleSide;
+  readonly initialOrder: readonly BattleCardId[];
+  readonly itemsById: ReadonlyMap<
+    BattleCardId,
+    CardOrderEditorItem<BattleCardId>
+  >;
   readonly onCancel: () => void;
-  readonly onConfirm: (order: readonly string[]) => void;
+  readonly onConfirm: (order: readonly BattleCardId[]) => void;
 }
 
 /** Pure Cumulus presentation for ordering a battle deck selection. */
@@ -30,12 +35,12 @@ export function BattleDeckOrderOverlay({
   onCancel,
   onConfirm,
 }: BattleDeckOrderOverlayProps): ReactElement {
-  const [draftOrder, setDraftOrder] = useState<readonly string[]>(() => [
+  const [draftOrder, setDraftOrder] = useState<readonly BattleCardId[]>(() => [
     ...initialOrder,
   ]);
   const previouslyFocusedRef = useRef<HTMLElement | null>(null);
   const items = draftOrder.flatMap((id) => {
-    const item = itemsById[id];
+    const item = itemsById.get(id);
     return item === undefined ? [] : [item];
   });
 
@@ -77,7 +82,7 @@ export function BattleDeckOrderOverlay({
         data-battle-deck-order-side={side}
         style={{ display: "grid", gap: token("--space-m") }}
       >
-        <CardOrderEditor
+        <CardOrderEditor<BattleCardId>
           label={label}
           items={items}
           placement="onGlass"

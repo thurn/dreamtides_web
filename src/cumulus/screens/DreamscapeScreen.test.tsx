@@ -12,9 +12,9 @@ import { artRef } from "../primitives/art";
 import type { SiteState } from "../../types/journey";
 import { CumulusRoot } from "../CumulusRoot";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
-import { asDreamscapeId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { testDreamscapeId, testDreamsignId } from "../../types/test-identities";
+import { testPresentationId } from "../../types/test-identities";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -74,9 +74,12 @@ function siteModel(
   };
 }
 
-function siteState(id: string, overrides: Partial<SiteState> = {}): SiteState {
+function siteState(
+  idSeed: string,
+  overrides: Partial<SiteState> = {},
+): SiteState {
   return {
-    id: asSiteId(id),
+    id: parseSiteId(idSeed),
     type: "Purge",
     isEnhanced: false,
     isVisited: false,
@@ -85,7 +88,7 @@ function siteState(id: string, overrides: Partial<SiteState> = {}): SiteState {
 }
 
 const VIEW: DreamscapeView = {
-  scene: artRef.dreamscapeScene(asDreamscapeId("ember_wood")),
+  scene: artRef.dreamscapeScene(testDreamscapeId("ember_wood")),
   title: assertLocalized("Ember Wood"),
   inlineRewards: {},
   replacement: null,
@@ -141,7 +144,7 @@ describe("DreamscapeScreen", () => {
     const tutorialView: DreamscapeView = {
       ...VIEW,
       guideDialogue: {
-        id: "dreamscape-guide-dialogue",
+        id: testPresentationId("dreamscape-guide-dialogue"),
         model: {
           portrait: { kind: "character-portrait", characterId: "mira" },
           portraitAlt: assertLocalized("Mira"),
@@ -324,6 +327,7 @@ describe("DreamscapeScreen", () => {
     vi.useFakeTimers();
     const onSelectSite = vi.fn();
     const onInlineRewardAnimationComplete = vi.fn();
+    const rewardDreamsignId = testDreamsignId("dreamsign-uuid");
     const rewardView: DreamscapeView = {
       ...VIEW,
       sites: [siteModel(siteState("s-reward", { type: "Reward" }))],
@@ -332,7 +336,7 @@ describe("DreamscapeScreen", () => {
           kind: "dreamsign",
           requiresReplacement: false,
           dreamsign: localizedDreamsignFixture({
-            id: asDreamsignId("dreamsign-uuid"),
+            id: rewardDreamsignId,
             name: "Lantern in the Rain",
             effectDescription: "Your first dream each dawn costs 1 less.",
             imageName: "lantern-in-the-rain.webp",
@@ -367,7 +371,7 @@ describe("DreamscapeScreen", () => {
     expect(reward?.getAttribute("aria-label")).not.toBe("");
     expect(reward?.getAttribute("aria-label")).not.toContain("dreamsign-uuid");
     expect(
-      reward?.querySelector('[data-dreamsign-id="dreamsign-uuid"]'),
+      reward?.querySelector(`[data-dreamsign-id="${rewardDreamsignId}"]`),
     ).not.toBeNull();
     expect(
       reward?.querySelector("[data-reward-dreamsign-pulse]"),
@@ -410,13 +414,13 @@ describe("DreamscapeScreen", () => {
     const onReplaceDreamsign = vi.fn();
     const onDeclineReward = vi.fn();
     const pendingDreamsign = localizedDreamsignFixture({
-      id: asDreamsignId("pending-dreamsign"),
+      id: testDreamsignId("pending-dreamsign"),
       name: "Lantern in the Rain",
       effectDescription: "Your first dream each dawn costs 1 less.",
       imageName: "lantern-in-the-rain.webp",
     });
     const heldDreamsign = localizedDreamsignFixture({
-      id: asDreamsignId("held-dreamsign"),
+      id: testDreamsignId("held-dreamsign"),
       name: "Held Sign",
       effectDescription: "A held effect.",
       imageName: "held.webp",
@@ -479,11 +483,11 @@ describe("DreamscapeScreen", () => {
     act(() =>
       document
         .querySelector<HTMLButtonElement>(
-          '[data-replace-dreamsign-id="held-dreamsign"] button',
+          `[data-replace-dreamsign-id="${heldDreamsign.id}"] button`,
         )
         ?.click(),
     );
-    expect(onReplaceDreamsign).toHaveBeenCalledWith("held-dreamsign");
+    expect(onReplaceDreamsign).toHaveBeenCalledWith(heldDreamsign.id);
     act(() =>
       document
         .querySelector<HTMLButtonElement>(

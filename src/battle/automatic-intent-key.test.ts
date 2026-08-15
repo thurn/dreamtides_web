@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { BattleCommand } from "./debug/commands";
 import { automaticBattleIntentKey } from "./automatic-intent-key";
-import { asBattleId } from "../types/identifiers";
+import { parseBattleId } from "../types/identifiers";
 
 const state = { activeSide: "player" as const, turnNumber: 2 };
 
@@ -14,7 +14,7 @@ describe("automaticBattleIntentKey", () => {
     };
 
     expect(
-      automaticBattleIntentKey(asBattleId("battle-7"), state, command),
+      automaticBattleIntentKey(parseBattleId("battle-7"), state, command),
     ).toBe("battle:battle-7:dreamwell:player:2");
   });
 
@@ -31,7 +31,7 @@ describe("automaticBattleIntentKey", () => {
     };
 
     expect(
-      automaticBattleIntentKey(asBattleId("battle-7"), state, command),
+      automaticBattleIntentKey(parseBattleId("battle-7"), state, command),
     ).toBeUndefined();
   });
 
@@ -47,10 +47,10 @@ describe("automaticBattleIntentKey", () => {
     };
 
     expect(
-      automaticBattleIntentKey(asBattleId("battle-7"), state, automatic),
+      automaticBattleIntentKey(parseBattleId("battle-7"), state, automatic),
     ).toBe("battle:battle-7:auto-phase:player:2:day");
     expect(
-      automaticBattleIntentKey(asBattleId("battle-7"), state, manual),
+      automaticBattleIntentKey(parseBattleId("battle-7"), state, manual),
     ).toBeUndefined();
   });
 });

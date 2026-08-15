@@ -1,14 +1,20 @@
 import cardRoleJson from "../generated/config/card-role-data.json";
-import { asCardId, type CardId } from "../types/card-identity";
+import { parseCardId, type CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
+import {
+  parseContentHash,
+  parseFoldHash,
+  type ContentHash,
+  type FoldHash,
+} from "../types/content-hash";
 
 const SHA256 = /^[0-9a-f]{64}$/u;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 
 export interface CardRoleData {
   schemaVersion: 1;
-  contentHash: string;
-  foldHash: string;
+  contentHash: ContentHash;
+  foldHash: FoldHash;
   starterDeckCardIds: readonly CardId[];
   nightmare: Readonly<{
     cardId: CardId;
@@ -47,13 +53,13 @@ export function parseCardRoleData(value: unknown): CardRoleData {
   }
   return {
     schemaVersion: 1,
-    contentHash: value.contentHash,
-    foldHash: value.contentHash,
+    contentHash: parseContentHash(value.contentHash),
+    foldHash: parseFoldHash(value.contentHash),
     starterDeckCardIds: value.starterDeckCardIds.map((cardId) =>
-      asCardId(cardId as string),
+      parseCardId(cardId as string),
     ),
     nightmare: {
-      cardId: asCardId(value.nightmare.cardId),
+      cardId: parseCardId(value.nightmare.cardId),
       historicalCardNumber: value.nightmare.historicalCardNumber,
       displayName: value.nightmare.displayName,
     },
@@ -65,11 +71,11 @@ export const STARTER_CARD_IDS = CARD_ROLE_DATA.starterDeckCardIds;
 
 /** Resolve the RON-authored starter-deck UUID order against a loaded catalog. */
 export function resolveStarterCardNumbers(
-  idIndex: ReadonlyMap<string, number>,
+  idIndex: ReadonlyMap<CardId, number>,
   starterCardIds: readonly CardId[] = STARTER_CARD_IDS,
 ): number[] {
   return starterCardIds.map((cardId) => {
-    const cardNumber = idIndex.get(cardId.toLowerCase());
+    const cardNumber = idIndex.get(cardId);
     if (cardNumber === undefined) {
       throw new Error(`Starter deck references missing card UUID ${cardId}`);
     }
@@ -89,7 +95,7 @@ export function resolveCatalogStarterCardNumbers(
     throw new Error("Loaded card catalog has no starter-deck roles");
   }
   return resolveStarterCardNumbers(
-    new Map(catalog.map((card) => [card.id.toLowerCase(), card.cardNumber])),
+    new Map(catalog.map((card) => [card.id, card.cardNumber])),
     starterCardIds,
   );
 }

@@ -4,24 +4,26 @@ import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { assertLocalized } from "@trox/runtime";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import { artRef } from "../primitives/art";
 import { resolveColor } from "../primitives/color";
 import { GLYPHS } from "../primitives/glyph";
 import { CumulusRoot } from "../CumulusRoot";
 import { AugurySiteScreen, type AugurySiteView } from "./AugurySiteScreen";
-import { asSiteId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
-import { asGuideId } from "../../types/identifiers";
-import { asOfferId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asAuguryCardViewId, asChoiceId } from "../../types/identifiers";
+import { parseOfferId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseAuguryCardViewId, parseChoiceId } from "../../types/identifiers";
+import { testGuideId, testCardId, testOfferTileId } from "../../types/test-identities";
+import type { CardViewProps } from "../components/card/CardView";
+import type { DomTestId } from "../types/dom";
 
 vi.mock("../components/card/CardView", async () => {
   const { Pressable } = await import("../primitives/Pressable");
   return {
-    CardView: ({ card }: { card: { id: string } }) => (
+    CardView: ({ card }: Pick<CardViewProps, "card">) => (
       <div data-card-view-id={card.id} />
     ),
     GameCard: ({
@@ -33,7 +35,7 @@ vi.mock("../components/card/CardView", async () => {
       model: { cardId: CardId };
       onPress?: () => void;
       selection?: string;
-      testId?: string;
+      testId?: DomTestId;
     }) => (
       <Pressable
         as="button"
@@ -63,11 +65,11 @@ function stubMatchMedia(matches: boolean): void {
 
 function card(index: number): CardData {
   return {
-    id: asCardId(`81000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
-    name: asCardName(`Fixture ${String(index)}`),
+    id: testCardId(`81000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
+    name: parseCardName(`Fixture ${String(index)}`),
     cardNumber: index,
     cardType: "Character",
-    subtype: "Fixture",
+    subtype: "Warrior",
     isStarter: false,
     energyCost: 1,
     spark: 1,
@@ -87,22 +89,22 @@ function view(): AugurySiteView {
   const choices = [card(1), card(2), card(3), card(4)];
   const direct = card(5);
   return {
-    siteId: asSiteId("augury-site"),
+    siteId: parseSiteId("augury-site"),
     scene: null,
     encounterSignature: "encounter-fixture",
     guide: {
-      id: "aldric_the_seer",
+      id: testGuideId("aldric_the_seer"),
       name: assertLocalized("Aldric, the Seer"),
       line: assertLocalized("Choose one path for your dream."),
-      art: artRef.dreamGuide(asGuideId("aldric_the_seer")),
+      art: artRef.dreamGuide(testGuideId("aldric_the_seer")),
     },
     offers: [
       {
-        id: asOfferId("A"),
+        id: parseOfferId("A"),
         requiresSelection: true,
         presentation: PRESENTATION,
         tile: {
-          id: "encounter-fixture:A",
+          id: testOfferTileId("encounter-fixture:A"),
           kind: "card-draft",
           cards: choices.map((choice) => ({
             cardId: choice.id,
@@ -113,20 +115,20 @@ function view(): AugurySiteView {
           kind: "cardChoices",
           doubled: false,
           choices: choices.map((choice, index) => ({
-            id: asChoiceId(`choice-${String(index + 1)}`),
+            id: parseChoiceId(`choice-${String(index + 1)}`),
             card: {
-              id: asAuguryCardViewId(choice.id),
+              id: parseAuguryCardViewId(choice.id),
               model: { cardId: choice.id, displaySnapshot: choice },
             },
           })),
         },
       },
       {
-        id: asOfferId("B"),
+        id: parseOfferId("B"),
         requiresSelection: false,
         presentation: PRESENTATION,
         tile: {
-          id: "encounter-fixture:B",
+          id: testOfferTileId("encounter-fixture:B"),
           kind: "card-gift",
           card: direct,
         },
@@ -134,7 +136,7 @@ function view(): AugurySiteView {
           kind: "cards",
           cards: [
             {
-              id: asAuguryCardViewId(direct.id),
+              id: parseAuguryCardViewId(direct.id),
               model: { cardId: direct.id, displaySnapshot: direct },
             },
           ],
@@ -444,7 +446,7 @@ describe("AugurySiteScreen", () => {
           visual: {
             kind: "site",
             model: {
-              id: asSiteId("augury-preview:Shop"),
+              id: parseSiteId("augury-preview:Shop"),
               type: "Shop",
               isVisited: false,
               pos: { x: 50, y: 50 },
@@ -510,7 +512,7 @@ describe("AugurySiteScreen", () => {
           presentation: PRESENTATION,
           visual: {
             kind: "beforeAfter",
-            pairs: [{ id: asDeckEntryId("entry-1"), before, after }],
+            pairs: [{ id: parseDeckEntryId("entry-1"), before, after }],
           },
         },
         base.offers[1],

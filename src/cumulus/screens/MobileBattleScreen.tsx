@@ -1,4 +1,5 @@
 import { assertLocalized } from "@trox/runtime";
+import type { DomTestId } from "../types/dom";
 import {
   meaning,
   txa,
@@ -98,8 +99,7 @@ import type { PresentationId } from "../../types/identifiers";
 import type { BattleCardId } from "../../types/identifiers";
 import type { BattleSlotViewId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
-import { asBattleCardId } from "../../types/identifiers";
-import { asBattleSlotViewId } from "../../types/identifiers";
+import { parseBattleSlotViewId } from "../../types/identifiers";
 
 export { BATTLEFIELD_CARD_EXHAUSTED_FILTER } from "../components/battle/BattlefieldCard";
 const CARD_PICKER_HIGHLIGHT_SELECTION: GameCardSelection = "highlighted";
@@ -207,7 +207,7 @@ export type MobileBattlePromptCopy = LocalizedString;
 
 /** A UUID-safe card decision owned by the authoritative battle prompt. */
 export interface MobileBattleCardPickerView {
-  readonly key: string;
+  readonly key: number;
   readonly label: MobileBattlePromptCopy;
   readonly subtitle?: MobileBattlePromptCopy;
   readonly side: MobileBattleOwner;
@@ -233,7 +233,7 @@ export interface MobileBattleCardPickerCandidateView {
 
 /** An in-place option decision owned by the authoritative battle prompt. */
 export interface MobileBattleChoicePromptView {
-  readonly key: string;
+  readonly key: number;
   readonly label: MobileBattlePromptCopy;
   readonly options: readonly {
     readonly label: MobileBattlePromptCopy;
@@ -331,7 +331,7 @@ export interface MobileBattleInspectorSideView {
 
 export interface MobileBattleInspectorAiView {
   readonly proposal: string;
-  readonly kind: string;
+  readonly kind: "Idle" | "Action" | "End Phase" | "End Turn";
   readonly card: string;
   readonly target: string;
   readonly heuristicChange: string;
@@ -978,7 +978,7 @@ function FarHand({
       }}
     >
       {visibleCardIds.map((cardId, index) => {
-        const candidate = pickerCandidate(cardPicker, asBattleCardId(cardId));
+        const candidate = pickerCandidate(cardPicker, cardId);
         const card =
           cards.find((visibleCard) => visibleCard.id === cardId) ??
           candidate?.card;
@@ -999,7 +999,7 @@ function FarHand({
             data-battle-card-zone="far-hand"
             data-battle-card-face={showFaceUp ? "up" : "down"}
             data-battle-card-picker-candidate={
-              pickerCandidateIds.has(asBattleCardId(cardId))
+              pickerCandidateIds.has(cardId)
                 ? "true"
                 : undefined
             }
@@ -1040,7 +1040,7 @@ function FarHand({
                       }
                 }
                 interaction={
-                  pickerCandidateIds.has(asBattleCardId(cardId))
+                  pickerCandidateIds.has(cardId)
                     ? {
                         draggable: false,
                         debugGesture: isDesktop ? "context-menu" : "double-tap",
@@ -1371,6 +1371,13 @@ interface BattleCardSurfaceInteraction {
   ) => void;
 }
 
+type MobileBattleCardSurfaceZone =
+  | "far-hand"
+  | "near-hand"
+  | "targeting-stage"
+  | "shared-reveal"
+  | `${MobileBattleOwner}-${"front" | "back"}-rank`;
+
 function BattleCardSurface({
   card,
   zone,
@@ -1383,7 +1390,7 @@ function BattleCardSurface({
   interaction,
 }: {
   readonly card: MobileBattleCardView;
-  readonly zone: string;
+  readonly zone: MobileBattleCardSurfaceZone;
   readonly showRulesText?: boolean;
   readonly snapLayout?: boolean;
   readonly challengerChevron?: MobileBattleOwner;
@@ -1467,7 +1474,7 @@ function BattleCardSurface({
     >
       <BattlefieldCard
         model={{
-          battleCardId: asBattleCardId(card.id),
+          battleCardId: card.id,
           card: card.model,
           exhausted: card.exhausted,
           storedMemory: card.storedTime,
@@ -1683,14 +1690,14 @@ function visibleRankSlots(
   return [
     ...slots,
     ...Array.from({ length: slotCount - slots.length }, (_unused, offset) => ({
-      id: asBattleSlotViewId(`${prefix}${String(slots.length + offset)}`),
+      id: parseBattleSlotViewId(`${prefix}${String(slots.length + offset)}`),
       card: null,
     })),
   ];
 }
 
 function canonicalRankIndex(
-  slotId: string,
+  slotId: BattleSlotViewId,
   rank: MobileBattleRank,
 ): number | null {
   const prefix = rank === "back" ? "B" : "F";
@@ -1736,7 +1743,7 @@ function visibleMobileRankSlots(
     { length: maximumSlotCount },
     (_unused, index) =>
       slotsByIndex.get(index) ?? {
-        id: asBattleSlotViewId(`${prefix}${String(index)}`),
+        id: parseBattleSlotViewId(`${prefix}${String(index)}`),
         card: null,
       },
   );
@@ -1773,7 +1780,7 @@ function slotTargetFromElement(
   ) {
     return null;
   }
-  return { owner, rank, slotId: asBattleSlotViewId(slotId) };
+  return { owner, rank, slotId: parseBattleSlotViewId(slotId) };
 }
 
 function findBattleCardView(
@@ -1971,6 +1978,7 @@ function Rank({
         }}
       >
         {visibleSlots.map((slot) => {
+          const slotCard = slot.card;
           const slotTarget = { owner, rank, slotId: slot.id } as const;
           const canDrop =
             canDropOnOwner &&
@@ -1987,7 +1995,7 @@ function Rank({
           const candidate =
             slot.card === null
               ? null
-              : pickerCandidate(cardPicker, asBattleCardId(slot.card.id));
+              : pickerCandidate(cardPicker, slot.card.id);
           const isPickerSelected =
             slot.card !== null && selectedPickerCardIds.includes(slot.card.id);
           const isPickerHighlighted = candidate?.highlighted === true;
@@ -2089,15 +2097,15 @@ function Rank({
                   }}
                 />
               ) : null}
-              {slot.card !== null ? (
+              {slotCard !== null ? (
                 <BattleCardSurface
-                  card={slot.card}
+                  card={slotCard}
                   zone={`${owner}-${rank}-rank`}
-                  snapLayout={snapLayoutCardId === slot.card.id}
+                  snapLayout={snapLayoutCardId === slotCard.id}
                   challengerChevron={
                     showChallengerChevrons &&
                     rank === "front" &&
-                    slot.card.model.displaySnapshot.cardType === "Character"
+                    slotCard.model.displaySnapshot.cardType === "Character"
                       ? owner
                       : undefined
                   }
@@ -2105,8 +2113,8 @@ function Rank({
                   cardOverlay={cardOverlay}
                   selection={
                     candidate === null
-                      ? interactions?.targetSelectionCardId === slot.card.id ||
-                        interactions?.targetableCardIds?.includes(slot.card.id)
+                      ? interactions?.targetSelectionCardId === slotCard.id ||
+                        interactions?.targetableCardIds?.includes(slotCard.id)
                         ? { selected: true, kind: "highlighted" }
                         : undefined
                       : {
@@ -2134,11 +2142,9 @@ function Rank({
                               ? "context-menu"
                               : "double-tap",
                             onDragStart: () => {
-                              onBattlefieldDragChange(true, slot.card?.id);
+                              onBattlefieldDragChange(true, slotCard.id);
                               interactions.onCardDragStart(
-                                asBattleCardId(
-                                  slot.card?.id ?? asBattleCardId(""),
-                                ),
+                                slotCard.id,
                                 "battlefield",
                               );
                             },
@@ -2148,18 +2154,14 @@ function Rank({
                                 ? undefined
                                 : () =>
                                     interactions.onBattlefieldCardActivate?.(
-                                      asBattleCardId(
-                                        slot.card?.id ?? asBattleCardId(""),
-                                      ),
+                                      slotCard.id,
                                     ),
                             ...(interactions.onCardDebugActivate === undefined
                               ? {}
                               : {
                                   onDebugActivate: (invocation) =>
                                     interactions.onCardDebugActivate?.(
-                                      asBattleCardId(
-                                        slot.card?.id ?? asBattleCardId(""),
-                                      ),
+                                      slotCard.id,
                                       "battlefield",
                                       invocation,
                                     ),
@@ -2396,7 +2398,7 @@ function NearHand({
       }}
     >
       {cards.map((card, index) => {
-        const candidate = pickerCandidate(cardPicker, asBattleCardId(card.id));
+        const candidate = pickerCandidate(cardPicker, card.id);
         const isPickerCandidate = pickerCandidateIds.has(card.id);
         const isPickerSelected = selectedPickerCardIds.includes(card.id);
         const isPickerHighlighted = candidate?.highlighted === true;
@@ -2440,14 +2442,14 @@ function NearHand({
                       debugGesture: isDesktop ? "context-menu" : "double-tap",
                       onActivate: () =>
                         interactions.onHandCardActivate(
-                          asBattleCardId(card.id),
+                          card.id,
                         ),
                       ...(interactions.onCardDebugActivate === undefined
                         ? {}
                         : {
                             onDebugActivate: (invocation) =>
                               interactions.onCardDebugActivate?.(
-                                asBattleCardId(card.id),
+                                card.id,
                                 "near-hand",
                                 invocation,
                               ),
@@ -2455,7 +2457,7 @@ function NearHand({
                       onDragStart: () => {
                         onCardDragChange(true, card.id);
                         interactions.onCardDragStart(
-                          asBattleCardId(card.id),
+                          card.id,
                           "near-hand",
                         );
                       },
@@ -2657,7 +2659,7 @@ function SharedHandCardReveal({
                 debugGesture: isDesktop ? "context-menu" : "double-tap",
                 onDebugActivate: (invocation) =>
                   interactions.onRevealedHandCardDebugActivate?.(
-                    asBattleCardId(card.id),
+                    card.id,
                     invocation,
                   ),
               }
@@ -2786,7 +2788,7 @@ function dropMobileCardAtPoint(
     interactions.onSlotDrop({
       owner,
       rank,
-      slotId: asBattleSlotViewId(slotId),
+      slotId: parseBattleSlotViewId(slotId),
     });
     return;
   }
@@ -2818,7 +2820,7 @@ function resolveBattlefieldSlot(
     const target = {
       owner,
       rank,
-      slotId: asBattleSlotViewId(slotId),
+      slotId: parseBattleSlotViewId(slotId),
     } as const;
     const bounds = slot.getBoundingClientRect();
     const centerX = bounds.left + bounds.width / 2;
@@ -2915,7 +2917,7 @@ function closestOpenBackRankSlot(
   if (!Number.isFinite(clientX) || !Number.isFinite(clientY)) return undefined;
 
   let closest:
-    { readonly slotId: string; readonly distanceSquared: number } | undefined;
+    { readonly slotId: BattleSlotViewId; readonly distanceSquared: number } | undefined;
   const slots = battleScreen.querySelectorAll<HTMLElement>(
     `[data-battle-rank="${owner}-back"] [data-battle-slot-filled="false"]`,
   );
@@ -2927,13 +2929,16 @@ function closestOpenBackRankSlot(
     const deltaY = clientY - (bounds.top + bounds.height / 2);
     const distanceSquared = deltaX * deltaX + deltaY * deltaY;
     if (closest === undefined || distanceSquared < closest.distanceSquared) {
-      closest = { slotId, distanceSquared };
+      closest = {
+        slotId: parseBattleSlotViewId(slotId),
+        distanceSquared,
+      };
     }
   });
 
   return closest === undefined
     ? undefined
-    : { owner, rank: "back", slotId: asBattleSlotViewId(closest.slotId) };
+    : { owner, rank: "back", slotId: closest.slotId };
 }
 
 function pickerZoneCaption(
@@ -3610,7 +3615,7 @@ function InspectorButton({
   readonly onPress: () => void;
   readonly disabled?: boolean;
   readonly variant?: "default" | "accent" | "danger";
-  readonly testId?: string;
+  readonly testId?: DomTestId;
 }) {
   return (
     <div style={{ minWidth: 0 }}>
@@ -4316,7 +4321,7 @@ export function MobileBattleScreen({
     useState<FigmentMergeAnimationState | null>(null);
   const mergeAnimationSequence = useRef(1);
   const [cardPickerSelection, setCardPickerSelection] = useState<{
-    readonly pickerKey: string | null;
+    readonly pickerKey: number | null;
     readonly ids: readonly BattleCardId[];
   }>({ pickerKey: null, ids: [] });
   const [selectedSide, setSelectedSide] = useState<MobileBattleOwner>("player");

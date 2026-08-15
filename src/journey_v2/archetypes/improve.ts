@@ -23,7 +23,7 @@ import {
   selectMerchantReward,
 } from "./sharedSelection";
 import type { DeckEntryId } from "../../types/identifiers";
-import { asMerchantTargetKey } from "../../types/identifiers";
+import { parseMerchantTargetKey } from "../../types/identifiers";
 
 /** Clamp a value to [0, 1]. */
 function clamp01(v: number): number {
@@ -237,7 +237,7 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
       family: "improve",
       gameObjects: [transfigurePreviewObject(target)],
       applyPayload: transfigurePayload(target),
-      targetKey: asMerchantTargetKey(
+      targetKey: parseMerchantTargetKey(
         `${target.entryId}:${target.transfiguration}`,
       ),
       ...selectionMetadata(selection),
@@ -373,7 +373,7 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
       family: "improve",
       gameObjects,
       applyPayload: payload,
-      targetKey: asMerchantTargetKey(
+      targetKey: parseMerchantTargetKey(
         gameObjects
           .map((obj) =>
             obj.objectType === "deckCard"

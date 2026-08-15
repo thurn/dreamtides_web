@@ -10,9 +10,10 @@
 // entries).
 
 import { type Database, onValue, ref } from "firebase/database";
+import type { RoomId } from "../types/identifiers";
 import { decodeEvent } from "./append";
 import { decodeAppliedIndex } from "./fold";
-import type { GameEvent, LogNode } from "./types";
+import { parseEventActor, type GameEvent, type LogNode } from "./types";
 import { decodeRtdbLogNode } from "./wire";
 
 /**
@@ -30,7 +31,7 @@ function malformedEvent(raw: unknown): GameEvent {
   return {
     type: "__MALFORMED__",
     payload: { raw: typeof raw === "string" ? raw : String(raw) },
-    actor: "",
+    actor: parseEventActor("malformed-event"),
     clientTimestamp: "0",
     basedOnSeq: MALFORMED_BASED_ON_SEQ,
   };
@@ -105,7 +106,7 @@ export function decodeLogNode(raw: unknown): LogNode | null {
  */
 export function subscribeToLog(
   db: Database,
-  roomId: string,
+  roomId: RoomId,
   onNode: (node: LogNode) => void,
   onCorrupt?: () => void,
 ): () => void {

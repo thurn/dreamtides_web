@@ -1,3 +1,5 @@
+import { testJourneySeed } from "../../types/test-identities";
+import { testEventActor } from "../../types/test-identities";
 // Cross-cutting property tests for the Stage B journey reducer.
 //
 // These suites only make sense once every journey domain case exists (Tasks
@@ -83,20 +85,18 @@ import {
 import { registerSiteContentProvider, type SiteContentProvider } from "./sites";
 import { registerBattleInitProvider } from "../battle/battle-events";
 import { fixtureBattleInitProvider } from "../replay/fixture-providers";
-import { asAtlasNodeId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
 import type { DreamAvatarId } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { testDreamAvatarId, testCardId, testDreamsignId } from "../../types/test-identities";
 
 // ---------------------------------------------------------------------------
 // Fixtures & engine config
 // ---------------------------------------------------------------------------
 
 const GENESIS: Genesis = {
-  seed: "journey-properties-seed",
+  seed: testJourneySeed("journey-properties-seed"),
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: {
@@ -104,7 +104,7 @@ const GENESIS: Genesis = {
   },
 };
 
-const ACTOR = "alice";
+const ACTOR = testEventActor("alice");
 const TIMESTAMP = "1970-01-01T00:00:00.000Z";
 
 /**
@@ -172,7 +172,7 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
     return {
       dreamAvatar,
       draftPoolCopiesByCard: { "100": 4, "101": 4, "102": 4 },
-      dreamsignPoolIds: dreamsignPoolIds.map(asDreamsignId),
+      dreamsignPoolIds: dreamsignPoolIds.map(testDreamsignId),
       mandatoryOnlyPoolSize: 3,
       draftPoolSize: 3,
       doubledCardCount: 1,
@@ -201,10 +201,10 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
         resolvedPackage: pkg,
         remainingDreamsignPool: [...pkg.dreamsignPoolIds],
         draftState: populatedDraftState(),
-        currentDreamscape: asAtlasNodeId("node-start"),
+        currentDreamscape: parseAtlasNodeId("node-start"),
         atlas: {
           ...journey.atlas,
-          nodes: { [asAtlasNodeId("node-start")]: shopNode() },
+          nodes: { [parseAtlasNodeId("node-start")]: shopNode() },
         },
         siteRuntime: {
           [SHOP_SITE_ID]: {
@@ -235,7 +235,7 @@ function populatedDraftState(): PoolDraftState {
   return {
     mode: "tides4",
     currentOffer: [100, 101, 102],
-    activeSiteId: asSiteId(DRAFT_SITE_ID),
+    activeSiteId: parseSiteId(DRAFT_SITE_ID),
     pickNumber: 1,
     sitePicksCompleted: Math.max(0, SITE_PICKS - 1),
     draftPoolCopiesByCard: { "100": 4, "101": 4, "102": 4 },
@@ -246,13 +246,13 @@ function populatedDraftState(): PoolDraftState {
 /** An atlas node carrying the Shop site `REROLL_SHOP` restocks. */
 function shopNode(): DreamscapeNode {
   return {
-    id: asAtlasNodeId("node-start"),
+    id: parseAtlasNodeId("node-start"),
     layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: null,
     sites: [
       {
-        id: asSiteId(SHOP_SITE_ID),
+        id: parseSiteId(SHOP_SITE_ID),
         type: "Shop",
         isEnhanced: false,
         isVisited: false,
@@ -272,7 +272,7 @@ function rerolledDraftState(): DraftState {
   return {
     mode: "tides4",
     currentOffer: [],
-    activeSiteId: asSiteId(DRAFT_SITE_ID),
+    activeSiteId: parseSiteId(DRAFT_SITE_ID),
     pickNumber: 2,
     sitePicksCompleted: Math.max(0, SITE_PICKS - 1),
     draftPoolCopiesByCard: { "100": 4 },
@@ -411,7 +411,10 @@ function firstNulledRunField(
 // Seeded random event generator (non-debug journey event union)
 // ---------------------------------------------------------------------------
 
-type GeneratedEvent = { type: string; payload: Record<string, unknown> };
+type GeneratedEvent = {
+  type: GameEvent["type"];
+  payload: Record<string, unknown>;
+};
 
 /** Pick a random element of `values`. */
 function pick<T>(rng: () => number, values: readonly T[]): T {
@@ -467,57 +470,57 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
   // navigation
   (rng) => ({
     type: "ENTER_SITE",
-    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "TRAVEL_TO_DREAMSCAPE",
-    payload: { nodeId: asAtlasNodeId(pick(rng, NODE_IDS)) },
+    payload: { nodeId: parseAtlasNodeId(pick(rng, NODE_IDS)) },
   }),
   () => ({ type: "DISMISS_STARTING_DECK_POPUP", payload: {} }),
 
   // deck & transfiguration
   (rng) => ({
     type: "ADD_CARD",
-    payload: { cardId: asCardId(`card-${100 + Math.floor(rng() * 20)}`) },
+    payload: { cardId: testCardId(`card-${100 + Math.floor(rng() * 20)}`) },
   }),
   (rng) => ({
     type: "REMOVE_DECK_ENTRY",
-    payload: { entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`) },
+    payload: { entryId: parseDeckEntryId(`entry-${Math.floor(rng() * 20)}`) },
   }),
   (rng) => ({
     type: "PURGE_DECK_CARDS",
-    payload: { entryIds: [asDeckEntryId(`entry-${Math.floor(rng() * 20)}`)] },
+    payload: { entryIds: [parseDeckEntryId(`entry-${Math.floor(rng() * 20)}`)] },
   }),
   (rng) => ({
     type: "DUPLICATE_DECK_ENTRY",
-    payload: { entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`) },
+    payload: { entryId: parseDeckEntryId(`entry-${Math.floor(rng() * 20)}`) },
   }),
   (rng) => ({
     type: "SET_DECK_ENTRY_TYPE",
     payload: {
-      entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
+      entryId: parseDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
       typeChange: { to: "Event" },
     },
   }),
   (rng) => ({
     type: "TRANSFIGURE_CARD",
     payload: {
-      entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
+      entryId: parseDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
       transfiguration: { kind: "x" },
     },
   }),
   (rng) => ({
     type: "ACCEPT_TRANSFIGURATION_CHOICE",
     payload: {
-      siteId: asSiteId(pick(rng, SITE_IDS)),
-      entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
+      siteId: parseSiteId(pick(rng, SITE_IDS)),
+      entryId: parseDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
     },
   }),
   (rng) => ({
     type: "ACCEPT_DUPLICATION_CHOICE",
     payload: {
-      siteId: asSiteId(pick(rng, SITE_IDS)),
-      entryId: asDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
+      siteId: parseSiteId(pick(rng, SITE_IDS)),
+      entryId: parseDeckEntryId(`entry-${Math.floor(rng() * 20)}`),
     },
   }),
   () => ({ type: "PURGE_ALL_NIGHTMARE_CARDS", payload: {} }),
@@ -530,13 +533,13 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
   (rng) => ({
     type: "ADD_DREAMSIGN",
     payload: {
-      dreamsignId: asDreamsignId(`ds-${Math.floor(rng() * 1_000_000)}`),
+      dreamsignId: testDreamsignId(`ds-${Math.floor(rng() * 1_000_000)}`),
     },
   }),
   (rng) => ({
     type: "REMOVE_DREAMSIGN",
     payload: {
-      dreamsignId: asDreamsignId(`ds-${Math.floor(rng() * 1_000_000)}`),
+      dreamsignId: testDreamsignId(`ds-${Math.floor(rng() * 1_000_000)}`),
     },
   }),
   // draft — a pick aligned with the start draft's offer ([100,101,102]) so it
@@ -546,7 +549,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
     const idx = Math.floor(rng() * 3);
     return {
       type: "PICK_DRAFT_CARD",
-      payload: { packIndex: idx, cardId: asCardId(`card-${100 + idx}`) },
+      payload: { packIndex: idx, cardId: testCardId(`card-${100 + idx}`) },
     };
   },
   // draft — a deliberately mismatched pick (exercises the pack-membership bounce)
@@ -554,70 +557,70 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
     type: "PICK_DRAFT_CARD",
     payload: {
       packIndex: Math.floor(rng() * 5),
-      cardId: asCardId(`card-${200 + Math.floor(rng() * 5)}`),
+      cardId: testCardId(`card-${200 + Math.floor(rng() * 5)}`),
     },
   }),
 
   // sites (bounce without a SiteContentProvider / matching runtime)
   (rng) => ({
     type: "OPEN_SITE",
-    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "COMPLETE_AUGURY",
-    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "ACCEPT_REWARD",
     payload: {
-      siteId: asSiteId(pick(rng, SITE_IDS)),
+      siteId: parseSiteId(pick(rng, SITE_IDS)),
       choiceIndex: Math.floor(rng() * 3),
     },
   }),
   (rng) => ({
     type: "ACCEPT_DREAMSIGN_OFFER",
     payload: {
-      siteId: asSiteId(pick(rng, SITE_IDS)),
-      dreamsignId: asDreamsignId(`ds-${Math.floor(rng() * 1000)}`),
+      siteId: parseSiteId(pick(rng, SITE_IDS)),
+      dreamsignId: testDreamsignId(`ds-${Math.floor(rng() * 1000)}`),
     },
   }),
   (rng) => ({
     type: "REJECT_DREAMSIGN_OFFER",
-    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "ACCEPT_ESSENCE",
-    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "COMPLETE_SITE",
-    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
 
   // shop & merchant
   (rng) => ({
     type: "ACCEPT_MERCHANT_OFFER",
-    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "DECLINE_MERCHANT",
-    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
     type: "BUY_SHOP_SLOT",
     payload: {
-      siteId: asSiteId(pick(rng, SITE_IDS)),
+      siteId: parseSiteId(pick(rng, SITE_IDS)),
       slotIndex: Math.floor(rng() * 4),
     },
   }),
   (rng) => ({
     type: "REROLL_SHOP",
-    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   // REROLL_SHOP aimed at the seeded Shop site so it APPLIES (rewriting
   // draftState from the Site fake's non-null restock) at least once per run,
   // before another action can close it.
-  () => ({ type: "REROLL_SHOP", payload: { siteId: asSiteId(SHOP_SITE_ID) } }),
+  () => ({ type: "REROLL_SHOP", payload: { siteId: parseSiteId(SHOP_SITE_ID) } }),
   (rng) => ({
     type: "GRANT_FREE_REROLLS",
     payload: { count: Math.floor(rng() * 3) },
@@ -651,7 +654,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
   (rng) => ({
     type: "REPLACE_SITE_TYPE",
     payload: {
-      nodeId: asAtlasNodeId(pick(rng, NODE_IDS)),
+      nodeId: parseAtlasNodeId(pick(rng, NODE_IDS)),
       fromSiteType: pick(rng, SITE_TYPES),
       toSiteType: pick(rng, SITE_TYPES),
     },
@@ -659,7 +662,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
   (rng) => ({
     type: "ADD_SITE_TO_DREAMSCAPE",
     payload: {
-      nodeId: asAtlasNodeId(pick(rng, NODE_IDS)),
+      nodeId: parseAtlasNodeId(pick(rng, NODE_IDS)),
       siteType: pick(rng, SITE_TYPES),
     },
   }),
@@ -669,7 +672,7 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
   () => ({ type: "END_BATTLE", payload: {} }),
   (rng) => ({
     type: "BEGIN_BATTLE",
-    payload: { siteId: asSiteId(pick(rng, SITE_IDS)) },
+    payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   // Battle-slice mutation (applies once a BEGIN_BATTLE has created the slice), so
   // the determinism / JSON-purity / hash properties exercise a live battle fold.
@@ -776,7 +779,7 @@ const START_JOURNEY_ENTRY: { seq: number; event: GameEvent } = {
   seq: 1,
   event: {
     type: "START_JOURNEY",
-    payload: { dreamAvatarId: asDreamAvatarId("dc-1") },
+    payload: { dreamAvatarId: testDreamAvatarId("dc-1") },
     actor: ACTOR,
     clientTimestamp: TIMESTAMP,
     basedOnSeq: 0,

@@ -6,7 +6,7 @@ import {
   loadEditorCards,
   saveEditorCardField,
 } from "./editor-api";
-import { asCardId } from "../types/card-identity";
+import { testCardId } from "../types/test-identities";
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -78,7 +78,7 @@ describe("editor-api", () => {
     await expect(
       saveEditorCardField({
         field: "name",
-        id: asCardId("card-id"),
+        id: testCardId("card-id"),
         value: "",
       }),
     ).rejects.toMatchObject({
@@ -137,19 +137,23 @@ describe("editor-api", () => {
     window.history.replaceState({}, "", "/editor?toml=cards.toml");
     const fetchMock = vi.fn(() =>
       Promise.resolve(
-        new Response(JSON.stringify({ card: {} }), { status: 200 }),
+        new Response(
+          JSON.stringify({ card: { subtype: "", preview: { subtype: "" } } }),
+          { status: 200 },
+        ),
       ),
     );
     vi.stubGlobal("fetch", fetchMock);
 
+    const cardId = testCardId("card-id");
     await saveEditorCardField({
       field: "name",
-      id: asCardId("card-id"),
+      id: cardId,
       value: "Renamed",
     });
 
     expect(fetchMock).toHaveBeenCalledWith(
-      "/api/editor/cards/card-id?source=cards.toml",
+      `/api/editor/cards/${cardId}?source=cards.toml`,
       expect.objectContaining({ method: "PATCH" }),
     );
   });

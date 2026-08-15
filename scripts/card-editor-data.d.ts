@@ -9,7 +9,7 @@ export type EditableCardField =
 export const EDITABLE_CARD_FIELDS: ReadonlySet<EditableCardField>;
 
 export interface CardEditorRecord {
-  id: string;
+  id: CardId;
   cardNumber: number;
   cardType?: string;
   rarity?: string;
@@ -42,10 +42,11 @@ export function validateCardEdit(field: string, rawValue: unknown): CardEditVali
 
 export function patchRenderedCardsToml(
   source: string,
-  patch: { cardId: string; field: string; value: unknown },
+  patch: { cardId: CardId; field: string; value: unknown },
 ): { source: string };
 
 export function refreshCardDataJson(options?: { rootDir?: string }): {
   count: number;
   path: string;
 };
+import type { CardId } from "../src/types/card-identity";

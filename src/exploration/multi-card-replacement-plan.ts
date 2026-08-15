@@ -8,14 +8,15 @@ import {
   SELECTION_RULES_VERSION,
   type RewardSelectionRequest,
   type RewardSelectionTrace,
+  type SelectionRulesVersion,
 } from "../reward-selection/types";
 import type { CardData } from "../types/cards";
 import type { JourneyState, SiteState } from "../types/journey";
 import type { DeckEntryId, SelectionKey } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
-import { asCardId } from "../types/card-identity";
 import type { ExplorationActionId } from "../types/identifiers";
-import { asSelectionKey } from "../types/identifiers";
+import { parseSelectionKey } from "../types/identifiers";
+import type { SelectionContentRevision } from "../types/selection-content-revision";
 
 export interface MultiCardReplacementBinding {
   sourceEntryId: DeckEntryId;
@@ -28,8 +29,8 @@ export interface MultiCardReplacementPreparation {
   predicate: ExplorationPredicate;
   authoredMaximumCount: number;
   bindings: readonly MultiCardReplacementBinding[];
-  selectionRulesVersion: string;
-  selectionContentRevision: string;
+  selectionRulesVersion: SelectionRulesVersion;
+  selectionContentRevision: SelectionContentRevision;
   selectionKey: SelectionKey;
   selectorSignatures: readonly string[];
   selectorTraces: readonly RewardSelectionTrace[];
@@ -86,7 +87,7 @@ function replacementRequest(input: {
     scope: {
       journeySeed: input.plan.journey.seed,
       siteUuid: input.plan.site.id,
-      selectionKey: asSelectionKey(
+      selectionKey: parseSelectionKey(
         `${input.plan.actionId}:replacement:${input.sourceEntryId}`,
       ),
     },
@@ -182,7 +183,7 @@ export function prepareMultiCardReplacementPlan(
     bindings.push({
       sourceEntryId: entry.entryId,
       sourceCardId: baseCard.id,
-      replacementCardId: asCardId(replacementCardId),
+      replacementCardId: replacementCardId,
     });
     selectorSignatures.push(selected.signature);
     selectorTraces.push(selected.trace);
@@ -195,7 +196,7 @@ export function prepareMultiCardReplacementPlan(
     bindings,
     selectionRulesVersion: SELECTION_RULES_VERSION,
     selectionContentRevision: context.selectionContentRevision,
-    selectionKey: asSelectionKey(input.actionId),
+    selectionKey: parseSelectionKey(input.actionId),
     selectorSignatures,
     selectorTraces,
     ...(bindings.length === 0

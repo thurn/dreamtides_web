@@ -1,3 +1,5 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 
 import type { EventContext, GameEvent, Genesis } from "../eventlog/types";
@@ -15,12 +17,11 @@ import {
   clearReplayFixtureProviders,
   registerReplayFixtureProviders,
 } from "../rules/replay/fixture-providers";
-import { asDreamscapeId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
-import { asSiteId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
+import { testDreamscapeId, testDreamAvatarId } from "../types/test-identities";
 
 const GENESIS: Genesis = {
-  seed: "journey-flow-reducer",
+  seed: testJourneySeed("journey-flow-reducer"),
   reducerVersion: "test",
   createdAt: 0,
   contentConfig: {
@@ -31,13 +32,13 @@ const GENESIS: Genesis = {
 function apply(
   state: FoldState,
   seq: number,
-  type: string,
+  type: GameEvent["type"],
   payload: Record<string, unknown>,
 ): FoldState {
   const event: GameEvent = {
     type,
     payload,
-    actor: "player",
+    actor: testEventActor("player"),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
     basedOnSeq: seq - 1,
   };
@@ -56,17 +57,17 @@ function reachBattle(): { state: FoldState; seq: number } {
   let state = genesisFoldState(GENESIS);
   let seq = 1;
   state = apply(state, seq++, "START_JOURNEY", {
-    dreamAvatarId: asDreamAvatarId(DREAM_AVATAR_ID),
+    dreamAvatarId: testDreamAvatarId(DREAM_AVATAR_ID),
   });
   for (const siteId of [ESSENCE_SITE_ID, SHOP_SITE_ID, DRAFT_SITE_ID]) {
-    state = apply(state, seq++, "ENTER_SITE", { siteId: asSiteId(siteId) });
-    state = apply(state, seq++, "COMPLETE_SITE", { siteId: asSiteId(siteId) });
+    state = apply(state, seq++, "ENTER_SITE", { siteId: parseSiteId(siteId) });
+    state = apply(state, seq++, "COMPLETE_SITE", { siteId: parseSiteId(siteId) });
   }
   state = apply(state, seq++, "ENTER_SITE", {
-    siteId: asSiteId(BATTLE_SITE_ID),
+    siteId: parseSiteId(BATTLE_SITE_ID),
   });
   state = apply(state, seq++, "BEGIN_BATTLE", {
-    siteId: asSiteId(BATTLE_SITE_ID),
+    siteId: parseSiteId(BATTLE_SITE_ID),
   });
   return { state, seq };
 }
@@ -95,7 +96,7 @@ describe("authoritative journey flow", () => {
     expect(state.journey.atlas.nodes[NODE_ID].state).toBe("completed");
     expect(state.journey.atlas.nodes[NEXT_NODE_ID]).toMatchObject({
       state: "available",
-      dreamscapeId: asDreamscapeId("dreamscape-next"),
+      dreamscapeId: testDreamscapeId("dreamscape-next"),
     });
   });
 
@@ -121,7 +122,7 @@ describe("authoritative journey flow", () => {
     const event: GameEvent = {
       type: "END_BATTLE",
       payload: {},
-      actor: "player",
+      actor: testEventActor("player"),
       clientTimestamp: "1970-01-01T00:00:00.000Z",
       basedOnSeq: reached.seq - 1,
     };

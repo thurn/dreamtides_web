@@ -1,3 +1,4 @@
+import { testJourneySeed } from "../types/test-identities";
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { makeTestPoolContext } from "../__test-helpers__/pool-context";
@@ -7,10 +8,13 @@ import {
   buildDreamAvatarPackage,
   buildDreamAvatarTides4Provenance,
 } from "./journey-content";
-import { asDreamAvatarId } from "../types/identifiers";
+import {
+  testDreamAvatarId,
+  testDreamsignId,
+} from "../types/test-identities";
 
 const DREAM_AVATAR: DreamAvatarContent = {
-  id: asDreamAvatarId("test-avatar"),
+  id: testDreamAvatarId("test-avatar"),
   name: "Test Avatar",
   title: "The Tester",
   renderedText: "",
@@ -28,17 +32,20 @@ describe("tides4 DreamAvatar packages", () => {
     const first = buildDreamAvatarPackage(
       DREAM_AVATAR,
       context,
-      "journey-seed",
+      testJourneySeed("journey-seed"),
     );
     const second = buildDreamAvatarPackage(
       DREAM_AVATAR,
       context,
-      "journey-seed",
+      testJourneySeed("journey-seed"),
     );
 
     expect(first.draftPoolCopiesByCard).toEqual(second.draftPoolCopiesByCard);
     expect(first.draftPoolSize).toBe(60);
-    expect(first.dreamsignPoolIds).toEqual(["dreamsign-a", "dreamsign-b"]);
+    expect(first.dreamsignPoolIds).toEqual([
+      testDreamsignId("dreamsign-a"),
+      testDreamsignId("dreamsign-b"),
+    ]);
 
     const event = getLogEntries().find(
       (entry) => entry.event === "draft_pool_constructed",
@@ -52,7 +59,7 @@ describe("tides4 DreamAvatar packages", () => {
     const provenance = buildDreamAvatarTides4Provenance(
       DREAM_AVATAR,
       context,
-      "journey-seed",
+      testJourneySeed("journey-seed"),
     );
 
     expect(provenance).not.toBeNull();

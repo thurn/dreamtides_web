@@ -12,8 +12,8 @@ export interface EconomyStock {
 }
 export interface EconomyData {
   schemaVersion: 1;
-  contentHash: string;
-  foldHash: string;
+  contentHash: ContentHash;
+  foldHash: FoldHash;
   journey: { defaultStartingEssence: number; dreamsignCap: number };
   shop: {
     prices: { standardCard: number; specialtyCard: number; dreamsign: number };
@@ -48,3 +48,4 @@ export interface EconomyData {
   };
   exploration: { defaultEssencePerSpark: number };
 }
+import type { ContentHash, FoldHash } from "./content-hash";

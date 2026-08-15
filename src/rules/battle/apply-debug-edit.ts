@@ -18,6 +18,8 @@ import {
   createBattleProtoNoteAddedLogEvent,
   createBattleProtoNoteClearedLogEvent,
   createBattleProtoNoteDismissedLogEvent,
+  parseBattleDestinationLogLabel,
+  type BattleDestinationLogLabel,
 } from "../../logging";
 import type {
   BattleCardInstance,
@@ -33,7 +35,9 @@ import type {
   BattleResult,
   BattleSide,
   BattleTransitionData,
+  BattleZoneId,
 } from "../../battle/types";
+import type { CardSubtype } from "../../types/card-identity";
 import {
   backRankSlotId,
   ensureContiguousRankSlots,
@@ -73,9 +77,13 @@ import {
   setCardRevealedTo,
 } from "../../battle/state/card-visibility";
 import type { BattleCardId, NoteId } from "../../types/identifiers";
-import { asCardId, type CardId } from "../../types/card-identity";
-import { asNoteId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
+import {
+  parseCardId,
+  type CardId,
+  type CardName,
+} from "../../types/card-identity";
+import { parseBattleCardId } from "../../types/identifiers";
+import { semanticEntityId } from "../../types/semantic-identity";
 
 export function applyDebugEdit(
   state: BattleMutableState,
@@ -512,7 +520,7 @@ function reorderDeck(
   state: BattleMutableState,
   nextState: BattleMutableState,
   side: BattleSide,
-  order: readonly string[],
+  order: readonly BattleCardId[],
   context: BattleEngineEmissionContext,
 ): {
   state: BattleMutableState;
@@ -535,7 +543,7 @@ function reorderDeck(
     };
   }
 
-  nextState.sides[side].deck = orderAfter.map(asBattleCardId);
+  nextState.sides[side].deck = orderAfter.map(parseBattleCardId);
 
   return {
     state: nextState,
@@ -546,8 +554,8 @@ function reorderDeck(
           nextState,
           {
             side,
-            orderBefore: orderBefore.map(asBattleCardId),
-            orderAfter: orderAfter.map(asBattleCardId),
+            orderBefore: orderBefore.map(parseBattleCardId),
+            orderAfter: orderAfter.map(parseBattleCardId),
           },
           context,
         ),
@@ -596,12 +604,14 @@ function resolveForesee(
     }
   }
 
-  const cardUuids = (battleCardIds: readonly BattleCardId[]): string[] =>
-    battleCardIds.map(
-      (battleCardId) =>
-        nextState.cardInstances[battleCardId]?.definition.cardId ??
-        asCardId(""),
-    );
+  const cardUuids = (battleCardIds: readonly BattleCardId[]): CardId[] =>
+    battleCardIds.map((battleCardId) => {
+      const instance = nextState.cardInstances[battleCardId];
+      if (instance === undefined) {
+        throw new Error(`Missing battle card instance ${battleCardId}.`);
+      }
+      return instance.definition.cardId;
+    });
 
   return {
     state: nextState,
@@ -630,14 +640,14 @@ function resolveForesee(
 }
 
 function isDeckPermutation(
-  current: readonly string[],
-  candidate: readonly string[],
+  current: readonly BattleCardId[],
+  candidate: readonly BattleCardId[],
 ): boolean {
   if (current.length !== candidate.length) {
     return false;
   }
 
-  const currentCounts = new Map<string, number>();
+  const currentCounts = new Map<BattleCardId, number>();
   for (const id of current) {
     currentCounts.set(id, (currentCounts.get(id) ?? 0) + 1);
   }
@@ -654,8 +664,8 @@ function isDeckPermutation(
 }
 
 function isSameOrder(
-  left: readonly string[],
-  right: readonly string[],
+  left: readonly BattleCardId[],
+  right: readonly BattleCardId[],
 ): boolean {
   if (left.length !== right.length) {
     return false;
@@ -932,7 +942,7 @@ function dismissCardNote(
       logEvents: [
         createBattleProtoNoteDismissedLogEvent(
           nextState,
-          { battleCardId, noteId: asNoteId(noteId) },
+          { battleCardId, noteId: noteId },
           context,
         ),
       ],
@@ -1228,7 +1238,7 @@ function createCardCopy(
         createBattleProtoCardCreatedLogEvent(
           nextState,
           {
-            battleCardId: asBattleCardId(battleCardId),
+            battleCardId: battleCardId,
             destinationZone: formatDestinationZoneLabel(destination),
             name: definition.name,
             ownerSide: destination.side,
@@ -1250,9 +1260,9 @@ function createFigment(
   side: BattleSide,
   chosenFigmentId: CardId | undefined,
   count: number,
-  chosenSubtype: string,
+  chosenSubtype: CardSubtype,
   chosenSpark: number,
-  name: string,
+  name: CardName,
   destination: BattleDebugZoneDestination,
   createdAtMs: number,
   context: BattleEngineEmissionContext,
@@ -1281,9 +1291,10 @@ function createFigment(
 
   const definition: BattleDeckCardDefinition = {
     sourceDeckEntryId: null,
-    // Figments use their authored UUID as their catalog identity. Legacy or
-    // isolated callers without a hydrated catalog retain the empty fallback.
-    cardId: asCardId(catalogEntry?.id ?? chosenFigmentId ?? asCardId("")),
+    cardId:
+      catalogEntry?.id ??
+      chosenFigmentId ??
+      parseCardId(semanticEntityId("figment", chosenSubtype)),
     cardNumber: 0,
     name,
     battleCardKind: "character",
@@ -1347,7 +1358,7 @@ function createFigment(
     return createBattleProtoCardCreatedLogEvent(
       nextState,
       {
-        battleCardId: asBattleCardId(battleCardId),
+        battleCardId: battleCardId,
         destinationZone: formatDestinationZoneLabel(resolvedDestination),
         figmentCount: selectFigmentCount(nextState.cardInstances[battleCardId]),
         name,
@@ -1471,7 +1482,7 @@ function createCardFromDefinition(
         createBattleProtoCardCreatedLogEvent(
           nextState,
           {
-            battleCardId: asBattleCardId(battleCardId),
+            battleCardId: battleCardId,
             destinationZone: formatDestinationZoneLabel(destination),
             name: clonedDefinition.name,
             ownerSide: destination.side,
@@ -1615,16 +1626,20 @@ function isDebugDestinationPlaceable(
 
 function formatDestinationZoneLabel(
   destination: BattleDebugZoneDestination,
-): string {
+): BattleDestinationLogLabel {
   if ("slotId" in destination) {
-    return `${destination.side}:${destination.zone}:${destination.slotId}`;
+    return parseBattleDestinationLogLabel(
+      `${destination.side}:${destination.zone}:${destination.slotId}`,
+    );
   }
 
   if (destination.zone === "deck") {
-    return `${destination.side}:deck:${destination.position}`;
+    return parseBattleDestinationLogLabel(
+      `${destination.side}:deck:${destination.position}`,
+    );
   }
 
-  return `${destination.side}:${destination.zone}`;
+  return parseBattleDestinationLogLabel(`${destination.side}:${destination.zone}`);
 }
 
 export function forceBattleResult(
@@ -1743,7 +1758,7 @@ function moveCardToDebugZone(
     const nextState = cloneBattleMutableState(state);
     const stackEmptied = dissolveFigmentsFromStackInPlace(
       nextState,
-      asBattleCardId(battleCardId),
+      battleCardId,
       1,
     );
     if (stackEmptied) {
@@ -1851,7 +1866,10 @@ function moveCardToDebugZone(
   };
 }
 
-const BATTLEFIELD_ZONE_NAMES = new Set<string>(["backRank", "frontRank"]);
+const BATTLEFIELD_ZONE_NAMES = new Set<BattleZoneId>([
+  "backRank",
+  "frontRank",
+]);
 
 /**
  * Resets a card's stored ⧗ counters to 0 when it leaves the battlefield (rules
@@ -1861,8 +1879,8 @@ const BATTLEFIELD_ZONE_NAMES = new Set<string>(["backRank", "frontRank"]);
  */
 function clearCountersOnLeavingPlay(
   instance: BattleCardInstance,
-  sourceZone: string,
-  destinationZone: string,
+  sourceZone: BattleZoneId,
+  destinationZone: BattleZoneId,
 ): void {
   const leavingPlay =
     !BATTLEFIELD_ZONE_NAMES.has(destinationZone) &&

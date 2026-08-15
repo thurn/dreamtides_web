@@ -1,12 +1,18 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
+import { assertLocalized } from "@trox/runtime";
 
 import "../../../src/cumulus/primitives/cumulus-tokens.css";
 import { GlassButton } from "../../../src/cumulus/components/controls/GlassButton";
 import { glassSurfaceStyle } from "../../../src/cumulus/internal/glass-surface";
+import { parseDreamsignId, type DreamsignId } from "../../../src/types/identifiers";
+import {
+  parseSceneComparisonId,
+  type SceneComparisonId,
+} from "../../../src/types/tool-identifiers";
 
 type DreamsignDefinition = {
-  id: string;
+  id: DreamsignId;
   art: string;
   xViewportHeight: number;
   yViewportHeight: number;
@@ -16,7 +22,7 @@ type DreamsignDefinition = {
 };
 
 type SceneDefinition = {
-  id: string;
+  id: SceneComparisonId;
   renderer: "shopGlassDemo" | "dreamsignGlassDemo";
   backdrop: string;
   panelViewportHeight: number;
@@ -27,16 +33,37 @@ type Manifest = {
   scenes: SceneDefinition[];
 };
 
-const sceneId = new URLSearchParams(window.location.search).get("scene");
-if (!sceneId) throw new Error("Expected ?scene=<scene-id>");
+const requestedSceneId = new URLSearchParams(window.location.search).get(
+  "scene",
+);
 
 const manifestUrl = new URL("../manifest.json", import.meta.url);
-const manifest = (await fetch(manifestUrl).then((response) => {
+const rawManifest = (await fetch(manifestUrl).then((response) => {
   if (!response.ok) throw new Error(`Could not load scene manifest: ${response.status}`);
   return response.json();
-})) as Manifest;
-const scene = manifest.scenes.find((candidate) => candidate.id === sceneId);
-if (!scene) throw new Error(`Unknown comparison scene: ${sceneId}`);
+})) as {
+  scenes: Array<
+    Omit<SceneDefinition, "id" | "dreamsigns"> & {
+      id: unknown;
+      dreamsigns?: Array<Omit<DreamsignDefinition, "id"> & { id: unknown }>;
+    }
+  >;
+};
+const manifest: Manifest = {
+  scenes: rawManifest.scenes.map((candidate) => ({
+    ...candidate,
+    id: parseSceneComparisonId(candidate.id),
+    dreamsigns: candidate.dreamsigns?.map((dreamsign) => ({
+      ...dreamsign,
+      id: parseDreamsignId(dreamsign.id),
+    })),
+  })),
+};
+const scene = manifest.scenes.find(
+  (candidate) => candidate.id === requestedSceneId,
+);
+if (!scene)
+  throw new Error(`Unknown comparison scene: ${String(requestedSceneId)}`);
 
 const backdropUrl = new URL(scene.backdrop, manifestUrl).href;
 const dreamsigns = (scene.dreamsigns ?? []).map((dreamsign) => ({
@@ -133,7 +160,11 @@ function DreamsignGlassDemo() {
           transformOrigin: "bottom center",
         }}
       >
-        <GlassButton label="Sort" placement="onGlass" onPress={() => undefined} />
+        <GlassButton
+          label={assertLocalized("Sort")}
+          placement="onGlass"
+          onPress={() => undefined}
+        />
       </div>
     </SceneFrame>
   );

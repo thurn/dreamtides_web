@@ -23,6 +23,8 @@
 
 import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
 import type { JourneyContent } from "../data/journey-content";
+import type { JourneySeed } from "../types/journey-seed";
+import type { GameEventType } from "../rules/events";
 import { NIGHTMARE_CARD_ID } from "../data/nightmare";
 import { useActions, useAppend, useGameState } from "../coop/hooks";
 import {
@@ -30,6 +32,12 @@ import {
   type JourneyContextValue,
   type JourneyMutations,
 } from "./journey-context";
+
+function importedSnapshotWithSeed(snapshot: unknown, seed: JourneySeed): unknown {
+  return typeof snapshot === "object" && snapshot !== null && !Array.isArray(snapshot)
+    ? { ...snapshot, seed }
+    : snapshot;
+}
 import { mergeCardKeywordModification } from "../card-type-change";
 import { buildQaScene, qaSceneLoadsBattle } from "../runtime/qa-scenes";
 import {
@@ -41,9 +49,8 @@ import {
   updateCardSourcePublication,
   type CardSourcePublication,
 } from "./card-source-publication";
-import { asCardId } from "../types/card-identity";
-import { asAtlasNodeId } from "../types/identifiers";
-import type { AtlasNodeId } from "../types/identifiers";
+import { parseCardId } from "../types/card-identity";
+import { parseIntentKey, type AtlasNodeId } from "../types/identifiers";
 
 export interface CoopJourneyProviderProps {
   children: ReactNode;
@@ -110,7 +117,7 @@ export function CoopJourneyProvider({
         console.error("Coop journey action failed", error);
       });
     };
-    const emit = (type: string, payload: Record<string, unknown>): void => {
+    const emit = (type: GameEventType, payload: Record<string, unknown>): void => {
       dispatch(append({ type, payload }));
     };
     const cardIdFor = (cardNumber: number): string | null =>
@@ -135,7 +142,9 @@ export function CoopJourneyProvider({
       // live room seed keeps every derived generator convergent for both clients.
       loadJourneyState: (snapshot) =>
         dispatch(
-          actions.loadState({ ...snapshot, seed: stateRef.current.seed }),
+          actions.loadState(
+            importedSnapshotWithSeed(snapshot, stateRef.current.seed),
+          ),
         ),
       bootstrapQaScene: (
         sceneId,
@@ -184,7 +193,7 @@ export function CoopJourneyProvider({
               snapshot: seededSnapshot,
               ...(battle === null ? {} : { battle }),
             },
-            intentKey: `qa-bootstrap:${sceneId}`,
+            intentKey: parseIntentKey(`qa-bootstrap:${sceneId}`),
           }),
         );
       },
@@ -202,7 +211,7 @@ export function CoopJourneyProvider({
       addCard: (cardNumber, source) => {
         const cardId = cardIdFor(cardNumber);
         if (cardId === null) return;
-        dispatch(actions.addCard({ cardId: asCardId(cardId), source }));
+        dispatch(actions.addCard({ cardId: parseCardId(cardId), source }));
       },
       addCardById: (cardId, source) => {
         dispatch(actions.addCard({ cardId, source }));
@@ -270,7 +279,7 @@ export function CoopJourneyProvider({
         if (packIndex < 0) return;
         const cardId = cardIdFor(cardNumber);
         if (cardId === null) return;
-        dispatch(actions.pickDraftCard(packIndex, asCardId(cardId)));
+        dispatch(actions.pickDraftCard(packIndex, parseCardId(cardId)));
       },
       rerollDraftOffer: (siteId) => dispatch(actions.rerollDraftOffer(siteId)),
       enterDraftSite: (siteId) =>
@@ -544,7 +553,7 @@ export function CoopJourneyProvider({
             ? current.currentDreamscape
             : findNextDreamscapeId(current.atlas, current.currentDreamscape);
         if (nodeId === null) return;
-        dispatch(actions.addSiteToDreamscape(asAtlasNodeId(nodeId), siteType));
+        dispatch(actions.addSiteToDreamscape(nodeId, siteType));
       },
       replaceSiteType: (from, to) => {
         const nodeId = stateRef.current.currentDreamscape;

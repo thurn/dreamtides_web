@@ -67,11 +67,11 @@ describe("figment catalog", () => {
 
   it("looks entries up case-insensitively with surrounding whitespace tolerated", () => {
     expect(lookupFigmentCatalogEntry("Warrior")?.baseSpark).toBe(
-      FIGMENT_CATALOG.warrior.baseSpark,
+      FIGMENT_CATALOG[normalizeFigmentCatalogKey("Warrior")].baseSpark,
     );
     expect(lookupFigmentCatalogEntry("  WRAITH  ")?.keyword).toBe("vengeful");
     expect(lookupFigmentCatalogEntry("Spirit Animal")).toBe(
-      FIGMENT_CATALOG["spirit animal"],
+      FIGMENT_CATALOG[normalizeFigmentCatalogKey("Spirit Animal")],
     );
   });
 

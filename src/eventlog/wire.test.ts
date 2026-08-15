@@ -1,6 +1,9 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
 import { decodeEvent, encodeEvent } from "./append";
 import type { GameEvent, Genesis } from "./types";
+import { testFoldHash } from "../types/test-identities";
 import {
   decodeAppendableLogNode,
   decodeGenesis,
@@ -8,20 +11,20 @@ import {
 } from "./wire";
 
 const GENESIS: Genesis = {
-  seed: "wire-seed",
+  seed: testJourneySeed("wire-seed"),
   reducerVersion: "v1",
   createdAt: 0,
   contentConfig: {
     poolVariant: "tides4",
-    atlasFoldHash: "fixture-atlas-fold-hash",
-    sitesFoldHash: "fixture-sites-fold-hash",
-    draftFoldHash: "fixture-draft-fold-hash",
-    cardRolesFoldHash: "fixture-card-roles-fold-hash",
-    economyFoldHash: "fixture-economy-fold-hash",
-    rewardSelectionFoldHash: "fixture-reward-selection-fold-hash",
-    auguryFoldHash: "fixture-augury-fold-hash",
-    explorationFoldHash: "fixture-exploration-fold-hash",
-    tutorialFoldHash: "fixture-tutorial-fold-hash",
+    atlasFoldHash: testFoldHash("fixture-atlas-fold-hash"),
+    sitesFoldHash: testFoldHash("fixture-sites-fold-hash"),
+    draftFoldHash: testFoldHash("fixture-draft-fold-hash"),
+    cardRolesFoldHash: testFoldHash("fixture-card-roles-fold-hash"),
+    economyFoldHash: testFoldHash("fixture-economy-fold-hash"),
+    rewardSelectionFoldHash: testFoldHash("fixture-reward-selection-fold-hash"),
+    auguryFoldHash: testFoldHash("fixture-augury-fold-hash"),
+    explorationFoldHash: testFoldHash("fixture-exploration-fold-hash"),
+    tutorialFoldHash: testFoldHash("fixture-tutorial-fold-hash"),
     defaultStartingEssence: 137,
     dreamsignCap: 9,
   },
@@ -31,7 +34,7 @@ function event(seq: number): GameEvent {
   return {
     type: "T",
     payload: { seq },
-    actor: "client-a",
+    actor: testEventActor("client-a"),
     clientTimestamp: "0",
     basedOnSeq: seq - 1,
   };
@@ -145,19 +148,19 @@ describe("RTDB log wire decoding", () => {
   it("round-trips the pinned Draft fold hash", () => {
     expect(
       decodeGenesis(JSON.stringify(GENESIS))?.contentConfig?.draftFoldHash,
-    ).toBe("fixture-draft-fold-hash");
+    ).toBe(GENESIS.contentConfig?.draftFoldHash);
   });
 
   it("round-trips the pinned card-role fold hash", () => {
     expect(
       decodeGenesis(JSON.stringify(GENESIS))?.contentConfig?.cardRolesFoldHash,
-    ).toBe("fixture-card-roles-fold-hash");
+    ).toBe(GENESIS.contentConfig?.cardRolesFoldHash);
   });
 
   it("round-trips the pinned tutorial fold hash", () => {
     expect(
       decodeGenesis(JSON.stringify(GENESIS))?.contentConfig?.tutorialFoldHash,
-    ).toBe("fixture-tutorial-fold-hash");
+    ).toBe(GENESIS.contentConfig?.tutorialFoldHash);
   });
 
   it.each([

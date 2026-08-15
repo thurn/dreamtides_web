@@ -7,7 +7,7 @@ import {
   selectionMetadata,
   selectMerchantReward,
 } from "./sharedSelection";
-import { asMerchantTargetKey } from "../../types/identifiers";
+import { parseMerchantTargetKey } from "../../types/identifiers";
 
 function dreamsignGameObject(template: DreamsignTemplate): MerchantGameObject {
   return {
@@ -57,7 +57,7 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
         dreamsignId: target.id,
         dreamsignTemplate: target,
       },
-      targetKey: asMerchantTargetKey(target.id),
+      targetKey: parseMerchantTargetKey(target.id),
       ...selectionMetadata(selection),
     };
   },

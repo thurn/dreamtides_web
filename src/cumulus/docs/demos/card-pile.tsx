@@ -1,20 +1,24 @@
 import { assertLocalized } from "@trox/runtime";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import {
+  parseCardId,
+  parseCardName,
+  parseCardSubtype,
+} from "../../../types/card-identity";
 import { CardPile } from "../../components/battle/CardPile";
 import type { GameCardModel } from "../../components/card/CardView";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
-import { asBattleCardId } from "../../../types/identifiers";
+import { parseBattleCardId } from "../../../types/identifiers";
 
-const DEMO_CARD_ID = asCardId("1268a899-b209-46bb-bce4-6def1dcd0404");
+const DEMO_CARD_ID = parseCardId("1268a899-b209-46bb-bce4-6def1dcd0404");
 const DEMO_CARD: GameCardModel = {
   cardId: DEMO_CARD_ID,
   displaySnapshot: {
     id: DEMO_CARD_ID,
-    name: asCardName("Woodland Apparition"),
+    name: parseCardName("Woodland Apparition"),
     cardNumber: 1,
     cardType: "Character",
-    subtype: "Dreamborn",
+    subtype: parseCardSubtype("Visitor"),
     isStarter: false,
     energyCost: 2,
     spark: 2,
@@ -38,9 +42,9 @@ function CardPileDemo() {
       <div style={{ width }}>
         <CardPile
           cards={[
-            { face: "down", id: asBattleCardId("demo-deck-top") },
-            { face: "down", id: asBattleCardId("demo-deck-middle") },
-            { face: "down", id: asBattleCardId("demo-deck-bottom") },
+            { face: "down", id: parseBattleCardId("demo-deck-top") },
+            { face: "down", id: parseBattleCardId("demo-deck-middle") },
+            { face: "down", id: parseBattleCardId("demo-deck-bottom") },
           ]}
           label={assertLocalized("Face-down deck")}
         />
@@ -50,17 +54,17 @@ function CardPileDemo() {
           cards={[
             {
               face: "up",
-              id: asBattleCardId("demo-void-top"),
+              id: parseBattleCardId("demo-void-top"),
               model: DEMO_CARD,
             },
             {
               face: "up",
-              id: asBattleCardId("demo-void-middle"),
+              id: parseBattleCardId("demo-void-middle"),
               model: DEMO_CARD,
             },
             {
               face: "up",
-              id: asBattleCardId("demo-void-bottom"),
+              id: parseBattleCardId("demo-void-bottom"),
               model: DEMO_CARD,
             },
           ]}

@@ -2,7 +2,18 @@ import type { ArtCrop } from "../types/cards";
 import type { SourceTransport } from "../runtime/localization/runtime";
 import { hydrateSourceTransport } from "../runtime/localization/runtime";
 import { SourceMessage } from "@trox/runtime";
-import { asDreamwellCardId, type DreamwellCardId } from "../types/identifiers";
+import {
+  parseDreamwellCardId,
+  parseDreamwellChoiceKey,
+  parseDreamwellPromptKey,
+  type DreamwellCardId,
+  type DreamwellChoiceKey,
+  type DreamwellPromptKey,
+} from "../types/identifiers";
+import {
+  parseDreamwellCardName,
+  type DreamwellCardName,
+} from "../types/catalog-names";
 
 /**
  * The shared Dreamwell cards drawn one per turn during the Dreamwell phase
@@ -13,7 +24,7 @@ import { asDreamwellCardId, type DreamwellCardId } from "../types/identifiers";
 export interface DreamwellCard {
   /** Stable UUID identity. Cards are referenced by id, never by name. */
   id: DreamwellCardId;
-  name: string;
+  name: DreamwellCardName;
   /** Rules text with the same symbol/glossary markup as regular cards. */
   renderedText: string;
   /**
@@ -30,7 +41,7 @@ export interface DreamwellCard {
   imageNumber?: number;
   /** Curated pan/zoom crop framing the art; absent until the card is framed. */
   art?: ArtCrop;
-  cardType?: string;
+  cardType?: "Dreamwell";
   artOwned?: boolean;
   automation?: readonly DreamwellAutomationPrompt[];
 }
@@ -39,12 +50,12 @@ export type DreamwellPromptArgumentKind =
   "Count" | "Amount" | "MaximumCost" | "CardUuid" | "Side";
 
 export interface DreamwellAutomationPrompt {
-  readonly key: string;
+  readonly key: DreamwellPromptKey;
   readonly title: SourceTransport;
   readonly subtitle: SourceTransport;
   readonly instructions: SourceTransport;
   readonly choices?: readonly {
-    readonly key: string;
+    readonly key: DreamwellChoiceKey;
     readonly label: SourceTransport;
   }[];
   readonly arguments?: readonly {
@@ -92,6 +103,19 @@ function record(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
 
+function artCropFromUnknown(value: unknown): ArtCrop | null {
+  if (
+    !record(value) ||
+    typeof value.x !== "number" ||
+    !Number.isFinite(value.x) ||
+    typeof value.y !== "number" ||
+    !Number.isFinite(value.y) ||
+    typeof value.scale !== "number" ||
+    !Number.isFinite(value.scale)
+  ) return null;
+  return { x: value.x, y: value.y, scale: value.scale };
+}
+
 function localizedTransport(value: unknown): boolean {
   return (
     (typeof value === "string" && value.trim() !== "") ||
@@ -114,11 +138,22 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
     ) {
       throw new Error(`Dreamwell card ${String(cardIndex + 1)} is malformed`);
     }
-    const cardId = asDreamwellCardId(candidate.id);
+    const cardId = parseDreamwellCardId(candidate.id);
+    const art = candidate.art === undefined ? undefined : artCropFromUnknown(candidate.art);
+    if (
+      candidate.imageNumber !== undefined &&
+        (typeof candidate.imageNumber !== "number" ||
+          !Number.isInteger(candidate.imageNumber)) ||
+      art === null ||
+      candidate.cardType !== undefined && candidate.cardType !== "Dreamwell" ||
+      candidate.artOwned !== undefined && typeof candidate.artOwned !== "boolean"
+    ) {
+      throw new Error(`Dreamwell card ${cardId} is malformed`);
+    }
     const automation = candidate.automation ?? [];
     if (!Array.isArray(automation))
       throw new Error(`Dreamwell card ${cardId} automation must be an array`);
-    const promptKeys = new Set<string>();
+    const promptKeys = new Set<DreamwellPromptKey>();
     const normalizedAutomation = automation.map(
       (prompt, promptIndex): DreamwellAutomationPrompt => {
         if (
@@ -133,7 +168,7 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
             `Dreamwell card ${cardId} prompt ${String(promptIndex + 1)} is malformed`,
           );
         }
-        const promptKey = prompt.key;
+        const promptKey = parseDreamwellPromptKey(prompt.key);
         if (promptKeys.has(promptKey))
           throw new Error(
             `Dreamwell card ${cardId} duplicates prompt ${promptKey}`,
@@ -146,25 +181,30 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
             `Dreamwell card ${cardId} prompt ${promptKey} collections are malformed`,
           );
         }
-        const choiceKeys = new Set<string>();
+        const choiceKeys = new Set<DreamwellChoiceKey>();
         const normalizedChoices = choices.map((choice) => {
+          const choiceKey =
+            record(choice) &&
+            typeof choice.key === "string" &&
+            PROMPT_KEY.test(choice.key)
+              ? parseDreamwellChoiceKey(choice.key)
+              : null;
           if (
             !record(choice) ||
-            typeof choice.key !== "string" ||
-            !PROMPT_KEY.test(choice.key) ||
+            choiceKey === null ||
             !localizedTransport(choice.label) ||
-            choiceKeys.has(choice.key)
+            choiceKeys.has(choiceKey)
           ) {
             throw new Error(
               `Dreamwell card ${cardId} prompt ${promptKey} has an invalid choice`,
             );
           }
-          choiceKeys.add(choice.key);
+          choiceKeys.add(choiceKey);
           return {
-            key: choice.key,
+            key: choiceKey,
             label: hydrateSourceTransport(
               choice.label,
-              `Dreamwell ${cardId} ${promptKey} choice ${choice.key}`,
+              `Dreamwell ${cardId} ${promptKey} choice ${String(choice.key)}`,
             ),
           };
         });
@@ -232,8 +272,22 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
       },
     );
     return {
-      ...(candidate as unknown as DreamwellCard),
       id: cardId,
+      name: parseDreamwellCardName(candidate.name),
+      renderedText: candidate.renderedText,
+      order: candidate.order,
+      energyAdded: candidate.energyAdded,
+      cardNumber: candidate.cardNumber,
+      ...(candidate.imageNumber === undefined
+        ? {}
+        : { imageNumber: candidate.imageNumber }),
+      ...(art === undefined ? {} : { art }),
+      ...(candidate.cardType === undefined
+        ? {}
+        : { cardType: candidate.cardType }),
+      ...(candidate.artOwned === undefined
+        ? {}
+        : { artOwned: candidate.artOwned }),
       automation: normalizedAutomation,
     };
   });

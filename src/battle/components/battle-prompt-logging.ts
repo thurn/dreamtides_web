@@ -10,7 +10,7 @@ import {
 import { selectBattleCardLocation } from "../state/selectors";
 import type { BattleCardId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
 
 export function promptTextLogFields(
   prefix: string,
@@ -68,7 +68,7 @@ export function createBattlePromptOpenedLogFields(
       : promptTextLogFields("prompt", pendingPrompt.options.label)),
     candidateBattleCardInstanceIds: candidateInstanceIds,
     candidateBackingCardUuids: candidateInstanceIds.map((instanceId) =>
-      backingCardUuid(board, asBattleCardId(instanceId)),
+      backingCardUuid(board, instanceId),
     ),
   };
 }
@@ -83,7 +83,7 @@ export function createBattlePromptResolutionLogFields(
   const candidateInstanceIds = (
     openedFields.candidateBattleCardInstanceIds as unknown[]
   ).flatMap((value) =>
-    typeof value === "string" ? [asBattleCardId(value)] : [],
+    typeof value === "string" ? [parseBattleCardId(value)] : [],
   );
   const chosenInstanceIds =
     resolution.kind === "pick-cards"
@@ -107,7 +107,7 @@ export function createBattlePromptResolutionLogFields(
     }),
     chosenBattleCardInstanceIds: chosenInstanceIds,
     chosenBackingCardUuids: chosenInstanceIds.map((instanceId) =>
-      backingCardUuid(board, asBattleCardId(instanceId)),
+      backingCardUuid(board, instanceId),
     ),
     finalResolution: resolution,
   };

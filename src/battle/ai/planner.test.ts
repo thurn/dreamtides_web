@@ -1,12 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../types/test-identities";
 import { planNextAction, type PlannerOptions } from "./planner";
 import { starterCardModels } from "./cards/index";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 import { isBackRankSlotId, isFrontRankSlotId, rankSlotIds } from "../types";
-import type { FrontRankSlotId } from "../types";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 import { opponentsFixture } from "../../testing/opponents-fixture";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
 
 const AI_TUNING = opponentsFixture().ai;
 
@@ -43,9 +43,9 @@ let nextId = 0;
 function makeCard(overrides: Partial<AiCard> = {}): AiCard {
   nextId += 1;
   return {
-    battleCardId: asBattleCardId(`card-${nextId}`),
+    battleCardId: parseBattleCardId(`card-${nextId}`),
     cardNumber: 999, // unmodeled vanilla body by default
-    name: "Test Body",
+    name: testCardName("Test Body"),
     energyCost: 0,
     basePrintedSpark: 0,
     sparkDelta: 0,
@@ -58,7 +58,7 @@ function makeCard(overrides: Partial<AiCard> = {}): AiCard {
 function opponentBody(overrides: Partial<AiOpponentBody> = {}): AiOpponentBody {
   nextId += 1;
   return {
-    battleCardId: asBattleCardId(`opp-${nextId}`),
+    battleCardId: parseBattleCardId(`opp-${nextId}`),
     effectiveSpark: 0,
     energyCost: 0,
     rank: "front",
@@ -92,7 +92,7 @@ function strummer(): AiCard {
   // #510 Nocturne Strummer — 2●, 1✦, Support +2✦.
   return makeCard({
     cardNumber: 510,
-    name: "Nocturne Strummer",
+    name: testCardName("Nocturne Strummer"),
     energyCost: 2,
     basePrintedSpark: 1,
   });
@@ -102,7 +102,7 @@ function colossus(): AiCard {
   // #515 Wildflower Colossus — 6●, 6✦, +2✦ per supporting ally.
   return makeCard({
     cardNumber: 515,
-    name: "Wildflower Colossus",
+    name: testCardName("Wildflower Colossus"),
     energyCost: 6,
     basePrintedSpark: 6,
   });
@@ -112,7 +112,7 @@ function direwolf(): AiCard {
   // #512 Marked Direwolf — 4●, 4✦ vanilla.
   return makeCard({
     cardNumber: 512,
-    name: "Marked Direwolf",
+    name: testCardName("Marked Direwolf"),
     energyCost: 4,
     basePrintedSpark: 4,
   });
@@ -155,7 +155,7 @@ describe("planNextAction", () => {
       // the occupied F0–F3 positions.
       const ready = makeCard({
         cardNumber: 512,
-        name: "Marked Direwolf",
+        name: testCardName("Marked Direwolf"),
         basePrintedSpark: 4,
         canChallengeThisTurn: true,
       });
@@ -172,9 +172,11 @@ describe("planNextAction", () => {
       });
       const action = planNextAction(model, defaultOptions());
       if (action.kind === "MOVE_CARD") {
-        const toSlot = action.toSlot as FrontRankSlotId | undefined;
-        expect(toSlot).toBeDefined();
-        expect(model.aiFrontRank[toSlot as FrontRankSlotId]).toBeNull();
+        const toSlot = action.toSlot;
+        if (toSlot === undefined || !isFrontRankSlotId(toSlot)) {
+          throw new Error("Expected a front-rank move destination");
+        }
+        expect(model.aiFrontRank[toSlot]).toBeNull();
       }
     });
 
@@ -184,7 +186,7 @@ describe("planNextAction", () => {
       // the card never leaves hand (energy down, card stuck in hand).
       const challenger = makeCard({
         cardNumber: 512,
-        name: "Marked Direwolf",
+        name: testCardName("Marked Direwolf"),
         basePrintedSpark: 4,
         canChallengeThisTurn: true,
       });
@@ -205,7 +207,7 @@ describe("planNextAction", () => {
     it("a returned MOVE_CARD targets an empty, legal deploy slot from a ready reserve card", () => {
       const ready = makeCard({
         cardNumber: 512,
-        name: "Marked Direwolf",
+        name: testCardName("Marked Direwolf"),
         basePrintedSpark: 4,
         canChallengeThisTurn: true,
       });
@@ -248,7 +250,10 @@ describe("planNextAction", () => {
           cardModel?.play(model, self, action.targets ?? targets);
         } else if (action.kind === "MOVE_CARD") {
           const self = action.self as AiCard;
-          const toSlot = action.toSlot as FrontRankSlotId;
+          const toSlot = action.toSlot;
+          if (toSlot === undefined || !isFrontRankSlotId(toSlot)) {
+            throw new Error("Expected a front-rank move destination");
+          }
           expect(model.aiFrontRank[toSlot]).toBeNull();
           // Apply the move on the live model.
           for (const slot of rankSlotIds(model.aiBackRank)) {
@@ -317,7 +322,7 @@ describe("planNextAction", () => {
       // listed AFTER the Colossus in hand.
       const challenger = makeCard({
         cardNumber: 512,
-        name: "Marked Direwolf",
+        name: testCardName("Marked Direwolf"),
         basePrintedSpark: 4,
         canChallengeThisTurn: true,
       });
@@ -359,7 +364,7 @@ describe("planNextAction", () => {
       // complete plan begins with the Strummer play.
       const colossusOnBoard = makeCard({
         cardNumber: 515,
-        name: "Wildflower Colossus",
+        name: testCardName("Wildflower Colossus"),
         basePrintedSpark: 6,
         canChallengeThisTurn: true,
       });

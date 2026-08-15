@@ -106,7 +106,7 @@ export type AtlasNodeState =
   | "unrevealed" | "revealedLocked" | "available" | "completed" | "forgone";
 
 export interface DreamscapeContent {
-  id: string;
+  id: DreamscapeId;
   name: string;
   guideId: string | null;
   signatureSite: SiteType;
@@ -116,7 +116,7 @@ export interface DreamscapeContent {
 }
 
 export interface DreamGuideContent {
-  id: string;
+  id: GuideId;
   name: string;
   homeDreamscapeId: string;
   siteType: SiteType;
@@ -125,7 +125,7 @@ export interface DreamGuideContent {
 }
 
 export interface AffiliationContent {
-  id: string;
+  id: AffiliationId;
   name: string;
   signatureCards: string[];
   weightStrength: number;
@@ -182,7 +182,7 @@ In `src/types/journey.ts` replace `DreamscapeNode.status` with `state: AtlasNode
 
 ```ts
 export interface DreamscapeNode {
-  id: string;
+  id: AtlasNodeId;
   layer: number;            // 0..6
   indexInLayer: number;
   dreamscapeId: string | null;  // null while unrevealed

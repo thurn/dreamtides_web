@@ -1,3 +1,5 @@
+import { testJourneySeed } from "../types/test-identities";
+import { testEventActor } from "../types/test-identities";
 import { beforeEach, describe, expect, it } from "vitest";
 import type { EventContext, GameEvent, Genesis } from "../eventlog/types";
 import { TUTORIAL_PLAYER_CARD_INSTANCE_ID } from "../data/tutorial-cards";
@@ -8,8 +10,7 @@ import {
 import { registerTutorialFrontDoorContentProvider } from "./front-door";
 import { genesisFoldState } from "./fold-state";
 import { reduceGameEvent } from "./reducer";
-import { asTutorialActionId } from "../types/identifiers";
-import { asDreamAvatarId } from "../types/identifiers";
+import { testTutorialActionId, testDreamAvatarId } from "../types/test-identities";
 
 const TUTORIAL_OPPONENT_CARD_ID =
   TEST_TUTORIAL_CARD_CONSTANTS.tutorialOpponentCharacterCardId;
@@ -19,12 +20,12 @@ const TUTORIAL_PLAYER_CARD_ID =
 beforeEach(() => {
   registerTutorialFrontDoorContentProvider({
     playerCardId: TUTORIAL_PLAYER_CARD_ID,
-    journeyDreamAvatarId: asDreamAvatarId(TEST_TUTORIAL_PLAYER_AVATAR_ID),
+    journeyDreamAvatarId: testDreamAvatarId(TEST_TUTORIAL_PLAYER_AVATAR_ID),
   });
 });
 
 const GENESIS: Genesis = {
-  seed: "front-door-seed",
+  seed: testJourneySeed("front-door-seed"),
   reducerVersion: "test",
   createdAt: 0,
   frontDoorEntry: "main",
@@ -34,7 +35,7 @@ const GENESIS: Genesis = {
 };
 
 function event(
-  type: string,
+  type: GameEvent["type"],
   payload: Record<string, unknown>,
   basedOnSeq = 0,
   actor = "player-a",
@@ -42,7 +43,7 @@ function event(
   return {
     type,
     payload,
-    actor,
+    actor: testEventActor(actor),
     clientTimestamp: "1970-01-01T00:00:00.000Z",
     basedOnSeq,
   };
@@ -132,7 +133,7 @@ describe("front-door reducer", () => {
         surface: "main",
         actionId: "new-journey",
       }),
-      context(2, [{ seq: 1, actor: "player-a", type: "FRONT_DOOR_ACTION" }]),
+      context(2, [{ seq: 1, actor: testEventActor("player-a"), type: "FRONT_DOOR_ACTION" }]),
     );
 
     expect(duplicate.outcome).toBe("bounced");
@@ -154,7 +155,7 @@ describe("front-door reducer", () => {
         0,
         "player-b",
       ),
-      context(2, [{ seq: 1, actor: "player-a", type: "FRONT_DOOR_ACTION" }]),
+      context(2, [{ seq: 1, actor: testEventActor("player-a"), type: "FRONT_DOOR_ACTION" }]),
     );
 
     expect(journey.outcome).toBe("applied");
@@ -184,7 +185,7 @@ describe("front-door reducer", () => {
       event("BEGIN_TUTORIAL", {
         actions: [
           {
-            id: asTutorialActionId("welcome"),
+            id: testTutorialActionId("welcome"),
             action: "display-speech-bubble",
             speechBubble: {
               speaker: "mira",
@@ -196,13 +197,13 @@ describe("front-door reducer", () => {
             wait: 0.5,
           },
           {
-            id: asTutorialActionId("how-to-play"),
+            id: testTutorialActionId("how-to-play"),
             action: "display-how-to-play",
             text: "Shared configured instructions.",
             wait: 0,
           },
           {
-            id: asTutorialActionId("end-turn"),
+            id: testTutorialActionId("end-turn"),
             action: "end-turn",
             wait: 0,
           },
@@ -222,7 +223,7 @@ describe("front-door reducer", () => {
       begun.state,
       event("COMPLETE_TUTORIAL_ACTION", {
         runId: "event:1",
-        actionId: "how-to-play",
+        actionId: testTutorialActionId("how-to-play"),
       }),
       context(2),
     );
@@ -232,7 +233,7 @@ describe("front-door reducer", () => {
       begun.state,
       event("COMPLETE_TUTORIAL_ACTION", {
         runId: "event:1",
-        actionId: "welcome",
+        actionId: testTutorialActionId("welcome"),
       }),
       context(2),
     );
@@ -243,7 +244,7 @@ describe("front-door reducer", () => {
       first.state,
       event("COMPLETE_TUTORIAL_ACTION", {
         runId: "event:1",
-        actionId: "how-to-play",
+        actionId: testTutorialActionId("how-to-play"),
       }),
       context(3),
     );
@@ -254,7 +255,7 @@ describe("front-door reducer", () => {
       second.state,
       event("COMPLETE_TUTORIAL_ACTION", {
         runId: "event:1",
-        actionId: "end-turn",
+        actionId: testTutorialActionId("end-turn"),
       }),
       context(4),
     );
@@ -328,7 +329,7 @@ describe("front-door reducer", () => {
       played.state,
       event("COMPLETE_TUTORIAL_ACTION", {
         runId: "event:1",
-        actionId: "end-turn",
+        actionId: testTutorialActionId("end-turn"),
       }),
       context(7),
     );
@@ -340,7 +341,7 @@ describe("front-door reducer", () => {
     const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
     const actions = [
       {
-        id: asTutorialActionId("welcome"),
+        id: testTutorialActionId("welcome"),
         action: "display-speech-bubble",
         speechBubble: {
           speaker: "mira",
@@ -352,7 +353,7 @@ describe("front-door reducer", () => {
         wait: 1,
       },
       {
-        id: asTutorialActionId("tail-start"),
+        id: testTutorialActionId("tail-start"),
         action: "display-speech-bubble",
         speechBubble: {
           speaker: "mira",
@@ -367,7 +368,10 @@ describe("front-door reducer", () => {
 
     const begun = reduceGameEvent(
       start,
-      event("BEGIN_TUTORIAL", { actions, startActionId: "tail-start" }),
+      event("BEGIN_TUTORIAL", {
+        actions,
+        startActionId: testTutorialActionId("tail-start"),
+      }),
       context(1),
     );
     expect(begun.outcome).toBe("applied");
@@ -389,7 +393,7 @@ describe("front-door reducer", () => {
     const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
     const actions = [
       {
-        id: asTutorialActionId("end-turn"),
+        id: testTutorialActionId("end-turn"),
         action: "end-turn",
         wait: 0,
       },
@@ -416,24 +420,24 @@ describe("front-door reducer", () => {
     const start = genesisFoldState({ ...GENESIS, frontDoorEntry: "tutorial" });
     const actions = [
       {
-        id: asTutorialActionId("how-to-play"),
+        id: testTutorialActionId("how-to-play"),
         action: "display-how-to-play",
         text: "Play a character.",
         wait: 0,
       },
       {
-        id: asTutorialActionId("end-turn"),
+        id: testTutorialActionId("end-turn"),
         action: "end-turn",
         wait: 0,
       },
       {
-        id: asTutorialActionId("opponent-character-advance"),
+        id: testTutorialActionId("opponent-character-advance"),
         action: "reposition-opponent-character",
         cardId: TUTORIAL_OPPONENT_CARD_ID,
         wait: 0,
       },
       {
-        id: asTutorialActionId("challenge-positioning-how-to-play"),
+        id: testTutorialActionId("challenge-positioning-how-to-play"),
         action: "display-how-to-play",
         text: "Position characters in the front rank.",
         wait: 0,
@@ -442,7 +446,10 @@ describe("front-door reducer", () => {
 
     const atEndTurn = reduceGameEvent(
       start,
-      event("BEGIN_TUTORIAL", { actions, startActionId: "end-turn" }),
+      event("BEGIN_TUTORIAL", {
+        actions,
+        startActionId: testTutorialActionId("end-turn"),
+      }),
       context(1),
     );
     expect(atEndTurn.outcome).toBe("applied");
@@ -452,7 +459,9 @@ describe("front-door reducer", () => {
       start,
       event("BEGIN_TUTORIAL", {
         actions,
-        startActionId: "challenge-positioning-how-to-play",
+        startActionId: testTutorialActionId(
+          "challenge-positioning-how-to-play",
+        ),
       }),
       context(2),
     );

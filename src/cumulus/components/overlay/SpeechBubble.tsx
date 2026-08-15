@@ -9,6 +9,7 @@ import {
   type CSSProperties,
   type ReactElement,
 } from "react";
+import type { DomTestId } from "../../types/dom";
 import { glassSurfaceStyle } from "../../internal/glass-surface";
 import { renderTutorialInstructionText } from "../../internal/tutorial-instruction-text";
 import { token } from "../../primitives/tokens";
@@ -44,7 +45,7 @@ export interface SpeechBubbleProps {
   /** Edge and alignment of the pointer toward the speaking character. */
   pointerPlacement?: SpeechBubblePointerPlacement;
   /** Optional stable test id for product-screen QA. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 /**

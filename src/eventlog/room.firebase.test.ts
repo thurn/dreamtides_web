@@ -1,5 +1,7 @@
+import { testJourneySeed } from "../types/test-identities";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { ContentConfig, Genesis } from "./types";
+import { testClientId, testRoomId } from "../types/test-identities";
 
 interface FirebaseMocks {
   snapshotValue: unknown;
@@ -69,7 +71,7 @@ const CONTENT_CONFIG: ContentConfig = {
 
 function genesisAt(createdAt: number): string {
   const genesis: Genesis = {
-    seed: "s",
+    seed: testJourneySeed("s"),
     reducerVersion: "v1",
     createdAt,
     contentConfig: CONTENT_CONFIG,
@@ -116,8 +118,8 @@ describe("createRoomEvictingStale presence protection", () => {
       },
     };
 
-    await createRoomEvictingStale({} as never, "newroom", {
-      seed: "new",
+    await createRoomEvictingStale({} as never, testRoomId("newroom"), {
+      seed: testJourneySeed("new"),
       reducerVersion: "v1",
       createdAt: now,
       contentConfig: CONTENT_CONFIG,
@@ -132,7 +134,12 @@ describe("createRoomEvictingStale presence protection", () => {
 describe("writePresence reconnect handling", () => {
   it("rearms onDisconnect and rewrites presence on each .info/connected reconnect", async () => {
     const times = ["t1", "t2"];
-    const cleanup = writePresence({} as never, "room1", "client1", () => times.shift() ?? "tx");
+    const cleanup = writePresence(
+      {} as never,
+      testRoomId("room1"),
+      testClientId("client1"),
+      () => times.shift() ?? "tx",
+    );
     const emitConnected = (value: boolean): void => {
       const callback = firebase.connectionCallbacks[firebase.connectionCallbacks.length - 1];
       if (callback === undefined) {
@@ -173,7 +180,12 @@ describe("writePresence reconnect handling", () => {
 
   it("does not restore presence when cleanup wins a pending onDisconnect registration", async () => {
     firebase.deferOnDisconnectRemove = true;
-    const cleanup = writePresence({} as never, "old-room", "client1", () => "t1");
+    const cleanup = writePresence(
+      {} as never,
+      testRoomId("old-room"),
+      testClientId("client1"),
+      () => "t1",
+    );
     const callback = firebase.connectionCallbacks[firebase.connectionCallbacks.length - 1];
     if (callback === undefined) {
       throw new Error("writePresence did not subscribe to .info/connected");

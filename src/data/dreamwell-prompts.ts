@@ -5,7 +5,14 @@ import type {
 } from "./dreamwell-database";
 import type { LocalizedString } from "@trox/runtime";
 import { bindSourceTransport } from "../runtime/localization/runtime";
-import type { DreamwellCardId } from "../types/identifiers";
+import {
+  dreamwellCardIdFromUnknown,
+  dreamwellChoiceKeyFromUnknown,
+  dreamwellPromptKeyFromUnknown,
+  type DreamwellCardId,
+  type DreamwellChoiceKey,
+  type DreamwellPromptKey,
+} from "../types/identifiers";
 
 export type DreamwellPromptArgumentValue = string | number;
 
@@ -13,10 +20,10 @@ export type DreamwellPromptArgumentValue = string | number;
 export interface DreamwellPromptRef {
   readonly kind: "dreamwell-prompt";
   readonly cardId: DreamwellCardId;
-  readonly promptKey: string;
+  readonly promptKey: DreamwellPromptKey;
   readonly arguments: Readonly<Record<string, DreamwellPromptArgumentValue>>;
   readonly part: "title" | "subtitle" | "instructions" | "choice";
-  readonly choiceKey?: string;
+  readonly choiceKey?: DreamwellChoiceKey;
 }
 
 /** Read-only compatibility shape accepted for prompts persisted before descriptors. */
@@ -95,14 +102,14 @@ export function builtInBattlePromptRef(
 
 function isExactRecord(
   value: unknown,
-  expectedKeys: readonly string[],
+  expectedProperties: readonly string[],
 ): value is Record<string, unknown> {
   if (value === null || typeof value !== "object" || Array.isArray(value)) {
     return false;
   }
   return (
     Object.keys(value).sort().join("\u0000") ===
-    [...expectedKeys].sort().join("\u0000")
+    [...expectedProperties].sort().join("\u0000")
   );
 }
 
@@ -174,10 +181,10 @@ export function builtInBattlePromptRefFromV24Descriptor(
 
 export function dreamwellPromptRef(
   cardId: DreamwellCardId,
-  promptKey: string,
+  promptKey: DreamwellPromptKey,
   part: DreamwellPromptRef["part"] = "title",
   arguments_: DreamwellPromptRef["arguments"] = {},
-  choiceKey?: string,
+  choiceKey?: DreamwellChoiceKey,
 ): DreamwellPromptRef {
   return {
     kind: "dreamwell-prompt",
@@ -197,8 +204,8 @@ export function isDreamwellPromptRef(
   const candidate = value as Partial<DreamwellPromptRef>;
   return (
     candidate.kind === "dreamwell-prompt" &&
-    typeof candidate.cardId === "string" &&
-    typeof candidate.promptKey === "string" &&
+    dreamwellCardIdFromUnknown(candidate.cardId) !== null &&
+    dreamwellPromptKeyFromUnknown(candidate.promptKey) !== null &&
     (candidate.part === "title" ||
       candidate.part === "subtitle" ||
       candidate.part === "instructions" ||
@@ -212,7 +219,7 @@ export function isDreamwellPromptRef(
         (typeof argument === "number" && Number.isFinite(argument)),
     ) &&
     (candidate.part === "choice"
-      ? typeof candidate.choiceKey === "string"
+      ? dreamwellChoiceKeyFromUnknown(candidate.choiceKey) !== null
       : candidate.choiceKey === undefined)
   );
 }

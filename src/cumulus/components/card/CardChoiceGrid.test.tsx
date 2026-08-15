@@ -3,11 +3,14 @@
 import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import { parseCardName } from "../../../types/card-identity";
 import { CardChoiceGrid } from "./CardChoiceGrid";
 import { CARD_CORNER_RADIUS } from "./card-aspect";
 import { CumulusRoot } from "../../CumulusRoot";
-import { asDeckEntryId } from "../../../types/identifiers";
+import { parseDeckEntryId } from "../../../types/identifiers";
+import { testCardId } from "../../../types/test-identities";
+import type { DomTestId } from "../../types/dom";
+import type { GameCardModel } from "./CardView";
 
 vi.mock("./CardView", () => ({
   CardView: () => <div />,
@@ -21,7 +24,7 @@ vi.mock("./CardView", () => ({
     model: { displaySnapshot: { name: string } };
     onPress?: () => void;
     selection?: string;
-    testId?: string;
+    testId?: DomTestId;
     unavailable?: boolean;
   }) => (
     <button
@@ -35,13 +38,13 @@ vi.mock("./CardView", () => ({
   ),
 }));
 
-function model(name: string) {
-  const cardId = asCardId("11111111-1111-4111-8111-111111111111");
+function model(name: string): GameCardModel {
+  const cardId = testCardId("11111111-1111-4111-8111-111111111111");
   return {
     cardId,
     displaySnapshot: {
       id: cardId,
-      name: asCardName(name),
+      name: parseCardName(name),
       cardNumber: 1,
       cardType: "Event" as const,
       subtype: "",
@@ -74,12 +77,12 @@ describe("CardChoiceGrid", () => {
           <CardChoiceGrid
             cards={[
               {
-                entryId: asDeckEntryId("choice-a"),
+                entryId: parseDeckEntryId("choice-a"),
                 model: model("A"),
                 testId: "choice-a",
               },
               {
-                entryId: asDeckEntryId("choice-b"),
+                entryId: parseDeckEntryId("choice-b"),
                 model: model("B"),
                 testId: "choice-b",
                 selection: "highlighted",
@@ -137,7 +140,7 @@ describe("CardChoiceGrid", () => {
           <CardChoiceGrid
             cards={[
               {
-                entryId: asDeckEntryId("disabled-card"),
+                entryId: parseDeckEntryId("disabled-card"),
                 model: model("Disabled"),
                 testId: "disabled-card",
                 disabled: true,
@@ -199,22 +202,22 @@ describe("CardChoiceGrid", () => {
           <CardChoiceGrid
             cards={[
               {
-                entryId: asDeckEntryId("purge"),
+                entryId: parseDeckEntryId("purge"),
                 model: model("Purge"),
                 operation: "purge",
               },
               {
-                entryId: asDeckEntryId("copy"),
+                entryId: parseDeckEntryId("copy"),
                 model: model("Copy"),
                 operation: "copy",
               },
               {
-                entryId: asDeckEntryId("transfigure"),
+                entryId: parseDeckEntryId("transfigure"),
                 model: model("Transfigure"),
                 operation: "transfigure",
               },
               {
-                entryId: asDeckEntryId("change"),
+                entryId: parseDeckEntryId("change"),
                 model: model("Change"),
                 operation: "change",
               },

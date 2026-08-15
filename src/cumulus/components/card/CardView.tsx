@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode, RefObject } from "react";
 import "./CardView.css";
 import type { CardData, Rarity } from "../../../types/cards";
 import type { CardId } from "../../../types/card-identity";
+import type { DomTestId } from "../../types/dom";
 import {
   cardIdenticonUri,
   cardImageUrl,
@@ -39,11 +40,13 @@ import { useFitText } from "../controls/useFitText";
 import { DESKTOP_MIN_WIDTH } from "../../primitives/use-is-desktop";
 import { Pressable } from "../../primitives/Pressable";
 import { useRevealSource } from "../../internal/reveal/context";
+import { semanticEntityId as revealEntityId } from "../../../types/semantic-identity";
 import { DEFAULT_ART_CROP, resolveCardArtImageStyle } from "./card-art-crop";
 import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { glossaryInfoCard } from "./glossary-info-card";
 import { meaning, opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import type { GlossaryEntryId } from "../../../types/identifiers";
 
 function localizedCardDisplayName(
   card: Pick<CardData, "name" | "subtype">,
@@ -135,7 +138,7 @@ function cardTimingInfoCards(card: Pick<CardData, "isFast" | "isInterrupt">) {
 
 function cardRulesTextDefinitionCards(
   card: Pick<CardData, "isFast" | "isInterrupt" | "renderedText">,
-  extraExcludedIds: readonly string[] = [],
+  extraExcludedIds: readonly GlossaryEntryId[] = [],
 ) {
   if (card.renderedText.trim() === "") return [];
   return rulesTextDefinitionCards(
@@ -1736,7 +1739,7 @@ export interface GameCardProps {
   /** Render the figment frame with its canonical `"<Identity> Figment"` title bar. */
   readonly figment?: boolean;
   /** Optional stable test id for the semantic source. */
-  readonly testId?: string;
+  readonly testId?: DomTestId;
 }
 
 export interface GameCardRevealOptions {
@@ -1834,7 +1837,10 @@ export function GameCard({
       }
     : model.displaySnapshot;
   const binding = useRevealSource({
-    identity: { entityType: "game-card", entityId: model.cardId },
+    identity: {
+      entityType: "game-card",
+      entityId: revealEntityId("game-card", model.cardId),
+    },
     spec: gameCardRevealSpec(model, {
       selection,
       exhausted,
@@ -1899,7 +1905,10 @@ export function GameCard({
 
 function GlossaryInfoCardView(props: CardViewProps) {
   const binding = useRevealSource({
-    identity: { entityType: "game-card", entityId: props.card.id },
+    identity: {
+      entityType: "game-card",
+      entityId: revealEntityId("game-card", props.card.id),
+    },
     spec: {
       primary: {
         kind: "gameCard",

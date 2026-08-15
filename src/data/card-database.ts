@@ -2,6 +2,15 @@ import { createAvatar } from "@dicebear/core";
 import { identicon } from "@dicebear/collection";
 import type { CardData } from "../types/cards";
 import { assetUrl } from "../runtime/asset-url";
+import type { CardId, CardName } from "../types/card-identity";
+import type { DreamwellCardId } from "../types/identifiers";
+import type { DreamwellCardName } from "../types/catalog-names";
+
+export type CardIdenticonIdentity =
+  | CardId
+  | CardName
+  | DreamwellCardId
+  | DreamwellCardName;
 
 /** Returns the URL for a card's image, keyed by its image number. */
 export function cardImageUrl(imageNumber: number): string {
@@ -22,25 +31,25 @@ export function hasAssignedImage(imageNumber: CardData["imageNumber"]): boolean 
 // Memoize identicons by seed: `createAvatar` is deterministic per seed, so a
 // grid that re-renders frequently (the card editor) avoids regenerating the
 // same SVG data URI on every pass.
-const identiconCache = new Map<string, string>();
+const identiconCache = new Map<CardIdenticonIdentity, string>();
 
 /**
  * Returns a deterministic "identicon" style avatar as an SVG data URI, used as
  * the art fallback for cards without an assigned image. The seed should be a
  * stable per-card identifier so the same card always renders the same glyph.
  */
-export function cardIdenticonUri(seed: string): string {
-  const cached = identiconCache.get(seed);
+export function cardIdenticonUri(identity: CardIdenticonIdentity): string {
+  const cached = identiconCache.get(identity);
   if (cached !== undefined) {
     return cached;
   }
   const uri = createAvatar(identicon, {
-    seed,
+    seed: identity,
     size: 128,
     backgroundColor: ["1a1025"],
     backgroundType: ["solid"],
   }).toDataUri();
-  identiconCache.set(seed, uri);
+  identiconCache.set(identity, uri);
   return uri;
 }
 

@@ -23,7 +23,7 @@ Floating and anchored preferences consume only the Tutorial Dialogue Placement c
 | `context` | `"site" \| "card" \| "battle"` | yes | — | Semantic host context used for presentation and diagnostics. |
 | `placement` | `TutorialDialoguePlacement` | yes | — | Named placement preference resolved through registered geometry. |
 | `visible` | `boolean` | yes | — | Whether dialogue is visible and announced through aria-live. |
-| `diagnostics` | `{ readonly triggerId?: string \| undefined; readonly messageIndex?: number \| undefined; }` | no | — | Optional tutorial-state diagnostics retained on semantic attributes. |
+| `diagnostics` | `{ readonly triggerId?: TutorialTriggerId \| undefined; readonly messageIndex?: number \| undefined; }` | no | — | Optional tutorial-state diagnostics retained on semantic attributes. |
 
 ### `dialogue`: the `CharacterDialogueModel` model
 

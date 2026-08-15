@@ -1,4 +1,5 @@
 import { sha256 } from "js-sha256";
+import { parseStateHash, type StateHash } from "./types";
 
 /**
  * Computes a canonical SHA-256 hex digest of `value`.
@@ -11,8 +12,8 @@ import { sha256 } from "js-sha256";
  * Array order is preserved and DOES affect the hash: a reordered array is a
  * different state. Do not sort arrays.
  */
-export function hashState(value: unknown): string {
-  return sha256(canonicalize(value));
+export function hashState(value: unknown): StateHash {
+  return parseStateHash(sha256(canonicalize(value)));
 }
 
 /**

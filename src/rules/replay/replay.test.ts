@@ -17,6 +17,8 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { Genesis } from "../../eventlog/types";
+import { decodeEvent } from "../../eventlog/append";
+import { decodeGenesis } from "../../eventlog/wire";
 import { NIGHTMARE_CARD_NUMBER } from "../../data/nightmare";
 import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 import type { FoldState } from "../fold-state";
@@ -29,10 +31,10 @@ import {
 import adversarial from "./fixtures/adversarial.json";
 import battle from "./fixtures/battle.json";
 import journeyOnly from "./fixtures/journey-only.json";
-import { asSiteId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
-import { asDreamsignId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { testDreamsignId } from "../../types/test-identities";
 
 interface ReplayFixture {
   providerSet: string;
@@ -41,10 +43,29 @@ interface ReplayFixture {
   finalHash: string;
 }
 
+function parseReplayFixture(raw: {
+  providerSet: string;
+  genesis: unknown;
+  events: Array<{ seq: number; event: unknown }>;
+  finalHash: string;
+}): ReplayFixture {
+  const genesis = decodeGenesis(JSON.stringify(raw.genesis));
+  if (genesis === null) throw new Error("Replay fixture has invalid genesis.");
+  const events = raw.events.map(({ seq, event }) => ({
+    seq,
+    event: decodeEvent(JSON.stringify(event)),
+  }));
+  return { ...raw, genesis, events };
+}
+
+const JOURNEY_ONLY_FIXTURE = parseReplayFixture(journeyOnly);
+const BATTLE_FIXTURE = parseReplayFixture(battle);
+const ADVERSARIAL_FIXTURE = parseReplayFixture(adversarial);
+
 const FIXTURES: Array<{ name: string; fixture: ReplayFixture }> = [
-  { name: "journey-only", fixture: journeyOnly },
-  { name: "battle", fixture: battle },
-  { name: "adversarial", fixture: adversarial },
+  { name: "journey-only", fixture: JOURNEY_ONLY_FIXTURE },
+  { name: "battle", fixture: BATTLE_FIXTURE },
+  { name: "adversarial", fixture: ADVERSARIAL_FIXTURE },
 ];
 
 beforeAll(() => {
@@ -74,7 +95,7 @@ describe("replay fixtures", () => {
           candidateIds: ["card-a", "card-b", "card-c"],
           count: 2,
           optional: true,
-          highlightCardIds: [asBattleCardId("card-c")],
+          highlightCardIds: [parseBattleCardId("card-c")],
         },
       },
     },
@@ -138,7 +159,7 @@ describe("replay fixtures", () => {
   ] as const)(
     "$name preserves every prompt field through compaction",
     ({ prompt }) => {
-      const base = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
+      const base = GAME_ENGINE_CONFIG.genesisState(JOURNEY_ONLY_FIXTURE.genesis);
       const state: FoldState = {
         ...base,
         battle: {
@@ -161,7 +182,7 @@ describe("replay fixtures", () => {
   );
 
   it("normalizes every compacted Bane reference to Nightmare", () => {
-    const state = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
+    const state = GAME_ENGINE_CONFIG.genesisState(JOURNEY_ONLY_FIXTURE.genesis);
     const decoded = GAME_ENGINE_CONFIG.decode(
       JSON.stringify({
         ...state,
@@ -169,15 +190,15 @@ describe("replay fixtures", () => {
           ...state.journey,
           deck: [
             {
-              entryId: asDeckEntryId("nightmare"),
+              entryId: parseDeckEntryId("nightmare"),
               cardNumber: NIGHTMARE_CARD_NUMBER,
               isBane: false,
             },
-            { entryId: asDeckEntryId("retired"), cardNumber: 44, isBane: true },
+            { entryId: parseDeckEntryId("retired"), cardNumber: 44, isBane: true },
           ],
           dreamsigns: [
             {
-              id: asDreamsignId("negative"),
+              id: testDreamsignId("negative"),
               name: "Sign",
               effectDescription: "",
               isBane: true,
@@ -188,14 +209,14 @@ describe("replay fixtures", () => {
               kind: "temporary_bane_grant",
               count: 1,
               battlesRemaining: 1,
-              addedEntryIds: [asDeckEntryId("nightmare")],
+              addedEntryIds: [parseDeckEntryId("nightmare")],
               source: "historical-log",
             },
             {
               kind: "temporary_bane_grant",
               count: 1,
               battlesRemaining: 1,
-              addedEntryIds: [asDeckEntryId("retired")],
+              addedEntryIds: [parseDeckEntryId("retired")],
               source: "historical-log",
             },
           ],
@@ -205,17 +226,17 @@ describe("replay fixtures", () => {
 
     expect(decoded.journey.deck).toEqual([
       expect.objectContaining({
-        entryId: asDeckEntryId("nightmare"),
+        entryId: parseDeckEntryId("nightmare"),
         isBane: true,
       }),
       expect.objectContaining({
-        entryId: asDeckEntryId("retired"),
+        entryId: parseDeckEntryId("retired"),
         cardNumber: NIGHTMARE_CARD_NUMBER,
         isBane: true,
       }),
     ]);
     expect(decoded.journey.dreamsigns).toEqual([
-      expect.objectContaining({ id: "negative" }),
+      expect.objectContaining({ id: testDreamsignId("negative") }),
     ]);
     expect(decoded.journey.dreamsigns[0]).not.toHaveProperty("isBane");
     expect(decoded.journey.dreamsigns[0]).not.toHaveProperty("isNegative");
@@ -226,7 +247,7 @@ describe("replay fixtures", () => {
   });
 
   it("normalizes pre-Wave-6 shop state during compaction replay", () => {
-    const state = GAME_ENGINE_CONFIG.genesisState(journeyOnly.genesis);
+    const state = GAME_ENGINE_CONFIG.genesisState(JOURNEY_ONLY_FIXTURE.genesis);
     const {
       freeNextShopModifiers: _freeNextShopModifiers,
       freePurchaseModifiers: _freePurchaseModifiers,
@@ -255,7 +276,7 @@ describe("replay fixtures", () => {
       freeNextShopModifiers: [],
       freePurchaseModifiers: [],
     });
-    expect(decoded.journey.siteRuntime[asSiteId("legacy-shop")]).toMatchObject({
+    expect(decoded.journey.siteRuntime[parseSiteId("legacy-shop")]).toMatchObject({
       kind: "shop",
       purchaseHistory: [],
     });

@@ -20,6 +20,8 @@ import type { BattleDebugEdit } from "../../battle/debug/commands";
 import type {
   BattleEngineEmissionContext,
   BattleMutableState,
+  BattlefieldZone,
+  BattleZoneId,
 } from "../../battle/types";
 import type { EventContext } from "../../eventlog/types";
 import { isoTimestampToMs } from "./timestamp";
@@ -37,7 +39,7 @@ import type { BattleFoldState, EffectRun } from "./fold";
 import { battleModeOf, newEffectRun, resolveScript } from "./fold";
 import { selectBattleCardLocation } from "../../battle/state/selectors";
 import type { BattleCardId } from "../../types/identifiers";
-import { asBattleEffectScriptId } from "../../types/identifiers";
+import { parseBattleEffectScriptId } from "../../types/identifiers";
 
 const EMISSION: BattleEngineEmissionContext = {
   sourceSurface: "auto-system",
@@ -221,7 +223,7 @@ function applyEdits(
         ) {
           queue.push(
             newEffectRun(
-              { table: "dreamwell", id: asBattleEffectScriptId(dreamwell.id) },
+              { table: "dreamwell", id: parseBattleEffectScriptId(dreamwell.id) },
               edit.side,
             ),
           );
@@ -309,7 +311,7 @@ function enqueueLifecycleRun(
   );
 }
 
-function isBattlefieldZone(zone: string): boolean {
+function isBattlefieldZone(zone: BattleZoneId): zone is BattlefieldZone {
   return zone === "backRank" || zone === "frontRank";
 }
 

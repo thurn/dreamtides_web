@@ -17,6 +17,7 @@ import type {
 } from "../../types/journey";
 import type { ArtRef } from "../../cumulus/primitives/art";
 import type { TransfigurationData } from "../../types/transfiguration-data";
+import type { DeckEntryId } from "../../types/identifiers";
 import { transfigurationForm } from "../../data/transfiguration-data";
 import type {
   TransfigurationCandidateView,
@@ -58,7 +59,7 @@ export function buildTransfigurationCandidates(
   const deckByEntryId = new Map(
     state.deck.map((entry) => [entry.entryId, entry]),
   );
-  const candidates = new Map<string, TransfigurationCandidateView>();
+  const candidates = new Map<DeckEntryId, TransfigurationCandidateView>();
 
   for (const offer of runtime.transfigurationOffers) {
     const entry = deckByEntryId.get(offer.entryId);

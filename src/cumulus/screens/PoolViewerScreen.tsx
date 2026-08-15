@@ -6,6 +6,10 @@
 // reports stable entry ids through callbacks.
 
 import type { CSSProperties, DragEvent, ReactElement } from "react";
+import {
+  parseCardSubtype,
+  type CardSubtype,
+} from "../../types/card-identity";
 import { useEffect, useState } from "react";
 import {
   meaning,
@@ -41,7 +45,7 @@ export interface PoolViewerFilterView {
   sort: PoolViewerSortId;
   direction: PoolViewerSortDirection;
   type: PoolViewerTypeFilter;
-  subtype: string;
+  subtype: CardSubtype | "";
   cost: PoolViewerCostFilter;
 }
 
@@ -55,6 +59,8 @@ export type PoolViewerDisclosureView =
       facetAvailableCount: number;
     }
   | { id: "algorithm"; variant: string };
+
+export type PoolViewerDisclosureId = PoolViewerDisclosureView["id"];
 
 export interface PoolViewerView {
   title: PoolViewerTitleKind;
@@ -114,8 +120,8 @@ export function PoolViewerScreen({
 }: PoolViewerScreenProps): ReactElement {
   const resolve = useLocalizer();
   const [expandedDisclosures, setExpandedDisclosures] = useState<
-    Record<string, boolean>
-  >({});
+    ReadonlyMap<PoolViewerDisclosureId, boolean>
+  >(() => new Map());
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent): void {
       if (event.key === "Escape") onClose();
@@ -155,7 +161,12 @@ export function PoolViewerScreen({
           size="sm"
           options={sourceOptions}
           value={view.source}
-          onChange={(value) => onSourceChange(value as PoolViewerSourceId)}
+          onChange={(value) => {
+            const source = view.sourceOptions.find(
+              (candidate) => candidate === value,
+            );
+            if (source !== undefined) onSourceChange(source);
+          }}
         />
         <SegmentedControl
           size="sm"
@@ -206,7 +217,11 @@ export function PoolViewerScreen({
             })),
           ]}
           value={view.filters.subtype}
-          onChange={(subtype) => onFiltersChange({ subtype })}
+          onChange={(subtype) =>
+            onFiltersChange({
+              subtype: subtype === "" ? "" : parseCardSubtype(subtype),
+            })
+          }
         />
         <Select
           size="sm"
@@ -225,7 +240,7 @@ export function PoolViewerScreen({
           })}
           value={view.filters.cost}
           onChange={(cost) =>
-            onFiltersChange({ cost: cost as PoolViewerCostFilter })
+            onFiltersChange({ cost })
           }
         />
       </div>
@@ -259,12 +274,11 @@ export function PoolViewerScreen({
                   "[pool-viewer] [developer] Visible Pool Viewer diagnostic summary naming the pool-construction algorithm. algorithm_id is a stable raw internal identifier such as tides4; translators may reorder it but the identifier itself remains unchanged.",
                 )
           }
-          expanded={expandedDisclosures[disclosure.id] ?? true}
+          expanded={expandedDisclosures.get(disclosure.id) ?? true}
           onExpandedChange={(expanded) =>
-            setExpandedDisclosures((current) => ({
-              ...current,
-              [disclosure.id]: expanded,
-            }))
+            setExpandedDisclosures((current) =>
+              new Map(current).set(disclosure.id, expanded),
+            )
           }
           testId={`pool-disclosure-${disclosure.id}`}
         >
@@ -348,8 +362,12 @@ export function PoolViewerScreen({
             options: view.sortOptions.map((sort) => {
               return { value: sort, label: sortFieldLabel(sort) };
             }),
-            onChange: (sort) =>
-              onFiltersChange({ sort: sort as PoolViewerSortId }),
+            onChange: (value) => {
+              const sort = view.sortOptions.find(
+                (candidate) => candidate === value,
+              );
+              if (sort !== undefined) onFiltersChange({ sort });
+            },
           },
         }}
         cards={galleryCards}

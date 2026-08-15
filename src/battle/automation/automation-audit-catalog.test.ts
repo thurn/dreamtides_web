@@ -11,6 +11,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
+import { parseCardId, type CardId } from "../../types/card-identity";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
@@ -25,7 +26,7 @@ const UUID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 interface CatalogEntry {
-  id: string;
+  id: CardId;
   name: string;
   triggers: string[];
   ruleLines: Record<string, string>;
@@ -40,16 +41,26 @@ function loadCatalog(): { generatedFrom: string; cards: CatalogEntry[] } {
     join(REPO_ROOT, "docs", "automation-audit.json"),
     "utf8"
   );
-  return JSON.parse(raw) as { generatedFrom: string; cards: CatalogEntry[] };
+  const parsed = JSON.parse(raw) as {
+    generatedFrom: string;
+    cards: Array<Omit<CatalogEntry, "id"> & { id: unknown }>;
+  };
+  return {
+    ...parsed,
+    cards: parsed.cards.map((card) => ({
+      ...card,
+      id: parseCardId(card.id),
+    })),
+  };
 }
 
-function loadCardIds(): Set<string> {
+function loadCardIds(): Set<CardId> {
   const raw = readFileSync(
     join(REPO_ROOT, "public", "cards_v2-data.json"),
     "utf8"
   );
-  const cards = JSON.parse(raw) as Array<{ id: string }>;
-  return new Set(cards.map((c) => c.id));
+  const cards = JSON.parse(raw) as Array<{ id: unknown }>;
+  return new Set(cards.map((card) => parseCardId(card.id)));
 }
 
 describe("automation-audit catalog", () => {

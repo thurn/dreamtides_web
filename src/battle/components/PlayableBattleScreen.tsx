@@ -30,18 +30,20 @@ import type {
   BattleDreamAvatarSummary,
   BattleEnemyDescriptor,
   BattleFieldSlotAddress,
-  BattlefieldSlotId,
   BattleHistory,
   BattleMutableState,
   BattlePhase,
   BattleSide,
   BrowseableZone,
 } from "../types";
+import type { OpponentId } from "../../types/identifiers";
+import { isBackRankSlotId, isFrontRankSlotId } from "../types";
 import type { JourneyContent } from "../../data/journey-content";
 import type { BattleCommand } from "../debug/commands";
 import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import { useBattleAi } from "../ai/use-battle-ai";
 import { aiMayRunHere, battleAiDriverEnabled } from "../ai/ai-may-run-here";
+import { aiEventActor } from "../../eventlog/types";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
 import { BattleFigmentCreator } from "./BattleFigmentCreator";
@@ -79,12 +81,12 @@ import { buildBattleTutorialGuidanceView } from "../../screens/cumulus_adapters/
 import { useBattleTutorialGuidance } from "../use-battle-tutorial-guidance";
 import { selectBattlefieldFigmentMergeTargets } from "../state/figments";
 import type { BattleCardId, DreamAvatarId } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
-import { asBattleSlotViewId } from "../../types/identifiers";
-import { asBattleHistoryCommandId } from "../../types/identifiers";
-import { asBattleEffectScriptId } from "../../types/identifiers";
-import { asIntentKey } from "../../types/identifiers";
-import { asDreamAvatarId } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { parseBattleSlotViewId } from "../../types/identifiers";
+import { parseBattleHistoryCommandId } from "../../types/identifiers";
+import { parseBattleEffectScriptId } from "../../types/identifiers";
+import { parseIntentKey } from "../../types/identifiers";
+import { parseDreamAvatarId } from "../../types/identifiers";
 
 // `BattleLogDrawer` renders from the append-only coop fold, so its
 // `history` prop is supplied an empty undo/redo envelope.
@@ -110,6 +112,18 @@ type ForeseeOverlayState = {
   count: number;
   side: BattleSide;
 } | null;
+
+function battleFieldAddressForMobileTarget(
+  target: MobileBattleSlotTarget,
+): BattleFieldSlotAddress | null {
+  if (target.rank === "back" && isBackRankSlotId(target.slotId)) {
+    return { side: target.owner, zone: "backRank", slotId: target.slotId };
+  }
+  if (target.rank === "front" && isFrontRankSlotId(target.slotId)) {
+    return { side: target.owner, zone: "frontRank", slotId: target.slotId };
+  }
+  return null;
+}
 type PendingDragState =
   | {
       kind: "battle-card";
@@ -153,7 +167,7 @@ function affectedBattleCardIds(
       ids.add(id);
     }
   } else if (edit.kind === "REORDER_DECK") {
-    for (const id of edit.order) ids.add(asBattleCardId(id));
+    for (const id of edit.order) ids.add(parseBattleCardId(id));
   }
   return [...ids];
 }
@@ -227,7 +241,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       pendingPrompt?.run.scriptRef.table === "dreamwell"
         ? battleInit.dreamwellDeck.find(
             (card) =>
-              asBattleEffectScriptId(card.id) ===
+              parseBattleEffectScriptId(card.id) ===
               pendingPrompt.run.scriptRef.id,
           )
         : undefined,
@@ -347,6 +361,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     mayRunHere: aiMayRun,
     perspectiveSide,
   });
+  const aiActor = useMemo(() => aiEventActor(clientId), [clientId]);
 
   // The AI approval loop. Inert unless `aiMode` is true AND this client may run
   // the AI: when disabled the hook holds no proposal and submits nothing. It
@@ -355,15 +370,15 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   // re-plans.
   const submitAiCommand = useCallback(
     (command: BattleCommand): void => {
-      void actions.battleCommand(command, undefined, `ai:${clientId}`);
+      void actions.battleCommand(command, undefined, aiActor);
     },
-    [actions, clientId],
+    [actions, aiActor],
   );
   const submitAiGesture = useCallback(
     (commands: readonly BattleCommand[]): void => {
-      void actions.battleGesture(commands, undefined, `ai:${clientId}`);
+      void actions.battleGesture(commands, undefined, aiActor);
     },
-    [actions, clientId],
+    [actions, aiActor],
   );
   const submitAiPlayCard = useCallback(
     (
@@ -375,10 +390,10 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       void actions.battlePlayCard(
         battleCardId,
         targetBattleCardIds,
-        asIntentKey(
+        parseIntentKey(
           `battle-play:${board.battleId}:${String(board.turnNumber)}:${battleCardId}`,
         ),
-        `ai:${clientId}`,
+        aiActor,
         trace === null ? undefined : [trace],
         characterDestination === undefined
           ? undefined
@@ -389,7 +404,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
             },
       );
     },
-    [actions, board.battleId, board.turnNumber, clientId],
+    [actions, aiActor, board.battleId, board.turnNumber],
   );
   const {
     proposal,
@@ -424,9 +439,10 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     ) {
       return;
     }
-    void actions.battleAiBlock("enemy", `ai:${clientId}`);
+    void actions.battleAiBlock("enemy", aiActor);
   }, [
     actions,
+    aiActor,
     aiBlockingTurn,
     aiDriverEnabled,
     board.activeSide,
@@ -476,7 +492,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           target: {
             owner: candidate.location.side,
             rank: candidate.location.zone === "backRank" ? "back" : "front",
-            slotId: asBattleSlotViewId(candidate.location.slotId),
+            slotId: parseBattleSlotViewId(candidate.location.slotId),
           },
           figmentLabel:
             board.cardInstances[pendingDrag.battleCardId]?.definition.name ===
@@ -523,7 +539,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
             resolution.kind === "pick-cards"
               ? resolution.chosenIds[0] === undefined
                 ? null
-                : asBattleCardId(resolution.chosenIds[0])
+                : resolution.chosenIds[0]
               : null,
         }),
         ...createBattlePromptResolutionLogFields(
@@ -549,7 +565,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         ...createBattleLogBaseFields(board, {
           sourceSurface: "hand-tray",
           selectedCardId:
-            chosenIds[0] === undefined ? null : asBattleCardId(chosenIds[0]),
+            chosenIds[0] === undefined ? null : chosenIds[0],
         }),
         action,
         dreamwellCardUuid:
@@ -625,7 +641,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           }),
           perspectiveSide,
           semanticActingSide: actor,
-          commandId: asBattleHistoryCommandId(attributedCommand.id),
+          commandId: parseBattleHistoryCommandId(attributedCommand.id),
           editKind:
             attributedCommand.id === "DEBUG_EDIT"
               ? attributedCommand.edit.kind
@@ -1123,18 +1139,16 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   ): void {
     if (pendingDrag?.kind !== "battle-card") return;
     pendingDragDropHandledRef.current = true;
+    const preferredAddress =
+      preferredTarget === undefined
+        ? undefined
+        : (battleFieldAddressForMobileTarget(preferredTarget) ?? undefined);
     const command = createPlayCardFromHandCommand(
       board,
       pendingDrag.battleCardId,
       pendingDrag.sourceSurface,
       true,
-      preferredTarget === undefined
-        ? undefined
-        : {
-            side: preferredTarget.owner,
-            zone: preferredTarget.rank === "back" ? "backRank" : "frontRank",
-            slotId: preferredTarget.slotId as BattlefieldSlotId,
-          },
+      preferredAddress,
     );
     if (command === null) {
       setPendingDrag(null);
@@ -1248,17 +1262,15 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     target: MobileBattleSlotTarget,
   ): void {
     if (!canPlayerAct) return;
+    const destination = battleFieldAddressForMobileTarget(target);
+    if (destination === null) return;
     pendingDragDropHandledRef.current = true;
     handleCommand({
       id: "DEBUG_EDIT",
       edit: {
         kind: "MOVE_CARD_TO_ZONE",
         battleCardId: sourceBattleCardId,
-        destination: {
-          side: target.owner,
-          zone: target.rank === "back" ? "backRank" : "frontRank",
-          slotId: target.slotId as BattlefieldSlotId,
-        },
+        destination,
       },
       sourceSurface: "battlefield",
     });
@@ -1670,11 +1682,12 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
           },
           onCardDragEnd: handleCardDragEnd,
           onSlotDrop: ({ owner, rank, slotId }) => {
-            handleSlotDrop({
-              side: owner,
-              zone: rank === "back" ? "backRank" : "frontRank",
-              slotId: slotId as BattlefieldSlotId,
+            const target = battleFieldAddressForMobileTarget({
+              owner,
+              rank,
+              slotId,
             });
+            if (target !== null) handleSlotDrop(target);
           },
           onFigmentMerge: handleFigmentMerge,
           onZoneDrop: ({ owner, zone }) => {
@@ -1731,7 +1744,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       ) : null}
       {openNoteEditor !== null ? (
         <BattleCardNoteEditor
-          battleCardId={asBattleCardId(openNoteEditor)}
+          battleCardId={parseBattleCardId(openNoteEditor)}
           state={board}
           onClose={() => setOpenNoteEditor(null)}
           onSubmit={(edit) =>
@@ -1900,7 +1913,9 @@ function findEnemySourceDreamAvatar(
   });
 }
 
-function parseEnemySourceDreamAvatarId(enemyId: string): DreamAvatarId | null {
+function parseEnemySourceDreamAvatarId(
+  enemyId: OpponentId,
+): DreamAvatarId | null {
   const prefix = "enemy:";
   if (!enemyId.startsWith(prefix)) {
     return null;
@@ -1910,7 +1925,7 @@ function parseEnemySourceDreamAvatarId(enemyId: string): DreamAvatarId | null {
   if (seedSeparator <= 0) {
     return null;
   }
-  return asDreamAvatarId(sourceAndSeed.slice(0, seedSeparator));
+  return parseDreamAvatarId(sourceAndSeed.slice(0, seedSeparator));
 }
 
 function resolveDragSourceSurface(

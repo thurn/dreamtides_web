@@ -19,7 +19,7 @@ export function missingPoolData(detail: string): never {
 /** The card fields needed to build the UUID and display-name indexes. */
 export interface PoolCard {
   name: string;
-  id?: string;
+  id?: CardId;
 }
 
 /** Shared run inputs used by tides4 and affiliation scoring. */
@@ -28,7 +28,7 @@ export interface PoolData {
   /** The committed production tide-deck artifact. */
   tides4Decks?: Tides4DecksJson;
   /** Stable card UUID -> current display name. */
-  cardNameById?: Map<string, string>;
+  cardNameById?: Map<CardId, string>;
 }
 
 export type Tides4PoolTideSelection =
@@ -52,7 +52,7 @@ export interface Tides4PoolCardProvenance {
 }
 
 export interface Tides4PoolProvenance {
-  dreamAvatarId: DreamAvatarId;
+  dreamAvatarId: DreamAvatarId | null;
   signatureless: boolean;
   borrowedArchetypeName: string | null;
   dealSize: number;
@@ -79,6 +79,6 @@ export interface Tides4GenerationResult {
   counts: Map<CardId, number>;
   tideDeckIds: TideId[];
   /** Current algorithm label followed by joined tide ids. */
-  selected: string[];
+  selected: ["tides4", ...TideId[]];
   tides4Provenance: Tides4PoolProvenance;
 }

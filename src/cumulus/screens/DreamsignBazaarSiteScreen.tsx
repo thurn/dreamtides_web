@@ -176,7 +176,7 @@ function DreamsignBazaarGallery({
 }) {
   const desktop = layout === "desktop";
   const [locallyPurchasedEntryIds, setLocallyPurchasedEntryIds] = useState(
-    () => new Set<string>(),
+    () => new Set<DeckEntryId>(),
   );
   const [purchaseTravels, setPurchaseTravels] = useState<PurchaseTravel[]>([]);
 

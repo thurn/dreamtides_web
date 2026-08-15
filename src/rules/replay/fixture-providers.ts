@@ -25,9 +25,16 @@
 // active automation runner.
 
 import type { ResolvedDreamAvatarPackage } from "../../types/content";
+import {
+  parseCardName,
+  parseCardSubtype,
+} from "../../types/card-identity";
 import { economyFixture } from "../../testing/economy-fixture";
 import { MINIMAL_SITES_DATA } from "../../__test-helpers__/atlas-fixtures";
-import type { PoolDraftState } from "../../types/draft";
+import type {
+  DraftPoolCopiesByCard,
+  PoolDraftState,
+} from "../../types/draft";
 import type {
   BattleCardInstance,
   BattleCardStatus,
@@ -70,18 +77,27 @@ import {
   registerSiteContentProvider,
   type SiteContentProvider,
 } from "../journey/sites";
-import { asDreamscapeId } from "../../types/identifiers";
 import type { DreamAvatarId } from "../../types/identifiers";
+import type { JourneySeed } from "../../types/journey-seed";
 import type { BattleCardId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import type { SiteId } from "../../types/identifiers";
-import { asCardId } from "../../types/card-identity";
-import { asDreamsignId } from "../../types/identifiers";
-import { asAtlasNodeId } from "../../types/identifiers";
-import { asSiteId } from "../../types/identifiers";
-import { asBattleId } from "../../types/identifiers";
-import { asBattleEntryKey } from "../../types/identifiers";
-import { asBattleCardId } from "../../types/identifiers";
+import { parseAtlasNodeId } from "../../types/identifiers";
+import { parseSiteId } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
+import { parseBattleCardId } from "../../types/identifiers";
+import { parseOpponentId } from "../../types/identifiers";
+import { parseDreamwellCardName } from "../../types/catalog-names";
+import { opponentsFixture } from "../../testing/opponents-fixture";
+import { resolveBattleAiConfiguration } from "../../types/opponents-data";
+import {
+  testCardId,
+  testContentHash,
+  testDreamAvatarId,
+  testDreamscapeId,
+  testDreamsignId,
+} from "../../types/test-identities";
 
 // ---------------------------------------------------------------------------
 // Stable ids the fixture event logs reference
@@ -90,16 +106,16 @@ import { asBattleCardId } from "../../types/identifiers";
 /** A synthetic provider-set identifier stamped into every fixture. */
 export const FIXTURE_PROVIDER_SET = "synthetic-deterministic-v1";
 
-export const DREAM_AVATAR_ID = "dc-fixture";
-export const NODE_ID = asAtlasNodeId("node-start");
-export const NEXT_NODE_ID = asAtlasNodeId("node-next");
-export const ESSENCE_SITE_ID = "site-essence";
-export const SHOP_SITE_ID = "site-shop";
-export const BATTLE_SITE_ID = "site-battle";
-export const DRAFT_SITE_ID = "site-draft";
+export const DREAM_AVATAR_ID = testDreamAvatarId("dc-fixture");
+export const NODE_ID = parseAtlasNodeId("node-start");
+export const NEXT_NODE_ID = parseAtlasNodeId("node-next");
+export const ESSENCE_SITE_ID = parseSiteId("site-essence");
+export const SHOP_SITE_ID = parseSiteId("site-shop");
+export const BATTLE_SITE_ID = parseSiteId("site-battle");
+export const DRAFT_SITE_ID = parseSiteId("site-draft");
 
 /** The fixed run draft pool: 4 unique card numbers (matching DEFAULT_DRAFT_CONFIG's packSize), 4 copies each. */
-const DRAFT_POOL_COPIES_BY_CARD: Record<string, number> = {
+const DRAFT_POOL_COPIES_BY_CARD: DraftPoolCopiesByCard = {
   "100": 4,
   "101": 4,
   "102": 4,
@@ -107,8 +123,8 @@ const DRAFT_POOL_COPIES_BY_CARD: Record<string, number> = {
 };
 
 /** Battle-card instance ids the battle-fixture BATTLE_COMMANDs move. */
-export const BATTLE_CARD_DETERMINISTIC = asBattleCardId("bc-det");
-export const BATTLE_CARD_FORESEE = asBattleCardId("bc-foresee");
+export const BATTLE_CARD_DETERMINISTIC = parseBattleCardId("bc-det");
+export const BATTLE_CARD_FORESEE = parseBattleCardId("bc-foresee");
 
 /** The front-rank slots the two battle cards deploy into. */
 export const DETERMINISTIC_SLOT = frontRankSlotId(0);
@@ -146,7 +162,7 @@ function makePrng(seed: number): () => number {
 
 function fixturePackage(
   dreamAvatarId: DreamAvatarId,
-  seed: string,
+  seed: JourneySeed,
 ): ResolvedDreamAvatarPackage {
   const rng = makePrng(hashNumber(`${dreamAvatarId}:${seed}`));
   const dreamsignPoolIds = Array.from(
@@ -163,7 +179,7 @@ function fixturePackage(
       startingEssence: 300,
     },
     draftPoolCopiesByCard: DRAFT_POOL_COPIES_BY_CARD,
-    dreamsignPoolIds: dreamsignPoolIds.map(asDreamsignId),
+    dreamsignPoolIds: dreamsignPoolIds.map(testDreamsignId),
     mandatoryOnlyPoolSize: 3,
     draftPoolSize: 3,
     doubledCardCount: 1,
@@ -180,25 +196,25 @@ function fixtureNode(
 ): DreamscapeNode {
   const allSites: SiteState[] = [
     {
-      id: asSiteId(ESSENCE_SITE_ID),
+      id: parseSiteId(ESSENCE_SITE_ID),
       type: "Essence",
       isEnhanced: false,
       isVisited: false,
     },
     {
-      id: asSiteId(SHOP_SITE_ID),
+      id: parseSiteId(SHOP_SITE_ID),
       type: "Shop",
       isEnhanced: false,
       isVisited: false,
     },
     {
-      id: asSiteId(DRAFT_SITE_ID),
+      id: parseSiteId(DRAFT_SITE_ID),
       type: "Draft",
       isEnhanced: false,
       isVisited: false,
     },
     {
-      id: asSiteId(BATTLE_SITE_ID),
+      id: parseSiteId(BATTLE_SITE_ID),
       type: "Battle",
       isEnhanced: false,
       isVisited: false,
@@ -209,15 +225,15 @@ function fixtureNode(
       ? allSites
       : allSites.filter((site) => includedSiteTypes.has(site.type));
   return {
-    id: asAtlasNodeId(NODE_ID),
+    id: NODE_ID,
     layer: LayerName.One,
     indexInLayer: 0,
-    dreamscapeId: asDreamscapeId("dreamscape-start"),
+    dreamscapeId: testDreamscapeId("dreamscape-start"),
     sites,
     position: { x: 0, y: 0 },
     state: "available",
     enhancedSiteType: null,
-    forwardIds: [asAtlasNodeId(NEXT_NODE_ID)],
+    forwardIds: [NEXT_NODE_ID],
     backwardIds: [],
     knownDreamsignId: null,
   };
@@ -225,7 +241,7 @@ function fixtureNode(
 
 function fixtureNextNode(): DreamscapeNode {
   return {
-    id: asAtlasNodeId(NEXT_NODE_ID),
+    id: NEXT_NODE_ID,
     layer: LayerName.Two,
     indexInLayer: 0,
     dreamscapeId: null,
@@ -234,7 +250,7 @@ function fixtureNextNode(): DreamscapeNode {
     state: "unrevealed",
     enhancedSiteType: null,
     forwardIds: [],
-    backwardIds: [asAtlasNodeId(NODE_ID)],
+    backwardIds: [NODE_ID],
     knownDreamsignId: null,
   };
 }
@@ -293,9 +309,9 @@ function lifecycleProvider(): JourneyLifecycleContentProvider {
             [NODE_ID]: fixtureNode(includedSiteTypes),
             [NEXT_NODE_ID]: fixtureNextNode(),
           },
-          startingNodeId: asAtlasNodeId(NODE_ID),
-          bossNodeId: asAtlasNodeId(NEXT_NODE_ID),
-          currentNodeId: asAtlasNodeId(NODE_ID),
+          startingNodeId: NODE_ID,
+          bossNodeId: NEXT_NODE_ID,
+          currentNodeId: NODE_ID,
         },
         siteRuntime: {},
         screen: { type: "dreamscape" },
@@ -395,9 +411,9 @@ function makeInstance(
       sourceDeckEntryId: null,
       cardId,
       cardNumber: 0,
-      name: "Fixture Card",
+      name: parseCardName("Fixture Card"),
       battleCardKind: "character",
-      subtype: "Unit",
+      subtype: parseCardSubtype("Warrior"),
       energyCost: 0,
       printedEnergyCost: 0,
       printedSpark: 1,
@@ -454,12 +470,13 @@ function makeInit(siteId: SiteId): BattleInit {
   if (foresee === undefined) {
     throw new Error("replay fixture requires a Foresee Dreamwell script");
   }
+  const opponentData = opponentsFixture();
   return {
-    battleId: asBattleId(`battle-${siteId}`),
-    battleEntryKey: asBattleEntryKey(`fixture:${siteId}`),
+    battleId: parseBattleId(`battle-${siteId}`),
+    battleEntryKey: parseBattleEntryKey(`fixture:${siteId}`),
     seed: 1,
     siteId,
-    dreamscapeId: asDreamscapeId(NODE_ID),
+    dreamscapeId: NODE_ID,
     completionLevelAtStart: 0,
     isFinalBoss: false,
     essenceReward: 75,
@@ -467,6 +484,10 @@ function makeInit(siteId: SiteId): BattleInit {
     scoreToWin: 30,
     turnLimit: 12,
     maxEnergyCap: 12,
+    handLimit: 10,
+    opponentsContentHash: testContentHash("replay-opponents"),
+    opponentAbilityActive: false,
+    aiConfiguration: resolveBattleAiConfiguration(opponentData, "journey"),
     startingSide: "player",
     playerDrawSkipsTurnOne: true,
     journeyDeckEntries: [],
@@ -474,7 +495,7 @@ function makeInit(siteId: SiteId): BattleInit {
     dreamwellDeck: [
       {
         id: foresee.id,
-        name: "Fixture Dreamwell",
+        name: parseDreamwellCardName("Fixture Dreamwell"),
         renderedText: "",
         energyAdded: 0,
         order: 0,
@@ -483,10 +504,14 @@ function makeInit(siteId: SiteId): BattleInit {
       },
     ],
     enemyDescriptor: {
-      id: "fixture-enemy",
+      id: parseOpponentId("fixture-enemy"),
       name: "Fixture Enemy",
-      title: "",
+      subtitle: "",
       imageNumber: "1",
+      portraitSeed: 1,
+      abilityText: "",
+      dreamsigns: [],
+      signatureCards: [],
     },
     enemyDeckDefinition: [],
     dreamAvatarSummary: null,
@@ -497,13 +522,13 @@ function makeInit(siteId: SiteId): BattleInit {
         [NODE_ID]: fixtureNode(),
         [NEXT_NODE_ID]: fixtureNextNode(),
       },
-      startingNodeId: asAtlasNodeId(NODE_ID),
-      bossNodeId: asAtlasNodeId(NEXT_NODE_ID),
+      startingNodeId: NODE_ID,
+      bossNodeId: NEXT_NODE_ID,
       bossIncarnationId: null,
-      currentNodeId: asAtlasNodeId(NODE_ID),
+      currentNodeId: NODE_ID,
       knownDreamsignCarrierIds: [],
     },
-  } as unknown as BattleInit;
+  };
 }
 
 export function fixtureBattleInitProvider(): BattleInitProvider {
@@ -524,7 +549,7 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
       player.hand = [BATTLE_CARD_DETERMINISTIC, BATTLE_CARD_FORESEE];
       const enemy = makeSide();
       const board: BattleMutableState = {
-        battleId: asBattleId(`battle-${siteId}`),
+        battleId: parseBattleId(`battle-${siteId}`),
         activeSide: "player",
         turnNumber: 2,
         phase: "dreamwell",
@@ -536,12 +561,12 @@ export function fixtureBattleInitProvider(): BattleInitProvider {
         cardInstances: {
           [BATTLE_CARD_DETERMINISTIC]: makeInstance(
             BATTLE_CARD_DETERMINISTIC,
-            asCardId("00000000-0000-0000-0000-000000000001"),
+            testCardId("00000000-0000-0000-0000-000000000001"),
             "player",
           ),
           [BATTLE_CARD_FORESEE]: makeInstance(
             BATTLE_CARD_FORESEE,
-            asCardId("00000000-0000-0000-0000-000000000002"),
+            testCardId("00000000-0000-0000-0000-000000000002"),
             "player",
           ),
         },
@@ -571,7 +596,7 @@ function fixtureBattleCompletionProvider(): BattleCompletionProvider {
       }
       return {
         ...journey.atlas,
-        currentNodeId: asAtlasNodeId(NODE_ID),
+        currentNodeId: NODE_ID,
         nodes: {
           ...journey.atlas.nodes,
           [NODE_ID]: {
@@ -580,7 +605,7 @@ function fixtureBattleCompletionProvider(): BattleCompletionProvider {
           },
           [NEXT_NODE_ID]: {
             ...journey.atlas.nodes[NEXT_NODE_ID],
-            dreamscapeId: asDreamscapeId("dreamscape-next"),
+            dreamscapeId: testDreamscapeId("dreamscape-next"),
             state: "available",
           },
         },

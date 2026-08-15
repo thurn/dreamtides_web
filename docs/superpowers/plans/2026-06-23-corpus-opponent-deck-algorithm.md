@@ -273,7 +273,7 @@ In `src/data/journey-content.ts`:
 
 ```typescript
 export interface KnownGoodDecklist {
-  id: string;        // `${draftId}#${seat}`
+  id: CandidateSeatId; // `${draftId}#${seat}`
   draftId: string;
   seat: number;
   name: string;
@@ -349,7 +349,7 @@ signature-card-ids = ["<uuid>", "..."]   # empty for neutral
 
 ```typescript
 export interface DreamsignSignature {
-  id: string;
+  id: CardId;
   category: "neutral" | "tailored";
   signatureCardIds: string[];
 }
@@ -390,14 +390,14 @@ import type { CardData } from "../../types/cards";
 
 export interface CorpusOpponentDeckBuild {
   /** The selected source deck. */
-  source: { id: string; name: string; sourceFile?: string };
+  source: { id: CardId; name: CardName; sourceFile?: string };
   /** Stage A scores for the selected deck. */
   signatureFit: number;
   affiliationFit: number;
   combined: number;
   candidateCount: number;
   /** The ranked top-K window (id + combined), the seed sampled from. */
-  topK: { id: string; name: string; combined: number }[];
+  topK: { id: CardId; name: CardName; combined: number }[];
   /** The selected base deck before Stage B (distinct cards as records). */
   baseCards: CardData[];
   /** Filled by Stage B in Task 8; selection-only build leaves these at defaults. */
@@ -408,7 +408,7 @@ export interface CorpusOpponentDeckBuild {
     cardsCut: CardData[];
     startersAdded: CardData[];
   };
-  dreamsign: { id: string; name: string; fit: number } | null;
+  dreamsign: { id: DreamsignId; name: LocalizedString; fit: number } | null;
   abilityActive: boolean;
 }
 
@@ -537,7 +537,7 @@ export interface AlgorithmView {
 }
 
 export interface DebugAlgorithm {
-  id: string;       // "coherent" | "corpus"
+  id: DraftAlgorithmId; // "coherent" | "corpus"
   label: string;
   build(content: JourneyContent, params: {
     opponentDreamAvatar: DreamAvatarContent | null;
@@ -549,7 +549,7 @@ export interface DebugAlgorithm {
 }
 
 export const OPPONENT_ALGORITHMS: readonly DebugAlgorithm[]; // [coherent, corpus]
-export function getAlgorithm(id: string | null): DebugAlgorithm; // defaults to coherent
+export function getAlgorithm(id: DraftAlgorithmId | null): DebugAlgorithm; // defaults to coherent
 ```
 
 - [ ] **Step 2: Implement the `coherent` algorithm**

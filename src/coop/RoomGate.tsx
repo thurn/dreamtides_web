@@ -21,6 +21,7 @@ import type { AuguryData } from "../types/augury-data";
 import type { DraftData } from "../types/draft-data";
 import type { GambleData } from "../types/gamble-data";
 import type { TransfigurationData } from "../types/transfiguration-data";
+import type { FoldHash } from "../types/content-hash";
 import {
   createRoomEvictingStale,
   generateRoomId,
@@ -42,6 +43,7 @@ import {
   isReducerVersionCompatible,
 } from "./reducer-version";
 import type { FrontDoorPhase } from "../rules/fold-state";
+import { parseJourneySeed, type JourneySeed } from "../types/journey-seed";
 import {
   installJourneyLogSink,
   type JourneyLogSinkHandle,
@@ -51,7 +53,7 @@ import { UnreadableRoomScreen } from "./UnreadableRoomScreen";
 import { VersionGateScreen } from "./VersionGateScreen";
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
 import { meaning, tx, txa, type LocalizedString } from "@trox/runtime";
-import { asClientId, type ClientId, type RoomId } from "../types/identifiers";
+import { parseClientId, type ClientId, type RoomId } from "../types/identifiers";
 
 // How long to wait for the first log snapshot before treating the room as
 // unreachable/missing. Firebase emits its initial value within a couple of
@@ -75,7 +77,7 @@ export function roomScopedClientId(
   const key = `${CLIENT_ID_STORAGE_PREFIX}${roomId}`;
   try {
     const existing = storage.getItem(key);
-    if (existing !== null && existing.length > 0) return asClientId(existing);
+    if (existing !== null && existing.length > 0) return parseClientId(existing);
     const minted = mintClientId();
     storage.setItem(key, minted);
     return minted;
@@ -108,9 +110,9 @@ interface RoomGateProps {
   /** This client's presentation and room-navigation runtime config. */
   runtimeConfig: RuntimeConfig;
   /** Hash of Atlas sections which influence deterministic folding. */
-  atlasFoldHash: string;
+  atlasFoldHash: FoldHash;
   /** Hash of guide assignments and deterministic site rules. */
-  sitesFoldHash: string;
+  sitesFoldHash: FoldHash;
   /** Validated draft rules and fold hash pinned into room genesis. */
   draftData: DraftData;
   /** Validated economy content and journey defaults pinned into room genesis. */
@@ -120,8 +122,8 @@ interface RoomGateProps {
   opponentsData: OpponentsData;
   rewardSelectionData: RewardSelectionData;
   auguryData: AuguryData;
-  explorationFoldHash: string;
-  tutorialFoldHash: string;
+  explorationFoldHash: FoldHash;
+  tutorialFoldHash: FoldHash;
   /** Scene stamped into genesis only when this mount creates a fresh room. */
   frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">;
   children: (context: RoomReadyContext) => ReactNode;
@@ -142,15 +144,15 @@ type GateState =
     };
 
 /** Fresh random seed for a new room's genesis. */
-function freshSeed(): string {
+function freshSeed(): JourneySeed {
   const cryptoSource = globalThis.crypto;
   if (typeof cryptoSource?.randomUUID === "function") {
-    return cryptoSource.randomUUID();
+    return parseJourneySeed(cryptoSource.randomUUID());
   }
   const bytes = new Uint8Array(16);
   cryptoSource.getRandomValues(bytes);
-  return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join(
-    "",
+  return parseJourneySeed(
+    Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join(""),
   );
 }
 

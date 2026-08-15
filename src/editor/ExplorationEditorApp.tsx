@@ -11,6 +11,7 @@ import { GLYPHS } from "../cumulus/primitives/glyph";
 import { logEvent } from "../logging";
 import type { CardData } from "../types/cards";
 import type { Dreamsign } from "../types/journey";
+import type { DreamsignId } from "../types/identifiers";
 import EditableField from "./EditableField";
 import { EditorApiRequestError } from "./editor-api";
 import { explorationEditorClient } from "./exploration-editor-api";
@@ -40,8 +41,8 @@ import {
   type FieldTarget,
 } from "./save-state";
 import "./exploration-editor.css";
-import { asDreamsignId, asEditorFieldTargetId } from "../types/identifiers";
-import { asCardId, type CardId } from "../types/card-identity";
+import { parseEditorFieldTargetId } from "../types/identifiers";
+import type { CardId } from "../types/card-identity";
 
 type LoadState = "loading" | "ready" | "error";
 type ActionSaveStatus = "idle" | "saving" | "saved" | "error";
@@ -50,7 +51,7 @@ interface ReferenceCatalog {
   cards: CardData[];
   cardsById: ReadonlyMap<CardId, CardData>;
   dreamsigns: Dreamsign[];
-  dreamsignsById: ReadonlyMap<string, Dreamsign>;
+  dreamsignsById: ReadonlyMap<DreamsignId, Dreamsign>;
 }
 
 interface CardPickerTarget {
@@ -85,9 +86,7 @@ function renderedEffect(
       );
     }
     if (part.kind === "card") {
-      const card = references.cardsById.get(
-        asCardId(part.cardId.toLowerCase()),
-      );
+      const card = references.cardsById.get(part.cardId);
       return (
         <span
           data-runtime-card-id={part.cardId}
@@ -100,9 +99,7 @@ function renderedEffect(
         </span>
       );
     }
-    const dreamsign = references.dreamsignsById.get(
-      part.dreamsignId.toLowerCase(),
-    );
+    const dreamsign = references.dreamsignsById.get(part.dreamsignId);
     return (
       <span
         data-runtime-dreamsign-id={part.dreamsignId}
@@ -236,7 +233,7 @@ function ExplorationCardPicker({
 }: {
   cards: CardData[];
   query: string;
-  selectedCardId: string | undefined;
+  selectedCardId: CardId | undefined;
   onQueryChange: (query: string) => void;
   onClose: () => void;
   onSelect: (cardId: CardId) => void;
@@ -286,7 +283,7 @@ function ExplorationCardPicker({
         cards={shown.map((card) => ({
           entryId: card.id,
           model: { cardId: card.id, displaySnapshot: card },
-          selected: card.id.toLowerCase() === selectedCardId?.toLowerCase(),
+          selected: card.id === selectedCardId,
           caption: {
             kind: "text",
             message: assertLocalized(card.id.slice(0, 8)),
@@ -778,7 +775,7 @@ function ExplorationEditorRow({
     if (field.control === "card") {
       const card =
         typeof action.cardId === "string"
-          ? catalog.cardsById.get(asCardId(action.cardId.toLowerCase()))
+          ? catalog.cardsById.get(action.cardId)
           : undefined;
       return (
         <div className="exploration-editor-reference-field" key={key}>
@@ -801,18 +798,21 @@ function ExplorationEditorRow({
     }
     const dreamsign =
       typeof action.dreamsignId === "string"
-        ? catalog.dreamsignsById.get(action.dreamsignId.toLowerCase())
+        ? catalog.dreamsignsById.get(action.dreamsignId)
         : undefined;
     const dreamsignOptions = catalog.dreamsigns
-      .filter((entry) => entry.id !== undefined)
+      .filter(
+        (entry): entry is Dreamsign & { id: NonNullable<Dreamsign["id"]> } =>
+          entry.id !== undefined,
+      )
       .sort(
         (left, right) =>
           left.name.localeCompare(right.name) ||
-          (left.id ?? asDreamsignId("")).localeCompare(right.id ?? ""),
+          left.id.localeCompare(right.id),
       )
       .map((entry) => ({
-        value: entry.id ?? asDreamsignId(""),
-        label: `${entry.name} · ${(entry.id ?? asDreamsignId("")).slice(0, 8)}`,
+        value: entry.id,
+        label: `${entry.name} · ${entry.id.slice(0, 8)}`,
         triggerLabel: entry.name,
       }));
     return (
@@ -844,7 +844,7 @@ function ExplorationEditorRow({
       <section className="exploration-editor-action" key={action.id}>
         {editable(
           {
-            cardId: asEditorFieldTargetId(
+            cardId: parseEditorFieldTargetId(
               `${encounter.cardId}:${String(slot)}`,
             ),
             field: "label",
@@ -856,7 +856,7 @@ function ExplorationEditorRow({
         )}
         {editable(
           {
-            cardId: asEditorFieldTargetId(
+            cardId: parseEditorFieldTargetId(
               `${encounter.cardId}:${String(slot)}`,
             ),
             field: "effectText",
@@ -887,7 +887,7 @@ function ExplorationEditorRow({
               value={action.effectKind}
               onChange={(value) => {
                 const nextDefinition = definitions.get(
-                  value as ExplorationEditorAction["effectKind"],
+                  value,
                 );
                 if (nextDefinition === undefined) return;
                 const nextAction = { ...action };
@@ -981,7 +981,7 @@ function ExplorationEditorRow({
           >
             {editable(
               {
-                cardId: asEditorFieldTargetId(
+                cardId: parseEditorFieldTargetId(
                   `${encounter.cardId}:${String(slot)}`,
                 ),
                 field: "followupTitle",
@@ -994,7 +994,7 @@ function ExplorationEditorRow({
             )}
             {editable(
               {
-                cardId: asEditorFieldTargetId(
+                cardId: parseEditorFieldTargetId(
                   `${encounter.cardId}:${String(slot)}`,
                 ),
                 field: "followupSubtitle",
@@ -1147,14 +1147,14 @@ export default function ExplorationEditorApp({
         setCatalog({
           cards: loaded.cards,
           cardsById: new Map(
-            loaded.cards.map((card) => [asCardId(card.id.toLowerCase()), card]),
+            loaded.cards.map((card) => [card.id, card]),
           ),
           dreamsigns: loaded.dreamsigns,
           dreamsignsById: new Map(
             loaded.dreamsigns.flatMap((dreamsign) =>
               dreamsign.id === undefined
                 ? []
-                : [[dreamsign.id.toLowerCase(), dreamsign]],
+                : [[dreamsign.id, dreamsign]],
             ),
           ),
         });

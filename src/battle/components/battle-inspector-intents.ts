@@ -65,7 +65,7 @@ export function resolveBattleInspectorIntent(
   }
 }
 
-function shuffled(deck: readonly string[], random: () => number): string[] {
+function shuffled<Item>(deck: readonly Item[], random: () => number): Item[] {
   const order = [...deck];
   for (let index = order.length - 1; index > 0; index -= 1) {
     const swapIndex = Math.floor(random() * (index + 1));

@@ -24,10 +24,10 @@ import {
   selectMerchantReward,
 } from "./sharedSelection";
 import { selectionBandSize } from "../../selection/tide-affinity";
-import { asChoiceId } from "../../types/identifiers";
-import { asMerchantTargetKey } from "../../types/identifiers";
+import { parseChoiceId } from "../../types/identifiers";
+import { parseMerchantTargetKey } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
-import { asCardId } from "../../types/card-identity";
+import { parseCardId } from "../../types/card-identity";
 
 function catalogGameObject(card: MerchantCatalogCard): MerchantCatalogCard {
   return card;
@@ -114,7 +114,7 @@ function catalogChoiceCandidate(
   payload: MerchantApplyPayload,
 ): MerchantChoiceCandidateDraft {
   return {
-    choiceId: asChoiceId(card.cardUuid),
+    choiceId: parseChoiceId(card.cardUuid),
     gameObjects: [catalogGameObject(card)],
     applyPayload: payload,
     cardUuid: card.cardUuid,
@@ -150,7 +150,7 @@ function directGrantBuilder(
           addCatalogCardPayload(target),
           grantedCopies(context, archetypeId),
         ),
-        targetKey: asMerchantTargetKey(target.cardUuid),
+        targetKey: parseMerchantTargetKey(target.cardUuid),
         ...selectionMetadata(selection),
       };
     },
@@ -205,7 +205,7 @@ function chooserBuilder(
         family: "grant",
         gameObjects: [],
         choiceRequest: { choiceType: "catalogCard", candidates },
-        targetKey: asMerchantTargetKey(
+        targetKey: parseMerchantTargetKey(
           sampled.map((card) => card.cardUuid).join(","),
         ),
         ...selectionMetadata(selection),
@@ -264,7 +264,7 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       request: {
         count: archetype.quantities.chooserSize,
         constraints: {
-          allowedCardUuids: pool.map((card) => card.cardUuid).map(asCardId),
+          allowedCardUuids: pool.map((card) => card.cardUuid).map(parseCardId),
           excludeOwned: true,
         },
       },
@@ -289,7 +289,7 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       family: "grant",
       gameObjects: [],
       choiceRequest: { choiceType: "catalogCard", candidates },
-      targetKey: asMerchantTargetKey(
+      targetKey: parseMerchantTargetKey(
         `${category.id}:${sampled.map((card) => card.cardUuid).join(",")}`,
       ),
       ...selectionMetadata(selection),
@@ -338,7 +338,7 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
         kind: "composite",
         children: cards.map(addCatalogCardPayload),
       },
-      targetKey: asMerchantTargetKey(
+      targetKey: parseMerchantTargetKey(
         cards.map((card) => card.cardUuid).join(","),
       ),
       ...selectionMetadata(selection),
@@ -387,7 +387,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
       context,
       selection.bindings.cardUuids,
     ).flatMap((card) => {
-      const transfiguration = forms.get(asCardId(card.cardUuid));
+      const transfiguration = forms.get(card.cardUuid);
       if (transfiguration === undefined) return [];
       const built = buildTransfigurationDisplay(
         context.rewardSelection.content.transfigurationData,
@@ -406,7 +406,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     if (choices.length < count) return null;
     const candidates: MerchantChoiceCandidateDraft[] = choices.map(
       (choice) => ({
-        choiceId: asChoiceId(choice.card.cardUuid),
+        choiceId: parseChoiceId(choice.card.cardUuid),
         gameObjects: [
           {
             ...choice.card,
@@ -433,7 +433,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
       family: "grant",
       gameObjects: [],
       choiceRequest: { choiceType: "catalogCard", candidates },
-      targetKey: asMerchantTargetKey(
+      targetKey: parseMerchantTargetKey(
         choices
           .map((choice) => `${choice.card.cardUuid}:${choice.transfiguration}`)
           .join(","),

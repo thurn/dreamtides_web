@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { token } from "../primitives/tokens";
 import type { CumulusUISystem } from "./systems/registry";
+import type { DomElementId } from "../types/dom";
 
 const articleStyle: CSSProperties = {
   display: "grid",
@@ -31,7 +32,7 @@ export function SystemShowcase({
   anchorId,
 }: {
   readonly system: CumulusUISystem;
-  readonly anchorId: string;
+  readonly anchorId: DomElementId;
 }) {
   const Preview = system.Preview;
   return (

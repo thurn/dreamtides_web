@@ -13,7 +13,6 @@ import { Dreamsign, type LocalizedDreamsign } from "../hud/Dreamsign";
 import { token } from "../../primitives/tokens";
 import { GlassDialog } from "./GlassDialog";
 import type { DreamsignId } from "../../../types/identifiers";
-import { asDreamsignId } from "../../../types/identifiers";
 
 /** Prepared display data for choosing which held Dreamsign to replace. */
 export interface DreamsignReplacementModel {
@@ -134,7 +133,7 @@ export function DreamsignReplacementDialog({
                   )}
                   variant="accent"
                   placement="onGlass"
-                  onPress={() => onDreamsignPress(asDreamsignId(dreamsignId))}
+                  onPress={() => onDreamsignPress(dreamsignId)}
                 />
               </div>
             );

@@ -36,8 +36,8 @@ export interface AtlasFillProfile {
 /** Validated browser data compiled from data/atlas.toml. */
 export interface AtlasData {
   schemaVersion: 1;
-  contentHash: string;
-  foldHash: string;
+  contentHash: ContentHash;
+  foldHash: FoldHash;
   layers: readonly AtlasLayerData[];
   graph: {
     connectionAverage: number;
@@ -103,3 +103,4 @@ export function atlasLayerData(
   }
   return result;
 }
+import type { ContentHash, FoldHash } from "./content-hash";

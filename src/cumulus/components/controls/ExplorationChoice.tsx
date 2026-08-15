@@ -9,12 +9,14 @@ import { Pressable } from "../../primitives/Pressable";
 import { gameCardRevealSpec, type GameCardModel } from "../card/CardView";
 import { dreamsignRevealSpec, type LocalizedDreamsign } from "../hud/Dreamsign";
 import type { DeckEntryId } from "../../../types/identifiers";
-import type { ExplorationActionId } from "../../../types/identifiers";
+import type {
+  DreamsignId,
+  ExplorationActionId,
+} from "../../../types/identifiers";
+import type { CardId } from "../../../types/card-identity";
 
 /** Shared presentation fields for a revealable Exploration entity. */
 interface ExplorationChoiceEntityBase {
-  /** Stable canonical entity UUID. */
-  readonly id: string;
   /** Stable deck-entry UUID when the entity is a concrete deck object. */
   readonly entryId?: DeckEntryId;
   /** Number of identical UUID-resolved copies represented by the entity. */
@@ -28,12 +30,16 @@ export type ExplorationChoiceEntity =
   | (ExplorationChoiceEntityBase & {
       /** Reveals a complete game-card presentation. */
       readonly kind: "card";
+      /** Stable canonical card UUID. */
+      readonly id: CardId;
       /** Complete resolved card model used by the reveal coordinator. */
       readonly card: GameCardModel;
     })
   | (ExplorationChoiceEntityBase & {
       /** Reveals a complete Dreamsign presentation. */
       readonly kind: "dreamsign";
+      /** Stable canonical Dreamsign UUID. */
+      readonly id: DreamsignId;
       /** Complete localized Dreamsign used by the reveal coordinator. */
       readonly dreamsign: LocalizedDreamsign;
     });
@@ -137,7 +143,10 @@ function entityRevealRegistration(entity: ExplorationChoiceEntity) {
           (entity.copies ?? 1) === 1
             ? ("game-card" as const)
             : ("game-card-copies" as const),
-        entityId: entity.id,
+        entityId: revealEntityId(
+          (entity.copies ?? 1) === 1 ? "game-card" : "game-card-copies",
+          entity.id,
+        ),
       },
       spec:
         (entity.copies ?? 1) === 1

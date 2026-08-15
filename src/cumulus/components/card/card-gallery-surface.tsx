@@ -13,6 +13,7 @@ import {
   type ReactElement,
   type Ref,
 } from "react";
+import type { DomTestId } from "../../types/dom";
 import { type LocalizedString, tx } from "@trox/runtime";
 import type { GlassControlPlacement } from "../../primitives/control-placement";
 import type { Glyph } from "../../primitives/glyph";
@@ -84,7 +85,7 @@ export interface CardBrowserSearchControl {
   /** Optional empty-field hint. */
   placeholder?: LocalizedString;
   /** Optional stable test id for the native input. */
-  testId?: string;
+  testId?: DomTestId;
   /** Optional ref used by an overlay to focus search on open. */
   inputRef?: Ref<HTMLInputElement>;
 }
@@ -141,7 +142,7 @@ interface CardPanelBaseProps<EntryId extends string> {
   /** Empty-state copy shown when `cards` is empty. */
   emptyLabel?: LocalizedString;
   /** Test id for the panel root. */
-  testId?: string;
+  testId?: DomTestId;
 }
 
 export interface CardBrowserPanelProps<

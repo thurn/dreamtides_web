@@ -108,7 +108,7 @@ New table `BATTLE_CARD_EFFECTS` in `src/battle/automation/`, mirroring
 
 ```ts
 interface BattleCardEffectScript {
-  id: string;                          // card UUID
+  id: CardId;                          // card UUID
   trigger: "dawn" | "materialized" | "support";
   textHash: string;                    // hash of renderedText this script targets
   steps?: EffectStep[];                // for dawn / materialized (shared step type)

@@ -9,7 +9,7 @@ import type {
 } from "./battle/types";
 import { BATTLE_MARKER_SET_EVENT } from "./battle/state/markers-utils";
 import type { BattleId } from "./types/identifiers";
-import type { CardId } from "./types/card-identity";
+import type { CardId, CardName, CardSubtype } from "./types/card-identity";
 import type { BattleCardId, NoteId } from "./types/identifiers";
 
 /** Base structure for all log events. */
@@ -18,6 +18,20 @@ export interface LogEntry {
   event: string;
   seq: number;
   [key: string]: unknown;
+}
+
+declare const battleDestinationLogLabelBrand: unique symbol;
+export type BattleDestinationLogLabel = string & {
+  readonly [battleDestinationLogLabelBrand]: "BattleDestinationLogLabel";
+};
+
+export function parseBattleDestinationLogLabel(
+  value: unknown,
+): BattleDestinationLogLabel {
+  if (typeof value !== "string" || value.length === 0) {
+    throw new Error("Battle destination log label must be a non-empty string.");
+  }
+  return value as BattleDestinationLogLabel;
 }
 
 type LogListener = () => void;
@@ -302,11 +316,11 @@ export function createBattleProtoCardCreatedLogEvent(
     battleCardId: BattleCardId;
     provenanceKind: "generated-copy" | "generated-figment" | "generated-pool";
     sourceBattleCardId: BattleCardId | null;
-    name: string;
-    subtype: string;
+    name: CardName;
+    subtype: CardSubtype;
     printedSpark: number;
     ownerSide: BattleSide;
-    destinationZone: string;
+    destinationZone: BattleDestinationLogLabel;
     figmentCount?: number;
   },
   context: {
@@ -442,7 +456,7 @@ function selectSelectedCardIdFromMetadata(
   metadata: BattleHistoryEntryMetadata,
 ): BattleCardId | null {
   const cardTarget = metadata.targets.find((target) => target.kind === "card");
-  return cardTarget === undefined ? null : (cardTarget.ref as BattleCardId);
+  return cardTarget?.ref ?? null;
 }
 
 export function logBattleHistoryEvent(

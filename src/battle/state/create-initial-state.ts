@@ -21,7 +21,11 @@ import type {
   FrontRankSlotId,
   BackRankSlotId,
 } from "../types";
-import { asBattleCardId, type BattleCardId } from "../../types/identifiers";
+import {
+  identityKeys,
+  parseBattleCardId,
+  type BattleCardId,
+} from "../../types/identifiers";
 
 /**
  * Default per-card status: every flag false and every numeric counter zero. A
@@ -87,14 +91,14 @@ export function createInitialBattleState(
   );
   const playerOpeningHand = playerDeckCardIds.slice(0, openingHandSize);
   const enemyOpeningHand = enemyDeckCardIds.slice(0, enemyOpeningHandSize);
-  state.sides.player.hand = playerOpeningHand.map(asBattleCardId);
+  state.sides.player.hand = playerOpeningHand.map(parseBattleCardId);
   state.sides.player.deck = playerDeckCardIds
     .slice(playerOpeningHand.length)
-    .map(asBattleCardId);
-  state.sides.enemy.hand = enemyOpeningHand.map(asBattleCardId);
+    .map(parseBattleCardId);
+  state.sides.enemy.hand = enemyOpeningHand.map(parseBattleCardId);
   state.sides.enemy.deck = enemyDeckCardIds
     .slice(enemyOpeningHand.length)
-    .map(asBattleCardId);
+    .map(parseBattleCardId);
   return state;
 }
 
@@ -119,7 +123,7 @@ export function cloneBattleMutableState(
     // deterministic regardless of the source state's insertion history
     // (bug-042). `bc_NNNN` ids sort lexicographically into ordinal order.
     cardInstances: Object.fromEntries(
-      Object.keys(state.cardInstances)
+      identityKeys(state.cardInstances)
         .sort()
         .map((battleCardId) => {
           const instance = state.cardInstances[battleCardId];
@@ -147,9 +151,7 @@ export function cloneBattleMutableState(
 }
 
 export function allocateBattleCardId(state: BattleMutableState): BattleCardId {
-  const battleCardId = asBattleCardId(
-    formatBattleCardId(state.nextBattleCardOrdinal),
-  );
+  const battleCardId = formatBattleCardId(state.nextBattleCardOrdinal);
   state.nextBattleCardOrdinal += 1;
   return battleCardId;
 }
@@ -166,7 +168,7 @@ export function allocateBattleCardInstance(
 ): BattleCardId {
   const battleCardId = allocateBattleCardId(state);
   state.cardInstances[battleCardId] = {
-    battleCardId: asBattleCardId(battleCardId),
+    battleCardId: battleCardId,
     definition: params.definition,
     owner: params.owner,
     controller: params.controller,
@@ -245,8 +247,8 @@ function createInitialSideState(
     maxEnergy,
     score: 0,
     visibility: {},
-    deck: deck.map(asBattleCardId),
-    hand: hand.map(asBattleCardId),
+    deck: deck.map(parseBattleCardId),
+    hand: hand.map(parseBattleCardId),
     void: [],
     banished: [],
     backRank: createEmptyBackRank(),
@@ -266,5 +268,5 @@ function createEmptyFrontRank(): Record<FrontRankSlotId, BattleCardId | null> {
 }
 
 export function formatBattleCardId(ordinal: number): BattleCardId {
-  return asBattleCardId(`bc_${String(ordinal).padStart(4, "0")}`);
+  return parseBattleCardId(`bc_${String(ordinal).padStart(4, "0")}`);
 }

@@ -261,18 +261,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
       : String(measuredFeedback.hoverScale);
     const resetFeedback = snapFeedbackExit && feedbackReset;
 
-    // `as` is a runtime-chosen element type (intrinsic tag or component), so
-    // its exact prop shape isn't known statically — resolving it against
-    // React.ElementType's full intrinsic-tag union blows up into an
-    // unrepresentable type. This is the same honest-but-loose boundary the
-    // registry uses for heterogeneous entries (see registry.ts): one
-    // explicit, non-`any` cast (through `unknown`, never `any`) here keeps
-    // the rest of the module fully typed. The cast is type-level only —
-    // `as` still carries its real runtime value ("button", "div", a
-    // component, ...) straight through to React.createElement.
-    const Element = as as unknown as React.ComponentType<
-      Record<string, unknown>
-    >;
+    const Element = as;
     const typeProp = as === "button" ? { type: "button" } : {};
     if (ariaLabelMessage !== undefined && typeof as !== "string") {
       throw new Error(

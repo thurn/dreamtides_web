@@ -1,8 +1,7 @@
 import { layerOrdinal } from "../types/layer-name";
 import type { FoldState } from "./fold-state";
 import { battleModeOf } from "./battle/fold";
-import { asSiteId } from "../types/identifiers";
-import { asDreamscapeId } from "../types/identifiers";
+import { parseSiteId } from "../types/identifiers";
 
 export interface FoldInvariantViolation {
   code: string;
@@ -46,7 +45,7 @@ export function foldInvariantViolations(
     if (journey.activeSiteId !== siteId) {
       violations.push({
         code: "site_screen_active_mismatch",
-        detail: `${siteId}/${journey.activeSiteId ?? asSiteId("none")}`,
+        detail: `${siteId}/${journey.activeSiteId ?? parseSiteId("none")}`,
       });
     }
     const current =
@@ -139,7 +138,7 @@ export function foldInvariantViolations(
     violations.push({
       code: "journey_complete_inconsistent",
       detail: `${String(journey.completionLevel)}/${
-        journey.currentDreamscape ?? asDreamscapeId("none")
+        journey.currentDreamscape ?? "none"
       }`,
     });
   }
@@ -159,8 +158,8 @@ export function foldInvariantViolations(
     ) {
       violations.push({
         code: "battle_dreamscape_mismatch",
-        detail: `${init.dreamscapeId ?? asDreamscapeId("none")}/${
-          journey.currentDreamscape ?? asDreamscapeId("none")
+        detail: `${init.dreamscapeId ?? "none"}/${
+          journey.currentDreamscape ?? "none"
         }`,
       });
     }

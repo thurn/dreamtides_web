@@ -2,6 +2,7 @@ import { useMemo, useSyncExternalStore } from "react";
 import {
   BattleLogOverlay,
   type BattleLogTurnView,
+  type BattleRawLogEntryId,
 } from "../../cumulus/screens/battle-overlays/BattleLogOverlay";
 import { getLogEntries, subscribeLogEntries } from "../../logging";
 import type {
@@ -13,6 +14,13 @@ import type {
 import { assertLocalized } from "@trox/runtime";
 
 const EMPTY_ENTRIES: ReadonlyArray<Readonly<import("../../logging").LogEntry>> = [];
+
+function rawLogEntryId(
+  sequence: number,
+  event: string,
+): BattleRawLogEntryId {
+  return `${sequence}-${event}`;
+}
 export function BattleLogDrawer({
   battleInit,
   futureCount: _futureCount,
@@ -44,7 +52,7 @@ export function BattleLogDrawer({
       const turnNumber = readLogText(entry.turnNumber) ?? "-";
       const phase = readLogText(entry.phase) ?? "-";
       return {
-        id: `${entry.seq}-${entry.event}`,
+        id: rawLogEntryId(entry.seq, entry.event),
         kind: classifyLogKind(entry.event),
         text: assertLocalized(`${turnNumber} · ${phase} · ${label}`),
       };

@@ -4,7 +4,10 @@ import {
   isTransfigurationExplorationEffect,
   loadExplorationContent,
 } from "./exploration";
-import { asCardId } from "../types/card-identity";
+import {
+  testCardId,
+  testExplorationActionId,
+} from "../types/test-identities";
 
 const HASH = "0".repeat(64);
 
@@ -17,11 +20,11 @@ function fixture(action: Record<string, unknown>) {
     customDreamsigns: [],
     encounters: [
       {
-        cardId: asCardId("00000000-0000-4000-8000-000000000001"),
+        cardId: testCardId("00000000-0000-4000-8000-000000000001"),
         prose: "Synthetic prose",
         action: [
           {
-            id: "synthetic-action",
+            id: testExplorationActionId("synthetic-action"),
             label: "Synthetic action",
             effectText: "Synthetic effect",
             ...action,
@@ -152,7 +155,7 @@ describe("Exploration starter-card content", () => {
     ];
     const content = fixture(actions[0]);
     content.encounters[0].action = actions.map((action, index) => ({
-      id: `synthetic-action-${String(index)}`,
+      id: testExplorationActionId(`synthetic-action-${String(index)}`),
       label: "Synthetic action",
       effectText: "Synthetic effect",
       ...action,
@@ -257,7 +260,9 @@ describe("Exploration starter-card content", () => {
     ];
     const content = fixture(actions[0]);
     content.encounters[0].action = actions.map((action, index) => ({
-      id: `synthetic-transfigure-action-${String(index)}`,
+      id: testExplorationActionId(
+        `synthetic-transfigure-action-${String(index)}`,
+      ),
       label: "Synthetic action",
       effectText: "Synthetic effect",
       ...action,
@@ -385,12 +390,12 @@ describe("Exploration Wave 7 deck-mutation content", () => {
       canonicalMechanicId: "replace-deck-entry",
       selectionPolicyId: "uniform",
       predicate: "event",
-      cardId: asCardId("00000000-0000-4000-8000-000000000048"),
+      cardId: testCardId("00000000-0000-4000-8000-000000000048"),
       effectText: "Replace a random Event with {fixed_card}",
     });
     (content.encounters[0].action as Array<Record<string, unknown>>).push(
       {
-        id: "synthetic-action-53",
+        id: testExplorationActionId("synthetic-action-53"),
         label: "Change the revealed card",
         effectText: "Change {deck_card} to become {card_type}",
         effectKind: "change-card-type-selected",
@@ -400,7 +405,7 @@ describe("Exploration Wave 7 deck-mutation content", () => {
         deckTarget: "offered",
       },
       {
-        id: "synthetic-action-72",
+        id: testExplorationActionId("synthetic-action-72"),
         label: "Gain a legend",
         effectText: "Gain a random Legendary card",
         effectKind: "gain-random-cards",
@@ -418,7 +423,7 @@ describe("Exploration Wave 7 deck-mutation content", () => {
       {
         effectKind: "replace-random-with-card",
         predicate: "event",
-        cardId: asCardId("00000000-0000-4000-8000-000000000048"),
+        cardId: testCardId("00000000-0000-4000-8000-000000000048"),
       },
       {
         effectKind: "change-card-type-selected",
@@ -439,7 +444,7 @@ describe("Exploration Wave 7 deck-mutation content", () => {
       canonicalMechanicId: "replace-deck-entry",
       selectionPolicyId: "uniform",
       predicate: "event",
-      cardId: asCardId("00000000-0000-4000-8000-000000000048"),
+      cardId: testCardId("00000000-0000-4000-8000-000000000048"),
       effectText: "Replace a random Event",
     },
     {
@@ -447,7 +452,7 @@ describe("Exploration Wave 7 deck-mutation content", () => {
       canonicalMechanicId: "replace-deck-entry",
       selectionPolicyId: "uniform",
       predicate: "event",
-      cardId: asCardId("00000000-0000-4000-8000-000000000048"),
+      cardId: testCardId("00000000-0000-4000-8000-000000000048"),
       effectText: "Replace a random Event with {fixed_card}",
       count: 1,
     },
@@ -598,7 +603,7 @@ describe("Exploration shop purchase modifier content", () => {
       Record<string, unknown>
     >;
     actionList.push({
-      id: "synthetic-counted-shop-modifier",
+      id: testExplorationActionId("synthetic-counted-shop-modifier"),
       label: "Synthetic action",
       effectText: "Synthetic effect",
       effectKind: "lose-half-essence-and-free-purchases",
@@ -716,7 +721,9 @@ describe("Exploration multi-card transfiguration content", () => {
     ];
     const content = fixture(actions[0]);
     content.encounters[0].action = actions.map((action, index) => ({
-      id: `synthetic-multi-transfigure-${String(index)}`,
+      id: testExplorationActionId(
+        `synthetic-multi-transfigure-${String(index)}`,
+      ),
       label: "Synthetic action",
       effectText: "Synthetic effect",
       ...action,
@@ -915,7 +922,7 @@ describe("Exploration counted deck mutation content", () => {
     ];
     const content = fixture(actions[0]);
     content.encounters[0].action = actions.map((action, index) => ({
-      id: `counted-action-${String(index)}`,
+      id: testExplorationActionId(`counted-action-${String(index)}`),
       label: "Synthetic action",
       effectText: "Synthetic effect",
       ...action,
@@ -951,7 +958,7 @@ describe("Exploration counted deck mutation content", () => {
     ];
     const content = fixture(actions[0]);
     content.encounters[0].action = actions.map((action, index) => ({
-      id: `automatic-action-${String(index)}`,
+      id: testExplorationActionId(`automatic-action-${String(index)}`),
       label: "Synthetic action",
       effectText: "Synthetic effect",
       ...action,

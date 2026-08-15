@@ -11,15 +11,17 @@ import {
   getLogEntries,
   logEvent,
   logEventOnce,
+  parseBattleDestinationLogLabel,
   resetLog,
   setLogContext,
   setLogSink,
 } from "./logging";
 import type { LogEntry } from "./logging";
 import type { BattleMutableState } from "./battle/types";
-import { asBattleCardId, type BattleCardId } from "./types/identifiers";
-import { asBattleId } from "./types/identifiers";
-import { asNoteId } from "./types/identifiers";
+import { parseBattleCardId } from "./types/identifiers";
+import { parseBattleId } from "./types/identifiers";
+import { parseNoteId } from "./types/identifiers";
+import { testCardName, testCardSubtype } from "./types/test-identities";
 
 beforeEach(() => {
   resetLog();
@@ -222,7 +224,7 @@ describe("createBattleLogBaseFields", () => {
   it("includes every L-3 common field", () => {
     const fields = createBattleLogBaseFields(makeBattleStateFixture(), {
       sourceSurface: "action-bar",
-      selectedCardId: asBattleCardId("card-42"),
+      selectedCardId: parseBattleCardId("card-42"),
     });
 
     expect(fields.battleId).toBe("battle-fixture");
@@ -238,7 +240,7 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
   const state = makeBattleStateFixture();
   const context = {
     sourceSurface: "inspector" as const,
-    selectedCardId: null as BattleCardId | null,
+    selectedCardId: null,
   };
 
   const helpers: Array<{
@@ -253,8 +255,8 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
         createBattleProtoNoteAddedLogEvent(
           state,
           {
-            battleCardId: asBattleCardId("card-1"),
-            noteId: asNoteId("note-1"),
+            battleCardId: parseBattleCardId("card-1"),
+            noteId: parseNoteId("note-1"),
             text: "note",
             expiry: { kind: "manual" },
             createdAtTurnNumber: 1,
@@ -270,8 +272,8 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
         createBattleProtoNoteDismissedLogEvent(
           state,
           {
-            battleCardId: asBattleCardId("card-1"),
-            noteId: asNoteId("note-1"),
+            battleCardId: parseBattleCardId("card-1"),
+            noteId: parseNoteId("note-1"),
           },
           context,
         ),
@@ -283,7 +285,7 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
         createBattleProtoNoteClearedLogEvent(
           state,
           {
-            battleCardId: asBattleCardId("card-1"),
+            battleCardId: parseBattleCardId("card-1"),
             noteCount: 2,
           },
           context,
@@ -296,14 +298,14 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
         createBattleProtoCardCreatedLogEvent(
           state,
           {
-            battleCardId: asBattleCardId("card-1"),
+            battleCardId: parseBattleCardId("card-1"),
             provenanceKind: "generated-copy",
-            sourceBattleCardId: asBattleCardId("card-0"),
-            name: "Copy",
-            subtype: "x",
+            sourceBattleCardId: parseBattleCardId("card-0"),
+            name: testCardName("Copy"),
+            subtype: testCardSubtype("x"),
             printedSpark: 1,
             ownerSide: "player",
-            destinationZone: "hand",
+            destinationZone: parseBattleDestinationLogLabel("player:hand"),
           },
           context,
         ),
@@ -316,8 +318,8 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
           state,
           {
             side: "player",
-            orderBefore: [asBattleCardId("a"), asBattleCardId("b")],
-            orderAfter: [asBattleCardId("b"), asBattleCardId("a")],
+            orderBefore: [parseBattleCardId("a"), parseBattleCardId("b")],
+            orderAfter: [parseBattleCardId("b"), parseBattleCardId("a")],
           },
           context,
         ),
@@ -329,7 +331,7 @@ describe("battle_proto_* helper suite (L-3 coverage)", () => {
         createBattleProtoMarkerSetLogEvent(
           state,
           {
-            battleCardId: asBattleCardId("card-1"),
+            battleCardId: parseBattleCardId("card-1"),
             markers: { isPrevented: true, isCopied: false },
             diff: { prevented: "set", copied: "unchanged" },
           },
@@ -357,7 +359,7 @@ function makeBattleStateFixture(): Pick<
   "battleId" | "turnNumber" | "phase" | "activeSide"
 > {
   return {
-    battleId: asBattleId("battle-fixture"),
+    battleId: parseBattleId("battle-fixture"),
     turnNumber: 3,
     phase: "day",
     activeSide: "enemy",

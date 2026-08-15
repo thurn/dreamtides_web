@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import {
   auditDomainStrings,
   findRawStringIdentityDeclarationsInSource,
+  findUncheckedIdentityAssertionsInSource,
 } from "./domain-string-audit.mjs";
 
 describe("domain string audit", () => {
@@ -16,6 +17,8 @@ describe("domain string audit", () => {
           siteId: string;
           readonly cardUuids: readonly string[];
           id?: ReadonlyArray<string>;
+          cardsById: ReadonlyMap<string, CardData>;
+          nodesById: Record<string, Node>;
         }
       `,
       "src/example.ts",
@@ -24,6 +27,8 @@ describe("domain string audit", () => {
       "siteId",
       "cardUuids",
       "id",
+      "cardsById",
+      "nodesById",
     ]);
   });
 
@@ -39,6 +44,27 @@ describe("domain string audit", () => {
       "src/example.ts",
     );
     expect(findings).toEqual([]);
+  });
+
+  it("rejects unchecked identity constructors and assertions", () => {
+    const findings = findUncheckedIdentityAssertionsInSource(
+      `
+        const site = asSiteId(raw);
+        const card = raw as CardId;
+      `,
+      "src/example.ts",
+    );
+    expect(findings.map(({ name }) => name)).toEqual(["asSiteId", "CardId"]);
+  });
+
+  it("allows only the named private minting functions in the whole-tree audit", () => {
+    const findings = findUncheckedIdentityAssertionsInSource(
+      `function anotherBoundary(raw: string) { return raw as CardId; }`,
+      "src/types/card-identity.ts",
+    );
+    expect(findings).toMatchObject([
+      { name: "CardId", functionName: "anotherBoundary" },
+    ]);
   });
 
   it("keeps the production domain tree free of raw string identities", () => {

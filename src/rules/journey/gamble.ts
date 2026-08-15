@@ -27,7 +27,7 @@ import {
 } from "../../data/blackjack";
 import { gambleGameByRulesKind } from "../../data/gamble-data";
 import type { GambleRulesKind } from "../../types/gamble-data";
-import type { GravokGateId } from "../../types/gamble";
+import { isGravokGateId } from "../../types/gamble";
 import type {
   DeckEntry,
   FourSuitRepriseRound,
@@ -48,9 +48,7 @@ import { siteIdFromUnknown } from "../../types/identifiers";
 import { shuffleCommitmentFromUnknown } from "../../types/identifiers";
 import { dreamsignIdFromUnknown } from "../../types/identifiers";
 import { deckEntryIdFromUnknown } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
 
-const GATE_IDS: ReadonlySet<string> = new Set(["six", "nine", "jack"]);
 
 function configuredGame<Kind extends GambleRulesKind>(kind: Kind) {
   const data = getSiteContentProvider()?.gambleData;
@@ -382,11 +380,11 @@ export function placeGravokWager(
 ): JourneyState | null {
   const siteId = siteIdFromUnknown(payload.siteId);
   const rawGateId = asString(payload.gateId);
-  if (siteId === null || rawGateId === null || !GATE_IDS.has(rawGateId)) {
+  if (siteId === null || !isGravokGateId(rawGateId)) {
     return null;
   }
 
-  const gateId = rawGateId as GravokGateId;
+  const gateId = rawGateId;
   const runtime = gravokRuntimeFor(journey, siteId);
   if (runtime === null || runtime.result !== null) return null;
   const game = configuredGame("threeGate");
@@ -1026,7 +1024,7 @@ export function settleFourSuitReprise(
   } else if (round.outcome === "duplication") {
     const duplicatedEntryId = mintEntryId(journey.deck, ctx.seq, 0);
     const copy: DeckEntry = {
-      entryId: asDeckEntryId(duplicatedEntryId),
+      entryId: duplicatedEntryId,
       cardNumber: target.cardNumber,
       transfiguration: null,
       isBane: false,
@@ -1035,7 +1033,7 @@ export function settleFourSuitReprise(
     nextRound = {
       ...nextRound,
       resultSettled: true,
-      duplicatedEntryId: asDeckEntryId(duplicatedEntryId),
+      duplicatedEntryId: duplicatedEntryId,
     };
   } else if (round.outcome === "purge") {
     nextJourney = {

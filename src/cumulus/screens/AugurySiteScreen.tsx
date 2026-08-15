@@ -42,7 +42,7 @@ import type { SiteId } from "../../types/identifiers";
 import type { OfferId } from "../../types/identifiers";
 import type { ChoiceId } from "../../types/identifiers";
 import type { AuguryCardViewId } from "../../types/identifiers";
-import { asDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 
 export type AuguryGuideView = SiteLayoutGuideView;
@@ -558,11 +558,11 @@ function OfferDetailVisual({
                 changeId: pair.id,
                 kind: "replacement",
                 before: {
-                  entryId: asDeckEntryId(pair.before.id),
+                  entryId: parseDeckEntryId(pair.before.id),
                   card: pair.before.model,
                 },
                 after: {
-                  entryId: asDeckEntryId(pair.after.id),
+                  entryId: parseDeckEntryId(pair.after.id),
                   card: pair.after.model,
                 },
               }}
@@ -662,7 +662,7 @@ function CardRow({
   return (
     <CardChoiceGrid
       cards={cards.map((card) => ({
-        entryId: asDeckEntryId(card.id),
+        entryId: parseDeckEntryId(card.id),
         model: card.model,
         selection: tone === "danger" ? "danger" : undefined,
       }))}

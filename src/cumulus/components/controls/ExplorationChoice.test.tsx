@@ -11,14 +11,14 @@ import {
   type ExplorationChoiceEntity,
 } from "./ExplorationChoice";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
-import { asDeckEntryId } from "../../../types/identifiers";
-import { asExplorationActionId } from "../../../types/identifiers";
+import { parseDeckEntryId } from "../../../types/identifiers";
+import { testExplorationActionId } from "../../../types/test-identities";
 
 const entityCard = syntheticGameCard(1);
 const entity: ExplorationChoiceEntity = {
   kind: "card",
   id: entityCard.cardId,
-  entryId: asDeckEntryId("entry"),
+  entryId: parseDeckEntryId("entry"),
   label: assertLocalized("Entity"),
   card: entityCard,
 };
@@ -48,11 +48,12 @@ function touchPointer(
 
 describe("ExplorationChoice", () => {
   it("renders ordered prepared parts and emits its action ID once", () => {
+    const actionId = testExplorationActionId("action");
     const onPress = vi.fn();
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
-          actionId: asExplorationActionId("action"),
+          actionId,
           label: assertLocalized("Choice"),
           description: [
             { kind: "text", value: assertLocalized("Before ") },
@@ -66,11 +67,11 @@ describe("ExplorationChoice", () => {
       />,
     );
     const choice = container.querySelector<HTMLElement>(
-      '[data-exploration-action-id="action"]',
+      `[data-exploration-action-id="${actionId}"]`,
     )!;
     act(() => choice.click());
     expect(onPress).toHaveBeenCalledOnce();
-    expect(onPress).toHaveBeenCalledWith("action");
+    expect(onPress).toHaveBeenCalledWith(actionId);
     expect(
       container.querySelector<HTMLElement>("[data-exploration-entity-label]")
         ?.dataset.entityId,
@@ -79,11 +80,12 @@ describe("ExplorationChoice", () => {
   });
 
   it("emits exactly once for quick mouse, keyboard-compatible, and touch activation", () => {
+    const actionId = testExplorationActionId("activation");
     const onPress = vi.fn();
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
-          actionId: asExplorationActionId("activation"),
+          actionId,
           label: assertLocalized("Choice"),
           description: [{ kind: "text", value: assertLocalized("Plain") }],
           availability: "available",
@@ -92,7 +94,7 @@ describe("ExplorationChoice", () => {
       />,
     );
     const choice = container.querySelector<HTMLElement>(
-      '[data-exploration-action-id="activation"]',
+      `[data-exploration-action-id="${actionId}"]`,
     )!;
     act(() => {
       choice.dispatchEvent(
@@ -119,17 +121,18 @@ describe("ExplorationChoice", () => {
       );
     });
     expect(onPress).toHaveBeenCalledTimes(3);
-    expect(onPress).toHaveBeenNthCalledWith(3, "activation");
+    expect(onPress).toHaveBeenNthCalledWith(3, actionId);
     act(() => root.unmount());
   });
 
   it("uses touch hold for reading without activation", () => {
+    const actionId = testExplorationActionId("hold");
     vi.useFakeTimers();
     const onPress = vi.fn();
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
-          actionId: asExplorationActionId("hold"),
+          actionId,
           label: assertLocalized("Choice"),
           description: [{ kind: "entity", entity }],
           availability: "available",
@@ -139,7 +142,7 @@ describe("ExplorationChoice", () => {
       />,
     );
     const choice = container.querySelector<HTMLElement>(
-      '[data-exploration-action-id="hold"]',
+      `[data-exploration-action-id="${actionId}"]`,
     )!;
     act(() => {
       choice.dispatchEvent(touchPointer("pointerdown", 8, 100));
@@ -162,11 +165,11 @@ describe("ExplorationChoice", () => {
     const repeatedCard = {
       ...entity,
       id: secondCard.cardId,
-      entryId: asDeckEntryId("entry-two"),
+      entryId: parseDeckEntryId("entry-two"),
       card: secondCard,
     };
     const dreamsign = localizedDreamsignFixture({
-      id: "40000000-0000-4000-8000-000000000001",
+      idSeed: "40000000-0000-4000-8000-000000000001",
       name: "Entity",
     });
     const dreamsignEntity: ExplorationChoiceEntity = {
@@ -178,7 +181,7 @@ describe("ExplorationChoice", () => {
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
-          actionId: asExplorationActionId("ordered"),
+          actionId: testExplorationActionId("ordered"),
           label: assertLocalized(
             "A long localized choice label that must remain readable",
           ),
@@ -215,7 +218,7 @@ describe("ExplorationChoice", () => {
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
-          actionId: asExplorationActionId("blocked"),
+          actionId: testExplorationActionId("blocked"),
           label: assertLocalized("Choice"),
           description: [{ kind: "entity", entity }],
           availability: "unavailable",

@@ -3,9 +3,9 @@ import { useJourney } from "../state/journey-context";
 import {
   JourneyDebugEditorScreen,
   type JourneyDebugResourceId,
+  type JourneyDebugDreamsignActionId,
 } from "../cumulus/screens/JourneyDebugEditorScreen";
 import { buildJourneyDebugEditorView } from "./cumulus_adapters/journey-debug-view-model";
-import { asCardId } from "../types/card-identity";
 
 const SOURCE = "journey_debug_editor";
 
@@ -33,7 +33,7 @@ export default function JourneyDebugEditor({
       state,
     ],
   );
-  const dreamsignIndex = (actionId: string): number =>
+  const dreamsignIndex = (actionId: JourneyDebugDreamsignActionId): number =>
     Number(actionId.slice(actionId.lastIndexOf(":") + 1));
   const changeResource = (id: JourneyDebugResourceId, delta: number): void => {
     if (id === "essence") mutations.setEssence(state.essence + delta, SOURCE);
@@ -57,7 +57,7 @@ export default function JourneyDebugEditor({
       onRemoveDreamsign={(actionId) =>
         mutations.removeDreamsign(dreamsignIndex(actionId), SOURCE)
       }
-      onAddCard={(cardId) => mutations.addCardById(asCardId(cardId), SOURCE)}
+      onAddCard={(cardId) => mutations.addCardById(cardId, SOURCE)}
       onRemoveCard={(entryId) => mutations.removeDeckEntry(entryId, SOURCE)}
       onSetStatOverride={(entryId, statOverride) =>
         mutations.setDeckEntryStatOverride?.(entryId, statOverride, SOURCE)

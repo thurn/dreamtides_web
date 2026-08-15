@@ -12,6 +12,11 @@ import {
   TutorialDialoguePlacementPreview,
 } from "./tutorial-dialogue-placement";
 
+export type CumulusUISystemId =
+  | "tutorial-dialogue-placement"
+  | "entity-reveals"
+  | "journey-screen-host-chrome";
+
 /**
  * A cross-component behavioral contract documented by Cumulus. UI systems own
  * coordination, lifecycle, placement, or other behavior that cannot be
@@ -19,7 +24,7 @@ import {
  */
 export interface CumulusUISystem {
   /** Hash-route id under `#/systems/`. */
-  readonly id: string;
+  readonly id: CumulusUISystemId;
   /** Human-readable system name. */
   readonly title: string;
   /** Short overview and page-header description. */
@@ -57,9 +62,8 @@ export const CUMULUS_UI_SYSTEMS = [
   },
 ] as const satisfies readonly CumulusUISystem[];
 
-/** Every registered UI-system route id, kept literal for component backlinks. */
-export type CumulusUISystemId = (typeof CUMULUS_UI_SYSTEMS)[number]["id"];
-
-export function getUISystem(id: string): CumulusUISystem | undefined {
-  return CUMULUS_UI_SYSTEMS.find((system) => system.id === id);
+export function getUISystem(value: unknown): CumulusUISystem | undefined {
+  return typeof value === "string"
+    ? CUMULUS_UI_SYSTEMS.find((system) => system.id === value)
+    : undefined;
 }

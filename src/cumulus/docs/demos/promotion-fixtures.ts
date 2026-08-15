@@ -1,22 +1,26 @@
 import { assertLocalized } from "@trox/runtime";
-import { asCardId, asCardName } from "../../../types/card-identity";
+import {
+  parseCardId,
+  parseCardName,
+  parseCardSubtype,
+} from "../../../types/card-identity";
 import type { GameCardModel } from "../../components/card/CardView";
 import { localizedTransfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
-import { asDreamsignId } from "../../../types/identifiers";
-import { asDeckEntryId } from "../../../types/identifiers";
+import { parseDreamsignId } from "../../../types/identifiers";
+import { parseDeckEntryId } from "../../../types/identifiers";
 
 export function demoCard(index: number, _name: string): GameCardModel {
-  const id = asCardId(
+  const id = parseCardId(
     `90000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
   );
   return {
     cardId: id,
     displaySnapshot: {
       id,
-      name: asCardName("Bloodpact Berserker"),
+      name: parseCardName("Bloodpact Berserker"),
       cardNumber: index,
       cardType: "Character",
-      subtype: "Dreamer",
+      subtype: parseCardSubtype("Guide"),
       isStarter: false,
       energyCost: 2,
       spark: 3,
@@ -28,12 +32,12 @@ export function demoCard(index: number, _name: string): GameCardModel {
   };
 }
 
-export function demoInstanceId(index: number): string {
+export function demoIdentitySeed(index: number): string {
   return `92000000-0000-4000-8000-${String(index).padStart(12, "0")}`;
 }
 
 export const demoDreamsign = (index: number) => ({
-  id: asDreamsignId(
+  id: parseDreamsignId(
     `91000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
   ),
   name: assertLocalized(`Dreamsign ${String(index)}`),
@@ -49,7 +53,7 @@ export const demoDialogue = {
 };
 
 export const demoTransfigurationCandidate = {
-  entryId: asDeckEntryId(demoInstanceId(1)),
+  entryId: parseDeckEntryId(demoIdentitySeed(1)),
   card: demoCard(1, "Wayfinder"),
   forms: [
     {

@@ -5,12 +5,14 @@ import {
   hasAssignedImage,
 } from "../../../data/card-database";
 import type { DreamwellCardId } from "../../../types/identifiers";
+import type { DomTestId } from "../../types/dom";
 import type { ArtCrop } from "../../../types/cards";
 import { token } from "../../primitives/tokens";
 import { CardStatOrb } from "../card/CardStatOrb";
 import { RulesText } from "../card/RulesText";
 import { rulesTextDefinitionCards } from "../card/rules-text-reveal";
 import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import "./dreamwell-card.css";
 import { txa, opaque, type LocalizedString } from "@trox/runtime";
@@ -44,7 +46,7 @@ export interface DreamwellCardProps {
   /** Canonical Dreamwell card semantics and resolved display snapshot. */
   readonly model: DreamwellCardModel;
   /** Optional stable test id for the complete card. */
-  readonly testId?: string;
+  readonly testId?: DomTestId;
 }
 
 const DEFAULT_ART_CROP: ArtCrop = { x: 0, y: 0, scale: 1 };
@@ -90,7 +92,10 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
     : cardIdenticonUri(model.cardId);
   const definitions = rulesTextDefinitionCards(card.renderedText, "card");
   const binding = useRevealSource({
-    identity: { entityType: "dreamwell-card", entityId: model.cardId },
+    identity: {
+      entityType: "dreamwell-card",
+      entityId: revealEntityId("dreamwell-card", model.cardId),
+    },
     spec: {
       primary: {
         kind: "source",
@@ -215,7 +220,7 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
         >
           <RulesText
             text={card.renderedText}
-            owner={{ kind: "card", id: model.cardId }}
+            owner={{ kind: "dreamwellCard", id: model.cardId }}
             glossaryInteraction="delegated"
           />
         </div>

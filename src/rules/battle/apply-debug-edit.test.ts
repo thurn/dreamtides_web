@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { testCardName } from "../../types/test-identities";
 import type {
   BattleEngineEmissionContext,
   BattleMutableState,
@@ -13,7 +14,7 @@ import {
 } from "../../battle/test-support";
 import { applyDebugEdit } from "./apply-debug-edit";
 import type { BattleCardId } from "../../types/identifiers";
-import { asBattleEntryKey } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
 
 const EMISSION: BattleEngineEmissionContext = {
   sourceSurface: "foresee-overlay",
@@ -23,7 +24,7 @@ const EMISSION: BattleEngineEmissionContext = {
 function createTestState(): BattleMutableState {
   return createInitialBattleState(
     createTestBattleInit({
-      battleEntryKey: asBattleEntryKey("site-7::2::dreamscape-2"),
+      battleEntryKey: parseBattleEntryKey("site-7::2::dreamscape-2"),
       site: makeBattleTestSite(),
       state: makeBattleTestState(),
       cardDatabase: makeBattleTestCardDatabase(),
@@ -285,7 +286,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         side: "player",
         chosenSubtype: "Shadow",
         chosenSpark: 2,
-        name: "Shadow",
+        name: testCardName("Shadow"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
         createdAtMs: 0,
       },
@@ -306,7 +307,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         side: "player",
         chosenSubtype: "Shadow",
         chosenSpark: 2,
-        name: "First Shadow",
+        name: testCardName("First Shadow"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
         createdAtMs: 0,
       },
@@ -319,7 +320,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         side: "player",
         chosenSubtype: "Shadow",
         chosenSpark: 3,
-        name: "Second Shadow",
+        name: testCardName("Second Shadow"),
         destination: { side: "player", zone: "backRank", slotId: "B1" },
         createdAtMs: 1,
       },
@@ -349,7 +350,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         chosenSubtype: "Shadow",
         chosenSpark: 2,
         count: 3,
-        name: "Shadow",
+        name: testCardName("Shadow"),
         destination: { side: "player", zone: "backRank", slotId: "B2" },
         createdAtMs: 0,
       },
@@ -390,7 +391,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         side: "player",
         chosenSubtype: "Shadow",
         chosenSpark: 3,
-        name: "Second Shadow",
+        name: testCardName("Second Shadow"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
         createdAtMs: 1,
       },
@@ -411,7 +412,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         side: "player",
         chosenSubtype: "Shadow",
         chosenSpark: 2,
-        name: "Shadow",
+        name: testCardName("Shadow"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
         createdAtMs: 0,
       },
@@ -424,7 +425,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         side: "player",
         chosenSubtype: "Shadow",
         chosenSpark: 2,
-        name: "Shadow",
+        name: testCardName("Shadow"),
         destination: { side: "player", zone: "backRank", slotId: "B1" },
         createdAtMs: 1,
       },
@@ -474,7 +475,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         side: "player",
         chosenSubtype: "Shadow",
         chosenSpark: 2,
-        name: "Shadow",
+        name: testCardName("Shadow"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
         createdAtMs: 0,
       },
@@ -487,7 +488,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         side: "player",
         chosenSubtype: "Shadow",
         chosenSpark: 2,
-        name: "Shadow",
+        name: testCardName("Shadow"),
         destination: { side: "player", zone: "backRank", slotId: "B1" },
         createdAtMs: 1,
       },
@@ -522,7 +523,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         side: "player",
         chosenSubtype: "Legion",
         chosenSpark: 1,
-        name: "Legionnaire",
+        name: testCardName("Legionnaire"),
         destination: { side: "player", zone: "backRank", slotId: "B0" },
         createdAtMs: 0,
       },
@@ -535,7 +536,7 @@ describe("applyDebugEdit Figments leaving play", () => {
         side: "player",
         chosenSubtype: "Legion",
         chosenSpark: 1,
-        name: "Legionnaire",
+        name: testCardName("Legionnaire"),
         destination: { side: "player", zone: "backRank", slotId: "B1" },
         createdAtMs: 1,
       },

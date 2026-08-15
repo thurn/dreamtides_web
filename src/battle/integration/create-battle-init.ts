@@ -1,4 +1,5 @@
 import type { CardData } from "../../types/cards";
+import type { JourneySeed } from "../../types/journey-seed";
 import type {
   AffiliationContent,
   DreamAvatarContent,
@@ -58,10 +59,9 @@ import {
 import { opponentAbilityIsActive } from "./opponent-deck";
 import type { Tides4DecksJson } from "../../draft/pool/tides4-io";
 import type { Tides4Tuning } from "../../types/draft-data";
-import { asOpponentId } from "../../types/identifiers";
-import { asDreamwellCardId } from "../../types/identifiers";
-import { asBattleEntryKey } from "../../types/identifiers";
-import { asBattleId } from "../../types/identifiers";
+import { parseOpponentId } from "../../types/identifiers";
+import { parseBattleEntryKey } from "../../types/identifiers";
+import { parseBattleId } from "../../types/identifiers";
 
 /**
  * Minimum journey deck size for a battle. A deck below this is padded with
@@ -305,7 +305,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
           dreamsignTemplates,
           completionLevel: completionLevelAtStart,
           poolSeed,
-          battleEntryKey: asBattleEntryKey(battleEntryKey),
+          battleEntryKey: battleEntryKey,
           opponentsContentHash: opponentsData.contentHash,
           progression: opponentsData.progression,
           deckSize: opponentsData.opponentDeckSize,
@@ -373,7 +373,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     // pick reconstructable: each card is chosen for the glossary keywords it
     // shares with the DreamAvatar's ability (idf-weighted across the deck).
     logEvent("opponent_signature_cards_selected", {
-      battleEntryKey: asBattleEntryKey(battleEntryKey),
+      battleEntryKey: battleEntryKey,
       dreamscapeId: state.currentDreamscape,
       completionLevel: completionLevelAtStart,
       dreamAvatarId: opponentDreamAvatar?.id ?? null,
@@ -389,7 +389,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     });
     if (tideBuild === null) return;
     logEvent("tide_opponent_dream_avatar_selected", {
-      battleEntryKey: asBattleEntryKey(battleEntryKey),
+      battleEntryKey: battleEntryKey,
       dreamscapeId: state.currentDreamscape,
       completionLevel: completionLevelAtStart,
       restrictedToDreamscapeResidents:
@@ -468,8 +468,8 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     // session-scope identity (battleId used for logs and completion tracking).
     // A `battle:` prefix keeps them semantically distinct even though they
     // remain 1:1 today; callers should not rely on string equality.
-    battleId: asBattleId(input.battleInstanceId ?? `battle:${battleEntryKey}`),
-    battleEntryKey: asBattleEntryKey(battleEntryKey),
+    battleId: parseBattleId(input.battleInstanceId ?? `battle:${battleEntryKey}`),
+    battleEntryKey: battleEntryKey,
     seed,
     siteId: site.id,
     dreamscapeId: state.currentDreamscape,
@@ -584,7 +584,7 @@ function toDreamwellCardDefinition(
   card: DreamwellCard,
 ): DreamwellCardDefinition {
   const definition: DreamwellCardDefinition = {
-    id: asDreamwellCardId(card.id),
+    id: card.id,
     name: card.name,
     renderedText: card.renderedText,
     energyAdded: card.energyAdded,
@@ -609,12 +609,12 @@ function toDreamwellCardDefinition(
  */
 function resolveSeed(
   battleEntryKey: BattleEntryKey,
-  journeySeed: string,
+  journeySeed: JourneySeed,
   seedOverride: number | null | undefined,
 ): number {
   if (seedOverride === undefined || seedOverride === null) {
     return deriveBattleSeed(
-      asBattleEntryKey(`${journeySeed}:${battleEntryKey}`),
+      parseBattleEntryKey(`${journeySeed}:${battleEntryKey}`),
     );
   }
   if (
@@ -656,7 +656,7 @@ export function buildEnemyDescriptor(
 
   if (opponentDreamAvatar === null) {
     return {
-      id: asOpponentId("enemy:fallback"),
+      id: parseOpponentId("enemy:fallback"),
       name: "Spectral Rival",
       subtitle: "Battlefield Projection",
       imageNumber: "001",
@@ -669,7 +669,7 @@ export function buildEnemyDescriptor(
 
   const portraitSeed = Math.floor(random() * 1_000_000);
   return {
-    id: asOpponentId(`enemy:${opponentDreamAvatar.id}:${String(portraitSeed)}`),
+    id: parseOpponentId(`enemy:${opponentDreamAvatar.id}:${String(portraitSeed)}`),
     name: opponentDreamAvatar.name,
     // The DreamAvatar's title (e.g. "Wreckoner") rides the descriptor as its
     // subtitle so the Battle Start name plate and the in-battle side summary can

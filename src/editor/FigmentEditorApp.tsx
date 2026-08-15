@@ -1,4 +1,7 @@
-import { asCardName } from "../types/card-identity";
+import {
+  parseCardName,
+  parseCardSubtype,
+} from "../types/card-identity";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import "./editable-figment.css";
@@ -138,11 +141,11 @@ function figmentPreviewWithDrafts(
   const next: CardData = { ...preview };
   const name = drafts.name;
   if (typeof name === "string" && name.trim().length > 0) {
-    next.name = asCardName(name);
+    next.name = parseCardName(name);
   }
   const subtype = drafts.subtype;
   if (typeof subtype === "string") {
-    next.subtype = subtype;
+    next.subtype = parseCardSubtype(subtype);
   }
   const renderedText = drafts["rendered-text"];
   if (typeof renderedText === "string") {

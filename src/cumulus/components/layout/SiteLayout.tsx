@@ -9,9 +9,12 @@ import { Motes } from "../hud/Motes";
 import { SpeechBubble } from "../overlay/SpeechBubble";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import { token } from "../../primitives/tokens";
-import { useTutorialAnchor } from "../overlay/tutorial-placement";
+import {
+  SITE_CONTENT_TUTORIAL_ANCHOR_ID,
+  useTutorialAnchor,
+} from "../overlay/tutorial-placement";
 import { useIsDesktop } from "../../primitives/use-is-desktop";
-import type { SiteId } from "../../../types/identifiers";
+import type { GuideId, SiteId } from "../../../types/identifiers";
 
 /**
  * Responsive recipes for the routed site family.
@@ -62,7 +65,7 @@ export type SiteLayoutComposition = keyof typeof SITE_LAYOUT_COMPOSITIONS;
 /** Resolved Dream Guide content shared by every guide-bearing site view. */
 export interface SiteLayoutGuideView {
   /** Stable Dream Guide identity. */
-  readonly id: string;
+  readonly id: GuideId;
   /** Localized guide name used by visible and accessible presentation. */
   readonly name: LocalizedString;
   /** Localized line spoken by the guide when present. */
@@ -135,7 +138,7 @@ export function SiteLayout({
   const isRevelation = recipe.revelation;
   const isContentLed = recipe.contentLed;
   const isExpanded = recipe.expanded;
-  const contentAnchorRef = useTutorialAnchor("site-content");
+  const contentAnchorRef = useTutorialAnchor(SITE_CONTENT_TUTORIAL_ANCHOR_ID);
 
   return (
     <div

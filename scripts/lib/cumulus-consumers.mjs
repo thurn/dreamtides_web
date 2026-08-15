@@ -247,7 +247,7 @@ function buildValueImportIndex() {
  * Compute, per registered component (in registry order), the number of real
  * (value, non-doc, non-test) consumers of its source module.
  *
- * @returns {{ id: string, title: string, docName: string, status: string | undefined, module: string, count: number }[]}
+ * @returns {{ id: import("../../src/cumulus/docs/registry").CumulusComponentId, title: string, docName: string, status: string | undefined, module: string, count: number }[]}
  */
 export function computeConsumerCounts() {
   const registryText = readFileSync(REGISTRY_PATH, "utf8");

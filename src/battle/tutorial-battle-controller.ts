@@ -6,14 +6,22 @@ import { buildTrace } from "./ai/trace";
 import type { BattleCommand } from "./debug/commands";
 import { planHandoff } from "./engine/handoff";
 import { isBackRankSlotId } from "./types";
-import type { BattleAiChoiceTrace } from "./types";
+import type {
+  BattleAiChoiceTrace,
+  BattlePhase,
+  BattleSide,
+} from "./types";
 import {
   planTutorialAiActionOverride,
   type TutorialAiActionOverrideBlockReason,
 } from "./tutorial-ai-action-overrides";
 import type { TutorialBattleAiActionOverride } from "../types/tutorial";
 import type { PromptResolution } from "../rules/battle/effect-runner-core";
-import { battleModeOf, type PendingPrompt } from "../rules/battle/fold";
+import {
+  battleModeOf,
+  type BattleFoldState,
+  type PendingPrompt,
+} from "../rules/battle/fold";
 import type { FoldState } from "../rules/fold-state";
 import type { CardId } from "../types/card-identity";
 import type { BattleCardId, ClientId, IntentKey } from "../types/identifiers";
@@ -21,9 +29,8 @@ import type { TutorialAiActionOverrideId } from "../types/identifiers";
 import type { PresentationId } from "../types/identifiers";
 import type { BattleId } from "../types/identifiers";
 import type { DreamwellCardId } from "../types/identifiers";
-import { asBattleCardId } from "../types/identifiers";
-import { asPresentationId } from "../types/identifiers";
-import { asIntentKey } from "../types/identifiers";
+import { parseBattleCardId } from "../types/identifiers";
+import { parseIntentKey } from "../types/identifiers";
 
 export type TutorialDriverStatus =
   "not-tutorial" | "driver" | "observer" | "paused-driver-absent" | "terminal";
@@ -45,12 +52,28 @@ export interface TutorialAiActionOverrideMiss {
   reason: TutorialAiActionOverrideBlockReason;
 }
 
+export type TutorialAutomaticIntentReason =
+  | NonNullable<BattleFoldState["tutorialPresentation"]>["kind"]
+  | "resolve-dawn-triggers"
+  | "reveal-dreamwell"
+  | "advance-dawn"
+  | "advance-dreamwell"
+  | "advance-player-dusk"
+  | "advance-player-no-choice-phase"
+  | "advance-enemy-no-choice-phase"
+  | "enemy-block-player-challenge"
+  | "enemy-scripted-day-play"
+  | "enemy-day-play"
+  | "enemy-day-reposition"
+  | "enemy-day-complete"
+  | `enemy-${PendingPrompt["options"]["kind"]}-prompt`;
+
 export type TutorialAutomaticIntent = (
   | {
       kind: "battle-command";
       command: BattleCommand;
       intentKey: IntentKey;
-      reason: string;
+      reason: TutorialAutomaticIntentReason;
     }
   | {
       kind: "battle-play-card";
@@ -64,32 +87,32 @@ export type TutorialAutomaticIntent = (
       };
       tutorialAiActionOverrideId?: TutorialAiActionOverrideId;
       intentKey: IntentKey;
-      reason: string;
+      reason: TutorialAutomaticIntentReason;
     }
   | {
       kind: "battle-gesture";
       commands: readonly BattleCommand[];
       intentKey: IntentKey;
-      reason: string;
+      reason: TutorialAutomaticIntentReason;
     }
   | {
       kind: "battle-ai-block";
       decision: BlockingDecision;
       intentKey: IntentKey;
-      reason: string;
+      reason: TutorialAutomaticIntentReason;
     }
   | {
       kind: "complete-presentation";
       presentationId: PresentationId;
       intentKey: IntentKey;
-      reason: string;
+      reason: TutorialAutomaticIntentReason;
     }
   | {
       kind: "resolve-prompt";
       promptId: number;
       resolution: PromptResolution;
       intentKey: IntentKey;
-      reason: string;
+      reason: TutorialAutomaticIntentReason;
     }
 ) & { aiActionOverrideMiss?: TutorialAiActionOverrideMiss };
 
@@ -170,8 +193,8 @@ export function planTutorialBattleController(
       requiresHumanDecision: false,
       intent: {
         kind: "complete-presentation",
-        presentationId: asPresentationId(presentation.id),
-        intentKey: asIntentKey(
+        presentationId: presentation.id,
+        intentKey: parseIntentKey(
           `tutorial-battle:${battle.board.battleId}:presentation:${presentation.id}`,
         ),
         reason: presentation.kind,
@@ -221,7 +244,7 @@ export function planTutorialBattleController(
           edit: { kind: "SET_PHASE", phase: "dawn" },
           sourceSurface: "auto-system",
         },
-        asIntentKey(`${key}:dawn:triggers`),
+        parseIntentKey(`${key}:dawn:triggers`),
         "resolve-dawn-triggers",
         controllerClientId,
       );
@@ -232,7 +255,7 @@ export function planTutorialBattleController(
         edit: { kind: "SET_PHASE", phase: "day" },
         sourceSurface: "auto-system",
       },
-      asIntentKey(`${key}:dawn:day`),
+      parseIntentKey(`${key}:dawn:day`),
       "advance-dawn",
       controllerClientId,
     );
@@ -249,7 +272,7 @@ export function planTutorialBattleController(
           },
           sourceSurface: "auto-system",
         },
-        asIntentKey(`${key}:dreamwell:reveal`),
+        parseIntentKey(`${key}:dreamwell:reveal`),
         "reveal-dreamwell",
         controllerClientId,
       );
@@ -260,7 +283,7 @@ export function planTutorialBattleController(
         edit: { kind: "SET_PHASE", phase: "dawn" },
         sourceSurface: "auto-system",
       },
-      asIntentKey(`${key}:dreamwell:dawn`),
+      parseIntentKey(`${key}:dreamwell:dawn`),
       "advance-dreamwell",
       controllerClientId,
     );
@@ -294,7 +317,7 @@ export function planTutorialBattleController(
         intent: {
           kind: "battle-ai-block",
           decision: blocking.decision,
-          intentKey: asIntentKey(`${key}:block`),
+          intentKey: parseIntentKey(`${key}:block`),
           reason: "enemy-block-player-challenge",
         },
       };
@@ -306,7 +329,7 @@ export function planTutorialBattleController(
           edit: { kind: "SET_PHASE", phase: "night" },
           sourceSurface: "auto-system",
         },
-        asIntentKey(`${key}:night`),
+        parseIntentKey(`${key}:night`),
         "advance-player-dusk",
         controllerClientId,
       );
@@ -374,7 +397,7 @@ export function planTutorialBattleController(
                 },
               }),
           tutorialAiActionOverrideId: scripted.override.id,
-          intentKey: asIntentKey(
+          intentKey: parseIntentKey(
             `${key}:enemy-scripted-play:${scripted.override.id}`,
           ),
           reason: "enemy-scripted-day-play",
@@ -440,7 +463,7 @@ export function planTutorialBattleController(
           ...(aiActionOverrideMiss === undefined
             ? {}
             : { aiActionOverrideMiss }),
-          intentKey: asIntentKey(
+          intentKey: parseIntentKey(
             `${key}:enemy-play:${action.self.battleCardId}`,
           ),
           reason: "enemy-day-play",
@@ -463,8 +486,8 @@ export function planTutorialBattleController(
           ...(aiActionOverrideMiss === undefined
             ? {}
             : { aiActionOverrideMiss }),
-          intentKey: asIntentKey(
-            `${key}:enemy-move:${action.self?.battleCardId ?? asBattleCardId("none")}:${action.toSlot ?? "none"}`,
+          intentKey: parseIntentKey(
+            `${key}:enemy-move:${action.self?.battleCardId ?? parseBattleCardId("none")}:${action.toSlot ?? "none"}`,
           ),
           reason: "enemy-day-reposition",
         },
@@ -477,7 +500,7 @@ export function planTutorialBattleController(
         sourceSurface: "auto-system",
         aiChoices: [trace],
       },
-      asIntentKey(`${key}:enemy-day-complete`),
+      parseIntentKey(`${key}:enemy-day-complete`),
       "enemy-day-complete",
       controllerClientId,
       aiActionOverrideMiss,
@@ -511,7 +534,7 @@ function idlePlan(status: "not-tutorial"): TutorialBattleControllerPlan {
 function commandPlan(
   command: BattleCommand,
   intentKey: IntentKey,
-  reason: string,
+  reason: TutorialAutomaticIntentReason,
   driverClientId: ClientId | null,
   aiActionOverrideMiss?: TutorialAiActionOverrideMiss,
 ): TutorialBattleControllerPlan {
@@ -533,7 +556,7 @@ function commandPlan(
 
 function handoffPlan(
   state: FoldState,
-  reason: string,
+  reason: TutorialAutomaticIntentReason,
 ): TutorialBattleControllerPlan {
   const battle = state.battle;
   if (battle === null) return idlePlan("not-tutorial");
@@ -545,7 +568,7 @@ function handoffPlan(
   }).flowEdit;
   return commandPlan(
     { id: "DEBUG_EDIT", edit: flowEdit, sourceSurface: "auto-system" },
-    asIntentKey(`${intentKeyPrefix(battle.board)}:handoff`),
+    parseIntentKey(`${intentKeyPrefix(battle.board)}:handoff`),
     reason,
     state.playtestControl?.controllerClientId ?? null,
   );
@@ -559,7 +582,7 @@ function promptIntent(
     kind: "resolve-prompt",
     promptId: prompt.promptId,
     resolution: deterministicPromptResolution(prompt),
-    intentKey: asIntentKey(
+    intentKey: parseIntentKey(
       `tutorial-battle:${battleId}:prompt:${String(prompt.promptId)}`,
     ),
     reason: `enemy-${prompt.options.kind}-prompt`,
@@ -582,8 +605,8 @@ function deterministicPromptResolution(
     case "foresee":
       return {
         kind: "foresee",
-        viewedCardIds: [...prompt.options.cardIds.map(asBattleCardId)],
-        orderedCardIds: [...prompt.options.cardIds.map(asBattleCardId)],
+        viewedCardIds: [...prompt.options.cardIds.map(parseBattleCardId)],
+        orderedCardIds: [...prompt.options.cardIds.map(parseBattleCardId)],
         voidCardIds: [],
       };
   }
@@ -597,13 +620,16 @@ function enemyHasChallenger(state: FoldState): boolean {
   );
 }
 
+type TutorialBattleIntentKeyPrefix =
+  `tutorial-battle:${BattleId}:${BattleSide}:${number}:${BattlePhase}`;
+
 function intentKeyPrefix(board: {
   battleId: BattleId;
-  activeSide: string;
+  activeSide: BattleSide;
   turnNumber: number;
-  phase: string;
-}): string {
-  return `tutorial-battle:${board.battleId}:${board.activeSide}:${String(board.turnNumber)}:${board.phase}`;
+  phase: BattlePhase;
+}): TutorialBattleIntentKeyPrefix {
+  return `tutorial-battle:${board.battleId}:${board.activeSide}:${board.turnNumber}:${board.phase}`;
 }
 
 function tutorialPlannerSeed(battleId: BattleId, turnNumber: number): number {

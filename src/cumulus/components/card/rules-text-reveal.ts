@@ -5,6 +5,7 @@ import {
 } from "../../../data/glossary-terms";
 import type { InfoCardProps, InfoCardTextProps } from "../overlay/InfoCard";
 import type { LocalizedString } from "@trox/runtime";
+import type { GlossaryEntryId } from "../../../types/identifiers";
 import {
   localizedSourceText,
   resolveSource,
@@ -22,7 +23,7 @@ export function glossaryDefinitionsCardModel(
     | ProjectedGlossaryCatalogEntry
     | import("../../../data/glossary").GlossaryCatalogEntry
   )[],
-  excludedIds: readonly string[] = [],
+  excludedIds: readonly GlossaryEntryId[] = [],
 ): InfoCardTextProps | null {
   const excluded = new Set(excludedIds);
   const visibleEntries = entries.filter((entry) => !excluded.has(entry.id));
@@ -57,7 +58,7 @@ export function glossaryDefinitionsCardModel(
 export function rulesTextDefinitionCards(
   text: LocalizedString,
   owner: RulesTextGlossaryOwner = "card",
-  excludedIds: readonly string[] = [],
+  excludedIds: readonly GlossaryEntryId[] = [],
 ): Readonly<InfoCardProps>[] {
   const card = glossaryDefinitionsCardModel(
     extractProjectedGlossaryTerms(resolveSource(text), owner),

@@ -20,6 +20,7 @@ import {
 } from "./journey-result-layout";
 import { tx } from "@trox/runtime";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
+import type { DreamAvatarId } from "../../types/identifiers";
 
 export interface JourneyFailedStatView {
   id: "battles" | "round" | "playerScore" | "enemyScore";
@@ -27,7 +28,7 @@ export interface JourneyFailedStatView {
 }
 
 export interface JourneyFailedDreamAvatarView extends DreamAvatarVisual {
-  id: string;
+  id: DreamAvatarId;
   ability: LocalizedString;
 }
 

@@ -105,12 +105,15 @@ export function planBlockingWithDecision(
   opts: BlockingOptions,
 ): BlockingPlan {
   const challengers: Challenger[] = model.opponentBodies
-    .filter((body) => body.rank === "front" && isFrontRankSlotId(body.slot))
-    .map((body) => ({
-      battleCardId: body.battleCardId,
-      slot: body.slot as FrontRankSlotId,
-      spark: body.effectiveSpark,
-    }))
+    .flatMap((body) =>
+      body.rank === "front" && isFrontRankSlotId(body.slot)
+        ? [{
+            battleCardId: body.battleCardId,
+            slot: body.slot,
+            spark: body.effectiveSpark,
+          }]
+        : [],
+    )
     .sort((a, b) => b.spark - a.spark || a.slot.localeCompare(b.slot));
 
   const available: BackRankBody[] = [];

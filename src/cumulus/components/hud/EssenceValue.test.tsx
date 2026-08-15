@@ -4,6 +4,7 @@ import { act } from "react";
 import { createRoot } from "react-dom/client";
 import { beforeEach, describe, expect, it } from "vitest";
 import { GLOSSARY_IDS } from "../../../data/glossary";
+import { semanticEntityId } from "../../../types/semantic-identity";
 import { CumulusRoot } from "../../CumulusRoot";
 import { EssenceValue } from "./EssenceValue";
 
@@ -52,7 +53,7 @@ describe("EssenceValue", () => {
           <EssenceValue
             amount={120}
             entity={{
-              id: "journey-start-caller",
+              id: semanticEntityId("test:essence-source", "journey-start-caller"),
               glossaryId: GLOSSARY_IDS.startingEssence,
             }}
           />

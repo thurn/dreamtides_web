@@ -1,4 +1,5 @@
 import type { EditorCardRecord } from "./types";
+import type { CardId } from "../types/card-identity";
 
 /** Duplicate-source counts for one UUID-keyed card record. */
 export interface CardDuplicateUsage {
@@ -9,7 +10,7 @@ export interface CardDuplicateUsage {
 type DuplicateFacet = keyof CardDuplicateUsage;
 
 function markDuplicateRun(
-  usageByCardId: Map<string, CardDuplicateUsage>,
+  usageByCardId: Map<CardId, CardDuplicateUsage>,
   cards: readonly EditorCardRecord[],
   facet: DuplicateFacet,
 ): void {
@@ -30,7 +31,7 @@ function markDuplicateRun(
 }
 
 function markSortedDuplicateRuns(
-  usageByCardId: Map<string, CardDuplicateUsage>,
+  usageByCardId: Map<CardId, CardDuplicateUsage>,
   sortedCards: readonly EditorCardRecord[],
   compare: (left: EditorCardRecord, right: EditorCardRecord) => number,
   facet: DuplicateFacet,
@@ -60,8 +61,8 @@ function markSortedDuplicateRuns(
  */
 export function buildCardDuplicateUsageById(
   cards: readonly EditorCardRecord[],
-): ReadonlyMap<string, CardDuplicateUsage> {
-  const usageByCardId = new Map<string, CardDuplicateUsage>();
+): ReadonlyMap<CardId, CardDuplicateUsage> {
+  const usageByCardId = new Map<CardId, CardDuplicateUsage>();
 
   markSortedDuplicateRuns(
     usageByCardId,

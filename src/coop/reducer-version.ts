@@ -5,7 +5,10 @@
  * compatible rules fixes. Bump it only when this client cannot safely fold or
  * append to rooms written by the preceding reducer protocol.
  */
-export const CURRENT_REDUCER_VERSION = "dreamtides-coop-v25";
+import type { ReducerVersion } from "../types/reducer-version";
+
+export const CURRENT_REDUCER_VERSION =
+  "dreamtides-coop-v25" satisfies ReducerVersion;
 
 /**
  * Build-scoped reducer ids from deployed clients whose fold behavior was
@@ -15,14 +18,14 @@ export const CURRENT_REDUCER_VERSION = "dreamtides-coop-v25";
  * Keep the full id: its digest includes generated runtime catalogs, so a
  * different catalog build is not accepted accidentally.
  */
-export const COMPATIBLE_LEGACY_REDUCER_VERSIONS: ReadonlySet<string> =
+export const COMPATIBLE_LEGACY_REDUCER_VERSIONS: ReadonlySet<ReducerVersion> =
   new Set();
 
 export type ReducerCompatibility = "current" | "legacy" | "incompatible";
 
 /** Classify whether this client may safely participate in a room. */
 export function classifyReducerVersion(
-  roomReducerVersion: string,
+  roomReducerVersion: ReducerVersion,
 ): ReducerCompatibility {
   if (roomReducerVersion === CURRENT_REDUCER_VERSION) {
     return "current";
@@ -35,7 +38,7 @@ export function classifyReducerVersion(
 
 /** Whether this client may safely fold and append to the room. */
 export function isReducerVersionCompatible(
-  roomReducerVersion: string,
+  roomReducerVersion: ReducerVersion,
 ): boolean {
   return classifyReducerVersion(roomReducerVersion) !== "incompatible";
 }

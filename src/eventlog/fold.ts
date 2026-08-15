@@ -16,7 +16,9 @@ import type {
   BounceReason,
   EngineConfig,
   EventContext,
+  EventActor,
   EventOutcome,
+  EventType,
   GameEvent,
   Genesis,
   ReducerResult,
@@ -62,8 +64,8 @@ export interface FoldError {
 
 /** Minimal identity of an applied event, used to answer intervening queries. */
 export interface AppliedEntry {
-  actor: string;
-  type: string;
+  actor: EventActor;
+  type: EventType;
 }
 
 export interface FoldBase<S> {
@@ -229,7 +231,7 @@ function computeIntervening(
   if (basedOnSeq < coveredFromSeq) {
     return "unknown";
   }
-  const entries: Array<{ seq: number; actor: string; type: string }> = [];
+  const entries: Array<{ seq: number; actor: EventActor; type: EventType }> = [];
   for (const [entrySeq, info] of applied) {
     if (entrySeq > basedOnSeq && entrySeq < seq) {
       entries.push({ seq: entrySeq, actor: info.actor, type: info.type });
