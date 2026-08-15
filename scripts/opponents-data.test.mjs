@@ -18,6 +18,11 @@ function fixture() {
       "starting-side": "enemy",
       "skip-player-opening-draw": false,
       "opponent-signature-card-count": 2,
+      reward: {
+        "base-essence": 31,
+        "essence-per-completion-level": 9,
+        "minimum-essence": 3,
+      },
     },
     dreamwell: {
       "opening-orders": [0],

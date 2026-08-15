@@ -7,8 +7,8 @@
 
 Move five families of repeated authored UI and rules metadata out of TypeScript and Fluent lookup tables and into canonical typed RON catalogs:
 
-1. Gamble rules, tuning, outcomes, and presentation live in `data/gamble.ron`.
-2. Transfiguration rules, tuning, forms, and presentation live in `data/transfiguration.ron`.
+1. Gamble rules, tuning, outcomes, and presentation live in `data/gamble_site.ron`.
+2. Transfiguration rules, tuning, forms, and presentation live in `data/transfiguration_site.ron`.
 3. Dreamwell automation prompts live beside their owning cards in `data/dreamwell.ron`.
 4. The five resonances live in `data/resonance.ron`.
 5. Rules-text symbol labels and presentation metadata live on their concepts in `data/glossary.ron`.
@@ -57,15 +57,15 @@ Data-driven does not mean putting executable programs in RON. Catalogs select fr
 
 ### Gamble
 
-Gamble configuration is split among `data/sites.ron`, `data/economy.ron`, `data/locales/en-US/sites.ftl`, rule-version constants, five game modules under `src/data`, the Journey Gamble reducer, and site-provider setup. Values and copy are selected by game identity in several layers.
+Gamble configuration is split among `data/sites.ron`, `data/gamble_site.ron`, `data/locales/en-US/sites.ftl`, rule-version constants, five game modules under `src/data`, the Journey Gamble reducer, and site-provider setup. Values and copy are selected by game identity in several layers.
 
-`sites.ron` should continue to describe Gamble as a site and participate in site placement. `economy.ron` should continue to describe general Journey economy. Neither should own a Gamble game's internal prices, payouts, attempt limits, target bands, outcomes, or rules version.
+`sites.ron` describes Gamble as a site and participates in site placement. `gamble_site.ron` owns a Gamble game's internal prices, payouts, attempt limits, target bands, outcomes, and rules version.
 
 ### Transfiguration
 
-Form names and descriptions are spread across site, card, and accessibility Fluent files. Colors, icons, and display tints live in `transfiguration-display.ts`; form-specific behavior and eligibility live in `transfiguration-logic.ts`; choice rendering repeats form switches; pricing lives in `economy.ron`; and allowed forms plus benefit tuning live in `reward_selection.ron`.
+Form names and descriptions are spread across site, card, and accessibility Fluent files. Colors, icons, and display tints live in `transfiguration-display.ts`; form-specific behavior and eligibility live in `transfiguration-logic.ts`; choice rendering repeats form switches; pricing lives in `transfiguration_site.ron`; and allowed forms plus benefit tuning live in `reward_selection.ron`.
 
-The generic reward-selection blend remains in `reward_selection.ron`. Transfiguration's forms and their scoring inputs belong to `transfiguration.ron`.
+The generic reward-selection blend remains in `reward_selection.ron`. Transfiguration's forms and their scoring inputs belong to `transfiguration_site.ron`.
 
 ### Dreamwell prompts
 
@@ -95,7 +95,7 @@ canonical RON -> Rust source model and semantic validation
 
 ## Catalog Design
 
-### 1. `data/gamble.ron`
+### 1. `data/gamble_site.ron`
 
 `GambleCatalog` owns the complete authored definition of every Gamble game. The initial catalog has exact coverage for Blackjack, Gravok's Wager, Tidemark Ladder Climb, Starway Stairs, and Four-Suit Reprise.
 
@@ -127,7 +127,7 @@ The TypeScript implementation retains generic deterministic deck construction, s
 
 The migration removes the Gamble rule subtree from `sites.ron` and Gamble prices/rewards from `economy.ron`. `sites.ron` keeps site-level metadata, placement constraints, and navigation. Dream Guide dialogue remains in `dream_guides.ron`.
 
-### 2. `data/transfiguration.ron`
+### 2. `data/transfiguration_site.ron`
 
 `TransfigurationCatalog` owns site configuration, pricing, selection tuning, benefit tuning, form order, form presentation, eligibility, and effects. It has exact coverage for all nine stable form IDs, including `Hastened`.
 
@@ -295,7 +295,7 @@ Tests use synthetic catalog fixtures and stable IDs. They do not assert particul
 
 **Green**
 
-- Author `data/gamble.ron` from the current production values and text.
+- Author `data/gamble_site.ron` from the current production values and text.
 - Remove Gamble-owned subtrees from `sites.ron` and `economy.ron`.
 - Remove direct Gamble presentation messages from `sites.ftl`, retaining only genuine grammatical shells and generic controls.
 - Refresh generated artifacts.
@@ -350,7 +350,7 @@ Tests use synthetic catalog fixtures and stable IDs. They do not assert particul
 
 **Green**
 
-- Author `data/transfiguration.ron` from current production behavior and presentation.
+- Author `data/transfiguration_site.ron` from current production behavior and presentation.
 - Add the missing canonical glossary ownership for `Hastened`.
 - Remove Transfiguration-owned pricing, choice limits, form lists, and benefit tuning from economy, sites, and reward-selection catalogs.
 - Remove duplicated form names, disclosures, badges, and direct descriptions from Fluent.

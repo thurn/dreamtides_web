@@ -524,7 +524,7 @@ function isSourceMessageRef(value) {
 /** Convert and validate the authored Exploration encounter catalog. */
 export function transformExplorationData(source) {
   if (source["schema-version"] !== 2) {
-    throw new Error("exploration.toml: schema-version must be 2");
+    throw new Error("exploration_site.toml: schema-version must be 2");
   }
   const effectSchemas = EXPLORATION_EFFECT_SCHEMAS;
   const effectSchemaByKind = new Map(
@@ -544,7 +544,7 @@ export function transformExplorationData(source) {
     )
   ) {
     throw new Error(
-      "exploration.toml: compiler, runtime, and editor effect kinds must match",
+      "exploration_site.toml: compiler, runtime, and editor effect kinds must match",
     );
   }
   const effectKindSet = new Set(EXPLORATION_EFFECT_KINDS);
@@ -598,16 +598,16 @@ export function transformExplorationData(source) {
           fail(message) {
             if (action.effectKind === "add-fixed-site") {
               throw new Error(
-                `exploration.toml: action ${action.id} effect-kind add-fixed-site requires a supported site-type`,
+                `exploration_site.toml: action ${action.id} effect-kind add-fixed-site requires a supported site-type`,
               );
             }
             if (action.effectKind === "choose-site-type") {
               throw new Error(
-                `exploration.toml: action ${action.id} effect-kind choose-site-type requires explicit offer-count 3`,
+                `exploration_site.toml: action ${action.id} effect-kind choose-site-type requires explicit offer-count 3`,
               );
             }
             throw new Error(
-              `exploration.toml: action ${action.id} effect-kind ${message}`,
+              `exploration_site.toml: action ${action.id} effect-kind ${message}`,
             );
           },
         });
@@ -638,17 +638,17 @@ export function transformExplorationData(source) {
   });
 
   if (encounters.length === 0) {
-    throw new Error("exploration.toml: requires at least one encounter");
+    throw new Error("exploration_site.toml: requires at least one encounter");
   }
   const encounterIds = new Set();
   const actionIds = new Set();
   for (const encounter of encounters) {
     if (typeof encounter.cardId !== "string" || encounter.cardId.length === 0) {
-      throw new Error("exploration.toml: every encounter requires card-id");
+      throw new Error("exploration_site.toml: every encounter requires card-id");
     }
     if (encounterIds.has(encounter.cardId.toLowerCase())) {
       throw new Error(
-        `exploration.toml: duplicate encounter card-id ${encounter.cardId}`,
+        `exploration_site.toml: duplicate encounter card-id ${encounter.cardId}`,
       );
     }
     encounterIds.add(encounter.cardId.toLowerCase());
@@ -658,19 +658,19 @@ export function transformExplorationData(source) {
       encounter.action.length > 4
     ) {
       throw new Error(
-        `exploration.toml: encounter ${encounter.cardId} must have between one and four actions`,
+        `exploration_site.toml: encounter ${encounter.cardId} must have between one and four actions`,
       );
     }
     for (const action of encounter.action) {
       if (typeof action.id !== "string" || actionIds.has(action.id)) {
         throw new Error(
-          `exploration.toml: missing or duplicate action id ${String(action.id)}`,
+          `exploration_site.toml: missing or duplicate action id ${String(action.id)}`,
         );
       }
       actionIds.add(action.id);
       if (!effectKindSet.has(action.effectKind)) {
         throw new Error(
-          `exploration.toml: action ${action.id} has unknown effect-kind ${String(action.effectKind)}`,
+          `exploration_site.toml: action ${action.id} has unknown effect-kind ${String(action.effectKind)}`,
         );
       }
       const definition = effectSchemaByKind.get(action.effectKind);
@@ -679,7 +679,7 @@ export function transformExplorationData(source) {
         !definition.allowedSelectionPolicyIds.includes(action.selectionPolicyId)
       ) {
         throw new Error(
-          `exploration.toml: action ${action.id} has unsupported selection-policy-id ${String(action.selectionPolicyId)}`,
+          `exploration_site.toml: action ${action.id} has unsupported selection-policy-id ${String(action.selectionPolicyId)}`,
         );
       }
       for (const key of ["label", "effectText"]) {
@@ -688,7 +688,7 @@ export function transformExplorationData(source) {
           (typeof action[key] !== "string" || action[key].trim() === "")
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires ${key}`,
+            `exploration_site.toml: action ${action.id} requires ${key}`,
           );
         }
       }
@@ -707,7 +707,7 @@ export function transformExplorationData(source) {
               ].includes(action.effectKind)
             ) {
               throw new Error(
-                `exploration.toml: action ${action.id} effect-kind ${action.effectKind} must compile without a selection policy`,
+                `exploration_site.toml: action ${action.id} effect-kind ${action.effectKind} must compile without a selection policy`,
               );
             }
             if (
@@ -717,11 +717,11 @@ export function transformExplorationData(source) {
               ].includes(action.effectKind)
             ) {
               throw new Error(
-                `exploration.toml: action ${action.id} effect-kind ${action.effectKind} does not support a top-level selection-policy-id`,
+                `exploration_site.toml: action ${action.id} effect-kind ${action.effectKind} does not support a top-level selection-policy-id`,
               );
             }
           }
-          throw new Error(`exploration.toml: action ${action.id} ${message}`);
+          throw new Error(`exploration_site.toml: action ${action.id} ${message}`);
         },
         terminology: {
           effectKind: "effect-kind",
@@ -744,7 +744,7 @@ export function transformExplorationData(source) {
             action.predicate.length === 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires predicate`,
+            `exploration_site.toml: action ${action.id} requires predicate`,
           );
         }
         if (
@@ -753,17 +753,17 @@ export function transformExplorationData(source) {
           !isRewardCardPredicate(action.predicate)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} has unsupported predicate ${String(action.predicate)}`,
+            `exploration_site.toml: action ${action.id} has unsupported predicate ${String(action.predicate)}`,
           );
         }
         if (action.cardType !== undefined) {
           throw new Error(
-            `exploration.toml: action ${action.id} field cardType does not apply to effect-kind ${action.effectKind}`,
+            `exploration_site.toml: action ${action.id} field cardType does not apply to effect-kind ${action.effectKind}`,
           );
         }
         if (action.siteType !== undefined) {
           throw new Error(
-            `exploration.toml: action ${action.id} field siteType does not apply to effect-kind ${action.effectKind}`,
+            `exploration_site.toml: action ${action.id} field siteType does not apply to effect-kind ${action.effectKind}`,
           );
         }
         const invalidCount =
@@ -777,7 +777,7 @@ export function transformExplorationData(source) {
             invalidCount)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires a positive whole-number count`,
+            `exploration_site.toml: action ${action.id} requires a positive whole-number count`,
           );
         }
         if (
@@ -794,7 +794,7 @@ export function transformExplorationData(source) {
             action.offerCount <= 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires a positive whole-number offer-count`,
+            `exploration_site.toml: action ${action.id} requires a positive whole-number offer-count`,
           );
         }
         if (
@@ -806,7 +806,7 @@ export function transformExplorationData(source) {
           (typeof action.cardId !== "string" || action.cardId.length === 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires card-id`,
+            `exploration_site.toml: action ${action.id} requires card-id`,
           );
         }
         if (
@@ -815,7 +815,7 @@ export function transformExplorationData(source) {
             action.dreamsignId.trim().length === 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires dreamsign-id`,
+            `exploration_site.toml: action ${action.id} requires dreamsign-id`,
           );
         }
         if (
@@ -829,7 +829,7 @@ export function transformExplorationData(source) {
             action.transfiguration.length === 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires positive whole-number essence, predicate, and transfiguration`,
+            `exploration_site.toml: action ${action.id} requires positive whole-number essence, predicate, and transfiguration`,
           );
         }
         if (
@@ -838,7 +838,7 @@ export function transformExplorationData(source) {
             action.essencePerCard <= 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires positive essence-per-card`,
+            `exploration_site.toml: action ${action.id} requires positive essence-per-card`,
           );
         }
         if (
@@ -846,7 +846,7 @@ export function transformExplorationData(source) {
           (typeof action.sparkBonus !== "number" || action.sparkBonus <= 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires positive spark-bonus`,
+            `exploration_site.toml: action ${action.id} requires positive spark-bonus`,
           );
         }
         if (
@@ -857,7 +857,7 @@ export function transformExplorationData(source) {
             action.sparkBonus <= 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires subtype and positive spark-bonus`,
+            `exploration_site.toml: action ${action.id} requires subtype and positive spark-bonus`,
           );
         }
         if (
@@ -865,7 +865,7 @@ export function transformExplorationData(source) {
           (typeof action.essence !== "number" || action.essence <= 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires positive essence`,
+            `exploration_site.toml: action ${action.id} requires positive essence`,
           );
         }
         if (
@@ -883,7 +883,7 @@ export function transformExplorationData(source) {
             action.nightmareCount <= 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires a positive whole-number nightmare-count`,
+            `exploration_site.toml: action ${action.id} requires a positive whole-number nightmare-count`,
           );
         }
         const nightmareDreamsignFields = [
@@ -917,7 +917,7 @@ export function transformExplorationData(source) {
             !applicableKinds.includes(action.effectKind)
           ) {
             throw new Error(
-              `exploration.toml: action ${action.id} field ${field} does not apply to effect-kind ${action.effectKind}`,
+              `exploration_site.toml: action ${action.id} field ${field} does not apply to effect-kind ${action.effectKind}`,
             );
           }
         }
@@ -934,7 +934,7 @@ export function transformExplorationData(source) {
             action.count <= 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires a positive whole-number count`,
+            `exploration_site.toml: action ${action.id} requires a positive whole-number count`,
           );
         }
         if (
@@ -944,7 +944,7 @@ export function transformExplorationData(source) {
             action.essencePerSpark <= 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires positive essence-per-spark`,
+            `exploration_site.toml: action ${action.id} requires positive essence-per-spark`,
           );
         }
         if (
@@ -956,7 +956,7 @@ export function transformExplorationData(source) {
             action.offerCount <= 0)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires a positive whole-number offer-count`,
+            `exploration_site.toml: action ${action.id} requires a positive whole-number offer-count`,
           );
         }
         if (
@@ -964,7 +964,7 @@ export function transformExplorationData(source) {
           (typeof action.subtype !== "string" || action.subtype.trim() === "")
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires a non-empty subtype`,
+            `exploration_site.toml: action ${action.id} requires a non-empty subtype`,
           );
         }
         const targetedKinds = new Set([
@@ -977,12 +977,12 @@ export function transformExplorationData(source) {
             action.deckTarget !== "offered"
           ) {
             throw new Error(
-              `exploration.toml: action ${action.id} requires deck-target`,
+              `exploration_site.toml: action ${action.id} requires deck-target`,
             );
           }
         } else if (action.deckTarget !== undefined) {
           throw new Error(
-            `exploration.toml: action ${action.id} has unsupported deck-target`,
+            `exploration_site.toml: action ${action.id} has unsupported deck-target`,
           );
         }
         if (
@@ -990,7 +990,7 @@ export function transformExplorationData(source) {
           (action.followupSubtitle === undefined)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} requires both followup fields`,
+            `exploration_site.toml: action ${action.id} requires both followup fields`,
           );
         }
         if (
@@ -998,7 +998,7 @@ export function transformExplorationData(source) {
           /\$[A-Z][A-Z0-9_]*/u.test(action.effectText)
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} uses an untyped presentation token`,
+            `exploration_site.toml: action ${action.id} uses an untyped presentation token`,
           );
         }
         const presentationSlots = typeof action.effectText === "string" ? [
@@ -1022,7 +1022,7 @@ export function transformExplorationData(source) {
         for (const slot of presentationSlots ?? []) {
           if (!allowedSlots.has(slot)) {
             throw new Error(
-              `exploration.toml: action ${action.id} has unsupported presentation slot ${slot}`,
+              `exploration_site.toml: action ${action.id} has unsupported presentation slot ${slot}`,
             );
           }
         }
@@ -1032,7 +1032,7 @@ export function transformExplorationData(source) {
           !presentationSlots.includes("{offered_card}")
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} must present {offered_card}`,
+            `exploration_site.toml: action ${action.id} must present {offered_card}`,
           );
         }
         if (
@@ -1041,7 +1041,7 @@ export function transformExplorationData(source) {
           !presentationSlots.includes("{deck_card}")
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} must present {deck_card}`,
+            `exploration_site.toml: action ${action.id} must present {deck_card}`,
           );
         }
         if (
@@ -1050,7 +1050,7 @@ export function transformExplorationData(source) {
           !presentationSlots.includes("{fixed_card}")
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} must present {fixed_card}`,
+            `exploration_site.toml: action ${action.id} must present {fixed_card}`,
           );
         }
         if (
@@ -1064,7 +1064,7 @@ export function transformExplorationData(source) {
           !presentationSlots.includes("{nightmare_card}")
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} must present {nightmare_card}`,
+            `exploration_site.toml: action ${action.id} must present {nightmare_card}`,
           );
         }
       }
@@ -1088,7 +1088,7 @@ export function transformExplorationData(source) {
       for (const slot of followupSlots) {
         if (!allowedFollowupSlots.has(slot)) {
           throw new Error(
-            `exploration.toml: action ${action.id} has unsupported followup slot ${slot}`,
+            `exploration_site.toml: action ${action.id} has unsupported followup slot ${slot}`,
           );
         }
       }
@@ -1489,16 +1489,18 @@ export function setupAssets({
   dreamscapesTomlPath = join(DATA_DIR, "dreamscapes.toml"),
   dreamGuidesTomlPath = join(DATA_DIR, "dream_guides.toml"),
   sitesTomlPath = join(DATA_DIR, "sites.toml"),
-  explorationTomlPath = join(DATA_DIR, "exploration.toml"),
-  auguryTomlPath = join(DATA_DIR, "augury.toml"),
+  explorationTomlPath = join(DATA_DIR, "exploration_site.toml"),
+  auguryTomlPath = join(DATA_DIR, "augury_site.toml"),
   affiliationsTomlPath = join(DATA_DIR, "affiliations.toml"),
   atlasTomlPath = join(DATA_DIR, "atlas.toml"),
-  economyTomlPath = join(DATA_DIR, "economy.toml"),
-  draftTomlPath = join(DATA_DIR, "draft.toml"),
+  journeyTomlPath = join(DATA_DIR, "journey.toml"),
+  shopSiteTomlPath = join(DATA_DIR, "shop_site.toml"),
+  battleTomlPath = join(DATA_DIR, "battle.toml"),
+  draftTomlPath = join(DATA_DIR, "draft_site.toml"),
   opponentsTomlPath = join(DATA_DIR, "opponents.toml"),
   glossaryTomlPath = join(DATA_DIR, "glossary.toml"),
-  gambleTomlPath = join(DATA_DIR, "gamble.toml"),
-  transfigurationTomlPath = join(DATA_DIR, "transfiguration.toml"),
+  gambleTomlPath = join(DATA_DIR, "gamble_site.toml"),
+  transfigurationTomlPath = join(DATA_DIR, "transfiguration_site.toml"),
   resonanceTomlPath = join(DATA_DIR, "resonance.toml"),
   apollyonIncarnationsTomlPath = join(DATA_DIR, "apollyon_incarnations.toml"),
   figmentTomlPath = join(DATA_DIR, "figments.toml"),
@@ -1725,7 +1727,7 @@ export function setupAssets({
     `Wrote ${jsonDreamsigns.length} dreamsigns to dreamsign-data.json`,
   );
 
-  console.log("Parsing exploration.toml...");
+  console.log("Parsing exploration_site.toml...");
   const explorationSource = parse(readFileSync(explorationTomlPath, "utf8"));
   const explorationData = transformExplorationData(explorationSource);
   const explorationCardById = new Map(
@@ -1744,7 +1746,7 @@ export function setupAssets({
     )
   ) {
     throw new Error(
-      "exploration.toml: every encounter card requires an image-number",
+      "exploration_site.toml: every encounter card requires an image-number",
     );
   }
   const knownCardIds = new Set(
@@ -1760,7 +1762,7 @@ export function setupAssets({
   for (const encounter of explorationData.encounters) {
     if (!knownCardIds.has(encounter.cardId.toLowerCase())) {
       throw new Error(
-        `exploration.toml: encounter references unknown card UUID ${encounter.cardId}`,
+        `exploration_site.toml: encounter references unknown card UUID ${encounter.cardId}`,
       );
     }
     for (const action of encounter.action) {
@@ -1770,7 +1772,7 @@ export function setupAssets({
           !knownCardIds.has(action[field].toLowerCase())
         ) {
           throw new Error(
-            `exploration.toml: action ${action.id} references unknown card UUID ${action[field]}`,
+            `exploration_site.toml: action ${action.id} references unknown card UUID ${action[field]}`,
           );
         }
       }
@@ -1779,7 +1781,7 @@ export function setupAssets({
         !knownDreamsignIds.has(action.dreamsignId.toLowerCase())
       ) {
         throw new Error(
-          `exploration.toml: action ${action.id} references unknown Dreamsign UUID ${action.dreamsignId}`,
+          `exploration_site.toml: action ${action.id} references unknown Dreamsign UUID ${action.dreamsignId}`,
         );
       }
     }
@@ -1897,10 +1899,14 @@ export function setupAssets({
   writeFileSync(atlasJsonPath, JSON.stringify(jsonAtlasData, null, 2) + "\n");
   console.log("Wrote Atlas data to atlas-data.json");
 
-  console.log("Parsing economy.toml...");
-  const jsonEconomyData = compileEconomyData(
-    parse(readFileSync(economyTomlPath, "utf8")),
-  );
+  console.log("Assembling economy data from journey, shop-site, sites, and battle catalogs...");
+  const parsedSites = parse(readFileSync(sitesTomlPath, "utf8"));
+  const jsonEconomyData = compileEconomyData({
+    journey: parse(readFileSync(journeyTomlPath, "utf8")),
+    shop: parse(readFileSync(shopSiteTomlPath, "utf8")),
+    sites: parsedSites,
+    battle: parse(readFileSync(battleTomlPath, "utf8")),
+  });
   writeFileSync(
     economyJsonPath,
     JSON.stringify(jsonEconomyData, null, 2) + "\n",
@@ -1947,14 +1953,13 @@ export function setupAssets({
 
   console.log("Parsing sites.toml...");
   const jsonSitesData = compileSitesData(
-    parse(readFileSync(sitesTomlPath, "utf8")),
+    parsedSites,
     {
       guides: jsonDreamGuides,
       dreamscapes: jsonDreamscapes,
       glossaryIds: Array.isArray(parsedGlossary.entries)
         ? parsedGlossary.entries.map((entry) => entry.id)
         : [],
-      economy: jsonEconomyData,
     },
   );
   const serializedSitesData = JSON.stringify(jsonSitesData, null, 2) + "\n";
@@ -1962,7 +1967,7 @@ export function setupAssets({
   writeFileSync(generatedSitesJsonPath, serializedSitesData);
   console.log("Wrote Sites data to sites-data.json");
 
-  console.log("Parsing draft.toml...");
+  console.log("Parsing draft_site.toml...");
   const jsonDraftData = compileDraftData(
     parse(readFileSync(draftTomlPath, "utf8")),
   );
@@ -1972,7 +1977,7 @@ export function setupAssets({
   writeFileSync(generatedDraftJsonPath, serializedDraftData);
   console.log("Wrote Draft data to draft-data.json");
 
-  console.log("Parsing augury.toml...");
+  console.log("Parsing augury_site.toml...");
   const jsonAuguryData = compileAuguryData(
     parse(readFileSync(auguryTomlPath, "utf8")),
   );

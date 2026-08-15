@@ -10,6 +10,9 @@ use uuid::{Uuid, Variant, Version};
 use super::localization::{source_text, source_transport_value};
 
 use super::atlas::SiteType;
+use super::economy::{self, PurgeRules, SiteRewardRules};
+#[cfg(test)]
+use super::economy::{DreamsignRevelationRules, IntegerRange, SiteEssenceRewards};
 
 const SITE_TYPES: [SiteType; 14] = [
     SiteType::Battle,
@@ -91,6 +94,8 @@ const GLOSSARY_ID_MAP: [(&str, &str); 14] = [
 #[serde(deny_unknown_fields)]
 pub struct SitesCatalog {
     pub encounter_sites: EncounterSiteRules,
+    pub rewards: SiteRewardRules,
+    pub purge: PurgeRules,
     pub site_types: Vec<SiteMetadata>,
     pub random_site: RandomSiteRules,
 }
@@ -204,6 +209,8 @@ struct CompatibilityCatalog {
     schema_version: u32,
     #[serde(rename = "encounter-sites")]
     encounter_sites: CompatibilityEncounterSiteRules,
+    rewards: toml::Value,
+    purge: toml::Value,
     #[serde(rename = "site-types")]
     site_types: Vec<CompatibilitySiteMetadata>,
     #[serde(rename = "random-site")]
@@ -264,6 +271,8 @@ fn lower_with_glossary_map(
     glossary_ids: &[(&'static str, &'static str)],
 ) -> Result<toml::Value> {
     validate(&source)?;
+    let rewards = economy::lower_site_rewards(&source.rewards)?;
+    let purge = economy::lower_purge(&source.purge)?;
     let encounter_sites = CompatibilityEncounterSiteRules {
         min_deck_for_purge: source.encounter_sites.min_deck_for_purge,
         placeable_sites: source
@@ -299,6 +308,8 @@ fn lower_with_glossary_map(
     Ok(toml::Value::try_from(CompatibilityCatalog {
         schema_version: 1,
         encounter_sites,
+        rewards,
+        purge,
         site_types,
         random_site,
     })?)
@@ -381,6 +392,7 @@ fn compatibility_glossary_id(
 }
 
 fn validate(source: &SitesCatalog) -> Result<()> {
+    economy::validate_site_configuration(&source.rewards, &source.purge)?;
     ensure!(
         source.encounter_sites.min_deck_for_purge > 0,
         "encounter_sites min_deck_for_purge must be positive"
@@ -615,6 +627,21 @@ mod tests {
                     SiteType::Duplication,
                 ],
             },
+            rewards: SiteRewardRules {
+                essence: SiteEssenceRewards {
+                    standard: IntegerRange { min: 10, max: 20 },
+                    enhanced: IntegerRange { min: 30, max: 40 },
+                },
+                reward_fallback_essence: IntegerRange { min: 15, max: 25 },
+                dreamsign_revelation: DreamsignRevelationRules {
+                    standard_offer_count: 3,
+                    enhanced_offer_count: 4,
+                },
+            },
+            purge: PurgeRules {
+                marginal_costs: vec![40, 60],
+                enhanced_discount_percent: 30,
+            },
             site_types,
             random_site: RandomSiteRules {
                 destinations: vec![
@@ -680,6 +707,11 @@ mod tests {
                 .len(),
             4
         );
+        assert_eq!(
+            lowered["rewards"]["reward"]["fallback-essence"]["max"].as_integer(),
+            Some(25)
+        );
+        assert_eq!(lowered["purge"]["marginal-costs"][1].as_integer(), Some(60));
         let site_types = lowered["site-types"].as_array().unwrap();
         assert_eq!(site_types.len(), 14);
         assert_eq!(site_types[0]["type"].as_str(), Some("Battle"));

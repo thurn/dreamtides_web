@@ -47,7 +47,7 @@ import type { TideId } from "../../types/identifiers";
 import { DEFAULT_DRAFT_DATA } from "../../data/draft-data";
 import type { AvatarId } from "../../types/identifiers";
 
-/** Developer/test fallback; production injects the compiled draft.toml values. */
+/** Developer/test fallback; production injects the compiled draft_site.toml values. */
 export const DEFAULT_TIDES4_TUNING: Tides4Tuning =
   DEFAULT_DRAFT_DATA.pool.tides4;
 

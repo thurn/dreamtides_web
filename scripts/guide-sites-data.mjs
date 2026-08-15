@@ -92,6 +92,106 @@ function number(value, file, path, { min = 0, max, integer = true } = {}) {
   return value;
 }
 
+function integerRange(value, file, path) {
+  const source = keys(value, file, path, ["min", "max"]);
+  const min = number(source.min, file, `${path}.min`);
+  const max = number(source.max, file, `${path}.max`);
+  if (min > max) fail(file, path, "min must not exceed max");
+  return { min, max };
+}
+
+/** Compile the rewards and purge configuration owned by sites.toml. */
+export function compileSiteEconomyData(
+  sourceValue,
+  { file = "sites.toml", pathPrefix = "" } = {},
+) {
+  const path = (value) => `${pathPrefix}${value}`;
+  const rootPath = pathPrefix.endsWith(".")
+    ? pathPrefix.slice(0, -1)
+    : pathPrefix || "root";
+  const root = table(sourceValue, file, rootPath);
+  const rawRewards = keys(root.rewards, file, path("rewards"), [
+    "essence",
+    "reward",
+    "dreamsign-revelation",
+  ]);
+  const rawEssenceRewards = keys(
+    rawRewards.essence,
+    file,
+    path("rewards.essence"),
+    ["standard", "enhanced"],
+  );
+  const rawReward = keys(
+    rawRewards.reward,
+    file,
+    path("rewards.reward"),
+    ["fallback-essence"],
+  );
+  const rawRevelation = keys(
+    rawRewards["dreamsign-revelation"],
+    file,
+    path("rewards.dreamsign-revelation"),
+    ["standard-offer-count", "enhanced-offer-count"],
+  );
+  const rewards = {
+    essence: {
+      standard: integerRange(
+        rawEssenceRewards.standard,
+        file,
+        path("rewards.essence.standard"),
+      ),
+      enhanced: integerRange(
+        rawEssenceRewards.enhanced,
+        file,
+        path("rewards.essence.enhanced"),
+      ),
+    },
+    reward: {
+      fallbackEssence: integerRange(
+        rawReward["fallback-essence"],
+        file,
+        path("rewards.reward.fallback-essence"),
+      ),
+    },
+    dreamsignRevelation: {
+      standardOfferCount: number(
+        rawRevelation["standard-offer-count"],
+        file,
+        path("rewards.dreamsign-revelation.standard-offer-count"),
+      ),
+      enhancedOfferCount: number(
+        rawRevelation["enhanced-offer-count"],
+        file,
+        path("rewards.dreamsign-revelation.enhanced-offer-count"),
+      ),
+    },
+  };
+  const rawPurge = keys(root.purge, file, path("purge"), [
+    "marginal-costs",
+    "enhanced-discount-percent",
+  ]);
+  const marginalCosts = array(
+    rawPurge["marginal-costs"],
+    file,
+    path("purge.marginal-costs"),
+  ).map((value, index) =>
+    number(value, file, path(`purge.marginal-costs[${String(index)}]`)),
+  );
+  if (marginalCosts.length === 0) {
+    fail(file, path("purge.marginal-costs"), "must not be empty");
+  }
+  const purge = {
+    marginalCosts,
+    enhancedDiscountPercent: number(
+      rawPurge["enhanced-discount-percent"],
+      file,
+      path("purge.enhanced-discount-percent"),
+      { max: 100 },
+    ),
+  };
+  return { rewards, purge };
+}
+
 function exactIdentity(value, expected, file, path) {
   const result = requiredString(value, file, path);
   if (result !== expected) fail(file, path, `expected ${expected}`);
@@ -472,6 +572,8 @@ export function compileSitesData(sourceValue, catalogs = {}) {
   const root = keys(sourceValue, file, "root", [
     "schema-version",
     "encounter-sites",
+    "rewards",
+    "purge",
     "site-types",
     "random-site",
   ]);
@@ -524,6 +626,7 @@ export function compileSitesData(sourceValue, catalogs = {}) {
     ),
     placeableSites,
   };
+  const { rewards, purge } = compileSiteEconomyData(root);
   const siteTypes = {};
   for (const [index, rawMetadata] of array(
     root["site-types"],
@@ -634,6 +737,8 @@ export function compileSitesData(sourceValue, catalogs = {}) {
   const normalized = {
     schemaVersion: 1,
     encounterSites,
+    rewards,
+    purge,
     siteTypes,
     randomSite: { ...randomSite, guideId: randomSiteGuideId },
     guideAssignments,
@@ -641,6 +746,8 @@ export function compileSitesData(sourceValue, catalogs = {}) {
   const behavior = {
     schemaVersion: 1,
     encounterSites,
+    rewards,
+    purge,
     randomSite: normalized.randomSite,
     rulesBySiteType: Object.fromEntries(
       Object.entries(siteTypes).flatMap(([type, metadata]) =>

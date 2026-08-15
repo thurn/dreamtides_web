@@ -43,7 +43,12 @@ const GUIDE_SITE_DEPENDENCY_TOMLS = new Set([
   "dream_guides.toml",
   "sites.toml",
   "glossary.toml",
-  "economy.toml",
+]);
+const ECONOMY_DEPENDENCY_TOMLS = new Set([
+  "journey.toml",
+  "shop_site.toml",
+  "sites.toml",
+  "battle.toml",
 ]);
 
 const DEFAULT_ATLAS_ASSET_SOURCE_DIRS = {
@@ -86,21 +91,27 @@ function compileGuideSiteCatalogsAtRoot(rootDir) {
     },
   );
   const dreamscapes = deriveDreamscapesData(rawDreamscapes, guides);
-  const economy = compileEconomyData(
-    parse(readFileSync(join(dataDir, "economy.toml"), "utf8")),
-  );
   const sites = compileSitesData(
     parse(readFileSync(join(dataDir, "sites.toml"), "utf8")),
     {
       guides,
       dreamscapes,
-      economy,
       glossaryIds: parsedArray(dataDir, "glossary.toml", "entries").map(
         (entry) => entry.id,
       ),
     },
   );
-  return { guides, dreamscapes, sites, economy };
+  return { guides, dreamscapes, sites };
+}
+
+function compileEconomyAtRoot(rootDir) {
+  const dataDir = join(rootDir, "data");
+  return compileEconomyData({
+    journey: parse(readFileSync(join(dataDir, "journey.toml"), "utf8")),
+    shop: parse(readFileSync(join(dataDir, "shop_site.toml"), "utf8")),
+    sites: parse(readFileSync(join(dataDir, "sites.toml"), "utf8")),
+    battle: parse(readFileSync(join(dataDir, "battle.toml"), "utf8")),
+  });
 }
 
 export function refreshGuidePortraitLinks(
@@ -126,7 +137,7 @@ export function refreshGuidePortraitLinks(
  * the full asset build; this registry lets the dev server regenerate one of them
  * on its own when only that TOML is edited (see `configDataHotReloadPlugin` in
  * vite.config.ts), so a config edit reaches the running app without a server
- * restart or a full `setup-assets` run. Atlas and economy use their shared
+ * restart or a full `setup-assets` run. Atlas and the economy aggregate use their shared
  * strict compilers while the smaller catalogs use their exported transforms.
  *
  * Each entry transforms with the same exported function `setup-assets.mjs` uses,
@@ -140,13 +151,13 @@ export function refreshGuidePortraitLinks(
  */
 export const SIMPLE_CONFIGS = [
   {
-    tomlFile: "gamble.toml",
+    tomlFile: "gamble_site.toml",
     jsonFile: "gamble-data.json",
     arrayKey: null,
     transform: compileGambleData,
   },
   {
-    tomlFile: "transfiguration.toml",
+    tomlFile: "transfiguration_site.toml",
     jsonFile: "transfiguration-data.json",
     arrayKey: null,
     transform: compileTransfigurationData,
@@ -187,20 +198,20 @@ export const SIMPLE_CONFIGS = [
     arrayKey: null,
     transform: null,
   },
-  {
-    tomlFile: "economy.toml",
+  ...["journey.toml", "shop_site.toml", "battle.toml"].map((tomlFile) => ({
+    tomlFile,
     jsonFile: "economy-data.json",
     arrayKey: null,
-    transform: compileEconomyData,
-  },
+    transform: null,
+  })),
   {
-    tomlFile: "draft.toml",
+    tomlFile: "draft_site.toml",
     jsonFile: "draft-data.json",
     arrayKey: null,
     transform: compileDraftData,
   },
   {
-    tomlFile: "augury.toml",
+    tomlFile: "augury_site.toml",
     jsonFile: "augury-data.json",
     arrayKey: null,
     transform: compileAuguryData,
@@ -228,9 +239,9 @@ export const SIMPLE_CONFIG_TOML_BASENAMES = SIMPLE_CONFIGS.map(
  * targeted `config-data:changed` event.
  */
 export function generatedConfigDataWatchPaths({ rootDir = ROOT } = {}) {
-  return SIMPLE_CONFIGS.map((config) =>
+  return [...new Set(SIMPLE_CONFIGS.map((config) =>
     join(rootDir, "public", config.jsonFile),
-  );
+  ))];
 }
 
 /** Recompile Atlas JSON after a referenced catalog changes. */
@@ -259,6 +270,10 @@ export function regenerateSitesData({ rootDir = ROOT } = {}) {
   writeFileSync(
     join(publicDir, "sites-data.json"),
     JSON.stringify(compiled.sites, null, 2) + "\n",
+  );
+  writeFileSync(
+    join(publicDir, "economy-data.json"),
+    JSON.stringify(compileEconomyAtRoot(rootDir), null, 2) + "\n",
   );
   return join(publicDir, "sites-data.json");
 }
@@ -303,9 +318,7 @@ export function regenerateConfigData(
       join(publicDir, "sites-data.json"),
       JSON.stringify(compiled.sites, null, 2) + "\n",
     );
-    if (config.tomlFile === "economy.toml") {
-      result = compiled.economy;
-    } else if (config.tomlFile === "dream_guides.toml") {
+    if (config.tomlFile === "dream_guides.toml") {
       result = compiled.guides;
       refreshGuidePortraitLinks(rootDir, compiled.guides);
     } else if (config.tomlFile === "dreamscapes.toml") {
@@ -313,6 +326,8 @@ export function regenerateConfigData(
     } else {
       result = compiled.sites;
     }
+  } else if (ECONOMY_DEPENDENCY_TOMLS.has(config.tomlFile)) {
+    result = compileEconomyAtRoot(rootDir);
   } else if (config.tomlFile === "atlas.toml") {
     result = compileAtlasAtRoot(rootDir, atlasAssetSourceDirs);
   } else if (config.arrayKey === null) {
@@ -331,6 +346,15 @@ export function regenerateConfigData(
     ? compileAtlasAtRoot(rootDir, atlasAssetSourceDirs)
     : null;
   writeFileSync(jsonPath, JSON.stringify(result, null, 2) + "\n");
+  if (
+    ECONOMY_DEPENDENCY_TOMLS.has(tomlBasename) &&
+    config.jsonFile !== "economy-data.json"
+  ) {
+    writeFileSync(
+      join(rootDir, "public", "economy-data.json"),
+      JSON.stringify(compileEconomyAtRoot(rootDir), null, 2) + "\n",
+    );
+  }
   if (dependentAtlasData !== null) {
     writeFileSync(
       join(rootDir, "public", "atlas-data.json"),

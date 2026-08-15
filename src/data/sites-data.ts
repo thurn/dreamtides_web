@@ -69,6 +69,47 @@ function isChoiceLimit(value: unknown): value is number | null {
   return value === null || isInteger(value, { min: 1 });
 }
 
+function isRange(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    hasExactKeys(value, ["min", "max"]) &&
+    isInteger(value.min, { min: 0 }) &&
+    isInteger(value.max, { min: value.min })
+  );
+}
+
+function isRewards(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    hasExactKeys(value, ["essence", "reward", "dreamsignRevelation"]) &&
+    isRecord(value.essence) &&
+    hasExactKeys(value.essence, ["standard", "enhanced"]) &&
+    isRange(value.essence.standard) &&
+    isRange(value.essence.enhanced) &&
+    isRecord(value.reward) &&
+    hasExactKeys(value.reward, ["fallbackEssence"]) &&
+    isRange(value.reward.fallbackEssence) &&
+    isRecord(value.dreamsignRevelation) &&
+    hasExactKeys(value.dreamsignRevelation, [
+      "standardOfferCount",
+      "enhancedOfferCount",
+    ]) &&
+    isInteger(value.dreamsignRevelation.standardOfferCount, { min: 0 }) &&
+    isInteger(value.dreamsignRevelation.enhancedOfferCount, { min: 0 })
+  );
+}
+
+function isPurge(value: unknown): boolean {
+  return (
+    isRecord(value) &&
+    hasExactKeys(value, ["marginalCosts", "enhancedDiscountPercent"]) &&
+    Array.isArray(value.marginalCosts) &&
+    value.marginalCosts.length > 0 &&
+    value.marginalCosts.every((cost) => isInteger(cost, { min: 0 })) &&
+    isInteger(value.enhancedDiscountPercent, { min: 0, max: 100 })
+  );
+}
+
 const PRESENTATION_KIND_BY_SITE: Readonly<Partial<Record<SiteType, string>>> = {
   Battle: "battle",
   Draft: "draft",
@@ -124,6 +165,8 @@ function isSitesData(value: unknown): value is SitesData {
       "contentHash",
       "foldHash",
       "encounterSites",
+      "rewards",
+      "purge",
       "siteTypes",
       "randomSite",
       "guideAssignments",
@@ -140,6 +183,8 @@ function isSitesData(value: unknown): value is SitesData {
     value.encounterSites.placeableSites.some(
       (entry) => !SITE_TYPES.includes(entry as SiteType),
     ) ||
+    !isRewards(value.rewards) ||
+    !isPurge(value.purge) ||
     !isRecord(value.siteTypes) ||
     !isRecord(value.randomSite) ||
     !isRecord(value.guideAssignments)

@@ -9,10 +9,10 @@
         "four-suit-reprise",
         "blackjack"
       ],
-      "targetOwner": "data/gamble.ron",
+      "targetOwner": "data/gamble_site.ron",
       "currentSources": [
         {
-          "path": "data/gamble.ron",
+          "path": "data/gamble_site.ron",
           "fields": ["selection", "economy", "rules"]
         }
       ],
@@ -39,10 +39,10 @@
         "Attuned",
         "Perfected"
       ],
-      "targetOwner": "data/transfiguration.ron",
+      "targetOwner": "data/transfiguration_site.ron",
       "currentSources": [
         {
-          "path": "data/transfiguration.ron",
+          "path": "data/transfiguration_site.ron",
           "fields": ["forms", "description", "glyph", "pricing", "reward_score"]
         }
       ],

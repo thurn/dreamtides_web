@@ -9,6 +9,39 @@
       "Duplication"
     ]
   },
+  "rewards": {
+    "essence": {
+      "standard": {
+        "min": 200,
+        "max": 300
+      },
+      "enhanced": {
+        "min": 400,
+        "max": 600
+      }
+    },
+    "reward": {
+      "fallbackEssence": {
+        "min": 150,
+        "max": 350
+      }
+    },
+    "dreamsignRevelation": {
+      "standardOfferCount": 3,
+      "enhancedOfferCount": 4
+    }
+  },
+  "purge": {
+    "marginalCosts": [
+      40,
+      60,
+      90,
+      130,
+      180,
+      240
+    ],
+    "enhancedDiscountPercent": 30
+  },
   "siteTypes": {
     "Battle": {
       "icon": "bxf bx-sword-alt",
@@ -229,6 +262,6 @@
       "homeDreamscapeId": "grid_city"
     }
   },
-  "contentHash": "b912abc4c2296af3ce27a52e03e55382df59ec7906d3fdd0366e95d088163b1a",
-  "foldHash": "907dfa9e6fadbde20c196e31db9086fdaf4825303b8a20f9ebd2de3e488e01d2"
+  "contentHash": "60781c9ca2d3875f60cfd051f0c0a0d787fd89abb33fe8f3acb914796f68f7bb",
+  "foldHash": "07971f05e5c09419952a9af5b8934b3b2731d8fd918470915be0cdc5bc894233"
 }

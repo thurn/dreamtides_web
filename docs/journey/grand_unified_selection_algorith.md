@@ -103,7 +103,7 @@ identity basis used when constructing its opponents.
 Selection tuning lives with the feature that owns it:
 
 - `data/tides.ron`: universal top-band fraction and minimum;
-- `data/augury.ron`: archetype weights, chooser quantities, package categories,
+- `data/augury_site.ron`: archetype weights, chooser quantities, package categories,
   subtype eligibility, and cost bands;
 - `data/sites.ron`: the purge deck-size threshold and placeable sites shared by
   Augury and Exploration encounters;

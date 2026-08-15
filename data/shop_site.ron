@@ -1,0 +1,28 @@
+// Shop-site prices, inventories, discounts, and reroll rules.
+
+#![enable(implicit_some)]
+ShopSiteCatalog(
+  prices: (standard_card: 100, specialty_card: 200, dreamsign: 50),
+
+  stock: (
+    card_shop: (card_slots: 5, dreamsign_slots: 0),
+    specialty_shop: (card_slots: 5, dreamsign_slots: 0),
+    dreamsign_bazaar: (card_slots: 0, dreamsign_slots: 3),
+  ),
+
+  discounts: (
+    // Relative weights select how many generated offers receive a discount.
+    slot_counts: [(value: 1, weight: 1), (value: 2, weight: 1)],
+    percentages: [
+      (value: 30, weight: 1),
+      (value: 40, weight: 1),
+      (value: 50, weight: 1),
+      (value: 60, weight: 1),
+      (value: 70, weight: 1),
+      (value: 80, weight: 1),
+      (value: 90, weight: 1),
+    ],
+  ),
+
+  reroll: (standard_price: 50, enhanced_price: 0, max_per_visit: 1),
+)

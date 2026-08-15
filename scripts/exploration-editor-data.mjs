@@ -23,7 +23,7 @@ import {
 } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_EXPLORATION_TOML_PATH = join("data", "exploration.toml");
+export const DEFAULT_EXPLORATION_TOML_PATH = join("data", "exploration_site.toml");
 export const DEFAULT_EXPLORATION_CARDS_PATH = join("data", "cards.toml");
 export const DEFAULT_EXPLORATION_DREAMSIGNS_PATH = join(
   "data",
@@ -92,7 +92,7 @@ function requiredString(value, label) {
 const sourceCatalogs = new Map();
 
 function sourceCatalogFor(rootDir, options = {}) {
-  const sourcePath = join(rootDir, "data", "exploration.ron");
+  const sourcePath = join(rootDir, "data", "exploration_site.ron");
   const stat = (options.stat ?? statSync)(sourcePath);
   const version = [stat.dev, stat.ino, stat.size, stat.mtimeMs].join(":");
   let cached = sourceCatalogs.get(rootDir);

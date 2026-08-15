@@ -46,6 +46,15 @@ pub struct BattleRules {
     pub starting_side: StartingSide,
     pub skip_player_opening_draw: bool,
     pub opponent_signature_card_count: u32,
+    pub reward: BattleRewardRules,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
+#[serde(deny_unknown_fields)]
+pub struct BattleRewardRules {
+    pub base_essence: u32,
+    pub essence_per_completion_level: u32,
+    pub minimum_essence: u32,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
@@ -261,6 +270,17 @@ struct CompatibilityBattleRules {
     skip_player_opening_draw: bool,
     #[serde(rename = "opponent-signature-card-count")]
     opponent_signature_card_count: u32,
+    reward: CompatibilityBattleRewardRules,
+}
+
+#[derive(Serialize)]
+struct CompatibilityBattleRewardRules {
+    #[serde(rename = "base-essence")]
+    base_essence: u32,
+    #[serde(rename = "essence-per-completion-level")]
+    essence_per_completion_level: u32,
+    #[serde(rename = "minimum-essence")]
+    minimum_essence: u32,
 }
 
 #[derive(Serialize)]
@@ -431,6 +451,11 @@ fn compatibility_battle(source: &BattleRules) -> CompatibilityBattleRules {
         starting_side: source.starting_side.as_compat(),
         skip_player_opening_draw: source.skip_player_opening_draw,
         opponent_signature_card_count: source.opponent_signature_card_count,
+        reward: CompatibilityBattleRewardRules {
+            base_essence: source.reward.base_essence,
+            essence_per_completion_level: source.reward.essence_per_completion_level,
+            minimum_essence: source.reward.minimum_essence,
+        },
     }
 }
 
@@ -732,6 +757,11 @@ mod tests {
             starting_side: StartingSide::Enemy,
             skip_player_opening_draw: false,
             opponent_signature_card_count: 2,
+            reward: BattleRewardRules {
+                base_essence: 31,
+                essence_per_completion_level: 9,
+                minimum_essence: 3,
+            },
         }
     }
 

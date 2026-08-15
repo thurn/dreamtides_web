@@ -65,9 +65,9 @@ name = "Test Sign"
 ''',
             encoding="utf-8",
         )
-        self.exploration_source = root / "exploration.ron"
+        self.exploration_source = root / "exploration_site.ron"
         self.exploration_source.write_text("[]\n", encoding="utf-8")
-        self.exploration_compat = root / "exploration.toml"
+        self.exploration_compat = root / "exploration_site.toml"
         self.exploration_compat.write_text(
             f'''schema-version = 2
 effect-kinds = ["draft-card"]
@@ -87,9 +87,9 @@ offer-count = 4
 ''',
             encoding="utf-8",
         )
-        self.transfiguration_source = root / "transfiguration.ron"
+        self.transfiguration_source = root / "transfiguration_site.ron"
         self.transfiguration_source.write_text("()\n", encoding="utf-8")
-        self.transfiguration_compat = root / "transfiguration.toml"
+        self.transfiguration_compat = root / "transfiguration_site.toml"
         self.transfiguration_compat.write_text(
             '''[[forms]]
 id = "Empowered"

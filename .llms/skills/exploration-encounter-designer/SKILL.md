@@ -353,7 +353,7 @@ commentary.
    ```
 
    Do not open `data/templates.json` directly. The script reads the canonical
-   catalog and production prevalence in `data/exploration.toml`
+   catalog and production prevalence in `data/exploration_site.toml`
    exclusively, then prints the complete selectable `templates` list for this
    run. Review every returned template before committing; do not stop after
    finding the first ten plausible entries. Every selectable template reports

@@ -46,6 +46,5 @@ export interface EconomyData {
     essencePerCompletionLevel: number;
     minimumEssence: number;
   };
-  exploration: { defaultEssencePerSpark: number };
 }
 import type { ContentHash, FoldHash } from "./content-hash";

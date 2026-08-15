@@ -463,7 +463,7 @@ def render_workset(
     return json.dumps(
         {
             "schema_version": 2,
-            "purpose": "Validated scratch contract for implementation in data/exploration.ron.",
+            "purpose": "Validated scratch contract for implementation in data/exploration_site.ron.",
             "encounters": encounters,
         },
         ensure_ascii=False,

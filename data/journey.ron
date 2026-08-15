@@ -1,0 +1,8 @@
+// Journey-wide starting currency and collection limits.
+
+#![enable(implicit_some)]
+JourneyCatalog(
+  default_starting_essence: 200,
+
+  dreamsign_cap: 12,
+)

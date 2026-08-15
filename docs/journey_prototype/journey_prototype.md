@@ -30,7 +30,7 @@ validated, generated compatibility TOML. It is idempotent and then:
 6. Compiles and cross-validates the canonical Dream Guide and Site catalogs,
    derives Dreamscape assignments, and emits `public/dream-guides-data.json`,
    `public/dreamscapes-data.json`, and `public/sites-data.json`.
-7. Compiles generated `data/exploration.toml` into validated
+7. Compiles generated `data/exploration_site.toml` into validated
    `public/exploration-data.json`.
 8. Compiles generated `data/opponents.toml` into validated
    `public/opponents-data.json`.

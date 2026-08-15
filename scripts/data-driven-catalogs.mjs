@@ -106,13 +106,13 @@ export function compileGambleData(source) {
     source.games.length > 5
   ) {
     throw new Error(
-      "gamble.toml games: expected between one and five compiler-validated games",
+      "gamble_site.toml games: expected between one and five compiler-validated games",
     );
   }
   const games = source.games.map((game, index) => {
     const id = GAMBLE_IDS[game.id];
     if (id === undefined)
-      throw new Error(`gamble.toml games[${String(index)}].id: unknown game`);
+      throw new Error(`gamble_site.toml games[${String(index)}].id: unknown game`);
     return {
       id,
       selection: normalize(game.selection),
@@ -144,7 +144,7 @@ export function compileTransfigurationData(source) {
     source.site === undefined
   ) {
     throw new Error(
-      "transfiguration.toml: expected site and at least one compiler-validated form",
+      "transfiguration_site.toml: expected site and at least one compiler-validated form",
     );
   }
   const site = normalize(source.site);

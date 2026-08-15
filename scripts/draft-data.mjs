@@ -4,7 +4,7 @@ import { CARD_RARITIES } from "../src/types/cards.ts";
 const RARITIES = new Set(CARD_RARITIES);
 
 function fail(path, message) {
-  throw new Error(`draft.toml ${path}: ${message}`);
+  throw new Error(`draft_site.toml ${path}: ${message}`);
 }
 
 function table(value, path) {
@@ -53,7 +53,7 @@ function hash(value) {
     .digest("hex");
 }
 
-/** Compile and strictly validate the parsed draft.toml document. */
+/** Compile and strictly validate the parsed draft_site.toml document. */
 export function compileDraftData(sourceValue) {
   const root = keys(sourceValue, "root", [
     "schema-version",

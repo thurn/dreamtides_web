@@ -5,25 +5,14 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct EconomyCatalog {
-    pub journey: JourneyRules,
-    pub shop: ShopRules,
-    pub site_rewards: SiteRewardRules,
-    pub purge: PurgeRules,
-    pub battle_reward: BattleRewardRules,
-    pub exploration: ExplorationRules,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct JourneyRules {
+pub struct JourneyCatalog {
     pub default_starting_essence: u32,
     pub dreamsign_cap: u32,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
-pub struct ShopRules {
+pub struct ShopSiteCatalog {
     pub prices: ShopPrices,
     pub stock: ShopStockCatalog,
     pub discounts: DiscountRules,
@@ -127,84 +116,67 @@ pub struct PurgeRules {
     pub enhanced_discount_percent: u32,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct BattleRewardRules {
-    pub base_essence: u32,
-    pub essence_per_completion_level: u32,
-    pub minimum_essence: u32,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct ExplorationRules {
-    pub default_essence_per_spark: u32,
-}
-
-pub fn lower(source: EconomyCatalog) -> Result<toml::Value> {
-    validate(&source)?;
-
-    let compatibility = CompatibilityEconomy {
+pub fn lower_journey(source: JourneyCatalog) -> Result<toml::Value> {
+    let compatibility = CompatibilityJourneyCatalog {
         schema_version: 1,
-        journey: source.journey.into(),
-        shop: CompatibilityShop {
-            prices: source.shop.prices.into(),
-            stock: CompatibilityStockCatalog {
-                card_shop: CompatibilityStock::from(&source.shop.stock.card_shop),
-                specialty_shop: CompatibilityStock::from(&source.shop.stock.specialty_shop),
-                dreamsign_bazaar: CompatibilityStock::from(&source.shop.stock.dreamsign_bazaar),
-            },
-            discounts: source.shop.discounts.into(),
-            reroll: source.shop.reroll.into(),
-        },
-        site_rewards: CompatibilitySiteRewards {
-            essence: source.site_rewards.essence,
-            reward: CompatibilityReward {
-                fallback_essence: source.site_rewards.reward_fallback_essence,
-            },
-            dreamsign_revelation: source.site_rewards.dreamsign_revelation.into(),
-        },
-        purge: source.purge.into(),
-        battle_reward: source.battle_reward.into(),
-        exploration: source.exploration.into(),
+        default_starting_essence: source.default_starting_essence,
+        dreamsign_cap: source.dreamsign_cap,
     };
-
     Ok(toml::Value::try_from(compatibility)?)
 }
 
-fn validate(source: &EconomyCatalog) -> Result<()> {
-    validate_weighted(
-        "discount slot counts",
-        &source.shop.discounts.slot_counts,
-        false,
-    )?;
-    validate_weighted(
-        "discount percentages",
-        &source.shop.discounts.percentages,
-        true,
-    )?;
-    validate_range(
-        "standard Essence reward",
-        source.site_rewards.essence.standard,
-    )?;
-    validate_range(
-        "enhanced Essence reward",
-        source.site_rewards.essence.enhanced,
-    )?;
-    validate_range(
-        "Reward fallback Essence",
-        source.site_rewards.reward_fallback_essence,
-    )?;
+pub fn lower_shop_site(source: ShopSiteCatalog) -> Result<toml::Value> {
+    validate_shop(&source)?;
+    let compatibility = CompatibilityShopSiteCatalog {
+        schema_version: 1,
+        prices: source.prices.into(),
+        stock: CompatibilityStockCatalog {
+            card_shop: CompatibilityStock::from(&source.stock.card_shop),
+            specialty_shop: CompatibilityStock::from(&source.stock.specialty_shop),
+            dreamsign_bazaar: CompatibilityStock::from(&source.stock.dreamsign_bazaar),
+        },
+        discounts: source.discounts.into(),
+        reroll: source.reroll.into(),
+    };
+    Ok(toml::Value::try_from(compatibility)?)
+}
+
+fn validate_shop(source: &ShopSiteCatalog) -> Result<()> {
+    validate_weighted("discount slot counts", &source.discounts.slot_counts, false)?;
+    validate_weighted("discount percentages", &source.discounts.percentages, true)?;
+    Ok(())
+}
+
+pub(crate) fn validate_site_configuration(
+    rewards: &SiteRewardRules,
+    purge: &PurgeRules,
+) -> Result<()> {
+    validate_range("standard Essence reward", rewards.essence.standard)?;
+    validate_range("enhanced Essence reward", rewards.essence.enhanced)?;
+    validate_range("Reward fallback Essence", rewards.reward_fallback_essence)?;
     ensure!(
-        !source.purge.marginal_costs.is_empty(),
+        !purge.marginal_costs.is_empty(),
         "purge marginal costs must not be empty"
     );
-    validate_percent(
-        "enhanced purge discount",
-        source.purge.enhanced_discount_percent,
-    )?;
+    validate_percent("enhanced purge discount", purge.enhanced_discount_percent)?;
 
     Ok(())
+}
+
+pub(crate) fn lower_site_rewards(source: &SiteRewardRules) -> Result<toml::Value> {
+    Ok(toml::Value::try_from(CompatibilitySiteRewards {
+        essence: source.essence.clone(),
+        reward: CompatibilityReward {
+            fallback_essence: source.reward_fallback_essence,
+        },
+        dreamsign_revelation: source.dreamsign_revelation.clone().into(),
+    })?)
+}
+
+pub(crate) fn lower_purge(source: &PurgeRules) -> Result<toml::Value> {
+    Ok(toml::Value::try_from(CompatibilityPurge::from(
+        source.clone(),
+    ))?)
 }
 
 fn validate_weighted(label: &str, entries: &[WeightedValue], percentage: bool) -> Result<()> {
@@ -241,38 +213,19 @@ fn validate_range(label: &str, range: IntegerRange) -> Result<()> {
 }
 
 #[derive(Serialize)]
-struct CompatibilityEconomy {
+struct CompatibilityJourneyCatalog {
     #[serde(rename = "schema-version")]
     schema_version: u32,
-    journey: CompatibilityJourney,
-    shop: CompatibilityShop,
-    #[serde(rename = "site-rewards")]
-    site_rewards: CompatibilitySiteRewards,
-    purge: CompatibilityPurge,
-    #[serde(rename = "battle-reward")]
-    battle_reward: CompatibilityBattleReward,
-    exploration: CompatibilityExploration,
-}
-
-#[derive(Serialize)]
-struct CompatibilityJourney {
     #[serde(rename = "default-starting-essence")]
     default_starting_essence: u32,
     #[serde(rename = "dreamsign-cap")]
     dreamsign_cap: u32,
 }
 
-impl From<JourneyRules> for CompatibilityJourney {
-    fn from(value: JourneyRules) -> Self {
-        Self {
-            default_starting_essence: value.default_starting_essence,
-            dreamsign_cap: value.dreamsign_cap,
-        }
-    }
-}
-
 #[derive(Serialize)]
-struct CompatibilityShop {
+struct CompatibilityShopSiteCatalog {
+    #[serde(rename = "schema-version")]
+    schema_version: u32,
     prices: CompatibilityShopPrices,
     stock: CompatibilityStockCatalog,
     discounts: CompatibilityDiscountRules,
@@ -409,143 +362,70 @@ impl From<PurgeRules> for CompatibilityPurge {
     }
 }
 
-#[derive(Serialize)]
-struct CompatibilityBattleReward {
-    #[serde(rename = "base-essence")]
-    base_essence: u32,
-    #[serde(rename = "essence-per-completion-level")]
-    essence_per_completion_level: u32,
-    #[serde(rename = "minimum-essence")]
-    minimum_essence: u32,
-}
-
-impl From<BattleRewardRules> for CompatibilityBattleReward {
-    fn from(value: BattleRewardRules) -> Self {
-        Self {
-            base_essence: value.base_essence,
-            essence_per_completion_level: value.essence_per_completion_level,
-            minimum_essence: value.minimum_essence,
-        }
-    }
-}
-
-#[derive(Serialize)]
-struct CompatibilityExploration {
-    #[serde(rename = "default-essence-per-spark")]
-    default_essence_per_spark: u32,
-}
-
-impl From<ExplorationRules> for CompatibilityExploration {
-    fn from(value: ExplorationRules) -> Self {
-        Self {
-            default_essence_per_spark: value.default_essence_per_spark,
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use pretty_assertions::assert_eq;
 
     use super::*;
 
-    fn catalog() -> EconomyCatalog {
-        EconomyCatalog {
-            journey: JourneyRules {
-                default_starting_essence: 17,
-                dreamsign_cap: 9,
+    fn shop() -> ShopSiteCatalog {
+        ShopSiteCatalog {
+            prices: ShopPrices {
+                standard_card: 11,
+                specialty_card: 22,
+                dreamsign: 7,
             },
-            shop: ShopRules {
-                prices: ShopPrices {
-                    standard_card: 11,
-                    specialty_card: 22,
-                    dreamsign: 7,
+            stock: ShopStockCatalog {
+                card_shop: ShopStock {
+                    card_slots: 1,
+                    dreamsign_slots: 2,
                 },
-                stock: ShopStockCatalog {
-                    card_shop: ShopStock {
-                        card_slots: 1,
-                        dreamsign_slots: 2,
+                specialty_shop: ShopStock {
+                    card_slots: 3,
+                    dreamsign_slots: 4,
+                },
+                dreamsign_bazaar: ShopStock {
+                    card_slots: 5,
+                    dreamsign_slots: 6,
+                },
+            },
+            discounts: DiscountRules {
+                slot_counts: vec![
+                    WeightedValue {
+                        value: 1,
+                        weight: RelativeWeight::Integer(2),
                     },
-                    specialty_shop: ShopStock {
-                        card_slots: 3,
-                        dreamsign_slots: 4,
+                    WeightedValue {
+                        value: 3,
+                        weight: RelativeWeight::Float(2.5),
                     },
-                    dreamsign_bazaar: ShopStock {
-                        card_slots: 5,
-                        dreamsign_slots: 6,
-                    },
-                },
-                discounts: DiscountRules {
-                    slot_counts: vec![
-                        WeightedValue {
-                            value: 1,
-                            weight: RelativeWeight::Integer(2),
-                        },
-                        WeightedValue {
-                            value: 3,
-                            weight: RelativeWeight::Float(2.5),
-                        },
-                    ],
-                    percentages: vec![WeightedValue {
-                        value: 35,
-                        weight: RelativeWeight::Float(3.75),
-                    }],
-                },
-                reroll: RerollRules {
-                    standard_price: 13,
-                    enhanced_price: 2,
-                    max_per_visit: 4,
-                },
+                ],
+                percentages: vec![WeightedValue {
+                    value: 35,
+                    weight: RelativeWeight::Float(3.75),
+                }],
             },
-            site_rewards: SiteRewardRules {
-                essence: SiteEssenceRewards {
-                    standard: IntegerRange { min: 10, max: 20 },
-                    enhanced: IntegerRange { min: 30, max: 50 },
-                },
-                reward_fallback_essence: IntegerRange { min: 12, max: 48 },
-                dreamsign_revelation: DreamsignRevelationRules {
-                    standard_offer_count: 2,
-                    enhanced_offer_count: 5,
-                },
-            },
-            purge: PurgeRules {
-                marginal_costs: vec![8, 21],
-                enhanced_discount_percent: 15,
-            },
-            battle_reward: BattleRewardRules {
-                base_essence: 31,
-                essence_per_completion_level: 9,
-                minimum_essence: 3,
-            },
-            exploration: ExplorationRules {
-                default_essence_per_spark: 27,
+            reroll: RerollRules {
+                standard_price: 13,
+                enhanced_price: 2,
+                max_per_visit: 4,
             },
         }
     }
 
     #[test]
-    fn lowers_every_typed_identity_and_compatibility_sentinel() {
-        let lowered = lower(catalog()).unwrap();
-        let root = lowered.as_table().unwrap();
+    fn lowers_journey_and_shop_catalogs() {
+        let journey = lower_journey(JourneyCatalog {
+            default_starting_essence: 17,
+            dreamsign_cap: 9,
+        })
+        .unwrap();
+        assert_eq!(journey["default-starting-essence"].as_integer(), Some(17));
+        assert_eq!(journey["dreamsign-cap"].as_integer(), Some(9));
+
+        let lowered = lower_shop_site(shop()).unwrap();
         assert_eq!(
-            root.keys().map(String::as_str).collect::<Vec<_>>(),
-            vec![
-                "schema-version",
-                "journey",
-                "shop",
-                "site-rewards",
-                "purge",
-                "battle-reward",
-                "exploration",
-            ]
-        );
-        assert_eq!(lowered["schema-version"].as_integer(), Some(1));
-        assert_eq!(
-            lowered["journey"]["default-starting-essence"].as_integer(),
-            Some(17)
-        );
-        assert_eq!(
-            lowered["shop"]["stock"]
+            lowered["stock"]
                 .as_table()
                 .unwrap()
                 .keys()
@@ -554,74 +434,80 @@ mod tests {
             vec!["card-shop", "specialty-shop", "dreamsign-bazaar"]
         );
         assert_eq!(
-            lowered["shop"]["discounts"]["slot-counts"][0]["weight"].as_integer(),
+            lowered["discounts"]["slot-counts"][0]["weight"].as_integer(),
             Some(2)
         );
         assert_eq!(
-            lowered["shop"]["discounts"]["slot-counts"][1]["weight"].as_float(),
+            lowered["discounts"]["slot-counts"][1]["weight"].as_float(),
             Some(2.5)
-        );
-        assert_eq!(
-            lowered["site-rewards"]["reward"]["fallback-essence"]["max"].as_integer(),
-            Some(48)
-        );
-
-        assert_eq!(
-            lowered["exploration"]["default-essence-per-spark"].as_integer(),
-            Some(27)
         );
     }
 
     #[test]
-    fn strictly_deserializes_the_canonical_shape() {
-        let serialized = ron::ser::to_string(&catalog()).unwrap();
+    fn strictly_deserializes_each_canonical_shape() {
+        let serialized = ron::ser::to_string(&shop()).unwrap();
         assert_eq!(
-            ron::from_str::<EconomyCatalog>(&serialized).unwrap(),
-            catalog()
+            ron::from_str::<ShopSiteCatalog>(&serialized).unwrap(),
+            shop()
         );
 
         let unknown = serialized.replacen('(', "(surprise:true,", 1);
-        assert!(ron::from_str::<EconomyCatalog>(&unknown).is_err());
-        let obsolete_gamble = serialized.replacen('(', "(gamble:(),", 1);
-        assert!(ron::from_str::<EconomyCatalog>(&obsolete_gamble).is_err());
+        assert!(ron::from_str::<ShopSiteCatalog>(&unknown).is_err());
 
-        let negative = serialized.replacen(
-            "default_starting_essence:17",
-            "default_starting_essence:-1",
-            1,
+        let journey = "(default_starting_essence:17,dreamsign_cap:9)";
+        assert!(ron::from_str::<JourneyCatalog>(journey).is_ok());
+        assert!(
+            ron::from_str::<JourneyCatalog>("(default_starting_essence:-1,dreamsign_cap:9)")
+                .is_err()
         );
-        assert!(ron::from_str::<EconomyCatalog>(&negative).is_err());
     }
 
     #[test]
-    fn rejects_invalid_ranges_distributions_percentages_and_bands() {
-        let mut source = catalog();
-        source.site_rewards.essence.standard = IntegerRange { min: 2, max: 1 };
-        assert_error_contains(source, "minimum must not exceed maximum");
+    fn rejects_invalid_shop_distributions_and_percentages() {
+        let mut source = shop();
+        source.discounts.slot_counts.clear();
+        assert_shop_error_contains(source, "must not be empty");
 
-        let mut source = catalog();
-        source.shop.discounts.slot_counts.clear();
-        assert_error_contains(source, "must not be empty");
+        let mut source = shop();
+        source.discounts.slot_counts[1].value = source.discounts.slot_counts[0].value;
+        assert_shop_error_contains(source, "repeats value");
 
-        let mut source = catalog();
-        source.shop.discounts.slot_counts[1].value = source.shop.discounts.slot_counts[0].value;
-        assert_error_contains(source, "repeats value");
+        let mut source = shop();
+        source.discounts.slot_counts[0].weight = RelativeWeight::Float(f64::NAN);
+        assert_shop_error_contains(source, "positive finite");
 
-        let mut source = catalog();
-        source.shop.discounts.slot_counts[0].weight = RelativeWeight::Float(f64::NAN);
-        assert_error_contains(source, "positive finite");
-
-        let mut source = catalog();
-        source.shop.discounts.percentages[0].value = 101;
-        assert_error_contains(source, "from 0 through 100");
-
-        let mut source = catalog();
-        source.purge.marginal_costs.clear();
-        assert_error_contains(source, "purge marginal costs must not be empty");
+        let mut source = shop();
+        source.discounts.percentages[0].value = 101;
+        assert_shop_error_contains(source, "from 0 through 100");
     }
 
-    fn assert_error_contains(source: EconomyCatalog, expected: &str) {
-        let error = lower(source).unwrap_err().to_string();
+    #[test]
+    fn validates_site_owned_ranges_and_purge_configuration() {
+        let rewards = SiteRewardRules {
+            essence: SiteEssenceRewards {
+                standard: IntegerRange { min: 2, max: 1 },
+                enhanced: IntegerRange { min: 3, max: 5 },
+            },
+            reward_fallback_essence: IntegerRange { min: 1, max: 2 },
+            dreamsign_revelation: DreamsignRevelationRules {
+                standard_offer_count: 2,
+                enhanced_offer_count: 3,
+            },
+        };
+        let purge = PurgeRules {
+            marginal_costs: vec![1],
+            enhanced_discount_percent: 10,
+        };
+        assert!(
+            validate_site_configuration(&rewards, &purge)
+                .unwrap_err()
+                .to_string()
+                .contains("minimum must not exceed maximum")
+        );
+    }
+
+    fn assert_shop_error_contains(source: ShopSiteCatalog, expected: &str) {
+        let error = lower_shop_site(source).unwrap_err().to_string();
         assert!(
             error.contains(expected),
             "{error:?} did not contain {expected:?}"

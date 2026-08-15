@@ -42,6 +42,11 @@ export function opponentsFixture(): OpponentsData {
       startingSide: "player",
       skipPlayerOpeningDraw: true,
       opponentSignatureCardCount: 3,
+      reward: {
+        baseEssence: 100,
+        essencePerCompletionLevel: 50,
+        minimumEssence: 0,
+      },
     },
     dreamwell: {
       openingOrders: [0],

@@ -248,7 +248,7 @@ fn adapt(
                 cards::metadata_by_id(&compatibility_metadata)?,
             )
         }
-        Adapter::EconomyV1 => economy::lower(parse_ron(source, dataset)?),
+        Adapter::JourneyV1 => economy::lower_journey(parse_ron(source, dataset)?),
         Adapter::ExplorationV2 => exploration::lower(parse_ron(source, dataset)?),
         Adapter::InternalAiV1 => {
             let catalog: opponents::InternalAiCatalog = parse_ron(source, dataset)?;
@@ -282,6 +282,7 @@ fn adapt(
         Adapter::GambleV1 => gamble::lower(parse_ron(source, dataset)?),
         Adapter::GlossaryV1 => glossary::lower(parse_ron(source, dataset)?),
         Adapter::SitesV1 => sites::lower(parse_ron(source, dataset)?),
+        Adapter::ShopSiteV1 => economy::lower_shop_site(parse_ron(source, dataset)?),
         Adapter::TutorialV1 => tutorial::lower(parse_ron(source, dataset)?),
         Adapter::TutorialJourneyPoolV1 => {
             let catalog: tutorial_journey_pool::TutorialJourneyDraftPool =
@@ -629,8 +630,8 @@ mod tests {
                 Adapter::DreamsignsV1 => {
                     canonical::<Vec<dreamsigns::DreamsignDefinition>>(&source, true);
                 }
-                Adapter::EconomyV1 => {
-                    canonical::<economy::EconomyCatalog>(&source, true);
+                Adapter::JourneyV1 => {
+                    canonical::<economy::JourneyCatalog>(&source, true);
                 }
                 Adapter::DreamwellV2 => {
                     canonical::<dreamwell::DreamwellCatalog>(&source, true);
@@ -661,6 +662,9 @@ mod tests {
                 }
                 Adapter::SitesV1 => {
                     canonical::<sites::SitesCatalog>(&source, true);
+                }
+                Adapter::ShopSiteV1 => {
+                    canonical::<economy::ShopSiteCatalog>(&source, true);
                 }
                 Adapter::TutorialV1 => {
                     canonical::<tutorial::TutorialCatalog>(&source, true);

@@ -44,6 +44,5 @@ export function economyFixture(): EconomyData {
       essencePerCompletionLevel: 50,
       minimumEssence: 0,
     },
-    exploration: { defaultEssencePerSpark: 40 },
   };
 }

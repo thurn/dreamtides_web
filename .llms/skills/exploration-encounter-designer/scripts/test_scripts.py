@@ -102,7 +102,7 @@ class ListTemplateCandidatesTests(unittest.TestCase):
             root = Path(directory)
             catalog_path = root / "templates.json"
             catalog_path.write_text(json.dumps(templates), encoding="utf-8")
-            exploration_path = root / "exploration.toml"
+            exploration_path = root / "exploration_site.toml"
             exploration_lines: list[str] = []
             for encounter_index, template_uses in enumerate(
                 encounter_template_uses

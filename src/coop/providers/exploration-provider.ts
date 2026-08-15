@@ -4537,12 +4537,12 @@ export function resolveExplorationChoice(input: {
     case "purge-for-essence": {
       const entryIds = stringArray(selection.entryIds);
       if (entryIds === null || entryIds.length !== 1) return null;
+      if (action.essencePerSpark === undefined) return null;
       const selected = cardForEntry(next, content, parseDeckEntryId(entryIds[0]));
       if (selected === null) return null;
       const essenceGained =
         Math.max(0, selected.card.spark ?? 0) *
-        (action.essencePerSpark ??
-          input.content.economyData.exploration.defaultEssencePerSpark);
+        action.essencePerSpark;
       const target = deckTarget(next, content, parseDeckEntryId(entryIds[0]));
       if (
         target === null ||

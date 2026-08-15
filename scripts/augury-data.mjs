@@ -30,7 +30,7 @@ const PRESENTATION_SLOTS = new Set([
   "second_card_name", "site_name", "subtype_name",
 ]);
 function fail(path, message) {
-  throw new Error(`augury.toml ${path}: ${message}`);
+  throw new Error(`augury_site.toml ${path}: ${message}`);
 }
 
 function table(value, path) {
@@ -136,7 +136,7 @@ function presentationText(value, path, contract) {
   fail(`${path}.kind`, "expected text, count, or category");
 }
 
-/** Compile and strictly validate the parsed augury.toml document. */
+/** Compile and strictly validate the parsed augury_site.toml document. */
 export function compileAuguryData(sourceValue) {
   const root = exact(sourceValue, "root", ["schema-version", "selection", "encounter", "archetype"]);
   if (positive(root["schema-version"], "schema-version") !== 1) fail("schema-version", "only schema version 1 is supported");

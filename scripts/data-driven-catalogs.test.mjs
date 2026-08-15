@@ -16,7 +16,7 @@ const parsed = (file) =>
 
 describe("data-driven catalog runtime generation", () => {
   it("emits deterministic gameplay-only Gamble data with stable identities", () => {
-    const source = parsed("gamble.toml");
+    const source = parsed("gamble_site.toml");
     const first = compileGambleData(source);
     expect(compileGambleData(source)).toEqual(first);
     expect(first.games.map((game) => game.id)).toEqual([
@@ -35,7 +35,7 @@ describe("data-driven catalog runtime generation", () => {
   });
 
   it("preserves a configured Gamble subset and order", () => {
-    const source = parsed("gamble.toml");
+    const source = parsed("gamble_site.toml");
     source.games = [source.games[4], source.games[0]];
     const result = compileGambleData(source);
     expect(result.games.map((game) => game.id)).toEqual([
@@ -45,7 +45,7 @@ describe("data-driven catalog runtime generation", () => {
   });
 
   it("normalizes Transfiguration tuning without restating closed mechanics", () => {
-    const result = compileTransfigurationData(parsed("transfiguration.toml"));
+    const result = compileTransfigurationData(parsed("transfiguration_site.toml"));
     expect(result.forms.map((form) => form.id)).toHaveLength(9);
     expect(result.forms[0].glyph).toBe("transfigurationEmpowered");
     expect(result.forms[0].rewardScore.kind).toBe("statDelta");
@@ -56,7 +56,7 @@ describe("data-driven catalog runtime generation", () => {
   });
 
   it("preserves a configured Transfiguration subset and variable limits", () => {
-    const source = parsed("transfiguration.toml");
+    const source = parsed("transfiguration_site.toml");
     source.forms = source.forms.slice(0, 3).reverse();
     source.site.standard_choice_limit = "All";
     source.site.enhanced_choice_limit = { Count: 2 };

@@ -57,7 +57,7 @@ describe("transformExplorationData", () => {
   it("compiles a non-empty UUID-keyed catalog with two actions per encounter", () => {
     const source = parse(
       readFileSync(
-        join(import.meta.dirname, "../data/exploration.toml"),
+        join(import.meta.dirname, "../data/exploration_site.toml"),
         "utf8",
       ),
     );

@@ -482,7 +482,7 @@ function catalogCardFollowup(
 
 function configuredFollowupCopy(
   action: ExplorationActionContent,
-  content: JourneyContent,
+  _content: JourneyContent,
   key: "followupTitle" | "followupSubtitle",
   fallback: string | LocalizedString | SourceMessage,
 ): LocalizedString {
@@ -498,13 +498,7 @@ function configuredFollowupCopy(
       case "transfiguration":
         return localizedSourceText(action.transfiguration ?? "Kindled");
       case "essence_per_spark":
-        if (action.essencePerSpark !== undefined) return action.essencePerSpark;
-        if (content.economyData === undefined) {
-          throw new Error(
-            "Missing Exploration economy data for {essence_per_spark}.",
-          );
-        }
-        return content.economyData.exploration.defaultEssencePerSpark;
+        return authoredEssencePerSpark(action);
       default:
         throw new Error(
           `Missing configured Exploration followup argument {${name}}.`,
@@ -535,6 +529,13 @@ function configuredFollowupCopy(
     );
   }
   return localizedSourceText(selected, values);
+}
+
+function authoredEssencePerSpark(action: ExplorationActionContent): number {
+  if (action.essencePerSpark === undefined) {
+    throw new Error("Missing essencePerSpark on purge-for-essence action.");
+  }
+  return action.essencePerSpark;
 }
 
 function siteTypeChoiceFollowup(
@@ -693,7 +694,7 @@ function followupForAction(
           action,
           content,
           "followupSubtitle",
-          `Choose a card to purge for ${String(action.essencePerSpark ?? content.economyData.exploration.defaultEssencePerSpark)} essence per ✦.`,
+          `Choose a card to purge for ${String(authoredEssencePerSpark(action))} essence per ✦.`,
         ),
         eligibleDeckCards(state, content),
         "single",
@@ -4384,9 +4385,7 @@ function rewardForResolution(
         kind: "purged-card-essence",
         card,
         spark: Math.max(0, card.model.displaySnapshot.spark ?? 0),
-        essencePerSpark:
-          resolvedAction.essencePerSpark ??
-          content.economyData.exploration.defaultEssencePerSpark,
+        essencePerSpark: authoredEssencePerSpark(resolvedAction),
         totalEssence: resolution.essenceGained,
       };
     }

@@ -54,6 +54,11 @@ export interface OpponentsData {
     startingSide: "player" | "enemy";
     skipPlayerOpeningDraw: boolean;
     opponentSignatureCardCount: number;
+    reward: {
+      baseEssence: number;
+      essencePerCompletionLevel: number;
+      minimumEssence: number;
+    };
   };
   dreamwell: {
     openingOrders: number[];

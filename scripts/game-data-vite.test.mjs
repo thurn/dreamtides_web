@@ -31,7 +31,7 @@ describe("RON generation Vite integration", () => {
         debounceMs: 10,
         list: () => ({ datasets: [
           { id: "cards", source: "data/cards.ron" },
-          { id: "draft", source: "data/draft.ron" },
+          { id: "draft", source: "data/draft_site.ron" },
         ] }),
       }).configureServer(instance);
       expect(ensure).toHaveBeenNthCalledWith(1, { rootDir });
@@ -69,16 +69,16 @@ describe("RON generation Vite integration", () => {
     try {
       await gameDataRonPlugin({
         rootDir, ensure, debounceMs: 10,
-        list: () => ({ datasets: [{ id: "draft", source: "data/draft.ron" }] }),
+        list: () => ({ datasets: [{ id: "draft", source: "data/draft_site.ron" }] }),
       }).configureServer(instance);
-      listener("change", "draft.ron");
+      listener("change", "draft_site.ron");
       await vi.advanceTimersByTimeAsync(10);
       await Promise.resolve();
       expect(instance.ws.send).toHaveBeenCalledWith(expect.objectContaining({
         type: "error",
         err: expect.objectContaining({ message: expect.stringContaining("draft") }),
       }));
-      listener("change", "draft.ron");
+      listener("change", "draft_site.ron");
       await vi.advanceTimersByTimeAsync(10);
       await Promise.resolve();
       expect(ensure).toHaveBeenCalledTimes(3);

@@ -180,8 +180,8 @@ Canonical RON and generated TOML share a basename and directory:
 ```text
 data/cards.ron                    # tracked source
 data/cards.toml                   # ignored generated compatibility file
-data/exploration.ron              # tracked source
-data/exploration.toml             # ignored generated compatibility file
+data/exploration_site.ron              # tracked source
+data/exploration_site.toml             # ignored generated compatibility file
 ```
 
 Keeping generated TOML at the current path makes the format boundary invisible

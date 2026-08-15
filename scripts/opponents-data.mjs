@@ -101,6 +101,12 @@ export function compileOpponentsData(sourceValue, { cardIds } = {}) {
     "starting-side",
     "skip-player-opening-draw",
     "opponent-signature-card-count",
+    "reward",
+  ]);
+  const battleReward = keys(battle.reward, "battle.reward", [
+    "base-essence",
+    "essence-per-completion-level",
+    "minimum-essence",
   ]);
   const startingSide = string(battle["starting-side"], "battle.starting-side");
   if (startingSide !== "player" && startingSide !== "enemy")
@@ -290,6 +296,20 @@ export function compileOpponentsData(sourceValue, { cardIds } = {}) {
         battle["opponent-signature-card-count"],
         "battle.opponent-signature-card-count",
       ),
+      reward: {
+        baseEssence: number(
+          battleReward["base-essence"],
+          "battle.reward.base-essence",
+        ),
+        essencePerCompletionLevel: number(
+          battleReward["essence-per-completion-level"],
+          "battle.reward.essence-per-completion-level",
+        ),
+        minimumEssence: number(
+          battleReward["minimum-essence"],
+          "battle.reward.minimum-essence",
+        ),
+      },
     },
     dreamwell: {
       openingOrders,

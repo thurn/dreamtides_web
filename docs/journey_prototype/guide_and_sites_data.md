@@ -6,12 +6,12 @@ catalog to generated compatibility TOML, and full asset setup compiles the
 catalogs to `public/dream-guides-data.json` and `public/sites-data.json`; the
 browser loads both documents before constructing `JourneyContent`.
 
-TypeScript owns structural identities and algorithms: `SiteType`, Gamble game
-IDs, the standard card deck, fixed gate and suit identities, routing, reducers,
-screen composition, and screen-local flow copy. RON owns guide identity and
-dialogue, site icons and glossary mappings, list-facing site labels and titles,
-selection tuning, and rule tables that designers and modders are expected to
-revise.
+TypeScript owns structural identities and algorithms: `SiteType`, routing,
+reducers, screen composition, and screen-local flow copy. RON owns guide
+identity and dialogue, site icons and glossary mappings, list-facing site
+labels and titles, selection tuning, rewards, purge costs, and rule tables that
+designers and modders are expected to revise. Gamble rules and economy are
+authored separately in `data/gamble_site.ron`.
 
 ## Dream guides
 
@@ -41,21 +41,14 @@ compatibility document carries `schema-version = 1`. The source contains:
 | `site_types`                   | Exactly one metadata record for every `SiteType`, including icons, glossary mappings, optional list-facing identity copy, and site-local rules. |
 | `random_site`                  | Eligible destinations, home and away choice counts, and the insufficient-destination policy.   |
 | `site_types.Duplication.rules` | Eligible deck-entry candidates shown by standard and enhanced Duplication sites.               |
-| `gamble.selection`             | Game weights and a guaranteed supported fallback.                                              |
-| `gamble.three_gate`            | Gate order and win/lose results.                                                               |
-| `gamble.ladder_climb`          | Attempt count, target range, and ordered reward tiers.                                         |
-| `gamble.starway_stairs`        | Attempt count, target range, and ordered reward tiers.                                         |
-| `gamble.four_suit_reprise`     | Draw count, suit order, ranking order, and result table.                                       |
-
-Four-Suit prices and Essence rewards live in `economy.ron`. The other Gamble
-prices and rewards continue to use the existing Economy catalog. The Sites
-compiler cross-validates its schedule against the compiled Economy data.
+| `selection`                    | Minimum deck size for Purge and the site types eligible for player placement.                  |
+| `rewards`                      | Standard and enhanced Essence ranges, fallback Reward Essence, and Dreamsign Revelation offer counts. |
+| `purge`                        | Marginal Purge costs and the enhanced-site discount percentage.                               |
 
 Metadata glossary IDs must resolve in `glossary.ron`. Random Site destinations
 must be materializable site implementations and fit the configured choice
-counts. Gamble tables must cover their code-owned identities and accepted
-template values. When the external art catalog is available, guide portrait
-source filenames must also resolve.
+counts. When the external art catalog is available, guide portrait source
+filenames must also resolve.
 
 The Duplication metadata owns its `rules.card_choices` configuration.
 `Count(3)` selects three eligible entries from the player's current deck, while
@@ -84,9 +77,8 @@ The targeted development pipeline applies these dependencies:
 
 - A Dream Guide edit recompiles guides, derives Dreamscapes, recompiles Sites,
   and refreshes guide portrait links.
-- A Site edit recompiles Sites.
+- A Site edit recompiles Sites and refreshes the browser economy aggregate.
 - A Glossary edit recompiles its artifact and revalidates Site references.
-- An Economy edit recompiles Economy and cross-validates Sites.
 
 The Dreamscape editor patches affected guide assignments and returns recomputed
 guide, Dreamscape, and Site catalogs in one atomic transaction. Selecting a

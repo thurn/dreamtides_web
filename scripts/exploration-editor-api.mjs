@@ -14,7 +14,7 @@ import { runTrox } from "./trox.mjs";
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/exploration";
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
-const EXPLORATION_SOURCE_PATHS = ["data/exploration.ron"];
+const EXPLORATION_SOURCE_PATHS = ["data/exploration_site.ron"];
 export function refreshExplorationLocalizationArtifacts({
   rootDir,
   stageRoot,

@@ -151,7 +151,7 @@ export interface RunPoolContext {
    * boundary.
    */
   idIndex: ReadonlyMap<CardId, number>;
-  /** Per-card rarity copy-cap overrides compiled from draft.toml. */
+  /** Per-card rarity copy-cap overrides compiled from draft_site.toml. */
   poolCopyCapsByCardNumber?: ReadonlyMap<number, number>;
   /** Default pool copy cap for cards without a rarity override. */
   defaultPoolCopyCap?: number;
@@ -160,7 +160,7 @@ export interface RunPoolContext {
    * Pool-construction algorithm for this run.
    */
   poolVariant?: PoolVariant;
-  /** Production tides4 tuning compiled from draft.toml. */
+  /** Production tides4 tuning compiled from draft_site.toml. */
   tides4Tuning?: DraftData["pool"]["tides4"];
 }
 

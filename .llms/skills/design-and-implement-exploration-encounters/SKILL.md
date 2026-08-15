@@ -167,7 +167,7 @@ to pause.
 
 ## 5. Implement exactly the selected action replacement
 
-Locate the selected `EncounterDefinition` in `data/exploration.ron`. Replace the
+Locate the selected `EncounterDefinition` in `data/exploration_site.ron`. Replace the
 nominated `ActionDefinition` in place. Preserve the encounter's position, card UUID,
 prose, and other action source exactly. Author the new action with its pre-minted
 UUID, label, presentation, and typed effect.

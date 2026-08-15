@@ -13,7 +13,7 @@ Unselected candidate encounters are outside the implementation diff.
 
 ## Canonical data and generation
 
-Exploration authoring lives in `data/exploration.ron`. Its root is a flat RON list
+Exploration authoring lives in `data/exploration_site.ron`. Its root is a flat RON list
 of `EncounterDefinition` values. Each encounter has a card UUID, prose, and one to
 four `ActionDefinition` values. Each action has:
 
@@ -24,7 +24,7 @@ four `ActionDefinition` values. Each action has:
 
 The authoritative model and compatibility lowerer are in
 `tools/game-data/src/models/exploration.rs`. `npm run game-data:compile` validates
-the source and emits `data/exploration.toml`. Runtime code consumes that generated
+the source and emits `data/exploration_site.toml`. Runtime code consumes that generated
 compatibility view.
 
 Keep these contracts synchronized when a typed effect changes:

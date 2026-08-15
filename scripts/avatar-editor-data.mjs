@@ -3,7 +3,7 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
 import { transformAvatar } from "./setup-assets.mjs";
-import { compileEconomyData } from "./economy-data.mjs";
+import { compileJourneyData } from "./economy-data.mjs";
 import { compileTidesData } from "./tides-data.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -13,7 +13,7 @@ export const DEFAULT_AVATAR_TOML_PATH = join(
 );
 export const TIDES_SOURCE_PATH = join("data", "tides.ron");
 export const TIDES_TOML_PATH = join("data", "tides.toml");
-export const DEFAULT_ECONOMY_TOML_PATH = join("data", "economy.toml");
+export const DEFAULT_JOURNEY_TOML_PATH = join("data", "journey.toml");
 const AVATAR_JSON_PATH = join("public", "avatars-v2-data.json");
 
 // Generated compatibility TOML supplies editor records. Semantic field and
@@ -122,11 +122,11 @@ export function readEditorAvatars({
   rootDir = ROOT,
   avatarTomlPath = DEFAULT_AVATAR_TOML_PATH,
   tides4Path = TIDES_TOML_PATH,
-  economyTomlPath = DEFAULT_ECONOMY_TOML_PATH,
+  journeyTomlPath = DEFAULT_JOURNEY_TOML_PATH,
 } = {}) {
   const tides4 = readTides4(rootDir, tides4Path, avatarTomlPath);
-  const economy = compileEconomyData(
-    parse(readFileSync(join(rootDir, economyTomlPath), "utf8")),
+  const journey = compileJourneyData(
+    parse(readFileSync(join(rootDir, journeyTomlPath), "utf8")),
   );
   return readSourceAvatars(rootDir, avatarTomlPath).map(
     (avatar, index) =>
@@ -134,7 +134,7 @@ export function readEditorAvatars({
         avatar,
         index,
         tides4,
-        economy.journey.defaultStartingEssence,
+        journey.defaultStartingEssence,
       ),
   );
 }

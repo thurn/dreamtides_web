@@ -3,9 +3,13 @@ import { compileEconomyData } from "./economy-data.mjs";
 
 function fixture() {
   return {
-    "schema-version": 1,
-    journey: { "default-starting-essence": 137, "dreamsign-cap": 9 },
+    journey: {
+      "schema-version": 1,
+      "default-starting-essence": 137,
+      "dreamsign-cap": 9,
+    },
     shop: {
+      "schema-version": 1,
       prices: { "standard-card": 73, "specialty-card": 149, dreamsign: 31 },
       stock: {
         "card-shop": { "card-slots": 4, "dreamsign-slots": 1 },
@@ -24,24 +28,34 @@ function fixture() {
       },
       reroll: { "standard-price": 27, "enhanced-price": 2, "max-per-visit": 2 },
     },
-    "site-rewards": {
-      essence: {
-        standard: { min: 41, max: 59 },
-        enhanced: { min: 83, max: 101 },
+    sites: {
+      "schema-version": 1,
+      rewards: {
+        essence: {
+          standard: { min: 41, max: 59 },
+          enhanced: { min: 83, max: 101 },
+        },
+        reward: { "fallback-essence": { min: 19, max: 37 } },
+        "dreamsign-revelation": {
+          "standard-offer-count": 2,
+          "enhanced-offer-count": 5,
+        },
       },
-      reward: { "fallback-essence": { min: 19, max: 37 } },
-      "dreamsign-revelation": {
-        "standard-offer-count": 2,
-        "enhanced-offer-count": 5,
+      purge: {
+        "marginal-costs": [13, 29, 61],
+        "enhanced-discount-percent": 25,
       },
     },
-    purge: { "marginal-costs": [13, 29, 61], "enhanced-discount-percent": 25 },
-    "battle-reward": {
-      "base-essence": 43,
-      "essence-per-completion-level": 17,
-      "minimum-essence": 3,
+    battle: {
+      "schema-version": 1,
+      battle: {
+        reward: {
+          "base-essence": 43,
+          "essence-per-completion-level": 17,
+          "minimum-essence": 3,
+        },
+      },
     },
-    exploration: { "default-essence-per-spark": 43 },
   };
 }
 
@@ -63,28 +77,28 @@ describe("compileEconomyData", () => {
     [
       "unknown section",
       (source) => {
-        source.extra = {};
+        source.journey.extra = {};
       },
       /unknown key/u,
     ],
     [
       "obsolete Gamble section",
       (source) => {
-        source.gamble = {};
+        source.shop.gamble = {};
       },
-      /root.gamble: unknown key/u,
+      /shop-site.gamble: unknown key/u,
     ],
     [
       "missing section",
       (source) => {
-        delete source.purge;
+        delete source.sites.purge;
       },
-      /missing key purge/u,
+      /sites\.purge: expected a table/u,
     ],
     [
       "invalid range",
       (source) => {
-        source["site-rewards"].essence.standard = { min: 9, max: 4 };
+        source.sites.rewards.essence.standard = { min: 9, max: 4 };
       },
       /min must not exceed max/u,
     ],
@@ -98,9 +112,9 @@ describe("compileEconomyData", () => {
     [
       "bad percentage",
       (source) => {
-        source.purge["enhanced-discount-percent"] = 101;
+        source.sites.purge["enhanced-discount-percent"] = 101;
       },
-      /expected a value/u,
+      /between 0 and 100/u,
     ],
     [
       "empty weights",

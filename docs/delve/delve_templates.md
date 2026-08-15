@@ -5,7 +5,7 @@ narrative focus. The player enters a short event inspired by that card and
 chooses between two actions.
 
 Every production encounter is authored in
-[`../../data/exploration.ron`](../../data/exploration.ron). An action colocates
+[`../../data/exploration_site.ron`](../../data/exploration_site.ron). An action colocates
 its player-facing presentation with one closed typed gameplay effect:
 
 ```ron
@@ -74,7 +74,7 @@ The browser editor obtains labels, controls, and safe field defaults from the
 closed code-owned schema in
 [`../../scripts/exploration-effect-definitions.mjs`](../../scripts/exploration-effect-definitions.mjs).
 That schema is development tooling metadata. Player-facing action and followup
-copy stays in `data/exploration.ron` and is saved on the individual action.
+copy stays in `data/exploration_site.ron` and is saved on the individual action.
 
 After editing canonical data, run `scripts/regenerate-assets.sh` to regenerate
 the compatibility TOML and browser JSON.

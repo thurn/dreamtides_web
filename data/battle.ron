@@ -37,4 +37,6 @@ BattleRules(
   // Number of representative opponent deck cards featured on the Battle Start
   // screen as that Avatar's signature cards.
   opponent_signature_card_count: 3,
+
+  reward: (base_essence: 100, essence_per_completion_level: 50, minimum_essence: 0),
 )

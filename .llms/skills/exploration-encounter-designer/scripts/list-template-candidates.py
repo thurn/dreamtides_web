@@ -18,7 +18,7 @@ from template_rendering import PLACEHOLDER_RE, SPECIAL_RE
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
 DEFAULT_TEMPLATE_CATALOG = REPO_ROOT / "data/templates.json"
-DEFAULT_EXPLORATION_DATA = REPO_ROOT / "data/exploration.toml"
+DEFAULT_EXPLORATION_DATA = REPO_ROOT / "data/exploration_site.toml"
 UNIQUE_EFFECT_BALANCE_CLASS = "unique_effect"
 SUPPORTED_BALANCE_CLASSES = {UNIQUE_EFFECT_BALANCE_CLASS}
 
@@ -46,7 +46,7 @@ def parse_args() -> argparse.Namespace:
         default=DEFAULT_EXPLORATION_DATA,
         help=(
             "Production encounter TOML used for prevalence counts "
-            "(default: data/exploration.toml)."
+            "(default: data/exploration_site.toml)."
         ),
     )
     parser.add_argument(

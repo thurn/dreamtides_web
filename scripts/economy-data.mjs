@@ -1,7 +1,8 @@
 import { createHash } from "node:crypto";
+import { compileSiteEconomyData } from "./guide-sites-data.mjs";
 
 function fail(path, message) {
-  throw new Error(`economy.toml ${path}: ${message}`);
+  throw new Error(`economy catalogs ${path}: ${message}`);
 }
 function table(value, path) {
   if (typeof value !== "object" || value === null || Array.isArray(value))
@@ -34,13 +35,6 @@ function number(value, path, { min = 0, max = Infinity, integer = true } = {}) {
 }
 const count = (value, path) => number(value, path);
 const percent = (value, path) => number(value, path, { max: 100 });
-function range(value, path) {
-  const source = keys(value, path, ["min", "max"]);
-  const min = count(source.min, `${path}.min`);
-  const max = count(source.max, `${path}.max`);
-  if (min > max) fail(path, "min must not exceed max");
-  return { min, max };
-}
 function weighted(value, path, validateValue) {
   const entries = list(value, path);
   if (entries.length === 0) fail(path, "must not be empty");
@@ -82,29 +76,43 @@ function hash(value) {
     .digest("hex");
 }
 
-/** Compile and strictly validate the parsed economy.toml document. */
-export function compileEconomyData(sourceValue) {
-  const root = keys(sourceValue, "root", [
+export function compileJourneyData(sourceValue) {
+  const journey = keys(sourceValue, "journey", [
     "schema-version",
-    "journey",
-    "shop",
-    "site-rewards",
-    "purge",
-    "battle-reward",
-    "exploration",
-  ]);
-  if (number(root["schema-version"], "schema-version") !== 1)
-    fail("schema-version", "only schema version 1 is supported");
-  const journey = keys(root.journey, "journey", [
     "default-starting-essence",
     "dreamsign-cap",
   ]);
-  const shop = keys(root.shop, "shop", [
+  if (number(journey["schema-version"], "journey.schema-version") !== 1)
+    fail("journey.schema-version", "only schema version 1 is supported");
+  return {
+    defaultStartingEssence: count(
+      journey["default-starting-essence"],
+      "journey.default-starting-essence",
+    ),
+    dreamsignCap: count(journey["dreamsign-cap"], "journey.dreamsign-cap"),
+  };
+}
+
+/** Assemble and strictly validate the economy data owned by four canonical catalogs. */
+export function compileEconomyData({ journey: journeyValue, shop: shopValue, sites: sitesValue, battle: battleValue }) {
+  const journey = compileJourneyData(journeyValue);
+  const shop = keys(shopValue, "shop-site", [
+    "schema-version",
     "prices",
     "stock",
     "discounts",
     "reroll",
   ]);
+  const sites = table(sitesValue, "sites");
+  const battleCatalog = table(battleValue, "battle");
+  for (const [path, version] of [
+    ["shop-site.schema-version", shop["schema-version"]],
+    ["sites.schema-version", sites["schema-version"]],
+    ["battle.schema-version", battleCatalog["schema-version"]],
+  ]) {
+    if (number(version, path) !== 1)
+      fail(path, "only schema version 1 is supported");
+  }
   const prices = keys(shop.prices, "shop.prices", [
     "standard-card",
     "specialty-card",
@@ -124,52 +132,19 @@ export function compileEconomyData(sourceValue) {
     "enhanced-price",
     "max-per-visit",
   ]);
-  const siteRewards = keys(root["site-rewards"], "site-rewards", [
-    "essence",
-    "reward",
-    "dreamsign-revelation",
-  ]);
-  const essence = keys(siteRewards.essence, "site-rewards.essence", [
-    "standard",
-    "enhanced",
-  ]);
-  const reward = keys(siteRewards.reward, "site-rewards.reward", [
-    "fallback-essence",
-  ]);
-  const revelation = keys(
-    siteRewards["dreamsign-revelation"],
-    "site-rewards.dreamsign-revelation",
-    ["standard-offer-count", "enhanced-offer-count"],
-  );
-  const purge = keys(root.purge, "purge", [
-    "marginal-costs",
-    "enhanced-discount-percent",
-  ]);
-  const marginalCosts = list(
-    purge["marginal-costs"],
-    "purge.marginal-costs",
-  ).map((entry, index) =>
-    count(entry, `purge.marginal-costs[${String(index)}]`),
-  );
-  if (marginalCosts.length === 0)
-    fail("purge.marginal-costs", "must not be empty");
-  const battle = keys(root["battle-reward"], "battle-reward", [
+  const { rewards: siteRewards, purge } = compileSiteEconomyData(sites, {
+    file: "economy catalogs",
+    pathPrefix: "sites.",
+  });
+  const battleRules = table(battleCatalog.battle, "battle.battle");
+  const battle = keys(battleRules.reward, "battle.battle.reward", [
     "base-essence",
     "essence-per-completion-level",
     "minimum-essence",
   ]);
-  const exploration = keys(root.exploration, "exploration", [
-    "default-essence-per-spark",
-  ]);
   const payload = {
     schemaVersion: 1,
-    journey: {
-      defaultStartingEssence: count(
-        journey["default-starting-essence"],
-        "journey.default-starting-essence",
-      ),
-      dreamsignCap: count(journey["dreamsign-cap"], "journey.dreamsign-cap"),
-    },
+    journey,
     shop: {
       prices: {
         standardCard: count(
@@ -220,50 +195,17 @@ export function compileEconomyData(sourceValue) {
         ),
       },
     },
-    siteRewards: {
-      essence: {
-        standard: range(essence.standard, "site-rewards.essence.standard"),
-        enhanced: range(essence.enhanced, "site-rewards.essence.enhanced"),
-      },
-      reward: {
-        fallbackEssence: range(
-          reward["fallback-essence"],
-          "site-rewards.reward.fallback-essence",
-        ),
-      },
-      dreamsignRevelation: {
-        standardOfferCount: count(
-          revelation["standard-offer-count"],
-          "site-rewards.dreamsign-revelation.standard-offer-count",
-        ),
-        enhancedOfferCount: count(
-          revelation["enhanced-offer-count"],
-          "site-rewards.dreamsign-revelation.enhanced-offer-count",
-        ),
-      },
-    },
-    purge: {
-      marginalCosts,
-      enhancedDiscountPercent: percent(
-        purge["enhanced-discount-percent"],
-        "purge.enhanced-discount-percent",
-      ),
-    },
+    siteRewards,
+    purge,
     battleReward: {
-      baseEssence: count(battle["base-essence"], "battle-reward.base-essence"),
+      baseEssence: count(battle["base-essence"], "battle.battle.reward.base-essence"),
       essencePerCompletionLevel: count(
         battle["essence-per-completion-level"],
-        "battle-reward.essence-per-completion-level",
+        "battle.battle.reward.essence-per-completion-level",
       ),
       minimumEssence: count(
         battle["minimum-essence"],
-        "battle-reward.minimum-essence",
-      ),
-    },
-    exploration: {
-      defaultEssencePerSpark: count(
-        exploration["default-essence-per-spark"],
-        "exploration.default-essence-per-spark",
+        "battle.battle.reward.minimum-essence",
       ),
     },
   };

@@ -77,6 +77,21 @@ function sitesFixture() {
       "min-deck-for-purge": 8,
       "placeable-sites": ["Shop", "Purge", "Transfiguration", "Duplication"],
     },
+    rewards: {
+      essence: {
+        standard: { min: 10, max: 20 },
+        enhanced: { min: 30, max: 40 },
+      },
+      reward: { "fallback-essence": { min: 15, max: 25 } },
+      "dreamsign-revelation": {
+        "standard-offer-count": 3,
+        "enhanced-offer-count": 4,
+      },
+    },
+    purge: {
+      "marginal-costs": [40, 60],
+      "enhanced-discount-percent": 30,
+    },
     "site-types": SITE_TYPES.map((type) => ({
       type,
       icon: `fixture-icon-${type}`,

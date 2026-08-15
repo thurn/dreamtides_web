@@ -11,6 +11,18 @@ SitesCatalog(
     placeable_sites: [Shop, Purge, Transfiguration, Duplication],
   ),
 
+  rewards: (
+    essence: (standard: (min: 200, max: 300), enhanced: (min: 400, max: 600)),
+    reward_fallback_essence: (min: 150, max: 350),
+    dreamsign_revelation: (standard_offer_count: 3, enhanced_offer_count: 4),
+  ),
+
+  purge: (
+    // Each entry prices the next paid purge; the list length is the visit cap.
+    marginal_costs: [40, 60, 90, 130, 180, 240],
+    enhanced_discount_percent: 30,
+  ),
+
   site_types: [
     SiteMetadata(
       site: Battle,

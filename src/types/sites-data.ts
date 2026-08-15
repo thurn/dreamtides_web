@@ -49,6 +49,21 @@ export interface SitesData {
     minDeckForPurge: number;
     placeableSites: readonly SiteType[];
   };
+  rewards: {
+    essence: {
+      standard: { min: number; max: number };
+      enhanced: { min: number; max: number };
+    };
+    reward: { fallbackEssence: { min: number; max: number } };
+    dreamsignRevelation: {
+      standardOfferCount: number;
+      enhancedOfferCount: number;
+    };
+  };
+  purge: {
+    marginalCosts: readonly number[];
+    enhancedDiscountPercent: number;
+  };
   siteTypes: Readonly<Record<SiteType, SiteTypeData>>;
   randomSite: {
     destinations: readonly RandomSiteDestinationType[];

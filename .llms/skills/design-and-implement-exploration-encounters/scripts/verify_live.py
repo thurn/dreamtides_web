@@ -15,7 +15,7 @@ from select_batch import SelectionError, canonical_uuid
 
 SCRIPTS_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPTS_DIR.parents[3]
-DEFAULT_EXPLORATION = REPO_ROOT / "data/exploration.toml"
+DEFAULT_EXPLORATION = REPO_ROOT / "data/exploration_site.toml"
 MISSING = object()
 
 

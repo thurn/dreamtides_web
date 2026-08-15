@@ -130,6 +130,18 @@ export const MINIMAL_SITES_DATA: SitesData = {
     minDeckForPurge: 8,
     placeableSites: ["Shop", "Purge", "Transfiguration", "Duplication"],
   },
+  rewards: {
+    essence: {
+      standard: { min: 200, max: 300 },
+      enhanced: { min: 400, max: 600 },
+    },
+    reward: { fallbackEssence: { min: 150, max: 350 } },
+    dreamsignRevelation: { standardOfferCount: 3, enhancedOfferCount: 4 },
+  },
+  purge: {
+    marginalCosts: [40, 60, 90, 130, 180, 240],
+    enhancedDiscountPercent: 30,
+  },
   siteTypes: SYNTHETIC_SITE_TYPES,
   randomSite: {
     destinations: [

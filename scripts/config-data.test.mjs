@@ -22,7 +22,9 @@ const REQUIRED_DATA_FILES = [
   "atlas.toml",
   "dream_guides.toml",
   "dreamscapes.toml",
-  "economy.toml",
+  "journey.toml",
+  "shop_site.toml",
+  "battle.toml",
   "glossary.toml",
   "sites.toml",
 ];
@@ -86,16 +88,16 @@ describe("regenerateConfigData Atlas dependencies", () => {
 
   it("hot-regenerates economy JSON and changes its fold hash after an edit", () => {
     const rootDir = makeFixtureRoot();
-    regenerateConfigData("economy.toml", { rootDir });
+    regenerateConfigData("shop_site.toml", { rootDir });
     const jsonPath = join(rootDir, "public", "economy-data.json");
     const before = JSON.parse(readFileSync(jsonPath, "utf8"));
-    const sourcePath = join(rootDir, "data", "economy.toml");
+    const sourcePath = join(rootDir, "data", "shop_site.toml");
     const source = readFileSync(sourcePath, "utf8");
     writeFileSync(
       sourcePath,
       source.replace("standard-card = 100", "standard-card = 101"),
     );
-    regenerateConfigData("economy.toml", { rootDir });
+    regenerateConfigData("shop_site.toml", { rootDir });
     const after = JSON.parse(readFileSync(jsonPath, "utf8"));
     expect(after.shop.prices.standardCard).toBe(101);
     expect(after.foldHash).not.toBe(before.foldHash);

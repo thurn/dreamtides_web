@@ -24,7 +24,6 @@ export async function loadEconomyData(): Promise<EconomyData> {
     !SHA256_HEX.test(candidate.foldHash ?? "") ||
     candidate.journey === undefined ||
     candidate.shop === undefined ||
-    candidate.exploration === undefined ||
     "gamble" in candidate
   ) {
     throw new Error("Failed to load economy data: malformed economy-data.json");
