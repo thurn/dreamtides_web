@@ -1,5 +1,7 @@
 import type { ArtCrop } from "../types/cards";
-import type { SourceTransport } from "../runtime/localization/runtime";
+import type {
+  BindableSourceTransport,
+} from "../runtime/localization/runtime";
 import { hydrateSourceTransport } from "../runtime/localization/runtime";
 import { SourceMessage } from "@trox/runtime";
 import {
@@ -51,12 +53,12 @@ export type DreamwellPromptArgumentKind =
 
 export interface DreamwellAutomationPrompt {
   readonly key: DreamwellPromptKey;
-  readonly title: SourceTransport;
-  readonly subtitle: SourceTransport;
-  readonly instructions: SourceTransport;
+  readonly title: BindableSourceTransport;
+  readonly subtitle: BindableSourceTransport;
+  readonly instructions: BindableSourceTransport;
   readonly choices?: readonly {
     readonly key: DreamwellChoiceKey;
-    readonly label: SourceTransport;
+    readonly label: BindableSourceTransport;
   }[];
   readonly arguments?: readonly {
     readonly name: string;

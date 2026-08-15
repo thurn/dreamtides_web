@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
+import { assertLocalized } from "@trox/runtime";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
@@ -22,8 +23,14 @@ import {
   createBattlePreview,
   settleDeferredOpponentLog,
 } from "./battle-init-provider";
+import {
+  testDreamwellCardId,
+  testDreamwellCardName,
+  testDreamwellPromptKey,
+} from "../../types/test-identities";
 import { parseJourneyId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
+import { hashState } from "../../eventlog/hash";
 
 function makeContent(): JourneyContent {
   return {
@@ -31,7 +38,24 @@ function makeContent(): JourneyContent {
     draftData: draftDataFixture(),
     cardDatabase: makeBattleTestCardDatabase(),
     dreamAvatars: makeBattleTestDreamAvatars(),
-    dreamwellCards: [],
+    dreamwellCards: [
+      {
+        id: testDreamwellCardId("json-safe-battle"),
+        name: testDreamwellCardName("JSON-safe Battle"),
+        renderedText: "Synthetic Dreamwell fixture.",
+        order: 0,
+        energyAdded: 1,
+        cardNumber: 1,
+        automation: [
+          {
+            key: testDreamwellPromptKey("choose-card"),
+            title: assertLocalized("Choose a card"),
+            subtitle: assertLocalized("Synthetic fixture"),
+            instructions: assertLocalized("Select one card."),
+          },
+        ],
+      },
+    ],
     dreamsignTemplates: [],
     dreamscapes: MINIMAL_DREAMSCAPES,
     affiliations: [],
@@ -76,6 +100,7 @@ describe("battle init provider", () => {
     expect(preview).not.toBeNull();
     expect(battle?.init).toEqual(preview);
     expect(battle?.init.seed).toBe(4242);
+    expect(() => hashState(battle)).not.toThrow();
     expect(getLogEntries()).toEqual([]);
 
     expect(settleDeferredOpponentLog(17, true)).toBe(true);

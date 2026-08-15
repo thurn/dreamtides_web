@@ -242,10 +242,7 @@ pub fn lower(
         record.insert("energy-cost".into(), card.energy_cost.compatibility_value());
         record.insert("card-type".into(), card_type.into());
         record.insert("subtype".into(), subtype.into());
-        record.insert(
-            "rarity".into(),
-            card.rarity.as_compat().into(),
-        );
+        record.insert("rarity".into(), card.rarity.as_compat().into());
         if !card.roles.is_empty() {
             let unique_roles = card.roles.iter().copied().collect::<BTreeSet<_>>();
             if unique_roles.len() != card.roles.len() {

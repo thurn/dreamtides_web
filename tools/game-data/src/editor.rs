@@ -518,11 +518,8 @@ fn edit_affiliations(
                     })
                     .collect::<Result<Vec<_>>>()?;
                 catalog.affiliations[index].tide_ids = parsed;
-                source = patch_affiliation_field(
-                    &source,
-                    &catalog.affiliations[index],
-                    "tide_ids",
-                )?;
+                source =
+                    patch_affiliation_field(&source, &catalog.affiliations[index], "tide_ids")?;
             }
             _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to affiliations"),
         }
@@ -1146,11 +1143,8 @@ fn edit_dreamsigns(
                         .collect::<Vec<_>>();
                     if retained != definition.tags {
                         definition.tags = retained;
-                        source_text = patch_dreamsign_definition_field(
-                            &source_text,
-                            definition,
-                            "tags",
-                        )?;
+                        source_text =
+                            patch_dreamsign_definition_field(&source_text, definition, "tags")?;
                     }
                 }
                 if replacement != tags {
@@ -1177,7 +1171,7 @@ fn edit_dreamsigns(
         ok: true,
         changed,
         dataset_id: "dreamsigns".into(),
-        source_revision: revision(staging_root, manifest, &["dreamsigns", "dreamsign-tags"])?
+        source_revision: revision(staging_root, manifest, &["dreamsigns", "dreamsign-tags"])?,
     })
 }
 
@@ -2012,13 +2006,11 @@ fn edit_dream_avatars(
                     facets: parse_tide_ids(&facets)?,
                     neutral: parse_tide_ids(&neutral)?,
                 };
-                dream_avatars::validate_tide_references(&avatars, &tide_kinds)
-                    .context("INVALID_EDIT: DreamAvatar tide-pool edit violates the catalog contract")?;
-                source_text = patch_dream_avatar_source_field(
-                    &source_text,
-                    &avatars[index],
-                    "tide-pool",
+                dream_avatars::validate_tide_references(&avatars, &tide_kinds).context(
+                    "INVALID_EDIT: DreamAvatar tide-pool edit violates the catalog contract",
                 )?;
+                source_text =
+                    patch_dream_avatar_source_field(&source_text, &avatars[index], "tide-pool")?;
             }
             _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to DreamAvatars"),
         }
@@ -3866,7 +3858,6 @@ TidesCatalog(
 )
 "###;
 
-
     const EXPLORATION_SOURCE: &str = r###"// Stable Exploration guidance.
 #![enable(implicit_some)]
 [
@@ -4911,8 +4902,7 @@ DreamwellCatalog(
             json!("Edited Tide"),
         )
         .unwrap();
-        let patched =
-            patch_tide_field(TIDES_SOURCE, &catalog.tides[index], "displayName").unwrap();
+        let patched = patch_tide_field(TIDES_SOURCE, &catalog.tides[index], "displayName").unwrap();
 
         assert_eq!(ron::from_str::<TidesCatalog>(&patched).unwrap(), catalog);
         let before = TIDES_SOURCE.lines().collect::<Vec<_>>();
@@ -4935,8 +4925,7 @@ DreamwellCatalog(
         let mut catalog: TidesCatalog = ron::from_str(TIDES_SOURCE).unwrap();
         let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
         set_tide_field(&mut catalog.tides[index], "resonance", json!("ember")).unwrap();
-        let patched =
-            patch_tide_field(TIDES_SOURCE, &catalog.tides[index], "resonance").unwrap();
+        let patched = patch_tide_field(TIDES_SOURCE, &catalog.tides[index], "resonance").unwrap();
 
         assert_eq!(ron::from_str::<TidesCatalog>(&patched).unwrap(), catalog);
         assert!(patched.contains("resonance: Ember"));
@@ -4949,18 +4938,19 @@ DreamwellCatalog(
         assert!(unique_tide_index(&catalog, "not-a-uuid").is_err());
         assert!(unique_tide_index(&catalog, "00000000-0000-4000-8000-000000000099").is_err());
         let index = unique_tide_index(&catalog, TIDE_ID).unwrap();
-        assert!(
-            set_tide_field(&mut catalog.tides[index], "resonance", json!("harmony")).is_err()
-        );
+        assert!(set_tide_field(&mut catalog.tides[index], "resonance", json!("harmony")).is_err());
         assert!(set_tide_field(&mut catalog.tides[index], "kind", json!("neutral")).is_err());
 
         let mut avatars: Vec<AvatarDefinition> = ron::from_str(DREAM_AVATAR_SOURCE).unwrap();
         avatars[0].tide_pool.facets = vec![TideId::parse(TIDE_ID).unwrap()];
         assert!(
-            dream_avatars::validate_tide_references(&avatars, &tides::tide_kinds(&catalog).unwrap())
-                .unwrap_err()
-                .to_string()
-                .contains("facet reference")
+            dream_avatars::validate_tide_references(
+                &avatars,
+                &tides::tide_kinds(&catalog).unwrap()
+            )
+            .unwrap_err()
+            .to_string()
+            .contains("facet reference")
         );
     }
 
@@ -6452,17 +6442,20 @@ DreamwellCatalog(
     #[test]
     fn exploration_editor_preserves_typed_presentation_placeholders() {
         let mut value = action(EffectKind::GainDreamsign);
-        value.as_object_mut().unwrap().insert(
-            "effectText".into(),
-            json!("Gain {nightmare_card}"),
-        );
+        value
+            .as_object_mut()
+            .unwrap()
+            .insert("effectText".into(), json!("Gain {nightmare_card}"));
         let action = action_from_compat(value).unwrap();
         let arguments = action
             .presentation
             .effect_text
             .ron_template_arguments()
             .expect("placeholder-bearing editor copy must remain a RON template");
-        assert_eq!(arguments.get("nightmare_card"), Some(&trox::ArgumentSchema::Opaque));
+        assert_eq!(
+            arguments.get("nightmare_card"),
+            Some(&trox::ArgumentSchema::Opaque)
+        );
         assert_eq!(arguments.len(), 1);
     }
 
@@ -7023,12 +7016,9 @@ AffiliationCatalog(
             CanonicalUuid::parse("00000000-0000-4000-8000-000000000102").unwrap(),
             CanonicalUuid::parse("00000000-0000-4000-8000-000000000101").unwrap(),
         ];
-        let patched = patch_affiliation_field(
-            AFFILIATION_SOURCE,
-            &catalog.affiliations[0],
-            "tide_ids",
-        )
-        .unwrap();
+        let patched =
+            patch_affiliation_field(AFFILIATION_SOURCE, &catalog.affiliations[0], "tide_ids")
+                .unwrap();
         assert!(patched.contains(
             "[\"00000000-0000-4000-8000-000000000103\",\"00000000-0000-4000-8000-000000000102\",\"00000000-0000-4000-8000-000000000101\"]"
         ));

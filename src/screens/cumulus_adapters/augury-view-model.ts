@@ -327,7 +327,7 @@ export function projectOfferTileCategory(
       if (category.id.startsWith("subtype:")) {
         return { kind: "subtype", name: localizedSourceText(category.label) };
       }
-      if (category.id.startsWith("cluster:")) {
+      if (category.id.startsWith("tide:")) {
         return { kind: "package", name: localizedSourceText(category.label) };
       }
       return unavailable("category_draft_known has an unsupported category id");

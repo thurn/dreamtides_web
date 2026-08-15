@@ -178,6 +178,11 @@ mod tests {
     fn rejects_invalid_progress_placeholders() {
         let mut source = document();
         source.presentation.progress = ls("Draft ({pick_number})");
-        assert!(lower(source).unwrap_err().to_string().contains("pick_total"));
+        assert!(
+            lower(source)
+                .unwrap_err()
+                .to_string()
+                .contains("pick_total")
+        );
     }
 }

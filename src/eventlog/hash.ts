@@ -13,7 +13,7 @@ import { parseStateHash, type StateHash } from "./types";
  * different state. Do not sort arrays.
  */
 export function hashState(value: unknown): StateHash {
-  return parseStateHash(sha256(canonicalize(value)));
+  return parseStateHash(sha256(canonicalize(value, "$")));
 }
 
 /**
@@ -34,7 +34,7 @@ export function hashState(value: unknown): StateHash {
  *   silently hide a structural difference is enforced by {@link assertJsonSafe},
  *   which the client runs on the folded state in dev mode.
  */
-function canonicalize(value: unknown): string {
+function canonicalize(value: unknown, path: string): string {
   if (value === undefined || typeof value === "function" || typeof value === "symbol") {
     // Reached only for a top-level unserializable value; emit the JSON slot form.
     return "null";
@@ -43,15 +43,17 @@ function canonicalize(value: unknown): string {
     return JSON.stringify(value);
   }
   if (Array.isArray(value)) {
-    const items = value.map((item) =>
+    const items = value.map((item, index) =>
       item === undefined || typeof item === "function" || typeof item === "symbol"
         ? "null"
-        : canonicalize(item),
+        : canonicalize(item, `${path}[${String(index)}]`),
     );
     return `[${items.join(",")}]`;
   }
   if (!isPlainObject(value)) {
-    throw new Error("hashState: non-plain object cannot be canonicalized safely");
+    throw new Error(
+      `hashState: ${path} holds a non-plain object that cannot be canonicalized safely`,
+    );
   }
   const record = value as Record<string, unknown>;
   const keys = Object.keys(record).sort();
@@ -62,7 +64,7 @@ function canonicalize(value: unknown): string {
       // JSON.stringify drops such object entries entirely.
       continue;
     }
-    entries.push(`${JSON.stringify(key)}:${canonicalize(child)}`);
+    entries.push(`${JSON.stringify(key)}:${canonicalize(child, `${path}.${key}`)}`);
   }
   return `{${entries.join(",")}}`;
 }

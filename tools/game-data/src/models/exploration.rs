@@ -1970,11 +1970,10 @@ mod tests {
 
     #[test]
     fn transfiguration_references_use_ron_enum_variants() {
-        let bare = "TransfigureAllForEssence(essence: 10, predicate: Event, transfiguration: Inspired)";
+        let bare =
+            "TransfigureAllForEssence(essence: 10, predicate: Event, transfiguration: Inspired)";
         assert!(ron::from_str::<ActionEffect>(bare).is_ok());
-        assert!(
-            ron::from_str::<ActionEffect>(&bare.replace("Inspired", r#""Inspired""#)).is_err()
-        );
+        assert!(ron::from_str::<ActionEffect>(&bare.replace("Inspired", r#""Inspired""#)).is_err());
         assert!(ron::from_str::<ActionEffect>(&bare.replace("Inspired", "Unknown")).is_err());
     }
 

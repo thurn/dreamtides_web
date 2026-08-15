@@ -7,8 +7,8 @@ use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::{joined_source_text, source_text};
 use super::cards::Rarity;
+use super::localization::{joined_source_text, source_text};
 use super::tides::TideId;
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -147,7 +147,10 @@ pub fn validate_definitions(definitions: &[DreamsignDefinition]) -> Result<()> {
             bail!("Dreamsign {} has a non-pool rarity", definition.id);
         }
         if definition.tide_ids.is_empty() || definition.tide_ids.len() > 3 {
-            bail!("Dreamsign {} must declare between one and three tides", definition.id);
+            bail!(
+                "Dreamsign {} must declare between one and three tides",
+                definition.id
+            );
         }
         let mut tide_ids = BTreeSet::new();
         for tide_id in &definition.tide_ids {
@@ -176,7 +179,10 @@ pub fn validate_tide_references(
     for definition in definitions {
         for tide_id in &definition.tide_ids {
             if !known_tide_ids.contains(&tide_id.to_string()) {
-                bail!("Dreamsign {} references unknown Tide UUID {tide_id}", definition.id);
+                bail!(
+                    "Dreamsign {} references unknown Tide UUID {tide_id}",
+                    definition.id
+                );
             }
         }
     }
@@ -360,7 +366,12 @@ mod tests {
 
         let mut definitions = fixture();
         definitions[0].tags = vec!["duplicate".into(), "duplicate".into()];
-        assert!(lower(definitions).unwrap_err().to_string().contains("repeats tags value"));
+        assert!(
+            lower(definitions)
+                .unwrap_err()
+                .to_string()
+                .contains("repeats tags value")
+        );
 
         let known = BTreeSet::from([TIDE_ONE.to_owned()]);
         assert!(

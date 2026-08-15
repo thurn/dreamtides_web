@@ -314,7 +314,8 @@ fn lower_guide(
             dialogue.gamble_three_gate = Some(source_transport_values(gamble.three_gate)?);
             dialogue.gamble_ladder_climb = Some(source_transport_values(gamble.ladder_climb)?);
             dialogue.gamble_starway_stairs = Some(source_transport_values(gamble.starway_stairs)?);
-            dialogue.gamble_four_suit_reprise = Some(source_transport_values(gamble.four_suit_reprise)?);
+            dialogue.gamble_four_suit_reprise =
+                Some(source_transport_values(gamble.four_suit_reprise)?);
             dialogue.gamble_blackjack = Some(source_transport_values(gamble.blackjack)?);
         }
         GuideSpecialty::Shop { .. }

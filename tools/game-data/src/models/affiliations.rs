@@ -126,16 +126,15 @@ pub fn validate(source: &AffiliationCatalog) -> Result<()> {
             );
         }
         if affiliation.tide_ids.len() != 3 {
-            bail!("affiliation {} must declare exactly three tides", affiliation.id);
+            bail!(
+                "affiliation {} must declare exactly three tides",
+                affiliation.id
+            );
         }
         let mut tide_ids = BTreeSet::new();
         for tide_id in &affiliation.tide_ids {
             if !tide_ids.insert(*tide_id) {
-                bail!(
-                    "affiliation {} repeats tide id {}",
-                    affiliation.id,
-                    tide_id
-                );
+                bail!("affiliation {} repeats tide id {}", affiliation.id, tide_id);
             }
         }
     }
@@ -150,7 +149,10 @@ pub fn validate_tide_references(
     for affiliation in &source.affiliations {
         for tide_id in &affiliation.tide_ids {
             if !known_tide_ids.contains(&tide_id.to_string()) {
-                bail!("affiliation {} references unknown Tide UUID {tide_id}", affiliation.id);
+                bail!(
+                    "affiliation {} references unknown Tide UUID {tide_id}",
+                    affiliation.id
+                );
             }
         }
     }

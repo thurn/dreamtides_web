@@ -96,9 +96,7 @@ impl TransfigurationFormId {
     }
 
     pub(crate) fn from_compat(value: &str) -> Option<Self> {
-        Self::ALL
-            .into_iter()
-            .find(|form| form.as_compat() == value)
+        Self::ALL.into_iter().find(|form| form.as_compat() == value)
     }
 
     const ALL: [Self; 9] = [

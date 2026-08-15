@@ -37,13 +37,6 @@ export function configuredTutorialJourneyDreamAvatarId(): DreamAvatarId | null {
 
 const MAIN_ACTION_IDS: ReadonlySet<FrontDoorActionId> = new Set([
   parseFrontDoorActionId("new-journey"),
-  parseFrontDoorActionId("dream-codex"),
-  parseFrontDoorActionId("settings"),
-  parseFrontDoorActionId("about"),
-  parseFrontDoorActionId("quit"),
-  parseFrontDoorActionId("github"),
-  parseFrontDoorActionId("discord"),
-  parseFrontDoorActionId("reddit"),
 ]);
 
 function isTutorialPlayerBackSlotId(value: unknown): value is BattleSlotViewId {
@@ -110,10 +103,6 @@ export function frontDoorAction(
 
   if (surface !== "main") return null;
   if (state.phase !== "main" || !MAIN_ACTION_IDS.has(actionId)) return null;
-
-  if (actionId !== "new-journey") {
-    return state;
-  }
 
   return {
     phase: "mainExiting",

@@ -21,6 +21,7 @@ import {
   localizedSourceText,
   requireSourceRuntime,
   resolveSource,
+  serializeSourceTransport,
   sourceMessage,
   splitCanonicalLocalizedParagraphs,
 } from "./runtime";
@@ -79,6 +80,7 @@ describe("Trox localization runtime", () => {
     expect(Object.keys(sourceMessage(reference).argumentSchemas)).toEqual(
       Object.keys(entry.arguments ?? {}),
     );
+    expect(serializeSourceTransport(sourceMessage(reference))).toEqual(reference);
     expect(() => sourceMessage({ ...reference, contract_signature: "0".repeat(64) }))
       .toThrow(/unauthorized-entry/u);
   });
@@ -218,6 +220,9 @@ describe("Trox localization runtime", () => {
         message.toCanonicalJSON(),
       ).entryId,
     ).toBe(message.entryId);
+    const serialized = serializeSourceTransport(message);
+    expect(JSON.parse(JSON.stringify(serialized))).toEqual(serialized);
+    expect(resolveSource(bindSourceTransport(serialized))).toBe("Search cards");
   });
 
   it("authorizes static canonical source text without asserting it untranslated", () => {

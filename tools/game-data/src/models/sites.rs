@@ -349,7 +349,10 @@ fn lower_presentation(source: SitePresentation) -> Result<toml::Value> {
         } => {
             put("kind", "battle".into());
             put("label", source_transport_value(&label)?);
-            put("final-boss-label", source_transport_value(&final_boss_label)?);
+            put(
+                "final-boss-label",
+                source_transport_value(&final_boss_label)?,
+            );
             put("locked-guidance", source_transport_value(&locked_guidance)?);
         }
         SitePresentation::Draft { label } => {
@@ -400,7 +403,10 @@ fn lower_presentation(source: SitePresentation) -> Result<toml::Value> {
             );
             put("restock-action", source_transport_value(&restock_action)?);
             put("free-price", source_transport_value(&free_price)?);
-            put("replacement-title", source_transport_value(&replacement_title)?);
+            put(
+                "replacement-title",
+                source_transport_value(&replacement_title)?,
+            );
         }
         SitePresentation::DreamsignRevelation { loading, exhausted } => {
             put("kind", "dreamsign-revelation".into());
@@ -445,12 +451,7 @@ fn validate(source: &SitesCatalog) -> Result<()> {
         source.selection.min_deck_for_purge > 0,
         "selection min_deck_for_purge must be positive"
     );
-    let allowed_placeable = BTreeSet::from([
-        "Shop",
-        "Purge",
-        "Transfiguration",
-        "Duplication",
-    ]);
+    let allowed_placeable = BTreeSet::from(["Shop", "Purge", "Transfiguration", "Duplication"]);
     let placeable = source
         .selection
         .placeable_types

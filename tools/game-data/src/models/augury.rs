@@ -485,10 +485,22 @@ pub fn lower(source: AuguryCatalog) -> Result<toml::Value> {
             (
                 "cost-bands".into(),
                 toml::Value::Table(toml::map::Map::from_iter([
-                    ("cheap-maximum".into(), i64::from(selection.cost_bands.cheap_maximum).into()),
-                    ("mid-minimum".into(), i64::from(selection.cost_bands.mid_minimum).into()),
-                    ("mid-maximum".into(), i64::from(selection.cost_bands.mid_maximum).into()),
-                    ("big-minimum".into(), i64::from(selection.cost_bands.big_minimum).into()),
+                    (
+                        "cheap-maximum".into(),
+                        i64::from(selection.cost_bands.cheap_maximum).into(),
+                    ),
+                    (
+                        "mid-minimum".into(),
+                        i64::from(selection.cost_bands.mid_minimum).into(),
+                    ),
+                    (
+                        "mid-maximum".into(),
+                        i64::from(selection.cost_bands.mid_maximum).into(),
+                    ),
+                    (
+                        "big-minimum".into(),
+                        i64::from(selection.cost_bands.big_minimum).into(),
+                    ),
                     (
                         "cheap-character-maximum".into(),
                         i64::from(selection.cost_bands.cheap_character_maximum).into(),
@@ -921,9 +933,7 @@ mod tests {
             Some("trox-source-message-ref")
         );
         assert_eq!(
-            count["one"]["source_signature"]
-                .as_str()
-                .map(str::len),
+            count["one"]["source_signature"].as_str().map(str::len),
             Some(64)
         );
 

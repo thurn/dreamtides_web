@@ -75,7 +75,7 @@ describe("hashState", () => {
 
   it("does not canonicalize non-plain object containers as empty records", () => {
     expect(() => hashState({ cache: new Map([["x", 1]]) })).toThrow(
-      /non-plain object/,
+      /\$\.cache holds a non-plain object/,
     );
   });
 });

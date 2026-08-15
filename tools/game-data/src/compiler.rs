@@ -10,9 +10,9 @@ use sha2::{Digest, Sha256};
 
 use crate::manifest::{Adapter, Dataset, Manifest, MigrationState};
 use crate::models::{
-    affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft,
-    dream_avatars, dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments,
-    gamble, glossary, internal_card_metadata, opponents, resonance, sites, tides, transfiguration,
+    affiliations, apollyon_incarnations, atlas, augury, cards, compat, draft, dream_avatars,
+    dream_guides, dreamscapes, dreamsigns, dreamwell, economy, exploration, figments, gamble,
+    glossary, internal_card_metadata, opponents, resonance, sites, tides, transfiguration,
     tutorial, tutorial_journey_pool,
 };
 
@@ -164,10 +164,7 @@ fn adapt(
                     .with_context(|| format!("read tides source {}", tides_dataset.source))?,
                 tides_dataset,
             )?;
-            dream_avatars::validate_tide_references(
-                &avatars,
-                &tides::tide_kinds(&tides_catalog)?,
-            )?;
+            dream_avatars::validate_tide_references(&avatars, &tides::tide_kinds(&tides_catalog)?)?;
             let metadata_dataset = manifest.dataset("internal-card-metadata")?;
             let metadata_source = fs::read_to_string(root.join(&metadata_dataset.source))
                 .with_context(|| {

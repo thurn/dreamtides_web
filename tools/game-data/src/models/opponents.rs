@@ -63,7 +63,6 @@ pub struct ProgressionRules {
     pub starter_dilution: Vec<u32>,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DeckEntry {

@@ -283,7 +283,10 @@ pub(crate) fn validate(source: &[AvatarDefinition]) -> Result<()> {
             );
         }
         if avatar.tide_pool.facets.is_empty() {
-            bail!("DreamAvatar {} must contain at least one facet tide", avatar.id);
+            bail!(
+                "DreamAvatar {} must contain at least one facet tide",
+                avatar.id
+            );
         }
         if avatar.portrait.image == 0 || avatar.portrait.image > 9_999 {
             bail!(

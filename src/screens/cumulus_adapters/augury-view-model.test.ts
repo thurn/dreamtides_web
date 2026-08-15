@@ -574,7 +574,7 @@ describe("augury view model", () => {
       ["fast", "fast card", { kind: "fast" }],
       ["subtype:Ancient", "Ancient", { kind: "subtype", name: "Ancient" }],
       [
-        "cluster:7",
+        "tide:00000000-0000-4000-8000-000000000007",
         "Skull Weaver package",
         { kind: "package", name: "Skull Weaver package" },
       ],

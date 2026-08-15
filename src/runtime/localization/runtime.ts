@@ -157,7 +157,15 @@ export function localizedSourceMessage(
   return sourceMessage(reference).bind(values);
 }
 
+export type SerializedSourceTransport =
+  | string
+  | LocalizedStringWire
+  | SourceMessageRef;
 export type SourceTransport = string | LocalizedString | SourceMessage;
+export type BindableSourceTransport =
+  | SourceTransport
+  | LocalizedStringWire
+  | SourceMessageRef;
 export type SourceTransportValue = number | boolean | string | LocalizedString;
 
 export function canonicalPlaceholderName(name: string): string {
@@ -185,7 +193,7 @@ export function hydrateSourceTransport(
 }
 
 export function bindSourceTransport(
-  value: SourceTransport,
+  value: BindableSourceTransport,
   inputs: Readonly<Record<string, SourceTransportValue>> = {},
 ): LocalizedString {
   if (typeof value === "string") {
@@ -204,15 +212,21 @@ export function bindSourceTransport(
   if (value instanceof LocalizedString) {
     return value;
   }
-  const names = Object.keys(value.argumentSchemas);
+  if (!(value instanceof SourceMessage) && value.format === "trox-localized-string") {
+    return requireSourceRuntime().localizer.localizedStringFromJSON(
+      canonicalJson(value),
+    );
+  }
+  const message = value instanceof SourceMessage ? value : sourceMessage(value);
+  const names = Object.keys(message.argumentSchemas);
   if (
     names.some((name) => !Object.prototype.hasOwnProperty.call(inputs, name))
   ) {
     throw new Error("Source-message arguments do not match its Trox contract.");
   }
-  return value.bind(Object.fromEntries(names.map((name) => {
+  return message.bind(Object.fromEntries(names.map((name) => {
     const input = inputs[name];
-    const schema = value.argumentSchemas[name];
+    const schema = message.argumentSchemas[name];
     return [
       name,
       schema?.kind === "opaque" && input instanceof LocalizedString
@@ -220,6 +234,16 @@ export function bindSourceTransport(
         : input,
     ];
   })) as Readonly<Record<string, ArgumentInput>>);
+}
+
+/** Convert a localized transport into the plain wire shape stored in room state. */
+export function serializeSourceTransport(
+  value: BindableSourceTransport,
+): SerializedSourceTransport {
+  if (typeof value === "string") return value;
+  if (value instanceof LocalizedString) return value.wireValue();
+  if (value instanceof SourceMessage) return structuredClone(value.sourceRef);
+  return structuredClone(value);
 }
 
 /**

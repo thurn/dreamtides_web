@@ -166,7 +166,7 @@ describe("front-door reducer", () => {
     });
   });
 
-  it("records non-journey menu actions without changing the shared scene", () => {
+  it("bounces unavailable main-menu actions", () => {
     const start = genesisFoldState(GENESIS);
     const result = reduceGameEvent(
       start,
@@ -174,8 +174,8 @@ describe("front-door reducer", () => {
       context(1),
     );
 
-    expect(result.outcome).toBe("applied");
-    expect(result.state.frontDoor).toEqual(start.frontDoor);
+    expect(result.outcome).toBe("bounced");
+    expect(result.state).toBe(start);
   });
 
   it("folds a validated tutorial snapshot and advances only its current action", () => {
