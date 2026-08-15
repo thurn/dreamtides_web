@@ -62,7 +62,6 @@ import type { Tides4Tuning } from "../../types/draft-data";
 import { parseOpponentId } from "../../types/identifiers";
 import { parseBattleEntryKey } from "../../types/identifiers";
 import { parseBattleId } from "../../types/identifiers";
-import { serializeSourceTransport } from "../../runtime/localization/runtime";
 
 /**
  * Minimum journey deck size for a battle. A deck below this is padded with
@@ -592,20 +591,6 @@ function toDreamwellCardDefinition(
     order: card.order,
     cardNumber: card.cardNumber,
     imageNumber: card.imageNumber ?? 0,
-    automation: (card.automation ?? []).map((prompt) => ({
-      ...prompt,
-      title: serializeSourceTransport(prompt.title),
-      subtitle: serializeSourceTransport(prompt.subtitle),
-      instructions: serializeSourceTransport(prompt.instructions),
-      ...(prompt.choices === undefined
-        ? {}
-        : {
-            choices: prompt.choices.map((choice) => ({
-              ...choice,
-              label: serializeSourceTransport(choice.label),
-            })),
-          }),
-    })),
   };
   // Firebase rejects `undefined` property values, so only attach `art` when the
   // card has actually been framed. Unframed cards omit the key entirely.

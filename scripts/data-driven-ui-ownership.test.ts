@@ -115,7 +115,9 @@ describe("data-driven UI ownership", () => {
 
   it("keeps every current source field, consumer, persisted shape, and logging site executable", () => {
     for (const definition of Object.values(inventory.families)) {
-      expect(definition.targetOwner).toMatch(/^data\/[a-z_]+\.ron$/);
+      expect(definition.targetOwner).toMatch(
+        /^(?:data\/[a-z_]+\.ron|src\/[a-z0-9_/-]+\.ts)$/,
+      );
       for (const source of definition.currentSources) {
         const text = readFileSync(resolve(ROOT, source.path), "utf8");
         for (const field of source.fields)

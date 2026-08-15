@@ -568,7 +568,6 @@ function tutorialDreamwellDeck(
     order: card.order,
     cardNumber: card.cardNumber,
     imageNumber: card.imageNumber ?? card.cardNumber,
-    automation: [...(card.automation ?? [])],
     ...(card.art ? { art: card.art } : {}),
   }));
 }

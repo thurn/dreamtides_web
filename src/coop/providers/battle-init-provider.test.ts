@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { assertLocalized } from "@trox/runtime";
 import { economyFixture } from "../../testing/economy-fixture";
 import { opponentsFixture } from "../../testing/opponents-fixture";
 import { draftDataFixture } from "../../testing/draft-data-fixture";
@@ -26,7 +25,6 @@ import {
 import {
   testDreamwellCardId,
   testDreamwellCardName,
-  testDreamwellPromptKey,
 } from "../../types/test-identities";
 import { parseJourneyId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
@@ -46,14 +44,6 @@ function makeContent(): JourneyContent {
         order: 0,
         energyAdded: 1,
         cardNumber: 1,
-        automation: [
-          {
-            key: testDreamwellPromptKey("choose-card"),
-            title: assertLocalized("Choose a card"),
-            subtitle: assertLocalized("Synthetic fixture"),
-            instructions: assertLocalized("Select one card."),
-          },
-        ],
       },
     ],
     dreamsignTemplates: [],

@@ -2,7 +2,7 @@
 //
 // Both players draw from the same seeded deck. Each drawn card permanently
 // increases that player's maximum energy by `energy_added`, then resolves the
-// player-facing rules in `ability_text` and any matching automation prompt.
+// player-facing rules in `ability_text`.
 
 #![enable(implicit_some)]
 DreamwellCatalog(
@@ -95,14 +95,6 @@ DreamwellCatalog(
       ability_text: [Tx("Draw a card, then discard a card.")],
       energy_added: 1,
       deck_tier: One,
-      automation: [
-        AutomationPrompt(
-          key: "discard-drawn-card",
-          title: Tx("Choose a card to discard"),
-          subtitle: Tx("Choose one card from your hand."),
-          instructions: Tx("Choose a card to discard."),
-        ),
-      ],
       art: (image: 1011222385, owned: true),
     ),
 
@@ -123,21 +115,6 @@ DreamwellCatalog(
       ability_text: [Tx("You may immediately play a ≤2● cost character from your void.")],
       energy_added: 1,
       deck_tier: Three,
-      automation: [
-        AutomationPrompt(
-          key: "confirm-play-void-character",
-          title: Tx("Play a character from your void?"),
-          subtitle: Tx("You may play a character without paying its energy cost."),
-          instructions: Tx("Choose whether to play a character from your void."),
-        ),
-
-        AutomationPrompt(
-          key: "choose-void-character",
-          title: Tx("Choose a character to play"),
-          subtitle: Tx("Choose an eligible character from your void."),
-          instructions: Tx("Choose a character to play."),
-        ),
-      ],
       art: (image: 2155438699, owned: true),
     ),
 
@@ -156,14 +133,6 @@ DreamwellCatalog(
       ability_text: [Tx("A chosen card in your void gains reclaim until end of turn.")],
       energy_added: 1,
       deck_tier: Two,
-      automation: [
-        AutomationPrompt(
-          key: "grant-reclaim",
-          title: Tx("Choose a void card to gain Reclaim"),
-          subtitle: Tx("You may play it from your void this turn, then banish it."),
-          instructions: Tx("Choose a card in your void."),
-        ),
-      ],
       art: (image: 1068256580, owned: true),
     ),
 
@@ -200,29 +169,6 @@ DreamwellCatalog(
       ability_text: [Tx("You may discard 2 cards, then draw 2 cards.")],
       energy_added: 1,
       deck_tier: Three,
-      automation: [
-        AutomationPrompt(
-          key: "discard-and-draw",
-          title: Tx(
-            text: "Discard {count} cards, then draw {count}?",
-            placeholders: {"count": Scalar},
-          ),
-          subtitle: Tx("Choose whether to exchange cards from your hand."),
-          instructions: Tx("Choose whether to discard and draw the same number of cards."),
-          arguments: [PromptArgument(name: "count", kind: Count)],
-        ),
-
-        AutomationPrompt(
-          key: "choose-discards",
-          title: Tx(text: "Discard {count} cards", placeholders: {"count": Scalar}),
-          subtitle: Tx("Choose cards from your hand."),
-          instructions: Tx(
-            text: "Choose {count} cards to discard.",
-            placeholders: {"count": Scalar},
-          ),
-          arguments: [PromptArgument(name: "count", kind: Count)],
-        ),
-      ],
       art: (image: 1721490835),
     ),
 
@@ -232,14 +178,6 @@ DreamwellCatalog(
       ability_text: [Tx("Return a card from your void to your hand.")],
       energy_added: 1,
       deck_tier: Three,
-      automation: [
-        AutomationPrompt(
-          key: "return-void-card",
-          title: Tx("Return a void card to hand"),
-          subtitle: Tx("Choose one card from your void."),
-          instructions: Tx("Choose a card to return to your hand."),
-        ),
-      ],
       art: (image: 2030910782, owned: true),
     ),
 
@@ -249,14 +187,6 @@ DreamwellCatalog(
       ability_text: [Tx("Banish an enemy until end of turn.")],
       energy_added: 0,
       deck_tier: Three,
-      automation: [
-        AutomationPrompt(
-          key: "banish-enemy-character",
-          title: Tx("Banish an enemy character"),
-          subtitle: Tx("Choose an opposing character in play."),
-          instructions: Tx("Choose a character to banish until Ending."),
-        ),
-      ],
       art: (image: 1950881323, owned: true),
     ),
 
@@ -270,14 +200,6 @@ DreamwellCatalog(
       ],
       energy_added: 0,
       deck_tier: Three,
-      automation: [
-        AutomationPrompt(
-          key: "pick-card-for-hand",
-          title: Tx("Pick a card for your hand"),
-          subtitle: Tx("The other revealed card goes to the bottom of your deck."),
-          instructions: Tx("Choose one revealed card to put into your hand."),
-        ),
-      ],
       art: (image: 1252796548, owned: true),
     ),
 
@@ -305,21 +227,6 @@ DreamwellCatalog(
       ability_text: [Tx("You may put a card from your void on top of your deck.")],
       energy_added: 1,
       deck_tier: Four,
-      automation: [
-        AutomationPrompt(
-          key: "confirm-void-to-deck",
-          title: Tx("Put a void card on top of your deck?"),
-          subtitle: Tx("Choose whether to return a card to your deck."),
-          instructions: Tx("Choose whether to put a void card on top of your deck."),
-        ),
-
-        AutomationPrompt(
-          key: "choose-void-for-deck",
-          title: Tx("Choose a void card to put on top"),
-          subtitle: Tx("Choose one card from your void."),
-          instructions: Tx("Choose the card to put on top of your deck."),
-        ),
-      ],
       art: (image: 2285036621, owned: true),
     ),
 
@@ -329,25 +236,6 @@ DreamwellCatalog(
       ability_text: [Tx("You may abandon a character to draw 2 cards.")],
       energy_added: 0,
       deck_tier: Four,
-      automation: [
-        AutomationPrompt(
-          key: "confirm-abandon-and-draw",
-          title: Tx(text: "Abandon a character to draw {count}?", placeholders: {"count": Scalar}),
-          subtitle: Tx("Choose whether to abandon a character you control."),
-          instructions: Tx(
-            text: "Choose whether to abandon a character and draw {count} cards.",
-            placeholders: {"count": Scalar},
-          ),
-          arguments: [PromptArgument(name: "count", kind: Count)],
-        ),
-
-        AutomationPrompt(
-          key: "choose-character-to-abandon",
-          title: Tx("Choose a character to abandon"),
-          subtitle: Tx("Choose one character you control."),
-          instructions: Tx("Choose the character to abandon."),
-        ),
-      ],
       art: (image: 748956883, owned: true),
     ),
 
@@ -366,21 +254,6 @@ DreamwellCatalog(
       ability_text: [Tx("Discover a ≤2● cost card.")],
       energy_added: 1,
       deck_tier: Two,
-      automation: [
-        AutomationPrompt(
-          key: "discover-card",
-          title: Tx(
-            text: "Discover a ≤{maximum_cost}● cost card",
-            placeholders: {"maximum_cost": Scalar},
-          ),
-          subtitle: Tx("Choose one of the sampled cards."),
-          instructions: Tx(
-            text: "Choose a card costing at most {maximum_cost}●.",
-            placeholders: {"maximum_cost": Scalar},
-          ),
-          arguments: [PromptArgument(name: "maximum_cost", kind: MaximumCost)],
-        ),
-      ],
       art: (image: 2622590199),
     ),
 
@@ -417,14 +290,6 @@ DreamwellCatalog(
       ability_text: [Tx("Rematerialize a character you control.")],
       energy_added: 1,
       deck_tier: Three,
-      automation: [
-        AutomationPrompt(
-          key: "rematerialize-ally",
-          title: Tx("Rematerialize an ally"),
-          subtitle: Tx("Choose one character you control."),
-          instructions: Tx("Choose a character to rematerialize."),
-        ),
-      ],
       art: (image: 691496707),
     ),
 
@@ -434,23 +299,6 @@ DreamwellCatalog(
       ability_text: [Tx("Choose one: Draw a card or gain 2●.")],
       energy_added: 0,
       deck_tier: Four,
-      automation: [
-        AutomationPrompt(
-          key: "choose-benefit",
-          title: Tx("Choose one"),
-          subtitle: Tx("Choose a Dreamwell benefit."),
-          instructions: Tx("Choose whether to draw a card or gain energy."),
-          choices: [
-            PromptChoice(key: "draw-card", label: Tx("Draw a card")),
-
-            PromptChoice(
-              key: "gain-energy",
-              label: Tx(text: "Gain {amount}●", placeholders: {"amount": Scalar}),
-            ),
-          ],
-          arguments: [PromptArgument(name: "amount", kind: Amount)],
-        ),
-      ],
       art: (image: 1504647500),
     ),
 
@@ -460,14 +308,6 @@ DreamwellCatalog(
       ability_text: [Tx("Gain 2●. Discard a card.")],
       energy_added: 1,
       deck_tier: One,
-      automation: [
-        AutomationPrompt(
-          key: "discard-card",
-          title: Tx("Discard a card"),
-          subtitle: Tx("Choose one card from your hand."),
-          instructions: Tx("Choose a card to discard."),
-        ),
-      ],
       art: (image: 450441286),
     ),
 
@@ -477,14 +317,6 @@ DreamwellCatalog(
       ability_text: [Tx("Discover a character.")],
       energy_added: 0,
       deck_tier: Three,
-      automation: [
-        AutomationPrompt(
-          key: "discover-character",
-          title: Tx("Discover a character"),
-          subtitle: Tx("Choose one of the sampled characters."),
-          instructions: Tx("Choose a character card."),
-        ),
-      ],
       art: (image: 485518030),
     ),
 
@@ -494,14 +326,6 @@ DreamwellCatalog(
       ability_text: [Tx("Return an event from your void to your hand.")],
       energy_added: 1,
       deck_tier: Three,
-      automation: [
-        AutomationPrompt(
-          key: "return-event",
-          title: Tx("Return an event from your void to hand"),
-          subtitle: Tx("Choose one event from your void."),
-          instructions: Tx("Choose an event to return to your hand."),
-        ),
-      ],
       art: (image: 2251144879),
     ),
 
@@ -529,14 +353,6 @@ DreamwellCatalog(
       ability_text: [Tx("You may discard your hand, then draw that many cards.")],
       energy_added: 0,
       deck_tier: Four,
-      automation: [
-        AutomationPrompt(
-          key: "redraw-hand",
-          title: Tx("Discard your hand and redraw?"),
-          subtitle: Tx("Draw the same number of cards you discard."),
-          instructions: Tx("Choose whether to discard your hand and draw replacements."),
-        ),
-      ],
       art: (image: 635276573, crop: (x: 0, y: -1, scale: 1)),
     ),
   ],

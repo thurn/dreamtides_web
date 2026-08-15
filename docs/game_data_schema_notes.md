@@ -336,6 +336,9 @@ docs/battle_rules/battle_rules.md). Each card permanently raises the drawing
 player's maximum ● by its `energy_added` value and may carry bonus-effect
 paragraphs in `ability_text`, formatted per docs/cards2/style_guide.md.
 
+Application-owned battle prompt copy and semantic prompt arguments are defined
+in `src/data/dreamwell-prompts.ts`, keyed by stable Dreamwell card UUID.
+
 `deck_tier` sets the card's position in the Dreamwell deck. `Starting` cards
 appear only during the first cycle; tiers `One` through `Four` recur in
 ascending order. `art` owns the image identity, provenance flag, and optional

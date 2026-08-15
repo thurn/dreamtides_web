@@ -1,17 +1,5 @@
 import type { ArtCrop } from "../types/cards";
-import type {
-  BindableSourceTransport,
-} from "../runtime/localization/runtime";
-import { hydrateSourceTransport } from "../runtime/localization/runtime";
-import { SourceMessage } from "@trox/runtime";
-import {
-  parseDreamwellCardId,
-  parseDreamwellChoiceKey,
-  parseDreamwellPromptKey,
-  type DreamwellCardId,
-  type DreamwellChoiceKey,
-  type DreamwellPromptKey,
-} from "../types/identifiers";
+import { parseDreamwellCardId, type DreamwellCardId } from "../types/identifiers";
 import {
   parseDreamwellCardName,
   type DreamwellCardName,
@@ -45,25 +33,6 @@ export interface DreamwellCard {
   art?: ArtCrop;
   cardType?: "Dreamwell";
   artOwned?: boolean;
-  automation?: readonly DreamwellAutomationPrompt[];
-}
-
-export type DreamwellPromptArgumentKind =
-  "Count" | "Amount" | "MaximumCost" | "CardUuid" | "Side";
-
-export interface DreamwellAutomationPrompt {
-  readonly key: DreamwellPromptKey;
-  readonly title: BindableSourceTransport;
-  readonly subtitle: BindableSourceTransport;
-  readonly instructions: BindableSourceTransport;
-  readonly choices?: readonly {
-    readonly key: DreamwellChoiceKey;
-    readonly label: BindableSourceTransport;
-  }[];
-  readonly arguments?: readonly {
-    readonly name: string;
-    readonly kind: DreamwellPromptArgumentKind;
-  }[];
 }
 
 const DREAMWELL_JSON_PATH = "/dreamwell-data.json";
@@ -83,24 +52,6 @@ export async function loadDreamwellCards(): Promise<DreamwellCard[]> {
   return parseDreamwellCards(await response.json());
 }
 
-const PROMPT_KEY = /^[a-z0-9]+(?:-[a-z0-9]+)*$/u;
-const ARGUMENT_NAME = /^[a-z][a-z0-9]*(?:_[a-z0-9]+)*$/u;
-const ARGUMENT_KINDS: readonly DreamwellPromptArgumentKind[] = [
-  "Count",
-  "Amount",
-  "MaximumCost",
-  "CardUuid",
-  "Side",
-];
-
-function isPromptArgumentKind(
-  value: unknown,
-): value is DreamwellPromptArgumentKind {
-  return (
-    typeof value === "string" && ARGUMENT_KINDS.some((kind) => kind === value)
-  );
-}
-
 function record(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === "object" && !Array.isArray(value);
 }
@@ -116,13 +67,6 @@ function artCropFromUnknown(value: unknown): ArtCrop | null {
     !Number.isFinite(value.scale)
   ) return null;
   return { x: value.x, y: value.y, scale: value.scale };
-}
-
-function localizedTransport(value: unknown): boolean {
-  return (
-    (typeof value === "string" && value.trim() !== "") ||
-    (record(value) && value.format === "trox-source-message-ref")
-  );
 }
 
 /** Validate the generated Dreamwell payload before it enters journey content. */
@@ -152,127 +96,6 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
     ) {
       throw new Error(`Dreamwell card ${cardId} is malformed`);
     }
-    const automation = candidate.automation ?? [];
-    if (!Array.isArray(automation))
-      throw new Error(`Dreamwell card ${cardId} automation must be an array`);
-    const promptKeys = new Set<DreamwellPromptKey>();
-    const normalizedAutomation = automation.map(
-      (prompt, promptIndex): DreamwellAutomationPrompt => {
-        if (
-          !record(prompt) ||
-          typeof prompt.key !== "string" ||
-          !PROMPT_KEY.test(prompt.key) ||
-          !localizedTransport(prompt.title) ||
-          !localizedTransport(prompt.subtitle) ||
-          !localizedTransport(prompt.instructions)
-        ) {
-          throw new Error(
-            `Dreamwell card ${cardId} prompt ${String(promptIndex + 1)} is malformed`,
-          );
-        }
-        const promptKey = parseDreamwellPromptKey(prompt.key);
-        if (promptKeys.has(promptKey))
-          throw new Error(
-            `Dreamwell card ${cardId} duplicates prompt ${promptKey}`,
-          );
-        promptKeys.add(promptKey);
-        const choices = prompt.choices ?? [];
-        const arguments_ = prompt.arguments ?? [];
-        if (!Array.isArray(choices) || !Array.isArray(arguments_)) {
-          throw new Error(
-            `Dreamwell card ${cardId} prompt ${promptKey} collections are malformed`,
-          );
-        }
-        const choiceKeys = new Set<DreamwellChoiceKey>();
-        const normalizedChoices = choices.map((choice) => {
-          const choiceKey =
-            record(choice) &&
-            typeof choice.key === "string" &&
-            PROMPT_KEY.test(choice.key)
-              ? parseDreamwellChoiceKey(choice.key)
-              : null;
-          if (
-            !record(choice) ||
-            choiceKey === null ||
-            !localizedTransport(choice.label) ||
-            choiceKeys.has(choiceKey)
-          ) {
-            throw new Error(
-              `Dreamwell card ${cardId} prompt ${promptKey} has an invalid choice`,
-            );
-          }
-          choiceKeys.add(choiceKey);
-          return {
-            key: choiceKey,
-            label: hydrateSourceTransport(
-              choice.label,
-              `Dreamwell ${cardId} ${promptKey} choice ${String(choice.key)}`,
-            ),
-          };
-        });
-        const argumentNames = new Set<string>();
-        const normalizedArguments = arguments_.map((argument) => {
-          if (
-            !record(argument) ||
-            typeof argument.name !== "string" ||
-            !ARGUMENT_NAME.test(argument.name) ||
-            !isPromptArgumentKind(argument.kind) ||
-            argumentNames.has(argument.name)
-          ) {
-            throw new Error(
-              `Dreamwell card ${cardId} prompt ${promptKey} has an invalid argument`,
-            );
-          }
-          argumentNames.add(argument.name);
-          return {
-            name: argument.name,
-            kind: argument.kind,
-          };
-        });
-        const hydratedTexts = [
-          hydrateSourceTransport(
-            prompt.title,
-            `Dreamwell ${cardId} ${promptKey} title`,
-          ),
-          hydrateSourceTransport(
-            prompt.subtitle,
-            `Dreamwell ${cardId} ${promptKey} subtitle`,
-          ),
-          hydrateSourceTransport(
-            prompt.instructions,
-            `Dreamwell ${cardId} ${promptKey} instructions`,
-          ),
-          ...normalizedChoices.map((choice) => choice.label),
-        ];
-        const placeholders = new Set(
-          hydratedTexts.flatMap((text) =>
-            text instanceof SourceMessage
-              ? Object.keys(text.argumentSchemas)
-              : typeof text === "string"
-                ? [
-                    ...text.matchAll(/\{([a-z][a-z0-9]*(?:_[a-z0-9]+)*)\}/gu),
-                  ].map((match) => match[1] ?? "")
-                : [],
-          ),
-        );
-        if (
-          [...placeholders].some((name) => !argumentNames.has(name)) ||
-          [...argumentNames].some((name) => !placeholders.has(name))
-        ) {
-          throw new Error(
-            `Dreamwell card ${cardId} prompt ${promptKey} placeholder coverage is invalid`,
-          );
-        }
-        return {
-          key: promptKey,
-          title: hydratedTexts[0],
-          subtitle: hydratedTexts[1],
-          instructions: hydratedTexts[2],
-          choices: normalizedChoices,
-          arguments: normalizedArguments,
-        };
-      },
-    );
     return {
       id: cardId,
       name: parseDreamwellCardName(candidate.name),
@@ -290,7 +113,6 @@ export function parseDreamwellCards(value: unknown): DreamwellCard[] {
       ...(candidate.artOwned === undefined
         ? {}
         : { artOwned: candidate.artOwned }),
-      automation: normalizedAutomation,
     };
   });
 }

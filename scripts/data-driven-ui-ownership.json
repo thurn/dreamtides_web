@@ -83,11 +83,11 @@
         "return-event",
         "return-void-card"
       ],
-      "targetOwner": "data/dreamwell.ron",
+      "targetOwner": "src/data/dreamwell-prompts.ts",
       "currentSources": [
         {
-          "path": "data/dreamwell.ron",
-          "fields": ["automation:", "AutomationPrompt("]
+          "path": "src/data/dreamwell-prompts.ts",
+          "fields": ["DREAMWELL_AUTOMATION_PROMPTS", "DreamwellAutomationPromptDefinition"]
         }
       ],
       "consumers": [
@@ -167,6 +167,11 @@
       "rationale": "The generic glyph vocabulary remains closed in TypeScript."
     },
     {
+      "id": "src/data/dreamwell-prompts.ts#DREAMWELL_AUTOMATION_PROMPTS#dreamwellPrompts",
+      "classification": "closed-behavior-registry",
+      "rationale": "Dreamwell automation prompt copy and semantic argument contracts are application-owned TypeScript behavior."
+    },
+    {
       "id": "src/data/exploration.ts#TRANSFIGURATION_SET#transfiguration",
       "classification": "closed-identity",
       "rationale": "Exploration loader validation retains the closed Transfiguration form identity vocabulary."
@@ -189,7 +194,7 @@
     {
       "id": "src/rules/battle/dreamwell-effects-table.ts#DREAMWELL_EFFECT_SCRIPTS#dreamwellPrompts",
       "classification": "closed-behavior-registry",
-      "rationale": "The scoped proposal keeps effect behavior in TypeScript while card-specific prompt content is catalog-owned."
+      "rationale": "Dreamwell effect scripts pair stable prompt identities with application-owned behavior."
     },
     {
       "id": "src/rules/journey/deck.ts#TRANSFIGURATION_TYPES#transfiguration",

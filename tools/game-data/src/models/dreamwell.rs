@@ -3,12 +3,11 @@ use std::fmt;
 use trox::LocalizedString;
 
 use anyhow::{Result, bail, ensure};
-use regex::Regex;
 use serde::de::Error as _;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uuid::{Uuid, Variant, Version};
 
-use super::localization::{joined_source_text, source_text, source_transport_value};
+use super::localization::{joined_source_text, source_text};
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
@@ -35,44 +34,6 @@ pub struct DreamwellCardDefinition {
     pub energy_added: u32,
     pub deck_tier: DeckTier,
     pub art: Art,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub automation: Vec<AutomationPrompt>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct AutomationPrompt {
-    pub key: String,
-    pub title: LocalizedString,
-    pub subtitle: LocalizedString,
-    pub instructions: LocalizedString,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub choices: Vec<PromptChoice>,
-    #[serde(default, skip_serializing_if = "Vec::is_empty")]
-    pub arguments: Vec<PromptArgument>,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct PromptChoice {
-    pub key: String,
-    pub label: LocalizedString,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
-#[serde(deny_unknown_fields)]
-pub struct PromptArgument {
-    pub name: String,
-    pub kind: SemanticPromptArgumentKind,
-}
-
-#[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
-pub enum SemanticPromptArgumentKind {
-    Count,
-    Amount,
-    MaximumCost,
-    CardUuid,
-    Side,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -194,26 +155,6 @@ struct CompatibilityCard {
     card_number: u32,
     #[serde(skip_serializing_if = "Option::is_none")]
     art: Option<CompatibilityArtCrop>,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    automation: Vec<CompatibilityAutomationPrompt>,
-}
-
-#[derive(Serialize)]
-struct CompatibilityAutomationPrompt {
-    key: String,
-    title: toml::Value,
-    subtitle: toml::Value,
-    instructions: toml::Value,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    choices: Vec<CompatibilityPromptChoice>,
-    #[serde(skip_serializing_if = "Vec::is_empty")]
-    arguments: Vec<PromptArgument>,
-}
-
-#[derive(Serialize)]
-struct CompatibilityPromptChoice {
-    key: String,
-    label: toml::Value,
 }
 
 #[derive(Serialize)]
@@ -268,11 +209,6 @@ pub fn lower(
                     y: number(crop.y),
                     scale: number(crop.scale),
                 }),
-                automation: card
-                    .automation
-                    .into_iter()
-                    .map(lower_automation_prompt)
-                    .collect::<Result<Vec<_>>>()?,
             })
         })
         .collect::<Result<Vec<_>>>()?;
@@ -294,26 +230,6 @@ fn number(value: f64) -> toml::Value {
     } else {
         toml::Value::Float(value)
     }
-}
-
-fn lower_automation_prompt(prompt: AutomationPrompt) -> Result<CompatibilityAutomationPrompt> {
-    Ok(CompatibilityAutomationPrompt {
-        key: prompt.key,
-        title: source_transport_value(&prompt.title)?,
-        subtitle: source_transport_value(&prompt.subtitle)?,
-        instructions: source_transport_value(&prompt.instructions)?,
-        choices: prompt
-            .choices
-            .into_iter()
-            .map(|choice| {
-                Ok(CompatibilityPromptChoice {
-                    key: choice.key,
-                    label: source_transport_value(&choice.label)?,
-                })
-            })
-            .collect::<Result<Vec<_>>>()?,
-        arguments: prompt.arguments,
-    })
 }
 
 pub(crate) fn validate(source: &DreamwellCatalog) -> Result<()> {
@@ -365,9 +281,6 @@ pub(crate) fn validate_rules(source: &DreamwellRules) -> Result<()> {
 fn validate_cards(source: &[DreamwellCardDefinition]) -> Result<()> {
     ensure!(!source.is_empty(), "Dreamwell catalog must not be empty");
     let mut ids = BTreeSet::new();
-    let placeholder = Regex::new(r"\{([a-z][a-z0-9]*(?:_[a-z0-9]+)*)\}")
-        .expect("static prompt placeholder regex");
-
     for card in source {
         ensure!(
             ids.insert(card.id),
@@ -379,7 +292,6 @@ fn validate_cards(source: &[DreamwellCardDefinition]) -> Result<()> {
             "Dreamwell card {} has an empty name",
             card.id
         );
-        validate_automation(card, &placeholder)?;
         if let Some(crop) = &card.art.crop {
             ensure!(
                 crop.x.is_finite() && crop.y.is_finite(),
@@ -394,98 +306,6 @@ fn validate_cards(source: &[DreamwellCardDefinition]) -> Result<()> {
         }
     }
     Ok(())
-}
-
-fn validate_automation(card: &DreamwellCardDefinition, placeholder: &Regex) -> Result<()> {
-    let mut prompt_keys = BTreeSet::new();
-    for (prompt_index, prompt) in card.automation.iter().enumerate() {
-        let path = format!("Dreamwell {} automation[{prompt_index}]", card.id);
-        ensure!(is_key(&prompt.key), "{path}.key must use lower kebab-case");
-        ensure!(
-            prompt_keys.insert(&prompt.key),
-            "{path}.key duplicates {}",
-            prompt.key
-        );
-        for (field, value) in [
-            ("title", &prompt.title),
-            ("subtitle", &prompt.subtitle),
-            ("instructions", &prompt.instructions),
-        ] {
-            ensure!(
-                !source_text(value)?.trim().is_empty(),
-                "{path}.{field} must not be blank"
-            );
-        }
-        let mut choice_keys = BTreeSet::new();
-        for choice in &prompt.choices {
-            ensure!(
-                is_key(&choice.key) && !source_text(&choice.label)?.trim().is_empty(),
-                "{path}.choices require kebab-case keys and non-blank labels"
-            );
-            ensure!(
-                choice_keys.insert(&choice.key),
-                "{path}.choices contains duplicate key {}",
-                choice.key
-            );
-        }
-        let mut argument_names = BTreeSet::new();
-        for argument in &prompt.arguments {
-            ensure!(
-                is_argument_name(&argument.name),
-                "{path}.arguments name must use lower snake_case"
-            );
-            ensure!(
-                argument_names.insert(argument.name.clone()),
-                "{path}.arguments contains duplicate name {}",
-                argument.name
-            );
-        }
-        let mut used = BTreeSet::new();
-        let mut texts = vec![
-            source_text(&prompt.title)?,
-            source_text(&prompt.subtitle)?,
-            source_text(&prompt.instructions)?,
-        ];
-        texts.extend(
-            prompt
-                .choices
-                .iter()
-                .map(|choice| source_text(&choice.label))
-                .collect::<Result<Vec<_>>>()?,
-        );
-        for text in texts {
-            used.extend(
-                placeholder
-                    .captures_iter(&text)
-                    .map(|capture| capture[1].to_owned()),
-            );
-        }
-        ensure!(
-            used == argument_names,
-            "{path} placeholders must exactly match the declared semantic arguments"
-        );
-    }
-    Ok(())
-}
-
-fn is_key(value: &str) -> bool {
-    !value.is_empty()
-        && value.split('-').all(|part| {
-            !part.is_empty()
-                && part
-                    .bytes()
-                    .all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit())
-        })
-}
-
-fn is_argument_name(value: &str) -> bool {
-    !value.is_empty()
-        && value.split('_').all(|part| {
-            !part.is_empty()
-                && part
-                    .bytes()
-                    .all(|byte| byte.is_ascii_lowercase() || byte.is_ascii_digit())
-        })
 }
 
 #[cfg(test)]
@@ -605,55 +425,6 @@ DreamwellCatalog(
         for (tier, order) in cases {
             assert_eq!(tier.compatibility_order(), order);
         }
-    }
-
-    #[test]
-    fn validates_and_lowers_semantic_automation_prompts() {
-        let prompt = r#"automation: [AutomationPrompt(
-      key: "choose-card",
-      title: Tx("Choose up to {{count}}"),
-      subtitle: Tx(text: "Cards cost at most {maximum_cost}", placeholders: {"maximum_cost": Scalar}),
-      instructions: Tx("Choose cards."),
-      choices: [PromptChoice(key: "confirm", label: Tx("Choose {{count}}"))],
-      arguments: [
-        PromptArgument(name: "count", kind: Count),
-        PromptArgument(name: "maximum_cost", kind: MaximumCost),
-      ],
-    )],
-    art: ("#;
-        let source = synthetic_source().replacen("art: (", prompt, 1);
-        let lowered = lower(parse_source(&source), parse_metadata(synthetic_metadata())).unwrap();
-        let automation = lowered["dreamwell"][0]["automation"].as_array().unwrap();
-        assert_eq!(automation[0]["key"].as_str(), Some("choose-card"));
-
-        assert!(
-            ron::from_str::<DreamwellCatalog>(&source.replace(
-                "key: \"choose-card\"",
-                "key: \"choose-card\", surprise: true"
-            ),)
-            .is_err()
-        );
-        assert!(
-            ron::from_str::<DreamwellCatalog>(&source.replace("kind: Count", "kind: Unsupported"))
-                .is_err()
-        );
-        assert!(
-            ron::from_str::<DreamwellCatalog>(
-                &source.replace("instructions: Tx(\"Choose cards.\"),", "")
-            )
-            .is_err()
-        );
-        let duplicate = source.replace(
-            "automation: [AutomationPrompt(",
-            "automation: [AutomationPrompt(key: \"choose-card\", title: Tx(\"Title\"), subtitle: Tx(\"Subtitle\"), instructions: Tx(\"Instructions\")), AutomationPrompt(",
-        );
-        assert_lower_error(&duplicate, synthetic_metadata(), "duplicates choose-card");
-        let unknown = source.replace("Choose cards.", "Choose {{amount}}.");
-        assert_lower_error(
-            &unknown,
-            synthetic_metadata(),
-            "placeholders must exactly match",
-        );
     }
 
     #[test]

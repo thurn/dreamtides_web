@@ -1,11 +1,12 @@
 import { describe, expect, it } from "vitest";
+import { assertLocalized, LocalizedString } from "@trox/runtime";
 import { testDreamwellCardName } from "../types/test-identities";
 import { parseDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import {
   dreamwellPromptRef,
   resolveDreamwellPromptRef,
+  type DreamwellPromptDefinitions,
 } from "./dreamwell-prompts";
-import { resolveSource } from "../runtime/localization/runtime";
 import {
   testDreamwellCardId,
   testDreamwellChoiceKey,
@@ -21,57 +22,55 @@ const CATALOG: readonly DreamwellCard[] = [
     order: 1,
     energyAdded: 0,
     cardNumber: 1,
-    automation: [
-      {
-        key: testDreamwellPromptKey("choose-value"),
-        title: "Choose {count}",
-        subtitle: "Up to {maximum_cost}",
-        instructions: "Choose {count} value.",
-        choices: [
-          {
-            key: testDreamwellChoiceKey("confirm"),
-            label: "Confirm {count}",
-          },
-        ],
-        arguments: [
-          { name: testDreamwellCardName("count"), kind: "Count" },
-          { name: testDreamwellCardName("maximum_cost"), kind: "MaximumCost" },
-        ],
-      },
-    ],
   },
 ];
 
+const PROMPTS: DreamwellPromptDefinitions = {
+  [CARD_ID]: [
+    {
+      key: "choose-value",
+      title: () => assertLocalized("Fixture title"),
+      subtitle: () => assertLocalized("Fixture subtitle"),
+      instructions: () => assertLocalized("Fixture instructions"),
+      choices: [
+        {
+          key: "confirm",
+          label: () => assertLocalized("Fixture choice"),
+        },
+      ],
+      arguments: [{ name: "count", kind: "Count" }],
+    },
+  ],
+};
+
 describe("Dreamwell prompt references", () => {
   it("resolves semantic prompt parts through an injected catalog", () => {
-    const arguments_ = { count: 2, maximum_cost: 3 };
+    const arguments_ = { count: 2 };
     expect(
-      resolveSource(
-        resolveDreamwellPromptRef(
-          dreamwellPromptRef(
-            testDreamwellCardId(CARD_ID),
-            testDreamwellPromptKey("choose-value"),
-            "title",
-            arguments_,
-          ),
-          CATALOG,
+      resolveDreamwellPromptRef(
+        dreamwellPromptRef(
+          testDreamwellCardId(CARD_ID),
+          testDreamwellPromptKey("choose-value"),
+          "title",
+          arguments_,
         ),
+        CATALOG,
+        PROMPTS,
       ),
-    ).toBe("Choose 2");
+    ).toBeInstanceOf(LocalizedString);
     expect(
-      resolveSource(
-        resolveDreamwellPromptRef(
-          dreamwellPromptRef(
-            testDreamwellCardId(CARD_ID),
-            testDreamwellPromptKey("choose-value"),
-            "choice",
-            arguments_,
-            testDreamwellChoiceKey("confirm"),
-          ),
-          CATALOG,
+      resolveDreamwellPromptRef(
+        dreamwellPromptRef(
+          testDreamwellCardId(CARD_ID),
+          testDreamwellPromptKey("choose-value"),
+          "choice",
+          arguments_,
+          testDreamwellChoiceKey("confirm"),
         ),
+        CATALOG,
+        PROMPTS,
       ),
-    ).toBe("Confirm 2");
+    ).toBeInstanceOf(LocalizedString);
   });
 
   it("rejects missing prompts and invalid semantic argument types", () => {
@@ -82,6 +81,7 @@ describe("Dreamwell prompt references", () => {
           testDreamwellPromptKey("missing"),
         ),
         CATALOG,
+        PROMPTS,
       ),
     ).toThrow(/Unknown Dreamwell prompt/u);
     expect(() =>
@@ -92,22 +92,16 @@ describe("Dreamwell prompt references", () => {
           "title",
           {
             count: "two",
-            maximum_cost: 3,
           },
         ),
         CATALOG,
+        PROMPTS,
       ),
     ).toThrow(/Invalid Dreamwell prompt argument count/u);
   });
 
-  it("fails closed on malformed generated prompt metadata", () => {
-    const malformed = CATALOG.map((card) => ({
-      ...card,
-      automation: card.automation?.map((prompt) => ({
-        ...prompt,
-        arguments: [{ name: testDreamwellCardName("count"), kind: "Unknown" }],
-      })),
-    }));
-    expect(() => parseDreamwellCards(malformed)).toThrow(/invalid argument/u);
+  it("keeps generated Dreamwell card data free of prompt definitions", () => {
+    const [parsed] = parseDreamwellCards([{ ...CATALOG[0], automation: [] }]);
+    expect(parsed).not.toHaveProperty("automation");
   });
 });
