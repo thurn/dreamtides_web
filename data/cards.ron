@@ -5197,9 +5197,6 @@
     name: Tx("Frost Hewer"),
     id: "9495f501-f627-4b74-a848-b3d928641229",
     ability_text: [Tx("Discard a card: This character gains vengeful this turn.")],
-    amplified_text: [
-      Tx("Discard a card: This character gains vengeful until the start of your next turn."),
-    ],
     energy_cost: Fixed(1),
     kind: Character(subtype: "Visitor", spark: Fixed(1)),
     rarity: Common,
