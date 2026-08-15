@@ -40,7 +40,18 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24.16.0
-      - run: npm ci && npm run build
+      - name: Check out pinned Trox CLI
+        run: |
+          git clone --no-checkout https://github.com/thurn/trox.git "$RUNNER_TEMP/trox"
+          git -C "$RUNNER_TEMP/trox" checkout "$(cat .trox-revision)"
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: ${{ runner.temp }}/trox
+          shared-key: trox-cli
+      - run: npm ci && npm run setup-assets && npm run trox:release && npm run build
+        env:
+          TROX_ROOT: ${{ runner.temp }}/trox
+          TROX_VERIFY_REVISION: "1"
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}

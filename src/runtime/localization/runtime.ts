@@ -15,7 +15,7 @@ import {
   type SourceMessageRef,
 } from "@trox/runtime";
 import { localizedRuntimeTemplate } from "./runtime-templates.generated";
-import enUSBundleJSON from "../../generated/localization/en-US.trox.json?raw";
+import { enUSBundleJSON } from "virtual:trox-bundles";
 import { logEvent } from "../../logging";
 
 export type QALocale = "ar" | "es" | "ja" | "ru";

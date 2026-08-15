@@ -9,11 +9,13 @@ import {
   txa,
 } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
-import arBundleJSON from "../../generated/localization/ar.trox.json?raw";
-import enUSBundleJSON from "../../generated/localization/en-US.trox.json?raw";
-import esBundleJSON from "../../generated/localization/es.trox.json?raw";
-import jaBundleJSON from "../../generated/localization/ja.trox.json?raw";
-import ruBundleJSON from "../../generated/localization/ru.trox.json?raw";
+import {
+  arBundleJSON,
+  enUSBundleJSON,
+  esBundleJSON,
+  jaBundleJSON,
+  ruBundleJSON,
+} from "virtual:trox-bundles";
 import {
   bindSourceTransport,
   createTargetLocalizationRuntime,
@@ -85,7 +87,7 @@ describe("Trox localization runtime", () => {
       .toThrow(/unauthorized-entry/u);
   });
 
-  it("loads the committed canonical source bundle and resolves source values", () => {
+  it("loads the ephemeral canonical source bundle and resolves source values", () => {
     expect(
       loadCanonicalBundle(enUSBundleJSON, "source").source_catalog_fingerprint,
     ).toBe(source.source_catalog_fingerprint);

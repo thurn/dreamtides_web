@@ -47,6 +47,12 @@ refresh. An invalid save keeps the confirmed TOML and runtime JSON in place and
 reports the dataset, source, and RON parser or compatibility error. Correcting
 the source resumes the same watch path.
 
+Player-facing text changes in canonical RON require the ordinary
+`npm run review` authoring check. Vite builds a current English localization
+catalog in a temporary workspace for development. Localization reports and
+runtime bundles are ignored release artifacts produced by
+`npm run trox:release` and by the deployment pipeline.
+
 ## Editor writes
 
 Local browser editors load generated compatibility data and submit semantic

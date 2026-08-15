@@ -1,5 +1,6 @@
 import { defineConfig } from "vitest/config";
 import { availableParallelism } from "node:os";
+import { troxDevelopmentBundlesPlugin } from "./scripts/trox-vite-plugin.ts";
 
 const requestedWorkers = Number.parseInt(
   process.env.JOURNEY_TEST_WORKERS ?? "2",
@@ -17,6 +18,7 @@ const testTimeout = Number.isInteger(requestedTimeout) && requestedTimeout > 0
   : 15_000;
 
 export default defineConfig({
+  plugins: [troxDevelopmentBundlesPlugin()],
   test: {
     include: [
       "src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}",

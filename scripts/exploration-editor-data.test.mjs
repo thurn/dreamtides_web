@@ -7,12 +7,14 @@ import {
 import { EXPLORATION_EFFECT_SCHEMAS } from "./exploration-editor-schema.mjs";
 
 describe("exploration editor data", () => {
-  it("reloads the source catalog when its published bundle changes", () => {
+  it("reloads the ephemeral source catalog when canonical source changes", () => {
     let version = { dev: 1, ino: 2, size: 3, mtimeMs: 4 };
     const stat = vi.fn(() => version);
-    const read = vi.fn(() => JSON.stringify({ marker: read.mock.calls.length }));
+    const buildBundles = vi.fn(() => ({
+      "en-US": JSON.stringify({ marker: buildBundles.mock.calls.length }),
+    }));
     const create = vi.fn((bundle) => ({ bundle }));
-    const options = { stat, read, create };
+    const options = { stat, buildBundles, create };
 
     const first = explorationEditorInternals.sourceCatalogFor(
       "/virtual/exploration-catalog-refresh",
@@ -30,7 +32,7 @@ describe("exploration editor data", () => {
 
     expect(cached).toBe(first);
     expect(refreshed).not.toBe(first);
-    expect(read).toHaveBeenCalledTimes(2);
+    expect(buildBundles).toHaveBeenCalledTimes(2);
     expect(create).toHaveBeenCalledTimes(2);
   });
 

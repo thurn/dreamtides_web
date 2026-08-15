@@ -17,7 +17,7 @@ import { runTrox } from "./trox.mjs";
 import { assertCanonicalLocalizationContract } from "./canonical-localization-audit.mjs";
 
 const QUEST_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const GENERATED_PATH = join("src", "generated", "localization");
+const GENERATED_PATH = join(".generated", "localization", "bundles");
 
 function filesUnder(directory) {
   if (!existsSync(directory)) return [];
@@ -65,16 +65,20 @@ export function checkGeneratedTroxBundles(options = {}) {
       recursive: true,
     });
     cpSync(join(root, "trox.ron"), join(cleanRoot, "trox.ron"));
-    rmSync(join(cleanRoot, GENERATED_PATH), { recursive: true, force: true });
     mkdirSync(join(cleanRoot, GENERATED_PATH), { recursive: true });
 
     const generate =
       options.generate ??
       ((stagingRoot) =>
-        runTrox(["bundle", "--allow-missing"], {
-          configPath: join(stagingRoot, "trox.ron"),
-          cwd: stagingRoot,
-        }));
+        {
+          const troxOptions = {
+            configPath: join(stagingRoot, "trox.ron"),
+            cwd: stagingRoot,
+          };
+          runTrox(["extract"], troxOptions);
+          runTrox(["check", "--deny", "warnings"], troxOptions);
+          runTrox(["bundle", "--allow-missing"], troxOptions);
+        });
     generate(cleanRoot);
     assertGeneratedBundlesEqual(
       join(root, GENERATED_PATH),
@@ -83,7 +87,7 @@ export function checkGeneratedTroxBundles(options = {}) {
   } finally {
     rmSync(cleanRoot, { recursive: true, force: true });
   }
-  console.log("Committed Trox bundles match clean regeneration.");
+  console.log("Release Trox bundles match clean regeneration.");
 }
 
 if (

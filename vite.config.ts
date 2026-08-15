@@ -31,6 +31,7 @@ import { createGlossaryEditorApiMiddleware } from "./scripts/glossary-editor-api
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 import { regenerateCardData } from "./scripts/setup-assets.mjs";
 import { resolveBuildHash } from "./scripts/build-hash.mjs";
+import { troxDevelopmentBundlesPlugin } from "./scripts/trox-vite-plugin.ts";
 import { ensureGameData, listGameData } from "./scripts/game-data-pipeline.mjs";
 import { createRonEditorBridge } from "./scripts/ron-editor-bridge.mjs";
 import {
@@ -51,7 +52,6 @@ const imageViewerStatePath = path.join(
   "internal",
   "image-viewer-state.json",
 );
-
 export const generatedDataTomlWatchPattern =
   path.resolve(path.join(__dirname, "data")) + "/*.toml*";
 export const generatedCardDataWatchPaths = [
@@ -1037,6 +1037,7 @@ export default defineConfig({
   },
   plugins: [
     firebaseConfigGuardPlugin(),
+    troxDevelopmentBundlesPlugin(),
     gameDataRonPlugin(),
     react(),
     tailwindcss(),

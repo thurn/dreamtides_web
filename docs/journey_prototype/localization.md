@@ -2,8 +2,8 @@
 
 Dreamtides uses Trox for code-authored player text. Authors create immutable
 `LocalizedString` values inline with `tx`, `txa`, selectors, and semantic
-arguments from `@trox/runtime`. Trox extracts those values into translator CSVs
-and deterministic runtime bundles.
+arguments from `@trox/runtime`. Trox extracts those values into ephemeral
+reports and deterministic runtime bundles.
 
 ## Project layout
 
@@ -15,14 +15,12 @@ and deterministic runtime bundles.
 - `TROX_VERIFY_REVISION=1` requires the checkout to match `.trox-revision` and
   is enabled in CI. Runtime updates require the pinned revision as well.
 - `npm run trox:bump` pins the current clean `TROX_ROOT` commit, updates the
-  Rust dependency and lockfile, rebuilds the vendored TypeScript runtime, and
-  regenerates the localization reports and bundles.
-- `localization/reports/en-US.csv` is the source-English review report.
-- `localization/qa/<locale>.csv` is editable translator data for development QA.
+  Rust dependency and lockfile, and rebuilds the vendored TypeScript runtime.
 - `localization/qa/<locale>.ron` defines locale direction, isolation, fallback,
   and grammatical facets.
 - `localization/terms.ron` owns reusable lexical terms and their forms.
-- `src/generated/localization/*.trox.json` contains canonical runtime bundles.
+- `.generated/localization/` receives ignored reports, QA catalogs, and runtime
+  bundles when the release pipeline runs.
 - `src/runtime/localization/` owns bundle loading, diagnostics, React context,
   source fallback, and development QA locale selection.
 
@@ -80,8 +78,11 @@ UI sentence.
 
 ## Runtime behavior
 
-`TroxLocalizationProvider` loads the checked `en-US` bundle synchronously. The
-source runtime uses source patterns without directional isolation so source
+`TroxLocalizationProvider` loads the current `en-US` bundle synchronously. Vite
+extracts and bundles the current source in a temporary workspace for local
+development, tests, and builds, so canonical card-copy edits render in English
+without writing localization artifacts into the checkout. The source runtime
+uses source patterns without directional isolation so source
 output remains byte-stable. Target runtimes use strict resolution, source
 fallback, and the isolation policy in their locale profile.
 
@@ -108,18 +109,17 @@ prompt cursors, hashes, and fold behavior are language-independent.
 Version-24 snapshots are normalized while loading into the version-25 prompt
 reference shape. Newly serialized application and coop state uses version 25.
 
-## Translator workflow
+## Release workflow
 
-1. Author or edit inline Trox messages.
-2. Run `node scripts/trox.mjs extract`.
-3. For a target locale, run `node scripts/trox.mjs extract --locale <locale>`.
-4. Review source, description and its `Conditions:` context, placeholders,
-   status, source locations, and every expanded row in the CSV.
-5. Edit the target `translation` cells without changing identities or source
-   signatures.
-6. Run `node scripts/trox.mjs check --deny warnings`.
-7. Run `node scripts/trox.mjs bundle --allow-missing` for development QA
-   bundles.
+1. Author or edit inline Trox messages or canonical RON text.
+2. Run `npm run review`; Trox extraction and validation occur in a temporary
+   workspace and leave the checkout unchanged.
+3. Run `npm run trox:release` to materialize reports, QA catalogs, and bundles
+   under `.generated/localization/` and verify deterministic regeneration.
+4. Inspect the generated source report, descriptions and `Conditions:`
+   context, placeholders, status, source locations, and expanded rows.
+5. Deploy through `npm run deploy`, which runs the release generation gate
+   before packaging the application.
 
 `trox.ron` denies warnings by default. Each allowed diagnostic names one narrow
 rule and carries a nonempty review reason. The current exceptions cover
@@ -127,16 +127,17 @@ intentional leading-plus delta labels, complete selector branches which omit an
 inapplicable placeholder, and the reviewed 12-row accessible battle participant
 summary.
 
-Use `node scripts/trox.mjs prune` when obsolete translator rows have been
-reviewed and should be deleted. Locale-specific pruning accepts `--locale`.
-
 ## Verification
 
-`scripts/regenerate-assets.sh` runs extraction, validation, and bundle
-generation after the other repository generators. `npm run review` selects the
-Trox check for configured source, runtime, catalog, profile, wrapper, or vendored
-runtime changes. `npm run review:full` includes Trox validation, deterministic
-generated-bundle checking, lint, typecheck, and the complete test suite.
+`npm run review` selects isolated Trox extraction and validation for configured
+source, runtime, profile, wrapper, or vendored-runtime changes.
+`npm run review:full` applies the same source-validity gate with lint,
+typecheck, and the complete test suite. `npm run trox:release` owns generated
+artifact validation at the packaging boundary.
+
+`npm run trox:check` is the isolated source-validity entry point used by commit
+gates. `npm run trox:check-artifacts` validates materialized release outputs and
+is invoked by `npm run trox:release` after extraction.
 
 Localization tests use real Trox bundles. Synthetic target translations are
 added with `withSyntheticTranslations()` against stable message identities;

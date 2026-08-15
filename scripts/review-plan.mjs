@@ -42,6 +42,7 @@ const LOCALIZATION_CONTRACT_INPUTS = new Set([
   "scripts/trox.mjs",
   "scripts/sync-trox-runtime.mjs",
   "scripts/trox-generated-check.mjs",
+  "scripts/trox-source-workspace.mjs",
 ]);
 const LOCALIZATION_CONTRACT_TESTS = [
   "scripts/bump-trox.test.mjs",
@@ -49,12 +50,12 @@ const LOCALIZATION_CONTRACT_TESTS = [
   "scripts/trox.test.mjs",
   "scripts/trox-csv-sync.test.mjs",
   "scripts/trox-generated-check.test.mjs",
+  "scripts/trox-source-workspace.test.mjs",
 ];
 
 function isLocalizationCatalogInput(file) {
   return (
     file.startsWith("localization/") ||
-    file.startsWith("src/generated/localization/") ||
     file.startsWith("src/runtime/localization/") ||
     file.startsWith("vendor/trox-runtime/")
   );

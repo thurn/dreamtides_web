@@ -44,10 +44,6 @@ jobs:
           workspaces: ${{ runner.temp }}/trox
           shared-key: trox-cli
       - run: npm ci
-      - run: npm run trox:check -- --deny warnings
-        env:
-          TROX_ROOT: ${{ runner.temp }}/trox
-          TROX_VERIFY_REVISION: "1"
       - run: npm run trox:check-runtime
         env:
           TROX_ROOT: ${{ runner.temp }}/trox

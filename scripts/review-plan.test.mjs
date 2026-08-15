@@ -78,13 +78,14 @@ describe("fast review plan", () => {
         "scripts/canonical-localization-audit.test.mjs",
         "scripts/trox-csv-sync.test.mjs",
         "scripts/trox-generated-check.test.mjs",
+        "scripts/trox-source-workspace.test.mjs",
         "scripts/trox.test.mjs",
       ],
     });
   });
 
-  it("selects localization contract checks for a locale report", () => {
-    expect(buildReviewPlan(["localization/qa/es.csv"])).toMatchObject(
+  it("selects localization contract checks for a locale profile", () => {
+    expect(buildReviewPlan(["localization/qa/es.ron"])).toMatchObject(
       {
         shouldCheckTrox: true,
         testInputs: [
@@ -92,6 +93,7 @@ describe("fast review plan", () => {
           "scripts/canonical-localization-audit.test.mjs",
           "scripts/trox-csv-sync.test.mjs",
           "scripts/trox-generated-check.test.mjs",
+          "scripts/trox-source-workspace.test.mjs",
           "scripts/trox.test.mjs",
         ],
       },
@@ -106,6 +108,7 @@ describe("fast review plan", () => {
         "scripts/canonical-localization-audit.test.mjs",
         "scripts/trox-csv-sync.test.mjs",
         "scripts/trox-generated-check.test.mjs",
+        "scripts/trox-source-workspace.test.mjs",
         "scripts/trox.mjs",
         "scripts/trox.test.mjs",
       ],

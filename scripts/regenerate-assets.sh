@@ -17,8 +17,8 @@
 #    2. generate-cumulus-tokens   src/cumulus/primitives/tokens.ts
 #    3. generate-cumulus-metadata src/cumulus/metadata/cumulus-metadata.json
 #    4. generate-cumulus-docs     .llms/skills/cumulus/ component reference + index
-#    5. trox extract/check/bundle, generate runtime-template adapters, then
-#       extract/check/bundle the adapters into the final localization outputs
+#    5. generate runtime-template adapters; Trox reports and bundles are
+#       release artifacts and are validated separately by `npm run trox:release`
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
@@ -56,14 +56,8 @@ if [[ "$FAST" == true ]]; then
   step "1/2  setup-assets — refresh runtime bundles from RON content"
   node scripts/setup-assets.mjs
 
-  step "2/2  Trox — extract, validate, and bundle localization"
-  node scripts/trox.mjs extract
-  node scripts/trox.mjs check --deny warnings
-  node scripts/trox.mjs bundle --allow-missing
+  step "2/2  localized runtime templates"
   node scripts/generate-localized-runtime-templates.mjs
-  node scripts/trox.mjs extract
-  node scripts/trox.mjs check --deny warnings
-  node scripts/trox.mjs bundle --allow-missing
 
   step "Done — fast content regeneration complete"
   git status --short -- data || true
@@ -89,17 +83,11 @@ node scripts/generate-cumulus-metadata.mjs
 step "4/5  generate-cumulus-docs — .llms/skills/cumulus component reference"
 node scripts/generate-cumulus-docs.mjs
 
-step "5/5  Trox — extract, validate, and bundle localization"
-node scripts/trox.mjs extract
-node scripts/trox.mjs check --deny warnings
-node scripts/trox.mjs bundle --allow-missing
+step "5/5  localized runtime templates"
 node scripts/generate-localized-runtime-templates.mjs
-node scripts/trox.mjs extract
-node scripts/trox.mjs check --deny warnings
-node scripts/trox.mjs bundle --allow-missing
 
 step "Done — git-tracked files changed by this run"
-git status --short -- data docs localization src/generated/localization src/runtime/localization/runtime-templates.generated.ts src/cumulus/primitives/tokens.ts src/cumulus/metadata/cumulus-metadata.json .llms/skills/cumulus || true
+git status --short -- data docs localization src/runtime/localization/runtime-templates.generated.ts src/cumulus/primitives/tokens.ts src/cumulus/metadata/cumulus-metadata.json .llms/skills/cumulus || true
 
 cat <<'EOF'
 

@@ -279,7 +279,7 @@ export function canonicalLocalizationInputs(root) {
 export function assertCanonicalLocalizationContract(root) {
   const bundle = JSON.parse(
     readFileSync(
-      resolve(root, "src/generated/localization/en-US.trox.json"),
+      resolve(root, ".generated/localization/bundles/en-US.trox.json"),
       "utf8",
     ),
   );

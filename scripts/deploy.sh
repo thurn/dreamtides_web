@@ -17,9 +17,8 @@
 # Deploying Hosting alone leaves newly-keyed art 404ing in the bucket (the image
 # shows blank with no console error), so both steps run here unconditionally.
 #
-# This script deploys the CURRENT local state. If you have changed RON game data
-# and need to re-bake the committed artifacts first, run `npm run regenerate-assets`
-# (and commit the result) before deploying.
+# This script deploys the CURRENT local state. Localization reports and bundles
+# are generated and validated as release artifacts immediately before the build.
 #
 # Requirements:
 #   - `.env` + `.env.production` populated (VITE_FIREBASE_* and VITE_ASSET_BASE_URL);
@@ -53,7 +52,13 @@ step() {
 step "Installing locked dependencies"
 npm ci --include=dev
 
-step "1/3  build — compile + bundle code, HTML, and data catalogs into dist/"
+step "1/5  setup — compile current canonical game data"
+npm run setup-assets
+
+step "2/5  localization — generate and validate release artifacts"
+npm run trox:release
+
+step "3/5  build — compile + bundle code, HTML, and data catalogs into dist/"
 npm run build
 
 if [[ "$DRY_RUN" == true ]]; then
@@ -61,10 +66,10 @@ if [[ "$DRY_RUN" == true ]]; then
   exit 0
 fi
 
-step "2/3  firebase deploy — publish dist/ to Hosting"
+step "4/5  firebase deploy — publish dist/ to Hosting"
 firebase deploy --only hosting
 
-step "3/3  upload-assets — sync binary art to the Storage bucket"
+step "5/5  upload-assets — sync binary art to the Storage bucket"
 npm run upload-assets
 
 step "Done — Hosting and the art bucket are both up to date"

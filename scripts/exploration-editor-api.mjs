@@ -15,19 +15,6 @@ const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/exploration";
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 const EXPLORATION_SOURCE_PATHS = ["data/exploration.ron"];
-export const EXPLORATION_LOCALIZATION_PATHS = [
-  "localization/reports/en-US.csv",
-  "localization/qa/ar.csv",
-  "localization/qa/es.csv",
-  "localization/qa/ja.csv",
-  "localization/qa/ru.csv",
-  "src/generated/localization/en-US.trox.json",
-  "src/generated/localization/ar.trox.json",
-  "src/generated/localization/es.trox.json",
-  "src/generated/localization/ja.trox.json",
-  "src/generated/localization/ru.trox.json",
-];
-
 export function refreshExplorationLocalizationArtifacts({
   rootDir,
   stageRoot,
@@ -43,7 +30,7 @@ export function refreshExplorationLocalizationArtifacts({
     cwd: stageRoot,
   };
   runTroxCommand(["extract"], troxOptions);
-  runTroxCommand(["bundle", "--allow-missing"], troxOptions);
+  runTroxCommand(["check", "--deny", "warnings"], troxOptions);
 }
 
 function respond(res, status, body) {
@@ -203,7 +190,6 @@ export function createExplorationEditorApiMiddleware(options = {}) {
                 prepareDerivedArtifacts: ({ stageRoot }) => {
                   refreshLocalizationArtifacts({ rootDir, stageRoot });
                 },
-                additionalPublishPaths: EXPLORATION_LOCALIZATION_PATHS,
               });
               data = {
                 ...readData(dataOptions),
@@ -247,7 +233,6 @@ export function createExplorationEditorApiMiddleware(options = {}) {
                 prepareDerivedArtifacts: ({ stageRoot }) => {
                   refreshLocalizationArtifacts({ rootDir, stageRoot });
                 },
-                additionalPublishPaths: EXPLORATION_LOCALIZATION_PATHS,
               });
               data = {
                 ...readData(dataOptions),

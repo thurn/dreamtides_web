@@ -211,10 +211,10 @@ function commandFor(step, extraArgs = []) {
       ],
     ];
   }
-  if (step === "trox-check") {
+  if (step === "trox-source-check") {
     return [
       process.execPath,
-      [join(root, "scripts", "trox.mjs"), "check", "--deny", "warnings"],
+      [join(root, "scripts", "trox-source-workspace.mjs")],
     ];
   }
   if (step === "typecheck") {
@@ -304,12 +304,11 @@ function executionPlan() {
   if (task === "full") {
     return [
       { step: "validate", args: [] },
-      { step: "trox-check", args: [] },
+      { step: "trox-source-check", args: [] },
       { step: "ron-format-check", args: [] },
       { step: "rust-format-check", args: [] },
       { step: "rust-test", args: [] },
       { step: "clean-game-data", args: [] },
-      { step: "trox-generated-check", args: [] },
       { step: "lint", args: [] },
       { step: "typecheck", args: [] },
       { step: "test", args: [] },
@@ -317,7 +316,7 @@ function executionPlan() {
   }
   if (task === "lint-full") {
     return [
-      { step: "trox-check", args: [] },
+      { step: "trox-source-check", args: [] },
       { step: "ron-format-check", args: [] },
       { step: "rust-format-check", args: [] },
       { step: "lint", args: passthrough },
@@ -332,7 +331,7 @@ function executionPlan() {
   if (task === "lint") {
     const steps = [];
     if (reviewPlan.shouldCheckTrox) {
-      steps.push({ step: "trox-check", args: [] });
+      steps.push({ step: "trox-source-check", args: [] });
     }
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });
@@ -366,7 +365,7 @@ function executionPlan() {
     const steps = [];
     if (reviewPlan.shouldValidate) steps.push({ step: "validate", args: [] });
     if (reviewPlan.shouldCheckTrox) {
-      steps.push({ step: "trox-check", args: [] });
+      steps.push({ step: "trox-source-check", args: [] });
     }
     if (reviewPlan.shouldCheckRonFormatting) {
       steps.push({ step: "ron-format-check", args: [] });

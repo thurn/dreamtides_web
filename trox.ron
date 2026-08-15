@@ -3,9 +3,9 @@
 
   terms: "localization/terms.ron",
 
-  source_bundle: "src/generated/localization/en-US.trox.json",
+  source_bundle: ".generated/localization/bundles/en-US.trox.json",
 
-  source_report: "localization/reports/en-US.csv",
+  source_report: ".generated/localization/reports/en-US.csv",
 
   sources: [
     (
@@ -28,23 +28,23 @@
   locales: {
     "ar": (
       profile: "localization/qa/ar.ron",
-      csv: "localization/qa/ar.csv",
-      bundle: "src/generated/localization/ar.trox.json",
+      csv: ".generated/localization/qa/ar.csv",
+      bundle: ".generated/localization/bundles/ar.trox.json",
     ),
     "es": (
       profile: "localization/qa/es.ron",
-      csv: "localization/qa/es.csv",
-      bundle: "src/generated/localization/es.trox.json",
+      csv: ".generated/localization/qa/es.csv",
+      bundle: ".generated/localization/bundles/es.trox.json",
     ),
     "ja": (
       profile: "localization/qa/ja.ron",
-      csv: "localization/qa/ja.csv",
-      bundle: "src/generated/localization/ja.trox.json",
+      csv: ".generated/localization/qa/ja.csv",
+      bundle: ".generated/localization/bundles/ja.trox.json",
     ),
     "ru": (
       profile: "localization/qa/ru.ron",
-      csv: "localization/qa/ru.csv",
-      bundle: "src/generated/localization/ru.trox.json",
+      csv: ".generated/localization/qa/ru.csv",
+      bundle: ".generated/localization/bundles/ru.trox.json",
     ),
   },
 

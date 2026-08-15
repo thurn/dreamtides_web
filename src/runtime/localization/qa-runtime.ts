@@ -1,7 +1,9 @@
-import arBundleJSON from "../../generated/localization/ar.trox.json?raw";
-import esBundleJSON from "../../generated/localization/es.trox.json?raw";
-import jaBundleJSON from "../../generated/localization/ja.trox.json?raw";
-import ruBundleJSON from "../../generated/localization/ru.trox.json?raw";
+import {
+  arBundleJSON,
+  esBundleJSON,
+  jaBundleJSON,
+  ruBundleJSON,
+} from "virtual:trox-bundles";
 import { logEvent } from "../../logging";
 import {
   createTargetLocalizationRuntime,

@@ -15,6 +15,7 @@ import {
 } from "./exploration-editor-schema.mjs";
 import { EXPLORATION_FIXED_SITE_TYPES } from "./exploration-effect-editor-schema.mjs";
 import { validateExplorationEffectAction } from "./exploration-effect-validation.mjs";
+import { buildDevelopmentTroxBundles } from "./trox-source-workspace.mjs";
 import {
   transformCard,
   transformDreamsign,
@@ -91,18 +92,15 @@ function requiredString(value, label) {
 const sourceCatalogs = new Map();
 
 function sourceCatalogFor(rootDir, options = {}) {
-  const bundlePath = join(
-    rootDir,
-    "src",
-    "generated",
-    "localization",
-    "en-US.trox.json",
-  );
-  const stat = (options.stat ?? statSync)(bundlePath);
+  const sourcePath = join(rootDir, "data", "exploration.ron");
+  const stat = (options.stat ?? statSync)(sourcePath);
   const version = [stat.dev, stat.ino, stat.size, stat.mtimeMs].join(":");
   let cached = sourceCatalogs.get(rootDir);
   if (cached?.version !== version) {
-    const bundle = JSON.parse((options.read ?? readFileSync)(bundlePath, "utf8"));
+    const bundleJSON = (options.buildBundles ?? buildDevelopmentTroxBundles)({
+      root: rootDir,
+    })["en-US"];
+    const bundle = JSON.parse(bundleJSON);
     cached = {
       version,
       bundle,

@@ -4,7 +4,6 @@ import { EventEmitter } from "node:events";
 import { describe, expect, it, vi } from "vitest";
 import {
   createExplorationEditorApiMiddleware,
-  EXPLORATION_LOCALIZATION_PATHS,
   refreshExplorationLocalizationArtifacts,
 } from "./exploration-editor-api.mjs";
 
@@ -51,7 +50,7 @@ describe("exploration editor API", () => {
     expect(result.body.sourceRevision).toMatch(/^[0-9a-f]{64}$/u);
   });
 
-  it("refreshes every Trox artifact inside the staged publication root", () => {
+  it("validates Trox source inside the staged publication root", () => {
     const copy = vi.fn();
     const runTroxCommand = vi.fn();
 
@@ -71,14 +70,14 @@ describe("exploration editor API", () => {
         configPath: "/stage/trox.ron",
         cwd: "/stage",
       }],
-      [["bundle", "--allow-missing"], {
+      [["check", "--deny", "warnings"], {
         configPath: "/stage/trox.ron",
         cwd: "/stage",
       }],
     ]);
   });
 
-  it("publishes prose and its refreshed Trox catalogs in one transaction", async () => {
+  it("publishes prose after isolated Trox validation", async () => {
     const cardId = "161482b6-af07-4d9e-822d-8c738672beb9";
     const readData = vi.fn(() => ({
       encounters: [{ cardId, prose: "Fixture prose", actions: [] }],
@@ -115,7 +114,6 @@ describe("exploration editor API", () => {
         card_id: cardId,
         prose: "Revised fixture prose",
       }],
-      additionalPublishPaths: EXPLORATION_LOCALIZATION_PATHS,
     }));
     expect(refreshLocalizationArtifacts).toHaveBeenCalledWith({
       rootDir: process.cwd(),
