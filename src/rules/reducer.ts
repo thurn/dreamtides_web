@@ -615,7 +615,7 @@ export function routeDomain(
         gamble.playAgainBlackjack(journey, payload, ctx),
       );
 
-    // --- shop, merchant & modifiers ---
+    // --- shop, augury & modifiers ---
     case "BUY_SHOP_SLOT":
       return journeyCase(state, shop.buyShopSlot(journey, payload, ctx));
     case "REROLL_SHOP":
@@ -624,13 +624,13 @@ export function routeDomain(
       return journeyCase(state, shop.grantFreeRerolls(journey, payload));
     case "APPLY_SHOP_DISCOUNT":
       return journeyCase(state, shop.applyShopDiscount(journey, payload));
-    case "ACCEPT_MERCHANT_OFFER":
+    case "ACCEPT_AUGURY_OFFER":
       return journeyCase(
         state,
-        shop.acceptMerchantOffer(journey, payload, ctx),
+        shop.acceptAuguryOffer(journey, payload, ctx),
       );
-    case "DECLINE_MERCHANT":
-      return journeyCase(state, shop.declineMerchant(journey, payload, ctx));
+    case "DECLINE_AUGURY":
+      return journeyCase(state, shop.declineAugury(journey, payload, ctx));
     case "PUSH_BATTLE_MODIFIER":
       return journeyCase(state, shop.pushBattleModifier(journey, payload));
     case "PUSH_TEMPORARY_NIGHTMARE_GRANT":

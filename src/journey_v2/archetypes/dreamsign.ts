@@ -1,15 +1,15 @@
-import type { MerchantRng } from "../signals/rng";
+import type { AuguryRng } from "../signals/rng";
 import type { DreamsignTemplate } from "../../types/content";
-import type { MerchantContext, MerchantGameObject } from "../types";
-import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import type { AuguryContext, AuguryGameObject } from "../types";
+import type { AuguryArchetypeBuilder, AuguryOfferDraft } from "./types";
 import {
   augurySelectionPolicy,
   selectionMetadata,
-  selectMerchantReward,
+  selectAuguryReward,
 } from "./sharedSelection";
-import { parseMerchantTargetKey } from "../../types/identifiers";
+import { parseAuguryTargetKey } from "../../types/identifiers";
 
-function dreamsignGameObject(template: DreamsignTemplate): MerchantGameObject {
+function dreamsignGameObject(template: DreamsignTemplate): AuguryGameObject {
   return {
     objectType: "dreamsign",
     dreamsignId: template.id,
@@ -23,17 +23,17 @@ function dreamsignGameObject(template: DreamsignTemplate): MerchantGameObject {
  *
  * Candidates: unheld Dreamsigns. Ordinary affinity leads; rarity breaks ties.
  */
-export const dreamsignBuilder: MerchantArchetypeBuilder = {
+export const dreamsignBuilder: AuguryArchetypeBuilder = {
   archetypeId: "dreamsign",
   family: "dreamsign",
-  eligible(context: MerchantContext): boolean {
+  eligible(context: AuguryContext): boolean {
     return context.candidateDreamsigns.length > 0;
   },
   build(
-    context: MerchantContext,
-    _rng: MerchantRng,
-  ): MerchantOfferDraft | null {
-    const selection = selectMerchantReward({
+    context: AuguryContext,
+    _rng: AuguryRng,
+  ): AuguryOfferDraft | null {
+    const selection = selectAuguryReward({
       context,
       archetypeId: "dreamsign",
       mechanicId: "gain-dreamsign",
@@ -57,7 +57,7 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
         dreamsignId: target.id,
         dreamsignTemplate: target,
       },
-      targetKey: parseMerchantTargetKey(target.id),
+      targetKey: parseAuguryTargetKey(target.id),
       ...selectionMetadata(selection),
     };
   },

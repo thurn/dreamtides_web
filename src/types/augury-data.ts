@@ -1,12 +1,12 @@
 import type {
-  MerchantArchetypeId,
-  MerchantOfferFamily,
+  AuguryArchetypeId,
+  AuguryOfferFamily,
 } from "../journey_v2/archetypes/types";
 import type { RewardSelectionPolicyId } from "../reward-selection/types";
 import type { SourceTransport } from "../runtime/localization/runtime";
 
 export interface AuguryArchetypeData {
-  id: MerchantArchetypeId;
+  id: AuguryArchetypeId;
   /** Internal label used by debugging and authoring tools. */
   name: string;
   /** Player-facing copy resolved from the concrete offer model. */
@@ -17,7 +17,7 @@ export interface AuguryArchetypeData {
     backgroundArt?: Readonly<{ source: "card"; imageNumber: number }>;
   }>;
   enabled: boolean;
-  family: MerchantOfferFamily;
+  family: AuguryOfferFamily;
   weight: number;
   selectionPolicyId: RewardSelectionPolicyId;
   quantities: Readonly<Record<string, number>>;

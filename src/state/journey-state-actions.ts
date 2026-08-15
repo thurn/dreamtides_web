@@ -354,7 +354,7 @@ export function addSiteToCurrentDreamscape(
   }
   const count = totalSiteCount(prev.atlas);
   const newSite: SiteState = {
-    id: parseSiteId(`site-merchant-${sourceId}-${String(count)}`),
+    id: parseSiteId(`site-augury-${sourceId}-${String(count)}`),
     type: siteType,
     isEnhanced: false,
     isVisited: false,

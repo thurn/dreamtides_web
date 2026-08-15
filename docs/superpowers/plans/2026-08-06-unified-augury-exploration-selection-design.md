@@ -38,7 +38,7 @@ members of the add-site candidate pool.
 
 ## Related Information
 
-- [Dream Merchant v3 design][merchant-v3] defines the existing Augury
+- [Augury v3 design][augury-v3] defines the existing Augury
   archetypes, corpus signals, ranked-band sampling, and deterministic encounter
   generation that form the starting point for the shared core.
 - [Journey rules][journeys] describe the player-facing roles of Augury and
@@ -50,12 +50,12 @@ members of the add-site candidate pool.
   uniform target selection and bespoke effect resolution being converged.
 - [Current Augury archetype registry][augury-registry] identifies the active
   Augury reward builders.
-- [Current Augury selection context][merchant-context] projects journey state
+- [Current Augury selection context][augury-context] projects journey state
   into the card, deck-entry, Dreamsign, corpus, and fit-model inputs used by
   reward generation.
-- [Current selection trace contract][merchant-trace] records candidate scores,
+- [Current selection trace contract][augury-trace] records candidate scores,
   bands, selected UUIDs, and fallback branches for Augury.
-- [Current deterministic sampler][merchant-rng] defines the SHA-256 stream and
+- [Current deterministic sampler][augury-rng] defines the SHA-256 stream and
   ranked-band implementation preserved by the first shared rules version.
 - [Site event fold][site-fold] defines `OPEN_SITE` idempotence and authoritative
   runtime generation.
@@ -72,14 +72,14 @@ members of the add-site candidate pool.
 - [Gamble mechanics][gamble-mechanics] documents another consumer of the
   Dreamsign match score and its “strong Dreamsign pool” terminology.
 
-[merchant-v3]: ../specs/2026-06-09-dream-merchant-v3-design.md
+[augury-v3]: ../specs/2026-06-09-augury-v3-design.md
 [journeys]: ../../journeys/journeys.md
 [exploration-catalog]: ../../../data/exploration_site.toml
 [exploration-provider]: ../../../src/coop/providers/exploration-provider.ts
 [augury-registry]: ../../../src/journey_v2/archetypes/registry.ts
-[merchant-context]: ../../../src/journey_v2/context/buildMerchantContext.ts
-[merchant-trace]: ../../../src/journey_v2/trace/types.ts
-[merchant-rng]: ../../../src/journey_v2/signals/rng.ts
+[augury-context]: ../../../src/journey_v2/context/buildAuguryContext.ts
+[augury-trace]: ../../../src/journey_v2/trace/types.ts
+[augury-rng]: ../../../src/journey_v2/signals/rng.ts
 [site-fold]: ../../../src/rules/journey/sites.ts
 [reward-effects]: ../../../src/rules/journey/reward-effects.ts
 [coop-actions]: ../../../src/coop/actions.ts
@@ -404,7 +404,7 @@ and keyword modifications. Candidate legality and scoring therefore reflect
 the deck the player actually has, not only base card definitions.
 
 The existing Augury context projection is the starting implementation, but the
-shared contract is named and owned as reward selection rather than merchant
+shared contract is named and owned as reward selection rather than augury
 behavior. Surface-only fields stay outside the common context.
 
 ### Reward selection request
@@ -1201,7 +1201,7 @@ mechanic, or selection policy. It displays candidate ids, scores, components,
 band membership, selected targets, fallback branch, and ineligibility reason.
 Those diagnostics remain outside the player-facing route.
 
-The merchant simulation harness exercises shared policies through site-neutral
+The augury simulation harness exercises shared policies through site-neutral
 requests. It can compare outcome diversity, candidate reach, fallback frequency,
 and average signal quality across representative synthetic or recorded deck
 snapshots. Statistical analysis informs tuning but does not become a
@@ -1340,7 +1340,7 @@ The proposal is complete when all of the following are true:
 ### Call Augury builders directly from Exploration
 
 This would reuse code quickly, but it would make Exploration depend on Augury's
-two-offer archetype model, merchant naming, dialogue assumptions, and offer
+two-offer archetype model, augury naming, dialogue assumptions, and offer
 types. Exploration actions often constrain a reward by narrative predicate or
 use a different choice shape. A site-neutral core keeps the reusable decision
 logic without treating one surface as the other surface's special case.

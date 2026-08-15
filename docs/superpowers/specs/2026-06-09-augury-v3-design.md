@@ -1,6 +1,6 @@
-# Dream Merchant v3 Design
+# Augury v3 Design
 
-Rewrite of the dream merchant encounter system in `src/journey_v2`. The merchant
+Rewrite of the Augury encounter system in `src/journey_v2`. The augury
 offers the player two free, immediate, permanent rewards; the player accepts one
 or declines. Offer generation is driven by corpus-derived signals from the
 ~1,061 adapted draft records rather than curated tags, and selection is a
@@ -11,7 +11,7 @@ property of the system.
 
 - Every offered choice is something the player would plausibly want.
 - Behavior is varied: roughly 50+ distinct outcomes at the first-dreamscape
-  merchant, measured by a simulation harness.
+  augury, measured by a simulation harness.
 - Minimal externally curated data. The only curated file is a small dreamsign
   profile TOML; everything about cards is derived from hard card data and the
   draft-record corpus.
@@ -21,7 +21,7 @@ property of the system.
 
 - Time-limited journey effects (effects scoped to the next N battles or
   dreamscapes).
-- Essence or omens as merchant currency or merchant rewards (no prices, no
+- Essence or omens as augury currency or augury rewards (no prices, no
   locked offers, no essence/omen grants, no shop or reroll modifiers).
 - Card type conversion rewards.
 - Future-scoped site rewards: adding sites to the *next* dreamscape, replacing
@@ -65,7 +65,7 @@ as used today for jitter and dialogue selection), mapped to uniform floats.
 Every draw salts the hash with (journey seed, site id, slot, purpose), e.g.
 `hash(seed, siteId, "B", "archetype")`, `hash(seed, siteId, "B", "target", i)`.
 Draws are therefore independent of one another and reproducible. The same run
-always shows the same offers at a given merchant; different runs diverge
+always shows the same offers at a given augury; different runs diverge
 heavily.
 
 ### Band sampling (used throughout)
@@ -86,8 +86,8 @@ delivers "never know what you'll get". Archetypes may override `bandFraction`
 ## Generation pipeline
 
 ```
-buildMerchantContext(journeyState, journeyContent)
-  -> MerchantContext { deck, dreamsigns, cardDatabase, corpus signals,
+buildAuguryContext(journeyState, journeyContent)
+  -> AuguryContext { deck, dreamsigns, cardDatabase, corpus signals,
                        dreamsign profiles }
 
 Stage 1: archetype roll
@@ -100,7 +100,7 @@ Stage 2: target sampling (per offer)
   - Build the archetype's candidate list, ranked by its signal.
   - Band-sample the target (or the chooser set).
 
-Dialogue: one merchant line (<=10 words) hinting at one seeded-chosen offer.
+Dialogue: one augury line (<=10 words) hinting at one seeded-chosen offer.
 Resolve: regenerate, validate, apply, complete site.
 ```
 
@@ -247,7 +247,7 @@ site type). Always eligible.
 ### Journey v1 reward types deliberately excluded
 
 From the v1 catalog (`src/journeys/journey/shared/rewards.ts`, 64 templates):
-essence/omen operations (currency is out of merchant scope), future-scoped
+essence/omen operations (currency is out of augury scope), future-scoped
 site rewards (next-dreamscape placement, site replacement, appearance-chance
 boosts) and shop modifiers, all time-limited and battle-window rewards,
 character/event type conversions, dreamwell stubs, and the composite "gain 2
@@ -305,7 +305,7 @@ falling back to `0.25 + 0.15 * (spark >= 3)` for cards without corpus signal.
 The current detector applies argmax three times: it keeps only the single
 best transfiguration per entry, then only the top 2 entries globally, with
 deterministic benefit constants — which is why a 4-spark starter character
-reliably produces "Kindled on Marked Direwolf" as the first merchant's offer.
+reliably produces "Kindled on Marked Direwolf" as the first augury's offer.
 v3 requirement: the `transfigure` candidate set is **every**
 (entry, transfiguration) pair with positive benefit, and the offered pair is
 band-sampled. A Empowered on an expensive card, a Enduring on an event, and the
@@ -323,7 +323,7 @@ understanding is mechanical; cards are identified by UUID throughout.
   min-max normalization of fit scores over the candidate pool for the current
   deck. `fitPrior` and `fitCooccurrence` are the model's component signals.
 - **Quality** — the conditional-logit `quality[c]` term from
-  the merchant corpus's conditional-logit choice model (taken-over-passed strength), fit
+  the augury corpus's conditional-logit choice model (taken-over-passed strength), fit
   offline over the adapted records and baked. `qualityNorm` is min-max
   normalized over the pool.
 - **Misfit (leave-one-out)** — for deck entry `e` with card `c`:
@@ -342,7 +342,7 @@ understanding is mechanical; cards are identified by UUID throughout.
 
 ### Baked artifact
 
-One committed file, `data/merchant_corpus.json`, holding quality ratings,
+One committed file, `data/augury_corpus.json`, holding quality ratings,
 multiplicity, and cluster assignments — same pattern as the affinity corpus: a
 bake script regenerates it from `docs/draft_records_adapted/`, and a parity
 check validates the committed artifact against a live rebuild. Runtime never
@@ -390,7 +390,7 @@ ones readily). At ~32 dreamsigns this file is cheap to maintain.
 
 ## Dialogue
 
-Each encounter renders exactly one merchant line of at most 10 words, hinting
+Each encounter renders exactly one augury line of at most 10 words, hinting
 at the motivation for one seeded-chosen offer — e.g. "That direwolf of yours
 could be so much more." Small per-archetype template banks (6–10 lines each),
 slot-filled with at most the target's display name. One short accept reaction
@@ -399,8 +399,8 @@ or decline reactions.
 
 ## Metrics harness
 
-`scripts/merchant-experiment.ts`, run via `vite-node` and exposed as
-`npm run merchant-metric`, following the pool-experiment pattern. Simulated decks are prefixes of real
+`scripts/augury-experiment.ts`, run via `vite-node` and exposed as
+`npm run augury-metric`, following the pool-experiment pattern. Simulated decks are prefixes of real
 adapted draft records (a record truncated at picks 0/5/10/20 models a player
 at that stage), so measurements reflect real deck states.
 
@@ -439,7 +439,7 @@ at that stage), so measurements reflect real deck states.
    modelling slot A alone halves the expected share of small-family archetypes
    and spuriously fails almost every archetype.
 5. **Content coverage** — across the full sweep (all deck states x seeds), the
-   merchant must exercise the whole content space, not a favored subset:
+   augury must exercise the whole content space, not a favored subset:
    - *Transfiguration types*: every transfiguration type that any reachable
      pool/deck card is eligible for appears in offers (`transfigure`,
      `starter_transfigure`, `transfigured_draft` combined); report the share per
@@ -479,12 +479,12 @@ metrics, the same way pool generation is tuned today.
 
 Retained (adapted):
 
-- UI shell: `DreamMerchantScreen`, `OfferCard`, `MerchantChooserPanel`,
-  `MerchantGameObjectView` — with pricing/locked-offer UI removed and the
+- UI shell: `AuguryScreen`, `OfferCard`, `AuguryChooserPanel`,
+  `AuguryGameObjectView` — with pricing/locked-offer UI removed and the
   commit-then-reveal flow added.
-- `buildMerchantContext` shape — support metadata replaced by corpus signals
+- `buildAuguryContext` shape — support metadata replaced by corpus signals
   and dreamsign profiles.
-- `resolveMerchantOffer` validation pattern (encounter signature,
+- `resolveAuguryOffer` validation pattern (encounter signature,
   regenerate-validate-apply), extended with the commit mutation.
 - Transfiguration application (`transfiguration-logic.ts`) and keyword
   modification storage/merge (`card-type-change.ts`), both unchanged.
@@ -496,10 +496,10 @@ New:
 - `src/journey_v2/signals/` — fit/quality/misfit/multiplicity/cluster access
   and dreamsign profile matching.
 - Stage-1 archetype roll and stage-2 band sampling in
-  `encounter/generateMerchantEncounter.ts` (rewritten).
-- `data/merchant_corpus.json` + bake script + parity check.
+  `encounter/generateAuguryEncounter.ts` (rewritten).
+- `data/augury_corpus.json` + bake script + parity check.
 - `data/dreamsign_profiles.toml` + subagent curation pass.
-- `scripts/merchant-experiment.ts` (run via `vite-node`) + `merchant-metric` npm script.
+- `scripts/augury-experiment.ts` (run via `vite-node`) + `augury-metric` npm script.
 
 Deleted:
 

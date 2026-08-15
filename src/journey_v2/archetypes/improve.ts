@@ -8,22 +8,22 @@ import type { TransfigurationType } from "../../types/journey";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import { transfigurationForm } from "../../data/transfiguration-data";
 import { auguryArchetype } from "../../data/augury-data";
-import type { MerchantRng } from "../signals/rng";
+import type { AuguryRng } from "../signals/rng";
 import type {
-  MerchantApplyPayload,
-  MerchantContext,
-  MerchantDeckCard,
-  MerchantGameObject,
+  AuguryApplyPayload,
+  AuguryContext,
+  AuguryDeckCard,
+  AuguryGameObject,
 } from "../types";
-import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import type { AuguryArchetypeBuilder, AuguryOfferDraft } from "./types";
 import {
   augurySelectionPolicy,
   selectionMetadata,
-  selectMerchantCount,
-  selectMerchantReward,
+  selectAuguryCount,
+  selectAuguryReward,
 } from "./sharedSelection";
 import type { DeckEntryId } from "../../types/identifiers";
-import { parseMerchantTargetKey } from "../../types/identifiers";
+import { parseAuguryTargetKey } from "../../types/identifiers";
 
 /** Clamp a value to [0, 1]. */
 function clamp01(v: number): number {
@@ -97,7 +97,7 @@ export function rewardTransfigurations(
 /** A single (deck entry, eligible transfiguration) candidate pair. */
 export interface TransfigureCandidatePair {
   transfigurationData: TransfigurationData;
-  deckCard: MerchantDeckCard;
+  deckCard: AuguryDeckCard;
   entryId: DeckEntryId;
   transfiguration: TransfigurationType;
   benefit: number;
@@ -116,7 +116,7 @@ export interface TransfigureCandidatePair {
  * card, since transfiguration applies to the base.
  */
 export function transfigureCandidatePairs(
-  context: MerchantContext,
+  context: AuguryContext,
 ): readonly TransfigureCandidatePair[] {
   const all: TransfigureCandidatePair[] = [];
   for (const deckCard of context.deckCards) {
@@ -156,7 +156,7 @@ export function transfigureCandidatePairs(
 
 function transfigurePreviewObject(
   pair: TransfigureCandidatePair,
-): MerchantGameObject {
+): AuguryGameObject {
   // Build the display descriptor off the entry's base card so the "after" card
   // paints the change in the transfiguration tint (e.g. a green energy orb for
   // Empowered, the added "Reclaim."/"Fast" marked text). The descriptor's card
@@ -183,7 +183,7 @@ function transfigurePreviewObject(
 
 function transfigurePayload(
   pair: TransfigureCandidatePair,
-): MerchantApplyPayload {
+): AuguryApplyPayload {
   return {
     kind: "transfigure_deck_entry",
     entryId: pair.entryId,
@@ -203,19 +203,19 @@ function transfigurePayload(
  * benefit leads; leave-one-out affinity breaks ties. Face-up with a before/after
  * preview. Eligible when at least one pair exists.
  */
-export const transfigureBuilder: MerchantArchetypeBuilder = {
+export const transfigureBuilder: AuguryArchetypeBuilder = {
   archetypeId: "transfigure",
   family: "improve",
-  eligible(context: MerchantContext): boolean {
+  eligible(context: AuguryContext): boolean {
     return transfigureCandidatePairs(context).length > 0;
   },
   build(
-    context: MerchantContext,
-    _rng: MerchantRng,
-  ): MerchantOfferDraft | null {
+    context: AuguryContext,
+    _rng: AuguryRng,
+  ): AuguryOfferDraft | null {
     const pairs = transfigureCandidatePairs(context);
     if (pairs.length === 0) return null;
-    const selection = selectMerchantReward({
+    const selection = selectAuguryReward({
       context,
       archetypeId: "transfigure",
       mechanicId: "transfigure-deck-entry",
@@ -237,7 +237,7 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
       family: "improve",
       gameObjects: [transfigurePreviewObject(target)],
       applyPayload: transfigurePayload(target),
-      targetKey: parseMerchantTargetKey(
+      targetKey: parseAuguryTargetKey(
         `${target.entryId}:${target.transfiguration}`,
       ),
       ...selectionMetadata(selection),
@@ -252,8 +252,8 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
  * positive-benefit eligible transfiguration.
  */
 function transfigurableStarters(
-  context: MerchantContext,
-): readonly MerchantDeckCard[] {
+  context: AuguryContext,
+): readonly AuguryDeckCard[] {
   return context.deckCards.filter((deckCard) => {
     if (!deckCard.card.isStarter) return false;
     if (deckCard.deckEntry.transfiguration !== null) return false;
@@ -263,7 +263,7 @@ function transfigurableStarters(
 
 /** Eligible transfigurations of a card whose benefit is strictly positive. */
 function positiveBenefitTransfigurations(
-  context: MerchantContext,
+  context: AuguryContext,
   card: CardData,
 ): readonly TransfigurationType[] {
   return rewardTransfigurations(
@@ -295,16 +295,16 @@ function positiveBenefitTransfigurations(
  * Composite payload. Face-up with previews. Eligible when >= 1 such starter
  * exists.
  */
-export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
+export const starterTransfigureBuilder: AuguryArchetypeBuilder = {
   archetypeId: "starter_transfigure",
   family: "improve",
-  eligible(context: MerchantContext): boolean {
+  eligible(context: AuguryContext): boolean {
     return transfigurableStarters(context).length > 0;
   },
   build(
-    context: MerchantContext,
-    _rng: MerchantRng,
-  ): MerchantOfferDraft | null {
+    context: AuguryContext,
+    _rng: AuguryRng,
+  ): AuguryOfferDraft | null {
     const starters = transfigurableStarters(context);
     if (starters.length === 0) return null;
     const maximumTargets = auguryArchetype(
@@ -312,7 +312,7 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
       "starter_transfigure",
     ).quantities.maximumTargets;
 
-    const desired = selectMerchantCount({
+    const desired = selectAuguryCount({
       context,
       archetypeId: "starter_transfigure",
       mechanicId: "transfigure-deck-entry",
@@ -320,7 +320,7 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
       minimum: 1,
       maximum: Math.min(maximumTargets, starters.length),
     });
-    const selection = selectMerchantReward({
+    const selection = selectAuguryReward({
       context,
       archetypeId: "starter_transfigure",
       mechanicId: "transfigure-deck-entry",
@@ -333,8 +333,8 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
     });
     if (selection === null) return null;
 
-    const children: MerchantApplyPayload[] = [];
-    const gameObjects: MerchantGameObject[] = [];
+    const children: AuguryApplyPayload[] = [];
+    const gameObjects: AuguryGameObject[] = [];
     for (const binding of selection.bindings.transfigurations) {
       const deckCard =
         binding.entryId === undefined
@@ -366,14 +366,14 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
     }
     if (children.length === 0) return null;
 
-    const payload: MerchantApplyPayload = { kind: "composite", children };
+    const payload: AuguryApplyPayload = { kind: "composite", children };
 
     return {
       archetypeId: "starter_transfigure",
       family: "improve",
       gameObjects,
       applyPayload: payload,
-      targetKey: parseMerchantTargetKey(
+      targetKey: parseAuguryTargetKey(
         gameObjects
           .map((obj) =>
             obj.objectType === "deckCard"

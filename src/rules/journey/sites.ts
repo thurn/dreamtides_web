@@ -138,23 +138,23 @@ export interface SiteContentProvider {
   }): ShopRerollResult | null;
 
   /**
-   * Resolve a Dream Merchant `ACCEPT_MERCHANT_OFFER` / `DECLINE_MERCHANT` at
+   * Resolve a Augury `ACCEPT_AUGURY_OFFER` / `DECLINE_AUGURY` at
    * `site`. The whole resolution (offer lookup, essence / deck / dreamsign
    * payload application, site completion) is content-coupled — it reads the
-   * merchant encounter generated from async-loaded journey content — so it lives
+   * augury encounter generated from async-loaded journey content — so it lives
    * entirely behind this seam. Returns the fully-updated `JourneyState` (site
    * already completed) or `null` to bounce (stale encounter, unknown offer,
    * unaffordable, already-visited). Must not mutate `journey`.
    *
    * SEAM (Task 26): real registration relocates the legacy
-   * `resolveMerchantOffer` / `resolveMerchantDecline` (src/journey_v2) behind
+   * `resolveAuguryOffer` / `resolveAuguryDecline` (src/journey_v2) behind
    * this method, sourcing randomness from the injected `rng` and minting any
    * new deck entry through `seq` (via `mintEntryId(deck, seq, index)` in
    * ./deck — the SAME scheme every other minting case uses, not a second
    * independently-evolving one; audit finding P3-8). Absent (or
-   * `null`-returning) → the merchant events bounce.
+   * `null`-returning) → the augury events bounce.
    */
-  resolveMerchant?(input: {
+  resolveAugury?(input: {
     journey: JourneyState;
     site: SiteState;
     action: "accept" | "decline";

@@ -55,7 +55,7 @@ import {
   offeredTransfigurationForms,
   transfigurationEffectDetails,
 } from "../../transfiguration/transfiguration-logic";
-import { MERCHANT_TUNING } from "../../journey_v2/tuning";
+import { AUGURY_TUNING } from "../../journey_v2/tuning";
 import { projectGuideView } from "./guide-view-model";
 import { transfigurationForm } from "../../data/transfiguration-data";
 import { tx, txa } from "@trox/runtime";
@@ -97,7 +97,7 @@ function matchesPredicate(
         card.energyCost <=
           (content.rewardSelectionData?.tuning.costBands
             .cheapCharacterMaximum ??
-            MERCHANT_TUNING.costBands.cheapCharacterMaximum)
+            AUGURY_TUNING.costBands.cheapCharacterMaximum)
       );
     case "legendary":
       return card.rarity === "Legendary";

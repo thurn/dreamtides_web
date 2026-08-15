@@ -11,7 +11,7 @@ import { validateTides4Decks } from "../draft/pool/tides4-io";
  * Runtime selection uses the JourneyContent instance so Vite hot reloads apply;
  * this export keeps isolated algorithm tests and analysis scripts concise.
  */
-export const MERCHANT_TUNING = {
+export const AUGURY_TUNING = {
   ...buildRewardSelectionData({
     tides: validateTides4Decks(tidesJson),
     augury: parseAuguryData(auguryJson),

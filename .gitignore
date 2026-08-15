@@ -24,7 +24,7 @@ public/dreamsign-profiles-data.json
 public/dreamwell-data.json
 public/figments-data.json
 public/tutorial-data.json
-public/merchant-corpus-data.json
+public/augury-corpus-data.json
 public/atlas-data.json
 public/economy-data.json
 public/exploration-data.json
@@ -46,7 +46,7 @@ logs/
 .game-data-transaction.json.tmp-*
 .game-data.lock
 tools/game-data/target/
-merchant-metric-report.json
+augury-metric-report.json
 .superpowers/
 # Default output directory for scripts/mobile-screenshot.mjs
 screenshots/

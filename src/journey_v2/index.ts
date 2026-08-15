@@ -1,47 +1,47 @@
-export { buildMerchantContext } from "./context/buildMerchantContext";
+export { buildAuguryContext } from "./context/buildAuguryContext";
 export {
-  generateMerchantEncounter,
-  generateMerchantEncounterWithDebug,
-} from "./encounter/generateMerchantEncounter";
+  generateAuguryEncounter,
+  generateAuguryEncounterWithDebug,
+} from "./encounter/generateAuguryEncounter";
 export { resolveOfferPresentation } from "./ui/offerPresentation";
 export {
-  applyMerchantPayloadToState,
-  resolveMerchantDecline,
-  resolveMerchantOffer,
-} from "./encounter/resolveMerchantOffer";
-export { MERCHANT_ARCHETYPE_BUILDERS } from "./archetypes/registry";
+  applyAuguryPayloadToState,
+  resolveAuguryDecline,
+  resolveAuguryOffer,
+} from "./encounter/resolveAuguryOffer";
+export { AUGURY_ARCHETYPE_BUILDERS } from "./archetypes/registry";
 export {
-  isTransfigurationMerchantArchetype,
-  MERCHANT_ARCHETYPE_FAMILIES,
+  isTransfigurationAuguryArchetype,
+  AUGURY_ARCHETYPE_FAMILIES,
 } from "./archetypes/types";
-export { MERCHANT_TUNING } from "./tuning";
-export { buildMerchantDeckSnapshot } from "./trace/deckSnapshot";
-export type { MerchantDeckSnapshot } from "./trace/deckSnapshot";
-export type { MerchantOfferTrace } from "./trace/types";
-export type { MerchantEncounterGenerationDebug } from "./encounter/generateMerchantEncounter";
+export { AUGURY_TUNING } from "./tuning";
+export { buildAuguryDeckSnapshot } from "./trace/deckSnapshot";
+export type { AuguryDeckSnapshot } from "./trace/deckSnapshot";
+export type { AuguryOfferTrace } from "./trace/types";
+export type { AuguryEncounterGenerationDebug } from "./encounter/generateAuguryEncounter";
 export type {
-  MerchantResolveFailureReason,
-  ResolveMerchantDeclineResult,
-  ResolveMerchantOfferResult,
-} from "./encounter/resolveMerchantOffer";
+  AuguryResolveFailureReason,
+  ResolveAuguryDeclineResult,
+  ResolveAuguryOfferResult,
+} from "./encounter/resolveAuguryOffer";
 export type {
-  MerchantArchetypeBuilder,
-  MerchantArchetypeId,
-  MerchantOfferDraft,
-  MerchantOfferFamily,
+  AuguryArchetypeBuilder,
+  AuguryArchetypeId,
+  AuguryOfferDraft,
+  AuguryOfferFamily,
 } from "./archetypes/types";
 export type {
-  MerchantApplyPayload,
-  MerchantAcceptRequest,
-  MerchantCatalogCard,
-  MerchantChoice,
-  MerchantChoiceCandidate,
-  MerchantChoiceRequest,
-  MerchantContext,
-  MerchantDeckCard,
-  MerchantDeclineRequest,
-  MerchantEncounter,
-  MerchantGameObject,
-  MerchantOffer,
-  MerchantOfferActionResult,
+  AuguryApplyPayload,
+  AuguryAcceptRequest,
+  AuguryCatalogCard,
+  AuguryChoice,
+  AuguryChoiceCandidate,
+  AuguryChoiceRequest,
+  AuguryContext,
+  AuguryDeckCard,
+  AuguryDeclineRequest,
+  AuguryEncounter,
+  AuguryGameObject,
+  AuguryOffer,
+  AuguryOfferActionResult,
 } from "./types";

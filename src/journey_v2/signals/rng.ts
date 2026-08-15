@@ -1,7 +1,7 @@
 import { sha256 } from "js-sha256";
 
 /** Uniform [0, 1) deterministic stream. */
-export type MerchantRng = () => number;
+export type AuguryRng = () => number;
 
 const DEFAULT_BAND_FRACTION = 0.25;
 const DEFAULT_BAND_MINIMUM = 5;
@@ -11,7 +11,7 @@ const DEFAULT_BAND_MINIMUM = 5;
  * Each call hashes the salt joined with an internal counter, so draws are
  * reproducible for the same salt and independent across different salts.
  */
-export function merchantRng(...saltParts: string[]): MerchantRng {
+export function auguryRng(...saltParts: string[]): AuguryRng {
   const salt = saltParts.join("|");
   let counter = 0;
   return () => {
@@ -30,7 +30,7 @@ export function merchantRng(...saltParts: string[]): MerchantRng {
 export function weightedSample<T>(
   items: readonly T[],
   weight: (t: T) => number,
-  rng: MerchantRng,
+  rng: AuguryRng,
 ): T | null {
   const weights = items.map((item) => {
     const w = weight(item);
@@ -65,7 +65,7 @@ export function bandSample<T>(
   items: readonly T[],
   score: (t: T) => number,
   count: number,
-  rng: MerchantRng,
+  rng: AuguryRng,
   opts?: { bandFraction?: number; bandMinimum?: number },
 ): T[] {
   const n = items.length;

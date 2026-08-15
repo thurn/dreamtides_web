@@ -1,17 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { applyMerchantPayloadToState } from "../encounter/resolveMerchantOffer";
-import { merchantRng } from "../signals/rng";
-import { buildMerchantContext } from "../context/buildMerchantContext";
+import { applyAuguryPayloadToState } from "../encounter/resolveAuguryOffer";
+import { auguryRng } from "../signals/rng";
+import { buildAuguryContext } from "../context/buildAuguryContext";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
-  makeMerchantTestJourneyState,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDeckEntry,
+  makeAuguryTestJourneyState,
+  makeAuguryTestSite,
 } from "../testing/fixtures";
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/journey";
-import type { MerchantContext } from "../types";
+import type { AuguryContext } from "../types";
 import {
   rewardTransfigurations,
   starterTransfigureBuilder,
@@ -30,24 +30,24 @@ function uuid(n: number): CardId {
 }
 
 /**
- * Builds a merchant context from explicit card + deck-entry fixtures. Cards are
+ * Builds a augury context from explicit card + deck-entry fixtures. Cards are
  * registered in the database keyed by cardNumber; the deck is whatever entries
  * are passed.
  */
 function makeContext(input: {
   cards: readonly CardData[];
   deckEntries: readonly DeckEntry[];
-}): MerchantContext {
-  const journeyContent = makeMerchantTestContent({
+}): AuguryContext {
+  const journeyContent = makeAuguryTestContent({
     cards: input.cards,
   });
-  const journeyState = makeMerchantTestJourneyState({
+  const journeyState = makeAuguryTestJourneyState({
     deck: [...input.deckEntries],
   });
-  return buildMerchantContext({
+  return buildAuguryContext({
     journeyState,
     journeyContent,
-    site: makeMerchantTestSite(),
+    site: makeAuguryTestSite(),
   });
 }
 
@@ -55,7 +55,7 @@ describe("rewardTransfigurations", () => {
   it("never offers Perfected, even when the card is Perfected-eligible", () => {
     // A Character with cost, a digit, and spark is eligible for several
     // transfigurations, which makes it Perfected-eligible.
-    const card = makeMerchantTestCard({
+    const card = makeAuguryTestCard({
       id: uuid(50),
       cardNumber: 50,
       cardType: "Character",
@@ -63,7 +63,7 @@ describe("rewardTransfigurations", () => {
       spark: 2,
       renderedText: "Deal 2 damage.",
     });
-    const data = makeMerchantTestContent({ cards: [card] }).transfigurationData;
+    const data = makeAuguryTestContent({ cards: [card] }).transfigurationData;
     expect(eligibleTransfigurations(data, card)).toContain("Perfected");
     expect(rewardTransfigurations(data, card)).not.toContain("Perfected");
     // It still offers the underlying types.
@@ -71,7 +71,7 @@ describe("rewardTransfigurations", () => {
   });
 
   it("includes Hastened for a non-fast Event", () => {
-    const card = makeMerchantTestCard({
+    const card = makeAuguryTestCard({
       id: uuid(51),
       cardNumber: 51,
       cardType: "Event",
@@ -80,7 +80,7 @@ describe("rewardTransfigurations", () => {
       isFast: false,
       renderedText: "Deal damage.",
     });
-    const data = makeMerchantTestContent({ cards: [card] }).transfigurationData;
+    const data = makeAuguryTestContent({ cards: [card] }).transfigurationData;
     expect(rewardTransfigurations(data, card)).toContain("Hastened");
   });
 });
@@ -90,9 +90,9 @@ describe("rewardTransfigurations", () => {
 describe("improve family — transfigure pair enumeration", () => {
   it("contributes exactly one candidate per (entry, eligible transfiguration) pair", () => {
     // A Character with energyCost>0 and no digit/trigger is eligible for
-    // Empowered (cost>0) and Kindled (Character). The merchant never offers
+    // Empowered (cost>0) and Kindled (Character). The augury never offers
     // Perfected, so this entry contributes exactly those two pairs.
-    const card = makeMerchantTestCard({
+    const card = makeAuguryTestCard({
       id: uuid(100),
       cardNumber: 100,
       cardType: "Character",
@@ -103,7 +103,7 @@ describe("improve family — transfigure pair enumeration", () => {
     const context = makeContext({
       cards: [card],
       deckEntries: [
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId("e1"),
           cardNumber: 100,
         }),
@@ -118,7 +118,7 @@ describe("improve family — transfigure pair enumeration", () => {
   });
 
   it("never enumerates already-transfigured entries", () => {
-    const card = makeMerchantTestCard({
+    const card = makeAuguryTestCard({
       id: uuid(101),
       cardNumber: 101,
       cardType: "Character",
@@ -128,7 +128,7 @@ describe("improve family — transfigure pair enumeration", () => {
     const context = makeContext({
       cards: [card],
       deckEntries: [
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId("e1"),
           cardNumber: 101,
           transfiguration: "Kindled",
@@ -140,7 +140,7 @@ describe("improve family — transfigure pair enumeration", () => {
   });
 
   it("excludes starters while a non-starter pair exists, includes them otherwise", () => {
-    const starter = makeMerchantTestCard({
+    const starter = makeAuguryTestCard({
       id: uuid(200),
       cardNumber: 200,
       cardType: "Character",
@@ -148,7 +148,7 @@ describe("improve family — transfigure pair enumeration", () => {
       energyCost: 4,
       spark: 2,
     });
-    const nonStarter = makeMerchantTestCard({
+    const nonStarter = makeAuguryTestCard({
       id: uuid(201),
       cardNumber: 201,
       cardType: "Character",
@@ -160,11 +160,11 @@ describe("improve family — transfigure pair enumeration", () => {
     const withBoth = makeContext({
       cards: [starter, nonStarter],
       deckEntries: [
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId("starter-e"),
           cardNumber: 200,
         }),
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId("ns-e"),
           cardNumber: 201,
         }),
@@ -178,7 +178,7 @@ describe("improve family — transfigure pair enumeration", () => {
     const starterOnly = makeContext({
       cards: [starter],
       deckEntries: [
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId("starter-e"),
           cardNumber: 200,
         }),
@@ -193,7 +193,7 @@ describe("improve family — transfigure pair enumeration", () => {
     // An Event with energyCost 0 and no digit: Empowered ineligible (cost 0),
     // Kindled ineligible (not Character). Inspired/Enduring (Event) have benefit
     // 0.55 > 0. So pairs come only from positive-benefit transfigurations.
-    const card = makeMerchantTestCard({
+    const card = makeAuguryTestCard({
       id: uuid(300),
       cardNumber: 300,
       cardType: "Event",
@@ -204,7 +204,7 @@ describe("improve family — transfigure pair enumeration", () => {
     const context = makeContext({
       cards: [card],
       deckEntries: [
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId("e1"),
           cardNumber: 300,
         }),
@@ -224,7 +224,7 @@ describe("improve family — transfigure pair enumeration", () => {
     const deckEntries: DeckEntry[] = [];
 
     // The Direwolf: a high-spark Character. Kindled benefit = (8-4)/4 = 1.0.
-    const direwolf = makeMerchantTestCard({
+    const direwolf = makeAuguryTestCard({
       id: uuid(900),
       cardNumber: 900,
       name: parseCardName("Marked Direwolf"),
@@ -235,7 +235,7 @@ describe("improve family — transfigure pair enumeration", () => {
     });
     cards.push(direwolf);
     deckEntries.push(
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId("direwolf"),
         cardNumber: 900,
       }),
@@ -248,7 +248,7 @@ describe("improve family — transfigure pair enumeration", () => {
     for (let i = 0; i < 7; i += 1) {
       const n = 800 + i;
       cards.push(
-        makeMerchantTestCard({
+        makeAuguryTestCard({
           id: uuid(n),
           cardNumber: n,
           name: parseCardName(`Event ${String(n)}`),
@@ -259,7 +259,7 @@ describe("improve family — transfigure pair enumeration", () => {
         }),
       );
       deckEntries.push(
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId(`evt-${String(i)}`),
           cardNumber: n,
         }),
@@ -268,8 +268,8 @@ describe("improve family — transfigure pair enumeration", () => {
 
     const context = makeContext({ cards, deckEntries });
 
-    const first = transfigureBuilder.build(context, merchantRng("first"));
-    const replay = transfigureBuilder.build(context, merchantRng("unrelated"));
+    const first = transfigureBuilder.build(context, auguryRng("first"));
+    const replay = transfigureBuilder.build(context, auguryRng("unrelated"));
     expect(first).not.toBeNull();
     expect(replay?.targetKey).toBe(first?.targetKey);
     expect(first?.selectionTrace?.candidateCount).toBeGreaterThanOrEqual(3);
@@ -281,7 +281,7 @@ describe("improve family — transfigure pair enumeration", () => {
   });
 
   it("targetKey is entryId:transfiguration and payload applies", () => {
-    const card = makeMerchantTestCard({
+    const card = makeAuguryTestCard({
       id: uuid(400),
       cardNumber: 400,
       cardType: "Character",
@@ -289,20 +289,20 @@ describe("improve family — transfigure pair enumeration", () => {
       spark: 2,
     });
     const deckEntries = [
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId("e1"),
         cardNumber: 400,
       }),
     ];
     const context = makeContext({ cards: [card], deckEntries });
-    const draft = transfigureBuilder.build(context, merchantRng("s"));
+    const draft = transfigureBuilder.build(context, auguryRng("s"));
     expect(draft).not.toBeNull();
     expect(draft?.targetKey).toMatch(/^e1:/);
     expect(draft?.applyPayload?.kind).toBe("transfigure_deck_entry");
 
-    const journeyState = makeMerchantTestJourneyState({ deck: deckEntries });
-    const journeyContent = makeMerchantTestContent({ cards: [card] });
-    const next = applyMerchantPayloadToState({
+    const journeyState = makeAuguryTestJourneyState({ deck: deckEntries });
+    const journeyContent = makeAuguryTestContent({ cards: [card] });
+    const next = applyAuguryPayloadToState({
       state: journeyState,
       journeyContent,
       payload: draft!.applyPayload!,
@@ -316,7 +316,7 @@ describe("improve family — transfigure pair enumeration", () => {
 
 describe("improve family — starter_transfigure", () => {
   it("is eligible only when an untransfigured starter has an eligible transfiguration", () => {
-    const starter = makeMerchantTestCard({
+    const starter = makeAuguryTestCard({
       id: uuid(500),
       cardNumber: 500,
       cardType: "Character",
@@ -327,7 +327,7 @@ describe("improve family — starter_transfigure", () => {
     const eligibleCtx = makeContext({
       cards: [starter],
       deckEntries: [
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId("s1"),
           cardNumber: 500,
         }),
@@ -338,7 +338,7 @@ describe("improve family — starter_transfigure", () => {
     const transfiguredCtx = makeContext({
       cards: [starter],
       deckEntries: [
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId("s1"),
           cardNumber: 500,
           transfiguration: "Kindled",
@@ -350,7 +350,7 @@ describe("improve family — starter_transfigure", () => {
 
   it("targets only starter entries with a composite payload of 1-2 transfigures", () => {
     const starters = [0, 1].map((i) =>
-      makeMerchantTestCard({
+      makeAuguryTestCard({
         id: uuid(600 + i),
         cardNumber: 600 + i,
         cardType: "Character",
@@ -359,7 +359,7 @@ describe("improve family — starter_transfigure", () => {
         spark: 2,
       }),
     );
-    const nonStarter = makeMerchantTestCard({
+    const nonStarter = makeAuguryTestCard({
       id: uuid(610),
       cardNumber: 610,
       cardType: "Character",
@@ -368,15 +368,15 @@ describe("improve family — starter_transfigure", () => {
       spark: 2,
     });
     const deckEntries = [
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId("s0"),
         cardNumber: 600,
       }),
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId("s1"),
         cardNumber: 601,
       }),
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId("ns"),
         cardNumber: 610,
       }),
@@ -389,7 +389,7 @@ describe("improve family — starter_transfigure", () => {
     for (let seed = 0; seed < 20; seed += 1) {
       const draft = starterTransfigureBuilder.build(
         context,
-        merchantRng("s", String(seed)),
+        auguryRng("s", String(seed)),
       );
       expect(draft).not.toBeNull();
       if (draft === null) continue;

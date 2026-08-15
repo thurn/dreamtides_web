@@ -1,17 +1,17 @@
-import type { MerchantCatalogCard, MerchantDeckCard } from "../types";
+import type { AuguryCatalogCard, AuguryDeckCard } from "../types";
 import type {
-  MerchantDreamsignTier,
-  MerchantOfferTrace,
-  MerchantTraceCandidate,
-  MerchantTraceDecision,
-  MerchantTraceKeyKind,
+  AuguryDreamsignTier,
+  AuguryOfferTrace,
+  AuguryTraceCandidate,
+  AuguryTraceDecision,
+  AuguryTraceKeyKind,
 } from "./types";
-import { MERCHANT_TUNING } from "../tuning";
+import { AUGURY_TUNING } from "../tuning";
 import type { DreamsignId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
-import type { MerchantTargetKey } from "../../types/identifiers";
-import { parseMerchantTargetKey } from "../../types/identifiers";
+import type { AuguryTargetKey } from "../../types/identifiers";
+import { parseAuguryTargetKey } from "../../types/identifiers";
 
 /**
  * Cap on the candidates carried per offer line. Small candidate sets (choosers
@@ -45,7 +45,7 @@ export function traceBandSize(
 
 /** A candidate before the trace assembler ranks, bands, and truncates it. */
 export interface TraceCandidateInput {
-  key: MerchantTargetKey;
+  key: AuguryTargetKey;
   displayName?: string;
   cardUuid?: CardId;
   cardNumber?: number;
@@ -57,7 +57,7 @@ export interface TraceCandidateInput {
 }
 
 /**
- * Assembles a {@link MerchantOfferTrace} from a builder's candidate inputs.
+ * Assembles a {@link AuguryOfferTrace} from a builder's candidate inputs.
  *
  * Ranks candidates by score descending (the same comparator `bandSample` uses,
  * so the band membership matches), marks the top `bandSize` as in-band and the
@@ -69,20 +69,20 @@ export interface TraceCandidateInput {
  * touches the clock, RNG, or logger.
  */
 export function assembleOfferTrace(params: {
-  decision: MerchantTraceDecision;
-  keyKind: MerchantTraceKeyKind;
+  decision: AuguryTraceDecision;
+  keyKind: AuguryTraceKeyKind;
   candidates: readonly TraceCandidateInput[];
-  selectedKeys: readonly MerchantTargetKey[];
+  selectedKeys: readonly AuguryTargetKey[];
   bandFraction: number;
   bandMinimum?: number;
   selectedCount: number;
   coldStartQualityFallback?: boolean;
-  dreamsignTier?: MerchantDreamsignTier;
+  dreamsignTier?: AuguryDreamsignTier;
   blend?: Readonly<Record<string, number>>;
   notes?: readonly string[];
   maxCandidates?: number;
-}): MerchantOfferTrace {
-  const bandMinimum = params.bandMinimum ?? MERCHANT_TUNING.bandMinimum;
+}): AuguryOfferTrace {
+  const bandMinimum = params.bandMinimum ?? AUGURY_TUNING.bandMinimum;
   const poolSize = params.candidates.length;
   const bandSize = traceBandSize(poolSize, params.bandFraction, bandMinimum);
   const selectedSet = new Set(params.selectedKeys);
@@ -93,7 +93,7 @@ export function assembleOfferTrace(params: {
     .map((candidate, index) => ({ candidate, index }))
     .sort((a, b) => b.candidate.score - a.candidate.score);
 
-  const full: MerchantTraceCandidate[] = ranked.map(({ candidate }, rank) => ({
+  const full: AuguryTraceCandidate[] = ranked.map(({ candidate }, rank) => ({
     key: candidate.key,
     ...(candidate.displayName === undefined
       ? {}
@@ -158,13 +158,13 @@ export function assembleOfferTrace(params: {
  * are optional per-card breakdowns when the builder surfaces them.
  */
 export function catalogTraceCandidates(
-  pool: readonly MerchantCatalogCard[],
+  pool: readonly AuguryCatalogCard[],
   scoreByUuid: ReadonlyMap<CardId, number>,
   componentsByUuid?: ReadonlyMap<CardId, Readonly<Record<string, number>>>,
   draftPoolCardUuids?: ReadonlySet<CardId>,
 ): TraceCandidateInput[] {
   return pool.map((card) => ({
-    key: parseMerchantTargetKey(card.cardUuid),
+    key: parseAuguryTargetKey(card.cardUuid),
     displayName: card.displayName,
     cardUuid: card.cardUuid,
     cardNumber: card.cardNumber,
@@ -184,14 +184,14 @@ export function catalogTraceCandidates(
  */
 export function deckEntryTraceCandidates(
   entries: readonly {
-    deckCard: MerchantDeckCard;
+    deckCard: AuguryDeckCard;
     entryId: DeckEntryId;
     score: number;
     components?: Readonly<Record<string, number>>;
   }[],
 ): TraceCandidateInput[] {
   return entries.map((entry) => ({
-    key: parseMerchantTargetKey(entry.entryId),
+    key: parseAuguryTargetKey(entry.entryId),
     displayName: entry.deckCard.displayName,
     cardUuid: entry.deckCard.cardUuid,
     cardNumber: entry.deckCard.cardNumber,

@@ -15,19 +15,19 @@ import {
 import { CONFIG_DATA_FIXTURE } from "../../testing/config-data-fixture";
 import { transfigurationFormFixture } from "../../testing/transfiguration-fixture";
 import type {
-  MerchantChoiceCandidate,
-  MerchantContext,
-  MerchantDeckCard,
-  MerchantEncounter,
-  MerchantGameObject,
-  MerchantOffer,
+  AuguryChoiceCandidate,
+  AuguryContext,
+  AuguryDeckCard,
+  AuguryEncounter,
+  AuguryGameObject,
+  AuguryOffer,
 } from "../../journey_v2/types";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
-  makeMerchantTestJourneyState,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDeckEntry,
+  makeAuguryTestJourneyState,
+  makeAuguryTestSite,
 } from "../../journey_v2/testing/fixtures";
 import {
   buildAuguryAcceptRequest,
@@ -47,8 +47,8 @@ import { parseOfferId } from "../../types/identifiers";
 import { parseChoiceId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
-import { parseMerchantTargetKey } from "../../types/identifiers";
-import { parseMerchantCategoryId } from "../../types/identifiers";
+import { parseAuguryTargetKey } from "../../types/identifiers";
+import { parseAuguryCategoryId } from "../../types/identifiers";
 import type { DreamGuideContent } from "../../types/content";
 import { makeTestPoolContext } from "../../__test-helpers__/pool-context";
 import {
@@ -63,13 +63,13 @@ const PACKAGE_TIDE_ID = testTideId(
   "f7072be7-f12b-482a-b9e1-4d3925622eb2",
 );
 
-const card = makeMerchantTestCard({
+const card = makeAuguryTestCard({
   id: testCardId("81000000-0000-4000-8000-000000000012"),
   cardNumber: 12,
   name: parseCardName("Fixture Gift"),
 });
 
-function candidate(choiceId: ChoiceId): MerchantChoiceCandidate {
+function candidate(choiceId: ChoiceId): AuguryChoiceCandidate {
   return {
     choiceId,
     gameObjects: [
@@ -89,13 +89,13 @@ function candidate(choiceId: ChoiceId): MerchantChoiceCandidate {
   };
 }
 
-function chooserOffer(): MerchantOffer {
+function chooserOffer(): AuguryOffer {
   return {
     offerId: parseOfferId("A"),
     encounterSignature: stableDigest("encounter-fixture"),
     archetypeId: "fit_card_draft",
     family: "grant",
-    targetKey: parseMerchantTargetKey("fixture-target"),
+    targetKey: parseAuguryTargetKey("fixture-target"),
     gameObjects: [],
     choiceRequest: {
       choiceType: "catalogCard",
@@ -109,13 +109,13 @@ function chooserOffer(): MerchantOffer {
   };
 }
 
-function directOffer(): MerchantOffer {
+function directOffer(): AuguryOffer {
   return {
     offerId: parseOfferId("B"),
     encounterSignature: stableDigest("encounter-fixture"),
     archetypeId: "strong_card",
     family: "grant",
-    targetKey: parseMerchantTargetKey(card.id),
+    targetKey: parseAuguryTargetKey(card.id),
     gameObjects: [candidate(parseChoiceId("direct")).gameObjects[0]],
     applyPayload: {
       kind: "add_catalog_card",
@@ -125,7 +125,7 @@ function directOffer(): MerchantOffer {
   };
 }
 
-function encounter(): MerchantEncounter {
+function encounter(): AuguryEncounter {
   return {
     encounterSignature: stableDigest("encounter-fixture"),
     siteId: parseSiteId("site-fixture"),
@@ -134,7 +134,7 @@ function encounter(): MerchantEncounter {
 }
 
 const mappingCards = [1, 2, 3, 4, 5].map((index) =>
-  makeMerchantTestCard({
+  makeAuguryTestCard({
     id: testCardId(`82000000-0000-4000-8000-${String(index).padStart(12, "0")}`),
     cardNumber: 100 + index,
     name: parseCardName(`Mapping Fixture ${String(index)}`),
@@ -145,7 +145,7 @@ const mappingCards = [1, 2, 3, 4, 5].map((index) =>
 
 function catalogObject(
   index: number,
-): Extract<MerchantGameObject, { objectType: "catalogCard" }> {
+): Extract<AuguryGameObject, { objectType: "catalogCard" }> {
   const value = mappingCards[index];
   return {
     objectType: "catalogCard",
@@ -159,9 +159,9 @@ function catalogObject(
 function mappedDeckObject(
   index: number,
   entryId: DeckEntryId,
-): MerchantDeckCard {
+): AuguryDeckCard {
   const mappedCard = mappingCards[index];
-  const deckEntry = makeMerchantTestDeckEntry({
+  const deckEntry = makeAuguryTestDeckEntry({
     entryId,
     cardNumber: mappedCard.cardNumber,
   });
@@ -192,7 +192,7 @@ const mappingContext = {
     tuning: CONFIG_DATA_FIXTURE.rewardSelectionData.tuning,
     content: { auguryData: CONFIG_DATA_FIXTURE.auguryData },
   },
-} as unknown as MerchantContext;
+} as unknown as AuguryContext;
 
 const GUIDE = {
   id: testGuideId("fixture-augury-guide"),
@@ -207,7 +207,7 @@ const GUIDE = {
 function mappingContentWithTide() {
   const poolContext = makeTestPoolContext();
   return {
-    ...makeMerchantTestContent({ cards: mappingCards }),
+    ...makeAuguryTestContent({ cards: mappingCards }),
     poolContext: {
       ...poolContext,
       poolData: {
@@ -236,7 +236,7 @@ function mappingContentWithTide() {
   };
 }
 
-function fourCandidates(payloadCopies = 1): MerchantChoiceCandidate[] {
+function fourCandidates(payloadCopies = 1): AuguryChoiceCandidate[] {
   return mappingCards.slice(0, 4).map((_unused, index) => {
     const object = catalogObject(index);
     const add = {
@@ -259,22 +259,22 @@ function fourCandidates(payloadCopies = 1): MerchantChoiceCandidate[] {
 }
 
 function mappedOffer(
-  archetypeId: MerchantOffer["archetypeId"],
-  overrides: Partial<MerchantOffer>,
-): MerchantOffer {
+  archetypeId: AuguryOffer["archetypeId"],
+  overrides: Partial<AuguryOffer>,
+): AuguryOffer {
   return {
     offerId: parseOfferId("A"),
     encounterSignature: stableDigest("mapping-encounter"),
     archetypeId,
     family: "grant",
-    targetKey: parseMerchantTargetKey("fixture"),
+    targetKey: parseAuguryTargetKey("fixture"),
     gameObjects: [],
     ...overrides,
   };
 }
 
 const choiceRequest = (
-  candidates: MerchantChoiceCandidate[],
+  candidates: AuguryChoiceCandidate[],
   choiceType: "catalogCard" | "dreamsign" | "replacementCard" = "catalogCard",
 ) => ({
   choiceType,
@@ -283,7 +283,7 @@ const choiceRequest = (
 
 function dreamsignObject(
   idSeed: string,
-): Extract<MerchantGameObject, { objectType: "dreamsign" }> {
+): Extract<AuguryGameObject, { objectType: "dreamsign" }> {
   return {
     objectType: "dreamsign",
     dreamsignId: testDreamsignId(idSeed),
@@ -305,7 +305,7 @@ describe("augury view model", () => {
       tuning: CONFIG_DATA_FIXTURE.rewardSelectionData.tuning,
       content: { auguryData: CONFIG_DATA_FIXTURE.auguryData },
     },
-  } as unknown as MerchantContext;
+  } as unknown as AuguryContext;
 
   it("maps both offers to short object-first views without production summaries", () => {
     const offers = buildAuguryOfferViews(encounter(), context);
@@ -417,7 +417,7 @@ describe("augury view model", () => {
   it("builds an added site as a canonical non-interactive site-node model", () => {
     const offer = mappedOffer("add_site", {
       family: "site",
-      targetKey: parseMerchantTargetKey("Shop"),
+      targetKey: parseAuguryTargetKey("Shop"),
       applyPayload: { kind: "add_site", siteType: "Shop" },
     });
     const offers = buildAuguryOfferViews(
@@ -452,10 +452,10 @@ describe("augury view model", () => {
     });
   });
 
-  it("maps every merchant archetype to its strict Offer Tile category", () => {
+  it("maps every augury archetype to its strict Offer Tile category", () => {
     const drafts = fourCandidates();
     const dreamsigns = [dreamsignObject("sign-1"), dreamsignObject("sign-2")];
-    const cases: readonly [MerchantOffer, string, string][] = [
+    const cases: readonly [AuguryOffer, string, string][] = [
       [
         mappedOffer("fit_card_grant", { gameObjects: [catalogObject(0)] }),
         "card-gift",
@@ -480,7 +480,7 @@ describe("augury view model", () => {
       ],
       [
         mappedOffer("category_draft_known", {
-          targetKey: parseMerchantTargetKey(
+          targetKey: parseAuguryTargetKey(
             `type:Character:${mappingCards
               .slice(0, 4)
               .map((value) => value.id)
@@ -549,7 +549,7 @@ describe("augury view model", () => {
       [
         mappedOffer("add_site", {
           family: "site",
-          targetKey: parseMerchantTargetKey("Shop"),
+          targetKey: parseAuguryTargetKey("Shop"),
           applyPayload: { kind: "add_site", siteType: "Shop" },
         }),
         "add-site",
@@ -592,7 +592,7 @@ describe("augury view model", () => {
   it("rejects malformed fixed counts and resolves structured category and copy data", () => {
     const category = buildAuguryOfferTileModel(
       mappedOffer("category_draft_known", {
-        targetKey: parseMerchantTargetKey(
+        targetKey: parseAuguryTargetKey(
           `type:Character:${mappingCards
             .slice(0, 4)
             .map((value) => value.id)
@@ -644,7 +644,7 @@ describe("augury view model", () => {
     for (const [id, label, expected] of cases) {
       expect(
         projectOfferTileCategory({
-          id: parseMerchantCategoryId(id),
+          id: parseAuguryCategoryId(id),
           label,
           memberUuids: [],
         }),
@@ -653,12 +653,12 @@ describe("augury view model", () => {
   });
 
   it("keeps a persisted tide-package category reroll in the offer state", () => {
-    const site = makeMerchantTestSite({
+    const site = makeAuguryTestSite({
       id: parseSiteId("site-augury-tide-reroll"),
       type: "Augury",
     });
     const packageOffer = mappedOffer("category_draft_known", {
-      targetKey: parseMerchantTargetKey(
+      targetKey: parseAuguryTargetKey(
         `tide:${PACKAGE_TIDE_ID}:${mappingCards
           .slice(0, 4)
           .map((value) => value.id)
@@ -671,7 +671,7 @@ describe("augury view model", () => {
       siteId: site.id,
       offers: [packageOffer, directOffer()],
     };
-    const state = makeMerchantTestJourneyState({
+    const state = makeAuguryTestJourneyState({
       siteRuntime: {
         [site.id]: {
           kind: "augury",

@@ -6,11 +6,8 @@ import type { DreamsignTemplate } from "../types/content";
 import type { JourneyRewardEffect } from "../rules/journey/reward-effects";
 import type { SitesData } from "../types/sites-data";
 import type { DeckEntry, SiteState } from "../types/journey";
-import type {
-  MerchantArchetypeId,
-  MerchantOfferFamily,
-} from "./archetypes/types";
-import type { MerchantOfferTrace } from "./trace/types";
+import type { AuguryOfferFamily } from "./archetypes/types";
+import type { AuguryOfferTrace } from "./trace/types";
 import type {
   RewardMechanicId,
   RewardSelectionContext,
@@ -28,29 +25,29 @@ import type { SelectionContentRevision } from "../types/selection-content-revisi
 import type { StableDigest } from "../types/stable-digest";
 import type {
   AuguryArchetypeId,
-  MerchantTargetKey,
+  AuguryTargetKey,
   SelectionKey,
 } from "../types/identifiers";
 
-export interface MerchantGameObjectBadge {
+export interface AuguryGameObjectBadge {
   label: string;
   detail?: string;
 }
 
-export interface MerchantCardIdentity {
+export interface AuguryCardIdentity {
   cardUuid: CardId;
   cardNumber: number;
   entryId?: DeckEntryId;
   dreamsignId?: DreamsignId;
 }
 
-export interface MerchantDeckCard extends MerchantCardIdentity {
+export interface AuguryDeckCard extends AuguryCardIdentity {
   objectType: "deckCard";
   entryId: DeckEntryId;
   deckEntry: DeckEntry;
   card: CardData;
   displayName: string;
-  badge?: MerchantGameObjectBadge;
+  badge?: AuguryGameObjectBadge;
   previewCard?: CardData;
   /**
    * When the object's `card`/`previewCard` shows a transfigured result, this
@@ -61,16 +58,16 @@ export interface MerchantDeckCard extends MerchantCardIdentity {
   transfiguration?: CardTransfigurationDisplay;
 }
 
-export interface MerchantCatalogCard extends MerchantCardIdentity {
+export interface AuguryCatalogCard extends AuguryCardIdentity {
   objectType: "catalogCard";
   card: CardData;
   displayName: string;
-  badge?: MerchantGameObjectBadge;
-  /** Paints the hover preview as transfigured; see {@link MerchantDeckCard}. */
+  badge?: AuguryGameObjectBadge;
+  /** Paints the hover preview as transfigured; see {@link AuguryDeckCard}. */
   transfiguration?: CardTransfigurationDisplay;
 }
 
-export interface MerchantContext {
+export interface AuguryContext {
   sitesData: SitesData;
   journeySeed: JourneySeed;
   site: SiteState;
@@ -84,19 +81,19 @@ export interface MerchantContext {
    */
   rerollNonce?: number;
   /**
-   * Debug-only: when set to an eligible `MerchantArchetypeId`, the generator
+   * Debug-only: when set to an eligible `AuguryArchetypeId`, the generator
    * forces the first offer (slot A) to use that archetype instead of weighted
    * sampling. Typed as `string` because it is a persisted passthrough from
    * `AugurySiteRuntime`; the generator validates it against the eligible
    * builder set and ignores values that are not eligible.
    */
   forcedArchetypeId?: AuguryArchetypeId;
-  /** Retained on the context for other screens; the merchant ignores it. */
+  /** Retained on the context for other screens; the augury ignores it. */
   essence: number;
-  deckCards: readonly MerchantDeckCard[];
+  deckCards: readonly AuguryDeckCard[];
   cardByUuid: ReadonlyMap<CardId, CardData>;
   cardByNumber: ReadonlyMap<number, CardData>;
-  deckEntryById: ReadonlyMap<DeckEntryId, MerchantDeckCard>;
+  deckEntryById: ReadonlyMap<DeckEntryId, AuguryDeckCard>;
   ownedCardUuids: ReadonlySet<CardId>;
   /**
    * UUIDs of the cards in this journey's resolved draft pool (the cards the player
@@ -109,7 +106,7 @@ export interface MerchantContext {
   heldDreamsignIds: ReadonlySet<DreamsignId>;
   heldDreamsignFallbackNames: ReadonlySet<string>;
   /** Non-starter pool cards eligible as grant targets. */
-  candidateGrantCards: readonly MerchantCatalogCard[];
+  candidateGrantCards: readonly AuguryCatalogCard[];
   /** Unheld dreamsign templates. */
   candidateDreamsigns: readonly DreamsignTemplate[];
   cardDatabase: JourneyContent["cardDatabase"];
@@ -118,7 +115,7 @@ export interface MerchantContext {
   rewardSelection: RewardSelectionContext;
 }
 
-type MerchantTransfigurationPayload = Extract<
+type AuguryTransfigurationPayload = Extract<
   JourneyRewardEffect,
   { kind: "transfigure_deck_entry" }
 > & {
@@ -126,44 +123,44 @@ type MerchantTransfigurationPayload = Extract<
   description: string;
 };
 
-/** Merchant-facing reward payload with its presentation-only preview fields. */
-export type MerchantApplyPayload =
+/** Augury-facing reward payload with its presentation-only preview fields. */
+export type AuguryApplyPayload =
   | Exclude<
       JourneyRewardEffect,
       { kind: "transfigure_deck_entry" } | { kind: "composite" }
     >
-  | MerchantTransfigurationPayload
-  | { kind: "composite"; children: readonly MerchantApplyPayload[] };
+  | AuguryTransfigurationPayload
+  | { kind: "composite"; children: readonly AuguryApplyPayload[] };
 
-export interface MerchantChoiceRequest {
+export interface AuguryChoiceRequest {
   choiceType: "catalogCard" | "dreamsign" | "replacementCard";
-  candidates: readonly MerchantChoiceCandidate[];
+  candidates: readonly AuguryChoiceCandidate[];
 }
 
-export interface MerchantChoice {
+export interface AuguryChoice {
   choiceId: ChoiceId;
 }
 
-export interface MerchantChoiceCandidate {
+export interface AuguryChoiceCandidate {
   choiceId: ChoiceId;
-  gameObjects: readonly MerchantGameObject[];
-  applyPayload: MerchantApplyPayload;
+  gameObjects: readonly AuguryGameObject[];
+  applyPayload: AuguryApplyPayload;
   cardUuid?: CardId;
   cardNumber?: number;
   dreamsignId?: DreamsignId;
 }
 
-export interface MerchantOffer {
+export interface AuguryOffer {
   offerId: OfferId;
   encounterSignature: StableDigest;
-  archetypeId: MerchantArchetypeId;
-  family: MerchantOfferFamily;
-  targetKey: MerchantTargetKey;
-  gameObjects: readonly MerchantGameObject[];
-  applyPayload?: MerchantApplyPayload;
-  choiceRequest?: MerchantChoiceRequest;
+  archetypeId: AuguryArchetypeId;
+  family: AuguryOfferFamily;
+  targetKey: AuguryTargetKey;
+  gameObjects: readonly AuguryGameObject[];
+  applyPayload?: AuguryApplyPayload;
+  choiceRequest?: AuguryChoiceRequest;
   /** Pure explanation of how this offer's target(s) were chosen; logged per offer. */
-  trace?: MerchantOfferTrace;
+  trace?: AuguryOfferTrace;
   mechanicId?: RewardMechanicId;
   policyId?: RewardSelectionPolicyId;
   selectionKey?: SelectionKey;
@@ -172,23 +169,23 @@ export interface MerchantOffer {
   selectionTrace?: RewardSelectionTrace;
 }
 
-export interface MerchantEncounter {
+export interface AuguryEncounter {
   encounterSignature: StableDigest;
   siteId: SiteId;
   selectionRulesVersion?: SelectionRulesVersion;
   selectionContentRevision?: SelectionContentRevision;
-  offers: readonly MerchantOffer[];
+  offers: readonly AuguryOffer[];
 }
 
-export interface MerchantAcceptRequest {
+export interface AuguryAcceptRequest {
   encounterSignature: StableDigest;
   offerId: OfferId;
-  archetypeId: MerchantArchetypeId;
+  archetypeId: AuguryArchetypeId;
   selectionRulesVersion?: SelectionRulesVersion;
-  choice?: MerchantChoice;
+  choice?: AuguryChoice;
 }
 
-export type MerchantOfferFailureReason =
+export type AuguryOfferFailureReason =
   | "encounter_unavailable"
   | "stale_encounter"
   | "offer_not_found"
@@ -198,29 +195,29 @@ export type MerchantOfferFailureReason =
   | "target_unavailable"
   | "site_unavailable";
 
-export type MerchantOfferActionResult =
+export type AuguryOfferActionResult =
   | {
       ok: true;
     }
   | {
       ok: false;
-      reason: MerchantOfferFailureReason;
+      reason: AuguryOfferFailureReason;
     };
 
-export interface MerchantDeclineRequest {
+export interface AuguryDeclineRequest {
   encounterSignature: StableDigest;
   offerId: OfferId;
   selectionRulesVersion?: SelectionRulesVersion;
-  choice?: MerchantChoice;
+  choice?: AuguryChoice;
 }
 
-export type MerchantGameObject =
-  | MerchantCatalogCard
-  | MerchantDeckCard
+export type AuguryGameObject =
+  | AuguryCatalogCard
+  | AuguryDeckCard
   | {
       objectType: "dreamsign";
       dreamsignId: DreamsignId;
       dreamsignTemplate: DreamsignTemplate;
       displayName: string;
-      badge?: MerchantGameObjectBadge;
+      badge?: AuguryGameObjectBadge;
     };

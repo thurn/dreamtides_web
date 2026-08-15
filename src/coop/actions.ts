@@ -279,9 +279,9 @@ export interface CoopActions {
     runId?: JourneyId,
   ) => Promise<number>;
 
-  // --- merchant & shop ---
-  acceptMerchantOffer: (siteId: SiteId, offer?: unknown) => Promise<number>;
-  declineMerchant: (siteId: SiteId) => Promise<number>;
+  // --- augury & shop ---
+  acceptAuguryOffer: (siteId: SiteId, offer?: unknown) => Promise<number>;
+  declineAugury: (siteId: SiteId) => Promise<number>;
   buyShopSlot: (siteId: SiteId, slotIndex: number) => Promise<number>;
   rerollShop: (siteId: SiteId) => Promise<number>;
   grantFreeRerolls: (count: number) => Promise<number>;
@@ -713,13 +713,13 @@ export function makeActions(
         ),
       ),
 
-    // --- merchant & shop ---
-    acceptMerchantOffer: (siteId, offer) =>
+    // --- augury & shop ---
+    acceptAuguryOffer: (siteId, offer) =>
       emit(
-        "ACCEPT_MERCHANT_OFFER",
+        "ACCEPT_AUGURY_OFFER",
         offer === undefined ? { siteId } : { siteId, offer },
       ),
-    declineMerchant: (siteId) => emit("DECLINE_MERCHANT", { siteId }),
+    declineAugury: (siteId) => emit("DECLINE_AUGURY", { siteId }),
     buyShopSlot: (siteId, slotIndex) =>
       emit("BUY_SHOP_SLOT", { siteId, slotIndex }),
     rerollShop: (siteId) => emit("REROLL_SHOP", { siteId }),

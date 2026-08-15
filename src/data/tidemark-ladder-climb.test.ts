@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestDreamsignTemplate,
+  makeAuguryTestCard,
+  makeAuguryTestDreamsignTemplate,
 } from "../journey_v2/testing/fixtures";
 import {
   nextTidemarkLadderClimbAttemptNumber,
@@ -106,39 +106,39 @@ describe("Tidemark Ladder Climb rules", () => {
 
   it("sorts eligible Dreamsigns by tide affinity, rarity, and UUID", () => {
     const deckCards = [
-      makeMerchantTestCard({
+      makeAuguryTestCard({
         id: testCardId("00000000-0000-4000-8000-000000000001"),
         cardNumber: 1,
         subtype: "Spirit Animal",
       }),
-      makeMerchantTestCard({
+      makeAuguryTestCard({
         id: testCardId("00000000-0000-4000-8000-000000000002"),
         cardNumber: 2,
         subtype: "Spirit Animal",
       }),
-      makeMerchantTestCard({
+      makeAuguryTestCard({
         id: testCardId("00000000-0000-4000-8000-000000000003"),
         cardNumber: 3,
         subtype: "Spirit Animal",
       }),
     ];
     const templates = [
-      makeMerchantTestDreamsignTemplate({
+      makeAuguryTestDreamsignTemplate({
         id: testDreamsignId("sign-z-matched"),
         rarity: "Common",
         tideIds: [testTideId("wolf-tide")],
       }),
-      makeMerchantTestDreamsignTemplate({
+      makeAuguryTestDreamsignTemplate({
         id: testDreamsignId("sign-b-generic"),
         rarity: "Uncommon",
         tideIds: [],
       }),
-      makeMerchantTestDreamsignTemplate({
+      makeAuguryTestDreamsignTemplate({
         id: testDreamsignId("sign-a-generic"),
         rarity: "Uncommon",
         tideIds: [],
       }),
-      makeMerchantTestDreamsignTemplate({
+      makeAuguryTestDreamsignTemplate({
         id: testDreamsignId("sign-off-deck"),
         rarity: "Common",
         tideIds: [testTideId("dragon-tide")],

@@ -1,17 +1,17 @@
 import { describe, expect, it } from "vitest";
-import { applyMerchantPayloadToState } from "../encounter/resolveMerchantOffer";
-import { merchantRng } from "../signals/rng";
-import { buildMerchantContext } from "../context/buildMerchantContext";
+import { applyAuguryPayloadToState } from "../encounter/resolveAuguryOffer";
+import { auguryRng } from "../signals/rng";
+import { buildAuguryContext } from "../context/buildAuguryContext";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestJourneyState,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestJourneyState,
+  makeAuguryTestSite,
 } from "../testing/fixtures";
 import type { JourneyState } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
-import type { MerchantContext } from "../types";
-import { addSiteBuilder, MERCHANT_PLACEABLE_SITES } from "./site";
+import type { AuguryContext } from "../types";
+import { addSiteBuilder, AUGURY_PLACEABLE_SITES } from "./site";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { testDreamscapeId, testCardId } from "../../types/test-identities";
@@ -19,7 +19,7 @@ import { testDreamscapeId, testCardId } from "../../types/test-identities";
 function makeDreamscapeState(
   overrides: Partial<JourneyState> = {},
 ): JourneyState {
-  const base = makeMerchantTestJourneyState(overrides);
+  const base = makeAuguryTestJourneyState(overrides);
   // Set up a current dreamscape with some pre-existing sites
   return {
     ...base,
@@ -82,19 +82,19 @@ function makeDreamscapeState(
   };
 }
 
-function makeContext(state: JourneyState): MerchantContext {
-  const journeyContent = makeMerchantTestContent({
+function makeContext(state: JourneyState): AuguryContext {
+  const journeyContent = makeAuguryTestContent({
     cards: [
-      makeMerchantTestCard({
+      makeAuguryTestCard({
         id: testCardId("11111111-1111-4111-8111-111111111111"),
         cardNumber: 1,
       }),
     ],
   });
-  return buildMerchantContext({
+  return buildAuguryContext({
     journeyState: state,
     journeyContent,
-    site: makeMerchantTestSite(),
+    site: makeAuguryTestSite(),
   });
 }
 
@@ -110,7 +110,7 @@ describe("add_site — always eligible", () => {
   });
 
   it("is eligible with no current dreamscape", () => {
-    const state = makeMerchantTestJourneyState();
+    const state = makeAuguryTestJourneyState();
     const context = makeContext(state);
     expect(addSiteBuilder.eligible(context)).toBe(true);
   });
@@ -124,16 +124,16 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
   it("adds exactly one site to the current dreamscape", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
-    const journeyContent = makeMerchantTestContent({
+    const journeyContent = makeAuguryTestContent({
       cards: [
-        makeMerchantTestCard({
+        makeAuguryTestCard({
           id: testCardId("11111111-1111-4111-8111-111111111111"),
           cardNumber: 1,
         }),
       ],
     });
 
-    const rng = merchantRng("add-site-apply-test", "0");
+    const rng = auguryRng("add-site-apply-test", "0");
     const offer = addSiteBuilder.build(context, rng);
     expect(offer).not.toBeNull();
     if (offer === null) return;
@@ -143,7 +143,7 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     expect(offer.applyPayload.kind).toBe("add_site");
 
     const payload = offer.applyPayload;
-    const resultState = applyMerchantPayloadToState({
+    const resultState = applyAuguryPayloadToState({
       state,
       journeyContent,
       payload,
@@ -168,22 +168,22 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
   it("does not modify other dreamscapes", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
-    const journeyContent = makeMerchantTestContent({
+    const journeyContent = makeAuguryTestContent({
       cards: [
-        makeMerchantTestCard({
+        makeAuguryTestCard({
           id: testCardId("11111111-1111-4111-8111-111111111111"),
           cardNumber: 1,
         }),
       ],
     });
 
-    const rng = merchantRng("add-site-other-dreamscape-test", "0");
+    const rng = auguryRng("add-site-other-dreamscape-test", "0");
     const offer = addSiteBuilder.build(context, rng);
     expect(offer).not.toBeNull();
     if (offer === null) return;
     if (offer.applyPayload === undefined) return;
 
-    const resultState = applyMerchantPayloadToState({
+    const resultState = applyAuguryPayloadToState({
       state,
       journeyContent,
       payload: offer.applyPayload,
@@ -206,16 +206,16 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
   it("applying the same payload twice yields sites with distinct ids", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
-    const journeyContent = makeMerchantTestContent({
+    const journeyContent = makeAuguryTestContent({
       cards: [
-        makeMerchantTestCard({
+        makeAuguryTestCard({
           id: testCardId("11111111-1111-4111-8111-111111111111"),
           cardNumber: 1,
         }),
       ],
     });
 
-    const rng = merchantRng("add-site-distinct-ids-test", "0");
+    const rng = auguryRng("add-site-distinct-ids-test", "0");
     const offer = addSiteBuilder.build(context, rng);
     expect(offer).not.toBeNull();
     if (offer === null || offer.applyPayload === undefined) return;
@@ -223,7 +223,7 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
     const payload = offer.applyPayload;
 
     // Apply once
-    const state1 = applyMerchantPayloadToState({
+    const state1 = applyAuguryPayloadToState({
       state,
       journeyContent,
       payload,
@@ -232,7 +232,7 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
     if (state1 === null) return;
 
     // Apply again to the already-modified state (simulate getting the same payload twice)
-    const state2 = applyMerchantPayloadToState({
+    const state2 = applyAuguryPayloadToState({
       state: state1,
       journeyContent,
       payload,
@@ -265,13 +265,13 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
 // ---------------------------------------------------------------------------
 
 describe("add_site — builder samples from placeable sites", () => {
-  it("sampled site comes from the MERCHANT_PLACEABLE_SITES list", () => {
+  it("sampled site comes from the AUGURY_PLACEABLE_SITES list", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
-    const placeableSet = new Set(MERCHANT_PLACEABLE_SITES);
+    const placeableSet = new Set(AUGURY_PLACEABLE_SITES);
 
     for (let seed = 0; seed < 20; seed += 1) {
-      const rng = merchantRng("add-site-placeable-test", String(seed));
+      const rng = auguryRng("add-site-placeable-test", String(seed));
       const offer = addSiteBuilder.build(context, rng);
       if (offer === null) continue;
       if (offer.applyPayload?.kind === "add_site") {
@@ -285,7 +285,7 @@ describe("add_site — builder samples from placeable sites", () => {
     const context = makeContext(state);
 
     for (let seed = 0; seed < 10; seed += 1) {
-      const rng = merchantRng("add-site-targetkey-test", String(seed));
+      const rng = auguryRng("add-site-targetkey-test", String(seed));
       const offer = addSiteBuilder.build(context, rng);
       if (offer === null) continue;
       if (offer.applyPayload?.kind === "add_site") {

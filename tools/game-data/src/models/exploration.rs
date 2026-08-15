@@ -1746,7 +1746,7 @@ mod tests {
 [
   EncounterDefinition(
     card_id: "11111111-1111-4111-8111-111111111111",
-    prose: Tx("A synthetic merchant writes two promises in silver ink."),
+    prose: Tx("A synthetic augury writes two promises in silver ink."),
     actions: [
       ActionDefinition(
         label: Tx("Claim the Open Market"),

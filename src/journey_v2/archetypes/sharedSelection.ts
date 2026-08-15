@@ -6,18 +6,18 @@ import {
   type RewardSelectionRequest,
   type RewardSelectionResult,
 } from "../../reward-selection";
-import type { MerchantArchetypeId, MerchantOfferDraft } from "./types";
-import type { MerchantContext } from "../types";
+import type { AuguryArchetypeId, AuguryOfferDraft } from "./types";
+import type { AuguryContext } from "../types";
 import { auguryArchetype } from "../../data/augury-data";
-import type { MerchantOfferTrace, MerchantTraceDecision } from "../trace/types";
+import type { AuguryOfferTrace, AuguryTraceDecision } from "../trace/types";
 import {
   parseRewardCandidateKey,
-  parseMerchantTargetKey,
+  parseAuguryTargetKey,
   parseSelectionKey,
 } from "../../types/identifiers";
 
-function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
-  const decision: MerchantTraceDecision =
+function legacyTraceFor(selection: RewardSelectionResult): AuguryOfferTrace {
+  const decision: AuguryTraceDecision =
     selection.mechanicId === "gain-dreamsign"
       ? "dreamsign_match"
       : selection.mechanicId === "add-site"
@@ -82,7 +82,7 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
     },
     candidateCount: selection.trace.candidateCount,
     candidates: selection.trace.band.candidates.map((candidate) => ({
-      key: parseMerchantTargetKey(candidate.key),
+      key: parseAuguryTargetKey(candidate.key),
       score: candidate.score,
       components: candidate.components,
       ...(candidate.cardUuid === undefined
@@ -116,8 +116,8 @@ function legacyTraceFor(selection: RewardSelectionResult): MerchantOfferTrace {
 
 /** The TOML-authored policy for an Augury archetype. */
 export function augurySelectionPolicy(
-  context: MerchantContext,
-  archetypeId: MerchantArchetypeId,
+  context: AuguryContext,
+  archetypeId: AuguryArchetypeId,
 ): RewardSelectionPolicyId {
   return auguryArchetype(
     context.rewardSelection.content.auguryData,
@@ -125,9 +125,9 @@ export function augurySelectionPolicy(
   ).selectionPolicyId;
 }
 
-export function selectMerchantReward(input: {
-  context: MerchantContext;
-  archetypeId: MerchantArchetypeId;
+export function selectAuguryReward(input: {
+  context: AuguryContext;
+  archetypeId: AuguryArchetypeId;
   mechanicId: RewardMechanicId;
   policyId: RewardSelectionPolicyId;
   request?: Omit<
@@ -165,7 +165,7 @@ export function selectMerchantReward(input: {
 export function selectionMetadata(
   selection: RewardSelectionResult,
 ): Pick<
-  MerchantOfferDraft,
+  AuguryOfferDraft,
   | "mechanicId"
   | "policyId"
   | "selectionKey"
@@ -185,9 +185,9 @@ export function selectionMetadata(
   };
 }
 
-export function selectMerchantCount(input: {
-  context: MerchantContext;
-  archetypeId: MerchantArchetypeId;
+export function selectAuguryCount(input: {
+  context: AuguryContext;
+  archetypeId: AuguryArchetypeId;
   mechanicId: RewardMechanicId;
   policyId: RewardSelectionPolicyId;
   minimum: number;

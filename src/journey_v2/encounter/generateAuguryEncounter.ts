@@ -1,16 +1,16 @@
 import { sha256 } from "js-sha256";
-import { MERCHANT_ARCHETYPE_BUILDERS } from "../archetypes/registry";
+import { AUGURY_ARCHETYPE_BUILDERS } from "../archetypes/registry";
 import type {
-  MerchantArchetypeBuilder,
-  MerchantArchetypeId,
-  MerchantOfferDraft,
+  AuguryArchetypeBuilder,
+  AuguryArchetypeId,
+  AuguryOfferDraft,
 } from "../archetypes/types";
-import { merchantRng, weightedSample } from "../signals/rng";
+import { auguryRng, weightedSample } from "../signals/rng";
 import { auguryArchetype } from "../../data/augury-data";
 import type {
-  MerchantContext,
-  MerchantEncounter,
-  MerchantOffer,
+  AuguryContext,
+  AuguryEncounter,
+  AuguryOffer,
 } from "../types";
 import type { OfferId } from "../../types/identifiers";
 import { parseOfferId, parseSelectionKey } from "../../types/identifiers";
@@ -24,21 +24,21 @@ import {
  * dead roll — an eligible builder that returned null and was dropped before the
  * slot redrew — so the dead rolls preceding the chosen offer are not invisible.
  */
-export interface MerchantRollAttempt {
-  archetypeId: MerchantArchetypeId;
+export interface AuguryRollAttempt {
+  archetypeId: AuguryArchetypeId;
   built: boolean;
 }
 
-export interface MerchantEncounterGenerationDebug {
-  eligibleArchetypeIds: readonly MerchantArchetypeId[];
-  rolledA: MerchantArchetypeId | null;
-  rolledB: MerchantArchetypeId | null;
+export interface AuguryEncounterGenerationDebug {
+  eligibleArchetypeIds: readonly AuguryArchetypeId[];
+  rolledA: AuguryArchetypeId | null;
+  rolledB: AuguryArchetypeId | null;
   /** Build attempts for slot A in order, including dead rolls (`built: false`). */
-  rollsA: readonly MerchantRollAttempt[];
+  rollsA: readonly AuguryRollAttempt[];
   /** Build attempts for slot B in order, including dead rolls (`built: false`). */
-  rollsB: readonly MerchantRollAttempt[];
+  rollsB: readonly AuguryRollAttempt[];
   /** The debug-forced archetype that was honored for slot A, when any. */
-  forcedArchetypeId: MerchantArchetypeId | null;
+  forcedArchetypeId: AuguryArchetypeId | null;
   encounterSignature: StableDigest;
 }
 
@@ -92,8 +92,8 @@ function toStableJsonValue(value: unknown): StableJsonValue {
 }
 
 function weightFor(
-  context: MerchantContext,
-  builder: MerchantArchetypeBuilder,
+  context: AuguryContext,
+  builder: AuguryArchetypeBuilder,
 ): number {
   return auguryArchetype(
     context.rewardSelection.content.auguryData,
@@ -108,28 +108,28 @@ function weightFor(
  * pool is exhausted.
  */
 function rollSlot(
-  eligible: readonly MerchantArchetypeBuilder[],
-  context: MerchantContext,
+  eligible: readonly AuguryArchetypeBuilder[],
+  context: AuguryContext,
   saltParts: readonly string[],
 ): {
   result: {
-    builder: MerchantArchetypeBuilder;
-    draft: MerchantOfferDraft;
+    builder: AuguryArchetypeBuilder;
+    draft: AuguryOfferDraft;
   } | null;
-  attempts: MerchantRollAttempt[];
+  attempts: AuguryRollAttempt[];
 } {
   let pool = [...eligible];
   let attempt = 0;
-  const attempts: MerchantRollAttempt[] = [];
+  const attempts: AuguryRollAttempt[] = [];
   while (pool.length > 0) {
-    const rng = merchantRng(...saltParts, "archetype", String(attempt));
+    const rng = auguryRng(...saltParts, "archetype", String(attempt));
     const builder = weightedSample(
       pool,
       (candidate) => weightFor(context, candidate),
       rng,
     );
     if (builder === null) return { result: null, attempts };
-    const buildRng = merchantRng(...saltParts, "target", builder.archetypeId);
+    const buildRng = auguryRng(...saltParts, "target", builder.archetypeId);
     const draft = builder.build(
       {
         ...context,
@@ -154,19 +154,19 @@ function rollSlot(
  * category never collides with the unforced encounter's signatures.
  */
 function forceSlot(
-  builder: MerchantArchetypeBuilder,
-  context: MerchantContext,
+  builder: AuguryArchetypeBuilder,
+  context: AuguryContext,
   saltParts: readonly string[],
 ): {
   result: {
-    builder: MerchantArchetypeBuilder;
-    draft: MerchantOfferDraft;
+    builder: AuguryArchetypeBuilder;
+    draft: AuguryOfferDraft;
   } | null;
-  attempts: MerchantRollAttempt[];
+  attempts: AuguryRollAttempt[];
 } {
-  const attempts: MerchantRollAttempt[] = [];
+  const attempts: AuguryRollAttempt[] = [];
   for (let attempt = 0; attempt < FORCE_BUILD_ATTEMPTS; attempt += 1) {
-    const buildRng = merchantRng(
+    const buildRng = auguryRng(
       ...saltParts,
       "force",
       builder.archetypeId,
@@ -187,7 +187,7 @@ function forceSlot(
   return { result: null, attempts };
 }
 
-function offerIdentity(offer: MerchantOffer): unknown {
+function offerIdentity(offer: AuguryOffer): unknown {
   return {
     offerId: offer.offerId,
     archetypeId: offer.archetypeId,
@@ -196,7 +196,7 @@ function offerIdentity(offer: MerchantOffer): unknown {
   };
 }
 
-function inputSignature(context: MerchantContext): unknown {
+function inputSignature(context: AuguryContext): unknown {
   return {
     journeySeed: context.journeySeed,
     siteId: context.site.id,
@@ -215,21 +215,21 @@ function inputSignature(context: MerchantContext): unknown {
 }
 
 function signatureFor(
-  context: MerchantContext,
-  offers: readonly Omit<MerchantOffer, "encounterSignature">[],
+  context: AuguryContext,
+  offers: readonly Omit<AuguryOffer, "encounterSignature">[],
 ): StableDigest {
   return parseStableDigest(sha256(
     stableJson({
       input: inputSignature(context),
-      offers: offers.map((offer) => offerIdentity(offer as MerchantOffer)),
+      offers: offers.map((offer) => offerIdentity(offer as AuguryOffer)),
     }),
   ));
 }
 
 function draftToOffer(
-  draft: MerchantOfferDraft,
+  draft: AuguryOfferDraft,
   offerId: OfferId,
-): Omit<MerchantOffer, "encounterSignature"> {
+): Omit<AuguryOffer, "encounterSignature"> {
   return {
     offerId,
     archetypeId: draft.archetypeId,
@@ -260,47 +260,47 @@ function draftToOffer(
   };
 }
 
-function assertValidEncounter(encounter: MerchantEncounter): void {
+function assertValidEncounter(encounter: AuguryEncounter): void {
   if (encounter.offers.length !== OFFER_IDS.length) {
     throw new Error(
-      `Dream Merchant encounter requires exactly two offers; generated ${String(encounter.offers.length)}`,
+      `Augury encounter requires exactly two offers; generated ${String(encounter.offers.length)}`,
     );
   }
   const [offerA, offerB] = encounter.offers;
   if (offerA === undefined || offerB === undefined) {
-    throw new Error("Dream Merchant encounter is missing an offer");
+    throw new Error("Augury encounter is missing an offer");
   }
   if (offerA.family === offerB.family) {
     throw new Error(
-      `Dream Merchant offers must come from different families; both were ${offerA.family}`,
+      `Augury offers must come from different families; both were ${offerA.family}`,
     );
   }
   for (const [index, expectedOfferId] of OFFER_IDS.entries()) {
     const offer = encounter.offers[index];
     if (offer?.offerId !== expectedOfferId) {
       throw new Error(
-        `Dream Merchant offer ${String(index + 1)} must have id ${expectedOfferId}`,
+        `Augury offer ${String(index + 1)} must have id ${expectedOfferId}`,
       );
     }
     const choiceCount = offer.choiceRequest?.candidates.length ?? 0;
     if (offer.applyPayload === undefined && choiceCount === 0) {
       throw new Error(
-        `Dream Merchant offer ${offer.offerId} has neither a payload nor a chooser`,
+        `Augury offer ${offer.offerId} has neither a payload nor a chooser`,
       );
     }
     if (choiceCount > 4) {
       throw new Error(
-        `Dream Merchant offer ${offer.offerId} chooser exceeds 4 candidates`,
+        `Augury offer ${offer.offerId} chooser exceeds 4 candidates`,
       );
     }
   }
 }
 
-export function generateMerchantEncounterWithDebug(context: MerchantContext): {
-  encounter: MerchantEncounter;
-  debug: MerchantEncounterGenerationDebug;
+export function generateAuguryEncounterWithDebug(context: AuguryContext): {
+  encounter: AuguryEncounter;
+  debug: AuguryEncounterGenerationDebug;
 } {
-  const eligible = MERCHANT_ARCHETYPE_BUILDERS.filter((builder) => {
+  const eligible = AUGURY_ARCHETYPE_BUILDERS.filter((builder) => {
     const config = auguryArchetype(
       context.rewardSelection.content.auguryData,
       builder.archetypeId,
@@ -337,10 +337,10 @@ export function generateMerchantEncounterWithDebug(context: MerchantContext): {
   // Slot A: a forced builder's attempts come first; if it never builds we fall
   // back to a normal roll and concatenate both attempt logs so the dead forced
   // rolls remain visible alongside the eventual pick.
-  const rollsA: MerchantRollAttempt[] = [];
+  const rollsA: AuguryRollAttempt[] = [];
   let slotA: {
-    builder: MerchantArchetypeBuilder;
-    draft: MerchantOfferDraft;
+    builder: AuguryArchetypeBuilder;
+    draft: AuguryOfferDraft;
   } | null;
   if (forcedBuilder === null) {
     const rolled = rollSlot(eligible, context, slotASalt);
@@ -358,7 +358,7 @@ export function generateMerchantEncounterWithDebug(context: MerchantContext): {
     }
   }
   if (slotA === null) {
-    throw new Error("Dream Merchant could not roll a first offer");
+    throw new Error("Augury could not roll a first offer");
   }
   const honoredForcedArchetypeId =
     forcedBuilder !== null &&
@@ -372,7 +372,7 @@ export function generateMerchantEncounterWithDebug(context: MerchantContext): {
   const slotBSalt = [context.journeySeed, context.site.id, "B", ...rerollSalt];
   const rolledB = rollSlot(eligibleB, context, slotBSalt);
   if (rolledB.result === null) {
-    throw new Error("Dream Merchant could not roll a second offer");
+    throw new Error("Augury could not roll a second offer");
   }
   const slotB = rolledB.result;
 
@@ -381,12 +381,12 @@ export function generateMerchantEncounterWithDebug(context: MerchantContext): {
     draftToOffer(slotB.draft, parseOfferId(OFFER_IDS[1])),
   ];
   const encounterSignature = signatureFor(context, unsignedOffers);
-  const offers: MerchantOffer[] = unsignedOffers.map((offer) => ({
+  const offers: AuguryOffer[] = unsignedOffers.map((offer) => ({
     ...offer,
     encounterSignature,
   }));
 
-  const encounter: MerchantEncounter = {
+  const encounter: AuguryEncounter = {
     encounterSignature,
     siteId: context.site.id,
     offers,
@@ -408,8 +408,8 @@ export function generateMerchantEncounterWithDebug(context: MerchantContext): {
   };
 }
 
-export function generateMerchantEncounter(
-  context: MerchantContext,
-): MerchantEncounter {
-  return generateMerchantEncounterWithDebug(context).encounter;
+export function generateAuguryEncounter(
+  context: AuguryContext,
+): AuguryEncounter {
+  return generateAuguryEncounterWithDebug(context).encounter;
 }

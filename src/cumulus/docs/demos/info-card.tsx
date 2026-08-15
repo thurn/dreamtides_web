@@ -107,7 +107,7 @@ import { richText } from "src/cumulus/components/card/rich-text";
       code: `<InfoCard
   variant="icon"
   glyph={glyph("bxf bx-store-alt-2")}
-  title={assertLocalized("Merchant")}
+  title={assertLocalized("Augury")}
   body={richText.plain(assertLocalized("Spend essence on cards, dreamsigns, and services."))}
 />`,
     },

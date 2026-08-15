@@ -8,28 +8,28 @@ import { auguryArchetype } from "../../data/augury-data";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
 import type { JourneyContent } from "../../data/journey-content";
 import {
-  buildMerchantContext,
-  buildMerchantDeckSnapshot,
-  generateMerchantEncounterWithDebug,
+  buildAuguryContext,
+  buildAuguryDeckSnapshot,
+  generateAuguryEncounterWithDebug,
   resolveOfferPresentation,
 } from "../../journey_v2";
 import {
   buildCategoryUniverse,
-  type MerchantCategory,
+  type AuguryCategory,
 } from "../../journey_v2/archetypes/categories";
 import type {
-  MerchantAcceptRequest,
-  MerchantCatalogCard,
-  MerchantContext,
-  MerchantDeclineRequest,
-  MerchantDeckCard,
-  MerchantEncounter,
-  MerchantEncounterGenerationDebug,
-  MerchantGameObject,
-  MerchantOffer,
-  MerchantOfferActionResult,
+  AuguryAcceptRequest,
+  AuguryCatalogCard,
+  AuguryContext,
+  AuguryDeclineRequest,
+  AuguryDeckCard,
+  AuguryEncounter,
+  AuguryEncounterGenerationDebug,
+  AuguryGameObject,
+  AuguryOffer,
+  AuguryOfferActionResult,
 } from "../../journey_v2";
-import type { MerchantDeckSnapshot } from "../../journey_v2/trace/deckSnapshot";
+import type { AuguryDeckSnapshot } from "../../journey_v2/trace/deckSnapshot";
 import {
   parseAuguryCardViewId,
   parseOfferTileId,
@@ -76,14 +76,14 @@ import type { ChoiceId } from "../../types/identifiers";
 import type { SiteId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 
-type CardObject = MerchantCatalogCard | MerchantDeckCard;
+type CardObject = AuguryCatalogCard | AuguryDeckCard;
 
 export interface AuguryBuildResult {
   view: AugurySiteView;
-  context: MerchantContext | null;
-  encounter: MerchantEncounter | null;
-  debug: MerchantEncounterGenerationDebug | null;
-  deckSnapshot: MerchantDeckSnapshot | null;
+  context: AuguryContext | null;
+  encounter: AuguryEncounter | null;
+  debug: AuguryEncounterGenerationDebug | null;
+  deckSnapshot: AuguryDeckSnapshot | null;
   cardSourceDebug: CardSourceDebugState | null;
   errorMessage: string | null;
 }
@@ -146,7 +146,7 @@ function sitePreviewModel(
 }
 
 function firstCard(
-  objects: readonly MerchantGameObject[],
+  objects: readonly AuguryGameObject[],
 ): CardObject | undefined {
   return objects.find(
     (object): object is CardObject =>
@@ -154,7 +154,7 @@ function firstCard(
   );
 }
 
-function allCards(objects: readonly MerchantGameObject[]): CardObject[] {
+function allCards(objects: readonly AuguryGameObject[]): CardObject[] {
   return objects.filter(
     (object): object is CardObject =>
       object.objectType === "catalogCard" || object.objectType === "deckCard",
@@ -162,7 +162,7 @@ function allCards(objects: readonly MerchantGameObject[]): CardObject[] {
 }
 
 function toDreamsign(
-  object: Extract<MerchantGameObject, { objectType: "dreamsign" }>,
+  object: Extract<AuguryGameObject, { objectType: "dreamsign" }>,
 ): ReturnType<typeof localizedDreamsign> {
   return localizedDreamsign(
     {
@@ -194,7 +194,7 @@ function tileCard(object: CardObject, preview = false): Readonly<CardData> {
 }
 
 function requiredCard(
-  objects: readonly MerchantGameObject[],
+  objects: readonly AuguryGameObject[],
   label: string,
   preview = false,
 ): Readonly<CardData> {
@@ -204,7 +204,7 @@ function requiredCard(
 }
 
 function candidateCards(
-  offer: MerchantOffer,
+  offer: AuguryOffer,
   allowedCounts: readonly number[],
   preview = false,
 ): readonly Readonly<CardData>[] {
@@ -256,7 +256,7 @@ function duplicateCards(
 }
 
 function tileDreamsign(
-  object: Extract<MerchantGameObject, { objectType: "dreamsign" }>,
+  object: Extract<AuguryGameObject, { objectType: "dreamsign" }>,
 ): OfferTileDreamsign {
   const imageName =
     object.dreamsignTemplate.imageName ?? `${object.dreamsignId}.png`;
@@ -268,20 +268,20 @@ function tileDreamsign(
 }
 
 function requiredDreamsign(
-  objects: readonly MerchantGameObject[],
+  objects: readonly AuguryGameObject[],
   label: string,
 ): OfferTileDreamsign {
   const object = objects.find(
     (
       candidate,
-    ): candidate is Extract<MerchantGameObject, { objectType: "dreamsign" }> =>
+    ): candidate is Extract<AuguryGameObject, { objectType: "dreamsign" }> =>
       candidate.objectType === "dreamsign",
   );
   if (object === undefined) unavailable(`${label} has no dreamsign`);
   return tileDreamsign(object);
 }
 
-function copyCount(offer: MerchantOffer): number {
+function copyCount(offer: AuguryOffer): number {
   const candidates = offer.choiceRequest?.candidates;
   if (candidates === undefined || candidates.length !== 4) {
     unavailable("copies_draft requires 4 candidates");
@@ -308,7 +308,7 @@ function copyCount(offer: MerchantOffer): number {
 }
 
 export function projectOfferTileCategory(
-  category: MerchantCategory,
+  category: AuguryCategory,
 ): OfferTileCategory {
   switch (category.id) {
     case "type:Character":
@@ -335,8 +335,8 @@ export function projectOfferTileCategory(
 }
 
 function offerTileCategory(
-  offer: MerchantOffer,
-  context: MerchantContext,
+  offer: AuguryOffer,
+  context: AuguryContext,
 ): OfferTileCategory {
   const category = buildCategoryUniverse(context).find((candidate) =>
     offer.targetKey.startsWith(`${candidate.id}:`),
@@ -347,8 +347,8 @@ function offerTileCategory(
 }
 
 export function buildAuguryOfferTileModel(
-  offer: MerchantOffer,
-  context: MerchantContext,
+  offer: AuguryOffer,
+  context: AuguryContext,
 ): OfferTileModel {
   const id = parseOfferTileId(`${offer.encounterSignature}:${offer.offerId}`);
   switch (offer.archetypeId) {
@@ -444,7 +444,7 @@ export function buildAuguryOfferTileModel(
 }
 
 function cardChoices(
-  candidates: NonNullable<MerchantOffer["choiceRequest"]>["candidates"],
+  candidates: NonNullable<AuguryOffer["choiceRequest"]>["candidates"],
   preview: boolean,
 ): AuguryCardChoiceView[] {
   const choices: AuguryCardChoiceView[] = [];
@@ -466,8 +466,8 @@ function cardChoices(
 }
 
 function buildOfferVisual(
-  offer: MerchantOffer,
-  context: Pick<MerchantContext, "deckEntryById">,
+  offer: AuguryOffer,
+  context: Pick<AuguryContext, "deckEntryById">,
   sitesData: SitesData,
 ): AuguryOfferVisualView {
   const presentation = resolveOfferPresentation(offer);
@@ -552,7 +552,7 @@ function buildOfferVisual(
             (
               object,
             ): object is Extract<
-              MerchantGameObject,
+              AuguryGameObject,
               { objectType: "dreamsign" }
             > => object.objectType === "dreamsign",
           )
@@ -562,8 +562,8 @@ function buildOfferVisual(
 }
 
 export function buildAuguryOfferViews(
-  encounter: MerchantEncounter,
-  context: MerchantContext,
+  encounter: AuguryEncounter,
+  context: AuguryContext,
 ): AuguryOfferView[] {
   if (encounter.offers.length !== 2) {
     unavailable("encounter requires exactly 2 offers");
@@ -583,9 +583,9 @@ export function buildAuguryOfferViews(
   });
 }
 
-function collectVisibleGrantCards(encounter: MerchantEncounter): CardData[] {
+function collectVisibleGrantCards(encounter: AuguryEncounter): CardData[] {
   const byUuid = new Map<CardId, CardData>();
-  const collect = (objects: readonly MerchantGameObject[]) => {
+  const collect = (objects: readonly AuguryGameObject[]) => {
     for (const object of objects) {
       if (object.objectType === "catalogCard") {
         byUuid.set(object.cardUuid, object.card);
@@ -618,7 +618,7 @@ export function buildAugurySiteModel(params: {
     allowDecline: params.journeyContent.auguryData.encounter.allowDecline,
   };
   try {
-    const context = buildMerchantContext({
+    const context = buildAuguryContext({
       journeyState: params.state,
       journeyContent: params.journeyContent,
       site: params.site,
@@ -628,7 +628,7 @@ export function buildAugurySiteModel(params: {
       runtime?.kind === "augury" ? runtime.encounter : undefined;
     const generated =
       persistedEncounter === undefined
-        ? generateMerchantEncounterWithDebug(context)
+        ? generateAuguryEncounterWithDebug(context)
         : null;
     const encounter = persistedEncounter ?? generated?.encounter;
     if (encounter === undefined)
@@ -644,9 +644,9 @@ export function buildAugurySiteModel(params: {
       context,
       encounter,
       debug,
-      deckSnapshot: buildMerchantDeckSnapshot(context),
+      deckSnapshot: buildAuguryDeckSnapshot(context),
       cardSourceDebug: buildCardSourceDebugState(
-        "Dream Merchant Offers",
+        "Augury Offers",
         "Reward",
         collectVisibleGrantCards(encounter),
         params.state.resolvedPackage,
@@ -675,10 +675,10 @@ export function buildAugurySiteModel(params: {
 }
 
 export function buildAuguryAcceptRequest(
-  encounter: MerchantEncounter,
+  encounter: AuguryEncounter,
   offerId: OfferId,
   choiceId: ChoiceId | null,
-): MerchantAcceptRequest | null {
+): AuguryAcceptRequest | null {
   const offer = encounter.offers.find(
     (candidate) => candidate.offerId === offerId,
   );
@@ -704,8 +704,8 @@ export function buildAuguryAcceptRequest(
 }
 
 export function buildAuguryDeclineRequest(
-  encounter: MerchantEncounter,
-): MerchantDeclineRequest | null {
+  encounter: AuguryEncounter,
+): AuguryDeclineRequest | null {
   const offer = encounter.offers[0];
   return offer === undefined
     ? null
@@ -748,7 +748,7 @@ export function buildAuguryLogEntries(
     if (result.errorMessage !== null) {
       entries.push({
         key: `augury:${site.id}:unavailable`,
-        event: "merchant_offer_validation_failed",
+        event: "augury_offer_validation_failed",
         payload: {
           siteId: site.id,
           reason: "encounter_unavailable",
@@ -761,7 +761,7 @@ export function buildAuguryLogEntries(
   const { encounter, debug, deckSnapshot } = result;
   entries.push({
     key: `augury:${encounter.encounterSignature}:generated`,
-    event: "merchant_encounter_generated",
+    event: "augury_encounter_generated",
     payload: {
       siteId: encounter.siteId,
       encounterSignature: encounter.encounterSignature,
@@ -773,7 +773,7 @@ export function buildAuguryLogEntries(
   for (const offer of encounter.offers) {
     entries.push({
       key: `augury:${encounter.encounterSignature}:offer:${offer.offerId}`,
-      event: "merchant_offer_built",
+      event: "augury_offer_built",
       payload: {
         siteId: encounter.siteId,
         encounterSignature: offer.encounterSignature,
@@ -798,7 +798,7 @@ export function buildAuguryLogEntries(
 }
 
 export function auguryChoiceResult(
-  result: MerchantOfferActionResult | void,
+  result: AuguryOfferActionResult | void,
 ): { ok: true } | { ok: false; message: LocalizedString } {
   if (result?.ok !== false) return { ok: true };
   if (
@@ -828,8 +828,8 @@ export function chooseAuguryOffer(
   result: AuguryBuildResult | null,
   acceptOffer: (
     siteId: SiteId,
-    request: MerchantAcceptRequest,
-  ) => MerchantOfferActionResult | void,
+    request: AuguryAcceptRequest,
+  ) => AuguryOfferActionResult | void,
   offerId: OfferId,
   choiceId: ChoiceId | null,
 ): { ok: true } | { ok: false; message: LocalizedString } {

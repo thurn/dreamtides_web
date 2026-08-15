@@ -10,7 +10,7 @@ import type {
   RewardSelectionTrace,
   SelectionRulesVersion,
 } from "../reward-selection/types";
-import type { MerchantEncounter } from "../journey_v2/types";
+import type { AuguryEncounter } from "../journey_v2/types";
 import type { FourSuitRepriseOutcome } from "../data/four-suit-reprise";
 import type { DraftState } from "./draft";
 import type { LayerName } from "./layer-name";
@@ -463,19 +463,19 @@ export interface AugurySiteRuntime {
   /** Shared-version runtimes persist their complete prepared encounter. */
   selectionRulesVersion?: SelectionRulesVersion;
   selectionContentRevision?: SelectionContentRevision;
-  encounter?: MerchantEncounter;
+  encounter?: AuguryEncounter;
   /**
    * Debug reroll counter. Incremented by `rerollAugury` to regenerate the
    * encounter from the same journey parameters. Mixed into the encounter RNG salt
-   * by `buildMerchantContext`, so the persisted value drives both the displayed
+   * by `buildAuguryContext`, so the persisted value drives both the displayed
    * encounter and the signature checks on accept/decline. Absent (or `0`) for an
    * un-rerolled site.
    */
   rerollNonce?: number;
   /**
    * Debug-only: forces the first generated offer to use this archetype (a
-   * `MerchantArchetypeId`). Set by `forceAuguryArchetype` from the Augury
-   * "force a category" debug dropdown. Read by `buildMerchantContext` and
+   * `AuguryArchetypeId`). Set by `forceAuguryArchetype` from the Augury
+   * "force a category" debug dropdown. Read by `buildAuguryContext` and
    * honored during encounter generation, so it drives both the displayed
    * encounter and the signature checks on accept/decline. Absent when no
    * category is forced; the value is ignored if it is not eligible for the

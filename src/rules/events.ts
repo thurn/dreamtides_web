@@ -213,9 +213,9 @@ export interface EventPayloads {
     previousShuffleCommitment: ShuffleCommitment;
   };
 
-  // --- merchant & shop ---
-  ACCEPT_MERCHANT_OFFER: { siteId: SiteId; offer?: unknown };
-  DECLINE_MERCHANT: { siteId: SiteId };
+  // --- augury & shop ---
+  ACCEPT_AUGURY_OFFER: { siteId: SiteId; offer?: unknown };
+  DECLINE_AUGURY: { siteId: SiteId };
   BUY_SHOP_SLOT: { siteId: SiteId; slotIndex: number };
   REROLL_SHOP: { siteId: SiteId };
   GRANT_FREE_REROLLS: { count: number };
@@ -421,8 +421,8 @@ const KNOWN_EVENT_TYPES_AS_OBJECT: Record<GameEventType, true> = {
   STAND_BLACKJACK: true,
   SETTLE_BLACKJACK: true,
   PLAY_AGAIN_BLACKJACK: true,
-  ACCEPT_MERCHANT_OFFER: true,
-  DECLINE_MERCHANT: true,
+  ACCEPT_AUGURY_OFFER: true,
+  DECLINE_AUGURY: true,
   BUY_SHOP_SLOT: true,
   REROLL_SHOP: true,
   GRANT_FREE_REROLLS: true,

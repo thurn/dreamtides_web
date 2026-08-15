@@ -1,7 +1,7 @@
 import type { ShopFreePurchaseStatusView } from "../../cumulus/screens/ShopFreePurchaseStatus";
 import type { JourneyState, ShopSiteRuntime } from "../../types/journey";
 
-/** Project authoritative event-log state into the merchant status affordance. */
+/** Project authoritative event-log state into the augury status affordance. */
 export function buildShopFreePurchaseStatus(
   runtime: ShopSiteRuntime,
   shopModifiers: JourneyState["shopModifiers"],

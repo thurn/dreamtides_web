@@ -60,7 +60,7 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: SiteId }) {
     publishedSignatureRef.current = signature;
     setCardSourceDebugRef.current(
       result.cardSourceDebug,
-      "merchant_grant_cards_shown",
+      "augury_grant_cards_shown",
     );
   }, [result]);
   useEffect(() => {
@@ -70,7 +70,7 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: SiteId }) {
       queueMicrotask(() => {
         if (lifetimeGenerationRef.current !== generation) return;
         publishedSignatureRef.current = null;
-        setCardSourceDebugRef.current(null, "merchant_grant_cards_hidden");
+        setCardSourceDebugRef.current(null, "augury_grant_cards_hidden");
       });
   }, [siteId]);
 
@@ -78,7 +78,7 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: SiteId }) {
     chooseAuguryOffer(
       site,
       result,
-      mutations.acceptDreamMerchantOffer,
+      mutations.acceptAuguryOffer,
       offerId,
       choiceId,
     );
@@ -90,7 +90,7 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: SiteId }) {
         ? null
         : buildAuguryDeclineRequest(result.encounter);
     if (request === null) mutations.completeAugurySite(site.id);
-    else mutations.declineDreamMerchant(site.id, request);
+    else mutations.declineAugury(site.id, request);
   }, [mutations, result, site]);
 
   const handleReroll = useCallback(() => {
@@ -103,7 +103,7 @@ export function AugurySiteScreenAdapter({ siteId }: { siteId: SiteId }) {
       (candidate) => candidate.offerId === offerId,
     );
     if (site === null || offer === undefined) return;
-    logEvent("merchant_offer_preview_selected", {
+    logEvent("augury_offer_preview_selected", {
       siteId: site.id,
       encounterSignature: offer.encounterSignature,
       offerId,

@@ -234,7 +234,7 @@ replaces it with the confirmed fold within one round-trip.
 
 ### Randomness and time
 
-- `rng.ts` implements the `merchantRng` SHA-256 salted-stream pattern from
+- `rng.ts` implements the `auguryRng` SHA-256 salted-stream pattern from
   `src/journey_v2/signals/rng.ts`, keyed `(genesis.seed, seq, drawIndex)`.
   The reducer receives `ctx.rng` and passes it wherever `StepContext.random`
   goes today. `weightedSample` in `draft-engine.ts` takes an injected rng.
@@ -303,7 +303,7 @@ contained in production, see Safety rails).
 Every multiplayer mutation in `src/state/multiplayer-journey-context.tsx`
 becomes an event type with a reducer case in `src/rules/journey/`, grouped by
 feature (essence, lifecycle, dream avatar, navigation, deck, transfiguration,
-dreamsigns, draft, sites, merchant, shop, limits, atlas, modifiers, misc).
+dreamsigns, draft, sites, augury, shop, limits, atlas, modifiers, misc).
 The implementation plan carries the authoritative 1:1 table from the
 mutation catalogue produced during exploration; representative examples:
 

@@ -226,8 +226,8 @@ function captureAllDrafts(): EventDraft[] {
     parseSiteId("site-1"),
     parseShuffleCommitment("commitment-1"),
   );
-  void actions.acceptMerchantOffer(parseSiteId("site-1"));
-  void actions.declineMerchant(parseSiteId("site-1"));
+  void actions.acceptAuguryOffer(parseSiteId("site-1"));
+  void actions.declineAugury(parseSiteId("site-1"));
   void actions.buyShopSlot(parseSiteId("site-1"), 0);
   void actions.rerollShop(parseSiteId("site-1"));
   void actions.grantFreeRerolls(1);

@@ -42,7 +42,7 @@ src/rules/                       # Stage B/C — pure reducer (lint-banned: fire
     deck.ts        deck.test.ts      # deck, transfiguration, dreamsign events
     draft.ts       draft.test.ts     # PICK_DRAFT_CARD, SET_DRAFT_STATE
     sites.ts       sites.test.ts     # OPEN_SITE generation + site interaction events
-    shop.ts        shop.test.ts      # shop, merchant, modifier events
+    shop.ts        shop.test.ts      # shop, augury, modifier events
   battle/
     (relocated intact: apply-debug-edit.ts, battle-card-effects-table.ts,
      dreamwell-effects-table.ts, effect-runner-core.ts, rules-text-hash.ts,
@@ -120,8 +120,8 @@ Every multiplayer mutation in `src/state/multiplayer-journey-context.tsx` maps t
 | rerollAugury *(debug)* | `REROLL_AUGURY` | `{ siteId }`; redraw from `ctx.rng` at this event's seq |
 | forceAuguryArchetype *(debug)* | `FORCE_AUGURY_ARCHETYPE` | `{ siteId, archetypeId }` |
 | completeSite | `COMPLETE_SITE` | `{ siteId }` |
-| acceptDreamMerchantOffer | `ACCEPT_MERCHANT_OFFER` | `{ siteId }` + the legacy offer payload (effects applied in-case) |
-| declineDreamMerchant | `DECLINE_MERCHANT` | `{ siteId }` |
+| acceptAuguryOffer | `ACCEPT_AUGURY_OFFER` | `{ siteId }` + the legacy offer payload (effects applied in-case) |
+| declineAugury | `DECLINE_AUGURY` | `{ siteId }` |
 | buyShopSlot | `BUY_SHOP_SLOT` | `{ siteId, slotIndex }`; insufficient essence → bounce |
 | rerollShop | `REROLL_SHOP` | `{ siteId }`; consumes freeRerolls first; redraw via `ctx.rng` |
 | grantFreeShopRerolls | `GRANT_FREE_REROLLS` | `{ count }` |
@@ -166,7 +166,7 @@ The lint rails are the architectural enforcement from the spec and must exist be
 
 **Files:** Create: `src/eventlog/rng.ts`, `src/eventlog/rng.test.ts`
 
-`eventRng(seed: string, seq: number): (drawIndex: number) => number` returning uniform [0, 1). Implementation: the SHA-256 salted-digest pattern from `src/journey_v2/signals/rng.ts` (`merchantRng`), salted `"${seed}|${seq}|${drawIndex}"`. Do not import from journey_v2 (that would couple engine → game); reimplement the ~10-line pattern using the same sha256 dependency.
+`eventRng(seed: string, seq: number): (drawIndex: number) => number` returning uniform [0, 1). Implementation: the SHA-256 salted-digest pattern from `src/journey_v2/signals/rng.ts` (`auguryRng`), salted `"${seed}|${seq}|${drawIndex}"`. Do not import from journey_v2 (that would couple engine → game); reimplement the ~10-line pattern using the same sha256 dependency.
 
 - [ ] **Step 1: Write failing tests.** Bug classes: nondeterminism (same (seed, seq, drawIndex) twice → identical value); stream collision (different seq or drawIndex → different values for at least 99 of 100 sampled triples); range violation (1,000 draws all in [0, 1)).
 - [ ] **Step 2: Run `npx vitest run src/eventlog/rng.test.ts` — expect FAIL (module missing).**
@@ -303,11 +303,11 @@ Cases: `OPEN_SITE`, `COMPLETE_AUGURY`, `ACCEPT_REWARD`, `ACCEPT_DREAMSIGN_OFFER`
 - [ ] **Step 1: Failing tests.** Bug classes: **generation nondeterminism** (same seed+seq: two folds of OPEN_SITE yield hash-identical runtime — for every site type, table-driven over the site types the legacy ensure* family handles); **idempotence** (second OPEN_SITE on same site: state hash unchanged, outcome applied); **accept-before-open** (ACCEPT_* on a site with no runtime bounces); **double-accept** (second ACCEPT_* on an accepted site bounces — the coop double-claim race made safe); **reroll advances** (REROLL_AUGURY produces a different runtime than the original with overwhelming probability — assert hash differs for a seed where it does, fixture-pinned).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**
 
-### Task 15: Shop, merchant, modifier events
+### Task 15: Shop, augury, modifier events
 
 **Files:** Create: `src/rules/journey/shop.ts`, `src/rules/journey/shop.test.ts`; Modify: `src/rules/reducer.ts`
 
-Cases: `BUY_SHOP_SLOT`, `REROLL_SHOP`, `GRANT_FREE_REROLLS`, `APPLY_SHOP_DISCOUNT`, `ACCEPT_MERCHANT_OFFER`, `DECLINE_MERCHANT`, `PUSH_BATTLE_MODIFIER`, `PUSH_TEMPORARY_NIGHTMARE_GRANT`, `BAN_SITE_TYPE`, `BOOST_SITE_APPEARANCE`, `REPLACE_SITE_TYPE`, `ADD_SITE_TO_DREAMSCAPE`, `UPDATE_ATLAS`, `SET_CARD_SOURCE_DEBUG`. Also in this task: grep the callers of the legacy `setFailureSummary`; if any caller sets a failure summary outside the battle-defeat path, add `JOURNEY_FAILED { summary }` (to `events.ts`, this file, and `actions.ts` in Task 25); otherwise `END_BATTLE { result: "defeat" }` fully covers it and no extra event exists.
+Cases: `BUY_SHOP_SLOT`, `REROLL_SHOP`, `GRANT_FREE_REROLLS`, `APPLY_SHOP_DISCOUNT`, `ACCEPT_AUGURY_OFFER`, `DECLINE_AUGURY`, `PUSH_BATTLE_MODIFIER`, `PUSH_TEMPORARY_NIGHTMARE_GRANT`, `BAN_SITE_TYPE`, `BOOST_SITE_APPEARANCE`, `REPLACE_SITE_TYPE`, `ADD_SITE_TO_DREAMSCAPE`, `UPDATE_ATLAS`, `SET_CARD_SOURCE_DEBUG`. Also in this task: grep the callers of the legacy `setFailureSummary`; if any caller sets a failure summary outside the battle-defeat path, add `JOURNEY_FAILED { summary }` (to `events.ts`, this file, and `actions.ts` in Task 25); otherwise `END_BATTLE { result: "defeat" }` fully covers it and no extra event exists.
 
 - [ ] **Step 1: Failing tests.** Bug classes: **insufficient-essence bounce** (BUY with price > essence bounces, essence unchanged); **double-buy bounce** (second BUY on the same slot bounces — the coop race); **discount application** (BUY with `shopModifiers.essenceDiscountPercent` set charges the discounted price — pins the documented ShopModifiers contract); **free-reroll consumption order** (REROLL consumes freeRerolls before charging essence).
 - [ ] **Step 2–4: Red → implement → green. Step 5: Commit and push.**

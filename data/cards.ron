@@ -3004,7 +3004,7 @@
   ),
 
   CardDefinition(
-    name: Tx("Thought Merchant"),
+    name: Tx("Thought Augury"),
     id: "b4838d67-f055-4fd3-a64d-0a4d2b6678cc",
     ability_text: [Tx("Once per turn, when you discard a card, draw a card and gain 1●.")],
     amplified_text: Tx("2●."),

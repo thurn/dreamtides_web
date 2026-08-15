@@ -1,7 +1,7 @@
-// Pure shop / merchant / modifier reducer cases.
+// Pure shop / augury / modifier reducer cases.
 //
 // This module owns the journey events that spend at a shop, resolve a Dream
-// Merchant offer, and stack the battle / dreamscape / shop modifiers and atlas
+// Augury offer, and stack the battle / dreamscape / shop modifiers and atlas
 // edits that Augury rewards and debug tools push. Each exported case
 // relocates the DOMAIN MATH of a legacy journey mutation
 // (`src/state/multiplayer-journey-context.tsx`) into a pure function of
@@ -16,7 +16,7 @@
 //
 // Two cases are content-coupled and are split across the {@link
 // SiteContentProvider} seam (defined in `./sites`): `REROLL_SHOP` redraws its
-// inventory from the async-loaded card / Dreamsign catalogues, and the merchant
+// inventory from the async-loaded card / Dreamsign catalogues, and the augury
 // events resolve an encounter generated from async-loaded journey content. The
 // pure reducer owns the money math (free-reroll-vs-essence ordering, the
 // essence charge) and delegates only the content generation; until a provider
@@ -459,41 +459,41 @@ export function applyShopDiscount(
 }
 
 // ---------------------------------------------------------------------------
-// Merchant offers (provider-seam delegated)
+// Augury offers (provider-seam delegated)
 // ---------------------------------------------------------------------------
 
 /**
- * `ACCEPT_MERCHANT_OFFER { siteId, ...request }` — legacy
- * `acceptDreamMerchantOffer`. The whole resolution (offer lookup, essence /
+ * `ACCEPT_AUGURY_OFFER { siteId, ...request }` — legacy
+ * `acceptAuguryOffer`. The whole resolution (offer lookup, essence /
  * deck / dreamsign payload application, site completion) is content-coupled and
- * lives behind the {@link SiteContentProvider}'s `resolveMerchant`, so this
+ * lives behind the {@link SiteContentProvider}'s `resolveAugury`, so this
  * case only resolves the site and delegates. Bounces on a missing site, no
- * provider (or absent `resolveMerchant`), or a provider that rejects the
+ * provider (or absent `resolveAugury`), or a provider that rejects the
  * request (stale encounter, unknown offer, unaffordable, already visited).
  */
-export function acceptMerchantOffer(
+export function acceptAuguryOffer(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  return resolveMerchant(journey, payload, ctx, "accept");
+  return resolveAugury(journey, payload, ctx, "accept");
 }
 
 /**
- * `DECLINE_MERCHANT { siteId, ...request }` — legacy `declineDreamMerchant`.
- * Delegates to the {@link SiteContentProvider}'s `resolveMerchant` with a
+ * `DECLINE_AUGURY { siteId, ...request }` — legacy `declineAugury`.
+ * Delegates to the {@link SiteContentProvider}'s `resolveAugury` with a
  * `decline` action; the provider validates the encounter and completes the
- * site. Bounces on the same conditions as `ACCEPT_MERCHANT_OFFER`.
+ * site. Bounces on the same conditions as `ACCEPT_AUGURY_OFFER`.
  */
-export function declineMerchant(
+export function declineAugury(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
 ): JourneyState | null {
-  return resolveMerchant(journey, payload, ctx, "decline");
+  return resolveAugury(journey, payload, ctx, "decline");
 }
 
-function resolveMerchant(
+function resolveAugury(
   journey: JourneyState,
   payload: Record<string, unknown>,
   ctx: EventContext,
@@ -504,7 +504,7 @@ function resolveMerchant(
   const site = findSite(journey, siteId);
   if (site === null) return null;
   const provider = getSiteContentProvider();
-  const result = provider?.resolveMerchant?.({
+  const result = provider?.resolveAugury?.({
     journey,
     site,
     action,

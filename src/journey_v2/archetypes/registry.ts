@@ -15,7 +15,7 @@ import {
 } from "./improve";
 import { purgeBuilder } from "./remove";
 import { addSiteBuilder } from "./site";
-import type { MerchantArchetypeBuilder } from "./types";
+import type { AuguryArchetypeBuilder } from "./types";
 
 /**
  * Every registered archetype builder. Stage 1 of the generator weighted-rolls
@@ -24,7 +24,7 @@ import type { MerchantArchetypeBuilder } from "./types";
  * Each builder is weighted and family-checked against Augury data at encounter
  * generation.
  */
-export const MERCHANT_ARCHETYPE_BUILDERS: readonly MerchantArchetypeBuilder[] = [
+export const AUGURY_ARCHETYPE_BUILDERS: readonly AuguryArchetypeBuilder[] = [
   strongCardBuilder,
   fitCardGrantBuilder,
   fitCardDraftBuilder,

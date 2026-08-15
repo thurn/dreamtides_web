@@ -192,14 +192,14 @@ export function InfoCardMockup() {
           }
         />
         <Trigger
-          label="Merchant"
+          label="Augury"
           variant="icon"
           glyph="bxf bx-store-alt-2"
           card={
             <InfoCard
               variant="icon"
               glyph={glyph("bxf bx-store-alt-2")}
-              title={assertLocalized("Merchant")}
+              title={assertLocalized("Augury")}
               body={richText.plain(
                 assertLocalized(
                   "Spend essence on cards, dreamsigns, and services.",
@@ -218,7 +218,7 @@ export function InfoCardMockup() {
               title={assertLocalized("Essence")}
               body={richText.plain(
                 assertLocalized(
-                  "The dream's currency — spent to draft cards and buy from merchants.",
+                  "The dream's currency — spent to draft cards and buy from augurys.",
                 ),
               )}
             />

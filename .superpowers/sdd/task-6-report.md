@@ -121,7 +121,7 @@ Stable path: `screenshots/entity-reveals/`
 - Documentation wording scan found none of the prohibited historical-contrast phrases in the normative reveal or QA-scene docs.
 - Card semantics use UUIDs. The Draft fixture was corrected to a valid UUID so fail-closed semantics are exercised in its screen test.
 - The conformance battle representative uses the canonical GameCard source with a battle instance data hook; the normal playable-battle workflow separately verifies the full `BattleGameCard` adapter.
-- Dream Merchant card-source debug publication is encounter-keyed, so applying
+- Augury card-source debug publication is encounter-keyed, so applying
   the debug event through the coop fold does not retrigger publication or
   cleanup. The normal JourneyCard reveal route completes cleanly.
 
@@ -153,7 +153,7 @@ Stable path: `screenshots/entity-reveals/`
   visual-only InfoCard contract, gesture timing, lifecycle diagnostics, and
   one-active-group rule. Retired-symbol and historical-contrast scans are empty
   in both documents.
-- Removed the stale DreamMerchant `CardHoverPreview` mock and updated its card
+- Removed the stale Augury `CardHoverPreview` mock and updated its card
   module mock to preserve the named `GameCard` export. Updated the HUD
   Dreamsign comment to describe coordinator-owned reading detail.
 - Review-remediation browser QA used `http://localhost:5175` and isolated
@@ -164,7 +164,7 @@ Stable path: `screenshots/entity-reveals/`
   `bestEffortPrimaryOverlap: true`, and `circleClearance: -4.5`. Safe-area
   placement started exactly at y=52, reduced-motion transition was `none`, and
   quick touch activation produced one open, one close, and `fired`.
-- The normal Dream Merchant route confirms migrated JourneyCard sources with
+- The normal Augury route confirms migrated JourneyCard sources with
   matching `data-card-id` / `data-card-uuid` values and zero retired journey
   zoom nodes. Remediation 2 records the completed open/close lifecycle.
 - Stable remediation captures live under
@@ -191,7 +191,7 @@ Stable path: `screenshots/entity-reveals/`
   0.05px. Direct pixel inspection of `side-fallback-desktop-active.png` confirms
   the reading card and five-card glossary stack are visibly painted. Every image
   had nonzero natural dimensions; page and console error buffers were empty.
-- `JourneyCard` has one normal product surface, so the Dream Merchant route's
+- `JourneyCard` has one normal product surface, so the Augury route's
   card-source debug loop received a narrow fix rather than substituting a
   component harness. A RED ScreenRouter regression reproduced the coop fold
   with a replacement mutation object; encounter-keyed publication plus a
@@ -207,7 +207,7 @@ Stable path: `screenshots/entity-reveals/`
   zero groups and portals. Error buffers were empty and a final DOM query proved
   the page remained responsive. Direct inspection of
   `journey-card-normal-open-close.png` confirms the reading card is visibly
-  open over the merchant scene.
+  open over the augury scene.
 - Stable second-remediation captures live under
   `screenshots/entity-reveals-remediation-2/`.
 - Closed the isolated browser sessions and cleanly stopped the task-owned Vite
@@ -229,7 +229,7 @@ Stable path: `screenshots/entity-reveals/`
   repository-absolute `src/` paths.
 - ScreenRouter tests set `IS_REACT_ACT_ENVIRONMENT`, provide an async fold
   re-render that flushes effects, and emit no act warnings. Actual StrictMode
-  coverage verifies the Dream Merchant debug effect records exactly one initial
+  coverage verifies the Augury debug effect records exactly one initial
   publication with no hidden-state null write or republish. Cleanup uses a
   generation-guarded microtask: StrictMode's immediate setup replay cancels the
   pending cleanup, while a real unmount still clears the debug surface.

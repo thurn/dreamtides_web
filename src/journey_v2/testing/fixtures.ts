@@ -39,7 +39,7 @@ export const TEST_CARD_UUIDS = {
   outsidePool: "66666666-6666-4666-8666-666666666666",
 } as const;
 
-export function makeMerchantTestCard(
+export function makeAuguryTestCard(
   overrides: Partial<CardData> & Pick<CardData, "id" | "cardNumber">,
 ): CardData {
   const { id, cardNumber, ...rest } = overrides;
@@ -60,7 +60,7 @@ export function makeMerchantTestCard(
   };
 }
 
-export function makeMerchantTestDeckEntry(
+export function makeAuguryTestDeckEntry(
   overrides: Partial<DeckEntry> & Pick<DeckEntry, "entryId" | "cardNumber">,
 ): DeckEntry {
   const { entryId, cardNumber, ...rest } = overrides;
@@ -73,11 +73,11 @@ export function makeMerchantTestDeckEntry(
   };
 }
 
-export function makeMerchantTestSite(
+export function makeAuguryTestSite(
   overrides: Partial<SiteState> = {},
 ): SiteState {
   return {
-    id: parseSiteId("site-merchant-fixture"),
+    id: parseSiteId("site-augury-fixture"),
     type: "Reward",
     isEnhanced: false,
     isVisited: false,
@@ -85,7 +85,7 @@ export function makeMerchantTestSite(
   };
 }
 
-export function makeMerchantTestDreamsignTemplate(
+export function makeAuguryTestDreamsignTemplate(
   overrides: Partial<DreamsignTemplate> & Pick<DreamsignTemplate, "id">,
 ): DreamsignTemplate {
   const { id, ...rest } = overrides;
@@ -97,7 +97,7 @@ export function makeMerchantTestDreamsignTemplate(
   };
 }
 
-export function makeMerchantTestDreamsign(
+export function makeAuguryTestDreamsign(
   overrides: Partial<Dreamsign> = {},
 ): Dreamsign {
   return {
@@ -108,18 +108,18 @@ export function makeMerchantTestDreamsign(
   };
 }
 
-export function makeMerchantTestJourneyState(
+export function makeAuguryTestJourneyState(
   overrides: Partial<JourneyState> = {},
 ): JourneyState {
   return {
     ...createDefaultState(),
-    seed: parseJourneySeed("merchant-fixture-seed"),
+    seed: parseJourneySeed("augury-fixture-seed"),
     essence: 120,
     ...overrides,
   };
 }
 
-function makeMerchantTestAvatarContent(): AvatarContent {
+function makeAuguryTestAvatarContent(): AvatarContent {
   return {
     id: testAvatarId("avatar-fixture"),
     name: "Fixture Avatar",
@@ -130,11 +130,11 @@ function makeMerchantTestAvatarContent(): AvatarContent {
   };
 }
 
-export function makeMerchantTestResolvedPackage(
+export function makeAuguryTestResolvedPackage(
   overrides: Partial<ResolvedAvatarPackage> = {},
 ): ResolvedAvatarPackage {
   return {
-    avatar: makeMerchantTestAvatarContent(),
+    avatar: makeAuguryTestAvatarContent(),
     draftPoolCopiesByCard: {},
     dreamsignPoolIds: [],
     mandatoryOnlyPoolSize: 0,
@@ -146,14 +146,14 @@ export function makeMerchantTestResolvedPackage(
   };
 }
 
-export function makeMerchantTestContent({
+export function makeAuguryTestContent({
   cards,
   dreamsignTemplates = [],
 }: {
   cards: readonly CardData[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
   fitModel?: unknown;
-  merchantCorpus?: unknown;
+  auguryCorpus?: unknown;
   dreamsignProfiles?: unknown;
 }): JourneyContent {
   return {

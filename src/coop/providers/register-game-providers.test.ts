@@ -62,15 +62,15 @@ import {
   TEST_STARTER_CARD_NUMBERS,
 } from "../../__test-helpers__/pool-context";
 import { LayerName } from "../../types/layer-name";
-import { buildMerchantContext } from "../../journey_v2/context/buildMerchantContext";
-import { generateMerchantEncounter } from "../../journey_v2/encounter/generateMerchantEncounter";
+import { buildAuguryContext } from "../../journey_v2/context/buildAuguryContext";
+import { generateAuguryEncounter } from "../../journey_v2/encounter/generateAuguryEncounter";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
-  makeMerchantTestDreamsignTemplate,
-  makeMerchantTestJourneyState,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDeckEntry,
+  makeAuguryTestDreamsignTemplate,
+  makeAuguryTestJourneyState,
+  makeAuguryTestSite,
 } from "../../journey_v2/testing/fixtures";
 import {
   clearGameProviders,
@@ -730,25 +730,25 @@ describe("registerGameProviders (real content providers)", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Merchant resolution (ACCEPT_MERCHANT_OFFER / DECLINE_MERCHANT)
+// Augury resolution (ACCEPT_AUGURY_OFFER / DECLINE_AUGURY)
 // ---------------------------------------------------------------------------
 
-const MERCHANT_SEED = "merchant-real-provider-seed";
-// The merchant fixture journey is seeded with MERCHANT_SEED, and the LOAD_STATE
+const AUGURY_SEED = "augury-real-provider-seed";
+// The augury fixture journey is seeded with AUGURY_SEED, and the LOAD_STATE
 // validator requires the loaded snapshot's seed to equal the room seed, so these
-// merchant replays run against a genesis pinned to the same seed.
-const MERCHANT_GENESIS: Genesis = { ...GENESIS, seed: testJourneySeed(MERCHANT_SEED) };
-const MERCHANT_SITE_ID = parseSiteId("site-merchant-resolve");
-const MERCHANT_NODE_ID = parseAtlasNodeId("dreamscape-a");
+// augury replays run against a genesis pinned to the same seed.
+const AUGURY_GENESIS: Genesis = { ...GENESIS, seed: testJourneySeed(AUGURY_SEED) };
+const AUGURY_SITE_ID = parseSiteId("site-augury-resolve");
+const AUGURY_NODE_ID = parseAtlasNodeId("dreamscape-a");
 
-/** An Augury merchant fixture: content with a corpus + a journey state whose current dreamscape holds the merchant site. */
-function makeMerchantFixture(): {
+/** An Augury augury fixture: content with a corpus + a journey state whose current dreamscape holds the augury site. */
+function makeAuguryFixture(): {
   journey: JourneyState;
   content: JourneyContent;
   site: SiteState;
 } {
-  const site = makeMerchantTestSite({
-    id: MERCHANT_SITE_ID,
+  const site = makeAuguryTestSite({
+    id: AUGURY_SITE_ID,
     type: "Augury",
   });
 
@@ -757,7 +757,7 @@ function makeMerchantFixture(): {
     const cardNumber = 1000 + i;
     const id = `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`;
     cards.push(
-      makeMerchantTestCard({
+      makeAuguryTestCard({
         id: testCardId(id),
         cardNumber,
         name: parseCardName(`Pool ${String(cardNumber)}`),
@@ -769,33 +769,33 @@ function makeMerchantFixture(): {
   for (let i = 0; i < 10; i += 1) {
     const id = `dsign-${String(i)}`;
     templates.push(
-      makeMerchantTestDreamsignTemplate({
+      makeAuguryTestDreamsignTemplate({
         id: testDreamsignId(id),
         name: `Sign ${String(i)}`,
       }),
     );
   }
 
-  const content = makeMerchantTestContent({
+  const content = makeAuguryTestContent({
     cards,
     dreamsignTemplates: templates,
   });
 
-  const journey = makeMerchantTestJourneyState({
-    seed: testJourneySeed(MERCHANT_SEED),
-    currentDreamscape: MERCHANT_NODE_ID,
+  const journey = makeAuguryTestJourneyState({
+    seed: testJourneySeed(AUGURY_SEED),
+    currentDreamscape: AUGURY_NODE_ID,
     screen: { type: "site", siteId: site.id },
     activeSiteId: site.id,
     deck: [1000, 1001, 1002, 1003, 1004, 1005].map((cardNumber, index) =>
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId(`deck-${String(index + 1)}`),
         cardNumber,
       }),
     ),
     atlas: {
       nodes: {
-        [MERCHANT_NODE_ID]: {
-          id: MERCHANT_NODE_ID,
+        [AUGURY_NODE_ID]: {
+          id: AUGURY_NODE_ID,
           layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: testDreamscapeId("test_dreamscape"),
@@ -808,9 +808,9 @@ function makeMerchantFixture(): {
           knownDreamsignId: null,
         },
       },
-      startingNodeId: MERCHANT_NODE_ID,
-      bossNodeId: MERCHANT_NODE_ID,
-      currentNodeId: MERCHANT_NODE_ID,
+      startingNodeId: AUGURY_NODE_ID,
+      bossNodeId: AUGURY_NODE_ID,
+      currentNodeId: AUGURY_NODE_ID,
       layers: [],
       knownDreamsignCarrierIds: [],
     },
@@ -821,12 +821,12 @@ function makeMerchantFixture(): {
 describe("createSiteContentProvider — Gamble", () => {
   it("chooses among every configured game unless one is forced", () => {
     resetLog();
-    const fixture = makeMerchantFixture();
-    const site = makeMerchantTestSite({
+    const fixture = makeAuguryFixture();
+    const site = makeAuguryTestSite({
       id: parseSiteId("gamble-site"),
       type: "Gamble",
     });
-    const farpointSite = makeMerchantTestSite({
+    const farpointSite = makeAuguryTestSite({
       id: parseSiteId("farpoint-gamble-site"),
       type: "Gamble",
       isEnhanced: true,
@@ -1042,15 +1042,15 @@ describe("createSiteContentProvider — Gamble", () => {
   });
 
   it("selects the Ladder Climb reward uniformly from its top 50 candidates", () => {
-    const fixture = makeMerchantFixture();
+    const fixture = makeAuguryFixture();
     const templates = Array.from({ length: 55 }, (_value, index) => {
       const id = `dsign-${String(index).padStart(3, "0")}`;
-      return makeMerchantTestDreamsignTemplate({
+      return makeAuguryTestDreamsignTemplate({
         id: testDreamsignId(id),
         name: `Sign ${String(index)}`,
       });
     });
-    const content = makeMerchantTestContent({
+    const content = makeAuguryTestContent({
       cards: [...fixture.content.cardDatabase.values()],
       dreamsignTemplates: templates,
     });
@@ -1061,7 +1061,7 @@ describe("createSiteContentProvider — Gamble", () => {
 
     const result = createSiteContentProvider(content).openSite({
       journey,
-      site: makeMerchantTestSite({
+      site: makeAuguryTestSite({
         id: parseSiteId("gamble-site"),
         type: "Gamble",
       }),
@@ -1084,13 +1084,13 @@ describe("createSiteContentProvider — Gamble", () => {
   });
 
   it("falls back to Three Gates when Ladder Climb cannot prepare a Dreamsign", () => {
-    const fixture = makeMerchantFixture();
+    const fixture = makeAuguryFixture();
     const result = createSiteContentProvider(fixture.content).openSite({
       journey: {
         ...fixture.journey,
         remainingDreamsignPool: [],
       },
-      site: makeMerchantTestSite({
+      site: makeAuguryTestSite({
         id: parseSiteId("gamble-site"),
         type: "Gamble",
       }),
@@ -1106,10 +1106,10 @@ describe("createSiteContentProvider — Gamble", () => {
   });
 });
 
-describe("registerGameProviders — merchant resolution", () => {
-  const fixture = makeMerchantFixture();
-  const encounter = generateMerchantEncounter(
-    buildMerchantContext({
+describe("registerGameProviders — augury resolution", () => {
+  const fixture = makeAuguryFixture();
+  const encounter = generateAuguryEncounter(
+    buildAuguryContext({
       journeyState: fixture.journey,
       journeyContent: fixture.content,
       site: fixture.site,
@@ -1123,14 +1123,14 @@ describe("registerGameProviders — merchant resolution", () => {
     clearGameProviders();
   });
 
-  // LOAD_STATE injects the merchant fixture journey state into the fold; the
-  // merchant event then resolves against the same state the encounter was
+  // LOAD_STATE injects the augury fixture journey state into the fold; the
+  // augury event then resolves against the same state the encounter was
   // generated from, so the signature matches and the event APPLIES.
   const loadState = (): SeqEvent =>
     ev(1, "LOAD_STATE", { snapshot: fixture.journey });
 
-  it("folds LOAD_STATE -> ACCEPT_MERCHANT_OFFER: applies + deterministic", () => {
-    // A direct-payload (non-chooser) offer, exactly as the merchant unit test
+  it("folds LOAD_STATE -> ACCEPT_AUGURY_OFFER: applies + deterministic", () => {
+    // A direct-payload (non-chooser) offer, exactly as the augury unit test
     // accepts one.
     const offer = encounter.offers.find((o) => o.applyPayload !== undefined);
     expect(offer).toBeDefined();
@@ -1138,22 +1138,22 @@ describe("registerGameProviders — merchant resolution", () => {
 
     const events: SeqEvent[] = [
       loadState(),
-      ev(2, "ACCEPT_MERCHANT_OFFER", {
-        siteId: MERCHANT_SITE_ID,
+      ev(2, "ACCEPT_AUGURY_OFFER", {
+        siteId: AUGURY_SITE_ID,
         encounterSignature: offer.encounterSignature,
         offerId: offer.offerId,
         archetypeId: offer.archetypeId,
       }),
     ];
-    const first = replayLog({ genesis: MERCHANT_GENESIS, events });
+    const first = replayLog({ genesis: AUGURY_GENESIS, events });
     expect(
       first.outcomes.find((o) => o.seq === 2)?.outcome,
       first.outcomes.find((o) => o.seq === 2)?.error?.message,
     ).toBe("applied");
-    // The merchant site completed and returned to the dreamscape.
+    // The augury site completed and returned to the dreamscape.
     expect(first.finalState.journey.screen).toEqual({ type: "dreamscape" });
 
-    const second = replayLog({ genesis: MERCHANT_GENESIS, events });
+    const second = replayLog({ genesis: AUGURY_GENESIS, events });
     expect(second.finalHash).toBe(first.finalHash);
   });
 
@@ -1165,15 +1165,15 @@ describe("registerGameProviders — merchant resolution", () => {
       ...fixture.journey,
       siteRuntime: {
         ...fixture.journey.siteRuntime,
-        [MERCHANT_SITE_ID]: {
+        [AUGURY_SITE_ID]: {
           kind: "augury",
           completed: false,
           forcedArchetypeId: "fit_card_draft",
         },
       },
     };
-    const mintEncounter = generateMerchantEncounter(
-      buildMerchantContext({
+    const mintEncounter = generateAuguryEncounter(
+      buildAuguryContext({
         journeyState: mintJourney,
         journeyContent: fixture.content,
         site: fixture.site,
@@ -1194,15 +1194,15 @@ describe("registerGameProviders — merchant resolution", () => {
 
     const events: SeqEvent[] = [
       ev(1, "LOAD_STATE", { snapshot: mintJourney }),
-      ev(2, "ACCEPT_MERCHANT_OFFER", {
-        siteId: MERCHANT_SITE_ID,
+      ev(2, "ACCEPT_AUGURY_OFFER", {
+        siteId: AUGURY_SITE_ID,
         encounterSignature: offer.encounterSignature,
         offerId: offer.offerId,
         archetypeId: offer.archetypeId,
         choice: { choiceId: candidate.choiceId },
       }),
     ];
-    const result = replayLog({ genesis: MERCHANT_GENESIS, events });
+    const result = replayLog({ genesis: AUGURY_GENESIS, events });
     expect(
       result.outcomes.find((o) => o.seq === 2)?.outcome,
       result.outcomes.find((o) => o.seq === 2)?.error?.message,
@@ -1213,31 +1213,31 @@ describe("registerGameProviders — merchant resolution", () => {
       (entry) => !beforeIds.has(entry.entryId),
     );
     expect(newEntries).toHaveLength(1);
-    // Minted through mintEntryId(deck, ctx.seq, 0) at the ACCEPT_MERCHANT_OFFER
+    // Minted through mintEntryId(deck, ctx.seq, 0) at the ACCEPT_AUGURY_OFFER
     // event's own seq (2) — the SAME scheme every other minting case uses, not
     // a second, independently-evolving `deck-<counter>` scheme.
     expect(newEntries[0].entryId).toBe("deck-2-0");
   });
 
-  it("folds LOAD_STATE -> DECLINE_MERCHANT: applies + deterministic", () => {
+  it("folds LOAD_STATE -> DECLINE_AUGURY: applies + deterministic", () => {
     const offer = encounter.offers[0];
     expect(offer).toBeDefined();
     const events: SeqEvent[] = [
       loadState(),
-      ev(2, "DECLINE_MERCHANT", {
-        siteId: MERCHANT_SITE_ID,
+      ev(2, "DECLINE_AUGURY", {
+        siteId: AUGURY_SITE_ID,
         encounterSignature: encounter.encounterSignature,
         offerId: offer.offerId,
       }),
     ];
-    const first = replayLog({ genesis: MERCHANT_GENESIS, events });
+    const first = replayLog({ genesis: AUGURY_GENESIS, events });
     expect(
       first.outcomes.find((o) => o.seq === 2)?.outcome,
       first.outcomes.find((o) => o.seq === 2)?.error?.message,
     ).toBe("applied");
     expect(first.finalState.journey.screen).toEqual({ type: "dreamscape" });
 
-    const second = replayLog({ genesis: MERCHANT_GENESIS, events });
+    const second = replayLog({ genesis: AUGURY_GENESIS, events });
     expect(second.finalHash).toBe(first.finalHash);
   });
 });

@@ -229,7 +229,7 @@ describe("applyJourneyRewardEffect", () => {
 
     expect(next?.atlas.nodes[parseAtlasNodeId("node-a")]?.sites).toEqual([
       {
-        id: parseSiteId("site-merchant-Duplication-0"),
+        id: parseSiteId("site-augury-Duplication-0"),
         type: "Duplication",
         isEnhanced: false,
         isVisited: false,

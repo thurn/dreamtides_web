@@ -8,7 +8,7 @@ import type {
 } from "../../types/journey";
 import { hasFreePurchase } from "./shop-free-purchase-view-model";
 
-/** Reconstructable inventory and modifier state recorded when a merchant opens. */
+/** Reconstructable inventory and modifier state recorded when a augury opens. */
 export function buildShopSiteEntryLog(
   runtime: ShopSiteRuntime,
   shopModifiers: JourneyState["shopModifiers"],
@@ -52,7 +52,7 @@ export function buildShopSiteEntryLog(
   };
 }
 
-/** Exact UUID-resolved purchase receipts retained across merchant rerolls. */
+/** Exact UUID-resolved purchase receipts retained across augury rerolls. */
 export function buildShopPurchaseLogs(
   purchaseHistory: readonly ShopPurchaseResult[],
   cardDatabase: ReadonlyMap<number, CardData>,

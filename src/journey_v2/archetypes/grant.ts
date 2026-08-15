@@ -6,37 +6,37 @@ import type { CardData } from "../../types/cards";
 import type { TransfigurationType } from "../../types/journey";
 import { auguryArchetype } from "../../data/augury-data";
 import type {
-  MerchantApplyPayload,
-  MerchantCatalogCard,
-  MerchantContext,
+  AuguryApplyPayload,
+  AuguryCatalogCard,
+  AuguryContext,
 } from "../types";
-import type { MerchantRng } from "../signals/rng";
-import { buildCategoryUniverse, type MerchantCategory } from "./categories";
+import type { AuguryRng } from "../signals/rng";
+import { buildCategoryUniverse, type AuguryCategory } from "./categories";
 import type {
-  MerchantArchetypeBuilder,
-  MerchantChoiceCandidateDraft,
-  MerchantOfferDraft,
+  AuguryArchetypeBuilder,
+  AuguryChoiceCandidateDraft,
+  AuguryOfferDraft,
 } from "./types";
 import {
   augurySelectionPolicy,
   selectionMetadata,
-  selectMerchantCount,
-  selectMerchantReward,
+  selectAuguryCount,
+  selectAuguryReward,
 } from "./sharedSelection";
 import { selectionBandSize } from "../../selection/tide-affinity";
 import { parseChoiceId } from "../../types/identifiers";
-import { parseMerchantTargetKey } from "../../types/identifiers";
+import { parseAuguryTargetKey } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import { parseCardId } from "../../types/card-identity";
 
-function catalogGameObject(card: MerchantCatalogCard): MerchantCatalogCard {
+function catalogGameObject(card: AuguryCatalogCard): AuguryCatalogCard {
   return card;
 }
 
 function selectedCatalogCards(
-  context: MerchantContext,
+  context: AuguryContext,
   cardUuids: readonly CardId[],
-): MerchantCatalogCard[] {
+): AuguryCatalogCard[] {
   const byUuid = new Map(
     context.candidateGrantCards.map((candidate) => [
       candidate.cardUuid,
@@ -51,8 +51,8 @@ function selectedCatalogCards(
 
 /** The ordinary unowned card pool used by every Augury grant. */
 export function grantCandidatePool(
-  context: MerchantContext,
-): readonly MerchantCatalogCard[] {
+  context: AuguryContext,
+): readonly AuguryCatalogCard[] {
   const unowned = context.candidateGrantCards.filter(
     (card) => !context.ownedCardUuids.has(card.cardUuid),
   );
@@ -63,7 +63,7 @@ export function grantCandidatePool(
 }
 
 function bandCanFill(
-  context: MerchantContext,
+  context: AuguryContext,
   poolSize: number,
   count: number,
 ): boolean {
@@ -72,8 +72,8 @@ function bandCanFill(
 }
 
 function addCatalogCardPayload(
-  card: MerchantCatalogCard,
-): MerchantApplyPayload {
+  card: AuguryCatalogCard,
+): AuguryApplyPayload {
   return {
     kind: "add_catalog_card",
     cardUuid: card.cardUuid,
@@ -82,9 +82,9 @@ function addCatalogCardPayload(
 }
 
 function repeatedPayload(
-  payload: MerchantApplyPayload,
+  payload: AuguryApplyPayload,
   count: number,
-): MerchantApplyPayload {
+): AuguryApplyPayload {
   return count === 1
     ? payload
     : {
@@ -94,7 +94,7 @@ function repeatedPayload(
 }
 
 function grantedCopies(
-  context: MerchantContext,
+  context: AuguryContext,
   archetypeId:
     | "fit_card_grant"
     | "fit_card_draft"
@@ -110,9 +110,9 @@ function grantedCopies(
 }
 
 function catalogChoiceCandidate(
-  card: MerchantCatalogCard,
-  payload: MerchantApplyPayload,
-): MerchantChoiceCandidateDraft {
+  card: AuguryCatalogCard,
+  payload: AuguryApplyPayload,
+): AuguryChoiceCandidateDraft {
   return {
     choiceId: parseChoiceId(card.cardUuid),
     gameObjects: [catalogGameObject(card)],
@@ -124,13 +124,13 @@ function catalogChoiceCandidate(
 
 function directGrantBuilder(
   archetypeId: "strong_card" | "fit_card_grant",
-): MerchantArchetypeBuilder {
+): AuguryArchetypeBuilder {
   return {
     archetypeId,
     family: "grant",
     eligible: (context) => grantCandidatePool(context).length > 0,
-    build(context): MerchantOfferDraft | null {
-      const selection = selectMerchantReward({
+    build(context): AuguryOfferDraft | null {
+      const selection = selectAuguryReward({
         context,
         archetypeId,
         mechanicId: "gain-card",
@@ -150,7 +150,7 @@ function directGrantBuilder(
           addCatalogCardPayload(target),
           grantedCopies(context, archetypeId),
         ),
-        targetKey: parseMerchantTargetKey(target.cardUuid),
+        targetKey: parseAuguryTargetKey(target.cardUuid),
         ...selectionMetadata(selection),
       };
     },
@@ -162,7 +162,7 @@ export const fitCardGrantBuilder = directGrantBuilder("fit_card_grant");
 
 function chooserBuilder(
   archetypeId: "fit_card_draft" | "copies_draft",
-): MerchantArchetypeBuilder {
+): AuguryArchetypeBuilder {
   return {
     archetypeId,
     family: "grant",
@@ -173,13 +173,13 @@ function chooserBuilder(
       ).quantities.chooserSize;
       return bandCanFill(context, grantCandidatePool(context).length, count);
     },
-    build(context): MerchantOfferDraft | null {
+    build(context): AuguryOfferDraft | null {
       const archetype = auguryArchetype(
         context.rewardSelection.content.auguryData,
         archetypeId,
       );
       const count = archetype.quantities.chooserSize;
-      const selection = selectMerchantReward({
+      const selection = selectAuguryReward({
         context,
         archetypeId,
         mechanicId: "catalog-card-chooser",
@@ -205,7 +205,7 @@ function chooserBuilder(
         family: "grant",
         gameObjects: [],
         choiceRequest: { choiceType: "catalogCard", candidates },
-        targetKey: parseMerchantTargetKey(
+        targetKey: parseAuguryTargetKey(
           sampled.map((card) => card.cardUuid).join(","),
         ),
         ...selectionMetadata(selection),
@@ -218,9 +218,9 @@ export const fitCardDraftBuilder = chooserBuilder("fit_card_draft");
 export const copiesDraftBuilder = chooserBuilder("copies_draft");
 
 function categoryCandidatePool(
-  context: MerchantContext,
-  category: MerchantCategory,
-): readonly MerchantCatalogCard[] {
+  context: AuguryContext,
+  category: AuguryCategory,
+): readonly AuguryCatalogCard[] {
   const memberSet = new Set(category.memberUuids);
   return grantCandidatePool(context).filter((card) =>
     memberSet.has(card.cardUuid),
@@ -228,8 +228,8 @@ function categoryCandidatePool(
 }
 
 function offerableCategories(
-  context: MerchantContext,
-): readonly MerchantCategory[] {
+  context: AuguryContext,
+): readonly AuguryCategory[] {
   const chooserSize = auguryArchetype(
     context.rewardSelection.content.auguryData,
     "category_draft_known",
@@ -240,11 +240,11 @@ function offerableCategories(
   );
 }
 
-export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
+export const categoryDraftKnownBuilder: AuguryArchetypeBuilder = {
   archetypeId: "category_draft_known",
   family: "grant",
   eligible: (context) => offerableCategories(context).length > 0,
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
+  build(context: AuguryContext, rng: AuguryRng): AuguryOfferDraft | null {
     const categories = offerableCategories(context);
     if (categories.length === 0) return null;
     const category =
@@ -256,7 +256,7 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       "category_draft_known",
     );
     const pool = categoryCandidatePool(context, category);
-    const selection = selectMerchantReward({
+    const selection = selectAuguryReward({
       context,
       archetypeId: "category_draft_known",
       mechanicId: "catalog-card-chooser",
@@ -289,7 +289,7 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       family: "grant",
       gameObjects: [],
       choiceRequest: { choiceType: "catalogCard", candidates },
-      targetKey: parseMerchantTargetKey(
+      targetKey: parseAuguryTargetKey(
         `${category.id}:${sampled.map((card) => card.cardUuid).join(",")}`,
       ),
       ...selectionMetadata(selection),
@@ -297,16 +297,16 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
   },
 };
 
-export const cardBundleBuilder: MerchantArchetypeBuilder = {
+export const cardBundleBuilder: AuguryArchetypeBuilder = {
   archetypeId: "card_bundle",
   family: "grant",
   eligible: (context) => grantCandidatePool(context).length > 0,
-  build(context): MerchantOfferDraft | null {
+  build(context): AuguryOfferDraft | null {
     const quantities = auguryArchetype(
       context.rewardSelection.content.auguryData,
       "card_bundle",
     ).quantities;
-    const bundleSize = selectMerchantCount({
+    const bundleSize = selectAuguryCount({
       context,
       archetypeId: "card_bundle",
       mechanicId: "gain-card",
@@ -314,7 +314,7 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
       minimum: quantities.minimumBundleSize,
       maximum: quantities.bundleSize,
     });
-    const selection = selectMerchantReward({
+    const selection = selectAuguryReward({
       context,
       archetypeId: "card_bundle",
       mechanicId: "gain-card",
@@ -338,7 +338,7 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
         kind: "composite",
         children: cards.map(addCatalogCardPayload),
       },
-      targetKey: parseMerchantTargetKey(
+      targetKey: parseAuguryTargetKey(
         cards.map((card) => card.cardUuid).join(","),
       ),
       ...selectionMetadata(selection),
@@ -347,13 +347,13 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
 };
 
 interface TransfiguredChoice {
-  card: MerchantCatalogCard;
+  card: AuguryCatalogCard;
   transfiguration: TransfigurationType;
   preview: CardData;
   display: CardTransfigurationDisplay;
 }
 
-export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
+export const transfiguredDraftBuilder: AuguryArchetypeBuilder = {
   archetypeId: "transfigured_draft",
   family: "grant",
   eligible(context): boolean {
@@ -363,13 +363,13 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     ).quantities.chooserSize;
     return bandCanFill(context, grantCandidatePool(context).length, count);
   },
-  build(context): MerchantOfferDraft | null {
+  build(context): AuguryOfferDraft | null {
     const archetype = auguryArchetype(
       context.rewardSelection.content.auguryData,
       "transfigured_draft",
     );
     const count = archetype.quantities.chooserSize;
-    const selection = selectMerchantReward({
+    const selection = selectAuguryReward({
       context,
       archetypeId: "transfigured_draft",
       mechanicId: "transfigured-card-chooser",
@@ -404,7 +404,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
       ];
     });
     if (choices.length < count) return null;
-    const candidates: MerchantChoiceCandidateDraft[] = choices.map(
+    const candidates: AuguryChoiceCandidateDraft[] = choices.map(
       (choice) => ({
         choiceId: parseChoiceId(choice.card.cardUuid),
         gameObjects: [
@@ -433,7 +433,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
       family: "grant",
       gameObjects: [],
       choiceRequest: { choiceType: "catalogCard", candidates },
-      targetKey: parseMerchantTargetKey(
+      targetKey: parseAuguryTargetKey(
         choices
           .map((choice) => `${choice.card.cardUuid}:${choice.transfiguration}`)
           .join(","),

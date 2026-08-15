@@ -219,7 +219,7 @@ Everything the effect runners do today becomes reducer logic:
   machinery (`ownsRunRef`, `cancelPromptSignal`, `remoteCommandEpoch`)
   becomes deletable.
 - **Randomness**: the reducer draws from a pure stream keyed by
-  `(genesis.seed, seq, drawIndex)` — the `merchantRng` SHA-256 salted-stream
+  `(genesis.seed, seq, drawIndex)` — the `auguryRng` SHA-256 salted-stream
   pattern in `src/journey_v2/signals/rng.ts` is exactly right and should be
   reused. The `Math.random()` calls injected into effect contexts
   (`use-battle-effect-runner.ts:91,484,544`) and `weightedSample`

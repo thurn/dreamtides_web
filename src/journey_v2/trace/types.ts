@@ -1,10 +1,10 @@
-import type { DreamsignId, MerchantTargetKey } from "../../types/identifiers";
+import type { DreamsignId, AuguryTargetKey } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers"; /**
- * Pure explanation data for a single Dream Merchant offer.
+ * Pure explanation data for a single Augury offer.
  *
  * Every archetype builder is a deterministic `score → band → sample` pipeline,
- * but the scores it computes are thrown away once the {@link MerchantOfferDraft}
- * is built. A {@link MerchantOfferTrace} captures *what the builder already
+ * but the scores it computes are thrown away once the {@link AuguryOfferDraft}
+ * is built. A {@link AuguryOfferTrace} captures *what the builder already
  * computed* — the candidate set, each candidate's score and the components that
  * score blends, the sampling band, the branch taken, and the tuning weights
  * applied — so a human reading `logs/journey-log.jsonl` can reconstruct and
@@ -16,15 +16,15 @@ import type { DeckEntryId } from "../../types/identifiers"; /**
  * line.
  *
  * The 17 archetypes decide in five distinct ways, captured by
- * {@link MerchantTraceDecision}. A single candidate shape
- * ({@link MerchantTraceCandidate}) serves all of them because every generator
+ * {@link AuguryTraceDecision}. A single candidate shape
+ * ({@link AuguryTraceCandidate}) serves all of them because every generator
  * ultimately ranks keyed candidates by a numeric score; what differs is the key
- * ({@link MerchantTraceKeyKind}), the score's components, and a handful of
+ * ({@link AuguryTraceKeyKind}), the score's components, and a handful of
  * branch flags — all optional fields below.
  */
 
 /** What a trace candidate's `key` identifies. */
-export type MerchantTraceKeyKind =
+export type AuguryTraceKeyKind =
   /** Grant family — pool cards keyed by card UUID. */
   | "cardUuid"
   /** Dreamsign family — dreamsigns keyed by their dreamsign id. */
@@ -46,7 +46,7 @@ export type MerchantTraceKeyKind =
  *   `copies_draft`, `category_draft_known`, `card_bundle`, and `transfigured_draft`.
  * - `dreamsign_match` — the dreamsign family ranks a tiered coverage pool by
  *   `meanCoverage * qualityWeight`. Components: `meanCoverage`, `featureCount`,
- *   `qualityWeight`; the chosen tier is in {@link MerchantOfferTrace.dreamsignTier}.
+ *   `qualityWeight`; the chosen tier is in {@link AuguryOfferTrace.dreamsignTier}.
  * - `deck_entry_rank` — `duplicate` and `purge` rank EXISTING deck entries.
  *   `duplicate` blends `quality`/`fitLoo`; `purge` ranks by `misfit` (with a
  *   starter bonus and a leave-one-out threshold).
@@ -55,7 +55,7 @@ export type MerchantTraceKeyKind =
  *   samples uniformly.
  * - `uniform` — `add_site` samples a site type with equal weight.
  */
-export type MerchantTraceDecision =
+export type AuguryTraceDecision =
   | "scored_cards"
   | "dreamsign_match"
   | "deck_entry_rank"
@@ -63,7 +63,7 @@ export type MerchantTraceDecision =
   | "uniform";
 
 /** Which dreamsign pool tier the `dreamsign` family sampled from. */
-export type MerchantDreamsignTier = "covered" | "generic" | "fallback";
+export type AuguryDreamsignTier = "covered" | "generic" | "fallback";
 
 /**
  * One scored candidate the builder considered. The natural key (`key`) is
@@ -72,9 +72,9 @@ export type MerchantDreamsignTier = "covered" | "generic" | "fallback";
  * convenience only — no logic or query keys off it (AGENTS.md: identify cards by
  * UUID, never name).
  */
-export interface MerchantTraceCandidate {
-  /** Authoritative key (its meaning is {@link MerchantOfferTrace.keyKind}). */
-  key: MerchantTargetKey;
+export interface AuguryTraceCandidate {
+  /** Authoritative key (its meaning is {@link AuguryOfferTrace.keyKind}). */
+  key: AuguryTargetKey;
   /** Non-authoritative human label; never key logic off this. */
   displayName?: string;
   cardUuid?: import("../../types/card-identity").CardId;
@@ -99,7 +99,7 @@ export interface MerchantTraceCandidate {
 }
 
 /** The sampling band the builder drew the target(s) from. */
-export interface MerchantTraceBand {
+export interface AuguryTraceBand {
   /** Candidates the band was computed over. */
   poolSize: number;
   /** Top-scoring candidates kept as the band (the sampleable set). */
@@ -114,13 +114,13 @@ export interface MerchantTraceBand {
 
 /**
  * The full explanation of one offer's target selection. Attached to a
- * {@link MerchantOfferDraft}/{@link MerchantOffer} as pure data and logged once
- * at the React boundary as a `merchant_offer_built` event.
+ * {@link AuguryOfferDraft}/{@link AuguryOffer} as pure data and logged once
+ * at the React boundary as a `augury_offer_built` event.
  */
-export interface MerchantOfferTrace {
-  decision: MerchantTraceDecision;
-  keyKind: MerchantTraceKeyKind;
-  band: MerchantTraceBand;
+export interface AuguryOfferTrace {
+  decision: AuguryTraceDecision;
+  keyKind: AuguryTraceKeyKind;
+  band: AuguryTraceBand;
   /** Total candidates considered before any top-N truncation of `candidates`. */
   candidateCount: number;
   /**
@@ -129,7 +129,7 @@ export interface MerchantOfferTrace {
    * keeps every selected candidate plus the top runners-up; `truncated` and
    * `candidateCount` record that the line was bounded.
    */
-  candidates: readonly MerchantTraceCandidate[];
+  candidates: readonly AuguryTraceCandidate[];
   /** True when `candidates` was capped to a top-N (full size is `candidateCount`). */
   truncated: boolean;
   /**
@@ -138,7 +138,7 @@ export interface MerchantOfferTrace {
    */
   coldStartQualityFallback?: boolean;
   /** Which dreamsign pool tier the candidates were drawn from (dreamsign family). */
-  dreamsignTier?: MerchantDreamsignTier;
+  dreamsignTier?: AuguryDreamsignTier;
   /** Blend weights actually applied to the score (snapshot of tuning). */
   blend?: Readonly<Record<string, number>>;
   /** Free-form explanatory notes (category pick, bundle grow steps, thresholds). */

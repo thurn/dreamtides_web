@@ -1,36 +1,36 @@
 import { describe, expect, it } from "vitest";
-import { buildMerchantContext } from "./buildMerchantContext";
+import { buildAuguryContext } from "./buildAuguryContext";
 import {
   TEST_CARD_UUIDS,
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
-  makeMerchantTestDreamsign,
-  makeMerchantTestDreamsignTemplate,
-  makeMerchantTestJourneyState,
-  makeMerchantTestResolvedPackage,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDeckEntry,
+  makeAuguryTestDreamsign,
+  makeAuguryTestDreamsignTemplate,
+  makeAuguryTestJourneyState,
+  makeAuguryTestResolvedPackage,
+  makeAuguryTestSite,
 } from "../testing/fixtures";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testDreamsignId, testCardId } from "../../types/test-identities";
 
-describe("buildMerchantContext", () => {
+describe("buildAuguryContext", () => {
   it("indexes all catalog cards with UUIDs", () => {
-    const ordinaryCard = makeMerchantTestCard({
+    const ordinaryCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 101,
     });
-    const deckCard = makeMerchantTestCard({
+    const deckCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.deckCopy),
       cardNumber: 102,
     });
 
-    const context = buildMerchantContext({
-      journeyState: makeMerchantTestJourneyState(),
-      journeyContent: makeMerchantTestContent({
+    const context = buildAuguryContext({
+      journeyState: makeAuguryTestJourneyState(),
+      journeyContent: makeAuguryTestContent({
         cards: [ordinaryCard, deckCard],
       }),
-      site: makeMerchantTestSite(),
+      site: makeAuguryTestSite(),
     });
 
     expect(context.cardByUuid.get(testCardId(TEST_CARD_UUIDS.ordinary))).toBe(
@@ -42,19 +42,19 @@ describe("buildMerchantContext", () => {
   });
 
   it("projects deck entries to concrete entry ids and card UUIDs", () => {
-    const deckCard = makeMerchantTestCard({
+    const deckCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.deckCopy),
       cardNumber: 201,
     });
-    const deckEntry = makeMerchantTestDeckEntry({
+    const deckEntry = makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-201-a"),
       cardNumber: deckCard.cardNumber,
     });
 
-    const context = buildMerchantContext({
-      journeyState: makeMerchantTestJourneyState({ deck: [deckEntry] }),
-      journeyContent: makeMerchantTestContent({ cards: [deckCard] }),
-      site: makeMerchantTestSite(),
+    const context = buildAuguryContext({
+      journeyState: makeAuguryTestJourneyState({ deck: [deckEntry] }),
+      journeyContent: makeAuguryTestContent({ cards: [deckCard] }),
+      site: makeAuguryTestSite(),
     });
 
     expect(context.deckCards).toEqual([
@@ -73,17 +73,17 @@ describe("buildMerchantContext", () => {
   });
 
   it("skips deck entries whose card records are missing", () => {
-    const context = buildMerchantContext({
-      journeyState: makeMerchantTestJourneyState({
+    const context = buildAuguryContext({
+      journeyState: makeAuguryTestJourneyState({
         deck: [
-          makeMerchantTestDeckEntry({
+          makeAuguryTestDeckEntry({
             entryId: parseDeckEntryId("entry-missing-card"),
             cardNumber: 999,
           }),
         ],
       }),
-      journeyContent: makeMerchantTestContent({ cards: [] }),
-      site: makeMerchantTestSite(),
+      journeyContent: makeAuguryTestContent({ cards: [] }),
+      site: makeAuguryTestSite(),
     });
 
     expect(context.deckCards).toEqual([]);
@@ -93,29 +93,29 @@ describe("buildMerchantContext", () => {
   });
 
   it("excludes starter and special cards from grant candidates", () => {
-    const ordinaryCard = makeMerchantTestCard({
+    const ordinaryCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 301,
     });
-    const starterFlagCard = makeMerchantTestCard({
+    const starterFlagCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.starterFlag),
       cardNumber: 302,
       isStarter: true,
     });
-    const starterRarityCard = makeMerchantTestCard({
+    const starterRarityCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.starterRarity),
       cardNumber: 303,
       rarity: "Starter",
     });
-    const specialRarityCard = makeMerchantTestCard({
+    const specialRarityCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.specialRarity),
       cardNumber: 304,
       rarity: "Special",
     });
 
-    const context = buildMerchantContext({
-      journeyState: makeMerchantTestJourneyState(),
-      journeyContent: makeMerchantTestContent({
+    const context = buildAuguryContext({
+      journeyState: makeAuguryTestJourneyState(),
+      journeyContent: makeAuguryTestContent({
         cards: [
           ordinaryCard,
           starterFlagCard,
@@ -123,7 +123,7 @@ describe("buildMerchantContext", () => {
           specialRarityCard,
         ],
       }),
-      site: makeMerchantTestSite(),
+      site: makeAuguryTestSite(),
     });
 
     expect(context.candidateGrantCards.map((card) => card.cardUuid)).toEqual([
@@ -132,15 +132,15 @@ describe("buildMerchantContext", () => {
   });
 
   it("uses loaded catalog cards for grant candidates without run pool data", () => {
-    const ordinaryCard = makeMerchantTestCard({
+    const ordinaryCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 305,
     });
 
-    const context = buildMerchantContext({
-      journeyState: makeMerchantTestJourneyState(),
-      journeyContent: makeMerchantTestContent({ cards: [ordinaryCard] }),
-      site: makeMerchantTestSite(),
+    const context = buildAuguryContext({
+      journeyState: makeAuguryTestJourneyState(),
+      journeyContent: makeAuguryTestContent({ cards: [ordinaryCard] }),
+      site: makeAuguryTestSite(),
     });
 
     expect(context.candidateGrantCards.map((card) => card.cardUuid)).toEqual([
@@ -149,28 +149,28 @@ describe("buildMerchantContext", () => {
   });
 
   it("includes ordinary catalog cards outside the run pool", () => {
-    const inPoolCard = makeMerchantTestCard({
+    const inPoolCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 401,
     });
-    const outsidePoolCard = makeMerchantTestCard({
+    const outsidePoolCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.outsidePool),
       cardNumber: 402,
     });
-    const inPoolStarterCard = makeMerchantTestCard({
+    const inPoolStarterCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.starterRarity),
       cardNumber: 403,
       rarity: "Starter",
     });
-    const inPoolSpecialCard = makeMerchantTestCard({
+    const inPoolSpecialCard = makeAuguryTestCard({
       id: testCardId(TEST_CARD_UUIDS.specialRarity),
       cardNumber: 404,
       rarity: "Special",
     });
 
-    const context = buildMerchantContext({
-      journeyState: makeMerchantTestJourneyState({
-        resolvedPackage: makeMerchantTestResolvedPackage({
+    const context = buildAuguryContext({
+      journeyState: makeAuguryTestJourneyState({
+        resolvedPackage: makeAuguryTestResolvedPackage({
           draftPoolCopiesByCard: {
             [String(inPoolCard.cardNumber)]: 1,
             [String(inPoolStarterCard.cardNumber)]: 1,
@@ -178,7 +178,7 @@ describe("buildMerchantContext", () => {
           },
         }),
       }),
-      journeyContent: makeMerchantTestContent({
+      journeyContent: makeAuguryTestContent({
         cards: [
           inPoolCard,
           outsidePoolCard,
@@ -186,7 +186,7 @@ describe("buildMerchantContext", () => {
           inPoolSpecialCard,
         ],
       }),
-      site: makeMerchantTestSite(),
+      site: makeAuguryTestSite(),
     });
 
     expect(context.candidateGrantCards.map((card) => card.cardUuid)).toEqual([
@@ -198,24 +198,24 @@ describe("buildMerchantContext", () => {
   it("excludes held Dreamsign ids from Dreamsign candidates", () => {
     const heldDreamsignId = testDreamsignId("sign-held");
     const openDreamsignId = testDreamsignId("sign-open");
-    const heldTemplate = makeMerchantTestDreamsignTemplate({
+    const heldTemplate = makeAuguryTestDreamsignTemplate({
       id: heldDreamsignId,
     });
-    const openTemplate = makeMerchantTestDreamsignTemplate({
+    const openTemplate = makeAuguryTestDreamsignTemplate({
       id: openDreamsignId,
     });
 
-    const context = buildMerchantContext({
-      journeyState: makeMerchantTestJourneyState({
+    const context = buildAuguryContext({
+      journeyState: makeAuguryTestJourneyState({
         dreamsigns: [
-          makeMerchantTestDreamsign({ id: heldDreamsignId }),
+          makeAuguryTestDreamsign({ id: heldDreamsignId }),
         ],
       }),
-      journeyContent: makeMerchantTestContent({
+      journeyContent: makeAuguryTestContent({
         cards: [],
         dreamsignTemplates: [heldTemplate, openTemplate],
       }),
-      site: makeMerchantTestSite(),
+      site: makeAuguryTestSite(),
     });
 
     expect(context.heldDreamsignIds).toEqual(new Set([heldDreamsignId]));
@@ -224,28 +224,28 @@ describe("buildMerchantContext", () => {
   });
 
   it("keeps name fallback separate for held Dreamsigns missing ids", () => {
-    const heldNameTemplate = makeMerchantTestDreamsignTemplate({
+    const heldNameTemplate = makeAuguryTestDreamsignTemplate({
       id: testDreamsignId("sign-held-name"),
       name: "Shared Name",
     });
-    const openTemplate = makeMerchantTestDreamsignTemplate({
+    const openTemplate = makeAuguryTestDreamsignTemplate({
       id: testDreamsignId("sign-open"),
     });
 
-    const context = buildMerchantContext({
-      journeyState: makeMerchantTestJourneyState({
+    const context = buildAuguryContext({
+      journeyState: makeAuguryTestJourneyState({
         dreamsigns: [
-          makeMerchantTestDreamsign({
+          makeAuguryTestDreamsign({
             id: undefined,
             name: "Shared Name",
           }),
         ],
       }),
-      journeyContent: makeMerchantTestContent({
+      journeyContent: makeAuguryTestContent({
         cards: [],
         dreamsignTemplates: [heldNameTemplate, openTemplate],
       }),
-      site: makeMerchantTestSite(),
+      site: makeAuguryTestSite(),
     });
 
     expect(context.heldDreamsignIds).toEqual(new Set());

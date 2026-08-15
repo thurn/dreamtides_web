@@ -5,35 +5,35 @@ import {
 } from "../../state/journey-state-actions";
 import type { DeckEntry, JourneyState, SiteState } from "../../types/journey";
 import { applyJourneyRewardEffect } from "../../rules/journey/reward-effects";
-import { buildMerchantContext } from "../context/buildMerchantContext";
+import { buildAuguryContext } from "../context/buildAuguryContext";
 import type {
-  MerchantAcceptRequest,
-  MerchantApplyPayload,
-  MerchantChoice,
-  MerchantDeclineRequest,
-  MerchantOffer,
-  MerchantOfferFailureReason,
+  AuguryAcceptRequest,
+  AuguryApplyPayload,
+  AuguryChoice,
+  AuguryDeclineRequest,
+  AuguryOffer,
+  AuguryOfferFailureReason,
 } from "../types";
-import { generateMerchantEncounter } from "./generateMerchantEncounter";
+import { generateAuguryEncounter } from "./generateAuguryEncounter";
 import type { SiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
 
-export type MerchantResolveFailureReason = MerchantOfferFailureReason;
+export type AuguryResolveFailureReason = AuguryOfferFailureReason;
 
-export type ResolveMerchantOfferResult =
+export type ResolveAuguryOfferResult =
   | {
       ok: true;
       state: JourneyState;
-      offer: MerchantOffer;
-      appliedPayload: MerchantApplyPayload;
+      offer: AuguryOffer;
+      appliedPayload: AuguryApplyPayload;
     }
   | {
       ok: false;
-      reason: MerchantResolveFailureReason;
+      reason: AuguryResolveFailureReason;
       state: JourneyState;
     };
 
-export type ResolveMerchantDeclineResult =
+export type ResolveAuguryDeclineResult =
   | {
       ok: true;
       state: JourneyState;
@@ -48,24 +48,24 @@ export type ResolveMerchantDeclineResult =
       state: JourneyState;
     };
 
-interface ResolveMerchantOfferInput {
+interface ResolveAuguryOfferInput {
   state: JourneyState;
   journeyContent: JourneyContent;
   site: SiteState;
-  request: MerchantAcceptRequest;
+  request: AuguryAcceptRequest;
 }
 
-interface ResolveMerchantDeclineInput {
+interface ResolveAuguryDeclineInput {
   state: JourneyState;
   journeyContent: JourneyContent;
   site: SiteState;
-  request: MerchantDeclineRequest;
+  request: AuguryDeclineRequest;
 }
 
 function fail(
   state: JourneyState,
-  reason: MerchantResolveFailureReason,
-): ResolveMerchantOfferResult {
+  reason: AuguryResolveFailureReason,
+): ResolveAuguryOfferResult {
   return { ok: false, reason, state };
 }
 
@@ -87,7 +87,7 @@ function markSiteComplete(
   );
 }
 
-export function applyMerchantPayloadToState({
+export function applyAuguryPayloadToState({
   state,
   journeyContent,
   payload,
@@ -95,7 +95,7 @@ export function applyMerchantPayloadToState({
 }: {
   state: JourneyState;
   journeyContent: JourneyContent;
-  payload: MerchantApplyPayload;
+  payload: AuguryApplyPayload;
   mintEntryId?: (deck: readonly DeckEntry[], index: number) => DeckEntryId;
 }): JourneyState | null {
   return applyJourneyRewardEffect({
@@ -110,8 +110,8 @@ function findCurrentOffer(input: {
   state: JourneyState;
   journeyContent: JourneyContent;
   site: SiteState;
-  request: MerchantAcceptRequest;
-}): MerchantOffer | MerchantResolveFailureReason {
+  request: AuguryAcceptRequest;
+}): AuguryOffer | AuguryResolveFailureReason {
   const { state, journeyContent, site, request } = input;
   const runtime = state.siteRuntime[site.id];
   let encounter = runtime?.kind === "augury" ? runtime.encounter : undefined;
@@ -125,8 +125,8 @@ function findCurrentOffer(input: {
     if (encounter === undefined) return "encounter_unavailable";
   } else {
     try {
-      encounter = generateMerchantEncounter(
-        buildMerchantContext({ journeyState: state, journeyContent, site }),
+      encounter = generateAuguryEncounter(
+        buildAuguryContext({ journeyState: state, journeyContent, site }),
       );
     } catch {
       return "encounter_unavailable";
@@ -144,9 +144,9 @@ function findCurrentOffer(input: {
 }
 
 function payloadForChoice(
-  offer: MerchantOffer,
-  choice: MerchantChoice,
-): MerchantApplyPayload | null {
+  offer: AuguryOffer,
+  choice: AuguryChoice,
+): AuguryApplyPayload | null {
   const candidate = offer.choiceRequest?.candidates.find(
     (entry) => entry.choiceId === choice.choiceId,
   );
@@ -154,9 +154,9 @@ function payloadForChoice(
 }
 
 function payloadForRequest(
-  offer: MerchantOffer,
-  request: MerchantAcceptRequest,
-): MerchantApplyPayload | MerchantResolveFailureReason {
+  offer: AuguryOffer,
+  request: AuguryAcceptRequest,
+): AuguryApplyPayload | AuguryResolveFailureReason {
   if (offer.choiceRequest !== undefined) {
     if (request.choice === undefined) return "missing_choice";
     return payloadForChoice(offer, request.choice) ?? "invalid_choice";
@@ -164,15 +164,15 @@ function payloadForRequest(
   return offer.applyPayload ?? "target_unavailable";
 }
 
-export function resolveMerchantOffer({
+export function resolveAuguryOffer({
   state,
   journeyContent,
   site,
   request,
   mintEntryId,
-}: ResolveMerchantOfferInput & {
+}: ResolveAuguryOfferInput & {
   mintEntryId?: (deck: readonly DeckEntry[], index: number) => DeckEntryId;
-}): ResolveMerchantOfferResult {
+}): ResolveAuguryOfferResult {
   const offer = findCurrentOffer({ state, journeyContent, site, request });
   if (typeof offer === "string") return fail(state, offer);
 
@@ -198,12 +198,12 @@ export function resolveMerchantOffer({
   };
 }
 
-export function resolveMerchantDecline({
+export function resolveAuguryDecline({
   state,
   journeyContent,
   site,
   request,
-}: ResolveMerchantDeclineInput): ResolveMerchantDeclineResult {
+}: ResolveAuguryDeclineInput): ResolveAuguryDeclineResult {
   try {
     const runtime = state.siteRuntime[site.id];
     if (
@@ -216,8 +216,8 @@ export function resolveMerchantDecline({
     const encounter =
       runtime?.kind === "augury" && runtime.encounter !== undefined
         ? runtime.encounter
-        : generateMerchantEncounter(
-            buildMerchantContext({ journeyState: state, journeyContent, site }),
+        : generateAuguryEncounter(
+            buildAuguryContext({ journeyState: state, journeyContent, site }),
           );
     if (encounter.encounterSignature !== request.encounterSignature) {
       return { ok: false, reason: "stale_encounter", state };

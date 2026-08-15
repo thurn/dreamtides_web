@@ -29,14 +29,14 @@ import type {
 } from "../types/journey";
 import { LayerName } from "../types/layer-name";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
-  makeMerchantTestDreamsignTemplate,
-  makeMerchantTestJourneyState,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDeckEntry,
+  makeAuguryTestDreamsignTemplate,
+  makeAuguryTestJourneyState,
 } from "../journey_v2/testing/fixtures";
 import { getLogEntries, resetLog } from "../logging";
-import type { MerchantArchetypeId } from "../journey_v2";
+import type { AuguryArchetypeId } from "../journey_v2";
 import { auguryArchetype } from "../data/augury-data";
 import { parseSiteId } from "../types/identifiers";
 import { parseAtlasNodeId } from "../types/identifiers";
@@ -138,7 +138,7 @@ function card(
   cardNumber: number,
   overrides: Partial<CardData> = {},
 ): CardData {
-  return makeMerchantTestCard({
+  return makeAuguryTestCard({
     id: testCardId(idSeed),
     cardNumber,
     name: parseCardName(`Router Fixture ${cardNumber}`),
@@ -182,16 +182,16 @@ function fixtureCards(): CardData[] {
   ];
 }
 
-function merchantContent() {
+function auguryContent() {
   const cards = fixtureCards();
-  const content = makeMerchantTestContent({
+  const content = makeAuguryTestContent({
     cards,
     dreamsignTemplates: [
-      makeMerchantTestDreamsignTemplate({
+      makeAuguryTestDreamsignTemplate({
         id: testDreamsignId("router-sign-a"),
         name: "Router Sign A",
       }),
-      makeMerchantTestDreamsignTemplate({
+      makeAuguryTestDreamsignTemplate({
         id: testDreamsignId("router-sign-b"),
         name: "Router Sign B",
       }),
@@ -269,8 +269,8 @@ function makeMutations(): JourneyMutations {
     acceptTransfigurationChoice: vi.fn(),
     acceptDuplicationChoice: vi.fn(),
     completeAugurySite: vi.fn(),
-    acceptDreamMerchantOffer: vi.fn(),
-    declineDreamMerchant: vi.fn(),
+    acceptAuguryOffer: vi.fn(),
+    declineAugury: vi.fn(),
     rerollAugury: vi.fn(),
     forceAuguryArchetype: vi.fn(),
     pickDraftCard: vi.fn(),
@@ -320,18 +320,18 @@ function makeSite(type: SiteState["type"]): SiteState {
 }
 
 function makeStateFor(site: SiteState): JourneyState {
-  const merchantState = makeMerchantTestJourneyState({
-    seed: testJourneySeed("router-merchant-seed"),
+  const auguryState = makeAuguryTestJourneyState({
+    seed: testJourneySeed("router-augury-seed"),
     essence: 180,
     deck: [1, 2, 3, 4, 5, 6].map((cardNumber, index) =>
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId(`router-entry-${index + 1}`),
         cardNumber,
       }),
     ),
   });
   return {
-    ...merchantState,
+    ...auguryState,
     currentDreamscape: parseAtlasNodeId("dreamscape-router"),
     screen: { type: "site", siteId: site.id },
     activeSiteId: site.id,
@@ -453,7 +453,7 @@ describe("ScreenRouter Augury routing", () => {
     const site = makeSite("Augury");
     const container = renderWithJourney({
       state: makeStateFor(site),
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -474,7 +474,7 @@ describe("ScreenRouter Augury routing", () => {
     const site = makeSite("Augury");
     const container = renderWithJourney({
       state: makeStateFor(site),
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -491,7 +491,7 @@ describe("ScreenRouter Augury routing", () => {
     const container = renderWithJourney({
       state,
       journeyContent: withFixtureGuides(
-        makeMerchantTestContent({ cards: fixtureCards() }),
+        makeAuguryTestContent({ cards: fixtureCards() }),
       ),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
@@ -506,7 +506,7 @@ describe("ScreenRouter Augury routing", () => {
     const state = makeStateFor(site);
     const container = renderWithJourney({
       state,
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -519,7 +519,7 @@ describe("ScreenRouter Augury routing", () => {
     const site = makeSite("Augury");
     const container = renderWithJourney({
       state: makeStateFor(site),
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -543,7 +543,7 @@ describe("ScreenRouter Augury routing", () => {
       imageNumber: "0000",
       startingEssence: 180,
     };
-    const journeyContent = merchantContent();
+    const journeyContent = auguryContent();
     const container = renderWithJourney({
       state,
       mutations,
@@ -574,11 +574,11 @@ describe("ScreenRouter Augury routing", () => {
     expect(menuRow("Random (clear force)")).toBeDefined();
 
     const generated = getLogEntries().find(
-      (entry) => entry.event === "merchant_encounter_generated",
+      (entry) => entry.event === "augury_encounter_generated",
     );
     const eligibleArchetypeIds = (
       generated?.debug as
-        { eligibleArchetypeIds?: MerchantArchetypeId[] } | undefined
+        { eligibleArchetypeIds?: AuguryArchetypeId[] } | undefined
     )?.eligibleArchetypeIds;
     const firstEligible = eligibleArchetypeIds?.[0];
     expect(firstEligible).toBeDefined();
@@ -600,7 +600,7 @@ describe("ScreenRouter Augury routing", () => {
     const state = makeStateFor(site);
     renderWithJourney({
       state,
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
       strict: true,
     });
@@ -620,13 +620,13 @@ describe("ScreenRouter Augury routing", () => {
     const state = makeStateFor(site);
     renderWithJourney({
       state,
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
       strict: true,
     });
 
     const shownLogs = getLogEntries().filter(
-      (entry) => entry.event === "merchant_encounter_generated",
+      (entry) => entry.event === "augury_encounter_generated",
     );
     expect(shownLogs).toHaveLength(1);
     expect(shownLogs[0]?.offerCount).toBe(2);
@@ -645,20 +645,20 @@ describe("ScreenRouter Augury routing", () => {
     expect(debug?.rolledB).toBeDefined();
   });
 
-  it("emits a per-offer merchant_offer_built event joined to the encounter", () => {
+  it("emits a per-offer augury_offer_built event joined to the encounter", () => {
     const site = makeSite("Augury");
     const state = makeStateFor(site);
     renderWithJourney({
       state,
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
     const encounterLogs = getLogEntries().filter(
-      (entry) => entry.event === "merchant_encounter_generated",
+      (entry) => entry.event === "augury_encounter_generated",
     );
     const offerLogs = getLogEntries().filter(
-      (entry) => entry.event === "merchant_offer_built",
+      (entry) => entry.event === "augury_offer_built",
     );
     const signature = encounterLogs[0]?.encounterSignature;
     expect(signature).toBeDefined();
@@ -682,13 +682,13 @@ describe("ScreenRouter Augury routing", () => {
     );
   });
 
-  it("sets card source debug for visible merchant grant cards", () => {
+  it("sets card source debug for visible augury grant cards", () => {
     const site = makeSite("Augury");
     // Build content with no dreamsigns so the generator uses families that
     // yield cards.
     const cards = fixtureCards();
     const contentWithoutDreamsigns = withFixtureGuides(
-      makeMerchantTestContent({
+      makeAuguryTestContent({
         cards,
         dreamsignTemplates: [],
       }),
@@ -710,8 +710,8 @@ describe("ScreenRouter Augury routing", () => {
       vi.mocked(mutations.setCardSourceDebug).mock.calls[0] ?? [];
     const cardSourceDebug = debugState as
       CardSourceDebugState | null | undefined;
-    expect(source).toBe("merchant_grant_cards_shown");
-    expect(cardSourceDebug?.screenLabel).toBe("Dream Merchant Offers");
+    expect(source).toBe("augury_grant_cards_shown");
+    expect(cardSourceDebug?.screenLabel).toBe("Augury Offers");
     expect(cardSourceDebug?.surface).toBe("Reward");
     expect(
       cardSourceDebug?.entries.some(
@@ -725,7 +725,7 @@ describe("ScreenRouter Augury routing", () => {
     const state = { ...makeStateFor(site), deck: [] };
     const mutations = makeMutations();
     const foldedMutations = makeMutations();
-    const content = merchantContent();
+    const content = auguryContent();
     const mounted = mountWithJourney({
       state,
       mutations,
@@ -751,7 +751,7 @@ describe("ScreenRouter Augury routing", () => {
     renderWithJourney({
       state: { ...makeStateFor(site), deck: [] },
       mutations,
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
       strict: true,
     });
@@ -759,7 +759,7 @@ describe("ScreenRouter Augury routing", () => {
     expect(mutations.setCardSourceDebug).toHaveBeenCalledTimes(1);
     expect(mutations.setCardSourceDebug).not.toHaveBeenCalledWith(
       null,
-      "merchant_grant_cards_hidden",
+      "augury_grant_cards_hidden",
     );
   });
 
@@ -768,7 +768,7 @@ describe("ScreenRouter Augury routing", () => {
     const state = makeStateFor(site);
     const container = renderWithJourney({
       state,
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -777,14 +777,14 @@ describe("ScreenRouter Augury routing", () => {
     ).not.toBeNull();
   });
 
-  it("renders a contained v2 fallback when merchant generation is unavailable", () => {
+  it("renders a contained v2 fallback when augury generation is unavailable", () => {
     const site = makeSite("Augury");
     const state = makeStateFor(site);
     const mutations = makeMutations();
     const container = renderWithJourney({
       state,
       mutations,
-      journeyContent: withFixtureGuides(makeMerchantTestContent({ cards: [] })),
+      journeyContent: withFixtureGuides(makeAuguryTestContent({ cards: [] })),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -831,7 +831,7 @@ describe("ScreenRouter terminal Cumulus routing", () => {
     const container = renderWithJourney({
       state,
       mutations,
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -883,7 +883,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     state.currentDreamscape = parseAtlasNodeId("next-dreamscape");
     const container = renderWithJourney({
       state,
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
 
@@ -913,7 +913,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     };
     const container = renderWithJourney({
       state,
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       mutations,
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
@@ -954,7 +954,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
           },
         },
       },
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       mutations,
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
     });
@@ -982,7 +982,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     const mutations = makeMutations();
     const container = renderWithJourney({
       state: makeStateFor(site),
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       mutations,
       children: (
         <ScreenRouter
@@ -1003,7 +1003,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     const mutations = makeMutations();
     renderWithJourney({
       state: makeStateFor(site),
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       mutations,
       children: (
         <ScreenRouter
@@ -1023,7 +1023,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     const mutations = makeMutations();
     renderWithJourney({
       state: makeStateFor(site),
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       mutations,
       children: (
         <ScreenRouter
@@ -1043,7 +1043,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     const mutations = makeMutations();
     renderWithJourney({
       state: makeStateFor(site),
-      journeyContent: merchantContent(),
+      journeyContent: auguryContent(),
       mutations,
       children: (
         <ScreenRouter
@@ -1073,7 +1073,7 @@ describe("ScreenRouter site-dispatch completeness", () => {
     );
     const site = makeSite("Exploration");
     const mutations = makeMutations();
-    const journeyContent = merchantContent();
+    const journeyContent = auguryContent();
     const selectedCard = card(
       testCardId("161482b6-af07-4d9e-822d-8c738672beb9"),
       901,

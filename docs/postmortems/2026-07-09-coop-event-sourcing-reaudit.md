@@ -144,7 +144,7 @@ not by design.
   en-US and a da-DK client folding the same `BEGIN_BATTLE` can sort the
   neutral-dreamsign list differently, pick different dreamsigns, and diverge
   the whole `BattleFoldState`. Same class at
-  `src/journey_v2/encounter/generateMerchantEncounter.ts:175` (lower
+  `src/journey_v2/encounter/generateAuguryEncounter.ts:175` (lower
   practical risk). Fix: plain code-unit comparator
   (`a < b ? -1 : a > b ? 1 : 0`); consider a lint rule banning
   `localeCompare` in fold-reachable code the way `Date.now` is banned in
@@ -224,7 +224,7 @@ not by design.
   failure: `loadDecklistIds().catch(() => [])`,
   `loadDraftRecords().catch(() => [])`,
   `loadKnownGoodDecklists().catch(() => [])`,
-  `loadMerchantCorpus().catch(() => undefined)`. Scenario: client A's
+  `loadAuguryCorpus().catch(() => undefined)`. Scenario: client A's
   draft-records fetch fails → corpus-backed scoring inputs are unavailable while
   client B has real deps → the same committed `PICK_DRAFT_CARD` reveals a
   different next offer on each client; same class for `BEGIN_BATTLE`
@@ -470,7 +470,7 @@ Suggested sequencing; sizes are rough.
    parks its prompt", and browser-QA an interactive card play. (S–M)
 2. **[R-P0-2, R-P0-3] Kill the two nondeterminism leaks** — Fisher-Yates in
    shop-generator; code-unit comparators in corpus-opponent-deck and
-   generateMerchantEncounter; add a lint restriction on `localeCompare` and
+   generateAuguryEncounter; add a lint restriction on `localeCompare` and
    comparator-less/inconsistent `sort` for fold-reachable dirs; regenerate
    replay fixtures. (S)
 3. **[R-P1-1, R-P1-3, R-P1-2] Total decode + terminal room states +

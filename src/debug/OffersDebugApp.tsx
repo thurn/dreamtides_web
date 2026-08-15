@@ -19,8 +19,8 @@ import { token } from "../cumulus/primitives/tokens";
 import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
 import auguryJson from "../generated/config/augury-data.json";
 import { auguryArchetype, parseAuguryData } from "../data/augury-data";
-import { MERCHANT_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
-import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
+import { AUGURY_ARCHETYPE_BUILDERS } from "../journey_v2/archetypes/registry";
+import type { AuguryArchetypeId } from "../journey_v2/archetypes/types";
 import {
   parseCardId,
   parseCardName,
@@ -157,7 +157,7 @@ const DREAMSIGN = {
 /** One maximal, production-shaped UUID-backed specimen per canonical archetype. */
 export function buildOfferTileDebugModels(
   sitesData: SitesData,
-): Readonly<Record<MerchantArchetypeId, OfferTileModel>> {
+): Readonly<Record<AuguryArchetypeId, OfferTileModel>> {
   return {
     fit_card_grant: {
       id: parseOfferTileId("debug:fit_card_grant"),
@@ -235,7 +235,7 @@ export function buildOfferTileDebugModels(
 
 /** Debug-only explanation of the maximal live offer shape each tile represents. */
 export const OFFER_TILE_DEBUG_NOTES: Readonly<
-  Record<MerchantArchetypeId, string>
+  Record<AuguryArchetypeId, string>
 > = {
   fit_card_grant: "1 preselected card",
   fit_card_draft: "4 choices · all shown",
@@ -253,7 +253,7 @@ export const OFFER_TILE_DEBUG_NOTES: Readonly<
 };
 
 /** One representative archetype for each distinct player-facing tile shape. */
-export const OFFER_TILE_DEBUG_ARCHETYPE_IDS = MERCHANT_ARCHETYPE_BUILDERS.map(
+export const OFFER_TILE_DEBUG_ARCHETYPE_IDS = AUGURY_ARCHETYPE_BUILDERS.map(
   (builder) => builder.archetypeId,
 ).filter((archetypeId) => archetypeId !== "strong_card");
 

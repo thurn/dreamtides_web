@@ -22,10 +22,10 @@ import type { DraftState } from "../types/draft";
 import type { GambleGameId, GravokGateId } from "../types/gamble";
 import { deriveEntryIdCounter } from "./deck-entry-ids";
 import type {
-  MerchantAcceptRequest,
-  MerchantArchetypeId,
-  MerchantDeclineRequest,
-  MerchantOfferActionResult,
+  AuguryAcceptRequest,
+  AuguryArchetypeId,
+  AuguryDeclineRequest,
+  AuguryOfferActionResult,
 } from "../journey_v2";
 import type { SiteId } from "../types/identifiers";
 import type { ShuffleCommitment } from "../types/identifiers";
@@ -204,13 +204,13 @@ export interface JourneyMutations {
    * visit-tracking bookkeeping.
    */
   completeAugurySite: (siteId: SiteId) => void;
-  acceptDreamMerchantOffer: (
+  acceptAuguryOffer: (
     siteId: SiteId,
-    request: MerchantAcceptRequest,
-  ) => MerchantOfferActionResult | void;
-  declineDreamMerchant: (
+    request: AuguryAcceptRequest,
+  ) => AuguryOfferActionResult | void;
+  declineAugury: (
     siteId: SiteId,
-    request: MerchantDeclineRequest,
+    request: AuguryDeclineRequest,
   ) => void;
   /**
    * Debug-only: regenerates the Augury encounter for a site using the
@@ -231,7 +231,7 @@ export interface JourneyMutations {
    */
   forceAuguryArchetype?: (
     siteId: SiteId,
-    archetypeId: MerchantArchetypeId | null,
+    archetypeId: AuguryArchetypeId | null,
   ) => void;
   pickDraftCard: (siteId: SiteId, cardNumber: number) => void;
   /** Requests a shared debug reroll of the displayed offer at an active draft site. */

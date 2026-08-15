@@ -8,15 +8,15 @@ import type {
   SiteState,
 } from "../../types/journey";
 import type {
-  MerchantContext,
-  MerchantCatalogCard,
-  MerchantDeckCard,
+  AuguryContext,
+  AuguryCatalogCard,
+  AuguryDeckCard,
 } from "../types";
 import { buildRewardSelectionContext } from "../../reward-selection";
 import type { CardId } from "../../types/card-identity";
 import type { DeckEntryId, DreamsignId } from "../../types/identifiers";
 
-interface BuildMerchantContextInput {
+interface BuildAuguryContextInput {
   journeyState: JourneyState;
   journeyContent: JourneyContent;
   site: SiteState;
@@ -37,7 +37,7 @@ function buildCardByUuid(
 function projectDeckCard(
   deckEntry: DeckEntry,
   cardByNumber: ReadonlyMap<number, CardData>,
-): MerchantDeckCard | null {
+): AuguryDeckCard | null {
   const card = cardByNumber.get(deckEntry.cardNumber);
   if (card === undefined) return null;
 
@@ -57,7 +57,7 @@ function isGrantCandidate(card: CardData): boolean {
   return card.rarity !== "Starter" && card.rarity !== "Special";
 }
 
-function projectCatalogCard(card: CardData): MerchantCatalogCard {
+function projectCatalogCard(card: CardData): AuguryCatalogCard {
   return {
     objectType: "catalogCard",
     cardUuid: card.id,
@@ -126,21 +126,21 @@ function isAvailableDreamsignTemplate(
   );
 }
 
-export function buildMerchantContext({
+export function buildAuguryContext({
   journeyState,
   journeyContent,
   site,
-}: BuildMerchantContextInput): MerchantContext {
+}: BuildAuguryContextInput): AuguryContext {
   const cardByNumber = new Map(journeyContent.cardDatabase);
   const cardByUuid = buildCardByUuid(cardByNumber);
 
   const deckCards = Object.freeze(
     journeyState.deck
       .map((deckEntry) => projectDeckCard(deckEntry, cardByNumber))
-      .filter((deckCard): deckCard is MerchantDeckCard => deckCard !== null),
+      .filter((deckCard): deckCard is AuguryDeckCard => deckCard !== null),
   );
 
-  const deckEntryById = new Map<DeckEntryId, MerchantDeckCard>();
+  const deckEntryById = new Map<DeckEntryId, AuguryDeckCard>();
   const ownedCardUuids = new Set<CardId>();
   for (const deckCard of deckCards) {
     deckEntryById.set(deckCard.entryId, deckCard);

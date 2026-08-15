@@ -5,9 +5,9 @@ import type { CardData } from "../../types/cards";
 import type { CardId } from "../../types/card-identity";
 import type { JourneyState, SiteState } from "../../types/journey";
 import {
-  buildMerchantContext,
-  generateMerchantEncounter,
-  isTransfigurationMerchantArchetype,
+  buildAuguryContext,
+  generateAuguryEncounter,
+  isTransfigurationAuguryArchetype,
 } from "../../journey_v2";
 
 function explorationOffersTransfiguration(
@@ -50,15 +50,15 @@ export function createCardTutorialGuidanceContentProvider(
       }
       if (site.type !== "Augury") return false;
       try {
-        const encounter = generateMerchantEncounter(
-          buildMerchantContext({
+        const encounter = generateAuguryEncounter(
+          buildAuguryContext({
             journeyState: journey,
             journeyContent: content,
             site,
           }),
         );
         return encounter.offers.some((offer) =>
-          isTransfigurationMerchantArchetype(offer.archetypeId),
+          isTransfigurationAuguryArchetype(offer.archetypeId),
         );
       } catch {
         return false;

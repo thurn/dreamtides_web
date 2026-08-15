@@ -6,22 +6,22 @@ import type { JourneyContent } from "../../data/journey-content";
 import type { CardData } from "../../types/cards";
 import type { JourneyState, SiteState } from "../../types/journey";
 import { LayerName } from "../../types/layer-name";
-import { buildMerchantContext } from "../context/buildMerchantContext";
+import { buildAuguryContext } from "../context/buildAuguryContext";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
-  makeMerchantTestDreamsignTemplate,
-  makeMerchantTestJourneyState,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDeckEntry,
+  makeAuguryTestDreamsignTemplate,
+  makeAuguryTestJourneyState,
+  makeAuguryTestSite,
 } from "../testing/fixtures";
-import type { MerchantAcceptRequest, MerchantOffer } from "../types";
-import { generateMerchantEncounter } from "./generateMerchantEncounter";
+import type { AuguryAcceptRequest, AuguryOffer } from "../types";
+import { generateAuguryEncounter } from "./generateAuguryEncounter";
 import {
-  applyMerchantPayloadToState,
-  resolveMerchantDecline,
-  resolveMerchantOffer,
-} from "./resolveMerchantOffer";
+  applyAuguryPayloadToState,
+  resolveAuguryDecline,
+  resolveAuguryOffer,
+} from "./resolveAuguryOffer";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
@@ -33,7 +33,7 @@ function poolCards(count: number): CardData[] {
     const cardNumber = 1000 + i;
     const id = `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`;
     cards.push(
-      makeMerchantTestCard({
+      makeAuguryTestCard({
         id: testCardId(id),
         cardNumber,
         name: parseCardName(`Pool ${String(cardNumber)}`),
@@ -48,7 +48,7 @@ function dreamsignFixture(count: number) {
   for (let i = 0; i < count; i += 1) {
     const id = `dsign-${String(i)}`;
     templates.push(
-      makeMerchantTestDreamsignTemplate({
+      makeAuguryTestDreamsignTemplate({
         id: testDreamsignId(id),
         name: `Sign ${String(i)}`,
       }),
@@ -62,23 +62,23 @@ function makeFixture(overrides: { seed?: string } = {}): {
   journeyContent: JourneyContent;
   site: SiteState;
 } {
-  const site = makeMerchantTestSite({
-    id: parseSiteId("site-merchant-resolve"),
+  const site = makeAuguryTestSite({
+    id: parseSiteId("site-augury-resolve"),
     type: "Augury",
   });
   const cards = poolCards(30);
   const templates = dreamsignFixture(10);
-  const journeyContent = makeMerchantTestContent({
+  const journeyContent = makeAuguryTestContent({
     cards,
     dreamsignTemplates: templates,
   });
-  const state = makeMerchantTestJourneyState({
-    seed: testJourneySeed(overrides.seed ?? "merchant-resolve-seed"),
+  const state = makeAuguryTestJourneyState({
+    seed: testJourneySeed(overrides.seed ?? "augury-resolve-seed"),
     currentDreamscape: parseAtlasNodeId("dreamscape-a"),
     screen: { type: "site", siteId: site.id },
     activeSiteId: site.id,
     deck: [1000, 1001, 1002, 1003, 1004, 1005].map((cardNumber, index) =>
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId(`deck-${String(index + 1)}`),
         cardNumber,
       }),
@@ -114,8 +114,8 @@ function encounterFor(fixture: {
   journeyContent: JourneyContent;
   site: SiteState;
 }) {
-  return generateMerchantEncounter(
-    buildMerchantContext({
+  return generateAuguryEncounter(
+    buildAuguryContext({
       journeyState: fixture.state,
       journeyContent: fixture.journeyContent,
       site: fixture.site,
@@ -123,7 +123,7 @@ function encounterFor(fixture: {
   );
 }
 
-function requestFor(offer: MerchantOffer): MerchantAcceptRequest {
+function requestFor(offer: AuguryOffer): AuguryAcceptRequest {
   return {
     encounterSignature: offer.encounterSignature,
     offerId: offer.offerId,
@@ -131,12 +131,12 @@ function requestFor(offer: MerchantOffer): MerchantAcceptRequest {
   };
 }
 
-describe("resolveMerchantOffer", () => {
+describe("resolveAuguryOffer", () => {
   it("rejects a stale signature and leaves state untouched", () => {
     const fixture = makeFixture();
     const encounter = encounterFor(fixture);
     const offer = encounter.offers[0];
-    const result = resolveMerchantOffer({
+    const result = resolveAuguryOffer({
       state: fixture.state,
       journeyContent: fixture.journeyContent,
       site: fixture.site,
@@ -155,7 +155,7 @@ describe("resolveMerchantOffer", () => {
     const offer = encounter.offers[0];
     const wrongArchetype =
       offer.archetypeId === "strong_card" ? "dreamsign" : "strong_card";
-    const result = resolveMerchantOffer({
+    const result = resolveAuguryOffer({
       state: fixture.state,
       journeyContent: fixture.journeyContent,
       site: fixture.site,
@@ -182,14 +182,14 @@ describe("resolveMerchantOffer", () => {
     const directPayload = directOffer.applyPayload;
     expect(directPayload).toBeDefined();
     if (directPayload === undefined) return;
-    const expectedRewardState = applyMerchantPayloadToState({
+    const expectedRewardState = applyAuguryPayloadToState({
       state: fixture.state,
       journeyContent: fixture.journeyContent,
       payload: directPayload,
     });
     expect(expectedRewardState).not.toBeNull();
     if (expectedRewardState === null) return;
-    const result = resolveMerchantOffer({
+    const result = resolveAuguryOffer({
       state: fixture.state,
       journeyContent: fixture.journeyContent,
       site: fixture.site,
@@ -224,7 +224,7 @@ describe("resolveMerchantOffer", () => {
   it("declines without mutating deck or dreamsigns and completes the site", () => {
     const fixture = makeFixture();
     const encounter = encounterFor(fixture);
-    const result = resolveMerchantDecline({
+    const result = resolveAuguryDecline({
       state: fixture.state,
       journeyContent: fixture.journeyContent,
       site: fixture.site,
@@ -245,13 +245,13 @@ describe("resolveMerchantOffer", () => {
   });
 });
 
-describe("applyMerchantPayloadToState", () => {
+describe("applyAuguryPayloadToState", () => {
   it("appends a catalog card to the deck", () => {
     const fixture = makeFixture();
     const card = fixture.journeyContent.cardDatabase.get(1000);
     expect(card).toBeDefined();
     if (card === undefined) return;
-    const next = applyMerchantPayloadToState({
+    const next = applyAuguryPayloadToState({
       state: fixture.state,
       journeyContent: fixture.journeyContent,
       payload: {
@@ -266,7 +266,7 @@ describe("applyMerchantPayloadToState", () => {
 
   it("adds a site to the current dreamscape", () => {
     const fixture = makeFixture();
-    const next = applyMerchantPayloadToState({
+    const next = applyAuguryPayloadToState({
       state: fixture.state,
       journeyContent: fixture.journeyContent,
       payload: { kind: "add_site", siteType: "Shop" },

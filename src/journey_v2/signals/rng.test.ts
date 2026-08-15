@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { bandSample, merchantRng, weightedSample } from "./rng";
+import { bandSample, auguryRng, weightedSample } from "./rng";
 
 type ScoredItemId = `item-${number}`;
 
@@ -15,9 +15,9 @@ function makeItems(count: number): ScoredItem[] {
   }));
 }
 
-describe("merchantRng", () => {
+describe("auguryRng", () => {
   it("produces values in [0, 1)", () => {
-    const rng = merchantRng("seed", "site", "A");
+    const rng = auguryRng("seed", "site", "A");
     for (let i = 0; i < 100; i += 1) {
       const value = rng();
       expect(value).toBeGreaterThanOrEqual(0);
@@ -26,23 +26,23 @@ describe("merchantRng", () => {
   });
 
   it("is deterministic: same salt yields identical sequences", () => {
-    const a = merchantRng("seed", "site", "A");
-    const b = merchantRng("seed", "site", "A");
+    const a = auguryRng("seed", "site", "A");
+    const b = auguryRng("seed", "site", "A");
     const seqA = Array.from({ length: 20 }, () => a());
     const seqB = Array.from({ length: 20 }, () => b());
     expect(seqA).toEqual(seqB);
   });
 
   it("diverges for different salts", () => {
-    const a = merchantRng("seed", "site", "A");
-    const b = merchantRng("seed", "site", "B");
+    const a = auguryRng("seed", "site", "A");
+    const b = auguryRng("seed", "site", "B");
     const seqA = Array.from({ length: 10 }, () => a());
     const seqB = Array.from({ length: 10 }, () => b());
     expect(seqA).not.toEqual(seqB);
   });
 
   it("advances per call via the internal counter", () => {
-    const rng = merchantRng("seed");
+    const rng = auguryRng("seed");
     const first = rng();
     const second = rng();
     expect(first).not.toEqual(second);
@@ -52,11 +52,11 @@ describe("merchantRng", () => {
 describe("bandSample", () => {
   it("is deterministic for the same salt", () => {
     const items = makeItems(20);
-    const resultA = bandSample(items, (t) => t.score, 3, merchantRng("s", "x"), {
+    const resultA = bandSample(items, (t) => t.score, 3, auguryRng("s", "x"), {
       bandFraction: 0.25,
       bandMinimum: 5,
     });
-    const resultB = bandSample(items, (t) => t.score, 3, merchantRng("s", "x"), {
+    const resultB = bandSample(items, (t) => t.score, 3, auguryRng("s", "x"), {
       bandFraction: 0.25,
       bandMinimum: 5,
     });
@@ -72,7 +72,7 @@ describe("bandSample", () => {
     const sortedScores = items.map((t) => t.score).sort((a, b) => b - a);
     const worstInBandScore = sortedScores[bandSize - 1];
     for (let seed = 0; seed < 50; seed += 1) {
-      const picks = bandSample(items, (t) => t.score, 3, merchantRng("floor", String(seed)), {
+      const picks = bandSample(items, (t) => t.score, 3, auguryRng("floor", String(seed)), {
         bandFraction,
         bandMinimum,
       });
@@ -89,7 +89,7 @@ describe("bandSample", () => {
     const items = makeItems(20);
     const firstPicks = new Set<ScoredItemId>();
     for (let seed = 0; seed < 200; seed += 1) {
-      const picks = bandSample(items, (t) => t.score, 3, merchantRng("dist", String(seed)), {
+      const picks = bandSample(items, (t) => t.score, 3, auguryRng("dist", String(seed)), {
         bandFraction: 0.25,
         bandMinimum: 5,
       });
@@ -100,7 +100,7 @@ describe("bandSample", () => {
 
   it("returns fewer items when the band is smaller than count", () => {
     const items = makeItems(3);
-    const picks = bandSample(items, (t) => t.score, 5, merchantRng("small"), {
+    const picks = bandSample(items, (t) => t.score, 5, auguryRng("small"), {
       bandFraction: 0.25,
       bandMinimum: 5,
     });
@@ -109,14 +109,14 @@ describe("bandSample", () => {
   });
 
   it("returns an empty array for empty input", () => {
-    const picks = bandSample([] as ScoredItem[], (t) => t.score, 3, merchantRng("empty"));
+    const picks = bandSample([] as ScoredItem[], (t) => t.score, 3, auguryRng("empty"));
     expect(picks).toEqual([]);
   });
 });
 
 describe("weightedSample", () => {
   it("returns null for an empty list", () => {
-    expect(weightedSample([] as ScoredItem[], () => 1, merchantRng("w"))).toBeNull();
+    expect(weightedSample([] as ScoredItem[], () => 1, auguryRng("w"))).toBeNull();
   });
 
   it("picks the heavy item 60-95% of the time over 500 seeds with 9:1 weights", () => {
@@ -126,7 +126,7 @@ describe("weightedSample", () => {
     ];
     let heavyCount = 0;
     for (let seed = 0; seed < 500; seed += 1) {
-      const pick = weightedSample(items, (t) => t.score, merchantRng("weighted", String(seed)));
+      const pick = weightedSample(items, (t) => t.score, auguryRng("weighted", String(seed)));
       if (pick?.id === "heavy") {
         heavyCount += 1;
       }
@@ -142,7 +142,7 @@ describe("weightedSample", () => {
       { id: "only", score: 1 },
     ];
     for (let seed = 0; seed < 50; seed += 1) {
-      const pick = weightedSample(items, (t) => t.score, merchantRng("zero", String(seed)));
+      const pick = weightedSample(items, (t) => t.score, auguryRng("zero", String(seed)));
       expect(pick?.id).toBe("only");
     }
   });

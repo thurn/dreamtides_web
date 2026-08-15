@@ -1042,51 +1042,51 @@ describe("SET_CARD_SOURCE_DEBUG", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Merchant offers (provider-seam delegated)
+// Augury offers (provider-seam delegated)
 // ---------------------------------------------------------------------------
 
-describe("merchant offers", () => {
-  it("ACCEPT_MERCHANT_OFFER delegates to the provider and applies its state", () => {
+describe("augury offers", () => {
+  it("ACCEPT_AUGURY_OFFER delegates to the provider and applies its state", () => {
     const provider: SiteContentProvider = {
       sitesData: MINIMAL_SITES_DATA,
       openSite() {
         return null;
       },
-      resolveMerchant({ journey, action }) {
+      resolveAugury({ journey, action }) {
         return action === "accept" ? { ...journey, essence: 499 } : null;
       },
     };
     registerSiteContentProvider(provider);
     const state = stateWith([makeSite("Augury")]);
-    const result = reduce(state, "ACCEPT_MERCHANT_OFFER", {
+    const result = reduce(state, "ACCEPT_AUGURY_OFFER", {
       siteId: SITE_ID,
     });
     expect(result.outcome).toBe("applied");
     expect(result.state.journey.essence).toBe(499);
   });
 
-  it("ACCEPT_MERCHANT_OFFER bounces when the provider returns null", () => {
+  it("ACCEPT_AUGURY_OFFER bounces when the provider returns null", () => {
     const provider: SiteContentProvider = {
       sitesData: MINIMAL_SITES_DATA,
       openSite() {
         return null;
       },
-      resolveMerchant() {
+      resolveAugury() {
         return null;
       },
     };
     registerSiteContentProvider(provider);
     const state = stateWith([makeSite("Augury")]);
     expect(
-      reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: SITE_ID })
+      reduce(state, "ACCEPT_AUGURY_OFFER", { siteId: SITE_ID })
         .outcome,
     ).toBe("bounced");
   });
 
-  it("ACCEPT_MERCHANT_OFFER bounces with no provider or unknown site", () => {
+  it("ACCEPT_AUGURY_OFFER bounces with no provider or unknown site", () => {
     const state = stateWith([makeSite("Augury")]);
     expect(
-      reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: SITE_ID })
+      reduce(state, "ACCEPT_AUGURY_OFFER", { siteId: SITE_ID })
         .outcome,
     ).toBe("bounced");
     const provider: SiteContentProvider = {
@@ -1094,24 +1094,24 @@ describe("merchant offers", () => {
       openSite() {
         return null;
       },
-      resolveMerchant({ journey }) {
+      resolveAugury({ journey }) {
         return { ...journey };
       },
     };
     registerSiteContentProvider(provider);
     expect(
-      reduce(state, "ACCEPT_MERCHANT_OFFER", { siteId: parseSiteId("missing") })
+      reduce(state, "ACCEPT_AUGURY_OFFER", { siteId: parseSiteId("missing") })
         .outcome,
     ).toBe("bounced");
   });
 
-  it("DECLINE_MERCHANT delegates to the provider", () => {
+  it("DECLINE_AUGURY delegates to the provider", () => {
     const provider: SiteContentProvider = {
       sitesData: MINIMAL_SITES_DATA,
       openSite() {
         return null;
       },
-      resolveMerchant({ journey, action }) {
+      resolveAugury({ journey, action }) {
         return action === "decline"
           ? {
               ...journey,
@@ -1122,7 +1122,7 @@ describe("merchant offers", () => {
     };
     registerSiteContentProvider(provider);
     const state = stateWith([makeSite("Augury")]);
-    const result = reduce(state, "DECLINE_MERCHANT", {
+    const result = reduce(state, "DECLINE_AUGURY", {
       siteId: SITE_ID,
     });
     expect(result.outcome).toBe("applied");

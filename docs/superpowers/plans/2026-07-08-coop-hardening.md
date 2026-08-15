@@ -339,11 +339,11 @@ it("assertJsonSafe names the path of an undefined value / NaN", ...);
 
 ### Task 5: CI, convergence coverage, and the hygiene tail
 
-Fixes audit findings **P1-10** (CI runs zero tests; chaos storm toy-only), **P2-7** (room-create overwrite), **P2-8** (AI presence default), and the P3 items: **P3-2** (client decode bypass), **P3-3** (`Date.parse`), **P3-5** (event-type registries), **P3-6** (rule-2 comment), **P3-8** (merchant entry ids), **P3-9** (bounce `interveningSeqs`), **P3-10** (stale `test:emulator` filter), **P3-11** (debug setter clamps).
+Fixes audit findings **P1-10** (CI runs zero tests; chaos storm toy-only), **P2-7** (room-create overwrite), **P2-8** (AI presence default), and the P3 items: **P3-2** (client decode bypass), **P3-3** (`Date.parse`), **P3-5** (event-type registries), **P3-6** (rule-2 comment), **P3-8** (augury entry ids), **P3-9** (bounce `interveningSeqs`), **P3-10** (stale `test:emulator` filter), **P3-11** (debug setter clamps).
 
 **Files:**
 - Create: `.github/workflows/checks.yml`
-- Modify: `src/eventlog/emulator.integration.test.ts` (real-reducer scenario), `src/eventlog/room.ts`, `src/eventlog/subscribe.ts`/`client.ts` (decode path), `src/eventlog/fold.ts` (+`interveningSeqs` on bounced outcomes), `src/battle/ai/ai-may-run-here.ts`, `src/rules/battle/battle-events.ts` (timestamp parse), `src/rules/events.ts` (registry tie), `src/state/resolveMerchantOffer.ts` (entry ids), `src/rules/journey/lifecycle.ts` (clamps), `src/coop/hooks.ts`/`journey-log-sink.ts` (intervening seqs), `package.json`, `eslint.config.js` (`Date.parse` restriction)
+- Modify: `src/eventlog/emulator.integration.test.ts` (real-reducer scenario), `src/eventlog/room.ts`, `src/eventlog/subscribe.ts`/`client.ts` (decode path), `src/eventlog/fold.ts` (+`interveningSeqs` on bounced outcomes), `src/battle/ai/ai-may-run-here.ts`, `src/rules/battle/battle-events.ts` (timestamp parse), `src/rules/events.ts` (registry tie), `src/state/resolveAuguryOffer.ts` (entry ids), `src/rules/journey/lifecycle.ts` (clamps), `src/coop/hooks.ts`/`journey-log-sink.ts` (intervening seqs), `package.json`, `eslint.config.js` (`Date.parse` restriction)
 - Test: respective suites
 
 **Interfaces:**
@@ -370,7 +370,7 @@ export function isoTimestampToMs(timestamp: string): number | null;
 
 **Pinned real-reducer convergence scenario** (in `emulator.integration.test.ts`): register the deterministic fixture providers (`registerReplayFixtureProviders` from `src/rules/replay/fixture-providers.ts` — real `GAME_ENGINE_CONFIG`, synthetic content, no TOML dependence per Global Constraints) and run a two-client storm of real journey events (`START_JOURNEY`, `SELECT_DREAM_AVATAR`, `ADJUST_ESSENCE`, `OPEN_SITE`, `ENTER_DRAFT_SITE`, `PICK_DRAFT_CARD`, interleaved invalid/stale intents) asserting: identical final hashes on both clients and on a third client that joins only after compaction has run, dense seqs, zero thrown errors. Clear providers in `afterAll`.
 
-**Pinned small fixes:** AI gate returns `false` while presence is unknown (`ai-may-run-here.ts:40-45`; update its tests); merchant entries mint through `mintEntryId` (`deck.ts:116`) with fixtures regenerated; `setMaxDreamsigns`/`setCompletionLevel` clamp to non-negative integers; the rule-2 doc comment in `reducer.ts` states the real invariant ("no CAS-exempt type alters decision-relevant battle state — notes mutate `cardInstances[id].notes` only"); event-type registries tied with a compile-time check, e.g.:
+**Pinned small fixes:** AI gate returns `false` while presence is unknown (`ai-may-run-here.ts:40-45`; update its tests); augury entries mint through `mintEntryId` (`deck.ts:116`) with fixtures regenerated; `setMaxDreamsigns`/`setCompletionLevel` clamp to non-negative integers; the rule-2 doc comment in `reducer.ts` states the real invariant ("no CAS-exempt type alters decision-relevant battle state — notes mutate `cardInstances[id].notes` only"); event-type registries tied with a compile-time check, e.g.:
 
 ```ts
 const _exhaustive: Record<keyof EventPayloads, true> = KNOWN_EVENT_TYPES_AS_OBJECT; // fails to compile on drift
@@ -379,7 +379,7 @@ const _exhaustive: Record<keyof EventPayloads, true> = KNOWN_EVENT_TYPES_AS_OBJE
 plus a unit test asserting every `KNOWN_EVENT_TYPES` member routes to a non-default `routeDomain` case or is explicitly listed as intentionally unrouted. Client decode path: `LogNode.baseSnapshot` carries the **raw string** (`string | null`); `client.ts` `baseState` calls `config.decode(raw)`; compaction and client now share one decode path (`subscribe.ts` stops pre-parsing it; the `LogNode | null` corrupt-node contract from Task 2 is unchanged). Lint: add `Date.parse` to the `no-restricted-properties` list for `src/rules/**` with a message pointing at `isoTimestampToMs`. Two document-only items from the audit: a comment on `appendEvent`'s null-first-call abort (`append.ts:121-131`) naming the invariant it leans on (the live subscription warms the RTDB cache before `submit` is reachable), and a comment where `EventContext.rng` is defined stating the one-rng-consumer-per-event convention (two consumers at one seq would correlate draws — audit P3-4).
 
 - [ ] **Step 1: Write the failing tests** for the code changes (room existence, AI unknown-presence, `isoTimestampToMs` strictness incl. rejecting `"July 8 2026"`, intervening-seqs threading to `recordBounce`, decode-path symmetry with a non-identity toy `decode`, registry exhaustiveness compile check).
-- [ ] **Step 2: Run to verify failures, implement, re-run green.** Regenerate replay fixtures for the merchant entry-id change.
+- [ ] **Step 2: Run to verify failures, implement, re-run green.** Regenerate replay fixtures for the augury entry-id change.
 - [ ] **Step 3: Add the CI workflow + emulator scenario.** Verify locally: `npm run test:emulator` green including the new real-reducer scenario.
 - [ ] **Step 4: Full verification.** `npm run lint && npm run typecheck && npm test && npm run test:emulator`.
 - [ ] **Step 5: Commit and push; confirm the workflow runs green on the pushed branch** (`gh run watch` or `gh run list --branch <branch>`), iterating on the workflow file if the emulator job needs environment fixes.

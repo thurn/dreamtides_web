@@ -1,6 +1,6 @@
 import { assertLocalized } from "@trox/runtime";
 import { useMemo } from "react";
-import type { MerchantArchetypeId } from "../journey_v2";
+import type { AuguryArchetypeId } from "../journey_v2";
 import {
   buildAugurySiteModel,
   resolveAuguryGuide,
@@ -49,7 +49,7 @@ export function useAuguryJourneyMenuActions(
     const forceCategory = mutations.forceAuguryArchetype;
     if (forceCategory !== undefined) {
       const forcedArchetypeId = result.context?.forcedArchetypeId ?? null;
-      const archetypeName = (archetypeId: MerchantArchetypeId) =>
+      const archetypeName = (archetypeId: AuguryArchetypeId) =>
         auguryArchetype(journeyContent.auguryData, archetypeId).name;
       const eligibleArchetypes = [
         ...(result.debug?.eligibleArchetypeIds ?? []),

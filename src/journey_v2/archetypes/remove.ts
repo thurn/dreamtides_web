@@ -1,20 +1,20 @@
-import type { MerchantRng } from "../signals/rng";
+import type { AuguryRng } from "../signals/rng";
 import type {
-  MerchantApplyPayload,
-  MerchantContext,
-  MerchantDeckCard,
+  AuguryApplyPayload,
+  AuguryContext,
+  AuguryDeckCard,
 } from "../types";
-import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import type { AuguryArchetypeBuilder, AuguryOfferDraft } from "./types";
 import {
   augurySelectionPolicy,
   selectionMetadata,
-  selectMerchantReward,
+  selectAuguryReward,
 } from "./sharedSelection";
-import { parseMerchantTargetKey } from "../../types/identifiers";
+import { parseAuguryTargetKey } from "../../types/identifiers";
 
 function removeDeckEntryPayload(
-  card: MerchantDeckCard,
-): Extract<MerchantApplyPayload, { kind: "remove_deck_entry" }> {
+  card: AuguryDeckCard,
+): Extract<AuguryApplyPayload, { kind: "remove_deck_entry" }> {
   return {
     kind: "remove_deck_entry",
     entryId: card.entryId,
@@ -24,7 +24,7 @@ function removeDeckEntryPayload(
 }
 
 /** Purges the lowest leave-one-out affinity entry; rarity is not consulted. */
-export const purgeBuilder: MerchantArchetypeBuilder = {
+export const purgeBuilder: AuguryArchetypeBuilder = {
   archetypeId: "purge",
   family: "remove",
   eligible(context): boolean {
@@ -35,10 +35,10 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
     );
   },
   build(
-    context: MerchantContext,
-    _rng: MerchantRng,
-  ): MerchantOfferDraft | null {
-    const selection = selectMerchantReward({
+    context: AuguryContext,
+    _rng: AuguryRng,
+  ): AuguryOfferDraft | null {
+    const selection = selectAuguryReward({
       context,
       archetypeId: "purge",
       mechanicId: "purge-deck-entry",
@@ -54,7 +54,7 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
       family: "remove",
       gameObjects: [{ ...target }],
       applyPayload: removeDeckEntryPayload(target),
-      targetKey: parseMerchantTargetKey(target.entryId),
+      targetKey: parseAuguryTargetKey(target.entryId),
       ...selectionMetadata(selection),
     };
   },

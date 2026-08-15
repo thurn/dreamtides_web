@@ -2,12 +2,12 @@ import { testJourneySeed } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
 import { parseCardName } from "../types/card-identity";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
-  makeMerchantTestJourneyState,
-  makeMerchantTestResolvedPackage,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDeckEntry,
+  makeAuguryTestJourneyState,
+  makeAuguryTestResolvedPackage,
+  makeAuguryTestSite,
 } from "../journey_v2/testing/fixtures";
 import { buildRewardSelectionContext } from "./context";
 import { selectReward } from "./selectReward";
@@ -23,7 +23,7 @@ const ids = Array.from({ length: 10 }, (_, index) =>
 
 function context(reverse = false): RewardSelectionContext {
   const cards = ids.map((id, index) =>
-    makeMerchantTestCard({
+    makeAuguryTestCard({
       id,
       cardNumber: index + 1,
       name: parseCardName(
@@ -35,23 +35,23 @@ function context(reverse = false): RewardSelectionContext {
     }),
   );
   const ordered = reverse ? [...cards].reverse() : cards;
-  const journey = makeMerchantTestJourneyState({
+  const journey = makeAuguryTestJourneyState({
     seed: testJourneySeed("selection-seed"),
     deck: [
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId("entry-a"),
         cardNumber: 1,
       }),
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId("entry-b"),
         cardNumber: 1,
       }),
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId("entry-c"),
         cardNumber: 2,
       }),
     ],
-    resolvedPackage: makeMerchantTestResolvedPackage({
+    resolvedPackage: makeAuguryTestResolvedPackage({
       draftPoolCopiesByCard: Object.fromEntries(
         cards.map((card) => [String(card.cardNumber), 1]),
       ),
@@ -59,8 +59,8 @@ function context(reverse = false): RewardSelectionContext {
   });
   return buildRewardSelectionContext({
     journeyState: journey,
-    journeyContent: makeMerchantTestContent({ cards: ordered }),
-    site: makeMerchantTestSite({
+    journeyContent: makeAuguryTestContent({ cards: ordered }),
+    site: makeAuguryTestSite({
       id: parseSiteId("selection-site"),
       type: "Exploration",
     }),
@@ -69,7 +69,7 @@ function context(reverse = false): RewardSelectionContext {
 
 function legendaryContext(reverse = false): RewardSelectionContext {
   const cards = ids.slice(0, 6).map((id, index) =>
-    makeMerchantTestCard({
+    makeAuguryTestCard({
       id,
       cardNumber: index + 1,
       name: parseCardName(
@@ -78,15 +78,15 @@ function legendaryContext(reverse = false): RewardSelectionContext {
       ...(index === 1 ? {} : { rarity: "Legendary" as const }),
     }),
   );
-  const journey = makeMerchantTestJourneyState({
+  const journey = makeAuguryTestJourneyState({
     seed: testJourneySeed("selection-seed"),
     deck: [
-      makeMerchantTestDeckEntry({
+      makeAuguryTestDeckEntry({
         entryId: parseDeckEntryId("owned-entry"),
         cardNumber: 6,
       }),
     ],
-    resolvedPackage: makeMerchantTestResolvedPackage({
+    resolvedPackage: makeAuguryTestResolvedPackage({
       draftPoolCopiesByCard: Object.fromEntries(
         cards
           .filter((_, index) => index !== 3)
@@ -96,10 +96,10 @@ function legendaryContext(reverse = false): RewardSelectionContext {
   });
   return buildRewardSelectionContext({
     journeyState: journey,
-    journeyContent: makeMerchantTestContent({
+    journeyContent: makeAuguryTestContent({
       cards: reverse ? [...cards].reverse() : cards,
     }),
-    site: makeMerchantTestSite({
+    site: makeAuguryTestSite({
       id: parseSiteId("selection-site"),
       type: "Exploration",
     }),
@@ -232,9 +232,9 @@ describe("shared reward selection", () => {
       },
     };
     const customContext = buildRewardSelectionContext({
-      journeyState: makeMerchantTestJourneyState({ seed: testJourneySeed("selection-seed") }),
+      journeyState: makeAuguryTestJourneyState({ seed: testJourneySeed("selection-seed") }),
       journeyContent: content,
-      site: makeMerchantTestSite({
+      site: makeAuguryTestSite({
         id: parseSiteId("selection-site"),
         type: "Exploration",
       }),
@@ -257,15 +257,15 @@ describe("shared reward selection", () => {
   it("includes authored affinity inputs in the content revision", () => {
     const base = context();
     const cards = [...base.content.cardDatabase.values()];
-    const journey = makeMerchantTestJourneyState({ seed: testJourneySeed("selection-seed") });
-    const site = makeMerchantTestSite({
+    const journey = makeAuguryTestJourneyState({ seed: testJourneySeed("selection-seed") });
+    const site = makeAuguryTestSite({
       id: parseSiteId("selection-site"),
       type: "Exploration",
     });
     const withAvatar = buildRewardSelectionContext({
       journeyState: journey,
       journeyContent: {
-        ...makeMerchantTestContent({ cards }),
+        ...makeAuguryTestContent({ cards }),
         avatars: [
           {
             id: testAvatarId("selection-avatar"),

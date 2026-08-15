@@ -1,6 +1,6 @@
 import type { AuguryArchetypeData, AuguryData } from "../types/augury-data";
-import type { MerchantArchetypeId } from "../journey_v2/archetypes/types";
-import type { MerchantOfferFamily } from "../journey_v2/archetypes/types";
+import type { AuguryArchetypeId } from "../journey_v2/archetypes/types";
+import type { AuguryOfferFamily } from "../journey_v2/archetypes/types";
 import type { RewardSelectionPolicyId } from "../reward-selection/types";
 import { hydrateSourceTransport } from "../runtime/localization/runtime";
 import { LocalizedString, SourceMessage } from "@trox/runtime";
@@ -143,7 +143,7 @@ function archetypeFromUnknown(value: unknown): AuguryArchetypeData | null {
     subtitle === null ||
     (backgroundArt !== undefined) !== requiresBackgroundArt ||
     typeof value.enabled !== "boolean" ||
-    !isMerchantOfferFamily(value.family) ||
+    !isAuguryOfferFamily(value.family) ||
     typeof value.weight !== "number" || !Number.isFinite(value.weight) || value.weight <= 0 ||
     !isRewardSelectionPolicyId(value.selectionPolicyId) ||
     !isRecord(value.quantities)
@@ -197,7 +197,7 @@ function requireNonnegativeInteger(value: unknown): number {
   return value;
 }
 
-function isMerchantOfferFamily(value: unknown): value is MerchantOfferFamily {
+function isAuguryOfferFamily(value: unknown): value is AuguryOfferFamily {
   return value === "grant" || value === "improve" || value === "remove" ||
     value === "duplicate" || value === "dreamsign" || value === "site";
 }
@@ -218,7 +218,7 @@ export async function loadAuguryData(): Promise<AuguryData> {
   return parseAuguryData(await response.json());
 }
 
-export function auguryArchetype(data: AuguryData, id: MerchantArchetypeId): AuguryArchetypeData {
+export function auguryArchetype(data: AuguryData, id: AuguryArchetypeId): AuguryArchetypeData {
   const result = data.archetypes.find((entry) => entry.id === id);
   if (result === undefined) throw new Error(`Augury data is missing archetype ${id}`);
   return result;

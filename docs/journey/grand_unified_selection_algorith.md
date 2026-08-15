@@ -249,7 +249,7 @@ and Journey log.
 ### Rarity allocation
 
 The 501 ordinary cards classified during cutover were partitioned by searching
-allocations against the production merchant-quality ordering. The selected
+allocations against the production augury-quality ordering. The selected
 allocation is:
 
 | Rarity | Newly classified cards | Total ordinary pool cards |

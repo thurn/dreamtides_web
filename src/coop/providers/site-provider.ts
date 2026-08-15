@@ -56,12 +56,12 @@ import {
 } from "../../transfiguration/transfiguration-logic";
 import { transfigurationEssenceCost } from "../../transfiguration/transfiguration-pricing";
 import {
-  resolveMerchantDecline,
-  resolveMerchantOffer,
-} from "../../journey_v2/encounter/resolveMerchantOffer";
-import { generateMerchantEncounter } from "../../journey_v2/encounter/generateMerchantEncounter";
-import { buildMerchantContext } from "../../journey_v2/context/buildMerchantContext";
-import type { MerchantChoice } from "../../journey_v2/types";
+  resolveAuguryDecline,
+  resolveAuguryOffer,
+} from "../../journey_v2/encounter/resolveAuguryOffer";
+import { generateAuguryEncounter } from "../../journey_v2/encounter/generateAuguryEncounter";
+import { buildAuguryContext } from "../../journey_v2/context/buildAuguryContext";
+import type { AuguryChoice } from "../../journey_v2/types";
 import { auguryArchetypeIdFromUnknown } from "../../types/identifiers";
 import { mintEntryId } from "../../rules/journey/deck";
 import type {
@@ -94,8 +94,8 @@ function asString(value: unknown): string | null {
   return typeof value === "string" ? value : null;
 }
 
-/** Coerce an optional `{ choiceId }` merchant choice from a raw payload field. */
-function coerceMerchantChoice(value: unknown): MerchantChoice | undefined {
+/** Coerce an optional `{ choiceId }` augury choice from a raw payload field. */
+function coerceAuguryChoice(value: unknown): AuguryChoice | undefined {
   if (typeof value !== "object" || value === null) return undefined;
   const choiceId = (value as { choiceId?: unknown }).choiceId;
   return typeof choiceId === "string"
@@ -655,12 +655,12 @@ export function createSiteContentProvider(
       switch (site.type) {
         case "Augury": {
           if (selectionRulesVersion !== SELECTION_RULES_VERSION) return null;
-          const merchantContext = buildMerchantContext({
+          const auguryContext = buildAuguryContext({
             journeyState: journey,
             journeyContent: content,
             site,
           });
-          const generated = generateMerchantEncounter(merchantContext);
+          const generated = generateAuguryEncounter(auguryContext);
           const selectionContext = buildRewardSelectionContext({
             journeyState: journey,
             journeyContent: content,
@@ -919,13 +919,13 @@ export function createSiteContentProvider(
       };
     },
 
-    // Resolve a Dream Merchant / Augury ACCEPT / DECLINE. The whole
+    // Resolve a Augury / Augury ACCEPT / DECLINE. The whole
     // resolution (encounter regeneration, offer lookup, payload application,
     // site completion) is a PURE function of `(journey, journeyContent, site,
     // request)` — no rng, no clock — so the provider `rng` is unused. Both
     // resolvers regenerate the encounter deterministically from the same journey
     // state the reducer folds against, so two clients resolve identically.
-    resolveMerchant: ({
+    resolveAugury: ({
       journey,
       site,
       action,
@@ -941,10 +941,10 @@ export function createSiteContentProvider(
         ? null
         : parseSelectionRulesVersion(rawSelectionRulesVersion);
       if (encounterSignature === null || offerId === null) return null;
-      const choice = coerceMerchantChoice(payload.choice);
+      const choice = coerceAuguryChoice(payload.choice);
 
       if (action === "decline") {
-        const result = resolveMerchantDecline({
+        const result = resolveAuguryDecline({
           state: journey,
           journeyContent: content,
           site,
@@ -962,7 +962,7 @@ export function createSiteContentProvider(
 
       const archetypeId = auguryArchetypeIdFromUnknown(payload.archetypeId);
       if (archetypeId === null) return null;
-      const result = resolveMerchantOffer({
+      const result = resolveAuguryOffer({
         state: journey,
         journeyContent: content,
         site,

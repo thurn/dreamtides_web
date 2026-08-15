@@ -1,11 +1,11 @@
 import { testJourneySeed } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
-  makeMerchantTestJourneyState,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDeckEntry,
+  makeAuguryTestJourneyState,
+  makeAuguryTestSite,
 } from "../journey_v2/testing/fixtures";
 import type { CardData } from "../types/cards";
 import type { JourneyContent } from "../data/journey-content";
@@ -39,7 +39,7 @@ function card(
 ): CardData {
   const id = CARD_IDS[index];
   if (id === undefined) throw new Error("Missing synthetic card UUID");
-  return makeMerchantTestCard({
+  return makeAuguryTestCard({
     id,
     cardNumber: index + 1,
     cardType,
@@ -59,33 +59,33 @@ function contentFixture(reverse = false): JourneyContent {
     card(3, "Event", ""),
     card(4, "Event", ""),
   ];
-  return makeMerchantTestContent({ cards: reverse ? cards.reverse() : cards });
+  return makeAuguryTestContent({ cards: reverse ? cards.reverse() : cards });
 }
 
 function journeyFixture(reverse = false): JourneyState {
   const deck = [
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-warrior-a"),
       cardNumber: 1,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-warrior-b"),
       cardNumber: 1,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-event"),
       cardNumber: 2,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-starter"),
       cardNumber: 3,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-nightmare"),
       cardNumber: 4,
       isBane: true,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-prior-override"),
       cardNumber: 5,
       typeChange: {
@@ -96,13 +96,13 @@ function journeyFixture(reverse = false): JourneyState {
       },
     }),
   ];
-  return makeMerchantTestJourneyState({
+  return makeAuguryTestJourneyState({
     seed: testJourneySeed("random-deck-target-plan-test"),
     deck: reverse ? deck.reverse() : deck,
   });
 }
 
-const site = makeMerchantTestSite({
+const site = makeAuguryTestSite({
   id: parseSiteId("random-deck-target-site"),
   type: "Exploration",
 });
@@ -284,14 +284,14 @@ describe("Exploration random deck target plan", () => {
 
   it("keeps duplicate base-card UUID entries as distinct replacement targets", () => {
     const plan = prepareReplacement({
-      journey: makeMerchantTestJourneyState({
+      journey: makeAuguryTestJourneyState({
         seed: testJourneySeed("random-deck-target-plan-test"),
         deck: [
-          makeMerchantTestDeckEntry({
+          makeAuguryTestDeckEntry({
             entryId: parseDeckEntryId("entry-warrior-a"),
             cardNumber: 1,
           }),
-          makeMerchantTestDeckEntry({
+          makeAuguryTestDeckEntry({
             entryId: parseDeckEntryId("entry-warrior-b"),
             cardNumber: 1,
           }),
@@ -411,7 +411,7 @@ describe("Exploration random deck target plan", () => {
       encounterCardId: testCardId("b0000000-0000-4000-8000-000000000098"),
     });
     const differentSite = prepareReplacement({
-      site: makeMerchantTestSite({
+      site: makeAuguryTestSite({
         id: parseSiteId("other-random-deck-target-site"),
         type: "Exploration",
       }),
@@ -423,7 +423,7 @@ describe("Exploration random deck target plan", () => {
           : candidate,
     );
     const differentContent = prepareReplacement({
-      content: makeMerchantTestContent({ cards: revisedCards }),
+      content: makeAuguryTestContent({ cards: revisedCards }),
     });
 
     for (const changed of [

@@ -122,7 +122,7 @@ function findEntry(
  * distinguishes multiple entries minted by one event so they never collide.
  *
  * THE single entry-id minting scheme: every case that mints a deck entry —
- * `ADD_CARD`/`ADD_DREAMSIGN`-adjacent cases here, `BUY_SHOP_SLOT`/merchant
+ * `ADD_CARD`/`ADD_DREAMSIGN`-adjacent cases here, `BUY_SHOP_SLOT`/augury
  * resolution in shop.ts, `PURGE_...`-adjacent grants in sites.ts, and
  * `PICK_DRAFT_CARD` in draft.ts — mints through this function with its own
  * event's `seq`, so no second, independently-evolving id scheme exists in

@@ -354,7 +354,7 @@ Update/author the purge pricing test to pin the doc's economy anchors as a small
 
 - [ ] **Step 5: Nightmare into Purge; retire Cleanse.** Remove the `Cleanse` `SiteType` member and its `ScreenRouter` case and screen. Extend the Purge screen to list Nightmare deck entries (`DeckEntry.isBane`) as selectable for removal, priced cheaply/free per the doc. Anything that previously generated a Cleanse site now relies on Purge.
 
-- [ ] **Step 6: Rename Dream Journey → Augury.** Rename the `SiteType` member, the runtime discriminant/kind if it embeds the name, screen/route labels, and log event names. The underlying merchant/journey mechanics stay; only the name changes. Keep `src/journey_v2` internals; update player-facing strings + type names.
+- [ ] **Step 6: Rename Dream Journey → Augury.** Rename the `SiteType` member, the runtime discriminant/kind if it embeds the name, screen/route labels, and log event names. The underlying augury/journey mechanics stay; only the name changes. Keep `src/journey_v2` internals; update player-facing strings + type names.
 
 - [ ] **Step 7: Dreamsign Bazaar + Dreamsign Revelation.** Dreamsign Bazaar: a Shop variant that sells dreamsigns for essence (3 items + 50-essence restock) reusing `ShopScreen` + dreamsign pool. Dreamsign Revelation: route to the existing dreamsign offering screen (1 random, or choice-of-3; home dreamscape → always a choice). Add both `ScreenRouter` cases.
 

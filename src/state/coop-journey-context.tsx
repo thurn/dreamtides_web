@@ -14,7 +14,7 @@
 // Fields the reducer reads that the typed facade does not surface (e.g.
 // `purgeIndex` on ACCEPT_REWARD / ACCEPT_DREAMSIGN_OFFER / BUY_SHOP_SLOT, the
 // optional transfiguration `type`, `essenceCost` on REROLL_SHOP, and the
-// merchant request fields) are appended directly via `useAppend()`; the reducer
+// augury request fields) are appended directly via `useAppend()`; the reducer
 // re-validates every raw payload, so a raw append is equivalent to a facade call
 // with the extra fields present.
 //
@@ -498,11 +498,11 @@ export function CoopJourneyProvider({
       forceAuguryArchetype: (siteId, archetypeId) =>
         // archetypeId may be null (clear the force); the reducer accepts it.
         emit("FORCE_AUGURY_ARCHETYPE", { siteId, archetypeId }),
-      acceptDreamMerchantOffer: (siteId, request) => {
-        emit("ACCEPT_MERCHANT_OFFER", { siteId, ...request });
+      acceptAuguryOffer: (siteId, request) => {
+        emit("ACCEPT_AUGURY_OFFER", { siteId, ...request });
       },
-      declineDreamMerchant: (siteId, request) => {
-        emit("DECLINE_MERCHANT", { siteId, ...request });
+      declineAugury: (siteId, request) => {
+        emit("DECLINE_AUGURY", { siteId, ...request });
       },
 
       // ---- shop ----

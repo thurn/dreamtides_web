@@ -1,13 +1,13 @@
-import type { MerchantRng } from "../signals/rng";
-import type { MerchantContext } from "../types";
-import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+import type { AuguryRng } from "../signals/rng";
+import type { AuguryContext } from "../types";
+import type { AuguryArchetypeBuilder, AuguryOfferDraft } from "./types";
 import {
   augurySelectionPolicy,
   selectionMetadata,
-  selectMerchantReward,
+  selectAuguryReward,
 } from "./sharedSelection";
-import { MERCHANT_TUNING } from "../tuning";
-import { parseMerchantTargetKey } from "../../types/identifiers";
+import { AUGURY_TUNING } from "../tuning";
+import { parseAuguryTargetKey } from "../../types/identifiers";
 
 /**
  * Sites an encounter can place on the current dreamscape.
@@ -17,32 +17,32 @@ import { parseMerchantTargetKey } from "../../types/identifiers";
  * rewarding/utility sites a player would be excited to add.
  */
 /** Generated compatibility view of the TOML-authored placeable site list. */
-export const MERCHANT_PLACEABLE_SITES = MERCHANT_TUNING.placeableSites;
+export const AUGURY_PLACEABLE_SITES = AUGURY_TUNING.placeableSites;
 
 /**
  * `add_site` — *Add a site to the current dreamscape.*
  *
- * Samples one site uniformly from `MERCHANT_PLACEABLE_SITES` and
+ * Samples one site uniformly from `AUGURY_PLACEABLE_SITES` and
  * adds it to the current dreamscape. The offer title names the site type.
  * Always eligible. Face-up (the offer names the site type).
  *
  * The placement delegates to `addSiteToCurrentDreamscape` via
- * `applyMerchantPayloadToState`, which derives a deterministic id from
+ * `applyAuguryPayloadToState`, which derives a deterministic id from
  * (sourceId, existing site count) so the regenerate-validate-apply pattern
  * remains safe.
  */
-export const addSiteBuilder: MerchantArchetypeBuilder = {
+export const addSiteBuilder: AuguryArchetypeBuilder = {
   archetypeId: "add_site",
   family: "site",
-  eligible(_unused: MerchantContext): boolean {
-    // Always eligible — the merchant can always place a new site.
+  eligible(_unused: AuguryContext): boolean {
+    // Always eligible — the augury can always place a new site.
     return true;
   },
   build(
-    context: MerchantContext,
-    _rng: MerchantRng,
-  ): MerchantOfferDraft | null {
-    const selection = selectMerchantReward({
+    context: AuguryContext,
+    _rng: AuguryRng,
+  ): AuguryOfferDraft | null {
+    const selection = selectAuguryReward({
       context,
       archetypeId: "add_site",
       mechanicId: "add-site",
@@ -64,7 +64,7 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
         kind: "add_site",
         siteType,
       },
-      targetKey: parseMerchantTargetKey(siteType),
+      targetKey: parseAuguryTargetKey(siteType),
       ...selectionMetadata(selection),
     };
   },

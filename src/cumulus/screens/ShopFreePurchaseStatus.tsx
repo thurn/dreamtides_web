@@ -15,7 +15,7 @@ export interface ShopFreePurchaseStatusView {
   readonly freePurchasesRemaining: number;
 }
 
-/** Persistent, accessible status for free purchase benefits at merchant sites. */
+/** Persistent, accessible status for free purchase benefits at augury sites. */
 export function ShopFreePurchaseStatus({
   status,
 }: {

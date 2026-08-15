@@ -120,8 +120,8 @@ export type GambleResultId = DomainIdentity<"GambleResultId">;
 export type GuideId = DomainIdentity<"GuideId">;
 export type JourneyId = DomainIdentity<"JourneyId">;
 export type IntentKey = DomainIdentity<"IntentKey">;
-export type MerchantCategoryId = DomainIdentity<"MerchantCategoryId">;
-export type MerchantTargetKey = DomainIdentity<"MerchantTargetKey">;
+export type AuguryCategoryId = DomainIdentity<"AuguryCategoryId">;
+export type AuguryTargetKey = DomainIdentity<"AuguryTargetKey">;
 export type NoteId = DomainIdentity<"NoteId">;
 export type OfferId = DomainIdentity<"OfferId">;
 export type OfferTileId = DomainIdentity<"OfferTileId">;
@@ -190,8 +190,8 @@ const brandGambleResultId = identityConstructor<GambleResultId>();
 const brandGuideId = identityConstructor<GuideId>();
 const brandJourneyId = identityConstructor<JourneyId>();
 const brandIntentKey = identityConstructor<IntentKey>();
-const brandMerchantCategoryId = identityConstructor<MerchantCategoryId>();
-const brandMerchantTargetKey = identityConstructor<MerchantTargetKey>();
+const brandAuguryCategoryId = identityConstructor<AuguryCategoryId>();
+const brandAuguryTargetKey = identityConstructor<AuguryTargetKey>();
 const brandNoteId = identityConstructor<NoteId>();
 const brandOfferId = identityConstructor<OfferId>();
 const brandOfferTileId = identityConstructor<OfferTileId>();
@@ -377,13 +377,13 @@ export const parseGuideId = identityParser(
 );
 export const parseJourneyId = identityParser("Journey id", brandJourneyId);
 export const parseIntentKey = identityParser("Intent key", brandIntentKey);
-export const parseMerchantCategoryId = identityParser(
-  "Merchant category id",
-  brandMerchantCategoryId,
+export const parseAuguryCategoryId = identityParser(
+  "Augury category id",
+  brandAuguryCategoryId,
 );
-export const parseMerchantTargetKey = identityParser(
-  "Merchant target key",
-  brandMerchantTargetKey,
+export const parseAuguryTargetKey = identityParser(
+  "Augury target key",
+  brandAuguryTargetKey,
 );
 export const parseNoteId = identityParser("Note id", brandNoteId);
 export const parseOfferId = identityParser("Offer id", brandOfferId);
@@ -520,10 +520,10 @@ export const gambleResultIdFromUnknown = identityDecoder(parseGambleResultId);
 export const guideIdFromUnknown = identityDecoder(parseGuideId);
 export const journeyIdFromUnknown = identityDecoder(parseJourneyId);
 export const intentKeyFromUnknown = identityDecoder(parseIntentKey);
-export const merchantCategoryIdFromUnknown =
-  identityDecoder(parseMerchantCategoryId);
-export const merchantTargetKeyFromUnknown =
-  identityDecoder(parseMerchantTargetKey);
+export const auguryCategoryIdFromUnknown =
+  identityDecoder(parseAuguryCategoryId);
+export const auguryTargetKeyFromUnknown =
+  identityDecoder(parseAuguryTargetKey);
 export const noteIdFromUnknown = identityDecoder(parseNoteId);
 export const offerIdFromUnknown = identityDecoder(parseOfferId);
 export const offerTileIdFromUnknown = identityDecoder(parseOfferTileId);

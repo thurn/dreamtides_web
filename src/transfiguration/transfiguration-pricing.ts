@@ -24,7 +24,7 @@ import type {
   TransfigurationCostBand,
   TransfigurationData,
 } from "../types/transfiguration-data";
-import { merchantRng } from "../journey_v2/signals/rng";
+import { auguryRng } from "../journey_v2/signals/rng";
 import { transfigurationForm } from "../data/transfiguration-data";
 import { transfigurationMechanic } from "./transfiguration-logic";
 import type { SiteId } from "../types/identifiers";
@@ -124,6 +124,6 @@ export function transfigurationEssenceCost(
   type: TransfigurationType,
 ): number {
   const band = transfigurationCostBand(data, card, type);
-  const rng = merchantRng(seed, siteId, entryId, type, "transfiguration_cost");
+  const rng = auguryRng(seed, siteId, entryId, type, "transfiguration_cost");
   return rollTransfigurationCost(data, band, rng);
 }

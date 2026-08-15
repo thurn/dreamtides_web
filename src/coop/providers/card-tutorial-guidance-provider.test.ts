@@ -4,11 +4,11 @@ import type {
   ExplorationContent,
 } from "../../data/exploration";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
-  makeMerchantTestJourneyState,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDeckEntry,
+  makeAuguryTestJourneyState,
+  makeAuguryTestSite,
 } from "../../journey_v2/testing/fixtures";
 import type { JourneyState, SiteState } from "../../types/journey";
 import { buildExplorationRuntime } from "./exploration-provider";
@@ -26,7 +26,7 @@ function uuid(index: number) {
 describe("card tutorial guidance content provider", () => {
   it("recognizes a transfiguration reward in a generated Augury encounter", () => {
     const cards = Array.from({ length: 16 }, (_, index) =>
-      makeMerchantTestCard({
+      makeAuguryTestCard({
         id: uuid(index + 1),
         cardNumber: index + 1,
         cardType: "Character",
@@ -34,14 +34,14 @@ describe("card tutorial guidance content provider", () => {
         spark: 2,
       }),
     );
-    const content = makeMerchantTestContent({ cards });
-    const site = makeMerchantTestSite({
+    const content = makeAuguryTestContent({ cards });
+    const site = makeAuguryTestSite({
       id: parseSiteId("augury-with-transfiguration"),
       type: "Augury",
     });
-    const journey = makeMerchantTestJourneyState({
+    const journey = makeAuguryTestJourneyState({
       deck: [
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId("deck-1"),
           cardNumber: 1,
         }),
@@ -63,11 +63,11 @@ describe("card tutorial guidance content provider", () => {
   });
 
   it("tracks whether an authored Exploration transfiguration action is currently visible", () => {
-    const encounterCard = makeMerchantTestCard({
+    const encounterCard = makeAuguryTestCard({
       id: uuid(101),
       cardNumber: 101,
     });
-    const deckCard = makeMerchantTestCard({
+    const deckCard = makeAuguryTestCard({
       id: uuid(102),
       cardNumber: 102,
       cardType: "Character",
@@ -99,7 +99,7 @@ describe("card tutorial guidance content provider", () => {
       ],
     };
     const content = {
-      ...makeMerchantTestContent({ cards: [encounterCard, deckCard] }),
+      ...makeAuguryTestContent({ cards: [encounterCard, deckCard] }),
       exploration,
     };
     const site: SiteState = {
@@ -108,9 +108,9 @@ describe("card tutorial guidance content provider", () => {
       isEnhanced: false,
       isVisited: false,
     };
-    const baseJourney = makeMerchantTestJourneyState({
+    const baseJourney = makeAuguryTestJourneyState({
       deck: [
-        makeMerchantTestDeckEntry({
+        makeAuguryTestDeckEntry({
           entryId: parseDeckEntryId("deck-1"),
           cardNumber: 102,
         }),

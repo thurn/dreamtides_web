@@ -44,7 +44,7 @@ describe("updateCardSourcePublication", () => {
     );
 
     expect(updateCardSourcePublication(owned, null)).toBe(owned);
-    const ownerless = updateCardSourcePublication(null, debugState("Merchant"));
+    const ownerless = updateCardSourcePublication(null, debugState("Augury"));
     expect(updateCardSourcePublication(ownerless, null)).toBeNull();
   });
 });

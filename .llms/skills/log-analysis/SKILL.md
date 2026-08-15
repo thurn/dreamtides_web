@@ -1,6 +1,6 @@
 ---
 name: log-analysis
-description: Answer "why did the algorithm do X?" questions by reconstructing behavior from logs/journey-log.jsonl. Focuses on draft pool construction and dream journey / merchant offer construction. Triggers on log analysis, why did my draft pool, why was this card offered, draft pool debugging, dream journey debugging, merchant offer debugging, reconstruct algorithm, journey-log.jsonl.
+description: Answer "why did the algorithm do X?" questions by reconstructing behavior from logs/journey-log.jsonl. Focuses on draft pool construction and dream journey / augury offer construction. Triggers on log analysis, why did my draft pool, why was this card offered, draft pool debugging, dream journey debugging, augury offer debugging, reconstruct algorithm, journey-log.jsonl.
 ---
 
 # Log Analysis Skill
@@ -19,7 +19,7 @@ question about a game you can't find in the local file.
 This skill targets two question families:
 
 1. **Draft pool construction** — "Why is *Terminus* in my warriors draft pool?"
-2. **Dream journey / merchant construction** — "Why did my dream journey offer me
+2. **Dream journey / augury construction** — "Why did my dream journey offer me
    to draft a Synth card?"
 
 ## Phase 0: Orient before answering
@@ -121,12 +121,12 @@ missing provenance instead of inventing a rationale.
 `algo` + `seed` + `avatarId` fully determine the pool. To reproduce or dig
 deeper than the log captures, re-run construction with that seed.
 
-## Phase 2: Dream journey & merchant offer questions
+## Phase 2: Dream journey & augury offer questions
 
 A "dream journey" assembles the map (dreamscapes, sites) and the offers inside
-sites (drafts, dreamsign offerings, merchants). "Why did my journey offer me to
+sites (drafts, dreamsign offerings, augurys). "Why did my journey offer me to
 draft a Synth card?" usually resolves to either a **journey template** that rolled
-a category draft, or a **merchant offer** whose builder targeted a subtype.
+a category draft, or a **augury offer** whose builder targeted a subtype.
 
 ### Map / site generation
 
@@ -143,21 +143,21 @@ a category draft, or a **merchant offer** whose builder targeted a subtype.
 | `dreamsign_pool_updated` | `source`, `remainingDreamsignPoolSize`, and the full `remainingDreamsignPool` (UUIDs) — the draw bag state. |
 | `dreamsign_acquired` | What was taken: `name`, `isNegative`, `sourceSiteType`. |
 
-### Merchant offers (the richest explainability trace)
+### Augury offers (the richest explainability trace)
 
-Merchant construction logs three events per encounter. Read them in this order:
+Augury construction logs three events per encounter. Read them in this order:
 
-1. **`merchant_encounter_generated`** — the roll. `debug.eligibleArchetypeIds`
+1. **`augury_encounter_generated`** — the roll. `debug.eligibleArchetypeIds`
    lists every offer archetype that *could* have appeared; `debug.rolledA` /
    `debug.rolledB` are the two that did. `offerCount`, `encounterSignature`
    (stable hash to correlate the other two events).
-2. **`merchant_offer_built`** — *why these specific cards*. Key fields:
+2. **`augury_offer_built`** — *why these specific cards*. Key fields:
    - `archetypeId` (e.g. `category_draft_known`), `family` (e.g. `grant`).
    - `targetKey` — **what the offer is keyed to**. A value like
      `subtype:Synth:<uuid>,<uuid>,...` is the literal answer to "why a Synth
      card": the builder picked the *Synth subtype* as its target and the UUIDs
      are the candidate cards.
-   - `needId` (also on `merchant_offer_shown`) — the deck *need* that motivated
+   - `needId` (also on `augury_offer_shown`) — the deck *need* that motivated
      the offer, e.g. `need:missing-role:interaction` or
      `need:upgrade-target:deck-3:<uuid>:Scarlet`. This is the "what gap in my
      deck is this addressing" signal.
@@ -167,14 +167,14 @@ Merchant construction logs three events per encounter. Read them in this order:
      `components` (e.g. `fit`), `inBand`, and `selected`. To answer "why *this*
      card and not that one", compare `score`/`components` across candidates and
      note the `band` cutoff.
-3. **`merchant_offer_shown`** — the final surfaced offer: `offerId`,
+3. **`augury_offer_shown`** — the final surfaced offer: `offerId`,
    `rewardBuilderId`, `needId`, `price`, `locked`.
 
 Correlate all three by `gameId` + `siteId` + `encounterSignature`.
 
-So "Why did the merchant offer me a Synth draft?" →
-`merchant_encounter_generated` shows `category_draft_known` was rolled →
-`merchant_offer_built` shows `needId` (the deck gap) and
+So "Why did the augury offer me a Synth draft?" →
+`augury_encounter_generated` shows `category_draft_known` was rolled →
+`augury_offer_built` shows `needId` (the deck gap) and
 `targetKey: subtype:Synth:...` (the builder resolved that need to the Synth
 subtype) → `trace.candidates` shows which Synth cards scored highest and made the
 band.

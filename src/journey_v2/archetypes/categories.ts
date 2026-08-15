@@ -1,22 +1,22 @@
 import type { CardData } from "../../types/cards";
-import type { MerchantContext } from "../types";
+import type { AuguryContext } from "../types";
 import type { CardId } from "../../types/card-identity";
 import { parseCardId } from "../../types/card-identity";
 import {
-  parseMerchantCategoryId,
-  type MerchantCategoryId,
+  parseAuguryCategoryId,
+  type AuguryCategoryId,
 } from "../../types/identifiers";
 
 /** An Augury-labelled subset of the current journey's card pool. */
-export interface MerchantCategory {
-  id: MerchantCategoryId;
+export interface AuguryCategory {
+  id: AuguryCategoryId;
   label: string;
   memberUuids: readonly CardId[];
 }
 
 type CostBand = "cheap" | "mid" | "big";
 
-function costBandOf(card: CardData, context: MerchantContext): CostBand | null {
+function costBandOf(card: CardData, context: AuguryContext): CostBand | null {
   const cost = card.energyCost;
   if (cost === null) return null;
   const bands = context.rewardSelection.tuning.costBands;
@@ -36,12 +36,12 @@ const COST_BAND_LABELS: Readonly<Record<CostBand, string>> = {
  * learned relationship clusters, so every package is inspectable in RON.
  */
 export function buildCategoryUniverse(
-  context: MerchantContext,
-): readonly MerchantCategory[] {
+  context: AuguryContext,
+): readonly AuguryCategory[] {
   const pool = context.candidateGrantCards;
-  const categories: MerchantCategory[] = [];
+  const categories: AuguryCategory[] = [];
   const add = (
-    id: MerchantCategoryId,
+    id: AuguryCategoryId,
     label: string,
     predicate: (card: CardData) => boolean,
     minimum: number,
@@ -55,7 +55,7 @@ export function buildCategoryUniverse(
 
   for (const cardType of ["Character", "Event"] as const) {
     add(
-      parseMerchantCategoryId(`type:${cardType}`),
+      parseAuguryCategoryId(`type:${cardType}`),
       cardType,
       (card) => card.cardType === cardType,
       1,
@@ -68,7 +68,7 @@ export function buildCategoryUniverse(
   );
   for (const subtype of [...subtypes].sort()) {
     add(
-      parseMerchantCategoryId(`subtype:${subtype}`),
+      parseAuguryCategoryId(`subtype:${subtype}`),
       subtype,
       (card) => card.subtype === subtype,
       subtypeMinimum,
@@ -77,14 +77,14 @@ export function buildCategoryUniverse(
 
   for (const band of ["cheap", "mid", "big"] as const) {
     add(
-      parseMerchantCategoryId(`cost:${band}`),
+      parseAuguryCategoryId(`cost:${band}`),
       COST_BAND_LABELS[band],
       (card) => costBandOf(card, context) === band,
       1,
     );
   }
   add(
-    parseMerchantCategoryId("fast"),
+    parseAuguryCategoryId("fast"),
     "fast card",
     (card) => card.isFast,
     subtypeMinimum,
@@ -100,7 +100,7 @@ export function buildCategoryUniverse(
         .filter((id) => poolUuids.has(id));
       if (memberUuids.length > 0) {
         categories.push({
-          id: parseMerchantCategoryId(`tide:${tide.id}`),
+          id: parseAuguryCategoryId(`tide:${tide.id}`),
           label: tide.auguryPackageReference,
           memberUuids,
         });

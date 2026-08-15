@@ -3,11 +3,11 @@ import { describe, expect, it } from "vitest";
 import { stableDigest } from "../reward-selection/stable";
 import type { JourneyContent } from "../data/journey-content";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
-  makeMerchantTestJourneyState,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDeckEntry,
+  makeAuguryTestJourneyState,
+  makeAuguryTestSite,
 } from "../journey_v2/testing/fixtures";
 import { parseCardName } from "../types/card-identity";
 import type { CardData, CardType } from "../types/cards";
@@ -36,7 +36,7 @@ function card(
 ): CardData {
   const id = CARD_IDS[index];
   if (id === undefined) throw new Error("Missing synthetic card UUID");
-  return makeMerchantTestCard({
+  return makeAuguryTestCard({
     id,
     cardNumber: index + 1,
     name: parseCardName(options.name ?? `Synthetic ${String(index + 1)}`),
@@ -59,37 +59,37 @@ function contentFixture(reverse = false): JourneyContent {
     card(5, "Event"),
     card(6, "Character"),
   ];
-  return makeMerchantTestContent({ cards: reverse ? cards.reverse() : cards });
+  return makeAuguryTestContent({ cards: reverse ? cards.reverse() : cards });
 }
 
 function journeyFixture(reverse = false): JourneyState {
   const deck = [
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-copy-a"),
       cardNumber: 1,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-copy-b"),
       cardNumber: 1,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-encounter"),
       cardNumber: 2,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-event"),
       cardNumber: 3,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-starter"),
       cardNumber: 4,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-nightmare"),
       cardNumber: 5,
       isBane: true,
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-effective-character"),
       cardNumber: 6,
       typeChange: {
@@ -99,7 +99,7 @@ function journeyFixture(reverse = false): JourneyState {
         label: "Character",
       },
     }),
-    makeMerchantTestDeckEntry({
+    makeAuguryTestDeckEntry({
       entryId: parseDeckEntryId("entry-effective-event"),
       cardNumber: 7,
       typeChange: {
@@ -110,13 +110,13 @@ function journeyFixture(reverse = false): JourneyState {
       },
     }),
   ];
-  return makeMerchantTestJourneyState({
+  return makeAuguryTestJourneyState({
     seed: testJourneySeed("disclosed-deck-target-plan-test"),
     deck: reverse ? deck.reverse() : deck,
   });
 }
 
-const site = makeMerchantTestSite({
+const site = makeAuguryTestSite({
   id: parseSiteId("disclosed-deck-target-site"),
   type: "Exploration",
 });
@@ -277,10 +277,10 @@ describe("Exploration disclosed deck target plan", () => {
       effectKind: "copy-selected-card" as "change-card-type-selected",
     });
     const noEligible = prepare({
-      journey: makeMerchantTestJourneyState({
+      journey: makeAuguryTestJourneyState({
         seed: testJourneySeed("disclosed-deck-target-plan-test"),
         deck: [
-          makeMerchantTestDeckEntry({
+          makeAuguryTestDeckEntry({
             entryId: parseDeckEntryId("only-event"),
             cardNumber: 3,
           }),

@@ -295,8 +295,8 @@ function draftProvider(): DraftContentProvider {
 /**
  * Site fake: `rerollShop` restocks with a NON-NULL `draftState`, so
  * `REROLL_SHOP` applies and rewrites the run's draft state. `openSite` bounces
- * (returns null) so `OPEN_SITE` never mutates the seeded runtime; the merchant
- * seam is left unimplemented so merchant events bounce.
+ * (returns null) so `OPEN_SITE` never mutates the seeded runtime; the augury
+ * seam is left unimplemented so augury events bounce.
  */
 function siteProvider(): SiteContentProvider {
   return {
@@ -434,7 +434,7 @@ const SITE_IDS = [
   "unknown-site",
 ] as const;
 const NODE_IDS = ["node-start", "node-a", "node-b"] as const;
-const SITE_TYPES = ["Shop", "Draft", "DreamMerchant", "Battle"] as const;
+const SITE_TYPES = ["Shop", "Draft", "Augury", "Battle"] as const;
 
 /**
  * Occasionally corrupt a payload field to a wrong-typed value so the generator
@@ -597,13 +597,13 @@ const NON_DEBUG_GENERATORS: ReadonlyArray<
     payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
 
-  // shop & merchant
+  // shop & augury
   (rng) => ({
-    type: "ACCEPT_MERCHANT_OFFER",
+    type: "ACCEPT_AUGURY_OFFER",
     payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({
-    type: "DECLINE_MERCHANT",
+    type: "DECLINE_AUGURY",
     payload: { siteId: parseSiteId(pick(rng, SITE_IDS)) },
   }),
   (rng) => ({

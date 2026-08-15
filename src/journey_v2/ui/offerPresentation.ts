@@ -1,20 +1,20 @@
 import type { SiteType } from "../../types/journey";
 import type {
-  MerchantChoiceCandidate,
-  MerchantDeckCard,
-  MerchantGameObject,
-  MerchantOffer,
+  AuguryChoiceCandidate,
+  AuguryDeckCard,
+  AuguryGameObject,
+  AuguryOffer,
 } from "../types";
 
 /** A card-shaped game object (a deck card or a catalog card). */
 export type JourneyCardObject = Extract<
-  MerchantGameObject,
+  AuguryGameObject,
   { objectType: "catalogCard" | "deckCard" }
 >;
 
 /** A dreamsign game object. */
 export type JourneyDreamsignObject = Extract<
-  MerchantGameObject,
+  AuguryGameObject,
   { objectType: "dreamsign" }
 >;
 
@@ -36,29 +36,29 @@ export type OfferPresentation =
    */
   | {
       kind: "cardGrid";
-      candidates: readonly MerchantChoiceCandidate[];
+      candidates: readonly AuguryChoiceCandidate[];
       transfigured: boolean;
       doubled: boolean;
     }
   /** Transfigure / keyword / tribal — a pre-targeted before → after pair. */
-  | { kind: "beforeAfter"; object: MerchantDeckCard }
+  | { kind: "beforeAfter"; object: AuguryDeckCard }
   /** Improve several starter cards — one before → after pair per card. */
-  | { kind: "beforeAfterMulti"; objects: readonly MerchantDeckCard[] }
+  | { kind: "beforeAfterMulti"; objects: readonly AuguryDeckCard[] }
   /** Purge — one pre-targeted card under a red seal. */
-  | { kind: "purge"; object: MerchantDeckCard }
+  | { kind: "purge"; object: AuguryDeckCard }
   /** Duplicate (chooser) — pick one of up to three; the pick renders as two copies. */
-  | { kind: "duplicateChoose"; candidates: readonly MerchantChoiceCandidate[] }
+  | { kind: "duplicateChoose"; candidates: readonly AuguryChoiceCandidate[] }
   /** Duplicate (single) — one pre-targeted card shown as two copies. */
-  | { kind: "duplicateSingle"; object: MerchantDeckCard }
+  | { kind: "duplicateSingle"; object: AuguryDeckCard }
   /** Dreamsign Gift — a pre-targeted dreamsign icon with rules on hover. */
   | { kind: "dreamsign"; object: JourneyDreamsignObject }
   /** Add Site — a slice of the dreamscape map with the new node inserted. */
   | { kind: "addSite"; siteType: SiteType }
   /** Anything unrecognized renders its raw objects so nothing ever blanks out. */
-  | { kind: "fallback"; objects: readonly MerchantGameObject[] };
+  | { kind: "fallback"; objects: readonly AuguryGameObject[] };
 
 function firstCardObject(
-  objects: readonly MerchantGameObject[],
+  objects: readonly AuguryGameObject[],
 ): JourneyCardObject | undefined {
   return objects.find(
     (object): object is JourneyCardObject =>
@@ -67,7 +67,7 @@ function firstCardObject(
 }
 
 function allCardObjects(
-  objects: readonly MerchantGameObject[],
+  objects: readonly AuguryGameObject[],
 ): readonly JourneyCardObject[] {
   return objects.filter(
     (object): object is JourneyCardObject =>
@@ -76,23 +76,23 @@ function allCardObjects(
 }
 
 function firstDeckCard(
-  objects: readonly MerchantGameObject[],
-): MerchantDeckCard | undefined {
+  objects: readonly AuguryGameObject[],
+): AuguryDeckCard | undefined {
   return objects.find(
-    (object): object is MerchantDeckCard => object.objectType === "deckCard",
+    (object): object is AuguryDeckCard => object.objectType === "deckCard",
   );
 }
 
 function allDeckCards(
-  objects: readonly MerchantGameObject[],
-): readonly MerchantDeckCard[] {
+  objects: readonly AuguryGameObject[],
+): readonly AuguryDeckCard[] {
   return objects.filter(
-    (object): object is MerchantDeckCard => object.objectType === "deckCard",
+    (object): object is AuguryDeckCard => object.objectType === "deckCard",
   );
 }
 
 function firstDreamsign(
-  objects: readonly MerchantGameObject[],
+  objects: readonly AuguryGameObject[],
 ): JourneyDreamsignObject | undefined {
   return objects.find(
     (object): object is JourneyDreamsignObject => object.objectType === "dreamsign",
@@ -106,7 +106,7 @@ function firstDreamsign(
  * treatment, so an unexpected shape degrades to something visible rather than a
  * blank column.
  */
-export function resolveOfferPresentation(offer: MerchantOffer): OfferPresentation {
+export function resolveOfferPresentation(offer: AuguryOffer): OfferPresentation {
   const candidates = offer.choiceRequest?.candidates;
   const isChooser = candidates !== undefined && candidates.length > 0;
 
@@ -209,7 +209,7 @@ export function presentationRequiresSelection(
 /** The candidate set a chooser presentation offers, or empty for pre-targeted. */
 export function presentationCandidates(
   presentation: OfferPresentation,
-): readonly MerchantChoiceCandidate[] {
+): readonly AuguryChoiceCandidate[] {
   switch (presentation.kind) {
     case "cardGrid":
     case "duplicateChoose":

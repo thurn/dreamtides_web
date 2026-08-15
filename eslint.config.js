@@ -225,7 +225,7 @@ export default tseslint.config(
   {
     files: [
       "src/battle/integration/corpus-opponent-deck.ts",
-      "src/journey_v2/encounter/generateMerchantEncounter.ts",
+      "src/journey_v2/encounter/generateAuguryEncounter.ts",
     ],
     rules: {
       "no-restricted-syntax": [

@@ -30,7 +30,7 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     isBattle: false,
     isLocked: false,
     isInteractive: true,
-    label: assertLocalized("Merchant"),
+    label: assertLocalized("Augury"),
     blurb: assertLocalized("Spend essence on cards, dreamsigns, and services."),
     icon: glyph("bxf bx-store-alt-2"),
   },

@@ -1,14 +1,14 @@
 import { sha256 } from "js-sha256";
 import type { CardData, CardType } from "../../types/cards";
 import type { CardSubtype } from "../../types/card-identity";
-import type { MerchantContext } from "../types";
+import type { AuguryContext } from "../types";
 import {
   parseStableDigest,
   type StableDigest,
 } from "../../reward-selection/stable";
 
 /**
- * A compact, explanatory snapshot of the deck the merchant scored against.
+ * A compact, explanatory snapshot of the deck the augury scored against.
  *
  * Scores are only explainable if their inputs are visible. The fit / quality
  * scorers operate over the deck's cards, and the dreamsign-coverage and
@@ -16,13 +16,13 @@ import {
  * both: the exact `cardNumbers` (small integers, a deck is at most a few dozen
  * cards) plus a `hash` for cross-event joins, and the derived `features` the
  * scorers actually consume. It is emitted once per encounter (the deck is the
- * same for both offers) on `merchant_encounter_generated`; each
- * `merchant_offer_built` line back-references it by `size` + `hash`.
+ * same for both offers) on `augury_encounter_generated`; each
+ * `augury_offer_built` line back-references it by `size` + `hash`.
  *
  * Feature tallies are computed over each entry's printed card, which is what the
  * dreamsign-coverage scorer reads.
  */
-export interface MerchantDeckSnapshot {
+export interface AuguryDeckSnapshot {
   /** Deck size (entry count). */
   size: number;
   /** Sorted printed card numbers — the exact deck the scores ran against. */
@@ -30,25 +30,25 @@ export interface MerchantDeckSnapshot {
   /** Stable hash of the deck's card content and per-entry modifications. */
   hash: StableDigest;
   /** Derived feature tallies the dreamsign / tribal scorers key off. */
-  features: MerchantDeckFeatureTallies;
+  features: AuguryDeckFeatureTallies;
 }
 
-/** Feature tallies the merchant scorers derive from the deck. */
-export interface MerchantDeckFeatureTallies {
+/** Feature tallies the augury scorers derive from the deck. */
+export interface AuguryDeckFeatureTallies {
   /** Count of deck cards per card type (Character, Event, …). */
   cardType: Partial<Record<CardType, number>>;
   /** Count of deck cards per subtype (Warrior, Spirit Animal, …). */
   subtype: Partial<Record<CardSubtype, number>>;
   /** Count of deck cards per cost band: cheap (<=1), mid (2-3), big (>=4), variable. */
-  costBand: Partial<Record<MerchantDeckCostBand, number>>;
+  costBand: Partial<Record<AuguryDeckCostBand, number>>;
   /** Count of deck cards carrying each keyword: reclaim, fast. */
-  keyword: Partial<Record<MerchantDeckKeyword, number>>;
+  keyword: Partial<Record<AuguryDeckKeyword, number>>;
 }
 
-type MerchantDeckCostBand = "variable" | "cheap" | "mid" | "big";
-type MerchantDeckKeyword = "reclaim" | "fast";
+type AuguryDeckCostBand = "variable" | "cheap" | "mid" | "big";
+type AuguryDeckKeyword = "reclaim" | "fast";
 
-function costBandOf(card: CardData): MerchantDeckCostBand {
+function costBandOf(card: CardData): AuguryDeckCostBand {
   const cost = card.energyCost;
   if (cost === null) return "variable";
   if (cost <= 1) return "cheap";
@@ -66,11 +66,11 @@ function increment<Key extends string>(
 /** Tallies the deck's card-type / subtype / cost-band / keyword features. */
 export function deckFeatureTallies(
   cards: readonly CardData[],
-): MerchantDeckFeatureTallies {
+): AuguryDeckFeatureTallies {
   const cardType: Partial<Record<CardType, number>> = {};
   const subtype: Partial<Record<CardSubtype, number>> = {};
-  const costBand: Partial<Record<MerchantDeckCostBand, number>> = {};
-  const keyword: Partial<Record<MerchantDeckKeyword, number>> = {};
+  const costBand: Partial<Record<AuguryDeckCostBand, number>> = {};
+  const keyword: Partial<Record<AuguryDeckKeyword, number>> = {};
   for (const card of cards) {
     increment(cardType, card.cardType);
     increment(subtype, card.subtype);
@@ -84,14 +84,14 @@ export function deckFeatureTallies(
 }
 
 /**
- * Builds the deck snapshot from a merchant context. The `hash` covers each
+ * Builds the deck snapshot from a augury context. The `hash` covers each
  * entry's card number and modifications (transfiguration, type change, keyword
  * modification, Nightmare flag) sorted for stability, so two encounters scored
  * against the same deck content share a hash.
  */
-export function buildMerchantDeckSnapshot(
-  context: MerchantContext,
-): MerchantDeckSnapshot {
+export function buildAuguryDeckSnapshot(
+  context: AuguryContext,
+): AuguryDeckSnapshot {
   const cards = context.deckCards.map((deckCard) => deckCard.card);
   const cardNumbers = context.deckCards
     .map((deckCard) => deckCard.cardNumber)

@@ -1,37 +1,37 @@
 import { auguryArchetype } from "../../data/augury-data";
-import type { MerchantRng } from "../signals/rng";
+import type { AuguryRng } from "../signals/rng";
 import type {
-  MerchantApplyPayload,
-  MerchantContext,
-  MerchantDeckCard,
+  AuguryApplyPayload,
+  AuguryContext,
+  AuguryDeckCard,
 } from "../types";
 import type {
-  MerchantArchetypeBuilder,
-  MerchantChoiceCandidateDraft,
-  MerchantOfferDraft,
+  AuguryArchetypeBuilder,
+  AuguryChoiceCandidateDraft,
+  AuguryOfferDraft,
 } from "./types";
 import {
   augurySelectionPolicy,
   selectionMetadata,
-  selectMerchantReward,
+  selectAuguryReward,
 } from "./sharedSelection";
 import { parseChoiceId } from "../../types/identifiers";
-import { parseMerchantTargetKey } from "../../types/identifiers";
+import { parseAuguryTargetKey } from "../../types/identifiers";
 
 /** Duplicates strong entries, using rarity first and leave-one-out affinity second. */
-export const duplicateBuilder: MerchantArchetypeBuilder = {
+export const duplicateBuilder: AuguryArchetypeBuilder = {
   archetypeId: "duplicate",
   family: "duplicate",
   eligible: (context) => context.deckCards.some((card) => !card.card.isStarter),
   build(
-    context: MerchantContext,
-    _rng: MerchantRng,
-  ): MerchantOfferDraft | null {
+    context: AuguryContext,
+    _rng: AuguryRng,
+  ): AuguryOfferDraft | null {
     const archetype = auguryArchetype(
       context.rewardSelection.content.auguryData,
       "duplicate",
     );
-    const selection = selectMerchantReward({
+    const selection = selectAuguryReward({
       context,
       archetypeId: "duplicate",
       mechanicId: "duplicate-deck-entry",
@@ -47,7 +47,7 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
     });
     if (sampled.length === 0) return null;
 
-    const payload = (card: MerchantDeckCard): MerchantApplyPayload => {
+    const payload = (card: AuguryDeckCard): AuguryApplyPayload => {
       const child = {
         kind: "duplicate_deck_entry" as const,
         entryId: card.entryId,
@@ -64,7 +64,7 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
             ),
           };
     };
-    const object = (card: MerchantDeckCard): MerchantDeckCard => ({ ...card });
+    const object = (card: AuguryDeckCard): AuguryDeckCard => ({ ...card });
     if (sampled.length === 1) {
       const target = sampled[0];
       return {
@@ -72,11 +72,11 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
         family: "duplicate",
         gameObjects: [object(target.deckCard)],
         applyPayload: payload(target.deckCard),
-        targetKey: parseMerchantTargetKey(target.entryId),
+        targetKey: parseAuguryTargetKey(target.entryId),
         ...selectionMetadata(selection),
       };
     }
-    const candidates: MerchantChoiceCandidateDraft[] = sampled.map(
+    const candidates: AuguryChoiceCandidateDraft[] = sampled.map(
       (target) => ({
         choiceId: parseChoiceId(target.entryId),
         gameObjects: [object(target.deckCard)],
@@ -88,7 +88,7 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
       family: "duplicate",
       gameObjects: [],
       choiceRequest: { choiceType: "catalogCard", candidates },
-      targetKey: parseMerchantTargetKey(
+      targetKey: parseAuguryTargetKey(
         sampled.map((entry) => entry.entryId).join(","),
       ),
       ...selectionMetadata(selection),

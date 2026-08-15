@@ -5,18 +5,18 @@ import type { CardData } from "../../types/cards";
 import type { JourneyContent } from "../../data/journey-content";
 import type { JourneyState } from "../../types/journey";
 import {
-  makeMerchantTestCard,
-  makeMerchantTestContent,
-  makeMerchantTestDreamsignTemplate,
-  makeMerchantTestJourneyState,
-  makeMerchantTestSite,
+  makeAuguryTestCard,
+  makeAuguryTestContent,
+  makeAuguryTestDreamsignTemplate,
+  makeAuguryTestJourneyState,
+  makeAuguryTestSite,
 } from "../testing/fixtures";
-import { buildMerchantContext } from "../context/buildMerchantContext";
+import { buildAuguryContext } from "../context/buildAuguryContext";
 import {
   compareCodeUnits,
-  generateMerchantEncounter,
-  generateMerchantEncounterWithDebug,
-} from "./generateMerchantEncounter";
+  generateAuguryEncounter,
+  generateAuguryEncounterWithDebug,
+} from "./generateAuguryEncounter";
 import { parseSiteId } from "../../types/identifiers";
 import { testCardId, testDreamsignId } from "../../types/test-identities";
 
@@ -26,7 +26,7 @@ function poolCards(count: number): CardData[] {
     const cardNumber = 1000 + i;
     const id = `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`;
     cards.push(
-      makeMerchantTestCard({
+      makeAuguryTestCard({
         id: testCardId(id),
         cardNumber,
         name: parseCardName(`Pool ${String(cardNumber)}`),
@@ -41,7 +41,7 @@ function dreamsignTemplates(count: number) {
   for (let i = 0; i < count; i += 1) {
     const id = `dsign-${String(i)}`;
     templates.push(
-      makeMerchantTestDreamsignTemplate({
+      makeAuguryTestDreamsignTemplate({
         id: testDreamsignId(id),
         name: `Sign ${String(i)}`,
       }),
@@ -56,21 +56,21 @@ function fixtureContent(input: {
 }): JourneyContent {
   const cards = poolCards(input.poolCount ?? 30);
   const templates = dreamsignTemplates(input.dreamsignCount ?? 10);
-  return makeMerchantTestContent({
+  return makeAuguryTestContent({
     cards,
     dreamsignTemplates: templates,
   });
 }
 
 function contextFor(content: JourneyContent, state: JourneyState) {
-  return buildMerchantContext({
+  return buildAuguryContext({
     journeyState: state,
     journeyContent: content,
-    site: makeMerchantTestSite({ id: parseSiteId("site-gen-fixture") }),
+    site: makeAuguryTestSite({ id: parseSiteId("site-gen-fixture") }),
   });
 }
 
-describe("generateMerchantEncounter", () => {
+describe("generateAuguryEncounter", () => {
   it("uses locale-free code-unit ordering for signature inputs", () => {
     expect(compareCodeUnits("B", "a")).toBeLessThan(0);
     expect(["a", "B"].sort(compareCodeUnits)).toEqual(["B", "a"]);
@@ -79,8 +79,8 @@ describe("generateMerchantEncounter", () => {
   it("produces exactly two offers from different families across seeds", () => {
     const content = fixtureContent({});
     for (let s = 0; s < 30; s += 1) {
-      const state = makeMerchantTestJourneyState({ seed: testJourneySeed(`seed-${String(s)}`) });
-      const encounter = generateMerchantEncounter(contextFor(content, state));
+      const state = makeAuguryTestJourneyState({ seed: testJourneySeed(`seed-${String(s)}`) });
+      const encounter = generateAuguryEncounter(contextFor(content, state));
       expect(encounter.offers).toHaveLength(2);
       const [a, b] = encounter.offers;
       expect(a.family).not.toBe(b.family);
@@ -94,8 +94,8 @@ describe("generateMerchantEncounter", () => {
 
   it("persists only semantic encounter and reward data", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestJourneyState({ seed: testJourneySeed("semantic-data") });
-    const encounter = generateMerchantEncounter(contextFor(content, state));
+    const state = makeAuguryTestJourneyState({ seed: testJourneySeed("semantic-data") });
+    const encounter = generateAuguryEncounter(contextFor(content, state));
 
     expect(encounter).not.toHaveProperty("dialogue");
     expect(encounter).not.toHaveProperty("acceptReaction");
@@ -117,10 +117,10 @@ describe("generateMerchantEncounter", () => {
   it("records roll attempts and attaches a trace to each offer", () => {
     const content = fixtureContent({});
     for (let s = 0; s < 10; s += 1) {
-      const state = makeMerchantTestJourneyState({
+      const state = makeAuguryTestJourneyState({
         seed: testJourneySeed(`rolls-${String(s)}`),
       });
-      const { encounter, debug } = generateMerchantEncounterWithDebug(
+      const { encounter, debug } = generateAuguryEncounterWithDebug(
         contextFor(content, state),
       );
       // The final built archetype is the last attempt in each slot's roll log.
@@ -148,9 +148,9 @@ describe("generateMerchantEncounter", () => {
 
   it("is deterministic for the same (seed, site, state)", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestJourneyState({ seed: testJourneySeed("stable-seed") });
-    const a = generateMerchantEncounter(contextFor(content, state));
-    const b = generateMerchantEncounter(contextFor(content, state));
+    const state = makeAuguryTestJourneyState({ seed: testJourneySeed("stable-seed") });
+    const a = generateAuguryEncounter(contextFor(content, state));
+    const b = generateAuguryEncounter(contextFor(content, state));
     expect(a).toEqual(b);
   });
 
@@ -158,8 +158,8 @@ describe("generateMerchantEncounter", () => {
     const content = fixtureContent({});
     const tuples = new Set<string>();
     for (let s = 0; s < 30; s += 1) {
-      const state = makeMerchantTestJourneyState({ seed: testJourneySeed(`vary-${String(s)}`) });
-      const encounter = generateMerchantEncounter(contextFor(content, state));
+      const state = makeAuguryTestJourneyState({ seed: testJourneySeed(`vary-${String(s)}`) });
+      const encounter = generateAuguryEncounter(contextFor(content, state));
       const [a, b] = encounter.offers;
       tuples.add(
         `${a.archetypeId}:${a.targetKey}|${b.archetypeId}:${b.targetKey}`,
@@ -170,24 +170,24 @@ describe("generateMerchantEncounter", () => {
 
   it("still yields a valid encounter for an empty deck", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestJourneyState({
+    const state = makeAuguryTestJourneyState({
       seed: testJourneySeed("empty-deck"),
       deck: [],
     });
-    const encounter = generateMerchantEncounter(contextFor(content, state));
+    const encounter = generateAuguryEncounter(contextFor(content, state));
     expect(encounter.offers).toHaveLength(2);
     expect(encounter.offers[0].family).not.toBe(encounter.offers[1].family);
   });
 
   it("forces an eligible archetype into slot A when requested", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestJourneyState({ seed: testJourneySeed("force-seed") });
+    const state = makeAuguryTestJourneyState({ seed: testJourneySeed("force-seed") });
     const baseContext = contextFor(content, state);
-    const { debug } = generateMerchantEncounterWithDebug(baseContext);
+    const { debug } = generateAuguryEncounterWithDebug(baseContext);
 
     expect(debug.eligibleArchetypeIds.length).toBeGreaterThan(0);
     for (const archetypeId of debug.eligibleArchetypeIds) {
-      const forced = generateMerchantEncounterWithDebug({
+      const forced = generateAuguryEncounterWithDebug({
         ...baseContext,
         forcedArchetypeId: archetypeId,
       });
@@ -202,10 +202,10 @@ describe("generateMerchantEncounter", () => {
 
   it("ignores a forced archetype that is not eligible", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestJourneyState({ seed: testJourneySeed("force-ineligible") });
+    const state = makeAuguryTestJourneyState({ seed: testJourneySeed("force-ineligible") });
     const baseContext = contextFor(content, state);
-    const baseline = generateMerchantEncounter(baseContext);
-    const { encounter, debug } = generateMerchantEncounterWithDebug({
+    const baseline = generateAuguryEncounter(baseContext);
+    const { encounter, debug } = generateAuguryEncounterWithDebug({
       ...baseContext,
       // A syntactically valid id that is excluded from the eligible set here.
       forcedArchetypeId: "add_site",
@@ -220,13 +220,13 @@ describe("generateMerchantEncounter", () => {
 
   it("forcing is deterministic for the same parameters", () => {
     const content = fixtureContent({});
-    const state = makeMerchantTestJourneyState({ seed: testJourneySeed("force-deterministic") });
+    const state = makeAuguryTestJourneyState({ seed: testJourneySeed("force-deterministic") });
     const baseContext = contextFor(content, state);
-    const { debug } = generateMerchantEncounterWithDebug(baseContext);
+    const { debug } = generateAuguryEncounterWithDebug(baseContext);
     const archetypeId = debug.eligibleArchetypeIds[0];
     const forcedContext = { ...baseContext, forcedArchetypeId: archetypeId };
-    expect(generateMerchantEncounter(forcedContext)).toEqual(
-      generateMerchantEncounter(forcedContext),
+    expect(generateAuguryEncounter(forcedContext)).toEqual(
+      generateAuguryEncounter(forcedContext),
     );
   });
 });
