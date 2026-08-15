@@ -1845,6 +1845,53 @@ describe("transformCard Amplified text", () => {
     ).toThrow(/changes an activated ability cost/u);
   });
 
+  it("allows an Amplified form to change a retained Reclaim value", () => {
+    const result = transformCard({
+      name: "Amplified fixture",
+      id: "amplified-fixture",
+      "card-number": 1,
+      "card-type": "Character",
+      "energy-cost": 1,
+      "is-fast": false,
+      "rendered-text": "▸Dawn: Gain 1●.\n\nReclaim 3●",
+      "amplified-text": "▸Dawn: Gain 2●.\n\nReclaim 2●",
+      "image-number": 1,
+      "art-owned": false,
+    });
+
+    expect(result.amplifiedText).toBe(
+      "▸Dawn: Gain 2●.\n\nReclaim 2●",
+    );
+  });
+
+  it("rejects an Amplified form that adds or removes Reclaim", () => {
+    const base = {
+      name: "Amplified fixture",
+      id: "amplified-fixture",
+      "card-number": 1,
+      "card-type": "Character",
+      "energy-cost": 1,
+      "is-fast": false,
+      "image-number": 1,
+      "art-owned": false,
+    };
+
+    expect(() =>
+      transformCard({
+        ...base,
+        "rendered-text": "▸Dawn: Gain 1●.",
+        "amplified-text": "▸Dawn: Gain 2●.\n\nReclaim 2●",
+      }),
+    ).toThrow(/adds or removes Reclaim/u);
+    expect(() =>
+      transformCard({
+        ...base,
+        "rendered-text": "▸Dawn: Gain 1●.\n\nReclaim 3●",
+        "amplified-text": "▸Dawn: Gain 2●.",
+      }),
+    ).toThrow(/adds or removes Reclaim/u);
+  });
+
   it("rejects authored text that breaks later Perfected transforms", () => {
     expect(() =>
       transformCard({

@@ -19,8 +19,8 @@ export const cadencePhrases = (text) =>
     (match) => match[0].toLowerCase(),
   );
 
-export const reclaimClauses = (text) =>
-  text.split("\n\n").filter((paragraph) => /\bReclaim\b/u.test(paragraph));
+export const reclaimCount = (text) =>
+  [...text.matchAll(/\bReclaim\b/gu)].length;
 
 export const discoverCriteria = (text) =>
   [
@@ -35,12 +35,14 @@ export function amplifiedStructuralErrors(base, amplified, cardType) {
     ["an activated ability cost", activatedCosts],
     ["a named trigger", namedTriggers],
     ["trigger cadence", cadencePhrases],
-    ["Reclaim text", reclaimClauses],
     ["Discover criteria", discoverCriteria],
   ]) {
     if (JSON.stringify(collect(amplified)) !== JSON.stringify(collect(base))) {
       errors.push(`changes ${label}`);
     }
+  }
+  if (reclaimCount(amplified) !== reclaimCount(base)) {
+    errors.push("adds or removes Reclaim");
   }
   if (!/\bFast\b/u.test(base) && /\bFast\b/u.test(amplified)) {
     errors.push("adds Fast");
