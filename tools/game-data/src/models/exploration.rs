@@ -731,6 +731,19 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
                     if !action_ids.insert(action.id.clone()) {
                         bail!("duplicate Exploration action id: {}", action.id);
                     }
+                    if matches!(&action.effect, ActionEffect::ReplaceSelected { .. })
+                        && action
+                            .presentation_override
+                            .as_ref()
+                            .and_then(|presentation| presentation.followup.as_ref())
+                            .and_then(|followup| followup.title.as_ref())
+                            .is_none()
+                    {
+                        bail!(
+                            "Exploration replace-selected action {} requires an explicit followup title",
+                            action.id
+                        );
+                    }
                     match &action.effect {
                         ActionEffect::PurgeSelected {
                             count: Some(count), ..
@@ -1644,7 +1657,10 @@ mod tests {
       ActionDefinition(
         label: Tx("Replace Two Events"),
         id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        presentation_override: ActionPresentationOverride(effect_text: Tx("Replace up to 2 Events"), followup: None),
+        presentation_override: ActionPresentationOverride(
+          effect_text: Tx("Replace up to 2 Events"),
+          followup: FollowupOverride(title: Tx("Choose Events")),
+        ),
         effect: ReplaceSelected(predicate: Event, count: 2),
       ),
       ActionDefinition(
@@ -2459,6 +2475,7 @@ mod tests {
         let lowered = lower(catalog).unwrap();
         let actions = lowered["encounter"][0]["action"].as_array().unwrap();
 
+        assert!(actions[0].get("followup-title").is_some());
         assert_eq!(actions[0]["effect-kind"].as_str(), Some("replace-selected"));
         assert_eq!(actions[0]["predicate"].as_str(), Some("event"));
         assert_eq!(actions[0]["count"].as_integer(), Some(2));
@@ -2706,6 +2723,21 @@ mod tests {
                 &DECK_MUTATION_SOURCE.replace("card_type: Character", "card_type: Warrior")
             )
             .is_err()
+        );
+    }
+
+    #[test]
+    fn replace_selected_requires_an_explicit_followup_title() {
+        let malformed = DECK_MUTATION_SOURCE.replace(
+            "followup: FollowupOverride(title: Tx(\"Choose Events\")),",
+            "followup: None,",
+        );
+        let catalog: ExplorationCatalog = ron::from_str(&malformed).unwrap();
+        assert!(
+            lower(catalog)
+                .unwrap_err()
+                .to_string()
+                .contains("requires an explicit followup title")
         );
     }
 

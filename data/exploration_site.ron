@@ -608,7 +608,10 @@
         label: Tx("Touch Its Tendrils"),
         id: "a6f4aa8d-c110-4f58-b995-fa94c7a8a3bf",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Character to replace.")),
+          followup: FollowupOverride(
+            title: Tx("Touch Its Tendrils"),
+            subtitle: Tx("Choose a Character to replace."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Character),
       ),
@@ -1226,7 +1229,10 @@
         label: Tx("Cross Frozen Reflection"),
         id: "e1b947b6-a2a0-4f54-9722-de5a3d9d9274",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Warrior to send across.")),
+          followup: FollowupOverride(
+            title: Tx("Cross Frozen Reflection"),
+            subtitle: Tx("Choose a Warrior to send across."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Warrior),
       ),
@@ -1979,7 +1985,10 @@
         label: Tx("Forsake Fallen Shape"),
         id: "9ac0ef87-8d42-4306-8f13-3879a59f3d3f",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a ≤2● cost Character to replace.")),
+          followup: FollowupOverride(
+            title: Tx("Forsake Fallen Shape"),
+            subtitle: Tx("Choose a ≤2● cost Character to replace."),
+          ),
         ),
         effect: ReplaceSelected(predicate: CheapCharacter, count: 1),
       ),
@@ -2150,7 +2159,10 @@
         label: Tx("Send Someone Beyond"),
         id: "02cd4cba-658c-4c99-8d9a-e0ae01067d65",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Character to send beyond.")),
+          followup: FollowupOverride(
+            title: Tx("Send Someone Beyond"),
+            subtitle: Tx("Choose a Character to send beyond."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Character),
       ),
@@ -2632,7 +2644,10 @@
         label: Tx("Exchange Broken Visions"),
         id: "8eb89438-d367-4c52-be5b-abd76324cd80",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose one or two Event cards to exchange.")),
+          followup: FollowupOverride(
+            title: Tx("Exchange Broken Visions"),
+            subtitle: Tx("Choose one or two Event cards to exchange."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Event, count: 2),
       ),
@@ -2797,7 +2812,10 @@
         label: Tx("Rebuild a Companion"),
         id: "12e8d8cb-0674-401c-ad99-bdc40a9b75d1",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Character to dismantle and rebuild.")),
+          followup: FollowupOverride(
+            title: Tx("Rebuild a Companion"),
+            subtitle: Tx("Choose a Character to dismantle and rebuild."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Character),
       ),
@@ -3651,7 +3669,10 @@
         label: Tx("Yield to Black Cables"),
         id: "fad87e00-bfac-4ec4-8047-752814b91ebe",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Warrior for black cables to consume.")),
+          followup: FollowupOverride(
+            title: Tx("Yield to Black Cables"),
+            subtitle: Tx("Choose a Warrior for black cables to consume."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Warrior),
       ),
@@ -3674,7 +3695,10 @@
         label: Tx("Call Extraction Protocol"),
         id: "ccd5b997-cf13-4519-ac40-bb515fef6cb5",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Character to extract and replace.")),
+          followup: FollowupOverride(
+            title: Tx("Call Extraction Protocol"),
+            subtitle: Tx("Choose a Character to extract and replace."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Character),
       ),
@@ -3803,7 +3827,10 @@
         label: Tx("Trade across the counter"),
         id: "1c5991fd-d12b-4e1f-9df7-9284057fb6d3",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Character to trade.")),
+          followup: FollowupOverride(
+            title: Tx("Trade across the counter"),
+            subtitle: Tx("Choose a Character to trade."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Character),
       ),
@@ -4380,6 +4407,7 @@
         id: "e09c6663-67e5-40e3-9e8b-6b2d50c74d46",
         presentation_override: ActionPresentationOverride(
           followup: FollowupOverride(
+            title: Tx("Release Fading Bloom"),
             subtitle: Tx("Choose a Character to return through new growth."),
           ),
         ),
@@ -4481,7 +4509,10 @@
         label: Tx("Signal a Rider Exchange"),
         id: "8ebf20ca-56e0-4dd5-b60e-0fcf294e94dc",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Warrior to replace.")),
+          followup: FollowupOverride(
+            title: Tx("Signal a Rider Exchange"),
+            subtitle: Tx("Choose a Warrior to replace."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Warrior),
       ),
@@ -4816,7 +4847,10 @@
         label: Tx("Salvage the airborne debris"),
         id: "5fa9d0a1-115e-4a02-a110-91e9b4d6f1b8",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose an Event to salvage and replace.")),
+          followup: FollowupOverride(
+            title: Tx("Salvage the airborne debris"),
+            subtitle: Tx("Choose an Event to salvage and replace."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Event),
       ),
@@ -5467,6 +5501,7 @@
         id: "7ba9c54a-04ba-40bc-bc2d-750531b02e46",
         presentation_override: ActionPresentationOverride(
           followup: FollowupOverride(
+            title: Tx("Send a Warrior Through"),
             subtitle: Tx("Choose a Warrior to send through the aperture."),
           ),
         ),
@@ -7458,7 +7493,10 @@
         label: Tx("Trade Places in Fire"),
         id: "eddcf564-381b-41e9-bfc8-7309c2fecb3f",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Character to send into the fire.")),
+          followup: FollowupOverride(
+            title: Tx("Trade Places in Fire"),
+            subtitle: Tx("Choose a Character to send into the fire."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Character),
       ),
@@ -7863,7 +7901,10 @@
         label: Tx("Cross in Another Shape"),
         id: "5891b1c2-d6ed-4b62-94db-c71c01f4f97c",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a ≤2● cost Character to send through.")),
+          followup: FollowupOverride(
+            title: Tx("Cross in Another Shape"),
+            subtitle: Tx("Choose a ≤2● cost Character to send through."),
+          ),
         ),
         effect: ReplaceSelected(predicate: CheapCharacter),
       ),
@@ -8928,7 +8969,10 @@
         label: Tx("Invert a Known Event"),
         id: "01f98df4-d453-4039-8271-40616328a26d",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose an Event to invert.")),
+          followup: FollowupOverride(
+            title: Tx("Invert a Known Event"),
+            subtitle: Tx("Choose an Event to invert."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Event),
       ),
@@ -9363,7 +9407,10 @@
         label: Tx("Enter Shattering Portal"),
         id: "e227f409-c792-42bf-bb2f-582693acba06",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Character to send through.")),
+          followup: FollowupOverride(
+            title: Tx("Enter Shattering Portal"),
+            subtitle: Tx("Choose a Character to send through."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Character),
       ),
@@ -9790,7 +9837,10 @@
         label: Tx("Release Black Panther"),
         id: "6f5e2dcb-e9ca-488c-8b61-d9f33ff92e79",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Spirit Animal to release into fire.")),
+          followup: FollowupOverride(
+            title: Tx("Release Black Panther"),
+            subtitle: Tx("Choose a Spirit Animal to release into fire."),
+          ),
         ),
         effect: ReplaceSelected(predicate: SpiritAnimal),
       ),
@@ -10505,7 +10555,10 @@
         label: Tx("Trade one warrior"),
         id: "b3959b4f-713f-44c8-ae28-964d48e0ce89",
         presentation_override: ActionPresentationOverride(
-          followup: FollowupOverride(subtitle: Tx("Choose a Warrior to surrender.")),
+          followup: FollowupOverride(
+            title: Tx("Trade one warrior"),
+            subtitle: Tx("Choose a Warrior to surrender."),
+          ),
         ),
         effect: ReplaceSelected(predicate: Warrior, count: 1),
       ),

@@ -479,7 +479,7 @@ function configuredFollowupCopy(
   action: ExplorationActionContent,
   _content: JourneyContent,
   key: "followupTitle" | "followupSubtitle",
-  fallback: string | LocalizedString | SourceMessage,
+  fallback?: string | LocalizedString | SourceMessage,
 ): LocalizedString {
   const template = action[key];
   const codeDefault =
@@ -490,6 +490,11 @@ function configuredFollowupCopy(
     template === undefined || template === ""
       ? (codeDefault ?? fallback)
       : template;
+  if (selected === undefined) {
+    throw new Error(
+      `Missing configured Exploration ${key} for action ${action.id}.`,
+    );
+  }
   const valueFor = (name: string): number | LocalizedString => {
     switch (name) {
       case "count":
@@ -765,7 +770,6 @@ function followupForAction(
             action,
             content,
             "followupTitle",
-            action.label,
           ),
           subtitle: configuredFollowupCopy(
             action,
@@ -786,7 +790,6 @@ function followupForAction(
           action,
           content,
           "followupTitle",
-          "Release a Fellow Swimmer",
         ),
         configuredFollowupCopy(
           action,

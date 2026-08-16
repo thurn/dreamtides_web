@@ -4963,6 +4963,99 @@ describe("exploration-view-model", () => {
     ).toBeNull();
   });
 
+  it("requires explicit followup titles for selected-card replacements", () => {
+    const encounter = card(sourceId, 17);
+    const replacementTitle = assertLocalized("Fixture replacement title.");
+    const action: ExplorationActionContent = {
+      id: testExplorationActionId("replacement-title-contract"),
+      label: assertLocalized("Fixture replacement action."),
+      effectText: assertLocalized("Fixture replacement effect."),
+      followupSubtitle: assertLocalized("Fixture replacement subtitle."),
+      effectKind: "replace-selected",
+      predicate: "character",
+      count: 1,
+    };
+    const state = {
+      ...createDefaultState(),
+      deck: [
+        {
+          entryId: parseDeckEntryId("replacement-title-source"),
+          cardNumber: encounter.cardNumber,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+    };
+    const content = {
+      cardDatabase: new Map([[encounter.cardNumber, encounter]]),
+      avatars: [],
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      dreamscapes: [],
+      affiliations: [],
+      guides: [guide],
+      atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
+      economyData: economyFixture(),
+      exploration: {
+        customCards: [],
+        customDreamsigns: [],
+        encounters: [
+          {
+            cardId: encounter.id,
+            prose: assertLocalized("Fixture replacement encounter."),
+            actions: [action],
+          },
+        ],
+      },
+    } as unknown as JourneyContent;
+    const build = (candidate: ExplorationActionContent) =>
+      buildExplorationSiteView({
+        sceneNode: null,
+        site: explorationSite,
+        guide,
+        guideLine: assertLocalized("Fixture line."),
+        state,
+        content: {
+          ...content,
+          exploration: {
+            ...content.exploration!,
+            encounters: [
+              {
+                cardId: encounter.id,
+                prose: assertLocalized("Fixture replacement encounter."),
+                actions: [candidate],
+              },
+            ],
+          },
+        },
+        runtime: {
+          kind: "exploration",
+          encounterCardId: encounter.id,
+          actionOffers: [
+            {
+              actionId: action.id,
+              offeredCardIds: [],
+              packCardIds: [],
+              replacementCardIdByEntryId: {},
+              transfigurationByEntryId: {},
+            },
+          ],
+          resolution: null,
+        },
+      });
+
+    expect(() => build(action)).toThrow(
+      `Missing configured Exploration followupTitle for action ${action.id}.`,
+    );
+    const view = build({ ...action, followupTitle: replacementTitle });
+    expect(view?.actions[0].followup).toMatchObject({ kind: "cards" });
+    if (view?.actions[0].followup.kind !== "cards") {
+      throw new Error("Expected selected-card replacement followup.");
+    }
+    expect(view.actions[0].followup.title).toBe(replacementTitle);
+  });
+
   it.each([
     {
       effectKind: "copy-random-cards",
