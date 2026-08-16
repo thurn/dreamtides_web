@@ -4,7 +4,7 @@
 [
   EncounterDefinition(
     card_id: "161482b6-af07-4d9e-822d-8c738672beb9",
-    prose: Tx("A young lantern bearer approaches a towering window of stars."),
+    prose: Tx("A young lantern bearer approaches a towering window of constellations."),
     actions: [
       ActionDefinition(
         label: Tx("Invite someone through"),
@@ -152,7 +152,7 @@
 
   EncounterDefinition(
     card_id: "886c9d49-b25f-4ddd-97f0-2ec4b42eda89",
-    prose: Tx("A colossal rider looms through star-filled haze, long hair streaming."),
+    prose: Tx("A colossal horseman looms through star-filled haze, long hair streaming."),
     actions: [
       ActionDefinition(
         label: Tx("Answer Their Muster"),
@@ -206,7 +206,7 @@
 
   EncounterDefinition(
     card_id: "e26e0ac8-d6c9-4b0c-8672-4f73651f2586",
-    prose: Tx("A solitary man pauses on a gnarled bough beneath suspended lanterns."),
+    prose: Tx("A solitary man pauses on a gnarled bough beneath suspended golden lights."),
     actions: [
       ActionDefinition(
         label: Tx("Offer Him an Exchange"),
@@ -375,7 +375,7 @@
   EncounterDefinition(
     card_id: "edb479be-68a5-45bc-bd19-2602156edb57",
     prose: Tx(
-      "A colossal eagle beats broad wings through canyon haze, dark feathers edged with glare."
+      "A colossal raptor beats broad wings through canyon haze, dark feathers edged with glare."
     ),
     actions: [
       ActionDefinition(
@@ -476,7 +476,7 @@
 
   EncounterDefinition(
     card_id: "1dc8f23e-58bd-47e5-9510-b48315fba1df",
-    prose: Tx("A dark-coated explorer holds a bright lantern as wind whips his hair."),
+    prose: Tx("A dark-coated explorer cradles a bright beacon as wind whips his hair."),
     actions: [
       ActionDefinition(
         label: Tx("Touch the lantern"),
@@ -517,7 +517,7 @@
 
   EncounterDefinition(
     card_id: "7dd2214f-8d16-453a-9f28-62712e64eae1",
-    prose: Tx("A black firefly hovers, amber abdomen blazing."),
+    prose: Tx("A black firefly hovers, its golden abdomen blazing."),
     actions: [
       ActionDefinition(
         label: Tx("Rest in its radiance"),
@@ -581,7 +581,7 @@
   EncounterDefinition(
     card_id: "5e1b943f-9fa2-4055-b613-5dd09a048c99",
     prose: Tx(
-      "A lone pilgrim faces a radiant portal while shattered monoliths drift across an alien sky."
+      "A lone traveler faces a radiant portal while shattered monoliths drift across an alien sky."
     ),
     actions: [
       ActionDefinition(
@@ -642,7 +642,7 @@
   EncounterDefinition(
     card_id: "eed92573-8052-494c-adae-9838de5375a1",
     prose: Tx(
-      "Twin wolves flank a cloaked wanderer beneath a blood-red moon, awaiting her silent command."
+      "Twin wolves flank a cloaked wanderer beneath a scarlet orb, awaiting her silent command."
     ),
     actions: [
       ActionDefinition(
@@ -680,7 +680,7 @@
   EncounterDefinition(
     card_id: "34ea77a8-66e4-49b8-a934-a9d95cb74376",
     prose: Tx(
-      "A lone navigator poles through flooded refineries while amber waters glitter with drifting wreckage."
+      "A lone boatman poles through flooded refineries while amber waters glitter with drifting wreckage."
     ),
     actions: [
       ActionDefinition(
@@ -738,7 +738,7 @@
   EncounterDefinition(
     card_id: "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6",
     prose: Tx(
-      "A colossal stag towers across a twilight road, white halo blazing between black antlers."
+      "A colossal antlered beast towers across a twilight road, white halo blazing between black tines."
     ),
     actions: [
       ActionDefinition(
@@ -761,7 +761,7 @@
 
   EncounterDefinition(
     card_id: "e7c93c3b-14db-4131-ab50-71d152331777",
-    prose: Tx("A crimson rider surfs sunset air above a fractured city."),
+    prose: Tx("A crimson rider glides through sunset air above a fractured city."),
     actions: [
       ActionDefinition(
         label: Tx("Ride crimson wake"),
@@ -780,7 +780,7 @@
   EncounterDefinition(
     card_id: "06a4709d-fbef-4ea2-aa5e-caa2beac80ab",
     prose: Tx(
-      "A yellow-cloaked explorer faces a blue vortex as stone and golden fragments spiral skyward."
+      "A yellow-cloaked wanderer faces a blue maelstrom as stone and golden fragments spiral skyward."
     ),
     actions: [
       ActionDefinition(
@@ -844,7 +844,7 @@
   EncounterDefinition(
     card_id: "42427d15-c019-4786-9d7e-285829c4f3cb",
     prose: Tx(
-      "A cabled silhouette reaches into golden radiance as luminous signals ripple around her."
+      "A cabled silhouette reaches into golden radiance as luminous pulses ripple around her."
     ),
     actions: [
       ActionDefinition(
@@ -863,7 +863,7 @@
 
   EncounterDefinition(
     card_id: "5ab11bef-5dcd-49f5-be49-ae2ccde76e70",
-    prose: Tx("A rusted colossus stands among wildflowers as petals drift through mist."),
+    prose: Tx("A corroded giant stands among wildflowers as petals drift through mist."),
     actions: [
       ActionDefinition(
         label: Tx("Wake the Last Survivor"),
@@ -882,7 +882,7 @@
   EncounterDefinition(
     card_id: "7def28c4-d75a-47e1-ae86-5b7093cc0419",
     prose: Tx(
-      "A lone delver wades through flooded machinery as pale light gleams beyond hanging cables."
+      "A lone wanderer wades through flooded machinery as pale light gleams beyond hanging cables."
     ),
     actions: [
       ActionDefinition(
@@ -920,7 +920,7 @@
   EncounterDefinition(
     card_id: "5a27e236-86d7-442f-81d2-fb29a2b7f12a",
     prose: Tx(
-      "Embers whirl around a ragged wight advancing between scorched graves beneath a burning sky."
+      "Embers whirl around a ragged apparition advancing between scorched graves beneath a burning sky."
     ),
     actions: [
       ActionDefinition(
@@ -939,7 +939,7 @@
 
   EncounterDefinition(
     card_id: "22239029-f53c-4ba9-b9b6-29f6592bb722",
-    prose: Tx("A lone pilgrim wades beside an empty skiff beneath stars mirrored in still water."),
+    prose: Tx("A lone traveler wades beside an empty skiff beneath stars doubled in still water."),
     actions: [
       ActionDefinition(
         label: Tx("Search Skiff's Reflection"),
@@ -957,7 +957,7 @@
 
   EncounterDefinition(
     card_id: "eae928f6-aab2-415e-b4b1-b9c3ed8e6818",
-    prose: Tx("A radiant jellyfish sovereign rises above a drifting neon shoal."),
+    prose: Tx("A radiant jellyfish monarch rises above a floating neon shoal."),
     actions: [
       ActionDefinition(
         label: Tx("Join luminous procession"),
@@ -1115,7 +1115,7 @@
   EncounterDefinition(
     card_id: "e3193b23-2002-40a9-91fc-e0713200355e",
     prose: Tx(
-      "Windblown leaves circle a lone swordsman climbing stone steps beneath a crimson moon."
+      "Windblown leaves circle a lone swordsman climbing stone steps beneath a crimson disc."
     ),
     actions: [
       ActionDefinition(
@@ -1193,7 +1193,7 @@
   EncounterDefinition(
     card_id: "20a6474c-55b8-4b1b-9155-baac62a06f1e",
     prose: Tx(
-      "A lone ballerina balances beside a radiant crescent while emberlike lights drift across clouds."
+      "A lone ballerina balances beside a radiant silver arc while emberlike lights drift across clouds."
     ),
     actions: [
       ActionDefinition(
@@ -1213,7 +1213,7 @@
   EncounterDefinition(
     card_id: "96e2c30c-930c-47af-abb0-d4fbab454d56",
     prose: Tx(
-      "Warm crescent light guides a cloaked traveler across reflective snow among bare winter trunks."
+      "Warm crescent light leads a cloaked traveler across reflective snow among frost-bare trunks."
     ),
     actions: [
       ActionDefinition(
@@ -1273,7 +1273,7 @@
 
   EncounterDefinition(
     card_id: "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a",
-    prose: Tx("An armored standard bearer raises a luminous banner beneath a vast ringed planet."),
+    prose: Tx("An armored herald raises a luminous banner beneath a vast ringed planet."),
     actions: [
       ActionDefinition(
         label: Tx("Answer Banner's Call"),
@@ -1310,7 +1310,7 @@
   EncounterDefinition(
     card_id: "78673e2b-a6d1-43de-8850-3d3327de5cc6",
     prose: Tx(
-      "Fiery spirits stream skyward around a lone warrior standing amid smoldering branches."
+      "Fiery apparitions stream skyward around a lone warrior standing amid smoldering branches."
     ),
     actions: [
       ActionDefinition(
@@ -1376,7 +1376,7 @@
   EncounterDefinition(
     card_id: "16f4962d-2950-4360-8f55-bc47428480ef",
     prose: Tx(
-      "A gas-masked captain rides an armored horse past black spires toward a blinding flare."
+      "A gas-masked officer rides an armored horse past black spires toward a blinding flare."
     ),
     actions: [
       ActionDefinition(
@@ -1396,7 +1396,7 @@
   EncounterDefinition(
     card_id: "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4",
     prose: Tx(
-      "An engineer welds a colossal translucent machine as green light floods tangled cables."
+      "A masked worker welds a colossal translucent machine as green light floods tangled cables."
     ),
     actions: [
       ActionDefinition(
@@ -1416,7 +1416,7 @@
   EncounterDefinition(
     card_id: "6196d53d-a226-490d-a3bb-159a78d1b2b7",
     prose: Tx(
-      "An electrified sphere suspends a luminous figure above a lone silhouette among fractured towers."
+      "An electrified globe suspends a luminous figure above a lone silhouette among fractured towers."
     ),
     actions: [
       ActionDefinition(
@@ -1458,7 +1458,7 @@
 
   EncounterDefinition(
     card_id: "78b5a42d-b099-48f1-a1b4-5b6bc177adeb",
-    prose: Tx("A sword-bearing warrior faces floating amber shards above violet clouds."),
+    prose: Tx("A sword-bearing warrior faces floating amber splinters above violet clouds."),
     actions: [
       ActionDefinition(
         label: Tx("Call Through Shards"),
@@ -1733,7 +1733,7 @@
   EncounterDefinition(
     card_id: "8f69312f-4bec-4671-99da-e752ec6d4cbc",
     prose: Tx(
-      "A young seeker climbs moss-covered stairs toward a red gate suspended among clouds."
+      "A young traveler climbs moss-covered stairs toward a red gate suspended among clouds."
     ),
     actions: [
       ActionDefinition(
@@ -1771,7 +1771,7 @@
   EncounterDefinition(
     card_id: "acefcfcf-cba5-46ec-913e-32f1091afbda",
     prose: Tx(
-      "A seated traveler and watchful companion study luminous star trails spiraling above a ruined skyline."
+      "A seated traveler and watchful companion study luminous star trails coiling above a ruined skyline."
     ),
     actions: [
       ActionDefinition(
@@ -1831,7 +1831,7 @@
   EncounterDefinition(
     card_id: "c73f978e-8196-4589-a432-845265115555",
     prose: Tx(
-      "A stormbound warrior channels forked lightning beneath a ruptured sky and hovering monolith."
+      "A stormbound warrior summons forked bolts beneath a ruptured sky and hovering monolith."
     ),
     actions: [
       ActionDefinition(
@@ -1891,7 +1891,7 @@
   EncounterDefinition(
     card_id: "881e3a5f-280f-413a-b927-352aeb3bda71",
     prose: Tx(
-      "A lone axebearer faces crimson light and blood-red tracks among tangled, snow-dusted trees."
+      "A lone axebearer faces crimson light and scarlet tracks among tangled, snow-dusted trees."
     ),
     actions: [
       ActionDefinition(
@@ -1995,7 +1995,7 @@
   EncounterDefinition(
     card_id: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
     prose: Tx(
-      "A rune-marked warrior floats barefoot before a crimson moon, gripping a luminous blade above dawnlit clouds."
+      "A sigil-marked warrior floats barefoot before a crimson moon, gripping a luminous blade above dawnlit clouds."
     ),
     actions: [
       ActionDefinition(
@@ -2033,7 +2033,7 @@
   EncounterDefinition(
     card_id: "be6a2712-cfe3-4d61-b62c-fab8990786a1",
     prose: Tx(
-      "A spear-bearing chieftain watches sunset beside three wolves gathered along a rocky shore."
+      "A spear-bearing clan leader watches sunset beside three wolves gathered along a rocky shore."
     ),
     actions: [
       ActionDefinition(
@@ -2071,7 +2071,7 @@
   EncounterDefinition(
     card_id: "cbabe603-1333-42bd-85c0-555c664b60b3",
     prose: Tx(
-      "A pale mourner sheds blue tears while mothlike lights drift through tangled black hair."
+      "A pale figure sheds blue tears while mothlike lights drift through tangled black hair."
     ),
     actions: [
       ActionDefinition(
@@ -2120,7 +2120,7 @@
   EncounterDefinition(
     card_id: "41c14462-86b9-42a4-8a61-859d59ffa466",
     prose: Tx(
-      "A lone warrior faces a colossal blade dissolving beneath lightning and drifting black fragments."
+      "A lone warrior faces a colossal sword dissolving beneath lightning and drifting black fragments."
     ),
     actions: [
       ActionDefinition(
@@ -2203,7 +2203,9 @@
 
   EncounterDefinition(
     card_id: "7697da0e-d759-4c75-8c9c-477e9058b035",
-    prose: Tx("A cybernetic agent fires midair as teal light shatters a black, angular structure."),
+    prose: Tx(
+      "A cybernetic operative fires midair as teal light ruptures a black, angular structure."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Detonate an Agent"),
@@ -2240,7 +2242,7 @@
   EncounterDefinition(
     card_id: "48257e3e-9600-4edf-a905-e73a41ab5ec1",
     prose: Tx(
-      "A crimson flamingo balances above glassy water while its reflection stretches beneath bright clouds."
+      "A crimson wading bird balances above glassy water while its reflection stretches beneath bright clouds."
     ),
     actions: [
       ActionDefinition(
@@ -2277,7 +2279,7 @@
 
   EncounterDefinition(
     card_id: "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1",
-    prose: Tx("An armored wanderer watches a cyan beam rise beyond flooded industrial wreckage."),
+    prose: Tx("An armored wanderer studies a cyan beam rising beyond flooded industrial wreckage."),
     actions: [
       ActionDefinition(
         label: Tx("Bury Fallen Echoes"),
@@ -2316,7 +2318,7 @@
   EncounterDefinition(
     card_id: "6cf545ba-b014-4333-a0da-573e8f97d734",
     prose: Tx(
-      "A staff-bearing nomad crosses golden grass beneath vast luminous rings curling through clouds."
+      "A staff-bearing wayfarer crosses golden grass beneath vast luminous rings curling through clouds."
     ),
     actions: [
       ActionDefinition(
@@ -2409,7 +2411,9 @@
 
   EncounterDefinition(
     card_id: "fd355778-abea-4513-844c-91bf75929ebe",
-    prose: Tx("A hooded reaper rides a flaming horse above skulls as embers and stones scatter."),
+    prose: Tx(
+      "A hooded scytheman rides a flaming horse above skulls as embers and stones scatter."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Trade One Soul"),
@@ -2723,7 +2727,7 @@
 
   EncounterDefinition(
     card_id: "312e42cb-e8ee-43da-9ef8-173a69583c97",
-    prose: Tx("A silver-haired matriarch bears an antlered spear beside an immense sunlit tree."),
+    prose: Tx("A silver-haired elder bears an antlered spear beside an immense sunlit tree."),
     actions: [
       ActionDefinition(
         label: Tx("Call Sylvan Retinue"),
@@ -2812,7 +2816,7 @@
   EncounterDefinition(
     card_id: "c32ef131-d283-4bf1-bf65-2d5e5d232168",
     prose: Tx(
-      "Twin palm-sigils burn as a fragmented titan hovers above a lone traveler and shattered stones."
+      "Twin palm-sigils burn as a fragmented giant hovers above a lone traveler and shattered stones."
     ),
     actions: [
       ActionDefinition(
@@ -2831,7 +2835,7 @@
 
   EncounterDefinition(
     card_id: "f82c7407-b642-4ab1-8878-171f9121b3eb",
-    prose: Tx("A spear-bearing lookout crouches on a high branch above mist and distant birds."),
+    prose: Tx("A spear-bearing sentry crouches on a high branch above mist and distant birds."),
     actions: [
       ActionDefinition(
         label: Tx("End a Warrior's Watch"),
@@ -3020,7 +3024,7 @@
   EncounterDefinition(
     card_id: "fa7dadd8-c72f-42e7-b203-3d22aa36122f",
     prose: Tx(
-      "A crimson construct reaches toward a luminous fragment amid concentric mechanisms and cascading metallic wreckage."
+      "A crimson machine reaches toward a luminous fragment amid concentric mechanisms and cascading metallic wreckage."
     ),
     actions: [
       ActionDefinition(
@@ -3187,7 +3191,7 @@
 
   EncounterDefinition(
     card_id: "e4ab6a18-c3b2-4149-a446-c7c1e8d66714",
-    prose: Tx("A red-armored gunner scans violet-lit wreckage, a long rifle across her back."),
+    prose: Tx("A red-armored soldier scans violet-lit wreckage, a long rifle across her back."),
     actions: [
       ActionDefinition(
         label: Tx("Search Violet Wreckage"),
@@ -3248,7 +3252,9 @@
 
   EncounterDefinition(
     card_id: "44ae8838-4714-43a5-a7bd-e9f806f35ca9",
-    prose: Tx("A pilot rides within a massive battlesuit as neon rain scatters across city steel."),
+    prose: Tx(
+      "A pilot rides within massive powered armor as neon rain scatters across city steel."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Enter Open Cockpit"),
@@ -3311,7 +3317,7 @@
   EncounterDefinition(
     card_id: "770b21e4-ea6a-4910-8fca-2ec5b8813da1",
     prose: Tx(
-      "A suited broker falls between exploding towers as contracts and debris spiral through blue fire."
+      "A suited financier falls between exploding towers as contracts and debris spiral through blue fire."
     ),
     actions: [
       ActionDefinition(
@@ -3351,7 +3357,7 @@
   EncounterDefinition(
     card_id: "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a",
     prose: Tx(
-      "Golden sigils bind a midnight courser while violet spirit-fire lifts stones beneath an aurora."
+      "Golden sigils bind a midnight steed while violet spirit-fire lifts stones beneath an aurora."
     ),
     actions: [
       ActionDefinition(
@@ -3373,7 +3379,7 @@
 
   EncounterDefinition(
     card_id: "37d9165f-2b3a-44a2-848b-401cf4466a7c",
-    prose: Tx("A blue-robed guide gathers drifting soul-signals amid a mist-veiled city."),
+    prose: Tx("A blue-robed shepherd gathers drifting ghost-signals amid a mist-veiled city."),
     actions: [
       ActionDefinition(
         label: Tx("Release a Lost Visionary"),
@@ -3467,7 +3473,7 @@
 
   EncounterDefinition(
     card_id: "cd2d4eaf-6295-451d-aaa2-ea74188bac3b",
-    prose: Tx("A pale panther sprawls across a high branch, amber eyes fixed forward."),
+    prose: Tx("An ivory great cat sprawls across a high branch, amber eyes fixed forward."),
     actions: [
       ActionDefinition(
         label: Tx("Follow its gaze"),
@@ -3638,7 +3644,7 @@
   EncounterDefinition(
     card_id: "b8a66998-f2d8-401d-8262-d5a658563936",
     prose: Tx(
-      "Black cables consume a cybernetic marksman aiming across burning wreckage beneath falling ash."
+      "Black cables engulf a cybernetic sniper aiming across burning wreckage beneath falling ash."
     ),
     actions: [
       ActionDefinition(
@@ -3705,7 +3711,7 @@
   EncounterDefinition(
     card_id: "07ceb104-0b27-473a-bc72-e6225479ed83",
     prose: Tx(
-      "A colossal stone whale breaches through drifting rubble as a tethered astronaut reaches toward its flank."
+      "A colossal mineral whale breaches through drifting rubble as a tethered astronaut reaches toward its flank."
     ),
     actions: [
       ActionDefinition(
@@ -3770,7 +3776,7 @@
   EncounterDefinition(
     card_id: "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea",
     prose: Tx(
-      "A colossal rider charges through billowing dust, a long spear leveled beneath stars."
+      "A colossal horseman charges through billowing dust, a long spear leveled beneath stars."
     ),
     actions: [
       ActionDefinition(
@@ -3790,7 +3796,7 @@
   EncounterDefinition(
     card_id: "4f0f0811-1a4c-4d42-a804-77dba8707792",
     prose: Tx(
-      "A shadowed shopkeeper stands behind a counter, one hand lifted toward shelves packed with glowing curios."
+      "A shadowed shopkeeper stands behind a counter, one hand lifted toward shelves packed with glowing relics."
     ),
     actions: [
       ActionDefinition(
@@ -3830,7 +3836,9 @@
 
   EncounterDefinition(
     card_id: "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b",
-    prose: Tx("A silent curator shelters beneath burning silk as wind scatters glowing fragments."),
+    prose: Tx(
+      "A silent custodian shelters beneath burning silk as wind scatters glowing fragments."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Shelter a Remnant"),
@@ -3985,7 +3993,7 @@
 
   EncounterDefinition(
     card_id: "8904714c-38a9-491f-92ce-5cb5ece26ab1",
-    prose: Tx("A vast star vortex spirals above an orange planetary horizon."),
+    prose: Tx("A vast star vortex spirals above the orange rim of a planet."),
     actions: [
       ActionDefinition(
         label: Tx("Study the star vortex"),
@@ -4024,7 +4032,7 @@
   EncounterDefinition(
     card_id: "7d5672d2-c8fa-4837-9e98-8cccdd07ff56",
     prose: Tx(
-      "A lantern-bearer climbs fractured stairs toward a blazing circular portal suspended beneath stars."
+      "A lantern-bearer climbs fractured stairs toward a blazing circular threshold suspended beneath stars."
     ),
     actions: [
       ActionDefinition(
@@ -4044,7 +4052,7 @@
   EncounterDefinition(
     card_id: "b56ef7e8-c634-4d40-ac08-fab591dfbc4a",
     prose: Tx(
-      "Two astronauts cross a snowy valley toward a golden beam descending through starlight."
+      "Two astronauts cross a snowy valley toward a golden beam descending through the starry dusk."
     ),
     actions: [
       ActionDefinition(
@@ -4285,9 +4293,7 @@
 
   EncounterDefinition(
     card_id: "8896c178-757e-4775-b117-a4357ebfe30f",
-    prose: Tx(
-      "A red-coated woman braces amid flames, long hair streaming across burning wreckage."
-    ),
+    prose: Tx("A red-coated woman braces amid fire, long hair streaming across burning wreckage."),
     actions: [
       ActionDefinition(
         label: Tx("Search burning wreckage"),
@@ -4366,7 +4372,7 @@
   EncounterDefinition(
     card_id: "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c",
     prose: Tx(
-      "A spear-bearing guard wades through luminous blossoms while blue motes circle beneath an ember sky."
+      "A spear-bearing protector wades through luminous blossoms while blue motes circle beneath an ember sky."
     ),
     actions: [
       ActionDefinition(
@@ -4411,7 +4417,7 @@
 
   EncounterDefinition(
     card_id: "f4082c01-fdc8-4583-afdb-76bac980b3bf",
-    prose: Tx("A lone soldier faces a towering sandstorm across a stark, sunlit wasteland."),
+    prose: Tx("A lone soldier faces a towering sandstorm across stark, sunlit barrens."),
     actions: [
       ActionDefinition(
         label: Tx("Wait Out the Storm"),
@@ -4430,7 +4436,7 @@
   EncounterDefinition(
     card_id: "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
     prose: Tx(
-      "A young voyager rows through clouds toward a green floating island as white birds scatter."
+      "A young mariner rows through clouds toward a green floating island as white birds scatter."
     ),
     actions: [
       ActionDefinition(
@@ -4490,7 +4496,9 @@
 
   EncounterDefinition(
     card_id: "9495f501-f627-4b74-a848-b3d928641229",
-    prose: Tx("A hooded hewer raises a runed blade against a golden-eyed bear amid driving snow."),
+    prose: Tx(
+      "A hooded warrior raises a runed blade against a golden-eyed bear amid driving snow."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Lower Runed Hewer"),
@@ -4515,7 +4523,7 @@
   EncounterDefinition(
     card_id: "2931e20b-1a80-4ddd-8944-20e68d182886",
     prose: Tx(
-      "A lone diver descends through flooded wreckage toward orange radiance beneath blue water."
+      "A lone diver descends through flooded wreckage toward an orange glow beneath blue water."
     ),
     actions: [
       ActionDefinition(
@@ -4865,7 +4873,7 @@
   EncounterDefinition(
     card_id: "a526fa7b-5cef-4da9-a3f2-27ee0bd9b481",
     prose: Tx(
-      "A rifle-bearing witness crosses burning wreckage as ash-dark figures close from every side."
+      "A rifle-bearing survivor crosses burning wreckage as ash-dark figures close from every side."
     ),
     actions: [
       ActionDefinition(
@@ -4929,7 +4937,7 @@
   EncounterDefinition(
     card_id: "caaee8a9-0c22-41b4-950f-4c1131b98221",
     prose: Tx(
-      "A seated dreamer watches birds cross luminous planets above a cloud-ringed celestial sea."
+      "A seated dreamer watches birds cross luminous planets above a cloud-ringed astral sea."
     ),
     actions: [
       ActionDefinition(
@@ -4968,7 +4976,7 @@
 
   EncounterDefinition(
     card_id: "d1c25546-dcf2-481e-8f00-9afef3adf24b",
-    prose: Tx("A green-coated scout grips a tattered flag before a broken circular arch."),
+    prose: Tx("A green-coated outrider grips a tattered flag before a broken circular arch."),
     actions: [
       ActionDefinition(
         label: Tx("Scout beyond the arch"),
@@ -5046,7 +5054,7 @@
 
   EncounterDefinition(
     card_id: "25d00336-5ad7-433b-8ced-71720a9f074a",
-    prose: Tx("A lone child rows across mirrored starlight beneath a vast wheel of luminous arcs."),
+    prose: Tx("A lone child rows across mirrored starlight beneath a vast crown of luminous arcs."),
     actions: [
       ActionDefinition(
         label: Tx("Complete Celestial Circuit"),
@@ -5164,7 +5172,7 @@
   EncounterDefinition(
     card_id: "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188",
     prose: Tx(
-      "A pillar of flame lifts shattered structures above a ruined city as embers fill darkness."
+      "A pillar of fire lifts shattered structures above a ruined city as embers fill darkness."
     ),
     actions: [
       ActionDefinition(
@@ -5184,7 +5192,7 @@
   EncounterDefinition(
     card_id: "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1",
     prose: Tx(
-      "A masked duelist grips a lightning blade amid rain, smoking cables, and skeletal towers."
+      "A masked swordsman grips a lightning blade amid rain, smoking cables, and skeletal towers."
     ),
     actions: [
       ActionDefinition(
@@ -5203,9 +5211,7 @@
 
   EncounterDefinition(
     card_id: "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5",
-    prose: Tx(
-      "A broad manta ray glides through glowing orange clouds, its dark wings outstretched."
-    ),
+    prose: Tx("A broad manta glides through glowing orange vapor, its dark fins outstretched."),
     actions: [
       ActionDefinition(
         label: Tx("Follow the manta ray"),
@@ -5224,7 +5230,7 @@
   EncounterDefinition(
     card_id: "9adbe3db-d872-4b75-92b5-d7f2798c22ce",
     prose: Tx(
-      "A cybernetic figure strides through shattered clockwork as glowing hands cross behind him."
+      "A cybernetic figure strides through shattered mechanisms as glowing hands cross behind him."
     ),
     actions: [
       ActionDefinition(
@@ -5287,7 +5293,7 @@
   EncounterDefinition(
     card_id: "6f1833a0-30f5-4718-9a3e-7620beb72bfc",
     prose: Tx(
-      "A windblown salvager faces a luminous clockwork horse amid colossal gears and tilted towers."
+      "A windblown scavenger faces a luminous mechanical horse amid colossal gears and tilted towers."
     ),
     actions: [
       ActionDefinition(
@@ -5307,7 +5313,7 @@
   EncounterDefinition(
     card_id: "b5fbff03-f850-4627-94eb-12ed4dc15334",
     prose: Tx(
-      "A black cat pauses between a golden forest dawn and violet shadows alive with fireflies."
+      "A black cat pauses between a golden forest dawn and violet darkness alive with fireflies."
     ),
     actions: [
       ActionDefinition(
@@ -5330,7 +5336,7 @@
   EncounterDefinition(
     card_id: "2e8571c0-4faf-4e7a-a702-26952d2035ee",
     prose: Tx(
-      "A hooded watcher surveys a crowded avenue burning beneath shattered towers and distant domes."
+      "A hooded observer surveys a crowded avenue burning beneath shattered towers and distant domes."
     ),
     actions: [
       ActionDefinition(
@@ -5370,7 +5376,7 @@
   EncounterDefinition(
     card_id: "cfa78375-85b7-47e9-95f5-b31e6d112c52",
     prose: Tx(
-      "A masked scavenger scans a glowing display beside a radiation-marked crate in yellow haze."
+      "A masked looter scans a glowing display beside a radiation-marked crate in yellow haze."
     ),
     actions: [
       ActionDefinition(
@@ -5408,7 +5414,7 @@
   EncounterDefinition(
     card_id: "448abb34-d77d-40ac-8292-58db03176247",
     prose: Tx(
-      "A skull-crowned binder channels screaming spirits through a fiery sigil and blood-red gem."
+      "A skull-crowned occultist draws screaming spirits through a fiery sigil and blood-red gem."
     ),
     actions: [
       ActionDefinition(
@@ -5433,7 +5439,7 @@
   EncounterDefinition(
     card_id: "de946f5a-1e27-4d40-ae44-9ef8cc041949",
     prose: Tx(
-      "A silhouetted rower stands in a dark skiff, paddle balanced across one shoulder beneath countless stars."
+      "A silhouetted boatman stands in a dark skiff, paddle balanced across one shoulder beneath countless stars."
     ),
     actions: [
       ActionDefinition(
@@ -5453,7 +5459,7 @@
   EncounterDefinition(
     card_id: "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c",
     prose: Tx(
-      "A crouched hunter faces a burning metal aperture as sparks drift through tangled forest."
+      "A crouched hunter faces a burning metal opening as sparks drift through tangled forest."
     ),
     actions: [
       ActionDefinition(
@@ -5498,7 +5504,7 @@
 
   EncounterDefinition(
     card_id: "61060827-8bed-4b63-b63d-6c3b0536e941",
-    prose: Tx("A lean wolf howls from a jagged peak, its dark coat rimmed in amber light."),
+    prose: Tx("A lean wolf calls from a jagged peak, its dark coat rimmed in amber light."),
     actions: [
       ActionDefinition(
         label: Tx("Answer the Howl"),
@@ -5541,7 +5547,7 @@
   EncounterDefinition(
     card_id: "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2",
     prose: Tx(
-      "A winged cellist bows beneath a radiant eclipse as birds wheel above shadowed spires."
+      "A winged cellist bows beneath a radiant black sun as birds wheel above shadowed spires."
     ),
     actions: [
       ActionDefinition(
@@ -5564,7 +5570,7 @@
   EncounterDefinition(
     card_id: "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b",
     prose: Tx(
-      "Two armored fighters face across broken catwalks as molten sparks engulf a ruined foundry."
+      "Two armored fighters face across broken catwalks as incandescent sparks engulf a ruined foundry."
     ),
     actions: [
       ActionDefinition(
@@ -5609,7 +5615,7 @@
   EncounterDefinition(
     card_id: "245b49b9-e1e5-4dd0-ae18-718c437b8eb0",
     prose: Tx(
-      "A white-haired conduit levitates wrecked cars as blue lightning webs across a shattered roadway."
+      "A white-haired psychic levitates wrecked cars as blue lightning webs across a shattered roadway."
     ),
     actions: [
       ActionDefinition(
@@ -5717,7 +5723,7 @@
   EncounterDefinition(
     card_id: "90a6a7a0-b739-475e-8379-647741aab423",
     prose: Tx(
-      "A crowned herald wades toward a colossal armored sentinel looming before a mistbound castle."
+      "A crowned emissary wades toward a colossal armored sentinel looming before a mistbound castle."
     ),
     actions: [
       ActionDefinition(
@@ -5787,7 +5793,7 @@
   EncounterDefinition(
     card_id: "691883df-63d8-4664-a1fe-d5f3b5becd11",
     prose: Tx(
-      "A traveler faces a colossal spectral antelope, its luminous horns piercing snowfall."
+      "A traveler faces a colossal spectral antelope, its luminous crown piercing the flurries."
     ),
     actions: [
       ActionDefinition(
@@ -5824,7 +5830,7 @@
 
   EncounterDefinition(
     card_id: "28c3ef90-c0dc-4b85-92c8-40758b99e0ce",
-    prose: Tx("A red-cloaked woman wades through dark water as loose petals spiral around her."),
+    prose: Tx("A red-cloaked woman wades through dark water as loose blossoms spiral around her."),
     actions: [
       ActionDefinition(
         label: Tx("Read the Ripples"),
@@ -5945,7 +5951,7 @@
   EncounterDefinition(
     card_id: "041fafeb-f159-4aba-90c2-3ce4b3038bdc",
     prose: Tx(
-      "A hulking antlered creature strides through burning grass, ember-red eyes glowing beneath tangled bark."
+      "A hulking branch-crowned creature strides through burning grass, ember-red eyes glowing beneath tangled bark."
     ),
     actions: [
       ActionDefinition(
@@ -5965,7 +5971,7 @@
   EncounterDefinition(
     card_id: "cd3d8e4a-618e-4c2f-be60-0363b81887f1",
     prose: Tx(
-      "A lone technician stands between radiant pylons as electricity crawls through a ruined laboratory."
+      "A lone mechanic stands between radiant pylons as electricity crawls through a ruined laboratory."
     ),
     actions: [
       ActionDefinition(
@@ -6011,7 +6017,7 @@
   EncounterDefinition(
     card_id: "a37876f4-08a7-4352-bb3a-6d24f5c9407d",
     prose: Tx(
-      "A cloaked mage raises a blazing staff toward a cracked lighthouse wrapped in spectral light."
+      "A cloaked mage raises a blazing staff toward a cracked beacon tower wrapped in spectral fire."
     ),
     actions: [
       ActionDefinition(
@@ -6159,7 +6165,7 @@
   EncounterDefinition(
     card_id: "1b341984-d32e-42a7-ae56-b22059c59737",
     prose: Tx(
-      "A masked survivor watches glowing motes drift through a canyon of stacked wrecked cars."
+      "A masked survivor watches glowing motes drift through a canyon of stacked ruined cars."
     ),
     actions: [
       ActionDefinition(
@@ -6261,7 +6267,7 @@
 
   EncounterDefinition(
     card_id: "a031eada-2c47-49c6-8c19-d2fe85f8ce97",
-    prose: Tx("A lone explorer lifts a lantern toward blue lights beyond a flooded cavern."),
+    prose: Tx("A lone wanderer lifts a lantern toward blue lights beyond a flooded cavern."),
     actions: [
       ActionDefinition(
         label: Tx("Read Hidden Revelations"),
@@ -6283,7 +6289,7 @@
   EncounterDefinition(
     card_id: "724a1362-3f0f-4b77-b14e-22c0b877349a",
     prose: Tx(
-      "A mounted captain gallops through burning woods as radiant birds scatter beside a shadowed spear."
+      "A mounted officer gallops through burning woods as luminous birds scatter beside a shadowed spear."
     ),
     actions: [
       ActionDefinition(
@@ -6325,7 +6331,9 @@
 
   EncounterDefinition(
     card_id: "f7ffe999-685d-4ea2-85de-2e567eb2a042",
-    prose: Tx("Countless keys orbit a luminous keyhole while a solitary child approaches."),
+    prose: Tx(
+      "Countless golden talismans orbit a luminous lock while a solitary child approaches."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Cross Green Threshold"),
@@ -6403,7 +6411,7 @@
   EncounterDefinition(
     card_id: "f7c68226-def4-4eb0-bdfe-b028482e1351",
     prose: Tx(
-      "A colossal sleeper floats beneath green light while a masked technician studies nearby controls."
+      "A colossal dormant figure floats beneath green light while a masked technician studies nearby controls."
     ),
     actions: [
       ActionDefinition(
@@ -6449,7 +6457,7 @@
   EncounterDefinition(
     card_id: "7992dbb5-ca45-4066-aca3-ff1d6d87619e",
     prose: Tx(
-      "A woman rides a howling wolf atop shattered peaks beneath green stars and drifting stones."
+      "A woman rides a howling beast atop shattered peaks beneath green stars and drifting stones."
     ),
     actions: [
       ActionDefinition(
@@ -6521,7 +6529,7 @@
   EncounterDefinition(
     card_id: "4d4618bd-4779-4953-b446-dab05e1da5db",
     prose: Tx(
-      "A lone traveler watches a crimson nebula burn above black spires and misty cascades."
+      "A lone traveler watches a crimson star cloud burn above black spires and misty cascades."
     ),
     actions: [
       ActionDefinition(
@@ -6585,7 +6593,7 @@
   EncounterDefinition(
     card_id: "06f8cfff-92ec-4668-afbc-f33a274c3b1a",
     prose: Tx(
-      "A lone mechanic faces a shattered blue veil while bright fragments float above orange embers."
+      "A lone mechanic faces a shattered blue curtain while bright fragments float above orange embers."
     ),
     actions: [
       ActionDefinition(
@@ -6610,7 +6618,7 @@
   EncounterDefinition(
     card_id: "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf",
     prose: Tx(
-      "A young guitarist strums from a broad branch above reflective water in a sunlit autumn forest."
+      "A young guitarist plays from a broad branch above reflective water in a sunlit autumn forest."
     ),
     actions: [
       ActionDefinition(
@@ -6670,7 +6678,7 @@
   EncounterDefinition(
     card_id: "7ffb1179-6c94-4f80-9613-ece2b799f19d",
     prose: Tx(
-      "Headtaker's many faces kindle turquoise; each severed crown nourishes those remaining."
+      "A many-faced horror kindles turquoise; each severed crown nourishes those remaining."
     ),
     actions: [
       ActionDefinition(
@@ -6692,7 +6700,7 @@
 
   EncounterDefinition(
     card_id: "88994286-96db-4ba6-a660-b30ae9b52cff",
-    prose: Tx("A torchbearer confronts towering horned smoke-beasts amid sickly green haze."),
+    prose: Tx("A torchbearer confronts towering horned soot-beasts amid sickly green haze."),
     actions: [
       ActionDefinition(
         label: Tx("Feed the Smoke"),
@@ -6758,7 +6766,7 @@
 
   EncounterDefinition(
     card_id: "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e",
-    prose: Tx("A lone explorer faces prismatic light erupting from dark surf."),
+    prose: Tx("A lone explorer faces rainbow light erupting from dark surf."),
     actions: [
       ActionDefinition(
         label: Tx("Collect Prismatic Fragments"),
@@ -6776,9 +6784,7 @@
 
   EncounterDefinition(
     card_id: "14ac6804-ed1d-4148-aad7-11796b6fff6c",
-    prose: Tx(
-      "A broad-winged butterfly rests on a mossy branch, cyan light flooding patterned wings."
-    ),
+    prose: Tx("A broad butterfly rests on a mossy branch, cyan light flooding patterned pinions."),
     actions: [
       ActionDefinition(
         label: Tx("Trace Its Patterns"),
@@ -6839,7 +6845,7 @@
 
   EncounterDefinition(
     card_id: "81074582-dfb3-497c-8c04-f97a24d6b1d4",
-    prose: Tx("A horned witch listens as ember eyes smolder inside spiraling bone chambers."),
+    prose: Tx("A horned sorceress listens as ember eyes smolder inside spiraling bone chambers."),
     actions: [
       ActionDefinition(
         label: Tx("Trade a Memory"),
@@ -6862,7 +6868,9 @@
 
   EncounterDefinition(
     card_id: "1b4d2adc-64ab-4020-bae6-b35321898bf0",
-    prose: Tx("A cloaked warden raises a blue lantern above shadowed ships in a radiant harbor."),
+    prose: Tx(
+      "A cloaked sentinel raises a blue lantern above shadowed ships in a radiant anchorage."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Call the Market Fleet"),
@@ -6941,7 +6949,7 @@
   EncounterDefinition(
     card_id: "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b",
     prose: Tx(
-      "A skeletal spider-giant scatters black shards while two tiny figures hang beneath glowing red eyes."
+      "A skeletal spider-giant scatters black splinters while two tiny figures hang beneath glowing red eyes."
     ),
     actions: [
       ActionDefinition(
@@ -7010,7 +7018,7 @@
   EncounterDefinition(
     card_id: "eae700c9-5005-4627-b8d6-a5c2c273e61a",
     prose: Tx(
-      "A solitary child opens a radiant door amid towering blue ruins and suspended debris."
+      "A solitary child opens a radiant threshold amid towering blue ruins and suspended debris."
     ),
     actions: [
       ActionDefinition(
@@ -7071,7 +7079,7 @@
   EncounterDefinition(
     card_id: "3e6a5236-9850-4a69-9fe1-48389365a399",
     prose: Tx(
-      "Blind Butcher's sealed gaze hangs above two blood-bright maws and cold luminous sigils."
+      "A sightless horror's sealed gaze hangs above two blood-bright maws and cold luminous sigils."
     ),
     actions: [
       ActionDefinition(
@@ -7094,7 +7102,7 @@
   EncounterDefinition(
     card_id: "ecf77f27-df0f-47c4-99c2-48d7fa46a137",
     prose: Tx(
-      "A suspended automaton hangs from cables above a flare-bearing technician in red vapor."
+      "A suspended machine hangs from cables above a flare-bearing technician in red vapor."
     ),
     actions: [
       ActionDefinition(
@@ -7141,7 +7149,9 @@
 
   EncounterDefinition(
     card_id: "401fdd0a-356b-49c1-806d-d50617b084d2",
-    prose: Tx("A radiant spirit climbs flowered steps as violet ribbons curl among glowing trees."),
+    prose: Tx(
+      "A radiant apparition climbs flowered steps as violet ribbons curl among glowing trees."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Release Repeated Echoes"),
@@ -7284,7 +7294,7 @@
   EncounterDefinition(
     card_id: "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
     prose: Tx(
-      "A lone drifter dangles beneath bright balloons above immense clouds streaked with coral light."
+      "A lone aeronaut dangles beneath bright balloons above immense vapor banks streaked with coral light."
     ),
     actions: [
       ActionDefinition(
@@ -7303,7 +7313,9 @@
 
   EncounterDefinition(
     card_id: "99101fce-f2b4-4032-b999-317ce3e4a6dd",
-    prose: Tx("A lone astronaut carves a luminous dune beneath a vast planet and star-filled sky."),
+    prose: Tx(
+      "A lone astronaut carves a luminous sand ridge beneath a vast planet and star-filled sky."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Ride falling sand"),
@@ -7322,7 +7334,7 @@
   EncounterDefinition(
     card_id: "470bbf9d-a73c-4e00-bc66-cb0fa767c8de",
     prose: Tx(
-      "A red-robed vizier studies a luminous blue underwater window framed by towering crimson curtains."
+      "A red-robed counselor studies a luminous blue underwater window framed by towering crimson curtains."
     ),
     actions: [
       ActionDefinition(
@@ -7342,7 +7354,7 @@
   EncounterDefinition(
     card_id: "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
     prose: Tx(
-      "A lone herald strides from roaring fire while scattered embers gather into armed silhouettes."
+      "A lone emissary strides from roaring fire while scattered embers gather into armed silhouettes."
     ),
     actions: [
       ActionDefinition(
@@ -7434,7 +7446,7 @@
 
   EncounterDefinition(
     card_id: "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40",
-    prose: Tx("A lone rescuer scans burning ruins as fiery arcs sweep through airborne rubble."),
+    prose: Tx("A lone searcher scans burning ruins as fiery arcs sweep through airborne rubble."),
     actions: [
       ActionDefinition(
         label: Tx("Search Embered Streets"),
@@ -7536,7 +7548,7 @@
 
   EncounterDefinition(
     card_id: "867b98cf-171b-497b-9252-9af5dcf70726",
-    prose: Tx("A hooded channeler raises an axe as golden fire spirals past a vast planet."),
+    prose: Tx("A hooded warrior raises an axe as golden fire spirals past a vast planet."),
     actions: [
       ActionDefinition(
         label: Tx("Call a stellar host"),
@@ -7703,7 +7715,7 @@
   EncounterDefinition(
     card_id: "01298848-1ebb-48a1-b00b-d7e0af890870",
     prose: Tx(
-      "A quiet child crouches amid violet blossoms as luminous butterflies gather beneath a coral dawn."
+      "A quiet child crouches amid violet blossoms as luminous butterflies cluster beneath a coral dawn."
     ),
     actions: [
       ActionDefinition(
@@ -7743,7 +7755,7 @@
   EncounterDefinition(
     card_id: "b6d1df72-d989-4689-a599-4490a0c2568d",
     prose: Tx(
-      "A cloaked mage raises a crescent staff before a golden gate blazing with green runes."
+      "A cloaked mage raises a crescent staff before a golden arch blazing with green runes."
     ),
     actions: [
       ActionDefinition(
@@ -7763,7 +7775,7 @@
   EncounterDefinition(
     card_id: "56411ed4-bda9-4fdf-82e5-b5492de67039",
     prose: Tx(
-      "An armored commander guides a fire-breathing dragon across sunset peaks and storm-darkened sky."
+      "An armored leader guides a fire-breathing dragon across sunset peaks and storm-darkened heights."
     ),
     actions: [
       ActionDefinition(
@@ -7822,7 +7834,9 @@
 
   EncounterDefinition(
     card_id: "4644db03-fbcd-4af5-a229-17962ce093d5",
-    prose: Tx("A shrouded reaper raises a black scythe before a pale eclipse, ember eyes burning."),
+    prose: Tx(
+      "A shrouded executioner raises a black scythe before a pale eclipse, ember eyes burning."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Offer One to Scythe"),
@@ -7843,7 +7857,7 @@
 
   EncounterDefinition(
     card_id: "cc21a902-e482-46c0-bf07-e04035f39190",
-    prose: Tx("Emerald radiance floods a vinebound gate as a lone mage raises conjured flame."),
+    prose: Tx("Emerald radiance floods a vinebound arch as a lone mage raises conjured flame."),
     actions: [
       ActionDefinition(
         label: Tx("Cross in Another Shape"),
@@ -7864,7 +7878,7 @@
 
   EncounterDefinition(
     card_id: "69d9e550-eacc-49f2-8cc5-30b8940c9eed",
-    prose: Tx("A hooded boatman rows among glowing moons while a skiff carries gathered spheres."),
+    prose: Tx("A hooded ferryman rows among glowing moons while a skiff carries gathered spheres."),
     actions: [
       ActionDefinition(
         label: Tx("Welcome Moonlit Passengers"),
@@ -7906,7 +7920,7 @@
   EncounterDefinition(
     card_id: "4f7cb174-6324-46a8-9973-44adfa7fef9f",
     prose: Tx(
-      "Field Reverent pauses where bare trunks bloom into prismatic currents and jeweled petals."
+      "A branch-crowned mystic pauses where bare trunks bloom into prismatic currents and jeweled petals."
     ),
     actions: [
       ActionDefinition(
@@ -7926,7 +7940,7 @@
   EncounterDefinition(
     card_id: "2c9711c7-800c-4e55-a488-17ea5a6813c6",
     prose: Tx(
-      "A branch-crowned musician strums among glowing butterflies beneath rose-colored hill mist."
+      "A branch-crowned musician strums among glowing butterflies beneath rose-colored upland mist."
     ),
     actions: [
       ActionDefinition(
@@ -7969,7 +7983,7 @@
   EncounterDefinition(
     card_id: "8fed2e20-09c6-43e0-b6e0-5a4a417529a1",
     prose: Tx(
-      "A young archer braces beneath mossy boughs as sunlight pierces tangled forest ruins."
+      "A slight archer braces beneath mossy boughs as sunlight pierces tangled forest ruins."
     ),
     actions: [
       ActionDefinition(
@@ -8019,7 +8033,7 @@
   EncounterDefinition(
     card_id: "f38ab9b6-bea7-4c6e-b5db-2609796ba46b",
     prose: Tx(
-      "A colossal panther carries a child through shattered mountains as golden lightning rends dawn."
+      "A colossal panther carries a child through shattered mountains as golden lightning rends the sky."
     ),
     actions: [
       ActionDefinition(
@@ -8062,7 +8076,7 @@
   EncounterDefinition(
     card_id: "d2a3d344-613c-449e-9a87-0f720a85585d",
     prose: Tx(
-      "A lone explorer stands on a mossy bough above clouds as sunset gilds towering roots."
+      "A lone wanderer stands on a mossy bough above clouds as sunset gilds towering roots."
     ),
     actions: [
       ActionDefinition(
@@ -8104,7 +8118,7 @@
 
   EncounterDefinition(
     card_id: "e83014d3-9d35-4e80-a1b3-9b25360ad2af",
-    prose: Tx("A colossal rune-marked direwolf prowls beside a lone explorer amid angular ice."),
+    prose: Tx("A colossal rune-scarred beast prowls beside a lone explorer amid angular ice."),
     actions: [
       ActionDefinition(
         label: Tx("Trace Golden Markings"),
@@ -8122,7 +8136,7 @@
 
   EncounterDefinition(
     card_id: "6475483c-07de-43a0-b419-aaae6f436ec6",
-    prose: Tx("Burning meteors tear through a smoke-choked sky above a sprawling city."),
+    prose: Tx("Burning meteors tear through smoke-choked heavens above a sprawling city."),
     actions: [
       ActionDefinition(
         label: Tx("Erase every echo"),
@@ -8161,7 +8175,7 @@
   EncounterDefinition(
     card_id: "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6",
     prose: Tx(
-      "A red-visored commando brandishes twin pistols atop a dark ridge amid drifting white sparks."
+      "A red-visored soldier brandishes twin pistols atop a dark ridge amid drifting white sparks."
     ),
     actions: [
       ActionDefinition(
@@ -8200,7 +8214,7 @@
 
   EncounterDefinition(
     card_id: "647f5150-b2e0-424b-9480-27557642524e",
-    prose: Tx("A caped watcher stands atop a vintage car before an immense ringed planet."),
+    prose: Tx("A caped sentinel stands atop a vintage car before an immense banded planet."),
     actions: [
       ActionDefinition(
         label: Tx("Read Celestial Rings"),
@@ -8258,7 +8272,7 @@
 
   EncounterDefinition(
     card_id: "7c9f3a38-1434-4db4-a856-24fe744e8322",
-    prose: Tx("A lone wanderer crosses mistbound woods beneath a river of violet stars."),
+    prose: Tx("A lone wanderer crosses mistbound woods beneath a river of violet constellations."),
     actions: [
       ActionDefinition(
         label: Tx("Read Canopy Stars"),
@@ -8319,7 +8333,7 @@
 
   EncounterDefinition(
     card_id: "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7",
-    prose: Tx("A ragged caller summons blue-eyed wolves from a firelit haze."),
+    prose: Tx("A ragged summoner beckons blue-eyed wolves from a firelit haze."),
     actions: [
       ActionDefinition(
         label: Tx("Call Twin Echoes"),
@@ -8358,7 +8372,7 @@
   EncounterDefinition(
     card_id: "c92a7dc0-04b0-4c54-9485-59a92505eabc",
     prose: Tx(
-      "An armored trooper braces a colossal cannon above burning towers as debris whips past."
+      "An armored infantryman braces a colossal cannon above burning towers as debris whips past."
     ),
     actions: [
       ActionDefinition(
@@ -8423,7 +8437,7 @@
   EncounterDefinition(
     card_id: "bf323913-3695-49ee-8d13-8165657e3dc9",
     prose: Tx(
-      "A solitary forager gathers luminous leaves while an ancient tree sheds whispers into blue mist."
+      "A solitary collector gathers luminous leaves while an ancient tree murmurs into blue mist."
     ),
     actions: [
       ActionDefinition(
@@ -8471,7 +8485,7 @@
   EncounterDefinition(
     card_id: "4b2f044c-0afe-432a-a121-2ea785bb1182",
     prose: Tx(
-      "An armored warrior grips twin burning blades while embers whirl through shattered ruins."
+      "An armored warrior grips twin burning swords while embers whirl through shattered ruins."
     ),
     actions: [
       ActionDefinition(
@@ -8513,7 +8527,7 @@
 
   EncounterDefinition(
     card_id: "ffec9fdd-d948-4756-b7df-39b9e982613e",
-    prose: Tx("A skull-faced red spider towers over a lone hunter within a misty jungle."),
+    prose: Tx("A bone-faced red spider towers over a lone hunter within a misty jungle."),
     actions: [
       ActionDefinition(
         label: Tx("Offer Spider Prey"),
@@ -8552,7 +8566,7 @@
   EncounterDefinition(
     card_id: "01d53e49-7833-4122-a970-b72c73ad2c28",
     prose: Tx(
-      "A solitary horseman crosses crimson ice toward a halo-crowned colossus clutching a luminous sword."
+      "A solitary horseman crosses scarlet ice toward a halo-crowned colossus clutching a luminous sword."
     ),
     actions: [
       ActionDefinition(
@@ -8592,7 +8606,7 @@
   EncounterDefinition(
     card_id: "650b2ed4-f016-46c0-815a-f53fffe08a9a",
     prose: Tx(
-      "Mirrored mechanisms peel apart around a lone figure, revealing a golden path beyond rain-dark glass."
+      "Mirrored mechanisms peel open around a lone figure, revealing a golden path beyond rain-dark glass."
     ),
     actions: [
       ActionDefinition(
@@ -8653,7 +8667,7 @@
   EncounterDefinition(
     card_id: "c36e67ab-fbee-4d83-b57b-34d34f60e17c",
     prose: Tx(
-      "A radiant summoner conjures a colossal tentacled shadow amid sparks, thorns, and burning clouds."
+      "A radiant summoner conjures colossal tentacled darkness amid sparks, thorns, and burning clouds."
     ),
     actions: [
       ActionDefinition(
@@ -8693,7 +8707,7 @@
   EncounterDefinition(
     card_id: "34ef6c0c-1a23-4870-a52c-90d34e9769be",
     prose: Tx(
-      "A young guitarist plays beside dark mountains as golden lights descend across a violet sky."
+      "A young guitarist plays beside dark mountains as golden sparks descend across a violet sky."
     ),
     actions: [
       ActionDefinition(
@@ -8713,7 +8727,7 @@
   EncounterDefinition(
     card_id: "290ea9db-0340-4838-842a-0dea09b5340a",
     prose: Tx(
-      "A hooded witch balances pale fire above lava-lit stone beside a smoking volcanic wall."
+      "A hooded witch balances pale fire above lava-lit stone beside a smoking basalt wall."
     ),
     actions: [
       ActionDefinition(
@@ -8733,7 +8747,7 @@
   EncounterDefinition(
     card_id: "f0a70e7d-46af-4d32-92cc-9d510e97a07e",
     prose: Tx(
-      "Railgun Reinforcer materializes through cyan static, weapon raised amid broken machinery."
+      "An armored soldier materializes through cyan static, weapon raised amid broken machinery."
     ),
     actions: [
       ActionDefinition(
@@ -8759,9 +8773,7 @@
 
   EncounterDefinition(
     card_id: "e4e8d3b9-3463-4b92-8fbe-35064f72402d",
-    prose: Tx(
-      "A lone Synth stands atop an orbital pinnacle as auroras consume a planet's horizon."
-    ),
+    prose: Tx("A lone Synth stands atop an orbital summit as auroras consume a planet's horizon."),
     actions: [
       ActionDefinition(
         label: Tx("Share the Ascension"),
@@ -8843,7 +8855,7 @@
   EncounterDefinition(
     card_id: "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3",
     prose: Tx(
-      "An armored warrior braces a twin-bladed spear while viridian fire devours a shattered containment bay."
+      "An armored warrior braces a twin-bladed spear while viridian fire devours a shattered sealed bay."
     ),
     actions: [
       ActionDefinition(
@@ -8863,7 +8875,7 @@
   EncounterDefinition(
     card_id: "6fa9c440-3912-4b1e-868c-840ae772fe1c",
     prose: Tx(
-      "A lone traveler faces a tunnel of twisted roots, their ember-cracks glaring around pale light."
+      "A lone traveler faces a tunnel of twisted tendrils, their ember-cracks glaring around pale light."
     ),
     actions: [
       ActionDefinition(
@@ -8885,7 +8897,9 @@
 
   EncounterDefinition(
     card_id: "99ca2635-a91a-46ba-a9d3-4d2581c354f3",
-    prose: Tx("A torchbearer faces a colossal stag among green-lit trees and still forest water."),
+    prose: Tx(
+      "A torchbearer faces a colossal stag among emerald-lit trees and still forest water."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Follow Colossal Stag"),
@@ -8907,7 +8921,7 @@
   EncounterDefinition(
     card_id: "120ea441-f6ff-434b-973c-bde459f65368",
     prose: Tx(
-      "A solitary figure crosses a broken bridge beneath an upside-down sea and fractured reflections."
+      "A solitary figure crosses a broken bridge beneath an upside-down sea and splintered images."
     ),
     actions: [
       ActionDefinition(
@@ -9014,7 +9028,7 @@
   EncounterDefinition(
     card_id: "95711262-8510-475c-a572-c1cd144d54cb",
     prose: Tx(
-      "A child wanders through violet flowers as luminous insects drift beneath an emerald dawn."
+      "A child walks through violet flowers as luminous insects drift beneath an emerald dawn."
     ),
     actions: [
       ActionDefinition(
@@ -9037,7 +9051,7 @@
   EncounterDefinition(
     card_id: "648237c5-ceff-4a28-aaf8-4aa099eae80d",
     prose: Tx(
-      "Two armored petitioners approach a colossal shadowed sovereign amid green fire, red light, and mist."
+      "Two armored petitioners approach a colossal shadowed monarch amid green fire, red light, and mist."
     ),
     actions: [
       ActionDefinition(
@@ -9082,7 +9096,7 @@
   EncounterDefinition(
     card_id: "73fc1b7f-3c2b-4993-9590-924240515c2f",
     prose: Tx(
-      "A lone hart crosses luminous water beneath circling stars, drifting clouds, and cobalt night."
+      "A lone antlered deer crosses luminous water beneath circling stars, drifting clouds, and cobalt night."
     ),
     actions: [
       ActionDefinition(
@@ -9161,7 +9175,9 @@
 
   EncounterDefinition(
     card_id: "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277",
-    prose: Tx("Nexus Wayfinder stands beneath blue sigils, red cloak lifted by waterfall mist."),
+    prose: Tx(
+      "A red-cloaked traveler stands beneath blue sigils, fabric lifted by waterfall mist."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Trace Hidden Route"),
@@ -9180,7 +9196,7 @@
   EncounterDefinition(
     card_id: "ce09ddfa-c349-4b32-b524-fb74444cddcb",
     prose: Tx(
-      "A skull-faced arbiter crosses rose petals among colossal broken swords and drifting crimson fragments."
+      "A skull-faced judge crosses rose petals among colossal broken swords and drifting crimson fragments."
     ),
     actions: [
       ActionDefinition(
@@ -9222,7 +9238,7 @@
 
   EncounterDefinition(
     card_id: "89c0d03c-2199-415a-bc66-89e451034328",
-    prose: Tx("A lone rider charges through twisted woods toward a horizon blazing with dawn."),
+    prose: Tx("A lone rider charges through twisted woods toward a distant sky blazing with dawn."),
     actions: [
       ActionDefinition(
         label: Tx("Gather Dawn Riders"),
@@ -9262,7 +9278,7 @@
   EncounterDefinition(
     card_id: "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15",
     prose: Tx(
-      "A hooded specter waits beneath bone-white branches as silent snow buries every departing footprint."
+      "A hooded apparition waits beneath bone-white branches as quiet flakes bury every departing footprint."
     ),
     actions: [
       ActionDefinition(
@@ -9302,7 +9318,7 @@
   EncounterDefinition(
     card_id: "f1452b45-51dc-453a-916e-88bd9d29e36e",
     prose: Tx(
-      "A red-eyed visitor shelters beneath an umbrella as black tendrils writhe through midnight rain."
+      "A red-eyed visitor shelters beneath an umbrella as black tendrils writhe through a moonless downpour."
     ),
     actions: [
       ActionDefinition(
@@ -9426,7 +9442,7 @@
   EncounterDefinition(
     card_id: "8451340c-02c5-465a-8c25-51efb2dc857a",
     prose: Tx(
-      "A mounted standard-bearer faces a colossal stone god burning with wrath above a shattered ridge."
+      "A mounted standard-bearer faces a colossal stone deity burning with fury above a shattered ridge."
     ),
     actions: [
       ActionDefinition(
@@ -9533,7 +9549,7 @@
   EncounterDefinition(
     card_id: "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9",
     prose: Tx(
-      "A lone woman faces a crimson engine surrounded by hanging gears, chains, sparks, and wreckage."
+      "A lone woman faces a crimson engine surrounded by hanging cogs, chains, sparks, and wreckage."
     ),
     actions: [
       ActionDefinition(
@@ -9575,9 +9591,7 @@
 
   EncounterDefinition(
     card_id: "8951e112-92d2-4246-9859-39320620231b",
-    prose: Tx(
-      "Spirit of Smoldering Echoes leans from molten stone, shedding sparks into cavern smoke."
-    ),
+    prose: Tx("A molten apparition leans from the stone, shedding sparks into cavern smoke."),
     actions: [
       ActionDefinition(
         label: Tx("Gather Fallen Sparks"),
@@ -9792,7 +9806,7 @@
   EncounterDefinition(
     card_id: "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6",
     prose: Tx(
-      "A child rows beneath a floating ship while turquoise stars blaze across silent water."
+      "A child rows beneath a floating ship while turquoise constellations blaze across silent water."
     ),
     actions: [
       ActionDefinition(
@@ -9812,7 +9826,7 @@
   EncounterDefinition(
     card_id: "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a",
     prose: Tx(
-      "A cloaked sentinel raises a luminous spear as green fire engulfs shattered scaffolds."
+      "A hooded guardian raises a luminous spear as green fire engulfs shattered scaffolds."
     ),
     actions: [
       ActionDefinition(
@@ -9963,7 +9977,7 @@
   EncounterDefinition(
     card_id: "6497d8b1-85b8-486d-99e2-5c141486d508",
     prose: Tx(
-      "A sword-bearing warrior faces a descending dragon amid amber smoke and jagged mountains."
+      "A sword-bearing warrior faces a descending winged beast amid amber smoke and jagged mountains."
     ),
     actions: [
       ActionDefinition(
@@ -10003,7 +10017,7 @@
   EncounterDefinition(
     card_id: "9e9efbc0-d438-48a9-9551-85c93fb33f3e",
     prose: Tx(
-      "A recursive corridor fractures floating rubble, pulling blue light through impossible angles."
+      "A recursive corridor splits floating rubble, pulling blue light through impossible angles."
     ),
     actions: [
       ActionDefinition(
@@ -10064,7 +10078,9 @@
 
   EncounterDefinition(
     card_id: "c86c1364-6ac4-4c90-8053-4e49441a2c83",
-    prose: Tx("A solitary girl studies countless keys glowing across a chained cavern wall."),
+    prose: Tx(
+      "A solitary girl studies countless golden teeth glowing across a chained cavern wall."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Turn Four Keys"),
@@ -10095,7 +10111,7 @@
   EncounterDefinition(
     card_id: "071bcab4-ed02-48a0-93dc-8fd0f36611c8",
     prose: Tx(
-      "A spined berserker convulses amid lightning, trailing tendrils and fragments through colored haze."
+      "A spined warrior convulses amid lightning, trailing tendrils and fragments through colored haze."
     ),
     actions: [
       ActionDefinition(
@@ -10115,7 +10131,7 @@
   EncounterDefinition(
     card_id: "ccbefadc-aab8-4f8c-a705-07bd70c91731",
     prose: Tx(
-      "A solitary architect faces a luminous portal while black tendrils condense above ruined machinery."
+      "A solitary engineer faces a luminous portal while black tendrils condense above ruined machinery."
     ),
     actions: [
       ActionDefinition(
@@ -10180,7 +10196,7 @@
   EncounterDefinition(
     card_id: "af739e3d-bc61-4fab-bf81-a22e78d7e524",
     prose: Tx(
-      "A fractured machine drifts inside a radiant ring as tendrils spread beneath descending light."
+      "A broken machine drifts inside a radiant ring as tendrils spread beneath descending light."
     ),
     actions: [
       ActionDefinition(
@@ -10225,9 +10241,7 @@
 
   EncounterDefinition(
     card_id: "3811a0a2-66af-4c06-b179-948dfa9b2ee3",
-    prose: Tx(
-      "A child rests atop a glowing moon while amber clouds drift beneath countless stars."
-    ),
+    prose: Tx("A child rests atop a glowing moon while amber mist drifts beneath countless stars."),
     actions: [
       ActionDefinition(
         label: Tx("Record a fallen story"),
@@ -10266,7 +10280,7 @@
   EncounterDefinition(
     card_id: "0211963d-d097-4427-9d16-5e857621e481",
     prose: Tx(
-      "A lone traveler approaches a ruined sanctum beneath a luminous blue ring and hovering stone."
+      "A lone traveler approaches a ruined shrine beneath a luminous blue ring and hovering stone."
     ),
     actions: [
       ActionDefinition(
@@ -10360,7 +10374,7 @@
   EncounterDefinition(
     card_id: "9d63ba3e-fafb-466e-8418-ce5f8941ba30",
     prose: Tx(
-      "A solitary mariner rows through blue-lit rain as a towering white wave curls overhead."
+      "A solitary sailor rows through blue-lit rain as a towering white wave curls overhead."
     ),
     actions: [
       ActionDefinition(
@@ -10426,7 +10440,7 @@
   EncounterDefinition(
     card_id: "f68774ce-0e94-489f-90a5-68e03a549ff6",
     prose: Tx(
-      "Rain hisses through a broken overpass while cyan butterflies rise from a masked survivor's vigil."
+      "Rain hisses through a broken overpass while cyan butterflies rise from a masked survivor's stillness."
     ),
     actions: [
       ActionDefinition(
@@ -10446,7 +10460,7 @@
   EncounterDefinition(
     card_id: "3076694f-ffc2-46c9-8e1a-39f3878c73c9",
     prose: Tx(
-      "A luminous rift suspends shattered stone while dark tendrils probe descending steps."
+      "A luminous tear suspends shattered stone while dark tendrils probe descending steps."
     ),
     actions: [
       ActionDefinition(
@@ -10465,7 +10479,9 @@
 
   EncounterDefinition(
     card_id: "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c",
-    prose: Tx("A masked rider leads spectral birds through a sky burning between dusk and dream."),
+    prose: Tx(
+      "A masked horseman leads spectral birds through a sky burning between twilight and dream."
+    ),
     actions: [
       ActionDefinition(
         label: Tx("Outfly Falling Night"),
@@ -10483,7 +10499,7 @@
 
   EncounterDefinition(
     card_id: "a7820b34-9fdc-46cc-8357-53c8caa056b1",
-    prose: Tx("A horned broker leans forward, bladed cables coiling around glowing circuitry."),
+    prose: Tx("A horned trader leans forward, bladed cables coiling around glowing circuitry."),
     actions: [
       ActionDefinition(
         label: Tx("Trade one warrior"),
@@ -10505,7 +10521,7 @@
   EncounterDefinition(
     card_id: "b4df0b25-0c46-4faa-8db6-84f5f3c3444b",
     prose: Tx(
-      "A courier waves from a pale dragon soaring between sunlit clouds and gathering storm."
+      "A messenger waves from a pale dragon soaring between sunlit vapor and gathering storm."
     ),
     actions: [
       ActionDefinition(
@@ -10557,7 +10573,7 @@
   EncounterDefinition(
     card_id: "ffa4fa56-8897-465d-b812-3798e3cf5a1f",
     prose: Tx(
-      "A colossal red-eyed crow lowers its beak as a lone augur whispers among burning leaves."
+      "A colossal red-eyed black bird lowers its beak as a lone seer whispers among burning leaves."
     ),
     actions: [
       ActionDefinition(
@@ -10596,9 +10612,7 @@
 
   EncounterDefinition(
     card_id: "629fe4d4-826f-41b9-a913-458a503856a8",
-    prose: Tx(
-      "A cliffside marksman aims across sunset canyons while a saddled horse waits nearby."
-    ),
+    prose: Tx("A cliffside sniper aims across sunset canyons while a saddled horse waits nearby."),
     actions: [
       ActionDefinition(
         label: Tx("Ride Beyond Sunset"),
@@ -10634,7 +10648,7 @@
 
   EncounterDefinition(
     card_id: "c06b993d-a1f4-42ad-85a9-ebf611d9a129",
-    prose: Tx("A blazing runner surges through airborne embers as firebirds wheel toward dawn."),
+    prose: Tx("A blazing runner races through airborne embers as firebirds wheel toward dawn."),
     actions: [
       ActionDefinition(
         label: Tx("Race With Firebirds"),
@@ -10673,7 +10687,7 @@
   EncounterDefinition(
     card_id: "382dafa1-f8ff-47b4-9151-15b84067a5b2",
     prose: Tx(
-      "A torch-bearing saboteur guards golden plunder as a shattered flagship burns behind dark waves."
+      "A torch-bearing infiltrator guards golden plunder as a shattered flagship burns behind dark waves."
     ),
     actions: [
       ActionDefinition(
