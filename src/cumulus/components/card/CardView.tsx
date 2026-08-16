@@ -95,31 +95,21 @@ const GAME_CARD_SELECTION_COLORS = {
   changed: "accent-bright",
   "spark-changed": "spark",
   "energy-changed": "energy",
+  transfigured: "transfigured",
   figment: "accent-bright",
-} as const satisfies Record<
-  Exclude<GameCardSelection, "transfigured">,
-  CumulusColor
->;
+} as const satisfies Record<GameCardSelection, CumulusColor>;
 
 function gameCardSelectionColor(
   selection: GameCardSelection,
-  transfiguration?: CardTransfigurationDisplay,
 ): CumulusColor {
-  return selection === "transfigured"
-    ? transfiguration === undefined
-      ? "selected"
-      : transfiguration.form.accentColor
-    : GAME_CARD_SELECTION_COLORS[selection];
+  return GAME_CARD_SELECTION_COLORS[selection];
 }
 
 /** Canonical selection-ring shadows shared by card surfaces and unfiltered overlays. */
 export function cardSelectionShadowLayers(
   selection: GameCardSelection,
-  transfiguration?: CardTransfigurationDisplay,
 ): readonly [string, string] {
-  const selectionCss = resolveColor(
-    gameCardSelectionColor(selection, transfiguration),
-  );
+  const selectionCss = resolveColor(gameCardSelectionColor(selection));
   return [`0 0 0 3px ${selectionCss}`, `0 0 12px ${selectionCss}`];
 }
 const CARD_TIMING_GLOSSARY_IDS = [
@@ -932,9 +922,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
   // corners.
   const shadowLayers: string[] = ["0 4px 14px rgba(0, 0, 0, 0.55)"];
   if (selection !== undefined) {
-    shadowLayers.unshift(
-      ...cardSelectionShadowLayers(selection, transfiguration),
-    );
+    shadowLayers.unshift(...cardSelectionShadowLayers(selection));
   }
 
   const isInteractive = onPress !== undefined;

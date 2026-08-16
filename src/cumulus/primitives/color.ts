@@ -43,6 +43,7 @@ export type ColorRole =
   | "danger"
   | "positive"
   | "selected"
+  | "transfigured"
   | "text-primary"
   | "text-secondary"
   | "text-on-accent"
@@ -58,6 +59,7 @@ const COLOR_ROLE_TOKENS: Record<ColorRole, string> = {
   danger: token("--danger"),
   positive: token("--positive"),
   selected: token("--selected"),
+  transfigured: token("--transfigured"),
   "text-primary": token("--text-primary"),
   "text-secondary": token("--text-secondary"),
   "text-on-accent": token("--text-on-accent"),

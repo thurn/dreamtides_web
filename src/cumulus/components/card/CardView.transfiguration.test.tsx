@@ -82,7 +82,7 @@ afterEach(() => {
 });
 
 describe("CardView transfiguration rules marker", () => {
-  it("derives the selection ring from the semantic transfiguration type", () => {
+  it("uses the semantic Transfiguration color for the selection ring", () => {
     const { container, root } = mount(
       display(card().renderedText),
       "transfigured",
@@ -90,7 +90,10 @@ describe("CardView transfiguration rules marker", () => {
 
     expect(
       container.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
-    ).toContain(display("").form.accentColor);
+    ).toContain("var(--transfigured)");
+    expect(
+      container.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
+    ).not.toContain("var(--danger)");
 
     act(() => root.unmount());
     container.remove();

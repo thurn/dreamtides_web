@@ -45,9 +45,18 @@ describe("CardChangePair", () => {
       expect(pair?.dataset.afterEntryId).toBe("entry-after");
       expect(pair?.dataset.beforeCardId).not.toBe(pair?.dataset.afterCardId);
       expect(pair?.dataset.cardChangeKind).toBe(kind);
+      expect(pair?.style.width).toBe("520px");
+      const beforeFace = container.querySelector<HTMLElement>(
+        '[data-card-change-face="before"]',
+      );
+      const afterFace = container.querySelector<HTMLElement>(
+        '[data-card-change-face="after"]',
+      );
+      expect(afterFace?.style.width).toBe(beforeFace?.style.width);
+      expect(afterFace?.style.aspectRatio).toBe(beforeFace?.style.aspectRatio);
+      expect(afterFace?.style.transform).toBe("");
       expect(
-        container.querySelector<HTMLElement>('[data-card-change-face="after"]')
-          ?.dataset.cardChangeSelection,
+        afterFace?.dataset.cardChangeSelection,
       ).toBe(
         kind === "copy"
           ? "copied"
@@ -120,7 +129,7 @@ describe("CardChangePair", () => {
         .cardChangeReveal,
     ).toBe("complete");
     expect(
-      container.querySelector<HTMLElement>('[data-card-change-face="after"]')
+      container.querySelector<HTMLElement>("[data-card-change-flip-stage]")
         ?.style.transition,
     ).toBe("none");
     act(() => root.unmount());

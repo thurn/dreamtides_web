@@ -218,7 +218,7 @@ export const gameCardDemo: CumulusComponent = {
     },
     {
       label: "Selected in a picker",
-      note: "Choose the semantic reason for the selection ring; GameCard owns its color. `hideRulesText` gives the dense identity-only surface used in tight lists.",
+      note: "Choose the semantic reason for the selection ring; GameCard owns its color. Transfigured cards use the dedicated orange Transfiguration role, while danger red identifies destructive targets such as purge. `hideRulesText` gives the dense identity-only surface used in tight lists.",
       code: `<GameCard
   model={{ cardId: card.id, displaySnapshot: card }}
   selection="highlighted"

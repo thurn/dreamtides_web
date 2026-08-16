@@ -5695,23 +5695,32 @@ export function ExplorationSiteScreen({
               pointerEvents: "none",
             }}
           >
-            <RadialAnnouncement
-              headline={
-                starterCardTransfigurationReward === null
-                  ? tx(
-                      "Cards Transfigured",
-                      "[exploration] [transfiguration] Headline for an Exploration result containing ordinary card Transfiguration mappings.",
-                    )
-                  : tx(
-                      "Starter Cards Transfigured",
-                      "[exploration] [transfiguration] Headline for an Exploration result containing starter-card Transfiguration mappings.",
-                    )
-              }
-              tone="reward"
-              size={isDesktop ? "compact" : "mini"}
-              duration="extended"
-              announcementId={`exploration-${starterCardTransfigurationReward === null ? "card" : "starter-card"}-transfiguration:${view.resolvedActionId ?? "resolved"}`}
-            />
+            <div
+              data-exploration-card-transfiguration-announcement=""
+              style={{
+                position: "relative",
+                width: "100%",
+                height: isDesktop ? 184 : 108,
+              }}
+            >
+              <RadialAnnouncement
+                headline={
+                  starterCardTransfigurationReward === null
+                    ? tx(
+                        "Cards Transfigured",
+                        "[exploration] [transfiguration] Headline for an Exploration result containing ordinary card Transfiguration mappings.",
+                      )
+                    : tx(
+                        "Starter Cards Transfigured",
+                        "[exploration] [transfiguration] Headline for an Exploration result containing starter-card Transfiguration mappings.",
+                      )
+                }
+                tone="reward"
+                size={isDesktop ? "compact" : "mini"}
+                duration="extended"
+                announcementId={`exploration-${starterCardTransfigurationReward === null ? "card" : "starter-card"}-transfiguration:${view.resolvedActionId ?? "resolved"}`}
+              />
+            </div>
             <Pressable
               as="div"
               ref={starterCardTransfigurationPairsRef}

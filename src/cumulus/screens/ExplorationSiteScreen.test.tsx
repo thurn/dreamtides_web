@@ -3217,6 +3217,11 @@ describe("ExplorationSiteScreen", () => {
     const reviewRegion = outcome?.querySelector<HTMLElement>(
       "[data-exploration-multi-card-transfiguration-pairs]",
     );
+    const announcementStage = outcome?.querySelector<HTMLElement>(
+      "[data-exploration-card-transfiguration-announcement]",
+    );
+    expect(announcementStage?.style.position).toBe("relative");
+    expect(announcementStage?.contains(reviewRegion ?? null)).toBe(false);
     expect(reviewRegion?.style.maxHeight).toBe("100%");
     expect(reviewRegion?.style.overflow).toBe("auto");
     expect(outcome?.style.bottom).toBe(

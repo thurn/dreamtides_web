@@ -3,9 +3,9 @@ import { txa } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
-import { GlassPanel } from "../overlay/GlassPanel";
 import { StandaloneGlyph } from "../controls/StandaloneGlyph";
 import { CardBack } from "../battle/CardBack";
+import { CARD_ASPECT_RATIO } from "./card-aspect";
 import { GameCard, type GameCardModel } from "./CardView";
 import type { DeckEntryId } from "../../../types/identifiers";
 
@@ -97,57 +97,63 @@ export function CardChangePair<ChangeId extends string>({
               "[accessibility] Name for a before-and-after card presentation while its result remains concealed. before_card is UUID-resolved.",
             ),
       )}
-      style={{ width: "fit-content", maxWidth: "100%" }}
+      style={{ width: 520, maxWidth: "100%" }}
     >
-      <GlassPanel radius="popover">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: token("--space-s"),
+          padding: token("--space-s"),
+          containerType: "inline-size",
+        }}
+      >
         <div
+          data-card-change-face="before"
+          data-card-change-selection={
+            model.kind === "replacement" ? "danger" : "none"
+          }
+          data-entry-id={model.before.entryId}
+          data-card-id={model.before.card.cardId}
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: token("--space-s"),
-            padding: token("--space-s"),
-            containerType: "inline-size",
+            width: "clamp(108px, 38cqw, 220px)",
+            aspectRatio: CARD_ASPECT_RATIO,
+          }}
+        >
+          <GameCard
+            model={model.before.card}
+            selection={model.kind === "replacement" ? "danger" : undefined}
+          />
+        </div>
+        <span
+          aria-hidden="true"
+          style={{
+            display: "grid",
+            placeItems: "center",
+            flexShrink: 0,
+            fontSize: "clamp(22px, 6cqw, 30px)",
+          }}
+        >
+          <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
+        </span>
+        <div
+          aria-hidden={!complete}
+          data-card-change-face="after"
+          data-card-change-selection={afterSelection}
+          data-entry-id={model.after.entryId}
+          data-card-id={model.after.card.cardId}
+          style={{
+            position: "relative",
+            width: "clamp(108px, 38cqw, 220px)",
+            aspectRatio: CARD_ASPECT_RATIO,
           }}
         >
           <div
-            data-card-change-face="before"
-            data-card-change-selection={
-              model.kind === "replacement" ? "danger" : "none"
-            }
-            data-entry-id={model.before.entryId}
-            data-card-id={model.before.card.cardId}
+            data-card-change-flip-stage=""
             style={{
-              width: "clamp(108px, 38cqw, 220px)",
-              aspectRatio: "4 / 5",
-            }}
-          >
-            <GameCard
-              model={model.before.card}
-              selection={model.kind === "replacement" ? "danger" : undefined}
-            />
-          </div>
-          <span
-            aria-hidden="true"
-            style={{
-              display: "grid",
-              placeItems: "center",
-              flexShrink: 0,
-              fontSize: "clamp(22px, 6cqw, 30px)",
-            }}
-          >
-            <StandaloneGlyph glyph={GLYPHS.arrowRightFilled} color="white" />
-          </span>
-          <div
-            aria-hidden={!complete}
-            data-card-change-face="after"
-            data-card-change-selection={afterSelection}
-            data-entry-id={model.after.entryId}
-            data-card-id={model.after.card.cardId}
-            style={{
-              position: "relative",
-              width: "clamp(108px, 38cqw, 220px)",
-              aspectRatio: "4 / 5",
+              position: "absolute",
+              inset: 0,
               transform: complete ? "rotateY(180deg)" : "rotateY(0deg)",
               transformStyle: "preserve-3d",
               perspective: 1200,
@@ -184,7 +190,7 @@ export function CardChangePair<ChangeId extends string>({
             </div>
           </div>
         </div>
-      </GlassPanel>
+      </div>
     </div>
   );
 }
