@@ -247,8 +247,7 @@ with `[data-testid="cumulus-exploration-choice-1"]` for templates 41, 44, and
 45 or `[data-testid="cumulus-exploration-choice-0"]` for templates 42 and 43.
 The persisted outcome appears at
 `[data-exploration-outcome="site-insertion"][data-exploration-site-type="<SiteType>"]`.
-After selecting the close control at
-`[data-testid="cumulus-exploration-exit"]`, the Dreamscape contains the new
+After the outcome presentation completes, the Dreamscape contains the new
 `[data-site-type="<SiteType>"]` node. In each selector, `<SiteType>` is exactly
 `Duplication`, `Shop`, `DreamsignBazaar`, `Transfiguration`, or `Purge`.
 

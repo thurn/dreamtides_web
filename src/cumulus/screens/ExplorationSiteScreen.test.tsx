@@ -1301,7 +1301,7 @@ afterEach(() => {
 });
 
 describe("ExplorationSiteScreen", () => {
-  it("breaks the selected card's licensed art into a dismissible fullscreen layer", () => {
+  it("keeps the selected card's licensed art open while the player explores it", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
       function getBoundingClientRect(this: HTMLElement) {
         if (this.hasAttribute("data-exploration-card-slot")) {
@@ -1392,22 +1392,19 @@ describe("ExplorationSiteScreen", () => {
     ).toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-exploration-exit"]'),
-    ).not.toBeNull();
+    ).toBeNull();
     expect(
       container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();
 
-    const returnButton = container.querySelector<HTMLButtonElement>(
-      'button[aria-label="Return to Exploration"]',
-    );
-    act(() => returnButton?.click());
+    act(() => fullArt?.click());
     expect(onExit).not.toHaveBeenCalled();
     expect(
       container.querySelector("[data-exploration-frame-break]"),
-    ).toBeNull();
+    ).not.toBeNull();
     expect(
       container.querySelector('[data-testid="cumulus-exploration-channel"]'),
-    ).not.toBeNull();
+    ).toBeNull();
     act(() => root.unmount());
   });
 
@@ -1505,6 +1502,9 @@ describe("ExplorationSiteScreen", () => {
     );
     act(() => action?.click());
     expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID);
+    expect(
+      container.querySelector("[data-exploration-frame-break]"),
+    ).not.toBeNull();
     act(() => root.unmount());
   });
 

@@ -44,7 +44,6 @@ import {
 } from "../components/dreamscape/SiteNode";
 import { GlassButton } from "../components/controls/GlassButton";
 import { StandaloneGlyph } from "../components/controls/StandaloneGlyph";
-import { IconButton } from "../components/controls/IconButton";
 import {
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
   JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE_OP,
@@ -67,11 +66,7 @@ import { Pressable } from "../primitives/Pressable";
 import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
-import {
-  MENU_BUTTON_PX,
-  MENU_EDGE_INSET_DESKTOP_PX,
-  MENU_EDGE_INSET_MOBILE_PX,
-} from "../primitives/chrome-geometry";
+import { MENU_BUTTON_PX } from "../primitives/chrome-geometry";
 import {
   SiteLayout,
   type SiteLayoutGuideView,
@@ -2666,17 +2661,6 @@ export function ExplorationSiteScreen({
     onChannel();
   };
 
-  const collapseFrameBreak = (): void => {
-    setCollapseIntent("preview");
-    setFrameBreakActive(false);
-    if (reduceMotion) {
-      setFrameBreakGeometry(null);
-      setFrameBreakPhase("idle");
-    } else {
-      setFrameBreakPhase("collapsing");
-    }
-  };
-
   const completeExit = useCallback((): void => {
     if (exitCompletedRef.current) return;
     exitCompletedRef.current = true;
@@ -3379,10 +3363,6 @@ export function ExplorationSiteScreen({
     setFrameBreakPhase("idle");
   };
 
-  const exitEdgeInset = isDesktop
-    ? MENU_EDGE_INSET_DESKTOP_PX
-    : MENU_EDGE_INSET_MOBILE_PX;
-
   const openAction = (action: ExplorationActionView): void => {
     if (action.followup.kind === "none") {
       if (action.automaticSelection === undefined) {
@@ -4072,20 +4052,7 @@ export function ExplorationSiteScreen({
             background: token("--bg-app"),
           }}
         >
-          <Pressable
-            ariaLabelMessage={tx(
-              "Return to Exploration",
-              "[accessibility] [exploration] Command on the full-screen Exploration artwork that collapses the expanded site and returns the current player to its choice view.",
-            )}
-            pressFeedback="stationary"
-            hoverFeedback="stationary"
-            onClick={
-              frameBreakPhase === "open" &&
-              view.resolvedActionId === null &&
-              view.reward === null
-                ? collapseFrameBreak
-                : undefined
-            }
+          <div
             style={{
               position: "absolute",
               inset: 0,
@@ -4208,7 +4175,7 @@ export function ExplorationSiteScreen({
                 userSelect: "none",
               }}
             />
-          </Pressable>
+          </div>
         </motion.div>
       )}
       {frameBreakGeometry !== null &&
@@ -8102,40 +8069,6 @@ export function ExplorationSiteScreen({
               </GlassPanel>
             )}
           </motion.section>
-        )}
-      {frameBreakGeometry !== null &&
-        frameBreakPhase === "open" &&
-        activeAction === null &&
-        view.resolvedActionId === null &&
-        view.reward === null && (
-          <motion.div
-            data-exploration-exit-control=""
-            data-tutorial-guidance-obstacle=""
-            initial={{ opacity: 0, scale: 0.92 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{
-              duration: reduceMotion ? 0 : motionTimeSeconds("--dur-base"),
-              ease: DREAM_EASE,
-            }}
-            style={{
-              position: "fixed",
-              top: `max(var(--safe-area-inset-top), ${String(exitEdgeInset)}px)`,
-              right: isDesktop
-                ? `calc(max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px) + ${String(MENU_BUTTON_PX)}px + ${token("--space-xs")})`
-                : `max(var(--safe-area-inset-right), ${String(exitEdgeInset)}px)`,
-              zIndex: FRAME_BREAK_EXIT_LAYER,
-            }}
-          >
-            <IconButton
-              glyph={GLYPHS.close}
-              label={tx(
-                "Return to Exploration",
-                "[accessibility] [exploration] Command on the full-screen Exploration artwork that collapses the expanded site and returns the current player to its choice view.",
-              )}
-              onPress={collapseFrameBreak}
-              testId="cumulus-exploration-exit"
-            />
-          </motion.div>
         )}
     </div>
   );
