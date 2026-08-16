@@ -1,9 +1,0 @@
-`npm run trox:release` fails its canonical localization audit with
-`unmatched-composite-paragraph` for the amplified replacements of cards
-`0458658d-7e02-4286-9249-93674d16620b`,
-`fbf32510-0bad-4567-859f-b3db6d7be5d5`, and
-`fb967cc1-4199-4a08-8070-724e07cebea5`.
-
-The repository instructions require running `scripts/regenerate-assets.sh`
-after creating a worktree, but that script is absent. The current workspace
-materialization command is `npm run prepare-workspace`.
