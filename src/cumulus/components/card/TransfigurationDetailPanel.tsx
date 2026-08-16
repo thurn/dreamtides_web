@@ -23,7 +23,7 @@ export interface TransfigurationDetailForm extends TransfigurationButtonModel {
 export interface TransfigurationDetailCandidate {
   /** Complete current card presentation. */
   readonly card: GameCardModel;
-  /** Prepared form quotes in display order. */
+  /** Prepared priced or unpriced forms in display order. */
   readonly forms: readonly TransfigurationDetailForm[];
 }
 
@@ -47,8 +47,6 @@ export interface TransfigurationDetailPanelProps {
   readonly value: TransfigurationType | null;
   /** Authoritative commit presentation state. */
   readonly status: "idle" | "submitting";
-  /** Whether the commit action shows a quoted Essence cost. */
-  readonly quote: "show-cost" | "included";
   /** Closed navigation behavior for the hosting workflow. */
   readonly navigation: TransfigurationDetailNavigation;
   /** Reports a controlled form selection by canonical form type. */
@@ -62,7 +60,6 @@ export function TransfigurationDetailPanel({
   candidate,
   value,
   status,
-  quote,
   navigation,
   onChange,
   onConfirm,
@@ -71,9 +68,12 @@ export function TransfigurationDetailPanel({
   const narrow = !useIsDesktop();
   const activeForm =
     candidate.forms.find((form) => form.type === value) ?? null;
+  const activePrice =
+    activeForm?.pricing.kind === "essence" ? activeForm.pricing : null;
   const disabled =
-    activeForm === null || !activeForm.affordable || status !== "idle";
-  const showCost = quote === "show-cost";
+    activeForm === null ||
+    activePrice?.affordable === false ||
+    status !== "idle";
 
   return (
     <section
@@ -137,21 +137,27 @@ export function TransfigurationDetailPanel({
                       "[transfiguration] Commits the selected form.",
                     )
               }
-              essenceCost={showCost ? (activeForm?.essenceCost ?? null) : null}
+              essenceCost={activePrice?.amount ?? null}
               widthReservations={candidate.forms.flatMap((form) => [
                 {
                   label: tx(
                     meaning("transfiguration-commit-action", "Transfigure"),
                     "[transfiguration] Commits the selected form.",
                   ),
-                  essenceCost: showCost ? form.essenceCost : null,
+                  essenceCost:
+                    form.pricing.kind === "essence"
+                      ? form.pricing.amount
+                      : null,
                 },
                 {
                   label: tx(
                     "Reforging…",
                     "[transfiguration] Pending status while a Transfiguration is being saved.",
                   ),
-                  essenceCost: showCost ? form.essenceCost : null,
+                  essenceCost:
+                    form.pricing.kind === "essence"
+                      ? form.pricing.amount
+                      : null,
                 },
               ])}
               disabled={disabled}
@@ -200,7 +206,7 @@ export function TransfigurationDetailPanel({
               ),
             )}
             data-transfiguration-options=""
-            data-transfiguration-option-layout={narrow ? "compact" : "priced"}
+            data-transfiguration-option-layout={narrow ? "compact" : "wide"}
             style={{
               display: "flex",
               flexDirection: "column",
@@ -214,7 +220,7 @@ export function TransfigurationDetailPanel({
               <TransfigurationButton
                 key={form.type}
                 form={form}
-                variant={narrow ? "compact" : "priced"}
+                layout={narrow ? "compact" : "wide"}
                 selected={form.type === activeForm?.type}
                 disabled={status !== "idle"}
                 onPress={onChange}

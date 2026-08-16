@@ -18,15 +18,13 @@ const candidate: TransfigurationDetailCandidate = {
     {
       type: "Empowered",
       presentation: localizedTransfigurationFormFixture("Empowered"),
-      essenceCost: 20,
-      affordable: true,
+      pricing: { kind: "unpriced" },
       previewModel: syntheticGameCard(2),
     },
     {
       type: "Kindled",
       presentation: localizedTransfigurationFormFixture("Kindled"),
-      essenceCost: 40,
-      affordable: false,
+      pricing: { kind: "essence", amount: 40, affordable: false },
       previewModel: syntheticGameCard(3),
     },
     {
@@ -35,8 +33,7 @@ const candidate: TransfigurationDetailCandidate = {
         ...localizedTransfigurationFormFixture("Resonant"),
         name: assertLocalized("Resonant Across the Unending Luminous Horizon"),
       },
-      essenceCost: 30,
-      affordable: true,
+      pricing: { kind: "essence", amount: 30, affordable: true },
       previewModel: syntheticGameCard(4),
     },
   ],
@@ -61,7 +58,6 @@ describe("TransfigurationDetailPanel", () => {
         candidate={candidate}
         value="Empowered"
         status="idle"
-        quote="included"
         navigation={{ kind: "fixed" }}
         onChange={onChange}
         onConfirm={onConfirm}
@@ -83,7 +79,11 @@ describe("TransfigurationDetailPanel", () => {
     );
     expect(onChange).toHaveBeenCalledWith("Resonant");
     expect(onConfirm).toHaveBeenCalledWith("Empowered");
-    expect(container.querySelector("[data-essence-cost]")).toBeNull();
+    expect(
+      container.querySelector(
+        '[data-testid="cumulus-transfiguration-confirm"] > span > [data-glass-button-content] > [data-glass-button-essence-cost]',
+      ),
+    ).toBeNull();
     act(() => root.unmount());
   });
 
@@ -95,7 +95,6 @@ describe("TransfigurationDetailPanel", () => {
           candidate={candidate}
           value={status === "idle" ? null : "Empowered"}
           status={status}
-          quote="show-cost"
           navigation={{ kind: "fixed" }}
           onChange={() => {}}
           onConfirm={() => {}}
@@ -111,7 +110,7 @@ describe("TransfigurationDetailPanel", () => {
         ),
       ).toBeNull();
       expect(
-        container.querySelectorAll("[data-transfiguration-button-variant]"),
+        container.querySelectorAll("[data-transfiguration-button-layout]"),
       ).toHaveLength(3);
       act(() => root.unmount());
     },
@@ -125,7 +124,6 @@ describe("TransfigurationDetailPanel", () => {
           candidate={candidate}
           value={value}
           status="idle"
-          quote="show-cost"
           navigation={{ kind: "fixed" }}
           onChange={() => {}}
           onConfirm={onConfirm}
@@ -144,7 +142,7 @@ describe("TransfigurationDetailPanel", () => {
   });
 
   it.each([
-    { desktop: true, layout: "desktop", optionLayout: "priced" },
+    { desktop: true, layout: "desktop", optionLayout: "wide" },
     { desktop: false, layout: "mobile", optionLayout: "compact" },
   ])(
     "owns $layout layout for three-plus forms",
@@ -159,7 +157,6 @@ describe("TransfigurationDetailPanel", () => {
           candidate={candidate}
           value="Resonant"
           status="idle"
-          quote="included"
           navigation={{ kind: "fixed" }}
           onChange={() => {}}
           onConfirm={() => {}}
@@ -175,7 +172,11 @@ describe("TransfigurationDetailPanel", () => {
           "[data-transfiguration-option-layout]",
         )?.dataset.transfigurationOptionLayout,
       ).toBe(optionLayout);
-      expect(container.querySelector("[data-essence-cost]")).toBeNull();
+      expect(
+        container.querySelector(
+          '[data-testid="cumulus-transfiguration-confirm"] > span > [data-glass-button-content] > [data-glass-button-essence-cost]',
+        ),
+      ).not.toBeNull();
       act(() => root.unmount());
     },
   );
@@ -188,7 +189,6 @@ describe("TransfigurationDetailPanel", () => {
         candidate={candidate}
         value={null}
         status="idle"
-        quote="show-cost"
         navigation={{ kind: "reselectable", onBack }}
         onChange={() => undefined}
         onConfirm={onConfirm}

@@ -111,6 +111,31 @@ const site: SiteState = {
 };
 
 describe("buildTransfigurationCandidates", () => {
+  it("models a zero-cost offer as unpriced without affordability data", () => {
+    const state = {
+      ...createDefaultState(),
+      essence: 0,
+      deck: [makeEntry(1)],
+    };
+    const cardDatabase = new Map([[1, makeCard(1)]]);
+    const zeroCostRuntime = {
+      ...runtime(),
+      entryIds: [parseDeckEntryId("entry-1")],
+      transfigurationOffers: [
+        offer(parseDeckEntryId("entry-1"), "Empowered", 0),
+      ],
+    };
+
+    const candidates = buildTransfigurationCandidates(
+      state,
+      zeroCostRuntime,
+      cardDatabase,
+      false,
+    );
+
+    expect(candidates[0]?.forms[0]?.pricing).toEqual({ kind: "unpriced" });
+  });
+
   it("groups form rows by concrete entry id, keeps UUID card identity, and caps the standard offer at three cards", () => {
     const state = {
       ...createDefaultState(),
@@ -138,9 +163,9 @@ describe("buildTransfigurationCandidates", () => {
       "Empowered",
       "Kindled",
     ]);
-    expect(candidates[0]?.forms.map((form) => form.affordable)).toEqual([
-      true,
-      false,
+    expect(candidates[0]?.forms.map((form) => form.pricing)).toEqual([
+      { kind: "essence", amount: 40, affordable: true },
+      { kind: "essence", amount: 70, affordable: false },
     ]);
     expect(candidates[0]?.forms[0]?.previewModel.transfiguration?.type).toBe(
       "Empowered",

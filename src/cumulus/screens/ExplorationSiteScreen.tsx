@@ -7322,7 +7322,6 @@ export function ExplorationSiteScreen({
                     }}
                     value={selectedTransfigurationFormType}
                     status={transfigurationConfirming ? "submitting" : "idle"}
-                    quote="show-cost"
                     navigation={{
                       kind: "reselectable",
                       onBack: () => {
@@ -7453,7 +7452,6 @@ export function ExplorationSiteScreen({
                       }}
                       value={selectedForm}
                       status={transfigurationConfirming ? "submitting" : "idle"}
-                      quote="included"
                       navigation={{
                         kind: "reselectable",
                         onBack: () => {

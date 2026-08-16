@@ -7,30 +7,46 @@ import type { DomTestId } from "../../types/dom";
 import { token } from "../../primitives/tokens";
 import { EssenceValue } from "../hud/EssenceValue";
 import { StandaloneGlyph } from "./StandaloneGlyph";
-import { exact, one, other, opaque, plural, txa } from "@trox/runtime";
+import { opaque, txa } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { LocalizedTransfigurationPresentation } from "./transfiguration-presentation";
 
-/** Player-facing data for one offered transfiguration form. */
-export interface TransfigurationButtonModel {
+/** Identity and authored presentation shared by every Transfiguration choice. */
+export interface TransfigurationButtonBaseModel {
   /** Named transfiguration form, which determines the canonical glyph. */
   type: TransfigurationType;
   /** Authored presentation resolved from the injected catalog. */
   presentation: LocalizedTransfigurationPresentation;
-  /** Quoted essence cost announced in the accessible label. */
-  essenceCost: number;
-  /** Whether the player can currently pay the quoted cost. */
-  affordable: boolean;
 }
 
-/** Strict visual treatments for compact and optionally priced form lists. */
-export type TransfigurationButtonVariant = "compact" | "priced";
+/** First-class pricing semantics for a Transfiguration choice. */
+export type TransfigurationButtonPricing =
+  | {
+      /** Pricing does not apply to this choice. */
+      readonly kind: "unpriced";
+    }
+  | {
+      /** The choice is purchased with the attached Essence quote. */
+      readonly kind: "essence";
+      readonly amount: number;
+      readonly affordable: boolean;
+    };
+
+/** One first-class unpriced or Essence-priced Transfiguration choice. */
+export interface TransfigurationButtonModel
+  extends TransfigurationButtonBaseModel {
+  /** Unpriced semantics or the complete Essence-price behavior. */
+  pricing: TransfigurationButtonPricing;
+}
+
+/** Strict layouts independent of whether the choice carries a price. */
+export type TransfigurationButtonLayout = "compact" | "wide";
 
 export interface TransfigurationButtonProps {
   /** Structured offered-form data; the component owns its canonical glyph and color. */
   form: TransfigurationButtonModel;
-  /** Compact name-only choice or a wider choice that shows positive essence prices. */
-  variant: TransfigurationButtonVariant;
+  /** Compact or wide layout; wide priced choices show their Essence amount. */
+  layout: TransfigurationButtonLayout;
   /** Whether this form is the active radio choice. */
   selected: boolean;
   /** Prevent activation while a transfiguration commit is in flight. */
@@ -47,23 +63,25 @@ export interface TransfigurationButtonProps {
  */
 export function TransfigurationButton({
   form,
-  variant,
+  layout,
   selected,
   disabled = false,
   onPress,
   testId,
 }: TransfigurationButtonProps) {
   const resolve = useLocalizer();
-  const canSelect = form.affordable && !disabled;
+  const canAfford =
+    form.pricing.kind === "unpriced" || form.pricing.affordable;
+  const canSelect = canAfford && !disabled;
   const glyph = GLYPHS[form.presentation.glyph];
   const accent = form.presentation.accentColor;
-  const compact = variant === "compact";
-  const showPrice = !compact && form.essenceCost > 0;
+  const compact = layout === "compact";
+  const showPrice = !compact && form.pricing.kind === "essence";
 
   return (
     <Pressable
       as="button"
-      data-transfiguration-button-variant={variant}
+      data-transfiguration-button-layout={layout}
       role="radio"
       aria-checked={selected}
       aria-description={resolve(
@@ -73,18 +91,18 @@ export function TransfigurationButton({
           "[transfiguration] Description of a Transfiguration form sourced from the authored catalog.",
         ),
       )}
-      ariaLabelMessage={txa(
-        plural(form.essenceCost, [
-          exact(0, "{form_name}, free"),
-          one("{form_name}, {essence_cost} Essence"),
-          other("{form_name}, {essence_cost} Essence"),
-        ]),
-        {
-          form_name: opaque(form.presentation.name),
-          essence_cost: form.essenceCost,
-        },
-        "[accessibility] [transfiguration] Name for a selectable Transfiguration form and its price. form_name is the authored catalog name; essence_cost is a non-negative integer. Exact zero describes a free choice; positive values share the same wording because Essence is a game-resource name rather than a count noun here.",
-      )}
+      ariaLabelMessage={
+        form.pricing.kind === "unpriced"
+          ? form.presentation.name
+          : txa(
+              "{form_name}, {essence_cost} Essence",
+              {
+                form_name: opaque(form.presentation.name),
+                essence_cost: form.pricing.amount,
+              },
+              "[accessibility] [transfiguration] Name and quoted price for a selectable Essence-priced Transfiguration form. form_name is the authored catalog name; essence_cost is the displayed non-negative Essence amount.",
+            )
+      }
       disabled={!canSelect}
       data-testid={testId}
       onClick={canSelect ? () => onPress(form.type) : undefined}
@@ -115,7 +133,7 @@ export function TransfigurationButton({
         background: "transparent",
         boxShadow: "none",
         color: token("--text-on-glass"),
-        opacity: form.affordable ? 1 : 0.46,
+        opacity: canAfford ? 1 : 0.46,
       }}
     >
       <span
@@ -140,7 +158,7 @@ export function TransfigurationButton({
       >
         {resolve(form.presentation.name)}
       </strong>
-      {showPrice && (
+      {showPrice && form.pricing.kind === "essence" && (
         <span
           data-transfiguration-button-price=""
           style={{
@@ -149,7 +167,7 @@ export function TransfigurationButton({
             whiteSpace: "nowrap",
           }}
         >
-          <EssenceValue amount={form.essenceCost} tone="inherit" />
+          <EssenceValue amount={form.pricing.amount} tone="inherit" />
         </span>
       )}
     </Pressable>

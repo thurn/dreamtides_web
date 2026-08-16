@@ -3,7 +3,7 @@ import { assertLocalized } from "@trox/runtime";
 import type { TransfigurationType } from "../../../types/journey";
 import {
   TransfigurationButton,
-  type TransfigurationButtonVariant,
+  type TransfigurationButtonLayout,
 } from "../../components/controls/TransfigurationButton";
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
@@ -23,26 +23,23 @@ function demoPresentation(
 const DEMO_FORMS = [
   {
     type: "Inspired" as const,
-    essenceCost: 0,
-    affordable: true,
+    pricing: { kind: "unpriced" as const },
   },
   {
     type: "Empowered" as const,
-    essenceCost: 40,
-    affordable: true,
+    pricing: { kind: "essence" as const, amount: 40, affordable: true },
   },
   {
     type: "Kindled" as const,
-    essenceCost: 80,
-    affordable: false,
+    pricing: { kind: "essence" as const, amount: 80, affordable: false },
   },
 ];
 
 function TransfigurationButtonDemo() {
   const [selected, setSelected] = useState<TransfigurationType | null>(null);
-  const variants: readonly TransfigurationButtonVariant[] = [
+  const layouts: readonly TransfigurationButtonLayout[] = [
     "compact",
-    "priced",
+    "wide",
   ];
   return (
     <div
@@ -55,9 +52,9 @@ function TransfigurationButtonDemo() {
         gap: token("--space-l"),
       }}
     >
-      {variants.map((variant) => (
+      {layouts.map((layout) => (
         <div
-          key={variant}
+          key={layout}
           style={{
             display: "flex",
             flexDirection: "column",
@@ -69,7 +66,7 @@ function TransfigurationButtonDemo() {
               <TransfigurationButton
                 key={form.type}
                 form={{ ...form, presentation: demoPresentation(form.type) }}
-                variant={variant}
+                layout={layout}
                 selected={selected === form.type}
                 onPress={setSelected}
               />
@@ -85,21 +82,21 @@ export const transfigurationButtonDemo: CumulusComponent = {
   id: "transfiguration-button",
   title: "Transfiguration Button",
   blurb:
-    "The canonical forge-form choice: compact and optionally priced controls with shared glyph, color, state, and accessibility behavior.",
+    "The canonical forge-form choice: compact and wide layouts for first-class unpriced and Essence-priced choices.",
   callout:
-    "Use the compact variant for space-constrained lists and the priced variant when choices may carry an essence quote; zero-cost choices omit the price.",
+    "Choose pricing semantics independently from layout: unpriced choices carry no payment data, while Essence-priced choices own amount and affordability.",
   group: "Actions & Inputs",
   docName: "TransfigurationButton",
   Component: TransfigurationButtonDemo,
   usage: [
     {
       label: "Forge form",
-      note: "Pass the structured form model and choose one of the two strict presentation variants.",
+      note: "Pass an explicitly unpriced or Essence-priced form and choose its layout independently.",
       code: `import { TransfigurationButton } from "src/cumulus/components/controls/TransfigurationButton";
 
 <TransfigurationButton
   form={form}
-  variant="priced"
+  layout="wide"
   selected={selectedType === form.type}
   onPress={selectForm}
 />`,

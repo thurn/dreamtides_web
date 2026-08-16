@@ -1301,8 +1301,8 @@ describe("exploration-view-model", () => {
         {
           entryId: parseDeckEntryId("entry-eligible"),
           forms: [
-            { type: "Empowered", essenceCost: 0, affordable: true },
-            { type: "Kindled", essenceCost: 0, affordable: true },
+            { type: "Empowered", pricing: { kind: "unpriced" } },
+            { type: "Kindled", pricing: { kind: "unpriced" } },
           ],
         },
       ],

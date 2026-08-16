@@ -7,7 +7,6 @@ import { DemoControls, DemoLog, DemoSelect } from "./promotion-demo-controls";
 function Demo() {
   const [value, setValue] = useState<TransfigurationType | null>("Empowered");
   const [status, setStatus] = useState<"idle" | "submitting">("idle");
-  const [quote, setQuote] = useState<"show-cost" | "included">("show-cost");
   const [navigation, setNavigation] = useState<"fixed" | "reselectable">(
     "reselectable",
   );
@@ -33,12 +32,6 @@ function Demo() {
           onChange={(next) => setStatus(next as "idle" | "submitting")}
         />
         <DemoSelect
-          label="Quote"
-          value={quote}
-          values={["show-cost", "included"]}
-          onChange={(next) => setQuote(next as "show-cost" | "included")}
-        />
-        <DemoSelect
           label="Navigation"
           value={navigation}
           values={["fixed", "reselectable"]}
@@ -49,7 +42,6 @@ function Demo() {
         candidate={demoTransfigurationCandidate}
         value={value}
         status={status}
-        quote={quote}
         navigation={
           navigation === "fixed"
             ? { kind: "fixed" }
@@ -75,19 +67,19 @@ export const transfigurationDetailPanelDemo: CumulusComponent = {
   id: "transfiguration-detail-panel",
   title: "Transfiguration Detail Panel",
   blurb:
-    "A controlled form chooser for one prepared candidate, including previews, affordability, quoted costs, navigation, and commit state.",
+    "A controlled form chooser for one prepared candidate, including unpriced and Essence-priced forms, previews, navigation, and commit state.",
   callout:
-    "Pass prepared quotes and persist selection in the hosting workflow.",
+    "Give each prepared form explicit pricing semantics and persist selection in the hosting workflow.",
   details: [
     "The panel emits only a Transfiguration type; payment and card mutation remain outside the component.",
-    "Builders prepare each form's quote and affordability; status and controlled selection belong to the hosting workflow.",
+    "Builders identify each form as unpriced or attach its complete Essence quote; status and controlled selection belong to the hosting workflow.",
   ],
   group: "Card Workflows",
   docName: "TransfigurationDetailPanel",
   Component: Demo,
   usage: [
     {
-      code: `<TransfigurationDetailPanel candidate={candidate} value={type} status="idle" quote="show-cost" navigation={{ kind: "fixed" }} onChange={setType} onConfirm={commit} />`,
+      code: `<TransfigurationDetailPanel candidate={candidate} value={type} status="idle" navigation={{ kind: "fixed" }} onChange={setType} onConfirm={commit} />`,
     },
   ],
   demo: { defaultArgs: {} },

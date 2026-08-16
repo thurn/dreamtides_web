@@ -20,8 +20,7 @@ function LocalizedTransfigurationButton(
 const empowered = {
   type: "Empowered" as const,
   presentation: localizedTransfigurationFormFixture("Empowered"),
-  essenceCost: 40,
-  affordable: true,
+  pricing: { kind: "unpriced" as const },
 };
 
 beforeEach(() => {
@@ -57,7 +56,7 @@ describe("TransfigurationButton", () => {
       root.render(
         <LocalizedTransfigurationButton
           form={empowered}
-          variant="compact"
+          layout="compact"
           selected={false}
           onPress={onActivate}
         />,
@@ -68,7 +67,7 @@ describe("TransfigurationButton", () => {
     expect(button?.style.width).toBe("100%");
     expect(button?.style.justifyContent).toBe("center");
     expect(button?.style.textAlign).toBe("center");
-    expect(button?.dataset.transfigurationButtonVariant).toBe("compact");
+    expect(button?.dataset.transfigurationButtonLayout).toBe("compact");
     expect(button?.textContent?.trim()).not.toBe("");
     expect(button?.getAttribute("aria-label")?.trim()).not.toBe("");
 
@@ -87,8 +86,11 @@ describe("TransfigurationButton", () => {
     act(() => {
       root.render(
         <LocalizedTransfigurationButton
-          form={{ ...empowered, essenceCost: 0, affordable: false }}
-          variant="priced"
+          form={{
+            ...empowered,
+            pricing: { kind: "essence", amount: 40, affordable: false },
+          }}
+          layout="wide"
           selected
           onPress={onActivate}
         />,
@@ -96,12 +98,14 @@ describe("TransfigurationButton", () => {
     });
 
     const button = container.querySelector<HTMLButtonElement>("button");
-    expect(button?.dataset.transfigurationButtonVariant).toBe("priced");
-    expect(button?.style.gridTemplateColumns).toBe("auto minmax(0, 1fr)");
+    expect(button?.dataset.transfigurationButtonLayout).toBe("wide");
+    expect(button?.style.gridTemplateColumns).toBe(
+      "auto minmax(0, 1fr) auto",
+    );
     expect(button?.style.padding).toBe("var(--space-xs)");
     expect(
       button?.querySelector("[data-transfiguration-button-price]"),
-    ).toBeNull();
+    ).not.toBeNull();
     expect(button?.getAttribute("aria-label")?.trim()).not.toBe("");
     expect(button?.getAttribute("aria-disabled")).toBe("true");
 

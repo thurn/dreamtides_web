@@ -505,8 +505,7 @@ function buildFourSuitTransfigurationCandidate(
             offer.type,
           ),
         effectDetails: offer.effectDetails,
-        essenceCost: 0,
-        affordable: true,
+        pricing: { kind: "unpriced" },
         previewModel: {
           cardId: target.cardSnapshot.id,
           displaySnapshot: preview.card,

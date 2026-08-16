@@ -785,7 +785,7 @@ function fourSuitTarget(
 }
 
 describe("gamble-site-view-model — Four-Suit Reprise", () => {
-  it("maps free forms and removes every used card UUID from later rounds", () => {
+  it("maps unpriced forms and removes every used card UUID from later rounds", () => {
     const target = fourSuitTarget(1);
     const sameCardCopy = {
       ...fourSuitTarget(1, "four-suit-entry-1-copy"),
@@ -852,14 +852,12 @@ describe("gamble-site-view-model — Four-Suit Reprise", () => {
     expect(
       view.result?.transfigurationCandidate.forms.map((form) => ({
         type: form.type,
-        essenceCost: form.essenceCost,
-        affordable: form.affordable,
+        pricing: form.pricing,
       })),
     ).toEqual([
       {
         type: "Empowered",
-        essenceCost: 0,
-        affordable: true,
+        pricing: { kind: "unpriced" },
       },
     ]);
     expect(view.canPlayAgain).toBe(true);

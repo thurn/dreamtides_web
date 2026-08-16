@@ -3397,7 +3397,6 @@ function FourSuitRepriseScreen({
                   }}
                   value={selectedFormType}
                   status={decisionPending ? "submitting" : "idle"}
-                  quote="included"
                   navigation={{ kind: "fixed" }}
                   onChange={(type) =>
                     setSelectedFormType((current) =>

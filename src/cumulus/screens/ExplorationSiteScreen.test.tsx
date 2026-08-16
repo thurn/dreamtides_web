@@ -706,8 +706,7 @@ function multiTransfigurationFollowupView(): ExplorationSiteView {
       type,
       presentation: localizedTransfigurationFormFixture(type),
       effectDetails: { entryId, type },
-      essenceCost: 0,
-      affordable: true,
+      pricing: { kind: "unpriced" as const },
       previewModel: {
         ...model,
         transfiguration: {
@@ -3682,8 +3681,7 @@ describe("ExplorationSiteScreen", () => {
                     presentation:
                       localizedTransfigurationFormFixture("Empowered"),
                     effectDetails: { energyCost: { before: 2, after: 1 } },
-                    essenceCost: 0,
-                    affordable: true,
+                    pricing: { kind: "unpriced" },
                     previewModel: {
                       cardId: transformed.id,
                       displaySnapshot: transformed,

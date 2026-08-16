@@ -82,7 +82,6 @@ const PROMOTED_COMPONENT_PROP_MANIFEST = {
     "navigation",
     "onChange",
     "onConfirm",
-    "quote",
     "status",
     "value",
   ],

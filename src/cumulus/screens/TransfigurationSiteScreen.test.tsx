@@ -52,8 +52,7 @@ function candidate(index: number): TransfigurationCandidateView {
         type: "Empowered",
         presentation: localizedTransfigurationFormFixture("Empowered"),
         effectDetails: { fixture: true },
-        essenceCost: 40,
-        affordable: true,
+        pricing: { kind: "essence", amount: 40, affordable: true },
         previewModel: {
           cardId: card.id,
           displaySnapshot: { ...card, energyCost: 1 },
@@ -73,8 +72,7 @@ function candidate(index: number): TransfigurationCandidateView {
         type: "Kindled",
         presentation: localizedTransfigurationFormFixture("Kindled"),
         effectDetails: { fixture: true },
-        essenceCost: 80,
-        affordable: false,
+        pricing: { kind: "essence", amount: 80, affordable: false },
         previewModel: {
           cardId: card.id,
           displaySnapshot: { ...card, spark: 4 },
@@ -421,7 +419,7 @@ describe("TransfigurationSiteScreen", () => {
       '[data-testid="cumulus-transfiguration-form-Empowered"]',
     );
     expect(empowered?.textContent?.trim()).not.toBe("");
-    expect(empowered?.dataset.transfigurationButtonVariant).toBe("priced");
+    expect(empowered?.dataset.transfigurationButtonLayout).toBe("wide");
     expect(empowered?.getAttribute("aria-description")?.trim()).not.toBe("");
     expect(empowered?.style.padding).toBe("var(--space-xs)");
     expect(empowered?.style.background).toBe("transparent");
@@ -626,7 +624,7 @@ describe("TransfigurationSiteScreen", () => {
     expect(
       container.querySelector<HTMLButtonElement>(
         '[data-testid="cumulus-transfiguration-form-Empowered"]',
-      )?.dataset.transfigurationButtonVariant,
+      )?.dataset.transfigurationButtonLayout,
     ).toBe("compact");
     expect(
       container

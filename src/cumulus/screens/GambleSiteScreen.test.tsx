@@ -255,8 +255,7 @@ function fourSuitResultView(
             type: "Empowered",
             presentation: localizedTransfigurationFormFixture("Empowered"),
             effectDetails: { fixture: true },
-            essenceCost: 0,
-            affordable: true,
+            pricing: { kind: "unpriced" },
             previewModel: {
               cardId: card.id,
               displaySnapshot: { ...card, energyCost: 1 },

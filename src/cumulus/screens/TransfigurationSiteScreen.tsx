@@ -271,7 +271,6 @@ export function TransfigurationSiteScreen({
                 }}
                 value={selectedFormType}
                 status={confirming ? "submitting" : "idle"}
-                quote="show-cost"
                 navigation={{ kind: "reselectable", onBack: goBack }}
                 onChange={(type) =>
                   setSelectedFormType((current) =>
@@ -284,12 +283,16 @@ export function TransfigurationSiteScreen({
                   );
                   if (form === undefined) return;
                   setConfirming(true);
+                  const essenceCost =
+                    form.pricing.kind === "essence"
+                      ? form.pricing.amount
+                      : 0;
                   onTransfigure(
                     picked.entryId,
                     type,
                     resolve(form.presentation.description),
                     form.effectDetails,
-                    form.essenceCost,
+                    essenceCost,
                   );
                 }}
               />
@@ -320,7 +323,6 @@ export function TransfigurationSiteScreen({
                   }}
                   value={null}
                   status="idle"
-                  quote="show-cost"
                   navigation={{ kind: "reselectable", onBack: () => undefined }}
                   onChange={() => undefined}
                   onConfirm={() => undefined}

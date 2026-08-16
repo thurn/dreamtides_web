@@ -237,8 +237,7 @@ function freeTransfigurationCandidates(
         ),
         change: offer.change,
         effectDetails: transfigurationEffectDetails(offer, card),
-        essenceCost: 0,
-        affordable: true,
+        pricing: { kind: "unpriced" as const },
         previewModel: {
           cardId: card.id,
           displaySnapshot: preview.card,

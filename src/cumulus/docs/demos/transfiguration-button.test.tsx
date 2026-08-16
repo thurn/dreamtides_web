@@ -5,15 +5,15 @@ import { createRoot } from "react-dom/client";
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("../../components/controls/TransfigurationButton", () => ({
-  TransfigurationButton: ({ variant }: { variant: string }) => (
-    <div data-transfiguration-button-variant={variant} />
+  TransfigurationButton: ({ layout }: { layout: string }) => (
+    <div data-transfiguration-button-layout={layout} />
   ),
 }));
 
 import { transfigurationButtonDemo } from "./transfiguration-button";
 
 describe("TransfigurationButton documentation demo", () => {
-  it("uses a responsive grid that collapses each variant to a full-width row", () => {
+  it("uses a responsive grid that collapses each layout to a full-width row", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -31,7 +31,7 @@ describe("TransfigurationButton documentation demo", () => {
       "repeat(auto-fit, minmax(min(240px, 100%), 1fr))",
     );
     expect(
-      container.querySelectorAll("[data-transfiguration-button-variant]"),
+      container.querySelectorAll("[data-transfiguration-button-layout]"),
     ).toHaveLength(6);
 
     act(() => root.unmount());

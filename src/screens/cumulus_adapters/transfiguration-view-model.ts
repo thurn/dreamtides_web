@@ -88,8 +88,14 @@ export function buildTransfigurationCandidates(
         transfigurationForm(transfigurationData, offer.type),
       ),
       effectDetails: offer.effectDetails,
-      essenceCost: offer.essenceCost,
-      affordable: offer.essenceCost <= state.essence,
+      pricing:
+        offer.essenceCost === 0
+          ? { kind: "unpriced" }
+          : {
+              kind: "essence",
+              amount: offer.essenceCost,
+              affordable: offer.essenceCost <= state.essence,
+            },
       previewModel: {
         cardId: card.id,
         displaySnapshot: preview.card,

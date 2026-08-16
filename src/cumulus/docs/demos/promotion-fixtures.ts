@@ -223,22 +223,27 @@ export const demoTransfigurationCandidate = {
     {
       type: "Empowered" as const,
       presentation: localizedTransfigurationFormFixture("Empowered"),
-      essenceCost: 20,
-      affordable: true,
+      pricing: { kind: "unpriced" as const },
       previewModel: demoCard(2),
     },
     {
       type: "Kindled" as const,
       presentation: localizedTransfigurationFormFixture("Kindled"),
-      essenceCost: 40,
-      affordable: false,
+      pricing: {
+        kind: "essence" as const,
+        amount: 40,
+        affordable: false,
+      },
       previewModel: demoCard(3),
     },
     {
       type: "Resonant" as const,
       presentation: localizedTransfigurationFormFixture("Resonant"),
-      essenceCost: 30,
-      affordable: true,
+      pricing: {
+        kind: "essence" as const,
+        amount: 30,
+        affordable: true,
+      },
       previewModel: demoCard(4),
     },
   ],
