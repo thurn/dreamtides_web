@@ -13,6 +13,7 @@ import {
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { parseDeckEntryId } from "../../../types/identifiers";
 import { testExplorationActionId } from "../../../types/test-identities";
+import { parseGlossaryEntryId } from "../../../types/identifiers";
 import { richText } from "../card/rich-text";
 
 const entityCard = syntheticGameCard(1);
@@ -78,6 +79,34 @@ describe("ExplorationChoice", () => {
       container.querySelector<HTMLElement>("[data-exploration-entity-label]")
         ?.dataset.entityId,
     ).toBe(entity.id);
+    act(() => root.unmount());
+  });
+
+  it("registers a fixed Transfiguration definition with the complete option", () => {
+    const glossaryId = parseGlossaryEntryId(
+      "f40df441-0e44-4122-b4d4-cdc4085a9ffb",
+    );
+    const { container, root } = mountCumulus(
+      <ExplorationChoice
+        model={{
+          actionId: testExplorationActionId("kindled-definition"),
+          label: assertLocalized("Temper Two in Flame"),
+          description: richText.rules(
+            assertLocalized("Apply Kindled to two eligible cards."),
+          ),
+          availability: "available",
+          transfigurationGlossaryId: glossaryId,
+        }}
+        onPress={() => {}}
+      />,
+    );
+    const choice = container.querySelector<HTMLElement>(
+      "[data-exploration-transfiguration-glossary-id]",
+    );
+    expect(choice?.dataset.explorationTransfigurationGlossaryId).toBe(
+      glossaryId,
+    );
+    expect(choice?.dataset.revealSecondaryTitles).toBe("Kindled");
     act(() => root.unmount());
   });
 

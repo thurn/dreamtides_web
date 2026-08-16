@@ -2676,6 +2676,14 @@ function actionView(
     },
     label: localizedAuthoredMessage(action.label),
     ...effect,
+    ...(action.transfiguration === undefined
+      ? {}
+      : {
+          transfigurationGlossaryId: transfigurationForm(
+            content.transfigurationData,
+            action.transfiguration,
+          ).glossaryUuid,
+        }),
     ...(effectDisclosure === undefined ? {} : { effectDisclosure }),
     followup,
     ...(action.effectKind === "gain-offered-card" &&

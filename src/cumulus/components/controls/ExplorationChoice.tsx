@@ -21,8 +21,10 @@ import type { DeckEntryId } from "../../../types/identifiers";
 import type {
   DreamsignId,
   ExplorationActionId,
+  GlossaryEntryId,
 } from "../../../types/identifiers";
 import type { CardId } from "../../../types/card-identity";
+import { glossaryInfoCard } from "../card/glossary-info-card";
 
 /** Shared presentation fields for a revealable Exploration entity. */
 interface ExplorationChoiceEntityBase {
@@ -65,6 +67,8 @@ export interface ExplorationChoiceModel {
   readonly availability: "available" | "unavailable";
   /** Optional entity revealed by holding or focusing the complete choice. */
   readonly preview?: ExplorationChoiceEntity;
+  /** Optional Transfiguration definition revealed with the complete choice. */
+  readonly transfigurationGlossaryId?: GlossaryEntryId;
 }
 
 export interface ExplorationChoiceProps {
@@ -201,14 +205,24 @@ export function ExplorationChoice({
     model.preview === undefined
       ? null
       : entityRevealRegistration(model.preview);
+  const transfigurationDefinition =
+    model.transfigurationGlossaryId === undefined
+      ? []
+      : [glossaryInfoCard(model.transfigurationGlossaryId)];
   const binding = useRevealSource({
     identity: previewRegistration?.identity ?? {
       entityType: "gallery-action",
       entityId: revealEntityId("gallery-action", model.actionId),
     },
-    spec: previewRegistration?.spec ?? {
-      primary: { kind: "source" as const, description: model.label },
-      secondaries: [],
+    spec: {
+      ...(previewRegistration?.spec ?? {
+        primary: { kind: "source" as const, description: model.label },
+        secondaries: [],
+      }),
+      secondaries: [
+        ...(previewRegistration?.spec.secondaries ?? []),
+        ...transfigurationDefinition,
+      ],
     },
     onActivate: available ? () => onPress(model.actionId) : undefined,
   });
@@ -227,6 +241,9 @@ export function ExplorationChoice({
       data-entity-id={model.preview?.id}
       data-entity-copies={
         model.preview?.copies ?? (model.preview ? 1 : undefined)
+      }
+      data-exploration-transfiguration-glossary-id={
+        model.transfigurationGlossaryId
       }
       data-reveal-source-retain="true"
       onPointerDown={(event) => {

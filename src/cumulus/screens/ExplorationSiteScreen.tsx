@@ -101,6 +101,7 @@ import type { CardId } from "../../types/card-identity";
 import type { ExplorationActionId } from "../../types/identifiers";
 import type { AtlasNodeId } from "../../types/identifiers";
 import type { DreamsignId } from "../../types/identifiers";
+import type { GlossaryEntryId } from "../../types/identifiers";
 import type { IdentityRecord } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 
@@ -666,6 +667,8 @@ export interface ExplorationActionView {
   readonly mechanics: Readonly<Record<string, unknown>>;
   readonly label: LocalizedString;
   readonly effectText: AnnotatedLocalizedString<ExplorationEntityView>;
+  /** Canonical definition for a fixed Transfiguration named by this option. */
+  readonly transfigurationGlossaryId?: GlossaryEntryId;
   /** Code-authored disclosure rendered as a complete localized message. */
   readonly effectDisclosure?: LocalizedString;
   /** Complete fallback message inputs when a special deck-card target is absent. */
@@ -1113,6 +1116,8 @@ function ExplorationNarrativeChoices({
                   disclosure: action.effectDisclosure,
                   availability:
                     visible && action.available ? "available" : "unavailable",
+                  transfigurationGlossaryId:
+                    action.transfigurationGlossaryId,
                   preview: (() => {
                     const entity = previewEntityForAction(action);
                     return entity === null

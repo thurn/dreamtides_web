@@ -679,6 +679,10 @@ describe("exploration-view-model", () => {
     expect(resolveSource(view.actions[0].effectText.localized)).toBe(
       "Apply Empowered to a chosen card.",
     );
+    expect(view.actions[0].transfigurationGlossaryId).toBe(
+      transfigurationFixture().forms.find((form) => form.id === "Empowered")
+        ?.glossaryUuid,
+    );
     expect(view.actions[0].effectDisclosure).toEqual(
       "(Fixture Empowered effect)",
     );
