@@ -141,10 +141,7 @@ function dreamsignById(
   return template === undefined ? null : createDreamsign(template);
 }
 
-function avatarById(
-  content: JourneyContent,
-  avatarId: AvatarId,
-) {
+function avatarById(content: JourneyContent, avatarId: AvatarId) {
   const normalized = avatarId.toLowerCase();
   const avatar = content.avatars.find(
     (candidate) => candidate.id.toLowerCase() === normalized,
@@ -1478,10 +1475,7 @@ export function buildExplorationActionEffect(
   content: JourneyContent,
   deckCardEntity?: DeckCardVariableTarget["entity"],
   starterCardEntity?: DeckCardVariableTarget["entity"],
-): Pick<
-  ExplorationActionView,
-  "effectText" | "effectFallback"
-> {
+): Pick<ExplorationActionView, "effectText" | "effectFallback"> {
   const references = effectReferencesForAction(
     action,
     offer,
@@ -1557,10 +1551,7 @@ export function buildExplorationActionEffect(
     if (action.effectText instanceof LocalizedString) return action.effectText;
     if (typeof action.effectText === "string")
       return localizedSourceText(action.effectText, localizedValues);
-    return derivedExplorationEffectText(
-      action,
-      localizedValues,
-    );
+    return derivedExplorationEffectText(action, localizedValues);
   };
   const argumentNames = explorationEffectArgumentNames(action);
   if (
@@ -1604,10 +1595,7 @@ export function buildExplorationActionEffect(
               reference.placeholder,
             ),
           )
-          .map((reference) => [
-            reference.placeholder,
-            reference.entity,
-          ]),
+          .map((reference) => [reference.placeholder, reference.entity]),
       ),
     ),
   };
@@ -2595,8 +2583,7 @@ function actionView(
                                   ? (offer.offeredDeckEntryIds?.length ?? 0) ===
                                     1
                                   : action.effectKind === "choose-avatar"
-                                    ? (offer.offeredAvatarIds?.length ??
-                                        0) > 0
+                                    ? (offer.offeredAvatarIds?.length ?? 0) > 0
                                     : action.effectKind === "add-site"
                                       ? offer.offeredSiteType !== undefined
                                       : requiresDeckCardTarget
@@ -4460,7 +4447,8 @@ function rewardForResolution(
   }
   if (
     resolvedAction?.effectKind === "gain-essence-per-card" &&
-    resolvedAction.essencePerCard !== undefined
+    resolvedAction.essencePerCard !== undefined &&
+    resolvedAction.predicate !== undefined
   ) {
     return {
       kind: "essence",
@@ -4472,6 +4460,7 @@ function rewardForResolution(
         const card = deckCardChoice(entry, content);
         return card === null ? [] : [card];
       }),
+      predicate: resolvedAction.predicate,
       essencePerCard: resolvedAction.essencePerCard,
       totalEssence: resolution.essenceGained,
     };

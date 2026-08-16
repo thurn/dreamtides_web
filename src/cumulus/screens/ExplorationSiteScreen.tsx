@@ -93,6 +93,7 @@ import type {
 import type {
   ExplorationChoosableSiteType,
   ExplorationEffectKind,
+  ExplorationPredicate,
 } from "../../data/exploration";
 import type { SiteId } from "../../types/identifiers";
 import type { DeckEntryId } from "../../types/identifiers";
@@ -199,6 +200,8 @@ export type ExplorationRewardView =
       readonly kind: "essence";
       /** Exact deck entries that contributed to the Essence reward. */
       readonly cards: readonly ExplorationCardChoiceView[];
+      /** Authored predicate shared by every contributing deck entry. */
+      readonly predicate: ExplorationPredicate;
       /** Essence granted by each contributing card. */
       readonly essencePerCard: number;
       /** Authoritative total applied by the reducer. */
@@ -448,6 +451,67 @@ type SemanticRewardKind<Reward> = Reward extends {
 }
   ? Exclude<Kind, undefined>
   : never;
+
+function localizedEssencePredicateCount(
+  predicate: ExplorationPredicate,
+  count: number,
+): LocalizedString {
+  if (count === 1) {
+    switch (predicate) {
+      case "character":
+        return localizedSourceText("Character");
+      case "event":
+        return localizedSourceText("Event");
+      case "cheap-character":
+        return localizedSourceText("≤2● cost Character");
+      case "legendary":
+        return localizedSourceText("legendary card");
+      case "spirit-animal":
+        return localizedSourceText("Spirit Animal");
+      case "survivor":
+        return localizedSourceText("Survivor");
+      case "warrior":
+        return localizedSourceText("Warrior");
+    }
+  }
+  switch (predicate) {
+    case "character":
+      return tx(
+        "Characters",
+        "[card-browser] Type filter option that keeps Character cards.",
+      );
+    case "event":
+      return tx(
+        "Events",
+        "[card-browser] Type filter option that keeps Event cards.",
+      );
+    case "cheap-character":
+      return tx(
+        "≤2● cost Characters",
+        "[exploration] Card category in an Essence reward calculation.",
+      );
+    case "legendary":
+      return tx(
+        "legendary cards",
+        "[exploration] Card category in an Essence reward calculation.",
+      );
+    case "spirit-animal":
+      return tx(
+        "Spirit Animals",
+        "[exploration] Card category in an Essence reward calculation.",
+      );
+    case "survivor":
+      return tx(
+        "Survivors",
+        "[exploration] Card category in an Essence reward calculation.",
+      );
+    case "warrior":
+      return tx(
+        "Warriors",
+        "[exploration] Card category in an Essence reward calculation.",
+      );
+  }
+}
 
 export type ExplorationOutcomeKind =
   | ExplicitRewardKind<ExplorationRewardView>
@@ -2381,8 +2445,7 @@ export function ExplorationSiteScreen({
     effectReward?.kind === "smaller-hand-and-cost-discount"
       ? effectReward
       : null;
-  const avatarReward =
-    effectReward?.kind === "avatar" ? effectReward : null;
+  const avatarReward = effectReward?.kind === "avatar" ? effectReward : null;
   const siteOfferModifierReward =
     effectReward?.kind === "site-offer-modifier" ? effectReward : null;
   const shopModifierReward =
@@ -4713,9 +4776,7 @@ export function ExplorationSiteScreen({
         avatarReward !== null && (
           <motion.section
             data-exploration-outcome="avatar"
-            data-exploration-previous-avatar-id={
-              avatarReward.previous?.id
-            }
+            data-exploration-previous-avatar-id={avatarReward.previous?.id}
             data-exploration-avatar-id={avatarReward.current.id}
             role="status"
             aria-label={resolve(
@@ -6885,23 +6946,30 @@ export function ExplorationSiteScreen({
           <motion.section
             data-exploration-essence-cards=""
             data-exploration-essence-card-count={essenceReward.cards.length}
+            data-exploration-essence-predicate={essenceReward.predicate}
             role="status"
             aria-label={resolve(
               txa(
                 plural(essenceReward.cards.length, [
                   one(
-                    "{card_count} Spirit Animal card grants {total_essence} Essence total, {essence_per_card} for that card",
+                    "{card_count} {predicate} grants {total_essence} Essence total, {essence_per_card} for that card",
                   ),
                   other(
-                    "{card_count} Spirit Animal cards grant {total_essence} Essence total, {essence_per_card} each",
+                    "{card_count} {predicate} grant {total_essence} Essence total, {essence_per_card} each",
                   ),
                 ]),
                 {
                   card_count: essenceReward.cards.length,
+                  predicate: opaque(
+                    localizedEssencePredicateCount(
+                      essenceReward.predicate,
+                      essenceReward.cards.length,
+                    ),
+                  ),
                   total_essence: essenceReward.totalEssence,
                   essence_per_card: essenceReward.essencePerCard,
                 },
-                "[accessibility] [exploration] Summary of an Exploration outcome that converts Spirit Animal cards into Essence. card_count is the positive number of affected cards; total_essence and essence_per_card are non-negative Essence amounts.",
+                "[accessibility] [exploration] Summary of an Exploration outcome that converts cards matching an authored predicate into Essence. predicate names the matching card category; card_count is the positive number of affected cards; total_essence and essence_per_card are non-negative Essence amounts.",
               ),
             )}
             initial={{ opacity: 0 }}
@@ -6996,6 +7064,7 @@ export function ExplorationSiteScreen({
         essenceRewardPhase === "announcement" && (
           <div
             data-exploration-essence-announcement=""
+            data-exploration-essence-predicate={essenceReward.predicate}
             style={{
               position: "fixed",
               inset: 0,
@@ -7010,15 +7079,18 @@ export function ExplorationSiteScreen({
                 "[exploration] Headline on an Exploration reward announcement that grants Essence.",
               )}
               detail={txa(
-                plural(essenceReward.cards.length, [
-                  one("{essence_per_card} × {card_count} Spirit Animal"),
-                  other("{essence_per_card} × {card_count} Spirit Animals"),
-                ]),
+                "{essence_per_card} × {card_count} {predicate}",
                 {
                   essence_per_card: essenceReward.essencePerCard,
                   card_count: essenceReward.cards.length,
+                  predicate: opaque(
+                    localizedEssencePredicateCount(
+                      essenceReward.predicate,
+                      essenceReward.cards.length,
+                    ),
+                  ),
                 },
-                "[exploration] Calculation detail for Essence gained from Spirit Animal cards. essence_per_card is a non-negative Essence rate and card_count is the positive number of Spirit Animal cards involved; the total payout is rendered separately.",
+                "[exploration] Calculation detail for Essence gained from cards matching an authored predicate. predicate names the matching card category; essence_per_card is a non-negative Essence rate and card_count is the positive number of matching cards involved; the total payout is rendered separately.",
               )}
               essenceGained={essenceReward.totalEssence}
               tone="reward"
@@ -8037,9 +8109,7 @@ export function ExplorationSiteScreen({
                           variant="panel"
                           profile={{
                             id: avatar.id,
-                            ability: localizedSourceText(
-                              avatar.renderedText,
-                            ),
+                            ability: localizedSourceText(avatar.renderedText),
                           }}
                           onPress={() =>
                             onResolve(activeAction.id, {

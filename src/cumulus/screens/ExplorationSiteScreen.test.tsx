@@ -980,6 +980,7 @@ function essenceRewardView(): ExplorationSiteView {
     reward: {
       kind: "essence",
       cards,
+      predicate: "cheap-character",
       essencePerCard: 15,
       totalEssence: 90,
     },
@@ -1579,9 +1580,9 @@ describe("ExplorationSiteScreen", () => {
             "[exploration] Synthetic effect purging one disclosed Starter card. starter_card is the proper card name.",
           ).annotate({
             starter_card: {
-                kind: "card",
-                card: base.card.displaySnapshot,
-                entryId: parseDeckEntryId(starterEntryId),
+              kind: "card",
+              card: base.card.displaySnapshot,
+              entryId: parseDeckEntryId(starterEntryId),
             },
           }),
           automaticSelection: {},
@@ -1914,22 +1915,22 @@ describe("ExplorationSiteScreen", () => {
             "[exploration] Synthetic effect granting three copies of one disclosed card. nightmare_card is the proper card name.",
           ).annotate({
             nightmare_card: {
-                kind: "card",
-                card: {
-                  ...referencedCard,
-                  renderedText: `${referencedCard.renderedText} Draw a card.`,
-                },
-                transfiguration: {
-                  type: "Inspired",
-                  form: transfigurationFormFixture("Inspired"),
-                  markedText: `${referencedCard.renderedText} Draw a card.`,
-                  energyChanged: false,
-                  energyChangeName: null,
-                  sparkChanged: false,
-                  sparkChangeName: null,
-                  fastChanged: false,
-                },
-                copies: 3,
+              kind: "card",
+              card: {
+                ...referencedCard,
+                renderedText: `${referencedCard.renderedText} Draw a card.`,
+              },
+              transfiguration: {
+                type: "Inspired",
+                form: transfigurationFormFixture("Inspired"),
+                markedText: `${referencedCard.renderedText} Draw a card.`,
+                energyChanged: false,
+                energyChangeName: null,
+                sparkChanged: false,
+                sparkChangeName: null,
+                fastChanged: false,
+              },
+              copies: 3,
             },
           }),
         },
@@ -5450,6 +5451,11 @@ describe("ExplorationSiteScreen", () => {
       container.querySelector("[data-exploration-essence-cards]")?.textContent,
     ).toContain("+15");
     expect(
+      container
+        .querySelector("[data-exploration-essence-cards]")
+        ?.getAttribute("data-exploration-essence-predicate"),
+    ).toBe("cheap-character");
+    expect(
       container.querySelector("[data-exploration-essence-announcement]"),
     ).toBeNull();
 
@@ -5465,6 +5471,9 @@ describe("ExplorationSiteScreen", () => {
     expect(announcement?.textContent).toContain("+90");
     expect(announcement?.textContent).toContain("15");
     expect(announcement?.textContent).toContain("6");
+    expect(
+      announcement?.getAttribute("data-exploration-essence-predicate"),
+    ).toBe("cheap-character");
     expect(onExit).not.toHaveBeenCalled();
 
     act(() => {

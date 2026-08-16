@@ -59,7 +59,14 @@ import { parseSelectionKey } from "../../types/identifiers";
 import { parseRewardCandidateKey } from "../../types/identifiers";
 import { parseSelectionContentRevision } from "../../types/selection-content-revision";
 import { parseSelectionRulesVersion } from "../../reward-selection/types";
-import { testAvatarId, testDreamscapeId, testDreamsignId, testExplorationActionId, testGuideId, testCardId } from "../../types/test-identities";
+import {
+  testAvatarId,
+  testDreamscapeId,
+  testDreamsignId,
+  testExplorationActionId,
+  testGuideId,
+  testCardId,
+} from "../../types/test-identities";
 
 expect.addEqualityTesters([localizedStringSourceEquality]);
 
@@ -1130,7 +1137,9 @@ describe("exploration-view-model", () => {
       },
     } as unknown as JourneyContent;
     const startingDeck = [firstEvent, secondEvent].map((event, index) => ({
-      entryId: parseDeckEntryId(index === 0 ? "entry-event-a" : "entry-event-b"),
+      entryId: parseDeckEntryId(
+        index === 0 ? "entry-event-a" : "entry-event-b",
+      ),
       cardNumber: event.cardNumber,
       transfiguration: null,
       isBane: false,
@@ -1449,6 +1458,7 @@ describe("exploration-view-model", () => {
           model: { cardId: secondSpiritAnimal.id },
         },
       ],
+      predicate: "spirit-animal",
       essencePerCard: 15,
       totalEssence: 30,
     });
@@ -1456,7 +1466,10 @@ describe("exploration-view-model", () => {
 
   it("resolves an offered-card placeholder and presents the UUID-backed card", () => {
     const source = card(sourceId, 17);
-    const offered = card(testCardId("f0000000-0000-4000-8000-000000000018"), 18);
+    const offered = card(
+      testCardId("f0000000-0000-4000-8000-000000000018"),
+      18,
+    );
     const state = {
       ...createDefaultState(),
       deck: [
@@ -1708,7 +1721,8 @@ describe("exploration-view-model", () => {
           ? { [starterEntryId]: source.id }
           : {},
       selectionRulesVersion: parseSelectionRulesVersion("starter-rules-v1"),
-      selectionContentRevision: parseSelectionContentRevision("starter-content-v1"),
+      selectionContentRevision:
+        parseSelectionContentRevision("starter-content-v1"),
       selectionKey: parseSelectionKey("fixture-starter-selection"),
       selectorSignatures: [stableDigest("starter-selector-signature")],
       selectorTraces: [],
@@ -2595,7 +2609,10 @@ describe("exploration-view-model", () => {
 
   it("builds semantic outcomes for copied cards, next-battle modifiers, Reclaim, and Avatar replacement", () => {
     const source = card(sourceId, 17);
-    const survivor = card(testCardId("f0000000-0000-4000-8000-000000000018"), 18);
+    const survivor = card(
+      testCardId("f0000000-0000-4000-8000-000000000018"),
+      18,
+    );
     const avatars = Array.from({ length: 4 }, (_, index) => ({
       id: testAvatarId(`avatar-${String(index)}`),
       name: `Avatar ${String(index)}`,
@@ -2743,7 +2760,10 @@ describe("exploration-view-model", () => {
       {
         ...emptyResolution(testExplorationActionId("copy")),
         gainedCardIds: [source.id, source.id],
-        gainedEntryIds: [parseDeckEntryId("copy-a"), parseDeckEntryId("copy-b")],
+        gainedEntryIds: [
+          parseDeckEntryId("copy-a"),
+          parseDeckEntryId("copy-b"),
+        ],
         affectedEntryIds: [parseDeckEntryId("source-entry")],
       },
     );
@@ -2809,7 +2829,10 @@ describe("exploration-view-model", () => {
           model: { cardId: survivor.id },
         },
         cards: [
-          { entryId: parseDeckEntryId("copy-b"), model: { cardId: survivor.id } },
+          {
+            entryId: parseDeckEntryId("copy-b"),
+            model: { cardId: survivor.id },
+          },
         ],
         count: 1,
       },
@@ -2832,7 +2855,10 @@ describe("exploration-view-model", () => {
           ],
         },
         gainedCardIds: [source.id, survivor.id],
-        gainedEntryIds: [parseDeckEntryId("copy-a"), parseDeckEntryId("copy-b")],
+        gainedEntryIds: [
+          parseDeckEntryId("copy-a"),
+          parseDeckEntryId("copy-b"),
+        ],
         affectedEntryIds: [
           parseDeckEntryId("source-entry"),
           parseDeckEntryId("survivor-entry"),
@@ -2989,8 +3015,14 @@ describe("exploration-view-model", () => {
               entryId: parseDeckEntryId("source-entry"),
               model: { cardId: source.id },
             },
-            { entryId: parseDeckEntryId("copy-a"), model: { cardId: source.id } },
-            { entryId: parseDeckEntryId("copy-b"), model: { cardId: source.id } },
+            {
+              entryId: parseDeckEntryId("copy-a"),
+              model: { cardId: source.id },
+            },
+            {
+              entryId: parseDeckEntryId("copy-b"),
+              model: { cardId: source.id },
+            },
           ],
         },
         deckModification: {
@@ -3423,7 +3455,10 @@ describe("exploration-view-model", () => {
         ],
         purgedEntrySnapshots: [baseState.deck[0], baseState.deck[3]],
         gainedCardIds: [survivor.id, source.id],
-        gainedEntryIds: [parseDeckEntryId("copy-a"), parseDeckEntryId("copy-b")],
+        gainedEntryIds: [
+          parseDeckEntryId("copy-a"),
+          parseDeckEntryId("copy-b"),
+        ],
         resolvedPredicate: "character",
         starterCardReplacements: [
           {
@@ -3527,7 +3562,9 @@ describe("exploration-view-model", () => {
     };
     const commonPreparation = {
       selectionRulesVersion: parseSelectionRulesVersion("2"),
-      selectionContentRevision: parseSelectionContentRevision("compound-content-revision"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "compound-content-revision",
+      ),
       selectorSignatures: [],
       selectorTraces: [],
       planSignature: stableDigest("compound-plan-signature"),
@@ -3696,7 +3733,8 @@ describe("exploration-view-model", () => {
       available: true,
       automaticSelection: { entryIds: [bindings[0].entryId] },
     });
-    const disclosedEntity = disclosedActionView?.effectText.annotations.deck_card;
+    const disclosedEntity =
+      disclosedActionView?.effectText.annotations.deck_card;
     if (disclosedEntity?.kind !== "card") {
       throw new Error("Expected the disclosed compound target to be a card");
     }
@@ -3830,7 +3868,9 @@ describe("exploration-view-model", () => {
         transfiguration: "Kindled",
       })),
       selectionRulesVersion: parseSelectionRulesVersion("2"),
-      selectionContentRevision: parseSelectionContentRevision("compound-resolution-revision"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "compound-resolution-revision",
+      ),
       selectionKey: parseSelectionKey(action.id),
       selectorSignatures: [],
       selectorTraces: [],
@@ -4095,7 +4135,9 @@ describe("exploration-view-model", () => {
         eligibleCards,
         targets,
         selectionRulesVersion: parseSelectionRulesVersion("2"),
-        selectionContentRevision: parseSelectionContentRevision("multi-transfiguration-content-v1"),
+        selectionContentRevision: parseSelectionContentRevision(
+          "multi-transfiguration-content-v1",
+        ),
         selectionKey: parseSelectionKey("multi-transfiguration-key"),
         selectorSignatures:
           mode === "chosen-flexible" || mode === "chosen-fixed"
@@ -4253,8 +4295,8 @@ describe("exploration-view-model", () => {
         expect(concealed).not.toContain(eligibleCards[0].entryId);
       }
       expect(
-        build(baseState, null, { selectionSignature: stableDigest("tampered") })?.actions[0]
-          .available,
+        build(baseState, null, { selectionSignature: stableDigest("tampered") })
+          ?.actions[0].available,
       ).toBe(false);
 
       const committedTargets =
@@ -4437,8 +4479,12 @@ describe("exploration-view-model", () => {
         starterCards,
         eligibleStarterCards: starterCards,
         targets,
-        selectionRulesVersion: parseSelectionRulesVersion("starter-transfiguration-rules-v1"),
-        selectionContentRevision: parseSelectionContentRevision("starter-transfiguration-content-v1"),
+        selectionRulesVersion: parseSelectionRulesVersion(
+          "starter-transfiguration-rules-v1",
+        ),
+        selectionContentRevision: parseSelectionContentRevision(
+          "starter-transfiguration-content-v1",
+        ),
         selectionKey: parseSelectionKey("starter-transfiguration-key"),
         selectorSignatures: [
           stableDigest("starter-targets"),
@@ -4570,8 +4616,9 @@ describe("exploration-view-model", () => {
       expect(concealedView).not.toContain(starterCards[0].entryId);
       expect(concealedView).not.toContain(targets[0].transfiguration);
       expect(
-        runtime(baseState, null, { selectionSignature: stableDigest("tampered-plan") })
-          ?.actions[0].available,
+        runtime(baseState, null, {
+          selectionSignature: stableDigest("tampered-plan"),
+        })?.actions[0].available,
       ).toBe(false);
 
       const finalState: JourneyState = {
@@ -4687,7 +4734,9 @@ describe("exploration-view-model", () => {
       authoredMaximumCount: 2,
       bindings,
       selectionRulesVersion: parseSelectionRulesVersion("2"),
-      selectionContentRevision: parseSelectionContentRevision("replacement-content-v1"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "replacement-content-v1",
+      ),
       selectionKey: parseSelectionKey("replacement-action"),
       selectorSignatures: [
         stableDigest("replacement-a"),
@@ -4803,8 +4852,8 @@ describe("exploration-view-model", () => {
       firstReplacement.id,
     );
     expect(
-      build(beforeState, null, { selectionSignature: stableDigest("tampered") })?.actions[0]
-        .available,
+      build(beforeState, null, { selectionSignature: stableDigest("tampered") })
+        ?.actions[0].available,
     ).toBe(false);
 
     const gainedEntries = [
@@ -4927,7 +4976,10 @@ describe("exploration-view-model", () => {
     "conceals $effectKind targets and reconstructs its exact persisted mappings",
     ({ effectKind, mechanicId, predicate, cardType }) => {
       const encounter = card(sourceId, 17);
-      const first = card(testCardId("f4000000-0000-4000-8000-000000000041"), 41);
+      const first = card(
+        testCardId("f4000000-0000-4000-8000-000000000041"),
+        41,
+      );
       const second =
         effectKind === "copy-random-cards"
           ? first
@@ -4945,7 +4997,9 @@ describe("exploration-view-model", () => {
         eligibleCards: bindings,
         targets: bindings,
         selectionRulesVersion: parseSelectionRulesVersion("2"),
-        selectionContentRevision: parseSelectionContentRevision("random-target-content-v1"),
+        selectionContentRevision: parseSelectionContentRevision(
+          "random-target-content-v1",
+        ),
         selectionKey: parseSelectionKey(
           "random-target-action:random-deck-targets",
         ),
@@ -5044,8 +5098,9 @@ describe("exploration-view-model", () => {
       expect(concealed).not.toContain(bindings[0].entryId);
       expect(concealed).not.toContain(bindings[1].entryId);
       expect(
-        build(beforeState, null, { selectionSignature: stableDigest("tampered") })?.actions[0]
-          .available,
+        build(beforeState, null, {
+          selectionSignature: stableDigest("tampered"),
+        })?.actions[0].available,
       ).toBe(false);
 
       if (effectKind === "copy-random-cards") {
@@ -5115,10 +5170,7 @@ describe("exploration-view-model", () => {
             { ...beforeState, deck: [...beforeEntries, ...copies] },
             {
               ...resolution,
-              gainedEntryIds: [
-                copies[0].entryId,
-                copies[0].entryId,
-              ],
+              gainedEntryIds: [copies[0].entryId, copies[0].entryId],
               cardCopies: [
                 mappings[0],
                 {
@@ -5133,7 +5185,9 @@ describe("exploration-view-model", () => {
       }
 
       const afterTypeChange: CardTypeChange = {
-        predicateId: parseCardTypeChangePredicateId("exploration:card-type:Event"),
+        predicateId: parseCardTypeChangePredicateId(
+          "exploration:card-type:Event",
+        ),
         cardType: "Event" as const,
         subtype: "",
         label: "Event",
@@ -5242,7 +5296,9 @@ describe("exploration-view-model", () => {
       eligibleCards: [{ entryId: sourceEntry.entryId, cardId: source.id }],
       targets: [{ entryId: sourceEntry.entryId, cardId: source.id }],
       selectionRulesVersion: parseSelectionRulesVersion("2"),
-      selectionContentRevision: parseSelectionContentRevision("replacement-content-v1"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "replacement-content-v1",
+      ),
       selectionKey: parseSelectionKey(`${action.id}:random-deck-targets`),
       selectorSignature: stableDigest("replacement-selector"),
       selectorTrace: { fixture: "replacement" } as never,
@@ -5392,7 +5448,9 @@ describe("exploration-view-model", () => {
       eligibleCards: [{ entryId: entry.entryId, cardId: event.id }],
       target: { entryId: entry.entryId, cardId: event.id },
       selectionRulesVersion: parseSelectionRulesVersion("2"),
-      selectionContentRevision: parseSelectionContentRevision("disclosed-content-v1"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "disclosed-content-v1",
+      ),
       selectionKey: parseSelectionKey(`${action.id}:disclosed-deck-target`),
       selectorSignature: stableDigest("disclosed-selector"),
       selectorTrace: { fixture: "disclosed" } as never,
@@ -5469,9 +5527,9 @@ describe("exploration-view-model", () => {
         card: { id: event.id },
       },
     });
-    expect(
-      resolveSource(preparedAction!.effectText.localized),
-    ).not.toContain("{card_type}");
+    expect(resolveSource(preparedAction!.effectText.localized)).not.toContain(
+      "{card_type}",
+    );
     expect(Object.keys(preparedAction!.effectText.annotations)).toEqual([
       "deck_card",
     ]);
@@ -5574,7 +5632,9 @@ describe("exploration-view-model", () => {
       canonicalMechanicId: "add-site" as const,
       selectionPolicyId: "fixed" as const,
       selectionRulesVersion: parseSelectionRulesVersion("selection-rules-v1"),
-      selectionContentRevision: parseSelectionContentRevision("selection-content-v1"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "selection-content-v1",
+      ),
       selectionKey: parseSelectionKey(action.id),
       selectionSignature: preparation.planSignature,
       siteInsertionPreparation: preparation,
@@ -5779,7 +5839,9 @@ describe("exploration-view-model", () => {
     };
     const selectionTrace = {
       selectionRulesVersion: parseSelectionRulesVersion("2"),
-      selectionContentRevision: parseSelectionContentRevision("selection-content-v1"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "selection-content-v1",
+      ),
       mechanicId: "add-site" as const,
       policyId: "site-uniform" as const,
       selectionKey: parseSelectionKey(action.id),
@@ -5809,7 +5871,9 @@ describe("exploration-view-model", () => {
       canonicalMechanicId: "add-site" as const,
       selectionPolicyId: "site-uniform" as const,
       selectionRulesVersion: parseSelectionRulesVersion("selection-rules-v1"),
-      selectionContentRevision: parseSelectionContentRevision("selection-content-v1"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "selection-content-v1",
+      ),
       selectionKey: parseSelectionKey(action.id),
       selectionSignature: preparation.planSignature,
       selectionTrace,
