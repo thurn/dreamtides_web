@@ -1607,7 +1607,7 @@ describe("Exploration provider", () => {
     const packAction: ExplorationActionContent = {
       id: testExplorationActionId("warrior-packs"),
       label: "Answer Their Muster",
-      effectText: "Choose one of 2 packs of Warrior cards to add to your deck",
+      effectText: "Choose one of two packs of Warrior cards to add to your deck",
       effectKind: "choose-pack",
       predicate: "warrior",
       packCount: 2,

@@ -47,7 +47,7 @@ Cards you reclaim are not banished when they leave play.
    - ***Call a Formidable Guardian*** — Gain a random legendary card.
 
 4. Dust drifts around you as a seated guardian watches beside a bright gateway.
-   - ***Call Beyond the Gate*** — Choose one of 2 packs of Survivor cards to add to your deck
+   - ***Call Beyond the Gate*** — Choose one of two packs of Survivor cards to add to your deck
    - ***Train Beside the Guardian*** — Apply Kindled to $DECK_CARD
 
 5. You find a solitary guardian bowed beside a luminous frame half-buried in rubble.
@@ -64,7 +64,7 @@ Cards you reclaim are not banished when they leave play.
 
 1. Before you, a colossal wolf advances through burning grass, pale eyes fixed ahead.
    - ***Feed the Fire*** — Purge a chosen Event card
-   - ***Welcome Its Kin*** — Choose one of 2 packs of Spirit Animal cards to add to your deck
+   - ***Welcome Its Kin*** — Choose one of two packs of Spirit Animal cards to add to your deck
 
 2. A giant wolf emerges from the blaze, dwarfing the crouched archer.
    - ***Invite a Wild Companion*** — Gain a random Spirit Animal card

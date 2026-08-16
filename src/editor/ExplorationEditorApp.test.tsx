@@ -151,27 +151,11 @@ const SERVER_DATA: ExplorationEditorServerData = {
           id: testExplorationActionId(`${CARD_ID}:first`),
           label: "Gather a company",
           effectText:
-            "Choose one of 2 packs of 3 Character cards to add to your deck",
+            "Choose one of two packs of Character cards to add to your deck",
           renderedEffectText:
-            "Choose one of 2 packs of 3 Character cards to add to your deck",
+            "Choose one of two packs of Character cards to add to your deck",
           renderedEffectParts: [
-            { kind: "text", text: "Choose one of " },
-            {
-              kind: "variable",
-              placeholder: "{pack_count}",
-              variableName: "pack_count",
-              value: 2,
-              text: "2",
-            },
-            { kind: "text", text: " packs of " },
-            {
-              kind: "variable",
-              placeholder: "{pack_size}",
-              variableName: "pack_size",
-              value: 3,
-              text: "3",
-            },
-            { kind: "text", text: " " },
+            { kind: "text", text: "Choose one of two packs of " },
             {
               kind: "variable",
               placeholder: "{predicate}",
@@ -391,7 +375,7 @@ describe("ExplorationEditorApp", () => {
     );
     expect(container.textContent).toContain("Gather a company");
     expect(container.textContent).toContain(
-      "Choose one of 2 packs of 3 Character cards",
+      "Choose one of two packs of Character cards",
     );
     expect(container.querySelector("img")?.getAttribute("src")).toBe(
       "/exploration/42.jpg",

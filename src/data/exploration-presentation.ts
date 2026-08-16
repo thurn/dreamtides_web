@@ -85,7 +85,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["change-random-card-type",null,2,"Event",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Modify 2 random cards to become Event cards",
+        "Modify two random cards to become Event cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -165,7 +165,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["choose-avatar",null,null,null,null,null,null,3,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Pick a new Avatar from 3 choices",
+        "Pick a new Avatar from three choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -173,7 +173,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["choose-pack","character",null,null,null,2,3,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Choose one of 2 packs of 3 Character cards to add to your deck",
+        "Choose one of two packs of Character cards to add to your deck",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -181,7 +181,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["choose-pack","cheap-character",null,null,null,2,3,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Choose one of 2 packs of 3 ≤2● cost Character cards to add to your deck",
+        "Choose one of two packs of ≤2● cost Character cards to add to your deck",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -189,7 +189,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["choose-pack","spirit-animal",null,null,null,2,3,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Choose one of 2 packs of 3 Spirit Animal cards to add to your deck",
+        "Choose one of two packs of Spirit Animal cards to add to your deck",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -197,7 +197,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["choose-pack","survivor",null,null,null,2,3,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Choose one of 2 packs of 3 Survivor cards to add to your deck",
+        "Choose one of two packs of Survivor cards to add to your deck",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -205,7 +205,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["choose-pack","warrior",null,null,null,2,3,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Choose one of 2 packs of 3 Warrior cards to add to your deck",
+        "Choose one of two packs of Warrior cards to add to your deck",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -213,7 +213,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["choose-pack","warrior",null,null,null,3,3,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Choose one of 3 packs of 3 Warrior cards to add to your deck",
+        "Choose one of three packs of Warrior cards to add to your deck",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -221,7 +221,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["choose-site-type",null,null,null,null,null,null,3,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Choose 1 of 3 offered site types to add to this Dreamscape",
+        "Choose one of three offered site types to add to this Dreamscape",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -229,7 +229,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["copy-offered-deck-card",null,null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draw 4 cards from your deck and choose one to gain a copy of.",
+        "Draw four cards from your deck and choose one to gain a copy of.",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -237,7 +237,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["copy-random-cards","character",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain one copy of each of 2 random Character cards in your deck",
+        "Gain one copy of each of two random Character cards in your deck",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -253,7 +253,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["copy-selected-card","event",2,null,"chosen",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain 2 copies of a chosen Event",
+        "Gain two copies of a chosen Event",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -261,7 +261,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["copy-selected-card",null,1,null,"chosen",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain 1 copy of a chosen card",
+        "Gain one copy of a chosen card",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -269,7 +269,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["copy-selected-card",null,2,null,"chosen",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain 2 copies of a chosen card",
+        "Gain two copies of a chosen card",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -277,7 +277,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["copy-selected-cards",null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain one copy of each of 2 chosen cards",
+        "Gain one copy of each of two chosen cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -293,7 +293,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","character",1,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a Character from 4 choices",
+        "Draft a Character from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -301,7 +301,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","character",2,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a Character from 4 choices and gain 2 copies of it",
+        "Draft a Character from four choices and gain two copies of it",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -309,7 +309,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","cheap-character",1,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a ≤2● cost Character from 4 choices",
+        "Draft a ≤2● cost Character from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -317,7 +317,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","cheap-character",2,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a ≤2● cost Character from 4 choices and gain 2 copies of it",
+        "Draft a ≤2● cost Character from four choices and gain two copies of it",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -325,7 +325,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","event",1,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft an Event from 4 choices",
+        "Draft an Event from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -333,7 +333,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","event",2,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft an Event from 4 choices and gain 2 copies of it",
+        "Draft an Event from four choices and gain two copies of it",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -341,7 +341,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","spirit-animal",1,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a Spirit Animal from 4 choices",
+        "Draft a Spirit Animal from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -349,7 +349,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","spirit-animal",2,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a Spirit Animal from 4 choices and gain 2 copies of it",
+        "Draft a Spirit Animal from four choices and gain two copies of it",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -357,7 +357,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","survivor",1,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a Survivor from 4 choices",
+        "Draft a Survivor from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -365,7 +365,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","survivor",2,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a Survivor from 4 choices and gain 2 copies of it",
+        "Draft a Survivor from four choices and gain two copies of it",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -373,7 +373,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","warrior",1,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a Warrior from 4 choices",
+        "Draft a Warrior from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -381,7 +381,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["draft-card","warrior",2,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a Warrior from 4 choices and gain 2 copies of it",
+        "Draft a Warrior from four choices and gain two copies of it",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -453,7 +453,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["gain-offered-dreamsign",null,null,null,null,null,null,3,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain one of 3 offered dreamsigns",
+        "Gain one of three offered dreamsigns",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -469,7 +469,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["gain-random-cards","character",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain 2 random Character cards",
+        "Gain two random Character cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -477,7 +477,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["gain-random-cards","cheap-character",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain 2 random ≤2● cost Character cards",
+        "Gain two random ≤2● cost Character cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -501,7 +501,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["gain-random-cards","spirit-animal",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain 2 random Spirit Animal cards",
+        "Gain two random Spirit Animal cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -517,7 +517,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["gain-random-cards","survivor",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain 2 random Survivor cards",
+        "Gain two random Survivor cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -525,7 +525,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["gain-random-cards","warrior",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain 2 random Warrior cards",
+        "Gain two random Warrior cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -549,7 +549,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["lose-half-essence-and-free-purchases",null,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Lose half your current essence. The next 3 items you purchase are free.",
+        "Lose half your current essence. The next three items you purchase are free.",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -565,7 +565,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["next-battle-opening-hand",null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draw 2 additional cards at the start of your next battle",
+        "Draw two additional cards at the start of your next battle",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -581,7 +581,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["next-battle-starting-energy",null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Gain 2 additional energy at the start of your next battle",
+        "Gain two additional energy at the start of your next battle",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -621,7 +621,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["purge-one-transfigure-and-copy-others",null,null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,"Attuned",null]',
     () =>
       tx(
-        "Select 4 random cards from your deck and choose one to purge. Apply Attuned to the other 3 eligible cards, then gain a copy of each.",
+        "Select four random cards from your deck and choose one to purge. Apply Attuned to the other three eligible cards, then gain a copy of each.",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -709,7 +709,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["purge-selected-dreamsign-and-gain-random",null,3,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Purge a chosen Dreamsign. Gain 3 random Dreamsigns.",
+        "Purge a chosen Dreamsign. Gain three random Dreamsigns.",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -741,7 +741,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["purge-selected","warrior",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Purge up to 2 chosen Warrior cards",
+        "Purge up to two chosen Warrior cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -757,7 +757,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["purge-selected",null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Purge up to 2 chosen cards",
+        "Purge up to two chosen cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -789,7 +789,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["replace-selected-dreamsign-with-offered",null,null,null,null,null,null,3,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Replace a chosen dreamsign with one of 3 offered dreamsigns",
+        "Replace a chosen dreamsign with one of three offered dreamsigns",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -813,7 +813,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["replace-selected","event",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Purge up to 2 chosen Event cards and gain a random Event replacement for each card purged",
+        "Purge up to two chosen Event cards and gain a random Event replacement for each card purged",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -845,7 +845,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["take-cards","character",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Take any number of Character cards from 4 choices",
+        "Take any number of Character cards from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -853,7 +853,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["take-cards","cheap-character",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Take any number of ≤2● cost Character cards from 4 choices",
+        "Take any number of ≤2● cost Character cards from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -861,7 +861,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["take-cards","event",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Take any number of Event cards from 4 choices",
+        "Take any number of Event cards from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -869,7 +869,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["take-cards","spirit-animal",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Take any number of Spirit Animal cards from 4 choices",
+        "Take any number of Spirit Animal cards from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -877,7 +877,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["take-cards","survivor",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Take any number of Survivor cards from 4 choices",
+        "Take any number of Survivor cards from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -885,7 +885,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["take-cards","warrior",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Take any number of Warrior cards from 4 choices",
+        "Take any number of Warrior cards from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -941,7 +941,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["transfigure-fixed-random-cards","cheap-character",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,"Kindled",null]',
     () =>
       tx(
-        "Apply Kindled to 2 random eligible ≤2● cost Character cards in your deck",
+        "Apply Kindled to two random eligible ≤2● cost Character cards in your deck",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -957,7 +957,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["transfigure-fixed-selected","warrior",2,null,"chosen",null,null,null,null,null,null,null,null,null,null,null,null,null,"Kindled",null]',
     () =>
       tx(
-        "Apply Kindled to 2 chosen Warrior cards",
+        "Apply Kindled to two chosen Warrior cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -981,7 +981,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["transfigure-random-cards","event",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Apply a transfiguration to 2 random Event cards",
+        "Apply a transfiguration to two random Event cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -989,7 +989,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["transfigure-random-starter-cards",null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Transfigure 2 random starter cards",
+        "Transfigure two random starter cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -997,7 +997,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["transfigure-selected","event",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Apply a transfiguration to 2 chosen Event cards",
+        "Apply a transfiguration to two chosen Event cards",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -1013,7 +1013,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["transfigured-card-draft","character",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a transfigured Character from 4 choices",
+        "Draft a transfigured Character from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -1021,7 +1021,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["transfigured-card-draft","cheap-character",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a transfigured ≤2● cost Character from 4 choices",
+        "Draft a transfigured ≤2● cost Character from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -1029,7 +1029,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["transfigured-card-draft","event",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a transfigured Event from 4 choices",
+        "Draft a transfigured Event from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -1037,7 +1037,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["transfigured-card-draft","spirit-animal",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a transfigured Spirit Animal from 4 choices",
+        "Draft a transfigured Spirit Animal from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -1045,7 +1045,7 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["transfigured-card-draft","warrior",null,null,null,null,null,4,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Draft a transfigured Warrior from 4 choices",
+        "Draft a transfigured Warrior from four choices",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],
@@ -1136,7 +1136,7 @@ const FOLLOWUP_SUBTITLE_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["copy-selected-card",null,1,null,"chosen",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Choose a card to gain 1 copy of.",
+        "Choose a card to gain one copy of.",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.followup.FollowupOverride.subtitle",
       ),
   ],
@@ -1144,7 +1144,7 @@ const FOLLOWUP_SUBTITLE_BY_MECHANIC = new Map<string, () => LocalizedString>([
     '["copy-selected-cards",null,2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
     () =>
       tx(
-        "Choose 2 cards to copy.",
+        "Choose two cards to copy.",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.followup.FollowupOverride.subtitle",
       ),
   ],
