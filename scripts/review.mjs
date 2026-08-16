@@ -4,6 +4,7 @@ import {
   existsSync,
   mkdirSync,
 } from "node:fs";
+import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import {
   buildReviewPlan,
@@ -18,6 +19,14 @@ import {
 } from "./review-lock.mjs";
 
 const root = process.cwd();
+const localAssetHome = resolve(
+  process.env.DREAMTIDES_LOCAL_ASSET_HOME ?? homedir(),
+);
+const shouldRestoreLocalAssets =
+  process.env.CI === undefined &&
+  existsSync(
+    join(localAssetHome, "Documents", "dreamsigns", "filtered", "outlined"),
+  );
 const commonGitDir = resolve(
   root,
   execFileSync("git", ["rev-parse", "--git-common-dir"], {
@@ -245,6 +254,9 @@ function commandFor(step, extraArgs = []) {
   if (step === "prepare") {
     return [process.execPath, [join(root, "scripts", "prepare-workspace.mjs")]];
   }
+  if (step === "restore-local-assets") {
+    return [process.execPath, [join(root, "scripts", "setup-assets.mjs")]];
+  }
   if (step === "rust-test") {
     return ["cargo", ["test", "--locked", "--manifest-path", "tools/game-data/Cargo.toml"]];
   }
@@ -276,20 +288,26 @@ function commandFor(step, extraArgs = []) {
   ];
 }
 
-async function runStep(step, extraArgs = []) {
+async function runStep(
+  step,
+  extraArgs = [],
+  { isolateLocalAssets = true } = {},
+) {
   const [command, args] = commandFor(step, extraArgs);
   console.log(`\n[review] ${step}`);
   const startedAt = Date.now();
-  const env = {
-    ...process.env,
-    DREAMTIDES_LOCAL_ASSET_HOME: join(
-      root,
-      "node_modules",
-      ".cache",
-      "journey-review",
-      "local-assets",
-    ),
-  };
+  const env = isolateLocalAssets
+    ? {
+        ...process.env,
+        DREAMTIDES_LOCAL_ASSET_HOME: join(
+          root,
+          "node_modules",
+          ".cache",
+          "journey-review",
+          "local-assets",
+        ),
+      }
+    : process.env;
   child = spawn(command, args, { cwd: root, env, stdio: "inherit" });
   writeOwner({ childPid: child.pid, step });
   const exitCode = await new Promise((resolveExit, reject) => {
@@ -403,6 +421,7 @@ function executionPlan() {
 }
 
 const requiresFullReviewSlot = ["full", "lint-full", "test-full"].includes(task);
+let restoreLocalAssets = false;
 if (requiresFullReviewSlot) {
   await acquireLock();
   lockHeld = true;
@@ -419,11 +438,25 @@ try {
   }
   for (const { step, args } of steps) {
     const exitCode = await runStep(step, args);
+    if (step === "prepare" && exitCode === 0) restoreLocalAssets = true;
     if (exitCode !== 0) {
       process.exitCode = exitCode;
       break;
     }
   }
 } finally {
-  releaseLock();
+  try {
+    if (restoreLocalAssets && shouldRestoreLocalAssets) {
+      const restoreExitCode = await runStep(
+        "restore-local-assets",
+        [],
+        { isolateLocalAssets: false },
+      );
+      if (restoreExitCode !== 0 && (process.exitCode ?? 0) === 0) {
+        process.exitCode = restoreExitCode;
+      }
+    }
+  } finally {
+    releaseLock();
+  }
 }

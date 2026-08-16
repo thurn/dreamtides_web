@@ -58,6 +58,18 @@ describe("Cumulus documentation preview boundaries", () => {
     act(() => root.unmount());
   });
 
+  it("gives viewport demos a definite canvas for full-screen content", () => {
+    const { root, container } = mount(
+      <DemoStage Component={entry.Component} args={{}} stage="viewport" />,
+    );
+    const boundary = container.querySelector<HTMLElement>(
+      "[data-cumulus-doc-preview-boundary]",
+    );
+
+    expect(boundary?.dataset.cumulusDocPreviewStage).toBe("viewport");
+    act(() => root.unmount());
+  });
+
   it("contains fixed-position full-screen mockups", () => {
     const { root, container } = mount(<ComponentShowcase entry={entry} />);
 

@@ -125,5 +125,6 @@ export const glassDialogDemo: CumulusComponent = {
   ],
   demo: {
     defaultArgs: {},
+    stage: "viewport",
   },
 };

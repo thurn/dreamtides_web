@@ -240,6 +240,12 @@ export interface CumulusComponent {
     /** Initial control values, seeded into the ComponentPage's args state. */
     defaultArgs: Record<string, unknown>;
     /**
+     * Gives full-screen and large workflow examples a definite viewport-sized
+     * canvas on their component page. The Demo and Controls sections stack so
+     * the preview receives the complete documentation content width.
+     */
+    stage?: "viewport";
+    /**
      * Props that have no interactive control (controlForProp returns "none") —
      * ReactNode children and structured model slots like a `RichText` body.
      * Keyed by prop name; spread into the demo alongside args so the live

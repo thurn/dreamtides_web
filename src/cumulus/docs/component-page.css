@@ -20,4 +20,8 @@
   .cumulus-component-page__layout {
     grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
   }
+
+  .cumulus-component-page__layout--viewport {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

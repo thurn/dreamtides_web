@@ -86,5 +86,5 @@ export const transfigurationPickerPanelDemo: CumulusComponent = {
       code: `<TransfigurationPickerPanel state={pickerState} onCardPress={selectEntry} onDismiss={close} />`,
     },
   ],
-  demo: { defaultArgs: {} },
+  demo: { defaultArgs: {}, stage: "viewport" },
 };

@@ -62,5 +62,5 @@ export const dreamsignReplacementDialogDemo: CumulusComponent = {
       code: `<DreamsignReplacementDialog model={replacement} onDreamsignPress={replaceById} onDismiss={cancel} />`,
     },
   ],
-  demo: { defaultArgs: {} },
+  demo: { defaultArgs: {}, stage: "viewport" },
 };

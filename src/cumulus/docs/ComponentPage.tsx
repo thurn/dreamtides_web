@@ -230,13 +230,20 @@ export function ComponentPage({ id }: { id: CumulusComponentId }) {
           )}
       </header>
 
-      <div className="cumulus-component-page__layout">
+      <div
+        className={`cumulus-component-page__layout${
+          entry.demo.stage === "viewport"
+            ? " cumulus-component-page__layout--viewport"
+            : ""
+        }`}
+      >
         <section>
           <h2 style={sectionHeadingStyle}>Demo</h2>
           <DemoStage
             Component={entry.Component}
             args={args}
             sampleContent={entry.demo.sampleContent}
+            stage={entry.demo.stage}
           />
         </section>
         <section

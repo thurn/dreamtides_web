@@ -70,5 +70,5 @@ export const battleForeseeEditorDemo: CumulusComponent = {
       code: `<BattleForeseeEditor model={preparedForesee} onConfirm={commitResult} />`,
     },
   ],
-  demo: { defaultArgs: {} },
+  demo: { defaultArgs: {}, stage: "viewport" },
 };

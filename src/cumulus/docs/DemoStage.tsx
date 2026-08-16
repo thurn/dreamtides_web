@@ -22,18 +22,27 @@ interface DemoStageProps {
   Component: ComponentType<Record<string, unknown>>;
   args: Record<string, unknown>;
   sampleContent?: Record<string, unknown>;
+  stage?: "viewport";
 }
 
-export function DemoStage({ Component, args, sampleContent }: DemoStageProps) {
+export function DemoStage({
+  Component,
+  args,
+  sampleContent,
+  stage,
+}: DemoStageProps) {
+  const viewportStage = stage === "viewport";
   return (
     <div
       data-cumulus-doc-preview-boundary=""
+      data-cumulus-doc-preview-stage={stage ?? "content"}
       style={{
         ...FIXED_PREVIEW_BOUNDARY_STYLE,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        minHeight: "160px",
+        minHeight: viewportStage ? undefined : "160px",
+        height: viewportStage ? "clamp(640px, 90vh, 800px)" : undefined,
         padding: token("--space-3xl"),
         background: token("--bg-sunken"),
         border: `1px solid ${token("--border-mid")}`,
