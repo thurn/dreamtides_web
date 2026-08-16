@@ -1,4 +1,4 @@
-import { assertLocalized } from "@trox/runtime";
+import { assertLocalized, opaque, txa } from "@trox/runtime";
 import { resolveChecked } from "../../runtime/localization/runtime";
 // @vitest-environment jsdom
 
@@ -131,7 +131,7 @@ function view(resolved = false): ExplorationSiteView {
         effectKind: "gain-card",
         mechanics: { effectKind: "gain-card" },
         label: assertLocalized("Choose A"),
-        effectText: assertLocalized("Gain the fixture."),
+        effectText: assertLocalized("Gain the fixture.").annotate({}),
         followup: { kind: "none" },
         available: true,
       },
@@ -140,7 +140,7 @@ function view(resolved = false): ExplorationSiteView {
         effectKind: "change-subtype-selected",
         mechanics: { effectKind: "change-subtype-selected" },
         label: assertLocalized("Choose B"),
-        effectText: assertLocalized("Change the fixture."),
+        effectText: assertLocalized("Change the fixture.").annotate({}),
         followup: { kind: "none" },
         available: true,
       },
@@ -1569,19 +1569,21 @@ describe("ExplorationSiteScreen", () => {
           ...base.actions[0],
           effectKind: "purge-starter-card",
           mechanics: { effectKind: "purge-starter-card" },
-          effectText: assertLocalized(
-            `Purge ${base.card.displaySnapshot.name}.`,
-          ),
-          effectParts: [
+          effectText: txa(
+            "Purge {starter_card}.",
             {
-              kind: "entity",
-              entity: {
+              starter_card: opaque(
+                assertLocalized(base.card.displaySnapshot.name),
+              ),
+            },
+            "[exploration] Synthetic effect purging one disclosed Starter card. starter_card is the proper card name.",
+          ).annotate({
+            starter_card: {
                 kind: "card",
                 card: base.card.displaySnapshot,
                 entryId: parseDeckEntryId(starterEntryId),
-              },
             },
-          ],
+          }),
           automaticSelection: {},
         },
         base.actions[1],
@@ -1627,12 +1629,15 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...view().actions[0],
-          effectText: assertLocalized(
-            "Spend 1● to gain +1✦ and Exploration Fixture.",
-          ),
-          effectParts: [
-            { kind: "entity", entity: { kind: "card", card: makeCard() } },
-          ],
+          effectText: txa(
+            "Spend 1● to gain +1✦ and {offered_card}.",
+            {
+              offered_card: opaque(assertLocalized("Exploration Fixture")),
+            },
+            "[exploration] Synthetic resource effect granting one disclosed card. offered_card is the proper card name.",
+          ).annotate({
+            offered_card: { kind: "card", card: makeCard() },
+          }),
         },
         view().actions[1],
       ],
@@ -1673,7 +1678,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => root.unmount());
   });
 
-  it("keeps repeated entity labels independently interactive", () => {
+  it("renders repeated entity labels without independent interaction targets", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
@@ -1689,13 +1694,17 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...base.actions[0],
-          effectText: assertLocalized(
-            "Abandon Exploration Fixture, then copy Exploration Fixture.",
-          ),
-          effectParts: [
-            { kind: "entity", entity: { kind: "card", card: first } },
-            { kind: "entity", entity: { kind: "card", card: second } },
-          ],
+          effectText: txa(
+            "Abandon {first_card}, then copy {second_card}.",
+            {
+              first_card: opaque(assertLocalized("Exploration Fixture")),
+              second_card: opaque(assertLocalized("Exploration Fixture")),
+            },
+            "[exploration] Synthetic effect referencing two different cards with the same proper name. Each placeholder identifies its corresponding card.",
+          ).annotate({
+            first_card: { kind: "card", card: first },
+            second_card: { kind: "card", card: second },
+          }),
         },
         base.actions[1],
       ],
@@ -1723,6 +1732,14 @@ describe("ExplorationSiteScreen", () => {
     expect(
       Array.from(labels, (label) => label.getAttribute("data-entity-id")),
     ).toEqual([first.id, second.id]);
+    expect(
+      Array.from(labels, (label) => label.hasAttribute("tabindex")),
+    ).toEqual([false, false]);
+    expect(
+      Array.from(labels, (label) =>
+        label.hasAttribute("data-reveal-entity-id"),
+      ),
+    ).toEqual([false, false]);
 
     act(() => root.unmount());
   });
@@ -1737,11 +1754,11 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...base.actions[0],
-          effectText: assertLocalized("Resolved Character fixture"),
-          effectParts: [
-            { kind: "entity", entity: { kind: "card", card: makeCard() } },
-            { kind: "card-type", cardType: "Character" },
-          ],
+          effectText: txa(
+            "Resolved {card_type} fixture",
+            { card_type: opaque(assertLocalized("Character")) },
+            "[exploration] Synthetic effect containing a card-type placeholder. card_type is the canonical card type label.",
+          ).annotate({}),
         },
         base.actions[1],
       ],
@@ -1889,11 +1906,14 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...base.actions[0],
-          effectText: assertLocalized(`Gain 3 ${referencedCard.name} cards.`),
-          effectParts: [
+          effectText: txa(
+            "Gain 3 {nightmare_card} cards.",
             {
-              kind: "entity",
-              entity: {
+              nightmare_card: opaque(assertLocalized(referencedCard.name)),
+            },
+            "[exploration] Synthetic effect granting three copies of one disclosed card. nightmare_card is the proper card name.",
+          ).annotate({
+            nightmare_card: {
                 kind: "card",
                 card: {
                   ...referencedCard,
@@ -1910,9 +1930,8 @@ describe("ExplorationSiteScreen", () => {
                   fastChanged: false,
                 },
                 copies: 3,
-              },
             },
-          ],
+          }),
         },
         base.actions[1],
       ],
@@ -1948,8 +1967,8 @@ describe("ExplorationSiteScreen", () => {
     expect(source?.dataset.revealPrimaryVariant).toBe("gameCard");
     expect(label?.textContent).toBe(referencedCard.name);
     expect(label?.style.textDecoration).toBe("underline");
-    expect(label?.hasAttribute("data-reveal-entity-id")).toBe(true);
-    expect(label?.tabIndex).toBe(0);
+    expect(label?.hasAttribute("data-reveal-entity-id")).toBe(false);
+    expect(label?.hasAttribute("tabindex")).toBe(false);
     act(() => source?.focus());
     expect(source?.dataset.revealActive).toBe("true");
     await act(async () => {
@@ -1977,13 +1996,13 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...base.actions[0],
-          effectText: assertLocalized(`Gain ${referencedCard.name}.`),
-          effectParts: [
-            {
-              kind: "entity",
-              entity: { kind: "card", card: referencedCard },
-            },
-          ],
+          effectText: txa(
+            "Gain {offered_card}.",
+            { offered_card: opaque(assertLocalized(referencedCard.name)) },
+            "[exploration] Synthetic effect granting one disclosed card. offered_card is the proper card name.",
+          ).annotate({
+            offered_card: { kind: "card", card: referencedCard },
+          }),
         },
         base.actions[1],
       ],
@@ -2714,7 +2733,7 @@ describe("ExplorationSiteScreen", () => {
               effectKind: "purge-selected-dreamsign-and-gain-random",
               effectText: assertLocalized(
                 "Purge one sign and gain three at random.",
-              ),
+              ).annotate({}),
               followup: {
                 kind: "dreamsign-flow",
                 title: assertLocalized("Break the pattern"),
@@ -4973,7 +4992,9 @@ describe("ExplorationSiteScreen", () => {
       actions: [
         {
           ...fastView.actions[0],
-          effectText: assertLocalized("All cards in your deck become ❖ (fast)"),
+          effectText: assertLocalized(
+            "All cards in your deck become ❖ (fast)",
+          ).annotate({}),
         },
         fastView.actions[1],
       ],

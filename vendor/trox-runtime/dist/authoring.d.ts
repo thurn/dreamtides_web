@@ -181,10 +181,23 @@ export declare class LocalizedString {
     get arguments(): Readonly<Record<string, Argument>>;
     get selectors(): readonly SelectorRecord[];
     isAtomic(): boolean;
+    /** Associates application metadata with declared placeholders without resolving this value. */
+    annotate<T>(annotations: Readonly<Record<string, T>>): AnnotatedLocalizedString<T>;
     toCanonicalJSON(): string;
     wireValue(): LocalizedStringWire;
     toString(): never;
     [Symbol.toPrimitive](): never;
+}
+/** A lazy localized value paired with application-owned placeholder metadata. */
+export declare class AnnotatedLocalizedString<T> {
+    readonly localized: LocalizedString;
+    readonly annotations: Readonly<Record<string, T>>;
+    /** Returns the metadata for one placeholder without resolving the message. */
+    annotationFor(name: string): T | undefined;
+    /** Returns whether metadata was supplied, including when its value is undefined. */
+    hasAnnotation(name: string): boolean;
+    /** Annotation metadata is deliberately outside Trox's canonical wire protocol. */
+    toJSON(): never;
 }
 export declare function tx(pattern: PatternInput, description: string): LocalizedString;
 export declare function txa(pattern: PatternInput, inputs: Readonly<Record<string, ArgumentInput>>, description: string): LocalizedString;

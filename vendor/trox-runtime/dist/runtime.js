@@ -235,27 +235,53 @@ export class Localizer {
     get sourceCatalog() { return this.#catalog; }
     localizedStringFromJSON(input) { return this.#catalog.localizedStringFromJSON(input); }
     resolveChecked(value) {
-        const assertedPattern = assertedLocalizedPattern(value);
-        if (assertedPattern !== undefined)
-            return this.interpolate(assertedPattern, value, false);
-        const row = this.targetRow(value);
-        return this.interpolate(row.translation, value, true);
+        return joinParts(this.resolveValuePartsChecked(value));
     }
     resolve(value) {
+        return joinParts(this.resolveValueParts(value).parts);
+    }
+    /** Resolves an annotated value through the target row and returns the first failure. */
+    resolvePartsChecked(value) {
+        return Object.freeze(this.resolveValuePartsChecked(value.localized, value.annotations));
+    }
+    /** Resolves an annotated value with the same diagnostics and source recovery as resolve(). */
+    resolveParts(value) {
+        return this.resolvePartsOutcome(value).parts;
+    }
+    /** Resolves structured parts and reports whether the complete message used source fallback. */
+    resolvePartsOutcome(value) {
+        const outcome = this.resolveValueParts(value.localized, value.annotations);
+        return Object.freeze({ parts: Object.freeze(outcome.parts), usedSourceFallback: outcome.usedSourceFallback });
+    }
+    resolveValuePartsChecked(value, annotations) {
         const assertedPattern = assertedLocalizedPattern(value);
         if (assertedPattern !== undefined)
-            return this.interpolateRecovering(assertedPattern, value);
+            return this.interpolateParts(assertedPattern, value, false, annotations);
+        const row = this.targetRow(value);
+        return this.interpolateParts(row.translation, value, true, annotations);
+    }
+    resolveValueParts(value, annotations) {
+        const assertedPattern = assertedLocalizedPattern(value);
+        if (assertedPattern !== undefined) {
+            return { parts: this.interpolatePartsRecovering(assertedPattern, value, false, annotations), usedSourceFallback: false };
+        }
         try {
-            return this.interpolateRecovering(this.targetRow(value).translation, value, true);
+            return {
+                parts: this.interpolatePartsRecovering(this.targetRow(value).translation, value, true, annotations),
+                usedSourceFallback: false,
+            };
         }
         catch (error) {
             this.emit(error, value.entryId);
             try {
-                return this.interpolateRecovering(selectPattern(this.#source, value).text, value);
+                return {
+                    parts: this.interpolatePartsRecovering(selectPattern(this.#source, value).text, value, false, annotations),
+                    usedSourceFallback: true,
+                };
             }
             catch (sourceError) {
                 this.emit(sourceError, value.entryId);
-                return `⟦${value.entryId}⟧`;
+                return { parts: [{ kind: "literal", value: `⟦${value.entryId}⟧` }], usedSourceFallback: true };
             }
         }
     }
@@ -271,16 +297,16 @@ export class Localizer {
         const digest = blake3(new TextEncoder().encode(canonicalJson(expansion)));
         throw new TroxResolveError("trox.missing-row", `row row1_${base32(digest.slice(0, 16))} is unavailable`);
     }
-    interpolate(pattern, value, preferTarget) {
-        let output = "";
+    interpolateParts(pattern, value, preferTarget, annotations) {
+        const output = [];
         for (let index = 0; index < pattern.length;) {
             if (pattern.startsWith("{{", index)) {
-                output += "{";
+                appendLiteral(output, "{");
                 index += 2;
                 continue;
             }
             if (pattern.startsWith("}}", index)) {
-                output += "}";
+                appendLiteral(output, "}");
                 index += 2;
                 continue;
             }
@@ -293,13 +319,13 @@ export class Localizer {
                 if (argument === undefined)
                     throw new TroxResolveError("trox.missing-argument", `argument ${name} is missing`);
                 const surface = this.argumentSurface(argument, preferTarget);
-                output += this.#target.wire.isolation === "isolate" ? `\u2068${surface}\u2069` : surface;
+                appendPlaceholder(output, name, this.isolate(surface), annotations);
                 index = end + 1;
                 continue;
             }
             if (pattern[index] === "}")
                 throw new TroxResolveError("trox.malformed-translation", "unmatched closing brace");
-            output += pattern[index];
+            appendLiteral(output, pattern[index]);
             index += 1;
         }
         return output;
@@ -316,16 +342,16 @@ export class Localizer {
             case "term": return this.termSurface(argument, preferTarget);
         }
     }
-    interpolateRecovering(pattern, value, preferTarget = false) {
-        let output = "";
+    interpolatePartsRecovering(pattern, value, preferTarget, annotations) {
+        const output = [];
         for (let index = 0; index < pattern.length;) {
             if (pattern.startsWith("{{", index)) {
-                output += "{";
+                appendLiteral(output, "{");
                 index += 2;
                 continue;
             }
             if (pattern.startsWith("}}", index)) {
-                output += "}";
+                appendLiteral(output, "}");
                 index += 2;
                 continue;
             }
@@ -360,16 +386,19 @@ export class Localizer {
                         surface = `{${name}}`;
                     }
                 }
-                output += this.#target.wire.isolation === "isolate" ? `\u2068${surface}\u2069` : surface;
+                appendPlaceholder(output, name, this.isolate(surface), annotations);
                 index = end + 1;
                 continue;
             }
             if (pattern[index] === "}")
                 throw new TroxResolveError("trox.malformed-translation", "unmatched closing brace");
-            output += pattern[index];
+            appendLiteral(output, pattern[index]);
             index += 1;
         }
         return output;
+    }
+    isolate(surface) {
+        return this.#target.wire.isolation === "isolate" ? `\u2068${surface}\u2069` : surface;
     }
     termSurface(argument, preferTarget) {
         const bundle = preferTarget ? this.#target : this.#source;
@@ -403,6 +432,23 @@ export class Localizer {
             // Diagnostics are observational and must never change resolution behavior.
         }
     }
+}
+function appendLiteral(parts, value) {
+    const previous = parts.at(-1);
+    if (previous?.kind === "literal") {
+        parts[parts.length - 1] = { kind: "literal", value: previous.value + value };
+    }
+    else {
+        parts.push({ kind: "literal", value });
+    }
+}
+function appendPlaceholder(parts, name, value, annotations) {
+    parts.push(annotations !== undefined && Object.hasOwn(annotations, name)
+        ? { kind: "placeholder", name, value, annotation: annotations[name] }
+        : { kind: "placeholder", name, value });
+}
+function joinParts(parts) {
+    return parts.map((part) => part.value).join("");
 }
 function validateBundle(bundle) {
     assertObjectKeys(bundle, [

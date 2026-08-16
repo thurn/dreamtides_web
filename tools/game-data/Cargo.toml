@@ -19,7 +19,7 @@ sha2 = "0.10"
 tempfile = "3.23"
 thiserror = "2.0"
 toml = { version = "0.9", features = ["preserve_order"] }
-trox = { git = "https://github.com/thurn/trox.git", rev = "6cc60f9d47cb9e0a61d5c07a0ff6114ad9592905" }
+trox = { git = "https://github.com/thurn/trox.git", rev = "604a79412034b206bbe51f809a3b0f43c9746d73" }
 uuid = { version = "1.18", features = ["serde"] }
 
 [dev-dependencies]

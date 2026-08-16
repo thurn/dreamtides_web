@@ -4,7 +4,6 @@ import type { CardSubtype } from "../../types/card-identity";
 // deck anchor, flips it face up, and holds it in the encounter panel.
 
 import {
-  assertLocalized,
   meaning,
   opaque,
   txa,
@@ -12,6 +11,7 @@ import {
   plural,
   one,
   other,
+  type AnnotatedLocalizedString,
   type LocalizedString,
 } from "@trox/runtime";
 import { motion, useReducedMotion } from "framer-motion";
@@ -82,8 +82,8 @@ import { TransfigurationPickerPanel } from "../components/card/TransfigurationPi
 import {
   ExplorationChoice as ExplorationChoiceControl,
   type ExplorationChoiceEntity,
-  type ExplorationChoicePart,
 } from "../components/controls/ExplorationChoice";
+import { richText, type RichText } from "../components/card/rich-text";
 import { GUIDE_GALLERY_MOBILE_PANEL_WIDTH } from "./guide-gallery-geometry";
 import { useIsDesktop } from "../primitives/use-is-desktop";
 import { requireDreamsignId } from "../../data/dreamsigns";
@@ -606,8 +606,7 @@ export interface ExplorationActionView {
   readonly effectKind: ExplorationEffectKind;
   readonly mechanics: Readonly<Record<string, unknown>>;
   readonly label: LocalizedString;
-  readonly effectText: LocalizedString;
-  readonly effectParts?: readonly ExplorationActionEffectPart[];
+  readonly effectText: AnnotatedLocalizedString<ExplorationEntityView>;
   /** Code-authored disclosure rendered as a complete localized message. */
   readonly effectDisclosure?: LocalizedString;
   /** Complete fallback message inputs when a special deck-card target is absent. */
@@ -632,10 +631,6 @@ export type ExplorationEntityView =
       readonly kind: "dreamsign";
       readonly dreamsign: LocalizedDreamsign;
     };
-
-export type ExplorationActionEffectPart =
-  | { readonly kind: "card-type"; readonly cardType: CardType }
-  | { readonly kind: "entity"; readonly entity: ExplorationEntityView };
 
 export interface ExplorationEffectFallback {
   readonly message: LocalizedString;
@@ -675,10 +670,7 @@ interface RewardTrajectory {
 function previewEntityForAction(
   action: ExplorationActionView,
 ): ExplorationEntityView | null {
-  for (const part of action.effectParts ?? []) {
-    if (part.kind === "entity") return part.entity;
-  }
-  return null;
+  return Object.values(action.effectText.annotations)[0] ?? null;
 }
 
 interface ExplorationEntityDetails {
@@ -770,7 +762,6 @@ function preparedExplorationChoiceEntity(
         id: entity.card.id,
         ...(details.entryId === undefined ? {} : { entryId: details.entryId }),
         copies: details.copies,
-        label: details.name,
         card: {
           cardId: entity.card.id,
           displaySnapshot: entity.card,
@@ -783,76 +774,23 @@ function preparedExplorationChoiceEntity(
         kind: "dreamsign",
         id: requireDreamsignId(entity.dreamsign, "Exploration choice"),
         copies: details.copies,
-        label: details.name,
         dreamsign: entity.dreamsign,
       };
 }
 
-interface ExplorationEffectToken {
-  readonly start: number;
-  readonly end: number;
-  readonly part: ExplorationActionEffectPart;
-}
-
 function prepareExplorationChoiceDescription(
-  message: LocalizedString,
-  parts: readonly ExplorationActionEffectPart[],
-  resolve: (message: LocalizedString) => string,
-): readonly ExplorationChoicePart[] {
-  const text = resolve(message);
-  const nextStartByLabel = new Map<string, number>();
-  const candidates = parts
-    .flatMap((part): ExplorationEffectToken[] => {
-      const label =
-        part.kind === "card-type"
-          ? part.cardType
-          : resolve(explorationEntityDetails(part.entity).name);
-      const start = text.indexOf(label, nextStartByLabel.get(label) ?? 0);
-      if (start >= 0) nextStartByLabel.set(label, start + label.length);
-      return start < 0 ? [] : [{ start, end: start + label.length, part }];
-    })
-    .sort((left, right) => left.start - right.start || left.end - right.end);
-  const tokens: ExplorationEffectToken[] = [];
-  for (const candidate of candidates) {
-    const previous = tokens[tokens.length - 1];
-    if (previous === undefined || candidate.start >= previous.end) {
-      tokens.push(candidate);
-    }
-  }
-
-  if (tokens.length === 0) {
-    return [{ kind: "rules", value: message }];
-  }
-
-  const rendered: ExplorationChoicePart[] = [];
-  let cursor = 0;
-  for (const token of tokens) {
-    if (token.start > cursor) {
-      rendered.push({
-        kind: "rules",
-        value: assertLocalized(text.slice(cursor, token.start)),
-      });
-    }
-    if (token.part.kind === "card-type") {
-      rendered.push({
-        kind: "rules",
-        value: assertLocalized(text.slice(token.start, token.end)),
-      });
-    } else {
-      rendered.push({
-        kind: "entity",
-        entity: preparedExplorationChoiceEntity(token.part.entity),
-      });
-    }
-    cursor = token.end;
-  }
-  if (cursor < text.length) {
-    rendered.push({
-      kind: "rules",
-      value: assertLocalized(text.slice(cursor)),
-    });
-  }
-  return rendered;
+  message: AnnotatedLocalizedString<ExplorationEntityView>,
+): RichText<ExplorationChoiceEntity> {
+  return richText.annotated(
+    message.localized.annotate(
+      Object.fromEntries(
+        Object.entries(message.annotations).map(([name, entity]) => [
+          name,
+          preparedExplorationChoiceEntity(entity),
+        ]),
+      ),
+    ),
+  );
 }
 
 type CardRewardItemKey = `card:${number}:${CardId}`;
@@ -1111,19 +1049,8 @@ function ExplorationNarrativeChoices({
                   label: action.label,
                   description:
                     action.effectFallback !== undefined
-                      ? [
-                          {
-                            kind: "rules",
-                            value: action.effectFallback.message,
-                          },
-                        ]
-                      : action.effectParts === undefined
-                        ? [{ kind: "rules", value: action.effectText }]
-                        : prepareExplorationChoiceDescription(
-                            action.effectText,
-                            action.effectParts,
-                            resolve,
-                          ),
+                      ? richText.rules(action.effectFallback.message)
+                      : prepareExplorationChoiceDescription(action.effectText),
                   disclosure: action.effectDisclosure,
                   availability:
                     visible && action.available ? "available" : "unavailable",

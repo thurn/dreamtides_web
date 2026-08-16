@@ -1,5 +1,5 @@
 import { type NumberFormat } from "./number-format.js";
-import { LocalizedString, type ArgumentInput, type ArgumentSchema, type IdentityDescriptor, type PluralCategory } from "./authoring.js";
+import { AnnotatedLocalizedString, LocalizedString, type ArgumentInput, type ArgumentSchema, type IdentityDescriptor, type PluralCategory } from "./authoring.js";
 export { TroxDeserializeError, TroxResolveError, TroxValueError } from "./errors.js";
 export { formatNumber, type NumberFormat } from "./number-format.js";
 export { canonicalJson } from "./canonical-json.js";
@@ -74,6 +74,21 @@ export interface Diagnostic {
     readonly entry_id?: string;
     readonly message: string;
 }
+/** One display-ready run produced from a localized message. */
+export type ResolvedLocalizedPart<T> = {
+    readonly kind: "literal";
+    readonly value: string;
+} | {
+    readonly kind: "placeholder";
+    readonly name: string;
+    readonly value: string;
+    readonly annotation?: T;
+};
+/** Structured resolution plus whether the complete message used source fallback. */
+export interface ResolvedLocalizedPartsOutcome<T> {
+    readonly parts: readonly ResolvedLocalizedPart<T>[];
+    readonly usedSourceFallback: boolean;
+}
 export declare class SourceCatalog {
     #private;
     readonly fingerprint: string;
@@ -98,10 +113,19 @@ export declare class Localizer {
     localizedStringFromJSON(input: string): LocalizedString;
     resolveChecked(value: LocalizedString): string;
     resolve(value: LocalizedString): string;
+    /** Resolves an annotated value through the target row and returns the first failure. */
+    resolvePartsChecked<T>(value: AnnotatedLocalizedString<T>): readonly ResolvedLocalizedPart<T>[];
+    /** Resolves an annotated value with the same diagnostics and source recovery as resolve(). */
+    resolveParts<T>(value: AnnotatedLocalizedString<T>): readonly ResolvedLocalizedPart<T>[];
+    /** Resolves structured parts and reports whether the complete message used source fallback. */
+    resolvePartsOutcome<T>(value: AnnotatedLocalizedString<T>): ResolvedLocalizedPartsOutcome<T>;
+    private resolveValuePartsChecked;
+    private resolveValueParts;
     private targetRow;
-    private interpolate;
+    private interpolateParts;
     private argumentSurface;
-    private interpolateRecovering;
+    private interpolatePartsRecovering;
+    private isolate;
     private termSurface;
     private emit;
     private report;

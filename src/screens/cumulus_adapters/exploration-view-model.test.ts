@@ -1,10 +1,11 @@
-import { assertLocalized } from "@trox/runtime";
+import { assertLocalized, opaque, txa } from "@trox/runtime";
 import { describe, expect, it } from "vitest";
 import { stableDigest } from "../../reward-selection/stable";
 import { localizedStringSourceEquality } from "../../runtime/localization/testing";
 import { resolveSource } from "../../runtime/localization/runtime";
 import type { JourneyContent } from "../../data/journey-content";
 import type { ExplorationActionContent } from "../../data/exploration";
+import type { ExplorationActionView } from "../../cumulus/screens/ExplorationSiteScreen";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { parseCardName } from "../../types/card-identity";
 import { parseCardTypeChangePredicateId } from "../../types/identifiers";
@@ -33,6 +34,17 @@ import {
 } from "./exploration-view-model";
 import { transfigurationFixture } from "../../testing/transfiguration-fixture";
 import { economyFixture } from "../../testing/economy-fixture";
+
+function serializedActionView(
+  action: ExplorationActionView | undefined,
+): string {
+  if (action === undefined) return "";
+  const { effectText, ...rest } = action;
+  return JSON.stringify({
+    ...rest,
+    effectAnnotations: effectText.annotations,
+  });
+}
 import type { ExplorationMultiCardTransfigurationPreparation } from "../../exploration/multi-card-transfiguration-plan";
 import type { MultiCardReplacementPreparation } from "../../exploration/multi-card-replacement-plan";
 import type { ExplorationRandomDeckTargetPreparation } from "../../exploration/random-deck-target-plan";
@@ -657,7 +669,7 @@ describe("exploration-view-model", () => {
       selectionOperation: "transfigure",
       cards: [{ entryId: parseDeckEntryId("entry-eligible") }],
     });
-    expect(resolveSource(view.actions[0].effectText)).toBe(
+    expect(resolveSource(view.actions[0].effectText.localized)).toBe(
       "Apply Empowered to a chosen card.",
     );
     expect(view.actions[0].effectDisclosure).toEqual(
@@ -736,7 +748,11 @@ describe("exploration-view-model", () => {
               {
                 id: testExplorationActionId("inspire-event"),
                 label: "Present a Written Charm",
-                effectText: "Apply Inspired to {deck_card}",
+                effectText: txa(
+                  "Apply Inspired to {deck_card}",
+                  { deck_card: opaque(assertLocalized(target.name)) },
+                  "[exploration] Synthetic effect applying a fixed Transfiguration to one disclosed deck card. deck_card is the proper card name.",
+                ),
                 effectKind: "transfigure-fixed-selected",
                 deckTarget: "offered",
                 predicate: "event",
@@ -768,23 +784,20 @@ describe("exploration-view-model", () => {
 
     expect(view.actions[0]).toMatchObject({
       effectText: `Apply Inspired to ${target.name}`,
-      effectParts: [
-        {
-          kind: "entity",
-          entity: {
-            kind: "card",
-            card: {
-              id: target.id,
-              renderedText: `${target.renderedText} Draw a card.`,
-            },
-            transfiguration: { type: "Inspired" },
-          },
-        },
-      ],
       effectDisclosure: "(Fixture Inspired effect)",
       followup: { kind: "none" },
       automaticSelection: { entryIds: [parseDeckEntryId("entry-target")] },
       available: true,
+    });
+    expect(view.actions[0].effectText.annotations).toMatchObject({
+      deck_card: {
+        kind: "card",
+        card: {
+          id: target.id,
+          renderedText: `${target.renderedText} Draw a card.`,
+        },
+        transfiguration: { type: "Inspired" },
+      },
     });
   });
 
@@ -851,7 +864,11 @@ describe("exploration-view-model", () => {
               {
                 id: testExplorationActionId("become-survivor"),
                 label: "Fit a matching hood",
-                effectText: "Change {deck_card} to become a Survivor",
+                effectText: txa(
+                  "Change {deck_card} to become a Survivor",
+                  { deck_card: opaque(assertLocalized(target.name)) },
+                  "[exploration] Synthetic effect changing one disclosed deck card's subtype. deck_card is the proper card name.",
+                ),
                 effectKind: "change-subtype-selected",
                 deckTarget: "offered",
                 predicate: "cheap-character",
@@ -883,17 +900,16 @@ describe("exploration-view-model", () => {
 
     expect(view.actions[0]).toMatchObject({
       effectText: `Change ${target.name} to become a Survivor`,
-      effectParts: [
-        {
-          kind: "entity",
-          entity: { kind: "card", card: { id: target.id } },
-        },
-      ],
       followup: { kind: "none" },
       automaticSelection: { entryIds: [parseDeckEntryId("entry-target")] },
       available: true,
     });
-    expect(view.actions[0].effectText).not.toContain("{deck_card}");
+    expect(view.actions[0].effectText.annotations).toMatchObject({
+      deck_card: { kind: "card", card: { id: target.id } },
+    });
+    expect(resolveSource(view.actions[0].effectText.localized)).not.toContain(
+      "{deck_card}",
+    );
 
     const resolvedView = buildExplorationSiteView({
       sceneNode: null,
@@ -1497,7 +1513,11 @@ describe("exploration-view-model", () => {
               {
                 id: testExplorationActionId("gain-offered"),
                 label: "Invite someone through",
-                effectText: "Gain {offered_card}",
+                effectText: txa(
+                  "Gain {offered_card}",
+                  { offered_card: opaque(assertLocalized(offered.name)) },
+                  "[exploration] Synthetic effect gaining one offered card. offered_card is the proper card name.",
+                ),
                 effectKind: "gain-offered-card",
                 predicate: "cheap-character",
               },
@@ -1527,15 +1547,12 @@ describe("exploration-view-model", () => {
 
     expect(view.actions[0]).toMatchObject({
       effectText: `Gain ${offered.name}`,
-      effectParts: [
-        {
-          kind: "entity",
-          entity: { kind: "card", card: { id: offered.id } },
-        },
-      ],
       available: true,
       followup: { kind: "none" },
       automaticSelection: { cardIds: [offered.id] },
+    });
+    expect(view.actions[0].effectText.annotations).toMatchObject({
+      offered_card: { kind: "card", card: { id: offered.id } },
     });
     expect(view.actions[1].followup).toEqual({ kind: "none" });
     expect(view.actions.map((action) => action.id)).toEqual([
@@ -1593,7 +1610,11 @@ describe("exploration-view-model", () => {
       {
         id: testExplorationActionId("fixed-card"),
         label: "Gain a card",
-        effectText: "Gain {fixed_card}",
+        effectText: txa(
+          "Gain {fixed_card}",
+          { fixed_card: opaque(assertLocalized(fixedCard.name)) },
+          "[exploration] Synthetic effect gaining one fixed card. fixed_card is the proper card name.",
+        ),
         effectKind: "gain-card",
         cardId: fixedCard.id,
       },
@@ -1604,7 +1625,11 @@ describe("exploration-view-model", () => {
       {
         id: testExplorationActionId("nightmare-card"),
         label: "Accept the cost",
-        effectText: "Gain 3 {nightmare_card} cards.",
+        effectText: txa(
+          "Gain 3 {nightmare_card} cards.",
+          { nightmare_card: opaque(assertLocalized(nightmareCard.name)) },
+          "[exploration] Synthetic effect gaining three Nightmare cards. nightmare_card is the proper card name.",
+        ),
         effectKind: "reduce-cost-all-and-gain-nightmares",
         nightmareCount: 3,
       },
@@ -1615,7 +1640,11 @@ describe("exploration-view-model", () => {
       {
         id: testExplorationActionId("fixed-dreamsign"),
         label: "Take the sign",
-        effectText: "Gain Fixture Sign",
+        effectText: txa(
+          "Gain {dreamsign}",
+          { dreamsign: opaque(assertLocalized("Fixture Sign")) },
+          "[exploration] Synthetic effect gaining one fixed Dreamsign. dreamsign is the proper Dreamsign name.",
+        ),
         effectKind: "gain-dreamsign",
         dreamsignId: testDreamsignId(dreamsignId),
       },
@@ -1623,30 +1652,28 @@ describe("exploration-view-model", () => {
       content,
     );
 
-    expect(fixed.effectParts).toMatchObject([
-      {
-        kind: "entity",
-        entity: { kind: "card", card: { id: fixedCard.id } },
+    expect(fixed.effectText.annotations).toMatchObject({
+      fixed_card: { kind: "card", card: { id: fixedCard.id } },
+    });
+    expect(resolveSource(fixed.effectText.localized)).not.toContain(
+      "{fixed_card}",
+    );
+    expect(resolveSource(nightmare.effectText.localized)).not.toContain(
+      "{nightmare_card}",
+    );
+    expect(nightmare.effectText.annotations).toMatchObject({
+      nightmare_card: {
+        kind: "card",
+        card: { id: nightmareCard.id },
+        copies: 3,
       },
-    ]);
-    expect(fixed.effectText).not.toContain("{fixed_card}");
-    expect(nightmare.effectText).not.toContain("{nightmare_card}");
-    expect(nightmare.effectParts).toMatchObject([
-      {
-        kind: "entity",
-        entity: {
-          kind: "card",
-          card: { id: nightmareCard.id },
-          copies: 3,
-        },
+    });
+    expect(dreamsign.effectText.annotations).toMatchObject({
+      dreamsign: {
+        kind: "dreamsign",
+        dreamsign: { id: dreamsignId },
       },
-    ]);
-    expect(dreamsign.effectParts).toMatchObject([
-      {
-        kind: "entity",
-        entity: { kind: "dreamsign", dreamsign: { id: dreamsignId } },
-      },
-    ]);
+    });
   });
 
   it("discloses only the authored starter target and keeps random starter plans concealed", () => {
@@ -1766,7 +1793,11 @@ describe("exploration-view-model", () => {
       {
         id: testExplorationActionId("starter-disclosed"),
         label: "Release",
-        effectText: "Purge {starter_card}.",
+        effectText: txa(
+          "Purge {starter_card}.",
+          { starter_card: opaque(assertLocalized(starter.name)) },
+          "[exploration] Synthetic effect purging one disclosed Starter card. starter_card is the proper card name.",
+        ),
         effectKind: "purge-starter-card",
       },
       preparation("purge-starter-card"),
@@ -1775,18 +1806,17 @@ describe("exploration-view-model", () => {
       available: true,
       followup: { kind: "none" },
       automaticSelection: {},
-      effectParts: [
-        {
-          kind: "entity",
-          entity: {
-            kind: "card",
-            entryId: starterEntryId,
-            card: { id: starter.id },
-          },
-        },
-      ],
     });
-    expect(disclosed?.actions[0].effectText).not.toContain("{starter_card}");
+    expect(disclosed?.actions[0].effectText.annotations).toMatchObject({
+      starter_card: {
+        kind: "card",
+        entryId: starterEntryId,
+        card: { id: starter.id },
+      },
+    });
+    expect(
+      resolveSource(disclosed!.actions[0].effectText.localized),
+    ).not.toContain("{starter_card}");
 
     for (const kind of [
       "purge-random-starter-card",
@@ -1811,11 +1841,13 @@ describe("exploration-view-model", () => {
         followup: { kind: "none" },
         automaticSelection: {},
       });
-      expect(concealed?.actions[0].effectParts).toBeUndefined();
-      expect(JSON.stringify(concealed?.actions[0])).not.toContain(
+      expect(concealed?.actions[0].effectText.annotations).toEqual({});
+      expect(serializedActionView(concealed?.actions[0])).not.toContain(
         starterEntryId,
       );
-      expect(JSON.stringify(concealed?.actions[0])).not.toContain(starter.id);
+      expect(serializedActionView(concealed?.actions[0])).not.toContain(
+        starter.id,
+      );
     }
 
     const unavailablePreparation = {
@@ -2439,8 +2471,12 @@ describe("exploration-view-model", () => {
         },
       },
     ]);
-    expect(JSON.stringify(unresolved?.actions[2])).not.toContain(random[0].id);
-    expect(JSON.stringify(unresolved?.actions[3])).not.toContain(random[0].id);
+    expect(serializedActionView(unresolved?.actions[2])).not.toContain(
+      random[0].id,
+    );
+    expect(serializedActionView(unresolved?.actions[3])).not.toContain(
+      random[0].id,
+    );
 
     const belowCapacity = buildExplorationSiteView({
       sceneNode: null,
@@ -3632,7 +3668,11 @@ describe("exploration-view-model", () => {
     const disclosedAction: ExplorationActionContent = {
       id: testExplorationActionId("compound-disclosed"),
       label: "Purge the disclosed card",
-      effectText: "Purge {deck_card} and transfigure its companions.",
+      effectText: txa(
+        "Purge {deck_card} and transfigure its companions.",
+        { deck_card: opaque(assertLocalized(deckCards[0].name)) },
+        "[exploration] Synthetic compound effect purging one disclosed card and transforming related cards. deck_card is the proper card name.",
+      ),
       effectKind: "purge-disclosed-and-transfigure-same-type",
       transfiguration: "Kindled",
     };
@@ -3656,17 +3696,11 @@ describe("exploration-view-model", () => {
       available: true,
       automaticSelection: { entryIds: [bindings[0].entryId] },
     });
-    const disclosedEntityPart = disclosedActionView?.effectParts?.find(
-      (part) => part.kind === "entity",
-    );
-    expect(disclosedEntityPart?.kind).toBe("entity");
-    if (
-      disclosedEntityPart?.kind !== "entity" ||
-      disclosedEntityPart.entity.kind !== "card"
-    ) {
+    const disclosedEntity = disclosedActionView?.effectText.annotations.deck_card;
+    if (disclosedEntity?.kind !== "card") {
       throw new Error("Expected the disclosed compound target to be a card");
     }
-    expect(disclosedEntityPart.entity.entryId).toBe(bindings[0].entryId);
+    expect(disclosedEntity.entryId).toBe(bindings[0].entryId);
 
     const fastAction: ExplorationActionContent = {
       id: testExplorationActionId("compound-fast"),
@@ -4215,7 +4249,7 @@ describe("exploration-view-model", () => {
           followup: { kind: "none" },
           automaticSelection: {},
         });
-        const concealed = JSON.stringify(prepared?.actions[0]);
+        const concealed = serializedActionView(prepared?.actions[0]);
         expect(concealed).not.toContain(eligibleCards[0].entryId);
       }
       expect(
@@ -4531,8 +4565,8 @@ describe("exploration-view-model", () => {
         followup: { kind: "none" },
         automaticSelection: {},
       });
-      expect(preparedView?.actions[0].effectParts).toBeUndefined();
-      const concealedView = JSON.stringify(preparedView?.actions[0]);
+      expect(preparedView?.actions[0].effectText.annotations).toEqual({});
+      const concealedView = serializedActionView(preparedView?.actions[0]);
       expect(concealedView).not.toContain(starterCards[0].entryId);
       expect(concealedView).not.toContain(targets[0].transfiguration);
       expect(
@@ -4765,7 +4799,7 @@ describe("exploration-view-model", () => {
       },
     });
     expect(prepared?.actions[0].automaticSelection).toBeUndefined();
-    expect(JSON.stringify(prepared?.actions[0])).not.toContain(
+    expect(serializedActionView(prepared?.actions[0])).not.toContain(
       firstReplacement.id,
     );
     expect(
@@ -5006,7 +5040,7 @@ describe("exploration-view-model", () => {
         followup: { kind: "none" },
         automaticSelection: {},
       });
-      const concealed = JSON.stringify(prepared?.actions[0]);
+      const concealed = serializedActionView(prepared?.actions[0]);
       expect(concealed).not.toContain(bindings[0].entryId);
       expect(concealed).not.toContain(bindings[1].entryId);
       expect(
@@ -5189,7 +5223,11 @@ describe("exploration-view-model", () => {
     const action: ExplorationActionContent = {
       id: testExplorationActionId("random-fixed-replacement-action"),
       label: "Replace one card",
-      effectText: "Replace a random Character with {fixed_card}",
+      effectText: txa(
+        "Replace a random Character with {fixed_card}",
+        { fixed_card: opaque(assertLocalized(replacement.name)) },
+        "[exploration] Synthetic effect replacing a concealed card with one fixed card. fixed_card is the replacement card's proper name.",
+      ),
       effectKind: "replace-random-with-card",
       canonicalMechanicId: "replace-deck-entry",
       selectionPolicyId: "uniform",
@@ -5273,14 +5311,11 @@ describe("exploration-view-model", () => {
       available: true,
       followup: { kind: "none" },
       automaticSelection: {},
-      effectParts: [
-        {
-          kind: "entity",
-          entity: { kind: "card", card: { id: replacement.id } },
-        },
-      ],
     });
-    expect(JSON.stringify(prepared?.actions[0])).not.toContain(
+    expect(prepared?.actions[0].effectText.annotations).toMatchObject({
+      fixed_card: { kind: "card", card: { id: replacement.id } },
+    });
+    expect(serializedActionView(prepared?.actions[0])).not.toContain(
       sourceEntry.entryId,
     );
     const mapping = {
@@ -5337,7 +5372,14 @@ describe("exploration-view-model", () => {
     const action: ExplorationActionContent = {
       id: testExplorationActionId("disclosed-type-action"),
       label: "Change the revealed card",
-      effectText: "Change {deck_card} to become a {card_type}",
+      effectText: txa(
+        "Change {deck_card} to become a {card_type}",
+        {
+          deck_card: opaque(assertLocalized(event.name)),
+          card_type: opaque(assertLocalized("Character")),
+        },
+        "[exploration] Synthetic effect changing one disclosed deck card's card type. deck_card is the proper card name and card_type is the canonical destination card type.",
+      ),
       effectKind: "change-card-type-selected",
       canonicalMechanicId: "change-entry-card-type",
       selectionPolicyId: "deck-entry-centrality",
@@ -5419,20 +5461,20 @@ describe("exploration-view-model", () => {
       available: true,
       followup: { kind: "none" },
       automaticSelection: { entryIds: [entry.entryId] },
-      effectParts: [
-        {
-          kind: "entity",
-          entity: {
-            kind: "card",
-            entryId: entry.entryId,
-            card: { id: event.id },
-          },
-        },
-        { kind: "card-type", cardType: "Character" },
-      ],
     });
-    expect(preparedAction?.effectText).not.toContain("{card_type}");
-    expect(preparedAction?.effectParts).toHaveLength(2);
+    expect(preparedAction?.effectText.annotations).toMatchObject({
+      deck_card: {
+        kind: "card",
+        entryId: entry.entryId,
+        card: { id: event.id },
+      },
+    });
+    expect(
+      resolveSource(preparedAction!.effectText.localized),
+    ).not.toContain("{card_type}");
+    expect(Object.keys(preparedAction!.effectText.annotations)).toEqual([
+      "deck_card",
+    ]);
     const afterTypeChange: CardTypeChange = {
       predicateId: parseCardTypeChangePredicateId(
         "exploration:card-type:character",

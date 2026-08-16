@@ -1,4 +1,4 @@
-import { assertLocalized } from "@trox/runtime";
+import { assertLocalized, opaque, txa } from "@trox/runtime";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { TroxLocalizationProvider } from "../../../runtime/localization/context";
@@ -15,6 +15,38 @@ function renderValue(value: ReturnType<typeof richText.plain>): string {
 }
 
 describe("RichText", () => {
+  it("renders markup attached to a localized placeholder", () => {
+    const runtime = requireSourceRuntime();
+    const message = txa(
+      "Before {entity} after",
+      { entity: opaque(assertLocalized("the entity")) },
+      "[test] Synthetic annotated rich text. entity is the marked subject.",
+    ).annotate({ entity: { kind: "subject" } as const });
+
+    const markup = renderToStaticMarkup(
+      renderRichText(
+        richText.annotated(message),
+        (localized) => runtime.localizer.resolve(localized),
+        0,
+        {
+          resolveParts: (localized) =>
+            runtime.localizer.resolveParts(localized),
+          renderAnnotation: (annotation, value, key) => (
+            <mark key={key} data-annotation={annotation.kind}>
+              {value}
+            </mark>
+          ),
+        },
+      ),
+    );
+
+    expect(markup).toContain("Before ");
+    expect(markup).toContain(
+      '<mark data-annotation="subject">the entity</mark>',
+    );
+    expect(markup).toContain(" after");
+  });
+
   it("keeps glossary labels and definitions in compact monochrome rows", () => {
     const markup = renderValue(
       richText.definitions([

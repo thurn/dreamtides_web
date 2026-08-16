@@ -1,10 +1,19 @@
-import { useRef, type CSSProperties, type ReactElement } from "react";
+import {
+  useRef,
+  type CSSProperties,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import type { LocalizedString } from "@trox/runtime";
-import { useLocalizer } from "../../../runtime/localization/use-localizer";
+import {
+  useLocalizedPartsResolver,
+  useLocalizer,
+} from "../../../runtime/localization/use-localizer";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { token } from "../../primitives/tokens";
 import { renderRulesSymbolsInline } from "../card/RulesText";
+import { renderRichText, type RichText } from "../card/rich-text";
 import { Pressable } from "../../primitives/Pressable";
 import { gameCardRevealSpec, type GameCardModel } from "../card/CardView";
 import { dreamsignRevealSpec, type LocalizedDreamsign } from "../hud/Dreamsign";
@@ -21,8 +30,6 @@ interface ExplorationChoiceEntityBase {
   readonly entryId?: DeckEntryId;
   /** Number of identical UUID-resolved copies represented by the entity. */
   readonly copies?: number;
-  /** Localized inline label shown in the authored description. */
-  readonly label: LocalizedString;
 }
 
 /** Closed presentation-only entity union supported by Exploration choices. */
@@ -44,29 +51,14 @@ export type ExplorationChoiceEntity =
       readonly dreamsign: LocalizedDreamsign;
     });
 
-/** One authored unit in an ordered Exploration action description. */
-export type ExplorationChoicePart =
-  | {
-      /** Localized rules text whose semantic glyphs should render inline. */
-      readonly kind: "rules";
-      /** Complete localized rules fragment. */
-      readonly value: LocalizedString;
-    }
-  | {
-      /** Revealable inline entity. */
-      readonly kind: "entity";
-      /** Complete presentation-only entity model. */
-      readonly entity: ExplorationChoiceEntity;
-    };
-
 /** Complete prepared presentation for one Exploration action. */
 export interface ExplorationChoiceModel {
   /** Stable authored action UUID emitted by activation. */
   readonly actionId: ExplorationActionId;
   /** Localized primary action label. */
   readonly label: LocalizedString;
-  /** Ordered authored description parts prepared by the builder. */
-  readonly description: readonly ExplorationChoicePart[];
+  /** Lazy localized description with reveal entities attached to placeholders. */
+  readonly description: RichText<ExplorationChoiceEntity>;
   /** Optional complete localized disclosure appended to the description. */
   readonly disclosure?: LocalizedString;
   /** Prepared activation availability; unavailable choices remain readable. */
@@ -106,24 +98,21 @@ function choiceStyle(
 
 function EntityLabel({
   entity,
+  children,
 }: {
   readonly entity: ExplorationChoiceEntity;
+  readonly children: ReactNode;
 }): ReactElement {
-  const resolve = useLocalizer();
-  const registration = entityRevealRegistration(entity);
-  const binding = useRevealSource(registration);
   return (
     <span
-      ref={binding.ref}
-      {...binding.sourceProps}
       data-exploration-entity-label={entity.kind}
       data-entity-id={entity.id}
       data-exploration-deck-entry-id={entity.entryId}
       data-entity-copies={entity.copies ?? 1}
-      style={{ ...binding.sourceProps.style, textDecoration: "underline" }}
-      tabIndex={0}
+      data-exploration-choice-part="entity"
+      style={{ textDecoration: "underline" }}
     >
-      {resolve(entity.label)}
+      {children}
     </span>
   );
 }
@@ -169,6 +158,7 @@ function ChoiceContents({
   readonly model: ExplorationChoiceModel;
 }): ReactElement {
   const resolve = useLocalizer();
+  const resolveParts = useLocalizedPartsResolver();
   return (
     <>
       <span style={{ minWidth: 0, display: "grid", gap: token("--space-xxs") }}>
@@ -179,21 +169,15 @@ function ChoiceContents({
           data-exploration-choice-description=""
           style={{ font: token("--t-caption"), color: token("--text-muted") }}
         >
-          {model.description.map((part, index) =>
-            part.kind === "entity" ? (
-              <EntityLabel
-                key={`${part.entity.id}-${String(index)}`}
-                entity={part.entity}
-              />
-            ) : (
-              <span
-                key={`${part.kind}-${String(index)}`}
-                data-exploration-choice-part={part.kind}
-              >
-                {renderRulesSymbolsInline(resolve(part.value))}
-              </span>
+          {renderRichText(model.description, resolve, 0, {
+            substituteRulesSymbols: true,
+            resolveParts,
+            renderAnnotation: (entity, value, key) => (
+              <EntityLabel key={key} entity={entity}>
+                {value}
+              </EntityLabel>
             ),
-          )}
+          })}
           {model.disclosure === undefined ? null : (
             <span> {resolve(model.disclosure)}</span>
           )}

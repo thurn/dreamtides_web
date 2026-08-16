@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { act } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { assertLocalized } from "@trox/runtime";
+import { assertLocalized, opaque, txa } from "@trox/runtime";
 import {
   mountCumulus,
   syntheticGameCard,
@@ -13,13 +13,13 @@ import {
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { parseDeckEntryId } from "../../../types/identifiers";
 import { testExplorationActionId } from "../../../types/test-identities";
+import { richText } from "../card/rich-text";
 
 const entityCard = syntheticGameCard(1);
 const entity: ExplorationChoiceEntity = {
   kind: "card",
   id: entityCard.cardId,
   entryId: parseDeckEntryId("entry"),
-  label: assertLocalized("Entity"),
   card: entityCard,
 };
 afterEach(() => {
@@ -55,11 +55,13 @@ describe("ExplorationChoice", () => {
         model={{
           actionId,
           label: assertLocalized("Choice"),
-          description: [
-            { kind: "rules", value: assertLocalized("Before ") },
-            { kind: "entity", entity },
-            { kind: "rules", value: assertLocalized(" after") },
-          ],
+          description: richText.annotated(
+            txa(
+              "Before {entity} after",
+              { entity: opaque(assertLocalized("Entity")) },
+              "[exploration] Synthetic choice effect surrounding one revealable entity. entity is a fixture card name.",
+            ).annotate({ entity }),
+          ),
           availability: "available",
           preview: entity,
         }}
@@ -87,7 +89,7 @@ describe("ExplorationChoice", () => {
         model={{
           actionId,
           label: assertLocalized("Choice"),
-          description: [{ kind: "rules", value: assertLocalized("Plain") }],
+          description: richText.rules(assertLocalized("Plain")),
           availability: "available",
         }}
         onPress={onPress}
@@ -134,7 +136,13 @@ describe("ExplorationChoice", () => {
         model={{
           actionId,
           label: assertLocalized("Choice"),
-          description: [{ kind: "entity", entity }],
+          description: richText.annotated(
+            txa(
+              "{entity}",
+              { entity: opaque(assertLocalized("Entity")) },
+              "[exploration] Synthetic choice effect containing one revealable entity. entity is a fixture card name.",
+            ).annotate({ entity }),
+          ),
           availability: "available",
           preview: entity,
         }}
@@ -175,7 +183,6 @@ describe("ExplorationChoice", () => {
     const dreamsignEntity: ExplorationChoiceEntity = {
       kind: "dreamsign",
       id: dreamsign.id,
-      label: assertLocalized("Entity"),
       dreamsign,
     };
     const { container, root } = mountCumulus(
@@ -185,13 +192,21 @@ describe("ExplorationChoice", () => {
           label: assertLocalized(
             "A long localized choice label that must remain readable",
           ),
-          description: [
-            { kind: "entity", entity },
-            { kind: "rules", value: assertLocalized(" then ") },
-            { kind: "entity", entity: repeatedCard },
-            { kind: "rules", value: assertLocalized(" then reveal ") },
-            { kind: "entity", entity: dreamsignEntity },
-          ],
+          description: richText.annotated(
+            txa(
+              "{first_entity} then {second_entity} then reveal {dreamsign}",
+              {
+                first_entity: opaque(assertLocalized("Entity")),
+                second_entity: opaque(assertLocalized("Entity")),
+                dreamsign: opaque(dreamsign.name),
+              },
+              "[exploration] Synthetic choice effect containing two fixture cards and one Dreamsign. Each placeholder is the proper name of its revealable entity.",
+            ).annotate({
+              first_entity: entity,
+              second_entity: repeatedCard,
+              dreamsign: dreamsignEntity,
+            }),
+          ),
           availability: "available",
           preview: dreamsignEntity,
         }}
@@ -213,14 +228,20 @@ describe("ExplorationChoice", () => {
     act(() => root.unmount());
   });
 
-  it("keeps unavailable entity reveals mounted without activating", () => {
+  it("keeps unavailable entity labels visible without activating", () => {
     const onPress = vi.fn();
     const { container, root } = mountCumulus(
       <ExplorationChoice
         model={{
           actionId: testExplorationActionId("blocked"),
           label: assertLocalized("Choice"),
-          description: [{ kind: "entity", entity }],
+          description: richText.annotated(
+            txa(
+              "{entity}",
+              { entity: opaque(assertLocalized("Entity")) },
+              "[exploration] Synthetic unavailable choice effect containing one revealable entity. entity is a fixture card name.",
+            ).annotate({ entity }),
+          ),
           availability: "unavailable",
           preview: entity,
         }}
@@ -236,6 +257,16 @@ describe("ExplorationChoice", () => {
     expect(
       container.querySelector("[data-exploration-entity-label]"),
     ).not.toBeNull();
+    expect(
+      container
+        .querySelector("[data-exploration-entity-label]")
+        ?.hasAttribute("tabindex"),
+    ).toBe(false);
+    expect(
+      container
+        .querySelector("[data-exploration-entity-label]")
+        ?.hasAttribute("data-reveal-entity-id"),
+    ).toBe(false);
     act(() => root.unmount());
   });
 });

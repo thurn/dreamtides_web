@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { assertLocalized } from "@trox/runtime";
+import { assertLocalized, opaque, txa } from "@trox/runtime";
 import { ExplorationChoice } from "../../components/controls/ExplorationChoice";
+import { richText } from "../../components/card/rich-text";
 import type { CumulusComponent } from "../registry";
 import {
   demoCard,
@@ -15,14 +16,12 @@ const cardEntity = {
   kind: "card" as const,
   id: previewCard.cardId,
   entryId: parseDeckEntryId(demoIdentitySeed(1)),
-  label: assertLocalized(previewCard.displaySnapshot.name),
   card: previewCard,
 };
 const dreamsign = demoDreamsign(1);
 const dreamsignEntity = {
   kind: "dreamsign" as const,
   id: dreamsign.id,
-  label: dreamsign.name,
   dreamsign,
 };
 function Demo() {
@@ -36,6 +35,12 @@ function Demo() {
       : variant === "dreamsign-preview"
         ? dreamsignEntity
         : undefined;
+  const annotatedEntity =
+    variant === "dreamsign-preview" ? dreamsignEntity : cardEntity;
+  const annotatedName =
+    variant === "dreamsign-preview"
+      ? dreamsign.name
+      : assertLocalized(previewCard.displaySnapshot.name);
   return (
     <div style={{ width: "100%", maxWidth: 620, display: "grid", gap: 12 }}>
       <DemoControls>
@@ -59,36 +64,18 @@ function Demo() {
           label: assertLocalized("Follow the signal"),
           description:
             variant === "plain"
-              ? [
-                  {
-                    kind: "rules",
-                    value: assertLocalized(
-                      "Continue carefully through the long luminous passage.",
-                    ),
-                  },
-                ]
-              : [
-                  { kind: "rules", value: assertLocalized("Study ") },
-                  {
-                    kind: "entity",
-                    entity:
-                      variant === "dreamsign-preview"
-                        ? dreamsignEntity
-                        : cardEntity,
-                  },
-                  {
-                    kind: "rules",
-                    value: assertLocalized(" and draw 1 card."),
-                  },
-                  { kind: "rules", value: assertLocalized(" Then remember ") },
-                  {
-                    kind: "entity",
-                    entity:
-                      variant === "dreamsign-preview"
-                        ? dreamsignEntity
-                        : cardEntity,
-                  },
-                ],
+              ? richText.rules(
+                  assertLocalized(
+                    "Continue carefully through the long luminous passage.",
+                  ),
+                )
+              : richText.annotated(
+                  txa(
+                    "Study {entity} and draw 1 card. Then remember {entity}",
+                    { entity: opaque(annotatedName) },
+                    "[exploration] Demonstration choice effect with the same revealable entity referenced twice. entity is the proper name of a card or Dreamsign.",
+                  ).annotate({ entity: annotatedEntity }),
+                ),
           availability: variant === "unavailable" ? "unavailable" : "available",
           preview: preview,
         }}
@@ -108,10 +95,10 @@ export const explorationChoiceDemo: CumulusComponent = {
   blurb:
     "A reveal-aware semantic action whose ordered description can mix localized text, rules, and UUID-backed entities.",
   callout:
-    "Builders prepare authored part order; the component distinguishes quick activation from hold-to-read.",
+    "Builders attach reveal entities to lazy localized placeholders; the component distinguishes quick activation from hold-to-read.",
   details: [
-    "Unavailable choices stay readable, keyboard activation emits the action ID, and inline entities keep their own reveal identity.",
-    "Builders prepare the ordered text, rules, and entity parts before rendering; the component performs no placeholder search.",
+    "Unavailable choices stay readable, keyboard activation emits the action ID, and underlined entity names remain presentation inside the full-cell target.",
+    "Translators control placeholder order and repetition; the component resolves structured runs only at its final rendering boundary.",
   ],
   relatedSystems: ["entity-reveals"],
   group: "Actions & Inputs",

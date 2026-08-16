@@ -1,5 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import type { LocalizedString } from "@trox/runtime";
+import type {
+  AnnotatedLocalizedString,
+  LocalizedString,
+  ResolvedLocalizedPart,
+} from "@trox/runtime";
 import {
   requestedQALocaleFromBrowser,
   requireSourceRuntime,
@@ -7,11 +11,15 @@ import {
 } from "./runtime";
 
 export type ResolveMessage = (message: LocalizedString) => string;
+export type ResolveMessageParts = <T>(
+  message: AnnotatedLocalizedString<T>,
+) => readonly ResolvedLocalizedPart<T>[];
 
 interface LocalizationContextValue {
   readonly locale: string;
   readonly direction: "ltr" | "rtl";
   readonly resolve: ResolveMessage;
+  readonly resolveParts: ResolveMessageParts;
 }
 
 const LocalizationContext = createContext<LocalizationContextValue | null>(null);
@@ -82,6 +90,7 @@ function ActiveTroxLocalizationProvider({
     locale: runtime.locale,
     direction: runtime.direction,
     resolve: (message) => runtime.localizer.resolve(message),
+    resolveParts: (message) => runtime.localizer.resolveParts(message),
   }), [runtime]);
 
   useEffect(() => {

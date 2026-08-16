@@ -9,7 +9,11 @@
 // `InfoCard.body`) take a `RichText`, never a `ReactNode`.
 
 import { Fragment, type ReactNode } from "react";
-import type { LocalizedString } from "@trox/runtime";
+import type {
+  AnnotatedLocalizedString,
+  LocalizedString,
+  ResolvedLocalizedPart,
+} from "@trox/runtime";
 import { token } from "../../primitives/tokens";
 import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { InlineGlyph } from "../typography/InlineGlyph";
@@ -58,16 +62,25 @@ export interface RichTextDefinition {
  *    their inline glyphs. Use for card / avatar / dreamsign ability text.
  *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a
  *    "Locked" / "Visited" status shown under a site blurb.
+ *  - `annotated` — lazy localized copy whose selected placeholders carry
+ *    application-owned rendering metadata.
  *  - `stack` — several parts laid out vertically as separate lines.
  *  - `definitions` — a compact, monochrome semantic definition list whose
  *    labels and descriptions share one line whenever space permits; complete
  *    authored sentences may omit the label and colon.
  */
-export type RichText =
+export type RichText<TAnnotation = never> =
   | { readonly kind: "plain"; readonly text: LocalizedString }
   | { readonly kind: "rules"; readonly text: LocalizedString }
   | { readonly kind: "note"; readonly text: LocalizedString }
-  | { readonly kind: "stack"; readonly parts: readonly RichText[] }
+  | {
+      readonly kind: "annotated";
+      readonly text: AnnotatedLocalizedString<TAnnotation>;
+    }
+  | {
+      readonly kind: "stack";
+      readonly parts: readonly RichText<TAnnotation>[];
+    }
   | {
       readonly kind: "definitions";
       readonly entries: readonly RichTextDefinition[];
@@ -78,7 +91,12 @@ export const richText = {
   plain: (text: LocalizedString): RichText => ({ kind: "plain", text }),
   rules: (text: LocalizedString): RichText => ({ kind: "rules", text }),
   note: (text: LocalizedString): RichText => ({ kind: "note", text }),
-  stack: (...parts: RichText[]): RichText => ({ kind: "stack", parts }),
+  annotated: <TAnnotation,>(
+    text: AnnotatedLocalizedString<TAnnotation>,
+  ): RichText<TAnnotation> => ({ kind: "annotated", text }),
+  stack: <TAnnotation,>(
+    ...parts: RichText<TAnnotation>[]
+  ): RichText<TAnnotation> => ({ kind: "stack", parts }),
   definitions: (entries: readonly RichTextDefinition[]): RichText => ({
     kind: "definitions",
     entries,
@@ -89,7 +107,11 @@ export const richText = {
 const STACK_GAP = token("--space-s");
 const INLINE_RULE_SYMBOL_RE = /[●✦◆▸⍟☾⧗❖]/;
 
-interface RichTextRenderOptions {
+type ResolveAnnotatedParts = <T,>(
+  message: AnnotatedLocalizedString<T>,
+) => readonly ResolvedLocalizedPart<T>[];
+
+interface RichTextRenderOptions<TAnnotation> {
   /**
    * Route every textual RichText field through the canonical inline rules-text
    * tokenizer. InfoCard enables this at its shared rendering boundary so icon
@@ -97,6 +119,14 @@ interface RichTextRenderOptions {
    * plain, note, and definition-label copy.
    */
   readonly substituteRulesSymbols?: boolean;
+  /** Resolve a lazy annotated message only at this final rendering boundary. */
+  readonly resolveParts?: ResolveAnnotatedParts;
+  /** Render application-owned markup attached to one localized placeholder. */
+  readonly renderAnnotation?: (
+    annotation: TAnnotation,
+    value: string,
+    key: string | number,
+  ) => ReactNode;
 }
 
 /** One visible hairline with an even, compact rhythm between definition rows. */
@@ -111,7 +141,7 @@ const GLOSSARY_DEFINITION_DIVIDER_STYLE = {
 function renderDefinitionText(
   definition: LocalizedString,
   resolve: (message: LocalizedString) => string,
-  options: RichTextRenderOptions,
+  options: RichTextRenderOptions<never>,
 ): ReactNode {
   const text = resolve(definition);
   return options.substituteRulesSymbols === true ||
@@ -125,7 +155,7 @@ function renderDefinitionText(
 function renderInlineText(
   message: LocalizedString,
   resolve: (message: LocalizedString) => string,
-  options: RichTextRenderOptions,
+  options: RichTextRenderOptions<never>,
 ): ReactNode {
   const text = resolve(message);
   return options.substituteRulesSymbols === true
@@ -192,11 +222,11 @@ function DefinitionSymbol({
  * Renders a {@link RichText} value to nodes. Pure. `key` is applied to the
  * returned root so the result can sit directly in a React list (e.g. a stack).
  */
-export function renderRichText(
-  value: RichText,
+export function renderRichText<TAnnotation = never>(
+  value: RichText<TAnnotation>,
   resolve: (message: LocalizedString) => string,
   key: string | number = 0,
-  options: RichTextRenderOptions = {},
+  options: RichTextRenderOptions<TAnnotation> = {},
 ): ReactNode {
   switch (value.kind) {
     case "plain":
@@ -216,6 +246,39 @@ export function renderRichText(
           {renderInlineText(value.text, resolve, options)}
         </div>
       );
+    case "annotated": {
+      if (options.resolveParts === undefined) {
+        throw new Error(
+          "Annotated RichText requires a placeholder-parts resolver.",
+        );
+      }
+      const parts = options.resolveParts(value.text);
+      return (
+        <Fragment key={key}>
+          {parts.map((part, index) => {
+            const partKey = `${String(key)}-${String(index)}`;
+            if (
+              part.kind === "placeholder" &&
+              part.annotation !== undefined &&
+              options.renderAnnotation !== undefined
+            ) {
+              return options.renderAnnotation(
+                part.annotation,
+                part.value,
+                partKey,
+              );
+            }
+            return (
+              <Fragment key={partKey}>
+                {options.substituteRulesSymbols === true
+                  ? renderRulesSymbolsInline(part.value)
+                  : part.value}
+              </Fragment>
+            );
+          })}
+        </Fragment>
+      );
+    }
     case "stack":
       return (
         <div

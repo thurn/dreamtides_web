@@ -6,7 +6,6 @@ import type { DreamscapeSiteModel } from "../../cumulus/components/dreamscape/Si
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
 import type {
-  ExplorationActionEffectPart,
   ExplorationActionView,
   ExplorationCardSelectionOperation,
   ExplorationCardChoiceView,
@@ -1183,11 +1182,8 @@ function followupForAction(
 }
 
 interface ExplorationEffectReference {
-  readonly needle: string;
-  readonly part: Exclude<
-    ExplorationActionEffectPart,
-    { readonly kind: "text" }
-  >;
+  readonly placeholder: string;
+  readonly entity: ExplorationEntityView;
 }
 
 interface DeckCardVariableTarget {
@@ -1311,42 +1307,54 @@ function effectReferencesForAction(
 ): readonly ExplorationEffectReference[] {
   const references: ExplorationEffectReference[] = [];
   const argumentNames = explorationEffectArgumentNames(action);
-  if (argumentNames.includes("offered_card")) {
+  const offeredCardPlaceholder = argumentNames.find(
+    (name) => name === "offered_card",
+  );
+  if (offeredCardPlaceholder !== undefined) {
     const offeredCardId = offer.offeredCardIds[0];
     const offeredCard =
       offeredCardId === undefined ? null : cardById(content, offeredCardId);
     if (offeredCard !== null) {
       references.push({
-        needle: "{offered_card}",
-        part: { kind: "entity", entity: { kind: "card", card: offeredCard } },
+        placeholder: offeredCardPlaceholder,
+        entity: { kind: "card", card: offeredCard },
       });
     }
   }
-  if (argumentNames.includes("deck_card") && deckCardEntity !== undefined) {
+  const deckCardPlaceholder = argumentNames.find(
+    (name) => name === "deck_card",
+  );
+  if (deckCardPlaceholder !== undefined && deckCardEntity !== undefined) {
     references.push({
-      needle: "{deck_card}",
-      part: { kind: "entity", entity: deckCardEntity },
+      placeholder: deckCardPlaceholder,
+      entity: deckCardEntity,
     });
   }
-  if (
-    argumentNames.includes("starter_card") &&
-    starterCardEntity !== undefined
-  ) {
+  const starterCardPlaceholder = argumentNames.find(
+    (name) => name === "starter_card",
+  );
+  if (starterCardPlaceholder !== undefined && starterCardEntity !== undefined) {
     references.push({
-      needle: "{starter_card}",
-      part: { kind: "entity", entity: starterCardEntity },
+      placeholder: starterCardPlaceholder,
+      entity: starterCardEntity,
     });
   }
-  if (argumentNames.includes("fixed_card") && action.cardId !== undefined) {
+  const fixedCardPlaceholder = argumentNames.find(
+    (name) => name === "fixed_card",
+  );
+  if (fixedCardPlaceholder !== undefined && action.cardId !== undefined) {
     const card = cardById(content, action.cardId);
     if (card !== null) {
       references.push({
-        needle: "{fixed_card}",
-        part: { kind: "entity", entity: { kind: "card", card } },
+        placeholder: fixedCardPlaceholder,
+        entity: { kind: "card", card },
       });
     }
   }
-  if (argumentNames.includes("nightmare_card")) {
+  const nightmareCardPlaceholder = argumentNames.find(
+    (name) => name === "nightmare_card",
+  );
+  if (nightmareCardPlaceholder !== undefined) {
     const card = cardById(content, NIGHTMARE_CARD_ID);
     if (card !== null) {
       const copies =
@@ -1356,38 +1364,29 @@ function effectReferencesForAction(
           ? action.nightmareCount
           : undefined;
       references.push({
-        needle: "{nightmare_card}",
-        part: {
-          kind: "entity",
-          entity: {
-            kind: "card",
-            card,
-            ...(copies === undefined ? {} : { copies }),
-          },
+        placeholder: nightmareCardPlaceholder,
+        entity: {
+          kind: "card",
+          card,
+          ...(copies === undefined ? {} : { copies }),
         },
       });
     }
   }
-  if (argumentNames.includes("card_type") && action.cardType !== undefined) {
-    references.push({
-      needle: "{card_type}",
-      part: { kind: "card-type", cardType: action.cardType },
-    });
-  }
-  if (action.dreamsignId !== undefined) {
+  const dreamsignPlaceholder = argumentNames.find(
+    (name) => name === "dreamsign",
+  );
+  if (dreamsignPlaceholder !== undefined && action.dreamsignId !== undefined) {
     const dreamsign = dreamsignById(content, action.dreamsignId);
     if (dreamsign !== null) {
       references.push({
-        needle: "{dreamsign}",
-        part: {
-          kind: "entity",
-          entity: {
-            kind: "dreamsign",
-            dreamsign: localizedDreamsign(
-              dreamsign,
-              "Exploration effect reference",
-            ),
-          },
+        placeholder: dreamsignPlaceholder,
+        entity: {
+          kind: "dreamsign",
+          dreamsign: localizedDreamsign(
+            dreamsign,
+            "Exploration effect reference",
+          ),
         },
       });
     }
@@ -1403,6 +1402,7 @@ function explorationEffectArgumentNames(
     return derivedExplorationEffectArgumentNames(action);
   if (message instanceof SourceMessage)
     return Object.keys(message.argumentSchemas);
+  if (message instanceof LocalizedString) return Object.keys(message.arguments);
   if (typeof message === "string") {
     return [...message.matchAll(/\{([a-z_]+)\}/g)].map(
       (match) => match[1] ?? "",
@@ -1471,7 +1471,7 @@ function localizedExplorationPredicate(
   }
 }
 
-/** Build UUID-backed inline entity parts for an Exploration option's effect. */
+/** Attach UUID-backed reveal entities to an Exploration effect's placeholders. */
 export function buildExplorationActionEffect(
   action: ExplorationActionContent,
   offer: ExplorationActionOfferRuntime,
@@ -1480,7 +1480,7 @@ export function buildExplorationActionEffect(
   starterCardEntity?: DeckCardVariableTarget["entity"],
 ): Pick<
   ExplorationActionView,
-  "effectText" | "effectParts" | "effectFallback"
+  "effectText" | "effectFallback"
 > {
   const references = effectReferencesForAction(
     action,
@@ -1500,7 +1500,7 @@ export function buildExplorationActionEffect(
           return [argumentName, concealedTarget];
         }
         const reference = references.find(
-          (candidate) => candidate.needle === `{${argumentName}}`,
+          (candidate) => candidate.placeholder === argumentName,
         );
         if (reference === undefined) {
           switch (argumentName) {
@@ -1535,10 +1535,7 @@ export function buildExplorationActionEffect(
             `Missing localized Exploration effect argument {${argumentName}}.`,
           );
         }
-        if (reference.part.kind === "card-type") {
-          return [argumentName, localizedSourceText(reference.part.cardType)];
-        }
-        const entity = reference.part.entity;
+        const entity = reference.entity;
         return [
           argumentName,
           entity.kind === "card"
@@ -1568,7 +1565,7 @@ export function buildExplorationActionEffect(
   const argumentNames = explorationEffectArgumentNames(action);
   if (
     argumentNames.includes("deck_card") &&
-    !references.some((reference) => reference.needle === "{deck_card}")
+    !references.some((reference) => reference.placeholder === "deck_card")
   ) {
     const message = localizedEffect({
       deck_card: tx(
@@ -1577,13 +1574,13 @@ export function buildExplorationActionEffect(
       ),
     });
     return {
-      effectText: message,
+      effectText: message.annotate({}),
       effectFallback: { message },
     };
   }
   if (
     argumentNames.includes("starter_card") &&
-    !references.some((reference) => reference.needle === "{starter_card}")
+    !references.some((reference) => reference.placeholder === "starter_card")
   ) {
     const message = localizedEffect({
       starter_card: tx(
@@ -1592,15 +1589,27 @@ export function buildExplorationActionEffect(
       ),
     });
     return {
-      effectText: message,
+      effectText: message.annotate({}),
       effectFallback: { message },
     };
   }
+  const message = localizedEffect();
   return {
-    effectText: localizedEffect(),
-    ...(references.length === 0
-      ? {}
-      : { effectParts: references.map((reference) => reference.part) }),
+    effectText: message.annotate(
+      Object.fromEntries(
+        references
+          .filter((reference) =>
+            Object.prototype.hasOwnProperty.call(
+              message.arguments,
+              reference.placeholder,
+            ),
+          )
+          .map((reference) => [
+            reference.placeholder,
+            reference.entity,
+          ]),
+      ),
+    ),
   };
 }
 
@@ -3922,7 +3931,7 @@ function rewardForResolution(
           "Exploration effect resolved",
           "[exploration] Generic player-safe Exploration outcome used when a resolved typed effect requires presentation arguments that are unavailable.",
         )
-      : (resolvedActionView?.effectText ??
+      : (resolvedActionView?.effectText.localized ??
         localizedUnpreparedEffect(resolvedAction?.effectText ?? ""));
   if (
     resolvedAction?.effectKind === "add-fixed-site" ||

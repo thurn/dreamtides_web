@@ -199,10 +199,43 @@ export class LocalizedString {
     get arguments() { return this.#wire.arguments; }
     get selectors() { return this.#wire.selectors; }
     isAtomic() { return this.#wire.identity.pattern.kind === "text" && Object.keys(this.#wire.arguments).length === 0 && this.#wire.selectors.length === 0; }
+    /** Associates application metadata with declared placeholders without resolving this value. */
+    annotate(annotations) {
+        if (annotations === null || typeof annotations !== "object" || Array.isArray(annotations)) {
+            throw new TroxValueError("trox.invalid-annotations", "placeholder annotations must be an object");
+        }
+        return new AnnotatedLocalizedString(this, annotations);
+    }
     toCanonicalJSON() { return canonicalJson(this.#wire); }
     wireValue() { return structuredClone(this.#wire); }
     toString() { throw new TroxValueError("trox.explicit-resolution", "LocalizedString must be resolved by a Localizer"); }
     [Symbol.toPrimitive]() { throw new TroxValueError("trox.explicit-resolution", "LocalizedString must be resolved by a Localizer"); }
+}
+/** A lazy localized value paired with application-owned placeholder metadata. */
+export class AnnotatedLocalizedString {
+    localized;
+    annotations;
+    /** @internal Construct through LocalizedString.annotate so placeholder names are validated. */
+    constructor(localized, annotations) {
+        const snapshot = {};
+        for (const [name, annotation] of Object.entries(annotations)) {
+            if (!Object.hasOwn(localized.arguments, name)) {
+                throw new TroxValueError("trox.unknown-annotation", `annotation \`${name}\` does not name a declared placeholder`);
+            }
+            snapshot[name] = annotation;
+        }
+        this.localized = localized;
+        this.annotations = Object.freeze(snapshot);
+        Object.freeze(this);
+    }
+    /** Returns the metadata for one placeholder without resolving the message. */
+    annotationFor(name) { return this.annotations[name]; }
+    /** Returns whether metadata was supplied, including when its value is undefined. */
+    hasAnnotation(name) { return Object.hasOwn(this.annotations, name); }
+    /** Annotation metadata is deliberately outside Trox's canonical wire protocol. */
+    toJSON() {
+        throw new TroxValueError("trox.annotation-serialization", "annotated localized values are not serializable; serialize the LocalizedString and application metadata separately");
+    }
 }
 /** @internal */
 export const CONSTRUCTION_TOKEN = Symbol("trox-construction");

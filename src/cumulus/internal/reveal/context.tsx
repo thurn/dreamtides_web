@@ -82,6 +82,9 @@ function richTextDescriptionUnits(
   if (value.kind === "stack") {
     return value.parts.flatMap(richTextDescriptionUnits);
   }
+  if (value.kind === "annotated") {
+    return [{ kind: "message", message: value.text.localized }];
+  }
   return [{ kind: "message", message: value.text }];
 }
 

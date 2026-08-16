@@ -1,6 +1,7 @@
 import { blake3 } from "@noble/hashes/blake3.js";
 import {
   canonicalJson,
+  AnnotatedLocalizedString,
   LocalizedString,
   type Bundle,
   type Pattern,
@@ -13,6 +14,12 @@ export function localizedStringSourceEquality(
   left: unknown,
   right: unknown,
 ): boolean | undefined {
+  if (left instanceof AnnotatedLocalizedString) {
+    return localizedStringSourceEquality(left.localized, right);
+  }
+  if (right instanceof AnnotatedLocalizedString) {
+    return localizedStringSourceEquality(left, right.localized);
+  }
   if (left instanceof LocalizedString && typeof right === "string") {
     return resolveSource(left) === right;
   }
