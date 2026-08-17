@@ -464,7 +464,7 @@
   GlossaryDefinition(
     id: "3d708c8b-2153-47b8-821e-284f36e1ec9e",
     category: JourneyTerms,
-    term: Tx("Essence"),
+    term: Tx("Essence (◆)"),
     definition: Tx("Currency you gain and spend over the course of a run."),
     priority: 10,
     matches_term_in_rules_text: true,
@@ -604,7 +604,7 @@
     id: "bdae3633-0f98-4cbf-829e-89d557c24e83",
     category: Resources,
     term: Tx("Starting Essence"),
-    definition: Tx("The essence this avatar begins the journey with, spent at sites this run."),
+    definition: Tx("The essence (◆) this avatar begins the journey with, spent at sites this run."),
     priority: 0,
   ),
 
@@ -638,7 +638,7 @@
     id: "25f28ed1-5729-4240-a352-80f92fce530c",
     category: Sites,
     term: Tx("Card Shop"),
-    definition: Tx("Spend essence to buy cards."),
+    definition: Tx("Spend essence (◆) to buy cards."),
     priority: 0,
   ),
 
@@ -646,7 +646,7 @@
     id: "4873bddf-7bf5-41e8-979e-36eb193db5a6",
     category: Sites,
     term: Tx("Purge"),
-    definition: Tx("Remove any number of cards from your deck"),
+    definition: Tx("Remove cards from your deck for an essence (◆) cost"),
     priority: 0,
   ),
 
@@ -654,7 +654,7 @@
     id: "ba8ea132-f636-4fed-be27-e8eff0c9cb07",
     category: Sites,
     term: Tx("Essence"),
-    definition: Tx("Collect a trove of essence."),
+    definition: Tx("Collect a trove of essence (◆))."),
     priority: 0,
   ),
 

@@ -390,7 +390,7 @@ TutorialCatalog(
       // Desktop maximum width of the speech bubble, in pixels.
       maximum_width_pixels: 550,
       text: Tx(
-        "For each journey, you must choose a [purple]Avatar[/purple] who provides a permanent ability."
+        "For each journey, you must choose an [purple]Avatar[/purple] who provides a permanent ability."
       ),
     ),
     dreamscape: TutorialSpeechBubble(
@@ -416,7 +416,7 @@ TutorialCatalog(
       delay_seconds: 1,
       maximum_width_pixels: 600,
       text: Tx(
-        "You can [yellow]purge[/yellow] cards here, removing them from your deck for an ◆ essence cost."
+        "You can [yellow]purge[/yellow] cards here, removing them from your deck for an essence (◆) cost."
       ),
     ),
     dreamsign_revelation: TutorialSpeechBubble(
