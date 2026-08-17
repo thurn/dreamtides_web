@@ -38,6 +38,7 @@ import type {
   BattleZoneId,
 } from "../../battle/types";
 import type { CardSubtype } from "../../types/card-identity";
+import { drawsDreamwellCardAtStartOfTurn } from "../../battle/state/turn-utils";
 import {
   backRankSlotId,
   ensureContiguousRankSlots,
@@ -2031,6 +2032,12 @@ function drawDreamwellCard(
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
+  if (!drawsDreamwellCardAtStartOfTurn(turnNumber)) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
   if (!additional && state.sides[side].dreamwellDrawnTurn === turnNumber) {
     return {
       state,

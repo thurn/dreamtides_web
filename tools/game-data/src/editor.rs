@@ -928,12 +928,11 @@ fn set_dreamwell_field(
         "energy-added" | "energy_added" => card.energy_added = json_u32(value, field)?,
         "order" | "deck_tier" => {
             card.deck_tier = match json_u32(value, field)? {
-                0 => DeckTier::Starting,
                 1 => DeckTier::One,
                 2 => DeckTier::Two,
                 3 => DeckTier::Three,
                 4 => DeckTier::Four,
-                _ => bail!("INVALID_EDIT: Dreamwell order must be in [0, 4]"),
+                _ => bail!("INVALID_EDIT: Dreamwell order must be in [1, 4]"),
             };
         }
         "image-number" | "image_number" => card.art.image = json_u32(value, field)?,
@@ -1028,7 +1027,6 @@ fn patch_dreamwell_source_field(
         }
         "energy_added" => card.energy_added.to_string(),
         "deck_tier" => match card.deck_tier {
-            DeckTier::Starting => "Starting".into(),
             DeckTier::One => "One".into(),
             DeckTier::Two => "Two".into(),
             DeckTier::Three => "Three".into(),
@@ -4182,7 +4180,6 @@ CardMetadataCatalog(
 DreamwellCatalog(
   // Unrelated construction rules must survive card edits byte-for-byte.
   rules: DreamwellRules(
-    opening_orders: [0],
     recurring_orders: [1, 2, 3, 4],
     cards_per_recurring_order: 5,
     minimum_constructed_length: 62,
@@ -4194,7 +4191,7 @@ DreamwellCatalog(
       id: "00000000-0000-4000-8000-000000000021",
       ability_text: [Tx("First paragraph"), Tx("Second paragraph")],
       energy_added: 2,
-      deck_tier: Starting,
+      deck_tier: One,
       art: (
         image: 7,
         // Preserve nested art provenance guidance.

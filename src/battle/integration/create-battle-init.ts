@@ -512,11 +512,6 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   });
 }
 
-/**
- * Number of cards drawn per `order` group (1-4) in each Dreamwell deck cycle.
- * The order-0 starting cards lead the first cycle in addition to these.
- */
-
 /** Order groups, lowest first, that fill each Dreamwell deck cycle. */
 
 /**
@@ -529,10 +524,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
 /**
  * Builds the shared Dreamwell deck (rules §The Dreamwell and Energy):
  *
- *  - The first cycle leads with every order-0 card (the per-player starting
- *    cards), then five random cards from each of orders 1-4.
- *  - Each later cycle drops the order-0 cards and again takes five random cards
- *    from each of orders 1-4.
+ *  - Every cycle takes five random cards from each of orders 1-4.
  *
  * Cards are grouped by `order` and shuffled within each group via the seeded
  * `dreamwellDeck` RNG stream, so the deck is reproducible per battle seed while
@@ -558,20 +550,13 @@ export function buildDreamwellDeck(
   }
 
   const deck: DreamwellCardDefinition[] = [];
-  let firstCycle = true;
   while (deck.length < config.minimumConstructedLength) {
     const lengthBeforeCycle = deck.length;
-    if (firstCycle) {
-      for (const order of config.openingOrders) {
-        deck.push(...rng.shuffle(byOrder.get(order) ?? []));
-      }
-      firstCycle = false;
-    }
     for (const order of config.recurringOrders) {
       const group = byOrder.get(order) ?? [];
       deck.push(...rng.shuffle(group).slice(0, config.cardsPerRecurringOrder));
     }
-    // No order 1-4 cards (and no order-0 cards on the first pass) means the deck
+    // No order 1-4 cards means the deck
     // cannot grow; stop rather than loop forever on a sparse catalog.
     if (deck.length === lengthBeforeCycle) {
       break;

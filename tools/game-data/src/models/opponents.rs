@@ -285,8 +285,6 @@ struct CompatibilityBattleRewardRules {
 
 #[derive(Serialize)]
 struct CompatibilityDreamwellRules {
-    #[serde(rename = "opening-orders")]
-    opening_orders: Vec<u32>,
     #[serde(rename = "recurring-orders")]
     recurring_orders: Vec<u32>,
     #[serde(rename = "cards-per-recurring-order")]
@@ -402,7 +400,6 @@ pub fn lower(
         opponent_deck_size: source.opponent_deck_size,
         battle: compatibility_battle(&source.battle),
         dreamwell: CompatibilityDreamwellRules {
-            opening_orders: source.dreamwell.opening_orders,
             recurring_orders: source.dreamwell.recurring_orders,
             cards_per_recurring_order: source.dreamwell.cards_per_recurring_order,
             minimum_constructed_length: source.dreamwell.minimum_constructed_length,
@@ -738,7 +735,6 @@ mod tests {
 
     fn dreamwell_rules() -> DreamwellRules {
         DreamwellRules {
-            opening_orders: vec![8],
             recurring_orders: vec![9, 10],
             cards_per_recurring_order: 2,
             minimum_constructed_length: 14,
@@ -819,8 +815,8 @@ mod tests {
         assert_eq!(lowered["schema-version"].as_integer(), Some(1));
         assert_eq!(lowered["battle"]["starting-side"].as_str(), Some("enemy"));
         assert_eq!(
-            lowered["dreamwell"]["opening-orders"][0].as_integer(),
-            Some(8)
+            lowered["dreamwell"]["recurring-orders"][0].as_integer(),
+            Some(9)
         );
         assert_eq!(
             lowered["journey-ai-deck"][0]["card-id"].as_str(),
@@ -895,12 +891,12 @@ mod tests {
     #[test]
     fn rejects_invalid_collections_and_preset_references() {
         let mut source = dreamwell_rules();
-        source.recurring_orders.push(8);
+        source.recurring_orders.push(9);
         assert!(
             dreamwell::validate_rules(&source)
                 .unwrap_err()
                 .to_string()
-                .contains("appears in opening and recurring")
+                .contains("duplicate order")
         );
 
         let mut source = internal_ai();

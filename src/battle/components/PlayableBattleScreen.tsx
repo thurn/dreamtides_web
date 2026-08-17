@@ -49,6 +49,7 @@ import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
 import { BattleFigmentCreator } from "./BattleFigmentCreator";
 import { CumulusBattleForeseeOverlay } from "./CumulusBattleForeseeOverlay";
 import { automaticBattleIntentKey } from "../automatic-intent-key";
+import { drawsDreamwellCardAtStartOfTurn } from "../state/turn-utils";
 import { BattleCardNoteEditor } from "./BattleCardNoteEditor";
 import { BattleDreamwellHistoryDrawer } from "./BattleDreamwellHistoryDrawer";
 import { BattleLogDrawer } from "./BattleLogDrawer";
@@ -765,7 +766,11 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   const activeTurnNumber = board.turnNumber;
   const battleResult = board.result;
   useEffect(() => {
-    if (battleResult !== null || activePhase !== "dreamwell") {
+    if (
+      battleResult !== null ||
+      activePhase !== "dreamwell" ||
+      !drawsDreamwellCardAtStartOfTurn(activeTurnNumber)
+    ) {
       return;
     }
     handleCommand({
@@ -779,29 +784,32 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     });
   }, [handleCommand, activeSide, activePhase, activeTurnNumber, battleResult]);
 
-  // Round 1 surfaces no Dreamwell card (see `isDreamwellDisplayVisible` below),
-  // so the player should not have to click through an empty Dreamwell phase.
-  // Once round 1's reveal has committed — `dreamwellDrawnTurn` reaches this turn,
-  // so its energy is already applied — auto-advance to the Day phase for the
-  // locally-driven side. Skipped on the AI's own turn (the AI driver advances
-  // itself).
+  // Round 1 has no Dreamwell draw, so advance the locally-driven side through
+  // the empty Dreamwell phase. The AI driver advances its own turn.
   // The event-log intent key owns the once-per-(battle, side, turn) transition.
-  const activeDreamwellDrawnTurn = board.sides[activeSide].dreamwellDrawnTurn;
   useEffect(() => {
     if (battleResult !== null || activePhase !== "dreamwell") {
       return;
     }
-    if (activeTurnNumber > 1) {
+    if (drawsDreamwellCardAtStartOfTurn(activeTurnNumber)) {
       return;
     }
     if (aiDriverEnabled && activeSide === "enemy") {
       return;
     }
-    // Wait for this turn's Dreamwell reveal to land so its energy is applied
-    // before the phase advances.
-    if (activeDreamwellDrawnTurn !== activeTurnNumber) {
-      return;
-    }
+    logEventOnce(
+      `battle_proto_dreamwell_draw_skipped:${battleInit.battleId}:${activeSide}:${String(activeTurnNumber)}`,
+      "battle_proto_dreamwell_draw_skipped",
+      {
+        ...createBattleLogBaseFields(board, {
+          sourceSurface: "auto-system",
+          selectedCardId: null,
+        }),
+        side: activeSide,
+        drawTurnNumber: activeTurnNumber,
+        reason: "before-turn-2",
+      },
+    );
     handleCommand({
       id: "DEBUG_EDIT",
       edit: { kind: "SET_PHASE", phase: "day" },
@@ -814,7 +822,8 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     activePhase,
     activeTurnNumber,
     battleResult,
-    activeDreamwellDrawnTurn,
+    battleInit.battleId,
+    board,
   ]);
 
   useEffect(() => {
@@ -1805,9 +1814,8 @@ function computePhaseControlTarget(
   const normalizedNextIndex =
     (nextIndex + PHASE_CONTROL_SEQUENCE.length) % PHASE_CONTROL_SEQUENCE.length;
   // A forward control that flips into the next turn always lands on that turn's
-  // Dreamwell phase — the start-of-turn stop the player clicks through after
-  // seeing the drawn Dreamwell card — even the skip control, so the Dreamwell
-  // reveal is never bypassed on a turn change.
+  // Dreamwell phase so the round-dependent draw-or-skip rule is applied before
+  // play enters the Day phase.
   const phase: BattlePhase =
     didWrap && control !== "previous"
       ? "dreamwell"

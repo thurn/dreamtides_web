@@ -9,7 +9,10 @@ import {
 import { dreamwellEnergyEdits } from "../../battle/engine/energy";
 import { endingBanishEdits } from "../../battle/engine/handoff";
 import { selectBattleCardLocation } from "../../battle/state/selectors";
-import { drawsAtStartOfTurn } from "../../battle/state/turn-utils";
+import {
+  drawsAtStartOfTurn,
+  drawsDreamwellCardAtStartOfTurn,
+} from "../../battle/state/turn-utils";
 import type {
   BattleMutableState,
   BattlePhase,
@@ -255,6 +258,9 @@ function planDreamwellReveal(
   edit: Extract<BattleDebugEdit, { kind: "DRAW_DREAMWELL_CARD" }>,
   caps: BasicAutomationCaps,
 ): BattleCommand[] {
+  if (!drawsDreamwellCardAtStartOfTurn(edit.turnNumber)) {
+    return [command];
+  }
   const card = caps.dreamwellDeck[state.dreamwellDeckIndex];
   const energyAdded = card?.energyAdded ?? 0;
   const commands: BattleCommand[] = [];

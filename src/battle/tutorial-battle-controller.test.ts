@@ -172,6 +172,32 @@ function plan(
 }
 
 describe("tutorial battle controller", () => {
+  it("advances round 1 without drawing a Dreamwell card", () => {
+    expect(
+      plan(stateFor({ phase: "dreamwell", turnNumber: 1 })).intent,
+    ).toMatchObject({
+      kind: "battle-command",
+      command: {
+        edit: { kind: "SET_PHASE", phase: "dawn" },
+      },
+    });
+  });
+
+  it("draws a Dreamwell card from round 2 onward", () => {
+    expect(
+      plan(stateFor({ phase: "dreamwell", turnNumber: 2 })).intent,
+    ).toMatchObject({
+      kind: "battle-command",
+      command: {
+        edit: {
+          kind: "DRAW_DREAMWELL_CARD",
+          side: "player",
+          turnNumber: 2,
+        },
+      },
+    });
+  });
+
   it("assigns automatic work exclusively to the persisted, present driver", () => {
     const state = stateFor({ phase: "dawn" });
     expect(plan(state).intent?.kind).toBe("battle-command");

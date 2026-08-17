@@ -112,25 +112,14 @@ export function compileOpponentsData(sourceValue, { cardIds } = {}) {
   if (startingSide !== "player" && startingSide !== "enemy")
     fail("battle.starting-side", "expected player or enemy");
   const dreamwell = keys(root.dreamwell, "dreamwell", [
-    "opening-orders",
     "recurring-orders",
     "cards-per-recurring-order",
     "minimum-constructed-length",
   ]);
-  const openingOrders = unique(
-    numbers(dreamwell["opening-orders"], "dreamwell.opening-orders"),
-    "dreamwell.opening-orders",
-  );
   const recurringOrders = unique(
     numbers(dreamwell["recurring-orders"], "dreamwell.recurring-orders"),
     "dreamwell.recurring-orders",
   );
-  for (const order of openingOrders)
-    if (recurringOrders.includes(order))
-      fail(
-        "dreamwell",
-        `order ${String(order)} appears in opening and recurring orders`,
-      );
   const progression = keys(root.progression, "progression", [
     "ability-active-from-layer",
     "dreamsigns-from-layer",
@@ -312,7 +301,6 @@ export function compileOpponentsData(sourceValue, { cardIds } = {}) {
       },
     },
     dreamwell: {
-      openingOrders,
       recurringOrders,
       cardsPerRecurringOrder: number(
         dreamwell["cards-per-recurring-order"],

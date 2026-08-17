@@ -10,10 +10,7 @@ DreamwellCatalog(
   // Cards are shuffled only within their tier, using the battle's deterministic
   // Dreamwell RNG stream.
   rules: DreamwellRules(
-    // Tiers included in full, once, at the front of the first cycle. `Starting`
-    // cards lower to compatibility order 0, so every Starting card appears once.
-    opening_orders: [0],
-    // Tiers sampled in order for the first and every later cycle. Numbered
+    // Tiers sampled in order for every cycle. Numbered
     // tiers One through Four lower to compatibility orders 1 through 4.
     recurring_orders: [1, 2, 3, 4],
     // Maximum cards sampled from each recurring tier per cycle. A smaller tier
@@ -28,31 +25,6 @@ DreamwellCatalog(
   // and are not required to be unique. Source order is preserved in generated
   // data but deck construction groups cards by `deck_tier`.
   cards: [
-    DreamwellCardDefinition(
-      name: Tx("Dawning Horizon"),
-      id: "32d64cb6-9856-43a2-9451-fcb14007a9a6",
-      ability_text: [Tx("(no ability)")],
-      // Permanently increases the drawing player's maximum energy by this amount.
-      energy_added: 2,
-      // Starting cards appear only in the first cycle; numbered tiers recur in ascending order.
-      deck_tier: Starting,
-      art: (image: 1963305268, owned: true),
-    ),
-
-    DreamwellCardDefinition(
-      name: Tx("Sunrise Cavern"),
-      id: "5e17dc4b-b654-4962-ba5a-7b042852a980",
-      ability_text: [Tx("(no ability)")],
-      energy_added: 2,
-      deck_tier: Starting,
-      art: (
-        image: 565499323,
-        owned: true,
-        // Pan and zoom framing applied after the image fills the card frame.
-        crop: (x: 1, y: 0, scale: 1),
-      ),
-    ),
-
     DreamwellCardDefinition(
       name: Tx("Meteor Meadow"),
       id: "5ec17498-9028-4a01-80a0-67c91b03d505",

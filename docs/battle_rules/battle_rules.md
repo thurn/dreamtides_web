@@ -120,11 +120,12 @@ circumstances.
 ## The Dreamwell and Energy
 
 Energy (●) is the resource used to play cards. Dreamtides uses the Dreamwell — a
-shared deck of special cards that both players draw from, one per turn — in place
-of land cards.
+shared deck of special cards that both players draw from once per turn beginning
+on turn 2 — in place of land cards.
 
-- During each player's Dreamwell phase, the next Dreamwell card is drawn
-  automatically (no player choice involved).
+- During each player's Dreamwell phase from turn 2 onward, the next Dreamwell
+  card is drawn automatically (no player choice involved). Both players skip
+  this draw on turn 1.
 - Each Dreamwell card has an energy production value that permanently increases
   the player's **maximum ●** (their energy production).
 - At the start of each turn, current ● resets to equal maximum ●. After the
@@ -141,12 +142,9 @@ this turn.
 
 **Dreamwell numbers and cycling:**
 
-- Dreamwell cards carry order numbers 0–4 that set their position in the deck:
+- Dreamwell cards carry order numbers 1–4 that set their position in the deck:
   all #1 cards are shuffled together and placed above the shuffled #2 cards, and
   so on.
-- #0 cards appear only during the first cycle through the deck, typically
-  providing a larger early energy boost. These are the starting cards for each
-  player.
 - When the deck cycles, it is reshuffled within numeric groups so that
   lower-numbered cards always come first within a cycle while cards of the same
   number remain randomized.
@@ -221,9 +219,10 @@ Each turn progresses through these eight phases in order. The five main phases �
 Dawn, Day, Dusk, Night, and Challenge — are surfaced in the UI; Dreamwell, Draw,
 and Ending run as automatic bookends.
 
-1. **Dreamwell** — The active player draws the next Dreamwell card, permanently
-   increasing their maximum ●. Current ● then resets to the new maximum. Any
-   bonus effect on the card is applied. Auto-advances.
+1. **Dreamwell** — From turn 2 onward, the active player draws the next Dreamwell
+   card, permanently increasing their maximum ●. Current ● then resets to the
+   new maximum. Any bonus effect on the card is applied. Both players skip this
+   draw on turn 1. Auto-advances.
 2. **Draw** — The active player draws one card. (Skipped on the very first turn
    of the battle.) Auto-advances.
 3. **Dawn** — The active player's ▸Dawn triggered abilities fire and resolve.
@@ -258,8 +257,9 @@ and Ending run as automatic bookends.
    exhausted status. Auto-advances when the stack is empty, after which the
    turn passes to the opponent.
 
-**Battle start:** Each player draws 5 cards as their opening hand. The first
-player's first turn skips the Draw phase.
+**Battle start:** Each player draws 5 cards as their opening hand. Both players
+skip the Dreamwell draw on turn 1. The first player's first turn skips the Draw
+phase.
 
 ## Exhaust and Awaken
 

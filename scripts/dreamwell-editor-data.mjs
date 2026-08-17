@@ -10,10 +10,9 @@ export const DEFAULT_DREAMWELL_TOML_PATH = join("data", "dreamwell.toml");
 const DREAMWELL_JSON_PATH = join("public", "dreamwell-data.json");
 
 /**
- * Highest `order` slot a Dreamwell card may occupy. Order 0 cards are the
- * per-player starting cards; 1-4 are the shuffled deck slots (rules §The
- * Dreamwell and Energy). The editor caps `order` here so a stray value cannot
- * land a card outside the deck's cycle.
+ * Highest `order` slot a Dreamwell card may occupy. Orders 1-4 are the shuffled
+ * deck slots (rules §The Dreamwell and Energy). The editor caps `order` here so
+ * a stray value cannot land a card outside the deck's cycle.
  */
 export const MAX_DREAMWELL_ORDER = 4;
 
@@ -102,13 +101,13 @@ export function readEditorDreamwell({
   return readSourceDreamwell(rootDir, dreamwellTomlPath).map(editorRecordFromDreamwell);
 }
 
-function validateWholeNumber(field, rawValue, { max, label }) {
+function validateWholeNumber(field, rawValue, { min = 0, max, label }) {
   const numeric =
     typeof rawValue === "number" ? rawValue : Number(String(rawValue).trim());
-  if (!Number.isInteger(numeric) || numeric < 0) {
+  if (!Number.isInteger(numeric) || numeric < min) {
     return validationFailure(
       field,
-      `${label} must be a whole number of 0 or more.`,
+      `${label} must be a whole number of ${String(min)} or more.`,
       rawValue,
     );
   }
@@ -147,6 +146,7 @@ export function validateDreamwellEdit(field, rawValue) {
 
   if (field === "order") {
     return validateWholeNumber(field, rawValue, {
+      min: 1,
       max: MAX_DREAMWELL_ORDER,
       label: "Order",
     });

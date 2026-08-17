@@ -22,7 +22,7 @@ const CARD: DreamwellCardDefinition = {
   name: testDreamwellCardName("Recurring Beacon"),
   renderedText: "Draw a card.",
   energyAdded: 1,
-  order: 0,
+  order: 1,
   cardNumber: 1,
   imageNumber: 42,
 };

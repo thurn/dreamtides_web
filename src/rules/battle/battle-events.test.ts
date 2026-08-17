@@ -1460,7 +1460,7 @@ function reduceObserverBattleCommand(
 }
 
 describe("hosted journey battle automatic handoffs", () => {
-  it("lets an observer commit the mandatory Dreamwell reveal", () => {
+  it("rejects an observer Dreamwell reveal during round 1", () => {
     const board = makeRichBoard({ phase: "dreamwell", turnNumber: 1 });
     const state = hostedJourneyBattleState(board);
     const command = automaticCommand({
@@ -1476,17 +1476,13 @@ describe("hosted journey battle automatic handoffs", () => {
 
     const result = reduceObserverBattleCommand(state, command, intentKey);
 
-    expect(result.outcome).toBe("applied");
-    expect(result.state.battle?.board.sides.player.dreamwellDrawnTurn).toBe(1);
-    expect(result.state.playtestControl?.controllerClientId).toBe("controller");
+    expect(result.outcome).toBe("bounced");
+    expect(result.bounceReason).toBe("observer_read_only");
+    expect(result.state).toBe(state);
   });
 
-  it("lets an observer enter Day after the first-turn Dreamwell reveal", () => {
-    const board = makeRichBoard({
-      phase: "dreamwell",
-      turnNumber: 1,
-      playerDreamwellDrawnTurn: 1,
-    });
+  it("lets an observer enter Day without a first-round Dreamwell reveal", () => {
+    const board = makeRichBoard({ phase: "dreamwell", turnNumber: 1 });
     const state = hostedJourneyBattleState(board);
     const command = automaticCommand({
       kind: "SET_PHASE",
@@ -1528,19 +1524,6 @@ describe("hosted journey battle automatic handoffs", () => {
   it("rejects observer commands outside the fixed automatic prerequisites", () => {
     const beforeReveal = makeRichBoard({ phase: "dreamwell", turnNumber: 1 });
     const beforeRevealState = hostedJourneyBattleState(beforeReveal);
-    const earlyDay = automaticCommand({ kind: "SET_PHASE", phase: "day" });
-    const earlyDayKey = automaticBattleIntentKey(
-      beforeRevealState.battle!.init.battleId,
-      beforeReveal,
-      earlyDay,
-    );
-    const earlyDayResult = reduceObserverBattleCommand(
-      beforeRevealState,
-      earlyDay,
-      earlyDayKey,
-    );
-    expect(earlyDayResult.outcome).toBe("bounced");
-    expect(earlyDayResult.bounceReason).toBe("observer_read_only");
 
     const manualDraw: BattleCommand = {
       id: "DEBUG_EDIT",
@@ -1620,6 +1603,49 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
       debugEdit({ kind: "SET_SCORE", side: "player", value: 5 }),
     );
     expect(result.outcome).toBe("bounced");
+  });
+
+  it("does not consume a Dreamwell card during round 1", () => {
+    const dreamwellCard: DreamwellCardDefinition = {
+      id: testDreamwellCardId("fixture-round-one-dreamwell"),
+      name: testDreamwellCardName("Fixture Dreamwell"),
+      renderedText: "",
+      energyAdded: 2,
+      order: 1,
+      cardNumber: 1,
+      imageNumber: 0,
+    };
+    const board = makeRichBoard({
+      turnNumber: 1,
+      phase: "dreamwell",
+      dreamwellDeckIndex: 0,
+      playerDreamwellDrawnTurn: null,
+    });
+    const state = {
+      ...baseState(),
+      battle: battleFrom(board, {
+        init: makeInit({ dreamwellDeck: [dreamwellCard] }),
+      }),
+    };
+
+    const result = reduce(
+      state,
+      "BATTLE_COMMAND",
+      debugEdit({
+        kind: "DRAW_DREAMWELL_CARD",
+        side: "player",
+        turnNumber: 1,
+      }),
+    );
+
+    expect(result.outcome).toBe("applied");
+    expect(result.state.battle?.board.dreamwellDeckIndex).toBe(0);
+    expect(result.state.battle?.board.sides.player).toMatchObject({
+      dreamwellCardIndex: null,
+      dreamwellDrawnTurn: null,
+      maxEnergy: board.sides.player.maxEnergy,
+      currentEnergy: board.sides.player.currentEnergy,
+    });
   });
 
   it("bounces a malformed command payload", () => {
@@ -1960,7 +1986,7 @@ describe("BATTLE_COMMAND fold-time triggers", () => {
       name: testDreamwellCardName("Fixture Dreamwell"),
       renderedText: "",
       energyAdded: 0,
-      order: 0,
+      order: 1,
       cardNumber: 0,
       imageNumber: 0,
     };
@@ -3855,7 +3881,7 @@ describe("dreamwell reveal side", () => {
       name: testDreamwellCardName("Fixture Dreamwell"),
       renderedText: "",
       energyAdded: 0,
-      order: 0,
+      order: 1,
       cardNumber: 0,
       imageNumber: 0,
     };
@@ -3893,7 +3919,7 @@ describe("dreamwell reveal side", () => {
       name: testDreamwellCardName("Fixture Lily Lake"),
       renderedText: "",
       energyAdded: 2,
-      order: 0,
+      order: 3,
       cardNumber: 0,
       imageNumber: 0,
     };
@@ -3980,7 +4006,7 @@ describe("support recompute ordering", () => {
       name: testDreamwellCardName("Fixture Gateway"),
       renderedText: "",
       energyAdded: 0,
-      order: 0,
+      order: 4,
       cardNumber: 0,
       imageNumber: 0,
     };

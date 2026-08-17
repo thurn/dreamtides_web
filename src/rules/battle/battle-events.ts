@@ -59,6 +59,7 @@ import type {
   BattleDebugEdit,
 } from "../../battle/debug/commands";
 import { automaticBattleIntentKey } from "../../battle/automatic-intent-key";
+import { drawsDreamwellCardAtStartOfTurn } from "../../battle/state/turn-utils";
 import type {
   BattleModifier,
   JourneyFailureBattleResult,
@@ -1054,6 +1055,7 @@ export function isPassiveHostedBattleHandoff(
   }
   if (command.edit.kind === "DRAW_DREAMWELL_CARD") {
     return (
+      drawsDreamwellCardAtStartOfTurn(board.turnNumber) &&
       command.edit.additional !== true &&
       command.edit.side === board.activeSide &&
       command.edit.turnNumber === board.turnNumber
@@ -1063,7 +1065,7 @@ export function isPassiveHostedBattleHandoff(
     command.edit.kind === "SET_PHASE" &&
     command.edit.phase === "day" &&
     board.turnNumber === 1 &&
-    board.sides[board.activeSide].dreamwellDrawnTurn === board.turnNumber
+    board.sides[board.activeSide].dreamwellDrawnTurn !== board.turnNumber
   );
 }
 

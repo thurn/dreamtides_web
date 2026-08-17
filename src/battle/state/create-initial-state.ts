@@ -54,9 +54,8 @@ export function createInitialBattleState(
     battleId: battleInit.battleId,
     activeSide: "player",
     turnNumber: 1,
-    // The battle opens on the active player's Dreamwell phase: their first
-    // (order-0) Dreamwell card animates in and is clicked through before the
-    // first Day (rules §The Dreamwell and Energy).
+    // The battle opens on the active player's Dreamwell phase, which advances
+    // without a draw during round 1 (rules §The Dreamwell and Energy).
     phase: "dreamwell",
     result: null,
     forcedResult: null,
@@ -66,8 +65,7 @@ export function createInitialBattleState(
     sides: {
       // Energy starts at 0 for both sides; each side's maximum ● is raised by
       // the Dreamwell cards it draws (rules §The Dreamwell and Energy). The
-      // active player's opening Dreamwell card is revealed (and its energy
-      // applied under basic automation) when the Dreamwell phase resolves.
+      // Dreamwell energy begins to accrue when draws start in round 2.
       player: createInitialSideState(
         Math.max(0, battleInit.playerStartingEnergy ?? 0),
         Math.max(0, battleInit.playerStartingEnergy ?? 0),

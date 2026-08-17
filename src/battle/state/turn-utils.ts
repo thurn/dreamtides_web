@@ -43,3 +43,8 @@ export function drawsAtStartOfTurn(
 ): boolean {
   return !(incomingSide === "player" && turnNumber === 1);
 }
+
+/** Dreamwell draws begin in round 2 for both players. */
+export function drawsDreamwellCardAtStartOfTurn(turnNumber: number): boolean {
+  return turnNumber >= 2;
+}

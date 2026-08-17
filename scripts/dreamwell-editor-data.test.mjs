@@ -15,10 +15,10 @@ const SECOND_ID = "22222222-2222-4222-8222-222222222222";
 
 function fixtureToml() {
   return `[[dreamwell]]
-name = "Dawning Horizon"
+name = "Fixture Dreamwell"
 id = "${FIRST_ID}"
 rendered-text = "(no ability)"
-order = 0
+order = 1
 energy-added = 2
 card-type = "Dreamwell"
 image-number = 1963305268
@@ -58,10 +58,10 @@ describe("readEditorDreamwell", () => {
 
     expect(dreamwell.map((record) => record.id)).toEqual([FIRST_ID, SECOND_ID]);
     expect(dreamwell[0]).toMatchObject({
-      name: "Dawning Horizon",
+      name: "Fixture Dreamwell",
       "rendered-text": "(no ability)",
       "energy-added": 2,
-      order: 0,
+      order: 1,
       "image-number": 1963305268,
       sourceIndex: 0,
     });
@@ -80,6 +80,7 @@ describe("validateDreamwellEdit", () => {
     });
     expect(validateDreamwellEdit("name", "   ")).toMatchObject({ ok: false });
     expect(validateDreamwellEdit("energy-added", "-1")).toMatchObject({ ok: false });
+    expect(validateDreamwellEdit("order", 0)).toMatchObject({ ok: false });
     expect(validateDreamwellEdit("order", 5)).toMatchObject({ ok: false });
     expect(validateDreamwellEdit("image-number", "1.5")).toMatchObject({ ok: false });
     expect(validateDreamwellEdit("card-type", "Dreamwell")).toMatchObject({
@@ -114,10 +115,10 @@ describe("refreshDreamwellDataJson", () => {
     expect(result.count).toBe(2);
     expect(json[0]).toMatchObject({
       id: FIRST_ID,
-      name: "Dawning Horizon",
+      name: "Fixture Dreamwell",
       energyAdded: 2,
       imageNumber: 1963305268,
-      order: 0,
+      order: 1,
     });
   });
 });

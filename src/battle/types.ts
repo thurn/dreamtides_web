@@ -401,7 +401,7 @@ export interface BattleInit {
   openingHandSize: number;
   /** Enemy opening-hand size when it differs from the player's authored bonus. */
   enemyOpeningHandSize?: number;
-  /** Additional energy available to the player before the first Dreamwell card. */
+  /** Additional energy available to the player before Dreamwell draws begin. */
   playerStartingEnergy?: number;
   scoreToWin: number;
   turnLimit: number;
@@ -422,8 +422,8 @@ export interface BattleInit {
   /**
    * The shared Dreamwell deck both players draw from, pre-shuffled within
    * numeric `order` groups and pre-cycled long enough to cover the battle
-   * (rules §The Dreamwell and Energy). Order-0 cards lead the first cycle only;
-   * each later cycle reshuffles orders 1-4. `BattleMutableState.dreamwellDeckIndex`
+   * (rules §The Dreamwell and Energy). Each cycle reshuffles orders 1-4.
+   * `BattleMutableState.dreamwellDeckIndex`
    * tracks the next card to draw.
    */
   dreamwellDeck: readonly DreamwellCardDefinition[];

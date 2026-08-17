@@ -799,7 +799,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       name: testDreamwellCardName("Opening"),
       renderedText: "",
       energyAdded: 2,
-      order: 0,
+      order: 1,
       cardNumber: 1,
       imageNumber: 0,
     },
@@ -813,6 +813,27 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
       imageNumber: 0,
     },
   ];
+
+  it("does not grant Dreamwell energy during round 1", () => {
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 1,
+      phase: "dreamwell",
+      player: { maxEnergy: 0, currentEnergy: 0 },
+    });
+    const command: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 1 },
+      sourceSurface: "auto-system",
+    };
+
+    expect(
+      planBasicAutomationCommands(state, command, {
+        ...CAPS,
+        dreamwellDeck: DREAMWELL_DECK,
+      }),
+    ).toEqual([command]);
+  });
 
   it("draws before entering Day when a later turn leaves Dreamwell", () => {
     const state = makeState({
@@ -918,7 +939,7 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
 
     const result = edits(planBasicAutomationCommands(state, gesture, caps));
 
-    // Uncapped: previous max (9) + the order-0 card's energyAdded (2) = 11,
+    // Uncapped: previous max (9) + the card's energyAdded (2) = 11,
     // above the cap of 10; current ● refills to the new maximum before the
     // reveal command, which may park a prompt.
     expect(result).toEqual([

@@ -193,14 +193,6 @@ const DREAMWELL_EFFECT_SCRIPTS = [
   // Catalog entries with no effect are still registered so catalog coverage is
   // observable and status remains authoritative by UUID.
   {
-    id: parseDreamwellCardId("32d64cb6-9856-43a2-9451-fcb14007a9a6"),
-    steps: [],
-  },
-  {
-    id: parseDreamwellCardId("5e17dc4b-b654-4962-ba5a-7b042852a980"),
-    steps: [],
-  },
-  {
     id: parseDreamwellCardId("662b7393-751c-4aa9-8150-5f20b4d176a4"),
     steps: [],
   },

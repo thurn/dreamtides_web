@@ -25,7 +25,6 @@ function fixture() {
       },
     },
     dreamwell: {
-      "opening-orders": [0],
       "recurring-orders": [2, 4],
       "cards-per-recurring-order": 2,
       "minimum-constructed-length": 17,
@@ -134,16 +133,16 @@ describe("compileOpponentsData", () => {
     [
       "missing key",
       (x) => {
-        delete x.dreamwell["opening-orders"];
+        delete x.dreamwell["recurring-orders"];
       },
-      /dreamwell: missing key opening-orders/u,
+      /dreamwell: missing key recurring-orders/u,
     ],
     [
-      "overlapping orders",
+      "duplicate recurring orders",
       (x) => {
-        x.dreamwell["recurring-orders"] = [0, 2];
+        x.dreamwell["recurring-orders"] = [2, 2];
       },
-      /appears in opening and recurring/u,
+      /duplicate/u,
     ],
     [
       "unknown card",

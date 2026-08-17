@@ -49,7 +49,6 @@ export function opponentsFixture(): OpponentsData {
       },
     },
     dreamwell: {
-      openingOrders: [0],
       recurringOrders: [1, 2, 3, 4],
       cardsPerRecurringOrder: 5,
       minimumConstructedLength: 62,

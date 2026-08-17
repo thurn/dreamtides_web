@@ -19,7 +19,6 @@ pub struct DreamwellCatalog {
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
 #[serde(deny_unknown_fields)]
 pub struct DreamwellRules {
-    pub opening_orders: Vec<u32>,
     pub recurring_orders: Vec<u32>,
     pub cards_per_recurring_order: u32,
     pub minimum_constructed_length: u32,
@@ -45,7 +44,6 @@ pub struct DreamwellCardMetadata {
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize, PartialEq, Eq)]
 pub enum DeckTier {
-    Starting,
     One,
     Two,
     Three,
@@ -55,7 +53,6 @@ pub enum DeckTier {
 impl DeckTier {
     fn compatibility_order(self) -> u8 {
         match self {
-            Self::Starting => 0,
             Self::One => 1,
             Self::Two => 2,
             Self::Three => 3,
@@ -239,21 +236,8 @@ pub(crate) fn validate(source: &DreamwellCatalog) -> Result<()> {
 
 pub(crate) fn validate_rules(source: &DreamwellRules) -> Result<()> {
     ensure!(
-        !source.opening_orders.is_empty(),
-        "dreamwell.opening_orders must not be empty"
-    );
-    ensure!(
         !source.recurring_orders.is_empty(),
         "dreamwell.recurring_orders must not be empty"
-    );
-    let opening = source
-        .opening_orders
-        .iter()
-        .copied()
-        .collect::<BTreeSet<_>>();
-    ensure!(
-        opening.len() == source.opening_orders.len(),
-        "dreamwell.opening_orders contains a duplicate order"
     );
     let recurring = source
         .recurring_orders
@@ -264,9 +248,6 @@ pub(crate) fn validate_rules(source: &DreamwellRules) -> Result<()> {
         recurring.len() == source.recurring_orders.len(),
         "dreamwell.recurring_orders contains a duplicate order"
     );
-    if let Some(overlap) = opening.intersection(&recurring).next() {
-        bail!("dreamwell order {overlap} appears in opening and recurring orders");
-    }
     ensure!(
         source.cards_per_recurring_order > 0,
         "dreamwell.cards_per_recurring_order must be greater than zero"
@@ -321,7 +302,6 @@ mod tests {
         r##"#![enable(implicit_some)]
 DreamwellCatalog(
   rules: DreamwellRules(
-    opening_orders: [0],
     recurring_orders: [1, 2, 3, 4],
     cards_per_recurring_order: 2,
     minimum_constructed_length: 8,
@@ -332,7 +312,7 @@ DreamwellCatalog(
     id: "00000000-0000-4000-8000-000000000001",
     ability_text: [Tx("Draw a card."), Tx("Then gain 1●.")],
     energy_added: 2,
-    deck_tier: Starting,
+    deck_tier: One,
     art: (
       image: 42,
       owned: true,
@@ -392,7 +372,7 @@ DreamwellCatalog(
             cards[0]["rendered-text"].as_str(),
             Some("Draw a card.\n\nThen gain 1●.")
         );
-        assert_eq!(cards[0]["order"].as_integer(), Some(0));
+        assert_eq!(cards[0]["order"].as_integer(), Some(1));
         assert_eq!(cards[1]["order"].as_integer(), Some(4));
         assert_eq!(cards[0]["energy-added"].as_integer(), Some(2));
         assert_eq!(cards[0]["card-type"].as_str(), Some("Dreamwell"));
@@ -416,7 +396,6 @@ DreamwellCatalog(
     #[test]
     fn deck_tiers_exhaustively_preserve_compatibility_orders() {
         let cases = [
-            (DeckTier::Starting, 0),
             (DeckTier::One, 1),
             (DeckTier::Two, 2),
             (DeckTier::Three, 3),

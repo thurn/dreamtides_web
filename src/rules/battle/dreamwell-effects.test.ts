@@ -643,8 +643,6 @@ describe("DREAMWELL_EFFECTS catalog coverage", () => {
 
   it("registers every current Dreamwell UUID", () => {
     const catalogIds = [
-      "32d64cb6-9856-43a2-9451-fcb14007a9a6",
-      "5e17dc4b-b654-4962-ba5a-7b042852a980",
       "5ec17498-9028-4a01-80a0-67c91b03d505",
       "f9b479cf-02cb-40e1-bb64-70b29977bf15",
       "02e8ea92-1218-413c-9f0b-4c865a3921d3",

@@ -31,6 +31,7 @@ import type { BattleId } from "../types/identifiers";
 import type { DreamwellCardId } from "../types/identifiers";
 import { parseBattleCardId } from "../types/identifiers";
 import { parseIntentKey } from "../types/identifiers";
+import { drawsDreamwellCardAtStartOfTurn } from "./state/turn-utils";
 
 export type TutorialDriverStatus =
   "not-tutorial" | "driver" | "observer" | "paused-driver-absent" | "terminal";
@@ -261,7 +262,10 @@ export function planTutorialBattleController(
     );
   }
   if (board.phase === "dreamwell") {
-    if (board.sides[board.activeSide].dreamwellDrawnTurn !== board.turnNumber) {
+    if (
+      drawsDreamwellCardAtStartOfTurn(board.turnNumber) &&
+      board.sides[board.activeSide].dreamwellDrawnTurn !== board.turnNumber
+    ) {
       return commandPlan(
         {
           id: "DEBUG_EDIT",

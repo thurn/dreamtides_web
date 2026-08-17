@@ -61,7 +61,6 @@ export interface OpponentsData {
     };
   };
   dreamwell: {
-    openingOrders: number[];
     recurringOrders: number[];
     cardsPerRecurringOrder: number;
     minimumConstructedLength: number;

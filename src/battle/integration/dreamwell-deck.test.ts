@@ -27,7 +27,7 @@ function makeCard(order: number, n: number): DreamwellCard {
     name: testDreamwellCardName(`Order ${String(order)} #${String(n)}`),
     renderedText: "",
     order,
-    energyAdded: order === 0 ? 2 : 1,
+    energyAdded: 1,
     cardNumber: order * 100 + n,
     imageNumber: 0,
   };
@@ -35,8 +35,7 @@ function makeCard(order: number, n: number): DreamwellCard {
 
 function makeCatalog(): DreamwellCard[] {
   const cards: DreamwellCard[] = [];
-  // 2 order-0, then 8/6/12/7 across orders 1-4 (all groups >= 5).
-  for (let n = 0; n < 2; n += 1) cards.push(makeCard(0, n));
+  // 8/6/12/7 across orders 1-4 (all groups >= 5).
   for (let n = 0; n < 8; n += 1) cards.push(makeCard(1, n));
   for (let n = 0; n < 6; n += 1) cards.push(makeCard(2, n));
   for (let n = 0; n < 12; n += 1) cards.push(makeCard(3, n));
@@ -49,27 +48,23 @@ function ordersOf(deck: { order: number }[]): number[] {
 }
 
 describe("buildDreamwellDeck", () => {
-  it("leads the first cycle with all order-0 cards, then five from each of orders 1-4", () => {
+  it("takes five cards from each of orders 1-4 per cycle", () => {
     const deck = buildTestDreamwellDeck(
       makeCatalog(),
       createBattleRng(1234, "dreamwellDeck"),
     );
 
-    // First two cards are the order-0 starting cards.
-    expect(ordersOf(deck).slice(0, 2)).toEqual([0, 0]);
-    // Then five of order 1, five of order 2, five of order 3, five of order 4.
-    expect(ordersOf(deck).slice(2, 22)).toEqual([
+    expect(ordersOf(deck).slice(0, 20)).toEqual([
       1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4,
     ]);
   });
 
-  it("drops the order-0 cards from every cycle after the first", () => {
+  it("contains only configured recurring orders", () => {
     const deck = buildTestDreamwellDeck(
       makeCatalog(),
       createBattleRng(1234, "dreamwellDeck"),
     );
-    // The first cycle is the only one carrying order-0 cards (2 of them here).
-    expect(deck.filter((card) => card.order === 0)).toHaveLength(2);
+    expect(new Set(ordersOf(deck))).toEqual(new Set([1, 2, 3, 4]));
     // The deck is long enough to outlast a full-length battle.
     expect(deck.length).toBeGreaterThanOrEqual(62);
   });
@@ -79,18 +74,15 @@ describe("buildDreamwellDeck", () => {
       makeCatalog(),
       createBattleRng(4, "dreamwellDeck"),
       {
-        openingOrders: [2],
         recurringOrders: [1, 3],
         cardsPerRecurringOrder: 2,
         minimumConstructedLength: 11,
       },
     );
 
-    expect(ordersOf(deck).slice(0, 10)).toEqual([2, 2, 2, 2, 2, 2, 1, 1, 3, 3]);
+    expect(ordersOf(deck).slice(0, 8)).toEqual([1, 1, 3, 3, 1, 1, 3, 3]);
     expect(deck.length).toBeGreaterThanOrEqual(11);
-    expect(deck.some((card) => card.order === 0 || card.order === 4)).toBe(
-      false,
-    );
+    expect(deck.some((card) => card.order === 2 || card.order === 4)).toBe(false);
   });
 
   it("is deterministic for a given seed and varies across seeds", () => {
@@ -112,7 +104,6 @@ describe("buildDreamwellDeck", () => {
 
   it("tolerates an order group smaller than five by taking all of its cards", () => {
     const sparse: DreamwellCard[] = [
-      makeCard(0, 0),
       makeCard(1, 0),
       makeCard(1, 1),
       makeCard(2, 0),

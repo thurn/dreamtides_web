@@ -21,10 +21,10 @@ const servers = [];
 
 function fixtureToml() {
   return `[[dreamwell]]
-name = "Dawning Horizon"
+name = "Fixture Dreamwell"
 id = "${FIRST_ID}"
 rendered-text = "(no ability)"
-order = 0
+order = 1
 energy-added = 2
 card-type = "Dreamwell"
 image-number = 1963305268

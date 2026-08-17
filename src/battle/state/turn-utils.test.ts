@@ -1,6 +1,18 @@
 import { describe, expect, it } from "vitest";
 
-import { drawsAtStartOfTurn, nextStartOfTurnPair } from "./turn-utils";
+import {
+  drawsAtStartOfTurn,
+  drawsDreamwellCardAtStartOfTurn,
+  nextStartOfTurnPair,
+} from "./turn-utils";
+
+describe("drawsDreamwellCardAtStartOfTurn", () => {
+  it("skips round 1 and draws from round 2 onward", () => {
+    expect(drawsDreamwellCardAtStartOfTurn(1)).toBe(false);
+    expect(drawsDreamwellCardAtStartOfTurn(2)).toBe(true);
+    expect(drawsDreamwellCardAtStartOfTurn(50)).toBe(true);
+  });
+});
 
 describe("drawsAtStartOfTurn", () => {
   it("skips the draw for the first player (player) on the battle's first turn", () => {

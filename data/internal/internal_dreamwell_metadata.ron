@@ -2,10 +2,6 @@
 
 #![enable(implicit_some)]
 [
-  DreamwellCardMetadata(id: "32d64cb6-9856-43a2-9451-fcb14007a9a6", number: 1),
-
-  DreamwellCardMetadata(id: "5e17dc4b-b654-4962-ba5a-7b042852a980", number: 2),
-
   DreamwellCardMetadata(id: "5ec17498-9028-4a01-80a0-67c91b03d505", number: 3),
 
   DreamwellCardMetadata(id: "f9b479cf-02cb-40e1-bb64-70b29977bf15", number: 4),

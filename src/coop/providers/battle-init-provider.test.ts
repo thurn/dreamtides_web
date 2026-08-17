@@ -41,7 +41,7 @@ function makeContent(): JourneyContent {
         id: testDreamwellCardId("json-safe-battle"),
         name: testDreamwellCardName("JSON-safe Battle"),
         renderedText: "Synthetic Dreamwell fixture.",
-        order: 0,
+        order: 1,
         energyAdded: 1,
         cardNumber: 1,
       },
