@@ -95,6 +95,13 @@ export interface GameEvent {
   /** Newest confirmed seq folded into the state the actor saw when it built this event. */
   basedOnSeq: number;
   /**
+   * Room recovery generation this intent was created against. Legacy rooms and
+   * events omit it and therefore belong to generation 0. A cold recovery
+   * rotates the generation so in-flight intents from the abandoned log cannot
+   * append into the recovered game.
+   */
+  roomGeneration?: number;
+  /**
    * Client-stamped nonce used to match a confirmed event against the
    * appender's own pending-intent queue (optimistic echo reconciliation).
    * Ignored by reducers.
@@ -210,6 +217,8 @@ export interface PinnedGenesis extends Genesis {
  */
 export interface LogNode {
   genesis: Genesis;
+  /** Recovery generation of this authoritative log. Legacy logs are 0. */
+  generation: number;
   /** Events with seq <= baseSeq are compacted into baseSnapshot. */
   baseSeq: number;
   /**
@@ -250,6 +259,8 @@ export interface AppliedIndexEntry {
 export interface EncodedLogNode {
   /** JSON string encoding a Genesis. */
   genesis: string;
+  /** Recovery generation of this log. Absent legacy logs decode as 0. */
+  generation?: number;
   baseSeq: number;
   /** JSON string encoding the compacted fold state, or null before compaction. */
   baseSnapshot: string | null;

@@ -6,10 +6,12 @@ export function LocalizedErrorBoundaryFallback({
   scope,
   onRetry,
   onClose,
+  onRecover,
 }: {
   readonly scope: string;
   readonly onRetry: () => void;
   readonly onClose?: () => void;
+  readonly onRecover?: () => void;
 }): ReactNode {
   const resolve = useLocalizer();
   return (
@@ -75,6 +77,29 @@ export function LocalizedErrorBoundaryFallback({
             ),
           )}
         </button>
+        {onRecover !== undefined && (
+          <button
+            type="button"
+            data-testid="error-boundary-recover"
+            onClick={onRecover}
+            style={{
+              padding: "0.5rem 1rem",
+              borderRadius: "0.375rem",
+              background: "#7c3aed",
+              color: "#fff",
+              border: "none",
+              fontWeight: 500,
+              cursor: "pointer",
+            }}
+          >
+            {resolve(
+              tx(
+                meaning("error-boundary-recover", "Recover Game"),
+                "[coop] Emergency action that restores the entire shared game to its latest verified checkpoint.",
+              ),
+            )}
+          </button>
+        )}
         {onClose !== undefined && (
           <button
             type="button"

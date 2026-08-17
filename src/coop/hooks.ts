@@ -37,7 +37,7 @@ import {
   type ReactNode,
 } from "react";
 import { settleDeferredOpponentLog } from "./providers/battle-init-provider";
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, type Database } from "firebase/database";
 import {
   createLogClient,
   type EventDraft,
@@ -76,6 +76,10 @@ export type OutcomeListener = (
 ) => void;
 
 interface CoopContextValue {
+  /** Firebase database and room identity used by disaster-recovery metadata. */
+  db: Database;
+  roomId: RoomReadyContext["roomId"];
+  genesis: RoomReadyContext["genesis"];
   /** This client's id, as minted by `RoomGate` (`mintClientId`). */
   clientId: ClientId;
   /** The displayed fold (confirmed + optimistic); seeded from genesis pre-fold. */
@@ -92,6 +96,8 @@ interface CoopContextValue {
   connectedClientIds: readonly ClientId[] | null;
   /** Contiguous confirmed log head; null until the first node is folded. */
   confirmedHead: number | null;
+  /** Recovery generation containing the confirmed fold. */
+  confirmedGeneration: number;
   /**
    * Newest CONFIRMED seq (the max seq `onEventOutcome` has reported). A prompt
    * whose `promptId` (= its opening event's seq) exceeds this is still an
@@ -141,6 +147,7 @@ export function CoopProvider({
     readonly ClientId[] | null
   >(null);
   const [confirmedHead, setConfirmedHead] = useState<number | null>(null);
+  const [confirmedGeneration, setConfirmedGeneration] = useState(0);
   const [corruptLog, setCorruptLog] = useState(false);
   const [bounceToken, setBounceToken] = useState(0);
   // The copy for the toast the next `bounceToken` bump shows. Set by whichever
@@ -229,6 +236,7 @@ export function CoopProvider({
         },
         onConfirmedState: setConfirmedGameState,
         onConfirmedHead: setConfirmedHead,
+        onConfirmedGeneration: setConfirmedGeneration,
         onEventOutcome: (event, seq, outcome, detail) => {
           if (seq > confirmedSeqRef.current) {
             confirmedSeqRef.current = seq;
@@ -440,6 +448,9 @@ export function CoopProvider({
 
   const value = useMemo<CoopContextValue>(
     () => ({
+      db,
+      roomId,
+      genesis,
       clientId,
       gameState,
       confirmedGameState,
@@ -448,10 +459,14 @@ export function CoopProvider({
       connectedCount,
       connectedClientIds,
       confirmedHead,
+      confirmedGeneration,
       confirmedSeqRef,
       registerOutcomeListener,
     }),
     [
+      db,
+      roomId,
+      genesis,
       clientId,
       gameState,
       confirmedGameState,
@@ -460,6 +475,7 @@ export function CoopProvider({
       connectedCount,
       connectedClientIds,
       confirmedHead,
+      confirmedGeneration,
       registerOutcomeListener,
     ],
   );
@@ -498,6 +514,28 @@ export function useConfirmedGameState(): FoldState {
 /** The contiguous confirmed log head, or null before the initial fold. */
 export function useConfirmedHead(): number | null {
   return useCoop().confirmedHead;
+}
+
+/** Inputs required to publish a verified room recovery checkpoint. */
+export function useRoomRecoveryContext(): Pick<
+  CoopContextValue,
+  | "db"
+  | "roomId"
+  | "genesis"
+  | "confirmedGameState"
+  | "confirmedHead"
+  | "confirmedGeneration"
+> | null {
+  const value = useContext(CoopContext);
+  if (value === null) return null;
+  return {
+    db: value.db,
+    roomId: value.roomId,
+    genesis: value.genesis,
+    confirmedGameState: value.confirmedGameState,
+    confirmedHead: value.confirmedHead,
+    confirmedGeneration: value.confirmedGeneration,
+  };
 }
 
 /** This client's id, as minted by `RoomGate` (`mintClientId`). Stable for the

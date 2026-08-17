@@ -70,6 +70,7 @@ export function decodeEvent(raw: string): GameEvent {
   }
   const event = parsed as Record<string, unknown>;
   const payload = event.payload;
+  const roomGeneration = event.roomGeneration;
   if (
     typeof event.type !== "string" ||
     typeof payload !== "object" ||
@@ -78,6 +79,10 @@ export function decodeEvent(raw: string): GameEvent {
     typeof event.actor !== "string" ||
     typeof event.clientTimestamp !== "string" ||
     typeof event.basedOnSeq !== "number" ||
+    (roomGeneration !== undefined &&
+      (typeof roomGeneration !== "number" ||
+        !Number.isSafeInteger(roomGeneration) ||
+        roomGeneration < 0)) ||
     (event.nonce !== undefined && typeof event.nonce !== "string") ||
     (event.intentKey !== undefined && typeof event.intentKey !== "string") ||
     (event.stateHashAfter !== undefined &&
@@ -91,6 +96,9 @@ export function decodeEvent(raw: string): GameEvent {
     actor: parseEventActor(event.actor),
     clientTimestamp: event.clientTimestamp,
     basedOnSeq: event.basedOnSeq,
+    ...(roomGeneration === undefined
+      ? {}
+      : { roomGeneration }),
     ...(event.nonce === undefined
       ? {}
       : { nonce: parseEventNonce(event.nonce) }),
@@ -211,7 +219,14 @@ export function applyAppend<S>(
     }
   }
 
-  const next: EncodedLogNode = { genesis: encoded.genesis, baseSeq, baseSnapshot, head, events };
+  const next: EncodedLogNode = {
+    genesis: encoded.genesis,
+    generation: encoded.generation ?? 0,
+    baseSeq,
+    baseSnapshot,
+    head,
+    events,
+  };
   // Only attach `appliedIndex` when it exists (compaction has run at least
   // once): RTDB's transaction commit rejects any object carrying an `undefined`
   // property, so a pre-compaction node must omit the field entirely.
@@ -428,6 +443,9 @@ export async function appendEvent<S>(
       if (encoded === null) {
         // A missing or unreadable log cannot be appended safely. Abort rather
         // than fabricate or trust a shape the rules engine cannot fold.
+        return undefined;
+      }
+      if ((event.roomGeneration ?? 0) !== (encoded.generation ?? 0)) {
         return undefined;
       }
       return applyAppend(config, encoded, event);

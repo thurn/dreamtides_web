@@ -138,6 +138,25 @@ https://redacted-firebase-project.web.app/?viewLogs=r3f7vk   # view a production
 http://localhost:5173/?viewLogs=journey42                  # view a local run's log
 ```
 
+## Cold room recovery
+
+`/recover?game=<roomId>` restores the entire shared room to its latest verified
+checkpoint. The route initializes Firebase and the recovery controller without
+mounting journey content or the current gameplay screen. On success it keeps
+the same room id, rotates the room log generation, and redirects to the
+checkpoint's recorded path. Every connected player receives the recovered
+fold; a crashed client receives it when reloading the room URL.
+
+Use `realtime=1` with the recovery route for a cloud room:
+
+```
+http://localhost:5173/recover?game=journey42
+https://redacted-firebase-project.web.app/recover?game=journey42&realtime=1
+```
+
+The route requires a valid room id and a verified checkpoint. Repeating it on
+the canonical recovered baseline is idempotent.
+
 ## `goto`
 
 Jumps a fresh room straight onto a developer QA scene on boot, parsed into
@@ -282,6 +301,7 @@ http://localhost:5173/                          # default
 http://localhost:5173/?seed=42                  # fixed seed
 http://localhost:5173/?game=journey42             # parsed multiplayer room id
 http://localhost:5173/?viewLogs=journey42         # read-only journey-log viewer for a room
+http://localhost:5173/recover?game=journey42      # restore the whole shared room
 http://localhost:5173/?goto=atlas               # jump straight to a QA scene
 http://localhost:5173/?goto=augury              # jump straight to the Augury site
 http://localhost:5173/?goto=gamble&gambleGame=ladder-climb

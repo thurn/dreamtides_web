@@ -14,7 +14,8 @@ type StandaloneRouteId =
   | "dreamwell"
   | "images"
   | "offers"
-  | "cumulus";
+  | "cumulus"
+  | "recovery";
 
 export type RootRouteId = StandaloneRouteId | "journey";
 
@@ -133,6 +134,13 @@ const STANDALONE_ROUTES: Readonly<Partial<Record<string, StandaloneRoute>>> = {
     render: async () => {
       const { default: CumulusApp } = await import("./cumulus/docs/CumulusApp");
       return <CumulusApp />;
+    },
+  },
+  "/recover": {
+    id: "recovery",
+    render: async () => {
+      const { default: RecoveryApp } = await import("./coop/RecoveryApp");
+      return <RecoveryApp />;
     },
   },
 };

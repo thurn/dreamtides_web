@@ -46,6 +46,7 @@ Each room lives at `rooms/<roomId>`:
 rooms/<roomId>/
   log/
     genesis
+    generation
     baseSeq
     baseSnapshot
     head
@@ -57,12 +58,22 @@ rooms/<roomId>/
     connected
     lastSeenAt
   logs/<pushId>
+  recovery/
+    generation
+    latest
+    lastOperation
+    archives/<generation-operationId>
 ```
 
 `genesis`, `baseSnapshot`, each `events/<seq>` value, `appliedIndex`,
 `intentKeyIndex`, and each `logs/<pushId>` value are JSON strings. Opaque
 strings preserve empty arrays and objects and give fold hashes byte-stable
 input across Realtime Database round trips.
+
+`generation` identifies the active recovery generation. Legacy room logs decode
+as generation 0. Every submitted intent carries the generation it observed;
+the append transaction rejects an intent when the room has recovered onto a
+different generation.
 
 ### Genesis
 
@@ -157,6 +168,25 @@ The diagnostic sink stores single-line JSON records under
 and mirrors journey-generation diagnostics plus single-writer coop outcome
 records. `?viewLogs=<roomId>` reads this node without joining the game.
 
+### Recovery checkpoints
+
+After a gameplay surface renders successfully, its in-boundary checkpoint
+committer writes the confirmed fold, genesis, source path, sequence, canonical
+state hash, and generation to `recovery/latest` as one opaque JSON string. A
+screen that throws during render cannot publish its state because the committer
+shares that screen's error boundary.
+
+Cold recovery runs one transaction on `rooms/<roomId>`. It validates the latest
+checkpoint and state hash, archives the active log, writes a new active log
+whose base snapshot is the checkpoint, increments both generation fields, and
+records `lastOperation`. Presence and diagnostic logs remain in the same room.
+At most three archived logs are retained. Repeating recovery against the
+canonical recovered baseline is idempotent.
+
+The active log is not decoded by the cold recovery transaction. A room with a
+damaged genesis or base snapshot can therefore recover from an intact external
+checkpoint.
+
 ## Client Read And Write Flow
 
 `RoomGate` subscribes to `rooms/<roomId>/log`, validates genesis, installs
@@ -173,6 +203,10 @@ presence and logging, then mounts one `CoopProvider`. The provider owns one
    optimistically, and calls `appendEvent`.
 6. Subscription confirmation reconciles the pending intent by nonce or
    `intentKey`; an invalid or conflicting intent surfaces as a bounce.
+
+A generation change forces a full authoritative refold and drops every pending
+intent from the abandoned generation. Both connected clients receive the same
+log replacement through their existing subscriptions.
 
 `FoldState` contains the shared experience phase, playtest controller, journey,
 and active-battle slices. Journey navigation, site decisions, battle commands,

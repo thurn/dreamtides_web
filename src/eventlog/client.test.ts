@@ -80,6 +80,7 @@ function confirmedEvent(opts: {
 }
 
 function makeNode(opts: {
+  generation?: number;
   baseSeq?: number;
   baseSnapshot?: ToyState | null;
   events: Record<number, GameEvent>;
@@ -90,6 +91,7 @@ function makeNode(opts: {
   const head = seqs.length ? Math.max(...seqs) : baseSeq;
   return {
     genesis: GENESIS,
+    generation: opts.generation ?? 0,
     baseSeq,
     // The engine-level `LogNode.baseSnapshot` field is the RAW encoded
     // string (subscribe.ts no longer pre-parses it — see client.ts's
@@ -439,6 +441,69 @@ describe("LogClient double-apply of own intent", () => {
 
     resolvers[1](2);
     await expect(second).resolves.toBe(2);
+  });
+
+  it("stamps submissions with the authoritative recovery generation", async () => {
+    const { harness, client } = makeHarness();
+    harness.deliver(makeNode({ generation: 3, events: {} }));
+
+    await client.submit({ type: "T", payload: { tag: "after-recovery" } });
+
+    expect(harness.appended[0]?.roomGeneration).toBe(3);
+  });
+
+  it("drops pending intents when the room recovery generation changes", () => {
+    const { harness, client } = makeHarness(config, {
+      append: () => new Promise<number>(() => undefined),
+    });
+    harness.deliver(makeNode({ generation: 0, events: {} }));
+    void client.submit({ type: "T", payload: { tag: "stale" } });
+    expect(harness.displayed()?.applied).toEqual(["stale"]);
+
+    harness.deliver(
+      makeNode({
+        generation: 1,
+        baseSnapshot: { applied: ["recovered"] },
+        events: {},
+      }),
+    );
+
+    expect(harness.displayed()?.applied).toEqual(["recovered"]);
+    expect(harness.pendingDropped).toHaveLength(1);
+    expect(harness.pendingDropped[0]?.[0]?.payload.tag).toBe("stale");
+  });
+
+  it("allows a keyed intent to be retried after its stale generation rejects", async () => {
+    const rejectors: Array<(error: Error) => void> = [];
+    const { harness, client } = makeHarness(config, {
+      append: () =>
+        new Promise<number>((_resolve, reject) => {
+          rejectors.push(reject);
+        }),
+    });
+    harness.deliver(makeNode({ generation: 0, events: {} }));
+    const draft: EventDraft = {
+      type: "T",
+      payload: { tag: "keyed" },
+      intentKey: testIntentKey("recovery-retry"),
+    };
+    const first = client.submit(draft);
+
+    harness.deliver(
+      makeNode({
+        generation: 1,
+        baseSnapshot: { applied: ["recovered"] },
+        events: {},
+      }),
+    );
+    rejectors[0](new Error("stale generation"));
+    await expect(first).rejects.toThrow("stale generation");
+
+    const second = client.submit(draft);
+    await Promise.resolve();
+    expect(second).not.toBe(first);
+    expect(harness.appended).toHaveLength(2);
+    expect(harness.appended[1]?.roomGeneration).toBe(1);
   });
 
   it("remembers a keyed server no-op when the winning event was compacted", async () => {

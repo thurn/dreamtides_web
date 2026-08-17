@@ -84,6 +84,7 @@ export function decodeLogNode(raw: unknown): LogNode | null {
 
   return {
     genesis: encoded.genesis,
+    generation: encoded.generation,
     baseSeq: encoded.baseSeq,
     baseSnapshot: encoded.baseSnapshot,
     head: encoded.head,

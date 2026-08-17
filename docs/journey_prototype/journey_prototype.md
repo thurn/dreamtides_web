@@ -155,6 +155,21 @@ state.
 Journey save files capture journey progression outside an active battle. A load
 clears the room's battle slice and resumes the imported journey screen.
 
+### Shared-room recovery
+
+Each successfully rendered shared screen publishes the current confirmed fold
+as an opaque, checksummed recovery checkpoint. The checkpoint belongs to the
+room and includes journey, tutorial, and active-battle progress, so it restores
+both players to one authoritative state.
+
+The emergency fallback offers **Recover Game**. The cold `/recover?game=<id>`
+entrypoint performs the same operation without mounting journey content or the
+current gameplay screen. Recovery rotates the room log to a new generation,
+retains the room id and presence identities, archives the prior log for
+diagnosis, and clears intents stamped for the abandoned generation. Connected
+clients refold the recovered generation immediately; a crashed client joins it
+when its room URL reloads.
+
 ### Tutorial authoring
 
 The standalone tutorial scenario is authored as a typed `TutorialCatalog` in

@@ -150,6 +150,22 @@ describe("ErrorBoundary", () => {
     });
   });
 
+  it("offers cold shared-room recovery from the contained fallback", () => {
+    const onRecover = vi.fn();
+    const { container, root } = mount(
+      <ErrorBoundary scope="screen" onRecover={onRecover}>
+        <Bomb message="recover-me" />
+      </ErrorBoundary>,
+    );
+    const recoverButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="error-boundary-recover"]',
+    );
+    expect(recoverButton).not.toBeNull();
+    act(() => recoverButton!.click());
+    expect(onRecover).toHaveBeenCalledTimes(1);
+    act(() => root.unmount());
+  });
+
   it("resets back to children when resetKey changes", () => {
     let shouldThrow = true;
     function ConditionallyBomb(): ReactElement {

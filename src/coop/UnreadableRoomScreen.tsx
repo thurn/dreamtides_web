@@ -3,7 +3,9 @@ import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScree
 import type { Database } from "firebase/database";
 import type { PinnedContentConfig } from "../eventlog/types";
 import { createAndNavigateToRoom } from "./RoomGate";
-import { tx } from "@trox/runtime";
+import { meaning, tx } from "@trox/runtime";
+import { recoveryUrlFromLocation } from "./room-recovery-url";
+import { logEvent } from "../logging";
 
 interface UnreadableRoomScreenProps {
   db: Database;
@@ -27,6 +29,16 @@ export function UnreadableRoomScreen({
       });
   }, [db, contentConfig]);
 
+  const handleRecoverGame = useCallback(() => {
+    const recoveryUrl = recoveryUrlFromLocation(window.location.href);
+    if (recoveryUrl === null) return;
+    logEvent("room_recovery_requested", {
+      source: "unreadable_room",
+      recoveryUrl,
+    });
+    window.location.assign(recoveryUrl);
+  }, []);
+
   return (
     <ApplicationStateScreen
       view={{
@@ -42,6 +54,14 @@ export function UnreadableRoomScreen({
         actions: [
           {
             id: "primary",
+            label: tx(
+              meaning("unreadable-room-recover", "Recover Game"),
+              "[coop] Action that restores an unreadable shared room from its latest verified checkpoint.",
+            ),
+            onPress: handleRecoverGame,
+          },
+          {
+            id: "secondary",
             label:
               status === "creating"
                 ? tx(

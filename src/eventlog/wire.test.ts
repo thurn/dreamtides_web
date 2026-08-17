@@ -50,6 +50,7 @@ describe("RTDB log wire decoding", () => {
 
     expect(decoded).toEqual({
       genesis: JSON.stringify(GENESIS),
+      generation: 0,
       baseSeq: 0,
       baseSnapshot: null,
       head: 0,

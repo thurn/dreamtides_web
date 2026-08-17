@@ -103,6 +103,20 @@ describe("appendEvent Firebase transaction behavior", () => {
     expect(firebase.options).toEqual({ applyLocally: false });
   });
 
+  it("rejects an intent stamped for an abandoned recovery generation", async () => {
+    firebase.current = { ...emptyLog(), generation: 2 };
+
+    await expect(
+      appendEvent(
+        {} as never,
+        ROOM_ID,
+        config,
+        event({ roomGeneration: 1 }),
+      ),
+    ).rejects.toThrow("appendEvent aborted");
+    expect((firebase.current as EncodedLogNode).head).toBe(0);
+  });
+
   it("returns the original winner sequence for duplicate intent keys", async () => {
     firebase.current = emptyLog();
     await expect(

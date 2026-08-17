@@ -115,6 +115,7 @@ function genesisWith(contentConfig: Genesis["contentConfig"]): Genesis {
 function nodeWith(genesis: Genesis): LogNode {
   return {
     genesis,
+    generation: 0,
     baseSeq: 0,
     baseSnapshot: null,
     head: 0,

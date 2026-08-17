@@ -126,6 +126,7 @@ function roomLogPath(roomId: RoomId): string {
 export function genesisLogNode(genesis: Genesis): EncodedLogNode {
   return {
     genesis: JSON.stringify(genesis),
+    generation: 0,
     baseSeq: 0,
     baseSnapshot: null,
     head: 0,

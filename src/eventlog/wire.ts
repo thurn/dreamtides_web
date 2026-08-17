@@ -7,6 +7,7 @@ import { journeySeedFromUnknown } from "../types/journey-seed";
 export interface RtdbLogNode {
   genesis: Genesis;
   encodedGenesis: string;
+  generation: number;
   baseSeq: number;
   baseSnapshot: string | null;
   head: number;
@@ -199,8 +200,10 @@ export function decodeRtdbLogNode(raw: unknown): RtdbLogNode | null {
   const genesis = decodeGenesis(raw.genesis);
   const baseSnapshot = decodeSnapshot(raw.baseSnapshot);
   const events = decodeEvents(raw.events);
+  const generation = raw.generation ?? 0;
   if (
     genesis === null ||
+    !isNonNegativeSafeInteger(generation) ||
     !Number.isInteger(raw.baseSeq) ||
     (raw.baseSeq as number) < 0 ||
     !Number.isInteger(raw.head) ||
@@ -215,6 +218,7 @@ export function decodeRtdbLogNode(raw: unknown): RtdbLogNode | null {
   return {
     genesis,
     encodedGenesis: raw.genesis as string,
+    generation,
     baseSeq: raw.baseSeq as number,
     baseSnapshot,
     head: raw.head as number,
@@ -252,6 +256,7 @@ export function decodeAppendableLogNode(raw: unknown): EncodedLogNode | null {
   }
   return {
     genesis: node.encodedGenesis,
+    generation: node.generation,
     baseSeq: node.baseSeq,
     baseSnapshot: node.baseSnapshot,
     head: node.head,

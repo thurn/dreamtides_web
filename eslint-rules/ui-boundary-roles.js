@@ -70,6 +70,8 @@ const fileRoles = {
   "src/coop/HostedPlaytestShell.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/hosted-playtest-shell.css": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/RoomGate.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/coop/RecoveryApp.tsx": OUTER_UI_ROLES.APP_SHELL,
+  "src/coop/RecoveryCheckpointCommitter.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/UnreadableRoomScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
   "src/coop/VersionGateScreen.tsx": OUTER_UI_ROLES.APP_SHELL,
 

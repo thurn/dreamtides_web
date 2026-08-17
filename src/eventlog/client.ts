@@ -59,6 +59,8 @@ export interface LogClientCallbacks<S> {
   onConfirmedState?: (state: S) => void;
   /** The contiguous confirmed log head after each subscribed node is folded. */
   onConfirmedHead?: (head: number) => void;
+  /** The authoritative room recovery generation for the confirmed fold. */
+  onConfirmedGeneration?: (generation: number) => void;
   /**
    * Every confirmed event's resolved outcome, reported once per seq. `detail`
    * carries the exact confirmed fold transition plus a bounce's
@@ -167,6 +169,7 @@ export function createLogClient<S>(
 
   let genesis: Genesis | undefined;
   let initialized = false;
+  let roomGeneration = 0;
   // The confirmed fold: `confirmedState` is the fold of every applied event in
   // (baseSeq, lastFoldedSeq]; `lastFoldedSeq` is the newest confirmed seq folded.
   let confirmedState: S | undefined;
@@ -425,6 +428,8 @@ export function createLogClient<S>(
   function onNode(node: LogNode): void {
     genesis = node.genesis;
 
+    const nextGeneration = node.generation ?? 0;
+    const generationChanged = initialized && nextGeneration !== roomGeneration;
     const rewound = initialized && node.head < lastFoldedSeq; // log rewritten
     const firstCorrectedSeq = initialized
       ? firstChangedPrefixSeq(node, liveFingerprints, lastFoldedSeq)
@@ -433,6 +438,7 @@ export function createLogClient<S>(
     const previousHead = lastFoldedSeq;
     const needFullFold =
       !initialized ||
+      generationChanged ||
       node.baseSeq > lastFoldedSeq || // compaction advanced past our fold
       rewound ||
       corrected;
@@ -445,7 +451,7 @@ export function createLogClient<S>(
       // is already in the snapshot) or may never have committed at all.
       // Re-echoing either would corrupt the displayed fold, so the whole queue
       // is dropped and reported for UX.
-      if (pending.length > 0 && !corrected) {
+      if (pending.length > 0 && (!corrected || generationChanged)) {
         const dropped = pending.splice(0);
         callbacks.onPendingDropped?.(dropped);
       }
@@ -455,11 +461,12 @@ export function createLogClient<S>(
       // dedup) so the rewritten range's outcomes/fold-errors re-report exactly
       // once. A compaction-advance full refold, by contrast, only folds live
       // events above the old high-water, so its high-water is left intact.
-      if (rewound || corrected) {
+      if (rewound || corrected || generationChanged) {
         lastEmittedSeq = node.baseSeq;
         divergenceReported.clear();
         confirmedSeqByIntentKey.clear();
         confirmedEventByIntentKey.clear();
+        if (generationChanged) submissionsByIntentKey.clear();
       }
       if (corrected) {
         callbacks.onAuthoritativeCorrection?.({
@@ -493,9 +500,11 @@ export function createLogClient<S>(
     }
 
     initialized = true;
+    roomGeneration = nextGeneration;
     callbacks.onConfirmedState?.(confirmedState as S);
     recomputeDisplayed();
     callbacks.onConfirmedHead?.(lastFoldedSeq);
+    callbacks.onConfirmedGeneration?.(roomGeneration);
   }
 
   const unsubscribe = io.subscribe(onNode);
@@ -557,6 +566,7 @@ export function createLogClient<S>(
       // basedOnSeq is the newest CONFIRMED seq folded into the displayed state;
       // this client's own pending intents are covered by the self-chain rule.
       basedOnSeq: lastFoldedSeq,
+      roomGeneration,
       nonce,
       ...(draft.intentKey === undefined ? {} : { intentKey: draft.intentKey }),
     };
