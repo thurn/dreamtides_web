@@ -1995,6 +1995,37 @@ describe("linkExplorationArt", () => {
     );
     expect(existsSync(join(destinationDir, "303.jpg"))).toBe(false);
   });
+
+  it("falls back to recursively categorized source art", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "exploration-tagged-art-"));
+    const destinationDir = join(tempRoot, "public", "exploration");
+    const highResArtDir = join(tempRoot, "curated");
+    const sourceArtDir = join(tempRoot, "missing-source");
+    const taggedArtDir = join(tempRoot, "tagged");
+    const nestedTaggedDir = join(taggedArtDir, "tinkerer", "selected");
+    mkdirSync(nestedTaggedDir, { recursive: true });
+    writeFileSync(
+      join(nestedTaggedDir, "stock-photo-engineer-686903233.jpg"),
+      "tagged-source",
+    );
+
+    const result = linkExplorationArt({
+      destinationDir,
+      highResArtDir,
+      sourceArtDir,
+      taggedArtDir,
+      imageNumbers: [686903233],
+    });
+
+    expect(result).toEqual({
+      highResolutionCount: 0,
+      sourceCount: 1,
+      missingCount: 0,
+    });
+    expect(readFileSync(join(destinationDir, "686903233.jpg"), "utf8")).toBe(
+      "tagged-source",
+    );
+  });
 });
 
 describe("parseEnergyCost", () => {

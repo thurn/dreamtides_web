@@ -131,6 +131,12 @@ const EXPLORATION_SOURCE_ART_DIR = join(
   "shutterstock",
   "images",
 );
+const EXPLORATION_TAGGED_ART_DIR = join(
+  LOCAL_ASSET_HOME,
+  "Documents",
+  "shutterstock",
+  "tagged",
+);
 const TUTORIAL_DIALOGUE_FRAME_ART_PATH = join(
   LOCAL_ASSET_HOME,
   "Documents",
@@ -1214,6 +1220,7 @@ export function linkExplorationArt({
   destinationDir,
   highResArtDir,
   sourceArtDir,
+  taggedArtDir,
   imageNumbers,
 }) {
   recreateDir(destinationDir);
@@ -1235,25 +1242,44 @@ export function linkExplorationArt({
     }
   }
 
-  const sourceFiles = existsSync(sourceArtDir)
-    ? readdirSync(sourceArtDir).filter((filename) =>
-        filename.toLowerCase().endsWith(".jpg"),
-      )
-    : [];
+  const collectJpegPaths = (dir, recursive) => {
+    if (dir === undefined || !existsSync(dir)) return [];
+    const paths = [];
+    const visit = (currentDir) => {
+      for (const entry of readdirSync(currentDir, { withFileTypes: true }).sort(
+        (left, right) => left.name.localeCompare(right.name),
+      )) {
+        const entryPath = join(currentDir, entry.name);
+        if (entry.isDirectory()) {
+          if (recursive) visit(entryPath);
+          continue;
+        }
+        if (entry.isFile() && entry.name.toLowerCase().endsWith(".jpg")) {
+          paths.push(entryPath);
+        }
+      }
+    };
+    visit(dir);
+    return paths;
+  };
+
+  const sourceFiles = collectJpegPaths(sourceArtDir, false);
+  const taggedFiles = collectJpegPaths(taggedArtDir, true);
   for (const imageNumber of wanted) {
     if (linked.has(imageNumber)) continue;
     const pattern = new RegExp(`(?<!\\d)${imageNumber}\\.jpg$`, "iu");
-    const matches = sourceFiles.filter((filename) => pattern.test(filename));
+    const sourceMatches = sourceFiles.filter((path) => pattern.test(path));
+    const matches =
+      sourceMatches.length > 0
+        ? sourceMatches
+        : taggedFiles.filter((path) => pattern.test(path));
     if (matches.length !== 1) {
       console.warn(
         `  Warning: expected one Exploration source image for ${imageNumber}, found ${String(matches.length)}`,
       );
       continue;
     }
-    symlinkSync(
-      join(sourceArtDir, matches[0]),
-      join(destinationDir, `${imageNumber}.jpg`),
-    );
+    symlinkSync(matches[0], join(destinationDir, `${imageNumber}.jpg`));
     linked.add(imageNumber);
     sourceCount++;
   }
@@ -1568,6 +1594,7 @@ export function setupAssets({
   mainMenuBackgroundArtPath = MAIN_MENU_BACKGROUND_ART_PATH,
   explorationHighResArtDir = EXPLORATION_HIGH_RES_ART_DIR,
   explorationSourceArtDir = EXPLORATION_SOURCE_ART_DIR,
+  explorationTaggedArtDir = EXPLORATION_TAGGED_ART_DIR,
   cardFrameArtDir = CARD_FRAME_ART_DIR,
   dreamscapeSceneArtDir = DREAMSCAPE_SCENE_ART_DIR,
   dreamscapeIconArtDir = DREAMSCAPE_ICON_ART_DIR,
@@ -2421,6 +2448,7 @@ export function setupAssets({
     destinationDir: explorationDir,
     highResArtDir: explorationHighResArtDir,
     sourceArtDir: explorationSourceArtDir,
+    taggedArtDir: explorationTaggedArtDir,
     imageNumbers: explorationImageNumbers,
   });
   console.log(
