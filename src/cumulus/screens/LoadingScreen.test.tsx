@@ -189,8 +189,8 @@ describe("LoadingScreen", () => {
       container.querySelector("[data-loading-indicator]")?.textContent,
     ).toBe("Loading");
     expect(
-      container.querySelector("[data-loading-card-types-label]")?.textContent,
-    ).toBe("Dreamtides Cards:");
+      container.querySelector("[data-loading-card-types-label]"),
+    ).toBeNull();
     expect(
       container.querySelector(
         '[data-loading-card-type-label="loadingCharacter"]',
@@ -233,9 +233,7 @@ describe("LoadingScreen", () => {
     expect(stage?.style.gap).toBe("var(--space-6xl)");
     expect(cards).toHaveLength(2);
     expect(
-      cards.every((card) =>
-        card.style.width.startsWith("min(47vw, 200px,"),
-      ),
+      cards.every((card) => card.style.width.startsWith("min(47vw, 200px,")),
     ).toBe(true);
     expect(footer?.style.bottom).toBe(
       "max(var(--safe-area-inset-bottom), var(--space-xs))",
@@ -273,6 +271,10 @@ describe("LoadingScreen", () => {
     expect(container.querySelector("[data-loading-indicator]")).not.toBeNull();
     expect(container.querySelector('[data-testid="loading-begin"]')).toBeNull();
 
+    const footer = container.querySelector<HTMLElement>(
+      "[data-loading-footer]",
+    );
+
     act(() => {
       vi.advanceTimersByTime(1);
     });
@@ -281,6 +283,7 @@ describe("LoadingScreen", () => {
       '[data-testid="loading-begin"]',
     );
     expect(begin).not.toBeNull();
+    expect(begin?.closest("[data-loading-footer]")).toBe(footer);
     expect(begin?.style.height).toBe("56px");
     expect(begin?.style.font).toBe("var(--t-button-lg)");
     const entry = container.querySelector<HTMLElement>(

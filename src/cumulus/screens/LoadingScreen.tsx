@@ -310,8 +310,14 @@ function AnnotatedLoadingCard({
       >
         {resolve(
           cardType === "character"
-            ? tx("Character", "[loading] Card-type label above the Character example on the loading screen.")
-            : tx("Event", "[loading] Card-type label above the Event example on the loading screen."),
+            ? tx(
+                "Character",
+                "[loading] Card-type label above the Character example on the loading screen.",
+              )
+            : tx(
+                "Event",
+                "[loading] Card-type label above the Event example on the loading screen.",
+              ),
         )}
       </p>
 
@@ -372,9 +378,9 @@ export function LoadingScreen({
   const isDesktop = useIsDesktop();
   const reduceMotion = useReducedMotion() === true;
   const [ready, setReady] = useState(false);
-  const [titleTop, setTitleTop] = useState<number | null>(null);
-  const titleRef = useRef<HTMLHeadingElement | null>(null);
-  const titleBoundaryRef = useRef<HTMLSpanElement | null>(null);
+  const [indicatorTop, setIndicatorTop] = useState<number | null>(null);
+  const indicatorRef = useRef<HTMLDivElement | null>(null);
+  const indicatorBoundaryRef = useRef<HTMLSpanElement | null>(null);
 
   useEffect(() => {
     setReady(false);
@@ -386,10 +392,10 @@ export function LoadingScreen({
   }, [playbackSpeed]);
 
   useLayoutEffect(() => {
-    const title = titleRef.current;
-    const boundary = titleBoundaryRef.current;
-    if (title === null || boundary === null) return;
-    const screen = title.closest<HTMLElement>("[data-loading-screen]");
+    const indicator = indicatorRef.current;
+    const boundary = indicatorBoundaryRef.current;
+    if (indicator === null || boundary === null) return;
+    const screen = indicator.closest<HTMLElement>("[data-loading-screen]");
     if (screen === null) return;
 
     const content = [
@@ -400,18 +406,18 @@ export function LoadingScreen({
     let frame = 0;
     const measure = () => {
       const screenRect = screen.getBoundingClientRect();
-      const titleRect = title.getBoundingClientRect();
+      const indicatorRect = indicator.getBoundingClientRect();
       const boundaryRect = boundary.getBoundingClientRect();
       const contentRects = content
         .map((element) => element.getBoundingClientRect())
         .filter((rect) => rect.width > 0 && rect.height > 0);
-      if (titleRect.height <= 0 || contentRects.length === 0) return;
+      if (indicatorRect.height <= 0 || contentRects.length === 0) return;
       const contentTop = Math.min(...contentRects.map((rect) => rect.top));
       const nextTop =
         boundaryRect.top +
-        (contentTop - boundaryRect.top - titleRect.height) / 2 -
+        (contentTop - boundaryRect.top - indicatorRect.height) / 2 -
         screenRect.top;
-      setTitleTop((current) =>
+      setIndicatorTop((current) =>
         current !== null && Math.abs(current - nextTop) < 0.25
           ? current
           : nextTop,
@@ -423,7 +429,7 @@ export function LoadingScreen({
     };
     const observer = new ResizeObserver(scheduleMeasure);
     observer.observe(screen);
-    observer.observe(title);
+    observer.observe(indicator);
     content.forEach((element) => observer.observe(element));
     window.addEventListener("resize", scheduleMeasure);
     measure();
@@ -455,9 +461,9 @@ export function LoadingScreen({
       }}
     >
       <span
-        ref={titleBoundaryRef}
+        ref={indicatorBoundaryRef}
         aria-hidden="true"
-        data-loading-title-boundary
+        data-loading-indicator-boundary
         style={{
           position: "absolute",
           top: `calc(${token(SAFE_AREA_INSET_PROPERTIES.top)} + ${token("--space-xs")})`,
@@ -467,30 +473,38 @@ export function LoadingScreen({
           pointerEvents: "none",
         }}
       />
-      <h1
-        ref={titleRef}
-        data-loading-card-types-label
-        style={{
-          position: "absolute",
-          top:
-            titleTop ??
-            `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-xs")})`,
-          right: 0,
-          left: 0,
-          zIndex: 10,
-          margin: 0,
-          color: token("--text-on-accent"),
-          font: token(isDesktop ? "--t-title" : "--t-title-sm"),
-          textAlign: "center",
-        }}
-      >
-        {resolve(tx("Dreamtides Cards:", "[loading] Card-anatomy loading title and labels."))}
-      </h1>
+      {!ready && (
+        <div
+          ref={indicatorRef}
+          role="status"
+          data-loading-indicator
+          style={{
+            position: "absolute",
+            top:
+              indicatorTop ??
+              `max(${token(SAFE_AREA_INSET_PROPERTIES.top)}, ${token("--space-xs")})`,
+            right: 0,
+            left: 0,
+            zIndex: 10,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: token("--space-xs"),
+            color: token("--text-on-accent"),
+            font: token("--t-title"),
+          }}
+        >
+          <SegmentedLoadingSpinner
+            playbackSpeed={playbackSpeed}
+            reduceMotion={reduceMotion}
+          />
+          <span>{resolve(tx("Loading", "[loading] Progress label."))}</span>
+        </div>
+      )}
       <section
-        aria-label={resolve(tx(
-          "Card anatomy",
-          "[loading] Card anatomy label.",
-        ))}
+        aria-label={resolve(
+          tx("Card anatomy", "[loading] Card anatomy label."),
+        )}
         data-loading-card-stage
         style={{
           width: "100%",
@@ -538,7 +552,7 @@ export function LoadingScreen({
           justifyContent: "center",
         }}
       >
-        {ready ? (
+        {ready && (
           <motion.div
             data-loading-begin-entry
             initial={reduceMotion ? false : { opacity: 0, scale: 0.84 }}
@@ -554,39 +568,13 @@ export function LoadingScreen({
             }}
           >
             <GlassButton
-              label={tx(
-                "Begin",
-                "[loading] Begin action.",
-              )}
+              label={tx("Begin", "[loading] Begin action.")}
               onPress={onBegin}
               size="prominent"
               variant="accent"
               testId="loading-begin"
             />
           </motion.div>
-        ) : (
-          <div
-            role="status"
-            data-loading-indicator
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: token("--space-xs"),
-              color: token("--text-on-accent"),
-              font: token("--t-title"),
-            }}
-          >
-            <SegmentedLoadingSpinner
-              playbackSpeed={playbackSpeed}
-              reduceMotion={reduceMotion}
-            />
-            <span>
-              {resolve(tx(
-                "Loading",
-                "[loading] Progress label.",
-              ))}
-            </span>
-          </div>
         )}
       </footer>
     </motion.main>
