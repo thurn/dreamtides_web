@@ -32,6 +32,7 @@ export function MainMenuScreenAdapter({
   const handleAction = useCallback(
     (actionId: MainMenuActionId) => {
       logEvent("main_menu_action_pressed", { actionId });
+      if (actionId !== "new-journey") return;
       void mutations
         .action("main", parseFrontDoorActionId(actionId))
         .catch((error: unknown) => {
@@ -44,13 +45,8 @@ export function MainMenuScreenAdapter({
   const handleSocial = useCallback(
     (socialId: MainMenuSocialId) => {
       logEvent("main_menu_social_pressed", { socialId });
-      void mutations
-        .action("main", parseFrontDoorActionId(socialId))
-        .catch((error: unknown) => {
-          console.error("Coop main-menu social action failed", error);
-        });
     },
-    [mutations],
+    [],
   );
 
   const handleExitComplete = useCallback(() => {

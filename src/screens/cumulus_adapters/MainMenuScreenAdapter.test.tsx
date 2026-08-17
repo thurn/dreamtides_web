@@ -90,7 +90,7 @@ afterEach(() => {
 });
 
 describe("MainMenuScreenAdapter", () => {
-  it("submits every menu press and advances the shared exit transition", () => {
+  it("submits New Journey, logs the restored controls, and advances the shared exit transition", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -103,6 +103,7 @@ describe("MainMenuScreenAdapter", () => {
     );
 
     act(() => screenMocks.onAction?.("new-journey"));
+    act(() => screenMocks.onAction?.("dream-codex"));
     expect(coopMocks.frontDoorAction).toHaveBeenCalledWith(
       "main",
       "new-journey",
@@ -124,7 +125,7 @@ describe("MainMenuScreenAdapter", () => {
     ).not.toBeNull();
     act(() => screenMocks.onSocial?.("reddit"));
     act(() => screenMocks.onExitComplete?.());
-    expect(coopMocks.frontDoorAction).toHaveBeenCalledWith("main", "reddit");
+    expect(coopMocks.frontDoorAction).toHaveBeenCalledTimes(1);
     expect(coopMocks.advanceFrontDoor).toHaveBeenCalledWith(
       "mainExiting",
       "event:1",
@@ -136,6 +137,10 @@ describe("MainMenuScreenAdapter", () => {
         expect.objectContaining({
           event: "main_menu_action_pressed",
           actionId: "new-journey",
+        }),
+        expect.objectContaining({
+          event: "main_menu_action_pressed",
+          actionId: "dream-codex",
         }),
         expect.objectContaining({
           event: "main_menu_social_pressed",
