@@ -153,7 +153,7 @@ npm run review:full
   component metadata. Use `npm run cumulus-docs` only when the disposable
   Markdown snapshot helps the audit.
 - Any visually observable change → browser QA per AGENTS.md
-  ("Verification"): isolated `agent-browser` session, non-default port,
+  ("Verification"): isolated Playwright MCP context, non-default port,
   relevant `?goto=` scenes and responsive branches, DOM measurements for
   objective layout claims, and screenshots only for the changed visual states.
   Use the routine screenshot budget from `qa_tooling.md`; expand it only when a

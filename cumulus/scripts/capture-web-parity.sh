@@ -7,7 +7,6 @@ REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 MANIFEST="$REPO_ROOT/cumulus/Parity/manifest.json"
 OUTPUT="${1:-$REPO_ROOT/cumulus/Artifacts/GlassParity/web}"
 PORT="${CUMULUS_PARITY_PORT:-5187}"
-SESSION="cumulus-parity-web-$$"
 SERVER_LOG="$OUTPUT/vite.log"
 CAPTURE_DIMENSIONS="$(python3 - "$MANIFEST" <<'PY'
 import json, sys
@@ -18,17 +17,10 @@ PY
 CAPTURE_WIDTH="${CAPTURE_DIMENSIONS%% *}"
 CAPTURE_HEIGHT="${CAPTURE_DIMENSIONS##* }"
 
-if [[ -x /opt/homebrew/bin/agent-browser ]]; then
-  AGENT_BROWSER=(/opt/homebrew/bin/agent-browser)
-else
-  AGENT_BROWSER=(npx agent-browser)
-fi
-
 mkdir -p "$OUTPUT"
 rm -f "$OUTPUT"/*.png
 
 cleanup() {
-  "${AGENT_BROWSER[@]}" --session "$SESSION" close >/dev/null 2>&1 || true
   if [[ -n "${SERVER_PID:-}" ]]; then
     kill "$SERVER_PID" >/dev/null 2>&1 || true
     wait "$SERVER_PID" >/dev/null 2>&1 || true
@@ -47,24 +39,24 @@ for _ in {1..60}; do
 done
 curl -fsS "http://127.0.0.1:$PORT/cumulus/Parity/Web/" >/dev/null
 
-SCENARIOS="$(python3 - "$MANIFEST" <<'PY'
+CAPTURE_JOBS="$OUTPUT/capture-jobs.json"
+python3 - "$MANIFEST" "$CAPTURE_JOBS" "$OUTPUT" "$PORT" "$CAPTURE_WIDTH" "$CAPTURE_HEIGHT" <<'PY'
 import json, sys
-for scenario in json.load(open(sys.argv[1], encoding="utf-8"))["scenarios"]:
-    print(scenario["id"])
+manifest = json.load(open(sys.argv[1], encoding="utf-8"))
+jobs = []
+for scenario in manifest["scenarios"]:
+    for mode in ("bare", "glass"):
+        jobs.append({
+            "url": f"http://127.0.0.1:{sys.argv[4]}/cumulus/Parity/Web/?scenario={scenario['id']}&mode={mode}",
+            "width": int(sys.argv[5]),
+            "height": int(sys.argv[6]),
+            "waitSelector": '[data-parity-ready="true"]',
+            "selector": '[data-parity-frame]',
+            "output": f"{sys.argv[3]}/{scenario['id']}-{mode}.png",
+        })
+json.dump(jobs, open(sys.argv[2], "w", encoding="utf-8"))
 PY
-)"
-
-for scenario in $SCENARIOS; do
-  for mode in bare glass; do
-    url="http://127.0.0.1:$PORT/cumulus/Parity/Web/?scenario=$scenario&mode=$mode"
-    "${AGENT_BROWSER[@]}" --session "$SESSION" open "$url" >/dev/null
-    "${AGENT_BROWSER[@]}" --session "$SESSION" set viewport "$CAPTURE_WIDTH" "$CAPTURE_HEIGHT" 1 >/dev/null
-    "${AGENT_BROWSER[@]}" --session "$SESSION" wait '[data-parity-ready="true"]' >/dev/null
-    actual_url="$("${AGENT_BROWSER[@]}" --session "$SESSION" get url)"
-    [[ "$actual_url" == "$url" ]] || { printf 'unexpected capture URL: %s\n' "$actual_url" >&2; exit 1; }
-    "${AGENT_BROWSER[@]}" --session "$SESSION" screenshot '[data-parity-frame]' "$OUTPUT/$scenario-$mode.png" >/dev/null
-  done
-done
+node "$REPO_ROOT/scripts/playwright-mcp-capture.mjs" --jobs "$CAPTURE_JOBS"
 
 python3 - "$MANIFEST" "$OUTPUT" <<'PY'
 import json, struct, sys

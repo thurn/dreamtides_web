@@ -171,14 +171,12 @@ For tests, prefer the public surface and assert log behavior through
 - Always run the relevant persisted-room workflow when a change touches
   `room-service.ts`, `multiplayer-journey-context.tsx`, or reshapes `JourneyState`.
 
-## Browser QA With agent-browser
+## Browser QA With Playwright MCP
 
-Confirm the tool is available (it ships via `npx`):
-
-```bash
-npx agent-browser --help
-npx agent-browser skills get core    # refresher on snapshot/refs/waits
-```
+Use the globally configured Playwright MCP tools. The long-lived HTTP service
+shares one headless Chromium process, while each MCP client receives an
+isolated BrowserContext. Do not launch a browser or browser-automation CLI from
+the shell.
 
 ### Starting a Server
 
@@ -194,15 +192,13 @@ on `.claude/.llms` — that symlink points at itself, and the dev-mode file
 watcher chokes on it. The preview server has no watcher and is unaffected.
 
 Use a free, explicit port other than 5173. **Read the actual URL from the server
-stdout** before opening agent-browser.
+stdout** before opening the browser context.
 
 ### Open The App
 
-```bash
-agent-browser --session <unique-name> open http://localhost:5174/
-agent-browser --session <unique-name> wait --load networkidle
-agent-browser --session <unique-name> snapshot -i -c
-```
+Navigate to `http://localhost:5174/` with the MCP browser navigation tool, wait
+for the screen to settle, and inspect an accessibility snapshot. Prefer snapshot
+references and Playwright locators for interactions.
 
 The landing screen exposes a single `Create Game` button. Click it; the URL
 becomes `?game=<roomId>` and the snapshot reveals the 3-Avatar selection.
@@ -210,13 +206,12 @@ Picking an Avatar transitions straight to the first dreamscape.
 
 ### Capturing Render-Time Errors
 
-`agent-browser console get` does **not** reliably surface uncaught React
-render exceptions or rejected promises — many appear as "white screen, no
-console output." Install JS hooks immediately after opening the page so the
-buffer is in place before you click anything that triggers a render:
+Console inspection alone does **not** reliably surface every uncaught React
+render exception or rejected promise. Install JS hooks with the MCP browser
+evaluate tool immediately after opening the page so the buffer is in place
+before you click anything that triggers a render:
 
-```bash
-agent-browser eval "
+```js
 window.__caps = { errors: [], rejections: [], consoleErrors: [] };
 window.addEventListener('error', e => window.__caps.errors.push({
   msg: String(e.message),
@@ -229,24 +224,20 @@ console.error = (...a) => {
   window.__caps.consoleErrors.push(a.map(x => x?.stack || String(x)).join(' | ').slice(0, 1500));
   oce.apply(console, a);
 };
-'hooks installed'
-"
+'hooks installed';
 ```
 
-After each user action, read the buffer:
-
-```bash
-agent-browser eval "JSON.stringify(window.__caps).slice(0, 3000)"
-```
+After each user action, evaluate
+`JSON.stringify(window.__caps).slice(0, 3000)`.
 
 The buffer survives client-side route changes but is **wiped by full page
-reloads** (`agent-browser open …`). Re-install after a reload.
+reloads**. Re-install after a reload.
 
 ### Diagnosing A Blank Screen
 
-If `agent-browser snapshot -i -c` returns just
-`generic [ref=e1] clickable [onclick]` with no children, React rendered an
-empty tree — almost always an unhandled exception during render. Steps:
+If the accessibility snapshot contains only a generic clickable root with no
+children, React rendered an empty tree — almost always an unhandled exception
+during render. Steps:
 
 1. Read `window.__caps.errors` (above) for the message and source line.
 2. Inspect the live DOM: `document.getElementById('root')?.children.length`
@@ -292,11 +283,9 @@ Use the screenshot budget and exceptions in `qa_tooling.md`. A routine visual
 change needs at most one desktop, one narrow/mobile, and one changed-interaction
 capture; skip any that do not prove a changed branch.
 
-```bash
-agent-browser --session <unique-name> screenshot /tmp/qs-desktop.png
-agent-browser --session <unique-name> screenshot /tmp/qs-mobile.png
-agent-browser --session <unique-name> screenshot /tmp/qs-interaction.png
-```
+Resize the page with the MCP browser resize tool and capture the selected states
+with the MCP screenshot tool. Save artifacts under the task worktree or `/tmp`
+using descriptive desktop, mobile, and interaction filenames.
 
 Inspect screenshots visually after capture. Verify:
 
@@ -312,14 +301,13 @@ Use the current logging surfaces:
 
 ```bash
 tail -n 40 /Users/dthurn/quest_prototype/logs/journey-log.jsonl
-agent-browser console get | tail -40
-agent-browser eval "JSON.stringify(window.__caps)"
 ```
 
 `window.__journeyLog` and `window.__errors` are not published by the app — use
-the JSONL file, the captured `__caps` buffer, and `agent-browser console get`
-instead. Watch the dev-server terminal for asset-load errors. If you need a
-saved copy from the UI, use the HUD `Download Log` button.
+the JSONL file, the captured `__caps` buffer, and the MCP browser console tool
+instead. Use the MCP network tool for failed requests and watch the dev-server
+terminal for asset-load errors. If you need a saved copy from the UI, use the
+HUD `Download Log` button.
 
 ### Firebase Inspection
 
@@ -340,10 +328,7 @@ fields that RTDB stripped.
 If the change affects layout, test the responsive branches it can change.
 Measure objective geometry first and capture only representative evidence:
 
-```bash
-agent-browser eval "window.resizeTo(1280, 800)"
-agent-browser screenshot /tmp/qs-desktop.png
-
-agent-browser eval "window.resizeTo(768, 1024)"
-agent-browser screenshot /tmp/qs-tablet.png
-```
+Use the MCP browser resize tool to set `1280×800` and `768×1024`. After each
+resize, evaluate `({ href: location.href, width: innerWidth, height:
+innerHeight })`, measure the relevant DOM geometry, and capture a screenshot
+only when the responsive appearance itself is evidence.

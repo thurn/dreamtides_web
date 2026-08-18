@@ -126,21 +126,26 @@ Choose QA in proportion to the change:
   one final cold visual review; renderer work also needs same-scene on/off and
   deliberately broken negative controls.
 
-For applicable journey prototype UI work, run browser QA with `/opt/homebrew/bin/agent-browser`
-against a local Vite server. `npx agent-browser` is an acceptable fallback when
-the Homebrew-installed binary is unavailable. Start the QA Vite server on a port
-other than `http://localhost:5173` (for example `npm run dev -- --port 5174`) so
-QA does not kill the developer's own server already running on the default port.
+For applicable journey prototype UI work, run browser QA through the globally
+configured Playwright MCP service against a local Vite server. The singleton
+HTTP service shares one headless Chromium process while giving each MCP client
+an isolated BrowserContext. Prefer accessibility/DOM snapshots and Playwright
+locators for routine interaction; capture screenshots only when rendered
+appearance is relevant. Do not directly launch Chrome, Chromium, Playwright
+browsers, Selenium, or a separate browser-automation CLI. Start the QA Vite
+server on a port other than `http://localhost:5173` (for example
+`npm run dev -- --port 5174`) so QA does not kill the developer's own server
+already running on the default port.
 To QA screens that are otherwise reachable only by playing battles forward (for
 example the Dream Atlas boss preview), append `?goto=<scene>` to the dev URL (e.g.
 `http://localhost:5174/?goto=atlas`) to boot straight onto that screen. The
 registered scenes and the full `?goto=` mechanics are documented in
 `docs/journey_prototype/qa_scenes.md` (source of truth: `src/runtime/qa-scenes.ts`).
 
-Isolate every `agent-browser` call with a unique `--session <name>` (the shared
-`default` session is one persistent Chrome that keeps stale tabs and viewport
-across runs), assert `location.href` + `window.innerWidth` before each
-screenshot, and tear down only your own server — `npm run dev` spawns a
+MCP clients are isolated automatically; reuse the current task's BrowserContext
+for its walkthrough and close only that context when QA is complete. Assert
+`location.href` + `window.innerWidth` before each screenshot, and tear down only
+your own server — `npm run dev` spawns a
 `dev-with-emulator.mjs`/`vite --strictPort` tree, so `pkill -f "vite --port N"`
 misses it and a broad `pkill -f vite` kills the developer's 5173 server. Full
 session, assert-before-acting, and teardown detail is in
@@ -157,7 +162,7 @@ use screenshots for rendered appearance and holistic composition. Stop when
 focused checks pass, the relevant workflow and responsive branches pass, the
 error buffer is empty, and the final visual review has no unresolved material
 finding. Do not repeat the full suite or full screenshot matrix after every
-small visual adjustment. Full `agent-browser` session, teardown, and
+small visual adjustment. Full Playwright MCP context, teardown, and
 assert-before-acting details are in `docs/journey_prototype/qa_tooling.md`.
 
 # Deploy

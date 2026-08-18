@@ -101,25 +101,11 @@ worktree changes.
 
 ## Browser QA
 
-Use `agent-browser` for interactive testing. It ships via `npx`:
-
-```bash
-npx agent-browser --help
-```
-
-Core commands:
-
-```bash
-agent-browser open <url>
-agent-browser wait --load networkidle
-agent-browser snapshot -i
-agent-browser screenshot /tmp/file.png --annotate
-agent-browser eval "<js>"
-agent-browser click <selector|@ref>
-agent-browser fill <selector|@ref> "<text>"
-agent-browser console
-agent-browser errors
-```
+Use the globally configured Playwright MCP tools for interactive testing. Each
+MCP client receives an isolated BrowserContext from the singleton headless
+Chromium service. Navigate, inspect accessibility/DOM snapshots, interact with
+snapshot references or Playwright locators, evaluate state, inspect console and
+network activity, and capture screenshots only for relevant visual evidence.
 
 ### Battle URL
 
@@ -151,19 +137,18 @@ Good invariants:
 - compact action bar stays compact unless the task explicitly changes it
 - reward surfaces and popovers must appear above the inspector and battlefield
 
-Useful eval patterns:
+Useful MCP browser evaluation patterns:
 
-```bash
-agent-browser eval "(() => [...document.querySelectorAll('button')].map(b => (b.textContent || '').trim()).filter(Boolean))()"
-```
-
-```bash
-agent-browser eval "(() => [...document.querySelectorAll('*')].filter(el => typeof el.className === 'string' && el.className.includes('battle-card') && el.getBoundingClientRect().y > 430 && el.getBoundingClientRect().width > 40).length)()"
-```
-
-```bash
-agent-browser eval "(() => ({ enemy: !!document.querySelector('[data-battle-side-summary-popover=\"enemy\"]'), player: !!document.querySelector('[data-battle-side-summary-popover=\"player\"]') }))()"
-```
+- `() => [...document.querySelectorAll('button')].map(b =>
+  (b.textContent || '').trim()).filter(Boolean)`
+- `() => [...document.querySelectorAll('*')].filter(el => typeof el.className
+  === 'string' && el.className.includes('battle-card') &&
+  el.getBoundingClientRect().y > 430 && el.getBoundingClientRect().width >
+  40).length`
+- `() => ({ enemy:
+  !!document.querySelector('[data-battle-side-summary-popover="enemy"]'),
+  player:
+  !!document.querySelector('[data-battle-side-summary-popover="player"]') })`
 
 ### QA Rules
 
@@ -223,7 +208,7 @@ If you fix one of these, test the exact user path that previously failed.
 For battle changes:
 
 1. Run the most relevant focused battle test.
-2. Run browser QA with `agent-browser` on the changed battle flow when runtime
+2. Run browser QA with Playwright MCP on the changed battle flow when runtime
    behavior or presentation changed.
 3. Apply the canonical screenshot budget when visual output changed.
 4. Once stable, run the diff-aware `npm run review`. Use

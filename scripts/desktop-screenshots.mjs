@@ -1,14 +1,7 @@
 #!/usr/bin/env node
 
 import { execFileSync } from "node:child_process";
-import {
-  mkdtempSync,
-  mkdirSync,
-  rmSync,
-  statSync,
-  writeFileSync,
-} from "node:fs";
-import { tmpdir } from "node:os";
+import { mkdirSync, statSync, writeFileSync } from "node:fs";
 import { basename, join, resolve as resolvePath } from "node:path";
 import { pathToFileURL } from "node:url";
 import {
@@ -33,8 +26,8 @@ import {
   withReportDiagnostics,
 } from "./desktop-screenshot-report.mjs";
 import {
-  makeAgentBrowserRunner,
-  resolveAgentBrowser,
+  connectPlaywrightMcp,
+  parseMcpResult,
   startScreenshotDevServer,
   stopProcessTree,
   waitForServer,
@@ -68,7 +61,6 @@ Server and repeatability:
 
 Output:
       --run-id <id>             Stable artifact subdirectory name
-      --session <name>          Isolated agent-browser session name
       --json                    Print one compact machine-readable result
   -v, --verbose                 Print successful-cell readiness details
   -h, --help                    Show this help
@@ -192,56 +184,28 @@ function readinessExpression(timeoutMs) {
         !loadingCopy.some((copy) => rootText.includes(copy)) &&
         broken.length === 0;
       if (contentReady && stableMeasurements >= 2) {
-        return JSON.stringify({
+        return {
           ...latest,
           ready: true,
           stableMeasurements,
           waitMs: Date.now() - startedAt,
-        });
+        };
       }
       await new Promise((resolve) => setTimeout(resolve, 250));
     }
-    return JSON.stringify({
+    return {
       ...latest,
       ready: false,
       stableMeasurements,
       waitMs: Date.now() - startedAt,
       readinessMessage: "Timed out waiting for the QA room and stable rendered layout.",
-    });
+    };
   })()`;
-}
-
-function parseEvaluation(raw) {
-  let value = raw.trim();
-  for (let depth = 0; depth < 4; depth += 1) {
-    if (typeof value !== "string") break;
-    try {
-      value = JSON.parse(value);
-    } catch {
-      const firstBrace = value.indexOf("{");
-      const lastBrace = value.lastIndexOf("}");
-      if (firstBrace === -1 || lastBrace <= firstBrace) throw new Error(
-        `could not parse agent-browser evaluation: ${value.slice(0, 300)}`,
-      );
-      value = JSON.parse(value.slice(firstBrace, lastBrace + 1));
-    }
-    if (value?.data?.result !== undefined) value = value.data.result;
-    else if (value?.result !== undefined && Object.keys(value).length <= 3) {
-      value = value.result;
-    }
-  }
-  if (value === null || typeof value !== "object") {
-    throw new Error("agent-browser evaluation did not return an object");
-  }
-  return value;
 }
 
 function loadQaSceneCatalog(cwd) {
   const helper = join(cwd, "scripts/list-qa-scenes.mjs");
-  const rawImportLoader = join(
-    cwd,
-    "scripts/register-raw-import-loader.mjs",
-  );
+  const rawImportLoader = join(cwd, "scripts/register-raw-import-loader.mjs");
   const output = execFileSync(
     process.execPath,
     [`--import=${rawImportLoader}`, "--import=tsx", helper],
@@ -341,30 +305,25 @@ async function main() {
   const runDir = resolvePath(cwd, ARTIFACT_ROOT, runId);
   mkdirSync(runDir, { recursive: true });
 
-  const tmpDir = mkdtempSync(join(tmpdir(), "desktop-screenshots-"));
-  const initScriptPath = join(tmpDir, "capture-errors.js");
-  writeFileSync(initScriptPath, ERROR_INIT_SCRIPT, "utf8");
-
-  const session =
-    options.session ?? `desktopcap-${String(process.pid)}-${Date.now().toString(36)}`;
-  const binary = resolveAgentBrowser();
-  const runBrowser = makeAgentBrowserRunner(binary, session, {
-    globalArgs: ["--allow-file-access", "--init-script", initScriptPath],
+  const browserClient = `desktop-screenshots-${String(process.pid)}-${Date.now().toString(36)}`;
+  const browser = await connectPlaywrightMcp({
+    name: browserClient,
+    roots: [cwd, runDir],
   });
   const startedAt = Date.now();
   const startedAtIso = new Date(startedAt).toISOString();
   let devServer = null;
-  let browserStarted = false;
+  let browserStarted = true;
   let cleanupStarted = false;
   const cleanup = async () => {
     if (cleanupStarted) return;
     cleanupStarted = true;
     if (browserStarted) {
       try {
-        runBrowser(["close"], { capture: true });
+        await browser.close();
       } catch {
         process.stderr.write(
-          `Could not close browser session ${session}; close it manually.\n`,
+          `Could not close Playwright MCP context ${browserClient}.\n`,
         );
       }
     }
@@ -372,7 +331,6 @@ async function main() {
       process.stderr.write("Stopping dev server …\n");
       await stopProcessTree(devServer);
     }
-    rmSync(tmpDir, { recursive: true, force: true });
   };
   const handleSignal = (signal) => {
     process.stderr.write(`Received ${signal}; cleaning up this run …\n`);
@@ -395,8 +353,12 @@ async function main() {
       }
     }
 
-    browserStarted = true;
-    runBrowser(["set", "media", "dark"], { capture: true });
+    await browser.call("browser_run_code_unsafe", {
+      code: `async (page) => {
+        await page.addInitScript({ content: ${JSON.stringify(ERROR_INIT_SCRIPT)} });
+        await page.emulateMedia({ colorScheme: "dark" });
+      }`,
+    });
     const cells = [];
     const total = scenes.length * viewports.length;
     let current = 0;
@@ -411,32 +373,22 @@ async function main() {
           scene.id,
           options.seed,
         );
-        const relativeOutput = relativeCellOutputPath(
-          scene.id,
-          viewport.id,
-        );
+        const relativeOutput = relativeCellOutputPath(scene.id, viewport.id);
         const output = cellOutputPath(runDir, scene.id, viewport.id);
         process.stderr.write(
           `[${String(current)}/${String(total)}] ${scene.id} · ${viewport.id}\n`,
         );
 
         try {
-          runBrowser(
-            [
-              "set",
-              "viewport",
-              String(viewport.width),
-              String(viewport.height),
-              "1",
-            ],
-            { capture: true },
-          );
-          runBrowser(["open", expectedUrl], { capture: true });
-          const measurement = parseEvaluation(
-            runBrowser(
-              ["eval", readinessExpression(PAGE_READY_TIMEOUT_MS)],
-              { capture: true },
-            ),
+          await browser.call("browser_resize", {
+            width: viewport.width,
+            height: viewport.height,
+          });
+          await browser.call("browser_navigate", { url: expectedUrl });
+          const measurement = parseMcpResult(
+            await browser.call("browser_evaluate", {
+              function: readinessExpression(PAGE_READY_TIMEOUT_MS),
+            }),
           );
           const health = evaluateCaptureHealth(measurement, {
             url: expectedUrl,
@@ -444,7 +396,10 @@ async function main() {
             width: viewport.width,
             height: viewport.height,
           });
-          runBrowser(["screenshot", output], { capture: true });
+          await browser.call("browser_take_screenshot", {
+            filename: output,
+            scale: "css",
+          });
           if (statSync(output).size === 0) {
             health.diagnostics.push({
               code: "empty-screenshot",
@@ -501,9 +456,7 @@ async function main() {
     }
 
     const groups = [...new Set(scenes.map((scene) => scene.group))];
-    const contactSheets = groups.map(
-      (group) => `contact-sheet-${group}.png`,
-    );
+    const contactSheets = groups.map((group) => `contact-sheet-${group}.png`);
     const completedAt = Date.now();
     let manifest = buildManifest({
       run: {
@@ -516,12 +469,10 @@ async function main() {
         scenePreset:
           options.scenes.length > 0 ? "targeted" : options.scenePreset,
         viewportPreset:
-          options.viewports.length > 0
-            ? "targeted"
-            : options.viewportPreset,
+          options.viewports.length > 0 ? "targeted" : options.viewportPreset,
         managedServer: options.start,
         serverPort: options.start ? options.port : null,
-        browserSession: session,
+        browserSession: browserClient,
       },
       scenes,
       viewports,
@@ -538,29 +489,35 @@ async function main() {
     for (const group of groups) {
       const htmlPath = join(runDir, `.contact-sheet-${group}.html`);
       const pngPath = join(runDir, `contact-sheet-${group}.png`);
-      writeFileSync(
-        htmlPath,
-        renderContactSheetHtml(manifest, group),
-        "utf8",
-      );
+      const contactSheetHtml = renderContactSheetHtml(manifest, group);
+      writeFileSync(htmlPath, contactSheetHtml, "utf8");
       try {
-        const sheetWidth = Math.min(
-          3_200,
-          220 + viewports.length * 296,
-        );
-        runBrowser(
-          ["set", "viewport", String(sheetWidth), "360", "1"],
-          { capture: true },
-        );
-        runBrowser(["open", pathToFileURL(htmlPath).href], { capture: true });
-        runBrowser(
-          [
-            "eval",
-            `(async () => { await Promise.all([...document.images].map((image) => image.complete ? null : new Promise((resolve) => { image.addEventListener("load", resolve, { once: true }); image.addEventListener("error", resolve, { once: true }); }))); return JSON.stringify({ images: document.images.length, height: document.documentElement.scrollHeight }); })()`,
-          ],
-          { capture: true },
-        );
-        runBrowser(["screenshot", "--full", pngPath], { capture: true });
+        const sheetWidth = Math.min(3_200, 220 + viewports.length * 296);
+        await browser.call("browser_resize", {
+          width: sheetWidth,
+          height: 360,
+        });
+        await browser.call("browser_run_code_unsafe", {
+          code: `async (page) => {
+            await page.goto(${JSON.stringify(pathToFileURL(htmlPath).href)}, { waitUntil: "load" });
+          }`,
+        });
+        await browser.call("browser_evaluate", {
+          function: `async () => {
+            await Promise.all([...document.images].map((image) => image.complete
+              ? null
+              : new Promise((resolve) => {
+                  image.addEventListener("load", resolve, { once: true });
+                  image.addEventListener("error", resolve, { once: true });
+                })));
+            return { images: document.images.length, height: document.documentElement.scrollHeight };
+          }`,
+        });
+        await browser.call("browser_take_screenshot", {
+          filename: pngPath,
+          fullPage: true,
+          scale: "css",
+        });
         if (statSync(pngPath).size === 0) {
           throw new Error("rendered contact sheet is empty");
         }
@@ -613,7 +570,10 @@ async function main() {
 }
 
 main().catch((error) => {
-  const prefix = error instanceof UsageError ? "desktop-screenshots" : "desktop-screenshots failed";
+  const prefix =
+    error instanceof UsageError
+      ? "desktop-screenshots"
+      : "desktop-screenshots failed";
   process.stderr.write(`${prefix}: ${error?.stack ?? String(error)}\n`);
   process.exitCode = 1;
 });

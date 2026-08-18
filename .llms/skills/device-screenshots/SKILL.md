@@ -15,12 +15,13 @@ viewports at 1× DPR and produces compact contact sheets plus an HTML grid and
 manifest. The full workflow and presets are documented in
 `docs/journey_prototype/desktop_screenshot_matrix.md`.
 
-The tool is `scripts/device-screenshots.mjs`. It drives a headless Chromium via
-`agent-browser`, loading the app in an `<iframe>` sized to the target screen at
-the correct device pixel ratio. Phone targets paint the screen cut-out (Dynamic
-Island or camera punch-hole) and home indicator over the UI. The status bar
-(clock / battery / Wi-Fi) is omitted so the UI renders edge to edge. `--frame`
-wraps phone targets in a device body/bezel.
+The tool is `scripts/device-screenshots.mjs`. It connects to the globally
+configured Playwright MCP singleton and creates temporary BrowserContexts in
+its shared headless Chromium process at the target screen size and device pixel
+ratio. Phone targets paint the screen cut-out (Dynamic Island or camera
+punch-hole) and home indicator over the UI. The status bar (clock / battery /
+Wi-Fi) is omitted so the UI renders edge to edge. `--frame` wraps phone targets
+in a device body/bezel.
 
 ### Safe areas match the target
 
@@ -48,8 +49,9 @@ node scripts/device-screenshots.mjs -d iphone-16 --query 'demo=device-frame' \
   --url http://localhost:5178
 ```
 
-Requires Node 18+ and the `agent-browser` CLI. A dev server must be reachable
-(`--url`/`--port`), or pass `--start` to launch one for the run.
+Requires Node 18+ and the Playwright MCP launchd service. A dev server must be
+reachable (`--url`/`--port`), or pass `--start` to launch one for the run. Run
+`playwright-mcp-service start` if the configured endpoint is unavailable.
 
 ## Usage
 
@@ -167,5 +169,5 @@ dimensions match the target id exactly unless `--scale` is supplied.
   `x --scale`).
 - If nothing renders in the frame, the app probably was not ready yet - raise
   `--wait`, and confirm the server at `--url` actually serves the app.
-- The tool uses its own `agent-browser` session and closes it when done, so it
-  will not disturb a separate `agent-browser` session you have open.
+- The tool uses its own isolated MCP BrowserContext and closes it when done, so
+  it does not disturb another task's browser state.

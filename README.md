@@ -116,8 +116,8 @@ src/              Application source
 ```
 
 See `docs/journey_prototype/journey_prototype.md` for the architecture overview
-and `docs/journey_prototype/qa_tooling.md` for browser-QA notes using
-`npx agent-browser`.
+and `docs/journey_prototype/qa_tooling.md` for browser-QA notes using the shared
+Playwright MCP service.
 
 Canonical RON catalogs, generated TOML compatibility data, compiler commands,
 watch behavior, and editor transactions are documented in

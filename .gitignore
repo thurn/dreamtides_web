@@ -27,6 +27,7 @@ logs/
 .DS_Store
 .claude/worktrees
 .worktrees/
+.playwright-mcp/
 .game-data-stage-*/
 .game-data-transactions/
 .game-data-transaction.json

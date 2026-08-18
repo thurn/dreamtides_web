@@ -148,7 +148,7 @@ Run focused tests while iterating, compile game data, run the workset verifier, 
 finish with `npm run review`.
 
 For runtime or presentation changes, exercise the normal Exploration workflow with
-an isolated `agent-browser` session on a non-default Vite port. Assert URL and
+an isolated Playwright MCP context on a non-default Vite port. Assert URL and
 viewport before actions, inspect `window.__caps`, verify the resulting DOM state,
 and visually inspect the changed action/follow-up/outcome states at representative
 desktop and narrow widths when presentation changed.

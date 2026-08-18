@@ -133,8 +133,8 @@ alias for the stable `desktop-1366x768` id.
 
 ## Capture and diagnostics
 
-One run starts one server when `--start` is present and uses one unique,
-isolated `agent-browser` session. Each matrix cell navigates directly to:
+One run starts one server when `--start` is present and uses one isolated
+Playwright MCP BrowserContext from the singleton service. Each matrix cell navigates directly to:
 
 ```text
 /?goto=<scene>&seed=<seed>

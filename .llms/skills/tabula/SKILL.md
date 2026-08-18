@@ -47,7 +47,7 @@ npm --prefix tabula run dev -- --port 5185
 
 Use `http://localhost:5185/?real=1` for normal UI review against the current generated affiliation and card catalogs. This is the default review surface: it gives realistic names, card art, record counts, rule text, and layout density while keeping edits in memory. Use `?demo=1` only for deterministic component development or deliberately constructed edge cases.
 
-Use browser automation such as `agent-browser` for quick interaction checks and screenshots. Use a unique session and a non-default port. Exercise the actual workflow: select a record, edit fields, undo/redo, inspect validation, open and search the signature-card picker, add/remove/reorder cards, and test narrow and desktop layouts. Inspect console errors and unhandled rejections.
+Use the globally configured Playwright MCP tools for quick interaction checks and screenshots. The MCP client receives an isolated BrowserContext from the singleton service. Exercise the actual workflow: select a record, edit fields, undo/redo, inspect validation, open and search the signature-card picker, add/remove/reorder cards, and test narrow and desktop layouts. Inspect console errors and unhandled rejections.
 
 Browser mode does not prove Tauri IPC, Rust serialization, filesystem publication, stale-revision behavior, packaged WKWebView asset loading, or persistence. Never present a browser-only pass as proof that saving works.
 

@@ -4,26 +4,29 @@
  *
  * Renders the running journey prototype web app inside a selected phone or
  * desktop viewport and captures a PNG. This is a *mock-up*, not real hardware:
- * it drives a headless Chromium (via the `agent-browser` CLI) at the target
- * viewport and device-pixel-ratio, paints phone screen cut-outs and home
+ * it drives the shared Playwright MCP browser at the target viewport and
+ * device-pixel-ratio, paints phone screen cut-outs and home
  * indicators when relevant, and can wrap phone captures in a device frame.
  *
  * The status bar (clock / battery / Wi-Fi) is intentionally omitted so the UI
  * renders truly full-screen, edge to edge.
  *
- * Requires only Node 18+ plus the `agent-browser` CLI. It captures whatever the
- * app serves at `--url`, so a dev server must be reachable (or pass `--start`
- * to launch one for the duration of the run).
+ * Requires Node 18+ and the globally configured Playwright MCP service. It
+ * captures whatever the app serves at `--url`, so a dev server must be
+ * reachable (or pass `--start` to launch one for the duration of the run).
  *
  * Run with --help for the full flag list.
  */
 
-import { mkdirSync, writeFileSync, rmSync } from "node:fs";
-import { mkdtempSync } from "node:fs";
-import { tmpdir } from "node:os";
-import { join, isAbsolute, resolve as resolvePath, extname } from "node:path";
+import { mkdirSync } from "node:fs";
+import {
+  dirname,
+  join,
+  isAbsolute,
+  resolve as resolvePath,
+  extname,
+} from "node:path";
 import { parseArgs } from "node:util";
-import { pathToFileURL } from "node:url";
 import {
   DEVICES,
   findDevice,
@@ -33,8 +36,7 @@ import {
 import {
   DEFAULT_SCREENSHOT_PORT,
   buildAppUrl as buildSharedAppUrl,
-  makeAgentBrowserRunner,
-  resolveAgentBrowser,
+  connectPlaywrightMcp,
   startScreenshotDevServer,
   stopProcessTree,
   waitForServer,
@@ -91,7 +93,6 @@ Capture:
                       each target's configured density.
 
 Misc:
-      --session <s>   agent-browser session name. Default: a per-run name.
       --json          Print machine-readable JSON describing the output.
   -h, --help          Show this help.
 
@@ -136,7 +137,6 @@ function parse(argv) {
         out: { type: "string", short: "o" },
         wait: { type: "string" },
         scale: { type: "string" },
-        session: { type: "string" },
         json: { type: "boolean" },
         help: { type: "boolean", short: "h" },
       },
@@ -187,9 +187,7 @@ function resolveDevices(values) {
   for (const id of ids) {
     const device = findDevice(id);
     if (!device) {
-      fail(
-        `unknown device "${id}". Run with --list to see valid ids.`,
-      );
+      fail(`unknown device "${id}". Run with --list to see valid ids.`);
     }
     if (!result.includes(device)) result.push(device);
   }
@@ -199,7 +197,8 @@ function resolveDevices(values) {
 function buildBaseUrl(values) {
   if (values.url) return values.url.replace(/\/+$/, "");
   const port = values.port ? Number(values.port) : DEFAULT_PORT;
-  if (!Number.isInteger(port) || port <= 0) fail(`invalid --port "${values.port}"`);
+  if (!Number.isInteger(port) || port <= 0)
+    fail(`invalid --port "${values.port}"`);
   return `http://localhost:${port}`;
 }
 
@@ -250,14 +249,23 @@ async function main() {
   const base = buildBaseUrl(values);
   const appUrl = buildAppUrl(values, base);
   const waitMs = values.wait ? Number(values.wait) : DEFAULT_WAIT_MS;
-  if (!Number.isFinite(waitMs) || waitMs < 0) fail(`invalid --wait "${values.wait}"`);
+  if (!Number.isFinite(waitMs) || waitMs < 0)
+    fail(`invalid --wait "${values.wait}"`);
   const colorScheme = values.light ? "light" : "dark";
 
-  const binary = resolveAgentBrowser();
-  const session = values.session ?? `devicecap-${process.pid}`;
-  const run = makeAgentBrowserRunner(binary, session);
-
-  const tmpDir = mkdtempSync(join(tmpdir(), "device-screenshots-"));
+  const outputPaths = new Map(
+    devices.map((device) => [
+      device.id,
+      outputPathFor(device, values, devices),
+    ]),
+  );
+  const browser = await connectPlaywrightMcp({
+    name: `device-screenshots-${String(process.pid)}`,
+    roots: [
+      process.cwd(),
+      ...new Set([...outputPaths.values()].map((path) => dirname(path))),
+    ],
+  });
   let devServer = null;
 
   try {
@@ -277,11 +285,11 @@ async function main() {
     const results = [];
     for (const device of devices) {
       const scale = values.scale ? Number(values.scale) : device.dpr;
-      if (!Number.isFinite(scale) || scale <= 0) fail(`invalid --scale "${values.scale}"`);
+      if (!Number.isFinite(scale) || scale <= 0)
+        fail(`invalid --scale "${values.scale}"`);
 
       const framed = Boolean(values.frame);
-      const caption =
-        framed && !values["no-caption"] ? device.name : null;
+      const caption = framed && !values["no-caption"] ? device.name : null;
       const { html, width, height } = renderWrapper(device, {
         appUrl,
         frame: framed,
@@ -290,17 +298,35 @@ async function main() {
         backdrop: values.backdrop,
         caption,
       });
-      const wrapperPath = join(tmpDir, `${device.id}.html`);
-      writeFileSync(wrapperPath, html, "utf8");
-      const wrapperUrl = pathToFileURL(wrapperPath).href;
-      const outPath = outputPathFor(device, values, devices);
+      const outPath = outputPaths.get(device.id);
 
       process.stderr.write(`Capturing ${device.name} → ${outPath}\n`);
-      run(["set", "viewport", String(width), String(height), String(scale)]);
-      run(["set", "media", colorScheme]);
-      run(["open", wrapperUrl]);
-      run(["wait", String(waitMs)]);
-      run(["screenshot", outPath]);
+      await browser.call("browser_run_code_unsafe", {
+        code: `async (page) => {
+          const context = await page.context().browser().newContext({
+            viewport: ${JSON.stringify({ width, height })},
+            deviceScaleFactor: ${JSON.stringify(scale)},
+            colorScheme: ${JSON.stringify(colorScheme)}
+          });
+          try {
+            const capturePage = await context.newPage();
+            await capturePage.setContent(${JSON.stringify(html)}, { waitUntil: "load" });
+            await capturePage.waitForTimeout(${JSON.stringify(waitMs)});
+            await capturePage.screenshot({
+              path: ${JSON.stringify(outPath)},
+              scale: "device"
+            });
+            return {
+              url: ${JSON.stringify(appUrl)},
+              width: capturePage.viewportSize()?.width,
+              height: capturePage.viewportSize()?.height,
+              deviceScaleFactor: await capturePage.evaluate(() => devicePixelRatio)
+            };
+          } finally {
+            await context.close();
+          }
+        }`,
+      });
 
       results.push({
         device: device.id,
@@ -328,15 +354,14 @@ async function main() {
     }
   } finally {
     try {
-      run(["close"]);
+      await browser.close();
     } catch {
-      // session may not exist if we failed early
+      // The HTTP session may already be gone if startup failed.
     }
     if (devServer) {
       process.stderr.write("Stopping dev server …\n");
       await stopProcessTree(devServer);
     }
-    rmSync(tmpDir, { recursive: true, force: true });
   }
 }
 

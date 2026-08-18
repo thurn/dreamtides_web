@@ -799,7 +799,7 @@ channel that already exists end to end.
   figment-stack top-down loss via `selectFigmentChallengeLossCount`); the
   time-budget guard returning a valid best-so-far plan under an artificially
   tiny deadline; deterministic planning under a fixed seed.
-- **Browser QA** (`agent-browser` against a non-5173 port per repo QA rules) on
+- **Browser QA** (Playwright MCP against a non-5173 port per repo QA rules) on
   `?goto=battle&ai=1`: confirm the enemy takes
   a visible, paced turn, the
   player is gated from acting during it, the log shows the AI's choices, scores

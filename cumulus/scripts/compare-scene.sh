@@ -9,7 +9,6 @@ SCENE_ID="${1:-cumulus-shop-glass-demo}"
 WIDTH="${2:-}"
 HEIGHT="${3:-}"
 PORT="${CUMULUS_SCENE_COMPARE_PORT:-5188}"
-SESSION="cumulus-scene-compare-$$"
 
 CONFIG="$(python3 - "$MANIFEST" "$SCENE_ID" "$WIDTH" "$HEIGHT" <<'PY'
 import json, sys
@@ -38,16 +37,9 @@ UNITY_CAPTURE="$ARTIFACT_ROOT/unity.png"
 WEB_CAPTURE="$ARTIFACT_ROOT/web.png"
 SERVER_LOG="$ARTIFACT_ROOT/vite.log"
 
-if [[ -x /opt/homebrew/bin/agent-browser ]]; then
-  AGENT_BROWSER=(/opt/homebrew/bin/agent-browser)
-else
-  AGENT_BROWSER=(npx agent-browser)
-fi
-
 mkdir -p "$ARTIFACT_ROOT"
 
 cleanup() {
-  "${AGENT_BROWSER[@]}" --session "$SESSION" close >/dev/null 2>&1 || true
   if [[ -n "${SERVER_PID:-}" ]]; then
     kill "$SERVER_PID" >/dev/null 2>&1 || true
     wait "$SERVER_PID" >/dev/null 2>&1 || true
@@ -75,18 +67,27 @@ for _ in {1..60}; do
 done
 URL="http://127.0.0.1:$PORT$WEB_PATH"
 curl -fsS "$URL" >/dev/null
-"${AGENT_BROWSER[@]}" --session "$SESSION" open "$URL" >/dev/null
-"${AGENT_BROWSER[@]}" --session "$SESSION" set viewport "$WIDTH" "$HEIGHT" 1 >/dev/null
-"${AGENT_BROWSER[@]}" --session "$SESSION" wait '[data-scene-comparison-ready="true"]' >/dev/null
-ACTUAL="$("${AGENT_BROWSER[@]}" --session "$SESSION" eval '({url:location.href,width:window.innerWidth,height:window.innerHeight})')"
-python3 - "$ACTUAL" "$URL" "$WIDTH" "$HEIGHT" <<'PY'
+CAPTURE_JOBS="$ARTIFACT_ROOT/capture-jobs.json"
+python3 - "$CAPTURE_JOBS" "$URL" "$WIDTH" "$HEIGHT" "$WEB_CAPTURE" <<'PY'
 import json, sys
-actual = json.loads(sys.argv[1])
-expected = {"url": sys.argv[2], "width": int(sys.argv[3]), "height": int(sys.argv[4])}
-if actual != expected:
-    raise SystemExit(f"browser capture target mismatch: expected={expected}, actual={actual}")
+json.dump([{
+    "url": sys.argv[2],
+    "width": int(sys.argv[3]),
+    "height": int(sys.argv[4]),
+    "waitSelector": '[data-scene-comparison-ready="true"]',
+    "selector": '[data-scene-comparison-frame]',
+    "output": sys.argv[5],
+}], open(sys.argv[1], "w", encoding="utf-8"))
 PY
-"${AGENT_BROWSER[@]}" --session "$SESSION" screenshot '[data-scene-comparison-frame]' "$WEB_CAPTURE" >/dev/null
+CAPTURE_RESULT="$(node "$REPO_ROOT/scripts/playwright-mcp-capture.mjs" --jobs "$CAPTURE_JOBS" --json)"
+python3 - "$CAPTURE_RESULT" "$URL" "$WIDTH" "$HEIGHT" <<'PY'
+import json, sys
+actual = json.loads(sys.argv[1])["results"][0]
+expected = {"url": sys.argv[2], "width": int(sys.argv[3]), "height": int(sys.argv[4])}
+observed = {key: actual[key] for key in expected}
+if observed != expected:
+    raise SystemExit(f"browser capture target mismatch: expected={expected}, actual={observed}")
+PY
 
 python3 "$SCRIPT_DIR/scene_compare.py" \
   --web "$WEB_CAPTURE" \

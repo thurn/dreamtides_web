@@ -65,18 +65,11 @@ const JOURNEY_SCENES = new Set([
   "journeycomplete",
   "journeyfailed",
 ]);
-const COLLECTION_SCENES = new Set([
-  "deckviewer",
-  "poolviewer",
-  "startingdeck",
-]);
+const COLLECTION_SCENES = new Set(["deckviewer", "poolviewer", "startingdeck"]);
 
 export function sceneGroupFor(sceneId) {
   if (sceneId === "battle" || sceneId.startsWith("battle")) return "battle";
-  if (
-    JOURNEY_SCENES.has(sceneId) ||
-    sceneId.startsWith("atlas")
-  ) {
+  if (JOURNEY_SCENES.has(sceneId) || sceneId.startsWith("atlas")) {
     return "journey";
   }
   if (COLLECTION_SCENES.has(sceneId)) return "collections";
@@ -140,7 +133,6 @@ export function parseDesktopScreenshotArgs(argv) {
         start: { type: "boolean" },
         seed: { type: "string", default: "42" },
         "run-id": { type: "string" },
-        session: { type: "string" },
         verbose: { type: "boolean", short: "v" },
         json: { type: "boolean" },
         help: { type: "boolean", short: "h" },
@@ -165,10 +157,7 @@ export function parseDesktopScreenshotArgs(argv) {
       "--scene cannot be combined with --smoke or --scene-preset",
     );
   }
-  if (
-    viewports.length > 0 &&
-    (values.extended || values["viewport-preset"])
-  ) {
+  if (viewports.length > 0 && (values.extended || values["viewport-preset"])) {
     throw new UsageError(
       "--viewport cannot be combined with --extended or --viewport-preset",
     );
@@ -224,7 +213,6 @@ export function parseDesktopScreenshotArgs(argv) {
     port,
     seed: values.seed,
     runId: values["run-id"] ?? null,
-    session: values.session ?? null,
     verbose: Boolean(values.verbose),
     json: Boolean(values.json),
     help: Boolean(values.help),
@@ -248,9 +236,7 @@ export function validateScenePresets(registeredSceneIds) {
 }
 
 export function resolveSceneSelection(options, registeredScenes) {
-  const catalog = new Map(
-    registeredScenes.map((scene) => [scene.id, scene]),
-  );
+  const catalog = new Map(registeredScenes.map((scene) => [scene.id, scene]));
   validateScenePresets([...catalog.keys()]);
   let ids;
   if (options.scenes.length > 0) ids = options.scenes;
@@ -293,7 +279,9 @@ export function resolveViewportSelection(options) {
       : VIEWPORT_PRESETS[options.viewportPreset];
   const selected = [];
   const seen = new Set();
-  for (const id of deduplicate(ids.map((entry) => entry.trim().toLowerCase()))) {
+  for (const id of deduplicate(
+    ids.map((entry) => entry.trim().toLowerCase()),
+  )) {
     const viewport = findViewport(id);
     if (!viewport) {
       throw new UsageError(

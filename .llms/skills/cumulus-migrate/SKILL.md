@@ -147,7 +147,7 @@ testing-library). Two required incantations, copied from
 - Before registration and the full final check, capture one representative
   state and confirm the overall visual direction. Correct composition problems
   while the feedback loop is still small.
-- Run the risk-tiered agent-browser pass in AGENTS.md "Verification": boot the
+- Run the risk-tiered Playwright MCP pass in AGENTS.md "Verification": boot the
   dev server on a non-default port, drive the relevant normal player workflow,
   inspect `window.__caps`, and measure DOM geometry for clipping, overlap, and
   responsive-branch claims. For routine visual work, keep final screenshots to
