@@ -252,7 +252,7 @@ export type ExplorationRewardView =
     }
   | {
       readonly kind: "battle-modifier";
-      readonly modifier: "opening-hand" | "starting-energy";
+      readonly modifier: "opening-hand" | "event-draw" | "starting-energy";
       readonly amount: number;
       readonly battlesRemaining: number;
     }
@@ -426,8 +426,7 @@ export type ExplorationRewardView =
     }
   | {
       readonly kind: "card-type-changes";
-      readonly sourceKind:
-        "change-random-card-type" | "change-card-type-selected";
+      readonly sourceKind: "change-card-type-selected";
       /** Exact persisted before-to-after type changes in prepared target order. */
       readonly changes: readonly {
         readonly entryId: DeckEntryId;
@@ -1116,8 +1115,7 @@ function ExplorationNarrativeChoices({
                   disclosure: action.effectDisclosure,
                   availability:
                     visible && action.available ? "available" : "unavailable",
-                  transfigurationGlossaryId:
-                    action.transfigurationGlossaryId,
+                  transfigurationGlossaryId: action.transfigurationGlossaryId,
                   preview: (() => {
                     const entity = previewEntityForAction(action);
                     return entity === null
@@ -4671,11 +4669,24 @@ export function ExplorationSiteScreen({
                     { amount: battleModifierReward.amount },
                     "[accessibility] [exploration] [battle] Announcement for an Exploration reward adding opening-hand cards in the next battle. amount is a positive card count.",
                   )
-                : txa(
-                    "{amount} additional starting Energy in the next battle",
-                    { amount: battleModifierReward.amount },
-                    "[accessibility] [exploration] [battle] Announcement for an Exploration reward adding starting Energy in the next battle. amount is positive.",
-                  ),
+                : battleModifierReward.modifier === "event-draw"
+                  ? txa(
+                      plural(battleModifierReward.amount, [
+                        one(
+                          "Draw {amount} Event at the start of the next battle",
+                        ),
+                        other(
+                          "Draw {amount} Events at the start of the next battle",
+                        ),
+                      ]),
+                      { amount: battleModifierReward.amount },
+                      "[accessibility] [exploration] [battle] Announcement for an Exploration reward drawing Events at the start of the next battle. amount is a positive Event-card count.",
+                    )
+                  : txa(
+                      "{amount} additional starting Energy in the next battle",
+                      { amount: battleModifierReward.amount },
+                      "[accessibility] [exploration] [battle] Announcement for an Exploration reward adding starting Energy in the next battle. amount is positive.",
+                    ),
             )}
             style={{
               position: "fixed",
@@ -4697,11 +4708,20 @@ export function ExplorationSiteScreen({
                       { amount: battleModifierReward.amount },
                       "[exploration] Compact headline for an Exploration opening-hand reward. amount is a positive card count.",
                     )
-                  : txa(
-                      "+{amount} ●",
-                      { amount: battleModifierReward.amount },
-                      "[exploration] Compact headline for an Exploration starting-Energy reward. amount is positive and the dot is the canonical Energy symbol.",
-                    )
+                  : battleModifierReward.modifier === "event-draw"
+                    ? txa(
+                        plural(battleModifierReward.amount, [
+                          one("+{amount} Event"),
+                          other("+{amount} Events"),
+                        ]),
+                        { amount: battleModifierReward.amount },
+                        "[exploration] Compact headline for an Exploration next-battle Event-draw reward. amount is a positive Event-card count.",
+                      )
+                    : txa(
+                        "+{amount} ●",
+                        { amount: battleModifierReward.amount },
+                        "[exploration] Compact headline for an Exploration starting-Energy reward. amount is positive and the dot is the canonical Energy symbol.",
+                      )
               }
               detail={tx(
                 "Next Battle",

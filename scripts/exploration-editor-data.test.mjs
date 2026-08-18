@@ -1,8 +1,4 @@
-import {
-  mkdtempSync,
-  rmSync,
-  writeFileSync,
-} from "node:fs";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it, vi } from "vitest";
@@ -18,7 +14,9 @@ const FIXTURE_CARD_ID = "161482b6-af07-4d9e-822d-8c738672beb9";
 const NIGHTMARE_CARD_ID = "b0a2c3d4-e5f6-4789-8abc-0def12345678";
 
 function writeEditorCatalogFixture(root) {
-  writeFileSync(join(root, "exploration.toml"), `
+  writeFileSync(
+    join(root, "exploration.toml"),
+    `
 schema-version = 2
 effect-kinds = ${JSON.stringify(EXPLORATION_EFFECT_KINDS)}
 
@@ -42,8 +40,11 @@ card-id = "${FIXTURE_CARD_ID}"
 nightmare-count = 1
 followup-title = "Choose a reward"
 followup-subtitle = "Take one of the offered rewards"
-`);
-  writeFileSync(join(root, "cards.toml"), `
+`,
+  );
+  writeFileSync(
+    join(root, "cards.toml"),
+    `
 [[cards]]
 id = "${FIXTURE_CARD_ID}"
 name = "Fixture card"
@@ -63,7 +64,8 @@ card-type = "Event"
 subtype = ""
 rarity = "Special"
 image-number = 2
-`);
+`,
+  );
   writeFileSync(join(root, "dreamsigns.toml"), "");
 }
 
@@ -112,23 +114,6 @@ describe("exploration editor data", () => {
     });
   });
 
-  it("maps compatibility card-type to the editor cardType field", () => {
-    expect(
-      explorationEditorInternals.camelAction({
-        id: "card-type-action",
-        label: "Synthetic action",
-        "effect-text": "Become {card_type}",
-        "effect-kind": "change-random-card-type",
-        count: 2,
-        "card-type": "Event",
-      }),
-    ).toMatchObject({
-      effectKind: "change-random-card-type",
-      count: 2,
-      cardType: "Event",
-    });
-  });
-
   it("loads action-local presentation with UUID-backed previews", () => {
     const root = mkdtempSync(join(tmpdir(), "exploration-editor-data-"));
     try {
@@ -166,7 +151,8 @@ describe("exploration editor data", () => {
             action.runtimeCardSelections.some(
               (selection) =>
                 selection.placeholder === "{fixed_card}" &&
-                selection.cardId.toLowerCase() === action.cardId.toLowerCase() &&
+                selection.cardId.toLowerCase() ===
+                  action.cardId.toLowerCase() &&
                 selection.source === "fixed_reference",
             ),
           ),
@@ -189,7 +175,7 @@ describe("exploration editor data", () => {
   });
 
   it("publishes a closed code-owned schema without player copy", () => {
-    expect(EXPLORATION_EFFECT_SCHEMAS).toHaveLength(66);
+    expect(EXPLORATION_EFFECT_SCHEMAS).toHaveLength(65);
     expect(
       new Set(EXPLORATION_EFFECT_SCHEMAS.map((entry) => entry.kind)).size,
     ).toBe(EXPLORATION_EFFECT_SCHEMAS.length);
@@ -397,15 +383,6 @@ describe("exploration editor data", () => {
     );
     expect(
       EXPLORATION_EFFECT_SCHEMAS.findIndex(
-        ({ kind }) => kind === "change-card-type-selected",
-      ),
-    ).toBe(
-      EXPLORATION_EFFECT_SCHEMAS.findIndex(
-        ({ kind }) => kind === "change-random-card-type",
-      ) - 1,
-    );
-    expect(
-      EXPLORATION_EFFECT_SCHEMAS.findIndex(
         ({ kind }) => kind === "replace-random-with-card",
       ),
     ).toBe(
@@ -575,19 +552,9 @@ describe("exploration editor data", () => {
           "replace-selected",
           "transfigure-fixed-selected",
           "copy-random-cards",
-          "change-random-card-type",
         ].includes(definition.kind),
       ),
     ).toEqual([
-      expect.objectContaining({
-        kind: "change-random-card-type",
-        canonicalMechanicId: "change-entry-card-type",
-        defaultSelectionPolicyId: "uniform",
-        fields: [
-          expect.objectContaining({ key: "count", min: 1 }),
-          expect.objectContaining({ key: "cardType", control: "card-type" }),
-        ],
-      }),
       expect.objectContaining({
         kind: "replace-selected",
         fields: [
@@ -1122,7 +1089,7 @@ describe("exploration editor data", () => {
     }
   });
 
-  it("normalizes counted replacement, fixed transfiguration, copy, and card-type effects", () => {
+  it("normalizes counted replacement, fixed transfiguration, and copy effects", () => {
     const replacement = normalizeExplorationAction({
       id: "replacement",
       label: "Synthetic action",
@@ -1153,14 +1120,6 @@ describe("exploration editor data", () => {
       predicate: "event",
       count: 2,
     });
-    const cardType = normalizeExplorationAction({
-      id: "change-random-type",
-      label: "Synthetic action",
-      effectText: "Change two random cards into {card_type} cards",
-      effectKind: "change-random-card-type",
-      count: 2,
-      cardType: "Character",
-    });
     const legacyReplacement = normalizeExplorationAction({
       ...replacement,
       id: "legacy-replacement",
@@ -1185,11 +1144,6 @@ describe("exploration editor data", () => {
       canonicalMechanicId: "duplicate-deck-entry",
       selectionPolicyId: "uniform",
     });
-    expect(cardType).toMatchObject({
-      canonicalMechanicId: "change-entry-card-type",
-      selectionPolicyId: "uniform",
-      cardType: "Character",
-    });
     expect(legacyReplacement.count).toBeUndefined();
     expect(legacyFixed.count).toBeUndefined();
 
@@ -1204,12 +1158,6 @@ describe("exploration editor data", () => {
       ],
       [
         { ...copy, effectText: "Copy {deck_card}" },
-        /target-disclosing presentation tokens/u,
-      ],
-      [{ ...cardType, cardType: "Dreamwell" }, /Character or Event/u],
-      [{ ...cardType, predicate: "event" }, /predicate does not apply/u],
-      [
-        { ...cardType, effectText: "Change {deck_card} into an Event" },
         /target-disclosing presentation tokens/u,
       ],
     ]) {

@@ -11,11 +11,7 @@ import type { CardTransfigurationDisplay } from "../runtime/transfiguration-disp
 import type { BattleDebugEdit } from "./debug/commands";
 import type { TutorialTriggerDefinition } from "../types/tutorial";
 import type { DeckEntryId } from "../types/identifiers";
-import type {
-  CardId,
-  CardName,
-  CardSubtype,
-} from "../types/card-identity";
+import type { CardId, CardName, CardSubtype } from "../types/card-identity";
 import type { ContentHash } from "../types/content-hash";
 import type { DreamwellCardName } from "../types/catalog-names";
 import type { BattleId } from "../types/identifiers";
@@ -36,12 +32,7 @@ import type {
 } from "../types/identifiers";
 import type { BattleSide } from "../types/battle";
 
-export type {
-  BackRankSlotId,
-  BattlefieldSlotId,
-  BattleSide,
-  FrontRankSlotId,
-};
+export type { BackRankSlotId, BattlefieldSlotId, BattleSide, FrontRankSlotId };
 
 // The play area is the fixed staggered grid in the battle rules: 9 front-rank
 // positions and 10 back-rank positions. Slots are addressed by stable ids
@@ -399,6 +390,10 @@ export interface BattleInit {
   isFinalBoss: boolean;
   essenceReward: number;
   openingHandSize: number;
+  /** Event cards deterministically drawn after the ordinary opening hand. */
+  openingHandEventDrawCardUuids?: readonly CardId[];
+  /** Concrete journey entries corresponding to the Event draws when present. */
+  openingHandEventDrawEntryIds?: readonly (DeckEntryId | null)[];
   /** Enemy opening-hand size when it differs from the player's authored bonus. */
   enemyOpeningHandSize?: number;
   /** Additional energy available to the player before Dreamwell draws begin. */

@@ -82,14 +82,6 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
       ),
   ],
   [
-    '["change-random-card-type",null,2,"Event",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
-    () =>
-      tx(
-        "Modify two random cards to become Event cards",
-        "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
-      ),
-  ],
-  [
     '["change-subtype-all",null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,["Warrior","Mage","Spirit Animal","Survivor"],null,null,null]',
     () =>
       tx(
@@ -558,6 +550,14 @@ const EFFECT_TEXT_BY_MECHANIC = new Map<string, () => LocalizedString>([
     () =>
       tx(
         "All cards in your deck become ❖ (fast)",
+        "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
+      ),
+  ],
+  [
+    '["next-battle-opening-hand","event",2,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null]',
+    () =>
+      tx(
+        "At the start of your next battle, draw two events.",
         "Path: EncounterDefinition.actions.ActionDefinition.presentation_override.ActionPresentationOverride.effect_text",
       ),
   ],

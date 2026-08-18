@@ -27,9 +27,7 @@ import {
 const CARD_IDS = Array.from({ length: 5 }, (_, index) =>
   testCardId(`b0000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`),
 );
-const ENCOUNTER_CARD_ID = testCardId(
-  "b0000000-0000-4000-8000-000000000099",
-);
+const ENCOUNTER_CARD_ID = testCardId("b0000000-0000-4000-8000-000000000099");
 
 function card(
   index: number,
@@ -188,48 +186,6 @@ describe("Exploration random deck target plan", () => {
     );
   });
 
-  it("uses effective card type and excludes entries already at the authored target", () => {
-    const plan = prepare({
-      effectKind: "change-random-card-type",
-      predicate: undefined,
-      cardType: "Event",
-      count: 4,
-    });
-
-    expect(plan.unavailableReason).toBeUndefined();
-    expect(plan).toMatchObject({
-      effectKind: "change-random-card-type",
-      cardType: "Event",
-      count: 4,
-    });
-    expect(plan.eligibleCards.map(({ entryId }) => entryId)).toEqual([
-      "entry-prior-override",
-      "entry-starter",
-      "entry-warrior-a",
-      "entry-warrior-b",
-    ]);
-    expect(plan.targets.map(({ entryId }) => entryId)).toEqual(
-      expect.arrayContaining([
-        "entry-prior-override",
-        "entry-starter",
-        "entry-warrior-a",
-        "entry-warrior-b",
-      ]),
-    );
-    expect(plan.selectorTrace).toMatchObject({
-      mechanicId: "change-entry-card-type",
-      policyId: "uniform",
-      keyKind: "entryId",
-      candidateCount: 4,
-      constraints: {
-        allowStarters: true,
-        allowNightmare: true,
-        distinctDeckEntries: true,
-        excludedDeckEntryIds: ["entry-event", "entry-nightmare"],
-      },
-    });
-  });
-
   it("uniformly selects one exact effective-deck entry for a fixed replacement", () => {
     const plan = prepareReplacement();
     const reordered = prepareReplacement({
@@ -334,12 +290,6 @@ describe("Exploration random deck target plan", () => {
     const malformed = prepare({ predicate: undefined });
     const invalidCount = prepare({ count: 0 });
     const insufficient = prepare({ count: 5 });
-    const invalidTypeChange = prepare({
-      effectKind: "change-random-card-type",
-      predicate: "warrior",
-      cardType: "Event",
-      count: 1,
-    });
 
     expect(malformed).toMatchObject({
       unavailableReason: "invalid-authored-configuration",
@@ -347,9 +297,6 @@ describe("Exploration random deck target plan", () => {
       targets: [],
     });
     expect(invalidCount.unavailableReason).toBe(
-      "invalid-authored-configuration",
-    );
-    expect(invalidTypeChange.unavailableReason).toBe(
       "invalid-authored-configuration",
     );
     expect(insufficient).toMatchObject({
@@ -368,7 +315,6 @@ describe("Exploration random deck target plan", () => {
       replacementCardId: testCardId("b0000000-0000-4000-8000-000000000098"),
     });
     const explicitCount = prepareReplacement({ count: 1 });
-    const unrelatedField = prepareReplacement({ cardType: "Event" });
     const replacementOnCopy = prepare({ replacementCardId: CARD_IDS[4] });
     const insufficient = prepareReplacement({ predicate: "spirit-animal" });
 
@@ -376,7 +322,6 @@ describe("Exploration random deck target plan", () => {
       missingReplacement,
       unknownReplacement,
       explicitCount,
-      unrelatedField,
       replacementOnCopy,
     ]) {
       expect(malformed).toMatchObject({

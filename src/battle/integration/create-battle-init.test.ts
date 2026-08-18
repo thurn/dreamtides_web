@@ -211,6 +211,37 @@ describe("createBattleInit", () => {
     expect(init.playerStartingEnergy).toBe(3);
   });
 
+  it("draws two additional Events into the next battle opening hand", () => {
+    const baseState = makeBattleTestState();
+    const init = createBattleInit({
+      ...makeBaseInput(),
+      state: {
+        ...baseState,
+        battleModifiers: [
+          {
+            kind: "opening_hand_event_draw",
+            count: 2,
+            battlesRemaining: 1,
+            source: testJourneyMutationSource("exploration:test:events"),
+          },
+        ],
+      },
+    });
+
+    const drawnEvents = init.playerDeckOrder.slice(5, 7);
+    expect(init.openingHandSize).toBe(7);
+    expect(drawnEvents).toHaveLength(2);
+    expect(drawnEvents.every((card) => card.battleCardKind === "event")).toBe(
+      true,
+    );
+    expect(init.openingHandEventDrawCardUuids).toEqual(
+      drawnEvents.map((card) => card.cardId),
+    );
+    expect(init.openingHandEventDrawEntryIds).toEqual(
+      drawnEvents.map((card) => card.sourceDeckEntryId),
+    );
+  });
+
   it("applies the next-battle smaller-hand discount only to the player deck", () => {
     const baseInput = makeBaseInput();
     const baseline = createBattleInit(baseInput);
@@ -291,7 +322,10 @@ describe("createBattleInit", () => {
       const baseInput = makeBaseInput();
       const otherInput: CreateBattleInitInput = {
         ...baseInput,
-        state: { ...baseInput.state, seed: testJourneySeed("another-journey-seed") },
+        state: {
+          ...baseInput.state,
+          seed: testJourneySeed("another-journey-seed"),
+        },
       };
 
       const a = createBattleInit(baseInput);
@@ -323,7 +357,9 @@ describe("createBattleInit", () => {
     it("falls back to the hash-derived seed when seedOverride is null or omitted", () => {
       const baseInput = makeBaseInput();
       const expectedSeed = deriveBattleSeed(
-        parseBattleEntryKey(`${baseInput.state.seed}:${baseInput.battleEntryKey}`),
+        parseBattleEntryKey(
+          `${baseInput.state.seed}:${baseInput.battleEntryKey}`,
+        ),
       );
 
       const fromOmitted = createBattleInit(baseInput);

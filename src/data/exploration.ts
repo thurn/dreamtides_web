@@ -829,15 +829,13 @@ const WAVE4B_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> = new Set([
   "replace-selected",
   "transfigure-fixed-selected",
   "copy-random-cards",
-  "change-random-card-type",
 ]);
 const AUTOMATIC_WAVE4B_EFFECT_KINDS: ReadonlySet<ExplorationEffectKind> =
-  new Set(["copy-random-cards", "change-random-card-type"]);
+  new Set(["copy-random-cards"]);
 
 function validateWave4bFields(raw: ExplorationActionContent): void {
   if (
     raw.cardType !== undefined &&
-    raw.effectKind !== "change-random-card-type" &&
     raw.effectKind !== "change-card-type-selected"
   ) {
     throw new Error(
@@ -856,9 +854,7 @@ function validateWave4bFields(raw: ExplorationActionContent): void {
       ? "replace-deck-entry"
       : raw.effectKind === "copy-random-cards"
         ? "duplicate-deck-entry"
-        : raw.effectKind === "change-random-card-type"
-          ? "change-entry-card-type"
-          : "transfigure-deck-entry";
+        : "transfigure-deck-entry";
   if (raw.canonicalMechanicId !== expectedMechanic) {
     throw new Error(
       `Invalid Exploration data: ${raw.effectKind} requires canonical mechanic ${expectedMechanic}`,
@@ -904,25 +900,13 @@ function validateWave4bFields(raw: ExplorationActionContent): void {
       );
     }
   }
-  if (
-    raw.effectKind === "change-random-card-type" &&
-    raw.cardType !== "Character" &&
-    raw.cardType !== "Event"
-  ) {
-    throw new Error(
-      "Invalid Exploration data: change-random-card-type requires Character or Event cardType",
-    );
-  }
   if (AUTOMATIC_WAVE4B_EFFECT_KINDS.has(raw.effectKind)) {
     if (raw.followupTitle !== undefined || raw.followupSubtitle !== undefined) {
       throw new Error(
         `Invalid Exploration data: ${raw.effectKind} does not support a followup`,
       );
     }
-    const allowedTokens =
-      raw.effectKind === "change-random-card-type"
-        ? new Set(["card_type"])
-        : new Set<string>();
+    const allowedTokens = new Set<string>();
     const tokens = messageArgumentNames(raw.effectText);
     if (tokens.some((token) => !allowedTokens.has(token))) {
       throw new Error(
@@ -935,9 +919,7 @@ function validateWave4bFields(raw: ExplorationActionContent): void {
       ? ["predicate", "count"]
       : raw.effectKind === "transfigure-fixed-selected"
         ? ["predicate", "count", "transfiguration", "deckTarget"]
-        : raw.effectKind === "copy-random-cards"
-          ? ["predicate", "count"]
-          : ["count", "cardType"],
+        : ["predicate", "count"],
   );
   const effectFields: ReadonlyArray<keyof ExplorationActionContent> = [
     "predicate",

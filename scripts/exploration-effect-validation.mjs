@@ -43,10 +43,7 @@ const OPTIONAL_COUNT_MUTATION_KINDS = new Set([
   "replace-selected",
   "transfigure-fixed-selected",
 ]);
-const AUTOMATIC_WAVE4B_KINDS = new Set([
-  "copy-random-cards",
-  "change-random-card-type",
-]);
+const AUTOMATIC_WAVE4B_KINDS = new Set(["copy-random-cards"]);
 const WAVE7_KINDS = new Set([
   "replace-random-with-card",
   "change-card-type-selected",
@@ -85,7 +82,6 @@ const REQUIRED_AUTHORED_FIELDS = new Map([
   ["transfigure-random-cards", ["predicate", "count"]],
   ["transfigure-fixed-random-cards", ["predicate", "count", "transfiguration"]],
   ["copy-random-cards", ["predicate", "count"]],
-  ["change-random-card-type", ["count", "cardType"]],
   ["replace-random-with-card", ["predicate", "cardId"]],
   ["change-card-type-selected", ["cardType", "deckTarget"]],
   ["lose-half-essence-and-free-purchases", ["count"]],
@@ -451,38 +447,19 @@ export function validateExplorationEffectAction(
   }
 
   if (AUTOMATIC_WAVE4B_KINDS.has(kind)) {
-    requireMetadata(
-      action,
-      kind === "copy-random-cards"
-        ? "duplicate-deck-entry"
-        : "change-entry-card-type",
-      ["uniform"],
-      fail,
-    );
+    requireMetadata(action, "duplicate-deck-entry", ["uniform"], fail);
     rejectUnsupportedFields(
       action,
-      kind === "copy-random-cards"
-        ? ["predicate", "count"]
-        : ["count", "cardType"],
+      ["predicate", "count"],
       fail,
       effectKindLabel,
     );
     if (!Number.isInteger(action.count) || action.count <= 0) {
       fail(`${kind} requires a ${positiveInteger} count`);
     }
-    if (kind === "copy-random-cards")
-      requirePredicate(action, predicates, fail, predicateRequirement);
-    if (
-      kind === "change-random-card-type" &&
-      action.cardType !== "Character" &&
-      action.cardType !== "Event"
-    ) {
-      fail(`${kind} requires Character or Event cardType`);
-    }
+    requirePredicate(action, predicates, fail, predicateRequirement);
     requireNoFollowup(action, fail);
-    const allowed = new Set(
-      kind === "change-random-card-type" ? ["{card_type}"] : [],
-    );
+    const allowed = new Set();
     const tokens = presentationTokens(action.effectText);
     if (
       /\$[A-Z][A-Z0-9_]*/u.test(action.effectText) ||

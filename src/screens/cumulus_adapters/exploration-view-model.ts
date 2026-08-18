@@ -766,11 +766,7 @@ function followupForAction(
         const cards = preparedMultiCardReplacementCards(offer, state, content);
         return {
           kind: "cards",
-          title: configuredFollowupCopy(
-            action,
-            content,
-            "followupTitle",
-          ),
+          title: configuredFollowupCopy(action, content, "followupTitle"),
           subtitle: configuredFollowupCopy(
             action,
             content,
@@ -786,11 +782,7 @@ function followupForAction(
         };
       }
       return deckEntryFollowup(
-        configuredFollowupCopy(
-          action,
-          content,
-          "followupTitle",
-        ),
+        configuredFollowupCopy(action, content, "followupTitle"),
         configuredFollowupCopy(
           action,
           content,
@@ -920,7 +912,6 @@ function followupForAction(
     case "add-fixed-site":
     case "transfigure-all-for-essence":
     case "copy-random-cards":
-    case "change-random-card-type":
     case "replace-random-with-card":
       return { kind: "none" };
     case "choose-site-type":
@@ -2073,17 +2064,14 @@ function hasUsableRandomDeckTargetPreparation(
   offer: ExplorationActionOfferRuntime,
   state: JourneyState,
   content: JourneyContent,
-  allowResolvedTypeChange = false,
 ): boolean {
   const preparation = offer.randomDeckTargetPreparation;
   const expectedMechanic =
     action.effectKind === "copy-random-cards"
       ? "duplicate-deck-entry"
-      : action.effectKind === "change-random-card-type"
-        ? "change-entry-card-type"
-        : action.effectKind === "replace-random-with-card"
-          ? "replace-deck-entry"
-          : null;
+      : action.effectKind === "replace-random-with-card"
+        ? "replace-deck-entry"
+        : null;
   const expectedCount =
     action.effectKind === "replace-random-with-card" ? 1 : action.count;
   if (
@@ -2092,7 +2080,6 @@ function hasUsableRandomDeckTargetPreparation(
     preparation.effectKind !== action.effectKind ||
     preparation.count !== expectedCount ||
     preparation.predicate !== action.predicate ||
-    preparation.cardType !== action.cardType ||
     preparation.replacementCardId !== action.cardId ||
     preparation.unavailableReason !== undefined ||
     preparation.eligibleCards.length < preparation.count ||
@@ -2126,19 +2113,9 @@ function hasUsableRandomDeckTargetPreparation(
     if (card === null || card.model.cardId !== binding.cardId) {
       return false;
     }
-    if (
-      action.effectKind === "copy-random-cards" ||
-      action.effectKind === "replace-random-with-card"
-    ) {
-      return (
-        action.predicate !== undefined &&
-        matchesPredicate(card.model.displaySnapshot, action.predicate, content)
-      );
-    }
     return (
-      action.cardType !== undefined &&
-      (allowResolvedTypeChange ||
-        card.model.displaySnapshot.cardType !== action.cardType)
+      action.predicate !== undefined &&
+      matchesPredicate(card.model.displaySnapshot, action.predicate, content)
     );
   });
   return (
@@ -2433,7 +2410,6 @@ function actionView(
     action.effectKind === "replace-selected" && (action.count ?? 1) > 1;
   const usesRandomDeckTargetPreparation =
     action.effectKind === "copy-random-cards" ||
-    action.effectKind === "change-random-card-type" ||
     action.effectKind === "replace-random-with-card";
   const usesDisclosedDeckTargetPreparation =
     action.effectKind === "change-card-type-selected" &&
@@ -3464,7 +3440,6 @@ function cardTypeChangesRewardForResolution(
   const offer = runtime.actionOffers.find(
     (candidate) => candidate.actionId === action.id,
   );
-  const isRandom = action.effectKind === "change-random-card-type";
   const isDisclosed =
     action.effectKind === "change-card-type-selected" &&
     action.deckTarget === "offered";
@@ -3474,15 +3449,7 @@ function cardTypeChangesRewardForResolution(
   if (
     resolution === null ||
     offer === undefined ||
-    (!isRandom && !isDisclosed && !isChosen) ||
-    (isRandom &&
-      !hasUsableRandomDeckTargetPreparation(
-        action,
-        offer,
-        state,
-        content,
-        true,
-      )) ||
+    (!isDisclosed && !isChosen) ||
     (isDisclosed &&
       !hasUsableDisclosedDeckTargetPreparation(
         action,
@@ -3496,9 +3463,7 @@ function cardTypeChangesRewardForResolution(
   }
   const mappings = resolution.cardTypeChanges ?? [];
   let preparedTargets: Array<{ entryId: DeckEntryId; cardId: CardId }>;
-  if (isRandom) {
-    preparedTargets = [...(offer.randomDeckTargetPreparation?.targets ?? [])];
-  } else if (isDisclosed) {
+  if (isDisclosed) {
     const disclosedTarget = offer.disclosedDeckTargetPreparation?.target;
     if (disclosedTarget === undefined || disclosedTarget === null) return null;
     preparedTargets = [disclosedTarget];
@@ -3508,7 +3473,7 @@ function cardTypeChangesRewardForResolution(
       cardId: mapping.cardId,
     }));
   }
-  const expectedCount = isRandom ? (action.count ?? 0) : 1;
+  const expectedCount = 1;
   if (
     action.cardType === undefined ||
     resolution.resolvedCardType !== action.cardType ||
@@ -3565,9 +3530,7 @@ function cardTypeChangesRewardForResolution(
   return changes.length === mappings.length
     ? {
         kind: "card-type-changes",
-        sourceKind: isRandom
-          ? "change-random-card-type"
-          : "change-card-type-selected",
+        sourceKind: "change-card-type-selected",
         changes,
       }
     : null;
@@ -4070,10 +4033,7 @@ function rewardForResolution(
       content,
     );
   }
-  if (
-    resolvedAction?.effectKind === "change-random-card-type" ||
-    resolvedAction?.effectKind === "change-card-type-selected"
-  ) {
+  if (resolvedAction?.effectKind === "change-card-type-selected") {
     return cardTypeChangesRewardForResolution(
       resolvedAction,
       runtime,

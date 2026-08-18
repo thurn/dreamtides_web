@@ -44,8 +44,7 @@ string_enum!(EffectKind {
     ChoosePack => "choose-pack",
     DraftCard => "draft-card", PurgeForEssence => "purge-for-essence",
     ChangeSubtypeSelected => "change-subtype-selected",
-    ChangeCardTypeSelected => "change-card-type-selected",
-    ChangeRandomCardType => "change-random-card-type", ChangeSubtypeAll => "change-subtype-all",
+    ChangeCardTypeSelected => "change-card-type-selected", ChangeSubtypeAll => "change-subtype-all",
     TakeCards => "take-cards", ReplaceSelectedWithCard => "replace-selected-with-card",
     ReplaceRandomWithCard => "replace-random-with-card",
     ReplaceSelected => "replace-selected", GainNightmareAndCard => "gain-nightmare-and-card",
@@ -124,7 +123,7 @@ string_enum!(FixedSiteType {
 });
 
 impl EffectKind {
-    pub(crate) const ALL: [Self; 66] = [
+    pub(crate) const ALL: [Self; 65] = [
         Self::PurgeAndCopy,
         Self::PurgeOneTransfigureAndCopyOthers,
         Self::GainDreamsign,
@@ -147,7 +146,6 @@ impl EffectKind {
         Self::PurgeForEssence,
         Self::ChangeSubtypeSelected,
         Self::ChangeCardTypeSelected,
-        Self::ChangeRandomCardType,
         Self::ChangeSubtypeAll,
         Self::TakeCards,
         Self::TakeTransfiguredCardsAndGainNightmares,
@@ -223,9 +221,7 @@ impl EffectKind {
             Self::DraftCard | Self::TakeCards => Mechanic::CatalogCardChooser,
             Self::PurgeForEssence => Mechanic::PurgeForEssence,
             Self::ChangeSubtypeSelected => Mechanic::ChangeEntrySubtype,
-            Self::ChangeCardTypeSelected | Self::ChangeRandomCardType => {
-                Mechanic::ChangeEntryCardType
-            }
+            Self::ChangeCardTypeSelected => Mechanic::ChangeEntryCardType,
             Self::ChangeSubtypeAll => Mechanic::ChangeDeckSubtype,
             Self::ReplaceSelectedWithCard
             | Self::ReplaceRandomWithCard
@@ -292,7 +288,6 @@ impl EffectKind {
             | Self::TakeTransfiguredCardsAndGainNightmares => Some(SelectionPolicy::CardFit),
             Self::ChangeSubtypeSelected => Some(SelectionPolicy::DeckEntryCentrality),
             Self::ChangeCardTypeSelected => Some(SelectionPolicy::DeckEntryCentrality),
-            Self::ChangeRandomCardType => Some(SelectionPolicy::Uniform),
             Self::ReplaceRandomWithCard => Some(SelectionPolicy::Uniform),
             Self::ReplaceSelected | Self::GainOfferedCard => Some(SelectionPolicy::CardFitQuality),
             Self::GainRandomDreamsign
@@ -333,7 +328,6 @@ impl ActionEffect {
             Self::DraftCard { .. } => EffectKind::DraftCard,
             Self::ChangeSubtypeSelected { .. } => EffectKind::ChangeSubtypeSelected,
             Self::ChangeCardTypeSelected { .. } => EffectKind::ChangeCardTypeSelected,
-            Self::ChangeRandomCardType { .. } => EffectKind::ChangeRandomCardType,
             Self::ChangeSubtypeAll { .. } => EffectKind::ChangeSubtypeAll,
             Self::GainNamedCard { .. } => EffectKind::GainCard,
             Self::GainDreamsign { .. } => EffectKind::GainDreamsign,
@@ -547,10 +541,6 @@ pub enum ActionEffect {
         card_type: CardTypeTarget,
         target: DeckTarget,
     },
-    ChangeRandomCardType {
-        count: i64,
-        card_type: CardTypeTarget,
-    },
     ChangeSubtypeAll {
         subtype_options: Vec<String>,
     },
@@ -651,6 +641,8 @@ pub enum ActionEffect {
     },
     NextBattleOpeningHand {
         count: i64,
+        #[serde(default)]
+        predicate: Option<Predicate>,
     },
     NextBattleStartingEnergy {
         count: i64,
@@ -757,7 +749,6 @@ pub fn lower(catalog: ExplorationCatalog) -> Result<toml::Value> {
                         | ActionEffect::TransfigureRandomCards { count, .. }
                         | ActionEffect::TransfigureFixedRandomCards { count, .. }
                         | ActionEffect::CopyRandomCards { count, .. }
-                        | ActionEffect::ChangeRandomCardType { count, .. }
                             if *count <= 0 =>
                         {
                             bail!(
@@ -1102,11 +1093,6 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
             text!("card-type", card_type.as_compat());
             text!("deck-target", target.as_compat());
         }
-        ActionEffect::ChangeRandomCardType { count, card_type } => {
-            kind!(ChangeRandomCardType);
-            int!("count", count);
-            text!("card-type", card_type.as_compat());
-        }
         ActionEffect::ChangeSubtypeAll { subtype_options } => {
             kind!(ChangeSubtypeAll);
             output.insert(
@@ -1293,9 +1279,15 @@ fn lower_action_effect(effect: ActionEffect, output: &mut toml::map::Map<String,
             kind!(CopyOfferedDeckCard);
             int!("offer-count", offer_count);
         }
-        ActionEffect::NextBattleOpeningHand { count } => {
+        ActionEffect::NextBattleOpeningHand {
+            count,
+            predicate: value,
+        } => {
             kind!(NextBattleOpeningHand);
             int!("count", count);
+            if let Some(value) = value {
+                predicate!(value);
+            }
         }
         ActionEffect::NextBattleStartingEnergy { count } => {
             kind!(NextBattleStartingEnergy);
@@ -1679,12 +1671,6 @@ mod tests {
         id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
         presentation_override: ActionPresentationOverride(effect_text: Tx("Copy 2 random Events"), followup: None),
         effect: CopyRandomCards(predicate: Event, count: 2),
-      ),
-      ActionDefinition(
-        label: Tx("Make Two Characters"),
-        id: "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
-        presentation_override: ActionPresentationOverride(effect_text: Tx("Make 2 random cards Characters"), followup: None),
-        effect: ChangeRandomCardType(count: 2, card_type: Character),
       ),
     ],
   ),
@@ -2509,32 +2495,19 @@ mod tests {
         );
         assert_eq!(actions[2]["selection-policy-id"].as_str(), Some("uniform"));
 
-        assert_eq!(
-            actions[3]["effect-kind"].as_str(),
-            Some("change-random-card-type")
-        );
-        assert_eq!(actions[3]["count"].as_integer(), Some(2));
-        assert_eq!(actions[3]["card-type"].as_str(), Some("Character"));
-        assert_eq!(
-            actions[3]["canonical-mechanic-id"].as_str(),
-            Some("change-entry-card-type")
-        );
-        assert_eq!(actions[3]["selection-policy-id"].as_str(), Some("uniform"));
-
         let kinds = lowered["effect-kinds"].as_array().unwrap();
         let change = kinds
             .iter()
             .position(|kind| kind.as_str() == Some("change-subtype-selected"))
             .unwrap();
         assert_eq!(
-            kinds[change..change + 4]
+            kinds[change..change + 3]
                 .iter()
                 .filter_map(toml::Value::as_str)
                 .collect::<Vec<_>>(),
             vec![
                 "change-subtype-selected",
                 "change-card-type-selected",
-                "change-random-card-type",
                 "change-subtype-all",
             ]
         );
@@ -2608,14 +2581,13 @@ mod tests {
             .position(|kind| kind.as_str() == Some("change-subtype-selected"))
             .unwrap();
         assert_eq!(
-            kinds[change..change + 4]
+            kinds[change..change + 3]
                 .iter()
                 .filter_map(toml::Value::as_str)
                 .collect::<Vec<_>>(),
             vec![
                 "change-subtype-selected",
                 "change-card-type-selected",
-                "change-random-card-type",
                 "change-subtype-all",
             ]
         );
@@ -2687,10 +2659,6 @@ mod tests {
                 "CopyRandomCards(predicate: Event, count: 2)",
                 "CopyRandomCards(predicate: Event, count: 0)",
             ),
-            (
-                "ChangeRandomCardType(count: 2, card_type: Character)",
-                "ChangeRandomCardType(count: 0, card_type: Character)",
-            ),
         ] {
             let malformed: ExplorationCatalog =
                 ron::from_str(&DECK_MUTATION_SOURCE.replace(from, to)).unwrap();
@@ -2717,13 +2685,6 @@ mod tests {
                     .contains("requires a chosen target and predicate")
             );
         }
-
-        assert!(
-            ron::from_str::<ExplorationCatalog>(
-                &DECK_MUTATION_SOURCE.replace("card_type: Character", "card_type: Warrior")
-            )
-            .is_err()
-        );
     }
 
     #[test]

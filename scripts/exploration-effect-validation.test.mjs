@@ -91,15 +91,6 @@ const validActions = [
   },
   {
     ...base,
-    effectText: "Change cards into {card_type}",
-    effectKind: "change-random-card-type",
-    canonicalMechanicId: "change-entry-card-type",
-    selectionPolicyId: "uniform",
-    count: 2,
-    cardType: "Event",
-  },
-  {
-    ...base,
     effectText: "Replace a card with {fixed_card}",
     effectKind: "replace-random-with-card",
     canonicalMechanicId: "replace-deck-entry",
@@ -158,13 +149,12 @@ const invalidActions = [
   { ...validActions[0], effectText: "Purge a starter card" },
   { ...validActions[1], cardId: CARD_ID },
   { ...validActions[2], deckTarget: "offered" },
-  { ...validActions[3], cardType: "Dreamwell" },
-  { ...validActions[4], effectText: "Replace {deck_card}" },
-  { ...validActions[5], count: 1 },
-  { ...validActions[6], offerCount: 4 },
-  { ...validActions[7], predicate: "event" },
-  { ...validActions[8], effectText: "Purge a disclosed card" },
-  { ...validActions[9], followupSubtitle: "" },
+  { ...validActions[3], effectText: "Replace {deck_card}" },
+  { ...validActions[4], count: 1 },
+  { ...validActions[5], offerCount: 4 },
+  { ...validActions[6], predicate: "event" },
+  { ...validActions[7], effectText: "Purge a disclosed card" },
+  { ...validActions[8], followupSubtitle: "" },
 ];
 
 describe("shared Exploration effect validation", () => {
@@ -172,7 +162,7 @@ describe("shared Exploration effect validation", () => {
     expect(() =>
       transformExplorationData(
         generatorSource({
-          ...validActions[6],
+          ...validActions[5],
           effectText: undefined,
           followupTitle: SOURCE_MESSAGE_REF,
           followupSubtitle: SOURCE_MESSAGE_REF,

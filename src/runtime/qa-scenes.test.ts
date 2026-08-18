@@ -57,7 +57,15 @@ import type { CardId } from "../types/card-identity";
 import type { SiteId } from "../types/identifiers";
 import type { ExplorationActionId } from "../types/identifiers";
 import { parseDeckEntryId } from "../types/identifiers";
-import { testApollyonIncarnationId, testCardId, testDreamscapeId, testExplorationActionId, testGuideId, testAvatarId, testDreamsignId } from "../types/test-identities";
+import {
+  testApollyonIncarnationId,
+  testCardId,
+  testDreamscapeId,
+  testExplorationActionId,
+  testGuideId,
+  testAvatarId,
+  testDreamsignId,
+} from "../types/test-identities";
 
 const TUTORIAL_AVATAR_ID = TEST_TUTORIAL_PLAYER_AVATAR_ID;
 
@@ -850,10 +858,14 @@ describe('the "exploration" QA scene', () => {
       ],
     };
 
-    const state = buildQaScene(parseQaSceneId("exploration-purchases"), content, {
-      explorationCardId: encounterCardId,
-      journeySeed: testJourneySeed(input.seed),
-    });
+    const state = buildQaScene(
+      parseQaSceneId("exploration-purchases"),
+      content,
+      {
+        explorationCardId: encounterCardId,
+        journeySeed: testJourneySeed(input.seed),
+      },
+    );
     const node =
       state?.currentDreamscape === null ||
       state?.currentDreamscape === undefined
@@ -2028,10 +2040,14 @@ describe('the "exploration" QA scene', () => {
   it("parks the purchase-path scene before Exploration with Shop and Bazaar siblings", () => {
     const { content, encounterCardId } = explorationContent();
 
-    const state = buildQaScene(parseQaSceneId("exploration-purchases"), content, {
-      explorationCardId: encounterCardId,
-      journeySeed: testJourneySeed("qa-purchase-path"),
-    });
+    const state = buildQaScene(
+      parseQaSceneId("exploration-purchases"),
+      content,
+      {
+        explorationCardId: encounterCardId,
+        journeySeed: testJourneySeed("qa-purchase-path"),
+      },
+    );
     const currentNode =
       state?.currentDreamscape === null ||
       state?.currentDreamscape === undefined
@@ -2065,9 +2081,7 @@ describe('the "exploration" QA scene', () => {
       isVisited: false,
     });
     expect(bazaar).toMatchObject({
-      id: parseSiteId(
-        `${state?.activeSiteId ?? "none"}-qa-dreamsign-bazaar`,
-      ),
+      id: parseSiteId(`${state?.activeSiteId ?? "none"}-qa-dreamsign-bazaar`),
       type: "DreamsignBazaar",
       isEnhanced: false,
       isVisited: false,
@@ -2604,7 +2618,9 @@ describe('the "exploration" QA scene', () => {
   });
 
   it("prepares the final T8 encounter with two selectable Event replacements", () => {
-    const actionId = testExplorationActionId("8eb89438-d367-4c52-be5b-abd76324cd80");
+    const actionId = testExplorationActionId(
+      "8eb89438-d367-4c52-be5b-abd76324cd80",
+    );
     const { content, state, offer } = wave4bOffer({
       encounterCardId: testCardId("3725379c-676d-4efd-81ee-7e45d80db6d0"),
       seed: "qa-wave4b-t8",
@@ -2660,7 +2676,9 @@ describe('the "exploration" QA scene', () => {
   });
 
   it("prepares the final T21 encounter for exactly two chosen Kindled Warriors", () => {
-    const actionId = testExplorationActionId("3ac54fa8-0634-4feb-8930-2caf30f6cfc8");
+    const actionId = testExplorationActionId(
+      "3ac54fa8-0634-4feb-8930-2caf30f6cfc8",
+    );
     const { content, state, offer } = wave4bOffer({
       encounterCardId: testCardId("78673e2b-a6d1-43de-8850-3d3327de5cc6"),
       seed: "qa-wave4b-t21",
@@ -2729,24 +2747,6 @@ describe('the "exploration" QA scene', () => {
       } satisfies ExplorationActionContent,
       expectedMechanic: "duplicate-deck-entry" as const,
       expectedPredicate: "character" as const,
-      expectedCardType: undefined,
-    },
-    {
-      template: 54,
-      encounterCardId: testCardId("12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4"),
-      action: {
-        id: testExplorationActionId("f2a61678-17b0-4d50-b75c-f1de61fa0d5c"),
-        label: "T54 fixture",
-        effectText: "T54 fixture effect.",
-        effectKind: "change-random-card-type",
-        canonicalMechanicId: "change-entry-card-type",
-        selectionPolicyId: "uniform",
-        cardType: "Event",
-        count: 2,
-      } satisfies ExplorationActionContent,
-      expectedMechanic: "change-entry-card-type" as const,
-      expectedPredicate: undefined,
-      expectedCardType: "Event" as const,
     },
   ])(
     "prepares the final T$template encounter with two concealed deterministic targets",
@@ -2756,7 +2756,6 @@ describe('the "exploration" QA scene', () => {
       action,
       expectedMechanic,
       expectedPredicate,
-      expectedCardType,
     }) => {
       const { content, state, offer } = wave4bOffer({
         encounterCardId,
@@ -2779,7 +2778,6 @@ describe('the "exploration" QA scene', () => {
         selectionKey: `${action.id}:random-deck-targets`,
       });
       expect(preparation?.predicate).toBe(expectedPredicate);
-      expect(preparation?.cardType).toBe(expectedCardType);
       expect(preparation?.targets).toHaveLength(2);
       expect(
         new Set(preparation?.targets.map((binding) => binding.entryId)).size,
@@ -2791,12 +2789,7 @@ describe('the "exploration" QA scene', () => {
             entry === undefined
               ? undefined
               : content.cardDatabase.get(entry.cardNumber);
-          return (
-            card?.id === binding.cardId &&
-            (template === 52
-              ? card.cardType === "Character"
-              : card.cardType !== "Event")
-          );
+          return card?.id === binding.cardId && card.cardType === "Character";
         }),
       ).toBe(true);
       expect(preparation?.unavailableReason).toBeUndefined();
@@ -2806,7 +2799,9 @@ describe('the "exploration" QA scene', () => {
   );
 
   it("prepares and resolves T48 as one concealed signed target with one fixed replacement", () => {
-    const actionId = testExplorationActionId("574dc85e-37a9-4888-80a2-afec6ee24209");
+    const actionId = testExplorationActionId(
+      "574dc85e-37a9-4888-80a2-afec6ee24209",
+    );
     const { content, state, sourceSite, runtime, offer } = wave7Offer({
       encounterCardId: testCardId("bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034"),
       seed: "4801",
@@ -2902,7 +2897,9 @@ describe('the "exploration" QA scene', () => {
   });
 
   it("prepares T53 with one disclosed concrete target and persists its exact automatic type change", () => {
-    const actionId = testExplorationActionId("b59b7e6a-aa32-428a-9397-06766ebe9b7d");
+    const actionId = testExplorationActionId(
+      "b59b7e6a-aa32-428a-9397-06766ebe9b7d",
+    );
     const { content, state, sourceSite, runtime, offer } = wave7Offer({
       encounterCardId: testCardId("4e3c04a9-1cdd-468a-b42a-40157ed9c9d6"),
       seed: "5301",
@@ -2985,7 +2982,9 @@ describe('the "exploration" QA scene', () => {
   });
 
   it("prepares and resolves T72 as one exact UUID-backed Legendary gain", () => {
-    const actionId = testExplorationActionId("fbd70c5d-9c4a-4af7-9ace-41f52ab00976");
+    const actionId = testExplorationActionId(
+      "fbd70c5d-9c4a-4af7-9ace-41f52ab00976",
+    );
     const { content, state, sourceSite, runtime, offer } = wave7Offer({
       encounterCardId: testCardId("455ef341-8a26-44e1-b287-19e53bdc6158"),
       seed: "7201",
@@ -3249,9 +3248,13 @@ describe('the "exploration" QA scene', () => {
       });
     }
 
-    const state = buildQaScene(parseQaSceneId("exploration-duplicates"), content, {
-      explorationCardId: encounterCardId,
-    });
+    const state = buildQaScene(
+      parseQaSceneId("exploration-duplicates"),
+      content,
+      {
+        explorationCardId: encounterCardId,
+      },
+    );
 
     expect(state).not.toBeNull();
     const countsByCardNumber = new Map<number, number>();

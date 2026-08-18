@@ -12,7 +12,11 @@ import { parseDeckEntryId } from "../../types/identifiers";
 import { parseSiteId } from "../../types/identifiers";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { parseSelectionKey } from "../../types/identifiers";
-import { testCardId, testDreamsignId, testExplorationActionId } from "../../types/test-identities";
+import {
+  testCardId,
+  testDreamsignId,
+  testExplorationActionId,
+} from "../../types/test-identities";
 import { parseSelectionContentRevision } from "../../types/selection-content-revision";
 import { parseSelectionRulesVersion } from "../../reward-selection/types";
 
@@ -52,7 +56,8 @@ describe("exploration logging view model", () => {
         },
       ],
       selectionRulesVersion: parseSelectionRulesVersion("2"),
-      selectionContentRevision: parseSelectionContentRevision("content-revision"),
+      selectionContentRevision:
+        parseSelectionContentRevision("content-revision"),
       selectionKey: actionId,
       selectorSignatures: ["selector-signature"],
       selectorTraces: [{ selectedKeys: ["entry-a", "entry-b"] }],
@@ -162,12 +167,7 @@ describe("exploration logging view model", () => {
       selectionTraces: preparation.selectorTraces,
     });
     expect(
-      buildExplorationActionLog(
-        view,
-        runtime,
-        actionId,
-        selection,
-      ),
+      buildExplorationActionLog(view, runtime, actionId, selection),
     ).toMatchObject({
       requestedSelection: selection,
       compoundActionPreparation: preparation,
@@ -423,12 +423,7 @@ describe("exploration logging view model", () => {
         },
       });
       expect(
-        buildExplorationActionLog(
-          view,
-          runtime,
-          actionId,
-          {},
-        ),
+        buildExplorationActionLog(view, runtime, actionId, {}),
       ).toMatchObject({
         actionId,
         effectKind,
@@ -540,8 +535,11 @@ describe("exploration logging view model", () => {
     } as unknown as ExplorationSiteView;
     const runtime: ExplorationSiteRuntime = {
       kind: "exploration",
-      selectionRulesVersion: parseSelectionRulesVersion("exploration-selection-v1"),
-      selectionContentRevision: parseSelectionContentRevision("content-revision"),
+      selectionRulesVersion: parseSelectionRulesVersion(
+        "exploration-selection-v1",
+      ),
+      selectionContentRevision:
+        parseSelectionContentRevision("content-revision"),
       encounterSignature: stableDigest("encounter-signature"),
       encounterCardId: testCardId("encounter-card-uuid"),
       actionOffers: [
@@ -561,8 +559,11 @@ describe("exploration logging view model", () => {
       ],
       resolution: {
         actionId: actionId,
-        selectionRulesVersion: parseSelectionRulesVersion("exploration-selection-v1"),
-        selectionContentRevision: parseSelectionContentRevision("content-revision"),
+        selectionRulesVersion: parseSelectionRulesVersion(
+          "exploration-selection-v1",
+        ),
+        selectionContentRevision:
+          parseSelectionContentRevision("content-revision"),
         encounterSignature: stableDigest("encounter-signature"),
         selectionSignature: stableDigest("prepared-essence-signature"),
         selection: {},
@@ -664,7 +665,10 @@ describe("exploration logging view model", () => {
         },
         gainedCardIds: [],
         gainedDreamsignIds: [],
-        purgedCardIds: [testCardId("warrior-card-a"), testCardId("warrior-card-b")],
+        purgedCardIds: [
+          testCardId("warrior-card-a"),
+          testCardId("warrior-card-b"),
+        ],
         purgedEntryIds: purgedEntries
           .map((entry) => entry.entryId)
           .map(parseDeckEntryId),
@@ -687,18 +691,30 @@ describe("exploration logging view model", () => {
       actionId,
       authoredMechanics: { predicate: "warrior", count: 2 },
       selection: {
-        entryIds: [parseDeckEntryId("warrior-a"), parseDeckEntryId("warrior-b")],
+        entryIds: [
+          parseDeckEntryId("warrior-a"),
+          parseDeckEntryId("warrior-b"),
+        ],
       },
-      purgedEntryIds: [parseDeckEntryId("warrior-a"), parseDeckEntryId("warrior-b")],
+      purgedEntryIds: [
+        parseDeckEntryId("warrior-a"),
+        parseDeckEntryId("warrior-b"),
+      ],
       purgedEntrySnapshots: purgedEntries,
       outcomeKind: "card-purge",
     });
     expect(buildExplorationCompletionLog(view, runtime)).toMatchObject({
       actionId,
       selection: {
-        entryIds: [parseDeckEntryId("warrior-a"), parseDeckEntryId("warrior-b")],
+        entryIds: [
+          parseDeckEntryId("warrior-a"),
+          parseDeckEntryId("warrior-b"),
+        ],
       },
-      purgedEntryIds: [parseDeckEntryId("warrior-a"), parseDeckEntryId("warrior-b")],
+      purgedEntryIds: [
+        parseDeckEntryId("warrior-a"),
+        parseDeckEntryId("warrior-b"),
+      ],
       purgedEntrySnapshots: purgedEntries,
       outcomeKind: "card-purge",
     });
@@ -823,7 +839,9 @@ describe("exploration logging view model", () => {
       ],
       resolution: {
         actionId: actionId,
-        selectionContentRevision: parseSelectionContentRevision("bulk-content-revision"),
+        selectionContentRevision: parseSelectionContentRevision(
+          "bulk-content-revision",
+        ),
         selectionSignature: stableDigest("bulk-target-signature"),
         gainedCardIds: [],
         gainedDreamsignIds: [],
@@ -851,7 +869,9 @@ describe("exploration logging view model", () => {
       essenceSpent: 100,
       chosenTransfiguration: "Inspired",
       resolvedPredicate: "event",
-      selectionContentRevision: parseSelectionContentRevision("bulk-content-revision"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "bulk-content-revision",
+      ),
       outcomeKind: "transfiguration",
     });
   });
@@ -864,7 +884,9 @@ describe("exploration logging view model", () => {
   ] as const)(
     "records reconstructable Dreamsign preparation and mutation for %s",
     (effectKind, preparationKind) => {
-      const actionId = testExplorationActionId("b0000000-0000-4000-8000-000000000001");
+      const actionId = testExplorationActionId(
+        "b0000000-0000-4000-8000-000000000001",
+      );
       const heldIds = [
         "b0000000-0000-4000-8000-000000000002",
         "b0000000-0000-4000-8000-000000000003",
@@ -915,7 +937,9 @@ describe("exploration logging view model", () => {
       };
       const selectionTrace = {
         selectionRulesVersion: parseSelectionRulesVersion("2"),
-        selectionContentRevision: parseSelectionContentRevision("dreamsign-content-revision"),
+        selectionContentRevision: parseSelectionContentRevision(
+          "dreamsign-content-revision",
+        ),
         mechanicId: "gain-dreamsign",
         policyId: "uniform",
         selectionKey: "dreamsign-selection-key",
@@ -961,7 +985,9 @@ describe("exploration logging view model", () => {
         kind: "exploration",
         encounterCardId: testCardId("b0000000-0000-4000-8000-000000000007"),
         selectionRulesVersion: parseSelectionRulesVersion("2"),
-        selectionContentRevision: parseSelectionContentRevision("dreamsign-content-revision"),
+        selectionContentRevision: parseSelectionContentRevision(
+          "dreamsign-content-revision",
+        ),
         encounterSignature: stableDigest("encounter-signature"),
         actionOffers: [
           {
@@ -969,7 +995,9 @@ describe("exploration logging view model", () => {
             canonicalMechanicId: "gain-dreamsign",
             selectionPolicyId: "uniform",
             selectionRulesVersion: parseSelectionRulesVersion("2"),
-            selectionContentRevision: parseSelectionContentRevision("dreamsign-content-revision"),
+            selectionContentRevision: parseSelectionContentRevision(
+              "dreamsign-content-revision",
+            ),
             selectionKey: "dreamsign-selection-key",
             selectionSignature: stableDigest("selector-signature"),
             selectionTrace,
@@ -984,7 +1012,9 @@ describe("exploration logging view model", () => {
         resolution: {
           actionId,
           selectionRulesVersion: parseSelectionRulesVersion("2"),
-          selectionContentRevision: parseSelectionContentRevision("dreamsign-content-revision"),
+          selectionContentRevision: parseSelectionContentRevision(
+            "dreamsign-content-revision",
+          ),
           encounterSignature: stableDigest("encounter-signature"),
           selectionSignature: stableDigest("selector-signature"),
           selection,
@@ -999,7 +1029,9 @@ describe("exploration logging view model", () => {
       } as unknown as ExplorationSiteRuntime;
 
       expect(buildExplorationEntryLog(view, runtime)).toMatchObject({
-        selectionContentRevision: parseSelectionContentRevision("dreamsign-content-revision"),
+        selectionContentRevision: parseSelectionContentRevision(
+          "dreamsign-content-revision",
+        ),
         offers: [
           {
             selectionPolicyId: "uniform",
@@ -1013,12 +1045,7 @@ describe("exploration logging view model", () => {
         ],
       });
       expect(
-        buildExplorationActionLog(
-          view,
-          runtime,
-          actionId,
-          selection,
-        ),
+        buildExplorationActionLog(view, runtime, actionId, selection),
       ).toMatchObject({
         effectKind,
         requestedSelection: selection,
@@ -1091,10 +1118,10 @@ describe("exploration logging view model", () => {
         poolBeforeIds: [...fixture.offeredDreamsignIds],
         poolBasisIds: [...fixture.offeredDreamsignIds],
         poolRegenerated: false,
-        preparedDreamsignIds: (fixture.offeredDreamsignIds.length === 0
-          ? [testDreamsignId("fixed-dreamsign-id")]
-          : [...fixture.offeredDreamsignIds]
-        ),
+        preparedDreamsignIds:
+          fixture.offeredDreamsignIds.length === 0
+            ? [testDreamsignId("fixed-dreamsign-id")]
+            : [...fixture.offeredDreamsignIds],
         requiredOverflowReplacementCount: 1,
         planSignature: stableDigest("compound-plan-signature"),
       };
@@ -1145,7 +1172,10 @@ describe("exploration logging view model", () => {
         resolution: {
           actionId,
           selection: fixture.selection,
-          gainedCardIds: [testCardId(nightmareCardId), testCardId(nightmareCardId)],
+          gainedCardIds: [
+            testCardId(nightmareCardId),
+            testCardId(nightmareCardId),
+          ],
           gainedEntryIds: mintedEntryIds.map(parseDeckEntryId),
           gainedDreamsignIds: [testDreamsignId("gained-dreamsign-id")],
           purgedCardIds: [],
@@ -1173,12 +1203,7 @@ describe("exploration logging view model", () => {
         selectionTrace: { selectedKeys: ["gained-dreamsign-id"] },
       });
       expect(
-        buildExplorationActionLog(
-          view,
-          runtime,
-          actionId,
-          fixture.selection,
-        ),
+        buildExplorationActionLog(view, runtime, actionId, fixture.selection),
       ).toMatchObject({
         rawSelection: fixture.selection,
         selectorPlan: dreamsignPreparation,
@@ -1189,7 +1214,10 @@ describe("exploration logging view model", () => {
         mutation: dreamsignMutation,
         terminalOutcome: {
           kind: "nightmare-dreamsign-bundle",
-          gainedCardIds: [testCardId(nightmareCardId), testCardId(nightmareCardId)],
+          gainedCardIds: [
+            testCardId(nightmareCardId),
+            testCardId(nightmareCardId),
+          ],
           mintedEntryIds,
           dreamsignMutation,
         },
@@ -1250,7 +1278,8 @@ describe("exploration logging view model", () => {
           ? { [purgedEntry.entryId]: replacement.gainedCardId }
           : {},
         selectionRulesVersion: parseSelectionRulesVersion("starter-rules-v1"),
-        selectionContentRevision: parseSelectionContentRevision("starter-content-v1"),
+        selectionContentRevision:
+          parseSelectionContentRevision("starter-content-v1"),
         selectionKey: "starter-selection-key",
         selectorSignatures: ["purge-signature", "gain-signature"],
         selectorTraces: [
@@ -1326,12 +1355,7 @@ describe("exploration logging view model", () => {
         ],
       });
       expect(
-        buildExplorationActionLog(
-          view,
-          runtime,
-          actionId,
-          {},
-        ),
+        buildExplorationActionLog(view, runtime, actionId, {}),
       ).toMatchObject({
         authoredPredicate: fixture.predicate,
         requestedSelection: {},
@@ -1400,8 +1424,12 @@ describe("exploration logging view model", () => {
         starterCards: bindings,
         eligibleStarterCards: bindings,
         targets,
-        selectionRulesVersion: parseSelectionRulesVersion("starter-transfiguration-rules-v1"),
-        selectionContentRevision: parseSelectionContentRevision("starter-transfiguration-content-v1"),
+        selectionRulesVersion: parseSelectionRulesVersion(
+          "starter-transfiguration-rules-v1",
+        ),
+        selectionContentRevision: parseSelectionContentRevision(
+          "starter-transfiguration-content-v1",
+        ),
         selectionKey: "starter-transfiguration-selection",
         selectorSignatures: [
           "starter-target-selection",
@@ -1478,12 +1506,7 @@ describe("exploration logging view model", () => {
         ],
       });
       expect(
-        buildExplorationActionLog(
-          view,
-          runtime,
-          actionId,
-          {},
-        ),
+        buildExplorationActionLog(view, runtime, actionId, {}),
       ).toMatchObject({
         authoredCount,
         requestedSelection: {},
@@ -1603,8 +1626,12 @@ describe("exploration logging view model", () => {
         mode: fixture.mode,
         eligibleCards,
         targets: fixture.preparedTargets,
-        selectionRulesVersion: parseSelectionRulesVersion("multi-card-transfiguration-rules-v1"),
-        selectionContentRevision: parseSelectionContentRevision("multi-card-content-revision"),
+        selectionRulesVersion: parseSelectionRulesVersion(
+          "multi-card-transfiguration-rules-v1",
+        ),
+        selectionContentRevision: parseSelectionContentRevision(
+          "multi-card-content-revision",
+        ),
         selectionKey: "multi-card-selection-key",
         selectorSignatures: ["target-signature", "form-signature"],
         selectorTraces,
@@ -1776,16 +1803,22 @@ describe("exploration logging view model", () => {
   ] as const)(
     "records T8 $caseName chosen replacement reconstruction",
     ({ selectedEntryIds }) => {
-      const actionId = testExplorationActionId("8eb89438-d367-4c52-be5b-abd76324cd80");
+      const actionId = testExplorationActionId(
+        "8eb89438-d367-4c52-be5b-abd76324cd80",
+      );
       const encounterCardId = "cccccccc-cccc-4ccc-8ccc-cccccccccccc";
       const bindings = [
         {
-          sourceEntryId: parseDeckEntryId("11111111-1111-4111-8111-111111111111"),
+          sourceEntryId: parseDeckEntryId(
+            "11111111-1111-4111-8111-111111111111",
+          ),
           sourceCardId: testCardId("aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"),
           replacementCardId: testCardId("dddddddd-dddd-4ddd-8ddd-dddddddddddd"),
         },
         {
-          sourceEntryId: parseDeckEntryId("22222222-2222-4222-8222-222222222222"),
+          sourceEntryId: parseDeckEntryId(
+            "22222222-2222-4222-8222-222222222222",
+          ),
           sourceCardId: testCardId("bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"),
           replacementCardId: testCardId("eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"),
         },
@@ -1807,8 +1840,12 @@ describe("exploration logging view model", () => {
         predicate: "event",
         authoredMaximumCount: 2,
         bindings,
-        selectionRulesVersion: parseSelectionRulesVersion("replacement-rules-v1"),
-        selectionContentRevision: parseSelectionContentRevision("replacement-content-revision"),
+        selectionRulesVersion: parseSelectionRulesVersion(
+          "replacement-rules-v1",
+        ),
+        selectionContentRevision: parseSelectionContentRevision(
+          "replacement-content-revision",
+        ),
         selectionKey: actionId,
         selectorSignatures: [
           "replacement-signature-a",
@@ -1932,12 +1969,7 @@ describe("exploration logging view model", () => {
         },
       });
       expect(
-        buildExplorationActionLog(
-          view,
-          runtime,
-          actionId,
-          selection,
-        ),
+        buildExplorationActionLog(view, runtime, actionId, selection),
       ).toMatchObject({
         rawSelection: selection,
         validatedSelection: selection,
@@ -1967,7 +1999,9 @@ describe("exploration logging view model", () => {
   );
 
   it("records a rejected T8 zero-card intent without inventing a validated result", () => {
-    const actionId = testExplorationActionId("8eb89438-d367-4c52-be5b-abd76324cd80");
+    const actionId = testExplorationActionId(
+      "8eb89438-d367-4c52-be5b-abd76324cd80",
+    );
     const selection = { entryIds: ([] as string[]).map(parseDeckEntryId) };
     const preparation = {
       kind: "chosen-replacement" as const,
@@ -1975,7 +2009,9 @@ describe("exploration logging view model", () => {
       authoredMaximumCount: 2,
       bindings: [],
       selectionRulesVersion: parseSelectionRulesVersion("replacement-rules-v1"),
-      selectionContentRevision: parseSelectionContentRevision("replacement-content-revision"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "replacement-content-revision",
+      ),
       selectionKey: actionId,
       selectorSignatures: [],
       selectorTraces: [],
@@ -2015,12 +2051,7 @@ describe("exploration logging view model", () => {
     } as unknown as ExplorationSiteRuntime;
 
     expect(
-      buildExplorationActionLog(
-        view,
-        runtime,
-        actionId,
-        selection,
-      ),
+      buildExplorationActionLog(view, runtime, actionId, selection),
     ).toMatchObject({
       rawSelection: selection,
       requestedSelection: selection,
@@ -2031,7 +2062,9 @@ describe("exploration logging view model", () => {
   });
 
   it("records T21 exact fixed-form multi-card transfiguration reconstruction", () => {
-    const actionId = testExplorationActionId("3ac54fa8-0634-4feb-8930-2caf30f6cfc8");
+    const actionId = testExplorationActionId(
+      "3ac54fa8-0634-4feb-8930-2caf30f6cfc8",
+    );
     const eligibleCards = [
       {
         entryId: parseDeckEntryId("11111111-1111-4111-8111-111111111111"),
@@ -2048,8 +2081,12 @@ describe("exploration logging view model", () => {
       mode: "chosen-fixed",
       eligibleCards,
       targets: [],
-      selectionRulesVersion: parseSelectionRulesVersion("fixed-transfiguration-rules-v1"),
-      selectionContentRevision: parseSelectionContentRevision("fixed-transfiguration-content-revision"),
+      selectionRulesVersion: parseSelectionRulesVersion(
+        "fixed-transfiguration-rules-v1",
+      ),
+      selectionContentRevision: parseSelectionContentRevision(
+        "fixed-transfiguration-content-revision",
+      ),
       selectionKey: actionId,
       selectorSignatures: [],
       selectorTraces: [],
@@ -2123,12 +2160,7 @@ describe("exploration logging view model", () => {
       },
     });
     expect(
-      buildExplorationActionLog(
-        view,
-        runtime,
-        actionId,
-        selection,
-      ),
+      buildExplorationActionLog(view, runtime, actionId, selection),
     ).toMatchObject({
       rawSelection: selection,
       validatedSelection: selection,
@@ -2149,7 +2181,9 @@ describe("exploration logging view model", () => {
   });
 
   it("records T52 automatic copy targeting and exact minted mappings", () => {
-    const actionId = testExplorationActionId("979618b2-de06-40fa-9910-488dee6b3c24");
+    const actionId = testExplorationActionId(
+      "979618b2-de06-40fa-9910-488dee6b3c24",
+    );
     const targets = [
       {
         entryId: parseDeckEntryId("11111111-1111-4111-8111-111111111111"),
@@ -2171,8 +2205,12 @@ describe("exploration logging view model", () => {
       predicate: "event",
       eligibleCards: targets,
       targets,
-      selectionRulesVersion: parseSelectionRulesVersion("random-target-rules-v1"),
-      selectionContentRevision: parseSelectionContentRevision("random-target-content-revision"),
+      selectionRulesVersion: parseSelectionRulesVersion(
+        "random-target-rules-v1",
+      ),
+      selectionContentRevision: parseSelectionContentRevision(
+        "random-target-content-revision",
+      ),
       selectionKey: actionId,
       selectorSignature: stableDigest("random-copy-selector-signature"),
       selectorTrace,
@@ -2253,12 +2291,7 @@ describe("exploration logging view model", () => {
       },
     });
     expect(
-      buildExplorationActionLog(
-        view,
-        runtime,
-        actionId,
-        {},
-      ),
+      buildExplorationActionLog(view, runtime, actionId, {}),
     ).toMatchObject({
       rawSelection: {},
       validatedSelection: {},
@@ -2281,160 +2314,13 @@ describe("exploration logging view model", () => {
         .map((mapping) => mapping.mintedEntryId)
         .map(parseDeckEntryId),
       terminalOutcome: { cardCopies },
-    });
-  });
-
-  it("records T54 automatic targets and exact before/after type overrides", () => {
-    const actionId = testExplorationActionId("f2a61678-17b0-4d50-b75c-f1de61fa0d5c");
-    const targets = [
-      {
-        entryId: parseDeckEntryId("11111111-1111-4111-8111-111111111111"),
-        cardId: testCardId("aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"),
-      },
-      {
-        entryId: parseDeckEntryId("22222222-2222-4222-8222-222222222222"),
-        cardId: testCardId("bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb"),
-      },
-    ];
-    const selectorTrace = {
-      mechanicId: "change-entry-card-type",
-      policyId: "uniform",
-      selectedKeys: targets.map((target) => target.entryId),
-    };
-    const preparation = {
-      effectKind: "change-random-card-type",
-      count: 2,
-      cardType: "Event",
-      eligibleCards: targets,
-      targets,
-      selectionRulesVersion: parseSelectionRulesVersion("random-target-rules-v1"),
-      selectionContentRevision: parseSelectionContentRevision("random-target-content-revision"),
-      selectionKey: actionId,
-      selectorSignature: stableDigest("random-type-selector-signature"),
-      selectorTrace,
-      planSignature: stableDigest("random-type-plan-signature"),
-    };
-    const afterTypeChange = {
-      predicateId: "exploration:card-type:Event",
-      cardType: "Event",
-      subtype: "",
-      label: "Event",
-    };
-    const cardTypeChanges = [
-      {
-        entryId: targets[0].entryId,
-        cardId: targets[0].cardId,
-        beforeCardType: "Character",
-        afterCardType: "Event",
-        beforeTypeChange: null,
-        afterTypeChange,
-      },
-      {
-        entryId: targets[1].entryId,
-        cardId: targets[1].cardId,
-        beforeCardType: "Character",
-        afterCardType: "Event",
-        beforeTypeChange: {
-          predicateId: "exploration:card-type:Character",
-          cardType: "Character",
-          subtype: "Warrior",
-          label: "Character",
-        },
-        afterTypeChange,
-      },
-    ];
-    const view = {
-      actions: [
-        {
-          id: actionId,
-          effectKind: "change-random-card-type",
-          mechanics: {
-            effectKind: "change-random-card-type",
-            count: 2,
-            cardType: "Event",
-          },
-        },
-      ],
-      outcomeKind: "card-type-changes",
-    } as unknown as ExplorationSiteView;
-    const runtime = {
-      kind: "exploration",
-      encounterCardId: testCardId("cccccccc-cccc-4ccc-8ccc-cccccccccccc"),
-      actionOffers: [
-        {
-          actionId,
-          canonicalMechanicId: "change-entry-card-type",
-          selectionPolicyId: "uniform",
-          selectionSignature: preparation.planSignature,
-          selectionTrace: selectorTrace,
-          randomDeckTargetPreparation: preparation,
-          offeredCardIds: [],
-          packCardIds: [],
-          replacementCardIdByEntryId: {},
-          transfigurationByEntryId: {},
-        },
-      ],
-      resolution: {
-        actionId,
-        selection: {},
-        gainedCardIds: [],
-        gainedDreamsignIds: [],
-        purgedCardIds: [],
-        cardTypeChanges,
-        affectedEntryIds: targets.map((target) => target.entryId),
-        essenceGained: 0,
-        resolvedCardType: "Event",
-      },
-    } as unknown as ExplorationSiteRuntime;
-
-    expect(buildExplorationEntryLog(view, runtime)).toMatchObject({
-      actions: [{ authoredCount: 2, authoredCardType: "Event" }],
-      offers: [
-        {
-          canonicalMechanicId: "change-entry-card-type",
-          selectionPolicyId: "uniform",
-          selectionTrace: selectorTrace,
-          selectorSignatures: [preparation.selectorSignature],
-          randomDeckTargetPreparation: preparation,
-        },
-      ],
-      terminalOutcome: {
-        randomDeckTargetPreparation: preparation,
-        cardTypeChanges,
-        resolvedCardType: "Event",
-      },
-    });
-    expect(
-      buildExplorationActionLog(
-        view,
-        runtime,
-        actionId,
-        {},
-      ),
-    ).toMatchObject({
-      authoredCardType: "Event",
-      rawSelection: {},
-      validatedSelection: {},
-      randomDeckTargetPreparation: preparation,
-    });
-    expect(buildExplorationResolutionLog(view, runtime)).toMatchObject({
-      authoredCardType: "Event",
-      randomDeckTargetPreparation: preparation,
-      cardTypeChanges,
-      resolvedCardType: "Event",
-      terminalOutcome: { cardTypeChanges, resolvedCardType: "Event" },
-    });
-    expect(buildExplorationCompletionLog(view, runtime)).toMatchObject({
-      authoredCardType: "Event",
-      randomDeckTargetPreparation: preparation,
-      cardTypeChanges,
-      resolvedCardType: "Event",
-      terminalOutcome: { cardTypeChanges, resolvedCardType: "Event" },
     });
   });
 
   it("records the T53 disclosed plan, selector, automatic intent, and exact type outcome at every boundary", () => {
-    const actionId = testExplorationActionId("b59b7e6a-aa32-428a-9397-06766ebe9b7d");
+    const actionId = testExplorationActionId(
+      "b59b7e6a-aa32-428a-9397-06766ebe9b7d",
+    );
     const target = {
       entryId: parseDeckEntryId("11111111-1111-4111-8111-111111111153"),
       cardId: testCardId("aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaa53"),
@@ -2450,7 +2336,9 @@ describe("exploration logging view model", () => {
       eligibleCards: [target],
       target,
       selectionRulesVersion: parseSelectionRulesVersion("2"),
-      selectionContentRevision: parseSelectionContentRevision("disclosed-content-revision"),
+      selectionContentRevision: parseSelectionContentRevision(
+        "disclosed-content-revision",
+      ),
       selectionKey: `${actionId}:disclosed-deck-target`,
       selectorSignature: stableDigest("disclosed-selector-signature"),
       selectorTrace: selectorTrace as never,
@@ -2540,14 +2428,9 @@ describe("exploration logging view model", () => {
       },
     });
     expect(
-      buildExplorationActionLog(
-        view,
-        runtime,
-        actionId,
-        {
-          entryIds: [target.entryId],
-        },
-      ),
+      buildExplorationActionLog(view, runtime, actionId, {
+        entryIds: [target.entryId],
+      }),
     ).toMatchObject({
       disclosedDeckTargetPreparation: preparation,
       rawSelection: { entryIds: [target.entryId] },
@@ -2566,7 +2449,9 @@ describe("exploration logging view model", () => {
   });
 
   it("records the complete fixed-site plan and persisted insertion at every log boundary", () => {
-    const actionId = testExplorationActionId("41000000-0000-4000-8000-000000000041");
+    const actionId = testExplorationActionId(
+      "41000000-0000-4000-8000-000000000041",
+    );
     const insertedSite = {
       id: parseSiteId("site-exploration-source-action"),
       type: "Duplication" as const,
@@ -2613,8 +2498,10 @@ describe("exploration logging view model", () => {
           actionId: actionId,
           canonicalMechanicId: "add-site",
           selectionPolicyId: "fixed",
-          selectionRulesVersion: parseSelectionRulesVersion("selection-rules-v1"),
-          selectionContentRevision: parseSelectionContentRevision("sites-fold-v1"),
+          selectionRulesVersion:
+            parseSelectionRulesVersion("selection-rules-v1"),
+          selectionContentRevision:
+            parseSelectionContentRevision("sites-fold-v1"),
           selectionKey: parseSelectionKey(actionId),
           selectionSignature: preparation.planSignature,
           siteInsertionPreparation: preparation,
@@ -2627,7 +2514,8 @@ describe("exploration logging view model", () => {
       resolution: {
         actionId: actionId,
         selectionRulesVersion: parseSelectionRulesVersion("selection-rules-v1"),
-        selectionContentRevision: parseSelectionContentRevision("sites-fold-v1"),
+        selectionContentRevision:
+          parseSelectionContentRevision("sites-fold-v1"),
         selectionSignature: preparation.planSignature,
         selection: {},
         gainedCardIds: [],
@@ -2657,12 +2545,7 @@ describe("exploration logging view model", () => {
       },
     });
     expect(
-      buildExplorationActionLog(
-        view,
-        runtime,
-        actionId,
-        {},
-      ),
+      buildExplorationActionLog(view, runtime, actionId, {}),
     ).toMatchObject({
       authoredSiteType: "Duplication",
       requestedSelection: {},
@@ -2691,7 +2574,9 @@ describe("exploration logging view model", () => {
   });
 
   it("records the signed site-type offer, exact choice, and insertion at every log boundary", () => {
-    const actionId = testExplorationActionId("46000000-0000-4000-8000-000000000046");
+    const actionId = testExplorationActionId(
+      "46000000-0000-4000-8000-000000000046",
+    );
     const preparedSiteId = "site-exploration-source-choice-action";
     const choices = ["Shop", "Purge", "Transfiguration"].map((siteType) => ({
       siteType,
@@ -2746,8 +2631,10 @@ describe("exploration logging view model", () => {
           actionId,
           canonicalMechanicId: "add-site",
           selectionPolicyId: "site-uniform",
-          selectionRulesVersion: parseSelectionRulesVersion("selection-rules-v1"),
-          selectionContentRevision: parseSelectionContentRevision("sites-fold-v1"),
+          selectionRulesVersion:
+            parseSelectionRulesVersion("selection-rules-v1"),
+          selectionContentRevision:
+            parseSelectionContentRevision("sites-fold-v1"),
           selectionKey: actionId,
           selectionSignature: preparation.planSignature,
           selectionTrace,
@@ -2761,7 +2648,8 @@ describe("exploration logging view model", () => {
       resolution: {
         actionId,
         selectionRulesVersion: parseSelectionRulesVersion("selection-rules-v1"),
-        selectionContentRevision: parseSelectionContentRevision("sites-fold-v1"),
+        selectionContentRevision:
+          parseSelectionContentRevision("sites-fold-v1"),
         selectionSignature: preparation.planSignature,
         selection,
         gainedCardIds: [],
@@ -2805,12 +2693,7 @@ describe("exploration logging view model", () => {
       },
     });
     expect(
-      buildExplorationActionLog(
-        view,
-        runtime,
-        actionId,
-        selection,
-      ),
+      buildExplorationActionLog(view, runtime, actionId, selection),
     ).toMatchObject({
       ...preparedFields,
       requestedSelection: selection,
@@ -2840,7 +2723,9 @@ describe("exploration logging view model", () => {
   });
 
   it("retains the disclosed-site random selection trace for template 84", () => {
-    const actionId = testExplorationActionId("84000000-0000-4000-8000-000000000084");
+    const actionId = testExplorationActionId(
+      "84000000-0000-4000-8000-000000000084",
+    );
     const selectionTrace = {
       mechanicId: "add-site" as const,
       policyId: "uniform" as const,
@@ -2887,14 +2772,9 @@ describe("exploration logging view model", () => {
       ],
     });
     expect(
-      buildExplorationActionLog(
-        view,
-        runtime,
-        actionId,
-        {
-          siteType: "Shop",
-        },
-      ),
+      buildExplorationActionLog(view, runtime, actionId, {
+        siteType: "Shop",
+      }),
     ).toMatchObject({
       offeredSiteType: "Shop",
       selectionSignature: stableDigest("template-84-selection-signature"),

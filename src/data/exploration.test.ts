@@ -4,10 +4,7 @@ import {
   isTransfigurationExplorationEffect,
   loadExplorationContent,
 } from "./exploration";
-import {
-  testCardId,
-  testExplorationActionId,
-} from "../types/test-identities";
+import { testCardId, testExplorationActionId } from "../types/test-identities";
 
 const HASH = "0".repeat(64);
 
@@ -927,7 +924,7 @@ describe("Exploration counted deck mutation content", () => {
     ]);
   });
 
-  it("loads automatic random copy and card-type actions without targets", async () => {
+  it("loads automatic random copy actions without targets", async () => {
     const actions = [
       {
         effectKind: "copy-random-cards",
@@ -935,14 +932,6 @@ describe("Exploration counted deck mutation content", () => {
         selectionPolicyId: "uniform",
         predicate: "event",
         count: 2,
-      },
-      {
-        effectKind: "change-random-card-type",
-        canonicalMechanicId: "change-entry-card-type",
-        selectionPolicyId: "uniform",
-        count: 2,
-        cardType: "Event",
-        effectText: "Change two random cards into {card_type} cards",
       },
     ];
     const content = fixture(actions[0]);
@@ -959,11 +948,6 @@ describe("Exploration counted deck mutation content", () => {
       expect.objectContaining({
         effectKind: "copy-random-cards",
         predicate: "event",
-        count: 2,
-      }),
-      expect.objectContaining({
-        effectKind: "change-random-card-type",
-        cardType: "Event",
         count: 2,
       }),
     ]);
@@ -1031,35 +1015,6 @@ describe("Exploration counted deck mutation content", () => {
         predicate: "event",
         count: 2,
         effectText: "Copy {deck_card}",
-      },
-    ],
-    [
-      {
-        effectKind: "change-random-card-type",
-        canonicalMechanicId: "change-entry-card-type",
-        selectionPolicyId: "uniform",
-        count: 2,
-        cardType: "Dreamwell",
-      },
-    ],
-    [
-      {
-        effectKind: "change-random-card-type",
-        canonicalMechanicId: "change-entry-card-type",
-        selectionPolicyId: "uniform",
-        count: 2,
-        cardType: "Event",
-        predicate: "event",
-      },
-    ],
-    [
-      {
-        effectKind: "change-random-card-type",
-        canonicalMechanicId: "change-entry-card-type",
-        selectionPolicyId: "uniform",
-        count: 2,
-        cardType: "Event",
-        effectText: "Change {deck_card}",
       },
     ],
   ])("rejects malformed counted mutation fields %#", async (action) => {

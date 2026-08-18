@@ -2527,10 +2527,6 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
             card_type: json_card_type_target(object)?,
             target: json_deck_target(object)?,
         },
-        EffectKind::ChangeRandomCardType => ActionEffect::ChangeRandomCardType {
-            count: positive_int(object, "count")?,
-            card_type: json_card_type_target(object)?,
-        },
         EffectKind::ChangeSubtypeAll => ActionEffect::ChangeSubtypeAll {
             subtype_options: string_array(object, "subtypeOptions")?,
         },
@@ -2658,6 +2654,7 @@ fn action_from_compat(value: JsonValue) -> Result<ActionDefinition> {
         },
         EffectKind::NextBattleOpeningHand => ActionEffect::NextBattleOpeningHand {
             count: positive_int(object, "count")?,
+            predicate: optional_predicate(object, "predicate")?,
         },
         EffectKind::NextBattleStartingEnergy => ActionEffect::NextBattleStartingEnergy {
             count: positive_int(object, "count")?,
@@ -2809,7 +2806,6 @@ fn validate_action_fields(
         EffectKind::DraftCard => &["predicate", "count", "offerCount"],
         EffectKind::ChangeSubtypeSelected => &["predicate", "subtype", "deckTarget"],
         EffectKind::ChangeCardTypeSelected => &["cardType", "deckTarget"],
-        EffectKind::ChangeRandomCardType => &["count", "cardType"],
         EffectKind::ChangeSubtypeAll => &["subtypeOptions"],
         EffectKind::GainCard => &["cardId"],
         EffectKind::GainDreamsign => &["dreamsignId"],
@@ -2836,7 +2832,7 @@ fn validate_action_fields(
         EffectKind::CopySelectedCards => &["count"],
         EffectKind::CopyRandomCards => &["predicate", "count"],
         EffectKind::CopyOfferedDeckCard => &["offerCount"],
-        EffectKind::NextBattleOpeningHand => &["count"],
+        EffectKind::NextBattleOpeningHand => &["predicate", "count"],
         EffectKind::NextBattleStartingEnergy => &["count"],
         EffectKind::ChooseAvatar => &["offerCount"],
         EffectKind::TakeCards => &["predicate", "offerCount"],
@@ -5005,9 +5001,6 @@ DreamwellCatalog(
                 ("cardType", json!("Event")),
                 ("deckTarget", json!("offered")),
             ],
-            EffectKind::ChangeRandomCardType => {
-                &[("count", json!(2)), ("cardType", json!("Character"))]
-            }
             EffectKind::ChangeSubtypeAll => &[("subtypeOptions", json!(["Guide", "Warrior"]))],
             EffectKind::GainCard => &[("cardId", json!("00000000-0000-4000-8000-000000000001"))],
             EffectKind::GainDreamsign => {
@@ -5794,16 +5787,6 @@ DreamwellCatalog(
                 count: 2,
             }
         );
-        assert_eq!(
-            action_from_compat(action(EffectKind::ChangeRandomCardType))
-                .unwrap()
-                .effect,
-            ActionEffect::ChangeRandomCardType {
-                count: 2,
-                card_type: CardTypeTarget::Character,
-            }
-        );
-
         let mut replace_many = action(EffectKind::ReplaceSelected);
         replace_many
             .as_object_mut()
@@ -5850,7 +5833,6 @@ DreamwellCatalog(
             EffectKind::ReplaceSelected,
             EffectKind::TransfigureFixedSelected,
             EffectKind::CopyRandomCards,
-            EffectKind::ChangeRandomCardType,
         ] {
             let mut nonpositive = action(kind);
             nonpositive
@@ -5865,22 +5847,7 @@ DreamwellCatalog(
             );
         }
 
-        let mut unknown_type = action(EffectKind::ChangeRandomCardType);
-        unknown_type
-            .as_object_mut()
-            .unwrap()
-            .insert("cardType".into(), json!("Warrior"));
-        assert!(
-            action_from_compat(unknown_type)
-                .unwrap_err()
-                .to_string()
-                .contains("unknown card type")
-        );
-
-        for (kind, mechanic) in [
-            (EffectKind::CopyRandomCards, "duplicate-deck-entry"),
-            (EffectKind::ChangeRandomCardType, "change-entry-card-type"),
-        ] {
+        for (kind, mechanic) in [(EffectKind::CopyRandomCards, "duplicate-deck-entry")] {
             let mut explicit_metadata = action(kind);
             explicit_metadata
                 .as_object_mut()
@@ -6039,10 +6006,6 @@ DreamwellCatalog(
             ActionEffect::CopyRandomCards {
                 predicate: Predicate::Event,
                 count: 2,
-            },
-            ActionEffect::ChangeRandomCardType {
-                count: 2,
-                card_type: CardTypeTarget::Event,
             },
         ] {
             let mut catalog: ExplorationCatalog = ron::from_str(EXPLORATION_SOURCE).unwrap();

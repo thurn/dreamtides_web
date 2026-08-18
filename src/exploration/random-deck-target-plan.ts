@@ -10,7 +10,7 @@ import {
   type RewardSelectionTrace,
   type SelectionRulesVersion,
 } from "../reward-selection/types";
-import type { CardData, CardType } from "../types/cards";
+import type { CardData } from "../types/cards";
 import type { JourneyState, SiteState } from "../types/journey";
 import type { DeckEntryId, SelectionKey } from "../types/identifiers";
 import type { CardId } from "../types/card-identity";
@@ -19,7 +19,7 @@ import { parseSelectionKey } from "../types/identifiers";
 import type { SelectionContentRevision } from "../types/selection-content-revision";
 
 export type ExplorationRandomDeckTargetEffectKind =
-  "copy-random-cards" | "change-random-card-type" | "replace-random-with-card";
+  "copy-random-cards" | "replace-random-with-card";
 
 export interface ExplorationRandomDeckTargetBinding {
   entryId: DeckEntryId;
@@ -33,7 +33,6 @@ export interface ExplorationRandomDeckTargetPreparation {
   effectKind: ExplorationRandomDeckTargetEffectKind;
   count: number;
   predicate?: ExplorationPredicate;
-  cardType?: CardType;
   replacementCardId?: CardId;
   eligibleCards: readonly ExplorationRandomDeckTargetBinding[];
   targets: readonly ExplorationRandomDeckTargetBinding[];
@@ -50,7 +49,6 @@ export interface ExplorationRandomDeckTargetPlanInput {
   effectKind: ExplorationRandomDeckTargetEffectKind;
   predicate?: ExplorationPredicate;
   count?: number;
-  cardType?: CardType;
   replacementCardId?: CardId;
   actionId: ExplorationActionId;
   encounterCardId: CardId;
@@ -105,7 +103,6 @@ function isValidAuthoredInput(
       input.count === undefined &&
       input.predicate !== undefined &&
       EXPLORATION_PREDICATES.has(input.predicate) &&
-      input.cardType === undefined &&
       typeof input.replacementCardId === "string" &&
       [...input.content.cardDatabase.values()].some(
         (card) => card.id === input.replacementCardId,
@@ -117,15 +114,10 @@ function isValidAuthoredInput(
     return (
       input.predicate !== undefined &&
       EXPLORATION_PREDICATES.has(input.predicate) &&
-      input.cardType === undefined &&
       input.replacementCardId === undefined
     );
   }
-  return (
-    input.predicate === undefined &&
-    (input.cardType === "Character" || input.cardType === "Event") &&
-    input.replacementCardId === undefined
-  );
+  return false;
 }
 
 function targetCount(input: ExplorationRandomDeckTargetPlanInput): number {
@@ -139,13 +131,10 @@ function eligibleBindings(
   context: RewardSelectionContext,
 ): ExplorationRandomDeckTargetBinding[] {
   return context.effectiveDeckCards
-    .filter(({ effectiveCard }) =>
-      input.effectKind === "copy-random-cards" ||
-      input.effectKind === "replace-random-with-card"
-        ? input.predicate !== undefined &&
-          matchesPredicate(effectiveCard, input.predicate, input.content)
-        : input.cardType !== undefined &&
-          effectiveCard.cardType !== input.cardType,
+    .filter(
+      ({ effectiveCard }) =>
+        input.predicate !== undefined &&
+        matchesPredicate(effectiveCard, input.predicate, input.content),
     )
     .map(({ entry, baseCard }) => ({
       entryId: entry.entryId,
@@ -175,7 +164,6 @@ function signedPreparation(
         kind: input.effectKind,
         count: preparation.count,
         predicate: input.predicate ?? null,
-        cardType: input.cardType ?? null,
         replacementCardId: input.replacementCardId ?? null,
       },
       actionId: input.actionId,
@@ -198,9 +186,6 @@ function unavailablePreparation(input: {
     ...(input.plan.predicate === undefined
       ? {}
       : { predicate: input.plan.predicate }),
-    ...(input.plan.cardType === undefined
-      ? {}
-      : { cardType: input.plan.cardType }),
     ...(input.plan.replacementCardId === undefined
       ? {}
       : { replacementCardId: input.plan.replacementCardId }),
@@ -249,9 +234,7 @@ export function prepareExplorationRandomDeckTargetPlan(
     mechanicId:
       input.effectKind === "copy-random-cards"
         ? "duplicate-deck-entry"
-        : input.effectKind === "change-random-card-type"
-          ? "change-entry-card-type"
-          : "replace-deck-entry",
+        : "replace-deck-entry",
     policyId: "uniform",
     scope: {
       journeySeed: input.journey.seed,
@@ -295,7 +278,6 @@ export function prepareExplorationRandomDeckTargetPlan(
     effectKind: input.effectKind,
     count,
     ...(input.predicate === undefined ? {} : { predicate: input.predicate }),
-    ...(input.cardType === undefined ? {} : { cardType: input.cardType }),
     ...(input.replacementCardId === undefined
       ? {}
       : { replacementCardId: input.replacementCardId }),

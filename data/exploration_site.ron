@@ -1408,7 +1408,10 @@
       ActionDefinition(
         label: Tx("Rewire Tangled Synapses"),
         id: "f2a61678-17b0-4d50-b75c-f1de61fa0d5c",
-        effect: ChangeRandomCardType(count: 2, card_type: Event),
+        presentation_override: ActionPresentationOverride(
+          effect_text: Tx("At the start of your next battle, draw two events."),
+        ),
+        effect: NextBattleOpeningHand(count: 2, predicate: Event),
       ),
 
       ActionDefinition(

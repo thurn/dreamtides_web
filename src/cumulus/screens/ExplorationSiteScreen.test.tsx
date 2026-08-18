@@ -618,9 +618,7 @@ function multiCardReplacementRewardView(
 }
 
 function cardTypeChangesRewardView(
-  sourceKind:
-    | "change-random-card-type"
-    | "change-card-type-selected" = "change-random-card-type",
+  sourceKind: "change-card-type-selected" = "change-card-type-selected",
   count = 2,
 ): ExplorationSiteView {
   const base = view(true);

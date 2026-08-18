@@ -30,10 +30,15 @@ describe("Exploration presentation runtime", () => {
     );
     const cards = [starter, offerable];
     const playerDeck = buildSimulatedPlayerDeck(cards, () => 0);
-    const presentation = renderActionPresentation({
-      effectText: "Purge {starter_card}",
-      effectKind: "purge-starter-card",
-    }, cards, playerDeck, () => 0);
+    const presentation = renderActionPresentation(
+      {
+        effectText: "Purge {starter_card}",
+        effectKind: "purge-starter-card",
+      },
+      cards,
+      playerDeck,
+      () => 0,
+    );
 
     expect(presentation.runtimeCardSelections).toEqual([
       expect.objectContaining({
@@ -42,9 +47,12 @@ describe("Exploration presentation runtime", () => {
         source: "starter_deck",
       }),
     ]);
-    expect(cards.find(
-      (candidate) => candidate.id === presentation.runtimeCardSelections[0].cardId,
-    )?.isStarter).toBe(true);
+    expect(
+      cards.find(
+        (candidate) =>
+          candidate.id === presentation.runtimeCardSelections[0].cardId,
+      )?.isStarter,
+    ).toBe(true);
   });
 
   it.each([
@@ -52,51 +60,27 @@ describe("Exploration presentation runtime", () => {
     "transfigure-fixed-random-cards",
     "copy-random-cards",
   ])("does not disclose automatic multi-card targets for %s", (effectKind) => {
-    const cards = [card(
-      "00000000-0000-4000-8000-000000000001",
-      "Synthetic event",
-      { cardType: "Event" },
-    )];
-    const presentation = renderActionPresentation({
-      effectText: "Transfigure two random Events",
-      effectKind,
-      predicate: "event",
-      count: 2,
-    }, cards, cards, () => 0);
+    const cards = [
+      card("00000000-0000-4000-8000-000000000001", "Synthetic event", {
+        cardType: "Event",
+      }),
+    ];
+    const presentation = renderActionPresentation(
+      {
+        effectText: "Transfigure two random Events",
+        effectKind,
+        predicate: "event",
+        count: 2,
+      },
+      cards,
+      cards,
+      () => 0,
+    );
 
     expect(presentation.runtimeCardSelections).toEqual([]);
     expect(presentation.renderedEffectParts).toEqual([
       { kind: "text", text: "Transfigure two random Events" },
     ]);
-  });
-
-  it("renders authored card type without selecting or disclosing a target", () => {
-    const presentation = renderActionPresentation({
-      effectText: "Change two random cards into {card_type} cards",
-      effectKind: "change-random-card-type",
-      cardType: "Event",
-      count: 2,
-    }, [], [], () => 0);
-
-    expect(presentation.renderedEffectText)
-      .toBe("Change two random cards into Event cards");
-    expect(presentation.renderedEffectParts).toEqual([
-      { kind: "text", text: "Change two random cards into " },
-      {
-        kind: "variable",
-        placeholder: "{card_type}",
-        variableName: "card_type",
-        value: "Event",
-        text: "Event",
-      },
-      { kind: "text", text: " cards" },
-    ]);
-    expect(presentation.runtimeCardSelections).toEqual([]);
-
-    expect(() => renderActionPresentation({
-      effectText: "Become {card_type}",
-      effectKind: "change-random-card-type",
-    }, [], [], () => 0)).toThrow(/Character or Event/u);
   });
 
   it("matches legendary offers only by exact rarity", () => {
@@ -115,11 +99,16 @@ describe("Exploration presentation runtime", () => {
       { rarity: "Legendary" },
     );
 
-    const presentation = renderActionPresentation({
-      effectText: "Gain {offered_card}",
-      effectKind: "gain-random-cards",
-      predicate: "legendary",
-    }, [namedLegendary, roleLegendary, legendary], [], () => 0);
+    const presentation = renderActionPresentation(
+      {
+        effectText: "Gain {offered_card}",
+        effectKind: "gain-random-cards",
+        predicate: "legendary",
+      },
+      [namedLegendary, roleLegendary, legendary],
+      [],
+      () => 0,
+    );
 
     expect(presentation.runtimeCardSelections).toEqual([
       expect.objectContaining({

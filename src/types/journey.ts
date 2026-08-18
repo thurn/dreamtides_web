@@ -1,7 +1,4 @@
-import type {
-  AvatarPortraitFocus,
-  ResolvedAvatarPackage,
-} from "./content";
+import type { AvatarPortraitFocus, ResolvedAvatarPackage } from "./content";
 import type { CardData, CardType } from "./cards";
 import type {
   RewardCardPredicate,
@@ -864,7 +861,7 @@ export interface ExplorationResolution {
   /** Exact one-battle modifier created by the resolution. */
   battleModifier?:
     | {
-        kind: "opening-hand" | "starting-energy";
+        kind: "opening-hand" | "event-draw" | "starting-energy";
         amount: number;
         battlesRemaining: number;
       }
@@ -1117,6 +1114,12 @@ export type BattleModifier =
     }
   | {
       kind: "opening_hand_bonus";
+      count: number;
+      battlesRemaining: number;
+      source: JourneyMutationSource;
+    }
+  | {
+      kind: "opening_hand_event_draw";
       count: number;
       battlesRemaining: number;
       source: JourneyMutationSource;

@@ -89,6 +89,33 @@ function padBattleDeck(
   return padded;
 }
 
+function drawOpeningEvents(
+  deckOrder: readonly BattleDeckCardDefinition[],
+  ordinaryOpeningHandSize: number,
+  count: number,
+): {
+  deckOrder: BattleDeckCardDefinition[];
+  drawn: BattleDeckCardDefinition[];
+} {
+  if (count <= 0) return { deckOrder: [...deckOrder], drawn: [] };
+  const openingEnd = Math.min(
+    Math.max(0, ordinaryOpeningHandSize),
+    deckOrder.length,
+  );
+  const opening = deckOrder.slice(0, openingEnd);
+  const remainder = deckOrder.slice(openingEnd);
+  const drawn: BattleDeckCardDefinition[] = [];
+  const retained: BattleDeckCardDefinition[] = [];
+  for (const definition of remainder) {
+    if (drawn.length < count && definition.battleCardKind === "event") {
+      drawn.push(definition);
+    } else {
+      retained.push(definition);
+    }
+  }
+  return { deckOrder: [...opening, ...drawn, ...retained], drawn };
+}
+
 export interface CreateBattleInitInput {
   /** Complete authored opponent and battle tuning for this folded battle. */
   opponentsData: OpponentsData;
@@ -185,6 +212,7 @@ function applyBattleRewardModifiers(
         break;
       case "temporary_nightmare_grant":
       case "opening_hand_bonus":
+      case "opening_hand_event_draw":
       case "starting_energy_bonus":
       case "smaller_hand_and_cost_discount":
         break;
@@ -238,7 +266,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     state.deck,
     opponentsData.battle.minimumDeckSize,
   );
-  const playerDeckOrder = streams.playerDeckOrder
+  const shuffledPlayerDeckOrder = streams.playerDeckOrder
     .shuffle(battleDeck)
     .map((entry) => {
       const card = cardDatabase.get(entry.cardNumber);
@@ -256,6 +284,34 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
         ),
       );
     });
+  const openingHandAdjustment = state.battleModifiers.reduce(
+    (total, modifier) =>
+      modifier.kind === "opening_hand_bonus" && modifier.battlesRemaining > 0
+        ? total + modifier.count
+        : modifier.kind === "smaller_hand_and_cost_discount" &&
+            modifier.battlesRemaining > 0
+          ? total + modifier.openingHandDelta
+          : total,
+    0,
+  );
+  const ordinaryOpeningHandSize = Math.max(
+    0,
+    opponentsData.battle.playerOpeningHandSize + openingHandAdjustment,
+  );
+  const openingHandEventDrawCount = state.battleModifiers.reduce(
+    (total, modifier) =>
+      modifier.kind === "opening_hand_event_draw" &&
+      modifier.battlesRemaining > 0
+        ? total + modifier.count
+        : total,
+    0,
+  );
+  const openingEventDraw = drawOpeningEvents(
+    shuffledPlayerDeckOrder,
+    ordinaryOpeningHandSize,
+    openingHandEventDrawCount,
+  );
+  const playerDeckOrder = openingEventDraw.deckOrder;
   // The opponent is built by emulating its Avatar's journey to the
   // equivalent run depth (journeys doc "Battle"): a deterministic opponent
   // Avatar drawn from the dreamscape's residents, a single dreamsign from
@@ -428,16 +484,6 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       state.battleModifiers,
     ),
   );
-  const openingHandAdjustment = state.battleModifiers.reduce(
-    (total, modifier) =>
-      modifier.kind === "opening_hand_bonus" && modifier.battlesRemaining > 0
-        ? total + modifier.count
-        : modifier.kind === "smaller_hand_and_cost_discount" &&
-            modifier.battlesRemaining > 0
-          ? total + modifier.openingHandDelta
-          : total,
-    0,
-  );
   const playerStartingEnergy = state.battleModifiers.reduce(
     (total, modifier) =>
       modifier.kind === "starting_energy_bonus" && modifier.battlesRemaining > 0
@@ -468,7 +514,9 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     // session-scope identity (battleId used for logs and completion tracking).
     // A `battle:` prefix keeps them semantically distinct even though they
     // remain 1:1 today; callers should not rely on string equality.
-    battleId: parseBattleId(input.battleInstanceId ?? `battle:${battleEntryKey}`),
+    battleId: parseBattleId(
+      input.battleInstanceId ?? `battle:${battleEntryKey}`,
+    ),
     battleEntryKey: battleEntryKey,
     seed,
     siteId: site.id,
@@ -476,9 +524,12 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     completionLevelAtStart,
     isFinalBoss: completionLevelAtStart === layerCount - 1,
     essenceReward,
-    openingHandSize: Math.max(
-      0,
-      opponentsData.battle.playerOpeningHandSize + openingHandAdjustment,
+    openingHandSize: ordinaryOpeningHandSize + openingEventDraw.drawn.length,
+    openingHandEventDrawCardUuids: Object.freeze(
+      openingEventDraw.drawn.map((definition) => definition.cardId),
+    ),
+    openingHandEventDrawEntryIds: Object.freeze(
+      openingEventDraw.drawn.map((definition) => definition.sourceDeckEntryId),
     ),
     enemyOpeningHandSize: opponentsData.battle.enemyOpeningHandSize,
     playerStartingEnergy,

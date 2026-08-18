@@ -5063,12 +5063,6 @@ describe("exploration-view-model", () => {
       predicate: "character" as const,
       cardType: undefined,
     },
-    {
-      effectKind: "change-random-card-type",
-      mechanicId: "change-entry-card-type",
-      predicate: undefined,
-      cardType: "Event" as const,
-    },
   ] as const)(
     "conceals $effectKind targets and reconstructs its exact persisted mappings",
     ({ effectKind, mechanicId, predicate, cardType }) => {
@@ -5321,7 +5315,7 @@ describe("exploration-view-model", () => {
         outcomeKind: "card-type-changes",
         reward: {
           kind: "card-type-changes",
-          sourceKind: "change-random-card-type",
+          sourceKind: "change-card-type-selected",
           changes: [
             {
               entryId: bindings[0].entryId,

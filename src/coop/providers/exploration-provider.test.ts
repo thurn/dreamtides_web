@@ -321,8 +321,7 @@ function withDreamsignPool(
   const remainingIds = options.remainingIds ?? allIds.slice(heldCount);
   const packageIds = options.packageIds ?? allIds;
   const avatar = content.avatars[0];
-  if (avatar === undefined)
-    throw new Error("Expected an Avatar fixture");
+  if (avatar === undefined) throw new Error("Expected an Avatar fixture");
   return {
     ...journeyFixture(content),
     maxDreamsigns: options.maxDreamsigns ?? 12,
@@ -459,7 +458,9 @@ describe("Exploration provider", () => {
     expect(
       provider.openSite({
         ...input,
-        selectionRulesVersion: parseSelectionRulesVersion("unsupported-selection-version"),
+        selectionRulesVersion: parseSelectionRulesVersion(
+          "unsupported-selection-version",
+        ),
       }),
     ).toBeNull();
   });
@@ -1607,7 +1608,8 @@ describe("Exploration provider", () => {
     const packAction: ExplorationActionContent = {
       id: testExplorationActionId("warrior-packs"),
       label: "Answer Their Muster",
-      effectText: "Choose one of two packs of Warrior cards to add to your deck",
+      effectText:
+        "Choose one of two packs of Warrior cards to add to your deck",
       effectKind: "choose-pack",
       predicate: "warrior",
       packCount: 2,
@@ -2049,7 +2051,10 @@ describe("Exploration provider", () => {
     expect(explorationResolutionFor(resolved)).toMatchObject({
       selection: {},
       gainedCardIds: [NIGHTMARE_ID, NIGHTMARE_ID],
-      gainedEntryIds: [parseDeckEntryId("deck-91-0"), parseDeckEntryId("deck-91-1")],
+      gainedEntryIds: [
+        parseDeckEntryId("deck-91-0"),
+        parseDeckEntryId("deck-91-1"),
+      ],
       gainedDreamsignIds: [fixedDreamsignId],
       dreamsignMutation: {
         beforeIds: [dreamsignId(1)],
@@ -2298,7 +2303,10 @@ describe("Exploration provider", () => {
     expect(explorationResolutionFor(resolved)).toMatchObject({
       selection: { offeredDreamsignId: selected },
       gainedCardIds: [NIGHTMARE_ID, NIGHTMARE_ID],
-      gainedEntryIds: [parseDeckEntryId("deck-91-0"), parseDeckEntryId("deck-91-1")],
+      gainedEntryIds: [
+        parseDeckEntryId("deck-91-0"),
+        parseDeckEntryId("deck-91-1"),
+      ],
       gainedDreamsignIds: [selected],
       dreamsignMutation: {
         offeredIds: plan?.preparedDreamsignIds,
@@ -3352,6 +3360,38 @@ describe("Exploration provider", () => {
       },
     });
 
+    const eventOpeningHand: ExplorationActionContent = {
+      ...openingHand,
+      id: testExplorationActionId("opening-hand-events"),
+      predicate: "event",
+    };
+    const eventContent = contentFixture([eventOpeningHand, startingEnergy]);
+    const eventState = buildState(eventContent);
+    const withEvents = resolve(
+      eventContent,
+      eventState.journey,
+      eventOpeningHand.id,
+    );
+    expect(
+      withEvents.battleModifiers[withEvents.battleModifiers.length - 1],
+    ).toEqual({
+      kind: "opening_hand_event_draw",
+      count: 2,
+      battlesRemaining: 1,
+      source: `exploration:${site.id}:${eventOpeningHand.id}`,
+    });
+    expect(withEvents.siteRuntime[site.id]).toMatchObject({
+      kind: "exploration",
+      resolution: {
+        battleModifier: {
+          kind: "event-draw",
+          amount: 2,
+          battlesRemaining: 1,
+        },
+      },
+    });
+    expect(() => assertJsonSafe(withEvents, "journey")).not.toThrow();
+
     const energyState = buildState(content);
     const withEnergy = resolve(content, energyState.journey, startingEnergy.id);
     expect(
@@ -3418,8 +3458,7 @@ describe("Exploration provider", () => {
     };
     const baseContent = contentFixture([chooseAvatar, uniqueDeck]);
     const avatarTemplate = baseContent.avatars[0];
-    if (avatarTemplate === undefined)
-      throw new Error("Expected an Avatar");
+    if (avatarTemplate === undefined) throw new Error("Expected an Avatar");
     const content: JourneyContent = {
       ...baseContent,
       avatars: Array.from({ length: 32 }, (_, index) => ({
@@ -5426,92 +5465,10 @@ describe("Exploration provider", () => {
     );
   });
 
-  it("changes exact random effective non-target types and persists complete before/after overrides", () => {
-    const action: ExplorationActionContent = {
-      id: testExplorationActionId("change-two-random-types"),
-      label: "Make two Characters",
-      effectText: "Change 2 random non-Characters into Characters",
-      effectKind: "change-random-card-type",
-      count: 2,
-      cardType: "Character",
-    };
-    const fallback: ExplorationActionContent = {
-      id: testExplorationActionId("change-two-random-types-fallback"),
-      label: "Gain a card",
-      effectText: "Gain a card",
-      effectKind: "gain-card",
-      cardId: SOURCE_CARD_ID,
-    };
-    const content = contentFixture([action, fallback]);
-    const beforeOverride: CardTypeChange = {
-      predicateId: parseCardTypeChangePredicateId("fixture:event"),
-      cardType: "Event" as const,
-      subtype: "",
-      label: "Event",
-    };
-    const journey = {
-      ...journeyFixture(content),
-      deck: journeyFixture(content).deck.map((entry, index) =>
-        index % 2 === 0 ? { ...entry, typeChange: beforeOverride } : entry,
-      ),
-    };
-    const state = buildState(content, journey);
-    const offer = state.runtime.actionOffers[0];
-    const preparation = offer?.randomDeckTargetPreparation;
-    if (offer === undefined || preparation === undefined) {
-      throw new Error("Expected random card-type plan");
-    }
-    expect(preparation.effectKind).toBe("change-random-card-type");
-    expect(preparation.cardType).toBe("Character");
-    expect(preparation.targets).toHaveLength(2);
-    const resolved = resolve(content, state.journey, action.id);
-    const resolution = explorationResolutionFor(resolved);
-    expect(resolution.selection).toEqual({});
-    expect(resolution.resolvedCardType).toBe("Character");
-    expect(resolution.cardTypeChanges).toEqual(
-      preparation.targets.map((target) => ({
-        entryId: target.entryId,
-        cardId: target.cardId,
-        beforeCardType: "Event",
-        afterCardType: "Character",
-        beforeTypeChange: beforeOverride,
-        afterTypeChange: {
-          predicateId: parseCardTypeChangePredicateId(
-            "exploration:card-type:character",
-          ),
-          cardType: "Character",
-          subtype: "",
-          label: "Character",
-        },
-      })),
-    );
-    for (const target of preparation.targets) {
-      const entry = resolved.deck.find(
-        (candidate) => candidate.entryId === target.entryId,
-      );
-      expect(entry?.typeChange).toEqual({
-        predicateId: parseCardTypeChangePredicateId(
-          "exploration:card-type:character",
-        ),
-        cardType: "Character",
-        subtype: "",
-        label: "Character",
-      });
-      if (entry === undefined)
-        throw new Error("resolved target entry is missing");
-      const base = content.cardDatabase.get(entry.cardNumber);
-      expect(
-        base === undefined
-          ? undefined
-          : resolveDeckEntryCard(content.transfigurationData, base, entry)
-              .cardType,
-      ).toBe("Character");
-    }
-    expect(() => assertJsonSafe(resolved, "journey")).not.toThrow();
-  });
-
   it("atomically replaces one signed random target with a clean fixed catalog entry", () => {
-    const replacementCardId = testCardId("f0000000-0000-4000-8000-000000000001");
+    const replacementCardId = testCardId(
+      "f0000000-0000-4000-8000-000000000001",
+    );
     const action: ExplorationActionContent = {
       id: testExplorationActionId("replace-random-character-with-fixed"),
       label: "Trade one creature",
@@ -5930,7 +5887,8 @@ describe("Exploration provider", () => {
     }
 
     const stale = fresh();
-    const node = stale.journey.atlas.nodes[parseAtlasNodeId("exploration-node")];
+    const node =
+      stale.journey.atlas.nodes[parseAtlasNodeId("exploration-node")];
     if (node === undefined) throw new Error("Expected current node");
     node.sites.unshift({
       id: parseSiteId("new-sibling"),
@@ -6124,8 +6082,14 @@ describe("Exploration provider", () => {
     const firstChoice = preparation.choices[0];
     if (firstChoice === undefined) throw new Error("Expected first choice");
     const forgedStates = [
-      mutatePlan((plan) => ({ ...plan, planSignature: stableDigest("forged") })),
-      mutatePlan((plan) => ({ ...plan, selectorSignature: stableDigest("forged") })),
+      mutatePlan((plan) => ({
+        ...plan,
+        planSignature: stableDigest("forged"),
+      })),
+      mutatePlan((plan) => ({
+        ...plan,
+        selectorSignature: stableDigest("forged"),
+      })),
       mutatePlan((plan) => ({
         ...plan,
         targetNodeId: parseAtlasNodeId("forged"),
@@ -6188,12 +6152,14 @@ describe("Exploration provider", () => {
     }
 
     const stale = fresh();
-    stale.journey.atlas.nodes[parseAtlasNodeId("exploration-node")]?.sites.push({
-      id: parseSiteId("new-sibling"),
-      type: "Essence",
-      isEnhanced: false,
-      isVisited: false,
-    });
+    stale.journey.atlas.nodes[parseAtlasNodeId("exploration-node")]?.sites.push(
+      {
+        id: parseSiteId("new-sibling"),
+        type: "Essence",
+        isEnhanced: false,
+        isVisited: false,
+      },
+    );
     const invalidSelections = [
       undefined,
       {},
@@ -6295,10 +6261,9 @@ describe("Exploration provider", () => {
       }),
     ).toBeNull();
     expect(JSON.parse(JSON.stringify(once))).toEqual(once);
-    expect(once.atlas.nodes[parseAtlasNodeId("exploration-node")]?.sites).toEqual([
-      site,
-      chosen.insertedSite,
-    ]);
+    expect(
+      once.atlas.nodes[parseAtlasNodeId("exploration-node")]?.sites,
+    ).toEqual([site, chosen.insertedSite]);
   });
 
   it("folds a chosen site insertion deterministically and bounces a duplicate intent", () => {

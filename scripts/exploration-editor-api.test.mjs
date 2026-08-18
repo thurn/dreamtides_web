@@ -13,21 +13,25 @@ const FIXTURE_ACTION_ID = "6662e7ce-9ea7-49bf-85fe-4bbe6728f282";
 
 function editorDataFixture() {
   return {
-    encounters: [{
-      cardId: FIXTURE_CARD_ID,
-      prose: "Fixture prose",
-      actions: [{
-        id: FIXTURE_ACTION_ID,
-        label: "Fixture action",
-        effectKind: "gain-offered-card",
-        canonicalMechanicId: "gain-card",
-        selectionPolicyId: "card-fit-quality",
-        predicate: "cheap-character",
-        renderedEffectText: "Derived from typed effect",
-        renderedEffectParts: [],
-        runtimeCardSelections: [],
-      }],
-    }],
+    encounters: [
+      {
+        cardId: FIXTURE_CARD_ID,
+        prose: "Fixture prose",
+        actions: [
+          {
+            id: FIXTURE_ACTION_ID,
+            label: "Fixture action",
+            effectKind: "gain-offered-card",
+            canonicalMechanicId: "gain-card",
+            selectionPolicyId: "card-fit-quality",
+            predicate: "cheap-character",
+            renderedEffectText: "Derived from typed effect",
+            renderedEffectParts: [],
+            runtimeCardSelections: [],
+          },
+        ],
+      },
+    ],
     cards: [{ id: FIXTURE_CARD_ID }],
     dreamsigns: [],
     effectSchemas: EXPLORATION_EFFECT_SCHEMAS,
@@ -52,8 +56,12 @@ function response() {
   return {
     status: 0,
     body: "",
-    writeHead(status) { this.status = status; },
-    end(body = "") { this.body = body; },
+    writeHead(status) {
+      this.status = status;
+    },
+    end(body = "") {
+      this.body = body;
+    },
   };
 }
 
@@ -78,7 +86,7 @@ describe("exploration editor API", () => {
     const result = await call("GET", "/api/editor/exploration");
     expect(result.status).toBe(200);
     expect(result.body.encounters.length).toBeGreaterThan(0);
-    expect(result.body.effectSchemas).toHaveLength(66);
+    expect(result.body.effectSchemas).toHaveLength(65);
     expect(result.body).not.toHaveProperty("templates");
     expect(result.body.sourceRevision).toMatch(/^[0-9a-f]{64}$/u);
   });
@@ -99,14 +107,20 @@ describe("exploration editor API", () => {
       ["/quest/trox.ron", "/stage/trox.ron"],
     ]);
     expect(runTroxCommand.mock.calls).toEqual([
-      [["extract"], {
-        configPath: "/stage/trox.ron",
-        cwd: "/stage",
-      }],
-      [["check", "--deny", "warnings"], {
-        configPath: "/stage/trox.ron",
-        cwd: "/stage",
-      }],
+      [
+        ["extract"],
+        {
+          configPath: "/stage/trox.ron",
+          cwd: "/stage",
+        },
+      ],
+      [
+        ["check", "--deny", "warnings"],
+        {
+          configPath: "/stage/trox.ron",
+          cwd: "/stage",
+        },
+      ],
     ]);
   });
 
@@ -133,21 +147,28 @@ describe("exploration editor API", () => {
       refreshLocalizationArtifacts,
     });
     const res = response();
-    await isolated(request(
-      "PATCH",
-      `/api/editor/exploration/encounters/${cardId}`,
-      { value: "Revised fixture prose", expectedSourceRevision: "revision" },
-    ), res, vi.fn());
+    await isolated(
+      request("PATCH", `/api/editor/exploration/encounters/${cardId}`, {
+        value: "Revised fixture prose",
+        expectedSourceRevision: "revision",
+      }),
+      res,
+      vi.fn(),
+    );
 
     expect(res.status).toBe(200);
-    expect(publishEdit).toHaveBeenCalledWith(expect.objectContaining({
-      dataset: "exploration",
-      operations: [{
-        operation: "set_encounter_prose",
-        card_id: cardId,
-        prose: "Revised fixture prose",
-      }],
-    }));
+    expect(publishEdit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        dataset: "exploration",
+        operations: [
+          {
+            operation: "set_encounter_prose",
+            card_id: cardId,
+            prose: "Revised fixture prose",
+          },
+        ],
+      }),
+    );
     expect(refreshLocalizationArtifacts).toHaveBeenCalledWith({
       rootDir: process.cwd(),
       stageRoot: "/stage",
@@ -161,12 +182,22 @@ describe("exploration editor API", () => {
       status: 405,
       body: { error: { code: "METHOD_NOT_ALLOWED" } },
     });
-    expect(await call("PATCH", "/api/editor/exploration/templates/1", {}))
-      .toMatchObject({ status: 404, body: { error: { code: "INVALID_API_PATH" } } });
-    expect(await call("PATCH", "/api/editor/exploration/encounters/not-a-uuid", {}))
-      .toMatchObject({ status: 400, body: { error: { code: "INVALID_EDIT" } } });
-    expect(await call("PATCH", `/api/editor/exploration/encounters/${cardId}/actions/9`, {}))
-      .toMatchObject({ status: 400, body: { error: { code: "INVALID_EDIT" } } });
+    expect(
+      await call("PATCH", "/api/editor/exploration/templates/1", {}),
+    ).toMatchObject({
+      status: 404,
+      body: { error: { code: "INVALID_API_PATH" } },
+    });
+    expect(
+      await call("PATCH", "/api/editor/exploration/encounters/not-a-uuid", {}),
+    ).toMatchObject({ status: 400, body: { error: { code: "INVALID_EDIT" } } });
+    expect(
+      await call(
+        "PATCH",
+        `/api/editor/exploration/encounters/${cardId}/actions/9`,
+        {},
+      ),
+    ).toMatchObject({ status: 400, body: { error: { code: "INVALID_EDIT" } } });
   });
 
   it("rejects unknown action references before staging an edit", async () => {
@@ -199,27 +230,6 @@ describe("exploration editor API", () => {
       count: 2,
       followupTitle: "Choose cards",
       followupSubtitle: "Choose cards",
-    };
-    const result = await call(
-      "PATCH",
-      `/api/editor/exploration/encounters/${encounter.cardId}/actions/0`,
-      { action, expectedSourceRevision: loaded.body.sourceRevision },
-    );
-
-    expect(result).toMatchObject({
-      status: 400,
-      body: { error: { code: "INVALID_EFFECT_FIELD" } },
-    });
-  });
-
-  it("rejects malformed random card-type edits before staging", async () => {
-    const loaded = await call("GET", "/api/editor/exploration");
-    const encounter = loaded.body.encounters[0];
-    const action = {
-      ...encounter.actions[0],
-      effectKind: "change-random-card-type",
-      count: 2,
-      cardType: "Dreamwell",
     };
     const result = await call(
       "PATCH",
@@ -266,16 +276,25 @@ describe("exploration editor API", () => {
   it("rejects malformed Wave8 compound edits before staging", async () => {
     const loaded = await call("GET", "/api/editor/exploration");
     const encounter = loaded.body.encounters[0];
-    const action = { ...encounter.actions[0],
+    const action = {
+      ...encounter.actions[0],
       effectKind: "take-transfigured-cards-and-gain-nightmares",
-      predicate: "event", offerCount: 3, transfiguration: "Inspired",
-      nightmareCount: 1, followupTitle: "Choose rewards",
-      followupSubtitle: "Take any number of cards" };
-    const result = await call("PATCH",
+      predicate: "event",
+      offerCount: 3,
+      transfiguration: "Inspired",
+      nightmareCount: 1,
+      followupTitle: "Choose rewards",
+      followupSubtitle: "Take any number of cards",
+    };
+    const result = await call(
+      "PATCH",
       `/api/editor/exploration/encounters/${encounter.cardId}/actions/0`,
-      { action, expectedSourceRevision: loaded.body.sourceRevision });
-    expect(result).toMatchObject({ status: 400,
-      body: { error: { code: "INVALID_EFFECT_FIELD" } } });
+      { action, expectedSourceRevision: loaded.body.sourceRevision },
+    );
+    expect(result).toMatchObject({
+      status: 400,
+      body: { error: { code: "INVALID_EFFECT_FIELD" } },
+    });
   });
 
   it("rejects malformed fixed-site edits before staging", async () => {

@@ -834,17 +834,9 @@ describe("transformExplorationData", () => {
         predicate: "event",
         count: 2,
       },
-      {
-        id: "change-random-card-type",
-        label: "Synthetic action",
-        "effect-text": "Change two random cards into {card_type} cards",
-        "effect-kind": "change-random-card-type",
-        count: 2,
-        "card-type": "Character",
-      },
     ];
 
-    const [replacement, fixed, copy, cardType] =
+    const [replacement, fixed, copy] =
       transformExplorationData(source).encounters[0].action;
     expect(replacement).toMatchObject({
       canonicalMechanicId: "replace-deck-entry",
@@ -866,13 +858,6 @@ describe("transformExplorationData", () => {
       selectionPolicyId: "uniform",
       predicate: "event",
       count: 2,
-    });
-    expect(cardType).toMatchObject({
-      effectKind: "change-random-card-type",
-      canonicalMechanicId: "change-entry-card-type",
-      selectionPolicyId: "uniform",
-      count: 2,
-      cardType: "Character",
     });
 
     const legacy = syntheticExplorationSource();
@@ -963,30 +948,6 @@ describe("transformExplorationData", () => {
       "copy target token",
       "copy-random-cards",
       { predicate: "event", count: 2, "effect-text": "Copy {deck_card}" },
-      /target-disclosing/u,
-    ],
-    [
-      "card type missing count",
-      "change-random-card-type",
-      { "card-type": "Event" },
-      /requires count/u,
-    ],
-    [
-      "card type invalid",
-      "change-random-card-type",
-      { count: 2, "card-type": "Dreamwell" },
-      /Character or Event/u,
-    ],
-    [
-      "card type predicate",
-      "change-random-card-type",
-      { count: 2, "card-type": "Event", predicate: "event" },
-      /does not apply/u,
-    ],
-    [
-      "card type target token",
-      "change-random-card-type",
-      { count: 2, "card-type": "Event", "effect-text": "Change {deck_card}" },
       /target-disclosing/u,
     ],
   ])(
@@ -1550,10 +1511,7 @@ describe("validateAvatarMapping", () => {
 
   it("throws when a non-starter region has fewer than 3 or more than 4", () => {
     expect(() =>
-      validateAvatarMapping(
-        [scape("a", ["dc-1", "dc-2"])],
-        ["dc-1", "dc-2"],
-      ),
+      validateAvatarMapping([scape("a", ["dc-1", "dc-2"])], ["dc-1", "dc-2"]),
     ).toThrow(/must have 3-4/);
     expect(() =>
       validateAvatarMapping(

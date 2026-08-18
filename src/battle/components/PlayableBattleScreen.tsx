@@ -565,8 +565,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
       logEvent("battle_cumulus_card_picker_interaction", {
         ...createBattleLogBaseFields(board, {
           sourceSurface: "hand-tray",
-          selectedCardId:
-            chosenIds[0] === undefined ? null : chosenIds[0],
+          selectedCardId: chosenIds[0] === undefined ? null : chosenIds[0],
         }),
         action,
         dreamwellCardUuid:
@@ -854,6 +853,10 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         ),
         enemyHandSize: board.sides.enemy.hand.length,
         openingHandSize: battleInit.openingHandSize,
+        openingHandEventDrawCardUuids:
+          battleInit.openingHandEventDrawCardUuids ?? [],
+        openingHandEventDrawEntryIds:
+          battleInit.openingHandEventDrawEntryIds ?? [],
         playerHandBattleCardIds: [...board.sides.player.hand],
         playerHandCardUuids: board.sides.player.hand.map(
           (battleCardId) =>
@@ -1877,10 +1880,7 @@ function resolveEnemyAvatarSummary(
   enemyDescriptor: BattleEnemyDescriptor,
   journeyContent: JourneyContent,
 ): BattleAvatarSummary {
-  const sourceAvatar = findEnemySourceAvatar(
-    enemyDescriptor,
-    journeyContent,
-  );
+  const sourceAvatar = findEnemySourceAvatar(enemyDescriptor, journeyContent);
   return {
     id: sourceAvatar?.id ?? enemyDescriptor.id,
     imageNumber:
@@ -1921,9 +1921,7 @@ function findEnemySourceAvatar(
   });
 }
 
-function parseEnemySourceAvatarId(
-  enemyId: OpponentId,
-): AvatarId | null {
+function parseEnemySourceAvatarId(enemyId: OpponentId): AvatarId | null {
   const prefix = "enemy:";
   if (!enemyId.startsWith(prefix)) {
     return null;

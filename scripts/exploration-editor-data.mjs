@@ -320,7 +320,6 @@ export function normalizeExplorationAction(rawAction, references = undefined) {
   });
   if (
     action.cardType !== undefined &&
-    effectKind !== "change-random-card-type" &&
     effectKind !== "change-card-type-selected"
   ) {
     throw editorError(

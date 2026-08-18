@@ -15,7 +15,11 @@ import type {
   ExplorationEditorLoadResult,
   ExplorationEditorServerData,
 } from "./exploration-editor-types";
-import { testCardId, testDreamsignId, testExplorationActionId } from "../types/test-identities";
+import {
+  testCardId,
+  testDreamsignId,
+  testExplorationActionId,
+} from "../types/test-identities";
 
 const CARD_ID = "11111111-1111-4111-8111-111111111111";
 const REWARD_CARD_ID = "22222222-2222-4222-8222-222222222222";
@@ -613,76 +617,6 @@ describe("ExplorationEditorApp", () => {
       ),
     ).toBe(false);
     act(() => required.root.unmount());
-  });
-
-  it("edits the closed card-type field for random type changes", async () => {
-    const loaded = loadResult();
-    loaded.effectSchemas.push({
-      kind: "change-random-card-type",
-      label: "Change random card types",
-      canonicalMechanicId: "change-entry-card-type",
-      defaultSelectionPolicyId: "uniform",
-      allowedSelectionPolicyIds: ["uniform"],
-      fields: [
-        {
-          key: "count",
-          label: "Count",
-          control: "number",
-          defaultValue: 2,
-          min: 1,
-        },
-        {
-          key: "cardType",
-          label: "Card type",
-          control: "card-type",
-          defaultValue: "Character",
-        },
-      ],
-    });
-    loaded.encounters[0].actions[0] = {
-      ...loaded.encounters[0].actions[0],
-      effectKind: "change-random-card-type",
-      canonicalMechanicId: "change-entry-card-type",
-      selectionPolicyId: "uniform",
-      count: 2,
-      cardType: "Event",
-      renderedEffectParts: [{ kind: "text", text: "Synthetic effect" }],
-    };
-    const saveAction = vi.fn(
-      (request: Parameters<ExplorationEditorClient["saveAction"]>[0]) =>
-        Promise.resolve({
-          clientRevision: request.clientRevision,
-          data: structuredClone(SERVER_DATA),
-        }),
-    );
-    const { container, root } = await renderLoaded(
-      client({
-        load: vi.fn().mockResolvedValue(loaded),
-        saveAction,
-      }),
-    );
-    const field = container.querySelector<HTMLElement>(
-      '[data-exploration-field-control="cardType"]',
-    );
-    const trigger = field?.querySelector<HTMLButtonElement>("button");
-    if (trigger === null || trigger === undefined) {
-      throw new Error("Card-type control did not render");
-    }
-    act(() => trigger.click());
-    const inactiveOption = document.body.querySelector<HTMLButtonElement>(
-      '[role="option"][aria-selected="false"]',
-    );
-    await act(async () => {
-      inactiveOption?.click();
-      await Promise.resolve();
-    });
-
-    expect(saveAction.mock.calls[0]?.[0].action).toMatchObject({
-      effectKind: "change-random-card-type",
-      cardType: "Character",
-      count: 2,
-    });
-    act(() => root.unmount());
   });
 
   it("edits chosen and offered targets for selected card-type changes", async () => {
