@@ -19,6 +19,7 @@ const compositions: readonly SiteLayoutComposition[] = [
   "content-led-revelation",
   "balanced-expanded-revelation",
   "content-led-expanded-revelation",
+  "balanced-dual-dialogue-revelation",
 ];
 
 afterEach(() => {
@@ -255,6 +256,43 @@ describe("SiteLayout", () => {
       "calc(34vw + var(--space-6xl) + var(--space-s))",
     );
     expect(speech?.style.width).not.toBe("min(58vw, 380px)");
+    act(() => root.unmount());
+  });
+
+  it("reserves a lower dialogue band for a resident guide beneath supplemental guidance", () => {
+    installMatchMedia(390);
+    const { container, root } = mountCumulus(
+      <SiteLayout
+        siteId={parseSiteId("dual-dialogue-revelation")}
+        scene={null}
+        moteTint="violet"
+        guide={{
+          id: testGuideId("guide"),
+          name: assertLocalized("Guide"),
+          line: assertLocalized("Line"),
+          art: artRef.dreamGuide(testGuideId("guide")),
+          presence: "speaking",
+        }}
+        composition="balanced-dual-dialogue-revelation"
+      >
+        <div />
+      </SiteLayout>,
+    );
+    const speech = container.querySelector<HTMLElement>(
+      "[data-site-layout-speech-anchor]",
+    );
+    const guide = container.querySelector<HTMLElement>(
+      "[data-site-layout-guide]",
+    );
+    const content = container.querySelector<HTMLElement>(
+      "[data-site-layout-content-region]",
+    );
+
+    expect(guide?.style.top).toBe(
+      "calc(var(--space-6xl) + var(--space-6xl))",
+    );
+    expect(speech?.style.top).toBe("var(--space-2xl)");
+    expect(content?.style.top).toBe("36dvh");
     act(() => root.unmount());
   });
 });

@@ -23,6 +23,7 @@ const compositions: readonly SiteLayoutComposition[] = [
   "content-led-revelation",
   "balanced-expanded-revelation",
   "content-led-expanded-revelation",
+  "balanced-dual-dialogue-revelation",
 ];
 
 function Demo() {
@@ -157,6 +158,7 @@ export const siteLayoutDemo: CumulusComponent = {
   details: [
     "The stage preserves router-owned journey chrome and exposes stable composition and guide-presence diagnostics.",
     "Guide speech projects alpha-derived head-edge targets through the contained artwork on desktop and narrow layouts; compact content-led compositions use a reserved clear band.",
+    "Dual-dialogue Revelation reserves the top rail for supplemental character guidance and places the resident guide dialogue in the next clear band above the offer.",
     "Site content chooses its own material and floating panels should hug their content rather than fill the allocated region.",
   ],
   relatedSystems: ["journey-screen-host-chrome"],

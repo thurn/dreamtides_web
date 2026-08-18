@@ -125,7 +125,7 @@ export function DreamsignRevelationScreen({
         composition={
           view.tutorial === undefined
             ? "balanced-revelation"
-            : "balanced-expanded-revelation"
+            : "balanced-dual-dialogue-revelation"
         }
       >
         <div
@@ -154,12 +154,14 @@ export function DreamsignRevelationScreen({
           style={{
             position: "absolute",
             zIndex: 30,
-            top: isDesktop ? "20dvh" : "24dvh",
-            left: isDesktop ? "34vw" : "34vw",
+            top: `calc(max(var(--safe-area-inset-top), ${token("--safe-top")}) + ${token("--space-s")})`,
+            left: "50%",
             width: isDesktop
               ? `min(calc(100vw - (${token("--space-s")} * 2)), ${String(view.tutorial.bubbleWidth)}px)`
-              : `calc(66vw - ${token("--space-xs")})`,
-            transform: `translate(${String(view.tutorial.horizontalOffset)}px, ${String(view.tutorial.verticalOffset)}px)`,
+              : `calc(100vw - (${token("--space-s")} * 2))`,
+            display: "grid",
+            justifyItems: "center",
+            transform: `translate(calc(-50% + ${String(view.tutorial.horizontalOffset)}px), ${String(view.tutorial.verticalOffset)}px)`,
           }}
         >
           <CharacterDialogue

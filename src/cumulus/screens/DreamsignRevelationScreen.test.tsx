@@ -94,7 +94,7 @@ afterEach(() => {
 });
 
 describe("DreamsignRevelationScreen", () => {
-  it("waits one second before revealing Mira below the desktop app chrome", () => {
+  it("waits one second before revealing Mira in the desktop top rail", () => {
     vi.useFakeTimers();
     stubMatchMedia(true);
     const onTutorialShown = vi.fn();
@@ -160,7 +160,17 @@ describe("DreamsignRevelationScreen", () => {
     expect(
       container.querySelector<HTMLElement>("[data-revelation-site-tutorial]")
         ?.style.top,
-    ).toBe("20dvh");
+    ).toBe(
+      "calc(max(var(--safe-area-inset-top), var(--safe-top)) + var(--space-s))",
+    );
+    expect(
+      container.querySelector<HTMLElement>("[data-revelation-site-tutorial]")
+        ?.style.left,
+    ).toBe("50%");
+    expect(
+      container.querySelector<HTMLElement>("[data-site-layout]")?.dataset
+        .siteLayoutComposition,
+    ).toBe("balanced-dual-dialogue-revelation");
     expect(onTutorialShown).toHaveBeenCalledOnce();
     expect(
       container.querySelector("[data-site-layout-guide] img"),

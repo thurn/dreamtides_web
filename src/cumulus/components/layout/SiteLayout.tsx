@@ -33,37 +33,51 @@ import type { GuideId, SiteId } from "../../../types/identifiers";
  * `balanced-revelation` and `content-led-revelation` use the corresponding
  * desktop balance with the tall, left-cropped narrow guide treatment.
  * The expanded Revelation recipes move narrow content upward for taller bodies.
+ * `balanced-dual-dialogue-revelation` additionally reserves the top rail for
+ * supplemental character dialogue and places the resident guide beneath it.
  */
 export const SITE_LAYOUT_COMPOSITIONS = {
   "balanced-gallery": {
     contentLed: false,
     revelation: false,
     expanded: false,
+    supplementalDialogue: false,
   },
   "content-led-gallery": {
     contentLed: true,
     revelation: false,
     expanded: false,
+    supplementalDialogue: false,
   },
   "balanced-revelation": {
     contentLed: false,
     revelation: true,
     expanded: false,
+    supplementalDialogue: false,
   },
   "content-led-revelation": {
     contentLed: true,
     revelation: true,
     expanded: false,
+    supplementalDialogue: false,
   },
   "balanced-expanded-revelation": {
     contentLed: false,
     revelation: true,
     expanded: true,
+    supplementalDialogue: false,
   },
   "content-led-expanded-revelation": {
     contentLed: true,
     revelation: true,
     expanded: true,
+    supplementalDialogue: false,
+  },
+  "balanced-dual-dialogue-revelation": {
+    contentLed: false,
+    revelation: true,
+    expanded: true,
+    supplementalDialogue: true,
   },
 } as const;
 
@@ -238,6 +252,7 @@ export function SiteLayout({
   const isRevelation = recipe.revelation;
   const isContentLed = recipe.contentLed;
   const isExpanded = recipe.expanded;
+  const hasSupplementalDialogue = recipe.supplementalDialogue;
   const contentAnchorRef = useTutorialAnchor(SITE_CONTENT_TUTORIAL_ANCHOR_ID);
   const guideRef = useRef<HTMLDivElement | null>(null);
   const guideArtRef = useRef<HTMLImageElement | null>(null);
@@ -292,7 +307,8 @@ export function SiteLayout({
     };
   }, [desktop, guide.id, guideUrl, isRevelation]);
 
-  const measuredSpeechTarget = compactContentLed ? null : guideSpeechTarget;
+  const measuredSpeechTarget =
+    compactContentLed || hasSupplementalDialogue ? null : guideSpeechTarget;
 
   return (
     <div
@@ -367,7 +383,13 @@ export function SiteLayout({
               : isRevelation
                 ? `calc(-1 * (${token("--space-6xl")} + ${token("--space-s")}))`
                 : 0,
-            top: desktop ? 0 : isRevelation ? token("--space-s") : 0,
+            top: desktop
+              ? 0
+              : isRevelation
+                ? hasSupplementalDialogue
+                  ? `calc(${token("--space-6xl")} + ${token("--space-6xl")})`
+                  : token("--space-s")
+                : 0,
             bottom: undefined,
             width: desktop
               ? isContentLed
@@ -406,7 +428,11 @@ export function SiteLayout({
               style={{
                 position: "absolute",
                 top:
-                  measuredSpeechTarget !== null
+                  hasSupplementalDialogue
+                    ? desktop
+                      ? `calc(${token("--space-6xl")} + ${token("--space-6xl")} + ${token("--space-m")})`
+                      : token("--space-2xl")
+                    : measuredSpeechTarget !== null
                     ? `${String(measuredSpeechTarget.y)}px`
                     : desktop
                       ? compactContentLed
