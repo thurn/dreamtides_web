@@ -198,7 +198,7 @@ TutorialCatalog(
           duration_seconds: 10,
           vertical_offset_pixels: 30,
           text: Tx(
-            "A [yellow]blocked[/yellow] character that isn't dissolved scores fewer points (⍟), reduced by the enemy's spark (✦)."
+            "A victorious [yellow]blocked[/yellow] character still scores points (⍟), reduced by the enemy’s Spark (✦)."
           ),
         ),
       ),
