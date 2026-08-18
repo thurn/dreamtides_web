@@ -54,10 +54,23 @@ describe("isolated Trox source workspace", () => {
 
   it("returns current development bundles from the isolated catalog", () => {
     const root = fixture();
+    mkdirSync(resolve(root, ".generated/localization/sources"), {
+      recursive: true,
+    });
+    writeFileSync(
+      resolve(root, ".generated/localization/sources/derived.ron"),
+      '[Tx("Derived message")]\n',
+    );
     try {
       const bundles = buildDevelopmentTroxBundles({
         root,
         run: (arguments_, { cwd }) => {
+          expect(
+            readFileSync(
+              resolve(cwd, ".generated/localization/sources/derived.ron"),
+              "utf8",
+            ),
+          ).toBe('[Tx("Derived message")]\n');
           if (arguments_[0] !== "bundle") return;
           mkdirSync(resolve(cwd, ".generated/localization/bundles"), { recursive: true });
           for (const locale of ["en-US", "ar", "es", "ja", "ru"]) {

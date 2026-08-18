@@ -1,5 +1,1 @@
-Browser QA for the Exploration route can be blocked earlier in CumulusJourneyChrome by a missing Trox entry for the Dreamsign image description "Golden fruit-like charm with a mesh-patterned orb and smooth teardrop front." DesktopDeckViewerAdapter calls localizedSourceText for that description and the error boundary renders before the Exploration encounter can be exercised. This is unrelated to the ReplaceSelected followup-title contract fixed in this worktree.
-
-Room yu3nox exposes a pre-existing Transfiguration detail render failure because the canonical rules text "Give a character you control +3✦. Draw a card." has no matching Trox entry. The screen error boundary records `error_boundary_caught` from `cardRulesTextDefinitionCards`; the shared room state remains readable.
-
 The `scripts/desktop-screenshots.mjs --list-scenes` catalog loader fails under Node 24 before browser automation starts. Its `tsx` import graph reaches a `virtual:` URL that `scripts/raw-import-loader.mjs` forwards to Node's default ESM loader, which rejects the unsupported URL scheme with `ERR_UNSUPPORTED_ESM_URL_SCHEME`.

@@ -105,6 +105,7 @@ const DREAMSIGN_ART_DIR = join(
   "filtered",
   "outlined",
 );
+const DREAMSIGN_ALT_TEXT_PATH = join(DATA_DIR, "dreamsign-image-alts.tsv");
 const JOURNEY_ART_DIR = join(
   LOCAL_ASSET_HOME,
   "Documents",
@@ -365,6 +366,90 @@ function ronTx(text) {
   return `Tx(${JSON.stringify(escapedBraces)})`;
 }
 
+const ATTUNED_LOCALIZATION_COST_PATTERN = /([1-9]\d*)●(?=[^:.\n]*:)/;
+
+function appendTransfigurationClause(text, clause) {
+  return text + (text.length > 0 ? " " : "") + clause;
+}
+
+function resonantLocalizationText(text) {
+  if (/once per turn/i.test(text)) {
+    return text.replace(/once per turn/i, "any number of times per turn");
+  }
+  if (text.includes("▸Dawn")) {
+    return text.replace("▸Dawn", "▸Materialized, Dawn");
+  }
+  if (text.includes("▸Materialized:")) {
+    return text.replace("▸Materialized:", "▸Materialized, Dissolved:");
+  }
+  return null;
+}
+
+function attunedLocalizationText(text) {
+  const match = ATTUNED_LOCALIZATION_COST_PATTERN.exec(text);
+  if (match === null) return null;
+  const token = `${match[1]}●`;
+  const reduced = String(Math.max(0, Number.parseInt(match[1], 10) - 1));
+  return text.replace(token, `${reduced}●`);
+}
+
+/**
+ * Return every complete rules-text variant produced by a text-changing
+ * transfiguration. Perfected is evaluated in canonical form order so its
+ * combined output receives its own Trox entry as one translation unit.
+ */
+export function cardTransfigurationTextVariants(card) {
+  const baseText = String(card["rendered-text"] ?? "");
+  const amplifiedText = card["amplified-text"];
+  const hasAmplified =
+    amplifiedText !== undefined &&
+    String(amplifiedText).trim() !== "" &&
+    String(amplifiedText) !== baseText;
+  const isEvent = card["card-type"] === "Event";
+  const isCharacter = card["card-type"] === "Character";
+  const parsedEnergyCost = parseEnergyCost(card["energy-cost"]);
+  const hasPositiveEnergyCost =
+    parsedEnergyCost.energyCost !== null && parsedEnergyCost.energyCost > 0;
+  const resonantText = resonantLocalizationText(baseText);
+  const attunedText = attunedLocalizationText(baseText);
+  const eligibleFormCount = [
+    hasPositiveEnergyCost,
+    hasAmplified,
+    isCharacter,
+    isEvent,
+    isEvent && card["is-fast"] !== true,
+    resonantText !== null,
+    attunedText !== null,
+  ].filter(Boolean).length;
+
+  const variants = new Set();
+  if (hasAmplified) variants.add(String(amplifiedText));
+  if (isEvent) {
+    variants.add(appendTransfigurationClause(baseText, "Draw a card."));
+    variants.add(appendTransfigurationClause(baseText, "Reclaim."));
+  }
+  if (resonantText !== null) variants.add(resonantText);
+  if (attunedText !== null) variants.add(attunedText);
+
+  if (eligibleFormCount >= 2) {
+    let perfectedText = hasAmplified ? String(amplifiedText) : baseText;
+    if (isEvent) {
+      perfectedText = appendTransfigurationClause(perfectedText, "Draw a card.");
+      perfectedText = appendTransfigurationClause(perfectedText, "Reclaim.");
+    }
+    if (resonantText !== null) {
+      perfectedText = resonantLocalizationText(perfectedText) ?? perfectedText;
+    }
+    if (attunedText !== null) {
+      perfectedText = attunedLocalizationText(perfectedText) ?? perfectedText;
+    }
+    variants.add(perfectedText);
+  }
+
+  variants.delete(baseText);
+  return [...variants];
+}
+
 /**
  * Generate the complete card messages Trox extracts. Canonical cards.ron keeps
  * Amplified authoring compact, but translators need complete messages rather
@@ -389,6 +474,18 @@ export function generateCardLocalizationProjection(cards) {
     return `  CardDefinition(\n    name: ${ronTx(card.name)},\n    ability_text: [${abilityText}],${amplifiedField}\n  ),`;
   });
   return `// GENERATED FILE — DO NOT EDIT. Complete localization messages projected from data/cards.ron.\n[\n${records.join("\n\n")}\n]\n`;
+}
+
+/**
+ * Generate complete, globally deduplicated rules paragraphs for derived
+ * transfiguration forms. This projection lives under `.generated` because it
+ * is disposable workspace input to Trox rather than canonical game data.
+ */
+export function generateCardTransfigurationLocalizationProjection(cards) {
+  const variants = [
+    ...new Set(cards.flatMap((card) => cardTransfigurationTextVariants(card))),
+  ].sort((left, right) => left.localeCompare(right, "en-US"));
+  return `// GENERATED FILE — DO NOT EDIT. Complete transfiguration localization messages projected from data/cards.ron.\n[\n${variants.map((text) => `  ${ronTx(text)},`).join("\n")}\n]\n`;
 }
 
 /**
@@ -1301,14 +1398,7 @@ function defaultAvatarArtDir() {
   return AVATAR_ART_DIR_CANDIDATES[0];
 }
 
-function readDreamsignAltText(dreamsignArtDir) {
-  // Prefer alt text sitting alongside the images; the outlined variant folder
-  // shares the `alt_text.txt` catalog kept one level up in `filtered`, so fall
-  // back to the parent directory when the file is not local.
-  let altTextPath = join(dreamsignArtDir, "alt_text.txt");
-  if (!existsSync(altTextPath)) {
-    altTextPath = join(dreamsignArtDir, "..", "alt_text.txt");
-  }
+function readDreamsignAltText(altTextPath) {
   if (!existsSync(altTextPath)) {
     return new Map();
   }
@@ -1422,6 +1512,13 @@ export function regenerateCardData({
     "generated",
     "cards_localization.ron",
   ),
+  cardTransfigurationLocalizationRonPath = join(
+    ROOT,
+    ".generated",
+    "localization",
+    "sources",
+    "card_transfigurations.ron",
+  ),
 } = {}) {
   console.log("Parsing cards.toml for the runtime card catalog...");
   const cardTomlContent = readFileSync(cardTomlPath, "utf8");
@@ -1445,6 +1542,16 @@ export function regenerateCardData({
         generateCardLocalizationProjection(allCards),
         RON_FORMAT_CONFIG,
       ),
+      RON_FORMAT_CONFIG,
+    ),
+  );
+  mkdirSync(dirname(cardTransfigurationLocalizationRonPath), {
+    recursive: true,
+  });
+  writeFileSync(
+    cardTransfigurationLocalizationRonPath,
+    formatRon(
+      generateCardTransfigurationLocalizationProjection(allCards),
       RON_FORMAT_CONFIG,
     ),
   );
@@ -1498,6 +1605,7 @@ function setupCatalogFixture({
   imageCacheDir,
   avatarArtDir,
   dreamsignArtDir,
+  dreamsignAltTextPath,
   mainMenuBackgroundArtPath,
   tutorialDialogueFrameArtPath,
 }) {
@@ -1506,7 +1614,7 @@ function setupCatalogFixture({
   const parsedAvatars = parse(readFileSync(avatarV2TomlPath, "utf8"));
   const jsonAvatars = (parsedAvatars.avatar ?? []).map(transformAvatar);
   const parsedDreamsigns = parse(readFileSync(dreamsignTomlPath, "utf8"));
-  const altTextByImageName = readDreamsignAltText(dreamsignArtDir);
+  const altTextByImageName = readDreamsignAltText(dreamsignAltTextPath);
   const jsonDreamsigns = (parsedDreamsigns.dreamsign ?? []).map((dreamsign) =>
     transformDreamsign(dreamsign, altTextByImageName),
   );
@@ -1590,6 +1698,7 @@ export function setupAssets({
   imageCacheDir = IMAGE_CACHE_DIR,
   avatarArtDir = defaultAvatarArtDir(),
   dreamsignArtDir = DREAMSIGN_ART_DIR,
+  dreamsignAltTextPath = DREAMSIGN_ALT_TEXT_PATH,
   journeyArtDir = JOURNEY_ART_DIR,
   mainMenuBackgroundArtPath = MAIN_MENU_BACKGROUND_ART_PATH,
   explorationHighResArtDir = EXPLORATION_HIGH_RES_ART_DIR,
@@ -1611,6 +1720,7 @@ export function setupAssets({
       imageCacheDir,
       avatarArtDir,
       dreamsignArtDir,
+      dreamsignAltTextPath,
       mainMenuBackgroundArtPath,
       tutorialDialogueFrameArtPath,
     });
@@ -1789,7 +1899,7 @@ export function setupAssets({
     throw new Error("Expected [[dreamsign]] array in dreamsigns.toml");
   }
 
-  const altTextByImageName = readDreamsignAltText(dreamsignArtDir);
+  const altTextByImageName = readDreamsignAltText(dreamsignAltTextPath);
   const jsonDreamsigns = allDreamsigns.map((dreamsign) =>
     transformDreamsign(dreamsign, altTextByImageName),
   );

@@ -13,6 +13,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { parse } from "smol-toml";
 import {
   generateCardLocalizationProjection,
+  generateCardTransfigurationLocalizationProjection,
+  cardTransfigurationTextVariants,
   generateOpponentsData,
   imageHash,
   linkExplorationArt,
@@ -1559,6 +1561,7 @@ describe("setupAssets", () => {
     const cardTomlPath = join(tempRoot, "cards.toml");
     const avatarV2TomlPath = join(tempRoot, "avatars.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
+    const dreamsignAltTextPath = join(tempRoot, "dreamsign-image-alts.tsv");
     const cachedImagePath = join(imageCacheDir, imageHash(101));
 
     mkdirSync(imageCacheDir, { recursive: true });
@@ -1572,7 +1575,7 @@ describe("setupAssets", () => {
     writeFileSync(mainMenuBackgroundArtPath, "fake-jpg");
     writeFileSync(tutorialDialogueFrameArtPath, "fake-png");
     writeFileSync(
-      join(dreamsignArtDir, "alt_text.txt"),
+      dreamsignAltTextPath,
       "test-sign.png\tSmall idol with a violet glow.\n",
     );
     writeFileSync(
@@ -1650,6 +1653,7 @@ rendered-text = "Use the canonical Dreamsign text."
       imageCacheDir,
       avatarArtDir,
       dreamsignArtDir,
+      dreamsignAltTextPath,
       mainMenuBackgroundArtPath,
       tutorialDialogueFrameArtPath,
     });
@@ -2077,9 +2081,20 @@ describe("transformCard Amplified text", () => {
     const projection = generateCardLocalizationProjection([
       {
         name: "Amplified fixture",
+        "card-type": "Character",
+        "energy-cost": 2,
+        "is-fast": false,
         "rendered-text": "Gain 2●.\n\nDraw a card.",
         "amplified-text": "Gain 3●.\n\nDraw a card.",
         "amplified-replacement": "3●.",
+      },
+      {
+        name: "Inspired fixture",
+        "card-type": "Event",
+        "energy-cost": 1,
+        "is-fast": false,
+        "rendered-text": "Give a character +3✦.",
+        "amplified-text": "Give a character +4✦.",
       },
     ]);
     expect(projection).toContain("CardDefinition(");
@@ -2090,6 +2105,43 @@ describe("transformCard Amplified text", () => {
       'amplified_text: [Tx("Gain 3●."), Tx("Draw a card.")]',
     );
     expect(projection).not.toContain("amplified_replacement");
+    expect(projection).not.toContain("transfigured_text:");
+
+    const transfigurations =
+      generateCardTransfigurationLocalizationProjection([
+        {
+          name: "Inspired fixture",
+          "card-type": "Event",
+          "energy-cost": 1,
+          "is-fast": false,
+          "rendered-text": "Give a character +3✦.",
+          "amplified-text": "Give a character +4✦.",
+        },
+      ]);
+    expect(transfigurations).toContain(
+      'Tx("Give a character +3✦. Draw a card.")',
+    );
+    expect(transfigurations).toContain(
+      'Tx("Give a character +3✦. Reclaim.")',
+    );
+    expect(transfigurations).toContain(
+      'Tx("Give a character +4✦. Draw a card. Reclaim.")',
+    );
+  });
+
+  it("projects complete Resonant, Attuned, and Perfected rules variants", () => {
+    const variants = cardTransfigurationTextVariants({
+      name: "Triggered fixture",
+      "card-type": "Character",
+      "energy-cost": 3,
+      "rendered-text": "▸Dawn: 2●, ☾: Act.",
+    });
+
+    expect(variants).toEqual([
+      "▸Materialized, Dawn: 2●, ☾: Act.",
+      "▸Dawn: 1●, ☾: Act.",
+      "▸Materialized, Dawn: 1●, ☾: Act.",
+    ]);
   });
 
   it("carries an authored Amplified form into the runtime shape", () => {

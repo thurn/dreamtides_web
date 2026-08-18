@@ -2,7 +2,7 @@
 
 import { act } from "react";
 import { createRoot } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { parseCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
@@ -154,6 +154,38 @@ describe("CardView transfiguration rules marker", () => {
     const { container, root } = mount(display(card().renderedText));
 
     expect(container.querySelector("[data-card-rules-text-change]")).toBeNull();
+
+    act(() => root.unmount());
+    container.remove();
+  });
+
+  it("preserves hook order when a rules-changing transfiguration appears", () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
+    const initial = display(card().renderedText);
+    const { root, container } = mount(initial);
+
+    act(() => {
+      root.render(
+        <CumulusRoot>
+          <CardView
+            card={card()}
+            transfiguration={display(
+              `Draw ${TRANSFIGURE_MARK_START}two${TRANSFIGURE_MARK_END} cards.`,
+            )}
+          />
+        </CumulusRoot>,
+      );
+    });
+
+    expect(
+      consoleError.mock.calls.some((call) =>
+        call.some(
+          (value) =>
+            typeof value === "string" &&
+            value.includes("change in the order of Hooks"),
+        ),
+      ),
+    ).toBe(false);
 
     act(() => root.unmount());
     container.remove();

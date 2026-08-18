@@ -27,6 +27,11 @@
       include: ["data/**/*.ron"],
       exclude: ["data/internal/**/*.ron", "data/cards.ron"],
     ),
+    (
+      language: Ron,
+      // setup-assets materializes complete derived card rules here.
+      include: [".generated/localization/sources/**/*.ron"],
+    ),
   ],
 
   locales: {

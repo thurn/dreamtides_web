@@ -15,7 +15,7 @@ interface CardChangeBadgeOptions {
  * and rules text. This keeps the original Font Awesome metric box used by the
  * stat badges; the flowing-text InlineGlyph alignment is intentionally absent.
  */
-export function renderCardChangeBadge({
+export function CardChangeBadge({
   sizeVar,
   ariaLabel,
 }: CardChangeBadgeOptions): ReactElement {

@@ -9,7 +9,7 @@ import {
 import { useFitText } from "../controls/useFitText";
 import { type Glyph } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
-import { renderCardChangeBadge } from "./card-change-badge";
+import { CardChangeBadge } from "./card-change-badge";
 import { meaning, opaque, tx, txa, type LocalizedString } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 
@@ -275,9 +275,9 @@ export function CardStatOrb({
             display: "inline-flex",
           }}
         >
-          {renderCardChangeBadge({
-            sizeVar: `calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO)})`,
-          })}
+          <CardChangeBadge
+            sizeVar={`calc(${sizeVar} * ${String(CHANGE_BADGE_TO_ORB_RATIO)})`}
+          />
         </span>
       )}
     </span>

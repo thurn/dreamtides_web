@@ -32,7 +32,7 @@ import { InlineGlyph } from "../typography/InlineGlyph";
 import { GLYPHS } from "../../primitives/glyph";
 import { type CumulusColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
-import { renderCardChangeBadge } from "./card-change-badge";
+import { CardChangeBadge } from "./card-change-badge";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { TRANSFIGURE_MARK_START } from "../../../runtime/transfigure-markers";
 import { renderRulesText } from "./RulesText";
@@ -1537,14 +1537,14 @@ function GameCardSurface(props: GameCardSurfaceProps) {
                 pointerEvents: "none",
               }}
             >
-              {renderCardChangeBadge({
-                sizeVar: "var(--cv-transfiguration-change-badge-size)",
-                ariaLabel: txa(
+              <CardChangeBadge
+                sizeVar="var(--cv-transfiguration-change-badge-size)"
+                ariaLabel={txa(
                   "Rules text changed by {form_name} Transfiguration",
                   { form_name: transfiguration.form.name },
                   "[transfiguration] Tooltip explaining why a card's rules text differs from its base rules. form_name is the authored Transfiguration form name.",
-                ),
-              })}
+                )}
+              />
             </span>
           ) : null}
         </div>
