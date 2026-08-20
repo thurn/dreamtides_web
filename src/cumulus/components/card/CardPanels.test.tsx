@@ -323,6 +323,45 @@ describe("CardBrowserPanel", () => {
 });
 
 describe("CardPickerPanel", () => {
+  it("fits a whole-deck picker into complete rows through a display-contents wrapper", () => {
+    desktop = true;
+    const clientWidthSpy = vi
+      .spyOn(HTMLElement.prototype, "clientWidth", "get")
+      .mockImplementation(function (this: HTMLElement) {
+        if (this.matches('[data-testid="gallery-host"]')) return 690;
+        if (this.matches('[data-gallery-role="picker"]')) return 484;
+        return 0;
+      });
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+    act(() =>
+      root.render(
+        <div data-testid="gallery-host">
+          <div style={{ display: "contents" }}>
+            <CardPickerPanel
+              title={assertLocalized("Transfiguration")}
+              cards={Array.from({ length: 10 }, (_, index) => ({
+                entryId: parseDeckEntryId(`entry-${String(index)}`),
+                model: model(`Card ${String(index)}`),
+              }))}
+            />
+          </div>
+        </div>,
+      ),
+    );
+
+    const grid = container.querySelector<HTMLElement>(
+      "[data-card-choice-grid]",
+    );
+    expect(grid?.style.gridTemplateColumns).toContain("138px");
+    expect(grid?.children).toHaveLength(10);
+
+    clientWidthSpy.mockRestore();
+    act(() => root.unmount());
+    container.remove();
+  });
+
   it("derives count-aware columns and routes enabled card activation", () => {
     desktop = true;
     const activate = vi.fn();

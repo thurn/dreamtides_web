@@ -317,6 +317,17 @@ function finitePositive(value: number): number | null {
   return Number.isFinite(value) && value > 0 ? value : null;
 }
 
+function nearestMeasurableAncestor(
+  element: HTMLElement,
+): HTMLElement | null {
+  let ancestor = element.parentElement;
+  while (ancestor !== null) {
+    if (finitePositive(ancestor.clientWidth) !== null) return ancestor;
+    ancestor = ancestor.parentElement;
+  }
+  return null;
+}
+
 function parsePixel(value: string): number {
   const parsed = Number.parseFloat(value);
   return Number.isFinite(parsed) ? parsed : 0;
@@ -388,10 +399,16 @@ function useGalleryMeasure({
       const blockPadding =
         parsePixel(bodyStyle.paddingTop) + parsePixel(bodyStyle.paddingBottom);
       const gap = parsePixel(gridStyle.rowGap);
+      // Floating panels fit the nearest real layout ancestor. Semantic wrappers
+      // may use `display: contents`, so walk past zero-width ancestors instead
+      // of falling back to the viewport. Measuring the root itself would make a
+      // gallery shrink correctly but prevent it from expanding with its host.
+      const containingElement = nearestMeasurableAncestor(root);
       const availableWidth =
         (frame === "fullBleed"
           ? finitePositive(root.clientWidth)
-          : finitePositive(root.parentElement?.clientWidth ?? 0)) ??
+          : finitePositive(containingElement?.clientWidth ?? 0)) ??
+        finitePositive(root.clientWidth) ??
         finitePositive(window.innerWidth) ??
         0;
       const parentHeight = finitePositive(
@@ -465,9 +482,14 @@ function useGalleryMeasure({
         : new ResizeObserver(() => update());
     const root = rootRef.current;
     const parent = root?.parentElement ?? null;
+    const containingElement =
+      root === null ? null : nearestMeasurableAncestor(root);
     if (resizeObserver !== null) {
       if (root !== null) resizeObserver.observe(root);
       if (parent !== null) resizeObserver.observe(parent);
+      if (containingElement !== null && containingElement !== parent) {
+        resizeObserver.observe(containingElement);
+      }
       if (bodyRef.current !== null) resizeObserver.observe(bodyRef.current);
       const header = root?.querySelector<HTMLElement>(
         "[data-glass-panel-header]",
