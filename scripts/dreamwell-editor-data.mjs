@@ -2,7 +2,13 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
-import { validateArtCrop } from "./card-editor-data.mjs";
+import {
+  normalizeTagList,
+  readFacetRegistry,
+  TAG_FACET,
+  validateArtCrop,
+  validateTagRegistry,
+} from "./card-editor-data.mjs";
 import { transformDreamwell } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -30,6 +36,7 @@ export const EDITABLE_DREAMWELL_FIELDS = new Set([
   "order",
   "image-number",
   "art",
+  "tags",
 ]);
 
 function validationFailure(field, message, value) {
@@ -40,7 +47,10 @@ function validationSuccess(field, value) {
   return { ok: true, field, value };
 }
 
-function readSourceDreamwell(rootDir, dreamwellTomlPath = DEFAULT_DREAMWELL_TOML_PATH) {
+function readSourceDreamwell(
+  rootDir,
+  dreamwellTomlPath = DEFAULT_DREAMWELL_TOML_PATH,
+) {
   const absoluteTomlPath = join(rootDir, dreamwellTomlPath);
   const parsed = parse(readFileSync(absoluteTomlPath, "utf8"));
   const dreamwell = parsed.dreamwell;
@@ -82,13 +92,20 @@ function editorRecordFromDreamwell(dreamwell, index) {
     name: typeof dreamwell.name === "string" ? dreamwell.name : "",
     "rendered-text": dreamwell["rendered-text"] ?? "",
     "energy-added":
-      typeof dreamwell["energy-added"] === "number" ? dreamwell["energy-added"] : 0,
+      typeof dreamwell["energy-added"] === "number"
+        ? dreamwell["energy-added"]
+        : 0,
     order: typeof dreamwell.order === "number" ? dreamwell.order : 0,
     "image-number":
-      typeof dreamwell["image-number"] === "number" ? dreamwell["image-number"] : 0,
+      typeof dreamwell["image-number"] === "number"
+        ? dreamwell["image-number"]
+        : 0,
     art: readArtCrop(dreamwell.art),
+    tags: normalizeTagList(dreamwell.tags),
     "card-number":
-      typeof dreamwell["card-number"] === "number" ? dreamwell["card-number"] : index + 1,
+      typeof dreamwell["card-number"] === "number"
+        ? dreamwell["card-number"]
+        : index + 1,
     sourceIndex: index,
     source: dreamwell,
   };
@@ -98,7 +115,9 @@ export function readEditorDreamwell({
   rootDir = ROOT,
   dreamwellTomlPath = DEFAULT_DREAMWELL_TOML_PATH,
 } = {}) {
-  return readSourceDreamwell(rootDir, dreamwellTomlPath).map(editorRecordFromDreamwell);
+  return readSourceDreamwell(rootDir, dreamwellTomlPath).map(
+    editorRecordFromDreamwell,
+  );
 }
 
 function validateWholeNumber(field, rawValue, { min = 0, max, label }) {
@@ -112,7 +131,11 @@ function validateWholeNumber(field, rawValue, { min = 0, max, label }) {
     );
   }
   if (max !== undefined && numeric > max) {
-    return validationFailure(field, `${label} must be ${max} or less.`, rawValue);
+    return validationFailure(
+      field,
+      `${label} must be ${max} or less.`,
+      rawValue,
+    );
   }
   return validationSuccess(field, numeric);
 }
@@ -120,6 +143,22 @@ function validateWholeNumber(field, rawValue, { min = 0, max, label }) {
 export function validateDreamwellEdit(field, rawValue) {
   if (!EDITABLE_DREAMWELL_FIELDS.has(field)) {
     return validationFailure(field, "This field is not editable.", rawValue);
+  }
+
+  if (field === "tags") {
+    if (
+      !Array.isArray(rawValue) ||
+      rawValue.some((value) => typeof value !== "string" || value.trim() === "")
+    ) {
+      return validationFailure(
+        field,
+        "Tags must be a list of non-blank text values.",
+        rawValue,
+      );
+    }
+    return validationSuccess(field, [
+      ...new Set(rawValue.map((value) => value.trim())),
+    ]);
   }
 
   if (field === "name") {
@@ -163,12 +202,26 @@ export function validateDreamwellEdit(field, rawValue) {
   return validationFailure(field, "This field is not editable.", rawValue);
 }
 
+export function readDreamwellTagRegistry({
+  rootDir = ROOT,
+  dreamwellTomlPath = DEFAULT_DREAMWELL_TOML_PATH,
+} = {}) {
+  return readFacetRegistry({
+    rootDir,
+    cardTomlPath: dreamwellTomlPath,
+    facet: TAG_FACET,
+    sourceArrayKey: "dreamwell",
+  });
+}
+
+export { validateTagRegistry };
+
 export function refreshDreamwellDataJson({
   rootDir = ROOT,
   dreamwellTomlPath = DEFAULT_DREAMWELL_TOML_PATH,
 } = {}) {
-  const dreamwell = readSourceDreamwell(rootDir, dreamwellTomlPath).map((card) =>
-    transformDreamwell(card),
+  const dreamwell = readSourceDreamwell(rootDir, dreamwellTomlPath).map(
+    (card) => transformDreamwell(card),
   );
   const dreamwellJsonPath = join(rootDir, DREAMWELL_JSON_PATH);
 

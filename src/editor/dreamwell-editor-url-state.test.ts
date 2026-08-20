@@ -17,10 +17,15 @@ describe("Dreamwell editor URL display state", () => {
 
   it("parses search, edit mode, sort, direction, and size", () => {
     expect(
-      parseDreamwellDisplayState("?q=Meadow&edit=1&sort=energyAdded&dir=desc&size=small"),
+      parseDreamwellDisplayState(
+        "?q=Meadow&edit=1&sort=energyAdded&dir=desc&size=small",
+      ),
     ).toEqual({
       searchText: "Meadow",
       artEditing: true,
+      tagEditing: false,
+      tagFilters: [],
+      excludedTagFilters: [],
       sort: "energyAdded",
       dir: "desc",
       size: "small",
@@ -31,6 +36,9 @@ describe("Dreamwell editor URL display state", () => {
     const state: DreamwellDisplayState = {
       searchText: "Aurora & tide",
       artEditing: true,
+      tagEditing: true,
+      tagFilters: ["Art Owned"],
+      excludedTagFilters: ["Needs Crop"],
       sort: "order",
       dir: "desc",
       size: "medium",

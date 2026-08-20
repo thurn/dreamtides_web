@@ -6,6 +6,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   readEditorDreamwell,
+  readDreamwellTagRegistry,
   refreshDreamwellDataJson,
   validateDreamwellEdit,
 } from "./dreamwell-editor-data.mjs";
@@ -47,6 +48,10 @@ function writeFixtureRoot() {
   mkdirSync(join(rootDir, "data"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
   writeFileSync(join(rootDir, "data", "dreamwell.toml"), fixtureToml());
+  writeFileSync(
+    join(rootDir, "data", "dreamwell.tags.toml"),
+    '[[tags]]\nname = "Art Owned"\ncolor = "#0f766e"\n',
+  );
   return rootDir;
 }
 
@@ -65,6 +70,9 @@ describe("readEditorDreamwell", () => {
       "image-number": 1963305268,
       sourceIndex: 0,
     });
+    expect(readDreamwellTagRegistry({ rootDir })).toEqual([
+      { name: "Art Owned", color: "#0f766e" },
+    ]);
   });
 });
 
@@ -79,10 +87,14 @@ describe("validateDreamwellEdit", () => {
       value: 2,
     });
     expect(validateDreamwellEdit("name", "   ")).toMatchObject({ ok: false });
-    expect(validateDreamwellEdit("energy-added", "-1")).toMatchObject({ ok: false });
+    expect(validateDreamwellEdit("energy-added", "-1")).toMatchObject({
+      ok: false,
+    });
     expect(validateDreamwellEdit("order", 0)).toMatchObject({ ok: false });
     expect(validateDreamwellEdit("order", 5)).toMatchObject({ ok: false });
-    expect(validateDreamwellEdit("image-number", "1.5")).toMatchObject({ ok: false });
+    expect(validateDreamwellEdit("image-number", "1.5")).toMatchObject({
+      ok: false,
+    });
     expect(validateDreamwellEdit("card-type", "Dreamwell")).toMatchObject({
       ok: false,
       message: "This field is not editable.",

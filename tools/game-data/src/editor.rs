@@ -107,6 +107,12 @@ enum EditOperation {
     ReplaceDreamsignTags {
         tags: Vec<DreamsignTag>,
     },
+    ReplaceDreamwellTags {
+        tags: Vec<DreamsignTag>,
+    },
+    ReplaceFigmentTags {
+        tags: Vec<DreamsignTag>,
+    },
     SwapDreamGuideHomes {
         first_guide_id: String,
         second_guide_id: String,
@@ -851,14 +857,21 @@ fn edit_dreamwell(
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for dreamwell");
     }
     let source_path = staging_root.join(&dataset.source);
+    let tags_path = staging_root.join(&manifest.dataset("dreamwell-tags")?.source);
     let original_text = fs::read_to_string(&source_path)
         .with_context(|| format!("read staged Dreamwell source {}", source_path.display()))?;
     let original: DreamwellCatalog = ron::from_str(&original_text)
         .context("MALFORMED_SOURCE: staged Dreamwell RON is invalid")?;
     dreamwell::validate(&original)
         .context("MALFORMED_SOURCE: staged Dreamwell catalog is invalid")?;
+    let original_tags_text = fs::read_to_string(&tags_path)?;
+    let original_tags: DreamsignTagCatalog = ron::from_str(&original_tags_text)
+        .context("MALFORMED_SOURCE: staged Dreamwell tag registry RON is invalid")?;
+    dreamsigns::validate_tags(&original_tags)?;
     let mut catalog = original.clone();
+    let mut tags = original_tags.clone();
     let mut source_text = original_text;
+    let mut tags_text = original_tags_text;
 
     for operation in operations {
         match operation {
@@ -868,9 +881,49 @@ fn edit_dreamwell(
                 value,
             } => {
                 let index = unique_dreamwell_index(&catalog.cards, &dreamwell_id)?;
-                set_dreamwell_field(&mut catalog.cards[index], &field, value)?;
+                if field == "tags" {
+                    let values: Vec<String> = serde_json::from_value(value)
+                        .context("INVALID_EDIT: Dreamwell tags must be an array of strings")?;
+                    let known = tags
+                        .tags
+                        .iter()
+                        .map(|tag| tag.name.as_str())
+                        .collect::<BTreeSet<_>>();
+                    if values.iter().any(|value| !known.contains(value.as_str())) {
+                        bail!("INVALID_EDIT: Dreamwell tags must use the canonical registry");
+                    }
+                    catalog.cards[index].tags = values;
+                } else {
+                    set_dreamwell_field(&mut catalog.cards[index], &field, value)?;
+                }
                 source_text =
                     patch_dreamwell_source_field(&source_text, &catalog.cards[index], &field)?;
+            }
+            EditOperation::ReplaceDreamwellTags { tags: replacement } => {
+                let replacement = DreamsignTagCatalog { tags: replacement };
+                dreamsigns::validate_tags(&replacement)
+                    .context("INVALID_EDIT: Dreamwell tag registry is invalid")?;
+                let known = replacement
+                    .tags
+                    .iter()
+                    .map(|tag| tag.name.as_str())
+                    .collect::<BTreeSet<_>>();
+                for card in &mut catalog.cards {
+                    let retained = card
+                        .tags
+                        .iter()
+                        .filter(|tag| known.contains(tag.as_str()))
+                        .cloned()
+                        .collect::<Vec<_>>();
+                    if retained != card.tags {
+                        card.tags = retained;
+                        source_text = patch_dreamwell_source_field(&source_text, card, "tags")?;
+                    }
+                }
+                if replacement != tags {
+                    tags = replacement;
+                    tags_text = patch_dreamsign_tag_catalog(&tags_text, &tags)?;
+                }
             }
             _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Dreamwell"),
         }
@@ -879,15 +932,19 @@ fn edit_dreamwell(
     dreamwell::validate(&catalog)
         .context("INVALID_EDIT: Dreamwell edit violates the catalog contract")?;
     verify_round_trip::<DreamwellCatalog>(&source_text, &catalog)?;
-    let changed = catalog != original;
-    if changed {
+    verify_round_trip::<DreamsignTagCatalog>(&tags_text, &tags)?;
+    let changed = catalog != original || tags != original_tags;
+    if catalog != original {
         atomic_write(&source_path, source_text.as_bytes())?;
+    }
+    if tags != original_tags {
+        atomic_write(&tags_path, tags_text.as_bytes())?;
     }
     Ok(EditReport {
         ok: true,
         changed,
         dataset_id: "dreamwell".into(),
-        source_revision: revision(staging_root, manifest, &["dreamwell"])?,
+        source_revision: revision(staging_root, manifest, &["dreamwell", "dreamwell-tags"])?,
     })
 }
 
@@ -971,6 +1028,7 @@ fn patch_dreamwell_source_field(
         "rendered-text" | "ability_text" => "ability_text",
         "energy-added" | "energy_added" => "energy_added",
         "order" | "deck_tier" => "deck_tier",
+        "tags" => "tags",
         "image-number" | "image_number" | "art" => "art",
         _ => bail!("INVALID_EDIT: unsupported Dreamwell field {field}"),
     };
@@ -981,7 +1039,23 @@ fn patch_dreamwell_source_field(
         &card.id.to_string(),
         4,
     )?;
-    let range = top_level_field_value_range(source, record.clone(), source_field)?
+    let range = top_level_field_value_range(source, record.clone(), source_field)?;
+    if source_field == "tags" && range.is_none() {
+        let art = top_level_field_value_range(source, record, "art")?
+            .context("MALFORMED_SOURCE: Dreamwell card is missing art")?;
+        let line_start = source[..art.start]
+            .rfind('\n')
+            .map(|offset| offset + 1)
+            .unwrap_or(art.start);
+        return replace_source_ranges(
+            source,
+            vec![(
+                line_start..line_start,
+                format!("      tags: {},\n", ron::to_string(&card.tags)?),
+            )],
+        );
+    }
+    let range = range
         .with_context(|| format!("MALFORMED_SOURCE: Dreamwell card is missing {source_field}"))?;
     if matches!(field, "image-number" | "image_number") {
         let image = top_level_field_value_range(source, range, "image")?
@@ -1032,6 +1106,7 @@ fn patch_dreamwell_source_field(
             DeckTier::Three => "Three".into(),
             DeckTier::Four => "Four".into(),
         },
+        "tags" => ron::to_string(&card.tags)?,
         "art" => unreachable!(),
         _ => unreachable!(),
     };
@@ -1410,14 +1485,21 @@ fn edit_figments(
         bail!("FIELD_NOT_APPLICABLE: stage-edit is not registered for Figments");
     }
     let source_path = staging_root.join(&dataset.source);
+    let tags_path = staging_root.join(&manifest.dataset("figment-tags")?.source);
     let original_text = fs::read_to_string(&source_path)
         .with_context(|| format!("read staged Figment source {}", source_path.display()))?;
     let original: Vec<FigmentDefinition> =
         ron::from_str(&original_text).context("MALFORMED_SOURCE: staged Figment RON is invalid")?;
     crate::models::figments::lower(original.clone())
         .context("MALFORMED_SOURCE: staged Figment catalog is invalid")?;
+    let original_tags_text = fs::read_to_string(&tags_path)?;
+    let original_tags: DreamsignTagCatalog = ron::from_str(&original_tags_text)
+        .context("MALFORMED_SOURCE: staged Figment tag registry RON is invalid")?;
+    dreamsigns::validate_tags(&original_tags)?;
     let mut figments = original.clone();
+    let mut tags = original_tags.clone();
     let mut source_text = original_text;
+    let mut tags_text = original_tags_text;
 
     for operation in operations {
         match operation {
@@ -1427,8 +1509,48 @@ fn edit_figments(
                 value,
             } => {
                 let index = unique_figment_index(&figments, &figment_id)?;
-                set_figment_field(&mut figments[index], &field, value)?;
+                if field == "tags" {
+                    let values: Vec<String> = serde_json::from_value(value)
+                        .context("INVALID_EDIT: Figment tags must be an array of strings")?;
+                    let known = tags
+                        .tags
+                        .iter()
+                        .map(|tag| tag.name.as_str())
+                        .collect::<BTreeSet<_>>();
+                    if values.iter().any(|value| !known.contains(value.as_str())) {
+                        bail!("INVALID_EDIT: Figment tags must use the canonical registry");
+                    }
+                    figments[index].tags = values;
+                } else {
+                    set_figment_field(&mut figments[index], &field, value)?;
+                }
                 source_text = patch_figment_source_field(&source_text, &figments[index], &field)?;
+            }
+            EditOperation::ReplaceFigmentTags { tags: replacement } => {
+                let replacement = DreamsignTagCatalog { tags: replacement };
+                dreamsigns::validate_tags(&replacement)
+                    .context("INVALID_EDIT: Figment tag registry is invalid")?;
+                let known = replacement
+                    .tags
+                    .iter()
+                    .map(|tag| tag.name.as_str())
+                    .collect::<BTreeSet<_>>();
+                for figment in &mut figments {
+                    let retained = figment
+                        .tags
+                        .iter()
+                        .filter(|tag| known.contains(tag.as_str()))
+                        .cloned()
+                        .collect::<Vec<_>>();
+                    if retained != figment.tags {
+                        figment.tags = retained;
+                        source_text = patch_figment_source_field(&source_text, figment, "tags")?;
+                    }
+                }
+                if replacement != tags {
+                    tags = replacement;
+                    tags_text = patch_dreamsign_tag_catalog(&tags_text, &tags)?;
+                }
             }
             _ => bail!("FIELD_NOT_APPLICABLE: operation does not apply to Figments"),
         }
@@ -1437,15 +1559,19 @@ fn edit_figments(
     crate::models::figments::lower(figments.clone())
         .context("INVALID_EDIT: Figment edit violates the catalog contract")?;
     verify_round_trip::<Vec<FigmentDefinition>>(&source_text, &figments)?;
-    let changed = figments != original;
-    if changed {
+    verify_round_trip::<DreamsignTagCatalog>(&tags_text, &tags)?;
+    let changed = figments != original || tags != original_tags;
+    if figments != original {
         atomic_write(&source_path, source_text.as_bytes())?;
+    }
+    if tags != original_tags {
+        atomic_write(&tags_path, tags_text.as_bytes())?;
     }
     Ok(EditReport {
         ok: true,
         changed,
         dataset_id: "figments".into(),
-        source_revision: revision(staging_root, manifest, &["figments"])?,
+        source_revision: revision(staging_root, manifest, &["figments", "figment-tags"])?,
     })
 }
 
@@ -1525,6 +1651,7 @@ fn patch_figment_source_field(
         "subtype" => "character_type",
         "spark" => "base_spark",
         "rendered-text" => "behavior",
+        "tags" => "tags",
         "image-number" => "image_number",
         "art" => "art",
         _ => bail!("INVALID_EDIT: unsupported Figment field {field}"),
@@ -1538,6 +1665,21 @@ fn patch_figment_source_field(
             replacement,
             &source[value.end..]
         ));
+    }
+    if source_field == "tags" {
+        let image = top_level_field_value_range(source, record, "image_number")?
+            .context("MALFORMED_SOURCE: Figment is missing image_number")?;
+        let line_start = source[..image.start]
+            .rfind('\n')
+            .map(|offset| offset + 1)
+            .unwrap_or(image.start);
+        return replace_source_ranges(
+            source,
+            vec![(
+                line_start..line_start,
+                format!("    tags: {},\n", replacement),
+            )],
+        );
     }
     if source_field == "art" {
         let image = top_level_field_value_range(source, record.clone(), "image_number")?
@@ -1562,6 +1704,7 @@ fn render_figment_source_field(figment: &FigmentDefinition, field: &str) -> Resu
         "character_type" => Ok(ron::to_string(&figment.character_type)?),
         "base_spark" => Ok(figment.base_spark.to_string()),
         "behavior" => Ok(ron::to_string(&figment.behavior)?),
+        "tags" => Ok(ron::to_string(&figment.tags)?),
         "image_number" => Ok(figment.image_number.to_string()),
         "art" => {
             let art = figment.art.context("art must be present when rendering")?;
@@ -4262,6 +4405,21 @@ DreamwellCatalog(
     }
 
     #[test]
+    fn dreamwell_tag_patch_inserts_one_field_and_preserves_unrelated_source() {
+        let mut catalog: DreamwellCatalog = ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
+        catalog.cards[0].tags = vec!["Art Owned".into()];
+        let patched =
+            patch_dreamwell_source_field(DREAMWELL_EDITOR_SOURCE, &catalog.cards[0], "tags")
+                .unwrap();
+        assert!(patched.contains("      tags: [\"Art Owned\"],\n      art:"));
+        assert!(patched.contains("/* Unrelated record comment. */"));
+        assert_eq!(
+            ron::from_str::<DreamwellCatalog>(&patched).unwrap(),
+            catalog
+        );
+    }
+
+    #[test]
     fn dreamwell_editor_rejects_invalid_identity_and_values() {
         let mut catalog: DreamwellCatalog = ron::from_str(DREAMWELL_EDITOR_SOURCE).unwrap();
         assert!(
@@ -4427,6 +4585,20 @@ DreamwellCatalog(
             figments
         );
         crate::models::figments::lower(figments).unwrap();
+    }
+
+    #[test]
+    fn figment_tag_patch_inserts_one_field_and_preserves_unrelated_source() {
+        let mut figments: Vec<FigmentDefinition> = ron::from_str(FIGMENT_SOURCE).unwrap();
+        let index = unique_figment_index(&figments, FIGMENT_ID).unwrap();
+        figments[index].tags = vec!["Art Owned".into()];
+        let patched = patch_figment_source_field(FIGMENT_SOURCE, &figments[index], "tags").unwrap();
+        assert!(patched.contains("    tags: [\"Art Owned\"],\n    image_number:"));
+        assert!(patched.contains("/* Unrelated record comment. */"));
+        assert_eq!(
+            ron::from_str::<Vec<FigmentDefinition>>(&patched).unwrap(),
+            figments
+        );
     }
 
     #[test]

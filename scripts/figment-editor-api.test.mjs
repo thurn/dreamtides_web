@@ -14,6 +14,7 @@ const FIGMENT = {
   art: null,
   sourceIndex: 0,
   source: {},
+  tags: [],
 };
 
 function invoke(middleware, { method, url, body }) {
@@ -30,11 +31,16 @@ function invoke(middleware, { method, url, body }) {
       },
       end(content = "") {
         const text = String(content);
-        resolve({ status, headers, body: text === "" ? null : JSON.parse(text) });
+        resolve({
+          status,
+          headers,
+          body: text === "" ? null : JSON.parse(text),
+        });
       },
     };
-    Promise.resolve(middleware(req, res, () => resolve({ status: 404, body: null })))
-      .catch(reject);
+    Promise.resolve(
+      middleware(req, res, () => resolve({ status: 404, body: null })),
+    ).catch(reject);
   });
 }
 
@@ -43,6 +49,7 @@ function middleware(overrides = {}) {
     rootDir: "/fixture",
     revision: () => "revision-1",
     loadData: () => [FIGMENT],
+    loadTags: () => [],
     publishEdit: async () => ({ sourceRevision: "revision-2" }),
     ...overrides,
   });
@@ -55,11 +62,80 @@ describe("canonical Figment editor API", () => {
       url: "/api/editor/figments?source=figments.ron",
     });
     expect(response.status).toBe(200);
-    expect(response.body).toEqual({ figments: [FIGMENT], sourceRevision: "revision-1" });
+    expect(response.body).toEqual({
+      figments: [FIGMENT],
+      tags: [],
+      sourceRevision: "revision-1",
+    });
+  });
+
+  it("loads, assigns, and replaces canonical tags while rejecting unknown names", async () => {
+    const tags = [{ name: "Art Owned", color: "#0f766e" }];
+    const publishEdit = vi
+      .fn()
+      .mockResolvedValue({ sourceRevision: "revision-2" });
+    const tagged = { ...FIGMENT, tags: ["Art Owned"] };
+    const api = middleware({
+      loadTags: () => tags,
+      loadData: () => [tagged],
+      publishEdit,
+    });
+    const load = await invoke(api, {
+      method: "GET",
+      url: "/api/editor/figments",
+    });
+    expect(load.body.tags).toEqual(tags);
+    const save = await invoke(api, {
+      method: "PATCH",
+      url: `/api/editor/figments/${ID}`,
+      body: {
+        id: ID,
+        field: "tags",
+        value: ["Art Owned"],
+        expectedSourceRevision: "revision-1",
+      },
+    });
+    expect(save.status).toBe(200);
+    expect(publishEdit).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        operations: [
+          {
+            operation: "set_figment_field",
+            figment_id: ID,
+            field: "tags",
+            value: ["Art Owned"],
+          },
+        ],
+      }),
+    );
+    const unknown = await invoke(api, {
+      method: "PATCH",
+      url: `/api/editor/figments/${ID}`,
+      body: {
+        id: ID,
+        field: "tags",
+        value: ["Missing"],
+        expectedSourceRevision: "revision-1",
+      },
+    });
+    expect(unknown.status).toBe(400);
+    const registry = await invoke(api, {
+      method: "PUT",
+      url: "/api/editor/figments/tags",
+      body: { tags, expectedSourceRevision: "revision-1" },
+    });
+    expect(registry.status).toBe(200);
+    expect(publishEdit).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        operations: [{ operation: "replace_figment_tags", tags }],
+      }),
+    );
   });
 
   it("publishes a typed UUID-routed field operation and returns confirmation", async () => {
-    const publishEdit = vi.fn().mockResolvedValue({ sourceRevision: "revision-2" });
+    const publishEdit = vi
+      .fn()
+      .mockResolvedValue({ sourceRevision: "revision-2" });
     const response = await invoke(middleware({ publishEdit }), {
       method: "PATCH",
       url: `/api/editor/figments/${ID}`,
@@ -75,13 +151,15 @@ describe("canonical Figment editor API", () => {
     expect(publishEdit).toHaveBeenCalledWith({
       rootDir: "/fixture",
       dataset: "figments",
-      operations: [{
-        operation: "set_figment_field",
-        figment_id: ID,
-        field: "spark",
-        value: 2,
-      }],
-      sourcePaths: ["data/figments.ron"],
+      operations: [
+        {
+          operation: "set_figment_field",
+          figment_id: ID,
+          field: "spark",
+          value: 2,
+        },
+      ],
+      sourcePaths: ["data/figments.ron", "data/figments.tags.ron"],
       expectedSourceRevision: "revision-1",
       prepareDerivedArtifacts: expect.any(Function),
       additionalPublishPaths: ["public/figments-data.json"],
@@ -97,7 +175,9 @@ describe("canonical Figment editor API", () => {
       body: { id: ID, field: "spark", value: 2 },
     });
     expect(missingRevision.status).toBe(400);
-    expect(missingRevision.body.error.message).toContain("expectedSourceRevision");
+    expect(missingRevision.body.error.message).toContain(
+      "expectedSourceRevision",
+    );
 
     const invalid = await invoke(middleware(), {
       method: "PATCH",
@@ -132,7 +212,9 @@ describe("canonical Figment editor API", () => {
       },
     );
     expect(response.status).toBe(409);
-    expect(response.body.error.details.currentSourceRevision).toBe("revision-current");
+    expect(response.body.error.details.currentSourceRevision).toBe(
+      "revision-current",
+    );
     expect(response.body.error.details.confirmed.figments).toEqual([FIGMENT]);
   });
 

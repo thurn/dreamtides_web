@@ -30,6 +30,7 @@ card-type = "Dreamwell"
 image-number = 1963305268
 art-owned = true
 card-number = 1
+tags = ["Art Owned"]
 
 [[dreamwell]]
 name = "Meteor Meadow"
@@ -49,21 +50,34 @@ function writeFixtureRoot() {
   mkdirSync(join(rootDir, "data"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
   writeFileSync(join(rootDir, "data", "dreamwell.toml"), fixtureToml());
-  writeFileSync(join(rootDir, "data", "dreamwell.ron"), "synthetic canonical source\n");
+  writeFileSync(
+    join(rootDir, "data", "dreamwell.ron"),
+    "synthetic canonical source\n",
+  );
+  writeFileSync(
+    join(rootDir, "data", "dreamwell.tags.toml"),
+    '[[tags]]\nname = "Art Owned"\ncolor = "#0f766e"\n',
+  );
   writeFileSync(join(rootDir, "public", "dreamwell-data.json"), "[]\n");
   return rootDir;
 }
 
 async function startApi(rootDir, overrides = {}) {
-  const publishEdit = overrides.publishEdit ?? (async (request) => {
-    const operation = request.operations[0];
-    const sourcePath = join(rootDir, "data", "dreamwell.toml");
-    const source = readFileSync(sourcePath, "utf8");
-    if (operation.field !== "energy-added") throw new Error("unexpected test operation");
-    writeFileSync(sourcePath, source.replace("energy-added = 2", `energy-added = ${operation.value}`));
-    refreshDreamwellDataJson({ rootDir });
-    return { sourceRevision: "revision-2" };
-  });
+  const publishEdit =
+    overrides.publishEdit ??
+    (async (request) => {
+      const operation = request.operations[0];
+      const sourcePath = join(rootDir, "data", "dreamwell.toml");
+      const source = readFileSync(sourcePath, "utf8");
+      if (operation.field !== "energy-added")
+        throw new Error("unexpected test operation");
+      writeFileSync(
+        sourcePath,
+        source.replace("energy-added = 2", `energy-added = ${operation.value}`),
+      );
+      refreshDreamwellDataJson({ rootDir });
+      return { sourceRevision: "revision-2" };
+    });
   const middleware = createDreamwellEditorApiMiddleware({
     rootDir,
     publishEdit,
@@ -112,22 +126,27 @@ describe("createDreamwellEditorApiMiddleware", () => {
     const load = await requestJson(origin, "/api/editor/dreamwell");
     expect(load.response.status).toBe(200);
     expect(load.body.sourceRevision).toBe("revision-1");
+    expect(load.body.tags).toEqual([{ name: "Art Owned", color: "#0f766e" }]);
     expect(load.body.dreamwell.map((record) => record.id)).toEqual([
       FIRST_ID,
       SECOND_ID,
     ]);
 
-    const save = await requestJson(origin, `/api/editor/dreamwell/${FIRST_ID}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: FIRST_ID,
-        field: "energy-added",
-        value: 3,
-        clientRevision: 7,
-        expectedSourceRevision: "revision-1",
-      }),
-    });
+    const save = await requestJson(
+      origin,
+      `/api/editor/dreamwell/${FIRST_ID}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: FIRST_ID,
+          field: "energy-added",
+          value: 3,
+          clientRevision: 7,
+          expectedSourceRevision: "revision-1",
+        }),
+      },
+    );
 
     expect(save.response.status).toBe(200);
     expect(save.body.clientRevision).toBe(7);
@@ -137,27 +156,93 @@ describe("createDreamwellEditorApiMiddleware", () => {
       readFileSync(join(rootDir, "data", "dreamwell.toml"), "utf8"),
     ).toContain("energy-added = 3");
     expect(
-      JSON.parse(readFileSync(join(rootDir, "public", "dreamwell-data.json"), "utf8"))[0]
-        .energyAdded,
+      JSON.parse(
+        readFileSync(join(rootDir, "public", "dreamwell-data.json"), "utf8"),
+      )[0].energyAdded,
     ).toBe(3);
 
     rmSync(rootDir, { recursive: true, force: true });
+  });
+
+  it("publishes card tag and registry operations and rejects unknown tags", async () => {
+    const rootDir = writeFixtureRoot();
+    const requests = [];
+    const origin = await startApi(rootDir, {
+      publishEdit: async (request) => {
+        requests.push(request);
+        return { sourceRevision: "revision-2" };
+      },
+    });
+    const save = await requestJson(
+      origin,
+      `/api/editor/dreamwell/${FIRST_ID}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: FIRST_ID,
+          field: "tags",
+          value: ["Art Owned"],
+          expectedSourceRevision: "revision-1",
+        }),
+      },
+    );
+    expect(save.response.status).toBe(200);
+    expect(requests[0].operations).toEqual([
+      {
+        operation: "set_dreamwell_field",
+        dreamwell_id: FIRST_ID,
+        field: "tags",
+        value: ["Art Owned"],
+      },
+    ]);
+
+    const unknown = await requestJson(
+      origin,
+      `/api/editor/dreamwell/${FIRST_ID}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: FIRST_ID,
+          field: "tags",
+          value: ["Missing"],
+          expectedSourceRevision: "revision-1",
+        }),
+      },
+    );
+    expect(unknown.response.status).toBe(400);
+
+    const tags = [{ name: "Art Owned", color: "#0f766e" }];
+    const registry = await requestJson(origin, "/api/editor/dreamwell/tags", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ tags, expectedSourceRevision: "revision-1" }),
+    });
+    expect(registry.response.status).toBe(200);
+    expect(requests.at(-1).operations).toEqual([
+      { operation: "replace_dreamwell_tags", tags },
+    ]);
   });
 
   it("rejects an out-of-range deck order", async () => {
     const rootDir = writeFixtureRoot();
     const origin = await startApi(rootDir);
 
-    const save = await requestJson(origin, `/api/editor/dreamwell/${FIRST_ID}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: FIRST_ID,
-        field: "order",
-        value: 9,
-        expectedSourceRevision: "revision-1",
-      }),
-    });
+    const save = await requestJson(
+      origin,
+      `/api/editor/dreamwell/${FIRST_ID}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: FIRST_ID,
+          field: "order",
+          value: 9,
+          expectedSourceRevision: "revision-1",
+        }),
+      },
+    );
 
     expect(save.response.status).toBe(400);
     expect(save.body.error).toMatchObject({ code: "INVALID_EDIT" });
@@ -170,16 +255,20 @@ describe("createDreamwellEditorApiMiddleware", () => {
     const origin = await startApi(rootDir);
 
     const missingId = "33333333-3333-4333-8333-333333333333";
-    const save = await requestJson(origin, `/api/editor/dreamwell/${missingId}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: missingId,
-        field: "name",
-        value: "Nope",
-        expectedSourceRevision: "revision-1",
-      }),
-    });
+    const save = await requestJson(
+      origin,
+      `/api/editor/dreamwell/${missingId}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: missingId,
+          field: "name",
+          value: "Nope",
+          expectedSourceRevision: "revision-1",
+        }),
+      },
+    );
 
     expect(save.response.status).toBe(404);
     expect(save.body.error).toMatchObject({ code: "DREAMWELL_NOT_FOUND" });
@@ -201,27 +290,33 @@ describe("createDreamwellEditorApiMiddleware", () => {
       revision: () => "revision-current",
     });
 
-    const save = await requestJson(origin, `/api/editor/dreamwell/${FIRST_ID}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: FIRST_ID,
-        field: "name",
-        value: "Daybreak Ridge",
-        expectedSourceRevision: "revision-stale",
-      }),
-    });
+    const save = await requestJson(
+      origin,
+      `/api/editor/dreamwell/${FIRST_ID}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: FIRST_ID,
+          field: "name",
+          value: "Daybreak Ridge",
+          expectedSourceRevision: "revision-stale",
+        }),
+      },
+    );
 
     expect(requests[0]).toMatchObject({
       dataset: "dreamwell",
-      sourcePaths: ["data/dreamwell.ron"],
+      sourcePaths: ["data/dreamwell.ron", "data/dreamwell.tags.ron"],
       expectedSourceRevision: "revision-stale",
-      operations: [{
-        operation: "set_dreamwell_field",
-        dreamwell_id: FIRST_ID,
-        field: "name",
-        value: "Daybreak Ridge",
-      }],
+      operations: [
+        {
+          operation: "set_dreamwell_field",
+          dreamwell_id: FIRST_ID,
+          field: "name",
+          value: "Daybreak Ridge",
+        },
+      ],
     });
     expect(save.response.status).toBe(409);
     expect(save.body.error).toMatchObject({
@@ -244,11 +339,19 @@ describe("createDreamwellEditorApiMiddleware", () => {
       },
     });
 
-    const save = await requestJson(origin, `/api/editor/dreamwell/${FIRST_ID}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id: FIRST_ID, field: "name", value: "No revision" }),
-    });
+    const save = await requestJson(
+      origin,
+      `/api/editor/dreamwell/${FIRST_ID}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: FIRST_ID,
+          field: "name",
+          value: "No revision",
+        }),
+      },
+    );
 
     expect(save.response.status).toBe(400);
     expect(published).toBe(false);
@@ -257,8 +360,14 @@ describe("createDreamwellEditorApiMiddleware", () => {
 
   it("keeps canonical and generated files unchanged when publication fails", async () => {
     const rootDir = writeFixtureRoot();
-    const ronBefore = readFileSync(join(rootDir, "data", "dreamwell.ron"), "utf8");
-    const tomlBefore = readFileSync(join(rootDir, "data", "dreamwell.toml"), "utf8");
+    const ronBefore = readFileSync(
+      join(rootDir, "data", "dreamwell.ron"),
+      "utf8",
+    );
+    const tomlBefore = readFileSync(
+      join(rootDir, "data", "dreamwell.toml"),
+      "utf8",
+    );
     const origin = await startApi(rootDir, {
       publishEdit: async () => {
         const error = new Error("synthetic publication failure");
@@ -267,21 +376,29 @@ describe("createDreamwellEditorApiMiddleware", () => {
       },
     });
 
-    const save = await requestJson(origin, `/api/editor/dreamwell/${FIRST_ID}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: FIRST_ID,
-        field: "name",
-        value: "Unpublished",
-        expectedSourceRevision: "revision-1",
-      }),
-    });
+    const save = await requestJson(
+      origin,
+      `/api/editor/dreamwell/${FIRST_ID}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: FIRST_ID,
+          field: "name",
+          value: "Unpublished",
+          expectedSourceRevision: "revision-1",
+        }),
+      },
+    );
 
     expect(save.response.status).toBe(500);
     expect(save.body.error.code).toBe("PUBLICATION_FAILED");
-    expect(readFileSync(join(rootDir, "data", "dreamwell.ron"), "utf8")).toBe(ronBefore);
-    expect(readFileSync(join(rootDir, "data", "dreamwell.toml"), "utf8")).toBe(tomlBefore);
+    expect(readFileSync(join(rootDir, "data", "dreamwell.ron"), "utf8")).toBe(
+      ronBefore,
+    );
+    expect(readFileSync(join(rootDir, "data", "dreamwell.toml"), "utf8")).toBe(
+      tomlBefore,
+    );
     rmSync(rootDir, { recursive: true, force: true });
   });
 });

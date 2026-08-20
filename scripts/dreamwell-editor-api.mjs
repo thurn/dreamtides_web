@@ -4,7 +4,9 @@ import { fileURLToPath } from "node:url";
 import {
   DEFAULT_DREAMWELL_TOML_PATH,
   readEditorDreamwell,
+  readDreamwellTagRegistry,
   validateDreamwellEdit,
+  validateTagRegistry,
 } from "./dreamwell-editor-data.mjs";
 import {
   sourceRevision,
@@ -13,8 +15,13 @@ import {
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/dreamwell";
-const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
-export const DREAMWELL_EDITOR_SOURCE_PATHS = ["data/dreamwell.ron"];
+const TAGS_PATH = `${BASE_PATH}/tags`;
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
+export const DREAMWELL_EDITOR_SOURCE_PATHS = [
+  "data/dreamwell.ron",
+  "data/dreamwell.tags.ron",
+];
 
 function elapsedMs(start) {
   return Number((performance.now() - start).toFixed(3));
@@ -52,7 +59,11 @@ function sourceParamFromUrl(url) {
 }
 
 function resolveRequestedSource(requested) {
-  if (requested === null || requested === undefined || requested.trim() === "") {
+  if (
+    requested === null ||
+    requested === undefined ||
+    requested.trim() === ""
+  ) {
     return { ok: true, relativePath: DEFAULT_DREAMWELL_TOML_PATH };
   }
 
@@ -66,7 +77,10 @@ function resolveRequestedSource(requested) {
     .replace(/^data\//u, "")
     .replace(/\.toml$/iu, ".ron");
   if (normalized !== "dreamwell.ron") {
-    return { ok: false, message: "The Dreamwell editor source must be data/dreamwell.ron." };
+    return {
+      ok: false,
+      message: "The Dreamwell editor source must be data/dreamwell.ron.",
+    };
   }
   return { ok: true, relativePath: DEFAULT_DREAMWELL_TOML_PATH };
 }
@@ -89,7 +103,11 @@ function isDreamwellApiPath(pathname) {
   }
 
   const rawSegments = pathname.split("/");
-  if (rawSegments[1] !== "api" || rawSegments[2] !== "editor" || rawSegments.length < 4) {
+  if (
+    rawSegments[1] !== "api" ||
+    rawSegments[2] !== "editor" ||
+    rawSegments.length < 4
+  ) {
     return false;
   }
 
@@ -99,7 +117,11 @@ function isDreamwellApiPath(pathname) {
 
 function routeForRawPath(rawPath) {
   const rawSegments = rawPath.split("/");
-  if (rawSegments[1] === "api" && rawSegments[2] === "editor" && rawSegments.length >= 4) {
+  if (
+    rawSegments[1] === "api" &&
+    rawSegments[2] === "editor" &&
+    rawSegments.length >= 4
+  ) {
     const resourceSegment = decodePathSegment(rawSegments[3]);
     if (!resourceSegment.ok) {
       return {
@@ -110,7 +132,10 @@ function routeForRawPath(rawPath) {
       };
     }
 
-    if (resourceSegment.value === "dreamwell" && rawSegments[3] !== "dreamwell") {
+    if (
+      resourceSegment.value === "dreamwell" &&
+      rawSegments[3] !== "dreamwell"
+    ) {
       return {
         ok: false,
         statusCode: 400,
@@ -164,7 +189,11 @@ function routeForRawPath(rawPath) {
     };
   }
 
-  if (encodedSegment !== dreamwellId || dreamwellId.includes("/") || !UUID_PATTERN.test(dreamwellId)) {
+  if (
+    encodedSegment !== dreamwellId ||
+    dreamwellId.includes("/") ||
+    !UUID_PATTERN.test(dreamwellId)
+  ) {
     return {
       ok: false,
       statusCode: 400,
@@ -203,9 +232,15 @@ async function readJsonRequest(req) {
 }
 
 function dreamwellNotFound(res, dreamwellId) {
-  errorResponse(res, 404, "DREAMWELL_NOT_FOUND", "Dreamwell card was not found.", {
-    id: dreamwellId,
-  });
+  errorResponse(
+    res,
+    404,
+    "DREAMWELL_NOT_FOUND",
+    "Dreamwell card was not found.",
+    {
+      id: dreamwellId,
+    },
+  );
 }
 
 function methodNotAllowed(res, allowedMethods) {
@@ -224,16 +259,32 @@ function methodNotAllowed(res, allowedMethods) {
 
 function assertPatchBody(body) {
   if (body === null || typeof body !== "object" || Array.isArray(body)) {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body must be a JSON object." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body must be a JSON object.",
+    };
   }
   if (typeof body.id !== "string") {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body id must be a string." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body id must be a string.",
+    };
   }
   if (typeof body.field !== "string") {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body field must be a string." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body field must be a string.",
+    };
   }
   if (!Object.hasOwn(body, "value")) {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body value is required." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body value is required.",
+    };
   }
   return { ok: true };
 }
@@ -257,22 +308,39 @@ async function handlePatch(req, res, options, dreamwellId) {
   }
 
   if (!UUID_PATTERN.test(body.id)) {
-    errorResponse(res, 400, "INVALID_DREAMWELL_ID", "Request body id must be a canonical UUID.", {
-      id: body.id,
-    });
+    errorResponse(
+      res,
+      400,
+      "INVALID_DREAMWELL_ID",
+      "Request body id must be a canonical UUID.",
+      {
+        id: body.id,
+      },
+    );
     return;
   }
 
   if (body.id !== dreamwellId) {
-    errorResponse(res, 400, "DREAMWELL_ID_MISMATCH", "Route dreamwell id must match request body id.", {
-      routeId: dreamwellId,
-      bodyId: body.id,
-    });
+    errorResponse(
+      res,
+      400,
+      "DREAMWELL_ID_MISMATCH",
+      "Route dreamwell id must match request body id.",
+      {
+        routeId: dreamwellId,
+        bodyId: body.id,
+      },
+    );
     return;
   }
 
   if (typeof body.expectedSourceRevision !== "string") {
-    errorResponse(res, 400, "INVALID_REQUEST", "Every save requires expectedSourceRevision.");
+    errorResponse(
+      res,
+      400,
+      "INVALID_REQUEST",
+      "Every save requires expectedSourceRevision.",
+    );
     return;
   }
 
@@ -283,6 +351,20 @@ async function handlePatch(req, res, options, dreamwellId) {
       value: validation.value,
     });
     return;
+  }
+  if (body.field === "tags") {
+    const known = new Set(
+      options.loadTags(options.rootDir).map((tag) => tag.name),
+    );
+    if (validation.value.some((tag) => !known.has(tag))) {
+      errorResponse(
+        res,
+        400,
+        "INVALID_EDIT",
+        "Unknown tag. Create it in Manage tags first.",
+      );
+      return;
+    }
   }
 
   const totalStart = performance.now();
@@ -299,12 +381,14 @@ async function handlePatch(req, res, options, dreamwellId) {
   const result = await options.publishEdit({
     rootDir: options.rootDir,
     dataset: "dreamwell",
-    operations: [{
-      operation: "set_dreamwell_field",
-      dreamwell_id: dreamwellId,
-      field: validation.field,
-      value: validation.value,
-    }],
+    operations: [
+      {
+        operation: "set_dreamwell_field",
+        dreamwell_id: dreamwellId,
+        field: validation.field,
+        value: validation.value,
+      },
+    ],
     sourcePaths: DREAMWELL_EDITOR_SOURCE_PATHS,
     expectedSourceRevision: body.expectedSourceRevision,
   });
@@ -312,9 +396,9 @@ async function handlePatch(req, res, options, dreamwellId) {
   const refreshMs = 0;
 
   const confirmStart = performance.now();
-  const confirmedDreamwell = readEditorDreamwell({ rootDir: options.rootDir }).find(
-    (card) => card.id === dreamwellId,
-  );
+  const confirmedDreamwell = readEditorDreamwell({
+    rootDir: options.rootDir,
+  }).find((card) => card.id === dreamwellId);
   const confirmMs = elapsedMs(confirmStart);
 
   if (confirmedDreamwell === undefined) {
@@ -331,7 +415,9 @@ async function handlePatch(req, res, options, dreamwellId) {
     sourceRevision:
       result.sourceRevision ??
       options.revision(options.rootDir, DREAMWELL_EDITOR_SOURCE_PATHS),
-    ...(Object.hasOwn(body, "clientRevision") ? { clientRevision: body.clientRevision } : {}),
+    ...(Object.hasOwn(body, "clientRevision")
+      ? { clientRevision: body.clientRevision }
+      : {}),
     timing: {
       readMs,
       patchMs,
@@ -346,8 +432,9 @@ export function createDreamwellEditorApiMiddleware({
   rootDir = ROOT,
   publishEdit = stageAndPublishGameDataEdit,
   revision = sourceRevision,
+  loadTags = (dir) => readDreamwellTagRegistry({ rootDir: dir }),
 } = {}) {
-  const options = { rootDir, publishEdit, revision };
+  const options = { rootDir, publishEdit, revision, loadTags };
   return async function dreamwellEditorApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
 
@@ -357,13 +444,62 @@ export function createDreamwellEditorApiMiddleware({
     }
 
     try {
+      if (rawPath === TAGS_PATH) {
+        if (req.method !== "PUT") {
+          methodNotAllowed(res, ["PUT"]);
+          return;
+        }
+        const body = await readJsonRequest(req);
+        if (
+          typeof body?.expectedSourceRevision !== "string" ||
+          !Array.isArray(body?.tags)
+        ) {
+          errorResponse(
+            res,
+            400,
+            "INVALID_REQUEST",
+            "PUT body requires tags and expectedSourceRevision.",
+          );
+          return;
+        }
+        const validation = validateTagRegistry(body.tags);
+        if (!validation.ok) {
+          errorResponse(res, 400, "INVALID_TAG_REGISTRY", validation.message);
+          return;
+        }
+        const result = await publishEdit({
+          rootDir,
+          dataset: "dreamwell",
+          operations: [
+            { operation: "replace_dreamwell_tags", tags: validation.tags },
+          ],
+          sourcePaths: DREAMWELL_EDITOR_SOURCE_PATHS,
+          expectedSourceRevision: body.expectedSourceRevision,
+        });
+        jsonResponse(res, 200, {
+          dreamwell: readEditorDreamwell({ rootDir }),
+          tags: loadTags(rootDir),
+          sourceRevision:
+            result.sourceRevision ??
+            revision(rootDir, DREAMWELL_EDITOR_SOURCE_PATHS),
+        });
+        return;
+      }
       const route = routeForRawPath(rawPath);
       if (!route.ok) {
-        errorResponse(res, route.statusCode, route.code, route.message, route.details);
+        errorResponse(
+          res,
+          route.statusCode,
+          route.code,
+          route.message,
+          route.details,
+        );
         return;
       }
 
-      const sourceResolution = resolveRequestedSource(sourceParamFromUrl(req.url));
+      const sourceResolution = resolveRequestedSource(
+        sourceParamFromUrl(req.url),
+      );
       if (!sourceResolution.ok) {
         errorResponse(res, 400, "INVALID_SOURCE", sourceResolution.message);
         return;
@@ -371,15 +507,22 @@ export function createDreamwellEditorApiMiddleware({
 
       const dreamwellTomlPath = sourceResolution.relativePath;
       if (!existsSync(join(rootDir, dreamwellTomlPath))) {
-        errorResponse(res, 404, "TOML_NOT_FOUND", "The requested toml file was not found.", {
-          toml: dreamwellTomlPath,
-        });
+        errorResponse(
+          res,
+          404,
+          "TOML_NOT_FOUND",
+          "The requested toml file was not found.",
+          {
+            toml: dreamwellTomlPath,
+          },
+        );
         return;
       }
 
       if (req.method === "GET" && route.resource === "collection") {
         jsonResponse(res, 200, {
           dreamwell: readEditorDreamwell({ rootDir, dreamwellTomlPath }),
+          tags: loadTags(rootDir),
           sourceRevision: revision(rootDir, DREAMWELL_EDITOR_SOURCE_PATHS),
         });
         return;
@@ -390,13 +533,24 @@ export function createDreamwellEditorApiMiddleware({
         return;
       }
 
-      methodNotAllowed(res, route.resource === "collection" ? ["GET"] : ["PATCH"]);
+      methodNotAllowed(
+        res,
+        route.resource === "collection" ? ["GET"] : ["PATCH"],
+      );
     } catch (error) {
-      const statusCode = error.code === "STALE_SOURCE" ? 409
-        : error.code === "RECORD_NOT_FOUND" ? 404
-          : ["INVALID_EDIT", "FIELD_NOT_APPLICABLE"].includes(error.code) ? 400
-            : ["MALFORMED_SOURCE", "COMPATIBILITY_VALIDATION_FAILED"].includes(error.code) ? 422
-              : 500;
+      const statusCode =
+        error.code === "STALE_SOURCE"
+          ? 409
+          : error.code === "RECORD_NOT_FOUND"
+            ? 404
+            : ["INVALID_EDIT", "FIELD_NOT_APPLICABLE"].includes(error.code)
+              ? 400
+              : [
+                    "MALFORMED_SOURCE",
+                    "COMPATIBILITY_VALIDATION_FAILED",
+                  ].includes(error.code)
+                ? 422
+                : 500;
       errorResponse(
         res,
         statusCode,
@@ -405,15 +559,23 @@ export function createDreamwellEditorApiMiddleware({
         {
           datasetId: "dreamwell",
           source: DREAMWELL_EDITOR_SOURCE_PATHS[0],
-          ...(error.currentSourceRevision === undefined ? {} : {
-            currentSourceRevision: error.currentSourceRevision,
-          }),
-          ...(error.code === "STALE_SOURCE" ? {
-            confirmed: {
-              dreamwell: readEditorDreamwell({ rootDir }),
-              sourceRevision: revision(rootDir, DREAMWELL_EDITOR_SOURCE_PATHS),
-            },
-          } : {}),
+          ...(error.currentSourceRevision === undefined
+            ? {}
+            : {
+                currentSourceRevision: error.currentSourceRevision,
+              }),
+          ...(error.code === "STALE_SOURCE"
+            ? {
+                confirmed: {
+                  dreamwell: readEditorDreamwell({ rootDir }),
+                  tags: loadTags(rootDir),
+                  sourceRevision: revision(
+                    rootDir,
+                    DREAMWELL_EDITOR_SOURCE_PATHS,
+                  ),
+                },
+              }
+            : {}),
         },
       );
     }

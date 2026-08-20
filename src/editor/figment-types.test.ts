@@ -13,16 +13,17 @@ describe("figmentPreviewCard", () => {
       "rendered-text": "",
       "image-number": 277174382,
       art: { x: 0.289, y: -0.296, scale: 2.47 },
+      tags: [],
       sourceIndex: 1,
       source: {},
     } satisfies EditorFigmentRecord;
 
     expect(figmentPreviewCard(record).name).toBe("Shadow Figment");
-    expect(figmentPreviewCard({
-      ...record,
-      name: testCardName("Shadow Figment"),
-    }).name).toBe(
-      "Shadow Figment",
-    );
+    expect(
+      figmentPreviewCard({
+        ...record,
+        name: testCardName("Shadow Figment"),
+      }).name,
+    ).toBe("Shadow Figment");
   });
 });

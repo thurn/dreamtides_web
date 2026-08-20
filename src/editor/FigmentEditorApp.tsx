@@ -1,22 +1,24 @@
-import {
-  parseCardName,
-  parseCardSubtype,
-} from "../types/card-identity";
+import { parseCardName, parseCardSubtype } from "../types/card-identity";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import "./editable-figment.css";
 import "./editable-figment.css";
 import {
   loadEditorFigments,
+  loadEditorFigmentTags,
   saveEditorFigmentArt,
   saveEditorFigmentField,
   saveEditorFigmentImageNumber,
+  saveEditorFigmentTagRegistry,
 } from "./figment-editor-api";
 import FocusedCardEditor from "./FocusedCardEditor";
 import type { FocusedSaveStatus } from "./FocusedCardEditor";
 import EditableFigment from "./EditableFigment";
 import { figmentPreviewCard } from "./figment-types";
-import { CardView, DEFAULT_ART_CROP } from "../cumulus/components/card/CardView";
+import {
+  CardView,
+  DEFAULT_ART_CROP,
+} from "../cumulus/components/card/CardView";
 import type { CardData } from "../types/cards";
 import {
   beginFieldEdit,
@@ -39,12 +41,17 @@ import type {
   FigmentSortField,
 } from "./figment-types";
 import { editorTomlParam } from "./editor-api";
+import type { EditorTag } from "./types";
+import CatalogTagToolbar from "./CatalogTagToolbar";
+import ManageTagsModal from "./ManageTagsModal";
 
 const DEFAULT_FIGMENT_API_CLIENT: FigmentEditorApiClient = {
   loadEditorFigments,
+  loadEditorFigmentTags,
   saveEditorFigmentField,
   saveEditorFigmentArt,
   saveEditorFigmentImageNumber,
+  saveEditorFigmentTagRegistry,
 };
 
 type LoadStatus =
@@ -59,10 +66,24 @@ export interface FigmentEditorAppProps {
 const DEFAULT_DISPLAY_STATE: FigmentDisplayState = {
   searchText: "",
   artEditing: false,
+  tagEditing: false,
+  tagFilters: [],
+  excludedTagFilters: [],
   sort: "sourceOrder",
   dir: "asc",
   size: "large",
 };
+
+function initialDisplayState(): FigmentDisplayState {
+  const params = new URLSearchParams(window.location.search);
+  return {
+    ...DEFAULT_DISPLAY_STATE,
+    searchText: params.get("q") ?? "",
+    tagEditing: params.get("tagedit") === "1",
+    tagFilters: params.getAll("tag"),
+    excludedTagFilters: params.getAll("notag"),
+  };
+}
 
 function errorMessageFor(error: unknown): string {
   return error instanceof Error ? error.message : "Unable to load figments.";
@@ -170,7 +191,10 @@ function sortValue(
   }
 }
 
-function compareSortValues(left: string | number, right: string | number): number {
+function compareSortValues(
+  left: string | number,
+  right: string | number,
+): number {
   if (typeof left === "number" && typeof right === "number") {
     return left - right;
   }
@@ -189,6 +213,13 @@ function filteredAndSortedFigments(
   return figments
     .map((figment, index) => ({ figment, index }))
     .filter(({ figment }) => {
+      if (
+        !displayState.tagFilters.every((tag) => figment.tags.includes(tag)) ||
+        displayState.excludedTagFilters.some((tag) =>
+          figment.tags.includes(tag),
+        )
+      )
+        return false;
       if (searchText === "") {
         return true;
       }
@@ -236,7 +267,7 @@ export default function FigmentEditorApp({
   apiClient = DEFAULT_FIGMENT_API_CLIENT,
 }: FigmentEditorAppProps) {
   const [displayState, setDisplayState] =
-    useState<FigmentDisplayState>(DEFAULT_DISPLAY_STATE);
+    useState<FigmentDisplayState>(initialDisplayState);
   const activeTomlLabel = useMemo(() => {
     const param = editorTomlParam();
     const path = param ?? "figments.ron";
@@ -245,6 +276,13 @@ export default function FigmentEditorApp({
   }, []);
   const [loadStatus, setLoadStatus] = useState<LoadStatus>({ kind: "loading" });
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const [tags, setTags] = useState<EditorTag[]>([]);
+  const [manageTagsOpen, setManageTagsOpen] = useState(false);
+  const [tagRegistrySaving, setTagRegistrySaving] = useState(false);
+  const [tagRegistryError, setTagRegistryError] = useState<string | null>(null);
+  const [tagSaveState, setTagSaveState] = useState<
+    Record<string, { saving: boolean; error: string | null }>
+  >({});
   const [saveState, setSaveState] = useState<EditableSaveState>(
     EMPTY_EDITOR_SAVE_STATE,
   );
@@ -257,9 +295,9 @@ export default function FigmentEditorApp({
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
   const [imageNumberSaveStatus, setImageNumberSaveStatus] =
     useState<FocusedSaveStatus>("idle");
-  const [imageNumberSaveError, setImageNumberSaveError] = useState<string | null>(
-    null,
-  );
+  const [imageNumberSaveError, setImageNumberSaveError] = useState<
+    string | null
+  >(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -268,9 +306,13 @@ export default function FigmentEditorApp({
     async function load() {
       setLoadStatus({ kind: "loading" });
       try {
-        const figments = await apiClient.loadEditorFigments(controller.signal);
+        const [figments, loadedTags] = await Promise.all([
+          apiClient.loadEditorFigments(controller.signal),
+          apiClient.loadEditorFigmentTags(controller.signal),
+        ]);
         if (!cancelled) {
           setLoadStatus({ kind: "loaded", figments });
+          setTags(loadedTags ?? []);
         }
       } catch (error) {
         if (isAbortError(error)) {
@@ -290,7 +332,8 @@ export default function FigmentEditorApp({
     };
   }, [apiClient, loadAttempt]);
 
-  const loadedFigments = loadStatus.kind === "loaded" ? loadStatus.figments : [];
+  const loadedFigments =
+    loadStatus.kind === "loaded" ? loadStatus.figments : [];
   const sortedVisibleFigments = useMemo(
     () => filteredAndSortedFigments(loadedFigments, displayState),
     [loadedFigments, displayState],
@@ -317,6 +360,32 @@ export default function FigmentEditorApp({
     const next = updater(saveStateRef.current);
     saveStateRef.current = next;
     setSaveState(next);
+  }
+
+  function updateDisplayState(next: FigmentDisplayState) {
+    setDisplayState(next);
+    const url = new URL(window.location.href);
+    if (next.searchText) {
+      url.searchParams.set("q", next.searchText);
+    } else {
+      url.searchParams.delete("q");
+    }
+    if (next.tagEditing) {
+      url.searchParams.set("tagedit", "1");
+    } else {
+      url.searchParams.delete("tagedit");
+    }
+    url.searchParams.delete("tag");
+    next.tagFilters.forEach((tag) => url.searchParams.append("tag", tag));
+    url.searchParams.delete("notag");
+    next.excludedTagFilters.forEach((tag) =>
+      url.searchParams.append("notag", tag),
+    );
+    window.history.replaceState(
+      null,
+      "",
+      `${url.pathname}${url.search}${url.hash}`,
+    );
   }
 
   function handleFieldBeginEdit(
@@ -489,7 +558,10 @@ export default function FigmentEditorApp({
       });
   }
 
-  function handleSaveArt(figment: EditorFigmentRecord, art: EditorFigmentRecord["art"]) {
+  function handleSaveArt(
+    figment: EditorFigmentRecord,
+    art: EditorFigmentRecord["art"],
+  ) {
     if (art === null) {
       return;
     }
@@ -507,7 +579,10 @@ export default function FigmentEditorApp({
       });
   }
 
-  function handleSaveImageNumber(figment: EditorFigmentRecord, imageNumber: number) {
+  function handleSaveImageNumber(
+    figment: EditorFigmentRecord,
+    imageNumber: number,
+  ) {
     setImageNumberSaveStatus("saving");
     setImageNumberSaveError(null);
     void apiClient
@@ -529,6 +604,60 @@ export default function FigmentEditorApp({
     setImageNumberSaveStatus("idle");
     setImageNumberSaveError(null);
   }
+
+  function setFigmentTags(figment: EditorFigmentRecord, nextTags: string[]) {
+    const previous = figment.tags;
+    replaceConfirmedFigment({ ...figment, tags: nextTags });
+    setTagSaveState((current) => ({
+      ...current,
+      [figment.id]: { saving: true, error: null },
+    }));
+    void apiClient
+      .saveEditorFigmentField({
+        id: figment.id,
+        field: "tags",
+        value: nextTags,
+      })
+      .then((response) => {
+        replaceConfirmedFigment(response.figment);
+        setTagSaveState((current) => ({
+          ...current,
+          [figment.id]: { saving: false, error: null },
+        }));
+      })
+      .catch((error: unknown) => {
+        replaceConfirmedFigment({ ...figment, tags: previous });
+        setTagSaveState((current) => ({
+          ...current,
+          [figment.id]: { saving: false, error: errorMessageFor(error) },
+        }));
+      });
+  }
+
+  function saveTagRegistry(nextTags: EditorTag[]) {
+    setTagRegistrySaving(true);
+    setTagRegistryError(null);
+    void apiClient
+      .saveEditorFigmentTagRegistry(nextTags)
+      .then((response) => {
+        setTags(response.tags);
+        setLoadStatus({ kind: "loaded", figments: response.figments });
+        setManageTagsOpen(false);
+        setTagRegistrySaving(false);
+      })
+      .catch((error: unknown) => {
+        setTagRegistrySaving(false);
+        setTagRegistryError(errorMessageFor(error));
+      });
+  }
+
+  const tagUsageCounts = Object.fromEntries(
+    tags.map((tag) => [
+      tag.name,
+      loadedFigments.filter((figment) => figment.tags.includes(tag.name))
+        .length,
+    ]),
+  );
 
   return (
     <main
@@ -562,14 +691,21 @@ export default function FigmentEditorApp({
         }}
       >
         <h1
-          style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.1 }}
+          style={{
+            margin: 0,
+            fontSize: "1.05rem",
+            fontWeight: 800,
+            lineHeight: 1.1,
+          }}
         >
           Figment Editor
         </h1>
         <span aria-hidden="true" style={{ color: "rgba(247, 241, 223, 0.35)" }}>
           -
         </span>
-        <span style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}>
+        <span
+          style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}
+        >
           {loadStatus.kind === "loaded" ? activeTomlLabel : "Loading..."}
         </span>
       </header>
@@ -596,7 +732,54 @@ export default function FigmentEditorApp({
               displayState={displayState}
               visibleCount={visibleFigments.length}
               totalCount={loadStatus.figments.length}
-              onChange={setDisplayState}
+              onChange={updateDisplayState}
+            />
+            <CatalogTagToolbar
+              tags={tags}
+              selected={displayState.tagFilters}
+              excluded={displayState.excludedTagFilters}
+              editing={displayState.tagEditing}
+              onSelectedChange={(tagFilters) =>
+                updateDisplayState({ ...displayState, tagFilters })
+              }
+              onExcludedChange={(excludedTagFilters) =>
+                updateDisplayState({ ...displayState, excludedTagFilters })
+              }
+              onToggleExclude={(name) =>
+                updateDisplayState(
+                  displayState.excludedTagFilters.includes(name)
+                    ? {
+                        ...displayState,
+                        excludedTagFilters:
+                          displayState.excludedTagFilters.filter(
+                            (tag) => tag !== name,
+                          ),
+                        tagFilters: [
+                          ...displayState.tagFilters.filter(
+                            (tag) => tag !== name,
+                          ),
+                          name,
+                        ],
+                      }
+                    : {
+                        ...displayState,
+                        tagFilters: displayState.tagFilters.filter(
+                          (tag) => tag !== name,
+                        ),
+                        excludedTagFilters: [
+                          ...displayState.excludedTagFilters,
+                          name,
+                        ],
+                      },
+                )
+              }
+              onToggleEditing={() =>
+                updateDisplayState({
+                  ...displayState,
+                  tagEditing: !displayState.tagEditing,
+                })
+              }
+              onManage={() => setManageTagsOpen(true)}
             />
             {visibleFigments.length === 0 ? (
               <p role="status" style={{ margin: 0, color: "#c9d3cf" }}>
@@ -625,7 +808,10 @@ export default function FigmentEditorApp({
                         ? "150px"
                         : "190px";
                   return (
-                    <div key={figment.id} style={{ width: widthVar, flex: "0 0 auto" }}>
+                    <div
+                      key={figment.id}
+                      style={{ width: widthVar, flex: "0 0 auto" }}
+                    >
                       <EditableFigment
                         figment={figment}
                         size={displayState.size}
@@ -634,6 +820,14 @@ export default function FigmentEditorApp({
                         sparkSaveEntry={entryFor("spark")}
                         rulesTextSaveEntry={entryFor("rendered-text")}
                         artEditing={displayState.artEditing}
+                        tagEditing={displayState.tagEditing}
+                        availableTags={tags}
+                        tagSaving={tagSaveState[figment.id]?.saving ?? false}
+                        tagError={tagSaveState[figment.id]?.error ?? null}
+                        onSetTags={(nextTags) =>
+                          setFigmentTags(figment, nextTags)
+                        }
+                        onOpenManageTags={() => setManageTagsOpen(true)}
                         onOpenArtEditor={openArtEditor}
                         onFieldBeginEdit={handleFieldBeginEdit}
                         onFieldDraftChange={handleFieldDraftChange}
@@ -676,6 +870,18 @@ export default function FigmentEditorApp({
         ) : null}
       </section>
 
+      {manageTagsOpen ? (
+        <ManageTagsModal
+          tags={tags}
+          usageCounts={tagUsageCounts}
+          saving={tagRegistrySaving}
+          saveError={tagRegistryError}
+          onSave={saveTagRegistry}
+          onClose={() => {
+            if (!tagRegistrySaving) setManageTagsOpen(false);
+          }}
+        />
+      ) : null}
       {artEditorFigment !== null ? (
         <FocusedCardEditor
           title={artEditorFigment.name}
@@ -860,13 +1066,17 @@ function FigmentEditorToolbar({
         style={{
           ...controlStyle,
           cursor: "pointer",
-          background: displayState.artEditing ? "#1f635d" : controlStyle.background,
+          background: displayState.artEditing
+            ? "#1f635d"
+            : controlStyle.background,
           fontWeight: 700,
         }}
       >
         {displayState.artEditing ? "Edit mode: on" : "Edit mode: off"}
       </button>
-      <span style={{ fontSize: "0.78rem", color: "#8a948f", marginLeft: "auto" }}>
+      <span
+        style={{ fontSize: "0.78rem", color: "#8a948f", marginLeft: "auto" }}
+      >
         {visibleCount} / {totalCount}
       </span>
     </div>

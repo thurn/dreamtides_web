@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
   loadEditorDreamwell,
+  loadEditorDreamwellTags,
   saveEditorDreamwellField,
+  saveEditorDreamwellTagRegistry,
 } from "./dreamwell-editor-api";
 import DreamwellEditorToolbar from "./DreamwellEditorToolbar";
 import {
@@ -40,10 +42,15 @@ import {
   type EditorDreamwellRecord,
 } from "./dreamwell-types";
 import { editorTomlParam } from "./editor-api";
+import type { EditorTag } from "./types";
+import CatalogTagToolbar from "./CatalogTagToolbar";
+import ManageTagsModal from "./ManageTagsModal";
 
 const DEFAULT_DREAMWELL_API_CLIENT: DreamwellEditorApiClient = {
   loadEditorDreamwell,
+  loadEditorDreamwellTags,
   saveEditorDreamwellField,
+  saveEditorDreamwellTagRegistry,
 };
 
 type LoadStatus =
@@ -56,7 +63,9 @@ export interface DreamwellEditorAppProps {
 }
 
 function errorMessageFor(error: unknown): string {
-  return error instanceof Error ? error.message : "Unable to load Dreamwell cards.";
+  return error instanceof Error
+    ? error.message
+    : "Unable to load Dreamwell cards.";
 }
 
 function isAbortError(error: unknown): boolean {
@@ -107,12 +116,17 @@ function validateFieldSave(
     const numeric = Number(String(value).trim());
     return Number.isInteger(numeric) && numeric >= 0
       ? { ok: true, value: numeric }
-      : { ok: false, message: "Energy added must be a whole number of 0 or more." };
+      : {
+          ok: false,
+          message: "Energy added must be a whole number of 0 or more.",
+        };
   }
 
   if (field === "order") {
     const numeric = Number(String(value).trim());
-    return Number.isInteger(numeric) && numeric >= 0 && numeric <= MAX_DREAMWELL_ORDER
+    return Number.isInteger(numeric) &&
+      numeric >= 0 &&
+      numeric <= MAX_DREAMWELL_ORDER
       ? { ok: true, value: numeric }
       : {
           ok: false,
@@ -160,7 +174,10 @@ function sortValue(
   }
 }
 
-function compareSortValues(left: string | number, right: string | number): number {
+function compareSortValues(
+  left: string | number,
+  right: string | number,
+): number {
   if (typeof left === "number" && typeof right === "number") {
     return left - right;
   }
@@ -179,10 +196,16 @@ function filteredAndSorted(
   return dreamwell
     .map((record, index) => ({ record, index }))
     .filter(({ record }) => {
+      if (
+        !displayState.tagFilters.every((tag) => record.tags.includes(tag)) ||
+        displayState.excludedTagFilters.some((tag) => record.tags.includes(tag))
+      )
+        return false;
       if (searchText === "") {
         return true;
       }
-      const haystack = `${record.name} ${record["rendered-text"]}`.toLowerCase();
+      const haystack =
+        `${record.name} ${record["rendered-text"]}`.toLowerCase();
       return haystack.includes(searchText);
     })
     .sort((left, right) => {
@@ -235,6 +258,13 @@ export default function DreamwellEditorApp({
   );
   const [loadStatus, setLoadStatus] = useState<LoadStatus>({ kind: "loading" });
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const [tags, setTags] = useState<EditorTag[]>([]);
+  const [manageTagsOpen, setManageTagsOpen] = useState(false);
+  const [tagRegistrySaving, setTagRegistrySaving] = useState(false);
+  const [tagRegistryError, setTagRegistryError] = useState<string | null>(null);
+  const [tagSaveState, setTagSaveState] = useState<
+    Record<string, { saving: boolean; error: string | null }>
+  >({});
   const [saveState, setSaveState] = useState<EditableSaveState>(
     EMPTY_EDITOR_SAVE_STATE,
   );
@@ -243,7 +273,8 @@ export default function DreamwellEditorApp({
   const [artEditorId, setArtEditorId] = useState<string | null>(null);
   const [artSaveStatus, setArtSaveStatus] = useState<FocusedSaveStatus>("idle");
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
-  const [cropSaveStatus, setCropSaveStatus] = useState<FocusedSaveStatus>("idle");
+  const [cropSaveStatus, setCropSaveStatus] =
+    useState<FocusedSaveStatus>("idle");
   const [cropSaveError, setCropSaveError] = useState<string | null>(null);
 
   const activeTomlLabel = useMemo(() => {
@@ -260,9 +291,13 @@ export default function DreamwellEditorApp({
     async function load() {
       setLoadStatus({ kind: "loading" });
       try {
-        const dreamwell = await apiClient.loadEditorDreamwell(controller.signal);
+        const [dreamwell, loadedTags] = await Promise.all([
+          apiClient.loadEditorDreamwell(controller.signal),
+          apiClient.loadEditorDreamwellTags(controller.signal),
+        ]);
         if (!cancelled) {
           setLoadStatus({ kind: "loaded", dreamwell });
+          setTags(loadedTags ?? []);
         }
       } catch (error) {
         if (isAbortError(error)) {
@@ -529,7 +564,10 @@ export default function DreamwellEditorApp({
       });
   }
 
-  function handleSaveImageNumber(record: EditorDreamwellRecord, imageNumber: number) {
+  function handleSaveImageNumber(
+    record: EditorDreamwellRecord,
+    imageNumber: number,
+  ) {
     setArtSaveStatus("saving");
     setArtSaveError(null);
     void apiClient
@@ -547,6 +585,59 @@ export default function DreamwellEditorApp({
         setArtSaveError(errorMessageFor(error));
       });
   }
+
+  function setDreamwellTags(record: EditorDreamwellRecord, nextTags: string[]) {
+    const previous = record.tags;
+    replaceConfirmed({ ...record, tags: nextTags });
+    setTagSaveState((current) => ({
+      ...current,
+      [record.id]: { saving: true, error: null },
+    }));
+    void apiClient
+      .saveEditorDreamwellField({
+        id: record.id,
+        field: "tags",
+        value: nextTags,
+      })
+      .then((response) => {
+        replaceConfirmed(response.dreamwell);
+        setTagSaveState((current) => ({
+          ...current,
+          [record.id]: { saving: false, error: null },
+        }));
+      })
+      .catch((error: unknown) => {
+        replaceConfirmed({ ...record, tags: previous });
+        setTagSaveState((current) => ({
+          ...current,
+          [record.id]: { saving: false, error: errorMessageFor(error) },
+        }));
+      });
+  }
+
+  function saveTagRegistry(nextTags: EditorTag[]) {
+    setTagRegistrySaving(true);
+    setTagRegistryError(null);
+    void apiClient
+      .saveEditorDreamwellTagRegistry(nextTags)
+      .then((response) => {
+        setTags(response.tags);
+        setLoadStatus({ kind: "loaded", dreamwell: response.dreamwell });
+        setManageTagsOpen(false);
+        setTagRegistrySaving(false);
+      })
+      .catch((error: unknown) => {
+        setTagRegistrySaving(false);
+        setTagRegistryError(errorMessageFor(error));
+      });
+  }
+
+  const tagUsageCounts = Object.fromEntries(
+    tags.map((tag) => [
+      tag.name,
+      loadedDreamwell.filter((record) => record.tags.includes(tag.name)).length,
+    ]),
+  );
 
   return (
     <main
@@ -579,16 +670,27 @@ export default function DreamwellEditorApp({
           flexWrap: "wrap",
         }}
       >
-        <h1 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.1 }}>
+        <h1
+          style={{
+            margin: 0,
+            fontSize: "1.05rem",
+            fontWeight: 800,
+            lineHeight: 1.1,
+          }}
+        >
           Dreamwell Editor
         </h1>
         <span aria-hidden="true" style={{ color: "rgba(247, 241, 223, 0.35)" }}>
           -
         </span>
-        <span style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}>
+        <span
+          style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}
+        >
           {loadStatus.kind === "loaded" ? activeTomlLabel : "Loading..."}
         </span>
-        <span style={{ color: "#6f7a76", fontSize: "0.76rem", marginLeft: "6px" }}>
+        <span
+          style={{ color: "#6f7a76", fontSize: "0.76rem", marginLeft: "6px" }}
+        >
           Double-click the name, rules, energy orb, or tier to edit.
         </span>
       </header>
@@ -616,6 +718,56 @@ export default function DreamwellEditorApp({
               visibleCount={visible.length}
               totalCount={loadStatus.dreamwell.length}
               onDisplayStateChange={handleDisplayStateChange}
+            />
+            <CatalogTagToolbar
+              tags={tags}
+              selected={displayState.tagFilters}
+              excluded={displayState.excludedTagFilters}
+              editing={displayState.tagEditing}
+              onSelectedChange={(tagFilters) =>
+                handleDisplayStateChange({ ...displayState, tagFilters })
+              }
+              onExcludedChange={(excludedTagFilters) =>
+                handleDisplayStateChange({
+                  ...displayState,
+                  excludedTagFilters,
+                })
+              }
+              onToggleExclude={(name) =>
+                handleDisplayStateChange(
+                  displayState.excludedTagFilters.includes(name)
+                    ? {
+                        ...displayState,
+                        excludedTagFilters:
+                          displayState.excludedTagFilters.filter(
+                            (tag) => tag !== name,
+                          ),
+                        tagFilters: [
+                          ...displayState.tagFilters.filter(
+                            (tag) => tag !== name,
+                          ),
+                          name,
+                        ],
+                      }
+                    : {
+                        ...displayState,
+                        tagFilters: displayState.tagFilters.filter(
+                          (tag) => tag !== name,
+                        ),
+                        excludedTagFilters: [
+                          ...displayState.excludedTagFilters,
+                          name,
+                        ],
+                      },
+                )
+              }
+              onToggleEditing={() =>
+                handleDisplayStateChange({
+                  ...displayState,
+                  tagEditing: !displayState.tagEditing,
+                })
+              }
+              onManage={() => setManageTagsOpen(true)}
             />
             {visible.length === 0 ? (
               <p role="status" style={{ margin: 0, color: "#c9d3cf" }}>
@@ -653,6 +805,14 @@ export default function DreamwellEditorApp({
                         energySaveEntry={entryFor("energy-added")}
                         orderSaveEntry={entryFor("order")}
                         artEditing={displayState.artEditing}
+                        tagEditing={displayState.tagEditing}
+                        availableTags={tags}
+                        tagSaving={tagSaveState[record.id]?.saving ?? false}
+                        tagError={tagSaveState[record.id]?.error ?? null}
+                        onSetTags={(nextTags) =>
+                          setDreamwellTags(record, nextTags)
+                        }
+                        onOpenManageTags={() => setManageTagsOpen(true)}
                         onOpenArtEditor={openArtEditor}
                         onFieldBeginEdit={handleFieldBeginEdit}
                         onFieldDraftChange={handleFieldDraftChange}
@@ -673,7 +833,9 @@ export default function DreamwellEditorApp({
             <h2 style={{ margin: "0 0 8px", fontSize: "1.25rem" }}>
               Unable to load Dreamwell cards
             </h2>
-            <p style={{ margin: "0 0 18px", color: "#f0c6bd" }}>{loadStatus.message}</p>
+            <p style={{ margin: "0 0 18px", color: "#f0c6bd" }}>
+              {loadStatus.message}
+            </p>
             <button
               type="button"
               onClick={() => setLoadAttempt((attempt) => attempt + 1)}
@@ -693,6 +855,18 @@ export default function DreamwellEditorApp({
         ) : null}
       </section>
 
+      {manageTagsOpen ? (
+        <ManageTagsModal
+          tags={tags}
+          usageCounts={tagUsageCounts}
+          saving={tagRegistrySaving}
+          saveError={tagRegistryError}
+          onSave={saveTagRegistry}
+          onClose={() => {
+            if (!tagRegistrySaving) setManageTagsOpen(false);
+          }}
+        />
+      ) : null}
       {artEditorRecord !== null ? (
         <FocusedCardEditor
           title={artEditorRecord.name}

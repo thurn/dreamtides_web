@@ -8,6 +8,7 @@ import type { ArtCrop, CardData } from "../types/cards";
 import { figmentCardDisplayName } from "../data/figment-card-display";
 import { semanticEntityId } from "../types/semantic-identity";
 import type { SourceRevision } from "../types/source-revision";
+import type { EditorTag } from "./types";
 
 /** Figment fields edited inline through the card frame. */
 export type EditableFigmentField =
@@ -18,7 +19,8 @@ export type EditableFigmentField =
  * with `image-number` and the `art` crop, both edited through the art-edit
  * modal.
  */
-export type SavableFigmentField = EditableFigmentField | "image-number" | "art";
+export type SavableFigmentField =
+  EditableFigmentField | "image-number" | "art" | "tags";
 
 export type FigmentSortField = "sourceOrder" | "name" | "subtype" | "spark";
 export type FigmentSortDirection = "asc" | "desc";
@@ -34,6 +36,7 @@ export interface EditorFigmentRecord {
   "rendered-text": string;
   "image-number": number;
   art: ArtCrop | null;
+  tags: string[];
   sourceIndex: number;
   source: Record<string, unknown>;
 }
@@ -41,6 +44,9 @@ export interface EditorFigmentRecord {
 export interface FigmentDisplayState {
   searchText: string;
   artEditing: boolean;
+  tagEditing: boolean;
+  tagFilters: string[];
+  excludedTagFilters: string[];
   sort: FigmentSortField;
   dir: FigmentSortDirection;
   size: FigmentSize;
@@ -48,6 +54,7 @@ export interface FigmentDisplayState {
 
 export interface LoadEditorFigmentsResponse {
   figments: EditorFigmentRecord[];
+  tags: EditorTag[];
   sourceRevision: SourceRevision;
 }
 
@@ -87,6 +94,7 @@ export interface SaveEditorFigmentFieldResponse {
 
 export interface FigmentEditorApiClient {
   loadEditorFigments(signal?: AbortSignal): Promise<EditorFigmentRecord[]>;
+  loadEditorFigmentTags(signal?: AbortSignal): Promise<EditorTag[]>;
   saveEditorFigmentField(
     request: SaveEditorFigmentFieldRequest,
   ): Promise<SaveEditorFigmentFieldResponse>;
@@ -96,6 +104,13 @@ export interface FigmentEditorApiClient {
   saveEditorFigmentImageNumber(
     request: SaveEditorFigmentImageNumberRequest,
   ): Promise<SaveEditorFigmentFieldResponse>;
+  saveEditorFigmentTagRegistry(
+    tags: EditorTag[],
+  ): Promise<{
+    figments: EditorFigmentRecord[];
+    tags: EditorTag[];
+    sourceRevision: SourceRevision;
+  }>;
 }
 
 /**

@@ -128,6 +128,7 @@ for (const name of [
   "CardEditorGrid",
   "CardEditorToolbar",
   "CardTagEditor",
+  "CatalogTagToolbar",
   "AvatarDetailView",
   "AvatarEditorApp",
   "AvatarEditorGrid",

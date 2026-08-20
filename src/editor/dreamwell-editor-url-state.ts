@@ -18,12 +18,17 @@ const SIZES = new Set<DreamwellSize>(["small", "medium", "large"]);
 export const DEFAULT_DREAMWELL_DISPLAY_STATE: DreamwellDisplayState = {
   searchText: "",
   artEditing: false,
+  tagEditing: false,
+  tagFilters: [],
+  excludedTagFilters: [],
   sort: "sourceOrder",
   dir: "asc",
   size: "large",
 };
 
-export function parseDreamwellDisplayState(search: string): DreamwellDisplayState {
+export function parseDreamwellDisplayState(
+  search: string,
+): DreamwellDisplayState {
   const params = new URLSearchParams(search);
   const sort = params.get("sort");
   const dir = params.get("dir");
@@ -33,6 +38,9 @@ export function parseDreamwellDisplayState(search: string): DreamwellDisplayStat
     ...DEFAULT_DREAMWELL_DISPLAY_STATE,
     searchText: params.get("q") ?? DEFAULT_DREAMWELL_DISPLAY_STATE.searchText,
     artEditing: params.get("edit") === "1",
+    tagEditing: params.get("tagedit") === "1",
+    tagFilters: params.getAll("tag"),
+    excludedTagFilters: params.getAll("notag"),
     sort:
       sort !== null && SORT_FIELDS.has(sort as DreamwellSortField)
         ? (sort as DreamwellSortField)
@@ -61,15 +69,37 @@ function setIfChanged(
   }
 }
 
-export function replaceDreamwellDisplayStateInUrl(state: DreamwellDisplayState) {
+export function replaceDreamwellDisplayStateInUrl(
+  state: DreamwellDisplayState,
+) {
   const url = new URL(window.location.href);
   const params = url.searchParams;
 
-  setIfChanged(params, "q", state.searchText, DEFAULT_DREAMWELL_DISPLAY_STATE.searchText);
+  setIfChanged(
+    params,
+    "q",
+    state.searchText,
+    DEFAULT_DREAMWELL_DISPLAY_STATE.searchText,
+  );
   setIfChanged(params, "edit", state.artEditing ? "1" : "", "");
-  setIfChanged(params, "sort", state.sort, DEFAULT_DREAMWELL_DISPLAY_STATE.sort);
+  setIfChanged(params, "tagedit", state.tagEditing ? "1" : "", "");
+  params.delete("tag");
+  state.tagFilters.forEach((tag) => params.append("tag", tag));
+  params.delete("notag");
+  state.excludedTagFilters.forEach((tag) => params.append("notag", tag));
+  setIfChanged(
+    params,
+    "sort",
+    state.sort,
+    DEFAULT_DREAMWELL_DISPLAY_STATE.sort,
+  );
   setIfChanged(params, "dir", state.dir, DEFAULT_DREAMWELL_DISPLAY_STATE.dir);
-  setIfChanged(params, "size", state.size, DEFAULT_DREAMWELL_DISPLAY_STATE.size);
+  setIfChanged(
+    params,
+    "size",
+    state.size,
+    DEFAULT_DREAMWELL_DISPLAY_STATE.size,
+  );
 
   const nextSearch = params.toString();
   const nextUrl = `${url.pathname}${nextSearch === "" ? "" : `?${nextSearch}`}${url.hash}`;

@@ -31,6 +31,7 @@ DreamwellCatalog(
       ability_text: [Tx("Draw a card.")],
       energy_added: 1,
       deck_tier: Two,
+      tags: ["Art Owned"],
       art: (image: 2421338077, owned: true),
     ),
 
@@ -40,6 +41,7 @@ DreamwellCatalog(
       ability_text: [Tx("Foresee 1.")],
       energy_added: 1,
       deck_tier: One,
+      tags: ["Art Owned"],
       art: (image: 1897537165, owned: true),
     ),
 
@@ -49,6 +51,7 @@ DreamwellCatalog(
       ability_text: [Tx("Gain 2⍟.")],
       energy_added: 1,
       deck_tier: One,
+      tags: ["Art Owned"],
       art: (image: 1789989917, owned: true),
     ),
 
@@ -58,6 +61,7 @@ DreamwellCatalog(
       ability_text: [Tx("Gain 1●.")],
       energy_added: 1,
       deck_tier: One,
+      tags: ["Art Owned"],
       art: (image: 1786390154, owned: true),
     ),
 
@@ -67,6 +71,7 @@ DreamwellCatalog(
       ability_text: [Tx("Draw a card, then discard a card.")],
       energy_added: 1,
       deck_tier: One,
+      tags: ["Art Owned"],
       art: (image: 1011222385, owned: true),
     ),
 
@@ -78,6 +83,7 @@ DreamwellCatalog(
       ],
       energy_added: 1,
       deck_tier: Two,
+      tags: ["Art Owned"],
       art: (image: 2419795157, owned: true),
     ),
 
@@ -87,6 +93,7 @@ DreamwellCatalog(
       ability_text: [Tx("You may immediately play a ≤2● cost character from your void.")],
       energy_added: 1,
       deck_tier: Three,
+      tags: ["Art Owned"],
       art: (image: 2155438699, owned: true),
     ),
 
@@ -96,6 +103,7 @@ DreamwellCatalog(
       ability_text: [Tx("Draw an additional Dreamwell card.")],
       energy_added: 1,
       deck_tier: Three,
+      tags: ["Art Owned"],
       art: (image: 1302572581, owned: true),
     ),
 
@@ -105,6 +113,7 @@ DreamwellCatalog(
       ability_text: [Tx("A chosen card in your void gains reclaim until end of turn.")],
       energy_added: 1,
       deck_tier: Two,
+      tags: ["Art Owned"],
       art: (image: 1068256580, owned: true),
     ),
 
@@ -114,6 +123,7 @@ DreamwellCatalog(
       ability_text: [Tx("Erode 3.")],
       energy_added: 1,
       deck_tier: One,
+      tags: ["Art Owned"],
       art: (image: 1068256757, owned: true),
     ),
 
@@ -123,6 +133,7 @@ DreamwellCatalog(
       ability_text: [Tx("(no ability)")],
       energy_added: 2,
       deck_tier: Two,
+      tags: ["Art Owned"],
       art: (image: 1924168808, owned: true),
     ),
 
@@ -132,6 +143,7 @@ DreamwellCatalog(
       ability_text: [Tx("Each player draws 2 cards.")],
       energy_added: 1,
       deck_tier: Three,
+      tags: ["Art Owned"],
       art: (image: 1125132389, owned: true),
     ),
 
@@ -141,6 +153,7 @@ DreamwellCatalog(
       ability_text: [Tx("You may discard 2 cards, then draw 2 cards.")],
       energy_added: 1,
       deck_tier: Three,
+      tags: ["Art Owned"],
       art: (image: 1721490835),
     ),
 
@@ -150,6 +163,7 @@ DreamwellCatalog(
       ability_text: [Tx("Return a card from your void to your hand.")],
       energy_added: 1,
       deck_tier: Three,
+      tags: ["Art Owned"],
       art: (image: 2030910782, owned: true),
     ),
 
@@ -159,6 +173,7 @@ DreamwellCatalog(
       ability_text: [Tx("Banish an enemy until end of turn.")],
       energy_added: 0,
       deck_tier: Three,
+      tags: ["Art Owned"],
       art: (image: 1950881323, owned: true),
     ),
 
@@ -172,6 +187,7 @@ DreamwellCatalog(
       ],
       energy_added: 0,
       deck_tier: Three,
+      tags: ["Art Owned"],
       art: (image: 1252796548, owned: true),
     ),
 
@@ -181,6 +197,7 @@ DreamwellCatalog(
       ability_text: [Tx("Gain 3●.")],
       energy_added: 0,
       deck_tier: Four,
+      tags: ["Art Owned"],
       art: (image: 2295991867, owned: true),
     ),
 
@@ -190,6 +207,7 @@ DreamwellCatalog(
       ability_text: [Tx("Return a random character from each player's void to play.")],
       energy_added: 1,
       deck_tier: Four,
+      tags: ["Art Owned"],
       art: (image: 2256745741),
     ),
 
@@ -199,6 +217,7 @@ DreamwellCatalog(
       ability_text: [Tx("You may put a card from your void on top of your deck.")],
       energy_added: 1,
       deck_tier: Four,
+      tags: ["Art Owned"],
       art: (image: 2285036621, owned: true),
     ),
 
@@ -208,6 +227,7 @@ DreamwellCatalog(
       ability_text: [Tx("You may abandon a character to draw 2 cards.")],
       energy_added: 0,
       deck_tier: Four,
+      tags: ["Art Owned"],
       art: (image: 748956883, owned: true),
     ),
 
@@ -217,6 +237,7 @@ DreamwellCatalog(
       ability_text: [Tx("Each character you control gains +1✦.")],
       energy_added: 0,
       deck_tier: Four,
+      tags: ["Art Owned"],
       art: (image: 1633431259, owned: true),
     ),
 
@@ -262,6 +283,7 @@ DreamwellCatalog(
       ability_text: [Tx("Rematerialize a character you control.")],
       energy_added: 1,
       deck_tier: Three,
+      tags: ["Art Owned"],
       art: (image: 691496707),
     ),
 

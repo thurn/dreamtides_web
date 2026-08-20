@@ -7,7 +7,11 @@ import type {
   SaveEditorFigmentFieldResponse,
   SaveEditorFigmentImageNumberRequest,
 } from "./figment-types";
-import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+import {
+  confirmSourceRevision,
+  queueSourceSave,
+  withExpectedSourceRevision,
+} from "./source-revision";
 import {
   parseSourceRevisionResponse,
   type ParsedSourceRevisionResponse,
@@ -15,6 +19,7 @@ import {
   type SourceRevision,
 } from "../types/source-revision";
 import { parseCardSubtype } from "../types/card-identity";
+import type { EditorTag } from "./types";
 
 function decodeEditorFigment(
   record: LoadEditorFigmentsResponse["figments"][number],
@@ -47,7 +52,9 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
       body = JSON.parse(text) as unknown;
     } catch (error) {
       if (!response.ok) {
-        throw new Error(`Figment editor API request failed with ${response.status}`);
+        throw new Error(
+          `Figment editor API request failed with ${response.status}`,
+        );
       }
       throw error;
     }
@@ -94,24 +101,61 @@ export async function loadEditorFigments(
     headers: { Accept: "application/json" },
     signal,
   });
-  const body = await readRevisionedJsonResponse<LoadEditorFigmentsResponse>(response);
+  const body =
+    await readRevisionedJsonResponse<LoadEditorFigmentsResponse>(response);
   confirmSourceRevision(SOURCE, body);
   return body.figments.map(decodeEditorFigment);
+}
+
+export async function loadEditorFigmentTags(
+  signal?: AbortSignal,
+): Promise<EditorTag[]> {
+  const response = await fetch(withTomlParam("/api/editor/figments"), {
+    headers: { Accept: "application/json" },
+    signal,
+  });
+  const body =
+    await readRevisionedJsonResponse<LoadEditorFigmentsResponse>(response);
+  confirmSourceRevision(SOURCE, body);
+  return body.tags;
+}
+
+export async function saveEditorFigmentTagRegistry(tags: EditorTag[]) {
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(withTomlParam("/api/editor/figments/tags"), {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, { tags })),
+    });
+    const body =
+      await readRevisionedJsonResponse<LoadEditorFigmentsResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return { ...body, figments: body.figments.map(decodeEditorFigment) };
+  });
 }
 
 export async function saveEditorFigmentField(
   request: SaveEditorFigmentFieldRequest,
 ): Promise<SaveEditorFigmentFieldResponse> {
   return queueSourceSave(SOURCE, async () => {
-    const response = await fetch(withTomlParam(`/api/editor/figments/${request.id}`), {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-      body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
-    });
-    const body = await readRevisionedJsonResponse<SaveEditorFigmentFieldResponse>(response);
+    const response = await fetch(
+      withTomlParam(`/api/editor/figments/${request.id}`),
+      {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
+      },
+    );
+    const body =
+      await readRevisionedJsonResponse<SaveEditorFigmentFieldResponse>(
+        response,
+      );
     confirmSourceRevision(SOURCE, body);
     return { ...body, figment: decodeEditorFigment(body.figment) };
   });
@@ -121,17 +165,27 @@ export async function saveEditorFigmentArt(
   request: SaveEditorFigmentArtRequest,
 ): Promise<SaveEditorFigmentFieldResponse> {
   return queueSourceSave(SOURCE, async () => {
-    const response = await fetch(withTomlParam(`/api/editor/figments/${request.id}`), {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-      body: JSON.stringify(withExpectedSourceRevision(SOURCE, {
-        id: request.id, field: "art", value: request.art,
-      })),
-    });
-    const body = await readRevisionedJsonResponse<SaveEditorFigmentFieldResponse>(response);
+    const response = await fetch(
+      withTomlParam(`/api/editor/figments/${request.id}`),
+      {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          withExpectedSourceRevision(SOURCE, {
+            id: request.id,
+            field: "art",
+            value: request.art,
+          }),
+        ),
+      },
+    );
+    const body =
+      await readRevisionedJsonResponse<SaveEditorFigmentFieldResponse>(
+        response,
+      );
     confirmSourceRevision(SOURCE, body);
     return { ...body, figment: decodeEditorFigment(body.figment) };
   });
@@ -141,19 +195,27 @@ export async function saveEditorFigmentImageNumber(
   request: SaveEditorFigmentImageNumberRequest,
 ): Promise<SaveEditorFigmentFieldResponse> {
   return queueSourceSave(SOURCE, async () => {
-    const response = await fetch(withTomlParam(`/api/editor/figments/${request.id}`), {
-    method: "PATCH",
-    headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-    },
-      body: JSON.stringify(withExpectedSourceRevision(SOURCE, {
-      id: request.id,
-      field: "image-number",
-      value: request.imageNumber,
-      })),
-    });
-    const body = await readRevisionedJsonResponse<SaveEditorFigmentFieldResponse>(response);
+    const response = await fetch(
+      withTomlParam(`/api/editor/figments/${request.id}`),
+      {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          withExpectedSourceRevision(SOURCE, {
+            id: request.id,
+            field: "image-number",
+            value: request.imageNumber,
+          }),
+        ),
+      },
+    );
+    const body =
+      await readRevisionedJsonResponse<SaveEditorFigmentFieldResponse>(
+        response,
+      );
     confirmSourceRevision(SOURCE, body);
     return { ...body, figment: decodeEditorFigment(body.figment) };
   });

@@ -2,8 +2,10 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
   readEditorFigments,
+  readFigmentTagRegistry,
   refreshFigmentDataJson,
   validateFigmentEdit,
+  validateTagRegistry,
 } from "./figment-editor-data.mjs";
 import {
   sourceRevision,
@@ -12,10 +14,15 @@ import {
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
 const BASE_PATH = "/api/editor/figments";
+const TAGS_PATH = `${BASE_PATH}/tags`;
 const FIGMENT_JSON_PATH = join("public", "figments-data.json");
 export const FIGMENT_SOURCE_PATH = join("data", "figments.ron");
-export const FIGMENT_EDITOR_SOURCE_PATHS = [FIGMENT_SOURCE_PATH];
-const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
+export const FIGMENT_EDITOR_SOURCE_PATHS = [
+  FIGMENT_SOURCE_PATH,
+  join("data", "figments.tags.ron"),
+];
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 
 function elapsedMs(start) {
   return Number((performance.now() - start).toFixed(3));
@@ -53,7 +60,11 @@ function sourceParamFromUrl(url) {
 }
 
 function resolveRequestedSource(requested) {
-  if (requested === null || requested === undefined || requested.trim() === "") {
+  if (
+    requested === null ||
+    requested === undefined ||
+    requested.trim() === ""
+  ) {
     return { ok: true };
   }
 
@@ -64,7 +75,10 @@ function resolveRequestedSource(requested) {
     .replace(/\.toml$/iu, ".ron");
   return normalized === "figments.ron"
     ? { ok: true }
-    : { ok: false, message: "The Figment editor source must be data/figments.ron." };
+    : {
+        ok: false,
+        message: "The Figment editor source must be data/figments.ron.",
+      };
 }
 
 function decodePathSegment(segment) {
@@ -85,7 +99,11 @@ function isFigmentApiPath(pathname) {
   }
 
   const rawSegments = pathname.split("/");
-  if (rawSegments[1] !== "api" || rawSegments[2] !== "editor" || rawSegments.length < 4) {
+  if (
+    rawSegments[1] !== "api" ||
+    rawSegments[2] !== "editor" ||
+    rawSegments.length < 4
+  ) {
     return false;
   }
 
@@ -95,7 +113,11 @@ function isFigmentApiPath(pathname) {
 
 function routeForRawPath(rawPath) {
   const rawSegments = rawPath.split("/");
-  if (rawSegments[1] === "api" && rawSegments[2] === "editor" && rawSegments.length >= 4) {
+  if (
+    rawSegments[1] === "api" &&
+    rawSegments[2] === "editor" &&
+    rawSegments.length >= 4
+  ) {
     const resourceSegment = decodePathSegment(rawSegments[3]);
     if (!resourceSegment.ok) {
       return {
@@ -160,7 +182,11 @@ function routeForRawPath(rawPath) {
     };
   }
 
-  if (encodedSegment !== figmentId || figmentId.includes("/") || !UUID_PATTERN.test(figmentId)) {
+  if (
+    encodedSegment !== figmentId ||
+    figmentId.includes("/") ||
+    !UUID_PATTERN.test(figmentId)
+  ) {
     return {
       ok: false,
       statusCode: 400,
@@ -220,16 +246,32 @@ function methodNotAllowed(res, allowedMethods) {
 
 function assertPatchBody(body) {
   if (body === null || typeof body !== "object" || Array.isArray(body)) {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body must be a JSON object." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body must be a JSON object.",
+    };
   }
   if (typeof body.id !== "string") {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body id must be a string." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body id must be a string.",
+    };
   }
   if (typeof body.field !== "string") {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body field must be a string." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body field must be a string.",
+    };
   }
   if (!Object.hasOwn(body, "value")) {
-    return { ok: false, code: "INVALID_REQUEST", message: "PATCH body value is required." };
+    return {
+      ok: false,
+      code: "INVALID_REQUEST",
+      message: "PATCH body value is required.",
+    };
   }
   if (typeof body.expectedSourceRevision !== "string") {
     return {
@@ -245,9 +287,15 @@ function loadEditorData(rootDir) {
   return readEditorFigments({ rootDir });
 }
 
-function collectionResponse(rootDir, revision, loadData) {
+function collectionResponse(
+  rootDir,
+  revision,
+  loadData,
+  loadTags = (dir) => readFigmentTagRegistry({ rootDir: dir }),
+) {
   return {
     figments: loadData(rootDir),
+    tags: loadTags(rootDir),
     sourceRevision: revision(rootDir, FIGMENT_EDITOR_SOURCE_PATHS),
   };
 }
@@ -256,7 +304,10 @@ function statusFor(error) {
   if (error.code === "STALE_SOURCE") return 409;
   if (error.code === "RECORD_NOT_FOUND") return 404;
   if (["INVALID_EDIT", "FIELD_NOT_APPLICABLE"].includes(error.code)) return 400;
-  if (["MALFORMED_SOURCE", "COMPATIBILITY_VALIDATION_FAILED"].includes(error.code)) return 422;
+  if (
+    ["MALFORMED_SOURCE", "COMPATIBILITY_VALIDATION_FAILED"].includes(error.code)
+  )
+    return 422;
   return error.statusCode ?? 500;
 }
 
@@ -268,6 +319,7 @@ async function handlePatch(
   publishEdit,
   revision,
   loadData,
+  loadTags,
 ) {
   let body;
   try {
@@ -287,17 +339,29 @@ async function handlePatch(
   }
 
   if (!UUID_PATTERN.test(body.id)) {
-    errorResponse(res, 400, "INVALID_FIGMENT_ID", "Request body id must be a canonical UUID.", {
-      id: body.id,
-    });
+    errorResponse(
+      res,
+      400,
+      "INVALID_FIGMENT_ID",
+      "Request body id must be a canonical UUID.",
+      {
+        id: body.id,
+      },
+    );
     return;
   }
 
   if (body.id !== figmentId) {
-    errorResponse(res, 400, "FIGMENT_ID_MISMATCH", "Route figment id must match request body id.", {
-      routeId: figmentId,
-      bodyId: body.id,
-    });
+    errorResponse(
+      res,
+      400,
+      "FIGMENT_ID_MISMATCH",
+      "Route figment id must match request body id.",
+      {
+        routeId: figmentId,
+        bodyId: body.id,
+      },
+    );
     return;
   }
 
@@ -308,6 +372,18 @@ async function handlePatch(
       value: validation.value,
     });
     return;
+  }
+  if (body.field === "tags") {
+    const known = new Set(loadTags(rootDir).map((tag) => tag.name));
+    if (validation.value.some((tag) => !known.has(tag))) {
+      errorResponse(
+        res,
+        400,
+        "INVALID_EDIT",
+        "Unknown tag. Create it in Manage tags first.",
+      );
+      return;
+    }
   }
 
   const totalStart = performance.now();
@@ -321,12 +397,14 @@ async function handlePatch(
   const result = await publishEdit({
     rootDir,
     dataset: "figments",
-    operations: [{
-      operation: "set_figment_field",
-      figment_id: figmentId,
-      field: validation.field,
-      value: validation.value,
-    }],
+    operations: [
+      {
+        operation: "set_figment_field",
+        figment_id: figmentId,
+        field: validation.field,
+        value: validation.value,
+      },
+    ],
     sourcePaths: FIGMENT_EDITOR_SOURCE_PATHS,
     expectedSourceRevision: body.expectedSourceRevision,
     prepareDerivedArtifacts: ({ stageRoot }) => {
@@ -347,7 +425,9 @@ async function handlePatch(
     figment: confirmedFigment,
     sourceRevision:
       result.sourceRevision ?? revision(rootDir, FIGMENT_EDITOR_SOURCE_PATHS),
-    ...(Object.hasOwn(body, "clientRevision") ? { clientRevision: body.clientRevision } : {}),
+    ...(Object.hasOwn(body, "clientRevision")
+      ? { clientRevision: body.clientRevision }
+      : {}),
     timing: {
       readMs: 0,
       patchMs: 0,
@@ -363,6 +443,7 @@ export function createFigmentEditorApiMiddleware({
   publishEdit = stageAndPublishGameDataEdit,
   revision = sourceRevision,
   loadData = loadEditorData,
+  loadTags = (dir) => readFigmentTagRegistry({ rootDir: dir }),
 } = {}) {
   return async function figmentEditorApiMiddleware(req, res, next) {
     const rawPath = rawPathFromUrl(req.url);
@@ -373,20 +454,72 @@ export function createFigmentEditorApiMiddleware({
     }
 
     try {
+      if (rawPath === TAGS_PATH) {
+        if (req.method !== "PUT") {
+          methodNotAllowed(res, ["PUT"]);
+          return;
+        }
+        const body = await readJsonRequest(req);
+        if (
+          typeof body?.expectedSourceRevision !== "string" ||
+          !Array.isArray(body?.tags)
+        ) {
+          errorResponse(
+            res,
+            400,
+            "INVALID_REQUEST",
+            "PUT body requires tags and expectedSourceRevision.",
+          );
+          return;
+        }
+        const validation = validateTagRegistry(body.tags);
+        if (!validation.ok) {
+          errorResponse(res, 400, "INVALID_TAG_REGISTRY", validation.message);
+          return;
+        }
+        const result = await publishEdit({
+          rootDir,
+          dataset: "figments",
+          operations: [
+            { operation: "replace_figment_tags", tags: validation.tags },
+          ],
+          sourcePaths: FIGMENT_EDITOR_SOURCE_PATHS,
+          expectedSourceRevision: body.expectedSourceRevision,
+        });
+        jsonResponse(res, 200, {
+          ...collectionResponse(rootDir, revision, loadData, loadTags),
+          sourceRevision:
+            result.sourceRevision ??
+            revision(rootDir, FIGMENT_EDITOR_SOURCE_PATHS),
+        });
+        return;
+      }
       const route = routeForRawPath(rawPath);
       if (!route.ok) {
-        errorResponse(res, route.statusCode, route.code, route.message, route.details);
+        errorResponse(
+          res,
+          route.statusCode,
+          route.code,
+          route.message,
+          route.details,
+        );
         return;
       }
 
-      const sourceResolution = resolveRequestedSource(sourceParamFromUrl(req.url));
+      const sourceResolution = resolveRequestedSource(
+        sourceParamFromUrl(req.url),
+      );
       if (!sourceResolution.ok) {
         errorResponse(res, 400, "INVALID_SOURCE", sourceResolution.message);
         return;
       }
 
       if (req.method === "GET" && route.resource === "collection") {
-        jsonResponse(res, 200, collectionResponse(rootDir, revision, loadData));
+        jsonResponse(
+          res,
+          200,
+          collectionResponse(rootDir, revision, loadData, loadTags),
+        );
         return;
       }
 
@@ -399,20 +532,27 @@ export function createFigmentEditorApiMiddleware({
           publishEdit,
           revision,
           loadData,
+          loadTags,
         );
         return;
       }
 
-      methodNotAllowed(res, route.resource === "collection" ? ["GET"] : ["PATCH"]);
+      methodNotAllowed(
+        res,
+        route.resource === "collection" ? ["GET"] : ["PATCH"],
+      );
     } catch (error) {
-      const confirmed = error.code === "STALE_SOURCE"
-        ? collectionResponse(rootDir, revision, loadData)
-        : undefined;
+      const confirmed =
+        error.code === "STALE_SOURCE"
+          ? collectionResponse(rootDir, revision, loadData, loadTags)
+          : undefined;
       errorResponse(
         res,
         statusFor(error),
         error.code ?? "PUBLICATION_FAILED",
-        error instanceof Error ? error.message : "Figment editor transaction failed.",
+        error instanceof Error
+          ? error.message
+          : "Figment editor transaction failed.",
         {
           datasetId: "figments",
           source: FIGMENT_SOURCE_PATH,

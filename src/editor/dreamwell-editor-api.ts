@@ -5,13 +5,18 @@ import type {
   SaveEditorDreamwellFieldRequest,
   SaveEditorDreamwellFieldResponse,
 } from "./dreamwell-types";
-import { confirmSourceRevision, queueSourceSave, withExpectedSourceRevision } from "./source-revision";
+import {
+  confirmSourceRevision,
+  queueSourceSave,
+  withExpectedSourceRevision,
+} from "./source-revision";
 import {
   parseSourceRevisionResponse,
   type ParsedSourceRevisionResponse,
   type RawSourceRevisionResponse,
   type SourceRevision,
 } from "../types/source-revision";
+import type { EditorTag } from "./types";
 
 const SOURCE = "dreamwell";
 
@@ -38,7 +43,9 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
       body = JSON.parse(text) as unknown;
     } catch (error) {
       if (!response.ok) {
-        throw new Error(`Dreamwell editor API request failed with ${response.status}`);
+        throw new Error(
+          `Dreamwell editor API request failed with ${response.status}`,
+        );
       }
       throw error;
     }
@@ -85,24 +92,61 @@ export async function loadEditorDreamwell(
     headers: { Accept: "application/json" },
     signal,
   });
-  const body = await readRevisionedJsonResponse<LoadEditorDreamwellResponse>(response);
+  const body =
+    await readRevisionedJsonResponse<LoadEditorDreamwellResponse>(response);
   confirmSourceRevision(SOURCE, body);
   return body.dreamwell;
+}
+
+export async function loadEditorDreamwellTags(
+  signal?: AbortSignal,
+): Promise<EditorTag[]> {
+  const response = await fetch(withTomlParam("/api/editor/dreamwell"), {
+    headers: { Accept: "application/json" },
+    signal,
+  });
+  const body =
+    await readRevisionedJsonResponse<LoadEditorDreamwellResponse>(response);
+  confirmSourceRevision(SOURCE, body);
+  return body.tags;
+}
+
+export async function saveEditorDreamwellTagRegistry(tags: EditorTag[]) {
+  return queueSourceSave(SOURCE, async () => {
+    const response = await fetch(withTomlParam("/api/editor/dreamwell/tags"), {
+      method: "PUT",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(withExpectedSourceRevision(SOURCE, { tags })),
+    });
+    const body =
+      await readRevisionedJsonResponse<LoadEditorDreamwellResponse>(response);
+    confirmSourceRevision(SOURCE, body);
+    return body;
+  });
 }
 
 export async function saveEditorDreamwellField(
   request: SaveEditorDreamwellFieldRequest,
 ): Promise<SaveEditorDreamwellFieldResponse> {
   return queueSourceSave(SOURCE, async () => {
-    const response = await fetch(withTomlParam(`/api/editor/dreamwell/${request.id}`), {
-      method: "PATCH",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
+    const response = await fetch(
+      withTomlParam(`/api/editor/dreamwell/${request.id}`),
+      {
+        method: "PATCH",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
       },
-      body: JSON.stringify(withExpectedSourceRevision(SOURCE, request)),
-    });
-    const body = await readRevisionedJsonResponse<SaveEditorDreamwellFieldResponse>(response);
+    );
+    const body =
+      await readRevisionedJsonResponse<SaveEditorDreamwellFieldResponse>(
+        response,
+      );
     confirmSourceRevision(SOURCE, body);
     return body;
   });

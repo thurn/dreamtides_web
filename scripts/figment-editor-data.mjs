@@ -2,7 +2,13 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
-import { patchTomlRecord } from "./card-editor-data.mjs";
+import {
+  normalizeTagList,
+  patchTomlRecord,
+  readFacetRegistry,
+  TAG_FACET,
+  validateTagRegistry,
+} from "./card-editor-data.mjs";
 import { transformFigment } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -11,7 +17,7 @@ const FIGMENT_JSON_PATH = join("public", "figments-data.json");
 
 /**
  * Figment fields the editor can save. Mirrors the card editor's field set minus
- * the systems figments do not carry (energy cost, tags, tides): the inline
+ * the systems figments do not carry (energy cost and tides): the inline
  * fields `name`, `subtype`, `spark`, and `rendered-text`, plus `image-number`
  * and the `art` crop edited through the art-edit modal.
  */
@@ -22,6 +28,7 @@ export const EDITABLE_FIGMENT_FIELDS = new Set([
   "rendered-text",
   "image-number",
   "art",
+  "tags",
 ]);
 
 /** Default art crop applied to a figment that has never been art-edited. */
@@ -40,7 +47,10 @@ function roundTo(value, digits) {
   return Math.round(value * factor) / factor;
 }
 
-function readSourceFigments(rootDir, figmentTomlPath = DEFAULT_FIGMENT_TOML_PATH) {
+function readSourceFigments(
+  rootDir,
+  figmentTomlPath = DEFAULT_FIGMENT_TOML_PATH,
+) {
   const absoluteTomlPath = join(rootDir, figmentTomlPath);
   const parsed = parse(readFileSync(absoluteTomlPath, "utf8"));
   const figments = parsed.figments;
@@ -69,6 +79,7 @@ function editorRecordFromFigment(figment, index) {
       figment.art !== null && typeof figment.art === "object"
         ? figment.art
         : null,
+    tags: normalizeTagList(figment.tags),
     sourceIndex: index,
     source: figment,
   };
@@ -78,12 +89,30 @@ export function readEditorFigments({
   rootDir = ROOT,
   figmentTomlPath = DEFAULT_FIGMENT_TOML_PATH,
 } = {}) {
-  return readSourceFigments(rootDir, figmentTomlPath).map(editorRecordFromFigment);
+  return readSourceFigments(rootDir, figmentTomlPath).map(
+    editorRecordFromFigment,
+  );
 }
 
 export function validateFigmentEdit(field, rawValue) {
   if (!EDITABLE_FIGMENT_FIELDS.has(field)) {
     return validationFailure(field, "This field is not editable.", rawValue);
+  }
+
+  if (field === "tags") {
+    if (
+      !Array.isArray(rawValue) ||
+      rawValue.some((value) => typeof value !== "string" || value.trim() === "")
+    ) {
+      return validationFailure(
+        field,
+        "Tags must be a list of non-blank text values.",
+        rawValue,
+      );
+    }
+    return validationSuccess(field, [
+      ...new Set(rawValue.map((value) => value.trim())),
+    ]);
   }
 
   if (field === "name") {
@@ -103,7 +132,11 @@ export function validateFigmentEdit(field, rawValue) {
     }
     const value = rawValue.trim();
     if (value.length === 0) {
-      return validationFailure(field, "Character type cannot be blank.", rawValue);
+      return validationFailure(
+        field,
+        "Character type cannot be blank.",
+        rawValue,
+      );
     }
     return validationSuccess(field, value);
   }
@@ -142,7 +175,11 @@ export function validateFigmentEdit(field, rawValue) {
   }
 
   if (field === "art") {
-    if (rawValue === null || typeof rawValue !== "object" || Array.isArray(rawValue)) {
+    if (
+      rawValue === null ||
+      typeof rawValue !== "object" ||
+      Array.isArray(rawValue)
+    ) {
       return validationFailure(field, "Art crop must be an object.", rawValue);
     }
     const { x, y, scale } = rawValue;
@@ -169,6 +206,20 @@ export function validateFigmentEdit(field, rawValue) {
 
   return validationFailure(field, "This field is not editable.", rawValue);
 }
+
+export function readFigmentTagRegistry({
+  rootDir = ROOT,
+  figmentTomlPath = DEFAULT_FIGMENT_TOML_PATH,
+} = {}) {
+  return readFacetRegistry({
+    rootDir,
+    cardTomlPath: figmentTomlPath,
+    facet: TAG_FACET,
+    sourceArrayKey: "figments",
+  });
+}
+
+export { validateTagRegistry };
 
 export function patchFigmentsToml(source, { figmentId, field, value }) {
   return patchTomlRecord(source, {

@@ -2,6 +2,7 @@ import type { DreamwellEditorPreviewData } from "./DreamwellEditorPreview";
 import type { ArtCrop } from "../types/cards";
 import type { DreamwellCardId } from "../types/identifiers";
 import type { SourceRevision } from "../types/source-revision";
+import type { EditorTag } from "./types";
 
 /**
  * Dreamwell fields edited inline by double-clicking the card (the name heading,
@@ -15,7 +16,7 @@ export type EditableDreamwellField =
  * `image-number` and the `art` crop, both set through the focused editor.
  */
 export type SavableDreamwellField =
-  EditableDreamwellField | "image-number" | "art";
+  EditableDreamwellField | "image-number" | "art" | "tags";
 
 export type DreamwellSortField =
   "sourceOrder" | "name" | "energyAdded" | "order";
@@ -43,6 +44,7 @@ export interface EditorDreamwellRecord {
   "image-number": number;
   /** Curated pan/zoom crop framing the card art; absent until the card is framed. */
   art?: ArtCrop;
+  tags: string[];
   "card-number": number;
   sourceIndex: number;
   source: Record<string, unknown>;
@@ -55,6 +57,9 @@ export interface DreamwellDisplayState {
    * editor's edit mode) instead of starting an inline text edit.
    */
   artEditing: boolean;
+  tagEditing: boolean;
+  tagFilters: string[];
+  excludedTagFilters: string[];
   sort: DreamwellSortField;
   dir: DreamwellSortDirection;
   size: DreamwellSize;
@@ -62,6 +67,7 @@ export interface DreamwellDisplayState {
 
 export interface LoadEditorDreamwellResponse {
   dreamwell: EditorDreamwellRecord[];
+  tags: EditorTag[];
   sourceRevision: SourceRevision;
 }
 
@@ -89,9 +95,17 @@ export interface SaveEditorDreamwellFieldResponse {
 
 export interface DreamwellEditorApiClient {
   loadEditorDreamwell(signal?: AbortSignal): Promise<EditorDreamwellRecord[]>;
+  loadEditorDreamwellTags(signal?: AbortSignal): Promise<EditorTag[]>;
   saveEditorDreamwellField(
     request: SaveEditorDreamwellFieldRequest,
   ): Promise<SaveEditorDreamwellFieldResponse>;
+  saveEditorDreamwellTagRegistry(
+    tags: EditorTag[],
+  ): Promise<{
+    dreamwell: EditorDreamwellRecord[];
+    tags: EditorTag[];
+    sourceRevision: SourceRevision;
+  }>;
 }
 
 /**

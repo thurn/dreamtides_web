@@ -32,6 +32,8 @@ pub struct DreamwellCardDefinition {
     pub ability_text: Vec<LocalizedString>,
     pub energy_added: u32,
     pub deck_tier: DeckTier,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub tags: Vec<String>,
     pub art: Art,
 }
 
@@ -150,6 +152,7 @@ struct CompatibilityCard {
     art_owned: bool,
     #[serde(rename = "card-number")]
     card_number: u32,
+    tags: Vec<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     art: Option<CompatibilityArtCrop>,
 }
@@ -201,6 +204,7 @@ pub fn lower(
                 image_number: Some(card.art.image),
                 art_owned: card.art.owned,
                 card_number: metadata.number,
+                tags: card.tags,
                 art: card.art.crop.map(|crop| CompatibilityArtCrop {
                     x: number(crop.x),
                     y: number(crop.y),
@@ -273,6 +277,19 @@ fn validate_cards(source: &[DreamwellCardDefinition]) -> Result<()> {
             "Dreamwell card {} has an empty name",
             card.id
         );
+        let mut tags = BTreeSet::new();
+        for tag in &card.tags {
+            ensure!(
+                !tag.trim().is_empty(),
+                "Dreamwell card {} has a blank tag",
+                card.id
+            );
+            ensure!(
+                tags.insert(tag),
+                "Dreamwell card {} repeats tag {tag:?}",
+                card.id
+            );
+        }
         if let Some(crop) = &card.art.crop {
             ensure!(
                 crop.x.is_finite() && crop.y.is_finite(),

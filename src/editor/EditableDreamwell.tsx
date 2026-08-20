@@ -8,6 +8,8 @@ import {
   type DreamwellSize,
 } from "./dreamwell-types";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
+import CardTagEditor from "./CardTagEditor";
+import type { EditorTag } from "./types";
 
 export interface EditableDreamwellProps {
   record: EditorDreamwellRecord;
@@ -17,6 +19,12 @@ export interface EditableDreamwellProps {
   energySaveEntry: EditableFieldSaveEntry | null;
   orderSaveEntry: EditableFieldSaveEntry | null;
   artEditing: boolean;
+  tagEditing: boolean;
+  availableTags: EditorTag[];
+  tagSaving: boolean;
+  tagError: string | null;
+  onSetTags: (tags: string[]) => void;
+  onOpenManageTags: () => void;
   onOpenArtEditor: (record: EditorDreamwellRecord) => void;
   onFieldBeginEdit: (
     record: EditorDreamwellRecord,
@@ -67,6 +75,12 @@ export default function EditableDreamwell({
   energySaveEntry,
   orderSaveEntry,
   artEditing,
+  tagEditing,
+  availableTags,
+  tagSaving,
+  tagError,
+  onSetTags,
+  onOpenManageTags,
   onOpenArtEditor,
   onFieldBeginEdit,
   onFieldDraftChange,
@@ -84,7 +98,8 @@ export default function EditableDreamwell({
     wholeNumberDraft(energySaveEntry?.draftValue ?? record["energy-added"]) ??
     record["energy-added"];
   const visibleOrder =
-    wholeNumberDraft(orderSaveEntry?.draftValue ?? record.order) ?? record.order;
+    wholeNumberDraft(orderSaveEntry?.draftValue ?? record.order) ??
+    record.order;
 
   const visibleCard = {
     ...dreamwellPreviewCard(record),
@@ -127,7 +142,11 @@ export default function EditableDreamwell({
     ),
     rulesText: (defaultNode: ReactNode) => (
       <EditableField
-        {...fieldProps("rendered-text", record["rendered-text"], rulesTextSaveEntry)}
+        {...fieldProps(
+          "rendered-text",
+          record["rendered-text"],
+          rulesTextSaveEntry,
+        )}
         mode="multiline"
       >
         {defaultNode ?? (
@@ -210,10 +229,21 @@ export default function EditableDreamwell({
             </span>
           </EditableField>
         </span>
-        {orderEditing ? (
-          <span style={{ color: "#6f7a76" }}>(0-4)</span>
-        ) : null}
+        {orderEditing ? <span style={{ color: "#6f7a76" }}>(0-4)</span> : null}
       </div>
+      {tagEditing ? (
+        <CardTagEditor
+          cardTags={record.tags}
+          availableTags={availableTags}
+          saving={tagSaving}
+          error={tagError}
+          onAddTag={(name) => onSetTags([...record.tags, name])}
+          onRemoveTag={(name) =>
+            onSetTags(record.tags.filter((tag) => tag !== name))
+          }
+          onOpenManageTags={onOpenManageTags}
+        />
+      ) : null}
     </div>
   );
 }

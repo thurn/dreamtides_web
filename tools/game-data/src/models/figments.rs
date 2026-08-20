@@ -17,6 +17,8 @@ pub struct FigmentDefinition {
     pub character_type: CharacterType,
     pub base_spark: u32,
     pub behavior: FigmentBehavior,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub tags: Vec<String>,
     pub image_number: u32,
     #[serde(default, skip_serializing_if = "is_false")]
     pub art_owned: bool,
@@ -147,6 +149,7 @@ struct CompatibilityFigment {
     keyword: &'static str,
     #[serde(rename = "rendered-text")]
     rendered_text: &'static str,
+    tags: Vec<String>,
     #[serde(rename = "image-number")]
     image_number: u32,
     #[serde(rename = "art-owned")]
@@ -174,6 +177,7 @@ pub fn lower(source: Vec<FigmentDefinition>) -> Result<toml::Value> {
                 spark: figment.base_spark,
                 keyword: figment.behavior.compatibility_keyword(),
                 rendered_text: figment.behavior.compatibility_rules_text(),
+                tags: figment.tags,
                 image_number: figment.image_number,
                 art_owned: figment.art_owned,
                 art: figment.art.map(|crop| CompatibilityArtCrop {
@@ -203,6 +207,15 @@ fn validate(source: &[FigmentDefinition]) -> Result<()> {
         }
         if source_text(&figment.name)?.trim().is_empty() {
             bail!("Figment {} has an empty name", figment.id);
+        }
+        let mut tags = BTreeSet::new();
+        for tag in &figment.tags {
+            if tag.trim().is_empty() {
+                bail!("Figment {} has a blank tag", figment.id);
+            }
+            if !tags.insert(tag) {
+                bail!("Figment {} repeats tag {tag:?}", figment.id);
+            }
         }
         if let Some(art) = figment.art {
             if !art.x.is_finite() || !art.y.is_finite() || !art.scale.is_finite() {

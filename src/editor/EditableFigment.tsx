@@ -11,6 +11,8 @@ import type {
 } from "./figment-types";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import { parseCardName, parseCardSubtype } from "../types/card-identity";
+import CardTagEditor from "./CardTagEditor";
+import type { EditorTag } from "./types";
 
 export interface EditableFigmentProps {
   figment: EditorFigmentRecord;
@@ -20,6 +22,12 @@ export interface EditableFigmentProps {
   sparkSaveEntry: EditableFieldSaveEntry | null;
   rulesTextSaveEntry: EditableFieldSaveEntry | null;
   artEditing: boolean;
+  tagEditing: boolean;
+  availableTags: EditorTag[];
+  tagSaving: boolean;
+  tagError: string | null;
+  onSetTags: (tags: string[]) => void;
+  onOpenManageTags: () => void;
   onOpenArtEditor: (figment: EditorFigmentRecord) => void;
   onFieldBeginEdit: (
     figment: EditorFigmentRecord,
@@ -31,7 +39,10 @@ export interface EditableFigmentProps {
     field: EditableFigmentField,
     value: EditableFieldValue,
   ) => void;
-  onFieldCancel: (figment: EditorFigmentRecord, field: EditableFigmentField) => void;
+  onFieldCancel: (
+    figment: EditorFigmentRecord,
+    field: EditableFigmentField,
+  ) => void;
   onFieldSave: (
     figment: EditorFigmentRecord,
     field: EditableFigmentField,
@@ -61,6 +72,12 @@ export default function EditableFigment({
   sparkSaveEntry,
   rulesTextSaveEntry,
   artEditing,
+  tagEditing,
+  availableTags,
+  tagSaving,
+  tagError,
+  onSetTags,
+  onOpenManageTags,
   onOpenArtEditor,
   onFieldBeginEdit,
   onFieldDraftChange,
@@ -72,7 +89,9 @@ export default function EditableFigment({
 
   const rulesTextEditing = rulesTextSaveEntry?.status === "editing";
   const visibleName = String(nameSaveEntry?.draftValue ?? figment.name);
-  const visibleSubtype = String(subtypeSaveEntry?.draftValue ?? figment.subtype);
+  const visibleSubtype = String(
+    subtypeSaveEntry?.draftValue ?? figment.subtype,
+  );
   const previewSubtype = parseCardSubtype(visibleSubtype);
   const visibleRulesText = String(
     rulesTextSaveEntry?.draftValue ?? figment["rendered-text"],
@@ -104,7 +123,8 @@ export default function EditableFigment({
     value,
     saveEntry,
     cardAnchorRef: cardRef,
-    onBeginEdit: (next: EditableFieldValue) => onFieldBeginEdit(figment, field, next),
+    onBeginEdit: (next: EditableFieldValue) =>
+      onFieldBeginEdit(figment, field, next),
     onDraftChange: (next: EditableFieldValue) =>
       onFieldDraftChange(figment, field, next),
     onCancel: () => onFieldCancel(figment, field),
@@ -174,6 +194,39 @@ export default function EditableFigment({
 
   if (artEditing) {
     return (
+      <div>
+        <article
+          ref={cardRef}
+          aria-label={visibleCard.name}
+          data-editor-figment-id={figment.id}
+          style={{ display: "block", position: "relative" }}
+        >
+          <CardView
+            card={visibleCard}
+            large={size === "large"}
+            figment
+            onPress={() => onOpenArtEditor(figment)}
+          />
+        </article>
+        {tagEditing ? (
+          <CardTagEditor
+            cardTags={figment.tags}
+            availableTags={availableTags}
+            saving={tagSaving}
+            error={tagError}
+            onAddTag={(name) => onSetTags([...figment.tags, name])}
+            onRemoveTag={(name) =>
+              onSetTags(figment.tags.filter((tag) => tag !== name))
+            }
+            onOpenManageTags={onOpenManageTags}
+          />
+        ) : null}
+      </div>
+    );
+  }
+
+  return (
+    <div>
       <article
         ref={cardRef}
         aria-label={visibleCard.name}
@@ -184,59 +237,60 @@ export default function EditableFigment({
           card={visibleCard}
           large={size === "large"}
           figment
-          onPress={() => onOpenArtEditor(figment)}
+          slots={slots}
+          rulesTextboxExpanded={rulesTextEditing}
         />
-      </article>
-    );
-  }
-
-  return (
-    <article
-      ref={cardRef}
-      aria-label={visibleCard.name}
-      data-editor-figment-id={figment.id}
-      style={{ display: "block", position: "relative" }}
-    >
-      <CardView
-        card={visibleCard}
-        large={size === "large"}
-        figment
-        slots={slots}
-        rulesTextboxExpanded={rulesTextEditing}
-      />
-      {/* With no rules box at rest, this transparent strip over the bottom-left
+        {/* With no rules box at rest, this transparent strip over the bottom-left
           of the art (clear of the bottom-right type line) starts a rules edit on
           a double-click, revealing the editable frosted box. */}
-      {!showRulesBox ? (
-        <div
-          className="figment-edit-affordance"
-          role="button"
-          tabIndex={0}
-          aria-label={`Edit rules text for ${visibleName}`}
-          title="Double-click to add rules text"
-          onDoubleClick={() =>
-            onFieldBeginEdit(figment, "rendered-text", figment["rendered-text"])
-          }
-          onKeyDown={(event) => {
-            if (event.key === "Enter") {
+        {!showRulesBox ? (
+          <div
+            className="figment-edit-affordance"
+            role="button"
+            tabIndex={0}
+            aria-label={`Edit rules text for ${visibleName}`}
+            title="Double-click to add rules text"
+            onDoubleClick={() =>
               onFieldBeginEdit(
                 figment,
                 "rendered-text",
                 figment["rendered-text"],
-              );
+              )
             }
-          }}
-          style={{
-            position: "absolute",
-            bottom: "3.4%",
-            left: "5%",
-            right: "52%",
-            height: "9%",
-            cursor: "text",
-            zIndex: 5,
-          }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                onFieldBeginEdit(
+                  figment,
+                  "rendered-text",
+                  figment["rendered-text"],
+                );
+              }
+            }}
+            style={{
+              position: "absolute",
+              bottom: "3.4%",
+              left: "5%",
+              right: "52%",
+              height: "9%",
+              cursor: "text",
+              zIndex: 5,
+            }}
+          />
+        ) : null}
+      </article>
+      {tagEditing ? (
+        <CardTagEditor
+          cardTags={figment.tags}
+          availableTags={availableTags}
+          saving={tagSaving}
+          error={tagError}
+          onAddTag={(name) => onSetTags([...figment.tags, name])}
+          onRemoveTag={(name) =>
+            onSetTags(figment.tags.filter((tag) => tag !== name))
+          }
+          onOpenManageTags={onOpenManageTags}
         />
       ) : null}
-    </article>
+    </div>
   );
 }
