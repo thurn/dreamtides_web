@@ -327,6 +327,49 @@ describe("Cumulus AtlasScreen", () => {
     vi.useRealTimers();
   });
 
+  it("places Mira at the top-left on desktop and keeps her centered on mobile", () => {
+    const view: AtlasView = {
+      ...makeView(),
+      guideDialogue: {
+        id: testPresentationId("tutorial-run:atlas-guidance"),
+        model: {
+          portrait: { kind: "character-portrait", characterId: "mira" },
+          portraitAlt: assertLocalized("Mira"),
+          speakerName: assertLocalized("Mira"),
+          text: assertLocalized("Choose a dream."),
+        },
+        delaySeconds: 1,
+        horizontalOffset: 12,
+        verticalOffset: 8,
+        bubbleWidth: 700,
+      },
+    };
+
+    stubViewport(true);
+    const desktop = mount(
+      <AtlasScreen view={view} onEnterNode={vi.fn()} />,
+    );
+    const desktopPlacement = desktop.container.querySelector<HTMLElement>(
+      "[data-atlas-guide-dialogue-placement]",
+    );
+    expect(desktopPlacement?.style.left).toBe(
+      "max(var(--safe-area-inset-left), var(--gutter))",
+    );
+    expect(desktopPlacement?.style.transform).toBe("translate(12px, 8px)");
+    act(() => desktop.root.unmount());
+
+    stubViewport(false);
+    const mobile = mount(<AtlasScreen view={view} onEnterNode={vi.fn()} />);
+    const mobilePlacement = mobile.container.querySelector<HTMLElement>(
+      "[data-atlas-guide-dialogue-placement]",
+    );
+    expect(mobilePlacement?.style.left).toBe("50%");
+    expect(mobilePlacement?.style.transform).toBe(
+      "translate(calc(-50% + 12px), 8px)",
+    );
+    act(() => mobile.root.unmount());
+  });
+
   it("renders every node and leaves persistent chrome to the router", () => {
     const { container, root } = mount(
       <AtlasScreen view={makeView()} onEnterNode={vi.fn()} />,

@@ -21,7 +21,9 @@ import { AtlasNode, type AtlasNodeModel } from "../components/atlas/AtlasNode";
 import { Motes } from "../components/hud/Motes";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { glassSurfaceStyle } from "../internal/glass-surface";
+import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import { token } from "../primitives/tokens";
+import { useIsDesktop } from "../primitives/use-is-desktop";
 import { useScaleToFit } from "../primitives/use-scale-to-fit";
 import { atlasPreflightImageUrls } from "./atlas-preflight";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
@@ -86,6 +88,7 @@ export function AtlasScreen({
       ? undefined
       : (view.guideDialogue.delaySeconds ?? 0),
   );
+  const isDesktop = useIsDesktop();
   const scale = useScaleToFit(view.stageWidth, view.stageHeight);
 
   useEffect(() => {
@@ -163,10 +166,14 @@ export function AtlasScreen({
             position: "absolute",
             zIndex: 30,
             top: `calc(${token("--safe-top")} + ${token("--space-s")})`,
-            left: "50%",
+            left: isDesktop
+              ? safeAreaInsetAtLeast("left", "--gutter")
+              : "50%",
             width: `${String(view.guideDialogue.bubbleWidth)}px`,
             maxWidth: `calc(100vw - 2 * ${token("--gutter")})`,
-            transform: `translate(calc(-50% + ${String(view.guideDialogue.horizontalOffset)}px), ${String(view.guideDialogue.verticalOffset)}px)`,
+            transform: isDesktop
+              ? `translate(${String(view.guideDialogue.horizontalOffset)}px, ${String(view.guideDialogue.verticalOffset)}px)`
+              : `translate(calc(-50% + ${String(view.guideDialogue.horizontalOffset)}px), ${String(view.guideDialogue.verticalOffset)}px)`,
             pointerEvents: "none",
           }}
         >

@@ -24,6 +24,7 @@ import { GLYPHS } from "../primitives/glyph";
 import type { AvatarPortraitFocus } from "../../types/content";
 import { GLOSSARY_IDS } from "../../data/glossary";
 import { DEBUG_REROLL_TOP } from "../primitives/chrome-geometry";
+import { safeAreaInsetAtLeast } from "../primitives/safe-area";
 import type { TutorialSpeechBubbleView } from "./tutorial-speech-bubble-view";
 import { useDelayedTutorialSpeechBubbleVisibility } from "./use-delayed-tutorial-speech-bubble-visibility";
 import { useLocalizer } from "../../runtime/localization/use-localizer";
@@ -236,8 +237,8 @@ export function JourneyStartGuideDialogue({
         zIndex: 7,
         top: desktop ? "50%" : "36%",
         left: desktop
-          ? `max(var(--safe-area-inset-left), ${token("--gutter")})`
-          : `calc(max(var(--safe-area-inset-left), ${token("--gutter")}) + ${String(mobileLeftReserve)}px)`,
+          ? safeAreaInsetAtLeast("left", "--gutter")
+          : `calc(${safeAreaInsetAtLeast("left", "--gutter")} + ${String(mobileLeftReserve)}px)`,
         right: desktop
           ? undefined
           : `calc(max(var(--safe-area-inset-right), ${token("--gutter")}) + ${String(mobileRightReserve)}px)`,
