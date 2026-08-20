@@ -78,13 +78,13 @@ export const atlasNodeDemo: CumulusComponent = {
   id: "atlas-node",
   title: "Atlas Node",
   blurb:
-    "One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: a framed circular icon whose glow and badges track its state — including a frame-shaped violet outline that visibly widens and contracts around the next selectable dreamscape — and which reveals its scene / detail card on hover or press.",
+    "One dreamscape node on the Dream Atlas, wired to the shared InfoCard press engine: the framed destination reveals its scene and node details, while a known-Dreamsign badge is an independent read target.",
   group: "Atlas & Sites",
   docName: "AtlasNode",
   Component: AtlasNodeDemo,
   usage: [
     {
-      note: "One semantic Atlas node. The model carries UUID-backed face, primary, Dreamsign, site, and affiliation data; AtlasNode owns reveal interaction and activation.",
+      note: "One semantic Atlas node. The destination owns activation plus its primary, site, and affiliation reveal; a UUID-backed known Dreamsign receives a separate hover, focus, and touch-hold reveal target.",
       code: `import { AtlasNode } from "src/cumulus/components/atlas/AtlasNode";
 
 <div className="dream-atlas">

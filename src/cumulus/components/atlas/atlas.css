@@ -56,8 +56,15 @@
 }
 
 /* ---- Nodes ---- */
-.cumulus-atlas-node {
+.cumulus-atlas-node-shell {
   position: relative;
+  width: 100%;
+  height: 100%;
+  container-type: inline-size;
+}
+.cumulus-atlas-node {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   container-type: inline-size;
@@ -280,9 +287,7 @@
   box-shadow: 0 0 14px var(--atlas-boss-badge-glow);
 }
 .cumulus-atlas-known-badge {
-  position: absolute;
-  top: -6px;
-  right: -6px;
+  position: relative;
   width: 35cqi;
   height: 35cqi;
   border-radius: 50%;
@@ -293,6 +298,24 @@
   justify-content: center;
   border: 2px solid var(--atlas-known-badge-border);
   box-shadow: 0 0 14px var(--atlas-known-badge-glow);
+  pointer-events: none;
+}
+.cumulus-atlas-known-target {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: max(35cqi, var(--touch-min));
+  height: max(35cqi, var(--touch-min));
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  appearance: none;
+  padding: 0;
+  border: 0;
+  background: none;
+  touch-action: pan-x pan-y;
+  -webkit-tap-highlight-color: transparent;
 }
 .cumulus-atlas-known-badge img {
   width: 26cqi;
@@ -317,9 +340,20 @@
     height: 52.5cqi;
   }
 
+  .cumulus-atlas-known-target {
+    width: max(52.5cqi, var(--touch-min));
+    height: max(52.5cqi, var(--touch-min));
+  }
+
   .cumulus-atlas-known-badge img {
     width: 39cqi;
     height: 39cqi;
+  }
+}
+@media (max-width: 899.98px) {
+  .cumulus-atlas-known-target {
+    width: max(60cqi, var(--touch-min));
+    height: max(60cqi, var(--touch-min));
   }
 }
 .cumulus-atlas-known-badge::after {

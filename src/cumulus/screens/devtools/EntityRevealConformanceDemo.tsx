@@ -21,6 +21,7 @@ import { parseDreamscapeId } from "../../../types/identifiers";
 import { parseAtlasNodeId } from "../../../types/identifiers";
 import { parseArtAssetKey } from "../../../types/identifiers";
 import { parseAvatarId } from "../../../types/identifiers";
+import { parseDreamsignId } from "../../../types/identifiers";
 
 const CARD_ID = parseCardId("11111111-1111-4111-8111-111111111111");
 const BATTLE_CARD_ID = parseCardId("22222222-2222-4222-8222-222222222222");
@@ -62,6 +63,7 @@ const ATLAS_MODEL: AtlasNodeModel = {
     body: assertLocalized("A fixed Atlas fixture."),
   },
   dreamsign: {
+    id: parseDreamsignId("44444444-4444-4444-8444-444444444444"),
     name: assertLocalized("Measured Sign"),
     art: null,
     rulesText: assertLocalized("The first vision is fixed."),

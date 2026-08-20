@@ -358,6 +358,7 @@ function buildDreamsignCard(
     return null;
   }
   return {
+    id: dreamsign.id,
     name: localizedSourceText(dreamsign.name),
     art:
       dreamsign.imageName != null

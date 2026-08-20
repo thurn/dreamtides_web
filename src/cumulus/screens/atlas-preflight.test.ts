@@ -5,7 +5,7 @@ import type { DreamscapeNode } from "../../types/journey";
 import type { AtlasNodeModel } from "../components/atlas/AtlasNode";
 import { artRef, resolveArtRef } from "../primitives/art";
 import { atlasPreflightImageUrls } from "./atlas-preflight";
-import { parseAtlasNodeId } from "../../types/identifiers";
+import { parseAtlasNodeId, parseDreamsignId } from "../../types/identifiers";
 import {
   testDreamscapeId,
   testGuideId,
@@ -74,6 +74,7 @@ describe("atlasPreflightImageUrls", () => {
           figureArt: guide,
         },
         dreamsign: {
+          id: parseDreamsignId("00000000-0000-4000-8000-000000000099"),
           name: assertLocalized("The Held Star"),
           art: dreamsign,
           rulesText: assertLocalized("Gain 1 essence."),

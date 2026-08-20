@@ -16,7 +16,7 @@ import {
   atlasPrimaryInfoCard,
   type AtlasNodeModel,
 } from "./AtlasNode";
-import { parseAtlasNodeId } from "../../../types/identifiers";
+import { parseAtlasNodeId, parseDreamsignId } from "../../../types/identifiers";
 import {
   testDreamscapeId,
   testGuideId,
@@ -77,6 +77,7 @@ function model(
       body: assertLocalized("Aldric offers curated visions of the future."),
     },
     dreamsign: {
+      id: parseDreamsignId("00000000-0000-4000-8000-000000000052"),
       name: assertLocalized("Known Sign"),
       art: artRef.dreamsign("known.png"),
       rulesText: assertLocalized("Your first vision costs less."),
@@ -166,7 +167,7 @@ function pointer(
 }
 
 describe("AtlasNode semantic reveal contract", () => {
-  it("derives the Atlas primary and Dreamsign, site, affiliation secondaries in priority order", () => {
+  it("keeps the Atlas primary with its site and affiliation secondaries", () => {
     const value = model("available");
     const { source } = renderNode(value);
 
@@ -175,7 +176,6 @@ describe("AtlasNode semantic reveal contract", () => {
     expect(source.dataset.revealEntityId).toBe(NODE_ID);
     expect(source.dataset.revealPrimaryVariant).toBe("atlasReveal");
     expect(source.dataset.revealSecondaryTitles?.split("\u001f")).toEqual([
-      "Known Sign",
       "Augury",
       resolveSource(value.affiliation!.title),
     ]);
@@ -184,11 +184,28 @@ describe("AtlasNode semantic reveal contract", () => {
       source.getAttribute("aria-describedby") ?? "",
     );
     expect(description?.textContent).toContain("Wilderveil");
-    expect(description?.textContent).toContain("Known Sign");
+    expect(description?.textContent).not.toContain("Known Sign");
     expect(description?.textContent).toContain("Augury");
     expect(description?.textContent).toContain(
       resolveSource(value.affiliation!.title),
     );
+  });
+
+  it("gives the known Dreamsign its own reveal target without activating the node", () => {
+    const available = renderNode(model("available"));
+    const dreamsign = container.querySelector<HTMLElement>(
+      "[data-atlas-known-dreamsign-id]",
+    )!;
+
+    expect(dreamsign).not.toBeNull();
+    expect(dreamsign.dataset.revealEntityType).toBe("dreamsign");
+    expect(dreamsign.dataset.revealPrimaryVariant).toBe("object");
+    expect(dreamsign.dataset.revealSecondaryTitles).toBe("");
+    expect(dreamsign.getAttribute("aria-describedby")).toMatch(
+      /^cumulus-reveal-description-/,
+    );
+    act(() => dreamsign.click());
+    expect(available.onActivate).not.toHaveBeenCalled();
   });
 
   it("keeps reveal protocol derivation private to the named component", async () => {

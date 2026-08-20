@@ -11,7 +11,11 @@ import {
 } from "../components/atlas/atlas-display";
 import { artRef } from "../primitives/art";
 import { glyph } from "../primitives/glyph";
-import { parseArtAssetKey, parseAtlasNodeId } from "../../types/identifiers";
+import {
+  parseArtAssetKey,
+  parseAtlasNodeId,
+  parseDreamsignId,
+} from "../../types/identifiers";
 import { testDreamscapeId, testGuideId } from "../../types/test-identities";
 
 export interface NodeSizing {
@@ -112,6 +116,7 @@ export function atlasFixtureNodes(sizing: NodeSizing): AtlasFixtureNode[] {
     const dreamsign =
       role === "available"
         ? {
+            id: parseDreamsignId("00000000-0000-4000-8000-000000000088"),
             name: assertLocalized("Golden Acorn"),
             art: artRef.dreamsign("acorn_gold.png"),
             rulesText: assertLocalized(

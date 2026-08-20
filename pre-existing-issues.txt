@@ -1,1 +1,3 @@
 The `scripts/desktop-screenshots.mjs --list-scenes` catalog loader fails under Node 24 before browser automation starts. Its `tsx` import graph reaches a `virtual:` URL that `scripts/raw-import-loader.mjs` forwards to Node's default ESM loader, which rejects the unsupported URL scheme with `ERR_UNSUPPORTED_ESM_URL_SCHEME`.
+
+The Tollgate release baseline fails `npm run trox:gate` in `trox:check-generated` because `.generated/localization/bundles/ar.trox.json` is regenerated with different content and reported stale. Tollgate's clean diagnostic matrix reproduces the same failure on release and candidate sources and classifies the Trox result as inherited from base.
