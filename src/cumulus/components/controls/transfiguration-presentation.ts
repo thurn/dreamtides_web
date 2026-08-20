@@ -4,7 +4,7 @@ import type { TransfigurationFormDefinition } from "../../../types/transfigurati
 
 export type LocalizedTransfigurationPresentation = Pick<
   TransfigurationFormDefinition,
-  "glyph" | "accentColor"
+  "glossaryUuid" | "glyph" | "accentColor"
 > & {
   readonly name: LocalizedString;
   readonly description: LocalizedString;
@@ -14,6 +14,7 @@ export function localizedTransfigurationPresentation(
   presentation: TransfigurationFormDefinition,
 ): LocalizedTransfigurationPresentation {
   return {
+    glossaryUuid: presentation.glossaryUuid,
     glyph: presentation.glyph,
     accentColor: presentation.accentColor,
     name: localizedSourceText(presentation.name),

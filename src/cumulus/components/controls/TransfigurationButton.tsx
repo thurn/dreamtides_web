@@ -10,6 +10,10 @@ import { StandaloneGlyph } from "./StandaloneGlyph";
 import { opaque, txa } from "@trox/runtime";
 import { useLocalizer } from "../../../runtime/localization/use-localizer";
 import type { LocalizedTransfigurationPresentation } from "./transfiguration-presentation";
+import { useRevealSource } from "../../internal/reveal/context";
+import { revealEntityId } from "../../internal/reveal/identity";
+import { richText } from "../card/rich-text";
+import { useRef } from "react";
 
 /** Identity and authored presentation shared by every Transfiguration choice. */
 export interface TransfigurationButtonBaseModel {
@@ -77,10 +81,36 @@ export function TransfigurationButton({
   const accent = form.presentation.accentColor;
   const compact = layout === "compact";
   const showPrice = !compact && form.pricing.kind === "essence";
+  const suppressCompatibilityClick = useRef(false);
+  const binding = useRevealSource({
+    identity: {
+      entityType: "glossary-term",
+      entityId: revealEntityId(
+        "glossary-term",
+        form.presentation.glossaryUuid,
+      ),
+    },
+    spec: {
+      primary: {
+        kind: "infoCard",
+        card: {
+          variant: "icon",
+          glyph,
+          title: form.presentation.name,
+          body: richText.plain(form.presentation.description),
+        },
+      },
+      secondaries: [],
+    },
+    onActivate: canSelect ? () => onPress(form.type) : undefined,
+  });
+  const pointerDown = binding.sourceProps.onPointerDown;
 
   return (
     <Pressable
       as="button"
+      ref={binding.ref}
+      {...binding.sourceProps}
       data-transfiguration-button-layout={layout}
       role="radio"
       aria-checked={selected}
@@ -103,10 +133,25 @@ export function TransfigurationButton({
               "[accessibility] [transfiguration] Name and quoted price for a selectable Essence-priced Transfiguration form. form_name is the authored catalog name; essence_cost is the displayed non-negative Essence amount.",
             )
       }
-      disabled={!canSelect}
+      aria-disabled={canSelect ? undefined : true}
       data-testid={testId}
-      onClick={canSelect ? () => onPress(form.type) : undefined}
+      onPointerDown={(event) => {
+        suppressCompatibilityClick.current = event.pointerType === "touch";
+        pointerDown?.(event);
+      }}
+      onClick={(event) => {
+        if (!canSelect) return;
+        if (event.detail === 0) {
+          suppressCompatibilityClick.current = false;
+          onPress(form.type);
+        } else if (suppressCompatibilityClick.current) {
+          suppressCompatibilityClick.current = false;
+        } else {
+          onPress(form.type);
+        }
+      }}
       style={{
+        ...binding.sourceProps.style,
         height: compact ? token("--touch-min") : undefined,
         width: "100%",
         minWidth: 0,

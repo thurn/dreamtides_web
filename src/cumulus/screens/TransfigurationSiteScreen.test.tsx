@@ -638,7 +638,7 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-form-Empowered"]',
       )?.dataset.revealPrimaryVariant,
-    ).toBeUndefined();
+    ).toBe("icon");
     expect(
       container.querySelector<HTMLElement>(
         '[data-testid="cumulus-transfiguration-form-Empowered"]',

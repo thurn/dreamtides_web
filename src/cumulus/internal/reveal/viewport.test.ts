@@ -88,6 +88,10 @@ describe("captureVisualViewport", () => {
     const scroller = document.createElement("div");
     const source = document.createElement("button");
     scroller.style.overflowY = "auto";
+    Object.defineProperties(scroller, {
+      clientHeight: { value: 100 },
+      scrollHeight: { value: 200 },
+    });
     scroller.append(source);
     outer.append(scroller);
     document.body.append(outer);
@@ -95,5 +99,21 @@ describe("captureVisualViewport", () => {
     expect(findRevealBoundary(source)).toBe(scroller);
 
     outer.remove();
+  });
+
+  it("ignores an overflow container whose content fits without scrolling", () => {
+    const scroller = document.createElement("div");
+    const source = document.createElement("button");
+    scroller.style.overflowY = "auto";
+    Object.defineProperties(scroller, {
+      clientHeight: { value: 100 },
+      scrollHeight: { value: 100 },
+    });
+    scroller.append(source);
+    document.body.append(scroller);
+
+    expect(findRevealBoundary(source)).toBeNull();
+
+    scroller.remove();
   });
 });

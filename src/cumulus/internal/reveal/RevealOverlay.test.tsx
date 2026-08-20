@@ -175,6 +175,10 @@ describe("RevealOverlay", () => {
   it("keeps a source reveal inside its nearest scrolling ancestor", () => {
     const scroller = document.createElement("div");
     scroller.style.overflowY = "auto";
+    Object.defineProperties(scroller, {
+      clientHeight: { configurable: true, value: 250 },
+      scrollHeight: { configurable: true, value: 500 },
+    });
     scroller.getBoundingClientRect = () => ({
       x: 0,
       y: 50,

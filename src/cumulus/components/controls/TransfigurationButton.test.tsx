@@ -42,10 +42,66 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  vi.restoreAllMocks();
   document.body.innerHTML = "";
 });
 
 describe("TransfigurationButton", () => {
+  it("reveals the authored form description on pointer inspection", async () => {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue({
+      x: 100,
+      y: 100,
+      left: 100,
+      top: 100,
+      right: 348,
+      bottom: 210,
+      width: 248,
+      height: 110,
+      toJSON: () => ({}),
+    });
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <LocalizedTransfigurationButton
+          form={empowered}
+          layout="wide"
+          selected={false}
+          onPress={() => undefined}
+        />,
+      );
+    });
+
+    const button = container.querySelector<HTMLButtonElement>("button")!;
+    const descriptionId = button.getAttribute("aria-describedby")!;
+    expect(button.dataset.revealEntityType).toBe("glossary-term");
+    expect(button.dataset.revealEntityId).toBe(
+      empowered.presentation.glossaryUuid,
+    );
+    expect(document.querySelectorAll(`#${descriptionId} > span`)).toHaveLength(
+      2,
+    );
+
+    const pointerOver = new MouseEvent("pointerover", { bubbles: true });
+    Object.defineProperties(pointerOver, {
+      pointerType: { value: "mouse" },
+      pointerId: { value: 1 },
+    });
+    act(() => {
+      button.dispatchEvent(pointerOver);
+    });
+
+    await vi.waitFor(() =>
+      expect(
+        document.querySelector('[data-cumulus-reveal-card="primary"]'),
+      ).not.toBeNull(),
+    );
+
+    act(() => root.unmount());
+  });
+
   it("owns the compact treatment and reports its semantic form type", () => {
     const container = document.createElement("div");
     document.body.append(container);

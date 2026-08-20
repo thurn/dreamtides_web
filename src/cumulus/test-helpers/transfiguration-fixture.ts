@@ -9,7 +9,7 @@ export function transfigurationFormFixture(
 ): TransfigurationFormDefinition {
   return {
     id,
-    glossaryUuid: testGlossaryEntryId("00000000-0000-4000-8000-000000000001"),
+    glossaryUuid: testGlossaryEntryId(`transfiguration-${id}`),
     name: `Fixture ${id}`,
     // localization-ignore: test-only fixture mirrors authored RON presentation copy.
     description: `Fixture ${id} effect`,
@@ -26,6 +26,7 @@ export function localizedTransfigurationFormFixture(
 ): LocalizedTransfigurationPresentation {
   const form = transfigurationFormFixture(id);
   return {
+    glossaryUuid: form.glossaryUuid,
     glyph: form.glyph,
     accentColor: form.accentColor,
     name: assertLocalized(form.name),

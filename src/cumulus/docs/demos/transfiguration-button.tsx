@@ -8,11 +8,13 @@ import {
 import { token } from "../../primitives/tokens";
 import type { CumulusComponent } from "../registry";
 import type { LocalizedTransfigurationPresentation } from "../../components/controls/transfiguration-presentation";
+import { testGlossaryEntryId } from "../../../types/test-identities";
 
 function demoPresentation(
   id: TransfigurationType,
 ): LocalizedTransfigurationPresentation {
   return {
+    glossaryUuid: testGlossaryEntryId(`transfiguration-${id}`),
     name: assertLocalized(id),
     description: assertLocalized(`${id} demo effect`),
     glyph: `transfiguration${id}`,
@@ -82,9 +84,12 @@ export const transfigurationButtonDemo: CumulusComponent = {
   id: "transfiguration-button",
   title: "Transfiguration Button",
   blurb:
-    "The canonical forge-form choice: compact and wide layouts for first-class unpriced and Essence-priced choices.",
+    "The canonical forge-form choice: compact and wide layouts for first-class unpriced and Essence-priced choices, with an authored description revealed on inspection.",
   callout:
     "Choose pricing semantics independently from layout: unpriced choices carry no payment data, while Essence-priced choices own amount and affordability.",
+  details: [
+    "Hover or keyboard focus reveals the form name and authored description in the shared InfoCard; touch players can press and hold to read without selecting.",
+  ],
   group: "Actions & Inputs",
   docName: "TransfigurationButton",
   Component: TransfigurationButtonDemo,

@@ -16,7 +16,7 @@ function physicalInset(styles: CSSStyleDeclaration, name: string): number {
   return Number.isFinite(value) ? value : 0;
 }
 
-/** Finds the scrolling surface whose visible box bounds a source's reveal. */
+/** Finds the actively scrolling surface whose visible box bounds a source's reveal. */
 export function findRevealBoundary(
   source: Element,
   target: Window = window,
@@ -28,12 +28,13 @@ export function findRevealBoundary(
     ancestor !== target.document.documentElement
   ) {
     const styles = target.getComputedStyle(ancestor);
-    if (
-      styles.overflowX === "auto" ||
-      styles.overflowX === "scroll" ||
-      styles.overflowY === "auto" ||
-      styles.overflowY === "scroll"
-    ) {
+    const scrollsX =
+      (styles.overflowX === "auto" || styles.overflowX === "scroll") &&
+      ancestor.scrollWidth > ancestor.clientWidth;
+    const scrollsY =
+      (styles.overflowY === "auto" || styles.overflowY === "scroll") &&
+      ancestor.scrollHeight > ancestor.clientHeight;
+    if (scrollsX || scrollsY) {
       return ancestor;
     }
     ancestor = ancestor.parentElement;
