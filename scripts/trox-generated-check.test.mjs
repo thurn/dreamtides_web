@@ -40,6 +40,42 @@ describe("clean Trox bundle generation", () => {
     }
   });
 
+  it("includes generated localization sources in clean regeneration", () => {
+    const root = fixture();
+    mkdirSync(resolve(root, ".generated/localization/sources"), {
+      recursive: true,
+    });
+    writeFileSync(
+      resolve(root, ".generated/localization/sources/derived.ron"),
+      '[Tx("Derived message")]\n',
+    );
+    try {
+      checkGeneratedTroxBundles({
+        root,
+        generate: (stagingRoot) => {
+          expect(
+            readFileSync(
+              resolve(
+                stagingRoot,
+                ".generated/localization/sources/derived.ron",
+              ),
+              "utf8",
+            ),
+          ).toBe('[Tx("Derived message")]\n');
+          writeFileSync(
+            resolve(
+              stagingRoot,
+              ".generated/localization/bundles/en-US.trox.json",
+            ),
+            "expected\n",
+          );
+        },
+      });
+    } finally {
+      rmSync(root, { recursive: true, force: true });
+    }
+  });
+
   it("rejects stale bytes and a stale file set", () => {
     const root = fixture();
     try {

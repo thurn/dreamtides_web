@@ -18,6 +18,7 @@ import { assertCanonicalLocalizationContract } from "./canonical-localization-au
 
 const QUEST_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED_PATH = join(".generated", "localization", "bundles");
+const GENERATED_SOURCES_PATH = join(".generated", "localization", "sources");
 
 function filesUnder(directory) {
   if (!existsSync(directory)) return [];
@@ -65,6 +66,13 @@ export function checkGeneratedTroxBundles(options = {}) {
       recursive: true,
     });
     cpSync(join(root, "trox.ron"), join(cleanRoot, "trox.ron"));
+    if (existsSync(join(root, GENERATED_SOURCES_PATH))) {
+      cpSync(
+        join(root, GENERATED_SOURCES_PATH),
+        join(cleanRoot, GENERATED_SOURCES_PATH),
+        { recursive: true },
+      );
+    }
     mkdirSync(join(cleanRoot, GENERATED_PATH), { recursive: true });
 
     const generate =
