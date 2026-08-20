@@ -47,6 +47,9 @@ describe("JourneyStatusBar documentation demo", () => {
     expect(stage?.style.position).toBe("relative");
     expect(stage?.style.transform).toBe("translateZ(0)");
     expect(stage?.style.overflow).toBe("hidden");
+    expect(anchor?.querySelector<HTMLElement>("i")?.style.color).toBe(
+      "var(--text-tutorial-highlight)",
+    );
 
     act(() => root.unmount());
   });

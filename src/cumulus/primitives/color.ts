@@ -46,6 +46,7 @@ export type ColorRole =
   | "transfigured"
   | "text-primary"
   | "text-secondary"
+  | "tutorial-highlight"
   | "text-on-accent"
   | "white";
 
@@ -62,6 +63,7 @@ const COLOR_ROLE_TOKENS: Record<ColorRole, string> = {
   transfigured: token("--transfigured"),
   "text-primary": token("--text-primary"),
   "text-secondary": token("--text-secondary"),
+  "tutorial-highlight": token("--text-tutorial-highlight"),
   "text-on-accent": token("--text-on-accent"),
   white: "#ffffff",
 };

@@ -572,7 +572,7 @@ function QsbEssence({
           fontSize: Math.round(20 * scale),
         }}
       >
-        <StandaloneGlyph glyph={GLYPHS.essence} color="essence" />
+        <StandaloneGlyph glyph={GLYPHS.essence} color="tutorial-highlight" />
       </span>
     </Pressable>
   );
