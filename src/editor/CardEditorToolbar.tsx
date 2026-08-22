@@ -260,6 +260,18 @@ export default function CardEditorToolbar({
         }
       />
 
+      <ModeToggle
+        active={displayState.showImageNumberCopy}
+        icon="⧉"
+        label="Image #s"
+        title="Show buttons that copy each card's image number"
+        onToggle={() =>
+          updateDisplayState({
+            showImageNumberCopy: !displayState.showImageNumberCopy,
+          })
+        }
+      />
+
       {displayState.checkboxTag !== "" ? (
         <ModeToggle
           active

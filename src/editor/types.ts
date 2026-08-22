@@ -129,6 +129,11 @@ export interface EditorDisplayState {
    */
   checkboxTag: string;
   /**
+   * When true, each card shows a button that copies its canonical art image
+   * number to the clipboard.
+   */
+  showImageNumberCopy: boolean;
+  /**
    * When true, each card shows a small overlay badge with the rules-text font
    * size (in px) the auto-shrink fitter computed to fit the rules box. A
    * diagnostic aid for spotting cards whose text was shrunk the most.

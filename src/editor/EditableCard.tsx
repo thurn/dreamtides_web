@@ -22,6 +22,7 @@ import type {
   EditorTag,
 } from "./types";
 import type { CardId } from "../types/card-identity";
+import { logEvent } from "../logging";
 
 export interface EditableCardProps {
   card: EditorCardRecord;
@@ -42,6 +43,8 @@ export interface EditableCardProps {
    * editors are suppressed so only this one tag is in play.
    */
   checkboxTag: string;
+  /** Show a per-card control that copies the art image number. */
+  showImageNumberCopy: boolean;
   /**
    * When true, overlay a small badge on the card showing the rules-text font
    * size the fitter computed (in px).
@@ -254,6 +257,78 @@ function CheckboxTagControl({
   );
 }
 
+interface ImageNumberCopyControlProps {
+  cardId: CardId;
+  imageNumber: number;
+}
+
+async function copyTextToClipboard(text: string): Promise<void> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return;
+  } catch {
+    // Clipboard permissions can be disabled in embedded or automated browser
+    // contexts. Keep the explicit user gesture useful there by falling back to
+    // the browser's selection-based copy command.
+  }
+
+  const copySource = document.createElement("textarea");
+  copySource.value = text;
+  copySource.setAttribute("readonly", "");
+  copySource.style.position = "fixed";
+  copySource.style.opacity = "0";
+  document.body.append(copySource);
+  copySource.select();
+  const copied = document.execCommand("copy");
+  copySource.remove();
+  if (!copied) {
+    throw new Error("Clipboard copy was rejected.");
+  }
+}
+
+function ImageNumberCopyControl({
+  cardId,
+  imageNumber,
+}: ImageNumberCopyControlProps) {
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">(
+    "idle",
+  );
+
+  const copyImageNumber = async () => {
+    try {
+      await copyTextToClipboard(String(imageNumber));
+      setCopyState("copied");
+      logEvent("card_editor_image_number_copied", { cardId, imageNumber });
+    } catch {
+      setCopyState("error");
+    }
+  };
+
+  const label =
+    copyState === "copied"
+      ? `Copied ${String(imageNumber)}`
+      : copyState === "error"
+        ? "Copy failed"
+        : `Copy ${String(imageNumber)}`;
+
+  return (
+    <button
+      type="button"
+      className="cumulus card-editor-image-number-copy"
+      data-editor-image-number-copy-button={imageNumber}
+      aria-label={`Copy image number ${String(imageNumber)}`}
+      title={`Copy image number ${String(imageNumber)}`}
+      onClick={(event) => {
+        event.stopPropagation();
+        void copyImageNumber();
+      }}
+    >
+      <i className={GLYPHS.copy} aria-hidden="true" />
+      <span>{label}</span>
+    </button>
+  );
+}
+
 export default function EditableCard({
   card,
   duplicateUsage,
@@ -268,6 +343,7 @@ export default function EditableCard({
   tideEditing,
   artEditing,
   checkboxTag,
+  showImageNumberCopy,
   showFontSize,
   showGlossaryInfoOnHover,
   showAmplifiedText,
@@ -350,6 +426,12 @@ export default function EditableCard({
       color={tagColor(checkboxTag, availableTags)}
       saving={tagSaving}
       onToggle={toggleCheckboxTag}
+    />
+  ) : null;
+  const imageNumberCopyControl = showImageNumberCopy ? (
+    <ImageNumberCopyControl
+      cardId={card.id}
+      imageNumber={card.preview.imageNumber}
     />
   ) : null;
 
@@ -660,6 +742,7 @@ export default function EditableCard({
         {fontSizeOverlay}
         {amplifiedEditorPanel}
         {checkboxControl}
+        {imageNumberCopyControl}
         {hovering && mtgName !== "" ? (
           <MtgNameTooltip anchorRef={cardRef} mtgName={mtgName} />
         ) : null}
@@ -714,6 +797,7 @@ export default function EditableCard({
         />
       ) : null}
       {checkboxControl}
+      {imageNumberCopyControl}
       {hovering && mtgName !== "" ? (
         <MtgNameTooltip anchorRef={cardRef} mtgName={mtgName} />
       ) : null}

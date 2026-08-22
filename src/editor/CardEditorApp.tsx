@@ -116,6 +116,7 @@ function displayStateDataAttributes(displayState: EditorDisplayState) {
     "data-editor-tide-editing": String(displayState.tideEditing),
     "data-editor-art-editing": String(displayState.artEditing),
     "data-editor-checkbox-tag": displayState.checkboxTag,
+    "data-editor-image-number-copy": String(displayState.showImageNumberCopy),
     "data-editor-show-font-size": String(displayState.showFontSize),
     "data-editor-show-glossary-info-on-hover": String(
       displayState.showGlossaryInfoOnHover,
@@ -1251,6 +1252,7 @@ export default function CardEditorApp({
                 tideEditing={!isRonSource && displayState.tideEditing}
                 artEditing={displayState.artEditing}
                 checkboxTag={displayState.checkboxTag}
+                showImageNumberCopy={displayState.showImageNumberCopy}
                 showFontSize={displayState.showFontSize}
                 showGlossaryInfoOnHover={displayState.showGlossaryInfoOnHover}
                 showAmplifiedText={displayState.showAmplifiedText}

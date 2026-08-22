@@ -242,6 +242,7 @@ beforeEach(() => {
 
 afterEach(() => {
   document.body.innerHTML = "";
+  Reflect.deleteProperty(document, "execCommand");
   vi.restoreAllMocks();
 });
 
@@ -315,6 +316,113 @@ describe("CardEditorApp", () => {
       editorCard?.querySelector('[data-editor-field="rendered-text"]')
         ?.textContent,
     ).toContain("Draw a card.");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("copies each card's image number when enabled by the URL", async () => {
+    window.history.pushState(null, "", "/cards?imageNumberCopy=1");
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText },
+    });
+    const cards = [
+      makeEditorCard({
+        id: testCardId("copy-image-number"),
+        preview: makePreview({
+          id: "copy-image-number",
+          imageNumber: 481516,
+        }),
+      }),
+    ];
+    const { container, root } = await mountLoadedApp(cards);
+    const button = container.querySelector<HTMLButtonElement>(
+      '[data-editor-image-number-copy-button="481516"]',
+    );
+
+    expect(button?.textContent).toContain("Copy 481516");
+    await act(async () => {
+      button?.click();
+      await Promise.resolve();
+    });
+    expect(writeText).toHaveBeenCalledWith("481516");
+    expect(button?.textContent).toContain("Copied 481516");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("toggles image-number copy buttons from the toolbar and updates the URL", async () => {
+    const { container, root } = await mountLoadedApp([
+      makeEditorCard({
+        id: testCardId("toggle-image-number-copy"),
+        preview: makePreview({ id: "toggle-image-number-copy" }),
+      }),
+    ]);
+    const toggle = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent?.includes("Image #s"),
+    );
+
+    if (toggle === undefined) {
+      throw new Error("Missing image-number copy toggle");
+    }
+
+    expect(
+      container.querySelector("[data-editor-image-number-copy-button]"),
+    ).toBeNull();
+    act(() => toggle.click());
+    expect(
+      container.querySelector("[data-editor-image-number-copy-button]"),
+    ).not.toBeNull();
+    expect(new URLSearchParams(window.location.search).get("imageNumberCopy")).toBe(
+      "1",
+    );
+
+    act(() => toggle.click());
+    expect(
+      container.querySelector("[data-editor-image-number-copy-button]"),
+    ).toBeNull();
+    expect(
+      new URLSearchParams(window.location.search).has("imageNumberCopy"),
+    ).toBe(false);
+
+    act(() => root.unmount());
+  });
+
+  it("falls back to selection-based copy when clipboard permission is denied", async () => {
+    window.history.pushState(null, "", "/cards?imageNumberCopy=1");
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: vi.fn().mockRejectedValue(new Error("denied")) },
+    });
+    const execCommand = vi.fn().mockReturnValue(true);
+    Object.defineProperty(document, "execCommand", {
+      configurable: true,
+      value: execCommand,
+    });
+    const { container, root } = await mountLoadedApp([
+      makeEditorCard({
+        id: testCardId("fallback-copy-image-number"),
+        preview: makePreview({
+          id: "fallback-copy-image-number",
+          imageNumber: 108,
+        }),
+      }),
+    ]);
+    const button = container.querySelector<HTMLButtonElement>(
+      '[data-editor-image-number-copy-button="108"]',
+    );
+
+    await act(async () => {
+      button?.click();
+      await Promise.resolve();
+    });
+    expect(execCommand).toHaveBeenCalledWith("copy");
+    expect(button?.textContent).toContain("Copied 108");
 
     act(() => {
       root.unmount();

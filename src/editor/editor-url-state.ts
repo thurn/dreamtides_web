@@ -22,6 +22,7 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   tideEditing: false,
   artEditing: false,
   checkboxTag: "",
+  showImageNumberCopy: false,
   showFontSize: false,
   showGlossaryInfoOnHover: false,
   showAmplifiedText: false,
@@ -163,6 +164,7 @@ export function parseEditorDisplayState(
     tideEditing: params.get("tideedit") === "1",
     artEditing: params.get("artedit") === "1",
     checkboxTag: (params.get("checkboxtag") ?? DEFAULT_EDITOR_DISPLAY_STATE.checkboxTag).trim(),
+    showImageNumberCopy: params.get("imageNumberCopy") === "1",
     showFontSize: params.get("showfontsize") === "1",
     showGlossaryInfoOnHover: params.get("glossaryhover") === "1",
     showAmplifiedText: params.get("amplified") === "1",
@@ -213,6 +215,9 @@ export function serializeEditorDisplayState(
   }
   if (state.checkboxTag !== DEFAULT_EDITOR_DISPLAY_STATE.checkboxTag) {
     params.set("checkboxtag", state.checkboxTag);
+  }
+  if (state.showImageNumberCopy) {
+    params.set("imageNumberCopy", "1");
   }
   if (state.showFontSize) {
     params.set("showfontsize", "1");

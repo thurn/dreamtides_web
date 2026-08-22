@@ -173,6 +173,28 @@ describe("CardEditorToolbar", () => {
     act(() => root.unmount());
   });
 
+  it("toggles per-card image-number copy buttons", () => {
+    const onChange = vi.fn();
+    const { container, root } = mount(<StatefulToolbar onChange={onChange} />);
+    const toggle = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent?.includes("Image #s"),
+    );
+
+    if (toggle === undefined) {
+      throw new Error("Missing image-number copy toggle");
+    }
+
+    expect(toggle.getAttribute("aria-pressed")).toBe("false");
+    act(() => toggle.click());
+    expect(toggle.getAttribute("aria-pressed")).toBe("true");
+    expect(onChange).toHaveBeenLastCalledWith({
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      showImageNumberCopy: true,
+    });
+
+    act(() => root.unmount());
+  });
+
   it("toggles amplified previews and filters through the Filters panel", () => {
     const onChange = vi.fn();
     const { container, root } = mount(<StatefulToolbar onChange={onChange} />);

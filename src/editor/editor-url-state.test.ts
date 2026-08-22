@@ -69,6 +69,7 @@ describe("editor URL display state", () => {
       tideEditing: false,
       artEditing: false,
       checkboxTag: "",
+      showImageNumberCopy: false,
       showFontSize: false,
       showGlossaryInfoOnHover: false,
       showAmplifiedText: false,
@@ -203,6 +204,21 @@ describe("editor URL display state", () => {
       "Elves",
     );
     expect(parseEditorDisplayState("").checkboxTag).toBe("");
+  });
+
+  it("round-trips image-number copy controls", () => {
+    const state = {
+      ...DEFAULT_EDITOR_DISPLAY_STATE,
+      showImageNumberCopy: true,
+    };
+    const params = serializeEditorDisplayState(state);
+
+    expect(params.get("imageNumberCopy")).toBe("1");
+    expect(parseEditorDisplayState(params).showImageNumberCopy).toBe(true);
+    expect(
+      parseEditorDisplayState("?imageNumberCopy=0").showImageNumberCopy,
+    ).toBe(false);
+    expect(parseEditorDisplayState("").showImageNumberCopy).toBe(false);
   });
 
   it("round-trips glossary hover info cards", () => {

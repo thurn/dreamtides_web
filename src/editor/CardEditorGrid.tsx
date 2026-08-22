@@ -39,6 +39,7 @@ export interface CardEditorGridProps {
   tideEditing: boolean;
   artEditing: boolean;
   checkboxTag: string;
+  showImageNumberCopy: boolean;
   showFontSize: boolean;
   showGlossaryInfoOnHover: boolean;
   showAmplifiedText: boolean;
@@ -94,6 +95,7 @@ export default function CardEditorGrid({
   tideEditing,
   artEditing,
   checkboxTag,
+  showImageNumberCopy,
   showFontSize,
   showGlossaryInfoOnHover,
   showAmplifiedText,
@@ -173,6 +175,7 @@ export default function CardEditorGrid({
       tideEditing={tideEditing}
       artEditing={artEditing}
       checkboxTag={checkboxTag}
+      showImageNumberCopy={showImageNumberCopy}
       showFontSize={showFontSize}
       showGlossaryInfoOnHover={showGlossaryInfoOnHover}
       showAmplifiedText={showAmplifiedText}

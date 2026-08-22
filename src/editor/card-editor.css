@@ -21,6 +21,34 @@
   font: var(--t-caption);
 }
 
+.card-editor-image-number-copy {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  width: 100%;
+  margin-top: var(--space-xs);
+  padding: var(--space-xs) var(--space-s);
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-control);
+  background: var(--surface-raised);
+  color: var(--text-primary);
+  font: var(--t-caption);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.card-editor-image-number-copy:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+}
+
+.card-editor-image-number-copy:focus-visible {
+  outline: var(--space-xxs) solid var(--accent-bright);
+  outline-offset: var(--space-xxs);
+}
+
 @media (max-width: 520px) {
   .card-editor-shell {
     height: auto !important;
