@@ -54,16 +54,32 @@ const imageViewerStatePath = path.join(
 );
 export const generatedDataTomlWatchPattern =
   path.resolve(path.join(__dirname, "data")) + "/*.toml*";
-export const generatedCardDataWatchPaths = [
-  path.join(__dirname, "data", "cards.toml"),
+export const generatedCardRuntimeDataPaths = [
   path.join(__dirname, "public", "card-data.json"),
   path.join(__dirname, "public", "cards_v2-data.json"),
+].map((filePath) => path.resolve(filePath));
+export const generatedCardDataWatchPaths = [
+  path.join(__dirname, "data", "cards.toml"),
+  ...generatedCardRuntimeDataPaths,
   path.join(__dirname, "src", "generated", "config", "card-role-data.json"),
 ].map((filePath) => path.resolve(filePath));
 export const cardEditorSourceWatchPaths = [
   path.join(__dirname, "data", "cards.ron"),
   path.join(__dirname, "data", "internal", "internal_card_metadata.ron"),
 ].map((filePath) => path.resolve(filePath));
+
+export function generatedCardArtifactsAreCurrent(
+  cardTomlPath: string,
+  artifactPaths: readonly string[],
+): boolean {
+  if (!fs.existsSync(cardTomlPath)) return false;
+  const sourceModifiedAt = fs.statSync(cardTomlPath).mtimeMs;
+  return artifactPaths.every(
+    (artifactPath) =>
+      fs.existsSync(artifactPath) &&
+      fs.statSync(artifactPath).mtimeMs >= sourceModifiedAt,
+  );
+}
 export const gameDataPipelineWatchPatterns = [
   path.resolve(path.join(__dirname, ".game-data-stage-*")) + "/**",
   path.resolve(path.join(__dirname, ".game-data-transactions")) + "/**",
@@ -807,9 +823,15 @@ export function cardDataHotReloadPlugin(): Plugin {
 
       const regenerateAndReload = (): void => {
         try {
-          regenerateCardData();
+          const artifactsCurrent = generatedCardArtifactsAreCurrent(
+            cardTomlPath,
+            generatedCardRuntimeDataPaths,
+          );
+          if (!artifactsCurrent) regenerateCardData();
           console.log(
-            "[card-data] cards.toml changed -> regenerated card JSON -> notifying running app",
+            artifactsCurrent
+              ? "[card-data] cards.toml changed -> generated card JSON is current -> notifying running app"
+              : "[card-data] cards.toml changed -> regenerated card JSON -> notifying running app",
           );
           // Targeted custom event rather than a full reload: only the running
           // battle/journey app reloads to pick up the edit (see

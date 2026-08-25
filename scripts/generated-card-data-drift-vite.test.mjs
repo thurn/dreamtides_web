@@ -1,5 +1,7 @@
 // @vitest-environment node
 
+import { mkdtempSync, rmSync, utimesSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
@@ -8,6 +10,7 @@ import viteConfig, {
   gameDataPipelineWatchPatterns,
   generatedDataTomlWatchPattern,
   generatedCardDataDriftPlugin,
+  generatedCardArtifactsAreCurrent,
   generatedCardDataWatchPaths,
 } from "../vite.config.ts";
 import { generatedConfigDataWatchPaths } from "./config-data.mjs";
@@ -38,6 +41,24 @@ function callHotUpdate(plugin, context) {
 }
 
 describe("generated card data drift Vite integration", () => {
+  it("recognizes editor-generated card artifacts newer than cards.toml", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "card-artifact-times-"));
+    const source = join(tempRoot, "cards.toml");
+    const artifact = join(tempRoot, "card-data.json");
+    try {
+      writeFileSync(source, "source\n");
+      writeFileSync(artifact, "[]\n");
+      utimesSync(source, 10, 10);
+      utimesSync(artifact, 11, 11);
+      expect(generatedCardArtifactsAreCurrent(source, [artifact])).toBe(true);
+
+      utimesSync(source, 12, 12);
+      expect(generatedCardArtifactsAreCurrent(source, [artifact])).toBe(false);
+    } finally {
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+
   it("keeps editor-written card data files out of Vite's reload watcher", () => {
     // Generated TOML files are ignored so editor writes to any card or tag
     // TOML (not just the default cards.toml) never trigger a full

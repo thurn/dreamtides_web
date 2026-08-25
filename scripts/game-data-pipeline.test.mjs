@@ -17,6 +17,7 @@ import {
   gameDataPipelineInternals,
   recoverGameDataPublication,
   sourceRevision,
+  stageAndPublishGameDataEdit,
 } from "./game-data-pipeline.mjs";
 
 const roots = [];
@@ -35,6 +36,18 @@ function fixture() {
 }
 
 describe("game-data publication", () => {
+  it("rejects unknown staged-edit validation modes", async () => {
+    await expect(
+      stageAndPublishGameDataEdit({ validationMode: "fast-ish" }),
+    ).rejects.toThrow("unknown game-data validation mode");
+  });
+
+  it("requires a dataset for compiled-dataset validation", async () => {
+    await expect(
+      stageAndPublishGameDataEdit({ validationMode: "compiled-dataset" }),
+    ).rejects.toThrow("compiled-dataset validation requires a dataset");
+  });
+
   it("explains the Rust prerequisite when Cargo is unavailable", () => {
     const { root } = fixture();
     const originalPath = process.env.PATH;

@@ -5,6 +5,7 @@ import {
   mkdtempSync,
   mkdirSync,
   readFileSync,
+  rmSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -24,8 +25,25 @@ import {
   transformCard,
   transformExplorationData,
   validateAvatarMapping,
+  writeTextFileIfChanged,
 } from "./setup-assets.mjs";
 import { EXPLORATION_EFFECT_KINDS } from "./exploration-effect-kinds.mjs";
+
+describe("writeTextFileIfChanged", () => {
+  it("does not rewrite an unchanged generated localization source", () => {
+    const tempRoot = mkdtempSync(join(tmpdir(), "generated-localization-"));
+    const generatedPath = join(tempRoot, "cards_localization.ron");
+    try {
+      writeFileSync(generatedPath, "current\n");
+
+      expect(writeTextFileIfChanged(generatedPath, "current\n")).toBe(false);
+      expect(writeTextFileIfChanged(generatedPath, "updated\n")).toBe(true);
+      expect(readFileSync(generatedPath, "utf8")).toBe("updated\n");
+    } finally {
+      rmSync(tempRoot, { recursive: true, force: true });
+    }
+  });
+});
 
 describe("generateOpponentsData", () => {
   it("writes the compiled browser artifact during asset setup", () => {

@@ -30,6 +30,7 @@ import {
   sourceRevision,
   stageAndPublishGameDataEdit,
 } from "./game-data-pipeline.mjs";
+import { regenerateCardData } from "./setup-assets.mjs";
 
 // API-side facet descriptors bind each card taxonomy to its registry endpoint
 // and the data-layer helpers that read, serialize, and cascade it. Tags and
@@ -76,6 +77,35 @@ const CARD_SOURCE_PATHS = [
   CARD_RON_PATH,
   INTERNAL_CARD_METADATA_RON_PATH,
 ];
+
+function prepareStagedCardArtifacts(stageRoot) {
+  const cardTomlPath = join(stageRoot, CARD_TOML_PATH);
+  regenerateCardData({
+    cardTomlPath,
+    cardV2TomlPath: cardTomlPath,
+    publicDir: join(stageRoot, "public"),
+    cardRoleJsonPath: join(
+      stageRoot,
+      "src",
+      "generated",
+      "config",
+      "card-role-data.json",
+    ),
+    cardLocalizationRonPath: join(
+      stageRoot,
+      "data",
+      "generated",
+      "cards_localization.ron",
+    ),
+    cardTransfigurationLocalizationRonPath: join(
+      stageRoot,
+      ".generated",
+      "localization",
+      "sources",
+      "card_transfigurations.ron",
+    ),
+  });
+}
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/u;
 
 const defaultFileSystem = {
@@ -553,6 +583,7 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
     }
     const totalStart = performance.now();
     try {
+      const metadataOnly = body.field === "tags";
       const result = await stageAndPublishGameDataEdit({
         rootDir,
         dataset: "cards",
@@ -564,6 +595,18 @@ async function handlePatch(req, res, rootDir, cardId, cardTomlPath, fileSystem) 
           field: body.field,
           value: validation.value,
         }],
+        // Per-card tags live in the internal metadata sidecar and cannot alter
+        // player-facing rules or cross-catalog game behavior. The Rust compiler
+        // validates the typed catalog, then the shared card-only generator
+        // validates and materializes every card artifact needed by the editor.
+        // Other card fields retain the exhaustive cross-catalog validation.
+        ...(metadataOnly
+          ? {
+              prepareDerivedArtifacts: ({ stageRoot }) =>
+                prepareStagedCardArtifacts(stageRoot),
+              validationMode: "compiled-dataset",
+            }
+          : {}),
       });
       const confirmedCard = readEditorCards({ rootDir, cardTomlPath }).find(
         (card) => card.id === cardId,

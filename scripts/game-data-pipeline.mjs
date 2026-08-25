@@ -58,8 +58,12 @@ function ensureCompiler(rootDir) {
   return binaryPath(rootDir);
 }
 
-function runCompiler(rootDir, args, { input, dataRoot = rootDir } = {}) {
-  const binary = ensureCompiler(rootDir);
+function runCompiler(
+  rootDir,
+  args,
+  { input, dataRoot = rootDir, compilerPath } = {},
+) {
+  const binary = compilerPath ?? ensureCompiler(rootDir);
   let stdout;
   try {
     stdout = execFileSync(binary, ["--root", dataRoot, "--json", ...args], {
@@ -82,23 +86,25 @@ function runCompiler(rootDir, args, { input, dataRoot = rootDir } = {}) {
   return JSON.parse(stdout);
 }
 
-export function listGameData({ rootDir = MODULE_ROOT } = {}) {
-  return runCompiler(resolve(rootDir), ["list"]);
+export function listGameData({ rootDir = MODULE_ROOT, compilerPath } = {}) {
+  return runCompiler(resolve(rootDir), ["list"], { compilerPath });
 }
 
 function stageRootFor(rootDir) {
   return mkdtempSync(join(rootDir, ".game-data-stage-"));
 }
 
-function prepareValidationRoot(rootDir, stageRoot) {
+function prepareValidationRoot(rootDir, stageRoot, { includeTypeScriptWorkspace = true } = {}) {
   cpSync(join(rootDir, "data"), join(stageRoot, "data"), {
     recursive: true,
     dereference: false,
   });
   symlinkSync(join(rootDir, "docs"), join(stageRoot, "docs"), "dir");
-  cpSync(join(rootDir, "scripts"), join(stageRoot, "scripts"), { recursive: true });
-  cpSync(join(rootDir, "src"), join(stageRoot, "src"), { recursive: true });
-  symlinkSync(join(rootDir, "node_modules"), join(stageRoot, "node_modules"), "dir");
+  if (includeTypeScriptWorkspace) {
+    cpSync(join(rootDir, "scripts"), join(stageRoot, "scripts"), { recursive: true });
+    cpSync(join(rootDir, "src"), join(stageRoot, "src"), { recursive: true });
+    symlinkSync(join(rootDir, "node_modules"), join(stageRoot, "node_modules"), "dir");
+  }
   mkdirSync(join(stageRoot, "public"), { recursive: true });
   mkdirSync(join(stageRoot, "src", "generated", "config"), { recursive: true });
 }
@@ -417,7 +423,14 @@ export async function stageAndPublishGameDataEdit({
   stagedFiles = {},
   prepareDerivedArtifacts,
   additionalPublishPaths = [],
+  validationMode = "full",
 } = {}) {
+  if (validationMode !== "full" && validationMode !== "compiled-dataset") {
+    throw new Error(`unknown game-data validation mode: ${validationMode}`);
+  }
+  if (validationMode === "compiled-dataset" && typeof dataset !== "string") {
+    throw new Error("compiled-dataset validation requires a dataset");
+  }
   rootDir = resolve(rootDir);
   const release = acquireLock(rootDir);
   let stageRoot;
@@ -434,9 +447,16 @@ export async function stageAndPublishGameDataEdit({
       error.currentSourceRevision = currentRevision;
       throw error;
     }
-    const manifest = listGameData({ rootDir });
+    // Building the compiler is deliberately checked for every edit, but the
+    // resulting executable can be reused by all compiler operations in this
+    // transaction. Re-running Cargo before list, edit, and compile dominates
+    // small metadata saves even when the binary is already current.
+    const compilerPath = ensureCompiler(rootDir);
+    const manifest = listGameData({ rootDir, compilerPath });
     stageRoot = stageRootFor(rootDir);
-    prepareValidationRoot(rootDir, stageRoot);
+    prepareValidationRoot(rootDir, stageRoot, {
+      includeTypeScriptWorkspace: validationMode === "full",
+    });
     for (const [relativePath, contents] of Object.entries(stagedFiles)) {
       const destination = assertRepositoryRelativePath(stageRoot, relativePath);
       mkdirSync(dirname(destination), { recursive: true });
@@ -448,6 +468,7 @@ export async function stageAndPublishGameDataEdit({
       {
         dataRoot: rootDir,
         input: JSON.stringify({ dataset, operations }),
+        compilerPath,
       },
     );
     formatStagedRonSources(rootDir, stageRoot, sourcePaths);
@@ -463,16 +484,19 @@ export async function stageAndPublishGameDataEdit({
         sourceRevision: currentRevision,
       };
     }
-    const compileReport = runCompiler(
-      rootDir,
-      ["compile", "--staging-root", stageRoot],
-      { dataRoot: stageRoot },
-    );
+    const compileArgs = ["compile", "--staging-root", stageRoot];
+    if (validationMode === "compiled-dataset") compileArgs.push("--dataset", dataset);
+    const compileReport = runCompiler(rootDir, compileArgs, {
+      dataRoot: stageRoot,
+      compilerPath,
+    });
     if (prepareDerivedArtifacts !== undefined) {
       await prepareDerivedArtifacts({ stageRoot, compileReport });
     }
     validateTomlDocuments(manifest, stageRoot);
-    validateWithTypeScript(rootDir, stageRoot);
+    if (validationMode === "full") {
+      validateWithTypeScript(rootDir, stageRoot);
+    }
     const publication = publish(rootDir, stageRoot, manifest, {
       canonicalPaths: [...sourcePaths, ...additionalPublishPaths],
       lockHeld: true,

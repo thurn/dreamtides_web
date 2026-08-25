@@ -1,3 +1,4 @@
+import { memo, useMemo, useRef } from "react";
 import CardBrowserGrid from "./card-browser/CardBrowserGrid";
 import type {
   CardNameSubstringGroup,
@@ -15,6 +16,8 @@ import type {
 } from "./types";
 import type { CardId } from "../types/card-identity";
 import type { IdentityRecord } from "../types/identifiers";
+
+const MemoizedEditableCard = memo(EditableCard);
 
 export interface CardTagSaveState {
   saving: boolean;
@@ -118,6 +121,78 @@ export default function CardEditorGrid({
   onRemoveCardTide,
   onOpenManageTides,
 }: CardEditorGridProps) {
+  const latestHandlers = useRef({
+    onRulesFontSize,
+    onOpenArtEditor,
+    onFieldBeginEdit,
+    onFieldDraftChange,
+    onFieldCancel,
+    onFieldSave,
+    onFieldCommit,
+    onAddCardTag,
+    onRemoveCardTag,
+    onOpenManageTags,
+    onAddCardTide,
+    onRemoveCardTide,
+    onOpenManageTides,
+  });
+  latestHandlers.current = {
+    onRulesFontSize,
+    onOpenArtEditor,
+    onFieldBeginEdit,
+    onFieldDraftChange,
+    onFieldCancel,
+    onFieldSave,
+    onFieldCommit,
+    onAddCardTag,
+    onRemoveCardTag,
+    onOpenManageTags,
+    onAddCardTide,
+    onRemoveCardTide,
+    onOpenManageTides,
+  };
+  const stableHandlers = useMemo(
+    () => ({
+      onRulesFontSize: (cardId: CardId, fontSizePx: number) =>
+        latestHandlers.current.onRulesFontSize?.(cardId, fontSizePx),
+      onOpenArtEditor: (card: EditorCardRecord) =>
+        latestHandlers.current.onOpenArtEditor(card),
+      onFieldBeginEdit: (
+        card: EditorCardRecord,
+        field: EditableCardField,
+        value: EditableFieldValue,
+      ) => latestHandlers.current.onFieldBeginEdit(card, field, value),
+      onFieldDraftChange: (
+        card: EditorCardRecord,
+        field: EditableCardField,
+        value: EditableFieldValue,
+      ) => latestHandlers.current.onFieldDraftChange(card, field, value),
+      onFieldCancel: (card: EditorCardRecord, field: EditableCardField) =>
+        latestHandlers.current.onFieldCancel(card, field),
+      onFieldSave: (
+        card: EditorCardRecord,
+        field: EditableCardField,
+        value: EditableFieldValue,
+      ) => latestHandlers.current.onFieldSave(card, field, value),
+      onFieldCommit: (
+        card: EditorCardRecord,
+        field: EditableCardField,
+        value: EditableFieldValue,
+      ) => latestHandlers.current.onFieldCommit(card, field, value),
+      onAddCardTag: (card: EditorCardRecord, name: string) =>
+        latestHandlers.current.onAddCardTag(card, name),
+      onRemoveCardTag: (card: EditorCardRecord, name: string) =>
+        latestHandlers.current.onRemoveCardTag(card, name),
+      onOpenManageTags: () => latestHandlers.current.onOpenManageTags(),
+      onAddCardTide: (card: EditorCardRecord, name: string) =>
+        latestHandlers.current.onAddCardTide(card, name),
+      onRemoveCardTide: (card: EditorCardRecord, name: string) =>
+        latestHandlers.current.onRemoveCardTide(card, name),
+      onOpenManageTides: () => latestHandlers.current.onOpenManageTides(),
+    }),
+    [],
+  );
+
   type GridEntry =
     | { kind: "heading"; group: CardNameSubstringGroup }
     | {
@@ -143,7 +218,7 @@ export default function CardEditorGrid({
         ]);
 
   const renderCard = (card: EditorCardRecord) => (
-    <EditableCard
+    <MemoizedEditableCard
       card={card}
       duplicateUsage={duplicateUsageByCardId.get(card.id) ?? null}
       size={size}
@@ -186,19 +261,7 @@ export default function CardEditorGrid({
       tagError={tagSaveState[card.id]?.error ?? null}
       tideSaving={tideSaveState[card.id]?.saving ?? false}
       tideError={tideSaveState[card.id]?.error ?? null}
-      onRulesFontSize={onRulesFontSize}
-      onOpenArtEditor={onOpenArtEditor}
-      onFieldBeginEdit={onFieldBeginEdit}
-      onFieldDraftChange={onFieldDraftChange}
-      onFieldCancel={onFieldCancel}
-      onFieldSave={onFieldSave}
-      onFieldCommit={onFieldCommit}
-      onAddCardTag={onAddCardTag}
-      onRemoveCardTag={onRemoveCardTag}
-      onOpenManageTags={onOpenManageTags}
-      onAddCardTide={onAddCardTide}
-      onRemoveCardTide={onRemoveCardTide}
-      onOpenManageTides={onOpenManageTides}
+      {...stableHandlers}
     />
   );
 

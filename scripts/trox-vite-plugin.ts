@@ -5,6 +5,27 @@ import { buildDevelopmentTroxBundles } from "./trox-source-workspace.mjs";
 const virtualTroxBundlesId = "virtual:trox-bundles";
 const resolvedVirtualTroxBundlesId = `\0${virtualTroxBundlesId}`;
 
+/** Whether a changed source can contribute player-facing localization text. */
+export function isTroxLocalizationInput(
+  rootDir: string,
+  changedPath: string,
+): boolean {
+  const relative = path.relative(rootDir, changedPath);
+  const internalDataPrefix = `data${path.sep}internal${path.sep}`;
+  return (
+    relative === "trox.ron" ||
+    relative === "localization/terms.ron" ||
+    relative.startsWith(`localization${path.sep}qa${path.sep}`) ||
+    (relative.startsWith(`data${path.sep}`) &&
+      !relative.startsWith(internalDataPrefix) &&
+      relative.endsWith(".ron")) ||
+    (relative.startsWith(`src${path.sep}`) &&
+      /\.tsx?$/u.test(relative) &&
+      !/\.(test|spec)\.tsx?$/u.test(relative) &&
+      !relative.startsWith(`src${path.sep}generated${path.sep}`))
+  );
+}
+
 export function troxDevelopmentBundlesPlugin(options: {
   buildBundles?: typeof buildDevelopmentTroxBundles;
   rootDir?: string;
@@ -32,20 +53,8 @@ export function troxDevelopmentBundlesPlugin(options: {
     },
     configureServer(server) {
       let timer: ReturnType<typeof setTimeout> | undefined;
-      const localizationInput = (changedPath: string): boolean => {
-        const relative = path.relative(rootDir, changedPath);
-        return (
-          relative === "trox.ron" ||
-          relative === "localization/terms.ron" ||
-          relative.startsWith(`localization${path.sep}qa${path.sep}`) ||
-          (relative.startsWith(`data${path.sep}`) && relative.endsWith(".ron")) ||
-          (relative.startsWith(`src${path.sep}`) && /\.tsx?$/u.test(relative) &&
-            !/\.(test|spec)\.tsx?$/u.test(relative) &&
-            !relative.startsWith(`src${path.sep}generated${path.sep}`))
-        );
-      };
       const scheduleRefresh = (changedPath: string): void => {
-        if (!localizationInput(changedPath)) return;
+        if (!isTroxLocalizationInput(rootDir, changedPath)) return;
         if (timer !== undefined) clearTimeout(timer);
         timer = setTimeout(() => {
           timer = undefined;

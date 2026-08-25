@@ -78,6 +78,16 @@ const DATA_DIR = join(ROOT, "data");
 // data staging validator copies scripts but intentionally not repository-root
 // configuration files, so this generated-artifact contract is explicit here.
 const RON_FORMAT_CONFIG = { indentWidth: 2, printWidth: 100 };
+
+/** Preserve file identity when regenerated text is byte-for-byte unchanged. */
+export function writeTextFileIfChanged(filePath, contents) {
+  if (existsSync(filePath) && readFileSync(filePath, "utf8") === contents) {
+    return false;
+  }
+  writeFileSync(filePath, contents);
+  return true;
+}
+
 const LOCAL_ASSET_HOME = resolve(
   process.env.DREAMTIDES_LOCAL_ASSET_HOME ?? homedir(),
 );
@@ -1535,7 +1545,7 @@ export function regenerateCardData({
   mkdirSync(dirname(cardRoleJsonPath), { recursive: true });
   writeFileSync(cardRoleJsonPath, `${JSON.stringify(cardRoleData, null, 2)}\n`);
   mkdirSync(dirname(cardLocalizationRonPath), { recursive: true });
-  writeFileSync(
+  writeTextFileIfChanged(
     cardLocalizationRonPath,
     formatRon(
       formatRon(
@@ -1548,7 +1558,7 @@ export function regenerateCardData({
   mkdirSync(dirname(cardTransfigurationLocalizationRonPath), {
     recursive: true,
   });
-  writeFileSync(
+  writeTextFileIfChanged(
     cardTransfigurationLocalizationRonPath,
     formatRon(
       generateCardTransfigurationLocalizationProjection(allCards),
