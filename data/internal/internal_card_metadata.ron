@@ -356,7 +356,7 @@ CardMetadataCatalog(
       id: "5639053e-1fe3-4a42-b9c3-3fdf894bfab6",
       number: 51,
       mtg_origin: "Fiend Artisan",
-      tags: ["Free Sacrifice", "Spark Scaler", "Art OK"],
+      tags: ["Free Sacrifice", "Spark Scaler", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -461,7 +461,7 @@ CardMetadataCatalog(
       id: "86881031-393f-4359-96f5-3adde6bdd74d",
       number: 66,
       mtg_origin: "Elvish Reclaimer",
-      tags: ["Art Rework", "Art OK"],
+      tags: ["Art Rework", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -632,7 +632,7 @@ CardMetadataCatalog(
       id: "a8bca1eb-abc8-42e0-b770-0f03af250b81",
       number: 91,
       mtg_origin: "Repeal",
-      tags: ["Art OK"],
+      tags: ["Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -686,7 +686,7 @@ CardMetadataCatalog(
       id: "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c",
       number: 99,
       mtg_origin: "Avacyn's Pilgrim",
-      tags: ["Elves", "Art Rework", "Art OK"],
+      tags: ["Elves", "Art Rework", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -972,7 +972,7 @@ CardMetadataCatalog(
       id: "98f16d26-be71-49ad-9034-5fafb5d3f053",
       number: 140,
       mtg_origin: "Ignoble Hierarch",
-      tags: ["Art Rework", "Art Duplicate", "Art OK"],
+      tags: ["Art Rework", "Art Duplicate", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -1049,6 +1049,7 @@ CardMetadataCatalog(
       id: "ffa4fa56-8897-465d-b812-3798e3cf5a1f",
       number: 151,
       mtg_origin: "Endurance",
+      tags: ["Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -1485,7 +1486,7 @@ CardMetadataCatalog(
       id: "7ea13d02-9d97-492e-9edb-f326eb3b4d1c",
       number: 214,
       mtg_origin: "Demand Answers",
-      tags: ["Art Rework", "Art OK"],
+      tags: ["Art Rework", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -1548,7 +1549,7 @@ CardMetadataCatalog(
       id: "435ed83c-f7a6-4a73-a684-67fcc4e49bc4",
       number: 223,
       mtg_origin: "Magmatic Insight",
-      tags: ["Art Rework", "Art OK"],
+      tags: ["Art Rework", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -1562,7 +1563,7 @@ CardMetadataCatalog(
       id: "3cc9253a-4db6-4b02-92d6-a37805d192fb",
       number: 225,
       mtg_origin: "Opt",
-      tags: ["Cantrips", "Art OK"],
+      tags: ["Cantrips", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -1819,7 +1820,7 @@ CardMetadataCatalog(
       id: "7dd2214f-8d16-453a-9f28-62712e64eae1",
       number: 262,
       mtg_origin: "Elves of Deep Shadow",
-      tags: ["Elves", "Art Rework", "Art OK"],
+      tags: ["Elves", "Art Rework", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -1902,7 +1903,7 @@ CardMetadataCatalog(
       id: "87f075b1-b058-4570-a75f-c4f8f544e192",
       number: 274,
       mtg_origin: "Arboreal Grazer",
-      tags: ["Art Rework", "Art OK"],
+      tags: ["Art Rework", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -2286,7 +2287,7 @@ CardMetadataCatalog(
       id: "956aaeb1-5280-4294-bf80-73079f35c5f6",
       number: 330,
       mtg_origin: "Asmoranomardicadaistinaculdacar",
-      tags: ["Removal", "Figment Maker", "Art Rework", "Art OK"],
+      tags: ["Removal", "Figment Maker", "Art Rework", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -2456,7 +2457,7 @@ CardMetadataCatalog(
       id: "e4ab6a18-c3b2-4149-a446-c7c1e8d66714",
       number: 355,
       mtg_origin: "Chromatic Star",
-      tags: ["Art Rework", "Art OK", "tutorial"],
+      tags: ["Art Rework", "Art OK", "tutorial", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -2546,7 +2547,7 @@ CardMetadataCatalog(
       id: "9d14885c-a757-40cc-b43e-87dbec7ec379",
       number: 368,
       mtg_origin: "Blast from the Past",
-      tags: ["Removal", "Art Rework", "Art OK"],
+      tags: ["Removal", "Art Rework", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -2699,7 +2700,7 @@ CardMetadataCatalog(
       id: "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2",
       number: 390,
       mtg_origin: "Earthcraft",
-      tags: ["Character Payoff", "Art Rework", "Art Duplicate", "Art OK"],
+      tags: ["Character Payoff", "Art Rework", "Art Duplicate", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -2845,7 +2846,7 @@ CardMetadataCatalog(
       id: "86fd585b-e9d0-4dc1-bce9-488014b9316d",
       number: 411,
       mtg_origin: "Birds of Paradise",
-      tags: ["Elves"],
+      tags: ["Elves", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -3050,7 +3051,7 @@ CardMetadataCatalog(
       id: "cc1c1acd-f0ff-46cc-94d9-401b9daf253f",
       number: 441,
       mtg_origin: "Kor Skyfisher",
-      tags: ["ETB Bounce", "Art Rework", "Ally Audit", "Art OK"],
+      tags: ["ETB Bounce", "Art Rework", "Ally Audit", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -3146,7 +3147,7 @@ CardMetadataCatalog(
       id: "c11eb833-a45b-4983-949d-848039d0504c",
       number: 455,
       mtg_origin: "Inti, Seneschal of the Sun",
-      tags: ["Art Rework", "Art Duplicate", "Art OK"],
+      tags: ["Art Rework", "Art Duplicate", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
@@ -3304,7 +3305,7 @@ CardMetadataCatalog(
       id: "c92a7dc0-04b0-4c54-9485-59a92505eabc",
       number: 478,
       mtg_origin: "Stonecoil Serpent",
-      tags: ["Art Rework", "Art OK"],
+      tags: ["Art Rework", "Art OK", "Art Owned"],
     ),
 
     CardMetadataDefinition(
