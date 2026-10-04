@@ -17,9 +17,10 @@ The phase ends with the run's final acceptance and report.
   ISMCTS. Note its finding that random rollouts beat heuristic rollouts there;
   test that here rather than assume it.
 
-**Clock:** the AI phase's 3-day wall-clock box
-([D25](decisions.md#d25-ai-phase-stop-rule)) starts when bead 7.1 is claimed.
-Record the start timestamp in the epic notes.
+**No time box.** The phase is best effort
+([D25](decisions.md#d25-ai-phase-stop-rule)). Every build task, 7.1–7.6,
+completes against its own acceptance. The improvement loop (7.7) ends when
+three consecutive iterations produce no new champion.
 
 ## Tasks
 
@@ -166,13 +167,11 @@ Each iteration is one bead, filed only after the previous iteration closes.
 5. **Commit:**
    - If promoted, commit the change and record the new champion ID.
    - If rejected, commit only the report, and revert the code.
-6. **Check the stop rule (D25).** The phase moves to 7.8 when either holds:
-   - The champion clears the bar **and** the last three iterations produced
-     no new champion. The bar is ≥75% against the frozen `expert@7.3` and
-     ≥90% against the frozen `greedy@7.2`, each by CI lower bound with ≥400
-     full-budget games. It applies even when the champion is an Expert
-     variant.
-   - The 3-day clock has expired.
+6. **Check the stop rule (D25).** The phase moves to 7.8 when the last three
+   iterations produced no new champion. Each new champion is also measured
+   against the frozen `expert@7.3` and `greedy@7.2` with ≥400 full-budget
+   games, and the report records both win rates with their Wilson 95% CIs.
+   These are reference points, not a bar.
 
 Run tournaments only when no Tollgate validation is running (D17).
 
@@ -186,8 +185,8 @@ Run tournaments only when no Tollgate validation is running (D17).
 ### 7.9 Mason pass
 
 Run the [mason pass](workflow.md#mason-passes) over `src/engine/policy/`, the
-tournament runner, and the worker host. It runs after the 3-day clock's
-improvement loop and is not counted against it. Each bead must leave policy
+tournament runner, and the worker host. It runs after the improvement loop.
+Each bead must leave policy
 behavior unchanged: a fixed-seed tournament reproduces the champion's
 outcomes exactly.
 
@@ -196,8 +195,10 @@ outcomes exactly.
 1. **Browser acceptance** on desktop and mobile:
    - ~10 full games against the champion, with a blunder report written into
      `docs/plan/evidence/ai/acceptance.md`;
-   - two full journeys with real battles, one ending in victory against
-     Apollyon and one in defeat;
+   - two full journeys with real battles and no debug resolution
+     ([D41](decisions.md#d41-final-acceptance-opponents)): one ending in
+     victory against Apollyon, played with `?ai=greedy`, and one ending in
+     defeat, played against the champion;
    - the full tutorial.
 
    `__caps` must be empty throughout.
@@ -219,7 +220,8 @@ outcomes exactly.
      fix), for the operator;
    - the QA ledger totals and any remaining judged concerns;
    - the metrics before and after;
-   - the tournament ladder and champion, plus the balance observations;
+   - the tournament ladder and champion, the champion's win rates against
+     the frozen `greedy@7.2` and `expert@7.3`, and the balance observations;
    - the open issues, the review debt (if any), and the recommended
      follow-ups. Meta-progression is first.
 6. **Reach the D33 end state.** Delete `docs/plan/` except `report.md`.

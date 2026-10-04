@@ -82,8 +82,8 @@ Then propose **budgets**. They are monitored, never gated. Examples:
    [README](README.md#global-invariants) lists. Procedural detail moves into
    the project README in Phase 2.1, which also cuts the docs and skills
    (D33).
-2. **Ignored paths.** Add `artifacts/qa/` and `logs/tournaments/` to
-   `.gitignore`.
+2. **Ignored paths.** Add `artifacts/qa/` to `.gitignore`. `logs/` is already
+   ignored, which covers `logs/tournaments/` and `logs/fuzz/`; verify it.
 3. **Tollgate.** The trusted policy `~/dreamtides_web/.tollgate/config.toml`
    is local and untracked; `.git/info/exclude` excludes it. Pre-flight
    installed the prototype's `dependencies → trox → review` pipeline with

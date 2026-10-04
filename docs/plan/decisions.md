@@ -1,7 +1,7 @@
 # Decisions
 
 These decisions were made with the operator in the planning interview on
-2026-10-03, revised the same day, and refined in a readiness review on
+2026-10-03, revised the same day, and refined in two readiness reviews on
 2026-10-04. They are binding for the run. In the
 [rules ambiguity ladder](#d10-rules-ambiguity-ladder) they outrank every other
 precedent.
@@ -74,6 +74,22 @@ The **why:**
 - Production battles are against the AI.
 - One local writer needs none of the conflict machinery.
 - Determinism, replay, and fold-based testing are kept.
+
+### D40. Production log capture
+
+The Firebase room-log sink is how production games keep their logs today, and
+D2 and D3 delete it. Its replacement is local:
+
+- **Every build** persists each game's log entries in IndexedDB next to its
+  `LocalLog`. Storage is capped; the oldest games' logs are evicted first.
+- **An "Export log" control** in the error fallback and the game menu
+  downloads the current game's log as JSONL, in the
+  `logs/journey-log.jsonl` line format.
+- **Development builds** keep the `/api/log` → `logs/journey-log.jsonl` file
+  sink.
+
+**Why:** a player can hand over one file that explains a production game,
+with no server.
 
 ### D4. Debug tooling
 
@@ -405,6 +421,48 @@ text-less:
 This keeps journeys, the fuzzer, and the Phase 4 gate playable on full-pool
 decks before Phase 5.
 
+### D39. Deck-entry modifications and next-battle effects
+
+Exploration encounters change the player's deck and the next battle. Both are
+in scope, and the engine plays them exactly as the journey records them.
+
+**Deck-entry modifications** are stored on each `DeckEntry`
+(`src/types/journey.ts`) and resolved today by `resolveDeckEntryCard` in
+`src/card-type-change.ts`:
+
+- `sparkBonus`: permanent additive spark (IncreaseSparkAll,
+  PurgeRandomSubtypeAndIncreaseSpark);
+- `keywordModification.energyCostReduction` (ReduceCostAllAndGainNightmares);
+- `keywordModification.fast` (MakeFastAll, MakePredicateFastAndGainNightmares);
+- `keywordModification.reclaim` and `setReclaim`: a granted or overridden
+  Reclaim cost (PurgeDuplicatesAndGrantReclaim);
+- `typeChange`: a new subtype (ChangeSubtypeSelected, ChangeSubtypeAll) or a
+  new card type (ChangeCardTypeSelected, which can turn an Event into a
+  Character).
+
+In the engine they are part of a card instance's `variant`, next to the
+amplified flag and the transfigurations. They apply in layer 1 (copiable
+values) **after** the transfiguration transforms, in the prototype's order:
+transfiguration, then type and keyword changes, then the spark bonus. A card
+whose type changes keeps its printed abilities. Where the prototype does not
+settle a question, such as the spark of an Event turned into a Character,
+decide through the [ladder](#d10-rules-ambiguity-ladder) and record an RD
+entry. Displayed text keeps coming from the existing text transforms.
+
+**Next-battle effects** (NextBattleOpeningHand, NextBattleStartingEnergy,
+NextBattleSmallerHandAndCostDiscount) and every other journey-to-battle input
+are typed `BattleInit` fields, consumed once by the battle they apply to.
+
+- **Why:** These effects appear in roughly 500 exploration actions. Leaving
+  them implicit would force the agent to invent their engine semantics in the
+  middle of Phase 4 or 5.
+- **Consequences:**
+  - Phase 4.1 builds the typed `BattleInit` fields and the variant plumbing.
+  - Phase 5.7b proves every modification kind with contract tests, the
+    fuzzer, and a sweep sample.
+  - Determinization (D22) treats the player's deck modifications as part of
+    the known decklist.
+
 ## Workflow
 
 ### D16. Pre-flight
@@ -491,10 +549,21 @@ Per content batch:
 Every phase gate from Phase 4 on ends with full journey playthroughs on
 desktop and mobile. Verdicts go to the QA ledger.
 
+### D41. Final acceptance opponents
+
+The Phase 7 final acceptance plays its **victory** journey, every battle real
+through Apollyon, with `?ai=greedy`. The **defeat** journey and the ~10
+standalone games use the champion. No debug actions resolve battles in
+either acceptance journey.
+
+**Why:** the agent must reach the end of the run even when the champion is
+stronger than it is. The victory path proves the full journey and Apollyon
+flow; the champion games prove the AI.
+
 ### D26. Strict sequencing
 
-Phases run strictly in order, with no wall-clock boxes. The AI improvement
-loop has its own stop rule (D25).
+Phases run strictly in order, with no wall-clock boxes anywhere in the run.
+The AI improvement loop has its own plateau stop rule (D25).
 
 ### D28. Plan format
 
@@ -556,19 +625,18 @@ strength. There is no difficulty tuning.
 
 ### D25. AI phase stop rule
 
-A candidate becomes champion only if it beats the champion with a 95% CI
-lower bound above 50% over at least 400 paired games.
+The AI phase is best effort. It has no wall-clock box and no numeric
+strength bar.
 
-**Frozen baselines.** "Greedy" and "Expert" in the bar mean the immutable
-reference snapshots `greedy@7.2` and `expert@7.3`, recorded when those tasks
-close. Later changes to the Expert rules or evaluation never move the bar.
-The bar applies even when the champion is itself an Expert variant.
-
-The phase ends when either condition holds:
-
-- The champion clears the bar **and** three consecutive iterations produce no
-  new champion. The bar is ≥75% against Expert and ≥90% against Greedy.
-- 3 days of AI-phase wall-clock have elapsed.
+- **Promotion.** A candidate becomes champion only if it beats the champion
+  with a 95% CI lower bound above 50% over at least 400 paired games.
+- **Stop.** The improvement loop ends after **three consecutive iterations
+  produce no new champion.**
+- **Every build task completes.** Tasks 7.1–7.6 each finish against their own
+  acceptance criteria; none is skipped for time.
+- **Frozen references.** `greedy@7.2` and `expert@7.3` are immutable snapshots
+  recorded when those tasks close. Every champion is reported against both,
+  with a Wilson 95% CI. They are reference points, not a bar.
 
 ### D27. Expert bot knowledge
 

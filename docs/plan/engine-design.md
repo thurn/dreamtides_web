@@ -69,7 +69,7 @@ interface BattleState {
   readonly version: number;            // increments per committed step
   seed: string;                        // from the game seed + battle index
   rng: RngStreams;                     // named streams: shuffle:<side>, dreamwell, random:<purpose>
-  config: BattleConfig;                // from src/content/data/battle.ts + journey modifiers
+  config: BattleConfig;                // from src/content/data/battle.ts + BattleInit journey inputs (D39)
   turn: { round: number; active: Side; phase: Phase; challengeLane: number | null };
   sides: Record<Side, SideState>;
   instances: Record<InstanceId, CardInstance>;
@@ -99,7 +99,7 @@ interface CardInstance {
   source: { kind: "card"; cardId: CardId } | { kind: "figment"; figment: FigmentId }
         | { kind: "copy"; of: InstanceId | CardId; overrides?: CopyOverrides };
   owner: Side; controller: Side;
-  variant: Variant;                    // amplified flag + applied transfigurations
+  variant: Variant;                    // amplified flag + transfigurations + deck-entry mods (D39)
   status: { exhausted: boolean; reclaimed: boolean; offering: boolean; ephemeral: boolean;
             veil: boolean; gainedSpark: number; counters: number; created: boolean; grants: Grant[] };
   knownTo: Side[];                     // hidden-information tracking
@@ -485,7 +485,8 @@ Effective characteristics are computed, never stored, and memoized per
 layer:
 
 1. **Copiable values:** printed values, figment catalog values, copy
-   overrides, and variant transforms.
+   overrides, and variant transforms: transfigurations first, then
+   deck-entry modifications ([below](#deck-entry-modifications)).
 2. **Type changes:** "has all character types".
 3. **Ability adds and removes:** granted keywords, and disabled triggers.
 4. **Base-spark setting:** "base ✦ becomes 7", "✦ … becomes X".
@@ -634,6 +635,37 @@ The ability transforms here and those text transforms describe the same
 change; a contract test per transfiguration keeps the eligibility predicates
 of the two in agreement.
 
+## Deck-entry modifications
+
+This follows [D39](decisions.md#d39-deck-entry-modifications-and-next-battle-effects).
+
+```ts
+interface Variant {
+  amplified: boolean;
+  transfigurations: TransfigurationType[];
+  deckMods: {
+    sparkBonus: number;                // additive, after transfigurations
+    costReduction: number;             // energy cost, min 0
+    fast: boolean;
+    reclaim: number | null;            // granted or overridden Reclaim cost
+    typeChange: { cardType: CardType; subtype: CardSubtype } | null;
+  };
+}
+```
+
+- **Order** matches `resolveDeckEntryCard` in `src/card-type-change.ts`:
+  transfiguration transforms, then type and keyword changes, then the spark
+  bonus.
+- **Abilities are kept.** A type change alters the characteristics that
+  selectors and timing read, never the ability list.
+- **Granted Reclaim** is the same keyword that Enduring adds, with the
+  modification's cost.
+- **Next-battle effects** are `BattleInit` fields: extra opening-hand cards
+  (with an optional predicate), starting energy, and the smaller-hand cost
+  discount. Battle setup consumes them once.
+- **Displayed text** keeps coming from the existing deck-entry text
+  transforms, like transfigured text.
+
 ## Content gates
 
 **The coverage gate** is a CI test of the data↔engine contract:
@@ -722,7 +754,8 @@ Write both rules into `docs/rules.md` § Infinite Loops.
     to its chooser.
 - **The UI renders only views.** Debug reveal switches that side's view to
   omniscient.
-- **Determinization** (D22) is `sample(view, decklist, rng) → BattleState`. It
+- **Determinization** (D22) is `sample(view, decklist, rng) → BattleState`.
+  The decklist includes each entry's variant (D39). It
   deals unknown cards consistent with the decklist, the cards seen in public
   zones, the cards known to be in hand, and the known deck positions. Only the
   AI uses it.
@@ -817,7 +850,8 @@ an intent.
   ```
 
 - **Fuzz invariants** (`npm run fuzz:engine`): seeded games, random decks,
-  random transfigurations, Random and Greedy policies. Every Nth game runs in
+  random transfigurations, random deck-entry modifications, Random and Greedy
+  policies. Every Nth game runs in
   interactive replay mode to exercise suspension. After every step, it
   asserts:
   - zone conservation;

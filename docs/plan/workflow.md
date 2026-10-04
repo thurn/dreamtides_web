@@ -358,8 +358,16 @@ Intentional infinite combos are not issues.
 
 ## Logging
 
-New behavior logs through `src/logging.ts` into `logs/journey-log.jsonl`. Log
-enough to reconstruct what happened:
+New behavior logs through `src/logging.ts`. Development builds write
+`logs/journey-log.jsonl`; every build also keeps each game's log in IndexedDB
+with a JSONL export ([D40](decisions.md#d40-production-log-capture)). Log
+enough to reconstruct what happened.
+
+**The engine stays pure.** It emits engine events and never calls the logger.
+The host (the fold adapter, the worker host, the fuzzer, or the tournament
+runner) turns events into log lines and adds the game ID and timestamp.
+
+What to log:
 
 - **Engine.** Each applied action with its validated choices, every trigger
   fired and resolved, every prompt opened and answered, every rules-relevant
@@ -372,6 +380,10 @@ enough to reconstruct what happened:
   site, and before/after values.
 - **Tournaments** log to `logs/tournaments/<run-id>.jsonl`, which is
   gitignored. Summaries go to `docs/plan/evidence/ai/`.
+- **Fuzz runs** write no per-game logs. A failing game writes its seed, deck,
+  policies, and full action and answer log to
+  `logs/fuzz/<run-id>/<game>.jsonl` (gitignored), enough to replay it, and the
+  run prints the repro command.
 
 **UUIDs only, no names.** Every log line carries the game ID.
 

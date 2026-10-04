@@ -233,8 +233,15 @@ fold.
   player. That covers the tutorial's room controller and the
   collaborative-control handoff. The tutorial keeps working.
 - **Keep the log sink.** Keep the browser → `/api/log` → Vite
-  `journeyLogPlugin` → `logs/journey-log.jsonl` path, through
+  `journeyLogPlugin` → `logs/journey-log.jsonl` path for development, through
   `createJourneyLogMirror`, moved out of co-op code.
+- **Capture production logs** ([D40](decisions.md#d40-production-log-capture)).
+  This replaces the RTDB room-log sink:
+  - persist each game's log entries in IndexedDB beside its `LocalLog`, with a
+    cap that evicts the oldest games first;
+  - add an "Export log" control to the error fallback and the game menu. It
+    downloads the game's log as JSONL in the journey-log line format;
+  - copy lives in the UI copy module.
 - **Delete:**
   - RoomGate and rooms;
   - presence and identicons (`@dicebear`);
@@ -256,6 +263,10 @@ fold.
 - Browser QA: front door, journey start, battle start, and a reload, with
   screenshots matching apart from removed co-op chrome and `__caps` empty.
 - The dev server needs no Java.
+- A production build (`npm run build` plus a static preview) records a
+  journey's log entries, and the export yields JSONL that the `log-analysis`
+  line format parses. Pin persistence and eviction with tests on the
+  in-memory IndexedDB adapter.
 
 ### 2.6 Remove Firebase entirely (D2)
 

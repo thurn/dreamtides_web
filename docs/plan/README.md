@@ -35,15 +35,19 @@ When the run ends:
   - 33 Dreamwell cards;
   - the figment catalog;
   - Nightmare;
-  - all nine transfigurations.
+  - all nine transfigurations;
+  - exploration deck-entry modifications and next-battle effects
+    ([D39](decisions.md#d39-deck-entry-modifications-and-next-battle-effects)).
 
   "As printed" means as defined by `docs/rules.md`.
 - **The tutorial runs on the engine,** keeping all of its guidance.
 - **Apollyon has mechanics.** All ten incarnations get provisional, documented
   mechanics.
 - **The AI is competent and fair.** The enemy AI plays any deck, observes the
-  [D23](decisions.md#d23-ai-thinking-budget) budgets, and is proven by
-  tournaments.
+  [D23](decisions.md#d23-ai-thinking-budget) budgets, and is improved by
+  tournaments until it plateaus
+  ([D25](decisions.md#d25-ai-phase-stop-rule)). The work is best effort, with
+  no time box.
 - **The codebase is aggressively lean:**
   - solo and local-first;
   - English-only;
@@ -86,8 +90,8 @@ was rewritten for the public repository
 ## Phase map
 
 Phases run **strictly in order**. A phase starts only after the previous
-phase's gate bead is closed. There are no time boxes, except that the AI
-improvement loop has its own stop rule.
+phase's gate bead is closed. There are no time boxes anywhere; the AI
+improvement loop ends on its plateau stop rule.
 
 | # | Phase | Page | Exit gate (summary) |
 | --- | --- | --- | --- |
@@ -97,7 +101,7 @@ improvement loop has its own stop rule.
 | 4 | Battle UI on the engine | [phase-4-battle-ui.md](phase-4-battle-ui.md) | Engine battles in the existing UI against placeholder bots; one `PromptHost` for every prompt; journey sandbox and old AI removed; card-lab and sweep ready |
 | 5 | Content | [phase-5-content.md](phase-5-content.md) | Every entity is implemented, audited, swept, and judged; journey dreamsign effects, transfigurations, and Apollyon done; engine mason pass |
 | 6 | Tutorial on the engine | [phase-6-tutorial.md](phase-6-tutorial.md) | Tutorial battle and journey guidance work end to end; tutorial sandbox deleted |
-| 7 | AI (last) | [phase-7-ai.md](phase-7-ai.md) | Champion clears the bar and plateaus, or the 3-day box expires; final acceptance; report; docs end state |
+| 7 | AI (last) | [phase-7-ai.md](phase-7-ai.md) | Every AI build task done; champion plateaus for three iterations; final acceptance; report; docs end state |
 
 Every phase ends with a **mason pass** just before its gate. Every bead it
 files is implemented within that phase
@@ -174,7 +178,9 @@ These carry over from [AGENTS.md](../../AGENTS.md) and bind every phase:
 - **Never commit image files.** Screenshots go to the gitignored
   `artifacts/qa/` directory and are referenced by filename only.
 - **Log new features.** Every new feature logs enough to reconstruct what the
-  algorithm did in a given game. Logs go to `logs/journey-log.jsonl`.
+  algorithm did in a given game. Logs go to `logs/journey-log.jsonl` in
+  development and to per-game IndexedDB storage with JSONL export in every
+  build ([D40](decisions.md#d40-production-log-capture)).
 - **Write tests carefully.** Tests are deterministic, use synthetic fixtures,
   and pin observable contracts. They never assert UI strings, timing,
   statistics, or mutable production data. The coverage gate is the sanctioned
@@ -223,17 +229,20 @@ The run is complete when all of the following hold:
    hash matches.
 3. A fuzz soak of 10,000 seeded full battles passes with zero invariant
    violations or replay divergences. It uses full-pool random decks, random
-   transfigurations, and random policies, with ≥10% of games in interactive
-   replay mode.
+   transfigurations, random deck-entry modifications, and random policies,
+   with ≥10% of games in interactive replay mode.
 4. The QA ledger has a sweep verdict for every card in base and amplified form.
    It also covers the transfiguration sample from
-   [Phase 5.7](phase-5-content.md#57-transfigurations), plus judged verdicts per
-   [D21](decisions.md#d21-browser-qa-coverage). Every `fail` has been fixed and
-   re-verified.
+   [Phase 5.7](phase-5-content.md#57-transfigurations) and the deck-modification
+   sample from [Phase 5.7b](phase-5-content.md#57b-deck-entry-modifications),
+   plus judged verdicts per [D21](decisions.md#d21-browser-qa-coverage).
+   Every `fail` has been fixed and re-verified.
 5. The AI phase stop rule is satisfied; see
    [D25](decisions.md#d25-ai-phase-stop-rule).
 6. Final acceptance passes on desktop and mobile:
-   - full journeys, covering both the victory and the defeat path;
+   - full journeys with real battles, covering both the victory path (against
+     Greedy) and the defeat path (against the champion); see
+     [D41](decisions.md#d41-final-acceptance-opponents);
    - the tutorial;
    - ~10 full games against the champion, with a blunder report.
 7. The D33 end state holds. The tracked docs are `README.md`,

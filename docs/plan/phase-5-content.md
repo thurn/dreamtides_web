@@ -9,6 +9,8 @@
 - 153 dreamsigns (battle and journey effects);
 - Nightmare;
 - all nine transfigurations ([F6](decisions.md#established-facts));
+- exploration deck-entry modifications and next-battle effects
+  ([D39](decisions.md#d39-deck-entry-modifications-and-next-battle-effects));
 - Apollyon's ten incarnations (designed new; D6).
 
 No content entry is left `pending`; every one has abilities or `vanilla: true`.
@@ -101,7 +103,7 @@ primitive dependency and frequency:
 16. the remaining unique cards.
 
 File one bead per batch, chained in that order. Then file the remaining
-Phase 5 task beads (5.3–5.10) after the last card batch.
+Phase 5 task beads (5.3–5.10, including 5.7b) after the last card batch.
 
 **Acceptance:**
 
@@ -194,6 +196,32 @@ in the batches. For each of the other eight transfigurations, sweep at least
 20 eligible cards, stratified across mechanic families, plus every
 Resonant-eligible card. Then judge a sample of 3 per transfiguration.
 
+### 5.7b Deck-entry modifications
+
+Prove [D39](decisions.md#d39-deck-entry-modifications-and-next-battle-effects)
+end to end. Phase 4.1 built the plumbing; this task proves behavior on real
+content.
+
+- **Exhaustive mapping.** Every exploration effect kind that changes a deck
+  entry or the next battle maps to an engine `Variant` field or a
+  `BattleInit` field. A TypeScript exhaustive switch over the exploration
+  effect union enforces it, so a new effect kind fails `tsc`.
+- **Contract tests** on synthetic definitions, one per modification kind:
+  spark bonus, cost reduction, Fast, granted and overridden Reclaim, subtype
+  change (including typal selectors and synergies), card-type change, and
+  each stacked with a transfiguration in the prototype's order.
+- **Rules decisions.** Settle the open interactions through the ladder, each
+  with an RD entry: the spark of an Event turned into a Character, and a
+  granted Reclaim on a card that already has one.
+- **Fuzz.** Fuzz decks include random deck-entry modifications.
+- **Card-lab.** Add `&mods=<encoded deckMods>` to the card-lab URL.
+- **Sweep sample.** For each modification kind, sweep at least 20 eligible
+  cards stratified across mechanic families, `as=player` and `as=enemy`.
+  Judge one per kind.
+- **Journey QA.** One browser check per next-battle effect: take the
+  encounter through `?goto=exploration&card=<encounter card UUID>`, then confirm the
+  battle starts with the effect applied. `__caps` is empty.
+
 ### 5.8 Apollyon incarnations (D6)
 
 1. **Extend the content type.** Extend the `ApollyonIncarnation` type in
@@ -230,10 +258,11 @@ coverage gate must stay green after each one.
 
 1. **Nothing pending:** no entry is `pending` and the coverage gate passes.
 2. **Full re-sweep** of every card (base and amplified) on the final code, plus
-   the transfiguration sample. This is automated; run it in ≤30-minute
+   the transfiguration and deck-modification samples. This is automated; run it in ≤30-minute
    batches.
 3. **Fuzz soak:** 10,000 games, full-pool random decks, random
-   transfigurations, Random and Greedy policies. Zero violations.
+   transfigurations, random deck-entry modifications, Random and Greedy
+   policies. Zero violations.
 4. **Journey playthrough** on desktop and mobile against Greedy, with real
    battles for at least three of the seven.
 5. **Independent review:** the full diff of engine and primitives, plus a

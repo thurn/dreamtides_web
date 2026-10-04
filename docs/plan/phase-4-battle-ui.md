@@ -50,13 +50,23 @@ desktop 1440×900 and mobile 390×844. Capture these states:
     opponent progression;
   - the shared Dreamwell;
   - the score target;
-  - journey modifiers.
+  - each deck entry's full variant: amplified flag, transfiguration, and
+    deck-entry modifications
+    ([D39](decisions.md#d39-deck-entry-modifications-and-next-battle-effects));
+  - the next-battle effects as typed `BattleInit` fields:
+    NextBattleOpeningHand (with its predicate), NextBattleStartingEnergy, and
+    NextBattleSmallerHandAndCostDiscount, consumed once;
+  - every other journey-to-battle input the prototype's
+    `create-battle-init.ts` reads. List them in the bead notes.
 - **`END_BATTLE`:** the handoff semantics stay identical.
 - **Fixtures:** regenerate the replay fixtures.
 
 **Acceptance:**
 
 - Journey → battle → reward → atlas fold tests pass on the engine.
+- Contract tests on synthetic journeys cover each next-battle effect and each
+  deck-modification kind, checked against the engine's computed
+  characteristics.
 - Reload mid-battle and **mid-prompt** reproduce the same screen state.
 
 ### 4.2 Top-level action UI
