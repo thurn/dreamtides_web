@@ -33,7 +33,7 @@ Tollgate pushes certified `release` to the public
 `git@github.com:thurn/dreamtides_web.git` master.
 
 Nothing is deployed during the run. That covers Firebase Hosting, Storage
-uploads, and `npm run deploy`. Phase 1 deletes the Firebase Hosting GitHub
+uploads, and `npm run deploy`. Pre-flight deleted the Firebase Hosting GitHub
 workflows. `checks.yml` remains as an independent post-push signal.
 
 Before the first push, the planning session scrubbed history with

@@ -205,7 +205,21 @@ Resonant-eligible card. Then judge a sample of 3 per transfiguration.
    layer-6 decks. Record win rates in `docs/plan/evidence/ai/apollyon.md`.
    Phase 7 re-runs this with the champion.
 
-### 5.9 Phase gate
+### 5.9 Mason audit of the engine
+
+Run `mason` over `src/engine/` and the fold and UI adapters. It files bounded
+refactor beads (label `mason`) for:
+
+- simplifications revealed by ~750 definitions;
+- missing type constraints in the DSL;
+- duplicated primitives;
+- adapter leaks.
+
+Chain the top-ranked beads, at most ~8, before the gate, and implement them.
+The fuzz smoke and the coverage gate must stay green after each one. Chain
+the rest after the Phase 7 report.
+
+### 5.10 Phase gate
 
 1. **Pending list:** `pending.ts` is empty and the coverage gate passes.
 2. **Full re-sweep** of every card (base and amplified) on the final code, plus

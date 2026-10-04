@@ -111,6 +111,14 @@ same append/subscribe/fold seams.
   - `demo:certify`, with the `coop_*` and `firebase_multiplayer` docs.
 
   Keep `replay-fuzz` if it replays local logs.
+- **Single controller.** Every hosted-playtest and controller check resolves
+  to the single local player. That covers the tutorial's room controller
+  (`/main`, `/loading`, `/tutorial`) and the collaborative-control handoff.
+  The tutorial keeps working unchanged.
+- **Keep the journey-log sink.** The browser → `/api/log` → Vite
+  `journeyLogPlugin` path writes `logs/journey-log.jsonl`, through
+  `createJourneyLogMirror` in `src/coop/journey-log-sink.ts`. Move it out of
+  co-op code. Delete only the RTDB room-log parts.
 - **Rename** `src/coop/` to a name that describes it, such as `src/session/`.
   Update the `AGENTS.md` architecture section to the local-first statement:
   "Game state is a fold of the local intent log…".
@@ -172,6 +180,16 @@ same append/subscribe/fold seams.
    depends on it.
 4. **Work through `pre-existing-issues.txt`** with the
    `fix-pre-existing-issues` skill, if it still lists items.
+5. **Sweep temporary and testing scaffolding** out of production paths. Grep
+   for `TODO`, `HACK`, `FIXME`, `temporary`, `for testing`, `prototype`,
+   `playtest`, and debug-only branches. Each hit is either:
+   - deleted;
+   - made dev-only (P7);
+   - converted into a real feature, logged as a pre-existing issue, and filed
+     as a bead.
+
+   Re-check the "Retained invariants" in `docs/fake_configurability_audit.md`
+   against the surviving code.
 
 **Acceptance:**
 
@@ -180,7 +198,30 @@ same append/subscribe/fold seams.
 - The suite is green.
 - The review is resolved where marked.
 
-### 2.6 Phase gate
+### 2.6 Mason audit and refactors
+
+1. **Audit.** Run the Hive `mason` skill, read-only, over the surviving
+   codebase. Have it file each coherent improvement as a bounded bead with
+   label `mason`, with these priorities:
+   - type safety and illegal states, especially IDs, journey and site state,
+     and fold events;
+   - prototype shortcuts that became structure;
+   - any remaining name-keyed card logic (always a bug; see AGENTS.md);
+   - files over ~1000 lines in `src/screens` and `src/rules`;
+   - brittle tests.
+
+   Skip `src/battle/` and `src/rules/battle/` (replaced in Phases 3–4) and
+   `src/cumulus/`. Cumulus is preserved UI; only refactors with identical
+   rendering qualify there.
+2. **Chain the beads.** Put the mason beads into the phase sequence before the
+   gate, at most ~10 and ranked by mason. Lower-ranked findings stay open
+   beads labeled `mason`, chained after the Phase 7 report as optional
+   follow-ups.
+3. **Implement the chained beads.** This plan explicitly authorizes it. Each
+   one must preserve behavior and rendering (D30), with before/after
+   screenshots for any touched screen.
+
+### 2.7 Phase gate
 
 1. Re-measure the Phase 1 metric set. Add a "after Phase 2" column to
    `metrics.md`.

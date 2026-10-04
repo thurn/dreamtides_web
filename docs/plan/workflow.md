@@ -40,7 +40,8 @@ database.** An unavailable server is a blocker; handle it with the
 
 ### Filing a phase
 
-Do this at the start of each phase, before any implementation.
+Do this at the start of each phase, before any implementation. Phase 1 was
+filed by the planning session; see the [README](README.md#starting-the-run).
 
 1. **Create the epic.** Create it ready, then inspect it.
 
@@ -76,6 +77,8 @@ and an edge. Checkpoint the current bead, then work the prerequisite first.
 
 ### Claiming and working
 
+- **Claim task beads, never epics.** `hbd ready` also lists each phase's epic.
+  Skip it: an epic closes only after its gate task closes.
 - **Claim before substantive work:** `hbd update <id> --claim --json`. Proceed
   only on acknowledgement.
 - **Retitle the session** with the native title tool: `set_session_title` on
@@ -347,8 +350,8 @@ enough to reconstruct what happened:
 
 These are the [D17](decisions.md#d17-machine-resources) limits:
 
-- `JOURNEY_TEST_WORKERS=2` locally. Phase 1 sets the Tollgate config's
-  environment to 2.
+- `JOURNEY_TEST_WORKERS=2` locally. The local Tollgate policy
+  (`.tollgate/config.toml`, untracked) already sets 2.
 - Fuzz soaks and tournaments use at most 4 worker processes, in batches of at
   most 30 minutes.
 - Start a batch only when no Tollgate validation of this repository is

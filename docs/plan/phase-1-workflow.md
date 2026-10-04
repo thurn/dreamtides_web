@@ -20,7 +20,9 @@ tests about to be deleted.
 
 ## Tasks
 
-File these as beads, in order, using the [filing recipe](workflow.md#filing-a-phase).
+These are already filed as epic `hv-b8ef`, with tasks `hv-b8ef.1`–`hv-b8ef.5`
+in order. Additional area beads for 1.4 are filed and chained before
+`hv-b8ef.5` when needed.
 
 ### 1.1 Baseline measurements
 
@@ -73,18 +75,24 @@ Then propose **budgets**. They are monitored, never gated. Examples:
    - Keep every invariant that [README](README.md#global-invariants) lists.
 2. **Ignored paths.** Add `artifacts/qa/` and `logs/tournaments/` to
    `.gitignore`.
-3. **Tollgate.** Set `JOURNEY_TEST_WORKERS = "2"` in the Tollgate step
-   environment (D17). Keep `TROX_ROOT` and the cache paths.
-4. **GitHub workflows.** Delete `.github/workflows/firebase-hosting-*.yml`
+3. **Tollgate.** The trusted policy `~/dreamtides_web/.tollgate/config.toml`
+   is local and untracked; `.git/info/exclude` excludes it. Pre-flight
+   installed the prototype's `dependencies → trox → review` pipeline with
+   `JOURNEY_TEST_WORKERS = "2"` (D17). Verify it with `tg --no-launch config
+   explain`. Change it only through `tg --no-launch config validate`, then
+   `tg --no-launch config apply`, and only in Phase 1 beads whose purpose is
+   gate speed. Record the old and new config in `metrics.md`, because the file
+   is not versioned.
+4. **GitHub workflows.** Pre-flight deleted the Firebase Hosting workflows
    (D2). Keep `checks.yml`; GitHub runners are separate machines, so their
-   4 workers are fine.
+   4 workers are fine. Confirm it passes for the repository's first commits.
 5. **Deploy docs.** Remove the deploy instructions from always-loaded guidance.
    Deployment is operator-only and outside this run.
 
 **Acceptance:**
 
 - `AGENTS.md` is under ~120 lines and keeps every invariant.
-- The workflows are deleted.
+- `checks.yml` is green on GitHub.
 - The Tollgate config uses 2 workers.
 - A full gate passes with the new config.
 

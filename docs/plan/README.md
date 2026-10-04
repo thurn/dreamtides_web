@@ -80,10 +80,10 @@ improvement loop has its own stop rule.
 | # | Phase | Page | Exit gate (summary) |
 | --- | --- | --- | --- |
 | 1 | Workflow introspection | [phase-1-workflow.md](phase-1-workflow.md) | Baselines recorded; context diet and CI speedups landed; surviving tests triaged; budgets monitored |
-| 2 | Fork identity and legacy removal | [phase-2-cleanup.md](phase-2-cleanup.md) | Local-first log; co-op, Firebase runtime, editors, Tabula, Unity, and analysis tooling deleted; docs and skills pruned; re-measured |
+| 2 | Fork identity and legacy removal | [phase-2-cleanup.md](phase-2-cleanup.md) | Local-first log; co-op, Firebase runtime, editors, Tabula, Unity, and analysis tooling deleted; docs and skills pruned; mason refactors landed; re-measured |
 | 3 | Rules engine core | [phase-3-engine.md](phase-3-engine.md) | Headless deterministic engine with stack, triggers, continuous effects, zones, DSL, loops, and views; fuzz soak clean |
 | 4 | Battle UI on the engine | [phase-4-battle-ui.md](phase-4-battle-ui.md) | Journeys play full engine battles in the existing UI against placeholder bots; sandbox and old AI removed; card-lab and sweep tool ready |
-| 5 | Content | [phase-5-content.md](phase-5-content.md) | Every entity is implemented, audited, swept, and judged per policy; journey dreamsign effects, transfigurations, and Apollyon done |
+| 5 | Content | [phase-5-content.md](phase-5-content.md) | Every entity is implemented, audited, swept, and judged per policy; journey dreamsign effects, transfigurations, and Apollyon done; engine mason pass landed |
 | 6 | Tutorial on the engine | [phase-6-tutorial.md](phase-6-tutorial.md) | Tutorial battle and journey guidance work end to end |
 | 7 | AI (last) | [phase-7-ai.md](phase-7-ai.md) | Champion clears the bar and plateaus, or the 3-day box expires; final acceptance and report |
 
@@ -118,8 +118,15 @@ Pre-flight is complete:
 
 - The fork is created and its history scrubbed of secrets.
 - The remote is `git@github.com:thurn/dreamtides_web.git`.
-- The repository is registered with Tollgate.
-- Project `dreamtides_web` is registered in `~/brain/hive.json`.
+- The repository is registered with Tollgate. Its trusted policy is the
+  local, untracked `.tollgate/config.toml`, running `dependencies → trox →
+  review` at 2 test workers, with remote sync to `origin/master`.
+- Project `dreamtides_web` is registered in `~/brain/hive.json`. That change
+  is committed in `~/brain`, unpushed.
+
+Phase 1's beads are already filed: epic `hv-b8ef`, with tasks `hv-b8ef.1`–`.5`
+chained in order. Later phases are filed at their start, per
+[workflow](workflow.md#filing-a-phase).
 
 The operator manages keep-alive and launches a single session in
 `~/dreamtides_web` with:
