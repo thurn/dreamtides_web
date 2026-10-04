@@ -11,8 +11,7 @@ target metric, revert it.
 - `scripts/review.mjs` and `scripts/review-plan.mjs`;
 - `vitest.config.ts`;
 - `eslint.config.js`;
-- `.tollgate/config.toml`;
-- `.github/workflows/`.
+- `.tollgate/config.toml`.
 
 **Out of scope here:** deleting whole systems. That belongs to Phase 2.
 Triage tests only in areas that survive Phase 2, so effort isn't spent on
@@ -94,16 +93,12 @@ Then propose **budgets**. They are monitored, never gated. Examples:
    Phase 1 beads whose purpose is gate speed, and the Phase 2 beads that
    delete Rust (2.3) and Trox (2.4). Record the old and new config in
    `metrics.md`, because the file is not versioned.
-4. **GitHub workflows.** Pre-flight deleted the Firebase Hosting workflows
-   (D2). Keep `checks.yml`; GitHub runners are separate machines, so their
-   4 workers are fine. Confirm it passes for the repository's first commits.
-5. **Deploy docs.** Remove the deploy instructions from always-loaded guidance.
+4. **Deploy docs.** Remove the deploy instructions from always-loaded guidance.
    Deployment is operator-only and outside this run.
 
 **Acceptance:**
 
 - `AGENTS.md` is under ~120 lines and keeps every invariant.
-- `checks.yml` is green on GitHub.
 - The Tollgate config uses 2 workers.
 - A full gate passes with the new config.
 
@@ -183,8 +178,7 @@ closed.
 
 1. Re-measure the 1.1 set. Update `metrics.md` with a before/after table.
 2. Run the [independent review](workflow.md#reviews) over the phase diff.
-3. Check that GitHub `checks.yml` is green for the promoted commits.
-4. Close the epic.
+3. Close the epic.
 
 ## Exit gate
 

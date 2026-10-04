@@ -145,9 +145,8 @@ split into several beads at filing time, or as soon as the size becomes
 apparent. The target is under ~1,500 changed non-test lines per bead.
 Mechanical deletions may be larger.
 
-Remote GitHub `checks.yml` runs after each push. Inspect its result for the
-promoted commits **at each phase gate**, not per bead. Repair Linux-only
-failures in a dedicated bead.
+Tollgate's local gate is the only CI. The repository has no GitHub Actions
+workflows; never add one.
 
 ## Validation ladder
 

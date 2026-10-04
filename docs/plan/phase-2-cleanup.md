@@ -159,8 +159,6 @@ This is one or two beads.
    - `rust-toolchain.toml`;
    - the RON-related review steps (`ron-format-check`, `rust-format-check`,
      `rust-test`, `clean-game-data`);
-   - the `tools/game-data` `rust-cache` step in `checks.yml` (the Rust
-     toolchain itself stays until 2.4, because CI builds the Trox CLI);
    - `data/`.
 
 Split into beads:
@@ -204,8 +202,6 @@ The data modules already hold plain English (2.3), so nothing upstream of
    - The Tollgate policy loses its `trox` step and `TROX_ROOT`, through
      `tg --no-launch config validate` then `apply`. Record the old and new
      config in `metrics.md`.
-   - In `.github/workflows/checks.yml`, delete the Rust toolchain setup, the
-     Trox checkout, its `rust-cache`, and the `trox:*` steps.
 
 **Acceptance:**
 
@@ -349,10 +345,9 @@ before and after, and lint time before and after.
    (`git diff --diff-filter=AMR <base> HEAD`) plus the list of deleted paths,
    and ask it to check that nothing still reachable from a route, the build,
    a QA scene, or a surviving test was deleted.
-3. Check that GitHub checks are green.
-4. Do a browser smoke from the front door through the first battle start, on
+3. Do a browser smoke from the front door through the first battle start, on
    desktop and mobile.
-5. Close the epic.
+4. Close the epic.
 
 ## Exit gate
 

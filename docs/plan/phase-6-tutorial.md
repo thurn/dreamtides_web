@@ -75,7 +75,7 @@ setup, the AI override path in the policy host, and the guidance triggers.
 1. Full journey playthroughs on desktop and mobile against Greedy (D21),
    with `__caps` empty.
 2. Run the independent review over the phase diff.
-3. Check that the gate passes and GitHub checks are green.
+3. Check that the gate passes.
 4. Close the epic.
 
 ## Exit gate

@@ -42,8 +42,8 @@ entirely in Phase 2: Hosting config, Storage uploads, the deploy script, and
 the SDK. A production build is a static `dist/`. Card art comes from
 `VITE_ASSET_BASE_URL`, or from local symlinks in dev.
 
-The Firebase Hosting GitHub workflows were deleted during pre-flight.
-`checks.yml` remains as an independent post-push signal.
+The repository has no GitHub Actions workflows. Tollgate's local gate is the
+only CI.
 
 Before the first push, the planning session scrubbed history with
 `git filter-repo`. It replaced the hard-coded Discord webhook URL and every
@@ -278,7 +278,7 @@ Agent guidance is `AGENTS.md` plus at most one compact project skill,
 
 dreamtides_web has no localization. Phase 2 deletes all of the following:
 
-- the Trox pipeline: CLI, the Tollgate and GitHub trox steps, extraction,
+- the Trox pipeline: CLI, the Tollgate trox step, extraction,
   bundles, and the `ar`/`es`/`ja`/`ru` profiles;
 - `trox.ron`, `localization/`, `.trox-revision`, and `vendor/trox-runtime`;
 - the localization skill;

@@ -205,8 +205,7 @@ outcomes exactly.
    - a 10,000-game fuzz soak with the champion and Random policies, ≥10% of
      games in interactive replay mode;
    - the coverage gate;
-   - the full gate;
-   - GitHub checks green.
+   - the full gate.
 3. **Independent review** of the Phase 7 diff.
 4. **Docs pass.** `README.md`, `docs/rules.md`, and `docs/design.md`
    describe the shipped system in the current state. The rules include every

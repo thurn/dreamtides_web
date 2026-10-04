@@ -29,9 +29,7 @@ const RUST_TOOLCHAIN_CONTRACT_TEST =
 
 function isRustToolchainContractInput(file) {
   return (
-    file === "rust-toolchain.toml" ||
-    file === "scripts/review.mjs" ||
-    file.startsWith(".github/workflows/")
+    file === "rust-toolchain.toml" || file === "scripts/review.mjs"
   );
 }
 

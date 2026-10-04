@@ -159,12 +159,8 @@ describe("fast review plan", () => {
     });
   });
 
-  it("selects the Rust toolchain contract for either side of the CI contract", () => {
-    for (const input of [
-      "rust-toolchain.toml",
-      "scripts/review.mjs",
-      ".github/workflows/checks.yml",
-    ]) {
+  it("selects the Rust toolchain contract for either side of the review contract", () => {
+    for (const input of ["rust-toolchain.toml", "scripts/review.mjs"]) {
       expect(buildReviewPlan([input])).toMatchObject({
         testInputs: expect.arrayContaining([
           "scripts/rust-toolchain-contract.test.mjs",
