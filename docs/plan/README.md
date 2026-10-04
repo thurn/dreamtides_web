@@ -25,49 +25,61 @@ restart, do these steps in order:
 When the run ends:
 
 - **Battles run on the engine.** Every battle is played by the engine through
-  the existing battle UI. No rule is resolved by hand.
-- **All content works as printed.** That means all 521 cards and their 244
-  amplified variants, 153 dreamsigns (battle and journey effects), 32 avatars,
-  33 Dreamwell cards, the figment catalog, Nightmare, and all eight
-  transfigurations. "As printed" means as defined by
-  [battle_rules.md](../battle_rules/battle_rules.md).
-- **Play is solo and local-first.** The intent log and the pure fold persist in
-  the browser. Firebase is not used at runtime.
-- **The tutorial runs on the engine**, keeping all of its guidance.
+  the existing battle UI. Every player input, whatever raised it, goes through
+  one prompt protocol
+  ([D31](decisions.md#d31-prompt-architecture-replay-suspended-steps)).
+- **All content works as printed.** That means:
+  - all 521 cards and their 244 amplified variants;
+  - 153 dreamsigns, with battle and journey effects;
+  - 32 avatars;
+  - 33 Dreamwell cards;
+  - the figment catalog;
+  - Nightmare;
+  - all eight transfigurations.
+
+  "As printed" means as defined by `docs/rules.md`.
+- **The tutorial runs on the engine,** keeping all of its guidance.
 - **Apollyon has mechanics.** All ten incarnations get provisional, documented
   mechanics.
 - **The AI is competent and fair.** The enemy AI plays any deck, observes the
-  budgets in [decisions D23](decisions.md#d23-ai-thinking-budget), and is proven
-  by tournaments.
-- **The codebase is clean and fast to work in.** Prototype-era systems are
-  removed, and the agent's edit → validate → promote loop has measured, fast
-  feedback.
+  [D23](decisions.md#d23-ai-thinking-budget) budgets, and is proven by
+  tournaments.
+- **The codebase is aggressively lean:**
+  - solo and local-first;
+  - English-only;
+  - data in typed TypeScript modules;
+  - no Rust, Firebase, RON, editors, or co-op;
+  - three docs ([D33](decisions.md#d33-documentation-end-state)).
+
+  The agent's edit → validate → promote loop is fast and measured.
 
 ## Baseline at fork
 
 Measured on 2026-10-03, from `quest_prototype` master `16b08220d`. History
-was rewritten for the public repository; see
-[D2](decisions.md#d2-public-repository-and-no-deploys).
+was rewritten for the public repository
+([D2](decisions.md#d2-public-repository-and-no-deploys)).
 
 | Fact | Value |
 | --- | --- |
-| Source (non-test TS/TSX) | ~207k lines (`src/cumulus` 77k, `src/editor` 22k, `src/rules` 18k, `src/screens` 17k, `src/battle` 17k, `src/coop` 12k) |
+| Source (non-test TS/TSX) | ~207k lines (`src/cumulus` 77k incl. a 14k-line docs site, `src/editor` 22k, `src/rules` 18k, `src/screens` 17k, `src/battle` 17k, `src/coop` 12k) |
 | Tests | 497 files, ~172k lines |
-| Scripts | 201 files, ~51k lines; 45 custom ESLint rules |
-| Full gate (`npm run review:full` in Tollgate) | median 150 s, p90 181 s at 4 workers; plus ~10 s deps and ~26 s trox |
+| Tooling | 201 scripts (~51k lines); 45 custom ESLint rules; a 26.6k-line Rust RON compiler (`tools/game-data`); the Trox localization pipeline (Rust CLI, 4 locales) |
+| Docs and skills | 175 tracked files under `docs/`; 23 project skills (~5k lines); `dda/` |
+| Full gate in the fork (2 test workers) | deps 7.0 s, trox 47.4 s, `review:full` 228.4 s (pre-flight run) |
 | Battle | Manual sandbox: structural automation via `BattleDebugEdit`; about 11 cards semantically automated; the AI only proposes moves and knows only the 10 Starter cards |
-| Content | 376 characters and 145 events (36 Fast, 36 Interrupt); 244 amplified texts; 153 dreamsigns, many with journey-map effects that have no implementation; 32 avatars; 33 Dreamwell cards |
-| Energy | Dreamwell-driven: both sides start at 0 and draws start in round 2; `STANDARD_ENERGY_RAMP` in `src/battle/engine/energy.ts` is dead code |
-| Apollyon | `data/apollyon_incarnations.ron` holds 10 flavor-only "Aspects"; [bosses.md](../journeys/bosses.md) lists 20 unrelated forms |
+| Content | 376 characters and 145 events (36 Fast, 36 Interrupt); 244 amplified texts; 153 dreamsigns, journey-map effects unimplemented; 32 avatars; 33 Dreamwell cards; 35 RON catalogs |
+| Energy | Dreamwell-driven from 0; `STANDARD_ENERGY_RAMP` is dead code |
+| Apollyon | 10 flavor-only incarnations; `bosses.md` lists 20 unrelated forms |
 | Reference engine | `~/dreamtides` (Rust): older "Judgment" ruleset, text parser, and UCT AI. Use it as precedent only where rules text is unchanged |
 
 ## Non-goals
 
-- **Meta-progression.** It is the first follow-up project after this run.
-- **Deploys.** This covers Firebase Hosting, Storage uploads, and public builds.
-- **Multiplayer.** Neither co-op nor human-vs-human.
-- **Card design or balance changes.** Card text, costs, and spark are
-  immutable; see [D11](decisions.md#d11-card-data-is-immutable).
+- **Meta-progression.** It is the first follow-up project.
+- **Deploys and hosting.**
+- **Multiplayer.**
+- **Localization** (D35).
+- **Card design or balance changes.** Card data is immutable; see
+  [D11](decisions.md#d11-card-data-is-immutable).
 - **UI redesign.** Look and flows are preserved; see
   [D30](decisions.md#d30-ui-preservation).
 
@@ -79,18 +91,19 @@ improvement loop has its own stop rule.
 
 | # | Phase | Page | Exit gate (summary) |
 | --- | --- | --- | --- |
-| 1 | Workflow introspection | [phase-1-workflow.md](phase-1-workflow.md) | Baselines recorded; context diet and CI speedups landed; surviving tests triaged; budgets monitored |
-| 2 | Fork identity and legacy removal | [phase-2-cleanup.md](phase-2-cleanup.md) | Local-first log; co-op, Firebase runtime, editors, Tabula, Unity, and analysis tooling deleted; docs and skills pruned; mason refactors landed; re-measured |
-| 3 | Rules engine core | [phase-3-engine.md](phase-3-engine.md) | Headless deterministic engine with stack, triggers, continuous effects, zones, DSL, loops, and views; fuzz soak clean |
-| 4 | Battle UI on the engine | [phase-4-battle-ui.md](phase-4-battle-ui.md) | Journeys play full engine battles in the existing UI against placeholder bots; sandbox and old AI removed; card-lab and sweep tool ready |
-| 5 | Content | [phase-5-content.md](phase-5-content.md) | Every entity is implemented, audited, swept, and judged per policy; journey dreamsign effects, transfigurations, and Apollyon done; engine mason pass landed |
-| 6 | Tutorial on the engine | [phase-6-tutorial.md](phase-6-tutorial.md) | Tutorial battle and journey guidance work end to end |
-| 7 | AI (last) | [phase-7-ai.md](phase-7-ai.md) | Champion clears the bar and plateaus, or the 3-day box expires; final acceptance and report |
+| 1 | Workflow introspection | [phase-1-workflow.md](phase-1-workflow.md) | Baselines and budgets recorded; context diet and measured speedups landed; surviving tests triaged |
+| 2 | Aggressive cleanup | [phase-2-cleanup.md](phase-2-cleanup.md) | Three docs and one skill; English-only; TS data modules; no Rust, RON, Firebase, editors, co-op, or analysis tooling; scripts and lint rules culled; local-first log; mason refactors; re-measured |
+| 3 | Rules engine core | [phase-3-engine.md](phase-3-engine.md) | Headless deterministic engine; prompt protocol proven by property tests; stack, triggers, layers, zones, DSL, loops, views; soak clean |
+| 4 | Battle UI on the engine | [phase-4-battle-ui.md](phase-4-battle-ui.md) | Engine battles in the existing UI against placeholder bots; one `PromptHost` for every prompt; journey sandbox and old AI removed; card-lab and sweep ready |
+| 5 | Content | [phase-5-content.md](phase-5-content.md) | Every entity is implemented, audited, swept, and judged; journey dreamsign effects, transfigurations, and Apollyon done; engine mason pass |
+| 6 | Tutorial on the engine | [phase-6-tutorial.md](phase-6-tutorial.md) | Tutorial battle and journey guidance work end to end; tutorial sandbox deleted |
+| 7 | AI (last) | [phase-7-ai.md](phase-7-ai.md) | Champion clears the bar and plateaus, or the 3-day box expires; final acceptance; report; docs end state |
 
 Shared design references:
 
-- [engine-design.md](engine-design.md): engine architecture, ability DSL,
-  prompts, loops, views, and the policy interface.
+- [engine-design.md](engine-design.md): engine architecture, **decisions and
+  prompts**, the ability DSL and content modules, loops, views, and the policy
+  interface.
 - [workflow.md](workflow.md): beads, delivery, reviews, QA, ledgers,
   resources, recovery, and re-entry.
 
@@ -120,9 +133,11 @@ Pre-flight is complete:
 - The remote is `git@github.com:thurn/dreamtides_web.git`.
 - The repository is registered with Tollgate. Its trusted policy is the
   local, untracked `.tollgate/config.toml`, running `dependencies → trox →
-  review` at 2 test workers, with remote sync to `origin/master`.
+  review` at 2 test workers, with remote sync to `origin/master`. Phase 2
+  removes the trox step.
 - Project `dreamtides_web` is registered in `~/brain/hive.json`. That change
   is committed in `~/brain`, unpushed.
+- The Codex reviewer was verified: `gpt-5.6-sol`, read-only sandbox enforced.
 
 Phase 1's beads are already filed: epic `hv-b8ef`, with tasks `hv-b8ef.1`–`.5`
 chained in order. Later phases are filed at their start, per
@@ -156,49 +171,55 @@ These carry over from [AGENTS.md](../../AGENTS.md) and bind every phase:
   algorithm did in a given game. Logs go to `logs/journey-log.jsonl`.
 - **Write tests carefully.** Tests are deterministic, use synthetic fixtures,
   and pin observable contracts. They never assert UI strings, timing,
-  statistics, or mutable production data.
-- **Describe documentation in the current state.** Write what exists; never
-  write "no longer" or "removed" phrasing in maintained docs.
-- **Use RON for tunables.** Gameplay and UI tunables live in RON whenever
-  reasonable (the journeys "Golden Rule"). Card abilities live in the TS DSL;
-  see [D5](decisions.md#d5-ability-representation).
+  statistics, or mutable production data. The coverage gate is the sanctioned
+  data↔engine exception.
+- **Tunables live in the TS data modules** (D32), never as literals in logic.
+- **Copy lives in the UI copy module** (D35). The engine never builds display
+  strings.
+- **Docs describe the current state,** with no "no longer" or "removed"
+  phrasing. After Phase 2 the docs are only those of D33.
 - **Log pre-existing issues.** Record them in `./pre-existing-issues.txt`
   within the same commit.
-- **Leave the primary checkout alone.** Never edit the primary checkout
-  `~/dreamtides_web` directly; all work happens in Tollgate worktrees. Never
-  push worktree branches.
+- **Leave the primary checkout alone.** Never edit `~/dreamtides_web`
+  directly; all work happens in Tollgate worktrees. The exception is the local
+  Tollgate policy, under the Phase 1.2 rule. Never push worktree branches.
 - **Never deploy.** Never touch other repositories, other Hive projects'
   beads, or shared Hive configuration.
 
 ## Evidence and ledgers
 
+All of these are run-scoped and live under `docs/plan/`.
+
 | Record | Path | Written by |
 | --- | --- | --- |
 | Measured baselines and budgets | `docs/plan/evidence/metrics.md` | Phases 1–2, then every phase gate |
-| Test triage ledger | `docs/plan/evidence/test-triage.jsonl` | Phases 1–2 |
+| Test triage ledger | `docs/plan/evidence/test-triage.jsonl` | Phase 1 |
 | Content inventory | `docs/plan/evidence/content-inventory.json` | Phase 5 (generated by script) |
-| Card QA ledger (sweep and judged verdicts) | `docs/plan/evidence/qa-ledger.jsonl` | Phases 4–7 |
-| Rules decisions | `docs/rules_decisions.md`, plus normative text in `docs/battle_rules/battle_rules.md` | Any phase |
-| Card issues | `docs/card_issues.md` | Phase 5 onward |
-| Apollyon designs (provisional) | `docs/journeys/bosses.md` | Phase 5 |
+| Card QA ledger | `docs/plan/evidence/qa-ledger.jsonl` | Phases 4–7 |
+| Rules decisions | `docs/plan/evidence/rules-decisions.md`, plus normative text in `docs/rules.md` | Any phase |
+| Card issues | `docs/plan/evidence/card-issues.md` | Phase 5 onward |
 | Tournament reports | `docs/plan/evidence/ai/*.md` | Phase 7 |
 | Final report | `docs/plan/report.md` | End of Phase 7 |
 
 Bead notes are the progress ledger. These documents are never edited to record
 status.
 
+The final bead deletes `docs/plan/` except `report.md`. The report folds in
+the summaries of the ledgers, the rules decisions, and the card issues.
+
 ## Done criteria (whole run)
 
 The run is complete when all of the following hold:
 
 1. Every phase gate bead is closed with `hive_resolution=completed`.
-2. The coverage gate passes: every card, dreamsign, avatar, and Dreamwell UUID
-   in the catalogs has an engine definition, and every definition's text hash
-   matches.
-3. A fuzz soak of 10,000 seeded full battles, using random decks from the whole
-   pool and random policies, reports zero invariant violations.
+2. The coverage gate passes. No entity is `pending`, and every `verifiedText`
+   hash matches.
+3. A fuzz soak of 10,000 seeded full battles passes with zero invariant
+   violations or replay divergences. It uses full-pool random decks, random
+   transfigurations, and random policies, with ≥10% of games in interactive
+   replay mode.
 4. The QA ledger has a sweep verdict for every card in base and amplified form.
-   It also covers the transfiguration sample defined in
+   It also covers the transfiguration sample from
    [Phase 5.7](phase-5-content.md#57-transfigurations), plus judged verdicts per
    [D21](decisions.md#d21-browser-qa-coverage). Every `fail` has been fixed and
    re-verified.
@@ -208,4 +229,6 @@ The run is complete when all of the following hold:
    - full journeys, covering both the victory and the defeat path;
    - the tutorial;
    - ~10 full games against the champion, with a blunder report.
-7. `docs/plan/report.md` is written and promoted.
+7. The D33 end state holds. The tracked docs are `README.md`,
+   `docs/rules.md`, `docs/design.md`, `AGENTS.md`/`CLAUDE.md`, and the
+   `cumulus` skill, plus `docs/plan/report.md` for the operator to read.

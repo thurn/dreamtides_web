@@ -1,240 +1,344 @@
-# Phase 2: Fork Identity and Legacy Removal
+# Phase 2: Aggressive Cleanup
 
-**Goal:** turn the prototype into a lean, solo, local-first product codebase.
-Player-visible look and flows stay as they are
-([D30](decisions.md#d30-ui-preservation)). For every touched screen, capture
-before/after screenshots at desktop 1440×900 and mobile 390×844, and compare
-them.
+**Goal:** a lean, solo, local-first, English-only product codebase that
+contains **only what builds, runs, tests, plays, or QAs the game**
+([D8](decisions.md#d8-aggressive-cleanup)). That means:
+
+- three docs;
+- one project skill;
+- no Rust;
+- no Firebase;
+- no localization;
+- no RON;
+- no editors.
+
+**Player-visible look and flows stay as they are**
+([D30](decisions.md#d30-ui-preservation)), apart from deleted tool routes and
+co-op chrome.
+
+**For every touched screen,** capture before/after screenshots at desktop
+1440×900 and mobile 390×844, and compare them.
+
+**Deleting is the default.** When it is unclear whether something is needed,
+check whether a game route, a QA scene, the build, or a surviving test reaches
+it. If nothing does, delete it. Git history keeps everything.
 
 **Read first:**
 
-- [decisions D3, D4, D8](decisions.md);
-- `docs/journey_prototype/journey_prototype.md`;
-- `docs/journey_prototype/authoritative_transitions.md`;
+- [decisions D3, D8, D32, D33, D35](decisions.md);
+- `src/App.tsx` and `src/root-router.tsx`;
 - `src/eventlog/`, `src/coop/hooks.ts`, `src/coop/RoomGate.tsx`;
-- `src/App.tsx`, `src/root-router.tsx`;
-- `package.json` scripts.
-
-**Order matters.** Delete the tools first: they are independent and shrink the
-suite. Then swap the transport. Then sweep for dead code.
+- `scripts/prepare-workspace.mjs`;
+- `package.json`;
+- `.tollgate/config.toml` (the local trusted policy).
 
 ## Tasks
 
-### 2.1 Delete the editors and the image viewer
+### 2.1 Docs and skills to the end state (D33)
 
-Delete all of these:
+Do this first, so stale guidance stops consuming context.
 
-- `src/editor/`, including its routes: `/editor`, `/dreamsigns`, the
-  avatar/dreamscape/exploration/tutorial editors, and the tag editors;
-- `src/image_viewer/` and the `/images` route;
-- the npm scripts `editor`, `editor2`, `dreamsigns`, `images`;
-- the editor-only save paths in `scripts/game-data-pipeline.mjs edit`, if
-  nothing else uses them;
-- the editor docs in `docs/journey_prototype/url_parameters.md` and in
-  `docs/game_data_authoring.md`.
+1. **Move the rules.** Move `docs/battle_rules/battle_rules.md` to
+   `docs/rules.md` without editing its content.
+2. **Write `docs/design.md`.** Make it a current-state condensation of the
+   game design:
+   - `docs/journeys/journeys.md`: journeys, dreamscapes, guides, sites,
+     economy, limits, the atlas, transfigurations;
+   - `banes.md` (Nightmare);
+   - `bosses.md`, to be replaced by Apollyon in Phase 5;
+   - the site and guide data facts that the code doesn't make obvious;
+   - a short "Future: meta-progression" section (D7).
 
-`tutorial.ron` and the other RON catalogs are edited by hand from now on.
-
-**Acceptance:**
-
-- The build has no editor routes.
-- `knip` or a grep finds no references.
-- The game-data compile and check still pass.
-- The suite is green.
-
-### 2.2 Delete Tabula, Unity Cumulus, and the analysis tooling
-
-Delete all of these:
-
-- `tabula/` and its npm scripts;
-- `cumulus/` at the repository root (the Unity projects), with
-  `scripts/compare-scene`-style tooling and the `compare-cumulus-scene` and
-  `open-cumulus-scene-comparison` scripts. **Keep the TypeScript Cumulus
-  design system in `src/cumulus/`**;
-- the analysis scripts: `pool-metrics`, `draft-replay-metric`,
-  `tides-similarity`, the `experiment-*.mjs` oracles, `first-pick-cache/`,
-  and `first_picks.txt`;
-- the alternate draft algorithms (`?algo=` other than tides4) and their
-  baked data, keeping everything tides4 needs, such as
-  `data/tides4-overrides.jsonc` if it is tides4's;
-- the skills that only serve deleted subjects: `.llms/skills/tabula`,
-  `unity-cumulus`, `cumulus-compare`, `build-ron-editor`, plus any other skill
-  whose instructions now point at nothing. Check each skill's description and
-  references. **Never edit `dda/`** or the DDA skill.
+   Keep design intent. Drop implementation narration.
+3. **Rewrite `README.md`** in the current state. Cover:
+   - what the game is;
+   - prerequisites;
+   - `npm run dev`, test, review, build;
+   - browser QA essentials, merged in from `qa_tooling.md`, `qa_scenes.md`,
+     and `url_parameters.md`. These include port ≥5174 for QA servers, the
+     Playwright MCP service, `__caps`, assert-before-acting, the `?goto`
+     scenes list, and the `?debug`/`?ai`/`?seed` parameters;
+   - an architecture overview: intent log and fold, engine, UI, AI;
+   - the data layout;
+   - the conventions.
+4. **Delete:**
+   - every other file under `docs/`, except `docs/plan/`;
+   - `dda/`;
+   - `.superpowers/`;
+   - every `.llms/skills/*` except `cumulus`.
+5. **Rewrite `.llms/skills/cumulus/SKILL.md`** to be self-contained, at most
+   ~150 lines: when to use Cumulus components, tokens and spacing rules, and
+   the screen/adapter pattern. Fold in what is still needed from
+   `cumulus-migrate` and the deleted Cumulus docs.
+6. **Update `AGENTS.md`** for the new paths and the deleted guidance.
+   Procedural detail moves to the README. Update `docs/plan/` pages that link
+   to deleted docs.
 
 **Acceptance:**
 
-- tides4 drafts are unchanged. Pin this with an existing or new contract test
-  of pool construction on a synthetic catalog.
-- `npm run build` and `review:full` pass.
-- No dangling references remain.
+- Outside `docs/plan/`, the tracked Markdown files are exactly `README.md`,
+  `AGENTS.md`, `CLAUDE.md`, `docs/rules.md`, `docs/design.md`, and
+  `.llms/skills/cumulus/SKILL.md`. Markdown files inside directories that
+  later beads delete are allowed until those beads.
+- No relative link points at a missing file or anchor. Check with a small
+  script.
 
-### 2.3 Local-first log (core-review)
+### 2.2 Delete tools and dev-only sites
 
-Replace the Firebase RTDB transport with a local persisted log behind the
-same append/subscribe/fold seams.
+Delete all of these:
+
+- **Every standalone route** in `src/root-router.tsx` (`STANDALONE_ROUTES`),
+  with its code:
+  - `/cards`, `/editor` (`src/editor/`);
+  - `/dreamsigns`, `/glossary`, `/exploration`, `/avatars`, `/tides`,
+    `/dreamscapes`, `/figments`, `/dreamwell`;
+  - `/images`, `/images/favorites` (`src/image_viewer/`);
+  - `/offers`;
+  - `/cumulus` (`src/cumulus/docs/`, ~14k lines);
+  - `/recover`, which is replaced in 2.5.
+- **The Cumulus docs and metadata generators:** the
+  `generate-cumulus-docs`/`metadata`/`tokens` scripts that only serve docs,
+  `react-docgen-typescript`, and the integrity baselines that police only
+  docs. Keep the token generation if the game's CSS needs it. Also delete
+  `src/cumulus/screens/devtools/`.
+- **Tabula:** `tabula/`.
+- **Unity Cumulus:** `cumulus/` at the repository root.
+- **Analysis tooling:**
+  - `pool-metrics`, `draft-replay-metric`, `tides-similarity`, the
+    `experiment-*.mjs` oracles;
+  - `first-pick-cache/`, `first_picks.txt`;
+  - the alternate draft algorithms (`?algo=` other than tides4), keeping
+    everything tides4 needs.
+- **Tracked junk:** `saved-journeys/` unless a QA scene uses it, stale
+  artifacts, and anything else no route, build, or test reaches.
+
+This is one or two beads.
+
+**Acceptance:**
+
+- A synthetic-catalog contract test pins that tides4 drafts are unchanged.
+- The build has no tool routes.
+- `review:full` passes.
+
+### 2.3 English-only (D35)
+
+1. **Codemod the text.** `tx(...)` and `txa(...)` calls become plain strings
+   and template literals. `LocalizedString` becomes `string`. Selector and
+   plural helpers become small English functions.
+
+   Do it in reviewable batches by directory, keeping rendered output
+   identical. Spot-check with before/after screenshots of the main screens and
+   battle.
+2. **Delete Trox entirely:**
+   - `trox.ron`, `localization/`, `.trox-revision`, `vendor/trox-runtime`;
+   - `scripts/trox*.mjs`, `scripts/*localization*`, the player-localization
+     and domain-string audits;
+   - the Trox Vite plugin and the `trox:*` npm scripts;
+   - the localization ESLint rules;
+   - the generated bundles.
+3. **Update the gates:**
+   - The Tollgate policy loses its `trox` step and `TROX_ROOT`, through
+     `tg --no-launch config validate` then `apply`. Record the old and new
+     config in `metrics.md`.
+   - In `.github/workflows/checks.yml`, delete the Trox checkout,
+     `rust-cache`, and `trox:*` steps.
+
+**Acceptance:**
+
+- No `tx(`, `txa(`, `LocalizedString`, or `trox` appears in `src/`,
+  `scripts/`, or the configs.
+- Screens render identically to before.
+- The gate passes without a trox step.
+
+### 2.4 RON → TypeScript data modules (D32)
+
+1. **Convert the catalogs.** Convert all 35 `data/**/*.ron` catalogs into
+   typed modules under `src/content/` (layout in
+   [engine-design](engine-design.md#ability-dsl-and-content-modules)).
+   - Cards, dreamsigns, avatars, Dreamwell, and figments are one file per
+     entity, with an explicit `index.ts`.
+   - Tunables and journey catalogs are one module each: battle, opponents,
+     AI, atlas, dreamscapes, guides, sites, economy, tides, exploration,
+     gamble, augury, transfiguration, shop, tutorial, glossary, and resonance.
+
+   Write a one-off converter script, not kept. Carry over the RON comments.
+   Cards get `pending: true`, or `vanilla: true` when they have no rules
+   text; Phase 3 introduces the ability fields.
+2. **Prove parity.** Before deleting the pipeline, run a one-off check that
+   every converted catalog deep-equals the current generated runtime JSON,
+   value for value (D11). Record it in the bead notes.
+3. **Switch the runtime.** Replace `fetch("/card-data.json")` and its siblings
+   with imports, so data loading becomes synchronous where that simplifies
+   code.
+4. **Delete the RON pipeline:**
+   - `tools/game-data/` (Rust, 26.6k lines);
+   - `scripts/game-data-*`, `format-ron`, `.ronfmt.json`, the TOML
+     compatibility layer, and generated `public/*-data.json`;
+   - the data and localization phases of `scripts/prepare-workspace.mjs`,
+     keeping only art symlinking;
+   - `rust-toolchain.toml`;
+   - the RON-related review steps (`ron-format-check`, `rust-format-check`,
+     `rust-test`, `clean-game-data`);
+   - the Rust setup in `checks.yml`;
+   - `data/`.
+
+Split into beads:
+
+- (a) entity catalogs;
+- (b) journey and tunable catalogs;
+- (c) the runtime switch;
+- (d) the pipeline deletion.
+
+**Acceptance:**
+
+- Parity is recorded.
+- `data/`, `tools/`, and `.ron` files are gone.
+- No Rust toolchain is needed. Check this on a clean checkout:
+  `npm ci && npm run review:full`.
+- The game plays as before (browser smoke: journey start → draft → battle
+  start).
+
+### 2.5 Local-first log (core-review)
+
+The log has one local writer, so build the simplest thing that preserves the
+fold.
 
 - **`LocalLog`:**
-  - an in-memory ordered event list with synchronous append;
-  - persisted to IndexedDB, one store per local game ID, written through;
-  - a periodic fold checkpoint, so long journeys load quickly;
-  - subscription callbacks with the same ordering and decode semantics as
-    today.
-- **Keep the fold:** `src/rules/reducer.ts`, intents in
-  `src/coop/actions.ts`, deterministic randomness from the game seed and
-  sequence number, journey save and load files (`LOAD_STATE`), replay
-  fixtures, and the invariant checks.
-- **Keep deterministic bounces** for invalid intents. A rejected intent leaves
-  the state unchanged and logs a stable reason.
-- **Game identity:** `?game=<id>` selects a local saved game. The front door
-  keeps its look. Its "create game" path creates a local game, and recent local
-  games resume from IndexedDB.
+  - an ordered in-memory event list with synchronous append;
+  - written through to IndexedDB, one store per local game ID;
+  - a periodic fold checkpoint, so long journeys load quickly.
+- **Keep:**
+  - the pure reducer;
+  - intents (`src/coop/actions.ts` → `src/session/actions.ts`);
+  - deterministic randomness from the game seed and sequence number;
+  - deterministic bounces for invalid intents;
+  - `LOAD_STATE` save and load files;
+  - replay;
+  - the invariant checks.
+- **Single controller.** Every controller check resolves to the single local
+  player. That covers the tutorial's room controller and the
+  collaborative-control handoff. The tutorial keeps working.
+- **Keep the log sink.** Keep the browser → `/api/log` → Vite
+  `journeyLogPlugin` → `logs/journey-log.jsonl` path, through
+  `createJourneyLogMirror`, moved out of co-op code.
 - **Delete:**
-  - the Firebase RTDB client and its config;
-  - `src/firebase/` runtime use;
-  - the emulator startup in `scripts/dev-with-emulator.mjs`, so `npm run dev`
-    becomes `prepare-workspace` + Vite on the given port;
-  - `database.rules.json`, `.firebaserc`, and `firebase.json`'s database
-    section;
-  - the emulator tests (`test:emulator`);
-  - the `firebase-tools` dev dependency, if Hosting deploy no longer needs it
-    in-repo. Keep the deploy script only if it still works with
-    operator-provided config; otherwise delete it, and note in `docs/` how a
-    future deploy is assembled;
-  - the JDK requirement in the README.
-- **Delete co-op:**
-  - presence, `HostedPlaytestShell` controller semantics, and **Take
-    Control**;
-  - room-generation recovery: replace it with a local "Recover game" that
-    rebuilds from the latest valid checkpoint;
-  - `FuzzProbe` and `coop-fuzz`;
-  - `demo:certify`, with the `coop_*` and `firebase_multiplayer` docs.
+  - RoomGate and rooms;
+  - presence and identicons (`@dicebear`);
+  - Take Control and the hosted-playtest shell;
+  - optimistic echo, reconciliation, compaction, room generations,
+    `/recover`, FuzzProbe, `coop-fuzz`, `demo:certify`;
+  - the RTDB room-log sink.
 
-  Keep `replay-fuzz` if it replays local logs.
-- **Single controller.** Every hosted-playtest and controller check resolves
-  to the single local player. That covers the tutorial's room controller
-  (`/main`, `/loading`, `/tutorial`) and the collaborative-control handoff.
-  The tutorial keeps working unchanged.
-- **Keep the journey-log sink.** The browser → `/api/log` → Vite
-  `journeyLogPlugin` path writes `logs/journey-log.jsonl`, through
-  `createJourneyLogMirror` in `src/coop/journey-log-sink.ts`. Move it out of
-  co-op code. Delete only the RTDB room-log parts.
-- **Rename** `src/coop/` to a name that describes it, such as `src/session/`.
-  Update the `AGENTS.md` architecture section to the local-first statement:
-  "Game state is a fold of the local intent log…".
+  A "Recover game" button in the error fallback rebuilds from the latest
+  valid local checkpoint.
+- **Game identity:** `?game=<id>` selects a local game. The front door keeps
+  its look; "create game" creates a local game, and recent games resume.
 
 **Acceptance:**
 
-- A new journey, a reload mid-journey, a reload mid-battle, and a save → load
-  round trip each reproduce identical folds. Pin this with tests on a fake
-  IndexedDB, such as `fake-indexeddb` as a dev dependency or an in-memory
+- A new journey, reload mid-journey, reload mid-battle, and save → load each
+  reproduce identical folds. Pin this with tests on an in-memory IndexedDB
   adapter behind the same interface.
-- Browser QA:
-  - the front door, a journey start, a battle start, and a reload;
-  - before/after screenshots match apart from removed co-op chrome;
-  - `__caps` is empty.
-- The dev server starts without Java.
-- The suite is green.
+- Browser QA: front door, journey start, battle start, and a reload, with
+  screenshots matching apart from removed co-op chrome and `__caps` empty.
+- The dev server needs no Java.
 
-### 2.4 Identity, docs, and skills
+### 2.6 Remove Firebase entirely (D2)
 
-- **Rename the project:** `package.json` name `dreamtides-web`. Rewrite
-  `README.md` to the current state: what the game is, prerequisites (Node 24,
-  Rust; no JDK), `npm run dev`, layout, and a pointer to `docs/plan/`.
-- **Rewrite docs to the current state.**
-  - Rewrite `docs/journey_prototype/journey_prototype.md` and
-    `url_parameters.md`.
-  - Delete docs whose subject is gone: `firebase_multiplayer`,
-    `coop_demo_fuzzing`, `coop_event_sourcing_proposal`,
-    `react_effect_coop_audit`, `cumulus/unity-3d-ui`, Unity parity docs,
-    `superpowers/`, `postmortems/` about deleted systems,
-    `cumulus-sweeps/` reports.
-  - Keep the design and content docs: `journeys/`, `cards2/`, `calebgannon/`,
-    `battle_rules/`, `dda/`.
-- **Update skills that mention RTDB, rooms, the emulator, `?ai=1` approval,
-  or deleted tools:** `qs`, `journey-battle`, `log-analysis`, `device-screenshots`,
-  `send-images`, and others.
+Delete:
+
+- the Firebase SDK and its config modules;
+- `firebase.json`, `.firebaserc`, `database.rules.json`, `.firebase/`;
+- the emulator startup, so `npm run dev` is the workspace prep plus Vite on
+  the given port;
+- `scripts/deploy.sh` and `upload-assets-to-storage.mjs`;
+- the `firebase` and `firebase-tools` dependencies;
+- the `VITE_FIREBASE_*` handling and the `.env.production` placeholders.
+
+Keep `VITE_ASSET_BASE_URL` for production art. `npm run build` produces a
+static `dist/`.
 
 **Acceptance:**
 
-- `grep -ri 'firebase\|emulator\|rtdb\|room'` over `docs/` and `.llms/skills/`
-  finds only intended current-state mentions, such as optional static
-  hosting.
-- No relative Markdown link under `docs/`, `.llms/skills/`, `AGENTS.md`, or
-  `README.md` points at a missing file or anchor. Check with a small script,
-  committed under `scripts/` if it is reusable.
+- No `firebase` appears in `src/`, `scripts/`, the configs, or
+  `package.json`.
+- `npm run build` succeeds with no env file.
 
-### 2.5 Dead-code and legacy sweep
+### 2.7 Scripts, npm scripts, dependencies, and lint rules
 
-1. **Enumerate dead code.** Add `knip` as a dev dependency, configured for
-   the Vite entries, scripts, and tests. Use it to list unused files, exports,
-   and dependencies. Remove them with judgment.
-2. **Remove the known legacy:**
-   - `STANDARD_ENERGY_RAMP` and its schedule plumbing (F1);
-   - prototype-era save migrations (`src/rules/nightmare-migration.ts`,
-     `src/rules/shop-purchase-migration.ts`, plus any others). There are no
-     legacy saves to load;
+- **Scripts.** Keep only what an essential npm script reaches: dev, build,
+  test, review, lint, typecheck, setup-assets, and the screenshot runtime for
+  QA. Delete the rest of `scripts/`, from ~200 files to about 25, along with
+  their tests and npm entries. Phases 3–7 add their own tools later.
+- **Dependencies.** Prune with `knip` (dependencies mode). Expect to delete
+  `smol-toml`, `js-sha256` or `@noble/hashes` if they are duplicates,
+  `markdownlint-cli2`, and anything else unused.
+- **Custom ESLint rules.** Cut 45 → about 8. Keep only rules guarding real bug
+  classes, such as name-keyed card logic and Cumulus spacing tokens. Delete
+  the rest with their tests.
+
+**Acceptance:** `metrics.md` shows the script, dependency, and rule counts
+before and after, and lint time before and after.
+
+### 2.8 Dead-code and legacy sweep
+
+1. **Remove dead code.** Run `knip` on files and exports and remove what it
+   finds, with judgment. Every allowlist entry needs a reason.
+2. **Remove known legacy:**
+   - `STANDARD_ENERGY_RAMP` and its plumbing (F1);
+   - prototype save migrations (`nightmare-migration.ts`,
+     `shop-purchase-migration.ts`, and any others);
    - URL parameters for removed experiments;
-   - test-only scaffolding left without users.
-3. **Leave the battle sandbox alone.** Phase 4 replaces it while the UI still
-   depends on it.
-4. **Work through `pre-existing-issues.txt`** with the
-   `fix-pre-existing-issues` skill, if it still lists items.
-5. **Sweep temporary and testing scaffolding** out of production paths. Grep
-   for `TODO`, `HACK`, `FIXME`, `temporary`, `for testing`, `prototype`,
-   `playtest`, and debug-only branches. Each hit is either:
-   - deleted;
-   - made dev-only (P7);
-   - converted into a real feature, logged as a pre-existing issue, and filed
-     as a bead.
-
-   Re-check the "Retained invariants" in `docs/fake_configurability_audit.md`
-   against the surviving code.
+   - orphaned test scaffolding.
+3. **Sweep temporary and testing scaffolding.** Grep production paths for
+   `TODO`, `HACK`, `FIXME`, `temporary`, `for testing`, `prototype`,
+   `playtest`, and debug-only branches. Each hit is either deleted, made
+   dev-only (P7), or converted into a real feature. A conversion is filed as a
+   bead.
+4. **Leave the battle sandbox alone.** Phase 4 replaces it.
+5. **Clear `pre-existing-issues.txt`.** The Trox item disappears with 2.3.
 
 **Acceptance:**
 
-- `knip` reports zero unused files outside the allowlist, and every
-  allowlist entry has a reason.
+- `knip` is clean outside the reasoned allowlist.
 - The suite is green.
-- The review is resolved where marked.
 
-### 2.6 Mason audit and refactors
+### 2.9 Mason audit and refactors
 
 1. **Audit.** Run the Hive `mason` skill, read-only, over the surviving
-   codebase. Have it file each coherent improvement as a bounded bead with
-   label `mason`, with these priorities:
+   codebase. Have it file bounded beads (label `mason`), with these
+   priorities:
    - type safety and illegal states, especially IDs, journey and site state,
      and fold events;
    - prototype shortcuts that became structure;
-   - any remaining name-keyed card logic (always a bug; see AGENTS.md);
+   - any name-keyed card logic (always a bug; see AGENTS.md);
    - files over ~1000 lines in `src/screens` and `src/rules`;
    - brittle tests.
 
-   Skip `src/battle/` and `src/rules/battle/` (replaced in Phases 3–4) and
-   `src/cumulus/`. Cumulus is preserved UI; only refactors with identical
-   rendering qualify there.
-2. **Chain the beads.** Put the mason beads into the phase sequence before the
-   gate, at most ~10 and ranked by mason. Lower-ranked findings stay open
-   beads labeled `mason`, chained after the Phase 7 report as optional
-   follow-ups.
-3. **Implement the chained beads.** This plan explicitly authorizes it. Each
-   one must preserve behavior and rendering (D30), with before/after
-   screenshots for any touched screen.
+   Skip `src/battle/` and `src/rules/battle/`, which Phases 3–4 replace.
+2. **Chain the beads.** Put the top ~10 into the phase before the gate and
+   implement them; this plan authorizes it. Each preserves behavior and
+   rendering, with screenshots for touched screens. Chain the rest after the
+   Phase 7 report.
 
-### 2.7 Phase gate
+### 2.10 Phase gate
 
-1. Re-measure the Phase 1 metric set. Add a "after Phase 2" column to
-   `metrics.md`.
+1. Re-measure the Phase 1 set, adding an "after Phase 2" column to
+   `metrics.md`. Expect a much shorter gate: no trox step, no Rust steps,
+   fewer tests and rules.
 2. Run the independent review over the phase diff.
 3. Check that GitHub checks are green.
-4. Do a browser smoke of the journey from the front door through the first
-   battle start, desktop and mobile.
+4. Do a browser smoke from the front door through the first battle start, on
+   desktop and mobile.
 5. Close the epic.
 
 ## Exit gate
 
-- Solo play is local-first, with no Firebase or JDK at runtime.
-- The deleted systems are gone, with no dangling references.
-- The docs and skills describe the current state.
+- Three docs and one skill remain.
+- There is no RON, Rust, Firebase, Trox, co-op, editors, or analysis tooling.
+- Data lives in typed TS modules.
+- The log is local-first.
+- The scripts and lint rules are culled.
+- The mason refactors have landed.
 - The metrics are re-measured.
 - The review is resolved.

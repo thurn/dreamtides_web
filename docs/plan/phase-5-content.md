@@ -11,13 +11,13 @@
 - all eight transfigurations;
 - Apollyon's ten incarnations (designed new; D6).
 
-The pending list in `src/engine/content/pending.ts` reaches **empty**.
+No content entry is left `pending`; every one has abilities or `vanilla: true`.
 
 **Read first:**
 
-- [engine-design § Ability DSL](engine-design.md#ability-dsl), plus
+- [engine-design § Ability DSL](engine-design.md#ability-dsl-and-content-modules), plus
   [§ Transfigurations](engine-design.md#transfigurations) and
-  [§ Registry and gates](engine-design.md#registry-and-gates);
+  [§ Content gates](engine-design.md#content-gates);
 - [workflow § Card QA](workflow.md#card-qa-phases-47), plus
   [§ Rules ambiguity](workflow.md#rules-ambiguity-protocol) and
   [§ Card issues](workflow.md#card-issues-protocol);
@@ -28,21 +28,23 @@ The pending list in `src/engine/content/pending.ts` reaches **empty**.
 Every content batch bead follows these steps exactly.
 
 1. **Claim** the bead and create its worktree.
-2. **Author the definitions** for each UUID in the batch, plus the amplified
-   variant wherever `amplified_text` is non-blank. Record the text hash. Remove
-   the UUIDs from `pending.ts`.
+2. **Author the abilities** in each entity's content module, plus the
+   amplified variant wherever `amplifiedText` is present. Replace
+   `pending: true` with the abilities and set `verifiedText`.
 3. **Add primitives** the batch needs, each with primitive tests that use
    synthetic cards. Update the engine-design catalog table if the primitive is
    general.
-4. **Resolve ambiguities** with the ladder. Write battle_rules.md text and RD
-   entries. Log card problems in `docs/card_issues.md`.
+4. **Resolve ambiguities** with the ladder. Write `docs/rules.md` text and
+   entries in `docs/plan/evidence/rules-decisions.md`. Log card problems in
+   `docs/plan/evidence/card-issues.md`.
 5. **Write scenario specs** only for cards whose behavior exceeds the
    composition of their primitives (D20). Signs a card needs one: unusual
    targeting, interactions between its own abilities, functional zones, nth-in-turn
    counters, or replacement effects.
 6. **Audit:** `npm run audit:abilities -- --uuids <batch>` must report zero
-   unexplained mismatches. Explain an exception in `render-exceptions.ts` only
-   when the wording difference is cosmetic.
+   unexplained mismatches. Explain an exception in
+   `src/content/render-exceptions.ts` only when the wording difference is
+   cosmetic.
 7. **Fuzz smoke:** `npm run fuzz:engine -- --games 300 --weight-uuids <batch>`.
    Decks are biased to include the batch.
 8. **Sweep** the batch in the card-lab:
@@ -118,8 +120,8 @@ before the second batch: the sweep, the audit, and the lab solver.
 ### 5.3 Dreamwell cards (33)
 
 Port the behavior recorded from the deleted `dreamwell-effects-table` (see
-Phase 4.7 notes) into definitions. Keep `energy_added` and the tier
-construction rules from `dreamwell.ron` exactly. Sweep through a card-lab
+Phase 4.7 notes) into abilities. Keep `energy_added` and the tier
+construction rules from the Dreamwell content module exactly. Sweep through a card-lab
 variant that forces the next Dreamwell draw.
 
 ### 5.4 Avatars (32)
@@ -127,7 +129,7 @@ variant that forces the next Dreamwell draw.
 Avatar abilities run as emblem abilities (P4). That includes ☾ activated
 abilities with avatar exhaust, ❖/❖❖ speeds, first-turn triggers ("At the
 start of your first turn…"), and once-per-turn. Respect opponent progression:
-`ability_active_from_layer` in `opponents.ron`. The card-lab gains
+`ability_active_from_layer` in the opponents data module. The card-lab gains
 `?goto=card-lab&avatar=<uuid>`.
 
 ### 5.5 Dreamsigns: battle effects
@@ -154,7 +156,8 @@ consumed by the journey rules:
 - pre- and post-battle purge or transfigure windows;
 - "when you gain this dreamsign" one-shots.
 
-New player choices use existing Cumulus patterns and Trox copy:
+New player choices use existing Cumulus patterns and plain English copy in
+the UI copy module:
 
 - Sickle's forgo option;
 - Curled Tail's reroll;
@@ -191,16 +194,17 @@ Resonant-eligible card. Then judge a sample of 3 per transfiguration.
 
 ### 5.8 Apollyon incarnations (D6)
 
-1. **Extend the schema.** Extend `ApollyonIncarnation` in the game-data
-   compiler (Rust schema, TOML lowering, TS types) with:
-   - an Aspect ability: an emblem definition UUID in the DSL registry;
+1. **Extend the content type.** Extend the `ApollyonIncarnation` type in
+   `src/content/apollyon/` with:
+   - an Aspect ability, defined in the DSL as an emblem ability;
    - a deck recipe: a deck archetype bias plus up to 10 signature card UUIDs;
    - 1–2 dreamsign UUIDs.
 2. **Author all ten incarnations** to fit their `description` and
    `deck_archetype`.
 3. **Wire the boss battle init.** It uses the run's incarnation.
-4. **Rewrite `docs/journeys/bosses.md`** to describe the implemented
-   incarnations. Mark them **provisional** and list their design rationale.
+4. **Write the Apollyon section of `docs/design.md`** describing the
+   implemented incarnations. Mark them **provisional** and list their design
+   rationale.
 5. **Sanity-check** with 50 Greedy-vs-Greedy games per incarnation against
    layer-6 decks. Record win rates in `docs/plan/evidence/ai/apollyon.md`.
    Phase 7 re-runs this with the champion.
@@ -221,7 +225,7 @@ the rest after the Phase 7 report.
 
 ### 5.10 Phase gate
 
-1. **Pending list:** `pending.ts` is empty and the coverage gate passes.
+1. **Nothing pending:** no entry is `pending` and the coverage gate passes.
 2. **Full re-sweep** of every card (base and amplified) on the final code, plus
    the transfiguration sample. This is automated; run it in ≤30-minute
    batches.

@@ -217,8 +217,10 @@ procedure:
 
 Use the globally configured Playwright MCP service (`http://localhost:8931/mcp`).
 If it is unavailable, run `playwright-mcp-service start` and retry. **Never
-launch browsers directly.** See
-[qa_tooling.md](../journey_prototype/qa_tooling.md).
+launch browsers directly.** The project details (scenes, URL parameters,
+assert-before-acting) are in the README's QA section. Before Phase 2.1 merges
+them there, they are in `docs/journey_prototype/qa_tooling.md` and
+`qa_scenes.md`.
 
 ### Servers and contexts
 
@@ -294,15 +296,15 @@ and worked next. Then append a new `pass` line.
 Apply the [D10 ladder](decisions.md#d10-rules-ambiguity-ladder). For each
 decision:
 
-1. **Amend battle_rules.md** with normative, current-state text in the right
+1. **Amend `docs/rules.md`** with normative, current-state text in the right
    section. Keep its style: symbols, "you control", and so on. Write no
    history.
-2. **Append an entry to `docs/rules_decisions.md`:**
+2. **Append an entry to `docs/plan/evidence/rules-decisions.md`:**
 
    ```markdown
    ## RD-014: "Until your next turn" durations end at the start of the source controller's next Dreamwell phase
    - Ladder: 4 (MTG analog: "until your next turn" ends as that turn begins)
-   - battle_rules.md: § Keywords and Effects → Banish
+   - rules.md: § Keywords and Effects → Banish
    - Affects: 7be2e6d7-abff-4c44-a0c3-35460da1693c (amplified), …
    - Why: …
    ```
@@ -310,12 +312,12 @@ decision:
 3. **Encode it once** in the engine. Add a primitive test if the decision
    changes primitive behavior.
 
-The decisions D13–D15 and P1–P6 are written into battle_rules.md in Phase 3's
+The decisions D13–D15 and P1–P6 are written into `docs/rules.md` in Phase 3's
 first task.
 
 ## Card issues protocol
 
-`docs/card_issues.md` has one section per UUID:
+`docs/plan/evidence/card-issues.md` has one section per UUID:
 
 ```markdown
 ## 0458658d-7e02-4286-9249-93674d16620b

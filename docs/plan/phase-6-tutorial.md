@@ -7,13 +7,13 @@ Then delete the tutorial-only sandbox path.
 
 **Read first:**
 
-- `docs/journey_prototype/tutorial_data.md`;
-- `data/tutorial.ron`;
+- the tutorial content module, `src/content/data/tutorial.ts`, created in
+  Phase 2.4;
 - `src/battle/tutorial-battle-controller.ts`;
 - `src/battle/use-tutorial-battle-controller.ts`;
 - `src/cumulus/screens/TutorialBattleScreen.tsx`;
 - `src/rules/battle/tutorial-guidance.ts`;
-- the tutorial sections of `journey_prototype.md`.
+- the tutorial notes in the README's architecture section (Phase 2.1).
 
 Before starting, record the baseline: full screenshots of every tutorial beat
 on desktop and mobile, taken while the old path still works.
@@ -22,12 +22,12 @@ on desktop and mobile, taken while the old path still works.
 
 ### 6.1 Tutorial battle on the engine (core-review)
 
-- **Battle setup.** `tutorial.ron`'s battle setup (decks, hands, energy,
+- **Battle setup.** The tutorial module's battle setup (decks, hands, energy,
   board) becomes an engine `BattleInit`. The scripted segment is replayed as
   engine actions.
 - **AI overrides.** `battle.aiActionOverrides` become engine-level overrides
   in the policy host. They are triggered by UUID-based state triggers, such
-  as `after-dreamwell`, and resolved as ordinary `playCard` actions:
+  as `after-dreamwell`, and resolved as ordinary `play` actions:
   - The first override that matches takes priority, in source order.
   - A blocked override yields to the policy and logs its stable reason.
   - The committed transition records the override ID, the trigger card UUID,

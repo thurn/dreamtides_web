@@ -61,18 +61,18 @@ Then propose **budgets**. They are monitored, never gated. Examples:
 
 - `metrics.md` has every number with reproduction commands.
 - The budgets are written down.
-- The pre-existing Tollgate `trox:check-generated` issue in
-  `pre-existing-issues.txt` is re-checked:
-  - If it reproduces, it is fixed in this bead or the next.
-  - If it doesn't, it is removed from the file.
+- Steps that Phase 2 deletes are measured too, for the baseline: trox, Rust
+  game-data, RON formatting. The Trox entry in `pre-existing-issues.txt` is
+  left for Phase 2.3, which deletes Trox. The pre-flight run of the gate
+  passed: `trox` 47.4 s, `review` 228.4 s.
 
 ### 1.2 Unattended-run hygiene
 
-1. **Context diet.** Reduce always-loaded context:
-   - Trim `AGENTS.md` to durable invariants and pointers, under ~120 lines.
-   - Move procedural detail into the docs it belongs to, such as
-     `docs/journey_prototype/qa_tooling.md`.
-   - Keep every invariant that [README](README.md#global-invariants) lists.
+1. **Context diet.** Trim `AGENTS.md` to durable invariants and pointers,
+   under ~120 lines. Keep every invariant that
+   [README](README.md#global-invariants) lists. Procedural detail moves into
+   the project README in Phase 2.1, which also cuts the docs and skills
+   (D33).
 2. **Ignored paths.** Add `artifacts/qa/` and `logs/tournaments/` to
    `.gitignore`.
 3. **Tollgate.** The trusted policy `~/dreamtides_web/.tollgate/config.toml`
@@ -80,9 +80,10 @@ Then propose **budgets**. They are monitored, never gated. Examples:
    installed the prototype's `dependencies → trox → review` pipeline with
    `JOURNEY_TEST_WORKERS = "2"` (D17). Verify it with `tg --no-launch config
    explain`. Change it only through `tg --no-launch config validate`, then
-   `tg --no-launch config apply`, and only in Phase 1 beads whose purpose is
-   gate speed. Record the old and new config in `metrics.md`, because the file
-   is not versioned.
+   `tg --no-launch config apply`. Only two kinds of beads may change it:
+   Phase 1 beads whose purpose is gate speed, and the Phase 2 beads that
+   delete Trox (2.3) and Rust (2.4). Record the old and new config in
+   `metrics.md`, because the file is not versioned.
 4. **GitHub workflows.** Pre-flight deleted the Firebase Hosting workflows
    (D2). Keep `checks.yml`; GitHub runners are separate machines, so their
    4 workers are fine. Confirm it passes for the repository's first commits.
@@ -103,8 +104,8 @@ and three warm runs. Keep it only if its target metric improves by ≥10% with n
 regression elsewhere. Record the results in `metrics.md`.
 
 - **ESLint cache:** `--cache --cache-location node_modules/.cache/eslint`, in
-  `review.mjs` lint steps. Also look for slow custom rules; optimize a rule only
-  if 1.4 keeps it.
+  `review.mjs` lint steps. Don't optimize custom rules here; Phase 2.7 culls
+  them.
 - **Incremental typecheck:** `--incremental --tsBuildInfoFile
   node_modules/.cache/tsc/review.tsbuildinfo`, or `tsc -b`.
 - **Vitest environment:** default to `node`, with `jsdom` only for files that
@@ -113,23 +114,27 @@ regression elsewhere. Record the results in `metrics.md`.
 - **Test selection:** check how precise related-test selection is in
   `review-plan.mjs`. Over-selection costs time; under-selection costs
   correctness.
-- **Workspace caching:** check whether `prepare-workspace` skips unchanged
-  phases by content hash. Add hashing if it doesn't.
+- **Vitest startup:** setup-file cost, and dependency pre-bundling
+  (`deps.optimizer`).
 - **Tollgate concurrency:** running `lint` and `typecheck` concurrently inside
   `review:full`. Only do this if the 6-core cap holds.
 
 **Acceptance:** each kept change has its before/after numbers in `metrics.md`,
 and the rejected ones are listed with their numbers.
 
-### 1.4 Test and lint-rule triage (surviving areas)
+### 1.4 Test triage (surviving areas)
 
 Apply the behavior-contract rule from
 [D19](decisions.md#d19-test-pruning) to every test file outside these areas:
 
 - **Deleted in Phase 2:**
   - `src/coop/`, `src/eventlog/` transport and Firebase code, `src/firebase/`;
-  - `src/editor/`, `src/image_viewer/`, `tabula/`;
-  - analysis scripts and alternate draft algorithms.
+  - `src/editor/`, `src/image_viewer/`, `tabula/`, `src/cumulus/docs/`;
+  - analysis scripts and alternate draft algorithms;
+  - Trox and localization code;
+  - the RON/game-data pipeline and its scripts;
+  - every script outside the essential set (see Phase 2.7);
+  - all custom ESLint rules, which Phase 2.7 triages.
 - **Replaced in Phases 3–4:**
   - `src/battle/` sandbox and AI;
   - `src/rules/battle/` debug-edit automation and effect tables.
@@ -144,14 +149,9 @@ Steps:
    ```
 
 2. **Execute it in area batches,** one bead per area: `src/rules/journey`,
-   `src/screens`, `src/cumulus`, `src/data`, `scripts/`, `eslint-rules/`, and
-   so on. A `rewrite` turns implementation-detail tests into tests of the
+   `src/screens`, `src/cumulus` (outside `docs/`), `src/data`, `src/state`,
+   and so on. A `rewrite` turns implementation-detail tests into tests of the
    observable contract they were protecting.
-3. **Triage the custom ESLint rules (45).** Keep the rules that prevent real
-   bug classes: name-keyed card maps, untranslated player copy, Cumulus spacing
-   tokens, UUID handling. Delete obsolete ones with their tests and record
-   which in the ledger.
-
 **Acceptance:**
 
 - Every surviving-area test file has a ledger verdict.

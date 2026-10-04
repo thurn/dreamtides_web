@@ -65,7 +65,7 @@ Hand-written features computed from the engine view:
   estimated from the decklist;
 - tempo.
 
-The weights live in RON (`data/internal/internal_ai.ron`, extended). Greedy is
+The weights live in the AI data module (`src/content/data/ai.ts`). Greedy is
 upgraded to use the evaluation.
 
 **Acceptance:**
@@ -135,7 +135,8 @@ the calibrated budget.
   2. Set the iteration budgets so a mid-range laptop meets the ~1.5 s main and
      ~0.5 s response caps. Use 3× the M5 Max time as the proxy.
   3. Keep the wall-clock caps as a backstop.
-- **Per-layer presets** in RON (D24), defaulting to full strength.
+- **Per-layer presets** in the AI data module (D24), defaulting to full
+  strength.
 - **AI decision logging** per the [schema](workflow.md#logging).
 - **Browser QA:** the UI stays responsive during AI turns, and AI pacing uses
   the reveal dwell.
@@ -185,24 +186,36 @@ Run tournaments only when no Tollgate validation is running (D17).
 
    `__caps` must be empty throughout.
 2. **Final gates:**
-   - a 10,000-game fuzz soak with the champion and Random policies;
+   - a 10,000-game fuzz soak with the champion and Random policies, ≥10% of
+     games in interactive replay mode;
    - the coverage gate;
    - the full gate;
    - GitHub checks green.
 3. **Independent review** of the Phase 7 diff.
-4. **`docs/plan/report.md`** covers:
+4. **Docs pass.** `README.md`, `docs/rules.md`, and `docs/design.md`
+   describe the shipped system in the current state. The rules include every
+   normative decision; the design includes Apollyon, marked provisional.
+5. **Write `docs/plan/report.md`.** This is the only plan file that survives.
+   It is self-contained, because its sources are deleted in step 6. It covers:
    - what was delivered against the README's outcomes;
-   - the counts of RD entries and card issues, with links;
-   - the QA ledger totals;
+   - a summary of the rules decisions, with each RD's ladder step and the
+     affected UUIDs;
+   - the full card-issues list (UUID, problem, interpretation, suggested
+     fix), for the operator;
+   - the QA ledger totals and any remaining judged concerns;
    - the metrics before and after;
-   - the tournament ladder and champion;
-   - the open issues, the review debt (if any), and the recommended
-     follow-ups. Meta-progression is first.
-5. Close the Phase 7 epic.
+   - the tournament ladder and champion, plus the balance observations;
+   - the open issues, the review debt (if any), the deferred `mason` beads,
+     and the recommended follow-ups. Meta-progression is first.
+6. **Reach the D33 end state.** Delete `docs/plan/` except `report.md`.
+   Verify that the tracked Markdown files are exactly those listed in
+   [README done criterion 7](README.md#done-criteria-whole-run).
+7. Close the Phase 7 epic.
 
 ## Exit gate
 
 - The stop rule is satisfied.
 - The final acceptance passes.
 - The report is promoted.
+- The D33 end state holds.
 - This is the end of the run.
