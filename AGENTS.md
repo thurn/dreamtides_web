@@ -1,3 +1,11 @@
+# Plan
+
+This repository is executing [docs/plan/README.md](docs/plan/README.md)
+unattended. The decisions in [docs/plan/decisions.md](docs/plan/decisions.md)
+are binding, and [docs/plan/workflow.md](docs/plan/workflow.md) defines how
+work is filed, delivered, reviewed and QA'd. Hive project id:
+`dreamtides_web`.
+
 Use the `wt` skill for all work unless explicitly asked to work "on master".
 
 ~/.llms/skills/wt/SKILL.md (note this is not project-local)
@@ -6,24 +14,23 @@ Never edit files in the main repo directly unless explicitly asked to work "on m
 
 Perform follow up work on the same worktree as the intial work until promotion.
 
-When work is complete, create one detailed local commit and immediately submit
-it with `tg candidate HEAD` for speculative validation without promotion
-authority. Do not wait for user approval before committing or scheduling the
-candidate. After explicit promotion approval, authorize the exact candidate
-with `tg approve <candidate-id>`; Tollgate owns any required regeneration,
-certified promotion to `master`, and leased remote push. Worktree branches are
-local-only and must never be pushed to a remote.
+When work is complete, create one detailed local commit using Conventional
+Commits and immediately submit it with `tg candidate HEAD`. The plan grants
+promotion authority for in-scope plan work and in-scope CI repairs: authorize
+the exact candidate with `tg approve <candidate-id> --wait` without asking.
+Tollgate owns any required regeneration, certified promotion, and leased
+remote push. Worktree branches are local-only and must never be pushed to a
+remote.
 
 Do not create new branches unless explicitly requested.
 
 Do not print a summary of changes.
 
-For major work items (e.g. hundreds of non-test lines changed), please request review via the
-independent-review skill and fix flagged issues:
-
- ~/.llms/skills/independent-review
-
-Run one independent review maximum, there is no need to re-run it for follow-up tasks.
+Request independent review (the `independent-review` skill, run through the
+Codex CLI) at every plan phase gate and for every bead the phase pages mark
+core-review; see the Reviews section of docs/plan/workflow.md. This
+explicitly authorizes more than one review per session. There is no per-bead
+warden review.
 
 Dreamtides battle rules are in docs/battle_rules/battle_rules.md
 
@@ -167,7 +174,8 @@ assert-before-acting details are in `docs/journey_prototype/qa_tooling.md`.
 
 # Deploy
 
-Deploy the prototype to production with `npm run deploy` (`scripts/deploy.sh`). It runs every step needed to make production match local: builds `dist/`, deploys it to Firebase Hosting, and uploads the binary art to the Storage bucket. Art is served from the bucket — not Hosting — so a Hosting-only deploy leaves newly-keyed art 404ing; `npm run deploy` covers both origins.
+Deployment is operator-only. Never deploy, upload assets, or run
+`npm run deploy` during the plan. For reference, the operator deploys with `npm run deploy` (`scripts/deploy.sh`). It runs every step needed to make production match local: builds `dist/`, deploys it to Firebase Hosting, and uploads the binary art to the Storage bucket. Art is served from the bucket — not Hosting — so a Hosting-only deploy leaves newly-keyed art 404ing; `npm run deploy` covers both origins.
 
 The build needs a populated `.env` + `.env.production` (gitignored) with the `VITE_FIREBASE_*` config and `VITE_ASSET_BASE_URL`, and fails fast if those vars are missing. The art upload needs an authenticated `gcloud` with write access to the bucket (`gcloud auth login`; see docs/journey_prototype/asset-hosting.md).
 

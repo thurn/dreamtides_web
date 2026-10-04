@@ -14,7 +14,6 @@
  * The webhook URL is read from (in order of precedence):
  *   1. --webhook <url>
  *   2. the DISCORD_WEBHOOK_URL environment variable
- *   3. a built-in default (the project's screenshot channel)
  *
  * Run with --help for the full flag list.
  *
@@ -24,11 +23,6 @@
 import { readFile, stat } from "node:fs/promises";
 import { basename, extname } from "node:path";
 import { parseArgs } from "node:util";
-
-// The project's default screenshot channel. Override per-invocation with
-// --webhook or the DISCORD_WEBHOOK_URL env var (either takes precedence).
-const DEFAULT_WEBHOOK_URL =
-  "https://discord.com/api/webhooks/REDACTED";
 
 // Discord accepts at most 10 attachments per message.
 const MAX_ATTACHMENTS_PER_MESSAGE = 10;
@@ -58,8 +52,7 @@ Arguments:
 Options:
   -m, --message <str>  Text posted alongside the (first) batch of images.
   -u, --username <str> Override the webhook's display name for this post.
-  -w, --webhook <url>  Discord webhook URL. Defaults to $DISCORD_WEBHOOK_URL,
-                       then a built-in project default.
+  -w, --webhook <url>  Discord webhook URL. Defaults to $DISCORD_WEBHOOK_URL.
       --per-message    Post each batch as a separate message with its own copy
                        of --message (default: message attached to first batch).
   -n, --dry-run        Validate inputs and print the plan without sending.
@@ -198,8 +191,12 @@ async function main() {
     throw new UserError("No images provided.\n\nRun with --help for usage.");
   }
 
-  const webhookUrl =
-    flags.webhook ?? process.env.DISCORD_WEBHOOK_URL ?? DEFAULT_WEBHOOK_URL;
+  const webhookUrl = flags.webhook ?? process.env.DISCORD_WEBHOOK_URL;
+  if (webhookUrl === undefined || webhookUrl === "") {
+    throw new UserError(
+      "No webhook URL. Pass --webhook <url> or set DISCORD_WEBHOOK_URL.",
+    );
+  }
   if (!/^https:\/\/discord(app)?\.com\/api\/webhooks\//.test(webhookUrl)) {
     throw new UserError(`Not a valid Discord webhook URL: ${webhookUrl}`);
   }
