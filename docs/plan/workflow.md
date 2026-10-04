@@ -25,6 +25,10 @@ Where they differ, the [decisions](decisions.md) win, then AGENTS.md.
 - **Continuous mode is explicitly authorized.** After closing a bead, continue
   with the next eligible bead of the current phase. When the phase gate closes,
   file and start the next phase.
+- **The run ends when the Phase 7 epic closes.** Nothing is filed to run after
+  it. The session then stops.
+- **The run is silent.** Send no push notifications or other outbound
+  messages. Progress lives in bead notes and the session title.
 
 ## Beads
 
@@ -59,6 +63,9 @@ filed by the planning session; see the [README](README.md#starting-the-run).
    - `hive_origin_thread` metadata.
 
    Omit `hive_project` for now: the child has a prerequisite.
+
+   Every phase's task list ends with a **mason pass** task, then the gate
+   task ([Mason passes](#mason-passes)).
 
 3. **Chain the children.** Each child depends on the previous one:
    `hbd dep add <child-k> <child-k-1>`. The gate task depends on the last
@@ -212,6 +219,27 @@ procedure:
    and no inherited context, given the same scope and diff. Label it
    "fallback (not Sol)" in the notes. Never describe a fallback as the
    independent review.
+
+## Mason passes
+
+Every phase ends with a mason pass, immediately before its gate task.
+
+1. **Audit.** Run the Hive `mason` skill read-only. Scope it to the code the
+   phase created or touched, plus the phase page's stated focus. Exclude code
+   a later phase deletes or replaces.
+2. **File.** Mason files each finding as a bounded bead (label `mason`).
+   Chain each one after the mason task and before the gate, using the same
+   filing pattern: edges first, then `hive_project`.
+3. **Implement all of them in the phase.** Nothing is deferred to a later
+   phase or past the run. Each bead preserves behavior and rendering. Its
+   evidence is the same as any bead's, plus screenshots for touched screens.
+   Engine beads also keep the fuzz smoke green.
+4. **Close the mason task** after its audit is recorded in its notes and its
+   filed beads are chained. The gate checks that all of them closed.
+
+A finding too large for one commit is split at filing time. A finding that
+would change rules, card behavior, or the player-visible UI is not a mason
+refactor; log it in the bead notes and drop it.
 
 ## Browser QA
 
@@ -393,7 +421,8 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
 
 Run this sequence on every resume. It is idempotent.
 
-1. **Read the plan.** Read [README](README.md), then this section.
+1. **Read the plan.** Read [README](README.md), then this section. If the
+   Phase 7 epic is closed, the run is over: stop.
 2. **Find your work.** List your unfinished assignments:
    `hbd list --assignee "${CLAUDE_CODE_SESSION_ID:?}" --status in_progress --json`.
    If there are none, list the project's ready queue:

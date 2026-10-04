@@ -72,6 +72,8 @@ upgraded to use the evaluation.
 
 - Contract tests: the evaluation is monotonic in obvious features.
 - New Greedy beats old Greedy (CI lower bound > 50%, 400 games).
+- Snapshot it as the frozen reference policy `greedy@7.2` (D25). Later edits
+  to the evaluation never change the snapshot.
 
 ### 7.3 Expert bot (D27)
 
@@ -95,8 +97,12 @@ tempo, and trigger value.
 (`src/engine/policy/expert-overrides.ts`) is filled only from observed
 misplays, each with a note.
 
-**Acceptance:** Expert beats Greedy (CI lower bound > 50%, 400 games). The
-first report is recorded.
+**Acceptance:**
+
+- Expert beats Greedy (CI lower bound > 50%, 400 games). The first report is
+  recorded.
+- Snapshot it as the frozen reference policy `expert@7.3` (D25). Later edits
+  to the Expert rules never change the snapshot.
 
 ### 7.4 ISMCTS baseline
 
@@ -162,8 +168,10 @@ Each iteration is one bead, filed only after the previous iteration closes.
    - If rejected, commit only the report, and revert the code.
 6. **Check the stop rule (D25).** The phase moves to 7.8 when either holds:
    - The champion clears the bar **and** the last three iterations produced
-     no new champion. The bar is ≥75% against Expert and ≥90% against Greedy,
-     each by CI lower bound with ≥400 full-budget games.
+     no new champion. The bar is ≥75% against the frozen `expert@7.3` and
+     ≥90% against the frozen `greedy@7.2`, each by CI lower bound with ≥400
+     full-budget games. It applies even when the champion is an Expert
+     variant.
    - The 3-day clock has expired.
 
 Run tournaments only when no Tollgate validation is running (D17).
@@ -175,7 +183,15 @@ Run tournaments only when no Tollgate validation is running (D17).
    - per-avatar, per-archetype, and per-incarnation win rates;
    - outlier cards, flagged as observations only (D11).
 
-### 7.9 Final acceptance and report
+### 7.9 Mason pass
+
+Run the [mason pass](workflow.md#mason-passes) over `src/engine/policy/`, the
+tournament runner, and the worker host. It runs after the 3-day clock's
+improvement loop and is not counted against it. Each bead must leave policy
+behavior unchanged: a fixed-seed tournament reproduces the champion's
+outcomes exactly.
+
+### 7.10 Final acceptance and report
 
 1. **Browser acceptance** on desktop and mobile:
    - ~10 full games against the champion, with a blunder report written into
@@ -205,16 +221,19 @@ Run tournaments only when no Tollgate validation is running (D17).
    - the QA ledger totals and any remaining judged concerns;
    - the metrics before and after;
    - the tournament ladder and champion, plus the balance observations;
-   - the open issues, the review debt (if any), the deferred `mason` beads,
-     and the recommended follow-ups. Meta-progression is first.
+   - the open issues, the review debt (if any), and the recommended
+     follow-ups. Meta-progression is first.
 6. **Reach the D33 end state.** Delete `docs/plan/` except `report.md`.
+   Remove the `# Plan` section from `AGENTS.md` and every other pointer into
+   `docs/plan/`, so no surviving guidance references a deleted file.
    Verify that the tracked Markdown files are exactly those listed in
    [README done criterion 7](README.md#done-criteria-whole-run).
-7. Close the Phase 7 epic.
+7. Close the Phase 7 epic. The run is over; the session stops.
 
 ## Exit gate
 
 - The stop rule is satisfied.
+- Every mason bead filed this phase has landed.
 - The final acceptance passes.
 - The report is promoted.
 - The D33 end state holds.

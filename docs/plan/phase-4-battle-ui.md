@@ -72,6 +72,8 @@ desktop 1440×900 and mobile 390×844. Capture these states:
   Legionnaire confirmation prompt; All Forward and All Back.
 - **Passing:** the end-phase controls in the existing action bar.
 - **Dusk:** the human's blocking window.
+- **No undo (P2):** remove the prototype's battle undo/redo controls. Cancel
+  before the commit point is the only take-back.
 
 **Acceptance:**
 
@@ -164,7 +166,7 @@ Its rules:
 
   ```text
   ?goto=card-lab&card=<uuid>
-    &variant=<base|amplified|empowered|kindled|resonant|inspired|enduring|attuned|perfected>
+    &variant=<base|amplified|empowered|kindled|resonant|inspired|enduring|hastened|attuned|perfected>
     &as=<player|enemy>
   ```
 
@@ -188,8 +190,11 @@ is deleted here:
 - the journey `BattleDebugEdit` path;
 - the debug rail, zone-drag sandbox, status and counter editors, and the
   figment creator;
-- the journey use of `basic-automation` and the effect tables. Copy the
-  Dreamwell effect behavior into the Phase 5 Dreamwell bead's notes first;
+- the journey use of `basic-automation` and the effect tables. First write
+  `docs/plan/evidence/legacy-behavior.md`: for each Dreamwell card and each
+  semantically automated card, its UUID, the behavior the old code
+  implemented, and the source path, all at the pre-deletion commit OID.
+  Phase 5 reads it;
 - `semantic-play` and the automation audit;
 - the old journey AI (`src/battle/ai/`, approval loop, planner);
 - their tests.
@@ -197,21 +202,36 @@ is deleted here:
 Code that only the tutorial still needs gets a `// tutorial-only until Phase 6`
 header.
 
+**Tutorial-journey battles** run on the engine like every journey battle.
+Their in-battle Mira guidance may regress until Phase 6
+([D38](decisions.md#d38-tutorial-journey-battle-guidance-during-phases-45)).
+Port it here only where that is cheap.
+
 **Acceptance:**
 
 - `knip` shows no orphans outside the tutorial-only set.
 - The battle screen still matches the baseline.
 - `/tutorial` still plays through, verified by a browser smoke.
 
-### 4.8 Phase gate
+### 4.8 Mason pass
+
+Run the [mason pass](workflow.md#mason-passes) over the fold wiring, the
+battle view-model adapter, `PromptHost`, the policy host, and the card-lab
+and sweep tooling. Look especially for adapter leaks of engine internals into
+UI code and for prompt-kind handling duplicated outside `PromptHost`.
+
+### 4.9 Phase gate
 
 1. Browser playthrough of a journey on desktop and mobile against Greedy:
    - Play the first two battles and the final boss battle for real.
    - Force-resolve the intermediate battles with debug actions.
    - Watch `__caps`.
-2. Run the independent review over the phase diff.
-3. Update `metrics.md`.
-4. Close the epic.
+2. Walk the tutorial journey through its battles and list in the gate notes
+   exactly which Mira battle guidance is broken (D38). That list is Phase 6.2
+   scope.
+3. Run the independent review over the phase diff.
+4. Update `metrics.md`.
+5. Close the epic.
 
 ## Exit gate
 
@@ -219,4 +239,5 @@ header.
 - Every prompt flows through `PromptHost`.
 - The journey sandbox and old AI are gone.
 - The card-lab and sweep are working.
+- Every mason bead filed this phase has landed.
 - The review is resolved.

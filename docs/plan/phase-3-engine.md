@@ -128,10 +128,12 @@ Build:
   stack primitives come in 3.5.
 - **Content fields:** `abilities`, `vanilla`, `pending`, and `verifiedText`
   on the content-module types.
+- **Pending semantics** per
+  [D36](decisions.md#d36-pending-entities-play-text-less): pending entities
+  play text-less and emit `pendingAbility`.
 - **Gates:** the CI coverage gate and the `verifiedText` gate
   ([engine-design § Content gates](engine-design.md#content-gates)).
 - **Tooling:**
-  - the English renderer and `npm run audit:abilities`;
   - the scenario-spec builder (with scripted answers);
   - the initial card-lab setup solver.
 
@@ -139,8 +141,7 @@ Build:
 
 - Primitive tests use synthetic cards.
 - The gates pass with every entity `pending` or `vanilla`.
-- The audit runs on synthetic definitions.
-- The fuzzer mixes synthetic cards into decks.
+- The fuzzer mixes synthetic cards and full-pool pending cards into decks.
 
 ### 3.5 Stack, priority, and timing windows (core-review)
 
@@ -260,7 +261,14 @@ Build:
 - Determinization tests pass.
 - The numbers are recorded.
 
-### 3.11 Phase gate
+### 3.11 Mason pass
+
+Run the [mason pass](workflow.md#mason-passes) over `src/engine/`: type
+safety of IDs, steps, prompts, and answers; illegal states in `BattleState`;
+duplicated rules logic; and anything that would make Phase 5's ~750
+definitions harder to write. Every filed bead keeps the fuzz smoke green.
+
+### 3.12 Phase gate
 
 1. **Fuzz soak:** 10,000 games with synthetic and vanilla decks, ≥10% of them
    in interactive replay mode, in ≤30-minute batches with ≤4 processes. There
@@ -275,4 +283,5 @@ Build:
 - The engine enforces all of `docs/rules.md`.
 - The prompt protocol is proven by property tests and the soak.
 - Every entity is `pending` or `vanilla`.
+- Every mason bead filed this phase has landed.
 - The reviews are resolved.

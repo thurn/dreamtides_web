@@ -49,6 +49,10 @@ Do this first, so stale guidance stops consuming context.
    - the site and guide data facts that the code doesn't make obvious;
    - a short "Future: meta-progression" section (D7).
 
+   State the nine transfigurations with Empowered rounding down
+   ([F5, F6](decisions.md#established-facts)); `journeys.md`'s Empowered
+   examples are inconsistent and are not carried over.
+
    Keep design intent. Drop implementation narration.
 3. **Rewrite `README.md`** in the current state. Cover:
    - what the game is;
@@ -120,7 +124,66 @@ This is one or two beads.
 - The build has no tool routes.
 - `review:full` passes.
 
-### 2.3 English-only (D35)
+### 2.3 RON → TypeScript data modules (D32)
+
+1. **Convert the catalogs.** Convert all 35 `data/**/*.ron` catalogs into
+   typed modules under `src/content/` (layout in
+   [engine-design](engine-design.md#ability-dsl-and-content-modules)).
+   - Cards, dreamsigns, avatars, Dreamwell, and figments are one file per
+     entity, with an explicit `index.ts`.
+   - Tunables and journey catalogs are one module each: battle, opponents,
+     AI, atlas, dreamscapes, guides, sites, economy, tides, exploration,
+     gamble, augury, transfiguration, shop, tutorial, glossary, and resonance.
+
+   Write a one-off converter script, not kept. Carry over the RON comments.
+   The catalogs wrap player-facing text in `Tx("…")`; the converter unwraps
+   it into plain English strings, so no data module depends on Trox. This
+   task runs before 2.4 deletes Trox for that reason.
+   Cards get `pending: true`, or `vanilla: true` when they have no rules
+   text; Phase 3 introduces the ability fields.
+2. **Prove parity.** Before deleting the pipeline, run a one-off check that
+   every converted catalog deep-equals the current generated runtime JSON,
+   value for value (D11). Where the runtime JSON holds a
+   `trox-source-message-ref`, compare against its resolved English text.
+   Record it in the bead notes.
+3. **Switch the runtime.** Replace `fetch("/card-data.json")` and its siblings
+   with imports, so data loading becomes synchronous where that simplifies
+   code.
+4. **Delete the RON pipeline:**
+   - `tools/game-data/` (Rust, 26.6k lines);
+   - `scripts/game-data-*`, `format-ron`, `.ronfmt.json`, the TOML
+     compatibility layer, and generated `public/*-data.json`;
+   - the data phases of `scripts/prepare-workspace.mjs`, keeping only art
+     symlinking and whatever the localization step in 2.4 still needs until
+     it is deleted;
+   - `rust-toolchain.toml`;
+   - the RON-related review steps (`ron-format-check`, `rust-format-check`,
+     `rust-test`, `clean-game-data`);
+   - the `tools/game-data` `rust-cache` step in `checks.yml` (the Rust
+     toolchain itself stays until 2.4, because CI builds the Trox CLI);
+   - `data/`.
+
+Split into beads:
+
+- (a) entity catalogs;
+- (b) journey and tunable catalogs;
+- (c) the runtime switch;
+- (d) the pipeline deletion. Trox still runs until 2.4. If its Tollgate
+  `trox` step reads anything under `data/`, this bead regenerates the Trox
+  artifacts from the remaining sources so the step stays green.
+
+**Acceptance:**
+
+- Parity is recorded.
+- `data/`, `tools/`, and `.ron` files are gone.
+- `npm run review:full` passes.
+- The game plays as before (browser smoke: journey start → draft → battle
+  start).
+
+### 2.4 English-only (D35)
+
+The data modules already hold plain English (2.3), so nothing upstream of
+`src/` depends on Trox.
 
 1. **Codemod the text.** `tx(...)` and `txa(...)` calls become plain strings
    and template literals. `LocalizedString` becomes `string`. Selector and
@@ -135,13 +198,14 @@ This is one or two beads.
      and domain-string audits;
    - the Trox Vite plugin and the `trox:*` npm scripts;
    - the localization ESLint rules;
-   - the generated bundles.
+   - the generated bundles and the remaining localization phase of
+     `scripts/prepare-workspace.mjs`.
 3. **Update the gates:**
    - The Tollgate policy loses its `trox` step and `TROX_ROOT`, through
      `tg --no-launch config validate` then `apply`. Record the old and new
      config in `metrics.md`.
-   - In `.github/workflows/checks.yml`, delete the Trox checkout,
-     `rust-cache`, and `trox:*` steps.
+   - In `.github/workflows/checks.yml`, delete the Rust toolchain setup, the
+     Trox checkout, its `rust-cache`, and the `trox:*` steps.
 
 **Acceptance:**
 
@@ -149,54 +213,8 @@ This is one or two beads.
   `scripts/`, or the configs.
 - Screens render identically to before.
 - The gate passes without a trox step.
-
-### 2.4 RON → TypeScript data modules (D32)
-
-1. **Convert the catalogs.** Convert all 35 `data/**/*.ron` catalogs into
-   typed modules under `src/content/` (layout in
-   [engine-design](engine-design.md#ability-dsl-and-content-modules)).
-   - Cards, dreamsigns, avatars, Dreamwell, and figments are one file per
-     entity, with an explicit `index.ts`.
-   - Tunables and journey catalogs are one module each: battle, opponents,
-     AI, atlas, dreamscapes, guides, sites, economy, tides, exploration,
-     gamble, augury, transfiguration, shop, tutorial, glossary, and resonance.
-
-   Write a one-off converter script, not kept. Carry over the RON comments.
-   Cards get `pending: true`, or `vanilla: true` when they have no rules
-   text; Phase 3 introduces the ability fields.
-2. **Prove parity.** Before deleting the pipeline, run a one-off check that
-   every converted catalog deep-equals the current generated runtime JSON,
-   value for value (D11). Record it in the bead notes.
-3. **Switch the runtime.** Replace `fetch("/card-data.json")` and its siblings
-   with imports, so data loading becomes synchronous where that simplifies
-   code.
-4. **Delete the RON pipeline:**
-   - `tools/game-data/` (Rust, 26.6k lines);
-   - `scripts/game-data-*`, `format-ron`, `.ronfmt.json`, the TOML
-     compatibility layer, and generated `public/*-data.json`;
-   - the data and localization phases of `scripts/prepare-workspace.mjs`,
-     keeping only art symlinking;
-   - `rust-toolchain.toml`;
-   - the RON-related review steps (`ron-format-check`, `rust-format-check`,
-     `rust-test`, `clean-game-data`);
-   - the Rust setup in `checks.yml`;
-   - `data/`.
-
-Split into beads:
-
-- (a) entity catalogs;
-- (b) journey and tunable catalogs;
-- (c) the runtime switch;
-- (d) the pipeline deletion.
-
-**Acceptance:**
-
-- Parity is recorded.
-- `data/`, `tools/`, and `.ron` files are gone.
 - No Rust toolchain is needed. Check this on a clean checkout:
   `npm ci && npm run review:full`.
-- The game plays as before (browser smoke: journey start → draft → battle
-  start).
 
 ### 2.5 Local-first log (core-review)
 
@@ -296,7 +314,7 @@ before and after, and lint time before and after.
    dev-only (P7), or converted into a real feature. A conversion is filed as a
    bead.
 4. **Leave the battle sandbox alone.** Phase 4 replaces it.
-5. **Clear `pre-existing-issues.txt`.** The Trox item disappears with 2.3.
+5. **Clear `pre-existing-issues.txt`.** The Trox item disappears with 2.4.
 
 **Acceptance:**
 
@@ -316,17 +334,21 @@ before and after, and lint time before and after.
    - brittle tests.
 
    Skip `src/battle/` and `src/rules/battle/`, which Phases 3–4 replace.
-2. **Chain the beads.** Put the top ~10 into the phase before the gate and
-   implement them; this plan authorizes it. Each preserves behavior and
-   rendering, with screenshots for touched screens. Chain the rest after the
-   Phase 7 report.
+2. **Chain the beads.** Chain every filed bead before the gate and implement
+   all of them in this phase; this plan authorizes it
+   ([workflow § Mason passes](workflow.md#mason-passes)). Each preserves
+   behavior and rendering, with screenshots for touched screens.
 
 ### 2.10 Phase gate
 
 1. Re-measure the Phase 1 set, adding an "after Phase 2" column to
    `metrics.md`. Expect a much shorter gate: no trox step, no Rust steps,
    fewer tests and rules.
-2. Run the independent review over the phase diff.
+2. Run the independent review over the phase diff. The diff is dominated by
+   deletions, so give the reviewer the added and modified hunks
+   (`git diff --diff-filter=AMR <base> HEAD`) plus the list of deleted paths,
+   and ask it to check that nothing still reachable from a route, the build,
+   a QA scene, or a surviving test was deleted.
 3. Check that GitHub checks are green.
 4. Do a browser smoke from the front door through the first battle start, on
    desktop and mobile.
@@ -339,6 +361,6 @@ before and after, and lint time before and after.
 - Data lives in typed TS modules.
 - The log is local-first.
 - The scripts and lint rules are culled.
-- The mason refactors have landed.
+- Every mason bead filed this phase has landed.
 - The metrics are re-measured.
 - The review is resolved.

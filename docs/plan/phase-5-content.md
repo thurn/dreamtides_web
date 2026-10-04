@@ -8,7 +8,7 @@
 - 32 avatars;
 - 153 dreamsigns (battle and journey effects);
 - Nightmare;
-- all eight transfigurations;
+- all nine transfigurations ([F6](decisions.md#established-facts));
 - Apollyon's ten incarnations (designed new; D6).
 
 No content entry is left `pending`; every one has abilities or `vanilla: true`.
@@ -29,8 +29,10 @@ Every content batch bead follows these steps exactly.
 
 1. **Claim** the bead and create its worktree.
 2. **Author the abilities** in each entity's content module, plus the
-   amplified variant wherever `amplifiedText` is present. Replace
-   `pending: true` with the abilities and set `verifiedText`.
+   amplified variant wherever `amplifiedText` is present. The printed text is
+   canonical (D5): read it clause by clause and check that every clause is
+   implemented. Replace `pending: true` with the abilities and set
+   `verifiedText`.
 3. **Add primitives** the batch needs, each with primitive tests that use
    synthetic cards. Update the engine-design catalog table if the primitive is
    general.
@@ -41,23 +43,19 @@ Every content batch bead follows these steps exactly.
    composition of their primitives (D20). Signs a card needs one: unusual
    targeting, interactions between its own abilities, functional zones, nth-in-turn
    counters, or replacement effects.
-6. **Audit:** `npm run audit:abilities -- --uuids <batch>` must report zero
-   unexplained mismatches. Explain an exception in
-   `src/content/render-exceptions.ts` only when the wording difference is
-   cosmetic.
-7. **Fuzz smoke:** `npm run fuzz:engine -- --games 300 --weight-uuids <batch>`.
+6. **Fuzz smoke:** `npm run fuzz:engine -- --games 300 --weight-uuids <batch>`.
    Decks are biased to include the batch.
-8. **Sweep** the batch in the card-lab:
+7. **Sweep** the batch in the card-lab:
    `node scripts/qa/card-sweep.mjs --bead <id>`. Cover the base and amplified
    variants, `as=player` and `as=enemy`. Every `fail` is fixed and re-swept.
-9. **Judged QA** per D21:
+8. **Judged QA** per D21:
    - every card that introduces a new prompt kind, status indicator, or visual
      effect;
    - plus a random 10% of the rest. Seed the pick with the bead ID so it is
      reproducible.
 
    Record the verdicts in the ledger.
-10. **Validate.** Run `npm run review`. Then do one commit, submit the
+9. **Validate.** Run `npm run review`. Then do one commit, submit the
     candidate, approve with `--wait`, and close the bead. The bead notes list:
     counts, new primitives, RD and card-issue IDs, sweep and judged totals.
 
@@ -103,7 +101,7 @@ primitive dependency and frequency:
 16. the remaining unique cards.
 
 File one bead per batch, chained in that order. Then file the remaining
-Phase 5 task beads (5.3–5.9) after the last card batch.
+Phase 5 task beads (5.3–5.10) after the last card batch.
 
 **Acceptance:**
 
@@ -119,8 +117,9 @@ before the second batch: the sweep, the audit, and the lab solver.
 
 ### 5.3 Dreamwell cards (33)
 
-Port the behavior recorded from the deleted `dreamwell-effects-table` (see
-Phase 4.7 notes) into abilities. Keep `energy_added` and the tier
+Port the behavior recorded in `docs/plan/evidence/legacy-behavior.md`
+(written in Phase 4.7) into abilities. The batches that cover the prototype's
+semantically automated cards read the same file. Keep `energy_added` and the tier
 construction rules from the Dreamwell content module exactly. Sweep through a card-lab
 variant that forces the next Dreamwell draw.
 
@@ -178,17 +177,20 @@ Every modifier application is logged.
 
 Build:
 
-- the transforms and eligibility predicates for all eight types
+- the transforms and eligibility predicates for all nine types
   ([engine-design § Transfigurations](engine-design.md#transfigurations));
 - the journey integration: the Transfiguration site, its home specialty, and
   the dreamsigns and exploration effects that transfigure;
-- rendered modified text, using the existing tint presentation.
+- displayed modified text, from the existing text transforms in
+  `src/transfiguration/transfiguration-logic.ts` and the existing tint
+  presentation (D5).
 
-Tests: transform contract tests on synthetic definitions. Fuzz decks include
+Tests: transform contract tests on synthetic definitions, plus a test that
+the ability transforms and the text transforms agree on eligibility. Fuzz decks include
 random transfigurations.
 
 **Sweep sample:** the base and amplified forms of all cards are already swept
-in the batches. For each of the other seven transfigurations, sweep at least
+in the batches. For each of the other eight transfigurations, sweep at least
 20 eligible cards, stratified across mechanic families, plus every
 Resonant-eligible card. Then judge a sample of 3 per transfiguration.
 
@@ -211,7 +213,8 @@ Resonant-eligible card. Then judge a sample of 3 per transfiguration.
 
 ### 5.9 Mason audit of the engine
 
-Run `mason` over `src/engine/` and the fold and UI adapters. It files bounded
+Run `mason` over `src/engine/`, `src/content/`, the journey-modifier
+registry, and the fold and UI adapters. It files bounded
 refactor beads (label `mason`) for:
 
 - simplifications revealed by ~750 definitions;
@@ -219,9 +222,9 @@ refactor beads (label `mason`) for:
 - duplicated primitives;
 - adapter leaks.
 
-Chain the top-ranked beads, at most ~8, before the gate, and implement them.
-The fuzz smoke and the coverage gate must stay green after each one. Chain
-the rest after the Phase 7 report.
+This is the phase's [mason pass](workflow.md#mason-passes). Chain every filed
+bead before the gate and implement all of them. The fuzz smoke and the
+coverage gate must stay green after each one.
 
 ### 5.10 Phase gate
 
@@ -243,4 +246,5 @@ the rest after the Phase 7 report.
 - The ledger is complete per D21.
 - The soak is clean.
 - The card issues and RD entries are recorded.
+- Every mason bead filed this phase has landed.
 - The review is resolved.

@@ -20,9 +20,19 @@ tests about to be deleted.
 
 ## Tasks
 
-These are already filed as epic `hv-b8ef`, with tasks `hv-b8ef.1`–`hv-b8ef.5`
-in order. Additional area beads for 1.4 are filed and chained before
-`hv-b8ef.5` when needed.
+These are already filed as epic `hv-b8ef`. The tasks chain in this order:
+
+| Section | Bead |
+| --- | --- |
+| 1.1 Baseline measurements | `hv-b8ef.1` |
+| 1.2 Unattended-run hygiene | `hv-b8ef.2` |
+| 1.3 Feedback-loop speedups | `hv-b8ef.3` |
+| 1.4 Test triage | `hv-b8ef.4`, plus any area beads it files |
+| 1.5 Mason pass | `hv-b8ef.6`, plus the beads it files |
+| 1.6 Phase gate | `hv-b8ef.5` |
+
+Additional area beads for 1.4 are chained before `hv-b8ef.6`. Beads filed by
+the mason pass are chained before `hv-b8ef.5`.
 
 ### 1.1 Baseline measurements
 
@@ -63,7 +73,7 @@ Then propose **budgets**. They are monitored, never gated. Examples:
 - The budgets are written down.
 - Steps that Phase 2 deletes are measured too, for the baseline: trox, Rust
   game-data, RON formatting. The Trox entry in `pre-existing-issues.txt` is
-  left for Phase 2.3, which deletes Trox. The pre-flight run of the gate
+  left for Phase 2.4, which deletes Trox. The pre-flight run of the gate
   passed: `trox` 47.4 s, `review` 228.4 s.
 
 ### 1.2 Unattended-run hygiene
@@ -82,7 +92,7 @@ Then propose **budgets**. They are monitored, never gated. Examples:
    explain`. Change it only through `tg --no-launch config validate`, then
    `tg --no-launch config apply`. Only two kinds of beads may change it:
    Phase 1 beads whose purpose is gate speed, and the Phase 2 beads that
-   delete Trox (2.3) and Rust (2.4). Record the old and new config in
+   delete Rust (2.3) and Trox (2.4). Record the old and new config in
    `metrics.md`, because the file is not versioned.
 4. **GitHub workflows.** Pre-flight deleted the Firebase Hosting workflows
    (D2). Keep `checks.yml`; GitHub runners are separate machines, so their
@@ -159,7 +169,17 @@ Steps:
 - `metrics.md` shows the new test count and runtime.
 - No `contract` test was deleted.
 
-### 1.5 Phase gate
+### 1.5 Mason pass
+
+Run the [mason pass](workflow.md#mason-passes) over the areas that survive
+Phase 2, outside `src/battle/` and `src/rules/battle/`. Concentrate on what
+this phase touched: `scripts/review.mjs`, `scripts/review-plan.mjs`, the test
+setup, and the triaged tests. Skip findings in code Phase 2 deletes.
+
+**Acceptance:** every bead the pass files is chained before the gate and
+closed.
+
+### 1.6 Phase gate
 
 1. Re-measure the 1.1 set. Update `metrics.md` with a before/after table.
 2. Run the [independent review](workflow.md#reviews) over the phase diff.
@@ -171,5 +191,6 @@ Steps:
 - Baselines and budgets are recorded.
 - Hygiene and speedups have landed, with evidence.
 - Triage is complete for the surviving areas.
+- Every mason bead filed this phase has landed.
 - The review is resolved.
 - The gate passes at 2 workers.

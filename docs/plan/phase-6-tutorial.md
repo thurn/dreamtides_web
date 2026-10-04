@@ -49,7 +49,11 @@ on desktop and mobile, taken while the old path still works.
 
 ### 6.2 Tutorial journey and front door
 
-Verify the tutorial journey flow on the local-first log:
+Restore every item on the Phase 4 gate's list of broken tutorial-journey
+battle guidance
+([D38](decisions.md#d38-tutorial-journey-battle-guidance-during-phases-45)),
+driven by engine events. Then verify the tutorial journey flow on the
+local-first log:
 
 - the `journeyStart`, `dreamscape`, and `atlas` delayed guidance;
 - first visits to Draft, Purge, and Dreamsign Revelation;
@@ -61,14 +65,22 @@ Remove the hosted-playtest controller remnants if Phase 2 left any adapters.
 **Acceptance:** a browser walkthrough of the whole tutorial, on desktop and
 mobile, matches the baseline screenshots beat by beat, with `__caps` empty.
 
-### 6.3 Phase gate
+### 6.3 Mason pass
 
-1. Run the independent review over the phase diff.
-2. Check that the gate passes and GitHub checks are green.
-3. Close the epic.
+Run the [mason pass](workflow.md#mason-passes) over the tutorial battle
+setup, the AI override path in the policy host, and the guidance triggers.
+
+### 6.4 Phase gate
+
+1. Full journey playthroughs on desktop and mobile against Greedy (D21),
+   with `__caps` empty.
+2. Run the independent review over the phase diff.
+3. Check that the gate passes and GitHub checks are green.
+4. Close the epic.
 
 ## Exit gate
 
 - The tutorial and tutorial journey work end to end on the engine.
 - The sandbox code is gone.
+- Every mason bead filed this phase has landed.
 - The review is resolved.

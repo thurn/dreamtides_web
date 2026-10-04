@@ -1,7 +1,8 @@
 # Decisions
 
 These decisions were made with the operator in the planning interview on
-2026-10-03, and revised the same day. They are binding for the run. In the
+2026-10-03, revised the same day, and refined in a readiness review on
+2026-10-04. They are binding for the run. In the
 [rules ambiguity ladder](#d10-rules-ambiguity-ladder) they outrank every other
 precedent.
 
@@ -106,8 +107,12 @@ its catalog entry** in the TypeScript content modules ([D32](#d32-typescript-dat
 The entry carries its printed text, amplified text, and a
 `verifiedText` hash of the text the abilities were checked against.
 
+- **The printed English text is canonical.** The abilities are its
+  TypeScript implementation, and the two are kept in sync by hand.
 - A CI gate fails when the text changes without re-verification.
-- An English renderer audits each AST against its printed text.
+- There is no ability-to-English renderer. Displayed rules text, including
+  transfigured text, always comes from the catalog text and the existing
+  transfiguration text transforms, never from the abilities.
 
 **Why:**
 
@@ -185,6 +190,14 @@ All tutorial content and behavior stay:
 
 The scripted battle becomes engine actions plus authored AI overrides that
 resolve through normal engine play. Tutorial data becomes a TS content module.
+
+### D38. Tutorial-journey battle guidance during Phases 4–5
+
+Phase 4 moves journey battles onto the engine. Mira's in-battle guidance in
+tutorial-journey battles may regress until Phase 6. Phase 4 ports it only
+where that is cheap, and its gate notes list exactly what broke. That list is
+explicit Phase 6.2 scope. The standalone `/tutorial` battle stays on its
+frozen sandbox path until Phase 6 (Phase 4.7).
 
 ### D31. Prompt architecture: replay-suspended steps
 
@@ -376,6 +389,22 @@ Other properties:
 - X and paid additional costs carry over.
 - It ceases to exist on resolution or prevention.
 
+### D36. Pending entities play text-less
+
+Until Phase 5 authors an entity, it is `pending` and the engine treats it as
+text-less:
+
+- A pending character plays with its printed cost, spark, and subtype and has
+  no abilities.
+- A pending event resolves with no effect.
+- A pending dreamsign, avatar, or Dreamwell card has no battle effect. A
+  Dreamwell card still adds its `energy_added`.
+- Each pending play or draw emits a `pendingAbility` engine event, logged with
+  the UUID. Development builds show a small "pending" marker on the card.
+
+This keeps journeys, the fuzzer, and the Phase 4 gate playable on full-pool
+decks before Phase 5.
+
 ## Workflow
 
 ### D16. Pre-flight
@@ -405,6 +434,13 @@ The machine is shared with other agents. Stay at about 6 cores:
   - at most 4 worker processes;
   - batches of at most 30 minutes;
   - never concurrent with a running Tollgate validation of this repository.
+
+### D37. Mason pass every phase
+
+Every phase ends with a `mason` audit immediately before its gate, scoped to
+the code that phase created or touched. **Every** bead it files is implemented
+in the same phase; nothing is deferred to a later phase or past the run.
+Procedure: [workflow § Mason passes](workflow.md#mason-passes).
 
 ### D18. Review cadence
 
@@ -440,8 +476,8 @@ Layered:
 - **Scenario specs:** only for cards whose behavior exceeds the composition of
   their primitives (est. 25–35%).
 - **Every card, variant, and transfiguration:** covered by the seeded
-  invariant fuzzer, the coverage gate, and the `verifiedText` gate.
-- **English-render audit:** a bead-level validation report.
+  invariant fuzzer, the coverage gate, the `verifiedText` gate, and the
+  card-lab sweep.
 
 ### D21. Browser QA coverage
 
@@ -465,10 +501,11 @@ loop has its own stop rule (D25).
 This index, a decisions page, two design and process pages, and one page per
 phase. Progress lives in bead notes.
 
-### D29. Keep-alive
+### D29. Keep-alive and signals
 
 The operator owns keeping the session alive. The plan defines idempotent
-re-entry only.
+re-entry only. The run sends no notifications; the operator reads bead notes
+and the session title.
 
 ### D30. UI preservation
 
@@ -522,6 +559,11 @@ strength. There is no difficulty tuning.
 A candidate becomes champion only if it beats the champion with a 95% CI
 lower bound above 50% over at least 400 paired games.
 
+**Frozen baselines.** "Greedy" and "Expert" in the bar mean the immutable
+reference snapshots `greedy@7.2` and `expert@7.3`, recorded when those tasks
+close. Later changes to the Expert rules or evaluation never move the bar.
+The bar applies even when the champion is itself an Expert variant.
+
 The phase ends when either condition holds:
 
 - The champion clears the bar **and** three consecutive iterations produce no
@@ -542,7 +584,10 @@ ladder and are logged.
 - **P1. Response windows.** A player receives a response window only while
   holding a legal response. Otherwise the engine auto-passes. The human
   always gets their Dusk window and their own Day and Night phases.
-- **P2. Undo.** Undo is debug-only.
+- **P2. Undo.** Confirmed by the operator. Players have no undo: they may
+  cancel their own play or activation before its commit point, and nothing
+  after. Undo exists only as a `?debug=1` engine action. The prototype's
+  battle undo/redo controls are removed in Phase 4.
 - **P3. Mulligans.** There are no mulligans.
 - **P4. Avatars and dreamsigns are not characters.** They can't be targeted
   as characters and get no spark or Support. Each avatar has an exhausted
@@ -584,3 +629,11 @@ ladder and are logged.
 
   Today these live in `data/battle.ron`; after Phase 2, in the battle data
   module.
+- **F5. Empowered rounds down.** Empowered sets the cost to
+  `floor(cost / 2)`: 4→2, 3→1, 2→1, 1→0. That is the shipped behavior in
+  `src/transfiguration/transfiguration-logic.ts`; `journeys.md`'s examples
+  contradict each other and are wrong.
+- **F6. Nine transfigurations.** Empowered, Amplified, Kindled, Inspired,
+  Enduring, Hastened, Resonant, Attuned, and Perfected. Hastened applies to an
+  event that is not Fast and makes it Fast. Perfected applies every other one
+  the card is eligible for.

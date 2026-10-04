@@ -48,7 +48,7 @@ src/engine/
   effects/     DSL interpreter and primitives
   continuous/  computed characteristics (spark, cost, keywords, types), Support
   triggers/    event bus, trigger matching, queue, delayed/floating triggers
-  dsl/         ability types, builders, transfiguration transforms, English renderer
+  dsl/         ability types, builders, transfiguration transforms
   loops/       loop signatures, shortcut detection, mandatory-cycle detection
   view/        per-side redaction, knowledge tracking, determinization sampling
   policy/      Policy interface, Random/Greedy (Phase 4), bots (Phase 7), worker host
@@ -613,19 +613,26 @@ cards use event-like abilities. Figments are catalog entries.
 Each transfiguration is a pure transform of an entity's abilities, with an
 eligibility predicate:
 
+There are nine ([F6](decisions.md#established-facts)):
+
 | Transfiguration | Eligibility | Transform |
 | --- | --- | --- |
-| Empowered | printed cost > 0 | cost → `round(cost / 2)`, halves rounding up (4→2, 3→2, 2→1, 1→0) |
+| Empowered | printed cost > 0 | cost → `floor(cost / 2)` (4→2, 3→1, 2→1, 1→0; [F5](decisions.md#established-facts)) |
 | Amplified | `amplifiedText` present | `v.amplified = true` |
 | Kindled | character | base spark ×2; 0 → 1 |
 | Resonant | has `▸Materialized`, `▸Dawn`, or once-per-turn | Materialized also on Dissolved; Dawn also on Materialized; drop `oncePerTurn` |
 | Inspired | event | append `draw(1)` |
 | Enduring | event | add `keyword(reclaim())` |
+| Hastened | event that is not Fast | speed → Fast |
 | Attuned | has an activated ability with an energy cost | that cost −1 (min 0) |
 | Perfected | eligible for ≥2 of the above | apply all eligible transforms |
 
-The English renderer renders transformed abilities. That supplies the tinted
-modified rules text the journey shows. Preserve the current presentation.
+**Displayed text is not derived from abilities.** The tinted, modified rules
+text the journey shows keeps coming from the existing text transforms in
+`src/transfiguration/transfiguration-logic.ts`, with the current presentation.
+The ability transforms here and those text transforms describe the same
+change; a contract test per transfiguration keeps the eligibility predicates
+of the two in agreement.
 
 ## Content gates
 
@@ -635,18 +642,17 @@ modified rules text the journey shows. Preserve the current presentation.
   Phases 3–5) `pending: true`.
 - The pending set is empty at the Phase 5 gate.
 - Every entry with abilities has `verifiedText === hash(text, amplifiedText)`.
-  A text edit fails CI until the abilities are re-verified and the hash is
-  updated.
+  A text edit fails CI until the abilities are re-verified against the new
+  text and the hash is updated.
 
-**The English-render audit** (`npm run audit:abilities -- --uuids <…>`) is a
-report, not a test:
+The printed text is canonical and the abilities implement it (D5). There is
+no ability-to-English renderer. Correctness of an encoding is shown by
+primitive tests, scenario specs, the fuzzer, and the card-lab sweep and judged
+QA.
 
-1. It renders each entity, and its amplified variant, to canonical English.
-2. It normalizes the text and diffs it against the printed text.
-3. Every mismatch is either fixed or listed in
-   `src/content/render-exceptions.ts` with a one-line reason.
-
-A content bead closes only with zero unexplained mismatches.
+**Pending entities** are text-less in battle until authored
+([D36](decisions.md#d36-pending-entities-play-text-less)). The interpreter
+emits `pendingAbility` for each pending play or draw.
 
 ## Loops
 
@@ -784,7 +790,7 @@ an intent.
 - **Primitive and rules tests:** `src/engine/**/*.test.ts`, using synthetic
   definitions from `src/engine/testing/synthetic-cards.ts`. These are test
   fixtures, not catalog content.
-- **Prompt properties:** the core of Phase 3.2.
+- **Prompt properties:** the core of Phase 3.3.
   - **Equivalence.** For seeded synthetic games, run the game with
     `InlineSource` while recording its answers. Then replay the same answers
     through the fold, suspending and resuming at **every** prompt. Final
