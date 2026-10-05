@@ -1,4 +1,5 @@
 import type { CardData } from "../types/cards";
+import { loadCardsV2Database } from "./cards-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import { parseBattleCardId } from "../types/identifiers";
 
@@ -13,19 +14,9 @@ export interface TutorialCards {
 }
 
 /** Load the canonical card data used to resolve authored tutorial UUIDs. */
-export async function loadTutorialCards(): Promise<TutorialCards> {
-  const [response, dreamwell] = await Promise.all([
-    fetch("/card-data.json"),
-    loadDreamwellCards(),
-  ]);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load tutorial card data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  const cards = (await response.json()) as CardData[];
+export function loadTutorialCards(): TutorialCards {
   return {
-    cards,
-    dreamwell,
+    cards: [...loadCardsV2Database().values()],
+    dreamwell: loadDreamwellCards(),
   };
 }

@@ -1,10 +1,8 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { gambleFixture } from "../testing/gamble-fixture";
-import { loadGambleData } from "./gamble-data";
+import { parseGambleData } from "./gamble-data";
 
-afterEach(() => vi.unstubAllGlobals());
-
-function generatedFixture() {
+function documentFixture() {
   return {
     ...gambleFixture(),
     contentHash: "a".repeat(64),
@@ -12,72 +10,41 @@ function generatedFixture() {
   };
 }
 
-describe("loadGambleData", () => {
-  it("loads a validated generated artifact", async () => {
-    const fixture = generatedFixture();
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve(fixture),
-      }),
-    );
-
-    await expect(loadGambleData()).resolves.toEqual(fixture);
-    expect(fetch).toHaveBeenCalledWith("/gamble-data.json");
+describe("parseGambleData", () => {
+  it("accepts a well-formed Gamble document", () => {
+    const fixture = documentFixture();
+    expect(parseGambleData(fixture)).toEqual(fixture);
   });
 
-  it("rejects malformed hashes before publishing content", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            ...gambleFixture(),
-            contentHash: "not-a-hash",
-            foldHash: "also-not-a-hash",
-          }),
+  it("rejects malformed hashes before publishing content", () => {
+    expect(() =>
+      parseGambleData({
+        ...gambleFixture(),
+        contentHash: "not-a-hash",
+        foldHash: "also-not-a-hash",
       }),
-    );
-
-    await expect(loadGambleData()).rejects.toThrow(/malformed gamble-data/u);
+    ).toThrow();
   });
 
-  it("rejects a rule variant assigned to the wrong stable game", async () => {
-    const fixture = generatedFixture();
+  it("rejects a rule variant assigned to the wrong stable game", () => {
+    const fixture = documentFixture();
     const games = fixture.games.map((game, index) =>
       index === 0
         ? { ...game, rules: { ...game.rules, kind: "blackjack" } }
         : game,
     );
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: () => Promise.resolve({ ...fixture, games }),
-      }),
-    );
-
-    await expect(loadGambleData()).rejects.toThrow(/malformed gamble-data/u);
+    expect(() => parseGambleData({ ...fixture, games })).toThrow();
   });
 
-  it("rejects a catalog without the code-defined fallback game", async () => {
-    const fixture = generatedFixture();
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue({
-        ok: true,
-        json: () =>
-          Promise.resolve({
-            ...fixture,
-            games: fixture.games.filter(
-              (game) => game.id !== "gravok-three-gate-wager",
-            ),
-          }),
+  it("rejects a catalog without the code-defined fallback game", () => {
+    const fixture = documentFixture();
+    expect(() =>
+      parseGambleData({
+        ...fixture,
+        games: fixture.games.filter(
+          (game) => game.id !== "gravok-three-gate-wager",
+        ),
       }),
-    );
-
-    await expect(loadGambleData()).rejects.toThrow(/malformed gamble-data/u);
+    ).toThrow();
   });
 });

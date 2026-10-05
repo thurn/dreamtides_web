@@ -9,8 +9,8 @@ import type {
 } from "../types/transfiguration-data";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 import { glossaryEntryIdFromUnknown } from "../types/identifiers";
+import { transfigurationDocument } from "../content/documents";
 
-const PATH = "/transfiguration-data.json";
 const HASH = /^[0-9a-f]{64}$/u;
 const COLOR = /^#[0-9a-f]{6}$/u;
 
@@ -204,14 +204,9 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
   };
 }
 
-export async function loadTransfigurationData(): Promise<TransfigurationData> {
-  const response = await fetch(PATH);
-  if (!response.ok)
-    throw new Error(
-      `Failed to load Transfiguration data: ${String(response.status)} ${response.statusText}`,
-    );
-  const value: unknown = await response.json();
-  return parseTransfigurationData(value);
+/** Validates the Transfiguration document assembled from the content modules. */
+export function loadTransfigurationData(): TransfigurationData {
+  return parseTransfigurationData(transfigurationDocument());
 }
 
 export function transfigurationForm(

@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- tutorial orchestration is intentionally centralized here. */
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { TutorialScreen } from "../../cumulus/screens/TutorialScreen";
 import { logEvent } from "../../logging";
@@ -35,18 +34,11 @@ export function TutorialScreenAdapter({
   if (battleConfiguration === undefined) {
     throw new Error("Tutorial battle configuration is missing.");
   }
-  const { actions: authoredActions, loaded: actionsLoaded } =
-    useTutorialActions();
+  const authoredActions = useTutorialActions();
   const beginRequestedKey = useRef<IntentKey | null>(null);
   const tutorialCards = useTutorialCards();
   useEffect(() => {
-    if (
-      !actionsLoaded ||
-      tutorialCards === null ||
-      state.tutorial !== null ||
-      state.journeyId === null
-    )
-      return;
+    if (state.tutorial !== null || state.journeyId === null) return;
     const intentKey = parseIntentKey(`tutorial:${state.journeyId}:begin`);
     if (beginRequestedKey.current === intentKey) return;
     beginRequestedKey.current = intentKey;
@@ -62,15 +54,7 @@ export function TutorialScreenAdapter({
           message: error instanceof Error ? error.message : String(error),
         });
       });
-  }, [
-    actionsLoaded,
-    directLive,
-    authoredActions,
-    mutations,
-    tutorialCards,
-    state.journeyId,
-    state.tutorial,
-  ]);
+  }, [directLive, authoredActions, mutations, state.journeyId, state.tutorial]);
   useTutorialBattleHandoff(state.tutorial, mutations.beginTutorialBattle);
   const view = useMemo(
     () =>
@@ -78,8 +62,8 @@ export function TutorialScreenAdapter({
         avatars,
         battleConfiguration,
         state.tutorial,
-        tutorialCards?.cards ?? null,
-        tutorialCards?.dreamwell ?? null,
+        tutorialCards.cards,
+        tutorialCards.dreamwell,
       ),
     [battleConfiguration, avatars, state.tutorial, tutorialCards],
   );

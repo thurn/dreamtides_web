@@ -1,17 +1,20 @@
 import { describe, expect, it } from "vitest";
-import { parse } from "smol-toml";
-import cardsSource from "../../../data/cards.toml?raw";
-import dreamwellSource from "../../../data/dreamwell.toml?raw";
-import avatarsSource from "../../../data/avatars.toml?raw";
-import figmentsSource from "../../../data/figments.toml?raw";
-import tutorialSource from "../../../data/tutorial.toml?raw";
+import { AVATARS } from "../../content/avatars";
+import { CARDS } from "../../content/cards";
+import { DREAMWELL_CARDS } from "../../content/dreamwell";
+import { FIGMENTS } from "../../content/figments";
+import { TUTORIAL } from "../../content/tutorial";
 import { isHighlightedRulesTextTerm } from "../../cumulus/components/card/RulesText";
 import { GLOSSARY_IDS, lookupGlossaryTerm } from "../../data/glossary";
 import { parseTutorialTriggers } from "../../data/tutorial-actions";
 import type { TutorialTriggerDefinition } from "../../types/tutorial";
 import { matchTutorialGuidance } from "./tutorial-guidance";
 import type { TutorialTriggerId } from "../../types/identifiers";
-import { testTutorialTriggerId, testGlossaryEntryId, testCardId } from "../../types/test-identities";
+import {
+  testTutorialTriggerId,
+  testGlossaryEntryId,
+  testCardId,
+} from "../../types/test-identities";
 
 function glossaryTrigger(
   idSeed: string,
@@ -159,27 +162,19 @@ describe("matchTutorialGuidance", () => {
 
 describe("tutorial trigger coverage", () => {
   it("covers every yellow term currently used by battle entities", () => {
-    const sources = [
-      ...(parse(cardsSource).cards as Array<Record<string, unknown>>),
-      ...(parse(dreamwellSource).dreamwell as Array<Record<string, unknown>>),
-      ...(parse(avatarsSource).avatar as Array<
-        Record<string, unknown>
-      >),
-      ...(parse(figmentsSource).figments as Array<Record<string, unknown>>),
-    ];
+    const texts = [...CARDS, ...DREAMWELL_CARDS, ...AVATARS, ...FIGMENTS].map(
+      (entity) => entity.renderedText,
+    );
     const highlightedGlossaryIds = new Set<string>();
-    for (const record of sources) {
-      const text = record["rendered-text"];
-      if (typeof text !== "string") continue;
+    for (const text of texts) {
       for (const word of text.match(/[A-Za-z]+/gu) ?? []) {
         if (!isHighlightedRulesTextTerm(word)) continue;
         const glossary = lookupGlossaryTerm(word);
         if (glossary !== undefined) highlightedGlossaryIds.add(glossary.id);
       }
     }
-    const parsedTutorial = parse(tutorialSource) as Record<string, unknown>;
     const triggerGlossaryIds = new Set(
-      parseTutorialTriggers(parsedTutorial.triggers).flatMap((trigger) =>
+      parseTutorialTriggers(TUTORIAL.triggers).flatMap((trigger) =>
         trigger.match.kind === "glossary" ? [trigger.match.id] : [],
       ),
     );

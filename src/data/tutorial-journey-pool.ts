@@ -1,5 +1,4 @@
-import { parse } from "smol-toml";
-import tutorialJourneyPoolSource from "../../data/tutorial_journey_pool.toml?raw";
+import { TUTORIAL_JOURNEY_POOL as TUTORIAL_JOURNEY_POOL_CONTENT } from "../content/tutorial-journey-pool";
 import { DEFAULT_TIDES4_TUNING } from "../draft/pool/variant-tides4";
 import type {
   AvatarId,
@@ -74,32 +73,32 @@ export function validateTutorialJourneyPool(
 ): TutorialJourneyPool {
   const source = record(input, "root");
   const avatarId = nonBlankString(
-    source["avatar-id"],
-    "avatar-id",
+    source.avatarId,
+    "avatarId",
   );
   if (!UUID_RE.test(avatarId)) {
-    invalid("avatar-id must be a UUID");
+    invalid("avatarId must be a UUID");
   }
 
-  const poolSize = positiveInteger(source["pool-size"], "pool-size");
+  const poolSize = positiveInteger(source.poolSize, "poolSize");
   if (poolSize !== expectedPoolSize) {
     invalid(
-      `pool-size must match the normal journey pool size (${String(expectedPoolSize)})`,
+      `poolSize must match the normal journey pool size (${String(expectedPoolSize)})`,
     );
   }
 
-  const rawOpeningDreamsignIds = source["opening-dreamsigns"];
+  const rawOpeningDreamsignIds = source.openingDreamsignIds;
   if (
     !Array.isArray(rawOpeningDreamsignIds) ||
     rawOpeningDreamsignIds.length === 0 ||
     rawOpeningDreamsignIds.length > 3
   ) {
-    invalid("opening-dreamsigns must contain between one and three UUIDs");
+    invalid("openingDreamsignIds must contain between one and three UUIDs");
   }
   const openingDreamsignIds = rawOpeningDreamsignIds.map((value, index) => {
-    const id = nonBlankString(value, `opening-dreamsigns[${String(index)}]`);
+    const id = nonBlankString(value, `openingDreamsignIds[${String(index)}]`);
     if (!UUID_RE.test(id)) {
-      invalid(`opening-dreamsigns[${String(index)}] must be a UUID`);
+      invalid(`openingDreamsignIds[${String(index)}] must be a UUID`);
     }
     return parseDreamsignId(id);
   });
@@ -107,20 +106,20 @@ export function validateTutorialJourneyPool(
     new Set(openingDreamsignIds.map((id) => id.toLocaleLowerCase())).size !==
     openingDreamsignIds.length
   ) {
-    invalid("opening-dreamsigns must not contain duplicate UUIDs");
+    invalid("openingDreamsignIds must not contain duplicate UUIDs");
   }
 
   if (!Array.isArray(source.tides) || source.tides.length === 0) {
     invalid("tides must contain at least one entry");
   }
 
-  const rawOpeningOffers = source["opening-offers"];
+  const rawOpeningOffers = source.openingOffers;
   if (!Array.isArray(rawOpeningOffers) || rawOpeningOffers.length === 0) {
-    invalid("opening-offers must contain at least one offer");
+    invalid("openingOffers must contain at least one offer");
   }
   const openingCardIds = new Set<CardId>();
   const openingOffers = rawOpeningOffers.map((value, offerIndex) => {
-    const label = `opening-offers[${String(offerIndex)}]`;
+    const label = `openingOffers[${String(offerIndex)}]`;
     if (!Array.isArray(value) || value.length === 0 || value.length > 4) {
       return invalid(`${label} must contain between one and four card UUIDs`);
     }
@@ -228,11 +227,7 @@ export function validateTutorialJourneyPool(
   };
 }
 
-export function parseTutorialJourneyPool(source: string): TutorialJourneyPool {
-  return validateTutorialJourneyPool(parse(source));
-}
-
 /** The authored package used by the tutorial journey handoff. */
-export const TUTORIAL_JOURNEY_POOL = parseTutorialJourneyPool(
-  tutorialJourneyPoolSource,
+export const TUTORIAL_JOURNEY_POOL = validateTutorialJourneyPool(
+  TUTORIAL_JOURNEY_POOL_CONTENT,
 );

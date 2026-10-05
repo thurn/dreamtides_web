@@ -166,9 +166,7 @@ vi.mock("../../data/tutorial-actions", async (importOriginal) => {
     await importOriginal<typeof import("../../data/tutorial-actions")>();
   return {
     ...original,
-    loadTutorialActions: vi.fn(() =>
-      Promise.resolve(tutorialState.actions),
-    ),
+    loadTutorialActions: vi.fn(() => tutorialState.actions),
   };
 });
 

@@ -13,8 +13,8 @@ import {
   type GuideId,
 } from "../types/identifiers";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
+import { sitesDocument } from "../content/documents";
 
-const SITES_DATA_JSON_PATH = "/sites-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -276,14 +276,14 @@ function isSitesData(value: unknown): value is SitesData {
 
 export function parseSitesData(value: unknown): SitesData {
   if (!isSitesData(value)) {
-    throw new Error("Failed to load Sites data: malformed sites-data.json");
+    throw new Error("Failed to load Sites data: malformed Sites document");
   }
   try {
     for (const siteType of SITE_TYPES) {
       requireGlossaryEntry(value.siteTypes[siteType].glossaryId);
     }
   } catch {
-    throw new Error("Failed to load Sites data: malformed sites-data.json");
+    throw new Error("Failed to load Sites data: malformed Sites document");
   }
   return {
     ...value,
@@ -319,15 +319,9 @@ export function parseSitesData(value: unknown): SitesData {
   };
 }
 
-/** Fetches the validated site registry emitted by the asset pipeline. */
-export async function loadSitesData(): Promise<SitesData> {
-  const response = await fetch(SITES_DATA_JSON_PATH);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load Sites data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  return parseSitesData(await response.json());
+/** Validates the site registry assembled from the content modules. */
+export function loadSitesData(): SitesData {
+  return parseSitesData(sitesDocument());
 }
 
 function requireSiteTypeData(sitesData: SitesData, siteType: SiteType) {

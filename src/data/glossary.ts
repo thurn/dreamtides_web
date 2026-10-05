@@ -1,5 +1,5 @@
-import glossarySource from "../../data/glossary.toml?raw";
-import { parseGlossarySource } from "../../scripts/glossary-source.mjs";
+import { validateGlossaryEntries } from "../../scripts/glossary-source.mjs";
+import { GLOSSARY as GLOSSARY_ENTRIES } from "../content/glossary";
 import type { SourceTransport } from "../runtime/localization/runtime";
 import { hydrateSourceTransport } from "../runtime/localization/runtime";
 import {
@@ -89,7 +89,7 @@ function parseGlossaryCategory(value: unknown): GlossaryCategory {
 
 /** Every editable Info Card definition, in canonical RON source order. */
 export const INFO_CARD_GLOSSARY: readonly GlossaryCatalogEntry[] =
-  parseGlossarySource(glossarySource).map((entry) => ({
+  validateGlossaryEntries(GLOSSARY_ENTRIES).map((entry) => ({
     ...entry,
     id: parseGlossaryEntryId(entry.id),
     category: parseGlossaryCategory(entry.category),

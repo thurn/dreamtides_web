@@ -8,8 +8,8 @@ import {
   type GambleGameId,
 } from "../types/gamble";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
+import { gambleDocument } from "../content/documents";
 
-const GAMBLE_DATA_JSON_PATH = "/gamble-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
 const GAME_RULE_KIND = {
   "gravok-three-gate-wager": "threeGate",
@@ -68,17 +68,15 @@ function isGambleData(value: unknown): boolean {
   );
 }
 
-/** Load the compiler-validated Gamble gameplay catalog. */
-export async function loadGambleData(): Promise<GambleData> {
-  const response = await fetch(GAMBLE_DATA_JSON_PATH);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load Gamble data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  const value: unknown = await response.json();
+/** Validates the Gamble document assembled from the content modules. */
+export function loadGambleData(): GambleData {
+  return parseGambleData(gambleDocument());
+}
+
+/** Validates a Gamble gameplay document. */
+export function parseGambleData(value: unknown): GambleData {
   if (!isGambleData(value)) {
-    throw new Error("Failed to load Gamble data: malformed gamble-data.json");
+    throw new Error("Failed to load Gamble data: malformed Gamble document");
   }
   const raw = value as Omit<GambleData, "contentHash" | "foldHash"> & {
     contentHash: unknown;

@@ -1,19 +1,10 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { MINIMAL_SITES_DATA } from "../testing/atlas-fixtures";
 import type { SiteType } from "../types/site-type";
 import type { SitesData } from "../types/sites-data";
-import { loadDreamGuides } from "./dreamscapes";
-import { loadSitesData, siteTypeIcon } from "./sites-data";
+import { parseDreamGuides } from "./dreamscapes";
+import { parseSitesData, siteTypeIcon } from "./sites-data";
 import { testDreamscapeId, testGlossaryEntryId, testGuideId } from "../types/test-identities";
-
-function response(value: unknown): Response {
-  return {
-    ok: true,
-    status: 200,
-    statusText: "OK",
-    json: () => Promise.resolve(value),
-  } as Response;
-}
 
 const GUIDE_CATALOG = {
   schemaVersion: 1,
@@ -38,49 +29,25 @@ type Mutable<T> = T extends readonly (infer Entry)[]
     : T;
 type MutableSitesData = Mutable<SitesData>;
 
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
-
 describe("compiled guide and site artifact loaders", () => {
-  it("accepts structurally complete versioned artifacts", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn((url: string) =>
-        Promise.resolve(
-          response(
-            url.includes("sites-data") ? MINIMAL_SITES_DATA : GUIDE_CATALOG,
-          ),
-        ),
-      ),
-    );
-    await expect(loadDreamGuides()).resolves.toHaveLength(1);
-    await expect(loadSitesData()).resolves.toEqual(MINIMAL_SITES_DATA);
+  it("accepts structurally complete versioned artifacts", () => {
+    expect(parseDreamGuides(GUIDE_CATALOG)).toHaveLength(1);
+    expect(parseSitesData(MINIMAL_SITES_DATA)).toEqual(MINIMAL_SITES_DATA);
   });
 
-  it("rejects malformed guide dialogue and obsolete Gamble site data", async () => {
+  it("rejects malformed guide dialogue and obsolete Gamble site data", () => {
     const guides = structuredClone(GUIDE_CATALOG);
     guides.guides[0].dialogue.site = [];
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(() => Promise.resolve(response(guides))),
-    );
-    await expect(loadDreamGuides()).rejects.toThrow(
-      /malformed dream-guides-data/u,
-    );
+    expect(() => parseDreamGuides(guides)).toThrow();
 
     const sites = {
       ...structuredClone(MINIMAL_SITES_DATA),
       gamble: { obsolete: true },
     };
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(() => Promise.resolve(response(sites))),
-    );
-    await expect(loadSitesData()).rejects.toThrow(/malformed sites-data/u);
+    expect(() => parseSitesData(sites)).toThrow();
   });
 
-  it("rejects malformed site rules that affect deterministic folding", async () => {
+  it("rejects malformed site rules that affect deterministic folding", () => {
     const mutations: Array<(sites: MutableSitesData) => void> = [
       (sites) => {
         sites.randomSite.destinations = ["Battle" as never];
@@ -112,11 +79,7 @@ describe("compiled guide and site artifact loaders", () => {
         MINIMAL_SITES_DATA,
       ) as unknown as MutableSitesData;
       mutate(sites);
-      vi.stubGlobal(
-        "fetch",
-        vi.fn(() => Promise.resolve(response(sites))),
-      );
-      await expect(loadSitesData()).rejects.toThrow(/malformed sites-data/u);
+      expect(() => parseSitesData(sites)).toThrow();
     }
   });
 
@@ -126,16 +89,10 @@ describe("compiled guide and site artifact loaders", () => {
     ).toThrow(/Missing Sites metadata for UnknownSite/u);
   });
 
-  it("enforces site-specific guide contexts and template slots at runtime", async () => {
+  it("enforces site-specific guide contexts and template slots at runtime", () => {
     const randomGuide = structuredClone(GUIDE_CATALOG);
     randomGuide.guides[0].siteType = "RandomSite";
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(() => Promise.resolve(response(randomGuide))),
-    );
-    await expect(loadDreamGuides()).rejects.toThrow(
-      /malformed dream-guides-data/u,
-    );
+    expect(() => parseDreamGuides(randomGuide)).toThrow();
 
     const gambleGuide = structuredClone(GUIDE_CATALOG);
     gambleGuide.guides[0].siteType = "Gamble";
@@ -148,21 +105,9 @@ describe("compiled guide and site artifact loaders", () => {
       "gamble-blackjack": ["Fixture blackjack."],
     };
     gambleGuide.guides[0].dialogue = gambleDialogue;
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(() => Promise.resolve(response(gambleGuide))),
-    );
-    await expect(loadDreamGuides()).rejects.toThrow(
-      /malformed dream-guides-data/u,
-    );
+    expect(() => parseDreamGuides(gambleGuide)).toThrow();
 
     gambleDialogue["gamble-ladder-climb"] = ["Win {unexpected-slot} Essence."];
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(() => Promise.resolve(response(gambleGuide))),
-    );
-    await expect(loadDreamGuides()).rejects.toThrow(
-      /malformed dream-guides-data/u,
-    );
+    expect(() => parseDreamGuides(gambleGuide)).toThrow();
   });
 });

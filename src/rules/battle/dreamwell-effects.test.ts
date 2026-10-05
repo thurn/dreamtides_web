@@ -28,7 +28,7 @@ import {
   dreamwellAutomationStatus,
   selectDreamwellEffectScript,
 } from "./dreamwell-effects-table";
-import dreamwellCatalog from "../../../public/dreamwell-data.json";
+import { dreamwellCardsDocument } from "../../content/documents";
 import { parseDreamwellCards } from "../../data/dreamwell-database";
 import {
   isDreamwellPromptRef,
@@ -78,7 +78,10 @@ describe("Dreamwell prompt catalog coverage", () => {
     expect(refs.length).toBeGreaterThan(0);
     for (const ref of refs) {
       expect(() =>
-        resolveDreamwellPromptRef(ref, parseDreamwellCards(dreamwellCatalog)),
+        resolveDreamwellPromptRef(
+          ref,
+          parseDreamwellCards(dreamwellCardsDocument()),
+        ),
       ).not.toThrow();
     }
   });
@@ -255,7 +258,11 @@ describe("charactersInVoid", () => {
           "player",
           2,
         ),
-        [parseBattleCardId("e1")]: makeEvent(parseBattleCardId("e1"), "player", 2),
+        [parseBattleCardId("e1")]: makeEvent(
+          parseBattleCardId("e1"),
+          "player",
+          2,
+        ),
       },
     });
     expect(charactersInVoid(state, "player")).toEqual(["c1"]);
@@ -308,7 +315,11 @@ describe("charactersInVoid", () => {
     const state = makeState({
       playerVoid: ["e1"],
       cardInstances: {
-        [parseBattleCardId("e1")]: makeEvent(parseBattleCardId("e1"), "player", 1),
+        [parseBattleCardId("e1")]: makeEvent(
+          parseBattleCardId("e1"),
+          "player",
+          1,
+        ),
       },
     });
     expect(charactersInVoid(state, "player", 5)).toEqual([]);
@@ -318,7 +329,11 @@ describe("charactersInVoid", () => {
     const state = makeState({
       enemyVoid: ["c1"],
       cardInstances: {
-        [parseBattleCardId("c1")]: makeCharacter(parseBattleCardId("c1"), "enemy", 2),
+        [parseBattleCardId("c1")]: makeCharacter(
+          parseBattleCardId("c1"),
+          "enemy",
+          2,
+        ),
       },
     });
     expect(charactersInVoid(state, "player")).toEqual([]);
@@ -354,8 +369,16 @@ describe("eventsInVoid", () => {
           "player",
           2,
         ),
-        [parseBattleCardId("e1")]: makeEvent(parseBattleCardId("e1"), "player", 1),
-        [parseBattleCardId("e2")]: makeEvent(parseBattleCardId("e2"), "player", 3),
+        [parseBattleCardId("e1")]: makeEvent(
+          parseBattleCardId("e1"),
+          "player",
+          1,
+        ),
+        [parseBattleCardId("e2")]: makeEvent(
+          parseBattleCardId("e2"),
+          "player",
+          3,
+        ),
       },
     });
     expect(eventsInVoid(state, "player")).toEqual(["e1", "e2"]);
@@ -365,7 +388,11 @@ describe("eventsInVoid", () => {
     const state = makeState({
       enemyVoid: ["e1"],
       cardInstances: {
-        [parseBattleCardId("e1")]: makeEvent(parseBattleCardId("e1"), "enemy", 1),
+        [parseBattleCardId("e1")]: makeEvent(
+          parseBattleCardId("e1"),
+          "enemy",
+          1,
+        ),
       },
     });
     expect(eventsInVoid(state, "player")).toEqual([]);
@@ -375,7 +402,11 @@ describe("eventsInVoid", () => {
     const state = makeState({
       playerVoid: ["e1", "ghost"],
       cardInstances: {
-        [parseBattleCardId("e1")]: makeEvent(parseBattleCardId("e1"), "player", 1),
+        [parseBattleCardId("e1")]: makeEvent(
+          parseBattleCardId("e1"),
+          "player",
+          1,
+        ),
       },
     });
     expect(eventsInVoid(state, "player")).toEqual(["e1"]);
@@ -392,8 +423,16 @@ describe("enemyCharactersInPlay", () => {
       enemyBackRank: { ...emptyBackRankSlots(), B0: parseBattleCardId("c1") },
       enemyFrontRank: { ...emptyFrontRankSlots(), F0: parseBattleCardId("c2") },
       cardInstances: {
-        [parseBattleCardId("c1")]: makeCharacter(parseBattleCardId("c1"), "enemy", 2),
-        [parseBattleCardId("c2")]: makeCharacter(parseBattleCardId("c2"), "enemy", 2),
+        [parseBattleCardId("c1")]: makeCharacter(
+          parseBattleCardId("c1"),
+          "enemy",
+          2,
+        ),
+        [parseBattleCardId("c2")]: makeCharacter(
+          parseBattleCardId("c2"),
+          "enemy",
+          2,
+        ),
       },
     });
     const result = enemyCharactersInPlay(state, "player");
@@ -404,8 +443,14 @@ describe("enemyCharactersInPlay", () => {
 
   it("does not return the calling side's own characters", () => {
     const state = makeState({
-      playerBackRank: { ...emptyBackRankSlots(), B0: parseBattleCardId("mine") },
-      enemyBackRank: { ...emptyBackRankSlots(), B0: parseBattleCardId("theirs") },
+      playerBackRank: {
+        ...emptyBackRankSlots(),
+        B0: parseBattleCardId("mine"),
+      },
+      enemyBackRank: {
+        ...emptyBackRankSlots(),
+        B0: parseBattleCardId("theirs"),
+      },
       cardInstances: {
         [parseBattleCardId("mine")]: makeCharacter(
           parseBattleCardId("mine"),
@@ -428,8 +473,16 @@ describe("enemyCharactersInPlay", () => {
       enemyHand: ["h1"],
       enemyVoid: ["v1"],
       cardInstances: {
-        [parseBattleCardId("h1")]: makeCharacter(parseBattleCardId("h1"), "enemy", 2),
-        [parseBattleCardId("v1")]: makeCharacter(parseBattleCardId("v1"), "enemy", 2),
+        [parseBattleCardId("h1")]: makeCharacter(
+          parseBattleCardId("h1"),
+          "enemy",
+          2,
+        ),
+        [parseBattleCardId("v1")]: makeCharacter(
+          parseBattleCardId("v1"),
+          "enemy",
+          2,
+        ),
       },
     });
     expect(enemyCharactersInPlay(state, "player")).toEqual([]);
@@ -437,7 +490,10 @@ describe("enemyCharactersInPlay", () => {
 
   it("works symmetrically when side is enemy", () => {
     const state = makeState({
-      playerFrontRank: { ...emptyFrontRankSlots(), F0: parseBattleCardId("c1") },
+      playerFrontRank: {
+        ...emptyFrontRankSlots(),
+        F0: parseBattleCardId("c1"),
+      },
       cardInstances: {
         [parseBattleCardId("c1")]: makeCharacter(
           parseBattleCardId("c1"),
@@ -458,7 +514,10 @@ describe("alliesInPlay", () => {
   it("returns the side's own front and back rank occupants", () => {
     const state = makeState({
       playerBackRank: { ...emptyBackRankSlots(), B0: parseBattleCardId("c1") },
-      playerFrontRank: { ...emptyFrontRankSlots(), F0: parseBattleCardId("c2") },
+      playerFrontRank: {
+        ...emptyFrontRankSlots(),
+        F0: parseBattleCardId("c2"),
+      },
       cardInstances: {
         [parseBattleCardId("c1")]: makeCharacter(
           parseBattleCardId("c1"),
@@ -480,8 +539,14 @@ describe("alliesInPlay", () => {
 
   it("does not return the opponent's characters", () => {
     const state = makeState({
-      playerBackRank: { ...emptyBackRankSlots(), B0: parseBattleCardId("mine") },
-      enemyBackRank: { ...emptyBackRankSlots(), B0: parseBattleCardId("theirs") },
+      playerBackRank: {
+        ...emptyBackRankSlots(),
+        B0: parseBattleCardId("mine"),
+      },
+      enemyBackRank: {
+        ...emptyBackRankSlots(),
+        B0: parseBattleCardId("theirs"),
+      },
       cardInstances: {
         [parseBattleCardId("mine")]: makeCharacter(
           parseBattleCardId("mine"),
@@ -777,11 +842,9 @@ describe("Dreamwell Discover UUIDs", () => {
     });
     expect(draws).toBe(1);
     expect(candidates).toHaveLength(3);
-    expect(
-      candidates.every((id) =>
-        state.sides.player.deck.includes(id),
-      ),
-    ).toBe(true);
+    expect(candidates.every((id) => state.sides.player.deck.includes(id))).toBe(
+      true,
+    );
     expect(
       candidates.every(
         (id) =>
@@ -840,9 +903,21 @@ describe("Dreamwell Discover UUIDs", () => {
     const exact = makeState({
       playerDeck: ["a", "b", "c"],
       cardInstances: {
-        [parseBattleCardId("a")]: makeCharacter(parseBattleCardId("a"), "player", 1),
-        [parseBattleCardId("b")]: makeCharacter(parseBattleCardId("b"), "player", 2),
-        [parseBattleCardId("c")]: makeCharacter(parseBattleCardId("c"), "player", 3),
+        [parseBattleCardId("a")]: makeCharacter(
+          parseBattleCardId("a"),
+          "player",
+          1,
+        ),
+        [parseBattleCardId("b")]: makeCharacter(
+          parseBattleCardId("b"),
+          "player",
+          2,
+        ),
+        [parseBattleCardId("c")]: makeCharacter(
+          parseBattleCardId("c"),
+          "player",
+          3,
+        ),
       },
     });
     expect(prompt.candidates(makeCtx(exact))).toHaveLength(3);
@@ -854,7 +929,10 @@ describe("new prompt-driven Dreamwell UUIDs", () => {
     const prompt = getFirstPromptStep("2ad68489-044a-40d1-9be6-e62497a4e1fd");
     if (prompt.kind !== "pick-cards") throw new Error("expected picker");
     const state = makeState({
-      playerBackRank: { ...emptyBackRankSlots(), B0: parseBattleCardId("ally") },
+      playerBackRank: {
+        ...emptyBackRankSlots(),
+        B0: parseBattleCardId("ally"),
+      },
       cardInstances: {
         [parseBattleCardId("ally")]: makeCharacter(
           parseBattleCardId("ally"),
@@ -864,9 +942,9 @@ describe("new prompt-driven Dreamwell UUIDs", () => {
       },
     });
     expect(prompt.candidates(makeCtx(state))).toEqual(["ally"]);
-    expect(prompt.resolve([parseBattleCardId("ally")], makeCtx(state))).toEqual([
-      { kind: "REMATERIALIZE", battleCardId: parseBattleCardId("ally") },
-    ]);
+    expect(prompt.resolve([parseBattleCardId("ally")], makeCtx(state))).toEqual(
+      [{ kind: "REMATERIALIZE", battleCardId: parseBattleCardId("ally") }],
+    );
   });
 
   it("records the temporary Reclaim eligibility separately from reclaimed", () => {
@@ -1093,12 +1171,10 @@ describe("Eternal Horizon builder", () => {
     const edits = build(makeCtx(state, "player"));
     expect(edits).toHaveLength(2);
     const e1 = edits.find(
-      (e) =>
-        e.kind === "SET_CARD_SPARK_DELTA" && e.battleCardId === allyOneId,
+      (e) => e.kind === "SET_CARD_SPARK_DELTA" && e.battleCardId === allyOneId,
     );
     const e2 = edits.find(
-      (e) =>
-        e.kind === "SET_CARD_SPARK_DELTA" && e.battleCardId === allyTwoId,
+      (e) => e.kind === "SET_CARD_SPARK_DELTA" && e.battleCardId === allyTwoId,
     );
     expect(e1).toBeDefined();
     expect(e2).toBeDefined();
@@ -1140,16 +1216,8 @@ describe("property test: all DREAMWELL_EFFECTS scripts run without error", () =>
     cardInstances: {
       [HAND_CARD_ID]: makeCharacter(HAND_CARD_ID, "player", 2),
       [ALLY_ID]: makeCharacter(ALLY_ID, "player", 2),
-      [P_VOID_CHAR_ID]: makeCharacter(
-        P_VOID_CHAR_ID,
-        "player",
-        3,
-      ),
-      [E_VOID_CHAR_ID]: makeCharacter(
-        E_VOID_CHAR_ID,
-        "enemy",
-        3,
-      ),
+      [P_VOID_CHAR_ID]: makeCharacter(P_VOID_CHAR_ID, "player", 3),
+      [E_VOID_CHAR_ID]: makeCharacter(E_VOID_CHAR_ID, "enemy", 3),
     },
   });
 
@@ -1245,7 +1313,11 @@ describe("Verdant Hollow (a0fbcbd9) — only events in void", () => {
           "player",
           2,
         ),
-        [parseBattleCardId("e1")]: makeEvent(parseBattleCardId("e1"), "player", 2),
+        [parseBattleCardId("e1")]: makeEvent(
+          parseBattleCardId("e1"),
+          "player",
+          2,
+        ),
       },
     });
     const prompt = getFirstPromptStep(UUID);
@@ -1257,7 +1329,11 @@ describe("Verdant Hollow (a0fbcbd9) — only events in void", () => {
     const state = makeState({
       playerVoid: ["e1"],
       cardInstances: {
-        [parseBattleCardId("e1")]: makeEvent(parseBattleCardId("e1"), "player", 1),
+        [parseBattleCardId("e1")]: makeEvent(
+          parseBattleCardId("e1"),
+          "player",
+          1,
+        ),
       },
     });
     const prompt = getFirstPromptStep(UUID);
@@ -1334,9 +1410,7 @@ describe("Silent Winter (9954cede) — banish enemy character", () => {
 
 // Astral Interface — two-step: draw then discard
 describe("Astral Interface (ee1ef770) — draw then discard", () => {
-  const UUID = testDreamwellCardId(
-    "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d",
-  );
+  const UUID = testDreamwellCardId("ee1ef770-29ea-4a63-a1f9-7e97b5b8870d");
 
   it("step 0 is edits: draw 1", () => {
     const script = DREAMWELL_EFFECTS[UUID];
@@ -1375,7 +1449,10 @@ describe("Astral Interface (ee1ef770) — draw then discard", () => {
     const step1 = script.steps[1];
     if (step1?.kind !== "prompt" || step1.prompt.kind !== "pick-cards")
       throw new Error();
-    const edits = step1.prompt.resolve([parseBattleCardId("h1")], makeCtx(state));
+    const edits = step1.prompt.resolve(
+      [parseBattleCardId("h1")],
+      makeCtx(state),
+    );
     expect(edits).toEqual([
       { kind: "DISCARD_CARD", battleCardId: parseBattleCardId("h1") },
     ]);
@@ -1449,7 +1526,10 @@ describe("The Bastion (20be0fdd) — confirm → abandon ally → draw 2", () =>
 
   it("onYes pick resolve → ABANDON edit", () => {
     const state = makeState({
-      playerBackRank: { ...emptyBackRankSlots(), B0: parseBattleCardId("ally1") },
+      playerBackRank: {
+        ...emptyBackRankSlots(),
+        B0: parseBattleCardId("ally1"),
+      },
       cardInstances: {
         [parseBattleCardId("ally1")]: makeCharacter(
           parseBattleCardId("ally1"),
@@ -1535,9 +1615,7 @@ describe("Shining Beacon (3a4293da) — top 2, pick 1 to hand other to bottom", 
 
 // Fortune's Wheel — discard hand then draw that many (atomicity and ordering)
 describe("Fortune's Wheel (446095b1) — discard hand then draw same count", () => {
-  const UUID = testDreamwellCardId(
-    "446095b1-ec4d-40d7-8eed-a8221d339ea2",
-  );
+  const UUID = testDreamwellCardId("446095b1-ec4d-40d7-8eed-a8221d339ea2");
   const N = 3;
   const handIds = ["fw-hand-1", "fw-hand-2", "fw-hand-3"];
 
@@ -1605,22 +1683,14 @@ describe("property test: all prompt scripts run without error on rich fixture", 
     cardInstances: {
       [HAND_CARD_ID]: makeCharacter(HAND_CARD_ID, "player", 2),
       [ALLY_ID]: makeCharacter(ALLY_ID, "player", 2),
-      [P_VOID_CHAR_ID]: makeCharacter(
-        P_VOID_CHAR_ID,
-        "player",
+      [P_VOID_CHAR_ID]: makeCharacter(P_VOID_CHAR_ID, "player", 2),
+      [P_VOID_EVENT_ID]: makeEvent(P_VOID_EVENT_ID, "player", 1),
+      [E_VOID_CHAR_ID]: makeCharacter(E_VOID_CHAR_ID, "enemy", 3),
+      [ENEMY_CHAR_ID]: makeCharacter(
+        parseBattleCardId(ENEMY_CHAR_ID),
+        "enemy",
         2,
       ),
-      [P_VOID_EVENT_ID]: makeEvent(
-        P_VOID_EVENT_ID,
-        "player",
-        1,
-      ),
-      [E_VOID_CHAR_ID]: makeCharacter(
-        E_VOID_CHAR_ID,
-        "enemy",
-        3,
-      ),
-      [ENEMY_CHAR_ID]: makeCharacter(parseBattleCardId(ENEMY_CHAR_ID), "enemy", 2),
     },
   });
 

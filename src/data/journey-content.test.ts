@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import {
   MINIMAL_ATLAS_DATA,
@@ -12,8 +12,14 @@ import { opponentsFixture } from "../testing/opponents-fixture";
 import { transfigurationFixture } from "../testing/transfiguration-fixture";
 import { parseCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
-import explorationJson from "../../public/exploration-data.json";
-import { loadJourneyContent } from "./journey-content";
+import { validateTides4Decks } from "../draft/pool";
+import type { DraftAvatar } from "./avatars-v2-database";
+import { parseEconomyData } from "./economy-data";
+import { parseExplorationContent } from "./exploration";
+import { parseGambleData } from "./gamble-data";
+import { buildJourneyContent } from "./journey-content";
+import { parseOpponentsData } from "./opponents-data";
+import { parseTransfigurationData } from "./transfiguration-data";
 import {
   testCardId,
   testAvatarId,
@@ -40,22 +46,13 @@ function makeCard(cardNumber: number): CardData {
   };
 }
 
-beforeEach(() => vi.restoreAllMocks());
-
-describe("loadJourneyContent", () => {
-  function stubFetch(input: {
+describe("buildJourneyContent", () => {
+  function sources(input: {
     cards: CardData[];
-    avatars: unknown[];
-    failingPaths?: string[];
+    avatars: DraftAvatar[];
     economy?: ReturnType<typeof economyFixture>;
-  }): void {
-    const draftData = draftDataFixture();
-    const gambleData = {
-      ...gambleFixture(),
-      contentHash: "e".repeat(64),
-      foldHash: "f".repeat(64),
-    };
-    const tides = {
+  }) {
+    const tides = validateTides4Decks({
       version: 2,
       selection: { bandFraction: 0.25, bandMinimum: 5 },
       tides: [
@@ -70,11 +67,11 @@ describe("loadJourneyContent", () => {
         },
       ],
       tidePoolByAvatar: {},
-    };
-    const exploration = {
-      schemaVersion: explorationJson.schemaVersion,
-      contentHash: explorationJson.contentHash,
-      foldHash: explorationJson.foldHash,
+    });
+    const exploration = parseExplorationContent({
+      schemaVersion: 2,
+      contentHash: "0".repeat(64),
+      foldHash: "0".repeat(64),
       customCards: [],
       customDreamsigns: [],
       encounters: [
@@ -95,69 +92,51 @@ describe("loadJourneyContent", () => {
           ],
         },
       ],
-    };
-    const assets = new Map<string, unknown>([
-      ["/cards_v2-data.json", input.cards],
-      ["/exploration-data.json", exploration],
-      ["/augury-data.json", CONFIG_DATA_FIXTURE.auguryData],
-      ["/avatars-v2-data.json", input.avatars],
-      ["/dreamwell-data.json", []],
-      ["/dreamsign-data.json", []],
-      ["/tides4-data.json", tides],
-      ["/dreamscapes-data.json", []],
-      ["/affiliations-data.json", []],
-      [
-        "/dream-guides-data.json",
-        { schemaVersion: 1, contentHash: "a".repeat(64), guides: [] },
-      ],
-      ["/atlas-data.json", MINIMAL_ATLAS_DATA],
-      ["/sites-data.json", MINIMAL_SITES_DATA],
-      ["/economy-data.json", input.economy ?? economyFixture()],
-      ["/gamble-data.json", gambleData],
-      ["/draft-data.json", draftData],
-      ["/transfiguration-data.json", transfigurationFixture()],
-      ["/opponents-data.json", opponentsFixture()],
-      ["/apollyon-incarnations-data.json", []],
-      ["/figments-data.json", []],
-    ]);
-    const failures = new Set(input.failingPaths ?? []);
-    vi.stubGlobal(
-      "fetch",
-      vi.fn((request: string | URL | Request) => {
-        const path =
-          typeof request === "string"
-            ? request
-            : request instanceof URL
-              ? request.pathname
-              : new URL(request.url).pathname;
-        const ok = !failures.has(path) && assets.has(path);
-        return Promise.resolve({
-          ok,
-          status: ok ? 200 : 503,
-          statusText: ok ? "OK" : "Test Failure",
-          json: () => Promise.resolve(assets.get(path) ?? null),
-        } as Response);
+    });
+    return {
+      draftData: draftDataFixture(),
+      cardDatabase: new Map(input.cards.map((card) => [card.cardNumber, card])),
+      exploration,
+      auguryData: CONFIG_DATA_FIXTURE.auguryData,
+      draftAvatars: input.avatars,
+      dreamwellCards: [],
+      dreamsignTemplates: [],
+      tides4Decks: tides,
+      dreamscapes: [],
+      affiliations: [],
+      guides: [],
+      atlasData: MINIMAL_ATLAS_DATA,
+      sitesData: MINIMAL_SITES_DATA,
+      economyData: parseEconomyData(input.economy ?? economyFixture()),
+      gambleData: parseGambleData({
+        ...gambleFixture(),
+        contentHash: "e".repeat(64),
+        foldHash: "f".repeat(64),
       }),
-    );
+      transfigurationData: parseTransfigurationData(transfigurationFixture()),
+      opponentsData: parseOpponentsData(opponentsFixture()),
+      apollyonIncarnations: [],
+    };
   }
 
-  it("loads the current catalogs and assembles selection tuning from their owners", async () => {
-    stubFetch({
-      cards: [makeCard(1), makeCard(2)],
-      avatars: [
-        {
-          id: testAvatarId("avatar-1"),
-          name: "Test Avatar",
-          title: "Speaker of Tests",
-          renderedText: "Test rules text.",
-          imageNumber: "0001",
-          startingEssence: 235,
-          signatureCards: [],
-          signatureCardIds: [],
-        },
-      ],
-    });
-    const content = await loadJourneyContent();
+  it("assembles selection tuning from the catalogs that own it", () => {
+    const content = buildJourneyContent(
+      sources({
+        cards: [makeCard(1), makeCard(2)],
+        avatars: [
+          {
+            id: testAvatarId("avatar-1"),
+            name: "Test Avatar",
+            title: "Speaker of Tests",
+            renderedText: "Test rules text.",
+            imageNumber: "0001",
+            startingEssence: 235,
+            signatureCards: [],
+            signatureCardIds: [],
+          },
+        ],
+      }),
+    );
     expect(content.cardDatabase.size).toBe(2);
     expect(content.poolContext?.poolData.tides4Decks?.version).toBe(2);
     expect(content.rewardSelectionData.tuning).toMatchObject({
@@ -168,36 +147,26 @@ describe("loadJourneyContent", () => {
     });
   });
 
-  it("rejects when the Tides catalog is unavailable", async () => {
-    stubFetch({
-      cards: [makeCard(1)],
-      avatars: [],
-      failingPaths: ["/tides4-data.json"],
-    });
-    await expect(loadJourneyContent()).rejects.toThrow(
-      "Missing Tides4 catalog",
-    );
-  });
-
-  it("uses the authored economy default when an avatar omits starting essence", async () => {
+  it("uses the authored economy default when an avatar omits starting essence", () => {
     const economy = economyFixture();
     economy.journey.defaultStartingEssence = 137;
-    stubFetch({
-      cards: [makeCard(1)],
-      economy,
-      avatars: [
-        {
-          id: testAvatarId("avatar-defaulted"),
-          name: "Defaulted",
-          title: "D",
-          renderedText: "",
-          imageNumber: "0001",
-          signatureCards: [],
-          signatureCardIds: [],
-        },
-      ],
-    });
-    const content = await loadJourneyContent();
+    const content = buildJourneyContent(
+      sources({
+        cards: [makeCard(1)],
+        economy,
+        avatars: [
+          {
+            id: testAvatarId("avatar-defaulted"),
+            name: "Defaulted",
+            title: "D",
+            renderedText: "",
+            imageNumber: "0001",
+            signatureCards: [],
+            signatureCardIds: [],
+          },
+        ],
+      }),
+    );
     expect(content.avatars[0].startingEssence).toBe(137);
   });
 });

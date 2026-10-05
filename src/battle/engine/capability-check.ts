@@ -8,7 +8,7 @@ import type { BattleCardInstance } from "../types";
  * The function is PURE — it only reads the card instance, never mutates state.
  * It defaults to pausing (false negatives are the dangerous failure mode).
  *
- * Glyphs confirmed against public/cards_v2-data.json:
+ * Glyphs confirmed against the card catalog (src/content/cards/):
  *   ▸  U+25B8 — triggered-ability marker ("▸Dawn:", "▸Challenge:", …)
  *   –  U+2013 — en dash keyword/ability separator ("Support – …", "Reclaim – …")
  *   ✦  U+2726 — spark glyph used in "+N✦" / "+X✦" static buffs

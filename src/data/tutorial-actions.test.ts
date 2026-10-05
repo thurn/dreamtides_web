@@ -1,6 +1,6 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
-  loadTutorialActions,
+  parseTutorialConfiguration,
   parseTutorialActions,
   parseTutorialAtlasConfiguration,
   parseTutorialBattleConfiguration,
@@ -122,25 +122,11 @@ const ACTIONS_RESPONSE = {
   battle: makeTutorialBattleConfiguration(),
 };
 
-function successfulFetcher() {
-  return vi.fn(() =>
-    Promise.resolve(
-      new Response(JSON.stringify(ACTIONS_RESPONSE), {
-        status: 200,
-        headers: { "Content-Type": "application/json" },
-      }),
-    ),
-  );
-}
-
-describe("loadTutorialActions", () => {
-  it("loads the generated runtime data", async () => {
-    const fetcher = successfulFetcher();
-
-    await expect(
-      loadTutorialActions(fetcher as unknown as typeof fetch),
-    ).resolves.toEqual(ACTIONS_RESPONSE.actions);
-    expect(fetcher).toHaveBeenCalledWith("/tutorial-data.json");
+describe("parseTutorialConfiguration", () => {
+  it("accepts a well-formed tutorial document", () => {
+    expect(parseTutorialConfiguration(ACTIONS_RESPONSE).actions).toEqual(
+      ACTIONS_RESPONSE.actions,
+    );
   });
 });
 
@@ -1038,8 +1024,14 @@ describe("parseTutorialBattleConfiguration", () => {
           cardId: TEST_TUTORIAL_CARD_CONSTANTS.handoffEnemyCharacterCardId,
           copies: 3,
         },
-        { cardId: testCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"), copies: 3 },
-        { cardId: testCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"), copies: 3 },
+        {
+          cardId: testCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8"),
+          copies: 3,
+        },
+        {
+          cardId: testCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481"),
+          copies: 3,
+        },
       ],
       forcedPlayerDraws: [testCardId("5a980eff-6ec7-44d8-9977-b98e66bbc2c8")],
       forcedEnemyDraws: [testCardId("a526fa7b-5cef-4da9-a3f2-27ee0bd9b481")],

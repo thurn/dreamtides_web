@@ -1,4 +1,4 @@
-import cardRoleJson from "../generated/config/card-role-data.json";
+import { cardRoleDocument } from "../content/documents";
 import { parseCardId, type CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import {
@@ -66,7 +66,7 @@ export function parseCardRoleData(value: unknown): CardRoleData {
   };
 }
 
-export const CARD_ROLE_DATA = parseCardRoleData(cardRoleJson);
+export const CARD_ROLE_DATA = parseCardRoleData(cardRoleDocument());
 export const STARTER_CARD_IDS = CARD_ROLE_DATA.starterDeckCardIds;
 
 /** Resolve the RON-authored starter-deck UUID order against a loaded catalog. */

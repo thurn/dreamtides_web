@@ -1,7 +1,7 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { draftDataFixture } from "../testing/draft-data-fixture";
 import type { DraftData } from "../types/draft-data";
-import { loadDraftData, parseDraftData } from "./draft-data";
+import { parseDraftData } from "./draft-data";
 import { testContentHash, testFoldHash } from "../types/test-identities";
 
 const CONTENT_HASH = testContentHash("a");
@@ -10,10 +10,6 @@ const FOLD_HASH = testFoldHash("a");
 function fixture() {
   return draftDataFixture({ contentHash: CONTENT_HASH, foldHash: FOLD_HASH });
 }
-
-afterEach(() => {
-  vi.unstubAllGlobals();
-});
 
 describe("parseDraftData", () => {
   it("accepts the normalized compiler artifact", () => {
@@ -58,29 +54,5 @@ describe("parseDraftData", () => {
     const value = fixture();
     mutate(value);
     expect(() => parseDraftData(value)).toThrow(/malformed draft-data/u);
-  });
-});
-
-describe("loadDraftData", () => {
-  it("loads the compiled artifact from the public path", async () => {
-    const value = fixture();
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(value),
-    });
-    vi.stubGlobal("fetch", fetchMock);
-
-    await expect(loadDraftData()).resolves.toEqual(value);
-    expect(fetchMock).toHaveBeenCalledWith("/draft-data.json");
-  });
-
-  it("reports HTTP failures", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi
-        .fn()
-        .mockResolvedValue({ ok: false, status: 404, statusText: "Missing" }),
-    );
-    await expect(loadDraftData()).rejects.toThrow(/404 Missing/u);
   });
 });

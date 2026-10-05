@@ -29,8 +29,8 @@ import {
   type ContentHash,
   type FoldHash,
 } from "../types/content-hash";
+import { explorationDocument } from "../content/documents";
 
-const EXPLORATION_DATA_PATH = "/exploration-data.json";
 
 export type ExplorationPredicate =
   | "character"
@@ -1194,15 +1194,14 @@ const EXPLORATION_EFFECT_KIND_SET: ReadonlySet<string> = new Set(
   EXPLORATION_EFFECT_KINDS,
 );
 
-/** Load the authored encounter catalog generated from exploration.ron. */
-export async function loadExplorationContent(): Promise<ExplorationContent> {
-  const response = await fetch(EXPLORATION_DATA_PATH);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load Exploration data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  const raw = (await response.json()) as RawExplorationData;
+/** Load the authored encounter catalog from the content modules. */
+export function loadExplorationContent(): ExplorationContent {
+  return parseExplorationContent(explorationDocument());
+}
+
+/** Validates an Exploration document. */
+export function parseExplorationContent(document: unknown): ExplorationContent {
+  const raw = document as RawExplorationData;
   if (
     raw.schemaVersion !== 2 ||
     typeof raw.contentHash !== "string" ||

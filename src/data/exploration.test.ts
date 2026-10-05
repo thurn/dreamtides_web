@@ -1,8 +1,8 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import {
   explorationActionUsesOfferedDeckTarget,
   isTransfigurationExplorationEffect,
-  loadExplorationContent,
+  parseExplorationContent,
 } from "./exploration";
 import { testCardId, testExplorationActionId } from "../types/test-identities";
 
@@ -32,17 +32,15 @@ function fixture(action: Record<string, unknown>) {
   };
 }
 
+let mockedContent: unknown;
+
 function mockContent(content: unknown): void {
-  vi.stubGlobal(
-    "fetch",
-    vi.fn().mockResolvedValue({
-      ok: true,
-      json: () => Promise.resolve(content),
-    }),
-  );
+  mockedContent = content;
 }
 
-afterEach(() => vi.unstubAllGlobals());
+function loadMockedContent() {
+  return parseExplorationContent(mockedContent);
+}
 
 describe("Exploration Wave 8 compound content", () => {
   const actions: Record<string, unknown>[] = [
@@ -86,11 +84,11 @@ describe("Exploration Wave 8 compound content", () => {
     },
   ];
 
-  it("loads all five contracts and classifies their transfigurations", async () => {
+  it("loads all five contracts and classifies their transfigurations", () => {
     for (const action of actions) {
       mockContent(fixture(action));
       expect(
-        (await loadExplorationContent()).encounters[0].actions[0],
+        loadMockedContent().encounters[0].actions[0],
       ).toMatchObject(action);
     }
     expect(
@@ -119,14 +117,14 @@ describe("Exploration Wave 8 compound content", () => {
     { ...actions[3], offerCount: 3 },
     { ...actions[3], followupSubtitle: "" },
     { ...actions[4], predicate: "event" },
-  ])("rejects malformed Wave 8 fields %#", async (action) => {
+  ])("rejects malformed Wave 8 fields %#", (action) => {
     mockContent(fixture(action));
-    await expect(loadExplorationContent()).rejects.toThrow();
+    expect(loadMockedContent).toThrow();
   });
 });
 
 describe("Exploration starter-card content", () => {
-  it("loads the exact fieldless and predicate-bearing variants", async () => {
+  it("loads the exact fieldless and predicate-bearing variants", () => {
     const actions = [
       {
         effectKind: "purge-starter-card",
@@ -158,7 +156,7 @@ describe("Exploration starter-card content", () => {
     }));
     mockContent(content);
 
-    const loaded = await loadExplorationContent();
+    const loaded = loadMockedContent();
 
     expect(
       loaded.encounters[0].actions.map((action) => ({
@@ -234,13 +232,13 @@ describe("Exploration starter-card content", () => {
         followupSubtitle: "Synthetic subtitle",
       },
     ],
-  ])("rejects malformed starter-card fields %#", async (action) => {
+  ])("rejects malformed starter-card fields %#", (action) => {
     mockContent(fixture(action));
 
-    await expect(loadExplorationContent()).rejects.toThrow();
+    expect(loadMockedContent).toThrow();
   });
 
-  it("loads automatic random and all-starter transfigurations", async () => {
+  it("loads automatic random and all-starter transfigurations", () => {
     const actions = [
       {
         effectKind: "transfigure-random-starter-cards",
@@ -265,7 +263,7 @@ describe("Exploration starter-card content", () => {
     }));
     mockContent(content);
 
-    const loaded = await loadExplorationContent();
+    const loaded = loadMockedContent();
     const loadedActions = loaded.encounters[0].actions;
 
     expect(
@@ -372,15 +370,15 @@ describe("Exploration starter-card content", () => {
         effectText: "Transfigure $DECK_CARD",
       },
     ],
-  ])("rejects malformed starter transfiguration fields %#", async (action) => {
+  ])("rejects malformed starter transfiguration fields %#", (action) => {
     mockContent(fixture(action));
 
-    await expect(loadExplorationContent()).rejects.toThrow();
+    expect(loadMockedContent).toThrow();
   });
 });
 
 describe("Exploration Wave 7 deck-mutation content", () => {
-  it("loads random fixed replacement, disclosed type change, and Legendary gain contracts", async () => {
+  it("loads random fixed replacement, disclosed type change, and Legendary gain contracts", () => {
     const content = fixture({
       effectKind: "replace-random-with-card",
       canonicalMechanicId: "replace-deck-entry",
@@ -413,7 +411,7 @@ describe("Exploration Wave 7 deck-mutation content", () => {
     );
     mockContent(content);
 
-    const loaded = await loadExplorationContent();
+    const loaded = loadMockedContent();
 
     expect(loaded.encounters[0].actions).toMatchObject([
       {
@@ -468,10 +466,10 @@ describe("Exploration Wave 7 deck-mutation content", () => {
       deckTarget: "offered",
       effectText: "Change this card to become {card_type}",
     },
-  ])("rejects malformed Wave 7 fields %#", async (action) => {
+  ])("rejects malformed Wave 7 fields %#", (action) => {
     mockContent(fixture(action));
 
-    await expect(loadExplorationContent()).rejects.toThrow();
+    expect(loadMockedContent).toThrow();
   });
 });
 
@@ -482,7 +480,7 @@ describe("Exploration fixed-site content", () => {
     "Shop",
     "DreamsignBazaar",
     "Transfiguration",
-  ])("loads the closed fixed destination %s", async (siteType) => {
+  ])("loads the closed fixed destination %s", (siteType) => {
     mockContent(
       fixture({
         effectKind: "add-fixed-site",
@@ -492,7 +490,7 @@ describe("Exploration fixed-site content", () => {
       }),
     );
 
-    const loaded = await loadExplorationContent();
+    const loaded = loadMockedContent();
     expect(loaded.encounters[0]?.actions[0]).toMatchObject({
       effectKind: "add-fixed-site",
       canonicalMechanicId: "add-site",
@@ -513,7 +511,7 @@ describe("Exploration fixed-site content", () => {
     },
     { siteType: "Shop", count: 1 },
     { siteType: "Shop", effectText: "Add {site_type}" },
-  ])("rejects a malformed fixed-site action %#", async (overrides) => {
+  ])("rejects a malformed fixed-site action %#", (overrides) => {
     mockContent(
       fixture({
         effectKind: "add-fixed-site",
@@ -523,10 +521,10 @@ describe("Exploration fixed-site content", () => {
       }),
     );
 
-    await expect(loadExplorationContent()).rejects.toThrow();
+    expect(loadMockedContent).toThrow();
   });
 
-  it("rejects siteType on template-84 add-site", async () => {
+  it("rejects siteType on template-84 add-site", () => {
     mockContent(
       fixture({
         effectKind: "add-site",
@@ -536,12 +534,12 @@ describe("Exploration fixed-site content", () => {
       }),
     );
 
-    await expect(loadExplorationContent()).rejects.toThrow();
+    expect(loadMockedContent).toThrow();
   });
 });
 
 describe("Exploration site-type chooser content", () => {
-  it("loads the exact chooser contract", async () => {
+  it("loads the exact chooser contract", () => {
     mockContent(
       fixture({
         effectKind: "choose-site-type",
@@ -553,7 +551,7 @@ describe("Exploration site-type chooser content", () => {
       }),
     );
 
-    const loaded = await loadExplorationContent();
+    const loaded = loadMockedContent();
     expect(loaded.encounters[0]?.actions[0]).toMatchObject({
       effectKind: "choose-site-type",
       canonicalMechanicId: "add-site",
@@ -572,7 +570,7 @@ describe("Exploration site-type chooser content", () => {
     { siteType: "Shop" },
     { count: 1 },
     { effectText: "Choose {site_type}" },
-  ])("rejects malformed chooser content %#", async (overrides) => {
+  ])("rejects malformed chooser content %#", (overrides) => {
     const action = {
       effectKind: "choose-site-type",
       canonicalMechanicId: "add-site",
@@ -584,12 +582,12 @@ describe("Exploration site-type chooser content", () => {
     Object.assign(action, overrides);
     mockContent(fixture(action));
 
-    await expect(loadExplorationContent()).rejects.toThrow();
+    expect(loadMockedContent).toThrow();
   });
 });
 
 describe("Exploration shop purchase modifier content", () => {
-  it("loads the exact fieldless and counted contracts", async () => {
+  it("loads the exact fieldless and counted contracts", () => {
     const content = fixture({
       effectKind: "free-next-shop",
       canonicalMechanicId: "shop-purchase-modifier",
@@ -607,7 +605,7 @@ describe("Exploration shop purchase modifier content", () => {
     });
     mockContent(content);
 
-    const loaded = await loadExplorationContent();
+    const loaded = loadMockedContent();
     expect(loaded.encounters[0].actions).toEqual([
       expect.objectContaining({
         effectKind: "free-next-shop",
@@ -680,14 +678,14 @@ describe("Exploration shop purchase modifier content", () => {
       count: 3,
       effectText: "Gain {count} free purchases",
     },
-  ])("rejects malformed shop purchase modifier content %#", async (action) => {
+  ])("rejects malformed shop purchase modifier content %#", (action) => {
     mockContent(fixture(action));
-    await expect(loadExplorationContent()).rejects.toThrow();
+    expect(loadMockedContent).toThrow();
   });
 });
 
 describe("Exploration multi-card transfiguration content", () => {
-  it("loads chosen, random, and fixed-random variants", async () => {
+  it("loads chosen, random, and fixed-random variants", () => {
     const actions = [
       {
         effectKind: "transfigure-selected",
@@ -725,7 +723,7 @@ describe("Exploration multi-card transfiguration content", () => {
     }));
     mockContent(content);
 
-    const loaded = await loadExplorationContent();
+    const loaded = loadMockedContent();
     expect(
       loaded.encounters[0].actions.map((action) => ({
         kind: action.effectKind,
@@ -749,7 +747,7 @@ describe("Exploration multi-card transfiguration content", () => {
     ).toBe(true);
   });
 
-  it("keeps count-one chosen transfiguration backward compatible", async () => {
+  it("keeps count-one chosen transfiguration backward compatible", () => {
     mockContent(
       fixture({
         effectKind: "transfigure-selected",
@@ -759,7 +757,7 @@ describe("Exploration multi-card transfiguration content", () => {
       }),
     );
 
-    await expect(loadExplorationContent()).resolves.toMatchObject({
+    expect(loadMockedContent()).toMatchObject({
       encounters: [
         { actions: [{ effectKind: "transfigure-selected", count: 1 }] },
       ],
@@ -862,15 +860,15 @@ describe("Exploration multi-card transfiguration content", () => {
     ],
   ])(
     "rejects malformed multi-card transfiguration fields %#",
-    async (action) => {
+    (action) => {
       mockContent(fixture(action));
-      await expect(loadExplorationContent()).rejects.toThrow();
+      expect(loadMockedContent).toThrow();
     },
   );
 });
 
 describe("Exploration counted deck mutation content", () => {
-  it("loads legacy and counted replacement and fixed-transfiguration actions", async () => {
+  it("loads legacy and counted replacement and fixed-transfiguration actions", () => {
     const actions = [
       {
         effectKind: "replace-selected",
@@ -915,7 +913,7 @@ describe("Exploration counted deck mutation content", () => {
     }));
     mockContent(content);
 
-    const loaded = await loadExplorationContent();
+    const loaded = loadMockedContent();
     expect(loaded.encounters[0].actions.map((action) => action.count)).toEqual([
       undefined,
       undefined,
@@ -924,7 +922,7 @@ describe("Exploration counted deck mutation content", () => {
     ]);
   });
 
-  it("loads automatic random copy actions without targets", async () => {
+  it("loads automatic random copy actions without targets", () => {
     const actions = [
       {
         effectKind: "copy-random-cards",
@@ -943,7 +941,7 @@ describe("Exploration counted deck mutation content", () => {
     }));
     mockContent(content);
 
-    const loaded = await loadExplorationContent();
+    const loaded = loadMockedContent();
     expect(loaded.encounters[0].actions).toEqual([
       expect.objectContaining({
         effectKind: "copy-random-cards",
@@ -1017,8 +1015,8 @@ describe("Exploration counted deck mutation content", () => {
         effectText: "Copy {deck_card}",
       },
     ],
-  ])("rejects malformed counted mutation fields %#", async (action) => {
+  ])("rejects malformed counted mutation fields %#", (action) => {
     mockContent(fixture(action));
-    await expect(loadExplorationContent()).rejects.toThrow();
+    expect(loadMockedContent).toThrow();
   });
 });

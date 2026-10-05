@@ -5,8 +5,7 @@ import {
   parseTideId,
   type DreamsignId,
 } from "../types/identifiers";
-
-const DREAMSIGN_JSON_PATH = "/dreamsign-data.json";
+import { dreamsignsDocument } from "../content/documents";
 
 interface RawDreamsign {
   id: unknown;
@@ -16,18 +15,12 @@ interface RawDreamsign {
   effectDescription: string;
   rarity: DreamsignTemplate["rarity"];
   tideIds: unknown;
-  tags?: string[];
+  tags?: readonly string[];
 }
 
-/** Fetches canonical Dreamsign data from the asset pipeline output. */
-export async function loadDreamsignTemplates(): Promise<DreamsignTemplate[]> {
-  const response = await fetch(DREAMSIGN_JSON_PATH);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load Dreamsign data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  const raw = (await response.json()) as RawDreamsign[];
+/** Returns the Dreamsign templates from the content modules. */
+export function loadDreamsignTemplates(): DreamsignTemplate[] {
+  const raw: readonly RawDreamsign[] = dreamsignsDocument();
   return raw.map((entry) => {
     if (!Array.isArray(entry.tideIds)) {
       throw new Error("Dreamsign tide ids must be an array.");

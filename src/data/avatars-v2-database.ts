@@ -1,8 +1,9 @@
-/** Loads the Avatar identities compiled from `avatars.toml`. */
+/** Loads the Avatar identities from the `src/content/avatars/` modules. */
 
 import type { AvatarPortraitFocus } from "../types/content";
 import type { CardId } from "../types/card-identity";
 import { parseAvatarId, type AvatarId } from "../types/identifiers";
+import { avatarsDocument } from "../content/documents";
 
 export interface DraftAvatar {
   id: AvatarId;
@@ -21,14 +22,8 @@ interface RawDraftAvatar extends Omit<DraftAvatar, "id"> {
   id: unknown;
 }
 
-export async function loadAvatarsV2(): Promise<DraftAvatar[]> {
-  const response = await fetch("/avatars-v2-data.json");
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load Avatar data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  const avatars = (await response.json()) as RawDraftAvatar[];
+export function loadAvatarsV2(): DraftAvatar[] {
+  const avatars = avatarsDocument() as unknown as readonly RawDraftAvatar[];
   return avatars.map((avatar) => ({
     ...avatar,
     id: parseAvatarId(avatar.id),

@@ -47,9 +47,9 @@ export interface SiteGenerationContext {
 /**
  * External data the 7-layer Atlas generator needs: the dreamscape definitions it
  * assigns to nodes, the generation tuning, and the run's dreamsign pool the
- * known-dreamsign placement draws from. Sourced from the compiled TOML bundles
- * (`public/dreamscapes-data.json` and `public/atlas-data.json`) and threaded through the journey
- * content so generation stays synchronous inside reducers.
+ * known-dreamsign placement draws from. Sourced from the dreamscape and Atlas
+ * content modules and threaded through the journey content so generation
+ * stays synchronous inside reducers.
  */
 export interface AtlasBuildContext {
   dreamscapes: readonly DreamscapeContent[];

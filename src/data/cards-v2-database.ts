@@ -11,21 +11,14 @@ import {
   serializeCardNumber,
   type DraftPoolCopiesByCard,
 } from "../types/draft";
+import { cardsDocument, tides4Document } from "../content/documents";
 
 /**
- * Fetches the experimental v2 card pool (generated from `cards.toml` by
- * `scripts/setup-assets.mjs`) and returns a Map keyed by card number. Served
- * from the public directory at `/cards_v2-data.json`, which carries the
- * draft-pool metadata merged in alongside the base card fields.
+ * Returns the card catalog from the `src/content/cards/` modules as a Map
+ * keyed by card number.
  */
-export async function loadCardsV2Database(): Promise<Map<number, CardData>> {
-  const response = await fetch("/cards_v2-data.json");
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load cards_v2 data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  const cards = (await response.json()) as Array<
+export function loadCardsV2Database(): Map<number, CardData> {
+  const cards = cardsDocument() as unknown as Array<
     Omit<CardData, "id" | "name" | "subtype"> & {
       id: unknown;
       name: unknown;
@@ -45,17 +38,11 @@ export async function loadCardsV2Database(): Promise<Map<number, CardData>> {
 }
 
 /**
- * Fetch the browser projection compiled from `data/tides.ron` and
- * the per-avatar pools embedded in `data/avatars.ron` to
- * `/tides4-data.json` by `scripts/setup-assets.mjs`. The `tides4` pool variant
- * combines into pools — the signature, facet, and neutral tide decks and the
- * per-Avatar tide pools in one file. Returns `null` if the asset is missing
- * so the caller can surface a clear configuration error when the variant runs.
+ * Validates the tides4 pool document: the signature, facet, and neutral tide
+ * decks from `src/content/tides.ts` and each Avatar's tide pool.
  */
-export async function loadTides4Decks(): Promise<Tides4DecksJson | null> {
-  const response = await fetch("/tides4-data.json");
-  if (!response.ok) return null;
-  return validateTides4Decks(await response.json());
+export function loadTides4Decks(): Tides4DecksJson {
+  return validateTides4Decks(tides4Document());
 }
 
 /**

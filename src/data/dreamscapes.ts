@@ -14,6 +14,12 @@ import {
   localizedSourceText,
 } from "../runtime/localization/runtime";
 import { localizedGuideDialogue } from "../runtime/localization/runtime-templates.generated";
+import {
+  affiliationsDocument,
+  apollyonIncarnationsDocument,
+  dreamGuidesDocument,
+  dreamscapesDocument,
+} from "../content/documents";
 
 // Re-export the content types so callers can import dreamscape/guide/affiliation
 // shapes alongside their loaders from one module.
@@ -24,10 +30,6 @@ export type {
   DreamscapeContent,
 } from "../types/content";
 
-const DREAMSCAPES_JSON_PATH = "/dreamscapes-data.json";
-const DREAM_GUIDES_JSON_PATH = "/dream-guides-data.json";
-const AFFILIATIONS_JSON_PATH = "/affiliations-data.json";
-const APOLLYON_INCARNATIONS_JSON_PATH = "/apollyon-incarnations-data.json";
 const GUIDE_DIALOGUE_CONTEXTS = new Set([
   "site",
   "random-site",
@@ -46,22 +48,14 @@ const GAMBLE_DIALOGUE_CONTEXTS = [
 ] as const;
 const TEMPLATE_SLOT = /\{([^{}]+)\}/gu;
 
-async function fetchJson<T>(path: string, label: string): Promise<T> {
-  const response = await fetch(path);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load ${label}: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  return (await response.json()) as T;
+/** Reads a content document as its runtime content type. */
+function asContent<T>(document: unknown): T {
+  return document as T;
 }
 
-/** Fetches the dreamscape definitions from the asset pipeline output. */
-export async function loadDreamscapes(): Promise<DreamscapeContent[]> {
-  const dreamscapes = await fetchJson<DreamscapeContent[]>(
-    DREAMSCAPES_JSON_PATH,
-    "dreamscape data",
-  );
+/** Returns the dreamscape definitions from the content modules. */
+export function loadDreamscapes(): DreamscapeContent[] {
+  const dreamscapes = asContent<DreamscapeContent[]>(dreamscapesDocument());
   return dreamscapes.map((dreamscape) => ({
     ...dreamscape,
     ...(dreamscape.atlasDescription === undefined
@@ -75,12 +69,13 @@ export async function loadDreamscapes(): Promise<DreamscapeContent[]> {
   }));
 }
 
-/** Fetches the Dream Guide definitions from the asset pipeline output. */
-export async function loadDreamGuides(): Promise<DreamGuideContent[]> {
-  const catalog = await fetchJson<unknown>(
-    DREAM_GUIDES_JSON_PATH,
-    "dream guide data",
-  );
+/** Validates the Dream Guide definitions from the content modules. */
+export function loadDreamGuides(): DreamGuideContent[] {
+  return parseDreamGuides(dreamGuidesDocument());
+}
+
+/** Validates a Dream Guide catalog document. */
+export function parseDreamGuides(catalog: unknown): DreamGuideContent[] {
   if (
     typeof catalog !== "object" ||
     catalog === null ||
@@ -100,7 +95,7 @@ export async function loadDreamGuides(): Promise<DreamGuideContent[]> {
       catalog.guides.length
   ) {
     throw new Error(
-      "Failed to load dream guide data: malformed dream-guides-data.json",
+      "Failed to load dream guide data: malformed Dream Guide document",
     );
   }
   return catalog.guides.map((guide) => ({
@@ -202,22 +197,14 @@ function isDreamGuideContent(value: unknown): value is DreamGuideContent {
   return value.siteType !== "Gamble" || hasWinEssenceSlot;
 }
 
-/** Fetches the affiliation definitions from the asset pipeline output. */
-export async function loadAffiliations(): Promise<AffiliationContent[]> {
-  return fetchJson<AffiliationContent[]>(
-    AFFILIATIONS_JSON_PATH,
-    "affiliation data",
-  );
+/** Returns the affiliation definitions from the content modules. */
+export function loadAffiliations(): AffiliationContent[] {
+  return asContent<AffiliationContent[]>(affiliationsDocument());
 }
 
-/** Fetches Apollyon's incarnation definitions from the asset pipeline output. */
-export async function loadApollyonIncarnations(): Promise<
-  ApollyonIncarnationContent[]
-> {
-  return fetchJson<ApollyonIncarnationContent[]>(
-    APOLLYON_INCARNATIONS_JSON_PATH,
-    "Apollyon incarnation data",
-  );
+/** Returns Apollyon's incarnation definitions from the content modules. */
+export function loadApollyonIncarnations(): ApollyonIncarnationContent[] {
+  return asContent<ApollyonIncarnationContent[]>(apollyonIncarnationsDocument());
 }
 
 // ---------------------------------------------------------------------------

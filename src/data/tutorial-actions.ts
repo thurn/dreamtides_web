@@ -41,6 +41,7 @@ import type {
 } from "../types/identifiers";
 import { isBackRankSlotId, isFrontRankSlotId } from "../battle/types";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
+import { tutorialDocument } from "../content/documents";
 
 const DEFAULT_GUIDE_SPEECH_BUBBLE_WIDTH = 700;
 const DEFAULT_AVATAR_SPEECH_BUBBLE_WIDTH = 300;
@@ -1024,24 +1025,18 @@ export function parseTutorialTriggers(
   });
 }
 
-/** Load the authored tutorial sequence from the built runtime data. */
-export async function loadTutorialActions(
-  fetcher: typeof fetch = fetch,
-): Promise<readonly TutorialAction[]> {
-  return (await loadTutorialConfiguration(fetcher)).actions;
+/** Load the authored tutorial sequence from the content modules. */
+export function loadTutorialActions(): readonly TutorialAction[] {
+  return loadTutorialConfiguration().actions;
 }
 
 /** Load both the scripted sequence and supplemental battle triggers. */
-export async function loadTutorialConfiguration(
-  fetcher: typeof fetch = fetch,
-): Promise<TutorialConfiguration> {
-  const response = await fetcher("/tutorial-data.json");
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load tutorial actions (${String(response.status)}).`,
-    );
-  }
-  const body: unknown = await response.json();
+export function loadTutorialConfiguration(): TutorialConfiguration {
+  return parseTutorialConfiguration(tutorialDocument());
+}
+
+/** Validates a tutorial document. */
+export function parseTutorialConfiguration(body: unknown): TutorialConfiguration {
   if (body === null || typeof body !== "object" || Array.isArray(body)) {
     throw new Error("Tutorial data response must be an object.");
   }

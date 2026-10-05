@@ -242,11 +242,7 @@ export function JourneyApp({
       (dc) => dc.id === resolvedAvatarId,
     );
     if (avatar === undefined) return null;
-    return buildAvatarTides4Provenance(
-      avatar,
-      poolContext,
-      state.seed,
-    );
+    return buildAvatarTides4Provenance(avatar, poolContext, state.seed);
   }, [
     tides4ProvenanceNeeded,
     journeyContent.poolContext,
@@ -583,41 +579,41 @@ export default function App({
   }, []);
 
   useEffect(() => {
-    Promise.all([loadJourneyContent(), loadTutorialConfiguration()])
-      .then(([loadedContent, tutorial]) => {
-        logEvent("tutorial_configuration_loaded", {
-          contentHash: tutorial.contentHash,
-          foldHash: tutorial.foldHash,
-          tutorialCardConstants: tutorial.battle.tutorialCardConstants,
-          playerAvatarId: tutorial.battle.playerAvatarId,
-          enemyAvatarId: tutorial.battle.enemyAvatarId,
-          derivedDeckSize: tutorialStarterDeckSize(tutorial.battle),
-          startingEnergy: tutorial.battle.startingEnergy,
-          scoreToWin: tutorial.battle.scoreToWin,
-          handoff: tutorial.battle.handoff,
-        });
-        const content = {
-          ...loadedContent,
-          tutorial,
-        };
-        // Register the reducer content providers from the loaded
-        // content BEFORE any room folds an event. Until this runs, every
-        // provider-backed event (START_JOURNEY, SELECT_AVATAR, ADD_CARD,
-        // ADD_DREAMSIGN, content-coupled OPEN_SITE / REROLL_SHOP / BEGIN_BATTLE)
-        // bounces. Registering here — before `setJourneyContent` unblocks the
-        // render that mounts RoomGate / CoopProvider — guarantees the ordering,
-        // and the registration is identical across clients on the same build.
-        registerGameProviders(content);
-        setJourneyContent(content);
-        setLoadError(null);
-      })
-      .catch((error) => {
-        setLoadError(
-          error instanceof Error
-            ? error.message
-            : "Failed to load journey content.",
-        );
+    try {
+      const loadedContent = loadJourneyContent();
+      const tutorial = loadTutorialConfiguration();
+      logEvent("tutorial_configuration_loaded", {
+        contentHash: tutorial.contentHash,
+        foldHash: tutorial.foldHash,
+        tutorialCardConstants: tutorial.battle.tutorialCardConstants,
+        playerAvatarId: tutorial.battle.playerAvatarId,
+        enemyAvatarId: tutorial.battle.enemyAvatarId,
+        derivedDeckSize: tutorialStarterDeckSize(tutorial.battle),
+        startingEnergy: tutorial.battle.startingEnergy,
+        scoreToWin: tutorial.battle.scoreToWin,
+        handoff: tutorial.battle.handoff,
       });
+      const content = {
+        ...loadedContent,
+        tutorial,
+      };
+      // Register the reducer content providers from the loaded
+      // content BEFORE any room folds an event. Until this runs, every
+      // provider-backed event (START_JOURNEY, SELECT_AVATAR, ADD_CARD,
+      // ADD_DREAMSIGN, content-coupled OPEN_SITE / REROLL_SHOP / BEGIN_BATTLE)
+      // bounces. Registering here — before `setJourneyContent` unblocks the
+      // render that mounts RoomGate / CoopProvider — guarantees the ordering,
+      // and the registration is identical across clients on the same build.
+      registerGameProviders(content);
+      setJourneyContent(content);
+      setLoadError(null);
+    } catch (error) {
+      setLoadError(
+        error instanceof Error
+          ? error.message
+          : "Failed to load journey content.",
+      );
+    }
   }, []);
 
   useEffect(() => {

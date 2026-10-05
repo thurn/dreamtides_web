@@ -22,10 +22,10 @@ const OPENING_DREAMSIGN_ID = "00000000-0000-4000-8000-000000000020";
 
 function syntheticSource(): Record<string, unknown> {
   return {
-    "avatar-id": "00000000-0000-4000-8000-000000000010",
-    "pool-size": 8,
-    "opening-dreamsigns": [OPENING_DREAMSIGN_ID],
-    "opening-offers": [CARD_IDS.slice(0, 4), CARD_IDS.slice(4, 8)],
+    avatarId: "00000000-0000-4000-8000-000000000010",
+    poolSize: 8,
+    openingDreamsignIds: [OPENING_DREAMSIGN_ID],
+    openingOffers: [CARD_IDS.slice(0, 4), CARD_IDS.slice(4, 8)],
     tides: [
       {
         id: "first-tide",
@@ -123,7 +123,7 @@ describe("validateTutorialJourneyPool", () => {
         cards: CARD_IDS.map((id) => ({ id, copies: 1 })),
       },
     ];
-    source["opening-offers"] = [[CARD_IDS[0]], CARD_IDS.slice(1, 4)];
+    source.openingOffers = [[CARD_IDS[0]], CARD_IDS.slice(1, 4)];
 
     const pool = validateTutorialJourneyPool(source, 8);
     expect(pool.tides).toHaveLength(1);

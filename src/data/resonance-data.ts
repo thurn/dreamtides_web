@@ -1,4 +1,4 @@
-import rawResonanceData from "../generated/config/resonance-data.json";
+import { resonanceDocument } from "../content/documents";
 import type {
   Resonance,
   ResonanceData,
@@ -88,7 +88,7 @@ export function parseResonanceData(value: unknown): ResonanceData {
   };
 }
 
-export const RESONANCE_DATA = parseResonanceData(rawResonanceData);
+export const RESONANCE_DATA = parseResonanceData(resonanceDocument());
 
 export function resonance(
   id: Resonance,

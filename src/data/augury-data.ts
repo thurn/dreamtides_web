@@ -6,10 +6,10 @@ import { hydrateSourceTransport } from "../runtime/localization/runtime";
 import { LocalizedString, SourceMessage } from "@trox/runtime";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 import { auguryArchetypeIdFromUnknown } from "../types/identifiers";
+import { auguryDocument } from "../content/documents";
 
 export type { AuguryArchetypeData, AuguryData } from "../types/augury-data";
 
-const PATH = "/augury-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -212,10 +212,9 @@ function isRewardSelectionPolicyId(
     value === "dreamsign-match" || value === "site-uniform";
 }
 
-export async function loadAuguryData(): Promise<AuguryData> {
-  const response = await fetch(PATH);
-  if (!response.ok) throw new Error(`Failed to load Augury data: ${String(response.status)} ${response.statusText}`);
-  return parseAuguryData(await response.json());
+/** Validates the Augury document assembled from the content modules. */
+export function loadAuguryData(): AuguryData {
+  return parseAuguryData(auguryDocument());
 }
 
 export function auguryArchetype(data: AuguryData, id: AuguryArchetypeId): AuguryArchetypeData {

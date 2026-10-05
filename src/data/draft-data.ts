@@ -1,6 +1,6 @@
 import type { DraftData, DraftRarityCap } from "../types/draft-data";
 import { CARD_RARITIES, type Rarity } from "../types/cards";
-import generatedDraftData from "../generated/config/draft-data.json";
+import { draftDocument } from "../content/documents";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 export type {
@@ -9,7 +9,6 @@ export type {
   Tides4Tuning,
 } from "../types/draft-data";
 
-const PATH = "/draft-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
 const RARITIES: ReadonlySet<Rarity> = new Set(CARD_RARITIES);
 
@@ -119,16 +118,10 @@ export function parseDraftData(value: unknown): DraftData {
   };
 }
 
-/** Generated compatibility view for code paths that need RON-owned defaults. */
-export const DEFAULT_DRAFT_DATA = parseDraftData(generatedDraftData);
+/** The draft rules assembled from the content modules. */
+export const DEFAULT_DRAFT_DATA = parseDraftData(draftDocument());
 
-/** Fetch the strictly compiled draft rules before any room is folded. */
-export async function loadDraftData(): Promise<DraftData> {
-  const response = await fetch(PATH);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load draft data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  return parseDraftData(await response.json());
+/** Returns the validated draft rules. */
+export function loadDraftData(): DraftData {
+  return DEFAULT_DRAFT_DATA;
 }

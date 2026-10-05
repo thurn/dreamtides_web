@@ -31,7 +31,11 @@ import { parseSiteId } from "./types/identifiers";
 import { parseDeckEntryId } from "./types/identifiers";
 import { parseRoomId } from "./types/identifiers";
 import type { RoomId } from "./types/identifiers";
-import { testAvatarId, testDreamscapeId, testCardId } from "./types/test-identities";
+import {
+  testAvatarId,
+  testDreamscapeId,
+  testCardId,
+} from "./types/test-identities";
 
 vi.mock("./data/journey-content", () => ({
   AFFINITY_GROWN_POOL_VARIANTS: new Set<string>(),
@@ -45,117 +49,114 @@ vi.mock("./data/tutorial-actions", () => ({
   tutorialStarterDeckSize: (battle: {
     starterDeck: readonly { copies: number }[];
   }) => battle.starterDeck.reduce((total, entry) => total + entry.copies, 0),
-  loadTutorialConfiguration: vi.fn(() =>
-    Promise.resolve({
-      contentHash: "0".repeat(64),
-      foldHash: "1".repeat(64),
-      journeyStart: {
-        speechBubble: {
-          speaker: "mira",
-          horizontalOffset: 0,
-          verticalOffset: 0,
-          bubbleWidth: 550,
-          text: "Choose an avatar.",
-        },
+  loadTutorialConfiguration: vi.fn(() => ({
+    contentHash: "0".repeat(64),
+    foldHash: "1".repeat(64),
+    journeyStart: {
+      speechBubble: {
+        speaker: "mira",
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 550,
+        text: "Choose an avatar.",
       },
-      dreamscape: {
-        speechBubble: {
-          speaker: "mira",
-          delay: 2,
-          horizontalOffset: 0,
-          verticalOffset: 0,
-          bubbleWidth: 700,
-          text: "Visit Dream Sites.",
-        },
+    },
+    dreamscape: {
+      speechBubble: {
+        speaker: "mira",
+        delay: 2,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Visit Dream Sites.",
       },
-      atlas: {
+    },
+    atlas: {
+      speechBubble: {
+        speaker: "mira",
+        delay: 1,
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 700,
+        text: "Choose the next dream.",
+      },
+    },
+    draft: {
+      speechBubble: {
+        speaker: "mira",
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 600,
+        text: "Draft a card.",
+      },
+    },
+    purge: {
+      speechBubble: {
+        speaker: "mira",
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 600,
+        text: "Purge a card.",
+      },
+    },
+    dreamsignRevelation: {
+      speechBubble: {
+        speaker: "mira",
+        horizontalOffset: 0,
+        verticalOffset: 0,
+        bubbleWidth: 600,
+        text: "Choose a Dreamsign.",
+      },
+    },
+    battleStart: {
+      firstBattle: {
         speechBubble: {
           speaker: "mira",
           delay: 1,
           horizontalOffset: 0,
           verticalOffset: 0,
           bubbleWidth: 700,
-          text: "Choose the next dream.",
+          text: "Review the first opponent.",
         },
       },
-      draft: {
+      secondBattle: {
         speechBubble: {
           speaker: "mira",
+          delay: 1,
           horizontalOffset: 0,
           verticalOffset: 0,
-          bubbleWidth: 600,
-          text: "Draft a card.",
+          bubbleWidth: 700,
+          text: "Prepare for the second battle.",
         },
       },
-      purge: {
-        speechBubble: {
-          speaker: "mira",
-          horizontalOffset: 0,
-          verticalOffset: 0,
-          bubbleWidth: 600,
-          text: "Purge a card.",
-        },
+    },
+    actions: [],
+    triggers: [],
+    battle: {
+      tutorialCardConstants: {
+        tutorialPlayerCharacterCardId: "00000000-0000-4000-8000-000000000001",
+        tutorialOpponentCharacterCardId: "00000000-0000-4000-8000-000000000002",
+        loadingScreenCharacterCardId: "00000000-0000-4000-8000-000000000008",
+        loadingScreenEventCardId: "00000000-0000-4000-8000-000000000004",
+        handoffEnemyCharacterCardId: "00000000-0000-4000-8000-000000000003",
+        tutorialDreamwellCardId: "00000000-0000-4000-8000-000000000005",
       },
-      dreamsignRevelation: {
-        speechBubble: {
-          speaker: "mira",
-          horizontalOffset: 0,
-          verticalOffset: 0,
-          bubbleWidth: 600,
-          text: "Choose a Dreamsign.",
+      playerAvatarId: "00000000-0000-4000-8000-000000000006",
+      enemyAvatarId: "00000000-0000-4000-8000-000000000007",
+      startingEnergy: 4,
+      scoreToWin: 10,
+      starterDeck: [
+        {
+          cardId: testCardId("00000000-0000-4000-8000-000000000001"),
+          copies: 30,
         },
-      },
-      battleStart: {
-        firstBattle: {
-          speechBubble: {
-            speaker: "mira",
-            delay: 1,
-            horizontalOffset: 0,
-            verticalOffset: 0,
-            bubbleWidth: 700,
-            text: "Review the first opponent.",
-          },
-        },
-        secondBattle: {
-          speechBubble: {
-            speaker: "mira",
-            delay: 1,
-            horizontalOffset: 0,
-            verticalOffset: 0,
-            bubbleWidth: 700,
-            text: "Prepare for the second battle.",
-          },
-        },
-      },
-      actions: [],
-      triggers: [],
-      battle: {
-        tutorialCardConstants: {
-          tutorialPlayerCharacterCardId: "00000000-0000-4000-8000-000000000001",
-          tutorialOpponentCharacterCardId:
-            "00000000-0000-4000-8000-000000000002",
-          loadingScreenCharacterCardId: "00000000-0000-4000-8000-000000000008",
-          loadingScreenEventCardId: "00000000-0000-4000-8000-000000000004",
-          handoffEnemyCharacterCardId: "00000000-0000-4000-8000-000000000003",
-          tutorialDreamwellCardId: "00000000-0000-4000-8000-000000000005",
-        },
-        playerAvatarId: "00000000-0000-4000-8000-000000000006",
-        enemyAvatarId: "00000000-0000-4000-8000-000000000007",
-        startingEnergy: 4,
-        scoreToWin: 10,
-        starterDeck: [
-          {
-            cardId: testCardId("00000000-0000-4000-8000-000000000001"),
-            copies: 30,
-          },
-        ],
-        handoff: { activeSide: "player" },
-        forcedPlayerDraws: [],
-        forcedEnemyDraws: [],
-        dreamwellDraws: [],
-      },
-    }),
-  ),
+      ],
+      handoff: { activeSide: "player" },
+      forcedPlayerDraws: [],
+      forcedEnemyDraws: [],
+      dreamwellDraws: [],
+    },
+  })),
 }));
 
 vi.mock("./firebase/app-config", () => ({
@@ -481,7 +482,7 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null));
-  vi.mocked(loadJourneyContent).mockResolvedValue(makeJourneyContent());
+  vi.mocked(loadJourneyContent).mockReturnValue(makeJourneyContent());
   vi.mocked(getFirebaseDatabase).mockReturnValue(
     {} as ReturnType<typeof getFirebaseDatabase>,
   );
@@ -539,9 +540,9 @@ describe("App", () => {
   });
 
   it("blocks room entry and provider registration when journey content loading fails", async () => {
-    vi.mocked(loadJourneyContent).mockRejectedValueOnce(
-      new Error("Failed to load draft records: 503 Test Failure"),
-    );
+    vi.mocked(loadJourneyContent).mockImplementationOnce(() => {
+      throw new Error("Failed to load draft records: 503 Test Failure");
+    });
 
     const { container, root } = mount(
       <App

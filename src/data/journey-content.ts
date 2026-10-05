@@ -8,7 +8,11 @@ import {
   type Tides4ProvenanceSummary,
   type Tides4TideSummary,
 } from "../types/content";
-import { parseCardId, parseCardName, type CardId } from "../types/card-identity";
+import {
+  parseCardId,
+  parseCardName,
+  type CardId,
+} from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { JourneySeed } from "../types/journey-seed";
 import type {
@@ -17,6 +21,7 @@ import type {
   PoolVariant,
 } from "../draft/pool/types.ts";
 import { generatePoolFromData } from "../draft/pool/generate.ts";
+import type { Tides4DecksJson } from "../draft/pool";
 import { buildPoolData } from "../draft/pool/pool-data";
 import { loadFigmentDatabase } from "./figment-database";
 import { loadExplorationContent, type ExplorationContent } from "./exploration";
@@ -31,7 +36,7 @@ import {
   loadTides4Decks,
   resolvePool,
 } from "./cards-v2-database";
-import { loadAvatarsV2 } from "./avatars-v2-database";
+import { loadAvatarsV2, type DraftAvatar } from "./avatars-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import {
   loadAffiliations,
@@ -85,30 +90,24 @@ export interface JourneyContent {
   /** The shared Dreamwell deck source, drawn from during battle. */
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates: readonly DreamsignTemplate[];
-  /** Complete normalized tutorial scenario loaded from tutorial.toml. */
+  /** Complete normalized tutorial scenario. */
   tutorial?: TutorialConfiguration;
   /** Fixed three-tide draft pool used by the tutorial journey handoff. */
   tutorialJourneyPool?: TutorialJourneyPool;
-  /**
-   * Dreamscape definitions the Atlas generator assigns to nodes, loaded from
-   * `public/dreamscapes-data.json`.
-   */
+  /** Dreamscape definitions the Atlas generator assigns to nodes. */
   dreamscapes: readonly DreamscapeContent[];
   /**
-   * Thematic affiliations backing non-starter dreamscapes, loaded from
-   * `public/affiliations-data.json`. Each dreamscape's `affiliationId` resolves to
-   * one of these; its three authored tides contribute to opponent affinity.
+   * Thematic affiliations backing non-starter dreamscapes. Each dreamscape's
+   * `affiliationId` resolves to one of these; its three authored tides
+   * contribute to opponent affinity.
    */
   affiliations: readonly AffiliationContent[];
   /**
-   * Dream Guide definitions, loaded from `public/dream-guides-data.json`. Each
-   * guide tends one site type (its home dreamscape's signature site) and carries
+   * Dream Guide definitions. Each guide tends one site type (its home dreamscape's signature site) and carries
    * the dialog and `homeSpecialty` copy the guide frame presents at that site.
    */
   guides: readonly DreamGuideContent[];
-  /**
-   * Dream Atlas generation tuning, loaded from `public/atlas-data.json`.
-   */
+  /** Dream Atlas generation tuning. */
   atlasData: AtlasData;
   /** Canonical cross-site metadata and fold-relevant site rules. */
   sitesData: SitesData;
@@ -123,9 +122,7 @@ export interface JourneyContent {
   /** Fold-relevant opponent and battle tuning loaded before room entry. */
   opponentsData: OpponentsData;
   /**
-   * Apollyon's ten incarnations, loaded from
-   * `public/apollyon-incarnations-data.json`. Atlas generation picks one per run
-   * to present the boss node; the Atlas UI resolves the chosen incarnation's
+   * Apollyon's ten incarnations. Atlas generation picks one per run to present the boss node; the Atlas UI resolves the chosen incarnation's
    * title and description by `DreamAtlas.bossIncarnationId`.
    */
   apollyonIncarnations?: readonly ApollyonIncarnationContent[];
@@ -151,7 +148,7 @@ export interface RunPoolContext {
    * boundary.
    */
   idIndex: ReadonlyMap<CardId, number>;
-  /** Per-card rarity copy-cap overrides compiled from draft_site.toml. */
+  /** Per-card rarity copy-cap overrides from the draft rarity caps. */
   poolCopyCapsByCardNumber?: ReadonlyMap<number, number>;
   /** Default pool copy cap for cards without a rarity override. */
   defaultPoolCopyCap?: number;
@@ -160,7 +157,7 @@ export interface RunPoolContext {
    * Pool-construction algorithm for this run.
    */
   poolVariant?: PoolVariant;
-  /** Production tides4 tuning compiled from draft_site.toml. */
+  /** Production tides4 tuning from the draft rules. */
   tides4Tuning?: DraftData["pool"]["tides4"];
 }
 
@@ -203,10 +200,7 @@ function generateAvatarPool(
  * provenance are in hand. The algorithm, seed, tuning, and selected tide ids
  * make the pool construction reconstructable from the production log.
  */
-function logPoolConstructed(
-  avatar: AvatarContent,
-  pool: GeneratedPool,
-): void {
+function logPoolConstructed(avatar: AvatarContent, pool: GeneratedPool): void {
   logEvent("draft_pool_constructed", {
     avatarId: avatar.id,
     algo: pool.variant,
@@ -380,13 +374,65 @@ export function buildAvatarTides4Provenance(
   };
 }
 
+/** The validated catalogs a journey's content is assembled from. */
+export interface JourneyContentSources {
+  draftData: DraftData;
+  cardDatabase: Map<number, CardData>;
+  exploration: ExplorationContent;
+  auguryData: AuguryData;
+  draftAvatars: readonly DraftAvatar[];
+  dreamwellCards: readonly DreamwellCard[];
+  dreamsignTemplates: readonly DreamsignTemplate[];
+  tides4Decks: Tides4DecksJson;
+  dreamscapes: readonly DreamscapeContent[];
+  affiliations: readonly AffiliationContent[];
+  guides: readonly DreamGuideContent[];
+  atlasData: AtlasData;
+  sitesData: SitesData;
+  economyData: EconomyData;
+  gambleData: GambleData;
+  transfigurationData: TransfigurationData;
+  opponentsData: OpponentsData;
+  apollyonIncarnations: readonly ApollyonIncarnationContent[];
+}
+
 /**
- * Loads journey content and the Tides4 run-pool context.
+ * Loads journey content and the Tides4 run-pool context from the content
+ * modules, validating every document.
  */
-export async function loadJourneyContent(): Promise<JourneyContent> {
-  const draftData = await loadDraftData();
-  const [
-    cardDatabase,
+export function loadJourneyContent(): JourneyContent {
+  // Hydrate the figment catalog before publishing journey content so every
+  // GameCard registers its materialized-figment preview from the authored
+  // UUID, rules, and art on the first render.
+  loadFigmentDatabase();
+  return buildJourneyContent({
+    draftData: loadDraftData(),
+    cardDatabase: loadCardsV2Database(),
+    exploration: loadExplorationContent(),
+    auguryData: loadAuguryData(),
+    draftAvatars: loadAvatarsV2(),
+    dreamwellCards: loadDreamwellCards(),
+    dreamsignTemplates: loadDreamsignTemplates(),
+    tides4Decks: loadTides4Decks(),
+    dreamscapes: loadDreamscapes(),
+    affiliations: loadAffiliations(),
+    guides: loadDreamGuides(),
+    atlasData: loadAtlasData(),
+    sitesData: loadSitesData(),
+    economyData: loadEconomyData(),
+    gambleData: loadGambleData(),
+    transfigurationData: loadTransfigurationData(),
+    opponentsData: loadOpponentsData(),
+    apollyonIncarnations: loadApollyonIncarnations(),
+  });
+}
+
+/** Assembles journey content and its run-pool context from validated catalogs. */
+export function buildJourneyContent(
+  sources: JourneyContentSources,
+): JourneyContent {
+  const {
+    draftData,
     exploration,
     auguryData,
     draftAvatars,
@@ -403,40 +449,8 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     transfigurationData,
     opponentsData,
     apollyonIncarnations,
-    _figmentCatalog,
-  ] = await Promise.all([
-    loadCardsV2Database(),
-    loadExplorationContent(),
-    loadAuguryData(),
-    loadAvatarsV2(),
-    loadDreamwellCards(),
-    loadDreamsignTemplates(),
-    loadTides4Decks(),
-    // Dreamscape definitions and Atlas generation tuning are small and always
-    // loaded so the 7-layer Atlas generator can assign and tune nodes.
-    loadDreamscapes(),
-    // Affiliations are small and always loaded so affiliated card draws can
-    // reweight toward a dreamscape's faction.
-    loadAffiliations(),
-    // Dream Guides are small and always loaded so guide-bearing site screens can
-    // present the resident guide and their home specialty.
-    loadDreamGuides(),
-    loadAtlasData(),
-    loadSitesData(),
-    loadEconomyData(),
-    loadGambleData(),
-    loadTransfigurationData(),
-    loadOpponentsData(),
-    // Apollyon's incarnations are small and always loaded so the Atlas can
-    // present a per-run guise for the boss node.
-    loadApollyonIncarnations(),
-    // Complete this small load before publishing journey content so every
-    // GameCard registers its materialized-figment preview from the authored
-    // UUID, rules, and art on the first render. Failure remains non-fatal: the
-    // fixed rules catalog still provides gameplay defaults.
-    loadFigmentDatabase().catch(() => undefined),
-  ]);
-
+  } = sources;
+  const cardDatabase = new Map(sources.cardDatabase);
   const draftPoolCards = [...cardDatabase.values()];
   for (const customCard of exploration.customCards) {
     if (cardDatabase.has(customCard.cardNumber)) {
@@ -472,7 +486,6 @@ export async function loadJourneyContent(): Promise<JourneyContent> {
     if (cap !== undefined) poolCopyCapsByCardNumber.set(card.cardNumber, cap);
   }
 
-  if (tides4Decks === null) throw new Error("Missing Tides4 catalog");
   const poolData = buildPoolData(draftPoolCards);
   poolData.tides4Decks = tides4Decks;
   const rewardSelectionData = buildRewardSelectionData({

@@ -1,20 +1,18 @@
 import type { OpponentsData } from "../types/opponents-data";
+import { opponentsDocument } from "../content/documents";
 import { parseContentHash, parseFoldHash } from "../types/content-hash";
 
 export type { OpponentsData } from "../types/opponents-data";
 
-const PATH = "/opponents-data.json";
 const SHA256_HEX = /^[0-9a-f]{64}$/u;
 
-/** Fetches the strictly compiled opponent configuration used by every battle. */
-export async function loadOpponentsData(): Promise<OpponentsData> {
-  const response = await fetch(PATH);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load opponent data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  const value: unknown = await response.json();
+/** Validates the opponent configuration used by every battle. */
+export function loadOpponentsData(): OpponentsData {
+  return parseOpponentsData(opponentsDocument());
+}
+
+/** Validates an opponent configuration document. */
+export function parseOpponentsData(value: unknown): OpponentsData {
   const candidate = value as Partial<OpponentsData>;
   if (
     typeof value !== "object" ||
@@ -31,7 +29,7 @@ export async function loadOpponentsData(): Promise<OpponentsData> {
     !Array.isArray(candidate.journeyAiDeck)
   ) {
     throw new Error(
-      "Failed to load opponent data: malformed opponents-data.json",
+      "Failed to load opponent data: malformed opponents document",
     );
   }
   const decoded = value as OpponentsData;

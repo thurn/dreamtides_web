@@ -4,12 +4,12 @@ import {
   parseDreamwellCardName,
   type DreamwellCardName,
 } from "../types/catalog-names";
+import { dreamwellCardsDocument } from "../content/documents";
 
 /**
  * The shared Dreamwell cards drawn one per turn during the Dreamwell phase
- * (docs/battle_rules/battle_rules.md). The catalog is generated from
- * canonical `data/dreamwell.ron` through the generated compatibility catalog
- * `data/dreamwell.toml`, then served at `/dreamwell-data.json`.
+ * (docs/rules.md). The catalog lives in the `src/content/dreamwell/`
+ * modules.
  */
 export interface DreamwellCard {
   /** Stable UUID identity. Cards are referenced by id, never by name. */
@@ -35,21 +35,13 @@ export interface DreamwellCard {
   artOwned?: boolean;
 }
 
-const DREAMWELL_JSON_PATH = "/dreamwell-data.json";
-
 /**
- * Fetches the Dreamwell catalog generated from `dreamwell.toml`. Returns the
- * cards in their authored TOML order; the battle deck builder
- * (`buildDreamwellDeck`) groups and shuffles them by `order` at battle init.
+ * Validates the Dreamwell catalog. Returns the cards in their authored order;
+ * the battle deck builder (`buildDreamwellDeck`) groups and shuffles them by
+ * `order` at battle init.
  */
-export async function loadDreamwellCards(): Promise<DreamwellCard[]> {
-  const response = await fetch(DREAMWELL_JSON_PATH);
-  if (!response.ok) {
-    throw new Error(
-      `Failed to load Dreamwell data: ${String(response.status)} ${response.statusText}`,
-    );
-  }
-  return parseDreamwellCards(await response.json());
+export function loadDreamwellCards(): DreamwellCard[] {
+  return parseDreamwellCards(dreamwellCardsDocument());
 }
 
 function record(value: unknown): value is Record<string, unknown> {

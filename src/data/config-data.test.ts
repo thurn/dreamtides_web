@@ -1,11 +1,17 @@
 import { describe, expect, it } from "vitest";
-import auguryJson from "../generated/config/augury-data.json";
-import sitesJson from "../generated/config/sites-data.json";
-import tidesJson from "../generated/config/tides4-data.json";
+import {
+  auguryDocument,
+  sitesDocument,
+  tides4Document,
+} from "../content/documents";
 import { parseAuguryData } from "./augury-data";
 import { buildRewardSelectionData } from "./reward-selection-data";
 import { parseSitesData } from "./sites-data";
 import { validateTides4Decks } from "../draft/pool/tides4-io";
+
+const auguryJson = auguryDocument();
+const sitesJson = sitesDocument();
+const tidesJson = tides4Document();
 
 describe("generated game configuration trust boundaries", () => {
   it("assembles selection tuning from the generated Tides, Sites, and Augury artifacts", () => {
@@ -16,7 +22,9 @@ describe("generated game configuration trust boundaries", () => {
       sites: parseSitesData(sitesJson),
     });
     expect(selection.schemaVersion).toBe(2);
-    expect(selection.tuning.bandFraction).toBe(tidesJson.selection.bandFraction);
+    expect(selection.tuning.bandFraction).toBe(
+      tidesJson.selection.bandFraction,
+    );
     expect(selection.tuning.minDeckForPurge).toBe(
       sitesJson.encounterSites.minDeckForPurge,
     );
@@ -26,10 +34,15 @@ describe("generated game configuration trust boundaries", () => {
 
   it("keeps Augury authoring metadata and player presentation", () => {
     expect(auguryJson).not.toHaveProperty("dialogue");
-    expect(auguryJson.archetypes.every((entry) => !("copy" in entry))).toBe(true);
-    expect(auguryJson.archetypes.every((entry) =>
-      entry.name.trim() !== "" && entry.presentation.headline.kind !== ""
-    )).toBe(true);
+    expect(auguryJson.archetypes.every((entry) => !("copy" in entry))).toBe(
+      true,
+    );
+    expect(
+      auguryJson.archetypes.every(
+        (entry) =>
+          entry.name.trim() !== "" && entry.presentation.headline.kind !== "",
+      ),
+    ).toBe(true);
   });
 
   it("rejects missing Augury authoring metadata at the runtime boundary", () => {
