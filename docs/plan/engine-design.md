@@ -38,6 +38,10 @@ Every other section is written to fit it.
 This layout is a starting point. Update this page if a clearer structure
 emerges.
 
+Step kinds, engine event kinds, and DSL primitives are each **registered from
+their own module** through typed registries (Phase 3.2 and 3.4). Parallel
+lanes and content batches then add files instead of editing central switches.
+
 ```text
 src/engine/
   state/       BattleState, CardInstance, zones, ids, serialization, hashing
@@ -843,8 +847,10 @@ an intent.
     exactly. A cancel after it is rejected.
   - **Edge cases:** empty candidate sets, prompts alternating sides within one
     step, and auto-answers recorded and replayed.
-- **Scenario specs:** `src/content/specs/*.spec.ts`, written per D20, with
-  scripted answers:
+- **Scenario specs:** one file per content batch,
+  `src/content/specs/<batch-slug>.spec.ts`, written per D20, with scripted
+  answers. Like every engine and content test, they run in the `node`
+  environment ([D19](decisions.md#d19-test-pruning)):
 
   ```ts
   spec("7be2e6d7-abff-4c44-a0c3-35460da1693c", "challenge trigger banishes the opposing blocker until Ending", {

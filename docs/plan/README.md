@@ -1,7 +1,8 @@
 # Dreamtides Web: End-to-End Delivery Plan
 
-One Claude Code session, running unattended for a week or more, turns this
-fork of the journey prototype into the complete Dreamtides web game:
+One orchestrating Claude Code session, running unattended with implementation
+subagents in parallel lanes, turns this fork of the journey prototype into the
+complete Dreamtides web game:
 
 - A full rules engine that automates every card, dreamsign, avatar, and
   Dreamwell card.
@@ -55,9 +56,12 @@ When the run ends:
   - English-only;
   - data in typed TypeScript modules;
   - no Rust, Firebase, RON, editors, or co-op;
-  - three docs ([D33](decisions.md#d33-documentation-end-state)).
-
-  The agent's edit → validate → promote loop is fast and measured.
+  - three docs ([D33](decisions.md#d33-documentation-end-state));
+  - a small, fast test suite ([D19](decisions.md#d19-test-pruning)).
+- **The delivery loop is fast and measured.** A gate stage of about 60 s
+  promotes to `staging`. The full suite runs asynchronously as Tollgate's
+  release stage ([D44](decisions.md#d44-staged-validation)). Tollgate restarts
+  in seconds ([Track T](phase-t-tollgate.md)).
 
 ## Baseline at fork
 
@@ -91,24 +95,32 @@ was rewritten for the public repository
 
 ## Phase map
 
-Phases run **strictly in order**. A phase starts only after the previous
-phase's gate bead is closed. There are no time boxes anywhere; the AI
+Work runs in **dependency order** ([D26](decisions.md#d26-dependency-ordered-execution)).
+Each phase page has a task graph and an **earliest start**. A later phase's
+tasks start as soon as their prerequisites have landed, so phases overlap.
+Phase gates still close in order. There are no time boxes anywhere; the AI
 improvement loop ends on its plateau stop rule.
 
-| # | Phase | Page | Exit gate (summary) |
-| --- | --- | --- | --- |
-| 1 | Workflow introspection | [phase-1-workflow.md](phase-1-workflow.md) | Baselines and budgets recorded; context diet and measured speedups landed; surviving tests triaged |
-| 2 | Aggressive cleanup | [phase-2-cleanup.md](phase-2-cleanup.md) | Three docs and one skill; English-only; TS data modules; no Rust, RON, Firebase, editors, co-op, or analysis tooling; scripts and lint rules culled; local-first log; mason refactors; re-measured |
-| 3 | Rules engine core | [phase-3-engine.md](phase-3-engine.md) | Headless deterministic engine; prompt protocol proven by property tests; stack, triggers, layers, zones, DSL, loops, views; soak clean |
-| 4 | Battle UI on the engine | [phase-4-battle-ui.md](phase-4-battle-ui.md) | Engine battles in the existing UI against placeholder bots; one `PromptHost` for every prompt; journey sandbox and old AI removed; card-lab and sweep ready |
-| 5 | Content | [phase-5-content.md](phase-5-content.md) | Every entity is implemented, audited, swept, and judged; journey dreamsign effects, transfigurations, and Apollyon done; engine mason pass |
-| 6 | Tutorial on the engine | [phase-6-tutorial.md](phase-6-tutorial.md) | Tutorial battle and journey guidance work end to end; tutorial sandbox deleted |
-| 7 | AI (last) | [phase-7-ai.md](phase-7-ai.md) | Every AI build task done; champion plateaus for three iterations; final acceptance; report; docs end state |
+| # | Phase | Page | Earliest start | Exit gate (summary) |
+| --- | --- | --- | --- | --- |
+| 1 | Workflow introspection | [phase-1-workflow.md](phase-1-workflow.md) | (complete) | Baselines and budgets recorded; context diet and measured speedups landed; surviving tests triaged |
+| 2 | Aggressive cleanup | [phase-2-cleanup.md](phase-2-cleanup.md) | (in progress) | Three docs and one skill; English-only; TS data modules; no Rust, RON, Firebase, editors, co-op, or analysis tooling; scripts and lint rules culled; the test cut meets the D19 budgets; local-first log; mason refactors; re-measured |
+| T | Tollgate | [phase-t-tollgate.md](phase-t-tollgate.md) | now | Fast restarts; staged validation live for this repository; skills and Hive consistent |
+| 3 | Rules engine core | [phase-3-engine.md](phase-3-engine.md) | now (3.1); 3.2 after the Phase 2 lint, script, and battle-test cuts | Headless deterministic engine; prompt protocol proven by property tests; stack, triggers, layers, zones, DSL, loops, views; soak clean |
+| 4 | Battle UI on the engine | [phase-4-battle-ui.md](phase-4-battle-ui.md) | 4.0 after the Phase 2 gate; 4.1 after 3.4 | Engine battles in the existing UI against placeholder bots; one `PromptHost` for every prompt; journey sandbox and old AI removed; card-lab and sweep ready |
+| 5 | Content | [phase-5-content.md](phase-5-content.md) | 5.1 after 3.4; 5.6 after 5.1; card batches after the Phase 3 gate and 4.6 | Every entity is implemented, audited, swept, and judged; journey dreamsign effects, transfigurations, and Apollyon done; engine mason pass |
+| 6 | Tutorial on the engine | [phase-6-tutorial.md](phase-6-tutorial.md) | 6.0 after the Phase 2 gate; 6.1 after the Phase 4 gate and the first card batch | Tutorial battle and journey guidance work end to end; tutorial sandbox deleted |
+| 7 | AI (last) | [phase-7-ai.md](phase-7-ai.md) | 7.1 after 4.5; 7.2 after the Phase 5 gate | Every AI build task done; champion plateaus for three iterations; final acceptance; report; docs end state |
 
 Every phase ends with a **mason pass** just before its gate. Every bead it
 files is implemented within that phase
 ([D37](decisions.md#d37-mason-pass-every-phase)), so nothing is deferred past
 the run.
+
+**Tests are deleted early** ([D19](decisions.md#d19-test-pruning)). Tests of
+code that a later phase replaces are deleted when the replacing work starts,
+not at the end. Phase 2 cuts the suite to the D19 budgets before the engine
+work starts.
 
 Workflow and architecture friction is fixed while the run is underway
 ([D42](decisions.md#d42-continuous-introspection)). Every bead records its
@@ -126,25 +138,32 @@ Shared design references:
 - [workflow.md](workflow.md): beads, delivery, reviews, QA, ledgers,
   resources, recovery, and re-entry.
 
-## Operating model in one paragraph
+## Operating model
 
-**One Claude Code session executes everything sequentially.**
+**One orchestrating session; implementation subagents in parallel lanes**
+([D43](decisions.md#d43-orchestrated-parallel-execution)).
 
-- Each unit of work is one native Beads bead in the Hive store, with
-  `hive_project=dreamtides_web`.
-- Each bead is delivered by the `wt` workflow: a Tollgate worktree, one
-  Conventional Commit, `tg candidate HEAD`, and then
-  `tg approve <id> --wait`. This plan grants promotion authority for in-scope
-  work.
-- The session follows the Hive executor role in explicitly authorized
-  continuous mode, restricted to project `dreamtides_web`.
-- Implementation is never delegated. The only permitted helpers are:
-  - the independent reviewer, which is the Codex CLI;
-  - its fallback cold-review subagent;
-  - background processes the session itself owns, such as dev servers, fuzz
-    soaks, and tournaments.
+- **Beads.** Each unit of work is one native Beads bead in the Hive store,
+  with `hive_project=dreamtides_web`. Beads form a dependency graph, not a
+  chain. Each bead declares the areas it may change.
+- **The orchestrator** follows the Hive executor role in explicitly
+  authorized continuous mode, restricted to project `dreamtides_web`. It owns
+  every Beads call, every Tollgate queue action, worktree creation, reviews,
+  retrospectives, and ledgers.
+- **Lanes.** Up to two `dreamtides_web` implementation subagents and one
+  Track T subagent run at once, on beads with disjoint areas.
+- **Delivery.** Each bead is one Conventional Commit in a Tollgate worktree.
+  The orchestrator submits it with `tg candidate <oid>` and authorizes it with
+  `tg approve <id>`, never waiting on the gate. This plan grants promotion
+  authority for in-scope work.
+- **Other helpers:**
+  - the independent reviewer (the Codex CLI), run asynchronously;
+  - read-only subagents for mason audits, retrospectives, QA, and the
+    fallback cold review;
+  - background processes the session owns, such as dev servers, fuzz soaks,
+    and tournaments.
 
-## Starting the run
+## Starting and resuming the run
 
 Pre-flight is complete:
 
@@ -158,10 +177,17 @@ Pre-flight is complete:
   is committed in `~/brain`, unpushed.
 - The Codex reviewer was verified: `gpt-5.6-sol`, read-only sandbox enforced.
 
-Phase 1's beads are already filed: epic `hv-b8ef`, with tasks chained
-`.1 → .2 → .3 → .4 → .6` (mason pass) `→ .5` (gate). The mapping to sections is
-on the [Phase 1 page](phase-1-workflow.md#tasks). Later phases are filed at
-their start, per [workflow](workflow.md#filing-a-phase).
+Phase 1 (epic `hv-b8ef`) is closed. The 2026-10-05 replanning session
+re-filed the open work as dependency graphs:
+
+- **Phase 2:** epic `hv-47xj`. Its remaining tasks and the new test-cut tasks
+  follow the [Phase 2 task graph](phase-2-cleanup.md#task-graph).
+- **Phase 3:** filed early, so 3.1 can start at once.
+- **Track T:** filed, starting with the Tollgate startup fixes.
+
+The bead IDs for each section are on those pages. Later phases are filed when
+their earliest start approaches, per
+[workflow](workflow.md#filing-a-phase).
 
 The operator manages keep-alive and launches a single session in
 `~/dreamtides_web` with:
@@ -175,9 +201,13 @@ pausing for approval. Promotion of in-scope plan work is authorized.
 If the operator ever restarts the run in a **new** session, the old session's
 claimed bead blocks the new actor. Before relaunching:
 
-1. Release that bead's assignment.
-2. Leave its worktree alone. The new session restarts the bead from `release`;
-   see [workflow](workflow.md#re-entry-after-compaction-or-restart).
+1. Release that session's bead assignments.
+2. Leave its worktrees alone. The new session restarts those beads from fresh
+   worktrees; see
+   [workflow](workflow.md#re-entry-after-compaction-or-restart).
+
+A session that started under the sequential model adopts this model at its
+next re-entry. Its claimed bead finishes as a single lane.
 
 ## Global invariants
 
@@ -207,23 +237,28 @@ These carry over from [AGENTS.md](../../AGENTS.md) and bind every phase:
   Tollgate policy, under the Phase 1.2 rule. Tollgate fast-forwards its
   `master` after each promotion (`sync_user_master`). Never push worktree
   branches.
-- **Never deploy.** Never touch other repositories, other Hive projects'
-  beads, or shared Hive configuration.
+- **Never deploy.** Touch other repositories only as
+  [D16](decisions.md#d16-pre-flight-and-the-agents-footprint) allows for
+  Track T. Never touch other Hive projects' beads or shared Hive
+  configuration.
 
 ## Evidence and ledgers
 
 All of these are run-scoped and live under `docs/plan/`.
 
+Parallel lanes write evidence one file per bead or per entry, so lanes never
+conflict ([workflow § Evidence files](workflow.md#evidence-files)).
+
 | Record | Path | Written by |
 | --- | --- | --- |
-| Measured baselines and budgets | `docs/plan/evidence/metrics.md` | Phases 1–2, then every phase gate |
-| Friction ledger | `docs/plan/evidence/friction.jsonl` | Every bead |
-| Test triage ledger | `docs/plan/evidence/test-triage.jsonl` | Phase 1 |
+| Measured baselines and budgets | `docs/plan/evidence/metrics.md`, folded at each gate from `measurements/<bead-id>.md` | Phases 1–2, then every gate |
+| Friction ledger | `docs/plan/evidence/friction/<bead-id>.json` (Phase 1–2 history in `friction.jsonl`) | Every bead |
+| Test triage ledger | `docs/plan/evidence/test-triage.jsonl` (Phase 1) and `test-triage/<bead-id>.jsonl` (Phase 2 test cut) | Phases 1–2 |
 | Legacy battle behavior | `docs/plan/evidence/legacy-behavior.md` | Phase 4.7, read in Phase 5 |
 | Content inventory | `docs/plan/evidence/content-inventory.json` | Phase 5 (generated by script) |
-| Card QA ledger | `docs/plan/evidence/qa-ledger.jsonl` | Phases 4–7 |
-| Rules decisions | `docs/plan/evidence/rules-decisions.md`, plus normative text in `docs/rules.md` | Any phase |
-| Card issues | `docs/plan/evidence/card-issues.md` | Phase 5 onward |
+| Card QA ledger | `docs/plan/evidence/qa-ledger/<bead-id>.jsonl` | Phases 4–7 |
+| Rules decisions | `docs/plan/evidence/rules-decisions/RD-<bead-id>-<n>.md`, plus normative text in `docs/rules.md` | Any phase |
+| Card issues | `docs/plan/evidence/card-issues/<uuid>--<bead-id>.md` | Phase 5 onward |
 | Tournament reports | `docs/plan/evidence/ai/*.md` | Phase 7 |
 | Final report | `docs/plan/report.md` | End of Phase 7 |
 
@@ -237,7 +272,8 @@ the summaries of the ledgers, the rules decisions, and the card issues.
 
 The run is complete when all of the following hold:
 
-1. Every phase gate bead is closed with `hive_resolution=completed`.
+1. Every phase gate bead and the Track T gate bead are closed with
+   `hive_resolution=completed`, and `release == staging == origin/master`.
 2. The coverage gate passes. No entity is `pending`, and every `verifiedText`
    hash matches.
 3. A fuzz soak of 10,000 seeded full battles passes with zero invariant

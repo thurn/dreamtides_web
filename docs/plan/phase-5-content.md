@@ -23,48 +23,86 @@ No content entry is left `pending`; every one has abilities or `vanilla: true`.
 - [workflow § Card QA](workflow.md#card-qa-phases-47), plus
   [§ Rules ambiguity](workflow.md#rules-ambiguity-protocol) and
   [§ Card issues](workflow.md#card-issues-protocol);
-- [D11, D12, D20, D21](decisions.md).
+- [D11, D12, D19, D20, D21](decisions.md).
+
+## Earliest start and task graph
+
+Each task depends on the tasks listed after its arrow:
+
+- 5.1 ← Phase 3.4 and the Phase 2 gate
+- 5.6 ← 5.1, Phase 4.1 (C12 needs the deck-entry variant plumbing).
+  Journey effects use their own registry (P8), so they run alongside the
+  end of Phase 4.
+- 5.7a ← 5.6, the Phase 3 gate. 5.6 owns the journey-modifier hooks; 5.7a
+  wires the transforms into them.
+- **Card batches** ← 5.1, the Phase 3 gate, Phase 4.6, Phase 4.7 (batches
+  read `legacy-behavior.md`).
+  - Every batch after the first also depends on batch 1, which validates the
+    recipe.
+  - Between later batches, add an edge only where a batch needs a primitive
+    that an earlier batch introduces. The inventory derives these edges.
+    Otherwise batches run in parallel lanes.
+- 5.3 ← Phase 4.7, the energy-and-points batch
+- 5.4 and 5.5 ← the batches that introduce the primitives they need, per the
+  inventory
+- 5.7 (sweep sample) and 5.7b ← 5.7a and every card batch
+- 5.8 ← every card batch, 5.4, 5.5, Phase 7.1 (its sanity matrix uses the
+  tournament runner). 5.8 adds the Apollyon decks to the frozen deck pool,
+  and logs why.
+- 5.9 ← every task above; 5.10 ← 5.9 and the Phase 4 gate
+
+Two lanes run content batches in parallel. Batches touch disjoint entity
+modules. New primitives are new files under `effects/primitives/` (Phase 3.4),
+so two batches rarely share an area. When they do, the orchestrator runs them
+in sequence.
 
 ## Batch recipe
 
 Every content batch bead follows these steps exactly.
 
-1. **Claim** the bead and create its worktree.
+1. **Dispatch.** The orchestrator claims the bead, creates its worktree, and
+   briefs a subagent ([workflow](workflow.md#lanes-and-dispatch)).
 2. **Author the abilities** in each entity's content module, plus the
    amplified variant wherever `amplifiedText` is present. The printed text is
    canonical (D5): read it clause by clause and check that every clause is
    implemented. Replace `pending: true` with the abilities and set
    `verifiedText`.
 3. **Add primitives** the batch needs, each with primitive tests that use
-   synthetic cards. Update the engine-design catalog table if the primitive is
-   general.
+   synthetic cards, in the primitive group's test file. The registry index
+   is the catalog (Phase 3.4).
 4. **Resolve ambiguities** with the ladder. Check the
    [card text clarifications](decisions.md#card-text-clarifications) first:
    an entity named there is implemented exactly as its C-entry says, and the
    notes cite it. Write `docs/rules.md` text and
-   entries in `docs/plan/evidence/rules-decisions.md`. Log card problems in
-   `docs/plan/evidence/card-issues.md`.
+   RD files under `docs/plan/evidence/rules-decisions/`. Log card problems in
+   `docs/plan/evidence/card-issues/<uuid>--<bead-id>.md`.
 5. **Write scenario specs** only for cards whose behavior exceeds the
    composition of their primitives (D20). Signs a card needs one: unusual
-   targeting, interactions between its own abilities, functional zones, nth-in-turn
-   counters, or replacement effects.
+   targeting, interactions between its own abilities, functional zones,
+   nth-in-turn counters, or replacement effects. All of a batch's specs go in
+   **one file**, `src/content/specs/<batch-slug>.spec.ts`, in the `node`
+   environment (D19).
 6. **Fuzz smoke:** `npm run fuzz:engine -- --games 300 --weight-uuids <batch>`.
-   Decks are biased to include the batch.
-7. **Sweep** the batch in the card-lab:
-   `node scripts/qa/card-sweep.mjs --bead <id>`. Cover the base and amplified
-   variants, `as=player` and `as=enemy`. Every `fail` is fixed and re-swept.
-8. **Judged QA** per D21:
+   Decks are biased to include the batch. It is heavy (D17).
+7. **Sweep** the batch in the card-lab, on the lane's port:
+   `node scripts/qa/card-sweep.mjs --bead <id> --port <port>`. Cover the base
+   and amplified variants, `as=player` and `as=enemy`. Every `fail` is fixed
+   and re-swept.
+8. **Judged QA** per D21, by the implementing subagent or a QA subagent:
    - every card that introduces a new prompt kind, status indicator, or visual
      effect;
    - plus a random 10% of the rest. Seed the pick with the bead ID so it is
      reproducible.
 
-   Record the verdicts in the ledger.
-9. **Validate.** Run `npm run review`. Then do one commit, submit the
-    candidate, approve with `--wait`, and close the bead. The bead notes list:
-    counts, new primitives, RD and card-issue IDs, sweep and judged totals.
-    The commit includes the batch's
-    [friction ledger](workflow.md#friction-ledger) line.
+   Record the verdicts in `docs/plan/evidence/qa-ledger/<bead-id>.jsonl`.
+9. **Validate and commit.** Run `npm run review`, then make one commit with
+   the batch's [friction file](workflow.md#friction-ledger). The orchestrator
+   submits, approves without waiting, and closes the bead when it lands. The
+   bead notes list:
+   - counts;
+   - new primitives;
+   - RD and card-issue IDs;
+   - sweep and judged totals.
 
 **Batch size:** 15–30 entities. Split a batch whose definitions need more than
 ~3 new primitives.
@@ -108,13 +146,19 @@ primitive dependency and frequency:
 15. type and subtype synergies (Warriors, Spirit Animals, Survivors, …);
 16. the remaining unique cards.
 
-File one bead per batch, chained in that order. Then file the remaining
-Phase 5 task beads (5.3–5.10, including 5.7b) after the last card batch.
+When 5.1 lands, the orchestrator files one bead per batch from the inventory.
+Each gets an `Areas:` line naming its entity modules, its new primitive
+modules, and its spec file. Add batch-to-batch
+edges only where the inventory shows a primitive dependency. File the
+remaining Phase 5 task beads (5.3–5.10, including 5.7a and 5.7b) with the
+edges in the [task graph](#earliest-start-and-task-graph).
 
 **Acceptance:**
 
 - The inventory covers every catalog UUID exactly once.
-- The batch beads are filed and chained.
+- The inventory lists, for each batch, its entities, areas, and the batches
+  whose primitives it needs, so the orchestrator can file the batches with
+  their edges.
 - No batch exceeds 30 entities.
 
 ### 5.2 Card batches
@@ -193,9 +237,14 @@ Every modifier application is logged.
 - Every journey-effect dreamsign is in the ledger, as judged or swept through
   the site.
 
+### 5.7a Transfiguration transforms
+
+The code half of 5.7. It runs as soon as the engine is complete, ahead of the
+card batches.
+
 ### 5.7 Transfigurations
 
-Build:
+5.7a builds:
 
 - the transforms and eligibility predicates for all nine types
   ([engine-design § Transfigurations](engine-design.md#transfigurations));
@@ -209,8 +258,8 @@ Tests: transform contract tests on synthetic definitions, plus a test that
 the ability transforms and the text transforms agree on eligibility. Fuzz decks include
 random transfigurations.
 
-**Sweep sample:** the base and amplified forms of all cards are already swept
-in the batches. For each of the other eight transfigurations, sweep at least
+**Sweep sample** (5.7, after every card batch): the base and amplified forms
+of all cards are already swept in the batches. For each of the other eight transfigurations, sweep at least
 20 eligible cards, stratified across mechanic families, plus every
 Resonant-eligible card. Then judge a sample of 3 per transfiguration.
 
@@ -276,8 +325,8 @@ coverage gate must stay green after each one.
 
 1. **Nothing pending:** no entry is `pending` and the coverage gate passes.
 2. **Full re-sweep** of every card (base and amplified) on the final code, plus
-   the transfiguration and deck-modification samples. This is automated; run it in ≤30-minute
-   batches.
+   the transfiguration and deck-modification samples. This is automated. Run
+   it in ≤30-minute batches, split across two QA subagents on separate ports.
 3. **Fuzz soak:** 10,000 games, full-pool random decks, random
    transfigurations, random deck-entry modifications, Random and Greedy
    policies. Zero violations.
@@ -287,7 +336,9 @@ coverage gate must stay green after each one.
    and land the beads it files.
 6. **Independent review:** the full diff of engine and primitives, plus a
    deterministic 10% sample of content definitions, listed for the reviewer.
-7. Close the epic.
+7. Update `metrics.md`, including the D19 suite budgets. In staged mode,
+   confirm `release == staging`.
+8. Close the epic.
 
 ## Exit gate
 

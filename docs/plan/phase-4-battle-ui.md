@@ -28,8 +28,39 @@ UI work. Player-facing copy is plain English in the UI copy module (D35).
 - `src/battle/integration/create-battle-init.ts`;
 - the README's QA section and `scripts/screenshot-runtime.mjs`.
 
-**Before starting,** capture baseline screenshots of the battle screen at
-desktop 1440×900 and mobile 390×844. Capture these states:
+## Earliest start and task graph
+
+Each task depends on the tasks listed after its arrow:
+
+- 4.0 ← the Phase 2 gate
+- 4.1 ← 4.0, Phase 6.0 (the tutorial baseline, captured before the journey
+  battle changes), Phase 3.8 (its deck-modification contracts need layers and
+  zones)
+- 4.5 ← 4.1, Phase 3.10
+- 4.2 ← 4.1, 4.5 (its QA plays the Random bot), Phase 3.5
+- 4.3 ← 4.2, Phase 3.9 (loop shortcut), Phase 3.10 (`privateTo`)
+- 4.4 ← 4.3
+- 4.6 ← 4.3, 4.5
+- 4.7 ← 4.4, 4.5
+- 4.8 ← 4.6, 4.7
+- 4.9 ← 4.8 and the Phase 3 gate (3.12)
+
+Typical lanes: 4.1 → 4.2 → 4.3 → 4.4 in one, and 4.5 then 4.7 in the other.
+Phase 4 overlaps the end of Phase 3. The engine API that 3.2–3.4 fix
+is stable. A Phase 3 bead that must change it files a follow-up for the
+affected Phase 4 code.
+
+**Test rule:** each bead deletes the tests of the prototype behavior it
+replaces, in the same commit
+([D19](decisions.md#d19-test-pruning)). New screen tests follow D19's screen
+rule.
+
+## Tasks
+
+### 4.0 Baseline and test inventory
+
+Capture baseline screenshots of the battle screen at desktop 1440×900 and
+mobile 390×844, while the prototype battle still works. Capture these states:
 
 - battle start;
 - the Day board with a hand;
@@ -37,7 +68,12 @@ desktop 1440×900 and mobile 390×844. Capture these states:
 - the Challenge;
 - the reward surface.
 
-## Tasks
+List, in the bead notes, every surviving test that exercises the prototype
+battle path: the Phase 2.11a smoke files, and the battle screen and view-model
+contracts. Name the Phase 4 bead that replaces or deletes each one.
+
+**Acceptance:** the screenshots are in `artifacts/qa/<bead-id>/`, and the
+inventory is in the notes.
 
 ### 4.1 Fold wiring and battle init
 
@@ -60,6 +96,8 @@ desktop 1440×900 and mobile 390×844. Capture these states:
     `create-battle-init.ts` reads. List them in the bead notes.
 - **`END_BATTLE`:** the handoff semantics stay identical.
 - **Fixtures:** regenerate the replay fixtures.
+- **Tests:** delete the Phase 2.11a battle smoke files. The new fold tests
+  replace them.
 
 **Acceptance:**
 
@@ -207,7 +245,7 @@ is deleted here:
   Phase 5 reads it;
 - `semantic-play` and the automation audit;
 - the old journey AI (`src/battle/ai/`, approval loop, planner);
-- their tests.
+- their tests. Most were deleted in Phase 2.11a; delete any survivors here.
 
 Code that only the tutorial still needs gets a `// tutorial-only until Phase 6`
 header.
@@ -227,8 +265,11 @@ Port it here only where that is cheap.
 
 Run the [mason pass](workflow.md#mason-passes) over the fold wiring, the
 battle view-model adapter, `PromptHost`, the policy host, and the card-lab
-and sweep tooling. Look especially for adapter leaks of engine internals into
-UI code and for prompt-kind handling duplicated outside `PromptHost`.
+and sweep tooling. Look especially for:
+
+- adapter leaks of engine internals into UI code;
+- prompt-kind handling duplicated outside `PromptHost`;
+- screen tests that grew past D19's screen rule.
 
 ### 4.9 Phase gate
 
@@ -242,8 +283,9 @@ UI code and for prompt-kind handling duplicated outside `PromptHost`.
 3. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
    and land the beads it files.
 4. Run the independent review over the phase diff.
-5. Update `metrics.md`.
-6. Close the epic.
+5. Update `metrics.md`, including the D19 suite budgets.
+6. In staged mode, confirm `release == staging`.
+7. Close the epic.
 
 ## Exit gate
 

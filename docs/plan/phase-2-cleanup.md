@@ -32,6 +32,46 @@ it. If nothing does, delete it. Git history keeps everything.
 - `package.json`;
 - `.tollgate/config.toml` (the local trusted policy).
 
+## Task graph
+
+Phase 2 was filed as a chain and re-filed as this graph on 2026-10-05. Tasks
+on different branches run in parallel lanes when their areas are disjoint
+([D43](decisions.md#d43-orchestrated-parallel-execution)).
+
+Each task depends on the tasks listed after its arrow:
+
+- 2.4b, 2.5a, 2.11a, 2.11b, 2.11c ← 2.4a
+- 2.5b ← 2.5a; 2.5c ← 2.5b; 2.6 ← 2.5c
+- 2.7b ← 2.4b
+- 2.7a ← 2.4b, 2.6
+- 2.11d ← 2.11a, 2.11b, 2.11c, 2.4b, 2.5c
+- 2.8 ← 2.7a, 2.7b, 2.11d
+- 2.9 ← 2.8; 2.10 ← 2.9
+
+Typical lanes: 2.4b → 2.7b in one lane and 2.5a → 2.5b → 2.5c → 2.6 in the
+other, with the 2.11 cuts filling whichever lane is free.
+
+| Section | Bead | Areas (summary) |
+| --- | --- | --- |
+| 2.1 | `hv-47xj.1` | landed |
+| 2.2a, 2.2b | `hv-47xj.2`, `hv-47xj.3` | landed |
+| 2.3a–2.3d | `hv-47xj.4`–`hv-47xj.7` | landed |
+| 2.4a Codemod | `hv-47xj.8` | `src/` text call sites |
+| 2.4b Delete Trox | `hv-47xj.9` | Trox, localization, Vite plugin, `package.json` |
+| 2.5a LocalLog (core-review) | `hv-47xj.10` | `src/eventlog/`, `src/session/`, `src/coop/` |
+| 2.5b Log capture and export | `hv-47xj.11` | log storage, error fallback, game menu |
+| 2.5c Delete rooms and co-op | `hv-47xj.12` | `src/coop/`, rooms, presence |
+| 2.6 Remove Firebase | `hv-47xj.13` | Firebase modules and config, `package.json` |
+| 2.7a Scripts and dependencies | `hv-47xj.14` | `scripts/`, `package.json` |
+| 2.7b ESLint rules | `hv-47xj.15` | `eslint-rules/`, `eslint.config.js` |
+| 2.8 Dead code | `hv-47xj.16` | repository-wide |
+| 2.9 Mason pass | `hv-47xj.17` | audit only |
+| 2.10 Gate | `hv-47xj.18` | `docs/plan/` |
+| 2.11a Battle-test cut | `hv-47xj.19` | `src/battle/**`, `src/rules/battle/**` tests, except tutorial-sandbox tests |
+| 2.11b Screen-test cut | `hv-47xj.20` | `src/cumulus/**`, `src/components/**` tests |
+| 2.11c Adapter and rules test cut | `hv-47xj.21` | `src/screens/**`, `src/runtime/**`, `src/rules/journey/**`, `src/data/**` tests |
+| 2.11d Suite speed and budgets | `hv-47xj.22` | `vitest.config.ts`, `scripts/review*.mjs`, app-wide tests, `docs/plan/` |
+
 ## Tasks
 
 ### 2.1 Docs and skills to the end state (D33)
@@ -333,15 +373,15 @@ before and after, and lint time before and after.
 
 ### 2.9 Mason audit and refactors
 
-1. **Audit.** Run the Hive `mason` skill, read-only, over the surviving
-   codebase. Have it file bounded beads (label `mason`), with these
-   priorities:
+1. **Audit.** Run the Hive `mason` skill, read-only, as a subagent over the
+   surviving codebase. The orchestrator files its findings as bounded beads
+   (label `mason`), each with an `Areas:` line. The priorities are:
    - type safety and illegal states, especially IDs, journey and site state,
      and fold events;
    - prototype shortcuts that became structure;
    - any name-keyed card logic (always a bug; see AGENTS.md);
    - files over ~1000 lines in `src/screens` and `src/rules`;
-   - brittle tests.
+   - brittle, slow, or over-specified tests that survived 2.11.
 
    Skip `src/battle/` and `src/rules/battle/`, which Phases 3–4 replace.
 2. **Chain the beads.** Chain every filed bead before the gate and implement
@@ -353,7 +393,8 @@ before and after, and lint time before and after.
 
 1. Re-measure the Phase 1 set, adding an "after Phase 2" column to
    `metrics.md`. Expect a much shorter gate: no trox step, no Rust steps,
-   fewer tests and rules.
+   fewer tests and rules. Confirm the [D19](decisions.md#d19-test-pruning)
+   suite budgets hold. Record host load next to every timing.
 2. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
    and land the beads it files.
 3. Run the independent review over the phase diff. The diff is dominated by
@@ -365,6 +406,117 @@ before and after, and lint time before and after.
    desktop and mobile.
 5. Close the epic.
 
+### 2.11 Test cut (D19)
+
+The Phase 1 triage removed 34 of 5,187 tests. The suite still costs about
+140 s of a ~220 s gate, and module import dominates it, at about 155 s
+cumulative against about 60 s of test bodies. Cut it to the
+[D19](decisions.md#d19-test-pruning) budgets **before** the engine work
+starts.
+
+Rules for every 2.11 sub-task:
+
+- **Ledger.** Write one verdict per touched file to
+  `docs/plan/evidence/test-triage/<bead-id>.jsonl`, in the Phase 1 format.
+  Record the test delta.
+- **Porting base.** Record the pre-deletion OID in the bead notes. Any later
+  task that ports a contract reads the deleted files from git at that OID.
+- **Tutorial sandbox tests survive.** The standalone `/tutorial` battle keeps
+  its sandbox path until Phase 6 ([D38](decisions.md#d38-tutorial-journey-battle-guidance-during-phases-45)),
+  and Phase 6 ports these tests as contracts. Cut them only under D19's copy
+  and presentation-token rules:
+  - `tutorial-battle-lifecycle`;
+  - `tutorial-guidance`;
+  - `tutorial-battle-controller`;
+  - `tutorial-presentation-timing`;
+  - the tutorial screen and view-model tests.
+
+#### 2.11a Battle sandbox and legacy AI tests
+
+Phases 3–4 replace `src/battle/` and `src/rules/battle/` (74 test files,
+about 25k lines). Nothing in Phase 3 touches that code. Delete those tests
+now, except the tutorial-sandbox tests above.
+
+- **Porting base.** Phase 3 ports the challenge, Support, and
+  figment/capacity contracts by reading these files from git at this bead's
+  recorded OID:
+  - `src/battle/engine/*challenge*`;
+  - `support`;
+  - `src/battle/state/figments*`.
+- **Keep at most three smoke files** that guard the journey → battle start →
+  battle end → reward handoff until Phase 4 rewires it. Name them in the
+  notes.
+
+**Acceptance:**
+
+- The suite is green.
+- A browser smoke covers journey start → battle start on desktop.
+- The test delta and the porting OID are recorded.
+
+#### 2.11b Screen and component tests
+
+Apply D19's screen rule to `src/cumulus/**` and `src/components/**`. This
+includes `MobileBattleScreen.test.tsx` (5.6k lines, the slowest file at
+16.6 s). Phase 4 keeps that screen, so cut it to a render smoke plus its
+interaction contracts, about 300 lines or less.
+
+- One render smoke test plus the interaction and geometry contracts per
+  screen.
+- No presentation-token restatements, and no copy.
+- Split or cut every test file over ~500 lines, for example:
+  - `ExplorationSiteScreen.test.tsx` (6.3k);
+  - `TutorialScreen.test.tsx` (2.9k);
+  - `GambleSiteScreen.test.tsx` (2.0k);
+  - the reveal context tests;
+  - `GameCardReveal.test.tsx`;
+  - `ScreenRouter.test.tsx`.
+
+Merge small per-component files that share a harness, because each file pays
+module import again.
+
+**Acceptance:** the suite is green, the delta is recorded, and every
+surviving file over ~500 lines has a reason in the notes.
+
+#### 2.11c View-model, runtime, journey-rules, and data tests
+
+Apply the same rules to:
+
+- `src/screens/**`, for example `exploration-view-model.test.ts` (6.3k), the
+  battle view-model tests,
+  `exploration-logging-view-model.test.ts` (2.8k),
+  `tutorial-view-model.test.ts`, and `gamble-site-view-model.test.ts`;
+- `src/runtime/**`, for example `qa-scenes.test.ts` (3.5k);
+- `src/rules/journey/**` and `src/data/**`.
+
+View models keep derived-state contracts. Journey rules keep rule contracts
+and drop near-duplicates. QA-scene tests keep one assertion per scene that it
+loads, not a re-test of the scene's screen.
+
+**Acceptance:** the same as 2.11b.
+
+#### 2.11d Suite speed and budgets
+
+After the cuts and after 2.4b and 2.5c have removed their systems' tests:
+
+1. **Slim the app-wide tests** that related-test selection pulls into nearly
+   every review: `src/root-router.test.tsx`, `src/App.test.tsx`, and the
+   router tests. Each should be one smoke per route family.
+2. **Retry `isolate: false`.** Phase 1.3 measured it 45% faster, but 11 files
+   failed. Fix the module-state leaks that remain, or move those files to an
+   isolated project. Keep the change only if the suite stays green and
+   deterministic across three runs with different `--sequence.seed`.
+3. **Run `lint` and `typecheck` concurrently** in `review:full` if it saves
+   ≥10% of the smaller total.
+4. **Measure and record** the D19 budgets in this bead's measurement file,
+   with host load:
+   suite wall at 2 workers, test files, and `jsdom` files. If a budget is
+   missed, file another cut bead, which runs next.
+
+**Acceptance:**
+
+- The measurement file shows before and after.
+- The D19 budgets are met, or a follow-up cut bead is filed with the gap.
+
 ## Exit gate
 
 - Three docs and one skill remain.
@@ -372,6 +524,7 @@ before and after, and lint time before and after.
 - Data lives in typed TS modules.
 - The log is local-first.
 - The scripts and lint rules are culled.
+- The test suite meets the D19 budgets.
 - Every mason bead filed this phase has landed.
 - The retrospective's improvement beads have landed.
 - The metrics are re-measured.

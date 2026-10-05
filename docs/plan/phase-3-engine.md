@@ -22,7 +22,72 @@ content.
   and `phase_mutations/fire_triggers.rs`.
 
 Beads marked **core-review** get an independent review
-([D18](decisions.md#d18-review-cadence)).
+([D18](decisions.md#d18-review-cadence)), which runs asynchronously.
+
+## Earliest start and task graph
+
+Phase 3 overlaps Phase 2 ([D26](decisions.md#d26-dependency-ordered-execution)).
+`src/engine/` is new code, and the Phase 2 work it needs has landed: TS
+content modules (2.3) and `docs/rules.md` (2.1).
+
+Each task depends on the tasks listed after its arrow:
+
+- 3.1: none. It starts at once.
+- 3.2 ← 3.1, Phase 2.11a (porting OID). It adds an npm script and a lint
+  rule, so area holding orders it against 2.7a and 2.7b. Those culls keep
+  anything Phase 3 has added.
+- 3.3 ← 3.2; 3.4 ← 3.3
+- 3.5 ← 3.4; 3.6 ← 3.5
+- 3.7 ← 3.4; 3.8 ← 3.7
+- 3.9 ← 3.6, 3.8
+- 3.10 ← 3.8, 3.6
+- 3.11 ← 3.9, 3.10
+- 3.12 ← 3.11 and the Phase 2 gate (2.10)
+
+**The orchestrator implements 3.2–3.4 itself,** in sequence. They fix the
+architecture every later bead builds on. After 3.4 there are two lanes:
+
+- **Lane X:** 3.5 stack → 3.6 triggers → 3.9 loops.
+- **Lane Y:** 3.7 continuous effects → 3.8 zones → 3.10 views.
+
+They can run in parallel only because 3.2–3.4 make the engine
+**registry-based** (below), so lanes add files rather than edit shared
+switches. A lane that must edit a shared core file (`state/`, `steps/runner`,
+`effects/interpreter`) lists it in its areas. The other lane waits for it.
+
+| Section | Bead |
+| --- | --- |
+| Epic | `hv-7x4l` |
+| 3.1 | `hv-7x4l.1` |
+| 3.2 | `hv-7x4l.2` |
+| 3.3 | `hv-7x4l.3` |
+| 3.4 | `hv-7x4l.4` |
+| 3.5 | `hv-7x4l.5` |
+| 3.6 | `hv-7x4l.6` |
+| 3.7 | `hv-7x4l.7` |
+| 3.8 | `hv-7x4l.8` |
+| 3.9 | `hv-7x4l.9` |
+| 3.10 | `hv-7x4l.10` |
+| 3.11 | `hv-7x4l.11` |
+| 3.12 | `hv-7x4l.12` |
+
+## Engine test rules
+
+These apply to every Phase 3 bead ([D19](decisions.md#d19-test-pruning)):
+
+- **Environment.** Engine tests run in `node`, never `jsdom`.
+- **Fixtures.** Synthetic definitions live in
+  `src/engine/testing/synthetic-cards.ts`.
+- **File grain.** Use one test file per engine module or rules area, never
+  one per scenario. Property tests use a small fixed number of seeds; the
+  fuzzer provides breadth.
+- **Ported contracts.** Port prototype contracts from git at the OID recorded
+  in Phase 2.11a's notes (`git show <oid>:<path>`). Never resurrect the old
+  test files.
+- **Fuzz smoke.** In interim mode, run `fuzz:engine -- --games 200` locally
+  before committing an engine bead (heavy; D17). In staged mode, the release
+  stage runs it, and a bead runs it only when it changes the fuzzer or the
+  step runner.
 
 ## Tasks
 
@@ -46,12 +111,13 @@ This is a docs-only bead.
      figment copies, paying to end an effect, extra turns, "supporting",
      "when you challenge with N", figment cost, the ⍟ floor, "you win the
      game", untargetability, and additional spark.
-2. **Create `docs/plan/evidence/rules-decisions.md`** with entries RD-001
-   onward.
+2. **Create `docs/plan/evidence/rules-decisions/`** with one file per
+   decision, `RD-<bead-id>-<n>.md`.
 3. **Fix contradictions** you find, through the ladder.
 
 **Acceptance:** each listed decision appears in `docs/rules.md` as current
-state, with an RD entry.
+state, with an RD file (`docs/plan/evidence/rules-decisions/RD-<bead-id>-<n>.md`;
+see [workflow](workflow.md#rules-ambiguity-protocol)).
 
 ### 3.2 Engine skeleton and step runner (core-review)
 
@@ -80,6 +146,12 @@ Content: vanilla characters and text-less events.
 Tooling: `npm run fuzz:engine` (seeded, Random policy, invariants) as a Node
 script via `tsx`. Add a lint rule banning `Date`, `Math.random`, and
 module-level mutable state in `src/engine/`.
+
+**Registries.** Step kinds and engine event kinds are each registered from
+their own module (`steps/kinds/<kind>.ts`, `events/<kind>.ts`) through a typed
+registry. The runner and the event bus dispatch through it, so later beads
+add a file instead of editing a central switch. Exhaustiveness is checked at
+the type level.
 
 **Acceptance:**
 
@@ -139,15 +211,24 @@ Build:
   play text-less and emit `pendingAbility`.
 - **Gates:** the CI coverage gate and the `verifiedText` gate
   ([engine-design § Content gates](engine-design.md#content-gates)).
+- **Primitive registry:** each DSL primitive is defined, interpreted, and
+  tested in its own module under `effects/primitives/`, registered like step
+  kinds. Phases 3.5–3.8 and every Phase 5 content batch add primitives by
+  adding files.
 - **Tooling:**
   - the scenario-spec builder (with scripted answers);
   - the initial card-lab setup solver.
 
 **Acceptance:**
 
-- Primitive tests use synthetic cards.
+- Primitive tests use synthetic cards, with one test file per primitive
+  group, not per primitive (D19).
 - The gates pass with every entity `pending` or `vanilla`.
 - The fuzzer mixes synthetic cards and full-pool pending cards into decks.
+- Adding a primitive touches only its own module, its group's test file, and
+  one line in the registry index. Show this with one primitive added after
+  the registry lands. The registry index is the primitive catalog;
+  engine-design's table lists only the starting set.
 
 ### 3.5 Stack, priority, and timing windows (core-review)
 
@@ -287,13 +368,17 @@ definitions harder to write. Every filed bead keeps the fuzz smoke green.
 
 1. **Fuzz soak:** 10,000 games with synthetic and vanilla decks, ≥10% of them
    in interactive replay mode, in ≤30-minute batches with ≤4 processes. There
-   must be zero invariant violations or divergences.
+   must be zero invariant violations or divergences. Run batches while at most
+   one implementation lane is active (D17). Phase 4 work may continue in the
+   other lane.
 2. **Adversarial check:** run the `adversarial-test-validation` skill on the
    engine core, the step runner and prompt protocol first. Fix the survivors.
 3. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
    and land the beads it files.
 4. **Independent review** of the whole phase diff.
-5. Update `metrics.md`, then close the epic.
+5. Update `metrics.md`, including the D19 suite budgets and the engine tests'
+   share of the suite. In staged mode, confirm `release == staging`. Then
+   close the epic.
 
 ## Exit gate
 

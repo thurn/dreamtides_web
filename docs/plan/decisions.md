@@ -1,8 +1,9 @@
 # Decisions
 
 These decisions were made with the operator in the planning interview on
-2026-10-03, revised the same day, and refined in two readiness reviews on
-2026-10-04. They are binding for the run. In the
+2026-10-03, revised the same day, refined in two readiness reviews on
+2026-10-04, and amended in a replanning session on 2026-10-05 (D16–D19 and
+D26 amended; D43–D45 added). They are binding for the run. In the
 [rules ambiguity ladder](#d10-rules-ambiguity-ladder) they outrank every other
 precedent.
 
@@ -332,7 +333,7 @@ When `docs/rules.md` is silent or ambiguous, decide in this order:
 Then do both of the following:
 
 - Write the outcome into `docs/rules.md` as normative, current-state text.
-- Add an entry to `docs/plan/evidence/rules-decisions.md` that cites:
+- Write an RD file under `docs/plan/evidence/rules-decisions/` that cites:
   - the ladder step;
   - the section;
   - the affected UUIDs;
@@ -347,7 +348,7 @@ any card, dreamsign, avatar, or Dreamwell card. Ambiguous or seemingly broken
 text is handled as follows:
 
 - Implement it through the ladder.
-- Log it in `docs/plan/evidence/card-issues.md`.
+- Log it under `docs/plan/evidence/card-issues/`.
 
 Balance observations go into the AI reports, never into the data. Converting
 RON to TypeScript (D32) must preserve every value exactly. Apollyon content
@@ -469,7 +470,7 @@ are typed `BattleInit` fields, consumed once by the battle they apply to.
 
 ## Workflow
 
-### D16. Pre-flight
+### D16. Pre-flight and the agent's footprint
 
 The planning session performed setup:
 
@@ -481,30 +482,55 @@ The planning session performed setup:
 
 During the run the agent changes nothing outside these places:
 
-- `~/dreamtides_web`;
-- its Tollgate worktrees;
+- `~/dreamtides_web`, its Tollgate worktrees, and its local Tollgate policy;
+- `~/tollgate` and its Tollgate worktrees, for [Track T](phase-t-tollgate.md)
+  beads only ([D45](#d45-tollgate-track));
+- for Track T bead T8 only: the `wt` and `wt-sequence` skills under
+  `~/.llms/skills/`, and the skills and source under `~/hive`, each changed
+  through that repository's own workflow;
 - its own beads;
 - gitignored local state.
 
-The one exception is the Hive Dolt server. The agent may restart it when it is
-down, exactly as [workflow](workflow.md#failure-and-recovery) describes.
+Two runtime exceptions:
+
+- The agent may restart the Hive Dolt server when it is down, exactly as
+  [workflow](workflow.md#failure-and-recovery) describes.
+- The agent restarts the Tollgate app as Tollgate's own self-install rule
+  requires after a Track T promotion (D45).
 
 ### D17. Machine resources
 
-The machine is shared with other agents. Stay at about 6 cores:
+The machine is shared with other agents. Keep sustained load at about 6 cores:
 
 - **Vitest:** `JOURNEY_TEST_WORKERS=2`, locally and in Tollgate.
-- **Tollgate:** one repository buildset.
+- **Implementation lanes:** at most two `dreamtides_web` implementation
+  subagents and one Track T implementation subagent at a time
+  ([D43](#d43-orchestrated-parallel-execution)).
+- **Heavy commands.** Heavy means a local `npm run review:full`, a fuzz run
+  of 200 or more games, `cargo test --workspace`, and a Tollgate release
+  build. Beads that need one carry the label `heavy`. At most one `heavy`
+  `dreamtides_web` bead runs at a time, and Tollgate's own validation is the
+  other heavy slot. The Track T lane runs its cargo checks alongside, with
+  `CARGO_BUILD_JOBS=4`.
+- **Tollgate:** `max_buildsets = 2` for this repository, so one gate run and
+  one release run can overlap.
+- **Interactive browser QA** through the Playwright MCP tools runs in one
+  subagent at a time (label `browser`), because subagents may share the
+  orchestrator's MCP connection. Script-driven sweeps open their own MCP
+  client and may run in parallel on separate ports.
 - **Fuzz soaks and tournaments:**
-  - at most 4 worker processes;
   - batches of at most 30 minutes;
-  - never concurrent with a running Tollgate validation of this repository.
+  - 4 worker processes while no `heavy` bead is running, otherwise 2;
+  - they may overlap Tollgate validation and implementation lanes.
+- **Memory pressure:** when `memory_pressure` reports warn or critical, finish
+  the current work and drop to one implementation lane until it clears.
 
 ### D37. Mason pass every phase
 
 Every phase ends with a `mason` audit immediately before its gate, scoped to
 the code that phase created or touched. **Every** bead it files is implemented
 in the same phase; nothing is deferred to a later phase or past the run.
+Mason beads touch disjoint files, so they fill both implementation lanes.
 Procedure: [workflow § Mason passes](workflow.md#mason-passes).
 
 ### D42. Continuous introspection
@@ -512,7 +538,8 @@ Procedure: [workflow § Mason passes](workflow.md#mason-passes).
 When workflow problems or bad architecture keep slowing the run, fix them
 then, not at the end of the phase.
 
-- **Evidence:** every bead records its friction and timings in a ledger.
+- **Evidence:** every bead records its friction, timings, and test delta in a
+  ledger.
 - **Triggers:** a friction cause recurring in 3 beads, or a budget exceeded by
   more than 50% on 3 consecutive beads, files an improvement bead that runs
   next.
@@ -528,31 +555,181 @@ player-visible UI, or these decisions. Procedure:
 across ~200 beads, and the mason pass at the end of a phase arrives too late
 for a phase as long as Phase 5.
 
+### D43. Orchestrated parallel execution
+
+The run uses one **orchestrating** Claude Code session. Implementation is
+delegated to Agent-tool subagents running in parallel lanes.
+
+- **The orchestrator owns all shared state:**
+  - every Beads call (claim, notes, close, filing);
+  - every Tollgate queue action (`candidate`, `approve`, `cancel`, `retry`);
+  - creating and removing worktrees;
+  - reviews, retrospectives, ledgers, and the session title.
+- **An implementation subagent implements exactly one bead.**
+  - It works in a worktree the orchestrator created and handed to it.
+  - It validates the bead and makes exactly one commit.
+  - It commits the bead's friction file and returns the commit OID and a
+    report.
+  - It never calls `bd`, never submits or approves candidates, never creates,
+    removes, or pushes branches or worktrees, and never edits outside its
+    worktree.
+- **Lanes:** at most two `dreamtides_web` implementation subagents plus one
+  Track T subagent at a time (D17).
+- **No overlapping areas.** Every bead's description has an `Areas:` line
+  listing the directories and files it may change.
+  - A bead **holds its areas from dispatch until it lands** or is cancelled,
+    including while its candidate validates or is repaired. Two beads hold
+    areas at the same time only if those areas are disjoint.
+  - These are each a single area: `package.json` with `package-lock.json`,
+    `eslint.config.js`, `vitest.config.ts`, the local Tollgate policy, and the
+    plan pages with `metrics.md`.
+  - Per-bead evidence files never conflict
+    ([workflow § Evidence files](workflow.md#evidence-files)).
+- **Claims.** The orchestrator claims each bead it dispatches. It may hold one
+  claimed bead per lane that is still being implemented, plus any number
+  whose candidates are awaiting landing. This overrides the Hive executor's
+  one-unfinished-assignment convention for this run.
+- **The orchestrator may implement a bead itself** when coherence matters more
+  than parallelism, for example Phase 3.2–3.4. That bead occupies a lane.
+- **Read-only and QA helpers** are also subagents: mason audits, sage
+  retrospectives, browser QA and screenshots, judged card QA, and the
+  fallback cold review. They count against the D17 heavy-command and port
+  limits, not against the implementation lanes.
+- **Never wait idle on the gate.** The orchestrator approves a candidate and
+  dispatches the next ready bead at once. A lane is free once its subagent
+  has returned. The orchestrator checks candidate outcomes at each dispatch
+  boundary.
+
+**Why:** measured on Phases 1–2, a bead took about 25 minutes, and a third of
+that was the session waiting on the gate. With about 200 beads left, serial
+execution would take over 80 hours.
+
+### D44. Staged validation
+
+Validation has two stages, as designed in
+`~/tollgate/docs/staged-release-design.md`:
+
+- **Gate stage.** It is fast, at most about 60 s. It blocks promotion to the
+  Tollgate-owned `staging` ref. New worktrees branch from `staging`, and
+  user-owned local `master` follows `staging`.
+- **Release stage.** It runs `npm run review:full` and the fuzz smoke. It runs
+  asynchronously on the newest `staging` tip. A pass advances `release` and
+  remote `master` to that exact OID.
+
+Consequences:
+
+- **A bead is done when its commit is on `staging`.** It never waits for the
+  release stage.
+- **A red release run is fixed by a follow-up commit,** never by a revert. The
+  orchestrator files a `ci-fix` bead at once, and it preempts all other ready
+  work. The dreamtides policy sets `max_release_lag = 5`.
+- **Phase gates, the Track T gate, and the end of the run** require `release`
+  to equal `staging`.
+- **Until Track T adopts staged validation here** (task T9), the gate runs
+  `review:full` as before. The orchestrator still never waits on it (D43).
+
+**Why:** only 1 of 19 Phase 1–2 gates failed. Blocking every bead on the full
+suite bought almost nothing.
+
+### D45. Tollgate track
+
+Track T improves Tollgate itself, in `~/tollgate`, alongside the phases. It
+does three things:
+
+- fixes the startup outage of 2026-10-05;
+- delivers staged validation (D44);
+- adopts it in this repository.
+
+Rules:
+
+- **Standing authority.** The operator grants standing promotion authority
+  for Track T beads. This overrides, for these beads only, the explicit
+  approval that Tollgate's AGENTS.md otherwise requires.
+- **Tollgate's own workflow applies** inside `~/tollgate`: its `wt` flow, its
+  gate, and its self-install rule. After each promotion, build from the
+  promoted `release` OID in a detached worktree, install, restart, and run
+  `tg --no-launch doctor`.
+- **The orchestrator performs each self-install,** never a subagent. A Track
+  T bead lands when its promotion is installed and `doctor` is healthy.
+- **Restarts interrupt every repository's validations.** Install only when no
+  `dreamtides_web` validation is running, and record each restart in the bead
+  notes.
+- **The authority covers T8's changes** to the `wt` skills in the home
+  repository and to Hive's skills and source, through Hive's own flow. Those
+  are project code, not shared Hive configuration.
+- **The startup fixes (T1a, T1b) promote first.** No other Tollgate bead
+  promotes before them.
+- **The staged-release design is binding** for T2–T7, with its §15 defaults.
+  This repository's policy sets `max_release_lag = 5`.
+
+**Why:** on 2026-10-05 a docs-only Tollgate self-install restart left Tollgate
+unavailable to every repository for about 100 minutes. Startup pruned about
+23,000 expired battlement artifacts one at a time, with a quadratic lookup,
+before it opened its socket.
+
 ### D18. Review cadence
 
 The independent review is a fresh `gpt-5.6-sol` reviewer, run via the Codex
 CLI. The setup was verified on 2026-10-03: read-only sandbox enforced, the
 model honored, about 20 s for a trivial review. It runs:
 
-- at every phase gate;
-- for every engine-core bead marked in the phase pages.
+- at every phase gate and the Track T gate;
+- for every bead marked **core-review** on the phase and track pages.
 
 This explicitly authorizes more than the skill's default of one review per
-session. There is no per-bead warden review. When Codex hits a usage limit,
-record review debt and continue; see [workflow](workflow.md#reviews).
+session. There is no per-bead warden review.
+
+**Core-review is asynchronous.** The review runs in the background against
+the bead's exact commit, while the candidate validates and the next bead
+starts. Confirmed findings become a follow-up bead, which runs next in that
+bead's area. A gate review blocks its gate bead until its findings are
+resolved.
+
+When Codex hits a usage limit, record review debt and continue; see
+[workflow](workflow.md#reviews).
 
 ### D19. Test pruning
 
-Apply the behavior-contract rule: keep a test only if it pins an observable
-player-facing, rules, or data contract that would plausibly regress. Delete
-tests of:
+**The test suite is a cost paid on every bead. Delete aggressively.**
 
-- removed systems;
-- private helpers;
-- UI copy;
-- near-duplicates.
+Keep a test only if it pins a contract that later work still needs, and
+nothing cheaper would catch its regression: typecheck, a smoke test,
+screenshot QA, the fuzzer, or the sweep. Delete:
 
-There is no numeric quota. Budgets are monitored and reported, never gated.
+- **Tests of removed systems,** in the same commit as the system.
+- **Tests of code a later phase replaces,** at the start of the replacing
+  work. Do not keep them until the end. When a later task ports a contract
+  from deleted tests, it reads them from git at the OID recorded in the
+  deleting bead's notes.
+- **Tests of private helpers, UI copy, presentation tokens, and
+  near-duplicates.**
+- **Exhaustive screen and view-model tests.** A screen keeps one render smoke
+  test plus its interaction and geometry contracts. A view model keeps the
+  derived-state contracts that adapters and screens rely on, not every field.
+
+**Size rules:**
+
+- **Test files over ~500 lines are split or cut.** The bead notes record why
+  any survives.
+- **Prefer fewer files.** Module import dominates suite time, and each file
+  pays it again.
+
+**Budgets.** Every phase gate measures these. The Phase 2 test-cut beads must
+reach them:
+
+- full suite at most 60 s, at 2 workers and low host load;
+- at most 220 test files;
+- at most 80 `jsdom` test files.
+
+**New tests (Phases 3–7):**
+
+- Engine and content tests run in the `node` environment, never `jsdom`.
+- Scenario specs live in one file per content batch, never one file per card.
+- Breadth comes from the fuzzer, the coverage gate, and the sweep, not from
+  per-card tests.
+- Every bead's friction file records its test delta.
+- A phase retrospective that finds the suite over budget files a test-cut
+  bead that runs next.
 
 ### D20. Card test strategy
 
@@ -588,15 +765,23 @@ either acceptance journey.
 stronger than it is. The victory path proves the full journey and Apollyon
 flow; the champion games prove the AI.
 
-### D26. Strict sequencing
+### D26. Dependency-ordered execution
 
-Phases run strictly in order, with no wall-clock boxes anywhere in the run.
-The AI improvement loop has its own plateau stop rule (D25).
+Beads run in dependency order, not in one chain. Lanes run beads in parallel
+whenever their prerequisites have landed and their areas are disjoint (D43).
+
+**Phases overlap.** A later phase's task may start as soon as its
+prerequisites have landed. Each phase page states its earliest start and its
+task graph. Phase gates still close strictly in order: a phase's gate bead
+depends on the previous phase's gate bead.
+
+There are no wall-clock boxes anywhere in the run. The AI improvement loop has
+its own plateau stop rule (D25).
 
 ### D28. Plan format
 
-This index, a decisions page, two design and process pages, and one page per
-phase. Progress lives in bead notes.
+This index, a decisions page, two design and process pages, one page per
+phase, and one page for Track T. Progress lives in bead notes.
 
 ### D29. Keep-alive and signals
 
@@ -740,7 +925,7 @@ The operator settled these in a card-text audit on 2026-10-04. Each one is
 binding like a D-entry. Phase 3.1 writes the general rules among them (C5,
 C7–C10, C13–C15, C17) into `docs/rules.md` with RD entries. The content batch that implements each affected
 entity cites its C-entry in its notes. Typos stay in the data (D11); each is
-logged in `docs/plan/evidence/card-issues.md` with its suggested fix.
+logged under `docs/plan/evidence/card-issues/` with its suggested fix.
 
 ### C1. Contemplation
 

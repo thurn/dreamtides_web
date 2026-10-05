@@ -15,10 +15,27 @@ Then delete the tutorial-only sandbox path.
 - `src/rules/battle/tutorial-guidance.ts`;
 - the tutorial notes in the README's architecture section (Phase 2.1).
 
-Before starting, record the baseline: full screenshots of every tutorial beat
-on desktop and mobile, taken while the old path still works.
+## Earliest start and task graph
+
+Each task depends on the tasks listed after its arrow:
+
+- 6.0 ← the Phase 2 gate. Capture the baseline early, while the old path
+  certainly works.
+- 6.1 ← 6.0, the Phase 4 gate, and the Phase 5 batch with the Starter and
+  Tutorial cards
+- 6.2 ← 6.1; 6.3 ← 6.2
+- 6.4 ← 6.3 and the Phase 5 gate
+
+Phase 6 overlaps the Phase 5 content batches, as one lane among them.
 
 ## Tasks
+
+### 6.0 Baseline
+
+Record full screenshots of every tutorial beat on desktop and mobile, taken
+while the old path still works. List the tutorial tests that pin the sandbox
+path (`tutorial-battle-lifecycle`, the tutorial view-model and screen tests)
+and name the 6.1 contract each becomes.
 
 ### 6.1 Tutorial battle on the engine (core-review)
 
@@ -39,7 +56,8 @@ on desktop and mobile, taken while the old path still works.
   battle concept triggers keep their shared first-occurrence history in the
   fold.
 - **Delete the tutorial-only sandbox code** marked in Phase 4.7, with its
-  tests.
+  tests, in this commit. The ported contracts replace them; no sandbox-path
+  test survives ([D19](decisions.md#d19-test-pruning)).
 
 **Acceptance:**
 
@@ -77,8 +95,9 @@ setup, the AI override path in the policy host, and the guidance triggers.
 2. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
    and land the beads it files.
 3. Run the independent review over the phase diff.
-4. Check that the gate passes.
-5. Close the epic.
+4. Check that the gate passes. In staged mode, confirm `release == staging`.
+5. Update `metrics.md`, including the D19 suite budgets.
+6. Close the epic.
 
 ## Exit gate
 

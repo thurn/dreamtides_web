@@ -3,29 +3,36 @@
 This repository is executing [docs/plan/README.md](docs/plan/README.md)
 unattended. The decisions in [docs/plan/decisions.md](docs/plan/decisions.md)
 are binding, and [docs/plan/workflow.md](docs/plan/workflow.md) defines how
-work is filed, delivered, reviewed and QA'd. Hive project id:
-`dreamtides_web`.
+work is filed, dispatched to implementation subagents, delivered, reviewed
+and QA'd. Hive project id: `dreamtides_web`.
+
+An implementation subagent works only in the worktree and areas it is given,
+makes one commit, and never runs `bd`, `tg candidate`, `tg approve`, or
+`tg worktree`; the orchestrating session does.
 
 # Delivery
 
 - Use the `wt` skill (`~/.llms/skills/wt/SKILL.md`, not project-local) for
   all work unless explicitly asked to work "on master". Never edit the primary
-  checkout directly; all work happens in Tollgate worktrees. Follow-up work
-  stays in the same worktree until promotion.
+  checkout directly; all work happens in Tollgate worktrees. Repairs to an
+  unlanded candidate stay in the same worktree; new work gets a new bead.
 - Do not create new branches unless explicitly requested. Worktree branches
   are local-only and are never pushed.
-- When work is complete, create one detailed local Conventional Commit and
-  submit it with `tg candidate HEAD`. The plan grants promotion authority for
+- When work is complete, create one detailed local Conventional Commit. In
+  the plan run, a subagent stops there and the orchestrator submits it with
+  `tg candidate <oid>`. The plan grants promotion authority for
   in-scope plan work and in-scope CI repairs: authorize the exact candidate
-  with `tg approve <candidate-id> --wait` without asking. Tollgate owns
-  regeneration, certified promotion, and the leased remote push.
+  with `tg approve <candidate-id>` without asking, and do not wait on the gate
+  (docs/plan/workflow.md). Tollgate owns regeneration, certified promotion,
+  and the leased remote push.
 - Tollgate's local gate is the only CI. Never add GitHub Actions workflows.
 - Request independent review (the `independent-review` skill, run through the
   Codex CLI) at every plan phase gate and for every bead the phase pages mark
   core-review; see the Reviews section of `docs/plan/workflow.md`. This
   explicitly authorizes more than one review per session.
-- Never deploy, upload assets, or run `npm run deploy`. Never touch other
-  repositories, other Hive projects' beads, or shared Hive configuration.
+- Never deploy, upload assets, or run `npm run deploy`. Touch other
+  repositories only as decision D16 allows for Track T. Never touch other
+  Hive projects' beads or shared Hive configuration.
 - Do not print a summary of changes.
 
 # Invariants

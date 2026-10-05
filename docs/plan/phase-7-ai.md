@@ -17,6 +17,23 @@ The phase ends with the run's final acceptance and report.
   ISMCTS. Note its finding that random rollouts beat heuristic rollouts there;
   test that here rather than assume it.
 
+## Earliest start and task graph
+
+Each task depends on the tasks listed after its arrow:
+
+- 7.1 ← Phase 4.5. The harness and deck pool are built during Phase 5,
+  because they need only the policy interface.
+- 7.2 ← 7.1, the Phase 5 gate. Tuning against incomplete content is wasted.
+- 7.3 ← 7.2; 7.4 ← 7.3 (its rollouts and its report use the Expert)
+- 7.5 ← 7.3, 7.4; 7.6 ← 7.5
+- 7.7 iterations run in sequence ← 7.6
+- 7.8 ← 7.7; 7.9 ← 7.8
+- 7.10 ← 7.9, the Phase 6 gate, and the Track T gate
+- 7.11 ← 7.10
+
+Tournament runs are heavy. Run them only under the D17 soak conditions. While
+one runs, the other lane may implement, but not run heavy validation.
+
 **No time box.** The phase is best effort
 ([D25](decisions.md#d25-ai-phase-stop-rule)). Every build task, 7.1–7.6,
 completes against its own acceptance. The improvement loop (7.7) ends when
@@ -190,7 +207,7 @@ Each bead must leave policy
 behavior unchanged: a fixed-seed tournament reproduces the champion's
 outcomes exactly.
 
-### 7.10 Final acceptance and report
+### 7.10 Final acceptance
 
 1. **Browser acceptance** on desktop and mobile:
    - ~10 full games against the champion, with a blunder report written into
@@ -206,15 +223,24 @@ outcomes exactly.
    - a 10,000-game fuzz soak with the champion and Random policies, ≥10% of
      games in interactive replay mode;
    - the coverage gate;
-   - the full gate.
+   - the full gate, with `release == staging == origin/master`;
+   - the D19 suite budgets.
 3. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
    and land the beads it files.
 4. **Independent review** of the Phase 7 diff.
-5. **Docs pass.** `README.md`, `docs/rules.md`, and `docs/design.md`
+
+### 7.11 Report and end state
+
+The last bead. Its commit deletes `docs/plan/`, so its friction record goes
+into the report instead of a friction file. After it lands, the run is over:
+a compaction that finds no `docs/plan/README.md` and no `# Plan` section in
+`AGENTS.md` stops.
+
+1. **Docs pass.** `README.md`, `docs/rules.md`, and `docs/design.md`
    describe the shipped system in the current state. The rules include every
    normative decision; the design includes Apollyon, marked provisional.
-6. **Write `docs/plan/report.md`.** This is the only plan file that survives.
-   It is self-contained, because its sources are deleted in step 7. It covers:
+2. **Write `docs/plan/report.md`.** This is the only plan file that survives.
+   It is self-contained, because its sources are deleted in step 3. It covers:
    - what was delivered against the README's outcomes;
    - a summary of the rules decisions, with each RD's ladder step and the
      affected UUIDs;
@@ -228,12 +254,12 @@ outcomes exactly.
      the frozen `greedy@7.2` and `expert@7.3`, and the balance observations;
    - the open issues, the review debt (if any), and the recommended
      follow-ups. Meta-progression is first.
-7. **Reach the D33 end state.** Delete `docs/plan/` except `report.md`.
+3. **Reach the D33 end state.** Delete `docs/plan/` except `report.md`.
    Remove the `# Plan` section from `AGENTS.md` and every other pointer into
    `docs/plan/`, so no surviving guidance references a deleted file.
    Verify that the tracked Markdown files are exactly those listed in
    [README done criterion 7](README.md#done-criteria-whole-run).
-8. Close the Phase 7 epic. The run is over; the session stops.
+4. Close the Phase 7 epic. The run is over; the session stops.
 
 ## Exit gate
 

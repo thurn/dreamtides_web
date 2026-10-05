@@ -447,3 +447,31 @@ Phase 1's lasting gains are per-edit: the typecheck step drops from a full
 recheck to about 2 s once build info exists, and a fresh worktree seeds it,
 and related tests run on two workers. The gate itself shrinks in Phase 2,
 which removes the Trox, RON, and Rust steps (about 80 s at this load).
+
+## Budget revision (2026-10-05 replan)
+
+The replan ([D19](../decisions.md#d19-test-pruning),
+[D43](../decisions.md#d43-orchestrated-parallel-execution),
+[D44](../decisions.md#d44-staged-validation)) revises the budgets. Reasons:
+
+- The suite dominated every gate.
+- The Phase 1 triage removed under 1% of tests.
+- Gate time was mostly host load: 224 s at load 10 against 656 s at load
+  46–94.
+
+Every timing is now recorded with host load (`sysctl -n vm.loadavg`, 1-minute
+value). Overruns are judged only at comparable load.
+
+| Budget | Value | Measured as |
+| --- | --- | --- |
+| Full test suite, 2 workers, low host load | ≤ 60 s | `[review] test finished in` from `review:full` |
+| Test files | ≤ 220 | `npx vitest list --filesOnly` count |
+| `jsdom` test files | ≤ 80 | files with a `@vitest-environment jsdom` pragma |
+| Gate stage (staged mode), one-file change | ≤ 60 s | sum of gate-stage step `elapsed_ms` per buildset |
+| Release stage (staged mode) | ≤ 5 min | sum of release-stage step `elapsed_ms` per release run |
+| Full Tollgate gate (interim mode) | ≤ 5 min | unchanged |
+| Tollgate restart to healthy `doctor` | ≤ 30 s | Track T restart drill |
+| Idle lane time | ≤ 15% of lane time | retrospective, from bead dispatch and close times |
+
+The Phase 2.11 test cut must reach the first three. The rest are monitored
+from the bead that introduces them.
