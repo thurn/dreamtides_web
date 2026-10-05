@@ -340,7 +340,7 @@ export const parseDreamwellCardId = identityParser(
 export const parsePromptId = identityParser(
   "Prompt id",
   brandPromptId,
-  (value) => /^\d+:\d+$/u.test(value),
+  (value) => /^\d+:\d+:\d+$/u.test(value),
 );
 export const parseDreamwellChoiceKey = identityParser(
   "Dreamwell choice key",

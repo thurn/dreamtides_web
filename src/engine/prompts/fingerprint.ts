@@ -3,7 +3,7 @@ import type { Prompt, PromptFingerprint } from "./types";
 
 /**
  * A hash of the prompt's identifying fields: kind, side, purpose, sorted
- * candidates, bounds, options, and cost. Replaying a step compares it, so
+ * candidates, bounds, options, destinations with their counts, and cost. Replaying a step compares it, so
  * nondeterministic rules code fails loudly on the first replay.
  */
 export function promptFingerprint(prompt: Prompt): PromptFingerprint {
@@ -20,7 +20,10 @@ export function promptFingerprint(prompt: Prompt): PromptFingerprint {
       fields.push(prompt.min, prompt.max);
       break;
     case "arrange":
-      fields.push([...prompt.cards].sort(), prompt.destinations);
+      fields.push(
+        [...prompt.cards].sort(),
+        prompt.destinations.map((slot) => [slot.to, slot.min, slot.max]),
+      );
       break;
     case "confirm":
       break;

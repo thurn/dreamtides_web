@@ -63,11 +63,25 @@ export interface ChooseNumberPrompt extends PromptBase {
 
 export type ArrangeDestination = "top" | "bottom" | "void" | "hand";
 
-/** Place every listed card in one of the allowed destinations, in order. */
+/** One allowed destination of an arrangement and how many cards it takes. */
+export interface ArrangeSlot {
+  readonly to: ArrangeDestination;
+  /** The fewest cards this destination must receive. */
+  readonly min: number;
+  /** The most cards this destination may receive. */
+  readonly max: number;
+}
+
+/**
+ * Place every listed card in one of the allowed destinations, in order, with
+ * each destination receiving between its `min` and `max` cards. "One on top
+ * and one on bottom" is `[{ to: "top", min: 1, max: 1 }, { to: "bottom", min: 1, max: 1 }]`.
+ */
 export interface ArrangePrompt extends PromptBase {
   readonly kind: "arrange";
   readonly cards: readonly InstanceId[];
-  readonly destinations: readonly ArrangeDestination[];
+  /** Distinct destinations, each listed once. */
+  readonly destinations: readonly ArrangeSlot[];
 }
 
 /** Accept or decline a "you may". */

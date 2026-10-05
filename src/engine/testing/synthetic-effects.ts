@@ -4,6 +4,7 @@
  */
 import type { EngineCardDefinition, SyntheticHooks } from "../catalog";
 import type {
+  ArrangeDestination,
   ArrangePrompt,
   ChooseCardsPrompt,
   ChooseModePrompt,
@@ -136,7 +137,10 @@ export const PROMPTING = {
         purpose: purpose(ctx, item.instance, "foresee"),
         privateTo: item.controller,
         cards,
-        destinations: ["top", "void"],
+        destinations: [
+          { to: "top", min: 0, max: cards.length },
+          { to: "void", min: 0, max: cards.length },
+        ],
       });
       const toTop = arrangement.filter((entry) => entry.to === "top").map((entry) => entry.card);
       for (const entry of arrangement) {
@@ -144,6 +148,32 @@ export const PROMPTING = {
       }
       const rest = ctx.state.sides[item.controller].deck.filter((card) => !toTop.includes(card));
       ctx.state.sides[item.controller].deck = [...toTop, ...rest];
+    },
+  }),
+  /** "Look at the top 2 cards of your deck. Put one on top and the other on the bottom." */
+  topAndBottom: event(110, 0, {
+    resolve: (ctx, item) => {
+      const side = ctx.state.sides[item.controller];
+      const cards = side.deck.slice(0, 2);
+      if (cards.length === 0) return;
+      // With a single card left, it may go to either end.
+      const min = cards.length === 2 ? 1 : 0;
+      const arrangement = ctx.choose<ArrangePrompt>({
+        kind: "arrange",
+        side: item.controller,
+        purpose: purpose(ctx, item.instance, "topAndBottom"),
+        privateTo: item.controller,
+        cards,
+        destinations: [
+          { to: "top", min, max: 1 },
+          { to: "bottom", min, max: 1 },
+        ],
+      });
+      const placed = (to: ArrangeDestination) => arrangement.filter((entry) => entry.to === to).map((entry) => entry.card);
+      const top = placed("top");
+      const bottom = placed("bottom");
+      const rest = side.deck.filter((card) => !cards.includes(card));
+      side.deck = [...top, ...rest, ...bottom];
     },
   }),
   /** "You may draw a card." */

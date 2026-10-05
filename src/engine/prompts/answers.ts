@@ -1,6 +1,6 @@
 import { BATTLE } from "../../content/battle";
 import type { InstanceId } from "../state/ids";
-import type { Answer, ArrangeAnswer, Prompt } from "./types";
+import type { Answer, ArrangeAnswer, ArrangeDestination, ArrangePrompt, Prompt } from "./types";
 
 function isInstanceList(value: Answer): value is readonly InstanceId[] {
   return Array.isArray(value) && value.every((item) => typeof item === "string");
@@ -11,6 +11,25 @@ function isArrangement(value: Answer): value is ArrangeAnswer {
     Array.isArray(value) &&
     value.every((item) => typeof item === "object" && item !== null && "card" in item && "to" in item)
   );
+}
+
+function sum(values: readonly number[]): number {
+  return values.reduce((total, value) => total + value, 0);
+}
+
+function isLegalArrangement(prompt: ArrangePrompt, value: ArrangeAnswer): boolean {
+  if (value.length !== prompt.cards.length) return false;
+  const cards = new Set(value.map((entry) => entry.card));
+  if (cards.size !== prompt.cards.length || !prompt.cards.every((card) => cards.has(card))) {
+    return false;
+  }
+  if (!value.every((entry) => prompt.destinations.some((slot) => slot.to === entry.to))) {
+    return false;
+  }
+  return prompt.destinations.every((slot) => {
+    const count = value.filter((entry) => entry.to === slot.to).length;
+    return count >= slot.min && count <= slot.max;
+  });
 }
 
 /** Whether `value` is a legal answer to `prompt`. Answers are validated against the engine's own prompt. */
@@ -39,15 +58,8 @@ export function isLegalAnswer(prompt: Prompt, value: Answer): boolean {
         value >= prompt.min &&
         value <= prompt.max
       );
-    case "arrange": {
-      if (!isArrangement(value) || value.length !== prompt.cards.length) return false;
-      const cards = new Set(value.map((entry) => entry.card));
-      return (
-        cards.size === prompt.cards.length &&
-        prompt.cards.every((card) => cards.has(card)) &&
-        value.every((entry) => prompt.destinations.includes(entry.to))
-      );
-    }
+    case "arrange":
+      return isArrangement(value) && isLegalArrangement(prompt, value);
     case "confirm":
       return typeof value === "boolean";
     case "payOrDecline":
@@ -55,7 +67,10 @@ export function isLegalAnswer(prompt: Prompt, value: Answer): boolean {
   }
 }
 
-/** Whether the prompt has at least one legal answer. A prompt without one must never be raised. */
+/**
+ * Whether the prompt has at least one legal answer. A prompt without one
+ * must never be raised. Assumes the prompt is well formed (`isWellFormedPrompt`).
+ */
 export function hasLegalAnswer(prompt: Prompt): boolean {
   switch (prompt.kind) {
     case "chooseTargets":
@@ -65,8 +80,13 @@ export function hasLegalAnswer(prompt: Prompt): boolean {
       return prompt.options.some((option) => option.legal);
     case "chooseNumber":
       return prompt.min <= prompt.max;
-    case "arrange":
-      return prompt.cards.length === 0 || prompt.destinations.length > 0;
+    case "arrange": {
+      const count = prompt.cards.length;
+      return (
+        sum(prompt.destinations.map((slot) => slot.min)) <= count &&
+        sum(prompt.destinations.map((slot) => slot.max)) >= count
+      );
+    }
     case "confirm":
     case "payOrDecline":
       return true;
@@ -92,10 +112,14 @@ export function forcedAnswer(prompt: Prompt): Answer | undefined {
     }
     case "chooseNumber":
       return prompt.min === prompt.max ? prompt.min : undefined;
-    case "arrange":
-      return prompt.cards.length <= 1 && prompt.destinations.length === 1
-        ? prompt.cards.map((card) => ({ card, to: prompt.destinations[0] ?? "top" }))
-        : undefined;
+    case "arrange": {
+      const [card, ...rest] = prompt.cards;
+      if (card === undefined) return [];
+      if (rest.length > 0) return undefined;
+      const legal = prompt.destinations.filter((slot) => isLegalArrangement(prompt, [{ card, to: slot.to }]));
+      const [only] = legal;
+      return legal.length === 1 && only !== undefined ? [{ card, to: only.to }] : undefined;
+    }
     case "confirm":
       return undefined;
     case "payOrDecline":
@@ -127,12 +151,29 @@ export function randomLegalAnswer(prompt: Prompt, random: () => number): Answer 
       return prompt.min + pickIndex(prompt.max - prompt.min + 1);
     case "arrange": {
       const pool = [...prompt.cards];
-      const arrangement: { card: InstanceId; to: (typeof prompt.destinations)[number] }[] = [];
+      const order: InstanceId[] = [];
       while (pool.length > 0) {
         const [card] = pool.splice(pickIndex(pool.length), 1);
-        const to = prompt.destinations[pickIndex(prompt.destinations.length)];
-        if (card !== undefined && to !== undefined) arrangement.push({ card, to });
+        if (card !== undefined) order.push(card);
       }
+      // Every destination gets its minimum, then each remaining card goes to
+      // a random destination with room left.
+      const counts = prompt.destinations.map((slot) => slot.min);
+      for (let remaining = order.length - sum(counts); remaining > 0; remaining--) {
+        const open = prompt.destinations.flatMap((slot, index) =>
+          (counts[index] ?? 0) < slot.max ? [index] : [],
+        );
+        const index = open[pickIndex(open.length)];
+        if (index === undefined) break;
+        counts[index] = (counts[index] ?? 0) + 1;
+      }
+      const arrangement: { card: InstanceId; to: ArrangeDestination }[] = [];
+      prompt.destinations.forEach((slot, index) => {
+        for (let count = 0; count < (counts[index] ?? 0); count++) {
+          const card = order[arrangement.length];
+          if (card !== undefined) arrangement.push({ card, to: slot.to });
+        }
+      });
       return arrangement;
     }
     case "confirm":

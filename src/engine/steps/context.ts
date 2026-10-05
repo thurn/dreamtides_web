@@ -2,6 +2,7 @@ import type { EngineCatalog } from "../catalog";
 import { eventDefinition, type EngineEvent } from "../events";
 import { forcedAnswer, hasLegalAnswer, isLegalAnswer } from "../prompts/answers";
 import { promptFingerprint } from "../prompts/fingerprint";
+import { isWellFormedPrompt, MalformedPrompt } from "../prompts/structure";
 import type { AnswerFor, Prompt, PromptSpec } from "../prompts/types";
 import type { Side } from "../state/ids";
 import { drawRandom } from "../state/rng";
@@ -34,6 +35,9 @@ export class Context implements StepContext {
     const cancellable =
       !this.committed && this.options.canceller != null && spec.side === this.options.canceller;
     const prompt = { ...spec, cancellable } as Prompt;
+    if (!isWellFormedPrompt(prompt)) {
+      throw new MalformedPrompt(prompt);
+    }
     if (!hasLegalAnswer(prompt)) {
       throw new EmptyPrompt(prompt);
     }
@@ -52,6 +56,9 @@ export class Context implements StepContext {
     }
     const forced = forcedAnswer(prompt);
     if (forced !== undefined) {
+      if (!isLegalAnswer(prompt, forced)) {
+        throw new IllegalAnswer(prompt);
+      }
       this.answers.push({ fingerprint, value: forced, auto: true });
       return forced as AnswerFor<P>;
     }
