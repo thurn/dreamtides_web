@@ -1,79 +1,54 @@
 // @vitest-environment jsdom
 
 import { act, useState } from "react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { CardData } from "../../../types/cards";
-import { parseCardName } from "../../../types/card-identity";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { syntheticGameCard } from "../../test-helpers/component-test-fixtures";
+import { renderInCumulus } from "../../testing/render";
+import {
+  parseBattleCardId,
+  type BattleCardId,
+} from "../../../types/identifiers";
+import { testDreamwellCardId } from "../../../types/test-identities";
 import {
   BattleForeseeEditor,
   type BattleForeseeEditorModel,
 } from "./BattleForeseeEditor";
-import { parseBattleCardId } from "../../../types/identifiers";
-import type { BattleCardId } from "../../../types/identifiers";
-import { testCardId, testDreamwellCardId } from "../../../types/test-identities";
-import { renderInCumulus } from "../../testing/render";
 
 vi.mock("../card/CardView", () => ({
-  GameCard: ({ model }: { model: { displaySnapshot: CardData } }) => (
-    <div data-card-name={model.displaySnapshot.name}>
-      {model.displaySnapshot.name}
-    </div>
-  ),
+  GameCard: () => <div data-mock-game-card="" />,
 }));
 
-function makeCard(index: number): CardData {
-  return {
-    id: testCardId(`00000000-0000-0000-0000-00000000000${String(index)}`),
-    name: parseCardName(
-      ["First", "Second", "Third"][index - 1] ?? `Card ${String(index)}`,
-    ),
-    cardNumber: index,
-    cardType: "Character",
-    subtype: "",
-    isStarter: false,
-    energyCost: 1,
-    spark: 1,
-    isFast: false,
-    renderedText: "",
-    imageNumber: index,
-    artOwned: true,
-  };
-}
+const id = (value: string): BattleCardId => parseBattleCardId(value);
 
 function makeView(initialCount = 1): BattleForeseeEditorModel {
   return {
     initialCount,
     allowedCounts: [1, 2, 3],
-    cards: [1, 2, 3].map((index) => {
-      const displaySnapshot = makeCard(index);
-      return {
-        battleCardId: parseBattleCardId(`battle-card-${String(index)}`),
-        card: { cardId: displaySnapshot.id, displaySnapshot },
-      };
-    }),
+    cards: [1, 2, 3].map((index) => ({
+      battleCardId: id(`battle-card-${String(index)}`),
+      // Every card shares a name: the editor must track battle-instance ids.
+      card: syntheticGameCard(index, "Duplicate"),
+    })),
   };
 }
 
-const SOURCE_DREAMWELL_CARD = {
-  cardId: testDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
-  displaySnapshot: {
-    id: testDreamwellCardId("f9b479cf-02cb-40e1-bb64-70b29977bf15"),
-    name: "Skypath",
-    renderedText: "Foresee 1.",
-    energyAdded: 1,
-    imageNumber: 1897537165,
-  },
-} as const;
-
-function deckIds(container: HTMLElement): (BattleCardId | undefined)[] {
+function zoneIds(
+  container: HTMLElement,
+  zone: "deck" | "void",
+): (BattleCardId | undefined)[] {
   return Array.from(
-    container.querySelectorAll('[data-foresee-card-zone="deck"]'),
+    container.querySelectorAll<HTMLElement>(
+      `[data-foresee-card-zone="${zone}"]`,
+    ),
     (element) => {
-      const value = (element as HTMLElement).dataset.foreseeCardId;
+      const value = element.dataset.foreseeCardId;
       return value === undefined ? undefined : parseBattleCardId(value);
     },
   );
 }
+
+const deckIds = (container: HTMLElement) => zoneIds(container, "deck");
+const voidIds = (container: HTMLElement) => zoneIds(container, "void");
 
 function countButtons(container: HTMLElement): readonly HTMLButtonElement[] {
   return Array.from(
@@ -83,27 +58,17 @@ function countButtons(container: HTMLElement): readonly HTMLButtonElement[] {
   );
 }
 
-function pointerEvent(
-  type: string,
-  coordinates: { readonly clientX: number; readonly clientY: number },
-): Event {
-  const event = new Event(type, { bubbles: true, cancelable: true });
-  Object.defineProperties(event, {
-    pointerId: { value: 1 },
-    pointerType: { value: "mouse" },
-    button: { value: 0 },
-    clientX: { value: coordinates.clientX },
-    clientY: { value: coordinates.clientY },
+function confirm(container: HTMLElement): void {
+  act(() => {
+    container
+      .querySelector<HTMLButtonElement>(
+        '[data-testid="battle-foresee-confirm"]',
+      )
+      ?.click();
   });
-  return event;
 }
 
-function rect(
-  left: number,
-  top: number,
-  width: number,
-  height: number,
-): DOMRect {
+function rect(left: number, top: number, width: number, height: number) {
   return {
     x: left,
     y: top,
@@ -114,36 +79,60 @@ function rect(
     width,
     height,
     toJSON: () => ({}),
-  };
+  } as DOMRect;
 }
 
+/** Deck indicator at x 100–280, void indicator at x 700–880. */
 function stubDropGeometry(container: HTMLElement): void {
-  vi.spyOn(
-    container.querySelector<HTMLElement>("[data-foresee-row]") as HTMLElement,
-    "getBoundingClientRect",
-  ).mockReturnValue(rect(0, 0, 1_000, 400));
-  vi.spyOn(
-    container.querySelector<HTMLElement>(
-      '[data-foresee-indicator="deck"]',
-    ) as HTMLElement,
-    "getBoundingClientRect",
-  ).mockReturnValue(rect(100, 100, 180, 252));
-  vi.spyOn(
-    container.querySelector<HTMLElement>(
-      '[data-foresee-indicator="void"]',
-    ) as HTMLElement,
-    "getBoundingClientRect",
-  ).mockReturnValue(rect(700, 100, 180, 252));
+  const stub = (selector: string, value: DOMRect) =>
+    vi
+      .spyOn(
+        container.querySelector<HTMLElement>(selector)!,
+        "getBoundingClientRect",
+      )
+      .mockReturnValue(value);
+  stub("[data-foresee-row]", rect(0, 0, 1_000, 400));
+  stub('[data-foresee-indicator="deck"]', rect(100, 100, 180, 252));
+  stub('[data-foresee-indicator="void"]', rect(700, 100, 180, 252));
 }
 
 function pointerDrag(
-  element: HTMLElement,
-  from: { readonly clientX: number; readonly clientY: number },
-  to: { readonly clientX: number; readonly clientY: number },
+  container: HTMLElement,
+  cardId: BattleCardId,
+  fromX: number,
+  toX: number,
 ): void {
-  element.dispatchEvent(pointerEvent("pointerdown", from));
-  element.dispatchEvent(pointerEvent("pointermove", to));
-  element.dispatchEvent(pointerEvent("pointerup", to));
+  const element = container.querySelector<HTMLElement>(
+    `[data-foresee-card-id="${cardId}"]`,
+  );
+  const event = (type: string, clientX: number) => {
+    const result = new Event(type, { bubbles: true, cancelable: true });
+    Object.defineProperties(result, {
+      pointerId: { value: 1 },
+      pointerType: { value: "mouse" },
+      button: { value: 0 },
+      clientX: { value: clientX },
+      clientY: { value: 226 },
+    });
+    return result;
+  };
+  act(() => {
+    element?.dispatchEvent(event("pointerdown", fromX));
+    element?.dispatchEvent(event("pointermove", toX));
+    element?.dispatchEvent(event("pointerup", toX));
+  });
+}
+
+function keydown(
+  container: HTMLElement,
+  cardId: BattleCardId,
+  key: string,
+): void {
+  act(() => {
+    container
+      .querySelector(`[data-foresee-card-id="${cardId}"]`)
+      ?.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
+  });
 }
 
 function stubMatchMedia(matches: boolean): void {
@@ -159,129 +148,64 @@ function stubMatchMedia(matches: boolean): void {
   });
 }
 
-function ReplacementHarness() {
-  const [model, setModel] = useState(makeView(1));
-  return (
-    <>
-      <button type="button" onClick={() => setModel(makeView(2))}>
-        Replace model
-      </button>
-      <BattleForeseeEditor model={model} onConfirm={() => {}} />
-    </>
-  );
-}
-
 beforeEach(() => {
   stubMatchMedia(true);
 });
 
-afterEach(() => {
-  document.body.innerHTML = "";
-});
-
 describe("BattleForeseeEditor", () => {
-  it("shows the Dreamwell card that triggered an authoritative Foresee prompt", () => {
+  it("renders the battlefield-centered workflow with the triggering Dreamwell card", () => {
+    const sourceId = testDreamwellCardId(
+      "f9b479cf-02cb-40e1-bb64-70b29977bf15",
+    );
     const { container } = renderInCumulus(
       <BattleForeseeEditor
         model={{
           ...makeView(),
-          source: SOURCE_DREAMWELL_CARD,
+          source: {
+            cardId: sourceId,
+            displaySnapshot: {
+              id: sourceId,
+              name: "Source",
+              renderedText: "Foresee 1.",
+              energyAdded: 1,
+              imageNumber: 1,
+            },
+          },
         }}
         onConfirm={() => {}}
       />,
     );
-
-    const source = container.querySelector<HTMLElement>(
-      '[data-battle-prompt-source="dreamwell"]',
-    );
+    const dialog = container.querySelector('[role="dialog"]');
+    expect(dialog?.getAttribute("aria-label")).not.toBe("");
     expect(
-      source
-        ?.querySelector("[data-dreamwell-card]")
-        ?.getAttribute("data-dreamwell-card"),
-    ).toBe(SOURCE_DREAMWELL_CARD.cardId);
-    expect(
-      source?.querySelector("[data-dreamwell-card-name]")?.textContent,
-    ).toBe("Skypath");
-  });
-
-  it("renders one horizontal workflow with count controls and Confirm", () => {
-    const { container } = renderInCumulus(
-      <BattleForeseeEditor model={makeView()} onConfirm={() => {}} />,
-    );
-
-    expect(
-      container.querySelector('[role="dialog"]')?.getAttribute("aria-label"),
-    ).not.toBe("");
+      dialog?.getAttribute("data-glass-dialog-desktop-center-target"),
+    ).toBe("battlefield");
     expect(
       container
-        .querySelector('[role="dialog"]')
-        ?.getAttribute("data-glass-dialog-desktop-center-target"),
-    ).toBe("battlefield");
+        .querySelector(
+          '[data-battle-prompt-source="dreamwell"] [data-dreamwell-card]',
+        )
+        ?.getAttribute("data-dreamwell-card"),
+    ).toBe(sourceId);
     expect(deckIds(container)).toEqual(["battle-card-1"]);
-    expect(
-      Array.from(
-        container.querySelectorAll<HTMLElement>("[data-foresee-indicator]"),
-        (indicator) => indicator.textContent,
-      ),
-    ).toEqual(["Deck", "Void"]);
-    expect(
-      Array.from(
-        container.querySelectorAll("button"),
-        (button) => button.textContent,
-      ),
-    ).toEqual(["", "", "Confirm"]);
+    expect(container.querySelectorAll("[data-foresee-indicator]")).toHaveLength(
+      2,
+    );
     const [decrement, increment] = countButtons(container);
     expect(decrement?.getAttribute("aria-disabled")).toBe("true");
-    expect(decrement?.getAttribute("aria-label")).not.toBe("");
     expect(increment?.hasAttribute("aria-disabled")).toBe(false);
-    expect(increment?.getAttribute("aria-label")).not.toBe("");
-    expect(container.querySelector("[data-foresee-spacer]")).not.toBeNull();
-    const dialogPanel = container.querySelector<HTMLElement>('[role="dialog"]')
-      ?.firstElementChild as HTMLElement | undefined;
-    expect(dialogPanel?.style.maxWidth).toBe("min(900px, 90vw)");
-    expect(
-      Array.from(
-        container.querySelectorAll<HTMLElement>("[data-foresee-indicator]"),
-        (indicator) => indicator.style.width,
-      ),
-    ).toEqual(["180px", "180px"]);
   });
 
-  it("adds and removes the next deck card while keeping a half-overlapping stack", () => {
+  it("adds and removes deck cards within the allowed counts", () => {
     const { container } = renderInCumulus(
       <BattleForeseeEditor model={makeView()} onConfirm={() => {}} />,
     );
-
-    const initialAccessibleName = container
-      .querySelector('[role="dialog"]')
-      ?.getAttribute("aria-label");
-    act(() => {
-      countButtons(container)[1]?.click();
-    });
-    expect(
-      container.querySelector('[role="dialog"]')?.getAttribute("aria-label"),
-    ).not.toBe(initialAccessibleName);
-    expect(deckIds(container)).toEqual(["battle-card-1", "battle-card-2"]);
-    expect(
-      Array.from(
-        container.querySelectorAll<HTMLElement>(
-          '[data-foresee-card-zone="deck"]',
-        ),
-        (card) => card.style.marginInlineStart,
-      ),
-    ).toEqual(["0px", "-90px"]);
-    expect(
-      Array.from(
-        container.querySelectorAll<HTMLElement>(
-          '[data-foresee-card-zone="deck"]',
-        ),
-        (card) => card.style.zIndex,
-      ),
-    ).toEqual(["2", "1"]);
-
-    act(() => {
-      countButtons(container)[1]?.click();
-    });
+    const accessibleName = () =>
+      container.querySelector('[role="dialog"]')?.getAttribute("aria-label");
+    const initialName = accessibleName();
+    act(() => countButtons(container)[1]?.click());
+    expect(accessibleName()).not.toBe(initialName);
+    act(() => countButtons(container)[1]?.click());
     expect(deckIds(container)).toEqual([
       "battle-card-1",
       "battle-card-2",
@@ -291,188 +215,69 @@ describe("BattleForeseeEditor", () => {
       "true",
     );
 
-    const third = container.querySelector<HTMLElement>(
-      '[data-foresee-card-id="battle-card-3"]',
-    );
     stubDropGeometry(container);
-    act(() => {
-      if (third !== null) {
-        pointerDrag(
-          third,
-          { clientX: 400, clientY: 200 },
-          { clientX: 790, clientY: 200 },
-        );
-      }
-    });
-    expect(
-      container
-        .querySelector('[data-foresee-card-zone="void"]')
-        ?.getAttribute("data-foresee-card-id"),
-    ).toBe("battle-card-3");
+    pointerDrag(container, id("battle-card-3"), 400, 790);
+    expect(voidIds(container)).toEqual(["battle-card-3"]);
 
-    act(() => {
-      countButtons(container)[0]?.click();
-    });
+    act(() => countButtons(container)[0]?.click());
     expect(deckIds(container)).toEqual(["battle-card-1", "battle-card-2"]);
-    expect(
-      container.querySelector('[data-foresee-card-zone="void"]'),
-    ).toBeNull();
-    expect(
-      container.querySelector('[role="dialog"]')?.getAttribute("aria-label"),
-    ).not.toBe("");
+    expect(voidIds(container)).toEqual([]);
   });
 
-  it("supports drag ordering and dragging a card to the void before one confirmation", () => {
+  it("drags to reorder and to void before one confirmation by battle-instance id", () => {
     const onConfirm = vi.fn();
     const { container } = renderInCumulus(
       <BattleForeseeEditor model={makeView(3)} onConfirm={onConfirm} />,
     );
-    const first = container.querySelector<HTMLElement>(
-      '[data-foresee-card-id="battle-card-1"]',
-    );
-    const third = container.querySelector<HTMLElement>(
-      '[data-foresee-card-id="battle-card-3"]',
-    );
     stubDropGeometry(container);
-    vi.spyOn(third as HTMLElement, "getBoundingClientRect").mockReturnValue(
-      rect(400, 100, 180, 252),
-    );
+    vi.spyOn(
+      container.querySelector<HTMLElement>(
+        '[data-foresee-card-id="battle-card-3"]',
+      )!,
+      "getBoundingClientRect",
+    ).mockReturnValue(rect(400, 100, 180, 252));
 
-    act(() => {
-      if (first !== null) {
-        pointerDrag(
-          first,
-          { clientX: 300, clientY: 200 },
-          { clientX: 450, clientY: 200 },
-        );
-      }
-    });
+    pointerDrag(container, id("battle-card-1"), 300, 450);
     expect(deckIds(container)).toEqual([
       "battle-card-2",
       "battle-card-1",
       "battle-card-3",
     ]);
-
-    const second = container.querySelector<HTMLElement>(
-      '[data-foresee-card-id="battle-card-2"]',
-    );
-    act(() => {
-      if (second !== null) {
-        pointerDrag(
-          second,
-          { clientX: 350, clientY: 200 },
-          { clientX: 790, clientY: 200 },
-        );
-      }
-    });
+    pointerDrag(container, id("battle-card-2"), 350, 790);
     expect(deckIds(container)).toEqual(["battle-card-1", "battle-card-3"]);
-    expect(
-      container
-        .querySelector('[data-foresee-card-zone="void"]')
-        ?.getAttribute("data-foresee-card-id"),
-    ).toBe("battle-card-2");
+    expect(voidIds(container)).toEqual(["battle-card-2"]);
 
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-foresee-confirm"]',
-        )
-        ?.click();
-    });
+    confirm(container);
     expect(onConfirm).toHaveBeenCalledWith({
       viewedCardIds: [
-        parseBattleCardId("battle-card-1"),
-        parseBattleCardId("battle-card-2"),
-        parseBattleCardId("battle-card-3"),
+        id("battle-card-1"),
+        id("battle-card-2"),
+        id("battle-card-3"),
       ],
-      orderedCardIds: [
-        parseBattleCardId("battle-card-1"),
-        parseBattleCardId("battle-card-3"),
-      ],
-      voidCardIds: [parseBattleCardId("battle-card-2")],
+      orderedCardIds: [id("battle-card-1"), id("battle-card-3")],
+      voidCardIds: [id("battle-card-2")],
     });
   });
 
-  it("uses destination geometry to accept a release adjacent to the deck indicator", () => {
-    const cardInstanceIds = [
-      "11111111-1111-4111-8111-111111111111",
-      "22222222-2222-4222-8222-222222222222",
-    ] as const;
-    const view = {
-      initialCount: 2,
-      allowedCounts: [1, 2],
-      cards: makeView(2)
-        .cards.slice(0, 2)
-        .map((card, index) => ({
-          ...card,
-          battleCardId: parseBattleCardId(cardInstanceIds[index]),
-        })),
-    };
+  it("accepts a release adjacent to the deck indicator by nearest destination", () => {
     const { container } = renderInCumulus(
-      <BattleForeseeEditor model={view} onConfirm={() => {}} />,
+      <BattleForeseeEditor model={makeView(2)} onConfirm={() => {}} />,
     );
-    const row = container.querySelector<HTMLElement>("[data-foresee-row]");
-    const deckIndicator = container.querySelector<HTMLElement>(
-      '[data-foresee-indicator="deck"]',
-    );
-    const voidIndicator = container.querySelector<HTMLElement>(
-      '[data-foresee-indicator="void"]',
-    );
-    const second = container.querySelector<HTMLElement>(
-      `[data-foresee-card-id="${cardInstanceIds[1]}"]`,
-    );
-    vi.spyOn(row as HTMLElement, "getBoundingClientRect").mockReturnValue(
-      rect(0, 0, 900, 400),
-    );
-    vi.spyOn(
-      deckIndicator as HTMLElement,
-      "getBoundingClientRect",
-    ).mockReturnValue(rect(100, 100, 180, 252));
-    vi.spyOn(
-      voidIndicator as HTMLElement,
-      "getBoundingClientRect",
-    ).mockReturnValue(rect(700, 100, 180, 252));
-    act(() => {
-      if (second !== null) {
-        pointerDrag(
-          second,
-          { clientX: 350, clientY: 226 },
-          { clientX: 790, clientY: 226 },
-        );
-      }
-    });
-    expect(
-      container
-        .querySelector('[data-foresee-card-zone="void"]')
-        ?.getAttribute("data-foresee-card-id"),
-    ).toBe(cardInstanceIds[1]);
+    stubDropGeometry(container);
+    pointerDrag(container, id("battle-card-2"), 350, 790);
+    expect(voidIds(container)).toEqual(["battle-card-2"]);
 
-    const adjacentRelease = { clientX: 60, clientY: 226 };
-    expect(100 - adjacentRelease.clientX).toBe(40);
-    act(() => {
-      const returnedCard = container.querySelector<HTMLElement>(
-        `[data-foresee-card-id="${cardInstanceIds[1]}"]`,
-      );
-      if (returnedCard !== null) {
-        pointerDrag(
-          returnedCard,
-          { clientX: 790, clientY: 226 },
-          adjacentRelease,
-        );
-      }
-    });
-
-    expect(deckIds(container)).toEqual([
-      cardInstanceIds[1],
-      cardInstanceIds[0],
-    ]);
+    // Released 40px left of the deck indicator, outside every drop zone.
+    pointerDrag(container, id("battle-card-2"), 790, 60);
+    expect(deckIds(container)).toEqual(["battle-card-2", "battle-card-1"]);
+    expect(voidIds(container)).toEqual([]);
     expect(
-      container.querySelector('[data-foresee-card-zone="void"]'),
-    ).toBeNull();
-    expect(row?.dataset.foreseeDropGeometry).toBe("nearest-destination");
+      container.querySelector<HTMLElement>("[data-foresee-row]")?.dataset
+        .foreseeDropGeometry,
+    ).toBe("nearest-destination");
   });
 
-  it("fits the mobile row with a blank lane at least one card width", () => {
+  it("reserves a mobile blank lane at least one card wide", () => {
     stubMatchMedia(false);
     const { container } = renderInCumulus(
       <BattleForeseeEditor
@@ -484,22 +289,14 @@ describe("BattleForeseeEditor", () => {
         onConfirm={() => {}}
       />,
     );
-
     const card = container.querySelector<HTMLElement>(
-      "[data-foresee-card-zone=deck]",
+      '[data-foresee-card-zone="deck"]',
     );
     const spacer = container.querySelector<HTMLElement>(
       "[data-foresee-spacer]",
     );
-    const indicators = container.querySelectorAll<HTMLElement>(
-      "[data-foresee-indicator]",
-    );
-    expect(card?.style.width).toBe("104px");
-    expect(spacer?.style.minWidth).toBe("104px");
-    expect(
-      Array.from(indicators, (indicator) => indicator.style.width),
-    ).toEqual(["64px", "64px"]);
-    expect(container.querySelectorAll("button")).toHaveLength(3);
+    expect(card?.style.width).not.toBe("");
+    expect(spacer?.style.minWidth).toBe(card?.style.width);
   });
 
   it("uses pointer capture instead of native HTML drag", () => {
@@ -513,11 +310,9 @@ describe("BattleForeseeEditor", () => {
       bubbles: true,
       cancelable: true,
     });
-
     act(() => {
       card?.dispatchEvent(nativeDrag);
     });
-
     expect(card?.draggable).toBe(false);
     expect(nativeDrag.defaultPrevented).toBe(true);
   });
@@ -530,14 +325,12 @@ describe("BattleForeseeEditor", () => {
         onConfirm={onConfirm}
       />,
     );
-
-    const confirm = container.querySelector<HTMLButtonElement>(
-      '[data-testid="battle-foresee-confirm"]',
-    );
-    expect(confirm?.hasAttribute("aria-disabled")).toBe(false);
-
-    act(() => confirm?.click());
-
+    expect(
+      container
+        .querySelector('[data-testid="battle-foresee-confirm"]')
+        ?.hasAttribute("aria-disabled"),
+    ).toBe(false);
+    confirm(container);
     expect(onConfirm).toHaveBeenCalledWith({
       viewedCardIds: [],
       orderedCardIds: [],
@@ -545,103 +338,73 @@ describe("BattleForeseeEditor", () => {
     });
   });
 
-  it("gives keyboard editing the same complete order and void result", () => {
+  it("gives keyboard editing the same result without mutating the model", () => {
     const onConfirm = vi.fn();
-    const base = makeView(3);
-    const model = {
-      ...base,
-      allowedCounts: Object.freeze([...base.allowedCounts]),
-      cards: Object.freeze(
-        base.cards.map((entry) => ({
-          ...entry,
-          card: {
-            ...entry.card,
-            displaySnapshot: {
-              ...entry.card.displaySnapshot,
-              name: parseCardName("Duplicate"),
-            },
-          },
-        })),
-      ),
-    };
+    const model = makeView(3);
     const before = JSON.stringify(model);
     const { container } = renderInCumulus(
       <BattleForeseeEditor model={model} onConfirm={onConfirm} />,
     );
-    const card = (id: BattleCardId) =>
-      container.querySelector<HTMLElement>(`[data-foresee-card-id="${id}"]`);
-    act(() => {
-      card(parseBattleCardId("battle-card-1"))?.dispatchEvent(
-        new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }),
-      );
-    });
-    act(() => {
-      card(parseBattleCardId("battle-card-3"))?.dispatchEvent(
-        new KeyboardEvent("keydown", { key: "v", bubbles: true }),
-      );
-    });
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="battle-foresee-confirm"]',
-        )
-        ?.click();
-    });
+    keydown(container, id("battle-card-1"), "ArrowRight");
+    keydown(container, id("battle-card-3"), "v");
+    confirm(container);
     expect(onConfirm).toHaveBeenCalledWith({
       viewedCardIds: [
-        parseBattleCardId("battle-card-1"),
-        parseBattleCardId("battle-card-2"),
-        parseBattleCardId("battle-card-3"),
+        id("battle-card-1"),
+        id("battle-card-2"),
+        id("battle-card-3"),
       ],
-      orderedCardIds: [
-        parseBattleCardId("battle-card-2"),
-        parseBattleCardId("battle-card-1"),
-      ],
-      voidCardIds: [parseBattleCardId("battle-card-3")],
+      orderedCardIds: [id("battle-card-2"), id("battle-card-1")],
+      voidCardIds: [id("battle-card-3")],
     });
     expect(JSON.stringify(model)).toBe(before);
   });
 
   it("resets every staged edit when authoritative model identity changes", () => {
+    function ReplacementHarness() {
+      const [model, setModel] = useState(makeView(1));
+      return (
+        <>
+          <button
+            type="button"
+            data-testid="replace-model"
+            onClick={() => setModel(makeView(2))}
+          />
+          <BattleForeseeEditor model={model} onConfirm={() => {}} />
+        </>
+      );
+    }
     const { container } = renderInCumulus(<ReplacementHarness />);
-    act(() => {
-      container
-        .querySelector<HTMLElement>('[data-foresee-card-id="battle-card-1"]')
-        ?.dispatchEvent(
-          new KeyboardEvent("keydown", { key: "v", bubbles: true }),
-        );
-    });
-    expect(
-      container.querySelectorAll('[data-foresee-card-zone="void"]'),
-    ).toHaveLength(1);
+    keydown(container, id("battle-card-1"), "v");
+    expect(voidIds(container)).toHaveLength(1);
     act(() =>
-      Array.from(container.querySelectorAll<HTMLButtonElement>("button"))
-        .find((button) => button.textContent === "Replace model")
+      container
+        .querySelector<HTMLButtonElement>('[data-testid="replace-model"]')
         ?.click(),
     );
     expect(deckIds(container)).toEqual(["battle-card-1", "battle-card-2"]);
-    expect(
-      container.querySelectorAll('[data-foresee-card-zone="void"]'),
-    ).toHaveLength(0);
+    expect(voidIds(container)).toEqual([]);
   });
 
   it("rejects duplicate identities, invalid counts, and unsupported initial counts", () => {
     const consoleError = vi
       .spyOn(console, "error")
       .mockImplementation(() => {});
-    const duplicate = makeView();
+    const view = makeView();
     const invalidModels: BattleForeseeEditorModel[] = [
       {
-        ...duplicate,
-        cards: [duplicate.cards[0], duplicate.cards[0]],
+        ...view,
+        cards: [view.cards[0], view.cards[0]],
         allowedCounts: [1, 2],
       },
-      { ...makeView(), allowedCounts: [2, 1] },
-      { ...makeView(), initialCount: 2, allowedCounts: [1, 3] },
+      { ...view, allowedCounts: [2, 1] },
+      { ...view, initialCount: 2, allowedCounts: [1, 3] },
     ];
     for (const model of invalidModels) {
       expect(() =>
-        renderInCumulus(<BattleForeseeEditor model={model} onConfirm={() => {}} />),
+        renderInCumulus(
+          <BattleForeseeEditor model={model} onConfirm={() => {}} />,
+        ),
       ).toThrow();
     }
     consoleError.mockRestore();

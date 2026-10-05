@@ -1,17 +1,20 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { createRoot } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
-import { CumulusRoot } from "../CumulusRoot";
+import { renderInCumulus } from "../testing/render";
 import {
   BattleTutorialGuidance,
   type BattleTutorialGuidanceView,
 } from "./BattleTutorialGuidance";
-import { parsePresentationId } from "../../types/identifiers";
-import { parseBattleCardId } from "../../types/identifiers";
+import {
+  parseBattleCardId,
+  parsePresentationId,
+  type PresentationId,
+  type TutorialTriggerId,
+} from "../../types/identifiers";
 import {
   testCardId,
   testDreamwellCardId,
@@ -24,30 +27,120 @@ class ResizeObserverStub {
   disconnect() {}
 }
 
-function guidanceFields(
+function guidanceView(
+  presentationId: PresentationId,
+  triggerId: TutorialTriggerId,
   text: string,
-  options: {
-    readonly horizontalOffset?: number;
-    readonly verticalOffset?: number;
-    readonly bubbleWidth?: number;
-  } = {},
-) {
+  fields: Partial<BattleTutorialGuidanceView> &
+    Pick<BattleTutorialGuidanceView, "source">,
+): BattleTutorialGuidanceView {
   return {
+    presentationId,
+    triggerId,
+    messageIndex: 0,
+    messageCount: 1,
     duration: 3,
     dialogue: {
-      portrait: {
-        kind: "character-portrait" as const,
-        characterId: "mira" as const,
-      },
+      portrait: { kind: "character-portrait", characterId: "mira" },
       portraitAlt: "Mira",
       speakerName: "Mira",
-      text: text,
+      text,
     },
-    horizontalOffset: options.horizontalOffset ?? 0,
-    verticalOffset: options.verticalOffset ?? 0,
-    bubbleWidth: options.bubbleWidth ?? 700,
+    horizontalOffset: 0,
+    verticalOffset: 0,
+    bubbleWidth: 700,
+    ...fields,
   };
 }
+
+const DREAMWELL_ID = testDreamwellCardId("03e4e701-4720-4278-8198-9b7e0514d4cf");
+
+const dreamwellSource: BattleTutorialGuidanceView["source"] = {
+  kind: "dreamwell",
+  side: "player",
+  model: {
+    cardId: DREAMWELL_ID,
+    displaySnapshot: {
+      id: DREAMWELL_ID,
+      name: "Shadow Passage",
+      renderedText: "Erode 3.",
+      energyAdded: 1,
+      imageNumber: 3,
+    },
+  },
+};
+
+function cardSnapshot(
+  cardId: CardData["id"],
+  name: string,
+  cardNumber: number,
+): CardData {
+  return {
+    id: cardId,
+    name: parseCardName(name),
+    cardNumber,
+    cardType: "Character",
+    subtype: "Warrior",
+    isStarter: true,
+    energyCost: 1,
+    spark: 2,
+    isFast: false,
+    renderedText: "Support.",
+    imageNumber: cardNumber,
+    artOwned: true,
+  };
+}
+
+function guidance(
+  view: BattleTutorialGuidanceView | null,
+  callbacks: {
+    readonly onDismiss?: () => void;
+    readonly onDurationComplete?: () => void;
+  } = {},
+) {
+  return (
+    <BattleTutorialGuidance
+      view={view}
+      onDismiss={callbacks.onDismiss ?? (() => undefined)}
+      onDurationComplete={callbacks.onDurationComplete ?? (() => undefined)}
+    />
+  );
+}
+
+/** Replaces `HTMLElement.animate`, recording keyframes and finish listeners. */
+function stubAnimate(finishImmediately: boolean) {
+  const finishListeners: Array<() => void> = [];
+  const animations: Keyframe[][] = [];
+  HTMLElement.prototype.animate = vi.fn(
+    (keyframes: Keyframe[] | PropertyIndexedKeyframes | null) => {
+      animations.push(keyframes as Keyframe[]);
+      return {
+        addEventListener: (
+          type: string,
+          listener: EventListenerOrEventListenerObject,
+        ) => {
+          if (type !== "finish") return;
+          const finish = () => {
+            if (typeof listener === "function") {
+              listener(new Event("finish"));
+            } else {
+              listener.handleEvent(new Event("finish"));
+            }
+          };
+          if (finishImmediately) finish();
+          else finishListeners.push(finish);
+        },
+        cancel: vi.fn(),
+      } as unknown as Animation;
+    },
+  );
+  return { animations, finishListeners };
+}
+
+const animateDescriptor = Object.getOwnPropertyDescriptor(
+  HTMLElement.prototype,
+  "animate",
+);
 
 describe("BattleTutorialGuidance", () => {
   beforeEach(() => {
@@ -65,151 +158,92 @@ describe("BattleTutorialGuidance", () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+    if (animateDescriptor === undefined) {
+      Reflect.deleteProperty(HTMLElement.prototype, "animate");
+    } else {
+      Object.defineProperty(HTMLElement.prototype, "animate", animateDescriptor);
+    }
     document.body.innerHTML = "";
   });
 
   it("floats the source and dismissible Mira dialogue without modal chrome", () => {
     vi.useFakeTimers();
-    const container = document.createElement("div");
-    document.body.append(container);
-    const root = createRoot(container);
     const onContinue = vi.fn();
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <BattleTutorialGuidance
-            view={{
-              presentationId: parsePresentationId("guidance:erode"),
-              triggerId: testTutorialTriggerId("erode"),
-              messageIndex: 0,
-              messageCount: 1,
-              ...guidanceFields(
-                "[yellow]Erode[/yellow] sends cards to the void. Score 3⍟ for each missing card.",
-                {
-                  horizontalOffset: 30,
-                  verticalOffset: 20,
-                  bubbleWidth: 300,
-                },
-              ),
-              source: {
-                kind: "dreamwell",
-                side: "player",
-                model: {
-                  cardId: testDreamwellCardId(
-                    "03e4e701-4720-4278-8198-9b7e0514d4cf",
-                  ),
-                  displaySnapshot: {
-                    id: testDreamwellCardId(
-                      "03e4e701-4720-4278-8198-9b7e0514d4cf",
-                    ),
-                    name: "Shadow Passage",
-                    renderedText: "Erode 3.",
-                    energyAdded: 1,
-                    imageNumber: 3,
-                  },
-                },
-              },
-            }}
-            onDismiss={onContinue}
-            onDurationComplete={onContinue}
-          />
-        </CumulusRoot>,
-      );
-    });
+    const { container } = renderInCumulus(
+      guidance(
+        guidanceView(
+          parsePresentationId("guidance:erode"),
+          testTutorialTriggerId("erode"),
+          "[yellow]Erode[/yellow] sends cards to the void. Score 3⍟ for each missing card.",
+          {
+            horizontalOffset: 30,
+            verticalOffset: 20,
+            bubbleWidth: 300,
+            source: dreamwellSource,
+          },
+        ),
+        { onDismiss: onContinue, onDurationComplete: onContinue },
+      ),
+    );
 
     expect(
       container.querySelector('[data-testid="battle-tutorial-dreamwell"]'),
     ).not.toBeNull();
-    expect(container.textContent).toContain("Mira");
-    expect(container.textContent).toContain("Erode");
-    expect(container.querySelector('[aria-label="points"]')).not.toBeNull();
-    const guidance = container.querySelector<HTMLElement>(
+    expect(container.textContent).not.toContain("[yellow]");
+    expect(container.querySelector("[data-inline-glyph]")).not.toBeNull();
+    const guidanceRoot = container.querySelector<HTMLElement>(
       "[data-battle-tutorial-guidance]",
     );
-    expect(guidance?.getAttribute("aria-modal")).toBeNull();
-    expect(guidance?.getAttribute("role")).toBeNull();
+    expect(guidanceRoot?.getAttribute("aria-modal")).toBeNull();
+    expect(guidanceRoot?.getAttribute("role")).toBeNull();
     expect(
       container.querySelector('[data-testid="card-tutorial-scrim"]'),
-    ).toBeNull();
-    const dialogueLayout = container.querySelector<HTMLElement>(
-      '[data-testid="battle-tutorial-dismiss"]',
-    )?.parentElement;
-    expect(dialogueLayout?.style.maxWidth).toBe("300px");
-    expect(dialogueLayout?.style.transform).toBe("translate(30px, 20px)");
-    expect(
-      container.querySelector('[data-testid="battle-tutorial-continue"]'),
     ).toBeNull();
     const dialogue = container.querySelector<HTMLElement>(
       '[data-testid="battle-tutorial-dismiss"]',
     );
+    expect(dialogue?.parentElement?.style.maxWidth).toBe("300px");
+    expect(dialogue?.parentElement?.style.transform).toBe(
+      "translate(30px, 20px)",
+    );
+    expect(
+      container.querySelector('[data-testid="battle-tutorial-continue"]'),
+    ).toBeNull();
     act(() => dialogue?.click());
     expect(onContinue).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
-    vi.useRealTimers();
   });
 
   it("waits for the authored delay before showing dialogue and starting its dwell", () => {
     vi.useFakeTimers();
-    const container = document.createElement("div");
-    document.body.append(container);
-    const root = createRoot(container);
     const onDurationComplete = vi.fn();
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <BattleTutorialGuidance
-            view={{
-              presentationId: parsePresentationId("guidance:erode"),
-              triggerId: testTutorialTriggerId("erode"),
-              messageIndex: 0,
-              messageCount: 1,
-              delay: 1,
-              ...guidanceFields("Erode sends cards to the void."),
-              source: {
-                kind: "dreamwell",
-                side: "player",
-                model: {
-                  cardId: testDreamwellCardId(
-                    "03e4e701-4720-4278-8198-9b7e0514d4cf",
-                  ),
-                  displaySnapshot: {
-                    id: testDreamwellCardId(
-                      "03e4e701-4720-4278-8198-9b7e0514d4cf",
-                    ),
-                    name: "Shadow Passage",
-                    renderedText: "Erode 3.",
-                    energyAdded: 1,
-                    imageNumber: 3,
-                  },
-                },
-              },
-            }}
-            onDismiss={() => {}}
-            onDurationComplete={onDurationComplete}
-          />
-        </CumulusRoot>,
-      );
-    });
+    const { container } = renderInCumulus(
+      guidance(
+        guidanceView(
+          parsePresentationId("guidance:erode"),
+          testTutorialTriggerId("erode"),
+          "Erode sends cards to the void.",
+          { delay: 1, source: dreamwellSource },
+        ),
+        { onDurationComplete },
+      ),
+    );
 
     const dialogue = container.querySelector(
       '[data-testid="battle-tutorial-dialogue"]',
     );
-    expect(dialogue?.getAttribute("data-character-dialogue-visible")).toBe(
-      "false",
-    );
+    const visible = () =>
+      dialogue?.getAttribute("data-character-dialogue-visible");
+    expect(visible()).toBe("false");
     act(() => {
       vi.advanceTimersByTime(999);
     });
-    expect(dialogue?.getAttribute("data-character-dialogue-visible")).toBe(
-      "false",
-    );
+    expect(visible()).toBe("false");
     act(() => {
       vi.advanceTimersByTime(1);
     });
-    expect(dialogue?.getAttribute("data-character-dialogue-visible")).toBe(
-      "true",
-    );
+    expect(visible()).toBe("true");
     act(() => {
       vi.advanceTimersByTime(2_999);
     });
@@ -218,39 +252,22 @@ describe("BattleTutorialGuidance", () => {
       vi.advanceTimersByTime(1);
     });
     expect(onDurationComplete).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
-    vi.useRealTimers();
   });
 
   it("renders companion-free Challenge guidance as a battle tutorial", () => {
-    const container = document.createElement("div");
-    document.body.append(container);
-    const root = createRoot(container);
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <BattleTutorialGuidance
-            view={{
-              presentationId: parsePresentationId("guidance:spark-tie"),
-              triggerId: testTutorialTriggerId("spark-tie"),
-              messageIndex: 0,
-              messageCount: 1,
-              ...guidanceFields(
-                "If spark values tie, both characters are dissolved.",
-                { bubbleWidth: 500 },
-              ),
-              source: { kind: "battle" },
-            }}
-            onDismiss={() => {}}
-            onDurationComplete={() => {}}
-          />
-        </CumulusRoot>,
-      );
-    });
+    const { container } = renderInCumulus(
+      guidance(
+        guidanceView(
+          parsePresentationId("guidance:spark-tie"),
+          testTutorialTriggerId("spark-tie"),
+          "If spark values tie, both characters are dissolved.",
+          { bubbleWidth: 500, source: { kind: "battle" } },
+        ),
+      ),
+    );
 
     expect(
-      container.querySelector('[aria-label="Battle tutorial"]'),
+      container.querySelector("[data-battle-tutorial-guidance]"),
     ).not.toBeNull();
     expect(
       container.querySelector('[data-testid="battle-tutorial-dialogue"]'),
@@ -258,105 +275,43 @@ describe("BattleTutorialGuidance", () => {
     expect(
       container.querySelector('[data-testid="battle-tutorial-card"]'),
     ).toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("carries one battle-card identity from its source into guidance and on to its destination", () => {
     const battleCardId = "battle-card-1";
     const cardId = testCardId("e83014d3-9d35-4e80-a1b3-9b25360ad2af");
-    const displaySnapshot: CardData = {
-      id: cardId,
-      name: parseCardName("Fixture Traveler"),
-      cardNumber: 7,
-      cardType: "Character",
-      subtype: "Warrior",
-      isStarter: true,
-      energyCost: 1,
-      spark: 2,
-      isFast: false,
-      renderedText: "Support.",
-      imageNumber: 7,
-      artOwned: true,
-    };
-    const view: BattleTutorialGuidanceView = {
-      presentationId: parsePresentationId("guidance:support"),
-      triggerId: testTutorialTriggerId("support"),
-      messageIndex: 0,
-      messageCount: 1,
-      ...guidanceFields("Support helps the character in front."),
-      source: {
-        kind: "card",
-        battleCardId: parseBattleCardId(battleCardId),
-        model: { cardId, displaySnapshot },
-        figment: false,
+    const view = guidanceView(
+      parsePresentationId("guidance:support"),
+      testTutorialTriggerId("support"),
+      "Support helps the character in front.",
+      {
+        source: {
+          kind: "card",
+          battleCardId: parseBattleCardId(battleCardId),
+          model: {
+            cardId,
+            displaySnapshot: cardSnapshot(cardId, "Fixture Traveler", 7),
+          },
+          figment: false,
+        },
       },
-    };
+    );
     const source = document.createElement("div");
     source.dataset.battleCardId = battleCardId;
     document.body.append(source);
-    const container = document.createElement("div");
-    document.body.append(container);
-    const root = createRoot(container);
-    let sourceRect = DOMRect.fromRect({
-      x: 40,
-      y: 600,
-      width: 120,
-      height: 168,
-    });
-    const boxSpy = vi
-      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
-      .mockImplementation(function (this: HTMLElement) {
+    let sourceRect = DOMRect.fromRect({ x: 40, y: 600, width: 120, height: 168 });
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function (this: HTMLElement) {
         if (this.dataset.battleCardId === battleCardId) return sourceRect;
         if (this.dataset.battleTutorialSource !== undefined) {
-          return DOMRect.fromRect({
-            x: 400,
-            y: 180,
-            width: 240,
-            height: 336,
-          });
+          return DOMRect.fromRect({ x: 400, y: 180, width: 240, height: 336 });
         }
         return DOMRect.fromRect();
-      });
-    const finishListeners: Array<() => void> = [];
-    const animations: Keyframe[][] = [];
-    const animateDescriptor = Object.getOwnPropertyDescriptor(
-      HTMLElement.prototype,
-      "animate",
-    );
-    HTMLElement.prototype.animate = vi.fn(
-      (keyframes: Keyframe[] | PropertyIndexedKeyframes | null) => {
-        animations.push(keyframes as Keyframe[]);
-        return {
-          addEventListener: (
-            type: string,
-            listener: EventListenerOrEventListenerObject,
-          ) => {
-            if (type !== "finish") return;
-            finishListeners.push(() => {
-              if (typeof listener === "function") {
-                listener(new Event("finish"));
-              } else {
-                listener.handleEvent(new Event("finish"));
-              }
-            });
-          },
-          cancel: vi.fn(),
-        } as unknown as Animation;
       },
     );
+    const { animations, finishListeners } = stubAnimate(false);
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <BattleTutorialGuidance
-            view={view}
-            onDismiss={() => undefined}
-            onDurationComplete={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    const { container, rerender } = renderInCumulus(guidance(view));
 
     const journey = container.querySelector<HTMLElement>(
       "[data-battle-tutorial-guidance]",
@@ -368,48 +323,25 @@ describe("BattleTutorialGuidance", () => {
     act(() => finishListeners.shift()?.());
     expect(journey?.dataset.tutorialGuidanceJourney).toBe("dwelling");
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <BattleTutorialGuidance
-            view={{
-              ...view,
-              triggerId: testTutorialTriggerId("event-card"),
-              messageIndex: 1,
-              messageCount: 2,
-              dialogue: {
-                ...view.dialogue,
-                text: "The same card stays here for the next explanation.",
-              },
-            }}
-            onDismiss={() => undefined}
-            onDurationComplete={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      guidance({
+        ...view,
+        triggerId: testTutorialTriggerId("event-card"),
+        messageIndex: 1,
+        messageCount: 2,
+        dialogue: {
+          ...view.dialogue,
+          text: "The same card stays here for the next explanation.",
+        },
+      }),
+    );
     expect(animations).toHaveLength(1);
     expect(container.textContent).toContain(
       "The same card stays here for the next explanation.",
     );
 
-    sourceRect = DOMRect.fromRect({
-      x: 700,
-      y: 420,
-      width: 90,
-      height: 126,
-    });
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <BattleTutorialGuidance
-            view={null}
-            onDismiss={() => undefined}
-            onDurationComplete={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    sourceRect = DOMRect.fromRect({ x: 700, y: 420, width: 90, height: 126 });
+    rerender(guidance(null));
 
     expect(source.dataset.tutorialGuidanceJourneyHidden).toBe("destination");
     expect(source.style.opacity).toBe("0");
@@ -426,130 +358,70 @@ describe("BattleTutorialGuidance", () => {
     expect(
       container.querySelector("[data-battle-tutorial-guidance]"),
     ).toBeNull();
-
-    act(() => root.unmount());
-    if (animateDescriptor === undefined) {
-      Reflect.deleteProperty(HTMLElement.prototype, "animate");
-    } else {
-      Object.defineProperty(
-        HTMLElement.prototype,
-        "animate",
-        animateDescriptor,
-      );
-    }
-    boxSpy.mockRestore();
   });
 
   it("keeps journey cards in place and positions only Mira's dialogue outside them", () => {
     vi.useFakeTimers();
     const cardId = testCardId("card-a");
-    const displaySnapshot: CardData = {
-      id: cardId,
-      name: parseCardName("Fixture Offer"),
-      cardNumber: 8,
-      cardType: "Character",
-      subtype: "Warrior",
-      isStarter: false,
-      energyCost: 2,
-      spark: 3,
-      isFast: false,
-      renderedText: "Support.",
-      imageNumber: 8,
-      artOwned: true,
-    };
     const source = document.createElement("div");
     source.dataset.gameCardSource = "";
     source.dataset.cardId = cardId;
     document.body.append(source);
-    const container = document.createElement("div");
-    document.body.append(container);
-    const root = createRoot(container);
-    const boxSpy = vi
-      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
-      .mockImplementation(function (this: HTMLElement) {
+    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
+      function (this: HTMLElement) {
         if (this.dataset.cardId === cardId) {
-          return DOMRect.fromRect({
-            x: 40,
-            y: 500,
-            width: 180,
-            height: 252,
-          });
+          return DOMRect.fromRect({ x: 40, y: 500, width: 180, height: 252 });
         }
         if (this.dataset.cardTutorialDialogueLayout !== undefined) {
-          return DOMRect.fromRect({
-            width: 700,
-            height: 100,
-          });
+          return DOMRect.fromRect({ width: 700, height: 100 });
         }
         return DOMRect.fromRect();
-      });
-    const animations: Keyframe[][] = [];
-    const animateDescriptor = Object.getOwnPropertyDescriptor(
-      HTMLElement.prototype,
-      "animate",
-    );
-    HTMLElement.prototype.animate = vi.fn(
-      (keyframes: Keyframe[] | PropertyIndexedKeyframes | null) => {
-        animations.push(keyframes as Keyframe[]);
-        return {
-          addEventListener: (
-            type: string,
-            listener: EventListenerOrEventListenerObject,
-          ) => {
-            if (type !== "finish") return;
-            if (typeof listener === "function") listener(new Event("finish"));
-          },
-          cancel: vi.fn(),
-        } as unknown as Animation;
       },
     );
-    const view: BattleTutorialGuidanceView = {
-      presentationId: parsePresentationId("card-tutorial:fixture"),
-      triggerId: testTutorialTriggerId("support"),
-      messageIndex: 0,
-      messageCount: 1,
-      ...guidanceFields("Support helps the character in front."),
-      source: {
-        kind: "journey-card",
-        cardId,
-        model: { cardId, displaySnapshot },
-      },
-    };
+    const { animations } = stubAnimate(true);
     const onDurationComplete = vi.fn();
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <BattleTutorialGuidance
-            view={view}
-            onDismiss={() => undefined}
-            onDurationComplete={onDurationComplete}
-          />
-        </CumulusRoot>,
-      );
-    });
+    const { container, rerender } = renderInCumulus(
+      guidance(
+        guidanceView(
+          parsePresentationId("card-tutorial:fixture"),
+          testTutorialTriggerId("support"),
+          "Support helps the character in front.",
+          {
+            source: {
+              kind: "journey-card",
+              cardId,
+              model: {
+                cardId,
+                displaySnapshot: cardSnapshot(cardId, "Fixture Offer", 8),
+              },
+            },
+          },
+        ),
+        { onDurationComplete },
+      ),
+    );
 
-    expect(source.style.visibility).toBe("");
-    expect(source.style.opacity).toBe("");
+    const sourceUntouched = () => {
+      expect(source.style.visibility).toBe("");
+      expect(source.style.opacity).toBe("");
+    };
+    sourceUntouched();
     expect(source.dataset.tutorialGuidanceJourneyHidden).toBeUndefined();
     expect(
       container.querySelector("[data-card-tutorial-guidance]"),
     ).not.toBeNull();
-    expect(
-      container.querySelector("[data-battle-tutorial-guidance]"),
-    ).toBeNull();
-    expect(
-      container.querySelector('[data-testid="card-tutorial-card"]'),
-    ).toBeNull();
-    expect(
-      container.querySelector('[data-testid="card-tutorial-scrim"]'),
-    ).toBeNull();
+    for (const absent of [
+      "[data-battle-tutorial-guidance]",
+      '[data-testid="card-tutorial-card"]',
+      '[data-testid="card-tutorial-scrim"]',
+      '[data-testid="card-tutorial-dismiss"]',
+    ]) {
+      expect(container.querySelector(absent)).toBeNull();
+    }
     expect(
       container.querySelector('[data-testid="card-tutorial-dialogue"]'),
     ).not.toBeNull();
-    expect(
-      container.querySelector('[data-testid="card-tutorial-dismiss"]'),
-    ).toBeNull();
     const dialogueLayout = container.querySelector<HTMLElement>(
       "[data-card-tutorial-dialogue-layout]",
     );
@@ -567,69 +439,34 @@ describe("BattleTutorialGuidance", () => {
       container.querySelector("[data-card-tutorial-guidance]"),
     ).not.toBeNull();
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <BattleTutorialGuidance
-            view={null}
-            onDismiss={() => undefined}
-            onDurationComplete={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
-    expect(source.style.visibility).toBe("");
-    expect(source.style.opacity).toBe("");
+    rerender(guidance(null));
+    sourceUntouched();
     act(() => {
       vi.runAllTimers();
     });
-    expect(source.style.visibility).toBe("");
-    expect(source.style.opacity).toBe("");
+    sourceUntouched();
     expect(container.querySelector("[data-card-tutorial-guidance]")).toBeNull();
-
-    act(() => root.unmount());
-    if (animateDescriptor === undefined) {
-      Reflect.deleteProperty(HTMLElement.prototype, "animate");
-    } else {
-      Object.defineProperty(
-        HTMLElement.prototype,
-        "animate",
-        animateDescriptor,
-      );
-    }
-    boxSpy.mockRestore();
-    vi.useRealTimers();
   });
 
   it("dismisses site guidance after its authored visible duration", () => {
     vi.useFakeTimers();
-    const container = document.createElement("div");
-    document.body.append(container);
-    const root = createRoot(container);
     const onDurationComplete = vi.fn();
-
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <BattleTutorialGuidance
-            view={{
-              presentationId: parsePresentationId("site-tutorial:transfiguration"),
-              triggerId: testTutorialTriggerId("transfiguration"),
-              messageIndex: 0,
-              messageCount: 1,
-              delay: 1,
-              ...guidanceFields("Cards can be transfigured.", {
-                bubbleWidth: 500,
-              }),
-              duration: 5,
-              source: { kind: "journey-site" },
-            }}
-            onDismiss={() => undefined}
-            onDurationComplete={onDurationComplete}
-          />
-        </CumulusRoot>,
-      );
-    });
+    renderInCumulus(
+      guidance(
+        guidanceView(
+          parsePresentationId("site-tutorial:transfiguration"),
+          testTutorialTriggerId("transfiguration"),
+          "Cards can be transfigured.",
+          {
+            delay: 1,
+            bubbleWidth: 500,
+            duration: 5,
+            source: { kind: "journey-site" },
+          },
+        ),
+        { onDurationComplete },
+      ),
+    );
 
     act(() => {
       vi.advanceTimersByTime(5_999);
@@ -639,8 +476,5 @@ describe("BattleTutorialGuidance", () => {
       vi.advanceTimersByTime(1);
     });
     expect(onDurationComplete).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
-    vi.useRealTimers();
   });
 });

@@ -1,17 +1,10 @@
-import type { ReactElement } from "react";
 import { parseCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { GameCardModel } from "../components/card/CardView";
-import { renderInCumulus, type CumulusRender } from "../testing/render";
 import {
   testCardId,
   testCardSubtype,
 } from "../../types/test-identities";
-
-/** Renders inside CumulusRoot with automatic teardown; see renderInCumulus. */
-export function mountCumulus(element: ReactElement): CumulusRender {
-  return renderInCumulus(element);
-}
 
 export function syntheticGameCard(
   index = 1,

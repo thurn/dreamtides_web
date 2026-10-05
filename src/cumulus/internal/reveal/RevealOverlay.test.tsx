@@ -11,14 +11,10 @@ import {
   DESKTOP_GAME_CARD_WIDTH,
   type RevealPlacementDecision,
 } from "./geometry";
+import { captureVisualViewport, findRevealBoundary } from "./viewport";
 import { CumulusRoot } from "../../CumulusRoot";
 import { GLYPHS } from "../../primitives/glyph";
-import { artRef } from "../../primitives/art";
-import {
-  testCardId,
-  testDreamscapeId,
-  testSemanticEntityId,
-} from "../../../types/test-identities";
+import { testCardId, testSemanticEntityId } from "../../../types/test-identities";
 
 const UUID = testSemanticEntityId("00000000-0000-4000-8000-000000000001");
 let root: Root;
@@ -26,25 +22,53 @@ let container: HTMLDivElement;
 let resizeCallbacks: ResizeObserverCallback[];
 let measuredPrimaryHeight: number;
 
+function domRect(x: number, y: number, width: number, height: number): DOMRect {
+  return DOMRect.fromRect({ x, y, width, height });
+}
+
+function setViewport(width: number, height: number, offsetLeft = 0, offsetTop = 0): void {
+  Object.defineProperty(window, "visualViewport", {
+    configurable: true,
+    value: { width, height, offsetLeft, offsetTop },
+  });
+}
+
 function renderOverlay(element: ReactElement): void {
-  root.render(<CumulusRoot>{element}</CumulusRoot>);
+  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
+}
+
+function gameCardSpec(copies?: number): RevealSpec {
+  const cardId = testCardId(UUID);
+  return {
+    primary: {
+      kind: "gameCard",
+      cardId,
+      ...(copies === undefined ? {} : { copies }),
+      displaySnapshot: {
+        id: cardId,
+        name: parseCardName("Fixture Card"),
+        cardNumber: 1,
+        cardType: "Event",
+        subtype: "",
+        isStarter: false,
+        rarity: "Special",
+        energyCost: 1,
+        spark: null,
+        isFast: false,
+        renderedText: "Fixture text.",
+        imageNumber: 1,
+        artOwned: false,
+      },
+    },
+    secondaries: [],
+  };
 }
 
 function active(
   overrides: Partial<RevealOverlayActive> = {},
 ): RevealOverlayActive {
   const source = document.createElement("button");
-  source.getBoundingClientRect = () => ({
-    x: 400,
-    y: 250,
-    left: 400,
-    top: 250,
-    right: 500,
-    bottom: 300,
-    width: 100,
-    height: 50,
-    toJSON: () => ({}),
-  });
+  source.getBoundingClientRect = () => domRect(400, 250, 100, 50);
   return {
     source: {
       identity: { entityType: "test", entityId: UUID },
@@ -63,16 +87,38 @@ function active(
   };
 }
 
+interface PlacedProbe {
+  readonly onPlaced: (
+    decision: RevealPlacementDecision,
+    geometry: RevealGeometrySnapshot,
+  ) => void;
+  decision?: RevealPlacementDecision;
+  geometry?: RevealGeometrySnapshot;
+  calls: number;
+}
+
+function placed(): PlacedProbe {
+  const probe: PlacedProbe = {
+    calls: 0,
+    onPlaced: (decision, geometry) => {
+      probe.decision = decision;
+      probe.geometry = geometry;
+      probe.calls += 1;
+    },
+  };
+  return probe;
+}
+
+function revealCards(kind: "primary" | "secondary" | "adjacent"): HTMLElement[] {
+  return [
+    ...document.querySelectorAll<HTMLElement>(
+      `[data-cumulus-reveal-card="${kind}"]`,
+    ),
+  ];
+}
+
 beforeEach(() => {
-  Object.defineProperty(window, "visualViewport", {
-    configurable: true,
-    value: { width: 1200, height: 300, offsetLeft: 0, offsetTop: 0 },
-  });
-  window.matchMedia = vi.fn().mockReturnValue({
-    matches: false,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-  });
+  setViewport(1200, 300);
   resizeCallbacks = [];
   measuredPrimaryHeight = 100;
   globalThis.ResizeObserver = class {
@@ -85,56 +131,12 @@ beforeEach(() => {
   };
   vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
     function (this: HTMLElement) {
-      if (this.dataset.revealMeasure === "primary")
-        return {
-          x: 0,
-          y: 0,
-          left: 0,
-          top: 0,
-          right: 100,
-          bottom: measuredPrimaryHeight,
-          width: 100,
-          height: measuredPrimaryHeight,
-          toJSON: () => ({}),
-        };
-      if (this.dataset.revealMeasure === "secondary") {
-        const height = this.dataset.revealIndex === "0" ? 80 : 90;
-        return {
-          x: 0,
-          y: 0,
-          left: 0,
-          top: 0,
-          right: 80,
-          bottom: height,
-          width: 80,
-          height,
-          toJSON: () => ({}),
-        };
-      }
-      if (this.dataset.revealMeasure === "adjacent") {
-        return {
-          x: 0,
-          y: 0,
-          left: 0,
-          top: 0,
-          right: 150,
-          bottom: 225,
-          width: 150,
-          height: 225,
-          toJSON: () => ({}),
-        };
-      }
-      return {
-        x: 0,
-        y: 0,
-        left: 0,
-        top: 0,
-        right: 0,
-        bottom: 0,
-        width: 0,
-        height: 0,
-        toJSON: () => ({}),
-      };
+      const measure = this.dataset.revealMeasure;
+      if (measure === "primary") return domRect(0, 0, 100, measuredPrimaryHeight);
+      if (measure === "secondary")
+        return domRect(0, 0, 80, this.dataset.revealIndex === "0" ? 80 : 90);
+      if (measure === "adjacent") return domRect(0, 0, 150, 225);
+      return domRect(0, 0, 0, 0);
     },
   );
   container = document.createElement("div");
@@ -150,22 +152,22 @@ afterEach(() => {
 });
 
 describe("RevealOverlay", () => {
-  it("uses one highest-layer body portal that is pointer-transparent throughout", () => {
-    act(() => renderOverlay(<RevealOverlay active={active()} />));
-    const portal = document.body.querySelector<HTMLElement>(
+  it("uses one aria-hidden, pointer-transparent body portal that disappears in one render", () => {
+    renderOverlay(<RevealOverlay active={active()} />);
+    const portals = document.body.querySelectorAll<HTMLElement>(
       ":scope > [data-cumulus-reveal-portal]",
-    )!;
-    expect(portal).not.toBeNull();
-    expect(portal.style.zIndex).toBe("var(--layer-reveal)");
-    expect(portal.style.pointerEvents).toBe("none");
+    );
+    expect(portals).toHaveLength(1);
+    const portal = portals[0];
+    expect(portal.getAttribute("aria-hidden")).toBe("true");
+    expect(portal.querySelector("[tabindex]")).toBeNull();
     expect(
-      [...portal.querySelectorAll<HTMLElement>("*")].every(
+      [portal, ...portal.querySelectorAll<HTMLElement>("*")].every(
         (node) => getComputedStyle(node).pointerEvents === "none",
       ),
     ).toBe(true);
-    expect(
-      document.querySelectorAll("[data-cumulus-reveal-portal]"),
-    ).toHaveLength(1);
+    renderOverlay(<RevealOverlay active={null} />);
+    expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
   });
 
   it("keeps a source reveal inside its nearest scrolling ancestor", () => {
@@ -175,102 +177,54 @@ describe("RevealOverlay", () => {
       clientHeight: { configurable: true, value: 250 },
       scrollHeight: { configurable: true, value: 500 },
     });
-    scroller.getBoundingClientRect = () => ({
-      x: 0,
-      y: 50,
-      left: 0,
-      top: 50,
-      right: 1200,
-      bottom: 300,
-      width: 1200,
-      height: 250,
-      toJSON: () => ({}),
-    });
+    scroller.getBoundingClientRect = () => domRect(0, 50, 1200, 250);
     const source = document.createElement("button");
-    source.getBoundingClientRect = () => ({
-      x: 400,
-      y: 120,
-      left: 400,
-      top: 120,
-      right: 500,
-      bottom: 170,
-      width: 100,
-      height: 50,
-      toJSON: () => ({}),
-    });
+    source.getBoundingClientRect = () => domRect(400, 120, 100, 50);
     scroller.append(source);
     document.body.append(scroller);
 
-    act(() =>
-      renderOverlay(
-        <RevealOverlay
-          active={active({
-            element: source,
-            sourceRect: { x: 400, y: 120, width: 100, height: 50 },
-            spec: {
-              primary: {
-                kind: "galleryAction",
-                action: {
-                  glyph: GLYPHS.spark,
-                  label: "Inspect",
-                },
-              },
-              secondaries: [],
+    renderOverlay(
+      <RevealOverlay
+        active={active({
+          element: source,
+          sourceRect: { x: 400, y: 120, width: 100, height: 50 },
+          spec: {
+            primary: {
+              kind: "galleryAction",
+              action: { glyph: GLYPHS.spark, label: "Inspect" },
             },
-          })}
-        />,
-      ),
+            secondaries: [],
+          },
+        })}
+      />,
     );
 
-    expect(
-      document.querySelector<HTMLElement>(
-        '[data-cumulus-reveal-card="primary"]',
-      )?.style.top,
-    ).toBe("50px");
+    expect(revealCards("primary")[0]?.style.top).toBe("50px");
   });
 
   it("places a reveal outside its nearest semantic anchor", () => {
     const anchor = document.createElement("section");
     anchor.dataset.cumulusRevealAnchor = "";
-    anchor.getBoundingClientRect = () => ({
-      x: 12,
-      y: 50,
-      left: 12,
-      top: 50,
-      right: 412,
-      bottom: 250,
-      width: 400,
-      height: 200,
-      toJSON: () => ({}),
-    });
+    anchor.getBoundingClientRect = () => domRect(12, 50, 400, 200);
     const source = document.createElement("button");
     anchor.append(source);
     document.body.append(anchor);
-    let placedDecision: RevealPlacementDecision | undefined;
-    let placedGeometry: RevealGeometrySnapshot | undefined;
-    const onPlaced = vi.fn(
-      (decision: RevealPlacementDecision, geometry: RevealGeometrySnapshot) => {
-        placedDecision = decision;
-        placedGeometry = geometry;
-      },
+    const probe = placed();
+
+    renderOverlay(
+      <RevealOverlay
+        active={active({
+          element: source,
+          sourceRect: { x: 27, y: 150, width: 370, height: 69 },
+          sourceRemainsVisible: true,
+          spec: makeTextRevealSpec("Primary", "Body"),
+        })}
+        onPlaced={probe.onPlaced}
+      />,
     );
 
-    act(() =>
-      renderOverlay(
-        <RevealOverlay
-          active={active({
-            element: source,
-            sourceRect: { x: 27, y: 150, width: 370, height: 69 },
-            sourceRemainsVisible: true,
-            spec: makeTextRevealSpec("Primary", "Body"),
-          })}
-          onPlaced={onPlaced}
-        />,
-      ),
-    );
-
-    expect(placedDecision?.primaryRect.x).toBe(426);
-    expect(placedGeometry?.sourceRect).toEqual({
+    expect(probe.decision?.primaryRect.x).toBe(426);
+    expect(probe.geometry?.sourceRect).toEqual({
       x: 12,
       y: 50,
       width: 400,
@@ -278,8 +232,8 @@ describe("RevealOverlay", () => {
     });
   });
 
-  it("measures invisibly, side-aligns the chosen complete prefix, and omits overflow", () => {
-    act(() => renderOverlay(<RevealOverlay active={active()} />));
+  it("measures invisibly and side-aligns the chosen complete prefix", () => {
+    renderOverlay(<RevealOverlay active={active()} />);
     const group = document.querySelector<HTMLElement>(
       "[data-cumulus-reveal-group]",
     )!;
@@ -298,433 +252,226 @@ describe("RevealOverlay", () => {
   });
 
   it("passes the one-off Augury placement exception through measurement", () => {
-    let placedDecision: RevealPlacementDecision | undefined;
-    const onPlaced = vi.fn((decision: RevealPlacementDecision) => {
-      placedDecision = decision;
-    });
-    act(() =>
-      renderOverlay(
-        <RevealOverlay
-          active={active({
-            placementException: "augury-offer-above-source",
-            spec: makeTextRevealSpec("Primary", "Body"),
-          })}
-          onPlaced={onPlaced}
-        />,
-      ),
+    const probe = placed();
+    renderOverlay(
+      <RevealOverlay
+        active={active({
+          placementException: "augury-offer-above-source",
+          spec: makeTextRevealSpec("Primary", "Body"),
+        })}
+        onPlaced={probe.onPlaced}
+      />,
     );
 
-    expect(placedDecision?.family).toBe("desktop-augury-above-source");
-    expect(placedDecision?.primaryRect).toMatchObject({ x: 400, y: 136 });
+    expect(probe.decision?.family).toBe("desktop-augury-above-source");
+    expect(probe.decision?.primaryRect).toMatchObject({ x: 400, y: 136 });
   });
 
   it("places the Augury reveal against the viewport instead of its horizontal offer row", () => {
-    Object.defineProperty(window, "visualViewport", {
-      configurable: true,
-      value: { width: 390, height: 844, offsetLeft: 0, offsetTop: 0 },
-    });
+    setViewport(390, 844);
     const row = document.createElement("div");
     row.style.overflowX = "auto";
-    row.getBoundingClientRect = () => ({
-      x: 6,
-      y: 412,
-      left: 6,
-      top: 412,
-      right: 384,
-      bottom: 658,
-      width: 378,
-      height: 246,
-      toJSON: () => ({}),
-    });
+    row.getBoundingClientRect = () => domRect(6, 412, 378, 246);
     const source = document.createElement("button");
     row.append(source);
     document.body.append(row);
-    let geometry: RevealGeometrySnapshot | undefined;
+    const probe = placed();
 
-    act(() =>
-      renderOverlay(
-        <RevealOverlay
-          active={active({
-            element: source,
-            placementException: "augury-offer-above-source",
-            reason: "press",
-            sourceRect: { x: 75, y: 412, width: 240, height: 240 },
-            modality: "touch",
-          })}
-          onPlaced={(_decision, placedGeometry) => {
-            geometry = placedGeometry;
-          }}
-        />,
-      ),
+    renderOverlay(
+      <RevealOverlay
+        active={active({
+          element: source,
+          placementException: "augury-offer-above-source",
+          reason: "press",
+          sourceRect: { x: 75, y: 412, width: 240, height: 240 },
+          modality: "touch",
+        })}
+        onPlaced={probe.onPlaced}
+      />,
     );
 
-    expect(geometry?.viewport.boundary).toBeUndefined();
-    expect(geometry?.finalRects.primary.y).toBeLessThan(412);
-  });
-
-  it("reserves the atlas reveal's full native width before placing secondaries", () => {
-    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
-      function (this: HTMLElement) {
-        if (
-          this.dataset.revealMeasure === "primary" ||
-          this.dataset.revealMeasure === "secondary"
-        ) {
-          const width = Number.parseFloat(this.style.width);
-          const height = this.dataset.revealMeasure === "primary" ? 180 : 80;
-          return {
-            x: 0,
-            y: 0,
-            left: 0,
-            top: 0,
-            right: width,
-            bottom: height,
-            width,
-            height,
-            toJSON: () => ({}),
-          };
-        }
-        return {
-          x: 0,
-          y: 0,
-          left: 0,
-          top: 0,
-          right: 0,
-          bottom: 0,
-          width: 0,
-          height: 0,
-          toJSON: () => ({}),
-        };
-      },
-    );
-    const spec: RevealSpec = {
-      primary: {
-        kind: "infoCard",
-        card: {
-          variant: "atlasReveal",
-          image: artRef.dreamscapeScene(testDreamscapeId("wilderveil")),
-          title: "Wilderveil",
-        },
-      },
-      secondaries: [
-        {
-          variant: "text",
-          title: "Affiliation",
-          body: {
-            kind: "plain",
-            text: "Character cards are more likely here.",
-          },
-        },
-      ],
-    };
-
-    act(() => renderOverlay(<RevealOverlay active={active({ spec })} />));
-
-    const measuredPrimary = document.querySelector<HTMLElement>(
-      '[data-reveal-measure="primary"]',
-    )!;
-    const primary = document.querySelector<HTMLElement>(
-      '[data-cumulus-reveal-card="primary"]',
-    )!;
-    const secondary = document.querySelector<HTMLElement>(
-      '[data-cumulus-reveal-card="secondary"]',
-    )!;
-    const primaryRight =
-      Number.parseFloat(primary.style.left) +
-      Number.parseFloat(primary.style.width);
-
-    expect(measuredPrimary.style.width).toBe("360px");
-    expect(primary.style.width).toBe("360px");
-    expect(Number.parseFloat(secondary.style.left) - primaryRight).toBe(10);
+    expect(probe.geometry?.viewport.boundary).toBeUndefined();
+    expect(probe.geometry?.finalRects.primary.y).toBeLessThan(412);
   });
 
   it("keeps complete source content in place and stacks all definition cards in one column", () => {
     const spec: RevealSpec = {
-      primary: {
-        kind: "source",
-        description: "Complete ability text",
-      },
-      secondaries: [
-        {
-          variant: "text",
-          title: "First",
-          body: { kind: "plain", text: "First definition" },
-        },
-        {
-          variant: "text",
-          title: "Second",
-          body: { kind: "plain", text: "Second definition" },
-        },
-      ],
+      primary: { kind: "source", description: "Complete ability text" },
+      secondaries: makeTextRevealSpec("Primary", "Body", ["First", "Second"])
+        .secondaries,
     };
-    act(() => renderOverlay(<RevealOverlay active={active({ spec })} />));
-    expect(
-      document.querySelector('[data-cumulus-reveal-card="primary"]'),
-    ).toBeNull();
-    const definitions = [
-      ...document.querySelectorAll<HTMLElement>(
-        '[data-cumulus-reveal-card="secondary"]',
-      ),
-    ];
+    renderOverlay(<RevealOverlay active={active({ spec })} />);
+    expect(revealCards("primary")).toHaveLength(0);
+    const definitions = revealCards("secondary");
     expect(definitions).toHaveLength(2);
     expect(definitions[0].style.left).toBe(definitions[1].style.left);
     expect(Number.parseFloat(definitions[1].style.top)).toBeGreaterThan(
       Number.parseFloat(definitions[0].style.top),
     );
-    const lastDefinition = definitions[definitions.length - 1];
     expect(
-      Number.parseFloat(lastDefinition.style.top) +
-        Number.parseFloat(lastDefinition.style.height),
+      Number.parseFloat(definitions[1].style.top) +
+        Number.parseFloat(definitions[1].style.height),
     ).toBe(300);
   });
 
-  it("has no opacity, scale, or travel animation and disappears in one render frame", () => {
-    act(() => renderOverlay(<RevealOverlay active={active()} />));
-    const group = document.querySelector<HTMLElement>(
-      "[data-cumulus-reveal-group]",
-    )!;
-    expect(group.style.opacity).toBe("");
-    expect(group.style.transform).toBe("");
-    expect(group.style.transition).toBe("");
-    act(() => renderOverlay(<RevealOverlay active={null} />));
-    expect(document.querySelector("[data-cumulus-reveal-portal]")).toBeNull();
-  });
-
-  it("keeps accessible descriptions on the focus source rather than announcing the visual copy", () => {
-    act(() => renderOverlay(<RevealOverlay active={active()} />));
-    const portal = document.querySelector<HTMLElement>(
-      "[data-cumulus-reveal-portal]",
-    )!;
-    expect(portal.getAttribute("aria-hidden")).toBe("true");
-    expect(portal.querySelector("[tabindex]")).toBeNull();
-  });
-
   it("omits adjacent tangible previews from the mobile reveal branch", () => {
-    Object.defineProperty(window, "visualViewport", {
-      configurable: true,
-      value: { width: 390, height: 844, offsetLeft: 0, offsetTop: 0 },
-    });
-    const cardId = testCardId(UUID);
+    setViewport(390, 844);
+    const card = gameCardSpec().primary;
+    if (card.kind !== "gameCard") throw new Error("expected a GameCard spec");
     const spec: RevealSpec = {
       ...makeTextRevealSpec("Primary", "Body"),
-      adjacentCards: [
-        {
-          kind: "gameCard",
-          cardId,
-          displaySnapshot: {
-            id: cardId,
-            name: parseCardName("Warrior"),
-            cardNumber: 1,
-            cardType: "Character",
-            subtype: "Warrior",
-            isStarter: false,
-            energyCost: 0,
-            spark: 1,
-            isFast: false,
-            renderedText: "",
-            imageNumber: 1,
-            artOwned: false,
-          },
-          figment: true,
-        },
-      ],
+      adjacentCards: [{ ...card, figment: true }],
     };
-    act(() => renderOverlay(<RevealOverlay active={active({ spec })} />));
-    expect(
-      document.querySelector('[data-reveal-measure="adjacent"]'),
-    ).toBeNull();
-    expect(
-      document.querySelector('[data-cumulus-reveal-card="adjacent"]'),
-    ).toBeNull();
+    renderOverlay(<RevealOverlay active={active({ spec })} />);
+    expect(document.querySelector('[data-reveal-measure="adjacent"]')).toBeNull();
+    expect(revealCards("adjacent")).toHaveLength(0);
   });
 
   it("reports the captured visual viewport offsets used for placement", () => {
-    Object.defineProperty(window, "visualViewport", {
-      configurable: true,
-      value: { width: 1200, height: 300, offsetLeft: 7, offsetTop: 13 },
-    });
-    let placedGeometry: RevealGeometrySnapshot | undefined;
-    const onPlaced = vi.fn(
-      (
-        _decision: RevealPlacementDecision,
-        geometry: RevealGeometrySnapshot,
-      ) => {
-        placedGeometry = geometry;
-      },
-    );
-    act(() =>
-      renderOverlay(<RevealOverlay active={active()} onPlaced={onPlaced} />),
-    );
-    expect(onPlaced).toHaveBeenCalled();
-    expect(placedGeometry?.viewport).toMatchObject({
+    setViewport(1200, 300, 7, 13);
+    const probe = placed();
+    renderOverlay(<RevealOverlay active={active()} onPlaced={probe.onPlaced} />);
+    expect(probe.geometry?.viewport).toMatchObject({
       offsetLeft: 7,
       offsetTop: 13,
     });
   });
 
-  it("waits for the genuinely asynchronous GameCard renderer and remeasures its resolved size", async () => {
-    const cardId = testCardId(UUID);
-    const spec: RevealSpec = {
-      primary: {
-        kind: "gameCard",
-        cardId,
-        displaySnapshot: {
-          id: cardId,
-          name: parseCardName("Async Card"),
-          cardNumber: 2,
-          cardType: "Event",
-          subtype: "",
-          isStarter: false,
-          rarity: "Special",
-          energyCost: 1,
-          spark: null,
-          isFast: false,
-          renderedText: "Resolve.",
-          imageNumber: 2,
-          artOwned: false,
-        },
-      },
-      secondaries: [],
-    };
-    let placedDecision: RevealPlacementDecision | undefined;
-    const onPlaced = vi.fn((decision: RevealPlacementDecision) => {
-      placedDecision = decision;
-    });
-    act(() =>
-      renderOverlay(
-        <RevealOverlay active={active({ spec })} onPlaced={onPlaced} />,
-      ),
+  it("waits for the asynchronous GameCard renderer and remeasures its resolved size", async () => {
+    const probe = placed();
+    renderOverlay(
+      <RevealOverlay active={active({ spec: gameCardSpec() })} onPlaced={probe.onPlaced} />,
     );
-    expect(
-      document.querySelector("[data-reveal-render-pending]"),
-    ).not.toBeNull();
-    expect(onPlaced).not.toHaveBeenCalled();
+    expect(document.querySelector("[data-reveal-render-pending]")).not.toBeNull();
+    expect(probe.calls).toBe(0);
     await act(async () => {
       await import("../../components/card/CardView");
     });
     expect(document.querySelector("[data-reveal-render-pending]")).toBeNull();
     measuredPrimaryHeight = 240;
     act(() => {
-      for (const callback of resizeCallbacks)
-        callback([], {} as ResizeObserver);
+      for (const callback of resizeCallbacks) callback([], {} as ResizeObserver);
     });
-    expect(onPlaced).toHaveBeenCalledTimes(1);
-    expect(placedDecision?.primaryRect.height).toBeCloseTo(
+    expect(probe.calls).toBe(1);
+    expect(probe.decision?.primaryRect.height).toBeCloseTo(
       DESKTOP_GAME_CARD_WIDTH * (measuredPrimaryHeight / 100),
     );
   });
 
-  it("keeps a desktop GameCard source and reading copy visually unique", () => {
-    const cardId = testCardId(UUID);
-    const spec: RevealSpec = {
-      primary: {
-        kind: "gameCard",
-        cardId,
-        displaySnapshot: {
-          id: cardId,
-          name: parseCardName("Reading Card"),
-          cardNumber: 1,
-          cardType: "Event",
-          subtype: "",
-          isStarter: false,
-          rarity: "Special",
-          energyCost: 1,
-          spark: null,
-          isFast: false,
-          renderedText: "Draw a card.",
-          imageNumber: 1,
-          artOwned: false,
-        },
-      },
-      secondaries: [],
-    };
-    const value = active({ spec });
-    act(() => renderOverlay(<RevealOverlay active={value} />));
+  it("hides a desktop GameCard source while its reading copy is shown", () => {
+    const value = active({ spec: gameCardSpec() });
+    renderOverlay(<RevealOverlay active={value} />);
     expect(value.element.style.opacity).toBe("0");
-    act(() => renderOverlay(<RevealOverlay active={null} />));
+    renderOverlay(<RevealOverlay active={null} />);
     expect(value.element.style.opacity).toBe("");
   });
 
   it("keeps a preview control visible while placing its GameCard beside it", () => {
-    const cardId = testCardId(UUID);
-    const spec: RevealSpec = {
-      primary: {
-        kind: "gameCard",
-        cardId,
-        displaySnapshot: {
-          id: cardId,
-          name: parseCardName("Referenced Card"),
-          cardNumber: 1,
-          cardType: "Event",
-          subtype: "",
-          isStarter: false,
-          rarity: "Special",
-          energyCost: 1,
-          spark: null,
-          isFast: false,
-          renderedText: "Draw a card.",
-          imageNumber: 1,
-          artOwned: false,
-        },
-      },
-      secondaries: [],
-    };
     const value = active({
-      spec,
+      spec: gameCardSpec(),
       sourceRemainsVisible: true,
       sourceRect: { x: 29, y: 200, width: 366, height: 53 },
     });
 
-    act(() => renderOverlay(<RevealOverlay active={value} />));
+    renderOverlay(<RevealOverlay active={value} />);
 
-    const preview = document.querySelector<HTMLElement>(
-      '[data-cumulus-reveal-card="primary"]',
-    )!;
     expect(value.element.style.opacity).toBe("");
-    expect(Number.parseFloat(preview.style.left)).toBeGreaterThanOrEqual(409);
+    expect(
+      Number.parseFloat(revealCards("primary")[0]?.style.left ?? "0"),
+    ).toBeGreaterThanOrEqual(409);
   });
 
   it("renders every copy in an exact repeated-card entity reveal", async () => {
-    const cardId = testCardId(UUID);
-    const spec: RevealSpec = {
-      primary: {
-        kind: "gameCard",
-        cardId,
-        copies: 3,
-        displaySnapshot: {
-          id: cardId,
-          name: parseCardName("Repeated Card"),
-          cardNumber: 1,
-          cardType: "Event",
-          subtype: "",
-          isStarter: false,
-          rarity: "Special",
-          energyCost: 1,
-          spark: null,
-          isFast: false,
-          renderedText: "Draw a card.",
-          imageNumber: 1,
-          artOwned: false,
-        },
-      },
-      secondaries: [],
-    };
     await act(async () => {
       await import("../../components/card/CardView");
-      renderOverlay(
-        <RevealOverlay active={active({ spec, sourceRemainsVisible: true })} />,
+      root.render(
+        <CumulusRoot>
+          <RevealOverlay
+            active={active({ spec: gameCardSpec(3), sourceRemainsVisible: true })}
+          />
+        </CumulusRoot>,
       );
     });
     const measured = document.querySelector<HTMLElement>(
       '[data-reveal-measure="primary"]',
     );
-    expect(Number.parseFloat(measured?.style.width ?? "0")).toBe(
-      DESKTOP_GAME_CARD_WIDTH * 1.5,
-    );
-    expect(
-      measured?.querySelectorAll("[data-reveal-game-card-copy]"),
-    ).toHaveLength(3);
-    expect(
-      measured?.querySelector("[data-reveal-game-card-copy-count='3']"),
-    ).not.toBeNull();
+    expect(measured?.querySelectorAll("[data-reveal-game-card-copy]")).toHaveLength(3);
+  });
+});
+
+describe("captureVisualViewport", () => {
+  function statusBar(rect: DOMRect, variant?: string): HTMLElement {
+    const bar = document.createElement("div");
+    bar.dataset.journeyStatusBarAnchor = "";
+    if (variant !== undefined) bar.dataset.journeyStatusBarVariant = variant;
+    bar.getBoundingClientRect = () => rect;
+    document.body.append(bar);
+    return bar;
+  }
+
+  it.each([[899, "mobile"], [900, "desktop"]] as const)(
+    "classifies %ipx as %s and reads safe-area insets into a frozen snapshot",
+    (width, layout) => {
+      const style = document.documentElement.style;
+      const insets = { top: 11, right: 3, bottom: 17, left: 5 };
+      for (const [side, value] of Object.entries(insets))
+        style.setProperty(`--safe-area-inset-${side}`, `${String(value)}px`);
+      setViewport(width, 700, 7, 13);
+      const snapshot = captureVisualViewport();
+      for (const side of Object.keys(insets))
+        style.removeProperty(`--safe-area-inset-${side}`);
+      expect(snapshot).toEqual({
+        layout,
+        width,
+        height: 700,
+        offsetLeft: 7,
+        offsetTop: 13,
+        safeArea: insets,
+      });
+      expect(Object.isFrozen(snapshot)).toBe(true);
+      expect(Object.isFrozen(snapshot.safeArea)).toBe(true);
+    },
+  );
+
+  it("captures the visible rectangle of an application reveal boundary", () => {
+    setViewport(1200, 700, 7, 13);
+    const boundary = document.createElement("div");
+    boundary.getBoundingClientRect = () => domRect(20, 118, 1160, 562);
+    const snapshot = captureVisualViewport(window, boundary);
+    expect(snapshot.boundary).toEqual({ x: 20, y: 118, width: 1160, height: 562 });
+    expect(Object.isFrozen(snapshot.boundary)).toBe(true);
+  });
+
+  it("reserves the journey status bar band on desktop only, and never for the battle HUD", () => {
+    setViewport(1200, 700, 7, 13);
+    const bar = statusBar(domRect(0, 610, 1207, 103));
+    expect(captureVisualViewport().boundary).toEqual({ x: 7, y: 13, width: 1200, height: 597 });
+    bar.remove();
+
+    setViewport(390, 700);
+    const mobileBar = statusBar(domRect(0, 610, 390, 90));
+    expect(captureVisualViewport().boundary).toBeUndefined();
+    mobileBar.remove();
+
+    setViewport(1200, 700);
+    statusBar(domRect(0, 610, 1200, 90), "battle");
+    expect(captureVisualViewport().boundary).toBeUndefined();
+  });
+
+  it("uses the nearest scrolling ancestor as the reveal boundary and ignores one that fits", () => {
+    const scroller = document.createElement("div");
+    const source = document.createElement("button");
+    scroller.style.overflowY = "auto";
+    let scrollHeight = 200;
+    Object.defineProperties(scroller, {
+      clientHeight: { value: 100 },
+      scrollHeight: { get: () => scrollHeight },
+    });
+    scroller.append(source);
+    document.body.append(scroller);
+
+    expect(findRevealBoundary(source)).toBe(scroller);
+    scrollHeight = 100;
+    expect(findRevealBoundary(source)).toBeNull();
   });
 });

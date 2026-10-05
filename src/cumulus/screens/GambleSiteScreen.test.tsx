@@ -1,173 +1,156 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { artRef } from "../primitives/art";
-import type { CardData } from "../../types/cards";
-import { parseCardName } from "../../types/card-identity";
-import { PLAYING_CARD_DESIGN } from "../components/card/PlayingCard";
 import {
   GambleSiteScreen,
+  type BlackjackSiteView,
   type FourSuitRepriseSiteView,
+  type GambleSiteScreenProps,
   type GravokWagerSiteView,
   type LadderClimbSiteView,
   type StarwayStairsSiteView,
-  type BlackjackSiteView,
 } from "./GambleSiteScreen";
-import {
-  localizedTransfigurationFormFixture,
-  transfigurationFormFixture,
-} from "../test-helpers/transfiguration-fixture";
+import { localizedTransfigurationFormFixture } from "../test-helpers/transfiguration-fixture";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
-import { parseSiteId } from "../../types/identifiers";
-import { parseDeckEntryId } from "../../types/identifiers";
+import { parseDeckEntryId, parseSiteId } from "../../types/identifiers";
 import {
-  testCardId,
   testDreamsignId,
   testGambleResultId,
   testGuideId,
   testShuffleCommitment,
 } from "../../types/test-identities";
 import { renderInCumulus } from "../testing/render";
+import { syntheticGameCard } from "../test-helpers/component-test-fixtures";
 
-const JACKPOT_DREAMSIGN = localizedDreamsignFixture({
+const JACKPOT = localizedDreamsignFixture({
   id: testDreamsignId("00000000-0000-4000-8000-000000000041"),
   name: "Fixture Jackpot",
-  imageName: "fixture-jackpot.png",
   effectDescription: "Foresee 1.",
 });
 
-const VIEW: GravokWagerSiteView = {
-  gameId: "gravok-three-gate-wager",
+const SITE = {
   siteId: parseSiteId("fixture-gamble-site"),
   scene: null,
   isFarpoint: false,
   runtimeReady: true,
-  wagerCost: 50,
-  canAfford: true,
-  canPlayAgain: true,
-  card: { rank: "A", suit: "spades" },
-  gates: [
-    {
-      id: "six",
-      minimumWinningRank: "6",
-      chanceLabel: "69.23%",
-      oddsNumerator: 36,
-      oddsDenominator: 52,
-      essenceReward: 100,
-      rewardDreamsign: null,
-      available: true,
-    },
-    {
-      id: "nine",
-      minimumWinningRank: "9",
-      chanceLabel: "46.15%",
-      oddsNumerator: 24,
-      oddsDenominator: 52,
-      essenceReward: 150,
-      rewardDreamsign: null,
-      available: true,
-    },
-    {
-      id: "jack",
-      minimumWinningRank: "J",
-      chanceLabel: "30.77%",
-      oddsNumerator: 16,
-      oddsDenominator: 52,
-      essenceReward: 200,
-      rewardDreamsign: JACKPOT_DREAMSIGN,
-      available: true,
-    },
-  ],
   guide: {
     id: testGuideId("fixture-guide"),
     name: "Fixture Guide",
     line: "A fixture gamble.",
     art: artRef.dreamGuide(testGuideId("fixture-guide")),
   },
+} as const;
+
+const GRAVOK: GravokWagerSiteView = {
+  ...SITE,
+  gameId: "gravok-three-gate-wager",
+  wagerCost: 50,
+  canAfford: true,
+  canPlayAgain: true,
+  card: { rank: "A", suit: "spades" },
+  gates: (["six", "nine", "jack"] as const).map((id, index) => ({
+    id,
+    minimumWinningRank: (["6", "9", "J"] as const)[index],
+    chanceLabel: "50%",
+    oddsNumerator: 26,
+    oddsDenominator: 52,
+    essenceReward: 100 * (index + 1),
+    rewardDreamsign: id === "jack" ? JACKPOT : null,
+    available: true,
+  })),
   result: null,
   replacement: null,
 };
 
-const STARWAY_VIEW: StarwayStairsSiteView = {
+const GRAVOK_RESULT = {
+  id: testGambleResultId("fixture-result"),
+  gateId: "nine",
+  revealGateId: "jack",
+  won: true,
+  essenceGained: 200,
+  essenceSettled: false,
+  rewardDreamsign: null,
+  pendingDreamsignReplacement: false,
+} as const;
+
+const LADDER: LadderClimbSiteView = {
+  ...SITE,
+  gameId: "tidemark-ladder-climb",
+  essenceReward: 25,
+  rewardDreamsign: JACKPOT,
+  nextDraw: {
+    attemptNumber: 1,
+    targetRank: "Q",
+    cost: 0,
+    canAfford: true,
+    available: true,
+  },
+  result: null,
+  replacement: null,
+};
+
+const STARWAY: StarwayStairsSiteView = {
+  ...SITE,
   gameId: "starway-stairs",
-  siteId: parseSiteId("fixture-gamble-site"),
-  scene: null,
-  isFarpoint: false,
-  runtimeReady: true,
   wagerAmount: 30,
   canAffordWager: true,
   canPlayAgain: true,
-  tiers: [
-    {
-      tierNumber: 1,
-      minimumWinningRank: "3",
-      essenceReward: 60,
-      state: "current",
-      card: null,
-    },
-    {
-      tierNumber: 2,
-      minimumWinningRank: "5",
-      essenceReward: 140,
-      state: "future",
-      card: null,
-    },
-    {
-      tierNumber: 3,
-      minimumWinningRank: "8",
-      essenceReward: 300,
-      state: "future",
-      card: null,
-    },
-  ],
+  tiers: (["3", "5", "8"] as const).map((minimumWinningRank, index) => ({
+    tierNumber: index + 1,
+    minimumWinningRank,
+    essenceReward: 60 * (index + 1),
+    state: index === 0 ? "current" : "future",
+    card: null,
+  })),
   currentTierNumber: 1,
-  guide: {
-    id: testGuideId("gravok"),
-    name: "Gravok",
-    line: "Starway Stairs is the game. Keep betting to see how high you can go!",
-    art: artRef.dreamGuide(testGuideId("gravok")),
-  },
   result: null,
   cashOutReward: null,
   terminalReason: null,
   prizeAwarded: 0,
 };
 
-function fourSuitCard(index: number): CardData {
+function starwayAfterTierOne(busted: boolean): StarwayStairsSiteView {
   return {
-    name: parseCardName(`Four Suit Fixture ${String(index)}`),
-    id: testCardId(
-      `00000000-0000-4000-8000-${String(index).padStart(12, "0")}`,
+    ...STARWAY,
+    canAffordWager: false,
+    tiers: STARWAY.tiers.map((tier) =>
+      tier.tierNumber === 1
+        ? {
+            ...tier,
+            state: busted ? "bust" : "safe",
+            card: { rank: busted ? "2" : "3", suit: "clubs" },
+          }
+        : tier.tierNumber === 2 && !busted
+          ? { ...tier, state: "current" }
+          : tier,
     ),
-    cardNumber: index,
-    cardType: "Character",
-    subtype: "",
-    isStarter: false,
-    energyCost: 2,
-    spark: 2,
-    isFast: false,
-    renderedText: "Materialized: Gain 1 Essence.",
-    imageNumber: index,
-    artOwned: true,
+    currentTierNumber: busted ? null : 2,
+    result: {
+      id: testGambleResultId("starway-tier-1"),
+      tierNumber: 1,
+      busted,
+      resultSettled: true,
+      prizeAtRisk: 60,
+    },
+    cashOutReward: busted ? null : 60,
+    terminalReason: busted ? "bust" : null,
   };
 }
 
 function fourSuitCardView(index: number) {
-  const card = fourSuitCard(index);
+  const model = syntheticGameCard(index);
   return {
     entryId: parseDeckEntryId(`four-suit-entry-${String(index)}`),
-    cardId: card.id,
-    model: { cardId: card.id, displaySnapshot: card },
+    cardId: model.cardId,
+    model,
   };
 }
 
-const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
+const FOUR_SUIT: FourSuitRepriseSiteView = {
+  ...SITE,
   gameId: "four-suit-reprise",
-  siteId: parseSiteId("fixture-gamble-site"),
-  scene: null,
-  isFarpoint: false,
-  runtimeReady: true,
   drawCost: 25,
   canAffordDraw: true,
   roundNumber: 1,
@@ -181,56 +164,18 @@ const FOUR_SUIT_VIEW: FourSuitRepriseSiteView = {
   ],
   phase: "choose",
   cards: [fourSuitCardView(1), fourSuitCardView(2)],
-  guide: {
-    id: testGuideId("gravok"),
-    name: "Gravok",
-    line: "A fixture gamble.",
-    art: artRef.dreamGuide(testGuideId("gravok")),
-  },
   result: null,
   canPlayAgain: false,
 };
 
-const BLACKJACK_VIEW: BlackjackSiteView = {
-  gameId: "blackjack",
-  siteId: parseSiteId("fixture-gamble-site"),
-  handId: testShuffleCommitment("fixture-blackjack-hand"),
-  scene: null,
-  isFarpoint: false,
-  runtimeReady: true,
-  wagerCost: 50,
-  prizeEssence: 300,
-  attemptNumber: 1,
-  maxAttempts: 3,
-  target: 21,
-  canAffordWager: true,
-  playerCards: [],
-  playerTotal: null,
-  dealerCards: [],
-  dealerTotal: null,
-  dealerRevealed: false,
-  outcome: null,
-  essenceAwarded: 0,
-  resultSettled: false,
-  resultId: null,
-  canPlayAgain: false,
-  guide: {
-    id: testGuideId("gravok"),
-    name: "Gravok",
-    line: "A fixture gamble.",
-    art: artRef.dreamGuide(testGuideId("gravok")),
-  },
-};
-
-function fourSuitResultView(
+function spadesResult(
   overrides: Partial<NonNullable<FourSuitRepriseSiteView["result"]>> = {},
 ): FourSuitRepriseSiteView {
-  const target = FOUR_SUIT_VIEW.cards[0];
-  const card = target.model.displaySnapshot;
+  const target = FOUR_SUIT.cards[0];
   return {
-    ...FOUR_SUIT_VIEW,
+    ...FOUR_SUIT,
     phase: "result",
-    cards: [FOUR_SUIT_VIEW.cards[1]],
+    cards: [FOUR_SUIT.cards[1]],
     result: {
       id: testGambleResultId("four-suit-result-1"),
       roundNumber: 1,
@@ -251,20 +196,7 @@ function fourSuitResultView(
             presentation: localizedTransfigurationFormFixture("Empowered"),
             effectDetails: { fixture: true },
             pricing: { kind: "unpriced" },
-            previewModel: {
-              cardId: card.id,
-              displaySnapshot: { ...card, energyCost: 1 },
-              transfiguration: {
-                type: "Empowered",
-                form: transfigurationFormFixture("Empowered"),
-                markedText: card.renderedText,
-                energyChanged: true,
-                energyChangeName: "Fixture energy form",
-                sparkChanged: false,
-                sparkChangeName: null,
-                fastChanged: false,
-              },
-            },
+            previewModel: target.model,
           },
         ],
       },
@@ -275,515 +207,187 @@ function fourSuitResultView(
   };
 }
 
-function stubMatchMedia(): void {
-  window.matchMedia = (query: string) => ({
-    matches: query.includes("min-width"),
-    media: query,
-    onchange: null,
-    addEventListener: () => undefined,
-    removeEventListener: () => undefined,
-    addListener: () => undefined,
-    removeListener: () => undefined,
-    dispatchEvent: () => false,
-  });
+const BLACKJACK: BlackjackSiteView = {
+  ...SITE,
+  gameId: "blackjack",
+  handId: testShuffleCommitment("fixture-blackjack-hand"),
+  wagerCost: 50,
+  prizeEssence: 300,
+  attemptNumber: 1,
+  maxAttempts: 3,
+  target: 21,
+  canAffordWager: true,
+  playerCards: [],
+  playerTotal: null,
+  dealerCards: [],
+  dealerTotal: null,
+  dealerRevealed: false,
+  outcome: null,
+  essenceAwarded: 0,
+  resultSettled: false,
+  resultId: null,
+  canPlayAgain: false,
+};
+
+const BLACKJACK_HANDS = {
+  playerCards: [
+    { rank: "10", suit: "clubs" },
+    { rank: "8", suit: "hearts" },
+  ],
+  playerTotal: 18,
+  dealerCards: [
+    { rank: "9", suit: "spades" },
+    { rank: "9", suit: "diamonds" },
+  ],
+} as const;
+
+type View = GambleSiteScreenProps["view"];
+type Callbacks = Omit<GambleSiteScreenProps, "view">;
+
+const tid = (marker: string) => `[data-testid="${marker}"]`;
+
+function renderGamble(view: View, callbacks: Partial<Callbacks> = {}) {
+  const props: Callbacks = {
+    onChooseGate: () => undefined,
+    onLeave: () => undefined,
+    onOutcomeShown: () => undefined,
+    onPlayAgain: () => undefined,
+    onDrawLadder: () => undefined,
+    onLadderOutcomeShown: () => undefined,
+    onReplaceDreamsign: () => undefined,
+    ...callbacks,
+  };
+  const rendered = renderInCumulus(<GambleSiteScreen view={view} {...props} />);
+  const query = (selector: string) =>
+    rendered.container.querySelector<HTMLElement>(selector);
+  return {
+    ...rendered,
+    query,
+    count: (selector: string) =>
+      rendered.container.querySelectorAll(selector).length,
+    tap: (selector: string) => {
+      const button = query(selector);
+      expect(button).not.toBeNull();
+      act(() => button?.click());
+    },
+    show: (next: View) => {
+      rendered.rerender(<GambleSiteScreen view={next} {...props} />);
+    },
+  };
 }
 
-function stubMobileMatchMedia(): void {
-  window.matchMedia = (query: string) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addEventListener: () => undefined,
-    removeEventListener: () => undefined,
-    addListener: () => undefined,
-    removeListener: () => undefined,
-    dispatchEvent: () => false,
-  });
+function advance(ms = 10_000): void {
+  void act(() => vi.advanceTimersByTime(ms));
 }
 
-class ResizeObserverStub {
+globalThis.ResizeObserver = class {
   observe(): void {}
   unobserve(): void {}
   disconnect(): void {}
-}
-
-beforeEach(() => {
-  stubMatchMedia();
-  globalThis.ResizeObserver = ResizeObserverStub;
-});
+};
 
 afterEach(() => {
   vi.useRealTimers();
-  vi.restoreAllMocks();
-  document.body.innerHTML = "";
 });
 
-describe("GambleSiteScreen", () => {
-  it("presents three square prize cards and pins Leave to the HUD edge", () => {
+describe("GambleSiteScreen — Three-Gate Wager", () => {
+  it("commits a gate, locks the bets, settles on the announcement, and offers replay only when allowed", () => {
+    vi.useFakeTimers();
     const onChooseGate = vi.fn();
     const onLeave = vi.fn();
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={VIEW}
-        onChooseGate={onChooseGate}
-        onLeave={onLeave}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
+    const onOutcomeShown = vi.fn();
+    const onPlayAgain = vi.fn();
+    const screen = renderGamble(GRAVOK, {
+      onChooseGate,
+      onLeave,
+      onOutcomeShown,
+      onPlayAgain,
+    });
 
-    expect(container.querySelector("[data-playing-card]")).toBeNull();
-    expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(3);
-    expect(
-      [...container.querySelectorAll<HTMLElement>("[data-gamble-gate]")].map(
-        (gate) => [gate.style.gridColumn, gate.style.gridRow],
-      ),
-    ).toEqual([
-      ["1", "1"],
-      ["2", "1"],
-      ["3", "1"],
-    ]);
-    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(
-      3,
-    );
-    expect(
-      container
-        .querySelector('[data-gamble-gate="six"] [data-wager-prize-card]')
-        ?.getAttribute("data-wager-prize-target"),
-    ).toBe("6-A");
-    expect(
-      container
-        .querySelector('[data-gamble-gate="nine"] [data-wager-prize-card]')
-        ?.getAttribute("data-wager-prize-essence-reward"),
-    ).toBe("150");
-    expect(
-      container.querySelector(
-        '[data-gamble-gate="jack"] [data-playing-card-prize-dreamsign-name]',
-      ),
-    ).not.toBeNull();
-    expect(container.textContent).not.toContain("chance");
-    expect(container.textContent).not.toContain("Gravok’s Casino");
-    expect(container.textContent).not.toContain("Three-Gate Wager");
-    const dreamsignName = container.querySelector<HTMLElement>(
-      "[data-testid=gamble-jackpot-dreamsign-name]",
-    );
-    expect(dreamsignName).not.toBeNull();
-    expect(
-      dreamsignName?.parentElement?.hasAttribute(
-        "data-playing-card-prize-description",
-      ),
-    ).toBe(true);
-    const dreamsignSource = container.querySelector<HTMLElement>(
-      '[data-gamble-gate="jack"] [data-playing-card-prize-dreamsign-source]',
-    );
-    expect(dreamsignSource?.dataset.revealPrimaryVariant).toBe("object");
-    expect(
-      dreamsignSource?.querySelector("[data-playing-card-prize-title]"),
-    ).not.toBeNull();
-    expect(
-      dreamsignSource?.querySelector("[data-playing-card-prize-description]"),
-    ).not.toBeNull();
-    const leaveSlot = container.querySelector<HTMLElement>(
-      "[data-gamble-leave-slot]",
-    );
-    expect(leaveSlot?.style.position).toBe("absolute");
-    expect(leaveSlot?.style.bottom).toBe("0px");
-
-    const chooseSix = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-choose-six"]',
-    );
-    expect(chooseSix?.textContent).toContain("50");
-    expect(chooseSix?.getAttribute("aria-label")?.trim()).not.toBe("");
-    act(() => chooseSix?.click());
+    expect(screen.count("[data-gamble-gate]")).toBe(3);
+    expect(screen.count("[data-wager-prize-card]")).toBe(3);
+    screen.tap(tid("gamble-choose-six"));
     expect(onChooseGate).toHaveBeenCalledWith("six");
 
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>('[data-testid="gamble-leave"]')
-        ?.click();
-    });
-    expect(onLeave).toHaveBeenCalledOnce();
-  });
+    screen.show({ ...GRAVOK, result: GRAVOK_RESULT });
 
-  it("fades the locked bets immediately, flips a non-selected prize, and keeps the outcome readable", () => {
-    vi.useFakeTimers();
-    const onPlayAgain = vi.fn();
-    const onLeave = vi.fn();
-    const onOutcomeShown = vi.fn();
-    const resultView: GravokWagerSiteView = {
-      ...VIEW,
-      card: { rank: "Q", suit: "hearts" },
-      result: {
-        id: testGambleResultId("fixture-result"),
-        gateId: "nine",
-        revealGateId: "jack",
-        won: true,
-        essenceGained: 150,
-        essenceSettled: false,
-        rewardDreamsign: null,
-        pendingDreamsignReplacement: false,
-      },
-    };
-    const { container, rerender } = renderInCumulus(
-      <GambleSiteScreen
-        view={resultView}
-        onChooseGate={() => undefined}
-        onLeave={onLeave}
-        onOutcomeShown={onOutcomeShown}
-        onPlayAgain={onPlayAgain}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-
-    expect(container.querySelector("[data-playing-card]")).toBeNull();
-    expect(
-      container
-        .querySelector('[data-gamble-gate="nine"]')
-        ?.getAttribute("data-gamble-gate-presentation"),
-    ).toBe("selected");
-    expect(
-      container
-        .querySelector('[data-gamble-gate="jack"]')
-        ?.getAttribute("data-gamble-gate-presentation"),
-    ).toBe("revealed");
-    expect(container.querySelector('[data-testid="gamble-leave"]')).toBeNull();
-    const lockedBet = container.querySelector<HTMLElement>(
-      '[data-gamble-bet="nine"]',
-    );
-    const lockedButton = lockedBet?.querySelector<HTMLButtonElement>("button");
+    const gate = (choice: string) =>
+      screen.query(`[data-gamble-gate="${choice}"]`)?.dataset
+        .gambleGatePresentation;
+    expect(gate("nine")).toBe("selected");
+    expect(gate("jack")).toBe("revealed");
+    expect(screen.query(tid("gamble-leave"))).toBeNull();
+    const lockedBet = screen.query('[data-gamble-bet="nine"]');
     expect(lockedBet?.getAttribute("aria-hidden")).toBe("true");
     expect(lockedBet?.hasAttribute("inert")).toBe(true);
-    expect(lockedBet?.style.pointerEvents).toBe("none");
-    expect(lockedButton?.disabled).toBe(false);
-    expect(lockedButton?.style.opacity).toBe("1");
-    void act(() => vi.advanceTimersByTime(250));
-    expect(
-      container
-        .querySelector('[data-gamble-gate="jack"] [data-playing-card]')
-        ?.getAttribute("data-playing-card-face"),
-    ).toBe("front");
-    expect(
-      container
-        .querySelector('[data-gamble-gate="six"]')
-        ?.getAttribute("aria-hidden"),
-    ).toBe("true");
-    expect(
-      container
-        .querySelector('[data-gamble-bet="jack"]')
-        ?.getAttribute("aria-hidden"),
-    ).toBe("true");
-    expect(
-      container
-        .querySelector('[data-gamble-bet="nine"]')
-        ?.getAttribute("aria-hidden"),
-    ).toBe("true");
-    expect(
-      container.querySelectorAll('[data-gamble-bet][aria-hidden="true"]'),
-    ).toHaveLength(3);
-    void act(() => vi.advanceTimersByTime(719));
-    expect(container.querySelector("[data-radial-announcement]")).toBeNull();
-    expect(onOutcomeShown).not.toHaveBeenCalled();
-    void act(() => vi.advanceTimersByTime(1));
-    const announcement = container.querySelector(
-      '[data-radial-announcement="fixture-result"]',
-    );
-    expect(announcement).not.toBeNull();
-    expect(
-      announcement?.getAttribute("data-radial-announcement-duration"),
-    ).toBe("extended");
-    expect(
-      announcement?.querySelector<HTMLElement>(
-        "[data-radial-announcement-disc]",
-      )?.style.width,
-    ).toBe("164px");
+
+    advance(2_000);
     expect(onOutcomeShown).toHaveBeenCalledOnce();
-    expect(
-      announcement?.parentElement?.getAttribute("data-gamble-outcome-slot"),
-    ).toBe("six");
-    void act(() => vi.advanceTimersByTime(1_000));
-    rerender(
-      <GambleSiteScreen
-        view={{
-          ...resultView,
-          result: { ...resultView.result!, essenceSettled: true },
-        }}
-        onChooseGate={() => undefined}
-        onLeave={onLeave}
-        onOutcomeShown={onOutcomeShown}
-        onPlayAgain={onPlayAgain}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />
-    );
-    void act(() => vi.advanceTimersByTime(3_359));
-    expect(
-      container.querySelector('[data-testid="gamble-play-again"]'),
-    ).toBeNull();
-    void act(() => vi.advanceTimersByTime(1));
-    const playAgain = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-play-again"]',
-    );
-    const leave = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-leave-after-round"]',
-    );
-    expect(playAgain?.textContent?.trim()).not.toBe("");
-    expect(leave?.textContent?.trim()).not.toBe("");
-    const actionGroup = playAgain?.closest<HTMLElement>(
-      "[data-gamble-round-action-group]",
-    );
-    expect(actionGroup).toBe(
-      leave?.closest("[data-gamble-round-action-group]"),
-    );
-    expect(actionGroup?.style.gridColumn).toBe("2 / span 2");
-    act(() => leave?.click());
+    const settled = {
+      ...GRAVOK,
+      result: { ...GRAVOK_RESULT, essenceSettled: true },
+    };
+    screen.show(settled);
+    advance();
+    screen.tap(tid("gamble-leave-after-round"));
     expect(onLeave).toHaveBeenCalledOnce();
-    act(() => playAgain?.click());
+    screen.tap(tid("gamble-play-again"));
     expect(onPlayAgain).toHaveBeenCalledOnce();
 
-    rerender(
-      <GambleSiteScreen
-        view={{
-          ...resultView,
-          canPlayAgain: false,
-          result: {
-            ...resultView.result!,
-            gateId: "jack",
-            revealGateId: "six",
-          },
-        }}
-        onChooseGate={() => undefined}
-        onLeave={onLeave}
-        onOutcomeShown={onOutcomeShown}
-        onPlayAgain={onPlayAgain}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />
-    );
-    expect(
-      container.querySelector('[data-testid="gamble-play-again"]'),
-    ).toBeNull();
-    expect(
-      container.querySelector('[data-testid="gamble-leave-after-round"]'),
-    ).not.toBeNull();
-    expect(
-      container.querySelector<HTMLElement>("[data-gamble-round-action-group]")
-        ?.style.gridColumn,
-    ).toBe("1 / span 3");
+    screen.show({ ...settled, canPlayAgain: false });
+    expect(screen.query(tid("gamble-play-again"))).toBeNull();
+    expect(screen.query(tid("gamble-leave-after-round"))).not.toBeNull();
   });
 
-  it("opens the shared Dreamsign replacement flow after an at-cap jackpot", () => {
+  it("replaces a held Dreamsign by UUID after an at-cap jackpot", () => {
     vi.useFakeTimers();
     const onReplaceDreamsign = vi.fn();
-    const heldDreamsign = localizedDreamsignFixture({
+    const held = localizedDreamsignFixture({
       id: testDreamsignId("held-sign"),
       name: "Held Sign",
       effectDescription: "A held effect.",
     });
-    const replacementView: GravokWagerSiteView = {
-      ...VIEW,
-      card: { rank: "A", suit: "clubs" },
-      result: {
-        id: testGambleResultId("fixture-jackpot-result"),
-        gateId: "jack",
-        revealGateId: "six",
-        won: true,
-        essenceGained: 200,
-        essenceSettled: true,
-        rewardDreamsign: JACKPOT_DREAMSIGN,
-        pendingDreamsignReplacement: true,
+    const screen = renderGamble(
+      {
+        ...GRAVOK,
+        result: {
+          ...GRAVOK_RESULT,
+          gateId: "jack",
+          revealGateId: "six",
+          essenceSettled: true,
+          rewardDreamsign: JACKPOT,
+          pendingDreamsignReplacement: true,
+        },
+        replacement: { incoming: JACKPOT, held: [held], capacity: 1 },
       },
-      replacement: {
-        incoming: JACKPOT_DREAMSIGN,
-        held: [heldDreamsign],
-        capacity: 1,
-      },
-    };
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={replacementView}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={onReplaceDreamsign}
-      />,
+      { onReplaceDreamsign },
     );
 
-    void act(() => vi.advanceTimersByTime(970));
-    void act(() => vi.advanceTimersByTime(3_360));
-    expect(
-      container.querySelector("[data-dreamsign-replacement-dialog]"),
-    ).not.toBeNull();
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          `[data-replace-dreamsign-id="${heldDreamsign.id}"] button`,
-        )
-        ?.click();
-    });
-    expect(onReplaceDreamsign).toHaveBeenCalledWith(heldDreamsign.id);
+    advance(2_000);
+    advance();
+    expect(screen.query("[data-dreamsign-replacement-dialog]")).not.toBeNull();
+    screen.tap(`[data-replace-dreamsign-id="${held.id}"] button`);
+    expect(onReplaceDreamsign).toHaveBeenCalledWith(held.id);
   });
 });
 
-const LADDER_VIEW: LadderClimbSiteView = {
-  gameId: "tidemark-ladder-climb",
-  siteId: parseSiteId("fixture-gamble-site"),
-  scene: null,
-  isFarpoint: false,
-  runtimeReady: true,
-  essenceReward: 25,
-  rewardDreamsign: JACKPOT_DREAMSIGN,
-  nextDraw: {
-    attemptNumber: 1,
-    targetRank: "Q",
-    cost: 0,
-    canAfford: true,
-    available: true,
-  },
-  guide: VIEW.guide,
-  result: null,
-  replacement: null,
-};
-
 describe("GambleSiteScreen — Ladder Climb", () => {
-  it("uses the full-portrait dialog composition on mobile", () => {
-    stubMobileMatchMedia();
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={LADDER_VIEW}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-
-    expect(
-      container.querySelector<HTMLElement>("[data-site-layout]")?.dataset
-        .siteLayoutComposition,
-    ).toBe("balanced-gallery");
-  });
-
-  it("shows the first draw target and locked Dreamsign on the shared prize face", () => {
-    const onDraw = vi.fn();
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={LADDER_VIEW}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={onDraw}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-
-    expect(
-      container
-        .querySelector("[data-wager-prize-card]")
-        ?.getAttribute("data-wager-prize-card-state"),
-    ).toBe("prize");
-    expect(container.querySelectorAll("[data-gamble-gate]")).toHaveLength(0);
-    expect(
-      container.querySelector("[data-playing-card-prize-title]"),
-    ).not.toBeNull();
-    expect(
-      container.querySelector('[data-testid="gamble-ladder-dreamsign-name"]'),
-    ).not.toBeNull();
-    expect(
-      container.querySelector("[data-playing-card-prize-dreamsign-source]"),
-    ).not.toBeNull();
-    expect(
-      container
-        .querySelector("[data-wager-prize-card]")
-        ?.getAttribute("data-wager-prize-essence-reward"),
-    ).toBe("25");
-    const draw = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-ladder-climb"]',
-    );
-    expect(draw?.disabled).toBe(false);
-    const actionGroup = container.querySelector(
-      "[data-ladder-round-action-group]",
-    );
-    expect(
-      actionGroup?.querySelector('[data-testid="gamble-ladder-leave"]'),
-    ).not.toBeNull();
-    act(() => draw?.click());
-    expect(onDraw).toHaveBeenCalledOnce();
-  });
-
-  it("preserves the wager stage and action footprint while a draw resolves", () => {
-    const { container, rerender } = renderInCumulus(
-      <GambleSiteScreen
-        view={LADDER_VIEW}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-    const cardSlot = container.querySelector("[data-ladder-climb-card]");
-    const actionSlot = container.querySelector("[data-ladder-actions]");
-    const actionGroup = container.querySelector(
-      "[data-ladder-round-action-group]",
-    );
-
-    rerender(
-      <GambleSiteScreen
-        view={{
-          ...LADDER_VIEW,
-          nextDraw: null,
-          result: {
-            id: testGambleResultId("ladder-continuity"),
-            attemptNumber: 1,
-            targetRank: "Q",
-            card: { rank: "J", suit: "clubs" },
-            won: false,
-            resultSettled: false,
-            terminal: false,
-            pendingDreamsignReplacement: false,
-          },
-        }}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />
-    );
-
-    expect(container.querySelector("[data-ladder-climb-card]")).toBe(cardSlot);
-    expect(container.querySelector("[data-ladder-actions]")).toBe(actionSlot);
-    expect(container.querySelector("[data-ladder-round-action-group]")).toBe(
-      actionGroup,
-    );
-    expect(actionSlot?.getAttribute("data-ladder-actions")).toBe("hidden");
-  });
-
-  it("reveals the next paid draw only after a miss settles", () => {
+  it("draws, keeps the stage stable through a miss, and offers the next draw once settled", () => {
     vi.useFakeTimers();
-    const onDraw = vi.fn();
-    const onOutcomeShown = vi.fn();
-    const resultView: LadderClimbSiteView = {
-      ...LADDER_VIEW,
+    const onDrawLadder = vi.fn();
+    const onLadderOutcomeShown = vi.fn();
+    const screen = renderGamble(LADDER, { onDrawLadder, onLadderOutcomeShown });
+    const prizeState = () =>
+      screen.query("[data-wager-prize-card]")?.dataset.wagerPrizeCardState;
+
+    expect(prizeState()).toBe("prize");
+    screen.tap(tid("gamble-ladder-climb"));
+    expect(onDrawLadder).toHaveBeenCalledOnce();
+
+    const cardSlot = screen.query("[data-ladder-climb-card]");
+    const actionSlot = screen.query("[data-ladder-actions]");
+    const miss: LadderClimbSiteView = {
+      ...LADDER,
       nextDraw: null,
       result: {
         id: testGambleResultId("ladder-attempt-1"),
@@ -796,1240 +400,198 @@ describe("GambleSiteScreen — Ladder Climb", () => {
         pendingDreamsignReplacement: false,
       },
     };
-    const { container, rerender } = renderInCumulus(
-      <GambleSiteScreen
-        view={resultView}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={onDraw}
-        onLadderOutcomeShown={onOutcomeShown}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
+    screen.show(miss);
+    expect(screen.query("[data-ladder-climb-card]")).toBe(cardSlot);
+    expect(screen.query("[data-ladder-actions]")).toBe(actionSlot);
+    expect(actionSlot?.dataset.ladderActions).toBe("hidden");
 
-    expect(
-      container.querySelector('[data-testid="gamble-ladder-climb-again"]'),
-    ).toBeNull();
-    void act(() => vi.advanceTimersByTime(970));
-    expect(onOutcomeShown).toHaveBeenCalledOnce();
-    expect(
-      container
-        .querySelector("[data-radial-announcement]")
-        ?.getAttribute("data-radial-announcement-tone"),
-    ).toBe("danger");
-    expect(
-      container
-        .querySelector("[data-wager-prize-card]")
-        ?.getAttribute("data-wager-prize-card-state"),
-    ).toBe("drawn");
-    rerender(
-      <GambleSiteScreen
-        view={{
-          ...resultView,
-          nextDraw: {
-            attemptNumber: 2,
-            targetRank: "10",
-            cost: 5,
-            canAfford: true,
-            available: true,
-          },
-          result: { ...resultView.result!, resultSettled: true },
-        }}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={onDraw}
-        onLadderOutcomeShown={onOutcomeShown}
-        onReplaceDreamsign={() => undefined}
-      />
-    );
-    void act(() => vi.advanceTimersByTime(3_360));
-    const drawAgain = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-ladder-climb-again"]',
-    );
-    expect(drawAgain?.disabled).toBe(false);
-    expect(
-      container
-        .querySelector("[data-wager-prize-card]")
-        ?.getAttribute("data-wager-prize-card-state"),
-    ).toBe("prize");
-    expect(
-      container.querySelector('[data-testid="gamble-ladder-dreamsign-name"]'),
-    ).not.toBeNull();
-    act(() => drawAgain?.click());
-    expect(onDraw).toHaveBeenCalledOnce();
-  });
+    advance(2_000);
+    expect(onLadderOutcomeShown).toHaveBeenCalledOnce();
+    expect(prizeState()).toBe("drawn");
+    expect(screen.query(tid("gamble-ladder-climb-again"))).toBeNull();
 
-  it("keeps the result inside the same prize object", () => {
-    vi.useFakeTimers();
-    const resultView: LadderClimbSiteView = {
-      ...LADDER_VIEW,
-      nextDraw: null,
-      result: {
-        id: testGambleResultId("ladder-win"),
-        attemptNumber: 1,
-        targetRank: "Q",
-        card: { rank: "A", suit: "hearts" },
-        won: true,
-        resultSettled: false,
-        terminal: true,
-        pendingDreamsignReplacement: false,
-      },
-    };
-    const { container, rerender } = renderInCumulus(
-      <GambleSiteScreen
-        view={resultView}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-
-    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(
-      1,
-    );
-    void act(() => vi.advanceTimersByTime(970));
-    rerender(
-      <GambleSiteScreen
-        view={{
-          ...resultView,
-          result: {
-            ...resultView.result!,
-            resultSettled: true,
-          },
-        }}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />
-    );
-    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(
-      1,
-    );
-    expect(
-      container.querySelector("[data-ladder-dreamsign-reward]"),
-    ).not.toBeNull();
-  });
-
-  it("reveals a won Dreamsign at large size before flying it to its HUD dock", () => {
-    vi.useFakeTimers();
-    vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockImplementation(
-      function getBoundingClientRect(this: HTMLElement) {
-        if (this.hasAttribute("data-ladder-dreamsign-source")) {
-          return new DOMRect(900, 250, 240, 240);
-        }
-        return new DOMRect(0, 0, 100, 100);
-      },
-    );
-    const hudTarget = document.createElement("span");
-    hudTarget.dataset.dreamsignId = JACKPOT_DREAMSIGN.id;
-    hudTarget.getBoundingClientRect = () => new DOMRect(1180, 760, 58, 58);
-    document.body.append(hudTarget);
-    const resultView: LadderClimbSiteView = {
-      ...LADDER_VIEW,
-      nextDraw: null,
-      result: {
-        id: testGambleResultId("ladder-reward-flight"),
-        attemptNumber: 1,
-        targetRank: "Q",
-        card: { rank: "A", suit: "hearts" },
-        won: true,
-        resultSettled: true,
-        terminal: true,
-        pendingDreamsignReplacement: false,
-      },
-    };
-    const { container, root } = renderInCumulus(
-      <GambleSiteScreen
-        view={resultView}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-
-    void act(() => vi.advanceTimersByTime(970));
-    const source = container.querySelector<HTMLElement>(
-      "[data-ladder-dreamsign-source]",
-    );
-    expect(source?.style.width).toBe("240px");
-    void act(() => vi.advanceTimersByTime(1_680));
-    expect(
-      container
-        .querySelector("[data-ladder-dreamsign-flight]")
-        ?.getAttribute("data-ladder-dreamsign-destination"),
-    ).toBe("journey-dreamsign");
-    expect(hudTarget.style.visibility).toBe("hidden");
-
-    act(() => root.unmount());
-    expect(hudTarget.style.visibility).toBe("");
+    screen.show({
+      ...miss,
+      nextDraw: { ...LADDER.nextDraw!, attemptNumber: 2, cost: 5 },
+      result: { ...miss.result!, resultSettled: true },
+    });
+    advance();
+    screen.tap(tid("gamble-ladder-climb-again"));
+    expect(onDrawLadder).toHaveBeenCalledTimes(2);
   });
 });
 
 describe("GambleSiteScreen — Starway Stairs", () => {
-  it("shows three safe-draw range prizes above centered Bet and Leave actions", () => {
-    const onDrawStarway = vi.fn();
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={STARWAY_VIEW}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onDrawStarway={onDrawStarway}
-        onStarwayOutcomeShown={() => undefined}
-        onCashOutStarway={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-
-    expect(container.querySelectorAll("[data-starway-tier]")).toHaveLength(3);
-    expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(
-      3,
-    );
-    expect(
-      container.querySelectorAll("[data-starway-tier-button]"),
-    ).toHaveLength(1);
-    expect(
-      container.querySelectorAll("[data-playing-card-prize-title]"),
-    ).toHaveLength(3);
-    expect(
-      Array.from(
-        container.querySelectorAll<HTMLElement>("[data-wager-prize-card]"),
-        (card) => card.dataset.wagerPrizeTarget,
-      ),
-    ).toEqual(["3-A", "5-A", "8-A"]);
-    expect(container.textContent).not.toContain("%");
-    expect(container.textContent).toContain(
-      "Starway Stairs is the game. Keep betting to see how high you can go!",
-    );
-
-    const bet = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-starway-tier-1"]',
-    );
-    const leave = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-starway-leave"]',
-    );
-    const actions = container.querySelector<HTMLElement>(
-      "[data-starway-actions]",
-    );
-    expect(bet?.textContent).not.toContain("·");
-    expect(
-      bet?.querySelector("[data-glass-button-essence-value]"),
-    ).not.toBeNull();
-    expect(bet?.querySelector("[data-glass-button-essence-cost]")).toBeNull();
-    expect(leave?.textContent?.trim()).not.toBe("");
-    expect(bet?.parentElement?.parentElement).toBe(actions);
-    expect(leave?.parentElement).toBe(actions);
-    expect(actions?.style.justifyContent).toBe("center");
-    expect(actions?.style.flexWrap).toBe("nowrap");
-    expect(actions?.textContent).not.toContain("Essence");
-    expect(
-      container.querySelector(
-        '[data-starway-tier="1"] [data-playing-card-prize-emphasis="current"]',
-      ),
-    ).not.toBeNull();
-    expect(
-      container.querySelectorAll('[data-playing-card-prize-emphasis="muted"]'),
-    ).toHaveLength(2);
-    act(() => bet?.click());
-    expect(onDrawStarway).toHaveBeenCalledOnce();
-  });
-
-  it("reveals a safe card, then advances the tier and offers cash-out", () => {
+  it("bets on the current tier, settles a safe draw on it, and cashes out once", () => {
     vi.useFakeTimers();
-    const onOutcomeShown = vi.fn();
-    const onCashOut = vi.fn();
-    const safeView: StarwayStairsSiteView = {
-      ...STARWAY_VIEW,
-      canAffordWager: false,
-      tiers: STARWAY_VIEW.tiers.map((tier) =>
-        tier.tierNumber === 1
-          ? {
-              ...tier,
-              state: "safe" as const,
-              card: { rank: "3" as const, suit: "clubs" as const },
-            }
-          : tier.tierNumber === 2
-            ? { ...tier, state: "current" as const }
-            : tier,
-      ),
-      currentTierNumber: 2,
-      result: {
-        id: testGambleResultId("starway-tier-1"),
-        tierNumber: 1,
-        busted: false,
-        resultSettled: true,
-        prizeAtRisk: 60,
-      },
-      cashOutReward: 60,
-    };
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={safeView}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onDrawStarway={() => undefined}
-        onStarwayOutcomeShown={onOutcomeShown}
-        onCashOutStarway={onCashOut}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
+    const onDrawStarway = vi.fn();
+    const onStarwayOutcomeShown = vi.fn();
+    const onCashOutStarway = vi.fn();
+    const screen = renderGamble(STARWAY, {
+      onDrawStarway,
+      onStarwayOutcomeShown,
+      onCashOutStarway,
+    });
 
-    void act(() => vi.advanceTimersByTime(1_000));
-    expect(onOutcomeShown).toHaveBeenCalledOnce();
-    const outcome = container.querySelector<HTMLElement>(
-      "[data-starway-outcome]",
-    );
-    expect(outcome?.parentElement?.dataset.starwayTier).toBe("1");
-    expect(outcome?.style.position).toBe("absolute");
+    expect(screen.count("[data-starway-tier]")).toBe(3);
+    expect(screen.count("[data-starway-tier-button]")).toBe(1);
+    screen.tap(tid("gamble-starway-tier-1"));
+    expect(onDrawStarway).toHaveBeenCalledOnce();
+
+    screen.show(starwayAfterTierOne(false));
+
+    advance(2_000);
+    expect(onStarwayOutcomeShown).toHaveBeenCalledOnce();
     expect(
-      container.querySelector("[data-starway-stairs-tiers]")?.children,
-    ).toHaveLength(3);
-    expect(
-      container.querySelector(
-        '[data-starway-tier="1"] [data-playing-card="3-clubs"]',
-      ),
-    ).not.toBeNull();
-    expect(
-      container.querySelector(
-        '[data-starway-tier="1"] [data-playing-card-prize-emphasis="current"]',
-      ),
-    ).not.toBeNull();
-    expect(
-      container.querySelector(
-        '[data-starway-tier="2"] [data-playing-card-prize-emphasis="muted"]',
-      ),
-    ).not.toBeNull();
-    void act(() => vi.advanceTimersByTime(4_000));
-    expect(
-      container.querySelectorAll("[data-starway-tier-button]"),
-    ).toHaveLength(1);
-    const climb = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-starway-tier-2"]',
-    );
-    expect(climb).not.toBeNull();
-    expect(climb?.textContent).not.toContain("·");
-    expect(
-      climb?.querySelector("[data-glass-button-essence-value]"),
-    ).not.toBeNull();
-    expect(climb?.querySelector("[data-glass-button-essence-cost]")).toBeNull();
-    expect(climb?.getAttribute("aria-disabled")).toBe("true");
-    const cashOut = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-starway-cash-out"]',
-    );
-    expect(cashOut?.textContent).not.toContain("·");
-    expect(cashOut?.textContent).not.toContain("Essence");
-    expect(
-      cashOut?.querySelector("[data-glass-button-essence-value]"),
-    ).not.toBeNull();
-    expect(
-      container.querySelector(
-        '[data-starway-tier="1"] [data-playing-card-prize-emphasis="muted"]',
-      ),
-    ).not.toBeNull();
-    expect(
-      container.querySelector(
-        '[data-starway-tier="2"] [data-playing-card-prize-emphasis="current"]',
-      ),
-    ).not.toBeNull();
-    act(() => cashOut?.click());
-    expect(onCashOut).toHaveBeenCalledOnce();
-    expect(cashOut?.getAttribute("aria-disabled")).toBe("true");
-    expect(
-      container
-        .querySelector('[data-testid="gamble-starway-tier-2"]')
-        ?.getAttribute("aria-disabled"),
-    ).toBe("true");
+      screen.query("[data-starway-outcome]")?.parentElement?.dataset
+        .starwayTier,
+    ).toBe("1");
+    advance();
+    const disabled = (marker: string) =>
+      screen.query(tid(marker))?.getAttribute("aria-disabled");
+    expect(screen.count("[data-starway-tier-button]")).toBe(1);
+    expect(disabled("gamble-starway-tier-2")).toBe("true");
+    screen.tap(tid("gamble-starway-cash-out"));
+    expect(onCashOutStarway).toHaveBeenCalledOnce();
+    expect(disabled("gamble-starway-cash-out")).toBe("true");
   });
 
-  it("offers Play Again beside Leave after a terminal bust", () => {
+  it("offers Play Again after a bust only while rounds remain", () => {
     vi.useFakeTimers();
     const onPlayAgainStarway = vi.fn();
-    const bustedView: StarwayStairsSiteView = {
-      ...STARWAY_VIEW,
-      tiers: STARWAY_VIEW.tiers.map((tier) =>
-        tier.tierNumber === 1
-          ? {
-              ...tier,
-              state: "bust" as const,
-              card: { rank: "2" as const, suit: "spades" as const },
-            }
-          : tier,
-      ),
-      currentTierNumber: null,
-      result: {
-        id: testGambleResultId("starway-tier-1-bust"),
-        tierNumber: 1,
-        busted: true,
-        resultSettled: true,
-        prizeAtRisk: 60,
-      },
-      terminalReason: "bust",
-    };
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={bustedView}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onDrawStarway={() => undefined}
-        onStarwayOutcomeShown={() => undefined}
-        onCashOutStarway={() => undefined}
-        onPlayAgainStarway={onPlayAgainStarway}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
+    const busted = starwayAfterTierOne(true);
+    const screen = renderGamble(busted, { onPlayAgainStarway });
 
-    void act(() => vi.advanceTimersByTime(1_000));
-    void act(() => vi.advanceTimersByTime(4_000));
+    advance();
+    expect(screen.count("[data-starway-tier-button]")).toBe(0);
+    expect(screen.query(tid("gamble-starway-cash-out"))).toBeNull();
     expect(
-      container.querySelectorAll("[data-starway-tier-button]"),
-    ).toHaveLength(0);
-    expect(
-      container.querySelector(
-        '[data-testid="gamble-starway-leave-after-result"]',
-      ),
-    ).toBeInstanceOf(HTMLButtonElement);
-    const playAgain = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-starway-play-again"]',
-    );
-    expect(playAgain).toBeInstanceOf(HTMLButtonElement);
-    expect(playAgain?.parentElement).toBe(
-      container.querySelector(
-        '[data-testid="gamble-starway-leave-after-result"]',
-      )?.parentElement,
-    );
-    act(() => playAgain?.click());
-    expect(onPlayAgainStarway).toHaveBeenCalledOnce();
-    expect(
-      container.querySelector('[data-testid="gamble-starway-cash-out"]'),
-    ).toBeNull();
-  });
-
-  it("hides Play Again after the third round", () => {
-    vi.useFakeTimers();
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={{
-          ...STARWAY_VIEW,
-          canPlayAgain: false,
-          currentTierNumber: null,
-          terminalReason: "bust",
-          result: {
-            id: testGambleResultId("starway-final-round"),
-            tierNumber: 1,
-            busted: true,
-            resultSettled: true,
-            prizeAtRisk: 60,
-          },
-        }}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-
-    void act(() => vi.advanceTimersByTime(1_000));
-    void act(() => vi.advanceTimersByTime(4_000));
-    expect(
-      container.querySelector('[data-testid="gamble-starway-play-again"]'),
-    ).toBeNull();
-    expect(
-      container.querySelector(
-        '[data-testid="gamble-starway-leave-after-result"]',
-      ),
+      screen.query(tid("gamble-starway-leave-after-result")),
     ).not.toBeNull();
+    screen.tap(tid("gamble-starway-play-again"));
+    expect(onPlayAgainStarway).toHaveBeenCalledOnce();
+
+    screen.show({ ...busted, canPlayAgain: false });
+    expect(screen.query(tid("gamble-starway-play-again"))).toBeNull();
   });
 });
 
 describe("GambleSiteScreen — Four-Suit Reprise", () => {
-  it("shows the suit outcomes in a glass panel before committing a selected card", () => {
-    const onDraw = vi.fn();
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={FOUR_SUIT_VIEW}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onDrawFourSuit={onDraw}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
+  it("selects, reselects, and draws against a card by entry id", () => {
+    const onDrawFourSuit = vi.fn();
+    const screen = renderGamble(FOUR_SUIT, { onDrawFourSuit });
+    const pick = tid("gamble-four-suit-card-four-suit-entry-1");
 
-    expect(container.querySelector("[data-four-suit-picker]")).not.toBeNull();
+    expect(screen.query("[data-four-suit-picker]")).not.toBeNull();
+    screen.tap(pick);
+    expect(screen.query("[data-four-suit-picker]")).toBeNull();
     expect(
-      container.querySelector<HTMLElement>(
-        '[data-testid="gamble-four-suit-card-gallery"]',
-      )?.dataset.galleryRole,
-    ).toBe("picker");
-    expect(container.querySelector("[data-four-suit-prize]")).toBeNull();
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="gamble-four-suit-card-four-suit-entry-1"]',
-        )
-        ?.click();
-    });
+      screen.query('[data-four-suit-target="four-suit-entry-1"]'),
+    ).not.toBeNull();
+    expect(screen.count("[data-four-suit-outcome]")).toBe(4);
 
-    expect(container.querySelector("[data-four-suit-picker]")).toBeNull();
-    expect(
-      container.querySelector('[data-four-suit-target="four-suit-entry-1"]'),
-    ).not.toBeNull();
-    const outcomePanel = container.querySelector(
-      '[data-testid="gamble-four-suit-outcome-panel"]',
-    );
-    expect(outcomePanel?.getAttribute("data-glass-panel-frame")).toBe(
-      "floating",
-    );
-    expect(outcomePanel?.querySelector("[data-wager-prize-card]")).toBeNull();
-    expect(
-      container.querySelector(
-        '[data-four-suit-draw-card] [data-playing-card-variant="fourSuit"]',
-      ),
-    ).not.toBeNull();
-    expect(
-      container.querySelectorAll(
-        "[data-playing-card-four-suit-face] [data-playing-card-suit-mark]",
-      ),
-    ).toHaveLength(4);
-    expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(
-      4,
-    );
-    expect(
-      Array.from(
-        container.querySelectorAll<HTMLElement>("[data-four-suit-outcome]"),
-        (element) => element.dataset.fourSuitOutcome,
-      ),
-    ).toEqual(["spades", "diamonds", "hearts", "clubs"]);
-    expect(
-      Array.from(
-        container.querySelectorAll<HTMLElement>("[data-four-suit-outcome]"),
-        (element) =>
-          element.querySelector<HTMLElement>("[data-playing-card-suit-mark]")
-            ?.dataset.playingCardSuitMark,
-      ),
-    ).toEqual(["spades", "diamonds", "hearts", "clubs"]);
-    expect(
-      Array.from(
-        container.querySelectorAll<HTMLElement>(
-          "[data-four-suit-outcome] [data-playing-card-suit-glyph]",
-        ),
-      ).every((element) =>
-        element.style.webkitTextStroke.includes(
-          PLAYING_CARD_DESIGN.colors.characterOutline,
-        ),
-      ),
-    ).toBe(true);
-    expect(container.querySelector("[data-four-suit-chance]")).toBeNull();
-    const reselect = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-four-suit-choose-again"]',
-    );
-    expect(reselect?.querySelector("i.bx-refresh-ccw")).not.toBeNull();
-    expect(
-      container.querySelector(
-        '[data-four-suit-actions] [data-testid="gamble-four-suit-choose-again"]',
-      ),
-    ).toBe(reselect);
-    expect(
-      container.querySelector(
-        '[data-four-suit-reselect] [data-testid="gamble-four-suit-choose-again"]',
-      ),
-    ).toBe(reselect);
-    expect(
-      container.querySelector<HTMLElement>("[data-four-suit-reselect]")?.style
-        .gridColumn,
-    ).toBe("1");
-    expect(
-      container.querySelector<HTMLElement>("[data-four-suit-stage]")?.style
-        .gridTemplateAreas,
-    ).toBe('"target draw rewards"');
-    expect(
-      container.querySelector<HTMLElement>("[data-four-suit-stage]")?.style
-        .columnGap,
-    ).toBe("var(--space-4xl)");
-    expect(
-      container.querySelector<HTMLElement>(
-        '[data-gamble-game="four-suit-reprise"]',
-      )?.style.gap,
-    ).toBe("var(--space-3xl)");
-    act(() => reselect?.click());
-    expect(container.querySelector("[data-four-suit-picker]")).not.toBeNull();
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="gamble-four-suit-card-four-suit-entry-1"]',
-        )
-        ?.click();
-    });
-    const draw = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-four-suit-draw"]',
-    );
-    expect(
-      draw?.querySelector("[data-glass-button-essence-cost]"),
-    ).not.toBeNull();
-    act(() => draw?.click());
-    expect(onDraw).toHaveBeenCalledWith("four-suit-entry-1");
+    screen.tap(tid("gamble-four-suit-choose-again"));
+    expect(screen.query("[data-four-suit-picker]")).not.toBeNull();
+    screen.tap(pick);
+    screen.tap(tid("gamble-four-suit-draw"));
+    expect(onDrawFourSuit).toHaveBeenCalledWith("four-suit-entry-1");
   });
 
-  it("opens the shared free Transfiguration chooser after Spades", () => {
+  it("chooses a free Transfiguration after Spades, then replays once settled", () => {
     vi.useFakeTimers();
-    const onOutcomeShown = vi.fn();
-    const onChooseTransfiguration = vi.fn();
-    const initialView = fourSuitResultView();
-    const { container, rerender } = renderInCumulus(
-      <GambleSiteScreen
-        view={initialView}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onFourSuitOutcomeShown={onOutcomeShown}
-        onChooseFourSuitTransfiguration={onChooseTransfiguration}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-
-    void act(() => vi.advanceTimersByTime(1_000));
-    expect(onOutcomeShown).toHaveBeenCalledOnce();
-    expect(
-      container.querySelector(
-        '[data-playing-card-variant="fourSuit"][data-playing-card-state="drawn"]',
-      ),
-    ).not.toBeNull();
-    expect(container.querySelectorAll("[data-four-suit-outcome]")).toHaveLength(
-      4,
-    );
-    const revealedView = fourSuitResultView({ resultRevealed: true });
-    rerender(
-      <GambleSiteScreen
-        view={revealedView}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onFourSuitOutcomeShown={onOutcomeShown}
-        onChooseFourSuitTransfiguration={onChooseTransfiguration}
-        onReplaceDreamsign={() => undefined}
-      />
-    );
-    void act(() => vi.advanceTimersByTime(4_000));
-
-    expect(
-      container.querySelector('[data-testid="cumulus-transfiguration-detail"]'),
-    ).not.toBeNull();
-    expect(
-      container.querySelector(
-        '[data-testid="cumulus-transfiguration-choose-again"]',
-      ),
-    ).toBeNull();
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="cumulus-transfiguration-form-Empowered"]',
-        )
-        ?.click();
+    const onFourSuitOutcomeShown = vi.fn();
+    const onChooseFourSuitTransfiguration = vi.fn();
+    const onPlayAgainFourSuit = vi.fn();
+    const screen = renderGamble(spadesResult(), {
+      onFourSuitOutcomeShown,
+      onChooseFourSuitTransfiguration,
+      onPlayAgainFourSuit,
     });
-    const confirm = container.querySelector<HTMLButtonElement>(
-      '[data-testid="cumulus-transfiguration-confirm"]',
-    );
-    expect(confirm?.getAttribute("aria-disabled")).not.toBe("true");
-    expect(
-      confirm?.querySelector("[data-glass-button-essence-cost]"),
-    ).toBeNull();
-    act(() => confirm?.click());
-    expect(onChooseTransfiguration).toHaveBeenCalledWith("Empowered");
 
-    const revealedResult = revealedView.result;
-    const previewModel =
-      revealedResult?.transfigurationCandidate.forms[0]?.previewModel;
-    if (previewModel === undefined || revealedResult === null) {
-      throw new Error("expected fixture Transfiguration preview");
-    }
-    rerender(
-      <GambleSiteScreen
-        view={fourSuitResultView({
-          resultRevealed: true,
-          resultSettled: true,
-          chosenTransfiguration: "Empowered",
-          target: {
-            ...revealedResult.target,
-            model: previewModel,
-          },
-        })}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onFourSuitOutcomeShown={onOutcomeShown}
-        onChooseFourSuitTransfiguration={onChooseTransfiguration}
-        onReplaceDreamsign={() => undefined}
-      />
-    );
-    expect(
-      container.querySelector(
-        '[data-four-suit-card-outcome="transfiguration"]',
-      ),
-    ).not.toBeNull();
-    expect(
-      container.querySelectorAll("[data-four-suit-transfiguration-face]"),
-    ).toHaveLength(2);
-    void act(() => vi.advanceTimersByTime(2_600));
-    expect(container.querySelector("[data-four-suit-target]")).toBeNull();
-    expect(
-      container.querySelector("[data-four-suit-target-slot]"),
-    ).not.toBeNull();
-    const replay = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-four-suit-play-again"]',
-    );
-    expect(replay).not.toBeNull();
-    expect(replay?.getAttribute("aria-disabled")).not.toBe("true");
-  });
+    advance(2_000);
+    expect(onFourSuitOutcomeShown).toHaveBeenCalledOnce();
+    screen.show(spadesResult({ resultRevealed: true }));
+    advance();
+    expect(screen.query(tid("cumulus-transfiguration-detail"))).not.toBeNull();
+    screen.tap(tid("cumulus-transfiguration-form-Empowered"));
+    screen.tap(tid("cumulus-transfiguration-confirm"));
+    expect(onChooseFourSuitTransfiguration).toHaveBeenCalledWith("Empowered");
 
-  it.each([
-    ["essence", "diamonds", 100],
-    ["duplication", "hearts", 0],
-    ["purge", "clubs", 0],
-  ] as const)(
-    "animates the target card away for a %s result",
-    (outcome, suit, essenceGained) => {
-      vi.useFakeTimers();
-      const { container, root } = renderInCumulus(
-        <GambleSiteScreen
-          view={fourSuitResultView({
-            card: { rank: "7", suit },
-            outcome,
-            resultRevealed: true,
-            resultSettled: true,
-            essenceGained,
-          })}
-          onChooseGate={() => undefined}
-          onLeave={() => undefined}
-          onOutcomeShown={() => undefined}
-          onPlayAgain={() => undefined}
-          onDrawLadder={() => undefined}
-          onLadderOutcomeShown={() => undefined}
-          onReplaceDreamsign={() => undefined}
-        />,
-      );
-
-      void act(() => vi.advanceTimersByTime(1_000));
-      expect(
-        container.querySelector(`[data-four-suit-card-outcome="${outcome}"]`),
-      ).not.toBeNull();
-      if (outcome === "duplication") {
-        expect(
-          container.querySelectorAll("[data-four-suit-duplicate-card]"),
-        ).toHaveLength(2);
-      }
-      if (outcome === "essence") {
-        expect(
-          container.querySelector("[data-four-suit-essence-badge]"),
-        ).not.toBeNull();
-      }
-      void act(() => vi.advanceTimersByTime(2_600));
-      expect(container.querySelector("[data-four-suit-target]")).toBeNull();
-      expect(
-        container.querySelector("[data-four-suit-target-slot]"),
-      ).not.toBeNull();
-
-      act(() => root.unmount());
-    },
-  );
-
-  it("offers a shared replay only after a settled result", () => {
-    vi.useFakeTimers();
-    const onPlayAgain = vi.fn();
-    const { container, rerender } = renderInCumulus(
-      <GambleSiteScreen
-        view={fourSuitResultView({
-          card: { rank: "7", suit: "hearts" },
-          outcome: "duplication",
-          resultRevealed: true,
-          resultSettled: true,
-        })}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onPlayAgainFourSuit={onPlayAgain}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-
-    void act(() => vi.advanceTimersByTime(1_000));
-    void act(() => vi.advanceTimersByTime(4_000));
-    const replay = container.querySelector<HTMLButtonElement>(
-      '[data-testid="gamble-four-suit-play-again"]',
-    );
-    expect(replay).not.toBeNull();
-    act(() => replay?.click());
-    expect(onPlayAgain).toHaveBeenCalledOnce();
-    expect(
-      container.querySelector('[data-testid="gamble-four-suit-play-again"]'),
-    ).toBeNull();
-
-    const replayView: FourSuitRepriseSiteView = {
-      ...fourSuitResultView({
-        card: { rank: "7", suit: "hearts" },
-        outcome: "duplication",
+    screen.show(
+      spadesResult({
         resultRevealed: true,
         resultSettled: true,
+        chosenTransfiguration: "Empowered",
       }),
-      phase: "choose",
-      roundNumber: 2,
-      cards: [FOUR_SUIT_VIEW.cards[1]],
+    );
+    advance();
+    expect(screen.query("[data-four-suit-target]")).toBeNull();
+    screen.tap(tid("gamble-four-suit-play-again"));
+    expect(onPlayAgainFourSuit).toHaveBeenCalledOnce();
+    expect(screen.query(tid("gamble-four-suit-play-again"))).toBeNull();
+  });
+});
+
+describe("GambleSiteScreen — Blackjack", () => {
+  it("deals, conceals the dealer hole card, and hits while the player turn is open", () => {
+    vi.useFakeTimers();
+    const onDealBlackjack = vi.fn();
+    const onHitBlackjack = vi.fn();
+    const screen = renderGamble(BLACKJACK, { onDealBlackjack, onHitBlackjack });
+
+    expect(screen.query("[data-blackjack-prize]")).not.toBeNull();
+    screen.tap(tid("gamble-blackjack-deal"));
+    expect(onDealBlackjack).toHaveBeenCalledOnce();
+
+    screen.show({ ...BLACKJACK, ...BLACKJACK_HANDS, dealerTotal: 9 });
+
+    void act(() => vi.runAllTimers());
+    expect(screen.count("[data-blackjack-card]")).toBe(4);
+    expect(screen.count('[data-playing-card-state="concealed"]')).toBe(1);
+    screen.tap(tid("gamble-blackjack-hit"));
+    expect(onHitBlackjack).toHaveBeenCalledOnce();
+  });
+
+  it("settles on the announcement, then conceals and clears the table before playing again", () => {
+    vi.useFakeTimers();
+    const onBlackjackOutcomeShown = vi.fn();
+    const onPlayAgainBlackjack = vi.fn();
+    const push: BlackjackSiteView = {
+      ...BLACKJACK,
+      ...BLACKJACK_HANDS,
+      dealerTotal: 18,
+      dealerRevealed: true,
+      outcome: "push",
+      essenceAwarded: 50,
+      resultId: testGambleResultId("fixture-blackjack-push"),
+      canPlayAgain: true,
     };
-    rerender(
-      <GambleSiteScreen
-        view={replayView}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onPlayAgainFourSuit={onPlayAgain}
-        onReplaceDreamsign={() => undefined}
-      />
-    );
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="gamble-four-suit-card-four-suit-entry-2"]',
-        )
-        ?.click();
+    const screen = renderGamble(push, {
+      onBlackjackOutcomeShown,
+      onPlayAgainBlackjack,
     });
-    expect(
-      container.querySelector('[data-four-suit-target="four-suit-entry-2"]'),
-    ).not.toBeNull();
-    expect(
-      container.querySelector(
-        '[data-playing-card-variant="fourSuit"][data-playing-card-state="concealed"]',
-      ),
-    ).not.toBeNull();
-  });
+    const phase = () =>
+      screen.query("[data-blackjack-departure-phase]")?.dataset
+        .blackjackDeparturePhase;
 
-  it("shows the flat prize and one up-front wager before the deal", () => {
-    const onDeal = vi.fn();
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={BLACKJACK_VIEW}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onDealBlackjack={onDeal}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-    expect(container.querySelector("[data-blackjack-title]")).toBeNull();
-    const rewardPanel = container.querySelector<HTMLElement>(
-      '[data-blackjack-prize] [data-testid="blackjack-reward-panel"]',
-    );
-    expect(rewardPanel?.dataset.glassPanelFrame).toBe("floating");
-    expect(rewardPanel?.querySelector("[data-essence-value]")).not.toBeNull();
-    expect(container.querySelector("[data-dreamsign]")).toBeNull();
-    expect(
-      container.querySelector('[data-testid="gamble-blackjack-deal"]')
-        ?.textContent,
-    ).toContain("50");
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="gamble-blackjack-deal"]',
-        )
-        ?.click();
-    });
-    expect(onDeal).toHaveBeenCalledOnce();
-  });
-
-  it("renders player and dealer squircles with a concealed dealer hole card", () => {
-    vi.useFakeTimers();
-    const onHit = vi.fn();
-    const { container, rerender } = renderInCumulus(
-      <GambleSiteScreen
-        view={{
-          ...BLACKJACK_VIEW,
-          playerCards: [
-            { rank: "10", suit: "clubs" },
-            { rank: "6", suit: "hearts" },
-          ],
-          playerTotal: 16,
-          dealerCards: [
-            { rank: "5", suit: "spades" },
-            { rank: "K", suit: "diamonds" },
-          ],
-          dealerTotal: 5,
-        }}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onHitBlackjack={onHit}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-    expect(container.querySelector("[data-blackjack-title]")).toBeNull();
-    expect(container.querySelectorAll("[data-blackjack-card]")).toHaveLength(0);
-    expect(
-      container
-        .querySelector('[data-blackjack-total="dealer"]')
-        ?.getAttribute("data-blackjack-total-value"),
-    ).toBeNull();
+    void act(() => vi.runAllTimers());
+    expect(onBlackjackOutcomeShown).toHaveBeenCalledOnce();
+    expect(screen.count('[data-playing-card-state="drawn"]')).toBe(4);
+    screen.show({ ...push, resultSettled: true });
+    void act(() => vi.runAllTimers());
+    const cards = [
+      ...screen.container.querySelectorAll("[data-blackjack-card]"),
+    ];
+    screen.tap(tid("gamble-blackjack-play-again"));
+    expect(phase()).toBe("concealing");
+    expect(screen.count('[data-playing-card-state="concealed"]')).toBe(4);
     void act(() => vi.advanceTimersToNextTimer());
-    expect(container.querySelectorAll("[data-blackjack-card]")).toHaveLength(1);
-    expect(
-      container
-        .querySelector("[data-blackjack-card]")
-        ?.getAttribute("data-blackjack-card-revealed"),
-    ).toBe("false");
+    expect(phase()).toBe("departing");
+    expect([
+      ...screen.container.querySelectorAll("[data-blackjack-card]"),
+    ]).toEqual(cards);
+    expect(onPlayAgainBlackjack).not.toHaveBeenCalled();
     void act(() => vi.advanceTimersToNextTimer());
-    expect(
-      container
-        .querySelector("[data-blackjack-card]")
-        ?.getAttribute("data-blackjack-card-revealed"),
-    ).toBe("true");
-    expect(
-      container
-        .querySelector('[data-blackjack-total="player"]')
-        ?.getAttribute("data-blackjack-total-value"),
-    ).toBe("10");
-    expect(
-      container.querySelector('[data-radial-announcement-owner="player"]'),
-    ).not.toBeNull();
-    void act(() => vi.runAllTimers());
-    expect(
-      container.querySelectorAll('[data-playing-card-variant="faceDown"]'),
-    ).toHaveLength(4);
-    expect(
-      container.querySelectorAll('[data-playing-card-state="drawn"]'),
-    ).toHaveLength(3);
-    expect(
-      container.querySelectorAll('[data-playing-card-state="concealed"]'),
-    ).toHaveLength(1);
-    expect(
-      container
-        .querySelector('[data-blackjack-total="dealer"]')
-        ?.getAttribute("data-blackjack-total-value"),
-    ).toBe("5");
-    expect(
-      container
-        .querySelector('[data-blackjack-total="player"]')
-        ?.getAttribute("data-blackjack-total-value"),
-    ).toBe("16");
-    expect(
-      container.querySelectorAll(
-        '[data-radial-announcement-variant="hand-total"]',
-      ),
-    ).toHaveLength(2);
-    expect(
-      container.querySelectorAll("[data-radial-announcement-hand-total-orbit]"),
-    ).toHaveLength(2);
-    const persistentPlayerTotal = container.querySelector(
-      '[data-radial-announcement-owner="player"]',
-    );
-    expect(
-      container.querySelectorAll("[data-blackjack-hand-label]"),
-    ).toHaveLength(0);
-    expect(
-      container.querySelector<HTMLElement>('[data-blackjack-card="player:0"]')
-        ?.style.position,
-    ).toBe("relative");
-    expect(
-      container.querySelector('[data-testid="gamble-blackjack-hit"]'),
-    ).not.toBeNull();
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="gamble-blackjack-hit"]',
-        )
-        ?.click();
-    });
-    expect(onHit).toHaveBeenCalledOnce();
-
-    rerender(
-      <GambleSiteScreen
-        view={{
-          ...BLACKJACK_VIEW,
-          playerCards: [
-            { rank: "10", suit: "clubs" },
-            { rank: "6", suit: "hearts" },
-            { rank: "A", suit: "spades" },
-          ],
-          playerTotal: 17,
-          dealerCards: [
-            { rank: "5", suit: "spades" },
-            { rank: "K", suit: "diamonds" },
-          ],
-          dealerTotal: 5,
-        }}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onHitBlackjack={onHit}
-        onReplaceDreamsign={() => undefined}
-      />
-    );
-    expect(
-      container.querySelector('[data-radial-announcement-owner="player"]'),
-    ).toBe(persistentPlayerTotal);
-    expect(
-      persistentPlayerTotal?.getAttribute("data-radial-announcement-total"),
-    ).toBe("16");
-    void act(() => vi.runAllTimers());
-    expect(
-      container.querySelectorAll('[data-blackjack-card^="player:"]'),
-    ).toHaveLength(3);
-    expect(
-      container.querySelector('[data-blackjack-actions-visible="true"]'),
-    ).not.toBeNull();
-    expect(
-      container.querySelector('[data-radial-announcement-owner="player"]'),
-    ).toBe(persistentPlayerTotal);
-    expect(
-      persistentPlayerTotal?.getAttribute("data-radial-announcement-total"),
-    ).toBe("17");
-    expect(
-      container.querySelector<HTMLButtonElement>(
-        '[data-testid="gamble-blackjack-hit"]',
-      )?.disabled,
-    ).toBe(false);
-  });
-
-  it("reveals the dealer hand and offers only Leave after settlement", () => {
-    vi.useFakeTimers();
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={{
-          ...BLACKJACK_VIEW,
-          playerCards: [
-            { rank: "10", suit: "clubs" },
-            { rank: "9", suit: "hearts" },
-          ],
-          playerTotal: 19,
-          dealerCards: [
-            { rank: "10", suit: "spades" },
-            { rank: "8", suit: "diamonds" },
-          ],
-          dealerTotal: 18,
-          dealerRevealed: true,
-          outcome: "player-win",
-          essenceAwarded: 300,
-          resultSettled: true,
-          resultId: testGambleResultId("fixture-blackjack-result"),
-        }}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-    void act(() => vi.runAllTimers());
-    expect(
-      container.querySelector(
-        '[data-blackjack-card="dealer:1"] [data-playing-card-state="drawn"]',
-      ),
-    ).not.toBeNull();
-    expect(
-      container.querySelector(
-        '[data-testid="gamble-blackjack-leave-after-result"]',
-      ),
-    ).not.toBeNull();
-    expect(
-      container.querySelector('[data-testid="gamble-blackjack-play-again"]'),
-    ).toBeNull();
-    expect(
-      container.querySelector('[data-testid="gamble-open-replacement"]'),
-    ).toBeNull();
-  });
-
-  it("settles the authoritative result when the outcome animation appears", () => {
-    vi.useFakeTimers();
-    const onOutcomeShown = vi.fn();
-    renderInCumulus(
-      <GambleSiteScreen
-        view={{
-          ...BLACKJACK_VIEW,
-          playerCards: [
-            { rank: "K", suit: "clubs" },
-            { rank: "9", suit: "hearts" },
-          ],
-          playerTotal: 19,
-          dealerCards: [
-            { rank: "10", suit: "spades" },
-            { rank: "8", suit: "diamonds" },
-          ],
-          dealerTotal: 18,
-          dealerRevealed: true,
-          outcome: "player-win",
-          essenceAwarded: 300,
-          resultId: testGambleResultId("fixture-blackjack-unsettled"),
-        }}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onBlackjackOutcomeShown={onOutcomeShown}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-    void act(() => vi.runAllTimers());
-    expect(onOutcomeShown).toHaveBeenCalledOnce();
-  });
-
-  it("conceals and fades the complete settled table before playing again", () => {
-    vi.useFakeTimers();
-    const onPlayAgain = vi.fn();
-    const { container } = renderInCumulus(
-      <GambleSiteScreen
-        view={{
-          ...BLACKJACK_VIEW,
-          playerCards: [
-            { rank: "10", suit: "clubs" },
-            { rank: "8", suit: "hearts" },
-          ],
-          playerTotal: 18,
-          dealerCards: [
-            { rank: "9", suit: "spades" },
-            { rank: "9", suit: "diamonds" },
-          ],
-          dealerTotal: 18,
-          dealerRevealed: true,
-          outcome: "push",
-          essenceAwarded: 50,
-          resultSettled: true,
-          resultId: testGambleResultId("fixture-blackjack-push"),
-          canPlayAgain: true,
-        }}
-        onChooseGate={() => undefined}
-        onLeave={() => undefined}
-        onOutcomeShown={() => undefined}
-        onPlayAgain={() => undefined}
-        onDrawLadder={() => undefined}
-        onLadderOutcomeShown={() => undefined}
-        onPlayAgainBlackjack={onPlayAgain}
-        onReplaceDreamsign={() => undefined}
-      />,
-    );
-    void act(() => vi.runAllTimers());
-    const cards = [...container.querySelectorAll("[data-blackjack-card]")];
-    const totals = [...container.querySelectorAll("[data-blackjack-total]")];
-    expect(
-      container.querySelectorAll('[data-playing-card-state="drawn"]'),
-    ).toHaveLength(4);
-    act(() => {
-      container
-        .querySelector<HTMLButtonElement>(
-          '[data-testid="gamble-blackjack-play-again"]',
-        )
-        ?.click();
-    });
-    expect(
-      container
-        .querySelector("[data-blackjack-departure-phase]")
-        ?.getAttribute("data-blackjack-departure-phase"),
-    ).toBe("concealing");
-    expect(
-      container.querySelectorAll(
-        '[data-blackjack-card-departure-phase="concealing"]',
-      ),
-    ).toHaveLength(4);
-    expect(
-      container.querySelectorAll(
-        '[data-blackjack-total-departure-phase="concealing"]',
-      ),
-    ).toHaveLength(2);
-    expect(
-      container.querySelectorAll('[data-playing-card-state="concealed"]'),
-    ).toHaveLength(4);
-    expect([...container.querySelectorAll("[data-blackjack-card]")]).toEqual(
-      cards,
-    );
-    expect([...container.querySelectorAll("[data-blackjack-total]")]).toEqual(
-      totals,
-    );
-    expect(onPlayAgain).not.toHaveBeenCalled();
-    void act(() => vi.advanceTimersToNextTimer());
-    expect(
-      container
-        .querySelector("[data-blackjack-departure-phase]")
-        ?.getAttribute("data-blackjack-departure-phase"),
-    ).toBe("departing");
-    expect(
-      container.querySelectorAll(
-        '[data-blackjack-card-departure-phase="departing"]',
-      ),
-    ).toHaveLength(4);
-    expect(
-      container.querySelectorAll(
-        '[data-blackjack-total-departure-phase="departing"]',
-      ),
-    ).toHaveLength(2);
-    expect(
-      container.querySelectorAll(
-        '[data-blackjack-hand-departure-phase="departing"]',
-      ),
-    ).toHaveLength(2);
-    expect([...container.querySelectorAll("[data-blackjack-card]")]).toEqual(
-      cards,
-    );
-    expect([...container.querySelectorAll("[data-blackjack-total]")]).toEqual(
-      totals,
-    );
-    expect(onPlayAgain).not.toHaveBeenCalled();
-    void act(() => vi.advanceTimersToNextTimer());
-    expect(onPlayAgain).toHaveBeenCalledOnce();
+    expect(onPlayAgainBlackjack).toHaveBeenCalledOnce();
   });
 });

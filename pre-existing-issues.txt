@@ -9,3 +9,5 @@ Dreamscapes and Dream guides are identified at runtime by art-key slugs (`firstl
 QA scenes are not reproducible across loads: with `?goto=<scene>&seed=7`, 22 of 37 scenes (Atlas layouts, site offers, avatar choices, battle hands) render different content on each load, so before/after comparisons of their copy are impossible. Passing an explicit `?game=<id>` for a fresh room leaves the page on "Joining Game" indefinitely instead of creating it. Guide dialogue also picks its line with `Math.random()` on each mount.
 
 `src/battle/state/transition.ts` (`cloneBattleReducerTransition`) has no importers anywhere in the repository; it is dead code left in the sandbox battle state module.
+
+In `src/components/ScreenRouter.test.tsx`, every journey route renders `JourneyCardTutorialController`, which throws "Coop hooks must be used within a CoopProvider" because the router harness mounts without a `CoopProvider`; a nested error boundary catches it, so the tests pass while the controller never mounts and its errors show only as console noise.

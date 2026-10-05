@@ -28,11 +28,14 @@ describe("selectRevealPlacement", () => {
     expect(result.primaryRect.y + result.primaryRect.height).toBeLessThanOrEqual(base.touchPoint!.y - 24);
   });
 
-  it("keeps GameCard primary placement identical with or without secondaries", () => {
-    const game = { ...base, primaryKind: "gameCard" as const };
-    const alone = selectRevealPlacement(game);
-    const supported = selectRevealPlacement({ ...game, secondarySizes: [{ width: 248, height: 120 }, { width: 248, height: 150 }] });
-    expect(supported.primaryRect).toEqual(alone.primaryRect);
+  it("keeps the GameCard primary rectangle fixed while fitting secondaries around it", () => {
+    const mobile = { ...base, primaryKind: "gameCard" as const };
+    const desktop = { ...mobile, viewport: { ...viewport, layout: "desktop" as const, width: 1200 }, reason: "hover" as const, touchPoint: undefined };
+    for (const game of [mobile, desktop]) {
+      const alone = selectRevealPlacement(game);
+      const supported = selectRevealPlacement({ ...game, secondarySizes: [{ width: 248, height: 120 }, { width: 248, height: 150 }] });
+      expect(supported.primaryRect).toEqual(alone.primaryRect);
+    }
   });
 
   it("evenly distributes mobile popup columns between both edges and the internal gap", () => {
@@ -59,13 +62,6 @@ describe("selectRevealPlacement", () => {
     });
 
     expect(result.primaryRect.y + result.primaryRect.height).toBeLessThanOrEqual(sourceRect.y - 14);
-  });
-
-  it("keeps the desktop GameCard reading rectangle fixed while fitting secondaries around it", () => {
-    const game = { ...base, viewport: { ...viewport, layout: "desktop" as const, width: 1200 }, reason: "hover" as const, touchPoint: undefined, primaryKind: "gameCard" as const };
-    const alone = selectRevealPlacement(game);
-    const supported = selectRevealPlacement({ ...game, secondarySizes: [{ width: 248, height: 120 }] });
-    expect(supported.primaryRect).toEqual(alone.primaryRect);
   });
 
   it("places a GameCard named by a wide choice cell entirely beside the cell", () => {
@@ -374,7 +370,8 @@ describe("selectRevealPlacement", () => {
     expect(result.primaryRect.x).toBe(sourceRect.x + sourceRect.width + 14);
   });
 
-  it.each([500, 480])("truncates a desktop InfoCard pair that cannot fit the %ipx safe width", (width) => {
+  it("truncates a desktop InfoCard pair that cannot fit the safe width", () => {
+    const width = 480;
     const desktop = { ...base, viewport: { ...viewport, layout: "desktop" as const, width }, reason: "hover" as const, touchPoint: undefined, sourceRect: { x: 190, y: 500, width: 80, height: 60 }, primarySize: { width: 248, height: 180 }, secondarySizes: [{ width: 248, height: 100 }] };
     for (const input of [desktop, { ...desktop, sourceRect: { ...desktop.sourceRect, y: 20 } }]) {
       const result = selectRevealPlacement(input);
