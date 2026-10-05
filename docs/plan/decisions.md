@@ -486,6 +486,9 @@ During the run the agent changes nothing outside these places:
 - its own beads;
 - gitignored local state.
 
+The one exception is the Hive Dolt server. The agent may restart it when it is
+down, exactly as [workflow](workflow.md#failure-and-recovery) describes.
+
 ### D17. Machine resources
 
 The machine is shared with other agents. Stay at about 6 cores:

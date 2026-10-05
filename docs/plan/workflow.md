@@ -38,9 +38,9 @@ Define the routing prefix in every shell command that touches Beads:
 hbd() { env BEADS_DIR=/Users/dthurn/brain/.beads BEADS_DOLT_AUTO_START=0 BD_NON_INTERACTIVE=1 BD_NO_HOOKS=true bd --sandbox --dolt-auto-commit off --actor "${CLAUDE_CODE_SESSION_ID:?}" "$@"; }
 ```
 
-**Never start a Dolt server, initialize a store, or fall back to another
-database.** An unavailable server is a blocker; handle it with the
-[recovery](#failure-and-recovery) rules.
+**Never initialize a store, start a second server, or fall back to another
+database.** The operator authorizes restarting the configured Dolt server when
+it is down; see [recovery](#failure-and-recovery).
 
 ### Filing a phase
 
@@ -412,11 +412,27 @@ These are the [D17](decisions.md#d17-machine-resources) limits:
 - **Playwright MCP unavailable.** Run `playwright-mcp-service start` and retry
   once. If it is still down, continue non-QA work in the bead. Record QA debt,
   and clear it before the bead closes, or before the phase gate at the latest.
+- **Beads server down.** The Hive store is served by one external Dolt
+  `sql-server` on `127.0.0.1:3307`, rooted at `/Users/dthurn/brain/.beads/dolt`.
+  It is shared with other Hive projects. When a Beads call fails to connect:
+  1. Confirm the server is down, not merely slow: `env
+     BEADS_DIR=/Users/dthurn/brain/.beads bd dolt status` fails, and
+     `lsof -nP -iTCP:3307 -sTCP:LISTEN` shows no listener.
+  2. Restart exactly that server, detached, and nothing else:
+
+     ```sh
+     cd /Users/dthurn/brain/.beads/dolt && nohup /Users/dthurn/.local/bin/dolt sql-server -H 127.0.0.1 -P 3307 --loglevel=warning >> /Users/dthurn/brain/.beads/dolt-server.log 2>&1 &
+     ```
+
+  3. Verify with `hbd show <current-bead> --json`, and record the restart and
+     its PID in the bead notes.
+  4. Never restart a server that is still listening, change its port or data
+     directory, initialize a store, or run Dolt maintenance. If the restart
+     fails, treat Beads as unavailable.
 - **Tollgate or Beads unavailable.**
   1. Wait and retry with backoff: 1 minute, then 5, then 15.
   2. Meanwhile, do read-only preparation for the current bead.
   3. Never bypass Tollgate with raw `git push`.
-  4. Never start a Beads server.
 - **Before stopping for any reason,** invoke `justiciar` in the same session
   and follow the Hive executor recovery protocol. That means:
   - repair or relax only agent-imposed constraints, and record the change;
