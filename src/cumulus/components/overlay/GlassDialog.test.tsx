@@ -57,15 +57,11 @@ afterEach(() => {
 });
 
 describe("GlassBackdrop", () => {
-  it("renders an aria-hidden position:absolute frosted layer", () => {
+  it("renders an aria-hidden decorative layer", () => {
     const { container, root } = mount(<GlassBackdrop />);
 
     const layer = container.firstElementChild as HTMLElement | null;
     expect(layer).not.toBeNull();
-    const style = layer?.getAttribute("style") ?? "";
-    expect(style).toContain("position: absolute");
-    // The blur backdrop from the shared glass recipe.
-    expect(style).toContain("blur(");
     expect(layer?.getAttribute("aria-hidden")).toBe("true");
 
     act(() => {
@@ -115,18 +111,12 @@ describe("GlassDialog", () => {
     );
     expect(container.querySelector('[data-testid="body"]')).not.toBeNull();
 
-    expect(
-      container
-        .querySelector('button[aria-label="Close"]')
-        ?.getAttribute("data-glass-placement"),
-    ).toBe("onGlass");
+    const close = container.querySelector<HTMLButtonElement>("header button");
+    expect(close?.getAttribute("aria-label")).toBeTruthy();
+    expect(close?.getAttribute("data-glass-placement")).toBe("onGlass");
 
     act(() => {
-      (
-        container.querySelector(
-          'button[aria-label="Close"]',
-        ) as HTMLButtonElement
-      ).click();
+      close?.click();
     });
     expect(onClose).toHaveBeenCalledTimes(1);
 
@@ -146,10 +136,10 @@ describe("GlassDialog", () => {
       </GlassDialog>,
     );
 
+    expect(container.querySelectorAll("button")).toHaveLength(1);
     expect(
-      container.querySelector('button[aria-label="Dismiss deck"]'),
-    ).not.toBeNull();
-    expect(container.querySelector('button[aria-label="Close"]')).toBeNull();
+      container.querySelector("button")?.getAttribute("aria-label"),
+    ).toBe("Dismiss deck");
 
     act(() => {
       root.unmount();
@@ -183,16 +173,15 @@ describe("GlassDialog", () => {
     const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
     expect(dialog).not.toBeNull();
     expect(dialog?.children).toHaveLength(1);
-    const panel = dialog?.firstElementChild as HTMLElement | null;
-    expect(panel?.style.position).toBe("relative");
-    expect(panel?.style.maxWidth).toBe("min(900px, 90vw)");
+    expect(dialog?.firstElementChild?.hasAttribute("data-glass-dialog-panel"))
+      .toBe(true);
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("keeps the popup presentation bounded and content-sized on mobile", () => {
+  it("renders the popup presentation as one panel on mobile", () => {
     const { container, root } = mount(
       <GlassDialog
         title={assertLocalized("How to Play")}
@@ -204,19 +193,13 @@ describe("GlassDialog", () => {
     );
 
     const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
-    const panel = dialog?.querySelector<HTMLElement>(
-      "[data-glass-dialog-panel]",
-    );
     expect(dialog?.children).toHaveLength(1);
     expect(dialog?.getAttribute("data-glass-dialog-presentation")).toBe(
       "popup",
     );
-    expect(dialog?.style.paddingTop).toBe("var(--gutter)");
-    expect(panel?.style.width).toBe("fit-content");
-    expect(panel?.style.maxWidth).toBe("100%");
-    expect(panel?.style.maxHeight).toBe("100%");
-    expect(panel?.style.height).toBe("");
-    expect(panel?.style.borderRadius).not.toBe("0px");
+    expect(
+      dialog?.querySelector('[data-glass-dialog-panel] [data-testid="popup-content"]'),
+    ).not.toBeNull();
 
     act(() => {
       root.unmount();
@@ -239,14 +222,7 @@ describe("GlassDialog", () => {
     const layout = container.querySelector<HTMLElement>(
       "[data-glass-dialog-companion-layout]",
     );
-    const panel = container.querySelector<HTMLElement>(
-      "[data-glass-dialog-panel]",
-    );
     expect(layout?.dataset.glassDialogCompanionLayout).toBe("horizontal");
-    expect(layout?.style.gridTemplateColumns).toBe("360px minmax(0, 460px)");
-    expect(layout?.style.width).toBe("calc(820px + var(--space-xl))");
-    expect(panel?.style.width).toBe("100%");
-    expect(panel?.style.boxSizing).toBe("border-box");
     expect(container.querySelector('[data-testid="companion"]')).not.toBeNull();
 
     act(() => {
@@ -270,18 +246,11 @@ describe("GlassDialog", () => {
       "[data-glass-dialog-companion-layout]",
     );
     expect(layout?.dataset.glassDialogCompanionLayout).toBe("vertical");
-    expect(layout?.style.gridTemplateColumns).toBe("minmax(0, 1fr)");
-    expect(layout?.style.width).toBe(
-      "calc(100vw - var(--gutter) - var(--gutter))",
-    );
-    expect(layout?.style.maxWidth).toBe("460px");
-    expect(layout?.style.gap).toBe("var(--space-m)");
-    const companion = container.querySelector<HTMLElement>(
-      "[data-glass-dialog-companion]",
-    );
-    expect(companion?.style.width).toBe("76vw");
-    expect(companion?.style.maxWidth).toBe("340px");
-    expect(companion?.style.justifySelf).toBe("center");
+    expect(
+      container.querySelector(
+        '[data-glass-dialog-companion] [data-testid="companion"]',
+      ),
+    ).not.toBeNull();
 
     act(() => {
       root.unmount();
@@ -311,12 +280,7 @@ describe("GlassDialog", () => {
     expect(dialog?.querySelector("header")).toBeNull();
     expect(dialog?.querySelector("h2")).toBeNull();
     expect(body?.firstElementChild).toBe(flowingClose);
-    expect(flowingClose?.style.cssFloat).toBe("right");
-    expect(flowingClose?.style.marginTop).toBe("var(--space-xxs)");
-    expect(flowingClose?.style.marginRight).toBe("var(--space-xxs)");
-    expect(
-      flowingClose?.querySelector('button[aria-label="Close"]'),
-    ).not.toBeNull();
+    expect(flowingClose?.querySelector("button")).not.toBeNull();
     act(() => {
       root.unmount();
     });
@@ -355,8 +319,8 @@ describe("GlassDialog", () => {
     const dialog = container.querySelector<HTMLElement>('[role="dialog"]');
     expect(dialog?.style.position).toBe("fixed");
     expect(dialog?.style.inset).toBe("0px");
-    expect(dialog?.style.paddingLeft).toBe("var(--space-xl)");
-    expect(dialog?.style.paddingRight).toBe("calc(var(--space-xl) + 360px)");
+    // The 360px measured beyond the battlefield's right edge is reserved.
+    expect(dialog?.style.paddingRight).toContain("360px");
     expect(
       dialog?.getAttribute("data-glass-dialog-desktop-center-target"),
     ).toBe("battlefield");
@@ -380,7 +344,7 @@ describe("GlassDialog", () => {
     );
 
     const headerButton = container.querySelector("header button");
-    expect(headerButton?.getAttribute("aria-label")).toBe("Close");
+    expect(headerButton).not.toBeNull();
     // Exactly one close control — the disc moves, it never forks.
     expect(container.querySelectorAll("button")).toHaveLength(1);
 
@@ -405,9 +369,7 @@ describe("GlassDialog", () => {
     // The disc has left the header row...
     expect(container.querySelector("header button")).toBeNull();
     // ...and floats in an absolutely positioned wrapper beside the island.
-    const closeButton = container.querySelector<HTMLElement>(
-      'button[aria-label="Close"]',
-    );
+    const closeButton = container.querySelector<HTMLElement>("button");
     expect(closeButton).not.toBeNull();
     const floatWrapper = closeButton?.parentElement as HTMLElement | null;
     expect(floatWrapper?.style.position).toBe("absolute");

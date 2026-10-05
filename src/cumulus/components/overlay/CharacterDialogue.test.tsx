@@ -78,12 +78,6 @@ describe("CharacterDialogue", () => {
     expect(dialogue?.dataset.characterDialogueSize).toBe("compact");
     expect(dialogue?.getAttribute("aria-hidden")).toBe("false");
     expect(dialogue?.style.opacity).toBe("0");
-    expect(dialogue?.style.gridTemplateColumns).toBe("64px minmax(0, 1fr)");
-    expect(dialogue?.style.columnGap).toBe("var(--space-2xl)");
-    expect(dialogue?.style.maxWidth).toBe("300px");
-    expect(bubble?.style.padding).toBe(
-      "var(--space-m) var(--space-m) var(--space-m) calc(14px + var(--space-m))",
-    );
     expect(bubble?.dataset.speechBubblePointerPlacement).toBe("left-center");
     expect(bubble?.dataset.speechBubbleSize).toBe("standard");
     expect(portraitImage?.getAttribute("src")).toBe(resolveArtRef(portrait));
@@ -95,9 +89,7 @@ describe("CharacterDialogue", () => {
     container.remove();
   });
 
-  it("renders the prominent portrait and bubble with centered pointer geometry", () => {
-    vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(169);
-    vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(62);
+  it("renders the prominent size with highlight markup and rules symbols", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
@@ -127,38 +119,16 @@ describe("CharacterDialogue", () => {
     const bubble = container.querySelector<HTMLElement>(
       "[data-character-dialogue] aside",
     );
-    const bubbleRim = container.querySelector<SVGPathElement>(
-      "[data-character-dialogue] [data-speech-bubble-rim]",
-    );
-    const glassBody = container.querySelector<HTMLElement>(
-      "[data-character-dialogue] [data-speech-bubble-glass-body]",
-    );
     expect(dialogue?.dataset.characterDialogueSize).toBe("prominent");
-    expect(dialogue?.style.gridTemplateColumns).toBe("150px minmax(0, 1fr)");
-    expect(dialogue?.style.maxWidth).toBe("700px");
     expect(bubble?.dataset.speechBubbleSize).toBe("prominent");
-    expect(bubble?.style.zoom).toBe("1.25");
-    expect(bubble?.style.background).toBe("");
-    expect(bubble?.style.backdropFilter).toBe("");
-    expect(glassBody?.style.left).toBe("14px");
-    expect(glassBody?.style.background).toBe("var(--glass-sheen)");
-    expect(glassBody?.style.backdropFilter).toContain("var(--glass-blur)");
-    expect(bubbleRim?.getAttribute("d")).toContain("L 0 31");
-    expect(bubbleRim?.getAttribute("fill")).toBe("var(--glass-fill-popover)");
-    expect(bubbleRim?.getAttribute("stroke")).toBe("var(--glass-rim)");
-    expect(bubbleRim?.getAttribute("stroke-width")).toBe("2");
     const highlight = bubble?.querySelector<HTMLElement>(
       '[data-tutorial-instruction-highlight="yellow"]',
     );
     expect(highlight?.textContent).toBe("Dreamer");
-    expect(highlight?.style.color).toBe("var(--spark)");
     const purpleHighlight = bubble?.querySelector<HTMLElement>(
       '[data-tutorial-instruction-highlight="purple"]',
     );
     expect(purpleHighlight?.textContent).toBe("event");
-    expect(purpleHighlight?.style.color).toBe("var(--text-tutorial-highlight)");
-    expect(purpleHighlight?.style.fontWeight).toBe("700");
-    expect(highlight?.style.fontWeight).toBe("");
     expect(bubble?.textContent).toContain(
       "Welcome, Dreamer. An event resolves once. Score  equal to your spark .",
     );
@@ -176,46 +146,6 @@ describe("CharacterDialogue", () => {
     expect(sparkIcon?.querySelector("i")?.className).toContain(
       "bxf bx-sparkle",
     );
-    expect(sparkIcon?.parentElement?.style.color).toContain(
-      "var(--cv-rules-spark-color",
-    );
-
-    act(() => root.unmount());
-    container.remove();
-  });
-
-  it("widens desktop dialogue while retaining the compact portrait and bubble scale", () => {
-    const container = document.createElement("div");
-    document.body.append(container);
-    const root = createRoot(container);
-
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <CharacterDialogue
-            dialogue={{
-              portrait: artRef.characterPortrait("mira"),
-              portraitAlt: assertLocalized("Mira"),
-              speakerName: assertLocalized("Mira"),
-              text: assertLocalized("A broad desktop explanation."),
-            }}
-            size="wide"
-            visible
-          />
-        </CumulusRoot>,
-      );
-    });
-
-    const dialogue = container.querySelector<HTMLElement>(
-      "[data-character-dialogue]",
-    );
-    const bubble = container.querySelector<HTMLElement>(
-      "[data-character-dialogue] aside",
-    );
-    expect(dialogue?.dataset.characterDialogueSize).toBe("wide");
-    expect(dialogue?.style.gridTemplateColumns).toBe("64px minmax(0, 1fr)");
-    expect(dialogue?.style.maxWidth).toBe("700px");
-    expect(bubble?.dataset.speechBubbleSize).toBe("standard");
 
     act(() => root.unmount());
     container.remove();

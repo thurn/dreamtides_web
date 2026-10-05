@@ -11,7 +11,7 @@
 {"file": "src/components/JourneyCardTutorialController.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/components/JourneyUtilityMenuController.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/components/ScreenRouter.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/cumulus/components/atlas/AtlasNode.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "19 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/components/atlas/AtlasNode.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Refined in hv-b8ef.8: its style checks pin gesture handling (touch-action), caller-owned layout, and press/hover behavior, not restated tokens."}
 {"file": "src/cumulus/components/battle/BattleForeseeEditor.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Trigger-source label copy. Assert roles, ids, and structure instead."}
 {"file": "src/cumulus/components/battle/BattlePhaseIndicator.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/components/battle/BattleStatusDisplay.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Dormant-ability description copy. Assert roles, ids, and structure instead. Also review 14 inline style-value assertions."}
@@ -51,13 +51,13 @@
 {"file": "src/cumulus/components/controls/TransfigurationButton.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/components/controls/inspector-controls.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/components/controls/offer-tile-descriptions.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/cumulus/components/dreamscape/SiteNode.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Locked guardian battle description copy. Assert roles, ids, and structure instead."}
+{"file": "src/cumulus/components/dreamscape/SiteNode.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Refined in hv-b8ef.8: the description strings are supplied by the synthetic model, so asserting them pins pass-through."}
 {"file": "src/cumulus/components/hud/AvatarPortrait.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/components/hud/AvatarStage.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/components/hud/Dreamsign.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/components/hud/EssenceValue.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/cumulus/components/hud/TideDisc.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/cumulus/components/hud/TidesInfoLabel.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
+{"file": "src/cumulus/components/hud/TideDisc.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Refined in hv-b8ef.8: the Tides definition asserted production glossary text; it now compares against the glossary entry."}
+{"file": "src/cumulus/components/hud/TidesInfoLabel.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Refined in hv-b8ef.8: label, accessible name, and definition asserted production copy; they now compare against the glossary entry, and glyph metric styles are dropped."}
 {"file": "src/cumulus/components/hud/tide-spec.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/components/layout/SiteLayout.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "28 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
 {"file": "src/cumulus/components/overlay/CharacterDialogue.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "21 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
@@ -73,7 +73,7 @@
 {"file": "src/cumulus/components/status/RadialAnnouncement.test.tsx", "verdict": "rewrite", "reason": "ui-copy", "notes": "Outcome headline copy (Won!, Victory). Assert roles, ids, and structure instead."}
 {"file": "src/cumulus/components/status/TransientStatusToast.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/components/typography/InlineGlyph.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/cumulus/internal/reveal/RevealOverlay.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "17 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/internal/reveal/RevealOverlay.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Refined in hv-b8ef.8: its style checks are placement-engine results (positions, widths, gaps) and pointer transparency, which are the contract."}
 {"file": "src/cumulus/internal/reveal/context.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/internal/reveal/entity-competition.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/internal/reveal/feedback.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
@@ -82,7 +82,7 @@
 {"file": "src/cumulus/internal/reveal/logging.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/internal/reveal/state-machine.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
 {"file": "src/cumulus/internal/reveal/viewport.test.ts", "verdict": "keep", "reason": "contract", "notes": ""}
-{"file": "src/cumulus/primitives/Pressable.test.tsx", "verdict": "rewrite", "reason": "impl-detail", "notes": "18 inline style-value assertions; keep layout contracts (bounds, safe areas, ordering, geometry results) and drop restated token and pixel values."}
+{"file": "src/cumulus/primitives/Pressable.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Refined in hv-b8ef.8: its transform checks pin press-feedback behavior (scale versus stationary), which is the contract."}
 {"file": "src/cumulus/primitives/motion-time.test.ts", "verdict": "delete", "reason": "impl-detail", "notes": "Asserts one design-token value (mutable design data), not the conversion contract."}
 {"file": "src/cumulus/primitives/safe-area.test.ts", "verdict": "delete", "reason": "impl-detail", "notes": "Asserts the CSS string a private helper builds."}
 {"file": "src/cumulus/primitives/use-scale-to-fit.test.tsx", "verdict": "keep", "reason": "contract", "notes": ""}

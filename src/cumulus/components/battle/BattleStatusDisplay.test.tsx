@@ -198,7 +198,7 @@ describe("BattleStatusDisplay", () => {
     const description = document.getElementById(
       source?.getAttribute("aria-describedby") ?? "",
     );
-    expect(description?.textContent).toContain("Avatar ability is not active");
+    expect(description?.textContent).toBeTruthy();
 
     act(() => root.unmount());
     container.remove();

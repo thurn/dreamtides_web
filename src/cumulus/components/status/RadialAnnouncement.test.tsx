@@ -48,36 +48,6 @@ describe("RadialAnnouncement", () => {
     expect(
       announcement?.querySelector("[data-inline-glyph] i")?.className,
     ).toContain("bx-crypto");
-    expect(
-      announcement?.querySelector<HTMLElement>(
-        "[data-radial-announcement-disc]",
-      )?.style.width,
-    ).toBe("184px");
-
-    act(() => root.unmount());
-    container.remove();
-  });
-
-  it("keeps the mini outcome ripple close to its compact disc", () => {
-    const container = document.createElement("div");
-    document.body.append(container);
-    const root = createRoot(container);
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <RadialAnnouncement headline={assertLocalized("Bust!")} size="mini" />
-        </CumulusRoot>,
-      );
-    });
-
-    expect(
-      container.querySelector<HTMLElement>("[data-radial-announcement-disc]")
-        ?.style.width,
-    ).toBe("108px");
-    expect(
-      container.querySelector<HTMLElement>("[data-radial-announcement-ripple]")
-        ?.style.inset,
-    ).toBe("calc(-1 * var(--space-xxs))");
 
     act(() => root.unmount());
     container.remove();
@@ -107,11 +77,6 @@ describe("RadialAnnouncement", () => {
     );
     expect(announcement?.dataset.radialAnnouncementPoints).toBe("3");
     expect(announcement?.getAttribute("aria-label")).toContain("3");
-    expect(
-      announcement?.querySelector<HTMLElement>(
-        "[data-radial-announcement-disc]",
-      )?.style.width,
-    ).toBe("78%");
     expect(announcement?.querySelector("i.bxf.bx-star-circle")).not.toBeNull();
     expect(announcement?.textContent).not.toContain("⍟");
     const disc = announcement?.querySelector<HTMLElement>(
@@ -128,7 +93,6 @@ describe("RadialAnnouncement", () => {
       "[data-radial-announcement-orbit]",
     );
     expect(orbit?.hasAttribute("data-battle-card-points-orbit")).toBe(true);
-    expect(orbit?.getAttribute("style")).toContain("var(--accent-bright)");
 
     act(() => root.unmount());
     container.remove();
@@ -156,19 +120,6 @@ describe("RadialAnnouncement", () => {
     expect(available?.dataset.radialAnnouncementTargetStatus).toBe("available");
     expect(available?.textContent).toContain("2");
     expect(available?.querySelector("i.bx-sparkle")).not.toBeNull();
-    expect(
-      available?.querySelector<HTMLElement>("[data-radial-announcement-disc]")
-        ?.style.animation,
-    ).toContain("radial-announcement-target-disc");
-    const availableOrbit = available?.querySelector<HTMLElement>(
-      "[data-radial-announcement-orbit]",
-    );
-    expect(availableOrbit?.getAttribute("style")).toContain(
-      "var(--border-accent)",
-    );
-    expect(availableOrbit?.getAttribute("style")).toContain(
-      "var(--accent-bright)",
-    );
 
     act(() => {
       root.render(
@@ -213,9 +164,6 @@ describe("RadialAnnouncement", () => {
     expect(victory?.dataset.radialAnnouncement).toBe("fixture-victory");
     expect(title?.tagName).toBe("H1");
     expect(title?.textContent).toBe("Victory");
-    expect(title?.style.animation).toContain(
-      "radial-announcement-victory-title-move",
-    );
     expect(
       victory?.querySelectorAll("[data-radial-announcement-orbit]"),
     ).toHaveLength(2);
@@ -225,9 +173,6 @@ describe("RadialAnnouncement", () => {
     expect(
       victory?.querySelector('[data-radial-announcement-symbol="victory"]'),
     ).not.toBeNull();
-    expect(victory?.querySelector("style")?.textContent).toContain(
-      '[data-radial-announcement-variant="victory"]',
-    );
 
     act(() => root.unmount());
     container.remove();

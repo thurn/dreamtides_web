@@ -60,8 +60,6 @@ describe("IconButton", () => {
     const button = container.querySelector("button");
     expect(button).not.toBeNull();
     expect(button?.getAttribute("aria-label")).toBe("Close deck");
-    expect(button?.style.appearance).toBe("none");
-    expect(button?.style.webkitAppearance).toBe("none");
     // The disc shows only its glyph — the close mark (`bx bx-x`).
     expect(button?.querySelector("i.bx-x")).not.toBeNull();
 
@@ -89,67 +87,6 @@ describe("IconButton", () => {
     });
   });
 
-  it("renders `sm` as a 40px disc with a 22px glyph font", () => {
-    const { container, root } = mount(
-      <IconButton
-        glyph={GLYPHS.close}
-        size="sm"
-        label={assertLocalized("Close")}
-        onPress={() => {}}
-      />,
-    );
-
-    const style =
-      container.querySelector("button")?.getAttribute("style") ?? "";
-    expect(style).toContain("width: 40px");
-    expect(style).toContain("height: 40px");
-    expect(style).toContain("font-size: 22px");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("renders `md` as a 48px disc with a 26px glyph font", () => {
-    const { container, root } = mount(
-      <IconButton
-        glyph={GLYPHS.close}
-        size="md"
-        label={assertLocalized("Close")}
-        onPress={() => {}}
-      />,
-    );
-
-    const style =
-      container.querySelector("button")?.getAttribute("style") ?? "";
-    expect(style).toContain("width: 48px");
-    expect(style).toContain("height: 48px");
-    expect(style).toContain("font-size: 26px");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("defaults to the `md` size", () => {
-    const { container, root } = mount(
-      <IconButton
-        glyph={GLYPHS.close}
-        label={assertLocalized("Close")}
-        onPress={() => {}}
-      />,
-    );
-
-    const style =
-      container.querySelector("button")?.getAttribute("style") ?? "";
-    expect(style).toContain("width: 48px");
-    expect(style).toContain("font-size: 26px");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
   it("uses the lighter tonal-lens treatment when placed on glass", () => {
     const { container, root } = mount(
       <IconButton
@@ -162,8 +99,6 @@ describe("IconButton", () => {
 
     const button = container.querySelector("button");
     expect(button?.dataset.glassPlacement).toBe("onGlass");
-    expect(button?.style.background).toContain("--glass-on-glass-fill");
-    expect(button?.style.backdropFilter).toBe("");
 
     act(() => {
       root.unmount();

@@ -71,7 +71,7 @@ describe("GlassButton", () => {
     );
 
     const button = container.querySelector('[data-testid="glass-apply"]');
-    expect(button).not.toBeNull();
+    expect(button?.tagName).toBe("BUTTON");
     expect(button?.textContent).toContain("Apply Filters");
 
     act(() => {
@@ -106,30 +106,11 @@ describe("GlassButton", () => {
     );
 
     const button = container.querySelector("button");
-    expect(button?.textContent).toBe("Transfigure · 20");
-    const essenceIcon = button?.querySelector<HTMLElement>(
-      "[data-inline-glyph]",
-    );
-    expect(essenceIcon?.querySelector("i")?.className).toContain("bx-crypto");
-    expect(essenceIcon?.dataset.inlineGlyph).toBe("");
-    const essenceMetric = essenceIcon?.querySelector<HTMLElement>(
-      "[data-inline-glyph-metric]",
-    );
-    expect(essenceMetric?.style.verticalAlign).toBe("middle");
-    expect(essenceMetric?.style.transform).toBe(
-      "translateY(calc(0.5ex - 0.5cap))",
-    );
-    const content = container.querySelector<HTMLElement>(
-      "[data-glass-button-content]",
-    );
-    expect(content?.style.gap).toBe("0px");
+    expect(button?.textContent).toContain("Transfigure");
     expect(
-      content?.querySelector("[data-glass-button-essence-cost]")?.textContent,
-    ).toBe(" · 20");
-    expect(
-      content?.querySelector<HTMLElement>("[data-glass-button-essence-cost]")
-        ?.style.marginLeft,
-    ).toBe("var(--space-xs)");
+      button?.querySelector("[data-glass-button-essence-cost]")?.textContent,
+    ).toContain("20");
+    expect(button?.querySelector("[data-inline-glyph]")).not.toBeNull();
     act(() => {
       root.render(
         <CumulusRoot>
@@ -162,7 +143,9 @@ describe("GlassButton", () => {
     );
 
     const button = container.querySelector("button");
-    expect(button?.textContent).toBe("Choose · 50");
+    expect(
+      button?.querySelector("[data-glass-button-essence-cost]")?.textContent,
+    ).toContain("50");
     expect(button?.getAttribute("aria-label")).toBe(
       "Choose the Six Gate for 50 Essence",
     );
@@ -238,83 +221,12 @@ describe("GlassButton", () => {
     });
   });
 
-  it("owns centered content at the control root and within reserved dynamic width", () => {
-    const { container, root } = mount(
-      <GlassButton
-        label={assertLocalized("Transfigure")}
-        widthReservations={[
-          { label: assertLocalized("Transfigure"), essenceCost: null },
-          { label: assertLocalized("Reforging…"), essenceCost: 80 },
-        ]}
-        onPress={() => {}}
-      />,
-    );
-
-    const button = container.querySelector<HTMLButtonElement>("button");
-    expect(button?.style.justifyContent).toBe("center");
-    expect(button?.style.textAlign).toBe("center");
-    expect(button?.style.font).toBe("var(--t-button)");
-    expect(
-      button?.querySelector<HTMLElement>("[data-glass-button-content]")?.style
-        .justifyContent,
-    ).toBe("center");
-
-    act(() => root.unmount());
-  });
-
-  it("keeps the canonical target height with compact label spacing", () => {
-    const { container, root } = mount(
-      <GlassButton
-        label={assertLocalized("Choose")}
-        size="compact"
-        onPress={() => {}}
-      />,
-    );
-
-    const button = container.querySelector<HTMLButtonElement>("button");
-    expect(button?.style.height).toBe("42px");
-    expect(button?.style.padding).toBe("0 var(--space-s)");
-    expect(button?.style.font).toBe("var(--t-button-sm)");
-
-    act(() => root.unmount());
-  });
-
-  it("offers a prominent primary-action size", () => {
-    const { container, root } = mount(
-      <GlassButton
-        label={assertLocalized("Begin")}
-        size="prominent"
-        onPress={() => {}}
-      />,
-    );
-
-    const button = container.querySelector<HTMLButtonElement>("button");
-    expect(button?.style.height).toBe("56px");
-    expect(button?.style.padding).toBe("0 var(--space-2xl)");
-    expect(button?.style.font).toBe("var(--t-button-lg)");
-
-    act(() => root.unmount());
-  });
-
   it("omits the `<i>` when no glyph is given", () => {
     const { container, root } = mount(
       <GlassButton label={assertLocalized("Filter")} onPress={() => {}} />,
     );
 
     expect(container.querySelector("i")).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("defaults to the neutral glass treatment", () => {
-    const { container, root } = mount(
-      <GlassButton label={assertLocalized("Cancel")} onPress={() => {}} />,
-    );
-
-    const button = container.querySelector("button");
-    expect(button?.style.borderColor).toBe("");
 
     act(() => {
       root.unmount();
@@ -332,8 +244,6 @@ describe("GlassButton", () => {
 
     const button = container.querySelector("button");
     expect(button?.dataset.glassPlacement).toBe("onGlass");
-    expect(button?.style.background).toContain("--glass-on-glass-fill");
-    expect(button?.style.backdropFilter).toBe("");
 
     act(() => {
       root.unmount();
@@ -350,10 +260,7 @@ describe("GlassButton", () => {
     );
 
     const button = container.querySelector("button");
-    expect(button?.style.background).toContain("var(--danger) 20%");
-    expect(button?.style.background).toContain("var(--danger) 10%");
-    expect(button?.style.boxShadow).toContain("inset 0 -12px 26px");
-    expect(button?.style.boxShadow).toContain("0 10px 26px");
+    expect(button?.dataset.glassVariant).toBe("danger");
 
     act(() => {
       root.unmount();
@@ -370,11 +277,6 @@ describe("GlassButton", () => {
     );
     const button = container.querySelector<HTMLButtonElement>("button");
     expect(button?.dataset.glassVariant).toBe("accent");
-    expect(button?.style.backdropFilter).toContain("--glass-blur");
-    expect(button?.style.background).toContain("var(--accent-bright) 20%");
-    expect(button?.style.background).toContain("var(--accent-strong) 10%");
-    expect(button?.style.boxShadow).toContain("inset 0 -12px 26px");
-    expect(button?.style.boxShadow).toContain("0 10px 26px");
     act(() => root.unmount());
   });
 
@@ -407,28 +309,6 @@ describe("GlassButton", () => {
       );
     });
     expect(button?.style.border).toBe(neutralBorder);
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("balances the danger treatment for placement on glass", () => {
-    const { container, root } = mount(
-      <GlassButton
-        label={assertLocalized("Cancel")}
-        variant="danger"
-        placement="onGlass"
-        onPress={() => {}}
-      />,
-    );
-
-    const button = container.querySelector("button");
-    expect(button?.style.background).toContain("var(--danger) 18%");
-    expect(button?.style.background).toContain("var(--danger) 8%");
-    expect(button?.style.background).toContain("--glass-on-glass-fill");
-    expect(button?.style.boxShadow).toContain("inset 0 -10px 22px");
-    expect(button?.style.boxShadow).toContain("0 8px 22px");
 
     act(() => {
       root.unmount();
@@ -507,7 +387,6 @@ describe("GlassButton", () => {
 
     const button = container.querySelector("button");
     expect(button?.getAttribute("aria-disabled")).toBe("true");
-    expect(button?.getAttribute("style")).toContain("opacity: 0.5");
 
     act(() => {
       button?.click();
@@ -522,7 +401,6 @@ describe("GlassButton", () => {
       );
     });
     expect(button?.getAttribute("aria-disabled")).toBeNull();
-    expect(button?.getAttribute("style")).toContain("opacity: 1");
 
     act(() => {
       root.unmount();

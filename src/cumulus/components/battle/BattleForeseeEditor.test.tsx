@@ -210,7 +210,6 @@ describe("BattleForeseeEditor", () => {
     const source = container.querySelector<HTMLElement>(
       '[data-battle-prompt-source="dreamwell"]',
     );
-    expect(source?.textContent).toContain("Triggered By");
     expect(
       source
         ?.querySelector("[data-dreamwell-card]")

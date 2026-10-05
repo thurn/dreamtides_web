@@ -7,6 +7,9 @@ import { describe, expect, it } from "vitest";
 import { CumulusRoot } from "../../CumulusRoot";
 import { TideDisc } from "./TideDisc";
 import { testTideId } from "../../../types/test-identities";
+import { GLOSSARY_IDS, requireGlossaryEntry } from "../../../data/glossary";
+
+const TIDES = requireGlossaryEntry(GLOSSARY_IDS.tides);
 
 describe("TideDisc", () => {
   it("derives its tide primary and definition secondary internally", () => {
@@ -33,14 +36,14 @@ describe("TideDisc", () => {
     expect(source.dataset.revealEntityType).toBe("tide");
     expect(source.dataset.revealEntityId).toMatch(/^[0-9a-f-]{36}$/);
     expect(source.dataset.revealPrimaryVariant).toBe("tide");
-    expect(source.dataset.revealSecondaryTitles).toBe("Tides");
+    expect(source.dataset.revealSecondaryTitles).toBe(TIDES.term);
     expect(source.tabIndex).toBe(0);
     const description = document.getElementById(
       source.getAttribute("aria-describedby") ?? "",
     );
     expect(description?.textContent).toContain("Rising Valor");
     expect(description?.textContent).toContain("Stand firm.");
-    expect(description?.textContent).toContain("Pools of cards");
+    expect(description?.textContent).toContain(TIDES.definition);
     act(() => root.unmount());
     container.remove();
   });

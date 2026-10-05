@@ -135,6 +135,14 @@ function remeasure(): void {
   );
 }
 
+const glossaryTerm = (id: Parameters<typeof glossary.requireGlossaryEntry>[0]) =>
+  glossary.requireGlossaryEntry(id).term;
+const EXHAUSTED_TERM = glossaryTerm(glossary.GLOSSARY_IDS.exhausted);
+const FIGMENT_TERM = glossaryTerm(glossary.GLOSSARY_IDS.figment);
+const BANE_TERM = glossaryTerm(
+  testGlossaryEntryId("a9799416-d2d4-4f1b-a3b5-fec790119fae"),
+);
+
 describe("GameCard reveal contract", () => {
   it("registers canonical UUID semantics and derives de-duplicated glossary secondaries", () => {
     const { container, root } = mount(
@@ -245,11 +253,11 @@ describe("GameCard reveal contract", () => {
     const description =
       document.getElementById(source?.getAttribute("aria-describedby") ?? "")
         ?.textContent ?? "";
-    expect(description).toContain("Exhausted");
+    expect(description).toContain(EXHAUSTED_TERM);
     expect(description).toContain(
       glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.exhausted).definition,
     );
-    expect(description.indexOf("Exhausted")).toBeLessThan(
+    expect(description.indexOf(EXHAUSTED_TERM)).toBeLessThan(
       description.indexOf(
         glossary.requireGlossaryEntry(
           testGlossaryEntryId("a9799416-d2d4-4f1b-a3b5-fec790119fae"),
@@ -277,9 +285,9 @@ describe("GameCard reveal contract", () => {
         '[data-cumulus-reveal-card="secondary"]',
       ),
     ];
-    expect(secondaries[0]?.textContent).toContain("Exhausted");
+    expect(secondaries[0]?.textContent).toContain(EXHAUSTED_TERM);
     expect(secondaries[0]?.querySelectorAll("i.bxf.bx-moon")).toHaveLength(2);
-    expect(secondaries[1]?.textContent).toContain("Bane");
+    expect(secondaries[1]?.textContent).toContain(BANE_TERM);
 
     act(() => root.unmount());
   });
@@ -297,11 +305,11 @@ describe("GameCard reveal contract", () => {
     const description =
       document.getElementById(source?.getAttribute("aria-describedby") ?? "")
         ?.textContent ?? "";
-    expect(description).toContain("Figment");
+    expect(description).toContain(FIGMENT_TERM);
     expect(description).toContain(
       glossary.requireGlossaryEntry(glossary.GLOSSARY_IDS.figment).definition,
     );
-    expect(description.indexOf("Figment")).toBeLessThan(
+    expect(description.indexOf(FIGMENT_TERM)).toBeLessThan(
       description.indexOf(
         glossary.requireGlossaryEntry(
           testGlossaryEntryId("a9799416-d2d4-4f1b-a3b5-fec790119fae"),
@@ -329,8 +337,8 @@ describe("GameCard reveal contract", () => {
         '[data-cumulus-reveal-card="secondary"]',
       ),
     ];
-    expect(secondaries[0]?.textContent).toContain("Figment");
-    expect(secondaries[1]?.textContent).toContain("Bane");
+    expect(secondaries[0]?.textContent).toContain(FIGMENT_TERM);
+    expect(secondaries[1]?.textContent).toContain(BANE_TERM);
 
     act(() => root.unmount());
   });

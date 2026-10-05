@@ -274,15 +274,10 @@ describe("CardPile", () => {
     expect(pile?.style.aspectRatio).toBe(
       `${String(CARD_ASPECT_H)} / ${String(CARD_ASPECT_W)}`,
     );
-    expect(outline?.style.border).toBe("var(--battlefield-slot-border)");
-    expect(outline?.style.borderRadius).toBe("var(--radius-panel)");
     const label = outline?.querySelector<HTMLElement>(
       "[data-card-pile-empty-label]",
     );
     expect(label?.textContent).toBe("Void");
-    expect(label?.style.font).toBe("var(--t-button-sm)");
-    expect(label?.style.color).toBe("var(--text-faint)");
-    expect(label?.style.textShadow).toBe("var(--text-outline-media)");
 
     act(() => root.unmount());
     container.remove();
