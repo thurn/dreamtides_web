@@ -215,7 +215,7 @@ export default tseslint.config(
             {
               group: ["**/cumulus/internal/**", "**/cumulus/internal"],
               message:
-                "src/cumulus/internal/ material recipes are not for external reach-in. Import a public Cumulus component instead, or migrate this screen onto the Cumulus tier — see the cumulus-migrate skill.",
+                "src/cumulus/internal/ material recipes are not for external reach-in. Import a public Cumulus component instead, or migrate this screen onto the Cumulus tier — see the cumulus skill.",
             },
           ],
         },

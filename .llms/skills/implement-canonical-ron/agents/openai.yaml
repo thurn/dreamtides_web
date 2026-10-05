@@ -1,4 +1,0 @@
-interface:
-  display_name: "Activate Canonical RON"
-  short_description: "Activate immutable reviewed RON safely"
-  default_prompt: "Use $implement-canonical-ron to activate this reviewed candidate without modifying its bytes, and abort if the candidate requires changes."

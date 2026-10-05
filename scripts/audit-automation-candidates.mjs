@@ -3,7 +3,7 @@
 //
 // Loads public/cards_v2-data.json (a JSON ARRAY of card objects, each with
 // `id` UUID, `name`, `renderedText`, `subtype`, `energyCost`, `cardType`) and
-// emits docs/automation-audit.json: a catalog of every card whose renderedText
+// emits src/battle/automation/automation-audit.json: a catalog of every card whose renderedText
 // contains an automatable trigger clause.
 //
 // Trigger detection:
@@ -60,7 +60,7 @@
 //   Err toward manual: a missed card is safe; a mis-scripted card is not.
 //
 // Deterministic and re-runnable: `cards` is sorted by `id` and the output is
-// byte-stable. Do NOT hand-edit docs/automation-audit.json.
+// byte-stable. Do NOT hand-edit src/battle/automation/automation-audit.json.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -69,7 +69,7 @@ import { dirname, join } from 'node:path';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = join(__dirname, '..');
 const SOURCE = 'public/cards_v2-data.json';
-const OUTPUT = join(repoRoot, 'docs', 'automation-audit.json');
+const OUTPUT = join(repoRoot, 'src', 'battle', 'automation', 'automation-audit.json');
 
 const DAWN_MARK = '▸Dawn:';
 const MAT_MARK = '▸Materialized:';
@@ -427,7 +427,7 @@ function main() {
     counts[e.classification] = (counts[e.classification] || 0) + 1;
   }
   process.stderr.write(
-    `Wrote ${entries.length} entries to docs/automation-audit.json\n` +
+    `Wrote ${entries.length} entries to src/battle/automation/automation-audit.json\n` +
       Object.entries(counts)
         .sort()
         .map(([k, v]) => `  ${k}: ${v}`)

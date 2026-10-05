@@ -179,7 +179,7 @@ player repositions during the Dusk phase. An **exhausted character cannot be
 moved to the front rank** by either player.
 
 Dragging a figment onto a matching figment is an exception to the swap rule;
-see [Combining Figments](#combining-figments).
+see [Combining Figments](#merging-figments).
 
 The battlefield provides **All Forward** and **All Back** controls as
 repositioning conveniences. They preserve destination-rank occupants, then move

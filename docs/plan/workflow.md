@@ -319,9 +319,7 @@ closes only after every bead it filed has closed.
 Use the globally configured Playwright MCP service (`http://localhost:8931/mcp`).
 If it is unavailable, run `playwright-mcp-service start` and retry. **Never
 launch browsers directly.** The project details (scenes, URL parameters,
-assert-before-acting) are in the README's QA section. Before Phase 2.1 merges
-them there, they are in `docs/journey_prototype/qa_tooling.md` and
-`qa_scenes.md`.
+assert-before-acting) are in the README's Browser QA section.
 
 ### Servers and contexts
 

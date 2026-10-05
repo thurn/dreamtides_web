@@ -1,127 +1,169 @@
-# Dreamtides Journey Prototype
+# Dreamtides
 
-A standalone web prototype of the Dreamtides Journey Mode flow. The player picks
-an Avatar, a fixed package resolves, and the run proceeds through draft
-sites, Dreamsign surfaces, playable battles, and atlas progression. All
-journey runs are stored in Firebase Realtime Database rooms. Default local URLs
-use the Firebase emulator, and cloud RTDB rooms use `?realtime=1`.
+Dreamtides is a roguelike deckbuilder that runs in the browser. The player
+picks an Avatar, travels a branching map of dreamscapes, drafts and refines a
+deck at sites, and fights seven card battles, the last against Apollyon.
+
+- [docs/design.md](docs/design.md): the game and journey design.
+- [docs/rules.md](docs/rules.md): the battle rules.
+- [AGENTS.md](AGENTS.md): invariants and the working agreement for agents.
 
 ## Prerequisites
 
-- Node 24 and npm. CI uses Node 24.16.0. The dependency set also supports
-  Node 20.19+ and Node 22.12+, but not Node 26.
-- A Rust toolchain with Cargo, used to compile the canonical RON game data. On
-  macOS with Homebrew, install it with `brew install rust`.
-- JDK 21, used by the local Firebase Realtime Database emulator. On macOS with
-  Homebrew, install it with `brew install openjdk@21`; the start script finds
-  Homebrew's keg-only installation without requiring a system-wide symlink.
-- The TV image cache populated at
-  `~/Library/Caches/io.github.dreamtides.tv/image_cache/` is optional. Run TV
-  at least once to fill it. Missing artwork produces
-  setup warnings and broken images, but does not prevent the app from starting.
-- Optional: avatar and dreamsign portraits at
-  `~/Documents/synty/avatars/` and `~/Documents/dreamsigns/filtered/`.
-  Missing portraits behave like missing card artwork.
+- Node 24 and npm.
+- A Rust toolchain with Cargo, which compiles the RON game data.
+- JDK 21 for the local Firebase Realtime Database emulator. On macOS:
+  `brew install openjdk@21 rust`.
+- Optional card art: the TV image cache at
+  `~/Library/Caches/io.github.dreamtides.tv/image_cache/`, and Avatar and
+  Dreamsign portraits under `~/Documents/synty/avatars/` and
+  `~/Documents/dreamsigns/filtered/`. Missing art produces setup warnings and
+  broken images, but the game still runs.
 
-The bundled card, avatar, and dreamsign RON data live under `data/` in
-this repo, so no sibling dreamtides checkout is required.
-
-## Setup On A New Machine
-
-From the repository root, install the Java and Rust prerequisites and the
-project's npm dependencies, then start the development stack:
+## Running
 
 ```bash
-# macOS only; use any JDK 21 distribution on other platforms
-brew install openjdk@21 rust
-
-cd /path/to/journey_prototype
 npm install
-npm start
+npm run dev                  # emulator + workspace prep + Vite on :5173
+npm run dev -- --port 5174   # any other port
 ```
 
-No `.env` file, Firebase project, Firebase login, or global Firebase CLI is
-needed for local development. `npm install` provides the Firebase CLI used by
-the start script, and the app connects to a disposable local database.
+Open the `Local` URL Vite prints. The app creates a game room in the local
+emulator, adds `?game=<room-id>` to the URL, and opens Avatar selection.
 
-The first start may take a minute while Firebase downloads its database
-emulator and Emulator UI. Wait for output resembling:
+| Command | Purpose |
+| --- | --- |
+| `npm test -- <path>` | Focused Vitest file |
+| `npm run review` | Diff-aware pre-commit check: data validation, lint, typecheck, related tests |
+| `npm run review:full` | Everything the Tollgate gate runs |
+| `npm run typecheck` | Incremental typecheck |
+| `npm run build` | Production build into `dist/` |
+| `npm run prepare-workspace` | Refresh generated data and art links |
 
-```text
-✔  All emulators ready! It is now safe to connect your app.
-VITE ready
-➜  Local: http://localhost:5173/
-```
+`npm run review` plans its checks from the diff against `master`. Its
+typecheck emits declarations only, so an edit that keeps a module's API
+rechecks only that module, and a fresh worktree seeds its build information
+from `.git/journey-review/`. `review:full` never uses that shared copy.
 
-Open the exact `Local` URL printed by Vite. The app creates a room in the local
-emulator, adds `?game=<room-id>` to the URL, and opens the Avatar selection
-screen. Press `Ctrl-C` in the terminal to stop Vite and all emulators started by
-that command.
+## Browser QA
 
-`npm start` performs the following work each time:
+QA runs through the globally configured Playwright MCP service
+(`http://localhost:8931/mcp`; `playwright-mcp-service start` if it is down)
+against your own Vite server on port **5174 or higher**. Port 5173 belongs to
+the developer. Never launch browsers directly.
 
-1. Starts the Firebase Realtime Database emulator, normally on
-   `127.0.0.1:9000`, with project `demo-journey-prototype`.
-2. Starts the Emulator UI, normally on `http://127.0.0.1:4000/`.
-3. Refreshes generated JSON and the local artwork symlinks under `public/`.
-4. Starts Vite on `http://localhost:5173/`.
+1. **Start and track your server:** `npm run dev -- --port 5174`. It starts a
+   process tree (npm, the dev wrapper, Vite, and the emulator). Stop exactly
+   that tree when done, never `pkill -f vite`, and confirm the port is free:
+   `lsof -iTCP:5174 -sTCP:LISTEN -n -P`.
+2. **Assert before acting.** Before every measurement or screenshot, evaluate
+   `() => ({ href: location.href, width: innerWidth, height: innerHeight })`
+   and confirm the port and viewport. Set the viewport with `browser_resize`.
+3. **Capture errors.** Right after each full navigation, install the buffer:
 
-The emulator ports automatically move when their preferred ports are busy.
-Vite treats port 5173 as strict; to use another Vite port explicitly, run:
+   ```js
+   () => {
+     window.__caps = { errors: [], rejections: [], consoleErrors: [] };
+     addEventListener('error', e => window.__caps.errors.push(String(e.message)));
+     addEventListener('unhandledrejection', e =>
+       window.__caps.rejections.push(String(e.reason?.stack || e.reason)));
+     const original = console.error;
+     console.error = (...args) => {
+       window.__caps.consoleErrors.push(args.map(String).join(' | '));
+       original.apply(console, args);
+     };
+     return 'hooks installed';
+   }
+   ```
 
-```bash
-npm start -- --port 5174
-```
+   After each meaningful action, `() => window.__caps` must have three empty
+   arrays.
+4. **Prefer structure over pixels.** Use accessibility snapshots, roles, test
+   IDs, and `browser_evaluate` geometry for objective checks; use screenshots
+   for appearance. Default budget per changed surface: one desktop capture
+   (1440×900), one mobile capture (390×844), one changed interaction state.
+   Screenshots go to the gitignored `artifacts/qa/<bead-id>/`; check each with
+   `file <path>`.
+5. **Close** your browser context with `browser_close` when done.
 
-For an all-in-one command after installing JDK 21, `npm run launch` runs
-`npm install`, starts the stack, and opens the app in the default browser.
+### URL parameters
 
-### Setup Troubleshooting
+Read once at page load (`src/runtime/runtime-config.ts`):
 
-- `Unable to locate a Java Runtime`: install JDK 21. On macOS, run
-  `brew install openjdk@21` and retry `npm start`.
-- `Unsupported engine` during `npm install`: switch to Node 24. CI uses
-  24.16.0.
-- `Cargo is required`: install a Rust toolchain. On macOS, run
-  `brew install rust` and retry `npm start`.
-- `Port 5173 is already in use`: stop the process using it or pass a different
-  port as shown above.
-- Many `missing ... art` warnings: the optional local image libraries are not
-  populated. The server can still start and the game flow remains usable.
+| Parameter | Effect |
+| --- | --- |
+| `goto=<scene>` | Boot a fresh game straight onto a screen (below) |
+| `seed=<n>` | Fixed RNG seed (non-negative integer) |
+| `ai=1` | Local AI proposes enemy battle actions for approval |
+| `game=<id>` | Join or resume a game room |
+| `gambleGame=<id>` | Force a Gamble game: `three-gate`, `ladder-climb`, `starway-stairs`, `four-suit-reprise`, `blackjack` |
+| `card=<uuid>` | With an Exploration scene, use that source card's encounter |
+| `tutorialSpeed=<x>` | Tutorial playback speed multiplier |
+| `deviceFrame=<json>` | Inject device safe-area and cutout metrics |
 
-## Other Commands
+### QA scenes (`?goto=`)
 
-```bash
-npm run launch          # install + start + open browser (the all-in-one command)
-npm run dev             # same as npm start
-npm run dev:vite        # Vite only; requires a separately managed emulator
-npm run prepare-workspace # explicitly refresh disposable generated artifacts
-npm run review          # diff-aware pre-commit validation
-npm test -- path        # focused Vitest file
-npm run review:full     # exhaustive CI/release validation
-npm run test:emulator   # Firebase emulator integration tests
-npm run build           # production build into dist/
-npm run preview         # serve the production build locally
-```
+Scenes build a valid journey state from live content with the real
+generators and park the run on a screen (`src/runtime/qa-scenes.ts`). They
+only bootstrap a brand-new game; reloading a `?game=` URL resumes it.
 
-## Layout
+- **Journey start:** `avatar-select`, `tutorial-avatar-select`.
+- **Atlas:** `atlas` (same as `atlas2`), `atlas2` … `atlas7` (the frontier on
+  layer N), `tutorial-atlas`, `random-site-atlas`.
+- **Battle:** `battle` (same as `battle1`), `battle1` … `battle7` (Battle
+  Start preview with layer-tuned opponents), `battle-playable`,
+  `tutorial-battle1`, `tutorial-battle2`, `tutorial-battle`,
+  `tutorial-victory`.
+- **Dreamscape and overlays:** `dreamscape`, `dreamscape-with-essence`,
+  `reward`, `reward-at-cap`, `deckviewer`, `poolviewer`, `startingdeck`.
+- **Sites** (append `-enhanced` for the home version where listed):
+  `draft`, `shop`/`-enhanced`, `dreamsignbazaar`/`-enhanced`,
+  `dreamsign-revelation`/`-enhanced`, `transfiguration`/`-enhanced`,
+  `duplication`/`-enhanced`, `purge`/`-enhanced`, `augury`/`-enhanced`,
+  `gamble`/`-enhanced`, `exploration`/`-enhanced`, `exploration-duplicates`,
+  `exploration-purchases`, `random-site`, `random-site-home`.
+- **End screens:** `journeycomplete`, `journeyfailed`.
 
-```
-data/             Bundled RON data (cards, avatars, dreamsigns)
-docs/             Architecture and QA notes
-.llms/skills/     Agent skills (qs, journey-battle)
-public/           Disposable runtime assets (gitignored, prepared automatically)
-scripts/          setup-assets.mjs and its tests
-src/              Application source
-```
+Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
+`QA_SCENES`; site scenes use the `siteScene` helper.
 
-See `docs/journey_prototype/journey_prototype.md` for the architecture overview
-and `docs/journey_prototype/qa_tooling.md` for browser-QA notes using the shared
-Playwright MCP service.
+## Architecture
 
-Canonical RON catalogs, generated TOML compatibility data, compiler commands,
-watch behavior, and editor transactions are documented in
-[`docs/game_data_authoring.md`](docs/game_data_authoring.md).
+- **Event log and fold.** Game state is a fold of an event log. Clients write
+  intent events only (`src/coop/actions.ts`); a pure reducer
+  (`src/rules/`) applies them, with time and randomness supplied by the event
+  context, so a reload replays to the same state. The log lives in Firebase
+  Realtime Database rooms (`src/eventlog/`, `src/coop/`); local development
+  uses the emulator.
+- **Journey rules.** `src/rules/journey/` holds the site, deck, shop, gamble,
+  and lifecycle reducers. Generators live beside their domains: `src/atlas/`,
+  `src/draft/` (tides4), `src/exploration/`, `src/journey_v2/` (Augury),
+  `src/reward-selection/`, `src/shop/`, `src/transfiguration/`.
+- **Battle.** `src/battle/` and `src/rules/battle/` hold the battle board,
+  its structural automation, and the proposal-based AI.
+- **UI.** Screens are built from the Cumulus design system (`src/cumulus/`):
+  a view-model builder and adapter in `src/screens/cumulus_adapters/` turn
+  journey state into a screen's props, and `src/components/` routes screens
+  and hosts journey chrome.
+- **Logging.** `src/logging.ts` writes structured events; development builds
+  mirror them to `logs/journey-log.jsonl`.
 
-Firebase multiplayer setup and two-window QA live in
-`docs/journey_prototype/firebase_multiplayer.md`.
+## Data layout
+
+- `data/*.ron`: canonical catalogs (cards, avatars, Dreamsigns, Dreamwell,
+  figments, tides, atlas, sites, guides, dreamscapes, economy, tutorial, and
+  more). `npm run prepare-workspace` compiles them into generated runtime JSON
+  under `public/` and `src/generated/`, which are never committed.
+- Art is symlinked into `public/` from the local caches by
+  `scripts/setup-assets.mjs`.
+- Test fixtures are synthetic and live in `src/testing/`.
+
+## Conventions
+
+- Identify content by UUID, never by name.
+- Tunables live in the catalogs, not as literals in logic.
+- Player-facing copy lives in UI modules.
+- Tests pin observable contracts with synthetic fixtures; they never assert
+  UI copy, timing, statistics, or production data.
+- Never commit images or generated outputs.
+- Documentation describes the current system.

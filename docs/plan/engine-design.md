@@ -5,8 +5,7 @@ contracts and their non-obvious decisions. The agent fills in details through
 the [rules ladder](decisions.md#d10-rules-ambiguity-ladder) and keeps this page
 consistent when an implementation improves on it.
 
-`docs/rules.md` is authoritative for game behavior. Before Phase 2.1 it lives
-at `docs/battle_rules/battle_rules.md`.
+`docs/rules.md` is authoritative for game behavior.
 
 **The hardest part of a card-game engine is input prompts.** Any action can
 raise a prompt, because triggers and effects fire anywhere. This design

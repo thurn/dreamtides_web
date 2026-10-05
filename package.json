@@ -58,7 +58,6 @@
     "audit:domain-strings": "node scripts/domain-string-audit.mjs",
     "audit:amplified-designs": "node scripts/audit-amplified-designs.mjs",
     "upload-assets": "node scripts/upload-assets-to-storage.mjs",
-    "publish-dda-image": "node .llms/skills/dda/scripts/publish-image.mjs",
     "send-screenshots": "node scripts/send-screenshots-to-discord.mjs",
     "device-screenshots": "node scripts/device-screenshots.mjs",
     "screenshots:desktop": "node scripts/desktop-screenshots.mjs",

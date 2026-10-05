@@ -1,4 +1,0 @@
-interface:
-  display_name: "Localize Dreamtides"
-  short_description: "Author translator-ready Trox messages"
-  default_prompt: "Use $localization to localize this player-facing feature with Trox and verify every placeholder assumption."

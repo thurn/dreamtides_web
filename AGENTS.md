@@ -63,20 +63,22 @@ work is filed, delivered, reviewed and QA'd. Hive project id:
 
 # Architecture pointers
 
-- Battle rules: `docs/battle_rules/battle_rules.md`.
+- Battle rules: `docs/rules.md`. Game and journey design: `docs/design.md`.
+  Running, testing, browser QA, architecture, and data layout: `README.md`.
 - Card data: `data/cards.ron`; avatars: `data/avatars.ron`. Card, Dreamsign,
   Avatar, and affiliation selection derives from the canonical RON catalogs;
   `data/tides.ron` defines the shared affinity space.
 - Draft questions concern the "tides4" draft pool algorithm unless stated
   otherwise; its sources are `data/tides.ron` and the tide pools embedded in
   `data/avatars.ron`.
-- Coop game state is a fold of the room event log. React `useState`/`useRef`
-  never gates game flow; anything both players must agree on is an event in
-  the log. Clients write intent events only, via `src/coop/actions.ts`.
-- Generated compatibility data, runtime catalogs, typed token mirrors, Cumulus
-  metadata, and localization adapters are disposable workspace
-  materializations refreshed by `scripts/prepare-workspace.mjs`. Do not edit
-  or commit generated outputs.
+- Game state is a fold of the event log. React `useState`/`useRef` never
+  gates game flow; anything the game must agree on is an event in the log.
+  Clients write intent events only, via `src/coop/actions.ts`.
+- Generated runtime data, typed token mirrors, Cumulus metadata, and
+  localization adapters are disposable workspace materializations refreshed
+  by `scripts/prepare-workspace.mjs`. Do not edit or commit generated
+  outputs.
+- UI work uses the `cumulus` skill.
 
 # Verification
 
@@ -84,29 +86,24 @@ Run commands from the repository root; run `npm install` first in a fresh
 worktree.
 
 - While iterating: `npm test -- src/path/to/affected.test.ts`.
-- Before committing: `npm run review` (diff-aware generated-data validation,
-  lint, typecheck, and related tests).
-- `npm run review:full` (what the gate runs), `npm run lint:full` and
-  `npm run test:full` only for changes to test infrastructure,
-  repository-wide configuration, or cross-cutting architecture.
+- Before committing: `npm run review`.
+- `npm run review:full` (what the gate runs) only for changes to test
+  infrastructure, repository-wide configuration, or cross-cutting
+  architecture.
 
 Choose QA in proportion to the change:
 
 - Data, documentation, and internal refactors: focused checks, then
   `npm run review`. No browser QA unless runtime behavior or presentation
   changes.
-- Stateful UI, routing, drag/drop, coop, and overlays: browser QA of the
-  changed player workflow, asserting state, interaction results, DOM geometry,
-  and an empty `window.__caps` error buffer.
+- Stateful UI, routing, drag/drop, and overlays: browser QA of the changed
+  player workflow, asserting state, interaction results, DOM geometry, and an
+  empty `window.__caps` error buffer.
 - Visual or responsive changes: add one desktop capture, one mobile capture,
   and one changed interaction state.
 - New screens, major redesigns, and renderer work: a wider state and viewport
   matrix plus one final cold visual review.
 
-Browser QA uses the globally configured Playwright MCP service against a QA
-Vite server on port 5174 or higher (`npm run dev -- --port 5174`), never 5173.
-Never launch browsers directly. `?goto=<scene>` boots straight onto a screen.
-Kill only your own server's PID; a broad `pkill -f vite` kills the
-developer's server. Session, scene, and teardown detail:
-`docs/journey_prototype/qa_tooling.md` and
-`docs/journey_prototype/qa_scenes.md`.
+Browser QA follows the README's Browser QA section: the Playwright MCP
+service, your own server on port 5174 or higher (never 5173), and killing only
+your own server's process tree.
