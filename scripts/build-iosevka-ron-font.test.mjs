@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
-import { parseGlossarySource } from "./glossary-source.mjs";
+import { GLOSSARY } from "../src/content/glossary.ts";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = join(HERE, "..");
@@ -53,7 +53,7 @@ function symbolCharacters() {
 }
 
 function rulesSymbolGlyphs() {
-  const glossary = parseGlossarySource(read("data/glossary.toml"));
+  const glossary = GLOSSARY;
   const standaloneGlyph = read(
     "src/cumulus/components/controls/StandaloneGlyph.tsx",
   );

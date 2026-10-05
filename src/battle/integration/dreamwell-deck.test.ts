@@ -17,9 +17,9 @@ function buildTestDreamwellDeck(
 }
 
 /**
- * Synthetic Dreamwell catalog. The deck builder is deck-shape logic, not TOML
+ * Synthetic Dreamwell catalog. The deck builder is deck-shape logic, not catalog
  * data, so these tests author their own cards and never assert against
- * `data/dreamwell.toml` (which is free to change).
+ * the Dreamwell catalog (which is free to change).
  */
 function makeCard(order: number, n: number): DreamwellCard {
   return {

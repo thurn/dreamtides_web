@@ -13,7 +13,7 @@ export interface Tides4Tuning {
   maxFacets: number;
 }
 
-/** Validated browser data compiled from data/draft_site.toml. */
+/** Validated draft data from `src/content/draft.ts`. */
 export interface DraftData {
   schemaVersion: 1;
   contentHash: ContentHash;

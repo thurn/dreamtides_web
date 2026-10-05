@@ -13,6 +13,7 @@ import { LayerName } from "../types/layer-name";
 import type { DreamscapeContent } from "../types/content";
 import type { SiteType } from "../types/journey";
 import { loadTides4Decks } from "./cards-v2-database";
+import { loadAvatarsV2 } from "./avatars-v2-database";
 
 // Referential-integrity test for the dreamscape / guide / affiliation / atlas
 // content modules, loaded through their real loaders.
@@ -31,6 +32,18 @@ describe("dreamscape content referential integrity", () => {
       expect(d.id.length).toBeGreaterThan(0);
       expect(typeof d.name).toBe("string");
       expect(d.name.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("assigns each resident Avatar to exactly one dreamscape", () => {
+    const resident = loadDreamscapes().flatMap((d) => d.avatarIds);
+    const avatarIds = new Set<string>(
+      loadAvatarsV2().map((avatar) => avatar.id),
+    );
+    expect(new Set(resident).size).toBe(resident.length);
+    for (const id of resident) expect(avatarIds.has(id)).toBe(true);
+    for (const d of loadDreamscapes()) {
+      if (d.isStarter) expect(d.avatarIds).toEqual([]);
     }
   });
 

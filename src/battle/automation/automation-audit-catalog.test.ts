@@ -12,6 +12,7 @@ import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { parseCardId, type CardId } from "../../types/card-identity";
+import { cardsDocument } from "../../content/documents";
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..", "..");
 
@@ -55,18 +56,13 @@ function loadCatalog(): { generatedFrom: string; cards: CatalogEntry[] } {
 }
 
 function loadCardIds(): Set<CardId> {
-  const raw = readFileSync(
-    join(REPO_ROOT, "public", "cards_v2-data.json"),
-    "utf8"
-  );
-  const cards = JSON.parse(raw) as Array<{ id: unknown }>;
-  return new Set(cards.map((card) => parseCardId(card.id)));
+  return new Set(cardsDocument().map((card) => parseCardId(card.id)));
 }
 
 describe("automation-audit catalog", () => {
   it("parses and points at the expected source", () => {
     const catalog = loadCatalog();
-    expect(catalog.generatedFrom).toBe("public/cards_v2-data.json");
+    expect(catalog.generatedFrom).toBe("src/content/cards");
     expect(Array.isArray(catalog.cards)).toBe(true);
     expect(catalog.cards.length).toBeGreaterThan(0);
   });

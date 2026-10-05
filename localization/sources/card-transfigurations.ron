@@ -1,0 +1,2328 @@
+// Complete transfigured card rules text from the src/content/cards modules, as
+// Trox source messages.
+
+[
+  Tx("▸Challenge: Banish an enemy until your next turn."),
+
+  Tx("▸Challenge: Discard your hand, then draw 4 cards."),
+
+  Tx("▸Challenge: Each other challenging character gains +2✦."),
+
+  Tx("▸Challenge: Rematerialize up to two characters you control."),
+
+  Tx(
+    "▸Challenge: You may discard a card to draw a card.\n\nWhen you discard a card, this character gains +3✦ until end of turn."
+  ),
+
+  Tx("▸Challenge: You may discard a card to give this character +4✦."),
+
+  Tx(
+    "▸Dawn: Abandon a character. Erode 2.\n\nWhen a ≤2● cost character is put into your void, draw a card."
+  ),
+
+  Tx("▸Dawn: Draw a card. The opponent gains 1⍟."),
+
+  Tx("▸Dawn: Gain 1● for each ≤3● cost character you control."),
+
+  Tx("▸Dawn: Gain 1●.\n\n▸Dissolved: Gain 2●."),
+
+  Tx("▸Dawn: Gain 1●.\n\n3●, ☾: This character gains +1✦."),
+
+  Tx("▸Dawn: Gain 2●."),
+
+  Tx("▸Dawn: Gain 2●.\n\n☾, Abandon a character: Gain 2●."),
+
+  Tx("▸Dawn: Gain 2●.\n\n4●, ☾: This character gains +1✦."),
+
+  Tx("▸Dawn: Gain 2●.\n\nReclaim 3●"),
+
+  Tx("▸Dawn: Gain 2●. If you control 3 or more spirit animals, gain 3● instead."),
+
+  Tx(
+    "▸Dawn: Give a wraith you control +2✦. If you control no wraiths, materialize a 0✦ wraith figment with vengeful instead."
+  ),
+
+  Tx(
+    "▸Dawn: Materialize 1✦ ethereal figment.\n\n0●, Abandon X figments: Dissolve an enemy with X✦."
+  ),
+
+  Tx("▸Dawn: Materialize a 1✦ warrior figment.\n\n1●, ☾: Gain 1● for each warrior you control."),
+
+  Tx("▸Dawn: Materialize a 2✦ ethereal figment."),
+
+  Tx(
+    "▸Dawn: Materialize a 2✦ ethereal figment.\n\n1●, Abandon X figments: Dissolve an enemy with X✦."
+  ),
+
+  Tx("▸Dawn: Materialize a 2✦ warrior figment.\n\n2●, ☾: Gain 1● for each warrior you control."),
+
+  Tx(
+    "▸Dawn: Store 2⧗.\n\n❖ – ☾: Materialize a ≤X● cost character from your hand, where X is the stored ⧗."
+  ),
+
+  Tx(
+    "▸Dawn: This character gains +2✦.\n\n▸Dissolved: Give a character you control +X✦ where X is this character's ✦."
+  ),
+
+  Tx(
+    "▸Dawn: This character gains +2✦.\n\n▸Dissolved: Materialize a 1✦ warrior figment for each ✦ this character has."
+  ),
+
+  Tx("▸Dissolved: Choose one: Gain 2●, or gain 1 maximum ●."),
+
+  Tx("▸Dissolved: Dissolve a ≤3✦ enemy."),
+
+  Tx(
+    "▸Dissolved: Draw a card.\n\n▸Materialized, Dawn: If this card is in your void, you may pay 1● to return it to your hand."
+  ),
+
+  Tx("▸Dissolved: Gain 2 maximum ●."),
+
+  Tx("▸Materialized, ▸Dawn: Gain 2●. The opponent gains 2⍟."),
+
+  Tx("▸Materialized, ▸Materialized, Dawn: Gain 2●. The opponent gains 2⍟."),
+
+  Tx("▸Materialized, ▸Materialized, Dawn: Gain 2●. The opponent gains 3⍟."),
+
+  Tx(
+    "▸Materialized, Dawn: Abandon a character.\n\nWhen you abandon a character, draw a card and this character gains +1✦."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: Abandon a character. Erode 1.\n\nWhen a ≤2● cost character is put into your void, draw a card."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: Abandon a character. Erode 2.\n\nWhen a ≤2● cost character is put into your void, draw a card."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: Choose an event in your void with cost less than or equal to this character's ✦. That event gains reclaim 0●."
+  ),
+
+  Tx("▸Materialized, Dawn: Draw a card. The opponent gains 1⍟."),
+
+  Tx("▸Materialized, Dawn: Draw a card. The opponent gains 2⍟."),
+
+  Tx("▸Materialized, Dawn: Each warrior you control gains +1✦."),
+
+  Tx(
+    "▸Materialized, Dawn: Erode 1.\n\nany number of times per turn, you may play a warrior from your void."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: Erode 2.\n\nany number of times per turn, you may play a warrior from your void."
+  ),
+
+  Tx("▸Materialized, Dawn: Erode 2.\n\nOnce per turn, you may play a warrior from your void."),
+
+  Tx("▸Materialized, Dawn: Gain 1⍟."),
+
+  Tx("▸Materialized, Dawn: Gain 1● for each ≤2● cost character you control."),
+
+  Tx("▸Materialized, Dawn: Gain 1● for each ≤3● cost character you control."),
+
+  Tx("▸Materialized, Dawn: Gain 1●."),
+
+  Tx("▸Materialized, Dawn: Gain 1●.\n\n▸Dissolved: Gain 1●."),
+
+  Tx("▸Materialized, Dawn: Gain 1●.\n\n▸Dissolved: Gain 2●."),
+
+  Tx("▸Materialized, Dawn: Gain 1●.\n\n☾, Abandon a character: Gain 1●."),
+
+  Tx("▸Materialized, Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦."),
+
+  Tx("▸Materialized, Dawn: Gain 1●.\n\nReclaim 3●"),
+
+  Tx("▸Materialized, Dawn: Gain 1●. If you control 3 or more spirit animals, gain 2● instead."),
+
+  Tx("▸Materialized, Dawn: Gain 2●."),
+
+  Tx("▸Materialized, Dawn: Gain 2●.\n\n☾, Abandon a character: Gain 2●."),
+
+  Tx("▸Materialized, Dawn: Gain 2●.\n\n3●, ☾: This character gains +1✦."),
+
+  Tx("▸Materialized, Dawn: Gain 2●.\n\nReclaim 3●"),
+
+  Tx("▸Materialized, Dawn: Gain 2●. If you control 3 or more spirit animals, gain 3● instead."),
+
+  Tx("▸Materialized, Dawn: Gain 3●."),
+
+  Tx("▸Materialized, Dawn: Give a character you control +2✦."),
+
+  Tx(
+    "▸Materialized, Dawn: Give a wraith you control +1✦. If you control no wraiths, materialize a 0✦ wraith figment with vengeful instead."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: Give a wraith you control +2✦. If you control no wraiths, materialize a 0✦ wraith figment with vengeful instead."
+  ),
+
+  Tx("▸Materialized, Dawn: If this character is in your void, return it to your hand."),
+
+  Tx("▸Materialized, Dawn: If you control 2 or more warriors, gain 1●."),
+
+  Tx(
+    "▸Materialized, Dawn: Materialize 1✦ ethereal figment.\n\n1●, Abandon X figments: Dissolve an enemy with X✦."
+  ),
+
+  Tx("▸Materialized, Dawn: Materialize a 1✦ ethereal figment."),
+
+  Tx(
+    "▸Materialized, Dawn: Materialize a 1✦ warrior figment.\n\n2●, ☾: Gain 1● for each warrior you control."
+  ),
+
+  Tx("▸Materialized, Dawn: Materialize a 2✦ ethereal figment."),
+
+  Tx(
+    "▸Materialized, Dawn: Materialize a 2✦ ethereal figment.\n\n0●, Abandon X figments: Dissolve an enemy with X✦."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: Materialize a 2✦ warrior figment.\n\n1●, ☾: Gain 1● for each warrior you control."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: Store 1⧗.\n\n❖ – ☾: Materialize a ≤X● cost character from your hand, where X is the stored ⧗."
+  ),
+
+  Tx("▸Materialized, Dawn: Store 1⧗.\n\nDiscard your hand: Draw one card per stored ⧗."),
+
+  Tx(
+    "▸Materialized, Dawn: Store 2⧗.\n\n❖ – ☾: Materialize a ≤X● cost character from your hand, where X is the stored ⧗."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: This character gains +1✦.\n\n▸Dissolved: Give a character you control +X✦ where X is this character's ✦."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: This character gains +1✦.\n\n▸Dissolved: Materialize a 1✦ warrior figment for each ✦ this character has."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: This character gains +2✦.\n\n▸Dissolved: Give a character you control +X✦ where X is this character's ✦."
+  ),
+
+  Tx(
+    "▸Materialized, Dawn: This character gains +2✦.\n\n▸Dissolved: Materialize a 1✦ warrior figment for each ✦ this character has."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: An enemy loses all abilities. This character gains those abilities."
+  ),
+
+  Tx("▸Materialized, Dissolved: Banish a ≤2● cost enemy until this character leaves play."),
+
+  Tx("▸Materialized, Dissolved: Banish a ≤2● cost enemy."),
+
+  Tx("▸Materialized, Dissolved: Banish a ≤3● cost enemy until this character leaves play."),
+
+  Tx("▸Materialized, Dissolved: Banish a ≤3● cost enemy."),
+
+  Tx(
+    "▸Materialized, Dissolved: Banish a ≤4● cost enemy.\n\nWhen this character leaves play, the opponent draws a card."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Banish a ≤5● cost enemy.\n\nWhen this character leaves play, the opponent draws a card."
+  ),
+
+  Tx("▸Materialized, Dissolved: Banish a card from the opponent's void."),
+
+  Tx(
+    "▸Materialized, Dissolved: Banish a chosen card from the opponent's hand until this character leaves play."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Banish a chosen character from the opponent's hand until this character leaves play."
+  ),
+
+  Tx("▸Materialized, Dissolved: Banish an enemy warrior or monster."),
+
+  Tx("▸Materialized, Dissolved: Banish an enemy warrior."),
+
+  Tx("▸Materialized, Dissolved: Banish up to two cards from the opponent's void."),
+
+  Tx(
+    "▸Materialized, Dissolved: Choose a card in the opponent's hand. That card cannot be played while this character is in play."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Choose a character type. This character is that character type.\n\nCharacters of the chosen type have +1✦."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Choose a character type. This character is that character type.\n\nCharacters of the chosen type have +2✦."
+  ),
+
+  Tx("▸Materialized, Dissolved: Choose an event in your void to gain reclaim."),
+
+  Tx(
+    "▸Materialized, Dissolved: Disable the triggered abilities of an enemy while this character is in play."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Disable the triggered and activated abilities of an enemy while this character is in play."
+  ),
+
+  Tx("▸Materialized, Dissolved: Discard 3 cards, then draw 3 cards."),
+
+  Tx("▸Materialized, Dissolved: Discard a chosen card from the opponent's hand. They draw a card."),
+
+  Tx("▸Materialized, Dissolved: Discard your hand, then draw 3 cards."),
+
+  Tx("▸Materialized, Dissolved: Discover a ≤1● cost character and materialize it."),
+
+  Tx("▸Materialized, Dissolved: Discover a ≤2● cost character."),
+
+  Tx("▸Materialized, Dissolved: Discover a ≤2● cost event."),
+
+  Tx("▸Materialized, Dissolved: Discover a ≤2✦ character."),
+
+  Tx("▸Materialized, Dissolved: Dissolve a ≤2✦ enemy."),
+
+  Tx("▸Materialized, Dissolved: Dissolve a ≤3✦ enemy."),
+
+  Tx("▸Materialized, Dissolved: Draw 2 cards with ephemeral."),
+
+  Tx("▸Materialized, Dissolved: Draw 2 cards."),
+
+  Tx("▸Materialized, Dissolved: Draw 2 cards.\n\nReclaim – 3●, Banish 7 cards from your void."),
+
+  Tx("▸Materialized, Dissolved: Draw a ≤2● cost card. It costs 0●."),
+
+  Tx("▸Materialized, Dissolved: Draw a card."),
+
+  Tx("▸Materialized, Dissolved: Draw a card.\n\nSupport - Supported characters have +2✦.\n"),
+
+  Tx("▸Materialized, Dissolved: Draw a card.\n\nSupport – Supported characters have +3✦."),
+
+  Tx("▸Materialized, Dissolved: Draw a warrior."),
+
+  Tx(
+    "▸Materialized, Dissolved: Draw a warrior.\n\nWhen you materialize a non-figment warrior, this character gains +1 spark."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Draw a warrior.\n\nWhen you materialize a non-figment warrior, this character gains +2✦."
+  ),
+
+  Tx("▸Materialized, Dissolved: Each player abandons a non-figment character."),
+
+  Tx("▸Materialized, Dissolved: Each player discards a card.\n\nReclaim 1●."),
+
+  Tx("▸Materialized, Dissolved: Erode 1.\n\nReclaim 0●"),
+
+  Tx("▸Materialized, Dissolved: Erode 2.\n\nReclaim 0●"),
+
+  Tx(
+    "▸Materialized, Dissolved: Erode 3.\n\n▸Dissolved: Return a character from your void to your hand."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Erode 3.\n\n☾, Abandon a warrior: Materialize a ≤2● cost warrior from your void."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Erode 3.\n\n4●, ☾, Abandon this character: Return all ≤2● cost characters from your void to play."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Erode 3.\n\n5●, ☾, Abandon this character: Return all ≤2● cost characters from your void to play."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Erode 4.\n\n▸Dissolved: Return a character from your void to your hand."
+  ),
+
+  Tx("▸Materialized, Dissolved: Erode 4.\n\n☾: You may play an event from your void."),
+
+  Tx(
+    "▸Materialized, Dissolved: Erode 4. You may return a ≤2● cost character from among those cards to your hand."
+  ),
+
+  Tx("▸Materialized, Dissolved: Erode 5."),
+
+  Tx("▸Materialized, Dissolved: Foresee 1."),
+
+  Tx(
+    "▸Materialized, Dissolved: Foresee 2.\n\n❖ – 1●: Move this character to an unoccupied character position."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Foresee 3.\n\n❖ – 0●: Move this character to an unoccupied character position."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Gain 1⍟.\n\nAbandon a character: Materialize this character from your void."
+  ),
+
+  Tx("▸Materialized, Dissolved: Gain 1⍟.\n\nReclaim 0●"),
+
+  Tx("▸Materialized, Dissolved: Gain 2⍟.\n\nReclaim 0●"),
+
+  Tx("▸Materialized, Dissolved: Gain control of a ≤X● cost enemy."),
+
+  Tx(
+    "▸Materialized, Dissolved: If the top card of your deck is a ≤2● cost character, materialize it. Otherwise, draw that card."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Look at the top 4 cards of your deck and banish one.\n\n▸Dissolved: Put the banished card into your hand."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Materialize a 1✦ ethereal figment.\n\nWhen a character you control is dissolved, gain 1⍟."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Materialize a 2✦ ethereal figment.\n\nWhen a character you control is dissolved, gain 1⍟."
+  ),
+
+  Tx("▸Materialized, Dissolved: Materialize a 4✦ monstrosity figment."),
+
+  Tx("▸Materialized, Dissolved: Materialize a 5✦ monstrosity figment."),
+
+  Tx("▸Materialized, Dissolved: Materialize a Legionnaire figment with awakened."),
+
+  Tx("▸Materialized, Dissolved: Materialize a Legionnaire figment."),
+
+  Tx(
+    "▸Materialized, Dissolved: Prevent a played ≤2● cost card.\n\n❖ – 1●: Reposition this character."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Prevent a played ≤3● cost card.\n\n❖ – 0●: Reposition this character."
+  ),
+
+  Tx("▸Materialized, Dissolved: Put all cards in a player's void on the bottom of their deck."),
+
+  Tx("▸Materialized, Dissolved: Return a ≤3● cost character from your void to your hand."),
+
+  Tx("▸Materialized, Dissolved: Return a card from your void to your hand."),
+
+  Tx("▸Materialized, Dissolved: Return a character you control to hand."),
+
+  Tx(
+    "▸Materialized, Dissolved: Return a character you control to hand.\n\nWhen you return another character to your hand, reduce its cost by 1●."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Return a played ≤3● cost card to the opponent's hand. It costs 2● more."
+  ),
+
+  Tx(
+    "▸Materialized, Dissolved: Return a played ≤4● cost card to the opponent's hand. It costs 2● more."
+  ),
+
+  Tx("▸Materialized, Dissolved: Return an enemy to hand. It costs 2● more."),
+
+  Tx("▸Materialized, Dissolved: Return an event from your void to your hand."),
+
+  Tx("▸Materialized, Dissolved: Return up to two cards from your void to your hand."),
+
+  Tx("▸Materialized, Dissolved: The next time you play a ≤2● cost event this turn, copy it twice."),
+
+  Tx("▸Materialized, Dissolved: The next time you play a ≤3● cost event this turn, copy it twice."),
+
+  Tx(
+    "▸Materialized, Dissolved: The next time you play an event this turn, create a 0● ephemeral copy of that event in your hand."
+  ),
+
+  Tx("▸Materialized, Dissolved: The opponent cannot play events this turn."),
+
+  Tx("▸Materialized, Dissolved: The opponent discards a card. If they can't, draw 2 cards."),
+
+  Tx("▸Materialized, Dissolved: The opponent discards a card. If they can't, draw a card."),
+
+  Tx(
+    "▸Materialized, Dissolved: You may discard a card to discover a character with cost greater than that card's cost."
+  ),
+
+  Tx("▸Materialized, Dissolved: You may discard a card to draw 2 cards.\n\nReclaim 2●"),
+
+  Tx("▸Materialized, Dissolved: You may discard a card to draw a card.\n\nReclaim 2●"),
+
+  Tx("▸Materialized, Dissolved: You may materialize a ≤2● cost character from your hand."),
+
+  Tx("▸Materialized, Dissolved: You may materialize a ≤3● cost character from your hand."),
+
+  Tx("▸Materialized: Banish a ≤3● cost enemy until this character leaves play."),
+
+  Tx("▸Materialized: Banish a ≤3● cost enemy."),
+
+  Tx(
+    "▸Materialized: Banish a ≤5● cost enemy.\n\nWhen this character leaves play, the opponent draws a card."
+  ),
+
+  Tx("▸Materialized: Banish an enemy warrior or monster."),
+
+  Tx("▸Materialized: Banish up to two cards from the opponent's void."),
+
+  Tx(
+    "▸Materialized: Choose a character type. This character is that character type.\n\nCharacters of the chosen type have +2✦."
+  ),
+
+  Tx(
+    "▸Materialized: Disable the triggered and activated abilities of an enemy while this character is in play."
+  ),
+
+  Tx("▸Materialized: Discard 3 cards, then draw 3 cards."),
+
+  Tx("▸Materialized: Dissolve a ≤3✦ enemy."),
+
+  Tx("▸Materialized: Draw a card.\n\n▸Dawn: Gain 2●."),
+
+  Tx("▸Materialized: Draw a card.\n\n▸Materialized, Dawn: Gain 1●."),
+
+  Tx("▸Materialized: Draw a card.\n\n▸Materialized, Dawn: Gain 2●."),
+
+  Tx("▸Materialized: Draw a card.\n\nSupport – Supported characters have +3✦."),
+
+  Tx(
+    "▸Materialized: Draw a warrior.\n\nWhen you materialize a non-figment warrior, this character gains +2✦."
+  ),
+
+  Tx("▸Materialized: Erode 2.\n\n▸Materialized, Dawn: Gain 1●."),
+
+  Tx("▸Materialized: Erode 2.\n\nReclaim 0●"),
+
+  Tx("▸Materialized: Erode 3.\n\n▸Dawn: Gain 1●."),
+
+  Tx("▸Materialized: Erode 3.\n\n▸Materialized, Dawn: Gain 1●."),
+
+  Tx(
+    "▸Materialized: Erode 3.\n\n4●, ☾, Abandon this character: Return all ≤2● cost characters from your void to play."
+  ),
+
+  Tx("▸Materialized: Erode 4.\n\n▸Dissolved: Return a character from your void to your hand."),
+
+  Tx("▸Materialized: Foresee 1.\n\n▸Materialized, Dawn: Gain 1●."),
+
+  Tx("▸Materialized: Foresee 2.\n\n▸Dawn: Gain 1●."),
+
+  Tx("▸Materialized: Foresee 2.\n\n▸Materialized, Dawn: Gain 1●."),
+
+  Tx(
+    "▸Materialized: Foresee 2.\n\n❖ – 0●: Move this character to an unoccupied character position."
+  ),
+
+  Tx(
+    "▸Materialized: Foresee 3.\n\n❖ – 1●: Move this character to an unoccupied character position."
+  ),
+
+  Tx("▸Materialized: Gain 2⍟.\n\nReclaim 0●"),
+
+  Tx("▸Materialized: Gain 3●.\n\n▸Materialized, Dawn: The opponent gains 1⍟."),
+
+  Tx("▸Materialized: Gain 4●.\n\n▸Dawn: The opponent gains 1⍟."),
+
+  Tx("▸Materialized: Gain 4●.\n\n▸Materialized, Dawn: The opponent gains 1⍟."),
+
+  Tx(
+    "▸Materialized: Materialize a 2✦ ethereal figment.\n\nWhen a character you control is dissolved, gain 1⍟."
+  ),
+
+  Tx("▸Materialized: Materialize a 5✦ monstrosity figment."),
+
+  Tx("▸Materialized: Materialize a Legionnaire figment with awakened."),
+
+  Tx("▸Materialized: Prevent a played ≤2● cost card.\n\n❖ – 0●: Reposition this character."),
+
+  Tx("▸Materialized: Prevent a played ≤3● cost card.\n\n❖ – 1●: Reposition this character."),
+
+  Tx("▸Materialized: Return a played ≤4● cost card to the opponent's hand. It costs 2● more."),
+
+  Tx("▸Materialized: Return up to two cards from your void to your hand."),
+
+  Tx("▸Materialized: The next time you play a ≤3● cost event this turn, copy it twice."),
+
+  Tx("▸Materialized: The opponent discards a card. If they can't, draw 2 cards."),
+
+  Tx("▸Materialized: You may discard a card to draw 2 cards.\n\nReclaim 2●"),
+
+  Tx("▸Materialized: You may materialize a ≤3● cost character from your hand."),
+
+  Tx("▸Night: Draw a card, then discard a card unless you control a challenger or blocker."),
+
+  Tx(
+    "▸Night: If a character you control left play this turn, materialize a 1✦ ethereal figment.\n\n0●, Abandon another character: Foresee 1."
+  ),
+
+  Tx(
+    "▸Night: If a character you control left play this turn, materialize a 2✦ ethereal figment.\n\n0●, Abandon another character: Foresee 1."
+  ),
+
+  Tx(
+    "▸Night: If a character you control left play this turn, materialize a 2✦ ethereal figment.\n\n1●, Abandon another character: Foresee 1."
+  ),
+
+  Tx(
+    "▸Night: If you control a challenger, you may pay 2● to return this character from your void to play with awakened."
+  ),
+
+  Tx("▸Night: If you control no shadow figments, materialize a 3✦ shadow figment."),
+
+  Tx("▸Night: If you have only one challenger, give that character +4✦."),
+
+  Tx(
+    "☾, Abandon a ≤1● cost character: Materialize a random ≤2● cost character from your deck. This character gains +1✦."
+  ),
+
+  Tx("☾, Abandon a character: Materialize a 3✦ shadow figment."),
+
+  Tx("☾, Abandon a warrior: Materialize a warrior from your void with awakened."),
+
+  Tx("☾, Banish 3 cards from your void: Draw 2 cards."),
+
+  Tx("☾, Discard a card: Draw 2 cards."),
+
+  Tx(
+    "☾, Discard a card: Erode 2.\n\n3●, Abandon this character: Return a character from your void to your hand."
+  ),
+
+  Tx(
+    "☾, Discard a card: Materialize a 2✦ survivor figment.\n\n☾, Abandon a survivor: Return a survivor from your void to your hand."
+  ),
+
+  Tx(
+    "☾, Discard a card: Materialize a 2✦ warrior figment.\n\n☾, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy."
+  ),
+
+  Tx("☾, Discard your hand, abandon this character: Gain 4●."),
+
+  Tx("☾: Awaken up to two characters you control."),
+
+  Tx("☾: Draw 3 cards. The opponent draws 2 cards."),
+
+  Tx("☾: Materialize a 2✦ survivor figment.\n\n☾: Draw a card for each 3 survivors you control."),
+
+  Tx("☾: Materialize a 2✦ warrior figment."),
+
+  Tx(
+    "❖ – ☾: Give a character you control +1✦ for each warrior you control until the start of your next turn."
+  ),
+
+  Tx("❖ – 4●: Spirit animals you control gain +3✦ and vengeful until end of turn."),
+
+  Tx("❖ – 4●: Spirit animals you control gain +4✦ and vengeful until end of turn."),
+
+  Tx("❖ – 5●: Spirit animals you control gain +4✦ and vengeful until end of turn."),
+
+  Tx("❖❖ – ☾: Up to two other characters you control cannot be targeted by effects this turn."),
+
+  Tx(
+    "❖❖ – Abandon another character: Up to two characters you control cannot be targeted by effects this turn."
+  ),
+
+  Tx(
+    "❖❖ – Abandon this character: Up to two characters you control cannot be targeted by effects this turn."
+  ),
+
+  Tx("0●, Abandon 2 warriors: Draw 2 cards."),
+
+  Tx("0●, Abandon 2 warriors: Draw a card."),
+
+  Tx(
+    "0●, Abandon another character: Store 1⧗.\n\nAbandon this character: Gain X⍟ where X is the stored ⧗."
+  ),
+
+  Tx("0●, Abandon this character: Choose one: Draw a card or dissolve a ≤2✦ enemy."),
+
+  Tx("0●, Abandon this character: Choose one: Draw a card or dissolve a ≤3✦ enemy."),
+
+  Tx("0●, Abandon this character: Return a character to its controller's hand."),
+
+  Tx("0●, Banish a card from the opponent's void: This character gains +1✦."),
+
+  Tx("0●, Banish a card from the opponent's void: This character gains +2✦."),
+
+  Tx("0●, Return a character you control to hand: Give a character you control +1✦."),
+
+  Tx("0●, Return a character you control to hand: Give a character you control +2✦."),
+
+  Tx(
+    "0●: Return a ≤2● cost character from your void to your hand.\n\n1●, ☾, Abandon a character: Draw a card."
+  ),
+
+  Tx(
+    "0●: Return a ≤3● cost character from your void to your hand.\n\n1●, ☾, Abandon a character: Draw a card."
+  ),
+
+  Tx("1●, ☾, Abandon two other characters: This character gains +2✦. Draw 2 cards."),
+
+  Tx("1●, ☾, Abandon two other characters: This character gains +3✦. Draw 2 cards."),
+
+  Tx("1●, ☾, Discard a card: Draw 2 cards.\n\nWhen you discard a card, it gains reclaim."),
+
+  Tx("1●, ☾, Discard a card: Draw a card.\n\nWhen you discard a card, it gains reclaim."),
+
+  Tx(
+    "1●, ☾: Draw a card, then discard a card.\n\nany number of times per turn, when you discard a card, materialize a 3✦ shadow figment."
+  ),
+
+  Tx(
+    "1●, ☾: Draw a card, then discard a card.\n\nOnce per turn, when you discard a card, materialize a 2✦ shadow figment."
+  ),
+
+  Tx("1●, ☾: Draw a card, then discard a card.\n\nWhen you discard a card, gain 1⍟."),
+
+  Tx("1●, ☾: Materialize a figment copy of a character you control until end of turn."),
+
+  Tx("1●, ☾: Store 1⧗.\n\n▸Dawn: Gain 1● for each stored ⧗."),
+
+  Tx("1●, ☾: Store 2⧗.\n\n▸Materialized, Dawn: Gain 1● for each stored ⧗."),
+
+  Tx("1●, Abandon 2 warriors: Draw 2 cards."),
+
+  Tx("1●, Abandon a 1✦ character: Draw 2 cards."),
+
+  Tx("1●, Abandon this character: Choose one: Draw a card or dissolve a ≤3✦ enemy."),
+
+  Tx("1●, Banish a card from the opponent's void: This character gains +2✦."),
+
+  Tx("1●, Banish a card from your void: Materialize this character from your void with awakened."),
+
+  Tx("1●, Banish a card from your void: Materialize this character from your void."),
+
+  Tx(
+    "1●, Discard a character: Dissolve a ≤2✦ enemy.\n\n1●: Return a character you control to hand."
+  ),
+
+  Tx(
+    "1●, Discard a character: Dissolve a ≤3✦ enemy.\n\n1●: Return a character you control to hand."
+  ),
+
+  Tx("1●, Return a character you control to hand: Give a character you control +2✦."),
+
+  Tx("1●: Choose an event in your void to gain reclaim."),
+
+  Tx(
+    "1●: Return a ≤3● cost character from your void to your hand.\n\n1●, ☾, Abandon a character: Draw a card."
+  ),
+
+  Tx("2●, ☾, Abandon two other characters: This character gains +3✦. Draw 2 cards."),
+
+  Tx("2●, ☾, Discard a card: Draw 2 cards.\n\nWhen you discard a card, it gains reclaim."),
+
+  Tx(
+    "2●, ☾: Draw a card, then discard a card.\n\nany number of times per turn, when you discard a card, materialize a 2✦ shadow figment."
+  ),
+
+  Tx(
+    "2●, ☾: Draw a card, then discard a card.\n\nOnce per turn, when you discard a card, materialize a 3✦ shadow figment."
+  ),
+
+  Tx(
+    "2●, ☾: Materialize a 1✦ outsider figment.\n\nWhen an outsider you control scores ⍟, draw a card and gain 2⍟."
+  ),
+
+  Tx(
+    "2●, ☾: Materialize a 2✦ outsider figment.\n\nWhen an outsider you control scores ⍟, draw a card and gain 2⍟."
+  ),
+
+  Tx("2●, ☾: Store 1⧗.\n\n▸Materialized, Dawn: Gain 1● for each stored ⧗."),
+
+  Tx("2●, ☾: Store 2⧗.\n\n▸Dawn: Gain 1● for each stored ⧗."),
+
+  Tx("2●, Banish a card from your void: Materialize this character from your void with awakened."),
+
+  Tx(
+    "2●, Discard a character: Dissolve a ≤3✦ enemy.\n\n1●: Return a character you control to hand."
+  ),
+
+  Tx("2●: Store 1⧗.\n\nX⧗: Dissolve a ≤X✦ enemy."),
+
+  Tx("2●: Store 2⧗.\n\nX⧗: Dissolve a ≤X✦ enemy."),
+
+  Tx(
+    "3●, ☾: Materialize a 2✦ outsider figment.\n\nWhen an outsider you control scores ⍟, draw a card and gain 2⍟."
+  ),
+
+  Tx("3●: Gain 1⍟. This character gains +1✦."),
+
+  Tx("3●: Gain 2⍟. This character gains +1✦."),
+
+  Tx("3●: Store 2⧗.\n\nX⧗: Dissolve a ≤X✦ enemy."),
+
+  Tx("3●: This character gains +1✦.\n\n▸Dissolved: Draw a card for each ✦ this character has."),
+
+  Tx("4●, ☾: The base ✦ of each spirit animal you control becomes 7 until end of turn."),
+
+  Tx("4●, ☾: The base ✦ of each spirit animal you control becomes 8 until end of turn."),
+
+  Tx("4●: Erode 1. That card gains reclaim 0●."),
+
+  Tx("4●: Gain 2⍟. This character gains +1✦."),
+
+  Tx("5●, ☾: The base ✦ of each spirit animal you control becomes 8 until end of turn."),
+
+  Tx("Abandon a ≤1● cost character: Gain 1⍟."),
+
+  Tx("Abandon a ≤1● cost character: Gain 1●."),
+
+  Tx("Abandon a ≤1● cost character: Gain 2⍟."),
+
+  Tx("Abandon a ≤1● cost character: Gain 2●."),
+
+  Tx("Abandon a ≤2● cost character: Gain 2⍟."),
+
+  Tx("Abandon a ≤2● cost character: Gain 2●."),
+
+  Tx("Abandon a character: Erode 3."),
+
+  Tx("Abandon a character: Store 1⧗.\n\n1●, 2⧗: Materialize two 1✦ warrior figments."),
+
+  Tx("Abandon a character: Store 2⧗.\n\n2⧗: Gain 1●."),
+
+  Tx("Abandon a non-figment warrior: Materialize two 1✦ warrior figments."),
+
+  Tx("Abandon a warrior: Gain 3●."),
+
+  Tx("Abandon another character: Foresee 2."),
+
+  Tx("Abandon another character: Gain 2●."),
+
+  Tx("Abandon another character: Gain 2●. The opponent gains 1⍟."),
+
+  Tx("Abandon another character: Gain 3●."),
+
+  Tx("Abandon another character: This character gains +2✦."),
+
+  Tx("Abandon this character: Draw 2 cards with ephemeral."),
+
+  Tx("Abandon this character: Draw 2 cards."),
+
+  Tx("Abandon this character: Erode 1.\n\n▸Dissolved: Draw two cards."),
+
+  Tx("Abandon this character: Gain 2●."),
+
+  Tx("Abandon this character: Gain 2●.\n\n▸Dissolved: Draw a card."),
+
+  Tx("Abandon this character: Gain 2●.\n\nReclaim 0●"),
+
+  Tx("Abandon this character: Gain 4●."),
+
+  Tx(
+    "Abandon this character: Return a character from your void to your hand.\n\n▸Materialized, Dawn: If this card is in your void, erode 3."
+  ),
+
+  Tx("An enemy loses all abilities  until the opponent pays 3●. Draw a card."),
+
+  Tx("An enemy loses all abilities  until the opponent pays 3●. Reclaim."),
+
+  Tx("An enemy loses all abilities until the opponent pays 4●."),
+
+  Tx("An enemy loses all abilities until the opponent pays 4●. Draw a card. Reclaim."),
+
+  Tx(
+    "any number of times per turn, if you have one or fewer cards in hand, you may play a character from your void."
+  ),
+
+  Tx(
+    "any number of times per turn, if you have two or fewer cards in hand, you may play a character from your void."
+  ),
+
+  Tx(
+    "any number of times per turn, when a warrior you control is dissolved, materialize a 1✦ warrior figment."
+  ),
+
+  Tx(
+    "any number of times per turn, when a warrior you control is dissolved, materialize a 2✦ warrior figment."
+  ),
+
+  Tx("any number of times per turn, when the opponent plays an event, draw a card."),
+
+  Tx("any number of times per turn, when you discard a card, draw a card and gain 1●."),
+
+  Tx("any number of times per turn, when you discard a card, draw a card and gain 2●."),
+
+  Tx("any number of times per turn, when you discard one or more cards, draw that many cards."),
+
+  Tx("any number of times per turn, when you materialize a character, gain 1●."),
+
+  Tx("any number of times per turn, when you materialize a character, gain 2●."),
+
+  Tx("any number of times per turn, when you materialize a warrior, draw a card."),
+
+  Tx(
+    "any number of times per turn, when you play a spirit animal, materialize a 1✦ spirit animal figment."
+  ),
+
+  Tx(
+    "any number of times per turn, when you play a spirit animal, materialize a 2✦ spirit animal figment."
+  ),
+
+  Tx(
+    "any number of times per turn, when you reclaim a card, gain X⍟ where X is this character's ✦. Then this character gains +1✦."
+  ),
+
+  Tx("any number of times per turn, you may play a ≤2● cost character from your void."),
+
+  Tx("any number of times per turn, you may play a ≤3● cost character from your void."),
+
+  Tx("Awakened\n\n▸Challenge: This character gains +2✦."),
+
+  Tx("Awakened\n\n▸Dawn: Gain 2●."),
+
+  Tx("Awakened\n\n▸Materialized, Dawn: Gain 1●."),
+
+  Tx("Awakened\n\n▸Materialized, Dawn: Gain 2●."),
+
+  Tx("Awakened\n\n▸Materialized, Dissolved: Return a character you control to hand."),
+
+  Tx("Awakened\n\n☾: Draw 2 cards, then discard 2 cards."),
+
+  Tx(
+    "Awakened\n\n☾: Materialize two 2✦ ember figments with awakened. Abandon them at end of turn."
+  ),
+
+  Tx("Awakened\n\n☾: Rematerialize a character you control. This character gains +2✦."),
+
+  Tx("Awakened\n\n❖ – 0●: Move this character to an unoccupied character position."),
+
+  Tx("Awakened\n\n0●, ☾: Gain 1● for each character you control."),
+
+  Tx(
+    "Awakened\n\n1●, ☾, Discard a card: Return up to two ≤2● cost characters from your void to your hand."
+  ),
+
+  Tx(
+    "Awakened\n\n1●, ☾, Discard a card: Return up to two ≤3● cost characters from your void to your hand."
+  ),
+
+  Tx(
+    "Awakened\n\n2●, ☾, Discard a card: Return up to two ≤3● cost characters from your void to your hand."
+  ),
+
+  Tx("Awakened, Reclaim 1●\n\n☾: Awaken up to two characters you control."),
+
+  Tx("Banish a chosen character from the opponent's hand. Draw a card."),
+
+  Tx("Banish a chosen character from the opponent's hand. Draw a card. Reclaim."),
+
+  Tx("Banish a chosen character from the opponent's hand. Reclaim."),
+
+  Tx("Banish an enemy with cost X●. Draw a card."),
+
+  Tx("Banish an enemy with cost X●. Reclaim."),
+
+  Tx("Banish an enemy. Draw a card."),
+
+  Tx("Banish an enemy. Draw a card. Reclaim."),
+
+  Tx("Banish an enemy. Reclaim."),
+
+  Tx("Banish an enemy. The opponent gains 4⍟."),
+
+  Tx("Banish an enemy. The opponent gains 4⍟. Draw a card. Reclaim."),
+
+  Tx("Banish an enemy. The opponent gains 5⍟. Draw a card."),
+
+  Tx("Banish an enemy. The opponent gains 5⍟. Reclaim."),
+
+  Tx("Banish up to three cards from the opponent's void. Draw 2 cards."),
+
+  Tx("Banish up to three cards from the opponent's void. Draw 2 cards. Draw a card. Reclaim."),
+
+  Tx("Banish up to three cards from the opponent's void. Draw a card. Draw a card."),
+
+  Tx("Banish up to three cards from the opponent's void. Draw a card. Reclaim."),
+
+  Tx("Banish your hand and void. Draw 5 cards.\n\nReclaim 3● Draw a card."),
+
+  Tx("Banish your hand and void. Draw 5 cards.\n\nReclaim 3● Reclaim."),
+
+  Tx("Banish your hand. Draw 5 cards.\n\nReclaim 3●"),
+
+  Tx("Banish your hand. Draw 5 cards.\n\nReclaim 3● Draw a card. Reclaim."),
+
+  Tx(
+    "Cards you reclaim are not banished when they leave play.\n\n1●, ☾: Choose a character in your void to gain reclaim."
+  ),
+
+  Tx(
+    "Choose a character type. Discover a character of that type and put it on top of your deck. Draw a card."
+  ),
+
+  Tx(
+    "Choose a character type. Discover a character of that type and put it on top of your deck. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Choose a character type. Discover a character of that type and put it on top of your deck. Reclaim."
+  ),
+
+  Tx("Choose a player. For each card you've played this turn, that player erodes 2. Draw a card."),
+
+  Tx(
+    "Choose a player. For each card you've played this turn, that player erodes 2. Draw a card. Reclaim."
+  ),
+
+  Tx("Choose a player. For each card you've played this turn, that player erodes 2. Reclaim."),
+
+  Tx("Choose a player. That player discard X cards, then draws X cards. Draw a card."),
+
+  Tx("Choose a player. That player discard X cards, then draws X cards. Draw a card. Reclaim."),
+
+  Tx("Choose a player. That player discard X cards, then draws X cards. Reclaim."),
+
+  Tx("Choose a value of X. Discover a character with cost X●. Draw a card."),
+
+  Tx("Choose a value of X. Discover a character with cost X●. Draw a card. Reclaim."),
+
+  Tx("Choose a value of X. Discover a character with cost X●. Reclaim."),
+
+  Tx("Choose a value of X. Discover an event with cost X. Draw a card."),
+
+  Tx("Choose a value of X. Discover an event with cost X. Draw a card. Reclaim."),
+
+  Tx("Choose a value of X. Discover an event with cost X. Reclaim."),
+
+  Tx(
+    "Choose an event in your void to gain reclaim.\n\nAt the start of your turn, if this card is in your void, you may erode 3 to place this card on top of your deck. Draw a card."
+  ),
+
+  Tx(
+    "Choose an event in your void to gain reclaim.\n\nAt the start of your turn, if this card is in your void, you may erode 3 to place this card on top of your deck. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Choose an event in your void to gain reclaim.\n\nAt the start of your turn, if this card is in your void, you may erode 3 to place this card on top of your deck. Reclaim."
+  ),
+
+  Tx(
+    "Choose one: Dissolve a ≤2✦ enemy, draw 2 cards and discard 2 cards, or return a ≤2● cost character from your void to hand. Draw a card."
+  ),
+
+  Tx(
+    "Choose one: Dissolve a ≤2✦ enemy, draw 2 cards and discard 2 cards, or return a ≤2● cost character from your void to hand. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Choose one: Dissolve a ≤2✦ enemy, draw 2 cards and discard 2 cards, or return a ≤2● cost character from your void to hand. Reclaim."
+  ),
+
+  Tx("Choose one: Gain X⍟ or dissolve an enemy with X✦. Draw a card."),
+
+  Tx("Choose one: Gain X⍟ or dissolve an enemy with X✦. Draw a card. Reclaim."),
+
+  Tx("Choose one: Gain X⍟ or dissolve an enemy with X✦. Reclaim."),
+
+  Tx("Choose up to two ≤X● cost events in your void to gain reclaim 0●. Draw a card."),
+
+  Tx("Choose up to two ≤X● cost events in your void to gain reclaim 0●. Draw a card. Reclaim."),
+
+  Tx("Choose up to two ≤X● cost events in your void to gain reclaim 0●. Reclaim."),
+
+  Tx("Discard a ≤1● cost character: Dissolve a ≤2● cost enemy."),
+
+  Tx("Discard a ≤1● cost character: Dissolve a ≤3● cost enemy."),
+
+  Tx("Discard a ≤2● cost character: Dissolve a ≤3● cost enemy."),
+
+  Tx("Discard a card: Materialize a 2✦ survivor figment."),
+
+  Tx("Discard a card: This character gains +3✦ until end of turn."),
+
+  Tx("Discard a chosen ≤2● cost card from the opponent's hand. Draw a card."),
+
+  Tx("Discard a chosen ≤2● cost card from the opponent's hand. Reclaim."),
+
+  Tx("Discard a chosen ≤3● cost card from the opponent's hand."),
+
+  Tx("Discard a chosen ≤3● cost card from the opponent's hand. Draw a card. Reclaim."),
+
+  Tx("Discard a chosen card from the opponent's hand.\n\nReclaim 1●. Draw a card."),
+
+  Tx("Discard a chosen card from the opponent's hand.\n\nReclaim 1●. Draw a card. Reclaim."),
+
+  Tx("Discard a chosen card from the opponent's hand.\n\nReclaim 1●. Reclaim."),
+
+  Tx("Discard a chosen card from the opponent's hand. Draw a card."),
+
+  Tx("Discard a chosen card from the opponent's hand. Draw a card. Reclaim."),
+
+  Tx("Discard a chosen card from the opponent's hand. Reclaim."),
+
+  Tx("Discard a chosen event from the opponent's hand. Draw a card."),
+
+  Tx("Discard a chosen event from the opponent's hand. Draw a card. Reclaim."),
+
+  Tx("Discard a chosen event from the opponent's hand. Reclaim."),
+
+  Tx("Discard your hand. Gain 3●. Draw a card."),
+
+  Tx("Discard your hand. Gain 3●. Reclaim."),
+
+  Tx("Discard your hand. Gain 4●."),
+
+  Tx("Discard your hand. Gain 4●. Draw a card. Reclaim."),
+
+  Tx("Discover a card with cost X●. Draw a card."),
+
+  Tx("Discover a card with cost X●. Draw a card. Reclaim."),
+
+  Tx("Discover a card with cost X●. Reclaim."),
+
+  Tx("Discover a character with cost X and materialize it with awakened."),
+
+  Tx("Discover a character with cost X and materialize it with awakened. Draw a card. Reclaim."),
+
+  Tx("Discover a character with cost X and materialize it. Draw a card."),
+
+  Tx("Discover a character with cost X and materialize it. Reclaim."),
+
+  Tx("Discover a character. Draw a card."),
+
+  Tx("Discover a character. Draw a card. Reclaim."),
+
+  Tx("Discover a character. Reclaim."),
+
+  Tx("Discover an event. Draw a card."),
+
+  Tx("Discover an event. Draw a card. Reclaim."),
+
+  Tx("Discover an event. Reclaim."),
+
+  Tx("Dissolve a ≤1✦ enemy.\n\nReclaim – Discard a card Draw a card."),
+
+  Tx("Dissolve a ≤1✦ enemy.\n\nReclaim – Discard a card Reclaim."),
+
+  Tx("Dissolve a ≤1✦ enemy.\n\nReclaim 1● Draw a card."),
+
+  Tx("Dissolve a ≤1✦ enemy.\n\nReclaim 1● Reclaim."),
+
+  Tx("Dissolve a ≤2● cost enemy.\n\nReclaim 5●. Draw a card."),
+
+  Tx("Dissolve a ≤2● cost enemy.\n\nReclaim 5●. Reclaim."),
+
+  Tx("Dissolve a ≤2● cost enemy. Draw a card."),
+
+  Tx("Dissolve a ≤2● cost enemy. Draw a card. Reclaim."),
+
+  Tx("Dissolve a ≤2● cost enemy. Reclaim."),
+
+  Tx("Dissolve a ≤2✦ enemy.\n\nReclaim – Discard a card"),
+
+  Tx("Dissolve a ≤2✦ enemy.\n\nReclaim – Discard a card Draw a card. Reclaim."),
+
+  Tx("Dissolve a ≤2✦ enemy.\n\nReclaim 1●"),
+
+  Tx("Dissolve a ≤2✦ enemy.\n\nReclaim 1● Draw a card. Reclaim."),
+
+  Tx(
+    "Dissolve a ≤2✦ enemy.\n\nWhen an enemy scores ⍟, return this card from your void to your hand. Draw a card."
+  ),
+
+  Tx(
+    "Dissolve a ≤2✦ enemy.\n\nWhen an enemy scores ⍟, return this card from your void to your hand. Reclaim."
+  ),
+
+  Tx("Dissolve a ≤2✦ enemy.\n\nWhen you discard this card, it gains reclaim 0●.\n Draw a card."),
+
+  Tx("Dissolve a ≤2✦ enemy.\n\nWhen you discard this card, it gains reclaim 0●.\n Reclaim."),
+
+  Tx("Dissolve a ≤3● cost enemy.\n\nReclaim 5●."),
+
+  Tx("Dissolve a ≤3● cost enemy.\n\nReclaim 5●. Draw a card. Reclaim."),
+
+  Tx("Dissolve a ≤3● cost enemy. Draw a card."),
+
+  Tx("Dissolve a ≤3● cost enemy. Reclaim."),
+
+  Tx("Dissolve a ≤3✦ character. Draw a card."),
+
+  Tx("Dissolve a ≤3✦ character. Reclaim."),
+
+  Tx(
+    "Dissolve a ≤3✦ enemy.\n\nWhen an enemy scores ⍟, return this card from your void to your hand."
+  ),
+
+  Tx(
+    "Dissolve a ≤3✦ enemy.\n\nWhen an enemy scores ⍟, return this card from your void to your hand. Draw a card. Reclaim."
+  ),
+
+  Tx("Dissolve a ≤3✦ enemy.\n\nWhen you discard this card, it gains reclaim 0●.\n"),
+
+  Tx(
+    "Dissolve a ≤3✦ enemy.\n\nWhen you discard this card, it gains reclaim 0●.\n Draw a card. Reclaim."
+  ),
+
+  Tx("Dissolve a ≤3✦ enemy. Draw a card."),
+
+  Tx("Dissolve a ≤3✦ enemy. Reclaim."),
+
+  Tx("Dissolve a ≤4● cost enemy."),
+
+  Tx("Dissolve a ≤4● cost enemy. Draw a card. Reclaim."),
+
+  Tx("Dissolve a ≤4✦ character."),
+
+  Tx("Dissolve a ≤4✦ character. Draw a card. Reclaim."),
+
+  Tx("Dissolve a ≤4✦ enemy."),
+
+  Tx("Dissolve a ≤4✦ enemy. Draw a card. Reclaim."),
+
+  Tx("Dissolve all characters. Draw a card."),
+
+  Tx("Dissolve all characters. Draw a card. Reclaim."),
+
+  Tx("Dissolve all characters. Reclaim."),
+
+  Tx("Dissolve an enemy warrior or an enemy with 2✦ or less."),
+
+  Tx("Dissolve an enemy warrior or an enemy with 2✦ or less. Draw a card. Reclaim."),
+
+  Tx("Dissolve an enemy warrior. Draw a card."),
+
+  Tx("Dissolve an enemy warrior. Reclaim."),
+
+  Tx(
+    "Dissolve an enemy with ✦ less than or equal to the number of cards in your void. Draw a card."
+  ),
+
+  Tx("Dissolve an enemy with ✦ less than or equal to the number of cards in your void. Reclaim."),
+
+  Tx("Dissolve each ≤X✦ character. Draw a card."),
+
+  Tx("Dissolve each ≤X✦ character. Draw a card. Reclaim."),
+
+  Tx("Dissolve each ≤X✦ character. Reclaim."),
+
+  Tx("Dissolve each character with cost X●. Draw a card."),
+
+  Tx("Dissolve each character with cost X●. Draw a card. Reclaim."),
+
+  Tx("Dissolve each character with cost X●. Reclaim."),
+
+  Tx("Double your current ●. Draw a card."),
+
+  Tx("Double your current ●. Draw a card. Reclaim."),
+
+  Tx("Double your current ●. Reclaim."),
+
+  Tx("Draw 2 cards, then discard 1 card.\n\nReclaim 2●."),
+
+  Tx("Draw 2 cards, then discard 1 card.\n\nReclaim 2●. Draw a card. Reclaim."),
+
+  Tx("Draw 2 cards, then discard 2 cards.\n\nReclaim 2●. Draw a card."),
+
+  Tx("Draw 2 cards, then discard 2 cards.\n\nReclaim 2●. Reclaim."),
+
+  Tx(
+    "Draw 2 cards, then discard a card.\n\nWhen you discard this card, it gains reclaim. Draw a card."
+  ),
+
+  Tx(
+    "Draw 2 cards, then discard a card.\n\nWhen you discard this card, it gains reclaim. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Draw 2 cards, then discard a card.\n\nWhen you discard this card, it gains reclaim. Reclaim."
+  ),
+
+  Tx("Draw 2 cards. The opponent gains 1⍟."),
+
+  Tx("Draw 2 cards. The opponent gains 1⍟. Draw a card. Reclaim."),
+
+  Tx("Draw 2 cards. The opponent gains 2⍟. Draw a card."),
+
+  Tx("Draw 2 cards. The opponent gains 2⍟. Reclaim."),
+
+  Tx("Draw 3 cards, then shuffle 2 cards from your hand into your deck. Draw a card."),
+
+  Tx("Draw 3 cards, then shuffle 2 cards from your hand into your deck. Reclaim."),
+
+  Tx("Draw 3 cards, then shuffle a card from your hand into your deck."),
+
+  Tx("Draw 3 cards, then shuffle a card from your hand into your deck. Draw a card. Reclaim."),
+
+  Tx("Draw 3 cards. Draw a card."),
+
+  Tx("Draw 3 cards. Draw a card. Reclaim."),
+
+  Tx("Draw 3 cards. Reclaim."),
+
+  Tx("Draw a card for each character you controlled that dissolved this turn. Draw a card."),
+
+  Tx(
+    "Draw a card for each character you controlled that dissolved this turn. Draw a card. Reclaim."
+  ),
+
+  Tx("Draw a card for each character you controlled that dissolved this turn. Reclaim."),
+
+  Tx("Draw a card, then foresee 1. Draw a card."),
+
+  Tx("Draw a card, then foresee 1. Draw a card. Reclaim."),
+
+  Tx("Draw a card, then foresee 1. Reclaim."),
+
+  Tx("Draw a card.\n\nReclaim – Abandon a character. Draw a card."),
+
+  Tx("Draw a card.\n\nReclaim – Abandon a character. Draw a card. Reclaim."),
+
+  Tx("Draw a card.\n\nReclaim – Abandon a character. Reclaim."),
+
+  Tx("Draw a card. Draw a card."),
+
+  Tx("Draw a card. Draw a card. Reclaim."),
+
+  Tx("Draw a card. Foresee 2. Draw a card."),
+
+  Tx("Draw a card. Foresee 2. Reclaim."),
+
+  Tx("Draw a card. Foresee 3."),
+
+  Tx("Draw a card. Foresee 3. Draw a card. Reclaim."),
+
+  Tx("Draw a card. Reclaim."),
+
+  Tx("Draw two cards, then discard a card unless you played another event this turn. Draw a card."),
+
+  Tx(
+    "Draw two cards, then discard a card unless you played another event this turn. Draw a card. Reclaim."
+  ),
+
+  Tx("Draw two cards, then discard a card unless you played another event this turn. Reclaim."),
+
+  Tx("Draw two cards, then discard one card. Gain 3●."),
+
+  Tx("Draw two cards, then discard one card. Gain 3●. Draw a card. Reclaim."),
+
+  Tx("Draw two cards, then discard two cards. Gain 3●. Draw a card."),
+
+  Tx("Draw two cards, then discard two cards. Gain 3●. Reclaim."),
+
+  Tx("Draw two cards.\n\nReclaim 2● Draw a card."),
+
+  Tx("Draw two cards.\n\nReclaim 2● Draw a card. Reclaim."),
+
+  Tx("Draw two cards.\n\nReclaim 2● Reclaim."),
+
+  Tx(
+    "Draw X cards, then discard X cards. Materialize a 1✦ ethereal figment for each event discarded. Draw a card."
+  ),
+
+  Tx(
+    "Draw X cards, then discard X cards. Materialize a 1✦ ethereal figment for each event discarded. Reclaim."
+  ),
+
+  Tx(
+    "Draw X cards, then discard X cards. Materialize a 2✦ ethereal figment for each event discarded."
+  ),
+
+  Tx(
+    "Draw X cards, then discard X cards. Materialize a 2✦ ethereal figment for each event discarded. Draw a card. Reclaim."
+  ),
+
+  Tx("Draw X cards. Draw a card."),
+
+  Tx("Draw X cards. Draw a card. Reclaim."),
+
+  Tx("Draw X cards. Reclaim."),
+
+  Tx("Each player discards their hand, then draws 6 cards. Draw a card."),
+
+  Tx("Each player discards their hand, then draws 6 cards. Draw a card. Reclaim."),
+
+  Tx("Each player discards their hand, then draws 6 cards. Reclaim."),
+
+  Tx(
+    "Each player shuffles their hand and void into their deck, then draws 5 cards. Banish this card. Draw a card."
+  ),
+
+  Tx(
+    "Each player shuffles their hand and void into their deck, then draws 5 cards. Banish this card. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Each player shuffles their hand and void into their deck, then draws 5 cards. Banish this card. Reclaim."
+  ),
+
+  Tx("Erode 3. Draw a card. Draw a card."),
+
+  Tx("Erode 3. Draw a card. Draw a card. Reclaim."),
+
+  Tx("Erode 3. Draw a card. Reclaim."),
+
+  Tx(
+    "Erode 4. You may put two of those cards into your hand.\n\nWhen you discard this card, it gains reclaim 2●. Draw a card."
+  ),
+
+  Tx(
+    "Erode 4. You may put two of those cards into your hand.\n\nWhen you discard this card, it gains reclaim 2●. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Erode 4. You may put two of those cards into your hand.\n\nWhen you discard this card, it gains reclaim 2●. Reclaim."
+  ),
+
+  Tx(
+    "For each card you have played this turn, draw a card with ephemeral. They cost 0● this turn. Draw a card."
+  ),
+
+  Tx(
+    "For each card you have played this turn, draw a card with ephemeral. They cost 0● this turn. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "For each card you have played this turn, draw a card with ephemeral. They cost 0● this turn. Reclaim."
+  ),
+
+  Tx("For each card you've played this turn, materialize a 1✦ ethereal figment. Draw a card."),
+
+  Tx("For each card you've played this turn, materialize a 1✦ ethereal figment. Reclaim."),
+
+  Tx("For each card you've played this turn, materialize a 2✦ ethereal figment."),
+
+  Tx(
+    "For each card you've played this turn, materialize a 2✦ ethereal figment. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "For each card you've played this turn, materialize a 2✦ shadow figment.\n\nReclaim 2● Draw a card."
+  ),
+
+  Tx(
+    "For each card you've played this turn, materialize a 2✦ shadow figment.\n\nReclaim 2● Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "For each card you've played this turn, materialize a 2✦ shadow figment.\n\nReclaim 2● Reclaim."
+  ),
+
+  Tx("Foresee 1. Draw a card.\n\nReclaim 4● Draw a card."),
+
+  Tx("Foresee 1. Draw a card.\n\nReclaim 4● Reclaim."),
+
+  Tx("Foresee 1. Draw a card. Draw a card."),
+
+  Tx("Foresee 1. Draw a card. Reclaim."),
+
+  Tx("Foresee 2. Draw a card."),
+
+  Tx("Foresee 2. Draw a card.\n\nReclaim 4●"),
+
+  Tx("Foresee 2. Draw a card.\n\nReclaim 4● Draw a card. Reclaim."),
+
+  Tx("Foresee 2. Draw a card. Draw a card."),
+
+  Tx("Foresee 2. Draw a card. Draw a card. Reclaim."),
+
+  Tx("Foresee 2. Draw a card. Reclaim."),
+
+  Tx("Foresee 3. Draw a card."),
+
+  Tx("Foresee 3. Draw a card. Draw a card. Reclaim."),
+
+  Tx("Gain 2●. Draw a card."),
+
+  Tx("Gain 2●. Draw a card. Draw a card."),
+
+  Tx("Gain 2●. Draw a card. If this event was reclaimed, copy it.\n\nReclaim 6● Draw a card."),
+
+  Tx(
+    "Gain 2●. Draw a card. If this event was reclaimed, copy it.\n\nReclaim 6● Draw a card. Reclaim."
+  ),
+
+  Tx("Gain 2●. Draw a card. If this event was reclaimed, copy it.\n\nReclaim 6● Reclaim."),
+
+  Tx("Gain 2●. Draw a card. Reclaim."),
+
+  Tx("Gain 2●. Reclaim."),
+
+  Tx("Gain 3⍟. If you reclaimed this card, gain 6⍟ instead.\n\nReclaim 4● Draw a card."),
+
+  Tx("Gain 3⍟. If you reclaimed this card, gain 6⍟ instead.\n\nReclaim 4● Reclaim."),
+
+  Tx("Gain 3●."),
+
+  Tx("Gain 3●. Draw a card."),
+
+  Tx("Gain 3●. Draw a card. Draw a card. Reclaim."),
+
+  Tx("Gain 3●. Draw a card. Reclaim."),
+
+  Tx("Gain 3●. Reclaim."),
+
+  Tx("Gain 4⍟. If you reclaimed this card, gain 8⍟ instead.\n\nReclaim 4●"),
+
+  Tx("Gain 4⍟. If you reclaimed this card, gain 8⍟ instead.\n\nReclaim 4● Draw a card. Reclaim."),
+
+  Tx("Gain 4●."),
+
+  Tx("Gain 4●. Draw a card."),
+
+  Tx("Gain 4●. Draw a card. Reclaim."),
+
+  Tx("Gain 4●. Reclaim."),
+
+  Tx("Gain 5●."),
+
+  Tx("Gain 5●. Draw a card."),
+
+  Tx("Gain 5●. Draw a card. Reclaim."),
+
+  Tx("Gain 5●. Reclaim."),
+
+  Tx("Gain 6●."),
+
+  Tx("Gain 6●. Draw a card. Reclaim."),
+
+  Tx("Gain X⍟.\n\nReclaim – Discard X cards. Draw a card."),
+
+  Tx("Gain X⍟.\n\nReclaim – Discard X cards. Draw a card. Reclaim."),
+
+  Tx("Gain X⍟.\n\nReclaim – Discard X cards. Reclaim."),
+
+  Tx("Give a character you control +1✦ for each warrior you control. Draw a card."),
+
+  Tx("Give a character you control +1✦ for each warrior you control. Draw a card. Reclaim."),
+
+  Tx("Give a character you control +1✦ for each warrior you control. Reclaim."),
+
+  Tx("Give a character you control +3✦. Draw a card."),
+
+  Tx("Give a character you control +3✦. Draw a card. Reclaim."),
+
+  Tx("Give a character you control +3✦. Reclaim."),
+
+  Tx("If there are 2 or more events in your void, this character has +4✦ and gains awakened."),
+
+  Tx("If there are 5 or more cards in your void, this character has +5✦.\n\nReclaim 1●."),
+
+  Tx("If this card is in your void, characters you control have +2✦."),
+
+  Tx(
+    "If you control 2 or more characters, reveal the top card of your deck. You may play characters from the top of your deck."
+  ),
+
+  Tx("If you control 2 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy."),
+
+  Tx(
+    "If you control 2 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "If you control 3 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy.\n Draw a card."
+  ),
+
+  Tx(
+    "If you control 3 or more warriors, dissolve an enemy. Otherwise, dissolve a ≤2✦ enemy.\n Reclaim."
+  ),
+
+  Tx(
+    "If you control a survivor, you may play this card from your hand or void for 1●. If played this way, it materializes with awakened."
+  ),
+
+  Tx("If you have no cards in your deck, you win the game. Draw a card."),
+
+  Tx("If you have no cards in your deck, you win the game. Draw a card. Reclaim."),
+
+  Tx("If you have no cards in your deck, you win the game. Reclaim."),
+
+  Tx("Look at the opponent's hand. Put a card from it into your hand. Draw a card."),
+
+  Tx("Look at the opponent's hand. Put a card from it into your hand. Draw a card. Reclaim."),
+
+  Tx("Look at the opponent's hand. Put a card from it into your hand. Reclaim."),
+
+  Tx(
+    "Look at the top 3 cards of your deck. Put one on top of your deck, one on the bottom of your deck, and one into your hand. Draw a card."
+  ),
+
+  Tx(
+    "Look at the top 3 cards of your deck. Put one on top of your deck, one on the bottom of your deck, and one into your hand. Reclaim."
+  ),
+
+  Tx(
+    "Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral. Draw a card."
+  ),
+
+  Tx(
+    "Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Look at the top 4 cards of your deck. Choose one: Draw 1 of the cards, or draw 2 of the cards and they gain ephemeral. Reclaim."
+  ),
+
+  Tx(
+    "Look at the top 4 cards of your deck. Draw one of them and shuffle the rest back. Draw a card."
+  ),
+
+  Tx(
+    "Look at the top 4 cards of your deck. Draw one of them and shuffle the rest back. Draw a card. Reclaim."
+  ),
+
+  Tx("Look at the top 4 cards of your deck. Draw one of them and shuffle the rest back. Reclaim."),
+
+  Tx(
+    "Look at the top 4 cards of your deck. Put one on top of your deck, one on the bottom of your deck, and one into your hand. Put the rest into your void."
+  ),
+
+  Tx(
+    "Look at the top 4 cards of your deck. Put one on top of your deck, one on the bottom of your deck, and one into your hand. Put the rest into your void. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Materialize a ≤2● cost character from your void.\n\nReclaim – Abandon a character. Draw a card."
+  ),
+
+  Tx("Materialize a ≤2● cost character from your void.\n\nReclaim – Abandon a character. Reclaim."),
+
+  Tx("Materialize a ≤3● cost character from your void.\n\nReclaim – Abandon a character."),
+
+  Tx(
+    "Materialize a ≤3● cost character from your void.\n\nReclaim – Abandon a character. Draw a card. Reclaim."
+  ),
+
+  Tx("Materialize a 4✦ monstrosity figment.\n\nReclaim 4● Draw a card."),
+
+  Tx("Materialize a 4✦ monstrosity figment.\n\nReclaim 4● Reclaim."),
+
+  Tx("Materialize a 5✦ monstrosity figment.\n\nReclaim 4●"),
+
+  Tx("Materialize a 5✦ monstrosity figment.\n\nReclaim 4● Draw a card. Reclaim."),
+
+  Tx("Materialize all ≤2● cost characters in your void which dissolved this turn. Draw a card."),
+
+  Tx(
+    "Materialize all ≤2● cost characters in your void which dissolved this turn. Draw a card. Reclaim."
+  ),
+
+  Tx("Materialize all ≤2● cost characters in your void which dissolved this turn. Reclaim."),
+
+  Tx("Materialize all characters in your void which dissolved this turn. Draw a card."),
+
+  Tx("Materialize all characters in your void which dissolved this turn. Draw a card. Reclaim."),
+
+  Tx("Materialize all characters in your void which dissolved this turn. Reclaim."),
+
+  Tx(
+    "Materialize all characters in your void which were discarded this turn.\n\nWhen you discard this card, it gains reclaim 0●. Draw a card."
+  ),
+
+  Tx(
+    "Materialize all characters in your void which were discarded this turn.\n\nWhen you discard this card, it gains reclaim 0●. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Materialize all characters in your void which were discarded this turn.\n\nWhen you discard this card, it gains reclaim 0●. Reclaim."
+  ),
+
+  Tx("Materialize each ≤X● cost character in your void. Banish them at end of turn. Draw a card."),
+
+  Tx(
+    "Materialize each ≤X● cost character in your void. Banish them at end of turn. Draw a card. Reclaim."
+  ),
+
+  Tx("Materialize each ≤X● cost character in your void. Banish them at end of turn. Reclaim."),
+
+  Tx("Materialize three 1✦ ethereal figments.\n\nReclaim 2●"),
+
+  Tx("Materialize three 1✦ ethereal figments.\n\nReclaim 2● Draw a card. Reclaim."),
+
+  Tx("Materialize two 1✦ ethereal figments.\n\nReclaim 2● Draw a card."),
+
+  Tx("Materialize two 1✦ ethereal figments.\n\nReclaim 2● Reclaim."),
+
+  Tx("Materialize two random ≤2● cost characters from your deck. Draw a card."),
+
+  Tx("Materialize two random ≤2● cost characters from your deck. Draw a card. Reclaim."),
+
+  Tx("Materialize two random ≤2● cost characters from your deck. Reclaim."),
+
+  Tx(
+    "Materialize up to three chosen characters in your void which dissolved this turn. Draw a card."
+  ),
+
+  Tx(
+    "Materialize up to three chosen characters in your void which dissolved this turn. Draw a card. Reclaim."
+  ),
+
+  Tx("Materialize up to three chosen characters in your void which dissolved this turn. Reclaim."),
+
+  Tx("Materialize up to two ≤2● cost characters from your void.\n\nReclaim 5●. Draw a card."),
+
+  Tx(
+    "Materialize up to two ≤2● cost characters from your void.\n\nReclaim 5●. Draw a card. Reclaim."
+  ),
+
+  Tx("Materialize up to two ≤2● cost characters from your void.\n\nReclaim 5●. Reclaim."),
+
+  Tx("Materialize X 1✦ ethereal figments. Draw a card."),
+
+  Tx("Materialize X 1✦ ethereal figments. Reclaim."),
+
+  Tx("Materialize X 2✦ ethereal figments."),
+
+  Tx("Materialize X 2✦ ethereal figments. Draw a card. Reclaim."),
+
+  Tx("Offering\n\n▸Materialized, Dissolved: Dissolve an enemy."),
+
+  Tx("Offering\n\n▸Materialized, Dissolved: Prevent a played card."),
+
+  Tx("Offering\n\nBanish a ≤3● cost enemy. Draw a card."),
+
+  Tx("Offering\n\nBanish a ≤3● cost enemy. Reclaim."),
+
+  Tx("Offering\n\nBanish a ≤4● cost enemy."),
+
+  Tx("Offering\n\nBanish a ≤4● cost enemy. Draw a card. Reclaim."),
+
+  Tx("Offering\n\nDissolve an enemy. Draw a card."),
+
+  Tx("Offering\n\nDissolve an enemy. Draw a card. Reclaim."),
+
+  Tx("Offering\n\nDissolve an enemy. Reclaim."),
+
+  Tx("Offering\n\nDraw 2 cards. Draw a card."),
+
+  Tx("Offering\n\nDraw 2 cards. Draw a card. Reclaim."),
+
+  Tx("Offering\n\nDraw 2 cards. Reclaim."),
+
+  Tx("Offering\n\nPrevent a played card unless the opponent pays 1●. Draw a card."),
+
+  Tx("Offering\n\nPrevent a played card unless the opponent pays 1●. Reclaim."),
+
+  Tx("Offering\n\nPrevent a played card unless the opponent pays 2●."),
+
+  Tx("Offering\n\nPrevent a played card unless the opponent pays 2●. Draw a card. Reclaim."),
+
+  Tx("Offering\n\nPrevent a played card. Draw a card."),
+
+  Tx("Offering\n\nPrevent a played card. Draw a card. Reclaim."),
+
+  Tx("Offering\n\nPrevent a played card. Reclaim."),
+
+  Tx("Offering\n\nPrevent a played event. Draw a card."),
+
+  Tx("Offering\n\nPrevent a played event. Draw a card. Reclaim."),
+
+  Tx("Offering\n\nPrevent a played event. Reclaim."),
+
+  Tx("Offering\n\nThe next time you play an event this turn, copy it. Draw a card."),
+
+  Tx("Offering\n\nThe next time you play an event this turn, copy it. Draw a card. Reclaim."),
+
+  Tx("Offering\n\nThe next time you play an event this turn, copy it. Reclaim."),
+
+  Tx(
+    "Once per turn, if you have two or fewer cards in hand, you may play a character from your void."
+  ),
+
+  Tx("Once per turn, when a warrior you control is dissolved, materialize a 2✦ warrior figment."),
+
+  Tx("Once per turn, when you discard a card, draw a card and gain 2●."),
+
+  Tx("Once per turn, when you materialize a character, gain 2●."),
+
+  Tx("Once per turn, when you play a spirit animal, materialize a 2✦ spirit animal figment."),
+
+  Tx("Once per turn, you may play a ≤3● cost character from your void."),
+
+  Tx("Phasing\n\n▸Materialized, Dissolved: Return an enemy to hand."),
+
+  Tx("Phasing\n\nWhen an outsider you control scores ⍟, foresee 2 and draw a card."),
+
+  Tx("Phasing\n\nWhen this character scores ⍟, draw 2 cards."),
+
+  Tx("Play this event only if there are 2 or more events in your void. Gain 5●."),
+
+  Tx(
+    "Play this event only if there are 2 or more events in your void. Gain 5●. Draw a card. Reclaim."
+  ),
+
+  Tx("Play this event only if there are 3 or more events in your void. Gain 5●. Draw a card."),
+
+  Tx("Play this event only if there are 3 or more events in your void. Gain 5●. Reclaim."),
+
+  Tx("Prevent a played ≤2● cost card. Draw a card."),
+
+  Tx("Prevent a played ≤2● cost card. Reclaim."),
+
+  Tx("Prevent a played ≤2✦ character. Draw a card."),
+
+  Tx("Prevent a played ≤2✦ character. Reclaim."),
+
+  Tx("Prevent a played ≤3● cost card."),
+
+  Tx("Prevent a played ≤3● cost card. Draw a card. Reclaim."),
+
+  Tx("Prevent a played ≤3✦ character."),
+
+  Tx("Prevent a played ≤3✦ character. Draw a card. Reclaim."),
+
+  Tx("Prevent a played card unless the opponent abandons a non-figment character. Draw a card."),
+
+  Tx(
+    "Prevent a played card unless the opponent abandons a non-figment character. Draw a card. Reclaim."
+  ),
+
+  Tx("Prevent a played card unless the opponent abandons a non-figment character. Reclaim."),
+
+  Tx("Prevent a played card unless the opponent pays 1●. Draw a card."),
+
+  Tx("Prevent a played card unless the opponent pays 1●. Reclaim."),
+
+  Tx("Prevent a played card unless the opponent pays 2●."),
+
+  Tx("Prevent a played card unless the opponent pays 2●. Draw a card. Reclaim."),
+
+  Tx("Prevent a played card, then put that card into your hand. Draw a card."),
+
+  Tx("Prevent a played card, then put that card into your hand. Draw a card. Reclaim."),
+
+  Tx("Prevent a played card, then put that card into your hand. Reclaim."),
+
+  Tx("Prevent a played card. Draw 2 cards. The opponent draws a card."),
+
+  Tx("Prevent a played card. Draw 2 cards. The opponent draws a card. Draw a card. Reclaim."),
+
+  Tx("Prevent a played card. Draw a card."),
+
+  Tx("Prevent a played card. Draw a card. Reclaim."),
+
+  Tx("Prevent a played card. Each player draws a card. Draw a card."),
+
+  Tx("Prevent a played card. Each player draws a card. Reclaim."),
+
+  Tx("Prevent a played card. Put it on the bottom of the opponent's deck."),
+
+  Tx("Prevent a played card. Put it on the bottom of the opponent's deck. Draw a card. Reclaim."),
+
+  Tx("Prevent a played card. Put it on top of the opponent's deck. Draw a card."),
+
+  Tx("Prevent a played card. Put it on top of the opponent's deck. Reclaim."),
+
+  Tx("Prevent a played card. Reclaim."),
+
+  Tx("Prevent a played event unless the opponent pays 2●. Draw a card."),
+
+  Tx("Prevent a played event unless the opponent pays 2●. Reclaim."),
+
+  Tx("Prevent a played event unless the opponent pays 3●."),
+
+  Tx("Prevent a played event unless the opponent pays 3●. Draw a card. Reclaim."),
+
+  Tx("Put an enemy on top of the opponent's deck. Draw a card."),
+
+  Tx("Put an enemy on top of the opponent's deck. Draw a card. Reclaim."),
+
+  Tx("Put an enemy on top of the opponent's deck. Reclaim."),
+
+  Tx("Rematerialize a character you control.\n\nReclaim 1●. Draw a card."),
+
+  Tx("Rematerialize a character you control.\n\nReclaim 1●. Draw a card. Reclaim."),
+
+  Tx("Rematerialize a character you control.\n\nReclaim 1●. Reclaim."),
+
+  Tx("Return a character to its controller's hand. Gain 2●. Draw a card."),
+
+  Tx("Return a character to its controller's hand. Gain 2●. Reclaim."),
+
+  Tx("Return a character to its controller's hand. Gain 3●."),
+
+  Tx("Return a character to its controller's hand. Gain 3●. Draw a card. Reclaim."),
+
+  Tx("Return a character with cost X● to hand. Draw a card. Draw a card."),
+
+  Tx("Return a character with cost X● to hand. Draw a card. Draw a card. Reclaim."),
+
+  Tx("Return a character with cost X● to hand. Draw a card. Reclaim."),
+
+  Tx("Return a character you control to hand: Awaken up to two characters you control."),
+
+  Tx(
+    "Return all but one character you control to hand. Draw a card for each character returned. Draw a card."
+  ),
+
+  Tx(
+    "Return all but one character you control to hand. Draw a card for each character returned. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Return all but one character you control to hand. Draw a card for each character returned. Reclaim."
+  ),
+
+  Tx("Shuffle your hand and void into your deck. Draw 5 cards. Gain 5●. Draw a card."),
+
+  Tx("Shuffle your hand and void into your deck. Draw 5 cards. Gain 5●. Reclaim."),
+
+  Tx("Shuffle your hand and void into your deck. Draw 6 cards. Gain 5●."),
+
+  Tx("Shuffle your hand and void into your deck. Draw 6 cards. Gain 5●. Draw a card. Reclaim."),
+
+  Tx(
+    "Spirit animals you control have +2✦.\n\nWhen you play a spirit animal, you may pay 1● to draw a card."
+  ),
+
+  Tx(
+    "Support – Supported characters have +1✦ for each stored ⧗.\n\n0●, Banish a character from a void: Store 1⧗."
+  ),
+
+  Tx(
+    "Support – Supported characters have +2✦.\n\n❖ – 0●: Move this character to an unoccupied character position."
+  ),
+
+  Tx("Support – Supported spirit animals have +1✦.\n\n1●, ☾: Draw a spirit animal."),
+
+  Tx("Take an extra turn after this one. Draw a card."),
+
+  Tx("Take an extra turn after this one. Draw a card. Reclaim."),
+
+  Tx("Take an extra turn after this one. Reclaim."),
+
+  Tx("The next time you play a ≤2● cost event this turn, copy it. Draw a card."),
+
+  Tx("The next time you play a ≤2● cost event this turn, copy it. Reclaim."),
+
+  Tx("The next time you play a ≤3● cost event this turn, copy it."),
+
+  Tx("The next time you play a ≤3● cost event this turn, copy it. Draw a card. Reclaim."),
+
+  Tx("The next time you play an event this turn, copy it twice.\n\nReclaim 5●. Draw a card."),
+
+  Tx("The next time you play an event this turn, copy it twice.\n\nReclaim 5●. Reclaim."),
+
+  Tx(
+    "The next time you play an event this turn, copy it twice. You may choose new targets for the copies.\n\nReclaim 5●."
+  ),
+
+  Tx(
+    "The next time you play an event this turn, copy it twice. You may choose new targets for the copies.\n\nReclaim 5●. Draw a card. Reclaim."
+  ),
+
+  Tx("The opponent discards a card.\n\nReclaim – Discard a card. Draw a card."),
+
+  Tx("The opponent discards a card.\n\nReclaim – Discard a card. Reclaim."),
+
+  Tx(
+    "The opponent discards a card. If they have 5 or more cards in hand, they discard two cards instead.\n\nReclaim – Discard a card."
+  ),
+
+  Tx(
+    "The opponent discards a card. If they have 5 or more cards in hand, they discard two cards instead.\n\nReclaim – Discard a card. Draw a card. Reclaim."
+  ),
+
+  Tx("This character has +1✦ for each warrior you control. Other warriors you control have +2✦."),
+
+  Tx("This character has +4✦ if there are two or more ≤2● cost characters in your void."),
+
+  Tx("This character has all character types.\n\n▸Dawn: Gain 2●."),
+
+  Tx("This character has all character types.\n\n▸Materialized, Dawn: Gain 1●."),
+
+  Tx("This character has all character types.\n\n▸Materialized, Dawn: Gain 2●."),
+
+  Tx(
+    "This character has all character types.\n\n❖ – 0●: Move this character to an unoccupied character position."
+  ),
+
+  Tx(
+    "This character has all character types.\n\n0●: Characters you control have all character types until end of turn."
+  ),
+
+  Tx(
+    "This event cannot be prevented. Gain 2⍟ for each card you have played this turn. Draw a card."
+  ),
+
+  Tx(
+    "This event cannot be prevented. Gain 2⍟ for each card you have played this turn. Draw a card. Reclaim."
+  ),
+
+  Tx("This event cannot be prevented. Gain 2⍟ for each card you have played this turn. Reclaim."),
+
+  Tx("This event costs 1● less for each character you control. Dissolve an enemy. Draw a card."),
+
+  Tx(
+    "This event costs 1● less for each character you control. Dissolve an enemy. Draw a card. Reclaim."
+  ),
+
+  Tx("This event costs 1● less for each character you control. Dissolve an enemy. Reclaim."),
+
+  Tx(
+    "To play this card, abandon a ≤2● cost character. Discover a ≤2● cost character and materialize it. Draw a card."
+  ),
+
+  Tx(
+    "To play this card, abandon a ≤2● cost character. Discover a ≤2● cost character and materialize it. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "To play this card, abandon a ≤2● cost character. Discover a ≤2● cost character and materialize it. Reclaim."
+  ),
+
+  Tx("To play this card, abandon a character or discard a card. Draw 2 cards. Draw a card."),
+
+  Tx("To play this card, abandon a character or discard a card. Draw 2 cards. Reclaim."),
+
+  Tx("To play this card, abandon a character or discard a card. Draw 3 cards."),
+
+  Tx(
+    "To play this card, abandon a character or discard a card. Draw 3 cards. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "To play this card, abandon a character. Materialize a random character with higher cost from your deck.\n\nReclaim 3● Draw a card."
+  ),
+
+  Tx(
+    "To play this card, abandon a character. Materialize a random character with higher cost from your deck.\n\nReclaim 3● Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "To play this card, abandon a character. Materialize a random character with higher cost from your deck.\n\nReclaim 3● Reclaim."
+  ),
+
+  Tx("To play this card, banish 5 cards from your void. Draw 3 cards. Draw a card."),
+
+  Tx("To play this card, banish 5 cards from your void. Draw 3 cards. Draw a card. Reclaim."),
+
+  Tx("To play this card, banish 5 cards from your void. Draw 3 cards. Reclaim."),
+
+  Tx("To play this card, banish a card from hand.\n\n▸Materialized, ▸Materialized, Dawn: Gain 1●."),
+
+  Tx("To play this card, discard a card or pay 5⍟. Dissolve an enemy. Draw a card."),
+
+  Tx("To play this card, discard a card or pay 5⍟. Dissolve an enemy. Draw a card. Reclaim."),
+
+  Tx("To play this card, discard a card or pay 5⍟. Dissolve an enemy. Reclaim."),
+
+  Tx("To play this character, discard a character.\n\n▸Materialized, Dawn: Gain 2●."),
+
+  Tx("To play this event, abandon a character or discard a card. Dissolve an enemy. Draw a card."),
+
+  Tx(
+    "To play this event, abandon a character or discard a card. Dissolve an enemy. Draw a card. Reclaim."
+  ),
+
+  Tx("To play this event, abandon a character or discard a card. Dissolve an enemy. Reclaim."),
+
+  Tx(
+    "To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it with awakened."
+  ),
+
+  Tx(
+    "To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it with awakened. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it. Draw a card."
+  ),
+
+  Tx(
+    "To play this event, abandon a warrior. Discover a warrior with higher cost, then materialize it. Reclaim."
+  ),
+
+  Tx(
+    "To play this event, banish X cards from your void. Look at the top X cards of your deck. Put two of them into your hand and the rest on the bottom. Draw a card."
+  ),
+
+  Tx(
+    "To play this event, banish X cards from your void. Look at the top X cards of your deck. Put two of them into your hand and the rest on the bottom. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "To play this event, banish X cards from your void. Look at the top X cards of your deck. Put two of them into your hand and the rest on the bottom. Reclaim."
+  ),
+
+  Tx("To play this event, discard 2 cards. Draw 3 cards. Draw a card."),
+
+  Tx("To play this event, discard 2 cards. Draw 3 cards. Reclaim."),
+
+  Tx("To play this event, discard 2 cards. Draw 4 cards."),
+
+  Tx("To play this event, discard 2 cards. Draw 4 cards. Draw a card. Reclaim."),
+
+  Tx("To play this event, discard a card. Draw 2 cards. Draw a card."),
+
+  Tx("To play this event, discard a card. Draw 2 cards. Draw a card. Reclaim."),
+
+  Tx("To play this event, discard a card. Draw 2 cards. Reclaim."),
+
+  Tx("To play this event, discard X cards. Draw X+1 cards. Draw a card."),
+
+  Tx("To play this event, discard X cards. Draw X+1 cards. Reclaim."),
+
+  Tx("To play this event, discard X cards. Draw X+2 cards."),
+
+  Tx("To play this event, discard X cards. Draw X+2 cards. Draw a card. Reclaim."),
+
+  Tx("To play this event, pay 2⍟. Dissolve an enemy. Draw a card."),
+
+  Tx("To play this event, pay 2⍟. Dissolve an enemy. Draw a card. Reclaim."),
+
+  Tx("To play this event, pay 2⍟. Dissolve an enemy. Reclaim."),
+
+  Tx(
+    "Trigger the '▸Dawn' ability of each character you control. Awaken each character you control. Draw a card."
+  ),
+
+  Tx(
+    "Trigger the '▸Dawn' ability of each character you control. Awaken each character you control. Reclaim."
+  ),
+
+  Tx(
+    "Trigger the '▸Materialized, Dawn' ability of each character you control. Awaken each character you control."
+  ),
+
+  Tx(
+    "Trigger the '▸Materialized, Dawn' ability of each character you control. Awaken each character you control. Draw a card. Reclaim."
+  ),
+
+  Tx("Until end of turn, cards in your void gain reclaim. Draw a card."),
+
+  Tx("Until end of turn, cards in your void gain reclaim. Draw a card. Reclaim."),
+
+  Tx("Until end of turn, cards in your void gain reclaim. Reclaim."),
+
+  Tx(
+    "Until end of turn, characters you control have +X✦ where X is the number of characters you control. Draw a card."
+  ),
+
+  Tx(
+    "Until end of turn, characters you control have +X✦ where X is the number of characters you control. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Until end of turn, characters you control have +X✦ where X is the number of characters you control. Reclaim."
+  ),
+
+  Tx(
+    "Until end of turn, events in your void gain reclaim.\n\nWhen you discard or erode this card, it gains reclaim 3●. Draw a card."
+  ),
+
+  Tx(
+    "Until end of turn, events in your void gain reclaim.\n\nWhen you discard or erode this card, it gains reclaim 3●. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Until end of turn, events in your void gain reclaim.\n\nWhen you discard or erode this card, it gains reclaim 3●. Reclaim."
+  ),
+
+  Tx(
+    "Until end of turn, when a character you control is dissolved, return it to your hand. Draw a card."
+  ),
+
+  Tx(
+    "Until end of turn, when a character you control is dissolved, return it to your hand. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "Until end of turn, when a character you control is dissolved, return it to your hand. Reclaim."
+  ),
+
+  Tx(
+    "Until end of turn, when you materialize a character, draw a card.\n\nReclaim 4●. Draw a card."
+  ),
+
+  Tx(
+    "Until end of turn, when you materialize a character, draw a card.\n\nReclaim 4●. Draw a card. Reclaim."
+  ),
+
+  Tx("Until end of turn, when you materialize a character, draw a card.\n\nReclaim 4●. Reclaim."),
+
+  Tx("Until end of turn, when you play a character, draw a card. Draw a card."),
+
+  Tx("Until end of turn, when you play a character, draw a card. Draw a card. Reclaim."),
+
+  Tx("Until end of turn, when you play a character, draw a card. Reclaim."),
+
+  Tx("Until end of turn, when you play an event, copy it. Draw a card."),
+
+  Tx("Until end of turn, when you play an event, copy it. Draw a card. Reclaim."),
+
+  Tx("Until end of turn, when you play an event, copy it. Reclaim."),
+
+  Tx("Veil\n\n▸Dawn: Gain 2●."),
+
+  Tx("Veil\n\n▸Materialized, Dawn: Gain 1● for each figment you control."),
+
+  Tx("Veil\n\n▸Materialized, Dawn: Gain 1●."),
+
+  Tx("Veil\n\n▸Materialized, Dawn: Gain 2●."),
+
+  Tx("Veil\n\n▸Materialized, Dissolved: Draw 2 cards."),
+
+  Tx("Veil\n\n▸Materialized, Dissolved: Draw a card."),
+
+  Tx("Veil\n\n▸Materialized: Draw 2 cards."),
+
+  Tx("Veil\n\n0●, Discard a character with cost X●: Discover a character with cost X●."),
+
+  Tx("Veil\n\nAbandon a character: Gain 2⍟."),
+
+  Tx("Vengeful\n\n▸Dawn: Gain 2●."),
+
+  Tx("Vengeful\n\n▸Materialized, Dawn: Gain 1●."),
+
+  Tx("Vengeful\n\n▸Materialized, Dawn: Gain 2●."),
+
+  Tx("Vengeful\n\n▸Materialized, Dissolved: Draw a card."),
+
+  Tx(
+    "Vengeful\n\nWhen you play a card from your void, return this character to play with awakened."
+  ),
+
+  Tx("When a character card leaves your void, materialize a 3✦ shadow figment."),
+
+  Tx(
+    "When a character you control gains ✦, it gains an additional +1✦.\n\n1●, ☾: Give a character you control +1✦."
+  ),
+
+  Tx(
+    "When a character you control is dissolved, materialize a 2✦ survivor figment. When you discard or erode this card, it gains reclaim 0●."
+  ),
+
+  Tx(
+    "When a character you control is dissolved, you may pay 1● to materialize this character from your void with awakened."
+  ),
+
+  Tx(
+    "When a non-figment character you control is dissolved, create 'Contemplation' in your hand. If it was a survivor, create two instead."
+  ),
+
+  Tx(
+    "When a non-figment character you control is dissolved, materialize a 2✦ ember figment with awakened. When an ember figment is dissolved, this character gains +1✦."
+  ),
+
+  Tx("When a non-figment survivor you control is dissolved, materialize a 2✦ survivor figment."),
+
+  Tx(
+    "When you abandon a ≤2● cost character, materialize a 4✦ monstrosity figment.\n\n3●: Abandon a ≤2● cost character."
+  ),
+
+  Tx(
+    "When you abandon a ≤2● cost character, materialize a 5✦ monstrosity figment.\n\n3●: Abandon a ≤2● cost character."
+  ),
+
+  Tx(
+    "When you abandon a ≤2● cost character, materialize a 5✦ monstrosity figment.\n\n4●: Abandon a ≤2● cost character."
+  ),
+
+  Tx("When you abandon a character, gain 2⍟."),
+
+  Tx(
+    "When you abandon a character, this character gains +1✦.\n\n2●, Abandon a character: Draw a card."
+  ),
+
+  Tx(
+    "When you abandon a character, this character gains +2✦.\n\n▸Dissolved: Gain ⍟ equal to this character's ✦."
+  ),
+
+  Tx(
+    "When you abandon a character, this character gains +2✦.\n\n2●, Abandon a character: Draw a card."
+  ),
+
+  Tx(
+    "When you abandon a character, this character gains +2✦.\n\n3●, Abandon a character: Draw a card."
+  ),
+
+  Tx("When you challenge with two or more warriors, draw 2 cards."),
+
+  Tx("When you discard a card, this character gains +2✦."),
+
+  Tx("When you discard this card, materialize it with awakened."),
+
+  Tx("When you materialize a ≤1✦ character, materialize this character from your void."),
+
+  Tx("When you materialize a character, trigger its \"▸Materialized, Dawn\" ability."),
+
+  Tx("When you materialize a figment, materialize a 2✦ ethereal figment."),
+
+  Tx(
+    "When you materialize a non-figment character, store 2⧗.\n\n3⧗: Return a character from your void to your hand."
+  ),
+
+  Tx("When you materialize a spirit animal, store 2⧗.\n\n3⧗: Gain 3●."),
+
+  Tx("When you play a character, erode 2.\n\nReclaim 2●"),
+
+  Tx("When you play a character, materialize a 2✦ ethereal figment."),
+
+  Tx("When you play a character, materialize a 2✦ warrior figment."),
+
+  Tx("When you play a character, store 2⧗.\n\n2⧗: Gain 1●."),
+
+  Tx(
+    "When you play a character, store 2⧗.\n\nX⧗: Materialize a random character with cost X● from the opponent's deck."
+  ),
+
+  Tx(
+    "When you play a character, trigger the '▸Materialized, Dawn' ability of each other character you control."
+  ),
+
+  Tx("When you play a warrior, materialize a 2✦ warrior figment."),
+
+  Tx("When you play a warrior, this character gains +2✦."),
+
+  Tx("When you play a warrior, you may pay 2● to materialize a 2✦ Legionnaire figment."),
+
+  Tx("When you play an event, characters you control gain +2✦ until end of turn."),
+
+  Tx("When you play an event, foresee 2."),
+
+  Tx("When you play an event, gain 2●."),
+
+  Tx("When you play an event, materialize a 2✦ ethereal figment."),
+
+  Tx("When you play an event, materialize a 2✦ warrior figment."),
+
+  Tx("When you play an event, store 2⧗.\n\n3⧗: This character gains +5✦."),
+
+  Tx(
+    "When you play your second card in a turn, materialize this character from your void with awakened."
+  ),
+
+  Tx("When you reclaim this character, it gains +2✦.\n\nReclaim 0●"),
+
+  Tx(
+    "X●, ☾, Abandon another character: Discover a character with cost X●, then materialize it with awakened."
+  ),
+
+  Tx(
+    "You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead. Draw a card."
+  ),
+
+  Tx(
+    "You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead. Reclaim."
+  ),
+
+  Tx(
+    "You may discard a card as an additional cost to play this event. Dissolve a ≤3● cost enemy. If the additional cost was paid, dissolve any enemy instead."
+  ),
+
+  Tx(
+    "You may discard a card as an additional cost to play this event. Dissolve a ≤3● cost enemy. If the additional cost was paid, dissolve any enemy instead. Draw a card. Reclaim."
+  ),
+
+  Tx(
+    "You may pay an additional 3● to play this event. Dissolve a ≤2✦ enemy. If the additional cost was paid, dissolve any enemy instead. Draw a card."
+  ),
+
+  Tx(
+    "You may pay an additional 3● to play this event. Dissolve a ≤2✦ enemy. If the additional cost was paid, dissolve any enemy instead. Reclaim."
+  ),
+
+  Tx(
+    "You may pay an additional 3● to play this event. Dissolve a ≤3✦ enemy. If the additional cost was paid, dissolve any enemy instead."
+  ),
+
+  Tx(
+    "You may pay an additional 3● to play this event. Dissolve a ≤3✦ enemy. If the additional cost was paid, dissolve any enemy instead. Draw a card. Reclaim."
+  ),
+
+  Tx("You may play this card for 0● by giving the opponent 5⍟. Dissolve an enemy. Draw a card."),
+
+  Tx(
+    "You may play this card for 0● by giving the opponent 5⍟. Dissolve an enemy. Draw a card. Reclaim."
+  ),
+
+  Tx("You may play this card for 0● by giving the opponent 5⍟. Dissolve an enemy. Reclaim."),
+]

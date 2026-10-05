@@ -114,7 +114,7 @@ function legacyTraceFor(selection: RewardSelectionResult): AuguryOfferTrace {
   };
 }
 
-/** The TOML-authored policy for an Augury archetype. */
+/** The catalog-authored policy for an Augury archetype. */
 export function augurySelectionPolicy(
   context: AuguryContext,
   archetypeId: AuguryArchetypeId,

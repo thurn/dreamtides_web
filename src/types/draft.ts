@@ -35,7 +35,7 @@ export interface DraftConfig {
   packSize: number;
   /** Number of picks required to complete the active persisted Draft site. */
   sitePickCount: number;
-  /** Per-rarity pool and run limits compiled from draft_site.toml. */
+  /** Per-rarity pool and run limits from the draft catalog. */
   rarityCaps: readonly DraftRarityCap[];
   /**
    * Optional affiliation reweighting for a draft inside an affiliated dreamscape:

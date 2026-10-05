@@ -228,7 +228,7 @@ describe("RulesText", () => {
   });
 
   // Backlog task 029: cards with multiple abilities use a blank-line `\n\n`
-  // separator in the source TOML. Each ability must render as its own block
+  // separator in the card catalog. Each ability must render as its own block
   // with a visible vertical gap so adjacent abilities do not run together.
   it("renders each ability separated by `\\n\\n` as its own paragraph block", () => {
     const { container } = renderInCumulus(

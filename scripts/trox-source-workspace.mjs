@@ -1,6 +1,5 @@
 import {
   cpSync,
-  existsSync,
   mkdtempSync,
   readFileSync,
   rmSync,
@@ -9,8 +8,7 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { runTrox } from "./trox.mjs";
 
-const PROJECT_INPUTS = ["src", "data", "localization", "trox.ron"];
-const OPTIONAL_PROJECT_INPUTS = [".generated/localization/sources"];
+const PROJECT_INPUTS = ["src", "localization", "trox.ron"];
 const BUNDLE_LOCALES = ["en-US", "ar", "es", "ja", "ru"];
 
 export function withExtractedTroxWorkspace(options = {}) {
@@ -20,12 +18,6 @@ export function withExtractedTroxWorkspace(options = {}) {
   try {
     for (const input of PROJECT_INPUTS) {
       cpSync(join(root, input), join(stageRoot, input), { recursive: true });
-    }
-    for (const input of OPTIONAL_PROJECT_INPUTS) {
-      const source = join(root, input);
-      if (existsSync(source)) {
-        cpSync(source, join(stageRoot, input), { recursive: true });
-      }
     }
     const troxOptions = {
       configPath: join(stageRoot, "trox.ron"),

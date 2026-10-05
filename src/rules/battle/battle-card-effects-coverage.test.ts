@@ -7,7 +7,7 @@
 //      (`battle-card-effects-table.ts`).
 //
 // This reads the COMMITTED snapshot of the catalog, not a live re-derivation
-// from TOML / card data, so routine card-pool churn does NOT trip it. It only
+// from card catalog data, so routine card-pool churn does NOT trip it. It only
 // changes when the audit is deliberately re-run.
 //
 // Bug classes guarded:

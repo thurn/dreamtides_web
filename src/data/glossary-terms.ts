@@ -54,7 +54,7 @@ export interface ProjectedGlossaryCatalogEntry extends GlossaryCatalogEntry {
  */
 
 /**
- * Non-word rules-text forms come from glossary.toml. Sorting longest-first
+ * Non-word rules-text forms come from the glossary catalog. Sorting longest-first
  * keeps overlapping forms such as the double-bolt interrupt ahead of the
  * single-bolt fast marker.
  */

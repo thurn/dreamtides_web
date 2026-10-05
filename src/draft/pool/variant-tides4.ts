@@ -27,7 +27,7 @@
 // A signatureless Avatar has no identity to anchor on, so it borrows a
 // random signatured Avatar's whole pool (that archetype's signature core plus
 // its own facets), leaning toward a different coherent archetype each run rather
-// than a blend of unrelated leans. The pool is keyed by cards_v2 UUID; the
+// than a blend of unrelated leans. The pool is keyed by card UUID; the
 // catalog index (`poolData.cardNameById`) gates which UUIDs are dealable.
 
 import type { CardId } from "../../types/card-identity.ts";
@@ -47,7 +47,7 @@ import type { TideId } from "../../types/identifiers";
 import { DEFAULT_DRAFT_DATA } from "../../data/draft-data";
 import type { AvatarId } from "../../types/identifiers";
 
-/** Developer/test fallback; production injects the compiled draft_site.toml values. */
+/** Developer/test fallback; production injects the draft catalog values. */
 export const DEFAULT_TIDES4_TUNING: Tides4Tuning =
   DEFAULT_DRAFT_DATA.pool.tides4;
 
@@ -62,7 +62,7 @@ export const DEFAULT_TIDES4_TUNING: Tides4Tuning =
  * so an Avatar leans its identity a different way each run. A signatureless
  * Avatar (null starter) instead borrows
  * a random signatured Avatar's pool, so it leans a different coherent archetype
- * each run. Tide-deck cards are keyed by cards_v2 UUID; the catalog index
+ * each run. Tide-deck cards are keyed by card UUID; the catalog index
  * (`poolData.cardNameById`) gates membership, so a UUID absent from it (a card
  * dropped from the catalog) is skipped. Without a `avatarId` or a baked tide
  * pool, every
@@ -78,7 +78,7 @@ export function generateTides4(
   const data: Tides4DecksJson | undefined = poolData.tides4Decks;
   if (!data) {
     missingPoolData(
-      "no tide decks are bundled (data/tides.ron and data/avatars.ron, served as /tides4-data.json)",
+      "no tide decks are bundled (src/content/tides.ts and the Avatar tide pools)",
     );
   }
   return combineTidesPool(rng, poolData, data, avatarId, tuning);

@@ -4,7 +4,7 @@
  *
  *   - Local dev: `VITE_ASSET_BASE_URL` is empty, so `assetUrl("/cards/1.webp")`
  *     returns `/cards/1.webp` unchanged. The Vite dev server serves it from the
- *     `public/` directory, where `scripts/setup-assets.mjs` has symlinked the
+ *     `public/` directory, where `scripts/setup-assets.ts` has symlinked the
  *     art out of the developer's `~/Documents` source folders.
  *   - Production: the build sets `VITE_ASSET_BASE_URL` to the Firebase Storage
  *     bucket origin (see `.env.production`), so the same call returns
@@ -12,7 +12,7 @@
  *     are served from the bucket instead of being bundled into the Hosting
  *     deploy.
  *
- * Only binary art is routed through here; the generated `*-data.json` catalogs
+ * Only binary art is routed through here; the content catalogs
  * stay on Hosting alongside the code that fetches them, since they are small and
  * version-coupled to the build.
  */

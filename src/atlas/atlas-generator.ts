@@ -1208,7 +1208,7 @@ function generateInitialAtlasInternal(
       apollyonIncarnationIds: incarnations.map((i) => i.id),
       forwardIds,
       edges,
-      // Effective TOML tuning that drove every random draw, captured because the
+      // Effective catalog tuning that drove every random draw, captured because the
       // production tuning is subject to change and a later log read needs to know
       // which tuning produced this atlas.
       atlasData: {

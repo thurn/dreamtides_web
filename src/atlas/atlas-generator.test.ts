@@ -1169,7 +1169,7 @@ describe("regenerateAtlasForProgress", () => {
   // walked. A layout with disconnected `completed` segments is unreachable in
   // the live game, so the replay must never produce one — at any depth, on any
   // random roll. This is a structural check (edges and lifecycle states only);
-  // it makes no assumptions about which dreamscapes the production TOML defines.
+  // it makes no assumptions about which dreamscapes the production catalog defines.
   describe("completed path is always a connected route", () => {
     /**
      * Walks forward edges from the starter, hopping to the single completed

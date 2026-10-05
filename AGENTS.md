@@ -65,19 +65,19 @@ work is filed, delivered, reviewed and QA'd. Hive project id:
 
 - Battle rules: `docs/rules.md`. Game and journey design: `docs/design.md`.
   Running, testing, browser QA, architecture, and data layout: `README.md`.
-- Card data: `data/cards.ron`; avatars: `data/avatars.ron`. Card, Dreamsign,
-  Avatar, and affiliation selection derives from the canonical RON catalogs;
-  `data/tides.ron` defines the shared affinity space.
+- Content catalogs live in `src/content/`: cards in `src/content/cards/`,
+  Avatars in `src/content/avatars/`. Card, Dreamsign, Avatar, and affiliation
+  selection derives from these catalogs; `src/content/tides.ts` defines the
+  shared affinity space.
 - Draft questions concern the "tides4" draft pool algorithm unless stated
-  otherwise; its sources are `data/tides.ron` and the tide pools embedded in
-  `data/avatars.ron`.
+  otherwise; its sources are `src/content/tides.ts` and the tide pools
+  embedded in the Avatar modules.
 - Game state is a fold of the event log. React `useState`/`useRef` never
   gates game flow; anything the game must agree on is an event in the log.
   Clients write intent events only, via `src/coop/actions.ts`.
-- Generated runtime data, typed token mirrors, Cumulus metadata, and
-  localization adapters are disposable workspace materializations refreshed
-  by `scripts/prepare-workspace.mjs`. Do not edit or commit generated
-  outputs.
+- Linked art, typed token mirrors, and localization adapters are disposable
+  workspace materializations refreshed by `scripts/prepare-workspace.mjs`.
+  Do not edit or commit generated outputs.
 - UI work uses the `cumulus` skill.
 
 # Verification

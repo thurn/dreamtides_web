@@ -55,7 +55,7 @@ import type { JourneySeed } from "../../types/journey-seed";
 /**
  * The deterministic content the two run-assembly cases need but cannot compute
  * inside a pure reducer: the real Avatar pool, atlas, and draft state are
- * generated from TOML-sourced card/avatar data that only loads
+ * generated from catalog-sourced card/avatar data that only loads
  * asynchronously (`loadJourneyContent` in src/data/), while the reducer must fold
  * synchronously from `(state, event, ctx)` alone.
  *
@@ -485,7 +485,7 @@ export function loadState(
  *     effect tables and whose cursors address real positions in that script.
  *
  * Content values (card ids, costs, pool contents) are NOT asserted — only shape
- * and the fold invariants — so the check is resilient to TOML data edits.
+ * and the fold invariants — so the check is resilient to catalog edits.
  */
 export function validateLoadedState(
   state: FoldState,

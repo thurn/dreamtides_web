@@ -29,7 +29,7 @@ import { gambleGameByRulesKind } from "../../data/gamble-data";
 // src/testing (live compiled dreamscape / atlas-data bundles) plus a
 // hand-authored card/dreamsign corpus. Site ids and the avatar id are
 // RESOLVED from the folded state / content, never hardcoded, and the assertions
-// are over OUTCOMES and HASHES, never TOML content — so a data edit cannot
+// are over OUTCOMES and HASHES, never catalog content — so a data edit cannot
 // break the suite.
 
 import { afterAll, beforeAll, describe, expect, it } from "vitest";

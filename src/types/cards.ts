@@ -31,10 +31,9 @@ export type Rarity = (typeof CARD_RARITIES)[number];
  * positions in the range -1..1, where 0 is centered and ±1 pans to the image's
  * edge. The pan is normalized (not pixels) so the stored value is independent
  * of the source image's dimensions; `CardView` resolves it against the loaded
- * image's aspect ratio so the frame always stays fully covered. Authored
- * through the card editor's focused editor and stored as the inline `art` table
- * in the card TOML; absent on cards that have never been cropped, in which case
- * `CardView` falls back to its default crop.
+ * image's aspect ratio so the frame always stays fully covered. Stored as the
+ * card's `art` field; absent on cards that have never been cropped, in which
+ * case `CardView` falls back to its default crop.
  */
 export interface ArtCrop {
   x: number;
@@ -42,7 +41,7 @@ export interface ArtCrop {
   scale: number;
 }
 
-/** A single card record loaded from card-data.json. */
+/** A single card record from the card catalog. */
 export interface CardData {
   name: CardName;
   id: CardId;
@@ -58,17 +57,15 @@ export interface CardData {
   rarity?: Rarity;
   energyCost: number | null;
   /**
-   * Ordered orb labels for a card that has more than one energy cost, sourced
-   * from a comma-separated TOML `energy-cost` such as `"2,X"` (which yields
-   * `["2", "X"]`). `CardView` renders one energy orb per label in a vertical
+   * Ordered orb labels for a card that has more than one energy cost, such as
+   * `["2", "X"]`. `CardView` renders one energy orb per label in a vertical
    * column. Absent on the common single-cost card, where the single orb is
    * derived from `energyCost` (or `X` when it is `null`).
    */
   energyCosts?: string[];
   spark: number | null;
   /**
-   * Whether this card's spark is variable (printed as an `X` orb), sourced from
-   * a TOML `spark` of `X`/`x`/`*`. When `true`, `spark` is `null` and `CardView`
+   * Whether this card's spark is variable (printed as an `X` orb). When `true`, `spark` is `null` and `CardView`
    * renders a single `X` spark orb. This distinguishes a variable-spark card
    * from a card with no spark at all (the common case for Events), which also
    * has `spark: null` but leaves this `false`/absent and renders no spark orb.
@@ -77,7 +74,7 @@ export interface CardData {
   sparkVariable?: boolean;
   isFast: boolean;
   /**
-   * Whether this card is an interrupt, sourced from a TOML `is-interrupt`.
+   * Whether this card is an interrupt.
    * Interrupt cards are always also `isFast`; card surfaces mark an interrupt
    * with a double-bolt glyph (versus the single bolt for a plain fast card).
    */
@@ -87,11 +84,8 @@ export interface CardData {
   /** Authored stronger ability used by the Amplified transfiguration. */
   amplifiedText?: string;
   /**
-   * Name of the Magic: The Gathering card this card is derived from, sourced
-   * from a TOML `mtg-name` and carried through the setup-assets transform.
-   * Surfaced as a reference hover tooltip in card-browsing surfaces (the card
-   * editor and the Pool Viewer). Present on sources that record it (e.g.
-   * `cards.toml`); absent on cards whose source TOML omits `mtg-name`.
+   * Name of the Magic: The Gathering card this card's art reference is derived
+   * from. Surfaced as a reference hover tooltip in the Pool Viewer.
    */
   mtgName?: string;
   imageNumber: number;

@@ -31,7 +31,7 @@ export interface GlossaryProjection {
   readonly definition?: SourceTransport;
 }
 
-/** Fully identified record compiled to glossary.toml and shown in the editor. */
+/** Fully identified glossary catalog record. */
 export interface GlossaryCatalogEntry extends GlossaryEntry {
   /** Stable key used by semantic Info Card callsites. */
   readonly id: GlossaryEntryId;
@@ -186,7 +186,7 @@ export function glossaryEntry(id: GlossaryEntryId): GlossaryCatalogEntry | undef
 export function requireGlossaryEntry(id: GlossaryEntryId): GlossaryCatalogEntry {
   const entry = glossaryEntry(id);
   if (entry === undefined) {
-    throw new Error(`Missing glossary entry "${id}" in data/glossary.toml.`);
+    throw new Error(`Missing glossary entry "${id}" in the glossary catalog.`);
   }
   return entry;
 }

@@ -447,14 +447,14 @@ function RulesTextBolt({ count }: { readonly count: number }) {
 /**
  * Splits rules text into ability paragraphs.
  *
- * Cards in `data/cards.toml` separate distinct abilities with
+ * Cards in the card catalog separate distinct abilities with
  * a blank line (`\n\n`). Each chunk between blank lines is one ability and
  * renders as its own paragraph block so the player can tell adjacent
  * abilities apart. A single-ability card produces exactly one paragraph and
  * no inter-ability gap. See backlog task 029.
  *
  * Surrounding whitespace and stray empty strings are trimmed so a leading
- * newline (some TOML entries open with `"""\n`) does not produce an empty
+ * newline does not produce an empty
  * paragraph.
  */
 function splitRulesTextIntoParagraphs(text: string): string[] {

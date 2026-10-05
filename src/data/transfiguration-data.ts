@@ -168,7 +168,7 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
     value.forms.length > dataFormIds().length
   )
     throw new Error(
-      "Failed to load Transfiguration data: malformed transfiguration-data.json",
+      "Failed to load Transfiguration data: malformed Transfiguration document",
     );
   const statDeltaBands = value.site.pricing.statDeltaBands.map(
     statDeltaBandFromUnknown,
@@ -180,7 +180,7 @@ export function parseTransfigurationData(value: unknown): TransfigurationData {
     new Set(forms.map((form) => form?.id)).size !== forms.length
   )
     throw new Error(
-      "Failed to load Transfiguration data: malformed transfiguration-data.json",
+      "Failed to load Transfiguration data: malformed Transfiguration document",
     );
   return {
     schemaVersion: 1,

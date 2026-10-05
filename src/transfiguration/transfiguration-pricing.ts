@@ -10,7 +10,7 @@
  * The authored economy configuration supplies the global bounds, discrete step,
  * form bands, and magnitude bands. Hastened and kindling a zero-spark character
  * select the compiler-validated zero-cost band. The algorithm owns form-to-band
- * selection and deterministic sampling; the TOML owns all numeric tuning.
+ * selection and deterministic sampling; the Transfiguration catalog owns all numeric tuning.
  *
  * The jitter is drawn from a deterministic per-visit stream salted by the journey
  * seed, the site id, the deck entry, and the form, so a given form's price is

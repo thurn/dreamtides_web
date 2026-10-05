@@ -19,7 +19,7 @@ export function cardImageUrl(imageNumber: number): string {
 
 /**
  * Whether a card has an assigned art image. Card sources that have not had art
- * keyed yet (e.g. `cards.toml`) leave `image-number` blank, which arrives
+ * keyed yet leave the image number unset, which arrives
  * here as an empty string, `null`, or a non-positive value. Such cards fall
  * back to a generated identicon rather than a missing-image placeholder.
  */

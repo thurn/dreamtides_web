@@ -37,26 +37,7 @@ function renderStrict(root: Root, children: ReactNode): void {
   );
 }
 
-function installGlossaryReload(): void {
-  if (import.meta.hot) {
-    import.meta.hot.on("glossary-data:changed", () => {
-      window.location.reload();
-    });
-  }
-}
-
 async function renderJourneyRoute(root: Root, pathname: string): Promise<void> {
-  if (import.meta.hot) {
-    const reloadForData = () => {
-      window.location.reload();
-    };
-    import.meta.hot.on("card-data:changed", reloadForData);
-    import.meta.hot.on("figment-data:changed", reloadForData);
-    import.meta.hot.on("dreamwell-data:changed", reloadForData);
-    import.meta.hot.on("config-data:changed", reloadForData);
-    import.meta.hot.on("exploration-data:changed", reloadForData);
-  }
-
   const [{ default: App }, { parseRuntimeConfig, removeUiParamFromSearch }] =
     await Promise.all([
       import("./App.tsx"),
@@ -96,7 +77,6 @@ async function renderJourneyRoute(root: Root, pathname: string): Promise<void> {
 /** Resolve and render the application surface selected by the browser URL. */
 export async function renderRootRoute(root: Root): Promise<RootRouteId> {
   const pathname = normalizedPathname(window.location.pathname);
-  installGlossaryReload();
   const standaloneRoute = STANDALONE_ROUTES[pathname];
   if (standaloneRoute !== undefined) {
     renderStrict(root, await standaloneRoute.render());

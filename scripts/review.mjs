@@ -214,25 +214,6 @@ function commandFor(step, extraArgs = []) {
   if (step === "lint") {
     return [process.execPath, [join(root, "scripts", "run-eslint.mjs"), ...extraArgs]];
   }
-  if (step === "ron-format-check") {
-    return [
-      process.execPath,
-      [join(root, "scripts", "format-ron.mjs"), "--check"],
-    ];
-  }
-  if (step === "rust-format-check") {
-    return [
-      "cargo",
-      [
-        "fmt",
-        "--manifest-path",
-        "tools/game-data/Cargo.toml",
-        "--all",
-        "--",
-        "--check",
-      ],
-    ];
-  }
   if (step === "trox-source-check") {
     return [
       process.execPath,
@@ -250,26 +231,17 @@ function commandFor(step, extraArgs = []) {
       }),
     ];
   }
-  if (step === "validate") {
-    return [process.execPath, [join(root, "scripts", "setup-assets.mjs"), ...extraArgs]];
-  }
   if (step === "prepare") {
     return [process.execPath, [join(root, "scripts", "prepare-workspace.mjs")]];
   }
   if (step === "restore-local-assets") {
-    return [process.execPath, [join(root, "scripts", "setup-assets.mjs")]];
-  }
-  if (step === "rust-test") {
-    return ["cargo", ["test", "--locked", "--manifest-path", "tools/game-data/Cargo.toml"]];
-  }
-  if (step === "clean-game-data") {
-    return [process.execPath, [join(root, "scripts", "game-data-clean-checkout-test.mjs")]];
+    return [
+      process.execPath,
+      ["--import", "tsx", join(root, "scripts", "setup-assets.ts")],
+    ];
   }
   if (step === "trox-generated-check") {
     return [process.execPath, [join(root, "scripts", "trox-generated-check.mjs")]];
-  }
-  if (step === "game-data-compile") {
-    return [process.execPath, [join(root, "scripts", "game-data-pipeline.mjs"), "compile"]];
   }
   if (step === "test-related") {
     return [
@@ -332,10 +304,6 @@ function executionPlan() {
     return [
       { step: "prepare", args: [] },
       { step: "trox-source-check", args: [] },
-      { step: "ron-format-check", args: [] },
-      { step: "rust-format-check", args: [] },
-      { step: "rust-test", args: [] },
-      { step: "clean-game-data", args: [] },
       { step: "lint", args: [] },
       { step: "typecheck", args: [] },
       { step: "test", args: [] },
@@ -345,8 +313,6 @@ function executionPlan() {
     return [
       { step: "prepare", args: [] },
       { step: "trox-source-check", args: [] },
-      { step: "ron-format-check", args: [] },
-      { step: "rust-format-check", args: [] },
       { step: "lint", args: passthrough },
     ];
   }
@@ -361,12 +327,6 @@ function executionPlan() {
     if (needsPreparedWorkspace) steps.push({ step: "prepare", args: [] });
     if (reviewPlan.shouldCheckTrox) {
       steps.push({ step: "trox-source-check", args: [] });
-    }
-    if (reviewPlan.shouldCheckRonFormatting) {
-      steps.push({ step: "ron-format-check", args: [] });
-    }
-    if (reviewPlan.shouldCheckRustFormatting) {
-      steps.push({ step: "rust-format-check", args: [] });
     }
     if (reviewPlan.lintFiles.length > 0 || passthrough.length > 0) {
       steps.push({
@@ -396,13 +356,6 @@ function executionPlan() {
     if (reviewPlan.shouldCheckTrox) {
       steps.push({ step: "trox-source-check", args: [] });
     }
-    if (reviewPlan.shouldCheckRonFormatting) {
-      steps.push({ step: "ron-format-check", args: [] });
-    }
-    if (reviewPlan.shouldCheckRustFormatting) {
-      steps.push({ step: "rust-format-check", args: [] });
-    }
-    if (reviewPlan.shouldTestGameData) steps.push({ step: "rust-test", args: [] });
     if (reviewPlan.lintFiles.length > 0) {
       steps.push({ step: "lint", args: reviewPlan.lintFiles });
     }

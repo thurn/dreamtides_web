@@ -15,7 +15,7 @@
 //     Defeat/draw freezes the failure summary and tears down the battle.
 //
 // The src/rules/ lint rails forbid Firebase, React, and any live clock/rng.
-// Battle init reads TOML-sourced card / deck / avatar data that only loads
+// Battle init reads catalog-sourced card / deck / avatar data that only loads
 // asynchronously, which the pure reducer cannot statically reach, so its
 // construction is delegated to the injectable {@link BattleInitProvider} seam
 // (mirroring `SiteContentProvider`): the reducer forwards the provider

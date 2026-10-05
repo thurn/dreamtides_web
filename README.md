@@ -11,9 +11,8 @@ deck at sites, and fights seven card battles, the last against Apollyon.
 ## Prerequisites
 
 - Node 24 and npm.
-- A Rust toolchain with Cargo, which compiles the RON game data.
 - JDK 21 for the local Firebase Realtime Database emulator. On macOS:
-  `brew install openjdk@21 rust`.
+  `brew install openjdk@21`.
 - Optional card art: the TV image cache at
   `~/Library/Caches/io.github.dreamtides.tv/image_cache/`, and Avatar and
   Dreamsign portraits under `~/Documents/synty/avatars/` and
@@ -38,7 +37,7 @@ emulator, adds `?game=<room-id>` to the URL, and opens Avatar selection.
 | `npm run review:full` | Everything the Tollgate gate runs |
 | `npm run typecheck` | Incremental typecheck |
 | `npm run build` | Production build into `dist/` |
-| `npm run prepare-workspace` | Refresh generated data and art links |
+| `npm run prepare-workspace` | Refresh art links and generated adapters |
 
 `npm run review` plans its checks from the diff against `master`. Its
 typecheck emits declarations only, so an edit that keeps a module's API
@@ -150,12 +149,18 @@ Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
 
 ## Data layout
 
-- `data/*.ron`: canonical catalogs (cards, avatars, Dreamsigns, Dreamwell,
-  figments, tides, atlas, sites, guides, dreamscapes, economy, tutorial, and
-  more). `npm run prepare-workspace` compiles them into generated runtime JSON
-  under `public/` and `src/generated/`, which are never committed.
+- `src/content/`: the typed content catalogs, which `tsc` validates. Cards,
+  Avatars, Dreamsigns, Dreamwell cards, and figments are one module per entity
+  under `src/content/<kind>/`, named `<slug>-<uuid8>.ts`, with an explicit
+  `index.ts`. Tunables and journey catalogs (battle, opponents, AI, atlas,
+  dreamscapes, guides, sites, economy, shop, tides, exploration, gamble,
+  augury, transfiguration, tutorial, glossary, resonance, and more) are one
+  module each. `src/content/documents.ts` assembles them into the documents
+  the runtime loaders validate.
+- `localization/`: the Trox configuration and source messages for the
+  localization runtime.
 - Art is symlinked into `public/` from the local caches by
-  `scripts/setup-assets.mjs`.
+  `scripts/setup-assets.ts` (`npm run setup-assets`).
 - Test fixtures are synthetic and live in `src/testing/`.
 
 ## Conventions

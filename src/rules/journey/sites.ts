@@ -18,7 +18,7 @@
 //     purely in-reducer, drawing from `ctx.rng` (replacing the legacy
 //     `Math.random`).
 //   - Reward / Dreamsign offer / Shop / Card choice generation reads the
-//     TOML-sourced card, dreamsign, and affiliation catalogues that only load
+//     catalog-sourced card, dreamsign, and affiliation catalogues that only load
 //     asynchronously, so it is delegated to the injectable
 //     {@link SiteContentProvider}, which is handed a deterministic
 //     `(drawIndex) => number` rng derived from `ctx.rng`. Two clients folding

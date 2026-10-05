@@ -40,7 +40,7 @@ export interface SiteTypeData {
   rules: SiteRules | null;
 }
 
-/** Validated browser data compiled from data/sites.toml. */
+/** Validated site data from `src/content/sites.ts`. */
 export interface SitesData {
   schemaVersion: 1;
   contentHash: ContentHash;

@@ -10,7 +10,7 @@ import type { GuideId } from "../../../types/identifiers";
  * mapping and renderer geometry. Authored boss and frame data arrives through
  * the Atlas view model.
  *
- * Assets are produced by `scripts/setup-assets.mjs` and served from `public/`:
+ * Assets are produced by `scripts/setup-assets.ts` and served from `public/`:
  *   - `/dreamscapes/<id>.png`       rectangular scene art (hover-card header)
  *   - `/dreamscape-icons/<id>.png`  circular node icon
  *   - `/dream-guides/<guideId>.png` Dream Guide character render

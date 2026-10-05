@@ -42,7 +42,7 @@ import { parseCardTypeChangePredicateId } from "../../types/identifiers";
  * The deterministic content the two "add by id" cases need but cannot compute
  * inside a pure reducer: `ADD_CARD` carries a card UUID (not the `cardNumber`
  * the deck stores), and `ADD_DREAMSIGN` carries a dreamsign UUID (not the full
- * `Dreamsign` record). Both resolutions read the TOML-sourced card / dreamsign
+ * `Dreamsign` record). Both resolutions read the catalog-sourced card / dreamsign
  * catalogues that only load asynchronously, while the reducer must fold
  * synchronously from `(state, event, ctx)` alone.
  *

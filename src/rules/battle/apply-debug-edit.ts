@@ -1305,7 +1305,7 @@ function createFigment(
     printedSpark: resolvedSpark,
     isFast: false,
     reclaimCost: null,
-    // Rules text and art are sourced from the figment catalog (figments.toml via
+    // Rules text and art are sourced from the figment catalog (the figment catalog via
     // the figment editor) so a created figment renders the type's authored
     // description and image; an un-hydrated catalog falls back to no text/art.
     renderedText: catalogEntry?.renderedText ?? "",

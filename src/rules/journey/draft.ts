@@ -44,7 +44,7 @@ import { siteIdFromUnknown } from "../../types/identifiers";
  * The deterministic content `PICK_DRAFT_CARD` needs but cannot compute inside a
  * pure reducer: the event carries a card UUID (not the `cardNumber` the draft
  * state works in), and advancing the draft (revealing the next offer) reads the
- * TOML-sourced card catalogue plus the dreamscape's affiliation reweighting.
+ * catalog-sourced card catalogue plus the dreamscape's affiliation reweighting.
  * That content only loads
  * asynchronously, while the reducer must fold synchronously from
  * `(state, event, ctx)` alone.

@@ -69,7 +69,7 @@ export function parseResonanceData(value: unknown): ResonanceData {
     !HASH.test(value.contentHash) ||
     !Array.isArray(value.resonances)
   ) {
-    throw new Error("Failed to load resonance: malformed resonance-data.json");
+    throw new Error("Failed to load resonance: malformed resonance document");
   }
   const resonances = value.resonances.map(resonanceDefinitionFromUnknown);
   if (
@@ -77,7 +77,7 @@ export function parseResonanceData(value: unknown): ResonanceData {
     new Set(resonances.map((resonance) => resonance?.id)).size !==
       Object.keys(RESONANCE_CONTRACT).length
   ) {
-    throw new Error("Failed to load resonance: malformed resonance-data.json");
+    throw new Error("Failed to load resonance: malformed resonance document");
   }
   return {
     schemaVersion: 1,

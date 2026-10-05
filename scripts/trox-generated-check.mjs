@@ -14,11 +14,9 @@ import { tmpdir } from "node:os";
 import { dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runTrox } from "./trox.mjs";
-import { assertCanonicalLocalizationContract } from "./canonical-localization-audit.mjs";
 
 const QUEST_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const GENERATED_PATH = join(".generated", "localization", "bundles");
-const GENERATED_SOURCES_PATH = join(".generated", "localization", "sources");
 
 function filesUnder(directory) {
   if (!existsSync(directory)) return [];
@@ -61,18 +59,10 @@ export function checkGeneratedTroxBundles(options = {}) {
   const cleanRoot = mkdtempSync(join(tmpdir(), "quest-clean-trox-bundles-"));
   try {
     cpSync(join(root, "src"), join(cleanRoot, "src"), { recursive: true });
-    cpSync(join(root, "data"), join(cleanRoot, "data"), { recursive: true });
     cpSync(join(root, "localization"), join(cleanRoot, "localization"), {
       recursive: true,
     });
     cpSync(join(root, "trox.ron"), join(cleanRoot, "trox.ron"));
-    if (existsSync(join(root, GENERATED_SOURCES_PATH))) {
-      cpSync(
-        join(root, GENERATED_SOURCES_PATH),
-        join(cleanRoot, GENERATED_SOURCES_PATH),
-        { recursive: true },
-      );
-    }
     mkdirSync(join(cleanRoot, GENERATED_PATH), { recursive: true });
 
     const generate =
@@ -104,10 +94,6 @@ if (
 ) {
   try {
     checkGeneratedTroxBundles();
-    const result = assertCanonicalLocalizationContract(QUEST_ROOT);
-    console.log(
-      `Canonical localization audit checked ${String(result.compositeValueCount)} composed values, ${String(result.runtimeTemplateCount)} runtime templates, and ${String(result.projectionTemplateCount)} glossary projections.`,
-    );
   } catch (error) {
     console.error(error instanceof Error ? error.message : String(error));
     process.exitCode = 1;

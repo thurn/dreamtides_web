@@ -113,7 +113,7 @@ export type TutorialTriggerMatcher =
       readonly kind: "any";
     };
 
-/** One TOML-authored first-occurrence tutorial shared across journey and battle. */
+/** One catalog-authored first-occurrence tutorial shared across journey and battle. */
 export interface TutorialTriggerDefinition extends Omit<
   TutorialSpeechBubble,
   "delay" | "duration"

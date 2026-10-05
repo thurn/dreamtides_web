@@ -1,5 +1,3 @@
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
 import type {
   AffiliationContent,
   DreamGuideContent,
@@ -24,6 +22,13 @@ import {
   testFoldHash,
   testGuideId,
 } from "../types/test-identities";
+import {
+  affiliationsDocument,
+  atlasDocument,
+  dreamGuidesDocument,
+  dreamscapesDocument,
+  sitesDocument,
+} from "../content/documents";
 
 export const EARLY_ATLAS_FILL_PROFILE_ID = testAtlasFillProfileId("early");
 export const LATE_ATLAS_FILL_PROFILE_ID = testAtlasFillProfileId("late");
@@ -305,37 +310,34 @@ export function makeSyntheticAtlasData(): AtlasData {
   };
 }
 
-const PUBLIC_DIR = join(import.meta.dirname, "..", "..", "public");
-
-function readPublicJson<T>(filename: string): T {
-  return JSON.parse(readFileSync(join(PUBLIC_DIR, filename), "utf8")) as T;
+/** Reads a content document as its runtime content type. */
+function asContent<T>(document: unknown): T {
+  return document as T;
 }
 
-/** The live dreamscape definitions from the compiled bundle. */
+/** The live dreamscape definitions from the content modules. */
 export function loadTestDreamscapes(): DreamscapeContent[] {
-  return readPublicJson<DreamscapeContent[]>("dreamscapes-data.json");
+  return asContent<DreamscapeContent[]>(dreamscapesDocument());
 }
 
-/** The live affiliation definitions from the compiled bundle. */
+/** The live affiliation definitions from the content modules. */
 export function loadTestAffiliations(): AffiliationContent[] {
-  return readPublicJson<AffiliationContent[]>("affiliations-data.json");
+  return asContent<AffiliationContent[]>(affiliationsDocument());
 }
 
-/** The live Dream Guide definitions from the compiled bundle. */
+/** The live Dream Guide definitions from the content modules. */
 export function loadTestDreamGuides(): DreamGuideContent[] {
-  return readPublicJson<{ guides: DreamGuideContent[] }>(
-    "dream-guides-data.json",
-  ).guides;
+  return asContent<DreamGuideContent[]>(dreamGuidesDocument().guides);
 }
 
-/** The live Dream Atlas generation tuning from the compiled bundle. */
+/** The live Dream Atlas generation tuning from the content modules. */
 export function loadTestAtlasData(): AtlasData {
-  return readPublicJson<AtlasData>("atlas-data.json");
+  return asContent<AtlasData>(atlasDocument());
 }
 
-/** The live site registry and deterministic mechanics from the compiled bundle. */
+/** The live site registry and deterministic mechanics from the content modules. */
 export function loadTestSitesData(): SitesData {
-  return readPublicJson<SitesData>("sites-data.json");
+  return asContent<SitesData>(sitesDocument());
 }
 
 /** Structurally complete Atlas data for tests that do not vary Atlas rules. */

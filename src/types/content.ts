@@ -50,7 +50,7 @@ export interface AvatarContent {
    */
   signatureCards?: CardName[];
   /**
-   * Stable cards_v2 UUIDs for {@link signatureCards}, index-aligned. Lets a
+   * Stable card UUIDs for {@link signatureCards}, index-aligned. Lets a
    * consumer distinguish two cards that share a display name.
    */
   signatureCardIds?: CardId[];
@@ -70,15 +70,15 @@ export interface DreamsignTemplate {
 }
 
 /**
- * One dreamscape region of the Dream Atlas, sourced from dreamscapes.toml. The
+ * One dreamscape region of the Dream Atlas, from the dreamscape catalog. The
  * starter dreamscape (`isStarter`) opens every run with a `fixedSites` sequence
  * and carries no guide or affiliation; every other dreamscape has a resident
  * `guideId` and a thematic `affiliationId`.
  *
  * `avatarIds` lists the 3-4 Avatars resident in this region (empty for
  * the starter). Across all dreamscapes these lists partition
- * avatars.toml: every non-starter Avatar appears under exactly one
- * dreamscape, an invariant the asset build enforces.
+ * the Avatar catalog: every non-starter Avatar appears under exactly one
+ * dreamscape, an invariant the dreamscape integrity test enforces.
  */
 export interface DreamscapeContent {
   id: DreamscapeId;
@@ -121,8 +121,7 @@ export interface DreamGuidesData {
 }
 
 /**
- * One of Apollyon's ten incarnations, loaded from the generated
- * apollyon_incarnations.toml compatibility projection.
+ * One of Apollyon's ten incarnations, from the Apollyon incarnation catalog.
  * Atlas generation picks a single incarnation per run to present the boss node:
  * its `title` (epithet) and `description` (short deck summary) are surfaced in
  * the UI. `deckType` is design-reference metadata and is never displayed.
@@ -135,7 +134,7 @@ export interface ApollyonIncarnationContent {
 }
 
 /**
- * A thematic affiliation backing a dreamscape, sourced from affiliations.toml.
+ * A thematic affiliation backing a dreamscape, sourced from the affiliation catalog.
  * `tideIds` are the three authored tides that define the affiliation's theme.
  */
 export interface AffiliationContent {

@@ -11,7 +11,7 @@ import type { CardId, CardName } from "../../types/card-identity";
  * Carried on {@link BattleEnemyDescriptor} so the Battle Start screen can show
  * the three cards that best embody what the opponent is trying to do.
  *
- * Identity is the stable cards_v2 UUID (`cardId`); `cardNumber` is kept as the
+ * Identity is the stable card UUID (`cardId`); `cardNumber` is kept as the
  * card-database key so the screen can resolve the full {@link CardData} for
  * rendering without re-deriving it. `name` is a convenience for logs and labels
  * — never use it as a key, card names are not unique.

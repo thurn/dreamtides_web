@@ -14,9 +14,6 @@ describe("fast review plan", () => {
     expect(
       reviewNeedsPreparedWorkspace(buildReviewPlan(["src/state/example.ts"])),
     ).toBe(true);
-    expect(
-      reviewNeedsPreparedWorkspace(buildReviewPlan(["data/cards.ron"])),
-    ).toBe(true);
   });
 
   it("skips executable checks for documentation-only changes", () => {
@@ -24,11 +21,7 @@ describe("fast review plan", () => {
       changedFiles: ["docs/notes.md"],
       lintFiles: [],
       shouldCheckTrox: false,
-      shouldCheckRonFormatting: false,
-      shouldCheckRustFormatting: false,
       shouldTypecheck: false,
-      shouldTestGameData: false,
-      shouldValidate: false,
       testInputs: [],
     });
   });
@@ -49,35 +42,13 @@ describe("fast review plan", () => {
         "src/state/journey-state-actions.ts",
       ],
       shouldCheckTrox: true,
-      shouldCheckRonFormatting: false,
-      shouldCheckRustFormatting: false,
       shouldTypecheck: true,
-      shouldTestGameData: false,
-      shouldValidate: false,
       testInputs: [
         "scripts/cumulus-ui-boundary.test.mjs",
         "scripts/domain-string-audit.test.mjs",
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
       ],
-    });
-  });
-
-  it("adds asset validation for production data without forcing typecheck", () => {
-    expect(buildReviewPlan(["data/cards.toml"])).toMatchObject({
-      shouldTypecheck: false,
-      shouldValidate: true,
-      testInputs: ["data/cards.toml"],
-    });
-  });
-
-  it("selects Rust compiler tests for canonical RON and orchestration changes", () => {
-    expect(buildReviewPlan(["data/cards.ron"])).toMatchObject({
-      shouldTestGameData: true,
-      shouldValidate: true,
-    });
-    expect(buildReviewPlan(["scripts/game-data-pipeline.mjs"])).toMatchObject({
-      shouldTestGameData: true,
     });
   });
 
@@ -89,7 +60,6 @@ describe("fast review plan", () => {
       shouldTypecheck: false,
       testInputs: [
         "scripts/bump-trox.test.mjs",
-        "scripts/canonical-localization-audit.test.mjs",
         "scripts/trox-csv-sync.test.mjs",
         "scripts/trox-generated-check.test.mjs",
         "scripts/trox-source-workspace.test.mjs",
@@ -104,8 +74,7 @@ describe("fast review plan", () => {
         shouldCheckTrox: true,
         testInputs: [
           "scripts/bump-trox.test.mjs",
-          "scripts/canonical-localization-audit.test.mjs",
-          "scripts/trox-csv-sync.test.mjs",
+            "scripts/trox-csv-sync.test.mjs",
           "scripts/trox-generated-check.test.mjs",
           "scripts/trox-source-workspace.test.mjs",
           "scripts/trox.test.mjs",
@@ -119,7 +88,6 @@ describe("fast review plan", () => {
       shouldCheckTrox: true,
       testInputs: [
         "scripts/bump-trox.test.mjs",
-        "scripts/canonical-localization-audit.test.mjs",
         "scripts/trox-csv-sync.test.mjs",
         "scripts/trox-generated-check.test.mjs",
         "scripts/trox-source-workspace.test.mjs",
@@ -137,35 +105,8 @@ describe("fast review plan", () => {
     expect(buildReviewPlan(["scripts/review.mjs"])).toMatchObject({
       lintFiles: [],
       shouldTypecheck: false,
-      testInputs: [
-        "scripts/review.mjs",
-        "scripts/rust-toolchain-contract.test.mjs",
-      ],
+      testInputs: ["scripts/review.mjs"],
     });
-  });
-
-  it("selects the RON formatting gate for RON sources and formatter config", () => {
-    expect(buildReviewPlan([".ronfmt.json", "data/cards.ron"])).toMatchObject({
-      shouldCheckRonFormatting: true,
-    });
-  });
-
-  it("selects the Rust formatting gate for Rust sources and formatter config", () => {
-    expect(
-      buildReviewPlan(["rustfmt.toml", "tools/game-data/src/compiler.rs"]),
-    ).toMatchObject({
-      shouldCheckRustFormatting: true,
-    });
-  });
-
-  it("selects the Rust toolchain contract for either side of the review contract", () => {
-    for (const input of ["rust-toolchain.toml", "scripts/review.mjs"]) {
-      expect(buildReviewPlan([input])).toMatchObject({
-        testInputs: expect.arrayContaining([
-          "scripts/rust-toolchain-contract.test.mjs",
-        ]),
-      });
-    }
   });
 
   it("does not pass deleted files to lint or Vitest", () => {

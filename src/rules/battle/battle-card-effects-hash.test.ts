@@ -1,5 +1,5 @@
 // DELIBERATE NARROW EXCEPTION to the project rule "do not write tests which
-// fail when I change my production TOML / game-design data". This test is
+// fail when I change my production game-design data". This test is
 // scoped to ONLY the handful of card UUIDs registered in `BATTLE_CARD_EFFECTS`
 // — the cards whose rules text is automated by a hand-written script. Its whole
 // purpose is to fail when one of those specific cards' `renderedText` drifts
@@ -10,31 +10,18 @@
 // confirm the script still matches the new text, and update the entry's stored
 // `textHash` (`fnv1aHex` of the new `renderedText`). It is NOT a reason to
 // delete or loosen this test. This guard asserts nothing about unregistered
-// cards, so editing any other card's TOML leaves it untouched.
+// cards, so editing any other card's catalog entry leaves it untouched.
 
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { collectAutomationHashDrift } from "./battle-card-effects-table";
-import type { CardData } from "../../types/cards";
-import type { CardId } from "../../types/card-identity";
-
-const REPO_ROOT = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "..",
-  "..",
-  "..",
-);
+import { parseCardId, type CardId } from "../../types/card-identity";
+import { cardsDocument } from "../../content/documents";
 
 /** Loads the real runtime card catalog the battle screen reads at runtime. */
 function loadCardsById(): Map<CardId, string> {
-  const json = readFileSync(
-    join(REPO_ROOT, "public", "cards_v2-data.json"),
-    "utf8",
+  return new Map(
+    cardsDocument().map((card) => [parseCardId(card.id), card.renderedText]),
   );
-  const cards = JSON.parse(json) as CardData[];
-  return new Map(cards.map((card) => [card.id, card.renderedText]));
 }
 
 describe("battle-card automation hash drift", () => {

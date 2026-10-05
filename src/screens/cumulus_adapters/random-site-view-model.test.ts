@@ -58,10 +58,10 @@ describe("buildRandomSiteView", () => {
         homeSpecialty: "Fixture specialty",
       },
       sitesData,
-      guideLine: assertLocalized("Synthetic TOML guide copy"),
+      guideLine: assertLocalized("Synthetic guide copy"),
     });
 
-    expect(resolveSource(view.guide.line)).toBe("Synthetic TOML guide copy");
+    expect(resolveSource(view.guide.line)).toBe("Synthetic guide copy");
     expect(view.choices[0].icon).toBe(sitesData.siteTypes.Shop.icon);
   });
 });

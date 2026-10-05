@@ -4,23 +4,16 @@ import { fileURLToPath } from "node:url";
 import ts from "typescript";
 
 const SOURCE_EXTENSIONS = new Set([".ts", ".tsx", ".mts", ".cts"]);
-const SOURCE_DIRECTORIES = ["src", "scripts", "tabula", "cumulus", "eslint-rules"];
+const SOURCE_DIRECTORIES = ["src", "scripts", "eslint-rules"];
 const ROOT_SOURCE_FILES = ["vite.config.ts"];
 const CHECKED_IDENTITY_MINT_BOUNDARIES = new Set([
   "src/types/card-identity.ts:brandCardId:CardId",
-  "src/editor/card-name-substring-groups.ts:cardNameSubstringKey:CardNameSubstringKey",
-  "src/editor/card-name-substring-groups.ts:participantKey:CardParticipantSetKey",
-  "src/cumulus/docs/route.ts:parseCumulusRoute:hash",
   "src/coop/build-hash.ts::__BUILD_HASH__",
   "src/rules/battle/battle-events.test.ts:parkForeseePrompt:parkedBoardHash",
   "src/rules/replay/replay.test.ts::finalHash",
   "src/rules/replay/replay.test.ts:parseReplayFixture:finalHash",
-  "src/cumulus/docs/PropsTable.tsx::formatPropType",
-  "src/cumulus/docs/controls.ts::tsType",
-  "src/cumulus/docs/syntax-highlight.test.ts::valuesOfType",
 ]);
 const RAW_SEMANTIC_STRING_BOUNDARIES = new Set([
-  "src/data/tutorial-journey-pool.ts:parseTutorialJourneyPool:source",
   "src/data/tutorial-instruction-markup.ts:parseTutorialInstructionMarkup:source",
   "src/data/tutorial-instruction-markup.ts:tutorialInstructionPlainText:source",
   "src/battle/state/figment-catalog.ts:normalizeFigmentCatalogKey:subtype",

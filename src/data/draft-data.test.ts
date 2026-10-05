@@ -53,6 +53,6 @@ describe("parseDraftData", () => {
   it.each(invalidCases)("rejects %s", (_label, mutate) => {
     const value = fixture();
     mutate(value);
-    expect(() => parseDraftData(value)).toThrow(/malformed draft-data/u);
+    expect(() => parseDraftData(value)).toThrow(/malformed draft document/u);
   });
 });

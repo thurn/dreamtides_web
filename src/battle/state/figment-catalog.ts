@@ -47,23 +47,23 @@ export interface FigmentCatalogEntry {
   /** The implicit keyword this type carries, if any. */
   keyword?: FigmentKeyword;
   /**
-   * The figment's display name, sourced from `figments.toml` once the catalog
+   * The figment's display name, sourced from the figment catalog once the catalog
    * is hydrated. Absent on the built-in defaults, where callers fall back to a
    * `"<Type> Figment"` derivation.
    */
   name?: CardName;
-  /** The figment's rules text, sourced from `figments.toml` when hydrated. */
+  /** The figment's rules text, sourced from the figment catalog when hydrated. */
   renderedText?: string;
-  /** The figment's art image number, sourced from `figments.toml` when hydrated. */
+  /** The figment's art image number, sourced from the figment catalog when hydrated. */
   imageNumber?: number;
-  /** Whether the assigned art is owned, sourced from `figments.toml`. */
+  /** Whether the assigned art is owned, sourced from the figment catalog. */
   artOwned?: boolean;
   /** The authored crop applied to the figment's art. */
   art?: ArtCrop;
 }
 
 /**
- * A figment record as loaded from `figments.toml` (camelCased by
+ * A figment record as loaded from the figment catalog (camelCased by
  * `transformFigment`). Hydrating the catalog from these records is what carries
  * the figment editor's edits to spark, character type, name, rules text, and
  * art into the battle UI.
@@ -145,7 +145,7 @@ export const FIGMENT_CATALOG: Readonly<
   Object.fromEntries(FIGMENT_CATALOG_ENTRIES.map((item) => [item.key, item]));
 
 /**
- * The catalog hydrated from `figments.toml`, or `null` before the figment
+ * The catalog hydrated from the figment catalog, or `null` before the figment
  * database has loaded (the default in tests and on first paint). When present it
  * takes precedence over the built-in defaults, so a figment renders with the
  * name, character type, spark, rules text, and art the figment editor saved.
@@ -157,7 +157,7 @@ let hydratedCatalog: Readonly<
 let hydratedEntries: readonly FigmentCatalogEntry[] | null = null;
 
 /**
- * Replaces the live figment catalog with entries built from `figments.toml`
+ * Replaces the live figment catalog with entries built from the figment catalog
  * records. Each record's subtype is the lookup key; its base spark, keyword,
  * name, rules text, and image number become the entry the battle UI reads when
  * creating and rendering a figment of that type.
@@ -189,7 +189,7 @@ export function hydrateFigmentCatalog(
 }
 
 /**
- * The live figment catalog entries — the hydrated set from `figments.toml` when
+ * The live figment catalog entries — the hydrated set from the figment catalog when
  * loaded, otherwise the built-in defaults. The figment-creator UI lists these.
  */
 export function figmentCatalogEntries(): readonly FigmentCatalogEntry[] {

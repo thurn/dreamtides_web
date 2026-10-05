@@ -9,10 +9,10 @@
         "four-suit-reprise",
         "blackjack"
       ],
-      "targetOwner": "data/gamble_site.ron",
+      "targetOwner": "src/content/gamble.ts",
       "currentSources": [
         {
-          "path": "data/gamble_site.ron",
+          "path": "src/content/gamble.ts",
           "fields": ["selection", "economy", "rules"]
         }
       ],
@@ -39,11 +39,11 @@
         "Attuned",
         "Perfected"
       ],
-      "targetOwner": "data/transfiguration_site.ron",
+      "targetOwner": "src/content/transfiguration.ts",
       "currentSources": [
         {
-          "path": "data/transfiguration_site.ron",
-          "fields": ["forms", "description", "glyph", "pricing", "reward_score"]
+          "path": "src/content/transfiguration.ts",
+          "fields": ["forms", "description", "glyph", "pricing", "rewardScore"]
         }
       ],
       "consumers": [
@@ -102,11 +102,11 @@
     },
     "tides": {
       "identities": ["ember", "valor", "vision", "wild", "shadow"],
-      "targetOwner": "data/resonance.ron",
+      "targetOwner": "src/content/resonance.ts",
       "currentSources": [
         {
-          "path": "data/resonance.ron",
-          "fields": ["display_name", "accent_color", "accessibility_name"]
+          "path": "src/content/resonance.ts",
+          "fields": ["displayName", "accentColor", "accessibilityName"]
         }
       ],
       "consumers": ["src/cumulus/components/hud/TideDisc.tsx"],
@@ -115,11 +115,11 @@
     },
     "rulesSymbols": {
       "identities": ["essence", "points", "lunar", "store", "energy", "spark"],
-      "targetOwner": "data/glossary.ron",
+      "targetOwner": "src/content/glossary.ts",
       "currentSources": [
         {
-          "path": "data/glossary.ron",
-          "fields": ["rules_symbol", "accessible_label", "semantic_color_role"]
+          "path": "src/content/glossary.ts",
+          "fields": ["rulesSymbol", "accessibleLabel", "semanticColorRole"]
         }
       ],
       "consumers": ["src/cumulus/components/card/RulesText.tsx"],

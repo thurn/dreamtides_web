@@ -19,7 +19,7 @@ export interface TutorialGuidanceMatchInput {
 }
 
 /**
- * Select the highest-priority unseen TOML tutorial matching one authoritative
+ * Select the highest-priority unseen catalog tutorial matching one authoritative
  * battle edge. Source order breaks priority ties deterministically.
  */
 export function matchTutorialGuidance(

@@ -1,5 +1,6 @@
 // Schema and validation for the browser projection of `data/tides.ron` and the
-// embedded tide pools in `data/avatars.ron`, served as `/tides4-data.json`. The tides4
+// embedded tide pools of the Avatar catalog (`src/content/tides.ts` and
+// `src/content/avatars/`). The tides4
 // pool algorithm recombines these manually curated decks into a seeded draft pool.
 //
 // The artifact carries both halves of the algorithm so it is self-contained:
@@ -128,7 +129,7 @@ function parseKnownTideId(
 }
 
 /**
- * Validate a parsed `/tides4-data.json` payload and return it typed. Throws on
+ * Validate a tides4 document and return it typed. Throws on
  * any structural problem (missing fields, an unknown role, duplicate tide ids, a
  * tide-pool id that names no tide, an empty facet list) so a bad or stale bake
  * fails loudly at load time instead of producing a quietly wrong pool.

@@ -4,7 +4,7 @@
 // content-coupled `OPEN_SITE`, `REROLL_SHOP`, `BEGIN_BATTLE`) BOUNCES.
 //
 // The five adapters live OUTSIDE `src/rules/**` because they import impure
-// modules (async-loaded TOML content, the atlas / shop / battle generators). The
+// modules (catalog content, the atlas / shop / battle generators). The
 // content is loaded once at app init (`loadJourneyContent`) and captured in the
 // adapter closures here, so the providers are synchronous and deterministic at
 // fold time.

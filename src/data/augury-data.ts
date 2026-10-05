@@ -25,10 +25,10 @@ export function parseAuguryData(value: unknown): AuguryData {
     Object.values(value.selection.costBands).some((entry) => !isInteger(entry) || entry < 0) ||
     !isRecord(value.encounter) || typeof value.encounter.allowDecline !== "boolean" ||
     !Array.isArray(value.archetypes) || value.archetypes.length < 2
-  ) throw new Error("Failed to load Augury data: malformed augury-data.json");
+  ) throw new Error("Failed to load Augury data: malformed Augury document");
   const archetypes = value.archetypes.map(archetypeFromUnknown);
   if (archetypes.some((entry) => entry === null)) {
-    throw new Error("Failed to load Augury data: malformed augury-data.json");
+    throw new Error("Failed to load Augury data: malformed Augury document");
   }
   const decodedArchetypes = archetypes.filter(
     (entry): entry is AuguryArchetypeData => entry !== null,
@@ -41,7 +41,7 @@ export function parseAuguryData(value: unknown): AuguryData {
     ids.size !== decodedArchetypes.length ||
     decodedArchetypes.filter((entry) => entry.enabled).length < 2 ||
     families.size < 2
-  ) throw new Error("Failed to load Augury data: malformed augury-data.json");
+  ) throw new Error("Failed to load Augury data: malformed Augury document");
   return {
     schemaVersion: 1,
     contentHash: parseContentHash(value.contentHash),
@@ -192,7 +192,7 @@ function isInteger(value: unknown): value is number {
 
 function requireNonnegativeInteger(value: unknown): number {
   if (!isInteger(value) || value < 0) {
-    throw new Error("Failed to load Augury data: malformed augury-data.json");
+    throw new Error("Failed to load Augury data: malformed Augury document");
   }
   return value;
 }

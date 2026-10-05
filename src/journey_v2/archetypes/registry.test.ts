@@ -4,7 +4,7 @@ import { AUGURY_ARCHETYPE_BUILDERS } from "./registry";
 import { AUGURY_ARCHETYPE_FAMILIES } from "./types";
 
 describe("augury archetype registry", () => {
-  it("registers every TOML-configurable Augury offer type", () => {
+  it("registers every catalog-configurable Augury offer type", () => {
     const ids = AUGURY_ARCHETYPE_BUILDERS.map((builder) => builder.archetypeId);
     expect(ids.sort()).toEqual(Object.keys(AUGURY_ARCHETYPE_FAMILIES).sort());
   });

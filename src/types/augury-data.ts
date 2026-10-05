@@ -38,7 +38,7 @@ export type AuguryPresentationText =
       package: SourceTransport;
     }>;
 
-/** Validated browser data compiled from data/augury_site.toml. */
+/** Validated Augury data from `src/content/augury.ts`. */
 export interface AuguryData {
   schemaVersion: 1;
   contentHash: ContentHash;

@@ -16,7 +16,7 @@ import { parseAuguryTargetKey } from "../../types/identifiers";
  * player already controls via dedicated mechanics. The list covers all the
  * rewarding/utility sites a player would be excited to add.
  */
-/** Generated compatibility view of the TOML-authored placeable site list. */
+/** Generated compatibility view of the catalog-authored placeable site list. */
 export const AUGURY_PLACEABLE_SITES = AUGURY_TUNING.placeableSites;
 
 /**

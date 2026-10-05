@@ -99,7 +99,7 @@ export interface AugurySiteView {
   guide: AuguryGuideView;
   offers: readonly AuguryOfferView[];
   unavailableMessage: LocalizedString | null;
-  /** TOML-authored encounter rule; absent synthetic fixtures default to allowed. */
+  /** catalog-authored encounter rule; absent synthetic fixtures default to allowed. */
   allowDecline?: boolean;
 }
 

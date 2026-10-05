@@ -18,10 +18,9 @@ import {
 function fixture() {
   const root = mkdtempSync(resolve(tmpdir(), "trox-source-workspace-test-"));
   mkdirSync(resolve(root, "src"), { recursive: true });
-  mkdirSync(resolve(root, "data"), { recursive: true });
-  mkdirSync(resolve(root, "localization"), { recursive: true });
+  mkdirSync(resolve(root, "localization/sources"), { recursive: true });
   writeFileSync(resolve(root, "src/message.ts"), 'tx("Current English", "Fixture.");\n');
-  writeFileSync(resolve(root, "data/catalog.ron"), '[Tx("Card copy")]\n');
+  writeFileSync(resolve(root, "localization/sources/catalog.ron"), '[Tx("Card copy")]\n');
   writeFileSync(resolve(root, "localization/report.csv"), "committed,stale\n");
   writeFileSync(resolve(root, "trox.ron"), "()\n");
   return root;
@@ -54,23 +53,13 @@ describe("isolated Trox source workspace", () => {
 
   it("returns current development bundles from the isolated catalog", () => {
     const root = fixture();
-    mkdirSync(resolve(root, ".generated/localization/sources"), {
-      recursive: true,
-    });
-    writeFileSync(
-      resolve(root, ".generated/localization/sources/derived.ron"),
-      '[Tx("Derived message")]\n',
-    );
     try {
       const bundles = buildDevelopmentTroxBundles({
         root,
         run: (arguments_, { cwd }) => {
           expect(
-            readFileSync(
-              resolve(cwd, ".generated/localization/sources/derived.ron"),
-              "utf8",
-            ),
-          ).toBe('[Tx("Derived message")]\n');
+            readFileSync(resolve(cwd, "localization/sources/catalog.ron"), "utf8"),
+          ).toBe('[Tx("Card copy")]\n');
           if (arguments_[0] !== "bundle") return;
           mkdirSync(resolve(cwd, ".generated/localization/bundles"), { recursive: true });
           for (const locale of ["en-US", "ar", "es", "ja", "ru"]) {

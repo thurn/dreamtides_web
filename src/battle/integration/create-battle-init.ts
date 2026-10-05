@@ -149,13 +149,13 @@ export interface CreateBattleInitInput {
    */
   dreamscapes?: readonly DreamscapeContent[];
   /**
-   * Thematic affiliations backing dreamscapes (`data/affiliations.toml`).
+   * Thematic affiliations backing dreamscapes (`src/content/affiliations.ts`).
    * Resolved together with {@link dreamscapes} to bias the opponent deck toward
    * the battle's affiliation. Optional, mirroring {@link dreamscapes}.
    */
   affiliations?: readonly AffiliationContent[];
   /**
-   * The shared generated Dreamwell card catalog (`data/dreamwell.toml`). Built into
+   * The shared Dreamwell card catalog (`src/content/dreamwell/`). Built into
    * the per-battle Dreamwell deck both players draw from. Optional so
    * battle-engine tests can omit it; an empty list yields an empty Dreamwell
    * deck (energy then stays at its starting value).
@@ -582,7 +582,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
  * keeping same-order cards randomized. Cycles repeat until the deck is at least
  * {@link DREAMWELL_DECK_MIN_LENGTH} long (a length never reached in a real
  * battle). A group smaller than {@link DREAMWELL_CARDS_PER_ORDER} contributes
- * however many cards it has, so the builder tolerates Dreamwell TOML edits.
+ * however many cards it has, so the builder tolerates Dreamwell catalog edits.
  */
 export function buildDreamwellDeck(
   cards: readonly DreamwellCard[],

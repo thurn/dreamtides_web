@@ -53,6 +53,6 @@ describe("generated game configuration trust boundaries", () => {
       headline: { kind: "text", text: "" },
       subtitle: { kind: "text", text: "Fixture" },
     };
-    expect(() => parseAuguryData(malformed)).toThrow(/malformed augury-data/u);
+    expect(() => parseAuguryData(malformed)).toThrow(/malformed Augury document/u);
   });
 });

@@ -7,8 +7,8 @@
 #
 # Production is served from TWO origins, and a full deploy must update both:
 #
-#   1. Firebase Hosting — the code, HTML, and the small version-coupled
-#      `*-data.json` catalogs, built into `dist/` by `npm run build`.
+#   1. Firebase Hosting — the code, HTML, and the bundled content catalogs,
+#      built into `dist/` by `npm run build`.
 #   2. Firebase Storage bucket — the large binary art (card / avatar /
 #      dreamsign / atlas images), which `firebase.json` intentionally excludes
 #      from the Hosting deploy. The app loads it from the bucket via `assetUrl()`

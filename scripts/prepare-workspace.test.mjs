@@ -12,7 +12,7 @@ describe("prepareWorkspace", () => {
 
     prepareWorkspace({ root: "/fixture", run });
 
-    expect(run.mock.calls.map(([, args]) => args[0])).toEqual(
+    expect(run.mock.calls.map(([, args]) => args.at(-1))).toEqual(
       WORKSPACE_GENERATORS.map(({ script }) => `/fixture/${script}`),
     );
     expect(run).toHaveBeenCalledTimes(WORKSPACE_GENERATORS.length);

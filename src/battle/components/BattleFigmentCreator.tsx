@@ -45,7 +45,7 @@ function figmentTypeName(subtype: CardSubtype): string {
 
 /**
  * The default name for a figment of the given type: the catalog's authored name
- * from `figments.toml` when hydrated, otherwise the `"<Type> Figment"`
+ * from the figment catalog when hydrated, otherwise the `"<Type> Figment"`
  * derivation. The figment editor's name edits flow through here.
  */
 function defaultFigmentName(entry: FigmentCatalogEntry): string {

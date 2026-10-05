@@ -274,7 +274,7 @@ export interface BattleJourneyDeckEntry {
 
 export interface BattleDeckCardDefinition {
   sourceDeckEntryId: DeckEntryId | null;
-  /** Stable cards_v2 UUID of the source card. "" for synthetic definitions
+  /** Stable card UUID of the source card. "" for synthetic definitions
    *  (figments, generated copies) that have no catalog card. */
   cardId: CardId;
   cardNumber: number;
@@ -285,7 +285,7 @@ export interface BattleDeckCardDefinition {
   printedEnergyCost: number | null;
   /**
    * Ordered orb labels for a card that has more than one printed energy cost
-   * (a comma-separated TOML `energy-cost` such as `"2,X"` yielding
+   * (an `energyCosts` list such as `["2", "X"]` yielding
    * `["2", "X"]`), carried through from the catalog `CardData.energyCosts` so
    * the in-hand surface renders one orb per label. Absent on the common
    * single-cost card, where the single orb is derived from `printedEnergyCost`.
@@ -331,7 +331,7 @@ export interface DreamwellCardDefinition {
 
 /**
  * A card chosen to typify an opponent Avatar's ability, shown on the
- * Battle Start screen before hands are dealt. Identity is the stable cards_v2
+ * Battle Start screen before hands are dealt. Identity is the stable card
  * UUID (`cardId`); `cardNumber` is the card-database key the screen resolves the
  * full card from for rendering. Selected by `selectSignatureCards`
  * (`src/battle/integration/signature-cards.ts`).
@@ -410,7 +410,7 @@ export interface BattleInit {
   // invariants (B-6, C-10) are still enforced in `create-battle-init.ts`.
   startingSide: BattleSide;
   playerDrawSkipsTurnOne: boolean;
-  /** TOML-authored first-occurrence tutorials available in this battle. */
+  /** catalog-authored first-occurrence tutorials available in this battle. */
   tutorialTriggers?: readonly TutorialTriggerDefinition[];
   journeyDeckEntries: readonly BattleJourneyDeckEntry[];
   playerDeckOrder: readonly BattleDeckCardDefinition[];

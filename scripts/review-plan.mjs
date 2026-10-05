@@ -14,23 +14,12 @@ const TEST_INPUT_EXTENSIONS = new Set([
   ".css",
   ".json",
   ".jsonc",
-  ".ron",
-  ".toml",
 ]);
 
 const SOURCE_TREE_CONTRACT_TESTS = [
   "scripts/cumulus-ui-boundary.test.mjs",
   "scripts/domain-string-audit.test.mjs",
 ];
-
-const RUST_TOOLCHAIN_CONTRACT_TEST =
-  "scripts/rust-toolchain-contract.test.mjs";
-
-function isRustToolchainContractInput(file) {
-  return (
-    file === "rust-toolchain.toml" || file === "scripts/review.mjs"
-  );
-}
 
 const LOCALIZATION_CONTRACT_INPUTS = new Set([
   ".trox-revision",
@@ -44,7 +33,6 @@ const LOCALIZATION_CONTRACT_INPUTS = new Set([
 
 export function reviewNeedsPreparedWorkspace(reviewPlan) {
   return (
-    reviewPlan.shouldValidate ||
     reviewPlan.shouldCheckTrox ||
     reviewPlan.shouldTypecheck ||
     reviewPlan.testInputs.length > 0
@@ -53,7 +41,6 @@ export function reviewNeedsPreparedWorkspace(reviewPlan) {
 
 const LOCALIZATION_CONTRACT_TESTS = [
   "scripts/bump-trox.test.mjs",
-  "scripts/canonical-localization-audit.test.mjs",
   "scripts/trox.test.mjs",
   "scripts/trox-csv-sync.test.mjs",
   "scripts/trox-generated-check.test.mjs",
@@ -89,46 +76,16 @@ function isTypecheckInput(file) {
   );
 }
 
-function isValidationInput(file) {
-  return (
-    file.startsWith("data/") ||
-    file.startsWith("tools/game-data/") ||
-    file === "rust-toolchain.toml" ||
-    file === "scripts/setup-assets.mjs" ||
-    file.startsWith("scripts/generate-") ||
-    file.startsWith("scripts/parse-")
-  );
-}
-
 function isTestInput(file) {
   return (
     (file.startsWith("src/") ||
       file.startsWith("scripts/") ||
       file.startsWith("eslint-rules/") ||
-      file.startsWith("data/") ||
       file === "package.json" ||
       file === "package-lock.json" ||
       file === "vite.config.ts" ||
       file === "vitest.config.ts") &&
     TEST_INPUT_EXTENSIONS.has(extname(file))
-  );
-}
-
-function isRonFormattingInput(file) {
-  return (
-    extname(file) === ".ron" ||
-    file === ".ronfmt.json" ||
-    file === "scripts/format-ron.mjs" ||
-    file === "scripts/ron-format.mjs"
-  );
-}
-
-function isRustFormattingInput(file) {
-  return (
-    file.endsWith(".rs") ||
-    file === "rustfmt.toml" ||
-    file === ".rustfmt.toml" ||
-    file === "rust-toolchain.toml"
   );
 }
 
@@ -138,9 +95,6 @@ export function buildReviewPlan(files, fileExists = () => true) {
   const testInputs = existingFiles.filter(isTestInput);
   if (changedFiles.some(isProductionSourceInput)) {
     testInputs.push(...SOURCE_TREE_CONTRACT_TESTS);
-  }
-  if (changedFiles.some(isRustToolchainContractInput)) {
-    testInputs.push(RUST_TOOLCHAIN_CONTRACT_TEST);
   }
   if (
     changedFiles.some(
@@ -166,16 +120,6 @@ export function buildReviewPlan(files, fileExists = () => true) {
           file.startsWith("src/")),
     ),
     shouldTypecheck: changedFiles.some(isTypecheckInput),
-    shouldValidate: changedFiles.some(isValidationInput),
-    shouldCheckRonFormatting: changedFiles.some(isRonFormattingInput),
-    shouldCheckRustFormatting: changedFiles.some(isRustFormattingInput),
-    shouldTestGameData: changedFiles.some(
-      (file) =>
-        file.endsWith(".ron") ||
-        file.startsWith("tools/game-data/") ||
-        file === "rust-toolchain.toml" ||
-        file === "scripts/game-data-pipeline.mjs",
-    ),
     testInputs: [...new Set(testInputs)].sort(),
   };
 }

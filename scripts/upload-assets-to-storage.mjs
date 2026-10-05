@@ -3,7 +3,7 @@
  * Publishes the binary game art (card / avatar / dreamsign / atlas images)
  * to the Firebase Storage bucket that serves it in production.
  *
- * The art is intentionally kept out of git: `scripts/setup-assets.mjs` symlinks
+ * The art is intentionally kept out of git: `scripts/setup-assets.ts` symlinks
  * it into `public/<dir>/` from the developer's `~/Documents` source folders (and
  * the image cache). The deployed site loads it from the bucket via `assetUrl()`
  * (see `src/runtime/asset-url.ts`) instead of bundling it into the Hosting

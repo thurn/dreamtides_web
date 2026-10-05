@@ -1,27 +1,14 @@
-import { readFileSync } from "node:fs";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { starterCardModels } from "./index";
 import { buildAiConfiguredDeck } from "../deck";
 import type { CardData } from "../../../types/cards";
 import { opponentsFixture } from "../../../testing/opponents-fixture";
+import { cardsDocument } from "../../../content/documents";
 
-const REPO_ROOT = join(
-  dirname(fileURLToPath(import.meta.url)),
-  "..",
-  "..",
-  "..",
-  "..",
-);
 
 /** Loads the real runtime card catalog the headless scripts read. */
 function loadCardDatabase(): Map<number, CardData> {
-  const json = readFileSync(
-    join(REPO_ROOT, "public", "cards_v2-data.json"),
-    "utf8",
-  );
-  const cards = JSON.parse(json) as CardData[];
+  const cards = cardsDocument() as unknown as CardData[];
   return new Map(cards.map((card) => [card.cardNumber, card]));
 }
 

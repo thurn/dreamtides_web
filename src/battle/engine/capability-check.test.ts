@@ -60,7 +60,7 @@ const MODELED: ReadonlySet<number> = new Set([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
 describe("needsManualResolution", () => {
   describe("allowlist — modeled Starter cards always return false", () => {
     it("returns false for a modeled card even when its text contains a ▸ trigger", () => {
-      // Card #1 from cards_v2-data.json: '▸Challenge: Banish an enemy until end of turn.'
+      // Card #1 from the card catalog: '▸Challenge: Banish an enemy until end of turn.'
       const instance = makeInstance(
         "▸Challenge: Banish an enemy until end of turn.",
         1,
@@ -85,7 +85,7 @@ describe("needsManualResolution", () => {
 
   describe("trigger marker ▸ (U+25B8)", () => {
     it("returns true for an unmodeled card whose text starts with ▸", () => {
-      // Real text from card #1 in cards_v2-data.json
+      // Real text from card #1 in the card catalog
       const instance = makeInstance(
         "▸Challenge: Banish an enemy until end of turn.",
         100,
@@ -94,7 +94,7 @@ describe("needsManualResolution", () => {
     });
 
     it("returns true when ▸ appears mid-text (second paragraph)", () => {
-      // Real text from card #4 in cards_v2-data.json
+      // Real text from card #4 in the card catalog
       const instance = makeInstance(
         "▸Dawn: Gain 1●.\n\n4●, ☾: This character gains +1✦.",
         200,
@@ -105,7 +105,7 @@ describe("needsManualResolution", () => {
 
   describe("en-dash keyword separator – (U+2013)", () => {
     it("returns true for an unmodeled card with 'Support – ...' keyword line", () => {
-      // Real text from card #35 in cards_v2-data.json
+      // Real text from card #35 in the card catalog
       const instance = makeInstance(
         "Support – Supported allies have +2✦.\n\nReclaim – 3●, Banish 3 cards from your void.",
         300,
@@ -124,7 +124,7 @@ describe("needsManualResolution", () => {
 
   describe("resolution keyword (case-insensitive word match)", () => {
     it("returns true for an unmodeled card with standalone 'Vengeful'", () => {
-      // Real text from card #6 in cards_v2-data.json (not in MODELED set)
+      // Real text from card #6 in the card catalog (not in MODELED set)
       const instance = makeInstance(
         "Vengeful\n\nWhen you play a card from your void, return this character to play.",
         6,
@@ -141,13 +141,13 @@ describe("needsManualResolution", () => {
 
   describe("static spark text +<number>✦ (U+2726)", () => {
     it("returns true for an unmodeled card with '+2✦' in text", () => {
-      // Real text from card #49 in cards_v2-data.json (subset)
+      // Real text from card #49 in the card catalog (subset)
       const instance = makeInstance("Allied spirit animals have +1✦.", 49);
       expect(needsManualResolution(instance, MODELED)).toBe(true);
     });
 
     it("returns true for '+4✦' variant", () => {
-      // Real text from card #28 in cards_v2-data.json
+      // Real text from card #28 in the card catalog
       const instance = makeInstance(
         "If there are 7 or more cards in your void, this character has +4✦ and gains awakened.",
         28,
@@ -178,7 +178,7 @@ describe("needsManualResolution", () => {
     });
 
     it("returns false for an unmodeled card with plain effect text and no markers", () => {
-      // Real text from card #3 in cards_v2-data.json — simple draw spell.
+      // Real text from card #3 in the card catalog — simple draw spell.
       const instance = makeInstance("Offering\n\nDraw 2 cards.", 702);
       expect(needsManualResolution(instance, MODELED)).toBe(false);
     });

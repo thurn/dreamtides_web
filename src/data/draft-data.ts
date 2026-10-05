@@ -68,7 +68,7 @@ export function parseDraftData(value: unknown): DraftData {
     !isPositiveInteger(value.pool.tides4.copyCap) ||
     !isPositiveInteger(value.pool.tides4.maxFacets)
   ) {
-    throw new Error("Failed to load draft data: malformed draft-data.json");
+    throw new Error("Failed to load draft data: malformed draft document");
   }
   const seen = new Set<Rarity>();
   const rarityCaps: DraftRarityCap[] = [];
@@ -82,7 +82,7 @@ export function parseDraftData(value: unknown): DraftData {
       cap.poolCopyCap > value.pool.tides4.copyCap ||
       !isPositiveInteger(cap.maxPicksPerRun)
     ) {
-      throw new Error("Failed to load draft data: malformed draft-data.json");
+      throw new Error("Failed to load draft data: malformed draft document");
     }
     seen.add(cap.rarity);
     rarityCaps.push({
@@ -96,7 +96,7 @@ export function parseDraftData(value: unknown): DraftData {
     Math.ceil(value.pool.tides4.dealSize / value.pool.tides4.copyCap) <
     value.offers.cardsPerOffer * value.offers.picksPerSite
   ) {
-    throw new Error("Failed to load draft data: malformed draft-data.json");
+    throw new Error("Failed to load draft data: malformed draft document");
   }
   return {
     schemaVersion: 1,

@@ -5,7 +5,7 @@
 // REAL generators register through `src/coop/providers/registerGameProviders`,
 // but the permanent replay regression net deliberately uses these minimal
 // DETERMINISTIC fakes instead: baking real-content hashes would couple the
-// fixtures to the TOML card/avatar/atlas data, which AGENTS.md forbids
+// fixtures to the card/avatar/atlas catalogs, which AGENTS.md forbids
 // (tests must not break on a data edit). The real providers' determinism is
 // covered separately by `src/coop/providers/register-game-providers.test.ts`.
 // These fakes let the fixture event logs fold to a stable, reproducible state.
@@ -21,7 +21,7 @@
 // Determinism rails (src/rules/): no `Math.random`, no live clock. Randomness
 // comes from a seeded PRNG here and from `ctx.rng` inside the reducer; the
 // Dreamwell scripts are selected from the live effects table by structure so
-// fixtures stay resilient to TOML card-data edits while still covering the
+// fixtures stay resilient to card catalog edits while still covering the
 // active automation runner.
 
 import type { ResolvedAvatarPackage } from "../../types/content";

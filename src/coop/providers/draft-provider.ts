@@ -23,7 +23,7 @@ export function createDraftContentProvider(
     cardDatabase: (): Map<number, CardData> => content.cardDatabase,
     // SEAM (Task 27): the affiliation reweighting the legacy pick path applied is
     // keyed on the CURRENT dreamscape node, while this seam receives only the
-    // persisted site data. The TOML-authored rules are deterministic here;
+    // persisted site data. The catalog-authored rules are deterministic here;
     // affiliation-steered draft offers remain a separate follow-up.
     draftConfigFor: (
       _draftState: DraftState,

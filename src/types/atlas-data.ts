@@ -32,7 +32,7 @@ export interface AtlasFillProfile {
   siteWeights: Partial<Record<SiteType, number>>;
 }
 
-/** Validated browser data compiled from data/atlas.toml. */
+/** Validated Dream Atlas data from `src/content/atlas.ts`. */
 export interface AtlasData {
   schemaVersion: 1;
   contentHash: ContentHash;
@@ -91,7 +91,7 @@ export function atlasLayerData(
 ): AtlasLayerData {
   const result = atlasData.layers.find((entry) => entry.name === layer);
   if (result === undefined) {
-    throw new Error(`atlas.toml does not define layer ${layer}.`);
+    throw new Error(`The Atlas catalog does not define layer ${layer}.`);
   }
   return result;
 }
