@@ -277,7 +277,6 @@ function commandFor(step, extraArgs = []) {
         "related",
         "--run",
         "--passWithNoTests",
-        "--maxWorkers=1",
         ...extraArgs,
       ],
     ];

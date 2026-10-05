@@ -288,3 +288,65 @@ needs = ["trox"]
 timeout = "120m"
 environment = { DREAMTIDES_LOCAL_ASSET_HOME = ".", JOURNEY_TEST_WORKERS = "2", TROX_ROOT = "/Users/dthurn/.cache/quest-prototype/trox-604a79412034" }
 ```
+
+## Phase 1.3 feedback-loop speedups (2026-10-05, bead hv-b8ef.3)
+
+Each candidate was tried alone in a fresh worktree at `release` `c6972946`.
+"Cold" clears the relevant cache first. The host is shared: its load average
+rose from low to 25–35 (on 18 cores) during the session, so candidates that
+were close were re-measured as interleaved pairs under the same load.
+
+### Kept
+
+| Candidate | Target metric | Before | After | Change |
+| --- | --- | --- | --- | --- |
+| Related tests use `JOURNEY_TEST_WORKERS` (default 2) instead of `--maxWorkers=1` in `review.mjs`'s `test-related` step | `test-related` wall for the `shop.ts` one-line change (42 files) | 71.8, 72.0, 70.6 s (mean 71.5) | 47.2, 43.3, 43.8 s (mean 44.8) | **−37%** |
+
+The pairs above ran interleaved at load 28–36. Earlier, at low load, the same
+comparison gave 45.8 / 43.9 s (1 worker, cold / warm) against 43.4 / 44.1 /
+41.6 / 41.3 s (2 workers): about 5%. The second worker matters most when the
+host is contended, which is its normal state. Two workers is the D17 limit;
+the step still runs after lint and typecheck, never alongside them.
+
+**Already in place (verified, unchanged):** `review.mjs` runs `tsc --noEmit
+--incremental` with build info under `node_modules/.cache/journey-review/`.
+`tsc --extendedDiagnostics`: cold 8.2 s wall (check 6.6 s); no-change warm
+1.7 s; after a one-line body edit in `src/rules/journey/shop.ts` 1.4 s
+(check 0.04 s). In the real loop (edit → `npm run review` → edit →
+`npm run review`) the typecheck step took 2.1 s and 2.2 s under load. The
+9.6 s "warm" figure in the 1.1 baseline followed an intervening
+`trox:gate` run that rewrote typecheck inputs. `tsc -b` was not pursued.
+
+### Rejected
+
+| Candidate | Target metric | Before | After | Why rejected |
+| --- | --- | --- | --- | --- |
+| ESLint cache (`cache: true`, `cacheStrategy: "content"`, `node_modules/.cache/eslint/`) in `run-eslint.mjs` | `npm run review` lint step (changed files only) | one file 1.60 s | one file 1.62 s | No gain where it would apply. Whole-`src/` lint drops from 16.2–16.5 s to 0.77 s warm (15.9 s cold), but only `review:full` lints all of `src/`, and in Tollgate `node_modules` is fresh, so the cache is always cold. Persisting it across gates would let type-aware rules (`no-unsafe-*`, `no-misused-promises`) return stale results when a dependency's types change. |
+| Vitest `pool: "forks"` (vs `"threads"`) | full suite wall, 2 workers | threads: 135.7 cold; 133.2, 133.0, 132.0 warm | forks: 151.2 cold; 159.1, 153.9, 157.5 warm | 17% slower. |
+| Vitest `experimental.fsModuleCache` | full suite wall | threads as above | 142.8 cold; 138.4, 137.2, 137.8 warm | Transform drops 14 → 9.5 s, but wall rises 4%. |
+| Vitest `deps.optimizer` (`client` and `ssr` enabled) | full suite wall | threads as above | 135.8 cold; 135.0 warm | No gain (+2%). |
+| Vitest `isolate: false` | full suite wall | threads as above | 73.9 s, **11 files / 31 tests fail** | 45% faster but fails: jsdom component tests, `src/data/glossary-terms-symbols.test.ts` and two Firebase event-log tests depend on per-file module state. Shared module state makes results depend on file order, which the run's determinism rule forbids. |
+| `lint` and `typecheck` concurrently in `review:full` | `review:full` wall | lint 18.4 s + typecheck 10.8 s sequential (1.1 baseline) | concurrent ≈ max of the two | Saves about 10 s of 220 s (4.5%), under the 10% bar. Measured directly under load: sequential 55.7 / 51.1 / 51.0 s, concurrent 35.7 / 34.1 / 35.8 s (3 cores). Worth re-measuring once Phase 2 shrinks `review:full`. |
+
+### Findings that need no change here
+
+- **Environment.** Vitest already defaults to `node`; 146 files opt into
+  `jsdom` with `@vitest-environment jsdom` pragmas (56 more state `node`
+  explicitly). There are no setup files (`setup 0ms`).
+- **Import cost dominates.** Every full run reports import ≈ 150 s
+  cumulative against tests ≈ 60 s. Worker count barely changes the related
+  run at low load because module transform runs on the Vite server in the
+  main process.
+- **Selection precision.** `vitest related` follows the import graph, so
+  `src/rules/journey/shop.ts` selects 42 files: the router and app tests
+  that import the whole app (`src/root-router.test.tsx` 4.3 s,
+  `src/editor/main-editor-route.test.tsx` 17.7 s), 15 co-op and editor
+  files, and the three source-tree contract tests `review-plan.mjs` adds
+  for any production source change. Nothing is selected without an import
+  path, so narrowing it would trade correctness for speed. Phase 2 deletes
+  the editor, co-op, the Cumulus docs drift test and the localization audit.
+- **Phase 2 deletions** remove the other large per-review costs: the Trox
+  Vite plugin builds Trox bundles synchronously on first import of
+  `virtual:trox-bundles`, `trox-source-check` costs 4–6 s per TypeScript
+  change, and `prepare` (4–7 s) materializes the RON pipeline outputs that
+  D32 replaces with TypeScript modules.

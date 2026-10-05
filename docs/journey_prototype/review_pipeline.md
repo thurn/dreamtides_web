@@ -13,7 +13,8 @@ staged, unstaged, and untracked files:
 - Changed TypeScript application files run through the repository's typed
   ESLint scope.
 - Type-affecting changes run the incremental TypeScript check.
-- Changed source and data files run their related Vitest tests with one worker.
+- Changed source and data files run their related Vitest tests with
+  `JOURNEY_TEST_WORKERS` workers (default 2, from `vitest.config.ts`).
 - Documentation-only changes complete without executable checks.
 
 Set `JOURNEY_REVIEW_BASE=<revision>` to compare against a different revision.
