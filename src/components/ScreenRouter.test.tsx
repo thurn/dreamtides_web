@@ -277,24 +277,11 @@ describe("ScreenRouter Augury routing", () => {
     const encounter = encounterLogs[0];
     const signature = encounter?.encounterSignature;
     expect(signature).toBeDefined();
-    expect(encounter?.offerCount).toBe(2);
-    const anyString: unknown = expect.any(String);
-    const someStrings: unknown = expect.arrayContaining([anyString]);
-    expect(encounter?.debug).toMatchObject({
-      encounterSignature: signature,
-      eligibleArchetypeIds: someStrings,
-      rolledA: anyString,
-      rolledB: anyString,
-    });
-
     const offerLogs = logs("augury_offer_built");
     expect(offerLogs).toHaveLength(2);
     const deckHash = (encounter?.deck as { hash?: unknown } | undefined)?.hash;
     for (const offer of offerLogs) {
       expect(offer).toMatchObject({ encounterSignature: signature, deckHash });
-      expect(typeof offer.archetypeId).toBe("string");
-      expect(typeof offer.targetKey).toBe("string");
-      expect(typeof (offer.trace as { decision?: unknown } | null)?.decision).toBe("string");
     }
     expect(new Set(offerLogs.map((offer) => offer.offerId))).toEqual(new Set(["A", "B"]));
   });

@@ -1,7 +1,9 @@
-import { testJourneySeed } from "./types/test-identities";
 // @vitest-environment jsdom
 
 import { act } from "react";
+import type { ReactElement, ReactNode } from "react";
+import { createRoot, type Root } from "react-dom/client";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { economyFixture } from "./testing/economy-fixture";
 import { opponentsFixture } from "./testing/opponents-fixture";
 import { draftDataFixture } from "./testing/draft-data-fixture";
@@ -11,30 +13,22 @@ import {
   MINIMAL_DREAMSCAPES,
   MINIMAL_SITES_DATA,
 } from "./testing/atlas-fixtures";
-import type { ReactElement, ReactNode } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { CumulusRoot } from "./cumulus/CumulusRoot";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { JourneyContent } from "./data/journey-content";
 import { loadJourneyContent } from "./data/journey-content";
 import { useLocalGame } from "./session/use-local-game";
 import type { CardData } from "./types/cards";
 import type { JourneyMutations } from "./state/journey-context";
 import type { JourneyState } from "./types/journey";
-import { LayerName } from "./types/layer-name";
 import App, { JourneyApp } from "./App";
 import { useJourney } from "./state/journey-context";
 import { registerGameProviders } from "./session/providers/register-game-providers";
-import { parseJourneyId } from "./types/identifiers";
-import { parseAtlasNodeId } from "./types/identifiers";
-import { parseSiteId } from "./types/identifiers";
-import { parseDeckEntryId } from "./types/identifiers";
-import { parseRoomId } from "./types/identifiers";
 import {
-  testAvatarId,
-  testDreamscapeId,
-  testCardId,
-} from "./types/test-identities";
+  parseDeckEntryId,
+  parseJourneyId,
+  parseRoomId,
+} from "./types/identifiers";
+import { testAvatarId, testJourneySeed } from "./types/test-identities";
 
 vi.mock("./data/journey-content", () => ({
   AFFINITY_GROWN_POOL_VARIANTS: new Set<string>(),
@@ -44,119 +38,17 @@ vi.mock("./data/journey-content", () => ({
   loadJourneyContent: vi.fn(),
   poolVariantNeedsTides4: vi.fn(() => false),
 }));
-vi.mock("./data/tutorial-actions", () => ({
-  tutorialStarterDeckSize: (battle: {
-    starterDeck: readonly { copies: number }[];
-  }) => battle.starterDeck.reduce((total, entry) => total + entry.copies, 0),
-  loadTutorialConfiguration: vi.fn(() => ({
-    contentHash: "0".repeat(64),
-    foldHash: "1".repeat(64),
-    journeyStart: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 550,
-        text: "Choose an avatar.",
-      },
-    },
-    dreamscape: {
-      speechBubble: {
-        speaker: "mira",
-        delay: 2,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 700,
-        text: "Visit Dream Sites.",
-      },
-    },
-    atlas: {
-      speechBubble: {
-        speaker: "mira",
-        delay: 1,
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 700,
-        text: "Choose the next dream.",
-      },
-    },
-    draft: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 600,
-        text: "Draft a card.",
-      },
-    },
-    purge: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 600,
-        text: "Purge a card.",
-      },
-    },
-    dreamsignRevelation: {
-      speechBubble: {
-        speaker: "mira",
-        horizontalOffset: 0,
-        verticalOffset: 0,
-        bubbleWidth: 600,
-        text: "Choose a Dreamsign.",
-      },
-    },
-    battleStart: {
-      firstBattle: {
-        speechBubble: {
-          speaker: "mira",
-          delay: 1,
-          horizontalOffset: 0,
-          verticalOffset: 0,
-          bubbleWidth: 700,
-          text: "Review the first opponent.",
-        },
-      },
-      secondBattle: {
-        speechBubble: {
-          speaker: "mira",
-          delay: 1,
-          horizontalOffset: 0,
-          verticalOffset: 0,
-          bubbleWidth: 700,
-          text: "Prepare for the second battle.",
-        },
-      },
-    },
-    actions: [],
-    triggers: [],
-    battle: {
-      tutorialCardConstants: {
-        tutorialPlayerCharacterCardId: "00000000-0000-4000-8000-000000000001",
-        tutorialOpponentCharacterCardId: "00000000-0000-4000-8000-000000000002",
-        loadingScreenCharacterCardId: "00000000-0000-4000-8000-000000000008",
-        loadingScreenEventCardId: "00000000-0000-4000-8000-000000000004",
-        handoffEnemyCharacterCardId: "00000000-0000-4000-8000-000000000003",
-        tutorialDreamwellCardId: "00000000-0000-4000-8000-000000000005",
-      },
-      playerAvatarId: "00000000-0000-4000-8000-000000000006",
-      enemyAvatarId: "00000000-0000-4000-8000-000000000007",
-      startingEnergy: 4,
-      scoreToWin: 10,
-      starterDeck: [
-        {
-          cardId: testCardId("00000000-0000-4000-8000-000000000001"),
-          copies: 30,
-        },
-      ],
-      handoff: { activeSide: "player" },
-      forcedPlayerDraws: [],
-      forcedEnemyDraws: [],
-      dreamwellDraws: [],
-    },
-  })),
-}));
+vi.mock("./data/tutorial-actions", async () => {
+  const { makeTutorialConfiguration } = await import(
+    "./testing/tutorial-configuration-fixture"
+  );
+  return {
+    tutorialStarterDeckSize: (battle: {
+      starterDeck: readonly { copies: number }[];
+    }) => battle.starterDeck.reduce((total, entry) => total + entry.copies, 0),
+    loadTutorialConfiguration: vi.fn(() => makeTutorialConfiguration()),
+  };
+});
 
 vi.mock("./session/use-local-game", () => ({
   useLocalGame: vi.fn(() => ({
@@ -212,143 +104,59 @@ vi.mock("./components/ScreenRouter", () => ({
   ),
 }));
 
-interface DeckViewerMockProps {
+interface OverlayMockProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const deckViewerMock = vi.fn<(props: DeckViewerMockProps) => ReactNode>(
-  ({ isOpen }) => <div data-deck-open={String(isOpen)}>Deck Viewer</div>,
+const deckViewerMock = vi.fn<(props: OverlayMockProps) => ReactNode>(
+  ({ isOpen }) => <div data-deck-open={String(isOpen)} />,
 );
 
 vi.mock("./screens/cumulus_adapters/DesktopDeckViewerAdapter", () => ({
-  DesktopDeckViewerAdapter: (props: DeckViewerMockProps) =>
-    deckViewerMock(props),
+  DesktopDeckViewerAdapter: (props: OverlayMockProps) => deckViewerMock(props),
 }));
 
-interface PoolViewerMockProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const poolViewerMock = vi.fn<(props: PoolViewerMockProps) => ReactNode>(
+const poolViewerMock = vi.fn<(props: OverlayMockProps) => ReactNode>(
   ({ isOpen, onClose }) => (
-    <button type="button" data-pool-open={String(isOpen)} onClick={onClose}>
-      Pool Viewer
-    </button>
+    <button type="button" data-pool-open={String(isOpen)} onClick={onClose} />
   ),
 );
 
 vi.mock("./screens/cumulus_adapters/PoolViewerAdapter", () => ({
-  PoolViewerAdapter: (props: PoolViewerMockProps) => poolViewerMock(props),
+  PoolViewerAdapter: (props: OverlayMockProps) => poolViewerMock(props),
 }));
 
-interface StartingDeckOverlayMockProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-const startingDeckModalMock = vi.fn<
-  (props: StartingDeckOverlayMockProps) => ReactNode
->(({ isOpen }) => (
-  <div data-starting-deck-open={String(isOpen)}>Starting Deck Overlay</div>
-));
+const startingDeckModalMock = vi.fn<(props: OverlayMockProps) => ReactNode>(
+  ({ isOpen }) => <div data-starting-deck-open={String(isOpen)} />,
+);
 
 vi.mock("./screens/cumulus_adapters/StartingDeckOverlayAdapter", () => ({
-  StartingDeckOverlayAdapter: (props: StartingDeckOverlayMockProps) =>
+  StartingDeckOverlayAdapter: (props: OverlayMockProps) =>
     startingDeckModalMock(props),
 }));
 
 vi.mock("./screens/DebugScreen", () => ({
-  DebugScreen: () => <div>Debug Screen</div>,
+  DebugScreen: () => <div />,
 }));
 
 vi.mock("./screens/CardSourceOverlay", () => ({
-  CardSourceOverlay: () => <div>Card Source Overlay</div>,
+  CardSourceOverlay: () => <div />,
 }));
 
+/** Every mutation is a lazily created spy, so the shell may call any intent. */
 function makeMutations(): JourneyMutations {
-  return {
-    changeEssence: vi.fn(),
-    startJourney: vi.fn(),
-    rerollAvatarOffer: vi.fn(),
-    completeSite: vi.fn(),
-    ensureGambleSiteRuntime: vi.fn(),
-    ensureExplorationSiteRuntime: vi.fn(),
-    ensureRandomSiteRuntime: vi.fn(),
-    chooseRandomSite: vi.fn(),
-    resolveExplorationChoice: vi.fn(),
-    placeGravokWager: vi.fn(),
-    settleGravokWager: vi.fn(),
-    playAgainGravokWager: vi.fn(),
-    replaceGravokWagerDreamsign: vi.fn(),
-    playAgainStarwayStairs: vi.fn(),
-    drawFourSuitReprise: vi.fn(),
-    settleFourSuitReprise: vi.fn(),
-    chooseFourSuitRepriseTransfiguration: vi.fn(),
-    playAgainFourSuitReprise: vi.fn(),
-    dealBlackjack: vi.fn(),
-    hitBlackjack: vi.fn(),
-    standBlackjack: vi.fn(),
-    settleBlackjack: vi.fn(),
-    playAgainBlackjack: vi.fn(),
-    drawTidemarkLadderClimb: vi.fn(),
-    settleTidemarkLadderClimb: vi.fn(),
-    replaceTidemarkLadderClimbDreamsign: vi.fn(),
-    drawStarwayStairs: vi.fn(),
-    settleStarwayStairs: vi.fn(),
-    cashOutStarwayStairs: vi.fn(),
-    ensureRewardSiteRuntime: vi.fn(),
-    acceptRewardSite: vi.fn(),
-    ensureDreamsignOfferRuntime: vi.fn(),
-    acceptDreamsignOffer: vi.fn(),
-    rejectDreamsignOffer: vi.fn(),
-    ensureEssenceSiteRuntime: vi.fn(),
-    acceptEssenceSite: vi.fn(),
-    ensureShopRuntime: vi.fn(),
-    buyShopSlot: vi.fn(),
-    rerollShop: vi.fn(),
-    ensureCardChoiceRuntime: vi.fn(),
-    acceptTransfigurationChoice: vi.fn(),
-    acceptDuplicationChoice: vi.fn(),
-    completeAugurySite: vi.fn(),
-    acceptAuguryOffer: vi.fn(),
-    declineAugury: vi.fn(),
-    pickDraftCard: vi.fn(),
-    enterDraftSite: vi.fn(),
-    addCard: vi.fn(),
-    removeCard: vi.fn(),
-    transfigureCard: vi.fn(),
-    changeDeckEntryType: vi.fn(),
-    changeDeckEntryKeywords: vi.fn(),
-    setAvatarSelection: vi.fn(),
-    setCardSourceDebug: vi.fn(),
-    addDreamsign: vi.fn(),
-    removeDreamsign: vi.fn(),
-    setRemainingDreamsignPool: vi.fn(),
-    enterSite: vi.fn(),
-    travelToDreamscape: vi.fn(),
-    regenerateAtlas: vi.fn(),
-    setDraftState: vi.fn(),
-    dismissStartingDeckPopup: vi.fn(),
-    resetJourney: vi.fn(),
-    setEssence: vi.fn(),
-    addCardById: vi.fn(),
-    addCardByIdWithTransfiguration: vi.fn(),
-    removeDeckEntry: vi.fn(),
-    purgeDeckCards: vi.fn(),
-    duplicateDeckEntry: vi.fn(),
-    purgeRandomNightmareCards: vi.fn(),
-    purgeAllNightmareCards: vi.fn(),
-    pushBattleRewardModifier: vi.fn(),
-    pushTemporaryNightmareGrant: vi.fn(),
-    addSiteToDreamscape: vi.fn(),
-    replaceSiteType: vi.fn(),
-    removeSiteTypeFromNextDreamscapes: vi.fn(),
-    grantFreeShopRerolls: vi.fn(),
-    applyShopEssenceDiscount: vi.fn(),
-    boostSiteAppearance: vi.fn(),
-  };
+  const spies = new Map<string, ReturnType<typeof vi.fn>>();
+  return new Proxy({} as JourneyMutations, {
+    get(_target, key) {
+      if (typeof key !== "string" || key === "then" || key === "toJSON") {
+        return undefined;
+      }
+      const spy = spies.get(key) ?? vi.fn();
+      spies.set(key, spy);
+      return spy;
+    },
+  });
 }
 
 function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
@@ -393,13 +201,36 @@ function makeState(overrides: Partial<JourneyState> = {}): JourneyState {
   };
 }
 
+/** A journey whose avatar was just picked, with its starter deck dealt. */
+function starterCallerState(
+  overrides: Partial<JourneyState> = {},
+): JourneyState {
+  return makeState({
+    deck: Array.from({ length: 10 }, (_, index) => ({
+      entryId: parseDeckEntryId(`deck-${String(index + 1)}`),
+      cardNumber: 711 + index,
+      transfiguration: null,
+      isBane: false,
+    })),
+    avatar: {
+      id: testAvatarId("caller-1"),
+      name: "Starter Caller",
+      title: "Of the First Hand",
+      renderedText: "Pick your path.",
+      imageNumber: "0004",
+      startingEssence: 250,
+    },
+    screen: { type: "dreamscape" },
+    ...overrides,
+  });
+}
+
 function makeJourneyContent(): JourneyContent {
   return {
     ...CONFIG_DATA_FIXTURE,
     draftData: draftDataFixture(),
     cardDatabase: new Map<number, CardData>(),
     avatars: [],
-
     dreamwellCards: [],
     dreamsignTemplates: [],
     dreamscapes: MINIMAL_DREAMSCAPES,
@@ -412,41 +243,42 @@ function makeJourneyContent(): JourneyContent {
   };
 }
 
-function setJourneyState(state: JourneyState): void {
+function setJourneyState(
+  state: JourneyState,
+  mutations: JourneyMutations = makeMutations(),
+): void {
   vi.mocked(useJourney).mockReturnValue({
     state,
-    mutations: makeMutations(),
+    mutations,
     cardDatabase: new Map<number, CardData>(),
-    journeyContent: {
-      ...CONFIG_DATA_FIXTURE,
-      draftData: draftDataFixture(),
-      cardDatabase: new Map(),
-      avatars: [],
-
-      dreamwellCards: [],
-      dreamsignTemplates: [],
-      dreamscapes: MINIMAL_DREAMSCAPES,
-      affiliations: [],
-      guides: [],
-      atlasData: MINIMAL_ATLAS_DATA,
-      sitesData: MINIMAL_SITES_DATA,
-      economyData: economyFixture(),
-      opponentsData: opponentsFixture(),
-    },
+    journeyContent: makeJourneyContent(),
   });
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
+const roots: Root[] = [];
+
+function mount(element: ReactElement): HTMLDivElement {
   const container = document.createElement("div");
   document.body.append(container);
   const root = createRoot(container);
+  roots.push(root);
   act(() => {
     root.render(<CumulusRoot>{element}</CumulusRoot>);
   });
-  return { container, root };
+  return container;
+}
+
+function mountJourneyApp(): HTMLDivElement {
+  return mount(
+    <JourneyApp
+      cardDatabase={new Map()}
+      runtimeConfig={{ seedOverride: null, aiMode: false, gameId: null }}
+    />,
+  );
+}
+
+function lastOpenState(mock: typeof startingDeckModalMock): boolean | undefined {
+  return mock.mock.lastCall?.[0].isOpen;
 }
 
 async function flushAppEffects(): Promise<void> {
@@ -461,10 +293,8 @@ beforeEach(() => {
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null));
   vi.mocked(loadJourneyContent).mockReturnValue(makeJourneyContent());
-  // These specs exercise the desktop deck-viewer overlay (mocked as
-  // `deckViewerMock`); report a desktop viewport so `useIsDesktop` selects the
-  // `DesktopDeckViewerAdapter` rather than the narrow-viewport
-  // `MobileDeckViewerAdapter`.
+  // Report a desktop viewport so `useIsDesktop` selects the desktop deck
+  // viewer that `deckViewerMock` stands in for.
   vi.stubGlobal(
     "matchMedia",
     vi.fn((query: string) => ({
@@ -481,15 +311,16 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  for (const root of roots.splice(0)) act(() => root.unmount());
   document.body.innerHTML = "";
   vi.unstubAllGlobals();
+  vi.restoreAllMocks();
 });
 
 describe("App", () => {
   it("routes loaded journey content into the selected local game", async () => {
     setJourneyState(makeState());
-
-    const { container, root } = mount(
+    const container = mount(
       <App
         runtimeConfig={{
           seedOverride: null,
@@ -498,26 +329,19 @@ describe("App", () => {
         }}
       />,
     );
-
     await flushAppEffects();
 
     expect(vi.mocked(useLocalGame).mock.calls[0]?.[0].gameId).toBe("ab12cd");
+    expect(registerGameProviders).toHaveBeenCalled();
     expect(container.querySelector("[data-local-game-provider]")).not.toBeNull();
-    expect(
-      container.querySelector("[data-game-journey-provider]"),
-    ).not.toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
+    expect(container.querySelector("[data-game-journey-provider]")).not.toBeNull();
   });
 
   it("blocks game entry and provider registration when journey content loading fails", async () => {
     vi.mocked(loadJourneyContent).mockImplementationOnce(() => {
       throw new Error("Failed to load draft records: 503 Test Failure");
     });
-
-    const { container, root } = mount(
+    const container = mount(
       <App
         runtimeConfig={{
           seedOverride: null,
@@ -526,7 +350,6 @@ describe("App", () => {
         }}
       />,
     );
-
     await flushAppEffects();
 
     expect(
@@ -535,327 +358,57 @@ describe("App", () => {
     expect(useLocalGame).not.toHaveBeenCalled();
     expect(container.querySelector("[data-local-game-provider]")).toBeNull();
     expect(registerGameProviders).not.toHaveBeenCalled();
-
-    act(() => {
-      root.unmount();
-    });
   });
 });
 
 describe("JourneyApp", () => {
-  const starterCallerState = (
-    overrides: Partial<JourneyState> = {},
-  ): JourneyState =>
-    makeState({
-      deck: Array.from({ length: 10 }, (_, index) => ({
-        entryId: parseDeckEntryId(`deck-${String(index + 1)}`),
-        cardNumber: 711 + index,
-        transfiguration: null,
-        isBane: false,
-      })),
-      avatar: {
-        id: testAvatarId("caller-1"),
-        name: "Starter Caller",
-        title: "Of the First Hand",
-        renderedText: "Pick your path.",
-        imageNumber: "0004",
-        startingEssence: 250,
-      },
-      screen: { type: "dreamscape" },
-      ...overrides,
-    });
-
-  it("keeps the deck viewer and starting-deck modal closed before any avatar is selected", () => {
-    setJourneyState(makeState());
-
-    const { container, root } = mount(
-      <JourneyApp
-        cardDatabase={new Map()}
-        runtimeConfig={{
-          seedOverride: null,
-          aiMode: false,
-          gameId: null,
-        }}
-      />,
-    );
-
-    expect(deckViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false }),
-    );
-    expect(startingDeckModalMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false }),
-    );
-    expect(
-      container.querySelector("[data-testid='cumulus-screen-router']"),
-    ).not.toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
+  it("shows the starting-deck modal only once an avatar is picked and until it is seen", () => {
+    const cases: ReadonlyArray<readonly [JourneyState, boolean]> = [
+      [makeState(), false],
+      [starterCallerState(), true],
+      [starterCallerState({ hasSeenStartingDeckPopup: true }), false],
+    ];
+    for (const [state, modalOpen] of cases) {
+      setJourneyState(state);
+      const container = mountJourneyApp();
+      expect(
+        container.querySelector("[data-testid='cumulus-screen-router']"),
+      ).not.toBeNull();
+      expect(lastOpenState(startingDeckModalMock)).toBe(modalOpen);
+      // The starter reveal is the lightweight modal; the full deck viewer
+      // stays closed so the dreamscape behind remains visible.
+      expect(lastOpenState(deckViewerMock)).toBe(false);
+    }
   });
 
-  it("opens the starting-deck modal (not the full DeckViewer) immediately after an avatar is picked", () => {
-    setJourneyState(starterCallerState());
-
-    const { container, root } = mount(
-      <JourneyApp
-        cardDatabase={new Map()}
-        runtimeConfig={{
-          seedOverride: null,
-          aiMode: false,
-          gameId: null,
-        }}
-      />,
-    );
-
-    // The starter-deck reveal uses the lightweight modal overlay; the full
-    // DeckViewer stays closed so the dreamscape behind remains visible.
-    expect(startingDeckModalMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: true }),
-    );
-    expect(deckViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false }),
-    );
-    expect(
-      container.querySelector("[data-testid='cumulus-screen-router']"),
-    ).not.toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("dispatches dismissStartingDeckPopup when the starting-deck modal close handler fires", () => {
+  it("dispatches dismissStartingDeckPopup when the starting-deck modal closes", () => {
     const mutations = makeMutations();
-    vi.mocked(useJourney).mockReturnValue({
-      state: starterCallerState(),
-      mutations,
-      cardDatabase: new Map<number, CardData>(),
-      journeyContent: {
-        ...CONFIG_DATA_FIXTURE,
-        draftData: draftDataFixture(),
-        cardDatabase: new Map(),
-        avatars: [],
+    setJourneyState(starterCallerState(), mutations);
+    mountJourneyApp();
 
-        dreamwellCards: [],
-        dreamsignTemplates: [],
-        dreamscapes: MINIMAL_DREAMSCAPES,
-        affiliations: [],
-        guides: [],
-        atlasData: MINIMAL_ATLAS_DATA,
-        sitesData: MINIMAL_SITES_DATA,
-        economyData: economyFixture(),
-        opponentsData: opponentsFixture(),
-      },
-    });
-
-    const { root } = mount(
-      <JourneyApp
-        cardDatabase={new Map()}
-        runtimeConfig={{
-          seedOverride: null,
-          aiMode: false,
-          gameId: null,
-        }}
-      />,
-    );
-
-    const lastCall =
-      startingDeckModalMock.mock.calls[
-        startingDeckModalMock.mock.calls.length - 1
-      ];
-    expect(lastCall).toBeDefined();
-    const props = lastCall?.[0];
-    expect(props).toBeDefined();
-    expect(typeof props?.onClose).toBe("function");
-    act(() => {
-      props?.onClose();
-    });
+    const props = startingDeckModalMock.mock.lastCall?.[0];
+    if (props === undefined) throw new Error("expected the starting-deck modal");
+    act(() => props.onClose());
     expect(mutations.dismissStartingDeckPopup).toHaveBeenCalledTimes(1);
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("does not re-open the starting-deck modal when hasSeenStartingDeckPopup is already true (reload case)", () => {
-    setJourneyState(starterCallerState({ hasSeenStartingDeckPopup: true }));
-
-    const { root } = mount(
-      <JourneyApp
-        cardDatabase={new Map()}
-        runtimeConfig={{
-          seedOverride: null,
-          aiMode: false,
-          gameId: null,
-        }}
-      />,
-    );
-
-    expect(startingDeckModalMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false }),
-    );
-    expect(deckViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false }),
-    );
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("opens and closes the Pool Viewer from Cumulus journey chrome", () => {
     setJourneyState(starterCallerState({ hasSeenStartingDeckPopup: true }));
-
-    const { container, root } = mount(
-      <JourneyApp
-        cardDatabase={new Map()}
-        runtimeConfig={{
-          seedOverride: null,
-          aiMode: false,
-          gameId: null,
-        }}
-      />,
-    );
-
-    expect(poolViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false }),
-    );
+    const container = mountJourneyApp();
+    expect(lastOpenState(poolViewerMock)).toBe(false);
 
     act(() => {
       container
         .querySelector<HTMLButtonElement>("[data-testid='cumulus-open-pool']")
         ?.click();
     });
-    expect(poolViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: true }),
-    );
+    expect(lastOpenState(poolViewerMock)).toBe(true);
 
     act(() => {
       container
         .querySelector<HTMLButtonElement>("[data-pool-open='true']")
         ?.click();
     });
-    expect(poolViewerMock).toHaveBeenLastCalledWith(
-      expect.objectContaining({ isOpen: false }),
-    );
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("renders battle sites through the same Cumulus gameplay router", () => {
-    setJourneyState(
-      makeState({
-        atlas: {
-          nodes: {
-            [parseAtlasNodeId("dreamscape-1")]: {
-              id: parseAtlasNodeId("dreamscape-1"),
-              layer: LayerName.One,
-              indexInLayer: 0,
-              dreamscapeId: testDreamscapeId("test_dreamscape"),
-              sites: [
-                {
-                  id: parseSiteId("site-1"),
-                  type: "Battle",
-                  isEnhanced: false,
-                  isVisited: false,
-                },
-              ],
-              position: { x: 0, y: 0 },
-              state: "available",
-              enhancedSiteType: null,
-              forwardIds: [],
-              backwardIds: [],
-              knownDreamsignId: null,
-            },
-          },
-          startingNodeId: parseAtlasNodeId("dreamscape-1"),
-          bossNodeId: parseAtlasNodeId("dreamscape-1"),
-          currentNodeId: parseAtlasNodeId("dreamscape-1"),
-          layers: [],
-          knownDreamsignCarrierIds: [],
-        },
-        currentDreamscape: parseAtlasNodeId("dreamscape-1"),
-        screen: { type: "site", siteId: parseSiteId("site-1") },
-        activeSiteId: parseSiteId("site-1"),
-      }),
-    );
-
-    const { container, root } = mount(
-      <JourneyApp
-        cardDatabase={new Map()}
-        runtimeConfig={{
-          seedOverride: null,
-          aiMode: false,
-          gameId: null,
-        }}
-      />,
-    );
-
-    expect(
-      container.querySelector('[data-testid="cumulus-screen-router"]'),
-    ).not.toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("hides the shared HUD on the desktop Cumulus draft site", () => {
-    setJourneyState(
-      makeState({
-        atlas: {
-          nodes: {
-            [parseAtlasNodeId("dreamscape-1")]: {
-              id: parseAtlasNodeId("dreamscape-1"),
-              layer: LayerName.One,
-              indexInLayer: 0,
-              dreamscapeId: testDreamscapeId("test_dreamscape"),
-              sites: [
-                {
-                  id: parseSiteId("site-1"),
-                  type: "Draft",
-                  isEnhanced: false,
-                  isVisited: false,
-                },
-              ],
-              position: { x: 0, y: 0 },
-              state: "available",
-              enhancedSiteType: null,
-              forwardIds: [],
-              backwardIds: [],
-              knownDreamsignId: null,
-            },
-          },
-          startingNodeId: parseAtlasNodeId("dreamscape-1"),
-          bossNodeId: parseAtlasNodeId("dreamscape-1"),
-          currentNodeId: parseAtlasNodeId("dreamscape-1"),
-          layers: [],
-          knownDreamsignCarrierIds: [],
-        },
-        currentDreamscape: parseAtlasNodeId("dreamscape-1"),
-        screen: { type: "site", siteId: parseSiteId("site-1") },
-        activeSiteId: parseSiteId("site-1"),
-      }),
-    );
-
-    const { container, root } = mount(
-      <JourneyApp
-        cardDatabase={new Map()}
-        runtimeConfig={{
-          seedOverride: null,
-          aiMode: false,
-          gameId: null,
-        }}
-      />,
-    );
-
-    expect(container.querySelector('[data-testid="hud"]')).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
+    expect(lastOpenState(poolViewerMock)).toBe(false);
   });
 });

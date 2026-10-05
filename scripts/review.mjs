@@ -181,7 +181,7 @@ async function acquireLock() {
   }
 }
 
-let child = null;
+const children = new Set();
 let lockHeld = false;
 
 function releaseLock() {
@@ -196,7 +196,7 @@ function releaseLock() {
 
 for (const signal of ["SIGINT", "SIGTERM"]) {
   process.on(signal, () => {
-    if (child !== null) child.kill(signal);
+    for (const running of children) running.kill(signal);
     // Leave the owner record in place while a signalled child unwinds. The
     // next review waits for that exact PID, then recovers the stale lock.
     process.exit(signal === "SIGINT" ? 130 : 143);
@@ -252,13 +252,20 @@ function commandFor(step, extraArgs = []) {
   ];
 }
 
+/**
+ * Runs one review step. A buffered step collects its output and prints it as
+ * one block when it exits, so concurrent steps never interleave lines.
+ */
 async function runStep(
   step,
   extraArgs = [],
-  { isolateLocalAssets = true } = {},
+  { isolateLocalAssets = true, buffered = false } = {},
 ) {
+  if (step === "typecheck" && shareTypecheckState) {
+    seedTypecheckState(typecheckPaths);
+  }
   const [command, args] = commandFor(step, extraArgs);
-  console.log(`\n[review] ${step}`);
+  if (!buffered) console.log(`\n[review] ${step}`);
   const startedAt = Date.now();
   const env = isolateLocalAssets
     ? {
@@ -272,30 +279,58 @@ async function runStep(
         ),
       }
     : process.env;
-  child = spawn(command, args, { cwd: root, env, stdio: "inherit" });
+  const child = spawn(command, args, {
+    cwd: root,
+    env,
+    stdio: buffered ? ["ignore", "pipe", "pipe"] : "inherit",
+  });
+  children.add(child);
+  const output = [];
+  child.stdout?.on("data", (chunk) => output.push(chunk));
+  child.stderr?.on("data", (chunk) => output.push(chunk));
   writeOwner({ childPid: child.pid, step });
   const exitCode = await new Promise((resolveExit, reject) => {
     child.once("error", reject);
-    child.once("exit", (code, signal) => {
+    child.once("close", (code, signal) => {
       if (signal !== null) resolveExit(128 + (signal === "SIGINT" ? 2 : 15));
       else resolveExit(code ?? 1);
     });
   });
-  child = null;
+  children.delete(child);
   writeOwner({ step });
   const seconds = ((Date.now() - startedAt) / 1_000).toFixed(1);
+  if (buffered) {
+    console.log(`\n[review] ${step}`);
+    process.stdout.write(Buffer.concat(output));
+  }
   console.log(`[review] ${step} finished in ${seconds}s`);
+  if (step === "typecheck" && exitCode === 0 && shareTypecheckState) {
+    publishTypecheckState(typecheckPaths);
+  }
   return exitCode;
+}
+
+/** Runs independent steps concurrently; returns the first failing exit code. */
+async function runConcurrentSteps(steps) {
+  const exitCodes = await Promise.all(
+    steps.map(({ step, args }) => runStep(step, args, { buffered: true })),
+  );
+  return exitCodes.find((exitCode) => exitCode !== 0) ?? 0;
 }
 
 function executionPlan() {
   const needsPreparedWorkspace = reviewNeedsPreparedWorkspace(reviewPlan);
 
   if (task === "full") {
+    // Lint and typecheck share no state, so they overlap.
     return [
       { step: "prepare", args: [] },
-      { step: "lint", args: [] },
-      { step: "typecheck", args: [] },
+      {
+        concurrent: [
+          { step: "lint", args: [] },
+          { step: "typecheck", args: [] },
+        ],
+      },
       { step: "test", args: [] },
     ];
   }
@@ -373,15 +408,11 @@ try {
   if (steps.length === 0) {
     console.log("[review] no applicable checks");
   }
-  for (const { step, args } of steps) {
-    if (step === "typecheck" && shareTypecheckState) {
-      seedTypecheckState(typecheckPaths);
-    }
-    const exitCode = await runStep(step, args);
-    if (step === "prepare" && exitCode === 0) restoreLocalAssets = true;
-    if (step === "typecheck" && exitCode === 0 && shareTypecheckState) {
-      publishTypecheckState(typecheckPaths);
-    }
+  for (const entry of steps) {
+    const exitCode = entry.concurrent === undefined
+      ? await runStep(entry.step, entry.args)
+      : await runConcurrentSteps(entry.concurrent);
+    if (entry.step === "prepare" && exitCode === 0) restoreLocalAssets = true;
     if (exitCode !== 0) {
       process.exitCode = exitCode;
       break;
