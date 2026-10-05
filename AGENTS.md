@@ -41,6 +41,9 @@ makes one commit, and never runs `bd`, `tg candidate`, `tg approve`, or
   UNIQUE. A map or set keyed by card name, or comparing card names for
   equality, is ALWAYS A BUG; eradicate it when spotted. Resolve names only
   immediately before display in the UI.
+- **Identities use branded types** from the `parse*`/brand helpers in
+  `src/types/identifiers.ts` and `src/types/card-identity.ts`, never raw
+  `string`; `dreamtides/no-raw-string-identity` enforces this.
 - **Never commit image files.** QA screenshots go to the gitignored
   `artifacts/qa/<bead-id>/` and are referenced by filename only.
 - **Log new features** well enough to reconstruct what an algorithm did in a

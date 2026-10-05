@@ -98,6 +98,7 @@ function normalizeHydratedKeyword(
  * Normalizes a figment subtype to its catalog lookup key: trimmed and
  * lower-cased. Mirrors the normalization used elsewhere for figment subtypes.
  */
+// eslint-disable-next-line dreamtides/no-raw-string-identity -- normalizes untrusted card subtype text into a FigmentCatalogKey
 export function normalizeFigmentCatalogKey(subtype: string): FigmentCatalogKey {
   return parseFigmentCatalogKey(subtype.trim().toLowerCase());
 }
@@ -215,6 +216,7 @@ export function resetFigmentCatalogHydration(): void {
  * hydrated catalog when loaded, falling back to the built-in defaults.
  */
 export function lookupFigmentCatalogEntry(
+  // eslint-disable-next-line dreamtides/no-raw-string-identity -- accepts untrusted, non-normalized card subtype text
   subtype: string,
 ): FigmentCatalogEntry | undefined {
   if (subtype.trim() === "") return undefined;

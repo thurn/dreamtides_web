@@ -100,6 +100,7 @@ function parseParagraph(
  * event-frame purple.
  */
 export function parseTutorialInstructionMarkup(
+  // eslint-disable-next-line dreamtides/no-raw-string-identity -- source is authored tutorial markup text, not a domain identity
   source: string,
 ): readonly TutorialInstructionParagraph[] {
   return source
@@ -110,6 +111,7 @@ export function parseTutorialInstructionMarkup(
 }
 
 /** Return the player-visible copy with highlight tags removed. */
+// eslint-disable-next-line dreamtides/no-raw-string-identity -- source is authored tutorial markup text, not a domain identity
 export function tutorialInstructionPlainText(source: string): string {
   return source.replace(KNOWN_TAG_PATTERN, "");
 }

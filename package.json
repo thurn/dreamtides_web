@@ -24,7 +24,6 @@
     "setup-assets": "tsx scripts/setup-assets.ts",
     "prepare-workspace": "node scripts/prepare-workspace.mjs",
     "cumulus-tokens": "node scripts/generate-cumulus-tokens.mjs",
-    "audit:domain-strings": "node scripts/domain-string-audit.mjs",
     "send-screenshots": "node scripts/send-screenshots-to-discord.mjs",
     "device-screenshots": "node scripts/device-screenshots.mjs",
     "screenshots:desktop": "node scripts/desktop-screenshots.mjs",

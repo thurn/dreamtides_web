@@ -42,8 +42,6 @@ describe("fast review plan", () => {
       ],
       shouldTypecheck: true,
       testInputs: [
-        "scripts/cumulus-ui-boundary.test.mjs",
-        "scripts/domain-string-audit.test.mjs",
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
       ],
@@ -69,23 +67,18 @@ describe("fast review plan", () => {
       lintFiles: ["src/live.ts"],
       shouldTypecheck: true,
       testInputs: [
-        "scripts/cumulus-ui-boundary.test.mjs",
-        "scripts/domain-string-audit.test.mjs",
         "src/live.ts",
       ],
     });
   });
 
-  it("selects source-tree contracts for deleted production files", () => {
+  it("typechecks deleted production files without selecting tests", () => {
     expect(
       buildReviewPlan(["src/screens/RemovedScreen.tsx"], () => false),
     ).toMatchObject({
       lintFiles: [],
       shouldTypecheck: true,
-      testInputs: [
-        "scripts/cumulus-ui-boundary.test.mjs",
-        "scripts/domain-string-audit.test.mjs",
-      ],
+      testInputs: [],
     });
   });
 });

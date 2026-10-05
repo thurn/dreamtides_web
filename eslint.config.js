@@ -7,6 +7,7 @@ import noNameKeyedCards from "./eslint-rules/no-name-keyed-cards.js";
 import noRawIconClasses from "./eslint-rules/no-raw-icon-classes.js";
 import noRawInteractiveElements from "./eslint-rules/no-raw-interactive-elements.js";
 import noRawSafeAreaEnv from "./eslint-rules/no-raw-safe-area-env.js";
+import noRawStringIdentity from "./eslint-rules/no-raw-string-identity.js";
 import noUntokenizedLengths from "./eslint-rules/no-untokenized-lengths.js";
 import validTokenReferences from "./eslint-rules/valid-token-references.js";
 
@@ -22,6 +23,7 @@ const dreamtides = {
     "no-raw-icon-classes": noRawIconClasses,
     "no-raw-interactive-elements": noRawInteractiveElements,
     "no-raw-safe-area-env": noRawSafeAreaEnv,
+    "no-raw-string-identity": noRawStringIdentity,
     "no-untokenized-lengths": noUntokenizedLengths,
     "valid-token-references": validTokenReferences,
   },
@@ -72,6 +74,26 @@ export default tseslint.config(
     files: SOURCE,
     rules: {
       "dreamtides/no-name-keyed-cards": "error",
+    },
+  },
+  {
+    // Identities are branded types minted by the parse*/brand helpers in
+    // src/types/identifiers.ts and src/types/card-identity.ts, tests included.
+    files: SOURCE,
+    rules: {
+      "dreamtides/no-raw-string-identity": "error",
+    },
+  },
+  {
+    // Production domain values such as kind, seed, and zone are branded or
+    // closed unions too; tests and the shared test identities may stay loose.
+    files: SOURCE,
+    ignores: [...TESTS, "src/types/test-identities.ts"],
+    rules: {
+      "dreamtides/no-raw-string-identity": [
+        "error",
+        { checkSemanticNames: true },
+      ],
     },
   },
   {

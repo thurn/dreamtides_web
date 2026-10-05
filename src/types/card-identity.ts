@@ -95,6 +95,7 @@ export function isCardId(value: string): boolean {
 }
 
 function brandCardId(value: string): CardId {
+  // eslint-disable-next-line dreamtides/no-raw-string-identity -- private minting boundary; callers validate the UUID shape first
   return value as CardId;
 }
 

@@ -39,6 +39,7 @@ interface ReplayFixture {
   providerSet: string;
   genesis: Genesis;
   events: SeqEvent[];
+  // eslint-disable-next-line dreamtides/no-raw-string-identity -- the replay fixture records the expected state hash as raw JSON text
   finalHash: string;
 }
 
@@ -46,6 +47,7 @@ function parseReplayFixture(raw: {
   providerSet: string;
   genesis: unknown;
   events: Array<{ seq: number; event: unknown }>;
+  // eslint-disable-next-line dreamtides/no-raw-string-identity -- the replay fixture records the expected state hash as raw JSON text
   finalHash: string;
 }): ReplayFixture {
   const genesis = decodeGenesis(JSON.stringify(raw.genesis));
