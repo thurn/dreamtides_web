@@ -5,9 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 // with the game entry only, so the /cumulus docs and editor tools keep normal
 // text selection. See src/cumulus/primitives/cumulus-base.css.
 import "./cumulus/primitives/cumulus-base.css";
-import type { Database } from "firebase/database";
 import type { CardData } from "./types/cards";
-import { parseFoldHash } from "./types/content-hash";
+import { parseFoldHash, type FoldHash } from "./types/content-hash";
 import type { JourneyContent } from "./data/journey-content";
 import {
   buildAvatarTides4Provenance,
@@ -15,15 +14,11 @@ import {
 } from "./data/journey-content";
 import { loadTutorialConfiguration } from "./data/tutorial-actions";
 import { tutorialStarterDeckSize } from "./data/tutorial-actions";
-import { getFirebaseDatabase } from "./firebase/app-config";
-import { RoomGate } from "./coop/RoomGate";
-import {
-  CoopProvider,
-  useConfirmedHead,
-  useConnectedCount,
-} from "./coop/hooks";
-import { EventLogViewer } from "./coop/EventLogViewer";
+import { ConfigGateScreen } from "./coop/ConfigGateScreen";
 import { registerGameProviders } from "./coop/providers/register-game-providers";
+import { LocalGameProvider, useConfirmedHead } from "./session/hooks";
+import { useLocalGame } from "./session/use-local-game";
+import type { FrontDoorEntry } from "./session/genesis";
 import { useJourney } from "./state/journey-context";
 import { CoopJourneyProvider } from "./state/coop-journey-context";
 import { FrontDoorProvider } from "./state/front-door-context";
@@ -47,14 +42,16 @@ import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { getSavedJourney } from "./state/saved-journeys";
 import { logEvent } from "./logging";
-import type { RuntimeConfig } from "./runtime/runtime-config";
+import {
+  contentConfigFromRuntime,
+  type RuntimeConfig,
+} from "./runtime/runtime-config";
 import {
   DECK_VIEWER_SCENE_ID,
   POOL_VIEWER_SCENE_ID,
   findQaScene,
 } from "./runtime/qa-scenes";
 import { useJourneyUrlSync } from "./runtime/use-journey-url-sync";
-import type { JourneyState, SiteState } from "./types/journey";
 
 /** Inner component that renders the gameplay router and retained app overlays. */
 export function JourneyApp({
@@ -70,31 +67,25 @@ export function JourneyApp({
     journeyContent.draftData.pool.defaultStrategy;
   // Reflect the current screen into the address-bar path (e.g.
   // `/dreamscape/ember-wood/purge`, `/atlas`) so the URL shows where the player
-  // is. Passive reflection via `history.replaceState`; the `?game=<roomId>`
+  // is. Passive reflection via `history.replaceState`; the `?game=<gameId>`
   // query param remains the resume key. See `useJourneyUrlSync`.
   useJourneyUrlSync();
   // The starter-deck reveal popup is shown the first time a player picks a
   // Avatar. Visibility is driven entirely by persisted journey state
   // (`avatar` set + `hasSeenStartingDeckPopup` false) so a reload of the
   // same `?game=` URL does not re-open the popup. The flag round-trips
-  // through `normalizeJourneyState` so a fresh client joining the same room
-  // also sees the correct state. The popup uses a full-bleed alpha scrim on
+  // through `normalizeJourneyState` with the rest of the saved game. The popup uses a full-bleed alpha scrim on
   // mobile and a centered bounded glass panel on desktop, layered on top of the
   // live dreamscape; the HUD and screen return once it is dismissed.
   const showStarterDeckIntro =
     state.avatar !== null && !state.hasSeenStartingDeckPopup;
   const isDesktopViewport = useIsDesktop();
-  const activeSite = resolveActiveSite(state);
-  const activeSiteType = activeSite?.type ?? null;
-  const showConnectedCount =
-    activeSiteType === "Purge" || activeSiteType === "Shop";
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
   const [journeyEditorOpen, setJourneyEditorOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
   const confirmedHead = useConfirmedHead();
-  const connectedCount = useConnectedCount();
   const previousScreenTypeRef = useRef(state.screen.type);
   const gotoSceneFiredRef = useRef(false);
   const openDeckFiredRef = useRef(false);
@@ -109,11 +100,11 @@ export function JourneyApp({
   >(loadJourneyName === null ? "idle" : "pending");
   const [, setLoadJourneyError] = useState<string | null>(null);
 
-  // `?goto=<scene>`: replace the freshly created room's empty journey state with
+  // `?goto=<scene>`: replace the freshly created game's empty journey state with
   // one parked on a developer QA scene (e.g. `?goto=atlas`), letting browser QA
   // open screens that are otherwise reachable only by playing battles forward.
-  // Fires once per mount, and the multiplayer mutation guards on
-  // `avatar === null` so a reload is a no-op.
+  // Fires once per mount, and the mutation guards on `avatar === null` so a
+  // reload is a no-op.
   useEffect(() => {
     const gotoScene = runtimeConfig.gotoScene ?? null;
     if (
@@ -176,7 +167,7 @@ export function JourneyApp({
   }, [runtimeConfig.gotoScene, state.avatar]);
 
   // `?loadJourney=<name>`: fetch the named snapshot from the dev server and
-  // replace the room's journey state with it, then render the loaded run. Once
+  // replace the game's journey state with it, then render the loaded run. Once
   // the snapshot is applied, the `loadJourney` param is stripped from the URL so
   // a later reload — including a Vite HMR full reload triggered by editing a
   // file — keeps the in-session run instead of re-applying the snapshot and
@@ -316,8 +307,8 @@ export function JourneyApp({
   }, [mutations]);
 
   // `?goto=<scene>`: hold a loading screen — rather than the Avatar
-  // selection screen — until `bootstrapQaScene` round-trips through Firebase,
-  // so QA lands directly on the requested scene (e.g. the Dream Atlas). Scenes
+  // selection screen — until `bootstrapQaScene` has folded into the game, so QA
+  // lands directly on the requested scene (e.g. the Dream Atlas). Scenes
   // whose destination *is* the Avatar selection screen (`landsOnJourneyStart`)
   // are exempt: their state keeps `avatar` null, so this gate — which waits
   // for an Avatar to be selected — would otherwise spin forever.
@@ -391,8 +382,7 @@ export function JourneyApp({
             onLoadJourneyState: mutations.loadJourneyState,
             onRegenerateAtlas: handleRegenerateAtlas,
             elevated: deckViewerOpen && !isDesktopViewport,
-            showConnectedCount: !showConnectedCount,
-            connectedCount,
+            showConnectedCount: false,
           }}
         />
         {/*
@@ -501,18 +491,6 @@ function stripLoadJourneyParam(): void {
   window.history.replaceState(window.history.state, "", url.toString());
 }
 
-/** The site the run is currently parked on, or null when it cannot be resolved. */
-function resolveActiveSite(state: JourneyState): SiteState | null {
-  if (state.screen.type !== "site" || state.currentDreamscape === null) {
-    return null;
-  }
-  const siteId = state.screen.siteId;
-  const site = state.atlas.nodes[state.currentDreamscape]?.sites.find(
-    (candidate) => candidate.id === siteId,
-  );
-  return site ?? null;
-}
-
 export default function App({
   runtimeConfig,
   frontDoorEntry,
@@ -520,7 +498,7 @@ export default function App({
   previewTutorialVictory = false,
 }: {
   runtimeConfig: RuntimeConfig;
-  frontDoorEntry?: "main" | "loading" | "tutorial";
+  frontDoorEntry?: FrontDoorEntry;
   directTutorialBattle?: boolean;
   previewTutorialVictory?: boolean;
 }) {
@@ -528,8 +506,6 @@ export default function App({
     null,
   );
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [database, setDatabase] = useState<Database | null>(null);
-  const [firebaseError, setFirebaseError] = useState<string | null>(null);
 
   // Long-press context-menu suppression for the Cumulus subtree. The CSS reset
   // (cumulus-base.css) kills selection and the iOS callout, but Android raises a
@@ -568,13 +544,12 @@ export default function App({
         ...loadedContent,
         tutorial,
       };
-      // Register the reducer content providers from the loaded
-      // content BEFORE any room folds an event. Until this runs, every
-      // provider-backed event (START_JOURNEY, SELECT_AVATAR, ADD_CARD,
-      // ADD_DREAMSIGN, content-coupled OPEN_SITE / REROLL_SHOP / BEGIN_BATTLE)
-      // bounces. Registering here — before `setJourneyContent` unblocks the
-      // render that mounts RoomGate / CoopProvider — guarantees the ordering,
-      // and the registration is identical across clients on the same build.
+      // Register the reducer content providers from the loaded content BEFORE
+      // any game folds an event. Until this runs, every provider-backed event
+      // (START_JOURNEY, SELECT_AVATAR, ADD_CARD, ADD_DREAMSIGN, content-coupled
+      // OPEN_SITE / REROLL_SHOP / BEGIN_BATTLE) bounces. Registering here —
+      // before `setJourneyContent` unblocks the render that opens the local
+      // game — guarantees the ordering.
       registerGameProviders(content);
       setJourneyContent(content);
       setLoadError(null);
@@ -586,24 +561,6 @@ export default function App({
       );
     }
   }, []);
-
-  useEffect(() => {
-    if (journeyContent === null) {
-      return;
-    }
-
-    try {
-      setDatabase(getFirebaseDatabase(runtimeConfig.databaseMode));
-      setFirebaseError(null);
-    } catch (error) {
-      setDatabase(null);
-      setFirebaseError(
-        error instanceof Error
-          ? error.message
-          : "Failed to initialize Firebase.",
-      );
-    }
-  }, [journeyContent, runtimeConfig.databaseMode]);
 
   if (loadError !== null) {
     return (
@@ -647,62 +604,134 @@ export default function App({
     throw new Error("Tutorial configuration is missing from journey content.");
   }
 
-  if (firebaseError !== null) {
-    return (
-      <ApplicationStateScreen
-        view={{
-          kind: "fatalConfiguration",
-          title: "Firebase Setup Issue",
-          message: firebaseSetupHelp(runtimeConfig.databaseMode),
-          detail:
-            "Check this build’s Firebase configuration before trying again.",
-        }}
-      />
-    );
-  }
-
-  if (database === null) {
-    return (
-      <ApplicationStateScreen
-        view={{
-          kind: "loading",
-          title: "Connecting to Game Service",
-          message: "Preparing your shared game.",
-          busyLabel: "Connecting to Game Service",
-        }}
-      />
-    );
-  }
-
-  // `?viewLogs=<roomId>`: render the read-only log viewer instead of joining a
-  // game, so a production run's persisted log can be inspected without playing.
-  const viewLogsRoomId = runtimeConfig.viewLogs ?? null;
-  if (viewLogsRoomId !== null) {
-    return <EventLogViewer db={database} gameId={viewLogsRoomId} />;
-  }
-
   return (
-    <RoomGate
-      db={database}
-      gameId={runtimeConfig.gameId}
-      runtimeConfig={runtimeConfig}
-      atlasFoldHash={journeyContent.atlasData.foldHash}
-      sitesFoldHash={journeyContent.sitesData.foldHash}
-      draftData={journeyContent.draftData}
-      opponentsData={journeyContent.opponentsData}
-      economyData={journeyContent.economyData}
-      gambleData={journeyContent.gambleData}
-      transfigurationData={journeyContent.transfigurationData}
-      rewardSelectionData={journeyContent.rewardSelectionData}
-      auguryData={journeyContent.auguryData}
-      explorationFoldHash={
-        journeyContent.exploration?.foldHash ?? MISSING_EXPLORATION_FOLD_HASH
-      }
+    <LocalGameApp
+      journeyContent={journeyContent}
       tutorialFoldHash={journeyContent.tutorial.foldHash}
+      runtimeConfig={runtimeConfig}
       frontDoorEntry={frontDoorEntry}
-    >
-      {(context) => (
-        <CoopProvider context={context}>
+      directTutorialBattle={directTutorialBattle}
+      previewTutorialVictory={previewTutorialVictory}
+    />
+  );
+}
+
+/** Opens the `?game=` local game (or creates one) and renders it. */
+function LocalGameApp({
+  journeyContent,
+  tutorialFoldHash,
+  runtimeConfig,
+  frontDoorEntry,
+  directTutorialBattle,
+  previewTutorialVictory,
+}: {
+  journeyContent: JourneyContent;
+  tutorialFoldHash: FoldHash;
+  runtimeConfig: RuntimeConfig;
+  frontDoorEntry?: FrontDoorEntry;
+  directTutorialBattle: boolean;
+  previewTutorialVictory: boolean;
+}) {
+  const contentConfig = useMemo(
+    () =>
+      contentConfigFromRuntime(
+        journeyContent.atlasData.foldHash,
+        journeyContent.sitesData.foldHash,
+        journeyContent.draftData,
+        journeyContent.economyData,
+        journeyContent.gambleData,
+        journeyContent.transfigurationData,
+        journeyContent.opponentsData,
+        journeyContent.rewardSelectionData,
+        journeyContent.auguryData,
+        journeyContent.exploration?.foldHash ?? MISSING_EXPLORATION_FOLD_HASH,
+        tutorialFoldHash,
+      ),
+    [journeyContent, tutorialFoldHash],
+  );
+  const { status, createNewGame } = useLocalGame({
+    gameId: runtimeConfig.gameId,
+    contentConfig,
+    frontDoorEntry,
+  });
+  const createNewGameAction = {
+    id: "primary",
+    label: "Create New Game",
+    onPress: createNewGame,
+  } as const;
+
+  switch (status.kind) {
+    case "opening":
+    case "creating":
+      return (
+        <ApplicationStateScreen
+          view={{
+            kind: "loading",
+            title: status.kind === "creating" ? "Creating Game" : "Loading Game",
+            message: "Preparing the dream.",
+            busyLabel:
+              status.kind === "creating" ? "Creating Game" : "Loading Game",
+          }}
+        />
+      );
+    case "notFound":
+      return (
+        <ApplicationStateScreen
+          view={{
+            kind: "unreachableRoom",
+            title: "Game Not Found",
+            message: `No game ${status.gameId} is saved in this browser.`,
+            actions: [createNewGameAction],
+          }}
+        />
+      );
+    case "unreadable":
+      return (
+        <ApplicationStateScreen
+          view={{
+            kind: "unreadableRoom",
+            title: "This Game Could Not Be Read",
+            message:
+              "This game’s data cannot be loaded safely. Start a fresh game to keep playing.",
+            actions: [createNewGameAction],
+          }}
+        />
+      );
+    case "versionGate":
+      return (
+        <ApplicationStateScreen
+          view={{
+            kind: "versionGate",
+            title: "A New Version Was Released",
+            message:
+              "This game was started on an earlier version. Start a fresh game on the current version.",
+            actions: [createNewGameAction],
+          }}
+        />
+      );
+    case "configGate":
+      return (
+        <ConfigGateScreen
+          roomContentConfig={status.gameContentConfig}
+          localContentConfig={contentConfig}
+          onStartNewGame={createNewGame}
+        />
+      );
+    case "error":
+      return (
+        <ApplicationStateScreen
+          view={{
+            kind: "recoverableError",
+            title: "Something Went Wrong",
+            message: "The game could not be opened.",
+            detail: status.message,
+            actions: [{ ...createNewGameAction, label: "Try Again" }],
+          }}
+        />
+      );
+    case "ready":
+      return (
+        <LocalGameProvider game={status.game}>
           {import.meta.env.VITE_FUZZ_TEST === "1" ? <FuzzProbe /> : null}
           <CoopJourneyProvider journeyContent={journeyContent}>
             <FrontDoorProvider>
@@ -724,18 +753,7 @@ export default function App({
               </HostedPlaytestShell>
             </FrontDoorProvider>
           </CoopJourneyProvider>
-        </CoopProvider>
-      )}
-    </RoomGate>
-  );
-}
-
-function firebaseSetupHelp(
-  databaseMode: RuntimeConfig["databaseMode"],
-): string {
-  if (databaseMode === "emulator") {
-    return "Run npm start to launch the Firebase Realtime Database emulator with Vite.";
+        </LocalGameProvider>
+      );
   }
-
-  return "Required env: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_DATABASE_URL, VITE_FIREBASE_PROJECT_ID, VITE_FIREBASE_APP_ID.";
 }

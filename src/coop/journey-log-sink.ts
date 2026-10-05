@@ -28,8 +28,13 @@
 // §"Client layer" and §"Logging and observability".
 
 import { get, push, ref, runTransaction, update, type Database } from "firebase/database";
-import type { LogEntry, LogSink } from "../logging";
-import { clearLogContext, setLogContext, setLogSink } from "../logging";
+import type { JourneyLogMirror, LogEntry, LogSink } from "../logging";
+import {
+  clearLogContext,
+  createJourneyLogMirror,
+  setLogContext,
+  setLogSink,
+} from "../logging";
 import type { FoldError } from "../eventlog/fold";
 import type {
   BounceReason,
@@ -673,71 +678,9 @@ export function createCoopLogRecorder(options: CoopLogRecorderOptions): CoopLogR
 // journey-log.jsonl mirror
 // ---------------------------------------------------------------------------
 //
-// The coop shapes must ALSO reach `logs/journey-log.jsonl` (spec §Logging:
-// events reach the room `logs/` sink AND THENCE journey-log.jsonl so existing
-// tooling keeps working; Task 30 greps the file for the session's
-// `coop_event` entries). They are NOT routed through `logEvent` (which would
-// clobber their true fold `seq` with its per-session line counter — see the
-// header comment), so this mirror replicates `logEvent`'s two transports
-// VERBATIM on the fully-shaped record: a single-line `console.log` and a
-// best-effort POST to the dev server's `/api/log` endpoint.
-//
-// IMPORTANT: this delivery is what makes `coop_event`/`fold_divergence`
-// greppable in journey-log.jsonl. A future logEvent refactor must not silently
-// route these through logEvent; `journey-log-sink.test.ts` asserts the mirror
-// delivers the record verbatim (true `seq` intact) to both destinations.
-
-/**
- * POST one coop record VERBATIM to the dev-server `/api/log` middleware, best
- * effort. Mirrors `logEvent`'s `postLogEntryToDevServer` guarding exactly:
- * no-op when `fetch` is absent or under vitest (`import.meta.env.MODE`
- * === "test"), and a swallowed rejection so logging never wedges the caller.
- */
-function postCoopRecordToDevServer(record: SinkRecord): void {
-  if (typeof fetch !== "function") {
-    return;
-  }
-  try {
-    const env = (import.meta as { env?: { MODE?: string } }).env;
-    if (env?.MODE === "test") {
-      return;
-    }
-  } catch {
-    // If `import.meta.env` is unavailable, fall through — the `.catch` below
-    // still guards against unhandled rejections.
-  }
-  fetch("/api/log", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(record),
-  }).catch(() => {
-    // Best-effort: dev-server logging never wedges gameplay.
-  });
-}
-
-/** Delivers a fully-shaped coop record to the journey-log.jsonl transports. */
-export type JourneyLogMirror = (record: SinkRecord) => void;
-
-export interface JourneyLogMirrorDeps {
-  /** Console transport. Defaults to a single-line `console.log`. */
-  log?: (line: string) => void;
-  /** Dev-server transport. Defaults to a best-effort `/api/log` POST. */
-  post?: (record: SinkRecord) => void;
-}
-
-/**
- * Build the journey-log.jsonl mirror. Transports are injected so the delivery is
- * unit-testable without a console/dev-server. The record is passed VERBATIM so
- * its true `seq` survives.
- */
-export function createJourneyLogMirror(deps: JourneyLogMirrorDeps = {}): JourneyLogMirror {
-  const log = deps.log ?? ((line: string) => console.log(line));
-  const post = deps.post ?? postCoopRecordToDevServer;
-  return (record: SinkRecord) => {
-    log(JSON.stringify(record));
-    post(record);
-  };
-}
+// The coop shapes also reach `logs/journey-log.jsonl` through
+// `createJourneyLogMirror` (src/logging.ts), verbatim so their fold `seq`
+// survives.
 
 /**
  * Compose the coop `emit` callback: every shaped record is written to BOTH the

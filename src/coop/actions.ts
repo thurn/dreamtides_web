@@ -9,9 +9,9 @@
 //
 // Two construction paths so the facade is usable in both contexts:
 //   - `makeActions(append)` — a pure factory, testable in isolation with a fake
-//     append (no React, no Firebase).
-//   - `useActions()` (see hooks.ts) — binds `append` to the room's LogClient and
-//     adds the RESOLVE_PROMPT confirmed-prompt guard.
+//     append (no React, no IO).
+//   - `useActions()` (see src/session/hooks.ts) — binds `append` to the local
+//     game's log.
 //
 // Signatures mirror the legacy `JourneyMutations` call ergonomics
 // (src/state/journey-context.tsx) closely enough that Task 26 can back that
@@ -22,7 +22,7 @@
 // See docs/superpowers/specs/2026-07-01-coop-event-sourcing-rewrite-design.md
 // §"Client layer" (actions facade).
 
-import type { EventDraft } from "../eventlog/client";
+import type { EventDraft } from "../eventlog/local-log";
 import type { EventActor } from "../eventlog/types";
 import type { BeginTutorialOptions, TutorialAction } from "../types/tutorial";
 import type { GambleGameId, GravokGateId } from "../types/gamble";
@@ -65,9 +65,9 @@ import type { GameEventType } from "../rules/events";
 
 /**
  * Appends a stamped event, resolving to its committed seq. In production this
- * is the room LogClient's `submit`; in tests it is a fake that records drafts.
- * An `actor` on the draft overrides the client's own id (Task 27's AI loop
- * appends with `actor: "ai:<clientId>"`).
+ * appends to the local game's log; in tests it is a fake that records drafts.
+ * An `actor` on the draft overrides the local player's id (the AI appends with
+ * `actor: "ai:<clientId>"`).
  */
 export type AppendFn = (draft: EventDraft) => Promise<number>;
 
@@ -381,7 +381,7 @@ export interface CoopActions {
 
 /**
  * Build the action facade over an `append` function. Pure and dependency-free:
- * the caller supplies `append` (the room LogClient's `submit` in production, a
+ * the caller supplies `append` (the local game log's append in production, a
  * fake in tests), and every creator is a thin payload-builder that appends one
  * event.
  */

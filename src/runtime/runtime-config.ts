@@ -1,4 +1,4 @@
-import { normalizeRoomId } from "../eventlog/room";
+import { normalizeRoomId } from "../eventlog/game-id";
 import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
 import type { EconomyData } from "../types/economy-data";
 import type { OpponentsData } from "../types/opponents-data";

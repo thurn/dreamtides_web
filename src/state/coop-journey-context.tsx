@@ -1,9 +1,8 @@
-// The coop-backed journey context provider.
+// The event-log-backed journey context provider.
 //
-// This mounts inside `CoopProvider` (src/coop/hooks.ts) and re-backs the
-// legacy `JourneyContextValue` interface that every journey screen consumes:
-//   - `state` comes from `useGameState().journey` (the displayed fold, confirmed +
-//     optimistic), instead of the RTDB-mirrored multiplayer room.
+// This mounts inside `LocalGameProvider` (src/session/hooks.ts) and backs the
+// `JourneyContextValue` interface that every journey screen consumes:
+//   - `state` comes from `useGameState().journey`, the fold of the game log.
 //   - `mutations` are thin adapters over the Task-25 action facade
 //     (`useActions()`): each legacy `JourneyMutations` method resolves its display
 //     identifiers (cardNumber, dreamsign/dreamscape index, placement) to the
@@ -17,9 +16,6 @@
 // augury request fields) are appended directly via `useAppend()`; the reducer
 // re-validates every raw payload, so a raw append is equivalent to a facade call
 // with the extra fields present.
-//
-// See docs/superpowers/specs/2026-07-01-coop-event-sourcing-rewrite-design.md
-// §"Client layer".
 
 import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
 import type { JourneyContent } from "../data/journey-content";
@@ -136,10 +132,10 @@ export function CoopJourneyProvider({
       setAvatarSelection: (resolvedPackage) =>
         dispatch(actions.selectAvatar(resolvedPackage.avatar.id)),
       resetJourney: () => dispatch(actions.resetJourney()),
-      // The room seed is fixed at genesis, so a loaded snapshot must adopt it —
+      // The game seed is fixed at genesis, so a loaded snapshot must adopt it —
       // the reducer's LOAD_STATE validator bounces a foreign seed. These debug /
       // QA snapshots do not depend on their minted seed matching, so stamping the
-      // live room seed keeps every derived generator convergent for both clients.
+      // game seed keeps every derived generator consistent with the log.
       loadJourneyState: (snapshot) =>
         dispatch(
           actions.loadState(

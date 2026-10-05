@@ -38,10 +38,8 @@ type LogListener = () => void;
 
 /**
  * Receives every {@link logEvent} entry as it is emitted, for transports beyond
- * the in-memory accumulator (the multiplayer gate installs one that mirrors
- * entries into the room's Realtime Database node so a production game's log
- * survives the playing tab closing). Best-effort: a throwing sink is swallowed
- * so logging never wedges the caller.
+ * the in-memory accumulator. Best-effort: a throwing sink is swallowed so
+ * logging never wedges the caller.
  */
 export type LogSink = (entry: Readonly<LogEntry>) => void;
 
@@ -59,12 +57,11 @@ let logSnapshotCache: ReadonlyArray<Readonly<LogEntry>> = [];
 let isLogSnapshotDirty = false;
 
 // Ambient fields merged into every event so a whole session can be filtered out
-// of the shared `logs/journey-log.jsonl`. The room gate sets `{ gameId }` once a
-// room is ready, which is what lets `grep '"gameId":"h3ppju"'` isolate one
-// game's events from every other run interleaved in the same file. Defaults to
-// empty, so off the multiplayer path (tests, isolated units) entries are
-// untouched. Explicit `fields` on a call win over context; reserved keys can be
-// set by neither.
+// of the shared `logs/journey-log.jsonl`. Opening a local game sets `{ gameId }`,
+// which is what lets `grep '"gameId":"h3ppju"'` isolate one game's events from
+// every other run interleaved in the same file. Defaults to empty, so outside a
+// game (tests, isolated units) entries are untouched. Explicit `fields` on a
+// call win over context; reserved keys can be set by neither.
 let logContext: Record<string, unknown> = {};
 
 let logSink: LogSink | null = null;
@@ -80,7 +77,7 @@ export function setLogSink(sink: LogSink | null): void {
 /**
  * Replace the ambient log context merged into every subsequent {@link logEvent}.
  * Reserved keys (`timestamp`, `event`, `seq`) are stripped. Pass `{}` (or call
- * {@link clearLogContext}) to detach the context when leaving a room.
+ * {@link clearLogContext}) to detach the context when leaving a game.
  */
 export function setLogContext(fields: Record<string, unknown>): void {
   const next: Record<string, unknown> = {};
@@ -128,7 +125,7 @@ export function logEvent(
   logAccumulator.push(entry);
   isLogSnapshotDirty = true;
   notifyLogListeners();
-  postLogEntryToDevServer(entry);
+  postLogRecordToDevServer(entry);
   const frozen = Object.freeze({ ...entry });
   if (logSink !== null) {
     try {
@@ -141,14 +138,12 @@ export function logEvent(
 }
 
 /**
- * Posts the entry to the Vite dev-server `/api/log` middleware on a
- * best-effort basis. In test environments (where `fetch` is unmocked or the
- * dev server is unreachable) this is a no-op: we silently drop the request so
- * unit tests don't emit unhandled rejections. Production runtime behavior is
- * unchanged — fire-and-forget with errors swallowed is intentional for the
- * dev-log transport per spec §L.
+ * Posts one record to the Vite dev-server `/api/log` middleware, which appends
+ * it to `logs/journey-log.jsonl`. Best effort: a no-op without `fetch` or under
+ * Vitest (`import.meta.env.MODE === "test"`), and a failed request is
+ * swallowed so logging never wedges the caller.
  */
-function postLogEntryToDevServer(entry: LogEntry): void {
+function postLogRecordToDevServer(record: Readonly<Record<string, unknown>>): void {
   if (typeof fetch !== "function") {
     return;
   }
@@ -168,10 +163,40 @@ function postLogEntryToDevServer(entry: LogEntry): void {
   fetch("/api/log", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(entry),
+    body: JSON.stringify(record),
   }).catch(() => {
-    // Intentional: dev-server logging is best-effort. See `postLogEntryToDevServer`.
+    // Intentional: dev-server logging is best-effort.
   });
+}
+
+/** A fully shaped journey-log line that carries its own fields, `seq` included. */
+export type JourneyLogRecord = Readonly<Record<string, unknown>>;
+
+/** Delivers a fully shaped record to the journey-log.jsonl transports. */
+export type JourneyLogMirror = (record: JourneyLogRecord) => void;
+
+export interface JourneyLogMirrorDeps {
+  /** Console transport. Defaults to a single-line `console.log`. */
+  log?: (line: string) => void;
+  /** Dev-server transport. Defaults to a best-effort `/api/log` POST. */
+  post?: (record: JourneyLogRecord) => void;
+}
+
+/**
+ * Build the journey-log.jsonl mirror for records that carry their own `seq`
+ * (the event log's seq), which {@link logEvent} would replace with its
+ * per-session line counter. The record reaches the console and the dev-server
+ * `/api/log` sink verbatim. Transports are injectable for tests.
+ */
+export function createJourneyLogMirror(
+  deps: JourneyLogMirrorDeps = {},
+): JourneyLogMirror {
+  const log = deps.log ?? ((line: string) => console.log(line));
+  const post = deps.post ?? postLogRecordToDevServer;
+  return (record) => {
+    log(JSON.stringify(record));
+    post(record);
+  };
 }
 
 export function logEventOnce(

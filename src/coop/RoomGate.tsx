@@ -8,7 +8,6 @@ import {
 } from "react";
 import { type Database } from "firebase/database";
 import type {
-  ContentConfig,
   Genesis,
   LogNode,
   PinnedContentConfig,
@@ -32,18 +31,17 @@ import {
 import { subscribeToLog } from "../eventlog/subscribe";
 import {
   contentConfigFromRuntime,
-  contentConfigsEqual,
   type RuntimeConfig,
 } from "../runtime/runtime-config";
 import { logEvent } from "../logging";
 import { getBuildHash } from "./build-hash";
-import {
-  classifyReducerVersion,
-  CURRENT_REDUCER_VERSION,
-  isReducerVersionCompatible,
-} from "./reducer-version";
+import { classifyReducerVersion, CURRENT_REDUCER_VERSION } from "./reducer-version";
 import type { FrontDoorPhase } from "../rules/fold-state";
-import { parseJourneySeed, type JourneySeed } from "../types/journey-seed";
+import {
+  createFreshGenesis,
+  genesisCompatibility,
+  hasPinnedContentConfig,
+} from "../session/genesis";
 import {
   installJourneyLogSink,
   type JourneyLogSinkHandle,
@@ -142,37 +140,6 @@ type GateState =
       detailMessage?: string;
     };
 
-/** Fresh random seed for a new room's genesis. */
-function freshSeed(): JourneySeed {
-  const cryptoSource = globalThis.crypto;
-  if (typeof cryptoSource?.randomUUID === "function") {
-    return parseJourneySeed(cryptoSource.randomUUID());
-  }
-  const bytes = new Uint8Array(16);
-  cryptoSource.getRandomValues(bytes);
-  return parseJourneySeed(
-    Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join(""),
-  );
-}
-
-/**
- * Build the genesis for a brand-new room: fresh seed, the semantic reducer
- * protocol, now, and the fold-relevant content parameters pinned from this
- * client's config so every joiner folds the same content.
- */
-export function createFreshGenesis(
-  contentConfig: PinnedContentConfig,
-  frontDoorEntry?: Exclude<FrontDoorPhase, "mainExiting" | "journey">,
-): PinnedGenesis {
-  return {
-    seed: freshSeed(),
-    reducerVersion: CURRENT_REDUCER_VERSION,
-    createdAt: Date.now(),
-    contentConfig,
-    ...(frontDoorEntry === undefined ? {} : { frontDoorEntry }),
-  };
-}
-
 /**
  * Number of fresh-id attempts before giving up on a room-id collision. A
  * `generateRoomId()` collision at the default 6-character length is
@@ -215,49 +182,8 @@ export async function createAndNavigateToRoom(
   throw new Error("createAndNavigateToRoom: exhausted retry attempts");
 }
 
-/**
- * Decides how a delivered genesis gates against this client: an incompatible
- * reducer version (fatal, checked first) shows the version gate; a content-config
- * mismatch — including a genesis with no `contentConfig` at all — shows the
- * recoverable config gate; otherwise the room is ready. Pure, so it is unit
- * testable without rendering.
- */
-export function gateStatusFor(
-  genesis: Genesis,
-  localContentConfig: ContentConfig,
-): "ready" | "versionGate" | "configGate" {
-  if (!isReducerVersionCompatible(genesis.reducerVersion)) {
-    return "versionGate";
-  }
-  const roomContentConfig = genesis.contentConfig;
-  if (
-    roomContentConfig === undefined ||
-    !contentConfigsEqual(roomContentConfig, localContentConfig)
-  ) {
-    return "configGate";
-  }
-  return "ready";
-}
-
-function hasPinnedContentConfig(genesis: Genesis): genesis is PinnedGenesis {
-  return (
-    genesis.contentConfig !== undefined &&
-    typeof genesis.contentConfig.atlasFoldHash === "string" &&
-    typeof genesis.contentConfig.sitesFoldHash === "string" &&
-    typeof genesis.contentConfig.draftFoldHash === "string" &&
-    typeof genesis.contentConfig.cardRolesFoldHash === "string" &&
-    typeof genesis.contentConfig.economyFoldHash === "string" &&
-    typeof genesis.contentConfig.gambleFoldHash === "string" &&
-    typeof genesis.contentConfig.transfigurationFoldHash === "string" &&
-    typeof genesis.contentConfig.rewardSelectionFoldHash === "string" &&
-    typeof genesis.contentConfig.auguryFoldHash === "string" &&
-    typeof genesis.contentConfig.explorationFoldHash === "string" &&
-    typeof genesis.contentConfig.tutorialFoldHash === "string" &&
-    typeof genesis.contentConfig.opponentsFoldHash === "string" &&
-    typeof genesis.contentConfig.defaultStartingEssence === "number" &&
-    typeof genesis.contentConfig.dreamsignCap === "number"
-  );
-}
+/** Gate a delivered room genesis against this client's content. */
+export const gateStatusFor = genesisCompatibility;
 
 function navigateToRoom(roomId: RoomId): void {
   const nextUrl = new URL(window.location.href);

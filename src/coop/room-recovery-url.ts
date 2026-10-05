@@ -1,14 +1,11 @@
-import { normalizeRoomId } from "../eventlog/room";
+import { normalizeRoomId } from "../eventlog/game-id";
 
-/** Build the cold recovery entrypoint for a room URL without mounting gameplay. */
+/** The URL that reopens the current `?game=` from its stored log. */
 export function recoveryUrlFromLocation(href: string): string | null {
   const source = new URL(href);
-  const roomId = normalizeRoomId(source.searchParams.get("game"));
-  if (roomId === null) return null;
-  const recovery = new URL("/recover", source.origin);
-  recovery.searchParams.set("game", roomId);
-  if (source.searchParams.get("realtime") === "1") {
-    recovery.searchParams.set("realtime", "1");
-  }
+  const gameId = normalizeRoomId(source.searchParams.get("game"));
+  if (gameId === null) return null;
+  const recovery = new URL("/", source.origin);
+  recovery.searchParams.set("game", gameId);
   return recovery.toString();
 }

@@ -17,7 +17,7 @@ import { CumulusRoot } from "./cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { JourneyContent } from "./data/journey-content";
 import { loadJourneyContent } from "./data/journey-content";
-import { getFirebaseDatabase } from "./firebase/app-config";
+import { useLocalGame } from "./session/use-local-game";
 import type { CardData } from "./types/cards";
 import type { JourneyMutations } from "./state/journey-context";
 import type { JourneyState } from "./types/journey";
@@ -30,7 +30,6 @@ import { parseAtlasNodeId } from "./types/identifiers";
 import { parseSiteId } from "./types/identifiers";
 import { parseDeckEntryId } from "./types/identifiers";
 import { parseRoomId } from "./types/identifiers";
-import type { RoomId } from "./types/identifiers";
 import {
   testAvatarId,
   testDreamscapeId,
@@ -159,34 +158,17 @@ vi.mock("./data/tutorial-actions", () => ({
   })),
 }));
 
-vi.mock("./firebase/app-config", () => ({
-  getFirebaseDatabase: vi.fn(),
+vi.mock("./session/use-local-game", () => ({
+  useLocalGame: vi.fn(() => ({
+    status: { kind: "ready", game: {} },
+    createNewGame: vi.fn(),
+  })),
 }));
 
-vi.mock("./coop/RoomGate", () => ({
-  RoomGate: ({
-    gameId,
-    children,
-  }: {
-    gameId: RoomId | null;
-    children: (context: unknown) => ReactNode;
-  }) => {
-    const context = {
-      db: {},
-      roomId: gameId ?? "created-room",
-      clientId: "client-test",
-      genesis: { seed: "test-seed", reducerVersion: "test", createdAt: 0 },
-      logSink: {},
-    };
-    return <div data-room-gate={gameId ?? "create"}>{children(context)}</div>;
-  },
-}));
-
-vi.mock("./coop/hooks", () => ({
-  CoopProvider: ({ children }: { children: ReactNode }) => (
-    <div data-coop-provider>{children}</div>
+vi.mock("./session/hooks", () => ({
+  LocalGameProvider: ({ children }: { children: ReactNode }) => (
+    <div data-local-game-provider>{children}</div>
   ),
-  useConnectedCount: () => 1,
   useConfirmedHead: () => 0,
 }));
 
@@ -483,9 +465,6 @@ beforeEach(() => {
   vi.spyOn(console, "log").mockImplementation(() => {});
   vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(null));
   vi.mocked(loadJourneyContent).mockReturnValue(makeJourneyContent());
-  vi.mocked(getFirebaseDatabase).mockReturnValue(
-    {} as ReturnType<typeof getFirebaseDatabase>,
-  );
   // These specs exercise the desktop deck-viewer overlay (mocked as
   // `deckViewerMock`); report a desktop viewport so `useIsDesktop` selects the
   // `DesktopDeckViewerAdapter` rather than the narrow-viewport
@@ -511,7 +490,7 @@ afterEach(() => {
 });
 
 describe("App", () => {
-  it("routes loaded journey content through the coop room gate", async () => {
+  it("routes loaded journey content into the selected local game", async () => {
     setJourneyState(makeState());
 
     const { container, root } = mount(
@@ -527,9 +506,8 @@ describe("App", () => {
 
     await flushAppEffects();
 
-    expect(getFirebaseDatabase).toHaveBeenCalledWith("emulator");
-    expect(container.querySelector("[data-room-gate='ab12cd']")).not.toBeNull();
-    expect(container.querySelector("[data-coop-provider]")).not.toBeNull();
+    expect(vi.mocked(useLocalGame).mock.calls[0]?.[0].gameId).toBe("ab12cd");
+    expect(container.querySelector("[data-local-game-provider]")).not.toBeNull();
     expect(
       container.querySelector("[data-coop-journey-provider]"),
     ).not.toBeNull();
@@ -539,7 +517,7 @@ describe("App", () => {
     });
   });
 
-  it("blocks room entry and provider registration when journey content loading fails", async () => {
+  it("blocks game entry and provider registration when journey content loading fails", async () => {
     vi.mocked(loadJourneyContent).mockImplementationOnce(() => {
       throw new Error("Failed to load draft records: 503 Test Failure");
     });
@@ -560,69 +538,9 @@ describe("App", () => {
     expect(
       container.querySelector('[data-application-state="recoverableError"]'),
     ).not.toBeNull();
-    expect(container.querySelector("[data-room-gate]")).toBeNull();
-    expect(container.querySelector("[data-coop-provider]")).toBeNull();
+    expect(useLocalGame).not.toHaveBeenCalled();
+    expect(container.querySelector("[data-local-game-provider]")).toBeNull();
     expect(registerGameProviders).not.toHaveBeenCalled();
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("renders a Firebase setup issue when database initialization fails", async () => {
-    vi.mocked(getFirebaseDatabase).mockImplementationOnce(() => {
-      throw new Error("Missing VITE_FIREBASE_DATABASE_URL");
-    });
-
-    const { container, root } = mount(
-      <App
-        runtimeConfig={{
-          seedOverride: null,
-          aiMode: false,
-          gameId: null,
-          databaseMode: "emulator",
-        }}
-      />,
-    );
-
-    await flushAppEffects();
-
-    expect(
-      container.querySelector('[data-application-state="fatalConfiguration"]'),
-    ).not.toBeNull();
-    expect(container.querySelector("[data-room-gate]")).toBeNull();
-    expect(container.querySelector("[data-multiplayer-provider]")).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("renders realtime Firebase setup help when realtime database initialization fails", async () => {
-    vi.mocked(getFirebaseDatabase).mockImplementationOnce(() => {
-      throw new Error("Missing VITE_FIREBASE_DATABASE_URL");
-    });
-
-    const { container, root } = mount(
-      <App
-        runtimeConfig={{
-          seedOverride: null,
-          aiMode: false,
-          gameId: null,
-          databaseMode: "realtime",
-        }}
-      />,
-    );
-
-    await flushAppEffects();
-
-    expect(getFirebaseDatabase).toHaveBeenCalledWith("realtime");
-    expect(
-      container.querySelector('[data-application-state="fatalConfiguration"]'),
-    ).not.toBeNull();
-    expect(
-      container.querySelector('[data-application-state="fatalConfiguration"]'),
-    ).not.toBeNull();
 
     act(() => {
       root.unmount();

@@ -19,7 +19,7 @@ import type {
 import type { JourneyContent } from "../../data/journey-content";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { assertJsonSafe } from "../../eventlog/hash";
-import type { EventDraft } from "../../eventlog/client";
+import type { EventDraft } from "../../eventlog/local-log";
 import { foldEvents } from "../../eventlog/fold";
 import type { GameEvent, Genesis } from "../../eventlog/types";
 import { GAME_ENGINE_CONFIG } from "../../rules/replay/replay";

@@ -2,28 +2,7 @@ import { StrictMode, type ReactNode } from "react";
 import type { Root } from "react-dom/client";
 import { CumulusRoot } from "./cumulus/CumulusRoot";
 
-type StandaloneRouteId = "recovery";
-
-export type RootRouteId = StandaloneRouteId | "journey";
-
-interface StandaloneRoute {
-  readonly id: StandaloneRouteId;
-  readonly render: () => Promise<ReactNode>;
-}
-
-const STANDALONE_ROUTES: Readonly<Partial<Record<string, StandaloneRoute>>> = {
-  "/recover": {
-    id: "recovery",
-    render: async () => {
-      const { default: RecoveryApp } = await import("./coop/RecoveryApp");
-      return <RecoveryApp />;
-    },
-  },
-};
-
-export const STANDALONE_ROUTE_PATHS = Object.freeze(
-  Object.keys(STANDALONE_ROUTES),
-);
+export type RootRouteId = "journey";
 
 function normalizedPathname(pathname: string): string {
   return pathname.replace(/\/+$/u, "");
@@ -74,15 +53,8 @@ async function renderJourneyRoute(root: Root, pathname: string): Promise<void> {
   );
 }
 
-/** Resolve and render the application surface selected by the browser URL. */
+/** Render the game for the browser URL; every path is the journey route. */
 export async function renderRootRoute(root: Root): Promise<RootRouteId> {
-  const pathname = normalizedPathname(window.location.pathname);
-  const standaloneRoute = STANDALONE_ROUTES[pathname];
-  if (standaloneRoute !== undefined) {
-    renderStrict(root, await standaloneRoute.render());
-    return standaloneRoute.id;
-  }
-
-  await renderJourneyRoute(root, pathname);
+  await renderJourneyRoute(root, normalizedPathname(window.location.pathname));
   return "journey";
 }

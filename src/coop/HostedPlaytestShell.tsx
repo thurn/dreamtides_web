@@ -1,16 +1,15 @@
 import { useEffect, useRef, type ReactNode } from "react";
-import { GlassButton } from "../cumulus/components/controls/GlassButton";
-import { GlassPanel } from "../cumulus/components/overlay/GlassPanel";
 import { logEvent } from "../logging";
-import {
-  useActions,
-  useClientId,
-  useConnectedClientIds,
-  useGameState,
-} from "./hooks";
-import "./hosted-playtest-shell.css";
+import { useActions, useClientId, useGameState } from "./hooks";
 
-/** Applies the hosted-room controller policy without hiding shared content. */
+/**
+ * Keeps the single local player in control of the game's single-controller
+ * phases. The fold records the controller; whenever it names anyone else (a
+ * loaded save, an earlier local player id), the local player takes control.
+ * An unowned battle is claimed only when `claimUnownedBattle` is set (a direct
+ * tutorial-battle entry); otherwise the player's first tutorial intent claims
+ * it in the fold.
+ */
 export function HostedPlaytestShell({
   children,
   claimUnownedBattle = false,
@@ -21,95 +20,32 @@ export function HostedPlaytestShell({
   const state = useGameState();
   const actions = useActions();
   const clientId = useClientId();
-  const connectedClientIds = useConnectedClientIds();
   const control = state.playtestControl;
-
-  const claimRequestedRef = useRef(false);
+  const controllerClientId = control?.controllerClientId ?? null;
+  const shouldClaim =
+    control?.mode === "single-controller" &&
+    controllerClientId !== clientId &&
+    (controllerClientId !== null ||
+      (claimUnownedBattle && state.battle !== null));
+  // The controller each claim replaced, so a repeated effect claims it once.
+  const claimedFromRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (
-      !claimUnownedBattle ||
-      claimRequestedRef.current ||
-      state.battle === null ||
-      control?.mode !== "single-controller" ||
-      control.controllerClientId !== null
-    ) {
-      return;
-    }
-    claimRequestedRef.current = true;
-    logEvent("playtest_control_requested", {
-      previousControllerClientId: null,
-      requestingClientId: clientId,
-      phase: state.frontDoor.phase,
-      source: "direct_tutorial_battle",
-    });
-    void actions.takePlaytestControl(null).catch((error: unknown) => {
-      console.error("Take Control failed", error);
-    });
-  }, [
-    actions,
-    claimUnownedBattle,
-    clientId,
-    control?.controllerClientId,
-    control?.mode,
-    state.battle,
-    state.frontDoor.phase,
-  ]);
-
-  if (control?.mode !== "single-controller") return children;
-
-  const controllerClientId = control.controllerClientId;
-  if (controllerClientId === null) return children;
-
-  const isController = controllerClientId === clientId;
-  if (isController) return children;
-
-  const canTakeControl =
-    connectedClientIds !== null &&
-    !connectedClientIds.includes(controllerClientId);
-
-  const takeControl = (): void => {
-    if (!canTakeControl) return;
+    if (!shouldClaim) return;
+    const claimedFrom = controllerClientId ?? "unowned";
+    if (claimedFromRef.current === claimedFrom) return;
+    claimedFromRef.current = claimedFrom;
     logEvent("playtest_control_requested", {
       previousControllerClientId: controllerClientId,
       requestingClientId: clientId,
       phase: state.frontDoor.phase,
+      source:
+        controllerClientId === null ? "direct_tutorial_battle" : "local_player",
     });
-    void actions
-      .takePlaytestControl(controllerClientId)
-      .catch((error: unknown) => {
-        console.error("Take Control failed", error);
-      });
-  };
+    void actions.takePlaytestControl(controllerClientId).catch((error: unknown) => {
+      console.error("Take Control failed", error);
+    });
+  }, [actions, clientId, controllerClientId, shouldClaim, state.frontDoor.phase]);
 
-  return (
-    <div className="hosted-playtest-shell">
-      <div className="hosted-playtest-shell__content" inert aria-hidden="true">
-        {children}
-      </div>
-      {canTakeControl ? (
-        <div className="cumulus hosted-playtest-shell__status">
-          <GlassPanel
-            title={"Player Disconnected"}
-            headerSpacing="compact"
-            footer={
-              <GlassButton
-                label={"Take Control"}
-                variant="accent"
-                placement="onGlass"
-                onPress={takeControl}
-              />
-            }
-            testId="hosted-playtest-status"
-          >
-            <p className="hosted-playtest-shell__message">
-              {
-                "The playtest is paused. Take control when you are ready to continue."
-              }
-            </p>
-          </GlassPanel>
-        </div>
-      ) : null}
-    </div>
-  );
+  return children;
 }

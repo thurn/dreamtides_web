@@ -1,7 +1,7 @@
 // Game-agnostic event-sourcing engine contracts.
 //
-// This module defines the shapes shared by every eventlog file (append,
-// subscribe, fold, rng, hash, room) and by src/coop/. It must never import
+// This module defines the shapes shared by every eventlog file (local-log,
+// fold, rng, hash, wire, and the room transport) and by src/session/. It must never import
 // from src/rules/ or src/coop/ — the engine is parameterized over a generic
 // fold state `S` and knows nothing about Dreamtides.
 //
@@ -77,11 +77,10 @@ export function parseStateHash(value: unknown): StateHash {
 }
 
 /**
- * A single intent appended to a room's shared log.
+ * A single intent appended to a game's log.
  *
- * Events and snapshots are stored in RTDB as JSON strings (see
- * `EncodedLogNode`), never as RTDB trees, so a `GameEvent` here is always
- * the decoded, in-memory shape.
+ * Events are persisted as JSON strings (`encodeEvent` in wire.ts), so a
+ * `GameEvent` here is always the decoded, in-memory shape.
  */
 export interface GameEvent {
   /** e.g. "BATTLE_COMMAND" | "BEGIN_BATTLE" | ... */

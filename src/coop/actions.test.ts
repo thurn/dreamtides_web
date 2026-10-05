@@ -22,7 +22,7 @@ import { testJourneyMutationSource } from "../types/test-identities";
 // `KNOWN_EVENT_TYPES` set (derived from events.ts), never a hardcoded list.
 
 import { describe, expect, it } from "vitest";
-import type { EventDraft } from "../eventlog/client";
+import type { EventDraft } from "../eventlog/local-log";
 import { foldEvents } from "../eventlog/fold";
 import type { GameEvent, Genesis } from "../eventlog/types";
 import { NIGHTMARE_CARD_ID } from "../data/nightmare";

@@ -1,4 +1,14 @@
-import type { ContentConfig, EncodedLogNode, Genesis } from "./types";
+import {
+  parseEventActor,
+  parseEventNonce,
+  parseEventType,
+  parseStateHash,
+  type ContentConfig,
+  type EncodedLogNode,
+  type GameEvent,
+  type Genesis,
+} from "./types";
+import { parseIntentKey } from "../types/identifiers";
 import { parseFoldHash } from "../types/content-hash";
 import { parseReducerVersion } from "../types/reducer-version";
 import { journeySeedFromUnknown } from "../types/journey-seed";
@@ -270,5 +280,63 @@ export function decodeAppendableLogNode(raw: unknown): EncodedLogNode | null {
     ...(node.compactionError === undefined
       ? {}
       : { compactionError: node.compactionError }),
+  };
+}
+
+/** Encodes a decoded event to the JSON string a log stores per seq. */
+export function encodeEvent(event: GameEvent): string {
+  return JSON.stringify(event);
+}
+
+/** Decodes a stored event JSON string back into a `GameEvent`. */
+export function decodeEvent(raw: string): GameEvent {
+  const parsed = JSON.parse(raw) as unknown;
+  if (
+    typeof parsed !== "object" ||
+    parsed === null ||
+    Array.isArray(parsed)
+  ) {
+    throw new Error("event must be an object");
+  }
+  const event = parsed as Record<string, unknown>;
+  const payload = event.payload;
+  const roomGeneration = event.roomGeneration;
+  if (
+    typeof event.type !== "string" ||
+    typeof payload !== "object" ||
+    payload === null ||
+    Array.isArray(payload) ||
+    typeof event.actor !== "string" ||
+    typeof event.clientTimestamp !== "string" ||
+    typeof event.basedOnSeq !== "number" ||
+    (roomGeneration !== undefined &&
+      (typeof roomGeneration !== "number" ||
+        !Number.isSafeInteger(roomGeneration) ||
+        roomGeneration < 0)) ||
+    (event.nonce !== undefined && typeof event.nonce !== "string") ||
+    (event.intentKey !== undefined && typeof event.intentKey !== "string") ||
+    (event.stateHashAfter !== undefined &&
+      typeof event.stateHashAfter !== "string")
+  ) {
+    throw new Error("event has an invalid shape");
+  }
+  return {
+    type: parseEventType(event.type),
+    payload: payload as Record<string, unknown>,
+    actor: parseEventActor(event.actor),
+    clientTimestamp: event.clientTimestamp,
+    basedOnSeq: event.basedOnSeq,
+    ...(roomGeneration === undefined
+      ? {}
+      : { roomGeneration }),
+    ...(event.nonce === undefined
+      ? {}
+      : { nonce: parseEventNonce(event.nonce) }),
+    ...(event.intentKey === undefined
+      ? {}
+      : { intentKey: parseIntentKey(event.intentKey) }),
+    ...(event.stateHashAfter === undefined
+      ? {}
+      : { stateHashAfter: parseStateHash(event.stateHashAfter) }),
   };
 }
