@@ -308,14 +308,14 @@ comparison gave 45.8 / 43.9 s (1 worker, cold / warm) against 43.4 / 44.1 /
 host is contended, which is its normal state. Two workers is the D17 limit;
 the step still runs after lint and typecheck, never alongside them.
 
-**Already in place (verified, unchanged):** `review.mjs` runs `tsc --noEmit
---incremental` with build info under `node_modules/.cache/journey-review/`.
-`tsc --extendedDiagnostics`: cold 8.2 s wall (check 6.6 s); no-change warm
-1.7 s; after a one-line body edit in `src/rules/journey/shop.ts` 1.4 s
-(check 0.04 s). In the real loop (edit → `npm run review` → edit →
-`npm run review`) the typecheck step took 2.1 s and 2.2 s under load. The
-9.6 s "warm" figure in the 1.1 baseline followed an intervening
-`trox:gate` run that rewrote typecheck inputs. `tsc -b` was not pursued.
+**Incremental typecheck (corrected by hv-b8ef.12):** `review.mjs` ran
+`tsc --noEmit --incremental`. That only helps a no-change rerun (1.7 s):
+under `--noEmit` tsc cannot compare declaration signatures, so any edit,
+even a function body, rechecks every dependent (`src/rules/journey/shop.ts`
+body edit: check 15.9 s, wall 18.4 s). An earlier note here reported 1.4 s
+for that edit; that run had build info that already held the edited text.
+See [Phase 1 gate improvements](#hv-b8ef12-typecheck-signatures-and-seeding)
+for the fix.
 
 ### Rejected
 
@@ -380,3 +380,38 @@ Rules applied while executing:
 
 Most of the suite reduction comes later: the Phase 2 rows remove whole
 systems' tests along with their code.
+
+### hv-b8ef.12: typecheck signatures and seeding
+
+Retrospective finding: every bead starts in a fresh worktree, so its first
+`npm run review` typechecked cold (15.1–16.1 s in hv-b8ef.4, .7, .8, .9,
+.10), and later edits rechecked the whole program anyway (see the corrected
+1.3 note).
+
+Change: the typecheck step emits declarations only (`--noEmit false
+--declaration --emitDeclarationOnly --outDir
+node_modules/.cache/journey-review/declarations`), so tsc invalidates by
+exported signature; non-exhaustive tasks seed missing build info from
+`.git/journey-review/tsconfig.tsbuildinfo` and publish it after a passing
+typecheck. `review:full` (the gate) never touches the shared copy.
+
+Measured with `npm run typecheck` in a fresh worktree (host load 33–57):
+
+| Case | Before | After |
+| --- | --- | --- |
+| Cold (no build info anywhere) | 18.4 s | 18.0 s |
+| One-line body edit, warm | 18.4 s | 2.2 s |
+| Fresh worktree, seeded, body edit present | 18.0 s (no seed) | 2.1, 2.0, 2.0 s |
+
+Diagnostics are identical: an API change in `buyShopSlot` reports the same
+26 errors incrementally and cold, and a deliberate type error in a seeded
+worktree fails the step.
+
+## Budget notes (Phase 1 retrospective)
+
+Budgets are judged against runs at low host load. The host is shared:
+Phase 1 gates took 253 s at low load and 427–656 s at load averages of
+50–80 on 18 cores, with the `dependencies` step alone going from 10 s to
+23 s for identical work. Friction lines now carry the host's
+one-minute load average at commit time as `hostLoad` so overruns can be
+attributed (starting with hv-b8ef.12). The budgets themselves are unchanged.

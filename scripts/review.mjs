@@ -1,8 +1,10 @@
 import { spawn } from "node:child_process";
 import { execFileSync } from "node:child_process";
 import {
+  copyFileSync,
   existsSync,
   mkdirSync,
+  renameSync,
 } from "node:fs";
 import { homedir } from "node:os";
 import { dirname, join, resolve } from "node:path";
@@ -200,6 +202,38 @@ function nodeModulePath(...parts) {
   return join(root, "node_modules", ...parts);
 }
 
+const typecheckBuildInfo = nodeModulePath(
+  ".cache",
+  "journey-review",
+  "tsconfig.tsbuildinfo",
+);
+// Every worktree shares the git common dir, so a fresh worktree can seed
+// its incremental typecheck from the last local review. Build info stores
+// paths relative to itself and file versions as content hashes, so a seed
+// from a sibling worktree only rechecks what differs. The exhaustive tasks
+// never read or write the seed, keeping the gate's typecheck cold.
+const sharedTypecheckBuildInfo = join(
+  commonGitDir,
+  "journey-review",
+  "tsconfig.tsbuildinfo",
+);
+const seedsTypecheck = !["full", "lint-full", "test-full"].includes(task);
+
+function seedTypecheckBuildInfo() {
+  if (!seedsTypecheck || existsSync(typecheckBuildInfo)) return;
+  if (!existsSync(sharedTypecheckBuildInfo)) return;
+  mkdirSync(dirname(typecheckBuildInfo), { recursive: true });
+  copyFileSync(sharedTypecheckBuildInfo, typecheckBuildInfo);
+}
+
+function publishTypecheckBuildInfo() {
+  if (!seedsTypecheck || !existsSync(typecheckBuildInfo)) return;
+  mkdirSync(dirname(sharedTypecheckBuildInfo), { recursive: true });
+  const staged = `${sharedTypecheckBuildInfo}.${String(process.pid)}.tmp`;
+  copyFileSync(typecheckBuildInfo, staged);
+  renameSync(staged, sharedTypecheckBuildInfo);
+}
+
 function commandFor(step, extraArgs = []) {
   if (step === "lint") {
     return [process.execPath, [join(root, "scripts", "run-eslint.mjs"), ...extraArgs]];
@@ -230,20 +264,23 @@ function commandFor(step, extraArgs = []) {
     ];
   }
   if (step === "typecheck") {
-    const buildInfo = nodeModulePath(
-      ".cache",
-      "journey-review",
-      "tsconfig.tsbuildinfo",
-    );
-    mkdirSync(dirname(buildInfo), { recursive: true });
+    mkdirSync(dirname(typecheckBuildInfo), { recursive: true });
+    // Declaration-only emit lets tsc compare exported signatures, so an
+    // edit that keeps a module's API rechecks only that module. Under
+    // --noEmit, any edit rechecks every dependent.
     return [
       process.execPath,
       [
         nodeModulePath("typescript", "bin", "tsc"),
         "--noEmit",
+        "false",
+        "--declaration",
+        "--emitDeclarationOnly",
+        "--outDir",
+        nodeModulePath(".cache", "journey-review", "declarations"),
         "--incremental",
         "--tsBuildInfoFile",
-        buildInfo,
+        typecheckBuildInfo,
         ...extraArgs,
       ],
     ];
@@ -436,8 +473,10 @@ try {
     console.log("[review] no applicable checks");
   }
   for (const { step, args } of steps) {
+    if (step === "typecheck") seedTypecheckBuildInfo();
     const exitCode = await runStep(step, args);
     if (step === "prepare" && exitCode === 0) restoreLocalAssets = true;
+    if (step === "typecheck" && exitCode === 0) publishTypecheckBuildInfo();
     if (exitCode !== 0) {
       process.exitCode = exitCode;
       break;

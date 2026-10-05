@@ -33,9 +33,15 @@ Without a path, `npm test` and `npm run lint` use the same diff-aware selection
 as `npm run review`. Focused commands run immediately and do not acquire the
 full-review resource slot.
 
-TypeScript stores incremental build information under
-`node_modules/.cache/journey-review/`. The cache is scoped to the worktree and is
-safe to discard with `node_modules`.
+The typecheck emits declarations only, into
+`node_modules/.cache/journey-review/declarations/`, so TypeScript's incremental
+build information (`node_modules/.cache/journey-review/tsconfig.tsbuildinfo`)
+can compare exported signatures: an edit that keeps a module's API rechecks
+only that module. After each successful typecheck, `npm run review` and
+`npm run typecheck` copy the build information
+to `.git/journey-review/` in the shared git directory, and a worktree with no
+build information of its own seeds from that copy. The exhaustive commands
+never read or write the shared copy.
 
 ## Exhaustive commands
 
