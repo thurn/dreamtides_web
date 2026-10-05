@@ -1,10 +1,16 @@
 // @vitest-environment node
 
+import { execFileSync } from "node:child_process";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it, vi } from "vitest";
 import {
+  DISPOSABLE_WORKSPACE_FILES,
   prepareWorkspace,
   WORKSPACE_GENERATORS,
 } from "./prepare-workspace.mjs";
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
 describe("prepareWorkspace", () => {
   it("runs every workspace generator in dependency order", () => {
@@ -29,5 +35,17 @@ describe("prepareWorkspace", () => {
 
     expect(() => prepareWorkspace({ root: "/fixture", run })).toThrow(failure);
     expect(run).toHaveBeenCalledTimes(2);
+  });
+
+  it("keeps every disposable workspace file out of version control", () => {
+    const tracked = new Set(
+      execFileSync("git", ["ls-files"], { cwd: ROOT, encoding: "utf8" })
+        .split("\n")
+        .filter(Boolean),
+    );
+
+    expect(DISPOSABLE_WORKSPACE_FILES.filter((path) => tracked.has(path))).toEqual(
+      [],
+    );
   });
 });
