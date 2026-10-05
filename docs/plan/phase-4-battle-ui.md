@@ -239,9 +239,11 @@ UI code and for prompt-kind handling duplicated outside `PromptHost`.
 2. Walk the tutorial journey through its battles and list in the gate notes
    exactly which Mira battle guidance is broken (D38). That list is Phase 6.2
    scope.
-3. Run the independent review over the phase diff.
-4. Update `metrics.md`.
-5. Close the epic.
+3. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
+   and land the beads it files.
+4. Run the independent review over the phase diff.
+5. Update `metrics.md`.
+6. Close the epic.
 
 ## Exit gate
 
@@ -250,4 +252,5 @@ UI code and for prompt-kind handling duplicated outside `PromptHost`.
 - The journey sandbox and old AI are gone.
 - The card-lab and sweep are working.
 - Every mason bead filed this phase has landed.
+- The retrospective's improvement beads have landed.
 - The review is resolved.

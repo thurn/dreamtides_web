@@ -354,14 +354,16 @@ before and after, and lint time before and after.
 1. Re-measure the Phase 1 set, adding an "after Phase 2" column to
    `metrics.md`. Expect a much shorter gate: no trox step, no Rust steps,
    fewer tests and rules.
-2. Run the independent review over the phase diff. The diff is dominated by
+2. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
+   and land the beads it files.
+3. Run the independent review over the phase diff. The diff is dominated by
    deletions, so give the reviewer the added and modified hunks
    (`git diff --diff-filter=AMR <base> HEAD`) plus the list of deleted paths,
    and ask it to check that nothing still reachable from a route, the build,
    a QA scene, or a surviving test was deleted.
-3. Do a browser smoke from the front door through the first battle start, on
+4. Do a browser smoke from the front door through the first battle start, on
    desktop and mobile.
-4. Close the epic.
+5. Close the epic.
 
 ## Exit gate
 
@@ -371,5 +373,6 @@ before and after, and lint time before and after.
 - The log is local-first.
 - The scripts and lint rules are culled.
 - Every mason bead filed this phase has landed.
+- The retrospective's improvement beads have landed.
 - The metrics are re-measured.
 - The review is resolved.

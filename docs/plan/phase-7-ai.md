@@ -207,12 +207,14 @@ outcomes exactly.
      games in interactive replay mode;
    - the coverage gate;
    - the full gate.
-3. **Independent review** of the Phase 7 diff.
-4. **Docs pass.** `README.md`, `docs/rules.md`, and `docs/design.md`
+3. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
+   and land the beads it files.
+4. **Independent review** of the Phase 7 diff.
+5. **Docs pass.** `README.md`, `docs/rules.md`, and `docs/design.md`
    describe the shipped system in the current state. The rules include every
    normative decision; the design includes Apollyon, marked provisional.
-5. **Write `docs/plan/report.md`.** This is the only plan file that survives.
-   It is self-contained, because its sources are deleted in step 6. It covers:
+6. **Write `docs/plan/report.md`.** This is the only plan file that survives.
+   It is self-contained, because its sources are deleted in step 7. It covers:
    - what was delivered against the README's outcomes;
    - a summary of the rules decisions, with each RD's ladder step and the
      affected UUIDs;
@@ -220,21 +222,24 @@ outcomes exactly.
      fix), for the operator;
    - the QA ledger totals and any remaining judged concerns;
    - the metrics before and after;
+   - the friction ledger's recurring causes and the improvement beads they
+     produced, with their measured effect;
    - the tournament ladder and champion, the champion's win rates against
      the frozen `greedy@7.2` and `expert@7.3`, and the balance observations;
    - the open issues, the review debt (if any), and the recommended
      follow-ups. Meta-progression is first.
-6. **Reach the D33 end state.** Delete `docs/plan/` except `report.md`.
+7. **Reach the D33 end state.** Delete `docs/plan/` except `report.md`.
    Remove the `# Plan` section from `AGENTS.md` and every other pointer into
    `docs/plan/`, so no surviving guidance references a deleted file.
    Verify that the tracked Markdown files are exactly those listed in
    [README done criterion 7](README.md#done-criteria-whole-run).
-7. Close the Phase 7 epic. The run is over; the session stops.
+8. Close the Phase 7 epic. The run is over; the session stops.
 
 ## Exit gate
 
 - The stop rule is satisfied.
 - Every mason bead filed this phase has landed.
+- The retrospective's improvement beads have landed.
 - The final acceptance passes.
 - The report is promoted.
 - The D33 end state holds.

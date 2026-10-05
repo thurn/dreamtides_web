@@ -507,6 +507,27 @@ the code that phase created or touched. **Every** bead it files is implemented
 in the same phase; nothing is deferred to a later phase or past the run.
 Procedure: [workflow § Mason passes](workflow.md#mason-passes).
 
+### D42. Continuous introspection
+
+When workflow problems or bad architecture keep slowing the run, fix them
+then, not at the end of the phase.
+
+- **Evidence:** every bead records its friction and timings in a ledger.
+- **Triggers:** a friction cause recurring in 3 beads, or a budget exceeded by
+  more than 50% on 3 consecutive beads, files an improvement bead that runs
+  next.
+- **Retrospectives:** after every 10th bead of a phase and at every gate.
+- **Gate speed:** an improvement bead may change the local Tollgate policy in
+  any phase.
+
+Improvement beads preserve behavior and never change rules, card behavior,
+player-visible UI, or these decisions. Procedure:
+[workflow § Introspection](workflow.md#introspection).
+
+**Why:** the plan is long and unattended. A cost paid on every bead compounds
+across ~200 beads, and the mason pass at the end of a phase arrives too late
+for a phase as long as Phase 5.
+
 ### D18. Review cadence
 
 The independent review is a fresh `gpt-5.6-sol` reviewer, run via the Codex

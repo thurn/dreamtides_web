@@ -63,6 +63,8 @@ Every content batch bead follows these steps exactly.
 9. **Validate.** Run `npm run review`. Then do one commit, submit the
     candidate, approve with `--wait`, and close the bead. The bead notes list:
     counts, new primitives, RD and card-issue IDs, sweep and judged totals.
+    The commit includes the batch's
+    [friction ledger](workflow.md#friction-ledger) line.
 
 **Batch size:** 15–30 entities. Split a batch whose definitions need more than
 ~3 new primitives.
@@ -120,6 +122,12 @@ Phase 5 task beads (5.3–5.10, including 5.7b) after the last card batch.
 Each batch follows the recipe. The first batch (Starter, Tutorial, Nightmare)
 also validates the recipe end to end. Fix any tooling friction it reveals
 before the second batch: the sweep, the audit, and the lab solver.
+
+This phase has the most beads, so its
+[retrospectives](workflow.md#retrospectives) after every 10th bead also review
+the recipe itself: batch size, the sweep's wall time, judged-QA cost, lab
+overrides, and primitives that batches keep reworking. Improvement beads that
+change the recipe or its tooling run before the next batch.
 
 ### 5.3 Dreamwell cards (33)
 
@@ -275,9 +283,11 @@ coverage gate must stay green after each one.
    policies. Zero violations.
 4. **Journey playthrough** on desktop and mobile against Greedy, with real
    battles for at least three of the seven.
-5. **Independent review:** the full diff of engine and primitives, plus a
+5. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
+   and land the beads it files.
+6. **Independent review:** the full diff of engine and primitives, plus a
    deterministic 10% sample of content definitions, listed for the reviewer.
-6. Close the epic.
+7. Close the epic.
 
 ## Exit gate
 
@@ -286,4 +296,5 @@ coverage gate must stay green after each one.
 - The soak is clean.
 - The card issues and RD entries are recorded.
 - Every mason bead filed this phase has landed.
+- The retrospective's improvement beads have landed.
 - The review is resolved.

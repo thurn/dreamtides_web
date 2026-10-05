@@ -81,6 +81,8 @@ filed by the planning session; see the [README](README.md#starting-the-run).
 **Follow-up work gets a new bead, chained into the sequence.** It never gets a
 reopen. A newly discovered prerequisite of the current bead gets a new bead
 and an edge. Checkpoint the current bead, then work the prerequisite first.
+[Introspection](#introspection) improvement beads are filed the same way and
+chained to run next.
 
 ### Claiming and working
 
@@ -113,8 +115,8 @@ hbd update <id> --set-metadata hive_resolution=completed --append-notes 'Promote
 hbd close <id> --reason '<one-line outcome>'
 ```
 
-A gate bead closes only after its review is resolved and its phase evidence is
-written.
+A gate bead closes only after its [retrospective](#retrospectives)'s beads
+have closed, its review is resolved, and its phase evidence is written.
 
 ## Delivery
 
@@ -165,7 +167,8 @@ Run the cheapest relevant check first:
 
 Tests follow AGENTS.md. Never gate on timing, statistics, UI strings, or
 mutable production data. **Budgets are monitored, never asserted.** Phase 1
-defines them in `docs/plan/evidence/metrics.md`.
+defines them in `docs/plan/evidence/metrics.md`. A sustained overrun triggers
+an [improvement bead](#triggers).
 
 ## Reviews
 
@@ -239,6 +242,77 @@ Every phase ends with a mason pass, immediately before its gate task.
 A finding too large for one commit is split at filing time. A finding that
 would change rules, card behavior, or the player-visible UI is not a mason
 refactor; log it in the bead notes and drop it.
+
+## Introspection
+
+**Workflow problems and bad architecture are fixed as soon as the evidence
+shows they keep costing time** ([D42](decisions.md#d42-continuous-introspection)).
+Three mechanisms make this happen: a friction ledger, standing triggers, and
+retrospectives. None of them waits for the phase's mason pass.
+
+### Friction ledger
+
+Every bead appends one line to `docs/plan/evidence/friction.jsonl` in its own
+commit:
+
+```json
+{"bead":"hv-xxx","phase":3,"claimToCommitMin":95,"localValidationS":{"review":38,"focused":12,"fuzz":40},"reviewFindings":2,"prevBead":{"id":"hv-yyy","gateS":212,"candidates":1,"ciRepairs":0},"friction":[{"tag":"lab-solver-override","minutes":25,"note":"setup solver could not place a target for a void-only selector"}]}
+```
+
+- **`prevBead`** carries the Tollgate outcome of the previous bead, because a
+  bead's own gate runs after its commit.
+- **`friction`** lists each problem that cost more than ~10 minutes: tooling,
+  slow checks, flaky tests, confusing code, a missing primitive or helper,
+  an awkward abstraction, a misleading doc. An empty list is fine.
+- **`tag`** is a short stable kebab-case slug. Reuse an existing tag for the
+  same cause, so that recurrence can be counted with `jq`.
+
+### Triggers
+
+File an **improvement bead** when either of these holds:
+
+- the same friction tag appears in **3 beads** within a phase;
+- a [budget](#validation-ladder) in `metrics.md` is exceeded by **more than
+  50% on 3 consecutive beads**.
+
+An improvement bead:
+
+- is filed as soon as the trigger fires, at the current bead boundary, and is
+  chained to run **next**, ahead of the remaining phase tasks (edges first,
+  then `hive_project`);
+- carries the label `introspection` and names the evidence: ledger lines,
+  bead IDs, and measurements;
+- targets the cause, not the symptom: a faster check, a fixed flaky test, a
+  missing primitive, a simpler abstraction, a tooling fix, or a structural
+  refactor of the code that keeps causing the friction;
+- shows before/after numbers for a speed change, and is reverted if the target
+  metric does not improve by ≥10%;
+- preserves behavior and rendering, like a mason bead. Rules, card behavior,
+  and player-visible UI changes are out of scope, and the
+  [decisions](decisions.md) stay binding.
+
+A friction cause that is a prerequisite of the current bead is handled as a
+prerequisite bead at once, without waiting for a trigger.
+
+### Retrospectives
+
+Run a retrospective **after every 10th closed bead within a phase** and as part
+of every **phase gate**:
+
+1. Run the Hive `sage` skill read-only, scoped to this project's workflow
+   since the last retrospective: `friction.jsonl`, `metrics.md`, bead notes,
+   Tollgate history (`tg --no-launch history`), CI repair cycles, review
+   dispositions, and fuzz and sweep failures.
+2. Compare the current gate time, `npm run review` latency, and focused test
+   time with the budgets.
+3. Sage files an improvement bead (label `introspection`) for every recurring
+   cost it finds that a trigger has not already covered. Chain each to run
+   next, edges first, then `hive_project`. Budgets may be revised here, with
+   the reason recorded in `metrics.md`.
+4. Record the summary and the filed bead IDs in the phase epic's notes.
+
+At a phase gate, the retrospective runs before the independent review. The gate
+closes only after every bead it filed has closed.
 
 ## Browser QA
 

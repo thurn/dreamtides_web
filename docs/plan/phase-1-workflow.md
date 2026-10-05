@@ -60,7 +60,11 @@ cache state (cold or warm) for each of these:
   candidate. Use the per-step `elapsed_ms` in
   `.git/tollgate/state.sqlite3` (`step_attempts.attempt_json`).
 
-Then propose **budgets**. They are monitored, never gated. Examples:
+Start `docs/plan/evidence/friction.jsonl` with this bead's
+[ledger line](workflow.md#friction-ledger).
+
+Then propose **budgets**. They are monitored, never gated, and sustained
+overruns trigger [improvement beads](workflow.md#triggers). Examples:
 
 - `npm run review` for a typical one-file change: ≤ 45 s.
 - A focused test file: ≤ 5 s.
@@ -87,11 +91,14 @@ Then propose **budgets**. They are monitored, never gated. Examples:
 3. **Tollgate.** The trusted policy `~/dreamtides_web/.tollgate/config.toml`
    is local and untracked; `.git/info/exclude` excludes it. Pre-flight
    installed the prototype's `dependencies → trox → review` pipeline with
-   `JOURNEY_TEST_WORKERS = "2"` (D17). Verify it with `tg --no-launch config
-   explain`. Change it only through `tg --no-launch config validate`, then
-   `tg --no-launch config apply`. Only two kinds of beads may change it:
-   Phase 1 beads whose purpose is gate speed, and the Phase 2 beads that
-   delete Rust (2.3) and Trox (2.4). Record the old and new config in
+   `JOURNEY_TEST_WORKERS = "2"` (D17) and `sync_user_master = true`, which
+   fast-forwards the primary checkout's `master` after each promotion. Verify
+   it with `tg --no-launch config explain`. Change it only through
+   `tg --no-launch config validate`, then `tg --no-launch config apply`. Only
+   these beads may change it: beads whose purpose is gate speed (Phase 1
+   speedups and [introspection](workflow.md#introspection) improvement beads
+   in any phase), and the Phase 2 beads that delete Rust (2.3) and Trox (2.4).
+   Keep `sync_user_master` and the D17 limits. Record the old and new config in
    `metrics.md`, because the file is not versioned.
 4. **Deploy docs.** Remove the deploy instructions from always-loaded guidance.
    Deployment is operator-only and outside this run.
@@ -177,8 +184,10 @@ closed.
 ### 1.6 Phase gate
 
 1. Re-measure the 1.1 set. Update `metrics.md` with a before/after table.
-2. Run the [independent review](workflow.md#reviews) over the phase diff.
-3. Close the epic.
+2. Run the [phase retrospective](workflow.md#retrospectives) and land the beads
+   it files.
+3. Run the [independent review](workflow.md#reviews) over the phase diff.
+4. Close the epic.
 
 ## Exit gate
 
@@ -186,5 +195,6 @@ closed.
 - Hygiene and speedups have landed, with evidence.
 - Triage is complete for the surviving areas.
 - Every mason bead filed this phase has landed.
+- The retrospective's improvement beads have landed.
 - The review is resolved.
 - The gate passes at 2 workers.

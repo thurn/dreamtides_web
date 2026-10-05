@@ -290,8 +290,10 @@ definitions harder to write. Every filed bead keeps the fuzz smoke green.
    must be zero invariant violations or divergences.
 2. **Adversarial check:** run the `adversarial-test-validation` skill on the
    engine core, the step runner and prompt protocol first. Fix the survivors.
-3. **Independent review** of the whole phase diff.
-4. Update `metrics.md`, then close the epic.
+3. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
+   and land the beads it files.
+4. **Independent review** of the whole phase diff.
+5. Update `metrics.md`, then close the epic.
 
 ## Exit gate
 
@@ -299,4 +301,5 @@ definitions harder to write. Every filed bead keeps the fuzz smoke green.
 - The prompt protocol is proven by property tests and the soak.
 - Every entity is `pending` or `vanilla`.
 - Every mason bead filed this phase has landed.
+- The retrospective's improvement beads have landed.
 - The reviews are resolved.

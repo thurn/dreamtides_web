@@ -74,13 +74,16 @@ setup, the AI override path in the policy host, and the guidance triggers.
 
 1. Full journey playthroughs on desktop and mobile against Greedy (D21),
    with `__caps` empty.
-2. Run the independent review over the phase diff.
-3. Check that the gate passes.
-4. Close the epic.
+2. **Retrospective:** run the [phase retrospective](workflow.md#retrospectives)
+   and land the beads it files.
+3. Run the independent review over the phase diff.
+4. Check that the gate passes.
+5. Close the epic.
 
 ## Exit gate
 
 - The tutorial and tutorial journey work end to end on the engine.
 - The sandbox code is gone.
 - Every mason bead filed this phase has landed.
+- The retrospective's improvement beads have landed.
 - The review is resolved.
