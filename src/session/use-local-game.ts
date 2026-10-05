@@ -111,6 +111,7 @@ function opened(
   game: LocalGame<FoldState>,
   lock: GameLock,
   selection: LocalGameSelection,
+  requestNewGame: () => void,
 ): OpenedGame {
   const logCapture = createGameLogCapture(repository, game.gameId, {
     maxStoredCharacters: GAME_LOGS.maxStoredCharacters,
@@ -121,7 +122,12 @@ function opened(
     status: {
       kind: "ready",
       game,
-      controls: createLocalGameControls(game, repository, logCapture),
+      controls: createLocalGameControls(
+        game,
+        repository,
+        logCapture,
+        requestNewGame,
+      ),
     },
     lock,
     logCapture,
@@ -134,6 +140,7 @@ async function openGame(
   locks: GameLockManager | undefined,
   gameId: RoomId,
   contentConfig: PinnedContentConfig,
+  requestNewGame: () => void,
   selection: Exclude<LocalGameSelection, "created"> = "opened",
 ): Promise<OpenResult> {
   try {
@@ -159,7 +166,9 @@ async function openGame(
         gameId,
         persistOptions(gameId),
       );
-      if (game !== null) return opened(repository, game, lock, selection);
+      if (game !== null) {
+        return opened(repository, game, lock, selection, requestNewGame);
+      }
       lock.release();
       return { kind: "notFound", gameId };
     } catch (error) {
@@ -180,6 +189,7 @@ async function createGame(
   locks: GameLockManager | undefined,
   contentConfig: PinnedContentConfig,
   frontDoorEntry: FrontDoorEntry | undefined,
+  requestNewGame: () => void,
 ): Promise<OpenResult> {
   for (let attempt = 0; attempt < CREATE_GAME_MAX_ATTEMPTS; attempt += 1) {
     const gameId = generateGameId();
@@ -198,7 +208,7 @@ async function createGame(
         persistOptions(gameId),
       );
       replaceGameInUrl(gameId);
-      return opened(repository, game, lock, "created");
+      return opened(repository, game, lock, "created", requestNewGame);
     } catch (error) {
       lock.release();
       throw error;
@@ -217,6 +227,7 @@ async function resumeOrCreateGame(
   locks: GameLockManager | undefined,
   contentConfig: PinnedContentConfig,
   frontDoorEntry: FrontDoorEntry | undefined,
+  requestNewGame: () => void,
 ): Promise<OpenResult> {
   const [recent] = await repository.listGames();
   if (recent !== undefined) {
@@ -225,6 +236,7 @@ async function resumeOrCreateGame(
       locks,
       recent.gameId,
       contentConfig,
+      requestNewGame,
       "resumed",
     );
     if (result.kind === "ready") {
@@ -236,7 +248,13 @@ async function resumeOrCreateGame(
       reason: result.kind,
     });
   }
-  return createGame(repository, locks, contentConfig, frontDoorEntry);
+  return createGame(
+    repository,
+    locks,
+    contentConfig,
+    frontDoorEntry,
+    requestNewGame,
+  );
 }
 
 /** Point the current history entry's `?game=` at `gameId`. */
@@ -294,6 +312,10 @@ export function useLocalGame({
   } | null>(null);
   const mountedRef = useRef(false);
 
+  const createNewGame = useCallback(() => {
+    setCreateRequests((count) => count + 1);
+  }, []);
+
   useEffect(() => {
     if (requestRef.current?.key !== requestKey) {
       setStatus({ kind: create ? "creating" : "opening" });
@@ -301,15 +323,28 @@ export function useLocalGame({
         key: requestKey,
         result: repository().then((loaded) =>
           create
-            ? createGame(loaded, locks(), contentConfig, frontDoorEntry)
+            ? createGame(
+                loaded,
+                locks(),
+                contentConfig,
+                frontDoorEntry,
+                createNewGame,
+              )
             : gameId === null
               ? resumeOrCreateGame(
                   loaded,
                   locks(),
                   contentConfig,
                   frontDoorEntry,
+                  createNewGame,
                 )
-              : openGame(loaded, locks(), gameId, contentConfig),
+              : openGame(
+                  loaded,
+                  locks(),
+                  gameId,
+                  contentConfig,
+                  createNewGame,
+                ),
         ),
       };
     }
@@ -363,6 +398,7 @@ export function useLocalGame({
   }, [
     contentConfig,
     create,
+    createNewGame,
     frontDoorEntry,
     gameId,
     locks,
@@ -383,10 +419,6 @@ export function useLocalGame({
       active.detachLog();
       closeOpened(active.opened);
     };
-  }, []);
-
-  const createNewGame = useCallback(() => {
-    setCreateRequests((count) => count + 1);
   }, []);
 
   return { status, createNewGame };

@@ -140,6 +140,7 @@ describe("ErrorBoundary", () => {
     const controls: LocalGameControls = {
       exportLog: vi.fn(() => Promise.resolve(2)),
       recover: vi.fn(() => Promise.resolve()),
+      startNewGame: vi.fn(),
     };
     const { container } = renderInCumulus(
       <LocalGameControlsContext.Provider value={controls}>

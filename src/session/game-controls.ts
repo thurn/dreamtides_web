@@ -1,7 +1,7 @@
-// Player-invoked controls for the open local game: export its journey log and
-// recover it from storage. `LocalGameProvider` supplies them; the error
-// fallback and the game menu read them with `useLocalGameControls`, which is
-// null outside a game.
+// Player-invoked controls for the open local game: export its journey log,
+// recover it from storage, and leave it for a new game. `LocalGameProvider`
+// supplies them; the error fallback and the game menu read them with
+// `useLocalGameControls`, which is null outside a game.
 
 import { createContext, useContext } from "react";
 import { downloadJsonl, logEvent } from "../logging";
@@ -26,6 +26,11 @@ export interface LocalGameControls {
    * after it.
    */
   recover: (source: LocalGameControlSource) => Promise<void>;
+  /**
+   * Create a new local game and switch this tab to it. This game stays stored,
+   * so its `?game=` URL reopens it.
+   */
+  startNewGame: (source: LocalGameControlSource) => void;
 }
 
 export const LocalGameControlsContext = createContext<LocalGameControls | null>(
@@ -42,10 +47,15 @@ export function gameLogFileName(gameId: RoomId, at: Date): string {
   return `journey-log-${gameId}-${at.toISOString().replace(/[:.]/g, "-")}.jsonl`;
 }
 
+/**
+ * The controls for `game`. `requestNewGame` asks the game selection to create
+ * and open a new game in place of this one.
+ */
 export function createLocalGameControls(
   game: LocalGame<FoldState>,
   repository: GameRepository,
   logCapture: GameLogCapture,
+  requestNewGame: () => void,
 ): LocalGameControls {
   const { gameId } = game;
   return {
@@ -65,6 +75,13 @@ export function createLocalGameControls(
       const url = new URL(window.location.href);
       url.searchParams.set("game", gameId);
       window.location.assign(url.toString());
+    },
+    startNewGame(source) {
+      logEvent("local_game_new_requested", {
+        ...source,
+        head: game.log.head(),
+      });
+      requestNewGame();
     },
   };
 }

@@ -3,7 +3,9 @@
 // (StrictMode included) and the URL gains its id in place; the front door
 // resumes the most recent playable game instead; with `?game=` that stored
 // game resumes and its journey log is captured; unknown ids and games pinned
-// to other content are gated; a game another tab holds is not opened.
+// to other content are gated; a game another tab holds is not opened; the open
+// game's New Journey control switches to a created game and leaves the previous
+// one resumable by its id.
 
 import { act, StrictMode, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
@@ -266,6 +268,50 @@ describe("useLocalGame", () => {
     const reopened = await openTab(repository, gameId, CONTENT, locks);
     expect(reopened.status().kind).toBe("ready");
     await reopened.close();
+  });
+
+  it("starts a new game from the open game's controls and keeps the old one resumable", async () => {
+    const repository = createGameRepository(createMemoryKeyValueStore());
+    const locks = createFakeLockManager();
+    const previous = await storeGame(repository, parseRoomId("previous1"), 1_000);
+    window.history.replaceState(null, "", `/?game=${previous}`);
+    const entries = window.history.length;
+
+    const tab = await openTab(repository, previous, CONTENT, locks);
+    const opened = tab.status();
+    if (opened.kind !== "ready") throw new Error("expected a ready game");
+    expect(opened.game.gameId).toBe(previous);
+
+    act(() => opened.controls.startNewGame({ source: "game_menu" }));
+    await settle();
+
+    const switched = tab.status();
+    if (switched.kind !== "ready") throw new Error("expected a ready game");
+    const created = switched.game.gameId;
+    expect(created).not.toBe(previous);
+    expect(urlGameId()).toBe(created);
+    expect(window.history.length).toBe(entries);
+    expect((await repository.listGames()).map((g) => g.gameId).sort()).toEqual(
+      [previous, created].sort(),
+    );
+    expect(await selections(repository, created)).toEqual(["created"]);
+
+    const resumed = await openTab(repository, previous, CONTENT, locks);
+    const reopened = resumed.status();
+    expect(reopened.kind === "ready" && reopened.game.gameId).toBe(previous);
+    await resumed.close();
+    await tab.close();
+
+    const previousLog = (await repository.readLogLines(previous)).map(
+      (line) => JSON.parse(line) as { event: string; source?: string },
+    );
+    expect(previousLog).toContainEqual(
+      expect.objectContaining({
+        event: "local_game_new_requested",
+        source: "game_menu",
+        gameId: previous,
+      }),
+    );
   });
 
   it("gates unknown games and games pinned to other content", async () => {

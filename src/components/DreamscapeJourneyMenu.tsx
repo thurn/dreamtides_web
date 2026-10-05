@@ -1,16 +1,25 @@
 // DreamscapeJourneyMenu — the top-left utility menu for the Cumulus journey map
 // screens (the dreamscape and the Dream Atlas). The shared JourneyUtilityMenu
-// renders its root actions here as app-shell corner chrome.
+// renders its root actions here as app-shell corner chrome, and the New Journey
+// confirmation as a popup glass dialog.
 
+import type { ReactElement } from "react";
 import type { JourneyMutationSource } from "../state/journey-context";
 import {GLYPHS } from "../cumulus/primitives/glyph";
+import { token } from "../cumulus/primitives/tokens";
 import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
 import { MENU_BUTTON_PX } from "../cumulus/primitives/chrome-geometry";
+import { GlassButton } from "../cumulus/components/controls/GlassButton";
 import { CommandMenu } from "../cumulus/components/overlay/CommandMenu";
+import { GlassDialog } from "../cumulus/components/overlay/GlassDialog";
 import {
   useJourneyUtilityMenuController,
   type JourneyUtilityMenuAction,
+  type NewJourneyConfirmationModel,
 } from "./JourneyUtilityMenuController";
+
+/** Maximum prose width (px) of the New Journey confirmation. */
+const NEW_JOURNEY_CONFIRMATION_MAX_WIDTH_PX = 420;
 
 /** The App-shell overlay handlers the menu triggers. */
 interface DreamscapeJourneyMenuProps {
@@ -136,29 +145,97 @@ export function DreamscapeJourneyMenu({
 
   const model = useJourneyUtilityMenuController({
     actions,
-    builtIns: ["saveJourney", "loadJourney", "buildSha", "exportLog"],
+    builtIns: [
+      "newJourney",
+      "saveJourney",
+      "loadJourney",
+      "buildSha",
+      "exportLog",
+    ],
     onLoadJourneyState,
     saveSource: "dreamscape_menu_save_journey",
     loadSource: "dreamscape_menu_load_journey",
   });
 
   return (
-    <CommandMenu
-      model={{
-        kind: "appChrome",
-        trigger: {
-          glyph: isDesktop ? GLYPHS.gear : GLYPHS.menu,
-          label: "Open menu",
-          corner: isDesktop ? "topEnd" : "topStart",
-        },
-        actions: model.actions,
-        status:
-          model.status === null
-            ? undefined
-            : { text: model.status, testId: "dreamscape-menu-status" },
-        elevated,
-        testId: "dreamscape-menu-button",
-      }}
-    />
+    <>
+      <CommandMenu
+        model={{
+          kind: "appChrome",
+          trigger: {
+            glyph: isDesktop ? GLYPHS.gear : GLYPHS.menu,
+            label: "Open menu",
+            corner: isDesktop ? "topEnd" : "topStart",
+          },
+          actions: model.actions,
+          status:
+            model.status === null
+              ? undefined
+              : { text: model.status, testId: "dreamscape-menu-status" },
+          elevated,
+          testId: "dreamscape-menu-button",
+        }}
+      />
+      {model.newJourneyConfirmation !== null && (
+        <NewJourneyConfirmation confirmation={model.newJourneyConfirmation} />
+      )}
+    </>
+  );
+}
+
+/** Asks the player to confirm leaving this journey for a new one. */
+function NewJourneyConfirmation({
+  confirmation,
+}: {
+  confirmation: NewJourneyConfirmationModel;
+}): ReactElement {
+  return (
+    <GlassDialog
+      title="Begin a New Journey?"
+      presentation="popup"
+      onClose={confirmation.onCancel}
+      closeLabel="Cancel"
+    >
+      <div
+        data-new-journey-confirmation=""
+        style={{
+          display: "grid",
+          gap: token("--space-m"),
+          maxWidth: NEW_JOURNEY_CONFIRMATION_MAX_WIDTH_PX,
+        }}
+      >
+        <p
+          style={{
+            margin: 0,
+            color: token("--text-on-glass"),
+            font: token("--t-body"),
+          }}
+        >
+          You will choose a new Avatar and set out afresh. This journey stays
+          saved in this browser, and its current address returns you to it.
+        </p>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: token("--space-xs"),
+          }}
+        >
+          <GlassButton
+            label="Cancel"
+            placement="onGlass"
+            testId="new-journey-cancel"
+            onPress={confirmation.onCancel}
+          />
+          <GlassButton
+            label="Begin"
+            variant="accent"
+            placement="onGlass"
+            testId="new-journey-confirm"
+            onPress={confirmation.onConfirm}
+          />
+        </div>
+      </div>
+    </GlassDialog>
   );
 }

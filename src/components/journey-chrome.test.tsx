@@ -211,6 +211,9 @@ describe("DreamscapeJourneyMenu", () => {
       '[role="menuitem"][data-command-menu-action-id="buildSha"]',
     );
     expect(buildSha).not.toBeNull();
+    expect(
+      container.querySelector('[data-command-menu-action-id="newJourney"]'),
+    ).toBeNull();
     act(() => buildSha?.click());
 
     expect(container.querySelector('[role="menu"]')).toBeNull();
@@ -230,7 +233,9 @@ describe("buildJourneyUtilityMenuViewModel", () => {
     onSaveJourney: vi.fn(),
     onLoadJourney: vi.fn(),
     onExportLog: vi.fn(),
+    onRequestNewJourney: vi.fn(),
     onViewBuildSha: vi.fn(),
+    newJourneyConfirmation: null,
   };
 
   it("orders screen actions before the built-in utility actions", () => {
@@ -245,15 +250,23 @@ describe("buildJourneyUtilityMenuViewModel", () => {
           onCommand: vi.fn(),
         },
       ],
-      builtIns: ["saveJourney", "loadJourney", "buildSha", "exportLog"],
+      builtIns: [
+        "newJourney",
+        "saveJourney",
+        "loadJourney",
+        "buildSha",
+        "exportLog",
+      ],
       canLoadJourney: true,
       canExportLog: true,
+      canStartNewJourney: true,
       status: "Fixture status.",
     });
 
     expect(model.status).not.toBe("");
     expect(model.actions.map((item) => item.id)).toEqual([
       "deck",
+      "newJourney",
       "saveJourney",
       "loadJourney",
       "buildSha",
@@ -261,13 +274,14 @@ describe("buildJourneyUtilityMenuViewModel", () => {
     ]);
   });
 
-  it("omits load and export when the context cannot support them", () => {
+  it("omits load, export, and New Journey when the context cannot support them", () => {
     const model = buildJourneyUtilityMenuViewModel({
       ...handlers,
       actions: [],
-      builtIns: ["loadJourney", "exportLog"],
+      builtIns: ["loadJourney", "exportLog", "newJourney"],
       canLoadJourney: false,
       canExportLog: false,
+      canStartNewJourney: false,
       status: null,
     });
     expect(model.actions).toEqual([]);
@@ -281,12 +295,19 @@ describe("useJourneyUtilityMenuController", () => {
   const gameControls: LocalGameControls = {
     exportLog: vi.fn(() => Promise.resolve(3)),
     recover: vi.fn(() => Promise.resolve()),
+    startNewGame: vi.fn(),
   };
 
   function Probe(): null {
     latest = useJourneyUtilityMenuController({
       actions: [],
-      builtIns: ["saveJourney", "loadJourney", "buildSha", "exportLog"],
+      builtIns: [
+        "saveJourney",
+        "loadJourney",
+        "buildSha",
+        "exportLog",
+        "newJourney",
+      ],
       saveSource: parseJourneyMutationSource("menu-save"),
       loadSource: parseJourneyMutationSource("menu-load"),
       onLoadJourneyState: loadJourneyState,
@@ -295,7 +316,7 @@ describe("useJourneyUtilityMenuController", () => {
   }
 
   function command(
-    id: "saveJourney" | "loadJourney" | "exportLog",
+    id: "saveJourney" | "loadJourney" | "exportLog" | "newJourney",
   ): () => void {
     renderInCumulus(
       <LocalGameControlsContext.Provider value={gameControls}>
@@ -356,6 +377,37 @@ describe("useJourneyUtilityMenuController", () => {
     expect(latest?.status).not.toBeNull();
   });
 
+  it("starts a new game only after New Journey is confirmed", () => {
+    const request = command("newJourney");
+    expect(latest?.newJourneyConfirmation).toBeNull();
+
+    act(() => request());
+    expect(gameControls.startNewGame).not.toHaveBeenCalled();
+    const confirmation = latest?.newJourneyConfirmation;
+    if (confirmation == null) throw new Error("Missing confirmation");
+
+    act(() => confirmation.onConfirm());
+    expect(gameControls.startNewGame).toHaveBeenCalledTimes(1);
+    expect(gameControls.startNewGame).toHaveBeenCalledWith({
+      source: "game_menu",
+    });
+    expect(latest?.newJourneyConfirmation).toBeNull();
+  });
+
+  it("declining New Journey leaves the open game in place", () => {
+    const request = command("newJourney");
+    act(() => request());
+    const confirmation = latest?.newJourneyConfirmation;
+    if (confirmation == null) throw new Error("Missing confirmation");
+
+    act(() => confirmation.onCancel());
+    expect(latest?.newJourneyConfirmation).toBeNull();
+    expect(gameControls.startNewGame).not.toHaveBeenCalled();
+    expect(logEvent).toHaveBeenCalledWith("new_journey_declined", {
+      source: "game_menu",
+    });
+  });
+
   it("loads a selected file through the shared journey mutation", async () => {
     vi.mocked(chooseJourneySaveFile).mockResolvedValue({
       fileName: "before-atlas.json",
@@ -414,5 +466,48 @@ describe("useJourneyUtilityMenuController", () => {
       errorKind: "Error",
       message: "save file is corrupt",
     });
+  });
+
+  it("confirms New Journey in a dialog before starting a new game", () => {
+    stubViewport(true);
+    const controls: LocalGameControls = {
+      exportLog: vi.fn(() => Promise.resolve(0)),
+      recover: vi.fn(() => Promise.resolve()),
+      startNewGame: vi.fn(),
+    };
+    const { container } = renderInCumulus(
+      <LocalGameControlsContext.Provider value={controls}>
+        <DreamscapeJourneyMenu
+          onOpenDeckViewer={vi.fn()}
+          onOpenPoolViewer={vi.fn()}
+          onOpenDebugScreen={vi.fn()}
+          onOpenJourneyEditor={vi.fn()}
+          onToggleCardSourceOverlay={vi.fn()}
+          hasDraftData={false}
+          hasCardSourceDebug={false}
+          isCardSourceOverlayOpen={false}
+        />
+      </LocalGameControlsContext.Provider>,
+    );
+    const dialog = () =>
+      container.querySelector("[data-new-journey-confirmation]");
+    const press = (selector: string) =>
+      act(() => container.querySelector<HTMLButtonElement>(selector)?.click());
+    const requestNewJourney = () => {
+      press(MENU_BUTTON);
+      press('[role="menuitem"][data-command-menu-action-id="newJourney"]');
+    };
+
+    requestNewJourney();
+    expect(container.querySelector('[role="menu"]')).toBeNull();
+    expect(dialog()).not.toBeNull();
+    press('[data-testid="new-journey-cancel"]');
+    expect(dialog()).toBeNull();
+    expect(controls.startNewGame).not.toHaveBeenCalled();
+
+    requestNewJourney();
+    press('[data-testid="new-journey-confirm"]');
+    expect(dialog()).toBeNull();
+    expect(controls.startNewGame).toHaveBeenCalledWith({ source: "game_menu" });
   });
 });
