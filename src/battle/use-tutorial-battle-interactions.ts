@@ -8,7 +8,7 @@ import {
   useConfirmedPromptId,
   useEventOutcomes,
   useGameState,
-} from "../coop/hooks";
+} from "../session/hooks";
 import type { PromptResolution } from "../rules/battle/effect-runner-core";
 import type {
   MobileBattleDropResolution,

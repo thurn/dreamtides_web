@@ -24,7 +24,7 @@ import type { JourneyState } from "./types/journey";
 import { LayerName } from "./types/layer-name";
 import App, { JourneyApp } from "./App";
 import { useJourney } from "./state/journey-context";
-import { registerGameProviders } from "./coop/providers/register-game-providers";
+import { registerGameProviders } from "./session/providers/register-game-providers";
 import { parseJourneyId } from "./types/identifiers";
 import { parseAtlasNodeId } from "./types/identifiers";
 import { parseSiteId } from "./types/identifiers";
@@ -172,22 +172,18 @@ vi.mock("./session/hooks", () => ({
   useConfirmedHead: () => 0,
 }));
 
-vi.mock("./coop/providers/register-game-providers", () => ({
+vi.mock("./session/providers/register-game-providers", () => ({
   registerGameProviders: vi.fn(),
 }));
 
-vi.mock("./state/coop-journey-context", () => ({
-  CoopJourneyProvider: ({ children }: { children: ReactNode }) => (
-    <div data-coop-journey-provider>{children}</div>
+vi.mock("./state/game-journey-context", () => ({
+  GameJourneyProvider: ({ children }: { children: ReactNode }) => (
+    <div data-game-journey-provider>{children}</div>
   ),
 }));
 
 vi.mock("./state/front-door-context", () => ({
   FrontDoorProvider: ({ children }: { children: ReactNode }) => children,
-}));
-
-vi.mock("./coop/HostedPlaytestShell", () => ({
-  HostedPlaytestShell: ({ children }: { children: ReactNode }) => children,
 }));
 
 vi.mock("./components/FrontDoorRouter", () => ({
@@ -499,7 +495,6 @@ describe("App", () => {
           seedOverride: null,
           aiMode: false,
           gameId: parseRoomId("ab12cd"),
-          databaseMode: "emulator",
         }}
       />,
     );
@@ -509,7 +504,7 @@ describe("App", () => {
     expect(vi.mocked(useLocalGame).mock.calls[0]?.[0].gameId).toBe("ab12cd");
     expect(container.querySelector("[data-local-game-provider]")).not.toBeNull();
     expect(
-      container.querySelector("[data-coop-journey-provider]"),
+      container.querySelector("[data-game-journey-provider]"),
     ).not.toBeNull();
 
     act(() => {
@@ -528,7 +523,6 @@ describe("App", () => {
           seedOverride: null,
           aiMode: false,
           gameId: parseRoomId("ab12cd"),
-          databaseMode: "emulator",
         }}
       />,
     );
@@ -581,7 +575,6 @@ describe("JourneyApp", () => {
           seedOverride: null,
           aiMode: false,
           gameId: null,
-          databaseMode: "emulator",
         }}
       />,
     );
@@ -611,7 +604,6 @@ describe("JourneyApp", () => {
           seedOverride: null,
           aiMode: false,
           gameId: null,
-          databaseMode: "emulator",
         }}
       />,
     );
@@ -664,7 +656,6 @@ describe("JourneyApp", () => {
           seedOverride: null,
           aiMode: false,
           gameId: null,
-          databaseMode: "emulator",
         }}
       />,
     );
@@ -697,7 +688,6 @@ describe("JourneyApp", () => {
           seedOverride: null,
           aiMode: false,
           gameId: null,
-          databaseMode: "emulator",
         }}
       />,
     );
@@ -724,7 +714,6 @@ describe("JourneyApp", () => {
           seedOverride: null,
           aiMode: false,
           gameId: null,
-          databaseMode: "emulator",
         }}
       />,
     );
@@ -801,7 +790,6 @@ describe("JourneyApp", () => {
           seedOverride: null,
           aiMode: false,
           gameId: null,
-          databaseMode: "emulator",
         }}
       />,
     );
@@ -860,7 +848,6 @@ describe("JourneyApp", () => {
           seedOverride: null,
           aiMode: false,
           gameId: null,
-          databaseMode: "emulator",
         }}
       />,
     );

@@ -175,7 +175,7 @@ export function createBattleInitProvider(
 
 /**
  * Advance the live Atlas from authoritative folded journey/battle state.
- * Content is pinned by the room build and every random draw comes from the
+ * Content is pinned by the game build and every random draw comes from the
  * `END_BATTLE` event stream.
  */
 export function createBattleCompletionProvider(
@@ -216,7 +216,7 @@ export function createBattleCompletionProvider(
 /**
  * Builds the authored post-tutorial snapshot without needing a journey Battle
  * site. All identity comes from UUIDs and both remaining decks use streams
- * keyed by the room seed, tutorial run, side, and restart number.
+ * keyed by the game seed, tutorial run, side, and restart number.
  */
 export function createTutorialBattleInitProvider(
   content: JourneyContent,

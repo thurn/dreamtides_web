@@ -19,16 +19,14 @@ const mocks = vi.hoisted(() => ({
   completePresentation: vi.fn(() => Promise.resolve(1)),
   state: null as FoldState | null,
   clientId: "tutorial-driver",
-  connectedClientIds: ["tutorial-driver"] as readonly string[] | null,
 }));
 
-vi.mock("../coop/hooks", () => ({
+vi.mock("../session/hooks", () => ({
   useActions: () => ({
     completeTutorialBattlePresentation: mocks.completePresentation,
   }),
   useClientId: () => mocks.clientId,
   useConfirmedGameState: () => mocks.state,
-  useConnectedClientIds: () => mocks.connectedClientIds,
 }));
 
 function presentationState(): FoldState {
@@ -91,7 +89,6 @@ beforeEach(() => {
   vi.useFakeTimers();
   mocks.completePresentation.mockClear();
   mocks.clientId = "tutorial-driver";
-  mocks.connectedClientIds = ["tutorial-driver"];
   mocks.state = presentationState();
 });
 
@@ -206,12 +203,11 @@ describe("useTutorialBattleController", () => {
     act(() => root.unmount());
   });
 
-  it("does not automatically promote a connected viewer", () => {
+  it("does not drive a battle another client controls", () => {
     const container = document.createElement("div");
     document.body.append(container);
     const root = createRoot(container);
     mocks.clientId = "tutorial-viewer";
-    mocks.connectedClientIds = ["tutorial-viewer"];
 
     act(() => {
       root.render(<Harness visiblePresentationId={null} />);

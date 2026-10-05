@@ -58,8 +58,7 @@ describe("hashState", () => {
 
   it("hash equals hash after a JSON encode/decode round-trip for a state with an undefined-valued key", () => {
     // `JSON.stringify` drops the `b: undefined` entry; the canonical hash mirrors
-    // that, so the live state and its decoded snapshot hash identically. This is
-    // the invariant that prevents a false fold_divergence after compaction.
+    // that, so the live state and its decoded checkpoint hash identically.
     const live = { a: 1, b: undefined, c: 3 };
     const roundTripped = JSON.parse(JSON.stringify(live)) as Record<string, unknown>;
     expect(hashState(live)).toBe(hashState(roundTripped));

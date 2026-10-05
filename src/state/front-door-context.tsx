@@ -1,5 +1,5 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
-import { useActions, useClientId, useGameState } from "../coop/hooks";
+import { useActions, useClientId, useGameState } from "../session/hooks";
 import type { BattleFoldState, FrontDoorState } from "../rules/fold-state";
 import type { BeginTutorialOptions, TutorialAction } from "../types/tutorial";
 import type {

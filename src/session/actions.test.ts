@@ -1,7 +1,7 @@
 import { testJourneySeed } from "../types/test-identities";
 import { testEventActor } from "../types/test-identities";
 import { testJourneyMutationSource } from "../types/test-identities";
-// Facade contract test for the coop actions facade.
+// Facade contract test for the game actions facade.
 //
 // Bug class guarded: facade/event drift. Every named action creator must
 // produce an event whose `type` EXISTS in the rules-layer event union
@@ -271,7 +271,7 @@ function captureAllDrafts(): EventDraft[] {
   return drafts;
 }
 
-describe("coop actions facade", () => {
+describe("game actions facade", () => {
   const drafts = captureAllDrafts();
 
   it("produces a known event type for every creator", () => {
@@ -392,7 +392,7 @@ describe("coop actions facade", () => {
     ]);
   });
 
-  it("omits the selection protocol from intents written to legacy rooms", () => {
+  it("omits the selection protocol from intents written to legacy games", () => {
     const captured: EventDraft[] = [];
     const actions = makeActions(
       (draft) => {

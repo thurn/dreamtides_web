@@ -7,8 +7,8 @@
     "launch": "npm install && npm start -- --open",
     "qai": "npm install && npm start -- --open \"/?ai=1\"",
     "load-journey": "npm install && node scripts/load-saved-journey.mjs",
-    "start": "node scripts/dev-with-emulator.mjs",
-    "dev": "node scripts/dev-with-emulator.mjs",
+    "start": "node scripts/dev.mjs",
+    "dev": "node scripts/dev.mjs",
     "dev:vite": "node scripts/prepare-workspace.mjs && vite --port 5173 --strictPort",
     "build": "node scripts/prepare-workspace.mjs && npm run build:prepared",
     "build:prepared": "tsc && vite build",
@@ -34,16 +34,9 @@
     "dev:status": "node scripts/dev-processes.mjs",
     "dev:stop": "node scripts/dev-processes.mjs --stop",
     "kill-dev-servers": "node scripts/dev-processes.mjs --stop --all",
-    "regenerate-replay-fixtures": "tsx --import=./scripts/register-raw-import-loader.mjs scripts/regenerate-replay-fixtures.mjs",
-    "fuzz:coop": "tsx --import=./scripts/register-raw-import-loader.mjs scripts/coop-fuzz.mts",
-    "fuzz:demo": "node scripts/fuzz-demo.mjs",
-    "fuzz:demo:built": "node scripts/fuzz-demo.mjs --built --profile smoke --runs 1",
-    "fuzz:replay": "node scripts/replay-fuzz.mjs",
-    "demo:certify": "npm run fuzz:coop -- --runs 500 && npm run fuzz:demo:built"
+    "regenerate-replay-fixtures": "tsx --import=./scripts/register-raw-import-loader.mjs scripts/regenerate-replay-fixtures.mjs"
   },
   "dependencies": {
-    "@dicebear/collection": "^9.4.2",
-    "@dicebear/core": "^9.4.2",
     "@fortawesome/fontawesome-free": "^7.2.0",
     "firebase": "^12.13.0",
     "framer-motion": "^12.6.3",

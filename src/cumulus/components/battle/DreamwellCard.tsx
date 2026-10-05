@@ -1,9 +1,5 @@
 import { useEffect, useState, type CSSProperties } from "react";
-import {
-  cardIdenticonUri,
-  cardImageUrl,
-  hasAssignedImage,
-} from "../../../data/card-database";
+import { cardImageUrl, hasAssignedImage } from "../../../data/card-database";
 import type { DreamwellCardId } from "../../../types/identifiers";
 import type { DomTestId } from "../../types/dom";
 import type { ArtCrop } from "../../../types/cards";
@@ -84,10 +80,8 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
     setArtErrored(false);
   }, [model.cardId, card.imageNumber]);
 
+  // A card without loadable art shows the card surface behind the text.
   const hasArt = hasAssignedImage(card.imageNumber) && !artErrored;
-  const artUrl = hasArt
-    ? cardImageUrl(card.imageNumber)
-    : cardIdenticonUri(model.cardId);
   const definitions = rulesTextDefinitionCards(card.renderedText, "card");
   const binding = useRevealSource({
     identity: {
@@ -134,14 +128,16 @@ export function DreamwellCard({ model, testId }: DreamwellCardProps) {
         transition: "none",
       }}
     >
-      <img
-        src={artUrl}
-        alt=""
-        aria-hidden="true"
-        draggable={false}
-        style={artStyle(card.art ?? DEFAULT_ART_CROP)}
-        onError={hasArt ? () => setArtErrored(true) : undefined}
-      />
+      {hasArt && (
+        <img
+          src={cardImageUrl(card.imageNumber)}
+          alt=""
+          aria-hidden="true"
+          draggable={false}
+          style={artStyle(card.art ?? DEFAULT_ART_CROP)}
+          onError={() => setArtErrored(true)}
+        />
+      )}
       <div
         aria-hidden="true"
         style={{

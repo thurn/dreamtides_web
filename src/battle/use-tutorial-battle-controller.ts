@@ -4,8 +4,7 @@ import {
   useActions,
   useClientId,
   useConfirmedGameState,
-  useConnectedClientIds,
-} from "../coop/hooks";
+} from "../session/hooks";
 import type { BattleFoldState } from "../rules/battle/fold";
 import {
   planTutorialBattleController,
@@ -59,8 +58,9 @@ export function tutorialBattlePresentationDwellMs(
 
 /**
  * React bridge for the pure tutorial controller. It reads only the committed
- * fold and submits normal coop intents; the room log remains the sole flow
- * authority and intent keys absorb StrictMode/remount/reload duplicates.
+ * fold and submits normal game intents; the game log remains the sole flow
+ * authority and intent keys absorb StrictMode/remount/reload duplicates. The
+ * local player is the only connected client.
  */
 export function useTutorialBattleController({
   paused = false,
@@ -69,7 +69,6 @@ export function useTutorialBattleController({
 } = {}): TutorialBattleControllerRuntime {
   const state = useConfirmedGameState();
   const clientId = useClientId();
-  const connectedClientIds = useConnectedClientIds();
   const actions = useActions();
   const [visiblePresentationId, setVisiblePresentationId] = useState<
     string | null
@@ -81,8 +80,13 @@ export function useTutorialBattleController({
     [],
   );
   const plan = useMemo(
-    () => planTutorialBattleController({ state, clientId, connectedClientIds }),
-    [state, clientId, connectedClientIds],
+    () =>
+      planTutorialBattleController({
+        state,
+        clientId,
+        connectedClientIds: [clientId],
+      }),
+    [state, clientId],
   );
 
   useEffect(() => {

@@ -16,9 +16,9 @@
 // content from the same rng) and their folds diverge. Registration is a global
 // fact of the deployed build, not per-client state.
 //
-// SEAM (Task 26/27): the call site is the app / coop bootstrap — it awaits
-// `loadJourneyContent` and calls `registerGameProviders(content)` before mounting
-// the room / folding the log.
+// The call site is the app bootstrap (src/App.tsx): it loads the journey
+// content and calls `registerGameProviders(content)` before opening the local
+// game and folding its log.
 
 import type { JourneyContent } from "../../data/journey-content";
 import {

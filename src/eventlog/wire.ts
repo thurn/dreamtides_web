@@ -1,10 +1,11 @@
+// The stored encoding of a game's genesis and events: JSON strings decoded
+// and validated at the storage boundary, so nested game state round-trips
+// byte-exactly.
+
 import {
   parseEventActor,
-  parseEventNonce,
   parseEventType,
-  parseStateHash,
   type ContentConfig,
-  type EncodedLogNode,
   type GameEvent,
   type Genesis,
 } from "./types";
@@ -12,20 +13,6 @@ import { parseIntentKey } from "../types/identifiers";
 import { parseFoldHash } from "../types/content-hash";
 import { parseReducerVersion } from "../types/reducer-version";
 import { journeySeedFromUnknown } from "../types/journey-seed";
-
-/** A validated RTDB log envelope whose native-tree values remain untrusted. */
-export interface RtdbLogNode {
-  genesis: Genesis;
-  encodedGenesis: string;
-  generation: number;
-  baseSeq: number;
-  baseSnapshot: string | null;
-  head: number;
-  events: Record<number, unknown>;
-  appliedIndex?: string;
-  intentKeyIndex?: string;
-  compactionError?: EncodedLogNode["compactionError"];
-}
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -117,7 +104,7 @@ function decodeContentConfig(value: unknown): ContentConfig | undefined | null {
   };
 }
 
-/** Parse and validate the JSON-encoded room genesis stored by RTDB. */
+/** Parse and validate a stored JSON-encoded game genesis. */
 export function decodeGenesis(raw: unknown): Genesis | null {
   if (typeof raw !== "string") return null;
   let parsed: unknown;
@@ -155,134 +142,6 @@ export function decodeGenesis(raw: unknown): Genesis | null {
   };
 }
 
-function decodeSnapshot(raw: unknown): string | null | undefined {
-  if (raw === undefined || raw === null) return null;
-  if (typeof raw !== "string") return undefined;
-  try {
-    JSON.parse(raw);
-    return raw;
-  } catch {
-    return undefined;
-  }
-}
-
-function decodeEvents(raw: unknown): Record<number, unknown> | null {
-  if (raw === undefined || raw === null) return {};
-  if (typeof raw !== "object") return null;
-  const events: Record<number, unknown> = {};
-  for (const [key, value] of Object.entries(raw)) {
-    const seq = Number(key);
-    if (Number.isInteger(seq) && seq >= 0 && value !== null) {
-      events[seq] = value;
-    }
-  }
-  return events;
-}
-
-function decodeCompactionError(
-  raw: unknown,
-): EncodedLogNode["compactionError"] {
-  if (!isRecord(raw)) return undefined;
-  const { head, baseSeq, attemptedBaseSeq, message } = raw;
-  if (
-    !Number.isInteger(head) ||
-    !Number.isInteger(baseSeq) ||
-    !Number.isInteger(attemptedBaseSeq) ||
-    typeof message !== "string"
-  ) {
-    return undefined;
-  }
-  return {
-    head: head as number,
-    baseSeq: baseSeq as number,
-    attemptedBaseSeq: attemptedBaseSeq as number,
-    message,
-  };
-}
-
-/**
- * Normalize Firebase's native-tree representation into one validated envelope.
- * RTDB may omit null/empty children and may return dense integer keys as an
- * array, so neither representation is trusted as an application type.
- */
-export function decodeRtdbLogNode(raw: unknown): RtdbLogNode | null {
-  if (!isRecord(raw)) return null;
-  const genesis = decodeGenesis(raw.genesis);
-  const baseSnapshot = decodeSnapshot(raw.baseSnapshot);
-  const events = decodeEvents(raw.events);
-  const generation = raw.generation ?? 0;
-  if (
-    genesis === null ||
-    !isNonNegativeSafeInteger(generation) ||
-    !Number.isInteger(raw.baseSeq) ||
-    (raw.baseSeq as number) < 0 ||
-    !Number.isInteger(raw.head) ||
-    (raw.head as number) < (raw.baseSeq as number) ||
-    baseSnapshot === undefined ||
-    ((raw.baseSeq as number) > 0 && baseSnapshot === null) ||
-    events === null
-  ) {
-    return null;
-  }
-  const compactionError = decodeCompactionError(raw.compactionError);
-  return {
-    genesis,
-    encodedGenesis: raw.genesis as string,
-    generation,
-    baseSeq: raw.baseSeq as number,
-    baseSnapshot,
-    head: raw.head as number,
-    events,
-    ...(typeof raw.appliedIndex === "string"
-      ? { appliedIndex: raw.appliedIndex }
-      : {}),
-    ...(typeof raw.intentKeyIndex === "string"
-      ? { intentKeyIndex: raw.intentKeyIndex }
-      : {}),
-    ...(compactionError === undefined ? {} : { compactionError }),
-  };
-}
-
-/**
- * Decode the stricter shape required by an append transaction. A missing live
- * sequence is unreadable; a present non-string value becomes a deterministic
- * invalid-event string so the subscriber bounces that sequence while later
- * appends remain possible.
- */
-export function decodeAppendableLogNode(raw: unknown): EncodedLogNode | null {
-  const node = decodeRtdbLogNode(raw);
-  if (node === null) return null;
-  const events: Record<number, string> = {};
-  for (let seq = node.baseSeq + 1; seq <= node.head; seq += 1) {
-    if (!Object.prototype.hasOwnProperty.call(node.events, seq)) return null;
-    const value = node.events[seq];
-    events[seq] =
-      typeof value === "string"
-        ? value
-        : JSON.stringify({
-            __malformedRtdbEvent: true,
-            raw: value,
-          });
-  }
-  return {
-    genesis: node.encodedGenesis,
-    generation: node.generation,
-    baseSeq: node.baseSeq,
-    baseSnapshot: node.baseSnapshot,
-    head: node.head,
-    events,
-    ...(node.appliedIndex === undefined
-      ? {}
-      : { appliedIndex: node.appliedIndex }),
-    ...(node.intentKeyIndex === undefined
-      ? {}
-      : { intentKeyIndex: node.intentKeyIndex }),
-    ...(node.compactionError === undefined
-      ? {}
-      : { compactionError: node.compactionError }),
-  };
-}
-
 /** Encodes a decoded event to the JSON string a log stores per seq. */
 export function encodeEvent(event: GameEvent): string {
   return JSON.stringify(event);
@@ -300,7 +159,6 @@ export function decodeEvent(raw: string): GameEvent {
   }
   const event = parsed as Record<string, unknown>;
   const payload = event.payload;
-  const roomGeneration = event.roomGeneration;
   if (
     typeof event.type !== "string" ||
     typeof payload !== "object" ||
@@ -309,14 +167,7 @@ export function decodeEvent(raw: string): GameEvent {
     typeof event.actor !== "string" ||
     typeof event.clientTimestamp !== "string" ||
     typeof event.basedOnSeq !== "number" ||
-    (roomGeneration !== undefined &&
-      (typeof roomGeneration !== "number" ||
-        !Number.isSafeInteger(roomGeneration) ||
-        roomGeneration < 0)) ||
-    (event.nonce !== undefined && typeof event.nonce !== "string") ||
-    (event.intentKey !== undefined && typeof event.intentKey !== "string") ||
-    (event.stateHashAfter !== undefined &&
-      typeof event.stateHashAfter !== "string")
+    (event.intentKey !== undefined && typeof event.intentKey !== "string")
   ) {
     throw new Error("event has an invalid shape");
   }
@@ -326,17 +177,8 @@ export function decodeEvent(raw: string): GameEvent {
     actor: parseEventActor(event.actor),
     clientTimestamp: event.clientTimestamp,
     basedOnSeq: event.basedOnSeq,
-    ...(roomGeneration === undefined
-      ? {}
-      : { roomGeneration }),
-    ...(event.nonce === undefined
-      ? {}
-      : { nonce: parseEventNonce(event.nonce) }),
     ...(event.intentKey === undefined
       ? {}
       : { intentKey: parseIntentKey(event.intentKey) }),
-    ...(event.stateHashAfter === undefined
-      ? {}
-      : { stateHashAfter: parseStateHash(event.stateHashAfter) }),
   };
 }

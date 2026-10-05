@@ -27,7 +27,7 @@ export interface DreamwellCard {
   energyAdded: number;
   /** Catalog ordinal. */
   cardNumber: number;
-  /** Art key for `/cards/<imageNumber>.webp`; 0/absent renders an identicon. */
+  /** Art key for `/cards/<imageNumber>.webp`; 0/absent renders no art. */
   imageNumber?: number;
   /** Curated pan/zoom crop framing the art; absent until the card is framed. */
   art?: ArtCrop;

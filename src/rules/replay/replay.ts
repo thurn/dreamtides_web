@@ -1,5 +1,5 @@
 // The replay harness: the canonical game EngineConfig plus a one-call log
-// replayer used by the fixture regression net and by src/coop/ (Stage D).
+// replayer used by the fixture regression net and by src/session/ (Stage D).
 //
 // `GAME_ENGINE_CONFIG` is THE single definition of the real game's
 // `EngineConfig<FoldState>`: the root reducer, the genesis-state builder, a
@@ -37,7 +37,7 @@ import { reduceGameEvent } from "../reducer";
  * - `hash` — the canonical, key-order-independent SHA-256 digest.
  *
  * This is the ONE wiring every folder of the game log consumes (Stage D's
- * `src/coop/` included). Do not construct a second ad-hoc config; import this.
+ * `src/session/` included). Do not construct a second ad-hoc config; import this.
  */
 export const GAME_ENGINE_CONFIG: EngineConfig<FoldState> = {
   reducer: reduceGameEvent,

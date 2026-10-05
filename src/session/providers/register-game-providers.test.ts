@@ -735,7 +735,7 @@ describe("registerGameProviders (real content providers)", () => {
 
 const AUGURY_SEED = "augury-real-provider-seed";
 // The augury fixture journey is seeded with AUGURY_SEED, and the LOAD_STATE
-// validator requires the loaded snapshot's seed to equal the room seed, so these
+// validator requires the loaded snapshot's seed to equal the game seed, so these
 // augury replays run against a genesis pinned to the same seed.
 const AUGURY_GENESIS: Genesis = { ...GENESIS, seed: testJourneySeed(AUGURY_SEED) };
 const AUGURY_SITE_ID = parseSiteId("site-augury-resolve");

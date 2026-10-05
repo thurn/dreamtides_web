@@ -1,10 +1,5 @@
 import { useEffect, useRef, useState, type ReactElement } from "react";
-import {
-  cardIdenticonUri,
-  cardImageUrl,
-  hasAssignedImage,
-} from "../../../data/card-database";
-import { identiconsForced } from "../../../runtime/identicon-mode";
+import { cardImageUrl, hasAssignedImage } from "../../../data/card-database";
 import type { DomTestId } from "../../types/dom";
 import type { CardData } from "../../../types/cards";
 import type { AuguryPresentationText } from "../../../types/augury-data";
@@ -508,11 +503,8 @@ function CardArtPiece({
 }): ReactElement {
   const [imageBroken, setImageBroken] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
-  const useCardImage =
-    !identiconsForced() && hasAssignedImage(card.imageNumber) && !imageBroken;
-  const imageSource = useCardImage
-    ? cardImageUrl(card.imageNumber)
-    : cardIdenticonUri(card.id);
+  // Cards without loadable art show the tile's plain chrome background.
+  const useCardImage = hasAssignedImage(card.imageNumber) && !imageBroken;
   const artCrop = card.art ?? DEFAULT_ART_CROP;
 
   useEffect(() => {
@@ -541,38 +533,26 @@ function CardArtPiece({
         pointerEvents: "none",
       }}
     >
-      <img
-        src={imageSource}
-        alt=""
-        draggable={false}
-        onLoad={
-          useCardImage
-            ? (event) => {
-                const { naturalWidth, naturalHeight } = event.currentTarget;
-                if (naturalWidth > 0 && naturalHeight > 0) {
-                  setImageAspect(naturalWidth / naturalHeight);
-                }
-              }
-            : undefined
-        }
-        onError={useCardImage ? () => setImageBroken(true) : undefined}
-        style={{
-          ...(useCardImage
-            ? resolveCardArtImageStyle(artCrop, imageAspect, 1, frameAspect, 1)
-            : {
-                position: "absolute",
-                left: 0,
-                top: 0,
-                width: "100%",
-                height: "100%",
-                objectFit: "contain",
-                objectPosition: "50% 50%",
-              }),
-          display: "block",
-          pointerEvents: "none",
-          userSelect: "none",
-        }}
-      />
+      {useCardImage && (
+        <img
+          src={cardImageUrl(card.imageNumber)}
+          alt=""
+          draggable={false}
+          onLoad={(event) => {
+            const { naturalWidth, naturalHeight } = event.currentTarget;
+            if (naturalWidth > 0 && naturalHeight > 0) {
+              setImageAspect(naturalWidth / naturalHeight);
+            }
+          }}
+          onError={() => setImageBroken(true)}
+          style={{
+            ...resolveCardArtImageStyle(artCrop, imageAspect, 1, frameAspect, 1),
+            display: "block",
+            pointerEvents: "none",
+            userSelect: "none",
+          }}
+        />
+      )}
     </span>
   );
 }

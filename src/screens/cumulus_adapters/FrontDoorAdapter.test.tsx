@@ -27,7 +27,7 @@ const screenMocks = vi.hoisted(() => ({
   onSocial: null as null | ((socialId: MainMenuSocialId) => void),
 }));
 
-const coopMocks = vi.hoisted<{
+const gameMocks = vi.hoisted<{
   frontDoor: { phase: string; journeyId: JourneyId | null };
   frontDoorAction: ReturnType<typeof vi.fn>;
   advanceFrontDoor: ReturnType<typeof vi.fn>;
@@ -41,10 +41,10 @@ const coopMocks = vi.hoisted<{
 
 vi.mock("../../state/front-door-context", () => ({
   useFrontDoor: () => ({
-    state: coopMocks.frontDoor,
+    state: gameMocks.frontDoor,
     mutations: {
-      action: coopMocks.frontDoorAction,
-      advance: coopMocks.advanceFrontDoor,
+      action: gameMocks.frontDoorAction,
+      advance: gameMocks.advanceFrontDoor,
     },
   }),
 }));
@@ -52,7 +52,7 @@ vi.mock("../../state/front-door-context", () => ({
 vi.mock("../../state/journey-context", () => ({
   useJourney: () => ({
     journeyContent: {
-      cardDatabase: coopMocks.cardDatabase,
+      cardDatabase: gameMocks.cardDatabase,
       tutorial: makeTutorialConfiguration(),
     },
   }),
@@ -116,19 +116,19 @@ describe("LoadingScreenAdapter", () => {
       unobserve() {}
       disconnect() {}
     };
-    coopMocks.cardDatabase.clear();
+    gameMocks.cardDatabase.clear();
     const champion = card(1, TUTORIAL_LOADING_CHARACTER_CARD_ID);
     const worlds = card(2, TUTORIAL_WORLDS_AWAIT_CARD_ID);
-    coopMocks.cardDatabase.set(champion.cardNumber, champion);
-    coopMocks.cardDatabase.set(worlds.cardNumber, worlds);
+    gameMocks.cardDatabase.set(champion.cardNumber, champion);
+    gameMocks.cardDatabase.set(worlds.cardNumber, worlds);
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.useFakeTimers();
     window.history.replaceState(null, "", "/loading?seed=7#journey");
-    coopMocks.frontDoor = {
+    gameMocks.frontDoor = {
       phase: "loading",
       journeyId: testJourneyId("genesis:seed"),
     };
-    coopMocks.advanceFrontDoor.mockClear();
+    gameMocks.advanceFrontDoor.mockClear();
     resetLog();
   });
 
@@ -168,7 +168,7 @@ describe("LoadingScreenAdapter", () => {
     });
     expect(container.querySelector("[data-loading-indicator]")).not.toBeNull();
     expect(container.querySelector('[data-testid="loading-begin"]')).toBeNull();
-    expect(coopMocks.advanceFrontDoor).not.toHaveBeenCalled();
+    expect(gameMocks.advanceFrontDoor).not.toHaveBeenCalled();
 
     act(() => {
       vi.advanceTimersByTime(1);
@@ -178,10 +178,10 @@ describe("LoadingScreenAdapter", () => {
       '[data-testid="loading-begin"]',
     );
     expect(begin).not.toBeNull();
-    expect(coopMocks.advanceFrontDoor).not.toHaveBeenCalled();
+    expect(gameMocks.advanceFrontDoor).not.toHaveBeenCalled();
 
     act(() => begin?.click());
-    expect(coopMocks.advanceFrontDoor).toHaveBeenCalledWith(
+    expect(gameMocks.advanceFrontDoor).toHaveBeenCalledWith(
       "loading",
       "genesis:seed",
     );
@@ -216,9 +216,9 @@ describe("MainMenuScreenAdapter", () => {
     screenMocks.onAction = null;
     screenMocks.onExitComplete = null;
     screenMocks.onSocial = null;
-    coopMocks.frontDoor = { phase: "main", journeyId: null };
-    coopMocks.frontDoorAction.mockClear();
-    coopMocks.advanceFrontDoor.mockClear();
+    gameMocks.frontDoor = { phase: "main", journeyId: null };
+    gameMocks.frontDoorAction.mockClear();
+    gameMocks.advanceFrontDoor.mockClear();
     resetLog();
   });
 
@@ -241,12 +241,12 @@ describe("MainMenuScreenAdapter", () => {
 
     act(() => screenMocks.onAction?.("new-journey"));
     act(() => screenMocks.onAction?.("dream-codex"));
-    expect(coopMocks.frontDoorAction).toHaveBeenCalledWith(
+    expect(gameMocks.frontDoorAction).toHaveBeenCalledWith(
       "main",
       "new-journey",
     );
 
-    coopMocks.frontDoor = {
+    gameMocks.frontDoor = {
       phase: "mainExiting",
       journeyId: testJourneyId("event:1"),
     };
@@ -262,8 +262,8 @@ describe("MainMenuScreenAdapter", () => {
     ).not.toBeNull();
     act(() => screenMocks.onSocial?.("reddit"));
     act(() => screenMocks.onExitComplete?.());
-    expect(coopMocks.frontDoorAction).toHaveBeenCalledTimes(1);
-    expect(coopMocks.advanceFrontDoor).toHaveBeenCalledWith(
+    expect(gameMocks.frontDoorAction).toHaveBeenCalledTimes(1);
+    expect(gameMocks.advanceFrontDoor).toHaveBeenCalledWith(
       "mainExiting",
       "event:1",
     );

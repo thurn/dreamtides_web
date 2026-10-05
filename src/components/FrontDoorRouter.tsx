@@ -8,7 +8,6 @@ import { battleModeOf } from "../rules/battle/fold";
 import { useFrontDoor } from "../state/front-door-context";
 import type { AvatarContent } from "../types/content";
 import { ErrorBoundary } from "./ErrorBoundary";
-import { RecoveryCheckpointCommitter } from "../coop/RecoveryCheckpointCommitter";
 
 /** Reflects the room's shared front-door fold and renders its current scene. */
 export function FrontDoorRouter({
@@ -52,12 +51,6 @@ export function FrontDoorRouter({
     return journey;
   }
 
-  const path =
-    state.phase === "loading"
-      ? "/loading"
-      : state.phase === "tutorial"
-        ? "/tutorial"
-        : "/main";
   const content =
     state.phase === "loading" ? (
       <LoadingScreenAdapter playbackSpeed={tutorialPlaybackSpeed} />
@@ -82,7 +75,6 @@ export function FrontDoorRouter({
       resetKey={`${state.phase}:${state.journeyId ?? "none"}`}
     >
       {content}
-      <RecoveryCheckpointCommitter sourcePath={path} />
     </ErrorBoundary>
   );
 }

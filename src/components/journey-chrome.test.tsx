@@ -116,21 +116,6 @@ describe("CumulusJourneyChrome", () => {
     mockJourneyState(state);
   });
 
-  it("renders connected count only when explicit chrome state permits it", () => {
-    const chrome = (showConnectedCount: boolean) => (
-      <CumulusJourneyChrome handlers={{ connectedCount: 2, showConnectedCount }}>
-        <div />
-      </CumulusJourneyChrome>
-    );
-    const { container, rerender } = renderInCumulus(chrome(true));
-    expect(
-      container.querySelector("[data-connected-count]")?.textContent,
-    ).not.toBe("");
-
-    rerender(chrome(false));
-    expect(container.querySelector("[data-connected-count]")).toBeNull();
-  });
-
   it.each([
     { desktop: true, variant: "journey", statusBar: true, menu: true },
     { desktop: false, variant: "journey", statusBar: true, menu: true },

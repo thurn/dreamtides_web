@@ -193,7 +193,7 @@ function linkCardImages(catalog: ArtCatalog, paths: ArtPaths): void {
       linked++;
     }
   }
-  // Uncached images render as generated identicons, so misses are quiet.
+  // Uncached images render the card's missing-art treatment, so misses are quiet.
   console.log(
     `Linked ${String(linked)} of ${String(imageNumbers.size)} card images`,
   );

@@ -2,14 +2,10 @@
 //
 // `foldEvents` folds a batch of committed events onto a base state in seq
 // order, computing each event's `intervening` window and containing reducer
-// throws. It is game-agnostic: it never imports from src/rules/ or src/coop/,
-// touches no IO, and reads no clock (timestamps come from event data, RNG
-// from `eventRng`). Everything on the fold path is synchronous so compaction
-// can run it inside RTDB's synchronous transaction callback.
-//
-// See docs/superpowers/specs/2026-07-01-coop-event-sourcing-rewrite-design.md
-// §"The eventlog engine" (Read path and fold), §"The rules reducer" (Root
-// fold and CAS policy), and §"Error handling and safety rails".
+// throws. It is game-agnostic: it never imports from src/rules/ or
+// src/session/, touches no IO, and reads no clock (timestamps come from event
+// data, RNG from `eventRng`). Everything on the fold path is synchronous, so
+// the local log's append folds and commits in one call.
 
 import { eventRng } from "./rng";
 import type {
@@ -35,7 +31,7 @@ export interface FoldOutcome {
    * Present only when the engine turned a failure into a bounce: a reducer
    * throw contained in production (poison-event containment) or a malformed
    * event that never reached the reducer. Absent on ordinary applied/bounced
-   * outcomes. Surfacing it here lets the client log `fold_error` loudly
+   * outcomes. Surfacing it here lets the log record `fold_error` loudly
    * without the fold ever throwing.
    */
   error?: FoldError;
@@ -45,8 +41,8 @@ export interface FoldOutcome {
    * `ctx.intervening.map(e => e.seq)`, diagnostic context only (the
    * partner/non-neutral filtering CAS rule 3 applies is NOT re-applied here,
    * so this can include decision-neutral or self-chain entries too). Answers
-   * "which partner event caused this bounce" for `event_bounced` log lines
-   * (audit finding P3-9). Absent when the window predates the compaction
+   * "which event caused this bounce" for `event_bounced` log lines
+   * (audit finding P3-9). Absent when the window predates the checkpoint
    * horizon (`ctx.intervening === "unknown"`) or the event never reached
    * `computeIntervening` at all (e.g. a malformed `basedOnSeq`) — an empty
    * array is a precise "nothing intervened, the reducer bounced it for its
@@ -70,12 +66,12 @@ export interface AppliedEntry {
 
 export interface FoldBase<S> {
   /**
-   * The snapshot horizon (compaction baseSeq) that `state` corresponds to. It
+   * The checkpoint horizon (the seq) that `state` corresponds to. It
    * is the default coverage horizon: absent an explicit `coveredFromSeq`, an
    * event whose `basedOnSeq` is strictly below this has its intervening window
    * reported as "unknown". A fold that seeds a full applied index passes
    * `coveredFromSeq: 0` to enumerate windows below this horizon too. For an
-   * uncompacted incremental fold this stays 0 even as `state` advances.
+   * incremental fold from genesis this stays 0 even as `state` advances.
    */
   seq: number;
   state: S;
@@ -92,9 +88,9 @@ export interface FoldOptions {
    * The lowest seq from which `appliedBySeq` is a COMPLETE record of applied
    * events. An event whose `basedOnSeq` is strictly below this can not have its
    * intervening window enumerated, so it folds to "unknown". When a full applied
-   * index (dense from genesis) is supplied — as compaction and every client fold
-   * now do — this is 0, and no window is ever "unknown". Defaults to `base.seq`
-   * (the snapshot horizon), the coverage a fold gets when it seeds no index and
+   * index (dense from genesis) is supplied, or every event is based on the
+   * log head as the local log's are, this is 0 and no window is ever
+   * "unknown". Defaults to `base.seq` (the checkpoint horizon), the coverage a fold gets when it seeds no index and
    * only accumulates applied events above its base.
    */
   coveredFromSeq?: number;
@@ -239,79 +235,4 @@ function computeIntervening(
   }
   entries.sort((a, b) => a.seq - b.seq);
   return entries;
-}
-
-/**
- * Builds a seq -> {actor, type} index of the APPLIED events among `outcomes`,
- * for carrying the applied set forward across incremental folds. Bounced
- * events are excluded. `events` provides the authoritative event bodies keyed
- * by seq; `outcomes` supplies which seqs applied.
- */
-export function buildAppliedIndex(
-  events: Array<{ seq: number; event: GameEvent }>,
-  outcomes: FoldOutcome[],
-): Map<number, AppliedEntry> {
-  const eventBySeq = new Map(events.map(({ seq, event }) => [seq, event]));
-  const index = new Map<number, AppliedEntry>();
-  for (const outcome of outcomes) {
-    if (outcome.outcome !== "applied") {
-      continue;
-    }
-    const event = eventBySeq.get(outcome.seq) ?? outcome.event;
-    index.set(outcome.seq, { actor: event.actor, type: event.type });
-  }
-  return index;
-}
-
-/**
- * Serializes an applied index (seq -> {actor, type}) to the compact JSON string
- * compaction persists next to `baseSnapshot`. The stored object keys are the
- * decimal seqs; each value is the minimal `{actor, type}` an intervening query
- * needs (~40 bytes/entry). Growth is bounded only by the room's applied-event
- * count, which is acceptable at prototype room lifetimes.
- */
-export function encodeAppliedIndex(index: Map<number, AppliedEntry>): string {
-  const record: Record<number, AppliedEntry> = {};
-  for (const [seq, entry] of index) {
-    record[seq] = { actor: entry.actor, type: entry.type };
-  }
-  return JSON.stringify(record);
-}
-
-/**
- * Parses a persisted applied-index JSON string back into a seq -> {actor, type}
- * map. Total and tolerant: a missing or corrupt string (a pre-compaction node
- * has none) decodes to an empty map, malformed entries are skipped, and
- * non-integer keys are skipped.
- */
-export function decodeAppliedIndex(raw: string | null | undefined): Map<number, AppliedEntry> {
-  const map = new Map<number, AppliedEntry>();
-  if (raw === null || raw === undefined) {
-    return map;
-  }
-  let record: unknown;
-  try {
-    record = JSON.parse(raw);
-  } catch {
-    return map;
-  }
-  if (record === null || typeof record !== "object" || Array.isArray(record)) {
-    return map;
-  }
-  for (const [key, value] of Object.entries(record)) {
-    const seq = Number(key);
-    if (
-      Number.isInteger(seq) &&
-      value !== null &&
-      typeof value === "object" &&
-      typeof (value as Partial<AppliedEntry>).actor === "string" &&
-      typeof (value as Partial<AppliedEntry>).type === "string"
-    ) {
-      map.set(seq, {
-        actor: (value as AppliedEntry).actor,
-        type: (value as AppliedEntry).type,
-      });
-    }
-  }
-  return map;
 }

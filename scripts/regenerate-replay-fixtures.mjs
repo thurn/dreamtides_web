@@ -10,7 +10,7 @@
 // Each fixture is a checked-in `{ providerSet, genesis, events, finalHash }`.
 // These are SYNTHETIC seeds: they use the DETERMINISTIC fixture providers
 // (src/rules/replay/fixture-providers.ts, shared with replay.test.ts), NOT the
-// real content generators (which live in src/coop/providers/). The fixtures stay
+// real content generators (which live in src/session/providers/). The fixtures stay
 // synthetic on purpose: real-content hashes would couple this regression net to
 // the TOML data, which AGENTS.md forbids. When an intentional reducer /
 // rules-table change moves the hashes, re-run this script to re-stamp

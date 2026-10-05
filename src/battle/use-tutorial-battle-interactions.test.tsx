@@ -17,11 +17,7 @@ import type {
 } from "./types";
 import { getLogEntries, resetLog } from "../logging";
 import type { FoldState } from "../rules/fold-state";
-import {
-  parseEventNonce,
-  type EventOutcome,
-  type GameEvent,
-} from "../eventlog/types";
+import type { EventOutcome, GameEvent } from "../eventlog/types";
 import type { BattleCardId, IntentKey } from "../types/identifiers";
 import { parseBattleId } from "../types/identifiers";
 import { parseBattleCardId } from "../types/identifiers";
@@ -54,7 +50,7 @@ const mocks = vi.hoisted(() => ({
     ((event: GameEvent, seq: number, outcome: EventOutcome) => void) | null,
 }));
 
-vi.mock("../coop/hooks", () => ({
+vi.mock("../session/hooks", () => ({
   useActions: () => ({
     battlePlayCard: mocks.battlePlayCard,
     battleCommand: mocks.battleCommand,
@@ -583,7 +579,6 @@ describe("useTutorialBattleInteractions", () => {
           actor: testEventActor("driver-client"),
           clientTimestamp: "2026-07-26T03:38:48.126Z",
           basedOnSeq: 58,
-          nonce: parseEventNonce("driver-client:movement:2"),
         },
         59,
         "applied",

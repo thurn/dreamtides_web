@@ -91,7 +91,7 @@ export interface SiteOpenResult {
  * byte-identical offers.
  *
  * SEAM (Task 26): real content registration is deferred to the integration
- * task that wires the reducer into src/coop/ and relocates the legacy
+ * task that wires the reducer into src/session/ and relocates the legacy
  * `generateRewardSiteData` / `drawDreamsignOptions` / shop / `buildCardChoiceRuntime`
  * generators behind this seam, reading from the injected rng instead of
  * `Math.random`. Until a provider is registered, `OPEN_SITE` on a

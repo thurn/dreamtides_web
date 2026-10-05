@@ -384,7 +384,7 @@ function starterJourney(
 }
 
 describe("Exploration provider", () => {
-  it("keeps the frozen unversioned offer algorithm available for legacy room replay", () => {
+  it("keeps the frozen unversioned offer algorithm available for legacy game replay", () => {
     const offeredAction: ExplorationActionContent = {
       id: testExplorationActionId("gain-offered"),
       label: "Invite someone through",
@@ -1222,7 +1222,7 @@ describe("Exploration provider", () => {
     });
     await actions.resolveExplorationChoice(site.id, transfigureAllAction.id);
     const draft = drafts[0];
-    if (draft === undefined) throw new Error("Expected a coop intent");
+    if (draft === undefined) throw new Error("Expected a game intent");
     const genesis: Genesis = {
       seed: testJourneySeed("bulk-transfiguration-fold"),
       reducerVersion: "test",
@@ -4285,7 +4285,7 @@ describe("Exploration provider", () => {
     });
     await actions.resolveExplorationChoice(site.id, action.id);
     const draft = drafts[0];
-    if (draft === undefined) throw new Error("Expected a coop intent");
+    if (draft === undefined) throw new Error("Expected a game intent");
     const genesis: Genesis = {
       seed: testJourneySeed("starter-transfiguration-fold"),
       reducerVersion: "test",
@@ -4768,7 +4768,7 @@ describe("Exploration provider", () => {
     });
     await actions.resolveExplorationChoice(site.id, action.id, selection);
     const draft = drafts[0];
-    if (draft === undefined) throw new Error("Expected a coop intent");
+    if (draft === undefined) throw new Error("Expected a game intent");
     const genesis: Genesis = {
       seed: testJourneySeed("multi-card-transfiguration-fold"),
       reducerVersion: "test",

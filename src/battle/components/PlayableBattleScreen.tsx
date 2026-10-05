@@ -14,9 +14,8 @@ import {
   useActions,
   useClientId,
   useConfirmedPromptId,
-  useConnectedCount,
   useGameState,
-} from "../../coop/hooks";
+} from "../../session/hooks";
 import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
@@ -40,7 +39,6 @@ import type { JourneyContent } from "../../data/journey-content";
 import type { BattleCommand } from "../debug/commands";
 import type { PromptResolution } from "../../rules/battle/effect-runner-core";
 import { useBattleAi } from "../ai/use-battle-ai";
-import { aiMayRunHere, battleAiDriverEnabled } from "../ai/ai-may-run-here";
 import { aiEventActor } from "../../eventlog/types";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
@@ -87,7 +85,7 @@ import { parseBattleEffectScriptId } from "../../types/identifiers";
 import { parseIntentKey } from "../../types/identifiers";
 import { parseAvatarId } from "../../types/identifiers";
 
-// `BattleLogDrawer` renders from the append-only coop fold, so its
+// `BattleLogDrawer` renders from the append-only game fold, so its
 // `history` prop is supplied an empty undo/redo envelope.
 const EMPTY_BATTLE_HISTORY: BattleHistory = { past: [], future: [] };
 // Fires the automated-card hash-drift warning at most once per page session.
@@ -227,7 +225,6 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   }
 
   const actions = useActions();
-  const connectedCount = useConnectedCount();
   const clientId = useClientId();
   const confirmedPromptId = useConfirmedPromptId();
   const guidanceController = useBattleTutorialGuidance();
@@ -349,17 +346,9 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     [battleInit.scoreToWin, battleInit.turnLimit, battleInit.maxEnergyCap],
   );
 
-  // The AI is a LOCAL actor and must run on exactly ONE client. In a shared
-  // multiplayer room (two or more connected clients) it must NOT run here, or
-  // both clients would drive the enemy and corrupt the shared state. The gate is
-  // an ADDITIONAL condition on top of `aiMode`; single-player (one connected
-  // client) leaves the AI fully enabled.
-  const aiMayRun = aiMayRunHere({ connectedCount });
-  const aiDriverEnabled = battleAiDriverEnabled({
-    aiMode,
-    mayRunHere: aiMayRun,
-    perspectiveSide,
-  });
+  // The AI drives the enemy whenever `aiMode` is on and this screen shows the
+  // player's side.
+  const aiDriverEnabled = aiMode && perspectiveSide !== "enemy";
   const aiActor = useMemo(() => aiEventActor(clientId), [clientId]);
 
   // The AI approval loop. Inert unless `aiMode` is true AND this client may run
@@ -751,7 +740,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
   // folded in by the automation expansion of `DRAW_DREAMWELL_CARD`.
   //
   // Every connected client may observe this durable condition. The automatic
-  // battle intent key identifies the battle, side, and turn, so the room log
+  // battle intent key identifies the battle, side, and turn, so the game log
   // commits one reveal and reconciles every observer to that winning event.
   const activeSide = board.activeSide;
   const activePhase = board.phase;
@@ -983,7 +972,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
     void actions.endBattle();
   }
 
-  // Debug-only "Reset battle" control. The coop battle fold is append-only, so
+  // Debug-only "Reset battle" control. The battle fold is append-only, so
   // this dismisses the transient local overlays and selection state. It is a
   // pure client-side reset with no effect on the shared battle log.
   function handleResetBattle(): void {

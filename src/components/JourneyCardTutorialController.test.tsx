@@ -35,7 +35,7 @@ const mocks = vi.hoisted(() => {
   };
 });
 
-vi.mock("../coop/hooks", () => ({
+vi.mock("../session/hooks", () => ({
   useActions: () => ({
     openCardTutorialGuidance: mocks.open,
     completeCardTutorialGuidance: vi.fn(() => Promise.resolve(1)),
@@ -55,7 +55,7 @@ vi.mock("../logging", () => ({
   logEvent: vi.fn(),
 }));
 
-vi.mock("../coop/providers/card-tutorial-guidance-provider", () => ({
+vi.mock("../session/providers/card-tutorial-guidance-provider", () => ({
   createCardTutorialGuidanceContentProvider: () => ({
     triggers: [],
     cardById: () => undefined,

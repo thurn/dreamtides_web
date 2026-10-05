@@ -2,18 +2,12 @@ import type { ReactNode } from "react";
 import { TransientStatusToast } from "../cumulus/components/status/TransientStatusToast";
 import type { BounceReason } from "../eventlog/types";
 
-/** Copy for a confirmed cross-client compare-and-swap conflict. */
-export const PARTNER_CONFLICT_MESSAGE: string =
-  "Action not applied: your partner changed the game first.";
 /** Copy for an action rejected by its domain rules in the current state. */
 export const INVALID_ACTION_MESSAGE: string =
   "Action not applied: it is not valid for the current game state.";
-/** Copy for an intent whose append never reached the log. */
-export const APPEND_FAILED_MESSAGE: string =
-  "Action failed to send — try again.";
-/** Copy for a reconnect that discarded unconfirmed intents on a full refold. */
-export const PENDING_DROPPED_MESSAGE: string =
-  "Connection recovered — unconfirmed actions were discarded.";
+/** Copy for an action built against a game state that has since changed. */
+export const STALE_ACTION_MESSAGE: string =
+  "Action not applied: the game changed before it was received. Try again.";
 
 /** Select player-facing copy from the reducer's machine-readable bounce cause. */
 export function bounceMessageForReason(
@@ -21,13 +15,11 @@ export function bounceMessageForReason(
 ): string {
   switch (reason) {
     case "partner_conflict":
-      return PARTNER_CONFLICT_MESSAGE;
+    case "unknown_conflict":
+    case "observer_read_only":
+      return STALE_ACTION_MESSAGE;
     case "prompt_pending":
       return "Action not applied: finish the current choice first.";
-    case "unknown_conflict":
-      return "Action not applied: the game changed before it was received. Try again.";
-    case "observer_read_only":
-      return "Action not applied: this playtest is controlled from another browser.";
     case "fold_error":
     case "malformed_event":
       return "Action not applied because of an internal error. Please try again.";
@@ -37,7 +29,7 @@ export function bounceMessageForReason(
   }
 }
 
-/** Controller bridge from coop outcomes to Cumulus's transient status surface. */
+/** Shows a bounced intent's outcome on Cumulus's transient status surface. */
 export function BounceToast({
   onDismiss,
   message = INVALID_ACTION_MESSAGE,

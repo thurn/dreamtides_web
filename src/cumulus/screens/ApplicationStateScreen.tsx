@@ -43,17 +43,13 @@ interface ApplicationStateBase {
 }
 
 /**
- * The complete player-visible vocabulary for app bootstrap and coop gates.
- * Controllers select a state and retain all IO, URL, Firebase, and room-log
+ * The complete player-visible vocabulary for app bootstrap and local-game
+ * gates. Controllers select a state and retain all IO, URL, and storage
  * effects; this screen only renders the supplied copy, values, and callback.
  */
 export type ApplicationStateView =
   | (ApplicationStateBase & {
       readonly kind: "loading";
-      readonly busyLabel: string;
-    })
-  | (ApplicationStateBase & {
-      readonly kind: "roomCreation";
       readonly busyLabel: string;
     })
   | (ApplicationStateBase & { readonly kind: "recoverableError" })
@@ -63,18 +59,17 @@ export type ApplicationStateView =
       readonly kind: "contentConfigGate";
       readonly comparison: readonly ApplicationStateComparisonRow[];
     })
-  | (ApplicationStateBase & { readonly kind: "unreadableRoom" })
-  | (ApplicationStateBase & { readonly kind: "unreachableRoom" });
+  | (ApplicationStateBase & { readonly kind: "unreadableGame" })
+  | (ApplicationStateBase & { readonly kind: "unavailableGame" });
 
 export interface ApplicationStateScreenProps {
-  /** Strict bootstrap / coop state selected by the external controller. */
+  /** Strict bootstrap / local-game state selected by the external controller. */
   readonly view: ApplicationStateView;
 }
 
 function eyebrowForKind(kind: ApplicationStateView["kind"]): string {
   switch (kind) {
     case "loading":
-    case "roomCreation":
       return "Dreamtides";
     case "recoverableError":
       return "Journey Status";
@@ -84,25 +79,25 @@ function eyebrowForKind(kind: ApplicationStateView["kind"]): string {
       return "Game Version";
     case "contentConfigGate":
       return "Game Settings";
-    case "unreadableRoom":
+    case "unreadableGame":
       return "Game Data";
-    case "unreachableRoom":
-      return "Game Connection";
+    case "unavailableGame":
+      return "Saved Game";
   }
 }
 
-/** Pure Cumulus presentation for bootstrap, room, and compatibility states. */
+/** Pure Cumulus presentation for bootstrap, local-game, and compatibility states. */
 export function ApplicationStateScreen({
   view,
 }: ApplicationStateScreenProps): ReactElement {
-  const busy = view.kind === "loading" || view.kind === "roomCreation";
+  const busy = view.kind === "loading";
   return (
     <main
       className="cumulus"
       data-application-state={view.kind}
       data-config-gate={view.kind === "contentConfigGate" ? "true" : undefined}
       data-version-gate={view.kind === "versionGate" ? "true" : undefined}
-      data-unreadable-room={view.kind === "unreadableRoom" ? "true" : undefined}
+      data-unreadable-game={view.kind === "unreadableGame" ? "true" : undefined}
       aria-busy={busy || undefined}
       style={{
         minHeight: "100vh",

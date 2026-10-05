@@ -5,7 +5,6 @@ import type { CardData, Rarity } from "../../../types/cards";
 import type { CardId } from "../../../types/card-identity";
 import type { DomTestId } from "../../types/dom";
 import {
-  cardIdenticonUri,
   cardImageUrl,
   hasAssignedImage,
 } from "../../../data/card-database";
@@ -15,7 +14,6 @@ import {
   figmentCardDisplayName,
   figmentCardIdentityName,
 } from "../../../data/figment-card-display";
-import { identiconsForced } from "../../../runtime/identicon-mode";
 import {
   ART_EXTENSION_FRACTION,
   ART_REGION_ASPECT_RATIO_VALUE,
@@ -865,12 +863,8 @@ function GameCardSurface(props: GameCardSurfaceProps) {
     setImageAspect(null);
   }, [card.imageNumber]);
 
-  // `identicons=1` forces the generated identicon for every card; otherwise it
-  // is the art fallback for cards without an assigned image.
-  const hasImage = !identiconsForced() && hasAssignedImage(card.imageNumber);
-  const identiconUri = hasImage
-    ? null
-    : cardIdenticonUri(card.id !== "" ? card.id : card.name);
+  // Cards without assigned art render the missing-art placeholder.
+  const hasImage = hasAssignedImage(card.imageNumber);
 
   const typeLine: string | null =
     card.cardType === "Character"
@@ -1337,15 +1331,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
         : {})}
     >
       {/* Full-bleed art covering the entire card. */}
-      {identiconUri !== null ? (
-        <img
-          src={identiconUri}
-          alt={`${cardName} identicon`}
-          className="absolute inset-0 h-full w-full object-contain"
-          draggable={false}
-          loading="lazy"
-        />
-      ) : !imageError ? (
+      {hasImage && !imageError ? (
         <ArtLayers
           imageUrl={cardImageUrl(card.imageNumber)}
           alt={cardName}

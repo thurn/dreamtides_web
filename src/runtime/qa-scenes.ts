@@ -5,7 +5,7 @@ import { regenerateAtlasForProgress } from "../atlas/atlas-generator";
 import { createDefaultState } from "../state/journey-context";
 import { createDreamsign } from "../data/dreamsigns";
 import { createQaJourneyFoundation } from "./qa-journey-foundation";
-import { buildExplorationRuntime } from "../coop/providers/exploration-provider";
+import { buildExplorationRuntime } from "../session/providers/exploration-provider";
 import { initializeDraftState } from "../draft/draft-engine";
 import { eligibleTransfigurations } from "../transfiguration/transfiguration-logic";
 import { parseSiteId } from "../types/identifiers";

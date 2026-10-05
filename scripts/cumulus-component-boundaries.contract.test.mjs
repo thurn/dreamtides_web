@@ -51,7 +51,7 @@ const FORBIDDEN = [
   /^src\/cumulus\/screens\//,
   /^src\/screens\//,
   /^src\/state\//,
-  /^src\/coop\/(?:actions|hooks|providers|reducers?|state)(?:\/|\.|$)/,
+  /^src\/session\//,
   /^src\/(?:battle\/(?:engine|rules)|rules|reducers?|encounters?|exploration\/.*resolver)/,
 ];
 

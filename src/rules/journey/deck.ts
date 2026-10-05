@@ -52,7 +52,7 @@ import { parseCardTypeChangePredicateId } from "../../types/identifiers";
  * on the event's seq: the same UUID always resolves to the same card / dreamsign.
  *
  * SEAM: real content registration is deferred to the integration task that
- * wires the reducer into src/coop/. Until a provider is registered, `ADD_CARD`
+ * wires the reducer into src/session/. Until a provider is registered, `ADD_CARD`
  * and `ADD_DREAMSIGN` bounce (a recorded no-op, never a throw).
  */
 export interface DeckContentProvider {

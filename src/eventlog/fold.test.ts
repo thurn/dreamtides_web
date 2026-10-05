@@ -1,7 +1,7 @@
 import { testJourneySeed } from "../types/test-identities";
 import { testEventActor } from "../types/test-identities";
 import { describe, expect, it } from "vitest";
-import { buildAppliedIndex, decodeAppliedIndex, foldEvents } from "./fold";
+import { foldEvents } from "./fold";
 import { hashState } from "./hash";
 import type {
   EngineConfig,
@@ -13,7 +13,7 @@ import type {
 
 // A minimal, game-agnostic toy fold state and reducer used to exercise the
 // pure fold driver. `n` is a running counter; `log` records applied events in
-// order. No src/rules or src/coop imports appear here.
+// order. No src/rules or src/session imports appear here.
 interface ToyState {
   n: number;
   log: string[];
@@ -187,7 +187,7 @@ describe("foldEvents interveningSeqs on a bounced outcome (P3-9)", () => {
     expect(result.outcomes[0].interveningSeqs).toEqual([]);
   });
 
-  it("omits interveningSeqs when the window is 'unknown' (compacted away)", () => {
+  it("omits interveningSeqs when the window is 'unknown' (before the checkpoint)", () => {
     const events = [ev(6, "A", 1)]; // basedOnSeq 1 < base.seq 5 -> "unknown"
     const result = foldEvents(CONFIG, GENESIS, { seq: 5, state: CONFIG.genesisState(GENESIS) }, events);
     expect(result.outcomes[0].outcome).toBe("bounced");
@@ -242,60 +242,7 @@ describe("foldEvents snapshot horizon", () => {
   });
 });
 
-describe("foldEvents applied-index horizon coverage", () => {
-  it("a joiner folding from the snapshot computes the same intervening window a live client saw", () => {
-    // Live client: folds seqs 1..6 from genesis. Actors 1-3,5,6 = A; seq 4 = B.
-    // Event at seq 6 (basedOnSeq 3) sees applied partner seq 4 and bounces.
-    const liveEvents = [
-      ev(1, "A", 0),
-      ev(2, "A", 1),
-      ev(3, "A", 2),
-      ev(4, "B", 3),
-      ev(5, "A", 4),
-      ev(6, "A", 3),
-    ];
-    let liveWindow: EventContext["intervening"] | undefined;
-    const spyConfig: EngineConfig<ToyState> = {
-      ...CONFIG,
-      reducer: (state, event, ctx) => {
-        if (ctx.seq === 6) {
-          liveWindow = ctx.intervening;
-        }
-        return toyReducer(state, event, ctx);
-      },
-    };
-    const live = foldEvents(spyConfig, GENESIS, GENESIS_BASE(), liveEvents);
-    expect(new Map(live.outcomes.map((o) => [o.seq, o.outcome])).get(6)).toBe("bounced");
-    expect(liveWindow).toEqual([
-      { seq: 4, actor: testEventActor("B"), type: "ADD" },
-      { seq: 5, actor: testEventActor("A"), type: "ADD" },
-    ]);
-
-    // Joiner: starts from a snapshot at the compaction horizon base.seq = 5,
-    // seeded with the applied index the live client accumulated (covering
-    // seqs 1..5) and coveredFromSeq 0. Folding only the live event at seq 6
-    // (whose basedOnSeq 3 predates the horizon) must reproduce the SAME
-    // enumerated window — not "unknown".
-    const appliedBySeq = buildAppliedIndex(liveEvents.slice(0, 5), live.outcomes);
-    let joinerWindow: EventContext["intervening"] | undefined;
-    const joinerConfig: EngineConfig<ToyState> = {
-      ...CONFIG,
-      reducer: (state, event, ctx) => {
-        joinerWindow = ctx.intervening;
-        return toyReducer(state, event, ctx);
-      },
-    };
-    const joiner = foldEvents(
-      joinerConfig,
-      GENESIS,
-      { seq: 5, state: { n: 5, log: [] } },
-      [ev(6, "A", 3)],
-      { appliedBySeq, coveredFromSeq: 0 },
-    );
-    expect(joinerWindow).toEqual(liveWindow);
-    expect(joiner.outcomes[0].outcome).toBe("bounced");
-  });
-
+describe("foldEvents applied-index coverage", () => {
   it("still reports 'unknown' below coveredFromSeq when the index does not reach that far", () => {
     // coveredFromSeq defaults to base.seq; an event based below it is unknown.
     let captured: EventContext["intervening"] | undefined;
@@ -311,30 +258,6 @@ describe("foldEvents applied-index horizon coverage", () => {
       coveredFromSeq: 4,
     });
     expect(captured).toBe("unknown");
-  });
-});
-
-describe("decodeAppliedIndex", () => {
-  it("is total for corrupt persisted appliedIndex strings", () => {
-    expect(() => decodeAppliedIndex("{ not valid json")).not.toThrow();
-    expect(decodeAppliedIndex("{ not valid json").size).toBe(0);
-  });
-
-  it("skips malformed appliedIndex entries and keeps valid integer-keyed entries", () => {
-    const decoded = decodeAppliedIndex(
-      JSON.stringify({
-        1: { actor: testEventActor("a"), type: "T" },
-        nope: { actor: testEventActor("b"), type: "T" },
-        2: { actor: testEventActor("missing-type") },
-        3: null,
-        4: { actor: testEventActor("c"), type: "U" },
-      }),
-    );
-
-    expect([...decoded.entries()]).toEqual([
-      [1, { actor: testEventActor("a"), type: "T" }],
-      [4, { actor: testEventActor("c"), type: "U" }],
-    ]);
   });
 });
 
@@ -391,48 +314,5 @@ describe("foldEvents determinism", () => {
     expect(a.state).toEqual(b.state);
     expect(hashState(a.state)).toBe(hashState(b.state));
     expect(a.lastSeq).toBe(b.lastSeq);
-  });
-});
-
-describe("foldEvents incremental equivalence", () => {
-  it("fold [1..10] at once === fold [1..5] then [6..10] carrying the applied index", () => {
-    const all = Array.from({ length: 10 }, (_, i) => {
-      const seq = i + 1;
-      // Alternate actors and vary basedOnSeq to make intervening windows
-      // non-trivial; keep basedOnSeq < seq.
-      const actor = seq % 2 === 0 ? "A" : "B";
-      const basedOnSeq = Math.max(0, seq - 2);
-      return ev(seq, actor, basedOnSeq);
-    });
-
-    const batch = foldEvents(CONFIG, GENESIS, GENESIS_BASE(), all);
-
-    const first = foldEvents(CONFIG, GENESIS, GENESIS_BASE(), all.slice(0, 5));
-    const appliedBySeq = buildAppliedIndex(all.slice(0, 5), first.outcomes);
-    const second = foldEvents(
-      CONFIG,
-      GENESIS,
-      { seq: 0, state: first.state },
-      all.slice(5),
-      { appliedBySeq },
-    );
-
-    expect(hashState(second.state)).toBe(hashState(batch.state));
-    expect(second.state).toEqual(batch.state);
-    // Combined outcomes match batch outcomes seq-by-seq.
-    const incrementalOutcomes = [...first.outcomes, ...second.outcomes].map((o) => [o.seq, o.outcome]);
-    const batchOutcomes = batch.outcomes.map((o) => [o.seq, o.outcome]);
-    expect(incrementalOutcomes).toEqual(batchOutcomes);
-  });
-});
-
-describe("buildAppliedIndex", () => {
-  it("includes only applied events with actor and type", () => {
-    const events = [ev(1, "A", 0), ev(2, "B", 1, "BOUNCE_ME"), ev(3, "A", 1)];
-    const result = foldEvents(CONFIG, GENESIS, GENESIS_BASE(), events);
-    const index = buildAppliedIndex(events, result.outcomes);
-    expect([...index.keys()].sort((a, b) => a - b)).toEqual([1, 3]);
-    expect(index.get(1)).toEqual({ actor: testEventActor("A"), type: "ADD" });
-    expect(index.has(2)).toBe(false);
   });
 });

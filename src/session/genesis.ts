@@ -2,7 +2,7 @@
 // configuration a new game is created with, and the check that a stored game
 // can still be folded by this build.
 
-import { CURRENT_REDUCER_VERSION, isReducerVersionCompatible } from "../coop/reducer-version";
+import { CURRENT_REDUCER_VERSION, isReducerVersionCompatible } from "./reducer-version";
 import type {
   ContentConfig,
   Genesis,

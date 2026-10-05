@@ -2500,19 +2500,6 @@ export function ExplorationSiteScreen({
   }, [reduceMotion]);
 
   useEffect(() => {
-    if (frameBreakGeometry === null) return;
-    const presence = document.querySelector<HTMLElement>(
-      "[data-coop-presence-status]",
-    );
-    if (presence === null) return;
-    const previousVisibility = presence.style.visibility;
-    presence.style.visibility = "hidden";
-    return () => {
-      presence.style.visibility = previousVisibility;
-    };
-  }, [frameBreakGeometry]);
-
-  useEffect(() => {
     if (frameBreakGeometry === null || frameBreakPhase !== "open") return;
     const onKeyDown = (event: KeyboardEvent): void => {
       if (event.key !== "Escape") return;

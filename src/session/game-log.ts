@@ -4,7 +4,7 @@
 // from `logs/journey-log.jsonl` (development) or the game's exported log
 // (every build) by seq. Lines carry UUIDs and seqs, never names.
 
-import { settleDeferredOpponentLog } from "../coop/providers/battle-init-provider";
+import { settleDeferredOpponentLog } from "./providers/battle-init-provider";
 import type { LocalLogRecord } from "../eventlog/local-log";
 import {
   clearLogContext,

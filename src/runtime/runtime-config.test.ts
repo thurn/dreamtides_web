@@ -34,14 +34,12 @@ describe("runtime-config", () => {
         aiMode: false,
         tutorialPlaybackSpeed: 1,
         gameId: null,
-        databaseMode: "emulator",
         loadJourneyName: null,
         gotoScene: null,
         explorationCardId: null,
         explorationDreamsignCount: null,
         explorationDreamsignCap: null,
         explorationStarterCount: null,
-        viewLogs: null,
         gambleGameId: null,
       });
     });
@@ -192,39 +190,9 @@ describe("runtime-config", () => {
 
     describe("gameId", () => {
       it("returns a normalized game id from game", () => {
-        expect(parseRuntimeConfig("?game=JourneyRoom123").gameId).toBe(
-          "journeyroom123",
+        expect(parseRuntimeConfig("?game=JourneyGame123").gameId).toBe(
+          "journeygame123",
         );
-      });
-    });
-
-    describe("databaseMode", () => {
-      it("returns realtime only when realtime=1", () => {
-        expect(parseRuntimeConfig("?realtime=1").databaseMode).toBe("realtime");
-      });
-
-      it("defaults to emulator for missing or non-1 realtime values", () => {
-        expect(parseRuntimeConfig("").databaseMode).toBe("emulator");
-        expect(parseRuntimeConfig("?realtime=").databaseMode).toBe("emulator");
-        expect(parseRuntimeConfig("?realtime=0").databaseMode).toBe("emulator");
-        expect(parseRuntimeConfig("?realtime=true").databaseMode).toBe(
-          "emulator",
-        );
-        expect(parseRuntimeConfig("?realtime=2").databaseMode).toBe("emulator");
-      });
-    });
-
-    describe("viewLogs", () => {
-      it("returns a normalized room id from viewLogs", () => {
-        expect(parseRuntimeConfig("?viewLogs=JourneyRoom123").viewLogs).toBe(
-          "journeyroom123",
-        );
-      });
-
-      it("returns null when absent or malformed", () => {
-        expect(parseRuntimeConfig("").viewLogs).toBeNull();
-        expect(parseRuntimeConfig("?viewLogs=").viewLogs).toBeNull();
-        expect(parseRuntimeConfig("?viewLogs=bad_id").viewLogs).toBeNull();
       });
     });
   });
@@ -233,9 +201,9 @@ describe("runtime-config", () => {
     it("removes every ui key while preserving unrelated parameters", () => {
       expect(
         removeUiParamFromSearch(
-          "?game=room-7&ui=legacy&seed=42&ui=cumulus&deviceFrame=iphone16",
+          "?game=game7&ui=legacy&seed=42&ui=cumulus&deviceFrame=iphone16",
         ),
-      ).toBe("?game=room-7&seed=42&deviceFrame=iphone16");
+      ).toBe("?game=game7&seed=42&deviceFrame=iphone16");
     });
   });
 

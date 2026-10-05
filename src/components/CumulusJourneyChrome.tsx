@@ -8,7 +8,6 @@ import type { JourneyUtilityMenuAction } from "./JourneyUtilityMenuController";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useJourney } from "../state/journey-context";
 import { JourneyStatusBar } from "../cumulus/components/hud/JourneyStatusBar";
-import { CoopPresenceStatus } from "../cumulus/components/hud/CoopPresenceStatus";
 import { useIsDesktop } from "../cumulus/primitives/use-is-desktop";
 import type { JourneyMutationSource } from "../state/journey-context";
 import { buildDreamscapeHudView } from "../screens/cumulus_adapters/dreamscape-view-model";
@@ -32,8 +31,6 @@ export interface CumulusJourneyChromeHandlers {
   onRegenerateAtlas?: () => void;
   contextualActions?: readonly JourneyUtilityMenuAction[];
   elevated?: boolean;
-  showConnectedCount?: boolean;
-  connectedCount?: number | null;
 }
 
 export function CumulusJourneyChrome({
@@ -53,8 +50,6 @@ export function CumulusJourneyChrome({
   const { state } = useJourney();
   const hud = buildDreamscapeHudView(state);
   const isDesktop = useIsDesktop();
-  const showConnectedCount =
-    handlers.showConnectedCount ?? variant === "journey";
 
   return (
     <div
@@ -69,10 +64,6 @@ export function CumulusJourneyChrome({
           <JourneyCardTutorialController stageRef={stageRef} />
         </ErrorBoundary>
       )}
-      <CoopPresenceStatus
-        count={handlers.connectedCount ?? null}
-        visible={showConnectedCount}
-      />
       {showStatusBar && (variant === "journey" || isDesktop) && (
         <ErrorBoundary scope="overlay:cumulus-status-bar">
           <JourneyStatusBar

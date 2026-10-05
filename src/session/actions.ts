@@ -1,11 +1,10 @@
-// The coop actions facade: one named creator per rules-layer event type.
+// The game actions facade: one named creator per rules-layer event type.
 //
 // Every creator builds a single event's `{ type, payload }` draft (UUIDs and
 // indices only — never card names) and appends it through the injected
-// `append` function. The mapping from creator to event type is the authoritative
-// "Legacy mutation → event mapping" table in the coop plan; `actions.test.ts`
-// pins that every creator's type exists in the rules-layer union and that the
-// union is fully covered (no drift in either direction).
+// `append` function. `actions.test.ts` pins that every creator's type exists
+// in the rules-layer union and that the union is fully covered (no drift in
+// either direction).
 //
 // Two construction paths so the facade is usable in both contexts:
 //   - `makeActions(append)` — a pure factory, testable in isolation with a fake
@@ -13,14 +12,8 @@
 //   - `useActions()` (see src/session/hooks.ts) — binds `append` to the local
 //     game's log.
 //
-// Signatures mirror the legacy `JourneyMutations` call ergonomics
-// (src/state/journey-context.tsx) closely enough that Task 26 can back that
-// interface with these creators; complex payload shapes are typed `unknown`
-// here to keep this module import-light (the reducer's domain case is the one
-// place that narrows them).
-//
-// See docs/superpowers/specs/2026-07-01-coop-event-sourcing-rewrite-design.md
-// §"Client layer" (actions facade).
+// Complex payload shapes are typed `unknown` here to keep this module
+// import-light (the reducer's domain case is the one place that narrows them).
 
 import type { EventDraft } from "../eventlog/local-log";
 import type { EventActor } from "../eventlog/types";
@@ -72,7 +65,7 @@ import type { GameEventType } from "../rules/events";
 export type AppendFn = (draft: EventDraft) => Promise<number>;
 
 /** The full set of named action creators the screens call. */
-export interface CoopActions {
+export interface GameActions {
   // --- standalone front door ---
   frontDoorAction: (
     surface: "main" | "tutorial",
@@ -388,7 +381,7 @@ export interface CoopActions {
 export function makeActions(
   append: AppendFn,
   options: { selectionRulesVersion?: SelectionRulesVersion | null } = {},
-): CoopActions {
+): GameActions {
   const selectionRulesVersion =
     options.selectionRulesVersion === undefined
       ? SELECTION_RULES_VERSION

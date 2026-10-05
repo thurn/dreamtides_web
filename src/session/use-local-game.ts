@@ -11,7 +11,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GAME_LOGS } from "../content/game-logs";
-import { generateRoomId, mintClientId } from "../eventlog/game-id";
+import { generateGameId, mintClientId } from "../eventlog/game-id";
 import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
 import { logEvent } from "../logging";
 import type { FoldState } from "../rules/fold-state";
@@ -182,7 +182,7 @@ async function createGame(
   frontDoorEntry: FrontDoorEntry | undefined,
 ): Promise<OpenResult> {
   for (let attempt = 0; attempt < CREATE_GAME_MAX_ATTEMPTS; attempt += 1) {
-    const gameId = generateRoomId();
+    const gameId = generateGameId();
     const lock = await acquireGameLock(gameId, locks);
     if (lock === null) continue;
     try {

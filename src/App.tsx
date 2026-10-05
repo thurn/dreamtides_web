@@ -14,21 +14,19 @@ import {
 } from "./data/journey-content";
 import { loadTutorialConfiguration } from "./data/tutorial-actions";
 import { tutorialStarterDeckSize } from "./data/tutorial-actions";
-import { ConfigGateScreen } from "./coop/ConfigGateScreen";
-import { registerGameProviders } from "./coop/providers/register-game-providers";
+import { ConfigGateScreen } from "./components/ConfigGateScreen";
+import { registerGameProviders } from "./session/providers/register-game-providers";
 import { LocalGameProvider, useConfirmedHead } from "./session/hooks";
 import { useLocalGame } from "./session/use-local-game";
 import type { FrontDoorEntry } from "./session/genesis";
 import { useJourney } from "./state/journey-context";
-import { CoopJourneyProvider } from "./state/coop-journey-context";
+import { GameJourneyProvider } from "./state/game-journey-context";
 import { FrontDoorProvider } from "./state/front-door-context";
 import { FrontDoorRouter } from "./components/FrontDoorRouter";
 
 const MISSING_EXPLORATION_FOLD_HASH = parseFoldHash(
   "665bc1d7b9821fc8c95a0266d9773fda5414e05c9c19774b79c0b7a3f0365183",
 );
-import { HostedPlaytestShell } from "./coop/HostedPlaytestShell";
-import { FuzzProbe } from "./coop/FuzzProbe";
 import { ScreenRouter } from "./components/ScreenRouter";
 import { DesktopDeckViewerAdapter } from "./screens/cumulus_adapters/DesktopDeckViewerAdapter";
 import { MobileDeckViewerAdapter } from "./screens/cumulus_adapters/MobileDeckViewerAdapter";
@@ -382,7 +380,6 @@ export function JourneyApp({
             onLoadJourneyState: mutations.loadJourneyState,
             onRegenerateAtlas: handleRegenerateAtlas,
             elevated: deckViewerOpen && !isDesktopViewport,
-            showConnectedCount: false,
           }}
         />
         {/*
@@ -685,7 +682,7 @@ function LocalGameApp({
       return (
         <ApplicationStateScreen
           view={{
-            kind: "unreachableRoom",
+            kind: "unavailableGame",
             title: "Game Not Found",
             message: `No game ${status.gameId} is saved in this browser.`,
             actions: [createNewGameAction],
@@ -696,7 +693,7 @@ function LocalGameApp({
       return (
         <ApplicationStateScreen
           view={{
-            kind: "unreachableRoom",
+            kind: "unavailableGame",
             title: "Game Open in Another Tab",
             message:
               "This game is already open in another tab. Close that tab, then try again here.",
@@ -715,7 +712,7 @@ function LocalGameApp({
       return (
         <ApplicationStateScreen
           view={{
-            kind: "unreadableRoom",
+            kind: "unreadableGame",
             title: "This Game Could Not Be Read",
             message:
               "This game’s data cannot be loaded safely. Start a fresh game to keep playing.",
@@ -738,7 +735,7 @@ function LocalGameApp({
     case "configGate":
       return (
         <ConfigGateScreen
-          roomContentConfig={status.gameContentConfig}
+          gameContentConfig={status.gameContentConfig}
           localContentConfig={contentConfig}
           onStartNewGame={createNewGame}
         />
@@ -757,28 +754,27 @@ function LocalGameApp({
       );
     case "ready":
       return (
-        <LocalGameProvider game={status.game} controls={status.controls}>
-          {import.meta.env.VITE_FUZZ_TEST === "1" ? <FuzzProbe /> : null}
-          <CoopJourneyProvider journeyContent={journeyContent}>
+        <LocalGameProvider
+          game={status.game}
+          controls={status.controls}
+          claimUnownedBattle={directTutorialBattle}
+        >
+          <GameJourneyProvider journeyContent={journeyContent}>
             <FrontDoorProvider>
-              <HostedPlaytestShell claimUnownedBattle={directTutorialBattle}>
-                <FrontDoorRouter
-                  avatars={journeyContent.avatars}
-                  tutorialPlaybackSpeed={
-                    runtimeConfig.tutorialPlaybackSpeed ?? 1
-                  }
-                  directTutorialBattle={directTutorialBattle}
-                  previewTutorialVictory={previewTutorialVictory}
-                  journey={
-                    <JourneyApp
-                      cardDatabase={journeyContent.cardDatabase}
-                      runtimeConfig={runtimeConfig}
-                    />
-                  }
-                />
-              </HostedPlaytestShell>
+              <FrontDoorRouter
+                avatars={journeyContent.avatars}
+                tutorialPlaybackSpeed={runtimeConfig.tutorialPlaybackSpeed ?? 1}
+                directTutorialBattle={directTutorialBattle}
+                previewTutorialVictory={previewTutorialVictory}
+                journey={
+                  <JourneyApp
+                    cardDatabase={journeyContent.cardDatabase}
+                    runtimeConfig={runtimeConfig}
+                  />
+                }
+              />
             </FrontDoorProvider>
-          </CoopJourneyProvider>
+          </GameJourneyProvider>
         </LocalGameProvider>
       );
   }

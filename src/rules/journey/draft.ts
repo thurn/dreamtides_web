@@ -56,7 +56,7 @@ import { siteIdFromUnknown } from "../../types/identifiers";
  * the same card, and the same `(draftState, deck)` always yields the same deps.
  *
  * SEAM: real content registration is deferred to the integration task that
- * wires the reducer into src/coop/. Until a provider is registered,
+ * wires the reducer into src/session/. Until a provider is registered,
  * `PICK_DRAFT_CARD` bounces (a recorded no-op, never a throw).
  */
 export interface DraftContentProvider {

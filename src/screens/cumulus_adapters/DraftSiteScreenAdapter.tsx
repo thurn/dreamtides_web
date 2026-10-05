@@ -3,7 +3,7 @@
 // draft-site entry intent, the pick mutation, and returning to the dreamscape
 // once the pack is exhausted. Domain mapping lives in the builder
 // (`draft-view-model.ts`); entering a site is a single `ENTER_DRAFT_SITE`
-// intent (`src/coop/actions.ts`) folded by the reducer
+// intent (`src/session/actions.ts`) folded by the reducer
 // (`src/rules/journey/draft.ts`) — the reducer's optimistic echo paints the
 // first offer immediately, so the adapter itself carries no local draft-state
 // bootstrap.

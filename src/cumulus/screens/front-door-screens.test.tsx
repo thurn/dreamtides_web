@@ -350,13 +350,12 @@ describe("ApplicationStateScreen", () => {
   it("renders every strict application state", () => {
     const views: ApplicationStateView[] = [
       { kind: "loading", title: COPY, message: COPY, busyLabel: COPY },
-      { kind: "roomCreation", title: COPY, message: COPY, busyLabel: COPY },
       { kind: "recoverableError", title: COPY, message: COPY },
       { kind: "fatalConfiguration", title: COPY, message: COPY },
       { kind: "versionGate", title: COPY, message: COPY },
       { kind: "contentConfigGate", title: COPY, message: COPY, comparison: [] },
-      { kind: "unreadableRoom", title: COPY, message: COPY },
-      { kind: "unreachableRoom", title: COPY, message: COPY },
+      { kind: "unreadableGame", title: COPY, message: COPY },
+      { kind: "unavailableGame", title: COPY, message: COPY },
     ];
     for (const view of views) {
       const { container, unmount } = renderInCumulus(
@@ -381,7 +380,7 @@ describe("ApplicationStateScreen", () => {
             {
               id: "atlas",
               label: COPY,
-              expected: { kind: "raw", value: "Room" },
+              expected: { kind: "raw", value: "Game" },
               actual: { kind: "raw", value: "Local" },
               differs: true,
             },

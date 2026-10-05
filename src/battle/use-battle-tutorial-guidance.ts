@@ -1,5 +1,5 @@
 import { useCallback, useEffect } from "react";
-import { useActions, useClientId, useConfirmedGameState } from "../coop/hooks";
+import { useActions, useClientId, useConfirmedGameState } from "../session/hooks";
 import { logEvent } from "../logging";
 import {
   isAutomaticOpponentPlayGuidance,

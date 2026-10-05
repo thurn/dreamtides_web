@@ -6,7 +6,7 @@ import {
   useState,
   type RefObject,
 } from "react";
-import { useActions, useConfirmedGameState, useGameState } from "../coop/hooks";
+import { useActions, useConfirmedGameState, useGameState } from "../session/hooks";
 import { logEvent } from "../logging";
 import {
   cardIdsMatchCurrentDraftOffer,
@@ -16,7 +16,7 @@ import {
 import { useJourney } from "../state/journey-context";
 import { BattleTutorialGuidance } from "../cumulus/screens/BattleTutorialGuidance";
 import { buildCardTutorialGuidanceView } from "../screens/cumulus_adapters/card-tutorial-guidance-view-model";
-import { createCardTutorialGuidanceContentProvider } from "../coop/providers/card-tutorial-guidance-provider";
+import { createCardTutorialGuidanceContentProvider } from "../session/providers/card-tutorial-guidance-provider";
 import { activeFirstVisitTutorialSite } from "../data/site-tutorial-guidance";
 import { parseCardId } from "../types/card-identity";
 import type { CardId } from "../types/card-identity";

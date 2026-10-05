@@ -17,8 +17,7 @@
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import type { Genesis } from "../../eventlog/types";
-import { decodeEvent } from "../../eventlog/append";
-import { decodeGenesis } from "../../eventlog/wire";
+import { decodeEvent, decodeGenesis } from "../../eventlog/wire";
 import { NIGHTMARE_CARD_NUMBER } from "../../data/nightmare";
 import { builtInBattlePromptRef } from "../../data/dreamwell-prompts";
 import type { FoldState } from "../fold-state";

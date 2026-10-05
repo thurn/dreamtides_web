@@ -1,4 +1,4 @@
-import { normalizeRoomId } from "../eventlog/game-id";
+import { normalizeGameId } from "../eventlog/game-id";
 import type { ContentConfig, PinnedContentConfig } from "../eventlog/types";
 import type { EconomyData } from "../types/economy-data";
 import type { OpponentsData } from "../types/opponents-data";
@@ -19,16 +19,15 @@ export interface RuntimeConfig {
   /**
    * Local playback multiplier for the standalone tutorial sequence, from
    * `?tutorialSpeed=`. A positive finite decimal; absent or invalid values use
-   * normal speed (`1`). This is presentation-only and is not pinned into room
+   * normal speed (`1`). This is presentation-only and is not pinned into game
    * genesis.
    */
   tutorialPlaybackSpeed?: number;
   gameId: RoomId | null;
-  databaseMode: DatabaseMode;
   /**
    * Name of a saved journey to load on boot, from `?loadJourney=`. When set, the
    * app fetches the matching snapshot from the dev server's `/api/saved-journeys`
-   * endpoint and replaces the room's journey state with it before showing the
+   * endpoint and replaces the game's journey state with it before showing the
    * game (see `scripts/saved-journeys-api.mjs`). Null when absent.
    * `parseRuntimeConfig` always sets it; it is optional only so test config
    * literals can omit it. Only works while the Vite dev server is running,
@@ -37,7 +36,7 @@ export interface RuntimeConfig {
   loadJourneyName?: string | null;
   /**
    * Id of a developer QA scene to jump straight to on boot, from `?goto=`. When
-   * set, the app replaces the freshly created room's empty journey state with one
+   * set, the app replaces the freshly created game's empty journey state with one
    * parked on that screen (built from live journey content; see
    * `src/runtime/qa-scenes.ts`), so screens otherwise reachable only by playing
    * battles forward — such as the Dream Atlas boss preview — can be opened
@@ -59,28 +58,16 @@ export interface RuntimeConfig {
   /** QA-only authentic starter-card count for forced Exploration scenes. */
   explorationStarterCount?: number | null;
   /**
-   * Room id whose persisted journey log should be displayed, from
-   * `?viewLogs=<roomId>`. When set, the app renders the read-only log viewer
-   * (reading `rooms/<roomId>/logs` from Realtime Database) instead of joining a
-   * game, so a production run's log can be inspected after the playing tab has
-   * closed. Normalized like `?game=`; null when absent or malformed.
-   * `parseRuntimeConfig` always sets it; it is optional only so test config
-   * literals can omit it.
-   */
-  viewLogs?: RoomId | null;
-  /**
    * Optional Gamble game forced by `?gambleGame=`. Null lets OPEN_SITE choose
-   * randomly; the resolved game is persisted in the room event log.
+   * randomly; the resolved game is persisted in the game event log.
    */
   gambleGameId?: GambleGameId | null;
 }
 
-export type DatabaseMode = "emulator" | "realtime";
-
 /**
- * Extracts the fold-relevant content slice a room pins into its genesis.
- * Presentation-only configuration such as `aiMode` is excluded so two clients
- * differing purely in presentation still fold — and join — the same room.
+ * Extracts the fold-relevant content slice a game pins into its genesis.
+ * Presentation-only configuration such as `aiMode` is excluded so a change in
+ * presentation never gates a stored game.
  */
 export function contentConfigFromRuntime(
   atlasFoldHash: FoldHash,
@@ -114,7 +101,7 @@ export function contentConfigFromRuntime(
   };
 }
 
-/** Field-wise equality of two content configs (used by RoomGate's config gate). */
+/** Field-wise equality of two content configs (used by the config gate). */
 export function contentConfigsEqual(
   a: ContentConfig,
   b: ContentConfig,
@@ -154,8 +141,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     tutorialPlaybackSpeed: parseTutorialPlaybackSpeed(
       params.get("tutorialSpeed"),
     ),
-    gameId: normalizeRoomId(params.get("game")),
-    databaseMode: parseDatabaseMode(params.get("realtime")),
+    gameId: normalizeGameId(params.get("game")),
     loadJourneyName: parseLoadJourneyName(params.get("loadJourney")),
     gotoScene: parseGotoScene(params.get("goto")),
     explorationCardId: parseExplorationCardId(params.get("card")),
@@ -166,7 +152,6 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
       params.get("dreamsignCap"),
     ),
     explorationStarterCount: parseQaStarterInteger(params.get("starterCount")),
-    viewLogs: normalizeRoomId(params.get("viewLogs")),
     gambleGameId: parseGambleGameId(params.get("gambleGame")),
   };
 }
@@ -219,23 +204,6 @@ function parseGotoScene(rawScene: string | null): QaSceneId | null {
   }
   const trimmed = rawScene.trim();
   return trimmed === "" ? null : parseQaSceneId(trimmed);
-}
-
-function parseDatabaseMode(rawRealtime: string | null): DatabaseMode {
-  // `?realtime=1` forces the production realtime database; `?realtime=0` forces
-  // the local emulator (useful for testing a production build against a local
-  // emulator). With the param absent or unrecognised, default by build mode:
-  // production builds (the deployed `web.app` host) talk to the realtime
-  // database, dev builds talk to the local emulator. Defaulting deployed builds
-  // to the emulator made them try to reach `http://127.0.0.1:9000`, which a
-  // remote browser blocks as insecure content, hanging the join flow forever.
-  if (rawRealtime === "1") {
-    return "realtime";
-  }
-  if (rawRealtime === "0") {
-    return "emulator";
-  }
-  return import.meta.env.PROD ? "realtime" : "emulator";
 }
 
 function parseLoadJourneyName(rawName: string | null): string | null {

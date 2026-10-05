@@ -6,7 +6,6 @@ export type KnownReducerVersion =
   | "test"
   | "v1"
   | "build-abc"
-  | "coop-fuzz-v1"
   | "internal-reset";
 type LegacyReducerVersion = string & {
   readonly [legacyReducerVersionBrand]: "ReducerVersion";

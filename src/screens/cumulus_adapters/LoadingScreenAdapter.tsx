@@ -5,7 +5,7 @@ import { useFrontDoor } from "../../state/front-door-context";
 import { useJourney } from "../../state/journey-context";
 import { buildLoadingView } from "./loading-view-model";
 
-/** Coop-backed `/loading` wiring and presentation logging. */
+/** Game-log-backed `/loading` wiring and presentation logging. */
 export function LoadingScreenAdapter({
   playbackSpeed = 1,
 }: {
@@ -44,7 +44,7 @@ export function LoadingScreenAdapter({
       tutorialPlaybackSpeed: playbackSpeed,
     });
     void mutations.advance("loading", journeyId).catch((error: unknown) => {
-      console.error("Coop loading transition failed", error);
+      console.error("Loading transition failed", error);
     });
   }, [mutations, playbackSpeed, source, state.journeyId, state.phase]);
 

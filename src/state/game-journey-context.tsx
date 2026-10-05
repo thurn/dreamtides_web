@@ -22,7 +22,7 @@ import type { JourneyContent } from "../data/journey-content";
 import type { JourneySeed } from "../types/journey-seed";
 import type { GameEventType } from "../rules/events";
 import { NIGHTMARE_CARD_ID } from "../data/nightmare";
-import { useActions, useAppend, useGameState } from "../coop/hooks";
+import { useActions, useAppend, useGameState } from "../session/hooks";
 import {
   JourneyContextProvider,
   type JourneyContextValue,
@@ -39,7 +39,7 @@ import { buildQaScene, qaSceneLoadsBattle } from "../runtime/qa-scenes";
 import {
   createBattleInitProvider,
   settleDeferredOpponentLog,
-} from "../coop/providers/battle-init-provider";
+} from "../session/providers/battle-init-provider";
 import type { DreamAtlas, JourneyState } from "../types/journey";
 import {
   updateCardSourcePublication,
@@ -48,7 +48,7 @@ import {
 import { parseCardId } from "../types/card-identity";
 import { parseIntentKey, type AtlasNodeId } from "../types/identifiers";
 
-export interface CoopJourneyProviderProps {
+export interface GameJourneyProviderProps {
   children: ReactNode;
   journeyContent: JourneyContent;
 }
@@ -74,10 +74,10 @@ function findNextDreamscapeId(
   return null;
 }
 
-export function CoopJourneyProvider({
+export function GameJourneyProvider({
   children,
   journeyContent,
-}: CoopJourneyProviderProps) {
+}: GameJourneyProviderProps) {
   const fold = useGameState();
   const [cardSourcePublication, setCardSourcePublication] =
     useState<CardSourcePublication | null>(null);
@@ -110,7 +110,7 @@ export function CoopJourneyProvider({
     // matching the legacy providers' non-blocking write semantics.
     const dispatch = (promise: Promise<number>): void => {
       void promise.catch((error: unknown) => {
-        console.error("Coop journey action failed", error);
+        console.error("Journey action failed", error);
       });
     };
     const emit = (type: GameEventType, payload: Record<string, unknown>): void => {

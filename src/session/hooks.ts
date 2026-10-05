@@ -4,7 +4,8 @@
 // state and the committed state are the same fold.
 //
 // The single local player is the controller of every game: `useClientId` is
-// that player's id, and the player is always the one connected client.
+// that player's id, and the provider keeps that player in control of the
+// fold's single-controller phases (src/session/single-controller.ts).
 
 import {
   createContext,
@@ -18,9 +19,9 @@ import {
   useSyncExternalStore,
   type ReactNode,
 } from "react";
-import { BounceToast, bounceMessageForReason } from "../coop/BounceToast";
-import { makeActions, type AppendFn, type CoopActions } from "../coop/actions";
-import { CURRENT_REDUCER_VERSION } from "../coop/reducer-version";
+import { BounceToast, bounceMessageForReason } from "../components/BounceToast";
+import { makeActions, type AppendFn, type GameActions } from "./actions";
+import { CURRENT_REDUCER_VERSION } from "./reducer-version";
 import type { EventDraft } from "../eventlog/local-log";
 import type { EventOutcome, GameEvent } from "../eventlog/types";
 import type { FoldState } from "../rules/fold-state";
@@ -30,6 +31,7 @@ import {
   type LocalGameControls,
 } from "./game-controls";
 import type { LocalGame } from "./local-game";
+import { keepLocalPlayerInControl } from "./single-controller";
 
 /** A committed event's outcome, delivered to `useEventOutcomes` subscribers. */
 export type OutcomeListener = (
@@ -41,8 +43,7 @@ export type OutcomeListener = (
 interface LocalGameContextValue {
   game: LocalGame<FoldState>;
   append: AppendFn;
-  actions: CoopActions;
-  connectedClientIds: readonly ClientId[];
+  actions: GameActions;
 }
 
 const LocalGameContext = createContext<LocalGameContextValue | null>(null);
@@ -60,15 +61,19 @@ const BOUNCE_TOAST_MS = 4000;
 
 /**
  * Provides `game` to the game hooks, and its `controls` to
- * `useLocalGameControls`, and shows a toast when an intent bounces.
+ * `useLocalGameControls`, keeps the local player in control of the game, and
+ * shows a toast when an intent bounces. `claimUnownedBattle` also claims a
+ * battle nobody controls (a direct tutorial-battle entry).
  */
 export function LocalGameProvider({
   game,
   controls = null,
+  claimUnownedBattle = false,
   children,
 }: {
   game: LocalGame<FoldState>;
   controls?: LocalGameControls | null;
+  claimUnownedBattle?: boolean;
   children: ReactNode;
 }): ReactNode {
   const [bounce, setBounce] = useState<{ token: number; message: string }>({
@@ -87,6 +92,11 @@ export function LocalGameProvider({
         }));
       }),
     [game],
+  );
+
+  useEffect(
+    () => keepLocalPlayerInControl(game, { claimUnownedBattle }),
+    [claimUnownedBattle, game],
   );
 
   useEffect(() => {
@@ -110,7 +120,6 @@ export function LocalGameProvider({
             ? undefined
             : null,
       }),
-      connectedClientIds: [game.localPlayerId],
     }),
     [append, game],
   );
@@ -168,18 +177,8 @@ export function useAppend(): AppendFn {
 }
 
 /** The named action facade, bound to the game log. */
-export function useActions(): CoopActions {
+export function useActions(): GameActions {
   return useLocalGameContext().actions;
-}
-
-/** The number of connected players: the single local player. */
-export function useConnectedCount(): number | null {
-  return useLocalGameContext().connectedClientIds.length;
-}
-
-/** The connected players: the single local player. */
-export function useConnectedClientIds(): readonly ClientId[] | null {
-  return useLocalGameContext().connectedClientIds;
 }
 
 /** Subscribe to committed event outcomes for the lifetime of the caller. */

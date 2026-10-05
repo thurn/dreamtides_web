@@ -8,7 +8,6 @@ const SOURCE_DIRECTORIES = ["src", "scripts", "eslint-rules"];
 const ROOT_SOURCE_FILES = ["vite.config.ts"];
 const CHECKED_IDENTITY_MINT_BOUNDARIES = new Set([
   "src/types/card-identity.ts:brandCardId:CardId",
-  "src/coop/build-hash.ts::__BUILD_HASH__",
   "src/rules/battle/battle-events.test.ts:parkForeseePrompt:parkedBoardHash",
   "src/rules/replay/replay.test.ts::finalHash",
   "src/rules/replay/replay.test.ts:parseReplayFixture:finalHash",

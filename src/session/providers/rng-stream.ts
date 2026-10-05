@@ -1,4 +1,4 @@
-// Shared RNG adapters for the coop content providers.
+// Shared RNG adapters for the game content providers.
 //
 // The reducer hands each content seam a keyed `(drawIndex) => number` stream
 // derived from `(genesis.seed, seq, drawIndex)` (see `src/eventlog/rng.ts`), so

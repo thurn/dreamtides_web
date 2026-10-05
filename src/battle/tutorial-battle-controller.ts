@@ -37,10 +37,10 @@ export type TutorialDriverStatus =
   "not-tutorial" | "driver" | "observer" | "paused-driver-absent" | "terminal";
 
 export interface TutorialBattleControllerInput {
-  /** The confirmed room fold only; optimistic state must never drive automation. */
+  /** The committed game fold. */
   state: FoldState;
   clientId: ClientId;
-  /** `null` means presence has not loaded and automation must pause safely. */
+  /** The connected clients; `null` means unknown, and automation pauses safely. */
   connectedClientIds: readonly ClientId[] | null;
 }
 
@@ -122,7 +122,7 @@ export interface TutorialBattleControllerPlan {
   driverClientId: ClientId | null;
   /** True only for the persisted driver on this client, including at terminal. */
   isCurrentClientDriver: boolean;
-  /** Presence is deliberately explicit: a terminal result may outlive its driver. */
+  /** Whether the driver is connected; a terminal result may outlive its driver. */
   isDriverPresent: boolean;
   /** A human-owned prompt or block step must be rendered as interactive UI. */
   requiresHumanDecision: boolean;
@@ -132,7 +132,8 @@ export interface TutorialBattleControllerPlan {
 /**
  * Pure, one-step tutorial battle coordinator. Consumers submit at most the
  * returned intent and wait for its confirmation before asking again. The fold,
- * presence, and stable intent key are the entire coordination protocol.
+ * the connected clients, and stable intent key are the entire coordination
+ * protocol.
  */
 export function planTutorialBattleController(
   input: TutorialBattleControllerInput,

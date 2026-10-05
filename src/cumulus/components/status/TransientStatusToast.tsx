@@ -30,7 +30,6 @@ export function TransientStatusToast({
     <Pressable
       as="button"
       data-transient-status-toast="warning"
-      data-coop-bounce-toast=""
       aria-live="assertive"
       aria-label={onDismiss === undefined ? undefined : "Dismiss status"}
       disabled={onDismiss === undefined}

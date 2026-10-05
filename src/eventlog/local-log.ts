@@ -15,7 +15,7 @@
 // without being folded, so the list holds every event from seq 1.
 //
 // Game-agnostic: parameterized over `EngineConfig<S>`, never imports from
-// src/rules/ or src/coop/.
+// src/rules/ or src/session/.
 
 import { foldEvents, type FoldError } from "./fold";
 import { assertJsonSafe } from "./hash";

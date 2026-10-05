@@ -1,0 +1,27 @@
+{"file": "src/coop/FrontDoorApp.test.tsx", "verdict": "delete", "reason": "deleted-system", "notes": "The FrontDoorApp compatibility entry over the room runtime is deleted with src/coop (D3); App routes every front-door path."}
+{"file": "src/coop/FuzzProbe.test.tsx", "verdict": "delete", "reason": "deleted-system", "notes": "FuzzProbe and the co-op/demo fuzz certification are deleted (D3)."}
+{"file": "src/firebase/app-config.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Firebase app config and its databaseMode cases were reachable only from the deleted RecoveryApp (D2, D3)."}
+{"file": "src/runtime/identicon-mode.test.ts", "verdict": "delete", "reason": "deleted-system", "notes": "Executes the test-triage row: ?identicons=1 and the @dicebear identicons are deleted (D3)."}
+{"file": "src/session/single-controller.test.ts", "verdict": "keep", "reason": "contract", "notes": "New: the single-controller claim (formerly HostedPlaytestShell) takes a foreign controller, claims an unowned tutorial battle only on a direct entry, and keeps control after the log reopens, so the tutorial driver is never left paused-driver-absent."}
+{"file": "src/session/actions.test.ts", "verdict": "keep", "reason": "contract", "notes": "Moved from src/coop/actions.test.ts with the facade; describe names neutralized."}
+{"file": "src/session/reducer-version.test.ts", "verdict": "keep", "reason": "contract", "notes": "Moved from src/coop/; case name says games instead of rooms."}
+{"file": "src/session/providers/battle-init-provider.test.ts", "verdict": "keep", "reason": "contract", "notes": "Moved from src/coop/providers/ unchanged."}
+{"file": "src/session/providers/card-tutorial-guidance-provider.test.ts", "verdict": "keep", "reason": "contract", "notes": "Moved from src/coop/providers/ unchanged."}
+{"file": "src/session/providers/exploration-provider.test.ts", "verdict": "keep", "reason": "contract", "notes": "Moved from src/coop/providers/; error and case wording only."}
+{"file": "src/session/providers/register-game-providers.test.ts", "verdict": "keep", "reason": "contract", "notes": "Moved from src/coop/providers/; comment wording only."}
+{"file": "src/components/BounceToast.test.ts", "verdict": "rewrite", "reason": "contract", "notes": "Moved from src/coop/; the partner-conflict copy case became one stale-action case for every compare-and-swap bounce reason."}
+{"file": "src/components/journey-chrome.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Dropped the connected-count gating case with the presence status chrome (D3)."}
+{"file": "src/components/BattleSiteRoute.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Import path, GameActions rename, and databaseMode removed from the config literal."}
+{"file": "src/components/JourneyCardTutorialController.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Mock paths moved to src/session/."}
+{"file": "src/App.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Dropped the HostedPlaytestShell mock and databaseMode from config literals; provider path moved."}
+{"file": "src/battle/use-tutorial-battle-controller.test.tsx", "verdict": "keep", "reason": "contract", "notes": "No connected-client hook to mock; the viewer case asserts a client never drives a battle another client controls."}
+{"file": "src/battle/use-tutorial-battle-interactions.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Dropped the optimistic-echo nonce from an event fixture; mock path moved."}
+{"file": "src/cumulus/screens/front-door-screens.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Application-state kinds renamed (unreadableGame, unavailableGame); roomCreation removed."}
+{"file": "src/eventlog/fold.test.ts", "verdict": "keep", "reason": "contract", "notes": "Dropped the compaction cases (snapshot joiner, applied-index encode/decode, incremental index carry) with the RTDB transport (D3)."}
+{"file": "src/eventlog/hash.test.ts", "verdict": "keep", "reason": "contract", "notes": "Comment wording only."}
+{"file": "src/rules/battle/tutorial-battle-lifecycle.test.ts", "verdict": "keep", "reason": "contract", "notes": "Provider import path moved to src/session/providers/."}
+{"file": "src/rules/replay/replay.test.ts", "verdict": "keep", "reason": "contract", "notes": "decodeEvent now imported from eventlog/wire (eventlog/append is deleted)."}
+{"file": "src/runtime/runtime-config.test.ts", "verdict": "keep", "reason": "contract", "notes": "Dropped the databaseMode and viewLogs cases (D3)."}
+{"file": "src/screens/cumulus_adapters/FrontDoorAdapter.test.tsx", "verdict": "keep", "reason": "contract", "notes": "Mock variable renamed only."}
+{"file": "scripts/dev.test.mjs", "verdict": "keep", "reason": "contract", "notes": "Renamed from dev-with-emulator.test.mjs; keeps the Vite port-forwarding cases, drops the emulator exit-format case."}
+{"file": "scripts/cumulus-component-boundaries.contract.test.mjs", "verdict": "keep", "reason": "contract", "notes": "Forbids src/session/ imports from Cumulus components in place of the src/coop/ pattern."}

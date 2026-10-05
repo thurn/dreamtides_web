@@ -11,7 +11,7 @@ import type { JourneyContent } from "../../data/journey-content";
 import { genesisFoldState } from "../fold-state";
 import { reduceGameEvent } from "../reducer";
 import { registerTutorialBattleInitProvider } from "./battle-events";
-import { createTutorialBattleInitProvider } from "../../coop/providers/battle-init-provider";
+import { createTutorialBattleInitProvider } from "../../session/providers/battle-init-provider";
 import { planTutorialBattleController } from "../../battle/tutorial-battle-controller";
 import type { EventContext, GameEvent, Genesis } from "../../eventlog/types";
 import type { FoldState } from "../fold-state";

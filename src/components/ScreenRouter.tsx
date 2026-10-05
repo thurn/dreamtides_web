@@ -15,8 +15,6 @@ import {
 } from "./CumulusJourneyChrome";
 import { useAuguryJourneyMenuActions } from "./AuguryJourneyMenu";
 import { ErrorBoundary } from "./ErrorBoundary";
-import { RecoveryCheckpointCommitter } from "../coop/RecoveryCheckpointCommitter";
-import { screenToJourneyPath } from "../runtime/screen-url";
 import type { SiteId } from "../types/identifiers";
 import {
   parseScreenTransitionKey,
@@ -80,9 +78,6 @@ export function ScreenRouter({
           resetKey={screenKey(screen)}
         >
           {content}
-          <RecoveryCheckpointCommitter
-            sourcePath={screenToJourneyPath(state)}
-          />
         </ErrorBoundary>
       </JourneyScreenFrame>
     </AnimatePresence>

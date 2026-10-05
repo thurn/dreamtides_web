@@ -14,7 +14,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { beforeEach, afterEach, describe, expect, it, vi } from "vitest";
 import { BattleSiteRoute } from "./BattleSiteRoute";
 import { CumulusRoot } from "../cumulus/CumulusRoot";
-import type { CoopActions } from "../coop/actions";
+import type { GameActions } from "../session/actions";
 import { createDefaultState, useJourney } from "../state/journey-context";
 import type { FoldState } from "../rules/fold-state";
 import type { Screen, SiteState } from "../types/journey";
@@ -44,9 +44,9 @@ vi.mock("../state/journey-context", async (importOriginal) => ({
 
 let mockGameState: FoldState;
 const beginBattleSpy = vi.fn(() => Promise.resolve(0));
-const mockActions = { beginBattle: beginBattleSpy } as unknown as CoopActions;
+const mockActions = { beginBattle: beginBattleSpy } as unknown as GameActions;
 
-vi.mock("../coop/hooks", () => ({
+vi.mock("../session/hooks", () => ({
   useGameState: () => mockGameState,
   useConfirmedGameState: () => mockGameState,
   useActions: () => mockActions,
@@ -67,7 +67,7 @@ vi.mock("../screens/cumulus_adapters/BattleStartScreenAdapter", () => ({
 }));
 
 vi.mock("../battle/components/PlayableBattleScreen", async () => {
-  const { useGameState } = await import("../coop/hooks");
+  const { useGameState } = await import("../session/hooks");
   return {
     PlayableBattleScreen: () => {
       const battle = useGameState().battle;
@@ -189,7 +189,6 @@ function route(seedOverride: number | null = null): ReactElement {
         seedOverride,
         aiMode: false,
         gameId: null,
-        databaseMode: "emulator",
       }}
     />
   );

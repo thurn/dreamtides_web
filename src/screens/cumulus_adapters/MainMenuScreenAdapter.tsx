@@ -9,7 +9,7 @@ import { useFrontDoor } from "../../state/front-door-context";
 import { buildMainMenuView } from "./main-menu-view-model";
 import { parseFrontDoorActionId } from "../../types/identifiers";
 
-/** Coop-backed `/main` wiring, including its cinematic New Journey transition. */
+/** Game-log-backed `/main` wiring, including its cinematic New Journey transition. */
 export function MainMenuScreenAdapter({
   playbackSpeed = 1,
 }: {
@@ -36,7 +36,7 @@ export function MainMenuScreenAdapter({
       void mutations
         .action("main", parseFrontDoorActionId(actionId))
         .catch((error: unknown) => {
-          console.error("Coop main-menu action failed", error);
+          console.error("Main-menu action failed", error);
         });
     },
     [mutations],
@@ -54,7 +54,7 @@ export function MainMenuScreenAdapter({
     void mutations
       .advance("mainExiting", state.journeyId)
       .catch((error: unknown) => {
-        console.error("Coop main-menu transition failed", error);
+        console.error("Main-menu transition failed", error);
       });
   }, [mutations, state.journeyId, state.phase]);
 

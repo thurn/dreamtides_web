@@ -1,8 +1,8 @@
 import { pathToFileURL } from "node:url";
 
-import { runDevWithEmulator } from "./dev-with-emulator.mjs";
+import { runDev } from "./dev.mjs";
 
-// Launches Vite plus the Realtime Database emulator and opens the app straight
+// Launches the dev server and opens the app straight
 // into a journey previously persisted to disk via the debug overlay's "Save
 // Journey" control (see scripts/saved-journeys-api.mjs). The saved journey is
 // identified by the name it was saved under, e.g.
@@ -10,7 +10,7 @@ import { runDevWithEmulator } from "./dev-with-emulator.mjs";
 //   npm run load-journey -- "warriors draft"
 //
 // The app reads `?loadJourney=<name>` (see src/runtime/runtime-config.ts), fetches
-// the matching snapshot from `/api/saved-journeys`, and replaces the room's journey
+// the matching snapshot from `/api/saved-journeys`, and replaces the game's journey
 // state with it before rendering the run.
 
 export function buildOpenArgs(argv) {
@@ -30,7 +30,7 @@ async function main() {
     );
     process.exit(1);
   }
-  await runDevWithEmulator(openArgs);
+  await runDev(openArgs);
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {

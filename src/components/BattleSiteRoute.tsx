@@ -2,8 +2,8 @@ import { useMemo } from "react";
 import type { CardData } from "../types/cards";
 import type { SiteState } from "../types/journey";
 import { useJourney } from "../state/journey-context";
-import { useGameState, useActions } from "../coop/hooks";
-import { createBattlePreview } from "../coop/providers/battle-init-provider";
+import { useGameState, useActions } from "../session/hooks";
+import { createBattlePreview } from "../session/providers/battle-init-provider";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
 import { BattleStartScreenAdapter } from "../screens/cumulus_adapters/BattleStartScreenAdapter";
@@ -14,7 +14,7 @@ import {
 import { ApplicationStateScreen } from "../cumulus/screens/ApplicationStateScreen";
 
 /**
- * Drives the coop event-sourced battle fold. A null folded battle renders the
+ * Drives the event-sourced battle fold. A null folded battle renders the
  * deterministic opposing-Avatar preview; its Begin action appends
  * `BEGIN_BATTLE`. A non-null folded battle renders the playable surface on
  * every client, including after reload.

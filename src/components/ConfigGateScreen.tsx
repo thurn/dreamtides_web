@@ -8,18 +8,18 @@ import {
 import type { ContentConfig } from "../eventlog/types";
 
 interface ConfigGateScreenProps {
-  /** The content config pinned in the room's genesis, or undefined if the genesis predates config pinning. */
-  roomContentConfig: ContentConfig | undefined;
-  /** This client's local content config, shown alongside the room's for context. */
+  /** The content config pinned in the game's genesis, or undefined if the genesis predates config pinning. */
+  gameContentConfig: ContentConfig | undefined;
+  /** This build's content config, shown alongside the game's for context. */
   localContentConfig: ContentConfig;
   onStartNewGame: () => void;
 }
 
 /**
- * Controller for the recoverable room-content configuration gate.
+ * Controller for the recoverable game-content configuration gate.
  */
 export function ConfigGateScreen({
-  roomContentConfig,
+  gameContentConfig,
   localContentConfig,
   onStartNewGame,
 }: ConfigGateScreenProps): ReactNode {
@@ -28,8 +28,8 @@ export function ConfigGateScreen({
       view={{
         kind: "contentConfigGate",
         title: "This Game Uses Different Settings",
-        message: "Both players use the same content settings to play together.",
-        comparison: configComparisonRows(roomContentConfig, localContentConfig),
+        message: "This game was created with content settings that differ from this version.",
+        comparison: configComparisonRows(gameContentConfig, localContentConfig),
         detail: "This game needs settings this build cannot adopt.",
         actions: [
           {
@@ -45,12 +45,12 @@ export function ConfigGateScreen({
 
 /** Pure structured values for the Cumulus comparison table. */
 export function configComparisonRows(
-  roomContentConfig: ContentConfig | undefined,
+  gameContentConfig: ContentConfig | undefined,
   localContentConfig: ContentConfig,
 ): readonly ApplicationStateComparisonRow[] {
-  const room = describeConfig(roomContentConfig);
+  const game = describeConfig(gameContentConfig);
   const local = describeConfig(localContentConfig);
-  return room.map((entry, index) => ({
+  return game.map((entry, index) => ({
     id: entry.kind,
     label: entry.label,
     expected: entry.value,
