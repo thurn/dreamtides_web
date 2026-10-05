@@ -23,6 +23,9 @@ export const BATTLE = {
   // Consecutive automatic game actions after which a battle that no player can
   // stop ends in a draw (rules § Mandatory Loops).
   resolutionCap: 100000,
+  // Whether a prompt with exactly one legal answer (a forced choice) is
+  // answered automatically instead of being asked; the answer is recorded.
+  autoAnswerForcedPrompts: true,
   // Side that takes the first turn. Valid values are `Player` and `Enemy`.
   startingSide: "player",
   // Whether the player omits the normal Draw phase on their first turn.

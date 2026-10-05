@@ -4,10 +4,9 @@ import { deserializeState, serializeState, stateHash } from "./state/hash";
 import { battleSeed } from "./state/ids";
 import { drawRandom } from "./state/rng";
 import { NO_PROMPTS } from "./steps/sources";
-import { fuzzInit, playFuzzGame, replayFinalHash } from "./testing/fuzz";
-import { testCatalog } from "./testing/synthetic-cards";
+import { fuzzEngineCatalog, fuzzInit, playFuzzGame, replayFinalHash } from "./testing/fuzz";
 
-const engine = createEngine(testCatalog());
+const engine = createEngine(fuzzEngineCatalog());
 
 describe("random streams", () => {
   it("is deterministic per seed and stream, and independent across streams", () => {
@@ -42,7 +41,7 @@ describe("serialization and replay", () => {
       const game = playFuzzGame(engine, battleSeed(`core-test-${String(index)}`));
       expect(game.failure).toBeNull();
       expect(game.result).not.toBeNull();
-      expect(replayFinalHash(engine, game.init, game.actions)).toBe(game.finalHash);
+      expect(replayFinalHash(engine, game)).toBe(game.finalHash);
     }
   });
 });

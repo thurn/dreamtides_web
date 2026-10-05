@@ -7,7 +7,7 @@ import { contentCardDefinitions, contentDreamwellDefinitions } from "../content-
 import { parseCardId } from "../../types/card-identity";
 import type { CardId } from "../state/ids";
 
-function syntheticId(index: number): CardId {
+export function syntheticId(index: number): CardId {
   return parseCardId(`5e5e5e5e-0000-4000-8000-${index.toString(16).padStart(12, "0")}`);
 }
 
@@ -52,10 +52,10 @@ export const SYNTHETIC = {
 
 export const SYNTHETIC_CARDS: readonly EngineCardDefinition[] = Object.values(SYNTHETIC);
 
-/** A catalog of the synthetic cards plus every catalog card and Dreamwell card. */
-export function testCatalog(): EngineCatalog {
+/** A catalog of the given synthetic cards plus every catalog card and Dreamwell card. */
+export function testCatalog(extra: readonly EngineCardDefinition[] = []): EngineCatalog {
   return createCatalog(
-    [...SYNTHETIC_CARDS, ...contentCardDefinitions()],
+    [...SYNTHETIC_CARDS, ...extra, ...contentCardDefinitions()],
     contentDreamwellDefinitions(),
   );
 }

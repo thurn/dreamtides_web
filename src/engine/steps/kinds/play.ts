@@ -15,6 +15,7 @@ export interface PlayStep {
 
 export const play: StepDefinition<PlayStep> = {
   kind: "play",
+  canceller: (state, step) => state.instances[step.card]?.owner ?? null,
   run(ctx, step) {
     const { state, catalog } = ctx;
     const instance = instanceOf(state, step.card);
@@ -22,8 +23,10 @@ export const play: StepDefinition<PlayStep> = {
     if (!canPlayFromHand(state, catalog, side, step.card)) {
       throw new Error(`Card ${step.card} cannot be played now`);
     }
+    const definition = catalog.card(instance.cardId);
+    const choices = definition.synthetic?.play?.(ctx, step.card) ?? {};
     ctx.commitPoint();
-    const cost = catalog.card(instance.cardId).cost ?? 0;
+    const cost = (definition.cost ?? 0) + (choices.x ?? 0);
     state.sides[side].currentEnergy -= cost;
     ctx.emit({
       kind: "energyChanged",
@@ -31,7 +34,7 @@ export const play: StepDefinition<PlayStep> = {
       current: state.sides[side].currentEnergy,
       max: state.sides[side].maxEnergy,
     });
-    moveToStack(ctx, step.card, side);
+    moveToStack(ctx, step.card, side, { targets: choices.targets ?? [], x: choices.x ?? null });
     ctx.emit({ kind: "cardPlayed", side, instance: step.card });
     state.priority = opponent(side);
   },

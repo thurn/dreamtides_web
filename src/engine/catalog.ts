@@ -1,5 +1,24 @@
 import type { CardSubtype } from "../types/card-identity";
-import type { CardId, DreamwellCardId } from "./state/ids";
+import type { CardId, DreamwellCardId, InstanceId } from "./state/ids";
+import type { StackItem } from "./state/types";
+import type { StepContext } from "./steps/types";
+
+/** Choices made while playing a card, carried on its stack item. */
+export interface PlayChoices {
+  readonly targets?: readonly InstanceId[];
+  readonly x?: number;
+}
+
+/**
+ * Hand-written effects for synthetic test definitions only; catalog cards
+ * never set them.
+ */
+export interface SyntheticHooks {
+  /** Play-time choices, made before the commit point. */
+  play?(ctx: StepContext, self: InstanceId): PlayChoices;
+  /** Runs when the card resolves, before it moves to play or the void. */
+  resolve?(ctx: StepContext, item: StackItem): void;
+}
 
 /** How a card's timing category lets it be played (rules § Playing Cards and the Stack). */
 export type Speed = "standard" | "fast" | "interrupt";
@@ -18,6 +37,7 @@ export interface EngineCardDefinition {
   readonly subtype: CardSubtype;
   readonly speed: Speed;
   readonly keywords: readonly CombatKeyword[];
+  readonly synthetic?: SyntheticHooks;
 }
 
 export interface EngineDreamwellDefinition {

@@ -61,6 +61,10 @@ export interface CardInstance {
 export interface StackItem {
   readonly instance: InstanceId;
   readonly controller: Side;
+  /** Targets chosen when the item was played. */
+  readonly targets: readonly InstanceId[];
+  /** The value chosen for X, if the item has an X. */
+  readonly x: number | null;
 }
 
 export interface SideState {

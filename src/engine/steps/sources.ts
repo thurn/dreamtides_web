@@ -1,6 +1,8 @@
+import { firstLegalAnswer } from "../prompts/answers";
 import type { Answer, Prompt } from "../prompts/types";
 import type { BattleState } from "../state/types";
 import type { Side } from "../state/ids";
+import { Suspend } from "./errors";
 import type { AnswerSource } from "./types";
 
 /** Answers each prompt by asking the answering side's policy synchronously. */
@@ -43,7 +45,24 @@ export class ScriptedSource implements AnswerSource {
   }
 }
 
-/** A source for steps that must never prompt. */
+/**
+ * The fold's source: recorded answers are replayed by the step context, and
+ * the first prompt without one suspends the step.
+ */
+export const INTERACTIVE: AnswerSource = {
+  answer(prompt) {
+    throw new Suspend(prompt);
+  },
+};
+
+/** Answers every prompt with its first legal answer. Used by legality dry runs. */
+export const FIRST_LEGAL: AnswerSource = {
+  answer(prompt) {
+    return firstLegalAnswer(prompt);
+  },
+};
+
+/** A source for runs that must never prompt. */
 export const NO_PROMPTS: AnswerSource = {
   answer(prompt) {
     throw new Error(`Unexpected ${prompt.kind} prompt (${prompt.purpose.role})`);

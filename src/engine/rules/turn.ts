@@ -3,7 +3,8 @@ import { opponent, PHASES } from "../state/ids";
 import type { StepContext } from "../steps/types";
 import { designateBlockers, designateChallengers } from "./challenge";
 import { drawDreamwell } from "./dreamwell";
-import { drawCard, setEnergy } from "./resources";
+import type { ChooseCardsPrompt } from "../prompts/types";
+import { discardCard, drawCard, setEnergy } from "./resources";
 import { endBattle } from "./victory";
 import { charactersInPlay, instanceOf } from "./zones";
 
@@ -37,10 +38,33 @@ function enterPhase(ctx: StepContext, phase: Phase): void {
       state.turn.challengeLane = 0;
       return;
     case "ending":
+      discardToHandLimit(ctx);
       clearExhaustion(ctx);
       return;
     default:
       return;
+  }
+}
+
+/** Ending: the active side chooses cards to discard down to the hand limit (P6). */
+function discardToHandLimit(ctx: StepContext): void {
+  const { state } = ctx;
+  const side = state.turn.active;
+  const hand = state.sides[side].hand;
+  const excess = hand.length - state.config.handLimit;
+  if (excess <= 0) {
+    return;
+  }
+  const chosen = ctx.choose<ChooseCardsPrompt>({
+    kind: "chooseCards",
+    side,
+    purpose: { source: null, cardId: null, ability: null, role: "discardToHandLimit" },
+    candidates: [...hand],
+    min: excess,
+    max: excess,
+  });
+  for (const card of chosen) {
+    discardCard(ctx, side, card);
   }
 }
 

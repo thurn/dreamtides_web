@@ -11,6 +11,7 @@ export interface RepositionStep {
 
 export const reposition: StepDefinition<RepositionStep> = {
   kind: "reposition",
+  canceller: () => null,
   run(ctx, step) {
     const { state } = ctx;
     const side = instanceOf(state, step.card).controller;

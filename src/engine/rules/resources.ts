@@ -1,4 +1,4 @@
-import type { Side } from "../state/ids";
+import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { StepContext } from "../steps/types";
 import { moveInstance } from "./zones";
@@ -41,4 +41,10 @@ export function drawCard(ctx: StepContext, side: Side): void {
   }
   moveInstance(ctx, top, "hand", "bottom");
   ctx.emit({ kind: "cardDrawn", side, instance: top });
+}
+
+/** Discards a card from `side`'s hand into its void. */
+export function discardCard(ctx: StepContext, side: Side, card: InstanceId): void {
+  moveInstance(ctx, card, "void");
+  ctx.emit({ kind: "discarded", side, instance: card });
 }

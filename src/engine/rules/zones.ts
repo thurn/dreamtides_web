@@ -112,15 +112,20 @@ export function moveInstance(
   }
 }
 
-/** Moves an instance onto the top of the stack under `controller`. */
-export function moveToStack(ctx: StepContext, id: InstanceId, controller: Side): void {
+/** Moves an instance onto the top of the stack under `controller`, with its play-time choices. */
+export function moveToStack(
+  ctx: StepContext,
+  id: InstanceId,
+  controller: Side,
+  choices: { readonly targets: readonly InstanceId[]; readonly x: number | null } = { targets: [], x: null },
+): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
   detach(state, instance);
   instance.controller = controller;
   instance.zone = "stack";
   instance.enteredZoneAt = ++state.clock;
-  state.stack.push({ instance: id, controller });
+  state.stack.push({ instance: id, controller, targets: [...choices.targets], x: choices.x });
 }
 
 /**

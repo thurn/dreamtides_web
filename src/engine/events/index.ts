@@ -8,12 +8,14 @@ import { blockersDesignated, type BlockersDesignatedEvent } from "./kinds/blocke
 import { cardDrawn, type CardDrawnEvent } from "./kinds/card-drawn";
 import { cardPlayed, type CardPlayedEvent } from "./kinds/card-played";
 import { challengersDesignated, type ChallengersDesignatedEvent } from "./kinds/challengers-designated";
+import { discarded, type DiscardedEvent } from "./kinds/discarded";
 import { dissolved, type DissolvedEvent } from "./kinds/dissolved";
 import { dreamwellDrawn, type DreamwellDrawnEvent } from "./kinds/dreamwell-drawn";
 import { energyChanged, type EnergyChangedEvent } from "./kinds/energy-changed";
 import { fatigue, type FatigueEvent } from "./kinds/fatigue";
 import { laneResolved, type LaneResolvedEvent } from "./kinds/lane-resolved";
 import { materialized, type MaterializedEvent } from "./kinds/materialized";
+import { noLegalTarget, type NoLegalTargetEvent } from "./kinds/no-legal-target";
 import { phaseChanged, type PhaseChangedEvent } from "./kinds/phase-changed";
 import { pointsScored, type PointsScoredEvent } from "./kinds/points-scored";
 import { repositioned, type RepositionedEvent } from "./kinds/repositioned";
@@ -27,12 +29,14 @@ export type EngineEvent =
   | CardDrawnEvent
   | CardPlayedEvent
   | ChallengersDesignatedEvent
+  | DiscardedEvent
   | DissolvedEvent
   | DreamwellDrawnEvent
   | EnergyChangedEvent
   | FatigueEvent
   | LaneResolvedEvent
   | MaterializedEvent
+  | NoLegalTargetEvent
   | PhaseChangedEvent
   | PointsScoredEvent
   | RepositionedEvent
@@ -49,12 +53,14 @@ export const EVENT_DEFINITIONS = {
   cardDrawn,
   cardPlayed,
   challengersDesignated,
+  discarded,
   dissolved,
   dreamwellDrawn,
   energyChanged,
   fatigue,
   laneResolved,
   materialized,
+  noLegalTarget,
   phaseChanged,
   pointsScored,
   repositioned,

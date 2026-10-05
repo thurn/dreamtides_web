@@ -2,15 +2,22 @@
  * Seeded engine fuzzer: plays Random-policy games, checks invariants after
  * every step, and replays each game to confirm its final state hash.
  *
- *   npm run fuzz:engine -- --games 200 [--seed fuzz] [--first 0]
+ *   npm run fuzz:engine -- --games 200 [--seed fuzz] [--first 0] [--interactive-every 10]
+ *
+ * Every Nth game is also replayed through the fold, suspending at every
+ * prompt, and must match the inline game exactly.
  *
  * A failing game writes its seed, decks, and action log to
  * logs/fuzz/<run-id>/<game>.jsonl and prints the repro command.
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { createEngine } from "../src/engine";
-import { playFuzzGame, replayFinalHash } from "../src/engine/testing/fuzz";
-import { testCatalog } from "../src/engine/testing/synthetic-cards";
+import {
+  fuzzEngineCatalog,
+  playFuzzGame,
+  replayFinalHash,
+  replayInteractively,
+} from "../src/engine/testing/fuzz";
 import { battleSeed } from "../src/engine/state/ids";
 
 function option(name: string, fallback: string): string {
@@ -22,7 +29,11 @@ const games = Number.parseInt(option("games", "200"), 10);
 const prefix = option("seed", "fuzz");
 const first = Number.parseInt(option("first", "0"), 10);
 const runId = `${prefix}-${String(first)}-${String(games)}`;
-const engine = createEngine(testCatalog());
+const interactiveEvery = Number.parseInt(option("interactive-every", "10"), 10);
+const engine = createEngine(fuzzEngineCatalog());
+let prompts = 0;
+let reruns = 0;
+let rerunMs = 0;
 const started = performance.now();
 let steps = 0;
 let failures = 0;
@@ -35,14 +46,21 @@ for (let index = first; index < first + games; index++) {
   try {
     game = playFuzzGame(engine, seed);
     failure = game.failure;
-    if (failure === null && replayFinalHash(engine, game.init, game.actions) !== game.finalHash) {
+    if (failure === null && replayFinalHash(engine, game) !== game.finalHash) {
       failure = "replay produced a different final hash";
+    }
+    if (failure === null && interactiveEvery > 0 && index % interactiveEvery === 0) {
+      const interactive = replayInteractively(engine, game, () => performance.now());
+      failure = interactive.failure;
+      reruns += interactive.reruns;
+      rerunMs += interactive.rerunMs;
     }
   } catch (error) {
     failure = error instanceof Error ? (error.stack ?? error.message) : String(error);
   }
   if (game !== undefined) {
     steps += game.steps;
+    prompts += game.prompts;
     const result = game.result;
     if (result?.kind === "victory" && result.winner !== undefined) results[result.winner] += 1;
     else if (result?.kind === "draw") results.draw += 1;
@@ -69,6 +87,8 @@ for (let index = first; index < first + games; index++) {
 const seconds = (performance.now() - started) / 1000;
 console.log(
   `fuzz:engine ${String(games)} games, ${String(steps)} steps, ${seconds.toFixed(1)} s ` +
-    `(${(games / seconds).toFixed(1)} games/s); results ${JSON.stringify(results)}; failures ${String(failures)}`,
+    `(${(games / seconds).toFixed(1)} games/s); prompts ${String(prompts)}; ` +
+    `interactive re-runs ${String(reruns)} (${reruns > 0 ? (rerunMs / reruns).toFixed(3) : "0"} ms each); ` +
+    `results ${JSON.stringify(results)}; failures ${String(failures)}`,
 );
 process.exitCode = failures > 0 ? 1 : 0;

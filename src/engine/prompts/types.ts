@@ -1,29 +1,41 @@
 import type { CardId, InstanceId, Side } from "../state/ids";
 
-/** Why a prompt was raised: its source and the role of the choice. */
+/** Why a prompt was raised: its source and the role of the choice. Never prose. */
 export interface PromptPurpose {
   readonly source: InstanceId | null;
   readonly cardId: CardId | null;
   readonly ability: number | null;
+  /** A stable key the UI copy module renders, such as `discardToHandLimit`. */
   readonly role: string;
 }
 
-/** A suspended prompt's identity: `${committed.version}:${answers.length}`. */
-export type PromptId = string & { readonly __brand: "PromptId" };
+export type { PromptId } from "../../types/identifiers";
+import type { PromptId } from "../../types/identifiers";
+
+/** A prompt's fingerprint: a hash of its identifying fields. */
+export type PromptFingerprint = string & { readonly __brand: "PromptFingerprint" };
 
 interface PromptBase {
-  /** Assigned by the fold; absent in inline runs. */
+  /** Assigned by the fold while the prompt is pending; absent in inline runs. */
   readonly id?: PromptId;
   /** The side that answers. */
   readonly side: Side;
   readonly purpose: PromptPurpose;
-  /** Only before the commit point of the acting side's own play or activation. */
+  /** Only before the commit point of the acting side's own play. */
   readonly cancellable: boolean;
-  /** Cards revealed only to the chooser. */
+  /** Cards revealed only to the chooser, such as "look at the top 4". */
   readonly privateTo?: Side;
 }
 
-/** Choose between `min` and `max` of the listed instances. */
+/** Choose between `min` and `max` distinct targets in play or on the stack. */
+export interface ChooseTargetsPrompt extends PromptBase {
+  readonly kind: "chooseTargets";
+  readonly candidates: readonly InstanceId[];
+  readonly min: number;
+  readonly max: number;
+}
+
+/** Choose between `min` and `max` distinct cards from a zone. */
 export interface ChooseCardsPrompt extends PromptBase {
   readonly kind: "chooseCards";
   readonly candidates: readonly InstanceId[];
@@ -31,10 +43,72 @@ export interface ChooseCardsPrompt extends PromptBase {
   readonly max: number;
 }
 
-export type Prompt = ChooseCardsPrompt;
+export interface ModeOption {
+  readonly mode: number;
+  readonly legal: boolean;
+}
 
-export type Answer = readonly InstanceId[];
+/** Choose one legal mode. */
+export interface ChooseModePrompt extends PromptBase {
+  readonly kind: "chooseMode";
+  readonly options: readonly ModeOption[];
+}
 
-export type AnswerFor<P extends Prompt> = P extends ChooseCardsPrompt
+/** Choose an integer in `[min, max]`, such as the value of X. */
+export interface ChooseNumberPrompt extends PromptBase {
+  readonly kind: "chooseNumber";
+  readonly min: number;
+  readonly max: number;
+}
+
+export type ArrangeDestination = "top" | "bottom" | "void" | "hand";
+
+/** Place every listed card in one of the allowed destinations, in order. */
+export interface ArrangePrompt extends PromptBase {
+  readonly kind: "arrange";
+  readonly cards: readonly InstanceId[];
+  readonly destinations: readonly ArrangeDestination[];
+}
+
+/** Accept or decline a "you may". */
+export interface ConfirmPrompt extends PromptBase {
+  readonly kind: "confirm";
+}
+
+/** Pay an "unless" cost, or decline. `payable` is false when the cost cannot be paid. */
+export interface PayOrDeclinePrompt extends PromptBase {
+  readonly kind: "payOrDecline";
+  readonly energy: number;
+  readonly payable: boolean;
+}
+
+export type Prompt =
+  | ArrangePrompt
+  | ChooseCardsPrompt
+  | ChooseModePrompt
+  | ChooseNumberPrompt
+  | ChooseTargetsPrompt
+  | ConfirmPrompt
+  | PayOrDeclinePrompt;
+
+export type PromptKind = Prompt["kind"];
+
+/** An arrangement: each card with its destination; within a destination, earlier entries go first (top). */
+export type ArrangeAnswer = readonly { readonly card: InstanceId; readonly to: ArrangeDestination }[];
+
+export type Answer = readonly InstanceId[] | number | boolean | ArrangeAnswer;
+
+export type AnswerFor<P extends Prompt> = P extends ChooseTargetsPrompt | ChooseCardsPrompt
   ? readonly InstanceId[]
+  : P extends ChooseModePrompt | ChooseNumberPrompt
+    ? number
+    : P extends ConfirmPrompt | PayOrDeclinePrompt
+      ? boolean
+      : P extends ArrangePrompt
+        ? ArrangeAnswer
+        : never;
+
+/** What rules code passes to `choose`: the context fills in `cancellable` and the id. */
+export type PromptSpec<P extends Prompt = Prompt> = P extends Prompt
+  ? Omit<P, "cancellable" | "id">
   : never;

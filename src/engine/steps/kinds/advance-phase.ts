@@ -8,6 +8,7 @@ export interface AdvancePhaseStep {
 
 export const advancePhase: StepDefinition<AdvancePhaseStep> = {
   kind: "advancePhase",
+  canceller: () => null,
   run(ctx) {
     advance(ctx);
   },

@@ -10,6 +10,7 @@ export interface ChallengeLaneStep {
 
 export const challengeLane: StepDefinition<ChallengeLaneStep> = {
   kind: "challengeLane",
+  canceller: () => null,
   run(ctx, step) {
     resolveLane(ctx, step.lane);
     const next = step.lane + 1;

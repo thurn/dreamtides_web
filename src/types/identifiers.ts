@@ -107,6 +107,8 @@ export type AvatarId = DomainIdentity<"AvatarId">;
 export type DreamscapeId = DomainIdentity<"DreamscapeId">;
 export type DreamsignId = DomainIdentity<"DreamsignId">;
 export type DreamwellCardId = DomainIdentity<"DreamwellCardId">;
+/** A pending battle prompt: `<committed version>:<answers recorded>`. */
+export type PromptId = DomainIdentity<"PromptId">;
 export type DreamwellChoiceKey = DomainIdentity<"DreamwellChoiceKey">;
 export type DreamwellPromptKey = DomainIdentity<"DreamwellPromptKey">;
 export type EditorFieldTargetId = DomainIdentity<"EditorFieldTargetId">;
@@ -178,6 +180,7 @@ const brandAvatarId = identityConstructor<AvatarId>();
 const brandDreamscapeId = identityConstructor<DreamscapeId>();
 const brandDreamsignId = identityConstructor<DreamsignId>();
 const brandDreamwellCardId = identityConstructor<DreamwellCardId>();
+const brandPromptId = identityConstructor<PromptId>();
 const brandDreamwellChoiceKey = identityConstructor<DreamwellChoiceKey>();
 const brandDreamwellPromptKey = identityConstructor<DreamwellPromptKey>();
 const brandEditorFieldTargetId = identityConstructor<EditorFieldTargetId>();
@@ -332,6 +335,12 @@ export const parseDreamwellCardId = identityParser(
   brandDreamwellCardId,
   (value) => UUID_PATTERN.test(value),
   (value) => value.toLowerCase(),
+);
+
+export const parsePromptId = identityParser(
+  "Prompt id",
+  brandPromptId,
+  (value) => /^\d+:\d+$/u.test(value),
 );
 export const parseDreamwellChoiceKey = identityParser(
   "Dreamwell choice key",

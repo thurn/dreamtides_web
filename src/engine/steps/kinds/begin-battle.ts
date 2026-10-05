@@ -14,6 +14,7 @@ export interface BeginBattleStep {
 
 export const beginBattle: StepDefinition<BeginBattleStep> = {
   kind: "beginBattle",
+  canceller: () => null,
   run(ctx, step) {
     const { state } = ctx;
     for (const side of SIDES) {

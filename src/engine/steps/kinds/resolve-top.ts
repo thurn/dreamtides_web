@@ -13,6 +13,7 @@ export interface ResolveTopStep {
 
 export const resolveTop: StepDefinition<ResolveTopStep> = {
   kind: "resolveTop",
+  canceller: () => null,
   run(ctx) {
     const { state, catalog } = ctx;
     const item = state.stack[state.stack.length - 1];
@@ -20,8 +21,10 @@ export const resolveTop: StepDefinition<ResolveTopStep> = {
       throw new Error("resolveTop with an empty stack");
     }
     const instance = instanceOf(state, item.instance);
+    const definition = catalog.card(instance.cardId);
     ctx.emit({ kind: "resolved", instance: item.instance });
-    if (catalog.card(instance.cardId).cardType === "character") {
+    definition.synthetic?.resolve?.(ctx, item);
+    if (definition.cardType === "character") {
       const slot = leftmostOpenBackSlot(state, item.controller);
       if (slot === null) {
         // Capacity is reserved at play time, so this is unreachable through legal play.

@@ -37,7 +37,7 @@ emulator, adds `?game=<room-id>` to the URL, and opens Avatar selection.
 | `npm run review:full` | Everything the Tollgate gate runs |
 | `npm run typecheck` | Incremental typecheck |
 | `npm run build` | Production build into `dist/` |
-| `npm run fuzz:engine -- --games 200` | Seeded rules-engine fuzzer: invariants after every step, replay check |
+| `npm run fuzz:engine -- --games 200` | Seeded rules-engine fuzzer: invariants after every step, replay check, every 10th game replayed interactively through the fold |
 | `npm run prepare-workspace` | Refresh art links and generated adapters |
 
 `npm run review` plans its checks from the diff against `master`. Its
@@ -144,7 +144,11 @@ Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
   code from one committed state to the next, and `createEngine(catalog)`
   exposes `createBattle`, `decision`, `legalActions`, `apply`, and `view`.
   Step kinds (`steps/kinds/`) and engine events (`events/kinds/`) are each
-  registered from their own module. The `dreamtides/engine-purity` lint rule
+  registered from their own module. Rules code asks for player input with a
+  synchronous `ctx.choose(prompt)`. Inline runs (AI, fuzzer, tests) answer
+  at once; interactive play suspends the step and replays it from its start
+  with the recorded answers (`fold/slice.ts`), and a prompt fingerprint
+  check turns any nondeterminism into a loud `ReplayDivergence`. The `dreamtides/engine-purity` lint rule
   bans the clock, ambient randomness, and module-level mutable state there.
 - **Battle.** `src/battle/` and `src/rules/battle/` hold the battle board,
   its structural automation, and the proposal-based AI.
