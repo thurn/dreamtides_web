@@ -10,7 +10,7 @@
 // labeled secondary action reads as one family with the filter/sort controls it
 // sits beside. Neutral glass serves secondary actions; the purple accent
 // recipe lets a primary action retain the same material language. A
-// localized `label` (never caller markup) sits in the control
+// plain-text `label` (never caller markup) sits in the control
 // font; an optional leading `glyph` paints a `StandaloneGlyph` before it. Essence can
 // be presented either as a punctuated cost or as a plain action value. Prominent
 // primary actions can opt into the larger 56px treatment. Press/hover

@@ -1,4 +1,3 @@
-// localization-ignore: test-only fixture mirrors authored RON presentation copy.
 export const SHOP_PRESENTATION = {
   kind: "shop",
   title: "Dream Market",
@@ -8,7 +7,6 @@ export const SHOP_PRESENTATION = {
   freePrice: "Free",
 } as const;
 
-// localization-ignore: test-only fixture mirrors authored RON presentation copy.
 export const DREAMSIGN_MARKET_PRESENTATION = {
   kind: "dreamsign-bazaar",
   title: "Dreamsign Bazaar",
@@ -19,7 +17,6 @@ export const DREAMSIGN_MARKET_PRESENTATION = {
   replacementTitle: "Choose a Dreamsign to Replace",
 } as const;
 
-// localization-ignore: test-only fixture mirrors authored RON presentation copy.
 export const PURGE_PRESENTATION = {
   kind: "purge",
   title: "Purge Cards",
@@ -28,7 +25,6 @@ export const PURGE_PRESENTATION = {
   purgeAction: (count: number) => `Purge ${String(count)}`,
 } as const;
 
-// localization-ignore: test-only fixture mirrors authored RON presentation copy.
 export const DREAMSIGN_REVELATION_PRESENTATION = {
   kind: "dreamsign-revelation",
   loading: "Revealing Dreamsigns...",

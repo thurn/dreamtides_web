@@ -6,7 +6,7 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { requireDreamsignId } from "../../data/dreamsigns";
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import type { DreamsignView } from "../components/hud/Dreamsign";
 import { GlassButton } from "../components/controls/GlassButton";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
@@ -47,7 +47,7 @@ export interface DreamsignRevelationView {
   /** Sigrun's character art and dialog. */
   guide: DreamsignRevelationGuideView;
   /** Offered dreamsigns; empty while the pool is exhausted. */
-  offer: readonly LocalizedDreamsign[];
+  offer: readonly DreamsignView[];
   /** Null while loading, otherwise the offer is ready to display. */
   offerReady: boolean;
   /** Persistent Mira guidance throughout the first Revelation visit. */
@@ -309,7 +309,7 @@ function RevelationOption({
   desktop,
   onClaim,
 }: {
-  readonly dreamsign: LocalizedDreamsign;
+  readonly dreamsign: DreamsignView;
   readonly index: number;
   readonly disabled: boolean;
   readonly claimed: boolean;

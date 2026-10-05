@@ -28,14 +28,14 @@ import {
 /** Height/scale variants. */
 type SegmentedControlSize = "sm" | "md";
 
-/** One segment whose player-facing copy stays localized. */
+/** One segment with a player-facing text label. */
 export interface SegmentedOption {
   value: string;
   label: string;
   ariaLabel?: string;
 }
 
-/** A language-neutral symbol with a localized accessible name. */
+/** A language-neutral symbol with an accessible name. */
 export interface SymbolSegmentedOption {
   value: string;
   symbol: string;
@@ -45,7 +45,7 @@ export interface SymbolSegmentedOption {
 type RenderedSegmentedOption = SegmentedOption | SymbolSegmentedOption;
 
 export interface SegmentedControlProps {
-  /** Localized labels or language-neutral symbols represented by stable values. */
+  /** Text labels or language-neutral symbols represented by stable values. */
   options: readonly RenderedSegmentedOption[];
   /** The currently-selected segment's value. */
   value: string;

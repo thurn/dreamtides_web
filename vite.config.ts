@@ -8,7 +8,6 @@ import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
 import { createSavedJourneysApiMiddleware } from "./scripts/saved-journeys-api.mjs";
 import { resolveBuildHash } from "./scripts/build-hash.mjs";
-import { troxDevelopmentBundlesPlugin } from "./scripts/trox-vite-plugin.ts";
 import {
   parseBuildGitSha,
   type BuildGitRevision,
@@ -129,7 +128,6 @@ export default defineConfig({
   },
   plugins: [
     firebaseConfigGuardPlugin(),
-    troxDevelopmentBundlesPlugin(),
     react(),
     tailwindcss(),
     journeyLogPlugin(),

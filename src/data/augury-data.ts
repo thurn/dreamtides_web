@@ -66,23 +66,19 @@ function isNonemptyString(value: unknown): value is string {
   return typeof value === "string" && value.trim() !== "";
 }
 
-function isLocalizedTransport(value: unknown): boolean {
-  return isNonemptyString(value);
-}
-
 function presentationTextFromUnknown(
   value: unknown,
 ): AuguryArchetypeData["presentation"]["headline"] | null {
   if (!isRecord(value)) return null;
   switch (value.kind) {
     case "text":
-      if (!isLocalizedTransport(value.text)) return null;
+      if (!isNonemptyString(value.text)) return null;
       return {
         kind: "text",
         text: requireText(value.text, "Augury presentation text"),
       };
     case "count":
-      if (!isLocalizedTransport(value.one) || !isLocalizedTransport(value.other)) {
+      if (!isNonemptyString(value.one) || !isNonemptyString(value.other)) {
         return null;
       }
       return {
@@ -101,7 +97,7 @@ function presentationTextFromUnknown(
         value.subtype,
         value.package,
       ];
-      if (!fields.every(isLocalizedTransport)) return null;
+      if (!fields.every(isNonemptyString)) return null;
       return {
         kind: "category",
         character: requireText(value.character, "Augury presentation character"),

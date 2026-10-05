@@ -14,7 +14,7 @@ import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
-import { dreamsignRevealSpec, type LocalizedDreamsign } from "../hud/Dreamsign";
+import { dreamsignRevealSpec, type DreamsignView } from "../hud/Dreamsign";
 
 type PrizeRevealSourceBinding = ReturnType<typeof useRevealSource>;
 
@@ -493,11 +493,11 @@ export function PlayingCard(props: PlayingCardProps): ReactElement {
 export interface PlayingCardPrizeProps<ObjectId extends string> {
   /** Stable identity for this prize object. */
   objectId: ObjectId;
-  /** Localized heading printed on the prize face. */
+  /** Heading printed on the prize face. */
   title: string;
-  /** Localized supporting copy printed beneath the heading. */
+  /** Supporting copy printed beneath the heading. */
   description: string;
-  /** Complete localized accessible name for the concealed prize face. */
+  /** Complete accessible name for the concealed prize face. */
   accessibilityLabel: string;
   /** Named compact or standard square size. Defaults to `standard`. */
   size?: PlayingCardSize;
@@ -513,11 +513,11 @@ export interface PlayingCardPrizeProps<ObjectId extends string> {
   /** Accent current tier, foreground-muted alternative, or standard priority. */
   emphasis?: PlayingCardPrizeEmphasis;
   /** Dreamsign related to the prize copy, when present. */
-  relatedDreamsign: LocalizedDreamsign | null;
+  relatedDreamsign: DreamsignView | null;
 }
 
 /**
- * Localized prize copy on the PlayingCard superellipse. An assigned result
+ * Prize copy on the PlayingCard superellipse. An assigned result
  * flips into the standard rank-and-suit face without changing the footprint.
  */
 export function PlayingCardPrize<ObjectId extends string>(
@@ -536,7 +536,7 @@ export function PlayingCardPrize<ObjectId extends string>(
 
 function DreamsignPlayingCardPrize<ObjectId extends string>(
   props: PlayingCardPrizeProps<ObjectId> & {
-    relatedDreamsign: LocalizedDreamsign;
+    relatedDreamsign: DreamsignView;
   },
 ): ReactElement {
   const dreamsignId = requireDreamsignId(

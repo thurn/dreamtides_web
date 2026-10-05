@@ -24,7 +24,7 @@ import type {
   DreamsignBazaarRestockView,
   DreamsignBazaarSiteView,
 } from "../../cumulus/screens/DreamsignBazaarSiteScreen";
-import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
 import {
@@ -70,7 +70,7 @@ export function buildDreamsignBazaarOffers(
         `shop-slot-${String(slotIndex)}-${dreamsignId}`,
       ),
       slotIndex,
-      dreamsign: localizedDreamsign(slot.dreamsign, "Dreamsign Bazaar offer"),
+      dreamsign: toDreamsignView(slot.dreamsign, "Dreamsign Bazaar offer"),
       price,
       state: slot.purchased
         ? "purchased"
@@ -112,12 +112,12 @@ export function buildDreamsignBazaarPurgeView(
   return pendingDreamsign === null
     ? null
     : {
-        pendingDreamsign: localizedDreamsign(
+        pendingDreamsign: toDreamsignView(
           pendingDreamsign,
           "Dreamsign Bazaar pending purchase",
         ),
         currentDreamsigns: state.dreamsigns.map((dreamsign) =>
-          localizedDreamsign(dreamsign, "Dreamsign Bazaar held collection"),
+          toDreamsignView(dreamsign, "Dreamsign Bazaar held collection"),
         ),
         maxDreamsigns: state.maxDreamsigns,
       };

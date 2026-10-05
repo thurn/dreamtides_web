@@ -1,6 +1,6 @@
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { logEvent } from "../logging";
-import { LocalizedErrorBoundaryFallback } from "./LocalizedErrorBoundaryFallback";
+import { DefaultErrorBoundaryFallback } from "./ErrorBoundaryFallback";
 import { recoveryUrlFromLocation } from "../coop/room-recovery-url";
 
 /**
@@ -176,7 +176,7 @@ export class ErrorBoundary extends Component<
     }
 
     return (
-      <LocalizedErrorBoundaryFallback
+      <DefaultErrorBoundaryFallback
         scope={this.props.scope}
         onRetry={this.handleRetry}
         onClose={this.props.onClose === undefined ? undefined : this.handleClose}

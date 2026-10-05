@@ -1,12 +1,12 @@
 import type { Dreamsign } from "../../../types/journey";
 import { requireDreamsignId } from "../../../data/dreamsigns";
-import type { LocalizedDreamsign } from "./Dreamsign";
+import type { DreamsignView } from "./Dreamsign";
 
-/** Convert canonical Dreamsign content into the localized Cumulus contract. */
-export function localizedDreamsign(
+/** Convert canonical Dreamsign content into the Cumulus presentation contract. */
+export function toDreamsignView(
   dreamsign: Dreamsign,
   context: string,
-): LocalizedDreamsign {
+): DreamsignView {
   const name = dreamsign.name;
   return {
     id: requireDreamsignId(dreamsign, context),

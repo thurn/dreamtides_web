@@ -11,7 +11,7 @@ import { renderRulesSymbolsInline } from "../card/RulesText";
 import { renderRichText, type RichText } from "../card/rich-text";
 import { Pressable } from "../../primitives/Pressable";
 import { gameCardRevealSpec, type GameCardModel } from "../card/CardView";
-import { dreamsignRevealSpec, type LocalizedDreamsign } from "../hud/Dreamsign";
+import { dreamsignRevealSpec, type DreamsignView } from "../hud/Dreamsign";
 import type { DeckEntryId } from "../../../types/identifiers";
 import type {
   DreamsignId,
@@ -44,19 +44,19 @@ export type ExplorationChoiceEntity =
       readonly kind: "dreamsign";
       /** Stable canonical Dreamsign UUID. */
       readonly id: DreamsignId;
-      /** Complete localized Dreamsign used by the reveal coordinator. */
-      readonly dreamsign: LocalizedDreamsign;
+      /** Complete Dreamsign used by the reveal coordinator. */
+      readonly dreamsign: DreamsignView;
     });
 
 /** Complete prepared presentation for one Exploration action. */
 export interface ExplorationChoiceModel {
   /** Stable authored action UUID emitted by activation. */
   readonly actionId: ExplorationActionId;
-  /** Localized primary action label. */
+  /** Primary action label. */
   readonly label: string;
-  /** Lazy localized description with reveal entities attached to placeholders. */
+  /** Lazy description with reveal entities attached to placeholders. */
   readonly description: RichText<ExplorationChoiceEntity>;
-  /** Optional complete localized disclosure appended to the description. */
+  /** Optional complete disclosure appended to the description. */
   readonly disclosure?: string;
   /** Prepared activation availability; unavailable choices remain readable. */
   readonly availability: "available" | "unavailable";

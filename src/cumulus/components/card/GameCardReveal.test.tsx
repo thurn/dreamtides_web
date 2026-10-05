@@ -11,7 +11,7 @@ import { GlossaryTerm } from "./GlossaryTerm";
 import { Dreamsign } from "../hud/Dreamsign";
 import { SiteNode, type DreamscapeSiteModel } from "../dreamscape/SiteNode";
 import { glyph } from "../../primitives/glyph";
-import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../../test-helpers/dreamsign-fixture";
 import { transfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
 import { parseSiteId } from "../../../types/identifiers";
 import {
@@ -384,7 +384,7 @@ describe("GameCard reveal contract", () => {
 });
 
 describe("cross-family reveal competition", () => {
-  const SIGN = localizedDreamsignFixture({
+  const SIGN = dreamsignViewFixture({
     id: testDreamsignId("22222222-2222-4222-8222-222222222222"),
     name: "Fixture Sign",
     effectDescription: "Fixed effect.",

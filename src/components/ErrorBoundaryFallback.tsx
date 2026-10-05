@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export function LocalizedErrorBoundaryFallback({
+export function DefaultErrorBoundaryFallback({
   scope,
   onRetry,
   onClose,

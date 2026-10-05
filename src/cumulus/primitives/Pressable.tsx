@@ -176,7 +176,7 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   /** Whether ending hover or press immediately restores the original scale.
    * Physical cards use this to avoid a stale transformed hit target. */
   snapFeedbackExit?: boolean;
-  /** Localized accessible name resolved onto the final intrinsic element. */
+  /** Accessible name applied to the final intrinsic element. */
   ariaLabelMessage?: string;
   /** Content rendered inside the pressable element. */
   children?: React.ReactNode;

@@ -3,7 +3,7 @@
 
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import type { DreamsignView } from "../components/hud/Dreamsign";
 import { DreamsignGalleryPanel } from "../components/card/DreamsignGalleryPanel";
 import { Dreamsign } from "../components/hud/Dreamsign";
 import type { ArtRef } from "../primitives/art";
@@ -34,7 +34,7 @@ export interface DreamsignBazaarOfferView {
   /** Persistent runtime slot index used to purchase the ware. */
   slotIndex: number;
   /** Dreamsign rendered by the shared semantic entity component. */
-  dreamsign: LocalizedDreamsign;
+  dreamsign: DreamsignView;
   /** Effective essence price after discounts. */
   price: number;
   /** Whether the offer is available, unaffordable, or acquired. */
@@ -54,9 +54,9 @@ export interface DreamsignBazaarRestockView {
 
 export interface DreamsignBazaarPurgeView {
   /** Dreamsign the player is trying to purchase. */
-  pendingDreamsign: LocalizedDreamsign;
+  pendingDreamsign: DreamsignView;
   /** Current Dreamsigns, one of which must be replaced. */
-  currentDreamsigns: readonly LocalizedDreamsign[];
+  currentDreamsigns: readonly DreamsignView[];
   /** Maximum number of Dreamsigns the run may hold. */
   maxDreamsigns: number;
 }
@@ -349,7 +349,7 @@ interface RectSnapshot {
 
 interface PurchaseTravel {
   readonly key: string;
-  readonly dreamsign: LocalizedDreamsign;
+  readonly dreamsign: DreamsignView;
   readonly sourceRect: RectSnapshot;
   readonly targetRect: RectSnapshot;
 }

@@ -15,7 +15,7 @@ import {
   type DuplicationSiteView,
 } from "./DuplicationSiteScreen";
 import {
-  localizedTransfigurationFormFixture,
+  transfigurationPresentationFixture,
   transfigurationFormFixture,
 } from "../test-helpers/transfiguration-fixture";
 import { parseDeckEntryId, parseSiteId, type GuideId } from "../../types/identifiers";
@@ -93,7 +93,7 @@ describe("TransfigurationSiteScreen", () => {
       affordable: boolean,
     ) => ({
       type,
-      presentation: localizedTransfigurationFormFixture(type),
+      presentation: transfigurationPresentationFixture(type),
       effectDetails: { fixture: true },
       pricing: { kind: "essence" as const, amount, affordable },
       previewModel: {

@@ -6,7 +6,7 @@ import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
 import { artRef } from "../../primitives/art";
 import { GLYPHS } from "../../primitives/glyph";
 import { renderInCumulus } from "../../testing/render";
-import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../../test-helpers/dreamsign-fixture";
 import { richText } from "../card/rich-text";
 import { testDreamscapeId } from "../../../types/test-identities";
 import { CommandMenu, type CommandMenuItem } from "./CommandMenu";
@@ -503,12 +503,12 @@ describe("InfoCard", () => {
 
 describe("DreamsignReplacementDialog", () => {
   it("routes replacement by UUID and both dismissal controls through one intent", () => {
-    const incoming = localizedDreamsignFixture({
+    const incoming = dreamsignViewFixture({
       idSeed: "10000000-0000-4000-8000-000000000001",
       name: "Incoming",
     });
     const held = [1, 2].map((index) =>
-      localizedDreamsignFixture({
+      dreamsignViewFixture({
         idSeed: `20000000-0000-4000-8000-00000000000${String(index)}`,
         name: "Held",
       }),

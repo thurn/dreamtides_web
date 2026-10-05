@@ -7,7 +7,7 @@ import type { DomTestId } from "../../types/dom";
 import { token } from "../../primitives/tokens";
 import { EssenceValue } from "../hud/EssenceValue";
 import { StandaloneGlyph } from "./StandaloneGlyph";
-import type { LocalizedTransfigurationPresentation } from "./transfiguration-presentation";
+import type { TransfigurationPresentation } from "./transfiguration-presentation";
 import { useRevealSource } from "../../internal/reveal/context";
 import { revealEntityId } from "../../internal/reveal/identity";
 import { richText } from "../card/rich-text";
@@ -19,7 +19,7 @@ export interface TransfigurationButtonBaseModel {
   /** Named transfiguration form, which determines the canonical glyph. */
   type: TransfigurationType;
   /** Authored presentation resolved from the injected catalog. */
-  presentation: LocalizedTransfigurationPresentation;
+  presentation: TransfigurationPresentation;
 }
 
 /** First-class pricing semantics for a Transfiguration choice. */

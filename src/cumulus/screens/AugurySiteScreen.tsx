@@ -28,7 +28,7 @@ import { GlassPanel } from "../components/overlay/GlassPanel";
 import type { ArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import type { DreamsignView } from "../components/hud/Dreamsign";
 import type { AuguryArchetypeData } from "../../types/augury-data";
 import {
   SiteLayout,
@@ -74,12 +74,12 @@ export type AuguryOfferVisualView =
   | { kind: "purge"; card: AuguryCardView }
   | { kind: "duplicate"; card: AuguryCardView }
   | { kind: "duplicateChoices"; choices: readonly AuguryCardChoiceView[] }
-  | { kind: "dreamsigns"; dreamsigns: readonly LocalizedDreamsign[] }
+  | { kind: "dreamsigns"; dreamsigns: readonly DreamsignView[] }
   | { kind: "site"; model: DreamscapeSiteModel }
   | {
       kind: "mixed";
       cards: readonly AuguryCardView[];
-      dreamsigns: readonly LocalizedDreamsign[];
+      dreamsigns: readonly DreamsignView[];
     };
 
 export interface AuguryOfferView {
@@ -726,7 +726,7 @@ function DreamsignRow({
   dreamsigns,
   layout,
 }: {
-  dreamsigns: readonly LocalizedDreamsign[];
+  dreamsigns: readonly DreamsignView[];
   layout: "mobile" | "desktop";
 }) {
   const size = dreamsignSize(dreamsigns.length, layout);

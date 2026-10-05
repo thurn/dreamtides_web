@@ -60,7 +60,6 @@ export function BattlePhaseIndicator({
         pointerEvents: "none",
       }}
     >
-      {/* localization-ignore: CSS keyframe source is compositor behavior, not player-facing copy. */}
       <style>{`
         @keyframes cumulus-battle-phase-comet { 0% { transform: translateY(-50%) scaleX(${String(PHASE_COMET_START_SCALE)}); opacity: .12; } 45% { transform: translateY(-50%) scaleX(${String(PHASE_COMET_PEAK_SCALE)}); opacity: .52; } 100% { transform: translateY(-50%) scaleX(1); opacity: .28; } }
         @keyframes cumulus-battle-phase-pulse { 0%, 100% { transform: scale(1); opacity: .22; } 45% { transform: scale(${String(PHASE_HALO_PEAK_SCALE)}); opacity: .48; } }

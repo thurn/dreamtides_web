@@ -1,6 +1,6 @@
 import { requireDreamsignId } from "../../../data/dreamsigns";
 import { GlassButton } from "../controls/GlassButton";
-import { Dreamsign, type LocalizedDreamsign } from "../hud/Dreamsign";
+import { Dreamsign, type DreamsignView } from "../hud/Dreamsign";
 import { token } from "../../primitives/tokens";
 import { GlassDialog } from "./GlassDialog";
 import type { DreamsignId } from "../../../types/identifiers";
@@ -9,9 +9,9 @@ import { formatNumber } from "../../../runtime/format-number";
 /** Prepared display data for choosing which held Dreamsign to replace. */
 export interface DreamsignReplacementModel {
   /** The newly acquired Dreamsign awaiting capacity resolution. */
-  readonly incoming: LocalizedDreamsign;
+  readonly incoming: DreamsignView;
   /** Held Dreamsigns, each resolved by UUID. */
-  readonly held: readonly LocalizedDreamsign[];
+  readonly held: readonly DreamsignView[];
   /** Prepared maximum held-Dreamsign count. */
   readonly capacity: number;
   /** Label for the non-destructive dismissal action. */

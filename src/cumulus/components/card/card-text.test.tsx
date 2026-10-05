@@ -368,7 +368,7 @@ describe("glossaryInfoCard", () => {
 });
 
 describe("renderRichText", () => {
-  it("renders markup attached to a localized placeholder", () => {
+  it("renders markup attached to a template placeholder", () => {
     const message = annotatedFixture(
       "Before {entity} after",
       { entity: "the entity" },

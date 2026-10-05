@@ -4,7 +4,7 @@ import { act } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { parseDeckEntryId } from "../../../types/identifiers";
 import { syntheticGameCard } from "../../test-helpers/component-test-fixtures";
-import { localizedTransfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
+import { transfigurationPresentationFixture } from "../../test-helpers/transfiguration-fixture";
 import { renderInCumulus } from "../../testing/render";
 import {
   TransfigurationDetailPanel,
@@ -22,19 +22,19 @@ describe("TransfigurationDetailPanel", () => {
     forms: [
       {
         type: "Empowered",
-        presentation: localizedTransfigurationFormFixture("Empowered"),
+        presentation: transfigurationPresentationFixture("Empowered"),
         pricing: { kind: "unpriced" },
         previewModel: syntheticGameCard(2),
       },
       {
         type: "Kindled",
-        presentation: localizedTransfigurationFormFixture("Kindled"),
+        presentation: transfigurationPresentationFixture("Kindled"),
         pricing: { kind: "essence", amount: 40, affordable: false },
         previewModel: syntheticGameCard(3),
       },
       {
         type: "Resonant",
-        presentation: localizedTransfigurationFormFixture("Resonant"),
+        presentation: transfigurationPresentationFixture("Resonant"),
         pricing: { kind: "essence", amount: 30, affordable: true },
         previewModel: syntheticGameCard(4),
       },

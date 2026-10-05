@@ -90,7 +90,7 @@ export type AtlasNodeRole = "regular" | "starter" | "boss";
 export interface AtlasNodeModel {
   /** Stable Atlas node identity. */
   id: AtlasNodeId;
-  /** Localized accessible name for the assigned or unrevealed dreamscape. */
+  /** Accessible name for the assigned or unrevealed dreamscape. */
   name: string;
   /** Journey presentation state that selects the node treatment. */
   state: AtlasNodeState;

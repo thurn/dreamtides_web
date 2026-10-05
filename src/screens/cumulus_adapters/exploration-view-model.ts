@@ -33,7 +33,7 @@ import { toJourneyAvatar } from "../../data/avatar-selection";
 import type { JourneyContent } from "../../data/journey-content";
 import { NIGHTMARE_CARD_ID } from "../../data/nightmare";
 import { requireGuideForSiteType } from "../../data/dreamscapes";
-import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 import {
   siteTypeDescription,
   siteTypeIcon,
@@ -60,7 +60,7 @@ import {
 import { AUGURY_TUNING } from "../../journey_v2/tuning";
 import { projectGuideView } from "./guide-view-model";
 import { transfigurationForm } from "../../data/transfiguration-data";
-import { localizedTransfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
+import { transfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
 import type { GuideId } from "../../types/identifiers";
 import type { CardId } from "../../types/card-identity";
 import type { DreamsignId } from "../../types/identifiers";
@@ -231,7 +231,7 @@ function freeTransfigurationCandidates(
       );
       return {
         type: offer.type,
-        presentation: localizedTransfigurationPresentation(
+        presentation: transfigurationPresentation(
           transfigurationForm(content.transfigurationData, offer.type),
         ),
         change: offer.change,
@@ -370,18 +370,18 @@ function heldDreamsignChoices(state: JourneyState) {
   return state.dreamsigns.flatMap((dreamsign) =>
     dreamsign.id === undefined
       ? []
-      : [localizedDreamsign(dreamsign, "Exploration held Dreamsign")],
+      : [toDreamsignView(dreamsign, "Exploration held Dreamsign")],
   );
 }
 
 function dreamsignChoices(
   ids: readonly string[],
   content: JourneyContent,
-): readonly ReturnType<typeof localizedDreamsign>[] {
+): readonly ReturnType<typeof toDreamsignView>[] {
   return ids.flatMap((id) => {
     const dreamsign = dreamsignById(content, parseDreamsignId(id));
     if (dreamsign?.id === undefined) return [];
-    return [localizedDreamsign(dreamsign, "Exploration Dreamsign choice")];
+    return [toDreamsignView(dreamsign, "Exploration Dreamsign choice")];
   });
 }
 
@@ -1350,7 +1350,7 @@ function effectReferencesForAction(
         placeholder: dreamsignPlaceholder,
         entity: {
           kind: "dreamsign",
-          dreamsign: localizedDreamsign(
+          dreamsign: toDreamsignView(
             dreamsign,
             "Exploration effect reference",
           ),
@@ -1380,7 +1380,7 @@ function templateArgumentNames(message: string): readonly string[] {
   ];
 }
 
-function localizedUnpreparedEffect(
+function unpreparedEffect(
   message: ExplorationActionContent["effectText"],
 ): string {
   if (message === undefined || templateArgumentNames(message).length > 0) {
@@ -1389,7 +1389,7 @@ function localizedUnpreparedEffect(
   return message;
 }
 
-function localizedExplorationPredicate(
+function explorationPredicate(
   predicate: ExplorationPredicate | undefined,
 ): string {
   switch (predicate) {
@@ -1433,7 +1433,7 @@ export function buildExplorationActionEffect(
     concealedTargets: Readonly<Record<string, string>> = {},
   ): Record<string, string> => {
     const argumentNames = explorationEffectArgumentNames(action);
-    const localizedValues: Record<string, string> = Object.fromEntries(
+    const templateValues: Record<string, string> = Object.fromEntries(
       argumentNames.map((argumentName) => {
         const concealedTarget = concealedTargets[argumentName];
         if (concealedTarget !== undefined) {
@@ -1451,7 +1451,7 @@ export function buildExplorationActionEffect(
             case "predicate":
               return [
                 argumentName,
-                localizedExplorationPredicate(action.predicate),
+                explorationPredicate(action.predicate),
               ];
             case "subtype":
               if (action.subtype !== undefined)
@@ -1461,7 +1461,7 @@ export function buildExplorationActionEffect(
               if (action.transfiguration !== undefined) {
                 return [
                   argumentName,
-                  localizedTransfigurationPresentation(
+                  transfigurationPresentation(
                     transfigurationForm(
                       content.transfigurationData,
                       action.transfiguration,
@@ -1472,7 +1472,7 @@ export function buildExplorationActionEffect(
               break;
           }
           throw new Error(
-            `Missing localized Exploration effect argument {${argumentName}}.`,
+            `Missing Exploration effect argument {${argumentName}}.`,
           );
         }
         const entity = reference.entity;
@@ -1482,7 +1482,7 @@ export function buildExplorationActionEffect(
         ];
       }),
     );
-    return localizedValues;
+    return templateValues;
   };
   const renderEffect = (values: Readonly<Record<string, string>>): string =>
     action.effectText === undefined
@@ -3821,7 +3821,7 @@ function rewardForResolution(
       ? "Exploration effect resolved"
       : resolvedActionView !== undefined
         ? annotatedTextValue(resolvedActionView.effectText)
-        : localizedUnpreparedEffect(resolvedAction?.effectText ?? "");
+        : unpreparedEffect(resolvedAction?.effectText ?? "");
   if (
     resolvedAction?.effectKind === "add-fixed-site" ||
     resolvedAction?.effectKind === "choose-site-type"
@@ -4009,8 +4009,8 @@ function rewardForResolution(
       }
       return [
         {
-          removed: localizedDreamsign(removed, "Exploration removed Dreamsign"),
-          gained: localizedDreamsign(gained, "Exploration gained Dreamsign"),
+          removed: toDreamsignView(removed, "Exploration removed Dreamsign"),
+          gained: toDreamsignView(gained, "Exploration gained Dreamsign"),
         },
       ];
     });
@@ -4318,7 +4318,7 @@ function rewardForResolution(
     if (purgedDreamsign !== null) {
       return {
         kind: "purged-dreamsign-essence",
-        dreamsign: localizedDreamsign(
+        dreamsign: toDreamsignView(
           purgedDreamsign,
           "Exploration purged Dreamsign",
         ),
@@ -4462,7 +4462,7 @@ function rewardForResolution(
     );
     return dreamsign === undefined
       ? []
-      : [localizedDreamsign(dreamsign, "Exploration gained Dreamsign")];
+      : [toDreamsignView(dreamsign, "Exploration gained Dreamsign")];
   });
   const semanticKind =
     resolvedAction?.effectKind === "purge-selected"

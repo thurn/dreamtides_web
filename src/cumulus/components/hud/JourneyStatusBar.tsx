@@ -50,7 +50,7 @@ import {
   Dreamsign,
   dreamsignArtUrl,
   DS_SHADOW,
-  type LocalizedDreamsign,
+  type DreamsignView,
 } from "./Dreamsign";
 import { requireDreamsignId } from "../../../data/dreamsigns";
 import type { AvatarPortraitFocus } from "../../../types/content";
@@ -115,7 +115,7 @@ export const JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE = `calc(${JOURNEY_STATU
 /** One docked dreamsign, as the domain dreamsign shape the shared
  * {@link Dreamsign} object consumes (art resolved from `imageName`, never by
  * name). The HUD renders each through `<Dreamsign variant="hud">`. */
-export type QsbDreamsign = LocalizedDreamsign;
+export type QsbDreamsign = DreamsignView;
 
 /** The active Avatar shown as a bust in the HUD. */
 export interface QsbAvatar {

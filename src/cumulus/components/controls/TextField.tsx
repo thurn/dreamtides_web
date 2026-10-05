@@ -7,7 +7,7 @@ import type { DomTestId } from "../../types/dom";
 export type TextFieldKind = "text" | "search";
 
 export interface TextFieldProps {
-  /** Localized field label. */
+  /** Field label. */
   label: string;
   /** Controlled value. */
   value: string;

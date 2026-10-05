@@ -2,7 +2,6 @@ import type {
   AuguryArchetypeData,
   AuguryPresentationText,
 } from "../../../types/augury-data";
-import { canonicalPlaceholderName } from "../../../runtime/localization/runtime";
 import { richText, type RichText } from "../card/rich-text";
 import type { OfferTileModel } from "./OfferTile";
 import { fillTemplate } from "../../../runtime/text";
@@ -110,27 +109,12 @@ function selectedTemplate(
   return count === 1 ? text.one : text.other;
 }
 
-function localizedPresentationText(
+function presentationText(
   text: AuguryPresentationText,
   model: OfferTileModel,
   variables: Readonly<Record<string, string | number>>,
 ): string {
-  const selected = selectedTemplate(text, model);
-  if (typeof selected !== "string") {
-    return fillTemplate(selected, variables);
-  }
-  const names = [...selected.matchAll(/\{([a-z][a-zA-Z0-9_]*)\}/gu)].map(
-    (match) => match[1] ?? "",
-  );
-  const compatibleVariables = Object.fromEntries(
-    names.map((name) => {
-      const value =
-        variables[name] ?? variables[canonicalPlaceholderName(name)];
-      if (value === undefined) throw new Error(`missing value for {${name}}`);
-      return [name, value];
-    }),
-  );
-  return fillTemplate(selected, compatibleVariables);
+  return fillTemplate(selectedTemplate(text, model), variables);
 }
 
 /** Complete authored detail title for an Augury offer's semantic model. */
@@ -139,7 +123,7 @@ export function auguryOfferHeadline(
   presentation: HeadlinePresentation,
 ): string {
   const count = countFor(model);
-  return localizedPresentationText(
+  return presentationText(
     presentation.headline,
     model,
     count === null ? {} : { count },
@@ -151,7 +135,7 @@ export function offerTileDescription(
   model: OfferTileModel,
   presentation: SubtitlePresentation,
 ): string {
-  return localizedPresentationText(
+  return presentationText(
     presentation.subtitle,
     model,
     variablesFor(model),

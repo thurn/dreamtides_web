@@ -11,7 +11,7 @@ import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import { Pressable } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { IconButton } from "../controls/IconButton";
-import { Dreamsign, type LocalizedDreamsign } from "../hud/Dreamsign";
+import { Dreamsign, type DreamsignView } from "../hud/Dreamsign";
 import { EssenceValue } from "../hud/EssenceValue";
 import { CARD_ASPECT_RATIO_VALUE } from "./card-aspect";
 import { glossaryInfoCard } from "./glossary-info-card";
@@ -25,7 +25,7 @@ export interface DreamsignGalleryEntryView {
   /** Stable gallery entry id derived from the persistent slot and Dreamsign UUID. */
   entryId: DeckEntryId;
   /** The Dreamsign domain object rendered by the shared Dreamsign component. */
-  dreamsign: LocalizedDreamsign;
+  dreamsign: DreamsignView;
   /** Essence price shown beneath the offer. */
   price: number;
   /** Whether interaction is available, unaffordable, or already acquired. */

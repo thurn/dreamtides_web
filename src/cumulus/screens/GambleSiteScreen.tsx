@@ -11,7 +11,7 @@ import { GameCard, type GameCardModel } from "../components/card/CardView";
 import { CardPickerPanel } from "../components/card/CardPickerPanel";
 import type { GravokGateId, StarwayStairsTierNumber } from "../../types/gamble";
 import type { TransfigurationType } from "../../types/journey";
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import type { DreamsignView } from "../components/hud/Dreamsign";
 import type { FourSuitRepriseOutcome } from "../../data/four-suit-reprise";
 import { blackjackHandTotal } from "../../data/blackjack";
 import type { FourSuitRepriseGame } from "../../types/gamble-data";
@@ -76,7 +76,7 @@ export interface GambleGateView {
   /** Essence paid on a win. */
   essenceReward: number;
   /** Locked jackpot Dreamsign, only present on the Jack Gate. */
-  rewardDreamsign: LocalizedDreamsign | null;
+  rewardDreamsign: DreamsignView | null;
   /** Whether the gate has every reward it needs. */
   available: boolean;
 }
@@ -95,7 +95,7 @@ export interface GambleResultView {
   /** Whether the shared wager event has applied its payout. */
   essenceSettled: boolean;
   /** Jackpot Dreamsign shown in the reward announcement. */
-  rewardDreamsign: LocalizedDreamsign | null;
+  rewardDreamsign: DreamsignView | null;
   /** Whether a held Dreamsign must be replaced before leaving. */
   pendingDreamsignReplacement: boolean;
 }
@@ -160,7 +160,7 @@ export interface LadderClimbSiteView {
   /** Essence awarded alongside the locked Dreamsign on a win. */
   essenceReward: number;
   /** Locked Dreamsign shown as the prize from the opening state. */
-  rewardDreamsign: LocalizedDreamsign;
+  rewardDreamsign: DreamsignView;
   /** Only the currently unlocked attempt; future attempts stay undisclosed. */
   nextDraw: {
     attemptNumber: number;
@@ -781,7 +781,7 @@ function LadderDreamsignReward({
   reduceMotion,
 }: {
   readonly active: boolean;
-  readonly dreamsign: LocalizedDreamsign;
+  readonly dreamsign: DreamsignView;
   readonly layout: "mobile" | "desktop";
   readonly reduceMotion: boolean;
 }) {
@@ -996,7 +996,7 @@ interface WagerPrizeCardProps {
   dreamsignTestId?: DomTestId;
   emphasis?: PlayingCardPrizeEmphasis;
   essenceReward: number;
-  rewardDreamsign: LocalizedDreamsign | null;
+  rewardDreamsign: DreamsignView | null;
 }
 
 /** Gamble-owned rules copy composed onto the generic playing-card prize face. */

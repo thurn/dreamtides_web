@@ -10,11 +10,6 @@ import { fillTemplate } from "../runtime/text";
 /** The semantic owner whose rules text is being explained. */
 export type RulesTextGlossaryOwner = "card" | "avatar" | "dreamsign";
 
-export interface ProjectedGlossaryCatalogEntry extends GlossaryCatalogEntry {
-  readonly localizedTerm: string;
-  readonly localizedDefinition: string;
-}
-
 /**
  * Reusable utility that scans a string for glossary terms and returns the
  * matched glossary entries.
@@ -111,31 +106,23 @@ export function projectGlossaryEntry(
   entry: GlossaryCatalogEntry,
   text: string,
   owner: RulesTextGlossaryOwner = "card",
-): ProjectedGlossaryCatalogEntry {
+): GlossaryCatalogEntry {
   for (const projection of entry.projections ?? []) {
     const match = projectionMatches(projection, text, owner);
     if (match === undefined) continue;
-    const localizedTerm =
-        projection.term === undefined
-          ? entry.term
-          : fillTemplate(projection.term, projectionValues(projection.term, entry, match));
-    const localizedDefinition =
-        projection.definition === undefined
-          ? entry.definition
-          : fillTemplate(projection.definition, projectionValues(projection.definition, entry, match));
     return {
       ...entry,
-      term: localizedTerm,
-      definition: localizedDefinition,
-      localizedTerm,
-      localizedDefinition,
+      term:
+        projection.term === undefined
+          ? entry.term
+          : fillTemplate(projection.term, projectionValues(projection.term, entry, match)),
+      definition:
+        projection.definition === undefined
+          ? entry.definition
+          : fillTemplate(projection.definition, projectionValues(projection.definition, entry, match)),
     };
   }
-  return {
-    ...entry,
-    localizedTerm: entry.term,
-    localizedDefinition: entry.definition,
-  };
+  return entry;
 }
 
 /**
@@ -169,7 +156,7 @@ export function extractGlossaryTerms(text: string): GlossaryCatalogEntry[] {
 export function extractProjectedGlossaryTerms(
   text: string,
   owner: RulesTextGlossaryOwner = "card",
-): ProjectedGlossaryCatalogEntry[] {
+): GlossaryCatalogEntry[] {
   return extractGlossaryTerms(text).map((entry) =>
     projectGlossaryEntry(entry, text, owner),
   );

@@ -222,7 +222,7 @@ describe("glossary-terms", () => {
 
   describe("projected glossary definitions", () => {
 
-    it("binds captured projection arguments into localized values", () => {
+    it("binds captured projection arguments into the projected text", () => {
       const projection = {
         pattern: String.raw`\bforesee\s+(\d+)\b`,
         term: "{term} {1}",

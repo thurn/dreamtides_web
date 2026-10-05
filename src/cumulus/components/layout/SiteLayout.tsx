@@ -85,9 +85,9 @@ export type SiteLayoutComposition = keyof typeof SITE_LAYOUT_COMPOSITIONS;
 export interface SiteLayoutGuideView {
   /** Stable Dream Guide identity. */
   readonly id: GuideId;
-  /** Localized guide name used by visible and accessible presentation. */
+  /** Guide name used by visible and accessible presentation. */
   readonly name: string;
-  /** Localized line spoken by the guide when present. */
+  /** Line spoken by the guide when present. */
   readonly line: string;
   /** Transparent resident-guide artwork. */
   readonly art: ArtRef;
@@ -139,7 +139,7 @@ const GUIDE_HEAD_TARGET_Y = 0.22;
 const DEFAULT_GUIDE_HEAD_TARGET_X = 0.62;
 // Right-hand silhouette edges sampled from the transparent guide sources at
 // the shared head band. Stable guide identities keep the runtime geometry
-// independent of localized names and dialogue length.
+// independent of guide names and dialogue length.
 const GUIDE_HEAD_TARGET_X_BY_ID: Readonly<Record<string, number>> = {
   tobias_tanglefur: 0.793,
   amunet_the_tomb_keeper: 0.635,

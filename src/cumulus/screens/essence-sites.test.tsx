@@ -6,7 +6,7 @@ import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import type { DreamsignView } from "../components/hud/Dreamsign";
 import {
   PurgeSiteScreen,
   purgeActionWidthReservations,
@@ -25,7 +25,7 @@ import {
   PURGE_PRESENTATION,
   SHOP_PRESENTATION,
 } from "../test-helpers/presentation-fixtures";
-import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../test-helpers/dreamsign-fixture";
 import { parseDeckEntryId, parseSiteId, type GuideId } from "../../types/identifiers";
 import {
   testCardId,
@@ -378,8 +378,8 @@ describe("CardShopSiteScreen", () => {
 });
 
 describe("DreamsignBazaarSiteScreen", () => {
-  function sign(index: number): LocalizedDreamsign {
-    return localizedDreamsignFixture({
+  function sign(index: number): DreamsignView {
+    return dreamsignViewFixture({
       id: testDreamsignId(`dreamsign-uuid-${String(index)}`),
       name: `Dreamsign Fixture ${String(index)}`,
       imageName: `fixture-${String(index)}.png`,

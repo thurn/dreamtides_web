@@ -18,7 +18,7 @@ import type { ArtRef } from "../primitives/art";
 import { resolveArtRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import type { DreamsignView } from "../components/hud/Dreamsign";
 import {
   GUIDE_GALLERY_MOBILE_GUIDE_HEIGHT,
   GUIDE_GALLERY_MOBILE_GUIDE_LEFT,
@@ -49,7 +49,7 @@ export interface BattleStartView {
   battleId: BattleId;
   scene: ArtRef | null;
   avatar: BattleStartAvatarView;
-  dreamsigns: readonly LocalizedDreamsign[];
+  dreamsigns: readonly DreamsignView[];
   signatureCards: readonly BattleStartSignatureCardView[];
   pointsToWin: number;
   essenceReward: number;

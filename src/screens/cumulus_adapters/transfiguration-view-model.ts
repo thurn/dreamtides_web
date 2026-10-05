@@ -22,7 +22,7 @@ import type {
 } from "../../cumulus/screens/TransfigurationSiteScreen";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
-import { localizedTransfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
+import { transfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
 import type { GuideId } from "../../types/identifiers";
 const STANDARD_CANDIDATE_COUNT = 3;
 
@@ -83,7 +83,7 @@ export function buildTransfigurationCandidates(
     );
     candidate.forms.push({
       type: offer.type,
-      presentation: localizedTransfigurationPresentation(
+      presentation: transfigurationPresentation(
         transfigurationForm(transfigurationData, offer.type),
       ),
       effectDetails: offer.effectDetails,

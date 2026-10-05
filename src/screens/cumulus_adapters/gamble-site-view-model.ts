@@ -10,7 +10,7 @@ import type {
   BlackjackSiteView,
 } from "../../cumulus/screens/GambleSiteScreen";
 import type { TransfigurationCandidateView } from "../../cumulus/screens/TransfigurationSiteScreen";
-import { localizedTransfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
+import { transfigurationPresentation } from "../../cumulus/components/controls/transfiguration-presentation";
 import {
   gravokGateEssenceReward,
   gravokGateChanceLabel,
@@ -62,7 +62,7 @@ import type {
 import type { GravokGateId } from "../../types/gamble";
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { projectGuideView } from "./guide-view-model";
-import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 import { parseGambleResultId } from "../../types/identifiers";
 import type {
   GambleResultId,
@@ -114,7 +114,7 @@ export function buildGambleGateViews(
     essenceReward: gravokGateEssenceReward(game.economy, gate.gate),
     rewardDreamsign:
       gate.awardsDreamsign && runtime?.rewardDreamsign != null
-        ? localizedDreamsign(runtime.rewardDreamsign, "Gamble gate reward")
+        ? toDreamsignView(runtime.rewardDreamsign, "Gamble gate reward")
         : null,
     available:
       !gate.awardsDreamsign ||
@@ -199,19 +199,19 @@ function buildGravokWagerSiteView(params: {
             rewardDreamsign:
               rewardDreamsign === null
                 ? null
-                : localizedDreamsign(rewardDreamsign, "Gamble result reward"),
+                : toDreamsignView(rewardDreamsign, "Gamble result reward"),
             pendingDreamsignReplacement: result.pendingDreamsignReplacement,
           },
     replacement:
       result?.pendingDreamsignReplacement === true &&
       runtime.rewardDreamsign !== null
         ? {
-            incoming: localizedDreamsign(
+            incoming: toDreamsignView(
               runtime.rewardDreamsign,
               "Gamble pending reward",
             ),
             held: params.state.dreamsigns.map((dreamsign) =>
-              localizedDreamsign(dreamsign, "Gamble held collection"),
+              toDreamsignView(dreamsign, "Gamble held collection"),
             ),
             capacity: params.state.maxDreamsigns,
           }
@@ -254,7 +254,7 @@ function buildLadderClimbSiteView(params: {
     isFarpoint: runtime.isFarpoint,
     runtimeReady: true,
     essenceReward: params.game.economy.winEssence,
-    rewardDreamsign: localizedDreamsign(
+    rewardDreamsign: toDreamsignView(
       runtime.rewardDreamsign,
       "Ladder Climb reward",
     ),
@@ -297,12 +297,12 @@ function buildLadderClimbSiteView(params: {
     replacement:
       result?.pendingDreamsignReplacement === true
         ? {
-            incoming: localizedDreamsign(
+            incoming: toDreamsignView(
               runtime.rewardDreamsign,
               "Ladder Climb pending reward",
             ),
             held: params.state.dreamsigns.map((dreamsign) =>
-              localizedDreamsign(dreamsign, "Gamble held collection"),
+              toDreamsignView(dreamsign, "Gamble held collection"),
             ),
             capacity: params.state.maxDreamsigns,
           }
@@ -488,7 +488,7 @@ function buildFourSuitTransfigurationCandidate(
       );
       return {
         type: offer.type,
-        presentation: localizedTransfigurationPresentation(
+        presentation: transfigurationPresentation(
           transfigurationForm(transfigurationData, offer.type),
         ),
         change:

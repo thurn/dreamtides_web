@@ -1641,9 +1641,7 @@ function PlayableBattleScreenInner({ aiMode }: { aiMode: boolean }) {
         onClose={() => setIsPoolViewerOpen(false)}
         onPoolCardDragEnd={handleCardDragEnd}
         onPoolCardDragStart={handlePoolCardDragStart}
-        title={
-          /* localization-ignore: semantic pool-viewer context value. */ "battle"
-        }
+        title="battle"
         variant="floating"
       />
       <MobileBattleScreenAdapter

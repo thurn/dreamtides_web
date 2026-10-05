@@ -97,7 +97,7 @@ export function buildDeckTypeFilterOptions(
     .map(([subtype]): DeckControlOption<DeckTypeFilter> => ({
       value: `subtype:${subtype}`,
       // Subtype names are authored display values. Keep the semantic name
-      // intact; English suffix rules cannot safely produce localized labels.
+      // intact; English suffix rules cannot safely produce these labels.
       label: subtype,
     }));
   return [...BASE_DECK_TYPE_FILTER_OPTIONS, ...subtypeOptions];

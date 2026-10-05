@@ -124,7 +124,7 @@ export function parseCardId(value: unknown): CardId {
 
 /**
  * Parses a non-empty source-locale card name at the catalog boundary.
- * Player-facing consumers localize the catalog value before rendering it.
+ * Player-facing consumers read the display name from the catalog entry.
  */
 export function parseCardName(value: unknown): CardName {
   if (typeof value !== "string" || value.length === 0) {

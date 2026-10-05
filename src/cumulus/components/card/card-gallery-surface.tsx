@@ -74,7 +74,7 @@ export interface CardPickerFooterAction extends Omit<
 
 /** Controlled search field shown in the gallery's browser toolbar. */
 export interface CardBrowserSearchControl {
-  /** Localized visible label for the search field. */
+  /** Visible label for the search field. */
   label: string;
   /** Current search text. */
   value: string;
@@ -90,7 +90,7 @@ export interface CardBrowserSearchControl {
 
 /** Controlled dropdown shown in the gallery's browser toolbar. */
 export interface CardBrowserSelectControl {
-  /** Localized accessible name for the dropdown trigger. */
+  /** Accessible name for the dropdown trigger. */
   ariaLabel: string;
   /** Current option value. */
   value: string;

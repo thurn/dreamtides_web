@@ -12,8 +12,8 @@ import {
   type LadderClimbSiteView,
   type StarwayStairsSiteView,
 } from "./GambleSiteScreen";
-import { localizedTransfigurationFormFixture } from "../test-helpers/transfiguration-fixture";
-import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import { transfigurationPresentationFixture } from "../test-helpers/transfiguration-fixture";
+import { dreamsignViewFixture } from "../test-helpers/dreamsign-fixture";
 import { parseDeckEntryId, parseSiteId } from "../../types/identifiers";
 import {
   testDreamsignId,
@@ -24,7 +24,7 @@ import {
 import { renderInCumulus } from "../testing/render";
 import { syntheticGameCard } from "../test-helpers/component-test-fixtures";
 
-const JACKPOT = localizedDreamsignFixture({
+const JACKPOT = dreamsignViewFixture({
   id: testDreamsignId("00000000-0000-4000-8000-000000000041"),
   name: "Fixture Jackpot",
   effectDescription: "Foresee 1.",
@@ -193,7 +193,7 @@ function spadesResult(
         forms: [
           {
             type: "Empowered",
-            presentation: localizedTransfigurationFormFixture("Empowered"),
+            presentation: transfigurationPresentationFixture("Empowered"),
             effectDetails: { fixture: true },
             pricing: { kind: "unpriced" },
             previewModel: target.model,
@@ -342,7 +342,7 @@ describe("GambleSiteScreen — Three-Gate Wager", () => {
   it("replaces a held Dreamsign by UUID after an at-cap jackpot", () => {
     vi.useFakeTimers();
     const onReplaceDreamsign = vi.fn();
-    const held = localizedDreamsignFixture({
+    const held = dreamsignViewFixture({
       id: testDreamsignId("held-sign"),
       name: "Held Sign",
       effectDescription: "A held effect.",

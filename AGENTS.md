@@ -82,8 +82,8 @@ makes one commit, and never runs `bd`, `tg candidate`, `tg approve`, or
 - Game state is a fold of the event log. React `useState`/`useRef` never
   gates game flow; anything the game must agree on is an event in the log.
   Clients write intent events only, via `src/coop/actions.ts`.
-- Linked art, typed token mirrors, and localization adapters are disposable
-  workspace materializations refreshed by `scripts/prepare-workspace.mjs`.
+- Linked art and typed token mirrors are disposable workspace
+  materializations refreshed by `scripts/prepare-workspace.mjs`.
   Do not edit or commit generated outputs.
 - UI work uses the `cumulus` skill.
 

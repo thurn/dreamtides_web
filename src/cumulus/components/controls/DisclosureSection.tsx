@@ -8,9 +8,9 @@ import { StandaloneGlyph } from "./StandaloneGlyph";
 import type { DomTestId } from "../../types/dom";
 
 export interface DisclosureSectionProps {
-  /** Localized heading shown in the disclosure trigger. */
+  /** Heading shown in the disclosure trigger. */
   title: string;
-  /** Optional localized context shown beside the heading. */
+  /** Optional context shown beside the heading. */
   summary?: string;
   /** Controlled open state. */
   expanded: boolean;

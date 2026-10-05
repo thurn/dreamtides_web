@@ -157,8 +157,6 @@ Each load logs `debug_qa_scene_loaded`. To add a scene, register it in
   augury, transfiguration, tutorial, glossary, resonance, and more) are one
   module each. `src/content/documents.ts` assembles them into the documents
   the runtime loaders validate.
-- `localization/`: the Trox configuration and source messages for the
-  localization runtime.
 - Art is symlinked into `public/` from the local caches by
   `scripts/setup-assets.ts` (`npm run setup-assets`).
 - Test fixtures are synthetic and live in `src/testing/`.

@@ -50,7 +50,6 @@ export function TutorialScreenAdapter({
       .catch((error: unknown) => {
         beginRequestedKey.current = null;
         logEvent("tutorial_begin_failed", {
-          // localization-ignore: exception detail is diagnostic log payload.
           message: error instanceof Error ? error.message : String(error),
         });
       });

@@ -3309,7 +3309,6 @@ function BattleDebugMenu({
   readonly onFillAsymmetricBattlefieldPreview?: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  // localization-ignore: developer-only battle debug controls are outside the player path.
   return (
     <div
       data-battle-debug="menu"
@@ -3492,7 +3491,6 @@ function BattleInspectorContent({
     gap: token("--space-s"),
   };
 
-  // localization-ignore: developer-only battle inspector controls are outside the player path.
   return (
     <div
       style={{
@@ -4034,7 +4032,6 @@ function BattleInspectorRail({
   readonly onPerspectiveToggle?: () => void;
   readonly onAction?: (action: MobileBattleInspectorAction) => void;
 }) {
-  // localization-ignore: developer-only battle inspector controls are outside the player path.
   return (
     <div
       data-battle-inspector="docked"
@@ -4874,7 +4871,6 @@ export function MobileBattleScreen({
           </div>
         </GlassDialog>
       ) : null}
-      {/* localization-ignore: developer-only battle inspector controls are outside the player path. */}
       {inspectorVisibility === "available" &&
       !isDockLayout &&
       isInspectorOpen ? (

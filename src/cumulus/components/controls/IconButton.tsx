@@ -69,7 +69,7 @@ export interface IconButtonProps {
   ariaControls?: string;
   /** A `data-testid` for selecting the disc in tests. */
   testId?: DomTestId;
-  /** Localized accessible name forwarded unresolved to the final button. */
+  /** Accessible name forwarded to the final button. */
   label: string;
 }
 

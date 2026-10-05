@@ -101,7 +101,7 @@ interface OfferTileBase {
 
 export type OfferTileCategory =
   | {
-      /** Stable category whose complete player-facing phrase is localized. */
+      /** Stable category whose complete player-facing phrase is authored. */
       kind: "character" | "event" | "cheap" | "mid-cost" | "expensive" | "fast";
     }
   | {
@@ -124,7 +124,7 @@ export type OfferTileModel =
   | (OfferTileBase & {
       kind: "category-draft";
       cards: OfferTileCardChoices;
-      /** Semantic category used to select a complete localized phrase. */
+      /** Semantic category used to select a complete authored phrase. */
       category: OfferTileCategory;
     })
   | (OfferTileBase & {

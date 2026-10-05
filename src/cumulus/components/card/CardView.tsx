@@ -45,7 +45,7 @@ import { rulesTextDefinitionCards } from "./rules-text-reveal";
 import { glossaryInfoCard } from "./glossary-info-card";
 import type { GlossaryEntryId } from "../../../types/identifiers";
 
-function localizedCardDisplayName(
+function cardDisplayName(
   card: Pick<CardData, "name" | "subtype">,
   figment: boolean,
 ): string {
@@ -806,7 +806,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
         name: figmentCardDisplayName(sourceCard.name, sourceCard.subtype),
       }
     : sourceCard;
-  const localizedCardName = localizedCardDisplayName(card, figment);
+  const cardName = cardDisplayName(card, figment);
   const [imageError, setImageError] = useState(false);
   const [imageAspect, setImageAspect] = useState<number | null>(null);
   // Top of the rules text box as a fraction of card height, measured live so the
@@ -1059,7 +1059,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
           textOverflow: "ellipsis",
         }}
       >
-        {localizedCardName}
+        {cardName}
       </span>
       {transfiguration !== undefined ? (
         <i
@@ -1340,7 +1340,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       {identiconUri !== null ? (
         <img
           src={identiconUri}
-          alt={`${localizedCardName} identicon`}
+          alt={`${cardName} identicon`}
           className="absolute inset-0 h-full w-full object-contain"
           draggable={false}
           loading="lazy"
@@ -1348,7 +1348,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
       ) : !imageError ? (
         <ArtLayers
           imageUrl={cardImageUrl(card.imageNumber)}
-          alt={localizedCardName}
+          alt={cardName}
           artCrop={renderedArtCrop}
           imageAspect={imageAspect}
           safeAreaTarget={safeAreaTarget}
@@ -1386,7 +1386,7 @@ function GameCardSurface(props: GameCardSurfaceProps) {
               lineHeight: 1.15,
             }}
           >
-            {localizedCardName}
+            {cardName}
           </span>
         </div>
       )}
@@ -1789,7 +1789,7 @@ export function GameCard({
       role={interactive ? "button" : undefined}
       tabIndex={0}
       aria-disabled={unavailable || undefined}
-      aria-label={localizedCardDisplayName(displaySnapshot, figment)}
+      aria-label={cardDisplayName(displaySnapshot, figment)}
       data-testid={testId}
       data-game-card-source=""
       data-game-card-presentation={presentation}

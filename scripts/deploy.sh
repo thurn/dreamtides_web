@@ -17,8 +17,7 @@
 # Deploying Hosting alone leaves newly-keyed art 404ing in the bucket (the image
 # shows blank with no console error), so both steps run here unconditionally.
 #
-# This script deploys the CURRENT local state. Localization reports and bundles
-# are generated and validated as release artifacts immediately before the build.
+# This script deploys the CURRENT local state.
 #
 # Requirements:
 #   - `.env` + `.env.production` populated (VITE_FIREBASE_* and VITE_ASSET_BASE_URL);
@@ -52,16 +51,10 @@ step() {
 step "Installing locked dependencies"
 npm ci --include=dev
 
-step "1/5  prepare — materialize current canonical workspace data"
+step "1/4  prepare — materialize current canonical workspace data"
 npm run prepare-workspace
 
-step "2/5  localization — generate and validate release artifacts"
-npm run trox:extract
-npm run trox:check-artifacts -- --deny warnings
-npm run trox:bundle -- --allow-missing
-npm run trox:check-generated
-
-step "3/5  build — compile + bundle code, HTML, and data catalogs into dist/"
+step "2/4  build — compile + bundle code, HTML, and data catalogs into dist/"
 npm run build:prepared
 
 if [[ "$DRY_RUN" == true ]]; then
@@ -69,10 +62,10 @@ if [[ "$DRY_RUN" == true ]]; then
   exit 0
 fi
 
-step "4/5  firebase deploy — publish dist/ to Hosting"
+step "3/4  firebase deploy — publish dist/ to Hosting"
 firebase deploy --only hosting
 
-step "5/5  upload-assets — sync binary art to the Storage bucket"
+step "4/4  upload-assets — sync binary art to the Storage bucket"
 npm run upload-assets
 
 step "Done — Hosting and the art bucket are both up to date"

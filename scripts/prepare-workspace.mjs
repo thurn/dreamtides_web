@@ -17,17 +17,9 @@ export const WORKSPACE_GENERATORS = [
     script: "scripts/generate-cumulus-tokens.mjs",
     nodeArgs: [],
   },
-  {
-    label: "localized runtime adapters",
-    script: "scripts/generate-localized-runtime-templates.mjs",
-    nodeArgs: ["--import", "tsx"],
-  },
 ];
 
-export const DISPOSABLE_WORKSPACE_FILES = [
-  "src/cumulus/primitives/tokens.ts",
-  "src/runtime/localization/runtime-templates.generated.ts",
-];
+export const DISPOSABLE_WORKSPACE_FILES = ["src/cumulus/primitives/tokens.ts"];
 
 /**
  * Materialize every disposable file needed by development, tests, typechecking,

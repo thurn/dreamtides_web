@@ -19,7 +19,7 @@ import { buildMobileDeckView } from "./mobile-deck-view-model";
 import { buildAvatarTideViews } from "./journey-start-view-model";
 import type { TransfigurationData } from "../../types/transfiguration-data";
 import type { JourneySeed } from "../../types/journey-seed";
-import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 
 /** Map the run's Avatar to the sidebar view (portrait visual + rules text). */
 function toAvatarView(
@@ -58,7 +58,7 @@ export function buildDesktopDeckView(
     cards: buildMobileDeckView(transfigurationData, deck, cardDatabase).cards,
     avatar: toAvatarView(avatar),
     dreamsigns: dreamsigns.map((dreamsign) =>
-      localizedDreamsign(dreamsign, "Desktop deck viewer"),
+      toDreamsignView(dreamsign, "Desktop deck viewer"),
     ),
     tides:
       avatarContent === undefined || journeySeed === undefined

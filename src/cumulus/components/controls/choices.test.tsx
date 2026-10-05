@@ -17,7 +17,7 @@ import {
 } from "../../../types/test-identities";
 import { GLYPHS } from "../../primitives/glyph";
 import { syntheticGameCard } from "../../test-helpers/component-test-fixtures";
-import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../../test-helpers/dreamsign-fixture";
 import { annotatedFixture } from "../../testing/annotated-text";
 import { renderInCumulus } from "../../testing/render";
 import type { DomTestId } from "../../types/dom";
@@ -376,7 +376,7 @@ describe("ExplorationChoice", () => {
       entryId: parseDeckEntryId("entry-two"),
       card: secondCard,
     };
-    const dreamsign = localizedDreamsignFixture({
+    const dreamsign = dreamsignViewFixture({
       idSeed: "40000000-0000-4000-8000-000000000001",
       name: "Entity",
     });

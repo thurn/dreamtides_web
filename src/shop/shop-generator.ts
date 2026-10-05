@@ -379,7 +379,7 @@ export function generateShopInventory(
   // `cardSource` is the empty-shop signature; cross-check `drawnCardCount`
   // (pool exhausted vs. drew but filtered) and `cardsMissingFromDatabase`
   // (drew valid numbers but the card database lacked them) against the
-  // requested `cardCount` to localize the cause.
+  // requested `cardCount` to explain the cause.
   const reconstructionLog: ShopInventoryReconstructionLog = {
     event: "shop_inventory_generated",
     shopType: isSpecialty ? "specialty" : "regular",

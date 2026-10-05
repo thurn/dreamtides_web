@@ -13,7 +13,6 @@ public/dreamscape-icons/
 public/dream-guides/
 public/atlas/
 src/cumulus/primitives/tokens.ts
-src/runtime/localization/runtime-templates.generated.ts
 logs/
 .env
 .env.local

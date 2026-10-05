@@ -4,7 +4,7 @@ import type { TutorialBattleStartConfiguration } from "../../types/tutorial";
 import { artRef } from "../../cumulus/primitives/art";
 import type { BattleStartView } from "../../cumulus/screens/BattleStartScreen";
 import { tutorialSpeechBubbleDelaySeconds } from "../../data/tutorial-speech-bubble";
-import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 import { parsePresentationId } from "../../types/identifiers";
 
 export type BattleStartInit = BattleInit;
@@ -55,7 +55,7 @@ export function buildBattleStartView(
     dreamsigns: (enemy.dreamsigns ?? []).flatMap((dreamsign) =>
       dreamsign.id === undefined
         ? []
-        : [localizedDreamsign(dreamsign, "Battle start")],
+        : [toDreamsignView(dreamsign, "Battle start")],
     ),
     signatureCards: (enemy.signatureCards ?? []).flatMap((summary) => {
       const card = cardDatabase.get(summary.cardNumber);

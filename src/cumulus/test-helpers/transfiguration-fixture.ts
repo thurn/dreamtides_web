@@ -1,6 +1,6 @@
 import type { TransfigurationType } from "../../types/journey";
 import type { TransfigurationFormDefinition } from "../../types/transfiguration-data";
-import type { LocalizedTransfigurationPresentation } from "../components/controls/transfiguration-presentation";
+import type { TransfigurationPresentation } from "../components/controls/transfiguration-presentation";
 import { testGlossaryEntryId } from "../../types/test-identities";
 
 export function transfigurationFormFixture(
@@ -10,7 +10,6 @@ export function transfigurationFormFixture(
     id,
     glossaryUuid: testGlossaryEntryId(`transfiguration-${id}`),
     name: `Fixture ${id}`,
-    // localization-ignore: test-only fixture mirrors authored RON presentation copy.
     description: `Fixture ${id} effect`,
     glyph: `transfiguration${id}`,
     accentColor: ["#", "222222"].join("") as `#${string}`,
@@ -20,9 +19,9 @@ export function transfigurationFormFixture(
   };
 }
 
-export function localizedTransfigurationFormFixture(
+export function transfigurationPresentationFixture(
   id: TransfigurationType,
-): LocalizedTransfigurationPresentation {
+): TransfigurationPresentation {
   const form = transfigurationFormFixture(id);
   return {
     glossaryUuid: form.glossaryUuid,

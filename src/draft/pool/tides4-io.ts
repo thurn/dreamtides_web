@@ -51,7 +51,7 @@ export interface Tides4DeckJson {
   id: TideId;
   /** Player-facing narrative label. */
   displayName: string;
-  /** Localized grammatical reference used by Augury package offers. */
+  /** Grammatical reference used by Augury package offers. */
   auguryPackageReference: string;
   /** Player-facing explanation of the tide's mechanical identity. */
   displayDescription: string;

@@ -178,8 +178,8 @@ export function PoolViewerScreen({
             value: direction,
             symbol:
               direction === "asc"
-                ? /* localization-ignore: icon-only sort glyph; the adjacent ariaLabel is localized. */ "↑"
-                : /* localization-ignore: icon-only sort glyph; the adjacent ariaLabel is localized. */ "↓",
+                ? "↑"
+                : "↓",
             ariaLabel: sortDirectionLabel(direction),
           }))}
           value={view.filters.direction}

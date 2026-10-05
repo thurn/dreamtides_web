@@ -40,7 +40,7 @@ export interface CardZoneBrowserOwnerSwitch {
 export interface CardZoneBrowserOverlayProps<
   EntryId extends string = DeckEntryId,
 > {
-  /** Viewer-relative owner used only to select localized presentation. */
+  /** Viewer-relative owner used only to select presentation copy. */
   readonly owner: CardZoneBrowserOwner;
   /** Card zone whose contents are being inspected. */
   readonly zone: CardZoneBrowserZone;

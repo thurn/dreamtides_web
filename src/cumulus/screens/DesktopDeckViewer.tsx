@@ -33,7 +33,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { requireDreamsignId } from "../../data/dreamsigns";
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import type { DreamsignView } from "../components/hud/Dreamsign";
 import { GameCard } from "../components/card/CardView";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
 import {
@@ -82,7 +82,7 @@ export interface DesktopDeckView {
   /** The run's Avatar, or null before one is chosen. */
   avatar: DeckAvatarView | null;
   /** The dreamsigns collected so far, in collection order. */
-  dreamsigns: LocalizedDreamsign[];
+  dreamsigns: DreamsignView[];
   /** The exact tide set selected for this run, matching the journey-start preview. */
   tides: AvatarTideView[];
 }
@@ -319,7 +319,7 @@ function Sidebar({
   tides,
 }: {
   avatar: DeckAvatarView | null;
-  dreamsigns: LocalizedDreamsign[];
+  dreamsigns: DreamsignView[];
   tides: AvatarTideView[];
 }) {
   return (
@@ -400,7 +400,7 @@ function AvatarBlock({
 }
 
 /** The collected dreamsigns as hoverable art tiles. */
-function DreamsignsBlock({ dreamsigns }: { dreamsigns: LocalizedDreamsign[] }) {
+function DreamsignsBlock({ dreamsigns }: { dreamsigns: DreamsignView[] }) {
   
   return (
     <section

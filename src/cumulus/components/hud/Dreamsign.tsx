@@ -42,7 +42,7 @@ export function dreamsignArtUrl(imageName: string): string {
 
 /** Build the shared Dreamsign detail card and ordered glossary definitions. */
 export function dreamsignRevealSpec(
-  dreamsign: LocalizedDreamsign,
+  dreamsign: DreamsignView,
   showImage: boolean,
 ) {
   const effect = dreamsign.effectDescription;
@@ -68,22 +68,22 @@ export function dreamsignRevealSpec(
 }
 
 /** UUID-backed Dreamsign presentation data resolved before it reaches Cumulus. */
-export interface LocalizedDreamsign {
+export interface DreamsignView {
   /** Stable Dreamsign UUID. */
   readonly id: DreamsignId;
-  /** Canonical localized display name. */
+  /** Canonical display name. */
   readonly name: string;
-  /** Canonical localized effect copy, or null when the object has no rules. */
+  /** Canonical effect copy, or null when the object has no rules. */
   readonly effectDescription: string | null;
   /** Hosted art key. */
   readonly imageName?: string;
-  /** Localized alternative text for the art. */
+  /** Alternative text for the art. */
   readonly imageAlt: string;
 }
 
 export interface DreamsignProps {
   /** The dreamsign to show. Identified by `id` (never by name). */
-  dreamsign: LocalizedDreamsign;
+  dreamsign: DreamsignView;
   /**
    * Override the tile's `data-testid`. Defaults to `"dreamsign-art-tile"` so the
    * shipped shop / reward / deck-viewer selectors keep working.

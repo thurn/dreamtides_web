@@ -12,9 +12,9 @@ import { plainAnnotatedText } from "../../runtime/text";
 import { artRef } from "../primitives/art";
 import { GLYPHS } from "../primitives/glyph";
 import { syntheticGameCard } from "../test-helpers/component-test-fixtures";
-import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../test-helpers/dreamsign-fixture";
 import {
-  localizedTransfigurationFormFixture,
+  transfigurationPresentationFixture,
   transfigurationFormFixture,
 } from "../test-helpers/transfiguration-fixture";
 import { renderInCumulus } from "../testing/render";
@@ -99,7 +99,7 @@ function cardsFollowup(
 
 function dreamsign(idSeed: string) {
   const fixture = { name: idSeed, effectDescription: "Effect.", imageAlt: "Fixture art" };
-  return localizedDreamsignFixture({ idSeed, ...fixture, imageName: `${idSeed}.webp` });
+  return dreamsignViewFixture({ idSeed, ...fixture, imageName: `${idSeed}.webp` });
 }
 
 type Dreamsign = ReturnType<typeof dreamsign>;
@@ -287,7 +287,7 @@ describe("ExplorationSiteScreen", () => {
         reforgedType: null,
         forms: (["Empowered", "Kindled"] as const).map((type) => ({
           type,
-          presentation: localizedTransfigurationFormFixture(type),
+          presentation: transfigurationPresentationFixture(type),
           effectDetails: { entryId, type },
           pricing: { kind: "unpriced" as const },
           previewModel: {

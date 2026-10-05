@@ -59,7 +59,7 @@ type SelectSize = "sm" | "md";
  * (High to Low)" → trigger "Cost ↓"), so a long menu entry stays readable while
  * the button stays narrow enough to share a line.
  */
-/** One option whose copy remains localized until its DOM text node. */
+/** One option with its player-facing label. */
 export interface SelectOption<Value extends string = string> {
   value: Value;
   label: string;

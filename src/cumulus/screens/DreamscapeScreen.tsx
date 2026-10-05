@@ -21,7 +21,7 @@ import { Motes } from "../components/hud/Motes";
 import { CharacterDialogue } from "../components/overlay/CharacterDialogue";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import type { DreamsignView } from "../components/hud/Dreamsign";
 import {
   DreamsignReplacementDialog,
   type DreamsignReplacementModel,
@@ -38,7 +38,7 @@ export type InlineRewardView =
   | { kind: "essence"; amount: number }
   | {
       kind: "dreamsign";
-      dreamsign: LocalizedDreamsign;
+      dreamsign: DreamsignView;
       requiresReplacement: boolean;
     };
 

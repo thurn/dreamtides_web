@@ -22,7 +22,7 @@ import {
   testGlossaryEntryId,
 } from "../../../types/test-identities";
 import { syntheticGameCard } from "../../test-helpers/component-test-fixtures";
-import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../../test-helpers/dreamsign-fixture";
 import { transfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
 import { renderInCumulus } from "../../testing/render";
 import { CardChangePair } from "./CardChangePair";
@@ -407,7 +407,7 @@ describe("CardChangePair", () => {
 
 describe("PlayingCard", () => {
   it("keeps related Dreamsign reveal semantics and flips the prize into the drawn card", () => {
-    const dreamsign = localizedDreamsignFixture({
+    const dreamsign = dreamsignViewFixture({
       id: testDreamsignId("00000000-0000-4000-8000-000000000051"),
       name: "Bezoar",
       imageName: "bezoar.png",

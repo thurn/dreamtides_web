@@ -26,7 +26,7 @@ const VISUALLY_HIDDEN_STYLE: CSSProperties = {
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 export interface CardStatChangeBadge {
   kind: "empowered" | "kindled";
-  /** Localized form name supplied by the Transfiguration catalog. */
+  /** Form name supplied by the Transfiguration catalog. */
   accessibleName: string;
 }
 

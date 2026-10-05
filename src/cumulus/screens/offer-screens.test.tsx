@@ -9,14 +9,14 @@ import { GLYPHS } from "../primitives/glyph";
 import { GLOSSARY_IDS } from "../../data/glossary";
 import { draftOfferKey } from "../../data/draft-site-bootstrap";
 import { DreamsignGalleryPanel } from "../components/card/DreamsignGalleryPanel";
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import type { DreamsignView } from "../components/hud/Dreamsign";
 import { DraftScreen, type DraftView } from "./DraftScreen";
 import {
   DreamsignRevelationScreen,
   type DreamsignRevelationView,
 } from "./DreamsignRevelationScreen";
 import { DREAMSIGN_REVELATION_PRESENTATION } from "../test-helpers/presentation-fixtures";
-import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../test-helpers/dreamsign-fixture";
 import { parseDeckEntryId, type PresentationId } from "../../types/identifiers";
 import {
   testCardId,
@@ -214,8 +214,8 @@ describe("DraftScreen", () => {
 });
 
 describe("DreamsignRevelationScreen", () => {
-  function dreamsign(idSeed: string, imageName: string): LocalizedDreamsign {
-    return localizedDreamsignFixture({
+  function dreamsign(idSeed: string, imageName: string): DreamsignView {
+    return dreamsignViewFixture({
       idSeed,
       name: `Dreamsign ${idSeed}`,
       effectDescription: "A test effect.",

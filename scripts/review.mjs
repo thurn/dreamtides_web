@@ -214,12 +214,6 @@ function commandFor(step, extraArgs = []) {
   if (step === "lint") {
     return [process.execPath, [join(root, "scripts", "run-eslint.mjs"), ...extraArgs]];
   }
-  if (step === "trox-source-check") {
-    return [
-      process.execPath,
-      [join(root, "scripts", "trox-source-workspace.mjs")],
-    ];
-  }
   if (step === "typecheck") {
     mkdirSync(dirname(typecheckPaths.buildInfo), { recursive: true });
     return [
@@ -239,9 +233,6 @@ function commandFor(step, extraArgs = []) {
       process.execPath,
       ["--import", "tsx", join(root, "scripts", "setup-assets.ts")],
     ];
-  }
-  if (step === "trox-generated-check") {
-    return [process.execPath, [join(root, "scripts", "trox-generated-check.mjs")]];
   }
   if (step === "test-related") {
     return [
@@ -303,7 +294,6 @@ function executionPlan() {
   if (task === "full") {
     return [
       { step: "prepare", args: [] },
-      { step: "trox-source-check", args: [] },
       { step: "lint", args: [] },
       { step: "typecheck", args: [] },
       { step: "test", args: [] },
@@ -312,7 +302,6 @@ function executionPlan() {
   if (task === "lint-full") {
     return [
       { step: "prepare", args: [] },
-      { step: "trox-source-check", args: [] },
       { step: "lint", args: passthrough },
     ];
   }
@@ -325,9 +314,6 @@ function executionPlan() {
   if (task === "lint") {
     const steps = [];
     if (needsPreparedWorkspace) steps.push({ step: "prepare", args: [] });
-    if (reviewPlan.shouldCheckTrox) {
-      steps.push({ step: "trox-source-check", args: [] });
-    }
     if (reviewPlan.lintFiles.length > 0 || passthrough.length > 0) {
       steps.push({
         step: "lint",
@@ -353,9 +339,6 @@ function executionPlan() {
   if (task === "quick") {
     const steps = [];
     if (needsPreparedWorkspace) steps.push({ step: "prepare", args: [] });
-    if (reviewPlan.shouldCheckTrox) {
-      steps.push({ step: "trox-source-check", args: [] });
-    }
     if (reviewPlan.lintFiles.length > 0) {
       steps.push({ step: "lint", args: reviewPlan.lintFiles });
     }

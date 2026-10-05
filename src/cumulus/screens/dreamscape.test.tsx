@@ -8,7 +8,7 @@ import {
 } from "../components/dreamscape/SiteNode";
 import { artRef } from "../primitives/art";
 import { glyph } from "../primitives/glyph";
-import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../test-helpers/dreamsign-fixture";
 import { renderInCumulus } from "../testing/render";
 import type { SiteState } from "../../types/journey";
 import {
@@ -102,7 +102,7 @@ describe("DreamscapeScreen", () => {
   }
 
   function dreamsign(idSeed: string) {
-    return localizedDreamsignFixture({
+    return dreamsignViewFixture({
       id: testDreamsignId(idSeed),
       name: "Fixture Dreamsign",
       effectDescription: "Fixture effect.",

@@ -16,22 +16,6 @@ function requiredString(value, field, index) {
   return value.trim();
 }
 
-function isSourceMessageRef(value) {
-  return value !== null &&
-    typeof value === "object" &&
-    !Array.isArray(value) &&
-    value.format === "trox-source-message-ref" &&
-    typeof value.entry_id === "string" &&
-    typeof value.source_signature === "string" &&
-    typeof value.contract_signature === "string";
-}
-
-function optionalLocalized(value, field, index) {
-  if (value === undefined) return undefined;
-  if (isSourceMessageRef(value)) return value;
-  return requiredString(value, field, index);
-}
-
 function stringArray(value, field, index) {
   if (value === undefined) return [];
   if (
@@ -107,8 +91,8 @@ function projectionArray(value, index) {
         );
       }
     }
-    const term = optionalLocalized(projection.term, "projection term", index);
-    const definition = optionalLocalized(
+    const term = optionalString(projection.term, "projection term", index);
+    const definition = optionalString(
       projection.definition,
       "projection definition",
       index,

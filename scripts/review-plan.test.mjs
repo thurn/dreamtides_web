@@ -20,7 +20,6 @@ describe("fast review plan", () => {
     expect(buildReviewPlan(["docs/notes.md"])).toEqual({
       changedFiles: ["docs/notes.md"],
       lintFiles: [],
-      shouldCheckTrox: false,
       shouldTypecheck: false,
       testInputs: [],
     });
@@ -41,7 +40,6 @@ describe("fast review plan", () => {
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
       ],
-      shouldCheckTrox: true,
       shouldTypecheck: true,
       testInputs: [
         "scripts/cumulus-ui-boundary.test.mjs",
@@ -49,55 +47,6 @@ describe("fast review plan", () => {
         "src/state/journey-state-actions.test.ts",
         "src/state/journey-state-actions.ts",
       ],
-    });
-  });
-
-  it("selects localization contract checks for the Trox project config", () => {
-    expect(
-      buildReviewPlan(["trox.ron"]),
-    ).toMatchObject({
-      shouldCheckTrox: true,
-      shouldTypecheck: false,
-      testInputs: [
-        "scripts/bump-trox.test.mjs",
-        "scripts/trox-csv-sync.test.mjs",
-        "scripts/trox-generated-check.test.mjs",
-        "scripts/trox-source-workspace.test.mjs",
-        "scripts/trox.test.mjs",
-      ],
-    });
-  });
-
-  it("selects localization contract checks for a locale profile", () => {
-    expect(buildReviewPlan(["localization/qa/es.ron"])).toMatchObject(
-      {
-        shouldCheckTrox: true,
-        testInputs: [
-          "scripts/bump-trox.test.mjs",
-            "scripts/trox-csv-sync.test.mjs",
-          "scripts/trox-generated-check.test.mjs",
-          "scripts/trox-source-workspace.test.mjs",
-          "scripts/trox.test.mjs",
-        ],
-      },
-    );
-  });
-
-  it("selects Trox checks and wrapper tests for wrapper changes", () => {
-    expect(buildReviewPlan(["scripts/trox.mjs"])).toMatchObject({
-      shouldCheckTrox: true,
-      testInputs: [
-        "scripts/bump-trox.test.mjs",
-        "scripts/trox-csv-sync.test.mjs",
-        "scripts/trox-generated-check.test.mjs",
-        "scripts/trox-source-workspace.test.mjs",
-        "scripts/trox.mjs",
-        "scripts/trox.test.mjs",
-      ],
-    });
-    expect(buildReviewPlan(["scripts/bump-trox.mjs"])).toMatchObject({
-      shouldCheckTrox: true,
-      testInputs: expect.arrayContaining(["scripts/bump-trox.test.mjs"]),
     });
   });
 

@@ -36,7 +36,7 @@ import {
   logGambleResolved,
   logGambleSettled,
 } from "./gamble-site-logging-view-model";
-import { localizedDreamsignFixture } from "../../cumulus/test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../../cumulus/test-helpers/dreamsign-fixture";
 
 describe("shop-purchase-logging-view-model", () => {
   const card: CardData = {
@@ -234,8 +234,8 @@ describe("gamble-site-logging-view-model", () => {
     effectDescription: "Fixture effect.",
   };
 
-  const LOCALIZED_REWARD_DREAMSIGN =
-    localizedDreamsignFixture(REWARD_DREAMSIGN);
+  const REWARD_DREAMSIGN_VIEW =
+    dreamsignViewFixture(REWARD_DREAMSIGN);
 
   const RUNTIME: TidemarkLadderClimbSiteRuntime = {
     kind: "gamble",
@@ -278,7 +278,7 @@ describe("gamble-site-logging-view-model", () => {
     isFarpoint: false,
     runtimeReady: true,
     essenceReward: 25,
-    rewardDreamsign: LOCALIZED_REWARD_DREAMSIGN,
+    rewardDreamsign: REWARD_DREAMSIGN_VIEW,
     nextDraw: null,
     guide: {
       id: testGuideId("fixture-guide"),

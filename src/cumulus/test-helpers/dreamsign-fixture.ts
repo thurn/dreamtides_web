@@ -1,4 +1,4 @@
-import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
+import type { DreamsignView } from "../components/hud/Dreamsign";
 import { testDreamsignId } from "../../types/test-identities";
 import type { DreamsignId } from "../../types/identifiers";
 
@@ -13,9 +13,9 @@ type DreamsignFixtureInput = {
 );
 
 /** Build presentation-ready Dreamsign data from synthetic test copy. */
-export function localizedDreamsignFixture(
+export function dreamsignViewFixture(
   input: DreamsignFixtureInput,
-): LocalizedDreamsign {
+): DreamsignView {
   return {
     id: input.id ?? testDreamsignId(input.idSeed),
     name: input.name,

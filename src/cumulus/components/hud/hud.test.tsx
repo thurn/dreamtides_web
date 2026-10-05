@@ -17,11 +17,11 @@ import {
   testDreamsignId,
   testTideId,
 } from "../../../types/test-identities";
-import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../../test-helpers/dreamsign-fixture";
 import { renderInCumulus } from "../../testing/render";
 import { AvatarPortrait, type AvatarVisual } from "./AvatarPortrait";
 import { AvatarStage } from "./AvatarStage";
-import { Dreamsign, type LocalizedDreamsign } from "./Dreamsign";
+import { Dreamsign, type DreamsignView } from "./Dreamsign";
 import { EssenceValue } from "./EssenceValue";
 import { TideDisc } from "./TideDisc";
 import { TidesInfoLabel } from "./TidesInfoLabel";
@@ -64,8 +64,8 @@ describe("Dreamsign", () => {
 
   function makeDreamsign(
     overrides: Partial<{ imageName: string; imageAlt: string; effect: string }>,
-  ): LocalizedDreamsign {
-    return localizedDreamsignFixture({
+  ): DreamsignView {
+    return dreamsignViewFixture({
       name: "Sign",
       effectDescription: overrides.effect ?? "Sign effect.",
       imageName: overrides.imageName,
@@ -118,7 +118,7 @@ describe("Dreamsign", () => {
   it("requires a stable dreamsign id for render data attributes", () => {
     const { id: _id, ...sign } = makeDreamsign({});
     expect(() => {
-      renderInCumulus(<Dreamsign dreamsign={sign as LocalizedDreamsign} />);
+      renderInCumulus(<Dreamsign dreamsign={sign as DreamsignView} />);
     }).toThrow(/missing a stable id/);
   });
 });

@@ -38,7 +38,7 @@ import {
 } from "../components/hud/JourneyStatusBar";
 import {
   Dreamsign,
-  type LocalizedDreamsign,
+  type DreamsignView,
 } from "../components/hud/Dreamsign";
 import { AvatarPortrait } from "../components/hud/AvatarPortrait";
 import { EssenceValue } from "../components/hud/EssenceValue";
@@ -154,7 +154,7 @@ export type ExplorationRewardView =
       readonly objects: {
         readonly cards: readonly GameCardModel[];
         readonly purgedCards: readonly ExplorationCardChoiceView[];
-        readonly dreamsigns: readonly LocalizedDreamsign[];
+        readonly dreamsigns: readonly DreamsignView[];
       };
       /** Persisted mutation applied to every affected UUID-keyed deck entry. */
       readonly deckModification: ExplorationDeckModificationView | null;
@@ -200,7 +200,7 @@ export type ExplorationRewardView =
   | {
       readonly kind: "purged-dreamsign-essence";
       /** UUID-resolved Dreamsign removed by the persisted resolution. */
-      readonly dreamsign: LocalizedDreamsign;
+      readonly dreamsign: DreamsignView;
       /** Authoritative total applied by the reducer after the purge. */
       readonly totalEssence: number;
     }
@@ -290,17 +290,17 @@ export type ExplorationRewardView =
         | "replace-all-dreamsigns-random"
         | "purge-selected-dreamsign-and-gain-random";
       /** Exact collection snapshots surrounding the atomic persisted mutation. */
-      readonly before: readonly LocalizedDreamsign[];
-      readonly after: readonly LocalizedDreamsign[];
+      readonly before: readonly DreamsignView[];
+      readonly after: readonly DreamsignView[];
       /** Offered choices revealed before resolution, when the effect had offers. */
-      readonly offered: readonly LocalizedDreamsign[];
+      readonly offered: readonly DreamsignView[];
       /** Persisted gained and purged identities, including random outcomes. */
-      readonly gained: readonly LocalizedDreamsign[];
-      readonly purged: readonly LocalizedDreamsign[];
+      readonly gained: readonly DreamsignView[];
+      readonly purged: readonly DreamsignView[];
       /** Exact persisted replacement pairings in mutation order. */
       readonly replacements: readonly {
-        readonly removed: LocalizedDreamsign;
-        readonly gained: LocalizedDreamsign;
+        readonly removed: DreamsignView;
+        readonly gained: DreamsignView;
       }[];
       readonly poolRegenerated: boolean;
     }
@@ -312,14 +312,14 @@ export type ExplorationRewardView =
       /** Exact minted Nightmare deck entries, in persisted insertion order. */
       readonly nightmares: readonly ExplorationCardChoiceView[];
       /** Exact collection snapshots surrounding the persisted Dreamsign gain. */
-      readonly before: readonly LocalizedDreamsign[];
-      readonly after: readonly LocalizedDreamsign[];
-      readonly offered: readonly LocalizedDreamsign[];
-      readonly gained: readonly LocalizedDreamsign[];
-      readonly purged: readonly LocalizedDreamsign[];
+      readonly before: readonly DreamsignView[];
+      readonly after: readonly DreamsignView[];
+      readonly offered: readonly DreamsignView[];
+      readonly gained: readonly DreamsignView[];
+      readonly purged: readonly DreamsignView[];
       readonly replacements: readonly {
-        readonly removed: LocalizedDreamsign;
-        readonly gained: LocalizedDreamsign;
+        readonly removed: DreamsignView;
+        readonly gained: DreamsignView;
       }[];
       readonly poolRegenerated: boolean;
     }
@@ -441,7 +441,7 @@ type SemanticRewardKind<Reward> = Reward extends {
   ? Exclude<Kind, undefined>
   : never;
 
-function localizedEssencePredicateCount(
+function essencePredicateCount(
   predicate: ExplorationPredicate,
   count: number,
 ): string {
@@ -488,7 +488,7 @@ export type ExplorationOutcomeKind =
   | "objects";
 
 interface ExplorationDeckModificationViewBase {
-  /** Complete authored effect copy or localized fallback exposed to assistive technology. */
+  /** Complete authored effect copy or fallback exposed to assistive technology. */
   readonly announcement: string;
   /** Exact post-resolution snapshots of the affected deck entries. */
   readonly cards: readonly ExplorationCardChoiceView[];
@@ -597,7 +597,7 @@ export type ExplorationFollowupView =
       readonly title: string;
       readonly subtitle: string;
       readonly selectionKey: "replacedDreamsignId" | "dreamsignId";
-      readonly dreamsigns: readonly LocalizedDreamsign[];
+      readonly dreamsigns: readonly DreamsignView[];
     }
   | {
       readonly kind: "dreamsign-flow";
@@ -606,9 +606,9 @@ export type ExplorationFollowupView =
       readonly mode:
         "gain-offered" | "replace-with-offered" | "purge-and-gain-random";
       /** Prepared player-visible offers. Random results are never included here. */
-      readonly offered: readonly LocalizedDreamsign[];
+      readonly offered: readonly DreamsignView[];
       /** UUID-keyed collection snapshot from which purge/replacement choices come. */
-      readonly held: readonly LocalizedDreamsign[];
+      readonly held: readonly DreamsignView[];
       /** Exact number of additional held Dreamsigns that must leave for capacity. */
       readonly requiredOverflowReplacementCount: number;
     }
@@ -636,7 +636,7 @@ export interface ExplorationActionView {
   readonly effectText: AnnotatedText<ExplorationEntityView>;
   /** Canonical definition for a fixed Transfiguration named by this option. */
   readonly transfigurationGlossaryId?: GlossaryEntryId;
-  /** Code-authored disclosure rendered as a complete localized message. */
+  /** Code-authored disclosure rendered as a complete message. */
   readonly effectDisclosure?: string;
   /** Complete fallback message inputs when a special deck-card target is absent. */
   readonly effectFallback?: ExplorationEffectFallback;
@@ -658,7 +658,7 @@ export type ExplorationEntityView =
     }
   | {
       readonly kind: "dreamsign";
-      readonly dreamsign: LocalizedDreamsign;
+      readonly dreamsign: DreamsignView;
     };
 
 export interface ExplorationEffectFallback {
@@ -802,7 +802,7 @@ type ExplorationRewardItem =
       readonly key: ExplorationRewardItemKey;
       readonly kind: "dreamsign";
       readonly id: DreamsignId;
-      readonly dreamsign: LocalizedDreamsign;
+      readonly dreamsign: DreamsignView;
     };
 
 interface FrameBreakGeometry {
@@ -904,10 +904,9 @@ function ExplorationNarrativeChoices({
   readonly reduceMotion: boolean;
   readonly onActivate: (action: ExplorationActionView) => void;
 }) {
-  const localizedNarrative = narrative;
   const characters = useMemo(
-    () => Array.from(localizedNarrative),
-    [localizedNarrative],
+    () => Array.from(narrative),
+    [narrative],
   );
   const [visibleCharacterCount, setVisibleCharacterCount] = useState(
     reduceMotion ? characters.length : 0,
@@ -962,7 +961,7 @@ function ExplorationNarrativeChoices({
   return (
     <>
       <p
-        aria-label={localizedNarrative}
+        aria-label={narrative}
         style={{
           margin: 0,
           display: "grid",
@@ -975,7 +974,7 @@ function ExplorationNarrativeChoices({
           aria-hidden="true"
           style={{ gridArea: "1 / 1", visibility: "hidden" }}
         >
-          {localizedNarrative}
+          {narrative}
         </span>
         <span
           aria-hidden="true"
@@ -1896,8 +1895,8 @@ function DreamsignReplacementPresentation({
   isDesktop,
   reduceMotion,
 }: {
-  readonly removed: LocalizedDreamsign;
-  readonly gained: LocalizedDreamsign;
+  readonly removed: DreamsignView;
+  readonly gained: DreamsignView;
   readonly index: number;
   readonly isDesktop: boolean;
   readonly reduceMotion: boolean;
@@ -2039,7 +2038,7 @@ function ExplorationDreamsignChoiceGroup({
 }: {
   readonly heading: string;
   readonly role: "offered" | "exchange" | "purge" | "replacement";
-  readonly dreamsigns: readonly LocalizedDreamsign[];
+  readonly dreamsigns: readonly DreamsignView[];
   readonly selectedIds: readonly DreamsignId[];
   readonly isDesktop: boolean;
   readonly onChoose: (dreamsignId: DreamsignId) => void;
@@ -6377,11 +6376,11 @@ export function ExplorationSiteScreen({
             role="status"
             aria-label={
               essenceReward.cards.length === 1
-                ? `${formatNumber(essenceReward.cards.length)} ${localizedEssencePredicateCount(
+                ? `${formatNumber(essenceReward.cards.length)} ${essencePredicateCount(
                     essenceReward.predicate,
                     essenceReward.cards.length,
                   )} grants ${formatNumber(essenceReward.totalEssence)} Essence total, ${formatNumber(essenceReward.essencePerCard)} for that card`
-                : `${formatNumber(essenceReward.cards.length)} ${localizedEssencePredicateCount(
+                : `${formatNumber(essenceReward.cards.length)} ${essencePredicateCount(
                     essenceReward.predicate,
                     essenceReward.cards.length,
                   )} grant ${formatNumber(essenceReward.totalEssence)} Essence total, ${formatNumber(essenceReward.essencePerCard)} each`
@@ -6489,7 +6488,7 @@ export function ExplorationSiteScreen({
             <RadialAnnouncement
               announcementId={`exploration:${view.siteId}:${view.resolvedActionId ?? "essence"}`}
               headline={"Essence Gained"}
-              detail={`${formatNumber(essenceReward.essencePerCard)} × ${formatNumber(essenceReward.cards.length)} ${localizedEssencePredicateCount(
+              detail={`${formatNumber(essenceReward.essencePerCard)} × ${formatNumber(essenceReward.cards.length)} ${essencePredicateCount(
                 essenceReward.predicate,
                 essenceReward.cards.length,
               )}`}

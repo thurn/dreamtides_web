@@ -1,6 +1,6 @@
 import type { TransfigurationFormDefinition } from "../../../types/transfiguration-data";
 
-export type LocalizedTransfigurationPresentation = Pick<
+export type TransfigurationPresentation = Pick<
   TransfigurationFormDefinition,
   "glossaryUuid" | "glyph" | "accentColor"
 > & {
@@ -8,9 +8,9 @@ export type LocalizedTransfigurationPresentation = Pick<
   readonly description: string;
 };
 
-export function localizedTransfigurationPresentation(
+export function transfigurationPresentation(
   presentation: TransfigurationFormDefinition,
-): LocalizedTransfigurationPresentation {
+): TransfigurationPresentation {
   return {
     glossaryUuid: presentation.glossaryUuid,
     glyph: presentation.glyph,

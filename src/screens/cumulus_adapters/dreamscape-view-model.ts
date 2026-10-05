@@ -21,7 +21,7 @@ import type {
 } from "../../cumulus/components/hud/JourneyStatusBar";
 import { artRef, type ArtRef } from "../../cumulus/primitives/art";
 import { glyph } from "../../cumulus/primitives/glyph";
-import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 import type {
   DreamscapeGuideDialogueView,
   DreamscapeView,
@@ -201,7 +201,7 @@ export function toQsbDreamsigns(
     if (sign.imageName === undefined) {
       return;
     }
-    docked.push(localizedDreamsign(sign, "JourneyStatusBar docked"));
+    docked.push(toDreamsignView(sign, "JourneyStatusBar docked"));
   });
   return docked;
 }
@@ -233,7 +233,7 @@ export function dreamscapeSceneRef(node: DreamscapeNode): ArtRef | null {
     : null;
 }
 
-/** Resolve the dreamscape's localized display title from canonical content. */
+/** Resolve the dreamscape's display title from canonical content. */
 export function dreamscapeTitle(
   node: DreamscapeNode,
   journeyContent: JourneyContent,
@@ -275,7 +275,7 @@ export function buildDreamscapeView(
     if (runtime.reward.rewardType === "dreamsign") {
       inlineRewards[site.id] = {
         kind: "dreamsign",
-        dreamsign: localizedDreamsign(
+        dreamsign: toDreamsignView(
           runtime.reward.dreamsign,
           "Dreamscape inline reward",
         ),
@@ -381,12 +381,12 @@ export function buildDreamsignReplacementView(
     return null;
   }
   return {
-    incoming: localizedDreamsign(
+    incoming: toDreamsignView(
       runtime.reward.dreamsign,
       "Dreamscape pending reward",
     ),
     held: state.dreamsigns.map((dreamsign) =>
-      localizedDreamsign(dreamsign, "Dreamscape held reward"),
+      toDreamsignView(dreamsign, "Dreamscape held reward"),
     ),
     capacity: state.maxDreamsigns,
   };

@@ -36,7 +36,7 @@ import {
 } from "../../types/identifiers";
 import type { CardData } from "../../types/cards";
 import type { CardId } from "../../types/card-identity";
-import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 import type { DreamGuideContent } from "../../types/content";
 import type { SitesData } from "../../types/sites-data";
 import type {
@@ -160,8 +160,8 @@ function allCards(objects: readonly AuguryGameObject[]): CardObject[] {
 
 function toDreamsign(
   object: Extract<AuguryGameObject, { objectType: "dreamsign" }>,
-): ReturnType<typeof localizedDreamsign> {
-  return localizedDreamsign(
+): ReturnType<typeof toDreamsignView> {
+  return toDreamsignView(
     {
       id: object.dreamsignId,
       name: object.dreamsignTemplate.name,

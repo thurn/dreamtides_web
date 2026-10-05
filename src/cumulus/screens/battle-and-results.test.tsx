@@ -13,7 +13,7 @@ import {
   testOpponentId,
 } from "../../types/test-identities";
 import { artRef } from "../primitives/art";
-import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
+import { dreamsignViewFixture } from "../test-helpers/dreamsign-fixture";
 import { renderInCumulus } from "../testing/render";
 import {
   BattleResultSurface,
@@ -93,7 +93,7 @@ describe("BattleStartScreen", () => {
         abilityActive: true,
       },
       dreamsigns: [
-        localizedDreamsignFixture({
+        dreamsignViewFixture({
           id: testDreamsignId("battle-test:dreamsign:0"),
           name: "Sign of Quiet Thunder",
           effectDescription: "Fixture effect.",

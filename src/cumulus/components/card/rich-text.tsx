@@ -58,7 +58,7 @@ export interface RichTextDefinition {
  *    their inline glyphs. Use for card / avatar / dreamsign ability text.
  *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a
  *    "Locked" / "Visited" status shown under a site blurb.
- *  - `annotated` — lazy localized copy whose selected placeholders carry
+ *  - `annotated` — lazy template copy whose selected placeholders carry
  *    application-owned rendering metadata.
  *  - `stack` — several parts laid out vertically as separate lines.
  *  - `definitions` — a compact, monochrome semantic definition list whose
@@ -111,7 +111,7 @@ interface RichTextRenderOptions<TAnnotation> {
    * plain, note, and definition-label copy.
    */
   readonly substituteRulesSymbols?: boolean;
-  /** Render application-owned markup attached to one localized placeholder. */
+  /** Render application-owned markup attached to one template placeholder. */
   readonly renderAnnotation?: (
     annotation: TAnnotation,
     value: string,

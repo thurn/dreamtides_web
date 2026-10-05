@@ -3,7 +3,7 @@
 import { act, useState, type ReactElement } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { GLYPHS } from "../../primitives/glyph";
-import { localizedTransfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
+import { transfigurationPresentationFixture } from "../../test-helpers/transfiguration-fixture";
 import { renderInCumulus } from "../../testing/render";
 import { CardOrderEditor } from "./CardOrderEditor";
 import { DisclosureSection } from "./DisclosureSection";
@@ -181,7 +181,7 @@ describe("StandaloneGlyph", () => {
 describe("TransfigurationButton", () => {
   const empowered = {
     type: "Empowered" as const,
-    presentation: localizedTransfigurationFormFixture("Empowered"),
+    presentation: transfigurationPresentationFixture("Empowered"),
     pricing: { kind: "unpriced" as const },
   };
 

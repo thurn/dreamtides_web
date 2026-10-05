@@ -16,7 +16,7 @@ import type {
 import { dreamscapeSceneRef } from "./dreamscape-view-model";
 import { buildFirstVisitSiteTutorialView } from "./site-tutorial-view-model";
 import { projectGuideView } from "./guide-view-model";
-import { localizedDreamsign } from "../../cumulus/components/hud/localized-dreamsign";
+import { toDreamsignView } from "../../cumulus/components/hud/dreamsign-view";
 import type { GuideId } from "../../types/identifiers";
 
 /** Resolve Sigrun, the resident guide for Dreamsign Revelation. */
@@ -60,7 +60,7 @@ export function buildDreamsignRevelationView(params: {
     scene,
     guide: buildDreamsignRevelationGuideView(params.guide, params.guideLine),
     offer: (params.offeredDreamsigns ?? []).map((dreamsign) =>
-      localizedDreamsign(dreamsign, "Dreamsign Revelation offer"),
+      toDreamsignView(dreamsign, "Dreamsign Revelation offer"),
     ),
     offerReady: params.offeredDreamsigns !== null,
     tutorial: buildFirstVisitSiteTutorialView(
@@ -72,12 +72,12 @@ export function buildDreamsignRevelationView(params: {
       params.pendingPurgeDreamsign === null
         ? null
         : {
-            incoming: localizedDreamsign(
+            incoming: toDreamsignView(
               params.pendingPurgeDreamsign,
               "Dreamsign Revelation pending reward",
             ),
             held: params.state.dreamsigns.map((dreamsign) =>
-              localizedDreamsign(
+              toDreamsignView(
                 dreamsign,
                 "Dreamsign Revelation held collection",
               ),
