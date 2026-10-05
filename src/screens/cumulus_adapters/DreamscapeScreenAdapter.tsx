@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- this adapter keeps the full screen wiring together. */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DreamscapeScreen } from "../../cumulus/screens/DreamscapeScreen";
 import { logEvent, logEventOnce } from "../../logging";

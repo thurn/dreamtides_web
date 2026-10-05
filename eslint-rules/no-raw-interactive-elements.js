@@ -1,5 +1,3 @@
-import path from "node:path";
-import { isStrictCompositionFile } from "./ui-boundary-roles.js";
 
 /**
  * Bans raw native interactive elements in Cumulus's product-UI tier.
@@ -12,20 +10,7 @@ import { isStrictCompositionFile } from "./ui-boundary-roles.js";
  * creeps in. This rule flags those elements so the systematic path (use the
  * component) is the path of least resistance.
  *
- * SCOPE. Fires only on the composition / product-UI tier: files under
- * `src/cumulus/` that are NOT in {@link EXEMPT_PREFIXES}:
- *   - `src/cumulus/primitives/`, `src/cumulus/components/`, and `src/cumulus/internal/`
- *     — these are where a native element is legitimately wrapped (`Button`
- *     renders a `<button>`, `Pressable` renders the element it forwards to) or
- *     where a material recipe returns style objects with no elements of its
- *     own. They OWN the native tag.
- *   - `src/cumulus/docs/` — the documentation site is tooling: its control panel
- *     genuinely needs native `<input>`/`<select>`, and its chrome uses plain
- *     `<button>`s.
- * Everywhere else under `src/cumulus/` — above all `src/cumulus/screens/` — a raw
- * interactive element is an error, and so is the adapter/builder layer in
- * `src/screens/cumulus_adapters/`: compose `Button` / `SegmentedControl` / `Pressable`
- * instead. All other files are a no-op.
+ * eslint.config.js decides which files this rule governs.
  *
  * The rule also catches the hand-rolled button: a non-interactive intrinsic
  * element (`div`, `span`, …) given `onClick`/`onDoubleClick`, an interactive
@@ -36,15 +21,6 @@ import { isStrictCompositionFile } from "./ui-boundary-roles.js";
  * are deliberately not flagged.)
  */
 
-/** Repo-relative POSIX dir prefixes that may render native interactive tags. */
-const EXEMPT_PREFIXES = [
-  "src/cumulus/primitives/",
-  "src/cumulus/components/",
-  "src/cumulus/internal/",
-  "src/cumulus/docs/",
-  "src/cumulus/screens/devtools/",
-];
-
 /** Native interactive tag name -> the Cumulus surface to compose instead. */
 const BANNED_ELEMENTS = new Map([
   ["button", "Button, SegmentedControl, or the Pressable primitive"],
@@ -52,11 +28,6 @@ const BANNED_ELEMENTS = new Map([
   ["select", "SegmentedControl or a Cumulus control component"],
   ["textarea", "a Cumulus control component"],
 ]);
-
-/** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
-export function toRepoRelativePosix(absolutePath, cwd) {
-  return path.relative(cwd, absolutePath).split(path.sep).join("/");
-}
 
 /** The lowercase tag name of a JSX opening element, or null for a component. */
 export function jsxTagName(node) {
@@ -142,17 +113,6 @@ const rule = {
   },
 
   create(context) {
-    const rawFilename =
-      typeof context.filename === "string"
-        ? context.filename
-        : context.getFilename();
-    const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
-    const fileRelative = toRepoRelativePosix(rawFilename, cwd);
-
-    if (!isStrictCompositionFile(fileRelative, EXEMPT_PREFIXES)) {
-      return {};
-    }
-
     return {
       JSXOpeningElement(node) {
         const tag = jsxTagName(node);

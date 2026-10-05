@@ -1,4 +1,3 @@
-/* eslint-disable max-lines -- this adapter keeps the full screen wiring together. */
 // Adapter for the Cumulus Purge site. Wiring only: acquire live journey state,
 // build the view-model, log the visit, and commit the selected deck entries.
 

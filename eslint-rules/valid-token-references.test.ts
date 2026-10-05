@@ -1,54 +1,8 @@
 import { RuleTester } from "eslint";
 import tsParser from "@typescript-eslint/parser";
 import { describe, it, expect } from "vitest";
-import rule, {
-  toRepoRelativePosix,
-  isProductUiFile,
-  isCumulusOwnedFile,
-} from "./valid-token-references.js";
+import rule from "./valid-token-references.js";
 import { knownTokenNames } from "./cumulus-token-index.js";
-
-describe("toRepoRelativePosix (valid-token-references)", () => {
-  it("returns a clean repo-relative path", () => {
-    expect(
-      toRepoRelativePosix(
-        "/Users/x/journey_prototype/src/cumulus/screens/HomeScreen.tsx",
-        "/Users/x/journey_prototype",
-      ),
-    ).toBe("src/cumulus/screens/HomeScreen.tsx");
-  });
-});
-
-describe("isProductUiFile", () => {
-  it("covers screens, composition files, and the adapter layer", () => {
-    expect(isProductUiFile("src/cumulus/screens/HomeScreen.tsx")).toBe(true);
-    expect(isProductUiFile("src/screens/cumulus_adapters/HomeScreenAdapter.tsx")).toBe(
-      true,
-    );
-    expect(isProductUiFile("src/screens/cumulus_adapters/home-view-model.ts")).toBe(true);
-  });
-  it("exempts primitives, components, docs, and non-cumulus files", () => {
-    expect(isProductUiFile("src/cumulus/primitives/tokens.ts")).toBe(false);
-    expect(isProductUiFile("src/cumulus/components/GlassButton.tsx")).toBe(false);
-    expect(isProductUiFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
-    expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
-  });
-});
-
-describe("isCumulusOwnedFile", () => {
-  it("governs all of src/cumulus/ (components included) plus the adapter layer", () => {
-    expect(isCumulusOwnedFile("src/cumulus/components/GlassButton.tsx")).toBe(true);
-    expect(isCumulusOwnedFile("src/cumulus/screens/HomeScreen.tsx")).toBe(true);
-    expect(isCumulusOwnedFile("src/screens/cumulus_adapters/HomeScreenAdapter.tsx")).toBe(
-      true,
-    );
-  });
-  it("exempts the primitive and doc tiers, and non-cumulus files", () => {
-    expect(isCumulusOwnedFile("src/cumulus/primitives/tokens.ts")).toBe(false);
-    expect(isCumulusOwnedFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
-    expect(isCumulusOwnedFile("src/screens/LegacyScreen.tsx")).toBe(false);
-  });
-});
 
 describe("knownTokenNames", () => {
   it("loads a non-trivial token set from the live stylesheet", () => {
@@ -70,9 +24,6 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/cumulus/screens/HomeScreen.tsx";
-const ADAPTER = "src/screens/cumulus_adapters/HomeScreenAdapter.tsx";
-
 // Derive a real token from the live stylesheet so the tests never pin a
 // specific token NAME (token vocabulary is design data, subject to change).
 const REAL_TOKEN = [...knownTokenNames()][0];
@@ -84,68 +35,38 @@ ruleTester.run("valid-token-references", rule, {
   valid: [
     {
       name: "a declared token referenced via var() is fine",
-      filename: SCREEN,
       code: `const style = { color: "var(${REAL_TOKEN})" };`,
     },
     {
       name: "a declared token with a fallback is fine",
-      filename: SCREEN,
       code: `const style = { color: "var(${REAL_TOKEN}, red)" };`,
     },
     {
       name: "template chunks referencing declared tokens are fine",
-      filename: SCREEN,
       code: `const style = { border: \`1px solid var(${REAL_TOKEN})\` };`,
     },
     {
       name: "strings without var() references are ignored",
-      filename: SCREEN,
       code: `const label = "starts --like-a-token but is prose";`,
     },
     {
-      name: "a declared token referenced from a components file is fine",
-      filename: "src/cumulus/components/GameCard.tsx",
-      code: `const style = { color: "var(${REAL_TOKEN})" };`,
-    },
-    {
-      name: "allowlisted component-local runtime vars are fine in a components file",
-      filename: "src/cumulus/components/GameCard.tsx",
+      name: "allowlisted component-local runtime vars are fine",
       code: `const style = { width: "var(--atlas-node-size)", filter: "blur(var(--cv-name-color))" };`,
-    },
-    {
-      name: "files outside the product tier are inert",
-      filename: "src/screens/LegacyScreen.tsx",
-      code: `const style = { color: "var(${BOGUS_TOKEN})" };`,
     },
   ],
   invalid: [
     {
-      name: "components are now governed — an unknown token is reported",
-      filename: "src/cumulus/components/GameCard.tsx",
-      code: `const style = { color: "var(${BOGUS_TOKEN})" };`,
-      errors: [{ messageId: "unknownToken" }],
-    },
-    {
       name: "a typo'd token in a string literal",
-      filename: SCREEN,
       code: `const style = { color: "var(${BOGUS_TOKEN})" };`,
       errors: [{ messageId: "unknownToken" }],
     },
     {
       name: "an invented token in a template chunk",
-      filename: SCREEN,
       code: `const style = { border: \`1px solid var(${BOGUS_TOKEN})\` };`,
       errors: [{ messageId: "unknownToken" }],
     },
     {
-      name: "adapters are covered too",
-      filename: ADAPTER,
-      code: `const style = { color: "var(${BOGUS_TOKEN})" };`,
-      errors: [{ messageId: "unknownToken" }],
-    },
-    {
       name: "each unknown reference in one string is reported",
-      filename: SCREEN,
       code: `const style = { boxShadow: "0 0 4px var(${BOGUS_TOKEN}), 0 0 8px var(${BOGUS_TOKEN}-b)" };`,
       errors: [{ messageId: "unknownToken" }, { messageId: "unknownToken" }],
     },

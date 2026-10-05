@@ -1,5 +1,3 @@
-/* eslint-disable max-lines -- this adapter keeps the full screen wiring together. */
-
 // Adapter for Amunet's Cumulus Dreamsign Bazaar. Wiring only.
 
 import { useCallback, useEffect, useMemo, useState } from "react";

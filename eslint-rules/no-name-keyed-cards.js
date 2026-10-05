@@ -1,21 +1,14 @@
-import path from "node:path";
-import { isUniversalUiFile } from "./ui-boundary-roles.js";
-
 /**
- * Bans using card display names as lookup identity in Cumulus product surfaces.
+ * Bans using card display names as identity.
  *
- * Card names are display text and are not unique. A migrated Cumulus screen may
- * resolve a card name right before rendering, but Maps, Sets, object indexes,
- * and membership checks must be keyed by UUID/card id instead.
+ * Card names are display text and are not unique. Code may resolve a card name
+ * right before rendering, but Maps, Sets, object indexes, membership checks,
+ * and equality comparisons must use the card's UUID instead.
  */
 
 const MAP_KEY_METHODS = new Set(["get", "has", "set", "delete"]);
 const SET_KEY_METHODS = new Set(["add", "has", "delete"]);
-
-/** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
-export function toRepoRelativePosix(absolutePath, cwd) {
-  return path.relative(cwd, absolutePath).split(path.sep).join("/");
-}
+const EQUALITY_OPERATORS = new Set(["===", "!==", "==", "!="]);
 
 function identifierName(node) {
   return node?.type === "Identifier" ? node.name : null;
@@ -59,6 +52,14 @@ export function isCardNameExpression(node) {
   return containsCardishReference(node.object);
 }
 
+/** True for `null` and `undefined`, whose comparisons are presence checks. */
+function isNullish(node) {
+  return (
+    (node?.type === "Literal" && node.value === null) ||
+    (node?.type === "Identifier" && node.name === "undefined")
+  );
+}
+
 function staticMethodName(callee) {
   if (callee?.type !== "MemberExpression" || callee.computed) {
     return null;
@@ -93,27 +94,18 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "Ban Map/Set/object lookup identity keyed by card display names in Cumulus product UI.",
+        "Ban Map/Set/object lookup identity and equality comparisons keyed by card display names.",
     },
     schema: [],
     messages: {
       nameKey:
         "Card display names are not stable identity. Key this lookup by card UUID/id and resolve the name only for display.",
+      nameEquality:
+        "Card display names are not unique. Compare card UUIDs/ids and resolve the name only for display.",
     },
   },
 
   create(context) {
-    const rawFilename =
-      typeof context.filename === "string"
-        ? context.filename
-        : context.getFilename();
-    const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
-    const fileRelative = toRepoRelativePosix(rawFilename, cwd);
-
-    if (!isUniversalUiFile(fileRelative)) {
-      return {};
-    }
-
     function reportIfCardName(node) {
       if (isCardNameExpression(node)) {
         context.report({ node, messageId: "nameKey" });
@@ -130,6 +122,17 @@ const rule = {
     }
 
     return {
+      BinaryExpression(node) {
+        if (
+          EQUALITY_OPERATORS.has(node.operator) &&
+          !isNullish(node.left) &&
+          !isNullish(node.right) &&
+          (isCardNameExpression(node.left) || isCardNameExpression(node.right))
+        ) {
+          context.report({ node, messageId: "nameEquality" });
+        }
+      },
+
       CallExpression(node) {
         const method = staticMethodName(node.callee);
         if (

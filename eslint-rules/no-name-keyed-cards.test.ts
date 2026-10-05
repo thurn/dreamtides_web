@@ -1,21 +1,7 @@
 import { RuleTester } from "eslint";
 import tsParser from "@typescript-eslint/parser";
 import { describe, it, expect } from "vitest";
-import rule, {
-  isCardNameExpression,
-  toRepoRelativePosix,
-} from "./no-name-keyed-cards.js";
-
-describe("toRepoRelativePosix (no-name-keyed-cards)", () => {
-  it("returns a clean repo-relative path", () => {
-    expect(
-      toRepoRelativePosix(
-        "/Users/x/journey_prototype/src/cumulus/screens/DraftScreen.tsx",
-        "/Users/x/journey_prototype",
-      ),
-    ).toBe("src/cumulus/screens/DraftScreen.tsx");
-  });
-});
+import rule, { isCardNameExpression } from "./no-name-keyed-cards.js";
 
 describe("isCardNameExpression", () => {
   function expressionOf(source: string): unknown {
@@ -67,42 +53,41 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/cumulus/screens/DraftScreen.tsx";
-const ADAPTER = "src/screens/cumulus_adapters/draft-view-model.ts";
-
 ruleTester.run("no-name-keyed-cards", rule, {
   valid: [
     {
       name: "display rendering may read a card name",
-      filename: SCREEN,
       code: `const label = card.name;`,
     },
     {
       name: "card ids are valid lookup keys",
-      filename: SCREEN,
       code: `const byId = new Map(cards.map((card) => [card.id, card])); byId.get(card.id);`,
     },
     {
       name: "non-card names are not affected",
-      filename: SCREEN,
       code: `const sitesByName = new Map(sites.map((site) => [site.name, site])); sitesByName.get(site.name);`,
     },
     {
-      name: "outside Cumulus product surfaces the rule is inert",
-      filename: "src/components/LegacyCardList.tsx",
-      code: `const byName = new Map(cards.map((card) => [card.name, card]));`,
+      name: "card ids may be compared for equality",
+      code: `const same = card.id === other.id; const differs = left.cardId !== right.cardId;`,
+    },
+    {
+      name: "presence checks on a card name are not identity comparisons",
+      code: `const missing = cardName === null || card.name !== undefined;`,
+    },
+    {
+      name: "non-card names may be compared",
+      code: `const same = site.name === other.name;`,
     },
   ],
   invalid: [
     {
       name: "Map entry keyed by card.name",
-      filename: SCREEN,
       code: `const byName = new Map(cards.map((card) => [card.name, card]));`,
       errors: [{ messageId: "nameKey" }],
     },
     {
       name: "Map lookup keyed by card.name",
-      filename: SCREEN,
       code: `byName.get(card.name); byName.has(card.name); byName.set(card.name, card);`,
       errors: [
         { messageId: "nameKey" },
@@ -112,21 +97,23 @@ ruleTester.run("no-name-keyed-cards", rule, {
     },
     {
       name: "Set keyed by mapped card names",
-      filename: SCREEN,
       code: `const names = new Set(cards.map((card) => card.name));`,
       errors: [{ messageId: "nameKey" }],
     },
     {
       name: "object index keyed by a nested card name",
-      filename: ADAPTER,
       code: `const previous = seen[offer.card.name];`,
       errors: [{ messageId: "nameKey" }],
     },
     {
       name: "cardName variable used as a lookup key",
-      filename: ADAPTER,
       code: `cardNames.add(selectedCardName); lookup[selectedCardName] = true;`,
       errors: [{ messageId: "nameKey" }, { messageId: "nameKey" }],
+    },
+    {
+      name: "card names compared for equality",
+      code: `const same = card.name === other.card.name; const differs = cardName !== "Ember";`,
+      errors: [{ messageId: "nameEquality" }, { messageId: "nameEquality" }],
     },
   ],
 });

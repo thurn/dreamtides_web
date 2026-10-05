@@ -1,5 +1,3 @@
-/* eslint-disable max-lines -- this adapter keeps the full screen wiring together. */
-
 import { useCallback, useEffect, useMemo } from "react";
 import { logEvent, logEventOnce } from "../../logging";
 import { useJourney } from "../../state/journey-context";

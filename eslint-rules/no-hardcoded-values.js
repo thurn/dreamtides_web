@@ -1,6 +1,4 @@
-import path from "node:path";
 import { colorTokenFor } from "./cumulus-token-index.js";
-import { isStrictCompositionFile } from "./ui-boundary-roles.js";
 
 /**
  * Bans hardcoded COLOR literals in Cumulus's product-UI tier.
@@ -13,19 +11,7 @@ import { isStrictCompositionFile } from "./ui-boundary-roles.js";
  * {@link colorTokenFor} — names the design token that already carries the
  * color, autofixing when the whole string is a single color.
  *
- * SCOPE. The rule fires only on the composition / product-UI tier: files under
- * `src/cumulus/` that are NOT in {@link EXEMPT_PREFIXES}. The exempt dirs are:
- *   - `src/cumulus/primitives/`, `src/cumulus/components/`, and `src/cumulus/internal/`
- *     — the token-definition, leaf-component, and material-recipe layers
- *     legitimately author raw values; a material recipe like the glass surface
- *     is itself a bespoke value.
- *   - `src/cumulus/docs/` — the design-system's own documentation site: demos and
- *     mockups intentionally show components against arbitrary sample colors and
- *     backdrops, and the doc chrome is tooling, not product UI.
- * Everywhere else under `src/cumulus/` — above all `src/cumulus/screens/`, the
- * migrated product screens — a hardcoded color is an error, and so is the
- * adapter/builder layer in `src/screens/cumulus_adapters/` (a color minted in an adapter
- * or view-model flows straight into the screen). All other files are a no-op.
+ * eslint.config.js decides which files this rule governs.
  *
  * Only NUMERIC color literals (hex / `rgb(a)` / `hsl(a)`) are flagged: they are
  * unambiguous and each maps to a token. Named colors (`red`) and non-color
@@ -34,25 +20,11 @@ import { isStrictCompositionFile } from "./ui-boundary-roles.js";
  * a `--space-*`/`--radius-*` token in review.
  */
 
-/** Repo-relative POSIX dir prefixes that may author raw color values. */
-const EXEMPT_PREFIXES = [
-  "src/cumulus/primitives/",
-  "src/cumulus/components/",
-  "src/cumulus/internal/",
-  "src/cumulus/docs/",
-  "src/cumulus/screens/devtools/",
-];
-
 /** Finds each hex / rgb(a) / hsl(a) color literal inside a string. */
 const COLOR_RE = /#[0-9a-fA-F]{3,8}\b|(?:rgba?|hsla?)\([^()]*\)/g;
 
 /** True when the whole trimmed text is exactly one color literal. */
 const WHOLE_COLOR_RE = /^(?:#[0-9a-fA-F]{3,8}|(?:rgba?|hsla?)\([^()]*\))$/;
-
-/** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
-export function toRepoRelativePosix(absolutePath, cwd) {
-  return path.relative(cwd, absolutePath).split(path.sep).join("/");
-}
 
 /** @type {import("eslint").Rule.RuleModule} */
 const rule = {
@@ -73,17 +45,6 @@ const rule = {
   },
 
   create(context) {
-    const rawFilename =
-      typeof context.filename === "string"
-        ? context.filename
-        : context.getFilename();
-    const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
-    const fileRelative = toRepoRelativePosix(rawFilename, cwd);
-
-    if (!isStrictCompositionFile(fileRelative, EXEMPT_PREFIXES)) {
-      return {};
-    }
-
     /**
      * Report every color literal in `text`. `node` is the string/template node;
      * `fixTarget` is the node whose entire source is the quoted string (a

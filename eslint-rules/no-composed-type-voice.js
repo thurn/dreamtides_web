@@ -1,5 +1,3 @@
-import path from "node:path";
-import { isStrictCompositionFile } from "./ui-boundary-roles.js";
 
 /**
  * A `--t-*` type token is a COMPLETE `font` shorthand — it bundles weight,
@@ -24,30 +22,11 @@ import { isStrictCompositionFile } from "./ui-boundary-roles.js";
  * reference — a `token("--t-…")` expression or a literal `var(--t-…)` — with
  * any other content.
  *
- * SCOPE. The product-UI tier: files under `src/cumulus/` outside
- * {@link EXEMPT_PREFIXES}, plus the adapter/builder layer in
- * `src/screens/cumulus_adapters/`, mirroring `no-hardcoded-values`.
+ * eslint.config.js decides which files this rule governs.
  */
-
-/** Repo-relative POSIX dir prefixes exempt from the check. */
-const EXEMPT_PREFIXES = [
-  "src/cumulus/primitives/",
-  "src/cumulus/components/",
-  "src/cumulus/docs/",
-];
 
 /** Matches a literal `var(--t-…)` reference inside text. */
 const VAR_T_RE = /var\(\s*--t-[a-zA-Z0-9-]+\s*\)/g;
-
-/** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
-export function toRepoRelativePosix(absolutePath, cwd) {
-  return path.relative(cwd, absolutePath).split(path.sep).join("/");
-}
-
-/** True when this rule governs the given repo-relative POSIX path. */
-export function isProductUiFile(fileRelative) {
-  return isStrictCompositionFile(fileRelative, EXEMPT_PREFIXES);
-}
 
 /** True when this template expression is a `token("--t-…")` call. */
 function isTypeTokenCall(expression) {
@@ -78,17 +57,6 @@ const rule = {
   },
 
   create(context) {
-    const rawFilename =
-      typeof context.filename === "string"
-        ? context.filename
-        : context.getFilename();
-    const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
-    const fileRelative = toRepoRelativePosix(rawFilename, cwd);
-
-    if (!isProductUiFile(fileRelative)) {
-      return {};
-    }
-
     return {
       Literal(node) {
         if (typeof node.value !== "string") {

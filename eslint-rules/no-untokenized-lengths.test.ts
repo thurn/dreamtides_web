@@ -1,38 +1,8 @@
 import { RuleTester } from "eslint";
 import tsParser from "@typescript-eslint/parser";
 import { describe, it, expect } from "vitest";
-import rule, {
-  toRepoRelativePosix,
-  isProductUiFile,
-} from "./no-untokenized-lengths.js";
+import rule from "./no-untokenized-lengths.js";
 import { spaceTokenFor } from "./cumulus-token-index.js";
-
-describe("toRepoRelativePosix (no-untokenized-lengths)", () => {
-  it("returns a clean repo-relative path", () => {
-    expect(
-      toRepoRelativePosix(
-        "/Users/x/journey_prototype/src/cumulus/screens/HomeScreen.tsx",
-        "/Users/x/journey_prototype",
-      ),
-    ).toBe("src/cumulus/screens/HomeScreen.tsx");
-  });
-});
-
-describe("isProductUiFile (no-untokenized-lengths)", () => {
-  it("covers screens, components, internal UI, and the adapter layer", () => {
-    expect(isProductUiFile("src/cumulus/screens/HomeScreen.tsx")).toBe(true);
-    expect(isProductUiFile("src/cumulus/components/GlassButton.tsx")).toBe(true);
-    expect(isProductUiFile("src/cumulus/internal/control-treatment.ts")).toBe(true);
-    expect(isProductUiFile("src/screens/cumulus_adapters/HomeScreenAdapter.tsx")).toBe(
-      true,
-    );
-  });
-  it("exempts token definitions, docs, and non-cumulus files", () => {
-    expect(isProductUiFile("src/cumulus/primitives/tokens.ts")).toBe(false);
-    expect(isProductUiFile("src/cumulus/docs/CumulusApp.tsx")).toBe(false);
-    expect(isProductUiFile("src/screens/LegacyScreen.tsx")).toBe(false);
-  });
-});
 
 // Derive an on-scale step and an off-scale length from the live stylesheet so
 // the tests never pin specific scale VALUES (the scale is design data).
@@ -64,76 +34,59 @@ const ruleTester = new RuleTester({
   },
 });
 
-const SCREEN = "src/cumulus/screens/HomeScreen.tsx";
-
 ruleTester.run("no-untokenized-lengths", rule, {
   valid: [
     {
       name: "token-valued spacing is the sanctioned shape",
-      filename: SCREEN,
       code: `const el = <div style={{ gap: token("--space-m"), padding: "0 var(--space-s)" }} />;`,
     },
     {
       name: "zero needs no token",
-      filename: SCREEN,
       code: `const el = <div style={{ margin: 0, padding: "0" }} />;`,
     },
     {
       name: "box measures are content-driven layout, not rhythm",
-      filename: SCREEN,
       code: `const el = <div style={{ maxWidth: 340, minHeight: 62, width: "100%" }} />;`,
     },
     {
       name: "percentages and non-px units on offsets are not flagged",
-      filename: SCREEN,
       code: `const el = <div style={{ left: "50%", top: "1em" }} />;`,
     },
     {
       name: "hairline borders and type metrics are out of scope",
-      filename: SCREEN,
       code: "const el = <div style={{ border: `2px solid ${token(\"--border-mid\")}`, letterSpacing: \"0.06em\", lineHeight: 1.5 }} />;",
     },
     {
       name: "view-model data with CSS-ish field names is not a style object",
-      filename: "src/screens/cumulus_adapters/atlas-view-model.ts",
       code: `export function build() { return { top: ${ON_SCALE}, left: 340, gap: 3 }; }`,
     },
     {
-      name: "components may author fixed positional geometry",
-      filename: "src/cumulus/components/GlassButton.tsx",
+      name: "rhythmOnly leaves positional geometry and radii to the component",
+      options: [{ rhythmOnly: true }],
       code: `const el = <div style={{ top: ${ON_SCALE}, borderRadius: ${ON_SCALE} }} />;`,
-    },
-    {
-      name: "files outside the product tier are inert",
-      filename: "src/screens/LegacyScreen.tsx",
-      code: `const el = <div style={{ gap: ${ON_SCALE} }} />;`,
     },
   ],
   invalid: [
     {
       name: "a bare numeric spacing step is autofixed to its token",
-      filename: SCREEN,
       code: `const el = <div style={{ gap: ${ON_SCALE} }} />;`,
       output: `const el = <div style={{ gap: "var(${ON_SCALE_TOKEN})" }} />;`,
       errors: [{ messageId: "rawSpacingWithToken" }],
     },
     {
       name: "a whole 'Npx' string is autofixed to its token",
-      filename: SCREEN,
       code: `const el = <div style={{ marginTop: "${ON_SCALE}px" }} />;`,
       output: `const el = <div style={{ marginTop: "var(${ON_SCALE_TOKEN})" }} />;`,
       errors: [{ messageId: "rawSpacingWithToken" }],
     },
     {
       name: "an off-scale length asks for snapping, no autofix",
-      filename: SCREEN,
       code: `const el = <div style={{ gap: ${OFF_SCALE} }} />;`,
       output: null,
       errors: [{ messageId: "rawSpacingOffScale" }],
     },
     {
       name: "each px length in a shorthand string is reported",
-      filename: SCREEN,
       code: `const el = <div style={{ padding: "${ON_SCALE}px ${OFF_SCALE}px" }} />;`,
       output: null,
       errors: [
@@ -143,33 +96,23 @@ ruleTester.run("no-untokenized-lengths", rule, {
     },
     {
       name: "raw px inside a template chunk is reported",
-      filename: SCREEN,
       code: 'const el = <div style={{ padding: `${token("--space-l")} 18px` }} />;',
       errors: [{ messageId: "rawSpacingOffScale" }],
     },
     {
       name: "a raw corner radius must use a --radius-* role",
-      filename: SCREEN,
       code: `const el = <div style={{ borderRadius: ${ON_SCALE} }} />;`,
       errors: [{ messageId: "rawRadius" }],
     },
     {
       name: "extracted style consts are style context too",
-      filename: SCREEN,
       code: `const cardStyle = { gap: ${ON_SCALE} };`,
       output: `const cardStyle = { gap: "var(${ON_SCALE_TOKEN})" };`,
       errors: [{ messageId: "rawSpacingWithToken" }],
     },
     {
-      name: "component content rhythm uses spacing tokens",
-      filename: "src/cumulus/components/GlassButton.tsx",
-      code: `const el = <div style={{ gap: ${ON_SCALE} }} />;`,
-      output: `const el = <div style={{ gap: "var(${ON_SCALE_TOKEN})" }} />;`,
-      errors: [{ messageId: "rawSpacingWithToken" }],
-    },
-    {
-      name: "adapters are covered too",
-      filename: "src/screens/cumulus_adapters/HomeScreenAdapter.tsx",
+      name: "rhythmOnly still requires spacing tokens for content rhythm",
+      options: [{ rhythmOnly: true }],
       code: `const el = <div style={{ gap: ${ON_SCALE} }} />;`,
       output: `const el = <div style={{ gap: "var(${ON_SCALE_TOKEN})" }} />;`,
       errors: [{ messageId: "rawSpacingWithToken" }],

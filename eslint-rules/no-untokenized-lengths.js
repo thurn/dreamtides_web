@@ -1,5 +1,3 @@
-import path from "node:path";
-import { isStrictCompositionFile } from "./ui-boundary-roles.js";
 import { spaceTokenFor } from "./cumulus-token-index.js";
 
 /**
@@ -23,25 +21,10 @@ import { spaceTokenFor } from "./cumulus-token-index.js";
  * are hairline border widths, type metrics (the `--t-*` voices own those),
  * zIndex, opacity, or flex factors.
  *
- * SCOPE. Cumulus product UI plus the adapter/builder layer. Components and
- * internal material recipes may author object geometry and component-owned
- * radii, but their content rhythm (padding, margins, and gaps) still comes from
- * the shared spacing vocabulary. Token-definition files and the doc site are
- * tooling, so both remain exempt.
+ * OPTIONS. `{ rhythmOnly: true }` checks only the content rhythm (padding,
+ * margins, and gaps). eslint.config.js sets it for components and internal
+ * material recipes, which author their own object geometry and radii.
  */
-
-/** Repo-relative POSIX dir prefixes exempt from the check. */
-const EXEMPT_PREFIXES = [
-  "src/cumulus/primitives/",
-  "src/cumulus/docs/",
-  "src/cumulus/screens/devtools/",
-];
-
-/** Tiers that author fixed object geometry while sharing content rhythm. */
-const COMPONENT_GEOMETRY_PREFIXES = [
-  "src/cumulus/components/",
-  "src/cumulus/internal/",
-];
 
 /** Style-object property names whose values are rhythm steps. */
 const RHYTHM_PROPS = new Set([
@@ -72,7 +55,7 @@ const RHYTHM_PROPS = new Set([
   "columnGap",
 ]);
 
-/** Positional geometry governed in screens, but component-owned in leaf UI. */
+/** Positional geometry, checked unless the `rhythmOnly` option is set. */
 const POSITION_PROPS = new Set([
   "inset",
   "insetInline",
@@ -104,16 +87,6 @@ const RADIUS_PROPS = new Set([
 
 /** Finds each `<number>px` length inside a string value. */
 const PX_RE = /(\d+(?:\.\d+)?)px\b/g;
-
-/** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
-export function toRepoRelativePosix(absolutePath, cwd) {
-  return path.relative(cwd, absolutePath).split(path.sep).join("/");
-}
-
-/** True when this rule governs the given repo-relative POSIX path. */
-export function isProductUiFile(fileRelative) {
-  return isStrictCompositionFile(fileRelative, EXEMPT_PREFIXES);
-}
 
 /**
  * The raw pixel number a value node hardcodes, or null when the node carries
@@ -164,9 +137,15 @@ const rule = {
     fixable: "code",
     docs: {
       description:
-        "Spacing and radius values in Cumulus product UI come from the --space-*/--radius-* tokens, never raw pixel literals.",
+        "Spacing and radius values in Cumulus UI come from the --space-*/--radius-* tokens, never raw pixel literals.",
     },
-    schema: [],
+    schema: [
+      {
+        type: "object",
+        properties: { rhythmOnly: { type: "boolean" } },
+        additionalProperties: false,
+      },
+    ],
     messages: {
       rawSpacingWithToken:
         "'{{value}}' hardcodes a spacing step. Use var({{token}}) — rhythm comes from the --space-* scale so the whole app re-spaces from one place.",
@@ -178,19 +157,7 @@ const rule = {
   },
 
   create(context) {
-    const rawFilename =
-      typeof context.filename === "string"
-        ? context.filename
-        : context.getFilename();
-    const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
-    const fileRelative = toRepoRelativePosix(rawFilename, cwd);
-    const authorsComponentGeometry = COMPONENT_GEOMETRY_PREFIXES.some(
-      (prefix) => fileRelative.startsWith(prefix),
-    );
-
-    if (!isProductUiFile(fileRelative)) {
-      return {};
-    }
+    const rhythmOnly = context.options[0]?.rhythmOnly === true;
 
     /** Report one spacing length, autofixing a whole single on-scale value. */
     function reportSpacing(valueNode, px, isWholeValue) {
@@ -276,10 +243,7 @@ const rule = {
       if (!SPACING_PROPS.has(key) && !isRadius) {
         return;
       }
-      if (
-        authorsComponentGeometry &&
-        (POSITION_PROPS.has(key) || isRadius)
-      ) {
+      if (rhythmOnly && (POSITION_PROPS.has(key) || isRadius)) {
         return;
       }
       if (!inStyleContext(node)) {

@@ -1,5 +1,3 @@
-import path from "node:path";
-import { isUniversalUiFile } from "./ui-boundary-roles.js";
 
 /**
  * Bans raw Boxicons icon-font class strings in Cumulus's product-UI tier.
@@ -11,19 +9,7 @@ import { isUniversalUiFile } from "./ui-boundary-roles.js";
  * glyph registry already owns, so the same mark drifts out of sync across call
  * sites (and a typo'd class silently renders a blank box at runtime).
  *
- * SCOPE. Governs the Cumulus tier: every file under `src/cumulus/` plus the
- * adapter/builder layer in `src/screens/cumulus_adapters/`, EXCEPT
- *   - {@link EXEMPT_FILE} `src/cumulus/primitives/glyph.ts` — the one file that
- *     DEFINES the glyph vocabulary and so legitimately holds the raw class
- *     strings the registry brands;
- *   - the `src/cumulus/docs/` doc site — its specimens and mockups intentionally
- *     print raw class strings (matching how the sibling Cumulus lint rules exempt
- *     the doc tier); and
- *   - test files (`*.test.ts` / `*.test.tsx`) — a render test legitimately
- *     asserts against the CONCRETE rendered class (`querySelector("i.bx-x")`),
- *     which the design system's own vocabulary resolves TO; a GLYPHS symbol
- *     cannot be spelled into a DOM selector.
- * All other files are a no-op.
+ * eslint.config.js decides which files this rule governs.
  *
  * DETECTION. Any string {@link Literal} or {@link TemplateElement} whose text
  * contains a Boxicons class token — the base classes `bx` / `bxf`, or an icon
@@ -34,12 +20,6 @@ import { isUniversalUiFile } from "./ui-boundary-roles.js";
  * {@link isGlyphCallArgument}).
  */
 
-/** Repo-relative POSIX path of the one file that DEFINES the glyph vocabulary. */
-const EXEMPT_FILE = "src/cumulus/primitives/glyph.ts";
-
-/** The doc-site tier, exempt like the sibling Cumulus rules exempt it. */
-const EXEMPT_PREFIX = "src/cumulus/docs/";
-
 /** The sanctioned game-data boundary helper whose argument is exempt. */
 const GLYPH_BOUNDARY_FN = "glyph";
 
@@ -49,28 +29,6 @@ const GLYPH_BOUNDARY_FN = "glyph";
  * unrelated string that merely contains the letters "bx" is not flagged.
  */
 const ICON_CLASS_RE = /\bbxf?\b|\bbx-[a-z-]+/;
-
-/** True when the repo-relative POSIX path is a test file. */
-export function isTestFile(fileRelative) {
-  return /\.test\.[cm]?[jt]sx?$/.test(fileRelative);
-}
-
-/** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
-export function toRepoRelativePosix(absolutePath, cwd) {
-  return path.relative(cwd, absolutePath).split(path.sep).join("/");
-}
-
-/** True when this rule governs the given repo-relative POSIX path. */
-export function isGovernedFile(fileRelative) {
-  if (
-    fileRelative === EXEMPT_FILE ||
-    fileRelative.startsWith(EXEMPT_PREFIX) ||
-    isTestFile(fileRelative)
-  ) {
-    return false;
-  }
-  return isUniversalUiFile(fileRelative);
-}
 
 /** True when `call` is a `glyph(...)` invocation. */
 function isGlyphCall(call) {
@@ -107,17 +65,6 @@ const rule = {
   },
 
   create(context) {
-    const rawFilename =
-      typeof context.filename === "string"
-        ? context.filename
-        : context.getFilename();
-    const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
-    const fileRelative = toRepoRelativePosix(rawFilename, cwd);
-
-    if (!isGovernedFile(fileRelative)) {
-      return {};
-    }
-
     function report(node, text) {
       if (typeof text !== "string" || !ICON_CLASS_RE.test(text)) {
         return;
