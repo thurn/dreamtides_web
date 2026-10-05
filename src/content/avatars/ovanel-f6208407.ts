@@ -1,0 +1,50 @@
+import { avatar } from "../define";
+
+export default avatar({
+  name: "Ovanel",
+  title: "Lector of the Receding Rite",
+  id: "f6208407-c4e9-42ac-b533-346704f5e39e",
+  imageNumber: "0078",
+  renderedText: "2●, ☾: If you played an event this turn, draw an event.",
+  signatureCards: [
+    "Cloudtop Chronicler",
+    "Pastward Wanderer",
+    "Unleashed Destruction",
+    "Fell Swoop",
+  ],
+  portraitFocus: { x: 0.5, y: 0.162 },
+  tidePool: {
+    starter: "e6863f55-50e7-4c7b-b118-609b5fc5c005",
+    facets: [
+      "5b1199a2-d9c2-48f8-84b4-c111fba6aa64",
+      "87d5e3fa-192e-482b-a75c-a0921e5699e2",
+      "e5bac3ec-b64f-4303-8f9d-047e57ef6cf3",
+      "cf1f7e7c-f9e9-4f83-9ff5-6edc8a916277",
+      "856c3ff0-1868-4a48-a553-0aaf7aefb8d1",
+      "e4d7c1fe-cae0-4cec-8254-2656eff4359b",
+      "5bf0efa1-1024-47ed-bd4a-a5dc13ca2ba0",
+      "9a48fa73-7c55-4158-9fb7-fbd6941b9f59",
+    ],
+    neutral: [
+      "51903b9a-825b-4d9a-8a6d-071670c3caaa",
+      "22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e",
+      "0c536368-3612-4884-8a69-c9867e193590",
+      "d923b6e9-8572-4b27-b456-e70e69e80b31",
+      "f93cefb1-3a37-4075-98f0-c006571edd09",
+      "1f36ff28-d760-49ce-b4da-b4b97145f794",
+      "f32a2ee8-1e2b-4be1-801c-1b8fef6200a8",
+      "1694633b-f5a7-4fe8-a685-993be7e1a13c",
+      "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
+      "d7f92542-c7f6-4ae3-a97e-fc8d8681699a",
+      "ebb877b5-7f18-413b-8509-3d1e452e0df2",
+      "7343b376-88d2-45fe-8b5e-79763480ee7e",
+    ],
+  },
+  signatureCardIds: [
+    "3811a0a2-66af-4c06-b179-948dfa9b2ee3",
+    "95711262-8510-475c-a572-c1cd144d54cb",
+    "006e2f95-59a2-4cda-a777-e64f4aa31060",
+    "18979c10-39b8-42fb-ac1d-dd784da498d1",
+  ],
+  pending: true,
+});

@@ -1,0 +1,52 @@
+import { avatar } from "../define";
+
+export default avatar({
+  name: "Rael",
+  title: "Chain Accelerant",
+  id: "84e7020c-7384-4cc3-a20f-ab05f03cc375",
+  imageNumber: "0106",
+  renderedText: "When you play your second event in a turn, foresee 2.",
+  signatureCards: [
+    "Underroot Diviner",
+    "Aerie Defender",
+    "Pattern Seeker",
+    "Gateweaver",
+    "Scorched Reckoning",
+  ],
+  portraitFocus: { x: 0.515, y: 0.201 },
+  tidePool: {
+    starter: "ab89d262-45d4-438d-8670-79d91f6e944f",
+    facets: [
+      "cf1f7e7c-f9e9-4f83-9ff5-6edc8a916277",
+      "e4d7c1fe-cae0-4cec-8254-2656eff4359b",
+      "e95b00e1-dbff-453d-bdd6-f92034988107",
+      "87d5e3fa-192e-482b-a75c-a0921e5699e2",
+      "e5bac3ec-b64f-4303-8f9d-047e57ef6cf3",
+      "5b1199a2-d9c2-48f8-84b4-c111fba6aa64",
+      "5bf0efa1-1024-47ed-bd4a-a5dc13ca2ba0",
+      "9a48fa73-7c55-4158-9fb7-fbd6941b9f59",
+    ],
+    neutral: [
+      "51903b9a-825b-4d9a-8a6d-071670c3caaa",
+      "22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e",
+      "0c536368-3612-4884-8a69-c9867e193590",
+      "ebb877b5-7f18-413b-8509-3d1e452e0df2",
+      "1694633b-f5a7-4fe8-a685-993be7e1a13c",
+      "d923b6e9-8572-4b27-b456-e70e69e80b31",
+      "1f36ff28-d760-49ce-b4da-b4b97145f794",
+      "f32a2ee8-1e2b-4be1-801c-1b8fef6200a8",
+      "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
+      "f93cefb1-3a37-4075-98f0-c006571edd09",
+      "d7f92542-c7f6-4ae3-a97e-fc8d8681699a",
+      "7343b376-88d2-45fe-8b5e-79763480ee7e",
+    ],
+  },
+  signatureCardIds: [
+    "6fa9c440-3912-4b1e-868c-840ae772fe1c",
+    "c11eb833-a45b-4983-949d-848039d0504c",
+    "9a18d375-1b6d-4df4-95ec-c7c5c3f36379",
+    "b6d1df72-d989-4689-a599-4490a0c2568d",
+    "027ae231-6569-49bb-866f-7c36ec794a11",
+  ],
+  pending: true,
+});

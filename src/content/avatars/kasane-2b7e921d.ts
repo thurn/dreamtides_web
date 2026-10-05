@@ -1,0 +1,52 @@
+import { avatar } from "../define";
+
+export default avatar({
+  name: "Kasane",
+  title: "Wearer of the Stolen Face",
+  id: "2b7e921d-0cd7-4c20-a415-9e7eede7b477",
+  imageNumber: "0060",
+  renderedText: "4●, ☾: Copy the next event you play this turn.",
+  signatureCards: [
+    "Nebula's Wake",
+    "From the Barrow",
+    "Call the Lost",
+    "Inverted Reflection",
+    "Flash of Power",
+  ],
+  portraitFocus: { x: 0.513, y: 0.223 },
+  tidePool: {
+    starter: "1ad97f42-6157-45b3-8290-e27219c7888a",
+    facets: [
+      "87d5e3fa-192e-482b-a75c-a0921e5699e2",
+      "e5bac3ec-b64f-4303-8f9d-047e57ef6cf3",
+      "cf1f7e7c-f9e9-4f83-9ff5-6edc8a916277",
+      "f3f6da0b-f83f-4e66-a4e1-8e35a8d27488",
+      "b7aaeba4-7526-4301-93fc-326a3e5a1c7a",
+      "5b1199a2-d9c2-48f8-84b4-c111fba6aa64",
+      "5bf0efa1-1024-47ed-bd4a-a5dc13ca2ba0",
+      "9a48fa73-7c55-4158-9fb7-fbd6941b9f59",
+    ],
+    neutral: [
+      "22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e",
+      "0c536368-3612-4884-8a69-c9867e193590",
+      "51903b9a-825b-4d9a-8a6d-071670c3caaa",
+      "d923b6e9-8572-4b27-b456-e70e69e80b31",
+      "f93cefb1-3a37-4075-98f0-c006571edd09",
+      "d7f92542-c7f6-4ae3-a97e-fc8d8681699a",
+      "1f36ff28-d760-49ce-b4da-b4b97145f794",
+      "f32a2ee8-1e2b-4be1-801c-1b8fef6200a8",
+      "1694633b-f5a7-4fe8-a685-993be7e1a13c",
+      "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
+      "ebb877b5-7f18-413b-8509-3d1e452e0df2",
+      "7343b376-88d2-45fe-8b5e-79763480ee7e",
+    ],
+  },
+  signatureCardIds: [
+    "4d4618bd-4779-4953-b446-dab05e1da5db",
+    "4752fc43-6696-4bc3-88d0-4d5b97622fa8",
+    "2690912e-0295-4d12-a603-5946d37902d3",
+    "120ea441-f6ff-434b-973c-bde459f65368",
+    "c430ed7b-523e-4580-9a53-d43d11265633",
+  ],
+  pending: true,
+});

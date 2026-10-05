@@ -1,0 +1,55 @@
+import { avatar } from "../define";
+
+export default avatar({
+  name: "Vaela",
+  title: "Ember Among Remnants",
+  id: "60bd584b-5bc8-4ee7-8a98-cbb304eb71ab",
+  imageNumber: "0028",
+  renderedText:
+    "When a card leaves your void, a random card in your void gains reclaim.",
+  signatureCards: [
+    "Eternal Soul",
+    "Returned Vanguard",
+    "Vigil Keeper",
+    "Skull Weaver",
+    "Wasteland Arbitrator",
+    "Fallen Angel",
+  ],
+  portraitFocus: { x: 0.508, y: 0.193 },
+  tidePool: {
+    starter: "9ca5a839-cdcb-497d-9b76-2de4c6874cf0",
+    facets: [
+      "788c5f98-b45a-4651-bbf2-67a1da68b3ce",
+      "bdf90a73-3615-440e-92aa-fe0e150d8186",
+      "0ab905a2-4c1c-410e-bbbb-4460c85f95e5",
+      "14f8ed05-e684-407c-be32-1dc970d69f36",
+      "5354646a-9811-4f7e-85ea-cf8fec8f8f15",
+      "d5cf7078-48ae-402d-837e-dde02b1a7153",
+      "e1620ab4-7e68-4a57-a6eb-d7a3380c4dc5",
+      "e95b00e1-dbff-453d-bdd6-f92034988107",
+    ],
+    neutral: [
+      "f93cefb1-3a37-4075-98f0-c006571edd09",
+      "ebb877b5-7f18-413b-8509-3d1e452e0df2",
+      "d923b6e9-8572-4b27-b456-e70e69e80b31",
+      "1694633b-f5a7-4fe8-a685-993be7e1a13c",
+      "0c536368-3612-4884-8a69-c9867e193590",
+      "51903b9a-825b-4d9a-8a6d-071670c3caaa",
+      "7dfa6a52-04ce-42fc-9ef6-4e6571435510",
+      "22ca33d1-9d0f-4e0f-a2f5-b635e0ce184e",
+      "1f36ff28-d760-49ce-b4da-b4b97145f794",
+      "f32a2ee8-1e2b-4be1-801c-1b8fef6200a8",
+      "d7f92542-c7f6-4ae3-a97e-fc8d8681699a",
+      "7343b376-88d2-45fe-8b5e-79763480ee7e",
+    ],
+  },
+  signatureCardIds: [
+    "4e1c0192-2649-489f-aad3-75ff2887c0a7",
+    "4733876a-d6b1-48d2-b322-5f71aee9f3d6",
+    "f68774ce-0e94-489f-90a5-68e03a549ff6",
+    "ffec9fdd-d948-4756-b7df-39b9e982613e",
+    "bedee263-27b9-4d73-ab77-6b5c747dff69",
+    "16d2e85d-f940-43dd-9867-784b3a5ec5d7",
+  ],
+  pending: true,
+});
