@@ -33,7 +33,8 @@ function productionTypeScriptFiles(): string[] {
     .filter((path) => !path.includes("/src/cumulus/docs/"))
     .filter((path) => !path.includes("/src/debug/"))
     .filter((path) => !path.includes("/src/testing/"))
-    .filter((path) => !path.includes("/src/testing/"))
+    // Content modules are the authored data catalogs these tables belong in.
+    .filter((path) => !path.includes("/src/content/"))
     .filter((path) => !path.endsWith("/src/data/localization-messages.ts"));
 }
 

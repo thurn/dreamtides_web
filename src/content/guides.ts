@@ -1,0 +1,160 @@
+// Dream guides, their home Dreamscapes, specialties, and site dialogue.
+
+export const DREAM_GUIDES = [
+  {
+    id: "tobias_tanglefur",
+    name: "Tobias Tanglefur",
+    homeDreamscapeId: "tumbleleaf_village",
+    siteType: "Shop",
+    portraitSource: "tobias.png",
+    homeSpecialty: "Tobias offers strong cards at a steep discount.",
+    dialogue: {
+      site: [
+        "Welcome, friend! Browse a while.",
+        "I've set aside something just for you.",
+      ],
+    },
+  },
+  {
+    id: "amunet_the_tomb_keeper",
+    name: "Amunet, the Tomb-Keeper",
+    homeDreamscapeId: "pharaohs_gate",
+    siteType: "DreamsignBazaar",
+    portraitSource: "amunet.png",
+    homeSpecialty: "Amunet will restock the dreamsign choices once at no cost.",
+    dialogue: {
+      site: [
+        "The sands remember all dreams.",
+        "Choose, and I shall show you another.",
+      ],
+    },
+  },
+  {
+    id: "sigrun",
+    name: "Sigrún",
+    homeDreamscapeId: "winterwake_fjords",
+    siteType: "DreamsignRevelation",
+    portraitSource: "sigrun.png",
+    homeSpecialty:
+      "Sigrún offers several dreamsign choices, tailored to your deck.",
+    dialogue: {
+      site: [
+        "The frost reveals what is hidden. Pick one sign to claim.",
+        "Your path is clearer than most. Pick one sign to claim.",
+      ],
+    },
+  },
+  {
+    id: "durgan_forgehammer",
+    name: "Durgan Forgehammer",
+    homeDreamscapeId: "frostforge",
+    siteType: "Transfiguration",
+    portraitSource: "durgan.png",
+    homeSpecialty: "Durgan can transfigure any card in your deck.",
+    dialogue: {
+      site: [
+        "Stoke the forge — let's reshape it.",
+        "Any card, any temper you like.",
+      ],
+    },
+  },
+  {
+    id: "deacon_holt",
+    name: "Deacon Holt",
+    homeDreamscapeId: "hopes_end",
+    siteType: "Duplication",
+    portraitSource: "holt.png",
+    homeSpecialty: "Deacon Holt can pick any card to duplicate.",
+    dialogue: {
+      site: [
+        "We endure together, don't we?",
+        "Pick one, and I'll make another.",
+      ],
+    },
+  },
+  {
+    id: "master_takeshi",
+    name: "Master Takeshi",
+    homeDreamscapeId: "tsukiren",
+    siteType: "Purge",
+    portraitSource: "takeshi.png",
+    homeSpecialty: "Master Takeshi will purge cards from your deck at no cost.",
+    dialogue: {
+      site: ["Let go of what weighs you down.", "A cleaner blade cuts truer."],
+    },
+  },
+  {
+    id: "aldric_the_seer",
+    name: "Aldric, the Seer",
+    homeDreamscapeId: "wilderveil",
+    siteType: "Augury",
+    portraitSource: "aldric.png",
+    homeSpecialty: "Aldric offers curated visions of the future.",
+    dialogue: {
+      site: [
+        "Two paths unfold before you. Choose one to shape your dream.",
+        "Weigh both visions, then pick one path for your dream.",
+        "The dream divides here. Choose one vision and make it yours.",
+        "Two futures call to you. You may follow only one.",
+        "Look closely at each path, then choose the one your dream will take.",
+      ],
+    },
+  },
+  {
+    id: "maddox",
+    name: "Maddox",
+    homeDreamscapeId: "rust_expanse",
+    siteType: "RandomSite",
+    portraitSource: "maddox.png",
+    homeSpecialty:
+      "Maddox presents three random enhanced sites and lets you choose one.",
+    dialogue: {
+      site: ["Let’s see where this road takes us."],
+      "random-site": ["Three roads. Pick your poison."],
+    },
+  },
+  {
+    id: "gravok",
+    name: "Gravok",
+    homeDreamscapeId: "farpoint_station",
+    siteType: "Gamble",
+    portraitSource: "gravok.png",
+    homeSpecialty: "Gravok offers you his highest rewards and best odds.",
+    dialogue: {
+      site: [
+        "Fortune favors the bold, traveler.",
+        "No fee tonight. Big stakes, though.",
+      ],
+      "gamble-three-gate": [
+        "The game's called Three Gates. Place your bet on the next card drawn!",
+      ],
+      "gamble-ladder-climb": [
+        "The game's Ladder Climb. Match or beat the target to win {win_essence} Essence and a Dreamsign. Try again with better odds if you miss!",
+      ],
+      "gamble-starway-stairs": [
+        "Starway Stairs is the game. Keep betting to see how high you can go!",
+      ],
+      "gamble-four-suit-reprise": [
+        "Four-Suit Reprise is the game. Choose one card; the suit decides what becomes of it.",
+      ],
+      "gamble-blackjack": [
+        "Blackjack is the game. Beat my hand without going over 21!",
+      ],
+    },
+  },
+  {
+    id: "layaway",
+    name: '"Layaway"',
+    homeDreamscapeId: "grid_city",
+    siteType: "Exploration",
+    portraitSource: "layaway.png",
+    homeSpecialty:
+      "Layaway guides you deeper into the dream within the drawn card.",
+    dialogue: {
+      site: [
+        "Every card dreams, friend. Draw one, and we'll step inside.",
+        "Pick a direction. The dream will make the path.",
+      ],
+    },
+  },
+];

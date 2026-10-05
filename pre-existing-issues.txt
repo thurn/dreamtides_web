@@ -3,3 +3,5 @@ The `scripts/desktop-screenshots.mjs --list-scenes` catalog loader fails under N
 The Tollgate release baseline fails `npm run trox:gate` in `trox:check-generated` because `.generated/localization/bundles/ar.trox.json` is regenerated with different content and reported stale. Tollgate's clean diagnostic matrix reproduces the same failure on release and candidate sources and classifies the Trox result as inherited from base.
 
 The Hastened transfiguration has no glossary entry, so card-text tooltips and the glossary popup cannot explain it. Every other transfiguration resolves through `lookupGlossaryTerm`; `src/data/glossary.test.ts` marks Hastened as the known gap.
+
+Dreamscapes and Dream guides are identified at runtime by art-key slugs (`firstlight_meadow`, `tobias_tanglefur`) rather than the UUIDs authored in their catalogs. The compiled runtime data, and therefore `src/content/dreamscapes.ts`, `src/content/guides.ts`, and the guide references in `src/content/sites.ts`, key these entities by slug, contrary to the UUID identity invariant.
