@@ -7,3 +7,5 @@ The Hastened transfiguration has no glossary entry, so card-text tooltips and th
 Dreamscapes and Dream guides are identified at runtime by art-key slugs (`firstlight_meadow`, `tobias_tanglefur`) rather than the UUIDs authored in their catalogs. The compiled runtime data, and therefore `src/content/dreamscapes.ts`, `src/content/guides.ts`, and the guide references in `src/content/sites.ts`, key these entities by slug, contrary to the UUID identity invariant.
 
 QA scenes are not reproducible across loads: with `?goto=<scene>&seed=7`, 22 of 37 scenes (Atlas layouts, site offers, avatar choices, battle hands) render different content on each load, so before/after comparisons of their copy are impossible. Passing an explicit `?game=<id>` for a fresh room leaves the page on "Joining Game" indefinitely instead of creating it. Guide dialogue also picks its line with `Math.random()` on each mount.
+
+`src/battle/state/transition.ts` (`cloneBattleReducerTransition`) has no importers anywhere in the repository; it is dead code left in the sandbox battle state module.
