@@ -1,14 +1,11 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   JourneyStartScreen,
   type AvatarOfferView,
 } from "./JourneyStartScreen";
-import { CumulusRoot } from "../CumulusRoot";
 import { lookupGlossaryTerm } from "../../data/glossary";
 import { assertLocalized } from "@trox/runtime";
 import {
@@ -17,6 +14,7 @@ import {
   testTideId,
 } from "../../types/test-identities";
 import { testPresentationId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 class ResizeObserverStub {
   constructor(_callback: ResizeObserverCallback) {}
@@ -88,22 +86,9 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
-
 describe("Cumulus JourneyStartScreen (carousel)", () => {
   it("renders every portrait page and a glass console for the active Avatar", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={OFFERED}
         onPick={vi.fn()}
@@ -136,14 +121,10 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       `[data-starting-essence-value="${OFFERED[0].id}"]`,
     );
     expect(essence?.textContent).toContain(String(OFFERED[0].startingEssence));
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("shows the tides cluster only for Avatars that have tides", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={OFFERED}
         onPick={vi.fn()}
@@ -178,15 +159,11 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     expect(label?.querySelector("i")?.className).toBe("bxf bx-info-circle");
     expect(label?.dataset.revealPrimaryVariant).toBe("text");
     expect(label?.dataset.revealFeedback).toBe("stationary");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("calls onPick with the Avatar's id when its Choose action is pressed", () => {
     const onPick = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={OFFERED}
         onPick={onPick}
@@ -212,15 +189,11 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     });
 
     expect(onPick).toHaveBeenCalledWith(OFFERED[1].id);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the top-right reroll icon and reports its debug action", () => {
     const onReroll = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={OFFERED}
         onPick={vi.fn()}
@@ -241,15 +214,11 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       button?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(onReroll).toHaveBeenCalledOnce();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("shows one tutorial page without the reroll or carousel navigation controls", () => {
     const tutorialAvatar = OFFERED[0];
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={[tutorialAvatar]}
         onPick={vi.fn()}
@@ -269,14 +238,10 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
     ).toBeNull();
     expect(container.querySelector('[aria-label="Previous"]')).toBeNull();
     expect(container.querySelector('[aria-label="Next"]')).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("fades in Mira's tutorial guidance with highlighted Avatar copy", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={[OFFERED[0]]}
         guideDialogue={{
@@ -319,10 +284,6 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       '[data-tutorial-instruction-highlight="purple"]',
     );
     expect(highlighted?.textContent).toBe("Avatar");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("reveals every defined term from the whole Avatar ability box", () => {
@@ -336,7 +297,7 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       ...OFFERED[0],
       renderedText: assertLocalized(ability),
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={[avatar]}
         onPick={vi.fn()}
@@ -369,10 +330,6 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       );
     });
     expect(source?.dataset.revealActive).toBe("true");
-
-    act(() => {
-      root.unmount();
-    });
   });
 });
 
@@ -382,7 +339,7 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
   });
 
   it("renders every Avatar as a standalone column, not a carousel", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={OFFERED}
         onPick={vi.fn()}
@@ -422,15 +379,11 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     expect(container.querySelectorAll("[data-glass-panel-frame]")).toHaveLength(
       OFFERED.length,
     );
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the tutorial Avatar as the only desktop column", () => {
     const tutorialAvatar = OFFERED[0];
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={[tutorialAvatar]}
         onPick={vi.fn()}
@@ -448,14 +401,10 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     expect(
       container.querySelector("[data-avatar-reroll-control]"),
     ).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders tutorial guidance at the prominent desktop scale", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={[OFFERED[0]]}
         guideDialogue={{
@@ -486,14 +435,10 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
     expect(anchor?.style.width).toBe("500px");
     expect(anchor?.style.maxWidth).toBe("calc(50vw - 250px)");
     expect(anchor?.style.transform).toBe("translate(30px, calc(-50% + 10px))");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("shows a hover-only tide disc per tide for tided Avatars", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyStartScreen
         avatars={OFFERED}
         onPick={vi.fn()}
@@ -519,9 +464,5 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
         `[data-avatar-column="${OFFERED[1].id}"] [data-tides-info-label]`,
       ),
     ).not.toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 });

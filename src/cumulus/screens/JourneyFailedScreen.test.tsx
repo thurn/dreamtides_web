@@ -1,15 +1,14 @@
 import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
-import { act, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { CumulusRoot } from "../CumulusRoot";
 import {
   JourneyFailedScreen,
   type JourneyFailedView,
 } from "./JourneyFailedScreen";
 import { testAvatarId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 const VIEW: JourneyFailedView = {
   result: "defeat",
@@ -47,22 +46,9 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
-
 describe("Cumulus JourneyFailedScreen", () => {
   it("orders the result, interactive portrait, and terminal summary", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyFailedScreen view={VIEW} onNewJourney={vi.fn()} />,
     );
 
@@ -117,13 +103,11 @@ describe("Cumulus JourneyFailedScreen", () => {
       container.querySelector('[data-journey-failed-stat="enemyScore"]')
         ?.textContent,
     ).toContain("10");
-
-    act(() => root.unmount());
   });
 
   it("renders the bottom action as accent glass and reports activation", () => {
     const onNewJourney = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyFailedScreen view={VIEW} onNewJourney={onNewJourney} />,
     );
     const button = container.querySelector<HTMLButtonElement>(
@@ -133,12 +117,10 @@ describe("Cumulus JourneyFailedScreen", () => {
     expect(button?.dataset.glassVariant).toBe("accent");
     act(() => button?.click());
     expect(onNewJourney).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
   });
 
   it("renders a safe fallback without an action when the summary is missing", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyFailedScreen view={null} onNewJourney={vi.fn()} />,
     );
 
@@ -148,7 +130,5 @@ describe("Cumulus JourneyFailedScreen", () => {
     expect(
       container.querySelector('[data-testid="journey-failed-start-new-run"]'),
     ).toBeNull();
-
-    act(() => root.unmount());
   });
 });

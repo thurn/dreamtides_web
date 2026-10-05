@@ -2,11 +2,10 @@
 
 import { act } from "react";
 import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { logEvent, resetLog, getLogEntries } from "../logging";
-import { CumulusRoot } from "../cumulus/CumulusRoot";
+import { renderInCumulus } from "../cumulus/testing/render";
 
 vi.mock("../logging", async () => {
   const actual = await vi.importActual<typeof import("../logging")>(
@@ -21,19 +20,6 @@ vi.mock("../logging", async () => {
 /** Component that intentionally throws on render. */
 function Bomb({ message }: { message: string }): ReactElement {
   throw new Error(message);
-}
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
 }
 
 beforeEach(() => {
@@ -58,7 +44,7 @@ afterEach(() => {
 
 describe("ErrorBoundary", () => {
   it("renders children unchanged when no error is thrown", () => {
-    const { container } = mount(
+    const { container } = renderInCumulus(
       <ErrorBoundary scope="test-scope">
         <div data-testid="happy-path">All good</div>
       </ErrorBoundary>,
@@ -69,7 +55,7 @@ describe("ErrorBoundary", () => {
   });
 
   it("catches a render-time error from a child and shows the fallback UI", () => {
-    const { container } = mount(
+    const { container } = renderInCumulus(
       <ErrorBoundary scope="overlay">
         <Bomb message="kaboom" />
       </ErrorBoundary>,
@@ -80,7 +66,7 @@ describe("ErrorBoundary", () => {
   });
 
   it("logs the caught error through logEvent so it lands in journey-log.jsonl", () => {
-    mount(
+    renderInCumulus(
       <ErrorBoundary scope="screen">
         <Bomb message="boom-in-screen" />
       </ErrorBoundary>,
@@ -100,7 +86,7 @@ describe("ErrorBoundary", () => {
   });
 
   it("surfaces the error on window.__caps.errors for browser-QA", () => {
-    mount(
+    renderInCumulus(
       <ErrorBoundary scope="app-shell">
         <Bomb message="surface-me" />
       </ErrorBoundary>,
@@ -117,7 +103,7 @@ describe("ErrorBoundary", () => {
 
   it("calls the onRetry handler when the Retry action is clicked", () => {
     const onRetry = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ErrorBoundary scope="overlay" onRetry={onRetry}>
         <Bomb message="retry-me" />
       </ErrorBoundary>,
@@ -131,14 +117,11 @@ describe("ErrorBoundary", () => {
       retryButton!.click();
     });
     expect(onRetry).toHaveBeenCalledTimes(1);
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("offers cold shared-room recovery from the contained fallback", () => {
     const onRecover = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ErrorBoundary scope="screen" onRecover={onRecover}>
         <Bomb message="recover-me" />
       </ErrorBoundary>,
@@ -149,7 +132,6 @@ describe("ErrorBoundary", () => {
     expect(recoverButton).not.toBeNull();
     act(() => recoverButton!.click());
     expect(onRecover).toHaveBeenCalledTimes(1);
-    act(() => root.unmount());
   });
 
   it("resets back to children when resetKey changes", () => {
@@ -161,7 +143,7 @@ describe("ErrorBoundary", () => {
       return <div data-testid="recovered">Recovered</div>;
     }
 
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <ErrorBoundary scope="per-screen" resetKey="key-A">
         <ConditionallyBomb />
       </ErrorBoundary>,
@@ -173,22 +155,18 @@ describe("ErrorBoundary", () => {
     // Stop throwing, change the reset key — boundary should clear state
     // and re-render the children.
     shouldThrow = false;
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <ErrorBoundary scope="per-screen" resetKey="key-B">
-            <ConditionallyBomb />
-          </ErrorBoundary>
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <ErrorBoundary scope="per-screen" resetKey="key-B">
+        <ConditionallyBomb />
+      </ErrorBoundary>
+    );
 
     expect(container.querySelector('[data-testid="recovered"]')?.textContent)
       .toBe("Recovered");
   });
 
   it("supports a custom fallback render prop", () => {
-    const { container } = mount(
+    const { container } = renderInCumulus(
       <ErrorBoundary
         scope="custom"
         fallback={({ error }: { error: Error }) => (
@@ -205,7 +183,7 @@ describe("ErrorBoundary", () => {
 
   it("calls the onClose handler when the Close action is clicked", () => {
     const onClose = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ErrorBoundary scope="overlay" onClose={onClose}>
         <Bomb message="close-me" />
       </ErrorBoundary>,
@@ -219,8 +197,5 @@ describe("ErrorBoundary", () => {
       closeButton!.click();
     });
     expect(onClose).toHaveBeenCalledTimes(1);
-    act(() => {
-      root.unmount();
-    });
   });
 });

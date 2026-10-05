@@ -2,9 +2,6 @@ import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
-import { CumulusRoot } from "../CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveSource } from "../../runtime/localization/runtime";
 import type {
@@ -22,6 +19,7 @@ import { testArtAssetKey } from "../../types/test-identities";
 import { testPresentationId } from "../../types/test-identities";
 import { parseAtlasNodeId } from "../../types/identifiers";
 import { testDreamscapeId, testGuideId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 /**
  * Stub matchMedia (jsdom lacks it; Pressable + useIsDesktop + the InfoCard
@@ -100,19 +98,6 @@ function restorePrototypeDescriptor(
     return;
   }
   Object.defineProperty(HTMLElement.prototype, name, descriptor);
-}
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
 }
 
 function revealPointer(
@@ -291,7 +276,7 @@ describe("Cumulus AtlasScreen", () => {
         bubbleWidth: 700,
       },
     };
-    const { container, root } = mount(
+    const { container, root } = renderInCumulus(
       <AtlasScreen
         view={view}
         onEnterNode={vi.fn()}
@@ -343,7 +328,7 @@ describe("Cumulus AtlasScreen", () => {
     };
 
     stubViewport(true);
-    const desktop = mount(
+    const desktop = renderInCumulus(
       <AtlasScreen view={view} onEnterNode={vi.fn()} />,
     );
     const desktopPlacement = desktop.container.querySelector<HTMLElement>(
@@ -356,7 +341,7 @@ describe("Cumulus AtlasScreen", () => {
     act(() => desktop.root.unmount());
 
     stubViewport(false);
-    const mobile = mount(<AtlasScreen view={view} onEnterNode={vi.fn()} />);
+    const mobile = renderInCumulus(<AtlasScreen view={view} onEnterNode={vi.fn()} />);
     const mobilePlacement = mobile.container.querySelector<HTMLElement>(
       "[data-atlas-guide-dialogue-placement]",
     );
@@ -368,7 +353,7 @@ describe("Cumulus AtlasScreen", () => {
   });
 
   it("renders every node and leaves persistent chrome to the router", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <AtlasScreen view={makeView()} onEnterNode={vi.fn()} />,
     );
 
@@ -387,15 +372,11 @@ describe("Cumulus AtlasScreen", () => {
     expect(
       container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("reports the entered node when an available node is clicked", () => {
     const onEnterNode = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <AtlasScreen view={makeView()} onEnterNode={onEnterNode} />,
     );
 
@@ -405,10 +386,6 @@ describe("Cumulus AtlasScreen", () => {
       (available as HTMLElement).click();
     });
     expect(onEnterNode).toHaveBeenCalledWith("frontier");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("places mobile top-left and top-right touches from transformed source rectangles outside stage clipping", async () => {
@@ -418,7 +395,7 @@ describe("Cumulus AtlasScreen", () => {
       value: { width: 390, height: 844, offsetLeft: 0, offsetTop: 0 },
     });
     mockRevealCardMeasurements({ width: 248, height: 200 });
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <AtlasScreen view={makeView()} onEnterNode={vi.fn()} />,
     );
     const source = container.querySelector<HTMLElement>(
@@ -472,8 +449,6 @@ describe("Cumulus AtlasScreen", () => {
     expect(
       document.body.querySelector(":scope > [data-cumulus-reveal-portal]"),
     ).not.toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("uses desktop side fallback and follows actual source rect changes instead of stage-space coordinates", async () => {
@@ -485,7 +460,7 @@ describe("Cumulus AtlasScreen", () => {
     mockRevealCardMeasurements({ width: 248, height: 260 });
     const view = makeView();
     expect(view.nodes[1].left).toBe(500);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <AtlasScreen view={view} onEnterNode={vi.fn()} />,
     );
     const source = container.querySelector<HTMLElement>(
@@ -524,8 +499,6 @@ describe("Cumulus AtlasScreen", () => {
     await vi.waitFor(() => expect(placedPrimary().x).toBe(374));
     expect(placedPrimary()).toEqual({ x: 374, y: 20, width: 248, height: 260 });
     expect(view.nodes[1].left).toBe(500);
-
-    act(() => root.unmount());
   });
 
   it("reveals site and affiliation companion cards on a mobile press", () => {
@@ -547,7 +520,7 @@ describe("Cumulus AtlasScreen", () => {
     view.nodes[1] = nodeItem("frontier", "available", {
       semantic: resident,
     });
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <AtlasScreen view={view} onEnterNode={vi.fn()} />,
     );
 
@@ -581,9 +554,5 @@ describe("Cumulus AtlasScreen", () => {
     expect(document.body.textContent).toContain(
       resolveSource(resident.primary.placeName!),
     );
-
-    act(() => {
-      root.unmount();
-    });
   });
 });

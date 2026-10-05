@@ -1,17 +1,16 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { HTMLAttributes, ReactElement, ReactNode } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import type { HTMLAttributes, ReactNode } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import { StartingDeckOverlay } from "./StartingDeckOverlay";
 import type { StartingDeckView } from "./StartingDeckOverlay";
-import { CumulusRoot } from "../CumulusRoot";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testCardId } from "../../types/test-identities";
 import type { DomTestId } from "../types/dom";
+import { renderInCumulus } from "../testing/render";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -95,19 +94,6 @@ function makeView(cardCount = 2): StartingDeckView {
   };
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
-
 /** The panel wrapper bounds the shared CardBrowserPanel. */
 function panelOf(container: HTMLElement): HTMLElement | null {
   return galleryOf(container)?.parentElement ?? null;
@@ -155,7 +141,7 @@ afterEach(() => {
 
 describe("StartingDeckOverlay", () => {
   it("renders nothing when closed", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <StartingDeckOverlay
         isOpen={false}
         view={makeView()}
@@ -169,14 +155,10 @@ describe("StartingDeckOverlay", () => {
         "[data-testid='starting-deck-modal-card-entry-1']",
       ),
     ).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the starting cards in acquisition order under a title", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
 
@@ -192,14 +174,10 @@ describe("StartingDeckOverlay", () => {
       "starting-deck-modal-card-entry-1",
       "starting-deck-modal-card-entry-2",
     ]);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders a full-bleed panel on mobile with an internally scrolling body", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
 
@@ -222,15 +200,11 @@ describe("StartingDeckOverlay", () => {
     // The body scrolls internally.
     const scroll = scrollOf(container);
     expect(scroll?.style.overflowY).toBe("auto");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders a bounded, centered floating panel on desktop", () => {
     setDesktopViewport(true);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
 
@@ -239,14 +213,11 @@ describe("StartingDeckOverlay", () => {
     const gallery = galleryOf(container);
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("5");
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("uses the desktop peek sizing when the deck has more cards than fit", () => {
     setDesktopViewport(true);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <StartingDeckOverlay isOpen view={makeView(20)} onClose={vi.fn()} />,
     );
 
@@ -261,15 +232,11 @@ describe("StartingDeckOverlay", () => {
     expect(
       container.querySelectorAll("[data-testid^='starting-deck-modal-card-']"),
     ).toHaveLength(20);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("keeps the same measured desktop contract on roomy viewports", () => {
     setDesktopViewport(true, true);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
 
@@ -277,29 +244,21 @@ describe("StartingDeckOverlay", () => {
     expect(panel?.style.maxHeight).toContain("100vh");
     const gallery = galleryOf(container);
     expect(gallery?.dataset.galleryFrame).toBe("floating");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("exposes only one accent action (no sort/filter/summary chrome)", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
 
     const buttons = Array.from(container.querySelectorAll("button"));
     expect(buttons).toHaveLength(1);
     expect(buttons[0]?.dataset.glassVariant).toBe("accent");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("calls onClose when Begin Journey is clicked", () => {
     const onClose = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <StartingDeckOverlay isOpen view={makeView()} onClose={onClose} />,
     );
 
@@ -309,15 +268,11 @@ describe("StartingDeckOverlay", () => {
         ?.click();
     });
     expect(onClose).toHaveBeenCalledTimes(1);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("calls onClose when Escape is pressed", () => {
     const onClose = vi.fn();
-    const { root } = mount(
+    renderInCumulus(
       <StartingDeckOverlay isOpen view={makeView()} onClose={onClose} />,
     );
 
@@ -325,15 +280,11 @@ describe("StartingDeckOverlay", () => {
       window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
     });
     expect(onClose).toHaveBeenCalledTimes(1);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("does not dismiss on a click of the panel or backdrop (action or Escape only)", () => {
     const onClose = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <StartingDeckOverlay isOpen view={makeView()} onClose={onClose} />,
     );
 
@@ -344,14 +295,10 @@ describe("StartingDeckOverlay", () => {
       backdrop?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
     expect(onClose).not.toHaveBeenCalled();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the empty-state placeholder when the deck is empty", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <StartingDeckOverlay
         isOpen
         view={{
@@ -365,9 +312,5 @@ describe("StartingDeckOverlay", () => {
     expect(
       container.querySelector("[data-testid^='starting-deck-modal-card-']"),
     ).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 });

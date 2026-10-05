@@ -1,9 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { CumulusRoot } from "../../CumulusRoot";
 import { parseCardName } from "../../../types/card-identity";
 import type { CardData } from "../../../types/cards";
 import * as glossary from "../../../data/glossary";
@@ -13,6 +11,7 @@ import { GameCard, type GameCardModel } from "./CardView";
 import { transfigurationFormFixture } from "../../test-helpers/transfiguration-fixture";
 import { testGlossaryEntryId, testCardId } from "../../../types/test-identities";
 import type { GlossaryEntryId } from "../../../types/identifiers";
+import { renderInCumulus } from "../../testing/render";
 
 vi.mock("../../../data/materialized-figments", () => ({
   extractMaterializedFigmentPreviews: vi.fn(() => []),
@@ -41,17 +40,6 @@ function card(overrides: Partial<CardData> = {}): CardData {
 
 function model(displaySnapshot = card()): GameCardModel {
   return { cardId: CARD_ID, displaySnapshot };
-}
-
-function mount(element: React.ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
 }
 
 function rect(width: number, left = 80, top = 120): DOMRect {
@@ -142,7 +130,7 @@ const BANE_TERM = glossaryTerm(
 
 describe("GameCard reveal contract", () => {
   it("registers canonical UUID semantics and derives de-duplicated glossary secondaries", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard
         model={model(
           card({
@@ -169,11 +157,10 @@ describe("GameCard reveal contract", () => {
     if (baneEntry === undefined)
       throw new Error("Bane glossary fixture missing");
     expect(description.split(baneEntry.definition).length - 1).toBe(1);
-    act(() => root.unmount());
   });
 
   it("omits ordinary Materialize and Void definitions while preserving the Materialized trigger", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard
         model={model(
           card({
@@ -198,13 +185,11 @@ describe("GameCard reveal contract", () => {
       )
         .definition,
     );
-
-    act(() => root.unmount());
   });
 
   it("renders contextual counts and grammar for every numeric card keyword", () => {
     const renderedText = "Erode 2. Foresee 1. Reclaim 0●.";
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard
         model={model(
           card({
@@ -234,11 +219,10 @@ describe("GameCard reveal contract", () => {
       expect(description).toContain(entry.definition);
     }
 
-    act(() => root.unmount());
   });
 
   it("stacks the glossary-backed exhausted status before rules-text definitions", async () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard
         model={model(card({ renderedText: "Nightmare is a Bane." }))}
         exhausted
@@ -285,12 +269,10 @@ describe("GameCard reveal contract", () => {
     expect(secondaries[0]?.textContent).toContain(EXHAUSTED_TERM);
     expect(secondaries[0]?.querySelectorAll("i.bxf.bx-moon")).toHaveLength(2);
     expect(secondaries[1]?.textContent).toContain(BANE_TERM);
-
-    act(() => root.unmount());
   });
 
   it("stacks the glossary-backed figment status before rules-text definitions", async () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard
         model={model(card({ renderedText: "Nightmare is a Bane." }))}
         figment
@@ -336,12 +318,10 @@ describe("GameCard reveal contract", () => {
     ];
     expect(secondaries[0]?.textContent).toContain(FIGMENT_TERM);
     expect(secondaries[1]?.textContent).toContain(BANE_TERM);
-
-    act(() => root.unmount());
   });
 
   it("shows the Figment definition once when a figment's own rules text mentions figments", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard
         model={model(card({ renderedText: "Merge with another figment." }))}
         figment
@@ -358,8 +338,6 @@ describe("GameCard reveal contract", () => {
     ).definition;
 
     expect(description.split(figmentDefinition).length - 1).toBe(1);
-
-    act(() => root.unmount());
   });
 
   it.each([
@@ -396,7 +374,7 @@ describe("GameCard reveal contract", () => {
             }
           : undefined,
       );
-      const { container, root } = mount(
+      const { container, root } = renderInCumulus(
         <GameCard model={model(card({ ...cardData, renderedText: "" }))} />,
       );
       const source = container.querySelector<HTMLElement>(
@@ -450,7 +428,7 @@ describe("GameCard reveal contract", () => {
   ])(
     "describes a $label rules-text marker as an ability",
     async ({ renderedText, definition, iconCount }) => {
-      const { container, root } = mount(
+      const { container, root } = renderInCumulus(
         <GameCard model={model(card({ renderedText }))} />,
       );
       const source = container.querySelector<HTMLElement>(
@@ -487,7 +465,7 @@ describe("GameCard reveal contract", () => {
 
   it("keeps the card interactive when its exhausted glossary entry is unavailable", () => {
     vi.spyOn(glossary, "glossaryEntry").mockReturnValue(undefined);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard
         model={model(card({ renderedText: "Nightmare is a Bane." }))}
         exhausted
@@ -505,8 +483,6 @@ describe("GameCard reveal contract", () => {
     expect(description).toContain(
       "This rule's definition is temporarily unavailable.",
     );
-
-    act(() => root.unmount());
   });
 
   it("shows an authored figment card beyond glossary definitions on desktop", async () => {
@@ -530,7 +506,7 @@ describe("GameCard reveal contract", () => {
         }),
       },
     ]);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <div data-test-width="240">
         <GameCard
           model={model(
@@ -597,11 +573,10 @@ describe("GameCard reveal contract", () => {
         Number.parseFloat(definition!.style.width) +
         10,
     );
-    act(() => root.unmount());
   });
 
   it("uses a reading copy below 240px and leaves a complete 240px source in place", async () => {
-    const small = mount(
+    const small = renderInCumulus(
       <div data-test-width="239">
         <GameCard model={model()} />
       </div>,
@@ -632,7 +607,7 @@ describe("GameCard reveal contract", () => {
     ).toBe("240px");
     act(() => small.root.unmount());
 
-    const wide = mount(
+    const wide = renderInCumulus(
       <div data-test-width="240">
         <GameCard model={model()} />
       </div>,
@@ -665,7 +640,7 @@ describe("GameCard reveal contract", () => {
   });
 
   it("scales the desktop reading copy for a hovered battle hand card", async () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <div data-test-width="160" data-battle-hand-card-hover-scale="1.25">
         <GameCard model={model()} />
       </div>,
@@ -692,11 +667,10 @@ describe("GameCard reveal contract", () => {
         '[data-cumulus-reveal-card="primary"]',
       )?.style.width,
     ).toBe("300px");
-    act(() => root.unmount());
   });
 
   it("keeps hidden-rules cards eligible for a complete popup", async () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard model={model()} hideRulesText />,
     );
     const source = container.querySelector<HTMLElement>(
@@ -721,11 +695,10 @@ describe("GameCard reveal contract", () => {
       document.querySelector('[data-cumulus-reveal-card="primary"]')
         ?.textContent,
     ).toContain("Nightmare is a Bane");
-    act(() => root.unmount());
   });
 
   it("renders the battlefield face as art and enlarged spark while revealing the complete card", async () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard model={model()} presentation="battlefield" />,
     );
     const source = container.querySelector<HTMLElement>(
@@ -775,12 +748,10 @@ describe("GameCard reveal contract", () => {
     expect(reveal?.textContent).toContain("Synth");
     expect(reveal?.textContent).toContain("Nightmare is a Bane");
     expect(reveal?.querySelector("[data-card-energy-anchor]")).not.toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("uses the card's primary reveal when hovering a corner stat", async () => {
-    const { container, root } = mount(<GameCard model={model()} />);
+    const { container } = renderInCumulus(<GameCard model={model()} />);
     const source = container.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
@@ -809,14 +780,12 @@ describe("GameCard reveal contract", () => {
       document.querySelector('[data-cumulus-reveal-card="primary"]')
         ?.textContent,
     ).toContain("Archive Sentry");
-
-    act(() => root.unmount());
   });
 
   it.each(["full", "battlefield"] as const)(
     "snaps the %s card back to its original size when a press ends",
     (presentation) => {
-      const { container, root } = mount(
+      const { container, root } = renderInCumulus(
         <GameCard model={model()} presentation={presentation} />,
       );
       const source = container.querySelector<HTMLElement>(
@@ -858,8 +827,8 @@ describe("GameCard reveal contract", () => {
     const displaySnapshot = card({
       art: { x: 0, y: 0, scale: 1.3 },
     });
-    const full = mount(<GameCard model={model(displaySnapshot)} />);
-    const battlefield = mount(
+    const full = renderInCumulus(<GameCard model={model(displaySnapshot)} />);
+    const battlefield = renderInCumulus(
       <GameCard model={model(displaySnapshot)} presentation="battlefield" />,
     );
     const fullImage = full.container.querySelector<HTMLImageElement>(
@@ -893,7 +862,7 @@ describe("GameCard reveal contract", () => {
 
   it("renders an applied proposed transfiguration on the reading copy", async () => {
     const displaySnapshot = card({ energyCost: 1 });
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard
         model={{
           cardId: CARD_ID,
@@ -933,11 +902,10 @@ describe("GameCard reveal contract", () => {
         '[data-cumulus-reveal-card="primary"] i[aria-label]',
       ),
     ).not.toBeNull();
-    act(() => root.unmount());
   });
 
   it("carries the selected source ring onto the reading copy", async () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard model={model()} selection="copied" />,
     );
     const source = container.querySelector<HTMLElement>(
@@ -962,11 +930,10 @@ describe("GameCard reveal contract", () => {
         '[data-cumulus-reveal-card="primary"] .card-view',
       )?.style.boxShadow,
     ).toContain("var(--accent)");
-    act(() => root.unmount());
   });
 
   it("carries the figment frame and title bar onto the reading copy", async () => {
-    const { container, root } = mount(<GameCard model={model()} figment />);
+    const { container } = renderInCumulus(<GameCard model={model()} figment />);
     const source = container.querySelector<HTMLElement>(
       "[data-game-card-source]",
     );
@@ -1004,12 +971,11 @@ describe("GameCard reveal contract", () => {
         '[data-cumulus-reveal-card="primary"] [data-testid="figment-title-bar"]',
       )?.textContent,
     ).toContain("Archive Sentry Figment");
-    act(() => root.unmount());
   });
 
   it("keeps informative unavailable cards focusable while suppressing activation", async () => {
     const activate = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard model={model()} unavailable onPress={activate} />,
     );
     const source = container.querySelector<HTMLElement>(
@@ -1029,13 +995,12 @@ describe("GameCard reveal contract", () => {
     );
     act(() => source?.click());
     expect(activate).not.toHaveBeenCalled();
-    act(() => root.unmount());
   });
 
   it("fires quick activation, suppresses a hold, and dismisses on drag recognition", () => {
     vi.useFakeTimers();
     const activate = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GameCard model={model()} onPress={activate} />,
     );
     const source = container.querySelector<HTMLElement>(
@@ -1091,6 +1056,5 @@ describe("GameCard reveal contract", () => {
       source?.dispatchEvent(new Event("dragstart", { bubbles: true }));
     });
     expect(document.querySelector("[data-cumulus-reveal-group]")).toBeNull();
-    act(() => root.unmount());
   });
 });

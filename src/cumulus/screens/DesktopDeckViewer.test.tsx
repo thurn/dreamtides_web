@@ -1,18 +1,16 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
-import { CumulusRoot } from "../CumulusRoot";
 import type { DeckCardView } from "./MobileDeckViewer";
 import { DesktopDeckViewer } from "./DesktopDeckViewer";
 import { assertLocalized } from "@trox/runtime";
 import { testTideId } from "../../types/test-identities";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testCardId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 function deckCard(index: number): DeckCardView {
   const card: CardData = {
@@ -36,26 +34,13 @@ function deckCard(index: number): DeckCardView {
   };
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
-
 afterEach(() => {
   document.body.innerHTML = "";
 });
 
 describe("DesktopDeckViewer", () => {
   it("uses the standard alpha scrim without blurring the scene", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DesktopDeckViewer
         view={{ cards: [], avatar: null, dreamsigns: [], tides: [] }}
         onClose={vi.fn()}
@@ -67,14 +52,10 @@ describe("DesktopDeckViewer", () => {
     );
 
     expect(backdrop?.getAttribute("style")).not.toContain("backdrop-filter");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("selects sort direction from a two-arrow segmented control", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DesktopDeckViewer
         view={{ cards: [], avatar: null, dreamsigns: [], tides: [] }}
         onClose={vi.fn()}
@@ -99,14 +80,10 @@ describe("DesktopDeckViewer", () => {
 
     expect(ascending?.getAttribute("aria-selected")).toBe("false");
     expect(descending?.getAttribute("aria-selected")).toBe("true");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("centers up to three filtered cards at the reading-width floor", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DesktopDeckViewer
         view={{
           cards: [deckCard(1), deckCard(2), deckCard(3)],
@@ -122,12 +99,10 @@ describe("DesktopDeckViewer", () => {
     expect(grid?.dataset.deckCardGridLowCount).toBe("true");
     expect(grid?.style.gridTemplateColumns).toBe("repeat(3, 240px)");
     expect(grid?.style.justifyContent).toBe("center");
-
-    act(() => root.unmount());
   });
 
   it("shows current journey tides two per row with the shared tide reveal", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DesktopDeckViewer
         view={{
           cards: [],
@@ -167,12 +142,10 @@ describe("DesktopDeckViewer", () => {
     expect(discs?.[0]?.dataset.revealPrimaryVariant).toBe("tide");
     expect(discs?.[0]?.dataset.revealSecondaryTitles).toBe("Tides");
     expect(discs?.[0]?.getAttribute("aria-label")).not.toBe("");
-
-    act(() => root.unmount());
   });
 
   it("omits the tide section when the run has no selected tides", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DesktopDeckViewer
         view={{ cards: [], avatar: null, dreamsigns: [], tides: [] }}
         onClose={vi.fn()}
@@ -180,7 +153,5 @@ describe("DesktopDeckViewer", () => {
     );
 
     expect(container.querySelector("[data-deck-tides]")).toBeNull();
-
-    act(() => root.unmount());
   });
 });

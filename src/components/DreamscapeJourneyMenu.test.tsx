@@ -1,13 +1,11 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
-import { CumulusRoot } from "../cumulus/CumulusRoot";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useJourney } from "../state/journey-context";
 import { logEvent } from "../logging";
 import { DreamscapeJourneyMenu } from "./DreamscapeJourneyMenu";
+import { renderInCumulus } from "../cumulus/testing/render";
 
 vi.mock("../state/journey-context", () => ({
   useJourney: vi.fn(),
@@ -22,21 +20,8 @@ vi.mock("../runtime/build-info", () => ({
   BUILD_GIT_SHA: "abc123def456",
 }));
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
-
 function renderMenu() {
-  return mount(
+  return renderInCumulus(
     <DreamscapeJourneyMenu
       onOpenDeckViewer={vi.fn()}
       onOpenPoolViewer={vi.fn()}
@@ -73,7 +58,7 @@ afterEach(() => {
 describe("DreamscapeJourneyMenu", () => {
   it("renders a glass gear menu trigger on desktop", () => {
     mockDesktop(true);
-    const { container, root } = renderMenu();
+    const { container } = renderMenu();
 
     const menuButton = container.querySelector<HTMLButtonElement>(
       '[data-testid="dreamscape-menu-button"]',
@@ -82,28 +67,20 @@ describe("DreamscapeJourneyMenu", () => {
     // The desktop trigger is the circular glass gear button — icon only, no label.
     expect(menuButton?.textContent).toBe("");
     expect(menuButton?.querySelector("i")?.className).toBe("bxf bx-cog");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the hamburger menu trigger on mobile", () => {
-    const { container, root } = renderMenu();
+    const { container } = renderMenu();
 
     const menuButton = container.querySelector<HTMLButtonElement>(
       '[data-testid="dreamscape-menu-button"]',
     );
 
     expect(menuButton?.querySelector("i")?.className).toBe("bxf bx-menu");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("shows the build Git SHA from the menu", () => {
-    const { container, root } = renderMenu();
+    const { container } = renderMenu();
 
     const menuButton = container.querySelector<HTMLButtonElement>(
       '[data-testid="dreamscape-menu-button"]',
@@ -128,14 +105,10 @@ describe("DreamscapeJourneyMenu", () => {
       source: "dreamscape_menu",
       gitSha: "abc123def456",
     });
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("uses the Cumulus-owned viewport-bounded menu surface", () => {
-    const { container, root } = renderMenu();
+    const { container } = renderMenu();
     const menuButton = container.querySelector<HTMLButtonElement>(
       '[data-testid="dreamscape-menu-button"]',
     );
@@ -144,19 +117,15 @@ describe("DreamscapeJourneyMenu", () => {
     const menu = container.querySelector<HTMLElement>('[role="menu"]');
     expect(menu?.style.maxHeight).toContain("100vh");
     expect(menu?.style.overflowY).toBe("auto");
-
-    act(() => root.unmount());
   });
 
   it("omits the glossary action", () => {
-    const { container, root } = renderMenu();
+    const { container } = renderMenu();
     const menuButton = container.querySelector<HTMLButtonElement>(
       '[data-testid="dreamscape-menu-button"]',
     );
     act(() => menuButton?.click());
 
     expect(container.textContent).not.toContain("Glossary");
-
-    act(() => root.unmount());
   });
 });

@@ -1,13 +1,11 @@
 import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
-import { act, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import { artRef } from "../primitives/art";
-import { CumulusRoot } from "../CumulusRoot";
 import {
   TransfigurationSiteScreen,
   type TransfigurationCandidateView,
@@ -20,6 +18,7 @@ import {
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testGuideId, testCardId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 function makeCard(index: number): CardData {
   return {
@@ -170,17 +169,6 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
-
 beforeEach(() => {
   stubMatchMedia(true);
   globalThis.ResizeObserver = ResizeObserverStub;
@@ -193,7 +181,7 @@ afterEach(() => {
 
 describe("TransfigurationSiteScreen", () => {
   it("shows exactly three reading-width candidates inside the shared desktop glass gallery", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <TransfigurationSiteScreen
         view={view()}
         onClose={vi.fn()}
@@ -242,13 +230,11 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector('[data-testid="cumulus-transfiguration-leave"]'),
     ).toBeNull();
     expect(container.textContent).not.toContain("Essence 500");
-
-    act(() => root.unmount());
   });
 
   it("shows the enhanced whole-deck picker in the shared purge-gallery geometry", () => {
     const onClose = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <TransfigurationSiteScreen
         view={enhancedView()}
         onClose={onClose}
@@ -298,13 +284,11 @@ describe("TransfigurationSiteScreen", () => {
         ?.click();
     });
     expect(onClose).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
   });
 
   it("uses four columns for the enhanced whole-deck picker on mobile", () => {
     stubMatchMedia(true, false, true);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <TransfigurationSiteScreen
         view={enhancedView()}
         onClose={vi.fn()}
@@ -317,13 +301,11 @@ describe("TransfigurationSiteScreen", () => {
         '[data-testid="cumulus-transfiguration-picker"]',
       )?.dataset.galleryColumns,
     ).toBe("4");
-
-    act(() => root.unmount());
   });
 
   it("opens on the base card, toggles forms, and only enables commit while an affordable form is selected", () => {
     const onTransfigure = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <TransfigurationSiteScreen
         view={view()}
         onClose={vi.fn()}
@@ -435,8 +417,6 @@ describe("TransfigurationSiteScreen", () => {
     act(() => empowered?.click());
     expect(empowered?.getAttribute("aria-checked")).toBe("true");
     expect(commit?.getAttribute("aria-disabled")).toBe("true");
-
-    act(() => root.unmount());
   });
 
   it("collapses the two unchosen cards and creates a traveling selected card", () => {
@@ -446,7 +426,7 @@ describe("TransfigurationSiteScreen", () => {
       configurable: true,
       value: animate,
     });
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <TransfigurationSiteScreen
         view={view()}
         onClose={vi.fn()}
@@ -483,12 +463,10 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>('[data-gallery-entry-id="entry-2"]')
         ?.style.visibility,
     ).toBe("hidden");
-
-    act(() => root.unmount());
   });
 
   it("reserves breathing room around the scrolling option list so hover feedback is not clipped", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <TransfigurationSiteScreen
         view={view()}
         onClose={vi.fn()}
@@ -507,8 +485,6 @@ describe("TransfigurationSiteScreen", () => {
       "[data-transfiguration-options]",
     );
     expect(options?.style.overflowY).toBe("auto");
-
-    act(() => root.unmount());
   });
 
   it("uses the compact mobile gallery and a card-first icon detail surface", () => {
@@ -518,7 +494,7 @@ describe("TransfigurationSiteScreen", () => {
       configurable: true,
       value: animate,
     });
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <TransfigurationSiteScreen
         view={view()}
         onClose={vi.fn()}
@@ -655,8 +631,6 @@ describe("TransfigurationSiteScreen", () => {
       container.querySelector<HTMLElement>("[data-transfiguration-actions]")
         ?.style.justifyContent,
     ).toBe("center");
-
-    act(() => root.unmount());
   });
 
   it("reserves the expanded mobile region before choosing a dense form offer", () => {
@@ -676,7 +650,7 @@ describe("TransfigurationSiteScreen", () => {
       ...first.forms[0],
       type: "Amplified" as const,
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <TransfigurationSiteScreen
         view={{
           ...denseView,
@@ -744,7 +718,5 @@ describe("TransfigurationSiteScreen", () => {
         "[data-transfiguration-panel-viewport]",
       )?.style.alignContent,
     ).toBe("end");
-
-    act(() => root.unmount());
   });
 });

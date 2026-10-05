@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
 import { Dreamsign, type LocalizedDreamsign } from "./Dreamsign";
 import {
@@ -11,10 +10,10 @@ import {
   type GlossaryEntry,
 } from "../../../data/glossary";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
-import { CumulusRoot } from "../../CumulusRoot";
 import { localizedDreamsignFixture } from "../../test-helpers/dreamsign-fixture";
 import { testDreamsignId } from "../../../types/test-identities";
 import type { DreamsignId } from "../../../types/identifiers";
+import { renderInCumulus } from "../../testing/render";
 
 /**
  * The unified dreamsign entity (formerly `DreamsignArtTile` +
@@ -48,19 +47,6 @@ function makeDreamsign(
   });
 }
 
-function mountInto(node: React.ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{node}</CumulusRoot>);
-  });
-  return { container, root };
-}
-
 afterEach(() => {
   document.body.innerHTML = "";
 });
@@ -73,7 +59,7 @@ describe("Dreamsign", () => {
       effectDescription: effect,
       imageName: "semantic.png",
     });
-    const { container } = mountInto(<Dreamsign dreamsign={sign} />);
+    const { container } = renderInCumulus(<Dreamsign dreamsign={sign} />);
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
     );
@@ -98,7 +84,7 @@ describe("Dreamsign", () => {
       name: "Summoning sign",
       effectDescription: "Materialize a figment from your void.",
     });
-    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
+    const { container } = renderInCumulus(<Dreamsign dreamsign={sign} />);
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
     );
@@ -108,10 +94,6 @@ describe("Dreamsign", () => {
 
     expect(description?.textContent).not.toContain("Put a character into play");
     expect(description?.textContent).not.toContain("Your discard pile");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it.each([
@@ -134,7 +116,7 @@ describe("Dreamsign", () => {
         name: "Card timing sign",
         effectDescription: effect,
       });
-      const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
+      const { container, root } = renderInCumulus(<Dreamsign dreamsign={sign} />);
       const tile = container.querySelector<HTMLElement>(
         '[data-testid="dreamsign-art-tile"]',
       );
@@ -159,7 +141,7 @@ describe("Dreamsign", () => {
     const { id: _id, ...sign } = makeDreamsign({ name: "Nameless Id" });
 
     expect(() => {
-      mountInto(<Dreamsign dreamsign={sign as LocalizedDreamsign} />);
+      renderInCumulus(<Dreamsign dreamsign={sign as LocalizedDreamsign} />);
     }).toThrow(/Dreamsign tile dreamsign is missing a stable id/);
   });
 
@@ -169,16 +151,12 @@ describe("Dreamsign", () => {
       imageName: "black_horn.png",
     });
 
-    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
+    const { container } = renderInCumulus(<Dreamsign dreamsign={sign} />);
 
     const img = container.querySelector("img");
     expect(img).not.toBeNull();
     expect(img?.getAttribute("src")).toBe("/dreamsigns/black_horn.png");
     expect(img?.getAttribute("alt")).toBe("Black Horn");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("uses imageAlt when provided", () => {
@@ -188,15 +166,11 @@ describe("Dreamsign", () => {
       imageAlt: "A ringing bell wreathed in mist",
     });
 
-    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
+    const { container } = renderInCumulus(<Dreamsign dreamsign={sign} />);
 
     expect(container.querySelector("img")?.getAttribute("alt")).toBe(
       "A ringing bell wreathed in mist",
     );
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders dreamsigns with no tile chrome", () => {
@@ -205,7 +179,7 @@ describe("Dreamsign", () => {
       imageName: "moonstone.png",
     });
 
-    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
+    const { container } = renderInCumulus(<Dreamsign dreamsign={sign} />);
 
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
@@ -213,10 +187,6 @@ describe("Dreamsign", () => {
     // The art floats on the media with no border or background.
     expect(tile?.style.border).toBe("");
     expect(tile?.style.background).toBe("");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("fills the caller-owned layout box", () => {
@@ -225,7 +195,7 @@ describe("Dreamsign", () => {
       imageName: "moonstone.png",
     });
 
-    const { container, root } = mountInto(
+    const { container } = renderInCumulus(
       <div style={{ width: 96, height: 96 }}>
         <Dreamsign dreamsign={sign} />
       </div>,
@@ -236,10 +206,6 @@ describe("Dreamsign", () => {
     );
     expect(tile?.style.width).toBe("100%");
     expect(tile?.style.height).toBe("100%");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("composes the hud variant's drop-shadow into the tile filter", () => {
@@ -248,7 +214,7 @@ describe("Dreamsign", () => {
       imageName: "moonstone.png",
     });
 
-    const { container, root } = mountInto(
+    const { container } = renderInCumulus(
       <Dreamsign dreamsign={sign} variant="hud" />,
     );
 
@@ -258,10 +224,6 @@ describe("Dreamsign", () => {
     // The hud variant wears the object's own drop-shadow + violet glow so it
     // lifts off busy scene art; the flat default does not.
     expect(tile?.style.filter).toContain("drop-shadow");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("wears no drop-shadow in the default flat variant", () => {
@@ -270,30 +232,22 @@ describe("Dreamsign", () => {
       imageName: "moonstone.png",
     });
 
-    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
+    const { container } = renderInCumulus(<Dreamsign dreamsign={sign} />);
 
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
     );
     expect(tile?.style.filter).not.toContain("drop-shadow");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("falls back to a glyph only when imageName is missing", () => {
     const sign = makeDreamsign({ name: "Untextured" });
 
-    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
+    const { container } = renderInCumulus(<Dreamsign dreamsign={sign} />);
 
     expect(container.querySelector("img")).toBeNull();
     // Some visible placeholder must still appear so the slot is not empty.
     expect(container.textContent).not.toBe("");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   /**
@@ -334,7 +288,7 @@ describe("Dreamsign", () => {
       imageName: "keyworded.png",
     });
 
-    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
+    const { container } = renderInCumulus(<Dreamsign dreamsign={sign} />);
 
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
@@ -343,10 +297,6 @@ describe("Dreamsign", () => {
       tile?.getAttribute("aria-describedby") ?? "",
     );
     expect(description?.textContent).toContain(definitionWord);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("retains name and effect text for focus users", () => {
@@ -357,7 +307,7 @@ describe("Dreamsign", () => {
       imageName: "black_horn.png",
     });
 
-    const { container, root } = mountInto(<Dreamsign dreamsign={sign} />);
+    const { container } = renderInCumulus(<Dreamsign dreamsign={sign} />);
 
     const tile = container.querySelector<HTMLElement>(
       '[data-testid="dreamsign-art-tile"]',
@@ -373,9 +323,5 @@ describe("Dreamsign", () => {
     expect(description?.textContent).toContain(
       "When you dissolve or banish an enemy",
     );
-
-    act(() => {
-      root.unmount();
-    });
   });
 });

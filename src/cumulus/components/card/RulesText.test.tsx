@@ -1,33 +1,17 @@
 import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
-import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
-import { CumulusRoot } from "../../CumulusRoot";
 import { afterEach, describe, expect, it } from "vitest";
 import { ENERGY_ICON_COLOR } from "../controls/StandaloneGlyph";
 import type { GlossaryCatalogEntry } from "../../../data/glossary";
 import { renderRulesSymbolsInline, RulesText } from "./RulesText";
 import { testCardId, testGlossaryEntryId } from "../../../types/test-identities";
+import { renderInCumulus } from "../../testing/render";
 
 const CARD_OWNER = {
   kind: "card",
   id: testCardId("11111111-1111-4111-8111-111111111111"),
 } as const;
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
 
 afterEach(() => {
   document.body.innerHTML = "";
@@ -50,7 +34,7 @@ describe("RulesText", () => {
         accessibleLabel: "Synthetic accessible symbol",
       },
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <div>
         {renderRulesSymbolsInline("⍟", {
           rulesSymbolResolver: () => entry,
@@ -63,11 +47,10 @@ describe("RulesText", () => {
         .querySelector("[data-inline-glyph]")
         ?.getAttribute("aria-label"),
     ).toBe(entry.rulesSymbol?.accessibleLabel);
-    act(() => root.unmount());
   });
 
   it("renders recognized glossary terms as plain text without an underline", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized("Reclaim this card.")}
         owner={CARD_OWNER}
@@ -84,24 +67,16 @@ describe("RulesText", () => {
     expect(reclaimSpan?.getAttribute("style") ?? "").not.toContain(
       "text-decoration",
     );
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the energy glyph as the boxicons fire-alt icon", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText text={assertLocalized("Pay ●3.")} owner={CARD_OWNER} />,
     );
 
     const flame = container.querySelector("i.bxf.bx-fire-alt");
     expect(flame).not.toBeNull();
     expect(container.textContent).not.toContain("●");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   // Backlog task 001: the inline energy flame inside rules text reads in the
@@ -111,7 +86,7 @@ describe("RulesText", () => {
   // light-box surface (the figment frame) can override it, with the shared
   // constant as the fallback everywhere else, so the two cannot drift apart.
   it("colors the inline energy flame with ENERGY_ICON_COLOR", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized("Pay ●2 to draw a card.")}
         owner={CARD_OWNER}
@@ -133,17 +108,13 @@ describe("RulesText", () => {
     expect(ENERGY_ICON_COLOR.toLowerCase()).toBe("#0ea5e9");
     // Guard against regression to the previous gold/amber fill `#fbbf24`.
     expect(style.toLowerCase()).not.toContain("#fbbf24");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   // The fast marker `❖` renders as the filled lightning bolt (the same
   // `bxf bx-bolt` mark the title bar shows before the card name), not the
   // literal diamond character.
   it("renders the fast marker ❖ as one boxicons bolt icon", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized("❖ – 1●: Move this character.")}
         owner={CARD_OWNER}
@@ -155,16 +126,12 @@ describe("RulesText", () => {
     expect(
       container.querySelector("[data-rules-text-paragraph]")?.textContent,
     ).not.toContain("❖");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   // The interrupt marker `❖❖` renders as two bolts so it reads the same as the
   // double-bolt interrupt chip in the title bar.
   it("renders the interrupt marker ❖❖ as two bolt icons", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized("❖❖ – Abandon an ally: Effect.")}
         owner={CARD_OWNER}
@@ -176,14 +143,10 @@ describe("RulesText", () => {
     expect(
       container.querySelector("[data-rules-text-paragraph]")?.textContent,
     ).not.toContain("❖");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("does not wrap unknown words", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText text={assertLocalized("Deal 3 damage.")} owner={CARD_OWNER} />,
     );
 
@@ -191,14 +154,10 @@ describe("RulesText", () => {
       (s) => s.getAttribute("style")?.includes("text-decoration") === true,
     );
     expect(triggerSpans).toHaveLength(0);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("keeps the trigger keyword on one line and renders it as plain text", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized("▸ Judgment: Draw a card.")}
         owner={CARD_OWNER}
@@ -222,14 +181,10 @@ describe("RulesText", () => {
         s.textContent?.includes("Judgment") === true,
     );
     expect(nowrapGroup).toBe(true);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders ▸ as compact Unicode text that inherits the surrounding style", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized("▸ Judgment: Draw a card.")}
         owner={CARD_OWNER}
@@ -244,16 +199,12 @@ describe("RulesText", () => {
     expect(arrowSpan).toBeDefined();
     expect(arrowSpan?.getAttribute("style")).toBeNull();
     expect(arrowSpan?.className).toBe("");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   // The points `⍟`, lunar `☾`, and memory `⧗` glyphs each swap for their filled
   // icon-font mark rather than printing the literal character.
   it("renders points ⍟, lunar ☾, and memory ⧗ as filled marks", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized("Gain 2⍟. ☾: Store 1⧗.")}
         owner={CARD_OWNER}
@@ -274,17 +225,13 @@ describe("RulesText", () => {
     expect(container.querySelectorAll("[data-rules-text-source]")).toHaveLength(
       1,
     );
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   // Backlog task 029: cards with multiple abilities use a blank-line `\n\n`
   // separator in the source TOML. Each ability must render as its own block
   // with a visible vertical gap so adjacent abilities do not run together.
   it("renders each ability separated by `\\n\\n` as its own paragraph block", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized(
           "▸ Materialized: Banish an enemy until this character leaves play.\n\nAbandon this character: Foresee 2.",
@@ -299,17 +246,13 @@ describe("RulesText", () => {
     expect(paragraphs).toHaveLength(2);
     expect(paragraphs[0]?.textContent).toContain("Materialized");
     expect(paragraphs[1]?.textContent).toContain("Abandon this character");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   // The gap between abilities is set via `margin-top` (em-based) on every
   // paragraph after the first, so the spacing scales with the surrounding
   // font size (small card vs. large card).
   it("applies a top-margin to non-first ability paragraphs", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized("Ability one.\n\nAbility two.")}
         owner={CARD_OWNER}
@@ -329,15 +272,11 @@ describe("RulesText", () => {
     // Second paragraph: top margin in em so it scales with font size.
     expect(secondStyle).toContain("margin-top");
     expect(secondStyle).toContain("em");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   // Single-ability cards keep one paragraph and no inter-ability gap.
   it("renders a single ability as one paragraph with no extra spacing", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized("▸ Materialized: Foresee 1.")}
         owner={CARD_OWNER}
@@ -351,9 +290,5 @@ describe("RulesText", () => {
     expect(paragraphs[0]?.getAttribute("style") ?? "").not.toContain(
       "margin-top",
     );
-
-    act(() => {
-      root.unmount();
-    });
   });
 });

@@ -1,7 +1,6 @@
 // @vitest-environment jsdom
 
-import { act, useState, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { act, useState } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../../types/cards";
 import { parseCardName } from "../../../types/card-identity";
@@ -9,11 +8,11 @@ import {
   BattleForeseeEditor,
   type BattleForeseeEditorModel,
 } from "./BattleForeseeEditor";
-import { CumulusRoot } from "../../CumulusRoot";
 import { assertLocalized } from "@trox/runtime";
 import { parseBattleCardId } from "../../../types/identifiers";
 import type { BattleCardId } from "../../../types/identifiers";
 import { testCardId, testDreamwellCardId } from "../../../types/test-identities";
+import { renderInCumulus } from "../../testing/render";
 
 vi.mock("../card/CardView", () => ({
   GameCard: ({ model }: { model: { displaySnapshot: CardData } }) => (
@@ -66,17 +65,6 @@ const SOURCE_DREAMWELL_CARD = {
     imageNumber: 1897537165,
   },
 } as const;
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
 
 function deckIds(container: HTMLElement): (BattleCardId | undefined)[] {
   return Array.from(
@@ -194,7 +182,7 @@ afterEach(() => {
 
 describe("BattleForeseeEditor", () => {
   it("shows the Dreamwell card that triggered an authoritative Foresee prompt", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <BattleForeseeEditor
         model={{
           ...makeView(),
@@ -215,12 +203,10 @@ describe("BattleForeseeEditor", () => {
     expect(
       source?.querySelector("[data-dreamwell-card-name]")?.textContent,
     ).toBe("Skypath");
-
-    act(() => root.unmount());
   });
 
   it("renders one horizontal workflow with count controls and Confirm", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <BattleForeseeEditor model={makeView()} onConfirm={() => {}} />,
     );
 
@@ -260,12 +246,10 @@ describe("BattleForeseeEditor", () => {
         (indicator) => indicator.style.width,
       ),
     ).toEqual(["180px", "180px"]);
-
-    act(() => root.unmount());
   });
 
   it("adds and removes the next deck card while keeping a half-overlapping stack", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <BattleForeseeEditor model={makeView()} onConfirm={() => {}} />,
     );
 
@@ -337,13 +321,11 @@ describe("BattleForeseeEditor", () => {
     expect(
       container.querySelector('[role="dialog"]')?.getAttribute("aria-label"),
     ).not.toBe("");
-
-    act(() => root.unmount());
   });
 
   it("supports drag ordering and dragging a card to the void before one confirmation", () => {
     const onConfirm = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <BattleForeseeEditor model={makeView(3)} onConfirm={onConfirm} />,
     );
     const first = container.querySelector<HTMLElement>(
@@ -410,8 +392,6 @@ describe("BattleForeseeEditor", () => {
       ],
       voidCardIds: [parseBattleCardId("battle-card-2")],
     });
-
-    act(() => root.unmount());
   });
 
   it("uses destination geometry to accept a release adjacent to the deck indicator", () => {
@@ -429,7 +409,7 @@ describe("BattleForeseeEditor", () => {
           battleCardId: parseBattleCardId(cardInstanceIds[index]),
         })),
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <BattleForeseeEditor model={view} onConfirm={() => {}} />,
     );
     const row = container.querySelector<HTMLElement>("[data-foresee-row]");
@@ -491,13 +471,11 @@ describe("BattleForeseeEditor", () => {
       container.querySelector('[data-foresee-card-zone="void"]'),
     ).toBeNull();
     expect(row?.dataset.foreseeDropGeometry).toBe("nearest-destination");
-
-    act(() => root.unmount());
   });
 
   it("fits the mobile row with a blank lane at least one card width", () => {
     stubMatchMedia(false);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <BattleForeseeEditor
         model={{
           initialCount: 1,
@@ -523,12 +501,10 @@ describe("BattleForeseeEditor", () => {
       Array.from(indicators, (indicator) => indicator.style.width),
     ).toEqual(["64px", "64px"]);
     expect(container.querySelectorAll("button")).toHaveLength(3);
-
-    act(() => root.unmount());
   });
 
   it("uses pointer capture instead of native HTML drag", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <BattleForeseeEditor model={makeView()} onConfirm={() => {}} />,
     );
     const card = container.querySelector<HTMLElement>(
@@ -545,13 +521,11 @@ describe("BattleForeseeEditor", () => {
 
     expect(card?.draggable).toBe(false);
     expect(nativeDrag.defaultPrevented).toBe(true);
-
-    act(() => root.unmount());
   });
 
   it("confirms an empty Foresee so an authoritative prompt can resolve", () => {
     const onConfirm = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <BattleForeseeEditor
         model={{ initialCount: 0, allowedCounts: [0], cards: [] }}
         onConfirm={onConfirm}
@@ -570,8 +544,6 @@ describe("BattleForeseeEditor", () => {
       orderedCardIds: [],
       voidCardIds: [],
     });
-
-    act(() => root.unmount());
   });
 
   it("gives keyboard editing the same complete order and void result", () => {
@@ -594,7 +566,7 @@ describe("BattleForeseeEditor", () => {
       ),
     };
     const before = JSON.stringify(model);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <BattleForeseeEditor model={model} onConfirm={onConfirm} />,
     );
     const card = (id: BattleCardId) =>
@@ -629,11 +601,10 @@ describe("BattleForeseeEditor", () => {
       voidCardIds: [parseBattleCardId("battle-card-3")],
     });
     expect(JSON.stringify(model)).toBe(before);
-    act(() => root.unmount());
   });
 
   it("resets every staged edit when authoritative model identity changes", () => {
-    const { container, root } = mount(<ReplacementHarness />);
+    const { container } = renderInCumulus(<ReplacementHarness />);
     act(() => {
       container
         .querySelector<HTMLElement>('[data-foresee-card-id="battle-card-1"]')
@@ -653,7 +624,6 @@ describe("BattleForeseeEditor", () => {
     expect(
       container.querySelectorAll('[data-foresee-card-zone="void"]'),
     ).toHaveLength(0);
-    act(() => root.unmount());
   });
 
   it("rejects duplicate identities, invalid counts, and unsupported initial counts", () => {
@@ -672,7 +642,7 @@ describe("BattleForeseeEditor", () => {
     ];
     for (const model of invalidModels) {
       expect(() =>
-        mount(<BattleForeseeEditor model={model} onConfirm={() => {}} />),
+        renderInCumulus(<BattleForeseeEditor model={model} onConfirm={() => {}} />),
       ).toThrow();
     }
     consoleError.mockRestore();

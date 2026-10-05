@@ -2,12 +2,9 @@ import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
-import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import {
   DuplicationSiteScreen,
@@ -16,6 +13,7 @@ import {
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testGuideId, testCardId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 function makeCard(index: number): CardData {
   return {
@@ -81,17 +79,6 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
-
 beforeEach(() => {
   stubMatchMedia();
   globalThis.ResizeObserver = ResizeObserverStub;
@@ -105,7 +92,7 @@ afterEach(() => {
 describe("DuplicationSiteScreen", () => {
   it("keeps card selection in the gallery and enables the accent confirmation", () => {
     const onDuplicate = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DuplicationSiteScreen
         view={view()}
         onClose={vi.fn()}
@@ -161,13 +148,11 @@ describe("DuplicationSiteScreen", () => {
     act(() => confirm?.click());
     expect(onDuplicate).toHaveBeenCalledWith("entry-1");
     expect(confirm?.getAttribute("aria-disabled")).toBe("true");
-
-    act(() => root.unmount());
   });
 
   it("toggles a selected card off without committing", () => {
     const onDuplicate = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DuplicationSiteScreen
         view={view()}
         onClose={vi.fn()}
@@ -196,13 +181,11 @@ describe("DuplicationSiteScreen", () => {
     expect(confirm?.getAttribute("aria-disabled")).toBe("true");
     act(() => confirm?.click());
     expect(onDuplicate).not.toHaveBeenCalled();
-
-    act(() => root.unmount());
   });
 
   it("fits the enhanced whole-deck offer into the responsive gallery", () => {
     stubMatchMedia(false);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DuplicationSiteScreen
         view={view(9, true)}
         onClose={vi.fn()}
@@ -223,7 +206,5 @@ describe("DuplicationSiteScreen", () => {
       container.querySelector('[data-testid="cumulus-duplication-decline"]')
         ?.textContent,
     ).toBe("Decline");
-
-    act(() => root.unmount());
   });
 });

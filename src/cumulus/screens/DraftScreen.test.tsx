@@ -2,16 +2,14 @@ import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
 import { DraftScreen, type DraftView } from "./DraftScreen";
-import { CumulusRoot } from "../CumulusRoot";
 import { testCardId } from "../../types/test-identities";
 import { testPresentationId } from "../../types/test-identities";
 import { draftOfferKey } from "../../data/draft-site-bootstrap";
+import { renderInCumulus } from "../testing/render";
 
 function card(cardNumber: number): CardData {
   return {
@@ -82,19 +80,6 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
-
 describe("Cumulus DraftScreen", () => {
   it("shows Mira after one second and retires her with the first Draft pick", () => {
     vi.useFakeTimers();
@@ -116,7 +101,7 @@ describe("Cumulus DraftScreen", () => {
         bubbleWidth: 600,
       },
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DraftScreen
         view={tutorialView}
         onPick={onPick}
@@ -149,12 +134,10 @@ describe("Cumulus DraftScreen", () => {
     });
     expect(onPick).toHaveBeenCalledWith(101);
     expect(container.querySelector("[data-site-tutorial-guidance]")).toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("renders the mobile offer as the shipped 2x2 grid", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,
     );
 
@@ -171,15 +154,11 @@ describe("Cumulus DraftScreen", () => {
       '[data-draft-offer-card="101"]',
     );
     expect(firstCard?.style.width).toContain("var(--space-xs)");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the desktop offer as one row of four cards", () => {
     stubMatchMedia({ desktop: true });
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,
     );
 
@@ -196,15 +175,11 @@ describe("Cumulus DraftScreen", () => {
       "[data-draft-offer-stage]",
     );
     expect(stage?.style.justifyContent).toBe("center");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("reflows a narrow desktop offer into two columns", () => {
     stubMatchMedia({ desktop: true, wideDraft: false });
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,
     );
 
@@ -217,12 +192,10 @@ describe("Cumulus DraftScreen", () => {
       container.querySelector<HTMLElement>('[data-draft-offer-card="101"]')
         ?.style.width,
     ).toContain("300px");
-
-    act(() => root.unmount());
   });
 
   it("renders one offer cell per card in the pack and nothing else", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DraftScreen view={view([101, 102, 103, 104])} onPick={vi.fn()} />,
     );
 
@@ -239,15 +212,11 @@ describe("Cumulus DraftScreen", () => {
     const counter = container.querySelector("[data-draft-pick-counter]");
     expect(counter?.textContent).toContain("1");
     expect(counter?.textContent).toContain("5");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("calls onPick with the card's number when a card is pressed", () => {
     const onPick = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DraftScreen view={view([101, 102, 103, 104])} onPick={onPick} />,
     );
 
@@ -262,15 +231,11 @@ describe("Cumulus DraftScreen", () => {
     });
 
     expect(onPick).toHaveBeenCalledWith(102);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the reroll control beside the top-right journey menu and dispatches it", () => {
     const onReroll = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DraftScreen
         view={view([101, 102, 103, 104])}
         onPick={vi.fn()}
@@ -292,15 +257,11 @@ describe("Cumulus DraftScreen", () => {
     });
 
     expect(onReroll).toHaveBeenCalledTimes(1);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("latches the first pick so a second card cannot be picked in the same pack", () => {
     const onPick = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DraftScreen view={view([101, 102, 103, 104])} onPick={onPick} />,
     );
 
@@ -319,9 +280,5 @@ describe("Cumulus DraftScreen", () => {
 
     expect(onPick).toHaveBeenCalledTimes(1);
     expect(onPick).toHaveBeenCalledWith(101);
-
-    act(() => {
-      root.unmount();
-    });
   });
 });

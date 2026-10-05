@@ -2,29 +2,14 @@
 
 import { assertLocalized } from "@trox/runtime";
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GlassBackdrop, GlassDialog } from "./GlassDialog";
 import { hasInjectedDisplayCutout } from "../../../runtime/device-frame";
-import { CumulusRoot } from "../../CumulusRoot";
+import { renderInCumulus } from "../../testing/render";
 
 vi.mock("../../../runtime/device-frame", () => ({
   hasInjectedDisplayCutout: vi.fn(() => false),
 }));
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
 
 function stubMatchMedia(matches: boolean): void {
   window.matchMedia = (query: string) => ({
@@ -53,21 +38,17 @@ afterEach(() => {
 
 describe("GlassBackdrop", () => {
   it("renders an aria-hidden decorative layer", () => {
-    const { container, root } = mount(<GlassBackdrop />);
+    const { container } = renderInCumulus(<GlassBackdrop />);
 
     const layer = container.firstElementChild as HTMLElement | null;
     expect(layer).not.toBeNull();
     expect(layer?.getAttribute("aria-hidden")).toBe("true");
-
-    act(() => {
-      root.unmount();
-    });
   });
 });
 
 describe("GlassDialog", () => {
   it("omits the close control when the dialog is commit-gated", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog title={assertLocalized("Foresee 2")}>
         <div>content</div>
       </GlassDialog>,
@@ -75,15 +56,11 @@ describe("GlassDialog", () => {
 
     expect(container.querySelector('[role="dialog"]')).not.toBeNull();
     expect(container.querySelector("button")).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the title as an <h2>, the subtitle, the children, and a labeled close that fires onClose", () => {
     const onClose = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog
         title={assertLocalized("Starting Deck")}
         subtitle={assertLocalized("An intro line")}
@@ -114,14 +91,10 @@ describe("GlassDialog", () => {
       close?.click();
     });
     expect(onClose).toHaveBeenCalledTimes(1);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("uses a custom closeLabel as the close control's aria-label", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog
         title={assertLocalized("Title")}
         onClose={() => {}}
@@ -135,14 +108,10 @@ describe("GlassDialog", () => {
     expect(
       container.querySelector("button")?.getAttribute("aria-label"),
     ).toBe("Dismiss deck");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders no subtitle <p> in the header when subtitle is omitted", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog title={assertLocalized("Title")} onClose={() => {}}>
         <div data-testid="only-body">content</div>
       </GlassDialog>,
@@ -151,15 +120,11 @@ describe("GlassDialog", () => {
     const header = container.querySelector("header");
     expect(header).not.toBeNull();
     expect(header?.querySelector("p")).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the desktop dialog without a full-screen frosted backdrop", () => {
     stubMatchMedia(true);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog title={assertLocalized("Title")} onClose={() => {}}>
         <div>content</div>
       </GlassDialog>,
@@ -170,14 +135,10 @@ describe("GlassDialog", () => {
     expect(dialog?.children).toHaveLength(1);
     expect(dialog?.firstElementChild?.hasAttribute("data-glass-dialog-panel"))
       .toBe(true);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the popup presentation as one panel on mobile", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog
         title={assertLocalized("How to Play")}
         presentation="popup"
@@ -195,15 +156,11 @@ describe("GlassDialog", () => {
     expect(
       dialog?.querySelector('[data-glass-dialog-panel] [data-testid="popup-content"]'),
     ).not.toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("centers a tangible companion beside a wider prose panel on desktop", () => {
     stubMatchMedia(true);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog
         title={assertLocalized("How to Play")}
         presentation="popup"
@@ -219,14 +176,10 @@ describe("GlassDialog", () => {
     );
     expect(layout?.dataset.glassDialogCompanionLayout).toBe("horizontal");
     expect(container.querySelector('[data-testid="companion"]')).not.toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("centers a narrower companion above the prose panel on mobile", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog
         title={assertLocalized("How to Play")}
         presentation="popup"
@@ -246,14 +199,10 @@ describe("GlassDialog", () => {
         '[data-glass-dialog-companion] [data-testid="companion"]',
       ),
     ).not.toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("floats the close disc in body flow for prose wrapping", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog
         title={assertLocalized("How to Play")}
         presentation="popup"
@@ -276,9 +225,6 @@ describe("GlassDialog", () => {
     expect(dialog?.querySelector("h2")).toBeNull();
     expect(body?.firstElementChild).toBe(flowingClose);
     expect(flowingClose?.querySelector("button")).not.toBeNull();
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("centers a desktop panel within the measured battlefield while retaining the viewport modal layer", () => {
@@ -302,7 +248,7 @@ describe("GlassDialog", () => {
     });
     document.body.append(battlefield);
 
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog
         title={assertLocalized("Foresee 2")}
         desktopCenterTarget="battlefield"
@@ -319,16 +265,12 @@ describe("GlassDialog", () => {
     expect(
       dialog?.getAttribute("data-glass-dialog-desktop-center-target"),
     ).toBe("battlefield");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("keeps the close disc on the header row when cutoutAwareClose is set but no cutout box is injected", () => {
     // Default: hasInjectedDisplayCutout() is false, so even on mobile the disc
     // stays on the header's trailing edge.
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog
         title={assertLocalized("Title")}
         onClose={() => {}}
@@ -342,16 +284,12 @@ describe("GlassDialog", () => {
     expect(headerButton).not.toBeNull();
     // Exactly one close control — the disc moves, it never forks.
     expect(container.querySelectorAll("button")).toHaveLength(1);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("floats the close disc beside the island on a full-bleed mobile mock-up with a cutout box", () => {
     vi.mocked(hasInjectedDisplayCutout).mockReturnValue(true);
     const onClose = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassDialog
         title={assertLocalized("Title")}
         onClose={onClose}
@@ -375,9 +313,5 @@ describe("GlassDialog", () => {
       closeButton?.click();
     });
     expect(onClose).toHaveBeenCalledTimes(1);
-
-    act(() => {
-      root.unmount();
-    });
   });
 });

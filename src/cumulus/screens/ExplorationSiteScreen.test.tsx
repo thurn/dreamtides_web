@@ -2,14 +2,12 @@ import { assertLocalized, opaque, txa } from "@trox/runtime";
 import { resolveChecked } from "../../runtime/localization/runtime";
 // @vitest-environment jsdom
 
-import { act, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseCardName, parseCardSubtype } from "../../types/card-identity";
 import { parseCardTypeChangePredicateId } from "../../types/identifiers";
 import type { CardData } from "../../types/cards";
 import type { CardTypeChange } from "../../types/journey";
-import { CumulusRoot } from "../CumulusRoot";
 import {
   ENERGY_ICON_COLOR,
   SPARK_ICON_COLOR,
@@ -42,6 +40,7 @@ import {
   testGuideId,
   testCardId,
 } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 const reducedMotionPreference = vi.hoisted(() => ({ value: true }));
 const CHOICE_A_ID = testExplorationActionId("choice-a");
@@ -1247,17 +1246,6 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
-
 function pointer(
   type: "pointerdown" | "pointerup",
   options: {
@@ -1311,7 +1299,7 @@ describe("ExplorationSiteScreen", () => {
     );
     const onChannel = vi.fn();
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={view()}
         onChannel={onChannel}
@@ -1400,14 +1388,13 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector('[data-testid="cumulus-exploration-channel"]'),
     ).toBeNull();
-    act(() => root.unmount());
   });
 
   it("keeps landscape art on the existing full-bleed presentation", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={view()}
         onChannel={vi.fn()}
@@ -1441,7 +1428,6 @@ describe("ExplorationSiteScreen", () => {
     expect(
       frameBreak?.querySelector("[data-exploration-full-art-blur-fill]"),
     ).toBeNull();
-    act(() => root.unmount());
   });
 
   it("shows the authored narrative and resolves a direct choice", () => {
@@ -1450,7 +1436,7 @@ describe("ExplorationSiteScreen", () => {
     );
     const onResolve = vi.fn();
     const directView = view();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={directView}
         onChannel={vi.fn()}
@@ -1500,7 +1486,6 @@ describe("ExplorationSiteScreen", () => {
     expect(
       container.querySelector("[data-exploration-frame-break]"),
     ).not.toBeNull();
-    act(() => root.unmount());
   });
 
   it("submits a preselected deck-card target without opening a picker", () => {
@@ -1519,7 +1504,7 @@ describe("ExplorationSiteScreen", () => {
         base.actions[1],
       ],
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={automaticView}
         onChannel={vi.fn()}
@@ -1547,7 +1532,6 @@ describe("ExplorationSiteScreen", () => {
     expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
       entryIds: [parseDeckEntryId("minted-entry")],
     });
-    act(() => root.unmount());
   });
 
   it("exposes the prepared starter entity by UUID and submits an empty automatic selection", () => {
@@ -1584,7 +1568,7 @@ describe("ExplorationSiteScreen", () => {
         base.actions[1],
       ],
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={starterView}
         onChannel={vi.fn()}
@@ -1612,7 +1596,6 @@ describe("ExplorationSiteScreen", () => {
     ).toBe(starterEntryId);
     act(() => choice?.click());
     expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {});
-    act(() => root.unmount());
   });
 
   it("renders resource marks in structured Exploration choice copy", () => {
@@ -1637,7 +1620,7 @@ describe("ExplorationSiteScreen", () => {
         view().actions[1],
       ],
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={resourceView}
         onChannel={vi.fn()}
@@ -1669,8 +1652,6 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(sparkGlyph?.querySelector("i")?.className).toContain("bx-sparkle");
     expect(sparkGlyph?.parentElement?.style.color).toContain(SPARK_ICON_COLOR);
-
-    act(() => root.unmount());
   });
 
   it("renders repeated entity labels without independent interaction targets", () => {
@@ -1704,7 +1685,7 @@ describe("ExplorationSiteScreen", () => {
         base.actions[1],
       ],
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={repeatedEntityView}
         onChannel={vi.fn()}
@@ -1735,8 +1716,6 @@ describe("ExplorationSiteScreen", () => {
         label.hasAttribute("data-reveal-entity-id"),
       ),
     ).toEqual([false, false]);
-
-    act(() => root.unmount());
   });
 
   it("renders a structured card-type variable without exposing its authored token", () => {
@@ -1758,7 +1737,7 @@ describe("ExplorationSiteScreen", () => {
         base.actions[1],
       ],
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={cardTypeView}
         onChannel={vi.fn()}
@@ -1779,8 +1758,6 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(effect?.textContent).toContain("Character");
     expect(effect?.textContent).not.toContain("{card_type}");
-
-    act(() => root.unmount());
   });
 
   it("types the narrative for one second before revealing the choices", () => {
@@ -1793,7 +1770,7 @@ describe("ExplorationSiteScreen", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={view()}
         onChannel={vi.fn()}
@@ -1887,7 +1864,6 @@ describe("ExplorationSiteScreen", () => {
       container.querySelector("[data-exploration-choices-state='revealed']"),
     ).not.toBeNull();
     expect(secondChoice?.hasAttribute("aria-disabled")).toBe(false);
-    act(() => root.unmount());
   });
 
   it("makes the full referenced choice cell the reveal and activation source", async () => {
@@ -1932,7 +1908,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={referencedView}
         onChannel={vi.fn()}
@@ -1976,7 +1952,6 @@ describe("ExplorationSiteScreen", () => {
     );
     act(() => source?.click());
     expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID);
-    act(() => root.unmount());
   });
 
   it("reveals on a full-cell touch hold while preserving quick-touch activation", () => {
@@ -2003,7 +1978,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={referencedView}
         onChannel={vi.fn()}
@@ -2059,7 +2034,6 @@ describe("ExplorationSiteScreen", () => {
       );
     });
     expect(onResolve).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("collects a card follow-up before resolving the choice", () => {
@@ -2094,7 +2068,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={followupView}
         onChannel={vi.fn()}
@@ -2152,7 +2126,6 @@ describe("ExplorationSiteScreen", () => {
     expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
       entryIds: [parseDeckEntryId("entry-fixture")],
     });
-    act(() => root.unmount());
   });
 
   it("collects an exact multi-card set, preserves per-card forms across back navigation, and dispatches once", () => {
@@ -2160,7 +2133,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={multiTransfigurationFollowupView()}
         onChannel={vi.fn()}
@@ -2277,7 +2250,6 @@ describe("ExplorationSiteScreen", () => {
       ],
       transfigurations: ["Empowered", "Kindled"],
     });
-    act(() => root.unmount());
   });
 
   it("resolves a Dreamsign follow-up directly from its UUID-backed artwork", () => {
@@ -2311,7 +2283,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={followupView}
         onChannel={vi.fn()}
@@ -2357,7 +2329,6 @@ describe("ExplorationSiteScreen", () => {
     expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
       dreamsignId,
     });
-    act(() => root.unmount());
   });
 
   it("chooses the compound offered Dreamsign before the exact persisted capacity replacement", () => {
@@ -2395,7 +2366,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container, root } = renderInCumulus(
       <ExplorationSiteScreen
         view={flowView}
         onChannel={vi.fn()}
@@ -2464,7 +2435,7 @@ describe("ExplorationSiteScreen", () => {
       throw new Error("Expected compound Dreamsign follow-up fixture");
     }
     const belowCapacityResolve = vi.fn();
-    const belowCapacity = mount(
+    const belowCapacity = renderInCumulus(
       <ExplorationSiteScreen
         view={{
           ...flowView,
@@ -2526,7 +2497,7 @@ describe("ExplorationSiteScreen", () => {
       "Held One",
     );
     const belowCapResolve = vi.fn();
-    const belowCap = mount(
+    const belowCap = renderInCumulus(
       <ExplorationSiteScreen
         view={{
           ...base,
@@ -2565,7 +2536,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => belowCap.root.unmount());
 
     const atCapResolve = vi.fn();
-    const atCap = mount(
+    const atCap = renderInCumulus(
       <ExplorationSiteScreen
         view={{
           ...base,
@@ -2630,7 +2601,7 @@ describe("ExplorationSiteScreen", () => {
       "Held One",
     );
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={{
           ...base,
@@ -2702,7 +2673,6 @@ describe("ExplorationSiteScreen", () => {
       offeredDreamsignId: offered.id,
       replacedDreamsignId: held.id,
     });
-    act(() => root.unmount());
   });
 
   it("purges first, then requires exact overflow targets without exposing random gains", () => {
@@ -2718,7 +2688,7 @@ describe("ExplorationSiteScreen", () => {
     ];
     const randomDreamsignId = "30000000-0000-4000-8000-000000000001";
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={{
           ...base,
@@ -2801,7 +2771,6 @@ describe("ExplorationSiteScreen", () => {
       purgedDreamsignId: held[0].id,
       overflowReplacementDreamsignIds: [held[1].id, held[2].id],
     });
-    act(() => root.unmount());
   });
 
   it("resolves replace-all directly and reveals persisted random Dreamsign outcomes under reduced motion", () => {
@@ -2811,7 +2780,7 @@ describe("ExplorationSiteScreen", () => {
     );
     const directBase = view();
     const directResolve = vi.fn();
-    const direct = mount(
+    const direct = renderInCumulus(
       <ExplorationSiteScreen
         view={{
           ...directBase,
@@ -2846,7 +2815,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => direct.root.unmount());
 
     const onExit = vi.fn();
-    const outcome = mount(
+    const outcome = renderInCumulus(
       <ExplorationSiteScreen
         view={dreamsignMutationRewardView()}
         onChannel={vi.fn()}
@@ -2907,7 +2876,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={nightmareDreamsignBundleRewardView()}
         onChannel={vi.fn()}
@@ -2956,7 +2925,6 @@ describe("ExplorationSiteScreen", () => {
       vi.runAllTimers();
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("immediately presents persisted starter-card pairs with semantic UUIDs under reduced motion", () => {
@@ -2966,7 +2934,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={starterCardMutationRewardView("replace")}
         onChannel={vi.fn()}
@@ -3015,7 +2983,6 @@ describe("ExplorationSiteScreen", () => {
       vi.runAllTimers();
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("presents starter-card purges before persisted replacements", () => {
@@ -3025,7 +2992,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={starterCardMutationRewardView("replace")}
         onChannel={vi.fn()}
@@ -3064,7 +3031,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("presents a persisted starter-card purge without a replacement pair", () => {
@@ -3073,7 +3039,7 @@ describe("ExplorationSiteScreen", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={starterCardMutationRewardView("purge")}
         onChannel={vi.fn()}
@@ -3095,7 +3061,6 @@ describe("ExplorationSiteScreen", () => {
     expect(
       outcome?.querySelectorAll("[data-exploration-starter-card-replacement]"),
     ).toHaveLength(0);
-    act(() => root.unmount());
   });
 
   it("presents persisted starter-card base-to-form mappings immediately under reduced motion", () => {
@@ -3105,7 +3070,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={starterCardTransfigurationRewardView()}
         onChannel={vi.fn()}
@@ -3174,7 +3139,6 @@ describe("ExplorationSiteScreen", () => {
       vi.runAllTimers();
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("presents generic persisted multi-card mappings in a bounded reduced-motion review region", () => {
@@ -3183,7 +3147,7 @@ describe("ExplorationSiteScreen", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={multiCardTransfigurationRewardView()}
         onChannel={vi.fn()}
@@ -3244,7 +3208,6 @@ describe("ExplorationSiteScreen", () => {
         "[data-exploration-starter-card-transfiguration-pair]",
       ),
     ).toHaveLength(0);
-    act(() => root.unmount());
   });
 
   it("presents nonstarter replacement mappings in a bounded reduced-motion review region", () => {
@@ -3253,7 +3216,7 @@ describe("ExplorationSiteScreen", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={multiCardReplacementRewardView("replace-random-with-card")}
         onChannel={vi.fn()}
@@ -3293,7 +3256,6 @@ describe("ExplorationSiteScreen", () => {
     expect(
       outcome?.querySelectorAll("[data-exploration-starter-card-replacement]"),
     ).toHaveLength(0);
-    act(() => root.unmount());
   });
 
   it("dismisses a fully visible T48 replacement outcome under normal motion", () => {
@@ -3319,7 +3281,7 @@ describe("ExplorationSiteScreen", () => {
     const onExit = vi.fn();
     const onChannel = vi.fn();
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <ExplorationSiteScreen
         view={multiCardReplacementRewardView("replace-random-with-card", 1)}
         onChannel={onChannel}
@@ -3333,25 +3295,20 @@ describe("ExplorationSiteScreen", () => {
       );
 
     expect(outcome()?.dataset.explorationCardReplacementReviewed).toBe("true");
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <ExplorationSiteScreen
-            view={multiCardReplacementRewardView("replace-random-with-card", 1)}
-            onChannel={onChannel}
-            onResolve={onResolve}
-            onExit={onExit}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <ExplorationSiteScreen
+        view={multiCardReplacementRewardView("replace-random-with-card", 1)}
+        onChannel={onChannel}
+        onResolve={onResolve}
+        onExit={onExit}
+      />
+    );
     expect(outcome()?.dataset.explorationCardReplacementReviewed).toBe("true");
     expect(onExit).not.toHaveBeenCalled();
     act(() => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("presents exact card-type mappings in a bounded reduced-motion review region", () => {
@@ -3360,7 +3317,7 @@ describe("ExplorationSiteScreen", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={cardTypeChangesRewardView("change-card-type-selected")}
         onChannel={vi.fn()}
@@ -3420,7 +3377,6 @@ describe("ExplorationSiteScreen", () => {
         '[data-card-change-kind="card-type"] [data-card-change-face="after"]',
       ),
     ).toHaveLength(2);
-    act(() => root.unmount());
   });
 
   it("dismisses a fully visible T53 type-change outcome under normal motion", () => {
@@ -3444,7 +3400,7 @@ describe("ExplorationSiteScreen", () => {
       },
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={cardTypeChangesRewardView("change-card-type-selected", 1)}
         onChannel={vi.fn()}
@@ -3468,7 +3424,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("keeps an overflowing narrow transfiguration outcome in the HUD-safe region until every pair is reviewed", () => {
@@ -3496,7 +3451,7 @@ describe("ExplorationSiteScreen", () => {
       },
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={starterCardTransfigurationRewardView(4)}
         onChannel={vi.fn()}
@@ -3551,7 +3506,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("stages starter-card transfiguration from original cards into staggered form reveals", () => {
@@ -3561,7 +3515,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={starterCardTransfigurationRewardView()}
         onChannel={vi.fn()}
@@ -3599,7 +3553,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("renders persisted T30 and T63 Dreamsign replacement mappings", () => {
@@ -3632,7 +3585,7 @@ describe("ExplorationSiteScreen", () => {
     ] as const;
 
     for (const fixture of cases) {
-      const outcome = mount(
+      const outcome = renderInCumulus(
         <ExplorationSiteScreen
           view={dreamsignMutationRewardView(fixture.sourceKind)}
           onChannel={vi.fn()}
@@ -3725,7 +3678,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={followupView}
         onChannel={vi.fn()}
@@ -3779,7 +3732,6 @@ describe("ExplorationSiteScreen", () => {
       entryIds: [parseDeckEntryId("entry-fixture")],
       transfiguration: "Empowered",
     });
-    act(() => root.unmount());
   });
 
   it("resolves a pack from its explicit Choose button", () => {
@@ -3812,7 +3764,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={followupView}
         onChannel={vi.fn()}
@@ -3859,7 +3811,6 @@ describe("ExplorationSiteScreen", () => {
         ?.click(),
     );
     expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, { packIndex: 1 });
-    act(() => root.unmount());
   });
 
   it("presents four offered cards in the centered Augury choice grid without a Back button", () => {
@@ -3898,7 +3849,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={followupView}
         onChannel={vi.fn()}
@@ -3963,7 +3914,6 @@ describe("ExplorationSiteScreen", () => {
     expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
       cardIds: [testCardId("offered-c")],
     });
-    act(() => root.unmount());
   });
 
   it("lets the player undo the purge target in a purge-and-copy follow-up", () => {
@@ -4003,7 +3953,7 @@ describe("ExplorationSiteScreen", () => {
         base.actions[1],
       ],
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={followupView}
         onChannel={vi.fn()}
@@ -4068,7 +4018,6 @@ describe("ExplorationSiteScreen", () => {
     expect(confirm?.getAttribute("aria-disabled")).toBe("true");
     expect(confirm?.textContent).not.toBe(awaitingCopyLabel);
     expect(container.querySelector("[data-card-choice-operation]")).toBeNull();
-    act(() => root.unmount());
   });
 
   it("submits exactly two UUID-selected cards for the multi-copy follow-up", () => {
@@ -4102,7 +4051,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={followupView}
         onChannel={vi.fn()}
@@ -4148,7 +4097,6 @@ describe("ExplorationSiteScreen", () => {
     expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
       entryIds: [parseDeckEntryId("entry-a"), parseDeckEntryId("entry-b")],
     });
-    act(() => root.unmount());
   });
 
   it("submits zero to two UUID-selected cards for an optional bounded purge", () => {
@@ -4201,7 +4149,7 @@ describe("ExplorationSiteScreen", () => {
     };
 
     const resolveNone = vi.fn();
-    const empty = mount(
+    const empty = renderInCumulus(
       <ExplorationSiteScreen
         view={followupView}
         onChannel={vi.fn()}
@@ -4219,7 +4167,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => empty.root.unmount());
 
     const resolveTwo = vi.fn();
-    const selected = mount(
+    const selected = renderInCumulus(
       <ExplorationSiteScreen
         view={followupView}
         onChannel={vi.fn()}
@@ -4293,7 +4241,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={replacementView}
         onChannel={vi.fn()}
@@ -4338,7 +4286,6 @@ describe("ExplorationSiteScreen", () => {
     expect(onResolve).toHaveBeenCalledWith(CHOICE_A_ID, {
       entryIds: [parseDeckEntryId("replacement-source-a")],
     });
-    act(() => root.unmount());
   });
 
   it("submits an exact fixed-form multi-transfiguration without a form step", () => {
@@ -4378,7 +4325,7 @@ describe("ExplorationSiteScreen", () => {
       ],
     };
     const onResolve = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={fixedView}
         onChannel={vi.fn()}
@@ -4429,7 +4376,6 @@ describe("ExplorationSiteScreen", () => {
         parseDeckEntryId("fixed-source-b"),
       ],
     });
-    act(() => root.unmount());
   });
 
   it("returns immediately after a choice without a tangible reward", () => {
@@ -4454,7 +4400,7 @@ describe("ExplorationSiteScreen", () => {
     deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
     document.body.append(deckTarget);
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={view(true)}
         onChannel={vi.fn()}
@@ -4507,7 +4453,6 @@ describe("ExplorationSiteScreen", () => {
       );
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("flips a deck card into its transfigured form and returns it to the deck", () => {
@@ -4532,7 +4477,7 @@ describe("ExplorationSiteScreen", () => {
     deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
     document.body.append(deckTarget);
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={transfigurationRewardView()}
         onChannel={vi.fn()}
@@ -4582,7 +4527,6 @@ describe("ExplorationSiteScreen", () => {
       );
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("shows a two-card reward at reading size and flies both cards to the deck", () => {
@@ -4610,7 +4554,7 @@ describe("ExplorationSiteScreen", () => {
     deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
     document.body.append(deckTarget);
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={twoCardRewardView()}
         onChannel={vi.fn()}
@@ -4665,7 +4609,6 @@ describe("ExplorationSiteScreen", () => {
       }
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("purges first, then emits a copy from its source and flies both to the deck", () => {
@@ -4695,7 +4638,7 @@ describe("ExplorationSiteScreen", () => {
     deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
     document.body.append(deckTarget);
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={purgeAndCopyRewardView()}
         onChannel={vi.fn()}
@@ -4794,7 +4737,6 @@ describe("ExplorationSiteScreen", () => {
       }
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("presents both purge-and-copy phases without travel under reduced motion", () => {
@@ -4804,7 +4746,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={purgeAndCopyRewardView()}
         onChannel={vi.fn()}
@@ -4844,7 +4786,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("fans every affected card around a semantic deck-modification announcement", () => {
@@ -4862,7 +4803,7 @@ describe("ExplorationSiteScreen", () => {
       },
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={deckModificationRewardView()}
         onChannel={vi.fn()}
@@ -4927,7 +4868,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("presents a localized paid bulk transfiguration with exact cost and targets", () => {
@@ -4935,7 +4875,7 @@ describe("ExplorationSiteScreen", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={bulkTransfigurationRewardView()}
         onChannel={vi.fn()}
@@ -4981,7 +4921,6 @@ describe("ExplorationSiteScreen", () => {
         "[data-exploration-deck-modification-card] i[aria-label]",
       ),
     ).toHaveLength(2);
-    act(() => root.unmount());
   });
 
   it("shows the fast modifier and canonical bolt on every modified card", () => {
@@ -5004,7 +4943,7 @@ describe("ExplorationSiteScreen", () => {
       resolvedActionId: null,
       reward: null,
     };
-    const { container, root } = mount(
+    const { container, root } = renderInCumulus(
       <ExplorationSiteScreen
         view={unresolvedFastView}
         onChannel={vi.fn()}
@@ -5029,7 +4968,7 @@ describe("ExplorationSiteScreen", () => {
     );
     act(() => root.unmount());
 
-    const persisted = mount(
+    const persisted = renderInCumulus(
       <ExplorationSiteScreen
         view={deckModificationRewardView("fast")}
         onChannel={vi.fn()}
@@ -5080,7 +5019,7 @@ describe("ExplorationSiteScreen", () => {
       },
     };
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={composite}
         onChannel={vi.fn()}
@@ -5121,7 +5060,6 @@ describe("ExplorationSiteScreen", () => {
       container.querySelector("[data-exploration-reward-stage]"),
     ).not.toBeNull();
     expect(onExit).not.toHaveBeenCalled();
-    act(() => root.unmount());
   });
 
   it("presents the complete purge-then-Reclaim sequence under reduced motion", () => {
@@ -5174,7 +5112,7 @@ describe("ExplorationSiteScreen", () => {
       },
     };
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={reclaimView}
         onChannel={vi.fn()}
@@ -5214,7 +5152,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("presents a purged card before strengthening the survivors", () => {
@@ -5257,7 +5194,7 @@ describe("ExplorationSiteScreen", () => {
       },
     };
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={purgeAndStrengthenView}
         onChannel={vi.fn()}
@@ -5290,7 +5227,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("resumes a persisted deck modification directly at the reward moment", () => {
@@ -5308,7 +5244,7 @@ describe("ExplorationSiteScreen", () => {
       },
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={deckModificationRewardView()}
         onChannel={vi.fn()}
@@ -5324,8 +5260,6 @@ describe("ExplorationSiteScreen", () => {
       container.querySelector('[data-testid="cumulus-exploration-channel"]'),
     ).toBeNull();
     expect(onExit).not.toHaveBeenCalled();
-
-    act(() => root.unmount());
   });
 
   it("flies a gained Dreamsign to its UUID-matched HUD dock", () => {
@@ -5353,7 +5287,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(1140, 730, 58, 58);
     document.body.append(dreamsignTarget);
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container, root } = renderInCumulus(
       <ExplorationSiteScreen
         view={dreamsignRewardView()}
         onChannel={vi.fn()}
@@ -5416,7 +5350,7 @@ describe("ExplorationSiteScreen", () => {
       },
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={essenceRewardView()}
         onChannel={vi.fn()}
@@ -5482,7 +5416,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("immediately presents persisted direct Essence amounts and exits at zero under reduced motion", () => {
@@ -5492,7 +5425,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const randomExit = vi.fn();
-    const random = mount(
+    const random = renderInCumulus(
       <ExplorationSiteScreen
         view={directEssenceRewardView("gain-random-essence", 250, 87, 337)}
         onChannel={vi.fn()}
@@ -5524,7 +5457,7 @@ describe("ExplorationSiteScreen", () => {
     act(() => random.root.unmount());
 
     const zeroExit = vi.fn();
-    const zero = mount(
+    const zero = renderInCumulus(
       <ExplorationSiteScreen
         view={directEssenceRewardView("double-essence", 0, 0, 0)}
         onChannel={vi.fn()}
@@ -5568,7 +5501,7 @@ describe("ExplorationSiteScreen", () => {
       },
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={purgedDreamsignEssenceRewardView()}
         onChannel={vi.fn()}
@@ -5609,7 +5542,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("dissolves the exact purged card before announcing its spark-priced Essence", () => {
@@ -5619,7 +5551,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={purgedCardEssenceRewardView()}
         onChannel={vi.fn()}
@@ -5659,7 +5591,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("stages a face-down-to-face-up travel from the bottom-right deck anchor", () => {
@@ -5677,7 +5608,7 @@ describe("ExplorationSiteScreen", () => {
     deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
     document.body.append(deckTarget);
 
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={view()}
         onChannel={vi.fn()}
@@ -5699,8 +5630,6 @@ describe("ExplorationSiteScreen", () => {
         .querySelector("[data-exploration-channel-state]")
         ?.getAttribute("data-exploration-channel-state"),
     ).toBe("waiting");
-
-    act(() => root.unmount());
   });
 
   it("shows the original, emits exact copied entries, and flies every card to the deck", () => {
@@ -5723,7 +5652,7 @@ describe("ExplorationSiteScreen", () => {
     deckTarget.getBoundingClientRect = () => new DOMRect(1210, 720, 50, 70);
     document.body.append(deckTarget);
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={cardCopiesRewardView()}
         onChannel={vi.fn()}
@@ -5791,7 +5720,6 @@ describe("ExplorationSiteScreen", () => {
       }
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("presents two source-to-copy pairs as a dedicated multi-copy outcome", () => {
@@ -5801,7 +5729,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={multipleCardCopiesRewardView()}
         onChannel={vi.fn()}
@@ -5853,7 +5781,6 @@ describe("ExplorationSiteScreen", () => {
       }
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("presents the persisted next-battle modifier with its exact amount", () => {
@@ -5861,7 +5788,7 @@ describe("ExplorationSiteScreen", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={battleModifierRewardView()}
         onChannel={vi.fn()}
@@ -5876,7 +5803,6 @@ describe("ExplorationSiteScreen", () => {
     expect(outcome?.dataset.explorationBattleModifierAmount).toBe("2");
     expect(outcome?.dataset.explorationBattlesRemaining).toBe("1");
     expect(outcome?.textContent?.trim()).not.toBe("");
-    act(() => root.unmount());
   });
 
   it("presents the exact compound next-battle modifier under reduced motion", () => {
@@ -5886,7 +5812,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={smallerHandDiscountRewardView()}
         onChannel={vi.fn()}
@@ -5907,7 +5833,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("presents the exact persisted replacement Avatar", () => {
@@ -5915,7 +5840,7 @@ describe("ExplorationSiteScreen", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={avatarRewardView()}
         onChannel={vi.fn()}
@@ -5931,7 +5856,6 @@ describe("ExplorationSiteScreen", () => {
     );
     expect(outcome?.textContent).toContain("New Avatar");
     expect(outcome?.getAttribute("aria-label")).toContain("New Avatar");
-    act(() => root.unmount());
   });
 
   it("presents the persisted future-site modifier as a dedicated semantic outcome", () => {
@@ -5941,7 +5865,7 @@ describe("ExplorationSiteScreen", () => {
       new DOMRect(100, 100, 240, 336),
     );
     const onExit = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={siteOfferModifierRewardView()}
         onChannel={vi.fn()}
@@ -5963,7 +5887,6 @@ describe("ExplorationSiteScreen", () => {
       vi.advanceTimersByTime(10_000);
     });
     expect(onExit).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it.each([
@@ -5978,7 +5901,7 @@ describe("ExplorationSiteScreen", () => {
         new DOMRect(100, 100, 240, 336),
       );
       const onExit = vi.fn();
-      const { container, root } = mount(
+      const { container, root } = renderInCumulus(
         <ExplorationSiteScreen
           view={shopModifierRewardView(modifier)}
           onChannel={vi.fn()}
@@ -6039,7 +5962,7 @@ describe("ExplorationSiteScreen", () => {
         new DOMRect(100, 100, 240, 336),
       );
       const onExit = vi.fn();
-      const { container, root } = mount(
+      const { container, root } = renderInCumulus(
         <ExplorationSiteScreen
           view={compoundCardMutationRewardView(sourceKind)}
           onChannel={vi.fn()}
@@ -6111,7 +6034,7 @@ describe("ExplorationSiteScreen", () => {
     vi.spyOn(HTMLElement.prototype, "getBoundingClientRect").mockReturnValue(
       new DOMRect(100, 100, 240, 336),
     );
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <ExplorationSiteScreen
         view={emptyCardAcquisitionRewardView()}
         onChannel={vi.fn()}
@@ -6125,7 +6048,6 @@ describe("ExplorationSiteScreen", () => {
     expect(outcome?.dataset.explorationRewardCount).toBe("0");
     expect(outcome?.getAttribute("aria-label")?.trim()).not.toBe("");
     expect(outcome?.textContent?.trim()).not.toBe("");
-    act(() => root.unmount());
   });
 
   it.each([
@@ -6184,7 +6106,7 @@ describe("ExplorationSiteScreen", () => {
       };
       const onResolve = vi.fn();
       const onChannel = vi.fn();
-      const { container, root } = mount(
+      const { container, root } = renderInCumulus(
         <ExplorationSiteScreen
           view={choiceView}
           onChannel={onChannel}
@@ -6304,7 +6226,7 @@ describe("ExplorationSiteScreen", () => {
         new DOMRect(100, 100, 240, 336),
       );
       const onExit = vi.fn();
-      const { container, root } = mount(
+      const { container, root } = renderInCumulus(
         <ExplorationSiteScreen
           view={siteInsertionRewardView()}
           onChannel={vi.fn()}

@@ -2,10 +2,7 @@ import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
@@ -32,6 +29,7 @@ import {
   testGuideId,
   testShuffleCommitment,
 } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 const JACKPOT_DREAMSIGN = localizedDreamsignFixture({
   id: testDreamsignId("00000000-0000-4000-8000-000000000041"),
@@ -312,17 +310,6 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
-
 beforeEach(() => {
   stubMatchMedia();
   globalThis.ResizeObserver = ResizeObserverStub;
@@ -338,7 +325,7 @@ describe("GambleSiteScreen", () => {
   it("presents three square prize cards and pins Leave to the HUD edge", () => {
     const onChooseGate = vi.fn();
     const onLeave = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={VIEW}
         onChooseGate={onChooseGate}
@@ -422,8 +409,6 @@ describe("GambleSiteScreen", () => {
         ?.click();
     });
     expect(onLeave).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
   });
 
   it("fades the locked bets immediately, flips a non-selected prize, and keeps the outcome readable", () => {
@@ -445,7 +430,7 @@ describe("GambleSiteScreen", () => {
         pendingDreamsignReplacement: false,
       },
     };
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GambleSiteScreen
         view={resultView}
         onChooseGate={() => undefined}
@@ -524,25 +509,21 @@ describe("GambleSiteScreen", () => {
       announcement?.parentElement?.getAttribute("data-gamble-outcome-slot"),
     ).toBe("six");
     void act(() => vi.advanceTimersByTime(1_000));
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GambleSiteScreen
-            view={{
-              ...resultView,
-              result: { ...resultView.result!, essenceSettled: true },
-            }}
-            onChooseGate={() => undefined}
-            onLeave={onLeave}
-            onOutcomeShown={onOutcomeShown}
-            onPlayAgain={onPlayAgain}
-            onDrawLadder={() => undefined}
-            onLadderOutcomeShown={() => undefined}
-            onReplaceDreamsign={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GambleSiteScreen
+        view={{
+          ...resultView,
+          result: { ...resultView.result!, essenceSettled: true },
+        }}
+        onChooseGate={() => undefined}
+        onLeave={onLeave}
+        onOutcomeShown={onOutcomeShown}
+        onPlayAgain={onPlayAgain}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />
+    );
     void act(() => vi.advanceTimersByTime(3_359));
     expect(
       container.querySelector('[data-testid="gamble-play-again"]'),
@@ -568,30 +549,26 @@ describe("GambleSiteScreen", () => {
     act(() => playAgain?.click());
     expect(onPlayAgain).toHaveBeenCalledOnce();
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GambleSiteScreen
-            view={{
-              ...resultView,
-              canPlayAgain: false,
-              result: {
-                ...resultView.result!,
-                gateId: "jack",
-                revealGateId: "six",
-              },
-            }}
-            onChooseGate={() => undefined}
-            onLeave={onLeave}
-            onOutcomeShown={onOutcomeShown}
-            onPlayAgain={onPlayAgain}
-            onDrawLadder={() => undefined}
-            onLadderOutcomeShown={() => undefined}
-            onReplaceDreamsign={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GambleSiteScreen
+        view={{
+          ...resultView,
+          canPlayAgain: false,
+          result: {
+            ...resultView.result!,
+            gateId: "jack",
+            revealGateId: "six",
+          },
+        }}
+        onChooseGate={() => undefined}
+        onLeave={onLeave}
+        onOutcomeShown={onOutcomeShown}
+        onPlayAgain={onPlayAgain}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />
+    );
     expect(
       container.querySelector('[data-testid="gamble-play-again"]'),
     ).toBeNull();
@@ -602,8 +579,6 @@ describe("GambleSiteScreen", () => {
       container.querySelector<HTMLElement>("[data-gamble-round-action-group]")
         ?.style.gridColumn,
     ).toBe("1 / span 3");
-
-    act(() => root.unmount());
   });
 
   it("opens the shared Dreamsign replacement flow after an at-cap jackpot", () => {
@@ -633,7 +608,7 @@ describe("GambleSiteScreen", () => {
         capacity: 1,
       },
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={replacementView}
         onChooseGate={() => undefined}
@@ -659,8 +634,6 @@ describe("GambleSiteScreen", () => {
         ?.click();
     });
     expect(onReplaceDreamsign).toHaveBeenCalledWith(heldDreamsign.id);
-
-    act(() => root.unmount());
   });
 });
 
@@ -687,7 +660,7 @@ const LADDER_VIEW: LadderClimbSiteView = {
 describe("GambleSiteScreen — Ladder Climb", () => {
   it("uses the full-portrait dialog composition on mobile", () => {
     stubMobileMatchMedia();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={LADDER_VIEW}
         onChooseGate={() => undefined}
@@ -704,13 +677,11 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       container.querySelector<HTMLElement>("[data-site-layout]")?.dataset
         .siteLayoutComposition,
     ).toBe("balanced-gallery");
-
-    act(() => root.unmount());
   });
 
   it("shows the first draw target and locked Dreamsign on the shared prize face", () => {
     const onDraw = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={LADDER_VIEW}
         onChooseGate={() => undefined}
@@ -755,12 +726,10 @@ describe("GambleSiteScreen — Ladder Climb", () => {
     ).not.toBeNull();
     act(() => draw?.click());
     expect(onDraw).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
   });
 
   it("preserves the wager stage and action footprint while a draw resolves", () => {
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GambleSiteScreen
         view={LADDER_VIEW}
         onChooseGate={() => undefined}
@@ -778,35 +747,31 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       "[data-ladder-round-action-group]",
     );
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GambleSiteScreen
-            view={{
-              ...LADDER_VIEW,
-              nextDraw: null,
-              result: {
-                id: testGambleResultId("ladder-continuity"),
-                attemptNumber: 1,
-                targetRank: "Q",
-                card: { rank: "J", suit: "clubs" },
-                won: false,
-                resultSettled: false,
-                terminal: false,
-                pendingDreamsignReplacement: false,
-              },
-            }}
-            onChooseGate={() => undefined}
-            onLeave={() => undefined}
-            onOutcomeShown={() => undefined}
-            onPlayAgain={() => undefined}
-            onDrawLadder={() => undefined}
-            onLadderOutcomeShown={() => undefined}
-            onReplaceDreamsign={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GambleSiteScreen
+        view={{
+          ...LADDER_VIEW,
+          nextDraw: null,
+          result: {
+            id: testGambleResultId("ladder-continuity"),
+            attemptNumber: 1,
+            targetRank: "Q",
+            card: { rank: "J", suit: "clubs" },
+            won: false,
+            resultSettled: false,
+            terminal: false,
+            pendingDreamsignReplacement: false,
+          },
+        }}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />
+    );
 
     expect(container.querySelector("[data-ladder-climb-card]")).toBe(cardSlot);
     expect(container.querySelector("[data-ladder-actions]")).toBe(actionSlot);
@@ -814,8 +779,6 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       actionGroup,
     );
     expect(actionSlot?.getAttribute("data-ladder-actions")).toBe("hidden");
-
-    act(() => root.unmount());
   });
 
   it("reveals the next paid draw only after a miss settles", () => {
@@ -836,7 +799,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
         pendingDreamsignReplacement: false,
       },
     };
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GambleSiteScreen
         view={resultView}
         onChooseGate={() => undefined}
@@ -864,32 +827,28 @@ describe("GambleSiteScreen — Ladder Climb", () => {
         .querySelector("[data-wager-prize-card]")
         ?.getAttribute("data-wager-prize-card-state"),
     ).toBe("drawn");
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GambleSiteScreen
-            view={{
-              ...resultView,
-              nextDraw: {
-                attemptNumber: 2,
-                targetRank: "10",
-                cost: 5,
-                canAfford: true,
-                available: true,
-              },
-              result: { ...resultView.result!, resultSettled: true },
-            }}
-            onChooseGate={() => undefined}
-            onLeave={() => undefined}
-            onOutcomeShown={() => undefined}
-            onPlayAgain={() => undefined}
-            onDrawLadder={onDraw}
-            onLadderOutcomeShown={onOutcomeShown}
-            onReplaceDreamsign={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GambleSiteScreen
+        view={{
+          ...resultView,
+          nextDraw: {
+            attemptNumber: 2,
+            targetRank: "10",
+            cost: 5,
+            canAfford: true,
+            available: true,
+          },
+          result: { ...resultView.result!, resultSettled: true },
+        }}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={onDraw}
+        onLadderOutcomeShown={onOutcomeShown}
+        onReplaceDreamsign={() => undefined}
+      />
+    );
     void act(() => vi.advanceTimersByTime(3_360));
     const drawAgain = container.querySelector<HTMLButtonElement>(
       '[data-testid="gamble-ladder-climb-again"]',
@@ -905,8 +864,6 @@ describe("GambleSiteScreen — Ladder Climb", () => {
     ).not.toBeNull();
     act(() => drawAgain?.click());
     expect(onDraw).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
   });
 
   it("keeps the result inside the same prize object", () => {
@@ -925,7 +882,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
         pendingDreamsignReplacement: false,
       },
     };
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GambleSiteScreen
         view={resultView}
         onChooseGate={() => undefined}
@@ -942,36 +899,30 @@ describe("GambleSiteScreen — Ladder Climb", () => {
       1,
     );
     void act(() => vi.advanceTimersByTime(970));
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GambleSiteScreen
-            view={{
-              ...resultView,
-              result: {
-                ...resultView.result!,
-                resultSettled: true,
-              },
-            }}
-            onChooseGate={() => undefined}
-            onLeave={() => undefined}
-            onOutcomeShown={() => undefined}
-            onPlayAgain={() => undefined}
-            onDrawLadder={() => undefined}
-            onLadderOutcomeShown={() => undefined}
-            onReplaceDreamsign={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GambleSiteScreen
+        view={{
+          ...resultView,
+          result: {
+            ...resultView.result!,
+            resultSettled: true,
+          },
+        }}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onReplaceDreamsign={() => undefined}
+      />
+    );
     expect(container.querySelectorAll("[data-wager-prize-card]")).toHaveLength(
       1,
     );
     expect(
       container.querySelector("[data-ladder-dreamsign-reward]"),
     ).not.toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("reveals a won Dreamsign at large size before flying it to its HUD dock", () => {
@@ -1002,7 +953,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
         pendingDreamsignReplacement: false,
       },
     };
-    const { container, root } = mount(
+    const { container, root } = renderInCumulus(
       <GambleSiteScreen
         view={resultView}
         onChooseGate={() => undefined}
@@ -1036,7 +987,7 @@ describe("GambleSiteScreen — Ladder Climb", () => {
 describe("GambleSiteScreen — Starway Stairs", () => {
   it("shows three safe-draw range prizes above centered Bet and Leave actions", () => {
     const onDrawStarway = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={STARWAY_VIEW}
         onChooseGate={() => undefined}
@@ -1103,8 +1054,6 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     ).toHaveLength(2);
     act(() => bet?.click());
     expect(onDrawStarway).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
   });
 
   it("reveals a safe card, then advances the tier and offers cash-out", () => {
@@ -1135,7 +1084,7 @@ describe("GambleSiteScreen — Starway Stairs", () => {
       },
       cashOutReward: 60,
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={safeView}
         onChooseGate={() => undefined}
@@ -1216,8 +1165,6 @@ describe("GambleSiteScreen — Starway Stairs", () => {
         .querySelector('[data-testid="gamble-starway-tier-2"]')
         ?.getAttribute("aria-disabled"),
     ).toBe("true");
-
-    act(() => root.unmount());
   });
 
   it("offers Play Again beside Leave after a terminal bust", () => {
@@ -1244,7 +1191,7 @@ describe("GambleSiteScreen — Starway Stairs", () => {
       },
       terminalReason: "bust",
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={bustedView}
         onChooseGate={() => undefined}
@@ -1285,13 +1232,11 @@ describe("GambleSiteScreen — Starway Stairs", () => {
     expect(
       container.querySelector('[data-testid="gamble-starway-cash-out"]'),
     ).toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("hides Play Again after the third round", () => {
     vi.useFakeTimers();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={{
           ...STARWAY_VIEW,
@@ -1326,15 +1271,13 @@ describe("GambleSiteScreen — Starway Stairs", () => {
         '[data-testid="gamble-starway-leave-after-result"]',
       ),
     ).not.toBeNull();
-
-    act(() => root.unmount());
   });
 });
 
 describe("GambleSiteScreen — Four-Suit Reprise", () => {
   it("shows the suit outcomes in a glass panel before committing a selected card", () => {
     const onDraw = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={FOUR_SUIT_VIEW}
         onChooseGate={() => undefined}
@@ -1461,8 +1404,6 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     ).not.toBeNull();
     act(() => draw?.click());
     expect(onDraw).toHaveBeenCalledWith("four-suit-entry-1");
-
-    act(() => root.unmount());
   });
 
   it("opens the shared free Transfiguration chooser after Spades", () => {
@@ -1470,7 +1411,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     const onOutcomeShown = vi.fn();
     const onChooseTransfiguration = vi.fn();
     const initialView = fourSuitResultView();
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GambleSiteScreen
         view={initialView}
         onChooseGate={() => undefined}
@@ -1496,24 +1437,20 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       4,
     );
     const revealedView = fourSuitResultView({ resultRevealed: true });
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GambleSiteScreen
-            view={revealedView}
-            onChooseGate={() => undefined}
-            onLeave={() => undefined}
-            onOutcomeShown={() => undefined}
-            onPlayAgain={() => undefined}
-            onDrawLadder={() => undefined}
-            onLadderOutcomeShown={() => undefined}
-            onFourSuitOutcomeShown={onOutcomeShown}
-            onChooseFourSuitTransfiguration={onChooseTransfiguration}
-            onReplaceDreamsign={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GambleSiteScreen
+        view={revealedView}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onFourSuitOutcomeShown={onOutcomeShown}
+        onChooseFourSuitTransfiguration={onChooseTransfiguration}
+        onReplaceDreamsign={() => undefined}
+      />
+    );
     void act(() => vi.advanceTimersByTime(4_000));
 
     expect(
@@ -1547,32 +1484,28 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     if (previewModel === undefined || revealedResult === null) {
       throw new Error("expected fixture Transfiguration preview");
     }
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GambleSiteScreen
-            view={fourSuitResultView({
-              resultRevealed: true,
-              resultSettled: true,
-              chosenTransfiguration: "Empowered",
-              target: {
-                ...revealedResult.target,
-                model: previewModel,
-              },
-            })}
-            onChooseGate={() => undefined}
-            onLeave={() => undefined}
-            onOutcomeShown={() => undefined}
-            onPlayAgain={() => undefined}
-            onDrawLadder={() => undefined}
-            onLadderOutcomeShown={() => undefined}
-            onFourSuitOutcomeShown={onOutcomeShown}
-            onChooseFourSuitTransfiguration={onChooseTransfiguration}
-            onReplaceDreamsign={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GambleSiteScreen
+        view={fourSuitResultView({
+          resultRevealed: true,
+          resultSettled: true,
+          chosenTransfiguration: "Empowered",
+          target: {
+            ...revealedResult.target,
+            model: previewModel,
+          },
+        })}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onFourSuitOutcomeShown={onOutcomeShown}
+        onChooseFourSuitTransfiguration={onChooseTransfiguration}
+        onReplaceDreamsign={() => undefined}
+      />
+    );
     expect(
       container.querySelector(
         '[data-four-suit-card-outcome="transfiguration"]',
@@ -1591,8 +1524,6 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     );
     expect(replay).not.toBeNull();
     expect(replay?.getAttribute("aria-disabled")).not.toBe("true");
-
-    act(() => root.unmount());
   });
 
   it.each([
@@ -1603,7 +1534,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     "animates the target card away for a %s result",
     (outcome, suit, essenceGained) => {
       vi.useFakeTimers();
-      const { container, root } = mount(
+      const { container, root } = renderInCumulus(
         <GambleSiteScreen
           view={fourSuitResultView({
             card: { rank: "7", suit },
@@ -1649,7 +1580,7 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
   it("offers a shared replay only after a settled result", () => {
     vi.useFakeTimers();
     const onPlayAgain = vi.fn();
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GambleSiteScreen
         view={fourSuitResultView({
           card: { rank: "7", suit: "hearts" },
@@ -1691,23 +1622,19 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
       roundNumber: 2,
       cards: [FOUR_SUIT_VIEW.cards[1]],
     };
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GambleSiteScreen
-            view={replayView}
-            onChooseGate={() => undefined}
-            onLeave={() => undefined}
-            onOutcomeShown={() => undefined}
-            onPlayAgain={() => undefined}
-            onDrawLadder={() => undefined}
-            onLadderOutcomeShown={() => undefined}
-            onPlayAgainFourSuit={onPlayAgain}
-            onReplaceDreamsign={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GambleSiteScreen
+        view={replayView}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onPlayAgainFourSuit={onPlayAgain}
+        onReplaceDreamsign={() => undefined}
+      />
+    );
     act(() => {
       container
         .querySelector<HTMLButtonElement>(
@@ -1723,13 +1650,11 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         '[data-playing-card-variant="fourSuit"][data-playing-card-state="concealed"]',
       ),
     ).not.toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("shows the flat prize and one up-front wager before the deal", () => {
     const onDeal = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={BLACKJACK_VIEW}
         onChooseGate={() => undefined}
@@ -1761,13 +1686,12 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         ?.click();
     });
     expect(onDeal).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("renders player and dealer squircles with a concealed dealer hole card", () => {
     vi.useFakeTimers();
     const onHit = vi.fn();
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GambleSiteScreen
         view={{
           ...BLACKJACK_VIEW,
@@ -1870,36 +1794,32 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     });
     expect(onHit).toHaveBeenCalledOnce();
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GambleSiteScreen
-            view={{
-              ...BLACKJACK_VIEW,
-              playerCards: [
-                { rank: "10", suit: "clubs" },
-                { rank: "6", suit: "hearts" },
-                { rank: "A", suit: "spades" },
-              ],
-              playerTotal: 17,
-              dealerCards: [
-                { rank: "5", suit: "spades" },
-                { rank: "K", suit: "diamonds" },
-              ],
-              dealerTotal: 5,
-            }}
-            onChooseGate={() => undefined}
-            onLeave={() => undefined}
-            onOutcomeShown={() => undefined}
-            onPlayAgain={() => undefined}
-            onDrawLadder={() => undefined}
-            onLadderOutcomeShown={() => undefined}
-            onHitBlackjack={onHit}
-            onReplaceDreamsign={() => undefined}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GambleSiteScreen
+        view={{
+          ...BLACKJACK_VIEW,
+          playerCards: [
+            { rank: "10", suit: "clubs" },
+            { rank: "6", suit: "hearts" },
+            { rank: "A", suit: "spades" },
+          ],
+          playerTotal: 17,
+          dealerCards: [
+            { rank: "5", suit: "spades" },
+            { rank: "K", suit: "diamonds" },
+          ],
+          dealerTotal: 5,
+        }}
+        onChooseGate={() => undefined}
+        onLeave={() => undefined}
+        onOutcomeShown={() => undefined}
+        onPlayAgain={() => undefined}
+        onDrawLadder={() => undefined}
+        onLadderOutcomeShown={() => undefined}
+        onHitBlackjack={onHit}
+        onReplaceDreamsign={() => undefined}
+      />
+    );
     expect(
       container.querySelector('[data-radial-announcement-owner="player"]'),
     ).toBe(persistentPlayerTotal);
@@ -1924,12 +1844,11 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
         '[data-testid="gamble-blackjack-hit"]',
       )?.disabled,
     ).toBe(false);
-    act(() => root.unmount());
   });
 
   it("reveals the dealer hand and offers only Leave after settlement", () => {
     vi.useFakeTimers();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={{
           ...BLACKJACK_VIEW,
@@ -1975,14 +1894,12 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(
       container.querySelector('[data-testid="gamble-open-replacement"]'),
     ).toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("settles the authoritative result when the outcome animation appears", () => {
     vi.useFakeTimers();
     const onOutcomeShown = vi.fn();
-    const { root } = mount(
+    renderInCumulus(
       <GambleSiteScreen
         view={{
           ...BLACKJACK_VIEW,
@@ -2013,13 +1930,12 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     );
     void act(() => vi.runAllTimers());
     expect(onOutcomeShown).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("conceals and fades the complete settled table before playing again", () => {
     vi.useFakeTimers();
     const onPlayAgain = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GambleSiteScreen
         view={{
           ...BLACKJACK_VIEW,
@@ -2118,6 +2034,5 @@ describe("GambleSiteScreen — Four-Suit Reprise", () => {
     expect(onPlayAgain).not.toHaveBeenCalled();
     void act(() => vi.advanceTimersToNextTimer());
     expect(onPlayAgain).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 });

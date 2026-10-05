@@ -35,6 +35,9 @@ export default defineConfig({
       "**/.claude/worktrees/**",
     ],
     setupFiles: ["src/testing/setup-dom.ts"],
+    // Run after-hooks in definition order so the setup file's render
+    // teardown unmounts before a test file's own afterEach clears the DOM.
+    sequence: { hooks: "list" },
     pool: "threads",
     maxWorkers: Math.min(maxWorkers, availableParallelism()),
     testTimeout,

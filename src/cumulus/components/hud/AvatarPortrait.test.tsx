@@ -1,34 +1,19 @@
 import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
-import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
 import {
   AvatarPortrait,
   type AvatarVisual,
 } from "./AvatarPortrait";
-import { CumulusRoot } from "../../CumulusRoot";
 import { testAvatarId } from "../../../types/test-identities";
+import { renderInCumulus } from "../../testing/render";
 
 const DC: AvatarVisual = {
   imageNumber: "0042",
   name: assertLocalized("Astra"),
   title: assertLocalized("The Dawnbound"),
 };
-
-function mountInto(node: React.ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{node}</CumulusRoot>);
-  });
-  return { container, root };
-}
 
 afterEach(() => {
   document.body.innerHTML = "";
@@ -38,7 +23,7 @@ describe("AvatarPortrait variants", () => {
   it.each(["panel", "thumb"] as const)(
     "%s composites the transparent cutout over the light-gray portrait field",
     (variant) => {
-      const { container } = mountInto(
+      const { container } = renderInCumulus(
         <AvatarPortrait avatar={DC} variant={variant} />,
       );
 
@@ -49,7 +34,7 @@ describe("AvatarPortrait variants", () => {
   );
 
   it("registers a strict profile reveal only when semantic profile data is supplied", () => {
-    const { container } = mountInto(
+    const { container } = renderInCumulus(
       <AvatarPortrait
         avatar={DC}
         variant="panel"
@@ -78,7 +63,7 @@ describe("AvatarPortrait variants", () => {
   });
 
   it("thumb centers the authored head coordinate in a close bust crop", () => {
-    const { container } = mountInto(
+    const { container } = renderInCumulus(
       <AvatarPortrait
         avatar={{ ...DC, portraitFocus: { x: 0.58, y: 0.23 } }}
         variant="thumb"

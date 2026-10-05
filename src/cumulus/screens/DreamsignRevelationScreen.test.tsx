@@ -2,8 +2,6 @@ import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { artRef } from "../primitives/art";
 import {
@@ -11,12 +9,12 @@ import {
   type DreamsignRevelationView,
 } from "./DreamsignRevelationScreen";
 import { JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE } from "../components/hud/JourneyStatusBar";
-import { CumulusRoot } from "../CumulusRoot";
 import { DREAMSIGN_REVELATION_PRESENTATION } from "../test-helpers/presentation-fixtures";
 import { localizedDreamsignFixture } from "../test-helpers/dreamsign-fixture";
 import type { LocalizedDreamsign } from "../components/hud/Dreamsign";
 import { testGuideId } from "../../types/test-identities";
 import { testPresentationId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 function dreamsign(idSeed: string, imageName: string): LocalizedDreamsign {
   return localizedDreamsignFixture({
@@ -67,19 +65,6 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
-
 beforeEach(() => {
   stubMatchMedia();
   globalThis.ResizeObserver = ResizeObserverStub;
@@ -115,7 +100,7 @@ describe("DreamsignRevelationScreen", () => {
         bubbleWidth: 600,
       },
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DreamsignRevelationScreen
         view={tutorialView}
         claimedIndex={null}
@@ -178,13 +163,11 @@ describe("DreamsignRevelationScreen", () => {
     expect(container.querySelectorAll("[data-revelation-option]")).toHaveLength(
       3,
     );
-
-    act(() => root.unmount());
   });
 
   it("keeps unavailable choices focusable and revealable while suppressing keyboard activation", () => {
     const onClaim = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DreamsignRevelationScreen
         view={view()}
         claimedIndex={0}
@@ -207,11 +190,10 @@ describe("DreamsignRevelationScreen", () => {
       );
     });
     expect(onClaim).not.toHaveBeenCalled();
-    act(() => root.unmount());
   });
 
   it("centers the mobile decline action between the offer and status bar", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DreamsignRevelationScreen
         view={view()}
         claimedIndex={null}
@@ -238,10 +220,6 @@ describe("DreamsignRevelationScreen", () => {
     expect(offer?.style.gridTemplateRows).toBe("auto minmax(0, 1fr)");
     expect(offer?.style.height).toBe("100%");
     expect(declineSlot?.style.placeItems).toBe("center");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("uses purple accent glass actions for dreamsign replacement", () => {
@@ -253,7 +231,7 @@ describe("DreamsignRevelationScreen", () => {
         capacity: 1,
       },
     };
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DreamsignRevelationScreen
         view={replacementView}
         claimedIndex={null}
@@ -268,14 +246,10 @@ describe("DreamsignRevelationScreen", () => {
       (button) => button.textContent === "Replace",
     );
     expect(replace?.dataset.glassVariant).toBe("accent");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders offer dreamsigns without the revelation shadow", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DreamsignRevelationScreen
         view={view()}
         claimedIndex={null}
@@ -292,9 +266,5 @@ describe("DreamsignRevelationScreen", () => {
     expect(center).not.toBeNull();
 
     expect(center?.dataset.revealFeedback).toBe("measured");
-
-    act(() => {
-      root.unmount();
-    });
   });
 });

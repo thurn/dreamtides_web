@@ -1,8 +1,7 @@
 import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
-import { act, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
@@ -11,11 +10,11 @@ import {
   CardShopSiteScreen,
   type CardShopSiteView,
 } from "./CardShopSiteScreen";
-import { CumulusRoot } from "../CumulusRoot";
 import { SHOP_PRESENTATION } from "../test-helpers/presentation-fixtures";
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testExplorationActionId, testGuideId, testCardId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 function makeCard(index: number): CardData {
   return {
@@ -86,17 +85,6 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
-
 beforeEach(() => {
   stubMatchMedia();
   globalThis.ResizeObserver = ResizeObserverStub;
@@ -109,7 +97,7 @@ afterEach(() => {
 
 describe("CardShopSiteScreen", () => {
   it("shows the Dream Market with five directly priced cards and a mobile restock action", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <CardShopSiteScreen
         view={view()}
         onBuy={vi.fn()}
@@ -150,13 +138,11 @@ describe("CardShopSiteScreen", () => {
         .querySelector('[data-testid="cumulus-card-shop-restock"]')
         ?.getAttribute("data-press-feedback"),
     ).toBe("stationary");
-
-    act(() => root.unmount());
   });
 
   it("uses the shared desktop guide-and-picker composition", () => {
     stubMatchMedia(true);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <CardShopSiteScreen
         view={view()}
         onBuy={vi.fn()}
@@ -194,8 +180,6 @@ describe("CardShopSiteScreen", () => {
     expect(
       container.querySelector("[data-gallery-action-label]")?.textContent,
     ).toBe("Restock Offers");
-
-    act(() => root.unmount());
   });
 
   it("purchases an affordable card immediately and refreshes from the restock icon", () => {
@@ -204,7 +188,7 @@ describe("CardShopSiteScreen", () => {
     const deckTarget = document.createElement("div");
     deckTarget.dataset.journeyDeckTarget = "";
     document.body.append(deckTarget);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <CardShopSiteScreen
         view={view()}
         onBuy={onBuy}
@@ -247,8 +231,6 @@ describe("CardShopSiteScreen", () => {
     });
     expect(onBuy).toHaveBeenCalledTimes(1);
     expect(onRestock).toHaveBeenCalledTimes(1);
-
-    act(() => root.unmount());
   });
 
   it("announces overlapping free-purchase benefits with semantic provenance", () => {
@@ -265,7 +247,7 @@ describe("CardShopSiteScreen", () => {
       price: 0,
       state: offer.state === "purchased" ? offer.state : "available",
     }));
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <CardShopSiteScreen
         view={benefitView}
         onBuy={vi.fn()}
@@ -294,7 +276,5 @@ describe("CardShopSiteScreen", () => {
     expect(
       container.querySelectorAll('[data-gallery-caption="essence"]'),
     ).toHaveLength(6);
-
-    act(() => root.unmount());
   });
 });

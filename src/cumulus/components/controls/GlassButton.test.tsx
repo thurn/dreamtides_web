@@ -2,25 +2,10 @@ import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { GlassButton } from "./GlassButton";
 import { GLYPHS } from "../../primitives/glyph";
-import { CumulusRoot } from "../../CumulusRoot";
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
+import { renderInCumulus } from "../../testing/render";
 
 afterEach(() => {
   document.body.innerHTML = "";
@@ -28,7 +13,7 @@ afterEach(() => {
 
 describe("GlassButton", () => {
   it("exposes semantic pressed state for persistent toggles", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Return to Your Side")}
         pressed
@@ -38,10 +23,9 @@ describe("GlassButton", () => {
     const button = container.querySelector("button");
     expect(button?.getAttribute("aria-pressed")).toBe("true");
     expect(button?.getAttribute("data-pressed")).toBe("true");
-    act(() => root.unmount());
   });
   it("renders its text label inside a button", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Apply Filters")}
         testId="glass-apply"
@@ -52,14 +36,10 @@ describe("GlassButton", () => {
     const button = container.querySelector('[data-testid="glass-apply"]');
     expect(button?.tagName).toBe("BUTTON");
     expect(button?.textContent).toContain("Apply Filters");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders an optional leading glyph before the label", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Filter")}
         glyph={GLYPHS.filter}
@@ -69,14 +49,10 @@ describe("GlassButton", () => {
 
     // The leading glyph is a StandaloneGlyph <i> carrying the glyph class.
     expect(container.querySelector("i")?.className).toBe(String(GLYPHS.filter));
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders an optional inline essence cost after a centered dot", () => {
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Transfigure")}
         essenceCost={20}
@@ -90,27 +66,21 @@ describe("GlassButton", () => {
       button?.querySelector("[data-glass-button-essence-cost]")?.textContent,
     ).toContain("20");
     expect(button?.querySelector("[data-inline-glyph]")).not.toBeNull();
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GlassButton
-            label={assertLocalized("Transfigure")}
-            essenceCost={null}
-            onPress={() => {}}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GlassButton
+        label={assertLocalized("Transfigure")}
+        essenceCost={null}
+        onPress={() => {}}
+      />
+    );
     expect(
       container.querySelector("[data-glass-button-essence-cost]"),
     ).toBeNull();
     expect(container.querySelector("button")?.textContent).toBe("Transfigure");
-
-    act(() => root.unmount());
   });
 
   it("supports a distinct accessible name for a priced action", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Choose")}
         essenceCost={50}
@@ -128,11 +98,10 @@ describe("GlassButton", () => {
     expect(button?.getAttribute("aria-label")).toBe(
       "Choose the Six Gate for 50 Essence",
     );
-    act(() => root.unmount());
   });
 
   it("renders a non-cost Essence value without punctuation", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Take")}
         essenceValue={60}
@@ -148,8 +117,6 @@ describe("GlassButton", () => {
     ).toBeNull();
     expect(container.querySelector("button")?.textContent).not.toContain("·");
     expect(container.querySelector("button")?.textContent).not.toContain("(");
-
-    act(() => root.unmount());
   });
 
   it("keeps every dynamic width reservation in one hidden sizing grid", () => {
@@ -158,7 +125,7 @@ describe("GlassButton", () => {
       { label: assertLocalized("Purge 1"), essenceCost: 40 },
       { label: assertLocalized("Purge 2"), essenceCost: 100 },
     ] as const;
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Decline")}
         widthReservations={reservations}
@@ -176,44 +143,32 @@ describe("GlassButton", () => {
       "Purge 2 · 100",
     ]);
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GlassButton
-            label={assertLocalized("Purge 2")}
-            essenceCost={100}
-            widthReservations={reservations}
-            onPress={() => {}}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GlassButton
+        label={assertLocalized("Purge 2")}
+        essenceCost={100}
+        widthReservations={reservations}
+        onPress={() => {}}
+      />
+    );
     expect(
       Array.from(
         button?.querySelectorAll("[data-glass-button-width-reservation]") ?? [],
         (candidate) => candidate.textContent,
       ),
     ).toEqual(initialReservations);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("omits the `<i>` when no glyph is given", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassButton label={assertLocalized("Filter")} onPress={() => {}} />,
     );
 
     expect(container.querySelector("i")).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("uses the lighter tonal-lens treatment when placed on glass", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Cancel")}
         placement="onGlass"
@@ -223,14 +178,10 @@ describe("GlassButton", () => {
 
     const button = container.querySelector("button");
     expect(button?.dataset.glassPlacement).toBe("onGlass");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("can render the danger glass treatment", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Cancel")}
         variant="danger"
@@ -240,14 +191,10 @@ describe("GlassButton", () => {
 
     const button = container.querySelector("button");
     expect(button?.dataset.glassVariant).toBe("danger");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the purple soft-wash accent without dropping the glass blur", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Transfigure")}
         variant="accent"
@@ -256,46 +203,33 @@ describe("GlassButton", () => {
     );
     const button = container.querySelector<HTMLButtonElement>("button");
     expect(button?.dataset.glassVariant).toBe("accent");
-    act(() => root.unmount());
   });
 
   it("restores the neutral glass border after leaving the danger state", () => {
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GlassButton label={assertLocalized("Decline")} onPress={() => {}} />,
     );
     const button = container.querySelector<HTMLButtonElement>("button");
     const neutralBorder = button?.style.border;
     expect(neutralBorder).not.toBe("");
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GlassButton
-            label={assertLocalized("Purge 1")}
-            variant="danger"
-            onPress={() => {}}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GlassButton
+        label={assertLocalized("Purge 1")}
+        variant="danger"
+        onPress={() => {}}
+      />
+    );
     expect(button?.style.border).not.toBe(neutralBorder);
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GlassButton label={assertLocalized("Decline")} onPress={() => {}} />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GlassButton label={assertLocalized("Decline")} onPress={() => {}} />
+    );
     expect(button?.style.border).toBe(neutralBorder);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("restores the neutral on-glass border after leaving the danger state", () => {
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Decline")}
         placement="onGlass"
@@ -306,41 +240,29 @@ describe("GlassButton", () => {
     const neutralBorder = button?.style.border;
     expect(neutralBorder).not.toBe("");
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GlassButton
-            label={assertLocalized("Purge 1")}
-            variant="danger"
-            placement="onGlass"
-            onPress={() => {}}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GlassButton
+        label={assertLocalized("Purge 1")}
+        variant="danger"
+        placement="onGlass"
+        onPress={() => {}}
+      />
+    );
     expect(button?.style.border).not.toBe(neutralBorder);
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GlassButton
-            label={assertLocalized("Decline")}
-            placement="onGlass"
-            onPress={() => {}}
-          />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GlassButton
+        label={assertLocalized("Decline")}
+        placement="onGlass"
+        onPress={() => {}}
+      />
+    );
     expect(button?.style.border).toBe(neutralBorder);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("fires `onPress` on click", () => {
     const onPress = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <GlassButton label={assertLocalized("Apply")} onPress={onPress} />,
     );
 
@@ -348,15 +270,11 @@ describe("GlassButton", () => {
       container.querySelector("button")?.click();
     });
     expect(onPress).toHaveBeenCalledTimes(1);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it('while disabled dims, sets aria-disabled="true", and does not fire onPress', () => {
     const onPress = vi.fn();
-    const { container, root } = mount(
+    const { container, rerender } = renderInCumulus(
       <GlassButton
         label={assertLocalized("Apply")}
         onPress={onPress}
@@ -372,17 +290,9 @@ describe("GlassButton", () => {
     });
     expect(onPress).not.toHaveBeenCalled();
 
-    act(() => {
-      root.render(
-        <CumulusRoot>
-          <GlassButton label={assertLocalized("Apply")} onPress={onPress} />
-        </CumulusRoot>,
-      );
-    });
+    rerender(
+      <GlassButton label={assertLocalized("Apply")} onPress={onPress} />
+    );
     expect(button?.getAttribute("aria-disabled")).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 });

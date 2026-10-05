@@ -1,27 +1,15 @@
 // @vitest-environment jsdom
 
 import { assertLocalized } from "@trox/runtime";
-import { act, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { act } from "react";
 import { afterEach, describe, expect, it } from "vitest";
-import { CumulusRoot } from "../../CumulusRoot";
 import { Select, type SelectOption } from "./Select";
+import { renderInCumulus } from "../../testing/render";
 
 const OPTIONS: SelectOption[] = Array.from({ length: 10 }, (_, index) => ({
   value: String(index),
   label: assertLocalized(`Option ${String(index + 1)}`),
 }));
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
 
 function rect({ top, bottom }: { top: number; bottom: number }): DOMRect {
   return {
@@ -48,7 +36,7 @@ describe("Select", () => {
       configurable: true,
       value: 720,
     });
-    const { container, root } = mount(
+    const { container, root } = renderInCumulus(
       <Select
         options={OPTIONS}
         value=""
@@ -81,7 +69,7 @@ describe("Select", () => {
       configurable: true,
       value: 720,
     });
-    const { container, root } = mount(
+    const { container, root } = renderInCumulus(
       <Select
         options={OPTIONS}
         value=""
@@ -107,7 +95,7 @@ describe("Select", () => {
   });
 
   it("keeps the menu open while its options scroll", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <Select
         options={OPTIONS}
         value=""
@@ -130,8 +118,6 @@ describe("Select", () => {
       window.dispatchEvent(new Event("scroll"));
     });
     expect(document.body.querySelector('[role="listbox"]')).toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("navigates enabled options from the keyboard", () => {
@@ -144,7 +130,7 @@ describe("Select", () => {
       },
       { value: "third", label: assertLocalized("Third tide") },
     ];
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <Select
         options={options}
         value="first"
@@ -172,7 +158,5 @@ describe("Select", () => {
       );
     });
     expect(menuOptions[2]).toBe(document.activeElement);
-
-    act(() => root.unmount());
   });
 });

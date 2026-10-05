@@ -1,10 +1,8 @@
 import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
-import { act, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { CumulusRoot } from "../CumulusRoot";
 import { artRef } from "../primitives/art";
 import {
   DreamsignBazaarSiteScreen,
@@ -19,6 +17,7 @@ import { GLOSSARY_IDS } from "../../data/glossary";
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testGuideId, testDreamsignId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 function sign(index: number): LocalizedDreamsign {
   return localizedDreamsignFixture({
@@ -81,17 +80,6 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
-
 beforeEach(() => {
   stubMatchMedia();
   globalThis.ResizeObserver = ResizeObserverStub;
@@ -103,7 +91,7 @@ afterEach(() => {
 
 describe("DreamsignBazaarSiteScreen", () => {
   it("shows Amunet, a compact two-column shelf, prices, and the restock action on mobile", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DreamsignBazaarSiteScreen
         view={view()}
         onBuy={vi.fn()}
@@ -149,12 +137,10 @@ describe("DreamsignBazaarSiteScreen", () => {
     expect(
       Number.parseFloat(restockGlyph?.style.fontSize ?? "0"),
     ).toBeGreaterThan(70);
-
-    act(() => root.unmount());
   });
 
   it("keeps an action caption empty when it has neither price nor text", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DreamsignGalleryPanel
         title={assertLocalized("Fixture gallery")}
         entries={[]}
@@ -180,8 +166,6 @@ describe("DreamsignBazaarSiteScreen", () => {
     expect(captions).toHaveLength(1);
     expect(captions[0]?.textContent).toBe("");
     expect(captions[0]?.querySelector("[data-essence-value]")).toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("uses the shared desktop guide/gallery frame and purchases only an affordable offer", () => {
@@ -191,7 +175,7 @@ describe("DreamsignBazaarSiteScreen", () => {
     const hudTarget = document.createElement("div");
     hudTarget.dataset.journeyStatusBarAnchor = "";
     document.body.append(hudTarget);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DreamsignBazaarSiteScreen
         view={view()}
         onBuy={onBuy}
@@ -246,8 +230,6 @@ describe("DreamsignBazaarSiteScreen", () => {
         '[data-testid="cumulus-dreamsign-bazaar-purchase-travel"]',
       ),
     ).not.toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("renders cap replacement choices above the shared screen", () => {
@@ -259,7 +241,7 @@ describe("DreamsignBazaarSiteScreen", () => {
     };
     const replacementId = cappedView.purge.currentDreamsigns[1]?.id;
     const onPurge = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DreamsignBazaarSiteScreen
         view={cappedView}
         onBuy={vi.fn()}
@@ -279,8 +261,6 @@ describe("DreamsignBazaarSiteScreen", () => {
         ?.click();
     });
     expect(onPurge).toHaveBeenCalledWith(replacementId);
-
-    act(() => root.unmount());
   });
 
   it("announces the counted free-purchase benefit on the responsive shelf", () => {
@@ -294,7 +274,7 @@ describe("DreamsignBazaarSiteScreen", () => {
       price: 0,
       state: offer.state === "purchased" ? offer.state : "available",
     }));
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DreamsignBazaarSiteScreen
         view={benefitView}
         onBuy={vi.fn()}
@@ -315,7 +295,5 @@ describe("DreamsignBazaarSiteScreen", () => {
     expect(region?.dataset.shopFreePurchasesRemaining).toBe("3");
     expect(status?.getAttribute("role")).toBe("status");
     expect(status?.textContent?.trim()).not.toBe("");
-
-    act(() => root.unmount());
   });
 });

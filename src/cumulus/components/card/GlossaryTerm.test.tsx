@@ -1,26 +1,14 @@
 import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
-import { act, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { act } from "react";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { CumulusRoot } from "../../CumulusRoot";
 import { GlossaryTerm } from "./GlossaryTerm";
 import { RulesText } from "./RulesText";
 import { testCardId } from "../../../types/test-identities";
+import { renderInCumulus } from "../../testing/render";
 
 const CARD_ID = testCardId("11111111-1111-4111-8111-111111111111");
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
 
 afterEach(() => {
   document.body.innerHTML = "";
@@ -29,7 +17,7 @@ afterEach(() => {
 describe("GlossaryTerm", () => {
   it("registers stationary inline definition semantics without changing sentence flow", () => {
     const entry = FIXTURE;
-    const { container } = mount(
+    const { container } = renderInCumulus(
       <p>
         Before <GlossaryTerm entry={entry} text={assertLocalized("figments")} />{" "}
         after.
@@ -57,7 +45,7 @@ describe("GlossaryTerm", () => {
 
   it("becomes the active semantic source through focus", () => {
     const entry = FIXTURE;
-    const { container } = mount(
+    const { container } = renderInCumulus(
       <GlossaryTerm entry={entry} text={assertLocalized(entry.term)} />,
     );
     const source = container.querySelector<HTMLElement>("[data-glossary-term]");
@@ -71,7 +59,7 @@ describe("GlossaryTerm", () => {
 
   it("makes the complete RulesText block one stationary source while preserving rich marks", () => {
     const entry = FIXTURE;
-    const { container } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized(`${entry.term} 2● and 3✦.`)}
         owner={{ kind: "card", id: CARD_ID }}
@@ -99,7 +87,7 @@ describe("GlossaryTerm", () => {
   });
 
   it("renders passive RulesText copy when glossary interaction belongs to an outer entity", () => {
-    const { container } = mount(
+    const { container } = renderInCumulus(
       <RulesText
         text={assertLocalized(`${FIXTURE.term} 2●.`)}
         owner={{ kind: "card", id: CARD_ID }}

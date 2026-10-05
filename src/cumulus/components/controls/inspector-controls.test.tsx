@@ -2,24 +2,12 @@
 
 import { assertLocalized } from "@trox/runtime";
 import { act, useState, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CardOrderEditor } from "./CardOrderEditor";
 import { DisclosureSection } from "./DisclosureSection";
 import { NumberStepper } from "./NumberStepper";
 import { TextField } from "./TextField";
-import { CumulusRoot } from "../../CumulusRoot";
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
+import { renderInCumulus } from "../../testing/render";
 
 beforeEach(() => {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
@@ -43,7 +31,7 @@ describe("inspector Cumulus controls", () => {
   it("exposes labeled NumberStepper actions and formatted output", () => {
     const decrement = vi.fn();
     const increment = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <NumberStepper
         label={assertLocalized("Energy")}
         value={2}
@@ -73,7 +61,6 @@ describe("inspector Cumulus controls", () => {
     });
     expect(decrement).toHaveBeenCalledOnce();
     expect(increment).toHaveBeenCalledOnce();
-    act(() => root.unmount());
   });
 
   it("keeps DisclosureSection controlled", () => {
@@ -89,15 +76,14 @@ describe("inspector Cumulus controls", () => {
         </DisclosureSection>
       );
     }
-    const { container, root } = mount(<Fixture />);
+    const { container } = renderInCumulus(<Fixture />);
     expect(container.textContent).not.toContain("Hidden body");
     act(() => (container.querySelector("button") as HTMLButtonElement).click());
     expect(container.textContent).toContain("Hidden body");
-    act(() => root.unmount());
   });
 
   it("owns placement-aware DisclosureSection surface chrome", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <DisclosureSection
         title={assertLocalized("Details")}
         expanded={false}
@@ -111,12 +97,11 @@ describe("inspector Cumulus controls", () => {
     expect(section?.dataset.glassPlacement).toBe("onGlass");
     expect(section?.style.background).toContain("var(--glass-on-glass-fill)");
     expect(section?.style.border).toContain("var(--glass-on-glass-rim)");
-    act(() => root.unmount());
   });
 
   it("labels TextField and reports changes", () => {
     const onChange = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <TextField
         label={assertLocalized("Search cards")}
         kind="search"
@@ -134,12 +119,11 @@ describe("inspector Cumulus controls", () => {
       input.dispatchEvent(new Event("input", { bubbles: true }));
     });
     expect(onChange).toHaveBeenCalledWith("moon");
-    act(() => root.unmount());
   });
 
   it("returns card instance ids from CardOrderEditor keyboard reordering", () => {
     const onOrderChange = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <CardOrderEditor
         label={assertLocalized("Deck order")}
         items={[
@@ -159,11 +143,10 @@ describe("inspector Cumulus controls", () => {
       );
     });
     expect(onOrderChange).toHaveBeenCalledWith(["instance-b", "instance-a"]);
-    act(() => root.unmount());
   });
 
   it("owns standalone CardOrderEditor surface chrome by default", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <CardOrderEditor
         label={assertLocalized("Deck order")}
         items={[{ id: "instance-a", label: assertLocalized("A") }]}
@@ -174,6 +157,5 @@ describe("inspector Cumulus controls", () => {
     expect(editor?.dataset.glassPlacement).toBe("onMedia");
     expect(editor?.style.background).toContain("var(--glass-fill)");
     expect(editor?.style.border).toContain("var(--glass-rim)");
-    act(() => root.unmount());
   });
 });

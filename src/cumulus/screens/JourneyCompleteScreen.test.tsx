@@ -1,15 +1,14 @@
 import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
-import { act, type ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
+import { act } from "react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { CumulusRoot } from "../CumulusRoot";
 import {
   JourneyCompleteScreen,
   type JourneyCompleteView,
 } from "./JourneyCompleteScreen";
 import { testAvatarId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 const VIEW: JourneyCompleteView = {
   avatar: {
@@ -46,22 +45,9 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
-
 describe("Cumulus JourneyCompleteScreen", () => {
   it("orders the title, interactive portrait, and run summary without a resting name", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyCompleteScreen view={VIEW} onNewJourney={vi.fn()} />,
     );
 
@@ -108,13 +94,11 @@ describe("Cumulus JourneyCompleteScreen", () => {
     expect(
       container.querySelector('[data-testid="journey-complete-download-log"]'),
     ).toBeNull();
-
-    act(() => root.unmount());
   });
 
   it("renders the bottom action as accent glass and reports activation", () => {
     const onNewJourney = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <JourneyCompleteScreen view={VIEW} onNewJourney={onNewJourney} />,
     );
     const button = container.querySelector<HTMLButtonElement>(
@@ -124,7 +108,5 @@ describe("Cumulus JourneyCompleteScreen", () => {
     expect(button?.dataset.glassVariant).toBe("accent");
     act(() => button?.click());
     expect(onNewJourney).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
   });
 });

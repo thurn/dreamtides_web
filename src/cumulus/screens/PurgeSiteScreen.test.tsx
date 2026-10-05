@@ -2,8 +2,6 @@ import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
-import type { ReactElement } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
 import { parseCardName } from "../../types/card-identity";
@@ -14,12 +12,12 @@ import {
   purgeActionWidthReservations,
   type PurgeSiteView,
 } from "./PurgeSiteScreen";
-import { CumulusRoot } from "../CumulusRoot";
 import { PURGE_PRESENTATION } from "../test-helpers/presentation-fixtures";
 import { parseSiteId } from "../../types/identifiers";
 import { parseDeckEntryId } from "../../types/identifiers";
 import { testCardId, testGuideId } from "../../types/test-identities";
 import { testPresentationId } from "../../types/test-identities";
+import { renderInCumulus } from "../testing/render";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
@@ -92,19 +90,6 @@ class ResizeObserverStub {
   disconnect(): void {}
 }
 
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{element}</CumulusRoot>);
-  });
-  return { container, root };
-}
-
 beforeEach(() => {
   stubMatchMedia();
   globalThis.ResizeObserver = ResizeObserverStub;
@@ -126,7 +111,7 @@ describe("PurgeSiteScreen", () => {
   });
 
   it("starts with a Decline header action, no close disc, and no sprite purge button", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
@@ -152,15 +137,11 @@ describe("PurgeSiteScreen", () => {
     expect(
       container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("changes the header action after selection and sends the updated total cost", () => {
     const onPurge = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={onPurge} />,
     );
 
@@ -216,10 +197,6 @@ describe("PurgeSiteScreen", () => {
     });
 
     expect(onPurge).toHaveBeenCalledWith(["entry-a", "entry-b"], 100);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders and reports authored first-visit guidance with the essence Boxicon", () => {
@@ -239,7 +216,7 @@ describe("PurgeSiteScreen", () => {
       verticalOffset: 0,
       bubbleWidth: 600,
     } as const;
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <PurgeSiteScreen
         view={{ ...view(), tutorial }}
         onClose={vi.fn()}
@@ -262,14 +239,10 @@ describe("PurgeSiteScreen", () => {
       dialogue?.querySelector('[aria-label="essence"] i')?.className,
     ).toContain("bxf bx-crypto");
     expect(onTutorialShown).toHaveBeenCalledWith(tutorial);
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the mobile card grid on the shared rounded glass panel", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
@@ -304,27 +277,19 @@ describe("PurgeSiteScreen", () => {
       "gap: var(--space-xs)",
     );
     expect(surface?.style.borderLeft).not.toContain("var(--border-soft)");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("leaves persistent journey chrome to the router-owned wrapper", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
     expect(
       container.querySelector("[data-journey-status-bar-anchor]"),
     ).toBeNull();
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("anchors the mobile guide art beyond the shared menu corner inset", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
@@ -333,14 +298,10 @@ describe("PurgeSiteScreen", () => {
     );
     expect(guideArt?.style.left).toBe("0px");
     expect(guideArt?.style.width).toBe("46vw");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("anchors the mobile speech tail beside the guide's head", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
@@ -350,15 +311,11 @@ describe("PurgeSiteScreen", () => {
     expect(speechAnchor?.style.left).toBe("86%");
     expect(speechAnchor?.style.top).toBe("var(--space-m)");
     expect(speechAnchor?.style.bottom).toBe("");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("renders the desktop composition with cards on the shared rounded glass panel", () => {
     stubMatchMedia(true);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <PurgeSiteScreen view={view()} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
@@ -400,15 +357,11 @@ describe("PurgeSiteScreen", () => {
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("2");
     expect(surface?.style.borderLeft).not.toContain("var(--border-soft)");
-
-    act(() => {
-      root.unmount();
-    });
   });
 
   it("keeps the desktop purge card window fixed-height with a 20-card deck", () => {
     stubMatchMedia(true);
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <PurgeSiteScreen view={view(20)} onClose={vi.fn()} onPurge={vi.fn()} />,
     );
 
@@ -428,9 +381,5 @@ describe("PurgeSiteScreen", () => {
     expect(
       container.querySelectorAll("[data-testid^='cumulus-purge-card-entry-']"),
     ).toHaveLength(20);
-
-    act(() => {
-      root.unmount();
-    });
   });
 });

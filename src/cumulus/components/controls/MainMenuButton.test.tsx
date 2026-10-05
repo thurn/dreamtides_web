@@ -1,22 +1,10 @@
 // @vitest-environment jsdom
 
-import { act, type ReactElement } from "react";
+import { act } from "react";
 import { assertLocalized } from "@trox/runtime";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { MainMenuButton } from "./MainMenuButton";
-import { CumulusRoot } from "../../CumulusRoot";
-
-function mount(element: ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => root.render(<CumulusRoot>{element}</CumulusRoot>));
-  return { container, root };
-}
+import { renderInCumulus } from "../../testing/render";
 
 beforeEach(() => {
   window.matchMedia = vi.fn().mockImplementation((query: string) => ({
@@ -37,7 +25,7 @@ afterEach(() => {
 
 describe("MainMenuButton", () => {
   it("renders the shared neutral glass treatment on the press surface", () => {
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <MainMenuButton
         label={assertLocalized("New Journey")}
         onPress={() => {}}
@@ -52,13 +40,11 @@ describe("MainMenuButton", () => {
     expect(glassSurface?.style.background).toContain("--glass-fill");
     expect(glassSurface?.style.border).toContain("--glass-rim");
     expect(glassSurface?.style.boxShadow).toContain("--glass-shadow");
-
-    act(() => root.unmount());
   });
 
   it("reports activation with its player-facing label intact", () => {
     const onPress = vi.fn();
-    const { container, root } = mount(
+    const { container } = renderInCumulus(
       <MainMenuButton
         label={assertLocalized("New Journey")}
         onPress={onPress}
@@ -69,7 +55,5 @@ describe("MainMenuButton", () => {
     expect(button?.textContent).toBe("New Journey");
     act(() => button?.click());
     expect(onPress).toHaveBeenCalledOnce();
-
-    act(() => root.unmount());
   });
 });

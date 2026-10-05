@@ -2,30 +2,16 @@ import { assertLocalized } from "@trox/runtime";
 // @vitest-environment jsdom
 
 import { act } from "react";
-import { createRoot, type Root } from "react-dom/client";
 import { afterEach, describe, expect, it } from "vitest";
 import type { AvatarVisual } from "./AvatarPortrait";
 import { AvatarStage } from "./AvatarStage";
-import { CumulusRoot } from "../../CumulusRoot";
+import { renderInCumulus } from "../../testing/render";
 
 const AVATAR: AvatarVisual = {
   imageNumber: "0042",
   name: assertLocalized("Astra"),
   title: assertLocalized("The Dawnbound"),
 };
-
-function mountInto(node: React.ReactElement): {
-  container: HTMLDivElement;
-  root: Root;
-} {
-  const container = document.createElement("div");
-  document.body.append(container);
-  const root = createRoot(container);
-  act(() => {
-    root.render(<CumulusRoot>{node}</CumulusRoot>);
-  });
-  return { container, root };
-}
 
 afterEach(() => {
   document.body.innerHTML = "";
@@ -35,7 +21,7 @@ describe("AvatarStage", () => {
   it.each(["standing", "cutout", "fullBleed"] as const)(
     "%s renders full-body cutout art in the caller's stage",
     (variant) => {
-      const { container } = mountInto(
+      const { container } = renderInCumulus(
         <AvatarStage avatar={AVATAR} variant={variant} />,
       );
 
@@ -49,7 +35,7 @@ describe("AvatarStage", () => {
   );
 
   it("fullBleed centers the authored head coordinate instead of the canvas", () => {
-    const { container } = mountInto(
+    const { container } = renderInCumulus(
       <AvatarStage
         avatar={{
           ...AVATAR,
@@ -68,7 +54,7 @@ describe("AvatarStage", () => {
   it.each(["standing", "cutout", "fullBleed"] as const)(
     "%s falls back to the name's first letter when the art 404s",
     (variant) => {
-      const { container } = mountInto(
+      const { container } = renderInCumulus(
         <AvatarStage avatar={AVATAR} variant={variant} />,
       );
 
