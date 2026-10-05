@@ -105,7 +105,8 @@ interface CardInstance {
   owner: Side; controller: Side;
   variant: Variant;                    // amplified flag + transfigurations + deck-entry mods (D39)
   status: { exhausted: boolean; reclaimed: boolean; offering: boolean; ephemeral: boolean;
-            veil: boolean; gainedSpark: number; counters: number; created: boolean; grants: Grant[] };
+            veil: boolean; gainedSpark: number; counters: number; created: boolean; grants: Grant[];
+            x: number | null };                // X paid to play it, kept while in play (variable spark)
   knownTo: Side[];                     // hidden-information tracking
   enteredZoneAt: number;               // timestamp for layer ordering
 }
@@ -602,7 +603,7 @@ can't use `import.meta.glob`.
 (v) => [triggered(onDawn(), gainEnergy(1)), activated([energy(v.amplified ? 2 : 4), exhaustSelf()], gainSpark(self(), 1))]
 
 // Dream Sever 6e019832-2e0c-4166-81c3-54f7995425df (Interrupt): "Prevent a played event unless the opponent pays 2●."
-() => [event(prevent(target(stackItem({ type: "event", controller: "opponent" })), { unlessPays: [energy(2)] }))]
+() => [event(prevent(stackItem({ cardType: "event", controller: "opponent" }), { unlessPays: 2 }))]
 
 // Echo Architect 21965e95-0c8c-470c-a1e1-06d7b87a8d00: "Events cost you 1● more." / "When you play an event, copy it."
 () => [staticAbility(costModifier(cardsYouPlay({ type: "event" }), +1)), triggered(whenYouPlay({ type: "event" }), copyStackItem(triggeringItem()))]
@@ -613,14 +614,18 @@ can't use `import.meta.glob`.
 
 **Primitive registry.** Each primitive lives in its own module under
 `src/engine/effects/primitives/`, exporting its node type, its
-`PrimitiveDefinition` (op, optional children and play-time targets, and
-`resolve`), and its builder. `primitives/index.ts` lists one `export *` line
+`PrimitiveDefinition` (op, optional children, modes, and play-time targets,
+and `resolve`), and its builder. `primitives/index.ts` lists one `export *` line
 per primitive and is the authoritative catalog; `effects/registry.ts` derives
 the `Effect` union and the op lookup from it, so adding a primitive touches
 only its module, its group's test file, and one index line. Flow primitives
 resolve children through the `run` callback in their environment. Play-time
-targets are collected by walking the effect tree; one target spec object used
-in several places is one target.
+choices are collected by walking the effect tree: a modal node (`chooseOne`)
+prompts for its mode, a mode whose required targets have no candidates is not
+legal, and the walk descends only into the chosen mode, so only its targets
+are chosen. The stack item stores the chosen modes and targets, and the node
+resolves its stored mode. One target spec object used in several places is
+one target. Validation walks `children`, which list every mode.
 
 **Primitive catalog.** Phase 3 starts with a subset of these. Phase 5 extends
 them, with tests for each.

@@ -1,5 +1,5 @@
 import { eventAbilities } from "../../effects/abilities";
-import { resolveEffect } from "../../effects/interpreter";
+import { resolveEffect, splitChoices } from "../../effects/interpreter";
 import { originAbilities, originCardId } from "../../rules/activation";
 import { enterPlay, instanceOf, leftmostOpenBackSlot, moveInstance } from "../../rules/zones";
 import type { AbilityStackItem, CardStackItem } from "../../state/types";
@@ -22,10 +22,10 @@ function resolveCard(ctx: StepContext, item: CardStackItem): void {
   const definition = catalog.card(instance.cardId);
   ctx.emit({ kind: "resolved", instance: item.instance });
   definition.synthetic?.resolve?.(ctx, item);
-  // Each event ability resolves with its own slice of the play-time targets.
-  let offset = 0;
-  for (const ability of eventAbilities(definition, instance.variant)) {
-    const count = ability.targets.length;
+  // Each event ability resolves with its own share of the play-time modes and targets.
+  const abilities = eventAbilities(definition, instance.variant);
+  const choices = splitChoices(abilities.map((ability) => ability.effect), item);
+  abilities.forEach((ability, index) => {
     resolveEffect(ctx, ability.effect, {
       source: item.instance,
       ability: ability.ability,
@@ -33,16 +33,17 @@ function resolveCard(ctx: StepContext, item: CardStackItem): void {
       controller: item.controller,
       variant: instance.variant,
       x: item.x,
-      targets: item.targets.slice(offset, offset + count),
+      choices: choices[index] ?? { modes: [], targets: [] },
     });
-    offset += count;
-  }
+  });
   if (definition.cardType === "character") {
     const slot = leftmostOpenBackSlot(state, item.controller);
     if (slot === null) {
       // Capacity is reserved at play time, so this is unreachable through legal play.
       moveInstance(ctx, item.instance, "void");
     } else {
+      // A variable-spark character keeps the X paid for it while in play.
+      instance.status.x = item.x;
       enterPlay(ctx, item.instance, item.controller, slot);
     }
   } else {
@@ -65,7 +66,7 @@ function resolveAbility(ctx: StepContext, item: AbilityStackItem): void {
     controller: item.controller,
     variant: item.origin.kind === "card" ? item.origin.variant : { amplified: false },
     x: item.x,
-    targets: item.targets,
+    choices: item,
   });
 }
 

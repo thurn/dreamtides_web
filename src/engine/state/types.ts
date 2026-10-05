@@ -61,6 +61,8 @@ export interface CardStatus {
   created: boolean;
   /** Played by Reclaim; it is banished instead of any other zone change. */
   reclaimed: boolean;
+  /** The X paid to play the card, kept while it is in play (variable spark reads it); `null` elsewhere. */
+  x: number | null;
 }
 
 export interface CardInstance {
@@ -77,6 +79,8 @@ export interface CardInstance {
 
 interface StackItemBase {
   readonly controller: Side;
+  /** Modes chosen when the item was played, one per modal node on the chosen path in walk order. */
+  readonly modes: readonly number[];
   /** Targets chosen when the item was played, one list per target spec in walk order. */
   readonly targets: readonly (readonly InstanceId[])[];
   /** The value chosen for X, if the item has an X. */

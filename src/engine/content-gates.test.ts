@@ -13,7 +13,8 @@ import { DREAMWELL_CARDS } from "../content/dreamwell";
 import { FIGMENTS } from "../content/figments";
 import type { Ability } from "./dsl/types";
 import { expectedVerifiedText } from "./dsl/verified-text";
-import { collectTargets } from "./effects/interpreter";
+import { engineCardFromContent } from "./content-catalog";
+import { everyNode } from "./effects/interpreter";
 
 interface Entity {
   readonly kind: string;
@@ -55,9 +56,16 @@ describe("content gates", () => {
       for (const amplified of [false, true]) {
         const built: readonly Ability[] = abilities({ amplified });
         for (const ability of built) {
-          if (ability.kind === "event") expect(() => collectTargets(ability.effect)).not.toThrow();
+          // Every node, every mode of a modal node included, is a registered primitive.
+          if (ability.kind !== "keyword") expect(() => everyNode(ability.effect)).not.toThrow();
         }
       }
+    }
+  });
+
+  it("reads every card's printed energy cost orbs into its engine costs", () => {
+    for (const card of CARDS) {
+      expect(() => engineCardFromContent(card), card.id).not.toThrow();
     }
   });
 

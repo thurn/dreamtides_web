@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { xCost } from "./dsl/energy";
 import { createEngine } from "./engine";
 import { deserializeState, serializeState, stateHash } from "./state/hash";
 import { battleSeed, type CardId } from "./state/ids";
@@ -31,7 +32,7 @@ describe("random streams", () => {
 
   it("deals hands and deck order from the seed", () => {
     // Every card is distinct, so the card sequence is exactly the deal.
-    const cards = fuzzCatalogCards().filter((card) => card.cost !== null).slice(0, DECK_SIZE);
+    const cards = fuzzCatalogCards().filter((card) => xCost(card.costs) === null).slice(0, DECK_SIZE);
     expect(new Set(cards.map((card) => card.id)).size).toBe(DECK_SIZE);
     const deck = cards.map((card) => ({ cardId: card.id }));
     const deal = (seed: string): CardId[] => {

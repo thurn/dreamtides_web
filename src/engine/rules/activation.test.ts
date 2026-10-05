@@ -43,7 +43,7 @@ describe("activated abilities on the stack", () => {
     const { state, events } = activate(start, "player", source);
     expect(events.map((event) => event.kind)).toEqual(["energyChanged", "exhaustionChanged", "abilityActivated"]);
     expect(state.stack).toEqual([
-      { kind: "ability", source, ability: 0, origin: { kind: "card", cardId: STACK.drawForEnergyAndExhaust.id, variant: { amplified: false } }, controller: "player", targets: [], x: null },
+      { kind: "ability", source, ability: 0, origin: { kind: "card", cardId: STACK.drawForEnergyAndExhaust.id, variant: { amplified: false } }, controller: "player", modes: [], targets: [], x: null },
     ]);
     expect(state.priority).toBe("enemy");
     expect(engine.decision(state)).toEqual({ kind: "respond", side: "enemy" });
@@ -130,6 +130,19 @@ describe("activated abilities on the stack", () => {
     state.instances = Object.fromEntries(Object.entries(state.instances).filter(([id]) => id !== source));
     const resolved = engine.apply(state, "enemy", { kind: "pass" }, NO_PROMPTS);
     expect(resolved.state.sides.player.hand).toHaveLength(1);
+  });
+
+  it("chooses a modal ability's mode at activation, stores it on the stack, and resolves that mode", () => {
+    const { state: start, ids } = board({
+      player: { back: [STACK.modalAbility.id], energy: 1, deck },
+      enemy: { back: [STACK.interruptDraw.id, v.vanilla2.id], energy: 1, deck },
+    });
+    const victim = ids.enemy.back[1]!;
+    const { state } = activate(start, "player", ids.player.back[0]!, [0, [victim]]);
+    expect(state.stack).toEqual([expect.objectContaining({ kind: "ability", modes: [0], targets: [[victim]] })]);
+    const resolved = engine.apply(state, "enemy", { kind: "pass" }, NO_PROMPTS).state;
+    expect(resolved.instances[victim]?.zone).toBe("void");
+    expect(resolved.sides.player.score).toBe(0);
   });
 
   it("can be cancelled before the commit point, restoring the committed state", () => {

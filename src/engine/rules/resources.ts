@@ -23,19 +23,23 @@ export function spendEnergy(ctx: StepContext, side: Side, amount: number): void 
   ctx.emit({ kind: "energyChanged", side, current: state.currentEnergy, max: state.maxEnergy });
 }
 
-/** Adds victory points; a total never goes below 0 (C14). */
+/**
+ * Adds victory points; a total never goes below 0 (C14). The event carries
+ * the actual change, and a change of 0 emits none.
+ */
 export function gainPoints(
   ctx: StepContext,
   side: Side,
   amount: number,
   cause: "challenge" | "fatigue" | "effect",
 ): void {
-  if (amount === 0) {
-    return;
-  }
   const state = ctx.state.sides[side];
-  state.score = Math.max(0, state.score + amount);
-  ctx.emit({ kind: "pointsScored", side, amount, cause });
+  const before = state.score;
+  state.score = Math.max(0, before + amount);
+  const change = state.score - before;
+  if (change !== 0) {
+    ctx.emit({ kind: "pointsScored", side, amount: change, cause });
+  }
 }
 
 /** `side` suffers Fatigue: the opponent gains 1⍟, then 2⍟, 4⍟, … (rules § Fatigue). */

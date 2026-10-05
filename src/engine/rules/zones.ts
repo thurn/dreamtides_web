@@ -111,6 +111,7 @@ export function moveInstance(
   if (to !== "deck" && to !== "hand") {
     instance.status.exhausted = false;
   }
+  instance.status.x = null;
 }
 
 /** Moves an instance onto the top of the stack under `controller`, with its play-time choices. */
@@ -119,9 +120,10 @@ export function moveToStack(
   id: InstanceId,
   controller: Side,
   choices: {
+    readonly modes: readonly number[];
     readonly targets: readonly (readonly InstanceId[])[];
     readonly x: number | null;
-  } = { targets: [], x: null },
+  } = { modes: [], targets: [], x: null },
 ): void {
   const { state } = ctx;
   const instance = instanceOf(state, id);
@@ -133,6 +135,7 @@ export function moveToStack(
     kind: "card",
     instance: id,
     controller,
+    modes: [...choices.modes],
     targets: choices.targets.map((list) => [...list]),
     x: choices.x,
   });

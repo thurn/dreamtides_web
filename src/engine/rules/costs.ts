@@ -1,11 +1,12 @@
 /**
- * Costs of activated abilities (rules § Costs, Requirements, and X). Cost
- * choices are play-time prompts before the commit point; payment happens
- * after it, all before the item goes on the stack.
+ * Costs of cards and activated abilities (rules § Costs, Requirements, and
+ * X). Cost choices are play-time prompts before the commit point; payment
+ * happens after it, all before the item goes on the stack.
  */
 import { matchingCharacters } from "../dsl/selectors";
+import { fixedEnergy, minimumEnergy, xCost } from "../dsl/energy";
 import type { Cost } from "../dsl/types";
-import type { ChooseCardsPrompt, PromptPurpose } from "../prompts/types";
+import type { ChooseCardsPrompt, ChooseNumberPrompt, PromptPurpose } from "../prompts/types";
 import type { AbilitySource, InstanceId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
 import type { StepContext } from "../steps/types";
@@ -15,13 +16,26 @@ import { instanceOf, moveInstance, slotOf } from "./zones";
 /** Cards chosen to pay a list of costs, one list per cost in order (empty for costs without a choice). */
 export type CostCards = readonly (readonly InstanceId[])[];
 
-/** The fixed energy part of a list of costs. */
-export function fixedEnergy(costs: readonly Cost[]): number {
-  return costs.reduce((total, cost) => total + (cost.cost === "energy" ? cost.amount : 0), 0);
-}
-
-export function hasX(costs: readonly Cost[]): boolean {
-  return costs.some((cost) => cost.cost === "energyX");
+/**
+ * Chooses X as a play-time prompt when the costs have an X part: from its
+ * minimum up to the energy left after the fixed part. An unaffordable X is an
+ * empty prompt, which makes the play illegal. `null` without an X part.
+ */
+export function chooseX(
+  ctx: StepContext,
+  side: Side,
+  costs: readonly Cost[],
+  purpose: PromptPurpose,
+): number | null {
+  const variable = xCost(costs);
+  if (variable === null) return null;
+  return ctx.choose<ChooseNumberPrompt>({
+    kind: "chooseNumber",
+    side,
+    purpose,
+    min: variable.min,
+    max: ctx.state.sides[side].currentEnergy - fixedEnergy(costs),
+  });
 }
 
 /**
@@ -42,7 +56,7 @@ export function canPayExhaust(state: BattleState, source: AbilitySource): boolea
 
 /**
  * Whether `side` could pay the costs, apart from the cards chosen for them:
- * the energy (with X at least 1) and any ☾. The dry run checks the choices.
+ * the energy (with X at its minimum) and any ☾. The dry run checks the choices.
  */
 export function costsPayable(
   state: BattleState,
@@ -50,8 +64,7 @@ export function costsPayable(
   source: AbilitySource,
   costs: readonly Cost[],
 ): boolean {
-  const energy = fixedEnergy(costs) + (hasX(costs) ? 1 : 0);
-  if (energy > state.sides[side].currentEnergy) return false;
+  if (minimumEnergy(costs) > state.sides[side].currentEnergy) return false;
   return costs.every((cost) => cost.cost !== "exhaustSelf" || canPayExhaust(state, source));
 }
 
@@ -132,7 +145,8 @@ export function payCosts(
         spendEnergy(ctx, side, cost.amount);
         return;
       case "energyX":
-        spendEnergy(ctx, side, x ?? 0);
+        if (x === null) throw new Error("An X cost is paid only after X is chosen");
+        spendEnergy(ctx, side, x);
         return;
       case "exhaustSelf":
         exhaustForCost(ctx, source);

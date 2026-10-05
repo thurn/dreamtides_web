@@ -43,7 +43,7 @@ function card(
   return {
     id: syntheticId(300 + index),
     cardType,
-    cost,
+    costs: [energy(cost)],
     spark: cardType === "character" ? 1 : null,
     subtype: cardType === "character" ? "Warrior" : "",
     speed,
@@ -89,6 +89,8 @@ export const STACK = {
   discardToDissolve: card(13, "character", 1, () => [activated([discardCost(1)], p.dissolve(target(enemyCharacter())), { speed: "fast" })]),
   /** "Abandon a character: Another character you control gains +2✦." */
   abandonToPump: card(14, "character", 1, () => [activated([abandonCost()], p.gainSpark(target(characterYouControl()), 2))]),
+  /** "1●: Choose one: Dissolve an enemy; or gain 1⍟." */
+  modalAbility: card(16, "character", 1, () => [activated([energy(1)], p.chooseOne(p.dissolve(target(enemyCharacter())), p.gainPoints(1)))]),
   /** "Until the opponent pays 2●, …": registers a payable effect (C7). */
   payableEffect: {
     ...card(15, "event", 0, () => []),

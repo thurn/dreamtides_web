@@ -26,11 +26,11 @@ function place(state: BattleState, owner: Side, cardId: CardId, zone: Zone & ("v
     controller: owner,
     zone,
     variant: { amplified: false },
-    status: { exhausted: false, gainedSpark: 1, turnSpark: 0, counters: 2, created: false, reclaimed: false },
+    status: { exhausted: false, gainedSpark: 1, turnSpark: 0, counters: 2, created: false, reclaimed: false, x: null },
     enteredZoneAt: 3,
   };
   if (zone === "stack") {
-    state.stack.push({ kind: "card", instance: id, controller: owner, targets: [], x: null });
+    state.stack.push({ kind: "card", instance: id, controller: owner, modes: [], targets: [], x: null });
   } else {
     state.sides[owner][zone].push(id);
   }
@@ -55,7 +55,7 @@ function fixture() {
   const enemyFront = ids.enemy.front[0];
   const playerFront = ids.player.front[0];
   if (enemyFront === null || playerFront === null) throw new Error("fixture has empty fronts");
-  state.stack[0] = { kind: "card", instance: stacked, controller: "player", targets: [[enemyFront, ids.enemy.hand[0]]], x: 2 };
+  state.stack[0] = { kind: "card", instance: stacked, controller: "player", modes: [], targets: [[enemyFront, ids.enemy.hand[0]]], x: 2 };
   state.challenge = { challengers: [playerFront], blockers: { [playerFront]: enemyFront } };
   state.result = { kind: "victory", winner: "player", reason: "score" };
   state.rng["shuffle:player"] = 4;

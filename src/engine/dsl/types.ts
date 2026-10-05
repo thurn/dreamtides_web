@@ -97,14 +97,32 @@ export type Keyword = "vengeful" | "awakened" | "cannotBePrevented";
 /** A timing category: when a card or activated ability may be played (rules § Playing Cards and the Stack). */
 export type Speed = "standard" | "fast" | "interrupt";
 
+/** N●. */
+export interface EnergyCost {
+  readonly cost: "energy";
+  readonly amount: number;
+}
+
 /**
- * One cost of an activated ability (engine-design § Costs). Choices among
- * costs are play-time prompts; payment happens after the commit point.
+ * X●, chosen as the card is played or the ability activated (rules § Costs,
+ * Requirements, and X). X is at least `min`: 1, unless the definition widens
+ * it to 0 because X=0 does something meaningful.
+ */
+export interface EnergyXCost {
+  readonly cost: "energyX";
+  readonly min: number;
+}
+
+/** A cost paid to play a card: its printed energy, fixed and X parts in printed order ("2 X" pays 2● first, then X●). */
+export type CardCost = EnergyCost | EnergyXCost;
+
+/**
+ * One cost of an activated ability or a card (engine-design § Costs). Choices
+ * among costs are play-time prompts; payment happens after the commit point.
  */
 export type Cost =
-  | { readonly cost: "energy"; readonly amount: number }
-  /** X●, chosen as the ability is activated; X is at least 1. */
-  | { readonly cost: "energyX" }
+  | EnergyCost
+  | EnergyXCost
   /** ☾: exhausts the source, a ready back-rank character or the avatar. */
   | { readonly cost: "exhaustSelf" }
   /** Abandon characters you control that match the selector. */

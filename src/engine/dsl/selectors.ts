@@ -1,4 +1,5 @@
 import type { EngineCatalog } from "../catalog";
+import { fixedEnergy } from "./energy";
 import { hasKeyword } from "../rules/keywords";
 import { effectiveSpark } from "../rules/spark";
 import { charactersInPlay, instanceOf, slotOf } from "../rules/zones";
@@ -11,9 +12,9 @@ export function resolvePlayer(controller: Side, ref: PlayerRef): Side {
   return ref === "you" ? controller : opponent(controller);
 }
 
-/** A character's cost for cost selectors; an X-cost card counts as 0. */
+/** A character's cost for cost selectors: its fixed energy, with X counting as 0. */
 function costOf(state: BattleState, catalog: EngineCatalog, id: InstanceId): number {
-  return catalog.card(instanceOf(state, id).cardId).cost ?? 0;
+  return fixedEnergy(catalog.card(instanceOf(state, id).cardId).costs);
 }
 
 /** Whether a character in play matches the selector, for an effect controlled by `controller`. */

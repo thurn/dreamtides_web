@@ -5,6 +5,7 @@
 import type { EngineCardDefinition } from "../catalog";
 import type { Engine } from "../engine";
 import { eventTargetSpecs } from "../effects/abilities";
+import { fixedEnergy } from "../dsl/energy";
 import type { CharacterSelector } from "../dsl/types";
 import type { CardId, Side } from "../state/ids";
 import type { BattleState } from "../state/types";
@@ -22,14 +23,14 @@ function characterFor(
   pool: readonly EngineCardDefinition[],
 ): CardId {
   const fits = (card: EngineCardDefinition): boolean => {
-    const spark = card.spark ?? 0;
+    const spark = typeof card.spark === "number" ? card.spark : 0;
     return (
       card.cardType === "character" &&
       card.status !== "authored" &&
       (selector.subtype === undefined || card.subtype === selector.subtype) &&
       (selector.sparkAtMost === undefined || spark <= selector.sparkAtMost) &&
       (selector.sparkAtLeast === undefined || spark >= selector.sparkAtLeast) &&
-      (selector.costAtMost === undefined || (card.cost ?? 0) <= selector.costAtMost)
+      (selector.costAtMost === undefined || fixedEnergy(card.costs) <= selector.costAtMost)
     );
   };
   const vanilla = Object.values(SYNTHETIC).find(fits);

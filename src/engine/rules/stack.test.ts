@@ -19,7 +19,7 @@ function putOnStack(state: BattleState, id: InstanceId, priority: Side): void {
   if (instance === undefined) throw new Error(`no ${id}`);
   state.sides[instance.owner].hand = state.sides[instance.owner].hand.filter((card) => card !== id);
   instance.zone = "stack";
-  state.stack.push({ kind: "card", instance: id, controller: instance.owner, targets: [], x: null });
+  state.stack.push({ kind: "card", instance: id, controller: instance.owner, modes: [], targets: [], x: null });
   state.priority = priority;
 }
 

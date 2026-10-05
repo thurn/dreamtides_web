@@ -10,6 +10,7 @@ import {
   contentDreamwellDefinitions,
 } from "../content-catalog";
 import { parseCardId } from "../../types/card-identity";
+import { energy } from "../dsl/builders";
 import type { CardId } from "../state/ids";
 
 export function syntheticId(index: number): CardId {
@@ -25,7 +26,7 @@ function character(
   return {
     id: syntheticId(index),
     cardType: "character",
-    cost,
+    costs: [energy(cost)],
     spark,
     subtype: options.subtype ?? "Warrior",
     speed: options.speed ?? "standard",
@@ -39,7 +40,7 @@ function event(index: number, cost: number, speed: EngineCardDefinition["speed"]
   return {
     id: syntheticId(index),
     cardType: "event",
-    cost,
+    costs: [energy(cost)],
     spark: null,
     subtype: "",
     speed,

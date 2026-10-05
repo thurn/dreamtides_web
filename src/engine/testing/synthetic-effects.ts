@@ -3,6 +3,8 @@
  * and the fuzzer. Test fixtures only: catalog cards never carry hooks.
  */
 import type { EngineCardDefinition, SyntheticHooks } from "../catalog";
+import { energy, energyX } from "../dsl/builders";
+import type { CardCost } from "../dsl/types";
 import type {
   ArrangeDestination,
   ArrangePrompt,
@@ -43,11 +45,16 @@ export function chooseAndDiscard(ctx: StepContext, side: Side, source: InstanceI
   if (card !== undefined) discardCard(ctx, side, card);
 }
 
-function event(index: number, cost: number, synthetic: SyntheticHooks, speed: EngineCardDefinition["speed"] = "standard"): EngineCardDefinition {
+function event(
+  index: number,
+  cost: number | readonly CardCost[],
+  synthetic: SyntheticHooks,
+  speed: EngineCardDefinition["speed"] = "standard",
+): EngineCardDefinition {
   return {
     id: syntheticId(index),
     cardType: "event",
-    cost,
+    costs: typeof cost === "number" ? [energy(cost)] : cost,
     spark: null,
     subtype: "",
     speed,
@@ -118,8 +125,8 @@ export const PROMPTING = {
       }
     },
   }),
-  /** "X: draw X cards," with X chosen at play time. */
-  drawX: event(106, 0, {
+  /** "X: draw X cards," with X (from 0) chosen at play time. */
+  drawX: event(106, [energyX(0)], {
     play: (ctx, self) => {
       const side = instanceOf(ctx.state, self).owner;
       return {

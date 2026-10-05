@@ -1,17 +1,19 @@
 /** The card-lab setup solver and pending-entity semantics (D36). */
 import { describe, expect, it } from "vitest";
+import type { EngineCardDefinition } from "../catalog";
 import { contentCardDefinitions } from "../content-catalog";
 import { createEngine } from "../engine";
 import { NO_PROMPTS } from "../steps/sources";
 import { DSL, DSL_CARDS } from "./dsl-cards";
 import { labBoard } from "./lab-solver";
 import { playFromHand, runScenario } from "./scenario";
-import { SYNTHETIC, testCatalog } from "./synthetic-cards";
+import { SYNTHETIC, syntheticId, testCatalog } from "./synthetic-cards";
 
+/** A pending 1● event and a pending 2● 2✦ character. */
+const pendingEvent: EngineCardDefinition = { ...SYNTHETIC.event1, id: syntheticId(904), status: "pending" };
+const pendingCharacter: EngineCardDefinition = { ...SYNTHETIC.vanilla2, id: syntheticId(905), status: "pending" };
 const pool = contentCardDefinitions();
-const engine = createEngine(testCatalog(DSL_CARDS));
-const pendingEvent = pool.find((card) => card.status === "pending" && card.cardType === "event" && card.cost === 1 && card.speed === "standard");
-const pendingCharacter = pool.find((card) => card.status === "pending" && card.cardType === "character" && card.cost === 2 && card.speed === "standard");
+const engine = createEngine(testCatalog([...DSL_CARDS, pendingEvent, pendingCharacter]));
 
 describe("card-lab setup solver", () => {
   it("solves a playable board for every synthetic DSL card", () => {
@@ -29,7 +31,6 @@ describe("card-lab setup solver", () => {
 
 describe("pending entities play text-less", () => {
   it("resolves a pending event with no effect and reports pendingAbility when played and drawn", () => {
-    if (pendingEvent === undefined) throw new Error("no pending event in the pool");
     const { state, events, ids } = runScenario(engine, {
       board: { active: "player", phase: "day", player: { hand: [pendingEvent.id], energy: 1, deck: [pendingEvent.id] }, enemy: { deck: [SYNTHETIC.vanilla1.id] } },
       steps: (ids) => [playFromHand(ids, "player")],
@@ -50,7 +51,6 @@ describe("pending entities play text-less", () => {
   });
 
   it("plays a pending character with its printed cost and spark and no abilities", () => {
-    if (pendingCharacter === undefined) throw new Error("no pending character in the pool");
     const { state, ids, events } = runScenario(engine, {
       board: { active: "player", phase: "day", player: { hand: [pendingCharacter.id], energy: 2, deck: [SYNTHETIC.vanilla1.id] }, enemy: { deck: [SYNTHETIC.vanilla1.id] } },
       steps: (ids) => [playFromHand(ids, "player")],

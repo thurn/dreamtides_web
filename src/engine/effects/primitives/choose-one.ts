@@ -1,10 +1,10 @@
-import type { ChooseModePrompt } from "../../prompts/types";
 import { definePrimitive, type EffectNode } from "../types";
 
 /**
- * "Choose one:" — the controller picks a mode when the effect resolves.
- * Modes whose targets need play-time choices belong in the play step and
- * arrive with the stack primitives.
+ * "Choose one:" — the controller picks a mode as the card is played or the
+ * ability activated, before its targets; only the chosen mode's targets are
+ * chosen, and the effect resolves the chosen mode. A mode whose required
+ * targets have no candidates cannot be chosen.
  */
 export interface ChooseOneNode {
   readonly op: "chooseOne";
@@ -13,15 +13,13 @@ export interface ChooseOneNode {
 
 export const chooseOnePrimitive = definePrimitive<ChooseOneNode>({
   op: "chooseOne",
-  resolve(ctx, node, env) {
-    const mode = ctx.choose<ChooseModePrompt>({
-      kind: "chooseMode",
-      side: env.controller,
-      purpose: env.purpose("chooseOne"),
-      options: node.modes.map((_, index) => ({ mode: index, legal: true })),
-    });
-    const chosen = node.modes[mode];
-    if (chosen !== undefined) env.run(chosen);
+  children: (node) => node.modes,
+  modes: (node) => node.modes,
+  resolve(_, node, env) {
+    const mode = env.modeOf(node);
+    const chosen = mode === null ? undefined : node.modes[mode];
+    if (chosen === undefined) throw new Error("chooseOne resolved without a mode chosen at play time");
+    env.run(chosen);
   },
 });
 

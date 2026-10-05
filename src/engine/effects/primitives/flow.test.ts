@@ -1,11 +1,28 @@
 /** Flow primitives: sequence, chooseOne, optional, ifThen, repeat; X. */
 import { describe, expect, it } from "vitest";
+import type { EngineCardDefinition } from "../../catalog";
+import { enemyCharacter, energyX, event, target } from "../../dsl/builders";
 import { createEngine } from "../../engine";
+import { createFoldAdapter } from "../../fold/slice";
+import { boardState } from "../../testing/board";
 import { DSL, DSL_CARDS } from "../../testing/dsl-cards";
 import { playFromHand, runScenario } from "../../testing/scenario";
-import { SYNTHETIC, testCatalog } from "../../testing/synthetic-cards";
+import { SYNTHETIC, syntheticId, testCatalog } from "../../testing/synthetic-cards";
+import { chosenModes, collectTargets, everyNode, everyTarget } from "../interpreter";
+import { banish } from "./banish";
+import { chooseOne } from "./choose-one";
+import { dissolve } from "./dissolve";
+import { gainPoints } from "./gain-points";
 
-const engine = createEngine(testCatalog(DSL_CARDS));
+/** "X●, X from 0: Gain X⍟." */
+const pointsFromZeroX: EngineCardDefinition = { ...DSL.pointsTimesX, id: syntheticId(291), costs: [energyX(0)] };
+/** "Choose one: Dissolve an enemy; or banish an enemy." Both modes need a target. */
+const dissolveOrBanish: EngineCardDefinition = {
+  ...DSL.chooseDissolveOrPoints,
+  id: syntheticId(292),
+  abilities: () => [event(chooseOne(dissolve(target(enemyCharacter())), banish(target(enemyCharacter()))))],
+};
+const engine = createEngine(testCatalog([...DSL_CARDS, pointsFromZeroX, dissolveOrBanish]));
 const v = SYNTHETIC;
 const deck = Array.from({ length: 5 }, () => v.vanilla1.id);
 
@@ -17,6 +34,77 @@ describe("flow primitives", () => {
     });
     const kinds = events.map((event) => event.kind);
     expect(kinds.indexOf("cardDrawn")).toBeLessThan(kinds.lastIndexOf("energyChanged"));
+  });
+
+  it("chooseOne chooses its mode at play time, before the commit point and before targets", () => {
+    const { state } = boardState(engine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { hand: [DSL.chooseDissolveOrPoints.id], deck },
+      enemy: { back: [v.vanilla1.id, v.vanilla2.id], deck },
+    });
+    const fold = createFoldAdapter(engine, { checkEventPrefix: true });
+    const opened = fold.reduce(
+      { committed: state, inFlight: null, publishedEvents: 0, attempt: 0 },
+      { kind: "battleAction", side: "player", action: { kind: "play", card: state.sides.player.hand[0], from: "hand" } },
+    );
+    if (opened.kind !== "applied") throw new Error("play bounced");
+    expect(fold.pending(opened.slice)?.prompt).toMatchObject({
+      kind: "chooseMode",
+      cancellable: true,
+      options: [{ mode: 0, legal: true }, { mode: 1, legal: true }],
+    });
+  });
+
+  it("a targeted mode collects its target at play time and resolves against it", () => {
+    const { state, ids } = runScenario(engine, {
+      board: { active: "player", phase: "day", player: { hand: [DSL.chooseDissolveOrPoints.id], deck }, enemy: { back: [v.vanilla1.id, v.vanilla2.id], deck } },
+      steps: (ids) => [playFromHand(ids, "player")],
+      answers: (ids) => [0, [ids.enemy.back[1]!]],
+    });
+    expect(state.instances[ids.enemy.back[1]!]?.zone).toBe("void");
+    expect(state.instances[ids.enemy.back[0]!]?.zone).toBe("play");
+    expect(state.sides.player.score).toBe(0);
+  });
+
+  it("a mode whose required target has no candidate is not legal", () => {
+    const { state, answers } = runScenario(engine, {
+      board: { active: "player", phase: "day", player: { hand: [DSL.chooseDissolveOrPoints.id], deck }, enemy: { deck } },
+      steps: (ids) => [playFromHand(ids, "player")],
+    });
+    // The only legal mode is answered automatically.
+    expect(answers[0]).toMatchObject({ value: 1, auto: true });
+    expect(state.sides.player.score).toBe(1);
+    const { state: noTargets } = boardState(engine.catalog, {
+      active: "player",
+      phase: "day",
+      player: { hand: [dissolveOrBanish.id], deck },
+      enemy: { deck },
+    });
+    expect(engine.legalActions(noTargets, "player").some((action) => action.kind === "play")).toBe(false);
+  });
+
+  it("splits a card's modes and targets among its event abilities", () => {
+    const { state, ids } = runScenario(engine, {
+      board: { active: "player", phase: "day", player: { hand: [DSL.modalThenBounce.id], back: [v.vanilla1.id], deck }, enemy: { back: [v.vanilla2.id], deck } },
+      steps: (ids) => [playFromHand(ids, "player")],
+      // Mode 1 dissolves the only enemy (answered automatically); the bounce takes the player's character.
+      answers: (ids) => [1, [ids.player.back[0]!]],
+    });
+    expect(state.instances[ids.enemy.back[0]!]?.zone).toBe("void");
+    expect(state.instances[ids.player.back[0]!]?.zone).toBe("hand");
+    expect(state.sides.player.score).toBe(0);
+  });
+
+  it("collects only the chosen mode's targets, while validation walks every mode", () => {
+    const first = target(enemyCharacter());
+    const second = target(enemyCharacter());
+    const effect = chooseOne(dissolve(first), gainPoints(1), banish(second));
+    expect(collectTargets(effect, chosenModes(effect, [2]))).toEqual([second]);
+    expect(collectTargets(effect, chosenModes(effect, [1]))).toEqual([]);
+    expect(everyTarget(effect)).toEqual([first, second]);
+    expect(everyNode(effect)).toHaveLength(4);
+    expect(() => chosenModes(effect, [3])).toThrow();
   });
 
   it("chooseOne resolves only the chosen mode", () => {
@@ -64,5 +152,43 @@ describe("flow primitives", () => {
     });
     expect(answers[0]).toMatchObject({ value: 3 });
     expect(state.sides.player).toMatchObject({ score: 3, currentEnergy: 1 });
+  });
+
+  it("a fixed cost plus X prompts for X up to the energy left after the fixed part, and pays both", () => {
+    const { state, answers, events } = runScenario(engine, {
+      board: { active: "player", phase: "day", player: { hand: [DSL.fixedPlusXPoints.id], energy: 4, deck }, enemy: { deck } },
+      steps: (ids) => [playFromHand(ids, "player")],
+      answers: () => [3],
+    });
+    expect(answers[0]).toMatchObject({ value: 3 });
+    expect(state.sides.player).toMatchObject({ score: 3, currentEnergy: 0 });
+    // The fixed part is paid first, then X.
+    const spent = events.flatMap((event) => (event.kind === "energyChanged" && event.side === "player" ? [event.current] : []));
+    expect(spent.slice(0, 2)).toEqual([3, 0]);
+    const tooMuch = () =>
+      runScenario(engine, {
+        board: { active: "player", phase: "day", player: { hand: [DSL.fixedPlusXPoints.id], energy: 4, deck }, enemy: { deck } },
+        steps: (ids) => [playFromHand(ids, "player")],
+        answers: () => [4],
+      });
+    expect(tooMuch).toThrow();
+  });
+
+  it("a fixed cost plus X needs the fixed part and X's minimum to be playable", () => {
+    const playable = (energy: number) => {
+      const { state } = boardState(engine.catalog, { active: "player", phase: "day", player: { hand: [DSL.fixedPlusXPoints.id], energy, deck }, enemy: { deck } });
+      return engine.legalActions(state, "player").some((action) => action.kind === "play");
+    };
+    expect(playable(1)).toBe(false);
+    expect(playable(2)).toBe(true);
+  });
+
+  it("X is at least 1 unless the definition widens it to 0", () => {
+    const playable = (cardId: typeof DSL.pointsTimesX.id) => {
+      const { state } = boardState(engine.catalog, { active: "player", phase: "day", player: { hand: [cardId], energy: 0, deck }, enemy: { deck } });
+      return engine.legalActions(state, "player").some((action) => action.kind === "play");
+    };
+    expect(playable(DSL.pointsTimesX.id)).toBe(false);
+    expect(playable(pointsFromZeroX.id)).toBe(true);
   });
 });

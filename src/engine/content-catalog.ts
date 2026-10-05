@@ -13,12 +13,36 @@ import type {
   EngineDreamsignDefinition,
   EngineDreamwellDefinition,
 } from "./catalog";
-import type { AbilityList } from "./dsl/types";
+import { energy, energyX } from "./dsl/builders";
+import { fixedEnergy, xCost } from "./dsl/energy";
+import type { AbilityList, CardCost } from "./dsl/types";
 
 const NO_ABILITIES: AbilityList = () => [];
 
 function contentState(status: ContentStatus): ContentState {
   return status.abilities !== undefined ? "authored" : status.pending === true ? "pending" : "vanilla";
+}
+
+/**
+ * A card's printed energy costs. `energyCosts` lists the orbs of a card with
+ * more than one, such as `["2", "X"]`; otherwise `energyCost` is the one orb,
+ * with `null` for X. Throws when the two fields disagree.
+ */
+function cardCosts(card: CardDefinition): CardCost[] {
+  const labels = card.energyCosts ?? [card.energyCost === null ? "X" : String(card.energyCost)];
+  const costs = labels.map((label): CardCost => {
+    if (label === "X") return energyX();
+    const amount = Number(label);
+    if (!Number.isInteger(amount) || amount < 0) {
+      throw new Error(`Card ${card.id} has an unreadable energy cost orb ${label}`);
+    }
+    return energy(amount);
+  });
+  const fixed = fixedEnergy(costs);
+  if ((card.energyCost ?? 0) !== fixed || (card.energyCost === null) !== (xCost(costs) !== null && fixed === 0)) {
+    throw new Error(`Card ${card.id} has energyCost ${String(card.energyCost)} but energy cost orbs ${labels.join(" ")}`);
+  }
+  return costs;
 }
 
 /**
@@ -30,8 +54,8 @@ export function engineCardFromContent(card: CardDefinition): EngineCardDefinitio
   return {
     id: parseCardId(card.id),
     cardType: card.cardType === "Character" ? "character" : "event",
-    cost: card.energyCost,
-    spark: card.cardType === "Character" ? card.spark : null,
+    costs: cardCosts(card),
+    spark: card.cardType !== "Character" ? null : card.sparkVariable === true ? "x" : card.spark,
     subtype: card.subtype,
     speed: card.isInterrupt ? "interrupt" : card.isFast ? "fast" : "standard",
     keywords: [],

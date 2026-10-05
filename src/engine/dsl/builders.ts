@@ -7,6 +7,8 @@ import type {
   AllSpec,
   CharacterSelector,
   Cost,
+  EnergyCost,
+  EnergyXCost,
   Keyword,
   SelfSpec,
   Speed,
@@ -35,13 +37,13 @@ export function activated(
 }
 
 /** "N●". */
-export function energy(amount: number): Cost {
+export function energy(amount: number): EnergyCost {
   return { cost: "energy", amount };
 }
 
-/** "X●". */
-export function energyX(): Cost {
-  return { cost: "energyX" };
+/** "X●"; X is at least 1 unless `min` widens it to 0 (rules § Costs, Requirements, and X). */
+export function energyX(min = 1): EnergyXCost {
+  return { cost: "energyX", min };
 }
 
 /** "☾". */

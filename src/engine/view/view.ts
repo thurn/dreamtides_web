@@ -147,6 +147,7 @@ export function view(state: BattleState, viewer: Side): BattleView {
     instances,
     stack: state.stack.map((item) => ({
       ...item,
+      modes: [...item.modes],
       targets: item.targets.map((list) => list.filter(visible)),
     })),
     priority: state.priority,

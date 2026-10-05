@@ -109,13 +109,13 @@ describe("prevent", () => {
     const put = (id: InstanceId, controller: Side) => {
       state.sides[controller].hand = [];
       state.instances[id].zone = "stack";
-      state.stack.push({ kind: "card", instance: id, controller, targets: [], x: null });
+      state.stack.push({ kind: "card", instance: id, controller, modes: [], targets: [], x: null });
     };
     const event = ids.player.hand[0];
     const character = ids.enemy.hand[0];
     put(event, "player");
     put(character, "enemy");
-    state.stack.push({ kind: "ability", source: ids.player.back[0]!, ability: 0, origin: { kind: "card", cardId: STACK.fastPump.id, variant: { amplified: false } }, controller: "player", targets: [], x: null });
+    state.stack.push({ kind: "ability", source: ids.player.back[0]!, ability: 0, origin: { kind: "card", cardId: STACK.fastPump.id, variant: { amplified: false } }, controller: "player", modes: [], targets: [], x: null });
     const match = (selector: ReturnType<typeof stackItem>) => matchingStackItems(state, engine.catalog, selector, "player", "i999");
     expect(match(stackItem())).toEqual([character, event]);
     expect(match(stackItem({ controller: "opponent" }))).toEqual([character]);
@@ -138,7 +138,7 @@ describe("prevent", () => {
       start.sides[owner].hand = start.sides[owner].hand.filter((card) => card !== id);
       start.instances[id].zone = "stack";
       start.instances[id].controller = controller;
-      start.stack.push({ kind: "card", instance: id, controller, targets: targets.map((list) => [...list]), x: null });
+      start.stack.push({ kind: "card", instance: id, controller, modes: [], targets: targets.map((list) => [...list]), x: null });
     }
     start.priority = "player";
     const { state, events } = engine.apply(start, "player", { kind: "pass" }, NO_PROMPTS);

@@ -3,6 +3,7 @@ import type { Speed } from "../dsl/types";
 import type { InstanceId, Side } from "../state/ids";
 import { opponent } from "../state/ids";
 import type { BattleState } from "../state/types";
+import { minimumEnergy } from "../dsl/energy";
 import { instanceOf, openBackSlots } from "./zones";
 
 /** Whether `side` has a Fast window now: its own Day or Night, or the opponent's Dusk. */
@@ -73,9 +74,8 @@ export function canPlayFromHand(
   if (!timingAllows(state, side, definition.speed)) {
     return false;
   }
-  // An X cost needs at least 1● for X; the X prompt checks the rest.
-  const minimum = definition.cost ?? 1;
-  if (minimum > state.sides[side].currentEnergy) {
+  // An X cost needs its minimum X; the X prompt checks the rest.
+  if (minimumEnergy(definition.costs) > state.sides[side].currentEnergy) {
     return false;
   }
   return (

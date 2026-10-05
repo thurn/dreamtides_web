@@ -46,4 +46,19 @@ describe("resource primitives", () => {
     });
     expect(loss.state.sides.enemy.score).toBe(0);
   });
+
+  it("gainPoints reports the actual change: a loss clamped at 0, and no event for no change", () => {
+    const loss = runScenario(engine, {
+      board: { active: "player", phase: "day", player: { hand: [DSL.opponentLosesFive.id], energy: 1, deck }, enemy: { score: 2, deck } },
+      steps: (ids) => [playFromHand(ids, "player")],
+    });
+    expect(loss.events.filter((event) => event.kind === "pointsScored")).toEqual([
+      expect.objectContaining({ side: "enemy", amount: -2, cause: "effect" }),
+    ]);
+    const none = runScenario(engine, {
+      board: { active: "player", phase: "day", player: { hand: [DSL.opponentLosesFive.id], energy: 1, deck }, enemy: { score: 0, deck } },
+      steps: (ids) => [playFromHand(ids, "player")],
+    });
+    expect(none.events.some((event) => event.kind === "pointsScored")).toBe(false);
+  });
 });

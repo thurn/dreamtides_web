@@ -32,7 +32,7 @@ let divergentRuns = 0;
 const divergent: EngineCardDefinition = {
   id: syntheticId(901),
   cardType: "event",
-  cost: 0,
+  costs: [],
   spark: null,
   subtype: "",
   speed: "standard",

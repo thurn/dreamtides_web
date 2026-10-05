@@ -93,7 +93,7 @@ export function initialState(init: BattleInit, catalog: EngineCatalog): BattleSt
         controller: side,
         zone: "deck",
         variant: { amplified: entry.amplified === true },
-        status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false, reclaimed: false },
+        status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false, reclaimed: false, x: null },
         enteredZoneAt: 0,
       };
       state.instances[id] = instance;

@@ -1,11 +1,12 @@
 import type { CardSubtype } from "../types/card-identity";
-import type { AbilityList, Speed } from "./dsl/types";
+import type { AbilityList, CardCost, Speed } from "./dsl/types";
 import type { AvatarId, CardId, DreamsignId, DreamwellCardId, InstanceId } from "./state/ids";
 import type { CardStackItem } from "./state/types";
 import type { StepContext } from "./steps/types";
 
 /** Choices made while playing a card, carried on its stack item. */
 export interface PlayChoices {
+  readonly modes?: readonly number[];
   readonly targets?: readonly (readonly InstanceId[])[];
   readonly x?: number;
 }
@@ -34,14 +35,20 @@ export type CombatKeyword = "vengeful" | "awakened";
  */
 export type ContentState = "pending" | "vanilla" | "authored";
 
+/**
+ * A character's printed spark: a number, or `"x"` for variable spark, which
+ * is the X paid to play the character while it is in play and 0 elsewhere.
+ */
+export type BaseSpark = number | "x";
+
 /** The engine's view of one card definition. */
 export interface EngineCardDefinition {
   readonly id: CardId;
   readonly cardType: "character" | "event";
-  /** Energy cost; `null` for an X cost. */
-  readonly cost: number | null;
-  /** Base spark for a character; `null` for an event or a variable-spark character. */
-  readonly spark: number | null;
+  /** The costs paid to play the card, in printed order: "2 X" is `[energy(2), energyX()]`. */
+  readonly costs: readonly CardCost[];
+  /** Base spark for a character; `null` for an event. */
+  readonly spark: BaseSpark | null;
   readonly subtype: CardSubtype;
   readonly speed: Speed;
   /** Printed keywords; authored keyword abilities add to these. */

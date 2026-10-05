@@ -18,6 +18,8 @@ export interface EffectEnv {
   readonly variant: Variant;
   /** The value chosen for X, or `null`. */
   readonly x: number | null;
+  /** The mode chosen at play time for a modal node of this effect, or `null` for a node off the chosen path. */
+  modeOf(node: EffectNode): number | null;
   /** The targets chosen at play time for a target spec in this effect, or `null` if none were chosen. */
   targetsOf(spec: PlayTimeTarget): readonly InstanceId[] | null;
   /** Resolves a nested effect, for flow primitives. */
@@ -33,8 +35,13 @@ export interface EffectEnv {
  */
 export interface PrimitiveDefinition<N extends EffectNode> {
   readonly op: N["op"];
-  /** Nested effects, walked in order to collect play-time targets. */
+  /** Every nested effect, in order; validation walks them all. */
   children?(node: N): readonly EffectNode[];
+  /**
+   * For a modal node, its modes: one is chosen at play time, before targets,
+   * and only the chosen mode's targets are collected and resolved.
+   */
+  modes?(node: N): readonly EffectNode[];
   /** Target specs held directly by this node, in order. */
   targets?(node: N): readonly PlayTimeTarget[];
   resolve(ctx: StepContext, node: N, env: EffectEnv): void;

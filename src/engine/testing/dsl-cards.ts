@@ -4,22 +4,22 @@
  * `5e5e5e5e-…-0000000002xx`.
  */
 import type { EngineCardDefinition } from "../catalog";
-import { anyCharacter, characterYouControl, enemyCharacter, event, keyword, target, upTo, x } from "../dsl/builders";
-import type { Ability } from "../dsl/types";
+import { anyCharacter, characterYouControl, enemyCharacter, energy, energyX, event, keyword, target, upTo, x } from "../dsl/builders";
+import type { Ability, CardCost } from "../dsl/types";
 import * as p from "../effects/primitives";
 import { syntheticId } from "./synthetic-cards";
 
 function authored(
   index: number,
   cardType: "character" | "event",
-  cost: number | null,
+  cost: number | readonly CardCost[],
   abilities: EngineCardDefinition["abilities"],
   options: Partial<Pick<EngineCardDefinition, "speed" | "spark" | "subtype">> = {},
 ): EngineCardDefinition {
   return {
     id: syntheticId(200 + index),
     cardType,
-    cost,
+    costs: typeof cost === "number" ? [energy(cost)] : cost,
     spark: cardType === "character" ? (options.spark ?? 1) : null,
     subtype: options.subtype ?? (cardType === "character" ? "Warrior" : ""),
     speed: options.speed ?? "standard",
@@ -52,7 +52,7 @@ export const DSL = {
   chooseDrawOrPoints: authored(17, "event", 0, events(event(p.chooseOne(p.draw(1), p.gainPoints(1))))),
   mayDrawTwo: authored(18, "event", 0, events(event(p.optional(p.draw(2))))),
   drawIfTwoWarriors: authored(19, "event", 0, events(event(p.ifThen({ cond: "controls", selector: characterYouControl({ subtype: "Warrior" }), atLeast: 2 }, p.draw(1), p.gainEnergy(1))))),
-  pointsTimesX: authored(20, "event", null, events(event(p.repeat(x(), p.gainPoints(1))))),
+  pointsTimesX: authored(20, "event", [energyX()], events(event(p.repeat(x(), p.gainPoints(1))))),
   /** "Exhaust an enemy; it gains +1✦": one target spec used in two places is one target. */
   exhaustAndPumpSame: authored(21, "event", 1, () => {
     const enemy = target(enemyCharacter());
@@ -62,6 +62,17 @@ export const DSL = {
   awakenedCharacter: authored(23, "character", 2, () => [keyword("awakened")], { spark: 2 }),
   /** "Amplified: draw 3 instead of 2." */
   amplifiedDraw: authored(24, "event", 1, (variant) => [event(p.draw(variant.amplified ? 3 : 2))]),
+  /** "1 X: Gain X⍟" — a fixed cost plus X. */
+  fixedPlusXPoints: authored(25, "event", [energy(1), energyX()], events(event(p.gainPoints(x())))),
+  /** An X-cost character with X spark. */
+  variableSpark: { ...authored(26, "character", [energyX()], () => [], { spark: "x" }), status: "vanilla" },
+  /** "Choose one: Dissolve an enemy; or gain 1⍟." */
+  chooseDissolveOrPoints: authored(27, "event", 0, events(event(p.chooseOne(p.dissolve(target(enemyCharacter())), p.gainPoints(1))))),
+  /** "Choose one: Gain 1⍟; or dissolve an enemy." then "Return a character to its owner's hand." */
+  modalThenBounce: authored(28, "event", 0, events(
+    event(p.chooseOne(p.gainPoints(1), p.dissolve(target(enemyCharacter())))),
+    event(p.returnToHand(target(anyCharacter()))),
+  )),
 } as const;
 
 export const DSL_CARDS: readonly EngineCardDefinition[] = Object.values(DSL);

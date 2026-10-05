@@ -68,7 +68,7 @@ export function boardState(
       controller: side,
       zone,
       variant: { amplified },
-      status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false, reclaimed: false },
+      status: { exhausted: false, gainedSpark: 0, turnSpark: 0, counters: 0, created: false, reclaimed: false, x: null },
       enteredZoneAt: 0,
     };
     return id;
