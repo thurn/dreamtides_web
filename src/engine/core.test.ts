@@ -1,10 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { createEngine } from "./engine";
 import { deserializeState, serializeState, stateHash } from "./state/hash";
-import { battleSeed } from "./state/ids";
+import { battleSeed, type CardId } from "./state/ids";
+import type { BattleInit } from "./state/types";
 import { drawRandom } from "./state/rng";
 import { NO_PROMPTS } from "./steps/sources";
-import { fuzzEngineCatalog, fuzzInit, playFuzzGame, replayFinalHash } from "./testing/fuzz";
+import {
+  DECK_SIZE,
+  fuzzCatalogCards,
+  fuzzEngineCatalog,
+  fuzzInit,
+  playFuzzGame,
+  replayFinalHash,
+} from "./testing/fuzz";
 
 const engine = createEngine(fuzzEngineCatalog());
 
@@ -21,10 +29,51 @@ describe("random streams", () => {
     expect(drawRandom(c, "shuffle:player")).toBe(shuffleA);
   });
 
-  it("deals different hands for different seeds", () => {
-    const one = engine.createBattle({ ...fuzzInit(battleSeed("x")), seed: battleSeed("one") }, NO_PROMPTS).state;
-    const two = engine.createBattle({ ...fuzzInit(battleSeed("x")), seed: battleSeed("two") }, NO_PROMPTS).state;
-    expect(stateHash(one)).not.toBe(stateHash(two));
+  it("deals hands and deck order from the seed", () => {
+    // Every card is distinct, so the card sequence is exactly the deal.
+    const cards = fuzzCatalogCards().filter((card) => card.cost !== null).slice(0, DECK_SIZE);
+    expect(new Set(cards.map((card) => card.id)).size).toBe(DECK_SIZE);
+    const deck = cards.map((card) => ({ cardId: card.id }));
+    const deal = (seed: string): CardId[] => {
+      const init: BattleInit = { ...fuzzInit(battleSeed("x")), seed: battleSeed(seed), decks: { player: deck, enemy: deck } };
+      const { state } = engine.createBattle(init, NO_PROMPTS);
+      const player = state.sides.player;
+      return [...player.hand, ...player.deck].map((id) => state.instances[id].cardId);
+    };
+    expect(deal("one")).toHaveLength(DECK_SIZE);
+    expect(deal("one")).toEqual(deal("one"));
+    expect(deal("one")).not.toEqual(deal("two"));
+  });
+});
+
+/** A deep copy whose objects list their keys in reverse insertion order. */
+function reversedKeys<T>(value: T): T {
+  if (Array.isArray(value)) return value.map(reversedKeys) as T;
+  if (value === null || typeof value !== "object") return value;
+  return Object.fromEntries(
+    Object.entries(value)
+      .reverse()
+      .map(([key, entry]) => [key, reversedKeys(entry)]),
+  ) as T;
+}
+
+describe("state hash", () => {
+  it("hashes states that are equal as data equally, whatever their key order", () => {
+    const state = engine.createBattle(fuzzInit(battleSeed("hash-order")), NO_PROMPTS).state;
+    state.rng["random:a"] = 1;
+    state.rng["random:b"] = 2;
+    const reordered = reversedKeys(state);
+    expect(Object.keys(reordered.rng)).not.toEqual(Object.keys(state.rng));
+    expect(Object.keys(reordered.instances)).not.toEqual(Object.keys(state.instances));
+    expect(reordered).toEqual(state);
+    expect(stateHash(reordered)).toBe(stateHash(state));
+  });
+
+  it("hashes states that differ as data differently", () => {
+    const state = engine.createBattle(fuzzInit(battleSeed("hash-differ")), NO_PROMPTS).state;
+    const changed = deserializeState(serializeState(state));
+    changed.rng["random:a"] = 1;
+    expect(stateHash(changed)).not.toBe(stateHash(state));
   });
 });
 

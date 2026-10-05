@@ -27,4 +27,4 @@ export { deserializeState, serializeState, stateHash } from "./state/hash";
 export type { StepObserver } from "./steps/driver";
 export { InlineSource, NO_PROMPTS, ScriptedSource } from "./steps/sources";
 export type { AnswerSource } from "./steps/types";
-export type { BattleView, InstanceView } from "./view/view";
+export type { BattleView, HiddenZoneView, InstanceView, SideView } from "./view/view";
