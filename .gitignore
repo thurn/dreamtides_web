@@ -40,6 +40,7 @@ augury-metric-report.json
 screenshots/
 artifacts/journey-desktop-screenshots/
 artifacts/coop-fuzz/
+artifacts/qa/
 
 cumulus/Assets/ThirdParty/
 

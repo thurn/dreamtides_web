@@ -235,3 +235,56 @@ Monitored, never gated. "Overrun" means more than 50% over the budget.
 The review and focused-test budgets start below the baseline on purpose:
 Phase 1.3 targets them. Phase 3 adds a fuzz-smoke budget
 (`npm run fuzz:engine -- --games 200`) when the command exists.
+
+## Tollgate policy
+
+The trusted policy is the local, untracked
+`~/dreamtides_web/.tollgate/config.toml` (excluded by `.git/info/exclude`).
+Every change to it is recorded here with the old and new text.
+
+### 2026-10-05, verified unchanged (bead hv-b8ef.2)
+
+`tg --no-launch config explain`: configuration valid, digest
+`a9752faf11b7…`, steps `dependencies` (30m) → `trox` (30m) → `review`
+(120m), all voting. The policy uses 2 test workers (D17) and
+`sync_user_master = true`.
+
+```toml
+version = 1
+sync_user_master = true
+
+[resources]
+max_buildsets = 2
+repository_concurrency = 1
+
+[remote]
+enabled = true
+name = "origin"
+branch = "master"
+
+[cache]
+epoch = 0
+
+[[cache.paths]]
+path = "tools/game-data/target"
+policy = "clone"
+
+[[step]]
+name = "dependencies"
+run = "npm ci --prefer-offline --no-audit --no-fund"
+timeout = "30m"
+
+[[step]]
+name = "trox"
+run = "npm run trox:gate"
+needs = ["dependencies"]
+timeout = "30m"
+environment = { DREAMTIDES_LOCAL_ASSET_HOME = ".", TROX_ROOT = "/Users/dthurn/.cache/quest-prototype/trox-604a79412034" }
+
+[[step]]
+name = "review"
+run = "npm run review:full"
+needs = ["trox"]
+timeout = "120m"
+environment = { DREAMTIDES_LOCAL_ASSET_HOME = ".", JOURNEY_TEST_WORKERS = "2", TROX_ROOT = "/Users/dthurn/.cache/quest-prototype/trox-604a79412034" }
+```

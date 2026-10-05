@@ -1,1 +1,2 @@
 {"bead":"hv-b8ef.1","phase":1,"claimToCommitMin":22,"localValidationS":{"review":0.2},"reviewFindings":0,"prevBead":null,"friction":[]}
+{"bead":"hv-b8ef.2","phase":1,"claimToCommitMin":12,"localValidationS":{"review":0.3},"reviewFindings":0,"prevBead":{"id":"hv-b8ef.1","gateS":253.6,"candidates":1,"ciRepairs":0},"friction":[]}
