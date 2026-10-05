@@ -1677,13 +1677,6 @@ describe("TutorialScreen", () => {
     );
     const paragraphs = [...(content?.querySelectorAll("p") ?? [])];
     expect(paragraphs).toHaveLength(2);
-    expect(content?.style.paddingTop).toBe("var(--space-3xl)");
-    expect(content?.style.paddingRight).toBe("var(--space-3xl)");
-    expect(content?.style.paddingBottom).toBe("var(--space-3xl)");
-    expect(content?.style.paddingLeft).toBe("var(--space-3xl)");
-    expect(paragraphs[0]?.style.font).toBe("var(--t-tutorial-instruction)");
-    expect(paragraphs[0]?.style.marginTop).toBe("0px");
-    expect(paragraphs[1]?.style.marginTop).toBe("var(--space-xl)");
     expect(paragraphs[0]?.textContent).toContain(
       "Play characters and challenge with them to score points () equal to their spark (), or block a challenger",
     );
@@ -1709,7 +1702,6 @@ describe("TutorialScreen", () => {
       '[data-tutorial-instruction-highlight="purple"]',
     );
     expect(purpleHighlight?.textContent).toBe("event");
-    expect(purpleHighlight?.style.color).toBe("var(--text-tutorial-highlight)");
     expect(dialog?.querySelectorAll('[aria-label="points"]')).toHaveLength(2);
     expect(
       dialog?.querySelector('[aria-label="points"] i')?.className,
@@ -1996,7 +1988,6 @@ describe("TutorialScreen", () => {
       '[data-tutorial-instruction-highlight="yellow"]',
     );
     expect(dreamwellTerm?.textContent).toBe("dreamwell");
-    expect(dreamwellTerm?.style.color).toBe("var(--spark)");
     const energyTerm = dialog?.querySelector<HTMLElement>(
       "[data-tutorial-how-to-play-energy-term]",
     );
@@ -2871,7 +2862,6 @@ describe("TutorialScreen", () => {
     expect(bubble?.querySelector("p")?.style.font).toBe(
       "var(--t-tutorial-dialogue)",
     );
-    expect(bubble?.querySelector("p")?.style.lineHeight).toBe("");
     expect(overlay?.style.left).toBe("162px");
     expect(overlay?.style.top).toBe("142px");
     expect(overlay?.style.zIndex).toBe("var(--layer-reveal)");

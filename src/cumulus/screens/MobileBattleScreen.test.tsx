@@ -679,12 +679,8 @@ describe("MobileBattleScreen", () => {
     const exhaustedIcon = battlefield?.querySelector<HTMLElement>(
       '[data-battle-card-status="exhausted"] i',
     );
-    const exhaustedBadge = battlefield?.querySelector<HTMLElement>(
-      '[data-battle-card-status="exhausted"]',
-    );
     const whiteStyle = document.createElement("span").style;
     whiteStyle.color = resolveColor("white");
-    expect(exhaustedBadge?.style.border).toContain("var(--text-on-accent)");
     expect(exhaustedIcon?.style.color).toBe(whiteStyle.color);
     const storedTimeBadge = battlefield?.querySelector<HTMLElement>(
       '[data-battle-card-status="stored-time"]',
@@ -692,7 +688,6 @@ describe("MobileBattleScreen", () => {
     const storedTimeValue = storedTimeBadge?.querySelector<HTMLElement>(
       "[data-battle-memory-counter]",
     );
-    expect(storedTimeValue?.style.font).toBe("var(--t-numeral-sm)");
     expect(storedTimeValue?.textContent).toBe("4");
     expect(storedTimeValue?.firstElementChild?.nodeName).toBe("SPAN");
     expect(storedTimeValue?.querySelector("i.bxf.bx-brain")).not.toBeNull();
@@ -704,8 +699,6 @@ describe("MobileBattleScreen", () => {
     expect(storedTimeBadge?.style.background).toBe(
       "var(--surface-status-badge)",
     );
-    expect(storedTimeBadge?.style.border).toContain("var(--text-on-accent)");
-    expect(storedTimeBadge?.style.borderRadius).toBe("var(--radius-compact)");
     expect(
       battlefield?.querySelector('[data-battle-card-status="automated"]'),
     ).toBeNull();
@@ -806,13 +799,10 @@ describe("MobileBattleScreen", () => {
       '[data-battle-card-selection-ring="unfiltered"]',
     );
 
-    expect(filteredBody?.style.filter).toContain("grayscale");
     expect(filteredBody?.contains(selectionRing ?? null)).toBe(false);
     expect(selectionRing?.style.boxShadow).toContain(
       resolveColor("accent-bright"),
     );
-    expect(selectionRing?.style.boxShadow).toContain("3px");
-    expect(selectionRing?.style.boxShadow).toContain("12px");
     expect(
       target?.querySelector<HTMLElement>(".card-view")?.style.boxShadow,
     ).not.toContain(resolveColor("accent-bright"));
@@ -1030,8 +1020,6 @@ describe("MobileBattleScreen", () => {
     expect(layer?.style.top).toBe("calc(100% + var(--space-xs))");
     expect(layer?.style.bottom).toBe("");
     expect(layer?.style.pointerEvents).toBe("none");
-    expect(layer?.style.animation).toBe("none");
-    expect(layer?.style.transition).toBe("none");
     expect(
       layer?.querySelector<HTMLElement>("[data-dreamwell-card]")?.dataset
         .dreamwellCard,
@@ -1103,8 +1091,6 @@ describe("MobileBattleScreen", () => {
     expect(screen?.className).toBe("cumulus");
     expect(screen?.style.position).toBe("relative");
     expect(screen?.style.height).toBe("100dvh");
-    expect(screen?.style.backgroundColor).toBe("var(--bg-app)");
-    expect(screen?.style.backgroundImage).toBe("");
     expect(screen?.style.touchAction).toBe("none");
     expect(screen?.style.gridTemplateColumns).toBe("minmax(0, 1fr)");
     expect(screen?.style.gridTemplateRows).toBe(
@@ -1116,7 +1102,6 @@ describe("MobileBattleScreen", () => {
     expect(backdrop?.style.width).toBe("100%");
     expect(backdrop?.style.height).toBe("100%");
     expect(backdrop?.style.transform).toBe("translate(-50%, -50%)");
-    expect(backdrop?.style.backgroundImage).toContain("battle-background.png");
     expect(backdrop?.style.backgroundPosition).toBe("center center");
     expect(backdrop?.style.backgroundRepeat).toBe("no-repeat");
     expect(backdrop?.style.backgroundSize).toBe("100% 100%");
@@ -1126,7 +1111,6 @@ describe("MobileBattleScreen", () => {
     expect(safeAreaBackdrop?.style.position).toBe("absolute");
     expect(safeAreaBackdrop?.style.inset).toBe("0 0 auto");
     expect(safeAreaBackdrop?.style.height).toBe("var(--safe-area-inset-top)");
-    expect(safeAreaBackdrop?.style.background).toBe("var(--bg-app)");
     expect(rowNames).toEqual([
       "far-hand",
       "enemy-zones",
@@ -1225,7 +1209,6 @@ describe("MobileBattleScreen", () => {
     const toggle = inspector?.querySelector<HTMLButtonElement>(
       '[data-testid="battle-perspective-toggle"]',
     );
-    expect(toggle?.textContent).toContain("Return to Your Side");
     expect(toggle?.getAttribute("aria-pressed")).toBe("true");
     act(() => toggle?.click());
     expect(onPerspectiveToggle).toHaveBeenCalledOnce();
@@ -1355,7 +1338,6 @@ describe("MobileBattleScreen", () => {
     );
 
     expect(screen?.dataset.battleLayout).toBe("desktop");
-    expect(screen?.style.backgroundImage).toBe("");
     expect(screen?.style.gridTemplateRows).toBe(
       "minmax(0, 8fr) minmax(0, 11fr) minmax(0, 23fr) minmax(0, 23fr) minmax(0, 11fr) minmax(0, 24fr)",
     );
@@ -1364,11 +1346,8 @@ describe("MobileBattleScreen", () => {
     expect(backdrop?.style.transform).toBe(
       "translate(-50%, -50%) rotate(90deg)",
     );
-    expect(backdrop?.style.backgroundImage).toContain("battle-background.png");
     expect(enemyZones?.style.width).toBe("100%");
     expect(enemyZones?.style.maxWidth).toBe("540px");
-    expect(enemyZones?.style.boxSizing).toBe("border-box");
-    expect(enemyZones?.style.columnGap).toBe("var(--space-6xl)");
     expect(playerZones?.style.gridRow).toBe("5");
     expect(playerZones?.style.transform).toContain("translateY(max(0px");
     expect(playerZones?.style.height).toBe("");
@@ -1384,14 +1363,11 @@ describe("MobileBattleScreen", () => {
     ).toBe("center");
     expect(enemyHand?.style.display).toBe("flex");
     expect(enemyHand?.style.justifyContent).toBe("center");
-    expect(enemyHand?.style.gap).toBe("var(--space-xs)");
     expect(firstEnemyCard?.style.position).toBe("relative");
     expect(firstEnemyCard?.style.left).toBe("");
     expect(firstEnemyCard?.style.transform).not.toContain("translateX");
     expect(playerHand?.style.display).toBe("flex");
     expect(playerHand?.style.justifyContent).toBe("center");
-    expect(playerHand?.style.gap).toBe("var(--space-xs)");
-    expect(playerHand?.style.paddingTop).toBe("var(--space-2xl)");
     expect(playerHand?.style.paddingLeft).toContain(
       "--battle-hud-start-clearance",
     );
@@ -1418,7 +1394,6 @@ describe("MobileBattleScreen", () => {
     expect(controls?.style.gridColumn).toBe("1");
     expect(controls?.style.width).toBe("100%");
     expect(controls?.style.containerType).toBe("inline-size");
-    expect(controls?.style.paddingInline).toBe("0px");
     expect(phaseControls?.style.justifyContent).toBe("flex-end");
     expect(phaseControls?.style.width).toContain("46dvh");
     expect(controls?.style.transform).toBe("");
@@ -1465,17 +1440,12 @@ describe("MobileBattleScreen", () => {
     expect(
       container.querySelector('[data-battle-debug="player-state-panel"]'),
     ).toBeNull();
-    expect(container.textContent).toContain("Battle Snapshot");
-    expect(container.textContent).toContain("Player Resources");
-    expect(container.textContent).toContain("Back Rank");
-    expect(container.textContent).not.toContain("Stack cards");
     const inspector = container.querySelector(
       '[data-battle-inspector="docked"]',
     );
     const perspectiveToggle = inspector?.querySelector<HTMLButtonElement>(
       '[data-testid="battle-perspective-toggle"]',
     );
-    expect(perspectiveToggle?.textContent).toContain("Control Opponent");
     expect(perspectiveToggle?.getAttribute("aria-pressed")).toBe("false");
     expect(
       container.querySelector(
@@ -1513,7 +1483,6 @@ describe("MobileBattleScreen", () => {
       side: "enemy",
     });
     expect(onPerspectiveToggle).toHaveBeenCalledOnce();
-    expect(container.textContent).toContain("Enemy Resources");
 
     act(() => root.unmount());
   });
@@ -1539,7 +1508,6 @@ describe("MobileBattleScreen", () => {
     };
     const { container, root } = mount(makeView(), interactions);
 
-    expect(container.textContent).toContain("History");
     act(() => {
       container
         .querySelector<HTMLButtonElement>(
@@ -1768,7 +1736,6 @@ describe("MobileBattleScreen", () => {
       expect(row?.style.gridTemplateColumns).toBe(
         "minmax(0, 1fr) max-content minmax(0, 1fr)",
       );
-      expect(row?.style.columnGap).toBe("var(--space-xl)");
       expect(
         row?.querySelector<HTMLElement>("[data-battle-status-phase-anchor]")
           ?.style.width,
@@ -1838,13 +1805,9 @@ describe("MobileBattleScreen", () => {
       '[data-battle-zone="player-void"]',
     );
     const voidPile = voidZone?.querySelector<HTMLElement>("[data-card-pile]");
-    const outline = voidZone?.querySelector<HTMLElement>(
-      "[data-card-pile-empty]",
-    );
     expect(voidPile?.dataset.pileCount).toBe("0");
     expect(voidPile?.dataset.pileEmptyState).toBe("outlined");
     expect(voidPile?.style.aspectRatio).toBe("7 / 5");
-    expect(outline?.style.border).toBe("var(--battlefield-slot-border)");
 
     act(() => root.unmount());
   });
@@ -2083,8 +2046,6 @@ describe("MobileBattleScreen", () => {
     expect(playerAnnouncement?.querySelector("i, svg")).toBeNull();
     expect(playerDisc?.style.width).toBe("184px");
     expect(playerDisc?.style.height).toBe("184px");
-    expect(playerDisc?.style.borderRadius).toBe("var(--radius-pill)");
-    expect(playerDisc?.style.animation).toContain("radial-announcement-disc");
 
     act(() => {
       vi.advanceTimersByTime(699);
@@ -2131,9 +2092,6 @@ describe("MobileBattleScreen", () => {
       "[data-battle-phase-light-core]",
     );
     const icon = core?.querySelector<HTMLElement>("i");
-    const halo = light?.querySelector<HTMLElement>(
-      "[data-battle-phase-light-halo]",
-    );
     const streak = light?.querySelector<HTMLElement>(
       "[data-battle-phase-light-streak]",
     );
@@ -2149,23 +2107,13 @@ describe("MobileBattleScreen", () => {
     expect(light?.style.top).toBe("12px");
     expect(light?.style.left).toBe("30%");
     expect(light?.style.transform).toBe("translate(-50%, -100%)");
-    expect(light?.style.transition).toContain("var(--motion-object-travel)");
     expect(icon?.classList.contains("bxf")).toBe(true);
     expect(icon?.classList.contains("bx-sun")).toBe(true);
-    expect(core?.style.borderRadius).toBe("var(--radius-pill)");
-    expect(core?.style.backgroundColor).toBe("var(--bg-sunken)");
-    expect(core?.style.fontSize).toBe("15px");
     expect(icon?.style.width).toBe("1em");
     expect(icon?.style.height).toBe("1em");
-    expect(icon?.style.color).toBe("var(--accent-bright)");
     expect(icon?.style.filter.match(/drop-shadow/g)).toHaveLength(2);
-    expect(halo?.style.backgroundColor).toBe("var(--accent)");
-    expect(halo?.style.animation).toBe("");
     expect(streak?.style.width).toBe("28px");
     expect(streak?.style.height).toBe("2px");
-    expect(streak?.style.backgroundColor).toBe("var(--accent-bright)");
-    expect(streak?.style.animation).toContain("cumulus-battle-phase-comet");
-    expect(streak?.style.animation).toContain("var(--dur-slow)");
 
     act(() => root.unmount());
   });
@@ -2183,9 +2131,6 @@ describe("MobileBattleScreen", () => {
     const light = indicator?.querySelector<HTMLElement>(
       "[data-battle-phase-light]",
     );
-    const halo = light?.querySelector<HTMLElement>(
-      "[data-battle-phase-light-halo]",
-    );
 
     expect(container.querySelector('[data-battle-side="near"]')).toBeNull();
     expect(indicator?.dataset.battlePhase).toBe("challenge");
@@ -2195,8 +2140,6 @@ describe("MobileBattleScreen", () => {
     expect(light?.style.top).toBe("-12px");
     expect(light?.style.left).toBe("90%");
     expect(light?.style.transform).toBe("translate(-50%, 0%)");
-    expect(halo?.style.animation).toContain("cumulus-battle-phase-pulse");
-    expect(halo?.style.animation).toContain("var(--dur-slow)");
 
     act(() => root.unmount());
   });
@@ -2242,11 +2185,6 @@ describe("MobileBattleScreen", () => {
     expect(enemyArea?.querySelectorAll("[data-battle-slot-id]")).toHaveLength(
       11,
     );
-    const emptySlot = enemyArea?.querySelector<HTMLElement>(
-      '[data-battle-slot-filled="false"]',
-    );
-    expect(emptySlot?.style.border).toBe("");
-    expect(emptySlot?.style.borderRadius).toBe("");
     expect(
       playerArea?.querySelector('[data-battle-card-id="player-front-card"]'),
     ).not.toBeNull();
@@ -2282,8 +2220,6 @@ describe("MobileBattleScreen", () => {
       const frontTrack = frontRank?.querySelector<HTMLElement>(
         "[data-battle-rank-track]",
       );
-      expect(backTrack?.style.columnGap).toBe("var(--space-xs)");
-      expect(frontTrack?.style.columnGap).toBe("var(--space-xs)");
       expect(backTrack?.style.gridTemplateColumns).toContain("repeat(6,");
       expect(frontTrack?.style.gridTemplateColumns).toContain("repeat(5,");
       expect(backTrack?.style.width).toContain("6 * min(");
@@ -3098,7 +3034,6 @@ describe("MobileBattleScreen", () => {
     const submit = container.querySelector<HTMLButtonElement>(
       '[data-testid="battle-card-picker-submit"]',
     );
-    expect(submit?.textContent).toContain("Continue");
     expect(submit?.getAttribute("aria-disabled")).toBeNull();
     act(() => submit?.click());
     expect(onCardPickerSubmit).toHaveBeenCalledWith([]);
@@ -3169,7 +3104,6 @@ describe("MobileBattleScreen", () => {
         expect(track?.style.width).toContain(
           rank === "back" ? "6 * min(" : "5 * min(",
         );
-        expect(track?.style.columnGap).toBe("var(--space-xs)");
         expect(slots[0]?.style.width).toContain("var(--space-xs)");
         expect(slots[0]?.style.width).toContain("100cqh");
         expect(slots[0]?.style.height).toBe("");
@@ -3280,11 +3214,9 @@ describe("MobileBattleScreen", () => {
     const rank = container.querySelector<HTMLElement>(
       '[data-battle-rank="player-back"]',
     );
-    const track = rank?.querySelector<HTMLElement>("[data-battle-rank-track]");
 
     expect(rank?.style.left).toBe("3%");
     expect(rank?.style.right).toBe("3%");
-    expect(track?.style.columnGap).toBe("var(--space-xxs)");
     expect(rank?.style.height).toContain("94cqw - 9 * var(--space-xxs)");
 
     act(() => root.unmount());
@@ -3333,7 +3265,6 @@ describe("MobileBattleScreen", () => {
     expect(frontSlots).toHaveLength(9);
     expect(backRank?.style.left).toBe("1%");
     expect(backRank?.style.right).toBe("1%");
-    expect(backTrack?.style.columnGap).toBe("0px");
     expect(backRank?.style.height).toBe(
       "min(22cqw, calc((98cqw - 0 * var(--space-xxs)) / 10), calc((100cqh - var(--space-m) - var(--space-m)) / 2))",
     );
@@ -3512,12 +3443,8 @@ describe("MobileBattleScreen", () => {
     expect(controlRow?.style.gridRow).toBe("5");
     expect(controlRow?.style.display).toBe("flex");
     expect(controlRow?.style.justifyContent).toBe("flex-end");
-    expect(controlRow?.style.paddingInline).toBe("var(--space-s)");
-    expect(controlRow?.style.paddingTop).toBe("var(--space-s)");
-    expect(controlRow?.style.boxSizing).toBe("border-box");
     expect(controlRow?.style.zIndex).toBe("10");
     expect(phaseControls?.style.display).toBe("flex");
-    expect(phaseControls?.style.gap).toBe("var(--space-s)");
     expect(backSlot?.style.position).toBe("");
     expect(nextSlot?.style.width).toBe("max-content");
     expect(nextSlot?.style.minWidth).toBe("120px");
@@ -3613,9 +3540,6 @@ describe("MobileBattleScreen", () => {
     const nextSlot = container.querySelector<HTMLElement>(
       "[data-battle-phase-next]",
     );
-    const phaseControls = container.querySelector<HTMLElement>(
-      '[data-battle-phase-controls="row"]',
-    );
     const backButton = container.querySelector<HTMLButtonElement>(
       "[data-battle-phase-back] button",
     );
@@ -3630,8 +3554,6 @@ describe("MobileBattleScreen", () => {
     expect(nextSlot?.textContent).not.toContain("Next Phase");
     expect(nextSlot?.querySelectorAll("button")).toHaveLength(2);
     expect(nextSlot?.style.width).toBe("");
-    expect(nextSlot?.style.gap).toBe("var(--space-s)");
-    expect(phaseControls?.style.gap).toBe("var(--space-s)");
     expect(backButton?.getAttribute("aria-disabled")).toBe("true");
     expect(rejectButton?.getAttribute("aria-disabled")).toBeNull();
     expect(continueButton?.getAttribute("aria-disabled")).toBeNull();
@@ -3644,7 +3566,6 @@ describe("MobileBattleScreen", () => {
     );
     expect(message?.textContent).toBe("Play a fixture card to B2.");
     expect(topLeftControls?.style.position).toBe("absolute");
-    expect(message?.style.font).toBe("var(--t-caption)");
 
     act(() => {
       rejectButton?.click();
@@ -3692,10 +3613,7 @@ describe("MobileBattleScreen", () => {
 
     expect(message?.textContent).toBe("Pass from Day to Dusk.");
     expect(topLeftControls?.style.position).toBe("absolute");
-    expect(message?.style.font).toBe("var(--t-caption)");
-    expect(message?.style.textShadow).toBe("var(--text-outline-media)");
     expect(nextSlot?.querySelectorAll("button")).toHaveLength(1);
-    expect(nextSlot?.querySelector("button")?.textContent).toBe("Continue");
     expect(
       nextSlot?.querySelector('[aria-label="Reject AI action"]'),
     ).toBeNull();
@@ -3748,7 +3666,6 @@ describe("MobileBattleScreen", () => {
     const fill = container.querySelector<HTMLButtonElement>(
       '[data-testid="battle-debug-fill-grid"]',
     );
-    expect(fill?.textContent).toContain("Fill Battlefield + Voids");
     expect(
       container.querySelector('[data-testid="battle-debug-fill-asymmetric"]')
         ?.textContent,
@@ -3799,7 +3716,6 @@ describe("MobileBattleScreen", () => {
     const fillAsymmetric = container.querySelector<HTMLButtonElement>(
       '[data-testid="battle-debug-fill-asymmetric"]',
     );
-    expect(fillAsymmetric?.textContent).toContain("Fill 19 vs 9 + Voids");
 
     act(() => fillAsymmetric?.click());
 
@@ -4752,7 +4668,6 @@ describe("MobileBattleScreen", () => {
       "player-front-empty",
     );
     expect(guidedHighlight?.style.zIndex).toBe("4");
-    expect(guidedHighlight?.style.outline).toContain("var(--positive)");
 
     act(() => {
       revealSource?.dispatchEvent(
@@ -4895,8 +4810,6 @@ describe("MobileBattleScreen", () => {
       expect(outline.style.position).toBe("absolute");
       expect(outline.style.inset).toBe("0px");
       expect(outline.style.borderRadius).toBe(battlefieldCardRadius);
-      expect(outline.style.border).toBe("var(--battlefield-slot-border)");
-      expect(outline.style.boxSizing).toBe("border-box");
       expect(outline.style.pointerEvents).toBe("none");
     });
 
@@ -4916,7 +4829,6 @@ describe("MobileBattleScreen", () => {
 
     expect(occupiedSlot?.dataset.battleSlotFilled).toBe("true");
     expect(outline).not.toBeNull();
-    expect(outline?.style.border).toBe("var(--battlefield-slot-border)");
     expect(outline?.style.zIndex).toBe("0");
 
     act(() => root.unmount());

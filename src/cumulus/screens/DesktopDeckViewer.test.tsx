@@ -72,7 +72,6 @@ describe("DesktopDeckViewer", () => {
       '[data-testid="deck-viewer-backdrop"]',
     );
 
-    expect(backdrop?.style.background).toBe("var(--scrim-gallery)");
     expect(backdrop?.getAttribute("style")).not.toContain("backdrop-filter");
 
     act(() => {

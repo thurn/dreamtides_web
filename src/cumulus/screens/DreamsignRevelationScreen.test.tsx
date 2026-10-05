@@ -247,33 +247,6 @@ describe("DreamsignRevelationScreen", () => {
     });
   });
 
-  it("uses a neutral decline action with the desktop spacing step", () => {
-    stubMatchMedia(true);
-    const { container, root } = mount(
-      <DreamsignRevelationScreen
-        view={view()}
-        claimedIndex={null}
-        onClaim={vi.fn()}
-        onSkip={vi.fn()}
-        onPurge={vi.fn()}
-        onCancelPurge={vi.fn()}
-      />,
-    );
-
-    const offer = container.querySelector<HTMLElement>(
-      "[data-revelation-offer]",
-    );
-    const decline = Array.from(container.querySelectorAll("button")).find(
-      (button) => button.textContent?.includes("Decline Offer"),
-    );
-    expect(offer?.style.gap).toBe("var(--space-6xl)");
-    expect(decline?.style.borderColor).toBe("");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
   it("uses purple accent glass actions for dreamsign replacement", () => {
     const replacementView: DreamsignRevelationView = {
       ...view(),
@@ -320,9 +293,7 @@ describe("DreamsignRevelationScreen", () => {
       '[data-testid="dreamsign-revelation-art-1"]',
     );
     expect(center).not.toBeNull();
-    expect(center?.style.filter).toBe("none");
 
-    expect(center?.style.filter).toBe("none");
     expect(center?.dataset.revealFeedback).toBe("measured");
 
     act(() => {

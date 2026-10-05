@@ -114,7 +114,6 @@ describe("Cumulus JourneyStartScreen (carousel)", () => {
       />,
     );
 
-    expect(container.textContent).toContain("Choose Your Avatar");
     expect(container.innerHTML).not.toMatch(
       new RegExp(["dream", "caller"].join(""), "i"),
     );
@@ -394,7 +393,6 @@ describe("Cumulus JourneyStartScreen (desktop)", () => {
       />,
     );
 
-    expect(container.textContent).toContain("Choose Your Avatar");
     // No carousel pages on desktop.
     expect(container.querySelector("[data-avatar-page]")).toBeNull();
     for (const dc of OFFERED) {

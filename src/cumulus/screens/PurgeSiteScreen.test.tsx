@@ -197,8 +197,6 @@ describe("PurgeSiteScreen", () => {
       '[data-testid="cumulus-purge-header-action"]',
     );
     expect(selectedAction?.dataset.glassVariant).toBe("danger");
-    expect(selectedAction?.style.background).toContain("var(--danger) 18%");
-    expect(selectedAction?.style.background).toContain("--glass-on-glass-fill");
     expect(
       container.querySelector('[data-testid="cumulus-purge-commit-bar"]'),
     ).toBeNull();
@@ -295,8 +293,6 @@ describe("PurgeSiteScreen", () => {
     expect(cardRegion?.style.height).toBe("100%");
     expect(cardRegion?.style.width).toBe("calc(100vw - (var(--space-s) * 2))");
     expect(cardRegion?.style.minHeight).toBe("0px");
-    expect(surface?.style.background).toContain("var(--glass-fill-popover)");
-    expect(surface?.style.borderRadius).toBe("var(--radius-compact)");
     expect(gallery?.dataset.galleryRole).toBe("picker");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("2");
@@ -307,7 +303,6 @@ describe("PurgeSiteScreen", () => {
     const galleryBody = gallery?.querySelector<HTMLElement>(
       "[data-glass-panel-content] > div",
     );
-    expect(galleryBody?.style.padding).toBe("var(--space-s)");
     expect(galleryBody?.firstElementChild?.getAttribute("style")).toContain(
       "gap: var(--space-xs)",
     );
@@ -404,8 +399,6 @@ describe("PurgeSiteScreen", () => {
     expect(cardRegion?.style.minHeight).toBe("0px");
     expect(cardRegion?.style.display).toBe("grid");
     expect(cardRegion?.style.alignItems).toBe("center");
-    expect(surface?.style.background).toContain("var(--glass-fill-popover)");
-    expect(surface?.style.borderRadius).toBe("var(--radius-compact)");
     expect(gallery?.dataset.galleryRole).toBe("picker");
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("2");

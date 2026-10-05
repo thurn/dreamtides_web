@@ -350,3 +350,33 @@ the step still runs after lint and typecheck, never alongside them.
   `virtual:trox-bundles`, `trox-source-check` costs 4–6 s per TypeScript
   change, and `prepare` (4–7 s) materializes the RON pipeline outputs that
   D32 replaces with TypeScript modules.
+
+## Phase 1.4 test triage (2026-10-05, beads hv-b8ef.4, .7, .8, .9)
+
+`docs/plan/evidence/test-triage.jsonl` holds one verdict per surviving-area
+test file (278 files). Final tally: 216 keep, 41 rewrite (20 product copy,
+20 implementation detail, 1 statistical threshold), 21 delete. Seventeen of
+the deletes cover systems Phase 2 removes (Firebase and RTDB transport,
+co-op, Trox, identicons, editors, devtools, `/offers`) and execute with
+those deletions; the four implementation-detail deletes and the dead
+`src/draft/deck-cooccurrence` module landed in Phase 1.
+
+Rules applied while executing:
+
+- Asserting synthetic fixture text that a component or view model passes
+  through is allowed; asserting product copy or production data (glossary
+  titles, site names, screen copy) is not. Production glossary text is
+  compared against its glossary entry.
+- Single-line assertions that restate presentation tokens (font, color,
+  background, border, shadow, spacing, filter, animation) are removed;
+  geometry, transform, grid, gesture, and measured-placement assertions
+  stay.
+
+| Measurement | Before (1.1 baseline) | After | Notes |
+| --- | --- | --- | --- |
+| Test files | 518 | 513 | `npx vitest run`, 2 workers |
+| Tests | 5,187 | 5,153 | |
+| Full suite wall | 132.0–135.7 s (low host load) | 195.7 s, 198.8 s | After was measured at host load average 48–60 on 18 cores, so the walls are not comparable; the Phase 1 gate re-measures the 1.1 set. |
+
+Most of the suite reduction comes later: the Phase 2 rows remove whole
+systems' tests along with their code.

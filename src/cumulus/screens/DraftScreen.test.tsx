@@ -170,9 +170,6 @@ describe("Cumulus DraftScreen", () => {
       "[data-draft-offer-stage]",
     );
     expect(stage?.style.justifyContent).toBe("flex-start");
-    expect(stage?.style.paddingLeft).toBe("var(--space-xs)");
-    expect(stage?.style.paddingRight).toBe("var(--space-xs)");
-    expect(grid?.style.gap).toBe("var(--space-xs)");
     const firstCard = container.querySelector<HTMLElement>(
       '[data-draft-offer-card="101"]',
     );
@@ -202,8 +199,6 @@ describe("Cumulus DraftScreen", () => {
       "[data-draft-offer-stage]",
     );
     expect(stage?.style.justifyContent).toBe("center");
-    expect(stage?.style.paddingLeft).toBe("var(--space-m)");
-    expect(grid?.style.gap).toBe("var(--space-m)");
 
     act(() => {
       root.unmount();

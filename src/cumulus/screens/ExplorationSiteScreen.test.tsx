@@ -1349,7 +1349,6 @@ describe("ExplorationSiteScreen", () => {
         .querySelector('[data-testid="cumulus-exploration-revealed-card"]')
         ?.getAttribute("data-card-id"),
     ).toBe(view().card.cardId);
-    expect(channel?.textContent).toContain("Delve");
     expect(channel?.dataset.glassVariant).toBe("accent");
     expect(channel?.dataset.glassPlacement).toBe("onMedia");
 
@@ -4042,7 +4041,8 @@ describe("ExplorationSiteScreen", () => {
       '[data-testid="cumulus-exploration-followup-confirm"]',
     );
     act(() => purgeCard?.click());
-    expect(confirm?.textContent).toContain("Choose a card to copy");
+    const awaitingCopyLabel = confirm?.textContent ?? "";
+    expect(confirm?.getAttribute("aria-disabled")).toBe("true");
     expect(
       container.querySelector(
         '[data-gallery-entry-id="entry-a"] [data-card-choice-operation="purge"]',
@@ -4058,7 +4058,8 @@ describe("ExplorationSiteScreen", () => {
         '[data-gallery-entry-id="entry-b"] [data-card-choice-operation="copy"]',
       ),
     ).not.toBeNull();
-    expect(confirm?.textContent).toContain("Confirm Choice");
+    expect(confirm?.getAttribute("aria-disabled")).not.toBe("true");
+    expect(confirm?.textContent).not.toBe(awaitingCopyLabel);
 
     act(() =>
       container
@@ -4067,7 +4068,8 @@ describe("ExplorationSiteScreen", () => {
         )
         ?.click(),
     );
-    expect(confirm?.textContent).toContain("Choose a card to purge");
+    expect(confirm?.getAttribute("aria-disabled")).toBe("true");
+    expect(confirm?.textContent).not.toBe(awaitingCopyLabel);
     expect(container.querySelector("[data-card-choice-operation]")).toBeNull();
     act(() => root.unmount());
   });

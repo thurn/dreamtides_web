@@ -143,24 +143,16 @@ describe("CardShopSiteScreen", () => {
       "[data-gallery-action-glyph]",
     );
     expect(restockGlyph?.className).toContain("bx-refresh-cw");
-    expect(restockGlyph?.style.color).toBe("var(--gallery-action-foreground)");
-    expect(restockGlyph?.style.textShadow).toBe("var(--shadow-sm)");
     expect(
       container.querySelector("[data-gallery-action-label]")?.textContent,
     ).toBe("Restock");
     expect(container.querySelector("h2")?.textContent).toBe("Dream Market");
     expect(container.textContent).not.toContain("Tap a card to purchase it");
-    expect(restockGlyph?.style.filter).toBe("");
     expect(
       container
         .querySelector('[data-testid="cumulus-card-shop-restock"]')
         ?.getAttribute("data-press-feedback"),
     ).toBe("stationary");
-    const price = container.querySelector<HTMLElement>(
-      '[data-gallery-caption="essence"]',
-    );
-    expect(price?.style.color).toBe("var(--text-on-glass)");
-    expect(price?.style.background).toBe("");
 
     act(() => root.unmount());
   });

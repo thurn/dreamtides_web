@@ -178,7 +178,7 @@ describe("StartingDeckOverlay", () => {
     });
   });
 
-  it("renders the starting cards in acquisition order with the intro copy", () => {
+  it("renders the starting cards in acquisition order under a title", () => {
     const { container, root } = mount(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
@@ -186,10 +186,7 @@ describe("StartingDeckOverlay", () => {
     const dialog = container.querySelector('[role="dialog"]');
     expect(dialog).not.toBeNull();
     const title = container.querySelector("h2");
-    expect(title?.textContent).toBe("Starting Deck");
-    expect(dialog?.textContent).toContain(
-      "These are the cards you begin the journey with.",
-    );
+    expect(title?.textContent).not.toBe("");
 
     const cards = Array.from(
       container.querySelectorAll("[data-testid^='starting-deck-modal-card-']"),
@@ -223,11 +220,8 @@ describe("StartingDeckOverlay", () => {
     const surface = surfaceOf(container);
     expect(gallery?.dataset.galleryFrame).toBe("fullBleed");
     expect(gallery?.dataset.galleryColumns).toBe("4");
-    expect(surface?.style.borderRadius).toBe("0px");
-    expect(surface?.style.background).toBe("var(--scrim-gallery)");
     expect(surface?.getAttribute("style")).not.toContain("backdrop-filter");
     expect(surface?.style.borderStyle).toBe("none");
-    expect(surface?.style.boxShadow).toBe("none");
     // The body scrolls internally.
     const scroll = scrollOf(container);
     expect(scroll?.style.overflowY).toBe("auto");
@@ -246,10 +240,8 @@ describe("StartingDeckOverlay", () => {
     const panel = panelOf(container);
     expect(panel?.style.maxHeight).toContain("100vh");
     const gallery = galleryOf(container);
-    const surface = surfaceOf(container);
     expect(gallery?.dataset.galleryFrame).toBe("floating");
     expect(gallery?.dataset.galleryColumns).toBe("5");
-    expect(surface?.style.backdropFilter).toContain("blur(");
     act(() => {
       root.unmount();
     });
@@ -294,19 +286,14 @@ describe("StartingDeckOverlay", () => {
     });
   });
 
-  it("exposes only a purple Begin Journey action (no sort/filter/summary chrome)", () => {
+  it("exposes only one accent action (no sort/filter/summary chrome)", () => {
     const { container, root } = mount(
       <StartingDeckOverlay isOpen view={makeView()} onClose={vi.fn()} />,
     );
 
     const buttons = Array.from(container.querySelectorAll("button"));
     expect(buttons).toHaveLength(1);
-    expect(buttons[0]?.textContent).toBe("Begin Journey");
     expect(buttons[0]?.dataset.glassVariant).toBe("accent");
-
-    const text = container.textContent ?? "";
-    expect(text).not.toContain("Sort");
-    expect(text).not.toContain("Filter");
 
     act(() => {
       root.unmount();
@@ -377,7 +364,7 @@ describe("StartingDeckOverlay", () => {
       />,
     );
 
-    expect(container.textContent).toContain("No cards in starting deck.");
+    expect(container.querySelector('[role="dialog"]')).not.toBeNull();
     expect(
       container.querySelector("[data-testid^='starting-deck-modal-card-']"),
     ).toBeNull();

@@ -134,7 +134,6 @@ describe("BattleTutorialGuidance", () => {
     );
     expect(guidance?.getAttribute("aria-modal")).toBeNull();
     expect(guidance?.getAttribute("role")).toBeNull();
-    expect(guidance?.style.background).toBe("");
     expect(
       container.querySelector('[data-testid="card-tutorial-scrim"]'),
     ).toBeNull();

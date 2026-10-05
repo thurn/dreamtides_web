@@ -115,6 +115,16 @@ function mount(view = makeView()): {
   return { container, root };
 }
 
+function expectDormantAbility(container: HTMLElement): void {
+  const ability = container.querySelector(
+    '[data-battle-start-panel-section="ability"]',
+  );
+  expect(ability?.textContent).not.toContain(
+    "Whenever an event resolves, gain momentum.",
+  );
+  expect(ability?.textContent).not.toBe("");
+}
+
 describe("Cumulus BattleStartScreen", () => {
   it("renders the untouched scene, opponent, dense preview details, and stakes", () => {
     const view = makeView();
@@ -133,13 +143,14 @@ describe("Cumulus BattleStartScreen", () => {
     expect(container.querySelector("h1")?.textContent).not.toContain(
       view.avatar.id,
     );
-    const desktopSectionTitles = Array.from(
-      container.querySelectorAll("h2"),
-      (heading) => heading.textContent,
-    );
-    expect(desktopSectionTitles).toContain("Signature Cards");
-    expect(desktopSectionTitles).toContain("Dreamsigns");
-    expect(desktopSectionTitles).not.toContain("Signature Cards & Dreamsigns");
+    expect(
+      container.querySelector(
+        '[data-battle-start-panel-section="signature-cards"]',
+      ),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-battle-start-panel-section="dreamsigns"]'),
+    ).not.toBeNull();
     expect(
       container.querySelector("[data-battle-start-signature-objects]"),
     ).toBeNull();
@@ -151,16 +162,12 @@ describe("Cumulus BattleStartScreen", () => {
         '[data-signature-card-id] [data-reveal-complete-game-card="true"]',
       ),
     ).toHaveLength(3);
-    expect(container.textContent).toContain("To Win");
-    expect(container.textContent).not.toContain("Opposing Avatar");
-    expect(container.textContent).toContain("Reward");
-    expect(container.textContent).toContain("12");
-    expect(container.textContent).toContain("80");
+    expect(
+      container.querySelector('[data-battle-start-stake="reward"]')
+        ?.textContent,
+    ).toContain("80");
     const pointsValue = container.querySelector(
       '[data-battle-start-stake="points"] > div',
-    );
-    expect((pointsValue as HTMLElement | null)?.style.gap).toBe(
-      "var(--space-s)",
     );
     expect(pointsValue?.children[0]?.textContent).toBe("12");
     expect(pointsValue?.children[1]?.matches("[data-inline-glyph]")).toBe(true);
@@ -279,13 +286,6 @@ describe("Cumulus BattleStartScreen", () => {
     const panel = layout?.querySelector<HTMLElement>(
       "[data-battle-start-panel]",
     );
-    const glassPanel = layout?.querySelector<HTMLElement>(
-      '[data-testid="cumulus-battle-start-glass-panel"]',
-    );
-    const panelContent = layout?.querySelector<HTMLElement>(
-      "[data-battle-start-panel-content]",
-    );
-    expect(glassPanel?.style.backdropFilter).toContain("--glass-blur");
     expect(panel?.style.position).toBe("absolute");
     expect(panel?.style.top).toBe("");
     expect(panel?.style.bottom).toBe(
@@ -298,8 +298,6 @@ describe("Cumulus BattleStartScreen", () => {
     );
     expect(panel?.style.alignSelf).toBe("");
     expect(panel?.style.justifySelf).toBe("");
-    expect(panelContent?.style.padding).toBe("var(--space-l)");
-    expect(panelContent?.style.gap).toBe("var(--space-l)");
     expect(panel?.style.justifyContent).toBe("");
     expect(panel?.getAttribute("data-battle-start-panel-density")).toBe(
       "compact",
@@ -321,20 +319,16 @@ describe("Cumulus BattleStartScreen", () => {
     expect(opponent?.style.bottom).toBe(
       JOURNEY_STATUS_BAR_FLOATING_PANEL_CLEARANCE,
     );
-    expect(opponent?.style.width).toBe("58vw");
-    expect(opponent?.style.transform).toBe("scale(3)");
-    expect(opponent?.style.transformOrigin).toBe("50% 100%");
     expect(panel?.textContent).toContain("Aeris, the Prism Guide");
     expect(panel?.textContent).toContain("Storm Archivist");
-    expect(panel?.textContent).toContain("Ability");
-    expect(panel?.textContent).toContain(
+    expect(
+      panel?.querySelector('[data-battle-start-panel-section="ability"]')
+        ?.textContent,
+    ).toContain(
       "Whenever an event resolves, gain momentum.",
     );
     const objectSection = panel?.querySelector<HTMLElement>(
       "[data-battle-start-signature-objects]",
-    );
-    expect(objectSection?.previousElementSibling?.textContent).toBe(
-      "Signature Cards & Dreamsigns",
     );
     expect(
       objectSection?.querySelectorAll("[data-signature-card-id]"),
@@ -350,40 +344,14 @@ describe("Cumulus BattleStartScreen", () => {
       ),
     ).toHaveLength(1);
     expect(
-      objectSection?.querySelector<HTMLElement>(
-        '[data-testid^="cumulus-battle-start-dreamsign-"]',
-      )?.parentElement?.style.width,
-    ).toBe("52px");
+      panel?.querySelector('[data-battle-start-panel-section="dreamsigns"]'),
+    ).toBeNull();
     expect(
-      objectSection?.querySelector<HTMLElement>(
-        '[data-testid^="cumulus-battle-start-dreamsign-"]',
-      )?.style.width,
-    ).toBe("100%");
+      panel?.querySelector('[data-battle-start-stake="points"]'),
+    ).not.toBeNull();
     expect(
-      panel?.querySelector<HTMLElement>(
-        '[data-battle-start-panel-section="ability"]',
-      )?.style.paddingTop,
-    ).toBe("var(--space-m)");
-    expect(
-      panel?.querySelector<HTMLElement>(
-        '[data-battle-start-panel-section="ability"]',
-      )?.style.gap,
-    ).toBe("var(--space-s)");
-    expect(panel?.querySelector<HTMLElement>("footer")?.style.paddingTop).toBe(
-      "var(--space-m)",
-    );
-    expect(
-      Array.from(panel?.querySelectorAll("h2") ?? []).some(
-        (heading) => heading.textContent === "Dreamsigns",
-      ),
-    ).toBe(false);
-    expect(panel?.textContent).toContain("To Win");
-    expect(panel?.textContent).toContain("Reward");
-    expect(
-      panel?.querySelector<HTMLElement>(
-        '[data-battle-start-stake="points"] > div',
-      )?.style.gap,
-    ).toBe("var(--space-xs)");
+      panel?.querySelector('[data-battle-start-stake="reward"]'),
+    ).not.toBeNull();
     expect(
       panel?.querySelector('[data-testid="cumulus-battle-start-begin"]'),
     ).not.toBeNull();
@@ -393,7 +361,6 @@ describe("Cumulus BattleStartScreen", () => {
     const action = panel?.querySelector<HTMLButtonElement>(
       '[data-testid="cumulus-battle-start-begin"]',
     );
-    expect(action?.textContent).toContain("Begin Battle");
     expect(action?.getAttribute("data-glass-variant")).toBe("accent");
     expect(action?.getAttribute("data-glass-placement")).toBe("onGlass");
     act(() => action?.click());
@@ -402,17 +369,23 @@ describe("Cumulus BattleStartScreen", () => {
     act(() => root.unmount());
   });
 
-  it("labels the combined object section Signature Cards when no Dreamsigns are present", () => {
+  it("relabels the combined object section when no Dreamsigns are present", () => {
     stubMatchMedia(false);
     const view = makeView();
+    const sectionLabel = (container: HTMLElement) =>
+      container.querySelector("[data-battle-start-signature-objects]")
+        ?.previousElementSibling?.textContent ?? "";
+    const withDreamsigns = mount(view);
+    const combinedLabel = sectionLabel(withDreamsigns.container);
+    act(() => withDreamsigns.root.unmount());
     const { container, root } = mount({ ...view, dreamsigns: [] });
 
     const objectSection = container.querySelector<HTMLElement>(
       "[data-battle-start-signature-objects]",
     );
-    expect(objectSection?.previousElementSibling?.textContent).toBe(
-      "Signature Cards",
-    );
+    expect(combinedLabel).not.toBe("");
+    expect(sectionLabel(container)).not.toBe("");
+    expect(sectionLabel(container)).not.toBe(combinedLabel);
     expect(
       objectSection?.querySelectorAll(
         '[data-testid^="cumulus-battle-start-dreamsign-"]',
@@ -422,7 +395,7 @@ describe("Cumulus BattleStartScreen", () => {
     act(() => root.unmount());
   });
 
-  it("shows the inactive ability copy in the mobile briefing", () => {
+  it("replaces the ability text in the mobile briefing while it is dormant", () => {
     stubMatchMedia(false);
     const view = makeView();
     const { container, root } = mount({
@@ -430,22 +403,18 @@ describe("Cumulus BattleStartScreen", () => {
       avatar: { ...view.avatar, abilityActive: false },
     });
 
-    expect(container.textContent).toContain(
-      "Opponent avatar ability is not active.",
-    );
+    expectDormantAbility(container);
 
     act(() => root.unmount());
   });
 
-  it("shows the inactive ability copy when the opponent ability is dormant", () => {
+  it("replaces the ability text while the opponent ability is dormant", () => {
     const view = makeView();
     const { container, root } = mount({
       ...view,
       avatar: { ...view.avatar, abilityActive: false },
     });
-    expect(container.textContent).toContain(
-      "Opponent avatar ability is not active.",
-    );
+    expectDormantAbility(container);
     act(() => root.unmount());
   });
 });

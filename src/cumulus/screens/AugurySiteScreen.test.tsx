@@ -258,7 +258,6 @@ describe("AugurySiteScreen", () => {
     const row = container.querySelector<HTMLElement>("[data-augury-offer-row]");
     expect(row?.style.overflowX).toBe("auto");
     expect(row?.style.scrollSnapType).toBe("x mandatory");
-    expect(row?.style.paddingInline).toBe("calc(0.5 * (100% - 240px))");
   });
 
   it("opens one vision before exposing its detailed candidate pick", () => {

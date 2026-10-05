@@ -230,7 +230,6 @@ describe("TutorialBattleScreen", () => {
     expect(title?.style.animation).toContain(
       "radial-announcement-victory-title-move calc(var(--dur-slow) * 3)",
     );
-    expect(title?.style.animation).toContain("3s both");
     expect(titleCopy?.style.animation).toContain(
       "radial-announcement-victory-title-fade calc(var(--dur-slow) * 0.7)",
     );

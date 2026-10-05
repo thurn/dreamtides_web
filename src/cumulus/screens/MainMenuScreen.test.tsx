@@ -66,7 +66,6 @@ describe("Cumulus MainMenuScreen", () => {
 
     expect(container.querySelector("[data-main-menu-title]")?.textContent).toBeTruthy();
     expect(menu?.style.backgroundSize).toBe("cover");
-    expect(menu?.style.backgroundImage).toContain("/main-menu/background.jpg");
     expect(
       Array.from(container.querySelectorAll("[data-main-menu-actions] button")),
     ).toHaveLength(VIEW.actions.length);
@@ -158,16 +157,12 @@ describe("Cumulus MainMenuScreen", () => {
     const actions = container.querySelector<HTMLElement>(
       "[data-main-menu-actions]",
     );
-    const stack = container.querySelector<HTMLElement>(
-      "[data-main-menu-action-stack]",
-    );
 
     expect(menu?.style.backgroundPosition).toBe("54% 49%");
     expect(title?.style.top).toBe("var(--space-4xl)");
     expect(actions?.style.left).toBe("var(--space-6xl)");
     expect(actions?.style.bottom).toBe("var(--space-5xl)");
     expect(actions?.style.width).toBe("280px");
-    expect(stack?.style.gap).toBe("0px");
     expect(
       Array.from(
         container.querySelectorAll<HTMLElement>("[data-main-menu-action]"),

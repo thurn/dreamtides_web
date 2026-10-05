@@ -169,7 +169,6 @@ describe("LoadingScreen", () => {
       "[data-loading-screen]",
     );
 
-    expect(screen?.style.background).toBe("var(--bg-loading)");
     expect(JSON.parse(screen?.dataset.motionTransition ?? "{}")).toMatchObject({
       duration: 1.2,
     });
@@ -221,16 +220,12 @@ describe("LoadingScreen", () => {
     const footer = container.querySelector<HTMLElement>(
       "[data-loading-footer]",
     );
-    const stage = container.querySelector<HTMLElement>(
-      "[data-loading-card-stage]",
-    );
     const cards = [
       ...container.querySelectorAll<HTMLElement>("[data-loading-card]"),
     ];
 
     expect(screen?.style.height).toBe("100dvh");
     expect(screen?.style.minHeight).toBe("");
-    expect(stage?.style.gap).toBe("var(--space-6xl)");
     expect(cards).toHaveLength(2);
     expect(
       cards.every((card) => card.style.width.startsWith("min(47vw, 200px,")),
@@ -285,7 +280,6 @@ describe("LoadingScreen", () => {
     expect(begin).not.toBeNull();
     expect(begin?.closest("[data-loading-footer]")).toBe(footer);
     expect(begin?.style.height).toBe("56px");
-    expect(begin?.style.font).toBe("var(--t-button-lg)");
     const entry = container.querySelector<HTMLElement>(
       "[data-loading-begin-entry]",
     );
