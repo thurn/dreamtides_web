@@ -34,6 +34,7 @@ reference for reading any card definition.
 - [Zone Changes](#zone-changes)
 - [Created Cards](#created-cards)
 - [Figments](#figments)
+- [Infinite Loops](#infinite-loops)
 
 ## Symbols and Notation
 
@@ -64,8 +65,26 @@ designation rather than named slots.
 The first player to reach the victory point threshold wins the battle. The
 default threshold is **25⍟**. Most points are scored during the Challenge phase,
 when an unpaired challenger scores victory points equal to its spark or a
-challenger that wins a blocked lane scores the spark difference. If 50 turns
-pass without a winner, the battle ends in a draw.
+challenger that wins a blocked lane scores the spark difference.
+
+A player's victory points never go below 0. An effect that makes a player lose
+more ⍟ than they have reduces their total to 0.
+
+**Victory check:** The battle checks for a result after every game action —
+each card or ability played or resolved, each triggered ability, each challenge
+lane, and each phase change — so a player who reaches the threshold wins at
+once, even partway through a phase. In each check:
+
+- A player at or above the threshold wins.
+- A card in play that says "you win the game" when a condition holds wins the
+  battle for its controller while that condition is true — for example, "If
+  you have no cards in your deck, you win the game."
+- If both players would win in the same check, the battle is a draw.
+
+**Rounds and the turn limit:** A **round** is one turn for each player, the
+first player's turn followed by the second player's. Extra turns (see [Turn
+Structure](#turn-structure)) are not part of any round and do not advance the
+round count. If 50 rounds end without a winner, the battle ends in a draw.
 
 ## Card Types
 
@@ -90,6 +109,13 @@ each battle already in play. Avatars provide powerful ongoing abilities
 **Dreamsign** — A card representing a 2D illustrated object that provides
 ongoing effects, typically triggered or static. Active throughout the battle.
 
+Avatars and dreamsigns are **not characters**. They occupy no position in the
+play area, have no spark, do not benefit from Support, are never counted as
+characters, and cannot be chosen by effects that choose characters. An avatar
+pays its own ☾ costs: paying one exhausts the avatar, and an exhausted avatar
+cannot pay another ☾ cost until the exhausted status is cleared during the
+Ending phase (see [Exhaust and Awaken](#exhaust-and-awaken)).
+
 **Dreamwell** — Special shared cards drawn during the Dreamwell phase. Not part
 of either player's deck. They produce energy and usually carry a bonus effect
 for the player who drew them.
@@ -100,8 +126,8 @@ for the player who drew them.
 the Draw phase and by card effects.
 
 **Hand** — Cards held by a player, hidden from the opponent. A hand may hold any
-number of cards during the turn, but the player discards down to 10 during the
-Ending phase.
+number of cards during the turn, but the active player discards down to 10
+during the Ending phase, choosing which cards to discard.
 
 **Stack** — A temporary zone for cards that have been played but not yet
 resolved. While a card is on the stack, an opponent may respond with Interrupts.
@@ -121,11 +147,11 @@ circumstances.
 
 Energy (●) is the resource used to play cards. Dreamtides uses the Dreamwell — a
 shared deck of special cards that both players draw from once per turn beginning
-on turn 2 — in place of land cards.
+in round 2 — in place of land cards.
 
-- During each player's Dreamwell phase from turn 2 onward, the next Dreamwell
-  card is drawn automatically (no player choice involved). Both players skip
-  this draw on turn 1.
+- During each player's Dreamwell phase from round 2 onward, and in every extra
+  turn, the next Dreamwell card is drawn automatically (no player choice
+  involved). Both players skip this draw in round 1.
 - Each Dreamwell card has an energy production value that permanently increases
   the player's **maximum ●** (their energy production).
 - At the start of each turn, current ● resets to equal maximum ●. After the
@@ -166,6 +192,12 @@ Equivalently, `Fi` is supported by `Bi` and `B(i+1)`. A back-rank character
 with the Support keyword benefits the up-to-two front-rank characters in the
 positions it supports (see [Support](#keywords-and-effects)).
 
+Card text that refers to the characters **supporting** a character, as in "+2✦
+for each character supporting it", counts every character in a back-rank
+position that supports that character's front-rank position, whether or not it
+has the Support keyword. A front-rank character therefore has 0–2 supporting
+characters, and a back-rank character has none.
+
 **Front rank and the back rank:** Only front-rank characters participate
 directly in the Challenge phase, as challengers or blockers. Back-rank
 characters are safe during the Challenge phase — they do not challenge, block,
@@ -201,7 +233,7 @@ characters** in their front rank. If a player's back rank is full, they may no
 longer play any card or activate any ability which would cause a character to
 enter play. If a trigger attempts to put a character into play when the back
 rank is full, it instead stays in its previous zone. If a trigger attempts to
-create a a figment or a copy of a character when the back rank is full, it is
+create a figment or a copy of a character when the back rank is full, it is
 not created and an explanatory message is shown.
 
 Some effects cause multiple characters to enter play at once. In these cases,
@@ -219,10 +251,10 @@ Each turn progresses through these eight phases in order. The five main phases �
 Dawn, Day, Dusk, Night, and Challenge — are surfaced in the UI; Dreamwell, Draw,
 and Ending run as automatic bookends.
 
-1. **Dreamwell** — From turn 2 onward, the active player draws the next Dreamwell
-   card, permanently increasing their maximum ●. Current ● then resets to the
-   new maximum. Any bonus effect on the card is applied. Both players skip this
-   draw on turn 1. Auto-advances.
+1. **Dreamwell** — From round 2 onward, and in every extra turn, the active
+   player draws the next Dreamwell card, permanently increasing their maximum ●.
+   Current ● then resets to the new maximum. Any bonus effect on the card is
+   applied. Both players skip this draw in round 1. Auto-advances.
 2. **Draw** — The active player draws one card. (Skipped on the very first turn
    of the battle.) Auto-advances.
 3. **Dawn** — The active player's ▸Dawn triggered abilities fire and resolve.
@@ -251,15 +283,31 @@ and Ending run as automatic bookends.
    (see [Challengers, Blockers, and Scoring](#challengers-blockers-and-scoring)).
    No cards may be played during this phase, though triggered and static
    abilities still function and can modify spark.
-8. **Ending** — If the active player has more than 10 cards in hand, they
-   discard down to 10. Cards with the relevant end-of-turn statuses (Ephemeral,
-   Offering) are banished, and every exhausted character in play loses the
-   exhausted status. Auto-advances when the stack is empty, after which the
-   turn passes to the opponent.
+8. **Ending** — These happen in order:
+   1. If the active player has more than 10 cards in hand, they choose cards
+      from their hand and discard them down to 10.
+   2. Cards with the relevant end-of-turn statuses (Ephemeral, Offering) are
+      banished.
+   3. Effects that last "this turn" or "until end of turn" end, and cards
+      banished until end of turn return (see [Banish](#keywords-and-effects)).
+   4. Every exhausted character in play, and each exhausted avatar, loses the
+      exhausted status.
+
+   Auto-advances when the stack is empty, after which the turn passes to the
+   opponent, unless the active player has an extra turn to take.
 
 **Battle start:** Each player draws 5 cards as their opening hand. Both players
-skip the Dreamwell draw on turn 1. The first player's first turn skips the Draw
+skip the Dreamwell draw in round 1. The first player's first turn skips the Draw
 phase.
+
+**Extra turns:** An effect such as "Take an extra turn after this one" gives its
+controller another turn immediately after the current turn. An extra turn is a
+full turn: it runs all eight phases, including the Dreamwell draw and the Draw,
+and it is one of that player's turns for "this turn", "next turn", "last turn",
+"once per turn", and "until your next turn". It does not advance the round
+count, so it does not count toward the turn limit (see
+[Objective](#objective)). If several extra turns are waiting, the one created
+most recently is taken first.
 
 ## Exhaust and Awaken
 
@@ -279,12 +327,21 @@ Front-rank characters cannot activate abilities with ☾ costs. Because an
 exhausted character cannot be moved to the front rank, exhausting a back-rank
 character keeps it from challenging or blocking until it awakens.
 
+An avatar has an exhausted status of its own, used only for its ☾ costs: paying
+a ☾ cost exhausts the avatar, an exhausted avatar cannot pay ☾ costs, and the
+status is cleared during each Ending phase along with the characters'.
+
 ## Challengers, Blockers, and Scoring
 
 **Challengers** are the active player's front-rank characters as of the end of
 their Day phase. **Blockers** are the opposing player's front-rank characters
 directly opposite a challenger as of the end of the Dusk phase. Repositioning
 during the Night phase can change which characters hold these designations.
+
+Abilities reading "When you challenge with N or more …", such as "When you
+challenge with 2 or more warriors", fire once, at the end of Day when
+challengers are designated, and count the designated challengers that match.
+Changes during Night never fire them again.
 
 A character "scores ⍟" when a challenge converts its spark into victory points —
 that is, when an unpaired challenger scores or when a challenger wins a blocked
@@ -331,6 +388,13 @@ Spark can change in three distinct ways:
   control have +1✦", persists only while that static ability applies. It does not carry
   across zones the way gained spark does.
 
+**Additional spark:** An ability such as "When a character you control gains
+✦, it gains 1 additional ✦" applies to each "gains +N✦" event, permanent or
+with a duration, and the additional ✦ has the same duration as the gain that
+caused it. It never applies to spark a character _has_ (from static abilities,
+Support, or similar effects). The additional gain does not cause the ability to
+apply again. Several such abilities stack, each adding 1✦.
+
 ## Playing Cards and the Stack
 
 To play a card, the controlling player must be able to pay its costs (see
@@ -356,11 +420,50 @@ opponent priority to respond.
 **Only Interrupts can be played while the stack is non-empty.** Standard and Fast
 cards and abilities require the stack to be empty at the moment they are played.
 
-**Stack resolution:** Cards on the stack resolve last-in, first-out. An event
-resolves by applying its effect and moving to the void; a character resolves by
-entering play. After a card resolves, if the stack is not empty its controller
-receives priority. **Triggered abilities cannot be responded to** — they resolve
-immediately when their trigger condition is met.
+**Stack resolution:** Cards and activated abilities on the stack resolve
+last-in, first-out. An event resolves by applying its effect and moving to the
+void; a character resolves by entering play.
+
+**Priority:** The player with priority may respond with an Interrupt or pass.
+
+- Playing a card or activating an ability gives the **opponent** priority. A
+  player therefore only ever responds to the opponent's cards and abilities, and
+  cannot add a second item on top of their own: priority cannot be held.
+- **A single pass resolves the top item of the stack.** The other player does
+  not also need to pass.
+- After an item resolves and any triggered abilities it caused have resolved,
+  if the stack is not empty, the controller of the item that just resolved
+  receives priority.
+- When the stack becomes empty, play returns to the current phase.
+
+For example: the active player plays A, the opponent responds with B, and the
+active player responds with C. The opponent passes, so C resolves. The active
+player now has priority with B on top, and may play another Interrupt or pass.
+If they pass, B resolves, and the opponent receives priority with A on top.
+
+**Automatic passing:** A player who receives priority but has no legal
+response passes automatically. This never skips a player's phases: the active
+player always ends their own Day and Night phases, and the opposing player
+always ends the Dusk phase, by passing explicitly.
+
+**Triggered abilities cannot be responded to.** They do not use the stack and
+resolve before any player receives priority (see [Ability
+Types](#ability-types)).
+
+**Copies on the stack:** An effect that copies a card on the stack creates the
+copy as a created card directly above the original, so the copy resolves first.
+The copy is **not played**: it fires no "when you play" triggers, is not counted
+by effects that count cards played, and does not give either player priority.
+Its controller may choose new targets and modes for it. It uses the original's
+value of X and counts any additional costs paid for the original as paid. A copy
+can be Prevented like any other item, and it ceases to exist when it resolves or
+is Prevented.
+
+**Paying to end an effect:** An effect that lasts "until the opponent pays N●"
+lets that opponent — the controller of the affected character — pay N● to end
+the effect immediately. This is a special action, available whenever that
+player could play a Fast card (❖) and never in response to a card or ability.
+It does not use the stack and cannot be responded to.
 
 ## Costs, Requirements, and X
 
@@ -404,13 +507,29 @@ abandoned character was selected as a cost, not a target).
 Each [figment](#figments) is an independent character and is targeted
 individually.
 
+A card that "cannot be targeted by effects" cannot be chosen as a target by any
+effect, including effects its own controller controls. Effects that do not
+target, such as "Dissolve all characters", still affect it.
+
+**Required choices with no legal option:** A card cannot be played, and an
+ability cannot be activated, if a choice it requires when it is played — such
+as a target — has no legal option. If a required choice has no legal option when
+the card or ability resolves, that part of its effect does nothing; the rest of
+the effect still happens.
+
 ## Keywords and Effects
 
 **Dissolve** — Move a target character from play to the void.
 
 **Banish** — Permanently remove a card by sending it to its owner's Banished
 zone. Variants include banish from play, banish from the void, banish until the
-banishing card leaves play, and banish until the next Day phase.
+banishing card leaves play, banish until the next Day phase, and banish until
+end of turn. A character banished until end of turn returns to play during the
+Ending phase, in the leftmost open back-rank position of the player who
+controlled it when it was banished. Its return is a materialize: it enters
+exhausted unless awakened and fires its ▸Materialized trigger. If that player's
+back rank is full, it stays banished. A figment or other created card banished
+this way ceases to exist and does not return.
 
 **Materialize** — Put a character into play. This covers a character entering
 play from hand (played normally), from the void, from the deck, as a created
@@ -491,7 +610,9 @@ and optionally send any of them to the void.
 add one of them to your hand.
 
 **Copy** — Create a duplicate of a card or effect. Variants include copying a
-character in play and copying the next card played.
+character in play and copying the next card played. Copies of cards on the stack
+follow [Copies on the stack](#playing-cards-and-the-stack); figment copies of
+characters follow [Figment Copies](#figment-copies).
 
 **Gain control** — Move an opponent's character to the leftmost open back
 position on the receiving side. It preserves its state and is exhausted through
@@ -521,8 +642,23 @@ Triggered abilities can also use descriptive conditions such as "When you play a
 card" or "When you materialize a character". A character played from hand can
 satisfy both "when you play" and ▸Materialized triggers, while a character put
 directly into play satisfies only ▸Materialized. Combined triggers such as
-"▸Materialized, ▸Dawn" fire on both occasions. Triggered abilities cannot be
-responded to; they resolve immediately.
+"▸Materialized, ▸Dawn" fire on both occasions.
+
+**Trigger timing and order:** Triggered abilities do not use the stack and
+cannot be responded to.
+
+- An ability that triggers during an effect waits until that effect has
+  finished, then resolves before any player receives priority. An effect is
+  never interrupted partway by a triggered ability.
+- Waiting triggered abilities resolve one at a time, first in, first out, in
+  the order of the events that triggered them. Abilities triggered while they
+  resolve join the end of the line.
+- Abilities triggered by the same event resolve in a fixed order: the active
+  player's first, then the opposing player's. For each player, the order is
+  their avatar, then their dreamsigns, then their characters in play — back
+  rank `B0` through `B9`, then front rank `F0` through `F8` — and then their
+  cards in other zones: void, then hand, then deck.
+- Players never choose the order of triggered abilities.
 
 **Activated abilities** — Abilities with a cost the controller chooses to pay,
 written as "Cost: Effect" (for example "2●: Draw a card" or "1⧗, ☾: Draw a
@@ -568,9 +704,11 @@ ability, and any counters on the card, do not (see [Spark](#spark) and
 A **created card** is produced by an effect rather than drawn from a deck — for
 example, an effect that creates a token event in your hand. A created card can
 be played and otherwise used like a normal card, but it ceases to exist whenever
-it would leave play: it is banished instead of going to the void, and it never
-enters a deck. A created event, for instance, is banished on resolution rather
-than moving to the void.
+it would move to a deck, a hand, the void, or the Banished zone. A created event,
+for instance, ceases to exist on resolution rather than moving to the void, and
+a created character that would return to hand ceases to exist instead. A
+created card that ceases to exist is gone from the battle and is not in any
+zone.
 
 **Figments** are a character-typed subset of created cards.
 
@@ -607,6 +745,25 @@ challenges, scores, and interacts with Support on its own. A Support spark bonus
 applies once to each figment. A figment which is dissolved fires its
 '▸Dissolved' triggers before ceasing to exist.
 
+A figment's cost is **0●** wherever a cost is read, such as "a character with
+cost 2● or less" or "that character's cost". A figment copy has the cost it
+copied.
+
+### Figment Copies
+
+A **figment copy** of a card is a figment that:
+
+- copies the source card's printed subtype, abilities, cost, and base spark, as
+  modified by the card's transfigurations and other permanent changes to the
+  card itself;
+- never copies the source's gained spark, counters, or statuses;
+- has base spark 0 instead when the text says "0✦ figment copy";
+- is a figment in every other respect: it counts for effects that refer to
+  figments, and it ceases to exist when it leaves play;
+- merges only with figment copies of the same card, and two different cards
+  that share a name are different cards;
+- with "until end of turn", ceases to exist during that turn's Ending phase.
+
 ### Merging Figments
 
 During normal repositioning, a player can drag a figment onto another figment
@@ -637,3 +794,44 @@ positions with new figments. If every figment in that group fits, each keeps its
 own spark. Otherwise, the group's total spark is divided as evenly as
 possible among the new figments that fit, with any remainder assigned left to
 right. Figments already in play are not destinations for this merging.
+
+## Infinite Loops
+
+Combinations of cards that can repeat without limit are a legitimate part of
+the game, and they are never capped or broken up. A player can shorten a loop
+they control, and a loop that nobody can stop ends the battle in a draw.
+
+### Optional Loops
+
+A player builds an optional loop through their own choices. When, within a
+single turn, a sequence of a player's actions returns the battle to an
+equivalent position — the stack empty, no triggered abilities waiting, and
+everything the same except victory points, current and maximum ●, counters,
+gained spark, the number of cards in each deck and void, and turn counts — and
+those differences gained something for that player and nothing for the
+opponent, the player is offered a shortcut:
+
+- **Repeat ×N** performs the sequence N more times.
+- **Repeat until victory** performs it until the battle ends.
+
+Each repetition takes the same actions and makes the same choices as the
+original sequence. Repeating stops early, returning control to the player,
+when:
+
+- an action in the sequence has become illegal;
+- a choice offers different options than it did originally, so the player
+  makes it;
+- the battle ends;
+- the opponent has a legal response other than passing;
+- the sequence has repeated 10,000 times.
+
+### Mandatory Loops
+
+A mandatory loop is one that repeats while no player has the opportunity to
+play a card, activate an ability, reposition, or pass — for example, triggered
+abilities that keep triggering each other. Nobody can stop it, so:
+
+- If the battle returns to exactly the same state during such a sequence, the
+  battle ends in a draw.
+- If such a sequence runs for more than 100,000 consecutive automatic game
+  actions without repeating, the battle also ends in a draw.

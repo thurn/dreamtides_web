@@ -1,0 +1,5 @@
+# RD-hv-7x4l.1-4: Optional loops get a Repeat ×N / Repeat until victory shortcut; mandatory cycles and the resolution cap end in a draw
+- Ladder: 1 (D12 infinite combos are intentional; mechanics from engine-design § Loops; MTG 104.4b analog for mandatory cycles)
+- rules.md: § Infinite Loops (new section, with § Optional Loops and § Mandatory Loops)
+- Affects: general
+- Why: rules.md had no loop rules. D12 makes combos legal and uncapped: an action sequence that returns to an equivalent position (scores, energy, counters, gained spark, deck and void sizes, and turn counters abstracted) with a gain for the actor and none for the opponent offers Repeat ×N and Repeat until victory, replaying the same choices and stopping early on illegality, a changed choice, battle end, an opponent response, or the 10,000-repetition limit. A cycle with no player decision ends in a draw on an exact repeat, or after 100,000 automatic actions (the resolution cap). Both limits are the battle data module's defaults.
